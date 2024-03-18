@@ -1,7 +1,10 @@
 {
     "compilerOptions": {
         "target": "es2017",
-        "lib": ["ESNext", "ESNext.WeakRef"],
+        "lib": [
+            "ESNext",
+            "ESNext.WeakRef"
+        ],
         "moduleResolution": "node",
         "composite": true,
         "incremental": true,
@@ -13,8 +16,15 @@
         "skipLibCheck": true,
         "removeComments": false,
         "outDir": "build/peers",
-        "rootDirs": ["src"],
-        "module": "CommonJS",
+        "rootDirs": [
+            "src"
+        ],
+        "module": "CommonJS"
     },
-    "include": ["generated/**/*", "utils/**/*", "ohos-sdk/component/**/*", "ohos-sdk/api/**/*"],
+    "include": [
+        "generated/**/*",
+        "utils/**/*",
+        "interface_sdk-js/api/@internal/component/ets/**/*",
+        "interface_sdk-js/api/*"
+    ]
 }
