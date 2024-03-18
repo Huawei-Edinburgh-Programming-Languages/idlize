@@ -1,4 +1,4 @@
-if [ -d "ohos-sdk" ]; then
+if [ -d "interface_sdk-js" ]; then
   exit
 fi
 
