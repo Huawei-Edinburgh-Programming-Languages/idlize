@@ -28,8 +28,20 @@ import { GenericVisitor } from "./options"
 import { IndentedPrinter } from "./IndentedPrinter"
 import {
     AggregateConvertor,
-    AnyConvertor, ArgConvertor, ArrayConvertor, BooleanConvertor, EmptyConvertor, EnumConvertor, FunctionConvertor, InterfaceConvertor, LengthConvertor, TypedConvertor, NumberConvertor,
-    StringConvertor, UndefinedConvertor, UnionConvertor
+    AnyConvertor,
+    ArgConvertor,
+    ArrayConvertor,
+    BooleanConvertor,
+    EmptyConvertor,
+    EnumConvertor,
+    FunctionConvertor,
+    InterfaceConvertor,
+    LengthConvertor,
+    TypedConvertor,
+    NumberConvertor,
+    StringConvertor,
+    UndefinedConvertor,
+    UnionConvertor
 } from "./Convertors"
 
 export enum RuntimeType {
@@ -802,6 +814,7 @@ import { int32 } from "../../utils/ts/types"
 import { Callback, ErrorCallback } from "./ohos-sdk/api/@ohos.base"
 
 type Function = object
+type FirstNode = any
 
 export class Serializer extends SerializerBase {
 ${lines.join("\n")}
