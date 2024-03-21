@@ -20,7 +20,9 @@ import {
     stringOrNone,
     typeOrUndefined,
     capitalize,
-    dropSuffix
+    dropSuffix,
+    forEachExpanding,
+    isTypeParamSuitableType
 } from "./util"
 import { GenericVisitor } from "./options"
 import { IndentedPrinter } from "./IndentedPrinter"
@@ -84,18 +86,12 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     }
 
     serializerName(name: string, type: ts.TypeReferenceNode | ts.ImportTypeNode | undefined): string {
-        if (!serializerSeen.has(name)) {
-            this.serializerRequests.push({ type, name })
-            serializerSeen.add(name)
-        }
+        this.serializerRequests.push({ type, name })
         return `write${name}`
     }
 
     deserializerName(name: string, type: ts.TypeReferenceNode | ts.ImportTypeNode | undefined): string {
-        if (!serializerSeen.has(name)) {
-            this.serializerRequests.push({ type, name })
-            serializerSeen.add(name)
-        }
+        this.serializerRequests.push({ type, name })
         return `read${name}`
     }
 
@@ -111,9 +107,13 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         ].forEach(it => this.printTS(it))
         ts.forEachChild(this.sourceFile, (node) => this.visit(node))
 
-        this.serializerRequests.forEach(it => {
+        forEachExpanding(this.serializerRequests, (it) => {
+            if (serializerSeen.has(it.name)) {
+                return
+            }
             this.generateSerializer(it.name, it.type)
             this.generateDeserializer(it.name, it.type)
+            serializerSeen.add(it.name)
         })
 
         return this.printerTS.output
@@ -675,8 +675,9 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         this.printerNativeModule.print(`_${component}_${method}Impl(${parameters}): void`)
     }
 
-    private generateSerializer(name: string, type:  ts.TypeReferenceNode | ts.ImportTypeNode | undefined) {
-        this.printerSerializerTS.print(`write${name}(value: ${name}|undefined) {`)
+    private generateSerializer(name: string, type: ts.TypeReferenceNode | ts.ImportTypeNode | undefined) {
+        const typeParams = this.typeParamsClause(type)
+        this.printerSerializerTS.print(`write${name}${typeParams}(value: ${name}${typeParams}|undefined) {`)
         this.printerSerializerTS.pushIndent()
         let typeName = (type && ts.isTypeReferenceNode(type)) ? type.typeName : type?.qualifier
         let declarations = typeName ? getDeclarationsByNode(this.typeChecker, typeName) : []
@@ -689,7 +690,8 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
                 declaration.members
                     .filter(ts.isPropertySignature)
                     .forEach(it => {
-                        let typeConvertor = this.typeConvertor("value", it.type!)
+                        const type = it.questionToken ? typeOrUndefined(it.type!) : it.type!
+                        let typeConvertor = this.typeConvertor("value", type)
                         let fieldName = asString(it.name)
                         this.printerSerializerTS.print(`let value_${fieldName} = value.${fieldName}`)
                         typeConvertor.convertorToTSSerial(`value`, `value_${fieldName}`, this.printerSerializerTS)
@@ -733,6 +735,16 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         this.printerSerializerC.print(`}`)
         this.printerStructsC.popIndent()
         this.printerStructsC.print(`};`)
+    }
+
+    private typeParamsClause(type: ts.TypeReferenceNode | ts.ImportTypeNode | undefined): string {
+        const typeParams = type?.typeArguments
+            ?.filter(isTypeParamSuitableType)
+            ?.map(it => it.getText())
+            .join(", ")
+        return typeParams
+            ? `<${typeParams}>`
+            : ""
     }
 }
 
@@ -786,7 +798,10 @@ ${bridgeCc.join("\n")}
 export function makeTSSerializer(lines: string[]): string {
     return `
 import { SerializerBase, runtimeType } from "../../utils/ts/SerializerBase"
-import { int32 } from "../../utils/ts/Interop"
+import { int32 } from "../../utils/ts/types"
+import { Callback, ErrorCallback } from "./ohos-sdk/api/@ohos.base"
+
+type Function = object
 
 export class Serializer extends SerializerBase {
 ${lines.join("\n")}
