@@ -20,6 +20,6 @@
         "generated/**/*",
         "utils/ts/**/*",
         "interface_sdk-js/api/@internal/component/ets/**/*",
-        "interface_sdk-js/api/*"
+        "interface_sdk-js/api/**/*"
     ]
 }
