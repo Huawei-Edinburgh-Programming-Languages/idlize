@@ -126,8 +126,8 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
             `import { int32 } from "../../utils/ts/types"`,
             `import { nativeModule } from "./NativeModule"`,
             `import { PeerNode, KPointer, nullptr } from "../../utils/ts/Interop"`,
-            `import { ErrorCallback } from "../../interface_sdk-js/api/@ohos.base"`,
             `type Callback = Function`,
+            `type ErrorCallback = Function`,
         ].forEach(it => this.printTS(it))
         ts.forEachChild(this.sourceFile, (node) => this.visit(node))
 
@@ -896,7 +896,9 @@ export function makeTSSerializer(lines: string[]): string {
     return `
 import { SerializerBase, runtimeType, Tags } from "../../utils/ts/SerializerBase"
 import { int32 } from "../../utils/ts/types"
-import { Callback, ErrorCallback } from "../../interface_sdk-js/api/@ohos.base"
+
+type Callback = Function
+type ErrorCallback = Function
 
 type Function = object
 type FirstNode = any
