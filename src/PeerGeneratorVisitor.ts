@@ -735,7 +735,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
 
     private generateSerializer(name: string, type: ts.TypeReferenceNode | ts.ImportTypeNode | undefined) {
         const typeParams = this.typeParamsClause(type)
-        // this.printerSerializerTS.print(`write${name}${typeParams}(value: ${name}${typeParams}|undefined) {`)
         this.printerSerializerTS.print(`write${name}(value: ${name}|undefined) {`)
         this.printerSerializerTS.pushIndent()
         let typeName = (type && ts.isTypeReferenceNode(type)) ? type.typeName : type?.qualifier
