@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 import { IndentedPrinter } from "./IndentedPrinter"
-import { PeerGeneratorVisitor, RuntimeType } from "./PeerGeneratorVisitor"
+import { PeerGeneratorVisitor, RuntimeType } from "./peer-generation/PeerGeneratorVisitor"
 import * as ts from "typescript"
 
 export interface ArgConvertor {

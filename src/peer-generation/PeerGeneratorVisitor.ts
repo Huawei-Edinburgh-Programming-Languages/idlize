@@ -24,9 +24,9 @@ import {
     nameOrNull,
     stringOrNone,
     typeOrUndefined
-} from "./util"
-import { GenericVisitor } from "./options"
-import { IndentedPrinter } from "./IndentedPrinter"
+} from "../util"
+import { GenericVisitor } from "../options"
+import { IndentedPrinter } from "../IndentedPrinter"
 import {
     AggregateConvertor,
     AnyConvertor,
@@ -43,8 +43,9 @@ import {
     TypedConvertor,
     UndefinedConvertor,
     UnionConvertor
-} from "./Convertors"
+} from "../Convertors"
 import { SortingEmitter } from "./SortingEmitter"
+import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
 
 export enum RuntimeType {
     UNEXPECTED = -1,
@@ -79,20 +80,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     private printerStructsForwardC: IndentedPrinter
     private printerSerializerTS: IndentedPrinter
     private serializerRequests: TypeAndName[] = []
-
-    private static readonly rootComponents = [
-        "CommonMethod",
-        "ScrollableCommonMethod",
-        "SecurityComponentMethod",
-        "CommonShapeMethod",
-        "BaseSpan",
-    ]
-
-    // Will figure out what to do with those later, current will extend PeerNode
-    private static readonly standaloneComponents = [
-        "CalendarAttribute",
-        "ContainerSpanAttribute"
-    ]
 
     private static imports = [
         { file: "common", components: ["Common", "ScrollableCommon", "CommonShape"]},
@@ -178,42 +165,37 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         return this.printerC.getOutput()
     }
 
-    // Reduce to "CommonMethod" only once will learn how to follow generic class declarations.
-    static needsPeerRoots = ["CommonMethod"]
-    static skipPeerGeneration = ["CommonAttribute", "ComputedBarAttribute"]
-
-    private isCommonMethodInheritor(decl: ts.ClassDeclaration | ts.InterfaceDeclaration): boolean {
-        let isCommon = false
+    private isRootMethodInheritor(decl: ts.ClassDeclaration | ts.InterfaceDeclaration): boolean {
+        let isRoot = false
         decl.heritageClauses?.forEach(it => {
             heritageDeclarations(this.typeChecker, it).forEach(it => {
                 let name = asString(it.name)
-                isCommon = isCommon || PeerGeneratorVisitor.needsPeerRoots.includes(name)
+                isRoot = isRoot || PeerGeneratorConfig.rootComponents.includes(name)
                 // TODO: find a way to follow ts.TypeQuery as well.
                 if (!ts.isTypeReferenceNode(it)) return
                 let superDecls = getDeclarationsByNode(this.typeChecker, it.typeName)
                 if (superDecls.length > 0) {
                     let superDecl = superDecls[0]
                     if (ts.isClassDeclaration(superDecl) || ts.isInterfaceDeclaration(superDecl))
-                        isCommon = isCommon || this.needsPeer(superDecl)
+                        isRoot = isRoot || this.isRootMethodInheritor(superDecl)
                 }
             })
         })
-        return isCommon
+        return isRoot
     }
 
     needsPeer(decl: ts.ClassDeclaration | ts.InterfaceDeclaration): boolean {
         let name = decl.name?.text
         if (!name) return false
-        if (PeerGeneratorVisitor.skipPeerGeneration.includes(name)) return false
+        if (PeerGeneratorConfig.skipPeerGeneration.includes(name)) return false
 
         if (this.interfacesToGenerate.size > 0) {
             return this.interfacesToGenerate.has(name)
         }
 
-        if (name.endsWith("Attribute")) return true
-        if (PeerGeneratorVisitor.needsPeerRoots.includes(name)) return true
-        if (PeerGeneratorVisitor.rootComponents.includes(name)) return true
-        if (this.isCommonMethodInheritor(decl)) return true
+        if (PeerGeneratorConfig.standaloneComponents.includes(name)) return true
+        if (PeerGeneratorConfig.rootComponents.includes(name)) return true
+        if (this.isRootMethodInheritor(decl)) return true
         return false
     }
 
@@ -654,9 +636,9 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         const componentName = nameOrNull(component.name)!
         const parentName = this.parentName(component)
 
-        if (PeerGeneratorVisitor.needsPeerRoots.includes(componentName)) return "PeerNode"
-        if (PeerGeneratorVisitor.standaloneComponents.includes(componentName)) return "PeerNode" // for now
-        if (PeerGeneratorVisitor.rootComponents.includes(componentName)) return "Finalizable"
+        if (PeerGeneratorConfig.commonMethod.includes(componentName)) return "PeerNode"
+        if (PeerGeneratorConfig.standaloneComponents.includes(componentName)) return "PeerNode" // for now
+        if (PeerGeneratorConfig.rootComponents.includes(componentName)) return "Finalizable"
 
         return parentName
             ? this.renameToKoalaComponent(parentName) + "Peer"
@@ -667,8 +649,8 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         const componentName = nameOrNull(component.name)!
         const parentName = this.parentName(component)
 
-        if (componentName === "CommonMethod") return undefined
-        if (PeerGeneratorVisitor.rootComponents.includes(componentName)) return undefined
+        if (PeerGeneratorConfig.commonMethod.includes(componentName)) return undefined
+        if (PeerGeneratorConfig.rootComponents.includes(componentName)) return undefined
 
         return parentName
             ? (this.renameToKoalaComponent(parentName) + "Attributes")
@@ -690,12 +672,8 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     processApplyMethod(node: ts.ClassDeclaration | ts.InterfaceDeclaration) {
         const component = nameOrNull(node.name)!.replace("Attribute", "")
 
-        if (PeerGeneratorVisitor.needsPeerRoots.includes(component)) {
-            return
-        }
-
         const typeParam = this.renameToKoalaComponent(component) + "Attributes"
-        if (PeerGeneratorVisitor.rootComponents.includes(component)) {
+        if (PeerGeneratorConfig.rootComponents.includes(component)) {
             this.printTS(`applyAttributes(attributes: ${typeParam}): void {`)
             this.pushIndentTS()
             this.printTS(`super.constructor(42)`)
