@@ -989,14 +989,6 @@ export function bridgeCcDeclaration(bridgeCc: string[]): string {
 #include "Interop.h"
 #include "Deserializer.h"
 
-#define ARKUI_FULL_API_VERSION 1
-
-#define ARKUI_BASIC_API_VERSION 5
-#define ARKUI_EXTENDED_API_VERSION 4
-#define ARKUI_NODE_GRAPHICS_API_VERSION 5
-#define ARKUI_NODE_MODIFIERS_API_VERSION 5
-#define ARKUI_AUTO_GENERATE_NODE_ID -2
-
 enum ArkUIAPIVariantKind {
     BASIC = 1,
     FULL = 2,
