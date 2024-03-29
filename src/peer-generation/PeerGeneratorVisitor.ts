@@ -647,10 +647,10 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
                 : ""
         this.printTS(`export class ${componentName}Peer ${extendsClause} {`)
         this.pushIndentTS()
-        this.printAPI(`struct ArkUI${componentName}Modifier {`)
+        this.printAPI(`struct ArkUI${componentName.substring(3)}Modifier {`)
         this.pushIndentAPI()
         this.pushIndentAPIList()
-        this.printNodeModifier(componentName)
+        this.printNodeModifier(componentName.substring(3))
     }
 
     private parentName(component: ts.ClassDeclaration | ts.InterfaceDeclaration): string | undefined {
