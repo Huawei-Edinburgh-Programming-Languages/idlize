@@ -3,6 +3,7 @@
 typedef int32_t KInt;
 typedef float KFloat;
 typedef int KBoolean;
+typedef int ArkUI_Int32;
 typedef void* KPointer;
 typedef void* KNativePointer;
 typedef void* ArkUINodeHandle;
