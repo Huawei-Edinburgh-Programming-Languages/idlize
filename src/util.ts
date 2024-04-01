@@ -255,6 +255,7 @@ export function typeName(type: ts.TypeReferenceNode|ts.TypeQueryNode): string {
 export function zip<A, B>(to: readonly A[], from: readonly B[]): [A, B][] {
     return to.map((toValue, i) => [toValue, from[i]])
 }
+
 export function identName(node: ts.Node | undefined): string | undefined {
     if (!node) return undefined
     if (node.kind == ts.SyntaxKind.AnyKeyword) return `any`
