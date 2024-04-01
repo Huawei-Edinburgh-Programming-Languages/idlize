@@ -42,11 +42,13 @@ import {
     NumberConvertor,
     StringConvertor,
     TypedConvertor,
+    TupleConvertor,
     UndefinedConvertor,
     UnionConvertor
 } from "./Convertors"
 import { SortingEmitter } from "./SortingEmitter"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
+import { createAnyType } from "../idl"
 
 export enum RuntimeType {
     UNEXPECTED = -1,
@@ -78,7 +80,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     private printerNativeModule: IndentedPrinter
     private printerSerializerC: IndentedPrinter
     private printerStructsC: SortingEmitter
-    private printerStructsForwardC: IndentedPrinter
+    private printerTypedefsC: IndentedPrinter
     private printerSerializerTS: IndentedPrinter
     private serializerRequests: TypeAndName[] = []
     private apiPrinter: IndentedPrinter
@@ -110,7 +112,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         this.printerNativeModule = new IndentedPrinter(nativeModuleMethods)
         this.printerSerializerC = new IndentedPrinter(outputSerializersC)
         this.printerStructsC = outputStructsC
-        this.printerStructsForwardC = new IndentedPrinter(outputStructsForwardC)
+        this.printerTypedefsC = new IndentedPrinter(outputStructsForwardC)
         this.printerSerializerTS = new IndentedPrinter(outputSerializersTS)
         this.apiPrinter = new IndentedPrinter(apiHeaders)
         this.apiPrinterList = new IndentedPrinter(apiHeadersList)
@@ -411,8 +413,8 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
 
     generateAPIParameters(argConvertors: ArgConvertor[]): string[] {
         return (["ArkUINodeHandle node"].concat(argConvertors.map(it => {
-            return `${it.nativeType()}* ${it.param}`
-        }))) 
+            return `${it.nativeType()} ${it.param}`
+        })))
     }
 
     // TODO: may be this is another method of ArgConvertor?
@@ -595,7 +597,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
             throw new Error(`Unsupported literal type: ${type.literal.kind}` + type.getText(this.sourceFile))
         }
         if (ts.isTupleTypeNode(type)) {
-            return new EmptyConvertor(param)
+            return new TupleConvertor(param, this, type)
         }
         if (ts.isFunctionTypeNode(type)) {
             return new FunctionConvertor(param, this)
@@ -603,11 +605,19 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         if (ts.isParenthesizedTypeNode(type)) {
             return this.typeConvertor(param, type.type)
         }
+        if (ts.isOptionalTypeNode(type)) {
+            // TODO: implement OptionalConvertor
+            return new AnyConvertor(param)
+        }
         if (ts.isImportTypeNode(type)) {
             return new TypedConvertor(asString(type.qualifier), type, param, this)
         }
         if (ts.isTemplateLiteralTypeNode(type)) {
             return new StringConvertor(param)
+        }
+        if (ts.isNamedTupleMember(type)) {
+            // TODO: implement NamedTupleConvertor
+            return new AnyConvertor(param)
         }
         if (type.kind == ts.SyntaxKind.AnyKeyword) {
             return new AnyConvertor(param)
@@ -875,16 +885,20 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         let isAlias = declarations.length > 0 && ts.isTypeAliasDeclaration(declarations[0])
         let isStruct = !isEnum && !isAlias
         if (isEnum) {
-            this.printerStructsForwardC.print(`typedef int32_t ${name};`)
+            this.printerTypedefsC.print(`typedef int32_t ${name};`)
         }
         if (isAlias) {
             let decl = declarations[0] as ts.TypeAliasDeclaration
             let typeConvertor = this.typeConvertor("XXX", decl.type)
-            this.printerStructsForwardC.print(`typedef ${typeConvertor.nativeType()} ${name};`)
+            if (ts.isUnionTypeNode(decl.type)) { // TODO: tuples? functions?
+                this.printerStructsC.startEmit(this.typeChecker, decl.type, name)
+                this.printerStructsC.print(`typedef ${typeConvertor.nativeType()} ${name};`)
+            } else {
+                this.printerTypedefsC.print(`typedef ${typeConvertor.nativeType()} ${name};`)
+            }
         }
         if (isStruct) {
             // TODO: support subclasses.
-            this.printerStructsForwardC.print(`struct ${name};`)
             this.printerStructsC.startEmit(this.typeChecker, type!)
             this.printerStructsC.print(`struct ${name} {`)
             this.printerStructsC.pushIndent()
@@ -987,6 +1001,21 @@ export function bridgeCcDeclaration(bridgeCc: string[]): string {
     return `
 #include "Interop.h"
 #include "Deserializer.h"
+#include "arkoala_api.h"
+
+static ArkUIAnyAPI* impls[ArkUIAPIVariantKind::COUNT] = { 0 };
+
+const ArkUIAnyAPI* GetAnyImpl(ArkUIAPIVariantKind kind, int version, std::string* result) {
+    return impls[kind];
+}
+
+const ArkUIFullNodeAPI* GetFullImpl(std::string* result = nullptr) {
+    return reinterpret_cast<const ArkUIFullNodeAPI*>(GetAnyImpl(ArkUIAPIVariantKind::FULL, ARKUI_FULL_API_VERSION, result));
+}
+
+const ArkUINodeModifiers* GetNodeModifiers() {
+    return GetFullImpl()->getNodeModifiers();
+}
 
 ${bridgeCc.join("\n")}
 `
@@ -1039,11 +1068,32 @@ export function makeApiModifiers(lines: string[]): string {
  */
 struct ArkUINodeModifiers {
 ${lines.join("\n")}
-}
+};
+
+/**
+ * An API to control an implementation. When making changes modifying binary
+ * layout, i.e. adding new events - increase ARKUI_NODE_API_VERSION above for binary
+ * layout checks.
+ */
+struct ArkUIFullNodeAPI {
+    const ArkUINodeModifiers* (*getNodeModifiers)();
+};
+
+struct ArkUIAnyAPI {
+    ArkUI_Int32 version;
+};
 `
 }
 
 export function makeApiHeaders(lines: string[]): string {
-    return `${lines.join("\n")}
+    return `enum ArkUIAPIVariantKind {
+    BASIC = 1,
+    FULL = 2,
+    GRAPHICS = 3,
+    EXTENDED = 4,
+    COUNT = EXTENDED + 1,
+};
+
+${lines.join("\n")}
 `
 }
