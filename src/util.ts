@@ -251,3 +251,7 @@ export function typeName(type: ts.TypeReferenceNode|ts.TypeQueryNode): string {
     if (ts.isTypeQueryNode(type)) return ts.idText(type.exprName as ts.Identifier)
     throw new Error("unsupported")
 }
+
+export function zip<A, B>(to: readonly A[], from: readonly B[]): [A, B][] {
+    return to.map((toValue, i) => [toValue, from[i]])
+}
