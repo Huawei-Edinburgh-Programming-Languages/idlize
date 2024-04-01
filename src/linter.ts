@@ -334,6 +334,12 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
         return map
     }
 
+    /*
+        ts.typechecker doesn't provide the functionality to check if type1 satisfies type2,
+        so we'll implement it for functional types, by comparing recursively number of parameters
+
+        currently, this one's needed only to report ScrollAttribute
+     */
     private satisfies(
         subtypeFunction: ts.FunctionTypeNode,
         supertypeFunction: ts.FunctionTypeNode
