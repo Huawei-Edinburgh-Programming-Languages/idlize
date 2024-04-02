@@ -33,8 +33,6 @@ export class PeerGeneratorConfig {
         "ContainerSpanAttribute"
     ]
 
-    public static readonly serializerBaseMethods = serializerBaseMethods()
-
     public static skipPeerGeneration = ["CommonAttribute"]
 
     static mapComponentName(originalName: string): string {
