@@ -12,6 +12,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { defaultCompilerOptions } from "../util";
+import * as ts from "typescript";
+
 export class PeerGeneratorConfig {
     public static commonMethod = ["CommonMethod"]
 
@@ -31,6 +34,8 @@ export class PeerGeneratorConfig {
         "ContainerSpanAttribute"
     ]
 
+    public static readonly serializerBaseMethods = serializerBaseMethods()
+
     public static skipPeerGeneration = ["CommonAttribute"]
 
     static mapComponentName(originalName: string): string {
@@ -41,5 +46,26 @@ export class PeerGeneratorConfig {
 
     static isKnownParametrized(name: string | undefined) : boolean {
         return name != undefined && PeerGeneratorConfig.knownParametrized.includes(name)
+    }
+}
+
+function serializerBaseMethods(): string[] {
+    const program = ts.createProgram([
+        "./utils/ts/SerializerBase.ts",
+        "./utils/ts/types.ts",
+    ], defaultCompilerOptions)
+
+    const serializerDecl = program.getSourceFiles()
+        .find(it => it.fileName.includes("SerializerBase"))
+    if (serializerDecl === undefined) throw new Error("Didn't find SerializerBase")
+
+    const methods: string[] = []
+    visit(serializerDecl)
+    return methods
+
+    function visit(node: ts.Node) {
+        if (ts.isSourceFile(node)) node.statements.forEach(visit)
+        if (ts.isClassDeclaration(node)) node.members.filter(ts.isMethodDeclaration).forEach(visit)
+        if (ts.isMethodDeclaration(node)) methods.push(node.name.getText(serializerDecl))
     }
 }
