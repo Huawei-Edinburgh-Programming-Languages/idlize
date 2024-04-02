@@ -23,6 +23,7 @@ import {
     isCommonMethodOrSubclass,
     isDefined,
     nameOrNull,
+    serializerBaseMethods,
     stringOrNone,
     typeOrUndefined
 } from "../util"
@@ -94,6 +95,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         { file: "image", components: ["Image"] },
         { file: "span", components: ["BaseSpan"] },
     ]
+    private serializerBaseMethods = serializerBaseMethods()
 
     constructor(
         private sourceFile: ts.SourceFile,
@@ -119,6 +121,9 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     }
 
     requestType(name: string, type: ts.TypeReferenceNode | ts.ImportTypeNode | undefined) {
+        if (this.serializerBaseMethods.has(`write${name}`)) {
+            return
+        }
         if (type) {
             this.serializerRequests.push({ type, name })
         }
@@ -882,6 +887,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         this.printerSerializerTS.print(`}`)
         this.printerSerializerTS.popIndent()
     }
+
     private generateDeserializer(name: string, type: ts.TypeReferenceNode | ts.ImportTypeNode | undefined) {
         if (PeerGeneratorConfig.ignoreSerialization.indexOf(name) != -1) return
         this.printerSerializerC.print(`${name} read${name}() {`)
