@@ -85,14 +85,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     private apiPrinter: IndentedPrinter
     private apiPrinterList: IndentedPrinter
 
-    private static imports = [
-        { file: "common", components: ["Common", "ScrollableCommon", "CommonShape"]},
-        { file: "shape", components: ["Shape"] },
-        { file: "security_component", components: ["SecurityComponent"] },
-        { file: "column", components: ["Column"] },
-        { file: "image", components: ["Image"] },
-        { file: "span", components: ["BaseSpan"] },
-    ]
     private static readonly serializerBaseMethods = serializerBaseMethods()
 
     constructor(
@@ -137,7 +129,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     }
 
     private importStatements(currentFileName: string): string[] {
-        return PeerGeneratorVisitor.imports
+        return PeerGeneratorConfig.exports
             .filter(it => !currentFileName.endsWith(`/${it.file}.d.ts`))
             .map(it => {
                 const entities = it.components.map(it => [`Ark${it}Peer`, `Ark${it}Attributes`]).join(", ")
@@ -740,8 +732,13 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         this.printTS(`}`)
     }
 
-    private createComponentAttributesDeclaration(node: ts.ClassDeclaration | ts.InterfaceDeclaration) {
+    private createComponentAttributesDeclaration(node: ts.ClassDeclaration | ts.InterfaceDeclaration): void {
         const component = nameOrNull(node.name)!.replace("Attribute", "")
+        const koalaComponent = this.renameToKoalaComponent(component)
+        if (PeerGeneratorConfig.invalidAttributes.includes(koalaComponent)) {
+            this.printTS(`export interface ${koalaComponent}Attributes {}`)
+            return
+        }
         const parent = this.attributesParentName(node)
         const extendsClause =
             parent

@@ -12,7 +12,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { serializerBaseMethods } from "../util";
 
 export class PeerGeneratorConfig {
     public static commonMethod = ["CommonMethod"]
@@ -21,6 +20,17 @@ export class PeerGeneratorConfig {
     public static ignorePeerMethod = ["attributeModifier"]
 
     private static knownParametrized = ["Indicator", "AttributeModifier"]
+
+    public static exports = [
+        { file: "common", components: ["Common", "ScrollableCommon", "CommonShape"]},
+        { file: "shape", components: ["Shape"] },
+        { file: "security_component", components: ["SecurityComponent"] },
+        { file: "column", components: ["Column"] },
+        { file: "image", components: ["Image"] },
+        { file: "span", components: ["BaseSpan"] },
+    ]
+
+    public static invalidAttributes = ["ArkScrollableCommon"]
 
     public static readonly rootComponents = [
         "CommonMethod",
