@@ -1204,6 +1204,22 @@ struct ArkUINodeModifiers {
 ${lines.join("\n")}
 };
 
+struct ArkUIBasicAPI {
+    KBoolean version;
+};
+
+struct ArkUIAnimation {
+    KBoolean version;
+};
+
+struct ArkUINavigation {
+    KBoolean version;
+};
+
+struct ArkUIGraphicsAPI {
+    KBoolean version;
+};
+
 /**
  * An API to control an implementation. When making changes modifying binary
  * layout, i.e. adding new events - increase ARKUI_NODE_API_VERSION above for binary
@@ -1211,7 +1227,11 @@ ${lines.join("\n")}
  */
 struct ArkUIFullNodeAPI {
     KBoolean version;
+    const ArkUIBasicAPI* (*getBasicAPI)();
     const ArkUINodeModifiers* (*getNodeModifiers)();
+    const ArkUIAnimation* (*getAnimation)();
+    const ArkUINavigation* (*getNavigation)();
+    const ArkUIGraphicsAPI* (*getGraphicsAPI)();
 };
 
 struct ArkUIAnyAPI {
@@ -1221,8 +1241,7 @@ struct ArkUIAnyAPI {
 }
 
 export function makeApiHeaders(lines: string[]): string {
-    return `#include "Interop.h"
-#include "ArgDeserializerBase.h"
+    return `#include "Deserializer.h"
 
 enum ArkUIAPIVariantKind {
     BASIC = 1,
