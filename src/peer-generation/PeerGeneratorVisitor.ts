@@ -1205,19 +1205,19 @@ ${lines.join("\n")}
 };
 
 struct ArkUIBasicAPI {
-    KBoolean version;
+    KInt version;
 };
 
 struct ArkUIAnimation {
-    KBoolean version;
+    KInt version;
 };
 
 struct ArkUINavigation {
-    KBoolean version;
+    KInt version;
 };
 
 struct ArkUIGraphicsAPI {
-    KBoolean version;
+    KInt version;
 };
 
 /**
@@ -1226,7 +1226,7 @@ struct ArkUIGraphicsAPI {
  * layout checks.
  */
 struct ArkUIFullNodeAPI {
-    KBoolean version;
+    KInt version;
     const ArkUIBasicAPI* (*getBasicAPI)();
     const ArkUINodeModifiers* (*getNodeModifiers)();
     const ArkUIAnimation* (*getAnimation)();
@@ -1235,7 +1235,7 @@ struct ArkUIFullNodeAPI {
 };
 
 struct ArkUIAnyAPI {
-    KBoolean version;
+    KInt version;
 };
 `
 }
