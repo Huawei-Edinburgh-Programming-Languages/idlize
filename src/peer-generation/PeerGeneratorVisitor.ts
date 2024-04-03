@@ -1098,10 +1098,7 @@ ${methods.join("\n")}
 
 
 export function bridgeCcDeclaration(bridgeCc: string[]): string {
-    return `
-#include "Interop.h"
-#include "Deserializer.h"
-#include "arkoala_api.h"
+    return `#include "arkoala_api.h"
 
 static ArkUIAnyAPI* impls[ArkUIAPIVariantKind::COUNT] = { 0 };
 
@@ -1201,6 +1198,7 @@ export function makeApiModifiers(lines: string[]): string {
  * layout checks.
  */
 struct ArkUINodeModifiers {
+    KInt version;
 ${lines.join("\n")}
 };
 
