@@ -1210,17 +1210,21 @@ ${lines.join("\n")}
  * layout checks.
  */
 struct ArkUIFullNodeAPI {
+    KBoolean version;
     const ArkUINodeModifiers* (*getNodeModifiers)();
 };
 
 struct ArkUIAnyAPI {
-    ArkUI_Int32 version;
+    KBoolean version;
 };
 `
 }
 
 export function makeApiHeaders(lines: string[]): string {
-    return `enum ArkUIAPIVariantKind {
+    return `#include "Interop.h"
+#include "ArgDeserializerBase.h"
+
+enum ArkUIAPIVariantKind {
     BASIC = 1,
     FULL = 2,
     GRAPHICS = 3,
