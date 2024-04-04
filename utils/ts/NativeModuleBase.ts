@@ -1,8 +1,10 @@
 import { int32, KPointer, pointer, KStringPtr, KInt, NodePointer, KUint8ArrayPtr } from "./types"
 
 export interface NativeModuleBase {
-    _GetInteropProfile(): pointer
-
+    _GetResultString(kind: KInt): pointer
+    _ClearResultString(kind: KInt): void
+    _AppendResultString(kind: KInt): void
+    
     _GetStringFinalizer(): pointer
 
     _InvokeFinalizer(ptr: NodePointer, finalizer: NodePointer): void
