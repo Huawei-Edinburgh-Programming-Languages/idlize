@@ -1143,6 +1143,7 @@ export function dummyModifiers(lines: string[]): string {
 export function dummyModifierList(lines: string[]): string {
     return `
 const ArkUINodeModifiers impl = {
+    1, // version
 ${lines.join("\n")}
 };
 
@@ -1241,8 +1242,7 @@ struct ArkUIAnyAPI {
 }
 
 export function makeApiHeaders(lines: string[]): string {
-    return `#include "Deserializer.h"
-
+    return `
 enum ArkUIAPIVariantKind {
     BASIC = 1,
     FULL = 2,
