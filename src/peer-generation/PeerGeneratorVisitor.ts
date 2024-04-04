@@ -1098,7 +1098,9 @@ ${methods.join("\n")}
 
 
 export function bridgeCcDeclaration(bridgeCc: string[]): string {
-    return `#include "arkoala_api.h"
+    return `#include "Interop.h"
+#include "Deserializer.h"
+#include "arkoala_api.h"
 
 static ArkUIAnyAPI* impls[ArkUIAPIVariantKind::COUNT] = { 0 };
 
