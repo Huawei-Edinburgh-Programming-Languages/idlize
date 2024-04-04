@@ -153,11 +153,11 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     visitWholeFile(): stringOrNone[] {
         this.importStatements(this.sourceFile.fileName)
             .concat([
-                `import { runtimeType, functionToInt32, withLength, withLengthArray, RuntimeType } from "../../utils/ts/SerializerBase"`,
+                `import { runtimeType, functionToInt32, withLength, withLengthArray, RuntimeType } from "@arkoala/arkui/utils/ts/SerializerBase"`,
                 `import { Serializer } from "./Serializer"`,
-                `import { int32, KPointer } from "../../utils/ts/types"`,
+                `import { int32, KPointer } from "@arkoala/arkui/utils/ts/types"`,
                 `import { nativeModule } from "./NativeModule"`,
-                `import { PeerNode, Finalizable, nullptr } from "../../utils/ts/Interop"`,
+                `import { PeerNode, Finalizable, nullptr } from "@arkoala/arkui/utils/ts/Interop"`,
                 `type Callback = Function`,
                 `type ErrorCallback = Function`,
                 `type Style = any` // Style extends ProgressStyleMap from progress.d.ts
@@ -1066,7 +1066,7 @@ interface RetConvertor {
 
 export function nativeModuleDeclaration(methods: string[]): string {
     return `
-import { int32, KInt, Int32ArrayPtr, KNativePointer } from "../../utils/ts/types"
+import { int32, KInt, Int32ArrayPtr, KNativePointer } from "@arkoala/arkui/utils/ts/types"
 
 let theModule: NativeModule | undefined = undefined
 
@@ -1139,8 +1139,8 @@ const ArkUINodeModifiers* GetArkUINodeModifiers()
 
 export function makeTSSerializer(lines: string[]): string {
     return `
-import { SerializerBase, runtimeType, Tags, RuntimeType } from "../../utils/ts/SerializerBase"
-import { int32 } from "../../utils/ts/types"
+import { SerializerBase, runtimeType, Tags, RuntimeType } from "@arkoala/arkui/utils/ts/SerializerBase"
+import { int32 } from "@arkoala/arkui/utils/ts/types"
 
 type Callback = Function
 type ErrorCallback = Function

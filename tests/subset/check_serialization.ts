@@ -1,6 +1,6 @@
 import {strict as assert} from 'assert';
-import {RuntimeType, Tags} from "../../utils/ts/SerializerBase"
-import {Serializer} from "../../generated/subset/Serializer"
+import {RuntimeType, Tags} from "@arkoala/arkui/utils/ts/SerializerBase"
+import {Serializer} from "@arkoala/arkui/Serializer"
 
 function toArray(s: Serializer): Array<number> {
     return Array.from(s.asArray().slice(0, s.length()))
