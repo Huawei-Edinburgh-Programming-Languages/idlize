@@ -15,15 +15,15 @@
 
 const importTsInteropTypes = `
 import { 
-    int32, 
-    float32, 
-    KInt, 
-    KBoolean, 
-    Uint8ArrayPtr, 
-    KStringPtr, 
-    KPointer, 
-    KNativePointer, 
-    Int32ArrayPtr 
+    int32,
+    float32,
+    KInt,
+    KBoolean,
+    KStringPtr,
+    KPointer,
+    KNativePointer,
+    Int32ArrayPtr,
+    Uint8ArrayPtr
 } from "../../utils/ts/types"
 `.trim()
 

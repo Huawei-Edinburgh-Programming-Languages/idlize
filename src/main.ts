@@ -66,7 +66,7 @@ const options = program
     .option('--test-property <name>', 'Properties to test (comma separated)')
     .option('--generate-interface <name>', 'Interfaces to generate (comma separated)')
     .option('--disable-enum-initializers', "Don't include enum member initializers in the interface")
-    .option('--native-bridge-dir <name>', 'Directory with native bridge')
+    .option('--native-bridge-dir <name>', "Directory with native bridge")
     .option('--version')
     .parse()
     .opts()
