@@ -502,10 +502,9 @@ export class ImportTypeConvertor extends TypedConvertor {
             let shortName = getNameWithoutQualifiersRight(type.qualifier)!
             console.log(`FALLING BACK on ${shortName}`)
             // Fallback in case we could not find the declaration
-            this.realConvertor = new TypedConvertor(shortName, type, param, visitor)
+            this.realConvertor = new TypedConvertor(this.tsTypeName, type, param, visitor)
         }
     }
-
     convertorTSArg(param: string): string {
         return this.realConvertor!.convertorTSArg(param)
     }
@@ -527,7 +526,6 @@ export class ImportTypeConvertor extends TypedConvertor {
     estimateSize() {
         return this.realConvertor!.estimateSize()
     }
-
 }
 
 function computeImportType(type: ts.ImportTypeNode): string {

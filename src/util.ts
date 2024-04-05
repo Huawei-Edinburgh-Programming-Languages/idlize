@@ -317,7 +317,8 @@ export function identName(node: ts.Node | undefined): string | undefined {
         return `UnionType`
     }
     if (ts.isQualifiedName(node)) {
-        return `${identString(node.left)}.${identString(node.right)}`
+        // Ignored identString(node.left).
+        return `${identString(node.right)}`
     }
     if (ts.isIdentifier(node)) return identString(node)
     if (ts.isImportTypeNode(node)) return `imported ${identString(node.qualifier)}`

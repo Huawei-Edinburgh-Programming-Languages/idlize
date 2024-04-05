@@ -65,9 +65,7 @@ export function dummyImplementations(lines: string[]): string {
 #include "Deserializer.h"
 #include "arkoala_api.h"
 
-
 ${lines.join("\n")}
-
 
 `
 }
@@ -87,20 +85,14 @@ extern const ArkUINodeModifiers* GetArkUINodeModifiers()
 {
     return &impl;
 }
-
 `
 }
 
 
 export function makeTSSerializer(lines: string[]): string {
     return `
-import { SerializerBase, runtimeType, Tags, RuntimeType } from "../../utils/ts/SerializerBase"
+import { SerializerBase, runtimeType, Tags, RuntimeType, Callback, ErrorCallback, Function } from "../../utils/ts/SerializerBase"
 import { int32 } from "../../utils/ts/types"
-
-type Callback = Function
-type ErrorCallback = Function
-
-type Function = object
 
 export class Serializer extends SerializerBase {
 ${lines.join("\n")}

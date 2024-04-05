@@ -48,6 +48,10 @@ export function functionToInt32<T>(value: T): int32 {
     return 42
 }
 
+export type Function = object
+export type Callback = Function
+export type ErrorCallback = Function
+
 export function withLength(valueLength: Length|undefined, body: (value: float32, unit: int32, resource: int32) => void) {
     let type = runtimeType(valueLength)
     let value = 0
