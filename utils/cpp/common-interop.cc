@@ -128,14 +128,14 @@ std::vector<KStringPtr> makeStringVector(KNativePointerArray arr, KInt length) {
     }
 }
 
-
 std::vector<std::string> results;
-const std::string* GetResultString(KInt kind) {
-    if (kind >=0 && kind < results.size()) {
-        return &results[kind];
-    }
-    return nullptr;
-}
+
+// const std::string GetResultString(KInt kind) {
+//     if (kind >=0 && kind < results.size()) {
+//         return results[kind];
+//     }
+//     return nullptr;
+// }
 
 void ClearResultString(KInt kind) {
     if (kind >=0 && kind < results.size()) {
@@ -143,23 +143,23 @@ void ClearResultString(KInt kind) {
     }
 }
 
-void AppendResultString(KInt kind, const std::string& string) {
-    if (kind >=0 && kind <= results.size()) {
-        results.insert(results.begin() + kind, string);
-    }
-}
+// void AppendResultString(KStringPtrImpl* string) {
+//     results.push_back(string);
+// }
 
 KNativePointer impl_GetResultString(KInt kind) {
-    return new std::string(GetResultString(kind));
+    return new std::string(results[kind]);
 }
 KOALA_INTEROP_1(GetResultString, KNativePointer, KInt)
 
-void impl_ClearResultString(KInt kind) {
+KNativePointer impl_ClearResultString(KInt kind) {
     ClearResultString(kind);
+    return new std::string("There are " + std::to_string(results.size()) + " results left.");
 }
 KOALA_INTEROP_1(ClearResultString, KNativePointer, KInt)
 
-void impl_AppendResultString(KInt kind, const std::string& string) {
-    AppendResultString(kind, string);
+KNativePointer impl_AppendResultString(const KStringPtr& str) {
+    results.push_back(string(str.c_str()));
+    return new string(str.c_str());
 }
-KOALA_INTEROP_2(AppendResultString, KNativePointer, KInt, KStringPtr)
+KOALA_INTEROP_1(AppendResultString, KNativePointer, KStringPtr)

@@ -32,6 +32,7 @@ export function nativeModuleDeclaration(methods: string[], nativeBridgeDir: stri
     // TODO: better NativeBridge loader
     return `
 ${importTsInteropTypes}
+import { NativeModuleBase } from "../../utils/ts/NativeModuleBase"
 
 let theModule: NativeModule | undefined = undefined
 
@@ -41,7 +42,7 @@ export function nativeModule(): NativeModule {
     return theModule
 }
 
-export interface NativeModule {
+export interface NativeModule extends NativeModuleBase  {
 ${methods.join("\n")}
 }
 `
