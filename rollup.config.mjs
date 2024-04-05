@@ -15,7 +15,7 @@
 import nodeResolve from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
-import { dirname, resolve as pathResolve } from "path";
+import * as path from "path";
 
 const ENABLE_SOURCE_MAPS = false;  // Enable for debugging
 
@@ -27,9 +27,10 @@ export default {
         format: "commonjs",
         sourcemap: ENABLE_SOURCE_MAPS,
         sourcemapPathTransform: (relativeSourcePath, sourcemapPath) => {
-            // will replace relative paths with absolute paths, required for NodeJS debugging
             // For some reason Rollup adds extra ../ to relativeSourcePath, remove it
-            return pathResolve(dirname(sourcemapPath), "stub", relativeSourcePath);
+            let absolute = path.join(sourcemapPath, relativeSourcePath);
+            let relative = path.relative(path.dirname(sourcemapPath), absolute);
+            return relative
         },
         plugins: [
             // terser()
