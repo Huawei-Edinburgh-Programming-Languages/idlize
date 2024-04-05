@@ -13,7 +13,8 @@
  * limitations under the License.
  */
 import { IndentedPrinter } from "../IndentedPrinter"
-import { identName, typeName } from "../util"
+import { TypeChecker } from "../typecheck"
+import { getDeclarationsByNode, getNameWithoutQualifiersRight, identName, typeName } from "../util"
 import { PeerGeneratorVisitor, RuntimeType } from "./PeerGeneratorVisitor"
 import * as ts from "typescript"
 
@@ -430,7 +431,7 @@ export class AggregateConvertor extends BaseArgConvertor {
     nativeType(): string {
         return `Compound<${this.memberConvertors.map(it => it.nativeType()).join(", ")}>`
     }
-    interopType(): string {
+    interopType(ts: boolean): string {
         return "KNativePointer"
     }
     estimateSize() {
@@ -462,7 +463,7 @@ export class TypedConvertor extends BaseArgConvertor {
     nativeType(): string {
         return this.tsTypeName
     }
-    interopType(): string {
+    interopType(ts: boolean): string {
         return "KNativePointer"
     }
     estimateSize() {
@@ -474,6 +475,64 @@ export class InterfaceConvertor extends TypedConvertor {
     constructor(name: string, param: string, visitor: PeerGeneratorVisitor, type: ts.TypeReferenceNode | ts.ImportTypeNode) {
         super(name, type, param, visitor)
     }
+}
+
+export class ImportTypeConvertor extends TypedConvertor {
+    realConvertor: ArgConvertor| undefined
+    constructor(param: string, visitor: PeerGeneratorVisitor, type: ts.ImportTypeNode) {
+        super(computeImportType(type), type, param, visitor)
+        let importedName = undefined
+        if (type.qualifier && ts.isIdentifier(type.qualifier)) {
+            importedName = type.qualifier
+        } else if (type.qualifier && ts.isQualifiedName(type.qualifier)) {
+            importedName = type.qualifier.right
+        }
+        if (importedName) {
+            let importedDeclaration = getDeclarationsByNode(visitor.typeChecker, importedName)[0]
+            if (importedDeclaration) {
+                if (ts.isExportAssignment(importedDeclaration)) {
+                    if (ts.isIdentifier(importedDeclaration.expression)) {
+                        importedDeclaration = getDeclarationsByNode(visitor.typeChecker, importedDeclaration.expression)[0]
+                    }
+                }
+                this.realConvertor = visitor.declarationConvertor(param, type, importedDeclaration)
+            }
+        }
+        if (!this.realConvertor) {
+            let shortName = getNameWithoutQualifiersRight(type.qualifier)!
+            console.log(`FALLING BACK on ${shortName}`)
+            // Fallback in case we could not find the declaration
+            this.realConvertor = new TypedConvertor(shortName, type, param, visitor)
+        }
+    }
+
+    convertorTSArg(param: string): string {
+        return this.realConvertor!.convertorTSArg(param)
+    }
+    convertorToTSSerial(param: string, value: string, printer: IndentedPrinter): void {
+        this.realConvertor!.convertorToTSSerial(param, value, printer)
+    }
+    convertorCArg(param: string): string {
+        return this.realConvertor!.convertorCArg(param)
+    }
+    convertorToCDeserial(param: string, value: string, printer: IndentedPrinter): void {
+        this.realConvertor!.convertorToCDeserial(param, value,printer)
+    }
+    nativeType(): string {
+        return this.realConvertor!.nativeType()
+    }
+    interopType(ts: boolean): string {
+        return this.realConvertor!.interopType(ts)
+    }
+    estimateSize() {
+        return this.realConvertor!.estimateSize()
+    }
+
+}
+
+function computeImportType(type: ts.ImportTypeNode): string {
+    let name = `Imported${identName(type.qualifier)}`
+    return name
 }
 
 export class FunctionConvertor extends TypedConvertor {

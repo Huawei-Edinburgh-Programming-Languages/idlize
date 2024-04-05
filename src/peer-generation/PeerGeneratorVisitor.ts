@@ -41,14 +41,14 @@ import {
     EnumConvertor,
     FunctionConvertor,
     InterfaceConvertor,
-    LengthConvertor,
     NumberConvertor,
     OptionConvertor,
     StringConvertor,
-    TypedConvertor,
     TupleConvertor,
     UndefinedConvertor,
     UnionConvertor,
+    ImportTypeConvertor,
+    LengthConvertor,
     AnimationRangeConvertor
 } from "./Convertors"
 import { SortingEmitter } from "./SortingEmitter"
@@ -97,7 +97,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
 
     constructor(
         private sourceFile: ts.SourceFile,
-        private typeChecker: ts.TypeChecker,
+        public typeChecker: ts.TypeChecker,
         private interfacesToGenerate: Set<string>,
         nativeModuleMethods: string[],
         outputC: string[],
@@ -126,7 +126,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
 
     requestType(name: string, type: ts.TypeReferenceNode | ts.ImportTypeNode | undefined) {
         if (PeerGeneratorVisitor.serializerBaseMethods.includes(`write${name}`)) return
-
         if (type) {
             this.serializerRequests.push({ type, name })
         }
@@ -581,7 +580,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
             console.log(`WARNING: declaration not found: ${asString(type)}`)
             return new AnyConvertor(param)
         }
-        const declarationName = ts.idText(declaration.name as ts.Identifier) // identName(declaration.name)!
+        const declarationName = identName(declaration.name)!
 
         const entityName = typeEntityName(type)
         let customConvertor = this.customConvertor(entityName, param, type)
@@ -666,27 +665,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
             return new OptionConvertor(param, this, type.type)
         }
         if (ts.isImportTypeNode(type)) {
-            let importedName = undefined
-            if (type.qualifier && ts.isIdentifier(type.qualifier)) {
-                importedName = type.qualifier
-            } else if (type.qualifier && ts.isQualifiedName(type.qualifier)) {
-                importedName = type.qualifier.right
-            }
-            if (importedName) {
-                let importedDeclaration = getDeclarationsByNode(this.typeChecker, importedName)[0]
-                if (importedDeclaration) {
-                    if (ts.isExportAssignment(importedDeclaration)) {
-                        if (ts.isIdentifier(importedDeclaration.expression)) {
-                            importedDeclaration = getDeclarationsByNode(this.typeChecker, importedDeclaration.expression)[0]
-                        }
-                    }
-                    return this.declarationConvertor(param, type, importedDeclaration)
-                }
-            }
-            let shortName = getNameWithoutQualifiersRight(type.qualifier)!
-            console.log(`FALLING BACK on ${shortName}`)
-            // Fallback in case we could not find the declaration
-            return new TypedConvertor(shortName, type, param, this)
+            return new ImportTypeConvertor(param, this, type)
         }
         if (ts.isTemplateLiteralTypeNode(type)) {
             return new StringConvertor(param)
@@ -968,6 +947,9 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
                         this.printerSerializerTS.print(`let value_${fieldName} = value.${fieldName}`)
                         typeConvertor.convertorToTSSerial(`value`, `value_${fieldName}`, this.printerSerializerTS)
                     })
+            } else if (ts.isTypeAliasDeclaration(declaration)) {
+                let typeConvertor = this.typeConvertor("value", declaration.type)
+                typeConvertor.convertorToTSSerial(`value`, `value`, this.printerSerializerTS)
             } else {
                 let typeConvertor = this.typeConvertor("value", type!)
                 typeConvertor.convertorToTSSerial(`value`, `value`, this.printerSerializerTS)
@@ -976,7 +958,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
             this.printerSerializerTS.print(`}`)
             this.printerSerializerTS.popIndent()
         } else {
-            throw new Error(`No idea how to serialize ${asString(type)}`)
+            //throw new Error(`No idea how to serialize ${asString(type)}: ${type?.kind}`)
         }
     }
 
@@ -1036,7 +1018,9 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
             }
             this.printerSerializerC.print(`return value;`)
         } else {
-            throw new Error(`Implement ${name} manually`)
+            // Temporary!
+            if (name != "ImportedImageModifier")
+                throw new Error(`Implement ${name} manually`)
         }
         if (isStruct) {
             this.printerStructsC.popIndent()
@@ -1063,7 +1047,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         modifiers: ts.NodeArray<ts.ModifierLike> | undefined) {
         if (!fieldType) throw new Error("Untyped field")
         if (ts.isTypeReferenceNode(fieldType)) {
-            this.requestType(ts.idText(fieldType.typeName as ts.Identifier), fieldType)
+            this.requestType(identName(fieldType.typeName)!, fieldType)
         }
         let typeConvertor = this.typeConvertor("value", fieldType)
         let fieldName = identName(fieldNameTS)
