@@ -480,7 +480,8 @@ export class InterfaceConvertor extends TypedConvertor {
 export class ImportTypeConvertor extends TypedConvertor {
     realConvertor: ArgConvertor| undefined
     constructor(param: string, visitor: PeerGeneratorVisitor, type: ts.ImportTypeNode) {
-        super(computeImportType(type), type, param, visitor)
+        super(ImportTypeConvertor.computeImportType(type), type, param, visitor)
+        visitor.addImport(this.tsTypeName, type)
         let importedName = undefined
         if (type.qualifier && ts.isIdentifier(type.qualifier)) {
             importedName = type.qualifier
@@ -518,7 +519,7 @@ export class ImportTypeConvertor extends TypedConvertor {
         this.realConvertor!.convertorToCDeserial(param, value,printer)
     }
     nativeType(): string {
-        return this.realConvertor!.nativeType()
+        return ${this.realConvertor!.nativeType()}
     }
     interopType(ts: boolean): string {
         return this.realConvertor!.interopType(ts)
@@ -526,11 +527,11 @@ export class ImportTypeConvertor extends TypedConvertor {
     estimateSize() {
         return this.realConvertor!.estimateSize()
     }
-}
 
-function computeImportType(type: ts.ImportTypeNode): string {
-    let name = `Imported${identName(type.qualifier)}`
-    return name
+    static computeImportType(type: ts.ImportTypeNode): string {
+        let name = `Imported${identName(type.qualifier)}`
+        return name
+    }
 }
 
 export class FunctionConvertor extends TypedConvertor {

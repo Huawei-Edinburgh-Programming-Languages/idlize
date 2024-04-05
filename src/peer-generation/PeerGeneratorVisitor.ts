@@ -109,7 +109,8 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         apiHeadersList: string[],
         dummyImpl: string[],
         dummyImplModifiers: string[],
-        dummyImplModifierList: string[]
+        dummyImplModifierList: string[],
+        private importedTypes: Set<string>
     ) {
         this.printerC = new IndentedPrinter(outputC)
         this.printerNativeModule = new IndentedPrinter(nativeModuleMethods)
@@ -158,12 +159,12 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
                 `import { int32, KPointer } from "../../utils/ts/types"`,
                 `import { nativeModule } from "./NativeModule"`,
                 `import { PeerNode, Finalizable, nullptr } from "../../utils/ts/Interop"`,
-                `type Callback = Function`,
-                `type ErrorCallback = Function`,
-                `type Style = any` // Style extends ProgressStyleMap from progress.d.ts
+                `import { Callback, ErrorCallback } from "../../utils/ts/SerializerBase"`,
             ])
             .forEach(it => this.printTS(it))
         ts.forEachChild(this.sourceFile, (node) => this.visit(node))
+
+        this.importedTypes.forEach(it => this.printTS(it))
 
         forEachExpanding(this.serializerRequests, (it) => {
             if (serializerSeen.has(it.name)) {
@@ -186,6 +187,15 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
             return isCommonMethodOrSubclass(this.typeChecker, decl)
         }
         return false
+    }
+
+    addImport(name: string, type: ts.ImportTypeNode) {
+        let typeArg = type.argument
+        if (ts.isLiteralTypeNode(typeArg)) {
+            let maybeQualifier = type.qualifier?.getText()
+            if (name != "ImportedCallback" && name != "ImportedErrorCallback")
+                this.importedTypes.add(`type ${name} = import(${typeArg.literal.getText()})${maybeQualifier ? "."+maybeQualifier : ""}`)
+        }
     }
 
     needsPeer(decl: ts.ClassDeclaration | ts.InterfaceDeclaration): boolean {
@@ -284,6 +294,8 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
             if (declaration.length == 0) return "any"
             let typeName = asString(type.typeName)
             if (typeName == "AttributeModifier") return "AttributeModifier<this>"
+            // TODO: HACK, FIX ME!
+            if (typeName == "Style") return "object"
             if (typeName != "Array") return typeName
         }
         if (type && ts.isImportTypeNode(type)) {

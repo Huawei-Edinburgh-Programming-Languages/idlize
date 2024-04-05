@@ -222,6 +222,7 @@ if (options.dts2peer) {
     const dummyImpl: string[] = []
     const dummyImplModifiers: string[] = []
     const dummyImplModifierList: string[] = []
+    const importedTypes = new Set<string>()
 
     generate(
         options.inputDir,
@@ -241,7 +242,8 @@ if (options.dts2peer) {
             apiHeadersList,
             dummyImpl,
             dummyImplModifiers,
-            dummyImplModifierList
+            dummyImplModifierList,
+            importedTypes
         ),
         {
             compilerOptions: defaultCompilerOptions,
@@ -262,7 +264,7 @@ if (options.dts2peer) {
                 fs.writeFileSync(path.join(outDir, 'NativeModule.ts'), nativeModule)
                 const bridgeCc = bridgeCcDeclaration(bridgeCcArray)
                 fs.writeFileSync(path.join(outDir, 'bridge.cc'), bridgeCc)
-                fs.writeFileSync(path.join(outDir, 'Serializer.ts'), makeTSSerializer(serializerTS))
+                fs.writeFileSync(path.join(outDir, 'Serializer.ts'), makeTSSerializer(serializerTS, importedTypes))
                 fs.writeFileSync(path.join(outDir, 'Deserializer.h'), makeCDeserializer(structsForwardC, structsC.getOutput(), deserializerC))
                 fs.writeFileSync(path.join(outDir, 'arkoala_api.h'), makeApiHeaders(apiHeaders) + makeApiModifiers(apiHeadersList))
                 const dummyImplCc =
