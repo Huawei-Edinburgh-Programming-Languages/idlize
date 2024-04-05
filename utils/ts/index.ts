@@ -57,15 +57,16 @@ function checkFormComponent() {
 }
 
 function checkWithString() {
-    console.log(withStringResult(nativeModule()._AppendResultString("foo")))
-    console.log(withStringResult(nativeModule()._AppendResultString("qoo")))
-    console.log(withStringResult(nativeModule()._AppendResultString("bar")))
-    console.log(withStringResult(nativeModule()._AppendResultString("bar")))
+    nativeModule()._AppendResultString("foo")
+    nativeModule()._AppendResultString("qoo")
+    nativeModule()._AppendResultString("bar")
+    nativeModule()._AppendResultString("zex")
+    console.log(withStringResult(nativeModule()._GetResultString(0)))
+    console.log(withStringResult(nativeModule()._GetResultString(2)))
+    nativeModule()._ClearResultString(1)
     console.log("")
     console.log(withStringResult(nativeModule()._GetResultString(0)))
     console.log(withStringResult(nativeModule()._GetResultString(2)))
-    console.log("")
-    console.log(withStringResult(nativeModule()._ClearResultString(1)))
 }
 
 checkButton()
