@@ -20,38 +20,40 @@ import { ArkFormComponentPeer } from "@arkoala/arkui/ArkFormComponentPeer"
 import { withStringResult } from "./Interop"
 import { NativeModule, nativeModule } from "@arkoala/arkui/NativeModule"
 
+let count = 0
+function cppSideLog() {
+    console.log("C++ side: ", withStringResult(nativeModule()._GetResultString(count)))
+    count++
+}
+
 function checkButton() {
-    let count = 0
     let peer = new ArkButtonPeer()
     peer.width("42%")
-    console.log("C++ side: ", withStringResult(nativeModule()._GetResultString(count)))
-    count++
+    cppSideLog()
 
     peer.height({ id: 43, bundleName: "MyApp", moduleName: "MyApp" })
-    console.log("C++ side: ", withStringResult(nativeModule()._GetResultString(count)))
-    count++
+    cppSideLog()
     
     peer.bindSheet(false, () => {}, {
         title: {
             title: { id: 43, bundleName: "MyApp", moduleName: "MyApp" }
         }
     })
-    console.log("C++ side: ", withStringResult(nativeModule()._GetResultString(count)))
-    count++
+    cppSideLog()
 
     peer.type(1)
-    console.log("C++ side: ", withStringResult(nativeModule()._GetResultString(count)))
-    count++
+    cppSideLog()
 
     peer.labelStyle({maxLines: 3})
-    console.log("C++ side: ", withStringResult(nativeModule()._GetResultString(count)))
-    count++
+    cppSideLog()
 }
 
 function checkCalendar() {
     let peer = new ArkCalendarPickerPeer()
     peer.edgeAlign(2, {dx: 5, dy: 6})
+    cppSideLog()
     peer.edgeAlign(2, undefined)
+    cppSideLog()
 }
 
 /*
@@ -68,6 +70,7 @@ function checkDTS() {
 function checkFormComponent() {
     let peer = new ArkFormComponentPeer()
     peer.size({width: 5, height: 6})
+    cppSideLog()
 }
 
 checkButton()
