@@ -19,11 +19,23 @@ import { ArkCalendarPickerPeer } from "@arkoala/arkui/ArkCalendarPickerPeer"
 import { ArkFormComponentPeer } from "@arkoala/arkui/ArkFormComponentPeer"
 import { withStringResult } from "./Interop"
 import { NativeModule, nativeModule } from "@arkoala/arkui/NativeModule"
+import { assert } from "console"
 
 let count = 0
 function cppSideLog() {
     console.log("C++ side: ", withStringResult(nativeModule()._GetResultString(count)))
     count++
+}
+
+function checkWithString(test: Array<string>) {
+    for(let str of test) {
+        nativeModule()._AppendResultString(str)
+        if(str != withStringResult(nativeModule()._GetResultString(count))) {
+            throw new Error()
+        }
+        count++
+    }
+    console.log("withString success")
 }
 
 function checkButton() {
@@ -77,3 +89,4 @@ checkButton()
 checkCalendar()
 //checkDTS()
 checkFormComponent()
+checkWithString(["foo", "bar", "qoo", "zex"])
