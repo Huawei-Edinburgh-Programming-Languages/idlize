@@ -1187,10 +1187,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         typeConvertor.convertorToCDeserial(`value`, fieldValue, this.printerSerializerC)
         this.printerSerializerC.print(`value.${fieldName} = ${fieldValue};`);
     }
-
-    private log(message: string): void {
-        if (this.verbose) console.log(message)
-    }
 }
 
 function mapCInteropRetType(type: ts.TypeNode): string {
