@@ -132,6 +132,7 @@ export function dummyImplementations(lines: string[]): string {
 #include "Interop.h"
 #include "Deserializer.h"
 #include "arkoala_api.h"
+#include "common-interop.h"
 
 
 ${lines.join("\n")}

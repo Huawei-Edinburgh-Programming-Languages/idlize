@@ -17,6 +17,7 @@
 #define COMMON_INTEROP_BASE_H
 
 #include <vector>
+#include <string>
 
 #include "interop-types.h"
 
@@ -51,6 +52,8 @@ template <class T> KNativePointer fnPtr(void (*pointer)(T*)) {
 
 std::vector<KStringPtr> makeStringVector(KStringArray strArray);
 std::vector<KStringPtr> makeStringVector(KNativePointerArray arr, KInt size);
+
+void appendResultString(std::string str);
 
 #if defined KOALA_USE_NODE_VM
 #include "convertors-node.h"

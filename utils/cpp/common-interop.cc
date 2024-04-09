@@ -136,6 +136,10 @@ void ClearResultString(KInt index) {
     }
 }
 
+void appendResultString(std::string str) {
+    results.push_back(str);
+}
+
 KNativePointer impl_GetResultString(KInt index) {
     return new std::string(results[index]);
 }
@@ -147,6 +151,6 @@ void impl_ClearResultString(KInt index) {
 KOALA_INTEROP_V1(ClearResultString, KInt)
 
 void impl_AppendResultString(const KStringPtr& str) {
-    results.push_back(string(str.c_str()));
+    results.push_back(std::string(str.c_str()));
 }
 KOALA_INTEROP_V1(AppendResultString, KStringPtr)

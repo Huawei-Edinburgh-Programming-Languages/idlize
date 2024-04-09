@@ -18,18 +18,34 @@ import { ArkButtonPeer } from "@arkoala/arkui/ArkButtonPeer"
 import { ArkCalendarPickerPeer } from "@arkoala/arkui/ArkCalendarPickerPeer"
 import { ArkFormComponentPeer } from "@arkoala/arkui/ArkFormComponentPeer"
 import { withStringResult } from "./Interop"
+import { NativeModule, nativeModule } from "@arkoala/arkui/NativeModule"
 
 function checkButton() {
+    let count = 0
     let peer = new ArkButtonPeer()
     peer.width("42%")
+    console.log("C++ side: ", withStringResult(nativeModule()._GetResultString(count)))
+    count++
+
     peer.height({ id: 43, bundleName: "MyApp", moduleName: "MyApp" })
+    console.log("C++ side: ", withStringResult(nativeModule()._GetResultString(count)))
+    count++
+    
     peer.bindSheet(false, () => {}, {
         title: {
             title: { id: 43, bundleName: "MyApp", moduleName: "MyApp" }
         }
     })
+    console.log("C++ side: ", withStringResult(nativeModule()._GetResultString(count)))
+    count++
+
     peer.type(1)
+    console.log("C++ side: ", withStringResult(nativeModule()._GetResultString(count)))
+    count++
+
     peer.labelStyle({maxLines: 3})
+    console.log("C++ side: ", withStringResult(nativeModule()._GetResultString(count)))
+    count++
 }
 
 function checkCalendar() {
@@ -54,23 +70,7 @@ function checkFormComponent() {
     peer.size({width: 5, height: 6})
 }
 
-/*
-function checkWithString() {
-    nativeModule()._AppendResultString("foo")
-    nativeModule()._AppendResultString("qoo")
-    nativeModule()._AppendResultString("bar")
-    nativeModule()._AppendResultString("zex")
-    console.log(withStringResult(nativeModule()._GetResultString(0)))
-    console.log(withStringResult(nativeModule()._GetResultString(2)))
-    nativeModule()._ClearResultString(1)
-    console.log("")
-    console.log(withStringResult(nativeModule()._GetResultString(0)))
-    console.log(withStringResult(nativeModule()._GetResultString(2)))
-}
-*/
 checkButton()
 checkCalendar()
 //checkDTS()
 checkFormComponent()
-
-// checkWithString()
