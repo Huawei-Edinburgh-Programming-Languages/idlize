@@ -130,19 +130,19 @@ std::vector<KStringPtr> makeStringVector(KNativePointerArray arr, KInt length) {
 
 std::vector<std::string> results;
 
-void ClearResultString(KInt kind) {
-    if (kind >=0 && kind < results.size()) {
-        results.erase(results.begin() + kind);
+void ClearResultString(KInt index) {
+    if (index >=0 && index < results.size()) {
+        results.erase(results.begin() + index);
     }
 }
 
-KNativePointer impl_GetResultString(KInt kind) {
-    return new std::string(results[kind]);
+KNativePointer impl_GetResultString(KInt index) {
+    return new std::string(results[index]);
 }
 KOALA_INTEROP_1(GetResultString, KNativePointer, KInt)
 
-void impl_ClearResultString(KInt kind) {
-    ClearResultString(kind);
+void impl_ClearResultString(KInt index) {
+    ClearResultString(index);
 }
 KOALA_INTEROP_V1(ClearResultString, KInt)
 

@@ -44,11 +44,11 @@ interface SystemTextDecoder {
 }
 export class CustomTextDecoder {
     static cpArrayMaxSize = 128
-    constructor(decoder: SystemTextDecoder|undefined = ((typeof TextDecoder != "undefined") ? new TextDecoder() : undefined)) {
-        this.decoder = decoder
+    constructor(decoder?: SystemTextDecoder) {
+        this.decoder = decoder ?? new TextDecoder()
     }
 
-    private readonly decoder: SystemTextDecoder|undefined
+    private readonly decoder: SystemTextDecoder
 
     decode(input: Uint8Array): string {
         if (this.decoder !== undefined) {
@@ -98,7 +98,7 @@ const decoder = new CustomTextDecoder()
 
 
 export class Wrapper {
-    ptr: KPointer
+    protected ptr: KPointer
     constructor(ptr: KPointer) {
         if (ptr == null)
             throw new Error(`Init <${className(this)}> with null native peer`)

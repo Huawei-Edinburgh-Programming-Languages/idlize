@@ -53,7 +53,7 @@ export function nativeModuleEmptyDeclaration(methods: string[]): string {
 ${importTsInteropTypes}
 import { NativeModule } from "./NativeModule"
 
-export class NativeModuleEmpty implements NativeModule {
+export class NativeModuleEmpty extends NativeModuleBase implements NativeModule {
 ${methods.join("\n")}
 }
 `.trim()
