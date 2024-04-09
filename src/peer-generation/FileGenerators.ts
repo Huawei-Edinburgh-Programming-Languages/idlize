@@ -23,7 +23,10 @@ import {
     KPointer,
     KNativePointer,
     Int32ArrayPtr,
-    Uint8ArrayPtr
+    Uint8ArrayPtr,
+    pointer,
+    NodePointer,
+    KUint8ArrayPtr
 } from "@arkoala/arkui/utils/ts/types"
 `.trim()
 
@@ -52,9 +55,20 @@ export function nativeModuleEmptyDeclaration(methods: string[]): string {
     return `
 ${importTsInteropTypes}
 import { NativeModule } from "./NativeModule"
+import { NativeModuleBase } from "../../utils/ts/NativeModuleBase"
 
-export class NativeModuleEmpty extends NativeModuleBase implements NativeModule {
+export class NativeModuleEmpty implements NativeModule {
 ${methods.join("\n")}
+_GetResultString(index: KInt) { return BigInt(0) }
+_ClearResultString(index: KInt) { console.log("clearResultString") }
+_AppendResultString(string: KStringPtr) { console.log("AppendResultString") }
+
+_GetStringFinalizer() { return BigInt(0) }
+
+_InvokeFinalizer(ptr: NodePointer, finalizer: NodePointer) { console.log("InvokeFinalizer") }
+_StringLength(ptr: pointer) { return 0 }
+_StringData(ptr: pointer, buffer: KUint8ArrayPtr, length: KInt) { console.log("StringData") }
+_StringMake(value: KStringPtr) { return BigInt(0) }
 }
 `.trim()
 }
