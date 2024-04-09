@@ -53,42 +53,45 @@ typedef float float32_t;
 template <typename T>
 inline void WriteToString(string* result, const T& value) = delete;
 
-template <typename T>
-struct Tagged
+struct String
 {
-  Tags tag;
-  T value;
+  size_t capacity;
+  char* chars;
 };
 
-inline const char* tagName(Tags tag) {
-  switch (tag) {
-    case Tags::TAG_UNDEFINED: return "UNDEFINED";
-    case Tags::TAG_INT32: return "INT32";
-    case Tags::TAG_FLOAT32: return "FLOAT32";
-    case Tags::TAG_LENGTH: return "LENGTH";
-    case Tags::TAG_RESOURCE: return "RESOURCE";
-    case Tags::TAG_STRING: return "STRING";
-    case Tags::TAG_OBJECT: return "OBJECT";
+String String_new(size_t capacity, char* initial = NULL) {
+  String result;
+  result.capacity = capacity;
+  result.chars = (char*) malloc(capacity);
+  if (initial) {
+    strncpy(result.chars, initial, capacity);
   }
-  fprintf(stderr, "tag name %d is wrong\n", tag);
-  throw "Error";
+  return result;
 }
 
-template <typename T>
-inline void WriteToString(string* result, const Tagged<T>& value) {
-    result->append("tagged {[");
-    result->append(tagName(value.tag));
-    result->append("]");
-    if (value.tag != TAG_UNDEFINED) {
-      WriteToString(result, value.value);
-    }
-    result->append("}");
+void String_free(String str) {
+  free(str.chars);
 }
 
-template <typename T>
-inline void addToString(string* result, const T& value, bool needComma = false) {
-  WriteToString(result, value);
-  if (needComma) result->append(", ");
+void String_append_String(String str, String other) {
+  // TODO implement
+}
+
+void String_append_chars(String str, char* chars) {
+  // TODO implement
+}
+
+void String_append_int(String str, int n) {
+  // TODO implement
+}
+
+char* String_chars(String str) {
+  return str.chars;
+}
+
+template <>
+inline void WriteToString(string* result, const String& value) {
+  *result += value.chars;
 }
 
 template <>
@@ -109,6 +112,12 @@ struct Empty
 inline void WriteToString(string* result, const Empty& value) {
 }
 
+template <typename T>
+inline void addToString(string* result, const T& value, bool needComma = false) {
+  WriteToString(result, value);
+  if (needComma) result->append(", ");
+}
+
 template <>
 inline void addToString(string* result, const Empty& value, bool needComma) {
 }
@@ -119,243 +128,14 @@ struct Error
   Error(const std::string &message) : message(message) {}
 };
 
-template <typename T0, typename T1 = Empty, typename T2 = Empty, typename T3 = Empty, typename T4 = Empty, typename T5 = Empty, typename T6 = Empty>
-struct Union
-{
-  Union() : selector(-1) {}
-  Union(int32_t selector) : selector(selector) {}
-  Union& operator=(const Union& other) {
-    this->selector = other.selector;
-    switch (selector)
-    {
-    case 0:
-      this->value0 = other.value0;
-      break;
-    case 1:
-      this->value1 = other.value1;
-      break;
-    case 2:
-      this->value2 = other.value2;
-      break;
-    case 3:
-      this->value3 = other.value3;
-      break;
-    case 4:
-      this->value4 = other.value4;
-      break;
-    case 5:
-      this->value5 = other.value5;
-      break;
-    case 6:
-      this->value6 = other.value6;
-      break;
-    }
-    return *this;
-  }
-  Union(const Union<T0, T1, T2, T3, T4, T5, T6> &other)
-  {
-    this->selector = other.selector;
-    switch (selector)
-    {
-    case 0:
-      this->value0 = other.value0;
-      break;
-    case 1:
-      this->value1 = other.value1;
-      break;
-    case 2:
-      this->value2 = other.value2;
-      break;
-    case 3:
-      this->value3 = other.value3;
-      break;
-    case 4:
-      this->value4 = other.value4;
-      break;
-    case 5:
-      this->value5 = other.value5;
-      break;
-    case 6:
-      this->value6 = other.value6;
-      break;
-    }
-  }
-  /*
-  Union& operator=(Union&& other)
-  {
-    this->selector = other.selector;
-    switch (selector)
-    {
-    case 0:
-      this->value0 = std::move(other.value0);
-      break;
-    case 1:
-      this->value1 = std::move(other.value1);
-      break;
-    case 2:
-      this->value2 = std::move(other.value2);
-      break;
-    case 3:
-      this->value3 = std::move(other.value3);
-      break;
-    case 4:
-      this->value4 = std::move(other.value4);
-      break;
-    case 5:
-      this->value5 = std::move(other.value5);
-      break;
-    case 6:
-      this->value6 = std::move(other.value6);
-      break;
-    }
-    return *this;
-  } */
-  ~Union() {
-    switch (selector)
-    {
-    case 0:
-      this->value0.~T0();
-      break;
-    case 1:
-      this->value1.~T1();
-      break;
-    case 2:
-      this->value2.~T2();
-      break;
-    case 3:
-      this->value3.~T3();
-      break;
-    case 4:
-      this->value4.~T4();
-      break;
-    case 5:
-      this->value5.~T5();
-      break;
-    case 6:
-      this->value6.~T6();
-      break;
-    }
-  }
-  int32_t selector;
-  union
-  {
-    T0 value0;
-    T1 value1;
-    T2 value2;
-    T3 value3;
-    T4 value4;
-    T5 value5;
-    T6 value6;
-  };
-};
-
-template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
-inline void WriteToString(string* result, const Union<T0, T1, T2, T3, T4, T5, T6>& value) {
-    result->append("union[");
-    result->append(std::to_string(value.selector) + "] {");
-    switch (value.selector)
-    {
-    case 0:
-      addToString(result, value.value0);
-      break;
-    case 1:
-      addToString(result, value.value1);
-      break;
-    case 2:
-      addToString(result, value.value2);
-      break;
-    case 3:
-      addToString(result, value.value3);
-      break;
-    case 4:
-      addToString(result, value.value4);
-      break;
-    case 5:
-      addToString(result, value.value5);
-      break;
-    case 6:
-      addToString(result, value.value6);
-      break;
-    }
-    result->append("}");
-}
-
-template <typename T0 = Empty, typename T1 = Empty, typename T2 = Empty, typename T3 = Empty, typename T4 = Empty, typename T5 = Empty>
-struct Compound
-{
-  Compound() {}
-  Compound(const Compound<T0, T1, T2, T3, T4, T5> &other)
-  {
-    this->value0 = other.value0;
-    this->value1 = other.value1;
-    this->value2 = other.value2;
-    this->value3 = other.value3;
-    this->value4 = other.value4;
-    this->value5 = other.value5;
-  }
-  ~Compound() {}
-  Compound& operator=(const Compound& other) {
-    this->value0 = other.value0;
-    this->value1 = other.value1;
-    this->value2 = other.value2;
-    this->value3 = other.value3;
-    this->value4 = other.value4;
-    this->value5 = other.value5;
-    return *this;
-  }
-  /*
-  Compound& operator=(Compound&& other) {
-    this->value0 = std::move(other.value0);
-    this->value1 = std::move(other.value1);
-    this->value2 = std::move(other.value2);
-    this->value3 = std::move(other.value3);
-    this->value4 = std::move(other.value4);
-    this->value5 = std::move(other.value5);
-    return *this;
-  } */
-  T0 value0;
-  T1 value1;
-  T2 value2;
-  T3 value3;
-  T4 value4;
-  T5 value5;
-};
-
-template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5>
-inline void WriteToString(string* result, const Compound<T0, T1, T2, T3, T4, T5>& value) {
-  result->append("compound: {");
-  addToString(result, value.value0, true);
-  addToString(result, value.value1, true);
-  addToString(result, value.value2, true);
-  addToString(result, value.value3, true);
-  addToString(result, value.value4, true);
-  addToString(result, value.value5, false);
-  result->append("}");
-}
-
 struct Number
 {
-  // TODO: shall we keep a tag here?
-  Number() {}
-  Number(KInt value): i32(value) {}
-  Number(KFloat value): f32(value) {}
-  Number(const Tagged<Number> &other)
-  {
-    // TODO: check tag
-    this->i32 = other.value.i32;
-  }
-  Number(const Number &other)
-  {
-    this->i32 = other.i32;
-  }
-
-  ~Number() {}
+  int8_t tag;
   union
   {
     float32_t f32;
     int32_t i32;
   };
-
 };
 
 template <>
@@ -363,53 +143,24 @@ inline void WriteToString(string* result, const Number& value) {
   *result += std::to_string(value.i32);
 }
 
-struct String
+struct Array
 {
-  String() {}
-  String(const std::string &value) : value(value) {}
-  String(const KStringPtr& value) : value(value.c_str(), value.length()) {}
-
-  String(const String &other)
-  {
-    this->value = other.value;
-  }
-  String(const Tagged<String> &other)
-  {
-    // TODO: check    tag
-    this->value = other.value.value;
-  }
-  ~String() {}
-  std::string value;
-  std::string toString() const {
-    return "\"" + value + "\"";
-  }
-  const char* c_str() const {
-    return value.c_str();
-  }
+  size_t size;
+  void* data;
 };
 
-template <>
-inline void WriteToString(string* result, const String& value) {
-  *result += value.toString();
+Array Array_new(size_t size, void* data)
+{
+  Array result;
+  result.size = size;
+  result.data = data;
+  return result;
 }
 
 template <typename T>
-struct Array
-{
-  std::vector<T> array;
-  size_t size() const { return array.size(); }
-  void push_back(const T& value) { array.push_back(value); }
-  const T& operator[](size_t pos ) const { return array[pos]; }
-  T& operator[](size_t pos) { return array[pos]; }
-  void resize(size_t size) { array.resize(size); }
-};
-
-template <typename T>
-inline void WriteToString(string* result, const Array<T>& value) {
+inline void WriteToString(string* result, const Array& value) {
   result->append("[");
-  for (int i = 0; i < value.size(); i++) {
-        addToString(result, value[i], i != value.size() - 1);
-  }
+  result->append(std::to_string(value.size));
   result->append("]");
 }
 
@@ -418,35 +169,18 @@ struct Length
   float32_t value;
   int32_t unit;
   int32_t resource;
-  Length() : value(0), unit(0), resource(0) {}
-  Length(const Length &other) : value(other.value), unit(other.unit), resource(other.resource) {}
-  Length(const Tagged<Length> &other)
-  {
-    // TODO: check tag
-    this->value = other.value.value;
-    this->unit = other.value.unit;
-    this->resource = other.value.resource;
-  }
-  Length(const int32_t *array)
-  {
-    this->value = *(float32_t *)array;
-    this->unit = array[1];
-    this->resource = array[2];
-  }
-
-  ~Length() {}
-
-  static Length fromArray(int32_t *array)
-  {
-    Length result;
-    result.value = *(float32_t *)array;
-    result.unit = array[1];
-    result.resource = array[2];
-    return result;
-  }
 };
 
-inline const char* getUnitName(int value) {
+Length Length_from_array(int32_t *array)
+{
+  Length result;
+  result.value = *(float32_t *)array;
+  result.unit = array[1];
+  result.resource = array[2];
+  return result;
+}
+
+inline char* getUnitName(int value) {
   switch (value) {
     case 0: return "px";
     case 1: return "vp";
@@ -463,6 +197,7 @@ inline void WriteToString(string* result, const Length& value) {
   result->append(std::to_string(value.value));
   result->append(", unit=" + string(getUnitName(value.unit)));
   result->append(", resource=" + std::to_string(value.resource));
+  result->append(std::to_string(value.value));
   result->append("}");
 }
 
@@ -473,9 +208,68 @@ struct Undefined
     return "undefined";
   }
 };
+
 template <>
 inline void WriteToString(string* result, const Undefined& value) {
-  result->append("undefined");
+}
+
+struct Tagged
+{
+  Tags tag;
+  union {
+    Number number;
+    String string;
+    Length length;
+    Resource resource;
+    void* object;
+  };
+  void (*object_print_function)(std::string*, void*);
+};
+
+inline char* tagName(Tags tag) {
+  switch (tag) {
+    case Tags::TAG_UNDEFINED: return "UNDEFINED";
+    case Tags::TAG_INT32: return "INT32";
+    case Tags::TAG_FLOAT32: return "FLOAT32";
+    case Tags::TAG_LENGTH: return "LENGTH";
+    case Tags::TAG_RESOURCE: return "RESOURCE";
+    case Tags::TAG_STRING: return "STRING";
+    case Tags::TAG_OBJECT: return "OBJECT";
+  }
+  fprintf(stderr, "tag name %d is wrong\n", tag);
+  throw "Error";
+}
+
+template <typename T>
+inline void WriteToString(string* result, const Tagged& value) {
+  result->append("tagged {[");
+  result->append(tagName(value.tag));
+  result->append("]");
+  switch (value.tag) {
+    case TAG_UNDEFINED:
+      break;
+    case TAG_INT32:
+    case TAG_FLOAT32:
+      WriteToString(result, value.number);
+      break;
+    case TAG_LENGTH:
+      WriteToString(result, value.length);
+      break;
+    case TAG_RESOURCE:
+      WriteToString(result, value.resource);
+      break;
+    case TAG_STRING:
+      WriteToString(result, value.string);
+      break;
+    case TAG_OBJECT:
+      if (value.object_print_function) {
+        value.object_print_function(&result, value.object);
+      } else {
+        result->append("[object]");
+      }
+      break;
+  }
+  result->append("}");
 }
 
 class ArgDeserializerBase;
@@ -531,6 +325,11 @@ struct CustomDeserializer {
     return CustomObject("error");
   }
   CustomDeserializer* next = nullptr;
+};
+
+struct AnimationRange {
+  Number value0;
+  Number value1;
 };
 
 class ArgDeserializerBase
@@ -607,18 +406,18 @@ public:
     position += 4;
     return value;
   }
-  Tagged<Number> readNumber()
+  Tagged readNumber()
   {
     check(5);
-    Tagged<Number> result;
+    Tagged result;
     result.tag = (Tags)readInt8();
     if (result.tag == Tags::TAG_INT32)
     {
-      result.value.i32 = readInt32();
+      result.number.i32 = readInt32();
     }
     else if (result.tag == Tags::TAG_FLOAT32)
     {
-      result.value.f32 = readFloat32();
+      result.number.f32 = readFloat32();
     } else {
       fprintf(stderr, "Bad number tag %d\n", result.tag);
       throw "Unknown number tag";
@@ -626,14 +425,14 @@ public:
     return result;
   }
 
-  Tagged<Length> readLength()
+  Tagged readLength()
   {
-    Tagged<Length> result;
+    Tagged result;
     result.tag = (Tags)readInt8();
     if (result.tag == Tags::TAG_LENGTH) {
-      result.value.value = readFloat32();
-      result.value.unit = readInt32();
-      result.value.resource = readInt32();
+      result.length.value = readFloat32();
+      result.length.unit = readInt32();
+      result.length.resource = readInt32();
     } else if (result.tag == Tags::TAG_UNDEFINED) {
     } else {
       fprintf(stderr, "Bad length tag %d\n", result.tag);
@@ -642,11 +441,11 @@ public:
     return result;
   }
 
-  Compound<Number, Number> readAnimationRange()
+  AnimationRange readAnimationRange()
   {
-    Compound<Number, Number> result;
-    result.value0 = readNumber();
-    result.value1 = readNumber();
+    AnimationRange result;
+    result.value0 = readNumber().number;
+    result.value1 = readNumber().number;
     return result;
   }
 
@@ -667,9 +466,9 @@ public:
     return Undefined();
   }
 
-  Tagged<String> readString()
+  Tagged readString()
   {
-    Tagged<String> result;
+    Tagged result;
     result.tag = (Tags)readInt8();
     if (result.tag == Tags::TAG_UNDEFINED) {
       return result;
@@ -680,7 +479,7 @@ public:
     }
     int32_t length = readInt32();
     check(length);
-    result.value = std::string((char *)(data + position), length);
+    result.string = String_new(length, (char *)(data + position));
     position += length;
     return result;
   }

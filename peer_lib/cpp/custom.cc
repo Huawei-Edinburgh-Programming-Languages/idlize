@@ -29,8 +29,8 @@ struct MyDeserializer : CustomDeserializer {
         return std::find(supported.begin(), supported.end(), kind) != supported.end();
     }
     virtual CustomObject deserialize(ArgDeserializerBase* deserializer, const string& kind) {
-        String value = deserializer->readString();
-        fprintf(stderr, "native deserialize() for %s, got %s\n", kind.c_str(), value.c_str());
+        String value = deserializer->readString().string;
+        fprintf(stderr, "native deserialize() for %s, got %s\n", kind.c_str(), String_chars(value));
         return CustomObject(string("NativeError") + kind);
     }
 
