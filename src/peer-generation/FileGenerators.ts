@@ -169,13 +169,11 @@ ${lines.join("\n")}
 `
 }
 
-export function makeCDeserializer(structsForward: string[], structs: string[], serializers: string[]): string {
+export function makeCDeserializer(structs: string[], serializers: string[]): string {
     return `
 #include "Interop.h"
 #include "ArgDeserializerBase.h"
 #include <string>
-
-${structsForward.join("\n")}
 
 ${structs.join("\n")}
 

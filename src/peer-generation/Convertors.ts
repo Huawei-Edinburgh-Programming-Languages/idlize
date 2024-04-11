@@ -417,7 +417,7 @@ export class OptionConvertor extends BaseArgConvertor {
     }
     nativeType(impl: boolean): string {
         return impl
-            ? `struct { int tag; ${this.typeConvertor.nativeType(true)} value; }`
+            ? `struct { int tag; ${this.typeConvertor.nativeType(false)} value; }`
             : `Optional_${this.typeConvertor.nativeType(false)}`
     }
     interopType(ts: boolean): string {
@@ -482,7 +482,7 @@ export class AggregateConvertor extends BaseArgConvertor {
 export class TypedConvertor extends BaseArgConvertor {
     constructor(
         name: string,
-        private type: ts.TypeReferenceNode | undefined,
+        private type: ts.TypeReferenceNode,
         param: string, protected visitor: PeerGeneratorVisitor) {
         super(name, [RuntimeType.OBJECT, RuntimeType.FUNCTION, RuntimeType.UNDEFINED], false, true, param)
         visitor.requestType(name, type)
@@ -517,9 +517,9 @@ export class InterfaceConvertor extends TypedConvertor {
     }
 }
 
-export class FunctionConvertor extends TypedConvertor {
+export class FunctionConvertor extends CustomTypeConvertor {
     constructor(param: string, visitor: PeerGeneratorVisitor) {
-        super("Function", undefined, param, visitor)
+        super(param, visitor, "Function")
     }
 }
 

@@ -78,9 +78,10 @@ export enum RuntimeType {
  */
 
 let serializerSeen = new Set<string>()
+let typedefsSeen = new Set<string>()
 
 export interface TypeAndName {
-    type: ts.TypeReferenceNode | ts.ImportTypeNode | undefined
+    type: ts.TypeNode
     name: string
 }
 
@@ -101,7 +102,6 @@ export type PeerGeneratorVisitorOptions = {
     outputC: string[],
     outputSerializersTS: string[],
     outputSerializersC: string[],
-    outputStructsForwardC: string[],
     outputStructsC: SortingEmitter,
     apiHeaders: string[],
     apiHeadersList: string[],
@@ -121,7 +121,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     private printerNativeModuleEmpty: IndentedPrinter
     private printerSerializerC: IndentedPrinter
     private printerStructsC: SortingEmitter
-    private printerTypedefsC: IndentedPrinter
     private printerSerializerTS: IndentedPrinter
     private serializerRequests: TypeAndName[] = []
     private apiPrinter: IndentedPrinter
@@ -142,7 +141,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         this.printerNativeModuleEmpty = new IndentedPrinter(options.nativeModuleEmptyMethods)
         this.printerSerializerC = new IndentedPrinter(options.outputSerializersC)
         this.printerStructsC = options.outputStructsC
-        this.printerTypedefsC = new IndentedPrinter(options.outputStructsForwardC)
         this.printerSerializerTS = new IndentedPrinter(options.outputSerializersTS)
         this.apiPrinter = new IndentedPrinter(options.apiHeaders)
         this.apiPrinterList = new IndentedPrinter(options.apiHeadersList)
@@ -152,19 +150,19 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         this.dumpSerialized = options.dumpSerialized
     }
 
-    requestType(name: string, type: ts.TypeReferenceNode | ts.ImportTypeNode | undefined) {
+    requestType(name: string, type: ts.TypeNode | undefined) {
         if (PeerGeneratorVisitor.serializerBaseMethods.includes(`write${name}`)) return
         if (type) {
             this.serializerRequests.push({ type, name })
         }
     }
 
-    serializerName(name: string, type: ts.TypeReferenceNode | ts.ImportTypeNode | undefined): string {
+    serializerName(name: string, type: ts.TypeNode): string {
         this.requestType(name, type)
         return `write${name}`
     }
 
-    deserializerName(name: string, type: ts.TypeReferenceNode | ts.ImportTypeNode | undefined): string {
+    deserializerName(name: string, type: ts.TypeNode): string {
         this.requestType(name, type)
         return `read${name}`
     }
@@ -1084,9 +1082,10 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         })
     }
 
-    private generateSerializer(name: string, type: ts.TypeReferenceNode | ts.ImportTypeNode | undefined) {
+    private generateSerializer(name: string, type: ts.TypeNode) {
         if (!type || PeerGeneratorConfig.ignoreSerialization.includes(name)) return
-        let typeName = (type && ts.isTypeReferenceNode(type)) ? type.typeName : type?.qualifier
+        if (!ts.isTypeReferenceNode(type) && !ts.isImportTypeNode(type)) return
+        let typeName = (ts.isTypeReferenceNode(type)) ? type.typeName : (type as ts.ImportTypeNode).qualifier
         let declarations = typeName ? findRealDeclarations(this.typeChecker, typeName) : []
         if (declarations.length > 0) {
             let declaration = declarations[0]
@@ -1127,27 +1126,29 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
 
     private generateTypedef(type: ts.TypeNode, name: string | undefined, optional: boolean = false) {
         if (ts.isImportTypeNode(type)) {
-            this.printerTypedefsC.print(`typedef CustomObject ${name};`)
+            this.requestType(name!, type)
         } else {
             let typeConvertor = this.typeConvertor("<typedef>", type, optional)
-            this.printerTypedefsC.print(`typedef ${typeConvertor.nativeType(true)} ${name ?? typeConvertor.nativeType(false)};`)
+            let realName = name ?? typeConvertor.nativeType(false)
+            this.requestType(realName, type)
         }
     }
 
-    private generateDeserializer(name: string, type: ts.TypeReferenceNode | ts.ImportTypeNode | undefined) {
+    private generateDeserializer(name: string, type: ts.TypeNode) {
         if (!type || PeerGeneratorConfig.ignoreSerialization.includes(name)) return
-        let typeName = (type && ts.isTypeReferenceNode(type)) ? type.typeName : type?.qualifier
+        let typeName = ts.isTypeReferenceNode(type) ? type.typeName : (type as ts.ImportTypeNode).qualifier
         let declarations = typeName ? getDeclarationsByNode(this.typeChecker, typeName) : []
         let isEnum = declarations.length > 0 && ts.isEnumDeclaration(declarations[0])
         let isAlias = declarations.length > 0 && ts.isTypeAliasDeclaration(declarations[0])
         let isStruct = !isEnum && !isAlias
+        this.printerStructsC.startEmit(this.typeChecker, type, name)
 
         if (isEnum) {
-            this.printerTypedefsC.print(`typedef int32_t ${name};`)
+            this.printerStructsC.print(`typedef int32_t ${name};`)
             return
         }
         if (ts.isImportTypeNode(type)) {
-            this.printerTypedefsC.print(`typedef CustomObject ${importTypeName(type)};`)
+            this.printerStructsC.print(`typedef CustomObject ${importTypeName(type)};`)
             return
         }
         this.printerSerializerC.print(`${name} read${name}() {`)
