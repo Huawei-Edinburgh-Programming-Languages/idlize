@@ -1180,8 +1180,12 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         if (PeerGeneratorConfig.ignoreSerialization.includes(name)) return
         let typeName = ts.isTypeReferenceNode(type) ? type.typeName : (ts.isImportTypeNode(type) ? type.qualifier : undefined)
         let declarations = typeName ? getDeclarationsByNode(this.typeChecker, typeName) : []
-        let isEnum = declarations.length > 0 && ts.isEnumDeclaration(declarations[0])
         this.printerStructsC.startEmit(this.typeChecker, this, type, name)
+        while (declarations.length > 0 && ts.isTypeAliasDeclaration(declarations[0])) {
+            type = declarations[0].type
+            declarations = getDeclarationsByNode(this.typeChecker, declarations[0].type) ?? []
+        }
+        let isEnum = declarations.length > 0 && ts.isEnumDeclaration(declarations[0])
         if (isEnum) {
             this.printerStructsC.print(`typedef int32_t ${name};`)
             return
@@ -1211,17 +1215,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
                     .filter(ts.isPropertyDeclaration)
                     .forEach(it => structFields.push(it))
             }
-            /*
-            if (ts.isTypeAliasDeclaration(declaration)) {
-                let declType = declaration.type
-                // TEST
-                if (ts.isTypeLiteralNode(declType)) {
-                    declType
-                        .members
-                        .filter(ts.isPropertySignature)
-                        .forEach(it => structFields.push(it))
-                }
-            } */
             if (ts.isTypeLiteralNode(type)) {
                 type.members
                     .filter(ts.isPropertySignature)
