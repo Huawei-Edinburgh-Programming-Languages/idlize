@@ -414,10 +414,10 @@ inline void WriteToString(string* result, const Array<T>& value) {
 }
 
 template <typename T> 
-inline void WriteToString(string* result, std::pair<T*, KInt> value) {
+inline void WriteToString(string* result, const std::pair<T*, KInt>& value) {
   result->append("[");
   for (auto i = 0; i < value.second; i++) {
-  //       addToString(result, *(value.first+i), i != lenght - 1);
+      addToString(result, *(value.first+i), i != value.second - 1);
   }
   result->append("]");
 }
