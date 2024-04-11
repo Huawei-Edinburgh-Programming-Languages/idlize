@@ -180,7 +180,7 @@ Length Length_from_array(int32_t *array)
   return result;
 }
 
-inline char* getUnitName(int value) {
+inline const char* getUnitName(int value) {
   switch (value) {
     case 0: return "px";
     case 1: return "vp";
@@ -213,9 +213,12 @@ template <>
 inline void WriteToString(string* result, const Undefined& value) {
 }
 
+template <typename T>
 struct Tagged
 {
   Tags tag;
+  T value;
+  /*
   union {
     Number number;
     String string;
@@ -223,10 +226,11 @@ struct Tagged
     Resource resource;
     void* object;
   };
+  */
   void (*object_print_function)(std::string*, void*);
 };
 
-inline char* tagName(Tags tag) {
+inline const char* tagName(Tags tag) {
   switch (tag) {
     case Tags::TAG_UNDEFINED: return "UNDEFINED";
     case Tags::TAG_INT32: return "INT32";
@@ -241,10 +245,11 @@ inline char* tagName(Tags tag) {
 }
 
 template <typename T>
-inline void WriteToString(string* result, const Tagged& value) {
+inline void WriteToString(string* result, const Tagged<T>& value) {
   result->append("tagged {[");
   result->append(tagName(value.tag));
   result->append("]");
+  /*
   switch (value.tag) {
     case TAG_UNDEFINED:
       break;
@@ -268,7 +273,8 @@ inline void WriteToString(string* result, const Tagged& value) {
         result->append("[object]");
       }
       break;
-  }
+  }*/
+  WriteToString(result, value.value);
   result->append("}");
 }
 
@@ -406,18 +412,18 @@ public:
     position += 4;
     return value;
   }
-  Tagged readNumber()
+  Number readNumber()
   {
     check(5);
-    Tagged result;
+    Number result;
     result.tag = (Tags)readInt8();
     if (result.tag == Tags::TAG_INT32)
     {
-      result.number.i32 = readInt32();
+      result.i32 = readInt32();
     }
     else if (result.tag == Tags::TAG_FLOAT32)
     {
-      result.number.f32 = readFloat32();
+      result.f32 = readFloat32();
     } else {
       fprintf(stderr, "Bad number tag %d\n", result.tag);
       throw "Unknown number tag";
@@ -425,27 +431,25 @@ public:
     return result;
   }
 
-  Tagged readLength()
+  Length readLength()
   {
-    Tagged result;
-    result.tag = (Tags)readInt8();
-    if (result.tag == Tags::TAG_LENGTH) {
-      result.length.value = readFloat32();
-      result.length.unit = readInt32();
-      result.length.resource = readInt32();
-    } else if (result.tag == Tags::TAG_UNDEFINED) {
+    Length result;
+    Tags tag = (Tags)readInt8();
+    if (tag == Tags::TAG_LENGTH) {
+      result.value = readFloat32();
+      result.unit = readInt32();
+      result.resource = readInt32();
     } else {
-      fprintf(stderr, "Bad length tag %d\n", result.tag);
+      fprintf(stderr, "Bad length tag %d\n", tag);
       throw "Error";
     }
     return result;
   }
-
   AnimationRange readAnimationRange()
   {
     AnimationRange result;
-    result.value0 = readNumber().number;
-    result.value1 = readNumber().number;
+    result.value0 = readNumber();
+    result.value1 = readNumber();
     return result;
   }
 
@@ -466,9 +470,9 @@ public:
     return Undefined();
   }
 
-  Tagged readString()
+  Tagged<String> readString()
   {
-    Tagged result;
+    Tagged<String> result;
     result.tag = (Tags)readInt8();
     if (result.tag == Tags::TAG_UNDEFINED) {
       return result;
@@ -479,7 +483,7 @@ public:
     }
     int32_t length = readInt32();
     check(length);
-    result.string = String_new(length, (char *)(data + position));
+    result.value = String_new(length, (char *)(data + position));
     position += length;
     return result;
   }

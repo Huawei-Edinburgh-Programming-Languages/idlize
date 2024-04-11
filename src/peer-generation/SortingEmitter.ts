@@ -71,7 +71,7 @@ export class SortingEmitter extends IndentedPrinter {
     startEmit(typeChecker: ts.TypeChecker, type: ts.TypeNode, name: string | undefined = undefined) {
         const repr = this.repr(type, name)
         //if (this.emitters.has(repr)) throw new Error(`Already emitted ${type.getText()}`)
-        let next = new IndentedPrinter()
+        let next = this.emitters.has(repr) ? this.emitters.get(repr)! : new IndentedPrinter()
         let seen = new Set<string>()
         this.fillDeps(typeChecker, type, seen)
         seen.delete(repr)
