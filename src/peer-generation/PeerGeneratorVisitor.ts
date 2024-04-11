@@ -1191,26 +1191,25 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         this.printerDeserializerC.print(`return value;`)
         this.printerDeserializerC.popIndent()
         this.printerDeserializerC.print(`}`)
-        if (isStruct) {
-             this.printerStructsC.print(`template <>`)
-            this.printerStructsC.print(`inline void WriteToString(string* result, const ${name}& value) {`)
-            this.printerStructsC.pushIndent()
-            this.printerStructsC.print(`result->append("${name} {");`)
-            structFields.forEach((field, index) => {
-                const fieldName = identName(field.name)
-                if (index > 0) this.printerStructsC.print(`result->append(", ");`)
-                let isStatic = field.modifiers?.find(it => it.kind == ts.SyntaxKind.StaticKeyword) != undefined
-                if (isStatic) {
-                    this.printerStructsC.print(`/* Ignore static ${fieldName} */`)
-                } else {
-                    this.printerStructsC.print(`result->append("${fieldName}=");`)
-                    this.printerStructsC.print(`WriteToString(result, value.${fieldName});`)
-                }
-            })
-            this.printerStructsC.print(`result->append("}");`)
-            this.printerStructsC.popIndent()
-            this.printerStructsC.print(`}`)
-        }
+
+        this.printerStructsC.print(`template <>`)
+        this.printerStructsC.print(`inline void WriteToString(string* result, const ${name}& value) {`)
+        this.printerStructsC.pushIndent()
+        this.printerStructsC.print(`result->append("${name} {");`)
+        structFields.forEach((field, index) => {
+            const fieldName = identName(field.name)
+            if (index > 0) this.printerStructsC.print(`result->append(", ");`)
+            let isStatic = field.modifiers?.find(it => it.kind == ts.SyntaxKind.StaticKeyword) != undefined
+            if (isStatic) {
+                this.printerStructsC.print(`/* Ignore static ${fieldName} */`)
+            } else {
+                this.printerStructsC.print(`result->append("${fieldName}=");`)
+                this.printerStructsC.print(`WriteToString(result, value.${fieldName});`)
+            }
+        })
+        this.printerStructsC.print(`result->append("}");`)
+        this.printerStructsC.popIndent()
+        this.printerStructsC.print(`}`)
     }
 
     private processSingleField(field: ts.PropertySignature | ts.PropertyDeclaration, structName: string) {

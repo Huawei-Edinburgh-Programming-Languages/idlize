@@ -157,7 +157,7 @@ Array Array_new(size_t size, void* data)
   return result;
 }
 
-template <typename T>
+template <>
 inline void WriteToString(string* result, const Array& value) {
   result->append("[");
   result->append(std::to_string(value.size));
