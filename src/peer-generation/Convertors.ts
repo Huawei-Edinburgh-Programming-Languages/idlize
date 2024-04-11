@@ -416,9 +416,16 @@ export class OptionConvertor extends BaseArgConvertor {
         printer.print(`}`)
     }
     nativeType(impl: boolean): string {
-        return impl
-            ? `struct { int tag; ${this.typeConvertor.nativeType(false)} value; }`
-            : `Optional_${this.typeConvertor.nativeType(false)}`
+        let innerType = this.typeConvertor.nativeType(false)
+        if (impl) {
+            if (!innerType) {
+                // This type has no name, so let's just write out its components
+                innerType = this.typeConvertor.nativeType(true)
+            }
+            return `struct { int tag; ${innerType} value; }`
+        } else {
+            return `Optional_${innerType}`
+        }
     }
     interopType(ts: boolean): string {
         return "KPointer"
