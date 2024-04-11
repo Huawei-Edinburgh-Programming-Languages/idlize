@@ -1156,14 +1156,21 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         this.printerDeserializerC.pushIndent()
         if (isAlias) {
             let decl = declarations[0] as ts.TypeAliasDeclaration
-            this.generateTypedef(decl.type, name)
+            let typeConvertor = this.typeConvertor("<typedef>", decl.type)
+            if (ts.isImportTypeNode(decl.type)) {
+                this.printerStructsC.print(`typedef CustomObject ${importTypeName(decl.type)};`)
+            } else {
+                this.printerStructsC.print(`typedef ${typeConvertor.nativeType(true)} ${name};`)
+            }
         }
         let structFields: (ts.PropertySignature | ts.PropertyDeclaration)[] = []
         this.printerDeserializerC.print(`Deserializer& valueDeserializer = *this;`)
         this.printerDeserializerC.print(`${name} value;`)
         if (declarations.length > 0 && !optional) {
-            this.printerStructsC.print(`struct ${name} {`)
-            this.printerStructsC.pushIndent()
+            if (isStruct) {
+                this.printerStructsC.print(`struct ${name} {`)
+                this.printerStructsC.pushIndent()
+            }
             this.printerDeserializerC.print(`int32_t tag = valueDeserializer.readInt8();`)
             this.printerDeserializerC.print(`if (tag == Tags::TAG_UNDEFINED) throw new Error("Undefined");`)
             let declaration = declarations[0]
@@ -1181,8 +1188,10 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
             if (ts.isEnumDeclaration(declaration)) {
                 this.printerDeserializerC.print(`value = valueDeserializer.readInt32();`)
             }
-            this.printerStructsC.popIndent()
-            this.printerStructsC.print(`};`)
+            if (isStruct) {
+                this.printerStructsC.popIndent()
+                this.printerStructsC.print(`};`)
+            }
         } else {
             let convertor = this.typeConvertor("value", type, optional)
             convertor.convertorToCDeserial("value", "value", this.printerDeserializerC)
