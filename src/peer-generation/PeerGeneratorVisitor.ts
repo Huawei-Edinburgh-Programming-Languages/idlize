@@ -551,6 +551,9 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
             this.printTS(it.scopeEnd!(it.param))
         })
         this.generateAPICall(clazzName, originalMethodName, hasReceiver, argConvertors, isVoid)
+        argConvertors.forEach(it => {
+            this.printC(it.printDeleteFunction(`${it.param}Value`))
+        })
         this.popIndentBoth()
     }
 

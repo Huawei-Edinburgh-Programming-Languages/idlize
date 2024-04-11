@@ -34,6 +34,7 @@ export interface ArgConvertor {
     interopType(ts: boolean): string
     nativeType(): string
     param: string
+    printDeleteFunction(value: string): string
 }
 
 export abstract class BaseArgConvertor implements ArgConvertor {
@@ -61,6 +62,10 @@ export abstract class BaseArgConvertor implements ArgConvertor {
     abstract convertorToTSSerial(param: string, value: string, printer: IndentedPrinter): void
     abstract convertorCArg(param: string): string
     abstract convertorToCDeserial(param: string, value: string, printer: IndentedPrinter): void
+
+    printDeleteFunction(value: string): string {
+        return ``
+    }
 }
 
 
@@ -607,7 +612,6 @@ export class ArrayConvertor extends BaseArgConvertor {
         printer.popIndent()
         printer.print(`}`)
         printer.popIndent()
-        // printer.print(`delete[] ${value};`)
         printer.print(`}`)
 
     }
@@ -619,6 +623,10 @@ export class ArrayConvertor extends BaseArgConvertor {
     }
     estimateSize() {
         return 12
+    }
+
+    printDeleteFunction(value: string): string {
+        return `delete[] ${value}.first;`
     }
 }
 export class NumberConvertor extends BaseArgConvertor {
