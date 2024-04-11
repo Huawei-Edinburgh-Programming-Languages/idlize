@@ -599,18 +599,20 @@ export class ArrayConvertor extends BaseArgConvertor {
         printer.print(`if (${runtimeType} != RUNTIME_UNDEFINED) {`) // TODO: `else value = nullptr` ?
         printer.pushIndent()
         printer.print(`auto ${arrayLength} = ${param}Deserializer.readInt32();`)
-        printer.print(`${value}.resize(${arrayLength});`);
+        printer.print(`${value}.second = ${arrayLength};`)
+        printer.print(`${value}.first = new ${mapCType(this.elementType)}[${arrayLength}];`)
         printer.print(`for (int i = 0; i < ${arrayLength}; i++) {`)
         printer.pushIndent()
-        this.elementConvertor.convertorToCDeserial(param, `${value}[i]`, printer)
+        this.elementConvertor.convertorToCDeserial(param, `${value}.first[i]`, printer)
         printer.popIndent()
         printer.print(`}`)
         printer.popIndent()
+        // printer.print(`delete[] ${value};`)
         printer.print(`}`)
 
     }
     nativeType(): string {
-        return `Array<${mapCType(this.elementType)}>`
+        return `std::pair<${mapCType(this.elementType)}*, KInt>`
     }
     interopType(ts: boolean): string {
         return "KNativePointer"

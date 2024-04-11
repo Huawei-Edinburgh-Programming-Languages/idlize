@@ -413,6 +413,15 @@ inline void WriteToString(string* result, const Array<T>& value) {
   result->append("]");
 }
 
+template <typename T> 
+inline void WriteToString(string* result, std::pair<T*, KInt> value) {
+  result->append("[");
+  for (auto i = 0; i < value.second; i++) {
+  //       addToString(result, *(value.first+i), i != lenght - 1);
+  }
+  result->append("]");
+}
+
 struct Length
 {
   float32_t value;
