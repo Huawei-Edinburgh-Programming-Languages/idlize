@@ -56,7 +56,6 @@ import {
 } from "./Convertors"
 import { SortingEmitter } from "./SortingEmitter"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
-import { isOptional } from "../from-idl/webidl2-utils"
 
 export enum RuntimeType {
     UNEXPECTED = -1,
@@ -93,6 +92,16 @@ type MaybeCollapsedMethod = {
         paramsDecl: string,
         paramsUsage: string
     }
+}
+
+function assignName(type: ts.TypeNode, name: string, optional: boolean) {
+    let current = PeerGeneratorVisitor.namedTypes.get(type)
+    if (!current) {
+        current = [optional ? "" : name, optional ? name : `Optional_${name}`]
+    } else {
+        current[optional ? 1 : 0] = name
+    }
+    PeerGeneratorVisitor.namedTypes.set(type, current)
 }
 
 export type PeerGeneratorVisitorOptions = {
@@ -132,7 +141,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     private dummyImplModifierList: IndentedPrinter
     private dumpSerialized: boolean
 
-    private static readonly serializerBaseMethods = serializerBaseMethods()
+    static readonly serializerBaseMethods = serializerBaseMethods()
 
     constructor(options: PeerGeneratorVisitorOptions) {
         this.sourceFile = options.sourceFile
@@ -152,11 +161,15 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         this.dumpSerialized = options.dumpSerialized
     }
 
-    requestType(name: string, type: ts.TypeNode, optional: boolean = false) {
-        if (PeerGeneratorVisitor.serializerBaseMethods.includes(`write${name}`)) return
-        if (type) {
-            this.serializerRequests.push({ type, name, optional })
-        }
+    requestType(name: string|undefined, type: ts.TypeNode, optional: boolean = false) {
+        /*
+        if ts.isTypeReferenceNode(type)) {
+            name = identName(type.typeName)!
+        } */
+        if (name == undefined) name = this.computeTypeName(type, optional)
+        assignName(type, name, optional)
+        //if (PeerGeneratorVisitor.serializerBaseMethods.includes(`write${name}`)) return
+        this.serializerRequests.push({ type, name, optional })
     }
 
     serializerName(name: string, type: ts.TypeNode): string {
@@ -234,18 +247,18 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     visit(node: ts.Node) {
         if (ts.isClassDeclaration(node)) {
             this.processClass(node)
-        } else if (ts.isInterfaceDeclaration(node))  {
+        } else if (ts.isInterfaceDeclaration(node)) {
             this.processInterface(node)
         } else if (ts.isModuleDeclaration(node)) {
             if (node.body && ts.isModuleBlock(node.body)) {
                 node.body.statements.forEach(it => this.visit(it))
             }
         } else if (ts.isVariableStatement(node) ||
-                   ts.isExportDeclaration(node) ||
-                   ts.isEnumDeclaration(node) ||
-                   ts.isTypeAliasDeclaration(node) ||
-                   ts.isFunctionDeclaration(node) ||
-                   node.kind == ts.SyntaxKind.EndOfFileToken) {
+            ts.isExportDeclaration(node) ||
+            ts.isEnumDeclaration(node) ||
+            ts.isTypeAliasDeclaration(node) ||
+            ts.isFunctionDeclaration(node) ||
+            node.kind == ts.SyntaxKind.EndOfFileToken) {
             // Do nothing.
         } else {
             throw new Error(`Unknown node: ${node.kind}`)
@@ -373,9 +386,8 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         if (PeerGeneratorConfig.ignorePeerMethod.includes(methodName)) return
 
         method.parameters.map((param, index) => {
-            if (param.type) {
-                this.registerType(param.type, `Type_${clazzName}_${methodName}_Arg${index}`)
-            }
+            if (param.type)
+                this.requestType(`Type_${clazzName}_${methodName}_Arg${index}`, param.type)
         })
         const hasReceiver = true // TODO: make it false for non-method calls.
         const componentName = ts.idText(clazz.name as ts.Identifier)
@@ -571,7 +583,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         this.printerTS.popIndent()
         this.printerC.popIndent()
     }
-
     pushIndentTS() {
         this.printerTS.pushIndent()
     }
@@ -584,7 +595,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     popIndentC() {
         this.printerC.popIndent()
     }
-
     pushIndentAPI() {
         this.apiPrinter.pushIndent()
     }
@@ -722,9 +732,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         if (!param.type) throw new Error("Type is needed")
         let paramName = asString(param.name)
         let optional = param.questionToken !== undefined
-        if (optional) {
-            this.generateTypedef(param.type, undefined, true)
-        }
+        //if (optional) this.generateTypedef(param.type, undefined, true)
         return this.typeConvertor(paramName, param.type, optional)
     }
 
@@ -983,7 +991,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
                 })
 
             const params = paramsCollapsed
-                .map(({types, name, optional}) =>
+                .map(({ types, name, optional }) =>
                     ts.factory.createParameterDeclaration(
                         undefined,
                         undefined,
@@ -1035,26 +1043,68 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         })
     }
 
-    private static namedTypes = new Map<ts.TypeNode, string>()
-    static getTypeName(type: ts.TypeNode): string {
-        return PeerGeneratorVisitor.namedTypes.get(type)!
+    static namedTypes = new Map<ts.TypeNode, [string, string]>()
+    getTypeName(type: ts.TypeNode, optional: boolean = false): string {
+        let result = PeerGeneratorVisitor.namedTypes.get(type)
+        let index = optional ? 1 : 0
+        if (!result || result[index] == "") {
+            let name = this.computeTypeName(type, optional)
+            this.requestType(name, type, optional)
+            return name
+        }
+        return result[index]
     }
 
-    private registerType(type: ts.TypeNode, name: string) {
-        let typedef: [ts.TypeNode, string] | undefined = undefined
+    computeTypeName(type: ts.TypeNode, optional: boolean = false): string {
+        const prefix = optional ? "Optional_" : ""
+        if (ts.isImportTypeNode(type)) {
+            return prefix + identName(type.qualifier)!
+        }
         if (ts.isTypeReferenceNode(type)) {
-            const decl = getDeclarationsByNode(this.typeChecker, type.typeName)[0]
-            if (ts.isTypeAliasDeclaration(decl)) {
-                typedef = [decl.type, asString(type.typeName)]
-            }
-        } else if (ts.isUnionTypeNode(type) || ts.isTupleTypeNode(type) || ts.isTypeLiteralNode(type)) {
-            typedef = [type, name]
+            return prefix + identName(type.typeName)!
         }
-        if (typedef) {
-            const [t, n] = typedef
-            this.generateTypedef(t, n)
-            PeerGeneratorVisitor.namedTypes.set(t, n)
+        if (ts.isUnionTypeNode(type)) {
+            return prefix + `Union_${type.types.map(it => this.computeTypeName(it)).join("_")}`
         }
+        if (ts.isOptionalTypeNode(type)) {
+            return "Optional_" +  this.computeTypeName(type.type)
+        }
+        if (ts.isTupleTypeNode(type)) {
+            return prefix + `Tuple_${type.elements.map(it => this.computeTypeName(it)).join("_")}`
+        }
+        if (ts.isParenthesizedTypeNode(type)) {
+            return prefix + `Parenthesized_` + this.computeTypeName(type.type!, optional)
+        }
+        if (ts.isTypeLiteralNode(type)) {
+            return prefix + `Literal_${type.members.map(member => {
+                if (ts.isPropertySignature(member)) {
+                    return this.computeTypeName(member.type!, member.questionToken != undefined)
+                } else {
+                    return undefined
+                }
+            })
+            .filter(it => it != undefined)
+            .join("_")}`
+        }
+        if (ts.isFunctionTypeNode(type)) {
+            return prefix + "Function"
+        }
+        if (ts.isArrayTypeNode(type)) {
+            return prefix + `Array_` + this.computeTypeName(type.elementType, false)
+        }
+        if (type.kind == ts.SyntaxKind.NumberKeyword) {
+            return prefix + `Number`
+        }
+        if (type.kind == ts.SyntaxKind.UndefinedKeyword) {
+            return `Undefined`
+        }
+        if (type.kind == ts.SyntaxKind.StringKeyword) {
+            return prefix + `String`
+        }
+        if (type.kind == ts.SyntaxKind.BooleanKeyword) {
+            return prefix + `Boolean`
+        }
+        throw new Error(`Cannot compute type name: ${type.getText()}`)
     }
 
     private nativeModulePrint(parent: ts.ClassDeclaration, methods: MaybeCollapsedMethod[]): void {
@@ -1126,24 +1176,12 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         }
     }
 
-    private generateTypedef(type: ts.TypeNode, name: string | undefined, optional: boolean = false) {
-        if (ts.isImportTypeNode(type)) {
-            this.requestType(name!, type, optional)
-        } else {
-            let typeConvertor = this.typeConvertor("<typedef>", type, optional)
-            let realName = name ?? typeConvertor.nativeType(false)
-            this.requestType(realName, type, optional)
-        }
-    }
-
     private generateDeserializer(name: string, type: ts.TypeNode, optional: boolean) {
-        if (!type || PeerGeneratorConfig.ignoreSerialization.includes(name)) return
-        let typeName = ts.isTypeReferenceNode(type) ? type.typeName : (type as ts.ImportTypeNode).qualifier
+        if (PeerGeneratorConfig.ignoreSerialization.includes(name)) return
+        let typeName = ts.isTypeReferenceNode(type) ? type.typeName : (ts.isImportTypeNode(type) ? type.qualifier : undefined)
         let declarations = typeName ? getDeclarationsByNode(this.typeChecker, typeName) : []
         let isEnum = declarations.length > 0 && ts.isEnumDeclaration(declarations[0])
-        let isAlias = declarations.length > 0 && ts.isTypeAliasDeclaration(declarations[0])
-        let isStruct = !isEnum && !isAlias
-        this.printerStructsC.startEmit(this.typeChecker, type, name)
+        this.printerStructsC.startEmit(this.typeChecker, this, type, name)
         if (isEnum) {
             this.printerStructsC.print(`typedef int32_t ${name};`)
             return
@@ -1154,10 +1192,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         }
         this.printerDeserializerC.print(`${name} read${name}() {`)
         this.printerDeserializerC.pushIndent()
-        if (isAlias) {
-            let decl = declarations[0] as ts.TypeAliasDeclaration
-            this.generateTypedef(decl.type, name)
-        }
         let structFields: (ts.PropertySignature | ts.PropertyDeclaration)[] = []
         this.printerDeserializerC.print(`Deserializer& valueDeserializer = *this;`)
         this.printerDeserializerC.print(`${name} value;`)
@@ -1177,6 +1211,22 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
                     .filter(ts.isPropertyDeclaration)
                     .forEach(it => structFields.push(it))
             }
+            /*
+            if (ts.isTypeAliasDeclaration(declaration)) {
+                let declType = declaration.type
+                // TEST
+                if (ts.isTypeLiteralNode(declType)) {
+                    declType
+                        .members
+                        .filter(ts.isPropertySignature)
+                        .forEach(it => structFields.push(it))
+                }
+            } */
+            if (ts.isTypeLiteralNode(type)) {
+                type.members
+                    .filter(ts.isPropertySignature)
+                    .forEach(it => structFields.push(it))
+            }
             structFields.forEach(it => this.processSingleField(it, name))
             if (ts.isEnumDeclaration(declaration)) {
                 this.printerDeserializerC.print(`value = valueDeserializer.readInt32();`)
@@ -1192,39 +1242,34 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         this.printerDeserializerC.popIndent()
         this.printerDeserializerC.print(`}`)
 
-        this.printerStructsC.print(`template <>`)
-        this.printerStructsC.print(`inline void WriteToString(string* result, const ${name}& value) {`)
-        this.printerStructsC.pushIndent()
-        this.printerStructsC.print(`result->append("${name} {");`)
-        structFields.forEach((field, index) => {
-            const fieldName = identName(field.name)
-            if (index > 0) this.printerStructsC.print(`result->append(", ");`)
-            let isStatic = field.modifiers?.find(it => it.kind == ts.SyntaxKind.StaticKeyword) != undefined
-            if (isStatic) {
-                this.printerStructsC.print(`/* Ignore static ${fieldName} */`)
-            } else {
-                this.printerStructsC.print(`result->append("${fieldName}=");`)
-                this.printerStructsC.print(`WriteToString(result, value.${fieldName});`)
-            }
-        })
-        this.printerStructsC.print(`result->append("}");`)
-        this.printerStructsC.popIndent()
-        this.printerStructsC.print(`}`)
+        if (false) {
+            this.printerStructsC.print(`template <>`)
+            this.printerStructsC.print(`inline void WriteToString(string* result, const ${name}& value) {`)
+            this.printerStructsC.pushIndent()
+            this.printerStructsC.print(`result->append("${name} {");`)
+            structFields.forEach((field, index) => {
+                const fieldName = identName(field.name)
+                if (index > 0) this.printerStructsC.print(`result->append(", ");`)
+                let isStatic = field.modifiers?.find(it => it.kind == ts.SyntaxKind.StaticKeyword) != undefined
+                if (isStatic) {
+                    this.printerStructsC.print(`/* Ignore static ${fieldName} */`)
+                } else {
+                    this.printerStructsC.print(`result->append("${fieldName}=");`)
+                    this.printerStructsC.print(`WriteToString(result, value.${fieldName});`)
+                }
+            })
+            this.printerStructsC.print(`result->append("}");`)
+            this.printerStructsC.popIndent()
+            this.printerStructsC.print(`}`)
+        }
     }
 
     private processSingleField(field: ts.PropertySignature | ts.PropertyDeclaration, structName: string) {
         if (!field.type) throw new Error("Untyped field")
         let isStatic = field.modifiers?.find(it => it.kind == ts.SyntaxKind.StaticKeyword) != undefined
         if (isStatic) return
-        if (ts.isTypeReferenceNode(field.type)) {
-            this.requestType(identName(field.type.typeName)!, field.type)
-        }
-        this.registerType(field.type, `Type_${structName}_${identName(field.name)}`)
-
         const optional = field.questionToken !== undefined
-        if (optional) {
-            this.generateTypedef(field.type, undefined, optional)
-        }
+        this.requestType(`Type_${structName}_${identName(field.name)}`, field.type, optional)
         let typeConvertor = this.typeConvertor("value", field.type, optional)
         let fieldName = identName(field.name)
         let nativeType = typeConvertor.nativeType(false)

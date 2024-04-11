@@ -226,11 +226,9 @@ export class LengthConvertor extends BaseArgConvertor {
 
 export class UnionConvertor extends BaseArgConvertor {
     private memberConvertors: ArgConvertor[]
-    private nativeTypeName: string
 
-    constructor(param: string, visitor: PeerGeneratorVisitor, type: ts.UnionTypeNode) {
+    constructor(param: string, private visitor: PeerGeneratorVisitor, private type: ts.UnionTypeNode) {
         super(`any`, [], false, true, param)
-        this.nativeTypeName = PeerGeneratorVisitor.getTypeName(type)
         this.memberConvertors = type
             .types
             .map(member => visitor.typeConvertor(param, member))
@@ -291,9 +289,9 @@ export class UnionConvertor extends BaseArgConvertor {
     nativeType(impl: boolean): string {
         return impl
             ? `struct { int selector; union { ` +
-              `${this.memberConvertors.map((it, index) => `${it.nativeType(true)} value${index};`).join(" ")}` +
+            `${this.memberConvertors.map((it, index) => `${it.nativeType(false)} value${index};`).join(" ")}` +
               `}; }`
-            : this.nativeTypeName
+            :  this.visitor.getTypeName(this.type)
     }
     interopType(ts: boolean): string {
         throw new Error("Union")
@@ -382,7 +380,7 @@ export class CustomTypeConvertor extends BaseArgConvertor {
 export class OptionConvertor extends BaseArgConvertor {
     private typeConvertor: ArgConvertor
 
-    constructor(param: string, visitor: PeerGeneratorVisitor, type: ts.TypeNode) {
+    constructor(param: string, private visitor: PeerGeneratorVisitor, private type: ts.TypeNode) {
         let typeConvertor = visitor.typeConvertor(param, type)
         let runtimeTypes = typeConvertor.runtimeTypes;
         if (!runtimeTypes.includes(RuntimeType.UNDEFINED)) {
@@ -417,8 +415,8 @@ export class OptionConvertor extends BaseArgConvertor {
     }
     nativeType(impl: boolean): string {
         return impl
-            ? `struct { int tag; ${this.typeConvertor.nativeType(false)} value; }`
-            : `Optional_${this.typeConvertor.nativeType(false)}`
+            ? `struct { int tag; ${this.visitor.getTypeName(this.type, false)} value; }`
+            : this.visitor.getTypeName(this.type, true)
     }
     interopType(ts: boolean): string {
         return "KPointer"
@@ -431,9 +429,8 @@ export class OptionConvertor extends BaseArgConvertor {
 export class AggregateConvertor extends BaseArgConvertor {
     private memberConvertors: ArgConvertor[]
     private members: string[] = []
-    private nativeTypeName: string
 
-    constructor(param: string, visitor: PeerGeneratorVisitor, type: ts.TypeLiteralNode) {
+    constructor(param: string, private visitor: PeerGeneratorVisitor, private type: ts.TypeLiteralNode) {
         super(`any`, [RuntimeType.OBJECT], false, true, param)
         this.memberConvertors = type
             .members
@@ -442,7 +439,6 @@ export class AggregateConvertor extends BaseArgConvertor {
             this.members[index] = identName(member.name)!
             return visitor.typeConvertor(param, member.type!, member.questionToken != undefined)
         })
-        this.nativeTypeName = PeerGeneratorVisitor.getTypeName(type)
     }
 
     convertorTSArg(param: string): string {
@@ -469,7 +465,7 @@ export class AggregateConvertor extends BaseArgConvertor {
             ? `struct { ` +
               `${this.memberConvertors.map((it, index) => `${it.nativeType(true)} value${index};`).join(" ")}` +
               '} '
-            : this.nativeTypeName
+            : this.visitor.getTypeName(this.type)
     }
     interopType(): string {
         return "KNativePointer"
@@ -565,9 +561,9 @@ export class TupleConvertor extends BaseArgConvertor {
     nativeType(impl: boolean): string {
         return impl
         ? `struct { ` +
-          `${this.memberConvertors.map((it, index) => `${it.nativeType(true)} value${index};`).join(" ")}` +
+          `${this.memberConvertors.map((it, index) => `${it.nativeType(false)} value${index};`).join(" ")}` +
           '} '
-        : PeerGeneratorVisitor.getTypeName(this.elementType)
+        : this.visitor.getTypeName(this.elementType)
     }
     interopType(ts: boolean): string {
         return "KNativePointer"
@@ -696,48 +692,4 @@ export class PredefinedConvertor extends BaseArgConvertor {
     estimateSize() {
         return 8
     }
-}
-
-function mapCType(type: ts.TypeNode): string {
-    if (ts.isTypeReferenceNode(type)) {
-        return identName(type.typeName)!
-    }
-    if (ts.isUnionTypeNode(type) ||
-        ts.isTypeLiteralNode(type) ||
-        ts.isTupleTypeNode(type))
-    {
-        return PeerGeneratorVisitor.getTypeName(type)
-    }
-    if (ts.isOptionalTypeNode(type)) {
-        return `Tagged`
-    }
-    if (ts.isFunctionTypeNode(type)) {
-        return "Function"
-    }
-    if (ts.isParenthesizedTypeNode(type)) {
-        return `${mapCType(type.type)}`
-    }
-    if (ts.isNamedTupleMember(type)) {
-        return `${mapCType(type.type)}`
-    }
-    if (ts.isArrayTypeNode(type)) {
-        return `${mapCType(type.elementType)}[]`
-    }
-
-    if (type.kind == ts.SyntaxKind.NumberKeyword) {
-        return "Number"
-    }
-    if (type.kind == ts.SyntaxKind.StringKeyword) {
-        return "String"
-    }
-    if (type.kind == ts.SyntaxKind.ObjectKeyword) {
-        return "Object"
-    }
-    if (type.kind == ts.SyntaxKind.BooleanKeyword) {
-        return "KBoolean"
-    }
-    if (type.kind == ts.SyntaxKind.AnyKeyword) {
-        return "Any"
-    }
-    throw new Error(`Cannot map ${type.getText()}: ${type.kind}`)
 }

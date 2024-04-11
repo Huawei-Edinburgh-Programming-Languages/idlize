@@ -16,11 +16,13 @@
 import { IndentedPrinter } from "../IndentedPrinter";
 import * as ts from "typescript"
 import { asString, getDeclarationsByNode, getNameWithoutQualifiersRight, heritageTypes, stringOrNone } from "../util";
+import { PeerGeneratorVisitor } from "./PeerGeneratorVisitor";
 
 export class SortingEmitter extends IndentedPrinter {
     currentPrinter?: IndentedPrinter
     emitters = new Map<string, IndentedPrinter>()
     deps = new Map<string, Set<string>>()
+    visitor? : PeerGeneratorVisitor
 
     constructor() {
         super()
@@ -28,9 +30,10 @@ export class SortingEmitter extends IndentedPrinter {
 
     private fillDeps(typeChecker: ts.TypeChecker, type: ts.TypeNode | undefined, seen: Set<string>) {
         if (!type) return
+        let name = this.visitor!.computeTypeName(type, false)
+        if (seen.has(name)) return
+        seen.add(name)
         if (ts.isTypeReferenceNode(type)) {
-            if (seen.has(this.repr(type))) return
-            seen.add(this.repr(type))
             let decls = getDeclarationsByNode(typeChecker, type.typeName)
             if (decls.length > 0) {
                 let decl = decls[0]
@@ -68,24 +71,18 @@ export class SortingEmitter extends IndentedPrinter {
         }
     }
 
-    startEmit(typeChecker: ts.TypeChecker, type: ts.TypeNode, name: string | undefined = undefined) {
-        const repr = this.repr(type, name)
-        //if (this.emitters.has(repr)) throw new Error(`Already emitted ${type.getText()}`)
-        let next = this.emitters.has(repr) ? this.emitters.get(repr)! : new IndentedPrinter()
+    startEmit(typeChecker: ts.TypeChecker, visitor: PeerGeneratorVisitor, type: ts.TypeNode, name: string) {
+        this.visitor = visitor
+        let next = this.emitters.has(name) ? this.emitters.get(name)! : new IndentedPrinter()
         let seen = new Set<string>()
         this.fillDeps(typeChecker, type, seen)
-        seen.delete(repr)
-        this.deps.set(repr, seen)
-        this.emitters.set(repr, next)
+        seen.delete(name)
+        this.deps.set(name, seen)
+        this.emitters.set(name, next)
         this.currentPrinter = next
         if (seen.size > 0)
-            console.log(`${repr}: depends on ${Array.from(seen.keys()).join(",")}`)
+            console.log(`${name}: depends on ${Array.from(seen.keys()).join(",")}`)
     }
-
-    repr(type: ts.TypeNode, name: string | undefined = undefined): string {
-        return ts.isTypeReferenceNode(type) ? getNameWithoutQualifiersRight(type.typeName)! : name!
-    }
-
     printType(type: ts.TypeNode): string {
         return ts.isTypeReferenceNode(type)
             ? asString(type.typeName)
