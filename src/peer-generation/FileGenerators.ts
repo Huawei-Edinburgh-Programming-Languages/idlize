@@ -160,7 +160,6 @@ extern const ArkUINodeModifiers* GetArkUINodeModifiers()
 `
 }
 
-
 export function makeTSSerializer(table: DeclarationTable): string {
     let printer = new IndentedPrinter()
     table.generateSerializers(printer)
@@ -182,6 +181,9 @@ export function makeCDeserializer(table: DeclarationTable): string {
 #include "Interop.h"
 #include "ArgDeserializerBase.h"
 #include <string>
+
+typedef KBoolean Boolean;
+typedef CustomObject Resource;
 
 ${structs.getOutput().join("\n")}
 

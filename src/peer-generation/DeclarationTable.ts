@@ -505,7 +505,7 @@ export class DeclarationTable {
         printer.popIndent()
     }
 
-    private ignoreTarget(target: DeclarationTarget): boolean {
+    private ignoreTarget(target: DeclarationTarget): target is PrimitiveType|ts.EnumDeclaration  {
         if (PeerGeneratorConfig.ignoreSerialization.includes(this.computeTargetName(target, false))) return true
         if (target instanceof PrimitiveType) return true
         if (ts.isEnumDeclaration(target)) return true
