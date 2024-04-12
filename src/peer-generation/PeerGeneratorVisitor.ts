@@ -94,16 +94,6 @@ type MaybeCollapsedMethod = {
     }
 }
 
-function assignName(type: ts.TypeNode, name: string, optional: boolean) {
-    let current = PeerGeneratorVisitor.namedTypes.get(type)
-    if (!current) {
-        current = [optional ? "" : name, optional ? name : `Optional_${name}`]
-    } else {
-        current[optional ? 1 : 0] = name
-    }
-    PeerGeneratorVisitor.namedTypes.set(type, current)
-}
-
 export type PeerGeneratorVisitorOptions = {
     sourceFile: ts.SourceFile,
     typeChecker: ts.TypeChecker,
@@ -161,11 +151,21 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         this.dumpSerialized = options.dumpSerialized
     }
 
+    assignName(type: ts.TypeNode, name: string, optional: boolean) {
+        let current = this.namedTypes.get(type)
+        if (!current) {
+            current = [optional ? "" : name, optional ? name : `Optional_${name}`]
+        } else {
+            current[optional ? 1 : 0] = name
+        }
+        this.namedTypes.set(type, current)
+    }
+
     requestType(name: string|undefined, type: ts.TypeNode, optional: boolean = false) {
         //if (ts.isTypeReferenceNode(type)) name = identName(type.typeName)
         if (name == undefined) name = this.computeTypeNameImpl(type, optional)
         console.log("req", name)
-        assignName(type, name, optional)
+        this.assignName(type, name, optional)
         //if (PeerGeneratorVisitor.serializerBaseMethods.includes(`write${name}`)) return
         this.serializerRequests.push({ type, name, optional })
     }
@@ -404,7 +404,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
 
         this.printDummy(`${retType} ${implName}(${apiParameters}) {`)
         this.dummyImpl.pushIndent()
-        this.printDummy(`string out = string("${methodName}(");`)
+        this.printDummy(`string out("${methodName}(");`)
         method.parameters.forEach((param, index) => {
             if (index > 0) this.printDummy(`out.append(", ");`)
             this.printDummy(`WriteToString(&out, ${identName(param.name)});`)
@@ -1041,9 +1041,9 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         })
     }
 
-    static namedTypes = new Map<ts.TypeNode, [string, string]>()
+    namedTypes = new Map<ts.TypeNode, [string, string]>()
     getTypeName(type: ts.TypeNode, optional: boolean = false): string {
-        let result = PeerGeneratorVisitor.namedTypes.get(type)
+        let result = this.namedTypes.get(type)
         let index = optional ? 1 : 0
         if (!result || result[index] == "") {
             let name = this.computeTypeName(type, optional)
@@ -1271,11 +1271,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         let fieldName = identName(field.name)
         let nativeType = typeConvertor.nativeType(false)
         this.printerStructsC.print(`${nativeType} ${fieldName};`)
-
-        let fieldValue = `value_${fieldName}`
-        this.printerDeserializerC.print(`${nativeType} ${fieldValue};`)
-        typeConvertor.convertorToCDeserial(`value`, fieldValue, this.printerDeserializerC)
-        this.printerDeserializerC.print(`value.${fieldName} = ${fieldValue};`);
+        typeConvertor.convertorToCDeserial(`value`, `value.${fieldName}`, this.printerDeserializerC)
     }
 }
 

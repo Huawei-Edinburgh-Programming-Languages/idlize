@@ -68,12 +68,21 @@ export class SortingEmitter extends IndentedPrinter {
             } else {
                 console.log(`no decl for ${asString(type.typeName)}`)
             }
-        } else if (ts.isUnionTypeNode(type)) {
-            type.types.forEach(it => this.fillDeps(typeChecker, it, seen))
-        } else if (ts.isTypeLiteralNode(type)) {
-            type.members
-                .filter(ts.isPropertySignature)
-                .forEach(it => this.fillDeps(typeChecker, it.type, seen))
+        } else {
+            let types: ts.NodeArray<ts.TypeNode> | ts.TypeNode[] = []
+            if (ts.isParenthesizedTypeNode(type)) {
+                types = [type.type]
+            } else if (ts.isUnionTypeNode(type)) {
+                types = type.types
+            } else if (ts.isTupleTypeNode(type)) {
+                types = type.elements
+            } else if (ts.isTypeLiteralNode(type)) {
+                types = type.members
+                    .filter(ts.isPropertySignature)
+                    .map(it => it.type!)
+            }
+            types
+                .forEach(it => this.fillDeps(typeChecker, it, seen))
         }
     }
 
