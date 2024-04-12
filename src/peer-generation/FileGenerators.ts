@@ -167,9 +167,7 @@ export function makeTSSerializer(table: DeclarationTable): string {
 import { SerializerBase, runtimeType, Tags, RuntimeType, Function } from "./SerializerBase"
 import { int32 } from "./types"
 
-export class Serializer extends SerializerBase {
 ${printer.getOutput().join("\n")}
-}
 `
 }
 

@@ -58,7 +58,7 @@ export class DeserializerGenerator {
             this.structPrinter.popIndent()
             this.structPrinter.print(`};`)
         } else {
-            let convertor = visitor.typeConvertor("value", type, optional)
+            let convertor = visitor.declarationTable.typeConvertor("value", type, optional)
             convertor.convertorToCDeserial("value", "value", this.deserPrinter)
             this.structPrinter.print(`typedef ${convertor.nativeType(true)} ${name};`)
         }
@@ -94,7 +94,7 @@ export class DeserializerGenerator {
         if (isStatic) return
         const optional = field.questionToken !== undefined
         visitor.requestType(`${structName}_${identName(field.name)}`, field.type, optional)
-        let typeConvertor = visitor.typeConvertor("value", field.type, optional)
+        let typeConvertor = visitor.declarationTable.typeConvertor("value", field.type, optional)
         let fieldName = identName(field.name)
         let nativeType = typeConvertor.nativeType(false)
         this.structPrinter.print(`${nativeType} ${fieldName};`)

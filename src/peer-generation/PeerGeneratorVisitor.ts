@@ -19,10 +19,7 @@ import {
     capitalize,
     dropSuffix,
     forEachExpanding,
-    getDeclarationsByNode,
-    getNameWithoutQualifiersRight,
     identName,
-    importTypeName,
     isCommonMethodOrSubclass,
     isDefined,
     mapType,
@@ -102,7 +99,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     private interfacesToGenerate: Set<string>
     private printerNativeModule: IndentedPrinter
     private printerNativeModuleEmpty: IndentedPrinter
-    private printerDeserializerTS: IndentedPrinter
     private serializerRequests: TypeAndName[] = []
     private apiPrinter: IndentedPrinter
     private apiPrinterList: IndentedPrinter
@@ -110,7 +106,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     private dummyImplModifiers: IndentedPrinter
     private dummyImplModifierList: IndentedPrinter
     private dumpSerialized: boolean
-    private declarationTable: DeclarationTable
+    declarationTable: DeclarationTable
     private deserGenerator: DeserializerGenerator
 
     static readonly serializerBaseMethods = serializerBaseMethods()
@@ -148,7 +144,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     requestType(name: string|undefined, type: ts.TypeNode, optional: boolean = false) {
         this.declarationTable.requestType(name, type, optional)
     }
-
 
     private importStatements(currentFileName: string): string[] {
         return PeerGeneratorConfig.exports

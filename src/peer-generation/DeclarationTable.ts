@@ -31,63 +31,52 @@ type DeclarationTarget =
     | PrimitiveType
 
 class DeclarationRecord {
-    public nameBasic: string = ""
-    public nameOptional: string = ""
+    public nameBasic: string
+    public nameOptional: string
 
-    constructor (public target: DeclarationTarget, private table: DeclarationTable) {}
-    requestVariant(name: string, optional: boolean) {
-        if (optional) {
-            if (this.nameOptional.length == 0)
-                this.nameOptional = name
-        } else {
-            if (this.nameBasic.length == 0) {
-                this.nameBasic = name
-            }
-        }
+    constructor (public target: DeclarationTarget, private table: DeclarationTable) {
+        this.nameBasic = table.computeTargetName(target, false)
+        this.nameOptional = table.computeTargetName(target, true)
     }
     getVariantName(optional: boolean): string {
         if (optional) {
-            if (this.nameOptional.length == 0) {
-                this.nameOptional = this.table.computeTargetName(this.target, optional)
-            }
-            // throw new Error(`Not defined optional name for ${this.target.getText()}`)
             return this.nameOptional
         } else {
-            if (this.nameBasic.length == 0)
-                throw new Error(`Not defined basic name ${this.target.getText()}`)
             return this.nameBasic
         }
     }
 }
 
+class FieldRecord {
+    constructor(public typeName: string, public type: ts.TypeNode | undefined, public name: string, public optional: boolean = false) {}
+}
+
 export class DeclarationTable {
-    declarations = new Set<DeclarationTarget>()
-    typeMap = new Map<ts.TypeNode, DeclarationRecord>()
+    declarations = new Map<DeclarationTarget, DeclarationRecord>()
+    typeMap = new Map<ts.TypeNode, [DeclarationTarget, string]>()
     typeChecker: ts.TypeChecker | undefined = undefined
     constructor() {}
 
     getTypeName(type: ts.TypeNode, optional: boolean = false) {
-        let declaration: DeclarationRecord|undefined = this.typeMap.get(type)
+        let declaration  = this.typeMap.get(type)
         if (!declaration) {
             this.requestType(undefined, type, optional)
         }
         declaration = this.typeMap.get(type)!
-        return declaration.getVariantName(optional)
+        return declaration[1]
     }
 
     requestType(name: string|undefined, type: ts.TypeNode, optional: boolean = false) {
-        let declaration: DeclarationRecord|undefined = this.typeMap.get(type)
-        if (!name) name = this.computeTypeName(type, optional)
+        let declaration = this.typeMap.get(type)
         if (declaration) {
-            declaration.requestVariant(name, optional)
+            if (name && name != declaration[1]) throw new Error(`Mismatch of names${optional ? "[optional]" : ""}: ${name} ${declaration[1]}`)
             return
         }
+        name = this.computeTypeName(name, type, optional)
         let target = this.findDeclaration(type)
         if (!target) throw new Error(`Cannot find declaration: ${type.getText()}`)
-        this.declarations.add(target)
-        let record = new DeclarationRecord(target, this)
-        record.requestVariant(name, optional)
-        this.typeMap.set(type, record)
+        this.declarations.set(target, new DeclarationRecord(target, this))
+        this.typeMap.set(type, [target, name])
     }
 
     findDeclaration(type: ts.TypeNode): DeclarationTarget | undefined {
@@ -114,19 +103,19 @@ export class DeclarationTable {
             throw new Error(`Wrong declaration: ${decl.getText()}`)
         }
         if (type.kind == ts.SyntaxKind.BooleanKeyword)
-            return new PrimitiveType(`Boolean`)
+            return new PrimitiveType(`boolean`)
         if (type.kind == ts.SyntaxKind.NumberKeyword)
-            return new PrimitiveType(`Number`)
+            return new PrimitiveType(`number`)
         if (type.kind == ts.SyntaxKind.StringKeyword)
-            return new PrimitiveType(`String`)
+            return new PrimitiveType(`string`)
         if (ts.isFunctionTypeNode(type))
-            return new PrimitiveType(`Function`)
+            return new PrimitiveType(`object`)
         throw new Error(`Unknown type: ${type.getText()} ${asString(type)}`)
     }
 
-    computeTypeName(type: ts.TypeNode, optional: boolean = false): string {
-        let name = this.computeTypeNameImpl(type, optional)
-        this.requestType(name, type, optional)
+    computeTypeName(suggestedName: string|undefined, type: ts.TypeNode, optional: boolean = false): string {
+        let name = this.computeTypeNameImpl(suggestedName, type, optional)
+        //this.requestType(name, type, optional)
         return name
     }
 
@@ -138,7 +127,7 @@ export class DeclarationTable {
         if (ts.isTypeLiteralNode(target)) {
             return prefix + `Literal_${target.members.map(member => {
                 if (ts.isPropertySignature(member)) {
-                    return this.computeTypeNameImpl(member.type!, member.questionToken != undefined)
+                    return this.computeTypeNameImpl(undefined, member.type!, member.questionToken != undefined)
                 } else {
                     return undefined
                 }
@@ -146,16 +135,38 @@ export class DeclarationTable {
             .filter(it => it != undefined)
             .join("_")}`
         }
+        if (ts.isEnumDeclaration(target)) {
+            return prefix + identName(target.name)
+        }
         if (ts.isUnionTypeNode(target)) {
-            return prefix + `Union_${target.types.map(it => this.computeTypeNameImpl(it, optional)).join("_")}`
+            return prefix + `Union_${target.types.map(it => this.computeTypeNameImpl(undefined, it, optional)).join("_")}`
         }
         if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {
             return prefix + identName(target.name)
         }
-        throw new Error(`Cannot compute target name: ${target.getText()}`)
+        if (ts.isFunctionTypeNode(target)) {
+            return "Function"
+        }
+        if (ts.isTupleTypeNode(target)) {
+            return prefix + `Tuple_${target.elements.map(it => {
+                if (ts.isNamedTupleMember(it)) {
+                    return this.computeTypeNameImpl(undefined, it, it.questionToken != undefined)
+                } else {
+                    return this.computeTypeNameImpl(undefined, it, false)
+                }
+            }).join("_")}`
+        }
+        if (ts.isArrayTypeNode(target)) {
+            return prefix + `Array_` + this.computeTypeNameImpl(undefined, target.elementType, false)
+        }
+        if (ts.isImportTypeNode(target)) {
+            return prefix + identName(target.qualifier)!
+        }
+
+        throw new Error(`Cannot compute target name: ${target}`)
     }
 
-    private computeTypeNameImpl(type: ts.TypeNode, optional: boolean): string {
+    private computeTypeNameImpl(suggestedName: string|undefined, type: ts.TypeNode, optional: boolean): string {
         const prefix = optional ? "Optional_" : ""
         if (ts.isImportTypeNode(type)) {
             return prefix + identName(type.qualifier)!
@@ -164,21 +175,25 @@ export class DeclarationTable {
             return prefix + identName(type.typeName)!
         }
         if (ts.isUnionTypeNode(type)) {
-            return prefix + `Union_${type.types.map(it => this.computeTypeNameImpl(it, optional)).join("_")}`
+            if (suggestedName) return suggestedName
+            return prefix + `Union_${type.types.map(it => this.computeTypeNameImpl(undefined, it, optional)).join("_")}`
         }
         if (ts.isOptionalTypeNode(type)) {
-            return "Optional_" +  this.computeTypeNameImpl(type.type, false)
+            if (suggestedName) return suggestedName
+            return "Optional_" +  this.computeTypeNameImpl(undefined, type.type, false)
         }
         if (ts.isTupleTypeNode(type)) {
-            return prefix + `Tuple_${type.elements.map(it => this.computeTypeNameImpl(it, optional)).join("_")}`
+            if (suggestedName) return suggestedName
+            return prefix + `Tuple_${type.elements.map(it => this.computeTypeNameImpl(undefined, it, optional)).join("_")}`
         }
         if (ts.isParenthesizedTypeNode(type)) {
-            return this.computeTypeNameImpl(type.type!, optional)
+            return this.computeTypeNameImpl(suggestedName, type.type!, optional)
         }
         if (ts.isTypeLiteralNode(type)) {
+            if (suggestedName) return suggestedName
             return prefix + `Literal_${type.members.map(member => {
                 if (ts.isPropertySignature(member)) {
-                    return this.computeTypeNameImpl(member.type!, member.questionToken != undefined)
+                    return this.computeTypeNameImpl(undefined, member.type!, member.questionToken != undefined)
                 } else {
                     return undefined
                 }
@@ -190,7 +205,8 @@ export class DeclarationTable {
             return prefix + "Function"
         }
         if (ts.isArrayTypeNode(type)) {
-            return prefix + `Array_` + this.computeTypeNameImpl(type.elementType, false)
+            if (suggestedName) return suggestedName
+            return prefix + `Array_` + this.computeTypeNameImpl(undefined, type.elementType, false)
         }
         if (type.kind == ts.SyntaxKind.NumberKeyword) {
             return prefix + `Number`
@@ -343,13 +359,78 @@ export class DeclarationTable {
         throw new Error(`Unknown kind: ${declaration.kind}`)
     }
 
-    generateSerializers(printer: IndentedPrinter) {
+    generateSerializers0(printer: IndentedPrinter) {
         let seenNames = new Set<string>()
-        for (let x of this.typeMap.values()) {
+        printer.print(`export class Serializer extends SerializerBase {`)
+        printer.pushIndent()
+        for (let x of this.declarations.values()) {
             if (seenNames.has(x.nameBasic)) continue
             seenNames.add(x.nameBasic)
             this.generateSerializer(x.nameBasic, x.target, printer)
         }
+        printer.popIndent()
+        printer.print(`}`)
+        seenNames.clear()
+        for (let x of this.declarations.values()) {
+            if (seenNames.has(x.nameBasic)) continue
+            seenNames.add(x.nameBasic)
+            printer.print(`class ${x.nameBasic} {`)
+            printer.pushIndent()
+            this.targetFields(x.target).forEach((it, index) => {
+                printer.print(`${it.name}${it.optional ? "?" : ""}: ${it.type}`)
+            })
+            printer.popIndent()
+            printer.print(`}`)
+        }
+        for (let x of this.typeMap.values()) {
+            let record = this.declarations.get(x[0])!
+            if (seenNames.has(x[1])) continue
+            seenNames.add(x[1])
+            printer.print(`type ${x[1]} = ${record.nameBasic}`)
+        }
+    }
+
+    generateSerializers(printer: IndentedPrinter) {
+        let seenNames = new Set<string>()
+        printer.print(`export class Serializer extends SerializerBase {`)
+        printer.pushIndent()
+        for (let x of this.declarations.values()) {
+            if (seenNames.has(x.nameBasic)) continue
+            seenNames.add(x.nameBasic)
+            if (x.target instanceof PrimitiveType) continue
+            if (ts.isInterfaceDeclaration(x.target))
+                this.generateSerializer(x.nameBasic, x.target, printer)
+        }
+        printer.popIndent()
+        printer.print(`}`)
+    }
+
+
+    private targetFields(target: DeclarationTarget): FieldRecord[] {
+        let result: FieldRecord[]  = []
+        if (target instanceof PrimitiveType) {
+            result.push(new FieldRecord(target.name, undefined, "value"))
+            return result
+        }
+        if (ts.isInterfaceDeclaration(target)) {
+            target
+                .members
+                .filter(ts.isPropertySignature)
+                .forEach(it => {
+                    let typeName = this.computeTypeName(undefined, it.type!, false)
+                    result.push(new FieldRecord(typeName, it.type!, identName(it.name)!, it.questionToken != undefined))
+                })
+        }
+        if (ts.isClassDeclaration(target)) {
+            target
+                .members
+                .filter(ts.isPropertyDeclaration)
+                .forEach(it => {
+                    let typeName = this.computeTypeName(undefined, it.type!, false)
+                    result.push(new FieldRecord(typeName, it.type!, identName(it.name)!, it.questionToken != undefined))
+                })
+        }
+        return result
     }
 
     private generateSerializer(name: string, target: DeclarationTarget, printer: IndentedPrinter) {
@@ -361,10 +442,16 @@ export class DeclarationTable {
         printer.pushIndent()
         printer.print(`const valueSerializer = this`)
         printer.print(`if (undefined === value) { valueSerializer.writeInt8(Tags.UNDEFINED); return }`)
+        printer.print(`valueSerializer.writeInt8(Tags.OBJECT)`)
         if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {
-
+            let fields = this.targetFields(target)
+            fields.forEach(it => {
+                let field = `value_${it.name}`
+                printer.print(`let ${field} = value.${it.name}`)
+                let typeConvertor = this.typeConvertor(`value`, it.type!, it.optional)
+                typeConvertor.convertorToTSSerial(`value`, field, printer)
+            })
         } else {
-            printer.print(`valueSerializer.writeInt8(Tags.OBJECT)`)
             let typeConvertor = this.typeConvertor("value", target, false)
             typeConvertor.convertorToTSSerial(`value`, `value`, printer)
         }
