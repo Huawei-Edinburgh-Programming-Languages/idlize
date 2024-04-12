@@ -44,6 +44,7 @@ import { defaultCompilerOptions, isDefined, renameDtsToPeer, stringOrNone, toSet
 import { TypeChecker  } from "./typecheck"
 import { SortingEmitter } from "./peer-generation/SortingEmitter"
 import { initRNG } from "./rand_utils"
+import { DeclarationTable } from "./peer-generation/DeclarationTable"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -261,6 +262,7 @@ if (options.dts2peer) {
     const dummyImpl: string[] = []
     const dummyImplModifiers: string[] = []
     const dummyImplModifierList: string[] = []
+    const declarationTable = new DeclarationTable()
 
     generate(
         options.inputDir,
@@ -282,9 +284,13 @@ if (options.dts2peer) {
             dummyImplModifiers: dummyImplModifiers,
             dummyImplModifierList: dummyImplModifierList,
             dumpSerialized: options.dumpSerialized ?? false,
+            declarationTable,
         }),
         {
             compilerOptions: defaultCompilerOptions,
+            onBegin(outDir, typeChecker) {
+                declarationTable.typeChecker = typeChecker
+            },
             onSingleFile: (entries: stringOrNone[], outputDir, sourceFile) => {
                 const outFile = path.join(
                     outputDir,

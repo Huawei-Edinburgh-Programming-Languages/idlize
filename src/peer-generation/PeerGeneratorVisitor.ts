@@ -56,6 +56,7 @@ import {
 } from "./Convertors"
 import { SortingEmitter } from "./SortingEmitter"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
+import { DeclarationTable } from "./DeclarationTable"
 
 export enum RuntimeType {
     UNEXPECTED = -1,
@@ -78,7 +79,6 @@ export enum RuntimeType {
  */
 
 let serializerSeen = new Set<string>()
-let typedefsSeen = new Set<string>()
 
 export interface TypeAndName {
     type: ts.TypeNode
@@ -110,6 +110,7 @@ export type PeerGeneratorVisitorOptions = {
     dummyImplModifiers: string[],
     dummyImplModifierList: string[],
     dumpSerialized: boolean
+    declarationTable: DeclarationTable
 }
 
 export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
@@ -130,6 +131,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     private dummyImplModifiers: IndentedPrinter
     private dummyImplModifierList: IndentedPrinter
     private dumpSerialized: boolean
+    private declarationTable: DeclarationTable
 
     static readonly serializerBaseMethods = serializerBaseMethods()
 
@@ -149,6 +151,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         this.dummyImplModifiers = new IndentedPrinter(options.dummyImplModifiers)
         this.dummyImplModifierList = new IndentedPrinter(options.dummyImplModifierList)
         this.dumpSerialized = options.dumpSerialized
+        this.declarationTable = options.declarationTable
     }
 
     assignName(type: ts.TypeNode, name: string, optional: boolean) {
@@ -162,9 +165,9 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     }
 
     requestType(name: string|undefined, type: ts.TypeNode, optional: boolean = false) {
+        this.declarationTable.requestType(name, type, optional)
         //if (ts.isTypeReferenceNode(type)) name = identName(type.typeName)
         if (name == undefined) name = this.computeTypeNameImpl(type, optional)
-        console.log("req", name)
         this.assignName(type, name, optional)
         //if (PeerGeneratorVisitor.serializerBaseMethods.includes(`write${name}`)) return
         this.serializerRequests.push({ type, name, optional })
