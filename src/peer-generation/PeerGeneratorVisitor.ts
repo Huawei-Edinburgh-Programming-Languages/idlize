@@ -162,11 +162,9 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     }
 
     requestType(name: string|undefined, type: ts.TypeNode, optional: boolean = false) {
-        /*
-        if ts.isTypeReferenceNode(type)) {
-            name = identName(type.typeName)!
-        } */
-        if (name == undefined) name = this.computeTypeName(type, optional)
+        //if (ts.isTypeReferenceNode(type)) name = identName(type.typeName)
+        if (name == undefined) name = this.computeTypeNameImpl(type, optional)
+        console.log("req", name)
         assignName(type, name, optional)
         //if (PeerGeneratorVisitor.serializerBaseMethods.includes(`write${name}`)) return
         this.serializerRequests.push({ type, name, optional })
@@ -1056,6 +1054,12 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     }
 
     computeTypeName(type: ts.TypeNode, optional: boolean = false): string {
+        let name = this.computeTypeNameImpl(type, optional)
+        this.requestType(name, type, optional)
+        return name
+    }
+
+    private computeTypeNameImpl(type: ts.TypeNode, optional: boolean): string {
         const prefix = optional ? "Optional_" : ""
         if (ts.isImportTypeNode(type)) {
             return prefix + identName(type.qualifier)!
@@ -1073,7 +1077,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
             return prefix + `Tuple_${type.elements.map(it => this.computeTypeName(it)).join("_")}`
         }
         if (ts.isParenthesizedTypeNode(type)) {
-            return prefix + `Parenthesized_` + this.computeTypeName(type.type!, optional)
+            return this.computeTypeName(type.type!, optional)
         }
         if (ts.isTypeLiteralNode(type)) {
             return prefix + `Literal_${type.members.map(member => {
@@ -1262,7 +1266,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         let isStatic = field.modifiers?.find(it => it.kind == ts.SyntaxKind.StaticKeyword) != undefined
         if (isStatic) return
         const optional = field.questionToken !== undefined
-        this.requestType(`Type_${structName}_${identName(field.name)}`, field.type, optional)
+        this.requestType(`${structName}_${identName(field.name)}`, field.type, optional)
         let typeConvertor = this.typeConvertor("value", field.type, optional)
         let fieldName = identName(field.name)
         let nativeType = typeConvertor.nativeType(false)

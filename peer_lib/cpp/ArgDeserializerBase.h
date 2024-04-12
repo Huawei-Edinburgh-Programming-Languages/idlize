@@ -56,21 +56,13 @@ inline void WriteToString(string* result, const T& value) = delete;
 struct String
 {
   size_t capacity;
-  char* chars;
+  char chars[128];
 };
 
 String String_new(size_t capacity, char* initial = NULL) {
   String result;
-  result.capacity = capacity;
-  result.chars = (char*) malloc(capacity);
-  if (initial) {
-    strncpy(result.chars, initial, capacity);
-  }
+  strncpy(result.chars, initial, sizeof result.chars);
   return result;
-}
-
-void String_free(String str) {
-  free(str.chars);
 }
 
 void String_append_String(String str, String other) {
@@ -85,7 +77,7 @@ void String_append_int(String str, int n) {
   // TODO implement
 }
 
-char* String_chars(String str) {
+const char* String_chars(const String& str) {
   return str.chars;
 }
 
@@ -282,30 +274,6 @@ class ArgDeserializerBase;
 
 struct CustomObject {
   char kind[20];
-  CustomObject(): id(0) {
-    kind[0] = 0;
-  }
-  CustomObject(const string& kind): id(0) {
-    strncpy(this->kind, kind.c_str(), sizeof(this->kind));
-  }
-  CustomObject(const CustomObject& other) {
-    strncpy(this->kind, other.kind, sizeof(this->kind));
-    this->id = other.id;
-    // TODO: copy data.
-  }
-  ~CustomObject() {}
-  CustomObject& operator=(CustomObject&& other) {
-    this->id = other.id;
-    strncpy(this->kind, other.kind, sizeof(this->kind));
-    // TODO: copy data.
-    return *this;
-  }
-  CustomObject& operator=(const CustomObject& other) {
-    this->id = other.id;
-    strncpy(this->kind, other.kind, sizeof(this->kind));
-    // TODO: copy data.
-    return *this;
-  }
   int32_t id;
   // Data of custom object.
   int32_t ints[4];
@@ -328,7 +296,9 @@ inline void WriteToString(string* result, const CustomObject& value) {
 struct CustomDeserializer {
   virtual bool supports(const string& kind) { return false; }
   virtual CustomObject deserialize(ArgDeserializerBase* deserializer, const string& kind) {
-    return CustomObject("error");
+    CustomObject result;
+    strcpy(result.kind, "error");
+    return result;
   }
   CustomDeserializer* next = nullptr;
 };
@@ -381,7 +351,10 @@ public:
       int tag = readInt8();
       assert(tag == TAG_UNDEFINED);
       // Skip updefined tag!.
-      return CustomObject(string("Error") + kind);
+      CustomObject result;
+      strcpy(result.kind, "Error");
+      strcat(result.kind, kind.c_str());
+      return result;
   }
 
   int8_t readInt8()
@@ -470,20 +443,13 @@ public:
     return Undefined();
   }
 
-  Tagged<String> readString()
+  String readString()
   {
-    Tagged<String> result;
-    result.tag = (Tags)readInt8();
-    if (result.tag == Tags::TAG_UNDEFINED) {
-      return result;
-    }
-    if (result.tag != Tags::TAG_STRING) {
-      fprintf(stderr, "Unexpected string tag: %d\n", result.tag);
-      throw "Error";
-    }
+    String result;
     int32_t length = readInt32();
     check(length);
-    result.value = String_new(length, (char *)(data + position));
+    memcpy(result.chars, (char*)(data + position), length);
+    result.chars[length] = 0;
     position += length;
     return result;
   }

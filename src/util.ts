@@ -107,6 +107,7 @@ export function getDeclarationsByNode(typechecker: ts.TypeChecker, node: ts.Node
 
 export function findRealDeclarations(typechecker: ts.TypeChecker, node: ts.Node): ts.Declaration[] {
     const declarations = getDeclarationsByNode(typechecker, node)
+    console.log(`${asString(node)} gave ${declarations.length}`)
     const first = declarations[0]
     if (first && ts.isExportAssignment(first)) {
         return findRealDeclarations(typechecker, first.expression)

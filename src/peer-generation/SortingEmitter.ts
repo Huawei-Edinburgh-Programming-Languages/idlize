@@ -42,7 +42,7 @@ export class SortingEmitter extends IndentedPrinter {
                         .filter(ts.isPropertySignature)
                         .forEach(it => this.fillDeps(typeChecker, it.type, seen))
                     decl.heritageClauses?.forEach(it => {
-                        heritageTypes(typeChecker, it).forEach(it => this.fillDeps(typeChecker, it, seen))
+                        //heritageTypes(typeChecker, it).forEach(it => this.fillDeps(typeChecker, it, seen))
                     })
                 }
                 if (ts.isClassDeclaration(decl)) {
@@ -57,17 +57,23 @@ export class SortingEmitter extends IndentedPrinter {
                     decl.types
                         .forEach(it => this.fillDeps(typeChecker, it, seen))
                 }
-                /*
                 if (ts.isTypeLiteralNode(decl)) {
                     decl.members
-                        .filter(ts.isPropertyAssignment)
-                        .forEach(it => this.fillDeps(typeChecker, i, seen))
-                } */
+                        .filter(ts.isPropertySignature)
+                        .forEach(it => this.fillDeps(typeChecker, it.type, seen))
+                }
+                if (ts.isTypeAliasDeclaration(decl)) {
+                    this.fillDeps(typeChecker, decl.type, seen)
+                }
             } else {
                 console.log(`no decl for ${asString(type.typeName)}`)
             }
         } else if (ts.isUnionTypeNode(type)) {
             type.types.forEach(it => this.fillDeps(typeChecker, it, seen))
+        } else if (ts.isTypeLiteralNode(type)) {
+            type.members
+                .filter(ts.isPropertySignature)
+                .forEach(it => this.fillDeps(typeChecker, it.type, seen))
         }
     }
 
