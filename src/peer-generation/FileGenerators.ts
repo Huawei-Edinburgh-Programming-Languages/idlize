@@ -173,7 +173,7 @@ ${printer.getOutput().join("\n")}
 
 export function makeCDeserializer(table: DeclarationTable): string {
     const deserializer = new IndentedPrinter()
-    const structs = new SortingEmitter()
+    const structs = new SortingEmitter(table)
 
     table.generateDeserializers(deserializer, structs)
 

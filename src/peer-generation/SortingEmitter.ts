@@ -23,68 +23,19 @@ export class SortingEmitter extends IndentedPrinter {
     currentPrinter?: IndentedPrinter
     emitters = new Map<string, IndentedPrinter>()
     deps = new Map<string, Set<string>>()
-    table? : DeclarationTable
 
-    constructor() {
+    constructor(private table: DeclarationTable) {
         super()
     }
 
-    private fillDeps(typeChecker: ts.TypeChecker, type: ts.TypeNode | undefined, seen: Set<string>) {
-        if (!type) return
-        let name = this.table!.computeTypeName(undefined, type, false)
+    private fillDeps(target: DeclarationTarget, seen: Set<string>) {
+        let name = this.table!.computeTargetName(target, false)
         if (seen.has(name)) return
         seen.add(name)
-        if (ts.isTypeReferenceNode(type)) {
-            let decls = getDeclarationsByNode(typeChecker, type.typeName)
-            if (decls.length > 0) {
-                let decl = decls[0]
-                if (ts.isInterfaceDeclaration(decl)) {
-                    decl.members
-                        .filter(ts.isPropertySignature)
-                        .forEach(it => this.fillDeps(typeChecker, it.type, seen))
-                    decl.heritageClauses?.forEach(it => {
-                        //heritageTypes(typeChecker, it).forEach(it => this.fillDeps(typeChecker, it, seen))
-                    })
-                }
-                if (ts.isClassDeclaration(decl)) {
-                    decl.members
-                        .filter(ts.isPropertyDeclaration)
-                        .forEach(it => this.fillDeps(typeChecker, it.type, seen))
-                    decl.heritageClauses?.forEach(it => {
-                        heritageTypes(typeChecker, it).forEach(it => this.fillDeps(typeChecker, it, seen))
-                    })
-                }
-                if (ts.isUnionTypeNode(decl)) {
-                    decl.types
-                        .forEach(it => this.fillDeps(typeChecker, it, seen))
-                }
-                if (ts.isTypeLiteralNode(decl)) {
-                    decl.members
-                        .filter(ts.isPropertySignature)
-                        .forEach(it => this.fillDeps(typeChecker, it.type, seen))
-                }
-                if (ts.isTypeAliasDeclaration(decl)) {
-                    this.fillDeps(typeChecker, decl.type, seen)
-                }
-            } else {
-                console.log(`no decl for ${asString(type.typeName)}`)
-            }
-        } else {
-            let types: ts.NodeArray<ts.TypeNode> | ts.TypeNode[] = []
-            if (ts.isParenthesizedTypeNode(type)) {
-                types = [type.type]
-            } else if (ts.isUnionTypeNode(type)) {
-                types = type.types
-            } else if (ts.isTupleTypeNode(type)) {
-                types = type.elements
-            } else if (ts.isTypeLiteralNode(type)) {
-                types = type.members
-                    .filter(ts.isPropertySignature)
-                    .map(it => it.type!)
-            }
-            types
-                .forEach(it => this.fillDeps(typeChecker, it, seen))
-        }
+        let fields = this.table.targetFields(target)
+        fields.forEach(it => {
+            seen.add(it.typeName)
+        })
     }
 
     startEmit(table: DeclarationTable, declaration: DeclarationTarget) {
@@ -93,15 +44,13 @@ export class SortingEmitter extends IndentedPrinter {
         let next = this.emitters.has(name) ? this.emitters.get(name)! : new IndentedPrinter()
         this.emitters.set(name, next)
         this.currentPrinter = next
-        /*
         let seen = new Set<string>()
-        this.fillDeps(typeChecker, type, seen)
+        this.fillDeps(declaration, seen)
         seen.delete(name)
         this.deps.set(name, seen)
 
         if (seen.size > 0)
             console.log(`${name}: depends on ${Array.from(seen.keys()).join(",")}`)
-        */
     }
     printType(type: ts.TypeNode): string {
         return ts.isTypeReferenceNode(type)
@@ -134,7 +83,6 @@ export class SortingEmitter extends IndentedPrinter {
     }
 
     getToposorted(): Array<string> {
-        if (true) return Array.from(this.emitters.keys())
         // Not exactly correct for non-named types.
         let source = new Set(Array.from(this.emitters.keys()))
         let result: string[] = []

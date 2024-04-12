@@ -422,7 +422,7 @@ export class DeclarationTable {
     }
 
 
-    private targetFields(target: DeclarationTarget): FieldRecord[] {
+    targetFields(target: DeclarationTarget): FieldRecord[] {
         let result: FieldRecord[]  = []
         if (target instanceof PrimitiveType) {
             result.push(new FieldRecord(target.name, undefined, "value"))
