@@ -166,11 +166,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
 
     requestType(name: string|undefined, type: ts.TypeNode, optional: boolean = false) {
         this.declarationTable.requestType(name, type, optional)
-        //if (ts.isTypeReferenceNode(type)) name = identName(type.typeName)
-        if (name == undefined) name = this.computeTypeNameImpl(type, optional)
-        this.assignName(type, name, optional)
-        //if (PeerGeneratorVisitor.serializerBaseMethods.includes(`write${name}`)) return
-        this.serializerRequests.push({ type, name, optional })
     }
 
     serializerName(name: string, type: ts.TypeNode): string {
@@ -1057,61 +1052,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     }
 
     computeTypeName(type: ts.TypeNode, optional: boolean = false): string {
-        let name = this.computeTypeNameImpl(type, optional)
-        this.requestType(name, type, optional)
-        return name
-    }
-
-    private computeTypeNameImpl(type: ts.TypeNode, optional: boolean): string {
-        const prefix = optional ? "Optional_" : ""
-        if (ts.isImportTypeNode(type)) {
-            return prefix + identName(type.qualifier)!
-        }
-        if (ts.isTypeReferenceNode(type)) {
-            return prefix + identName(type.typeName)!
-        }
-        if (ts.isUnionTypeNode(type)) {
-            return prefix + `Union_${type.types.map(it => this.computeTypeName(it)).join("_")}`
-        }
-        if (ts.isOptionalTypeNode(type)) {
-            return "Optional_" +  this.computeTypeName(type.type)
-        }
-        if (ts.isTupleTypeNode(type)) {
-            return prefix + `Tuple_${type.elements.map(it => this.computeTypeName(it)).join("_")}`
-        }
-        if (ts.isParenthesizedTypeNode(type)) {
-            return this.computeTypeName(type.type!, optional)
-        }
-        if (ts.isTypeLiteralNode(type)) {
-            return prefix + `Literal_${type.members.map(member => {
-                if (ts.isPropertySignature(member)) {
-                    return this.computeTypeName(member.type!, member.questionToken != undefined)
-                } else {
-                    return undefined
-                }
-            })
-            .filter(it => it != undefined)
-            .join("_")}`
-        }
-        if (ts.isFunctionTypeNode(type)) {
-            return prefix + "Function"
-        }
-        if (ts.isArrayTypeNode(type)) {
-            return prefix + `Array_` + this.computeTypeName(type.elementType, false)
-        }
-        if (type.kind == ts.SyntaxKind.NumberKeyword) {
-            return prefix + `Number`
-        }
-        if (type.kind == ts.SyntaxKind.UndefinedKeyword) {
-            return `Undefined`
-        }
-        if (type.kind == ts.SyntaxKind.StringKeyword) {
-            return prefix + `String`
-        }
-        if (type.kind == ts.SyntaxKind.BooleanKeyword) {
-            return prefix + `Boolean`
-        }
-        throw new Error(`Cannot compute type name: ${type.getText()}`)
+        return this.declarationTable.getTypeName(type, optional)
     }
 
     private nativeModulePrint(parent: ts.ClassDeclaration, methods: MaybeCollapsedMethod[]): void {
