@@ -230,7 +230,7 @@ export class UnionConvertor extends BaseArgConvertor {
 
     constructor(param: string, visitor: PeerGeneratorVisitor, type: ts.UnionTypeNode) {
         super(`any`, [], false, true, param)
-        this.nativeTypeName = PeerGeneratorVisitor.getTypeName(type)
+        this.nativeTypeName = visitor.getTypeName(type)
         this.memberConvertors = type
             .types
             .map(member => visitor.typeConvertor(param, member))
@@ -449,7 +449,7 @@ export class AggregateConvertor extends BaseArgConvertor {
             this.members[index] = identName(member.name)!
             return visitor.typeConvertor(param, member.type!, member.questionToken != undefined)
         })
-        this.nativeTypeName = PeerGeneratorVisitor.getTypeName(type)
+        this.nativeTypeName = visitor.getTypeName(type)
     }
 
     convertorTSArg(param: string): string {
@@ -532,12 +532,14 @@ export class FunctionConvertor extends CustomTypeConvertor {
 
 export class TupleConvertor extends BaseArgConvertor {
     memberConvertors: ArgConvertor[]
+    private nativeTypeName: string
 
     constructor(param: string, protected visitor: PeerGeneratorVisitor, private elementType: ts.TupleTypeNode) {
         super(`[${elementType.elements.map(it => visitor.mapType(it)).join(",")}]`, [RuntimeType.OBJECT], false, true, param)
         this.memberConvertors = elementType
             .elements
             .map(element => visitor.typeConvertor(param, element))
+        this.nativeTypeName = visitor.getTypeName(this.elementType)
     }
 
     convertorTSArg(param: string): string {
@@ -574,7 +576,7 @@ export class TupleConvertor extends BaseArgConvertor {
         ? `struct { ` +
           `${this.memberConvertors.map((it, index) => `${it.nativeType(true)} value${index};`).join(" ")}` +
           '} '
-        : PeerGeneratorVisitor.getTypeName(this.elementType)
+        : this.nativeTypeName
     }
     interopType(ts: boolean): string {
         return "KNativePointer"
@@ -703,48 +705,4 @@ export class PredefinedConvertor extends BaseArgConvertor {
     estimateSize() {
         return 8
     }
-}
-
-function mapCType(type: ts.TypeNode): string {
-    if (ts.isTypeReferenceNode(type)) {
-        return identName(type.typeName)!
-    }
-    if (ts.isUnionTypeNode(type) ||
-        ts.isTypeLiteralNode(type) ||
-        ts.isTupleTypeNode(type))
-    {
-        return PeerGeneratorVisitor.getTypeName(type)
-    }
-    if (ts.isOptionalTypeNode(type)) {
-        return `Tagged`
-    }
-    if (ts.isFunctionTypeNode(type)) {
-        return "Function"
-    }
-    if (ts.isParenthesizedTypeNode(type)) {
-        return `${mapCType(type.type)}`
-    }
-    if (ts.isNamedTupleMember(type)) {
-        return `${mapCType(type.type)}`
-    }
-    if (ts.isArrayTypeNode(type)) {
-        return `${mapCType(type.elementType)}[]`
-    }
-
-    if (type.kind == ts.SyntaxKind.NumberKeyword) {
-        return "Number"
-    }
-    if (type.kind == ts.SyntaxKind.StringKeyword) {
-        return "String"
-    }
-    if (type.kind == ts.SyntaxKind.ObjectKeyword) {
-        return "Object"
-    }
-    if (type.kind == ts.SyntaxKind.BooleanKeyword) {
-        return "KBoolean"
-    }
-    if (type.kind == ts.SyntaxKind.AnyKeyword) {
-        return "Any"
-    }
-    throw new Error(`Cannot map ${type.getText()}: ${type.kind}`)
 }

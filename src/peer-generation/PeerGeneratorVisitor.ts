@@ -1035,9 +1035,9 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         })
     }
 
-    private static namedTypes = new Map<ts.TypeNode, string>()
-    static getTypeName(type: ts.TypeNode): string {
-        return PeerGeneratorVisitor.namedTypes.get(type)!
+    private namedTypes = new Map<ts.TypeNode, string>()
+    getTypeName(type: ts.TypeNode): string {
+        return this.namedTypes.get(type)!
     }
 
     private registerType(type: ts.TypeNode, name: string) {
@@ -1053,7 +1053,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         if (typedef) {
             const [t, n] = typedef
             this.generateTypedef(t, n)
-            PeerGeneratorVisitor.namedTypes.set(t, n)
+            this.namedTypes.set(t, n)
         }
     }
 
