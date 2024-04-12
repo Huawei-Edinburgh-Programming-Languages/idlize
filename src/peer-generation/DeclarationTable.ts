@@ -25,7 +25,7 @@ class PrimitiveType {
     getText(): string { return this.name }
 }
 
-type DeclarationTarget =
+export type DeclarationTarget =
     ts.ClassDeclaration | ts.InterfaceDeclaration | ts.EnumDeclaration
     | ts.UnionTypeNode | ts.TypeLiteralNode | ts.ImportTypeNode | ts.FunctionTypeNode | ts.TupleTypeNode
     | ts.ArrayTypeNode
@@ -379,20 +379,28 @@ export class DeclarationTable {
         for (let x of this.declarations.values()) {
             if (seenNames.has(x.nameBasic)) continue
             seenNames.add(x.nameBasic)
-            //structs.startEmit(x.target as ts.TypeNode)
+            structs.startEmit(this, x.target)
             structs.print(`struct ${x.nameBasic} {`)
             structs.pushIndent()
             this.targetFields(x.target).forEach((it, index) => {
-                printer.print(`${it.typeName} ${it.name};`)
+                structs.print(`${it.typeName} ${it.name};`)
             })
-            printer.popIndent()
-            printer.print(`};`)
+            structs.popIndent()
+            structs.print(`};`)
+            structs.print(`struct ${x.nameOptional} {`)
+            structs.pushIndent()
+            structs.print(`int32_t tag;`)
+            this.targetFields(x.target).forEach((it, index) => {
+                structs.print(`${it.typeName} ${it.name};`)
+            })
+            structs.popIndent()
+            structs.print(`};`)
         }
         for (let x of this.typeMap.values()) {
             let record = this.declarations.get(x[0])!
             if (seenNames.has(x[1])) continue
             seenNames.add(x[1])
-            printer.print(`typedef ${record.nameBasic} ${x[1]};`)
+            structs.print(`typedef ${record.nameBasic} ${x[1]};`)
         }
     }
 

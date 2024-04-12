@@ -17,12 +17,13 @@ import { IndentedPrinter } from "../IndentedPrinter";
 import * as ts from "typescript"
 import { asString, getDeclarationsByNode, getNameWithoutQualifiersRight, heritageTypes, stringOrNone } from "../util";
 import { PeerGeneratorVisitor } from "./PeerGeneratorVisitor";
+import { DeclarationTable, DeclarationTarget } from "./DeclarationTable";
 
 export class SortingEmitter extends IndentedPrinter {
     currentPrinter?: IndentedPrinter
     emitters = new Map<string, IndentedPrinter>()
     deps = new Map<string, Set<string>>()
-    visitor? : PeerGeneratorVisitor
+    table? : DeclarationTable
 
     constructor() {
         super()
@@ -30,7 +31,7 @@ export class SortingEmitter extends IndentedPrinter {
 
     private fillDeps(typeChecker: ts.TypeChecker, type: ts.TypeNode | undefined, seen: Set<string>) {
         if (!type) return
-        let name = this.visitor!.computeTypeName(type, false)
+        let name = this.table!.computeTypeName(undefined, type, false)
         if (seen.has(name)) return
         seen.add(name)
         if (ts.isTypeReferenceNode(type)) {
@@ -86,8 +87,9 @@ export class SortingEmitter extends IndentedPrinter {
         }
     }
 
-    startEmit(typeChecker: ts.TypeChecker, visitor: PeerGeneratorVisitor, type: ts.TypeNode, name: string) {
-        this.visitor = visitor
+    startEmit(table: DeclarationTable, declaration: DeclarationTarget) {
+        this.table = table
+        /*
         let next = this.emitters.has(name) ? this.emitters.get(name)! : new IndentedPrinter()
         let seen = new Set<string>()
         this.fillDeps(typeChecker, type, seen)
@@ -97,6 +99,7 @@ export class SortingEmitter extends IndentedPrinter {
         this.currentPrinter = next
         if (seen.size > 0)
             console.log(`${name}: depends on ${Array.from(seen.keys()).join(",")}`)
+        */
     }
     printType(type: ts.TypeNode): string {
         return ts.isTypeReferenceNode(type)

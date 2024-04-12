@@ -11,7 +11,7 @@ export class DeserializerGenerator {
     generate(name: string, type: ts.TypeNode, optional: boolean, visitor: PeerGeneratorVisitor) {
         let typeName = ts.isTypeReferenceNode(type) ? type.typeName : (ts.isImportTypeNode(type) ? type.qualifier : undefined)
         let declarations = typeName ? getDeclarationsByNode(visitor.typeChecker, typeName) : []
-        this.structPrinter.startEmit(visitor.typeChecker, visitor, type, name)
+        //this.structPrinter.startEmit(visitor.typeChecker, visitor, type, name)
         while (declarations.length > 0 && ts.isTypeAliasDeclaration(declarations[0])) {
             type = declarations[0].type
             declarations = getDeclarationsByNode(visitor.typeChecker, declarations[0].type) ?? []
