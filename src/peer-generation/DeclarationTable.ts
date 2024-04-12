@@ -18,6 +18,7 @@ import { asString, findRealDeclarations, getDeclarationsByNode, getNameWithoutQu
 import { IndentedPrinter } from "../IndentedPrinter"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
 import { AggregateConvertor, ArgConvertor, ArrayConvertor, BooleanConvertor, CustomTypeConvertor, EnumConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, LengthConvertor, NumberConvertor, OptionConvertor, PredefinedConvertor, StringConvertor, TupleConvertor, UndefinedConvertor, UnionConvertor } from "./Convertors"
+import { SortingEmitter } from "./SortingEmitter"
 
 class PrimitiveType {
     constructor(public name: string) {}
@@ -69,7 +70,8 @@ export class DeclarationTable {
     requestType(name: string|undefined, type: ts.TypeNode, optional: boolean = false) {
         let declaration = this.typeMap.get(type)
         if (declaration) {
-            if (name && name != declaration[1]) throw new Error(`Mismatch of names${optional ? "[optional]" : ""}: ${name} ${declaration[1]}`)
+            if (name && name != declaration[1])
+                throw new Error(`Mismatch of names${optional ? "[optional]" : ""}: ${name} ${declaration[1]}`)
             return
         }
         name = this.computeTypeName(name, type, optional)
@@ -359,34 +361,38 @@ export class DeclarationTable {
         throw new Error(`Unknown kind: ${declaration.kind}`)
     }
 
-    generateSerializers0(printer: IndentedPrinter) {
+    generateDeserializers(printer: IndentedPrinter, structs: SortingEmitter) {
         let seenNames = new Set<string>()
-        printer.print(`export class Serializer extends SerializerBase {`)
+        printer.print(`class Deserializer : public ArgDeserializerBase {`)
+        printer.print(` public:`)
         printer.pushIndent()
+        printer.print(`Deserializer(uint8_t *data, int32_t length) : ArgDeserializerBase(data, length) {}`)
+
         for (let x of this.declarations.values()) {
             if (seenNames.has(x.nameBasic)) continue
             seenNames.add(x.nameBasic)
-            this.generateSerializer(x.nameBasic, x.target, printer)
+            this.generateDeserializer(x.nameBasic, x.target, printer)
         }
         printer.popIndent()
-        printer.print(`}`)
+        printer.print(`};`)
         seenNames.clear()
         for (let x of this.declarations.values()) {
             if (seenNames.has(x.nameBasic)) continue
             seenNames.add(x.nameBasic)
-            printer.print(`class ${x.nameBasic} {`)
-            printer.pushIndent()
+            //structs.startEmit(x.target as ts.TypeNode)
+            structs.print(`struct ${x.nameBasic} {`)
+            structs.pushIndent()
             this.targetFields(x.target).forEach((it, index) => {
-                printer.print(`${it.name}${it.optional ? "?" : ""}: ${it.type}`)
+                printer.print(`${it.typeName} ${it.name};`)
             })
             printer.popIndent()
-            printer.print(`}`)
+            printer.print(`};`)
         }
         for (let x of this.typeMap.values()) {
             let record = this.declarations.get(x[0])!
             if (seenNames.has(x[1])) continue
             seenNames.add(x[1])
-            printer.print(`type ${x[1]} = ${record.nameBasic}`)
+            printer.print(`typedef ${record.nameBasic} ${x[1]};`)
         }
     }
 
@@ -398,7 +404,7 @@ export class DeclarationTable {
             if (seenNames.has(x.nameBasic)) continue
             seenNames.add(x.nameBasic)
             if (x.target instanceof PrimitiveType) continue
-            if (ts.isInterfaceDeclaration(x.target))
+            if (ts.isInterfaceDeclaration(x.target) || ts.isClassDeclaration(x.target))
                 this.generateSerializer(x.nameBasic, x.target, printer)
         }
         printer.popIndent()
@@ -430,6 +436,36 @@ export class DeclarationTable {
                     result.push(new FieldRecord(typeName, it.type!, identName(it.name)!, it.questionToken != undefined))
                 })
         }
+        if (ts.isUnionTypeNode(target)) {
+            target
+                .types
+                .forEach((it, index) => {
+                    let typeName = this.computeTypeName(undefined, it, false)
+                    result.push(new FieldRecord(typeName, it, `value${index}`, false))
+                })
+        }
+        if (ts.isTypeLiteralNode(target)) {
+            target
+                .members
+                .filter(ts.isPropertySignature)
+                .forEach(it => {
+                    let typeName = this.computeTypeName(undefined, it.type!, false)
+                    result.push(new FieldRecord(typeName, it.type, identName(it.name)!, it.questionToken != undefined))
+                })
+        }
+        if (ts.isTupleTypeNode(target)) {
+            target
+                .elements
+                .forEach((it, index) => {
+                    if (ts.isNamedTupleMember(it)) {
+                        let typeName = this.computeTypeName(undefined, it.type!, false)
+                        result.push(new FieldRecord(typeName, it.type!, identName(it.name)!, it.questionToken != undefined))
+                    } else {
+                        let typeName = this.computeTypeName(undefined, it, false)
+                        result.push(new FieldRecord(typeName, it, `value${index}`, false))
+                    }
+                })
+        }
         return result
     }
 
@@ -458,5 +494,27 @@ export class DeclarationTable {
         printer.popIndent()
         printer.print(`}`)
         printer.popIndent()
+    }
+
+    private generateDeserializer(name: string, target: DeclarationTarget, printer: IndentedPrinter) {
+        if (PeerGeneratorConfig.ignoreSerialization.includes(name)) return
+        if (target instanceof PrimitiveType) return
+        if (ts.isEnumDeclaration(target)) return
+        printer.print(`${name} read${name}() {`)
+        printer.pushIndent()
+        printer.print(`auto valueSerializer = *this;`)
+        if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {
+            let fields = this.targetFields(target)
+            fields.forEach(it => {
+                let typeConvertor = this.typeConvertor(`value`, it.type!, it.optional)
+                typeConvertor.convertorToCDeserial(`value`, `value.${it.name}`, printer)
+            })
+        } else {
+            let typeConvertor = this.typeConvertor("value", target, false)
+            typeConvertor.convertorToCDeserial(`value`, `value`, printer)
+        }
+        printer.print(`return value;`)
+        printer.popIndent()
+        printer.print(`}`)
     }
 }

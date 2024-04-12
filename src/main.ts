@@ -255,9 +255,6 @@ if (options.dts2peer) {
     const nativeMethods: string[] = []
     const nativeEmptyMethods: string[] = []
     const bridgeCcArray: string[] = []
-    const deserializerC: string[] = []
-    const structsC = new SortingEmitter()
-    const serializerTS: string[] = []
     const apiHeaders: string[] = []
     const apiHeadersList: string[] = []
     const dummyImpl: string[] = []
@@ -276,8 +273,6 @@ if (options.dts2peer) {
             nativeModuleMethods: nativeMethods,
             nativeModuleEmptyMethods: nativeEmptyMethods,
             outputC: bridgeCcArray,
-            outputDeserializersC: deserializerC,
-            outputStructsC: structsC,
             apiHeaders: apiHeaders,
             apiHeadersList: apiHeadersList,
             dummyImpl: dummyImpl,
@@ -317,7 +312,7 @@ if (options.dts2peer) {
                 const bridgeCc = bridgeCcDeclaration(bridgeCcArray)
                 fs.writeFileSync(path.join(outDir, 'bridge.cc'), bridgeCc)
                 fs.writeFileSync(path.join(outDir, 'Serializer.ts'), makeTSSerializer(declarationTable))
-                fs.writeFileSync(path.join(outDir, 'Deserializer.h'), makeCDeserializer(structsC.getOutput(), deserializerC))
+                fs.writeFileSync(path.join(outDir, 'Deserializer.h'), makeCDeserializer(declarationTable))
                 fs.writeFileSync(path.join(outDir, 'arkoala_api.h'), makeApiHeaders(apiHeaders) + makeApiModifiers(apiHeadersList))
                 const dummyImplCc =
                     dummyImplementations(dummyImpl) +

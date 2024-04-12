@@ -16,6 +16,7 @@ import * as fs from "fs"
 import * as path from "path"
 import { IndentedPrinter } from "../IndentedPrinter"
 import { DeclarationTable } from "./DeclarationTable"
+import { SortingEmitter } from "./SortingEmitter"
 
 const importTsInteropTypes = `
 import {
@@ -171,22 +172,20 @@ ${printer.getOutput().join("\n")}
 `
 }
 
-export function makeCDeserializer(structs: string[], serializers: string[]): string {
+export function makeCDeserializer(table: DeclarationTable): string {
+    const deserializer = new IndentedPrinter()
+    const structs = new SortingEmitter()
+
+    table.generateDeserializers(deserializer, structs)
+
     return `
 #include "Interop.h"
 #include "ArgDeserializerBase.h"
 #include <string>
 
-${structs.join("\n")}
+${structs.getOutput().join("\n")}
 
-class Deserializer : public ArgDeserializerBase
-{
-  public:
-    Deserializer(uint8_t *data, int32_t length)
-          : ArgDeserializerBase(data, length) {}
-
-${serializers.join("\n  ")}
-};
+${deserializer.getOutput().join("\n")}
 `
 }
 

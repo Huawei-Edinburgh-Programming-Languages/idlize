@@ -33,8 +33,6 @@ import { IndentedPrinter } from "../IndentedPrinter"
 import {
     ArgConvertor,
 } from "./Convertors"
-import { DeserializerGenerator } from "./DeserializerGenerator"
-import { SortingEmitter } from "./SortingEmitter"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
 import { DeclarationTable } from "./DeclarationTable"
 
@@ -58,7 +56,6 @@ export enum RuntimeType {
  * universal finite automata to serialize any value of the given type.
  */
 
-let serializerSeen = new Set<string>()
 
 export interface TypeAndName {
     type: ts.TypeNode
@@ -81,8 +78,6 @@ export type PeerGeneratorVisitorOptions = {
     nativeModuleMethods: string[],
     nativeModuleEmptyMethods: string[],
     outputC: string[],
-    outputDeserializersC: string[],
-    outputStructsC: SortingEmitter,
     apiHeaders: string[],
     apiHeadersList: string[],
     dummyImpl: string[],
@@ -99,7 +94,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     private interfacesToGenerate: Set<string>
     private printerNativeModule: IndentedPrinter
     private printerNativeModuleEmpty: IndentedPrinter
-    private serializerRequests: TypeAndName[] = []
     private apiPrinter: IndentedPrinter
     private apiPrinterList: IndentedPrinter
     private dummyImpl: IndentedPrinter
@@ -107,7 +101,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     private dummyImplModifierList: IndentedPrinter
     private dumpSerialized: boolean
     declarationTable: DeclarationTable
-    private deserGenerator: DeserializerGenerator
 
     static readonly serializerBaseMethods = serializerBaseMethods()
     readonly typeChecker: ts.TypeChecker
@@ -126,9 +119,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         this.dummyImplModifierList = new IndentedPrinter(options.dummyImplModifierList)
         this.dumpSerialized = options.dumpSerialized
         this.declarationTable = options.declarationTable
-        this.deserGenerator = new DeserializerGenerator(
-            options.outputStructsC,
-            new IndentedPrinter(options.outputDeserializersC))
     }
 
     assignName(type: ts.TypeNode, name: string, optional: boolean) {
@@ -168,15 +158,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
             ])
             .forEach(it => this.printTS(it))
         ts.forEachChild(this.sourceFile, (node) => this.visit(node))
-
-        forEachExpanding(this.serializerRequests, (it) => {
-            if (serializerSeen.has(it.name)) {
-                return
-            }
-            this.generateDeserializer(it.name, it.type, it.optional)
-            serializerSeen.add(it.name)
-        })
-
         return this.printerTS.getOutput()
     }
 
@@ -888,11 +869,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
             this.printerNativeModule.print(implDecl)
             this.printerNativeModuleEmpty.print(`${implDecl} { console.log("${originalName}") }`)
         })
-    }
-
-    private generateDeserializer(name: string, type: ts.TypeNode, optional: boolean) {
-        if (PeerGeneratorConfig.ignoreSerialization.includes(name)) return
-        this.deserGenerator.generate(name, type, optional, this)
     }
 }
 
