@@ -52,6 +52,10 @@ class FieldRecord {
     constructor(public typeName: string, public type: ts.TypeNode | undefined, public name: string, public optional: boolean = false) {}
 }
 
+class PendingTypeRequest {
+    constructor(public name: string, public type: ts.TypeNode, public optional: boolean) {}
+}
+
 export class DeclarationTable {
     declarations = new Map<DeclarationTarget, DeclarationRecord>()
     typeMap = new Map<ts.TypeNode, [DeclarationTarget, string]>()
@@ -64,17 +68,18 @@ export class DeclarationTable {
             this.requestType(undefined, type, optional)
         }
         declaration = this.typeMap.get(type)!
+        if (declaration[1] == "Union_Number_String") throw new Error("OK")
+
         return declaration[1]
     }
 
     requestType(name: string|undefined, type: ts.TypeNode, optional: boolean = false) {
         let declaration = this.typeMap.get(type)
         if (declaration) {
-            if (name && name != declaration[1])
-                throw new Error(`Mismatch of names${optional ? "[optional]" : ""}: ${name} ${declaration[1]}`)
+            if (name && name != declaration[1]) throw new Error(`Mismatch of names${optional ? "[optional]" : ""}: ${name} ${declaration[1]}`)
             return
         }
-        name = this.computeTypeName(name, type, optional)
+        name = this.computeTypeName(undefined, type, optional)
         let target = this.findDeclaration(type)
         if (!target) throw new Error(`Cannot find declaration: ${type.getText()}`)
         this.declarations.set(target, new DeclarationRecord(target, this))
@@ -111,18 +116,39 @@ export class DeclarationTable {
         if (type.kind == ts.SyntaxKind.StringKeyword)
             return new PrimitiveType(`String`)
         if (ts.isFunctionTypeNode(type))
-            return new PrimitiveType(`Object`)
+            return new PrimitiveType(`Function`)
         throw new Error(`Unknown type: ${type.getText()} ${asString(type)}`)
     }
 
+
+    private pendingRequests = new Array<PendingTypeRequest>()
+
     computeTypeName(suggestedName: string|undefined, type: ts.TypeNode, optional: boolean = false): string {
         let name = this.computeTypeNameImpl(suggestedName, type, optional)
-        //this.requestType(name, type, optional)
+        //if (name == "Tuple_Number_Boolean") throw new Error("OK")
+        this.pendingRequests.push(new PendingTypeRequest(name, type, optional))
         return name
     }
 
+    processPendingRequests() {
+        while (this.pendingRequests.length > 0) {
+            let value = this.pendingRequests.splice(this.pendingRequests.length - 1, 1)[0]
+            console.log("process", value.name)
+            this.requestType(value.name, value.type, value.optional)
+        }
+    }
+
     computeTargetName(target: DeclarationTarget, optional: boolean): string {
-        const prefix = optional ? "Optional_" : ""
+        let name = this.computeTargetNameImpl(target, optional)
+        if (!(target instanceof PrimitiveType) && (
+            ts.isUnionTypeNode(target) || ts.isTupleTypeNode(target))) {
+            this.pendingRequests.push(new PendingTypeRequest(name, target, optional))
+        }
+        return name
+    }
+
+    computeTargetNameImpl(target: DeclarationTarget, optional: boolean): string {
+        const prefix = "" // optional ? "Optional_" : ""
         if (target instanceof PrimitiveType) {
             return prefix + target.getText()
         }
@@ -378,9 +404,16 @@ export class DeclarationTable {
         seenNames.clear()
         for (let x of this.declarations.values()) {
             if (seenNames.has(x.nameBasic)) continue
-            if (this.ignoreTarget(x.target)) continue
             seenNames.add(x.nameBasic)
-            structs.startEmit(this, x.target)
+            let target = x.target
+            if (target instanceof PrimitiveType) continue
+            structs.startEmit(this, target)
+            if (ts.isEnumDeclaration(target)) {
+                structs.print(`typedef int32_t ${x.nameBasic};`)
+                structs.print(`typedef struct { int32_t tag; int32_t value; } ${x.nameOptional};`)
+                continue
+            }
+            if (this.ignoreTarget(target)) continue
             structs.print(`struct ${x.nameBasic} {`)
             structs.pushIndent()
             this.targetFields(x.target).forEach((it, index) => {
@@ -427,6 +460,11 @@ export class DeclarationTable {
         if (target instanceof PrimitiveType) {
             result.push(new FieldRecord(target.name, undefined, "value"))
             return result
+        }
+        if (ts.isArrayTypeNode(target)) {
+            let typeName = this.computeTypeName(undefined, target.elementType, false)
+            result.push(new FieldRecord(typeName+"*", target, "value"))
+            result.push(new FieldRecord("int32_t", undefined, "valueLength"))
         }
         if (ts.isInterfaceDeclaration(target)) {
             target
