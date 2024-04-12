@@ -1154,26 +1154,27 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         }
         this.printerDeserializerC.print(`${name} read${name}() {`)
         this.printerDeserializerC.pushIndent()
-        if (isAlias) {
-            let decl = declarations[0] as ts.TypeAliasDeclaration
-            let typeConvertor = this.typeConvertor("<typedef>", decl.type)
-            if (ts.isImportTypeNode(decl.type)) {
-                this.printerStructsC.print(`typedef CustomObject ${importTypeName(decl.type)};`)
-            } else {
-                this.printerStructsC.print(`typedef ${typeConvertor.nativeType(true)} ${name};`)
-            }
-        }
+
         let structFields: (ts.PropertySignature | ts.PropertyDeclaration)[] = []
         this.printerDeserializerC.print(`Deserializer& valueDeserializer = *this;`)
         this.printerDeserializerC.print(`${name} value;`)
         if (declarations.length > 0 && !optional) {
+            let declaration = declarations[0]
+            if (isAlias) {
+                let aliasDeclaration = declaration as ts.TypeAliasDeclaration
+                let typeConvertor = this.typeConvertor("<typedef>", aliasDeclaration.type)
+                if (ts.isImportTypeNode(aliasDeclaration.type)) {
+                    this.printerStructsC.print(`typedef CustomObject ${importTypeName(aliasDeclaration.type)};`)
+                } else {
+                    this.printerStructsC.print(`typedef ${typeConvertor.nativeType(true)} ${name};`)
+                }
+            }
             if (isStruct) {
                 this.printerStructsC.print(`struct ${name} {`)
                 this.printerStructsC.pushIndent()
             }
             this.printerDeserializerC.print(`int32_t tag = valueDeserializer.readInt8();`)
             this.printerDeserializerC.print(`if (tag == Tags::TAG_UNDEFINED) throw new Error("Undefined");`)
-            let declaration = declarations[0]
             if (ts.isInterfaceDeclaration(declaration)) {
                 declaration.members
                     .filter(ts.isPropertySignature)
