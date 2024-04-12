@@ -1238,11 +1238,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         let fieldName = identName(field.name)
         let nativeType = typeConvertor.nativeType(false)
         this.printerStructsC.print(`${nativeType} ${fieldName};`)
-
-        let fieldValue = `value_${fieldName}`
-        this.printerDeserializerC.print(`${nativeType} ${fieldValue};`)
-        typeConvertor.convertorToCDeserial(`value`, fieldValue, this.printerDeserializerC)
-        this.printerDeserializerC.print(`value.${fieldName} = ${fieldValue};`);
+        typeConvertor.convertorToCDeserial(`value`, `value.${fieldName}`, this.printerDeserializerC)
     }
 }
 
