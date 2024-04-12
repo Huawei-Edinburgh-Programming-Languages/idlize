@@ -89,14 +89,16 @@ export class SortingEmitter extends IndentedPrinter {
 
     startEmit(table: DeclarationTable, declaration: DeclarationTarget) {
         this.table = table
-        /*
+        let name = table.computeTargetName(declaration, false)
         let next = this.emitters.has(name) ? this.emitters.get(name)! : new IndentedPrinter()
+        this.emitters.set(name, next)
+        this.currentPrinter = next
+        /*
         let seen = new Set<string>()
         this.fillDeps(typeChecker, type, seen)
         seen.delete(name)
         this.deps.set(name, seen)
-        this.emitters.set(name, next)
-        this.currentPrinter = next
+
         if (seen.size > 0)
             console.log(`${name}: depends on ${Array.from(seen.keys()).join(",")}`)
         */
@@ -132,6 +134,7 @@ export class SortingEmitter extends IndentedPrinter {
     }
 
     getToposorted(): Array<string> {
+        if (true) return Array.from(this.emitters.keys())
         // Not exactly correct for non-named types.
         let source = new Set(Array.from(this.emitters.keys()))
         let result: string[] = []

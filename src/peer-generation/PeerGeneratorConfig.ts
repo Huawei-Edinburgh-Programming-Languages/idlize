@@ -16,7 +16,7 @@
 export class PeerGeneratorConfig {
     public static commonMethod = ["CommonMethod"]
 
-    public static ignoreSerialization = ["Array", "Callback", "ErrorCallback", "Length", "AttributeModifier", "Number"]
+    public static ignoreSerialization = ["Array", "Callback", "ErrorCallback", "Length", "AttributeModifier", "Number", "Object", "String"]
     public static ignorePeerMethod = ["attributeModifier"]
 
     private static knownParametrized = ["Indicator", "AttributeModifier", "AnimationRange"]

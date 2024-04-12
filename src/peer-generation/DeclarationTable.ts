@@ -105,13 +105,13 @@ export class DeclarationTable {
             throw new Error(`Wrong declaration: ${decl.getText()}`)
         }
         if (type.kind == ts.SyntaxKind.BooleanKeyword)
-            return new PrimitiveType(`boolean`)
+            return new PrimitiveType(`Boolean`)
         if (type.kind == ts.SyntaxKind.NumberKeyword)
-            return new PrimitiveType(`number`)
+            return new PrimitiveType(`Number`)
         if (type.kind == ts.SyntaxKind.StringKeyword)
-            return new PrimitiveType(`string`)
+            return new PrimitiveType(`String`)
         if (ts.isFunctionTypeNode(type))
-            return new PrimitiveType(`object`)
+            return new PrimitiveType(`Object`)
         throw new Error(`Unknown type: ${type.getText()} ${asString(type)}`)
     }
 
@@ -378,6 +378,7 @@ export class DeclarationTable {
         seenNames.clear()
         for (let x of this.declarations.values()) {
             if (seenNames.has(x.nameBasic)) continue
+            if (this.ignoreTarget(x.target)) continue
             seenNames.add(x.nameBasic)
             structs.startEmit(this, x.target)
             structs.print(`struct ${x.nameBasic} {`)
@@ -399,6 +400,7 @@ export class DeclarationTable {
         for (let x of this.typeMap.values()) {
             let record = this.declarations.get(x[0])!
             if (seenNames.has(x[1])) continue
+            if (PeerGeneratorConfig.ignoreSerialization.includes(x[1])) continue
             seenNames.add(x[1])
             structs.print(`typedef ${record.nameBasic} ${x[1]};`)
         }
@@ -445,6 +447,7 @@ export class DeclarationTable {
                 })
         }
         if (ts.isUnionTypeNode(target)) {
+            result.push(new FieldRecord("int32_t", undefined, `selector`, false))
             target
                 .types
                 .forEach((it, index) => {
@@ -478,9 +481,7 @@ export class DeclarationTable {
     }
 
     private generateSerializer(name: string, target: DeclarationTarget, printer: IndentedPrinter) {
-        if (PeerGeneratorConfig.ignoreSerialization.includes(name)) return
-        if (target instanceof PrimitiveType) return
-        if (ts.isEnumDeclaration(target)) return
+        if (this.ignoreTarget(target)) return
         printer.pushIndent()
         printer.print(`write${name}(value: ${name}|undefined) {`)
         printer.pushIndent()
@@ -504,10 +505,15 @@ export class DeclarationTable {
         printer.popIndent()
     }
 
+    private ignoreTarget(target: DeclarationTarget): boolean {
+        if (PeerGeneratorConfig.ignoreSerialization.includes(this.computeTargetName(target, false))) return true
+        if (target instanceof PrimitiveType) return true
+        if (ts.isEnumDeclaration(target)) return true
+        return false
+    }
+
     private generateDeserializer(name: string, target: DeclarationTarget, printer: IndentedPrinter) {
-        if (PeerGeneratorConfig.ignoreSerialization.includes(name)) return
-        if (target instanceof PrimitiveType) return
-        if (ts.isEnumDeclaration(target)) return
+        if (this.ignoreTarget(target)) return
         printer.print(`${name} read${name}() {`)
         printer.pushIndent()
         printer.print(`auto valueSerializer = *this;`)
