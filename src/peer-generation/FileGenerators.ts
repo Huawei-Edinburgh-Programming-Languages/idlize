@@ -14,6 +14,8 @@
  */
 import * as fs from "fs"
 import * as path from "path"
+import { IndentedPrinter } from "../IndentedPrinter"
+import { DeclarationTable } from "./DeclarationTable"
 
 const importTsInteropTypes = `
 import {
@@ -158,13 +160,15 @@ extern const ArkUINodeModifiers* GetArkUINodeModifiers()
 }
 
 
-export function makeTSSerializer(lines: string[]): string {
+export function makeTSSerializer(table: DeclarationTable): string {
+    let printer = new IndentedPrinter()
+    table.generateSerializers(printer)
     return `
 import { SerializerBase, runtimeType, Tags, RuntimeType, Function } from "./SerializerBase"
 import { int32 } from "./types"
 
 export class Serializer extends SerializerBase {
-${lines.join("\n")}
+${printer.getOutput().join("\n")}
 }
 `
 }

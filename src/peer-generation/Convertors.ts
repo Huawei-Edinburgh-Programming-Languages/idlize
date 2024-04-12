@@ -13,8 +13,9 @@
  * limitations under the License.
  */
 import { IndentedPrinter } from "../IndentedPrinter"
-import { asString, identName, importTypeName, typeName } from "../util"
-import { PeerGeneratorVisitor, RuntimeType } from "./PeerGeneratorVisitor"
+import { identName, importTypeName, mapType, typeName } from "../util"
+import { DeclarationTable } from "./DeclarationTable"
+import { RuntimeType } from "./PeerGeneratorVisitor"
 import * as ts from "typescript"
 
 let uniqueCounter = 0
@@ -154,11 +155,11 @@ export class UndefinedConvertor extends BaseArgConvertor {
 }
 
 export class EnumConvertor extends BaseArgConvertor {
-    constructor(param: string, type: ts.TypeReferenceNode | ts.ImportTypeNode, visitor: PeerGeneratorVisitor) {
+    constructor(param: string, type: ts.TypeReferenceNode | ts.ImportTypeNode, table: DeclarationTable) {
         // Enums are integers in runtime.
         super("number", [RuntimeType.NUMBER], false, false, param)
         const typeNameString = typeName(type)
-        if (typeNameString) visitor.requestType(typeNameString, type)
+        if (typeNameString) table.requestType(typeNameString, type)
     }
 
     convertorTSArg(param: string): string {
@@ -227,11 +228,11 @@ export class LengthConvertor extends BaseArgConvertor {
 export class UnionConvertor extends BaseArgConvertor {
     private memberConvertors: ArgConvertor[]
 
-    constructor(param: string, private visitor: PeerGeneratorVisitor, private type: ts.UnionTypeNode) {
+    constructor(param: string, private table: DeclarationTable, private type: ts.UnionTypeNode) {
         super(`any`, [], false, true, param)
         this.memberConvertors = type
             .types
-            .map(member => visitor.typeConvertor(param, member))
+            .map(member => table.typeConvertor(param, member))
         this.checkUniques(param, this.memberConvertors)
         this.runtimeTypes = this.memberConvertors.flatMap(it => it.runtimeTypes)
     }
@@ -291,7 +292,7 @@ export class UnionConvertor extends BaseArgConvertor {
             ? `struct { int selector; union { ` +
             `${this.memberConvertors.map((it, index) => `${it.nativeType(false)} value${index};`).join(" ")}` +
               `}; }`
-            :  this.visitor.getTypeName(this.type)
+            :  this.table.getTypeName(this.type)
     }
     interopType(ts: boolean): string {
         throw new Error("Union")
@@ -318,10 +319,10 @@ export class UnionConvertor extends BaseArgConvertor {
 
 export class ImportTypeConvertor extends BaseArgConvertor {
     private importedName: string
-    constructor(param: string, visitor: PeerGeneratorVisitor, type: ts.ImportTypeNode) {
+    constructor(param: string, table: DeclarationTable, type: ts.ImportTypeNode) {
         super("Object", [RuntimeType.OBJECT], false, true, param)
         this.importedName = importTypeName(type)
-        visitor.requestType(this.importedName, type)
+        table.requestType(this.importedName, type)
     }
 
     convertorTSArg(param: string): string {
@@ -349,7 +350,7 @@ export class ImportTypeConvertor extends BaseArgConvertor {
 
 export class CustomTypeConvertor extends BaseArgConvertor {
     private customName: string
-    constructor(param: string, visitor: PeerGeneratorVisitor, customName: string) {
+    constructor(param: string, customName: string) {
         super("Object", [RuntimeType.OBJECT], false, true, param)
         this.customName = customName
     }
@@ -380,8 +381,8 @@ export class CustomTypeConvertor extends BaseArgConvertor {
 export class OptionConvertor extends BaseArgConvertor {
     private typeConvertor: ArgConvertor
 
-    constructor(param: string, private visitor: PeerGeneratorVisitor, private type: ts.TypeNode) {
-        let typeConvertor = visitor.typeConvertor(param, type)
+    constructor(param: string, private table: DeclarationTable, private type: ts.TypeNode) {
+        let typeConvertor = table.typeConvertor(param, type)
         let runtimeTypes = typeConvertor.runtimeTypes;
         if (!runtimeTypes.includes(RuntimeType.UNDEFINED)) {
             runtimeTypes.push(RuntimeType.UNDEFINED)
@@ -415,8 +416,8 @@ export class OptionConvertor extends BaseArgConvertor {
     }
     nativeType(impl: boolean): string {
         return impl
-            ? `struct { int tag; ${this.visitor.getTypeName(this.type, false)} value; }`
-            : this.visitor.getTypeName(this.type, true)
+            ? `struct { int tag; ${this.table.getTypeName(this.type, false)} value; }`
+            : this.table.getTypeName(this.type, true)
     }
     interopType(ts: boolean): string {
         return "KPointer"
@@ -430,14 +431,14 @@ export class AggregateConvertor extends BaseArgConvertor {
     private memberConvertors: ArgConvertor[]
     private members: string[] = []
 
-    constructor(param: string, private visitor: PeerGeneratorVisitor, private type: ts.TypeLiteralNode) {
+    constructor(param: string, private table: DeclarationTable, private type: ts.TypeLiteralNode) {
         super(`any`, [RuntimeType.OBJECT], false, true, param)
         this.memberConvertors = type
             .members
             .filter(ts.isPropertySignature)
             .map((member, index) => {
             this.members[index] = identName(member.name)!
-            return visitor.typeConvertor(param, member.type!, member.questionToken != undefined)
+            return table.typeConvertor(param, member.type!, member.questionToken != undefined)
         })
     }
 
@@ -465,7 +466,7 @@ export class AggregateConvertor extends BaseArgConvertor {
             ? `struct { ` +
               `${this.memberConvertors.map((it, index) => `${it.nativeType(true)} value${index};`).join(" ")}` +
               '} '
-            : this.visitor.getTypeName(this.type)
+            : this.table.getTypeName(this.type)
     }
     interopType(): string {
         return "KNativePointer"
@@ -479,22 +480,22 @@ export class TypedConvertor extends BaseArgConvertor {
     constructor(
         name: string,
         private type: ts.TypeReferenceNode,
-        param: string, protected visitor: PeerGeneratorVisitor) {
+        param: string, protected table: DeclarationTable) {
         super(name, [RuntimeType.OBJECT, RuntimeType.FUNCTION, RuntimeType.UNDEFINED], false, true, param)
-        visitor.requestType(name, type)
+        table.requestType(name, type)
     }
 
     convertorTSArg(param: string): string {
         throw new Error("Must never be used")
     }
     convertorToTSSerial(param: string, value: string, printer: IndentedPrinter): void {
-        printer.print(`${param}Serializer.${this.visitor.serializerName(this.tsTypeName, this.type)}(${value})`)
+        printer.print(`${param}Serializer.${this.table.serializerName(this.tsTypeName, this.type)}(${value})`)
     }
     convertorCArg(param: string): string {
         throw new Error("Must never be used")
     }
     convertorToCDeserial(param: string, value: string, printer: IndentedPrinter): void {
-        printer.print(`${value} = ${param}Deserializer.${this.visitor.deserializerName(this.tsTypeName, this.type)}();`)
+        printer.print(`${value} = ${param}Deserializer.${this.table.deserializerName(this.tsTypeName, this.type)}();`)
     }
     nativeType(impl: boolean): string {
         return this.tsTypeName
@@ -508,25 +509,25 @@ export class TypedConvertor extends BaseArgConvertor {
 }
 
 export class InterfaceConvertor extends TypedConvertor {
-    constructor(name: string, param: string, visitor: PeerGeneratorVisitor, type: ts.TypeReferenceNode) {
-        super(name, type, param, visitor)
+    constructor(name: string, param: string, table: DeclarationTable, type: ts.TypeReferenceNode) {
+        super(name, type, param, table)
     }
 }
 
 export class FunctionConvertor extends CustomTypeConvertor {
-    constructor(param: string, visitor: PeerGeneratorVisitor) {
-        super(param, visitor, "Function")
+    constructor(param: string, table: DeclarationTable) {
+        super(param, "Function")
     }
 }
 
 export class TupleConvertor extends BaseArgConvertor {
     memberConvertors: ArgConvertor[]
 
-    constructor(param: string, protected visitor: PeerGeneratorVisitor, private elementType: ts.TupleTypeNode) {
-        super(`[${elementType.elements.map(it => visitor.mapType(it)).join(",")}]`, [RuntimeType.OBJECT], false, true, param)
+    constructor(param: string, protected table: DeclarationTable, private elementType: ts.TupleTypeNode) {
+        super(`[${elementType.elements.map(it => mapType(table.typeChecker!, it)).join(",")}]`, [RuntimeType.OBJECT], false, true, param)
         this.memberConvertors = elementType
             .elements
-            .map(element => visitor.typeConvertor(param, element))
+            .map(element => table.typeConvertor(param, element))
     }
 
     convertorTSArg(param: string): string {
@@ -563,7 +564,7 @@ export class TupleConvertor extends BaseArgConvertor {
         ? `struct { ` +
           `${this.memberConvertors.map((it, index) => `${it.nativeType(false)} value${index};`).join(" ")}` +
           '} '
-        : this.visitor.getTypeName(this.elementType)
+        : this.table.getTypeName(this.elementType)
     }
     interopType(ts: boolean): string {
         return "KNativePointer"
@@ -578,9 +579,9 @@ export class TupleConvertor extends BaseArgConvertor {
 
 export class ArrayConvertor extends BaseArgConvertor {
     elementConvertor: ArgConvertor
-    constructor(param: string, protected visitor: PeerGeneratorVisitor, private elementType: ts.TypeNode) {
-        super(`Array<${visitor.mapType(elementType)}>`, [RuntimeType.OBJECT], false, true, param)
-        this.elementConvertor = visitor.typeConvertor(param, elementType)
+    constructor(param: string, protected table: DeclarationTable, private elementType: ts.TypeNode) {
+        super(`Array<${mapType(table.typeChecker!, elementType)}>`, [RuntimeType.OBJECT], false, true, param)
+        this.elementConvertor = table.typeConvertor(param, elementType)
     }
 
     convertorTSArg(param: string): string {

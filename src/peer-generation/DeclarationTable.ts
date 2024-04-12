@@ -14,7 +14,10 @@
  */
 
 import * as ts from "typescript"
-import { asString, getDeclarationsByNode, identName } from "../util"
+import { asString, findRealDeclarations, getDeclarationsByNode, getNameWithoutQualifiersRight, identName, mapType, throwException, typeEntityName } from "../util"
+import { IndentedPrinter } from "../IndentedPrinter"
+import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
+import { AggregateConvertor, ArgConvertor, ArrayConvertor, BooleanConvertor, CustomTypeConvertor, EnumConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, LengthConvertor, NumberConvertor, OptionConvertor, PredefinedConvertor, StringConvertor, TupleConvertor, UndefinedConvertor, UnionConvertor } from "./Convertors"
 
 class PrimitiveType {
     constructor(public name: string) {}
@@ -36,7 +39,7 @@ class DeclarationRecord {
         if (optional) {
             if (this.nameOptional.length == 0)
                 this.nameOptional = name
-        } else  {
+        } else {
             if (this.nameBasic.length == 0) {
                 this.nameBasic = name
             }
@@ -204,4 +207,169 @@ export class DeclarationTable {
         throw new Error(`Cannot compute type name: ${type.getText()}`)
     }
 
+    serializerName(name: string, type: ts.TypeNode): string {
+        this.requestType(name, type)
+        return `write${name}`
+    }
+
+    deserializerName(name: string, type: ts.TypeNode): string {
+        this.requestType(name, type)
+        return `read${name}`
+    }
+
+    typeConvertor(param: string, type: ts.TypeNode, isOptionalParam = false): ArgConvertor {
+        if (isOptionalParam) {
+            return new OptionConvertor(param, this, type)
+        }
+        if (type.kind == ts.SyntaxKind.ObjectKeyword) {
+            return new CustomTypeConvertor(param, "Object")
+        }
+        if (type.kind == ts.SyntaxKind.UndefinedKeyword || type.kind == ts.SyntaxKind.VoidKeyword) {
+            return new UndefinedConvertor(param)
+        }
+        if (type.kind == ts.SyntaxKind.NullKeyword) {
+            throw new Error("Unsupported null")
+        }
+        if (type.kind == ts.SyntaxKind.NumberKeyword) {
+            return new NumberConvertor(param)
+        }
+        if (type.kind == ts.SyntaxKind.StringKeyword) {
+            return new StringConvertor(param)
+        }
+        if (type.kind == ts.SyntaxKind.BooleanKeyword) {
+            return new BooleanConvertor(param)
+        }
+        if (ts.isImportTypeNode(type)) {
+            return new ImportTypeConvertor(param, this, type)
+        }
+        if (ts.isTypeReferenceNode(type)) {
+            const declaration = getDeclarationsByNode(this.typeChecker!, type.typeName)[0]
+            return this.declarationConvertor(param, type, declaration)
+        }
+        if (ts.isUnionTypeNode(type)) {
+            return new UnionConvertor(param, this, type)
+        }
+        if (ts.isTypeLiteralNode(type)) {
+            return new AggregateConvertor(param, this, type)
+        }
+        if (ts.isArrayTypeNode(type)) {
+            return new ArrayConvertor(param, this, type.elementType)
+        }
+        if (ts.isLiteralTypeNode(type)) {
+            if (type.literal.kind == ts.SyntaxKind.NullKeyword) {
+                return new UndefinedConvertor(param)
+            }
+            if (type.literal.kind == ts.SyntaxKind.StringLiteral) {
+                return new StringConvertor(param)
+            }
+            throw new Error(`Unsupported literal type: ${type.literal.kind}` + type.getText())
+        }
+        if (ts.isTupleTypeNode(type)) {
+            return new TupleConvertor(param, this, type)
+        }
+        if (ts.isFunctionTypeNode(type)) {
+            return new FunctionConvertor(param, this)
+        }
+        if (ts.isParenthesizedTypeNode(type)) {
+            return this.typeConvertor(param, type.type)
+        }
+        if (ts.isOptionalTypeNode(type)) {
+            return new OptionConvertor(param, this, type.type)
+        }
+        if (ts.isTemplateLiteralTypeNode(type)) {
+            return new StringConvertor(param)
+        }
+        if (ts.isNamedTupleMember(type)) {
+            return this.typeConvertor(param, type.type)
+        }
+        if (type.kind == ts.SyntaxKind.AnyKeyword) {
+            return new CustomTypeConvertor(param, "Any")
+        }
+        console.log(type)
+        throw new Error(`Cannot convert: ${asString(type)} ${type.getText()}`)
+    }
+
+    customConvertor(typeName: ts.EntityName | undefined, param: string, type: ts.TypeReferenceNode | ts.ImportTypeNode): ArgConvertor | undefined {
+        let name = getNameWithoutQualifiersRight(typeName)
+        if (name === "Length") return new LengthConvertor(param)
+        if (name === "AnimationRange")
+            return new PredefinedConvertor(param, "AnimationRange<number>", "AnimationRange", "Compound<Number, Number>")
+        if (name === "AttributeModifier")
+            return new PredefinedConvertor(param, "AttributeModifier<any>", "AttributeModifier", "Tagged<CustomObject>")
+        if (name === "ContentModifier")
+            return new PredefinedConvertor(param, "ContentModifier<any>", "ContentModifier", "Tagged<CustomObject>")
+        if (name === "Array")
+            return new ArrayConvertor(param, this, type.typeArguments![0])
+        if (name === "Callback")
+            return new CustomTypeConvertor(param, "Callback")
+        if (name === "Optional")
+            return new CustomTypeConvertor(param, "Optional")
+        return undefined
+    }
+
+    declarationConvertor(param: string, type: ts.TypeReferenceNode, declaration: ts.NamedDeclaration | undefined): ArgConvertor {
+        const entityName = typeEntityName(type)
+        if (!declaration) {
+            return this.customConvertor(entityName, param, type) ?? throwException(`Declaration not found for: ${type.getText()}`)
+        }
+        const declarationName = ts.idText(declaration.name as ts.Identifier)
+
+        let customConvertor = this.customConvertor(entityName, param, type)
+        if (customConvertor) {
+            return customConvertor
+        }
+        if (ts.isTypeReferenceNode(type) && entityName && ts.isQualifiedName(entityName)) {
+            const typeOuter = ts.factory.createTypeReferenceNode(entityName.left)
+            return new EnumConvertor(param, typeOuter, this)
+        }
+        if (ts.isEnumDeclaration(declaration)) {
+            return new EnumConvertor(param, type, this)
+        }
+        if (ts.isTypeAliasDeclaration(declaration)) {
+            this.requestType(declarationName, type)
+            return this.typeConvertor(param, declaration.type)
+        }
+        if (ts.isInterfaceDeclaration(declaration)) {
+            return new InterfaceConvertor(declarationName, param, this, type)
+        }
+        if (ts.isClassDeclaration(declaration)) {
+            return new InterfaceConvertor(declarationName, param, this, type)
+        }
+        if (ts.isTypeParameterDeclaration(declaration)) {
+            console.log(declaration.getText())
+            return new CustomTypeConvertor(param, identName(declaration.name)!)
+        }
+        console.log(`${declaration.getText()}`)
+        throw new Error(`Unknown kind: ${declaration.kind}`)
+    }
+
+    generateSerializers(printer: IndentedPrinter) {
+        let seenNames = new Set<string>()
+        for (let x of this.typeMap.values()) {
+            if (seenNames.has(x.nameBasic)) continue
+            seenNames.add(x.nameBasic)
+            this.generateSerializer(x.nameBasic, x.target, printer)
+        }
+    }
+
+    private generateSerializer(name: string, target: DeclarationTarget, printer: IndentedPrinter) {
+        if (PeerGeneratorConfig.ignoreSerialization.includes(name)) return
+        if (target instanceof PrimitiveType) return
+        if (ts.isEnumDeclaration(target)) return
+        printer.pushIndent()
+        printer.print(`write${name}(value: ${name}|undefined) {`)
+        printer.pushIndent()
+        printer.print(`const valueSerializer = this`)
+        printer.print(`if (undefined === value) { valueSerializer.writeInt8(Tags.UNDEFINED); return }`)
+        if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {
+
+        } else {
+            printer.print(`valueSerializer.writeInt8(Tags.OBJECT)`)
+            let typeConvertor = this.typeConvertor("value", target, false)
+            typeConvertor.convertorToTSSerial(`value`, `value`, printer)
+        }
+        printer.popIndent()
+        printer.print(`}`)
+        printer.popIndent()
+    }
 }
