@@ -15,8 +15,7 @@
 
 import { IndentedPrinter } from "../IndentedPrinter";
 import * as ts from "typescript"
-import { asString, getDeclarationsByNode, getNameWithoutQualifiersRight, heritageTypes, stringOrNone } from "../util";
-import { PeerGeneratorVisitor } from "./PeerGeneratorVisitor";
+import { asString, stringOrNone } from "../util";
 import { DeclarationTable, DeclarationTarget } from "./DeclarationTable";
 
 export class SortingEmitter extends IndentedPrinter {
@@ -41,6 +40,7 @@ export class SortingEmitter extends IndentedPrinter {
     startEmit(table: DeclarationTable, declaration: DeclarationTarget) {
         this.table = table
         let name = table.computeTargetName(declaration, false)
+        console.log("emit for " + name)
         let next = this.emitters.has(name) ? this.emitters.get(name)! : new IndentedPrinter()
         this.emitters.set(name, next)
         this.currentPrinter = next
@@ -48,7 +48,7 @@ export class SortingEmitter extends IndentedPrinter {
         this.fillDeps(declaration, seen)
         seen.delete(name)
         this.deps.set(name, seen)
-
+        table.processPendingRequests()
         if (seen.size > 0)
             console.log(`${name}: depends on ${Array.from(seen.keys()).join(",")}`)
     }

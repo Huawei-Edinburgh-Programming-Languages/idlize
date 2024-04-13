@@ -14,7 +14,7 @@
  */
 
 import * as ts from "typescript"
-import { asString, findRealDeclarations, getDeclarationsByNode, getNameWithoutQualifiersRight, identName, mapType, throwException, typeEntityName } from "../util"
+import { asString, getDeclarationsByNode, getNameWithoutQualifiersRight, identName, throwException, typeEntityName } from "../util"
 import { IndentedPrinter } from "../IndentedPrinter"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
 import { AggregateConvertor, ArgConvertor, ArrayConvertor, BooleanConvertor, CustomTypeConvertor, EnumConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, LengthConvertor, NumberConvertor, OptionConvertor, PredefinedConvertor, StringConvertor, TupleConvertor, UndefinedConvertor, UnionConvertor } from "./Convertors"
@@ -23,12 +23,17 @@ import { SortingEmitter } from "./SortingEmitter"
 class PrimitiveType {
     constructor(public name: string) {}
     getText(): string { return this.name }
+    static String = new PrimitiveType("String")
+    static Number = new PrimitiveType("Number")
+    static Boolean = new PrimitiveType("Boolean")
+    static Function = new PrimitiveType("Function")
+    static Undefined = new PrimitiveType("Undefined")
 }
 
 export type DeclarationTarget =
-    ts.ClassDeclaration | ts.InterfaceDeclaration | ts.EnumDeclaration
+     ts.ClassDeclaration | ts.InterfaceDeclaration | ts.EnumDeclaration
     | ts.UnionTypeNode | ts.TypeLiteralNode | ts.ImportTypeNode | ts.FunctionTypeNode | ts.TupleTypeNode
-    | ts.ArrayTypeNode
+    | ts.ArrayTypeNode | ts.ParenthesizedTypeNode | ts.OptionalTypeNode
     | PrimitiveType
 
 class DeclarationRecord {
@@ -76,7 +81,7 @@ export class DeclarationTable {
     requestType(name: string|undefined, type: ts.TypeNode, optional: boolean = false) {
         let declaration = this.typeMap.get(type)
         if (declaration) {
-            if (name && name != declaration[1]) throw new Error(`Mismatch of names${optional ? "[optional]" : ""}: ${name} ${declaration[1]}`)
+            //if (name && name != declaration[1]) throw new Error(`Mismatch of names${optional ? "[optional]" : ""}: ${name} ${declaration[1]}`)
             return
         }
         name = this.computeTypeName(undefined, type, optional)
@@ -92,6 +97,8 @@ export class DeclarationTable {
         if (ts.isImportTypeNode(type)) return type
         if (ts.isTupleTypeNode(type)) return type
         if (ts.isArrayTypeNode(type)) return type
+        if (ts.isOptionalTypeNode(type)) return type
+        if (ts.isParenthesizedTypeNode(type)) return type
         if (ts.isTypeReferenceNode(type)) {
             let declarations = getDeclarationsByNode(this.typeChecker!, type.typeName)
             while (declarations.length > 0 && ts.isTypeAliasDeclaration(declarations[0])) {
@@ -110,13 +117,13 @@ export class DeclarationTable {
             throw new Error(`Wrong declaration: ${decl.getText()}`)
         }
         if (type.kind == ts.SyntaxKind.BooleanKeyword)
-            return new PrimitiveType(`Boolean`)
+            return PrimitiveType.Boolean
         if (type.kind == ts.SyntaxKind.NumberKeyword)
-            return new PrimitiveType(`Number`)
+            return PrimitiveType.Number
         if (type.kind == ts.SyntaxKind.StringKeyword)
-            return new PrimitiveType(`String`)
+            return PrimitiveType.String
         if (ts.isFunctionTypeNode(type))
-            return new PrimitiveType(`Function`)
+            return PrimitiveType.Boolean
         throw new Error(`Unknown type: ${type.getText()} ${asString(type)}`)
     }
 
@@ -125,12 +132,12 @@ export class DeclarationTable {
 
     computeTypeName(suggestedName: string|undefined, type: ts.TypeNode, optional: boolean = false): string {
         let name = this.computeTypeNameImpl(suggestedName, type, optional)
-        //if (name == "Tuple_Number_Boolean") throw new Error("OK")
         this.pendingRequests.push(new PendingTypeRequest(name, type, optional))
         return name
     }
 
     processPendingRequests() {
+        console.log("pending", this.pendingRequests.map(it => it.name).join(", "))
         while (this.pendingRequests.length > 0) {
             let value = this.pendingRequests.splice(this.pendingRequests.length - 1, 1)[0]
             console.log("process", value.name)
@@ -138,24 +145,60 @@ export class DeclarationTable {
         }
     }
 
+    toTarget(node: ts.TypeNode): DeclarationTarget {
+        if (ts.isUnionTypeNode(node)) return node
+        if (ts.isTypeLiteralNode(node)) return node
+        if (ts.isTupleTypeNode(node)) return node
+        if (ts.isOptionalTypeNode(node)) return node
+        if (ts.isParenthesizedTypeNode(node)) return node
+        if (ts.isTypeReferenceNode(node)) {
+            let declarations = getDeclarationsByNode(this.typeChecker!, node.typeName)
+            while (declarations.length > 0 && ts.isTypeAliasDeclaration(declarations[0])) {
+                node = declarations[0].type
+                if (ts.isUnionTypeNode(node) || ts.isTypeLiteralNode(node) || ts.isImportTypeNode(node)) return node
+                declarations = getDeclarationsByNode(this.typeChecker!, declarations[0].type) ?? []
+            }
+            if (declarations.length == 0) {
+                throw new Error(`No declaration for ${node.getText()}`)
+            }
+            return declarations[0] as ts.InterfaceDeclaration
+        }
+        if (node.kind == ts.SyntaxKind.StringKeyword) {
+            return PrimitiveType.String
+        }
+        if (node.kind == ts.SyntaxKind.NumberKeyword) {
+            return PrimitiveType.Number
+        }
+        if (node.kind == ts.SyntaxKind.BooleanKeyword) {
+            return PrimitiveType.Boolean
+        }
+        if (node.kind == ts.SyntaxKind.UndefinedKeyword) {
+            return PrimitiveType.Undefined
+        }
+
+        throw new Error(`Unknown ${node.getText()}`)
+    }
+
     computeTargetName(target: DeclarationTarget, optional: boolean): string {
         let name = this.computeTargetNameImpl(target, optional)
         if (!(target instanceof PrimitiveType) && (
-            ts.isUnionTypeNode(target) || ts.isTupleTypeNode(target))) {
+            !ts.isInterfaceDeclaration(target) && !ts.isClassDeclaration(target) && !ts.isEnumDeclaration(target))
+        ) {
+            console.log("pend", name)
             this.pendingRequests.push(new PendingTypeRequest(name, target, optional))
         }
         return name
     }
 
     computeTargetNameImpl(target: DeclarationTarget, optional: boolean): string {
-        const prefix = "" // optional ? "Optional_" : ""
+        const prefix = optional ? "Optional_" : ""
         if (target instanceof PrimitiveType) {
             return prefix + target.getText()
         }
         if (ts.isTypeLiteralNode(target)) {
             return prefix + `Literal_${target.members.map(member => {
                 if (ts.isPropertySignature(member)) {
-                    return this.computeTypeNameImpl(undefined, member.type!, member.questionToken != undefined)
+                    return this.computeTargetNameImpl(this.toTarget(member.type!), member.questionToken != undefined)
                 } else {
                     return undefined
                 }
@@ -167,7 +210,7 @@ export class DeclarationTable {
             return prefix + identName(target.name)
         }
         if (ts.isUnionTypeNode(target)) {
-            return prefix + `Union_${target.types.map(it => this.computeTypeNameImpl(undefined, it, optional)).join("_")}`
+            return prefix + `Union_${target.types.map(it => this.computeTargetNameImpl(this.toTarget(it), false)).join("_")}`
         }
         if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {
             return prefix + identName(target.name)
@@ -178,20 +221,25 @@ export class DeclarationTable {
         if (ts.isTupleTypeNode(target)) {
             return prefix + `Tuple_${target.elements.map(it => {
                 if (ts.isNamedTupleMember(it)) {
-                    return this.computeTypeNameImpl(undefined, it, it.questionToken != undefined)
+                    return this.computeTargetNameImpl(this.toTarget(it), it.questionToken != undefined)
                 } else {
-                    return this.computeTypeNameImpl(undefined, it, false)
+                    return this.computeTargetNameImpl(this.toTarget(it), false)
                 }
             }).join("_")}`
         }
         if (ts.isArrayTypeNode(target)) {
-            return prefix + `Array_` + this.computeTypeNameImpl(undefined, target.elementType, false)
+            return prefix + `Array_` + this.computeTargetNameImpl(this.toTarget(target.elementType), false)
         }
         if (ts.isImportTypeNode(target)) {
             return prefix + identName(target.qualifier)!
         }
-
-        throw new Error(`Cannot compute target name: ${target}`)
+        if (ts.isOptionalTypeNode(target)) {
+            return "Optional_" + this.computeTargetNameImpl(this.toTarget(target.type), false)
+        }
+        if (ts.isParenthesizedTypeNode(target)) {
+            return this.computeTargetNameImpl(this.toTarget(target.type), false)
+        }
+        throw new Error(`Cannot compute target name: ${(target as any).getText()} ${(target as any).kind}`)
     }
 
     private computeTypeNameImpl(suggestedName: string|undefined, type: ts.TypeNode, optional: boolean): string {
@@ -387,7 +435,8 @@ export class DeclarationTable {
         throw new Error(`Unknown kind: ${declaration.kind}`)
     }
 
-    generateDeserializers(printer: IndentedPrinter, structs: SortingEmitter) {
+    generateDeserializers(printer: IndentedPrinter, structs: SortingEmitter, typedefs: IndentedPrinter) {
+        this.processPendingRequests()
         let seenNames = new Set<string>()
         printer.print(`class Deserializer : public ArgDeserializerBase {`)
         printer.print(` public:`)
@@ -421,6 +470,7 @@ export class DeclarationTable {
             })
             structs.popIndent()
             structs.print(`};`)
+            if (x.nameOptional == x.nameBasic) continue
             structs.print(`struct ${x.nameOptional} {`)
             structs.pushIndent()
             structs.print(`int32_t tag;`)
@@ -435,7 +485,7 @@ export class DeclarationTable {
             if (seenNames.has(x[1])) continue
             if (PeerGeneratorConfig.ignoreSerialization.includes(x[1])) continue
             seenNames.add(x[1])
-            structs.print(`typedef ${record.nameBasic} ${x[1]};`)
+            typedefs.print(`typedef ${record.nameBasic} ${x[1]};`)
         }
     }
 
@@ -461,59 +511,77 @@ export class DeclarationTable {
             result.push(new FieldRecord(target.name, undefined, "value"))
             return result
         }
-        if (ts.isArrayTypeNode(target)) {
-            let typeName = this.computeTypeName(undefined, target.elementType, false)
+        else if (ts.isArrayTypeNode(target)) {
+            let typeName = this.computeTargetName(this.toTarget(target.elementType), false)
             result.push(new FieldRecord(typeName+"*", target, "value"))
             result.push(new FieldRecord("int32_t", undefined, "valueLength"))
         }
-        if (ts.isInterfaceDeclaration(target)) {
+        else if (ts.isInterfaceDeclaration(target)) {
             target
                 .members
                 .filter(ts.isPropertySignature)
                 .forEach(it => {
-                    let typeName = this.computeTypeName(undefined, it.type!, false)
+                    let typeName = this.computeTargetName(this.toTarget(it.type!), false)
                     result.push(new FieldRecord(typeName, it.type!, identName(it.name)!, it.questionToken != undefined))
                 })
         }
-        if (ts.isClassDeclaration(target)) {
+        else if (ts.isClassDeclaration(target)) {
             target
                 .members
                 .filter(ts.isPropertyDeclaration)
                 .forEach(it => {
-                    let typeName = this.computeTypeName(undefined, it.type!, false)
+                    let typeName = this.computeTargetName(this.toTarget(it.type!), false)
                     result.push(new FieldRecord(typeName, it.type!, identName(it.name)!, it.questionToken != undefined))
                 })
         }
-        if (ts.isUnionTypeNode(target)) {
+        else if (ts.isUnionTypeNode(target)) {
             result.push(new FieldRecord("int32_t", undefined, `selector`, false))
             target
                 .types
                 .forEach((it, index) => {
-                    let typeName = this.computeTypeName(undefined, it, false)
+                    let typeName = this.computeTargetName(this.toTarget(it), false)
                     result.push(new FieldRecord(typeName, it, `value${index}`, false))
                 })
         }
-        if (ts.isTypeLiteralNode(target)) {
+        else if (ts.isTypeLiteralNode(target)) {
             target
                 .members
                 .filter(ts.isPropertySignature)
                 .forEach(it => {
-                    let typeName = this.computeTypeName(undefined, it.type!, false)
+                    let typeName = this.computeTargetName(this.toTarget(it.type!), false)
                     result.push(new FieldRecord(typeName, it.type, identName(it.name)!, it.questionToken != undefined))
                 })
         }
-        if (ts.isTupleTypeNode(target)) {
+        else if (ts.isTupleTypeNode(target)) {
             target
                 .elements
                 .forEach((it, index) => {
                     if (ts.isNamedTupleMember(it)) {
-                        let typeName = this.computeTypeName(undefined, it.type!, false)
+                        let typeName = this.computeTargetName(this.toTarget(it.type!), false)
                         result.push(new FieldRecord(typeName, it.type!, identName(it.name)!, it.questionToken != undefined))
                     } else {
-                        let typeName = this.computeTypeName(undefined, it, false)
+                        let typeName = this.computeTargetName(this.toTarget(it), false)
                         result.push(new FieldRecord(typeName, it, `value${index}`, false))
                     }
                 })
+        }
+        else if (ts.isOptionalTypeNode(target)) {
+            result.push(new FieldRecord("int32_t", undefined, "tag"))
+            result = result.concat(this.targetFields(this.toTarget(target.type)))
+        }
+        else if (ts.isParenthesizedTypeNode(target)) {
+            // TODO: is it correct?
+            return this.targetFields(this.toTarget(target.type))
+        }
+        else if (ts.isEnumDeclaration(target)) {
+            result.push(new FieldRecord("int32_t", undefined, "value"))
+        }
+        else if (ts.isFunctionTypeNode(target)) {
+        }
+        else if (ts.isImportTypeNode(target)) {
+        }
+        else {
+            throw new Error(`Unsupported field getter: ${(target as any).getText()}`)
         }
         return result
     }
@@ -554,7 +622,8 @@ export class DeclarationTable {
         if (this.ignoreTarget(target)) return
         printer.print(`${name} read${name}() {`)
         printer.pushIndent()
-        printer.print(`auto valueSerializer = *this;`)
+        printer.print(`auto valueDeserializer = *this;`)
+        printer.print(`${name} value;`)
         if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {
             let fields = this.targetFields(target)
             fields.forEach(it => {

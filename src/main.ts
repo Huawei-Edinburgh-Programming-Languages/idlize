@@ -301,7 +301,6 @@ if (options.dts2peer) {
                 }
             },
             onEnd(outDir: string) {
-                declarationTable.processPendingRequests()
                 fs.writeFileSync(
                     path.join(outDir, 'NativeModule.ts'),
                     nativeModuleDeclaration(nativeMethods, options.nativeBridgeDir ?? "../../../../native/NativeBridge", false)

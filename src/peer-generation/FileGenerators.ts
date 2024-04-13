@@ -174,8 +174,9 @@ ${printer.getOutput().join("\n")}
 export function makeCDeserializer(table: DeclarationTable): string {
     const deserializer = new IndentedPrinter()
     const structs = new SortingEmitter(table)
+    const typedefs = new IndentedPrinter()
 
-    table.generateDeserializers(deserializer, structs)
+    table.generateDeserializers(deserializer, structs, typedefs)
 
     return `
 #include "Interop.h"
@@ -184,16 +185,10 @@ export function makeCDeserializer(table: DeclarationTable): string {
 
 typedef KBoolean Boolean;
 typedef CustomObject Resource;
-typedef struct {
-    int32_t tag;
-    String value;
-} Optional_String;
-typedef struct {
-    int32_t tag;
-    Boolean value;
-} Optional_Boolean;
 
 ${structs.getOutput().join("\n")}
+
+${typedefs.getOutput().join("\n")}
 
 ${deserializer.getOutput().join("\n")}
 `
