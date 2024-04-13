@@ -131,8 +131,8 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         this.namedTypes.set(type, current)
     }
 
-    requestType(name: string|undefined, type: ts.TypeNode, optional: boolean = false) {
-        this.declarationTable.requestType(name, type, optional)
+    requestType(name: string|undefined, type: ts.TypeNode) {
+        this.declarationTable.requestType(name, type)
     }
 
     private importStatements(currentFileName: string): string[] {
@@ -834,7 +834,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         let index = optional ? 1 : 0
         if (!result || result[index] == "") {
             let name = this.computeTypeName(type, optional)
-            this.requestType(name, type, optional)
+            this.requestType(name, type)
             return name
         }
         return result[index]

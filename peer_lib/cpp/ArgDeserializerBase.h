@@ -236,40 +236,6 @@ inline const char* tagName(Tags tag) {
   throw "Error";
 }
 
-template <typename T>
-inline void WriteToString(string* result, const Tagged<T>& value) {
-  result->append("tagged {[");
-  result->append(tagName(value.tag));
-  result->append("]");
-  /*
-  switch (value.tag) {
-    case TAG_UNDEFINED:
-      break;
-    case TAG_INT32:
-    case TAG_FLOAT32:
-      WriteToString(result, value.number);
-      break;
-    case TAG_LENGTH:
-      WriteToString(result, value.length);
-      break;
-    case TAG_RESOURCE:
-      WriteToString(result, value.resource);
-      break;
-    case TAG_STRING:
-      WriteToString(result, value.string);
-      break;
-    case TAG_OBJECT:
-      if (value.object_print_function) {
-        value.object_print_function(&result, value.object);
-      } else {
-        result->append("[object]");
-      }
-      break;
-  }*/
-  WriteToString(result, value.value);
-  result->append("}");
-}
-
 class ArgDeserializerBase;
 
 struct CustomObject {
@@ -328,6 +294,14 @@ public:
       while (current->next != nullptr) current = current->next;
       current->next = deserializer;
     }
+  }
+
+  std::vector<void*> toClean;
+  template <typename T>
+  void resizeArray(const T& array, int32_t length) {
+    void* value = malloc(length * sizeof(T));
+    toClean.push_back(value);
+    array.value = value;
   }
 
   int32_t currentPosition() const { return this->position; }

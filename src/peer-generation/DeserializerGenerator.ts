@@ -93,7 +93,7 @@ export class DeserializerGenerator {
         let isStatic = field.modifiers?.find(it => it.kind == ts.SyntaxKind.StaticKeyword) != undefined
         if (isStatic) return
         const optional = field.questionToken !== undefined
-        visitor.requestType(`${structName}_${identName(field.name)}`, field.type, optional)
+        visitor.requestType(`${structName}_${identName(field.name)}`, field.type)
         let typeConvertor = visitor.declarationTable.typeConvertor("value", field.type, optional)
         let fieldName = identName(field.name)
         let nativeType = typeConvertor.nativeType(false)

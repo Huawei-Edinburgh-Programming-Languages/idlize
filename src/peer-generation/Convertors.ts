@@ -456,8 +456,9 @@ export class AggregateConvertor extends BaseArgConvertor {
         throw new Error("Do not use")
     }
     convertorToCDeserial(param: string, value: string, printer: IndentedPrinter): void {
+        let fields = this.table.targetFields(this.table.toTarget(this.type))
         this.memberConvertors.forEach((it, index) => {
-            it.convertorToCDeserial(param, `${value}.value${index}`, printer)
+            it.convertorToCDeserial(param, `${value}.${fields[index].name}`, printer)
         })
     }
 
@@ -614,10 +615,10 @@ export class ArrayConvertor extends BaseArgConvertor {
         printer.print(`if (${runtimeType} != RUNTIME_UNDEFINED) {`) // TODO: `else value = nullptr` ?
         printer.pushIndent()
         printer.print(`auto ${arrayLength} = ${param}Deserializer.readInt32();`)
-        printer.print(`${value}.resize(${arrayLength});`);
+        printer.print(`${param}Deserializer.resizeArray(${value}, ${arrayLength});`);
         printer.print(`for (int i = 0; i < ${arrayLength}; i++) {`)
         printer.pushIndent()
-        this.elementConvertor.convertorToCDeserial(param, `${value}[i]`, printer)
+        this.elementConvertor.convertorToCDeserial(param, `${value}.array[i]`, printer)
         printer.popIndent()
         printer.print(`}`)
         printer.popIndent()

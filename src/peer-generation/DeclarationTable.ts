@@ -65,26 +65,26 @@ export class DeclarationTable {
     declarations = new Map<DeclarationTarget, DeclarationRecord>()
     typeMap = new Map<ts.TypeNode, [DeclarationTarget, string]>()
     typeChecker: ts.TypeChecker | undefined = undefined
-    constructor() {}
 
     getTypeName(type: ts.TypeNode, optional: boolean = false) {
         let declaration  = this.typeMap.get(type)
         if (!declaration) {
-            this.requestType(undefined, type, optional)
+            this.requestType(undefined, type)
         }
         declaration = this.typeMap.get(type)!
-        if (declaration[1] == "Union_Number_String") throw new Error("OK")
 
-        return declaration[1]
+        let prefix = optional ? "Optional_" : ""
+
+        return prefix + declaration[1]
     }
 
-    requestType(name: string|undefined, type: ts.TypeNode, optional: boolean = false) {
+    requestType(name: string|undefined, type: ts.TypeNode) {
         let declaration = this.typeMap.get(type)
         if (declaration) {
             //if (name && name != declaration[1]) throw new Error(`Mismatch of names${optional ? "[optional]" : ""}: ${name} ${declaration[1]}`)
             return
         }
-        name = this.computeTypeName(undefined, type, optional)
+        name = this.computeTypeName(undefined, type, false)
         let target = this.findDeclaration(type)
         if (!target) throw new Error(`Cannot find declaration: ${type.getText()}`)
         this.declarations.set(target, new DeclarationRecord(target, this))
@@ -137,11 +137,10 @@ export class DeclarationTable {
     }
 
     processPendingRequests() {
-        console.log("pending", this.pendingRequests.map(it => it.name).join(", "))
         while (this.pendingRequests.length > 0) {
             let value = this.pendingRequests.splice(this.pendingRequests.length - 1, 1)[0]
             console.log("process", value.name)
-            this.requestType(value.name, value.type, value.optional)
+            this.requestType(value.name, value.type)
         }
     }
 
@@ -184,7 +183,6 @@ export class DeclarationTable {
         if (!(target instanceof PrimitiveType) && (
             !ts.isInterfaceDeclaration(target) && !ts.isClassDeclaration(target) && !ts.isEnumDeclaration(target))
         ) {
-            console.log("pend", name)
             this.pendingRequests.push(new PendingTypeRequest(name, target, optional))
         }
         return name
@@ -435,6 +433,10 @@ export class DeclarationTable {
         throw new Error(`Unknown kind: ${declaration.kind}`)
     }
 
+    ignoredStruct(name: string) : boolean {
+        return ["Resource", "Number", "Boolean", "String", "Optional_Number", "Optional_Boolean", "Optional_String"].includes(name)
+    }
+
     generateDeserializers(printer: IndentedPrinter, structs: SortingEmitter, typedefs: IndentedPrinter) {
         this.processPendingRequests()
         let seenNames = new Set<string>()
@@ -455,11 +457,12 @@ export class DeclarationTable {
             if (seenNames.has(x.nameBasic)) continue
             seenNames.add(x.nameBasic)
             let target = x.target
-            if (target instanceof PrimitiveType) continue
+            if (target instanceof PrimitiveType || this.ignoredStruct(x.nameBasic)) continue
             structs.startEmit(this, target)
             if (ts.isEnumDeclaration(target)) {
                 structs.print(`typedef int32_t ${x.nameBasic};`)
                 structs.print(`typedef struct { int32_t tag; int32_t value; } ${x.nameOptional};`)
+                seenNames.add(x.nameOptional)
                 continue
             }
             if (this.ignoreTarget(target)) continue
@@ -471,12 +474,12 @@ export class DeclarationTable {
             structs.popIndent()
             structs.print(`};`)
             if (x.nameOptional == x.nameBasic) continue
+            if (seenNames.has(x.nameOptional)) continue
+            seenNames.add(x.nameOptional)
             structs.print(`struct ${x.nameOptional} {`)
             structs.pushIndent()
             structs.print(`int32_t tag;`)
-            this.targetFields(x.target).forEach((it, index) => {
-                structs.print(`${it.typeName} ${it.name};`)
-            })
+            structs.print(`${x.nameBasic} value;`)
             structs.popIndent()
             structs.print(`};`)
         }
@@ -486,6 +489,8 @@ export class DeclarationTable {
             if (PeerGeneratorConfig.ignoreSerialization.includes(x[1])) continue
             seenNames.add(x[1])
             typedefs.print(`typedef ${record.nameBasic} ${x[1]};`)
+            typedefs.print(`typedef ${record.nameOptional} Optional_${x[1]};`)
+
         }
     }
 
@@ -513,15 +518,15 @@ export class DeclarationTable {
         }
         else if (ts.isArrayTypeNode(target)) {
             let typeName = this.computeTargetName(this.toTarget(target.elementType), false)
-            result.push(new FieldRecord(typeName+"*", target, "value"))
-            result.push(new FieldRecord("int32_t", undefined, "valueLength"))
+            result.push(new FieldRecord(typeName+"*", target, "array"))
+            result.push(new FieldRecord("int32_t", undefined, "array_length"))
         }
         else if (ts.isInterfaceDeclaration(target)) {
             target
                 .members
                 .filter(ts.isPropertySignature)
                 .forEach(it => {
-                    let typeName = this.computeTargetName(this.toTarget(it.type!), false)
+                    let typeName = this.computeTargetName(this.toTarget(it.type!), it.questionToken != undefined)
                     result.push(new FieldRecord(typeName, it.type!, identName(it.name)!, it.questionToken != undefined))
                 })
         }
@@ -530,7 +535,7 @@ export class DeclarationTable {
                 .members
                 .filter(ts.isPropertyDeclaration)
                 .forEach(it => {
-                    let typeName = this.computeTargetName(this.toTarget(it.type!), false)
+                    let typeName = this.computeTargetName(this.toTarget(it.type!), it.questionToken != undefined)
                     result.push(new FieldRecord(typeName, it.type!, identName(it.name)!, it.questionToken != undefined))
                 })
         }
@@ -548,7 +553,7 @@ export class DeclarationTable {
                 .members
                 .filter(ts.isPropertySignature)
                 .forEach(it => {
-                    let typeName = this.computeTargetName(this.toTarget(it.type!), false)
+                    let typeName = this.computeTargetName(this.toTarget(it.type!), it.questionToken != undefined)
                     result.push(new FieldRecord(typeName, it.type, identName(it.name)!, it.questionToken != undefined))
                 })
         }
@@ -557,7 +562,7 @@ export class DeclarationTable {
                 .elements
                 .forEach((it, index) => {
                     if (ts.isNamedTupleMember(it)) {
-                        let typeName = this.computeTargetName(this.toTarget(it.type!), false)
+                        let typeName = this.computeTargetName(this.toTarget(it.type!), it.questionToken != undefined)
                         result.push(new FieldRecord(typeName, it.type!, identName(it.name)!, it.questionToken != undefined))
                     } else {
                         let typeName = this.computeTargetName(this.toTarget(it), false)
@@ -567,7 +572,7 @@ export class DeclarationTable {
         }
         else if (ts.isOptionalTypeNode(target)) {
             result.push(new FieldRecord("int32_t", undefined, "tag"))
-            result = result.concat(this.targetFields(this.toTarget(target.type)))
+            result.push(new FieldRecord(this.computeTargetName(this.toTarget(target.type), false), undefined, "value"))
         }
         else if (ts.isParenthesizedTypeNode(target)) {
             // TODO: is it correct?

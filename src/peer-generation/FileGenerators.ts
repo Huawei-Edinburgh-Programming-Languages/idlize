@@ -185,6 +185,9 @@ export function makeCDeserializer(table: DeclarationTable): string {
 
 typedef KBoolean Boolean;
 typedef CustomObject Resource;
+typedef struct { int32_t tag; Number value;} Optional_Number;
+typedef struct { int32_t tag; Boolean value;} Optional_Boolean;
+typedef struct { int32_t tag; String value;} Optional_String;
 
 ${structs.getOutput().join("\n")}
 
