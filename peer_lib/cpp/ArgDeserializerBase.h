@@ -51,35 +51,25 @@ enum Tags
 typedef float float32_t;
 
 template <typename T>
-inline void WriteToString(string* result, const T& value) = delete;
+inline void WriteToString(string* result, const T& value) {}
 
 struct String
 {
+  // TODO: rework!
+#ifdef __cplusplus
+  String() : capacity(0), chars(0) {}
+  String(const KStringPtr& other) {
+    this->capacity = other.length();
+    this->chars = other.c_str();
+  }
+  void operator=(const KStringPtr& other) {
+    this->capacity = other.length();
+    this->chars = other.c_str();
+  }
+#endif
   size_t capacity;
-  char chars[128];
+  const char* chars;
 };
-
-String String_new(size_t capacity, char* initial = NULL) {
-  String result;
-  strncpy(result.chars, initial, sizeof result.chars);
-  return result;
-}
-
-void String_append_String(String str, String other) {
-  // TODO implement
-}
-
-void String_append_chars(String str, char* chars) {
-  // TODO implement
-}
-
-void String_append_int(String str, int n) {
-  // TODO implement
-}
-
-const char* String_chars(const String& str) {
-  return str.chars;
-}
 
 template <>
 inline void WriteToString(string* result, const String& value) {
@@ -137,22 +127,14 @@ inline void WriteToString(string* result, const Number& value) {
 
 struct Array
 {
-  size_t size;
-  void* data;
+  void* array;
+  int32_t array_length;
 };
-
-Array Array_new(size_t size, void* data)
-{
-  Array result;
-  result.size = size;
-  result.data = data;
-  return result;
-}
 
 template <>
 inline void WriteToString(string* result, const Array& value) {
   result->append("Array[");
-  result->append(std::to_string(value.size));
+  result->append(std::to_string(value.array_length));
   result->append("]");
 }
 
@@ -163,7 +145,7 @@ struct Length
   int32_t resource;
 };
 
-Length Length_from_array(int32_t *array)
+inline Length Length_from_array(int32_t *array)
 {
   Length result;
   result.value = *(float32_t *)array;
@@ -280,11 +262,18 @@ protected:
   uint8_t *data;
   int32_t length;
   int32_t position;
+  std::vector<void*> to_clean;
 
   static CustomDeserializer* customDeserializers;
 public:
   ArgDeserializerBase(uint8_t *data, int32_t length)
       : data(data), length(length), position(0) {}
+
+  ~ArgDeserializerBase() {
+    for (auto data: to_clean) {
+      free(data);
+    }
+  }
 
   static void registerCustomDeserializer(CustomDeserializer* deserializer) {
     if (ArgDeserializerBase::customDeserializers == nullptr) {
@@ -297,11 +286,11 @@ public:
   }
 
   std::vector<void*> toClean;
-  template <typename T>
-  void resizeArray(const T& array, int32_t length) {
+  template <typename T, typename E>
+  void resizeArray(T* array, int32_t length) {
     void* value = malloc(length * sizeof(T));
     toClean.push_back(value);
-    array.value = value;
+    array->array = reinterpret_cast<E*>(value);
   }
 
   int32_t currentPosition() const { return this->position; }
@@ -422,8 +411,8 @@ public:
     String result;
     int32_t length = readInt32();
     check(length);
-    memcpy(result.chars, (char*)(data + position), length);
-    result.chars[length] = 0;
+    // TODO: no need to copy.
+    result.chars = (const char*)(data + position);
     position += length;
     return result;
   }

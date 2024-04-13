@@ -610,12 +610,13 @@ export class ArrayConvertor extends BaseArgConvertor {
         // Array length.
         let runtimeType = `runtimeType${uniqueCounter++}`;
         let arrayLength = `arrayLength${uniqueCounter++}`;
+        let elementTypeName = this.table.computeTypeName(undefined, this.elementType, false)
 
         printer.print(`auto ${runtimeType} = ${param}Deserializer.readInt8();`)
         printer.print(`if (${runtimeType} != RUNTIME_UNDEFINED) {`) // TODO: `else value = nullptr` ?
         printer.pushIndent()
         printer.print(`auto ${arrayLength} = ${param}Deserializer.readInt32();`)
-        printer.print(`${param}Deserializer.resizeArray(${value}, ${arrayLength});`);
+        printer.print(`${param}Deserializer.resizeArray<Array_${elementTypeName}, ${elementTypeName}>(&${value}, ${arrayLength});`);
         printer.print(`for (int i = 0; i < ${arrayLength}; i++) {`)
         printer.pushIndent()
         this.elementConvertor.convertorToCDeserial(param, `${value}.array[i]`, printer)
@@ -626,7 +627,7 @@ export class ArrayConvertor extends BaseArgConvertor {
 
     }
     nativeType(impl: boolean): string {
-        return "Array"
+        return `Array_${this.table.computeTypeName(undefined, this.elementType, false)}`
     }
     interopType(ts: boolean): string {
         return "KNativePointer"
@@ -637,8 +638,9 @@ export class ArrayConvertor extends BaseArgConvertor {
 }
 export class NumberConvertor extends BaseArgConvertor {
     constructor(param: string) {
-        // Enums are integers in runtime.
-        super("number", [RuntimeType.NUMBER], false, false, param)
+        // TODO: as we pass tagged values - request serialization to array for now.
+        // Optimize me later!
+        super("number", [RuntimeType.NUMBER], false, true, param)
     }
 
     convertorTSArg(param: string): string {
