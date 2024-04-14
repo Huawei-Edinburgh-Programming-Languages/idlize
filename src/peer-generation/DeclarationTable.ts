@@ -21,7 +21,7 @@ import { AggregateConvertor, ArgConvertor, ArrayConvertor, BooleanConvertor, Cus
 import { SortingEmitter } from "./SortingEmitter"
 
 class PrimitiveType {
-    constructor(public name: string) {}
+    constructor(public name: string) { }
     getText(): string { return this.name }
     static String = new PrimitiveType("String")
     static Number = new PrimitiveType("Number")
@@ -32,7 +32,7 @@ class PrimitiveType {
 }
 
 export type DeclarationTarget =
-     ts.ClassDeclaration | ts.InterfaceDeclaration | ts.EnumDeclaration
+    ts.ClassDeclaration | ts.InterfaceDeclaration | ts.EnumDeclaration
     | ts.UnionTypeNode | ts.TypeLiteralNode | ts.ImportTypeNode | ts.FunctionTypeNode | ts.TupleTypeNode
     | ts.ArrayTypeNode | ts.ParenthesizedTypeNode | ts.OptionalTypeNode
     | PrimitiveType
@@ -41,18 +41,18 @@ class DeclarationRecord {
     public nameBasic: string
     public nameOptional: string
 
-    constructor (public target: DeclarationTarget, private table: DeclarationTable) {
+    constructor(public target: DeclarationTarget, private table: DeclarationTable) {
         this.nameBasic = table.computeTargetName(target, false)
         this.nameOptional = table.computeTargetName(target, true)
     }
 }
 
 class FieldRecord {
-    constructor(public typeName: string, public type: ts.TypeNode | undefined, public name: string, public optional: boolean = false) {}
+    constructor(public typeName: string, public type: ts.TypeNode | undefined, public name: string, public optional: boolean = false) { }
 }
 
 class PendingTypeRequest {
-    constructor(public name: string, public type: ts.TypeNode) {}
+    constructor(public name: string, public type: ts.TypeNode) { }
 }
 
 export class DeclarationTable {
@@ -61,7 +61,7 @@ export class DeclarationTable {
     typeChecker: ts.TypeChecker | undefined = undefined
 
     getTypeName(type: ts.TypeNode, optional: boolean = false) {
-        let declaration  = this.typeMap.get(type)
+        let declaration = this.typeMap.get(type)
         if (!declaration) {
             this.requestType(undefined, type)
         }
@@ -72,7 +72,7 @@ export class DeclarationTable {
         return prefix + declaration[1]
     }
 
-    requestType(name: string|undefined, type: ts.TypeNode) {
+    requestType(name: string | undefined, type: ts.TypeNode) {
         let declaration = this.typeMap.get(type)
         if (declaration) {
             //if (name && name != declaration[1]) throw new Error(`Mismatch of names${optional ? "[optional]" : ""}: ${name} ${declaration[1]}`)
@@ -124,7 +124,7 @@ export class DeclarationTable {
 
     private pendingRequests = new Array<PendingTypeRequest>()
 
-    computeTypeName(suggestedName: string|undefined, type: ts.TypeNode, optional: boolean = false): string {
+    computeTypeName(suggestedName: string | undefined, type: ts.TypeNode, optional: boolean = false): string {
         let name = this.computeTypeNameImpl(suggestedName, type, optional)
         this.pendingRequests.push(new PendingTypeRequest(name, type))
         return name
@@ -195,8 +195,8 @@ export class DeclarationTable {
                     return undefined
                 }
             })
-            .filter(it => it != undefined)
-            .join("_")}`
+                .filter(it => it != undefined)
+                .join("_")}`
         }
         if (ts.isEnumDeclaration(target)) {
             return prefix + identName(target.name)
@@ -236,7 +236,7 @@ export class DeclarationTable {
         throw new Error(`Cannot compute target name: ${(target as any).getText()} ${(target as any).kind}`)
     }
 
-    private computeTypeNameImpl(suggestedName: string|undefined, type: ts.TypeNode, optional: boolean): string {
+    private computeTypeNameImpl(suggestedName: string | undefined, type: ts.TypeNode, optional: boolean): string {
         const prefix = optional ? "Optional_" : ""
         if (ts.isImportTypeNode(type)) {
             return prefix + identName(type.qualifier)!
@@ -250,7 +250,7 @@ export class DeclarationTable {
         }
         if (ts.isOptionalTypeNode(type)) {
             if (suggestedName) return suggestedName
-            return "Optional_" +  this.computeTypeNameImpl(undefined, type.type, false)
+            return "Optional_" + this.computeTypeNameImpl(undefined, type.type, false)
         }
         if (ts.isTupleTypeNode(type)) {
             if (suggestedName) return suggestedName
@@ -268,8 +268,8 @@ export class DeclarationTable {
                     return undefined
                 }
             })
-            .filter(it => it != undefined)
-            .join("_")}`
+                .filter(it => it != undefined)
+                .join("_")}`
         }
         if (ts.isFunctionTypeNode(type)) {
             return prefix + "Function"
@@ -428,7 +428,7 @@ export class DeclarationTable {
         throw new Error(`Unknown kind: ${declaration.kind}`)
     }
 
-    ignoredStruct(name: string) : boolean {
+    ignoredStruct(name: string): boolean {
         return ["Resource", "Number", "Boolean", "String", "Optional_Number", "Optional_Boolean", "Optional_String"].includes(name)
     }
 
@@ -449,33 +449,78 @@ export class DeclarationTable {
         printer.print(`};`)
         seenNames.clear()
         for (let x of this.declarations.values()) {
-            if (seenNames.has(x.nameBasic)) continue
-            if (x.nameOptional == x.nameBasic) continue
-            seenNames.add(x.nameBasic)
+            let nameBasic = x.nameBasic
+            let nameOptional = x.nameOptional
             let target = x.target
-            if (target instanceof PrimitiveType || this.ignoredStruct(x.nameBasic)) continue
+            if (seenNames.has(nameBasic)) continue
+            if (nameOptional == nameBasic) continue
+            seenNames.add(nameBasic)
+            if (target instanceof PrimitiveType || this.ignoredStruct(nameBasic)) continue
             structs.startEmit(this, target)
             if (ts.isEnumDeclaration(target)) {
-                structs.print(`typedef int32_t ${x.nameBasic};`)
-                structs.print(`typedef struct { int32_t tag; int32_t value; } ${x.nameOptional};`)
-                seenNames.add(x.nameOptional)
+                structs.print(`typedef int32_t ${nameBasic};`)
+                structs.print(`typedef struct { int32_t tag; int32_t value; } ${nameOptional};`)
+                structs.print(`template <>`)
+                structs.print(`inline void WriteToString(string* result, const ${nameOptional}& value) {}`)
                 continue
             }
             if (this.ignoreTarget(target)) continue
-            structs.print(`struct ${x.nameBasic} {`)
+            structs.print(`struct ${nameBasic} {`)
             structs.pushIndent()
-            this.targetFields(x.target).forEach((it, index) => {
-                structs.print(`${it.typeName} ${it.name};`)
-            })
+            this.targetFields(target).forEach(it => structs.print(`${it.typeName} ${it.name};`))
             structs.popIndent()
             structs.print(`};`)
-            //if (x.nameOptional == x.nameBasic) throw new Error("OK")
-            structs.print(`struct ${x.nameOptional} {`)
+            structs.print(`struct ${nameOptional} {`)
             structs.pushIndent()
             structs.print(`int32_t tag;`)
-            structs.print(`${x.nameBasic} value;`)
+            structs.print(`${nameBasic} value;`)
             structs.popIndent()
             structs.print(`};`)
+            structs.print(`template <>`)
+            structs.print(`inline void WriteToString(string* result, const ${nameBasic}& value) {`)
+            structs.pushIndent()
+            // TODO: make better
+            let isUnion = ts.isUnionTypeNode(target) || (ts.isParenthesizedTypeNode(target) &&  ts.isUnionTypeNode(target.type))
+            console.log(`ZZZ ${nameBasic} ${isUnion} ${asString(target)}`)
+            if (isUnion) {
+                structs.print(`result->append("${nameBasic} [variant ");`)
+                structs.print(`result->append(std::to_string(value.selector));`)
+                structs.print(`result->append("] ");`)
+                this.targetFields(target).forEach((field, index) => {
+                    if (index == 0) return
+                    structs.print(`if (value.selector == ${index - 1}) {`)
+                    structs.pushIndent()
+                    structs.print(`result->append("${field.name}=");`)
+                    structs.print(`WriteToString(result, value.${field.name});`)
+                    structs.popIndent()
+                    structs.print(`}`)
+                })
+            } else {
+                structs.print(`result->append("${nameBasic} {");`)
+                this.targetFields(target).forEach((field, index) => {
+                    if (index > 0) structs.print(`result->append(", ");`)
+                    structs.print(`result->append("${field.name}=");`)
+                    structs.print(`WriteToString(result, value.${field.name});`)
+                })
+            }
+            structs.print(`result->append("}");`)
+            structs.popIndent()
+            structs.print(`}`)
+            structs.print(`template <>`)
+            structs.print(`inline void WriteToString(string* result, const ${nameOptional}& value) {`)
+            structs.pushIndent()
+            structs.print(`result->append("${nameOptional} {");`)
+            structs.print(`result->append("tag=");`)
+            structs.print(`result->append(tagName((Tags)value.tag));`)
+            structs.print(`if (value.tag != TAG_UNDEFINED) {`)
+            structs.pushIndent()
+            structs.print(`result->append(" value=");`)
+            structs.print(`WriteToString(result, value.value);`)
+            structs.popIndent()
+            structs.print(`}`)
+            structs.print(`result->append("}");`)
+            structs.popIndent()
+            structs.print(`}`)
         }
         for (let x of this.typeMap.values()) {
             let record = this.declarations.get(x[0])!
@@ -505,14 +550,14 @@ export class DeclarationTable {
 
 
     targetFields(target: DeclarationTarget): FieldRecord[] {
-        let result: FieldRecord[]  = []
+        let result: FieldRecord[] = []
         if (target instanceof PrimitiveType) {
             result.push(new FieldRecord(target.name, undefined, "value"))
             return result
         }
         else if (ts.isArrayTypeNode(target)) {
             let typeName = this.computeTargetName(this.toTarget(target.elementType), false)
-            result.push(new FieldRecord(typeName+"*", target, "array"))
+            result.push(new FieldRecord(typeName + "*", target, "array"))
             result.push(new FieldRecord("int32_t", undefined, "array_length"))
         }
         else if (ts.isInterfaceDeclaration(target)) {
@@ -588,11 +633,9 @@ export class DeclarationTable {
     private generateSerializer(name: string, target: DeclarationTarget, printer: IndentedPrinter) {
         if (this.ignoreTarget(target)) return
         printer.pushIndent()
-        printer.print(`write${name}(value: ${name}|undefined) {`)
+        printer.print(`write${name}(value: ${name}) {`)
         printer.pushIndent()
         printer.print(`const valueSerializer = this`)
-        printer.print(`if (undefined === value) { valueSerializer.writeInt8(Tags.UNDEFINED); return }`)
-        printer.print(`valueSerializer.writeInt8(Tags.OBJECT)`)
         if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {
             let fields = this.targetFields(target)
             fields.forEach(it => {
@@ -610,7 +653,7 @@ export class DeclarationTable {
         printer.popIndent()
     }
 
-    private ignoreTarget(target: DeclarationTarget): target is PrimitiveType|ts.EnumDeclaration  {
+    private ignoreTarget(target: DeclarationTarget): target is PrimitiveType | ts.EnumDeclaration {
         if (PeerGeneratorConfig.ignoreSerialization.includes(this.computeTargetName(target, false))) return true
         if (target instanceof PrimitiveType) return true
         if (ts.isEnumDeclaration(target)) return true

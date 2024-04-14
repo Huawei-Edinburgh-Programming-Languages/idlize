@@ -33,6 +33,7 @@ struct MyDeserializer : CustomDeserializer {
         fprintf(stderr, "native deserialize() for %s, got %s\n", kind.c_str(), value.chars);
         CustomObject result;
         strcpy(result.kind, "NativeError");
+        result.id = 0;
         strcat(result.kind, kind.c_str());
         return result;
     }

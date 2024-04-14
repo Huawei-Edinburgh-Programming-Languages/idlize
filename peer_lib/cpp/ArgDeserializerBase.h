@@ -51,7 +51,7 @@ enum Tags
 typedef float float32_t;
 
 template <typename T>
-inline void WriteToString(string* result, const T& value) {}
+inline void WriteToString(string* result, const T& value) = delete;
 
 struct String
 {
@@ -73,7 +73,7 @@ struct String
 
 template <>
 inline void WriteToString(string* result, const String& value) {
-  *result += value.chars;
+  result->append(value.chars);
 }
 
 template <>
@@ -122,7 +122,10 @@ struct Number
 
 template <>
 inline void WriteToString(string* result, const Number& value) {
-  *result += std::to_string(value.i32);
+  if (value.tag == TAG_FLOAT32)
+    result->append(std::to_string(value.f32));
+  else
+    result->append(std::to_string(value.i32));
 }
 
 struct Array
@@ -171,7 +174,6 @@ inline void WriteToString(string* result, const Length& value) {
   result->append(std::to_string(value.value));
   result->append(", unit=" + string(getUnitName(value.unit)));
   result->append(", resource=" + std::to_string(value.resource));
-  result->append(std::to_string(value.value));
   result->append("}");
 }
 
@@ -186,23 +188,6 @@ struct Undefined
 template <>
 inline void WriteToString(string* result, const Undefined& value) {
 }
-
-template <typename T>
-struct Tagged
-{
-  Tags tag;
-  T value;
-  /*
-  union {
-    Number number;
-    String string;
-    Length length;
-    Resource resource;
-    void* object;
-  };
-  */
-  void (*object_print_function)(std::string*, void*);
-};
 
 inline const char* tagName(Tags tag) {
   switch (tag) {
@@ -262,7 +247,7 @@ protected:
   uint8_t *data;
   int32_t length;
   int32_t position;
-  std::vector<void*> to_clean;
+  std::vector<void*> toClean;
 
   static CustomDeserializer* customDeserializers;
 public:
@@ -270,7 +255,7 @@ public:
       : data(data), length(length), position(0) {}
 
   ~ArgDeserializerBase() {
-    for (auto data: to_clean) {
+    for (auto data: toClean) {
       free(data);
     }
   }
@@ -285,7 +270,6 @@ public:
     }
   }
 
-  std::vector<void*> toClean;
   template <typename T, typename E>
   void resizeArray(T* array, int32_t length) {
     void* value = malloc(length * sizeof(T));
@@ -389,18 +373,6 @@ public:
     return result;
   }
 
-  Tagged<CustomObject> readAttributeModifier() {
-    Tagged<CustomObject> result;
-    result.tag = (Tags)readInt8();
-    return result;
-  }
-
-  Tagged<CustomObject> readContentModifier() {
-    Tagged<CustomObject> result;
-    result.tag = (Tags)readInt8();
-    return result;
-  }
-
   Undefined readUndefined()
   {
     return Undefined();
@@ -411,7 +383,7 @@ public:
     String result;
     int32_t length = readInt32();
     check(length);
-    // TODO: no need to copy.
+    // We refer to string data in-place.
     result.chars = (const char*)(data + position);
     position += length;
     return result;
@@ -433,3 +405,44 @@ public:
   }
 
 };
+
+typedef KBoolean Boolean;
+typedef CustomObject Resource;
+typedef struct { int32_t tag; Number value;} Optional_Number;
+typedef struct { int32_t tag; Boolean value;} Optional_Boolean;
+typedef struct { int32_t tag; String value;} Optional_String;
+typedef struct { int32_t tag; Function value;} Optional_Function;
+
+inline void WriteToString(string* result, const Optional_Number& value) {
+    if (value.tag != TAG_UNDEFINED)
+        WriteToString(result, value.value);
+    else
+        result->append("undefined");
+}
+inline void WriteToString(string* result, const Boolean& value) {
+    result->append(value ? "true" : "false");
+}
+inline void WriteToString(string* result, const Optional_Boolean& value) {
+    if (value.tag != TAG_UNDEFINED)
+        WriteToString(result, value.value);
+    else
+        result->append("undefined");
+}
+inline void WriteToString(string* result, const String& value) {
+    if (value.chars)
+      result->append(value.chars);
+    else
+      result->append("<null>");
+}
+inline void WriteToString(string* result, String* value) {
+    result->append("XXX6");
+}
+inline void WriteToString(string* result, Number* value) {
+    result->append("XXX7");
+}
+inline void WriteToString(string* result, int32_t* value) {
+    result->append("XXX8");
+}
+inline void WriteToString(string* result, Boolean* value) {}
+inline void WriteToString(string* result, const Optional_String& value) {}
+inline void WriteToString(string* result, const Optional_Function& value) {}

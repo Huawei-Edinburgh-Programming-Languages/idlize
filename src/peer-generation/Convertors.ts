@@ -399,7 +399,8 @@ export class OptionConvertor extends BaseArgConvertor {
         printer.print(`${param}Serializer.writeInt8(${value}_type)`)
         printer.print(`if (${value}_type != RuntimeType.UNDEFINED) {`)
         printer.pushIndent()
-        this.typeConvertor.convertorToTSSerial(param, value, printer)
+        printer.print(`const ${value}_value = ${value}!`)
+        this.typeConvertor.convertorToTSSerial(param, `${value}_value`, printer)
         printer.popIndent()
         printer.print(`}`)
     }
