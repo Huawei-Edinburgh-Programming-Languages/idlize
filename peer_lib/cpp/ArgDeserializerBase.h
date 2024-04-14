@@ -57,17 +57,17 @@ struct String
 {
   // TODO: rework!
 #ifdef __cplusplus
-  String() : capacity(0), chars(0) {}
+  String() : length(0), chars(0) {}
   String(const KStringPtr& other) {
-    this->capacity = other.length();
+    this->length = other.length();
     this->chars = other.c_str();
   }
   void operator=(const KStringPtr& other) {
-    this->capacity = other.length();
+    this->length = other.length();
     this->chars = other.c_str();
   }
 #endif
-  size_t capacity;
+  size_t length;
   const char* chars;
 };
 
@@ -304,17 +304,16 @@ public:
       return result;
   }
 
-  int8_t readInt8()
-  {
+  int8_t readInt8() {
     check(1);
-    auto value = *(data + position);
+    int8_t value = *(data + position);
     position += 1;
     return value;
   }
   bool readBoolean()
   {
     check(1);
-    auto value = *(data + position);
+    int8_t value = *(data + position);
     position += 1;
     return value;
   }
@@ -385,7 +384,8 @@ public:
     check(length);
     // We refer to string data in-place.
     result.chars = (const char*)(data + position);
-    position += length;
+    result.length = length;
+    this->position += length;
     return result;
   }
 

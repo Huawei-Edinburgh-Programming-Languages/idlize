@@ -481,7 +481,6 @@ export class DeclarationTable {
             structs.pushIndent()
             // TODO: make better
             let isUnion = ts.isUnionTypeNode(target) || (ts.isParenthesizedTypeNode(target) &&  ts.isUnionTypeNode(target.type))
-            console.log(`ZZZ ${nameBasic} ${isUnion} ${asString(target)}`)
             if (isUnion) {
                 structs.print(`result->append("${nameBasic} [variant ");`)
                 structs.print(`result->append(std::to_string(value.selector));`)
@@ -664,7 +663,7 @@ export class DeclarationTable {
         if (this.ignoreTarget(target)) return
         printer.print(`${name} read${name}() {`)
         printer.pushIndent()
-        printer.print(`auto valueDeserializer = *this;`)
+        printer.print(`Deserializer& valueDeserializer = *this;`)
         printer.print(`${name} value;`)
         if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {
             let fields = this.targetFields(target)
