@@ -68,13 +68,15 @@ function checkButton() {
         }),
         "bindSheet(false, Custom kind=NativeErrorFunction id=0, Optional_SheetOptions " +
         "{tag=OBJECT value=SheetOptions {title=Optional_SheetTitleOptions {tag=OBJECT value=SheetTitleOptions " +
-        "{title=Union_String_Resource [variant 1] value1=Custom kind=NativeErrorResource id=0}, " +
+        "{title=Union_String_Resource [variant 1] value1=Custom kind=NativeErrorResource id=0, " +
         "subtitle=Optional_Union_String_Resource {tag=UNDEFINED}}}, " +
         "detents=Optional_Tuple_Union_SheetSize_Length_Optional_Union_SheetSize_Length_Optional_Union_SheetSize_Length {tag=UNDEFINED}}})"
         )
     checkResult("type", () => peer.type(1), "type(1)")
-    checkResult("labelStyle", () => peer.labelStyle({maxLines: 3}),
+    checkResult("labelStyle1", () => peer.labelStyle({maxLines: 3}),
         "labelStyle(LabelStyle {maxLines=3})")
+    checkResult("labelStyle2", () => peer.labelStyle({}),
+        "labelStyle(LabelStyle {maxLines=undefined})")
 }
 
 function checkCalendar() {
@@ -82,7 +84,7 @@ function checkCalendar() {
     checkResult("edgeAlign1", () => peer.edgeAlign(2, {dx: 5, dy: 6}),
        "edgeAlign(2, Optional_Literal_Length_Length {tag=OBJECT " +
     "value=Literal_Length_Length {dx=Length {value=5.000000, unit=vp, resource=0}, dy=Length {value=6.000000, unit=vp, resource=0}}})")
-    checkResult("edgeAlign2", () => peer.edgeAlign(2, undefined),
+    checkResult("edgeAlign2", () => peer.edgeAlign(2),
         "edgeAlign(2, Optional_Literal_Length_Length {tag=UNDEFINED})")
 }
 

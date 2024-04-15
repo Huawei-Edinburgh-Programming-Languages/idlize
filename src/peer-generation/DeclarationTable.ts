@@ -580,7 +580,6 @@ export class DeclarationTable {
             structs.print(`inline void WriteToString(string* result, const ${nameBasic}& value) {`)
             structs.pushIndent()
             this.generateWriteToString(nameBasic, target, structs)
-            structs.print(`result->append("}");`)
             structs.popIndent()
             structs.print(`}`)
 
@@ -662,6 +661,7 @@ export class DeclarationTable {
             printer.print(`WriteToString(result, value.array[i]);`)
             printer.popIndent()
             printer.print(`}`)
+            printer.print(`if (count < value.array_length) result->append(", ...");`)
             printer.print(`result->append("]}");`)
         } else {
             printer.print(`result->append("${name} {");`)
@@ -670,6 +670,7 @@ export class DeclarationTable {
                 printer.print(`result->append("${field.name}=");`)
                 printer.print(`WriteToString(result, value.${field.name});`)
             })
+            printer.print(`result->append("}");`)
         }
     }
 
