@@ -271,10 +271,11 @@ public:
   }
 
   template <typename T, typename E>
-  void resizeArray(T* array, int32_t length) {
+  void resizeArray(T& array, int32_t length) {
     void* value = malloc(length * sizeof(T));
     toClean.push_back(value);
-    array->array = reinterpret_cast<E*>(value);
+    array.array_length = length;
+    array.array = reinterpret_cast<E*>(value);
   }
 
   int32_t currentPosition() const { return this->position; }
