@@ -215,6 +215,13 @@ struct CustomObject {
   void* pointers[4];
 };
 
+struct Undefined {
+};
+
+inline void WriteToString(string* result, const Undefined& value) {
+  result->append("undefined");
+}
+
 typedef CustomObject Function;
 typedef CustomObject Callback;
 typedef CustomObject ErrorCallback;
@@ -400,6 +407,9 @@ public:
     return readFunction();
   }
 
+  Undefined readUndefined() {
+    return Undefined();
+  }
 };
 
 typedef KBoolean Boolean;
