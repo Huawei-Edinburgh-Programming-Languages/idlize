@@ -20,8 +20,8 @@ import { DeclarationTable, DeclarationTarget } from "./DeclarationTable";
 
 export class SortingEmitter extends IndentedPrinter {
     currentPrinter?: IndentedPrinter
-    emitters = new Map<string, IndentedPrinter>()
-    deps = new Map<string, Set<string>>()
+    emitters = new Map<DeclarationTarget, IndentedPrinter>()
+    deps = new Map<DeclarationTarget, Set<DeclarationTarget>>()
 
     constructor(private table: DeclarationTable) {
         super()
@@ -32,26 +32,24 @@ export class SortingEmitter extends IndentedPrinter {
         return name
     }
 
-    private fillDeps(target: DeclarationTarget, seen: Set<string>) {
-        let name = this.deoptional(this.table!.computeTargetName(target, false))
-        if (seen.has(name)) return
-        seen.add(name)
+    private fillDeps(target: DeclarationTarget, seen: Set<DeclarationTarget>) {
+        if (seen.has(target)) return
+        seen.add(target)
         let fields = this.table.targetFields(target)
         fields.forEach(it => {
-            seen.add(this.deoptional(it.typeName))
+            seen.add(it.fieldDeclaration)
         })
     }
 
     startEmit(table: DeclarationTable, declaration: DeclarationTarget) {
         this.table = table
-        let name = this.deoptional(table.computeTargetName(declaration, false))
-        let next = this.emitters.has(name) ? this.emitters.get(name)! : new IndentedPrinter()
-        this.emitters.set(name, next)
+        let next = this.emitters.has(declaration) ? this.emitters.get(declaration)! : new IndentedPrinter()
+        this.emitters.set(declaration, next)
         this.currentPrinter = next
-        let seen = new Set<string>()
+        let seen = new Set<DeclarationTarget>()
         this.fillDeps(declaration, seen)
-        seen.delete(name)
-        this.deps.set(name, seen)
+        seen.delete(declaration)
+        this.deps.set(declaration, seen)
         table.processPendingRequests()
         // if (seen.size > 0) console.log(`${name}: depends on ${Array.from(seen.keys()).join(",")}`)
     }
@@ -84,12 +82,12 @@ export class SortingEmitter extends IndentedPrinter {
         return result
     }
 
-    getToposorted(): Array<string> {
+    getToposorted(): Array<DeclarationTarget> {
         // Not exactly correct for non-named types.
         let source = new Set(Array.from(this.emitters.keys()))
-        let result: string[] = []
+        let result: DeclarationTarget[] = []
         // N^2, but nobody cares
-        let added: Set<string> = new Set()
+        let added: Set<DeclarationTarget> = new Set()
         while (source.size > added.size) {
             source.forEach(it => {
                 if (added.has(it)) return

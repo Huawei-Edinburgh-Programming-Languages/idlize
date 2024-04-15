@@ -35,6 +35,7 @@ class PrimitiveType {
     static Undefined = new PrimitiveType("Undefined")
     static Length = new PrimitiveType("Length")
     static CustomObject = new PrimitiveType("CustomObject")
+    static Int32 = new PrimitiveType("int32_t")
 }
 
 export type DeclarationTarget =
@@ -55,7 +56,7 @@ class DeclarationRecord {
 }
 
 class FieldRecord {
-    constructor(public typeName: string, public type: ts.TypeNode | undefined, public name: string, public optional: boolean = false) { }
+    constructor(public fieldDeclaration: DeclarationTarget, public type: ts.TypeNode | undefined, public name: string, public optional: boolean = false) { }
 }
 
 class PendingTypeRequest {
@@ -129,6 +130,8 @@ export class DeclarationTable {
         }
         if (type.kind == ts.SyntaxKind.BooleanKeyword)
             return PrimitiveType.Boolean
+        if (type.kind == ts.SyntaxKind.UndefinedKeyword)
+            return PrimitiveType.Undefined
         if (type.kind == ts.SyntaxKind.NumberKeyword)
             return PrimitiveType.Number
         if (type.kind == ts.SyntaxKind.StringKeyword)
@@ -210,6 +213,7 @@ export class DeclarationTable {
         if (!(target instanceof PrimitiveType) && (
             !ts.isInterfaceDeclaration(target) && !ts.isClassDeclaration(target) && !ts.isEnumDeclaration(target))
         ) {
+            // TODO: make it a set
             this.pendingRequests.push(new PendingTypeRequest(name, target))
         }
         return name
@@ -529,21 +533,53 @@ export class DeclarationTable {
     }
 
     ignoredStruct(name: string): boolean {
-        return ["Resource", "Number", "Boolean", "String", "Optional_Number", "Optional_Boolean", "Optional_String"].includes(name)
+    return ["Resource", "Number", "Boolean", "String" /*, "Optional_Number", "Optional_Boolean", "Optional_String" */].includes(name)
     }
+
+    private noUniqueNamedFields(declaration: DeclarationTarget): boolean {
+        let fields = this.targetFields(declaration)
+        if (declaration instanceof PrimitiveType) return true
+        if (!ts.isInterfaceDeclaration(declaration) && !ts.isClassDeclaration(declaration) && ts.isLiteralTypeNode(declaration)) return true
+        return fields.length == 0 || fields.every((it, index) => it.name == `value${index}`)
+    }
+    private assignUniqueNames() {
+        let seenNames = new Map<string, Array<DeclarationTarget>>()
+        for (let declaration of this.declarations.values()) {
+            if (seenNames.has(declaration.nameBasic)) {
+                seenNames.get(declaration.nameBasic)!.push(declaration.target)
+            } else {
+                seenNames.set(declaration.nameBasic, [declaration.target])
+            }
+        }
+        for (let name of seenNames.keys()) {
+            if (seenNames.get(name)!.length > 1) {
+                let declarations = seenNames.get(name)!
+                // If we have no named fields - no need to make unique.
+                if (declarations.every(it => this.noUniqueNamedFields(it))) continue
+                console.log(`for ${name} we have ${declarations.length} decls`)
+                declarations.forEach((declaration, index) => {
+                    let record = this.declarations.get(declaration)!
+                    record.nameBasic = `${record.nameBasic}_${index}`
+                    record.nameOptional = `${record.nameOptional}_${index}`
+                })
+            }
+        }
+    }
+
 
     generateDeserializers(printer: IndentedPrinter, structs: SortingEmitter, typedefs: IndentedPrinter) {
         this.processPendingRequests()
-        let seenNames = new Set<string>()
+        this.assignUniqueNames()
+        let seenNames = new Map<string, DeclarationTarget>()
         printer.print(`class Deserializer : public ArgDeserializerBase {`)
         printer.print(` public:`)
         printer.pushIndent()
         printer.print(`Deserializer(uint8_t *data, int32_t length) : ArgDeserializerBase(data, length) {}`)
 
-        for (let x of this.declarations.values()) {
-            if (seenNames.has(x.nameBasic)) continue
-            seenNames.add(x.nameBasic)
-            this.generateDeserializer(x.nameBasic, x.target, printer)
+        for (let declaration of this.declarations.values()) {
+            if (seenNames.has(declaration.nameBasic)) continue
+            seenNames.set(declaration.nameBasic, declaration.target)
+            this.generateDeserializer(declaration.nameBasic, declaration.target, printer)
         }
         printer.popIndent()
         printer.print(`};`)
@@ -552,9 +588,9 @@ export class DeclarationTable {
             let nameBasic = declaration.nameBasic
             let nameOptional = declaration.nameOptional
             let target = declaration.target
-            if (seenNames.has(nameBasic)) continue
             if (nameOptional == nameBasic) continue
-            seenNames.add(nameBasic)
+            if (seenNames.has(nameBasic)) continue
+            seenNames.set(nameBasic, target)
             if (target instanceof PrimitiveType || this.ignoredStruct(nameBasic)) continue
             structs.startEmit(this, target)
             if (ts.isEnumDeclaration(target)) {
@@ -567,7 +603,7 @@ export class DeclarationTable {
             if (this.ignoreTarget(target)) continue
             structs.print(`struct ${nameBasic} {`)
             structs.pushIndent()
-            this.targetFields(target).forEach(it => structs.print(`${it.typeName} ${it.name};`))
+            this.targetFields(target).forEach(it => structs.print(`${this.computeTargetName(it.fieldDeclaration, it.optional)} ${it.name};`))
             structs.popIndent()
             structs.print(`};`)
             structs.print(`struct ${nameOptional} {`)
@@ -625,7 +661,7 @@ export class DeclarationTable {
             let record = this.declarations.get(declarationTarget[0])!
             if (seenNames.has(declarationTarget[1])) continue
             if (PeerGeneratorConfig.ignoreSerialization.includes(declarationTarget[1])) continue
-            seenNames.add(declarationTarget[1])
+            seenNames.set(declarationTarget[1], declarationTarget[0])
             typedefs.print(`typedef ${record.nameBasic} ${declarationTarget[1]};`)
             typedefs.print(`typedef ${record.nameOptional} Optional_${declarationTarget[1]};`)
 
@@ -651,13 +687,12 @@ export class DeclarationTable {
     targetFields(target: DeclarationTarget): FieldRecord[] {
         let result: FieldRecord[] = []
         if (target instanceof PrimitiveType) {
-            result.push(new FieldRecord(target.name, undefined, "value"))
+            result.push(new FieldRecord(target, undefined, "value"))
             return result
         }
         else if (ts.isArrayTypeNode(target)) {
-            let typeName = this.computeTargetName(this.toTarget(target.elementType), false)
-            result.push(new FieldRecord(typeName + "*", target, "array"))
-            result.push(new FieldRecord("int32_t", undefined, "array_length"))
+            result.push(new FieldRecord(target, target, "array"))
+            result.push(new FieldRecord(PrimitiveType.Int32, undefined, "array_length"))
         }
         else if (ts.isInterfaceDeclaration(target)) {
             target
@@ -665,8 +700,8 @@ export class DeclarationTable {
                 .filter(ts.isPropertySignature)
                 .filter(it => !isStatic(it.modifiers))
                 .forEach(it => {
-                    let typeName = this.computeTargetName(this.toTarget(it.type!), it.questionToken != undefined)
-                    result.push(new FieldRecord(typeName, it.type!, identName(it.name)!, it.questionToken != undefined))
+                    this.requestType(undefined, it.type!)
+                    result.push(new FieldRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
                 })
         }
         else if (ts.isClassDeclaration(target)) {
@@ -675,17 +710,17 @@ export class DeclarationTable {
                 .filter(ts.isPropertyDeclaration)
                 .filter(it => !isStatic(it.modifiers))
                 .forEach(it => {
-                    let typeName = this.computeTargetName(this.toTarget(it.type!), it.questionToken != undefined)
-                    result.push(new FieldRecord(typeName, it.type!, identName(it.name)!, it.questionToken != undefined))
+                    this.requestType(undefined, it.type!)
+                    result.push(new FieldRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
                 })
         }
         else if (ts.isUnionTypeNode(target)) {
-            result.push(new FieldRecord("int32_t", undefined, `selector`, false))
+            result.push(new FieldRecord(PrimitiveType.Int32, undefined, `selector`, false))
             target
                 .types
                 .forEach((it, index) => {
-                    let typeName = this.computeTargetName(this.toTarget(it), false)
-                    result.push(new FieldRecord(typeName, it, `value${index}`, false))
+                    this.requestType(undefined, it)
+                    result.push(new FieldRecord(this.toTarget(it), it, `value${index}`, false))
                 })
         }
         else if (ts.isTypeLiteralNode(target)) {
@@ -693,33 +728,35 @@ export class DeclarationTable {
                 .members
                 .filter(ts.isPropertySignature)
                 .forEach(it => {
-                    let typeName = this.computeTargetName(this.toTarget(it.type!), it.questionToken != undefined)
-                    result.push(new FieldRecord(typeName, it.type, identName(it.name)!, it.questionToken != undefined))
+                    this.requestType(undefined, it.type!)
+                    result.push(new FieldRecord(this.toTarget(it.type!), it.type, identName(it.name)!, it.questionToken != undefined))
                 })
+        }
+        else if (ts.isTemplateLiteralTypeNode(target)) {
         }
         else if (ts.isTupleTypeNode(target)) {
             target
                 .elements
                 .forEach((it, index) => {
                     if (ts.isNamedTupleMember(it)) {
-                        let typeName = this.computeTargetName(this.toTarget(it.type!), it.questionToken != undefined)
-                        result.push(new FieldRecord(typeName, it.type!, identName(it.name)!, it.questionToken != undefined))
+                        //let typeName = this.computeTargetName(this.toTarget(it.type!), it.questionToken != undefined)
+                        result.push(new FieldRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
                     } else {
-                        let typeName = this.computeTargetName(this.toTarget(it), false)
-                        result.push(new FieldRecord(typeName, it, `value${index}`, false))
+                        //let typeName = this.computeTargetName(this.toTarget(it), false)
+                        result.push(new FieldRecord(this.toTarget(it), it, `value${index}`, false))
                     }
                 })
         }
         else if (ts.isOptionalTypeNode(target)) {
-            result.push(new FieldRecord("int32_t", undefined, "tag"))
-            result.push(new FieldRecord(this.computeTargetName(this.toTarget(target.type), false), undefined, "value"))
+            result.push(new FieldRecord(PrimitiveType.Int32, undefined, "tag"))
+            result.push(new FieldRecord(this.toTarget(target.type), undefined, "value"))
         }
         else if (ts.isParenthesizedTypeNode(target)) {
             // TODO: is it correct?
             return this.targetFields(this.toTarget(target.type))
         }
         else if (ts.isEnumDeclaration(target)) {
-            result.push(new FieldRecord("int32_t", undefined, "value"))
+            result.push(new FieldRecord(PrimitiveType.Int32, undefined, "value"))
         }
         else if (ts.isFunctionTypeNode(target)) {
         }
@@ -731,11 +768,16 @@ export class DeclarationTable {
         return result
     }
 
+    private mapSerializerType(name: string): string {
+        if (name == "ContentModifier") return "ContentModifier<any>"
+        return name
+    }
+
     private generateSerializer(name: string, target: DeclarationTarget, printer: IndentedPrinter) {
         if (this.ignoreTarget(target)) return
         printer.pushIndent()
         //printer.print(`write${name}(value: ${mapType(this.typeChecker!, target as ts.TypeNode)}) {`)
-        printer.print(`write${name}(value: ${name}) {`)
+        printer.print(`write${name}(value: ${this.mapSerializerType(name)}) {`)
         printer.pushIndent()
         printer.print(`const valueSerializer = this`)
         if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {

@@ -412,8 +412,18 @@ typedef struct { int32_t tag; Number value;} Optional_Number;
 typedef struct { int32_t tag; Boolean value;} Optional_Boolean;
 typedef struct { int32_t tag; String value;} Optional_String;
 typedef struct { int32_t tag; Function value;} Optional_Function;
+typedef struct { int32_t tag; Length value;} Optional_Length;
+typedef struct { int32_t tag; Callback value;} Optional_Callback;
+typedef struct { int32_t tag; CustomObject value;} Optional_CustomObject;
+typedef struct { int32_t tag; Array value;} Optional_Array;
 
 inline void WriteToString(string* result, const Optional_Number& value) {
+    if (value.tag != TAG_UNDEFINED)
+        WriteToString(result, value.value);
+    else
+        result->append("undefined");
+}
+inline void WriteToString(string* result, const Optional_Length& value) {
     if (value.tag != TAG_UNDEFINED)
         WriteToString(result, value.value);
     else
@@ -443,6 +453,36 @@ inline void WriteToString(string* result, Number* value) {
 inline void WriteToString(string* result, int32_t* value) {
     result->append("XXX8");
 }
-inline void WriteToString(string* result, Boolean* value) {}
-inline void WriteToString(string* result, const Optional_String& value) {}
-inline void WriteToString(string* result, const Optional_Function& value) {}
+inline void WriteToString(string* result, Boolean* value) {
+  result->append("XXX9");
+}
+inline void WriteToString(string* result, Optional_Callback* value) {
+    result->append("XXX7");
+}
+inline void WriteToString(string* result, const Optional_String& value) {
+  if (value.tag != TAG_UNDEFINED)
+    WriteToString(result, value.value);
+  else
+    result->append("undefined");
+}
+inline void WriteToString(string* result, const Optional_Function& value) {
+  if (value.tag != TAG_UNDEFINED)
+    WriteToString(result, value.value);
+  else
+    result->append("undefined");
+}
+inline void WriteToString(string* result, const Optional_Callback& value) {
+  if (value.tag != TAG_UNDEFINED)
+    WriteToString(result, value.value);
+  else
+    result->append("undefined");
+}
+inline void WriteToString(string* result, const Optional_Array& value) {
+  if (value.tag != TAG_UNDEFINED)
+    WriteToString(result, value.value);
+  else
+    result->append("undefined");
+
+}
+
+
