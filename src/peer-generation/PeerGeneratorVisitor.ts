@@ -19,7 +19,6 @@ import {
     capitalize,
     componentName,
     dropSuffix,
-    forEachExpanding,
     identName,
     isCommonMethodOrSubclass,
     isDefined,
@@ -28,6 +27,7 @@ import {
     renameDtsToPeer,
     serializerBaseMethods,
     stringOrNone,
+    throwException
 } from "../util"
 import { GenericVisitor } from "../options"
 import { IndentedPrinter } from "../IndentedPrinter"
@@ -105,6 +105,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     private interfacesToGenerate: Set<string>
     private printerNativeModule: IndentedPrinter
     private printerNativeModuleEmpty: IndentedPrinter
+    private printerNodeTypes: IndentedPrinter
     private apiPrinter: IndentedPrinter
     private apiPrinterList: IndentedPrinter
     private dummyImpl: IndentedPrinter
@@ -123,6 +124,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         this.printerC = new IndentedPrinter(options.outputC)
         this.printerNativeModule = new IndentedPrinter(options.nativeModuleMethods)
         this.printerNativeModuleEmpty = new IndentedPrinter(options.nativeModuleEmptyMethods)
+        this.printerNodeTypes = new IndentedPrinter(options.nodeTypes)
         this.apiPrinter = new IndentedPrinter(options.apiHeaders)
         this.apiPrinterList = new IndentedPrinter(options.apiHeadersList)
         this.dummyImpl = new IndentedPrinter(options.dummyImpl)
@@ -250,7 +252,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
                 this.processProperty(child)
             }
         })
-        this.processApplyMethod(node)
         this.popIndentTS()
         this.epilogue(node)
         this.generateAttributesValuesInterfaces()
@@ -903,6 +904,12 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
             this.printerNativeModule.print(implDecl)
             this.printerNativeModuleEmpty.print(`${implDecl} { console.log("${originalName}") }`)
         })
+    }
+
+    private printNodeType(node: ts.ClassDeclaration): void {
+        this.printerNodeTypes.print(
+            this.renameToComponent(nameOrNull(node.name)!)
+        )
     }
 }
 
