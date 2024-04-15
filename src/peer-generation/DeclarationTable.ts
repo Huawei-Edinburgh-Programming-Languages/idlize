@@ -69,11 +69,11 @@ class FieldRecord {
 }
 
 class PendingTypeRequest {
-    constructor(public name: string, public type: ts.TypeNode) { }
+    constructor(public name: string, public type: ts.TypeNode|undefined) { }
 }
 
 export class DeclarationTable {
-    declarations = new Map<DeclarationTarget, DeclarationRecord>()
+    declarations = new Set<DeclarationTarget>()
     typeMap = new Map<ts.TypeNode, [DeclarationTarget, string]>()
     typeChecker: ts.TypeChecker | undefined = undefined
 
@@ -98,7 +98,7 @@ export class DeclarationTable {
         name = this.computeTypeName(undefined, type, false)
         let target = this.findDeclaration(type)
         if (!target) throw new Error(`Cannot find declaration: ${type.getText()}`)
-        this.declarations.set(target, new DeclarationRecord(target, this))
+        this.declarations.add(target)
         this.typeMap.set(type, [target, name])
     }
 
@@ -116,7 +116,11 @@ export class DeclarationTable {
         return false
     }
 
-    findDeclaration(type: ts.TypeNode): DeclarationTarget | undefined {
+    findDeclaration(type: ts.TypeNode): DeclarationTarget {
+        return this.toTarget(type)
+    }
+
+    findDeclaration0(type: ts.TypeNode): DeclarationTarget | undefined {
         if (this.isDeclarationTarget(type)) return type as DeclarationTarget
         if (ts.isTypeReferenceNode(type)) {
             let declarations = getDeclarationsByNode(this.typeChecker!, type.typeName)
@@ -169,11 +173,17 @@ export class DeclarationTable {
     processPendingRequests() {
         while (this.pendingRequests.length > 0) {
             let value = this.pendingRequests.splice(this.pendingRequests.length - 1, 1)[0]
-            this.requestType(value.name, value.type)
+            this.requestType(value.name, value.type!)
         }
     }
 
     toTarget(node: ts.TypeNode): DeclarationTarget {
+        let result = this.toTargetImpl(node)
+        this.declarations.add(result)
+        return result
+    }
+
+    private toTargetImpl(node: ts.TypeNode): DeclarationTarget {
         if (this.isDeclarationTarget(node)) return node as DeclarationTarget
         if (ts.isTypeReferenceNode(node)) {
             if (identName(node) == "Length") return PrimitiveType.Length
@@ -291,7 +301,6 @@ export class DeclarationTable {
         }
         if (ts.isOptionalTypeNode(target)) {
             let name = this.computeTargetName(this.toTarget(target.type), false)
-            this.pendingRequests.push(new PendingTypeRequest(name, target))
             return `Optional_${name}`
         }
         if (ts.isParenthesizedTypeNode(target)) {
@@ -545,16 +554,25 @@ export class DeclarationTable {
     private noUniqueNamedFields(declaration: DeclarationTarget): boolean {
         let fields = this.targetFields(declaration)
         if (declaration instanceof PrimitiveType) return true
-        if (!ts.isInterfaceDeclaration(declaration) && !ts.isClassDeclaration(declaration) && ts.isLiteralTypeNode(declaration)) return true
+        if (!ts.isInterfaceDeclaration(declaration)
+            && !ts.isClassDeclaration(declaration)
+            && !ts.isTypeLiteralNode(declaration)) return true
         return fields.length == 0
     }
+
+    private uniqueNames = new Map<DeclarationTarget, string>()
     private assignUniqueNames() {
+        for (let declaration of this.declarations) {
+            let name = this.computeTargetName(declaration, false)
+            this.uniqueNames.set(declaration, name)
+        }
+
         let seenNames = new Map<string, Array<DeclarationTarget>>()
-        for (let declaration of this.declarations.values()) {
-            if (seenNames.has(declaration.nameBasic)) {
-                seenNames.get(declaration.nameBasic)!.push(declaration.target)
+        for (let pair of this.uniqueNames) {
+            if (seenNames.has(pair[1])) {
+                seenNames.get(pair[1])!.push(pair[0])
             } else {
-                seenNames.set(declaration.nameBasic, [declaration.target])
+                seenNames.set(pair[1], [pair[0]])
             }
         }
         for (let name of seenNames.keys()) {
@@ -562,11 +580,8 @@ export class DeclarationTable {
                 let declarations = seenNames.get(name)!
                 // If we have no named fields - no need to make unique.
                 if (declarations.every(it => this.noUniqueNamedFields(it))) continue
-                console.log(`for ${name} we have ${declarations.length} decls`)
                 declarations.forEach((declaration, index) => {
-                    let record = this.declarations.get(declaration)!
-                    record.nameBasic = `${record.nameBasic}_${index}`
-                    record.nameOptional = `${record.nameOptional}_${index}`
+                    this.uniqueNames.set(declaration, `${name}_${index}`)
                 })
             }
         }
@@ -574,103 +589,112 @@ export class DeclarationTable {
 
     generateDeserializers(printer: IndentedPrinter, structs: SortingEmitter, typedefs: IndentedPrinter) {
         this.processPendingRequests()
-        //this.assignUniqueNames()
+        this.assignUniqueNames()
         let seenNames = new Set<string>()
         printer.print(`class Deserializer : public ArgDeserializerBase {`)
         printer.print(` public:`)
         printer.pushIndent()
         printer.print(`Deserializer(uint8_t *data, int32_t length) : ArgDeserializerBase(data, length) {}`)
 
-        for (let x of this.declarations.values()) {
-            if (seenNames.has(x.nameBasic)) continue
-            seenNames.add(x.nameBasic)
-            this.generateDeserializer(x.nameBasic, x.target, printer)
+        for (let declaration of this.declarations) {
+            let name = this.uniqueNames.get(declaration)!
+            if (seenNames.has(name)) continue
+            seenNames.add(name)
+            this.generateDeserializer(name, declaration, printer)
         }
         printer.popIndent()
         printer.print(`};`)
         seenNames.clear()
-        for (let declaration of this.declarations.values()) {
-            let nameBasic = declaration.nameBasic
-            let nameOptional = declaration.nameOptional
-            let target = declaration.target
+        for (let target of this.declarations) {
+            let nameBasic = this.uniqueNames.get(target)!
+            if ("Optional" == nameBasic) continue
+            let nameOptional = "Optional_" + nameBasic
             if (seenNames.has(nameBasic)) continue
-            if (nameOptional == nameBasic) continue
             seenNames.add(nameBasic)
-            if (target instanceof PrimitiveType || this.ignoredStruct(nameBasic)) continue
+            //if (target instanceof PrimitiveType || this.ignoredStruct(nameBasic)) continue
             structs.startEmit(this, target)
-            if (ts.isEnumDeclaration(target)) {
+            let isEnum = !(target instanceof PrimitiveType) && ts.isEnumDeclaration(target)
+            if (isEnum) {
                 structs.print(`typedef int32_t ${nameBasic};`)
                 structs.print(`typedef struct { int32_t tag; int32_t value; } ${nameOptional};`)
-                structs.print(`template <>`)
-                structs.print(`inline void WriteToString(string* result, const ${nameOptional}& value) {}`)
+                this.writeOptional(nameOptional, structs)
                 continue
             }
-            if (this.ignoreTarget(target)) continue
-            structs.print(`struct ${nameBasic} {`)
-            structs.pushIndent()
-            this.targetFields(target).forEach(it => structs.print(`${this.computeTargetName(it.declaration, it.optional)} ${it.name};`))
-            structs.popIndent()
-            structs.print(`};`)
+            let ignore = (target instanceof PrimitiveType) || this.ignoreTarget(target, nameBasic)
+            if (!ignore) {
+                structs.print(`struct ${nameBasic} {`)
+                structs.pushIndent()
+                this.targetFields(target).forEach(it => structs.print(`${this.computeTargetName(it.declaration, it.optional)} ${it.name};`))
+                structs.popIndent()
+                structs.print(`};`)
+            }
             structs.print(`struct ${nameOptional} {`)
             structs.pushIndent()
             structs.print(`int32_t tag;`)
             structs.print(`${nameBasic} value;`)
             structs.popIndent()
             structs.print(`};`)
-            structs.print(`template <>`)
-            structs.print(`inline void WriteToString(string* result, const ${nameBasic}& value) {`)
-            structs.pushIndent()
-            // TODO: make better
-            let isUnion = ts.isUnionTypeNode(target) || (ts.isParenthesizedTypeNode(target) &&  ts.isUnionTypeNode(target.type))
-            if (isUnion) {
-                structs.print(`result->append("${nameBasic} [variant ");`)
-                structs.print(`result->append(std::to_string(value.selector));`)
-                structs.print(`result->append("] ");`)
-                this.targetFields(target).forEach((field, index) => {
-                    if (index == 0) return
-                    structs.print(`if (value.selector == ${index - 1}) {`)
-                    structs.pushIndent()
-                    structs.print(`result->append("${field.name}=");`)
-                    structs.print(`WriteToString(result, value.${field.name});`)
-                    structs.popIndent()
-                    structs.print(`}`)
-                })
-            } else {
-                structs.print(`result->append("${nameBasic} {");`)
-                this.targetFields(target).forEach((field, index) => {
-                    if (index > 0) structs.print(`result->append(", ");`)
-                    structs.print(`result->append("${field.name}=");`)
-                    structs.print(`WriteToString(result, value.${field.name});`)
-                })
+            if (!ignore) {
+                structs.print(`template <>`)
+                structs.print(`inline void WriteToString(string* result, const ${nameBasic}& value) {`)
+                structs.pushIndent()
+                // TODO: make better
+                let isUnion = !(target instanceof PrimitiveType) &&
+                    (ts.isUnionTypeNode(target) || (ts.isParenthesizedTypeNode(target) && ts.isUnionTypeNode(target.type)))
+                if (isUnion) {
+                    structs.print(`result->append("${nameBasic} [variant ");`)
+                    structs.print(`result->append(std::to_string(value.selector));`)
+                    structs.print(`result->append("] ");`)
+                    this.targetFields(target).forEach((field, index) => {
+                        if (index == 0) return
+                        structs.print(`if (value.selector == ${index - 1}) {`)
+                        structs.pushIndent()
+                        structs.print(`result->append("${field.name}=");`)
+                        structs.print(`WriteToString(result, value.${field.name});`)
+                        structs.popIndent()
+                        structs.print(`}`)
+                    })
+                } else {
+                    structs.print(`result->append("${nameBasic} {");`)
+                    this.targetFields(target).forEach((field, index) => {
+                        if (index > 0) structs.print(`result->append(", ");`)
+                        structs.print(`result->append("${field.name}=");`)
+                        structs.print(`WriteToString(result, value.${field.name});`)
+                    })
+                }
+                structs.print(`result->append("}");`)
+                structs.popIndent()
+                structs.print(`}`)
             }
-            structs.print(`result->append("}");`)
-            structs.popIndent()
-            structs.print(`}`)
-            structs.print(`template <>`)
-            structs.print(`inline void WriteToString(string* result, const ${nameOptional}& value) {`)
-            structs.pushIndent()
-            structs.print(`result->append("${nameOptional} {");`)
-            structs.print(`result->append("tag=");`)
-            structs.print(`result->append(tagName((Tags)value.tag));`)
-            structs.print(`if (value.tag != TAG_UNDEFINED) {`)
-            structs.pushIndent()
-            structs.print(`result->append(" value=");`)
-            structs.print(`WriteToString(result, value.value);`)
-            structs.popIndent()
-            structs.print(`}`)
-            structs.print(`result->append("}");`)
-            structs.popIndent()
-            structs.print(`}`)
+            this.writeOptional(nameOptional, structs)
         }
         for (let declarationTarget of this.typeMap.values()) {
-            let record = this.declarations.get(declarationTarget[0])!
+            let name = this.uniqueNames.get(declarationTarget[0])!
             if (seenNames.has(declarationTarget[1])) continue
             if (PeerGeneratorConfig.ignoreSerialization.includes(declarationTarget[1])) continue
             seenNames.add(declarationTarget[1])
-            typedefs.print(`typedef ${record.nameBasic} ${declarationTarget[1]};`)
-            typedefs.print(`typedef ${record.nameOptional} Optional_${declarationTarget[1]};`)
+            typedefs.print(`typedef ${name} ${declarationTarget[1]};`)
+            typedefs.print(`typedef Optional_${name} Optional_${declarationTarget[1]};`)
 
         }
+    }
+
+    writeOptional(nameOptional: string, structs: IndentedPrinter) {
+        structs.print(`template <>`)
+        structs.print(`inline void WriteToString(string* result, const ${nameOptional}& value) {`)
+        structs.pushIndent()
+        structs.print(`result->append("${nameOptional} {");`)
+        structs.print(`result->append("tag=");`)
+        structs.print(`result->append(tagName((Tags)value.tag));`)
+        structs.print(`if (value.tag != TAG_UNDEFINED) {`)
+        structs.pushIndent()
+        structs.print(`result->append(" value=");`)
+        structs.print(`WriteToString(result, value.value);`)
+        structs.popIndent()
+        structs.print(`}`)
+        structs.print(`result->append("}");`)
+        structs.popIndent()
+        structs.print(`}`)
     }
 
     generateSerializers(printer: IndentedPrinter) {
@@ -678,11 +702,12 @@ export class DeclarationTable {
         printer.print(`export class Serializer extends SerializerBase {`)
         printer.pushIndent()
         for (let declaration of this.declarations.values()) {
-            if (seenNames.has(declaration.nameBasic)) continue
-            seenNames.add(declaration.nameBasic)
-            if (declaration.target instanceof PrimitiveType) continue
-            if (ts.isInterfaceDeclaration(declaration.target) || ts.isClassDeclaration(declaration.target))
-                this.generateSerializer(declaration.nameBasic, declaration.target, printer)
+            let name = this.computeTargetName(declaration, false)
+            if (seenNames.has(name)) continue
+            seenNames.add(name)
+            if (declaration instanceof PrimitiveType) continue
+            if (ts.isInterfaceDeclaration(declaration) || ts.isClassDeclaration(declaration))
+                this.generateSerializer(name, declaration, printer)
         }
         printer.popIndent()
         printer.print(`}`)
@@ -761,17 +786,30 @@ export class DeclarationTable {
         }
         else if (ts.isImportTypeNode(target)) {
         }
-        else {
-            throw new Error(`Unsupported field getter: ${(target as any).getText()}`)
+        else if (ts.isTemplateLiteralTypeNode(target)) {
+        }
+        else if (ts.isLiteralTypeNode(target)) {
+        }
+        else if (ts.isTypeParameterDeclaration(target)) {
+        }
+        else if (ts.isEnumMember(target)) {
+        } else {
+            throw new Error(`Unsupported field getter: ${asString(target)} ${(target as any).getText()}`)
         }
         return result
     }
 
+    private translateSerializerParam(name: string, target: DeclarationTarget): string {
+        // TODO: hack, fix it!
+        if (name == "ContentModifier") return "ContentModifier<any>"
+        return name
+    }
+
     private generateSerializer(name: string, target: DeclarationTarget, printer: IndentedPrinter) {
-        if (this.ignoreTarget(target)) return
+        if (this.ignoreTarget(target, name)) return
         printer.pushIndent()
         //printer.print(`write${name}(value: ${mapType(this.typeChecker!, target as ts.TypeNode)}) {`)
-        printer.print(`write${name}(value: ${name}) {`)
+        printer.print(`write${name}(value: ${this.translateSerializerParam(name, target)}) {`)
         printer.pushIndent()
         printer.print(`const valueSerializer = this`)
         if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {
@@ -791,15 +829,15 @@ export class DeclarationTable {
         printer.popIndent()
     }
 
-    private ignoreTarget(target: DeclarationTarget): target is PrimitiveType | ts.EnumDeclaration {
-        if (PeerGeneratorConfig.ignoreSerialization.includes(this.computeTargetName(target, false))) return true
+    private ignoreTarget(target: DeclarationTarget, name: string): target is PrimitiveType | ts.EnumDeclaration {
+        if (PeerGeneratorConfig.ignoreSerialization.includes(name)) return true
         if (target instanceof PrimitiveType) return true
         if (ts.isEnumDeclaration(target)) return true
         return false
     }
 
     private generateDeserializer(name: string, target: DeclarationTarget, printer: IndentedPrinter) {
-        if (this.ignoreTarget(target)) return
+        if (this.ignoreTarget(target, name)) return
         printer.print(`${name} read${name}() {`)
         printer.pushIndent()
         printer.print(`Deserializer& valueDeserializer = *this;`)
