@@ -102,9 +102,9 @@ export class DeclarationTable {
         if (ts.isParenthesizedTypeNode(type)) return true
         if (ts.isTemplateLiteralTypeNode(type)) return true
         if (ts.isFunctionTypeNode(type)) return true
+        if (ts.isTypeParameterDeclaration(type)) return true
         return false
     }
-
 
     private pendingRequests = new Array<PendingTypeRequest>()
 
@@ -129,6 +129,8 @@ export class DeclarationTable {
 
     private toTargetImpl(node: ts.TypeNode): DeclarationTarget {
         if (this.isDeclarationTarget(node)) return node as DeclarationTarget
+        if (ts.isEnumMember(node)) return node.parent
+
         if (ts.isTypeReferenceNode(node)) {
             if (identName(node) == "Length") return PrimitiveType.Length
             let orig = node
@@ -504,6 +506,7 @@ export class DeclarationTable {
     private assignUniqueNames() {
         for (let declaration of this.declarations) {
             let name = this.computeTargetName(declaration, false)
+            if (!name) throw new Error(`Cannot compute name for ${declaration}`)
             this.uniqueNames.set(declaration, name)
         }
 
@@ -546,23 +549,24 @@ export class DeclarationTable {
         printer.print(`};`)
         seenNames.clear()
         for (let target of this.declarations) {
-            let nameBasic = this.uniqueNames.get(target)!
-            if ("Optional" == nameBasic || nameBasic.startsWith("Optional_")) continue
-            let nameOptional = "Optional_" + nameBasic
-            if (seenNames.has(nameBasic)) continue
-            seenNames.add(nameBasic)
+            let assignedName = this.uniqueNames.get(target)!
+            if (!assignedName) throw new Error(`No assigned name for ${target.getText()}`)
+            if ("Optional" == assignedName || assignedName.startsWith("Optional_")) continue
+            let nameOptional = "Optional_" + assignedName
+            if (seenNames.has(assignedName)) continue
+            seenNames.add(assignedName)
             //if (target instanceof PrimitiveType || this.ignoredStruct(nameBasic)) continue
             structs.startEmit(this, target)
             let isEnum = !(target instanceof PrimitiveType) && ts.isEnumDeclaration(target)
             if (isEnum) {
-                structs.print(`typedef int32_t ${nameBasic};`)
+                structs.print(`typedef int32_t ${assignedName};`)
                 structs.print(`typedef struct { int32_t tag; int32_t value; } ${nameOptional};`)
                 this.writeOptional(nameOptional, structs)
                 continue
             }
-            let ignore = (target instanceof PrimitiveType) || this.ignoreTarget(target, nameBasic)
+            let ignore = (target instanceof PrimitiveType) || this.ignoreTarget(target, assignedName)
             if (!ignore) {
-                structs.print(`struct ${nameBasic} {`)
+                structs.print(`struct ${assignedName} {`)
                 structs.pushIndent()
                 this.targetFields(target).forEach(it => structs.print(`${this.computeTargetName(it.declaration, it.optional)} ${it.name};`))
                 structs.popIndent()
@@ -572,18 +576,18 @@ export class DeclarationTable {
             structs.print(`struct ${nameOptional} {`)
             structs.pushIndent()
             structs.print(`int32_t tag;`)
-            structs.print(`${nameBasic} value;`)
+            structs.print(`${assignedName} value;`)
             structs.popIndent()
             structs.print(`};`)
             if (!ignore) {
                 structs.print(`template <>`)
-                structs.print(`inline void WriteToString(string* result, const ${nameBasic}& value) {`)
+                structs.print(`inline void WriteToString(string* result, const ${assignedName}& value) {`)
                 structs.pushIndent()
                 // TODO: make better
                 let isUnion = !(target instanceof PrimitiveType) &&
                     (ts.isUnionTypeNode(target) || (ts.isParenthesizedTypeNode(target) && ts.isUnionTypeNode(target.type)))
                 if (isUnion) {
-                    structs.print(`result->append("${nameBasic} [variant ");`)
+                    structs.print(`result->append("${assignedName} [variant ");`)
                     structs.print(`result->append(std::to_string(value.selector));`)
                     structs.print(`result->append("] ");`)
                     this.targetFields(target).forEach((field, index) => {
@@ -596,7 +600,7 @@ export class DeclarationTable {
                         structs.print(`}`)
                     })
                 } else {
-                    structs.print(`result->append("${nameBasic} {");`)
+                    structs.print(`result->append("${assignedName} {");`)
                     this.targetFields(target).forEach((field, index) => {
                         if (index > 0) structs.print(`result->append(", ");`)
                         structs.print(`result->append("${field.name}=");`)
