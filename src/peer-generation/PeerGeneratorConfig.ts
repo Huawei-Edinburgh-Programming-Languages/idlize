@@ -20,7 +20,7 @@ export class PeerGeneratorConfig {
         "Array", "Callback", "ErrorCallback", "Length", "AttributeModifier", "Number", "Object", "String", "Function", "Optional"]
     public static ignorePeerMethod = ["attributeModifier"]
 
-    private static knownParametrized = ["Indicator", "AttributeModifier", "AnimationRange"]
+    private static knownParametrized = ["Indicator", "AttributeModifier", "AnimationRange", "ContentModifier"]
 
     public static exports = [
         { file: "common", components: ["Common", "ScrollableCommon", "CommonShape"]},
@@ -32,17 +32,6 @@ export class PeerGeneratorConfig {
     ]
 
     public static invalidAttributes = ["ArkScrollableCommon"]
-
-    public static readonly rootComponents = [
-        "CommonMethod",
-        "SecurityComponentMethod"
-    ]
-
-    // Will figure out what to do with those later, currently will extend PeerNode
-    public static readonly standaloneComponents = [
-        "CalendarAttribute",
-        "ContainerSpanAttribute"
-    ]
 
     public static skipPeerGeneration = ["CommonAttribute"]
 
