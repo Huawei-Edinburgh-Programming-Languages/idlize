@@ -56,7 +56,7 @@ export class TestGeneratorVisitor implements GenericVisitor<string[]> {
             if (ts.isConstructorDeclaration(child)) {
                 this.testConstructor(child)
             } else if (ts.isMethodDeclaration(child)) {
-                this.testMethod(child)
+                this.testMethod(nameOrUndefined(node.name)!, child)
             } else if (ts.isPropertyDeclaration(child)) {
                 this.testProperty(child)
             }
@@ -72,7 +72,7 @@ export class TestGeneratorVisitor implements GenericVisitor<string[]> {
             if (ts.isConstructSignatureDeclaration(child)) {
                 this.testConstructor(child)
             } else if (ts.isMethodSignature(child)) {
-                this.testMethod(child)
+                this.testMethod(nameOrUndefined(node.name)!, child)
             } else if (ts.isPropertySignature(child)) {
                 this.testProperty(child)
             }
@@ -84,12 +84,13 @@ export class TestGeneratorVisitor implements GenericVisitor<string[]> {
         if (this.methodsToTest.size > 0 && !this.methodsToTest.has("constructor")) return
     }
 
-    testMethod(method: ts.MethodDeclaration | ts.MethodSignature) {
+    testMethod(parentName: string, method: ts.MethodDeclaration | ts.MethodSignature) {
         if (this.methodsToTest.size > 0 && !this.methodsToTest.has(nameOrUndefined(method.name)!)) return
 
         this.generateArgs(method).forEach(args => {
-            this.output.push(`  console.log(\`${nameOrUndefined(method.name)}(${args})\`)`)
-            this.output.push(`  peer.${nameOrUndefined(method.name)}(${args})`)
+            let methodName = nameOrUndefined(method.name)
+            let golden = `${methodName}(${args})`
+            this.output.push(`  checkResult("${parentName}.${methodName}", () => peer.${methodName}(${args}), \`${golden}\`)`)
         })
     }
 
