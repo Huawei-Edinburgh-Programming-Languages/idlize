@@ -1,6 +1,6 @@
 import {strict as assert} from 'assert';
 
-import {toArray, toInt32, toChars} from "../unit_utils"
+import {toArray, toInt32, toStr} from "../unit_utils"
 import {RuntimeType, Tags} from "@arkoala/arkui/SerializerBase"
 import {Serializer} from "@arkoala/arkui/Serializer"
 
@@ -48,12 +48,12 @@ it('Should write union optional string empty', function () {
     let serializer = new Serializer(8)
     serializer.writeUnionOptionalInterfaceDTS({unionProp: ""})
     assert.deepEqual(toArray(serializer),
-        [RuntimeType.STRING, Tags.STRING, ...toInt32(0)])
+        [RuntimeType.STRING, ...toStr("")])
 });
 
 it('Should write union optional string abc', function () {
     let serializer = new Serializer(8)
     serializer.writeUnionOptionalInterfaceDTS({unionProp: "abc"})
     assert.deepEqual(toArray(serializer),
-        [RuntimeType.STRING, Tags.STRING, ...toInt32(3), ...toChars("abc")])
+        [RuntimeType.STRING, ...toStr("abc")])
 });
