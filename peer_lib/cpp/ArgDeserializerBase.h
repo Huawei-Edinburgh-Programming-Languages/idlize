@@ -94,16 +94,6 @@ struct Empty
 inline void WriteToString(string* result, const Empty& value) {
 }
 
-template <typename T>
-inline void addToString(string* result, const T& value, bool needComma = false) {
-  WriteToString(result, value);
-  if (needComma) result->append(", ");
-}
-
-template <>
-inline void addToString(string* result, const Empty& value, bool needComma) {
-}
-
 struct Error
 {
   std::string message;
@@ -435,15 +425,5 @@ inline void WriteToString(string* result, const String& value) {
     else
       result->append("<null>");
 }
-inline void WriteToString(string* result, String* value) {
-    result->append("XXX6");
-}
-inline void WriteToString(string* result, Number* value) {
-    result->append("XXX7");
-}
-inline void WriteToString(string* result, int32_t* value) {
-    result->append("XXX8");
-}
-inline void WriteToString(string* result, Boolean* value) {}
 inline void WriteToString(string* result, const Optional_String& value) {}
 inline void WriteToString(string* result, const Optional_Function& value) {}
