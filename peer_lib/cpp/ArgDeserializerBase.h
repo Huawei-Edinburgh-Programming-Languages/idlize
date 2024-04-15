@@ -96,8 +96,8 @@ inline void WriteToString(string* result, const Empty& value) {
 
 template <typename T>
 inline void addToString(string* result, const T& value, bool needComma = false) {
-  WriteToString(result, value);
   if (needComma) result->append(", ");
+  WriteToString(result, value);
 }
 
 template <>

@@ -582,23 +582,19 @@ export class DeclarationTable {
             // TODO: make better
             let isUnion = ts.isUnionTypeNode(target) || (ts.isParenthesizedTypeNode(target) &&  ts.isUnionTypeNode(target.type))
             if (isUnion) {
-                structs.print(`result->append("${nameBasic} [variant ");`)
-                structs.print(`result->append(std::to_string(value.selector));`)
-                structs.print(`result->append("] ");`)
                 this.targetFields(target).forEach((field, index) => {
                     if (index == 0) return
                     structs.print(`if (value.selector == ${index - 1}) {`)
                     structs.pushIndent()
-                    structs.print(`result->append("${field.name}=");`)
                     structs.print(`WriteToString(result, value.${field.name});`)
                     structs.popIndent()
                     structs.print(`}`)
                 })
             } else {
-                structs.print(`result->append("${nameBasic} {");`)
+                structs.print(`result->append("{");`)
                 this.targetFields(target).forEach((field, index) => {
                     if (index > 0) structs.print(`result->append(", ");`)
-                    structs.print(`result->append("${field.name}=");`)
+                    structs.print(`result->append("${field.name}: ");`)
                     structs.print(`WriteToString(result, value.${field.name});`)
                 })
             }

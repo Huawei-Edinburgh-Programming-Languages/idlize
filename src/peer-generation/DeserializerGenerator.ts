@@ -70,7 +70,7 @@ export class DeserializerGenerator {
             this.structPrinter.print(`template <>`)
             this.structPrinter.print(`inline void WriteToString(string* result, const ${name}& value) {`)
             this.structPrinter.pushIndent()
-            this.structPrinter.print(`result->append("${name} {");`)
+            this.structPrinter.print(`result->append("{");`)
             structFields.forEach((field, index) => {
                 const fieldName = identName(field.name)
                 if (index > 0) this.structPrinter.print(`result->append(", ");`)
@@ -78,7 +78,7 @@ export class DeserializerGenerator {
                 if (isStatic) {
                     this.structPrinter.print(`/* Ignore static ${fieldName} */`)
                 } else {
-                    this.structPrinter.print(`result->append("${fieldName}=");`)
+                    this.structPrinter.print(`result->append("${fieldName}: ");`)
                     this.structPrinter.print(`WriteToString(result, value.${fieldName});`)
                 }
             })
