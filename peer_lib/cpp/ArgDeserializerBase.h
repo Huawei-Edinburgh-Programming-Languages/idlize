@@ -75,7 +75,7 @@ inline const char* getUnitName(int value) {
 typedef float float32_t;
 
 template <typename T>
-inline void WriteToString(string* result, const T value) = delete;
+inline void WriteToString(string* result, T value) = delete;
 
 // Binary layout must match that of KStringPtrImpl.
 struct String
