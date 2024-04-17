@@ -185,21 +185,28 @@ export class DeclarationTable {
         return name
     }
 
+    typeLiteralCount: number = 0
+    typeLiteralNames: Map<ts.TypeLiteralNode, string> = new Map()
+
     computeTargetNameImpl(target: DeclarationTarget, optional: boolean): string {
         const prefix = optional ? "Optional_" : ""
         if (target instanceof PrimitiveType) {
             return prefix + target.getText()
         }
         if (ts.isTypeLiteralNode(target)) {
-            return prefix + `Literal_${target.members.map(member => {
-                if (ts.isPropertySignature(member)) {
-                    return this.computeTargetName(this.toTarget(member.type!), member.questionToken != undefined)
-                } else {
-                    return undefined
-                }
-            })
+            if (!this.typeLiteralNames.has(target)) {
+                const name = prefix + `Literal_${target.members.map(member => {
+                    if (ts.isPropertySignature(member)) {
+                        return this.computeTargetName(this.toTarget(member.type!), member.questionToken != undefined)
+                    } else {
+                        return undefined
+                    }
+                })
                 .filter(it => it != undefined)
                 .join("_")}`
+                this.typeLiteralNames.set(target, `${name}_${this.typeLiteralCount++}`)
+            }
+            return this.typeLiteralNames.get(target)!
         }
         if (ts.isLiteralTypeNode(target)) {
             const literal = target.literal
