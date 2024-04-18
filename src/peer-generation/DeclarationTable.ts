@@ -520,8 +520,7 @@ export class DeclarationTable {
         let fields = this.targetFields(declaration)
         if (declaration instanceof PrimitiveType) return true
         if (!ts.isInterfaceDeclaration(declaration)
-            && !ts.isClassDeclaration(declaration)
-            && !ts.isTypeLiteralNode(declaration)) return true
+            && !ts.isClassDeclaration(declaration)) return true
         return fields.length == 0
     }
 
@@ -772,8 +771,8 @@ export class DeclarationTable {
             target
                 .members
                 .filter(ts.isPropertySignature)
-                .forEach(it => {
-                    result.push(new FieldRecord(this.toTarget(it.type!), it.type, identName(it.name)!, it.questionToken != undefined))
+                .forEach((it, index) => {
+                    result.push(new FieldRecord(this.toTarget(it.type!), it.type, `value${index}`, it.questionToken != undefined))
                 })
         }
         else if (ts.isTupleTypeNode(target)) {
@@ -781,7 +780,7 @@ export class DeclarationTable {
                 .elements
                 .forEach((it, index) => {
                     if (ts.isNamedTupleMember(it)) {
-                        result.push(new FieldRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
+                        result.push(new FieldRecord(this.toTarget(it.type!), it.type!, `value${index}`, it.questionToken != undefined))
                     } else {
                         result.push(new FieldRecord(this.toTarget(it), it, `value${index}`, false))
                     }
