@@ -14,7 +14,7 @@
  */
 
 import * as ts from "typescript"
-import { asString, getDeclarationsByNode, getLineNumberString, getNameWithoutQualifiersRight, identName, isStatic, mapType, throwException, typeEntityName } from "../util"
+import { asString, getDeclarationsByNode, getLineNumberString, getNameWithoutQualifiersRight, heritageDeclarations, identName, isStatic, isStatic2, mapType, throwException, typeEntityName } from "../util"
 import { IndentedPrinter } from "../IndentedPrinter"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
 import {
@@ -747,6 +747,32 @@ export class DeclarationTable {
         }
     }
 
+    private fieldsForClass(clazz: ts.ClassDeclaration|ts.InterfaceDeclaration, result: FieldRecord[]) {
+        clazz.heritageClauses?.forEach(it => {
+            heritageDeclarations(this.typeChecker!, it).forEach(it => {
+                if (ts.isClassDeclaration(it) || ts.isInterfaceDeclaration(it))
+                    this.fieldsForClass(it, result)
+            })
+        })
+        if (ts.isClassDeclaration(clazz)) {
+            clazz
+            .members
+                .filter(ts.isPropertyDeclaration)
+                .filter(it => !isStatic(it.modifiers))
+                .forEach(it => {
+                    result.push(new FieldRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
+                })
+        } else {
+            clazz
+            .members
+                .filter(ts.isPropertySignature)
+                .filter(it => !isStatic(it.modifiers))
+                .forEach(it => {
+                    result.push(new FieldRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
+            })
+        }
+    }
+
     targetFields(target: DeclarationTarget): FieldRecord[] {
         let result: FieldRecord[] = []
         if (target instanceof PrimitiveType) {
@@ -760,22 +786,10 @@ export class DeclarationTable {
             result.push(new FieldRecord(PrimitiveType.Int32, undefined, "array_length"))
         }
         else if (ts.isInterfaceDeclaration(target)) {
-            target
-                .members
-                .filter(ts.isPropertySignature)
-                .filter(it => !isStatic(it.modifiers))
-                .forEach(it => {
-                    result.push(new FieldRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
-                })
+            this.fieldsForClass(target, result)
         }
         else if (ts.isClassDeclaration(target)) {
-            target
-                .members
-                .filter(ts.isPropertyDeclaration)
-                .filter(it => !isStatic(it.modifiers))
-                .forEach(it => {
-                    result.push(new FieldRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
-                })
+            this.fieldsForClass(target, result)
         }
         else if (ts.isUnionTypeNode(target)) {
             result.push(new FieldRecord(PrimitiveType.Int32, undefined, `selector`, false))
