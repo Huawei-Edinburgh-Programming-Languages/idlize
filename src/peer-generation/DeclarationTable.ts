@@ -289,7 +289,7 @@ export class DeclarationTable {
         }
         if (ts.isImportTypeNode(target)) {
             // return prefix + identName(target.qualifier)!
-            return PrimitiveType.CustomObject.name
+            return PrimitiveType.CustomObject.getText(this)
         }
         if (ts.isOptionalTypeNode(target)) {
             let name = this.computeTargetName(this.toTarget(target.type), false)
@@ -674,7 +674,9 @@ export class DeclarationTable {
                 structs.popIndent()
                 structs.print(`} ${nameAssigned};`)
             }
-            if (!noBasicDecl && nameAssigned != "Length" && nameAssigned != "Function"  && nameAssigned != "Resource" && nameAssigned != "Array" && nameAssigned != "Optional" && nameAssigned != "RelativeIndexable") {
+            if (!noBasicDecl && nameAssigned != "Length" && nameAssigned != "Function"  && nameAssigned != "Resource"
+                && nameAssigned != "Array" && nameAssigned != "Optional" && nameAssigned != "RelativeIndexable"
+                && nameAssigned != "CustomObject") {
                 writeToString.print(`template <>`)
                 writeToString.print(`inline void WriteToString(string* result, const ${nameAssigned}${isPointer ? "*" : ""} value) {`)
                 writeToString.pushIndent()
@@ -682,39 +684,6 @@ export class DeclarationTable {
                 writeToString.popIndent()
                 writeToString.print(`}`)
             }
-            this.writeOptional(nameOptional, writeToString, isPointer)
-            /*
-            let ignore = (target instanceof PrimitiveType) || this.ignoreTarget(target, assignedName)
-
-            if (assignedName === PrimitiveType.CustomObject.name) {
-                continue
-            }
-
-            if (!ignore) {
-                structs.print(`typedef struct ${assignedName} {`)
-                structs.pushIndent()
-                this.targetStruct(target).getFields().forEach(it => structs.print(`${it.optional ? "Optional_" : ""}${this.uniqueName(it.declaration)} ${it.name};`))
-                structs.popIndent()
-                structs.print(`} ${assignedName};`)
-            }
-            if (seenNames.has(nameOptional)) continue
-            structs.print(`typedef struct ${nameOptional} {`)
-            structs.pushIndent()
-            structs.print(`int32_t tag;`)
-            structs.print(`${assignedName} value;`)
-            structs.popIndent()
-            structs.print(`} ${nameOptional};`)
-            if (!ignore) {
-                writeToString.print(`template <>`)
-                writeToString.print(`inline void WriteToString(string* result, const ${assignedName}${isPointer ? "*" : ""} value) {`)
-                writeToString.pushIndent()
-                this.generateWriteToString(assignedName, target, writeToString, isPointer)
-                writeToString.popIndent()
-                writeToString.print(`}`)
-            }
-            this.writeOptional(nameOptional, writeToString, isPointer)
-            */
-
             if (seenNames.has(nameOptional)) continue
             seenNames.add(nameOptional)
             if (!(target instanceof PointerType) && nameAssigned != "Optional" && nameAssigned != "RelativeIndexable") {
@@ -732,7 +701,7 @@ export class DeclarationTable {
             if (seenNames.has(declarationTarget[1])) continue
             if (PeerGeneratorConfig.ignoreSerialization.includes(declarationTarget[1])) continue
             if (name.startsWith("Optional_")) continue
-            if (name === PrimitiveType.CustomObject.name) continue
+            if (name === PrimitiveType.CustomObject.getText(this)) continue
             seenNames.add(declarationTarget[1])
             typedefs.print(`typedef ${name} ${declarationTarget[1]};`)
             if (seenNames.has(`Optional_${name}`)) {
