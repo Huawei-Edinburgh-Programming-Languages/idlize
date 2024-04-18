@@ -253,6 +253,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         const collapsedMethods = this.collapseOverloads(node)
 
         const componentName = this.renameToComponent(nameOrNull(node.name)!)
+        console.log("CLASS", componentName)
         // We don't know what comes first ButtonAtrtribute or ButtonInterface.
         // Both will contribute to the peer class.
         const peer = getOrPut(this.peers, componentName, (_) => new PeerClass(componentName, this.printers))
@@ -274,6 +275,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         if (!this.isFriendInterface(node)) return
 
         const componentName = this.renameToComponent(nameOrNull(node.name)!)
+        console.log("IFACE", componentName)
         // We don't know what comes first ButtonAtrtribute or ButtonInterface.
         // Both will contribute to the peer class.
         const peer = getOrPut(this.peers, componentName, (_) => new PeerClass(componentName, this.printers))
