@@ -36,6 +36,7 @@ export class SortingEmitter extends IndentedPrinter {
         if (seen.has(name)) return
         seen.add(name)
         let struct = this.table.targetStruct(target)
+        struct.supers.forEach(it => this.fillDeps(it, seen))
         struct.fields.forEach(it => this.fillDeps(it.declaration, seen))
     }
 

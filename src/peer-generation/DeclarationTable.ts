@@ -59,6 +59,7 @@ class FieldRecord {
 }
 
 class StructDescriptor {
+    supers: DeclarationTarget[] = []
     fields: FieldRecord[] = []
     packed: boolean = false
 }
@@ -754,9 +755,11 @@ export class DeclarationTable {
     private fieldsForClass(clazz: ts.ClassDeclaration|ts.InterfaceDeclaration, result: StructDescriptor) {
         clazz.heritageClauses?.forEach(it => {
             heritageDeclarations(this.typeChecker!, it).forEach(it => {
-                result.packed = true
-                if (ts.isClassDeclaration(it) || ts.isInterfaceDeclaration(it))
+                if (ts.isClassDeclaration(it) || ts.isInterfaceDeclaration(it)) {
+                    result.supers.push(it)
+                    result.packed = true
                     this.fieldsForClass(it, result)
+                }
             })
         })
         if (ts.isClassDeclaration(clazz)) {
