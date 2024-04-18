@@ -490,7 +490,7 @@ export class AggregateConvertor extends BaseArgConvertor {
     convertorToCDeserial(param: string, value: string, printer: IndentedPrinter): void {
         let struct = this.table.targetStruct(this.table.toTarget(this.type))
         this.memberConvertors.forEach((it, index) => {
-            it.convertorToCDeserial(param, `${value}.${struct.fields[index].name}`, printer)
+            it.convertorToCDeserial(param, `${value}.${struct.getFields()[index].name}`, printer)
         })
     }
 

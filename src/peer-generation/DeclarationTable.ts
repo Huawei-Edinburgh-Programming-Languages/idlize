@@ -60,7 +60,7 @@ class FieldRecord {
 
 class StructDescriptor {
     supers: DeclarationTarget[] = []
-    fields: FieldRecord[] = []
+    private fields: FieldRecord[] = []
     packed: boolean = false
     private seenFields = new Set<string>()
     addField(field: FieldRecord) {
@@ -68,6 +68,12 @@ class StructDescriptor {
             this.seenFields.add(field.name)
             this.fields.push(field)
         }
+    }
+    getFields(): readonly FieldRecord[] {
+        return this.fields
+    }
+    isEmpty(): boolean {
+        return this.fields.length == 0
     }
 }
 
@@ -550,7 +556,7 @@ export class DeclarationTable {
         if (!ts.isInterfaceDeclaration(declaration)
             && !ts.isClassDeclaration(declaration)
             && !ts.isTypeLiteralNode(declaration)) return true
-        return struct.fields.length == 0
+        return struct.isEmpty()
     }
 
     private uniqueNames = new Map<DeclarationTarget, string>()
@@ -639,7 +645,7 @@ export class DeclarationTable {
             if (!ignore) {
                 structs.print(`typedef struct ${assignedName} {`)
                 structs.pushIndent()
-                this.targetStruct(target).fields.forEach(it => structs.print(`${it.optional ? "Optional_" : ""}${this.uniqueName(it.declaration)} ${it.name};`))
+                this.targetStruct(target).getFields().forEach(it => structs.print(`${it.optional ? "Optional_" : ""}${this.uniqueName(it.declaration)} ${it.name};`))
                 structs.popIndent()
                 structs.print(`} ${assignedName};`)
             }
@@ -723,7 +729,7 @@ export class DeclarationTable {
             printer.print(`result->append("${name} [variant ");`)
             printer.print(`result->append(std::to_string(value${access}selector));`)
             printer.print(`result->append("] ");`)
-            this.targetStruct(target).fields.forEach((field, index) => {
+            this.targetStruct(target).getFields().forEach((field, index) => {
                 if (index == 0) return
                 let isPointerField = this.isPointerDeclaration(field.declaration, field.optional)
                 printer.print(`if (value${access}selector == ${index - 1}) {`)
@@ -749,7 +755,7 @@ export class DeclarationTable {
             printer.print(`result->append("]}");`)
         } else {
             printer.print(`result->append("${name} {");`)
-            this.targetStruct(target).fields.forEach((field, index) => {
+            this.targetStruct(target).getFields().forEach((field, index) => {
                 if (index > 0) printer.print(`result->append(", ");`)
                 printer.print(`result->append("${field.name}=");`)
                 let isPointerField = this.isPointerDeclaration(field.declaration, field.optional)
@@ -791,7 +797,7 @@ export class DeclarationTable {
     targetStruct(target: DeclarationTarget): StructDescriptor {
         let result = new StructDescriptor()
         if (target instanceof PrimitiveType) {
-            result.fields.push(new FieldRecord(target, undefined, "value"))
+            result.addField(new FieldRecord(target, undefined, "value"))
             return result
         }
         else if (ts.isArrayTypeNode(target)) {
@@ -878,7 +884,7 @@ export class DeclarationTable {
         printer.print(`const valueSerializer = this`)
         if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {
             let struct = this.targetStruct(target)
-            struct.fields.forEach(it => {
+            struct.getFields().forEach(it => {
                 let field = `value_${it.name}`
                 printer.print(`let ${field} = value.${it.name}`)
                 let typeConvertor = this.typeConvertor(`value`, it.type!, it.optional)
@@ -908,7 +914,7 @@ export class DeclarationTable {
         printer.print(`${name} value;`)
         if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {
             let struct = this.targetStruct(target)
-            struct.fields.forEach(it => {
+            struct.getFields().forEach(it => {
                 let typeConvertor = this.typeConvertor(`value`, it.type!, it.optional)
                 typeConvertor.convertorToCDeserial(`value`, `value.${it.name}`, printer)
             })
