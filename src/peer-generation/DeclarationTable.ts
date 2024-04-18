@@ -26,11 +26,12 @@ import {
 import { SortingEmitter } from "./SortingEmitter"
 
 export class PrimitiveType {
-    constructor(public name: string, public isPointer = false) { }
+    constructor(private name: string, public isPointer = false) { }
     getText(table: DeclarationTable): string { return this.name }
     static String = new PrimitiveType("String", true)
     static Number = new PrimitiveType("Number")
     static Int32 = new PrimitiveType("int32_t")
+    static Tag = new PrimitiveType("Tags")
     static Boolean = new PrimitiveType("Boolean")
     static Function = new PrimitiveType("Function")
     static Undefined = new PrimitiveType("Undefined")
@@ -50,7 +51,7 @@ class PointerType extends PrimitiveType {
         super("", true)
     }
     getText(table: DeclarationTable): string {
-        return `Pointer_${table.computeTargetName(this.pointed, false)}`
+        return `${table.computeTargetName(this.pointed, false)}*`
     }
 }
 
@@ -582,7 +583,7 @@ export class DeclarationTable {
     }
 
     private assignUniqueNames() {
-        this.addDeclaration(PrimitiveType.Int32)
+        //this.addDeclaration(PrimitiveType.Int32)
         let before = 0
         do {
             before = this.declarations.size
@@ -614,7 +615,7 @@ export class DeclarationTable {
     }
 
     private uniqueName(target: DeclarationTarget): string {
-        if (target instanceof PrimitiveType) return target.name
+        if (target instanceof PrimitiveType) return target.getText(this)
         return this.uniqueNames.get(target)!
     }
 
@@ -641,12 +642,10 @@ export class DeclarationTable {
         printer.popIndent()
         printer.print(`};`)
         seenNames.clear()
-        let noDeclaration = [PrimitiveType.Int32, PrimitiveType.Number, PrimitiveType.Boolean]
+        let noDeclaration = [PrimitiveType.Int32, PrimitiveType.Tag, PrimitiveType.Number, PrimitiveType.Boolean]
         for (let target of order) {
             if (target instanceof PrimitiveType && noDeclaration.includes(target)) continue
             let nameAssigned = this.uniqueNames.get(target)
-            if (!(target instanceof PrimitiveType))
-                console.log("XXX", nameAssigned, this.computeTargetName(target, false), ts.isOptionalTypeNode(target))
             if (!nameAssigned) {
                 throw new Error(`No assigned name for ${(target as ts.TypeNode).getText()} shall be ${this.computeTargetName(target, false)}`)
             }
@@ -656,7 +655,6 @@ export class DeclarationTable {
             let isEnum = !(target instanceof PrimitiveType) && ts.isEnumDeclaration(target)
             let nameOptional = "Optional_" + nameAssigned
             if (isEnum) {
-
                 structs.print(`typedef int32_t ${nameAssigned};`)
                 if (!seenNames.has(nameOptional)) {
                     seenNames.add(nameOptional)
@@ -672,23 +670,7 @@ export class DeclarationTable {
                 structs.popIndent()
                 structs.print(`} ${nameAssigned};`)
             }
-            writeToString.print(`template <>`)
-            writeToString.print(`inline void WriteToString(string* result, const ${nameAssigned}${isPointer ? "*" : ""} value) {`)
-            writeToString.pushIndent()
-            this.generateWriteToString(nameAssigned, target, writeToString, isPointer)
-            writeToString.popIndent()
-            writeToString.print(`}`)
-
-
-            if (seenNames.has(nameOptional)) continue
-            seenNames.add(nameOptional)
-            structs.print(`typedef struct ${nameOptional} {`)
-            structs.pushIndent()
-            structs.print(`int32_t tag;`)
-            structs.print(`${nameAssigned} value;`)
-            structs.popIndent()
-            structs.print(`} ${nameOptional};`)
-            if (!this.ignoreTarget(target, nameAssigned)) {
+            if (nameAssigned != "Length" && nameAssigned != "Function"  && nameAssigned != "Resource" && nameAssigned != "Array" && nameAssigned != "Optional" && nameAssigned != "RelativeIndexable") {
                 writeToString.print(`template <>`)
                 writeToString.print(`inline void WriteToString(string* result, const ${nameAssigned}${isPointer ? "*" : ""} value) {`)
                 writeToString.pushIndent()
@@ -729,6 +711,18 @@ export class DeclarationTable {
             this.writeOptional(nameOptional, writeToString, isPointer)
             */
 
+
+            if (seenNames.has(nameOptional)) continue
+            seenNames.add(nameOptional)
+            if (!(target instanceof PointerType) && nameAssigned != "Optional" && nameAssigned != "RelativeIndexable") {
+                structs.print(`typedef struct ${nameOptional} {`)
+                structs.pushIndent()
+                structs.print(`int32_t tag;`)
+                structs.print(`${nameAssigned} value;`)
+                structs.popIndent()
+                structs.print(`} ${nameOptional};`)
+                this.writeOptional(nameOptional, writeToString, isPointer)
+            }
         }
         for (let declarationTarget of this.typeMap.values()) {
             let name = this.uniqueNames.get(declarationTarget[0])!
@@ -750,10 +744,10 @@ export class DeclarationTable {
         printer.pushIndent()
         printer.print(`result->append("${nameOptional} {");`)
         printer.print(`result->append("tag=");`)
-        printer.print(`result->append(tagName((Tags)value->tag));`)
+        printer.print(`result->append(tagName((Tags)(value->tag)));`)
         printer.print(`if (value->tag != TAG_UNDEFINED) {`)
         printer.pushIndent()
-        printer.print(`result->append(" value=");`)
+        printer.print(`result->append(", value=");`)
         printer.print(`WriteToString(result, ${isPointer ? "&" : ""}value->value);`)
         printer.popIndent()
         printer.print(`}`)
@@ -781,22 +775,22 @@ export class DeclarationTable {
     private isMaybeWrapped(target: DeclarationTarget, predicate: (type: ts.Node) => boolean): boolean {
         if (target instanceof PrimitiveType) return false
         return predicate(target) ||
-                ts.isParenthesizedTypeNode(target) &&
-                this.isDeclarationTarget(target.type) &&
-                predicate(target.type)
+            ts.isParenthesizedTypeNode(target) &&
+            this.isDeclarationTarget(target.type) &&
+            predicate(target.type)
     }
 
     private generateWriteToString(name: string, target: DeclarationTarget, printer: IndentedPrinter, isPointer: boolean) {
         if (target instanceof PrimitiveType) return
         let isUnion = this.isMaybeWrapped(target, ts.isUnionTypeNode)
         let isArray = this.isMaybeWrapped(target, ts.isArrayTypeNode)
+        let isOptional = this.isMaybeWrapped(target, ts.isOptionalTypeNode)
         let access = isPointer ? "->" : "."
         if (isUnion) {
             printer.print(`result->append("${name} [variant ");`)
             printer.print(`result->append(std::to_string(value${access}selector));`)
             printer.print(`result->append("] ");`)
             this.targetStruct(target).getFields().forEach((field, index) => {
-                if (index == 0) return
                 let isPointerField = this.isPointerDeclaration(field.declaration, field.optional)
                 printer.print(`if (value${access}selector == ${index - 1}) {`)
                 printer.pushIndent()
@@ -819,6 +813,24 @@ export class DeclarationTable {
             printer.print(`}`)
             printer.print(`if (count < value${access}array_length) result->append(", ...");`)
             printer.print(`result->append("]}");`)
+        } else if (isOptional) {
+            printer.print(`result->append("${name} {");`)
+            const fields = this.targetStruct(target).getFields()
+            fields.forEach((field, index) => {
+                if (index > 0) printer.print(`result->append(", ");`)
+                printer.print(`result->append("${field.name}=");`)
+                let isPointerField = this.isPointerDeclaration(field.declaration, field.optional)
+                printer.print(`WriteToString(result, ${isPointerField ? "&" : ""}value${access}${field.name});`)
+                if (index == 0) {
+                    printer.print(`if (value${access}${field.name} != TAG_UNDEFINED) {`)
+                    printer.pushIndent()
+                }
+                if (index == fields.length - 1) {
+                    printer.popIndent()
+                    printer.print("}")
+                }
+            })
+            printer.print(`result->append("}");`)
         } else {
             printer.print(`result->append("${name} {");`)
             this.targetStruct(target).getFields().forEach((field, index) => {
@@ -831,7 +843,7 @@ export class DeclarationTable {
         }
     }
 
-    private fieldsForClass(clazz: ts.ClassDeclaration|ts.InterfaceDeclaration, result: StructDescriptor) {
+    private fieldsForClass(clazz: ts.ClassDeclaration | ts.InterfaceDeclaration, result: StructDescriptor) {
         clazz.heritageClauses?.forEach(it => {
             heritageDeclarations(this.typeChecker!, it).forEach(it => {
                 if (ts.isClassDeclaration(it) || ts.isInterfaceDeclaration(it)) {
@@ -843,7 +855,7 @@ export class DeclarationTable {
         })
         if (ts.isClassDeclaration(clazz)) {
             clazz
-            .members
+                .members
                 .filter(ts.isPropertyDeclaration)
                 .filter(it => !isStatic(it.modifiers))
                 .forEach(it => {
@@ -851,12 +863,12 @@ export class DeclarationTable {
                 })
         } else {
             clazz
-            .members
+                .members
                 .filter(ts.isPropertySignature)
                 .filter(it => !isStatic(it.modifiers))
                 .forEach(it => {
                     result.addField(new FieldRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
-            })
+                })
         }
     }
 
@@ -905,7 +917,7 @@ export class DeclarationTable {
                 })
         }
         else if (ts.isOptionalTypeNode(target)) {
-            result.addField(new FieldRecord(PrimitiveType.Int32, undefined, "tag"))
+            result.addField(new FieldRecord(PrimitiveType.Tag, undefined, "tag"))
             result.addField(new FieldRecord(this.toTarget(target.type), target.type, "value"))
         }
         else if (ts.isParenthesizedTypeNode(target)) {

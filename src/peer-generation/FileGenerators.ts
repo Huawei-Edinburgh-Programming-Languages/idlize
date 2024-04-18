@@ -271,6 +271,17 @@ typedef int8_t Boolean;
 
 typedef void* ArkUINodeHandle;
 
+enum Tags
+{
+  TAG_UNDEFINED = 101,
+  TAG_INT32 = 102,
+  TAG_FLOAT32 = 103,
+  TAG_STRING = 104,
+  TAG_LENGTH = 105,
+  TAG_RESOURCE = 106,
+  TAG_OBJECT = 107,
+};
+
 ${structsBase}
 
 ${structs.getOutput().join("\n")}
