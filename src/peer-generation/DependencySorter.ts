@@ -13,21 +13,13 @@
  * limitations under the License.
  */
 
-import { IndentedPrinter } from "../IndentedPrinter";
-import * as ts from "typescript"
-import { asString, stringOrNone } from "../util";
-import { DeclarationTable, DeclarationTarget } from "./DeclarationTable";
+import { asString } from "../util";
+import { DeclarationTable, DeclarationTarget, PrimitiveType } from "./DeclarationTable";
 
-export class SortingEmitter extends IndentedPrinter {
-    currentPrinter?: IndentedPrinter
-    emitters = new Map<DeclarationTarget, IndentedPrinter>()
+export class DependencySorter {
+    deps = new Set<DeclarationTarget>()
 
     constructor(private table: DeclarationTable) {
-        super()
-    }
-
-    private undecorate(name: string): string {
-        return name.replace(/^(Optional_)*(.*?)(\*)*$/, '$2')
     }
 
     private fillDepsInDepth(target: DeclarationTarget, seen: Set<DeclarationTarget>) {
@@ -50,49 +42,18 @@ export class SortingEmitter extends IndentedPrinter {
         return result
     }
 
-    startEmit(table: DeclarationTable, declaration: DeclarationTarget) {
-        this.table = table
-        let next = this.emitters.has(declaration) ? this.emitters.get(declaration)! : new IndentedPrinter()
-        this.emitters.set(declaration, next)
-        this.currentPrinter = next
+    addDep(declaration: DeclarationTarget) {
         let seen = new Set<DeclarationTarget>()
+        this.deps.add(declaration)
         this.fillDepsInDepth(declaration, seen)
-        table.processPendingRequests()
+        this.table.processPendingRequests()
         // if (seen.size > 0) console.log(`${name}: depends on ${Array.from(seen.keys()).join(",")}`)
-    }
-    printType(type: ts.TypeNode): string {
-        return ts.isTypeReferenceNode(type)
-            ? asString(type.typeName)
-            : `${type.kind}:${ts.SyntaxKind[type.kind]}`
-    }
-
-    print(value: stringOrNone) {
-        if (!this.currentPrinter) throw new Error("startEmit() first")
-        if (value) this.currentPrinter.print(value)
-    }
-
-    pushIndent(): void {
-        this.currentPrinter?.pushIndent()
-    }
-
-    popIndent(): void {
-        this.currentPrinter?.popIndent()
-    }
-
-    getOutput(): string[] {
-        let result: string[] = []
-        let sortedTypes = this.getToposorted()
-        sortedTypes.forEach(type => {
-            let next = this.emitters.get(type)?.getOutput()
-            if (next) result = result.concat(next)
-        })
-        return result
     }
 
     // Kahn's algorithm.
     getToposorted(): DeclarationTarget[] {
         let result: DeclarationTarget[] = []
-        let input = Array.from(this.emitters.keys())
+        let input = Array.from(this.deps)
         let adjMap = new Map<DeclarationTarget, DeclarationTarget[]>()
         for (let key of input) {
             adjMap.set(key, this.getDeps(key))

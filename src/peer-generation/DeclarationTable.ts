@@ -23,7 +23,7 @@ import {
     NumberConvertor, OptionConvertor, PredefinedConvertor, StringConvertor, TupleConvertor, TypeAliasConvertor,
     UndefinedConvertor, UnionConvertor
 } from "./Convertors"
-import { SortingEmitter } from "./SortingEmitter"
+import { DependencySorter } from "./DependencySorter"
 
 export class PrimitiveType {
     constructor(private name: string, public isPointer = false) { }
@@ -494,8 +494,12 @@ export class DeclarationTable {
         ) {
             return new CustomTypeConvertor(param, "Any")
         }
+        if (ts.isTypeParameterDeclaration(type)) {
+            // TODO: unlikely correct.
+            return new CustomTypeConvertor(param, identName(type.name)!)
+        }
         console.log(type)
-        throw new Error(`Cannot convert: ${asString(type)} ${type.getText()}`)
+        throw new Error(`Cannot convert: ${asString(type)} ${type.getText()} ${type.kind}`)
     }
 
     customConvertor(typeName: ts.EntityName | undefined, param: string, type: ts.TypeReferenceNode | ts.ImportTypeNode): ArgConvertor | undefined {
@@ -621,9 +625,9 @@ export class DeclarationTable {
 
     generateDeserializers(printer: IndentedPrinter, structs: IndentedPrinter, typedefs: IndentedPrinter, writeToString: IndentedPrinter) {
         this.processPendingRequests()
-        let orderer = new SortingEmitter(this)
+        let orderer = new DependencySorter(this)
         for (let declaration of this.declarations) {
-            orderer.startEmit(this, declaration)
+            orderer.addDep(declaration)
         }
         let order = orderer.getToposorted()
         this.assignUniqueNames()
@@ -644,7 +648,7 @@ export class DeclarationTable {
         seenNames.clear()
         let noDeclaration = [PrimitiveType.Int32, PrimitiveType.Tag, PrimitiveType.Number, PrimitiveType.Boolean]
         for (let target of order) {
-            if (target instanceof PrimitiveType && noDeclaration.includes(target)) continue
+            let noBasicDecl = (target instanceof PrimitiveType && noDeclaration.includes(target))
             let nameAssigned = this.uniqueNames.get(target)
             if (!nameAssigned) {
                 throw new Error(`No assigned name for ${(target as ts.TypeNode).getText()} shall be ${this.computeTargetName(target, false)}`)
@@ -663,14 +667,14 @@ export class DeclarationTable {
                 }
                 continue
             }
-            if (!this.ignoreTarget(target, nameAssigned)) {
+            if (!noBasicDecl && !this.ignoreTarget(target, nameAssigned)) {
                 structs.print(`typedef struct ${nameAssigned} {`)
                 structs.pushIndent()
                 this.targetStruct(target).getFields().forEach(it => structs.print(`${it.optional ? "Optional_" : ""}${this.uniqueName(it.declaration)} ${it.name};`))
                 structs.popIndent()
                 structs.print(`} ${nameAssigned};`)
             }
-            if (nameAssigned != "Length" && nameAssigned != "Function"  && nameAssigned != "Resource" && nameAssigned != "Array" && nameAssigned != "Optional" && nameAssigned != "RelativeIndexable") {
+            if (!noBasicDecl && nameAssigned != "Length" && nameAssigned != "Function"  && nameAssigned != "Resource" && nameAssigned != "Array" && nameAssigned != "Optional" && nameAssigned != "RelativeIndexable") {
                 writeToString.print(`template <>`)
                 writeToString.print(`inline void WriteToString(string* result, const ${nameAssigned}${isPointer ? "*" : ""} value) {`)
                 writeToString.pushIndent()
@@ -710,7 +714,6 @@ export class DeclarationTable {
             }
             this.writeOptional(nameOptional, writeToString, isPointer)
             */
-
 
             if (seenNames.has(nameOptional)) continue
             seenNames.add(nameOptional)

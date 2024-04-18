@@ -16,7 +16,6 @@ import * as fs from "fs"
 import * as path from "path"
 import { IndentedPrinter } from "../IndentedPrinter"
 import { DeclarationTable } from "./DeclarationTable"
-import { SortingEmitter } from "./SortingEmitter"
 
 const importTsInteropTypes = `
 import {

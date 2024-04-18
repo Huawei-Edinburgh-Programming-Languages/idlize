@@ -42,10 +42,8 @@ import {
 } from "./peer-generation/PeerGeneratorVisitor"
 import { defaultCompilerOptions, isDefined, renameDtsToPeer, stringOrNone, toSet } from "./util"
 import { TypeChecker  } from "./typecheck"
-import { SortingEmitter } from "./peer-generation/SortingEmitter"
 import { initRNG } from "./rand_utils"
 import { DeclarationTable } from "./peer-generation/DeclarationTable"
-import { table } from "console"
 import {IndentedPrinter} from "./IndentedPrinter";
 
 const options = program
