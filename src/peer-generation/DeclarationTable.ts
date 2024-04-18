@@ -62,6 +62,13 @@ class StructDescriptor {
     supers: DeclarationTarget[] = []
     fields: FieldRecord[] = []
     packed: boolean = false
+    private seenFields = new Set<string>()
+    addField(field: FieldRecord) {
+        if (!this.seenFields.has(field.name)) {
+            this.seenFields.add(field.name)
+            this.fields.push(field)
+        }
+    }
 }
 
 class PendingTypeRequest {
@@ -768,7 +775,7 @@ export class DeclarationTable {
                 .filter(ts.isPropertyDeclaration)
                 .filter(it => !isStatic(it.modifiers))
                 .forEach(it => {
-                    result.fields.push(new FieldRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
+                    result.addField(new FieldRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
                 })
         } else {
             clazz
@@ -776,7 +783,7 @@ export class DeclarationTable {
                 .filter(ts.isPropertySignature)
                 .filter(it => !isStatic(it.modifiers))
                 .forEach(it => {
-                    result.fields.push(new FieldRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
+                    result.addField(new FieldRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
             })
         }
     }
@@ -790,8 +797,8 @@ export class DeclarationTable {
         else if (ts.isArrayTypeNode(target)) {
             // TODO: delay this computation.
             let element = this.toTarget(target.elementType)
-            result.fields.push(new FieldRecord(PrimitiveType.pointerTo(this.computeTargetName(element, false)), target, "array"))
-            result.fields.push(new FieldRecord(PrimitiveType.Int32, undefined, "array_length"))
+            result.addField(new FieldRecord(PrimitiveType.pointerTo(this.computeTargetName(element, false)), target, "array"))
+            result.addField(new FieldRecord(PrimitiveType.Int32, undefined, "array_length"))
         }
         else if (ts.isInterfaceDeclaration(target)) {
             this.fieldsForClass(target, result)
@@ -800,11 +807,11 @@ export class DeclarationTable {
             this.fieldsForClass(target, result)
         }
         else if (ts.isUnionTypeNode(target)) {
-            result.fields.push(new FieldRecord(PrimitiveType.Int32, undefined, `selector`, false))
+            result.addField(new FieldRecord(PrimitiveType.Int32, undefined, `selector`, false))
             target
                 .types
                 .forEach((it, index) => {
-                    result.fields.push(new FieldRecord(this.toTarget(it), it, `value${index}`, false))
+                    result.addField(new FieldRecord(this.toTarget(it), it, `value${index}`, false))
                 })
         }
         else if (ts.isTypeLiteralNode(target)) {
@@ -812,7 +819,7 @@ export class DeclarationTable {
                 .members
                 .filter(ts.isPropertySignature)
                 .forEach(it => {
-                    result.fields.push(new FieldRecord(this.toTarget(it.type!), it.type, identName(it.name)!, it.questionToken != undefined))
+                    result.addField(new FieldRecord(this.toTarget(it.type!), it.type, identName(it.name)!, it.questionToken != undefined))
                 })
         }
         else if (ts.isTupleTypeNode(target)) {
@@ -820,22 +827,22 @@ export class DeclarationTable {
                 .elements
                 .forEach((it, index) => {
                     if (ts.isNamedTupleMember(it)) {
-                        result.fields.push(new FieldRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
+                        result.addField(new FieldRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
                     } else {
-                        result.fields.push(new FieldRecord(this.toTarget(it), it, `value${index}`, false))
+                        result.addField(new FieldRecord(this.toTarget(it), it, `value${index}`, false))
                     }
                 })
         }
         else if (ts.isOptionalTypeNode(target)) {
-            result.fields.push(new FieldRecord(PrimitiveType.Int32, undefined, "tag"))
-            result.fields.push(new FieldRecord(this.toTarget(target.type), undefined, "value"))
+            result.addField(new FieldRecord(PrimitiveType.Int32, undefined, "tag"))
+            result.addField(new FieldRecord(this.toTarget(target.type), undefined, "value"))
         }
         else if (ts.isParenthesizedTypeNode(target)) {
             // TODO: is it correct?
             return this.targetStruct(this.toTarget(target.type))
         }
         else if (ts.isEnumDeclaration(target) || ts.isEnumMember(target)) {
-            result.fields.push(new FieldRecord(PrimitiveType.Int32, undefined, "value"))
+            result.addField(new FieldRecord(PrimitiveType.Int32, undefined, "value"))
         }
         else if (ts.isFunctionTypeNode(target)) {
         }
