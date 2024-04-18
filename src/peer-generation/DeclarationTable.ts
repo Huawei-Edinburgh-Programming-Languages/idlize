@@ -27,7 +27,7 @@ import { SortingEmitter } from "./SortingEmitter"
 
 export class PrimitiveType {
     constructor(public name: string, public isPointer = false) { }
-    getText(): string { return this.name }
+    getText(table: DeclarationTable): string { return this.name }
     static String = new PrimitiveType("String", true)
     static Number = new PrimitiveType("Number")
     static Int32 = new PrimitiveType("int32_t")
@@ -36,14 +36,21 @@ export class PrimitiveType {
     static Undefined = new PrimitiveType("Undefined")
     static Length = new PrimitiveType("Length", true)
     static CustomObject = new PrimitiveType("CustomObject", true)
-    static pointerTo(target: string) {
-        return new PointerType(target)
+    private static pointersMap = new Map<DeclarationTarget, PointerType>()
+    static pointerTo(target: DeclarationTarget) {
+        if (PrimitiveType.pointersMap.has(target)) return PrimitiveType.pointersMap.get(target)!
+        let result = new PointerType(target)
+        PrimitiveType.pointersMap.set(target, result)
+        return result
     }
 }
 
 class PointerType extends PrimitiveType {
-    constructor(public pointed: string) {
-        super(`${pointed}*`)
+    constructor(public pointed: DeclarationTarget) {
+        super("", true)
+    }
+    getText(table: DeclarationTable): string {
+        return `Pointer_${table.computeTargetName(this.pointed, false)}`
     }
 }
 
@@ -137,14 +144,18 @@ export class DeclarationTable {
         }
     }
 
-    private addDeclarations(target: DeclarationTarget) {
+    addDeclaration(target: DeclarationTarget) {
         if (this.declarations.has(target)) return
         this.declarations.add(target)
     }
 
+    numDeclarations(): number {
+        return this.declarations.size
+    }
+
     toTarget(node: ts.TypeNode): DeclarationTarget {
         let result = this.toTargetImpl(node)
-        this.addDeclarations(result)
+        this.addDeclaration(result)
         return result
     }
 
@@ -203,6 +214,7 @@ export class DeclarationTable {
 
     computeTargetName(target: DeclarationTarget, optional: boolean): string {
         let name = this.computeTargetNameImpl(target, optional)
+        this.addDeclaration(target)
         if (!(target instanceof PrimitiveType) && (
             !ts.isInterfaceDeclaration(target) && !ts.isClassDeclaration(target) && !ts.isEnumDeclaration(target))
         ) {
@@ -214,7 +226,7 @@ export class DeclarationTable {
     computeTargetNameImpl(target: DeclarationTarget, optional: boolean): string {
         const prefix = optional ? "Optional_" : ""
         if (target instanceof PrimitiveType) {
-            return prefix + target.getText()
+            return prefix + target.getText(this)
         }
         if (ts.isTypeLiteralNode(target)) {
             return prefix + `Literal_${target.members.map(member => {
@@ -570,6 +582,7 @@ export class DeclarationTable {
     }
 
     private assignUniqueNames() {
+        this.addDeclaration(PrimitiveType.Int32)
         let before = 0
         do {
             before = this.declarations.size
@@ -605,8 +618,13 @@ export class DeclarationTable {
         return this.uniqueNames.get(target)!
     }
 
-    generateDeserializers(printer: IndentedPrinter, structs: SortingEmitter, typedefs: IndentedPrinter, writeToString: SortingEmitter) {
+    generateDeserializers(printer: IndentedPrinter, structs: IndentedPrinter, typedefs: IndentedPrinter, writeToString: IndentedPrinter) {
         this.processPendingRequests()
+        let orderer = new SortingEmitter(this)
+        for (let declaration of this.declarations) {
+            orderer.startEmit(this, declaration)
+        }
+        let order = orderer.getToposorted()
         this.assignUniqueNames()
         let seenNames = new Set<string>()
         printer.print(`class Deserializer : public ArgDeserializerBase {`)
@@ -614,7 +632,7 @@ export class DeclarationTable {
         printer.pushIndent()
         printer.print(`Deserializer(uint8_t *data, int32_t length) : ArgDeserializerBase(data, length) {}`)
 
-        for (let declaration of this.declarations) {
+        for (let declaration of order) {
             let name = this.uniqueNames.get(declaration)!
             if (seenNames.has(name)) continue
             seenNames.add(name)
@@ -623,25 +641,63 @@ export class DeclarationTable {
         printer.popIndent()
         printer.print(`};`)
         seenNames.clear()
-        for (let target of this.declarations) {
-            let assignedName = this.uniqueNames.get(target)
-            if (!assignedName) {
-                throw new Error(`No assigned name for ${target.getText()} shall be ${this.computeTargetName(target, false)}`)
+        let noDeclaration = [PrimitiveType.Int32, PrimitiveType.Number, PrimitiveType.Boolean]
+        for (let target of order) {
+            if (target instanceof PrimitiveType && noDeclaration.includes(target)) continue
+            let nameAssigned = this.uniqueNames.get(target)
+            if (!(target instanceof PrimitiveType))
+                console.log("XXX", nameAssigned, this.computeTargetName(target, false), ts.isOptionalTypeNode(target))
+            if (!nameAssigned) {
+                throw new Error(`No assigned name for ${(target as ts.TypeNode).getText()} shall be ${this.computeTargetName(target, false)}`)
             }
-            if ("Optional" == assignedName || assignedName.startsWith("Optional_")) continue
-            let nameOptional = "Optional_" + assignedName
-            if (seenNames.has(assignedName)) continue
-            seenNames.add(assignedName)
-            structs.startEmit(this, target)
-            writeToString.startEmit(this, target)
+            if (seenNames.has(nameAssigned)) continue
+            seenNames.add(nameAssigned)
             let isPointer = this.isPointerDeclaration(target)
             let isEnum = !(target instanceof PrimitiveType) && ts.isEnumDeclaration(target)
+            let nameOptional = "Optional_" + nameAssigned
             if (isEnum) {
-                structs.print(`typedef int32_t ${assignedName};`)
-                structs.print(`typedef struct { int32_t tag; int32_t value; } ${nameOptional};`)
-                this.writeOptional(nameOptional, writeToString, isPointer)
+
+                structs.print(`typedef int32_t ${nameAssigned};`)
+                if (!seenNames.has(nameOptional)) {
+                    seenNames.add(nameOptional)
+                    structs.print(`typedef struct { int32_t tag; int32_t value; } ${nameOptional};`)
+                    this.writeOptional(nameOptional, writeToString, isPointer)
+                }
                 continue
             }
+            if (!this.ignoreTarget(target, nameAssigned)) {
+                structs.print(`typedef struct ${nameAssigned} {`)
+                structs.pushIndent()
+                this.targetStruct(target).getFields().forEach(it => structs.print(`${it.optional ? "Optional_" : ""}${this.uniqueName(it.declaration)} ${it.name};`))
+                structs.popIndent()
+                structs.print(`} ${nameAssigned};`)
+            }
+            writeToString.print(`template <>`)
+            writeToString.print(`inline void WriteToString(string* result, const ${nameAssigned}${isPointer ? "*" : ""} value) {`)
+            writeToString.pushIndent()
+            this.generateWriteToString(nameAssigned, target, writeToString, isPointer)
+            writeToString.popIndent()
+            writeToString.print(`}`)
+
+
+            if (seenNames.has(nameOptional)) continue
+            seenNames.add(nameOptional)
+            structs.print(`typedef struct ${nameOptional} {`)
+            structs.pushIndent()
+            structs.print(`int32_t tag;`)
+            structs.print(`${nameAssigned} value;`)
+            structs.popIndent()
+            structs.print(`} ${nameOptional};`)
+            if (!this.ignoreTarget(target, nameAssigned)) {
+                writeToString.print(`template <>`)
+                writeToString.print(`inline void WriteToString(string* result, const ${nameAssigned}${isPointer ? "*" : ""} value) {`)
+                writeToString.pushIndent()
+                this.generateWriteToString(nameAssigned, target, writeToString, isPointer)
+                writeToString.popIndent()
+                writeToString.print(`}`)
+            }
+            this.writeOptional(nameOptional, writeToString, isPointer)
+            /*
             let ignore = (target instanceof PrimitiveType) || this.ignoreTarget(target, assignedName)
 
             if (assignedName === PrimitiveType.CustomObject.name) {
@@ -671,6 +727,8 @@ export class DeclarationTable {
                 writeToString.print(`}`)
             }
             this.writeOptional(nameOptional, writeToString, isPointer)
+            */
+
         }
         for (let declarationTarget of this.typeMap.values()) {
             let name = this.uniqueNames.get(declarationTarget[0])!
@@ -680,8 +738,9 @@ export class DeclarationTable {
             if (name === PrimitiveType.CustomObject.name) continue
             seenNames.add(declarationTarget[1])
             typedefs.print(`typedef ${name} ${declarationTarget[1]};`)
-            typedefs.print(`typedef Optional_${name} Optional_${declarationTarget[1]};`)
-
+            if (seenNames.has(`Optional_${name}`)) {
+                typedefs.print(`typedef Optional_${name} Optional_${declarationTarget[1]};`)
+            }
         }
     }
 
@@ -804,13 +863,12 @@ export class DeclarationTable {
     targetStruct(target: DeclarationTarget): StructDescriptor {
         let result = new StructDescriptor()
         if (target instanceof PrimitiveType) {
-            result.addField(new FieldRecord(target, undefined, "value"))
             return result
         }
         else if (ts.isArrayTypeNode(target)) {
             // TODO: delay this computation.
             let element = this.toTarget(target.elementType)
-            result.addField(new FieldRecord(PrimitiveType.pointerTo(this.computeTargetName(element, false)), target, "array"))
+            result.addField(new FieldRecord(PrimitiveType.pointerTo(element), target, "array"))
             result.addField(new FieldRecord(PrimitiveType.Int32, undefined, "array_length"))
         }
         else if (ts.isInterfaceDeclaration(target)) {
@@ -848,7 +906,7 @@ export class DeclarationTable {
         }
         else if (ts.isOptionalTypeNode(target)) {
             result.addField(new FieldRecord(PrimitiveType.Int32, undefined, "tag"))
-            result.addField(new FieldRecord(this.toTarget(target.type), undefined, "value"))
+            result.addField(new FieldRecord(this.toTarget(target.type), target.type, "value"))
         }
         else if (ts.isParenthesizedTypeNode(target)) {
             // TODO: is it correct?

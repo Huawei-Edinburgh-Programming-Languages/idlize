@@ -320,7 +320,7 @@ if (options.dts2peer) {
                 fs.writeFileSync(path.join(outDir, 'bridge.cc'), bridgeCc)
                 fs.writeFileSync(path.join(outDir, 'Serializer.ts'), makeTSSerializer(declarationTable))
 
-                const structs = new SortingEmitter(declarationTable)
+                const structs = new IndentedPrinter()
                 const typedefs = new IndentedPrinter()
 
                 fs.writeFileSync(path.join(outDir, 'Deserializer.h'), makeCDeserializer(declarationTable, structs, typedefs))

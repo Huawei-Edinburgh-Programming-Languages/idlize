@@ -16,12 +16,11 @@
 import { IndentedPrinter } from "../IndentedPrinter";
 import * as ts from "typescript"
 import { asString, stringOrNone } from "../util";
-import { DeclarationTable, DeclarationTarget, PrimitiveType } from "./DeclarationTable";
+import { DeclarationTable, DeclarationTarget } from "./DeclarationTable";
 
 export class SortingEmitter extends IndentedPrinter {
     currentPrinter?: IndentedPrinter
-    emitters = new Map<string, IndentedPrinter>()
-    deps = new Map<string, Set<string>>()
+    emitters = new Map<DeclarationTarget, IndentedPrinter>()
 
     constructor(private table: DeclarationTable) {
         super()
@@ -31,25 +30,33 @@ export class SortingEmitter extends IndentedPrinter {
         return name.replace(/^(Optional_)*(.*?)(\*)*$/, '$2')
     }
 
-    private fillDeps(target: DeclarationTarget, seen: Set<string>) {
-        let name = this.undecorate(this.table!.computeTargetName(target, false))
-        if (seen.has(name)) return
-        seen.add(name)
+    private fillDepsInDepth(target: DeclarationTarget, seen: Set<DeclarationTarget>) {
+        if (seen.has(target)) return
+        seen.add(target)
+        // Need to request that declaration.
+        this.table.addDeclaration(target)
         let struct = this.table.targetStruct(target)
-        struct.supers.forEach(it => this.fillDeps(it, seen))
-        struct.getFields().forEach(it => this.fillDeps(it.declaration, seen))
+        struct.supers.forEach(it => this.fillDepsInDepth(it, seen))
+        struct.getFields().forEach(it => this.fillDepsInDepth(it.declaration, seen))
+    }
+
+    private getDeps(target: DeclarationTarget): DeclarationTarget[] {
+        let result: DeclarationTarget[] = []
+        let struct = this.table.targetStruct(target)
+        struct.supers.forEach(it => result.push(it))
+        struct.getFields().forEach(it => {
+            result.push(it.declaration)
+        })
+        return result
     }
 
     startEmit(table: DeclarationTable, declaration: DeclarationTarget) {
         this.table = table
-        let name = this.undecorate(table.computeTargetName(declaration, false))
-        let next = this.emitters.has(name) ? this.emitters.get(name)! : new IndentedPrinter()
-        this.emitters.set(name, next)
+        let next = this.emitters.has(declaration) ? this.emitters.get(declaration)! : new IndentedPrinter()
+        this.emitters.set(declaration, next)
         this.currentPrinter = next
-        let seen = new Set<string>()
-        this.fillDeps(declaration, seen)
-        seen.delete(name)
-        this.deps.set(name, seen)
+        let seen = new Set<DeclarationTarget>()
+        this.fillDepsInDepth(declaration, seen)
         table.processPendingRequests()
         // if (seen.size > 0) console.log(`${name}: depends on ${Array.from(seen.keys()).join(",")}`)
     }
@@ -83,22 +90,20 @@ export class SortingEmitter extends IndentedPrinter {
     }
 
     // Kahn's algorithm.
-    getToposorted(): Array<string> {
-        let result: string[] = []
+    getToposorted(): DeclarationTarget[] {
+        let result: DeclarationTarget[] = []
         let input = Array.from(this.emitters.keys())
-        input.push(PrimitiveType.Int32.getText())
-        let deps = this.deps
-
-        const adjMap = new Map<string, string[]>()
+        let adjMap = new Map<DeclarationTarget, DeclarationTarget[]>()
+        for (let key of input) {
+            adjMap.set(key, this.getDeps(key))
+        }
         let count = 0
         // Build adj map.
-        let inDegree = new Map<string, number>()
+        let inDegree = new Map<DeclarationTarget, number>()
         for (let k of input) {
-            //console.log("k", k)
-            let array: string[] = []
-            adjMap.set(k, array)
+            let array: DeclarationTarget[] = []
             inDegree.set(k, 0)
-            deps.get(k)?.forEach(it => {
+            adjMap.get(k)?.forEach(it => {
                 array.push(it)
             })
             count++
@@ -114,7 +119,7 @@ export class SortingEmitter extends IndentedPrinter {
                 inDegree.set(it, old + 1)
             }
         }
-        let queue: string[] = []
+        let queue: DeclarationTarget[] = []
         // Insert elements with in-degree 0
         for (let k of input) {
             if (inDegree.get(k)! == 0) {
@@ -144,9 +149,10 @@ export class SortingEmitter extends IndentedPrinter {
                     cycle.push(it)
                 }
             }
-            console.log(`Cycle: ${cycle.join(",")}`)
+            console.log(`CYCLE: ${cycle.map(it => `${this.table.computeTargetName(it, false)}: ${adjMap.get(it)?.map(it => this.table.computeTargetName(it, false)).join(",")}`).join("\n")}`)
             throw new Error("cycle detected")
         }
+        console.log("DEPS", result.map(it => this.table.computeTargetName(it, false)).join(","))
         return result
     }
 }

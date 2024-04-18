@@ -175,10 +175,10 @@ ${printer.getOutput().join("\n")}
 `
 }
 
-export function makeCDeserializer(table: DeclarationTable, structs: SortingEmitter, typedefs: IndentedPrinter): string {
+export function makeCDeserializer(table: DeclarationTable, structs: IndentedPrinter, typedefs: IndentedPrinter): string {
 
     const deserializer = new IndentedPrinter()
-    const writeToString = new SortingEmitter(table)
+    const writeToString = new IndentedPrinter()
     table.generateDeserializers(deserializer, structs, typedefs, writeToString)
 
     return `
@@ -254,7 +254,7 @@ enum ArkUIAPIVariantKind {
 ${lines.join("\n")}
 `
 }
-export function makeAPI(headers: string[], modifiers: string[], structs: SortingEmitter, typedefs: IndentedPrinter): string {
+export function makeAPI(headers: string[], modifiers: string[], structs: IndentedPrinter, typedefs: IndentedPrinter): string {
 
     let structsBase = fs.readFileSync('./templates/StructsBase.h','utf8');
 
