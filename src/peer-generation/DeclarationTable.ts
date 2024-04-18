@@ -600,9 +600,14 @@ export class DeclarationTable {
         }
     }
 
-    private uniqueName(target: DeclarationTarget): string {
+    private uniqueName(target: DeclarationTarget, type?: ts.TypeNode): string {
         if (target instanceof PrimitiveType) return target.name
-        return this.uniqueNames.get(target)!
+        const result = this.uniqueNames.get(target)!
+        if (result === "Array" && type && ts.isTypeReferenceNode(type)) {
+            const element = this.uniqueNames.get(this.toTarget(type.typeArguments![0]))
+            return `${result}_${element}`
+        }
+        return result
     }
 
     generateDeserializers(printer: IndentedPrinter, structs: SortingEmitter, typedefs: IndentedPrinter, writeToString: SortingEmitter) {
@@ -651,7 +656,7 @@ export class DeclarationTable {
             if (!ignore) {
                 structs.print(`typedef struct ${assignedName} {`)
                 structs.pushIndent()
-                this.targetStruct(target).getFields().forEach(it => structs.print(`${it.optional ? "Optional_" : ""}${this.uniqueName(it.declaration)} ${it.name};`))
+                this.targetStruct(target).getFields().forEach(it => structs.print(`${it.optional ? "Optional_" : ""}${this.uniqueName(it.declaration, it.type)} ${it.name};`))
                 structs.popIndent()
                 structs.print(`} ${assignedName};`)
             }
