@@ -155,10 +155,6 @@ export function isStatic(modifierLikes: ts.NodeArray<ts.ModifierLike> | undefine
     return modifierLikes?.find(it => it.kind == ts.SyntaxKind.StaticKeyword) != undefined
 }
 
-export function isStatic2(modifierLikes: readonly ts.Modifier[] | undefined): boolean {
-    return modifierLikes?.find(it => it.kind == ts.SyntaxKind.StaticKeyword) != undefined
-}
-
 export function getLineNumberString(sourceFile: ts.SourceFile, position: number): string {
     let pos = ts.getLineAndCharacterOfPosition(sourceFile, position)
     return `${pos.line + 1}:${pos.character}`

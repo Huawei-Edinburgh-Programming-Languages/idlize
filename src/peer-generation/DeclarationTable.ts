@@ -14,7 +14,7 @@
  */
 
 import * as ts from "typescript"
-import { asString, getDeclarationsByNode, getLineNumberString, getNameWithoutQualifiersRight, heritageDeclarations, identName, isStatic, isStatic2, mapType, throwException, typeEntityName } from "../util"
+import { asString, getDeclarationsByNode, getLineNumberString, getNameWithoutQualifiersRight, heritageDeclarations, identName, isStatic, throwException, typeEntityName } from "../util"
 import { IndentedPrinter } from "../IndentedPrinter"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
 import {
