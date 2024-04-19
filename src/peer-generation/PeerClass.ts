@@ -1,19 +1,20 @@
 import { IndentedPrinter } from "../IndentedPrinter"
 import { throwException } from "../util"
-import { determineInheritanceRole, determineParentRole, InheritanceRole, isCommonMethod, isHeir, isRoot, isStandalone } from "./inheritance"
+import { determineParentRole, InheritanceRole, isCommonMethod, isHeir, isRoot, isStandalone } from "./inheritance"
 import { PeerMethod } from "./PeerMethod"
 import { Printers } from "./Printers"
 
 export class PeerClass {
     constructor(
-        public componentName: string,
-        public printers: Printers
+        public readonly componentName: string,
+        public readonly printers: Printers,
     ) { }
 
     methods: PeerMethod[] = []
 
     originalClassName: string | undefined = undefined
     originalParentName: string | undefined = undefined
+    originalParentFilename: string | undefined = undefined
     parentComponentName: string | undefined = undefined
 
     get koalaComponentName(): string {
