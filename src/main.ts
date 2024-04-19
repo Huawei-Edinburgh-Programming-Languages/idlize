@@ -326,9 +326,10 @@ if (options.dts2peer) {
 
                 const structs = new IndentedPrinter()
                 const typedefs = new IndentedPrinter()
+                const prologue = new IndentedPrinter()
 
-                fs.writeFileSync(path.join(outDir, 'Deserializer.h'), makeCDeserializer(declarationTable, structs, typedefs))
-                fs.writeFileSync(path.join(outDir, 'arkoala_api.h'), makeAPI(apiHeaders, apiHeadersList, structs, typedefs))
+                fs.writeFileSync(path.join(outDir, 'Deserializer.h'), makeCDeserializer(declarationTable, prologue, structs, typedefs))
+                fs.writeFileSync(path.join(outDir, 'arkoala_api.h'), makeAPI(apiHeaders, apiHeadersList, prologue, structs, typedefs))
 
                 const dummyImplCc =
                     dummyImplementations(dummyImpl) +

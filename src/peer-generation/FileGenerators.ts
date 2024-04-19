@@ -174,11 +174,11 @@ ${printer.getOutput().join("\n")}
 `
 }
 
-export function makeCDeserializer(table: DeclarationTable, structs: IndentedPrinter, typedefs: IndentedPrinter): string {
+export function makeCDeserializer(table: DeclarationTable, prologue: IndentedPrinter, structs: IndentedPrinter, typedefs: IndentedPrinter): string {
 
     const deserializer = new IndentedPrinter()
     const writeToString = new IndentedPrinter()
-    table.generateDeserializers(deserializer, structs, typedefs, writeToString)
+    table.generateDeserializers(deserializer, prologue, structs, typedefs, writeToString)
 
     return `
 #include "Interop.h"
@@ -253,7 +253,7 @@ enum ArkUIAPIVariantKind {
 ${lines.join("\n")}
 `
 }
-export function makeAPI(headers: string[], modifiers: string[], structs: IndentedPrinter, typedefs: IndentedPrinter): string {
+export function makeAPI(headers: string[], modifiers: string[], prologue: IndentedPrinter, structs: IndentedPrinter, typedefs: IndentedPrinter): string {
 
     let structsBase = fs.readFileSync('./templates/StructsBase.h','utf8');
 
@@ -284,6 +284,8 @@ enum Tags
 };
 
 ${structsBase}
+
+${prologue.getOutput().join("\n")}
 
 ${structs.getOutput().join("\n")}
 

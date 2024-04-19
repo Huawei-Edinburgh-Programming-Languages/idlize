@@ -84,6 +84,16 @@ class StructDescriptor {
     isEmpty(): boolean {
         return this.fields.length == 0
     }
+    *dependencies() {
+        for (let s of this.supers) yield s
+        for (let f of this.fields) {
+            // avoid dependencies on struct if the field is a struct pointer
+            if (!(f.declaration instanceof PointerType) || f.declaration.pointed instanceof PrimitiveType) {
+                yield f.declaration
+            }
+        }
+        for (let d of this.deps) yield d
+    }
 }
 
 class PendingTypeRequest {
@@ -665,7 +675,7 @@ export class DeclarationTable {
         }
     }
 
-    generateDeserializers(printer: IndentedPrinter, structs: IndentedPrinter, typedefs: IndentedPrinter, writeToString: IndentedPrinter) {
+    generateDeserializers(printer: IndentedPrinter, prologue: IndentedPrinter, structs: IndentedPrinter, typedefs: IndentedPrinter, writeToString: IndentedPrinter) {
         this.processPendingRequests()
         let orderer = new DependencySorter(this)
         for (let declaration of this.declarations) {
@@ -704,15 +714,16 @@ export class DeclarationTable {
             let isEnum = !(target instanceof PrimitiveType) && ts.isEnumDeclaration(target)
             let nameOptional = "Optional_" + nameAssigned
             if (isEnum) {
-                structs.print(`typedef int32_t ${nameAssigned};`)
+                prologue.print(`typedef int32_t ${nameAssigned};`)
                 if (!seenNames.has(nameOptional)) {
                     seenNames.add(nameOptional)
-                    structs.print(`typedef struct { enum Tags tag; int32_t value; } ${nameOptional};`)
+                    prologue.print(`typedef struct { enum Tags tag; int32_t value; } ${nameOptional};`)
                     this.writeOptional(nameOptional, writeToString, isPointer)
                 }
                 continue
             }
             if (!noBasicDecl && !this.ignoreTarget(target, nameAssigned)) {
+                prologue.print(`struct ${nameAssigned};`)
                 const structDescriptor = this.targetStruct(target)
                 this.printStructsCHead(nameAssigned, structDescriptor.packed, structs)
                 structDescriptor.getFields().forEach(it => structs.print(`${it.optional ? "Optional_" : ""}${this.uniqueName(it.declaration)} ${it.name};`))

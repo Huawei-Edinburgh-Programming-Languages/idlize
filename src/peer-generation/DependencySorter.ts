@@ -27,9 +27,9 @@ export class DependencySorter {
         // Need to request that declaration.
         this.table.addDeclaration(target)
         let struct = this.table.targetStruct(target)
-        struct.supers.forEach(it => this.fillDepsInDepth(it, seen))
-        struct.getFields().forEach(it => this.fillDepsInDepth(it.declaration, seen))
-        struct.deps.forEach(dep => this.fillDepsInDepth(dep, seen))
+        for (let dep of struct.dependencies()) {
+            this.fillDepsInDepth(dep, seen)
+        }
     }
 
     private getDeps(target: DeclarationTarget): DeclarationTarget[] {
