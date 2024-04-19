@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import * as path from "path"
 import * as ts from "typescript"
 import {
     asString,
@@ -45,7 +46,7 @@ import {
     isHeir,
     isRoot,
     isStandalone,
-    parentName
+    singleParentDeclaration,
 } from "./inheritance"
 import { Printers } from "./Printers"
 import { PeerClass } from "./PeerClass"
@@ -149,16 +150,35 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         this.declarationTable.requestType(name, type)
     }
 
-    private importStatements(currentFileName: string): string[] {
-        return PeerGeneratorConfig.exports
-            .filter(it => !currentFileName.endsWith(`/${it.file}.d.ts`))
-            .map(it => {
-                const entities = it.components
-                    .flatMap(it => [`Ark${it}Peer`, `Ark${it}Attributes`])
-                    .map(it => `  ${it}`)
-                    .join(",\n")
-                return `import {\n${entities}\n} from "./${renameDtsToPeer(it.file, false)}"`
-            })
+    dependencies: [ts.ClassDeclaration, PeerClass][] = []
+
+    addDependency(originalParent: ts.ClassDeclaration, peer: PeerClass) {
+        this.dependencies.push([originalParent, peer])
+    }
+
+    private dependenciesImports(): string[] {
+        const fileToImports = new Map<string, Set<string>>()
+        this.dependencies.forEach(dependency => {
+            const [originalParent, peer] = dependency
+            const originalFilename = originalParent.getSourceFile().fileName
+            if (originalFilename == this.sourceFile.fileName) return
+
+            const filename = renameDtsToPeer(path.basename(originalFilename))
+            const fileImports = getOrPut(fileToImports, filename, () => new Set())
+            fileImports.add(peer.peerParentName)
+            if (peer.attributesParentName)
+                fileImports.add(peer.attributesParentName)
+        })
+        
+        const statements: string[] = []
+        fileToImports.forEach((imports, filename) => {
+            const filenameWithoutExt = filename.replace(path.extname(filename), '')
+            const uniqImports = Array.from(imports)
+            statements.push(
+                `import {${uniqImports.join(", ")}} from "./${filenameWithoutExt}"`
+            )
+        })
+        return statements
     }
 
     printAllPeers() {
@@ -168,7 +188,9 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
     }
 
     visitWholeFile(): stringOrNone[] {
-        this.importStatements(this.sourceFile.fileName)
+        ts.forEachChild(this.sourceFile, (node) => this.visit(node))
+        
+        this.dependenciesImports()
             .concat([
                 `import { runtimeType, withLength, withLengthArray, RuntimeType } from "./SerializerBase"`,
                 `import { Serializer } from "./Serializer"`,
@@ -180,7 +202,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
                 `import { ArkComponent } from "@arkoala/arkui/ArkComponent"`
             ])
             .forEach(it => this.printTS(it))
-        ts.forEachChild(this.sourceFile, (node) => this.visit(node))
         this.printAllPeers()
         return this.printers.TS.getOutput()
     }
@@ -435,13 +456,14 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         throw new Error(`unexpected property ${property.name.getText(this.sourceFile)}`)
     }
 
-
     populatePeer(node: ts.ClassDeclaration, peer: PeerClass) {
         peer.originalClassName = className(node)
-        peer.originalParentName = parentName(node)
-        peer.parentComponentName = peer.originalParentName ?
-            this.renameToComponent(peer.originalParentName!) :
-            undefined
+        const parent = singleParentDeclaration(this.typeChecker, node) as ts.ClassDeclaration
+        if (parent) {
+            this.addDependency(parent, peer)
+            peer.originalParentName = className(parent)
+            peer.parentComponentName = this.renameToComponent(peer.originalParentName!)
+        }
     }
 
     private renameToComponent(name: string): string {
