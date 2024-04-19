@@ -50,13 +50,13 @@ export class PeerClass {
         return "Ark" + name + "Attributes"
     }
 
-    private parentAttributesName(): string | undefined {
+    get attributesParentName(): string | undefined {
         if (!isHeir(this.originalClassName!)) return undefined
         return this.componentToAttribute(this.parentComponentName!)
     }
 
     attributeInterfaceHeader() {
-        const parent = this.parentAttributesName()
+        const parent = this.attributesParentName
         const extendsClause =
             parent
                 ? ` extends ${parent} `
