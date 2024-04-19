@@ -59,7 +59,8 @@ export function singleParentDeclaration(
     const parentTypeNode = component.heritageClauses
         ?.filter(it => it.token == ts.SyntaxKind.ExtendsKeyword)[0]?.types[0]?.expression
     if (parentTypeNode) {
-        const declaration = getDeclarationsByNode(typeChecker, parentTypeNode)[0]
+        const declaration = getDeclarationsByNode(typeChecker, parentTypeNode)
+            .find(it => ts.isClassDeclaration(it) || ts.isInterfaceDeclaration(it))
         return declaration as (ts.ClassDeclaration | ts.InterfaceDeclaration | undefined)
     }
     return undefined
