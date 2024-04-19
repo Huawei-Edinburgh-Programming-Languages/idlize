@@ -84,16 +84,6 @@ class StructDescriptor {
     isEmpty(): boolean {
         return this.fields.length == 0
     }
-    *dependencies() {
-        for (let s of this.supers) yield s
-        for (let f of this.fields) {
-            // avoid dependencies on struct if the field is a struct pointer
-            if (!(f.declaration instanceof PointerType) || f.declaration.pointed instanceof PrimitiveType) {
-                yield f.declaration
-            }
-        }
-        for (let d of this.deps) yield d
-    }
 }
 
 class PendingTypeRequest {
@@ -1011,6 +1001,18 @@ export class DeclarationTable {
             throw new Error(`Unsupported field getter: ${asString(target)} ${(target as any).getText()}`)
         }
         return result
+    }
+
+    getDependencies(target: DeclarationTarget): DeclarationTarget[] {
+        const struct = this.targetStruct(target)
+        const fieldDeps = struct.getFields()
+            .filter(it =>
+                // avoid dependency on struct if the field is a struct pointer
+                !(it.declaration instanceof PointerType) || it.declaration.pointed instanceof PrimitiveType)
+            .map(it => it.declaration)
+        return struct.supers
+            .concat(fieldDeps)
+            .concat(Array.from(struct.deps))
     }
 
     private translateSerializerType(name: string, target: DeclarationTarget): string {
