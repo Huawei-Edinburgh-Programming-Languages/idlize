@@ -5,4 +5,7 @@
         "./tests/*": "./tests/*.js",
         "./*": "./generated/peers/*.js"
     }
+    "imports": {
+        "#@koalaui/arkui": "./generated/peers/ArkUINodeType"
+    }
 }

@@ -169,7 +169,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
                 `import { KPointer } from "./types"`,
                 `import { nativeModule } from "./NativeModule"`,
                 `import { PeerNode, Finalizable, nullptr } from "./Interop"`,
-                `import { ArkUINodeType } from "./ArkUINodeType"`,
+                `import { ArkUINodeType } from "@koalaui/arkoala"`,
                 `import { ArkComponent } from "@arkoala/arkui/ArkComponent"`
             ])
             .forEach(it => this.printTS(it))

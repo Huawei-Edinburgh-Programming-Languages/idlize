@@ -49,6 +49,9 @@ export default {
             declarationMap: false,
             declaration: false,
             composite: false,
+            paths: {
+                '@koalaui/arkoala': ['./koala-common']
+            }
         }),
         nodeResolve({
             extensions: [".js", ".mjs", ".cjs", ".ts", ".cts", ".mts"]

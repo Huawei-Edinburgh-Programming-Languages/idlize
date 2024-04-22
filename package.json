@@ -59,6 +59,5 @@
         "compile:native-node-host-subset": "npm run configure:native-node-host-subset && cd native && meson compile -C build-node-host-subset && meson install -C build-node-host-subset",
         "configure:native-node-host-full": "npm run download:napi && cd ./native && meson setup -Dsubset=false build-node-host-full",
         "compile:native-node-host-full": "npm run configure:native-node-host-full && cd native && meson compile -C build-node-host-full && meson install -C build-node-host-full"
-
     }
 }

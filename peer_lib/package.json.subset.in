@@ -4,5 +4,11 @@
         "./package.json": "./package.json",
         "./tests/*": "./tests/*.js",
         "./*": "./generated/subset/*.js"
+    },
+    "imports": {
+        "#@koalaui/arkui": {
+            "default": "./generated/subset/ArkUINodeType.js",
+            "node": "./generated/subset/ArkUINodeType.js"
+        }
     }
 }
