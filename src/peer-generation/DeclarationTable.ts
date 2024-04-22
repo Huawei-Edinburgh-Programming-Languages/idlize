@@ -655,7 +655,7 @@ export class DeclarationTable {
                 if (ts.isEnumDeclaration(elementType)) {
                     structs.print(`typedef int32_t ${name};`)
                 } else {
-                    structs.print(`struct ${this.computeTargetName(elementType, false)};`)
+                    structs.print(`typedef struct ${name} ${name};`)
                 }
             }
         }
