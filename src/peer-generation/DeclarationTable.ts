@@ -14,7 +14,7 @@
  */
 
 import * as ts from "typescript"
-import { asString, getDeclarationsByNode, getLineNumberString, getNameWithoutQualifiersRight, heritageDeclarations, identName, isStatic, throwException, typeEntityName } from "../util"
+import { asString, getDeclarationsByNode, getLineNumberString, getNameWithoutQualifiersRight, heritageDeclarations, identName, isCommonMethodOrSubclass, isStatic, throwException, typeEntityName } from "../util"
 import { IndentedPrinter } from "../IndentedPrinter"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
 import {
@@ -338,7 +338,7 @@ export class DeclarationTable {
                 return this.computeTargetName(this.toTarget(target.typeArguments[0]), true)
             if (name == "Array")
                 return prefix + `Array_` + this.computeTargetName(this.toTarget(target.typeArguments[0]), optional)
-            if (name == "ContentModifier" || name == "AnimationRange")
+            if (name == "ContentModifier" || name == "AnimationRange" || name == "PositionT" || name == "SizeT")
                 return prefix + PrimitiveType.CustomObject.getText()
             if (name == "Callback")
                 return prefix + PrimitiveType.Function.getText()
@@ -567,11 +567,13 @@ export class DeclarationTable {
         let name = getNameWithoutQualifiersRight(typeName)
         if (name === "Length") return new LengthConvertor(param)
         if (name === "AttributeModifier")
-            return new PredefinedConvertor(param, "AttributeModifier<any>", "AttributeModifier", "CustomObject")
+            return new PredefinedConvertor(param, "AttributeModifier<any>", "AttributeModifier", PrimitiveType.CustomObject.getText())
         if (name === "AnimationRange")
             return new CustomTypeConvertor(param, "AnimationRange", "AnimationRange<number>")
         if (name === "ContentModifier")
             return new CustomTypeConvertor(param, "ContentModifier", "ContentModifier<any>")
+        if (name === "CircleAttribute" || name === "EllipseAttribute" || name == "PathAttribute" || name == "RectAttribute")
+            return new CustomTypeConvertor(param, "CommonShape", "CommonShapeMethod<any>")
         if (name === "Array")
             return new ArrayConvertor(param, this, type, type.typeArguments![0])
         if (name === "Callback")
@@ -1089,7 +1091,7 @@ export class DeclarationTable {
                 result.addField(new FieldRecord(PrimitiveType.pointerTo(this.toTarget(type)), undefined, "config"))
             } else if (name == "Callback") {
                 result.addField(new FieldRecord(PrimitiveType.Int32, undefined, "id"))
-            } else if (name == "AnimationRange") {
+            } else if (name == "AnimationRange" || name == "PositionT" || name == "SizeT") {
                 // TODO: not yet :(
                 // let type = target.typeArguments[0]
                 // result.addField(new FieldRecord(this.toTarget(type), type, "value0"))
@@ -1142,6 +1144,7 @@ export class DeclarationTable {
         if (target instanceof PrimitiveType) return true
         if (ts.isEnumDeclaration(target)) return true
         if (ts.isImportTypeNode(target)) return true
+        if (ts.isClassDeclaration(target) && isCommonMethodOrSubclass(this.typeChecker!, target)) return true
         return false
     }
 
