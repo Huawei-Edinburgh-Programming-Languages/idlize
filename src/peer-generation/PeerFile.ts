@@ -14,7 +14,7 @@
  */
 
 import * as path from "path"
-import { getOrPut, renameDtsToPeer, renameDtsToComponent as renameDtsToComponent } from "../util"
+import { getOrPut, renameDtsToPeer, renameDtsToComponent } from "../util"
 import { PeerClass } from "./PeerClass"
 import { Printers } from "./Printers"
 import { ImportsCollector } from "./ImportsCollector"

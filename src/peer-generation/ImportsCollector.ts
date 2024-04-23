@@ -40,7 +40,7 @@ export class ImportsCollector {
     addFilterByBasename(basename: string) {
         const basenameNoExt = basename.replaceAll(path.extname(basename), '')
         const module = `./${basenameNoExt}`
-        this.addFilter((_, m) => m != module)
+        this.addFilter((_, m) => m !== module)
     }
 
     print(printer: IndentedPrinter) {

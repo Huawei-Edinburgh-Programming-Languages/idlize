@@ -560,12 +560,10 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
                     const typesToUnion = overloads.map(overload =>
                         overload.parameters[i]?.type ?? ts.factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword)
                     )
-                    const isOptional = overloads.some(overload => overload.parameters[i]?.questionToken)
-                        || overloads.some(overload => overload.parameters.length <= i)
                     return {
                         types: typesToUnion,
                         name: `arg${i}`,
-                        optional: isOptional
+                        optional: overloads.some(overload => overload.parameters[i]?.questionToken ?? true)
                             ? ts.factory.createToken(ts.SyntaxKind.QuestionToken)
                             : undefined
                     }

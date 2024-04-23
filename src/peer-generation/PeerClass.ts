@@ -1,6 +1,6 @@
 import * as path from "path"
 import { IndentedPrinter } from "../IndentedPrinter"
-import { renameDtsToPeer, throwException } from "../util"
+import { indentedBy, renameDtsToPeer, throwException } from "../util"
 import { ImportsCollector } from "./ImportsCollector"
 import { determineParentRole, InheritanceRole, isCommonMethod, isHeir, isRoot, isStandalone } from "./inheritance"
 import { PeerMethod } from "./PeerMethod"
@@ -160,20 +160,22 @@ export class PeerClass {
     printComponent() {
         const printer = this.printers.TSComponent
         const method = this.callableMethod
-        const parentStructClass = {
-            name: `ArkCommonStruct${(method?.mappedParamsTypes?.length ?? 0) + 1}`,
-            types: method?.mappedParamsTypes ?? []
-        }
         const componentClassName = `${this.koalaComponentName}Component`
         const componentFunctionName = this.koalaComponentName
         const peerClassName = `${this.koalaComponentName}Peer`
         const attributeClassName = `${this.koalaComponentName}Attribute`
+        const parentStructClass = {
+            name: `ArkCommonStruct${(method?.mappedParamsTypes?.length ?? 0) + 1}`,
+            typesLines: [
+                `${componentClassName},`,
+                `/** @memo */`,
+                `() => void${method?.mappedParamsTypes?.length ? "," : ""}`,
+                (method?.mappedParamsTypes ?? []).join(", ")
+            ]
+        }
         printer.print(`
 export class ${componentClassName} extends ${parentStructClass.name}<
-  ${componentClassName},
-  /** @memo */
-  () => void${parentStructClass.types.length > 0 ? "," : ""}
-  ${parentStructClass.types.join(",\n  ")}
+${parentStructClass.typesLines.map(it => indentedBy(it, 1)).join("\n")}
 > implements ${attributeClassName} {
 
   protected peer?: ${peerClassName}
@@ -190,7 +192,7 @@ export class ${componentClassName} extends ${parentStructClass.name}<
     style?: (attributes: ${componentClassName}) => void,
     /** @memo */
     content?: () => void,
-    ${method ? method?.mappedParams : ""} 
+    ${method?.mappedParams ?? ""} 
   ) {
     NodeAttach(() => new ${peerClassName}(ArkUINodeType.${this.componentName}, this), () => {
       style?.(this)
@@ -208,18 +210,15 @@ export function ${componentFunctionName}(
   style?: (attributes: ${componentClassName}) => void,
   /** @memo */
   content?: () => void,
-  ${method?.mappedParams ? method?.mappedParams : ""}
+  ${method?.mappedParams ?? ""}
 ) {
   ${componentClassName}._instantiate<
-    ${componentClassName},
-    /** @memo */
-    () => void${parentStructClass.types.length > 0 ? "," : ""}
-    ${parentStructClass.types.join(",\n    ")}
+${parentStructClass.typesLines.map(it => indentedBy(it, 2)).join("\n")}
   >(
     style,
     () => new ${componentClassName}(),
     content,
-    ${method?.mappedParamValues ? method.mappedParamValues : ""}
+    ${method?.mappedParamValues ?? ""}
   )
 }
 `)
