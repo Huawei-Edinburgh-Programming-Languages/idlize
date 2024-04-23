@@ -275,36 +275,3 @@ class OurCustomSerializer extends CustomSerializer {
 
 // TODO, remove me!
 SerializerBase.registerCustomSerializer(new OurCustomSerializer())
-
-// Shapes
-declare type RectOptions =
-{
-    width?: number | string
-    height?: number | string
-    radius?: number | string | Array<any>
-} |
-{
-    width?: number | string
-    height?: number | string
-    radiusWidth?: number | string
-    radiusHeight?: number | string
-}
-
-declare type CircleOptions =
-{
-    width?: string | number
-    height?: string | number
-}
-
-declare type EllipseOptions =
-{
-    width?: string | number
-    height?: string | number
-}
-
-declare type PathOptions =
-{
-    width?: number | string
-    height?: number | string
-    commands?: string
-}
