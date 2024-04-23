@@ -424,7 +424,7 @@ export function renameDtsToComponent(fileName: string) {
     return "Ark"
         .concat(snakeCaseToCamelCase(fileName))
         .replace(".d.ts", "")
-        .concat("Component", ".ts")
+        .concat(".ts")
 }
 
 export function importTypeName(type: ts.ImportTypeNode, asType = false): string {
