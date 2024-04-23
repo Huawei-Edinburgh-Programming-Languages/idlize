@@ -295,6 +295,8 @@ if (options.dts2peer) {
                 declarationTable.typeChecker = typeChecker
             },
             onSingleFile: (output: PeerGeneratorVisitorOutput, outputDir, sourceFile) => {
+                const skipComponentGenerationDueToCompileProblems = true
+
                 if (output.peer.length > 0) {
                     const outPeerFile = path.join(
                         outputDir,
@@ -308,7 +310,7 @@ if (options.dts2peer) {
                     fs.writeFileSync(outPeerFile, generated)
                 }
 
-                if (output.component.length > 0) {
+                if (!skipComponentGenerationDueToCompileProblems && output.component.length > 0) {
                     const outComponentFile = path.join(
                         outputDir,
                         renameDtsToComponent(path.basename(sourceFile.fileName))
