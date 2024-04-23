@@ -108,15 +108,6 @@ export class PeerMethod {
     }
 
     printModifierImplFunctionBody(retType: string, implName: string, apiParameters: string, printer: IndentedPrinter) {
-        /*
-        printer.print(`string out("${this.methodName}(");`)
-        this.argConvertors.forEach((argConvertor, index) => {
-            if (index > 0) this.printers.dummyImpl.print(`out.append(", ");`)
-            printer.print(`WriteToString(&out, ${argConvertor.param});`)
-        })
-        printer.print(`out.append(")");`)
-        printer.print(`appendGroupedLog(1, out);`)
-        */
         printer.print(`// ${implName} `)
         if (retType != "void") printer.print(`return 0;`)
     }
