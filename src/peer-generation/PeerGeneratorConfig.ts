@@ -16,17 +16,18 @@
 export class PeerGeneratorConfig {
     public static commonMethod = ["CommonMethod"]
 
+    public static shapes = ["RectAttribute", "CircleAttribute", "EllipseAttribute", "PathAttribute"]
+
     public static ignoreSerialization = [
         "Array", "Callback", "ErrorCallback", "Resource", "Length", "AttributeModifier",
         "Number", "String", "Function", "Optional", "RelativeIndexable"
-    ]
+    ].concat(PeerGeneratorConfig.shapes.map(it => it.replace(/Attribute$/, 'Options')))
+
     public static ignorePeerMethod = ["attributeModifier"]
 
     private static knownParametrized = ["Indicator", "AttributeModifier", "AnimationRange", "ContentModifier", "SizeT", "PositionT"]
 
     public static invalidAttributes = ["ArkScrollableCommon"]
-
-    public static shapes = ["RectAttribute", "CircleAttribute", "EllipseAttribute", "PathAttribute"]
 
     // TODO: need a better logic to know if the XxxInterface
     // doesn't have a XxxAttribute class which needs a peer.

@@ -300,7 +300,11 @@ export class DeclarationTable {
             return prefix + `Union_${target.types.map(it => this.computeTargetName(this.toTarget(it), false)).join("_")}`
         }
         if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {
-            return prefix + identName(target.name)
+            const name = identName(target.name)
+            if (name && PeerGeneratorConfig.shapes.includes(name)) {
+                return prefix + name.replace(/Attribute$/, 'Options')
+            }
+            return prefix + name
         }
         if (ts.isFunctionTypeNode(target)) {
             return prefix + PrimitiveType.Function.getText()
@@ -364,6 +368,9 @@ export class DeclarationTable {
             if (typeName === "Array") {
                 const elementTypeName = this.computeTypeNameImpl(undefined, type.typeArguments![0], false)
                 return `${prefix}Array_${elementTypeName}`
+            }
+            if (typeName && PeerGeneratorConfig.shapes.includes(typeName)) {
+                return prefix + typeName.replace(/Attribute$/, 'Options')
             }
             return prefix + identName(type.typeName)!
         }
@@ -587,8 +594,8 @@ export class DeclarationTable {
             return new OptionConvertor(param, this, type.typeArguments![0])
         }
         if (name && PeerGeneratorConfig.shapes.includes(name)) {
-            const replacement = name.replace(/^(.*)Attribute$/, 'Ark_$1Options')
-            return new PredefinedConvertor(param, replacement, name, replacement)
+            const replacement = name.replace(/Attribute$/, 'Options')
+            return new PredefinedConvertor(param, replacement, replacement, replacement)
         }
         return undefined
     }
