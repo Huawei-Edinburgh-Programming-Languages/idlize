@@ -18,7 +18,7 @@ import { ArkButtonPeer } from "@arkoala/arkui/ArkButtonPeer"
 import { ArkCalendarPickerPeer } from "@arkoala/arkui/ArkCalendarPickerPeer"
 import { ArkFormComponentPeer } from "@arkoala/arkui/ArkFormComponentPeer"
 import { ArkUINodeType } from "@koalaui/arkoala"
-import { withStringResult } from "./Interop"
+import { withStringResult } from "@koalaui/interop"
 import { nativeModule } from "@arkoala/arkui/NativeModule"
 
 const TEST_GROUP_LOG = 1

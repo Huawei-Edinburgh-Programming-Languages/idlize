@@ -39,7 +39,6 @@ import { DeclarationTable } from "./DeclarationTable"
 import {
     determineParentRole,
     InheritanceRole,
-    isCommonMethod,
     isHeir,
     isRoot,
     isStandalone,
@@ -166,9 +165,9 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
                 `import { runtimeType, withLength, withLengthArray, RuntimeType } from "./SerializerBase"`,
                 `import { Serializer } from "./Serializer"`,
                 `import { int32 } from "@koalaui/common"`,
-                `import { KPointer } from "./types"`,
+                `import { KPointer } from "@koalaui/interop"`,
                 `import { nativeModule } from "./NativeModule"`,
-                `import { PeerNode, Finalizable, nullptr } from "./Interop"`,
+                `import { PeerNode, Finalizable } from "@koalaui/interop"`,
                 `import { ArkUINodeType } from "@koalaui/arkoala"`,
                 `import { ArkComponent } from "@arkoala/arkui/ArkComponent"`
             ])
@@ -482,7 +481,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
                 }
             })
         }
-        this.printTS(`nativeModule()._${clazzName}_${methodName}(this.ptr${argConvertors.length > 0 ? ", " : ""}`)
+        this.printTS(`nativeModule()._${clazzName}_${methodName}(this.peer.ptr${argConvertors.length > 0 ? ", " : ""}`)
         this.pushIndentTS()
         argConvertors.forEach((it, index) => {
             let maybeComma = index == argConvertors.length - 1 ? "" : ","
@@ -590,14 +589,12 @@ export class PeerGeneratorVisitor implements GenericVisitor<stringOrNone[]> {
         this.pushIndentDummyModifiers()
     }
 
-    private peerParentName(component: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
-        const name = componentName(component)
-        if (isCommonMethod(name)) return "PeerNode"
-        if (isStandalone(name)) return "PeerNode"
-        if (isRoot(name)) return "Finalizable"
-
-        const parent = parentName(component)
-            ?? throwException(`Expected component to have parent: ${name}`)
+    private peerParentName(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
+        const parentRole = determineParentRole(node)
+        if ([InheritanceRole.Finalizable, InheritanceRole.PeerNode].includes(parentRole)) {
+            return InheritanceRole[parentRole]
+        }
+        const parent = parentName(node) ?? throwException(`Expected component to have parent`)
         return `${this.renameToKoalaComponent(parent)}Peer`
     }
 

@@ -1,5 +1,5 @@
 import * as ts from "typescript";
-import { componentName } from "../util";
+import { componentName, throwException } from "../util";
 
 export enum InheritanceRole {
     Finalizable,
@@ -31,7 +31,7 @@ export function determineParentRole(node: ts.ClassDeclaration | ts.InterfaceDecl
     if (parent === undefined) {
         if (isStandalone(name)) return InheritanceRole.PeerNode
         if (isCommonMethod(name)) return InheritanceRole.PeerNode
-        if (isRoot(name)) return InheritanceRole.Finalizable
+        if (isRoot(name)) return InheritanceRole.PeerNode
         throw new Error(`Expected check to be exhaustive`)
     }
     if (isRoot(parent)) return InheritanceRole.Root

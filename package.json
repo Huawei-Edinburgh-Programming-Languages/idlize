@@ -44,7 +44,7 @@
         "run:all": "npm run compile && node . --dts2idl --input-dir ./interface_sdk-js/api/@internal/component/ets/ --verify-idl --common-to-attributes --docs=opt",
         "run2h": "npm run compile && node . --idl2h --input-dir ./idl",
         "run2dts": "npm run compile && node . --idl2dts --input-dir ./idl",
-        "run2peer:all": "npm run compile && node . --dts2peer --input-dir ./interface_sdk-js/api/@internal/component/ets/ --output-dir ./generated/peers",
+        "run2peer:all": "npm run compile && node . --dts2peer --input-dir ./interface_sdk-js/api/@internal/component/ets/ --output-dir ./generated/peers && npm run deps",
         "run2peer": "npm run compile && node . --dts2peer --input-dir ./interface_sdk-js/api/@internal/component/ets/ --generate-interface CommonMethod,ButtonAttribute --output-dir ./generated/peers",
         "lint": "npm run compile && node . --linter --input-dir ./interface_sdk-js/api/@internal/component/ets/ --input-file common.d.ts --output-dir linter --linter-whitelist whitelist.json",
         "lint:all": "npm run compile && node . --linter --input-dir ./interface_sdk-js/api/@internal/component/ets/ --output-dir linter --linter-whitelist whitelist.json",
@@ -58,6 +58,13 @@
         "configure:native-node-host-subset": "npm run download:napi && cd ./native && meson setup -Dsubset=true build-node-host-subset",
         "compile:native-node-host-subset": "npm run configure:native-node-host-subset && cd native && meson compile -C build-node-host-subset && meson install -C build-node-host-subset",
         "configure:native-node-host-full": "npm run download:napi && cd ./native && meson setup -Dsubset=false build-node-host-full",
-        "compile:native-node-host-full": "npm run configure:native-node-host-full && cd native && meson compile -C build-node-host-full && meson install -C build-node-host-full"
+        "compile:native-node-host-full": "npm run configure:native-node-host-full && cd native && meson compile -C build-node-host-full && meson install -C build-node-host-full",
+
+        "compile:stub:arkoala": "cd peer_lib/ts/node_modules/@koalaui/arkoala && tsc index.ts --downlevelIteration",
+        "compile:stub:common": "cd peer_lib/ts/node_modules/@koalaui/common && tsc index.ts",
+        "compile:stub:interop": "cd peer_lib/ts/node_modules/@koalaui/interop && tsc index.ts --downlevelIteration",
+        "compile:stub:deps": "npm run compile:stub:arkoala && npm run compile:stub:common && npm run compile:stub:interop",
+        "copy:peer:deps": "cp -r ./peer_lib/ts/node_modules ./generated/peers",
+        "deps": "npm run compile:stub:deps && npm run copy:peer:deps"
     }
 }
