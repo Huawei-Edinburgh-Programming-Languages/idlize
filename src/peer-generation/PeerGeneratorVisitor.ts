@@ -264,13 +264,23 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         const peer = this.peerFile.getOrPutPeer(componentName)
         const collapsedMethods = this.collapseOverloads(node)
         const peerMethods = collapsedMethods
-            .filter(it =>
-                ts.isCallSignatureDeclaration(it.member) ||
-                PeerGeneratorConfig.shapes.includes(name) && ts.isConstructSignatureDeclaration(it.member))
+            .filter(it => ts.isCallSignatureDeclaration(it.member))
             .map(it => this.processMethodOrCallable(it, peer, identName(node)!))
             .filter(it => it != undefined) as PeerMethod[]
         peer.methods.push(...peerMethods)
         this.nativeModulePrint(node, collapsedMethods)
+
+        if (PeerGeneratorConfig.shapes.includes(componentName)) {
+            const params = collapsedMethods
+                .filter(it => ts.isConstructSignatureDeclaration(it.member))
+                .flatMap(it => it.member.parameters)
+            if (params.length > 0) {
+                const optionsType = params[0].type!
+                if (!ts.isTypeReferenceNode(optionsType)) {
+                    this.peerFile.declareType(componentName + "Options", optionsType.getText())
+                }
+            }
+        }
     }
 
     processConstructor(ctor: ts.ConstructorDeclaration | ts.ConstructSignatureDeclaration) {

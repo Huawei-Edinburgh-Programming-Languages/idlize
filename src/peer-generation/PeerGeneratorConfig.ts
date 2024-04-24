@@ -16,13 +16,13 @@
 export class PeerGeneratorConfig {
     public static commonMethod = ["CommonMethod"]
 
-    public static shapes = ["RectAttribute", "CircleAttribute", "EllipseAttribute", "PathAttribute"]
+    public static shapes = ["Rect", "Circle", "Ellipse", "Path"]///converge
+    public static shapeAttributes = ["RectAttribute", "CircleAttribute", "EllipseAttribute", "PathAttribute"]
 
     public static ignoreSerialization = [
         "Array", "Callback", "ErrorCallback", "Resource", "Length", "AttributeModifier",
         "Number", "String", "Function", "Optional", "RelativeIndexable"
-    ].concat(PeerGeneratorConfig.shapes.map(it => it.replace(/Attribute$/, 'Options')))
-
+    ]
     public static ignorePeerMethod = ["attributeModifier"]
 
     private static knownParametrized = ["Indicator", "AttributeModifier", "AnimationRange", "ContentModifier", "SizeT", "PositionT"]
