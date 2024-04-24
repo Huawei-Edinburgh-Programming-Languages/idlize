@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { int32, float32 } from "peer_lib/ts/@koalaui/common"
+import { int32, float32 } from "@koalaui/common"
 
 export type NodePointer = pointer // todo: move to NativeModule
 
@@ -163,7 +163,7 @@ export class PeerNode extends Finalizable {
     constructor(type: number, flags: int32) {
         // TODO: rework
         super(BigInt(42))
-        this.peer = new NativePeerNode(42)
+        this.peer = new NativePeerNode(BigInt(42))
     }
     applyAttributes(attrs: Object) {}
 }

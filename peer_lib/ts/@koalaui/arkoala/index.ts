@@ -1,5 +1,5 @@
-import { int32 } from "peer_lib/ts/@koalaui/common"
-import { pointer } from "peer_lib/ts/@koalaui/interop"
+import { int32 } from "@koalaui/common"
+import { pointer } from "@koalaui/interop"
 
 export class Finalizable {
     constructor(public ptr: pointer) {

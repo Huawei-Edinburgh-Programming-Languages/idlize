@@ -87,7 +87,7 @@ export class PeerClass {
             printer.print(`constructor(type: ArkUINodeType, component?: ArkComponent, flags: int32 = 0) {`)
             printer.pushIndent()
             printer.print(`super(type, flags)`)
-            printer.print(`component?.setPeer(this)`)
+            printer.print(`component?.setPeer(this.peer)`)
             printer.popIndent()
             printer.print(`}`)
             return
