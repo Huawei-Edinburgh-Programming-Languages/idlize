@@ -40,7 +40,6 @@ export class ArkStructCommon extends ArkComponent implements ArkCustomComponent 
     getUniqueId(): number { throw new Error("no implemented") }
     queryNavDestinationInfo(): NavDestinationInfo | undefined { throw new Error("no implemented") }
     queryNavigationInfo(): NavigationInfo | undefined { throw new Error("no implemented") }
-    queryRouterPageInfo(): RouterPageInfo | undefined { throw new Error("no implemented") }
     onDidBuild?(): void { throw new Error("no implemented") }
 }
 
