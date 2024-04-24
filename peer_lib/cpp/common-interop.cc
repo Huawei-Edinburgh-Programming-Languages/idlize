@@ -70,6 +70,7 @@ KNativePointer impl_StringMake(const KStringPtr& str) {
 KOALA_INTEROP_1(StringMake, KNativePointer, KStringPtr)
 
 void stringFinalizer(string* ptr) {
+    fprintf(stderr, "will delete string %p\n", ptr);
     delete ptr;
 }
 KNativePointer impl_GetStringFinalizer() {

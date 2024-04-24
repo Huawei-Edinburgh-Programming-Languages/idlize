@@ -36,7 +36,12 @@ struct KStringPtrImpl {
     }
     KStringPtrImpl& operator=(KStringPtrImpl& other) = delete;
 
-    ~KStringPtrImpl() { if (_value) free(_value); }
+    ~KStringPtrImpl() {
+        if (_value) {
+            fprintf(stderr, "~KStringPtrImpl %p\n", _value);
+            free(_value);
+        }
+     }
 
     bool isNull() const { return _value == nullptr; }
     const char* c_str() const { return _value; }

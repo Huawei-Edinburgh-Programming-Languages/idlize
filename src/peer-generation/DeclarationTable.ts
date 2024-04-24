@@ -930,7 +930,7 @@ export class DeclarationTable {
             if (elementType) {
                 let convertor = this.typeConvertor("param", elementType)
                 isPointerField = convertor.isPointerType()
-                constCast = isPointerField ? `(const ${convertor.nativeType(false)}*)` : ``
+                constCast = isPointerField ? `const_cast<const ${convertor.nativeType(false)}*>(&` : `(`
             }
 
             printer.print(`result->append("[");`)
@@ -938,7 +938,7 @@ export class DeclarationTable {
             printer.print(`for (int i = 0; i < count; i++) {`)
             printer.pushIndent()
             printer.print(`if (i > 0) result->append(", ");`)
-            printer.print(`WriteToString(result, ${constCast}${isPointerField ? "&" : ""}value${access}array[i]);`)
+            printer.print(`WriteToString(result, ${constCast}value${access}array[i]));`)
             printer.popIndent()
             printer.print(`}`)
             printer.print(`result->append("]");`)
