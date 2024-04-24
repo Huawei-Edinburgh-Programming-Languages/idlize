@@ -24,6 +24,7 @@ import {
     serializerBaseMethods,
     stringOrNone,
     className,
+    isDefined,
     isStatic,
     throwException
 } from "../util"
@@ -35,6 +36,9 @@ import {
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
 import { DeclarationTable, PrimitiveType } from "./DeclarationTable"
 import {
+    determineParentRole,
+    InheritanceRole,
+    isHeir,
     isRoot,
     isStandalone,
     singleParentDeclaration,
@@ -141,14 +145,13 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
 
     defaultImports() {
         return [
+            `import { int32 } from "@koalaui/common"`,
+            `import { PeerNode, Finalizable, nullptr, KPointer } from "@koalaui/interop"`,
             `import { runtimeType, withLength, withLengthArray, RuntimeType } from "./SerializerBase"`,
             `import { Serializer } from "./Serializer"`,
-            `import { int32 } from "@koalaui/common"`,
-            `import { KPointer } from "./types"`,
             `import { nativeModule } from "./NativeModule"`,
-            `import { PeerNode, Finalizable, nullptr } from "./Interop"`,
             `import { ArkUINodeType } from "./ArkUINodeType"`,
-            `import { ArkComponent } from "@arkoala/arkui/ArkComponent"`
+            `import { ArkComponent } from "./ArkComponent"`,
         ]
     }
 
@@ -229,14 +232,14 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         const collapsedMethods = this.collapseOverloads(node)
 
         const componentName = this.renameToComponent(nameOrNull(node.name)!)
-        // We don't know what comes first ButtonAtrtribute or ButtonInterface.
+        // We don't know what comes first ButtonAttribute or ButtonInterface.
         // Both will contribute to the peer class.
         const peer = this.peerFile.getOrPutPeer(componentName)
 
         this.populatePeer(node, peer)
         const peerMethods = collapsedMethods
             .map(it => this.processMethodOrCallable(it, peer))
-            .filter(it => it != undefined) as PeerMethod[]
+            .filter(isDefined)
         peer.methods.push(...peerMethods)
 
         this.createComponentAttributesDeclaration(node, peer)
@@ -250,7 +253,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         if (!this.isFriendInterface(node)) return
 
         const componentName = this.renameToComponent(nameOrNull(node.name)!)
-        // We don't know what comes first ButtonAtrtribute or ButtonInterface.
+        // We don't know what comes first ButtonAttribute or ButtonInterface.
         // Both will contribute to the peer class.
         const peer = this.peerFile.getOrPutPeer(componentName)
 
@@ -258,7 +261,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         const peerMethods = collapsedMethods
             .filter(it => ts.isCallSignatureDeclaration(it.member))
             .map(it => this.processMethodOrCallable(it, peer, identName(node)!))
-            .filter(it => it != undefined) as PeerMethod[]
+            .filter(isDefined)
         peer.methods.push(...peerMethods)
         this.nativeModulePrint(node, collapsedMethods)
     }
@@ -289,7 +292,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         { member: method, collapsed: collapsed }: MaybeCollapsedMethod,
         peer: PeerClass,
         parentName?: string
-    ): PeerMethod|undefined {
+    ): PeerMethod | undefined {
         const isCallSignature = ts.isCallSignatureDeclaration(method)
         // Some method have other parents as part of their names
         // Such as the ones coming from thr friend interfaces

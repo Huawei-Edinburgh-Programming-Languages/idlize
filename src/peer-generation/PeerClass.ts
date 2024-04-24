@@ -34,15 +34,11 @@ export class PeerClass {
     }
 
     get peerParentName(): string {
-        const name = this.originalClassName
-            ?? throwException(`By this time the class name should have been provided: ${this.componentName}`)
-
-        if (isCommonMethod(name)) return "PeerNode"
-        if (isStandalone(name)) return "PeerNode"
-        if (isRoot(name)) return "Finalizable"
-
-        const parent = this.parentComponentName
-            ?? throwException(`Expected component to have parent: ${name}`)
+        const parentRole = determineParentRole(this.originalClassName!, this.parentComponentName)
+        if ([InheritanceRole.Finalizable, InheritanceRole.PeerNode].includes(parentRole)) {
+            return InheritanceRole[parentRole]
+        }
+        const parent = this.parentComponentName ?? throwException(`Expected component to have parent`)
         return `${this.koalaComponentByComponent(parent)}Peer`
     }
 

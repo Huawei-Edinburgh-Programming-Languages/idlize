@@ -31,14 +31,7 @@ import {
     KInt32ArrayPtr,
     KUint8ArrayPtr,
     pointer
-} from "./types"
-import {
-    NativeStringBase,
-    withByteArray,
-    Access,
-    providePlatformDefinedData,
-    nullptr
-} from "./Interop"
+} from "@koalaui/interop"
 `.trim()
 
 export function nativeModuleDeclaration(methods: string[], nativeBridgePath: string, useEmpty: boolean): string {
@@ -46,6 +39,8 @@ export function nativeModuleDeclaration(methods: string[], nativeBridgePath: str
     return `
 ${importTsInteropTypes}
 import { NativeModuleEmpty } from "./NativeModuleEmpty"
+import { NativeModuleBase } from "./NativeModuleBase"
+import { NativeStringBase, providePlatformDefinedData, nullptr, Access, withByteArray } from "@koalaui/interop"
 
 export type NodePointer = pointer
 
@@ -82,15 +77,7 @@ providePlatformDefinedData({
     nativeString(ptr: KPointer): NativeStringBase { return new NativeString(ptr) }
 })
 
-export interface NativeModule {
-  _GetGroupedLog(index: KInt): KPointer;
-  _ClearGroupedLog(index: KInt): void;
-  _GetStringFinalizer(): KPointer;
-  _InvokeFinalizer(ptr: KPointer, finalizer: KPointer): void;
-  _StringLength(ptr: KPointer): KInt;
-  _StringData(ptr: KPointer, buffer: KUint8ArrayPtr, length: KInt): void;
-  _StringMake(value: KStringPtr): KPointer;
-
+export interface NativeModule extends NativeModuleBase {
 ${methods.map(it => `  ${it}`).join("\n")}
 }
 `

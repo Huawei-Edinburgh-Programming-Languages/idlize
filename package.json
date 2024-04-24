@@ -61,6 +61,13 @@
         "compile:native-node-host-subset": "npm run configure:native-node-host-subset && cd native && meson compile -C build-node-host-subset && meson install -C build-node-host-subset",
         "configure:native-node-host-full": "npm run download:napi && cd ./native && meson setup -Dsubset=false build-node-host-full",
         "compile:native-node-host-full": "npm run configure:native-node-host-full && cd native && meson compile -C build-node-host-full && meson install -C build-node-host-full",
-        "sanity": "npm run check:peers:run && npm run run:all && npm run lint:all "
+        "sanity": "npm run check:peers:run && npm run run:all && npm run lint:all ",
+
+        "compile:stub:arkoala": "cd peer_lib/ts/node_modules/@koalaui/arkoala && tsc index.ts --downlevelIteration",
+        "compile:stub:common": "cd peer_lib/ts/node_modules/@koalaui/common && tsc index.ts",
+        "compile:stub:interop": "cd peer_lib/ts/node_modules/@koalaui/interop && tsc index.ts --downlevelIteration",
+        "compile:stub:deps": "npm run compile:stub:arkoala && npm run compile:stub:common && npm run compile:stub:interop",
+        "copy:peer:deps": "cp -r ./peer_lib/ts/@koalaui ./node_modules",
+        "postinstall": "npm run copy:peer:deps"
     }
 }

@@ -1,4 +1,4 @@
-import { NativePeerNode } from "./Interop";
+import { NativePeerNode } from "@koalaui/interop"
 
 export class ArkComponent {
     protected peer?: NativePeerNode

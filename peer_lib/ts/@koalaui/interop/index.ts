@@ -13,8 +13,31 @@
  * limitations under the License.
  */
 
-import { int32 } from "@koalaui/common"
-import { pointer, KUint8ArrayPtr, KPointer, TypedArray } from "./types"
+import { int32, float32 } from "peer_lib/ts/@koalaui/common"
+
+export type NodePointer = pointer // todo: move to NativeModule
+
+export type KStringPtr = int32 | string | null
+export type KStringPtrArray = int32 | Uint8Array | null
+export type KUint8ArrayPtr = int32 | Uint8Array | null
+export type KInt32ArrayPtr = int32 | Int32Array | null
+export type KFloat32ArrayPtr = int32 | Float32Array | null
+export type KInt = int32
+export type KBoolean = int32
+export type KFloat = float32
+export type KPointer = number | bigint
+export type pointer = KPointer
+export type KNativePointer = KPointer
+
+export type TypedArray = // todo: move to interop-smth
+    Uint8Array
+    | Int8Array
+    | Uint16Array
+    | Int16Array
+    | Uint32Array
+    | Int32Array
+    | Float32Array
+    | Float64Array
 
 export function decodeToString(array: Uint8Array): string {
     return decoder.decode(array)
@@ -93,9 +116,7 @@ export class CustomTextDecoder {
     }
 }
 
-
 const decoder = new CustomTextDecoder()
-
 
 export class Wrapper {
     protected ptr: KPointer
@@ -138,9 +159,11 @@ export class NativePeerNode extends Finalizable {
 }
 
 export class PeerNode extends Finalizable {
+    peer: NativePeerNode
     constructor(type: number, flags: int32) {
         // TODO: rework
         super(BigInt(42))
+        this.peer = new NativePeerNode(42)
     }
     applyAttributes(attrs: Object) {}
 }
