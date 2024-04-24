@@ -918,15 +918,21 @@ export class DeclarationTable {
                 : ts.isTypeReferenceNode(target) && target.typeArguments
                     ? target.typeArguments[0]
                     : undefined
-            let isPointerField = elementType === undefined
-                ? false
-                : this.typeConvertor("param", elementType).isPointerType()
+
+            let isPointerField = false
+            let constCast = ``
+            if (elementType) {
+                let convertor = this.typeConvertor("param", elementType)
+                isPointerField = convertor.isPointerType()
+                constCast = isPointerField ? `(const ${convertor.nativeType(false)}*)` : ``
+            }
+
             printer.print(`result->append("[");`)
             printer.print(`int32_t count = value${access}array_length > 7 ? 7 : value${access}array_length;`)
             printer.print(`for (int i = 0; i < count; i++) {`)
             printer.pushIndent()
             printer.print(`if (i > 0) result->append(", ");`)
-            printer.print(`WriteToString(result, ${isPointerField ? "&" : ""}value${access}array[i]);`)
+            printer.print(`WriteToString(result, ${constCast}${isPointerField ? "&" : ""}value${access}array[i]);`)
             printer.popIndent()
             printer.print(`}`)
             printer.print(`result->append("]");`)
