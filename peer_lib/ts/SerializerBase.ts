@@ -275,3 +275,31 @@ class OurCustomSerializer extends CustomSerializer {
 
 // TODO, remove me!
 SerializerBase.registerCustomSerializer(new OurCustomSerializer())
+
+// Shapes
+declare type Ark_RectOptions = {
+    width?: number | string
+    height?: number | string
+    radius?: number | string | Array<any>
+} | {
+    width?: number | string
+    height?: number | string
+    radiusWidth?: number | string
+    radiusHeight?: number | string
+}
+
+declare type Ark_CircleOptions = {
+    width?: string | number
+    height?: string | number
+}
+
+declare type Ark_EllipseOptions = {
+    width?: string | number
+    height?: string | number
+}
+
+declare type Ark_PathOptions = {
+    width?: number | string
+    height?: number | string
+    commands?: string
+}

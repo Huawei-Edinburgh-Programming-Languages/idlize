@@ -586,6 +586,10 @@ export class DeclarationTable {
         if (name === "Optional" && type.typeArguments && type.typeArguments.length == 1) {
             return new OptionConvertor(param, this, type.typeArguments![0])
         }
+        if (name && PeerGeneratorConfig.shapes.includes(name)) {
+            const replacement = name.replace(/^(.*)Attribute$/, 'Ark_$1Options')
+            return new PredefinedConvertor(param, replacement, name, replacement)
+        }
         return undefined
     }
 

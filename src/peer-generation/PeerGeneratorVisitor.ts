@@ -257,7 +257,8 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
     processInterface(node: ts.InterfaceDeclaration) {
         if (!this.isFriendInterface(node)) return
 
-        const componentName = this.renameToComponent(nameOrNull(node.name)!)
+        const name = nameOrNull(node.name)!
+        const componentName = this.renameToComponent(name)
         // We don't know what comes first ButtonAtrtribute or ButtonInterface.
         // Both will contribute to the peer class.
         const peer = this.peerFile.getOrPutPeer(componentName)
@@ -265,7 +266,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         const peerMethods = collapsedMethods
             .filter(it =>
                 ts.isCallSignatureDeclaration(it.member) ||
-                this.shapes.has(componentName) && ts.isConstructSignatureDeclaration(it.member))
+                PeerGeneratorConfig.shapes.includes(name) && ts.isConstructSignatureDeclaration(it.member))
             .map(it => this.processMethodOrCallable(it, peer, identName(node)!))
             .filter(it => it != undefined) as PeerMethod[]
         peer.methods.push(...peerMethods)
@@ -307,7 +308,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         const methodName = isCallSignature
             ? `_set${peer.componentName}Options`
             : ts.isConstructSignatureDeclaration(method)
-                ? "new"
+                ? "_new"
                 : identName(method.name)!
         if (PeerGeneratorConfig.ignorePeerMethod.includes(methodName)) return
 
@@ -509,7 +510,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
     private nameOrEmpty(member: MethodDeclaration): string {
         if (ts.isMethodDeclaration(member)) return member.name.getText()
         if (ts.isCallSignatureDeclaration(member)) return ""
-        if (ts.isConstructSignatureDeclaration(member)) return "new"
+        if (ts.isConstructSignatureDeclaration(member)) return "_new"
         throw new Error("Unsupported: " + asString(member))
     }
     private collapseOverloads(node: ts.ClassDeclaration|ts.InterfaceDeclaration): MaybeCollapsedMethod[] {
@@ -646,7 +647,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
             const originalName = ts.isCallSignatureDeclaration(maybeCollapsedMethod.member)
                 ? `_set${this.renameToComponent(component)}Options`
                 : ts.isConstructSignatureDeclaration(maybeCollapsedMethod.member)
-                    ? "new"
+                    ? "_new"
                     : ts.idText(maybeCollapsedMethod.member.name as ts.Identifier)
             const implDecl = `_${component}_${originalName}(${parameters}): void`
 
