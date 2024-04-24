@@ -66,6 +66,14 @@ export class PeerGeneratorConfig {
         "AlertDialog",
         "CanvasPattern"
     ]
+    
+    public static readonly notCompilableComponents: string[] = [
+        "ArkCalendar", "ArkCircle", "ArkCommon", "ArkEllipse", "ArkGrid", "ArkGridContainer", 
+        "ArkHyperlink", "ArkImageSpan", "ArkLine", "ArkList", "ArkLocationButton", "ArkMediaCachedImage",
+        "ArkPasteButton", "ArkPath", "ArkPolygon", "ArkPolyline", "ArkRect", "ArkRichText", "ArkSaveButton",
+        "ArkScroll", "ArkSecurityComponent", "ArkSpan", "ArkText", "ArkTextPicker", "ArkTimePicker", "ArkWaterFlow",
+        "ArkContentSlot", 
+    ]
 
     static mapComponentName(originalName: string): string {
         if (originalName.endsWith("Attribute"))

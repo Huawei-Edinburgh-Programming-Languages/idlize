@@ -139,12 +139,11 @@ export class PeerClass {
     }
 
     collectComponentImports(imports: ImportsCollector) {
-        imports.addFeature(`${this.koalaComponentName}Attribute`, "@koalaui/arkui-common")
         imports.addFeature("NodeAttach", "@koalaui/runtime")
         const structPostfix = (this.callableMethod?.mappedParamsTypes?.length ?? 0) + 1
         imports.addFeature(`ArkCommonStruct${structPostfix}`, "./ArkStructCommon")
         imports.addFeatureByBasename(`${this.koalaComponentName}Peer`, renameDtsToPeer(path.basename(this.originalFilename)))
-        imports.addFeature("ArkUINodeType", "@koalaui/arkoala")
+        imports.addFeature("ArkUINodeType", "./ArkUINodeType")
     }
 
     printComponent() {
@@ -153,7 +152,7 @@ export class PeerClass {
         const componentClassName = `${this.koalaComponentName}Component`
         const componentFunctionName = this.koalaComponentName
         const peerClassName = `${this.koalaComponentName}Peer`
-        const attributeClassName = `${this.koalaComponentName}Attribute`
+        const attributeClassName = `${this.componentName}Attribute`
         const parentStructClass = {
             name: `ArkCommonStruct${(method?.mappedParamsTypes?.length ?? 0) + 1}`,
             typesLines: [
@@ -179,10 +178,10 @@ ${parentStructClass.typesLines.map(it => indentedBy(it, 1)).join("\n")}
   /** @memo */
   _build(
     /** @memo */
-    style?: (attributes: ${componentClassName}) => void,
+    style: ((attributes: ${componentClassName}) => void) | undefined,
     /** @memo */
-    content?: () => void,
-    ${method?.mappedParams ?? ""}
+    content: (() => void) | undefined,
+    ${method?.mappedParams ?? ""} 
   ) {
     NodeAttach(() => new ${peerClassName}(ArkUINodeType.${this.componentName}, this), () => {
       style?.(this)
@@ -197,9 +196,9 @@ ${parentStructClass.typesLines.map(it => indentedBy(it, 1)).join("\n")}
 /** @memo */
 export function ${componentFunctionName}(
   /** @memo */
-  style?: (attributes: ${componentClassName}) => void,
+  style: ((attributes: ${componentClassName}) => void) | undefined,
   /** @memo */
-  content?: () => void,
+  content: (() => void) | undefined,
   ${method?.mappedParams ?? ""}
 ) {
   ${componentClassName}._instantiate<
