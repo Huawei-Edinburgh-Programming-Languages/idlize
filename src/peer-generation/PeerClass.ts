@@ -17,6 +17,8 @@ export class PeerClass {
         return this.methods.find(method => method.isCallSignature)
     }
 
+    attributes: [string, string][] = []
+    generatedAttributesTypes: string[] = []
     originalClassName: string | undefined = undefined
     originalParentName: string | undefined = undefined
     originalParentFilename: string | undefined = undefined
@@ -228,6 +230,24 @@ ${parentStructClass.typesLines.map(it => indentedBy(it, 2)).join("\n")}
 `)
     }
 
+    private printPeerAttributes(printer: IndentedPrinter) {
+        printer.print(this.attributeInterfaceHeader())
+        if (this.attributes.length == 0) {
+            printer.print(`}`)
+            return
+        }
+        printer.pushIndent()
+        this.attributes.forEach(attribute => {
+            printer.print(`${attribute[0]}?: ${attribute[1]}`)
+        })
+        printer.popIndent()
+        printer.print('}')
+    }
+
+    private printGeneratedAttributesTypes(printer: IndentedPrinter) {
+        this.generatedAttributesTypes.forEach(it => printer.print(it))
+    }
+
     printPeer(printer: IndentedPrinter) {
         printer.print(this.peerClassHeader())
         printer.pushIndent()
@@ -236,6 +256,9 @@ ${parentStructClass.typesLines.map(it => indentedBy(it, 2)).join("\n")}
         this.generateApplyMethod(printer)
         printer.popIndent()
         printer.print(`}`)
+        printer.print('')
+        this.printGeneratedAttributesTypes(printer)
+        this.printPeerAttributes(printer)
     }
 
     private printGlobalProlog(printers: Printers) {

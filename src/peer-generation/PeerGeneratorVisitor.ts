@@ -103,13 +103,11 @@ export type PeerGeneratorVisitorOutput = {
 }
 
 export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitorOutput> {
-    private typesToGenerate: string[] = []
     private seenAttributes = new Set<string>()
     private readonly sourceFile: ts.SourceFile
     private interfacesToGenerate: Set<string>
     private printers: Printers
     // all peer printing must be moved into PeerClass on next iteration
-    private deprecatedPeerPrinter: IndentedPrinter
     private dumpSerialized: boolean
     declarationTable: DeclarationTable
 
@@ -134,7 +132,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
             new IndentedPrinter(options.modifierList),
             new IndentedPrinter(options.modifierImpl)
         )
-        this.deprecatedPeerPrinter = new IndentedPrinter()
         this.dumpSerialized = options.dumpSerialized
         this.declarationTable = options.declarationTable
         this.peerFile = new PeerFile(this.sourceFile.fileName)
@@ -148,12 +145,9 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         ts.forEachChild(this.sourceFile, (node) => this.visit(node))
 
         this.peerFile.printGlobal(this.printers)
-        const deprecatedPeerContent = this.deprecatedPeerPrinter.getOutput()
-            .filter(it => it != undefined)
-            .join("\n")
 
         return {
-            peer: this.peerFile.generatePeerFile().concat("\n", deprecatedPeerContent),
+            peer: this.peerFile.generatePeerFile(),
             component: this.peerFile.generateComponentFile(),
         }
     }
@@ -234,7 +228,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         peer.methods.push(...peerMethods)
 
         this.createComponentAttributesDeclaration(node, peer)
-        this.generateAttributesValuesInterfaces()
         this.nativeModulePrint(node, collapsedMethods)
 
         this.printNodeType(node)
@@ -273,10 +266,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
 
     generateValues(argConvertors: ArgConvertor[]): stringOrNone {
         return argConvertors?.map(it => `${it.param}`).join(", ")
-    }
-
-    private printTS(value: stringOrNone) {
-        this.deprecatedPeerPrinter.print(value)
     }
 
     processMethodOrCallable(
@@ -324,13 +313,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         return peerMethod
     }
 
-    pushIndentTS() {
-        this.deprecatedPeerPrinter.pushIndent()
-    }
-    popIndentTS() {
-        this.deprecatedPeerPrinter.popIndent()
-    }
-
     argConvertor(param: ts.ParameterDeclaration): ArgConvertor {
         if (!param.type) throw new Error("Type is needed")
         let paramName = asString(param.name)
@@ -371,23 +353,17 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
     }
 
     private createComponentAttributesDeclaration(node: ts.ClassDeclaration | ts.InterfaceDeclaration, peer: PeerClass): void {
-        const koalaComponent = peer.koalaComponentName
-        if (PeerGeneratorConfig.invalidAttributes.includes(koalaComponent)) {
-            this.printTS(`export interface ${koalaComponent}Attributes {}`)
+        if (PeerGeneratorConfig.invalidAttributes.includes(peer.koalaComponentName)) {
             return
         }
-        this.printTS(peer.attributeInterfaceHeader())
-        this.pushIndentTS()
         node.members.forEach(child => {
             if (ts.isMethodDeclaration(child)) {
-                this.processOptionAttribute(child)
+                this.processOptionAttribute(child, peer)
             }
         })
-        this.popIndentTS()
-        this.printTS("}")
     }
 
-    private processOptionAttribute(method: ts.MethodDeclaration | ts.MethodSignature): void {
+    private processOptionAttribute(method: ts.MethodDeclaration | ts.MethodSignature, peer: PeerClass) {
         const methodName = method.name.getText(this.sourceFile)
         if (this.seenAttributes.has(methodName)) {
             console.log(`WARNING: ignore seen method: ${methodName}`)
@@ -398,11 +374,11 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
             return
         }
         this.seenAttributes.add(methodName)
-        const type = this.argumentType(methodName, method.parameters)
-        this.printTS(`${methodName}?: ${type}`)
+        const type = this.argumentType(methodName, method.parameters, peer)
+        peer.attributes.push([methodName, type])
     }
 
-    private argumentType(methodName: string, parameters: ts.NodeArray<ts.ParameterDeclaration>): string {
+    private argumentType(methodName: string, parameters: ts.NodeArray<ts.ParameterDeclaration>, peer: PeerClass): string {
         const argumentTypeName = capitalize(methodName) + "ValuesType"
         if (parameters.length === 1 && ts.isTypeLiteralNode(parameters[0].type!)) {
             const typeLiteralStatements = parameters[0].type!.members
@@ -425,7 +401,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
                     }
                 })
 
-            this.typesToGenerate.push(
+            peer.generatedAttributesTypes.push(
                 this.createParameterType(argumentTypeName, typeLiteralStatements)
             )
             return argumentTypeName
@@ -436,7 +412,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
                 type: it.type!,
                 questionToken: !!it.questionToken
             }))
-            this.typesToGenerate.push(
+            peer.generatedAttributesTypes.push(
                 this.createParameterType(argumentTypeName, attributeInterfaceStatements)
             )
             return argumentTypeName
@@ -453,12 +429,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
             .map(it => `\n  ${it.name}${it.questionToken ? "?" : ""}: ${mapType(this.typeChecker, it.type)}`)
             .join('')
         return `export interface ${name} {${attributeDeclarations}\n}`
-    }
-
-    private generateAttributesValuesInterfaces() {
-        this.typesToGenerate.forEach((value: string) => {
-            this.printTS(value)
-        })
     }
 
     private nameOrEmpty(member: ts.MethodDeclaration | ts.CallSignatureDeclaration): string {
