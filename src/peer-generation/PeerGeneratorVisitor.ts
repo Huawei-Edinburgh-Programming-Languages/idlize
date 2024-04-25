@@ -108,6 +108,8 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
     private readonly sourceFile: ts.SourceFile
     private interfacesToGenerate: Set<string>
     private printers: Printers
+    // all peer printing must be moved into PeerClass on next iteration
+    private deprecatedPeerPrinter: IndentedPrinter
     private dumpSerialized: boolean
     declarationTable: DeclarationTable
 
@@ -121,8 +123,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         this.typeChecker = options.typeChecker
         this.interfacesToGenerate = options.interfacesToGenerate
         this.printers = new Printers(
-            new IndentedPrinter(),
-            new IndentedPrinter(),
             new IndentedPrinter(options.outputC),
             new IndentedPrinter(options.nativeModuleMethods),
             new IndentedPrinter(options.nativeModuleEmptyMethods),
@@ -134,37 +134,27 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
             new IndentedPrinter(options.modifierList),
             new IndentedPrinter(options.modifierImpl)
         )
+        this.deprecatedPeerPrinter = new IndentedPrinter()
         this.dumpSerialized = options.dumpSerialized
         this.declarationTable = options.declarationTable
-        this.peerFile = new PeerFile(this.sourceFile.fileName, this.printers)
+        this.peerFile = new PeerFile(this.sourceFile.fileName)
     }
 
     requestType(name: string|undefined, type: ts.TypeNode) {
         this.declarationTable.requestType(name, type)
     }
 
-    defaultImports() {
-        return [
-            `import { runtimeType, withLength, withLengthArray, RuntimeType } from "./SerializerBase"`,
-            `import { Serializer } from "./Serializer"`,
-            `import { int32 } from "@koalaui/common"`,
-            `import { KPointer } from "./types"`,
-            `import { nativeModule } from "./NativeModule"`,
-            `import { PeerNode, Finalizable, nullptr } from "./Interop"`,
-            `import { ArkUINodeType } from "./ArkUINodeType"`,
-            `import { ArkComponent } from "@arkoala/arkui/ArkComponent"`
-        ]
-    }
-
     visitWholeFile(): PeerGeneratorVisitorOutput {
         ts.forEachChild(this.sourceFile, (node) => this.visit(node))
 
-        this.defaultImports().forEach(it => this.printTS(it))
-        this.peerFile.print()
+        this.peerFile.printGlobal(this.printers)
+        const deprecatedPeerContent = this.deprecatedPeerPrinter.getOutput()
+            .filter(it => it != undefined)
+            .join("\n")
 
         return {
-            peer: this.printers.TSPeer.getOutput(),
-            component: this.printers.TSComponent.getOutput(),
+            peer: this.peerFile.generatePeerFile().concat("\n", deprecatedPeerContent),
+            component: this.peerFile.generateComponentFile(),
         }
     }
 
@@ -286,7 +276,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
     }
 
     private printTS(value: stringOrNone) {
-        this.printers.TSPeer.print(value)
+        this.deprecatedPeerPrinter.print(value)
     }
 
     processMethodOrCallable(
@@ -315,7 +305,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         const retConvertor = this.retConvertor(method.type)
 
         const peerMethod = new PeerMethod(
-            peer,
             originalParentName,
             methodName,
             argConvertors,
@@ -335,37 +324,11 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         return peerMethod
     }
 
-    pushIndentBoth() {
-        this.printers.TSPeer.pushIndent()
-        this.printers.C.pushIndent()
-    }
-    popIndentBoth() {
-        this.printers.TSPeer.popIndent()
-        this.printers.C.popIndent()
-    }
     pushIndentTS() {
-        this.printers.TSPeer.pushIndent()
+        this.deprecatedPeerPrinter.pushIndent()
     }
     popIndentTS() {
-        this.printers.TSPeer.popIndent()
-    }
-    pushIndentC() {
-        this.printers.C.pushIndent()
-    }
-    popIndentC() {
-        this.printers.C.popIndent()
-    }
-    pushIndentAPI() {
-        this.printers.api.pushIndent()
-    }
-    popIndentAPI() {
-        this.printers.api.popIndent()
-    }
-    pushIndentAPIList() {
-        this.printers.apiList.pushIndent()
-    }
-    popIndentAPIList() {
-        this.printers.apiList.popIndent()
+        this.deprecatedPeerPrinter.popIndent()
     }
 
     argConvertor(param: ts.ParameterDeclaration): ArgConvertor {

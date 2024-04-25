@@ -10,7 +10,6 @@ export class PeerClass {
     constructor(
         public readonly componentName: string,
         public readonly originalFilename: string,
-        public readonly printers: Printers,
     ) { }
 
     methods: PeerMethod[] = []
@@ -70,11 +69,11 @@ export class PeerClass {
                 : ""
         return `export interface ${this.componentToAttribute(this.componentName)} ${extendsClause} {`
     }
-    apiModifierHeader() {
+    private apiModifierHeader() {
         return `typedef struct ArkUI${this.componentName}Modifier {`
     }
 
-    generateConstructor(printer: IndentedPrinter): void {
+    private generateConstructor(printer: IndentedPrinter): void {
         const parentRole = determineParentRole(this.originalClassName!, this.originalParentName)
 
         if (parentRole === InheritanceRole.Finalizable) {
@@ -126,18 +125,18 @@ export class PeerClass {
         printer.print(`}`)
     }
 
-    printNodeModifier() {
+    private printNodeModifier(printers: Printers) {
         const component = this.componentName
-        this.printers.apiList.pushIndent()
-        this.printers.apiList.print(`const ArkUI${component}Modifier* (*get${component}Modifier)();`)
+        printers.apiList.pushIndent()
+        printers.apiList.print(`const ArkUI${component}Modifier* (*get${component}Modifier)();`)
 
         const modifierStructImpl = `ArkUI${component}ModifierImpl`
-        this.printers.modifiers.print(`ArkUI${component}Modifier ${modifierStructImpl} {`)
-        this.printers.modifiers.pushIndent()
+        printers.modifiers.print(`ArkUI${component}Modifier ${modifierStructImpl} {`)
+        printers.modifiers.pushIndent()
 
-        this.printers.modifierList.pushIndent()
-        this.printers.modifierList.print(`Get${component}Modifier,`)
-        this.printers.modifierList.popIndent()
+        printers.modifierList.pushIndent()
+        printers.modifierList.print(`Get${component}Modifier,`)
+        printers.modifierList.popIndent()
     }
 
     collectPeerImports(imports: ImportsCollector) {
@@ -149,6 +148,7 @@ export class PeerClass {
     }
 
     collectComponentImports(imports: ImportsCollector) {
+        if (!this.canPrintComponent()) return
         imports.addFeature("NodeAttach", "@koalaui/runtime")
         const structPostfix = (this.callableMethod?.mappedParamsTypes?.length ?? 0) + 1
         imports.addFeature(`ArkCommonStruct${structPostfix}`, "./ArkStructCommon")
@@ -156,8 +156,13 @@ export class PeerClass {
         imports.addFeature("ArkUINodeType", "./ArkUINodeType")
     }
 
-    printComponent() {
-        const printer = this.printers.TSComponent
+    private canPrintComponent() {
+        return determineInheritanceRole(this.originalClassName!) == InheritanceRole.Heir
+    }
+
+    printComponent(printer: IndentedPrinter) {
+        if (!this.canPrintComponent()) return
+
         const method = this.callableMethod
         const componentClassName = `${this.koalaComponentName}Component`
         const componentFunctionName = this.koalaComponentName
@@ -223,40 +228,38 @@ ${parentStructClass.typesLines.map(it => indentedBy(it, 2)).join("\n")}
 `)
     }
 
-    printProlog() {
-        this.printers.TSPeer.print(this.peerClassHeader())
-        this.printers.TSPeer.pushIndent()
-        this.printers.api.print(this.apiModifierHeader())
-        this.printers.api.pushIndent()
-        this.printNodeModifier()
+    printPeer(printer: IndentedPrinter) {
+        printer.print(this.peerClassHeader())
+        printer.pushIndent()
+        this.generateConstructor(printer)
+        this.methods.forEach(it => it.printPeerMethod(printer))
+        this.generateApplyMethod(printer)
+        printer.popIndent()
+        printer.print(`}`)
     }
 
-    printEpilog() {
-        this.printers.TSPeer.popIndent()
-        this.printers.TSPeer.print(`}`)
+    private printGlobalProlog(printers: Printers) {
+        printers.api.print(this.apiModifierHeader())
+        printers.api.pushIndent()
+        this.printNodeModifier(printers)
+    }
+
+    private printGlobalEpilog(printers: Printers) {
         if (this.methods.length == 0) {
-            this.printers.api.print("int dummy;")
+            printers.api.print("int dummy;")
         }
-        this.printers.api.popIndent()
-        this.printers.api.print(`} ArkUI${this.componentName}Modifier;\n`)
-        this.printers.apiList.popIndent()
-        this.printers.modifiers.popIndent()
-        this.printers.modifiers.print(`};\n`)
+        printers.api.popIndent()
+        printers.api.print(`} ArkUI${this.componentName}Modifier;\n`)
+        printers.apiList.popIndent()
+        printers.modifiers.popIndent()
+        printers.modifiers.print(`};\n`)
         const name = this.componentName
-        this.printers.modifiers.print(`const ArkUI${name}Modifier* Get${name}Modifier() { return &ArkUI${name}ModifierImpl; }\n\n`)
+        printers.modifiers.print(`const ArkUI${name}Modifier* Get${name}Modifier() { return &ArkUI${name}ModifierImpl; }\n\n`)
     }
 
-    printMethods() {
-        this.generateConstructor(this.printers.TSPeer)
-        this.methods.forEach(it => it.processPeerMethod())
-        this.generateApplyMethod(this.printers.TSPeer)
-    }
-
-    print() {
-        this.printProlog()
-        this.printMethods()
-        this.printEpilog()
-        if (determineInheritanceRole(this.originalClassName!) == InheritanceRole.Heir) 
-            this.printComponent()
+    printGlobal(printers: Printers) {
+        this.printGlobalProlog(printers)
+        this.methods.forEach(it => it.printGlobalMethod(printers))
+        this.printGlobalEpilog(printers)
     }
 }
