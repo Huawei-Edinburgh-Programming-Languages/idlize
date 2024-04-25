@@ -242,7 +242,7 @@ ${parentStructClass.typesLines.map(it => indentedBy(it, 2)).join("\n")}
         this.printProlog()
         this.printMethods()
         this.printEpilog()
-        if (determineInheritanceRole(this.componentName) == InheritanceRole.Heir) 
+        if (determineInheritanceRole(this.originalClassName!) == InheritanceRole.Heir) 
             this.printComponent()
     }
 }
