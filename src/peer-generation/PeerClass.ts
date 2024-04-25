@@ -2,7 +2,7 @@ import * as path from "path"
 import { IndentedPrinter } from "../IndentedPrinter"
 import { indentedBy, renameDtsToPeer, throwException } from "../util"
 import { ImportsCollector } from "./ImportsCollector"
-import { determineParentRole, InheritanceRole, isCommonMethod, isHeir, isRoot, isStandalone } from "./inheritance"
+import { determineInheritanceRole, determineParentRole, InheritanceRole, isCommonMethod, isHeir, isRoot, isStandalone } from "./inheritance"
 import { PeerMethod } from "./PeerMethod"
 import { Printers } from "./Printers"
 
@@ -256,6 +256,7 @@ ${parentStructClass.typesLines.map(it => indentedBy(it, 2)).join("\n")}
         this.printProlog()
         this.printMethods()
         this.printEpilog()
-        this.printComponent()
+        if (determineInheritanceRole(this.componentName) == InheritanceRole.Heir) 
+            this.printComponent()
     }
 }
