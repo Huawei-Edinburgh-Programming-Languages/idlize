@@ -301,7 +301,7 @@ export class DeclarationTable {
         }
         if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {
             const name = identName(target.name)
-            if (name && PeerGeneratorConfig.shapeAttributes.includes(name)) {
+            if (name && PeerGeneratorConfig.shapes.includes(name)) {
                 return prefix + name.replace(/Attribute$/, 'Options')
             }
             return prefix + name
@@ -369,7 +369,7 @@ export class DeclarationTable {
                 const elementTypeName = this.computeTypeNameImpl(undefined, type.typeArguments![0], false)
                 return `${prefix}Array_${elementTypeName}`
             }
-            if (typeName && PeerGeneratorConfig.shapeAttributes.includes(typeName)) {
+            if (typeName && PeerGeneratorConfig.shapes.includes(typeName)) {
                 return prefix + typeName.replace(/Attribute$/, 'Options')
             }
             return prefix + identName(type.typeName)!
@@ -593,7 +593,7 @@ export class DeclarationTable {
         if (name === "Optional" && type.typeArguments && type.typeArguments.length == 1) {
             return new OptionConvertor(param, this, type.typeArguments![0])
         }
-        if (name && PeerGeneratorConfig.shapeAttributes.includes(name)) {
+        if (name && PeerGeneratorConfig.shapes.includes(name)) {
             const replacement = name.replace(/Attribute$/, 'Options')
             return new PredefinedConvertor(param, replacement, replacement, replacement)
         }

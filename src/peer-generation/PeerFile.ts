@@ -21,8 +21,6 @@ import { ImportsCollector } from "./ImportsCollector"
 
 export class PeerFile {
     private readonly peers: Map<string, PeerClass> = new Map()
-    private typeDeclarations: string[] = []
-
     constructor(
         public readonly originalFilename: string,
         private readonly printers: Printers,
