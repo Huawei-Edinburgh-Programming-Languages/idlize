@@ -49,6 +49,7 @@ import { TypeChecker  } from "./typecheck"
 import { initRNG } from "./rand_utils"
 import { DeclarationTable } from "./peer-generation/DeclarationTable"
 import {IndentedPrinter} from "./IndentedPrinter";
+import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -314,19 +315,12 @@ if (options.dts2peer) {
                     fs.writeFileSync(outPeerFile, generated)
                 }
 
-                const notCompilableComponents = [
-                    "ArkCalendar", "ArkCircle", "ArkCommon", "ArkEllipse", "ArkGrid", "ArkGridContainer", 
-                    "ArkHyperlink", "ArkImageSpan", "ArkLine", "ArkList", "ArkLocationButton", "ArkMediaCachedImage",
-                    "ArkPasteButton", "ArkPath", "ArkPolygon", "ArkPolyline", "ArkRect", "ArkRichText", "ArkSaveButton",
-                    "ArkScroll", "ArkSecurityComponent", "ArkSpan", "ArkText", "ArkTextPicker", "ArkTimePicker", "ArkWaterFlow",
-                    "ArkContentSlot", 
-                ]
                 if (output.component.length > 0) {
                     const outComponentFile = path.join(
                         outputDir,
                         renameDtsToComponent(path.basename(sourceFile.fileName))
                     )
-                    if (!notCompilableComponents.some(it => outComponentFile.includes(it))) {
+                    if (!PeerGeneratorConfig.notCompilableComponents.some(it => outComponentFile.includes(it))) {
                         console.log("producing", outComponentFile)
                         let generated = output.component
                             .filter(element => (element?.length ?? 0) > 0)
