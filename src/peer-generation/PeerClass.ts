@@ -180,13 +180,13 @@ ${parentStructClass.typesLines.map(it => indentedBy(it, 1)).join("\n")}
     /** @memo */
     style: ((attributes: ${componentClassName}) => void) | undefined,
     /** @memo */
-    content: (() => void) | undefined,
+    content_: (() => void) | undefined,
     ${method?.mappedParams ?? ""} 
   ) {
     NodeAttach(() => new ${peerClassName}(ArkUINodeType.${this.componentName}, this), () => {
       style?.(this)
       ${method ? `this.${method?.methodName}(${method?.mappedParamValues})` : ""}
-      content?.()
+      content_?.()
       this.applyAttributesFinish()
     })
   }
@@ -198,7 +198,7 @@ export function ${componentFunctionName}(
   /** @memo */
   style: ((attributes: ${componentClassName}) => void) | undefined,
   /** @memo */
-  content: (() => void) | undefined,
+  content_: (() => void) | undefined,
   ${method?.mappedParams ?? ""}
 ) {
   ${componentClassName}._instantiate<
@@ -206,7 +206,7 @@ ${parentStructClass.typesLines.map(it => indentedBy(it, 2)).join("\n")}
   >(
     style,
     () => new ${componentClassName}(),
-    content,
+    content_,
     ${method?.mappedParamValues ?? ""}
   )
 }

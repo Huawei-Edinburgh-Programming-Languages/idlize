@@ -68,10 +68,9 @@ export class PeerGeneratorConfig {
     ]
 
     public static readonly notCompilableComponents: string[] = [
-        "ArkCalendar", "ArkCircle", "ArkCommon", "ArkEllipse", "ArkGrid", "ArkGridContainer", 
-        "ArkHyperlink", "ArkImageSpan", "ArkLine", "ArkList", "ArkLocationButton", "ArkMediaCachedImage",
-        "ArkPasteButton", "ArkPath", "ArkPolygon", "ArkPolyline", "ArkRect", "ArkRichText", "ArkSaveButton",
-        "ArkScroll", "ArkSecurityComponent", "ArkSpan", "ArkText", "ArkTextPicker", "ArkTimePicker", "ArkWaterFlow",
+        "ArkCircle", "ArkCommon", "ArkEllipse", "ArkGrid", "ArkImageSpan", 
+        "ArkLine", "ArkList", "ArkLocationButton", "ArkMediaCachedImage", "ArkPasteButton", "ArkPath", "ArkPolygon",
+        "ArkPolyline", "ArkRect", "ArkSaveButton", "ArkScroll", "ArkSpan", "ArkWaterFlow",
     ]
 
     static mapComponentName(originalName: string): string {
