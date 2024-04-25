@@ -70,10 +70,8 @@ export interface TypeAndName {
     optional: boolean
 }
 
-type MethodDeclaration = ts.MethodDeclaration | ts.CallSignatureDeclaration | ts.ConstructSignatureDeclaration
-
 type MaybeCollapsedMethod = {
-    member: MethodDeclaration | ts.MethodSignature
+    member: ts.MethodDeclaration | ts.MethodSignature | ts.CallSignatureDeclaration
     collapsed?: {
         paramsDecl: string,
         paramsTypes: string[],
@@ -252,21 +250,17 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         this.printNodeType(node)
     }
 
-    shapes = new Set(["Rect", "Circle", "Ellipse", "Path"])
-
     processInterface(node: ts.InterfaceDeclaration) {
         if (!this.isFriendInterface(node)) return
 
-        const name = nameOrNull(node.name)!
-        const componentName = this.renameToComponent(name)
+        const componentName = this.renameToComponent(nameOrNull(node.name)!)
         // We don't know what comes first ButtonAtrtribute or ButtonInterface.
         // Both will contribute to the peer class.
         const peer = this.peerFile.getOrPutPeer(componentName)
+
         const collapsedMethods = this.collapseOverloads(node)
         const peerMethods = collapsedMethods
-            .filter(it =>
-                ts.isCallSignatureDeclaration(it.member) ||
-                PeerGeneratorConfig.shapes.includes(name) && ts.isConstructSignatureDeclaration(it.member))
+            .filter(it => ts.isCallSignatureDeclaration(it.member))
             .map(it => this.processMethodOrCallable(it, peer, identName(node)!))
             .filter(it => it != undefined) as PeerMethod[]
         peer.methods.push(...peerMethods)
@@ -305,15 +299,11 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         // Such as the ones coming from thr friend interfaces
         // E.g. ButtonInterface instead of ButtonAttribute
         const originalParentName = parentName ?? peer.originalClassName!
-        const methodName = isCallSignature
-            ? `_set${peer.componentName}Options`
-            : ts.isConstructSignatureDeclaration(method)
-                ? "_new"
-                : identName(method.name)!
+        const methodName = isCallSignature ? `_set${peer.componentName}Options` : identName(method.name)!
+
         if (PeerGeneratorConfig.ignorePeerMethod.includes(methodName)) return
 
         this.declarationTable.setCurrentContext(`${methodName}()`)
-
         method.parameters.map((param, index) => {
             if (param.type)
                 this.requestType(`Type_${originalParentName}_${methodName}_Arg${index}`, param.type)
@@ -507,18 +497,17 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         })
     }
 
-    private nameOrEmpty(member: MethodDeclaration): string {
+    private nameOrEmpty(member: ts.MethodDeclaration | ts.CallSignatureDeclaration): string {
         if (ts.isMethodDeclaration(member)) return member.name.getText()
         if (ts.isCallSignatureDeclaration(member)) return ""
-        if (ts.isConstructSignatureDeclaration(member)) return "_new"
         throw new Error("Unsupported: " + asString(member))
     }
     private collapseOverloads(node: ts.ClassDeclaration|ts.InterfaceDeclaration): MaybeCollapsedMethod[] {
         const methods = (node.members as ts.NodeArray<ts.Node>).filter(
-            it => (ts.isMethodDeclaration(it) || ts.isCallSignatureDeclaration(it) || ts.isConstructSignatureDeclaration(it))
-        ) as MethodDeclaration[]
+            it => (ts.isMethodDeclaration(it) || ts.isCallSignatureDeclaration(it))
+        ) as (ts.MethodDeclaration | ts.CallSignatureDeclaration)[]
 
-        const groupedByName = new Map<string, (ts.MethodDeclaration|ts.CallSignatureDeclaration|ts.ConstructSignatureDeclaration)[]>(
+        const groupedByName = new Map<string, (ts.MethodDeclaration|ts.CallSignatureDeclaration)[]>(
             methods.map(it => [this.nameOrEmpty(it), []])
         )
         methods.forEach(it => {
@@ -644,11 +633,9 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
                 .concat(basicParameters)
                 .join(", ")
 
-            const originalName = ts.isCallSignatureDeclaration(maybeCollapsedMethod.member)
-                ? `_set${this.renameToComponent(component)}Options`
-                : ts.isConstructSignatureDeclaration(maybeCollapsedMethod.member)
-                    ? "_new"
-                    : ts.idText(maybeCollapsedMethod.member.name as ts.Identifier)
+            const originalName = ts.isCallSignatureDeclaration(maybeCollapsedMethod.member) ?
+                `_set${this.renameToComponent(component)}Options` :
+                ts.idText(maybeCollapsedMethod.member.name as ts.Identifier)
             const implDecl = `_${component}_${originalName}(${parameters}): void`
 
             this.printers.nativeModule.print(implDecl)

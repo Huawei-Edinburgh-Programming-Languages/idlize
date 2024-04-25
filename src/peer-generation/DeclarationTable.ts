@@ -300,8 +300,7 @@ export class DeclarationTable {
             return prefix + `Union_${target.types.map(it => this.computeTargetName(this.toTarget(it), false)).join("_")}`
         }
         if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {
-            const name = identName(target.name)
-            return prefix + name
+            return prefix + identName(target.name)
         }
         if (ts.isFunctionTypeNode(target)) {
             return prefix + PrimitiveType.Function.getText()

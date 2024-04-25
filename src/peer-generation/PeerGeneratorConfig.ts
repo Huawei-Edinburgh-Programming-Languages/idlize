@@ -16,12 +16,11 @@
 export class PeerGeneratorConfig {
     public static commonMethod = ["CommonMethod"]
 
-    public static shapes = ["RectAttribute", "CircleAttribute", "EllipseAttribute", "PathAttribute"]
-
     public static ignoreSerialization = [
         "Array", "Callback", "ErrorCallback", "Resource", "Length", "AttributeModifier",
-        "Number", "String", "Function", "Optional", "RelativeIndexable"
-    ].concat(PeerGeneratorConfig.shapes)
+        "Number", "String", "Function", "Optional", "RelativeIndexable",
+        "RectAttribute", "CircleAttribute", "EllipseAttribute", "PathAttribute"
+    ]
 
     public static ignorePeerMethod = ["attributeModifier"]
 
