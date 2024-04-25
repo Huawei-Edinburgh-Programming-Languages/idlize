@@ -8,7 +8,7 @@ source_set = 'subset'
 else
 source_set = 'peers'
 endif
-use_dummy_libace = true
+use_dummy_libace = false
 is_node = true
 
 gen_dir = '../generated/' + source_set
@@ -25,6 +25,10 @@ sources = [
 if use_dummy_libace
 sources += [
    gen_dir + '/dummy_impl.cc'
+]
+else
+sources += [
+   gen_dir + '/all_modifiers.cc'
 ]
 endif
 

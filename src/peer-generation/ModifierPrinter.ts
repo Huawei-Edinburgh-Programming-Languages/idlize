@@ -27,11 +27,11 @@ class ModifierVisitor {
     }
 
     printModifierImplFunctionBody(method: PeerMethod) {
-        const declarationTable = this.library.declarationTable
         const firstDeclarationTarget = method.declarationTargets[0]
         const firstArgConvertor = method.argConvertors[0]
         if (firstDeclarationTarget && !(firstDeclarationTarget instanceof PrimitiveType)) {
-            // declarationTable.generateWriteToString(firstArgConvertor.param, firstDeclarationTarget, this.real, firstArgConvertor.isPointerType())
+            const declarationTable = this.library.declarationTable
+            declarationTable.generateFirstArgDestruct(firstArgConvertor.param, firstDeclarationTarget, this.real, firstArgConvertor.isPointerType())
         }
         if (method.retType != "void") this.real.print(`return 0;`)
     }
