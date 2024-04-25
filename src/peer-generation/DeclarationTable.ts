@@ -301,9 +301,6 @@ export class DeclarationTable {
         }
         if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {
             const name = identName(target.name)
-            if (name && PeerGeneratorConfig.shapes.includes(name)) {
-                return prefix + name.replace(/Attribute$/, 'Options')
-            }
             return prefix + name
         }
         if (ts.isFunctionTypeNode(target)) {
@@ -368,9 +365,6 @@ export class DeclarationTable {
             if (typeName === "Array") {
                 const elementTypeName = this.computeTypeNameImpl(undefined, type.typeArguments![0], false)
                 return `${prefix}Array_${elementTypeName}`
-            }
-            if (typeName && PeerGeneratorConfig.shapes.includes(typeName)) {
-                return prefix + typeName.replace(/Attribute$/, 'Options')
             }
             return prefix + identName(type.typeName)!
         }
@@ -592,10 +586,6 @@ export class DeclarationTable {
             return new FunctionConvertor(param, this)
         if (name === "Optional" && type.typeArguments && type.typeArguments.length == 1) {
             return new OptionConvertor(param, this, type.typeArguments![0])
-        }
-        if (name && PeerGeneratorConfig.shapes.includes(name)) {
-            const replacement = name.replace(/Attribute$/, 'Options')
-            return new PredefinedConvertor(param, replacement, replacement, replacement)
         }
         return undefined
     }

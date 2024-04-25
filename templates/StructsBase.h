@@ -81,3 +81,47 @@ typedef struct Opt_Ark_Callback {
   enum Ark_Tag tag;
   Ark_CustomObject value;
 } Opt_Ark_Callback;
+
+// Shapes
+
+typedef struct Ark_OptionalNumberOrString {
+  enum Ark_Tag tag;
+  union {
+    Ark_Number number;
+    Ark_String string;
+  };
+} Ark_OptionalNumberOrString;
+
+typedef struct CircleAttribute {
+  Ark_OptionalNumberOrString width;
+  Ark_OptionalNumberOrString height;
+} CircleAttribute;
+
+typedef struct EllipseAttribute {
+  Ark_OptionalNumberOrString width;
+  Ark_OptionalNumberOrString height;
+} EllipseAttribute;
+
+typedef struct PathAttribute {
+  Ark_OptionalNumberOrString width;
+  Ark_OptionalNumberOrString height;
+  struct {
+    enum Ark_Tag tag;
+    Ark_String value;
+  } string;
+} PathAttribute;
+
+typedef struct RectAttribute {
+  Ark_OptionalNumberOrString width;
+  Ark_OptionalNumberOrString height;
+  int8_t selector;
+  union {
+    struct {
+      Ark_OptionalNumberOrString radius; /// TODO add Array<any>
+    } value0;
+    struct {
+      Ark_OptionalNumberOrString radiusWidth;
+      Ark_OptionalNumberOrString radiusHeight;
+    } value1;
+  };
+} RectAttribute;

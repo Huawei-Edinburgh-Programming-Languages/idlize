@@ -21,7 +21,7 @@ export class PeerGeneratorConfig {
     public static ignoreSerialization = [
         "Array", "Callback", "ErrorCallback", "Resource", "Length", "AttributeModifier",
         "Number", "String", "Function", "Optional", "RelativeIndexable"
-    ].concat(PeerGeneratorConfig.shapes.map(it => it.replace(/Attribute$/, 'Options')))
+    ].concat(PeerGeneratorConfig.shapes)
 
     public static ignorePeerMethod = ["attributeModifier"]
 

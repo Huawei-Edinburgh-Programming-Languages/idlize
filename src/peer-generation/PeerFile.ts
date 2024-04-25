@@ -30,9 +30,6 @@ export class PeerFile {
         return getOrPut(this.peers, componentName, () => new PeerClass(componentName, this.originalFilename, this.printers))
     }
 
-    declareType(name: string, text: string) {
-        this.typeDeclarations.push(`declare type ${name} = ${text}`)
-    }
     private printImports(): void {
         const peerImports = new ImportsCollector()
         peerImports.addFilterByBasename(renameDtsToPeer(path.basename(this.originalFilename)))
@@ -48,7 +45,6 @@ export class PeerFile {
 
     print(): void {
         this.printImports()
-        this.typeDeclarations.forEach(it => this.printers.TS.print(it))
         this.peers.forEach(it => it.print())
     }
 }

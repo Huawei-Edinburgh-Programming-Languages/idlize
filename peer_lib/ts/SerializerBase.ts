@@ -123,34 +123,6 @@ export abstract class CustomSerializer {
     next: CustomSerializer | undefined = undefined
 }
 
-// Shapes
-declare type RectOptions = {
-    width?: number | string
-    height?: number | string
-    radius?: number | string | Array<any>
-} | {
-    width?: number | string
-    height?: number | string
-    radiusWidth?: number | string
-    radiusHeight?: number | string
-}
-
-declare type CircleOptions = {
-    width?: string | number
-    height?: string | number
-}
-
-declare type EllipseOptions = {
-    width?: string | number
-    height?: string | number
-}
-
-declare type PathOptions = {
-    width?: number | string
-    height?: number | string
-    commands?: string
-}
-
 export class SerializerBase {
     private position = 0
     private buffer: ArrayBuffer
@@ -290,21 +262,76 @@ export class SerializerBase {
         this.writeCustomObject("Callback", value)
     }
 
-    writeCircleOptions(value: CircleOptions|undefined) {
-        ///implement
+    private writeOptionalNumberOrString(value?: number|string) {
+        switch (runtimeType(value)) {
+            case RuntimeType.UNDEFINED:
+                this.writeInt8(Tags.UNDEFINED)
+                break
+            case RuntimeType.NUMBER:
+                this.writeInt8(Tags.OBJECT)
+                this.writeNumber(value as number)
+                break
+            case RuntimeType.STRING:
+                this.writeInt8(Tags.STRING)
+                this.writeString(value as string)
+                break
+        }
     }
 
-    writeELlipseOptions(value: EllipseOptions|undefined) {
-        ///implement
+    private writeWidthAndHeight(value: {width: number|string, height: number|string}) {
+        this.writeOptionalNumberOrString(value.width)
+        this.writeOptionalNumberOrString(value.height)
     }
 
-    writePathOptions(value: PathOptions|undefined) {
-        ///implement
+    writeCircleAttribute(value: CircleAttribute|undefined) {
+        // const data = value ///.?
+        // if (!data) {
+        //     this.writeInt8(Tags.UNDEFINED)
+        //     return
+        // }
+        // this.writeWidthAndHeight(data)///converge?
     }
 
-    writeRectOptions(value: RectOptions|undefined) {
-        ///implement
+    writeEllipseAttribute(value: EllipseAttribute|undefined) {
+        // const data = value ///.?
+        // if (!data) {
+        //     this.writeInt8(Tags.UNDEFINED)
+        //     return
+        // }
+        // this.writeWidthAndHeight(data)
     }
+
+    writePathAttribute(value: PathAttribute|undefined) {
+        // const data = value ///.?
+        // if (!data) {
+        //     this.writeInt8(Tags.UNDEFINED)
+        //     return
+        // }
+        // this.writeWidthAndHeight(data)
+
+        // if (!data.commands) {
+        //     this.writeInt8(Tags.UNDEFINED)
+        //     return
+        // }
+        // this.writeInt8(Tags.STRING)
+        // this.writeString(data.commands)
+    }
+
+    writeRectAttribute(value: RectAttribute|undefined) {
+        // const data = value ///.?
+        // if (!data) {
+        //     this.writeInt8(Tags.UNDEFINED)
+        //     return
+        // }
+        // this.writeWidthAndHeight(data)
+        // if (data.radiusWidth) {
+        //     this.writeWidthAndHeight(data.radiusWidth)
+        //     this.writeWidthAndHeight(data.radiusHeight)
+        // } else {
+        //     this.writeWidthAndHeight(data.radius)
+        //     // TODO how to handle Array<any>?
+        // }
+    }///uncomment
 }
 
 class OurCustomSerializer extends CustomSerializer {

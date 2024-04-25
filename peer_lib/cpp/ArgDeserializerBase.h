@@ -299,6 +299,59 @@ public:
   Ark_Undefined readUndefined() {
     return Ark_Undefined();
   }
+
+  Ark_OptionalNumberOrString readOptionalNumberOrString() {
+    Ark_OptionalNumberOrString result;
+    result.tag = readTag();
+    if (result.tag == Ark_Tag::ARK_TAG_OBJECT) {
+        result.number = readNumber();
+    } else if (result.tag == Ark_Tag::ARK_TAG_STRING) {
+        result.string = readString();
+    }
+    return result;
+  }
+
+  CircleAttribute readCircleAttribute() {
+    CircleAttribute value;
+    value.width = readOptionalNumberOrString();
+    value.height = readOptionalNumberOrString();
+    return value;
+  }
+
+  EllipseAttribute readEllipseAttribute() {
+    EllipseAttribute value;
+    value.width = readOptionalNumberOrString();
+    value.height = readOptionalNumberOrString();
+    return value;
+  }
+
+  PathAttribute readPathAttribute() {
+    PathAttribute value;
+    value.width = readOptionalNumberOrString();
+    value.height = readOptionalNumberOrString();
+    value.string.tag = readTag();
+    if (value.string.tag != Ark_Tag::ARK_TAG_UNDEFINED) {
+      value.string.value = readString();
+    }
+    return value;
+  }
+
+  RectAttribute readRectAttribute() {
+    RectAttribute value;
+    value.width = readOptionalNumberOrString();
+    value.height = readOptionalNumberOrString();
+    value.selector = readInt8();
+    switch (value.selector) {
+      case 0:
+        value.value0.radius = readOptionalNumberOrString();
+        break;
+      case 1:
+        value.value1.radiusWidth = readOptionalNumberOrString();
+        value.value1.radiusHeight = readOptionalNumberOrString();
+        break;
+    }
+    return value;
+  }
 };
 
 inline void WriteToString(string* result, Ark_Boolean value) {
