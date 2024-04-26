@@ -37,9 +37,7 @@ import {
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
 import { DeclarationTable, PrimitiveType } from "./DeclarationTable"
 import {
-    determineParentRole,
-    InheritanceRole,
-    isHeir,
+    isCommonMethod,
     isRoot,
     isStandalone,
     singleParentDeclaration,
@@ -155,7 +153,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
             `import { Serializer } from "./Serializer"`,
             `import { nativeModule } from "./NativeModule"`,
             `import { ArkUINodeType } from "./ArkUINodeType"`,
-            `import { ArkCommon } from "./ArkCommon"`,
+            `import { ArkComponent } from "./ArkStructCommon"`
         ]
     }
 
@@ -236,6 +234,9 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         if (!this.needsPeer(node)) return
         if (isCustomComponentClass(node))
             return this.processCustomComponent(node)
+        if (isCommonMethod(nameOrNull(node.name)!)) {
+            this.printCommonComponent(node)
+        }
         const collapsedMethods = this.collapseOverloads(node)
 
         const componentName = this.renameToComponent(nameOrNull(node.name)!)
@@ -261,8 +262,41 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
             .filter(it => ts.isMethodDeclaration(it) || ts.isMethodSignature(it))
             .map(it => it.getText().replace(/;\s*$/g, ''))
             .map(it => `${it} { throw new Error("not implemented"); }`)
+        this.printers.structCommon.print('export class ArkStructCommon extends ArkComponent implements CustomComponent {')
+        this.printers.structCommon.pushIndent()
         for (const method of methods)
             this.printers.structCommon.print(method)
+        this.printers.structCommon.popIndent()
+        this.printers.structCommon.print('}')
+    }
+
+    private printCommonComponent(node: ts.ClassDeclaration) {
+        const collapsedMethods = this.collapseOverloads(node, true)
+
+        const methods = collapsedMethods
+            .filter(it => ts.isMethodDeclaration(it.member) || ts.isMethodSignature(it.member))
+            .filter(it => !ts.isCallSignatureDeclaration(it.member))
+            .map(it => `${identName(it.member.name)}(${it.collapsed!.paramsDecl}) : this`)
+            .map(it => it.replace('<T>', '<this>'))
+            .map(it => `${it} { throw new Error("not implemented"); }`)
+        this.printers.structCommon.print(`
+export class ArkComponent implements CommonMethod<CommonAttribute> {
+    // custom code
+    protected peer?: NativePeerNode
+    setPeer(peer: NativePeerNode) {
+    }
+    /** @memo:intrinsic */
+    protected checkPriority(
+        name: string
+    ): boolean { throw new Error("not implemented") }
+    protected applyAttributesFinish(): void { throw new Error("not implemented") }
+        `)
+
+        this.printers.structCommon.pushIndent()
+        for (const method of methods)
+            this.printers.structCommon.print(method)
+        this.printers.structCommon.popIndent()
+        this.printers.structCommon.print('}')
     }
 
     processInterface(node: ts.InterfaceDeclaration) {
@@ -522,7 +556,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         if (ts.isCallSignatureDeclaration(member)) return ""
         throw new Error("Unsupported: " + asString(member))
     }
-    private collapseOverloads(node: ts.ClassDeclaration|ts.InterfaceDeclaration): MaybeCollapsedMethod[] {
+    private collapseOverloads(node: ts.ClassDeclaration|ts.InterfaceDeclaration, convertEvenNotCollapsed: boolean = false): MaybeCollapsedMethod[] {
         const methods = (node.members as ts.NodeArray<ts.Node>).filter(
             it => (ts.isMethodDeclaration(it) || ts.isCallSignatureDeclaration(it))
         ) as (ts.MethodDeclaration | ts.CallSignatureDeclaration)[]
@@ -536,7 +570,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
 
         return [...groupedByName.keys()].map(name => {
             const overloads = groupedByName.get(name)!
-            if (overloads.length == 1) {
+            if (overloads.length == 1 && !convertEvenNotCollapsed) {
                 return {
                     member: overloads[0]
                 }

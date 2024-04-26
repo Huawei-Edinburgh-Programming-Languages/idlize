@@ -324,13 +324,11 @@ export function makeArkuiModule(componentsFiles: string[]): string {
     }).join("\n")
 }
 
-export function makeStructCommon(structCommonMethods: string[]): string {
+export function makeStructCommon(structCommon: string[]): string {
     return `
-import { ArkComponent } from "./ArkComponent";
+import { NativePeerNode } from "./Interop"
 
-export class ArkStructCommon extends ArkComponent implements CustomComponent {
-${structCommonMethods.map(it => indentedBy(it, 2)).join("\n")}
-}
+${structCommon.join('\n')}
 
 export abstract class ArkCommonStruct0<T extends ArkCommonStruct0<T>> extends ArkStructCommon {
     /** @memo */
