@@ -14,10 +14,7 @@
  */
 import { float32, int32 } from "@koalaui/common"
 import { KPointer } from "./types"
-import { ArkCirclePeer } from "./ArkCirclePeer"
-import { ArkEllipsePeer } from "./ArkEllipsePeer"
-import { ArkPathPeer } from "./ArkPathPeer"
-import { ArkRectPeer } from "./ArkRectPeer"
+import { ArkCommonPeer } from "./ArkCommonPeer"
 
 /**
  * Value representing possible JS runtime object type.
@@ -168,6 +165,9 @@ export class SerializerBase {
             this.view = new DataView(resizedBuffer)
         }
     }
+    getPeerPointer<T>(value: CommonMethod<T> | undefined): KPointer {
+        return (value as unknown as ArkCommonPeer).ptr
+    }
     writeCustomObject(kind: string, value: any) {
         let current = SerializerBase.customSerializers
         while (current) {
@@ -280,19 +280,19 @@ export class SerializerBase {
     }
 
     writeCircleAttribute(value: CircleAttribute|undefined) {
-        this.writePointer((value as unknown as ArkCirclePeer).ptr)
+        this.writePointer(this.getPeerPointer<CircleAttribute>(value))
     }
 
     writeEllipseAttribute(value: EllipseAttribute|undefined) {
-        this.writePointer((value as unknown as ArkEllipsePeer).ptr)
+        this.writePointer(this.getPeerPointer<EllipseAttribute>(value))
     }
 
     writePathAttribute(value: PathAttribute|undefined) {
-        this.writePointer((value as unknown as ArkPathPeer).ptr)
+        this.writePointer(this.getPeerPointer<PathAttribute>(value))
     }
 
     writeRectAttribute(value: RectAttribute|undefined) {
-        this.writePointer((value as unknown as ArkRectPeer).ptr)
+        this.writePointer(this.getPeerPointer<RectAttribute>(value))
     }
 }
 
