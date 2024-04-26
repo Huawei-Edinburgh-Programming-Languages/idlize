@@ -15,6 +15,7 @@
 
 export class PeerGeneratorConfig {
     public static commonMethod = ["CommonMethod"]
+    public static customComponent = ["CustomComponent"]
 
     public static ignoreSerialization = [
         "Array", "Callback", "ErrorCallback", "Resource", "Length", "AttributeModifier",
@@ -52,6 +53,7 @@ export class PeerGeneratorConfig {
     ]
 
     public static skipPeerGeneration = ["CommonAttribute"]
+    public static skipComponentGeneration = ["CommonShapeMethod", "ScrollableCommonMethod"]
 
     public static rootComponents = [
         "CommonMethod",
@@ -68,7 +70,7 @@ export class PeerGeneratorConfig {
     ]
 
     public static readonly notCompilableComponents: string[] = [
-        "ArkCircle", "ArkCommon", "ArkEllipse", "ArkGrid", "ArkImageSpan", 
+        "ArkCircle", "ArkEllipse", "ArkGrid", "ArkImageSpan", 
         "ArkLine", "ArkList", "ArkLocationButton", "ArkMediaCachedImage", "ArkPasteButton", "ArkPath", "ArkPolygon",
         "ArkPolyline", "ArkRect", "ArkSaveButton", "ArkScroll", "ArkSpan", "ArkWaterFlow",
     ]

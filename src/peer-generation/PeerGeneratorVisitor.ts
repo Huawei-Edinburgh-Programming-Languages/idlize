@@ -26,7 +26,8 @@ import {
     className,
     isDefined,
     isStatic,
-    throwException
+    throwException,
+    isCustomComponentClass,
 } from "../util"
 import { GenericVisitor } from "../options"
 import { IndentedPrinter } from "../IndentedPrinter"
@@ -95,6 +96,7 @@ export type PeerGeneratorVisitorOptions = {
     nodeTypes: string[]
     apiHeaders: string[]
     apiHeadersList: string[]
+    structCommon: string[]
     dumpSerialized: boolean
     declarationTable: DeclarationTable,
     peerLibrary: PeerLibrary
@@ -132,6 +134,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
             new IndentedPrinter(options.nodeTypes),
             new IndentedPrinter(options.apiHeaders),
             new IndentedPrinter(options.apiHeadersList),
+            new IndentedPrinter(options.structCommon),
         )
         this.dumpSerialized = options.dumpSerialized
         this.declarationTable = options.declarationTable
@@ -231,6 +234,8 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
 
     private processClass(node: ts.ClassDeclaration): void {
         if (!this.needsPeer(node)) return
+        if (isCustomComponentClass(node))
+            return this.processCustomComponent(node)
         const collapsedMethods = this.collapseOverloads(node)
 
         const componentName = this.renameToComponent(nameOrNull(node.name)!)
@@ -249,6 +254,15 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         this.nativeModulePrint(node, collapsedMethods)
 
         this.printNodeType(node)
+    }
+
+    private processCustomComponent(node: ts.ClassDeclaration) {
+        const methods = node.members
+            .filter(it => ts.isMethodDeclaration(it) || ts.isMethodSignature(it))
+            .map(it => it.getText().replace(/;\s*$/g, ''))
+            .map(it => `${it} { throw new Error("not implemented"); }`)
+        for (const method of methods)
+            this.printers.structCommon.print(method)
     }
 
     processInterface(node: ts.InterfaceDeclaration) {

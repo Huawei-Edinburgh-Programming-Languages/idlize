@@ -6,6 +6,7 @@ import { determineInheritanceRole, determineParentRole, InheritanceRole, isCommo
 import { PeerFile } from "./PeerFile"
 import { PeerMethod } from "./PeerMethod"
 import { Printers } from "./Printers"
+import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
 
 export class PeerClass {
     constructor(
@@ -238,11 +239,16 @@ ${parentStructClass.typesLines.map(it => indentedBy(it, 2)).join("\n")}
         this.generateApplyMethod(this.printers.TSPeer)
     }
 
+    private canGenerateComponent(): boolean {
+        return !PeerGeneratorConfig.skipComponentGeneration.includes(this.originalClassName!)
+            && determineInheritanceRole(this.originalClassName!) == InheritanceRole.Heir
+    }
+
     print() {
         this.printProlog()
         this.printMethods()
         this.printEpilog()
-        if (determineInheritanceRole(this.originalClassName!) == InheritanceRole.Heir) 
+        if (this.canGenerateComponent()) 
             this.printComponent()
     }
 }

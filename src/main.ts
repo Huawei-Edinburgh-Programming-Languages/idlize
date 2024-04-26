@@ -38,6 +38,7 @@ import {
     makeTSSerializer,
     nativeModuleDeclaration,
     nativeModuleEmptyDeclaration,
+    makeStructCommon,
 
 } from "./peer-generation/FileGenerators"
 import {
@@ -271,6 +272,7 @@ if (options.dts2peer) {
     const bridgeCcArray: string[] = []
     const apiHeaders: string[] = []
     const apiHeadersList: string[] = []
+    const structCommonMethods: string[] = []
     const declarationTable = new DeclarationTable()
     const peerLibrary = new PeerLibrary(declarationTable)
     const arkuiComponentsFiles: string[] = []
@@ -343,6 +345,10 @@ if (options.dts2peer) {
                 fs.writeFileSync(
                     path.join(outDir, 'index.ts'),
                     makeArkuiModule(arkuiComponentsFiles),
+                )
+                fs.writeFileSync(
+                    path.join(outDir, 'ArkStructCommon.ts'),
+                    makeStructCommon(structCommonMethods),
                 )
                 const bridgeCc = bridgeCcDeclaration(bridgeCcArray)
                 fs.writeFileSync(path.join(outDir, 'bridge.cc'), bridgeCc)
