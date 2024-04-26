@@ -310,28 +310,28 @@ public:
   CircleAttribute readCircleAttribute() {
     CircleAttribute value;
     value.ptr = readPointer();
-    printf("ptr-read %p\n", value.ptr);///
+    // printf("ptr-read %p\n", value.ptr);///
     return value;
   }
 
   EllipseAttribute readEllipseAttribute() {
     EllipseAttribute value;
     value.ptr = readPointer();
-    printf("ptr-read %p\n", value.ptr);///
+    // printf("ptr-read %p\n", value.ptr);///
     return value;
   }
 
   PathAttribute readPathAttribute() {
     PathAttribute value;
     value.ptr = readPointer();
-    printf("ptr-read %p\n", value.ptr);///
+    // printf("ptr-read %p\n", value.ptr);///
     return value;
   }
 
   RectAttribute readRectAttribute() {
     RectAttribute value;
     value.ptr = readPointer();
-    printf("ptr-read %p\n", value.ptr);///
+    // printf("ptr-read %p\n", value.ptr);///
     return value;
   }
 };

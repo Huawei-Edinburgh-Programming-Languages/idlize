@@ -207,7 +207,7 @@ export class SerializerBase {
         this.position += 4
     }
     writeInt64(value: bigint) {
-        console.log(`ptr-write ${value.toString(16)}`)///
+        // console.log(`ptr-write ${value.toString(16)}`)///
         this.checkCapacity(8)
         const mask = 0xffffffff as unknown as bigint
         const shift = 32 as unknown as bigint
