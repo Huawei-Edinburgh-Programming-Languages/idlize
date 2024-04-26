@@ -870,8 +870,11 @@ export class DeclarationTable {
         printer.print(`}`)
     }
 
-    generateFirstArgDestruct(name: string, target: DeclarationTarget, printer: IndentedPrinter, isPointer: boolean) {
+    generateFirstArgDestruct(convertor: ArgConvertor, target: DeclarationTarget, printer: IndentedPrinter, isPointer: boolean) {
         if (target instanceof PrimitiveType) return // Just don't emit anything
+        if (convertor instanceof OptionConvertor) return // TODO: handle optionals
+
+        const name = convertor.param
         this.setCurrentContext(`modifier(${name})`)
         let isUnion = this.isMaybeWrapped(target, ts.isUnionTypeNode)
         let isArray = this.isMaybeWrapped(target, ts.isArrayTypeNode)
@@ -886,15 +889,9 @@ export class DeclarationTable {
 
         if (isUnion) {
             this.targetStruct(target).getFields().forEach((field, index) => {
-                let isPointerField = this.isPointerDeclaration(field.declaration, field.optional)
                 if (index > 0) {
                     printer.print(`// ${this.uniqueNames.get(field.declaration) ?? ""}`)
                     printer.print(`if (${name}${access}selector == ${index - 1}) {`)
-                    /*
-                    printer.pushIndent()
-                    printer.print(`${isPointerField ? "&" : ""}${name}${access}${field.name};`)
-                    printer.popIndent()
-                    */
                     printer.print(`}`)
                 }
             })
@@ -909,25 +906,16 @@ export class DeclarationTable {
                 : this.typeConvertor("param", elementType).isPointerType()
             printer.print(`int32_t count = ${name}${access}array_length ;`)
             printer.print(`for (int i = 0; i < count; i++) {`)
-            /*
-            printer.pushIndent()
-            printer.print(`${isPointerField ? "&" : ""}${name}${access}array[i];`)
-            printer.popIndent()
-            */
             printer.print(`}`)
         } else if (isTuple) {
             const fields = this.targetStruct(target).getFields()
             fields.forEach((field, index) => {
                 printer.print(`// ${this.uniqueNames.get(field.declaration) ?? ""}`)
-                //let isPointerField = this.isPointerDeclaration(field.declaration, field.optional)
-                //printer.print(`${isPointerField ? "&" : ""}${name}${access}${field.name};`)
             })
         } else if (isOptional) {
             const fields = this.targetStruct(target).getFields()
             fields.forEach((field, index) => {
                 printer.print(`// ${this.uniqueNames.get(field.declaration) ?? ""}`)
-                //let isPointerField = this.isPointerDeclaration(field.declaration, field.optional)
-                //printer.print(`${isPointerField ? "&" : ""}${name}${access}${field.name};`)
                 if (index == 0) {
                     printer.print(`if (${name}${access}${field.name} != ${PrimitiveType.UndefinedTag}) {`)
                     printer.pushIndent()

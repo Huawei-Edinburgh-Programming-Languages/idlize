@@ -31,7 +31,7 @@ class ModifierVisitor {
         const firstArgConvertor = method.argConvertors[0]
         if (firstDeclarationTarget && !(firstDeclarationTarget instanceof PrimitiveType)) {
             const declarationTable = this.library.declarationTable
-            declarationTable.generateFirstArgDestruct(firstArgConvertor.param, firstDeclarationTarget, this.real, firstArgConvertor.isPointerType())
+            declarationTable.generateFirstArgDestruct(firstArgConvertor, firstDeclarationTarget, this.real, firstArgConvertor.isPointerType())
         }
         if (method.retType != "void") this.real.print(`return 0;`)
     }

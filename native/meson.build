@@ -8,7 +8,7 @@ source_set = 'subset'
 else
 source_set = 'peers'
 endif
-use_dummy_libace = false
+use_dummy_libace = true
 is_node = true
 
 gen_dir = '../generated/' + source_set
