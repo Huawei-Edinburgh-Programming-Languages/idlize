@@ -76,7 +76,7 @@ export class PeerClass {
         const parentRole = determineParentRole(this.originalClassName!, this.originalParentName)
 
         if (parentRole === InheritanceRole.Finalizable) {
-            printer.print(`constructor(type?: ArkUINodeType, component?: ArkComponent, flags: int32 = 0) {`)
+            printer.print(`constructor(type?: ArkUINodeType, component?: ArkCommon, flags: int32 = 0) {`)
             printer.pushIndent()
             printer.print(`super(BigInt(42)) // for now`)
             printer.popIndent()
@@ -84,7 +84,7 @@ export class PeerClass {
             return
         }
         if (parentRole === InheritanceRole.PeerNode) {
-            printer.print(`constructor(type: ArkUINodeType, component?: ArkComponent, flags: int32 = 0) {`)
+            printer.print(`constructor(type: ArkUINodeType, component?: ArkCommon, flags: int32 = 0) {`)
             printer.pushIndent()
             printer.print(`super(type, flags)`)
             printer.print(`component?.setPeer(this.peer)`)
@@ -94,7 +94,7 @@ export class PeerClass {
         }
 
         if (parentRole === InheritanceRole.Heir || parentRole === InheritanceRole.Root) {
-            printer.print(`constructor(type: ArkUINodeType, component?: ArkComponent, flags: int32 = 0) {`)
+            printer.print(`constructor(type: ArkUINodeType, component?: ArkCommon, flags: int32 = 0) {`)
             printer.pushIndent()
             printer.print(`super(type, component, flags)`)
             printer.popIndent()

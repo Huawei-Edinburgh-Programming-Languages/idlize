@@ -146,12 +146,13 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
     defaultImports() {
         return [
             `import { int32 } from "@koalaui/common"`,
-            `import { PeerNode, Finalizable, nullptr, KPointer } from "@koalaui/interop"`,
+            `import { PeerNode } from "@koalaui/arkoala"`,
+            `import { nullptr, KPointer } from "@koalaui/interop"`,
             `import { runtimeType, withLength, withLengthArray, RuntimeType } from "./SerializerBase"`,
             `import { Serializer } from "./Serializer"`,
             `import { nativeModule } from "./NativeModule"`,
             `import { ArkUINodeType } from "./ArkUINodeType"`,
-            `import { ArkComponent } from "./ArkComponent"`,
+            `import { ArkCommon } from "./ArkCommon"`,
         ]
     }
 

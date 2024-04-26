@@ -40,7 +40,15 @@ export function nativeModuleDeclaration(methods: string[], nativeBridgePath: str
 ${importTsInteropTypes}
 import { NativeModuleEmpty } from "./NativeModuleEmpty"
 import { NativeModuleBase } from "./NativeModuleBase"
-import { NativeStringBase, providePlatformDefinedData, nullptr, Access, withByteArray } from "@koalaui/interop"
+import {
+  NativeStringBase,
+  providePlatformDefinedData,
+  nullptr,
+  Access,
+  withByteArray,
+  CallbackRegistry,
+  ArrayDecoder
+} from "@koalaui/interop"
 
 export type NodePointer = pointer
 
@@ -74,7 +82,9 @@ class NativeString extends NativeStringBase {
 }
 
 providePlatformDefinedData({
-    nativeString(ptr: KPointer): NativeStringBase { return new NativeString(ptr) }
+    nativeString(ptr: KPointer): NativeStringBase { return new NativeString(ptr) },
+    nativeStringArrayDecoder(): ArrayDecoder<NativeStringBase> { throw new Error("Not implemented") },
+    callbackRegistry(): CallbackRegistry | undefined { return undefined }
 })
 
 export interface NativeModule extends NativeModuleBase {

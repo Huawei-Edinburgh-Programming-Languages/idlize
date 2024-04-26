@@ -150,29 +150,13 @@ export abstract class NativeStringBase extends Wrapper {
 
 export const nullptr: pointer = BigInt(0)
 
-export class Finalizable {
-    constructor(public ptr: pointer) {
-    }
-}
-
-export class NativePeerNode extends Finalizable {
-}
-
-export class PeerNode extends Finalizable {
-    peer: NativePeerNode
-    constructor(type: number, flags: int32) {
-        // TODO: rework
-        super(BigInt(42))
-        this.peer = new NativePeerNode(BigInt(42))
-    }
-    applyAttributes(attrs: Object) {}
-}
-
 export interface PlatformDefinedData {
     nativeString(ptr: KPointer): NativeStringBase
+    nativeStringArrayDecoder(ptr: KPointer): ArrayDecoder<NativeStringBase>
+    callbackRegistry(): CallbackRegistry | undefined
 }
 
-let platformData: PlatformDefinedData|undefined = undefined
+let platformData: PlatformDefinedData | undefined = undefined
 
 export function providePlatformDefinedData(platformDataParam: PlatformDefinedData) {
     platformData = platformDataParam
@@ -206,3 +190,17 @@ export function withUint8Array<T>(data: Uint8Array | undefined, access: Access, 
 }
 
 export const withByteArray = withUint8Array
+
+export abstract class ArrayDecoder<T> {
+    abstract getArraySize(blob: KPointer): int32
+    abstract disposeArray(blob: KPointer): void
+    abstract getArrayElement(blob: KPointer, index: int32): T
+
+    decode(blob: KPointer): Array<T> {
+        throw new Error(`TODO`)
+    }
+}
+
+export interface CallbackRegistry {
+    registerCallback(callback: any, obj: any): KPointer
+}
