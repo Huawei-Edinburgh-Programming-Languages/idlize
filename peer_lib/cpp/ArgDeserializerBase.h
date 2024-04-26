@@ -24,7 +24,6 @@
 
 using namespace std;
 
-
 inline const char* tagName(Ark_Tag tag) {
   switch (tag) {
     case Ark_Tag::ARK_TAG_UNDEFINED: return "UNDEFINED";
@@ -51,7 +50,7 @@ inline const char* getUnitName(int value) {
 
 // TODO: restore full printing!
 template <typename T>
-inline void WriteToString(string* result, T value) {} // = delete;
+inline void WriteToString(string* result, T value) = delete;
 
 inline void WriteToString(string* result, const Ark_Empty& value) {
 }
@@ -171,7 +170,7 @@ public:
   void resizeArray(T* array, int32_t length) {
     void* value = nullptr;
     if (length > 0) {
-      value = malloc(length * sizeof(T));
+      value = malloc(length * sizeof(E));
       memset(value, 0, length * sizeof(E));
       toClean.push_back(value);
     }
@@ -239,9 +238,9 @@ public:
   Ark_NativePointer readPointer()
   {
     check(8);
-    Ark_NativePointer value = (Ark_NativePointer)(data + position);
+    int64_t value = *(int64_t*)(data + position);
     position += 8;
-    return value;
+    return reinterpret_cast<Ark_NativePointer>(value);
   }
   Ark_Number readNumber()
   {
@@ -293,14 +292,6 @@ public:
     Ark_Function result;
     result.id = readInt32();
     return result;
-  }
-
-  Ark_Callback readCallback() {
-    return readFunction();
-  }
-
-  Ark_ErrorCallback readErrorCallback() {
-    return readFunction();
   }
 
   Ark_Undefined readUndefined() {
@@ -387,15 +378,6 @@ inline void WriteToString(string* result, Ark_Boolean value) {
 template <>
 inline void WriteToString(string* result, Ark_Int32 value) {
   result->append(std::to_string(value));
-}
-
-inline void WriteToString(string* result, Ark_String* value) {
-    result->append("\"");
-    if (value->chars)
-      result->append(value->chars);
-    else
-      result->append("<null>");
-    result->append("\"");
 }
 
 inline void WriteToString(string* result, const Ark_String* value) {

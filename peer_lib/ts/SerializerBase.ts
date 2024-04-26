@@ -13,8 +13,12 @@
  * limitations under the License.
  */
 import { float32, int32 } from "@koalaui/common"
+<<<<<<< HEAD
 import { KPointer } from "./types"
 import { ArkCommonPeer } from "./ArkCommonPeer"
+=======
+import { pointer } from "./types"
+>>>>>>> 2c5779fd82b9a785866c660d3af849f2d430b3dc
 
 /**
  * Value representing possible JS runtime object type.
@@ -223,22 +227,15 @@ export class SerializerBase {
         this.view.setInt32(this.position, value, true)
         this.position += 4
     }
-    writeInt64(value: bigint) {
-        // console.log(`ptr-write ${value.toString(16)}`)///
+    writePointer(value: pointer) {
         this.checkCapacity(8)
-        const mask = 0xffffffff as unknown as bigint
-        const shift = 32 as unknown as bigint
-        this.view.setInt32(this.position, (value & mask) as unknown as int32, true)
-        this.view.setInt32(this.position + 4, (value >> shift) as unknown as int32, true)
+        this.view.setBigInt64(this.position, BigInt(value), true)
         this.position += 8
     }
     writeFloat32(value: float32) {
         this.checkCapacity(4)
         this.view.setFloat32(this.position, value, true)
         this.position += 4
-    }
-    writePointer(value: KPointer) {
-        this.writeInt64(value as bigint)
     }
     writeBoolean(value: boolean|undefined) {
         this.checkCapacity(1)
@@ -258,9 +255,6 @@ export class SerializerBase {
         //this.view.setInt8(this.position + length  - 1, 0)
         this.position += length
     }
-    writeAny(value: any) {
-        throw new Error("How to write any?")
-    }
     // Length is an important common case.
     writeLength(value: Length|undefined) {
         this.checkCapacity(1)
@@ -273,27 +267,6 @@ export class SerializerBase {
                 this.writeInt32(resource)
             })
         }
-    }
-    writeAnimationRange(value: AnimationRange<number>|undefined) {
-       if (!value) {
-           this.writeInt8(Tags.UNDEFINED)
-           return
-        }
-        this.writeInt8(Tags.OBJECT)
-        this.writeNumber(value[0])
-        this.writeNumber(value[1])
-    }
-
-    writeAttributeModifier(value: AttributeModifier<any>|undefined) {
-        this.writeCustomObject("AttributeModifier", value)
-    }
-
-    writeContentModifier(value: ContentModifier<any>|undefined) {
-        this.writeCustomObject("ContentModifier", value)
-    }
-
-    writeCallback(value: Callback<any>|undefined) {
-        this.writeCustomObject("Callback", value)
     }
 
     writeCircleAttribute(value: CircleAttribute|undefined) {
