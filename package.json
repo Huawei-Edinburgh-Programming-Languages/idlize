@@ -61,6 +61,10 @@
         "compile:native-node-host-subset": "npm run configure:native-node-host-subset && cd native && meson compile -C build-node-host-subset && meson install -C build-node-host-subset",
         "configure:native-node-host-full": "npm run download:napi && cd ./native && meson setup -Dsubset=false build-node-host-full",
         "compile:native-node-host-full": "npm run configure:native-node-host-full && cd native && meson compile -C build-node-host-full && meson install -C build-node-host-full",
-        "sanity": "npm run check:peers:run && npm run run:all && npm run lint:all "
+        "sanity": "npm run check:peers:run && npm run run:all && npm run lint:all",
+        "panda:sdk:install": "cd panda && npm run panda:sdk:install",
+        "compile:arkts:subset": "bash ./panda/arkts/arktsc --arktsconfig ./arktsconfig-subset.json --ets-module",
+        "compile:arkts:peers": "bash ./panda/arkts/arktsc --arktsconfig ./arktsconfig-peers.json --ets-module",
+        "compile:arkts": "bash ./panda/arkts/arktsc --arktsconfig ./arktsconfig.json --ets-module"
     }
 }
