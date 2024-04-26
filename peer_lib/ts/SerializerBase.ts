@@ -13,6 +13,11 @@
  * limitations under the License.
  */
 import { float32, int32 } from "@koalaui/common"
+import { KPointer } from "./types"
+import { ArkCirclePeer } from "./ArkCirclePeer"
+import { ArkEllipsePeer } from "./ArkEllipsePeer"
+import { ArkPathPeer } from "./ArkPathPeer"
+import { ArkRectPeer } from "./ArkRectPeer"
 
 /**
  * Value representing possible JS runtime object type.
@@ -201,10 +206,22 @@ export class SerializerBase {
         this.view.setInt32(this.position, value, true)
         this.position += 4
     }
+    writeInt64(value: bigint) {
+        console.log(`ptr-write ${value.toString(16)}`)///
+        this.checkCapacity(8)
+        const mask = 0xffffffff as unknown as bigint
+        const shift = 32 as unknown as bigint
+        this.view.setInt32(this.position, (value & mask) as unknown as int32, true)
+        this.view.setInt32(this.position + 4, (value >> shift) as unknown as int32, true)
+        this.position += 8
+    }
     writeFloat32(value: float32) {
         this.checkCapacity(4)
         this.view.setFloat32(this.position, value, true)
         this.position += 4
+    }
+    writePointer(value: KPointer) {
+        this.writeInt64(value as bigint)
     }
     writeBoolean(value: boolean|undefined) {
         this.checkCapacity(1)
@@ -262,76 +279,21 @@ export class SerializerBase {
         this.writeCustomObject("Callback", value)
     }
 
-    private writeOptionalNumberOrString(value?: number|string) {
-        switch (runtimeType(value)) {
-            case RuntimeType.UNDEFINED:
-                this.writeInt8(Tags.UNDEFINED)
-                break
-            case RuntimeType.NUMBER:
-                this.writeInt8(Tags.OBJECT)
-                this.writeNumber(value as number)
-                break
-            case RuntimeType.STRING:
-                this.writeInt8(Tags.STRING)
-                this.writeString(value as string)
-                break
-        }
-    }
-
-    private writeWidthAndHeight(value: {width: number|string, height: number|string}) {
-        this.writeOptionalNumberOrString(value.width)
-        this.writeOptionalNumberOrString(value.height)
-    }
-
     writeCircleAttribute(value: CircleAttribute|undefined) {
-        // const data = value ///.?
-        // if (!data) {
-        //     this.writeInt8(Tags.UNDEFINED)
-        //     return
-        // }
-        // this.writeWidthAndHeight(data)///converge?
+        this.writePointer((value as unknown as ArkCirclePeer).ptr)
     }
 
     writeEllipseAttribute(value: EllipseAttribute|undefined) {
-        // const data = value ///.?
-        // if (!data) {
-        //     this.writeInt8(Tags.UNDEFINED)
-        //     return
-        // }
-        // this.writeWidthAndHeight(data)
+        this.writePointer((value as unknown as ArkEllipsePeer).ptr)
     }
 
     writePathAttribute(value: PathAttribute|undefined) {
-        // const data = value ///.?
-        // if (!data) {
-        //     this.writeInt8(Tags.UNDEFINED)
-        //     return
-        // }
-        // this.writeWidthAndHeight(data)
-
-        // if (!data.commands) {
-        //     this.writeInt8(Tags.UNDEFINED)
-        //     return
-        // }
-        // this.writeInt8(Tags.STRING)
-        // this.writeString(data.commands)
+        this.writePointer((value as unknown as ArkPathPeer).ptr)
     }
 
     writeRectAttribute(value: RectAttribute|undefined) {
-        // const data = value ///.?
-        // if (!data) {
-        //     this.writeInt8(Tags.UNDEFINED)
-        //     return
-        // }
-        // this.writeWidthAndHeight(data)
-        // if (data.radiusWidth) {
-        //     this.writeWidthAndHeight(data.radiusWidth)
-        //     this.writeWidthAndHeight(data.radiusHeight)
-        // } else {
-        //     this.writeWidthAndHeight(data.radius)
-        //     // TODO how to handle Array<any>?
-        // }
-    }///uncomment
+        this.writePointer((value as unknown as ArkRectPeer).ptr)
+    }
 }
 
 class OurCustomSerializer extends CustomSerializer {

@@ -304,6 +304,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         if (PeerGeneratorConfig.ignorePeerMethod.includes(methodName)) return
 
         this.declarationTable.setCurrentContext(`${methodName}()`)
+
         method.parameters.map((param, index) => {
             if (param.type)
                 this.requestType(`Type_${originalParentName}_${methodName}_Arg${index}`, param.type)
