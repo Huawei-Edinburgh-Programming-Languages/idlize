@@ -145,7 +145,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
 
     defaultImports() {
         return [
-            `import { runtimeType, withLength, withLengthArray, RuntimeType } from "./SerializerBase"`,
+            `import { runtimeType, withLength, withLengthArray, RuntimeType, Ark_CircularShape, Ark_RectangularShape, Ark_PathShape } from "./SerializerBase"`,
             `import { Serializer } from "./Serializer"`,
             `import { int32 } from "@koalaui/common"`,
             `import { KPointer } from "./types"`,

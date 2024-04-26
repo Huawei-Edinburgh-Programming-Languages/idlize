@@ -115,6 +115,23 @@ function registerCallback(value: object|undefined): number {
     return 42
 }
 
+// Shapes
+export class Ark_CircularShape {
+    width?: number | string
+    height?: number | string
+}
+
+export class Ark_RectangularShape extends Ark_CircularShape {
+    radiusWidth?: number | string
+    radiusHeight?: number | string
+    // TODO how to handle Array<any>?
+    ///restore union
+}
+
+export class Ark_PathShape extends Ark_CircularShape {
+    commands?: string
+}
+
 let textEncoder = new TextEncoder()
 
 /* Serialization extension point */
@@ -293,6 +310,60 @@ export class SerializerBase {
 
     writeRectAttribute(value: RectAttribute|undefined) {
         this.writePointer(this.getPeerPointer<RectAttribute>(value))
+    }
+
+    private writeOptionalNumberOrString(value?: number|string) {
+        switch (runtimeType(value)) {
+            case RuntimeType.UNDEFINED:
+                this.writeInt8(Tags.UNDEFINED)
+                break
+            case RuntimeType.NUMBER:
+                this.writeInt8(Tags.OBJECT)
+                this.writeNumber(value as number)
+                break
+            case RuntimeType.STRING:
+                this.writeInt8(Tags.STRING)
+                this.writeString(value as string)
+                break
+        }
+    }
+
+    private writeWidthAndHeight(value: Ark_CircularShape) {
+        this.writeOptionalNumberOrString(value.width)
+        this.writeOptionalNumberOrString(value.height)
+    }
+
+    writeCircularShape(value: Ark_CircularShape | undefined) {
+        if (!value) {
+            this.writeInt8(Tags.UNDEFINED)
+            return
+        }
+        this.writeWidthAndHeight(value)
+    }
+
+    writePathShape(value: Ark_PathShape | undefined) {
+        if (!value) {
+            this.writeInt8(Tags.UNDEFINED)
+            return
+        }
+        this.writeWidthAndHeight(value)
+
+        if (!value.commands) {
+            this.writeInt8(Tags.UNDEFINED)
+            return
+        }
+        this.writeInt8(Tags.STRING)
+        this.writeString(value.commands)
+    }
+
+    writeRectangularShape(value: Ark_RectangularShape | undefined) {
+        if (!value) {
+            this.writeInt8(Tags.UNDEFINED)
+            return
+        }
+        this.writeWidthAndHeight(value)
+        this.writeOptionalNumberOrString(value.radiusWidth)
+        this.writeOptionalNumberOrString(value.radiusHeight)
     }
 }
 

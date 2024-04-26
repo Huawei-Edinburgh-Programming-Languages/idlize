@@ -84,7 +84,7 @@ typedef struct Opt_Ark_Callback {
 
 // Shapes
 
-typedef struct CircleAttribute {
+typedef struct CircleAttribute {///rm?
   Ark_NativePointer ptr;
 } CircleAttribute;
 
@@ -99,3 +99,40 @@ typedef struct PathAttribute {
 typedef struct RectAttribute {
   Ark_NativePointer ptr;
 } RectAttribute;
+
+typedef struct Ark_OptionalNumberOrString {
+  enum Ark_Tag tag;
+  union {
+    Ark_Number number;
+    Ark_String string;
+  };
+} Ark_OptionalNumberOrString;
+
+typedef struct CircularShape {
+  Ark_OptionalNumberOrString width;
+  Ark_OptionalNumberOrString height;
+} CircularShape;
+
+typedef struct PathShape {
+  Ark_OptionalNumberOrString width;
+  Ark_OptionalNumberOrString height;
+  struct {
+    enum Ark_Tag tag;
+    Ark_String value;
+  } string;
+} PathShape;
+
+typedef struct RectangularShape {
+  Ark_OptionalNumberOrString width;
+  Ark_OptionalNumberOrString height;
+  int8_t selector;
+  union {
+    struct {
+      Ark_OptionalNumberOrString radius; /// TODO add Array<any>
+    } value0;
+    struct {
+      Ark_OptionalNumberOrString radiusWidth;
+      Ark_OptionalNumberOrString radiusHeight;
+    } value1;
+  };
+} RectangularShape;

@@ -39,6 +39,9 @@ export class PrimitiveType {
     static Length = new PrimitiveType("Ark_Length", true)
     static Resource = new PrimitiveType("Ark_Resource", true)
     static CustomObject = new PrimitiveType("Ark_CustomObject", true)
+    static CircularShape = new PrimitiveType("Ark_CircularShape", true)
+    static RectangularShape = new PrimitiveType("Ark_RectangularShape", true)
+    static PathShape = new PrimitiveType("Ark_PathShape", true)
     private static pointersMap = new Map<DeclarationTarget, PointerType>()
     static pointerTo(target: DeclarationTarget) {
         if (PrimitiveType.pointersMap.has(target)) return PrimitiveType.pointersMap.get(target)!
@@ -178,6 +181,9 @@ export class DeclarationTable {
         if (ts.isTypeReferenceNode(node)) {
             let name = identName(node)
             if (name == "Length") return PrimitiveType.Length
+            if (name == "CircleAttribute" || name == "EllipseAttribute") return PrimitiveType.CircularShape
+            if (name == "RectAttribute") return PrimitiveType.RectangularShape
+            if (name == "PathAttribute") return PrimitiveType.PathShape
             // TODO: rethink that!
             if (name == "AnimationRange") return PrimitiveType.CustomObject
             // Types with type arguments are declarations!
@@ -573,6 +579,12 @@ export class DeclarationTable {
     private customConvertor(typeName: ts.EntityName | undefined, param: string, type: ts.TypeReferenceNode | ts.ImportTypeNode): ArgConvertor | undefined {
         let name = getNameWithoutQualifiersRight(typeName)
         if (name === "Length") return new LengthConvertor(param)
+        if (name == "CircleAttribute" || name == "EllipseAttribute")
+            return new PredefinedConvertor(param, "Ark_CircularShape", "CircularShape", "Ark_CircularShape")
+        if (name == "RectAttribute")
+            return new PredefinedConvertor(param, "Ark_RectangularShape", "RectangularShape", "Ark_RectangularShape")
+        if (name == "PathAttribute")
+            return new PredefinedConvertor(param, "Ark_PathShape", "PathShape", "Ark_PathShape")
         if (name === "AttributeModifier")
             return new PredefinedConvertor(param, "AttributeModifier<any>", "AttributeModifier", "CustomObject")
         if (name === "AnimationRange")

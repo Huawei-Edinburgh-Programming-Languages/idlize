@@ -177,7 +177,7 @@ export function makeTSSerializer(table: DeclarationTable): string {
     let printer = new IndentedPrinter()
     table.generateSerializers(printer)
     return `
-import { SerializerBase, runtimeType, Tags, RuntimeType, Function } from "./SerializerBase"
+import { SerializerBase, runtimeType, Tags, RuntimeType, Function, Ark_CircularShape, Ark_RectangularShape, Ark_PathShape } from "./SerializerBase"
 import { int32 } from "@koalaui/common"
 
 ${printer.getOutput().join("\n")}
