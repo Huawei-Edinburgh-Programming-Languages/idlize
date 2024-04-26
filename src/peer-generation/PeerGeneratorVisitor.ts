@@ -271,12 +271,15 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
     }
 
     private printCommonComponent(node: ts.ClassDeclaration) {
-        const collapsedMethods = this.collapseOverloads(node, true)
+        const collapsedMethods = this.collapseOverloads(node)
 
         const methods = collapsedMethods
-            .filter(it => ts.isMethodDeclaration(it.member) || ts.isMethodSignature(it.member))
             .filter(it => !ts.isCallSignatureDeclaration(it.member))
-            .map(it => `${identName(it.member.name)}(${it.collapsed!.paramsDecl}) : this`)
+            .map(it => {
+                if (it.collapsed)
+                    return `${identName(it.member.name)}(${it.collapsed.paramsDecl}) : this`
+                return it.member.getText().replace(/:[^S:]*$/g, ': this')
+            })
             .map(it => it.replace('<T>', '<this>'))
             .map(it => `${it} { throw new Error("not implemented"); }`)
         this.printers.structCommon.print(`
@@ -556,7 +559,7 @@ export class ArkComponent implements CommonMethod<CommonAttribute> {
         if (ts.isCallSignatureDeclaration(member)) return ""
         throw new Error("Unsupported: " + asString(member))
     }
-    private collapseOverloads(node: ts.ClassDeclaration|ts.InterfaceDeclaration, convertEvenNotCollapsed: boolean = false): MaybeCollapsedMethod[] {
+    private collapseOverloads(node: ts.ClassDeclaration|ts.InterfaceDeclaration): MaybeCollapsedMethod[] {
         const methods = (node.members as ts.NodeArray<ts.Node>).filter(
             it => (ts.isMethodDeclaration(it) || ts.isCallSignatureDeclaration(it))
         ) as (ts.MethodDeclaration | ts.CallSignatureDeclaration)[]
@@ -570,7 +573,7 @@ export class ArkComponent implements CommonMethod<CommonAttribute> {
 
         return [...groupedByName.keys()].map(name => {
             const overloads = groupedByName.get(name)!
-            if (overloads.length == 1 && !convertEvenNotCollapsed) {
+            if (overloads.length == 1) {
                 return {
                     member: overloads[0]
                 }
