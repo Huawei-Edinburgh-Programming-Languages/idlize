@@ -15,9 +15,9 @@ import {
 
 export type NodePointer = pointer
 
-let theModule: PandaNativeModule | undefined = undefined
+let theModule: PandaModule | undefined = undefined
 
-export class PandaNativeModule {
+export class PandaModule {
     static {
         loadLibrary("PandaModule");
     }
@@ -25,14 +25,13 @@ export class PandaNativeModule {
     public native static hello(): String;
 
     public run(): void throws {
-        if (!("Hello" == PandaNativeModule.hello())) {
+        if (!("Hello" == PandaModule.hello())) {
             throw new Exception("ERROR: error return value from ETSNAPI");
         }
     }
 } 
 
 export function main(): void {
-    let a = new PandaNativeModule
-    // console.log(PandaNativeModule.hello())c
+    let a = new PandaModule
     console.log('hello')
 }
