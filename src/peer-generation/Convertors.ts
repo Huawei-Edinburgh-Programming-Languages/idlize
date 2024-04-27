@@ -307,8 +307,9 @@ export class UnionConvertor extends BaseArgConvertor {
             printer.print(`${maybeElse}if (${it.runtimeTypes.map(it => `${maybeComma1}RuntimeType.${RuntimeType[it]} == ${value}_type${maybeComma2}`).join(" || ")}) {`)
             printer.pushIndent()
             if (!(it instanceof UndefinedConvertor)) {
-                // TODO: `as unknown` is temporary to workaround for string enums.
-                let maybeAsUnknown = (it instanceof EnumConvertor) ? "as unknown " : ""
+                // TODO: `as unknown` is temporary to workaround for string enums and shapes.
+                let maybeAsUnknown = (it instanceof EnumConvertor || it.tsTypeName.match(/Ark_.*Shape/))
+                    ? "as unknown " : ""
                 printer.print(`const ${value}_${index}: ${it.tsTypeName} = ${value} ${maybeAsUnknown}as ${it.tsTypeName}`)
                 it.convertorToTSSerial(param, `${value}_${index}`, printer)
             }

@@ -128,7 +128,7 @@ enum Ark_APIVariantKind {
 
 // Shapes
 
-typedef struct CircleAttribute {///rm?
+typedef struct CircleAttribute {
   Ark_NativePointer ptr;
 } CircleAttribute;
 
