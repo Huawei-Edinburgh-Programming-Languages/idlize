@@ -13,12 +13,8 @@
  * limitations under the License.
  */
 import { float32, int32 } from "@koalaui/common"
-<<<<<<< HEAD
-import { KPointer } from "./types"
-import { ArkCommonPeer } from "./ArkCommonPeer"
-=======
 import { pointer } from "./types"
->>>>>>> 2c5779fd82b9a785866c660d3af849f2d430b3dc
+import { ArkCommonPeer } from "./ArkCommonPeer"
 
 /**
  * Value representing possible JS runtime object type.
@@ -186,7 +182,7 @@ export class SerializerBase {
             this.view = new DataView(resizedBuffer)
         }
     }
-    getPeerPointer<T>(value: CommonMethod<T> | undefined): KPointer {
+    getPeerPointer<T>(value: CommonMethod<T> | undefined): pointer {
         return (value as unknown as ArkCommonPeer).ptr
     }
     writeCustomObject(kind: string, value: any) {

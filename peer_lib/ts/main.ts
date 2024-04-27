@@ -16,6 +16,7 @@
 import { ArkButtonPeer } from "@arkoala/arkui/ArkButtonPeer"
 import { ArkCommonPeer } from "@arkoala/arkui/ArkCommonPeer"
 import { ArkCalendarPickerPeer } from "@arkoala/arkui/ArkCalendarPickerPeer"
+import { ArkEllipsePeer } from "@arkoala/arkui/ArkEllipsePeer"
 import { ArkFormComponentPeer } from "@arkoala/arkui/ArkFormComponentPeer"
 import { ArkNavigationPeer } from "@arkoala/arkui/ArkNavigationPeer"
 import { ArkParticlePeer } from "@arkoala/arkui/ArkParticlePeer"
@@ -119,13 +120,18 @@ function checkParticle() {
         `emitter([{index: 1, emitRate: 2}, {index: 3, emitRate: 4}])`)
 }
 
+function checkShapes() {
+    const buttonPeer = new ArkButtonPeer(ArkUINodeType.Button)
+    // buttonPeer.clipAttribute(new Ellipse({width: 60, height: 100}))
+}
+
 checkButton()
 checkCalendar()
-//checkDTS()
 checkFormComponent()
 checkCommon()
 checkNavigation()
 checkParticle()
+checkShapes()
 
 // Report in error code.
 checkTestFailures()

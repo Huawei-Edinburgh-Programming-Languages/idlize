@@ -132,6 +132,8 @@ declare class CommonMethod<T> {
     backgroundBlurStyle(value: BlurStyle, options?: BackgroundBlurStyleOptions): T;
 
     dragPreviewOptions(value: DragPreviewOptions, options?: DragInteractionOptions): T;
+
+    clip(value: boolean | CircleAttribute | EllipseAttribute | PathAttribute | RectAttribute): T;
 }
 
 declare interface Rectangle {
