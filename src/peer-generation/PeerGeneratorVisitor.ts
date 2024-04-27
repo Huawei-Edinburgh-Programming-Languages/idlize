@@ -88,27 +88,15 @@ export type PeerGeneratorVisitorOptions = {
     sourceFile: ts.SourceFile
     typeChecker: ts.TypeChecker
     interfacesToGenerate: Set<string>
-    nativeModuleMethods: string[]
-    nativeModuleEmptyMethods: string[]
-    outputC: string[]
-    nodeTypes: string[]
-    apiHeaders: string[]
-    apiHeadersList: string[]
     dumpSerialized: boolean
     declarationTable: DeclarationTable,
     peerLibrary: PeerLibrary
 }
 
-export type PeerGeneratorVisitorOutput = {
-    peer: stringOrNone[],
-    component: stringOrNone[],
-}
-
-export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitorOutput> {
+export class PeerGeneratorVisitor implements GenericVisitor<void> {
     private seenAttributes = new Set<string>()
     private readonly sourceFile: ts.SourceFile
     private interfacesToGenerate: Set<string>
-    private printers: Printers
     private dumpSerialized: boolean
     declarationTable: DeclarationTable
 
@@ -122,14 +110,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         this.sourceFile = options.sourceFile
         this.typeChecker = options.typeChecker
         this.interfacesToGenerate = options.interfacesToGenerate
-        this.printers = new Printers(
-            new IndentedPrinter(options.outputC),
-            new IndentedPrinter(options.nativeModuleMethods),
-            new IndentedPrinter(options.nativeModuleEmptyMethods),
-            new IndentedPrinter(options.nodeTypes),
-            new IndentedPrinter(options.apiHeaders),
-            new IndentedPrinter(options.apiHeadersList),
-        )
         this.dumpSerialized = options.dumpSerialized
         this.declarationTable = options.declarationTable
         this.peerFile = new PeerFile(this.sourceFile.fileName, this.declarationTable)
@@ -141,15 +121,8 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         this.declarationTable.requestType(name, type)
     }
 
-    visitWholeFile(): PeerGeneratorVisitorOutput {
+    visitWholeFile(): void {
         ts.forEachChild(this.sourceFile, (node) => this.visit(node))
-
-        this.peerFile.printGlobal(this.printers)
-
-        return {
-            peer: this.peerFile.generatePeer(),
-            component: this.peerFile.generateComponent(),
-        }
     }
 
     private isRootMethodInheritor(decl: ts.ClassDeclaration | ts.InterfaceDeclaration): boolean {
@@ -241,7 +214,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
             .filter(it => ts.isMethodDeclaration(it) || ts.isMethodSignature(it))
             .map(it => it.getText().replace(/;\s*$/g, ''))
             .map(it => `${it} { throw new Error("not implemented"); }`)
-        this.peerLibrary.customComponentMethods.push(...methods)
+        this.peerLibrary.pushCustomComponentMethods(...methods)
     }
 
     private processCommonComponent(node: ts.ClassDeclaration) {
@@ -256,7 +229,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
             })
             .map(it => it.replace('<T>', '<this>'))
             .map(it => `${it} { throw new Error("not implemented"); }`)
-        this.peerLibrary.commonMethods.push(...methods)
+        this.peerLibrary.pushCommonMethods(...methods)
     }
 
     processInterface(node: ts.InterfaceDeclaration) {
