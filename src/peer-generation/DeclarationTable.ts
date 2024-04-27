@@ -610,6 +610,7 @@ export class DeclarationTable {
             case "RectAttribute":
                 return new PredefinedConvertor(param, "Ark_RectangularShape", "RectangularShape", "Ark_RectangularShape")
             case "PathAttribute":
+                return new PredefinedConvertor(param, "Ark_PathShape", "PathShape", "Ark_PathShape")
         }
         return undefined
     }

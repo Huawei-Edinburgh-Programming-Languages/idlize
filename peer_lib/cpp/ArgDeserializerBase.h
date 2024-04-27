@@ -337,24 +337,26 @@ public:
     return result;
   }
 
-  CircularShape readCircularShape() {
-    CircularShape value;
+  Ark_CircularShape readCircularShape() {
+    Ark_CircularShape value;
     value.width = readOptionalNumberOrString();
     value.height = readOptionalNumberOrString();
     return value;
   }
 
-  PathShape readPathShape() {
-    PathShape value;
+  Ark_PathShape readPathShape() {
+    Ark_PathShape value;
     value.width = readOptionalNumberOrString();
     value.height = readOptionalNumberOrString();
     value.string.tag = readTag();
     if (value.string.tag != Ark_Tag::ARK_TAG_UNDEFINED) {
       value.string.value = readString();
     }
+    return value;
   }
-  RectangularShape readRectangularShape() {
-    RectangularShape value;
+
+  Ark_RectangularShape readRectangularShape() {
+    Ark_RectangularShape value;
     value.width = readOptionalNumberOrString();
     value.height = readOptionalNumberOrString();
     value.selector = readInt8();
@@ -387,4 +389,41 @@ inline void WriteToString(string* result, const Ark_String* value) {
     else
       result->append("<null>");
     result->append("\"");
+}
+
+template <>
+inline void WriteToString(string* result, const Ark_OptionalNumberOrString* value) {
+  if (value->tag == ARK_TAG_STRING) {
+    WriteToString(result, &value->string);
+  } else {
+    WriteToString(result, value->number);
+  }
+}
+
+template <>
+inline void WriteToString(string* result, const Ark_CircularShape* value) {
+  WriteToString(result, &value->width);
+  WriteToString(result, &value->height);
+}
+
+template <>
+inline void WriteToString(string* result, const Ark_PathShape* value) {
+  WriteToString(result, reinterpret_cast<const Ark_CircularShape*>(value));
+  if (value->string.tag != ARK_TAG_UNDEFINED) {
+    WriteToString(result, &value->string.value);
+  }
+}
+
+template <>
+inline void WriteToString(string* result, const Ark_RectangularShape* value) {
+  WriteToString(result, reinterpret_cast<const Ark_CircularShape*>(value));
+  switch (value->selector) {
+    case 0:
+      WriteToString(result, &value->value0.radius);
+      break;
+    case 1:
+      WriteToString(result, &value->value1.radiusWidth);
+      WriteToString(result, &value->value1.radiusHeight);
+      break;
+  }
 }

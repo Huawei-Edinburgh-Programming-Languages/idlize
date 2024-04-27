@@ -125,7 +125,6 @@ export class Ark_RectangularShape extends Ark_CircularShape {
     radiusWidth?: number | string
     radiusHeight?: number | string
     // TODO how to handle Array<any>?
-    ///restore union
 }
 
 export class Ark_PathShape extends Ark_CircularShape {

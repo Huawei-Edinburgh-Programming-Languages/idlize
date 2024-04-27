@@ -152,21 +152,21 @@ typedef struct Ark_OptionalNumberOrString {
   };
 } Ark_OptionalNumberOrString;
 
-typedef struct CircularShape {
+typedef struct Ark_CircularShape {
   Ark_OptionalNumberOrString width;
   Ark_OptionalNumberOrString height;
-} CircularShape;
+} Ark_CircularShape;
 
-typedef struct PathShape {
+typedef struct Ark_PathShape {
   Ark_OptionalNumberOrString width;
   Ark_OptionalNumberOrString height;
   struct {
     enum Ark_Tag tag;
     Ark_String value;
   } string;
-} PathShape;
+} Ark_PathShape;
 
-typedef struct RectangularShape {
+typedef struct Ark_RectangularShape {
   Ark_OptionalNumberOrString width;
   Ark_OptionalNumberOrString height;
   int8_t selector;
@@ -179,4 +179,4 @@ typedef struct RectangularShape {
       Ark_OptionalNumberOrString radiusHeight;
     } value1;
   };
-} RectangularShape;
+} Ark_RectangularShape;
