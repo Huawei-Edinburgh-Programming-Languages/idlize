@@ -117,6 +117,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
     static readonly serializerBaseMethods = serializerBaseMethods()
     readonly typeChecker: ts.TypeChecker
 
+    readonly peerLibrary: PeerLibrary
     readonly peerFile: PeerFile
 
     constructor(options: PeerGeneratorVisitorOptions) {
@@ -137,7 +138,8 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         this.dumpSerialized = options.dumpSerialized
         this.declarationTable = options.declarationTable
         this.peerFile = new PeerFile(this.sourceFile.fileName, this.declarationTable, this.printers)
-        options.peerLibrary.files.push(this.peerFile)
+        this.peerLibrary = options.peerLibrary
+        this.peerLibrary.files.push(this.peerFile)
     }
 
     requestType(name: string|undefined, type: ts.TypeNode) {
@@ -235,7 +237,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         if (isCustomComponentClass(node))
             return this.processCustomComponent(node)
         if (isCommonMethod(nameOrNull(node.name)!)) {
-            this.printCommonComponent(node)
+            this.processCommonComponent(node)
         }
         const collapsedMethods = this.collapseOverloads(node)
 
@@ -262,15 +264,10 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
             .filter(it => ts.isMethodDeclaration(it) || ts.isMethodSignature(it))
             .map(it => it.getText().replace(/;\s*$/g, ''))
             .map(it => `${it} { throw new Error("not implemented"); }`)
-        this.printers.structCommon.print('export class ArkStructCommon extends ArkCommon implements CustomComponent {')
-        this.printers.structCommon.pushIndent()
-        for (const method of methods)
-            this.printers.structCommon.print(method)
-        this.printers.structCommon.popIndent()
-        this.printers.structCommon.print('}')
+        this.peerLibrary.customComponentMethods.push(...methods)
     }
 
-    private printCommonComponent(node: ts.ClassDeclaration) {
+    private processCommonComponent(node: ts.ClassDeclaration) {
         const collapsedMethods = this.collapseOverloads(node)
 
         const methods = collapsedMethods
@@ -282,24 +279,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
             })
             .map(it => it.replace('<T>', '<this>'))
             .map(it => `${it} { throw new Error("not implemented"); }`)
-        this.printers.structCommon.print(`
-export class ArkCommon implements CommonMethod<CommonAttribute> {
-    // custom code
-    protected peer?: NativePeerNode
-    setPeer(peer: NativePeerNode) {
-    }
-    /** @memo:intrinsic */
-    protected checkPriority(
-        name: string
-    ): boolean { throw new Error("not implemented") }
-    protected applyAttributesFinish(): void { throw new Error("not implemented") }
-        `)
-
-        this.printers.structCommon.pushIndent()
-        for (const method of methods)
-            this.printers.structCommon.print(method)
-        this.printers.structCommon.popIndent()
-        this.printers.structCommon.print('}')
+        this.peerLibrary.commonMethods.push(...methods)
     }
 
     processInterface(node: ts.InterfaceDeclaration) {

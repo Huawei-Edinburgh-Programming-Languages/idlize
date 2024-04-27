@@ -349,7 +349,7 @@ if (options.dts2peer) {
                 )
                 fs.writeFileSync(
                     path.join(outDir, 'ArkCommon.ts'),
-                    makeStructCommon(structCommon),
+                    makeStructCommon(peerLibrary.commonMethods, peerLibrary.customComponentMethods),
                 )
                 const bridgeCc = bridgeCcDeclaration(bridgeCcArray)
                 fs.writeFileSync(path.join(outDir, 'bridge.cc'), bridgeCc)

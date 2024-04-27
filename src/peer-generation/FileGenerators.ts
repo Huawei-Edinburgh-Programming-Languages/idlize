@@ -324,10 +324,25 @@ export function makeArkuiModule(componentsFiles: string[]): string {
     }).join("\n")
 }
 
-export function makeStructCommon(structCommon: string[]): string {
+export function makeStructCommon(commonMethods: string[], customComponentMethods: string[]): string {
     return `
 import { NativePeerNode } from "@koalaui/arkoala"
 
-${structCommon.join('\n')}
+export class ArkCommon implements CommonMethod<CommonAttribute> {
+  protected peer?: NativePeerNode
+  setPeer(peer: NativePeerNode) {
+  }
+  /** @memo:intrinsic */
+  protected checkPriority(
+      name: string
+  ): boolean { throw new Error("not implemented") }
+  protected applyAttributesFinish(): void { throw new Error("not implemented") }
+
+  ${commonMethods.join('\n  ')}
+}
+
+export class ArkStructCommon extends ArkCommon implements CustomComponent {
+  ${customComponentMethods.join('\n  ')}
+}
 `
 }
