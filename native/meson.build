@@ -60,7 +60,7 @@ arkts_library_name = 'NativeBridgeArk'
 
 if is_clang
 # TODO: remove all -Wno-* when generation is fixed.
-cflags += ['-Wno-address-of-packed-member', '-Wall', '-Werror', '-Wno-unused-variable']
+cflags += ['-Wno-address-of-packed-member', '-Wall', '-Werror', '-Wno-unused-variable', '-Wno-extern-c-compat']
 endif
 
 node_cflags = ['-DKOALA_USE_NODE_VM', '-DKOALA_NAPI', '-DINTEROP_LIBRARY_NAME=' + node_library_name]

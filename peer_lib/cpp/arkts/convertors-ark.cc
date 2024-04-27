@@ -36,42 +36,49 @@ export function main(): void {
     console.log('hello')
 }
 */
-extern "C" {
-ETS_EXPORT ets_string ETS_CALL ETS_EtsnapiVersionHookTest_hello(EtsEnv *env, [[maybe_unused]] ets_class)
+extern "C"
 {
-    return env->NewStringUTF("Hello");
-}
-
-static EtsNativeMethod gMethods[] = {
-    {"hello", ":Lstd/core/String;", (void *)ETS_EtsnapiVersionHookTest_hello},
-};
-
-static int registerNativeMethods(EtsEnv *env, const char *classname, EtsNativeMethod *methods, int countMethods)
-{
-    ets_class clazz = env->FindClass(classname);
-    if (clazz == nullptr) {
-        return ETS_FALSE;
+    ETS_EXPORT ets_string ETS_CALL ETS_EtsnapiVersionHookTest_hello(EtsEnv *env, [[maybe_unused]] ets_class)
+    {
+        return env->NewStringUTF("Hello");
     }
-    if (env->RegisterNatives(clazz, methods, countMethods) < 0) {
-        return ETS_FALSE;
-    }
-    return ETS_TRUE;
-}
 
-static bool registerNatives(EtsEnv *env) {
-    size_t numMethods = 0;
-    EtsNativeMethod* methods = new EtsNativeMethod[numMethods];
-    for (size_t i = 0; i < numMethods; i++) {
-        // Fill in native methods table!
-    }
-    return registerNativeMethods(env, "EtsnapiVersionHookTest", gMethods, sizeof(gMethods) / sizeof(gMethods[0]));
-}
+    static EtsNativeMethod gMethods[] = {
+        {"hello", ":Lstd/core/String;", (void *)ETS_EtsnapiVersionHookTest_hello},
+    };
 
-ETS_EXPORT ets_int ETS_CALL EtsNapiOnLoad(EtsEnv *env) {
-    if (!registerNatives(env)) {
-        return -1;
+    static int registerNativeMethods(EtsEnv *env, const char *classname, EtsNativeMethod *methods, int countMethods)
+    {
+        ets_class clazz = env->FindClass(classname);
+        if (clazz == nullptr)
+        {
+            return ETS_FALSE;
+        }
+        if (env->RegisterNatives(clazz, methods, countMethods) < 0)
+        {
+            return ETS_FALSE;
+        }
+        return ETS_TRUE;
     }
-    return ETS_NAPI_VERSION_1_0;
-}
 
-}  // extern "C"
+    static bool registerNatives(EtsEnv *env)
+    {
+        /*
+        size_t numMethods = 0;
+        EtsNativeMethod* methods = new EtsNativeMethod[numMethods];
+        for (size_t i = 0; i < numMethods; i++) {
+            // Fill in native methods table!
+        } */
+        return registerNativeMethods(env, "EtsnapiVersionHookTest", gMethods, sizeof(gMethods) / sizeof(gMethods[0]));
+    }
+
+    ETS_EXPORT ets_int ETS_CALL EtsNapiOnLoad(EtsEnv *env)
+    {
+        if (!registerNatives(env))
+        {
+            return -1;
+        }
+        return ETS_NAPI_VERSION_1_0;
+    }
+
+} // extern "C"
