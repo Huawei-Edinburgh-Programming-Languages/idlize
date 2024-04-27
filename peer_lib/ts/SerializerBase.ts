@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 import { float32, int32 } from "@koalaui/common"
-import { pointer } from "./types"
+import { pointer } from "@koalaui/interop"
 import { ArkCommonPeer } from "./ArkCommonPeer"
 
 /**
