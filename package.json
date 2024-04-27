@@ -1,6 +1,6 @@
 {
     "name": "@azanat/idlize",
-    "version": "1.2.2",
+    "version": "1.2.5",
     "description": "",
     "main": "lib/index.js",
     "bin": "lib/index.js",
@@ -40,7 +40,7 @@
     "scripts": {
         "download:sdk": "node ./download-sdk.mjs",
         "download:napi": "node ./download-napi.mjs",
-        "compile": "npm run download:sdk && rollup -c && npm i",
+        "compile": "npm run download:sdk && rollup -c",
         "clean": "rimraf build dist lib",
         "run": "npm run compile && node . --dts2idl --input-dir ./interface_sdk-js/api/@internal/component/ets/ --input-file common.d.ts --verify-idl --common-to-attributes --docs=opt",
         "run:all": "npm run compile && node . --dts2idl --input-dir ./interface_sdk-js/api/@internal/component/ets/ --verify-idl --common-to-attributes --docs=opt",
