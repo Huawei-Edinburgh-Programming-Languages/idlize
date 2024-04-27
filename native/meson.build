@@ -88,6 +88,14 @@ shared_library(library_name,
     dependencies: []
 )
 
+shared_library(
+    'PandaModule',
+    [
+        '../abc_code/api.h',
+        '../abc_code/bridge.cc'
+    ]
+)
+
 executable('test_arkoala_api',
     gen_dir / 'api_test.c',
     c_args: cflags
