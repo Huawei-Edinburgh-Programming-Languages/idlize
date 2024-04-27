@@ -326,7 +326,7 @@ export function makeArkuiModule(componentsFiles: string[]): string {
 
 export function makeStructCommon(structCommon: string[]): string {
     return `
-import { NativePeerNode } from "./Interop"
+import { NativePeerNode } from "@koalaui/arkoala"
 
 ${structCommon.join('\n')}
 `
