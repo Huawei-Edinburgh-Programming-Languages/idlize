@@ -348,7 +348,7 @@ if (options.dts2peer) {
                     makeArkuiModule(arkuiComponentsFiles),
                 )
                 fs.writeFileSync(
-                    path.join(outDir, 'ArkStructCommon.ts'),
+                    path.join(outDir, 'ArkCommon.ts'),
                     makeStructCommon(structCommon),
                 )
                 const bridgeCc = bridgeCcDeclaration(bridgeCcArray)

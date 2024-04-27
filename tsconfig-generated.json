@@ -18,8 +18,6 @@
         "paths": {
             "@arkoala/arkui": ["./generated/peers", "./"],
             "@arkoala/arkui/*": ["./generated/peers/*", "./*"],
-            "@koalaui/common": ["./generated/peers/koalaui-common"],
-            "@koalaui/runtime": ["./generated/peers/koalaui-runtime"],
         },
     },
     "include": [

@@ -153,7 +153,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
             `import { Serializer } from "./Serializer"`,
             `import { nativeModule } from "./NativeModule"`,
             `import { ArkUINodeType } from "./ArkUINodeType"`,
-            `import { ArkComponent } from "./ArkStructCommon"`
+            `import { ArkCommon } from "./ArkCommon"`,
         ]
     }
 
@@ -262,7 +262,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
             .filter(it => ts.isMethodDeclaration(it) || ts.isMethodSignature(it))
             .map(it => it.getText().replace(/;\s*$/g, ''))
             .map(it => `${it} { throw new Error("not implemented"); }`)
-        this.printers.structCommon.print('export class ArkStructCommon extends ArkComponent implements CustomComponent {')
+        this.printers.structCommon.print('export class ArkStructCommon extends ArkCommon implements CustomComponent {')
         this.printers.structCommon.pushIndent()
         for (const method of methods)
             this.printers.structCommon.print(method)
@@ -283,7 +283,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
             .map(it => it.replace('<T>', '<this>'))
             .map(it => `${it} { throw new Error("not implemented"); }`)
         this.printers.structCommon.print(`
-export class ArkComponent implements CommonMethod<CommonAttribute> {
+export class ArkCommon implements CommonMethod<CommonAttribute> {
     // custom code
     protected peer?: NativePeerNode
     setPeer(peer: NativePeerNode) {
