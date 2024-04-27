@@ -13,9 +13,7 @@
  * limitations under the License.
  */
 
-
 #include "convertors-ark.h"
-#include <ostream>
 
 extern "C" {
 ETS_EXPORT ets_string ETS_CALL ETS_EtsnapiVersionHookTest_hello(EtsEnv *env, [[maybe_unused]] ets_class)
@@ -56,4 +54,3 @@ ETS_EXPORT ets_int ETS_CALL EtsNapiOnLoad(EtsEnv *env) {
 }
 
 }  // extern "C"
- 
