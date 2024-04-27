@@ -15,6 +15,27 @@
 
 #include "convertors-ark.h"
 
+/*
+export class PandaNativeModule {
+    static {
+        loadLibrary("PandaModule");
+    }
+
+    public native static hello(): String;
+
+    public run(): void throws {
+        if (!("Hello" == PandaNativeModule.hello())) {
+            throw new Exception("ERROR: error return value from ETSNAPI");
+        }
+    }
+}
+
+export function main(): void {
+    let a = new PandaNativeModule
+    // console.log(PandaNativeModule.hello())c
+    console.log('hello')
+}
+*/
 extern "C" {
 ETS_EXPORT ets_string ETS_CALL ETS_EtsnapiVersionHookTest_hello(EtsEnv *env, [[maybe_unused]] ets_class)
 {
