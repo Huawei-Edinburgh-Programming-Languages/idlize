@@ -234,9 +234,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         peer.methods.push(...peerMethods)
 
         this.createComponentAttributesDeclaration(node, peer)
-        this.nativeModulePrint(node, collapsedMethods)
-
-        this.printNodeType(node)
     }
 
     private processCustomComponent(node: ts.ClassDeclaration) {
@@ -269,17 +266,13 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
         // We don't know what comes first ButtonAttribute or ButtonInterface.
         // Both will contribute to the peer class.
         const peer = this.peerFile.getOrPutPeer(componentName)
-
+        peer.originalInterfaceName = this.classNameIfInterface(node)
         const collapsedMethods = this.collapseOverloads(node)
         const peerMethods = collapsedMethods
             .filter(it => ts.isCallSignatureDeclaration(it.member))
             .map(it => this.processMethodOrCallable(it, peer, identName(node)!))
             .filter(isDefined)
         peer.methods.push(...peerMethods)
-        this.nativeModulePrint(node, collapsedMethods)
-    }
-
-    processConstructor(ctor: ts.ConstructorDeclaration | ts.ConstructSignatureDeclaration) {
     }
 
     generateParams(params: ts.NodeArray<ts.ParameterDeclaration>): stringOrNone {
@@ -578,43 +571,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
             return name
         }
         throw new Error(`Expected a class or a friend interface: ${asString(clazz)}`)
-    }
-
-    private nativeModulePrint(parent: ts.ClassDeclaration|ts.InterfaceDeclaration, methods: MaybeCollapsedMethod[]): void {
-        const component = this.classNameIfInterface(parent)
-
-        methods.forEach(maybeCollapsedMethod => {
-            this.declarationTable.setCurrentContext(`${identName(maybeCollapsedMethod.member.name)}()`)
-            const basicParameters = maybeCollapsedMethod.member.parameters
-                .map(it => this.argConvertor(it))
-                .map(it => {
-                    if (it.useArray) {
-                        const array = `${it.param}Serializer`
-                        return `${it.param}Array: Uint8Array, ${array}Length: int32`
-                    } else {
-                        return `${it.param}: ${it.interopType(true)}`
-                    }
-                })
-            let maybeReceiver = isStatic(maybeCollapsedMethod.member.modifiers) ? [] :  [`ptr: KPointer`]
-            const parameters = maybeReceiver
-                .concat(basicParameters)
-                .join(", ")
-
-            const originalName = ts.isCallSignatureDeclaration(maybeCollapsedMethod.member) ?
-                `_set${this.renameToComponent(component)}Options` :
-                ts.idText(maybeCollapsedMethod.member.name as ts.Identifier)
-            const implDecl = `_${component}_${originalName}(${parameters}): void`
-
-            this.printers.nativeModule.print(implDecl)
-            this.printers.nativeModuleEmpty.print(`${implDecl} { console.log("${originalName}") }`)
-            this.declarationTable.setCurrentContext(undefined)
-        })
-    }
-
-    private printNodeType(node: ts.ClassDeclaration): void {
-        this.printers.nodeTypes.print(
-            this.renameToComponent(nameOrNull(node.name)!)
-        )
     }
 }
 
