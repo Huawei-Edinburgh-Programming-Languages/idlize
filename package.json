@@ -65,6 +65,9 @@
         "panda:sdk:install": "cd panda && npm run panda:sdk:install",
         "compile:arkts:subset": "bash ./panda/arkts/arktsc --arktsconfig ./arktsconfig-subset.json --ets-module",
         "compile:arkts:peers": "bash ./panda/arkts/arktsc --arktsconfig ./arktsconfig-peers.json --ets-module",
-        "compile:arkts": "bash ./panda/arkts/arktsc --arktsconfig ./arktsconfig.json --ets-module"
+        "compile:arkts": "bash ./panda/arkts/arktsc --arktsconfig arktsconfig.json",
+        "configure:panda": "cd ./native && meson setup build-panda-host",
+        "compile:panda": "npm run configure:panda && cd native && meson compile -C build-panda-host && meson install -C build-panda-host",
+        "run:panda": "bash ./panda/arkts/ark ./abc_code/build/NativeModule.abc"
     }
 }

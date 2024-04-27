@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "outDir": "abc_code/build/",
+        "outDir": "abc_code/build",
         "rootDir": "./abc_code",
         "paths": {
             "@arkoala/arkui": ["./generated/subset", "./"],
