@@ -10,6 +10,5 @@ export class Printers {
         public nodeTypes: IndentedPrinter,
         public api: IndentedPrinter,
         public apiList: IndentedPrinter,
-        public structCommon: IndentedPrinter,
     ) { }
 }

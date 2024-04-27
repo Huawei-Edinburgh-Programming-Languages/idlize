@@ -94,7 +94,6 @@ export type PeerGeneratorVisitorOptions = {
     nodeTypes: string[]
     apiHeaders: string[]
     apiHeadersList: string[]
-    structCommon: string[]
     dumpSerialized: boolean
     declarationTable: DeclarationTable,
     peerLibrary: PeerLibrary
@@ -133,7 +132,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<PeerGeneratorVisitor
             new IndentedPrinter(options.nodeTypes),
             new IndentedPrinter(options.apiHeaders),
             new IndentedPrinter(options.apiHeadersList),
-            new IndentedPrinter(options.structCommon),
         )
         this.dumpSerialized = options.dumpSerialized
         this.declarationTable = options.declarationTable

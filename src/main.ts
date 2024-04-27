@@ -272,7 +272,6 @@ if (options.dts2peer) {
     const bridgeCcArray: string[] = []
     const apiHeaders: string[] = []
     const apiHeadersList: string[] = []
-    const structCommon: string[] = []
     const declarationTable = new DeclarationTable()
     const peerLibrary = new PeerLibrary(declarationTable)
     const arkuiComponentsFiles: string[] = []
@@ -291,7 +290,6 @@ if (options.dts2peer) {
             outputC: bridgeCcArray,
             apiHeaders: apiHeaders,
             apiHeadersList: apiHeadersList,
-            structCommon: structCommon,
             dumpSerialized: options.dumpSerialized ?? false,
             declarationTable,
             peerLibrary
