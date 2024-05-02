@@ -7,8 +7,6 @@ export type PeerLibraryOutput = {
     nativeModuleMethods: string[]
     nativeModuleEmptyMethods: string[]
     nodeTypes: string[]
-    apiHeaders: string[]
-    apiHeadersList: string[]
     components: Map<string, string[]>
     peers: Map<string, string[]>
     commonMethods: string[]
@@ -46,8 +44,6 @@ export class PeerLibrary {
             nativeModuleMethods: printers.nativeModule.getOutput(),
             nativeModuleEmptyMethods: printers.nativeModuleEmpty.getOutput(),
             nodeTypes: printers.nodeTypes.getOutput(),
-            apiHeaders: printers.api.getOutput(),
-            apiHeadersList: printers.apiList.getOutput(),
             components: components,
             peers: peers,
             commonMethods: this.commonMethods,

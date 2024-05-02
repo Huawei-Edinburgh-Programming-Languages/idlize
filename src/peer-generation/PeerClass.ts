@@ -74,9 +74,6 @@ export class PeerClass {
                 : ""
         return `export interface ${this.componentToAttribute(this.componentName)} ${extendsClause} {`
     }
-    private apiModifierHeader() {
-        return `typedef struct ArkUI${this.componentName}Modifier {`
-    }
 
     private generateConstructor(printer: IndentedPrinter): void {
         const parentRole = determineParentRole(this.originalClassName, this.originalParentName)
@@ -243,22 +240,6 @@ ${parentStructClass.typesLines.map(it => indentedBy(it, 2)).join("\n")}
         this.printPeerAttributes(printer)
     }
 
-    private printGlobalProlog(printers: Printers) {
-        printers.api.print(this.apiModifierHeader())
-        printers.api.pushIndent()
-        printers.apiList.pushIndent()
-        printers.apiList.print(`const ArkUI${this.componentName}Modifier* (*get${this.componentName}Modifier)();`)
-    }
-
-    private printGlobalEpilog(printers: Printers) {
-        if (this.methods.length == 0) {
-            printers.api.print("int dummy;")
-        }
-        printers.api.popIndent()
-        printers.api.print(`} ArkUI${this.componentName}Modifier;\n`)
-        printers.apiList.popIndent()
-    }
-
     private printGlobalNativeModule(printers: Printers) {
         printers.nodeTypes.print(this.componentName)
         this.methods.forEach(method => {
@@ -292,9 +273,7 @@ ${parentStructClass.typesLines.map(it => indentedBy(it, 2)).join("\n")}
     }
 
     printGlobal(printers: Printers) {
-        this.printGlobalProlog(printers)
         this.methods.forEach(it => it.printGlobal(printers))
-        this.printGlobalEpilog(printers)
         this.printGlobalNativeModule(printers)
     }
 }

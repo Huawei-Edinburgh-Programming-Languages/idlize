@@ -118,10 +118,7 @@ export class PeerMethod {
     printGlobal(printers: Printers) {
         const retConvertor = this.retConvertor
         const argConvertors = this.argConvertors
-        const apiParameters = this.generateAPIParameters(argConvertors).join(", ")
-
-        printers.api.print(`${this.retType} (*${this.fullMethodName})(${apiParameters});`)
-
+        
         let cName = `${this.originalParentName}_${this.methodName}`
         printers.C.print(`${retConvertor.nativeType()} impl_${cName}(${this.generateCParameters(argConvertors).join(", ")}) {`)
         printers.C.pushIndent()
