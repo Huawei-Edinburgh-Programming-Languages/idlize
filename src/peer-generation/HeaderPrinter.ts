@@ -5,13 +5,11 @@ import { PeerLibrary } from "./PeerLibrary";
 import { PeerMethod } from "./PeerMethod";
 
 class HeaderVisitor {
-    //private structs = new IndentedPrinter()
-    //private typedefs = new IndentedPrinter()
-    api = new IndentedPrinter()
-    apiList = new IndentedPrinter()
-
     constructor(
         private library: PeerLibrary,
+        private api: IndentedPrinter,
+        private apiList: IndentedPrinter
+
     ) { }
 
     private apiModifierHeader(clazz: PeerClass) {
@@ -54,14 +52,17 @@ class HeaderVisitor {
 }
 
 export function printApiAndDeserializer(apiVersion: string|undefined, peerLibrary: PeerLibrary): {api: string, deserializer: string} {
-    const visitor = new HeaderVisitor(peerLibrary)
+    const apiHeader = new IndentedPrinter()
+    const apiList = new IndentedPrinter()
+
+    const visitor = new HeaderVisitor(peerLibrary, apiHeader, apiList)
     visitor.printApiAndDeserializer()
 
     const structs = new IndentedPrinter()
     const typedefs = new IndentedPrinter()
 
     const deserializer = makeCDeserializer(peerLibrary.declarationTable, structs, typedefs)
-    const api = makeAPI(apiVersion ?? "0", visitor.api.getOutput(), visitor.apiList.getOutput(), structs, typedefs)
+    const api = makeAPI(apiVersion ?? "0", apiHeader.getOutput(), apiList.getOutput(), structs, typedefs)
 
     return {api, deserializer}
 }
