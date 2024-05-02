@@ -24,19 +24,19 @@ class HeaderVisitor {
     constructor(
         private library: PeerLibrary,
         private api: IndentedPrinter,
-        private apiList: IndentedPrinter
-
+        private apiList: IndentedPrinter,
+        private prefix: string,
     ) { }
 
     private apiModifierHeader(clazz: PeerClass) {
-        return `typedef struct ArkUI${clazz.componentName}Modifier {`
+        return `typedef struct ${this.prefix}ArkUI${clazz.componentName}Modifier {`
     }
 
     private printClassProlog(clazz: PeerClass) {
         this.api.print(this.apiModifierHeader(clazz))
         this.api.pushIndent()
         this.apiList.pushIndent()
-        this.apiList.print(`const ArkUI${clazz.componentName}Modifier* (*get${clazz.componentName}Modifier)();`)
+        this.apiList.print(`const ${this.prefix}ArkUI${clazz.componentName}Modifier* (*get${clazz.componentName}Modifier)();`)
     }
 
     private printMethod(method: PeerMethod) {
@@ -49,7 +49,7 @@ class HeaderVisitor {
             this.api.print("int dummy;")
         }
         this.api.popIndent()
-        this.api.print(`} ArkUI${clazz.componentName}Modifier;\n`)
+        this.api.print(`} ${this.prefix}ArkUI${clazz.componentName}Modifier;\n`)
         this.apiList.popIndent()
     }
 
@@ -67,18 +67,21 @@ class HeaderVisitor {
     }
 }
 
-export function printApiAndDeserializer(apiVersion: string|undefined, peerLibrary: PeerLibrary): {api: string, deserializer: string} {
+export function printApiAndDeserializer(peerLibrary: PeerLibrary, apiVersion: string|undefined, apiPrefix: string|undefined): {api: string, deserializer: string} {
+
+    const version = apiVersion ?? "0"
+    const prefix = apiPrefix ?? ""
     const apiHeader = new IndentedPrinter()
     const apiList = new IndentedPrinter()
 
-    const visitor = new HeaderVisitor(peerLibrary, apiHeader, apiList)
+    const visitor = new HeaderVisitor(peerLibrary, apiHeader, apiList, prefix ?? "")
     visitor.printApiAndDeserializer()
 
     const structs = new IndentedPrinter()
     const typedefs = new IndentedPrinter()
 
     const deserializer = makeCDeserializer(peerLibrary.declarationTable, structs, typedefs)
-    const api = makeAPI(apiVersion ?? "0", apiHeader.getOutput(), apiList.getOutput(), structs, typedefs)
+    const api = makeAPI(version, prefix, apiHeader.getOutput(), apiList.getOutput(), structs, typedefs)
 
     return {api, deserializer}
 }

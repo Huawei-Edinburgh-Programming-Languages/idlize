@@ -205,51 +205,51 @@ ${deserializer.getOutput().join("\n")}
 `
 }
 
-export function makeApiModifiers(lines: string[]): string {
+export function makeApiModifiers(lines: string[], prefix: string): string {
     return `
 /**
  * An API to control an implementation. When making changes modifying binary
  * layout, i.e. adding new events - increase ARKUI_API_VERSION above for binary
  * layout checks.
  */
-typedef struct ArkUINodeModifiers {
+typedef struct ${prefix}ArkUINodeModifiers {
     ${PrimitiveType.Int32.getText()} version;
 ${lines.join("\n")}
-} ArkUINodeModifiers;
+} ${prefix}ArkUINodeModifiers;
 
-typedef struct ArkUIBasicAPI {
+typedef struct ${prefix}ArkUIBasicAPI {
     ${PrimitiveType.Int32.getText()} version;
-} ArkUIBasicAPI;
+} ${prefix}ArkUIBasicAPI;
 
-typedef struct ArkUIAnimation {
+typedef struct ${prefix}ArkUIAnimation {
     ${PrimitiveType.Int32.getText()} version;
-} ArkUIAnimation;
+} ${prefix}ArkUIAnimation;
 
-typedef struct ArkUINavigation {
+typedef struct ${prefix}ArkUINavigation {
     ${PrimitiveType.Int32.getText()} version;
-} ArkUINavigation;
+} ${prefix}ArkUINavigation;
 
-typedef struct ArkUIGraphicsAPI {
+typedef struct ${prefix}ArkUIGraphicsAPI {
     ${PrimitiveType.Int32.getText()} version;
-} ArkUIGraphicsAPI;
+} ${prefix}ArkUIGraphicsAPI;
 
 /**
  * An API to control an implementation. When making changes modifying binary
  * layout, i.e. adding new events - increase ARKUI_NODE_API_VERSION above for binary
  * layout checks.
  */
-typedef struct ArkUIFullNodeAPI {
+typedef struct ${prefix}ArkUIFullNodeAPI {
     ${PrimitiveType.Int32.getText()} version;
     const ArkUIBasicAPI* (*getBasicAPI)();
     const ArkUINodeModifiers* (*getNodeModifiers)();
     const ArkUIAnimation* (*getAnimation)();
     const ArkUINavigation* (*getNavigation)();
     const ArkUIGraphicsAPI* (*getGraphicsAPI)();
-} ArkUIFullNodeAPI;
+} ${prefix}ArkUIFullNodeAPI;
 
-typedef struct ArkUIAnyAPI {
+typedef struct ${prefix}ArkUIAnyAPI {
     ${PrimitiveType.Int32.getText()} version;
-} ArkUIAnyAPI;
+} ${prefix}ArkUIAnyAPI;
 `
 }
 
@@ -266,6 +266,7 @@ function readTemplate(name: string): string {
 
 export function makeAPI(
     apiVersion: string,
+    apiPrefix: string,
     headers: string[], modifiers: string[],
     structs: IndentedPrinter, typedefs: IndentedPrinter
 ): string {
@@ -284,7 +285,7 @@ ${typedefs.getOutput().join("\n")}
 
 ${makeApiHeaders(headers)}
 
-${makeApiModifiers(modifiers)}
+${makeApiModifiers(modifiers, apiPrefix)}
 
 ${epilogue}
 `

@@ -27,9 +27,7 @@ import { TestGeneratorVisitor } from "./TestGeneratorVisitor"
 import {
     bridgeCcDeclaration,
     copyPeerLib,
-    makeAPI,
     makeArkuiModule,
-    makeCDeserializer,
     makeNodeTypes,
     makeTSSerializer,
     nativeModuleDeclaration,
@@ -44,11 +42,9 @@ import { defaultCompilerOptions, isDefined, renameDtsToPeer, renameDtsToComponen
 import { TypeChecker } from "./typecheck"
 import { initRNG } from "./rand_utils"
 import { DeclarationTable } from "./peer-generation/DeclarationTable"
-import { IndentedPrinter } from "./IndentedPrinter";
 import { printRealAndDummyModifiers } from "./peer-generation/ModifierPrinter"
 import { PeerLibrary } from "./peer-generation/PeerLibrary"
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig"
-import { table } from "console"
 import { printApiAndDeserializer } from "./peer-generation/HeaderPrinter"
 
 const options = program
@@ -75,6 +71,7 @@ const options = program
     .option('--disable-enum-initializers', "Don't include enum member initializers in the interface")
     .option('--native-bridge-path <name>', "Path to native bridge")
     .option('--api-version <version>', "API version for generated peers")
+    .option('--api-prefix <string>', "Prepend API names with the prefix")
     .option('--dump-serialized', "Dump serialized data")
     .option('--docs [all|opt|none]', 'How to handle documentation: include, optimize, or skip')
     .option('--language [ts|sts|java]', 'Output language')
@@ -351,7 +348,7 @@ if (options.dts2peer) {
                 const bridgeCc = bridgeCcDeclaration(output.outputC)
                 fs.writeFileSync(path.join(outDir, 'bridge.cc'), bridgeCc)
 
-                const {api, deserializer} = printApiAndDeserializer(options.apiVersion, peerLibrary)
+                const {api, deserializer} = printApiAndDeserializer(peerLibrary, options.apiVersion, options.apiPrefix)
                 fs.writeFileSync(path.join(outDir, 'Deserializer.h'), deserializer)
                 fs.writeFileSync(path.join(outDir, 'arkoala_api.h'), api)
 
