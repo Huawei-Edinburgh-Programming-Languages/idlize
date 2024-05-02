@@ -1,6 +1,5 @@
 import { IndentedPrinter } from "../IndentedPrinter";
-import { PrimitiveType } from "./DeclarationTable";
-import { completeImplementations, dummyImplementations, makeAPI, makeCDeserializer, modifierStructList, modifierStructs } from "./FileGenerators";
+import { makeAPI, makeCDeserializer } from "./FileGenerators";
 import { PeerClass } from "./PeerClass";
 import { PeerLibrary } from "./PeerLibrary";
 import { PeerMethod } from "./PeerMethod";
@@ -19,26 +18,14 @@ class HeaderVisitor {
         return `typedef struct ArkUI${clazz.componentName}Modifier {`
     }
 
-    printClassProlog(clazz: PeerClass) {
+    private printClassProlog(clazz: PeerClass) {
         this.api.print(this.apiModifierHeader(clazz))
         this.api.pushIndent()
         this.apiList.pushIndent()
         this.apiList.print(`const ArkUI${clazz.componentName}Modifier* (*get${clazz.componentName}Modifier)();`)
     }
-    /*
-    printMethodProlog(printer: IndentedPrinter, method: PeerMethod) {
-        const apiParameters = method.generateAPIParameters(method.argConvertors).join(", ")
-        const signature = `${method.retType} ${method.implName}(${apiParameters}) {`
-        printer.print(signature)
-        printer.pushIndent()
-    }
-    */
-    printMethodEpiog(printer: IndentedPrinter) {
-        printer.popIndent()
-        printer.print(`}`)
-    }
 
-    printMethod(method: PeerMethod) {
+    private printMethod(method: PeerMethod) {
         const apiParameters = method.generateAPIParameters(method.argConvertors).join(", ")
         this.api.print(`${method.retType} (*${method.fullMethodName})(${apiParameters});`)
     }
@@ -52,7 +39,6 @@ class HeaderVisitor {
         this.apiList.popIndent()
     }
 
-
     // TODO: have a proper Peer module visitor
     printApiAndDeserializer() {
         this.library.files.forEach(file => {
@@ -62,7 +48,6 @@ class HeaderVisitor {
                     this.printMethod(method)
                 })
                 this.printClassEpilog(clazz)
-
             })
         })
     }
