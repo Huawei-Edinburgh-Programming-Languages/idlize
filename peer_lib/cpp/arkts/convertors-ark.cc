@@ -41,13 +41,15 @@ extern "C"
             methods[i].name = std::get<0>(impls[i]).c_str();
             methods[i].signature = std::get<1>(impls[i]).c_str();
             methods[i].func = std::get<2>(impls[i]);
+            fprintf(stderr, "name=%s sign=%s\n", methods[i].name, methods[i].signature);
         }
         return registerNativeMethods(env, "NativeModule", methods, numMethods);
     }
 
     ETS_EXPORT ets_int ETS_CALL EtsNapiOnLoad(EtsEnv *env)
     {
-        if (!registerNatives(env)) return -1;
+        //if (!registerNatives(env)) return -1;
+        registerNatives(env);
         return ETS_NAPI_VERSION_1_0;
     }
 

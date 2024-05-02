@@ -20,17 +20,17 @@ export class NativeModule {
 
     public native static hello(): String;
 
-    public run(): void {
-        console.log("Native gave us " + NativeModule.hello())
+    public native static _StringMake(str: String): long;
+    public native static _StringLength(ptr: long): int;
+
+    public static run(): void {
+        let value = NativeModule._StringMake("HELLO")
+        console.log("make gave" + value)
+        console.log("Native gave us " + NativeModule._StringLength(value))
     }
 } 
 
 export function main(): void {
-    console.log('hello')
-    let module = new NativeModule()
-    try {
-        module.run()
-    } catch (e) {
-        console.log("Thrown " + e)
-    }
+    console.log("in main()")
+    NativeModule.run()
 }
