@@ -100,7 +100,7 @@ class ModifierVisitor {
     printRealAndDummyModifiers(prefix: string) {
         this.library.files.forEach(file => {
             file.peers.forEach(clazz => {
-                this.printClassProlog(clazz, prefix)
+                this.printClassProlog(clazz)
                 clazz.methods.forEach(method => {
                     this.printRealAndDummyModifier(method)
                 })
