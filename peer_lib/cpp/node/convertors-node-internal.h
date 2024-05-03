@@ -153,8 +153,15 @@ inline KInt getArgument<int32_t>(const Napi::CallbackInfo& info, int index) {
 template <>
 inline KInteropNumber getArgument<KInteropNumber>(const Napi::CallbackInfo& info, int index) {
   KInteropNumber result;
-  result.tag = 102; // ARK_TAG_INT32
-  result.i32 = info[index].As<Napi::Number>().Int32Value();
+  double value = info[index].As<Napi::Number>().DoubleValue();
+  // TODO: boundary check
+  if (value == floor(value)) {
+    result.tag = 102; // ARK_TAG_INT32
+    result.i32 = (int)value;
+  } else {
+    result.tag = 103; // ARK_TAG_FLOAT32
+    result.f32 = (float)value;
+  }
   return result;
 }
 
