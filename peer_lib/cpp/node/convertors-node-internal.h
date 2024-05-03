@@ -150,15 +150,13 @@ inline KInt getArgument<int32_t>(const Napi::CallbackInfo& info, int index) {
   return getInt32(info, index);
 }
 
-#if 0
 template <>
-inline InteropNumber getArgument<InteropNumber>(const Napi::CallbackInfo& info, int index) {
-  InteropNumber result;
-  result.tag = ARK_TAG_INT32;
+inline KInteropNumber getArgument<KInteropNumber>(const Napi::CallbackInfo& info, int index) {
+  KInteropNumber result;
+  result.tag = 102; // ARK_TAG_INT32
   result.i32 = info[index].As<Napi::Number>().Int32Value();
   return result;
 }
-#endif
 
 template <>
 inline KFloat getArgument<float>(const Napi::CallbackInfo& info, int index) {
