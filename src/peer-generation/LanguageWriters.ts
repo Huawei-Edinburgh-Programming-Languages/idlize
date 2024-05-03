@@ -88,6 +88,7 @@ export class TSLanguageWriter extends LanguageWriter {
         this.pushIndent()
         op(this)
         this.popIndent()
+        this.printer.print(`}`)
     }
 
     printLog(message: string): void {
@@ -121,6 +122,7 @@ export class JavaLanguageWriter extends LanguageWriter {
         this.pushIndent()
         op(this)
         this.popIndent()
+        this.printer.print(`}`)
     }
 
     printLog(message: string): void {
