@@ -20,12 +20,14 @@ import { completeImplementations, dummyImplementations, modifierStructList, modi
 import { PeerClass } from "./PeerClass";
 import { PeerLibrary } from "./PeerLibrary";
 import { PeerMethod } from "./PeerMethod";
+import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
 
 class ModifierVisitor {
     dummy = new IndentedPrinter()
     real = new IndentedPrinter()
     modifiers = new IndentedPrinter()
     modifierList = new IndentedPrinter()
+    private prefix = PeerGeneratorConfig.cppPrefix()
 
     constructor(
         private library: PeerLibrary,
@@ -59,7 +61,7 @@ class ModifierVisitor {
         printer.pushIndent()
     }
 
-    printMethodEpiog(printer: IndentedPrinter) {
+    printMethodEpilogue(printer: IndentedPrinter) {
         printer.popIndent()
         printer.print(`}`)
     }
@@ -69,17 +71,17 @@ class ModifierVisitor {
         this.printMethodProlog(this.real, method)
         this.printDummyImplFunctionBody(method)
         this.printModifierImplFunctionBody(method)
-        this.printMethodEpiog(this.dummy)
-        this.printMethodEpiog(this.real)
+        this.printMethodEpilogue(this.dummy)
+        this.printMethodEpilogue(this.real)
 
         this.modifiers.print(`${method.implName},`)
     }
 
     printClassProlog(clazz: PeerClass) {
         const component = clazz.componentName
-        const modifierStructImpl = `ArkUI${component}ModifierImpl`
+        const modifierStructImpl = `${this.prefix}ArkUI${component}ModifierImpl`
 
-        this.modifiers.print(`ArkUI${component}Modifier ${modifierStructImpl} {`)
+        this.modifiers.print(`${this.prefix}ArkUI${component}Modifier ${modifierStructImpl} {`)
         this.modifiers.pushIndent()
 
         this.modifierList.pushIndent()
@@ -87,30 +89,36 @@ class ModifierVisitor {
         this.modifierList.popIndent()
     }
 
-    printClassEpilog(clazz: PeerClass) {
+    printClassEpilogue(clazz: PeerClass) {
         this.modifiers.popIndent()
         this.modifiers.print(`};\n`)
         const name = clazz.componentName
-        this.modifiers.print(`const ArkUI${name}Modifier* Get${name}Modifier() { return &ArkUI${name}ModifierImpl; }\n\n`)
+        this.modifiers.print(`const ${this.prefix}ArkUI${name}Modifier* Get${name}Modifier() { return &${PeerGeneratorConfig.cppPrefix()}ArkUI${name}ModifierImpl; }\n\n`)
     }
 
     // TODO: have a proper Peer module visitor
-    printRealAndDummyModifiers() {
+    printRealAndDummyModifiers(prefix: string) {
         this.library.files.forEach(file => {
             file.peers.forEach(clazz => {
-                this.printClassProlog(clazz)
+                this.printClassProlog(clazz, prefix)
                 clazz.methods.forEach(method => {
                     this.printRealAndDummyModifier(method)
                 })
-                this.printClassEpilog(clazz)
+                this.printClassEpilogue(clazz)
             })
         })
     }
 }
 
-export function printRealAndDummyModifiers(peerLibrary: PeerLibrary): {dummy: string, real: string} {
+export function printRealAndDummyModifiers(
+    peerLibrary: PeerLibrary,
+    prefix: string = ""
+): {
+    dummy: string,
+    real: string
+} {
     const visitor = new ModifierVisitor(peerLibrary)
-    visitor.printRealAndDummyModifiers()
+    visitor.printRealAndDummyModifiers(prefix)
 
     const dummy =
         dummyImplementations(visitor.dummy.getOutput()) +
@@ -121,5 +129,5 @@ export function printRealAndDummyModifiers(peerLibrary: PeerLibrary): {dummy: st
         completeImplementations(visitor.real.getOutput()) +
         modifierStructs(visitor.modifiers.getOutput()) +
         modifierStructList(visitor.modifierList.getOutput())
-    return {dummy, real}
+    return { dummy, real }
 }

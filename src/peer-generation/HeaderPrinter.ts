@@ -67,8 +67,14 @@ class HeaderVisitor {
     }
 }
 
-export function printApiAndDeserializer(peerLibrary: PeerLibrary, apiVersion: string|undefined, apiPrefix: string|undefined): {api: string, deserializer: string} {
-
+export function printApiAndDeserializer(
+    peerLibrary: PeerLibrary,
+    apiVersion: string|undefined,
+    apiPrefix: string|undefined
+): {
+    api: string,
+    deserializer: string
+} {
     const version = apiVersion ?? "0"
     const prefix = apiPrefix ?? ""
     const apiHeader = new IndentedPrinter()
@@ -83,5 +89,5 @@ export function printApiAndDeserializer(peerLibrary: PeerLibrary, apiVersion: st
     const deserializer = makeCDeserializer(peerLibrary.declarationTable, structs, typedefs)
     const api = makeAPI(version, prefix, apiHeader.getOutput(), apiList.getOutput(), structs, typedefs)
 
-    return {api, deserializer}
+    return { api, deserializer }
 }

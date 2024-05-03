@@ -18,8 +18,8 @@ import { IndentedPrinter } from "../IndentedPrinter"
 import { capitalize, dropSuffix, isDefined } from "../util"
 import { ArgConvertor, RetConvertor } from "./Convertors"
 import { DeclarationTarget, PrimitiveType } from "./DeclarationTable"
-import { PeerClass } from "./PeerClass"
 import { Printers } from "./Printers"
+
 
 export class PeerMethod {
     public readonly fullMethodName
