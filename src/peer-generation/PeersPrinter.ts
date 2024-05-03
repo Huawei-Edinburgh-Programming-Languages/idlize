@@ -182,8 +182,10 @@ class PeerFileVisitor {
             printer.popIndent()
             printer.print(it.scopeEnd!(it.param))
         })
+        method.argConvertors.forEach(it => {
+            if (it.useArray) printer.print(`${it.param}Serializer.close()`)
+        })
         printer.popIndent()
-
         printer.print(`}`)
     }
 
