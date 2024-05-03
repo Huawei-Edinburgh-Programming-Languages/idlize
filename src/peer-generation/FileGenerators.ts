@@ -37,8 +37,25 @@ import {
 
 export function nativeModuleDeclaration(methods: string[], nativeBridgePath: string, useEmpty: boolean, language: Language): string {
     if (language == Language.JAVA) {
-        // NativeModule will be taken from peer_lib.
-        return ``
+        return `
+public class NativeModule {
+  static {
+    Runtime.getRuntime().loadLibrary("NativeBridgeJni");
+  }
+  static native long _StringMake(String string);
+  static native int _StringLength(long ptr);
+  static native void _StringData(long ptr, byte[] arg1, int arg2);
+  static native long _GetStringFinalizer();
+  static native int _GetPtrVectorSize(long ptr);
+  static native long _GetGroupedLog(int kind);
+  static native long _GetPtrVectorElement(long ptr, int index);
+  static native void _InvokeFinalizer(long func, long obj);
+  static native void _ClearGroupedLog(int index);
+  static native int _TestPerfNumber(int value);
+  static native void _TestPerfNumberWithArray(byte[] data, int length);
+  ${methods.join("\n  ")}
+}
+`
     }
 
     // TODO: better NativeBridge loader
