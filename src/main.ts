@@ -352,7 +352,7 @@ if (options.dts2peer) {
                 fs.writeFileSync(path.join(outDir, 'Deserializer.h'), deserializer)
                 fs.writeFileSync(path.join(outDir, 'arkoala_api.h'), api)
 
-                const { dummy, real } = printRealAndDummyModifiers(peerLibrary)
+                const { dummy, real } = printRealAndDummyModifiers(peerLibrary, options.apiPrefix)
                 fs.writeFileSync(path.join(outDir, 'dummy_impl.cc'), dummy)
                 fs.writeFileSync(path.join(outDir, 'all_modifiers.cc'), real)
 

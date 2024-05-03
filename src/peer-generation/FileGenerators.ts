@@ -16,7 +16,8 @@ import * as fs from "fs"
 import * as path from "path"
 import { IndentedPrinter } from "../IndentedPrinter"
 import { DeclarationTable, PrimitiveType } from "./DeclarationTable"
-import { Language, indentedBy } from "../util"
+import { Language } from "../util"
+import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
 
 const importTsInteropTypes = `
 import {
@@ -112,24 +113,26 @@ ${methods.join("\n")}
 }
 
 export function bridgeCcDeclaration(bridgeCc: string[]): string {
+    const prefix = PeerGeneratorConfig.cppPrefix()
+
     return `#include "Interop.h"
 #include "arkoala_api.h"
 #include "Deserializer.h"
 
-static ArkUIAnyAPI* impls[Ark_APIVariantKind::COUNT] = { 0 };
+static ${prefix}ArkUIAnyAPI* impls[Ark_APIVariantKind::COUNT] = { 0 };
 
-const ArkUIAnyAPI* GetAnyImpl(Ark_APIVariantKind kind, int version, std::string* result) {
+const ${prefix}ArkUIAnyAPI* GetAnyImpl(Ark_APIVariantKind kind, int version, std::string* result) {
     return impls[kind];
 }
 
-const ArkUIFullNodeAPI* GetFullImpl(std::string* result = nullptr) {
-    return reinterpret_cast<const ArkUIFullNodeAPI*>(GetAnyImpl(Ark_APIVariantKind::FULL, ARKUI_FULL_API_VERSION, result));
+const ${prefix}ArkUIFullNodeAPI* GetFullImpl(std::string* result = nullptr) {
+    return reinterpret_cast<const ${prefix}ArkUIFullNodeAPI*>(GetAnyImpl(Ark_APIVariantKind::FULL, ARKUI_FULL_API_VERSION, result));
 }
 
-const ArkUINodeModifiers* GetNodeModifiers() {
+const ${prefix}ArkUINodeModifiers* GetNodeModifiers() {
     // TODO: restore the proper call
     // return GetFullImpl()->getNodeModifiers();
-    extern const ArkUINodeModifiers* GetArkUINodeModifiers();
+    extern const ${prefix}ArkUINodeModifiers* GetArkUINodeModifiers();
     return GetArkUINodeModifiers();
 }
 
@@ -162,13 +165,14 @@ export function modifierStructs(lines: string[]): string {
 }
 
 export function modifierStructList(lines: string[]): string {
+    const prefix = PeerGeneratorConfig.cppPrefix()
     return `
-const ArkUINodeModifiers impl = {
+const ${prefix}ArkUINodeModifiers impl = {
     1, // version
 ${lines.join("\n")}
 };
 
-extern const ArkUINodeModifiers* GetArkUINodeModifiers()
+extern const ${prefix}ArkUINodeModifiers* GetArkUINodeModifiers()
 {
     return &impl;
 }
@@ -240,11 +244,11 @@ typedef struct ${prefix}ArkUIGraphicsAPI {
  */
 typedef struct ${prefix}ArkUIFullNodeAPI {
     ${PrimitiveType.Int32.getText()} version;
-    const ArkUIBasicAPI* (*getBasicAPI)();
-    const ArkUINodeModifiers* (*getNodeModifiers)();
-    const ArkUIAnimation* (*getAnimation)();
-    const ArkUINavigation* (*getNavigation)();
-    const ArkUIGraphicsAPI* (*getGraphicsAPI)();
+    const ${prefix}ArkUIBasicAPI* (*getBasicAPI)();
+    const ${prefix}ArkUINodeModifiers* (*getNodeModifiers)();
+    const ${prefix}ArkUIAnimation* (*getAnimation)();
+    const ${prefix}ArkUINavigation* (*getNavigation)();
+    const ${prefix}ArkUIGraphicsAPI* (*getGraphicsAPI)();
 } ${prefix}ArkUIFullNodeAPI;
 
 typedef struct ${prefix}ArkUIAnyAPI {

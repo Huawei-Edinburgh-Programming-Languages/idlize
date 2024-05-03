@@ -84,4 +84,8 @@ export class PeerGeneratorConfig {
     static isKnownParametrized(name: string | undefined) : boolean {
         return name != undefined && PeerGeneratorConfig.knownParametrized.includes(name)
     }
+
+    static cppPrefix(): string {
+        return "GENERATED_"
+    }
 }
