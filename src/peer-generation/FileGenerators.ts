@@ -43,7 +43,7 @@ export function nativeModuleDeclaration(methods: string[], nativeBridgePath: str
     .replace("%USE_EMPTY%", useEmpty.toString())}
 
   ${methods.join("\n  ")}
-  ${readLangTemplate("NativeModule_epilogue", language)}
+${readLangTemplate("NativeModule_epilogue", language)}
 `
 }
 
