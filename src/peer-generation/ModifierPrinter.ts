@@ -76,50 +76,6 @@ class ModifierVisitor {
         this.modifiers.print(`${method.implName},`)
     }
 
-    printMaterializedMethodProlog(printer: IndentedPrinter, method: PeerMethod) {
-        printer.print(`/// matmethod ${method.methodName}: ${method.retType}`)
-        const apiParameters = method.generateAPIParameters(method.argConvertors).join(", ")
-        const signature = `${method.retType} ${method.implName}(${apiParameters}) {`
-        printer.print(signature)
-        printer.pushIndent()
-    }
-
-    printRealAndDummyAccessor(clazz: MaterializedClass) {
-        this.accessorList.pushIndent()
-        this.printMaterializedClassProlog(clazz)
-        this.dummy.print(`/// matmethod ${clazz.className}_construct`)
-        this.modifiers.print(`// ${clazz.className}_construct,`) ///uncomment
-        // this.printMaterializedMethodProlog(this.dummy, matClass.cons)
-        clazz.methods.forEach(m => {
-            this.modifiers.print(`// ${clazz.className}_${m.methodName},`) ///uncomment
-            const parameterList = m.params
-                .map(([name, type]) => `${type} ${name}`)
-                .join(", ")
-            this.dummy.print(`/// ${m.returnType} ${clazz.className}_${m.methodName}(${parameterList}) {`)
-            this.dummy.print(`///   ${m.returnType} result;`)
-            /// printDummyImplFunctionBody(method)
-            this.dummy.print(`///   return result;`)
-            this.dummy.print(`/// }`)
-            this.real.print(`/// ${m.returnType} ${clazz.className}_${m.methodName}(${parameterList}) {\n/// }`)
-        })
-        this.printMaterializedClassEpilog(clazz)
-        this.accessorList.popIndent()
-    }
-
-    printMaterializedClassProlog(clazz: MaterializedClass) {
-        const accessor = `${clazz.className}Accessor`
-        this.modifiers.print(`ArkUI${accessor} ${accessor}Impl {`)
-        this.modifiers.pushIndent()
-        this.accessorList.print(`Get${accessor},`)
-    }
-
-    printMaterializedClassEpilog(clazz: MaterializedClass) {
-        this.modifiers.popIndent()
-        this.modifiers.print(`};\n`)
-        const accessor = `${clazz.className}Accessor`
-        this.modifiers.print(`const ArkUI${accessor}* Get${accessor}() { return &${accessor}Impl; }\n\n`)
-    }
-
     printClassProlog(clazz: PeerClass) {
         const component = clazz.componentName
         const modifierStructImpl = `ArkUI${component}ModifierImpl`
@@ -146,10 +102,61 @@ class ModifierVisitor {
                 this.printClassProlog(clazz)
                 clazz.methods.forEach(method => this.printRealAndDummyModifier(method))
                 this.printClassEpilog(clazz)
-                //Materialized.Instance.materializedClasses.forEach(c => this.printRealAndDummyAccessor(c))
             })
         })
+        Materialized.Instance.materializedClasses.forEach(c => this.printRealAndDummyAccessor(c))
     }
+
+    printRealAndDummyAccessor(clazz: MaterializedClass) {
+        this.accessorList.pushIndent()
+        this.printMaterializedClassProlog(clazz)
+        this.dummy.print(`/// matmethod ${clazz.className}_construct`)
+        this.modifiers.print(`// ${clazz.className}_construct,`) ///uncomment
+
+        // this.printMaterializedMethodProlog(this.dummy, clazz.cons)///?
+        this.printMethodProlog(this.dummy, clazz.cons)
+        this.printMethodEpiog(this.dummy)
+        clazz.methods.forEach(method => {
+            this.modifiers.print(`// ${clazz.className}_${method.methodName},`) ///uncomment
+            this.printMethodProlog(this.dummy, method)
+            this.printMethodEpiog(this.dummy)
+            ///real
+            // const parameterList = m.params
+            //     .map(([name, type]) => `${type} ${name}`)
+            //     .join(", ")
+            // this.dummy.print(`/// ${m.returnType} ${clazz.className}_${m.methodName}(${parameterList}) {`)
+            // this.dummy.print(`///   ${m.returnType} result;`)
+            // /// printDummyImplFunctionBody(method)
+            // this.dummy.print(`///   return result;`)
+            // this.dummy.print(`/// }`)
+            // this.real.print(`/// ${m.returnType} ${clazz.className}_${m.methodName}(${parameterList}) {\n/// }`)
+        })
+        this.printMaterializedClassEpilog(clazz)
+        this.accessorList.popIndent()
+    }
+
+    printMaterializedClassProlog(clazz: MaterializedClass) {
+        const accessor = `${clazz.className}Accessor`
+        this.modifiers.print(`ArkUI${accessor} ${accessor}Impl {`)
+        this.modifiers.pushIndent()
+        this.accessorList.print(`Get${accessor},`)
+    }
+
+    printMaterializedClassEpilog(clazz: MaterializedClass) {
+        this.modifiers.popIndent()
+        this.modifiers.print(`};\n`)
+        const accessor = `${clazz.className}Accessor`
+        this.modifiers.print(`const ArkUI${accessor}* Get${accessor}() { return &${accessor}Impl; }\n\n`)
+    }
+
+    printMaterializedMethodProlog(printer: IndentedPrinter, method: PeerMethod) {
+        printer.print(`/// matmethod ${method.methodName}: ${method.retType}`)
+        const apiParameters = method.generateAPIParameters(method.argConvertors).join(", ")
+        const signature = `${method.retType} ${method.implName}(${apiParameters}) {`
+        printer.print(signature)
+        printer.pushIndent()
+    }
+
 }
 
 export function printRealAndDummyModifiers(peerLibrary: PeerLibrary): {dummy: string, real: string} {

@@ -75,7 +75,7 @@ class ParamRecord {
     constructor(public declaration: DeclarationTarget, public type: ts.TypeNode, public name: string) {}
 }
 
-class MethodRecord {
+export class MethodRecord {
     constructor(
         public name: string,
         public isStatic: boolean,

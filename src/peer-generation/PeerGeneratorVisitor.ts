@@ -35,7 +35,7 @@ import {
     ArgConvertor, RetConvertor,
 } from "./Convertors"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
-import { DeclarationTable, DeclarationTarget, PrimitiveType } from "./DeclarationTable"
+import { DeclarationTable, MethodRecord, PrimitiveType } from "./DeclarationTable"
 import {
     isCommonMethod,
     isRoot,
@@ -349,6 +349,18 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
         })
     }
 
+    private makePeerMethod(method: MethodRecord, parentName: string): PeerMethod {
+        const argConvertors = method.params
+            .map((param) => this.declarationTable.typeConvertor(param.name, param.type, false))
+        const declarationTargets = method.params
+            .map((param) => this.declarationTable.toTarget(param.type ??
+                throwException(`Expected a type for ${param.name} in ${method.name}`)))
+        const retConvertor = this.retConvertor(method.returnType)
+        return new PeerMethod(parentName, method.name, declarationTargets,
+                argConvertors, retConvertor, !method.isStatic,
+                false, undefined, undefined, undefined)
+    }
+
     processMaterializedClass(peer: PeerClass, target: ts.ClassDeclaration) {
         let structDescriptor = this.declarationTable.targetStruct(target)
         let constructor = structDescriptor.getConstructor()
@@ -357,34 +369,14 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
         }
 
         let className = nameOrNull(target.name)!
-
-        let exists = Materialized.Instance.materializedClasses
-            .map(it => it.className)
-            .find(it => it === className)
-
-        if (exists) {
+        if (Materialized.Instance.materializedClasses.has(className)) {
             return
         }
 
-        let processed = Materialized.Instance.materializedClasses
-            .map(it => it.className)
-            .find(it => it === className)
-
-        if (processed !== undefined) {
-            return
-        }
-
-        let mConstructor = new MaterializedMethod("", false, undefined,
-            constructor.params.map(it => [it.name, mapType(this.typeChecker, it.type)]))
-
-        let mMethods = structDescriptor
-        .getMethods()
-        .map(method => new MaterializedMethod(method.name, method.isStatic,
-            method.returnType == undefined ? undefined : mapType(this.typeChecker, method.returnType),
-            method.params.map(it =>[it.name, mapType(this.typeChecker, it.type)]
-        )))
-
-        Materialized.Instance.materializedClasses.push(
+        let mConstructor = this.makePeerMethod(constructor, className)
+        let mMethods = structDescriptor.getMethods()
+            .map(method => this.makePeerMethod(method, className))
+        Materialized.Instance.materializedClasses.set(className,
             new MaterializedClass(className, mConstructor, mMethods))
     }
 
@@ -647,6 +639,9 @@ function mapCInteropRetType(type: ts.TypeNode): string {
     if (type.kind == ts.SyntaxKind.NumberKeyword) {
         return PrimitiveType.Int32.getText()
     }
+    if (type.kind == ts.SyntaxKind.BooleanKeyword) {
+        return PrimitiveType.Boolean.getText()
+    }
     if (ts.isTypeReferenceNode(type)) {
         let name = identName(type.typeName)!
         /* HACK, fix */
@@ -657,7 +652,7 @@ function mapCInteropRetType(type: ts.TypeNode): string {
             case "UIContext": return PrimitiveType.NativePointer.getText()
         }
         console.log(`WARNING: unhandled return type ${type.getText()}`)
-        return `void`
+        return name
     }
     if (type.kind == ts.SyntaxKind.StringKeyword) {
         /* HACK, fix */

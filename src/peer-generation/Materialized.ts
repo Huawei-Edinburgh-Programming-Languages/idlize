@@ -13,7 +13,8 @@
  * limitations under the License.
  */
 
-import { LanguageWriter } from "./LanguageWriters";
+import { LanguageWriter } from "./LanguageWriters"
+import { PeerMethod } from "./PeerMethod"
 
 export class MaterializedMethod {
     constructor(
@@ -27,15 +28,15 @@ export class MaterializedMethod {
 export class MaterializedClass {
     constructor(
         public readonly className: string,
-        public readonly cons: MaterializedMethod,
-        public readonly methods: MaterializedMethod[],
+        public readonly cons: PeerMethod,
+        public readonly methods: PeerMethod[],
     ) {}
 }
 
 export class Materialized {
     private static _instance: Materialized = new Materialized()
 
-    public materializedClasses: MaterializedClass[] = []
+    public materializedClasses: Map<string, MaterializedClass> = new Map()
 
     private constructor() {
     }
@@ -46,9 +47,9 @@ export class Materialized {
 }
 
 export function printGlobalMaterialized(nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter) {
-        console.log(`Materialized classes: ${Materialized.Instance.materializedClasses.length}`)
+    console.log(`Materialized classes: ${Materialized.Instance.materializedClasses.size}`)
     Materialized.Instance.materializedClasses.forEach(clazz => {
-            clazz.methods.forEach(method => {
+        clazz.methods.forEach(method => {
             console.log(`Materialized class: ${clazz.className}, method: ${method.methodName}\n\n`)
             const implDecl = `_${clazz.className}_${method.methodName}(): void`
             nativeModule.print(implDecl)
