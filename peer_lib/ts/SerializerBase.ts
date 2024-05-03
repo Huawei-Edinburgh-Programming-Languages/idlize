@@ -250,7 +250,7 @@ class OurCustomSerializer extends CustomSerializer {
         super(["Resource", "Pixmap"])
     }
     serialize(serializer: SerializerBase, value: any, kind: string): void {
-        console.log(`managed serialize() for ${kind}`)
+        // console.log(`managed serialize() for ${kind}`)
         serializer.writeString(JSON.stringify(value))
     }
 }
