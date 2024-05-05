@@ -311,7 +311,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
             .map((param) => this.declarationTable.toTarget(param.type ??
                 throwException(`Expected a type for ${asString(param)} in ${asString(method)}`)))
         const retConvertor = this.retConvertor(method.type)
-        const tsRetType = method.type == undefined ? undefined : mapType(this.typeChecker, method.type)
 
         const peerMethod = new PeerMethod(
             originalParentName,
@@ -319,7 +318,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
             declarationTargets,
             argConvertors,
             retConvertor,
-            tsRetType,
             hasReceiver,
             isCallSignature,
             collapsed?.paramsDecl ?? this.generateParams(method.parameters),
@@ -351,17 +349,13 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
         })
     }
 
-    private makePeerMethod(method: MethodRecord, parentName: string): PeerMethod {
+    private makeMaterializedMethod(method: MethodRecord, parentName: string): MaterializedMethod {
         const argConvertors = method.params
             .map((param) => this.declarationTable.typeConvertor(param.name, param.type, false))
-        const declarationTargets = method.params
-            .map((param) => this.declarationTable.toTarget(param.type ??
-                throwException(`Expected a type for ${param.name} in ${method.name}`)))
         const retConvertor = this.retConvertor(method.returnType)
         const tsRetType = method.returnType == undefined ? undefined : mapType(this.typeChecker, method.returnType)
-        return new PeerMethod(parentName, method.name, declarationTargets,
-                argConvertors, retConvertor, tsRetType, !method.isStatic,
-                false, undefined, undefined, undefined)
+        return new MaterializedMethod(parentName, method.name, argConvertors, retConvertor,
+            tsRetType, !method.isStatic, false)
     }
 
     processMaterializedClass(peer: PeerClass, target: ts.ClassDeclaration) {
@@ -376,11 +370,11 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
             return
         }
 
-        let mConstructor = this.makePeerMethod(constructor, className)
-        let mDestructor = this.makePeerMethod(
+        let mConstructor = this.makeMaterializedMethod(constructor, className)
+        let mDestructor = this.makeMaterializedMethod(
             {name: "destructor", isStatic: false, returnType: undefined, params: []}, className)
         let mMethods = structDescriptor.getMethods()
-            .map(method => this.makePeerMethod(method, className))
+            .map(method => this.makeMaterializedMethod(method, className))
         Materialized.Instance.materializedClasses.set(className,
             new MaterializedClass(className, mConstructor, mDestructor, mMethods))
     }

@@ -41,7 +41,7 @@ class HeaderVisitor {
     }
 
     private printMethod(method: PeerMethod) {
-        const apiParameters = method.generateAPIParameters(method.argConvertors).join(", ")
+        const apiParameters = method.generateAPIParameters().join(", ")
         this.api.print(`${method.retType} (*${method.fullMethodName})(${apiParameters});`)
     }
 

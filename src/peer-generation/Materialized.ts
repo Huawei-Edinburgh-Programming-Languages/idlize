@@ -13,24 +13,39 @@
  * limitations under the License.
  */
 
+import { ArgConvertor, RetConvertor } from "./Convertors"
 import { LanguageWriter } from "./LanguageWriters"
 import { PeerMethod } from "./PeerMethod"
 
-export class MaterializedMethod {
+export class MaterializedMethod extends PeerMethod {
     constructor(
-        public readonly methodName: string,
-        public readonly isStatic: boolean,
-        public readonly returnType: string | undefined,
-        public readonly params: [name: string, type: string][]
-    ) {}
+        originalParentName: string,
+        methodName: string,
+        argConvertors: ArgConvertor[],
+        retConvertor: RetConvertor,
+        public tsRetType: string | undefined,
+        hasReceiver: boolean,
+        isCallSignature: boolean
+    ) {
+        super(originalParentName, methodName, [], argConvertors, retConvertor, hasReceiver, isCallSignature,
+            undefined, undefined, undefined)
+     }
+
+     override generateAPIParameters(): string[] {
+        let maybeReceiver = this.hasReceiver ? [`${this.originalParentName}Peer* peer`] : []
+        return (maybeReceiver.concat(this.argConvertors.map(it => {
+            let isPointer = it.isPointerType()
+            return `${isPointer ? "const ": ""}${it.nativeType(false)}${isPointer ? "*": ""} ${it.param}`
+        })))
+    }
 }
 
 export class MaterializedClass {
     constructor(
         public readonly className: string,
-        public readonly ctor: PeerMethod,
-        public readonly dtor: PeerMethod,
-        public readonly methods: PeerMethod[],
+        public readonly ctor: MaterializedMethod,
+        public readonly dtor: MaterializedMethod,
+        public readonly methods: MaterializedMethod[],
     ) {}
 }
 

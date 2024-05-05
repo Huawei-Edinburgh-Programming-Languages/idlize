@@ -25,7 +25,6 @@ export class PeerMethod {
         public declarationTargets: DeclarationTarget[],
         public argConvertors: ArgConvertor[],
         public retConvertor: RetConvertor,
-        public tsRetType: string | undefined,
         public hasReceiver: boolean,
         public isCallSignature: boolean,
         public mappedParams: string | undefined,
@@ -60,9 +59,9 @@ export class PeerMethod {
         return retConvertor.nativeType()
     }    
 
-    generateAPIParameters(argConvertors: ArgConvertor[]): string[] {
+    generateAPIParameters(): string[] {
         let maybeReceiver = this.hasReceiver ? [`${PrimitiveType.NativePointer.getText()} node`] : []
-        return (maybeReceiver.concat(argConvertors.map(it => {
+        return (maybeReceiver.concat(this.argConvertors.map(it => {
             let isPointer = it.isPointerType()
             return `${isPointer ? "const ": ""}${it.nativeType(false)}${isPointer ? "*": ""} ${it.param}`
         })))
