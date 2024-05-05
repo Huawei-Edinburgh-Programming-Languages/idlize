@@ -352,7 +352,9 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
     private makeMaterializedMethod(method: MethodRecord, parentName: string): MaterializedMethod {
         const argConvertors = method.params
             .map((param) => this.declarationTable.typeConvertor(param.name, param.type, false))
-        const retConvertor = this.retConvertor(method.returnType)
+        const retConvertor = method.name === "constructor" ///better?
+            ? { isVoid: false, nativeType: () => parentName + "Peer*", macroSuffixPart: () => "" }
+            : this.retConvertor(method.returnType)
         const tsRetType = method.returnType == undefined ? undefined : mapType(this.typeChecker, method.returnType)
         return new MaterializedMethod(parentName, method.name, argConvertors, retConvertor,
             tsRetType, !method.isStatic, false)

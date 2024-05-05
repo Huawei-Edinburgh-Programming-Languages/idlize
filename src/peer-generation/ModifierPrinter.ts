@@ -111,13 +111,10 @@ class ModifierVisitor {
         this.accessorList.pushIndent()
         this.printMaterializedClassProlog(clazz)
         this.dummy.print(`/// ${clazz.className}`)
-        this.printMaterializedSpecialMethod(this.dummy, clazz.ctor)
-        this.printMaterializedSpecialMethod(this.dummy, clazz.dtor)
+        this.printMaterializedMethod(this.dummy, clazz.ctor)
+        this.printMaterializedMethod(this.dummy, clazz.dtor)
         clazz.methods.forEach(method => {
-            this.printMaterializedMethodProlog(this.dummy, method)
-            this.printDummyImplFunctionBody(method)
-            this.printMethodEpilog(this.dummy)
-            this.modifiers.print(`${clazz.className}_${method.methodName},`)
+            this.printMaterializedMethod(this.dummy, method)
             ///real
             // const parameterList = m.params
             //     .map(([name, type]) => `${type} ${name}`)
@@ -147,7 +144,7 @@ class ModifierVisitor {
         this.modifiers.print(`const ArkUI${accessor}* Get${accessor}() { return &${accessor}Impl; }\n\n`)
     }
 
-    printMaterializedSpecialMethod(printer: IndentedPrinter, method: MaterializedMethod) {
+    printMaterializedMethod(printer: IndentedPrinter, method: MaterializedMethod) {
         this.printMaterializedMethodProlog(printer, method)
         this.printDummyImplFunctionBody(method)
         this.printMethodEpilog(printer)
