@@ -14,7 +14,7 @@ class MaterializedFileVisitor {
         private readonly dumpSerialized: boolean,
     ) {}
 
-    private     printMaterializedClass(printer: IndentedPrinter, clazz: MaterializedClass) {
+    private printMaterializedClass(printer: IndentedPrinter, clazz: MaterializedClass) {
         printer.print(`import { Finalizable } from "@koalaui/arkoala"`)
         printer.print(`export class ${clazz.className} extends Finalizable {`)
         printer.pushIndent()
@@ -28,7 +28,7 @@ class MaterializedFileVisitor {
         // methods
         clazz.methods.forEach(method => {
             let staticModifier = method.hasReceiver ? "" : "static "
-            let returnType = method.retType === undefined ? "" : `: ${method.retType} `
+            let returnType = method.tsRetType === undefined ? "" : `: ${method.tsRetType} `
             let params = method.argConvertors.map(it => `${it.param}: ${it.tsTypeName}`).join(", ")
             printer.print(`${staticModifier}${method.methodName}(${params})${returnType} {`)
             printer.pushIndent()

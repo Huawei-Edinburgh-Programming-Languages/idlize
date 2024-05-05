@@ -311,6 +311,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
             .map((param) => this.declarationTable.toTarget(param.type ??
                 throwException(`Expected a type for ${asString(param)} in ${asString(method)}`)))
         const retConvertor = this.retConvertor(method.type)
+        const tsRetType = method.type == undefined ? undefined : mapType(this.typeChecker, method.type)
 
         const peerMethod = new PeerMethod(
             originalParentName,
@@ -318,6 +319,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
             declarationTargets,
             argConvertors,
             retConvertor,
+            tsRetType,
             hasReceiver,
             isCallSignature,
             collapsed?.paramsDecl ?? this.generateParams(method.parameters),
@@ -356,8 +358,9 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
             .map((param) => this.declarationTable.toTarget(param.type ??
                 throwException(`Expected a type for ${param.name} in ${method.name}`)))
         const retConvertor = this.retConvertor(method.returnType)
+        const tsRetType = method.returnType == undefined ? undefined : mapType(this.typeChecker, method.returnType)
         return new PeerMethod(parentName, method.name, declarationTargets,
-                argConvertors, retConvertor, !method.isStatic,
+                argConvertors, retConvertor, tsRetType, !method.isStatic,
                 false, undefined, undefined, undefined)
     }
 

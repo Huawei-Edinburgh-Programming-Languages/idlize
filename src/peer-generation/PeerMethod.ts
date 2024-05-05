@@ -25,6 +25,7 @@ export class PeerMethod {
         public declarationTargets: DeclarationTarget[],
         public argConvertors: ArgConvertor[],
         public retConvertor: RetConvertor,
+        public tsRetType: string | undefined,
         public hasReceiver: boolean,
         public isCallSignature: boolean,
         public mappedParams: string | undefined,
