@@ -28,7 +28,8 @@ export class MaterializedMethod {
 export class MaterializedClass {
     constructor(
         public readonly className: string,
-        public readonly cons: PeerMethod,
+        public readonly ctor: PeerMethod,
+        public readonly dtor: PeerMethod,
         public readonly methods: PeerMethod[],
     ) {}
 }

@@ -60,7 +60,7 @@ class ModifierVisitor {
         printer.pushIndent()
     }
 
-    printMethodEpiog(printer: IndentedPrinter) {
+    printMethodEpilog(printer: IndentedPrinter) {
         printer.popIndent()
         printer.print(`}`)
     }
@@ -70,8 +70,8 @@ class ModifierVisitor {
         this.printMethodProlog(this.real, method)
         this.printDummyImplFunctionBody(method)
         this.printModifierImplFunctionBody(method)
-        this.printMethodEpiog(this.dummy)
-        this.printMethodEpiog(this.real)
+        this.printMethodEpilog(this.dummy)
+        this.printMethodEpilog(this.real)
 
         this.modifiers.print(`${method.implName},`)
     }
@@ -107,19 +107,17 @@ class ModifierVisitor {
         Materialized.Instance.materializedClasses.forEach(c => this.printRealAndDummyAccessor(c))
     }
 
-    printRealAndDummyAccessor(clazz: MaterializedClass) {
+    printRealAndDummyAccessor(clazz: MaterializedClass) {///mv all these smw close to Materialized
         this.accessorList.pushIndent()
         this.printMaterializedClassProlog(clazz)
-        this.dummy.print(`/// matmethod ${clazz.className}_construct`)
-        this.modifiers.print(`// ${clazz.className}_construct,`) ///uncomment
-
-        // this.printMaterializedMethodProlog(this.dummy, clazz.cons)///?
-        this.printMethodProlog(this.dummy, clazz.cons)
-        this.printMethodEpiog(this.dummy)
+        this.dummy.print(`/// ${clazz.className}`)
+        this.printMaterializedSpecialMethod(this.dummy, clazz, clazz.ctor)
+        this.printMaterializedSpecialMethod(this.dummy, clazz, clazz.dtor)
         clazz.methods.forEach(method => {
-            this.modifiers.print(`// ${clazz.className}_${method.methodName},`) ///uncomment
-            this.printMethodProlog(this.dummy, method)
-            this.printMethodEpiog(this.dummy)
+            this.printMaterializedMethodProlog(this.dummy, clazz, method)
+            this.printDummyImplFunctionBody(method)
+            this.printMethodEpilog(this.dummy)
+            this.modifiers.print(`${clazz.className}_${method.methodName},`)
             ///real
             // const parameterList = m.params
             //     .map(([name, type]) => `${type} ${name}`)
@@ -149,14 +147,28 @@ class ModifierVisitor {
         this.modifiers.print(`const ArkUI${accessor}* Get${accessor}() { return &${accessor}Impl; }\n\n`)
     }
 
-    printMaterializedMethodProlog(printer: IndentedPrinter, method: PeerMethod) {
-        printer.print(`/// matmethod ${method.methodName}: ${method.retType}`)
-        const apiParameters = method.generateAPIParameters(method.argConvertors).join(", ")
-        const signature = `${method.retType} ${method.implName}(${apiParameters}) {`
+    printMaterializedSpecialMethod(printer: IndentedPrinter, clazz: MaterializedClass, method: PeerMethod) {
+        this.printMaterializedMethodProlog(printer, clazz, method)
+        this.printDummyImplFunctionBody(method)
+        this.printMethodEpilog(printer)
+        this.modifiers.print(`${clazz.className}_${method.methodName},`)
+    }
+
+    printMaterializedMethodProlog(printer: IndentedPrinter, clazz: MaterializedClass, method: PeerMethod) {
+        const apiParameters = this.generateAPIParameters(clazz, method).join(", ")
+        const signature = `${method.retType} ${clazz.className}_${method.methodName}(${apiParameters}) {`
         printer.print(signature)
         printer.pushIndent()
     }
 
+    ///converge w/ PeerMethod?
+    generateAPIParameters(clazz: MaterializedClass, method: PeerMethod): string[] {
+        let maybeReceiver = method.hasReceiver ? [`${clazz.className}Peer* peer`] : []
+        return (maybeReceiver.concat(method.argConvertors.map(it => {
+            let isPointer = it.isPointerType()
+            return `${isPointer ? "const ": ""}${it.nativeType(false)}${isPointer ? "*": ""} ${it.param}`
+        })))
+    }
 }
 
 export function printRealAndDummyModifiers(peerLibrary: PeerLibrary): {dummy: string, real: string} {

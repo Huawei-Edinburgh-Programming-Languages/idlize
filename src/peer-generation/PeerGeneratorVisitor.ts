@@ -377,10 +377,12 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
         }
 
         let mConstructor = this.makePeerMethod(constructor, className)
+        let mDestructor = this.makePeerMethod(
+            {name: "destructor", isStatic: false, returnType: undefined, params: []}, className)
         let mMethods = structDescriptor.getMethods()
             .map(method => this.makePeerMethod(method, className))
         Materialized.Instance.materializedClasses.set(className,
-            new MaterializedClass(className, mConstructor, mMethods))
+            new MaterializedClass(className, mConstructor, mDestructor, mMethods))
     }
 
     argConvertor(param: ts.ParameterDeclaration): ArgConvertor {

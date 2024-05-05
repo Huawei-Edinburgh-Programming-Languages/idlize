@@ -18,7 +18,7 @@ class MaterializedFileVisitor {
         printer.print(`import { Finalizable } from "@koalaui/arkoala"`)
         printer.print(`export class ${clazz.className} extends Finalizable {`)
         printer.pushIndent()
-        let consParams = clazz.cons.argConvertors.map(it => `${it.param}: ${it.tsTypeName}`).join(", ")
+        let consParams = clazz.ctor.argConvertors.map(it => `${it.param}: ${it.tsTypeName}`).join(", ")
         // constructor
         printer.print(`constructor(${consParams}) {`)
         printer.pushIndent()
