@@ -350,6 +350,10 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
     }
 
     private makeMaterializedMethod(method: MethodRecord, parentName: string): MaterializedMethod {
+        method.params.map((param, index) => {
+            if (param.type)
+                this.requestType(`Type_${parentName}_${method.name}_Arg${index}`, param.type)
+        })
         const argConvertors = method.params
             .map((param) => this.declarationTable.typeConvertor(param.name, param.type, false))
         const retConvertor = method.name === "constructor" ///better?
