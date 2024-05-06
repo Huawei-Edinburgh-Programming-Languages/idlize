@@ -15,7 +15,7 @@
 
 import { IndentedPrinter } from "../IndentedPrinter";
 import { PrimitiveType } from "./DeclarationTable";
-import { completeImplementations, dummyImplementations, modifierStructList, modifierStructs } from "./FileGenerators";
+import { modifierStructList, modifierStructs } from "./FileGenerators";
 import { PeerClass } from "./PeerClass";
 import { PeerLibrary } from "./PeerLibrary";
 import { PeerMethod } from "./PeerMethod";

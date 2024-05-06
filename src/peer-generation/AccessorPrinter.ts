@@ -15,7 +15,7 @@
 
 import { IndentedPrinter } from "../IndentedPrinter";
 import { PrimitiveType } from "./DeclarationTable";
-import { accessorStructList, completeImplementations, dummyImplementations, modifierStructs } from "./FileGenerators";
+import { accessorStructList, modifierStructs } from "./FileGenerators";
 import { Materialized, MaterializedClass, MaterializedMethod } from "./Materialized";
 import { PeerLibrary } from "./PeerLibrary";
 import { PeerMethod } from "./PeerMethod";
@@ -63,24 +63,13 @@ class AccessorVisitor {
         printer.print(`}`)
     }
 
-    printRealAndDummyAccessor(clazz: MaterializedClass) {///mv all these smw close to Materialized
+    printRealAndDummyAccessor(clazz: MaterializedClass) {
         this.accessorList.pushIndent()
-        this.printMaterializedClassProlog(clazz)
-        this.dummy.print(`/// ${clazz.className}`)
-        this.printMaterializedMethod(this.dummy, clazz.ctor)
-        this.printMaterializedMethod(this.dummy, clazz.dtor)
-        clazz.methods.forEach(method => {
-            this.printMaterializedMethod(this.dummy, method)
-            ///real
-            // const parameterList = m.params
-            //     .map(([name, type]) => `${type} ${name}`)
-            //     .join(", ")
-            // this.dummy.print(`/// ${m.returnType} ${clazz.className}_${m.methodName}(${parameterList}) {`)
-            // this.dummy.print(`///   ${m.returnType} result;`)
-            // /// printDummyImplFunctionBody(method)
-            // this.dummy.print(`///   return result;`)
-            // this.dummy.print(`/// }`)
-            // this.real.print(`/// ${m.returnType} ${clazz.className}_${m.methodName}(${parameterList}) {\n/// }`)
+        this.printMaterializedClassProlog(clazz);
+        [clazz.ctor, clazz.dtor].concat(clazz.methods).forEach(method => {
+            this.printMaterializedMethod(this.dummy, method, m => this.printDummyImplFunctionBody(m))
+            this.printMaterializedMethod(this.real, method, m => this.printModifierImplFunctionBody(m))
+            this.accessors.print(`${method.originalParentName}_${method.methodName},`)
         })
         this.printMaterializedClassEpilog(clazz)
         this.accessorList.popIndent()
@@ -100,11 +89,10 @@ class AccessorVisitor {
         this.accessors.print(`const ArkUI${accessor}* Get${accessor}() { return &${accessor}Impl; }\n\n`)
     }
 
-    printMaterializedMethod(printer: IndentedPrinter, method: MaterializedMethod) {
+    printMaterializedMethod(printer: IndentedPrinter, method: MaterializedMethod, printBody: (m: MaterializedMethod) => void) {
         this.printMaterializedMethodProlog(printer, method)
-        this.printDummyImplFunctionBody(method)
+        printBody(method)
         this.printMethodEpilog(printer)
-        this.accessors.print(`${method.originalParentName}_${method.methodName},`)
     }
 
     printMaterializedMethodProlog(printer: IndentedPrinter, method: MaterializedMethod) {
