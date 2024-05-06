@@ -20,7 +20,7 @@ import { PeerClass } from "./PeerClass";
 import { PeerLibrary } from "./PeerLibrary";
 import { PeerMethod } from "./PeerMethod";
 
-class ModifierVisitor {
+export class ModifierVisitor {
     dummy = new IndentedPrinter()
     real = new IndentedPrinter()
     modifiers = new IndentedPrinter()
@@ -28,7 +28,7 @@ class ModifierVisitor {
     accessorList = new IndentedPrinter()
 
     constructor(
-        private library: PeerLibrary,
+        protected library: PeerLibrary,
     ) { }
 
     printDummyImplFunctionBody(method: PeerMethod) {
