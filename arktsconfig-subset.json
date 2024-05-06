@@ -5,8 +5,11 @@
         "paths": {
             "@arkoala/arkui": ["./generated/subset", "./"],
             "@arkoala/arkui/*": ["./generated/subset/*", "./*"],
-            "@koalaui/common": ["./generated/subset/koalaui-common"]
+            "@koalaui/arkoala": ["node_modules/@koalaui/arkoala"],
+            "@koalaui/common": ["node_modules/@koalaui/common"],
+            "@koalaui/interop": ["node_modules/@koalaui/interop"],
+            "@koalaui/runtime": ["node_modules/@koalaui/runtime"]
         }
     },
-    "include": ["./generated/subset/**/*.ets"]
+    "include": ["./generated/subset/**/*.ts"]
 }
