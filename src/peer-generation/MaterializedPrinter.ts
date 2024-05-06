@@ -55,7 +55,7 @@ class MaterializedVisitor {
     ) {}
 
     printMaterialized(): void {
-        for(const clazz of Materialized.Instance.materializedClasses.values()) {
+        for (const clazz of Materialized.Instance.materializedClasses.values()) {
             const visitor = new MaterializedFileVisitor(clazz, this.dumpSerialized)
             visitor.printFile()
             renameClassToMaterialized

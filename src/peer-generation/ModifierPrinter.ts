@@ -15,8 +15,7 @@
 
 import { IndentedPrinter } from "../IndentedPrinter";
 import { PrimitiveType } from "./DeclarationTable";
-import { accessorStructList, completeImplementations, dummyImplementations, modifierStructList, modifierStructs } from "./FileGenerators";
-import { Materialized, MaterializedClass, MaterializedMethod } from "./Materialized";
+import { completeImplementations, dummyImplementations, modifierStructList, modifierStructs } from "./FileGenerators";
 import { PeerClass } from "./PeerClass";
 import { PeerLibrary } from "./PeerLibrary";
 import { PeerMethod } from "./PeerMethod";
@@ -104,58 +103,6 @@ class ModifierVisitor {
                 this.printClassEpilog(clazz)
             })
         })
-        Materialized.Instance.materializedClasses.forEach(c => this.printRealAndDummyAccessor(c))
-    }
-
-    printRealAndDummyAccessor(clazz: MaterializedClass) {///mv all these smw close to Materialized
-        this.accessorList.pushIndent()
-        this.printMaterializedClassProlog(clazz)
-        this.dummy.print(`/// ${clazz.className}`)
-        this.printMaterializedMethod(this.dummy, clazz.ctor)
-        this.printMaterializedMethod(this.dummy, clazz.dtor)
-        clazz.methods.forEach(method => {
-            this.printMaterializedMethod(this.dummy, method)
-            ///real
-            // const parameterList = m.params
-            //     .map(([name, type]) => `${type} ${name}`)
-            //     .join(", ")
-            // this.dummy.print(`/// ${m.returnType} ${clazz.className}_${m.methodName}(${parameterList}) {`)
-            // this.dummy.print(`///   ${m.returnType} result;`)
-            // /// printDummyImplFunctionBody(method)
-            // this.dummy.print(`///   return result;`)
-            // this.dummy.print(`/// }`)
-            // this.real.print(`/// ${m.returnType} ${clazz.className}_${m.methodName}(${parameterList}) {\n/// }`)
-        })
-        this.printMaterializedClassEpilog(clazz)
-        this.accessorList.popIndent()
-    }
-
-    printMaterializedClassProlog(clazz: MaterializedClass) {
-        const accessor = `${clazz.className}Accessor`
-        this.modifiers.print(`ArkUI${accessor} ${accessor}Impl {`)
-        this.modifiers.pushIndent()
-        this.accessorList.print(`Get${accessor},`)
-    }
-
-    printMaterializedClassEpilog(clazz: MaterializedClass) {
-        this.modifiers.popIndent()
-        this.modifiers.print(`};\n`)
-        const accessor = `${clazz.className}Accessor`
-        this.modifiers.print(`const ArkUI${accessor}* Get${accessor}() { return &${accessor}Impl; }\n\n`)
-    }
-
-    printMaterializedMethod(printer: IndentedPrinter, method: MaterializedMethod) {
-        this.printMaterializedMethodProlog(printer, method)
-        this.printDummyImplFunctionBody(method)
-        this.printMethodEpilog(printer)
-        this.modifiers.print(`${method.originalParentName}_${method.methodName},`)
-    }
-
-    printMaterializedMethodProlog(printer: IndentedPrinter, method: MaterializedMethod) {
-        const apiParameters = method.generateAPIParameters().join(", ")
-        const signature = `${method.retType} ${method.originalParentName}_${method.methodName}(${apiParameters}) {`
-        printer.print(signature)
-        printer.pushIndent()
     }
 }
 
@@ -164,15 +111,13 @@ export function printRealAndDummyModifiers(peerLibrary: PeerLibrary): {dummy: st
     visitor.printRealAndDummyModifiers()
 
     const dummy =
-        dummyImplementations(visitor.dummy.getOutput()) +
+        visitor.dummy.getOutput().join("\n") +
         modifierStructs(visitor.modifiers.getOutput()) +
-        modifierStructList(visitor.modifierList.getOutput()) +
-        accessorStructList(visitor.accessorList.getOutput())
+        modifierStructList(visitor.modifierList.getOutput())
 
     const real =
-        completeImplementations(visitor.real.getOutput()) +
+        visitor.real.getOutput().join("\n") +
         modifierStructs(visitor.modifiers.getOutput()) +
-        modifierStructList(visitor.modifierList.getOutput()) +
-        accessorStructList(visitor.accessorList.getOutput())
+        modifierStructList(visitor.modifierList.getOutput())
     return {dummy, real}
 }
