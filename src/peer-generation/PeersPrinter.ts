@@ -267,8 +267,16 @@ class PeersVisitor {
 
 export function printPeers(peerLibrary: PeerLibrary, dumpSerialized: boolean): Map<string, string> {
     // TODO: support other output languages
-    if (peerLibrary.declarationTable.language != Language.TS)
-        return new Map()
+    if (peerLibrary.declarationTable.language == Language.ARKTS) {
+        const visitor = new PeersVisitor(peerLibrary, dumpSerialized)
+        visitor.printPeers()
+        const result = new Map<string, string>()
+        for (const [key, content] of visitor.peers) {
+            if (content.length === 0) continue
+            result.set(key, content.join('\n'))
+        }
+        return result
+    }
 
     const visitor = new PeersVisitor(peerLibrary, dumpSerialized)
     visitor.printPeers()

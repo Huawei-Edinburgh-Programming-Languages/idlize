@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "outDir": "build/abc/subset",
-        "rootDir": "./generated/subset",
+        "rootDir": "./generated/arkts_subset",
         "paths": {
             "@arkoala/arkui": ["./generated/subset", "./"],
             "@arkoala/arkui/*": ["./generated/subset/*", "./*"],
@@ -11,5 +11,5 @@
             "@koalaui/runtime": ["node_modules/@koalaui/runtime"]
         }
     },
-    "include": ["./generated/subset/**/*.ts"]
+    "include": ["./generated/arkts_subset/**/*.ets"]
 }

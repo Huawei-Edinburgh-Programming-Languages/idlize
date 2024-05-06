@@ -119,7 +119,10 @@ let textEncoder = new TextEncoder()
 class ArrayBufferCache {
     currentUsed = 0
     cache: Array<ArrayBuffer|undefined> = []
-    constructor(public maxCapacity: number) {}
+    public maxCapacity: number
+    constructor(maxCapacity: number) {
+        this.maxCapacity = maxCapacity
+    }
 
     get(size: number): ArrayBuffer {
         for (let i = 0; i < this.cache.length; i++) {
@@ -147,7 +150,10 @@ class ArrayBufferCache {
 
 /* Serialization extension point */
 export abstract class CustomSerializer {
-    constructor(protected supported: Array<string>) {}
+    protected supported: Array<string>
+    constructor(supported: Array<string>) {
+        this.supported = supported
+    }
     supports(kind: string): boolean { return this.supported.includes(kind) }
     abstract serialize(serializer: SerializerBase, value: any, kind: string): void
     next: CustomSerializer | undefined = undefined
