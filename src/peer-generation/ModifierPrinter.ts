@@ -93,7 +93,7 @@ class ModifierVisitor {
         this.modifiers.popIndent()
         this.modifiers.print(`};\n`)
         const name = clazz.componentName
-        this.modifiers.print(`const ${this.prefix}ArkUI${name}Modifier* Get${name}Modifier() { return &${PeerGeneratorConfig.cppPrefix()}ArkUI${name}ModifierImpl; }\n\n`)
+        this.modifiers.print(`const ${this.prefix}ArkUI${name}Modifier* ${this.prefix}Get${name}Modifier() { return &${PeerGeneratorConfig.cppPrefix()}ArkUI${name}ModifierImpl; }\n\n`)
     }
 
     // TODO: have a proper Peer module visitor
