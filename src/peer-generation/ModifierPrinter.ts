@@ -74,7 +74,7 @@ class ModifierVisitor {
         this.printMethodEpilogue(this.dummy)
         this.printMethodEpilogue(this.real)
 
-        this.modifiers.print(`${method.implName},`)
+        this.modifiers.print(`${this.prefix}${method.implName},`)
     }
 
     printClassProlog(clazz: PeerClass) {
@@ -85,7 +85,7 @@ class ModifierVisitor {
         this.modifiers.pushIndent()
 
         this.modifierList.pushIndent()
-        this.modifierList.print(`Get${component}Modifier,`)
+        this.modifierList.print(`${this.prefix}Get${component}Modifier,`)
         this.modifierList.popIndent()
     }
 
