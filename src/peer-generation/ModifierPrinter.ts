@@ -56,7 +56,7 @@ class ModifierVisitor {
 
     printMethodProlog(printer: IndentedPrinter, method: PeerMethod) {
         const apiParameters = method.generateAPIParameters(method.argConvertors).join(", ")
-        const signature = `${method.retType} ${method.implName}(${apiParameters}) {`
+        const signature = `${method.retType} ${this.prefix}${method.implName}(${apiParameters}) {`
         printer.print(signature)
         printer.pushIndent()
     }
