@@ -795,20 +795,20 @@ export class DeclarationTable {
         }
     }
 
-    private printStructsAccessor(name: string, structDescriptor: StructDescriptor, structs: IndentedPrinter) {
+    private printStructsAccessor(name: string, structDescriptor: StructDescriptor, printer: IndentedPrinter) {
         if (Materialized.Instance.materializedClasses.has(name)) {
             let peerName = `${name}Peer`
             let accessorName = `ArkUI${name}Accessor`
             let constructor = structDescriptor.getConstructor()!
-            structs.print(`typedef struct ${peerName} ${peerName} ;`)
-            structs.print(`typedef struct ${accessorName} {`)
-            structs.pushIndent()
+            printer.print(`typedef struct ${peerName} ${peerName} ;`)
+            printer.print(`typedef struct ${accessorName} {`)
+            printer.pushIndent()
                 let params = constructor.params
                     .map(it => `const ${this.uniqueName(it.declaration)}* ${it.name}`)
                     .join(`, `)
-                structs.print(`${peerName}* (*constructor) (${params});`)
+                printer.print(`${peerName}* (*constructor) (${params});`)
 
-            structs.print(`void (*destructor) (${peerName}* peer);`)
+            printer.print(`void (*destructor) (${peerName}* peer);`)
 
             let names = new Set<string>()
             structDescriptor.getMethods()
@@ -828,10 +828,10 @@ export class DeclarationTable {
                     let paramsList = method.isStatic ? [] : [`${peerName} *peer`]
                     let params = method.params
                       .map(it => `const ${this.uniqueName(it.declaration)}* ${it.name}`)
-                    structs.print(`${returnType} (*${method.name})(${paramsList.concat(params).join(`, `)});`)
+                    printer.print(`${returnType} (*${method.name})(${paramsList.concat(params).join(`, `)});`)
                 })
-            structs.popIndent()
-            structs.print(`} ${accessorName};`)
+            printer.popIndent()
+            printer.print(`} ${accessorName};`)
         }
     }
 
@@ -861,7 +861,6 @@ export class DeclarationTable {
         seenNames.clear()
         let noDeclaration = [PrimitiveType.Int32, PrimitiveType.Tag, PrimitiveType.Number, PrimitiveType.Boolean, PrimitiveType.String]
         for (let target of order) {
-            let noBasicDecl = (target instanceof PrimitiveType && noDeclaration.includes(target))
             let nameAssigned = this.uniqueNames.get(target)
             if (nameAssigned === PrimitiveType.Tag.getText(this)) {
                 continue
@@ -873,6 +872,8 @@ export class DeclarationTable {
             seenNames.add(nameAssigned)
             let isPointer = this.isPointerDeclaration(target)
             let isEnum = !(target instanceof PrimitiveType) && ts.isEnumDeclaration(target)
+            let isAccessor = Materialized.Instance.materializedClasses.has(nameAssigned)
+            let noBasicDecl = isAccessor || (target instanceof PrimitiveType && noDeclaration.includes(target))
             let nameOptional = PrimitiveType.OptionalPrefix + nameAssigned
             if (isEnum) {
                 structs.print(`typedef ${PrimitiveType.Int32.getText()} ${nameAssigned};`)
@@ -883,11 +884,14 @@ export class DeclarationTable {
                 }
                 continue
             }
+            const structDescriptor = this.targetStruct(target)
             if (!noBasicDecl && !this.ignoreTarget(target, nameAssigned)) {
-                const structDescriptor = this.targetStruct(target)
                 this.printStructsCHead(nameAssigned, structDescriptor, structs)
                 structDescriptor.getFields().forEach(it => structs.print(`${this.cFieldKind(it.declaration)}${it.optional ? PrimitiveType.OptionalPrefix : ""}${this.uniqueName(it.declaration)} ${it.name};`))
                 this.printStructsCTail(nameAssigned, structDescriptor.isPacked, structs)
+            }
+            if (isAccessor) {
+                structs.print(`typedef Ark_Materialized ${nameAssigned};`)
                 this.printStructsAccessor(nameAssigned, structDescriptor, accessors)
             }
             let skipWriteToString = (target instanceof PrimitiveType) || ts.isEnumDeclaration(target)
@@ -897,7 +901,6 @@ export class DeclarationTable {
             if (seenNames.has(nameOptional)) continue
             seenNames.add(nameOptional)
             if (!(target instanceof PointerType) && nameAssigned != "Optional" && nameAssigned != "RelativeIndexable") {
-                const structDescriptor = this.targetStruct(target)
                 this.printStructsCHead(nameOptional, structDescriptor, structs)
                 structs.print(`enum ${PrimitiveType.Tag.getText()} tag;`)
                 structs.print(`${nameAssigned} value;`)
