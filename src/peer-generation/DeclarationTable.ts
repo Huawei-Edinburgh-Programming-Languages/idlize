@@ -804,8 +804,8 @@ export class DeclarationTable {
             structs.print(`typedef struct ${accessorName} {`)
             structs.pushIndent()
                 let params = constructor.params
-                    .map(it => `${this.uniqueName(it.declaration)}* ${it.name}`)
-                    .join(`,`)
+                    .map(it => `const ${this.uniqueName(it.declaration)}* ${it.name}`)
+                    .join(`, `)
                 structs.print(`${peerName}* (*constructor) (${params});`)
 
             structs.print(`void (*destructor) (${peerName}* peer);`)
@@ -822,14 +822,13 @@ export class DeclarationTable {
                     names.add(method.name)
                     let returnNode = method.returnType
                     let returnType = returnNode === undefined
-                     ? "void"
-                     : this.uniqueNames.get(this.toTarget(returnNode))
-                     returnType = returnType ?? "void"
-                     let paramsList = method.isStatic ? [] : [`${peerName} *peer`]
-                     let params = method.params
-                     .map(it => `${this.uniqueName(it.declaration)}* ${it.name}`)
-                     paramsList = paramsList.concat(params)
-                     structs.print(`${returnType} (*${method.name})(${paramsList.join(`,`)});`)
+                      ? "void"
+                      : this.uniqueNames.get(this.toTarget(returnNode))
+                    returnType = returnType ?? "void"
+                    let paramsList = method.isStatic ? [] : [`${peerName} *peer`]
+                    let params = method.params
+                      .map(it => `const ${this.uniqueName(it.declaration)}* ${it.name}`)
+                    structs.print(`${returnType} (*${method.name})(${paramsList.concat(params).join(`, `)});`)
                 })
             structs.popIndent()
             structs.print(`} ${accessorName};`)

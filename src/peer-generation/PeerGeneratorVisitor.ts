@@ -355,7 +355,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
         const argConvertors = method.params
             .map((param) => this.declarationTable.typeConvertor(param.name, param.type, false))
         const retConvertor = method.name === "constructor" ///better?
-            ? { isVoid: false, nativeType: () => parentName + "Peer*", macroSuffixPart: () => "" }
+            ? { isVoid: false, isStruct: false, nativeType: () => parentName + "Peer*", macroSuffixPart: () => "" }
             : this.retConvertor(method.returnType)
         const tsRetType = method.returnType == undefined ? undefined : mapType(this.typeChecker, method.returnType)
         return new MaterializedMethod(parentName, method.name, argConvertors, retConvertor,
@@ -396,6 +396,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
         let isVoid = nativeType == "void"
         return {
             isVoid: isVoid,
+            isStruct: typeNode !== undefined && ts.isTypeReferenceNode(typeNode),
             nativeType: () => nativeType,
             macroSuffixPart: () => isVoid ? "V" : ""
         }

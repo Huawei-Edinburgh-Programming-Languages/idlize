@@ -15,7 +15,7 @@
 
 import { IndentedPrinter } from "../IndentedPrinter";
 import { PrimitiveType } from "./DeclarationTable";
-import { accessorStructList, completeImplementations, dummyImplementations, modifierStructs } from "./FileGenerators";
+import { accessorStructList, modifierStructs } from "./FileGenerators";
 import { Materialized, MaterializedClass, MaterializedMethod } from "./Materialized";
 import { PeerLibrary } from "./PeerLibrary";
 import { PeerMethod } from "./PeerMethod";
@@ -38,7 +38,10 @@ class AccessorVisitor {
         })
         this.dummy.print(`out.append(")");`)
         this.dummy.print(`appendGroupedLog(1, out);`)
-        if (method.retType != "void") this.dummy.print(`return 0;`)
+        if (!method.retConvertor.isVoid) {
+            const retValue = method.retConvertor.isStruct ? "{}" : "0"
+            this.dummy.print(`return ${retValue};`)
+        }
     }
 
     printModifierImplFunctionBody(method: PeerMethod) {
