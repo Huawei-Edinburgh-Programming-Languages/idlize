@@ -35,7 +35,7 @@ import {
     ArgConvertor, RetConvertor,
 } from "./Convertors"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
-import { DeclarationTable, MethodRecord, PrimitiveType } from "./DeclarationTable"
+import { DeclarationTable, DeclarationTarget, MethodRecord, PrimitiveType } from "./DeclarationTable"
 import {
     hasTransitiveHeritageGenericType,
     isCommonMethod,
@@ -58,7 +58,8 @@ export enum RuntimeType {
     UNDEFINED = 5,
     BIGINT = 6,
     FUNCTION = 7,
-    SYMBOL = 8
+    SYMBOL = 8,
+    MATERIALIZED = 9,
 }
 
 /**

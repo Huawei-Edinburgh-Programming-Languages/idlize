@@ -85,6 +85,14 @@ inline void WriteToString(string* result, const Ark_Function* value) {
    result->append("\"");
 }
 
+template <>
+inline void WriteToString(string* result, const Ark_Materialized* value) {
+   result->append("\"");
+   result->append("Materialized ");
+   result->append(std::to_string(value->id));
+   result->append("\"");
+}
+
 // TODO: generate!
 template <>
 inline void WriteToString(string* result, const Ark_Length* value) {
@@ -290,6 +298,12 @@ public:
 
   Ark_Function readFunction() {
     Ark_Function result;
+    result.id = readInt32();
+    return result;
+  }
+
+  Ark_Materialized readMaterialized() {
+    Ark_Materialized result;
     result.id = readInt32();
     return result;
   }

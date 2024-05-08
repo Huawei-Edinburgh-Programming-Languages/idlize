@@ -28,7 +28,8 @@ export enum RuntimeType {
     UNDEFINED = 5,
     BIGINT = 6,
     FUNCTION = 7,
-    SYMBOL = 8
+    SYMBOL = 8,
+    MATERIALIZED = 9,
 }
 
 /**
@@ -254,6 +255,10 @@ export class SerializerBase {
         this.position++
     }
     writeFunction(value: object | undefined) {
+        this.writeInt32(registerCallback(value))
+    }
+    writeMaterialized(value: object | undefined) {
+        // TBD: change callback
         this.writeInt32(registerCallback(value))
     }
     writeString(value: string) {

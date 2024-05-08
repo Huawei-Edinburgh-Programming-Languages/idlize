@@ -35,6 +35,7 @@ export class PrimitiveType {
     static Tag = new PrimitiveType("Ark_Tag")
     static Boolean = new PrimitiveType("Ark_Boolean")
     static Function = new PrimitiveType("Ark_Function", true)
+    static Materialized = new PrimitiveType("Ark_Materialized", true)
     static Undefined = new PrimitiveType("Ark_Undefined")
     static NativePointer = new PrimitiveType("Ark_NativePointer")
     static Length = new PrimitiveType("Ark_Length", true)
@@ -234,7 +235,7 @@ export class DeclarationTable {
 
             if (ts.isClassDeclaration(declaration)) {
                 if (isMaterialized(declaration)) {
-                    return PrimitiveType.CustomObject
+                    return PrimitiveType.Materialized
                 }
             }
 
