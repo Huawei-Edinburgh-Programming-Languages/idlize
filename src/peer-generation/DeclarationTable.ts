@@ -995,12 +995,12 @@ export class DeclarationTable {
 
         if (isUnion) {
             const maxIdentifierLength = 30
-            let fieldsLength = this.targetStruct(target).getFields().length
+            let fieldsCount = this.targetStruct(target).getFields().length
             this.targetStruct(target).getFields().forEach((field, index) => {
                 if (index > 0) {
                     printer.print(`// ${this.uniqueNames.get(field.declaration) ?? ""}`)
-                    const elseOp = `${index > 1 && index < fieldsLength ? "else " : ""}`
-                    printer.print(`${elseOp}if (${name}${access}selector == ${index - 1}) {`)
+                    const ifElseOp = `${index > 1 && index < fieldsCount ? "else if" : "if"}`
+                    printer.print(`${ifElseOp} (${name}${access}selector == ${index - 1}) {`)
                     printer.pushIndent()
                     let identifierName = this.uniqueNames.get(field.declaration)
                     if (identifierName) {
