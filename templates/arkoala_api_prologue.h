@@ -113,7 +113,7 @@ typedef Ark_Function Ark_Callback;
 typedef Ark_Function Ark_ErrorCallback;
 
 typedef struct Ark_Materialized {
-  Ark_Int32 id;
+  Ark_NativePointer ptr;
 } Ark_Materialized;
 
 typedef Ark_CustomObject Ark_Resource;

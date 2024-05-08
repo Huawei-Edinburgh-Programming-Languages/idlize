@@ -87,9 +87,11 @@ inline void WriteToString(string* result, const Ark_Function* value) {
 
 template <>
 inline void WriteToString(string* result, const Ark_Materialized* value) {
+  char hex[20];
+  std::snprintf(hex, sizeof(hex), "%p", value->ptr);
    result->append("\"");
    result->append("Materialized ");
-   result->append(std::to_string(value->id));
+   result->append(hex);
    result->append("\"");
 }
 
@@ -304,7 +306,7 @@ public:
 
   Ark_Materialized readMaterialized() {
     Ark_Materialized result;
-    result.id = readInt32();
+    result.ptr = readPointer();
     return result;
   }
 
