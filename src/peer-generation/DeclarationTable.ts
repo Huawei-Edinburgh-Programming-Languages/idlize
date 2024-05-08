@@ -233,11 +233,12 @@ export class DeclarationTable {
                 return declaration.parent
             }
 
-            if (ts.isClassDeclaration(declaration)) {
-                if (isMaterialized(declaration)) {
-                    return PrimitiveType.Materialized
-                }
-            }
+            // TBD
+            // if (ts.isClassDeclaration(declaration)) {
+            //     if (isMaterialized(declaration)) {
+            //         return PrimitiveType.Materialized
+            //     }
+            // }
 
             return declaration as DeclarationTarget
         }

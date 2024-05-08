@@ -17,6 +17,7 @@ import { identName, importTypeName, mapType, typeName } from "../util"
 import { DeclarationTable, PrimitiveType } from "./DeclarationTable"
 import { RuntimeType } from "./PeerGeneratorVisitor"
 import * as ts from "typescript"
+import { isMaterialized } from "./Materialized"
 
 let uniqueCounter = 0
 
@@ -577,6 +578,9 @@ export class TypedConvertor extends BaseArgConvertor {
         printer.print(`${value} = ${param}Deserializer.${this.table.deserializerName(this.tsTypeName, this.type)}();`)
     }
     nativeType(impl: boolean): string {
+        if (ts.isClassDeclaration(this.type) && isMaterialized(this.type)) {
+            return PrimitiveType.Materialized.getText()
+        }
         return this.tsTypeName
     }
     interopType(): string {
