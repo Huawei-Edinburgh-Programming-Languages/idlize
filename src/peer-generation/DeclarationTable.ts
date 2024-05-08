@@ -994,10 +994,24 @@ export class DeclarationTable {
         }
 
         if (isUnion) {
+            const maxIdentifierLength = 30
+            let fieldsLength = this.targetStruct(target).getFields().length
             this.targetStruct(target).getFields().forEach((field, index) => {
                 if (index > 0) {
                     printer.print(`// ${this.uniqueNames.get(field.declaration) ?? ""}`)
-                    printer.print(`if (${name}${access}selector == ${index - 1}) {`)
+                    const elseOp = `${index > 1 && index < fieldsLength ? "else " : ""}`
+                    printer.print(`${elseOp}if (${name}${access}selector == ${index - 1}) {`)
+                    printer.pushIndent()
+                    let identifierName = this.uniqueNames.get(field.declaration)
+                    if (identifierName) {
+                        identifierName = identifierName.charAt(0).toLowerCase()
+                            + identifierName?.replaceAll("_", "").slice(1)
+                    }
+                    if (!identifierName || identifierName.length > maxIdentifierLength) {
+                        identifierName = `value${index - 1}`
+                    }
+                    printer.print(`const auto &${identifierName} = ${name}${access}value${index - 1};`)
+                    printer.popIndent()
                     printer.print(`}`)
                 }
             })
