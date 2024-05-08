@@ -14,56 +14,17 @@
  */
 
 import { IndentedPrinter } from "../IndentedPrinter";
-import { PrimitiveType } from "./DeclarationTable";
 import { accessorStructList, modifierStructs } from "./FileGenerators";
 import { Materialized, MaterializedClass, MaterializedMethod } from "./Materialized";
+import { ModifierVisitor } from "./ModifierPrinter";
 import { PeerLibrary } from "./PeerLibrary";
-import { PeerMethod } from "./PeerMethod";
 
-class AccessorVisitor {
-    dummy = new IndentedPrinter()
-    real = new IndentedPrinter()
+class AccessorVisitor extends ModifierVisitor {
     accessors = new IndentedPrinter()
     accessorList = new IndentedPrinter()
 
-    constructor(
-        private library: PeerLibrary,
-    ) { }
-
-    printDummyImplFunctionBody(method: PeerMethod) {
-        this.dummy.print(`string out("${method.methodName}(");`)
-        method.argConvertors.forEach((argConvertor, index) => {
-            if (index > 0) this.dummy.print(`out.append(", ");`)
-            this.dummy.print(`WriteToString(&out, ${argConvertor.param});`)
-        })
-        this.dummy.print(`out.append(")");`)
-        this.dummy.print(`appendGroupedLog(1, out);`)
-        if (!method.retConvertor.isVoid) {
-            const retValue = method.retConvertor.isStruct ? "{}" : "0"
-            this.dummy.print(`return ${retValue};`)
-        }
-    }
-
-    printModifierImplFunctionBody(method: PeerMethod) {
-        const firstDeclarationTarget = method.declarationTargets[0]
-        const firstArgConvertor = method.argConvertors[0]
-        if (firstDeclarationTarget && !(firstDeclarationTarget instanceof PrimitiveType)) {
-            const declarationTable = this.library.declarationTable
-            declarationTable.generateFirstArgDestruct(firstArgConvertor, firstDeclarationTarget, this.real, firstArgConvertor.isPointerType())
-        }
-        if (method.retType != "void") this.real.print(`return 0;`)
-    }
-
-    printMethodProlog(printer: IndentedPrinter, method: PeerMethod) {
-        const apiParameters = method.generateAPIParameters().join(", ")
-        const signature = `${method.retType} ${method.implName}(${apiParameters}) {`
-        printer.print(signature)
-        printer.pushIndent()
-    }
-
-    printMethodEpilog(printer: IndentedPrinter) {
-        printer.popIndent()
-        printer.print(`}`)
+    constructor(library: PeerLibrary) {
+        super(library)
     }
 
     printRealAndDummyAccessor(clazz: MaterializedClass) {
@@ -111,12 +72,12 @@ export function printRealAndDummyAccessors(peerLibrary: PeerLibrary): {dummy: st
     Materialized.Instance.materializedClasses.forEach(c => visitor.printRealAndDummyAccessor(c))
 
     const dummy =
-        visitor.dummy.getOutput().join("\n") +
+        visitor.dummy.getOutput().join("\n") + "\n" +
         modifierStructs(visitor.accessors.getOutput()) +
         accessorStructList(visitor.accessorList.getOutput())
 
     const real =
-        visitor.real.getOutput().join("\n") +
+        visitor.real.getOutput().join("\n") + "\n" +
         modifierStructs(visitor.accessors.getOutput()) +
         accessorStructList(visitor.accessorList.getOutput())
     return {dummy, real}
