@@ -976,12 +976,50 @@ export class DeclarationTable {
         printer.print(`}`)
     }
 
+    genIdNameFromType(typeName: string): string {
+        return typeName.charAt(0).toLowerCase()
+            + typeName.replaceAll("_", "").slice(1)
+    }
+
+    processUnion(fieldName: string,
+                 target: DeclarationTarget,
+                 printer: IndentedPrinter,
+                 isPointer: boolean) {
+        let access = isPointer ? "->" : "."
+        let unionStructFields = this.targetStruct(target).getFields()
+        unionStructFields.forEach((field, index) => {
+            if (index > 0) {
+                const ifElseOp = `${index > 1 && index < unionStructFields.length ? "else if" : "if"}`
+                printer.print(`${ifElseOp} (${fieldName}${access}selector == ${index - 1}) {`)
+                let fieldTypeName = this.uniqueNames.get(field.declaration)
+                if (fieldTypeName) {
+                    printer.pushIndent()
+                    let isUnion = this.isMaybeWrapped(field.declaration, ts.isUnionTypeNode)
+                    let structFieldName = `${fieldName}${access}value${index - 1}`
+                    if (isUnion) {
+                        this.processUnion(structFieldName, field.declaration, printer, false);
+                    } else {
+                        let structFieldAlias = this.genIdNameFromType(fieldTypeName)
+                        const maxIdNameLength = 30
+                        if (structFieldAlias.length > maxIdNameLength) {
+                            structFieldAlias = `value${index - 1}`
+                        }
+                        printer.print(`[[maybe_unused]] const auto &${structFieldAlias} = ${structFieldName};`)
+                        printer.print(`// processing '${structFieldAlias}:${fieldTypeName}'`)
+                    }
+                    printer.popIndent()
+                }
+                printer.print(`}`)
+            }
+        })
+    }
+
     generateFirstArgDestruct(convertor: ArgConvertor, target: DeclarationTarget, printer: IndentedPrinter, isPointer: boolean) {
         if (target instanceof PrimitiveType) return // Just don't emit anything
         if (convertor instanceof OptionConvertor) return // TODO: handle optionals
 
-        const name = convertor.param
-        this.setCurrentContext(`modifier(${name})`)
+        const firstArgName = convertor.param
+        this.setCurrentContext(`modifier(${firstArgName})`)
         let isUnion = this.isMaybeWrapped(target, ts.isUnionTypeNode)
         let isArray = this.isMaybeWrapped(target, ts.isArrayTypeNode)
         let isOptional = this.isMaybeWrapped(target, ts.isOptionalTypeNode)
@@ -994,27 +1032,7 @@ export class DeclarationTable {
         }
 
         if (isUnion) {
-            const maxIdentifierLength = 30
-            let fieldsCount = this.targetStruct(target).getFields().length
-            this.targetStruct(target).getFields().forEach((field, index) => {
-                if (index > 0) {
-                    printer.print(`// ${this.uniqueNames.get(field.declaration) ?? ""}`)
-                    const ifElseOp = `${index > 1 && index < fieldsCount ? "else if" : "if"}`
-                    printer.print(`${ifElseOp} (${name}${access}selector == ${index - 1}) {`)
-                    printer.pushIndent()
-                    let identifierName = this.uniqueNames.get(field.declaration)
-                    if (identifierName) {
-                        identifierName = identifierName.charAt(0).toLowerCase()
-                            + identifierName?.replaceAll("_", "").slice(1)
-                    }
-                    if (!identifierName || identifierName.length > maxIdentifierLength) {
-                        identifierName = `value${index - 1}`
-                    }
-                    printer.print(`const auto &${identifierName} = ${name}${access}value${index - 1};`)
-                    printer.popIndent()
-                    printer.print(`}`)
-                }
-            })
+            this.processUnion(firstArgName, target, printer, isPointer)
         } else if (isArray) {
             let elementType = ts.isArrayTypeNode(target)
                 ? target.elementType
@@ -1024,7 +1042,7 @@ export class DeclarationTable {
             let isPointerField = elementType === undefined
                 ? false
                 : this.typeConvertor("param", elementType).isPointerType()
-            printer.print(`int32_t count = ${name}${access}array_length ;`)
+            printer.print(`int32_t count = ${firstArgName}${access}array_length ;`)
             printer.print(`for (int i = 0; i < count; i++) {`)
             printer.print(`}`)
         } else if (isTuple) {
@@ -1037,7 +1055,7 @@ export class DeclarationTable {
             fields.forEach((field, index) => {
                 printer.print(`// ${this.uniqueNames.get(field.declaration) ?? ""}`)
                 if (index == 0) {
-                    printer.print(`if (${name}${access}${field.name} != ${PrimitiveType.UndefinedTag}) {`)
+                    printer.print(`if (${firstArgName}${access}${field.name} != ${PrimitiveType.UndefinedTag}) {`)
                     printer.pushIndent()
                 }
                 if (index == fields.length - 1) {
