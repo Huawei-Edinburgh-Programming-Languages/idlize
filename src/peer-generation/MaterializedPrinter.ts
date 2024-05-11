@@ -85,6 +85,7 @@ class MaterializedVisitor {
 
     printMaterialized(): void {
         for (const clazz of Materialized.Instance.materializedClasses.values()) {
+            if (Materialized.ignored.includes(clazz.className)) continue
             const visitor = new MaterializedFileVisitor(clazz, this.dumpSerialized)
             visitor.printFile()
             const fileName = renameClassToMaterialized(clazz.className, this.library.declarationTable.language)

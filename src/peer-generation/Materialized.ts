@@ -68,11 +68,18 @@ export class Materialized {
     public static get Instance(): Materialized {
         return this._instance
     }
+
+    public static ignored = [
+        "NavPathStack",     // duplicate overloaded functions
+        "SubTabBarStyle",   // duplicate of()
+        "TransitionEffect", // Type 'typeof TransitionEffect' is not assignable to type 'TransitionEffect' ??
+    ]
 }
 
 export function printGlobalMaterialized(nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter) {
     console.log(`Materialized classes: ${Materialized.Instance.materializedClasses.size}`)
     Materialized.Instance.materializedClasses.forEach(clazz => {
+        if (Materialized.ignored.includes(clazz.className)) return
         clazz.methods.forEach(method => {
             console.log(`Materialized class: ${clazz.className}, method: ${method.methodName}\n\n`)
             if (clazz.className === "Scroller" && method.methodName === "scrollPage") {
