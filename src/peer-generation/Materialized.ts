@@ -62,6 +62,11 @@ export class Materialized {
 
     public materializedClasses: Map<string, MaterializedClass> = new Map()
 
+    addMaterializedClass(name: string, clazz: MaterializedClass) {
+        if (Materialized.whitelist.includes(name))///
+            this.materializedClasses.set(name, clazz)
+    }
+
     private constructor() {
     }
 
@@ -74,6 +79,8 @@ export class Materialized {
         "SubTabBarStyle",   // duplicate of()
         "TransitionEffect", // Type 'typeof TransitionEffect' is not assignable to type 'TransitionEffect' ??
     ]
+
+    public static whitelist: (string | undefined)[] = [ "SwiperController" ] ///eventually remove
 }
 
 export function printGlobalMaterialized(nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter) {

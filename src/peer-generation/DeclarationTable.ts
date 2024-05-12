@@ -688,7 +688,8 @@ export class DeclarationTable {
             return new InterfaceConvertor(declarationName, param, this, type)
         }
         if (ts.isClassDeclaration(declaration)) {
-            if (isMaterialized(declaration)) {
+            // if (isMaterialized(declaration)) {
+            if (Materialized.whitelist.includes(identName(declaration.name))) {///
                 return new MaterializedClassConvertor(declarationName, param, this, type)
             }
             return new InterfaceConvertor(declarationName, param, this, type)
@@ -796,39 +797,25 @@ export class DeclarationTable {
     }
 
     private printStructsAccessor(name: string, structDescriptor: StructDescriptor, printer: IndentedPrinter) {
-        if (Materialized.Instance.materializedClasses.has(name)) {
+        const clazz = Materialized.Instance.materializedClasses.get(name)
+        if (clazz) {
             let peerName = `${name}Peer`
             let accessorName = `ArkUI${name}Accessor`
-            let constructor = structDescriptor.getConstructor()!
             printer.print(`typedef struct ${peerName} ${peerName} ;`)
             printer.print(`typedef struct ${accessorName} {`)
             printer.pushIndent()
-                let params = constructor.params
-                    .map(it => `const ${this.uniqueName(it.declaration)}* ${it.name}`)
-                    .join(`, `)
-                printer.print(`${peerName}* (*constructor) (${params});`)
 
-            printer.print(`void (*destructor) (${peerName}* peer);`)
-
-            let names = new Set<string>()
-            structDescriptor.getMethods()
+            let names = new Set<string>();
+            [clazz.ctor, clazz.dtor].concat(clazz.methods)
                 .forEach(method => {
                     // TBD: handle methods with the same name like SubTabBarStyle
                     // of(content: ResourceStr) and
                     // of(content: ResourceStr | ComponentContent)
-                    if (names.has(method.name)) {
+                    if (names.has(method.methodName)) {
                         return
                     }
-                    names.add(method.name)
-                    let returnNode = method.returnType
-                    let returnType = returnNode === undefined
-                      ? "void"
-                      : this.uniqueNames.get(this.toTarget(returnNode))
-                    returnType = returnType ?? "void"
-                    let paramsList = method.isStatic ? [] : [`${peerName} *peer`]
-                    let params = method.params
-                      .map(it => `const ${this.uniqueName(it.declaration)}* ${it.name}`)
-                    printer.print(`${returnType} (*${method.name})(${paramsList.concat(params).join(`, `)});`)
+                    names.add(method.methodName)
+                    printer.print(`${method.retType} (*${method.methodName})(${method.generateAPIParameters()});`)
                 })
             printer.popIndent()
             printer.print(`} ${accessorName};`)

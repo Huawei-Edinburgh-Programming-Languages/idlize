@@ -362,7 +362,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
             {name: "destructor", isStatic: false, returnType: undefined, params: []})
         let mMethods = structDescriptor.getMethods()
             .map(method => this.makeMaterializedMethod(className, method))
-        Materialized.Instance.materializedClasses.set(className,
+        Materialized.Instance.addMaterializedClass(className,
             new MaterializedClass(className, mConstructor, mDestructor, mMethods))
     }
 
