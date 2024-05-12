@@ -548,6 +548,9 @@ export class DeclarationTable {
             return new BooleanConvertor(param)
         }
         if (ts.isImportTypeNode(type)) {
+            if (identName(type.qualifier) === "Callback") {
+                return new FunctionConvertor(param, this)
+            }
             return new ImportTypeConvertor(param, this, type)
         }
         if (ts.isTypeReferenceNode(type)) {
