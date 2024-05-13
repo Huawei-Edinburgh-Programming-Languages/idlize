@@ -46,6 +46,8 @@ const ignoredMaterializedClasses = [
     "DrawingRenderingContext",
     "DrawModifier",
     "SectionOptions",
+    "SymbolEffect",
+    "ToolBarSymbol",
     "WaterFlowSections",
 ]
 
