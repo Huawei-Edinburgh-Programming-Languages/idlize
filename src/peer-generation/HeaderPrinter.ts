@@ -69,7 +69,6 @@ class HeaderVisitor {
         if (clazz) {
             let peerName = `${name}Peer`
             let accessorName = `ArkUI${name}Accessor`
-            this.api.print(`typedef Ark_Materialized ${name};`)
             this.api.print(`typedef struct ${peerName} ${peerName};`)
             this.api.print(`typedef struct ${accessorName} {`)
             this.api.pushIndent()

@@ -24,7 +24,7 @@ import {
     UndefinedConvertor, UnionConvertor
 } from "./Convertors"
 import { DependencySorter } from "./DependencySorter"
-import { Materialized, isMaterialized } from "./Materialized"
+import { isMaterialized } from "./Materialized"
 
 export class PrimitiveType {
     constructor(private name: string, public isPointer = false) { }
@@ -827,7 +827,7 @@ export class DeclarationTable {
             seenNames.add(nameAssigned)
             let isPointer = this.isPointerDeclaration(target)
             let isEnum = !(target instanceof PrimitiveType) && ts.isEnumDeclaration(target)
-            let isAccessor = Materialized.Instance.materializedClasses.has(nameAssigned)
+            let isAccessor = !(target instanceof PrimitiveType) && ts.isClassDeclaration(target) && isMaterialized(target)
             let noBasicDecl = isAccessor || (target instanceof PrimitiveType && noDeclaration.includes(target))
             let nameOptional = PrimitiveType.OptionalPrefix + nameAssigned
             if (isEnum) {

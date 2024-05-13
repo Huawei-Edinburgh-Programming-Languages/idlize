@@ -25,30 +25,6 @@ const ignoredMaterializedClasses = [
     "Scroller",                 // duplicate scrollPage()
     "SubTabBarStyle",           // duplicate of()
     "TransitionEffect",         // Type 'typeof TransitionEffect' is not assignable to type 'TransitionEffect' ??
-
-    "CircleAttribute",          // random classes that get served by MaterializedConvertor but really shouldn't
-    "EllipseAttribute",
-    "PathAttribute",
-    "RectAttribute",
-    "CalendarController",
-    "RichEditorController",
-    "SearchController",
-    "TabsController",
-    "TextController",
-    "TextAreaController",
-    "TextClockController",
-    "TextInputController",
-    "TextTimerController",
-    "VideoController",
-    "WebController",
-    "XComponentController",
-    "CanvasGradient",
-    "DrawingRenderingContext",
-    "DrawModifier",
-    "SectionOptions",
-    "SymbolEffect",
-    "ToolBarSymbol",
-    "WaterFlowSections",
 ]
 
 export function isMaterialized(declaration: ts.ClassDeclaration): boolean {
