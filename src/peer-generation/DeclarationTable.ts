@@ -232,14 +232,6 @@ export class DeclarationTable {
             if (ts.isEnumMember(declaration)) {
                 return declaration.parent
             }
-
-            // TBD
-            // if (ts.isClassDeclaration(declaration)) {
-            //     if (isMaterialized(declaration)) {
-            //         return PrimitiveType.Materialized
-            //     }
-            // }
-
             return declaration as DeclarationTarget
         }
         if (ts.isParenthesizedTypeNode(node)) {

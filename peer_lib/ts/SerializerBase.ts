@@ -115,6 +115,11 @@ function registerCallback(value: object|undefined): number {
     return 42
 }
 
+function registerMaterialized(value: object|undefined): number {
+    // TODO: fix me!
+    return 42
+}
+
 let textEncoder = new TextEncoder()
 
 class ArrayBufferCache {
@@ -258,8 +263,7 @@ export class SerializerBase {
         this.writeInt32(registerCallback(value))
     }
     writeMaterialized(value: object | undefined) {
-        // TBD: change callback
-        this.writeInt32(registerCallback(value))
+        this.writeInt32(registerMaterialized(value))
     }
     writeString(value: string) {
         let encoded = textEncoder.encode(value)

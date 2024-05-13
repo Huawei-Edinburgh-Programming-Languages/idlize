@@ -578,9 +578,6 @@ export class TypedConvertor extends BaseArgConvertor {
         printer.print(`${value} = ${param}Deserializer.${this.table.deserializerName(this.tsTypeName, this.type)}();`)
     }
     nativeType(impl: boolean): string {
-        if (ts.isClassDeclaration(this.type) && isMaterialized(this.type)) {
-            return PrimitiveType.Materialized.getText()
-        }
         return this.tsTypeName
     }
     interopType(): string {
@@ -800,7 +797,6 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
         protected table: DeclarationTable,
         type: ts.TypeReferenceNode
     ) {
-        // TODO: pass materialized as integers to native side.
         super(name, [RuntimeType.MATERIALIZED], false, true, param)
     }
 
