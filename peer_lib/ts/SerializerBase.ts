@@ -31,6 +31,17 @@ export enum RuntimeType {
     SYMBOL = 8
 }
 
+const string2RuntimeType = new Map<string, RuntimeType>([
+    ["number", RuntimeType.NUMBER],
+    ["string", RuntimeType.STRING],
+    ["undefined", RuntimeType.UNDEFINED],
+    ["object", RuntimeType.OBJECT],
+    ["boolean", RuntimeType.BOOLEAN],
+    ["bigint", RuntimeType.BIGINT],
+    ["function", RuntimeType.FUNCTION],
+    ["symbol", RuntimeType.SYMBOL],
+])
+
 /**
  * Value representing object type in serialized data.
  * Must be synced with "enum Tags" in C++.
@@ -46,17 +57,7 @@ export enum Tags {
 }
 
 export function runtimeType(value: any): int32 {
-    let type = typeof value
-    if (type == "number") return RuntimeType.NUMBER
-    if (type == "string") return RuntimeType.STRING
-    if (type == "undefined") return RuntimeType.UNDEFINED
-    if (type == "object") return RuntimeType.OBJECT
-    if (type == "boolean") return RuntimeType.BOOLEAN
-    if (type == "bigint") return RuntimeType.BIGINT
-    if (type == "function") return RuntimeType.FUNCTION
-    if (type == "symbol") return RuntimeType.SYMBOL
-
-    throw new Error(`bug: ${value} is ${type}`)
+    return string2RuntimeType.get(typeof value)!
 }
 
 export type Function = object
@@ -194,6 +195,7 @@ export class SerializerBase {
             const resizedSize = Math.max(minSize, Math.round(3 * buffSize / 2))
             let resizedBuffer = SerializerBase.bufferCache.get(resizedSize)
             // TODO: can we grow without new?
+            // This way is the fastest: https://stackoverflow.com/a/22114687
             new Uint8Array(resizedBuffer).set(new Uint8Array(this.buffer))
             SerializerBase.bufferCache.release(this.buffer)
             this.buffer = resizedBuffer
@@ -212,21 +214,21 @@ export class SerializerBase {
         this.writeInt8(Tags.UNDEFINED)
     }
     writeNumber(value: number|undefined) {
-        this.checkCapacity(5)
         if (value == undefined) {
+            this.checkCapacity(1)
             this.view.setInt8(this.position, Tags.UNDEFINED)
             this.position++
-            return
-        }
-        if (value == Math.round(value)) {
+        } else if (Number.isInteger(value)) {
+            this.checkCapacity(5)
             this.view.setInt8(this.position, Tags.INT32)
             this.view.setInt32(this.position + 1, value, true)
             this.position += 5
-            return
+        } else {
+            this.checkCapacity(5)
+            this.view.setInt8(this.position, Tags.FLOAT32)
+            this.view.setFloat32(this.position + 1, value, true)
+            this.position += 5
         }
-        this.view.setInt8(this.position, Tags.FLOAT32)
-        this.view.setFloat32(this.position + 1, value, true)
-        this.position += 5
     }
     writeInt8(value: int32) {
         this.checkCapacity(1)
@@ -270,13 +272,15 @@ export class SerializerBase {
     writeLength(value: Length|undefined) {
         this.checkCapacity(1)
         let valueType = runtimeType(value)
-        this.writeInt8(valueType == RuntimeType.UNDEFINED ? Tags.UNDEFINED : Tags.LENGTH)
         if (valueType != RuntimeType.UNDEFINED) {
+            this.writeInt8(Tags.LENGTH)
             withLength(value, (value, unit, resource) => {
                 this.writeFloat32(value)
                 this.writeInt32(unit)
                 this.writeInt32(resource)
             })
+        } else {
+            this.writeInt8(Tags.UNDEFINED)
         }
     }
 }

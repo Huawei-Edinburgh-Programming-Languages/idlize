@@ -18,6 +18,7 @@
 #include <cstring>
 #include <string>
 #include <vector>
+#include <map>
 
 #include "common-interop.h"
 #include "arkoala_api.h"
@@ -25,17 +26,16 @@
 using namespace std;
 
 inline const char* tagName(Ark_Tag tag) {
-  switch (tag) {
-    case Ark_Tag::ARK_TAG_UNDEFINED: return "UNDEFINED";
-    case Ark_Tag::ARK_TAG_INT32: return "INT32";
-    case Ark_Tag::ARK_TAG_FLOAT32: return "FLOAT32";
-    case Ark_Tag::ARK_TAG_LENGTH: return "LENGTH";
-    case Ark_Tag::ARK_TAG_RESOURCE: return "RESOURCE";
-    case Ark_Tag::ARK_TAG_STRING: return "STRING";
-    case Ark_Tag::ARK_TAG_OBJECT: return "OBJECT";
-  }
-  fprintf(stderr, "tag name %d is wrong\n", tag);
-  throw "Error";
+  static const std::map<Ark_Tag, const char*> table = {
+    {Ark_Tag::ARK_TAG_UNDEFINED, "UNDEFINED"},
+    {Ark_Tag::ARK_TAG_INT32, "INT32"},
+    {Ark_Tag::ARK_TAG_FLOAT32, "FLOAT32"},
+    {Ark_Tag::ARK_TAG_LENGTH, "LENGTH"},
+    {Ark_Tag::ARK_TAG_RESOURCE, "RESOURCE"},
+    {Ark_Tag::ARK_TAG_STRING, "STRING"},
+    {Ark_Tag::ARK_TAG_OBJECT, "OBJECT"}
+  };
+  return table.at(tag);
 }
 
 inline const char* getUnitName(int value) {
@@ -66,7 +66,9 @@ inline void WriteToString(string* result, const Ark_Number* value) {
     // print with precision 2 digits after dot
     std::string fv = std::to_string(value->f32);
     size_t i = fv.find(".");
-    fv = (i != std::string::npos && (i + 3) < fv.length()) ? fv.substr(0, i + 3) : fv;
+    if (i != std::string::npos && (i + 3) < fv.length()) {
+      fv.resize(i + 3);
+    }
     result->append(fv);
   } else
     result->append(std::to_string(value->i32));
@@ -91,8 +93,10 @@ inline void WriteToString(string* result, const Ark_Length* value) {
   result->append("Length {");
   result->append("value=");
   result->append(std::to_string(value->value));
-  result->append(", unit=" + string(getUnitName(value->unit)));
-  result->append(", resource=" + std::to_string(value->resource));
+  result->append(", unit=");
+  result->append(std::string(getUnitName(value->unit)));
+  result->append(", resource=");
+  result->append(std::to_string(value->resource));
   result->append("}");
 }
 
@@ -103,8 +107,6 @@ inline Ark_Length Length_from_array(Ark_Int32* array) {
   result.resource = array[2];
   return result;
 }
-
-class ArgDeserializerBase;
 
 inline void WriteToString(string* result, Ark_Undefined value) {
   result->append("undefined");
@@ -124,6 +126,8 @@ inline void WriteToString(string* result, const Ark_CustomObject* value) {
   result->append(" id=");
   result->append(std::to_string(value->id));
 }
+
+class ArgDeserializerBase;
 
 struct CustomDeserializer {
   virtual ~CustomDeserializer() {}
@@ -172,7 +176,7 @@ public:
     if (length > 0) {
       value = malloc(length * sizeof(E));
       memset(value, 0, length * sizeof(E));
-      toClean.push_back(value);
+      toClean.emplace_back(value);
     }
     array->array_length = length;
     array->array = reinterpret_cast<E*>(value);
@@ -188,7 +192,7 @@ public:
     }
   }
 
-  Ark_CustomObject readCustomObject(string kind) {
+  Ark_CustomObject readCustomObject(const string& kind) {
       auto* current = ArgDeserializerBase::customDeserializers;
       while (current) {
         if (current->supports(kind)) {
