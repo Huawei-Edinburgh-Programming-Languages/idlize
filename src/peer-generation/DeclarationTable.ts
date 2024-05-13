@@ -985,32 +985,33 @@ export class DeclarationTable {
                  target: DeclarationTarget,
                  printer: IndentedPrinter,
                  isPointer: boolean) {
-        let access = isPointer ? "->" : "."
-        let unionStructFields = this.targetStruct(target).getFields()
-        unionStructFields.forEach((field, index) => {
-            if (index > 0) {
-                const ifElseOp = `${index > 1 && index < unionStructFields.length ? "else if" : "if"}`
-                printer.print(`${ifElseOp} (${fieldName}${access}selector == ${index - 1}) {`)
-                let fieldTypeName = this.uniqueNames.get(field.declaration)
-                if (fieldTypeName) {
-                    printer.pushIndent()
-                    let isUnion = this.isMaybeWrapped(field.declaration, ts.isUnionTypeNode)
-                    let structFieldName = `${fieldName}${access}value${index - 1}`
-                    if (isUnion) {
-                        this.processUnion(structFieldName, field.declaration, printer, false);
-                    } else {
-                        let structFieldAlias = this.genIdNameFromType(fieldTypeName)
-                        const maxIdNameLength = 30
-                        if (structFieldAlias.length > maxIdNameLength) {
-                            structFieldAlias = `value${index - 1}`
-                        }
-                        printer.print(`[[maybe_unused]] const auto &${structFieldAlias} = ${structFieldName};`)
-                        printer.print(`// processing '${structFieldAlias}:${fieldTypeName}'`)
-                    }
-                    printer.popIndent()
-                }
-                printer.print(`}`)
+        const access = isPointer ? "->" : "."
+        this.targetStruct(target).getFields().forEach((field, index) => {
+            // skip selector field
+            if (index == 0) {
+                return
             }
+
+            const ifElseOp = `${index == 1 ? "if" : "else if"}`
+            printer.print(`${ifElseOp} (${fieldName}${access}selector == ${index - 1}) {`)
+            printer.pushIndent()
+            const isUnion = this.isMaybeWrapped(field.declaration, ts.isUnionTypeNode)
+            const structFieldName = `${fieldName}${access}${field.name}`
+            const fieldTypeName = this.uniqueNames.get(field.declaration)
+            if (isUnion) {
+                this.processUnion(structFieldName, field.declaration, printer, false);
+            } else {
+                let structFieldAlias = fieldTypeName ? this.genIdNameFromType(fieldTypeName) : field.name
+                const maxIdNameLength = 30
+                if (structFieldAlias.length > maxIdNameLength) {
+                    structFieldAlias = field.name
+                }
+                printer.print(`[[maybe_unused]] const auto &${structFieldAlias} = ${structFieldName};`)
+                printer.print(`// processing '${structFieldAlias}:${fieldTypeName}'`)
+            }
+            printer.popIndent()
+            printer.print(`}`)
+
         })
     }
 
