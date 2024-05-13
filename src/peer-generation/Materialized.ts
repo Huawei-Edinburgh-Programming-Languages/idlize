@@ -80,7 +80,11 @@ export class Materialized {
         "TransitionEffect", // Type 'typeof TransitionEffect' is not assignable to type 'TransitionEffect' ??
     ]
 
-    public static whitelist: (string | undefined)[] = [ "SwiperController" ] ///eventually remove
+    public static whitelist: (string | undefined)[] = [
+        "ChildrenMainSize",
+        "PatternLockController",
+        "SwiperController",
+    ] ///eventually remove
 }
 
 export function printGlobalMaterialized(nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter) {
