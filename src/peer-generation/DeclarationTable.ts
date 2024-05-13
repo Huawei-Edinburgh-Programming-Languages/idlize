@@ -799,32 +799,6 @@ export class DeclarationTable {
         }
     }
 
-    private printStructsAccessor(name: string, structDescriptor: StructDescriptor, printer: IndentedPrinter) {
-        const clazz = Materialized.Instance.materializedClasses.get(name)
-        if (clazz) {
-            let peerName = `${name}Peer`
-            let accessorName = `ArkUI${name}Accessor`
-            printer.print(`typedef struct ${peerName} ${peerName} ;`)
-            printer.print(`typedef struct ${accessorName} {`)
-            printer.pushIndent()
-
-            let names = new Set<string>();
-            [clazz.ctor, clazz.dtor].concat(clazz.methods)
-                .forEach(method => {
-                    // TBD: handle methods with the same name like SubTabBarStyle
-                    // of(content: ResourceStr) and
-                    // of(content: ResourceStr | ComponentContent)
-                    if (names.has(method.methodName)) {
-                        return
-                    }
-                    names.add(method.methodName)
-                    printer.print(`${method.retType} (*${method.methodName})(${method.generateAPIParameters()});`)
-                })
-            printer.popIndent()
-            printer.print(`} ${accessorName};`)
-        }
-    }
-
     generateDeserializers(printer: IndentedPrinter, structs: IndentedPrinter, typedefs: IndentedPrinter, writeToString: IndentedPrinter) {
         this.processPendingRequests()
         let orderer = new DependencySorter(this)
@@ -882,7 +856,6 @@ export class DeclarationTable {
             }
             if (isAccessor) {
                 structs.print(`typedef Ark_Materialized ${nameAssigned};`)
-                this.printStructsAccessor(nameAssigned, structDescriptor, accessors)
             }
             let skipWriteToString = (target instanceof PrimitiveType) || ts.isEnumDeclaration(target)
             if (!noBasicDecl && !skipWriteToString) {
@@ -928,6 +901,7 @@ export class DeclarationTable {
         if (declaration instanceof PrimitiveType) return ""
         if (ts.isEnumDeclaration(declaration)) return ""
         if (ts.isImportTypeNode(declaration)) return ""
+        if (ts.isClassDeclaration(declaration) && isMaterialized(declaration)) return ""
         return `struct `
     }
 

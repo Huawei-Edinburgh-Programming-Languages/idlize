@@ -81,6 +81,7 @@ export class Materialized {
     ]
 
     public static whitelist: (string | undefined)[] = [
+        "BottomTabBarStyle",
         "ChildrenMainSize",
         "PatternLockController",
         "SwiperController",
