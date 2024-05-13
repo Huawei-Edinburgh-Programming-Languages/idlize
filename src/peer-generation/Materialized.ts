@@ -17,12 +17,42 @@ import * as ts from "typescript"
 import { ArgConvertor, RetConvertor } from "./Convertors"
 import { LanguageWriter } from "./LanguageWriters"
 import { PeerMethod } from "./PeerMethod"
+import { identName } from "../util"
+
+const ignoredMaterializedClasses = [
+    "CanvasRenderingContext2D", // has data
+    "NavPathStack",             // duplicate overloaded functions
+    "Scroller",                 // duplicate scrollPage()
+    "SubTabBarStyle",           // duplicate of()
+    "TransitionEffect",         // Type 'typeof TransitionEffect' is not assignable to type 'TransitionEffect' ??
+
+    "CircleAttribute",          // random classes that get served by MaterializedConvertor but really shouldn't
+    "EllipseAttribute",
+    "PathAttribute",
+    "RectAttribute",
+    "CalendarController",
+    "RichEditorController",
+    "SearchController",
+    "TabsController",
+    "TextController",
+    "TextAreaController",
+    "TextClockController",
+    "TextInputController",
+    "TextTimerController",
+    "VideoController",
+    "WebController",
+    "XComponentController",
+    "CanvasGradient",
+    "DrawingRenderingContext",
+    "DrawModifier",
+    "SectionOptions",
+    "WaterFlowSections",
+]
 
 export function isMaterialized(declaration: ts.ClassDeclaration): boolean {
     // TBD: check the class has zero fields
+    if (ignoredMaterializedClasses.includes(identName(declaration)!)) return false
     return declaration.members.find(ts.isConstructorDeclaration) !== undefined
-    // Temporally disable materialized classes generation
-    // return false
 }
 
 export class MaterializedMethod extends PeerMethod {
@@ -62,53 +92,17 @@ export class Materialized {
 
     public materializedClasses: Map<string, MaterializedClass> = new Map()
 
-    addMaterializedClass(name: string, clazz: MaterializedClass) {
-        if (!Materialized.ignored.includes(name))
-            this.materializedClasses.set(name, clazz)
-    }
-
     private constructor() {
     }
 
     public static get Instance(): Materialized {
         return this._instance
     }
-
-    public static ignored = [
-        "CanvasRenderingContext2D", // has data
-        "NavPathStack",             // duplicate overloaded functions
-        "Scroller",                 // duplicate scrollPage()
-        "SubTabBarStyle",           // duplicate of()
-        "TransitionEffect",         // Type 'typeof TransitionEffect' is not assignable to type 'TransitionEffect' ??
-
-        "CircleAttribute",          // random classes that get served by MaterializedConvertor but really shouldn't
-        "EllipseAttribute",
-        "PathAttribute",
-        "RectAttribute",
-        "CalendarController",
-        "RichEditorController",
-        "SearchController",
-        "TabsController",
-        "TextController",
-        "TextAreaController",
-        "TextClockController",
-        "TextInputController",
-        "TextTimerController",
-        "VideoController",
-        "WebController",
-        "XComponentController",
-        "CanvasGradient",
-        "DrawingRenderingContext",
-        "DrawModifier",
-        "SectionOptions",
-        "WaterFlowSections",
-    ]
 }
 
 export function printGlobalMaterialized(nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter) {
     console.log(`Materialized classes: ${Materialized.Instance.materializedClasses.size}`)
     Materialized.Instance.materializedClasses.forEach(clazz => {
-        if (Materialized.ignored.includes(clazz.className)) return
         clazz.methods.forEach(method => {
             console.log(`Materialized class: ${clazz.className}, method: ${method.methodName}\n\n`)
             if (clazz.className === "Scroller" && method.methodName === "scrollPage") {
