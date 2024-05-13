@@ -18,6 +18,7 @@ import { DeclarationTable, FieldRecord } from "./DeclarationTable";
 import { modifierStructList, modifierStructs } from "./FileGenerators";
 import { PeerClass } from "./PeerClass";
 import { PeerLibrary } from "./PeerLibrary";
+import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
 import { MethodSeparatorVisitor, PeerMethod } from "./PeerMethod";
 import { DelegateSignatureBuilder } from "./DelegatePrinter";
 
@@ -83,7 +84,7 @@ class MethodSeparatorPrinter extends MethodSeparatorVisitor {
         })
         if (this.method.hasReceiver())
             delegateArgs = [this.method.generateReceiver()!.argName, ...delegateArgs]
-        this.printer.print(`${delegateIdentifier}(${delegateArgs.join(', ')});`)        
+        this.printer.print(`${delegateIdentifier}(${delegateArgs.join(', ')});`)
     }
 }
 
@@ -153,7 +154,7 @@ export class ModifierVisitor {
         const component = clazz.componentName
         const modifierStructImpl = `ArkUI${component}ModifierImpl`
 
-        this.modifiers.print(`ArkUI${component}Modifier ${modifierStructImpl} {`)
+        this.modifiers.print(`${PeerGeneratorConfig.cppPrefix}ArkUI${component}Modifier ${modifierStructImpl} {`)
         this.modifiers.pushIndent()
 
         this.modifierList.pushIndent()
@@ -165,7 +166,7 @@ export class ModifierVisitor {
         this.modifiers.popIndent()
         this.modifiers.print(`};\n`)
         const name = clazz.componentName
-        this.modifiers.print(`const ArkUI${name}Modifier* Get${name}Modifier() { return &ArkUI${name}ModifierImpl; }\n\n`)
+        this.modifiers.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUI${name}Modifier* Get${name}Modifier() { return &ArkUI${name}ModifierImpl; }\n\n`)
     }
 
     // TODO: have a proper Peer module visitor

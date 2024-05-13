@@ -20,6 +20,7 @@ import { PeerClass } from "./PeerClass";
 import { PeerLibrary } from "./PeerLibrary";
 import { PeerMethod } from "./PeerMethod";
 import { Materialized } from "./Materialized";
+import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
 
 class HeaderVisitor {
     constructor(
@@ -30,14 +31,16 @@ class HeaderVisitor {
     ) { }
 
     private apiModifierHeader(clazz: PeerClass) {
-        return `typedef struct ArkUI${clazz.componentName}Modifier {`
+        return `typedef struct ${PeerGeneratorConfig.cppPrefix}ArkUI${clazz.componentName}Modifier {`
     }
 
     private printClassProlog(clazz: PeerClass) {
         this.api.print(this.apiModifierHeader(clazz))
         this.api.pushIndent()
         this.modifiersList.pushIndent()
-        this.modifiersList.print(`const ArkUI${clazz.componentName}Modifier* (*get${clazz.componentName}Modifier)();`)
+        this.modifiersList.print(
+            `const ${PeerGeneratorConfig.cppPrefix}ArkUI${clazz.componentName}Modifier* (*get${clazz.componentName}Modifier)();`
+        )
     }
 
     private printMethod(method: PeerMethod) {
@@ -50,7 +53,7 @@ class HeaderVisitor {
             this.api.print("int dummy;")
         }
         this.api.popIndent()
-        this.api.print(`} ArkUI${clazz.componentName}Modifier;\n`)
+        this.api.print(`} ${PeerGeneratorConfig.cppPrefix}ArkUI${clazz.componentName}Modifier;\n`)
         this.modifiersList.popIndent()
     }
 
@@ -59,7 +62,7 @@ class HeaderVisitor {
         this.accessorsList.pushIndent()
         Materialized.Instance.materializedClasses.forEach(c => {
             this.printAccessor(c.className)
-            this.accessorsList.print(`const ArkUI${c.className}Accessor* (*get${c.className}Accessor)();`)
+            this.accessorsList.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUI${c.className}Accessor* (*get${c.className}Accessor)();`)
         })
         this.accessorsList.popIndent()
     }
@@ -68,7 +71,7 @@ class HeaderVisitor {
         const clazz = Materialized.Instance.materializedClasses.get(name)
         if (clazz) {
             let peerName = `${name}Peer`
-            let accessorName = `ArkUI${name}Accessor`
+            let accessorName = `${PeerGeneratorConfig.cppPrefix}ArkUI${name}Accessor`
             this.api.print(`typedef struct ${peerName} ${peerName};`)
             this.api.print(`typedef struct ${accessorName} {`)
             this.api.pushIndent()

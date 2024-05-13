@@ -80,6 +80,7 @@ const options = program
     .option('--dump-serialized', "Dump serialized data")
     .option('--docs [all|opt|none]', 'How to handle documentation: include, optimize, or skip')
     .option('--language [ts|sts|java]', 'Output language')
+    .option('--api-prefix <string>', 'Cpp prefix to be compatible with manual arkoala implementation')
     .option('--version')
     .parse()
     .opts()
@@ -266,6 +267,10 @@ if (options.idl2h) {
 }
 
 if (options.dts2peer) {
+    if (options.apiPrefix !== undefined) {
+        PeerGeneratorConfig.cppPrefix = options.apiPrefix
+    }
+
     const declarationTable = new DeclarationTable(options.language ?? "ts")
     const peerLibrary = new PeerLibrary(declarationTable)
     const arkuiComponentsFiles: string[] = []

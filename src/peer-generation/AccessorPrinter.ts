@@ -18,6 +18,8 @@ import { accessorStructList, modifierStructs } from "./FileGenerators";
 import { Materialized, MaterializedClass, MaterializedMethod } from "./Materialized";
 import { ModifierVisitor } from "./ModifierPrinter";
 import { PeerLibrary } from "./PeerLibrary";
+import { PeerMethod } from "./PeerMethod";
+import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
 
 class AccessorVisitor extends ModifierVisitor {
     accessors = new IndentedPrinter()
@@ -41,7 +43,7 @@ class AccessorVisitor extends ModifierVisitor {
 
     printMaterializedClassProlog(clazz: MaterializedClass) {
         const accessor = `${clazz.className}Accessor`
-        this.accessors.print(`ArkUI${accessor} ${accessor}Impl {`)
+        this.accessors.print(`${PeerGeneratorConfig.cppPrefix}ArkUI${accessor} ${accessor}Impl {`)
         this.accessors.pushIndent()
         this.accessorList.print(`Get${accessor},`)
     }
@@ -50,7 +52,7 @@ class AccessorVisitor extends ModifierVisitor {
         this.accessors.popIndent()
         this.accessors.print(`};\n`)
         const accessor = `${clazz.className}Accessor`
-        this.accessors.print(`const ArkUI${accessor}* Get${accessor}() { return &${accessor}Impl; }\n\n`)
+        this.accessors.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUI${accessor}* Get${accessor}() { return &${accessor}Impl; }\n\n`)
     }
 
     printMaterializedMethod(printer: IndentedPrinter, method: MaterializedMethod, printBody: (m: MaterializedMethod) => void) {
