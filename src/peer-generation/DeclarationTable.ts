@@ -692,7 +692,7 @@ export class DeclarationTable {
         }
         if (ts.isClassDeclaration(declaration)) {
             // if (isMaterialized(declaration)) {
-            if (Materialized.whitelist.includes(identName(declaration.name))) {///
+            if (!Materialized.ignored.includes(identName(declaration.name)!)) {
                 return new MaterializedClassConvertor(declarationName, param, this, type)
             }
             return new InterfaceConvertor(declarationName, param, this, type)

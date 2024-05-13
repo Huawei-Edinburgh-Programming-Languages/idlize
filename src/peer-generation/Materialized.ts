@@ -63,7 +63,7 @@ export class Materialized {
     public materializedClasses: Map<string, MaterializedClass> = new Map()
 
     addMaterializedClass(name: string, clazz: MaterializedClass) {
-        if (Materialized.whitelist.includes(name))///
+        if (!Materialized.ignored.includes(name))
             this.materializedClasses.set(name, clazz)
     }
 
@@ -75,17 +75,34 @@ export class Materialized {
     }
 
     public static ignored = [
-        "NavPathStack",     // duplicate overloaded functions
-        "SubTabBarStyle",   // duplicate of()
-        "TransitionEffect", // Type 'typeof TransitionEffect' is not assignable to type 'TransitionEffect' ??
-    ]
+        "CanvasRenderingContext2D", // has data
+        "NavPathStack",             // duplicate overloaded functions
+        "Scroller",                 // duplicate scrollPage()
+        "SubTabBarStyle",           // duplicate of()
+        "TransitionEffect",         // Type 'typeof TransitionEffect' is not assignable to type 'TransitionEffect' ??
 
-    public static whitelist: (string | undefined)[] = [
-        "BottomTabBarStyle",
-        "ChildrenMainSize",
-        "PatternLockController",
-        "SwiperController",
-    ] ///eventually remove
+        "CircleAttribute",          // random classes that get served by MaterializedConvertor but really shouldn't
+        "EllipseAttribute",
+        "PathAttribute",
+        "RectAttribute",
+        "CalendarController",
+        "RichEditorController",
+        "SearchController",
+        "TabsController",
+        "TextController",
+        "TextAreaController",
+        "TextClockController",
+        "TextInputController",
+        "TextTimerController",
+        "VideoController",
+        "WebController",
+        "XComponentController",
+        "CanvasGradient",
+        "DrawingRenderingContext",
+        "DrawModifier",
+        "SectionOptions",
+        "WaterFlowSections",
+    ]
 }
 
 export function printGlobalMaterialized(nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter) {
