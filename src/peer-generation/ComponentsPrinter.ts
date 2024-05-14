@@ -69,7 +69,7 @@ class ComponentFileVisitor {
         this.printer.writeMethodImplementation(method.method, (writer) => {
             writer.print(`if (this.checkPriority("${method.method.name}")) {`)
             this.printer.pushIndent()
-            this.printer.print(`this.peer?.${method.method.name}Attribute(${method.mappedParamValues(Language.TS)})`)
+            this.printer.writeMemberCall(`this.peer`, `${method.method.name}Attribute`, method.mappedParamValues(Language.TS), true)
             this.printer.popIndent()
             this.printer.print(`}`)
             this.printer.print("return this")
@@ -113,7 +113,7 @@ class ComponentFileVisitor {
     style: ((attributes: ${componentClassName}) => void) | undefined,
     /** @memo */
     content_: (() => void) | undefined,
-    ${method?.mappedParams(Language.TS) ?? ""}
+    ${method?.mappedParams(Language.TS)?.join(", ") ?? ""}
   ) {
         NodeAttach(() => new ${peerClassName}(ArkUINodeType.${peer.componentName}, this), () => {
             style?.(this)
@@ -133,7 +133,7 @@ export function ${componentFunctionName}(
   style: ((attributes: ${componentClassName}) => void) | undefined,
   /** @memo */
   content_: (() => void) | undefined,
-  ${method?.mappedParams(Language.TS) ?? ""}
+  ${method?.mappedParams(Language.TS)?.join(", ") ?? ""}
 ) {
   ${componentClassName}._instantiate<
 ${parentStructClass.typesLines.map(it => indentedBy(it, 2)).join("\n")}

@@ -34,15 +34,15 @@ export class PeerMethod {
     }
 
     // TODO: remove these 3 methods
-    public mappedParams(language: Language): string | undefined {
-        return this.method.signature.args.map((it, index) => `${this.method.signature.argName(index)}${it.nullable ? "?" : ""}: ${it.name}`).join(", ")
+    public mappedParams(language: Language): string[] {
+        return this.method.signature.args.map((it, index) => `${this.method.signature.argName(index)}${it.nullable ? "?" : ""}: ${it.name}`)
     }
 
-    public mappedParamValues(language: Language): string | undefined {
-        return this.method.signature.args.map((it, index) => this.method.signature.argName(index)).join(", ")
+    public mappedParamValues(language: Language): string[] {
+        return this.method.signature.args.map((it, index) => this.method.signature.argName(index))
     }
 
-    public mappedParamsTypes(language: Language): string[] | undefined {
+    public mappedParamsTypes(language: Language): string[] {
         return this.method.signature.args.map(it => `${it.name}`)
     }
 
