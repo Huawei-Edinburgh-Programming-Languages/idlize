@@ -356,26 +356,41 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
             return
         }
 
-        let mConstructor = this.makeMaterializedMethod(className, constructor!, true)
-        let mDestructor = this.makeMaterializedMethod(className,
-            {name: "destructor", isStatic: false, returnType: undefined, params: []})
-        let mMethods = structDescriptor.getMethods()
-            .map(method => this.makeMaterializedMethod(className, method))
+        let mConstructor = this.materializeMethodRecord(className, constructor!, true)
+        let mDestructor = this.materializeMethodRecord(className,
+            {name: "destructor", isStatic: false, returnType: undefined, params: []}, false)
+        let mMethods = this.collapseOverloads(target)
+            .map(method => this.materializeCollapsedMethod(className, method))
         Materialized.Instance.materializedClasses.set(className,
             new MaterializedClass(className, mConstructor, mDestructor, mMethods))
     }
 
-    private makeMaterializedMethod(parentName: string, method: MethodRecord, isConstructor = false): MaterializedMethod {
+    private materializeCollapsedMethod(parentName: string, { member: method }: MaybeCollapsedMethod): MaterializedMethod {
+        const hasReceiver = !isStatic(method.modifiers)
+        const argConvertors = method.parameters
+            .map(param => this.argConvertor(param))
+        const retConvertor = this.retConvertor(method.type)
+        return this.materializeMethod(parentName, identName(method.name)!, hasReceiver,
+            argConvertors, retConvertor, method.type)
+    }
+
+    private materializeMethodRecord(parentName: string, method: MethodRecord, isConstructor: boolean): MaterializedMethod {
         const argConvertors = method.params
             .map((param) => this.declarationTable.typeConvertor(param.name, param.type, false))
         const retConvertor = isConstructor
             ? { isVoid: false, isStruct: false, nativeType: () => parentName + "Peer*", macroSuffixPart: () => "" }
             : this.retConvertor(method.returnType)
-        const tsRetType = method.returnType == undefined ? undefined : mapType(this.typeChecker, method.returnType)
-        return new MaterializedMethod(parentName, method.name, argConvertors, retConvertor,
-            tsRetType, !method.isStatic, false)
+        return this.materializeMethod(parentName, method.name, !method.isStatic,
+            argConvertors, retConvertor, method.returnType)
     }
 
+    private materializeMethod(parentName: string, methodName: string, hasReceiver: boolean,
+        argConvertors: ArgConvertor[], retConvertor: RetConvertor, returnType?: ts.TypeNode): MaterializedMethod
+    {
+        const tsRetType = returnType == undefined ? undefined : mapType(this.typeChecker, returnType)
+        return new MaterializedMethod(parentName, methodName, argConvertors, retConvertor,
+            tsRetType, hasReceiver, false)
+    }
 
     argConvertor(param: ts.ParameterDeclaration): ArgConvertor {
         if (!param.type) throw new Error("Type is needed")
@@ -589,12 +604,13 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
                 )
                 .join(", ")
 
+            const returnType = overloads[0].type // TODO check type is the same for all overloads
             return {
                 member: (name == "") ?
                     ts.factory.createCallSignature(
                         undefined,
                         params,
-                        undefined,
+                        returnType,
                     ) : ts.factory.createMethodDeclaration(
                         undefined,
                         undefined,
@@ -602,7 +618,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
                         undefined,
                         undefined,
                         params,
-                        undefined,
+                        returnType,
                         undefined
                     ),
                 collapsed: {

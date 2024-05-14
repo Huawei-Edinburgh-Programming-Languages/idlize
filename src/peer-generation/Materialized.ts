@@ -23,7 +23,7 @@ const ignoredMaterializedClasses = [
     "CanvasRenderingContext2D", // has data
     "NavPathStack",             // duplicate overloaded functions
     "Scroller",                 // duplicate scrollPage()
-    "SubTabBarStyle",           // duplicate of()
+    // "SubTabBarStyle",           // duplicate of()
     "TransitionEffect",         // Type 'typeof TransitionEffect' is not assignable to type 'TransitionEffect' ??
 ]
 
