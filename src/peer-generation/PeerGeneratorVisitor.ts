@@ -48,6 +48,7 @@ import { PeerMethod } from "./PeerMethod"
 import { PeerFile, EnumEntity } from "./PeerFile"
 import { PeerLibrary } from "./PeerLibrary"
 import { Materialized, MaterializedClass, MaterializedMethod, isMaterialized} from "./Materialized"
+import { NamedMethodSignature } from "./LanguageWriters";
 
 export enum RuntimeType {
     UNEXPECTED = -1,
@@ -271,6 +272,11 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
         this.peerFile.pushEnum(enumEntity)
     }
 
+    generateSignature(method: ts.MethodSignature): NamedMethodSignature {
+        return NamedMethodSignature.make(mapType(this.typeChecker, method.type),
+            method.parameters.map(it => ({ name: identName(it.name), type: mapType(this.typeChecker, method.type)}))))
+    }
+
     generateParams(params: ts.NodeArray<ts.ParameterDeclaration>): stringOrNone {
         return params?.map(param => {
             let mappedType = mapType(this.typeChecker, param.type)
@@ -324,9 +330,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
             retConvertor,
             hasReceiver,
             isCallSignature,
-            collapsed?.paramsDecl ?? this.generateParams(method.parameters),
-            collapsed?.paramsUsage ?? this.generateValues(argConvertors),
-            collapsed?.paramsTypes ?? this.generateParamsTypes(method.parameters),
+            collapsed?.signature ?? this.generateSignature(method),
         )
         this.declarationTable.setCurrentContext(undefined)
         return peerMethod
@@ -518,7 +522,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
             const overloads = groupedByName.get(name)!
 
             const maxParamsLength = Math.max(...overloads.map(it => it.parameters.length))
-            
+
             const paramsCollapsed: { types: ts.TypeNode[], name: string, optional?: ts.QuestionToken }[] =
                 Array.from({ length: maxParamsLength }, (_, i) => {
                     const typesToUnion = overloads.map(overload =>

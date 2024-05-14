@@ -17,6 +17,7 @@
 import { capitalize } from "../util"
 import { ArgConvertor, RetConvertor } from "./Convertors"
 import { DeclarationTarget, PrimitiveType } from "./DeclarationTable"
+import { NamedMethodSignature } from "./LanguageWriters"
 
 export class PeerMethod {
     constructor(
@@ -27,9 +28,10 @@ export class PeerMethod {
         public retConvertor: RetConvertor,
         public hasReceiver: boolean,
         public isCallSignature: boolean,
-        public mappedParams: string | undefined,
-        public mappedParamValues: string | undefined,
-        public mappedParamsTypes: string[] | undefined,
+        public signature: NamedMethodSignature,
+        //public mappedParams: string | undefined,
+        //public mappedParamValues: string | undefined,
+        //public mappedParamsTypes: string[] | undefined,
     ) { }
 
     get fullMethodName(): string {
@@ -57,7 +59,7 @@ export class PeerMethod {
     maybeCRetType(retConvertor: RetConvertor): string | undefined {
         if (retConvertor.isVoid) return undefined
         return retConvertor.nativeType()
-    }    
+    }
 
     generateAPIParameters(): string[] {
         let maybeReceiver = this.hasReceiver ? [`${PrimitiveType.NativePointer.getText()} node`] : []

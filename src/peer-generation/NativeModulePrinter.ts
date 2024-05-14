@@ -15,7 +15,7 @@
 
 import { IndentedPrinter } from "../IndentedPrinter";
 import { nativeModuleDeclaration, nativeModuleEmptyDeclaration } from "./FileGenerators";
-import { LanguageWriter, NamedMethodSignature, Type, createLanguageWriter } from "./LanguageWriters";
+import { LanguageWriter, Method, MethodModifier, NamedMethodSignature, Type, createLanguageWriter } from "./LanguageWriters";
 import { PeerClass } from "./PeerClass";
 import { PeerLibrary } from "./PeerLibrary";
 import { MaterializedClass, printGlobalMaterialized } from "./Materialized";
@@ -50,7 +50,7 @@ class NativeModuleVisitor {
             const parameters = NamedMethodSignature.make('void', maybeReceiver.concat(args))
             let name = `_${component}_${method.methodName}`
             this.nativeModule.writeNativeMethodDeclaration(name, parameters)
-            this.nativeModuleEmpty.writeMethodImplementation(name, parameters, (printer) => {
+            this.nativeModuleEmpty.writeMethodImplementation(new Method(name, parameters, [MethodModifier.STATIC]), (printer) => {
                 printer.writePrintLog(name)
             })
             peer.declarationTable.setCurrentContext(undefined)

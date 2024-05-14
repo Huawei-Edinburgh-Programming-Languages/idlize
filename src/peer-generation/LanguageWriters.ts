@@ -21,6 +21,11 @@ export class Type {
     static Void = new Type('void')
 }
 
+export enum MethodModifier {
+    PUBLIC,
+    STATIC
+}
+
 export class MethodSignature {
     constructor(public returnType: Type, public args: Type[], public defaults: stringOrNone[]|undefined = undefined) {}
 
@@ -33,17 +38,21 @@ export class MethodSignature {
 }
 
 export class NamedMethodSignature extends MethodSignature {
-    constructor(returnType: Type, args: Type[], public argsNames: string[], public defaults: stringOrNone[]|undefined = undefined) {
+    constructor(returnType: Type, args: Type[], public argsNames: string[], defaults: stringOrNone[]|undefined = undefined) {
         super(returnType, args, defaults)
     }
 
     static make(returnType: string, args: {name: string, type: string}[]): NamedMethodSignature {
-        return new NamedMethodSignature(new Type(returnType), args.map(it => new Type(it.type)), args.map(it => it.name) )
+        return new NamedMethodSignature(new Type(returnType), args.map(it => new Type(it.type)), args.map(it => it.name))
     }
 
     argName(index: number): string {
         return this.argsNames[index]
     }
+}
+
+export class Method {
+    constructor(public name: string, public signature: MethodSignature, public modifiers: MethodModifier[]|undefined = undefined) {}
 }
 
 export abstract class LanguageWriter {
@@ -57,7 +66,7 @@ export abstract class LanguageWriter {
     abstract writeMethodDeclaration(name: string, signature: MethodSignature, prefix?: string): void
 
     abstract writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void): void
-    abstract writeMethodImplementation(name: string, signature: MethodSignature, op: (writer: LanguageWriter) => void): void
+    abstract writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void): void
 
     writeSuperCall(params: string[]): void {
         this.printer.print(`super(${params.join(", ")});`)
@@ -131,8 +140,8 @@ export class TSLanguageWriter extends LanguageWriter {
 
     }
 
-    writeMethodImplementation(name: string, signature: MethodSignature, op: (writer: LanguageWriter) => void) {
-        this.writeDeclaration(name, signature, true, true)
+    writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void) {
+        this.writeDeclaration(method.name, method.signature, true, true, method.modifiers?.includes(MethodModifier.STATIC) ? "static " : "")
         this.pushIndent()
         op(this)
         this.popIndent()
@@ -223,8 +232,8 @@ export class JavaLanguageWriter extends LanguageWriter {
         this.printer.print(`}`)
     }
 
-    writeMethodImplementation(name: string, signature: MethodSignature, op: (writer: LanguageWriter) => void) {
-        this.printer.print(`${this.mapType(signature.returnType)} ${name}(${signature.args.map((it, index) => `${this.mapType(it)} ${signature.argName(index)}`).join(", ")}) {`)
+    writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void) {
+        this.printer.print(`${this.mapType(method.signature.returnType)} ${method.name}(${method.signature.args.map((it, index) => `${this.mapType(it)} ${method.signature.argName(index)}`).join(", ")}) {`)
         this.pushIndent()
         op(this)
         this.popIndent()
