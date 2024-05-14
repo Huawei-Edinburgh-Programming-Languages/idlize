@@ -22,7 +22,7 @@ import { ImportsCollector } from "./ImportsCollector";
 import { PeerClass } from "./PeerClass";
 import { InheritanceRole, determineParentRole, isHeir, isRoot } from "./inheritance";
 import { PeerMethod } from "./PeerMethod";
-import { LanguageWriter, Method, MethodModifier, NamedMethodSignature, Type, createLanguageWriter } from "./LanguageWriters";
+import { LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, Type, createLanguageWriter } from "./LanguageWriters";
 
 export function componentToPeerClass(component: string) {
     return `Ark${component}Peer`
@@ -123,54 +123,53 @@ class PeerFileVisitor {
     }
 
     private printPeerMethod(method: PeerMethod) {
-        //if (!this.isTs) return
-        const printer = this.printer
-        let genMethodName = method.hasReceiver ? `${method.methodName}Attribute` : method.methodName
+        if (!this.isTs) return
+        let peerMethod = new Method(method.hasReceiver() ? `${method.method.name}Attribute` : method.method.name,
+            new NamedMethodSignature(Type.Void, method.method.signature.args, (method.method.signature as NamedMethodSignature).argsNames))
 
-
-        this.printer.writeMethodImplementation(new Method(genMethodName, method.signature, method.hasReceiver ? undefined : [MethodModifier.STATIC]), (writer) => {
+        this.printer.writeMethodImplementation(peerMethod, (writer) => {
             let scopes = method.argConvertors.filter(it => it.isScoped)
             scopes.forEach(it => {
-                printer.pushIndent()
-                printer.print(it.scopeStart?.(it.param))
+                writer.pushIndent()
+                writer.print(it.scopeStart?.(it.param))
             })
             method.argConvertors.forEach(it => {
                 if (it.useArray) {
                     let size = it.estimateSize()
-                    printer.print(`const ${it.param}Serializer = new Serializer(${size})`)
+                    writer.print(`const ${it.param}Serializer = new Serializer(${size})`)
                     // TODO: pass writer to convertors!
-                    it.convertorToTSSerial(it.param, it.param, printer.printer)
+                    it.convertorToTSSerial(it.param, it.param, writer.printer)
                 }
             })
             // Enable to see serialized data.
             if (this.dumpSerialized) {
                 method.argConvertors.forEach((it, index) => {
                     if (it.useArray) {
-                        printer.print(`console.log("${it.param}:", ${it.param}Serializer.asArray(), ${it.param}Serializer.length())`)
+                        writer.writePrintLog(`"${it.param}:", ${it.param}Serializer.asArray(), ${it.param}Serializer.length())`)
                     }
                 })
             }
-            let maybeThis = method.hasReceiver ? `this.peer.ptr${method.argConvertors.length > 0 ? ", " : ""}` : ``
-            printer.print(`nativeModule()._${method.originalParentName}_${method.methodName}(${maybeThis}`)
-            printer.pushIndent()
+            let maybeThis = method.hasReceiver() ? `this.peer.ptr${method.argConvertors.length > 0 ? ", " : ""}` : ``
+            writer.print(`nativeModule()._${method.originalParentName}_${method.method.name}(${maybeThis}`)
+            writer.pushIndent()
             method.argConvertors.forEach((it, index) => {
                 let maybeComma = index == method.argConvertors.length - 1 ? "" : ","
                 if (it.useArray)
-                    printer.print(`${it.param}Serializer.asArray(), ${it.param}Serializer.length()`)
+                    writer.print(`${it.param}Serializer.asArray(), ${it.param}Serializer.length()`)
                 else
-                    printer.print(it.convertorTSArg(it.param))
-                printer.print(maybeComma)
+                    writer.print(it.convertorTSArg(it.param))
+                writer.print(maybeComma)
             })
-            printer.popIndent()
-            printer.print(`)`)
+            writer.popIndent()
+            writer.print(`)`)
             scopes.reverse().forEach(it => {
-                printer.popIndent()
-                printer.print(it.scopeEnd!(it.param))
+                writer.popIndent()
+                writer.print(it.scopeEnd!(it.param))
             })
             method.argConvertors.forEach(it => {
-                if (it.useArray) printer.print(`${it.param}Serializer.close()`)
+                if (it.useArray) writer.print(`${it.param}Serializer.close()`)
             })
-        }, !method.hasReceiver)
+        })
     }
 
     private printApplyMethod(peer: PeerClass) {

@@ -29,6 +29,7 @@ import {
     throwException,
     isCustomComponentClass,
     getComment,
+    mapTypeOrVoid,
 } from "../util"
 import { GenericVisitor } from "../options"
 import {
@@ -48,7 +49,7 @@ import { PeerMethod } from "./PeerMethod"
 import { PeerFile, EnumEntity } from "./PeerFile"
 import { PeerLibrary } from "./PeerLibrary"
 import { Materialized, MaterializedClass, MaterializedMethod, isMaterialized} from "./Materialized"
-import { NamedMethodSignature } from "./LanguageWriters";
+import { Method, MethodModifier, NamedMethodSignature, Type } from "./LanguageWriters";
 
 export enum RuntimeType {
     UNEXPECTED = -1,
@@ -80,10 +81,8 @@ export interface TypeAndName {
 
 type MaybeCollapsedMethod = {
     member: ts.MethodDeclaration | ts.MethodSignature | ts.CallSignatureDeclaration
-    collapsed: {
-        paramsDecl: string,
-        paramsTypes: string[],
-        paramsUsage: string,
+    collapsed?: {
+        method: Method,
         generatedImportTypes: string[],
     }
 }
@@ -208,8 +207,8 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
             .filter(isDefined)
         peer.methods.push(...peerMethods)
         collapsedMethods.forEach(it => {
-            peer.usedImportTypesStubs.push(...it.collapsed.generatedImportTypes)
-            this.peerLibrary.importTypesStubs.push(...it.collapsed.generatedImportTypes)
+            // peer.usedImportTypesStubs.push(...it.collapsed.generatedImportTypes)
+            // this.peerLibrary.importTypesStubs.push(...it.collapsed.generatedImportTypes)
         })
 
         this.createComponentAttributesDeclaration(node, peer)
@@ -229,8 +228,8 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
         const methods = collapsedMethods
             .filter(it => !ts.isCallSignatureDeclaration(it.member))
             .map(it => {
-                if (it.collapsed)
-                    return `${identName(it.member.name)}(${it.collapsed.paramsDecl}) : this`
+                // TODO: restore collapse logic
+                //if (it.collapsed) return `${identName(it.member.name)}(${it.collapsed.paramsDecl}) : this`
                 return it.member.getText().replace(/:[^S:]*$/g, ': this')
             })
             .map(it => it.replace('<T>', '<this>'))
@@ -253,8 +252,8 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
             .filter(isDefined)
         peer.methods.push(...peerMethods)
         collapsedMethods.forEach(it => {
-            peer.usedImportTypesStubs.push(...it.collapsed.generatedImportTypes)
-            this.peerLibrary.importTypesStubs.push(...it.collapsed.generatedImportTypes)
+            //peer.usedImportTypesStubs.push(...it.collapsed.generatedImportTypes)
+            //this.peerLibrary.importTypesStubs.push(...it.collapsed.generatedImportTypes)
         })
     }
 
@@ -272,9 +271,13 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
         this.peerFile.pushEnum(enumEntity)
     }
 
-    generateSignature(method: ts.MethodSignature): NamedMethodSignature {
-        return NamedMethodSignature.make(mapType(this.typeChecker, method.type),
-            method.parameters.map(it => ({ name: identName(it.name), type: mapType(this.typeChecker, method.type)}))))
+    generateSignature(method: ts.MethodDeclaration | ts.MethodSignature | ts.CallSignatureDeclaration): NamedMethodSignature {
+        return new NamedMethodSignature(Type.This,
+                method.parameters
+                    .map(it => new Type(mapTypeOrVoid(this.typeChecker, it.type), it.questionToken != undefined)),
+                method.parameters
+                    .map(it => identName(it.name)!),
+        )
     }
 
     generateParams(params: ts.NodeArray<ts.ParameterDeclaration>): stringOrNone {
@@ -314,7 +317,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
                 this.collectMaterializedClasses(param.type)
             }
         })
-        const hasReceiver = !isStatic(method.modifiers)
         const argConvertors = method.parameters
             .map((param) => this.argConvertor(param))
         const declarationTargets = method.parameters
@@ -322,15 +324,16 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
                 throwException(`Expected a type for ${asString(param)} in ${asString(method)}`)))
         const retConvertor = this.retConvertor(method.type)
 
+        // TODO: restore collapsing logic!
+        const signature = /* collapsed?.signature ?? */ this.generateSignature(method)
+
         const peerMethod = new PeerMethod(
             originalParentName,
-            methodName,
             declarationTargets,
             argConvertors,
             retConvertor,
-            hasReceiver,
             isCallSignature,
-            collapsed?.signature ?? this.generateSignature(method),
+            new Method(methodName, signature, isStatic(method.modifiers) ? [MethodModifier.STATIC] : []),
         )
         this.declarationTable.setCurrentContext(undefined)
         return peerMethod
@@ -361,8 +364,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
         }
 
         let mConstructor = this.makeMaterializedMethod(className, constructor!, true)
-        let mDestructor = this.makeMaterializedMethod(className,
-            {name: "destructor", isStatic: false, returnType: undefined, params: []})
+        let mDestructor = this.makeMaterializedMethod(className, new MethodRecord("destructor", false, undefined, []))
         let mMethods = structDescriptor.getMethods()
             .map(method => this.makeMaterializedMethod(className, method))
         Materialized.Instance.materializedClasses.set(className,
@@ -376,8 +378,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
             ? { isVoid: false, isStruct: false, nativeType: () => parentName + "Peer*", macroSuffixPart: () => "" }
             : this.retConvertor(method.returnType)
         const tsRetType = method.returnType == undefined ? undefined : mapType(this.typeChecker, method.returnType)
-        return new MaterializedMethod(parentName, method.name, argConvertors, retConvertor,
-            tsRetType, !method.isStatic, false)
+        return new MaterializedMethod(parentName, argConvertors, retConvertor, tsRetType, false, method.toMethod(this.typeChecker))
     }
 
 
@@ -511,6 +512,9 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
             it => (ts.isMethodDeclaration(it) || ts.isCallSignatureDeclaration(it))
         ) as (ts.MethodDeclaration | ts.CallSignatureDeclaration)[]
 
+        return methods.map(it => ({member: it}))
+
+        /*
         const groupedByName = new Map<string, (ts.MethodDeclaration|ts.CallSignatureDeclaration)[]>(
             methods.map(it => [this.nameOrEmpty(it), []])
         )
@@ -616,7 +620,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
                     generatedImportTypes: generatedImportTypes,
                 }
             }
-        })
+        }) */
     }
 
     classNameIfInterface(clazz: ts.ClassDeclaration | ts.InterfaceDeclaration): string {

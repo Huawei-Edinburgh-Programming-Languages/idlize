@@ -19,6 +19,7 @@ import { Language, stringOrNone } from "../util";
 export class Type {
     constructor(public name: string, public nullable = false) {}
     static Void = new Type('void')
+    static This = new Type('this')
 }
 
 export enum MethodModifier {
@@ -250,6 +251,7 @@ export class JavaLanguageWriter extends LanguageWriter {
             case 'Uint8Array': return 'byte[]'
             case 'int32': case 'KInt': return 'int'
             case 'KStringPtr': return 'String'
+            case 'string': return 'String'
             case 'number': return 'double'
         }
         return super.mapType(type)
