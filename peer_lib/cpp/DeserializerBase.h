@@ -20,7 +20,7 @@
 #include <vector>
 
 #include "common-interop.h"
-#include "arkoala_api.h"
+#include "generated/arkoala_api.h"
 
 using namespace std;
 

@@ -1,9 +1,9 @@
 {
     "name": "@arkoala/arkui",
-    "main": "generated/subset/main.js",
+    "main": "peers/subset/generated/main.js",
     "exports": {
         "./package.json": "./package.json",
         "./tests/*": "./tests/*.js",
-        "./*": "./generated/subset/*.js"
+        "./*": "./peers/subset/generated/*.js"
     }
 }
