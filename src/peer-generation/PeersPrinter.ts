@@ -126,7 +126,6 @@ class PeerFileVisitor {
         if (!this.isTs) return
         let peerMethod = new Method(method.hasReceiver() ? `${method.method.name}Attribute` : method.method.name,
             new NamedMethodSignature(Type.Void, method.method.signature.args, (method.method.signature as NamedMethodSignature).argsNames))
-
         this.printer.writeMethodImplementation(peerMethod, (writer) => {
             let scopes = method.argConvertors.filter(it => it.isScoped)
             scopes.forEach(it => {
