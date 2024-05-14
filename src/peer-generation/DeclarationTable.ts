@@ -1017,15 +1017,26 @@ export class DeclarationTable {
 
     generateFirstArgDestruct(convertor: ArgConvertor, target: DeclarationTarget, printer: IndentedPrinter, isPointer: boolean) {
         if (target instanceof PrimitiveType) return // Just don't emit anything
-        if (convertor instanceof OptionConvertor) return // TODO: handle optionals
 
         const firstArgName = convertor.param
+        const access = isPointer ? "->" : "."
+
+        if (convertor instanceof OptionConvertor) {
+            const tagField = `${firstArgName}${access}tag`
+            printer.print(`if (${tagField} != ARK_TAG_UNDEFINED) {`)
+            printer.pushIndent()
+            const valueField = `${firstArgName}${access}value`
+            printer.print(`// processing ${valueField}:${this.uniqueNames.get(target)}`)
+            printer.popIndent()
+            printer.print(`}`)
+            return;
+        }
+
         this.setCurrentContext(`modifier(${firstArgName})`)
         let isUnion = this.isMaybeWrapped(target, ts.isUnionTypeNode)
         let isArray = this.isMaybeWrapped(target, ts.isArrayTypeNode)
         let isOptional = this.isMaybeWrapped(target, ts.isOptionalTypeNode)
         let isTuple = this.isMaybeWrapped(target, ts.isTupleTypeNode)
-        let access = isPointer ? "->" : "."
 
         // treat Array<T> as array
         if (!isArray && ts.isTypeReferenceNode(target)) {
