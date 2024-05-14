@@ -30,8 +30,7 @@ class MaterializedFileVisitor {
             let staticModifier = method.hasReceiver ? "" : "static "
             let tsRetType = method.tsRetType
             let returnType = tsRetType === undefined ? "" : `: ${tsRetType} `
-            let params = method.argConvertors.map(it => `${it.param}: ${it.tsTypeName}`).join(", ")
-
+            let params = method.mappedParams ?? method.argConvertors.map(it => `${it.param}: ${it.tsTypeName}`).join(", ")
             if (params.includes("any")) {
                 // TBD: Handle "{ property: type }" types
                 return

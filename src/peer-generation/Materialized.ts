@@ -41,10 +41,13 @@ export class MaterializedMethod extends PeerMethod {
         retConvertor: RetConvertor,
         public tsRetType: string | undefined,
         hasReceiver: boolean,
-        isCallSignature: boolean
+        isCallSignature: boolean,
+        mappedParams: string | undefined,
+        mappedParamValues: string | undefined,
+        mappedParamsTypes: string[] | undefined,
     ) {
         super(originalParentName, methodName, [], argConvertors, retConvertor, hasReceiver, isCallSignature,
-            undefined, undefined, undefined)
+            mappedParams, mappedParamValues, mappedParamsTypes)
      }
 
      override generateAPIParameters(): string[] {

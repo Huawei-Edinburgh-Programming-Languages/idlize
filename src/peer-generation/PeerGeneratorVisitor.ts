@@ -365,13 +365,16 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
             new MaterializedClass(className, mConstructor, mDestructor, mMethods))
     }
 
-    private materializeCollapsedMethod(parentName: string, { member: method }: MaybeCollapsedMethod): MaterializedMethod {
+    private materializeCollapsedMethod(parentName: string, { member: method, collapsed: collapsed }: MaybeCollapsedMethod): MaterializedMethod {
         const hasReceiver = !isStatic(method.modifiers)
         const argConvertors = method.parameters
             .map(param => this.argConvertor(param))
         const retConvertor = this.retConvertor(method.type)
         return this.materializeMethod(parentName, identName(method.name)!, hasReceiver,
-            argConvertors, retConvertor, method.type)
+            argConvertors, retConvertor, method.type,
+            collapsed?.paramsDecl ?? this.generateParams(method.parameters),
+            collapsed?.paramsUsage ?? this.generateValues(argConvertors),
+            collapsed?.paramsTypes ?? this.generateParamsTypes(method.parameters))
     }
 
     private materializeMethodRecord(parentName: string, method: MethodRecord, isConstructor: boolean): MaterializedMethod {
@@ -385,11 +388,12 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
     }
 
     private materializeMethod(parentName: string, methodName: string, hasReceiver: boolean,
-        argConvertors: ArgConvertor[], retConvertor: RetConvertor, returnType?: ts.TypeNode): MaterializedMethod
+        argConvertors: ArgConvertor[], retConvertor: RetConvertor, returnType?: ts.TypeNode,
+        paramsDecl?: string, paramsUsage?: string, paramsTypes?: string[]): MaterializedMethod
     {
         const tsRetType = returnType == undefined ? undefined : mapType(this.typeChecker, returnType)
         return new MaterializedMethod(parentName, methodName, argConvertors, retConvertor,
-            tsRetType, hasReceiver, false)
+            tsRetType, hasReceiver, false, paramsDecl, paramsUsage, paramsTypes)
     }
 
     argConvertor(param: ts.ParameterDeclaration): ArgConvertor {
