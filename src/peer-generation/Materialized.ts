@@ -23,8 +23,6 @@ const ignoredMaterializedClasses = [
     "CanvasRenderingContext2D", // has data
     "NavPathStack",             // duplicate overloaded functions
     "Scroller",                 // duplicate scrollPage()
-    // "SubTabBarStyle",           // duplicate of()
-    "TransitionEffect",         // Type 'typeof TransitionEffect' is not assignable to type 'TransitionEffect' ??
 ]
 
 export function isMaterialized(declaration: ts.ClassDeclaration): boolean {
