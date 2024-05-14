@@ -17,6 +17,7 @@ import { identName, importTypeName, mapType, typeName } from "../util"
 import { DeclarationTable, PrimitiveType } from "./DeclarationTable"
 import { RuntimeType } from "./PeerGeneratorVisitor"
 import * as ts from "typescript"
+import { isMaterialized } from "./Materialized"
 
 let uniqueCounter = 0
 
@@ -205,12 +206,10 @@ export class EnumConvertor extends BaseArgConvertor {
     }
 
     convertorTSArg(param: string): string {
-        // `as unknown` for non-int enums, so it wouldn't clutter compiler diagnostic
-        return `${param} as unknown as int32`
+        return `unsafeCast<int32>(${param})`
     }
     convertorToTSSerial(param: string, value: string, printer: IndentedPrinter): void {
-        // `as unknown` for non-int enums, so it wouldn't clutter compiler diagnostic
-        printer.print(`${param}Serializer.writeInt32(${value} as unknown as int32)`)
+        printer.print(`${param}Serializer.writeInt32(unsafeCast<int32>(${value}))`)
     }
     convertorCArg(param: string): string {
         return param
@@ -307,9 +306,7 @@ export class UnionConvertor extends BaseArgConvertor {
             printer.print(`${maybeElse}if (${it.runtimeTypes.map(it => `${maybeComma1}RuntimeType.${RuntimeType[it]} == ${value}_type${maybeComma2}`).join(" || ")}) {`)
             printer.pushIndent()
             if (!(it instanceof UndefinedConvertor)) {
-                // TODO: `as unknown` is temporary to workaround for string enums.
-                let maybeAsUnknown = (it instanceof EnumConvertor) ? "as unknown " : ""
-                printer.print(`const ${value}_${index}: ${it.tsTypeName} = ${value} ${maybeAsUnknown}as ${it.tsTypeName}`)
+                printer.print(`const ${value}_${index} = unsafeCast<${it.tsTypeName}>(${value})`)
                 it.convertorToTSSerial(param, `${value}_${index}`, printer)
             }
             printer.popIndent()
@@ -789,9 +786,39 @@ export class NumberConvertor extends BaseArgConvertor {
     }
 }
 
-export class MaterializedClassConvertor extends CustomTypeConvertor {
-    constructor(name: string, param: string, table: DeclarationTable, type: ts.TypeReferenceNode) {
-        super(param, name, "any")
+export class MaterializedClassConvertor extends BaseArgConvertor {
+    constructor(
+        name: string,
+        param: string,
+        protected table: DeclarationTable,
+        type: ts.TypeReferenceNode
+    ) {
+        super(name, [RuntimeType.MATERIALIZED], false, true, param)
+    }
+
+    convertorTSArg(param: string): string {
+        throw new Error("Must never be used")
+    }
+    convertorToTSSerial(param: string, value: string, printer: IndentedPrinter): void {
+        printer.print(`${param}Serializer.writeMaterialized(${value})`)
+    }
+    convertorCArg(param: string): string {
+        throw new Error("Must never be used")
+    }
+    convertorToCDeserial(param: string, value: string, printer: IndentedPrinter): void {
+        printer.print(`${value} = ${param}Deserializer.readMaterialized();`)
+    }
+    nativeType(impl: boolean): string {
+        return PrimitiveType.Materialized.getText()
+    }
+    interopType(): string {
+        throw new Error("Must never be used")
+    }
+    estimateSize() {
+        return 12
+    }
+    isPointerType(): boolean {
+        return true
     }
 }
 
@@ -870,6 +897,7 @@ export class TypeAliasConvertor extends ProxyConvertor {
 
 export interface RetConvertor {
     isVoid: boolean
+    isStruct: boolean
     nativeType: () => string
     macroSuffixPart: () => string
 }
