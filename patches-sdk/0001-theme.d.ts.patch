@@ -1,0 +1,20 @@
+From 398592ee4dc4f1b03b374bf2a5e4f69c597af696 Mon Sep 17 00:00:00 2001
+From: naumovdk <dimnau@gmail.com>
+Date: Tue, 14 May 2024 11:24:52 +0300
+Subject: [PATCH] theme.d.ts
+
+---
+ api/@internal/component/ets/theme.d.ts | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 api/@internal/component/ets/theme.d.ts
+
+diff --git a/api/@internal/component/ets/theme.d.ts b/api/@internal/component/ets/theme.d.ts
+new file mode 100644
+index 000000000..3c483ae96
+--- /dev/null
++++ b/api/@internal/component/ets/theme.d.ts
+@@ -0,0 +1 @@
++declare type Theme = import("../api/@ohos.arkui.theme").Theme
+-- 
+2.39.3 (Apple Git-146)
+
