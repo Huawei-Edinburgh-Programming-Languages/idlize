@@ -17,13 +17,13 @@
         "module": "CommonJS",
         "baseUrl": ".",
         "paths": {
-            "@arkoala/arkui": ["./generated/subset", "./"],
-            "@arkoala/arkui/*": ["./generated/subset/*", "./*"],
+            "@arkoala/arkui": ["./peers/subset/generated", "./"],
+            "@arkoala/arkui/*": ["./peers/subset/generated/*", "./*"],
         },
     },
     "include": [
-        "generated/subset/**/*",
-        "generated/fuzz/**/*",
+        "peers/subset/**/*",
+        "peers/fuzz/**/*",
         "tests/subset/**/*"
     ],
 }

@@ -313,14 +313,14 @@ if (options.dts2peer) {
                 const materialized = printMaterialized(peerLibrary, options.dumpSerialized ?? false)
                 for (const [targetBasename, materializedClass] of materialized) {
                     console.log(`Print materialized class: ${materializedClass}`)
-                    const outMaterilizedFile = path.join(outDir,targetBasename)
-                    console.log("producing", outMaterilizedFile)
-                    fs.writeFileSync(outMaterilizedFile, materializedClass)
+                    const outMaterializedFile = path.join(outDir,targetBasename)
+                    console.log("producing", outMaterializedFile)
+                    fs.writeFileSync(outMaterializedFile, materializedClass)
                 }
 
                 fs.writeFileSync(
                     path.join(outDir, 'NativeModule' + langSuffix(lang)),
-                    printNativeModule(peerLibrary, options.nativeBridgeDir ?? "../../../../native/NativeBridgeNapi")
+                    printNativeModule(peerLibrary, options.nativeBridgeDir ?? PeerGeneratorConfig.nativeBridgeDir)
                 )
                 if (lang == Language.TS) {
                     fs.writeFileSync(

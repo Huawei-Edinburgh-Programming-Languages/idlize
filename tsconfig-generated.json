@@ -16,12 +16,12 @@
         "module": "CommonJS",
         "baseUrl": ".",
         "paths": {
-            "@arkoala/arkui": ["./generated/peers", "./"],
-            "@arkoala/arkui/*": ["./generated/peers/*", "./*"],
+            "@arkoala/arkui": ["./peers/full/generated", "./"],
+            "@arkoala/arkui/*": ["./peers/full/generated/*", "./*"],
         },
     },
     "include": [
-        "generated/peers/**/*",
+        "peers/full/**/*",
         "sdk/component/**/*",
     ]
 }

@@ -63,7 +63,7 @@ ${methods.join("\n")}
 
 export function bridgeCcDeclaration(bridgeCc: string[]): string {
     return `#include "Interop.h"
-#include "arkoala_api.h"
+#include "generated/arkoala_api.h"
 #include "Deserializer.h"
 
 static ${PeerGeneratorConfig.cppPrefix}ArkUIAnyAPI* impls[${PeerGeneratorConfig.cppPrefix}Ark_APIVariantKind::${PeerGeneratorConfig.cppPrefix}COUNT] = { 0 };
@@ -206,7 +206,7 @@ export function makeCDeserializer(table: DeclarationTable, structs: IndentedPrin
     return `
 #include "Interop.h"
 #include "ArgDeserializerBase.h"
-#include "arkoala_api.h"
+#include "generated/arkoala_api.h"
 #include <string>
 
 ${writeToString.getOutput().join("\n")}

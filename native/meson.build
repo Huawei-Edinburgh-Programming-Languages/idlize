@@ -6,7 +6,7 @@ project('NativeBridge', 'c', 'cpp',
 if get_option('source_set') != ''
 source_set = get_option('source_set')
 else
-source_set = 'peers'
+source_set = 'full'
 endif
 use_dummy_libace = true
 if get_option('arkts')
@@ -21,9 +21,12 @@ is_node = true
 is_arkts = true
 is_jni = java_home != 'undefined'
 
-gen_dir = '../generated/' + source_set
+
+base_gen_dir = '../peers/' + source_set
+gen_dir = base_gen_dir + '/generated'
 
 include_dirs = [
+   base_gen_dir,
    gen_dir
 ]
 
