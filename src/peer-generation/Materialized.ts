@@ -22,7 +22,6 @@ import { identName } from "../util"
 const ignoredMaterializedClasses = [
     "CanvasRenderingContext2D", // has data
     "NavPathStack",             // duplicate overloaded functions
-    "Scroller",                 // duplicate scrollPage()
 ]
 
 export function isMaterialized(declaration: ts.ClassDeclaration): boolean {

@@ -366,6 +366,8 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
     }
 
     private materializeCollapsedMethod(parentName: string, { member: method, collapsed: collapsed }: MaybeCollapsedMethod): MaterializedMethod {
+        if (method.type) this.requestType(undefined, method.type)
+
         const hasReceiver = !isStatic(method.modifiers)
         const argConvertors = method.parameters
             .map(param => this.argConvertor(param))

@@ -24,7 +24,7 @@ import {
     UndefinedConvertor, UnionConvertor
 } from "./Convertors"
 import { DependencySorter } from "./DependencySorter"
-import { isMaterialized } from "./Materialized"
+import { isMaterialized, Materialized } from "./Materialized"
 
 export class PrimitiveType {
     constructor(private name: string, public isPointer = false) { }
@@ -373,6 +373,9 @@ export class DeclarationTable {
                 return prefix + `Array_` + this.computeTargetName(this.toTarget(target.typeArguments[0]), optional)
             if (name == "Callback")
                 return prefix + PrimitiveType.Function.getText()
+            if (name && Materialized.Instance.materializedClasses.has(name))
+                // Materialized classes are known just by their names
+                return prefix + name
             if (PeerGeneratorConfig.isKnownParametrized(name))
                 return prefix + PrimitiveType.CustomObject.getText()
         }
@@ -1282,6 +1285,8 @@ export class DeclarationTable {
                 result.addField(new FieldRecord(PrimitiveType.pointerTo(this.toTarget(type)), undefined, "config"))
             } else if (name == "Callback") {
                 result.addField(new FieldRecord(PrimitiveType.Int32, undefined, "id"))
+            } else if (name && Materialized.Instance.materializedClasses.has(name)) {
+                // Materialized class, nothing to add
             } else if (PeerGeneratorConfig.isKnownParametrized(name)) {
                 // TODO: not this way yet!
                 // let type = target.typeArguments[0]
