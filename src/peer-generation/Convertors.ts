@@ -13,11 +13,11 @@
  * limitations under the License.
  */
 import { IndentedPrinter } from "../IndentedPrinter"
-import { identName, importTypeName, mapType, typeName } from "../util"
+import { Language, identName, importTypeName, mapType, typeName } from "../util"
 import { DeclarationTable, PrimitiveType } from "./DeclarationTable"
 import { RuntimeType } from "./PeerGeneratorVisitor"
 import * as ts from "typescript"
-import { isMaterialized } from "./Materialized"
+import { LanguageWriter } from "./LanguageWriters"
 
 let uniqueCounter = 0
 
@@ -27,13 +27,12 @@ export interface ArgConvertor {
     useArray: boolean
     runtimeTypes: RuntimeType[]
     estimateSize(): number
-    scopeStart?(param: string): string
-    scopeEnd?(param: string): string
-    convertorTSArg(param: string): string
-    convertorToTSSerial(param: string, value: string, printer: IndentedPrinter): void
-    convertorCArg(param: string): string
-    convertorToCDeserial(param: string, value: string, printer: IndentedPrinter): void
-    interopType(ts: boolean): string
+    scopeStart?(param: string, language: Language): string
+    scopeEnd?(param: string, language: Language): string
+    convertorArg(param: string, language: Language): string
+    convertorSerialize(param: string, value: string, writer: LanguageWriter): void
+    convertorDeserialize(param: string, value: string, writer: LanguageWriter): void
+    interopType(language: Language): string
     nativeType(impl: boolean): string
     isPointerType(): boolean
     param: string
@@ -57,16 +56,15 @@ export abstract class BaseArgConvertor implements ArgConvertor {
     isPointerType(): boolean {
         throw new Error("Define")
     }
-    interopType(ts: boolean): string {
+    interopType(language: Language): string {
         throw new Error("Define")
     }
 
-    scopeStart?(param: string): string
-    scopeEnd?(param: string): string
-    abstract convertorTSArg(param: string): string
-    abstract convertorToTSSerial(param: string, value: string, printer: IndentedPrinter): void
-    abstract convertorCArg(param: string): string
-    abstract convertorToCDeserial(param: string, value: string, printer: IndentedPrinter): void
+    scopeStart?(param: string, language: Language): string
+    scopeEnd?(param: string, language: Language): string
+    abstract convertorArg(param: string, language: Language): string
+    abstract convertorSerialize(param: string, value: string, writer: LanguageWriter): void
+    abstract convertorDeserialize(param: string, value: string, writer: LanguageWriter): void
 }
 
 
@@ -75,23 +73,23 @@ export class StringConvertor extends BaseArgConvertor {
         super("string", [RuntimeType.STRING], false, false, param)
     }
 
-    convertorTSArg(param: string): string {
-        return param
+    convertorArg(param: string, language: Language): string {
+        return language == Language.CPP ? this.convertorCArg(param) : `param`
     }
-    convertorToTSSerial(param: string, value: string, printer: IndentedPrinter): void {
-        printer.print(`${param}Serializer.writeString(${value})`)
+    convertorSerialize(param: string, value: string, writer: LanguageWriter): void {
+        writer.writeMemberCall(`${param}Serializer`, `writeString`, [value])
     }
     convertorCArg(param: string): string {
         return `(const ${PrimitiveType.String.getText()}*)&${param}`
     }
-    convertorToCDeserial(param: string, value: string, printer: IndentedPrinter): void {
-        printer.print(`${value} = ${param}Deserializer.readString();`)
+    convertorDeserialize(param: string, value: string, writer: LanguageWriter): void {
+        writer.print(`${value} = ${param}Deserializer.readString();`)
     }
 
     nativeType(impl: boolean): string {
         return PrimitiveType.String.getText()
     }
-    interopType(ts: boolean): string {
+    interopType(language: Language): string {
         return "KStringPtr"
     }
     estimateSize() {
@@ -107,23 +105,23 @@ export class ToStringConvertor extends BaseArgConvertor {
         super("string", [RuntimeType.OBJECT], false, false, param)
     }
 
-    convertorTSArg(param: string): string {
-        return `(${param}).toString()`
+    convertorArg(param: string, language: Language): string {
+        return language == Language.CPP ? this.convertorCArg(param) : `(${param}).toString()`
     }
-    convertorToTSSerial(param: string, value: string, printer: IndentedPrinter): void {
-        printer.print(`${param}Serializer.writeString((${value}).toString())`)
+    convertorSerialize(param: string, value: string, writer: LanguageWriter): void {
+        writer.writeMemberCall(`${param}Serializer`, `writeString`, [`${value}).toString()`])
     }
     convertorCArg(param: string): string {
         return `(const ${PrimitiveType.String.getText()}*)&${param}`
     }
-    convertorToCDeserial(param: string, value: string, printer: IndentedPrinter): void {
-        printer.print(`${value} = ${param}Deserializer.readString();`)
+    convertorDeserialize(param: string, value: string, writer: LanguageWriter): void {
+        writer.print(`${value} = ${param}Deserializer.readString();`)
     }
 
     nativeType(impl: boolean): string {
         return PrimitiveType.String.getText()
     }
-    interopType(ts: boolean): string {
+    interopType(language: Language): string {
         return "KStringPtr"
     }
     estimateSize() {
