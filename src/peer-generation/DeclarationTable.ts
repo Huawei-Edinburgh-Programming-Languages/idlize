@@ -14,7 +14,7 @@
  */
 
 import * as ts from "typescript"
-import { Language, asString, getDeclarationsByNode, getLineNumberString, getNameWithoutQualifiersRight, heritageDeclarations, identName, isStatic, throwException, typeEntityName } from "../util"
+import { Language, asString, getDeclarationsByNode, getLineNumberString, getNameWithoutQualifiersRight, heritageDeclarations, identName, isStatic, throwException, typeEntityName, capitalize } from "../util"
 import { IndentedPrinter } from "../IndentedPrinter"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
 import {
@@ -942,6 +942,58 @@ export class DeclarationTable {
             + typeName.replaceAll("_", "").slice(1)
     }
 
+    getTypeTarget(target: DeclarationTarget, isTargetOptional: boolean) {
+        if (isTargetOptional) {
+            return 'optional'
+        }
+        if (target instanceof PrimitiveType || target.kind == ts.SyntaxKind.EnumDeclaration) {
+            return 'primitive'
+        }
+        if (this.isMaybeWrapped(target, ts.isUnionTypeNode)) {
+            return 'union';
+        }
+        if (this.isMaybeWrapped(target, ts.isArrayTypeNode)) {
+            return 'array'
+        }
+        if (this.isMaybeWrapped(target, ts.isOptionalTypeNode)) {
+            return 'optional'
+        }
+        if (this.isMaybeWrapped(target, ts.isTupleTypeNode)) {
+            return 'tuple'
+        }
+        // treat Array<T> as array
+        if (ts.isTypeReferenceNode(target) && identName(target.typeName) === "Array") {
+            return 'array'
+        }
+        return 'struct'
+    }
+
+    printAliasForStructFieldName(structFieldName: string,
+                                 fieldName: string,
+                                 target: DeclarationTarget,
+                                 printer: IndentedPrinter,
+                                 fromType: boolean = true) {
+        const ids = structFieldName
+            .replaceAll("->", "_")
+            .replaceAll(".", "_")
+            .split("_")
+        const suffix = capitalize(ids.length > 1 ? ids[ids.length - 2] : ids[0])
+
+        const fieldTypeName = this.uniqueNames.get(target)
+        let structFieldAlias: string
+        if (fromType) {
+            structFieldAlias = (fieldTypeName ? this.genIdNameFromType(fieldTypeName) : fieldName) + suffix
+        } else {
+            structFieldAlias = `${fieldName}${suffix}`
+        }
+        const maxIdNameLength = 30
+        if (structFieldAlias.length > maxIdNameLength) {
+            structFieldAlias = fieldName + suffix
+        }
+        printer.print(`[[maybe_unused]] const auto &${structFieldAlias} = ${structFieldName};`)
+        printer.print(`// processing '${structFieldAlias}:${fieldTypeName}'`)
+    }
+
     processUnion(fieldName: string,
                  target: DeclarationTarget,
                  printer: IndentedPrinter,
@@ -956,95 +1008,94 @@ export class DeclarationTable {
             const ifElseOp = `${index == 1 ? "if" : "else if"}`
             printer.print(`${ifElseOp} (${fieldName}${access}selector == ${index - 1}) {`)
             printer.pushIndent()
-            const isUnion = this.isMaybeWrapped(field.declaration, ts.isUnionTypeNode)
             const structFieldName = `${fieldName}${access}${field.name}`
-            const fieldTypeName = this.uniqueNames.get(field.declaration)
-            if (isUnion) {
-                this.processUnion(structFieldName, field.declaration, printer, false);
-            } else {
-                let structFieldAlias = fieldTypeName ? this.genIdNameFromType(fieldTypeName) : field.name
-                const maxIdNameLength = 30
-                if (structFieldAlias.length > maxIdNameLength) {
-                    structFieldAlias = field.name
+            const type = this.getTypeTarget(field.declaration, field.optional)
+            if (type !== 'primitive') {
+                if (type === 'struct' && this.targetStruct(field.declaration).getFields().length === 0) {
+                    // empty struct
+                    this.printAliasForStructFieldName(structFieldName, field.name, field.declaration, printer)
+                } else {
+                    this.processTarget(structFieldName, field.declaration, field.optional, printer, false);
                 }
-                printer.print(`[[maybe_unused]] const auto &${structFieldAlias} = ${structFieldName};`)
-                printer.print(`// processing '${structFieldAlias}:${fieldTypeName}'`)
+            } else {
+                this.printAliasForStructFieldName(structFieldName, field.name, field.declaration, printer)
             }
             printer.popIndent()
             printer.print(`}`)
-
         })
+    }
+
+    processTarget(fieldName: string,
+                  target: DeclarationTarget,
+                  isTargetOptional: boolean,
+                  printer: IndentedPrinter,
+                  isPointer: boolean) {
+        const access = isPointer ? "->" : "."
+
+        switch (this.getTypeTarget(target, isTargetOptional)) {
+            case 'union':
+                this.processUnion(fieldName, target, printer, isPointer)
+                break;
+            case 'array': {
+                if (!(target instanceof PrimitiveType)) {
+                    printer.print(`for (int i = 0; i < ${fieldName}${access}array_length; i++) {`)
+                    printer.print(`}`)
+                }
+            }
+            break
+            case 'tuple': {
+                const fields = this.targetStruct(target).getFields()
+                fields.forEach((field, index) => {
+                    printer.print(`// ${this.uniqueNames.get(field.declaration) ?? ""}`)
+                })
+            }
+            break
+            case 'optional': {
+                let typeName = !(target instanceof PrimitiveType) && ts.isTypeReferenceNode(target)
+                    ? identName(target.typeName) ?? "" : ""
+                if (typeName === "Optional") {
+                    const fields = this.targetStruct(target)
+                        .getFields()
+                        .filter((field) => {
+                            return field.name === "value"
+                        })
+                    target = fields[0].declaration
+                }
+                const tagField = `${fieldName}${access}tag`
+                printer.print(`if (${tagField} != ${PrimitiveType.UndefinedTag}) {`)
+                printer.pushIndent()
+                const valueField = `${fieldName}${access}value`
+                this.processTarget(valueField, target, false, printer, false)
+                printer.popIndent()
+                printer.print(`}`)
+            }
+            break
+            case 'struct': {
+                this.targetStruct(target).getFields().forEach((field, index) => {
+                    const structFieldName = `${fieldName}${access}${field.name}`
+                    if (field.optional || this.getTypeTarget(field.declaration, isTargetOptional) !== 'primitive') {
+                        this.processTarget(structFieldName, field.declaration, field.optional, printer, false)
+                    } else {
+                        this.printAliasForStructFieldName(structFieldName, field.name, field.declaration, printer, false)
+                    }
+                })
+            }
+            break
+            case 'primitive': {
+                const fieldTypeName = this.uniqueNames.get(target)
+                if (fieldTypeName) {
+                    this.printAliasForStructFieldName(fieldName, this.genIdNameFromType(fieldTypeName), target, printer)
+                }
+            }
+            break
+        }
     }
 
     generateFirstArgDestruct(convertor: ArgConvertor, target: DeclarationTarget, printer: IndentedPrinter, isPointer: boolean) {
         if (target instanceof PrimitiveType) return // Just don't emit anything
-
         const firstArgName = convertor.param
-        const access = isPointer ? "->" : "."
-
-        if (convertor instanceof OptionConvertor) {
-            const tagField = `${firstArgName}${access}tag`
-            printer.print(`if (${tagField} != ARK_TAG_UNDEFINED) {`)
-            printer.pushIndent()
-            const valueField = `${firstArgName}${access}value`
-            printer.print(`// processing ${valueField}:${this.uniqueNames.get(target)}`)
-            printer.popIndent()
-            printer.print(`}`)
-            return;
-        }
-
         this.setCurrentContext(`modifier(${firstArgName})`)
-        let isUnion = this.isMaybeWrapped(target, ts.isUnionTypeNode)
-        let isArray = this.isMaybeWrapped(target, ts.isArrayTypeNode)
-        let isOptional = this.isMaybeWrapped(target, ts.isOptionalTypeNode)
-        let isTuple = this.isMaybeWrapped(target, ts.isTupleTypeNode)
-
-        // treat Array<T> as array
-        if (!isArray && ts.isTypeReferenceNode(target)) {
-            isArray = identName(target.typeName) === "Array"
-        }
-
-        if (isUnion) {
-            this.processUnion(firstArgName, target, printer, isPointer)
-        } else if (isArray) {
-            let elementType = ts.isArrayTypeNode(target)
-                ? target.elementType
-                : ts.isTypeReferenceNode(target) && target.typeArguments
-                    ? target.typeArguments[0]
-                    : undefined
-            let isPointerField = elementType === undefined
-                ? false
-                : this.typeConvertor("param", elementType).isPointerType()
-            printer.print(`int32_t count = ${firstArgName}${access}array_length ;`)
-            printer.print(`for (int i = 0; i < count; i++) {`)
-            printer.print(`}`)
-        } else if (isTuple) {
-            const fields = this.targetStruct(target).getFields()
-            fields.forEach((field, index) => {
-                printer.print(`// ${this.uniqueNames.get(field.declaration) ?? ""}`)
-            })
-        } else if (isOptional) {
-            const fields = this.targetStruct(target).getFields()
-            fields.forEach((field, index) => {
-                printer.print(`// ${this.uniqueNames.get(field.declaration) ?? ""}`)
-                if (index == 0) {
-                    printer.print(`if (${firstArgName}${access}${field.name} != ${PrimitiveType.UndefinedTag}) {`)
-                    printer.pushIndent()
-                }
-                if (index == fields.length - 1) {
-                    printer.popIndent()
-                    printer.print("}")
-                }
-            })
-        } else {
-            /*
-            this.targetStruct(target).getFields().forEach((field, index) => {
-                printer.print(`// ${this.uniqueNames.get(field.declaration) ?? ""}`)
-                let isPointerField = this.isPointerDeclaration(field.declaration, field.optional)
-                printer.print(`${isPointerField ? "&" : ""}${name}${access}${field.name};`)
-            })
-            */
-        }
+        this.processTarget(firstArgName, target, convertor instanceof OptionConvertor, printer, isPointer);
         this.setCurrentContext(undefined)
     }
 
