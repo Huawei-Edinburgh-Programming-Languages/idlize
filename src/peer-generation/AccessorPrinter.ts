@@ -16,16 +16,12 @@
 import { IndentedPrinter } from "../IndentedPrinter";
 import { accessorStructList, modifierStructs } from "./FileGenerators";
 import { Materialized, MaterializedClass, MaterializedMethod } from "./Materialized";
-import { ModifierVisitor } from "./ModifierPrinter";
+import { ModifierLikeVisitor } from "./ModifierPrinter";
 import { PeerLibrary } from "./PeerLibrary";
 
-class AccessorVisitor extends ModifierVisitor {
+class AccessorVisitor extends ModifierLikeVisitor {
     accessors = new IndentedPrinter()
     accessorList = new IndentedPrinter()
-
-    constructor(library: PeerLibrary) {
-        super(library)
-    }
 
     printRealAndDummyAccessor(clazz: MaterializedClass) {
         this.accessorList.pushIndent()
@@ -62,7 +58,8 @@ class AccessorVisitor extends ModifierVisitor {
 
 export function printRealAndDummyAccessors(peerLibrary: PeerLibrary): {dummy: string, real: string} {
     const visitor = new AccessorVisitor(peerLibrary)
-    Materialized.Instance.materializedClasses.forEach(c => visitor.printRealAndDummyAccessor(c))
+    Materialized.Instance.materializedClasses
+        .forEach(it => visitor.printRealAndDummyAccessor(it))
 
     const dummy =
         visitor.dummy.getOutput().join("\n") + "\n" +

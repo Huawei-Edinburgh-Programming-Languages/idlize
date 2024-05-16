@@ -87,16 +87,25 @@ class MethodSeparatorPrinter extends MethodSeparatorVisitor {
     }
 }
 
-export class ModifierVisitor {
+export abstract class ModifierLikeVisitor {
     dummy = new IndentedPrinter()
     real = new IndentedPrinter()
-    modifiers = new IndentedPrinter()
-    modifierList = new IndentedPrinter()
-    accessorList = new IndentedPrinter()
 
     constructor(
-        protected library: PeerLibrary,
+        protected library: PeerLibrary
     ) { }
+
+    printMethodProlog(printer: IndentedPrinter, method: PeerMethod) {
+        const apiParameters = method.generateAPIParameters().join(", ")
+        const signature = `${method.retType} ${method.implName}(${apiParameters}) {`
+        printer.print(signature)
+        printer.pushIndent()
+    }
+
+    printMethodEpilog(printer: IndentedPrinter) {
+        printer.popIndent()
+        printer.print(`}`)
+    }
 
     printDummyImplFunctionBody(method: PeerMethod) {
         this.dummy.print(`string out("${method.method.name}(");`)
@@ -125,18 +134,12 @@ export class ModifierVisitor {
             printer.print(`return ${retValue};`)
         }
     }
+}
 
-    printMethodProlog(printer: IndentedPrinter, method: PeerMethod) {
-        const apiParameters = method.generateAPIParameters().join(", ")
-        const signature = `${method.retType} ${method.implName}(${apiParameters}) {`
-        printer.print(signature)
-        printer.pushIndent()
-    }
-
-    printMethodEpilog(printer: IndentedPrinter) {
-        printer.popIndent()
-        printer.print(`}`)
-    }
+export class ModifierVisitor extends ModifierLikeVisitor {
+    modifiers = new IndentedPrinter()
+    modifierList = new IndentedPrinter()
+    accessorList = new IndentedPrinter()
 
     printRealAndDummyModifier(method: PeerMethod) {
         this.printMethodProlog(this.dummy, method)

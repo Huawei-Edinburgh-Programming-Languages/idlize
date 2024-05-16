@@ -18,10 +18,6 @@ import { DeclarationTable } from "./DeclarationTable";
 import { PeerClass } from "./PeerClass";
 import { PeerFile } from "./PeerFile";
 
-export type PeerLibraryOutput = {
-    outputC: string[]
-}
-
 export class PeerLibrary {
     public readonly files: PeerFile[] = []
 
