@@ -14,70 +14,19 @@
  */
 import {float32, int32} from "@koalaui/common"
 import {pointer} from "@koalaui/interop"
-
-/**
- * Value representing possible JS runtime object type.
- * Must be synced with "enum RuntimeType" in C++.
- */
-export enum RuntimeType {
-    UNEXPECTED = -1,
-    NUMBER = 1,
-    STRING = 2,
-    OBJECT = 3,
-    BOOLEAN = 4,
-    UNDEFINED = 5,
-    BIGINT = 6,
-    FUNCTION = 7,
-    SYMBOL = 8,
-    MATERIALIZED = 9,
-}
-
-/**
- * Value representing object type in serialized data.
- * Must be synced with "enum Tags" in C++.
- */
-export enum Tags {
-    UNDEFINED = 101,
-    INT32 = 102,
-    FLOAT32 = 103,
-    STRING = 104,
-    LENGTH = 105,
-    RESOURCE = 106,
-    OBJECT = 107,
-}
-
-export function runtimeType(value: any): int32 {
-    let type = typeof value
-    if (type == "number") return RuntimeType.NUMBER
-    if (type == "string") return RuntimeType.STRING
-    if (type == "undefined") return RuntimeType.UNDEFINED
-    if (type == "object") return RuntimeType.OBJECT
-    if (type == "boolean") return RuntimeType.BOOLEAN
-    if (type == "bigint") return RuntimeType.BIGINT
-    if (type == "function") return RuntimeType.FUNCTION
-    if (type == "symbol") return RuntimeType.SYMBOL
-
-    throw new Error(`bug: ${value} is ${type}`)
-}
-
-export type Function = object
-
-let textEncoder = new TextEncoder()
+import {RuntimeType, Tags} from "./SerializerBase";
 
 export class DeserializerBase {
     private position = 0
     private readonly buffer: ArrayBuffer
     private readonly length: int32
     private view: DataView
+    private readonly textDecoder = new TextDecoder()
 
     constructor(buffer: ArrayBuffer, length: int32) {
         this.buffer = buffer
         this.length = length
         this.view = new DataView(this.buffer)
-    }
-
-    close() {
-
     }
 
     asArray(): Uint8Array {
@@ -131,22 +80,19 @@ export class DeserializerBase {
 
     readFunction(): object | undefined {
         const id = this.readInt32()
-        this.position += 4
         return id == RuntimeType.UNDEFINED ? undefined : {}
     }
 
     readMaterialized(): object | undefined {
         const id = this.readInt32()
-        this.position += 4
         return id == RuntimeType.UNDEFINED ? undefined : {}
     }
 
     readString() : string {
-        this.checkCapacity(4)
         const length = this.readInt32()
-        this.position += 4
         this.checkCapacity(length)
-        const value = new Uint8Array(this.view.buffer, this.position).toString()
+        // read without null-terminated byte
+        const value = this.textDecoder.decode(new Uint8Array(this.view.buffer, this.position, length - 1));
         this.position += length
         return value
     }
@@ -163,22 +109,7 @@ export class DeserializerBase {
             if (type == RuntimeType.NUMBER) {
                 return value
             } else if (type == RuntimeType.STRING) {
-                let suffix
-                switch (unitId) {
-                    case 0:
-                        suffix = "px"
-                        break
-                    case 1:
-                        suffix = "vp"
-                        break
-                    case 3:
-                        suffix = "%"
-                        break
-                    case 4:
-                        suffix = "lpx"
-                        break
-                }
-                return `${value}${suffix}`
+                return `${value}${this.unitFromInt(unitId)}`
             } else if (type == RuntimeType.OBJECT) {
                 return {
                     id: resourceId,
@@ -189,5 +120,26 @@ export class DeserializerBase {
             return value
         }
         return undefined
+    }
+
+    private unitFromInt(unit: int32): string {
+        let suffix: string
+        switch (unit) {
+            case 0:
+                suffix = "px"
+                break
+            case 1:
+                suffix = "vp"
+                break
+            case 3:
+                suffix = "%"
+                break
+            case 4:
+                suffix = "lpx"
+                break
+            default:
+                suffix = "<unknown>"
+        }
+        return suffix
     }
 }
