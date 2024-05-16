@@ -16,6 +16,7 @@
 import { PeerFile } from "./PeerFile"
 import { PeerMethod } from "./PeerMethod"
 import { DeclarationTable } from "./DeclarationTable"
+import { Method } from "./LanguageWriters"
 
 export interface PeerClassBase {
     setGenerationContext(context: string| undefined): void
@@ -30,12 +31,45 @@ export class PeerClass implements PeerClassBase {
         public readonly declarationTable: DeclarationTable
     ) { }
 
+    private nameMap = new Map<string, Array<PeerMethod>>()
+
     setGenerationContext(context: string| undefined): void {
         this.declarationTable.setCurrentContext(context)
     }
 
     generatedName(isCallSignature: boolean): string{
         return isCallSignature ? this.originalInterfaceName! : this.originalClassName!
+    }
+
+    analyze() {
+        // Find name overrides.
+        for (let method of this.methods) {
+            let name = method.method.name
+            const list = this.nameMap.get(name)
+            if (list) {
+                list.push(method)
+            } else {
+                this.nameMap.set(name, [method])
+            }
+        }
+        for (let methods of this.nameMap.values()) {
+            if (methods.length > 1) {
+                let syntheticOverrideTarget = this.createSyntheticOverrideTarget(methods)
+                methods.forEach((method, index) => {
+                    method.isNameOverride = true
+                    method.method.name = `${method.method.name}_${index}`
+                })
+                this.methods.push(syntheticOverrideTarget)
+            }
+        }
+    }
+
+    private createSyntheticOverrideTarget(methods: Array<PeerMethod>): PeerMethod {
+        let method = new Method(methods[0].method.name, methods[0].method.signature, methods[0].method.modifiers)
+        let result = new PeerMethod(methods[0].originalParentName, methods[0].declarationTargets,
+            methods[0].argConvertors, methods[0].retConvertor, methods[0].isCallSignature, method)
+        result.isSyntheticOverrideTarget = true
+        return result
     }
 
     methods: PeerMethod[] = []

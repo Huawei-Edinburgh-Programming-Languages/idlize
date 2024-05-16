@@ -29,6 +29,9 @@ export class PeerMethod {
         public method: Method
     ) { }
 
+    public isNameOverride = false
+    public isSyntheticOverrideTarget = false
+
     public hasReceiver(): boolean {
         return !this.method.modifiers?.includes(MethodModifier.STATIC)
     }
@@ -108,7 +111,7 @@ export class MethodSeparatorVisitor {
             this.onVisitInseparable()
             return
         }
-        
+
         const visitor: StructVisitor = {
             visitUnionField: (field: FieldRecord, selectorValue: number) => {
                 this.onPushUnionScope(argIndex, field, selectorValue)

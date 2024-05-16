@@ -36,8 +36,17 @@ export class PeerLibrary {
     findPeerByComponentName(componentName: string): PeerClass | undefined {
         for (const file of this.files)
             for (const peer of file.peers.values())
-                if (peer.componentName == componentName) 
+                if (peer.componentName == componentName)
                     return peer
         return undefined
+    }
+
+    analyze() {
+        // Perform analysis of peer methods to create names map.
+        for (const file of this.files) {
+            for (const peer of file.peers.values()) {
+                peer.analyze()
+            }
+        }
     }
 }

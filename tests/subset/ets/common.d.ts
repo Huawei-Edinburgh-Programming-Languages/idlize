@@ -120,6 +120,16 @@ declare interface DragInteractionOptions {
 }
 
 
+declare enum ModalTransition {
+    DEFAULT,
+    NONE,
+}
+
+
+declare interface ContentCoverOptions {
+    modalTransition?: ModalTransition
+}
+
 declare class CommonMethod<T> {
 
     constructor();
@@ -139,6 +149,11 @@ declare class CommonMethod<T> {
     backgroundBlurStyle(value: BlurStyle, options?: BackgroundBlurStyleOptions): T;
 
     dragPreviewOptions(value: DragPreviewOptions, options?: DragInteractionOptions): T;
+
+    bindContentCover(isShow: boolean, builder: CustomBuilder, type?: ModalTransition): T;
+
+    bindContentCover(isShow: boolean, builder: CustomBuilder, options?: ContentCoverOptions): T;
+
 }
 
 declare interface Rectangle {

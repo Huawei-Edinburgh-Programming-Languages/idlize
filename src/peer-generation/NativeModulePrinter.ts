@@ -20,6 +20,7 @@ import { PeerClass, PeerClassBase } from "./PeerClass";
 import { PeerLibrary } from "./PeerLibrary";
 import { printGlobalMaterialized } from "./Materialized";
 import { PeerMethod } from "./PeerMethod";
+import { Language } from "../util";
 
 class NativeModuleVisitor {
     readonly nativeModule: LanguageWriter
@@ -47,6 +48,7 @@ class NativeModuleVisitor {
 }
 
 export function printPeerMethod(clazz: PeerClassBase, method: PeerMethod, nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter) {
+    if (method.isSyntheticOverrideTarget) return
     const component = clazz.generatedName(method.isCallSignature)
     clazz.setGenerationContext(`${method.isCallSignature ? "" : method.method.name}()`)
     const args = method.argConvertors
