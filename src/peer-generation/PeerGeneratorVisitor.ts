@@ -404,7 +404,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
     }
 
     retConvertor(typeNode?: ts.TypeNode): RetConvertor {
-        let nativeType = typeNode ? mapCInteropRetType(typeNode) : "void"
+        let nativeType = typeNode ? this.mapCInteropRetType(typeNode) : "void"
         let isVoid = nativeType == "void"
         return {
             isVoid: isVoid,
@@ -658,46 +658,48 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
         }
         throw new Error(`Expected a class or a friend interface: ${asString(clazz)}`)
     }
-}
 
-function mapCInteropRetType(type: ts.TypeNode): string {
-    if (type.kind == ts.SyntaxKind.VoidKeyword) {
-        return `void`
-    }
-    if (type.kind == ts.SyntaxKind.NumberKeyword) {
-        return PrimitiveType.Int32.getText()
-    }
-    if (type.kind == ts.SyntaxKind.BooleanKeyword) {
-        return PrimitiveType.Boolean.getText()
-    }
-    if (ts.isTypeReferenceNode(type)) {
-        let name = identName(type.typeName)!
-        /* HACK, fix */
-        if (name.endsWith("Attribute")) return "void"
-        switch (name) {
-            /* ANOTHER HACK, fix */
-            case "T": return "void"
-            case "UIContext": return PrimitiveType.NativePointer.getText()
+    private mapCInteropRetType(type: ts.TypeNode): string {
+        if (type.kind == ts.SyntaxKind.VoidKeyword) {
+            return `void`
         }
-        console.log(`WARNING: unhandled return type ${type.getText()}`)
-        return name
-    }
-    if (type.kind == ts.SyntaxKind.StringKeyword) {
-        /* HACK, fix */
-        // return `KStringPtr`
-        return "void"
-    }
-    if (ts.isUnionTypeNode(type)) {
-        console.log(`WARNING: unhandled union type: ${type.getText()}`)
-        // TODO: not really properly supported.
-        if (type.types[0].kind == ts.SyntaxKind.VoidKeyword) return "void"
-        if (type.types.length == 2) {
-            if (type.types[1].kind == ts.SyntaxKind.UndefinedKeyword) return `void`
-            if (ts.isLiteralTypeNode(type.types[1]) && type.types[1].literal.kind == ts.SyntaxKind.NullKeyword) {
-                // NavPathStack | null
-                return mapCInteropRetType(type.types[0])
+        if (type.kind == ts.SyntaxKind.NumberKeyword) {
+            return PrimitiveType.Int32.getText()
+        }
+        if (type.kind == ts.SyntaxKind.BooleanKeyword) {
+            return PrimitiveType.Boolean.getText()
+        }
+        if (ts.isTypeReferenceNode(type)) {
+            let name = identName(type.typeName)!
+            /* HACK, fix */
+            if (name.endsWith("Attribute")) return "void"
+            switch (name) {
+                case "Array":
+                    return this.declarationTable.computeTypeName(undefined, type, false)
+                /* ANOTHER HACK, fix */
+                case "T": return "void"
+                case "UIContext": return PrimitiveType.NativePointer.getText()
+            }
+            console.log(`WARNING: unhandled return type ${type.getText()}`)
+            return name
+        }
+        if (type.kind == ts.SyntaxKind.StringKeyword) {
+            /* HACK, fix */
+            // return `KStringPtr`
+            return "void"
+        }
+        if (ts.isUnionTypeNode(type)) {
+            console.log(`WARNING: unhandled union type: ${type.getText()}`)
+            // TODO: not really properly supported.
+            if (type.types[0].kind == ts.SyntaxKind.VoidKeyword) return "void"
+            if (type.types.length == 2) {
+                if (type.types[1].kind == ts.SyntaxKind.UndefinedKeyword) return `void`
+                if (ts.isLiteralTypeNode(type.types[1]) && type.types[1].literal.kind == ts.SyntaxKind.NullKeyword) {
+                    // NavPathStack | null
+                    return this.mapCInteropRetType(type.types[0])
+                }
             }
         }
+        throw new Error(type.getText())
     }
-    throw new Error(type.getText())
 }
