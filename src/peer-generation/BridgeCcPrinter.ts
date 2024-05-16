@@ -54,7 +54,9 @@ class BridgeCcVisitor {
         // TODO: how do we know the real amount of arguments of the API functions?
         // Do they always match in TS and in C one to one?
         const args = receiver.concat(argConvertors.map(it => this.generateApiArgument(it))).join(", ")
-        this.C.print(`${isVoid ? "" : "return "}${method.apiCall}->${modifier}->${peerMethod}(${args});`)
+        const call = `${isVoid ? "" : "return "}${method.apiCall}->${modifier}->${peerMethod}(${args});`
+        if (this.callLog) this.printCallLog(method, method.apiCall, modifier)
+        this.C.print(call)
     }
 
     private printNativeBody(method: PeerMethod) {
@@ -70,19 +72,26 @@ class BridgeCcVisitor {
                 it.convertorDeserialize(it.param, result, this.C)
             }
         })
-        if (this.callLog) this.printCallLog(method)
         this.printAPICall(method)
         this.C.popIndent()
     }
 
-    private printCallLog(method: PeerMethod) {
+    private printCallLog(method: PeerMethod, api: string, modifier: string) {
         this.C.print(`if (needGroupedLog(2)) {`)
         this.C.pushIndent()
-        this.C.print(`std::string _logData("${method.method.name}(");`)
-        method.argConvertors.forEach(it => {
+
+        this.C.print(`std::string _logData("  ${api}->${modifier}->${method.peerMethodName}(");`)
+        if (method.hasReceiver()) {
+            this.C.print(`WriteToString(&_logData, node);`)
+            if (method.argConvertors.length > 0)
+                this.C.print(`_logData.append(", ");`)
+        }
+        method.argConvertors.forEach((it, index) => {
             this.C.print(`WriteToString(&_logData, ${this.generateApiArgument(it)});`)
+            if (index < method.argConvertors.length - 1)
+                this.C.print(`_logData.append(", ");`)
         })
-        this.C.print(`_logData.append(")\\n");`)
+        this.C.print(`_logData.append(");\\n");`)
         this.C.print(`appendGroupedLog(2, _logData);`)
         this.C.popIndent()
         this.C.print(`}`)

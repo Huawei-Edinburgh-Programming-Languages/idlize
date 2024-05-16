@@ -207,8 +207,16 @@ checkNavigation()
 checkParticle()
 stopNativeLog(CALL_GROUP_LOG)
 
-console.log(getNativeLog(CALL_GROUP_LOG))
+const callLog = getNativeLog(CALL_GROUP_LOG)
+if (callLog.length > 0) {
+    console.log(`
+#include "arkoala_api.h"
 
+int main(int argc, const char** argv) {
+${callLog}
+  return 0;
+}`)
+}
 // checkTabContent()
 
 // Report in error code.
