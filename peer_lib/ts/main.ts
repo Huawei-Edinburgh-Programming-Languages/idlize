@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 import { SerializerBase } from "@arkoala/arkui/SerializerBase"
+import { DeserializerBase } from "@arkoala/arkui/DeserializerBase"
 import { ArkButtonPeer } from "@arkoala/arkui/ArkButtonPeer"
 import { ArkCommonPeer } from "@arkoala/arkui/ArkCommonPeer"
 import { ArkCalendarPickerPeer } from "@arkoala/arkui/ArkCalendarPickerPeer"
@@ -39,6 +40,29 @@ setReportTestFailures(getNativeLog().indexOf("heightAdaptivePolicy") == -1)
 
 if (!reportTestFailures) {
     console.log("WARNING: ignore test result")
+}
+
+function checkSerdeResult(name: string, value: any, expected: any) {
+    if (value !== expected) {
+        console.log(`TEST ${name} FAILURE`)
+    } else {
+        console.log(`TEST ${name} PASS`)
+    }
+}
+
+function checkSerde() {
+    const serializer = new SerializerBase(12)
+    serializer.writeLength("10px")
+    serializer.writeLength("11vp")
+    serializer.writeLength("12%")
+    serializer.writeLength("13lpx")
+    serializer.writeLength(14)
+    const deserializer = new DeserializerBase(serializer.asArray().buffer, serializer.length())
+    checkSerdeResult("length unit px", deserializer.readLength(), "10px")
+    checkSerdeResult("length unit vp", deserializer.readLength(), "11vp")
+    checkSerdeResult("length unit %", deserializer.readLength(), "12%")
+    checkSerdeResult("length unit lpx", deserializer.readLength(), "13lpx")
+    checkSerdeResult("length number", deserializer.readLength(), 14)
 }
 
 function checkButton() {
@@ -162,6 +186,8 @@ function checkPerf3(count: number) {
     let passed = performance.now() - start
     console.log(`widthAttributeString: ${Math.round(passed)}ms for ${count} iteration, ${Math.round(passed / count * 1000000)}ms per 1M iterations`)
 }
+
+checkSerde()
 
 checkPerf2(200 * 1000)
 checkPerf3(200 * 1000)
