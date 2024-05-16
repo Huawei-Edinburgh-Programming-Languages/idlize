@@ -17,6 +17,7 @@ import { PeerFile } from "./PeerFile"
 import { PeerMethod } from "./PeerMethod"
 import { DeclarationTable } from "./DeclarationTable"
 import { Method } from "./LanguageWriters"
+import { Language } from "../util"
 
 export interface PeerClassBase {
     setGenerationContext(context: string| undefined): void
@@ -42,6 +43,7 @@ export class PeerClass implements PeerClassBase {
     }
 
     analyze() {
+        if (this.file.declarationTable.language != Language.TS) return
         // Find name overrides.
         for (let method of this.methods) {
             let name = method.method.name
