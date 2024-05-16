@@ -1,4 +1,4 @@
-import { int32 } from "@koalaui/common"
+import { int32 } from "./common"
 import { pointer } from "./interop"
 
 export class Finalizable {

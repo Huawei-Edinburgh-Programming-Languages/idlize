@@ -158,9 +158,8 @@ export interface DragInteractionOptions {
     defaultAnimationBeforeLifting?: boolean;
 }
 
-
 export interface CommonMethod<T> {
-
+/*
     stateStyles(value: StateStyles): T;
 
     backdropBlur(value: number, options?: BlurOptions): T;
@@ -174,6 +173,7 @@ export interface CommonMethod<T> {
     backgroundBlurStyle(value: BlurStyle, options?: BackgroundBlurStyleOptions): T;
 
     dragPreviewOptions(value: DragPreviewOptions, options?: DragInteractionOptions): T;
+*/
 }
 
 export class CommonAttribute {

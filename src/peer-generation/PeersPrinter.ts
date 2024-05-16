@@ -215,8 +215,10 @@ class PeerFileVisitor {
             case Language.ARKTS: {
                 return [
                     `import { int32 } from "./common"`,
-                    `import { PeerNode } from "./PeerNode"`,
+                    `import { PeerNode } from "./arkoala"`,
                     `import { nullptr, KPointer } from "./interop"`,
+                    `import { ArkUINodeType } from "./ArkUINodeType"`,
+                    `import { ArkCommon } from "./ArkCommon"`,
                 ]
             }
             case Language.JAVA: {
