@@ -1,0 +1,168 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import {float32, int32} from "@koalaui/common"
+import {pointer} from "@koalaui/interop"
+
+/**
+ * Value representing possible JS runtime object type.
+ * Must be synced with "enum RuntimeType" in C++.
+ */
+export enum RuntimeType {
+    UNEXPECTED = -1,
+    NUMBER = 1,
+    STRING = 2,
+    OBJECT = 3,
+    BOOLEAN = 4,
+    UNDEFINED = 5,
+    BIGINT = 6,
+    FUNCTION = 7,
+    SYMBOL = 8,
+    MATERIALIZED = 9,
+}
+
+/**
+ * Value representing object type in serialized data.
+ * Must be synced with "enum Tags" in C++.
+ */
+export enum Tags {
+    UNDEFINED = 101,
+    INT32 = 102,
+    FLOAT32 = 103,
+    STRING = 104,
+    LENGTH = 105,
+    RESOURCE = 106,
+    OBJECT = 107,
+}
+
+export function runtimeType(value: any): int32 {
+    let type = typeof value
+    if (type == "number") return RuntimeType.NUMBER
+    if (type == "string") return RuntimeType.STRING
+    if (type == "undefined") return RuntimeType.UNDEFINED
+    if (type == "object") return RuntimeType.OBJECT
+    if (type == "boolean") return RuntimeType.BOOLEAN
+    if (type == "bigint") return RuntimeType.BIGINT
+    if (type == "function") return RuntimeType.FUNCTION
+    if (type == "symbol") return RuntimeType.SYMBOL
+
+    throw new Error(`bug: ${value} is ${type}`)
+}
+
+export type Function = object
+
+let textEncoder = new TextEncoder()
+
+export class DeserializerBase {
+    private position = 0
+    private readonly buffer: ArrayBuffer
+    private readonly length: int32
+    private view: DataView
+
+    constructor(buffer: ArrayBuffer, length: int32) {
+        this.buffer = buffer
+        this.length = length
+        this.view = new DataView(this.buffer)
+    }
+
+    close() {
+
+    }
+
+    asArray(): Uint8Array {
+        return new Uint8Array(this.buffer)
+    }
+
+    currentPosition(): int32 {
+        return this.position
+    }
+
+    private checkCapacity(value: int32) {
+        if (value > this.length) {
+            throw new Error(`${value} is less than remaining buffer length`)
+        }
+    }
+
+    readInt8(): int32 {
+        this.checkCapacity(1)
+        const value = this.view.getInt8(this.position)
+        this.position += 1
+        return value
+    }
+
+    readInt32(): int32 {
+        this.checkCapacity(4)
+        const value = this.view.getInt32(this.position, true)
+        this.position += 4
+        return value
+    }
+
+    readPointer(): pointer {
+        this.checkCapacity(8)
+        const value = this.view.getBigInt64(this.position, true)
+        this.position += 8
+        return value
+    }
+
+    readFloat32(): float32 {
+        this.checkCapacity(4)
+        const value = this.view.getFloat32(this.position, true)
+        this.position += 4
+        return value
+    }
+
+    readBoolean(): boolean | undefined {
+        this.checkCapacity(1)
+        const value = this.view.getInt8(this.position)
+        this.position += 1
+        return value == RuntimeType.UNDEFINED ? undefined : value == 1
+    }
+
+    readFunction(): object | undefined {
+        const id = this.readInt32()
+        this.position += 4
+        return id == RuntimeType.UNDEFINED ? undefined : {}
+    }
+
+    readMaterialized(): object | undefined {
+        const id = this.readInt32()
+        this.position += 4
+        return id == RuntimeType.UNDEFINED ? undefined : {}
+    }
+
+    readString() : string {
+        this.checkCapacity(4)
+        const length = this.readInt32()
+        this.position += 4
+        this.checkCapacity(length)
+        const value = new Uint8Array(this.view.buffer, this.position).toString()
+        this.position += length
+        return value
+    }
+
+    readLength(): object | undefined {
+        this.checkCapacity(1)
+        const valueType = this.readInt8()
+        let type = runtimeType(valueType)
+        if (type != Tags.UNDEFINED) {
+            const value = {
+                value: this.readFloat32(),
+                unit: this.readInt32(),
+                resource: this.readInt32()
+            }
+            return value
+        }
+        return undefined
+    }
+}
