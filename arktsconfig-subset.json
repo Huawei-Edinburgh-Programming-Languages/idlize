@@ -5,10 +5,10 @@
         "paths": {
             "@arkoala/arkui": ["./generated/arkts-subset", "./"],
             "@arkoala/arkui/*": ["./generated/arkts-subset/*", "./*"],
-            "@koalaui/arkoala": ["node_modules/@koalaui/arkoala"],
-            "@koalaui/common": ["node_modules/@koalaui/common"],
-            "@koalaui/interop": ["node_modules/@koalaui/interop"],
-            "@koalaui/runtime": ["node_modules/@koalaui/runtime"]
+            "@koalaui/arkoala": ["generated/arkts-subset/arkoala"],
+            "@koalaui/common": ["generated/arkts-subset/common"],
+            "@koalaui/interop": ["generated/arkts-subset/interop"],
+            "@koalaui/runtime": ["generated/arkts-subset/runtime"]
         }
     },
     "include": ["./generated/arkts-subset/**/*.ets"]

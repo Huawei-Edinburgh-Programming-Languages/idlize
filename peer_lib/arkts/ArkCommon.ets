@@ -1,4 +1,4 @@
-import { NativePeerNode } from "./arkoala"
+import { NativePeerNode } from "@koalaui/arkoala"
 import { BackgroundBlurStyleOptions, BlurOptions, BlurStyle, CommonAttribute, CommonMethod, DragInteractionOptions, DragPreviewOptions, Length, SheetOptions, StateStyles } from "./dts-exports"
 
 export class ArkCommon implements CommonMethod<CommonAttribute> {

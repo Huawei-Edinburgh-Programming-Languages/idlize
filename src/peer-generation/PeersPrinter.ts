@@ -64,8 +64,9 @@ class PeerFileVisitor {
     }
 
     private printImports(): void {
+        this.getDefaultPeerImports(this.file.declarationTable.language)!.forEach(it => this.printer.print(it))
         if (this.file.declarationTable.language == Language.JAVA) {
-            this.printer.print("import org.koalaui.arkoala.*;")
+            return
         }
         const imports = new ImportsCollector()
         imports.addFilterByBasename(this.targetBasename)
@@ -81,7 +82,6 @@ class PeerFileVisitor {
         })
         imports.addFeature("unsafeCast", "./generated-utils")
         imports.print(this.printer)
-        this.getDefaultPeerImports(this.file.declarationTable.language)!.forEach(it => this.printer.print(it))
     }
 
     private printAttributes(peer: PeerClass) {
@@ -214,14 +214,20 @@ class PeerFileVisitor {
             }
             case Language.ARKTS: {
                 return [
-                    `import { int32 } from "./common"`,
-                    `import { PeerNode } from "./arkoala"`,
-                    `import { nullptr, KPointer } from "./interop"`,
+                    `import { int32 } from "@koalaui/common"`,
+                    `import { PeerNode } from "@koalaui/arkoala"`,
+                    `import { nullptr, KPointer } from "@koalaui/interop"`,
+                    `import { runtimeType, withLength, withLengthArray, RuntimeType } from "./SerializerBase"`,
+                    `import { Serializer } from "./Serializer"`,
                     `import { ArkUINodeType } from "./ArkUINodeType"`,
                     `import { ArkCommon } from "./ArkCommon"`,
+                    `import { BackgroundBlurStyleOptions, BlurOptions, BlurStyle, CommonAttribute, CommonMethod, DragInteractionOptions, DragPreviewOptions, Length, ResourceColor, SheetOptions, StateStyles } from "./dts-exports"`
                 ]
             }
             case Language.JAVA: {
+                return [
+                    "import org.koalaui.arkoala.*;"
+                ]
             }
         }
     }

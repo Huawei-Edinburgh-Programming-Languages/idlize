@@ -28,8 +28,20 @@
  * limitations under the License.
  */
 
+export interface Resource {
 
-declare enum Color {
+  bundleName: string;
+
+  moduleName: string;
+
+  id: number;
+
+  params?: object[];
+
+  type?: number;
+}
+
+export enum Color {
     White,
     Black,
 }

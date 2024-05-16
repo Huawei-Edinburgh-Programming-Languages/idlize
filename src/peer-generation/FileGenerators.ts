@@ -152,6 +152,33 @@ extern const ArkUIAccessors* GetArkUIAccessors()
 
 export function makeTSSerializer(table: DeclarationTable): string {
     let printer = createLanguageWriter(new IndentedPrinter(), Language.TS)
+    if(table.language == Language.ARKTS) {
+        printer.print(`
+import {
+    AltOffset,
+    BackgroundBlurStyleOptions,
+    BlurOptions,
+    BlurStyle,
+    Color,
+    CommonAttribute,
+    CommonMethod,
+    DragInteractionOptions,
+    DragPreviewOptions,
+    Length,
+    Offset,
+    Padding,
+    Position,
+    Resource,
+    ResourceStr,
+    ResourceColor,
+    SheetOptions,
+    SheetSize,
+    StateStyles,
+    SheetTitleOptions
+} from "./dts-exports"
+`.trim()
+        )
+    }
     table.generateSerializers(printer)
     return `
 import { SerializerBase, runtimeType, Tags, RuntimeType, Function } from "./SerializerBase"

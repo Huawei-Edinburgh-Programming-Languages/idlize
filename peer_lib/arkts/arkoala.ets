@@ -1,5 +1,5 @@
-import { int32 } from "./common"
-import { pointer } from "./interop"
+import { int32 } from "@koalaui/common"
+import { pointer } from "@koalaui/interop"
 
 export class Finalizable {
     public ptr: pointer
