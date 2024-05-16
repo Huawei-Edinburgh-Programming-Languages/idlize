@@ -31,8 +31,8 @@ class AccessorVisitor extends ModifierVisitor {
         this.accessorList.pushIndent()
         this.printMaterializedClassProlog(clazz);
         [clazz.ctor, clazz.dtor].concat(clazz.methods).forEach(method => {
-            this.printMaterializedMethod(this.dummy, method, m => this.printDummyImplFunctionBody(m))
-            this.printMaterializedMethod(this.real, method, m => this.printModifierImplFunctionBody(m))
+            this.printMaterializedMethod(this.dummy, method, it => this.printDummyImplFunctionBody(it))
+            this.printMaterializedMethod(this.real, method, it => this.printModifierImplFunctionBody(it))
             this.accessors.print(`${method.originalParentName}_${method.method.name},`)
         })
         this.printMaterializedClassEpilog(clazz)

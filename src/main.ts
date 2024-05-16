@@ -308,9 +308,9 @@ if (options.dts2peer) {
                 const materialized = printMaterialized(peerLibrary, options.dumpSerialized ?? false)
                 for (const [targetBasename, materializedClass] of materialized) {
                     console.log(`Print materialized class: ${materializedClass}`)
-                    const outMaterilizedFile = path.join(outDir,targetBasename)
-                    console.log("producing", outMaterilizedFile)
-                    fs.writeFileSync(outMaterilizedFile, materializedClass)
+                    const outMaterializedFile = path.join(outDir,targetBasename)
+                    console.log("producing", outMaterializedFile)
+                    fs.writeFileSync(outMaterializedFile, materializedClass)
                 }
 
                 fs.writeFileSync(
