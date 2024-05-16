@@ -25,6 +25,7 @@ class AccessorVisitor extends ModifierVisitor {
 
     constructor(library: PeerLibrary) {
         super(library)
+        this.accessors.print("\n// Accessors\n")
     }
 
     printRealAndDummyAccessor(clazz: MaterializedClass) {

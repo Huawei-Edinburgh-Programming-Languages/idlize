@@ -370,7 +370,15 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
 
         let mConstructor = this.makeMaterializedMethod(className, constructor!, true)
         let mDestructor = this.makeMaterializedMethod(className, new MethodRecord("destructor", false, undefined, []))
+
+        // TODO: collapse overloads
+        const seen: Set<string> = new Set()
         let mMethods = structDescriptor.getMethods()
+            .filter(method => {
+                if (seen.has(method.name)) return false
+                seen.add(method.name)
+                return true
+            })
             .map(method => this.makeMaterializedMethod(className, method))
         Materialized.Instance.materializedClasses.set(className,
             new MaterializedClass(className, mConstructor, mDestructor, mMethods))
@@ -383,8 +391,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
         const retConvertor = isConstructor
             ? { isVoid: false, isStruct: false, nativeType: () => parentName + "Peer*", macroSuffixPart: () => "" }
             : this.retConvertor(method.returnType)
-        const tsRetType = method.returnType == undefined ? undefined : mapType(this.typeChecker, method.returnType)
-        return new MaterializedMethod(parentName, declarationTargets, argConvertors, retConvertor, tsRetType, false, method.toMethod(this.typeChecker))
+        return new MaterializedMethod(parentName, declarationTargets, argConvertors, retConvertor, false, method.toMethod(this.typeChecker))
     }
 
     argConvertor(param: ts.ParameterDeclaration): ArgConvertor {

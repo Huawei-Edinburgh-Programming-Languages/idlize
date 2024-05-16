@@ -39,7 +39,6 @@ export class MaterializedMethod extends PeerMethod {
         declarationTargets: DeclarationTarget[],
         argConvertors: ArgConvertor[],
         retConvertor: RetConvertor,
-        public tsRetType: string | undefined,
         isCallSignature: boolean,
         method: Method
     ) {
