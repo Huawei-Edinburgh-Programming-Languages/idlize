@@ -612,3 +612,13 @@ function mapCInteropRetType(type: ts.TypeNode): string {
     }
     throw new Error(type.getText())
 }
+
+// TODO: converge with mapCInteropRetType()
+export function mapCInteropRetType2(type: Type|undefined): string {
+    if (!type) return 'void'
+    switch (type.name) {
+        case 'this': return 'void'
+        case 'void': return 'void'
+        default: return PrimitiveType.NativePointer.getText()
+    }
+}

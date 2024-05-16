@@ -15,6 +15,7 @@
 
 import { IndentedPrinter } from "../IndentedPrinter";
 import { Language, stringOrNone } from "../util";
+import { PrimitiveType } from "./DeclarationTable";
 
 export class Type {
     constructor(public name: string, public nullable = false) {}
@@ -242,7 +243,10 @@ export class TSLanguageWriter extends LanguageWriter {
     }
 
     mapType(type: Type): string {
-        return `${type.name}`
+        switch (type.name) {
+            case PrimitiveType.NativePointer.getText(): return 'KNativePointer'
+            default: return type.name
+        }
     }
 }
 
@@ -340,11 +344,13 @@ export class JavaLanguageWriter extends LanguageWriter {
     mapType(type: Type): string {
         switch (type.name) {
             case 'KPointer': return 'long'
+            case PrimitiveType.NativePointer.getText(): return 'long'
             case 'Uint8Array': return 'byte[]'
             case 'int32': case 'KInt': return 'int'
             case 'KStringPtr': return 'String'
             case 'string': return 'String'
             case 'number': return 'double'
+            case 'pointer': return 'long'
         }
         return super.mapType(type)
     }

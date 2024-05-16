@@ -113,6 +113,7 @@ export function printGlobalMaterialized(nativeModule: LanguageWriter, nativeModu
     console.log(`Materialized classes: ${Materialized.Instance.materializedClasses.size}`)
     Materialized.Instance.materializedClasses.forEach(clazz => {
         printPeerMethod(clazz, clazz.ctor, nativeModule, nativeModuleEmpty, new Type("pointer"))
+        printPeerMethod(clazz, clazz.dtor, nativeModule, nativeModuleEmpty, Type.Void)
         clazz.methods.forEach(method => printPeerMethod(clazz, method, nativeModule, nativeModuleEmpty))
     })
 }

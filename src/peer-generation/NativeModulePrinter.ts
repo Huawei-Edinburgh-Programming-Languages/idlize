@@ -20,6 +20,7 @@ import { PeerClass, PeerClassBase } from "./PeerClass";
 import { PeerLibrary } from "./PeerLibrary";
 import { printGlobalMaterialized } from "./Materialized";
 import { PeerMethod } from "./PeerMethod";
+import { mapCInteropRetType2 } from "./PeerGeneratorVisitor";
 
 class NativeModuleVisitor {
     readonly nativeModule: LanguageWriter
@@ -46,9 +47,15 @@ class NativeModuleVisitor {
     }
 }
 
-export function printPeerMethod(clazz: PeerClassBase, method: PeerMethod, nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter,
+export function printPeerMethod(
+    clazz: PeerClassBase,
+    method: PeerMethod,
+    nativeModule: LanguageWriter,
+    nativeModuleEmpty: LanguageWriter,
     returnType?: Type
 ) {
+    // TODO: remove this junk
+    if (!returnType) returnType = method.method.signature.returnType
     const component = clazz.generatedName(method.isCallSignature)
     clazz.setGenerationContext(`${method.isCallSignature ? "" : method.overloadedName}()`)
     const args = method.argConvertors
@@ -63,7 +70,7 @@ export function printPeerMethod(clazz: PeerClassBase, method: PeerMethod, native
             }
         })
     let maybeReceiver = method.hasReceiver() ? [{ name: 'ptr', type: 'KPointer' }] : []
-    const parameters = NamedMethodSignature.make(returnType?.name ?? 'void', maybeReceiver.concat(args))
+    const parameters = NamedMethodSignature.make(mapCInteropRetType2(returnType), maybeReceiver.concat(args))
     let name = `_${component}_${method.overloadedName}`
     nativeModule.writeNativeMethodDeclaration(name, parameters)
     nativeModuleEmpty.writeMethodImplementation(new Method(name, parameters), (printer) => {
