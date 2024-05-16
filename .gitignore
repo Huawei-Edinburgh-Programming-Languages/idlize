@@ -10,3 +10,4 @@ linter
 NativeBridge.node
 /idl/
 panda/node_modules
+sdk/component
