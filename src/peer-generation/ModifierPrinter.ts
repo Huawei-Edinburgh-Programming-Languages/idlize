@@ -95,19 +95,19 @@ export abstract class ModifierLikeVisitor {
         protected library: PeerLibrary
     ) { }
 
-    printMethodProlog(printer: IndentedPrinter, method: PeerMethod) {
+    protected printMethodProlog(printer: IndentedPrinter, method: PeerMethod) {
         const apiParameters = method.generateAPIParameters().join(", ")
         const signature = `${method.retType} ${method.implName}(${apiParameters}) {`
         printer.print(signature)
         printer.pushIndent()
     }
 
-    printMethodEpilog(printer: IndentedPrinter) {
+    protected printMethodEpilog(printer: IndentedPrinter) {
         printer.popIndent()
         printer.print(`}`)
     }
 
-    printDummyImplFunctionBody(method: PeerMethod) {
+    protected printDummyImplFunctionBody(method: PeerMethod) {
         this.dummy.print(`string out("${method.method.name}(");`)
         method.argConvertors.forEach((argConvertor, index) => {
             if (index > 0) this.dummy.print(`out.append(", ");`)
@@ -118,7 +118,7 @@ export abstract class ModifierLikeVisitor {
         this.printReturnStatement(this.dummy, method)
     }
 
-    printModifierImplFunctionBody(method: PeerMethod) {
+    protected printModifierImplFunctionBody(method: PeerMethod) {
         const visitor = new MethodSeparatorPrinter(
             this.library.declarationTable,
             method
