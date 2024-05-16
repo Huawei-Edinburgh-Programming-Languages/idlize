@@ -151,15 +151,40 @@ export class DeserializerBase {
         return value
     }
 
-    readLength(): object | undefined {
+    readLength(): Length | undefined {
         this.checkCapacity(1)
         const valueType = this.readInt8()
-        let type = runtimeType(valueType)
-        if (type != Tags.UNDEFINED) {
-            const value = {
-                value: this.readFloat32(),
-                unit: this.readInt32(),
-                resource: this.readInt32()
+        if (valueType == Tags.LENGTH) {
+            const type = this.readInt8()
+            const value = this.readFloat32()
+            const unitId = this.readInt32()
+            const resourceId = this.readInt32()
+
+            if (type == RuntimeType.NUMBER) {
+                return value
+            } else if (type == RuntimeType.STRING) {
+                let suffix
+                switch (unitId) {
+                    case 0:
+                        suffix = "px"
+                        break
+                    case 1:
+                        suffix = "vp"
+                        break
+                    case 3:
+                        suffix = "%"
+                        break
+                    case 4:
+                        suffix = "lpx"
+                        break
+                }
+                return `${value}${suffix}`
+            } else if (type == RuntimeType.OBJECT) {
+                return {
+                    id: resourceId,
+                    bundleName: "",
+                    moduleName: ""
+                }
             }
             return value
         }
