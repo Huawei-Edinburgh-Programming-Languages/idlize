@@ -67,7 +67,6 @@ class PeerFileVisitor {
         if (this.file.declarationTable.language == Language.JAVA) {
             this.printer.print("import org.koalaui.arkoala.*;")
         }
-        if (!this.isTs) return
         const imports = new ImportsCollector()
         imports.addFilterByBasename(this.targetBasename)
         this.file.peers.forEach(peer => {
@@ -82,7 +81,7 @@ class PeerFileVisitor {
         })
         imports.addFeature("unsafeCast", "./generated-utils")
         imports.print(this.printer)
-        PeerFileVisitor._defaultPeerImports.forEach(it => this.printer.print(it))
+        this.getDefaultPeerImports(this.file.declarationTable.language)!.forEach(it => this.printer.print(it))
     }
 
     private printAttributes(peer: PeerClass) {
@@ -199,16 +198,31 @@ class PeerFileVisitor {
         })
     }
 
-    private static readonly _defaultPeerImports = [
-        `import { int32 } from "@koalaui/common"`,
-        `import { PeerNode } from "@koalaui/arkoala"`,
-        `import { nullptr, KPointer } from "@koalaui/interop"`,
-        `import { runtimeType, withLength, withLengthArray, RuntimeType } from "./SerializerBase"`,
-        `import { Serializer } from "./Serializer"`,
-        `import { nativeModule } from "./NativeModule"`,
-        `import { ArkUINodeType } from "./ArkUINodeType"`,
-        `import { ArkCommon } from "./ArkCommon"`,
-    ]
+    private getDefaultPeerImports(lang: Language) {
+        switch(lang) {
+            case Language.TS: {
+                return [
+                    `import { int32 } from "@koalaui/common"`,
+                    `import { PeerNode } from "@koalaui/arkoala"`,
+                    `import { nullptr, KPointer } from "@koalaui/interop"`,
+                    `import { runtimeType, withLength, withLengthArray, RuntimeType } from "./SerializerBase"`,
+                    `import { Serializer } from "./Serializer"`,
+                    `import { nativeModule } from "./NativeModule"`,
+                    `import { ArkUINodeType } from "./ArkUINodeType"`,
+                    `import { ArkCommon } from "./ArkCommon"`,
+                ]
+            }
+            case Language.ARKTS: {
+                return [
+                    `import { int32 } from "./common"`,
+                    `import { PeerNode } from "./PeerNode"`,
+                    `import { nullptr, KPointer } from "./interop"`,
+                ]
+            }
+            case Language.JAVA: {
+            }
+        }
+    }
 }
 
 class PeersVisitor {

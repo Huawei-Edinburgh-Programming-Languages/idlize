@@ -342,6 +342,13 @@ if (options.dts2peer) {
                         makeTSSerializer(declarationTable)
                     )
                 }
+                if(lang == Language.ARKTS) {
+                    fs.writeFileSync(
+                        path.join(outDir, 'ArkUINodeType' + langSuffix(lang)),
+                        printNodeTypes(peerLibrary),
+                    )
+                }
+
                 fs.writeFileSync(path.join(outDir, 'bridge.cc'), printBridgeCc(peerLibrary))
 
                 const {api, deserializer} = printApiAndDeserializer(options.apiVersion, peerLibrary)
