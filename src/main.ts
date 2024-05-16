@@ -350,6 +350,10 @@ if (options.dts2peer) {
                     fs.writeFileSync(path.join(outDir, 'Serializer' + langSuffix(lang)),
                         makeTSSerializer(declarationTable)
                     )
+                    fs.writeFileSync(
+                        path.join(outDir, 'ArkCommon' + langSuffix(lang)),
+                        printStructCommon(peerLibrary),
+                    )
                 }
 
                 fs.writeFileSync(path.join(outDir, 'bridge.cc'), printBridgeCc(peerLibrary))

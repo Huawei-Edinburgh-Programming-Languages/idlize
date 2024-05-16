@@ -151,7 +151,7 @@ extern const ArkUIAccessors* GetArkUIAccessors()
 }
 
 export function makeTSSerializer(table: DeclarationTable): string {
-    let printer = createLanguageWriter(new IndentedPrinter(), Language.TS)
+    let printer = createLanguageWriter(new IndentedPrinter(), table.language)
     if(table.language == Language.ARKTS) {
         printer.print(`
 import {
