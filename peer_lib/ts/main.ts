@@ -130,7 +130,7 @@ function checkOverloads() {
     )
     checkResult("Test string implementation for SideBarContainer.minSideBarWidth",
         () => component.minSideBarWidth("42%"),
-        "minSideBarWidth(Length {value=42.000000, unit=%, resource=0})"
+        `minSideBarWidth("42%")`
     )
 }
 
