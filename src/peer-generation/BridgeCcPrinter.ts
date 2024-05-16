@@ -82,7 +82,7 @@ class BridgeCcVisitor {
 
         this.C.print(`std::string _logData("  ${api}->${modifier}->${method.peerMethodName}(");`)
         if (method.hasReceiver()) {
-            this.C.print(`WriteToString(&_logData, node);`)
+            this.C.print(`WriteToString(&_logData, thisPtr);`)
             if (method.argConvertors.length > 0)
                 this.C.print(`_logData.append(", ");`)
         }
@@ -137,6 +137,7 @@ class BridgeCcVisitor {
         const argConvertors = method.argConvertors
 
         let cName = `${method.originalParentName}_${method.overloadedName}`
+        let rv = retConvertor.nativeType()
         this.C.print(`${retConvertor.nativeType()} impl_${cName}(${this.generateCParameters(method, argConvertors).join(", ")}) {`)
         this.C.pushIndent()
         this.printNativeBody(method)
