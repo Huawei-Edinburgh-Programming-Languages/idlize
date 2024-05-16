@@ -28,6 +28,7 @@ class BridgeCcVisitor {
 
     constructor(
         private readonly library: PeerLibrary,
+        private readonly callLog: boolean,
     ) {}
 
     private generateApiCall(method: PeerMethod): string {
@@ -38,7 +39,7 @@ class BridgeCcVisitor {
 
     // TODO: may be this is another method of ArgConvertor?
     private generateApiArgument(argConvertor: ArgConvertor): string {
-        const prefix = argConvertor.isPointerType() ? "&": "    "
+        const prefix = argConvertor.isPointerType() ? `(const ${argConvertor.nativeType(false)}*)&`: "    "
         if (argConvertor.useArray) return `${prefix}${argConvertor.param}_value`
         return `${argConvertor.convertorArg(argConvertor.param, this.C.language)}`
     }
@@ -69,8 +70,22 @@ class BridgeCcVisitor {
                 it.convertorDeserialize(it.param, result, this.C)
             }
         })
+        if (this.callLog) this.printCallLog(method)
         this.printAPICall(method)
         this.C.popIndent()
+    }
+
+    private printCallLog(method: PeerMethod) {
+        this.C.print(`if (needGroupedLog(2)) {`)
+        this.C.pushIndent()
+        this.C.print(`std::string _logData("${method.method.name}(");`)
+        method.argConvertors.forEach(it => {
+            this.C.print(`WriteToString(&_logData, ${this.generateApiArgument(it)});`)
+        })
+        this.C.print(`_logData.append(")\\n");`)
+        this.C.print(`appendGroupedLog(2, _logData);`)
+        this.C.popIndent()
+        this.C.print(`}`)
     }
 
     private generateCParameterTypes(argConvertors: ArgConvertor[], hasReceiver: boolean): string[] {
@@ -144,8 +159,8 @@ class BridgeCcVisitor {
     }
 }
 
-export function printBridgeCc(peerLibrary: PeerLibrary): string {
-    const visitor = new BridgeCcVisitor(peerLibrary)
+export function printBridgeCc(peerLibrary: PeerLibrary, callLog: boolean): string {
+    const visitor = new BridgeCcVisitor(peerLibrary, callLog)
     visitor.print()
     return bridgeCcDeclaration(visitor.C.getOutput())
 }
