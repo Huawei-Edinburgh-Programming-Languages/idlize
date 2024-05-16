@@ -1,64 +1,48 @@
 import * as path from "path"
 import { IndentedPrinter } from "../IndentedPrinter";
-import { Language, renameClassToMaterialized, renameDtsToPeer, throwException } from "../util";
+import { Language, renameClassToMaterialized } from "../util";
 
 import { PeerLibrary } from "./PeerLibrary";
+import { writePeerMethod } from "./PeersPrinter"
 
-import { Materialized, MaterializedClass} from "./Materialized"
+import { LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, Type, createLanguageWriter } from "./LanguageWriters";
+
+import { Materialized, MaterializedClass, MaterializedMethod} from "./Materialized"
+
+import { makeMaterializedPrologue } from "./FileGenerators";
 
 class MaterializedFileVisitor {
-    readonly printer: IndentedPrinter = new IndentedPrinter()
+
+    readonly printer: LanguageWriter = createLanguageWriter(new IndentedPrinter(), this.language)
 
     constructor(
+        private readonly language: Language,
         private readonly clazz: MaterializedClass,
         private readonly dumpSerialized: boolean,
     ) {}
 
-    private printMaterializedClass(printer: IndentedPrinter, clazz: MaterializedClass) {
-        printer.print(`import { Finalizable } from "@koalaui/arkoala"`)
-        printer.print(`export class ${clazz.className} extends Finalizable {`)
-        printer.pushIndent()
-        let consParams = clazz.ctor.argConvertors.map(it => `${it.param}: ${it.tsTypeName}`).join(", ")
-        // constructor
-        printer.print(`constructor(${consParams}) {`)
-        printer.pushIndent()
-        printer.print(`super(BigInt(42)) // TBD`)
-        printer.popIndent()
-        printer.print(`}`)
-        // methods
-        clazz.methods.forEach(method => {
-            let staticModifier = method.hasReceiver ? "" : "static "
-            let tsRetType = method.tsRetType
-            let returnType = tsRetType === undefined ? "" : `: ${tsRetType} `
-            let params = method.mappedParams ?? method.argConvertors.map(it => `${it.param}: ${it.tsTypeName}`).join(", ")
-            if (params.includes("any")) {
-                // TBD: Handle "{ property: type }" types
-                return
-            }
+    private printMaterializedClass(clazz: MaterializedClass) {
+        const printer = this.printer
+        printer.print(makeMaterializedPrologue())
 
-            let retValue = this.getReturnValue(clazz.className, tsRetType)
-            if (retValue === undefined) {
-                // TBD: Handle return values
-                return
-            }
+        printer.writeClass(clazz.className, writer => {
 
-            printer.print(`${staticModifier}${method.methodName}(${params})${returnType} {`)
-            printer.pushIndent()
+            writePeerMethod(writer, clazz.ctor, this.dumpSerialized, "", "")
 
-            //printer.print(`// TBD nativeModule()...`)
-            if (retValue !== "") {
-                printer.print(`return ${retValue}`)
-            }
+            writer.writeConstructorImplementation(clazz.className, clazz.ctor.method.signature, writer => {
+                const ctorSig = clazz.ctor.method.signature as NamedMethodSignature
+                writer.writeMemberCall(clazz.className, "ctor", ctorSig.argsNames)
+                writer.writeSuperCall([`BigInt(42)`])
+            })
 
-            printer.popIndent()
-            printer.print(`}`)
-        })
-        printer.popIndent()
-        printer.print(`}`)
+            clazz.methods.forEach(method => {
+                writePeerMethod(writer, method, this.dumpSerialized, "", "this.ptr")
+            })
+        }, "Finalizable")
     }
 
     printFile(): void {
-        this.printMaterializedClass(this.printer, this.clazz)
+        this.printMaterializedClass(this.clazz)
     }
 
     private getReturnValue(className: string, retType: string| undefined): string| undefined {
@@ -84,7 +68,8 @@ class MaterializedVisitor {
 
     printMaterialized(): void {
         for (const clazz of Materialized.Instance.materializedClasses.values()) {
-            const visitor = new MaterializedFileVisitor(clazz, this.dumpSerialized)
+            const visitor = new MaterializedFileVisitor(
+                this.library.declarationTable.language, clazz, this.dumpSerialized)
             visitor.printFile()
             const fileName = renameClassToMaterialized(clazz.className, this.library.declarationTable.language)
             this.materialized.set(fileName, visitor.printer.getOutput())
@@ -97,7 +82,7 @@ export function printMaterialized(peerLibrary: PeerLibrary, dumpSerialized: bool
     // TODO: support other output languages
     if (peerLibrary.declarationTable.language != Language.TS)
         return new Map()
- 
+
     const visitor = new MaterializedVisitor(peerLibrary, dumpSerialized)
     visitor.printMaterialized()
     const result = new Map<string, string>()

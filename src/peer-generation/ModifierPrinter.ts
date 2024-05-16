@@ -14,11 +14,78 @@
  */
 
 import { IndentedPrinter } from "../IndentedPrinter";
-import { PrimitiveType } from "./DeclarationTable";
+import { DeclarationTable, FieldRecord } from "./DeclarationTable";
 import { modifierStructList, modifierStructs } from "./FileGenerators";
 import { PeerClass } from "./PeerClass";
 import { PeerLibrary } from "./PeerLibrary";
-import { PeerMethod } from "./PeerMethod";
+import { MethodSeparatorVisitor, PeerMethod } from "./PeerMethod";
+import { DelegateSignatureBuilder } from "./DelegatePrinter";
+
+class MethodSeparatorPrinter extends MethodSeparatorVisitor {
+    public readonly printer = new IndentedPrinter()
+    constructor(
+        declarationTable: DeclarationTable,
+        method: PeerMethod,
+    ) {
+        super(declarationTable, method)
+        this.delegateSignatureBuilder = new DelegateSignatureBuilder(declarationTable, method)
+        this.accessChain = method.argConvertors.map(convertor => [{
+            name: convertor.param,
+            access: convertor.isPointerType() ? '->' : '.'
+        }])
+    }
+
+    private readonly delegateSignatureBuilder: DelegateSignatureBuilder
+    private readonly accessChain: {name: string, access: string}[][]
+    private generateAccessTo(argIndex: number, fieldName?: string) {
+        const argAccessChain = this.accessChain[argIndex]
+        let access = argAccessChain[0].name
+        for (let i = 1; i < argAccessChain.length; i++)
+            access += `${argAccessChain[i-1].access}${argAccessChain[i].name}`
+        if (fieldName)
+            access += `${argAccessChain[argAccessChain.length-1].access}${fieldName}`
+        return access
+    }
+
+    onPushUnionScope(argIndex: number, field: FieldRecord, selectorValue: number): void {
+        super.onPushUnionScope(argIndex, field, selectorValue)
+        this.printer.print(`if (${this.generateAccessTo(argIndex, 'selector')} == ${selectorValue}) {`)
+        this.printer.pushIndent()
+        this.accessChain[argIndex].push({
+            name: field.name,
+            access: '.'
+        })
+        this.delegateSignatureBuilder.pushUnionScope(argIndex, field)
+    }
+
+    onPopUnionScope(argIndex: number): void {
+        super.onPopUnionScope(argIndex)
+        this.accessChain[argIndex].pop()
+        this.printer.popIndent()
+        this.printer.print('}')
+        this.delegateSignatureBuilder.popScope(argIndex)
+    }
+
+    protected generateInseparableFieldName(argIndex: number) {
+        return `arg${argIndex}_inseparable_value`
+    }
+
+    onVisitInseparableArg(argIndex: number): void {
+        super.onVisitInseparableArg(argIndex)
+        this.printer.print(`const auto &${this.generateInseparableFieldName(argIndex)} = ${this.generateAccessTo(argIndex)};`)
+    }
+
+    onVisitInseparable(): void {
+        super.onVisitInseparable()
+        const delegateIdentifier = this.delegateSignatureBuilder.buildIdentifier()
+        let delegateArgs = Array.from({length: this.method.argConvertors.length}, (_, argIndex) => {
+            return this.generateInseparableFieldName(argIndex)
+        })
+        if (this.method.hasReceiver())
+            delegateArgs = [this.method.generateReceiver()!.argName, ...delegateArgs]
+        this.printer.print(`${delegateIdentifier}(${delegateArgs.join(', ')});`)        
+    }
+}
 
 export class ModifierVisitor {
     dummy = new IndentedPrinter()
@@ -32,7 +99,7 @@ export class ModifierVisitor {
     ) { }
 
     printDummyImplFunctionBody(method: PeerMethod) {
-        this.dummy.print(`string out("${method.methodName}(");`)
+        this.dummy.print(`string out("${method.method.name}(");`)
         method.argConvertors.forEach((argConvertor, index) => {
             if (index > 0) this.dummy.print(`out.append(", ");`)
             this.dummy.print(`WriteToString(&out, ${argConvertor.param});`)
@@ -43,12 +110,12 @@ export class ModifierVisitor {
     }
 
     printModifierImplFunctionBody(method: PeerMethod) {
-        const firstDeclarationTarget = method.declarationTargets[0]
-        const firstArgConvertor = method.argConvertors[0]
-        if (firstDeclarationTarget && !(firstDeclarationTarget instanceof PrimitiveType)) {
-            const declarationTable = this.library.declarationTable
-            declarationTable.generateFirstArgDestruct(firstArgConvertor, firstDeclarationTarget, this.real, firstArgConvertor.isPointerType())
-        }
+        const visitor = new MethodSeparatorPrinter(
+            this.library.declarationTable,
+            method
+        )
+        visitor.visit()
+        visitor.printer.getOutput().forEach(it => this.real.print(it))
         this.printReturnStatement(this.real, method)
     }
 

@@ -17,6 +17,7 @@ import * as path from "path"
 import { IndentedPrinter } from "../IndentedPrinter"
 import { DeclarationTable, PrimitiveType } from "./DeclarationTable"
 import { Language, indentedBy, langSuffix } from "../util"
+import { createLanguageWriter } from "./LanguageWriters"
 
 const importTsInteropTypes = `
 import {
@@ -90,6 +91,16 @@ export function completeImplementations(lines: string): string {
 #include "Interop.h"
 #include "Deserializer.h"
 #include "common-interop.h"
+#include "delegates.h"
+
+${lines}
+`
+}
+
+export function completeDelegatesImpl(lines: string): string {
+    return `
+#include "Deserializer.h"
+#include "delegates.h"
 
 ${lines}
 `
@@ -140,11 +151,12 @@ extern const ArkUIAccessors* GetArkUIAccessors()
 }
 
 export function makeTSSerializer(table: DeclarationTable): string {
-    let printer = new IndentedPrinter()
+    let printer = createLanguageWriter(new IndentedPrinter(), Language.TS)
     table.generateSerializers(printer)
     return `
 import { SerializerBase, runtimeType, Tags, RuntimeType, Function } from "./SerializerBase"
 import { int32 } from "@koalaui/common"
+import { unsafeCast } from "./generated-utils"
 
 ${printer.getOutput().join("\n")}
 `
@@ -152,7 +164,7 @@ ${printer.getOutput().join("\n")}
 
 export function makeCDeserializer(table: DeclarationTable, structs: IndentedPrinter, typedefs: IndentedPrinter): string {
 
-    const deserializer = new IndentedPrinter()
+    const deserializer = createLanguageWriter(new IndentedPrinter(), Language.CPP)
     const writeToString = new IndentedPrinter()
     table.generateDeserializers(deserializer, structs, typedefs, writeToString)
 
@@ -326,5 +338,15 @@ export class ArkCommon implements CommonMethod<CommonAttribute> {
 export class ArkStructCommon extends ArkCommon implements CustomComponent {
   ${customComponentMethods.join('\n  ')}
 }
+`
+}
+
+export function makeMaterializedPrologue(): string {
+    let prologue = readTemplate('materialized_class_prologue.ts')
+    return `
+${prologue}
+
+${importTsInteropTypes}
+
 `
 }

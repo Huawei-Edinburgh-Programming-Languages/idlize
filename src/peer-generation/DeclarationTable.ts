@@ -14,7 +14,7 @@
  */
 
 import * as ts from "typescript"
-import { Language, asString, getDeclarationsByNode, getLineNumberString, getNameWithoutQualifiersRight, heritageDeclarations, identName, isStatic, throwException, typeEntityName } from "../util"
+import { Language, asString, getDeclarationsByNode, getLineNumberString, getNameWithoutQualifiersRight, heritageDeclarations, identName, isStatic, mapType, mapTypeOrVoid, throwException, typeEntityName } from "../util"
 import { IndentedPrinter } from "../IndentedPrinter"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
 import {
@@ -24,7 +24,8 @@ import {
     UndefinedConvertor, UnionConvertor
 } from "./Convertors"
 import { DependencySorter } from "./DependencySorter"
-import { isMaterialized, Materialized } from "./Materialized"
+import { isMaterialized } from "./Materialized"
+import { LanguageWriter, Method, MethodModifier, NamedMethodSignature, Type } from "./LanguageWriters"
 
 export class PrimitiveType {
     constructor(private name: string, public isPointer = false) { }
@@ -69,20 +70,35 @@ export type DeclarationTarget =
     | ts.ArrayTypeNode | ts.ParenthesizedTypeNode | ts.OptionalTypeNode | ts.LiteralTypeNode
     | PrimitiveType
 
-class FieldRecord {
+export class FieldRecord {
     constructor(public declaration: DeclarationTarget, public type: ts.TypeNode | undefined, public name: string, public optional: boolean = false) { }
 }
 
+// TODO: commonize with Signature, avoid TS types!
 class ParamRecord {
-    constructor(public declaration: DeclarationTarget, public type: ts.TypeNode, public name: string) {}
+    constructor(public declaration: DeclarationTarget, public type: ts.TypeNode, public name: string, public nullable: boolean) {}
 }
 
+// TODO: commonize with Method, avoid TS types!
 export class MethodRecord {
     constructor(
         public name: string,
         public isStatic: boolean,
         public returnType: ts.TypeNode | undefined,
         public params: ParamRecord[]) {}
+
+    toMethod(typeChecker: ts.TypeChecker): Method {
+        const types = this.params.map(it => new Type(mapTypeOrVoid(typeChecker, it.type), it.nullable))
+        const names = this.params.map(it => it.name)
+        const signature = new NamedMethodSignature(new Type(mapTypeOrVoid(typeChecker, this.returnType)), types, names)
+        return new Method(this.name, signature, this.isStatic ? [MethodModifier.STATIC] : undefined)
+    }
+}
+
+export interface StructVisitor {
+    visitUnionField(field: FieldRecord, selectorValue: number): void
+    // visitOptionalField(field?: FieldRecord): void;
+    visitInseparable(): void
 }
 
 class StructDescriptor {
@@ -371,11 +387,10 @@ export class DeclarationTable {
                 return this.computeTargetName(this.toTarget(target.typeArguments[0]), true)
             if (name == "Array")
                 return prefix + `Array_` + this.computeTargetName(this.toTarget(target.typeArguments[0]), optional)
+            if (name == "Map")
+                return prefix + `Map_` + this.computeTargetName(this.toTarget(target.typeArguments[0]), false) + '_' + this.computeTargetName(this.toTarget(target.typeArguments[1]), false)
             if (name == "Callback")
                 return prefix + PrimitiveType.Function.getText()
-            if (name && Materialized.Instance.materializedClasses.has(name))
-                // Materialized classes are known just by their names
-                return prefix + name
             if (PeerGeneratorConfig.isKnownParametrized(name))
                 return prefix + PrimitiveType.CustomObject.getText()
         }
@@ -705,8 +720,7 @@ export class DeclarationTable {
         let struct = this.targetStruct(declaration)
         if (declaration instanceof PrimitiveType) return true
         if (!ts.isInterfaceDeclaration(declaration)
-            && !ts.isClassDeclaration(declaration)
-            && !ts.isTypeLiteralNode(declaration)) return true
+            && !ts.isClassDeclaration(declaration)) return true
         return struct.isEmpty()
     }
 
@@ -751,7 +765,7 @@ export class DeclarationTable {
         }
     }
 
-    private uniqueName(target: DeclarationTarget): string {
+    uniqueName(target: DeclarationTarget): string {
         if (target instanceof PrimitiveType) return target.getText(this)
         return this.uniqueNames.get(target)!
     }
@@ -795,7 +809,7 @@ export class DeclarationTable {
         }
     }
 
-    generateDeserializers(printer: IndentedPrinter, structs: IndentedPrinter, typedefs: IndentedPrinter, writeToString: IndentedPrinter) {
+    generateDeserializers(printer: LanguageWriter, structs: IndentedPrinter, typedefs: IndentedPrinter, writeToString: IndentedPrinter) {
         this.processPendingRequests()
         let orderer = new DependencySorter(this)
         for (let declaration of this.declarations) {
@@ -924,7 +938,7 @@ export class DeclarationTable {
         printer.print(`}`)
     }
 
-    generateSerializers(printer: IndentedPrinter) {
+    generateSerializers(printer: LanguageWriter) {
         let seenNames = new Set<string>()
         printer.print(`export class Serializer extends SerializerBase {`)
         printer.pushIndent()
@@ -940,71 +954,18 @@ export class DeclarationTable {
         printer.print(`}`)
     }
 
-    generateFirstArgDestruct(convertor: ArgConvertor, target: DeclarationTarget, printer: IndentedPrinter, isPointer: boolean) {
-        if (target instanceof PrimitiveType) return // Just don't emit anything
-        if (convertor instanceof OptionConvertor) return // TODO: handle optionals
-
-        const name = convertor.param
-        this.setCurrentContext(`modifier(${name})`)
-        let isUnion = this.isMaybeWrapped(target, ts.isUnionTypeNode)
-        let isArray = this.isMaybeWrapped(target, ts.isArrayTypeNode)
-        let isOptional = this.isMaybeWrapped(target, ts.isOptionalTypeNode)
-        let isTuple = this.isMaybeWrapped(target, ts.isTupleTypeNode)
-        let access = isPointer ? "->" : "."
-
-        // treat Array<T> as array
-        if (!isArray && ts.isTypeReferenceNode(target)) {
-            isArray = identName(target.typeName) === "Array"
-        }
-
-        if (isUnion) {
+    visitDeclaration(
+        target: DeclarationTarget,
+        visitor: StructVisitor,
+    ): void {
+        if (this.isMaybeWrapped(target, ts.isUnionTypeNode)) {
             this.targetStruct(target).getFields().forEach((field, index) => {
-                if (index > 0) {
-                    printer.print(`// ${this.uniqueNames.get(field.declaration) ?? ""}`)
-                    printer.print(`if (${name}${access}selector == ${index - 1}) {`)
-                    printer.print(`}`)
-                }
-            })
-        } else if (isArray) {
-            let elementType = ts.isArrayTypeNode(target)
-                ? target.elementType
-                : ts.isTypeReferenceNode(target) && target.typeArguments
-                    ? target.typeArguments[0]
-                    : undefined
-            let isPointerField = elementType === undefined
-                ? false
-                : this.typeConvertor("param", elementType).isPointerType()
-            printer.print(`int32_t count = ${name}${access}array_length ;`)
-            printer.print(`for (int i = 0; i < count; i++) {`)
-            printer.print(`}`)
-        } else if (isTuple) {
-            const fields = this.targetStruct(target).getFields()
-            fields.forEach((field, index) => {
-                printer.print(`// ${this.uniqueNames.get(field.declaration) ?? ""}`)
-            })
-        } else if (isOptional) {
-            const fields = this.targetStruct(target).getFields()
-            fields.forEach((field, index) => {
-                printer.print(`// ${this.uniqueNames.get(field.declaration) ?? ""}`)
-                if (index == 0) {
-                    printer.print(`if (${name}${access}${field.name} != ${PrimitiveType.UndefinedTag}) {`)
-                    printer.pushIndent()
-                }
-                if (index == fields.length - 1) {
-                    printer.popIndent()
-                    printer.print("}")
-                }
+                if (index === 0) return
+                visitor.visitUnionField(field, index - 1)
             })
         } else {
-            /*
-            this.targetStruct(target).getFields().forEach((field, index) => {
-                printer.print(`// ${this.uniqueNames.get(field.declaration) ?? ""}`)
-                let isPointerField = this.isPointerDeclaration(field.declaration, field.optional)
-                printer.print(`${isPointerField ? "&" : ""}${name}${access}${field.name};`)
-            })
-            */
+            visitor.visitInseparable()
         }
-        this.setCurrentContext(undefined)
     }
 
     private isMaybeWrapped(target: DeclarationTarget, predicate: (type: ts.Node) => boolean): boolean {
@@ -1146,13 +1107,13 @@ export class DeclarationTable {
             return
         }
 
-        result.cons = new MethodRecord("constructor", true, undefined, constructor.parameters
-            .map(it => new ParamRecord(this.toTarget(it.type!), it.type!, identName(it.name)!)))
+        result.cons = new MethodRecord("ctor", true, undefined, constructor.parameters
+            .map(it => new ParamRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined)))
 
         clazz.members
         .filter(ts.isMethodDeclaration)
         .forEach(method => {
-            let params = method.parameters.map(it => new ParamRecord(this.toTarget(it.type!), it.type!, identName(it.name)!))
+            let params = method.parameters.map(it => new ParamRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
             result.methods.push(
                 new MethodRecord(identName(method.name)!,
                 isStatic(method.modifiers),
@@ -1285,8 +1246,6 @@ export class DeclarationTable {
                 result.addField(new FieldRecord(PrimitiveType.pointerTo(this.toTarget(type)), undefined, "config"))
             } else if (name == "Callback") {
                 result.addField(new FieldRecord(PrimitiveType.Int32, undefined, "id"))
-            } else if (name && Materialized.Instance.materializedClasses.has(name)) {
-                // Materialized class, nothing to add
             } else if (PeerGeneratorConfig.isKnownParametrized(name)) {
                 // TODO: not this way yet!
                 // let type = target.typeArguments[0]
@@ -1312,7 +1271,7 @@ export class DeclarationTable {
         }
     }
 
-    private generateSerializer(name: string, target: DeclarationTarget, printer: IndentedPrinter) {
+    private generateSerializer(name: string, target: DeclarationTarget, printer: LanguageWriter) {
         if (this.ignoreTarget(target, name)) return
 
         this.setCurrentContext(`write${name}()`)
@@ -1327,11 +1286,11 @@ export class DeclarationTable {
                 let field = `value_${it.name}`
                 printer.print(`let ${field} = value.${it.name}`)
                 let typeConvertor = this.typeConvertor(`value`, it.type!, it.optional)
-                typeConvertor.convertorToTSSerial(`value`, field, printer)
+                typeConvertor.convertorSerialize(`value`, field, printer)
             })
         } else {
             let typeConvertor = this.typeConvertor("value", target, false)
-            typeConvertor.convertorToTSSerial(`value`, `value`, printer)
+            typeConvertor.convertorSerialize(`value`, `value`, printer)
         }
         printer.popIndent()
         printer.print(`}`)
@@ -1349,7 +1308,7 @@ export class DeclarationTable {
         return false
     }
 
-    private generateDeserializer(name: string, target: DeclarationTarget, printer: IndentedPrinter) {
+    private generateDeserializer(name: string, target: DeclarationTarget, printer: LanguageWriter) {
         if (this.ignoreTarget(target, name)) return
         this.setCurrentContext(`read${name}()`)
         printer.print(`${name} read${name}() {`)
@@ -1360,11 +1319,11 @@ export class DeclarationTable {
             let struct = this.targetStruct(target)
             struct.getFields().forEach(it => {
                 let typeConvertor = this.typeConvertor(`value`, it.type!, it.optional)
-                typeConvertor.convertorToCDeserial(`value`, `value.${it.name}`, printer)
+                typeConvertor.convertorDeserialize(`value`, `value.${it.name}`, printer)
             })
         } else {
             let typeConvertor = this.typeConvertor("value", target, false)
-            typeConvertor.convertorToCDeserial(`value`, `value`, printer)
+            typeConvertor.convertorDeserialize(`value`, `value`, printer)
         }
         printer.print(`return value;`)
         printer.popIndent()

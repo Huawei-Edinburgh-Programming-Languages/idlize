@@ -38,7 +38,8 @@ sources += [
 ]
 else
 sources += [
-   gen_dir + '/all_modifiers.cc'
+   gen_dir + '/all_modifiers.cc',
+   gen_dir + '/delegates.cc',
 ]
 endif
 
@@ -72,7 +73,7 @@ endif
 node_cflags = ['-DKOALA_USE_NODE_VM', '-DKOALA_NAPI', '-DINTEROP_LIBRARY_NAME=' + node_library_name]
 node_include_dirs = [
     '../node-api-headers/include',
-    '../node-addon-api'
+    '../node_modules/node-addon-api'
 ]
 node_sources = [
     gen_dir + '/convertors-node.cc'

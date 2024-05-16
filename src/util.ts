@@ -193,7 +193,7 @@ export function isCommonMethodOrSubclass(typeChecker: ts.TypeChecker, decl: ts.C
         heritageDeclarations(typeChecker, it).forEach(it => {
             let name = asString(it.name)
             isSubclass = isSubclass || isRoot(name)
-            if (!ts.isClassDeclaration(it)) return
+            if (!ts.isClassDeclaration(it)) return isSubclass
             isSubclass = isSubclass || isCommonMethodOrSubclass(typeChecker, it)
         })
     })
@@ -462,6 +462,12 @@ export function importTypeName(type: ts.ImportTypeNode, asType = false): string 
 
 export function throwException(message: string): never {
     throw new Error(message)
+}
+
+// TODO: remove this function!
+export function mapTypeOrVoid(typeChecker: ts.TypeChecker, type: ts.TypeNode | undefined): string {
+    if (!type) return "void"
+    return mapType(typeChecker, type)
 }
 
 // TODO: remove this function!
