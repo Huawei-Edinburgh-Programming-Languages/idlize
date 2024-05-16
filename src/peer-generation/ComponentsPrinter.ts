@@ -65,6 +65,7 @@ class ComponentFileVisitor {
     }
 
     private printComponentMethod(method: PeerMethod) {
+        if (method.isNameOverride) return
         this.printer.print(`/** @memo */`)
         this.printer.writeMethodImplementation(method.method, (writer) => {
             writer.print(`if (this.checkPriority("${method.method.name}")) {`)

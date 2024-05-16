@@ -149,11 +149,6 @@ declare class CommonMethod<T> {
     backgroundBlurStyle(value: BlurStyle, options?: BackgroundBlurStyleOptions): T;
 
     dragPreviewOptions(value: DragPreviewOptions, options?: DragInteractionOptions): T;
-
-    bindContentCover(isShow: boolean, builder: CustomBuilder, type?: ModalTransition): T;
-
-    bindContentCover(isShow: boolean, builder: CustomBuilder, options?: ContentCoverOptions): T;
-
 }
 
 declare interface Rectangle {

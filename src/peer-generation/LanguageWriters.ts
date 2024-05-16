@@ -20,6 +20,7 @@ export class Type {
     constructor(public name: string, public nullable = false) {}
     static Void = new Type('void')
     static This = new Type('this')
+    static Undefined = new Type('undefined')
 }
 
 export enum MethodModifier {

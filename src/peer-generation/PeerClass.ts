@@ -16,7 +16,7 @@
 import { PeerFile } from "./PeerFile"
 import { PeerMethod } from "./PeerMethod"
 import { DeclarationTable } from "./DeclarationTable"
-import { Method } from "./LanguageWriters"
+import { Method, NamedMethodSignature, Type } from "./LanguageWriters"
 import { Language } from "../util"
 
 export interface PeerClassBase {
@@ -67,7 +67,30 @@ export class PeerClass implements PeerClassBase {
     }
 
     private createSyntheticOverrideTarget(methods: Array<PeerMethod>): PeerMethod {
-        let method = new Method(methods[0].method.name, methods[0].method.signature, methods[0].method.modifiers)
+        let argCount = Math.max(... methods.map(method => method.method.signature.args.length))
+        let types: Type[][] = []
+        for (let i = 0; i < argCount; i++) {
+            let variants: Type[] = []
+            methods.forEach(method => {
+                if (i < method.method.signature.args.length) {
+                    let type = method.method.signature.args[i]
+                    if (!variants.find(it => type.name == it.name)) {
+                        variants.push(type)
+                    }
+                    if (type.nullable && !variants.find(it => it.name == 'undefined')) {
+                        variants.push(Type.Undefined)
+                    }
+                }
+            })
+            types.push(variants)
+        }
+        let name = methods[0].method.name
+        let signature = new NamedMethodSignature(
+            methods[0].method.signature.returnType,
+            types.map(it => new Type(it.map(it => it.name).join("|"))),
+            types.map((it, index) => `arg${index}`)
+        )
+        let method = new Method(name, signature, methods[0].method.modifiers)
         let result = new PeerMethod(methods[0].originalParentName, methods[0].declarationTargets,
             methods[0].argConvertors, methods[0].retConvertor, methods[0].isCallSignature, method)
         result.isSyntheticOverrideTarget = true

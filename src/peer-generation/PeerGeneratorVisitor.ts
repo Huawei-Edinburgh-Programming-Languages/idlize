@@ -39,7 +39,6 @@ import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
 import { DeclarationTable, DeclarationTarget, MethodRecord, PrimitiveType } from "./DeclarationTable"
 import {
     hasTransitiveHeritageGenericType,
-    isCommonMethod,
     isRoot,
     isStandalone,
     singleParentDeclaration,
@@ -191,7 +190,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
         if (!this.needsPeer(node)) return
         if (isCustomComponentClass(node))
             return this.processCustomComponent(node)
-        if (isCommonMethod(nameOrNull(node.name)!)) {
+        if ((nameOrNull(node.name)!)) {
             this.processCommonComponent(node)
         }
         const collapsedMethods = this.collapseOverloads(node)
@@ -217,6 +216,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
     private processCustomComponent(node: ts.ClassDeclaration) {
         const methods = node.members
             .filter(it => ts.isMethodDeclaration(it) || ts.isMethodSignature(it))
+
             .map(it => it.getText().replace(/;\s*$/g, ''))
             .map(it => `${it} { throw new Error("not implemented"); }`)
         this.peerLibrary.customComponentMethods.push(...methods)
