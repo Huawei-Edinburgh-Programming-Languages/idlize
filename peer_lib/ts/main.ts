@@ -87,6 +87,20 @@ function checkSerdeBasePrimitive() {
     ser.close()
 }
 
+function checkSerdeBaseCustomObject() {
+    const ser = new SerializerBase(12)
+    const resource: Resource = {
+        bundleName: "bundle name",
+        moduleName: "module name",
+        id: 1,
+    }
+    ser.writeCustomObject("Resource", resource)
+    const des = new DeserializerBase(ser.asArray().buffer, ser.length())
+    checkSerdeResult("DeserializerBase.readCustomObject, Resource",
+        JSON.stringify(resource),
+        JSON.stringify(des.readCustomObject("Resource") as Resource))
+}
+
 function checkButton() {
     let peer = new ArkButtonPeer(ArkUINodeType.Button)
 
@@ -212,6 +226,7 @@ function checkPerf3(count: number) {
 checkSerdeBaseLength()
 checkSerdeBaseText()
 checkSerdeBasePrimitive()
+checkSerdeBaseCustomObject()
 
 checkPerf2(200 * 1000)
 checkPerf3(200 * 1000)

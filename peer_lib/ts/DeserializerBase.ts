@@ -12,9 +12,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { float32, int32 } from "@koalaui/common"
-import { pointer } from "@koalaui/interop"
-import { RuntimeType, Tags } from "@arkoala/arkui/SerializerBase";
+import {float32, int32} from "@koalaui/common"
+import {pointer} from "@koalaui/interop"
+import {RuntimeType, Tags} from "@arkoala/arkui/SerializerBase";
 
 export class DeserializerBase {
     private position = 0
@@ -22,6 +22,19 @@ export class DeserializerBase {
     private readonly length: int32
     private view: DataView
     private static textDecoder = new TextDecoder()
+    private static customDeserializers: CustomDeserializer | undefined = undefined
+
+    static registerCustomDeserializer(deserializer: CustomDeserializer) {
+        let current = DeserializerBase.customDeserializers
+        if (current == undefined) {
+            DeserializerBase.customDeserializers = deserializer
+        } else {
+            while (current.next != undefined) {
+                current = current.next
+            }
+            current.next = deserializer
+        }
+    }
 
     constructor(buffer: ArrayBuffer, length: int32) {
         this.buffer = buffer
@@ -97,6 +110,19 @@ export class DeserializerBase {
         return value
     }
 
+    readCustomObject(kind: string): any {
+        let current = DeserializerBase.customDeserializers
+        while (current) {
+            if (current.supports(kind)) {
+                return current.deserialize(this, kind)
+            }
+            current = current.next
+        }
+        // consume tag
+        const tag = this.readInt8()
+        return undefined
+    }
+
     readNumber(): number | undefined {
         const tag = this.readInt8()
         switch (tag) {
@@ -158,3 +184,27 @@ export class DeserializerBase {
         return suffix
     }
 }
+
+export abstract class CustomDeserializer {
+    protected constructor(protected supported: Array<string>) {
+    }
+
+    supports(kind: string): boolean {
+        return this.supported.includes(kind)
+    }
+
+    abstract deserialize(serializer: DeserializerBase, kind: string): any
+
+    next: CustomDeserializer | undefined = undefined
+}
+
+class OurCustomDeserializer extends CustomDeserializer {
+    constructor() {
+        super(["Resource", "Pixmap"])
+    }
+    deserialize(deserializer: DeserializerBase, kind: string): any {
+        return JSON.parse(deserializer.readString())
+    }
+}
+
+DeserializerBase.registerCustomDeserializer(new OurCustomDeserializer())
