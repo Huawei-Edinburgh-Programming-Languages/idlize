@@ -70,8 +70,20 @@ function checkSerdeBaseText() {
     const ser = new SerializerBase(12)
     const text = "test text serialization/deserialization"
     ser.writeString(text)
-    const deserializer = new DeserializerBase(ser.asArray().buffer, ser.length())
-    checkSerdeResult("DeserializerBase.readString", deserializer.readString(), text)
+    const des = new DeserializerBase(ser.asArray().buffer, ser.length())
+    checkSerdeResult("DeserializerBase.readString", des.readString(), text)
+    ser.close()
+}
+
+function checkSerdeBasePrimitive() {
+    const ser = new SerializerBase(12)
+    ser.writeNumber(10)
+    ser.writeNumber(10.5)
+    ser.writeNumber(undefined)
+    const des = new DeserializerBase(ser.asArray().buffer, ser.length())
+    checkSerdeResult("DeserializerBase.readNumber, int", des.readNumber(), 10)
+    checkSerdeResult("DeserializerBase.readNumber, float", des.readNumber(), 10.5)
+    checkSerdeResult("DeserializerBase.readNumber, undefined", des.readNumber(), undefined)
     ser.close()
 }
 
@@ -199,6 +211,7 @@ function checkPerf3(count: number) {
 
 checkSerdeBaseLength()
 checkSerdeBaseText()
+checkSerdeBasePrimitive()
 
 checkPerf2(200 * 1000)
 checkPerf3(200 * 1000)

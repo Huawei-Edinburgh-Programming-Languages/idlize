@@ -97,6 +97,21 @@ export class DeserializerBase {
         return value
     }
 
+    readNumber(): number | undefined {
+        const tag = this.readInt8()
+        switch (tag) {
+            case Tags.UNDEFINED:
+                return undefined;
+            case Tags.INT32:
+                return this.readInt32()
+            case Tags.FLOAT32:
+                return this.readFloat32()
+            default:
+                throw new Error(`Unknown number tag: ${tag}`)
+                break
+        }
+    }
+
     readLength(): Length | undefined {
         this.checkCapacity(1)
         const valueType = this.readInt8()
