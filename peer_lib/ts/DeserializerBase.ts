@@ -12,16 +12,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {float32, int32} from "@koalaui/common"
-import {pointer} from "@koalaui/interop"
-import {RuntimeType, Tags} from "./SerializerBase";
+import { float32, int32 } from "@koalaui/common"
+import { pointer } from "@koalaui/interop"
+import { RuntimeType, Tags } from "@arkoala/arkui/SerializerBase";
 
 export class DeserializerBase {
     private position = 0
     private readonly buffer: ArrayBuffer
     private readonly length: int32
     private view: DataView
-    private readonly textDecoder = new TextDecoder()
+    private static textDecoder = new TextDecoder()
 
     constructor(buffer: ArrayBuffer, length: int32) {
         this.buffer = buffer
@@ -29,8 +29,8 @@ export class DeserializerBase {
         this.view = new DataView(this.buffer)
     }
 
-    asArray(): Uint8Array {
-        return new Uint8Array(this.buffer)
+    asArray(position?: number | undefined, length?: number | undefined): Uint8Array {
+        return new Uint8Array(this.buffer, position, length)
     }
 
     currentPosition(): int32 {
@@ -88,11 +88,11 @@ export class DeserializerBase {
         return id == RuntimeType.UNDEFINED ? undefined : {}
     }
 
-    readString() : string {
+    readString(): string {
         const length = this.readInt32()
         this.checkCapacity(length)
         // read without null-terminated byte
-        const value = this.textDecoder.decode(new Uint8Array(this.view.buffer, this.position, length - 1));
+        const value = DeserializerBase.textDecoder.decode(this.asArray(this.position, length - 1));
         this.position += length
         return value
     }
