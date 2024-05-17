@@ -152,9 +152,8 @@ export class DeclarationTable {
     }
 
     getTypeName(type: ts.TypeNode, optional: boolean = false): string {
-        let declaration = this.typeMap.get(type)
         this.requestType(undefined, type)
-        declaration = this.typeMap.get(type)!
+        let declaration = this.typeMap.get(type)!
         let prefix = optional ? PrimitiveType.OptionalPrefix : ""
         return prefix + declaration[1][0]
     }
@@ -220,7 +219,7 @@ export class DeclarationTable {
         if (ts.isImportTypeNode(node)) {
             return this.mapImportType(node)
         }
-        if (ts.isFunctionTypeNode(node)) {
+        if (ts.isFunctionTypeNode(node) || ts.isTypeReferenceNode(node) && identName(node) === "Function") {
             return PrimitiveType.Function
         }
         if (ts.isTypeReferenceNode(node)) {

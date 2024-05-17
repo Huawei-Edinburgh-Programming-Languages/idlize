@@ -123,6 +123,11 @@ typedef struct Opt_Ark_Callback {
   enum Ark_Tag tag;
   Ark_CustomObject value;
 } Opt_Ark_Callback;
+// TODO do not merge, should be generated
+typedef struct Opt_Ark_Materialized {
+  enum Ark_Tag tag;
+  Ark_Materialized value;
+} Opt_Ark_Materialized;
 
 enum Ark_APIVariantKind {
     BASIC = 1,

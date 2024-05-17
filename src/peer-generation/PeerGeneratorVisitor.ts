@@ -203,10 +203,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
         const peer = this.peerFile.getOrPutPeer(componentName)
 
         this.populatePeer(node, peer)
-        const peerMethods = tsMethods
-            .map(it => this.processMethodOrCallable(it, peer))
-            .filter(isDefined)
-        PeerMethod.markOverloads(peerMethods)
+        const peerMethods = this.processMethodsOrCallables(tsMethods, peer)
         peer.methods.push(...peerMethods)
 
         this.createComponentAttributesDeclaration(node, peer)
@@ -264,11 +261,11 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
         const peer = this.peerFile.getOrPutPeer(componentName)
         peer.originalInterfaceName = this.classNameIfInterface(node)
         const tsMethods = this.extractMethods(node)
-        const peerMethods = tsMethods
-            .filter(it => ts.isCallSignatureDeclaration(it))
-            .map(it => this.processMethodOrCallable(it, peer, identName(node)!))
-            .filter(isDefined)
-        PeerMethod.markOverloads(peerMethods)
+        const peerMethods = this.processMethodsOrCallables(
+            tsMethods.filter(it => ts.isCallSignatureDeclaration(it)),
+            peer,
+            identName(node)!,
+        )
         peer.methods.push(...peerMethods)
     }
 
@@ -336,9 +333,23 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
         return argConvertors?.map(it => `${it.param}`).join(", ")
     }
 
+    private processMethodsOrCallables(
+        methods: (ts.MethodDeclaration | ts.CallSignatureDeclaration)[],
+        peer: PeerClass,
+        parentName?: string
+    ): PeerMethod[] {
+        return methods.map(method => {
+            const overloads = methods.filter(it => identName(it.name) === identName(method.name))
+            const postfix = overloads.length == 1 ? "" : overloads.indexOf(method).toString()
+            return this.processMethodOrCallable(method, peer, postfix, parentName)
+        }).filter(isDefined)
+    }
+
     processMethodOrCallable(
         method: ts.MethodDeclaration | ts.CallSignatureDeclaration,
         peer: PeerClass,
+        // TODO dirty, just testing with this here
+        overloadPostfix: string,
         parentName?: string
     ): PeerMethod | undefined {
         const isCallSignature = ts.isCallSignatureDeclaration(method)
@@ -351,13 +362,6 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
         if (PeerGeneratorConfig.ignorePeerMethod.includes(methodName)) return
 
         this.declarationTable.setCurrentContext(`${methodName}()`)
-
-        method.parameters.forEach((param, index) => {
-            if (param.type) {
-                this.requestType(`Type_${originalParentName}_${methodName}_Arg${index}`, param.type)
-                this.collectMaterializedClasses(param.type)
-            }
-        })
         const argConvertors = method.parameters
             .map((param) => this.argConvertor(param))
         const declarationTargets = method.parameters
@@ -365,8 +369,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
                 throwException(`Expected a type for ${asString(param)} in ${asString(method)}`)))
         const retConvertor = this.retConvertor(method.type)
 
-        // TODO: restore collapsing logic!
-        const signature = /* collapsed?.signature ?? */ this.generateSignature(method)
+        const signature = this.generateSignature(method)
 
         const peerMethod = new PeerMethod(
             originalParentName,
@@ -374,9 +377,17 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
             argConvertors,
             retConvertor,
             isCallSignature,
-            false,
+            overloadPostfix != "",
             new Method(methodName, signature, isStatic(method.modifiers) ? [MethodModifier.STATIC] : []),
         )
+
+        method.parameters.forEach((param, index) => {
+            if (param.type) {
+                this.requestType(`Type_${originalParentName}_${peerMethod.overloadedName}_Arg${index}`, param.type)
+                this.collectMaterializedClasses(param.type)
+            }
+        })
+
         this.declarationTable.setCurrentContext(undefined)
         return peerMethod
     }
@@ -403,9 +414,20 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
         if (!isMaterialized(target)) {
             return
         }
+        let className = nameOrNull(target.name)!
+        let oldstructDescriptor = this.declarationTable.targetStruct(target)
+        for (const method of oldstructDescriptor.getMethods()) {
+            method.params.forEach((param, index) => {
+                this.requestType(undefined, param.type)
+                this.collectMaterializedClasses(param.type)
+            })
+        }
+        oldstructDescriptor.cons?.params.forEach((param, index) => {
+            this.requestType(undefined, param.type)
+            this.collectMaterializedClasses(param.type)
+        })
         let structDescriptor = this.declarationTable.targetStruct(target)
         let constructor = structDescriptor.getConstructor()
-        let className = nameOrNull(target.name)!
         if (Materialized.Instance.materializedClasses.has(className)) {
             return
         }

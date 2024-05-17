@@ -107,18 +107,6 @@ export class PeerMethod {
             argType: PrimitiveType.NativePointer.getText()
         }
     }
-
-    static markOverloads(methods: PeerMethod[]): void {
-        for (const peerMethod of methods)
-            peerMethod.isOverloaded = false
-        
-        for (const peerMethod of methods) {
-            if (peerMethod.isOverloaded) continue
-            const sameNamedMethods = methods.filter(it => it.method.name === peerMethod.method.name)
-            if (sameNamedMethods.length <= 1) continue
-            sameNamedMethods.forEach((method) => method.isOverloaded = true)
-        }
-    }
 }
 
 export class MethodSeparatorVisitor {

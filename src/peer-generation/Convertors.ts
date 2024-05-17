@@ -439,6 +439,7 @@ export class OptionConvertor extends BaseArgConvertor {
         }
         super(`(${typeConvertor.tsTypeName})?`, runtimeTypes, typeConvertor.isScoped, true, param)
         this.typeConvertor = typeConvertor
+        table.requestType(undefined, type)
     }
 
     convertorArg(param: string, language: Language): string {
@@ -467,8 +468,8 @@ export class OptionConvertor extends BaseArgConvertor {
     }
     nativeType(impl: boolean): string {
         return impl
-            ? `struct { ${PrimitiveType.Tag.getText()} tag; ${this.table.getTypeName(this.type, false)} value; }`
-            : this.table.getTypeName(this.type, true)
+            ? `struct { ${PrimitiveType.Tag.getText()} tag; ${this.typeConvertor.nativeType(false)} value; }`
+            : PrimitiveType.OptionalPrefix + this.typeConvertor.nativeType(false)
     }
     interopType(language: Language): string {
         return language == Language.CPP ? PrimitiveType.NativePointer.getText() : "KNativePointer"
