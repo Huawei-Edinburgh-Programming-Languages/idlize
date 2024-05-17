@@ -18,7 +18,6 @@
 #include <cstring>
 #include <string>
 #include <vector>
-#include <map>
 
 #include "common-interop.h"
 #include "arkoala_api.h"
@@ -26,16 +25,17 @@
 using namespace std;
 
 inline const char* tagName(Ark_Tag tag) {
-  static const std::map<Ark_Tag, const char*> table = {
-    {Ark_Tag::ARK_TAG_UNDEFINED, "UNDEFINED"},
-    {Ark_Tag::ARK_TAG_INT32, "INT32"},
-    {Ark_Tag::ARK_TAG_FLOAT32, "FLOAT32"},
-    {Ark_Tag::ARK_TAG_LENGTH, "LENGTH"},
-    {Ark_Tag::ARK_TAG_RESOURCE, "RESOURCE"},
-    {Ark_Tag::ARK_TAG_STRING, "STRING"},
-    {Ark_Tag::ARK_TAG_OBJECT, "OBJECT"}
-  };
-  return table.at(tag);
+  switch (tag) {
+      case Ark_Tag::ARK_TAG_UNDEFINED: return "UNDEFINED";
+      case Ark_Tag::ARK_TAG_INT32: return "INT32";
+      case Ark_Tag::ARK_TAG_FLOAT32: return "FLOAT32";
+      case Ark_Tag::ARK_TAG_LENGTH: return "LENGTH";
+      case Ark_Tag::ARK_TAG_RESOURCE: return "RESOURCE";
+      case Ark_Tag::ARK_TAG_STRING: return "STRING";
+      case Ark_Tag::ARK_TAG_OBJECT: return "OBJECT";
+  }
+  fprintf(stderr, "tag name %d is wrong\n", tag);
+  throw "Error";
 }
 
 inline const char* getUnitName(int value) {

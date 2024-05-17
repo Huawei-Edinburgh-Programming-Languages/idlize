@@ -31,17 +31,6 @@ export enum RuntimeType {
     SYMBOL = 8
 }
 
-const string2RuntimeType = new Map<string, RuntimeType>([
-    ["number", RuntimeType.NUMBER],
-    ["string", RuntimeType.STRING],
-    ["undefined", RuntimeType.UNDEFINED],
-    ["object", RuntimeType.OBJECT],
-    ["boolean", RuntimeType.BOOLEAN],
-    ["bigint", RuntimeType.BIGINT],
-    ["function", RuntimeType.FUNCTION],
-    ["symbol", RuntimeType.SYMBOL],
-])
-
 /**
  * Value representing object type in serialized data.
  * Must be synced with "enum Tags" in C++.
@@ -57,7 +46,17 @@ export enum Tags {
 }
 
 export function runtimeType(value: any): int32 {
-    return string2RuntimeType.get(typeof value)!
+    let type = typeof value
+    if (type == "number") return RuntimeType.NUMBER
+    if (type == "string") return RuntimeType.STRING
+    if (type == "undefined") return RuntimeType.UNDEFINED
+    if (type == "object") return RuntimeType.OBJECT
+    if (type == "boolean") return RuntimeType.BOOLEAN
+    if (type == "bigint") return RuntimeType.BIGINT
+    if (type == "function") return RuntimeType.FUNCTION
+    if (type == "symbol") return RuntimeType.SYMBOL
+
+    throw new Error(`bug: ${value} is ${type}`)
 }
 
 export type Function = object
