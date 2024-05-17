@@ -797,7 +797,12 @@ export class DeclarationTable {
     private printStructsCTail(name: string, needPacked: boolean, structs: IndentedPrinter) {
         structs.popIndent()
         if (needPacked) {
+            structs.print(`#ifdef _MSC_VER`)
             structs.print(`}`)
+            structs.print(`#pragma pack(pop)`)
+            structs.print(`#else`)
+            structs.print(`} __attribute__((packed))`)
+            structs.print(`#endif`)
             structs.print(`${name};`)
         } else {
             structs.print(`} ${name};`)
@@ -1128,7 +1133,7 @@ constructor(expectedSize: int32) {
             heritageDeclarations(this.typeChecker!, it).forEach(it => {
                 if (ts.isClassDeclaration(it) || ts.isInterfaceDeclaration(it)) {
                     result.supers.push(it)
-                    result.isPacked = true
+                    result.isPacked = false
                     this.fieldsForClass(it, result)
                 }
             })
