@@ -82,6 +82,13 @@ const ArkUINodeModifiers* GetNodeModifiers() {
     return GetArkUINodeModifiers();
 }
 
+const ArkUIAccessors* GetAccessors() {
+    // TODO: restore the proper call
+    // return GetFullImpl()->getAccessors();
+    extern const ArkUIAccessors* GetArkUIAccessors();
+    return GetArkUIAccessors();
+}
+
 ${bridgeCc.join("\n")}
 `
 }
@@ -151,7 +158,34 @@ extern const ArkUIAccessors* GetArkUIAccessors()
 }
 
 export function makeTSSerializer(table: DeclarationTable): string {
-    let printer = createLanguageWriter(new IndentedPrinter(), Language.TS)
+    let printer = createLanguageWriter(new IndentedPrinter(), table.language)
+    if(table.language == Language.ARKTS) {
+        printer.print(`
+import {
+    AltOffset,
+    BackgroundBlurStyleOptions,
+    BlurOptions,
+    BlurStyle,
+    Color,
+    CommonAttribute,
+    CommonMethod,
+    DragInteractionOptions,
+    DragPreviewOptions,
+    Length,
+    Offset,
+    Padding,
+    Position,
+    Resource,
+    ResourceStr,
+    ResourceColor,
+    SheetOptions,
+    SheetSize,
+    StateStyles,
+    SheetTitleOptions
+} from "./dts-exports"
+`.trim()
+        )
+    }
     table.generateSerializers(printer)
     return `
 import { SerializerBase, runtimeType, Tags, RuntimeType, Function } from "./SerializerBase"
@@ -341,8 +375,8 @@ export class ArkStructCommon extends ArkCommon implements CustomComponent {
 `
 }
 
-export function makeMaterializedPrologue(): string {
-    let prologue = readTemplate('materialized_class_prologue.ts')
+export function makeMaterializedPrologue(lang: Language): string {
+    let prologue = readLangTemplate('materialized_class_prologue', lang)
     return `
 ${prologue}
 

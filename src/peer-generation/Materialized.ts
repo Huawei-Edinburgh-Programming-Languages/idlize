@@ -42,11 +42,27 @@ export class MaterializedMethod extends PeerMethod {
         isCallSignature: boolean,
         method: Method
     ) {
-        super(originalParentName, declarationTargets, argConvertors, retConvertor, isCallSignature, method)
+        super(originalParentName, declarationTargets, argConvertors, retConvertor, isCallSignature, false, method)
+    }
+
+    override get peerMethodName() {
+        return this.method.name
     }
 
     override get implName(): string {
-        return `${this.originalParentName}_${this.method.name}`
+        return `${this.originalParentName}_${this.overloadedName}`
+    }
+
+    override get receiverType(): string {
+        return `${this.originalParentName}Peer*`
+    }
+
+    override get apiCall(): string {
+        return "GetAccessors()"
+    }
+
+    override get apiKind(): string {
+        return "Accessor"
     }
 
     override generateReceiver(): { argName: string; argType: string } | undefined {
@@ -92,7 +108,7 @@ export class Materialized {
 export function printGlobalMaterialized(nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter) {
     console.log(`Materialized classes: ${Materialized.Instance.materializedClasses.size}`)
     Materialized.Instance.materializedClasses.forEach(clazz => {
-        printPeerMethod(clazz, clazz.ctor, nativeModule, nativeModuleEmpty)
+        printPeerMethod(clazz, clazz.ctor, nativeModule, nativeModuleEmpty, new Type("pointer"))
         clazz.methods.forEach(method => printPeerMethod(clazz, method, nativeModule, nativeModuleEmpty))
     })
 }
