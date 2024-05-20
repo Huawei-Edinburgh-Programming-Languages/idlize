@@ -322,7 +322,7 @@ export class UnionConvertor extends BaseArgConvertor {
 
                 printer.print(`${maybeElse}if (${it.runtimeTypes.map(it => `${maybeComma1}${runtimeType} == RuntimeType.${RuntimeType[it]}${maybeComma2}`).join(" || ")}) {`)
                 printer.pushIndent()
-                it.convertorDeserialize(param, `${value}`, printer, Language.TS)
+                it.convertorDeserialize(param, value, printer, Language.TS)
                 printer.popIndent()
                 printer.print(`}`)
             })
@@ -491,7 +491,7 @@ export class OptionConvertor extends BaseArgConvertor {
             printer.print(`const ${value}_type = runtimeType(${param}Deserializer.readInt8())`)
             printer.print(`if (${value}_type != RuntimeType.UNDEFINED) {`)
             printer.pushIndent()
-            this.typeConvertor.convertorDeserialize(param, `${value}`, printer, lang)
+            this.typeConvertor.convertorDeserialize(param, value, printer, lang)
             printer.popIndent()
             printer.print(`}`)
         } else {

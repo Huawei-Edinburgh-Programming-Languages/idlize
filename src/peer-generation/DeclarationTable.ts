@@ -913,7 +913,7 @@ export class DeclarationTable {
             if (this.targetStruct(declaration).getFields().length == 0) continue
             if (ts.isInterfaceDeclaration(declaration) || ts.isClassDeclaration(declaration)) {
                 printer.pushIndent()
-                this.generateTsDeserializer(name, declaration, printer)
+                this.generateTSDeserializer(name, declaration, printer)
                 printer.popIndent()
             }
         }
@@ -1418,7 +1418,11 @@ constructor(expectedSize: int32) {
         this.setCurrentContext(undefined)
     }
 
-    private generateTsDeserializer(name: string, target: DeclarationTarget, printer: LanguageWriter) {
+    private createValueFieldName(fieldName: string): string {
+        return `value_${fieldName}`
+    }
+
+    private generateTSDeserializer(name: string, target: DeclarationTarget, printer: LanguageWriter) {
         if (this.ignoreTarget(target, name)) return
         this.setCurrentContext(`read${name}()`)
         printer.print(`read${name}(): ${name} {`)
@@ -1428,18 +1432,18 @@ constructor(expectedSize: int32) {
             let struct = this.targetStruct(target)
             printer.print(`let valueDeserializer = this`)
             struct.getFields().forEach((it) => {
-                printer.print(`let value_${it.name}: any`)
+                printer.print(`let ${this.createValueFieldName(it.name)}: any`)
             })
             let initArgs: string[] = []
             struct.getFields().forEach(it => {
                 let typeConvertor = this.typeConvertor("value", it.type!, it.optional)
-                typeConvertor.convertorDeserialize(`value`, `value_${it.name}`, printer, Language.TS)
-                initArgs.push(`${it.name}: value_${it.name}`)
+                typeConvertor.convertorDeserialize("value", this.createValueFieldName(it.name), printer, Language.TS)
+                initArgs.push(`${it.name}: ${this.createValueFieldName(it.name)}`)
             })
             printer.print(`const value: ${this.computeTargetName(target, false)} = {${initArgs.join(",")}}`)
         } else {
             let typeConvertor = this.typeConvertor("value", target, false)
-            typeConvertor.convertorDeserialize(`value`, `value`, printer, Language.TS)
+            typeConvertor.convertorDeserialize("value", "value", printer, Language.TS)
         }
 
         printer.print("return value")
