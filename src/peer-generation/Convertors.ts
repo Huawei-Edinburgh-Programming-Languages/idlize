@@ -666,10 +666,10 @@ export class TupleConvertor extends BaseArgConvertor {
     }
 
     convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
-        printer.pushIndent()
         if (language == Language.TS) {
             printer.print(`const ${value}_type = runtimeType(${param}Deserializer.readInt8())`)
             printer.print(`if (${value}_type != RuntimeType.UNDEFINED) {`)
+            printer.pushIndent()
             printer.print(`${value} = []`)
             this.memberConvertors.forEach((it, index) => {
                 printer.print(`let value${index}: any`)
@@ -682,8 +682,6 @@ export class TupleConvertor extends BaseArgConvertor {
             this.memberConvertors.forEach((it, index) => {
                 it.convertorDeserialize(param, `${value}.value${index}`, printer, Language.CPP)
             })
-            printer.popIndent()
-            printer.print(`}`)
         }
         printer.popIndent()
         printer.print(`}`)
