@@ -1356,15 +1356,19 @@ export class DeclarationTable {
         printer.print(`read${name}(): ${name} {`)
         printer.pushIndent()
 
-        printer.print(`let value: ${name} = {}`)
-        printer.print(`let valueDeserializer = this`)
-
         if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {
             let struct = this.targetStruct(target)
-            struct.getFields().forEach(it => {
-                let typeConvertor = this.typeConvertor(`value`, it.type!, it.optional)
-                typeConvertor.convertorDeserialize(`value`, `value.${it.name}`, printer, Language.TS)
+            printer.print(`let valueDeserializer = this`)
+            struct.getFields().forEach((it) => {
+                printer.print(`let value_${it.name}: any`)
             })
+            let initArgs: string[] = []
+            struct.getFields().forEach(it => {
+                let typeConvertor = this.typeConvertor("value", it.type!, it.optional)
+                typeConvertor.convertorDeserialize(`value`, `value_${it.name}`, printer, Language.TS)
+                initArgs.push(`${it.name}: value_${it.name}`)
+            })
+            printer.print(`const value = {${initArgs.join(",")}}`)
         } else {
             let typeConvertor = this.typeConvertor("value", target, false)
             typeConvertor.convertorDeserialize(`value`, `value`, printer, Language.TS)

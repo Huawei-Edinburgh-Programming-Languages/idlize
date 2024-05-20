@@ -305,25 +305,44 @@ export class UnionConvertor extends BaseArgConvertor {
             printer.print(`}`)
         })
     }
-    convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
-        // Save actual type being passed.
-        let runtimeType = `runtimeType${uniqueCounter++}`;
-        printer.print(`int32_t ${runtimeType} = ${param}Deserializer.readInt8();`)
-        this.memberConvertors.forEach((it, index) => {
-            if (it.runtimeTypes.length == 0) {
-                return
-            }
-            let maybeElse = (index > 0 && this.memberConvertors[index - 1].runtimeTypes.length > 0) ? "else " : ""
-            let maybeComma1 = (it.runtimeTypes.length > 1) ? "(" : ""
-            let maybeComma2 = (it.runtimeTypes.length > 1) ? ")" : ""
+    convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
+        if (language == Language.TS) {
+            let runtimeType = `runtimeType${uniqueCounter++}`;
+            printer.print(`const ${runtimeType} = ${param}Deserializer.readInt8();`)
+            this.memberConvertors.forEach((it, index) => {
+                if (it.runtimeTypes.length == 0) {
+                    return
+                }
+                let maybeElse = (index > 0 && this.memberConvertors[index - 1].runtimeTypes.length > 0) ? "else " : ""
+                let maybeComma1 = (it.runtimeTypes.length > 1) ? "(" : ""
+                let maybeComma2 = (it.runtimeTypes.length > 1) ? ")" : ""
 
-            printer.print(`${maybeElse}if (${it.runtimeTypes.map(it => `${maybeComma1}ARK_RUNTIME_${RuntimeType[it]} == ${runtimeType}${maybeComma2}`).join(" || ")}) {`)
-            printer.pushIndent()
-            it.convertorDeserialize(param, `${value}.value${index}`, printer, Language.CPP)
-            printer.print(`${value}.selector = ${index};`)
-            printer.popIndent()
-            printer.print(`}`)
-        })
+                printer.print(`${maybeElse}if (${it.runtimeTypes.map(it => `${maybeComma1}${runtimeType} == RuntimeType.${RuntimeType[it]}${maybeComma2}`).join(" || ")}) {`)
+                printer.pushIndent()
+                it.convertorDeserialize(param, `${value}`, printer, Language.TS)
+                printer.popIndent()
+                printer.print(`}`)
+            })
+        } else if (language == Language.CPP) {
+            // Save actual type being passed.
+            let runtimeType = `runtimeType${uniqueCounter++}`;
+            printer.print(`int32_t ${runtimeType} = ${param}Deserializer.readInt8();`)
+            this.memberConvertors.forEach((it, index) => {
+                if (it.runtimeTypes.length == 0) {
+                    return
+                }
+                let maybeElse = (index > 0 && this.memberConvertors[index - 1].runtimeTypes.length > 0) ? "else " : ""
+                let maybeComma1 = (it.runtimeTypes.length > 1) ? "(" : ""
+                let maybeComma2 = (it.runtimeTypes.length > 1) ? ")" : ""
+
+                printer.print(`${maybeElse}if (${it.runtimeTypes.map(it => `${maybeComma1}ARK_RUNTIME_${RuntimeType[it]} == ${runtimeType}${maybeComma2}`).join(" || ")}) {`)
+                printer.pushIndent()
+                it.convertorDeserialize(param, `${value}.value${index}`, printer, Language.CPP)
+                printer.print(`${value}.selector = ${index};`)
+                printer.popIndent()
+                printer.print(`}`)
+            })
+        }
     }
     nativeType(impl: boolean): string {
         return impl
@@ -466,8 +485,8 @@ export class OptionConvertor extends BaseArgConvertor {
             printer.popIndent()
             printer.print(`}`)
         } else if (lang == Language.TS) {
-            printer.print(`const ${value.replaceAll('.', '_')}_type = runtimeType(${param}Deserializer.readInt8())`)
-            printer.print(`if (${value.replaceAll('.', '_')}_type != RuntimeType.UNDEFINED) {`)
+            printer.print(`const ${value}_type = runtimeType(${param}Deserializer.readInt8())`)
+            printer.print(`if (${value}_type != RuntimeType.UNDEFINED) {`)
             printer.pushIndent()
             this.typeConvertor.convertorDeserialize(param, `${value}`, printer, lang)
             printer.popIndent()
@@ -647,14 +666,15 @@ export class TupleConvertor extends BaseArgConvertor {
         if (language == Language.CPP) {
             printer.print(`if (${param}Deserializer.readInt8() != ${PrimitiveType.UndefinedRuntime}) {`) // TODO: `else value = nullptr` ?
         } else if (language == Language.TS) {
-            printer.print(`const ${value.replaceAll('.', '_')}_type = runtimeType(${param}Deserializer.readInt8())`)
-            printer.print(`if (${value.replaceAll('.', '_')}_type != RuntimeType.UNDEFINED) {`)
+            printer.print(`const ${value}_type = runtimeType(${param}Deserializer.readInt8())`)
+            printer.print(`if (${value}_type != RuntimeType.UNDEFINED) {`)
         }
         printer.pushIndent()
         if (language == Language.TS) {
             this.memberConvertors.forEach((it, index) => {
-                it.convertorDeserialize(param, `let value${index}`, printer, language)
-                printer.print(`${value}.push(value${index}!)`)
+                printer.print(`let value${index}: any`)
+                it.convertorDeserialize(param, `value${index}`, printer, language)
+                printer.print(`if (value${index}) ${value}.push(value${index})`)
             })
         } else if (language == Language.CPP) {
             this.memberConvertors.forEach((it, index) => {
@@ -760,7 +780,11 @@ export class NumberConvertor extends BaseArgConvertor {
         return `(const ${PrimitiveType.Number.getText()}*)&${param}`
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
-        printer.print(`${value} = ${param}Deserializer.readNumber();`)
+        if (language == Language.TS) {
+            printer.print(`${value} = ${param}Deserializer.readNumber()`)
+        } else if (language == Language.CPP) {
+            printer.print(`${value} = ${param}Deserializer.readNumber();`)
+        }
     }
     nativeType(): string {
         return PrimitiveType.Number.getText()
@@ -844,8 +868,8 @@ class ProxyConvertor extends BaseArgConvertor {
     convertorArg(param: string, language: Language): string {
         return this.convertor.convertorArg(param, language)
     }
-    convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
-        this.convertor.convertorDeserialize(param, value, printer, Language.CPP)
+    convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
+        this.convertor.convertorDeserialize(param, value, printer, language)
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         this.convertor.convertorSerialize(param, value, printer)
