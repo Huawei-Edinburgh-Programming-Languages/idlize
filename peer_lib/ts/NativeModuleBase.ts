@@ -19,8 +19,11 @@ export class NativeModuleBase {
     _GetGroupedLog(index: KInt): KPointer {
         throw new Error("_GetResultString")
     }
-    _ClearGroupedLog(index: KInt): void  {
-        throw new Error("_ClearResultString")
+    _StartGroupedLog(index: KInt): void  {
+        throw new Error("_StartGroupedLog")
+    }
+    _StopGroupedLog(index: KInt): void  {
+        throw new Error("_StopGroupedLog")
     }
     _GetStringFinalizer(): KPointer  {
         throw new Error("_GetStringFinalizer")
@@ -39,4 +42,7 @@ export class NativeModuleBase {
     }
     _TestPerfNumber(value: KInt): KInt { return 0 }
     _TestPerfNumberWithArray(value: KUint8ArrayPtr, length: KInt): void {}
+    _StartPerf(traceName: KStringPtr): void {}
+    _EndPerf(traceName: KStringPtr): void {}
+    _DumpPerf(options: KInt): KPointer { return 0 }
 }

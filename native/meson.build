@@ -67,12 +67,12 @@ jni_library_name = 'NativeBridgeJni'
 
 if is_clang
 # TODO: remove all -Wno-* when generation is fixed.
-cflags += ['-Wno-address-of-packed-member', '-Wall', '-Werror', '-Wno-unused-variable', '-Wno-extern-c-compat']
+cflags += ['-Wall', '-Werror', '-Wno-unused-variable', '-Wno-extern-c-compat', '-Wno-error=deprecated-declarations']
 endif
 
 node_cflags = ['-DKOALA_USE_NODE_VM', '-DKOALA_NAPI', '-DINTEROP_LIBRARY_NAME=' + node_library_name]
 node_include_dirs = [
-    '../node-api-headers/include',
+    '../node_modules/node-api-headers/include',
     '../node_modules/node-addon-api'
 ]
 node_sources = [

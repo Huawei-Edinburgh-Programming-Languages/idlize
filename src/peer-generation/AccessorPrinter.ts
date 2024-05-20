@@ -15,7 +15,7 @@
 
 import { IndentedPrinter } from "../IndentedPrinter";
 import { accessorStructList, modifierStructs } from "./FileGenerators";
-import { Materialized, MaterializedClass, MaterializedMethod } from "./Materialized";
+import { MaterializedClass, MaterializedMethod } from "./Materialized";
 import { ModifierVisitor } from "./ModifierPrinter";
 import { PeerLibrary } from "./PeerLibrary";
 
@@ -33,7 +33,7 @@ class AccessorVisitor extends ModifierVisitor {
         [clazz.ctor, clazz.dtor].concat(clazz.methods).forEach(method => {
             this.printMaterializedMethod(this.dummy, method, m => this.printDummyImplFunctionBody(m))
             this.printMaterializedMethod(this.real, method, m => this.printModifierImplFunctionBody(m))
-            this.accessors.print(`${method.originalParentName}_${method.method.name},`)
+            this.accessors.print(`${method.originalParentName}_${method.overloadedName},`)
         })
         this.printMaterializedClassEpilog(clazz)
         this.accessorList.popIndent()
@@ -62,7 +62,7 @@ class AccessorVisitor extends ModifierVisitor {
 
 export function printRealAndDummyAccessors(peerLibrary: PeerLibrary): {dummy: string, real: string} {
     const visitor = new AccessorVisitor(peerLibrary)
-    Materialized.Instance.materializedClasses.forEach(c => visitor.printRealAndDummyAccessor(c))
+    peerLibrary.materializedClasses.forEach(c => visitor.printRealAndDummyAccessor(c))
 
     const dummy =
         visitor.dummy.getOutput().join("\n") + "\n" +

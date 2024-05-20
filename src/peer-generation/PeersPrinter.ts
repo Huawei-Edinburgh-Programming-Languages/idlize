@@ -22,7 +22,13 @@ import { ImportsCollector } from "./ImportsCollector";
 import { PeerClass } from "./PeerClass";
 import { InheritanceRole, determineParentRole, isHeir, isRoot } from "./inheritance";
 import { PeerMethod } from "./PeerMethod";
-import { LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, Type, createLanguageWriter } from "./LanguageWriters";
+import {
+    LanguageWriter,
+    Method,
+    NamedMethodSignature,
+    Type,
+    createLanguageWriter
+} from "./LanguageWriters";
 
 export function componentToPeerClass(component: string) {
     return `Ark${component}Peer`
@@ -39,6 +45,7 @@ class PeerFileVisitor {
     private isTs = this.file.declarationTable.language == Language.TS
 
     constructor(
+        private readonly library: PeerLibrary,
         private readonly file: PeerFile,
         private readonly dumpSerialized: boolean,
     ) { }
@@ -64,15 +71,16 @@ class PeerFileVisitor {
     }
 
     private printImports(): void {
+        this.getDefaultPeerImports(this.file.declarationTable.language)!.forEach(it => this.printer.print(it))
         if (this.file.declarationTable.language == Language.JAVA) {
-            this.printer.print("import org.koalaui.arkoala.*;")
+            return
         }
-        if (!this.isTs) return
+
         const imports = new ImportsCollector()
         imports.addFilterByBasename(this.targetBasename)
+        for (const importType of this.library.importTypesStubs)
+            imports.addFeatureByBasename(importType, 'ImportsStubs.ts')
         this.file.peers.forEach(peer => {
-            for (const importType of peer.usedImportTypesStubs)
-                imports.addFeatureByBasename(importType, 'ImportsStubs.ts')
             if (!peer.originalParentFilename) return
             const parentBasename = renameDtsToPeer(path.basename(peer.originalParentFilename), this.file.declarationTable.language)
             imports.addFeatureByBasename(this.generatePeerParentName(peer), parentBasename)
@@ -82,7 +90,6 @@ class PeerFileVisitor {
         })
         imports.addFeature("unsafeCast", "./generated-utils")
         imports.print(this.printer)
-        PeerFileVisitor._defaultPeerImports.forEach(it => this.printer.print(it))
     }
 
     private printAttributes(peer: PeerClass) {
@@ -199,16 +206,39 @@ class PeerFileVisitor {
         })
     }
 
-    private static readonly _defaultPeerImports = [
-        `import { int32 } from "@koalaui/common"`,
-        `import { PeerNode } from "@koalaui/arkoala"`,
-        `import { nullptr, KPointer } from "@koalaui/interop"`,
-        `import { runtimeType, withLength, withLengthArray, RuntimeType } from "./SerializerBase"`,
-        `import { Serializer } from "./Serializer"`,
-        `import { nativeModule } from "./NativeModule"`,
-        `import { ArkUINodeType } from "./ArkUINodeType"`,
-        `import { ArkCommon } from "./ArkCommon"`,
-    ]
+    private getDefaultPeerImports(lang: Language) {
+        switch(lang) {
+            case Language.TS: {
+                return [
+                    `import { int32 } from "@koalaui/common"`,
+                    `import { PeerNode } from "@koalaui/arkoala"`,
+                    `import { nullptr, KPointer } from "@koalaui/interop"`,
+                    `import { runtimeType, withLength, withLengthArray, RuntimeType } from "./SerializerBase"`,
+                    `import { Serializer } from "./Serializer"`,
+                    `import { nativeModule } from "./NativeModule"`,
+                    `import { ArkUINodeType } from "./ArkUINodeType"`,
+                    `import { ArkCommon } from "./ArkCommon"`,
+                ]
+            }
+            case Language.ARKTS: {
+                return [
+                    `import { int32 } from "@koalaui/common"`,
+                    `import { PeerNode } from "@koalaui/arkoala"`,
+                    `import { nullptr, KPointer } from "@koalaui/interop"`,
+                    `import { runtimeType, withLength, withLengthArray, RuntimeType } from "./SerializerBase"`,
+                    `import { Serializer } from "./Serializer"`,
+                    `import { ArkUINodeType } from "./ArkUINodeType"`,
+                    `import { ArkCommon } from "./ArkCommon"`,
+                    `import { BackgroundBlurStyleOptions, BlurOptions, BlurStyle, CommonAttribute, CommonMethod, DragInteractionOptions, DragPreviewOptions, Length, ResourceColor, SheetOptions, StateStyles } from "./dts-exports"`
+                ]
+            }
+            case Language.JAVA: {
+                return [
+                    "import org.koalaui.arkoala.*;"
+                ]
+            }
+        }
+    }
 }
 
 class PeersVisitor {
@@ -221,7 +251,7 @@ class PeersVisitor {
 
     printPeers(): void {
         for (const file of this.library.files.values()) {
-            const visitor = new PeerFileVisitor(file, this.dumpSerialized)
+            const visitor = new PeerFileVisitor(this.library, file, this.dumpSerialized)
             visitor.printFile()
             this.peers.set(visitor.targetBasename, visitor.printer.getOutput())
         }
@@ -240,11 +270,13 @@ export function printPeers(peerLibrary: PeerLibrary, dumpSerialized: boolean): M
 }
 
 export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, dumpSerialized: boolean,
-    methodPostfix: string, ptr: string) {
+    methodPostfix: string, ptr: string, returnType: Type = Type.Void) {
     if (printer.language != Language.TS) return
     const signature = method.method.signature as NamedMethodSignature
-    let peerMethod = new Method(method.hasReceiver() ? `${method.method.name}${methodPostfix}` : method.method.name,
-    new NamedMethodSignature(Type.Void, signature.args, signature.argsNames), method.method.modifiers)
+    let peerMethod = new Method(
+        method.hasReceiver() ? `${method.overloadedName}${methodPostfix}` : method.overloadedName,
+        new NamedMethodSignature(returnType, signature.args, signature.argsNames),
+        method.method.modifiers)
     printer.writeMethodImplementation(peerMethod, (writer) => {
     let scopes = method.argConvertors.filter(it => it.isScoped)
     scopes.forEach(it => {
@@ -269,7 +301,8 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, dum
     }
     //let maybeThis = method.hasReceiver() ? `this.peer.ptr${method.argConvertors.length > 0 ? ", " : ""}` : ``
     let maybeThis = method.hasReceiver() ? `${ptr}${method.argConvertors.length > 0 ? ", " : ""}` : ``
-    writer.print(`nativeModule()._${method.originalParentName}_${method.method.name}(${maybeThis}`)
+    const result = returnType == Type.Void ? "" : "const result = "
+    writer.print(`${result}nativeModule()._${method.originalParentName}_${method.overloadedName}(${maybeThis}`)
     writer.pushIndent()
     method.argConvertors.forEach((it, index) => {
         let maybeComma = index == method.argConvertors.length - 1 ? "" : ","
@@ -288,5 +321,10 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, dum
     method.argConvertors.forEach(it => {
         if (it.useArray) writer.print(`${it.param}Serializer.close()`)
     })
+
+    if (returnType != Type.Void) {
+        const result = returnType === Type.This ? `this` : `result`
+        writer.writeStatement(writer.makeReturn(writer.makeString(result)))
+    }
 })
 }

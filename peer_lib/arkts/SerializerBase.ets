@@ -8,12 +8,13 @@
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * WITHOUT WARRANTIES OR CONDITIONS OF object KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
 import { float32, int32 } from "@koalaui/common"
 import { pointer } from "@koalaui/interop"
+import { Length, Resource } from "./dts-exports"
 
 /**
  * Value representing possible JS runtime object type.
@@ -46,7 +47,7 @@ export enum Tags {
     OBJECT = 107,
 }
 
-export function runtimeType(value: any): int32 {
+export function runtimeType(value: object): int32 {
     let type = typeof value
     if (type == "number") return RuntimeType.NUMBER
     if (type == "string") return RuntimeType.STRING
@@ -62,7 +63,7 @@ export function runtimeType(value: any): int32 {
 
 export type Function = object
 
-export function withLength(valueLength: Length|undefined, body: (type: int32, value: float32, unit: int32, resource: int32) => void) {
+export function withLength(valueLength: Length|undefined, body: (value: float32, unit: int32, resource: int32) => void) {
     let type = runtimeType(valueLength)
     let value = 0
     let unit = 1 // vp
@@ -96,17 +97,16 @@ export function withLength(valueLength: Length|undefined, body: (type: int32, va
             resource = (valueLength as Resource).id
             break
     }
-    body(type, value, unit, resource)
+    body(value, unit, resource)
 }
 
 
 export function withLengthArray(valueLength: Length|undefined, body: (valuePtr: Int32Array) => void) {
-    withLength(valueLength, (type: int32, value, unit, resource) => {
-        let array = new Int32Array(4)
-        array[0] = type
-        array[1] = value
-        array[2] = unit
-        array[3] = resource
+    withLength(valueLength, (value, unit, resource) => {
+        let array = new Int32Array(3)
+        array[0] = value
+        array[1] = unit
+        array[2] = resource
         body(array)
     })
 }
@@ -121,47 +121,52 @@ function registerMaterialized(value: object|undefined): number {
     return 42
 }
 
-let textEncoder = new TextEncoder()
+// class ArrayBufferCache {
+//     currentUsed = 0
+//     cache: Array<ArrayBuffer|undefined> = []
 
-class ArrayBufferCache {
-    currentUsed = 0
-    cache: Array<ArrayBuffer|undefined> = []
-    constructor(public maxCapacity: number) {}
+//     public maxCapacity: number
+//     constructor(maxCapacity: number) {
+//         this.maxCapacity = maxCapacity
+//     }
 
-    get(size: number): ArrayBuffer {
-        for (let i = 0; i < this.cache.length; i++) {
-            let buffer = this.cache[i]
-            if (buffer && buffer.byteLength >= size) {
-                this.cache[i] = undefined
-                this.currentUsed += buffer.byteLength
-                return buffer
-            }
-        }
-        this.currentUsed += size
-        return new ArrayBuffer(size)
-    }
-    release(buffer: ArrayBuffer) {
-        this.currentUsed -= buffer.byteLength
-        for (let i = 0; i < this.cache.length; i++) {
-            if (!this.cache[i]) {
-                this.cache[i] = buffer
-                return
-            }
-        }
-        this.cache.push(buffer)
-    }
-}
+//     get(size: number): ArrayBuffer {
+//         for (let i = 0; i < this.cache.length; i++) {
+//             let buffer = this.cache[i]
+//             if (buffer && buffer.byteLength >= size) {
+//                 this.cache[i] = undefined
+//                 this.currentUsed += buffer.byteLength
+//                 return buffer
+//             }
+//         }
+//         this.currentUsed += size
+//         return new ArrayBuffer(size)
+//     }
+//     release(buffer: ArrayBuffer) {
+//         this.currentUsed -= buffer.byteLength
+//         for (let i = 0; i < this.cache.length; i++) {
+//             if (!this.cache[i]) {
+//                 this.cache[i] = buffer
+//                 return
+//             }
+//         }
+//         this.cache.push(buffer)
+//     }
+// }
 
 /* Serialization extension point */
 export abstract class CustomSerializer {
-    constructor(protected supported: Array<string>) {}
+    protected supported: Array<string>
+    constructor(supported: Array<string>) {
+        this.supported = supported
+    }
     supports(kind: string): boolean { return this.supported.includes(kind) }
-    abstract serialize(serializer: SerializerBase, value: any, kind: string): void
+    abstract serialize(serializer: SerializerBase, value: object, kind: string): void
     next: CustomSerializer | undefined = undefined
 }
 
 export class SerializerBase {
-    private static bufferCache = new ArrayBufferCache(4096)
+    // private static bufferCache = new ArrayBufferCache(4096)
 
     private position = 0
     private buffer: ArrayBuffer
@@ -178,11 +183,11 @@ export class SerializerBase {
         }
     }
     constructor(expectedSize: int32) {
-        this.buffer = SerializerBase.bufferCache.get(expectedSize)
+        // this.buffer = SerializerBase.bufferCache.get(expectedSize)
         this.view = new DataView(this.buffer)
     }
     close() {
-        SerializerBase.bufferCache.release(this.buffer)
+        // SerializerBase.bufferCache.release(this.buffer)
     }
     asArray(): Uint8Array {
         return new Uint8Array(this.buffer)
@@ -207,7 +212,7 @@ export class SerializerBase {
             this.view = new DataView(resizedBuffer)
         }
     }
-    writeCustomObject(kind: string, value: any) {
+    writeCustomObject(kind: string, value: object) {
         let current = SerializerBase.customSerializers
         while (current) {
             if (current.supports(kind)) {
@@ -264,17 +269,17 @@ export class SerializerBase {
         this.writeInt32(registerCallback(value))
     }
     writeMaterialized(value: object | undefined) {
-        this.writePointer(registerMaterialized(value))
+        this.writeInt32(registerMaterialized(value))
     }
     writeString(value: string) {
-        let encoded = textEncoder.encode(value)
-        let length = encoded.length + 1 // zero-terminated
-        this.checkCapacity(4 + length) // length, data
-        this.view.setInt32(this.position, length, true)
-        this.position += 4
-        new Uint8Array(this.view.buffer, this.position).set(encoded)
-        this.view.setInt8(this.position + length  - 1, 0)
-        this.position += length
+        // let encoded = textEncoder.encode(value)
+        // let length = encoded.length + 1 // zero-terminated
+        // this.checkCapacity(4 + length) // length, data
+        // this.view.setInt32(this.position, length, true)
+        // this.position += 4
+        // new Uint8Array(this.view.buffer, this.position).set(encoded)
+        // //this.view.setInt8(this.position + length  - 1, 0)
+        // this.position += length
     }
     // Length is an important common case.
     writeLength(value: Length|undefined) {
@@ -282,8 +287,7 @@ export class SerializerBase {
         let valueType = runtimeType(value)
         this.writeInt8(valueType == RuntimeType.UNDEFINED ? Tags.UNDEFINED : Tags.LENGTH)
         if (valueType != RuntimeType.UNDEFINED) {
-            withLength(value, (type, value, unit, resource) => {
-                this.writeInt8(type)
+            withLength(value, (value, unit, resource) => {
                 this.writeFloat32(value)
                 this.writeInt32(unit)
                 this.writeInt32(resource)
@@ -291,16 +295,3 @@ export class SerializerBase {
         }
     }
 }
-
-class OurCustomSerializer extends CustomSerializer {
-    constructor() {
-        super(["Resource", "Pixmap"])
-    }
-    serialize(serializer: SerializerBase, value: any, kind: string): void {
-        // console.log(`managed serialize() for ${kind}`)
-        serializer.writeString(JSON.stringify(value))
-    }
-}
-
-// TODO, remove me!
-SerializerBase.registerCustomSerializer(new OurCustomSerializer())

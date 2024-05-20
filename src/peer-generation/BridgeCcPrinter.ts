@@ -27,40 +27,41 @@ class BridgeCcVisitor {
 
     constructor(
         private readonly library: PeerLibrary,
+        private readonly callLog: boolean,
     ) {}
 
-    private generateModifierSection(clazzName: string): string {
+    private generateApiCall(method: PeerMethod): string {
         // TODO: may be need some translation tables?
-        let clazz = dropSuffix(dropSuffix(dropSuffix(clazzName, "Method"), "Attribute"), "Interface")
-        return `get${capitalize(clazz)}Modifier()`
+        let clazz = dropSuffix(dropSuffix(dropSuffix(method.originalParentName, "Method"), "Attribute"), "Interface")
+        return `get${capitalize(clazz)}${method.apiKind}()`
     }
 
     // TODO: may be this is another method of ArgConvertor?
     private generateApiArgument(argConvertor: ArgConvertor): string {
-        const prefix = argConvertor.isPointerType() ? "&": "    "
+        const prefix = argConvertor.isPointerType() ? `(const ${argConvertor.nativeType(false)}*)&`: "    "
         if (argConvertor.useArray) return `${prefix}${argConvertor.param}_value`
         return `${argConvertor.convertorArg(argConvertor.param, this.C.language)}`
     }
 
     private printAPICall(method: PeerMethod) {
-        const clazzName = method.originalParentName
         const hasReceiver = method.hasReceiver()
         const argConvertors = method.argConvertors
         const isVoid = method.retConvertor.isVoid
-        const api = "GetNodeModifiers()"
-        const modifier = this.generateModifierSection(clazzName)
+        const modifier = this.generateApiCall(method)
         const peerMethod = method.peerMethodName
-        const receiver = hasReceiver ? ['node'] : []
+        const receiver = hasReceiver ? ['self'] : []
         // TODO: how do we know the real amount of arguments of the API functions?
         // Do they always match in TS and in C one to one?
         const args = receiver.concat(argConvertors.map(it => this.generateApiArgument(it))).join(", ")
-        this.C.print(`${isVoid ? "" : "return "}${api}->${modifier}->${peerMethod}(${args});`)
+        const call = `${isVoid ? "" : "return "}${method.apiCall}->${modifier}->${peerMethod}(${args});`
+        if (this.callLog) this.printCallLog(method, method.apiCall, modifier)
+        this.C.print(call)
     }
 
     private printNativeBody(method: PeerMethod) {
         this.C.pushIndent()
         if (method.hasReceiver()) {
-            this.C.print("ArkUINodeHandle node = reinterpret_cast<ArkUINodeHandle>(nodePtr);")
+            this.C.print(`${method.receiverType} self = reinterpret_cast<${method.receiverType}>(thisPtr);`)
         }
         method.argConvertors.forEach(it => {
             if (it.useArray) {
@@ -72,6 +73,27 @@ class BridgeCcVisitor {
         })
         this.printAPICall(method)
         this.C.popIndent()
+    }
+
+    private printCallLog(method: PeerMethod, api: string, modifier: string) {
+        this.C.print(`if (needGroupedLog(2)) {`)
+        this.C.pushIndent()
+
+        this.C.print(`std::string _logData("  ${api}->${modifier}->${method.peerMethodName}(");`)
+        if (method.hasReceiver()) {
+            this.C.print(`WriteToString(&_logData, thisPtr);`)
+            if (method.argConvertors.length > 0)
+                this.C.print(`_logData.append(", ");`)
+        }
+        method.argConvertors.forEach((it, index) => {
+            this.C.print(`WriteToString(&_logData, ${this.generateApiArgument(it)});`)
+            if (index < method.argConvertors.length - 1)
+                this.C.print(`_logData.append(", ");`)
+        })
+        this.C.print(`_logData.append(");\\n");`)
+        this.C.print(`appendGroupedLog(2, _logData);`)
+        this.C.popIndent()
+        this.C.print(`}`)
     }
 
     private generateCParameterTypes(argConvertors: ArgConvertor[], hasReceiver: boolean): string[] {
@@ -98,7 +120,7 @@ class BridgeCcVisitor {
     }
 
     private generateCParameters(method: PeerMethod, argConvertors: ArgConvertor[]): string[] {
-        let maybeReceiver = method.hasReceiver() ? [`${PrimitiveType.NativePointer.getText()} nodePtr`] : []
+        let maybeReceiver = method.hasReceiver() ? [`${PrimitiveType.NativePointer.getText()} thisPtr`] : []
         return (maybeReceiver.concat(argConvertors.map(it => {
             if (it.useArray) {
                 return `uint8_t* ${it.param}Array, int32_t ${it.param}Length`
@@ -113,7 +135,8 @@ class BridgeCcVisitor {
         const retConvertor = method.retConvertor
         const argConvertors = method.argConvertors
 
-        let cName = `${method.originalParentName}_${method.method.name}`
+        let cName = `${method.originalParentName}_${method.overloadedName}`
+        let rv = retConvertor.nativeType()
         this.C.print(`${retConvertor.nativeType()} impl_${cName}(${this.generateCParameters(method, argConvertors).join(", ")}) {`)
         this.C.pushIndent()
         this.printNativeBody(method)
@@ -135,11 +158,18 @@ class BridgeCcVisitor {
                 }
             }
         }
+
+        this.C.print("\n// Accessors\n")
+        for (const clazz of this.library.materializedClasses.values()) {
+            for (const method of [clazz.ctor, clazz.dtor].concat(clazz.methods)) {
+                this.printMethod(method)
+            }
+        }
     }
 }
 
-export function printBridgeCc(peerLibrary: PeerLibrary): string {
-    const visitor = new BridgeCcVisitor(peerLibrary)
+export function printBridgeCc(peerLibrary: PeerLibrary, callLog: boolean): string {
+    const visitor = new BridgeCcVisitor(peerLibrary, callLog)
     visitor.print()
     return bridgeCcDeclaration(visitor.C.getOutput())
 }
