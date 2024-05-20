@@ -12,12 +12,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { IndentedPrinter } from "../IndentedPrinter"
-import { Language, identName, importTypeName, mapType, typeName } from "../util"
-import { DeclarationTable, PrimitiveType } from "./DeclarationTable"
-import { RuntimeType } from "./PeerGeneratorVisitor"
+import {identName, importTypeName, Language, mapType} from "../util"
+import {DeclarationTable, PrimitiveType} from "./DeclarationTable"
+import {RuntimeType} from "./PeerGeneratorVisitor"
 import * as ts from "typescript"
-import { LanguageWriter } from "./LanguageWriters"
+import {LanguageWriter} from "./LanguageWriters"
 
 let uniqueCounter = 0
 
@@ -178,8 +177,12 @@ export class UndefinedConvertor extends BaseArgConvertor {
     convertorCArg(param: string): string {
         return param
     }
-    convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
-        printer.print(`${value} = ${param}Deserializer.readUndefined();`)
+    convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
+        if (language == Language.TS) {
+            printer.print(`${value} = undefined;`)
+        } else if (language == Language.CPP) {
+            printer.print(`${value} = ${param}Deserializer.readUndefined();`)
+        }
     }
 
     nativeType(impl: boolean): string {
@@ -736,20 +739,36 @@ export class ArrayConvertor extends BaseArgConvertor {
         // Array length.
         let runtimeType = `runtimeType${uniqueCounter++}`;
         let arrayLength = `arrayLength${uniqueCounter++}`;
-        let elementTypeName = this.table.computeTargetName(this.table.toTarget(this.elementType), false)
-        printer.print(`auto ${runtimeType} = ${param}Deserializer.readInt8();`)
-        printer.print(`if (${runtimeType} != ${PrimitiveType.UndefinedRuntime}) {`) // TODO: `else value = nullptr` ?
-        printer.pushIndent()
-        printer.print(`auto ${arrayLength} = ${param}Deserializer.readInt32();`)
-        printer.print(`${param}Deserializer.resizeArray<Array_${elementTypeName}, ${elementTypeName}>(&${value}, ${arrayLength});`);
-        printer.print(`for (int i = 0; i < ${arrayLength}; i++) {`)
-        printer.pushIndent()
-        this.elementConvertor.convertorDeserialize(param, `${value}.array[i]`, printer, language)
-        printer.popIndent()
-        printer.print(`}`)
-        printer.popIndent()
-        printer.print(`}`)
 
+        if (language == Language.TS) {
+            printer.print(`const ${runtimeType} = ${param}Deserializer.readInt8();`)
+            printer.print(`if (${runtimeType} != RuntimeType.UNDEFINED) {`)
+            printer.pushIndent()
+            printer.print(`const ${arrayLength} = ${param}Deserializer.readInt32();`)
+            printer.print(`for (let i = 0; i < ${arrayLength}; i++) {`)
+            printer.pushIndent()
+            printer.print("let value: any")
+            this.elementConvertor.convertorDeserialize(param, "value", printer, language)
+            printer.print(`${value}.push(value)`)
+            printer.popIndent()
+            printer.print("}")
+            printer.popIndent()
+            printer.print("}")
+        } else if (language == Language.CPP) {
+            let elementTypeName = this.table.computeTargetName(this.table.toTarget(this.elementType), false)
+            printer.print(`auto ${runtimeType} = ${param}Deserializer.readInt8();`)
+            printer.print(`if (${runtimeType} != ${PrimitiveType.UndefinedRuntime}) {`) // TODO: `else value = nullptr` ?
+            printer.pushIndent()
+            printer.print(`auto ${arrayLength} = ${param}Deserializer.readInt32();`)
+            printer.print(`${param}Deserializer.resizeArray<Array_${elementTypeName}, ${elementTypeName}>(&${value}, ${arrayLength});`);
+            printer.print(`for (int i = 0; i < ${arrayLength}; i++) {`)
+            printer.pushIndent()
+            this.elementConvertor.convertorDeserialize(param, `${value}.array[i]`, printer, language)
+            printer.popIndent()
+            printer.print(`}`)
+            printer.popIndent()
+            printer.print(`}`)
+        }
     }
     nativeType(impl: boolean): string {
         return `Array_${this.table.computeTypeName(undefined, this.elementType, false)}`
