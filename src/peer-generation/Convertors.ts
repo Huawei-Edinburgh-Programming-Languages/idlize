@@ -666,23 +666,24 @@ export class TupleConvertor extends BaseArgConvertor {
     }
 
     convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
-        if (language == Language.CPP) {
-            printer.print(`if (${param}Deserializer.readInt8() != ${PrimitiveType.UndefinedRuntime}) {`) // TODO: `else value = nullptr` ?
-        } else if (language == Language.TS) {
-            printer.print(`const ${value}_type = runtimeType(${param}Deserializer.readInt8())`)
-            printer.print(`if (${value}_type != RuntimeType.UNDEFINED) {`)
-        }
         printer.pushIndent()
         if (language == Language.TS) {
+            printer.print(`const ${value}_type = runtimeType(${param}Deserializer.readInt8())`)
+            printer.print(`if (${value}_type != RuntimeType.UNDEFINED) {`)
+            printer.print(`${value} = []`)
             this.memberConvertors.forEach((it, index) => {
                 printer.print(`let value${index}: any`)
                 it.convertorDeserialize(param, `value${index}`, printer, language)
                 printer.print(`if (value${index}) ${value}.push(value${index})`)
             })
         } else if (language == Language.CPP) {
+            printer.print(`if (${param}Deserializer.readInt8() != ${PrimitiveType.UndefinedRuntime}) {`) // TODO: `else value = nullptr` ?
+            printer.pushIndent()
             this.memberConvertors.forEach((it, index) => {
-                it.convertorDeserialize(param, `${value}.value${index}`, printer, language)
+                it.convertorDeserialize(param, `${value}.value${index}`, printer, Language.CPP)
             })
+            printer.popIndent()
+            printer.print(`}`)
         }
         printer.popIndent()
         printer.print(`}`)
@@ -744,6 +745,7 @@ export class ArrayConvertor extends BaseArgConvertor {
             printer.print(`const ${runtimeType} = ${param}Deserializer.readInt8();`)
             printer.print(`if (${runtimeType} != RuntimeType.UNDEFINED) {`)
             printer.pushIndent()
+            printer.print(`${value} = []`)
             printer.print(`const ${arrayLength} = ${param}Deserializer.readInt32();`)
             printer.print(`for (let i = 0; i < ${arrayLength}; i++) {`)
             printer.pushIndent()
@@ -825,6 +827,7 @@ export class MapConvertor extends BaseArgConvertor {
             printer.print(`const ${runtimeType} = ${param}Deserializer.readInt8();`)
             printer.print(`if (${runtimeType} != RuntimeType.UNDEFINED) {`)
             printer.pushIndent()
+            printer.print(`${value} = new Map<${keyTypeName.replace("Ark_", "").toLowerCase()}, ${valueTypeName.replace("Ark_", "").toLowerCase()}>()`)
             printer.print(`const ${mapSize} = ${param}Deserializer.readInt32();`)
             printer.print(`for (let i = 0; i < ${mapSize}; i++) {`)
             printer.pushIndent()
@@ -832,7 +835,7 @@ export class MapConvertor extends BaseArgConvertor {
             this.keyConvertor.convertorDeserialize(param, "key", printer, Language.TS)
             printer.print("let value: any")
             this.valueConvertor.convertorDeserialize(param, "value", printer, Language.TS)
-            printer.print(`${value}[key] = value`)
+            printer.print(`${value}.set(key, value)`)
             printer.popIndent()
             printer.print(`}`)
             printer.popIndent()
