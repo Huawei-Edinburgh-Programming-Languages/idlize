@@ -814,26 +814,44 @@ export class MapConvertor extends BaseArgConvertor {
         printer.popIndent()
         printer.print(`}`)
     }
-    convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
+    convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
         // Map size.
         let runtimeType = `runtimeType${uniqueCounter++}`;
         let mapSize = `mapSize${uniqueCounter++}`;
         let keyTypeName = this.table.computeTargetName(this.table.toTarget(this.keyType), false)
         let valueTypeName = this.table.computeTargetName(this.table.toTarget(this.valueType), false)
-        printer.print(`auto ${runtimeType} = ${param}Deserializer.readInt8();`)
-        printer.print(`if (${runtimeType} != ${PrimitiveType.UndefinedRuntime}) {`) // TODO: `else value = nullptr` ?
-        printer.pushIndent()
-        printer.print(`auto ${mapSize} = ${param}Deserializer.readInt32();`)
-        printer.print(`${param}Deserializer.resizeMap<Map_${keyTypeName}_${valueTypeName}, ${keyTypeName}, ${valueTypeName}>(&${value}, ${mapSize});`);
-        printer.print(`for (int i = 0; i < ${mapSize}; i++) {`)
-        printer.pushIndent()
-        this.keyConvertor.convertorDeserialize(param, `${value}.keys[i]`, printer)
-        this.valueConvertor.convertorDeserialize(param, `${value}.values[i]`, printer)
-        printer.popIndent()
-        printer.print(`}`)
-        printer.popIndent()
-        printer.print(`}`)
 
+        if (language == Language.TS) {
+            printer.print(`const ${runtimeType} = ${param}Deserializer.readInt8();`)
+            printer.print(`if (${runtimeType} != RuntimeType.UNDEFINED) {`)
+            printer.pushIndent()
+            printer.print(`const ${mapSize} = ${param}Deserializer.readInt32();`)
+            printer.print(`for (let i = 0; i < ${mapSize}; i++) {`)
+            printer.pushIndent()
+            printer.print("let key: any")
+            this.keyConvertor.convertorDeserialize(param, "key", printer, Language.TS)
+            printer.print("let value: any")
+            this.valueConvertor.convertorDeserialize(param, "value", printer, Language.TS)
+            printer.print(`${value}[key] = value`)
+            printer.popIndent()
+            printer.print(`}`)
+            printer.popIndent()
+            printer.print(`}`)
+        } else if (language == Language.CPP) {
+            printer.print(`auto ${runtimeType} = ${param}Deserializer.readInt8();`)
+            printer.print(`if (${runtimeType} != ${PrimitiveType.UndefinedRuntime}) {`) // TODO: `else value = nullptr` ?
+            printer.pushIndent()
+            printer.print(`auto ${mapSize} = ${param}Deserializer.readInt32();`)
+            printer.print(`${param}Deserializer.resizeMap<Map_${keyTypeName}_${valueTypeName}, ${keyTypeName}, ${valueTypeName}>(&${value}, ${mapSize});`);
+            printer.print(`for (int i = 0; i < ${mapSize}; i++) {`)
+            printer.pushIndent()
+            this.keyConvertor.convertorDeserialize(param, `${value}.keys[i]`, printer, Language.CPP)
+            this.valueConvertor.convertorDeserialize(param, `${value}.values[i]`, printer, Language.CPP)
+            printer.popIndent()
+            printer.print(`}`)
+            printer.popIndent()
+            printer.print(`}`)
+        }
     }
     nativeType(impl: boolean): string {
         const keyTypeName = this.table.computeTypeName(undefined, this.keyType, false)
