@@ -901,6 +901,7 @@ export class DeclarationTable {
             if (seenNames.has(name)) continue
             seenNames.add(name)
             if (declaration instanceof PrimitiveType) continue
+            if (this.targetStruct(declaration).getFields().length == 0) continue
             if (ts.isInterfaceDeclaration(declaration) || ts.isClassDeclaration(declaration)) {
                 printer.pushIndent()
                 this.generateTsDeserializer(name, declaration, printer)
@@ -1368,7 +1369,7 @@ export class DeclarationTable {
                 typeConvertor.convertorDeserialize(`value`, `value_${it.name}`, printer, Language.TS)
                 initArgs.push(`${it.name}: value_${it.name}`)
             })
-            printer.print(`const value = {${initArgs.join(",")}}`)
+            printer.print(`const value: ${this.computeTargetName(target, false)} = {${initArgs.join(",")}}`)
         } else {
             let typeConvertor = this.typeConvertor("value", target, false)
             typeConvertor.convertorDeserialize(`value`, `value`, printer, Language.TS)
