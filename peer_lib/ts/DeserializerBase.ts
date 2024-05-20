@@ -42,7 +42,7 @@ export class DeserializerBase {
         this.view = new DataView(this.buffer)
     }
 
-    asArray(position?: number | undefined, length?: number | undefined): Uint8Array {
+    asArray(position?: number, length?: number): Uint8Array {
         return new Uint8Array(this.buffer, position, length)
     }
 
