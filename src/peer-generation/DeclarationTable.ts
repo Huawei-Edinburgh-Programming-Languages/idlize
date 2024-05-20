@@ -892,6 +892,25 @@ export class DeclarationTable {
         typedefs.print(`typedef ${PrimitiveType.OptionalPrefix}Ark_Length ${PrimitiveType.OptionalPrefix}Length;`)
     }
 
+    generateTSDeserializers(printer: LanguageWriter, writeToString: IndentedPrinter) {
+        let seenNames = new Set<string>()
+        printer.print(`export class Deserializer extends DeserializerBase {`)
+        printer.pushIndent()
+        for (const declaration of this.declarations) {
+            const name = this.computeTargetName(declaration, false)
+            if (seenNames.has(name)) continue
+            seenNames.add(name)
+            if (declaration instanceof PrimitiveType) continue
+            if (ts.isInterfaceDeclaration(declaration) || ts.isClassDeclaration(declaration)) {
+                printer.pushIndent()
+                this.generateTsDeserializer(name, declaration, printer)
+                printer.popIndent()
+            }
+        }
+        printer.popIndent()
+        printer.print(`}`)
+    }
+
     private addNameAlias(target: DeclarationTarget, declarationName: string, aliasName: string,
         seenNames: Set<string>, typedefs: IndentedPrinter): void {
         if (seenNames.has(aliasName)) return
@@ -1319,13 +1338,39 @@ export class DeclarationTable {
             let struct = this.targetStruct(target)
             struct.getFields().forEach(it => {
                 let typeConvertor = this.typeConvertor(`value`, it.type!, it.optional)
-                typeConvertor.convertorDeserialize(`value`, `value.${it.name}`, printer)
+                typeConvertor.convertorDeserialize(`value`, `value.${it.name}`, printer, Language.CPP)
             })
         } else {
             let typeConvertor = this.typeConvertor("value", target, false)
-            typeConvertor.convertorDeserialize(`value`, `value`, printer)
+            typeConvertor.convertorDeserialize(`value`, `value`, printer, Language.CPP)
         }
         printer.print(`return value;`)
+        printer.popIndent()
+        printer.print(`}`)
+        this.setCurrentContext(undefined)
+    }
+
+    private generateTsDeserializer(name: string, target: DeclarationTarget, printer: LanguageWriter) {
+        if (this.ignoreTarget(target, name)) return
+        this.setCurrentContext(`read${name}()`)
+        printer.print(`read${name}(): ${name} {`)
+        printer.pushIndent()
+
+        printer.print(`let value: ${name} = {}`)
+        printer.print(`let valueDeserializer = this`)
+
+        if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {
+            let struct = this.targetStruct(target)
+            struct.getFields().forEach(it => {
+                let typeConvertor = this.typeConvertor(`value`, it.type!, it.optional)
+                typeConvertor.convertorDeserialize(`value`, `value.${it.name}`, printer, Language.TS)
+            })
+        } else {
+            let typeConvertor = this.typeConvertor("value", target, false)
+            typeConvertor.convertorDeserialize(`value`, `value`, printer, Language.TS)
+        }
+
+        printer.print("return value")
         printer.popIndent()
         printer.print(`}`)
         this.setCurrentContext(undefined)

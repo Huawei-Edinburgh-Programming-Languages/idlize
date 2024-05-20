@@ -31,7 +31,7 @@ export interface ArgConvertor {
     scopeEnd?(param: string, language: Language): string
     convertorArg(param: string, language: Language): string
     convertorSerialize(param: string, value: string, writer: LanguageWriter): void
-    convertorDeserialize(param: string, value: string, writer: LanguageWriter): void
+    convertorDeserialize(param: string, value: string, writer: LanguageWriter, language: Language): void
     interopType(language: Language): string
     nativeType(impl: boolean): string
     isPointerType(): boolean
@@ -64,7 +64,7 @@ export abstract class BaseArgConvertor implements ArgConvertor {
     scopeEnd?(param: string, language: Language): string
     abstract convertorArg(param: string, language: Language): string
     abstract convertorSerialize(param: string, value: string, writer: LanguageWriter): void
-    abstract convertorDeserialize(param: string, value: string, writer: LanguageWriter): void
+    abstract convertorDeserialize(param: string, value: string, writer: LanguageWriter, language: Language): void
 }
 
 
@@ -319,7 +319,7 @@ export class UnionConvertor extends BaseArgConvertor {
 
             printer.print(`${maybeElse}if (${it.runtimeTypes.map(it => `${maybeComma1}ARK_RUNTIME_${RuntimeType[it]} == ${runtimeType}${maybeComma2}`).join(" || ")}) {`)
             printer.pushIndent()
-            it.convertorDeserialize(param, `${value}.value${index}`, printer)
+            it.convertorDeserialize(param, `${value}.value${index}`, printer, Language.CPP)
             printer.print(`${value}.selector = ${index};`)
             printer.popIndent()
             printer.print(`}`)
@@ -457,13 +457,24 @@ export class OptionConvertor extends BaseArgConvertor {
     convertorCArg(param: string): string {
         throw new Error("Must never be used")
     }
-    convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
-        printer.print(`${value}.tag = ${param}Deserializer.readInt8() == ARK_RUNTIME_UNDEFINED ? ARK_TAG_UNDEFINED : ARK_TAG_OBJECT;`)
-        printer.print(`if (${value}.tag != ARK_TAG_UNDEFINED) {`)
-        printer.pushIndent()
-        this.typeConvertor.convertorDeserialize(param, `${value}.value`, printer)
-        printer.popIndent()
-        printer.print(`}`)
+    convertorDeserialize(param: string, value: string, printer: LanguageWriter, lang: Language): void {
+        if (lang == Language.CPP) {
+            printer.print(`${value}.tag = ${param}Deserializer.readInt8() == ARK_RUNTIME_UNDEFINED ? ARK_TAG_UNDEFINED : ARK_TAG_OBJECT;`)
+            printer.print(`if (${value}.tag != ARK_TAG_UNDEFINED) {`)
+            printer.pushIndent()
+            this.typeConvertor.convertorDeserialize(param, `${value}.value`, printer, lang)
+            printer.popIndent()
+            printer.print(`}`)
+        } else if (lang == Language.TS) {
+            printer.print(`const ${value.replaceAll('.', '_')}_type = runtimeType(${param}Deserializer.readInt8())`)
+            printer.print(`if (${value.replaceAll('.', '_')}_type != RuntimeType.UNDEFINED) {`)
+            printer.pushIndent()
+            this.typeConvertor.convertorDeserialize(param, `${value}`, printer, lang)
+            printer.popIndent()
+            printer.print(`}`)
+        } else {
+            throw new Error("Unimplemented")
+        }
     }
     nativeType(impl: boolean): string {
         return impl
@@ -507,10 +518,10 @@ export class AggregateConvertor extends BaseArgConvertor {
             it.convertorSerialize(param, `${value}_${memberName}`, printer)
         })
     }
-    convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
+    convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
         let struct = this.table.targetStruct(this.table.toTarget(this.type))
         this.memberConvertors.forEach((it, index) => {
-            it.convertorDeserialize(param, `${value}.${struct.getFields()[index].name}`, printer)
+            it.convertorDeserialize(param, `${value}.${struct.getFields()[index].name}`, printer, language)
         })
     }
 
@@ -632,12 +643,24 @@ export class TupleConvertor extends BaseArgConvertor {
         printer.print(`}`)
     }
 
-    convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
-        printer.print(`if (${param}Deserializer.readInt8() != ${PrimitiveType.UndefinedRuntime}) {`) // TODO: `else value = nullptr` ?
+    convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
+        if (language == Language.CPP) {
+            printer.print(`if (${param}Deserializer.readInt8() != ${PrimitiveType.UndefinedRuntime}) {`) // TODO: `else value = nullptr` ?
+        } else if (language == Language.TS) {
+            printer.print(`const ${value.replaceAll('.', '_')}_type = runtimeType(${param}Deserializer.readInt8())`)
+            printer.print(`if (${value.replaceAll('.', '_')}_type != RuntimeType.UNDEFINED) {`)
+        }
         printer.pushIndent()
-        this.memberConvertors.forEach((it, index) => {
-            it.convertorDeserialize(param, `${value}.value${index}`, printer)
-        })
+        if (language == Language.TS) {
+            this.memberConvertors.forEach((it, index) => {
+                it.convertorDeserialize(param, `let value${index}`, printer, language)
+                printer.print(`${value}.push(value${index}!)`)
+            })
+        } else if (language == Language.CPP) {
+            this.memberConvertors.forEach((it, index) => {
+                it.convertorDeserialize(param, `${value}.value${index}`, printer, language)
+            })
+        }
         printer.popIndent()
         printer.print(`}`)
     }
@@ -689,7 +712,7 @@ export class ArrayConvertor extends BaseArgConvertor {
         printer.popIndent()
         printer.print(`}`)
     }
-    convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
+    convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
         // Array length.
         let runtimeType = `runtimeType${uniqueCounter++}`;
         let arrayLength = `arrayLength${uniqueCounter++}`;
@@ -701,7 +724,7 @@ export class ArrayConvertor extends BaseArgConvertor {
         printer.print(`${param}Deserializer.resizeArray<Array_${elementTypeName}, ${elementTypeName}>(&${value}, ${arrayLength});`);
         printer.print(`for (int i = 0; i < ${arrayLength}; i++) {`)
         printer.pushIndent()
-        this.elementConvertor.convertorDeserialize(param, `${value}.array[i]`, printer)
+        this.elementConvertor.convertorDeserialize(param, `${value}.array[i]`, printer, language)
         printer.popIndent()
         printer.print(`}`)
         printer.popIndent()
@@ -736,7 +759,7 @@ export class NumberConvertor extends BaseArgConvertor {
     convertorCArg(param: string): string {
         return `(const ${PrimitiveType.Number.getText()}*)&${param}`
     }
-    convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
+    convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
         printer.print(`${value} = ${param}Deserializer.readNumber();`)
     }
     nativeType(): string {
@@ -822,7 +845,7 @@ class ProxyConvertor extends BaseArgConvertor {
         return this.convertor.convertorArg(param, language)
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
-        this.convertor.convertorDeserialize(param, value, printer)
+        this.convertor.convertorDeserialize(param, value, printer, Language.CPP)
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         this.convertor.convertorSerialize(param, value, printer)

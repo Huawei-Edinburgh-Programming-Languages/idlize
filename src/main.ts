@@ -30,6 +30,7 @@ import {
     dummyImplementations,
     makeArkuiModule,
     makeTSSerializer,
+    makeTSDeserializer
 } from "./peer-generation/FileGenerators"
 import {
     PeerGeneratorVisitor,
@@ -340,6 +341,9 @@ if (options.dts2peer) {
                     )
                     fs.writeFileSync(path.join(outDir, 'Serializer' + langSuffix(lang)),
                         makeTSSerializer(declarationTable)
+                    )
+                    fs.writeFileSync(path.join(outDir, 'Deserializer' + langSuffix(lang)),
+                        makeTSDeserializer(declarationTable)
                     )
                 }
                 fs.writeFileSync(path.join(outDir, 'bridge.cc'), printBridgeCc(peerLibrary))
