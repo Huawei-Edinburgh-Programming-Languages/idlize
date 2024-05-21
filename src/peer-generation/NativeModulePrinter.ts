@@ -15,10 +15,9 @@
 
 import { IndentedPrinter } from "../IndentedPrinter";
 import { nativeModuleDeclaration, nativeModuleEmptyDeclaration } from "./FileGenerators";
-import { LanguageWriter, Method, MethodModifier, NamedMethodSignature, Type, createLanguageWriter } from "./LanguageWriters";
+import { LanguageWriter, Method, NamedMethodSignature, Type, createLanguageWriter } from "./LanguageWriters";
 import { PeerClass, PeerClassBase } from "./PeerClass";
 import { PeerLibrary } from "./PeerLibrary";
-import { printGlobalMaterialized } from "./Materialized";
 import { PeerMethod } from "./PeerMethod";
 
 class NativeModuleVisitor {
@@ -36,19 +35,34 @@ class NativeModuleVisitor {
         peer.methods.forEach(it => printPeerMethod(peer, it, this.nativeModule, this.nativeModuleEmpty))
     }
 
+    private printMaterializedMethods(nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter) {
+        this.library.materializedClasses.forEach(clazz => {
+            printPeerMethod(clazz, clazz.ctor, nativeModule, nativeModuleEmpty, Type.Pointer)
+            printPeerMethod(clazz, clazz.dtor, nativeModule, nativeModuleEmpty)
+            clazz.methods.forEach(method => {
+                const returnType = method.tsReturnType()
+                printPeerMethod(clazz, method, nativeModule, nativeModuleEmpty,
+                    returnType === Type.This || method.originalParentName === returnType?.name? Type.Pointer : returnType)
+            })
+        })
+    }
+
     print(): void {
+        console.log(`Materialized classes: ${this.library.materializedClasses.size}`)
         for (const file of this.library.files) {
             for (const peer of file.peers.values()) {
                 this.printPeerMethods(peer)
             }
         }
-        printGlobalMaterialized(this.nativeModule, this.nativeModuleEmpty)
+        this.printMaterializedMethods(this.nativeModule, this.nativeModuleEmpty)
     }
 }
 
-export function printPeerMethod(clazz: PeerClassBase, method: PeerMethod, nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter) {
+export function printPeerMethod(clazz: PeerClassBase, method: PeerMethod, nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter,
+    returnType?: Type
+) {
     const component = clazz.generatedName(method.isCallSignature)
-    clazz.setGenerationContext(`${method.isCallSignature ? "" : method.method.name}()`)
+    clazz.setGenerationContext(`${method.isCallSignature ? "" : method.overloadedName}()`)
     const args = method.argConvertors
         .flatMap(it => {
             if (it.useArray) {
@@ -61,11 +75,14 @@ export function printPeerMethod(clazz: PeerClassBase, method: PeerMethod, native
             }
         })
     let maybeReceiver = method.hasReceiver() ? [{ name: 'ptr', type: 'KPointer' }] : []
-    const parameters = NamedMethodSignature.make('void', maybeReceiver.concat(args))
-    let name = `_${component}_${method.method.name}`
+    const parameters = NamedMethodSignature.make(returnType?.name ?? 'void', maybeReceiver.concat(args))
+    let name = `_${component}_${method.overloadedName}`
     nativeModule.writeNativeMethodDeclaration(name, parameters)
     nativeModuleEmpty.writeMethodImplementation(new Method(name, parameters), (printer) => {
         printer.writePrintLog(name)
+        if (returnType !== undefined) {
+            printer.writeStatement(printer.makeReturn(printer.makeString(`-1`)))
+        }
     })
     clazz.setGenerationContext(undefined)
 }

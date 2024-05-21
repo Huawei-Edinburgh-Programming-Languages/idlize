@@ -1,13 +1,12 @@
-import * as path from "path"
 import { IndentedPrinter } from "../IndentedPrinter";
 import { Language, renameClassToMaterialized } from "../util";
 
 import { PeerLibrary } from "./PeerLibrary";
 import { writePeerMethod } from "./PeersPrinter"
 
-import { LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, Type, createLanguageWriter } from "./LanguageWriters";
+import { LanguageWriter, NamedMethodSignature, Type, createLanguageWriter } from "./LanguageWriters";
 
-import { Materialized, MaterializedClass, MaterializedMethod} from "./Materialized"
+import { MaterializedClass } from "./Materialized"
 
 import { makeMaterializedPrologue } from "./FileGenerators";
 
@@ -23,22 +22,54 @@ class MaterializedFileVisitor {
 
     private printMaterializedClass(clazz: MaterializedClass) {
         const printer = this.printer
-        printer.print(makeMaterializedPrologue())
+        printer.print(makeMaterializedPrologue(this.language))
 
         printer.writeClass(clazz.className, writer => {
 
-            writePeerMethod(writer, clazz.ctor, this.dumpSerialized, "", "")
+            const finalizableType = new Type("Finalizable")
+            writer.writeFieldDeclaration("peer", finalizableType, undefined, true)
 
-            writer.writeConstructorImplementation(clazz.className, clazz.ctor.method.signature, writer => {
-                const ctorSig = clazz.ctor.method.signature as NamedMethodSignature
-                writer.writeMemberCall(clazz.className, "ctor", ctorSig.argsNames)
-                writer.writeSuperCall([`BigInt(42)`])
+            const pointerType = Type.Pointer
+            writePeerMethod(writer, clazz.ctor, this.dumpSerialized, "", "", pointerType)
+
+            const ctorSig = clazz.ctor.method.signature as NamedMethodSignature
+            const sigWithPointer = new NamedMethodSignature(
+                ctorSig.returnType,
+                ctorSig.args.map(it => new Type(it.name, true)),
+                ctorSig.argsNames,
+                ctorSig.defaults)
+
+            const allUnedfined = ctorSig.argsNames.map(it => `${it} === undefined`).join(` && `)
+
+            writer.writeConstructorImplementation(clazz.className, sigWithPointer, writer => {
+
+                writer.writeStatement(
+                    writer.makeCondition(
+                        writer.makeString(ctorSig.args.length === 0 ? "true" : allUnedfined),
+                        writer.makeString(`return`),
+                        undefined
+                    )
+                )
+
+                const args = ctorSig.args.map((it, index) => `${ctorSig.argsNames[index]}${it.nullable ? "" : "!"}`)
+                writer.writeStatement(
+                    writer.makeAssign("ctorPtr", Type.Pointer,
+                        writer.makeMemberCall(clazz.className, "ctor", args),
+                        true))
+
+                writer.writeStatement(writer.makeAssign(
+                    "this.peer",
+                    finalizableType,
+                    writer.makeString("new Finalizable(ctorPtr)"),
+                    false
+                ))
             })
 
             clazz.methods.forEach(method => {
-                writePeerMethod(writer, method, this.dumpSerialized, "", "this.ptr")
+                const returnType = method.tsReturnType()
+                writePeerMethod(writer, method, this.dumpSerialized, "", "this.peer!.ptr", returnType)
             })
-        }, "Finalizable")
+        })
     }
 
     printFile(): void {
@@ -67,7 +98,7 @@ class MaterializedVisitor {
     ) {}
 
     printMaterialized(): void {
-        for (const clazz of Materialized.Instance.materializedClasses.values()) {
+        for (const clazz of this.library.materializedClasses.values()) {
             const visitor = new MaterializedFileVisitor(
                 this.library.declarationTable.language, clazz, this.dumpSerialized)
             visitor.printFile()

@@ -305,6 +305,16 @@ export function zip<A, B>(left: readonly A[], right: readonly B[]): [A, B][] {
     return left.map((_, i) => [left[i], right[i]])
 }
 
+export function identNameWithNamespace(node: ts.Node): string {
+    let parent = node.parent
+    while (parent && !ts.isModuleDeclaration(parent)) parent = parent.parent
+    if (parent) {
+        return `${identName(parent.name)}_${identName(node)}`
+    } else {
+        return identName(node)!
+    }
+}
+
 export function identName(node: ts.Node | undefined): string | undefined {
     if (!node) return undefined
     if (node.kind == ts.SyntaxKind.AnyKeyword) return `any`
@@ -492,7 +502,7 @@ export function mapType(typeChecker: ts.TypeChecker, type: ts.TypeNode | undefin
         if (typeName == "Optional" && type.typeArguments)
             return mapType(typeChecker, type.typeArguments[0]) + "|undefined"
 
-        if (typeName != "Array") return typeName
+        if (typeName != "Array" && typeName != "Map") return typeName
     }
     if (ts.isImportTypeNode(type)) {
         return importTypeName(type, true)
