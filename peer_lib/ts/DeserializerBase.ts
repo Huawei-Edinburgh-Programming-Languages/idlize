@@ -150,7 +150,7 @@ export class DeserializerBase {
             if (type == RuntimeType.NUMBER) {
                 return value
             } else if (type == RuntimeType.STRING) {
-                return `${value}${this.unitFromInt(unitId)}`
+                return `${value}${DeserializerBase.lengthUnitFromInt(unitId)}`
             } else if (type == RuntimeType.OBJECT) {
                 return {
                     id: resourceId,
@@ -163,7 +163,7 @@ export class DeserializerBase {
         return undefined
     }
 
-    private unitFromInt(unit: int32): string {
+    static lengthUnitFromInt(unit: int32): string {
         let suffix: string
         switch (unit) {
             case 0:

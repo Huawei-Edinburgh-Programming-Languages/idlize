@@ -12,19 +12,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {identName, importTypeName, Language, mapType} from "../util"
-import {DeclarationTable, PrimitiveType} from "./DeclarationTable"
-import {RuntimeType} from "./PeerGeneratorVisitor"
+import { Language, identName, importTypeName, mapType, typeName } from "../util"
+import { DeclarationTable, PrimitiveType } from "./DeclarationTable"
+import { RuntimeType } from "./PeerGeneratorVisitor"
 import * as ts from "typescript"
-import {LanguageWriter} from "./LanguageWriters"
+import { LanguageStatement, LanguageWriter } from "./LanguageWriters"
 
 let uniqueCounter = 0
 
 export interface ArgConvertor {
+    param: string
     tsTypeName: string
     isScoped: boolean
     useArray: boolean
     runtimeTypes: RuntimeType[]
+    scopeStart?(param: string, language: Language): string
     estimateSize(): number
     scopeStart?(param: string, language: Language): string
     scopeEnd?(param: string, language: Language): string
@@ -34,7 +36,8 @@ export interface ArgConvertor {
     interopType(language: Language): string
     nativeType(impl: boolean): string
     isPointerType(): boolean
-    param: string
+    customDiscriminator(value: string, writer: LanguageWriter): LanguageStatement|undefined
+    hasCustomDiscriminator(): boolean
 }
 
 export abstract class BaseArgConvertor implements ArgConvertor {
@@ -58,20 +61,23 @@ export abstract class BaseArgConvertor implements ArgConvertor {
     interopType(language: Language): string {
         throw new Error("Define")
     }
-
     scopeStart?(param: string, language: Language): string
     scopeEnd?(param: string, language: Language): string
     abstract convertorArg(param: string, language: Language): string
     abstract convertorSerialize(param: string, value: string, writer: LanguageWriter): void
     abstract convertorDeserialize(param: string, value: string, writer: LanguageWriter, language: Language): void
+    hasCustomDiscriminator(): boolean {
+        return false
+    }
+    customDiscriminator(value: string, writer: LanguageWriter): LanguageStatement|undefined {
+        return undefined
+    }
 }
-
 
 export class StringConvertor extends BaseArgConvertor {
     constructor(param: string) {
         super("string", [RuntimeType.STRING], false, false, param)
     }
-
     convertorArg(param: string, language: Language): string {
         return language == Language.CPP ? this.convertorCArg(param) : param
     }
@@ -84,7 +90,6 @@ export class StringConvertor extends BaseArgConvertor {
     convertorDeserialize(param: string, value: string, writer: LanguageWriter): void {
         writer.print(`${value} = ${param}Deserializer.readString();`)
     }
-
     nativeType(impl: boolean): string {
         return PrimitiveType.String.getText()
     }
@@ -103,7 +108,6 @@ export class ToStringConvertor extends BaseArgConvertor {
     constructor(param: string) {
         super("string", [RuntimeType.OBJECT], false, false, param)
     }
-
     convertorArg(param: string, language: Language): string {
         return language == Language.CPP ? this.convertorCArg(param) : `(${param}).toString()`
     }
@@ -116,7 +120,6 @@ export class ToStringConvertor extends BaseArgConvertor {
     convertorDeserialize(param: string, value: string, writer: LanguageWriter): void {
         writer.print(`${value} = ${param}Deserializer.readString();`)
     }
-
     nativeType(impl: boolean): string {
         return PrimitiveType.String.getText()
     }
@@ -135,20 +138,15 @@ export class BooleanConvertor extends BaseArgConvertor {
     constructor(param: string) {
         super("boolean", [RuntimeType.BOOLEAN], false, false, param)
     }
-
     convertorArg(param: string, language: Language): string {
         return language == Language.CPP ? param : `+${param}`
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         printer.print(`${param}Serializer.writeBoolean(${value})`)
     }
-    convertorCArg(param: string): string {
-        return param
-    }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
         printer.print(`${value} = ${param}Deserializer.readBoolean();`)
     }
-
     nativeType(impl: boolean): string {
         return PrimitiveType.Boolean.getText()
     }
@@ -167,7 +165,6 @@ export class UndefinedConvertor extends BaseArgConvertor {
     constructor(param: string) {
         super("undefined", [RuntimeType.UNDEFINED], false, false, param)
     }
-
     convertorArg(param: string, language: Language): string {
         return language == Language.CPP ? "nullptr" : "undefined"
     }
@@ -191,7 +188,6 @@ export class UndefinedConvertor extends BaseArgConvertor {
     interopType(language: Language): string {
         return PrimitiveType.NativePointer.getText()
     }
-
     estimateSize() {
         return 1
     }
@@ -201,7 +197,7 @@ export class UndefinedConvertor extends BaseArgConvertor {
 }
 
 export class EnumConvertor extends BaseArgConvertor {
-    constructor(param: string, table: DeclarationTable) {
+    constructor(param: string, table: DeclarationTable, private enumType: ts.EnumDeclaration) {
         // Enums are integers in runtime.
         super("number", [RuntimeType.NUMBER], false, false, param)
     }
@@ -214,19 +210,27 @@ export class EnumConvertor extends BaseArgConvertor {
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
         printer.print(`${value} = ${param}Deserializer.readInt32();`)
     }
-
     nativeType(impl: boolean): string {
         return PrimitiveType.Int32.getText()
     }
     interopType(language: Language): string {
         return language == Language.CPP ? PrimitiveType.Int32.getText() : "KInt"
     }
-
     estimateSize() {
         return 4
     }
     isPointerType(): boolean {
         return false
+    }
+    // TODO: bit clumsy.
+    customDiscriminator(value: string, writer: LanguageWriter): LanguageStatement | undefined {
+        return writer.makeNaryOp("&&", [
+            writer.makeNaryOp(">=", [writer.makeCast(writer.makeString(value), "number"), writer.makeString("0")]),
+            writer.makeNaryOp("<",  [writer.makeCast(writer.makeString(value), "number"), writer.makeString(this.enumType.members.length.toString())])
+        ])
+    }
+    hasCustomDiscriminator(): boolean {
+        return true
     }
 }
 
@@ -274,10 +278,6 @@ export class UnionConvertor extends BaseArgConvertor {
         this.memberConvertors = type
             .types
             .map(member => table.typeConvertor(param, member))
-        // TODO: simplify convertors.
-        if (false && this.memberConvertors.every(it => it.constructor == this.memberConvertors[0].constructor)) {
-            this.memberConvertors = [this.memberConvertors[0]]
-        }
         this.checkUniques(param, this.memberConvertors)
         this.runtimeTypes = this.memberConvertors.flatMap(it => it.runtimeTypes)
         table.requestType(undefined, type)
@@ -295,10 +295,12 @@ export class UnionConvertor extends BaseArgConvertor {
                 return
             }
             let maybeElse = (index > 0 && this.memberConvertors[index - 1].runtimeTypes.length > 0) ? "else " : ""
-            let maybeComma1 = (it.runtimeTypes.length > 1) ? "(" : ""
-            let maybeComma2 = (it.runtimeTypes.length > 1) ? ")" : ""
-
-            printer.print(`${maybeElse}if (${it.runtimeTypes.map(it => `${maybeComma1}RuntimeType.${RuntimeType[it]} == ${value}_type${maybeComma2}`).join(" || ")}) {`)
+            let conditions = printer.makeNaryOp("||",
+                it.runtimeTypes.map(it => printer.makeNaryOp("==", [ printer.makeString(`RuntimeType.${RuntimeType[it]}`), printer.makeString(`${value}_type`)])))
+            let customDiscriminator = it.customDiscriminator(value, printer)
+            if (customDiscriminator)
+                conditions = printer.makeNaryOp("&&", [customDiscriminator, conditions])
+            printer.print(`${maybeElse}if (${conditions.asString()}) {`)
             printer.pushIndent()
             if (!(it instanceof UndefinedConvertor)) {
                 printer.print(`const ${value}_${index} = unsafeCast<${it.tsTypeName}>(${value})`)
@@ -367,14 +369,14 @@ export class UnionConvertor extends BaseArgConvertor {
                 let second = convertors[j].runtimeTypes
                 first.forEach(value => {
                     let index = second.findIndex(it => it == value)
-                    if (index != -1) {
+                    if (index != -1 && !convertors[i].hasCustomDiscriminator() && !convertors[j].hasCustomDiscriminator()) {
                         let current = this.table.getCurrentContext()
                         if (!current) throw new Error("Used in undefined context, do setCurrentContext()")
                         if (!UnionConvertor.reportedConflicts.has(current)) {
                             if (current) UnionConvertor.reportedConflicts.add(current)
                             console.log(`WARNING: runtime type conflict in "${current ?? "<unknown>"} ${param}": could be ${RuntimeType[value]} in both ${convertors[i].constructor.name} and ${convertors[j].constructor.name}`)
                         }
-                        second.splice(index, 1)
+                        //second.splice(index, 1)
                     }
                 })
             }
@@ -383,10 +385,8 @@ export class UnionConvertor extends BaseArgConvertor {
     isPointerType(): boolean {
         return true
     }
-
     private static reportedConflicts = new Set<string>()
 }
-
 export class ImportTypeConvertor extends BaseArgConvertor {
     private importedName: string
     constructor(param: string, private table: DeclarationTable, type: ts.ImportTypeNode) {
@@ -394,7 +394,6 @@ export class ImportTypeConvertor extends BaseArgConvertor {
         this.importedName = importTypeName(type)
         table.requestType(this.importedName === "default" ? undefined : this.importedName, type)
     }
-
     convertorArg(param: string, language: Language): string {
         throw new Error("Must never be used")
     }
@@ -426,7 +425,6 @@ export class CustomTypeConvertor extends BaseArgConvertor {
         super(tsType ?? "Object", [RuntimeType.OBJECT], false, true, param)
         this.customName = customName
     }
-
     convertorArg(param: string, language: Language): string {
         throw new Error("Must never be used")
     }
@@ -452,7 +450,6 @@ export class CustomTypeConvertor extends BaseArgConvertor {
 
 export class OptionConvertor extends BaseArgConvertor {
     private typeConvertor: ArgConvertor
-
     constructor(param: string, private table: DeclarationTable, private type: ts.TypeNode) {
         let typeConvertor = table.typeConvertor(param, type)
         let runtimeTypes = typeConvertor.runtimeTypes;
@@ -462,7 +459,6 @@ export class OptionConvertor extends BaseArgConvertor {
         super(`(${typeConvertor.tsTypeName})?`, runtimeTypes, typeConvertor.isScoped, true, param)
         this.typeConvertor = typeConvertor
     }
-
     convertorArg(param: string, language: Language): string {
         throw new Error("Must never be used")
     }
@@ -529,7 +525,6 @@ export class AggregateConvertor extends BaseArgConvertor {
             })
         table.requestType(undefined, type)
     }
-
     convertorArg(param: string, language: Language): string {
         throw new Error("Do not use for aggregates")
     }
@@ -546,7 +541,6 @@ export class AggregateConvertor extends BaseArgConvertor {
             it.convertorDeserialize(param, `${value}.${struct.getFields()[index].name}`, printer, language)
         })
     }
-
     nativeType(impl: boolean): string {
         return impl
             ? `struct { ` +
@@ -565,11 +559,12 @@ export class AggregateConvertor extends BaseArgConvertor {
     }
 }
 
-export class TypedConvertor extends BaseArgConvertor {
+export class InterfaceConvertor extends BaseArgConvertor {
     constructor(
         name: string,
-        private type: ts.TypeReferenceNode,
-        param: string, protected table: DeclarationTable) {
+        param: string,
+        protected table: DeclarationTable,
+        private type: ts.TypeReferenceNode  ) {
         super(name, [RuntimeType.OBJECT], false, true, param)
         table.requestType(name, type)
     }
@@ -597,12 +592,6 @@ export class TypedConvertor extends BaseArgConvertor {
     }
 }
 
-export class InterfaceConvertor extends TypedConvertor {
-    constructor(name: string, param: string, table: DeclarationTable, type: ts.TypeReferenceNode) {
-        super(name, type, param, table)
-    }
-}
-
 export class FunctionConvertor extends BaseArgConvertor {
     constructor(
         param: string,
@@ -611,7 +600,6 @@ export class FunctionConvertor extends BaseArgConvertor {
         // TODO: pass functions as integers to native side.
         super("Function", [RuntimeType.FUNCTION], false, true, param)
     }
-
     convertorArg(param: string, language: Language): string {
         throw new Error("Must never be used")
     }
@@ -639,8 +627,6 @@ export class FunctionConvertor extends BaseArgConvertor {
 }
 
 export class TupleConvertor extends BaseArgConvertor {
-    memberConvertors: ArgConvertor[]
-
     constructor(param: string, protected table: DeclarationTable, private type: ts.TupleTypeNode) {
         super(`[${type.elements.map(it => mapType(table.typeChecker!, it)).join(",")}]`, [RuntimeType.OBJECT], false, true, param)
         this.memberConvertors = type
@@ -648,11 +634,10 @@ export class TupleConvertor extends BaseArgConvertor {
             .map(element => table.typeConvertor(param, element))
         table.requestType(undefined, type)
     }
-
+    private memberConvertors: ArgConvertor[]
     convertorArg(param: string, language: Language): string {
         throw new Error("Must never be used")
     }
-
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         printer.print(`${param}Serializer.writeInt8(runtimeType(${value}))`)
         printer.print(`if (${value} !== undefined) {`)
@@ -664,7 +649,6 @@ export class TupleConvertor extends BaseArgConvertor {
         printer.popIndent()
         printer.print(`}`)
     }
-
     convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
         if (language == Language.TS) {
             printer.print(`const ${value}_type = runtimeType(${param}Deserializer.readInt8())`)
@@ -696,7 +680,6 @@ export class TupleConvertor extends BaseArgConvertor {
     interopType(language: Language): string {
         throw new Error("Must never be used")
     }
-
     estimateSize() {
         return this.memberConvertors
             .map(it => it.estimateSize())
@@ -715,7 +698,6 @@ export class ArrayConvertor extends BaseArgConvertor {
         table.requestType(undefined, type)
         table.requestType(undefined, elementType)
     }
-
     convertorArg(param: string, language: Language): string {
         throw new Error("Must never be used")
     }
