@@ -30,6 +30,7 @@ import {
     createLanguageWriter
 } from "./LanguageWriters";
 import { MaterializedMethod } from "./Materialized";
+import { collectDtsImports } from "./DtsImportsGenerator";
 
 export function componentToPeerClass(component: string) {
     return `Ark${component}Peer`
@@ -43,7 +44,7 @@ class PeerFileVisitor {
     readonly printer: LanguageWriter = createLanguageWriter(new IndentedPrinter(), this.file.declarationTable.language)
 
     // Temporary, until other languages supported.
-    private isTs = this.file.declarationTable.language == Language.TS
+    private isTs = this.file.declarationTable.language == Language.TS || Language.ARKTS
 
     constructor(
         private readonly library: PeerLibrary,
@@ -112,7 +113,7 @@ class PeerFileVisitor {
         const isNode = parentRole !== InheritanceRole.Finalizable
         const signature = new NamedMethodSignature(
             Type.Void,
-            [new Type('ArkUINodeType', !isNode), new Type('ArkCommon', true), new Type('int32')],
+            [new Type(this.isTs ? 'ArkUINodeType' : 'int', !isNode), new Type('ArkCommon', true), new Type('int32')],
             ['type', 'component', 'flags'],
             [undefined, undefined, '0'])
 
@@ -230,7 +231,7 @@ class PeerFileVisitor {
                     `import { Serializer } from "./Serializer"`,
                     `import { ArkUINodeType } from "./ArkUINodeType"`,
                     `import { ArkCommon } from "./ArkCommon"`,
-                    `import { BackgroundBlurStyleOptions, BlurOptions, BlurStyle, CommonAttribute, CommonMethod, DragInteractionOptions, DragPreviewOptions, Length, ResourceColor, SheetOptions, StateStyles } from "./dts-exports"`
+                    `${collectDtsImports().trim()}`
                 ]
             }
             case Language.JAVA: {

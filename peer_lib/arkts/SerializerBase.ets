@@ -49,14 +49,14 @@ export enum Tags {
 
 export function runtimeType(value: object): int32 {
     let type = typeof value
-    if (type == "number") return RuntimeType.NUMBER
-    if (type == "string") return RuntimeType.STRING
-    if (type == "undefined") return RuntimeType.UNDEFINED
-    if (type == "object") return RuntimeType.OBJECT
-    if (type == "boolean") return RuntimeType.BOOLEAN
-    if (type == "bigint") return RuntimeType.BIGINT
-    if (type == "function") return RuntimeType.FUNCTION
-    if (type == "symbol") return RuntimeType.SYMBOL
+    if (type == "number") return RuntimeType.NUMBER as int32
+    if (type == "string") return RuntimeType.STRING as int32
+    if (type == "undefined") return RuntimeType.UNDEFINED as int32
+    if (type == "object") return RuntimeType.OBJECT as int32
+    if (type == "boolean") return RuntimeType.BOOLEAN as int32
+    if (type == "bigint") return RuntimeType.BIGINT as int32
+    if (type == "function") return RuntimeType.FUNCTION as int32
+    if (type == "symbol") return RuntimeType.SYMBOL as int32
 
     throw new Error(`bug: ${value} is ${type}`)
 }
