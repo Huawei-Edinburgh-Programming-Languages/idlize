@@ -320,7 +320,7 @@ if (options.dts2peer) {
 
                 fs.writeFileSync(
                     path.join(outDir, 'NativeModule' + langSuffix(lang)),
-                    printNativeModule(peerLibrary, options.nativeBridgeDir ?? PeerGeneratorConfig.nativeBridgeDir)
+                    printNativeModule(peerLibrary, options.nativeBridgePath ?? PeerGeneratorConfig.nativeBridgePath)
                 )
                 if (lang == Language.TS) {
                     fs.writeFileSync(
