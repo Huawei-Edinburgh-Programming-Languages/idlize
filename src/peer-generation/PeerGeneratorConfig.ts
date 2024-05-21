@@ -81,7 +81,7 @@ export class PeerGeneratorConfig {
         return name != undefined && PeerGeneratorConfig.knownParametrized.includes(name)
     }
 
-    public static nativeBridgeDir = "../../../../../native/NativeBridgeNapi"
+    public static nativeBridgePath = "../../../../../native/NativeBridgeNapi"
 
     static cppPrefix = "GENERATED_"
 }
