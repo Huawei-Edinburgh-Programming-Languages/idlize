@@ -54,6 +54,7 @@ import { printImportsStubs } from "./peer-generation/ImportsStubsPrinter"
 import { printDelegatesHeaders, printDelegatesImplementation } from "./peer-generation/DelegatePrinter"
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig";
 import { printEvents, printEventsCImpl } from "./peer-generation/EventsPrinter"
+import { collectDtsImports } from "./peer-generation/DtsImportsGenerator"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -361,7 +362,7 @@ if (options.dts2peer) {
                     )
                     fs.writeFileSync(
                         path.join(outDir, 'ArkCommon' + langSuffix(lang)),
-                        printStructCommon(peerLibrary),
+                        collectDtsImports() + printStructCommon(peerLibrary),
                     )
                 }
                 fs.writeFileSync(path.join(outDir, 'bridge.cc'), printBridgeCc(peerLibrary, options.callLog ?? false))

@@ -350,7 +350,7 @@ export function makeArkuiModule(componentsFiles: string[]): string {
 }
 
 export function makeStructCommon(commonMethods: string[], customComponentMethods: string[]): string {
-    return `${collectDtsImports().trim()}
+    return `
 import { NativePeerNode } from "@koalaui/arkoala"
 
 // TODO: temporary, remove!

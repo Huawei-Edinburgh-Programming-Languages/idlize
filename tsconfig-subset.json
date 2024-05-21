@@ -26,4 +26,7 @@
         "generated/fuzz/**/*",
         "tests/subset/**/*"
     ],
+    "exclude": [
+        "tests/subset/arkts-subset/*"
+    ]
 }
