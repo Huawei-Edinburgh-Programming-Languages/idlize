@@ -20,6 +20,8 @@ import { PeerClass } from "./PeerClass";
 import { PeerLibrary } from "./PeerLibrary";
 import { MethodSeparatorVisitor, PeerMethod } from "./PeerMethod";
 import { DelegateSignatureBuilder } from "./DelegatePrinter";
+import { PeerFile } from "./PeerFile";
+import { AccessorVisitor } from "./AccessorPrinter";
 
 class MethodSeparatorPrinter extends MethodSeparatorVisitor {
     public readonly printer = new IndentedPrinter()
@@ -87,13 +89,54 @@ class MethodSeparatorPrinter extends MethodSeparatorVisitor {
     }
 }
 
+export type DummyAndReal<T> = {
+    dummy: T,
+    real: T
+}
+
 export abstract class ModifierLikeVisitor {
     dummy = new IndentedPrinter()
     real = new IndentedPrinter()
+    modifierLikes = new IndentedPrinter()
+    modifierLikeList = new IndentedPrinter()
 
     constructor(
-        protected library: PeerLibrary
+        protected declarationTable: DeclarationTable
     ) { }
+
+    protected abstract listTemplate: (lines: string[]) => string
+    protected abstract printRealAndDummyModifierLikes(peerFile: PeerFile): DummyAndReal<string[]>
+
+    public getDummyAndRealModifiers(peerFile: PeerFile): DummyAndReal<string> {
+        this.printRealAndDummyModifierLikes(peerFile)
+
+        const dummy =
+            this.dummy.getOutput().join("\n")
+            // modifierStructs(this.modifierLikes.getOutput()) +
+            // modifierStructList(this.modifierLikeList.getOutput())
+
+        const real =
+            this.real.getOutput().join("\n")
+            // modifierStructs(this.modifierLikes.getOutput()) +
+            // this.listTemplate(this.modifierLikeList.getOutput())
+
+        return {dummy, real}
+    }
+
+    public getAllModifiers(library: PeerLibrary): DummyAndReal<string> {
+        library.files.forEach(it => this.printRealAndDummyModifierLikes(it))
+        const dummy =
+            // this.dummy.getOutput().join("\n")
+            modifierStructs(this.modifierLikes.getOutput()) +
+            this.listTemplate(this.modifierLikeList.getOutput())
+
+        const real =
+            // this.real.getOutput().join("\n")
+            modifierStructs(this.modifierLikes.getOutput()) +
+            this.listTemplate(this.modifierLikeList.getOutput())
+
+        return {dummy, real}
+    }
 
     protected printMethodProlog(printer: IndentedPrinter, method: PeerMethod) {
         const apiParameters = method.generateAPIParameters().join(", ")
@@ -120,7 +163,7 @@ export abstract class ModifierLikeVisitor {
 
     protected printModifierImplFunctionBody(method: PeerMethod) {
         const visitor = new MethodSeparatorPrinter(
-            this.library.declarationTable,
+            this.declarationTable,
             method
         )
         visitor.visit()
@@ -137,11 +180,13 @@ export abstract class ModifierLikeVisitor {
 }
 
 export class ModifierVisitor extends ModifierLikeVisitor {
-    modifiers = new IndentedPrinter()
-    modifierList = new IndentedPrinter()
-    accessorList = new IndentedPrinter()
+    override listTemplate = modifierStructList
 
-    printRealAndDummyModifier(method: PeerMethod) {
+    constructor(declarationTable: DeclarationTable) {
+        super(declarationTable)
+    }
+
+    private printRealAndDummyModifier(method: PeerMethod) {
         this.printMethodProlog(this.dummy, method)
         this.printMethodProlog(this.real, method)
         this.printDummyImplFunctionBody(method)
@@ -149,52 +194,37 @@ export class ModifierVisitor extends ModifierLikeVisitor {
         this.printMethodEpilog(this.dummy)
         this.printMethodEpilog(this.real)
 
-        this.modifiers.print(`${method.implName},`)
+        this.modifierLikes.print(`${method.implName},`)
     }
 
-    printClassProlog(clazz: PeerClass) {
+    private printClassProlog(clazz: PeerClass) {
         const component = clazz.componentName
         const modifierStructImpl = `ArkUI${component}ModifierImpl`
 
-        this.modifiers.print(`ArkUI${component}Modifier ${modifierStructImpl} {`)
-        this.modifiers.pushIndent()
+        this.modifierLikes.print(`ArkUI${component}Modifier ${modifierStructImpl} {`)
+        this.modifierLikes.pushIndent()
 
-        this.modifierList.pushIndent()
-        this.modifierList.print(`Get${component}Modifier,`)
-        this.modifierList.popIndent()
+        this.modifierLikeList.pushIndent()
+        this.modifierLikeList.print(`Get${component}Modifier,`)
+        this.modifierLikeList.popIndent()
     }
 
-    printClassEpilog(clazz: PeerClass) {
-        this.modifiers.popIndent()
-        this.modifiers.print(`};\n`)
+    private printClassEpilog(clazz: PeerClass) {
+        this.modifierLikes.popIndent()
+        this.modifierLikes.print(`};\n`)
         const name = clazz.componentName
-        this.modifiers.print(`const ArkUI${name}Modifier* Get${name}Modifier() { return &ArkUI${name}ModifierImpl; }\n\n`)
+        this.modifierLikes.print(`const ArkUI${name}Modifier* Get${name}Modifier() { return &ArkUI${name}ModifierImpl; }\n\n`)
     }
 
-    // TODO: have a proper Peer module visitor
-    printRealAndDummyModifiers() {
-        this.library.files.forEach(file => {
-            file.peers.forEach(clazz => {
-                this.printClassProlog(clazz)
-                clazz.methods.forEach(method => this.printRealAndDummyModifier(method))
-                this.printClassEpilog(clazz)
-            })
+    override printRealAndDummyModifierLikes(peerFile: PeerFile) {
+        peerFile.peers.forEach(peerClass => {
+            this.printClassProlog(peerClass)
+            peerClass.methods.forEach(method => this.printRealAndDummyModifier(method))
+            this.printClassEpilog(peerClass)
         })
+        return {
+            dummy: this.dummy.getOutput(),
+            real: this.real.getOutput()
+        }
     }
-}
-
-export function printRealAndDummyModifiers(peerLibrary: PeerLibrary): {dummy: string, real: string} {
-    const visitor = new ModifierVisitor(peerLibrary)
-    visitor.printRealAndDummyModifiers()
-
-    const dummy =
-        visitor.dummy.getOutput().join("\n") +
-        modifierStructs(visitor.modifiers.getOutput()) +
-        modifierStructList(visitor.modifierList.getOutput())
-
-    const real =
-        visitor.real.getOutput().join("\n") +
-        modifierStructs(visitor.modifiers.getOutput()) +
-        modifierStructList(visitor.modifierList.getOutput())
-    return {dummy, real}
 }

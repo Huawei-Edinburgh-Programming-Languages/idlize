@@ -38,10 +38,7 @@ import { defaultCompilerOptions, isDefined, toSet, langSuffix, Language } from "
 import { TypeChecker } from "./typecheck"
 import { initRNG } from "./rand_utils"
 import { DeclarationTable } from "./peer-generation/DeclarationTable"
-import { printRealAndDummyAccessors } from "./peer-generation/AccessorPrinter"
-import { printRealAndDummyModifiers } from "./peer-generation/ModifierPrinter"
 import { PeerLibrary } from "./peer-generation/PeerLibrary"
-import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig"
 import { printComponents } from "./peer-generation/ComponentsPrinter"
 import { printPeers } from "./peer-generation/PeersPrinter"
 import { printMaterialized } from "./peer-generation/MaterializedPrinter"
@@ -52,6 +49,9 @@ import { printNativeModule, printNativeModuleEmpty } from "./peer-generation/Nat
 import { printBridgeCc } from "./peer-generation/BridgeCcPrinter"
 import { printImportsStubs } from "./peer-generation/ImportsStubsPrinter"
 import { printDelegatesHeaders, printDelegatesImplementation } from "./peer-generation/DelegatePrinter"
+import { DummyAndReal, ModifierVisitor } from "./peer-generation/ModifierPrinter";
+import { PeerFile } from "./peer-generation/PeerFile";
+import { AccessorVisitor } from "./peer-generation/AccessorPrinter";
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -350,10 +350,33 @@ if (options.dts2peer) {
                 fs.writeFileSync(path.join(outDir, 'delegates.h'), printDelegatesHeaders(peerLibrary))
                 fs.writeFileSync(path.join(outDir, 'delegates.cc'), printDelegatesImplementation(peerLibrary))
 
-                const modifiers = printRealAndDummyModifiers(peerLibrary)
-                const accessors = printRealAndDummyAccessors(peerLibrary)
-                fs.writeFileSync(path.join(outDir, 'dummy_impl.cc'), dummyImplementations(modifiers.dummy + accessors.dummy))
-                fs.writeFileSync(path.join(outDir, 'all_modifiers.cc'), completeImplementations(modifiers.real + accessors.real))
+                // const modifiers = printRealAndDummyModifiers(peerLibrary)
+                // const accessors = printRealAndDummyAccessors(peerLibrary)
+                // fs.writeFileSync(path.join(outDir, 'dummy_impl.cc'), dummyImplementations(modifiers.dummy + accessors.dummy))
+                // fs.writeFileSync(path.join(outDir, 'all_modifiers.cc'), completeImplementations(modifiers.real + accessors.real))
+
+                const dummyOutDir = path.join(outDir, 'dummy')
+                if (!fs.existsSync(dummyOutDir)) {
+                    fs.mkdirSync(dummyOutDir, { recursive: true })
+                }
+                const realOutDir = path.join(outDir, 'real')
+                if (!fs.existsSync(realOutDir)) {
+                    fs.mkdirSync(realOutDir, { recursive: true })
+                }
+                printModifierLikes(peerLibrary).forEach(({dummy, real}, peerFile) => {
+                    fs.writeFileSync(
+                        path.join(dummyOutDir, peerFile.modifiersFileName),
+                        dummy
+                    )
+                    fs.writeFileSync(
+                        path.join(realOutDir, peerFile.modifiersFileName),
+                        real
+                    )
+                })
+                const {dummy, real} = printAllModifiers(peerLibrary)
+                fs.writeFileSync(
+                    path.join(outDir, )
+                )
 
                 copyPeerLib(path.join(__dirname, '..', 'peer_lib'), outDir)
             }
@@ -364,4 +387,41 @@ if (options.dts2peer) {
 
 if (!didJob) {
     program.help()
+}
+
+
+function printModifierLikes(peerLibrary: PeerLibrary): Map<PeerFile, DummyAndReal<string>> {
+    function modifierLikes(peerFile: PeerFile): DummyAndReal<string> {
+        const modifier = new ModifierVisitor(peerLibrary.declarationTable).getDummyAndRealModifiers(peerFile)
+        const accessor = new AccessorVisitor(peerLibrary.declarationTable).getDummyAndRealModifiers(peerFile)
+        return {
+            dummy: [
+                modifier.dummy,
+                accessor.dummy
+            ].join("\n\n"),
+            real: [
+                modifier.real,
+                accessor.real
+            ].join("\n\n")
+        }
+    }
+
+    return new Map<PeerFile, DummyAndReal<string>>(
+        peerLibrary.files.map(it => [it, modifierLikes(it)])
+    )
+}
+
+function printAllModifiers(peerLibrary: PeerLibrary): DummyAndReal<string> {
+    const modifier = new ModifierVisitor(peerLibrary.declarationTable).getAllModifiers(peerLibrary)
+    const accessor = new AccessorVisitor(peerLibrary.declarationTable).getAllModifiers(peerLibrary)
+    return {
+        dummy: [
+            modifier.dummy,
+            accessor.dummy
+        ].join("\n\n"),
+        real: [
+            modifier.real,
+            accessor.real
+        ].join("\n\n")
+    }
 }

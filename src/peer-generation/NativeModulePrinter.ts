@@ -26,7 +26,7 @@ class NativeModuleVisitor {
     readonly nativeModuleEmpty: LanguageWriter
 
     constructor(
-        private readonly library: PeerLibrary,
+        private readonly library: PeerLibrary
     ) {
         this.nativeModule = createLanguageWriter(new IndentedPrinter(), library.declarationTable.language)
         this.nativeModuleEmpty = createLanguageWriter(new IndentedPrinter(), library.declarationTable.language)
@@ -42,7 +42,7 @@ class NativeModuleVisitor {
                 this.printPeerMethods(peer)
             }
         }
-        printGlobalMaterialized(this.nativeModule, this.nativeModuleEmpty)
+        printGlobalMaterialized(this.library, this.nativeModule, this.nativeModuleEmpty)
     }
 }
 

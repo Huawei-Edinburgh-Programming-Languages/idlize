@@ -1,14 +1,9 @@
-import * as path from "path"
 import { IndentedPrinter } from "../IndentedPrinter";
 import { Language, renameClassToMaterialized } from "../util";
-
 import { PeerLibrary } from "./PeerLibrary";
 import { writePeerMethod } from "./PeersPrinter"
-
-import { LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, Type, createLanguageWriter } from "./LanguageWriters";
-
-import { Materialized, MaterializedClass, MaterializedMethod} from "./Materialized"
-
+import { LanguageWriter, NamedMethodSignature, Type, createLanguageWriter } from "./LanguageWriters";
+import { MaterializedClass } from "./Materialized"
 import { makeMaterializedPrologue } from "./FileGenerators";
 
 class MaterializedFileVisitor {
@@ -67,7 +62,7 @@ class MaterializedVisitor {
     ) {}
 
     printMaterialized(): void {
-        for (const clazz of Materialized.Instance.materializedClasses.values()) {
+        for (const clazz of this.library.getAllMaterialized().values()) {
             const visitor = new MaterializedFileVisitor(
                 this.library.declarationTable.language, clazz, this.dumpSerialized)
             visitor.printFile()

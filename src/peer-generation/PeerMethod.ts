@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 
-
 import { Language, capitalize } from "../util"
 import { ArgConvertor, OptionConvertor, RetConvertor } from "./Convertors"
 import { Method, MethodModifier, NamedMethodSignature } from "./LanguageWriters"

@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-
 import { DeclarationTable } from "./DeclarationTable";
 import { PeerClass } from "./PeerClass";
 import { PeerFile } from "./PeerFile";
+import { MaterializedClass } from "./Materialized";
 
 export class PeerLibrary {
     public readonly files: PeerFile[] = []
@@ -29,11 +29,21 @@ export class PeerLibrary {
     readonly customComponentMethods: string[] = []
     readonly importTypesStubs: string[] = []
 
-    findPeerByComponentName(componentName: string): PeerClass | undefined {
+    public findPeerByComponentName(componentName: string): PeerClass | undefined {
         for (const file of this.files)
             for (const peer of file.peers.values())
                 if (peer.componentName == componentName) 
                     return peer
         return undefined
+    }
+
+    public getAllMaterialized(): Map<string, MaterializedClass> {
+        const merged = new Map<string, MaterializedClass>()
+        this.files.forEach(file => {
+            for (const [key, value] of file.materializedClasses) {
+                merged.set(key, value)
+            }
+        })
+        return merged
     }
 }

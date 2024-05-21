@@ -16,6 +16,8 @@
 import { getOrPut } from "../util"
 import { PeerClass } from "./PeerClass"
 import { DeclarationTable } from "./DeclarationTable"
+import { MaterializedClass } from "./Materialized";
+import * as path from "path"
 
 export class EnumEntity {
     constructor(
@@ -37,12 +39,18 @@ class EnumMember {
 }
 
 export class PeerFile {
-    readonly peers: Map<string, PeerClass> = new Map()
+    readonly peers = new Map<string, PeerClass>()
+    readonly materializedClasses = new Map<string, MaterializedClass>()
     readonly enums: EnumEntity[] = []
+
+    public readonly modifiersFileName: string
+
     constructor(
         public readonly originalFilename: string,
         public readonly declarationTable: DeclarationTable,
-    ) {}
+    ) {
+        this.modifiersFileName = path.basename(originalFilename, ".d.ts") + ".cc"
+    }
 
     getOrPutPeer(componentName: string) {
         return getOrPut(this.peers, componentName, () => new PeerClass(this, componentName, this.originalFilename, this.declarationTable))

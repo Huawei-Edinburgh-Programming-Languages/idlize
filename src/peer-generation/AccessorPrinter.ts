@@ -14,61 +14,58 @@
  */
 
 import { IndentedPrinter } from "../IndentedPrinter";
-import { accessorStructList, modifierStructs } from "./FileGenerators";
-import { Materialized, MaterializedClass, MaterializedMethod } from "./Materialized";
+import { accessorStructList } from "./FileGenerators";
+import { MaterializedClass, MaterializedMethod } from "./Materialized";
 import { ModifierLikeVisitor } from "./ModifierPrinter";
-import { PeerLibrary } from "./PeerLibrary";
+import { PeerFile } from "./PeerFile";
+import { DeclarationTable } from "./DeclarationTable";
 
-class AccessorVisitor extends ModifierLikeVisitor {
-    accessors = new IndentedPrinter()
-    accessorList = new IndentedPrinter()
+export class AccessorVisitor extends ModifierLikeVisitor {
+    override listTemplate = accessorStructList
 
-    printRealAndDummyAccessor(clazz: MaterializedClass) {
-        this.accessorList.pushIndent()
+    constructor(declarationTable: DeclarationTable) {
+        super(declarationTable)
+    }
+
+    private printRealAndDummyAccessor(clazz: MaterializedClass) {
+        this.modifierLikeList.pushIndent()
         this.printMaterializedClassProlog(clazz);
         [clazz.ctor, clazz.dtor].concat(clazz.methods).forEach(method => {
             this.printMaterializedMethod(this.dummy, method, it => this.printDummyImplFunctionBody(it))
             this.printMaterializedMethod(this.real, method, it => this.printModifierImplFunctionBody(it))
-            this.accessors.print(`${method.originalParentName}_${method.method.name},`)
+            this.modifierLikes.print(`${method.originalParentName}_${method.method.name},`)
         })
         this.printMaterializedClassEpilog(clazz)
-        this.accessorList.popIndent()
+        this.modifierLikeList.popIndent()
     }
 
-    printMaterializedClassProlog(clazz: MaterializedClass) {
+    private printMaterializedClassProlog(clazz: MaterializedClass) {
         const accessor = `${clazz.className}Accessor`
-        this.accessors.print(`ArkUI${accessor} ${accessor}Impl {`)
-        this.accessors.pushIndent()
-        this.accessorList.print(`Get${accessor},`)
+        this.modifierLikes.print(`ArkUI${accessor} ${accessor}Impl {`)
+        this.modifierLikes.pushIndent()
+        this.modifierLikeList.print(`Get${accessor},`)
     }
 
-    printMaterializedClassEpilog(clazz: MaterializedClass) {
-        this.accessors.popIndent()
-        this.accessors.print(`};\n`)
+    private printMaterializedClassEpilog(clazz: MaterializedClass) {
+        this.modifierLikes.popIndent()
+        this.modifierLikes.print(`};\n`)
         const accessor = `${clazz.className}Accessor`
-        this.accessors.print(`const ArkUI${accessor}* Get${accessor}() { return &${accessor}Impl; }\n\n`)
+        this.modifierLikes.print(`const ArkUI${accessor}* Get${accessor}() { return &${accessor}Impl; }\n\n`)
     }
 
-    printMaterializedMethod(printer: IndentedPrinter, method: MaterializedMethod, printBody: (m: MaterializedMethod) => void) {
+    private printMaterializedMethod(printer: IndentedPrinter, method: MaterializedMethod, printBody: (m: MaterializedMethod) => void) {
         this.printMethodProlog(printer, method)
         printBody(method)
         this.printMethodEpilog(printer)
     }
-}
 
-export function printRealAndDummyAccessors(peerLibrary: PeerLibrary): {dummy: string, real: string} {
-    const visitor = new AccessorVisitor(peerLibrary)
-    Materialized.Instance.materializedClasses
-        .forEach(it => visitor.printRealAndDummyAccessor(it))
-
-    const dummy =
-        visitor.dummy.getOutput().join("\n") + "\n" +
-        modifierStructs(visitor.accessors.getOutput()) +
-        accessorStructList(visitor.accessorList.getOutput())
-
-    const real =
-        visitor.real.getOutput().join("\n") + "\n" +
-        modifierStructs(visitor.accessors.getOutput()) +
-        accessorStructList(visitor.accessorList.getOutput())
-    return {dummy, real}
+    override printRealAndDummyModifierLikes(peerFile: PeerFile) {
+        peerFile.materializedClasses.forEach((materializedClass, _) => {
+            this.printRealAndDummyAccessor(materializedClass)
+        })
+        return {
+            dummy: this.dummy.getOutput(),
+            real: this.real.getOutput()
+        }
+    }
 }

@@ -17,10 +17,11 @@ import * as ts from "typescript"
 import { ArgConvertor, RetConvertor } from "./Convertors"
 import { LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, Type } from "./LanguageWriters"
 import { PeerMethod } from "./PeerMethod"
-import { Language, identName } from "../util"
+import { identName} from "../util"
 import { printPeerMethod } from "./NativeModulePrinter"
 import { PeerClassBase } from "./PeerClass"
 import { DeclarationTarget } from "./DeclarationTable"
+import { PeerLibrary } from "./PeerLibrary";
 
 const ignoredMaterializedClasses = [
     "CanvasRenderingContext2D", // has data
@@ -80,22 +81,25 @@ export class MaterializedClass implements PeerClassBase {
 
 }
 
-export class Materialized {
-    private static _instance: Materialized = new Materialized()
+// export class Materialized {
+//     private static _instance: Materialized = new Materialized()
+//
+//     public materializedClasses: Map<string, MaterializedClass> = new Map()
+//
+//     private constructor() {
+//     }
+//
+//     public static get Instance(): Materialized {
+//         return this._instance
+//     }
+// }
 
-    public materializedClasses: Map<string, MaterializedClass> = new Map()
-
-    private constructor() {
-    }
-
-    public static get Instance(): Materialized {
-        return this._instance
-    }
-}
-
-export function printGlobalMaterialized(nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter) {
-    console.log(`Materialized classes: ${Materialized.Instance.materializedClasses.size}`)
-    Materialized.Instance.materializedClasses.forEach(clazz => {
+export function printGlobalMaterialized(
+    peerLibrary: PeerLibrary,
+    nativeModule: LanguageWriter,
+    nativeModuleEmpty: LanguageWriter
+) {
+    peerLibrary.getAllMaterialized().forEach(clazz => {
         printPeerMethod(clazz, clazz.ctor, nativeModule, nativeModuleEmpty)
         clazz.methods.forEach(method => printPeerMethod(clazz, method, nativeModule, nativeModuleEmpty))
     })
