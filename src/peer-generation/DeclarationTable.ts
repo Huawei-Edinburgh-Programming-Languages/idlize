@@ -150,6 +150,7 @@ export class DeclarationTable {
         if (ts.isTupleTypeNode(type)) return true
         if (ts.isArrayTypeNode(type)) return true
         if (ts.isOptionalTypeNode(type)) return true
+        if (ts.isFunctionTypeNode(type)) return true
         // TODO: shall we map it to string type here or later?
         if (ts.isTemplateLiteralTypeNode(type)) return true
         return false
@@ -189,9 +190,6 @@ export class DeclarationTable {
         if (this.isDeclarationTarget(node)) return node as DeclarationTarget
         if (ts.isImportTypeNode(node)) {
             return this.mapImportType(node)
-        }
-        if (ts.isFunctionTypeNode(node)) {
-            return PrimitiveType.Function
         }
         if (ts.isTypeReferenceNode(node)) {
             let result = this.customToTarget(node)
@@ -540,7 +538,8 @@ export class DeclarationTable {
         }
         if (ts.isImportTypeNode(type)) {
             if (identName(type.qualifier) === "Callback") {
-                return new FunctionConvertor(param, this)
+                const args = [{name: 'data', type: type.typeArguments![0], nullable: false}]
+                return new FunctionConvertor(param, this, args, type.typeArguments![1] ?? ts.factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword))
             }
             return new ImportTypeConvertor(param, this, type)
         }
@@ -573,7 +572,12 @@ export class DeclarationTable {
             return new TupleConvertor(param, this, type)
         }
         if (ts.isFunctionTypeNode(type)) {
-            return new FunctionConvertor(param, this)
+            const args = type.parameters.map(it => {return {
+                name: asString(it.name),
+                type: it.type!,
+                nullable: !!it.questionToken
+            }})
+            return new FunctionConvertor(param, this, args, type.type)
         }
         if (ts.isParenthesizedTypeNode(type)) {
             return this.typeConvertor(param, type.type)
@@ -638,7 +642,8 @@ export class DeclarationTable {
             case `Map`:
                 return new MapConvertor(param, this, type, type.typeArguments![0], type.typeArguments![1])
             case `Callback`:
-                return new FunctionConvertor(param, this)
+                const args = [{name: 'data', type: type.typeArguments![0], nullable: false}]
+                return new FunctionConvertor(param, this, args, type.typeArguments![1] ?? ts.factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword))
             case `Optional`:
                 if (type.typeArguments && type.typeArguments.length == 1)
                     return new OptionConvertor(param, this, type.typeArguments![0])

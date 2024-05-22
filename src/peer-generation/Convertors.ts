@@ -592,8 +592,10 @@ export class InterfaceConvertor extends BaseArgConvertor {
 
 export class FunctionConvertor extends BaseArgConvertor {
     constructor(
-        param: string,
-        protected table: DeclarationTable
+        public param: string,
+        protected table: DeclarationTable,
+        public args: {name: string, type: ts.TypeNode, nullable: boolean}[],
+        public returnType: ts.TypeNode,
     ) {
         // TODO: pass functions as integers to native side.
         super("Function", [RuntimeType.FUNCTION], false, true, param)

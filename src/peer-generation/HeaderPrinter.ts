@@ -20,14 +20,17 @@ import { PeerClass } from "./PeerClass";
 import { PeerLibrary } from "./PeerLibrary";
 import { PeerMethod } from "./PeerMethod";
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
+import { CallbackInfo, collectCallbacks } from "./EventsPrinter";
+import { PrimitiveType } from "./DeclarationTable";
 
 class HeaderVisitor {
     constructor(
         private library: PeerLibrary,
         private api: IndentedPrinter,
         private modifiersList: IndentedPrinter,
-        private accessorsList: IndentedPrinter
-    ) { }
+        private accessorsList: IndentedPrinter,
+        private eventsList: IndentedPrinter,
+    ) {}
 
     private apiModifierHeader(clazz: PeerClass) {
         return `typedef struct ${PeerGeneratorConfig.cppPrefix}ArkUI${clazz.componentName}Modifier {`
@@ -90,6 +93,53 @@ class HeaderVisitor {
         }
     }
 
+    private groupEvents(callbacks: CallbackInfo[]): Map<string, CallbackInfo[]> {
+        const receiverToCallbacks = new Map<string, CallbackInfo[]>()
+        for (const callback of callbacks) {
+            if (!receiverToCallbacks.has(callback.componentName))
+                receiverToCallbacks.set(callback.componentName, [callback])
+            else
+                receiverToCallbacks.get(callback.componentName)!.push(callback)
+        }
+        return receiverToCallbacks
+    }
+
+    private generateReceiverName(componentName: string) {
+        return `${PeerGeneratorConfig.cppPrefix}ArkUI${componentName}EventsReceiver`
+    }
+
+    private printEventsReceiver(componentName: string, callbacks: CallbackInfo[]) {
+        const receiver = this.generateReceiverName(componentName)
+        this.api.print(`typedef struct ${receiver} {`)
+        this.api.pushIndent()
+        const table = this.library.declarationTable
+        for (const callback of callbacks) {
+            const callbackArgs = callback.args
+                .map(it => {
+                    const conv = table.typeConvertor(it.name, it.type, it.nullable)
+                    return `const ${conv.nativeType(false)} ${it.name}`
+                })
+            const nodeArg = `${table.uniqueName(PrimitiveType.Int32)} nodeId`
+            const maybeComma = callbackArgs.length ? ', ' : ''
+            this.api.print(`void (*${callback.methodName})(${nodeArg}${maybeComma}${callbackArgs.join(", ")});`)
+        }
+        this.api.popIndent()
+        this.api.print(`} ${receiver};\n`)
+    }
+
+    private printEvents() {
+        const callbacks = this.groupEvents(collectCallbacks(this.library))
+        for (const [receiver, events] of callbacks) {
+            this.printEventsReceiver(receiver, events)
+        }
+
+        this.eventsList.pushIndent()
+        for (const [receiver, _] of callbacks) {
+            this.eventsList.print(`${this.generateReceiverName(receiver)} (*get${receiver}EventsReceiver)();`)
+        }
+        this.eventsList.popIndent()
+    }
+
     // TODO: have a proper Peer module visitor
     printApiAndDeserializer() {
         this.library.files.forEach(file => {
@@ -102,6 +152,7 @@ class HeaderVisitor {
             })
         })
         this.printAccessors()
+        this.printEvents()
     }
 }
 
@@ -109,15 +160,16 @@ export function printApiAndDeserializer(apiVersion: string|undefined, peerLibrar
     const apiHeader = new IndentedPrinter()
     const modifierList = new IndentedPrinter()
     const accessorList = new IndentedPrinter()
+    const eventsList = new IndentedPrinter()
 
-    const visitor = new HeaderVisitor(peerLibrary, apiHeader, modifierList, accessorList)
+    const visitor = new HeaderVisitor(peerLibrary, apiHeader, modifierList, accessorList, eventsList)
     visitor.printApiAndDeserializer()
 
     const structs = new IndentedPrinter()
     const typedefs = new IndentedPrinter()
 
     const deserializer = makeCDeserializer(peerLibrary.declarationTable, structs, typedefs)
-    const api = makeAPI(apiVersion ?? "0", apiHeader.getOutput(), modifierList.getOutput(), accessorList.getOutput(), structs, typedefs)
+    const api = makeAPI(apiVersion ?? "0", apiHeader.getOutput(), modifierList.getOutput(), accessorList.getOutput(), eventsList.getOutput(), structs, typedefs)
 
     return {api, deserializer}
 }

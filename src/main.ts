@@ -52,6 +52,7 @@ import { printBridgeCc } from "./peer-generation/BridgeCcPrinter"
 import { printImportsStubs } from "./peer-generation/ImportsStubsPrinter"
 import { printDelegatesHeaders, printDelegatesImplementation } from "./peer-generation/DelegatePrinter"
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig";
+import { printEvents } from "./peer-generation/EventsPrinter"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -343,6 +344,10 @@ if (options.dts2peer) {
                     )
                     fs.writeFileSync(path.join(outDir, 'Serializer' + langSuffix(lang)),
                         makeTSSerializer(declarationTable)
+                    )
+                    fs.writeFileSync(
+                        path.join(outDir, "peer_events" + langSuffix(lang)),
+                        printEvents(peerLibrary)
                     )
                 }
                 fs.writeFileSync(path.join(outDir, 'bridge.cc'), printBridgeCc(peerLibrary, options.callLog ?? false))
