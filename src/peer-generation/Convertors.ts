@@ -484,8 +484,9 @@ export class OptionConvertor extends BaseArgConvertor {
             printer.popIndent()
             printer.print(`}`)
         } else if (lang == Language.TS) {
-            printer.print(`const ${value}_type = runtimeType(${param}Deserializer.readInt8())`)
-            printer.print(`if (${value}_type != RuntimeType.UNDEFINED) {`)
+            const varTypeName = `${value.replaceAll(".", "_")}_type`
+            printer.print(`const ${varTypeName} = runtimeType(${param}Deserializer.readInt8())`)
+            printer.print(`if (${varTypeName} != RuntimeType.UNDEFINED) {`)
             printer.pushIndent()
             this.typeConvertor.convertorDeserialize(param, value, printer, lang)
             printer.popIndent()
@@ -537,6 +538,9 @@ export class AggregateConvertor extends BaseArgConvertor {
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
         let struct = this.table.targetStruct(this.table.toTarget(this.type))
+        if (language == Language.TS) {
+            printer.print(`${value} = {}`)
+        }
         this.memberConvertors.forEach((it, index) => {
             it.convertorDeserialize(param, `${value}.${struct.getFields()[index].name}`, printer, language)
         })

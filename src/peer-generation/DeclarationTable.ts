@@ -905,11 +905,10 @@ export class DeclarationTable {
         printer.print(`export class Deserializer extends DeserializerBase {`)
         printer.pushIndent()
         for (const declaration of this.declarations) {
+            if (declaration instanceof PrimitiveType) continue
             const name = this.computeTargetName(declaration, false)
             if (seenNames.has(name)) continue
             seenNames.add(name)
-            if (declaration instanceof PrimitiveType) continue
-            if (this.targetStruct(declaration).getFields().length == 0) continue
             if (ts.isInterfaceDeclaration(declaration) || ts.isClassDeclaration(declaration)) {
                 printer.pushIndent()
                 this.generateTSDeserializer(name, declaration, printer)
@@ -1434,13 +1433,19 @@ constructor(expectedSize: int32) {
             struct.getFields().forEach((it) => {
                 printer.print(`let ${this.createValueFieldName(it.name)}: any`)
             })
-            let initArgs: string[] = []
+            let resultObjArgs: string[] = []
             struct.getFields().forEach(it => {
                 let typeConvertor = this.typeConvertor("value", it.type!, it.optional)
                 typeConvertor.convertorDeserialize("value", this.createValueFieldName(it.name), printer, Language.TS)
-                initArgs.push(`${it.name}: ${this.createValueFieldName(it.name)}`)
+                resultObjArgs.push(`${it.name}: ${this.createValueFieldName(it.name)}`)
             })
-            printer.print(`const value: ${this.computeTargetName(target, false)} = {${initArgs.join(",")}}`)
+            printer.print(`const value: any = {`)
+            printer.pushIndent()
+            resultObjArgs.forEach((value) => {
+                printer.print(`${value},`)
+            })
+            printer.popIndent()
+            printer.print("}")
         } else {
             let typeConvertor = this.typeConvertor("value", target, false)
             typeConvertor.convertorDeserialize("value", "value", printer, Language.TS)
