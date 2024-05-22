@@ -63,55 +63,6 @@ export function runtimeType<T>(value: T): RuntimeType {
 
 export type Function = object
 
-export function withLength(valueLength: Length|undefined, body: (type: int32, value: float32, unit: int32, resource: int32) => void) {
-    let type = runtimeType(valueLength)
-    let value = 0
-    let unit = 1 // vp
-    let resource = 0
-    switch (type) {
-        case RuntimeType.UNDEFINED:
-            value = 0
-            unit = 0
-            break
-        case RuntimeType.NUMBER:
-            // value = valueLength as float32
-            break
-        case RuntimeType.STRING:
-            let valueStr = valueLength as string
-            // TODO: faster parse.
-            if (valueStr.endsWith("vp")) {
-                unit = 1 // vp
-                // value = Number(valueStr.substring(0, valueStr.length - 2))
-            } else if (valueStr.endsWith("%")) {
-                unit = 3 // percent
-                // value = Number(valueStr.substring(0, valueStr.length - 1))
-            } else if (valueStr.endsWith("lpx")) {
-                unit = 4 // lpx
-                // value = Number(valueStr.substring(0, valueStr.length - 3))
-            } else if (valueStr.endsWith("px")) {
-                unit = 0 // px
-                // value = Number(valueStr.substring(0, valueStr.length - 2))
-            }
-            break
-        case RuntimeType.OBJECT:
-            // resource = (valueLength as Resource).id
-            break
-    }
-    body(type as int32, value, unit, resource)
-}
-
-
-export function withLengthArray(valueLength: Length|undefined, body: (valuePtr: Int32Array) => void) {
-    withLength(valueLength, (type: int32, value, unit, resource) => {
-        let array = new Int32Array(4)
-        array[0] = type
-        array[1] = value
-        array[2] = unit
-        array[3] = resource
-        body(array)
-    })
-}
-
 function registerCallback(value: object|undefined): number {
     // TODO: fix me!
     return 42
@@ -277,16 +228,6 @@ export class SerializerBase {
     }
     writeMaterialized(value: object | undefined) {
         this.writePointer(registerMaterialized(value))
-    }
-    writeStringEncoder(value: string) {
-        let encoded = textEncoder.encode(value)
-        let length = encoded.length + 1 // zero-terminated
-        this.checkCapacity(4 + length) // length, data
-        this.view.setInt32(this.position, length, true)
-        this.position += 4
-        new Uint8Array(this.view.buffer, this.position).set(encoded)
-        this.view.setInt8(this.position + length  - 1, 0)
-        this.position += length
     }
     writeString(value: string) {
         this.checkCapacity(4 + value.length * 4) // length, data

@@ -194,5 +194,5 @@ export interface CommonMethod<T> {
     dragPreviewOptions(value: DragPreviewOptions, options?: DragInteractionOptions): this;
 }
 
-export interface CommonAttribute {
+export interface CommonAttribute extends CommonMethod<CommonAttribute> {
 }
