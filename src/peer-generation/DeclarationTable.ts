@@ -901,22 +901,20 @@ export class DeclarationTable {
     }
 
     generateTSDeserializers(printer: LanguageWriter, writeToString: IndentedPrinter) {
-        let seenNames = new Set<string>()
-        printer.print(`export class Deserializer extends DeserializerBase {`)
-        printer.pushIndent()
-        for (const declaration of this.declarations) {
-            if (declaration instanceof PrimitiveType) continue
-            const name = this.computeTargetName(declaration, false)
-            if (seenNames.has(name)) continue
-            seenNames.add(name)
-            if (ts.isInterfaceDeclaration(declaration) || ts.isClassDeclaration(declaration)) {
-                printer.pushIndent()
-                this.generateTSDeserializer(name, declaration, printer)
-                printer.popIndent()
+        printer.writeClass("Deserializer", (writer)=> {
+            let seenNames = new Set<string>()
+            for (const declaration of this.declarations) {
+                if (declaration instanceof PrimitiveType) continue
+                const name = this.computeTargetName(declaration, false)
+                if (seenNames.has(name)) continue
+                seenNames.add(name)
+                if (ts.isInterfaceDeclaration(declaration) || ts.isClassDeclaration(declaration)) {
+                    writer.pushIndent()
+                    this.generateTSDeserializer(name, declaration, writer)
+                    writer.popIndent()
+                }
             }
-        }
-        printer.popIndent()
-        printer.print(`}`)
+        }, "DeserializerBase");
     }
 
     private addNameAlias(target: DeclarationTarget, declarationName: string, aliasName: string,
@@ -1421,7 +1419,7 @@ constructor(expectedSize: int32) {
         return `value_${fieldName}`
     }
 
-    private generateTSDeserializer(name: string, target: DeclarationTarget, printer: LanguageWriter) {
+    private generateTSDeserializer(name: string, target: DeclarationTarget, writer: LanguageWriter) {
         if (this.ignoreTarget(target, name)) return
         this.setCurrentContext(`read${name}()`)
         const body = (writer: LanguageWriter) => {
@@ -1456,7 +1454,7 @@ constructor(expectedSize: int32) {
             }
             writer.print(`return ${resultVarName}`)
         }
-        printer.writeMethodImplementation(new Method(
+        writer.writeMethodImplementation(new Method(
             `read${name}`,
             new NamedMethodSignature(new Type(name))),
             body)
