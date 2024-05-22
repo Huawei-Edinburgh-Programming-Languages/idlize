@@ -21,6 +21,7 @@ export class Type {
     static Void = new Type('void')
     static This = new Type('this')
     static Pointer = new Type('KPointer')
+    static Any = new Type('any')
 }
 
 export enum MethodModifier {
@@ -43,6 +44,18 @@ export class AssignStatement implements LanguageStatement {
             writer.print(`const ${this.variableName}: ${this.type.name} = ${this.expression.asString()}`)
         } else {
             writer.print(`${this.variableName} = ${this.expression.asString()}`)
+        }
+    }
+}
+
+export class DeclareStatement implements LanguageStatement {
+    constructor(public variableName: string, public type: Type,
+                public expression: LanguageExpression|undefined = undefined) { }
+    write(writer: LanguageWriter): void {
+        if (this.expression) {
+            writer.print(`const ${this.variableName}: ${this.type.name} = ${this.expression.asString()}`)
+        } else {
+            writer.print(`let ${this.variableName}: ${this.type.name}`)
         }
     }
 }
@@ -186,7 +199,7 @@ export class MethodSignature {
 }
 
 export class NamedMethodSignature extends MethodSignature {
-    constructor(returnType: Type, args: Type[], public argsNames: string[], defaults: stringOrNone[]|undefined = undefined) {
+    constructor(returnType: Type, args: Type[] = [], public argsNames: string[] = [], defaults: stringOrNone[]|undefined = undefined) {
         super(returnType, args, defaults)
     }
 
