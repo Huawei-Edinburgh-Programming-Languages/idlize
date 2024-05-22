@@ -900,7 +900,7 @@ export class DeclarationTable {
         typedefs.print(`typedef ${PrimitiveType.OptionalPrefix}Ark_Length ${PrimitiveType.OptionalPrefix}Length;`)
     }
 
-    generateTSDeserializers(printer: LanguageWriter, writeToString: IndentedPrinter) {
+    generateTSDeserializers(printer: LanguageWriter) {
         printer.writeClass("Deserializer", (writer)=> {
             let seenNames = new Set<string>()
             for (const declaration of this.declarations) {

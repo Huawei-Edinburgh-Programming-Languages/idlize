@@ -217,14 +217,12 @@ ${deserializer.getOutput().join("\n")}
 
 export function makeTSDeserializer(table: DeclarationTable): string {
     const deserializer = createLanguageWriter(new IndentedPrinter(), Language.TS)
-    const writeToString = new IndentedPrinter()
-    table.generateTSDeserializers(deserializer, writeToString)
+    table.generateTSDeserializers(deserializer)
     return `
-    import { runtimeType, Tags, RuntimeType, Function } from "./SerializerBase"
-    import { DeserializerBase} from "./DeserializerBase"
-    import { int32 } from "@koalaui/common"
-    import { unsafeCast } from "./generated-utils"
-${writeToString.getOutput().join("\n")}
+import { runtimeType, Tags, RuntimeType, Function } from "./SerializerBase"
+import { DeserializerBase} from "./DeserializerBase"
+import { int32 } from "@koalaui/common"
+import { unsafeCast } from "./generated-utils"
 
 ${deserializer.getOutput().join("\n")}
 `
