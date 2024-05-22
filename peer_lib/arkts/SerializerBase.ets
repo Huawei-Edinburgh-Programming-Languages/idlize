@@ -47,16 +47,16 @@ export enum Tags {
     OBJECT = 107,
 }
 
-export function runtimeType(value: object): int32 {
+export function runtimeType<T>(value: T): int {
     let type = typeof value
-    if (type == "number") return RuntimeType.NUMBER as int32
-    if (type == "string") return RuntimeType.STRING as int32
-    if (type == "undefined") return RuntimeType.UNDEFINED as int32
-    if (type == "object") return RuntimeType.OBJECT as int32
-    if (type == "boolean") return RuntimeType.BOOLEAN as int32
-    if (type == "bigint") return RuntimeType.BIGINT as int32
-    if (type == "function") return RuntimeType.FUNCTION as int32
-    if (type == "symbol") return RuntimeType.SYMBOL as int32
+    if (type == "number") return RuntimeType.NUMBER as int
+    if (type == "string") return RuntimeType.STRING as int
+    if (type == "undefined") return RuntimeType.UNDEFINED as int
+    if (type == "object") return RuntimeType.OBJECT as int
+    if (type == "boolean") return RuntimeType.BOOLEAN as int
+    if (type == "bigint") return RuntimeType.BIGINT as int
+    if (type == "function") return RuntimeType.FUNCTION as int
+    if (type == "symbol") return RuntimeType.SYMBOL as int
 
     throw new Error(`bug: ${value} is ${type}`)
 }
@@ -69,32 +69,32 @@ export function withLength(valueLength: Length|undefined, body: (value: float32,
     let unit = 1 // vp
     let resource = 0
     switch (type) {
-        case RuntimeType.UNDEFINED:
+        case 5:
             value = 0
             unit = 0
             break
-        case RuntimeType.NUMBER:
-            value = valueLength as float32
+        case 1:
+            // value = valueLength as float32
             break
-        case RuntimeType.STRING:
+        case 2:
             let valueStr = valueLength as string
             // TODO: faster parse.
             if (valueStr.endsWith("vp")) {
                 unit = 1 // vp
-                value = Number(valueStr.substring(0, valueStr.length - 2))
+                // value = Number(valueStr.substring(0, valueStr.length - 2))
             } else if (valueStr.endsWith("%")) {
                 unit = 3 // percent
-                value = Number(valueStr.substring(0, valueStr.length - 1))
+                // value = Number(valueStr.substring(0, valueStr.length - 1))
             } else if (valueStr.endsWith("lpx")) {
                 unit = 4 // lpx
-                value = Number(valueStr.substring(0, valueStr.length - 3))
+                // value = Number(valueStr.substring(0, valueStr.length - 3))
             } else if (valueStr.endsWith("px")) {
                 unit = 0 // px
-                value = Number(valueStr.substring(0, valueStr.length - 2))
+                // value = Number(valueStr.substring(0, valueStr.length - 2))
             }
             break
-        case RuntimeType.OBJECT:
-            resource = (valueLength as Resource).id
+        case 3:
+            // resource = (valueLength as Resource).id
             break
     }
     body(value, unit, resource)
@@ -177,9 +177,10 @@ export class SerializerBase {
         if (SerializerBase.customSerializers == undefined) {
             SerializerBase.customSerializers = serializer
         } else {
-            let current = SerializerBase.customSerializers
+            /* let current = SerializerBase.customSerializers
             while (current.next != undefined) { current = current.next }
             current.next = serializer
+            */
         }
     }
     constructor(expectedSize: int32) {
@@ -204,39 +205,43 @@ export class SerializerBase {
         if (this.position > buffSize - value) {
             const minSize = this.position + value
             const resizedSize = Math.max(minSize, Math.round(3 * buffSize / 2))
+            /*
             let resizedBuffer = SerializerBase.bufferCache.get(resizedSize)
             // TODO: can we grow without new?
             new Uint8Array(resizedBuffer).set(new Uint8Array(this.buffer))
             SerializerBase.bufferCache.release(this.buffer)
             this.buffer = resizedBuffer
             this.view = new DataView(resizedBuffer)
+            */
         }
     }
     writeCustomObject(kind: string, value: object) {
         let current = SerializerBase.customSerializers
+        /*
         while (current) {
             if (current.supports(kind)) {
                 current.serialize(this, value, kind)
                 return
             }
         }
+        */
         console.log(`Unsupported custom serialization for ${kind}, write undefined`)
-        this.writeInt8(Tags.UNDEFINED)
+        this.writeInt8(Tags.UNDEFINED as int)
     }
     writeNumber(value: number|undefined) {
         this.checkCapacity(5)
         if (value == undefined) {
-            this.view.setInt8(this.position, Tags.UNDEFINED)
+            this.view.setInt8(this.position, Tags.UNDEFINED as int)
             this.position++
             return
         }
         if (value == Math.round(value)) {
-            this.view.setInt8(this.position, Tags.INT32)
+            this.view.setInt8(this.position, Tags.INT32 as int)
             this.view.setInt32(this.position + 1, value, true)
             this.position += 5
             return
         }
-        this.view.setInt8(this.position, Tags.FLOAT32)
+        this.view.setInt8(this.position, Tags.FLOAT32 as int)
         this.view.setFloat32(this.position + 1, value, true)
         this.position += 5
     }
@@ -252,7 +257,7 @@ export class SerializerBase {
     }
     writePointer(value: pointer) {
         this.checkCapacity(8)
-        this.view.setBigInt64(this.position, BigInt(value), true)
+        this.view.setBigInt64(this.position, value, true)
         this.position += 8
     }
     writeFloat32(value: float32) {
@@ -262,14 +267,14 @@ export class SerializerBase {
     }
     writeBoolean(value: boolean|undefined) {
         this.checkCapacity(1)
-        this.view.setInt8(this.position, value == undefined ? RuntimeType.UNDEFINED : +value)
+        // this.view.setInt8(this.position, value == undefined ? RuntimeType.UNDEFINED as int : +value)
         this.position++
     }
     writeFunction(value: object | undefined) {
-        this.writeInt32(registerCallback(value))
+        // this.writeInt32(registerCallback(value))
     }
     writeMaterialized(value: object | undefined) {
-        this.writeInt32(registerMaterialized(value))
+        // this.writeInt32(registerMaterialized(value))
     }
     writeString(value: string) {
         // let encoded = textEncoder.encode(value)
@@ -285,8 +290,8 @@ export class SerializerBase {
     writeLength(value: Length|undefined) {
         this.checkCapacity(1)
         let valueType = runtimeType(value)
-        this.writeInt8(valueType == RuntimeType.UNDEFINED ? Tags.UNDEFINED : Tags.LENGTH)
-        if (valueType != RuntimeType.UNDEFINED) {
+        // this.writeInt8(valueType == RuntimeType.UNDEFINED ? Tags.UNDEFINED : Tags.LENGTH)
+        if (valueType != RuntimeType.UNDEFINED as int) {
             withLength(value, (value, unit, resource) => {
                 this.writeFloat32(value)
                 this.writeInt32(unit)

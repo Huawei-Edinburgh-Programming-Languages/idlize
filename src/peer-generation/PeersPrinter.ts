@@ -44,7 +44,8 @@ class PeerFileVisitor {
     readonly printer: LanguageWriter = createLanguageWriter(new IndentedPrinter(), this.file.declarationTable.language)
 
     // Temporary, until other languages supported.
-    private isTs = this.file.declarationTable.language == Language.TS || Language.ARKTS
+    private isTs = this.file.declarationTable.language == Language.TS
+    private isArkTs = this.file.declarationTable.language == Language.ARKTS
 
     constructor(
         private readonly library: PeerLibrary,
@@ -95,7 +96,7 @@ class PeerFileVisitor {
     }
 
     private printAttributes(peer: PeerClass) {
-        if (!this.isTs) return
+        if (!(this.isTs||this.isArkTs)) return
         for (const attributeType of peer.attributesTypes)
             this.printer.print(attributeType)
 
@@ -113,7 +114,7 @@ class PeerFileVisitor {
         const isNode = parentRole !== InheritanceRole.Finalizable
         const signature = new NamedMethodSignature(
             Type.Void,
-            [new Type(this.isTs ? 'ArkUINodeType' : 'int', !isNode), new Type('ArkCommon', true), new Type('int32')],
+            [new Type(this.isArkTs ? 'int' : 'ArkUINodeType', !isNode), new Type('ArkCommon', true), new Type('int32')],
             ['type', 'component', 'flags'],
             [undefined, undefined, '0'])
 
@@ -136,7 +137,7 @@ class PeerFileVisitor {
     }
 
     private printApplyMethod(peer: PeerClass) {
-        if (!this.isTs) return
+        if (!(this.isTs||this.isArkTs)) return
         const name = peer.originalClassName!
         const typeParam = componentToAttributesClass(peer.componentName)
         if (isRoot(name)) {
@@ -181,12 +182,12 @@ class PeerFileVisitor {
     }
 
     private printEnums(peerFile: PeerFile) {
-        if (!this.isTs) return
+        if (!(this.isTs||this.isArkTs)) return
         peerFile.enums.forEach(it => this.printEnum(it))
     }
 
     private printAssignEnumsToGlobalScope(peerFile: PeerFile) {
-        if (!this.isTs) return
+        if (!(this.isTs||this.isArkTs)) return
         if (peerFile.enums.length != 0) {
             this.printer.print(`Object.assign(globalThis, {`)
             this.printer.pushIndent()
