@@ -20,8 +20,26 @@ import { PeerClass } from "./PeerClass";
 import { PeerLibrary } from "./PeerLibrary";
 import { PeerMethod } from "./PeerMethod";
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
-import { CallbackInfo, collectCallbacks } from "./EventsPrinter";
-import { PrimitiveType } from "./DeclarationTable";
+import { CallbackInfo, collectCallbacks, groupCallbacks } from "./EventsPrinter";
+import { DeclarationTable, PrimitiveType } from "./DeclarationTable";
+import { NamedMethodSignature, Type } from "./LanguageWriters";
+
+export function generateEventReceiverName(componentName: string) {
+    return `${PeerGeneratorConfig.cppPrefix}ArkUI${componentName}EventsReceiver`
+}
+
+export function generateEventSignature(table: DeclarationTable, event: CallbackInfo): NamedMethodSignature {
+    const nodeType = new Type(table.uniqueName(PrimitiveType.Int32))
+    const argsTypes = event.args.map(it => new Type(
+        'const ' + table.typeConvertor(it.name, it.type, it.nullable).nativeType(false),
+        it.nullable,
+    ))
+    return new NamedMethodSignature(
+        new Type('void'),
+        [nodeType, ...argsTypes],
+        ['nodeId', ...event.args.map(it => it.name)]
+    )
+}
 
 class HeaderVisitor {
     constructor(
@@ -93,49 +111,30 @@ class HeaderVisitor {
         }
     }
 
-    private groupEvents(callbacks: CallbackInfo[]): Map<string, CallbackInfo[]> {
-        const receiverToCallbacks = new Map<string, CallbackInfo[]>()
-        for (const callback of callbacks) {
-            if (!receiverToCallbacks.has(callback.componentName))
-                receiverToCallbacks.set(callback.componentName, [callback])
-            else
-                receiverToCallbacks.get(callback.componentName)!.push(callback)
-        }
-        return receiverToCallbacks
-    }
-
-    private generateReceiverName(componentName: string) {
-        return `${PeerGeneratorConfig.cppPrefix}ArkUI${componentName}EventsReceiver`
-    }
-
     private printEventsReceiver(componentName: string, callbacks: CallbackInfo[]) {
-        const receiver = this.generateReceiverName(componentName)
+        const receiver = generateEventReceiverName(componentName)
         this.api.print(`typedef struct ${receiver} {`)
         this.api.pushIndent()
-        const table = this.library.declarationTable
         for (const callback of callbacks) {
-            const callbackArgs = callback.args
-                .map(it => {
-                    const conv = table.typeConvertor(it.name, it.type, it.nullable)
-                    return `const ${conv.nativeType(false)} ${it.name}`
-                })
-            const nodeArg = `${table.uniqueName(PrimitiveType.Int32)} nodeId`
-            const maybeComma = callbackArgs.length ? ', ' : ''
-            this.api.print(`void (*${callback.methodName})(${nodeArg}${maybeComma}${callbackArgs.join(", ")});`)
+            const signature = generateEventSignature(this.library.declarationTable, callback)
+            const args = signature.args.map((type, index) => {
+                return `${type.name} ${signature.argName(index)}`
+            })
+            this.api.print(`${signature.returnType.name} (*${callback.methodName})(${args.join(',')});`)
         }
         this.api.popIndent()
         this.api.print(`} ${receiver};\n`)
     }
 
     private printEvents() {
-        const callbacks = this.groupEvents(collectCallbacks(this.library))
+        const callbacks = groupCallbacks(collectCallbacks(this.library))
         for (const [receiver, events] of callbacks) {
             this.printEventsReceiver(receiver, events)
         }
 
         this.eventsList.pushIndent()
         for (const [receiver, _] of callbacks) {
-            this.eventsList.print(`${this.generateReceiverName(receiver)} (*get${receiver}EventsReceiver)();`)
+            this.eventsList.print(`const ${generateEventReceiverName(receiver)}* (*get${receiver}EventsReceiver)();`)
         }
         this.eventsList.popIndent()
     }

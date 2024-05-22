@@ -2,11 +2,13 @@ import * as ts from "typescript"
 import { IndentedPrinter } from "../IndentedPrinter"
 import { ArgConvertor, FunctionConvertor } from "./Convertors"
 import { DeclarationTable, PrimitiveType } from "./DeclarationTable"
-import { LanguageWriter, Method, MethodModifier, NamedMethodSignature, StringExpression, TSLanguageWriter, Type } from "./LanguageWriters"
+import { CppLanguageWriter, LanguageWriter, Method, MethodModifier, NamedMethodSignature, StringExpression, TSLanguageWriter, Type } from "./LanguageWriters"
 import { PeerClass } from "./PeerClass"
 import { PeerLibrary } from "./PeerLibrary"
 import { PeerMethod } from "./PeerMethod"
-import { makePeerEvents } from "./FileGenerators"
+import { makeCEventsImpl, makePeerEvents } from "./FileGenerators"
+import { generateEventReceiverName, generateEventSignature } from "./HeaderPrinter"
+import { generate } from "../idlize"
 
 export const PeerEventKind = "PeerEventKind"
 const PeerNodeType = new Type('number')
@@ -26,11 +28,35 @@ function tempGenerateDeserializer(varName: string, type: ts.TypeNode) {
     }
 }
 
+function tempGenerateSerializer(varName: string, valueName: string, type: ts.TypeNode) {
+    // TODO here is ArgConvertors should do their work
+    switch (type.getText()) {
+        case "number":
+            return `${varName}.writeNumber(${valueName});`
+        case "string":
+            return `${varName}.writeString(${valueName});`
+        default:
+            console.log(type.getText())
+            throw new Error(`Not implemented`)
+    }
+}
+
 export type CallbackInfo = {
     componentName: string,
     methodName: string,
     args: {name: string, type: ts.TypeNode, nullable: boolean}[],
     returnTarget: ts.TypeNode,
+}
+
+export function groupCallbacks(callbacks: CallbackInfo[]): Map<string, CallbackInfo[]> {
+    const receiverToCallbacks = new Map<string, CallbackInfo[]>()
+    for (const callback of callbacks) {
+        if (!receiverToCallbacks.has(callback.componentName))
+            receiverToCallbacks.set(callback.componentName, [callback])
+        else
+            receiverToCallbacks.get(callback.componentName)!.push(callback)
+    }
+    return receiverToCallbacks
 }
 
 export function collectCallbacks(library: PeerLibrary): CallbackInfo[] {
@@ -77,9 +103,81 @@ export function callbackEventNameByInfo(info: CallbackInfo): string {
     return `${callbackIdByInfo(info)}_event`
 }
 
-class EventsVisitor {
-    readonly writer: LanguageWriter = new TSLanguageWriter(new IndentedPrinter())
-    readonly eventsWriter: LanguageWriter = new TSLanguageWriter(new IndentedPrinter())
+class CEventsVisitor {
+    readonly impl: LanguageWriter = new CppLanguageWriter(new IndentedPrinter())
+    readonly receiversList: LanguageWriter = new CppLanguageWriter(new IndentedPrinter())
+
+    constructor(
+        private readonly library: PeerLibrary,
+    ) {}
+
+    private printEventsKinds(callbacks: CallbackInfo[]) {
+        this.impl.print(`enum ${PeerEventKind} {`)
+        this.impl.pushIndent()
+        callbacks.forEach((callback, index) => {
+            this.impl.print(`Kind${callbackIdByInfo(callback)} = ${index},`)
+        })
+        this.impl.popIndent()
+        this.impl.print('};\n')
+    }
+
+    private printEventImpl(event: CallbackInfo) {
+        const signature = generateEventSignature(this.library.declarationTable, event)
+        const args = signature.args.map((type, index) => {
+            return `${type.name} ${signature.argName(index)}`
+        })
+        this.impl.print(`${signature.returnType.name} ${callbackIdByInfo(event)}Impl(${args.join(',')}) {`)
+        this.impl.pushIndent()
+        this.impl.print(`EventBuffer event;`)
+        this.impl.print(`ArgSerializerBase serializer(event.buffer);`)
+        this.impl.print(`serializer.writeInt32(Kind${callbackIdByInfo(event)});`)
+        this.impl.print(`serializer.writeInt32(nodeId);`)
+        for (const arg of event.args) {
+            this.impl.print(tempGenerateSerializer('serializer', arg.name, arg.type))
+        }
+        this.impl.print(`sendEvent(&event);`)
+        this.impl.popIndent()
+        this.impl.print('}')
+    }
+
+    private printReceiver(componentName: string, callbacks: CallbackInfo[]) {
+        const receiver = generateEventReceiverName(componentName)
+        this.impl.print(`${receiver} ${receiver}Impl {`)
+        this.impl.pushIndent()
+        for (const callback of callbacks) {
+            this.impl.print(`${callbackIdByInfo(callback)}Impl,`)
+        }
+        this.impl.popIndent()
+        this.impl.print(`};\n`)
+        this.impl.print(`const ${receiver}* Get${componentName}EventsReceiver() { return &${receiver}Impl; }`)
+    }
+
+    private printReceiversList(callbacks: Map<string, CallbackInfo[]>) {
+        this.receiversList.pushIndent()
+        for (const componentName of callbacks.keys()) {
+            this.receiversList.print(`Get${componentName}EventsReceiver,`)
+        }
+        this.receiversList.popIndent()
+    }
+
+    print() {
+        const listedCallbacks = collectCallbacks(this.library)
+        const groupedCallbacks = groupCallbacks(listedCallbacks)
+        this.printEventsKinds(listedCallbacks)
+        for (const [_, callbacks] of groupedCallbacks) {
+            for (const callback of callbacks) {
+                this.printEventImpl(callback)
+            }
+        }
+        for (const [name, callbacks] of groupedCallbacks) {
+            this.printReceiver(name, callbacks)
+        }
+        this.printReceiversList(groupedCallbacks)
+    }
+}
+
+class TSEventsVisitor {
+    readonly printer: LanguageWriter = new TSLanguageWriter(new IndentedPrinter())
 
     constructor(
         private readonly library: PeerLibrary,
@@ -88,7 +186,7 @@ class EventsVisitor {
     private printEventsClasses(infos: CallbackInfo[]) {
         for (const info of infos) {
             const eventClassName = callbackEventNameByInfo(info)
-            this.eventsWriter.writeClass(eventClassName, (writer) => {
+            this.printer.writeClass(eventClassName, (writer) => {
                 const constructorSignature = new NamedMethodSignature(
                     Type.Void,
                     [PeerNodeType, ...info.args.map(it => new Type(it.type.getText(), it.nullable))],
@@ -128,51 +226,51 @@ class EventsVisitor {
     }
 
     private printEventsEnum(infos: CallbackInfo[]) {
-        this.eventsWriter.print(`enum ${PeerEventKind} {`)
-        this.eventsWriter.pushIndent()
+        this.printer.print(`enum ${PeerEventKind} {`)
+        this.printer.pushIndent()
 
         infos.forEach((value, index) => {
-            this.eventsWriter.print(`${callbackIdByInfo(value)} = ${index},`)
+            this.printer.print(`${callbackIdByInfo(value)} = ${index},`)
         })
 
-        this.eventsWriter.popIndent()
-        this.eventsWriter.print(`}`)
+        this.printer.popIndent()
+        this.printer.print(`}`)
     }
 
     private printNameByKindRetriever(infos: CallbackInfo[]) {
-        this.eventsWriter.print(`export function getEventNameByKind(kind: ${PeerEventKind}): string {`)
-        this.eventsWriter.pushIndent()
-        this.eventsWriter.print(`switch (kind) {`)
-        this.eventsWriter.pushIndent()
+        this.printer.print(`export function getEventNameByKind(kind: ${PeerEventKind}): string {`)
+        this.printer.pushIndent()
+        this.printer.print(`switch (kind) {`)
+        this.printer.pushIndent()
         for (const info of infos) {
-            this.eventsWriter.print(`case ${PeerEventKind}.${callbackIdByInfo(info)}: return "${info.methodName}"`)
+            this.printer.print(`case ${PeerEventKind}.${callbackIdByInfo(info)}: return "${info.methodName}"`)
         }
-        this.eventsWriter.popIndent()
-        this.eventsWriter.print('}')
-        this.eventsWriter.popIndent()
-        this.eventsWriter.print('}')
+        this.printer.popIndent()
+        this.printer.print('}')
+        this.printer.popIndent()
+        this.printer.print('}')
     }
 
     private printParseFunction(infos: CallbackInfo[]) {
-        this.eventsWriter.print(`export function deserializePeerEvent(buffer: DeserializerBase): PeerEvent {`)
-        this.eventsWriter.pushIndent()
-        this.eventsWriter.writeStatement(this.eventsWriter.makeAssign(
+        this.printer.print(`export function deserializePeerEvent(buffer: DeserializerBase): PeerEvent {`)
+        this.printer.pushIndent()
+        this.printer.writeStatement(this.printer.makeAssign(
             'kind', 
             new Type(PeerEventKind), 
             new StringExpression(`buffer.readInt32()`),
             true,
         ))
 
-        this.eventsWriter.print(`switch (kind) {`)
-        this.eventsWriter.pushIndent()
+        this.printer.print(`switch (kind) {`)
+        this.printer.pushIndent()
         for (const info of infos) {
-            this.eventsWriter.print(`case ${PeerEventKind}.${callbackIdByInfo(info)}: return ${callbackEventNameByInfo(info)}.deserialize(buffer)`)
+            this.printer.print(`case ${PeerEventKind}.${callbackIdByInfo(info)}: return ${callbackEventNameByInfo(info)}.deserialize(buffer)`)
         }
-        this.eventsWriter.popIndent()
-        this.eventsWriter.print('}')
+        this.printer.popIndent()
+        this.printer.print('}')
 
-        this.eventsWriter.popIndent()
-        this.eventsWriter.print('}')
+        this.printer.popIndent()
+        this.printer.print('}')
     }
 
     private printProperties(infos: CallbackInfo[]) {
@@ -181,7 +279,7 @@ class EventsVisitor {
                 return 'void'
             return type.getText()
         }
-        this.eventsWriter.writeInterface('PeerEventsProperties', writer => {
+        this.printer.writeInterface('PeerEventsProperties', writer => {
             for (const info of infos) {
                 const signature = new NamedMethodSignature(
                     new Type('void'),
@@ -204,7 +302,16 @@ class EventsVisitor {
 }
 
 export function printEvents(library: PeerLibrary): string {
-    const visitor = new EventsVisitor(library)
+    const visitor = new TSEventsVisitor(library)
     visitor.print()
-    return makePeerEvents(visitor.eventsWriter.getOutput().join("\n"))
+    return makePeerEvents(visitor.printer.getOutput().join("\n"))
+}
+
+export function printEventsCImpl(library: PeerLibrary): string {
+    const visitor = new CEventsVisitor(library)
+    visitor.print()
+    return makeCEventsImpl(
+        visitor.impl.getOutput().join('\n'), 
+        visitor.receiversList.getOutput().join('\n')
+    )
 }

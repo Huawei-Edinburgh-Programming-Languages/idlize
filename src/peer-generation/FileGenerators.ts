@@ -106,6 +106,16 @@ ${lines}
 `
 }
 
+export function completeEventsImplementations(lines: string): string {
+    return `
+#include "arkoala_api.h"
+#include "events.h"
+#include "ArgSerializerBase.h"
+
+${lines}
+`
+}
+
 export function completeDelegatesImpl(lines: string): string {
     return `
 #include "Deserializer.h"
@@ -410,5 +420,21 @@ class PeerEvent {
 }
 
 ${data}
+`
+}
+
+export function makeCEventsImpl(implData: string, receiversList: string): string {
+    return `
+${implData}
+
+const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI eventsImpl = {
+  1, // version
+${receiversList}
+};
+
+extern const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI* GetArkUiEventsAPI()
+{
+    return &eventsImpl;
+}
 `
 }
