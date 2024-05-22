@@ -1,14 +1,13 @@
 import * as ts from "typescript"
 import { IndentedPrinter } from "../IndentedPrinter"
-import { ArgConvertor, FunctionConvertor } from "./Convertors"
-import { DeclarationTable, PrimitiveType } from "./DeclarationTable"
+import { DeclarationTable, DeclarationTarget, PrimitiveType } from "./DeclarationTable"
 import { CppLanguageWriter, LanguageWriter, Method, MethodModifier, NamedMethodSignature, StringExpression, TSLanguageWriter, Type } from "./LanguageWriters"
 import { PeerClass } from "./PeerClass"
 import { PeerLibrary } from "./PeerLibrary"
 import { PeerMethod } from "./PeerMethod"
 import { makeCEventsImpl, makePeerEvents } from "./FileGenerators"
 import { generateEventReceiverName, generateEventSignature } from "./HeaderPrinter"
-import { generate } from "../idlize"
+import { asString, identName } from "../util"
 
 export const PeerEventKind = "PeerEventKind"
 const PeerNodeType = new Type('number')
@@ -45,7 +44,7 @@ export type CallbackInfo = {
     componentName: string,
     methodName: string,
     args: {name: string, type: ts.TypeNode, nullable: boolean}[],
-    returnTarget: ts.TypeNode,
+    returnType: ts.TypeNode,
 }
 
 export function groupCallbacks(callbacks: CallbackInfo[]): Map<string, CallbackInfo[]> {
@@ -64,8 +63,8 @@ export function collectCallbacks(library: PeerLibrary): CallbackInfo[] {
     for (const file of library.files) {
         for (const peer of file.peers.values()) {
             for (const method of peer.methods) {
-                for (const conv of method.argConvertors) {
-                    const info = convertToCallback(peer, method, conv)
+                for (const target of method.declarationTargets) {
+                    const info = convertToCallback(peer, method, target)
                     if (info && canProcessCallback(library.declarationTable, info))
                         callbacks.push(info)
                 }
@@ -82,17 +81,27 @@ export function canProcessCallback(declarationTable: DeclarationTable, callback:
     })
 }
 
-export function convertToCallback(peer: PeerClass, method: PeerMethod, conv: ArgConvertor): CallbackInfo | undefined {
-    if (method.method.modifiers?.includes(MethodModifier.STATIC))
-        return
-    if (!(conv instanceof FunctionConvertor))
-        return
-    return {
-        componentName: peer.componentName,
-        methodName: method.method.name,
-        args: conv.args,
-        returnTarget: conv.returnType,
-    }
+export function convertToCallback(peer: PeerClass, method: PeerMethod, target: DeclarationTarget): CallbackInfo | undefined {
+    if (target instanceof PrimitiveType)
+        return undefined
+    if (ts.isFunctionTypeNode(target))
+        return {
+            componentName: peer.componentName,
+            methodName: method.method.name,
+            args: target.parameters.map(it => {return {
+                name: asString(it.name),
+                type: it.type!,
+                nullable: !!it.questionToken
+            }}),
+            returnType: target.type,
+        }
+    if (ts.isTypeReferenceNode(target) && identName(target.typeName) === "Callback")
+        return {
+            componentName: peer.componentName,
+            methodName: method.method.name,
+            args: [{name: 'data', type: target.typeArguments![0], nullable: false}],
+            returnType: target.typeArguments![1] ?? ts.factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword)
+        }
 }
 
 export function callbackIdByInfo(info: CallbackInfo): string {

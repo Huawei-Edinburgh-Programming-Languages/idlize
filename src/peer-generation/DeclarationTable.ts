@@ -538,8 +538,7 @@ export class DeclarationTable {
         }
         if (ts.isImportTypeNode(type)) {
             if (identName(type.qualifier) === "Callback") {
-                const args = [{name: 'data', type: type.typeArguments![0], nullable: false}]
-                return new FunctionConvertor(param, this, args, type.typeArguments![1] ?? ts.factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword))
+                return new FunctionConvertor(param, this)
             }
             return new ImportTypeConvertor(param, this, type)
         }
@@ -572,12 +571,7 @@ export class DeclarationTable {
             return new TupleConvertor(param, this, type)
         }
         if (ts.isFunctionTypeNode(type)) {
-            const args = type.parameters.map(it => {return {
-                name: asString(it.name),
-                type: it.type!,
-                nullable: !!it.questionToken
-            }})
-            return new FunctionConvertor(param, this, args, type.type)
+            return new FunctionConvertor(param, this)
         }
         if (ts.isParenthesizedTypeNode(type)) {
             return this.typeConvertor(param, type.type)
@@ -642,8 +636,7 @@ export class DeclarationTable {
             case `Map`:
                 return new MapConvertor(param, this, type, type.typeArguments![0], type.typeArguments![1])
             case `Callback`:
-                const args = [{name: 'data', type: type.typeArguments![0], nullable: false}]
-                return new FunctionConvertor(param, this, args, type.typeArguments![1] ?? ts.factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword))
+                return new FunctionConvertor(param, this)
             case `Optional`:
                 if (type.typeArguments && type.typeArguments.length == 1)
                     return new OptionConvertor(param, this, type.typeArguments![0])
