@@ -271,6 +271,7 @@ export class SerializerBase {
         // this.view.setInt8(this.position, value == undefined ? RuntimeType.UNDEFINED : +value)
         this.position++
     }
+    /*
     writeFunction(value: object | undefined) {
         this.writeInt32(registerCallback(value))
     }
@@ -308,4 +309,5 @@ export class SerializerBase {
             })
         }
     }
+    */
 }

@@ -920,7 +920,9 @@ export class DeclarationTable {
         printer.print(`export class Serializer extends SerializerBase {`)
         printer.pushIndent()
         if(printer.language == Language.ARKTS) {
+            printer.pushIndent()
             printer.print(`constructor(expectedSize: int32) { super(expectedSize) }`)
+            printer.popIndent()
         }
         for (let declaration of this.declarations) {
             let name = this.computeTargetName(declaration, false)
