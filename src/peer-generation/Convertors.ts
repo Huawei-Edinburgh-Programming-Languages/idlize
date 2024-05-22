@@ -16,7 +16,7 @@ import { Language, identName, importTypeName, mapType, typeName } from "../util"
 import { DeclarationTable, PrimitiveType } from "./DeclarationTable"
 import { RuntimeType } from "./PeerGeneratorVisitor"
 import * as ts from "typescript"
-import { LanguageExpression, LanguageStatement, LanguageWriter } from "./LanguageWriters"
+import { LanguageExpression, LanguageStatement, LanguageWriter, StatementFromFunction, Type } from "./LanguageWriters"
 
 let uniqueCounter = 0
 
@@ -489,14 +489,13 @@ export class OptionConvertor extends BaseArgConvertor {
             printer.print(`}`)
         } else if (lang == Language.TS) {
             const varTypeName = `${value.replaceAll(".", "_")}_type`
-            printer.print(`const ${varTypeName} = runtimeType(${param}Deserializer.readInt8())`)
-            printer.print(`if (${varTypeName} != RuntimeType.UNDEFINED) {`)
-            printer.pushIndent()
-            this.typeConvertor.convertorDeserialize(param, value, printer, lang)
-            printer.popIndent()
-            printer.print(`}`)
-        } else {
-            throw new Error("Unimplemented")
+            printer.writeStatement(printer.makeAssign(varTypeName,
+                new Type("int32"),
+                printer.makeString(`runtimeType(${param}Deserializer.readInt8())`), true))
+            printer.writeStatement(printer.makeCondition(printer.makeString(`${varTypeName} != RuntimeType.UNDEFINED`),
+                new StatementFromFunction((writer) =>
+                    this.typeConvertor.convertorDeserialize(param, value, writer, lang)
+                )))
         }
     }
     nativeType(impl: boolean): string {

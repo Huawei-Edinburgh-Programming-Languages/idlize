@@ -164,6 +164,17 @@ export class IfStatement implements LanguageStatement {
     }
 }
 
+export class StatementFromFunction implements LanguageStatement {
+    constructor(private readonly op: (writer: LanguageWriter) => void) { }
+    write(writer: LanguageWriter): void {
+        writer.print("{")
+        writer.pushIndent()
+        this.op(writer)
+        writer.popIndent()
+        writer.print("}")
+    }
+}
+
 export class TernaryExpression implements LanguageExpression {
     constructor(public condition: LanguageExpression,
         public trueExpression: LanguageExpression,
