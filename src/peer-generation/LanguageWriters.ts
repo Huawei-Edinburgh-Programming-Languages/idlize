@@ -239,6 +239,8 @@ export abstract class LanguageWriter {
     abstract writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void): void
     abstract writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void): void
 
+    abstract makeTestNotUndef(expr: LanguageExpression): LanguageExpression
+
     writeSuperCall(params: string[]): void {
         this.printer.print(`super(${params.join(", ")});`)
     }
@@ -367,6 +369,9 @@ export class TSLanguageWriter extends LanguageWriter {
     mapType(type: Type): string {
         return `${type.name}`
     }
+    makeTestNotUndef(expr: LanguageExpression): LanguageExpression {
+        return this.makeString(`${expr.asString()} != RuntimeType.UNDEFINED`);
+    }
 }
 
 export class ETSLanguageWriter extends TSLanguageWriter {
@@ -464,6 +469,10 @@ export class JavaLanguageWriter extends LanguageWriter {
         }
         return super.mapType(type)
     }
+
+    makeTestNotUndef(expr: LanguageExpression): LanguageExpression {
+        throw new Error("Method not implemented.")
+    }
 }
 
 export class CppLanguageWriter extends LanguageWriter {
@@ -507,6 +516,10 @@ export class CppLanguageWriter extends LanguageWriter {
     }
     writePrintLog(message: string): void {
         throw new Error("Method not implemented.")
+    }
+
+    makeTestNotUndef(expr: LanguageExpression): LanguageExpression {
+        return this.makeString(`${expr.asString()} != ARK_TAG_UNDEFINED`);
     }
 }
 

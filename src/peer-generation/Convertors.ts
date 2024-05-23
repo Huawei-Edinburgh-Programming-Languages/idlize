@@ -16,7 +16,7 @@ import { Language, identName, importTypeName, mapType, typeName } from "../util"
 import { DeclarationTable, PrimitiveType } from "./DeclarationTable"
 import { RuntimeType } from "./PeerGeneratorVisitor"
 import * as ts from "typescript"
-import { LanguageExpression, LanguageStatement, LanguageWriter } from "./LanguageWriters"
+import { BlockStatement, DeclareStatement, LanguageExpression, LanguageStatement, LanguageWriter, Type } from "./LanguageWriters"
 
 let uniqueCounter = 0
 
@@ -668,25 +668,30 @@ export class TupleConvertor extends BaseArgConvertor {
         printer.print(`}`)
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
-        if (language == Language.TS) {
-            printer.print(`const ${value}_type = runtimeType(${param}Deserializer.readInt8())`)
-            printer.print(`if (${value}_type != RuntimeType.UNDEFINED) {`)
-            printer.pushIndent()
-            printer.print(`${value} = []`)
-            this.memberConvertors.forEach((it, index) => {
-                printer.print(`let value${index}: any`)
-                it.convertorDeserialize(param, `value${index}`, printer, language)
-                printer.print(`if (value${index}) ${value}.push(value${index})`)
-            })
-        } else if (language == Language.CPP) {
-            printer.print(`if (${param}Deserializer.readInt8() != ${PrimitiveType.UndefinedRuntime}) {`) // TODO: `else value = nullptr` ?
-            printer.pushIndent()
-            this.memberConvertors.forEach((it, index) => {
-                it.convertorDeserialize(param, `${value}.value${index}`, printer, Language.CPP)
-            })
+        let block: BlockStatement
+        if (language == Language.CPP) {
+            block = new BlockStatement([
+                printer.makeStatementFromOp(writer => {
+                    this.memberConvertors.forEach((it, index) => {
+                        it.convertorDeserialize(param, `${value}.value${index}`, writer, language)
+                    })
+                })
+            ])
+        } else if (language == Language.TS) {
+            block = new BlockStatement([
+                printer.makeAssign(value, undefined, printer.makeString("[]"), false),
+                printer.makeStatementFromOp(writer => {
+                    this.memberConvertors.forEach((it, index) => {
+                        writer.writeStatement(new DeclareStatement(`value${index}`, Type.Any))
+                        it.convertorDeserialize(param, `value${index}`, writer, language)
+                        writer.writeStatement(writer.makeStatementFromOp(writer => writer.print(`${value}.push(value${index})`)))
+                    })
+                })
+            ])
         }
-        printer.popIndent()
-        printer.print(`}`)
+        printer.writeStatement(printer.makeCondition(
+            printer.makeTestNotUndef(printer.makeString(`${param}Deserializer.readInt8()`)),
+            block!))
     }
     nativeType(impl: boolean): string {
         return impl
