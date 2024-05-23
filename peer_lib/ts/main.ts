@@ -26,6 +26,7 @@ import { ArkTabContentPeer } from "@arkoala/arkui/ArkTabContentPeer"
 import { SubTabBarStyle } from "@arkoala/arkui/ArkSubTabBarStyleMaterialized"
 import { ArkUINodeType } from "@arkoala/arkui/ArkUINodeType"
 import { startPerformanceTest } from "@arkoala/arkui/test_performance"
+import { testString1000 } from "@arkoala/arkui/test_data"
 
 import {
     getNativeLog,
@@ -36,7 +37,8 @@ import {
     startNativeLog,
     CALL_GROUP_LOG,
     stopNativeLog,
-    TEST_GROUP_LOG
+    TEST_GROUP_LOG,
+    assertEquals
 } from "./test_utils"
 import { nativeModule } from "@arkoala/arkui//NativeModule"
 
@@ -52,7 +54,7 @@ if (!reportTestFailures) {
 
 function checkSerdeResult(name: string, value: any, expected: any) {
     if (value !== expected) {
-        console.log(`TEST ${name} FAILURE`)
+        console.log(`TEST ${name} FAILURE: ${value} != ${expected}`)
     } else {
         console.log(`TEST ${name} PASS`)
     }
@@ -215,9 +217,17 @@ function checkParticle() {
 
 function checkTabContent() {
     let peer = new ArkTabContentPeer(ArkUINodeType.TabContent)
-    checkResult("tabBar",
-        () => peer.tabBar_SubTabBarStyleBottomTabBarStyleAttribute(new SubTabBarStyle("abc")),
-        `new SubTabBarStyle("abc")tabBar(??)`)
+    let subTabBarStyle: SubTabBarStyle| undefined = undefined
+
+    checkResult("new SubTabBarStyle()",
+        () => peer.tabBar_SubTabBarStyleBottomTabBarStyleAttribute(subTabBarStyle = new SubTabBarStyle("abc")),
+        `new SubTabBarStyle("abc")[return (void*) 100]tabBar("Materialized 0x2a")`)
+    assertEquals("new SubTabBarStyle() ptr", 100, subTabBarStyle!.peer!.ptr) // constructor ptr is 100
+
+    checkResult("new SubTabBarStyle()",
+        () => peer.tabBar_SubTabBarStyleBottomTabBarStyleAttribute(subTabBarStyle = SubTabBarStyle.of_ResourceStr("ABC")),
+        `of("ABC")[return (void*) 200]tabBar("Materialized 0x2a")`)
+    assertEquals("SubTabBarStyle.of_ResourceStr() ptr", 200, subTabBarStyle!.peer!.ptr) // static method ptr is 200
 }
 
 function checkPerf1(count: number) {
@@ -249,8 +259,6 @@ function checkPerf2(count: number) {
     let passed = performance.now() - start
     console.log(`backdropBlur: ${Math.round(passed)}ms for ${count} iteration, ${Math.round(passed / count * 1000000)}ms per 1M iterations`)
 }
-
-export const testString1000: string = "Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand words Ten Thousand"
 
 function checkPerf3(count: number) {
     let peer = new ArkButtonPeer(ArkUINodeType.Button)
@@ -293,7 +301,7 @@ ${callLog}
   return 0;
 }`)
 }
-// checkTabContent()
+checkTabContent()
 
 // Report in error code.
 checkTestFailures()

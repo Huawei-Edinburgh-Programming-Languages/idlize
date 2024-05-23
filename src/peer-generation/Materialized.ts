@@ -15,7 +15,7 @@
 
 import * as ts from "typescript"
 import { ArgConvertor, RetConvertor } from "./Convertors"
-import { Method, Type } from "./LanguageWriters"
+import { Method, MethodModifier, Type } from "./LanguageWriters"
 import { PeerMethod } from "./PeerMethod"
 import { identName } from "../util"
 import { PeerClassBase } from "./PeerClass"
@@ -61,6 +61,12 @@ export class MaterializedMethod extends PeerMethod {
         }
     }
 
+    override get dummyReturnValue(): string | undefined {
+        if (this.method.name === "ctor") return `(void*) 100`
+        if (this.method.modifiers?.includes(MethodModifier.STATIC)) return `(void*) 200`
+        return undefined;
+    }
+
     override get receiverType(): string {
         return `${this.originalParentName}Peer*`
     }
@@ -82,10 +88,11 @@ export class MaterializedMethod extends PeerMethod {
     }
 
     tsReturnType(): Type | undefined {
-        if (this.hasReceiver()) {
-            return this.method.signature.returnType.name === this.originalParentName ? Type.This : undefined
+        const returnType = this.method.signature.returnType
+        if (!this.hasReceiver() || returnType === Type.This) {
+            return returnType
         } else {
-            return this.method.signature.returnType
+            return returnType.name === this.originalParentName ? Type.This : undefined
         }
     }
 }

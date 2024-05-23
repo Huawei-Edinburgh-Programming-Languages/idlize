@@ -14,7 +14,8 @@
  */
 
 import * as ts from "typescript"
-import { Language, asString, getDeclarationsByNode, getLineNumberString, getNameWithoutQualifiersRight, heritageDeclarations, identName, isStatic, mapType, mapTypeOrVoid, throwException, typeEntityName, identNameWithNamespace } from "../util"
+import { Language, asString, getDeclarationsByNode, getLineNumberString, getNameWithoutQualifiersRight, heritageDeclarations,
+     identName, isStatic, throwException, typeEntityName, identNameWithNamespace } from "../util"
 import { IndentedPrinter } from "../IndentedPrinter"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
 import {
@@ -25,7 +26,7 @@ import {
 } from "./Convertors"
 import { DependencySorter } from "./DependencySorter"
 import { isMaterialized } from "./Materialized"
-import { DeclareStatement, LanguageWriter, Method, MethodModifier, NamedMethodSignature, Type } from "./LanguageWriters"
+import { DeclareStatement, LanguageWriter } from "./LanguageWriters"
 
 export class PrimitiveType {
     constructor(private name: string, public isPointer = false) { }
@@ -74,27 +75,6 @@ export class FieldRecord {
     constructor(public declaration: DeclarationTarget, public type: ts.TypeNode | undefined, public name: string, public optional: boolean = false) { }
 }
 
-// TODO: commonize with Signature, avoid TS types!
-class ParamRecord {
-    constructor(public declaration: DeclarationTarget, public type: ts.TypeNode, public name: string, public nullable: boolean) {}
-}
-
-// TODO: commonize with Method, avoid TS types!
-export class MethodRecord {
-    constructor(
-        public name: string,
-        public isStatic: boolean,
-        public returnType: ts.TypeNode | undefined,
-        public params: ParamRecord[]) {}
-
-    toMethod(typeChecker: ts.TypeChecker): Method {
-        const types = this.params.map(it => new Type(mapTypeOrVoid(typeChecker, it.type), it.nullable))
-        const names = this.params.map(it => it.name)
-        const signature = new NamedMethodSignature(new Type(mapTypeOrVoid(typeChecker, this.returnType)), types, names)
-        return new Method(this.name, signature, this.isStatic ? [MethodModifier.STATIC] : undefined)
-    }
-}
-
 export interface StructVisitor {
     visitUnionField(field: FieldRecord, selectorValue: number): void
     // visitOptionalField(field?: FieldRecord): void;
@@ -104,8 +84,6 @@ export interface StructVisitor {
 class StructDescriptor {
     supers: DeclarationTarget[] = []
     deps = new Set<DeclarationTarget>()
-    cons: MethodRecord | undefined = undefined
-    methods: MethodRecord[] = []
     isPacked: boolean = false
     isArray: boolean = false
     private fields: FieldRecord[] = []
@@ -117,12 +95,6 @@ class StructDescriptor {
             if (field.name == `template`) field.name = `template_`
             this.fields.push(field)
         }
-    }
-    getConstructor(): MethodRecord | undefined {
-        return this.cons
-    }
-    getMethods(): readonly MethodRecord[] {
-        return this.methods
     }
     getFields(): readonly FieldRecord[] {
         return this.fields
@@ -179,6 +151,7 @@ export class DeclarationTable {
         if (ts.isTupleTypeNode(type)) return true
         if (ts.isArrayTypeNode(type)) return true
         if (ts.isOptionalTypeNode(type)) return true
+        if (ts.isFunctionTypeNode(type)) return true
         // TODO: shall we map it to string type here or later?
         if (ts.isTemplateLiteralTypeNode(type)) return true
         return false
@@ -218,9 +191,6 @@ export class DeclarationTable {
         if (this.isDeclarationTarget(node)) return node as DeclarationTarget
         if (ts.isImportTypeNode(node)) {
             return this.mapImportType(node)
-        }
-        if (ts.isFunctionTypeNode(node)) {
-            return PrimitiveType.Function
         }
         if (ts.isTypeReferenceNode(node)) {
             let result = this.customToTarget(node)
@@ -875,7 +845,7 @@ export class DeclarationTable {
             if (isAccessor) {
                 structs.print(`typedef Ark_Materialized ${nameAssigned};`)
             }
-            let skipWriteToString = (target instanceof PrimitiveType) || ts.isEnumDeclaration(target)
+            let skipWriteToString = (target instanceof PrimitiveType) || ts.isEnumDeclaration(target) || ts.isFunctionTypeNode(target)
             if (!noBasicDecl && !skipWriteToString) {
                 this.generateWriteToString(nameAssigned, target, writeToString, isPointer)
             }
@@ -1172,33 +1142,6 @@ constructor(expectedSize: int32) {
         this.setCurrentContext(undefined)
     }
 
-    private methodsForAccessorClass(clazz: ts.ClassDeclaration, result: StructDescriptor) {
-
-        if (!isMaterialized(clazz)) {
-            return
-        }
-
-        // typescript class has only one constructor
-        let constructor = clazz.members.find(ts.isConstructorDeclaration)
-        if (constructor === undefined) {
-            return
-        }
-
-        result.cons = new MethodRecord("ctor", true, undefined, constructor.parameters
-            .map(it => new ParamRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined)))
-
-        clazz.members
-        .filter(ts.isMethodDeclaration)
-        .forEach(method => {
-            let params = method.parameters.map(it => new ParamRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
-            result.methods.push(
-                new MethodRecord(identName(method.name)!,
-                isStatic(method.modifiers),
-                method.type,
-                params))
-        })
-    }
-
     private fieldsForClass(clazz: ts.ClassDeclaration | ts.InterfaceDeclaration, result: StructDescriptor) {
         clazz.heritageClauses?.forEach(it => {
             heritageDeclarations(this.typeChecker!, it).forEach(it => {
@@ -1249,7 +1192,6 @@ constructor(expectedSize: int32) {
             this.fieldsForClass(target, result)
         }
         else if (ts.isClassDeclaration(target)) {
-            this.methodsForAccessorClass(target, result)
             this.fieldsForClass(target, result)
         }
         else if (ts.isUnionTypeNode(target)) {
@@ -1386,6 +1328,7 @@ constructor(expectedSize: int32) {
         if (PeerGeneratorConfig.ignoreSerialization.includes(name)) return true
         if (target instanceof PrimitiveType) return true
         if (ts.isEnumDeclaration(target)) return true
+        if (ts.isFunctionTypeNode(target)) return true
         if (ts.isImportTypeNode(target)) return true
         if (ts.isTemplateLiteralTypeNode(target)) return true
         return false
