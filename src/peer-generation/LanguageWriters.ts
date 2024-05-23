@@ -38,10 +38,11 @@ export interface LanguageExpression {
 }
 
 export class AssignStatement implements LanguageStatement {
-    constructor(public variableName: string, public type: Type, public expression: LanguageExpression, public isDeclared: boolean = true) { }
+    constructor(public variableName: string, public type: Type | undefined, public expression: LanguageExpression, public isDeclared: boolean = true) { }
     write(writer: LanguageWriter): void {
         if (this.isDeclared) {
-            writer.print(`const ${this.variableName}: ${this.type.name} = ${this.expression.asString()}`)
+            const typeName = this.type ? `: ${this.type.name}` : ""
+            writer.print(`const ${this.variableName}${typeName} = ${this.expression.asString()}`)
         } else {
             writer.print(`${this.variableName} = ${this.expression.asString()}`)
         }
@@ -49,13 +50,15 @@ export class AssignStatement implements LanguageStatement {
 }
 
 export class DeclareStatement implements LanguageStatement {
-    constructor(public variableName: string, public type: Type,
-                public expression: LanguageExpression|undefined = undefined) { }
+    constructor(public variableName: string,
+                public type: Type | undefined,
+                public expression: LanguageExpression | undefined = undefined) { }
     write(writer: LanguageWriter): void {
+        const type = this.type ? `: ${this.type.name}` : ""
         if (this.expression) {
-            writer.print(`const ${this.variableName}: ${this.type.name} = ${this.expression.asString()}`)
+            writer.print(`const ${this.variableName}${type} = ${this.expression.asString()}`)
         } else {
-            writer.print(`let ${this.variableName}: ${this.type.name}`)
+            writer.print(`let ${this.variableName}${type}`)
         }
     }
 }
@@ -164,17 +167,6 @@ export class IfStatement implements LanguageStatement {
     }
 }
 
-export class StatementFromFunction implements LanguageStatement {
-    constructor(private readonly op: (writer: LanguageWriter) => void) { }
-    write(writer: LanguageWriter): void {
-        writer.print("{")
-        writer.pushIndent()
-        this.op(writer)
-        writer.popIndent()
-        writer.print("}")
-    }
-}
-
 export class TernaryExpression implements LanguageExpression {
     constructor(public condition: LanguageExpression,
         public trueExpression: LanguageExpression,
@@ -263,7 +255,7 @@ export abstract class LanguageWriter {
     makeMemberCall(receiver: string, method: string, params: LanguageExpression[], nullable?: boolean): LanguageExpression {
         return new MemberCallExpression(receiver, method, params, nullable)
     }
-    abstract makeAssign(variableName: string, type: Type, expr: LanguageExpression, isDeclared: boolean): LanguageStatement;
+    abstract makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean): LanguageStatement;
     abstract makeReturn(expr?: LanguageExpression): LanguageStatement;
     makeCondition(condition: LanguageExpression, thenStatement: LanguageStatement, elseStatement?: LanguageStatement): LanguageStatement {
         return new IfStatement(condition, thenStatement, elseStatement)
@@ -301,6 +293,17 @@ export abstract class LanguageWriter {
     }
     mapType(type: Type): string {
         return type.name
+    }
+    makeStatementFromOp(op: (writer: LanguageWriter) => void): LanguageStatement {
+        return new class implements LanguageStatement {
+            write(writer: LanguageWriter): void {
+                writer.print("{")
+                writer.pushIndent()
+                op(writer)
+                writer.popIndent()
+                writer.print("}")
+            }
+        }
     }
 }
 
@@ -349,7 +352,7 @@ export class TSLanguageWriter extends LanguageWriter {
     private writeDeclaration(name: string, signature: MethodSignature, needReturn: boolean, needBracket: boolean, prefix?: string) {
         this.printer.print(`${prefix ?? ""}${name}(${signature.args.map((it, index) => `${signature.argName(index)}${it.nullable ? "?" : ""}: ${this.mapType(it)}${signature.argDefault(index) ? ' = ' + signature.argDefault(index) : ""}`).join(", ")})${needReturn ? ": " + this.mapType(signature.returnType) : ""} ${needBracket ? "{" : ""}`)
     }
-    makeAssign(variableName: string, type: Type, expr: LanguageExpression, isDeclared: boolean = true): LanguageStatement {
+    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean = true): LanguageStatement {
         return new AssignStatement(variableName, type, expr, isDeclared)
     }
     makeReturn(expr: LanguageExpression): LanguageStatement {
@@ -485,8 +488,16 @@ export class CppLanguageWriter extends LanguageWriter {
     writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void): void {
         throw new Error("Method not implemented.")
     }
-    makeAssign(variableName: string, type: Type, expr: LanguageExpression, isDeclared: boolean = true): LanguageStatement {
-        throw new Error("Method not implemented.")
+    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean = true): LanguageStatement {
+        return new class implements LanguageStatement {
+            write(writer: LanguageWriter): void {
+                if (isDeclared) {
+                    writer.print(`const ${type ? type.name : "auto"} ${variableName} = ${expr.asString()}`)
+                } else {
+                    writer.print(`${variableName} = ${expr.asString()}`)
+                }
+            }
+        }
     }
     makeReturn(expr: LanguageExpression): LanguageStatement {
         throw new Error("Method not implemented.")

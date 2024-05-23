@@ -16,7 +16,7 @@ import { Language, identName, importTypeName, mapType, typeName } from "../util"
 import { DeclarationTable, PrimitiveType } from "./DeclarationTable"
 import { RuntimeType } from "./PeerGeneratorVisitor"
 import * as ts from "typescript"
-import { LanguageExpression, LanguageStatement, LanguageWriter, StatementFromFunction, Type } from "./LanguageWriters"
+import { LanguageExpression, LanguageStatement, LanguageWriter } from "./LanguageWriters"
 
 let uniqueCounter = 0
 
@@ -480,23 +480,32 @@ export class OptionConvertor extends BaseArgConvertor {
         throw new Error("Must never be used")
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter, lang: Language): void {
+        let valueName: string = value
+        let readStatement: LanguageStatement
+        let ifCondExpr: LanguageExpression
+
         if (lang == Language.CPP) {
-            printer.print(`${value}.tag = ${param}Deserializer.readInt8() == ARK_RUNTIME_UNDEFINED ? ARK_TAG_UNDEFINED : ARK_TAG_OBJECT;`)
-            printer.print(`if (${value}.tag != ARK_TAG_UNDEFINED) {`)
-            printer.pushIndent()
-            this.typeConvertor.convertorDeserialize(param, `${value}.value`, printer, lang)
-            printer.popIndent()
-            printer.print(`}`)
+            valueName = `${value}.value`
+            const valueTypeVar = `${value}.tag`
+            readStatement = printer.makeAssign(valueTypeVar,
+                undefined,
+                printer.makeString(`${param}Deserializer.readInt8() == ${PrimitiveType.UndefinedRuntime} ? ARK_TAG_UNDEFINED : ARK_TAG_OBJECT;`),
+                false)
+            ifCondExpr = printer.makeString(`${valueTypeVar} != ${PrimitiveType.UndefinedTag}`)
         } else if (lang == Language.TS) {
-            const varTypeName = `${value.replaceAll(".", "_")}_type`
-            printer.writeStatement(printer.makeAssign(varTypeName,
-                new Type("int32"),
-                printer.makeString(`runtimeType(${param}Deserializer.readInt8())`), true))
-            printer.writeStatement(printer.makeCondition(printer.makeString(`${varTypeName} != RuntimeType.UNDEFINED`),
-                new StatementFromFunction((writer) =>
-                    this.typeConvertor.convertorDeserialize(param, value, writer, lang)
-                )))
+            const valueTypeVar = `${value.replaceAll(".", "_")}_type`
+            readStatement = printer.makeAssign(valueTypeVar,
+                undefined,
+                printer.makeString(`runtimeType(${param}Deserializer.readInt8())`),
+                true)
+            ifCondExpr = printer.makeString(`${valueTypeVar} != RuntimeType.UNDEFINED`)
         }
+
+        printer.writeStatement(readStatement!)
+        printer.writeStatement(printer.makeCondition(ifCondExpr!,
+            printer.makeStatementFromOp((writer) =>
+                this.typeConvertor.convertorDeserialize(param, valueName, writer, lang)
+            )))
     }
     nativeType(impl: boolean): string {
         return impl
