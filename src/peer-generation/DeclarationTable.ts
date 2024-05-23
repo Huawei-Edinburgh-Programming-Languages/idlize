@@ -26,7 +26,7 @@ import {
 } from "./Convertors"
 import { DependencySorter } from "./DependencySorter"
 import { isMaterialized } from "./Materialized"
-import { DeclareStatement, LanguageWriter } from "./LanguageWriters"
+import {DeclareStatement, LanguageWriter, Method, NamedMethodSignature, Type} from "./LanguageWriters"
 
 export class PrimitiveType {
     constructor(private name: string, public isPointer = false) { }
