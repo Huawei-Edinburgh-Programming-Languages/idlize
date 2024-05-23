@@ -74,9 +74,9 @@ cpp = \'${crossPathResolve(`${ohosSdkRoot}/${ohosSdkVersion}/base/native/llvm/bi
 strip = \'${crossPathResolve(`${ohosSdkRoot}/${ohosSdkVersion}/base/native/llvm/bin/llvm-strip${exeSuffix}`)}\'
 
 [built-in options]
-c_args = ['--sysroot=${sysrootDir}', ${builtInArgs}]
+c_args = ['--sysroot=${sysrootDir}', '-fno-builtin', ${builtInArgs}]
 c_link_args = ['--sysroot=${sysrootDir}', ${builtInArgs}]
-cpp_args = ['--sysroot=${sysrootDir}', ${builtInArgs}]
+cpp_args = ['--sysroot=${sysrootDir}', '-fno-builtin', ${builtInArgs}]
 cpp_link_args = ['--sysroot=${sysrootDir}', ${builtInArgs}]
 
 [host_machine]

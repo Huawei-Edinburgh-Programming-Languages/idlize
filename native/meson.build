@@ -62,6 +62,7 @@ sources += [
    gen_dir + '/all_modifiers.cc',
    gen_dir + '/delegates.cc',
    gen_dir + '/all_events.cc',
+   gen_dir + '/events.cc'
 ]
 endif
 
@@ -184,17 +185,12 @@ ohos_cflags += [
     '-DKOALA_USE_ARK_VM=1',
     '-DKOALA_USE_ARK_VM_WITH_JS=1',
     '-DKOALA_OHOS',
-    '-D__MUSL__'
+    '-D__MUSL__',
 ]
 
 ohos_ldflags = [
-    '-lEGL',
-    '-lGLESv3',
     '-lhilog_ndk.z',
-    '-lace_ndk.z',
     '-lace_napi.z',
-    '-luv',
-    '-static-libstdc++'
 ]
 
 ohos_include_dirs = [
