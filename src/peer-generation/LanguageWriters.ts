@@ -86,7 +86,7 @@ export class CppAssignStatement extends AssignStatement {
      write(writer: LanguageWriter): void{
         if (this.isDeclared) {
             const typeSpec = this.type ? writer.mapType(this.type) : "auto"
-            writer.print(`${typeSpec} ${this.variableName} = ${this.expression.asString()};`)
+            writer.print(`const ${typeSpec} ${this.variableName} = ${this.expression.asString()};`)
         } else {
             writer.print(`${this.variableName} = ${this.expression.asString()};`)
         }

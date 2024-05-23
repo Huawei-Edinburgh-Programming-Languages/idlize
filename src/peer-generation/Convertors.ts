@@ -353,42 +353,40 @@ export class UnionConvertor extends BaseArgConvertor {
         })
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
+        let runtimeType = `runtimeType${uniqueCounter++}`;
+        printer.writeStatement(printer.makeAssign(runtimeType,
+            undefined,
+            printer.makeString(`${param}Deserializer.readInt8()`),
+            true))
         if (language == Language.TS) {
-            let runtimeType = `runtimeType${uniqueCounter++}`;
-            printer.print(`const ${runtimeType} = ${param}Deserializer.readInt8();`)
-            this.memberConvertors.forEach((it, index) => {
-                if (it.runtimeTypes.length == 0) {
-                    return
-                }
-                let maybeElse = (index > 0 && this.memberConvertors[index - 1].runtimeTypes.length > 0) ? "else " : ""
-                let maybeComma1 = (it.runtimeTypes.length > 1) ? "(" : ""
-                let maybeComma2 = (it.runtimeTypes.length > 1) ? ")" : ""
-
-                printer.print(`${maybeElse}if (${it.runtimeTypes.map(it => `${maybeComma1}${runtimeType} == RuntimeType.${RuntimeType[it]}${maybeComma2}`).join(" || ")}) {`)
-                printer.pushIndent()
-                it.convertorDeserialize(param, value, printer, Language.TS)
-                printer.popIndent()
-                printer.print(`}`)
-            })
-        } else if (language == Language.CPP) {
-            // Save actual type being passed.
-            let runtimeType = `runtimeType${uniqueCounter++}`;
-            printer.writeStatement(
-            printer.makeAssign(runtimeType, Type.Int32,
-                printer.makeMethodCall(`${param}Deserializer`, "readInt8", []), true))
             this.memberConvertors.forEach((it, index) => {
                 if (it.runtimeTypes.length == 0) {
                     return
                 }
                 let maybeElse = (index > 0 && this.memberConvertors[index - 1].runtimeTypes.length > 0) ? "else " : ""
                 const conditions = printer.makeNaryOp("||",
-                it.runtimeTypes.map(rt => printer.makeNaryOp("==", [ printer.makeString(`ARK_RUNTIME_${RuntimeType[rt]}`), printer.makeString(runtimeType)])))
+                    it.runtimeTypes.map(rt => printer.makeNaryOp("==", [ printer.makeString(`RuntimeType.${RuntimeType[rt]}`), printer.makeString(runtimeType)])))
 
                 printer.print(`${maybeElse}if (${conditions.asString()}) {`)
                 printer.pushIndent()
-                it.convertorDeserialize(param, `${value}.value${index}`, printer, Language.CPP)
+                it.convertorDeserialize(param, value, printer, language)
+                printer.popIndent()
+                printer.print(`}`)
+            })
+        } else if (language == Language.CPP) {
+            this.memberConvertors.forEach((it, index) => {
+                if (it.runtimeTypes.length == 0) {
+                    return
+                }
+                let maybeElse = (index > 0 && this.memberConvertors[index - 1].runtimeTypes.length > 0) ? "else " : ""
+                const conditions = printer.makeNaryOp("||",
+                    it.runtimeTypes.map(rt => printer.makeNaryOp("==", [ printer.makeString(`ARK_RUNTIME_${RuntimeType[rt]}`), printer.makeString(runtimeType)])))
+
+                printer.print(`${maybeElse}if (${conditions.asString()}) {`)
+                printer.pushIndent()
+                it.convertorDeserialize(param, `${value}.value${index}`, printer, language)
                 printer.writeStatement(
-                printer.makeAssign(`${value}.selector`, Type.Int32, printer.makeString(`${index}`), false))
+                    printer.makeAssign(`${value}.selector`, Type.Int32, printer.makeString(`${index}`), false))
                 printer.popIndent()
                 printer.print(`}`)
             })
