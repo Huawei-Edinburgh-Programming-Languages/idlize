@@ -49,9 +49,11 @@ export function checkResult(name: string, test: () => void, expected: string) {
     }
 }
 
-export function assertEquals(name: string, expected: number | bigint, actual: number | bigint) {
+export function assertEquals(name: string, expected: string | number | bigint, actual: string | number | bigint) {
     if (expected != actual ) {
         failedTestsCount++
         console.log(`TEST ${name} FAIL:\n  EXPECTED "${expected}"\n  ACTUAL   "${actual}"`)
+    } else {
+        console.log(`TEST ${name} PASS`)
     }
 }
