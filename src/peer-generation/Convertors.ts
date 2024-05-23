@@ -782,16 +782,19 @@ export class ArrayConvertor extends BaseArgConvertor {
         // Array length.
         let runtimeType = `runtimeType${uniqueCounter++}`;
         let arrayLength = `arrayLength${uniqueCounter++}`;
-        let initValue: LanguageStatement
+        let initValue: LanguageStatement[] = []
         let valueName: string
         if (language == Language.TS) {
-            initValue = printer.makeAssign(value, Type.Auto, printer.makeString("[]"), false)
-            valueName = `${value}[i]`
+            const aliasForDimension = `value${uniqueCounter++}`
+            initValue = [printer.makeAssign(value, Type.Auto, printer.makeString("[]"), false),
+                printer.makeAssign(aliasForDimension, Type.Auto, printer.makeString(value), true)
+            ]
+            valueName = `${aliasForDimension}[i]`
         } else if (language == Language.CPP) {
             let elementTypeName = this.table.computeTargetName(this.table.toTarget(this.elementType), false)
-            initValue = printer.makeStatement(printer.makeString(
+            initValue = [printer.makeStatement(printer.makeString(
                 `${param}Deserializer.resizeArray<Array_${elementTypeName}, ${elementTypeName}>(&${value}, ${arrayLength})`
-            ))
+            ))]
             valueName = `${value}.array[i]`
         }
         printer.writeStatement(printer.makeAssign(runtimeType,
@@ -802,7 +805,7 @@ export class ArrayConvertor extends BaseArgConvertor {
                 printer.makeTestNotUndef(printer.makeString(`${runtimeType}`)),
                 new BlockStatement([
                     printer.makeAssign(arrayLength, Type.Auto, printer.makeString(`${param}Deserializer.readInt32()`), true),
-                    initValue!,
+                        ...initValue,
                     printer.makeForLoop(arrayLength, printer.makeStatementFromOp((writer) => {
                         this.elementConvertor.convertorDeserialize(param, valueName, writer, language)
                     }))
