@@ -483,7 +483,7 @@ export class OptionConvertor extends BaseArgConvertor {
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         printer.print(`const ${value}_type = runtimeType(${value})`)
-        printer.print(`${param}Serializer.writeInt8(${value}_type)`)
+        printer.print(`${param}Serializer.writeInt8(${value}_type as int32)`)
         printer.print(`if (${value}_type != RuntimeType.UNDEFINED) {`)
         printer.pushIndent()
         printer.print(`const ${value}_value = ${value}!`)
@@ -647,15 +647,11 @@ export class TupleConvertor extends BaseArgConvertor {
         throw new Error("Must never be used")
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
-        printer.print(`${param}Serializer.writeInt8(runtimeType(${value}))`)
-        printer.print(`if (${value} !== undefined) {`)
-        printer.pushIndent()
+        printer.print(`${param}Serializer.writeInt8(runtimeType(${value}) as int32)`)
         this.memberConvertors.forEach((it, index) => {
             printer.print(`const ${value}_${index} = ${value}[${index}]`)
             it.convertorSerialize(param, `${value}_${index}`, printer)
         })
-        printer.popIndent()
-        printer.print(`}`)
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
         printer.print(`if (${param}Deserializer.readInt8() != ${PrimitiveType.UndefinedRuntime}) {`) // TODO: `else value = nullptr` ?
@@ -699,7 +695,7 @@ export class ArrayConvertor extends BaseArgConvertor {
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         // Array length.
-        printer.print(`${param}Serializer.writeInt8(runtimeType(${value}))`)
+        printer.print(`${param}Serializer.writeInt8(runtimeType(${value}) as int32)`)
         printer.print(`if (${value} !== undefined) {`)
         printer.pushIndent()
         printer.print(`${param}Serializer.writeInt32(${value}.length)`)
@@ -761,7 +757,7 @@ export class MapConvertor extends BaseArgConvertor {
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         // Map size.
-        printer.print(`${param}Serializer.writeInt8(runtimeType(${value}))`)
+        printer.print(`${param}Serializer.writeInt8(runtimeType(${value}) as int32)`)
         printer.print(`if (${value} !== undefined) {`)
         printer.pushIndent()
         printer.print(`${param}Serializer.writeInt32(${value}.size)`)
