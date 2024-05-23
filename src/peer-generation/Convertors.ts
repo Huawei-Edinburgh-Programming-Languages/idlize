@@ -175,11 +175,13 @@ export class UndefinedConvertor extends BaseArgConvertor {
         return param
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
+        let expr: LanguageExpression
         if (language == Language.TS) {
-            printer.print(`${value} = undefined;`)
+            expr = printer.makeString("undefined")
         } else if (language == Language.CPP) {
-            printer.print(`${value} = ${param}Deserializer.readUndefined();`)
+            expr = printer.makeString(`${param}Deserializer.readUndefined();`)
         }
+        printer.writeStatement(printer.makeAssign(value, undefined, expr!, false))
     }
 
     nativeType(impl: boolean): string {
