@@ -24,7 +24,6 @@ export class Type {
     static This = new Type('this')
     static Void = new Type('void')
     static Any = new Type('any')
-    static Auto = new Type('auto')
 }
 
 export enum MethodModifier {
@@ -483,7 +482,7 @@ export class TSLanguageWriter extends LanguageWriter {
     private writeDeclaration(name: string, signature: MethodSignature, needReturn: boolean, needBracket: boolean, prefix?: string) {
         this.printer.print(`${prefix ?? ""}${name}(${signature.args.map((it, index) => `${signature.argName(index)}${it.nullable ? "?" : ""}: ${this.mapType(it)}${signature.argDefault(index) ? ' = ' + signature.argDefault(index) : ""}`).join(", ")})${needReturn ? ": " + this.mapType(signature.returnType) : ""} ${needBracket ? "{" : ""}`)
     }
-    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean = true): LanguageStatement {
+    makeAssign(variableName: string, type: Type, expr: LanguageExpression, isDeclared: boolean = true): LanguageStatement {
         return new AssignStatement(variableName, type, expr, isDeclared)
     }
     makeReturn(expr: LanguageExpression): LanguageStatement {
@@ -502,9 +501,6 @@ export class TSLanguageWriter extends LanguageWriter {
         return new TSCastExpression(value, type, unsafe)
     }
     mapType(type: Type): string {
-        if (type == Type.Auto) {
-            return ""
-        }
         return `${type.name}`
     }
     makeTestNotUndef(expr: LanguageExpression): LanguageExpression {

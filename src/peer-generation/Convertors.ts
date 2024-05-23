@@ -171,7 +171,7 @@ export class UndefinedConvertor extends BaseArgConvertor {
         } else if (language == Language.CPP) {
             expr = printer.makeString(`${param}Deserializer.readUndefined();`)
         }
-        printer.writeStatement(printer.makeAssign(value, Type.Auto, expr!, false))
+        printer.writeStatement(printer.makeAssign(value, undefined, expr!, false))
     }
     nativeType(impl: boolean): string {
         return "Undefined"
@@ -531,14 +531,14 @@ export class OptionConvertor extends BaseArgConvertor {
             valueName = `${value}.value`
             const valueTypeVar = `${value}.tag`
             readStatement = printer.makeAssign(valueTypeVar,
-                Type.Auto,
+                undefined,
                 printer.makeString(`${param}Deserializer.readInt8() == ${PrimitiveType.UndefinedRuntime} ? ARK_TAG_UNDEFINED : ARK_TAG_OBJECT;`),
                 false)
             ifCondExpr = printer.makeString(`${valueTypeVar} != ${PrimitiveType.UndefinedTag}`)
         } else if (lang == Language.TS) {
             const valueTypeVar = `${value.replaceAll(".", "_")}_type`
             readStatement = printer.makeAssign(valueTypeVar,
-                Type.Auto,
+                undefined,
                 printer.makeString(`runtimeType(${param}Deserializer.readInt8())`),
                 true)
             ifCondExpr = printer.makeString(`${valueTypeVar} != RuntimeType.UNDEFINED`)
@@ -725,7 +725,7 @@ export class TupleConvertor extends BaseArgConvertor {
             ])
         } else if (language == Language.TS) {
             block = new BlockStatement([
-                printer.makeAssign(value, Type.Auto, printer.makeString("[]"), false),
+                printer.makeAssign(value, undefined, printer.makeString("[]"), false),
                 printer.makeStatementFromOp(writer => {
                     this.memberConvertors.forEach((it, index) => {
                         writer.writeStatement(new DeclareStatement(`value${index}`, Type.Any))
@@ -795,8 +795,8 @@ export class ArrayConvertor extends BaseArgConvertor {
         let valueName: string
         if (language == Language.TS) {
             const aliasForDimension = `value${uniqueCounter++}`
-            initValue = [printer.makeAssign(value, Type.Auto, printer.makeString("[]"), false),
-                printer.makeAssign(aliasForDimension, Type.Auto, printer.makeString(value), true)
+            initValue = [printer.makeAssign(value, undefined, printer.makeString("[]"), false),
+                printer.makeAssign(aliasForDimension, undefined, printer.makeString(value), true)
             ]
             valueName = `${aliasForDimension}[i]`
         } else if (language == Language.CPP) {
@@ -807,13 +807,13 @@ export class ArrayConvertor extends BaseArgConvertor {
             valueName = `${value}.array[i]`
         }
         printer.writeStatement(printer.makeAssign(runtimeType,
-            Type.Auto,
+            undefined,
             printer.makeString(`${param}Deserializer.readInt8();`), true))
         printer.writeStatement(
             printer.makeCondition(
                 printer.makeTestNotUndef(printer.makeString(`${runtimeType}`)),
                 new BlockStatement([
-                    printer.makeAssign(arrayLength, Type.Auto, printer.makeString(`${param}Deserializer.readInt32()`), true),
+                    printer.makeAssign(arrayLength, undefined, printer.makeString(`${param}Deserializer.readInt32()`), true),
                         ...initValue,
                     printer.makeForLoop(arrayLength, printer.makeStatementFromOp((writer) => {
                         this.elementConvertor.convertorDeserialize(param, valueName, writer, language)
