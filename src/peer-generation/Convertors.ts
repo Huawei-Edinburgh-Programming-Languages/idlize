@@ -171,7 +171,7 @@ export class UndefinedConvertor extends BaseArgConvertor {
         } else if (language == Language.CPP) {
             expr = printer.makeString(`${param}Deserializer.readUndefined();`)
         }
-        printer.writeStatement(printer.makeAssign(value, undefined, expr!, false))
+        printer.writeStatement(printer.makeAssign(value, Type.Auto, expr!, false))
     }
     nativeType(impl: boolean): string {
         return "Undefined"
@@ -529,14 +529,14 @@ export class OptionConvertor extends BaseArgConvertor {
             valueName = `${value}.value`
             const valueTypeVar = `${value}.tag`
             readStatement = printer.makeAssign(valueTypeVar,
-                undefined,
+                Type.Auto,
                 printer.makeString(`${param}Deserializer.readInt8() == ${PrimitiveType.UndefinedRuntime} ? ARK_TAG_UNDEFINED : ARK_TAG_OBJECT;`),
                 false)
             ifCondExpr = printer.makeString(`${valueTypeVar} != ${PrimitiveType.UndefinedTag}`)
         } else if (lang == Language.TS) {
             const valueTypeVar = `${value.replaceAll(".", "_")}_type`
             readStatement = printer.makeAssign(valueTypeVar,
-                undefined,
+                Type.Auto,
                 printer.makeString(`runtimeType(${param}Deserializer.readInt8())`),
                 true)
             ifCondExpr = printer.makeString(`${valueTypeVar} != RuntimeType.UNDEFINED`)
@@ -718,7 +718,7 @@ export class TupleConvertor extends BaseArgConvertor {
             ])
         } else if (language == Language.TS) {
             block = new BlockStatement([
-                printer.makeAssign(value, undefined, printer.makeString("[]"), false),
+                printer.makeAssign(value, Type.Auto, printer.makeString("[]"), false),
                 printer.makeStatementFromOp(writer => {
                     this.memberConvertors.forEach((it, index) => {
                         writer.writeStatement(new DeclareStatement(`value${index}`, Type.Any))
@@ -782,37 +782,31 @@ export class ArrayConvertor extends BaseArgConvertor {
         // Array length.
         let runtimeType = `runtimeType${uniqueCounter++}`;
         let arrayLength = `arrayLength${uniqueCounter++}`;
-
+        let initValue: LanguageStatement
+        let valueName: string
         if (language == Language.TS) {
-            printer.print(`const ${runtimeType} = ${param}Deserializer.readInt8();`)
-            printer.print(`if (${runtimeType} != RuntimeType.UNDEFINED) {`)
-            printer.pushIndent()
-            printer.print(`${value} = []`)
-            printer.print(`const ${arrayLength} = ${param}Deserializer.readInt32();`)
-            printer.print(`for (let i = 0; i < ${arrayLength}; i++) {`)
-            printer.pushIndent()
-            printer.print("let value: any")
-            this.elementConvertor.convertorDeserialize(param, "value", printer, language)
-            printer.print(`${value}.push(value)`)
-            printer.popIndent()
-            printer.print("}")
-            printer.popIndent()
-            printer.print("}")
+            initValue = printer.makeAssign(value, Type.Auto, printer.makeString("[]"), false)
+            valueName = `${value}[i]`
         } else if (language == Language.CPP) {
             let elementTypeName = this.table.computeTargetName(this.table.toTarget(this.elementType), false)
-            printer.print(`auto ${runtimeType} = ${param}Deserializer.readInt8();`)
-            printer.print(`if (${runtimeType} != ${PrimitiveType.UndefinedRuntime}) {`) // TODO: `else value = nullptr` ?
-            printer.pushIndent()
-            printer.print(`auto ${arrayLength} = ${param}Deserializer.readInt32();`)
-            printer.print(`${param}Deserializer.resizeArray<Array_${elementTypeName}, ${elementTypeName}>(&${value}, ${arrayLength});`);
-            printer.print(`for (int i = 0; i < ${arrayLength}; i++) {`)
-            printer.pushIndent()
-            this.elementConvertor.convertorDeserialize(param, `${value}.array[i]`, printer, language)
-            printer.popIndent()
-            printer.print(`}`)
-            printer.popIndent()
-            printer.print(`}`)
+            initValue = printer.makeStatement(printer.makeString(
+                `${param}Deserializer.resizeArray<Array_${elementTypeName}, ${elementTypeName}>(&${value}, ${arrayLength})`
+            ))
+            valueName = `${value}.array[i]`
         }
+        printer.writeStatement(printer.makeAssign(runtimeType,
+            Type.Auto,
+            printer.makeString(`${param}Deserializer.readInt8();`), true))
+        printer.writeStatement(
+            printer.makeCondition(
+                printer.makeTestNotUndef(printer.makeString(`${runtimeType}`)),
+                new BlockStatement([
+                    printer.makeAssign(arrayLength, Type.Auto, printer.makeString(`${param}Deserializer.readInt32()`), true),
+                    initValue!,
+                    printer.makeForLoop(arrayLength, printer.makeStatementFromOp((writer) => {
+                        this.elementConvertor.convertorDeserialize(param, valueName, writer, language)
+                    }))
+                ])))
     }
     nativeType(impl: boolean): string {
         return `Array_${this.table.computeTypeName(undefined, this.elementType, false)}`

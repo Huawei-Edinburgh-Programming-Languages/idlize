@@ -24,6 +24,7 @@ export class Type {
     static This = new Type('this')
     static Void = new Type('void')
     static Any = new Type('any')
+    static Auto = new Type('auto')
 }
 
 export enum MethodModifier {
@@ -40,10 +41,10 @@ export interface LanguageExpression {
 }
 
 export class AssignStatement implements LanguageStatement {
-    constructor(public variableName: string, public type: Type | undefined, public expression: LanguageExpression, public isDeclared: boolean = true) { }
+    constructor(public variableName: string, public type: Type, public expression: LanguageExpression, public isDeclared: boolean = true) { }
     write(writer: LanguageWriter): void {
         if (this.isDeclared) {
-            const typeName = this.type ? `: ${writer.mapType(this.type)}` : ""
+            const typeName = this.type != Type.Auto ? `:${writer.mapType(this.type)}` : ""
             writer.print(`const ${this.variableName}${typeName} = ${this.expression.asString()}`)
         } else {
             writer.print(`${this.variableName} = ${this.expression.asString()}`)
@@ -53,7 +54,7 @@ export class AssignStatement implements LanguageStatement {
 
 export class DeclareStatement implements LanguageStatement {
     constructor(public variableName: string,
-                public type: Type | undefined,
+                public type: Type,
                 public expression: LanguageExpression | undefined = undefined) { }
     write(writer: LanguageWriter): void {
         const type = this.type ? `: ${this.type.name}` : ""
@@ -285,7 +286,7 @@ export abstract class LanguageWriter {
     makeMethodCall(receiver: string, method: string, params: LanguageExpression[], nullable?: boolean): LanguageExpression {
         return new MethodCallExpression(receiver, method, params, nullable)
     }
-    abstract makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean): LanguageStatement;
+    abstract makeAssign(variableName: string, type: Type, expr: LanguageExpression, isDeclared: boolean): LanguageStatement;
     abstract makeReturn(expr?: LanguageExpression): LanguageStatement;
     makeCondition(condition: LanguageExpression, thenStatement: LanguageStatement, elseStatement?: LanguageStatement): LanguageStatement {
         return new IfStatement(condition, thenStatement, elseStatement)
@@ -336,6 +337,8 @@ export abstract class LanguageWriter {
             }
         }
     }
+
+    abstract makeForLoop(count: string, statement: LanguageStatement): LanguageStatement
 }
 
 export class TSLanguageWriter extends LanguageWriter {
@@ -383,7 +386,7 @@ export class TSLanguageWriter extends LanguageWriter {
     private writeDeclaration(name: string, signature: MethodSignature, needReturn: boolean, needBracket: boolean, prefix?: string) {
         this.printer.print(`${prefix ?? ""}${name}(${signature.args.map((it, index) => `${signature.argName(index)}${it.nullable ? "?" : ""}: ${this.mapType(it)}${signature.argDefault(index) ? ' = ' + signature.argDefault(index) : ""}`).join(", ")})${needReturn ? ": " + this.mapType(signature.returnType) : ""} ${needBracket ? "{" : ""}`)
     }
-    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean = true): LanguageStatement {
+    makeAssign(variableName: string, type: Type, expr: LanguageExpression, isDeclared: boolean = true): LanguageStatement {
         return new AssignStatement(variableName, type, expr, isDeclared)
     }
     makeReturn(expr: LanguageExpression): LanguageStatement {
@@ -396,10 +399,22 @@ export class TSLanguageWriter extends LanguageWriter {
         return new TSCastExpression(value, type, unsafe)
     }
     mapType(type: Type): string {
+        if (type == Type.Auto) {
+            return ""
+        }
         return `${type.name}`
     }
     makeTestNotUndef(expr: LanguageExpression): LanguageExpression {
         return this.makeString(`${expr.asString()} != RuntimeType.UNDEFINED`);
+    }
+    makeForLoop(count: string, statement: LanguageStatement): LanguageStatement {
+        return this.makeStatementFromOp((writer)=> {
+            writer.print(`for (let i = 0; i < ${count}; i++) {`)
+            writer.pushIndent()
+            statement.write(writer)
+            writer.popIndent()
+            writer.print("}")
+        })
     }
 }
 
@@ -498,8 +513,10 @@ export class JavaLanguageWriter extends LanguageWriter {
         }
         return super.mapType(type)
     }
-
     makeTestNotUndef(expr: LanguageExpression): LanguageExpression {
+        throw new Error("Method not implemented.")
+    }
+    makeForLoop(count: string, statement: LanguageStatement): LanguageStatement {
         throw new Error("Method not implemented.")
     }
 }
@@ -553,6 +570,15 @@ export class CppLanguageWriter extends LanguageWriter {
 
     makeTestNotUndef(expr: LanguageExpression): LanguageExpression {
         return this.makeString(`${expr.asString()} != ARK_TAG_UNDEFINED`);
+    }
+    makeForLoop(count: string, statement: LanguageStatement): LanguageStatement {
+        return this.makeStatementFromOp((writer)=> {
+            writer.print(`for (int64_t i = 0; i < ${count}; i++) {`)
+            writer.pushIndent()
+            statement.write(writer)
+            writer.popIndent()
+            writer.print("}")
+        })
     }
 }
 
