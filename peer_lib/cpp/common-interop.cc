@@ -62,8 +62,9 @@ KInt impl_StringLength(KNativePointer ptr) {
 KOALA_INTEROP_1(StringLength, KInt, KNativePointer)
 
 void impl_StringData(KNativePointer ptr, KByte* bytes, KUInt size) {
+    fprintf(stderr, "XXX impl_StringData %p %d\n", ptr, size);
     string* s = reinterpret_cast<string*>(ptr);
-    if (s) memcpy(bytes, s->c_str(), size);
+    if (s) memcpy(bytes, s->c_str(), s->length());
 }
 KOALA_INTEROP_V3(StringData, KNativePointer, KByte*, KUInt)
 
@@ -276,6 +277,7 @@ void PerfInfo::Print(std::stringstream& result, float counterSelf) {
 }
 
 void impl_StartPerf(KStringPtr traceName) {
+    fprintf(stderr, "XXX impl_StartPerf\n");
     PerfInfo& perf = Performace::GetInstance()->GetCurrent();
     perf.perf_name = traceName.c_str();
     auto now = std::chrono::high_resolution_clock::now();

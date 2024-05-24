@@ -78,7 +78,7 @@ ohos_library_name = 'NativeBridge_ohos'
 
 if is_clang
 # TODO: remove all -Wno-* when generation is fixed.
-cflags += ['-Wall', '-Werror', '-Wno-unused-variable', '-Wno-extern-c-compat', '-Wno-error=deprecated-declarations']
+cflags += ['-Wall', '-Werror', '-Wno-unused-variable', '-Wno-extern-c-compat', '-Wno-error=deprecated-declarations', '-Wno-unused-command-line-argument']
 endif
 
 node_cflags = ['-DKOALA_USE_NODE_VM', '-DKOALA_NAPI', '-DINTEROP_LIBRARY_NAME=' + node_library_name]
@@ -179,7 +179,7 @@ if is_ohos
 ohos_library_name = ohos_library_name + '_' + arch
 module_prefix = 'lib'
 module_suffix = 'so'
-ohos_cflags = [ '-DINTEROP_LIBRARY_NAME=' + ohos_library_name ]
+ohos_cflags = [ '-DINTEROP_LIBRARY_NAME=' + ohos_library_name]
 ohos_cflags += [
     '-DKOALA_NAPI',
     '-DKOALA_USE_ARK_VM=1',
@@ -188,17 +188,17 @@ ohos_cflags += [
     '-D__MUSL__',
 ]
 if arch == 'arm'
-ohos_cflags += ['--target=arm-linux-ohos'] #, '-m32', '-march=armv7-a']
+ohos_cflags += ['-m32', '-march=armv7-a']
 endif
-if arch == 'aarch64'
-ohos_cflags += ['--target=aarch64-linux-ohos']
-endif
-
-message(ohos_cflags)
 
 ohos_ldflags = [
+    '-lEGL',
+    '-lGLESv3',
     '-lhilog_ndk.z',
+    '-lace_ndk.z',
     '-lace_napi.z',
+    '-luv',
+    '-static-libstdc++'
 ]
 
 ohos_include_dirs = [
@@ -225,7 +225,7 @@ shared_library(ohos_library_name,
 endif
 
 # TODO: fix on Windows as well
-if os != 'windows' and not is_ohos
+if os != 'windows'
 executable('test_arkoala_api',
     gen_dir / 'api_test.c',
     c_args: cflags
