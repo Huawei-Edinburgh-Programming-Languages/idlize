@@ -481,7 +481,9 @@ export class CustomTypeConvertor extends BaseArgConvertor {
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
         const accessor = printer.getObjectAccessor(this, param, value)
-        printer.print(`${accessor} = ${param}Deserializer.readCustomObject("${this.customName}");`)
+        printer.writeStatement(
+            printer.makeAssign(accessor, undefined,
+                printer.makeString(`${param}Deserializer.readCustomObject("${this.customName}")`), false))
     }
     nativeType(impl: boolean): string {
         return PrimitiveType.CustomObject.getText()
@@ -668,7 +670,9 @@ export class FunctionConvertor extends BaseArgConvertor {
         throw new Error("Must never be used")
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
-        printer.print(`${value} = ${param}Deserializer.readFunction();`)
+        printer.writeStatement(
+            printer.makeAssign(value, undefined,
+                printer.makeString(`${param}Deserializer.readFunction()`), false))
     }
     nativeType(impl: boolean): string {
         return PrimitiveType.Function.getText()
@@ -905,7 +909,7 @@ export class NumberConvertor extends BaseArgConvertor {
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         printer.print(`${param}Serializer.writeNumber(${value})`)
     }
-    convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
+    convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
         const accessor = printer.getObjectAccessor(this, param, value)
         printer.writeStatement(printer.makeAssign(accessor, undefined, printer.makeString(`${param}Deserializer.readNumber()`), false))
     }
