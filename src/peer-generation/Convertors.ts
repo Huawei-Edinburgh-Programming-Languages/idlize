@@ -84,7 +84,8 @@ export class StringConvertor extends BaseArgConvertor {
         writer.writeMethodCall(`${param}Serializer`, `writeString`, [value])
     }
     convertorDeserialize(param: string, value: string, writer: LanguageWriter): void {
-        writer.writeStatement(writer.makeAssign(value, undefined, writer.makeString(`${param}Deserializer.readString()`), false))
+        const accessor = writer.getObjectAccessor(this, param, value)
+        writer.writeStatement(writer.makeAssign(accessor, undefined, writer.makeString(`${param}Deserializer.readString()`), false))
     }
     nativeType(impl: boolean): string {
         return PrimitiveType.String.getText()
@@ -743,7 +744,7 @@ export class TupleConvertor extends BaseArgConvertor {
 
 export class ArrayConvertor extends BaseArgConvertor {
     elementConvertor: ArgConvertor
-    constructor(param: string, protected table: DeclarationTable, type: ts.TypeNode, private elementType: ts.TypeNode) {
+    constructor(param: string, public table: DeclarationTable, type: ts.TypeNode, public elementType: ts.TypeNode) {
         super(`Array<${mapType(table.typeChecker!, elementType)}>`, [RuntimeType.OBJECT], false, true, param)
         this.elementConvertor = table.typeConvertor(param, elementType)
         table.requestType(undefined, type)
@@ -771,36 +772,24 @@ export class ArrayConvertor extends BaseArgConvertor {
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
         // Array length.
-        let runtimeType = `runtimeType${uniqueCounter++}`;
-        let arrayLength = `arrayLength${uniqueCounter++}`;
-        let initValue: LanguageStatement[] = []
-        let valueName: string
-        if (language == Language.TS) {
-            const aliasForDimension = `value${uniqueCounter++}`
-            initValue = [printer.makeAssign(value, undefined, printer.makeString("[]"), false),
-                printer.makeAssign(aliasForDimension, undefined, printer.makeString(value), true)
-            ]
-            valueName = `${aliasForDimension}[i]`
-        } else if (language == Language.CPP) {
-            let elementTypeName = this.table.computeTargetName(this.table.toTarget(this.elementType), false)
-            initValue = [printer.makeStatement(printer.makeString(
-                `${param}Deserializer.resizeArray<Array_${elementTypeName}, ${elementTypeName}>(&${value}, ${arrayLength})`
-            ))]
-            valueName = `${value}.array[i]`
-        }
+        const runtimeType = `runtimeType${uniqueCounter++}`;
+        const arrayLength = `arrayLength${uniqueCounter++}`;
         printer.writeStatement(printer.makeAssign(runtimeType,
             undefined,
-            printer.makeString(`${param}Deserializer.readInt8();`), true))
+            printer.makeString(`${param}Deserializer.readInt8()`), true))
+        const thenStatement = new BlockStatement([
+            // read length
+            printer.makeAssign(arrayLength, undefined, printer.makeString(`${param}Deserializer.readInt32()`), true),
+            // prepare object
+            printer.prepareTargetObject(this, param, value, undefined, arrayLength),
+            // store
+            printer.makeForLoop(arrayLength, printer.makeStatementFromOp((writer) => {
+                const accessor = printer.getObjectAccessor(this, param, value, "[i]")
+                this.elementConvertor.convertorDeserialize(param, accessor, writer, language)
+            }))
+        ])
         printer.writeStatement(
-            printer.makeCondition(
-                printer.makeTestNotUndef(printer.makeString(`${runtimeType}`)),
-                new BlockStatement([
-                    printer.makeAssign(arrayLength, undefined, printer.makeString(`${param}Deserializer.readInt32()`), true),
-                        ...initValue,
-                    printer.makeForLoop(arrayLength, printer.makeStatementFromOp((writer) => {
-                        this.elementConvertor.convertorDeserialize(param, valueName, writer, language)
-                    }))
-                ])))
+            printer.makeCondition(printer.makeTestNotUndef(printer.makeString(`${runtimeType}`)), thenStatement))
     }
     nativeType(impl: boolean): string {
         return `Array_${this.table.computeTypeName(undefined, this.elementType, false)}`

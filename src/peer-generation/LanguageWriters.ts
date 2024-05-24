@@ -239,9 +239,10 @@ class CppMapForEachStatement implements LanguageStatement {
 }
 
 class CppArrayResizeStatement implements LanguageStatement {
-    constructor(private elementType: string, private array: string, private length: string, private deserializer: string) {}
+    constructor(private array: string, private length: string, private deserializer: string) {}
     write(writer: LanguageWriter): void {
-        writer.print(`${this.deserializer}.resizeArray<Array_${this.elementType}, ${this.elementType}>(&${this.array}, ${this.length});`)
+        writer.print(`${this.deserializer}.resizeArray<std::decay<decltype(${this.array})>::type,
+        std::decay<decltype(*${this.array}.array)>::type>(&${this.array}, ${this.length});`)
     }
 }
 
@@ -402,8 +403,8 @@ export abstract class LanguageWriter {
         return new ExpressionStatement(expr)
     }
 
-    abstract prepareTargetObject(p: BaseArgConvertor, param: string, value: string, tag?: string): LanguageStatement
-    abstract getObjectAccessor(p: BaseArgConvertor, param: string, value: string, index?: number): string
+    abstract prepareTargetObject(p: BaseArgConvertor, param: string, value: string, tag?: string, length?: string): LanguageStatement
+    abstract getObjectAccessor(p: BaseArgConvertor, param: string, value: string, index?: number | string): string
     abstract convertRuntimeTypeToTag(name: string): LanguageExpression
 
     abstract makeCast(value: LanguageExpression, type: Type): LanguageExpression
@@ -522,15 +523,18 @@ export class TSLanguageWriter extends LanguageWriter {
             writer.print("}")
         })
     }
-    prepareTargetObject(p: BaseArgConvertor, param: string, value: string, tag?: string): LanguageStatement {
+    prepareTargetObject(p: BaseArgConvertor, param: string, value: string, tag?: string, length?: string): LanguageStatement {
         if (!(p instanceof OptionConvertor) && p.useArray) {
             return this.makeAssign(`${param}.${value}`, Type.Any, this.makeString("[]"), false)
         }
         return this.makeAssign(`${param}.${value}`, Type.Any, this.makeString("{}"), false)
     }
-    getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, index?: number): string {
+    getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, index?: number|string): string {
         if (convertor instanceof OptionConvertor) {
             return `${param}.${value}`
+        }
+        if (convertor instanceof ArrayConvertor) {
+            return `${param}.${value}${index??""}`
         }
         if (convertor.useArray && index != undefined) {
             return `${param}.${value}[${index}]`
@@ -652,7 +656,7 @@ export class JavaLanguageWriter extends LanguageWriter {
     makeForLoop(count: string, statement: LanguageStatement): LanguageStatement {
         throw new Error("Method not implemented.")
     }
-    prepareTargetObject(p: BaseArgConvertor, param: string, value: string, tag?: string): LanguageStatement {
+    prepareTargetObject(p: BaseArgConvertor, param: string, value: string, tag?: string, length?: string): LanguageStatement {
         throw new Error("Method not implemented.")
     }
     getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, index: number): string {
@@ -700,8 +704,8 @@ export class CppLanguageWriter extends LanguageWriter {
     makeMapForEach(map: string, key: string, value: string): LanguageStatement {
         return new CppMapForEachStatement(map, key, value)
     }
-    makeArrayResize(elementType: string, array: string, length: string, deserializer: string): LanguageStatement {
-        return new CppArrayResizeStatement(elementType, array, length, deserializer)
+    makeArrayResize(array: string, length: string, deserializer: string): LanguageStatement {
+        return new CppArrayResizeStatement(array, length, deserializer)
     }
     makeMapResize(keyType: string, valueType: string, map: string, size: string, deserializer: string): LanguageStatement {
         return new CppMapResizeStatement(keyType, valueType, map, size, deserializer)
@@ -737,19 +741,24 @@ export class CppLanguageWriter extends LanguageWriter {
             writer.print("}")
         })
     }
-    prepareTargetObject(convertor: BaseArgConvertor, param: string, value: string, tag?: string): LanguageStatement {
+    prepareTargetObject(convertor: BaseArgConvertor, param: string, value: string, tag?: string, length?: string): LanguageStatement {
+        if (convertor instanceof ArrayConvertor) {
+            return this.makeArrayResize(value, length!, `${param}Deserializer`)
+        }
         return new class implements LanguageStatement {
             write(writer: LanguageWriter): void {
                 writer.print(`${value} = {${tag ? ".tag = " + tag : ""}};`)
             }
         }
     }
-    getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, index?: number): string {
+    getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, index?: number|string): string {
         if (convertor instanceof OptionConvertor) {
             return `${value}.value`
         }
-        if (convertor instanceof ArrayConvertor
-            || convertor instanceof UnionConvertor
+        if (convertor instanceof ArrayConvertor) {
+            return `${value}.array${index}`
+        }
+        if (convertor instanceof UnionConvertor
             || convertor instanceof TupleConvertor) {
             return `${value}.value${index}`
         }
