@@ -15,6 +15,7 @@
 
 import { IndentedPrinter } from "../IndentedPrinter";
 import { Language, stringOrNone } from "../util";
+import {ArrayConvertor, BaseArgConvertor, OptionConvertor, TupleConvertor, UnionConvertor} from "./Convertors";
 
 export class Type {
     constructor(public name: string, public nullable = false) {}
