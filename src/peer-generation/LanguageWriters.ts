@@ -15,7 +15,7 @@
 
 import { IndentedPrinter } from "../IndentedPrinter";
 import { Language, stringOrNone } from "../util";
-import {ArrayConvertor, BaseArgConvertor, OptionConvertor, TupleConvertor, UnionConvertor} from "./Convertors";
+import { ArrayConvertor, BaseArgConvertor, EnumConvertor, FunctionConvertor, InterfaceConvertor, OptionConvertor, PrimitiveType, TupleConvertor, UnionConvertor } from "./Convertors";
 
 export class Type {
     constructor(public name: string, public nullable = false) {}
@@ -429,6 +429,7 @@ export abstract class LanguageWriter {
     abstract makeCast(value: LanguageExpression, type: Type): LanguageExpression
     abstract makeCast(value: LanguageExpression, type: Type, unsafe: boolean): LanguageExpression
     abstract writePrintLog(message: string): void
+    abstract makeUndefined(): LanguageExpression
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
         this.writeMethodDeclaration(name, signature)
     }
@@ -553,10 +554,22 @@ export class TSLanguageWriter extends LanguageWriter {
     }
     getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, index?: number|string): string {
         if (convertor instanceof OptionConvertor) {
-            return `${param}.${value}`
+            return `${value}`
         }
         if (convertor instanceof ArrayConvertor) {
             return `${param}.${value}${index??""}`
+        }
+        if (convertor instanceof UnionConvertor) {
+            return value
+        }
+        if (convertor instanceof EnumConvertor) {
+            return `${param}.${value}`
+        }
+        if (convertor instanceof FunctionConvertor) {
+            return `${param}.${value}`
+        }
+        if (convertor instanceof InterfaceConvertor) {
+            return `${param}.${value}`
         }
         if (convertor.useArray && index != undefined) {
             return `${param}.${value}[${index}]`
@@ -565,6 +578,9 @@ export class TSLanguageWriter extends LanguageWriter {
     }
     convertRuntimeTypeToTag(name: string): LanguageExpression {
         return this.makeString(`${name}`)
+    }
+    makeUndefined(): LanguageExpression {
+        return this.makeString("undefined")
     }
 }
 
@@ -698,6 +714,9 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     convertRuntimeTypeToTag(name: string): LanguageExpression {
         throw new Error("Method not implemented.")
     }
+    makeUndefined(): LanguageExpression {
+        return this.makeString("undefined")
+    }
 }
 
 export class CppLanguageWriter extends CLikeLanguageWriter {
@@ -812,6 +831,9 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     convertRuntimeTypeToTag(name: string): LanguageExpression {
         return this.makeTernary(this.makeString(`${name} == ARK_RUNTIME_UNDEFINED`),
             this.makeString("ARK_TAG_UNDEFINED"), this.makeString("ARK_TAG_OBJECT"))
+    }
+    makeUndefined(): LanguageExpression {
+        return this.makeString(`${PrimitiveType.Undefined.getText()}()`)
     }
 }
 

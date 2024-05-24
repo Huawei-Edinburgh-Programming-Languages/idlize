@@ -166,14 +166,11 @@ export class UndefinedConvertor extends BaseArgConvertor {
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         printer.print(`${param}Serializer.writeUndefined()`)
     }
-    convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
-        let expr: LanguageExpression
-        if (language == Language.TS) {
-            expr = printer.makeString("undefined")
-        } else if (language == Language.CPP) {
-            expr = printer.makeString(`${param}Deserializer.readUndefined();`)
-        }
-        printer.writeStatement(printer.makeAssign(value, undefined, expr!, false))
+    convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
+        const accessor = printer.getObjectAccessor(this, param, value)
+        printer.writeStatement(
+            printer.makeAssign(accessor, undefined,
+                printer.makeUndefined(), false))
     }
     nativeType(impl: boolean): string {
         return "Undefined"
@@ -201,7 +198,10 @@ export class EnumConvertor extends BaseArgConvertor {
         printer.print(`${param}Serializer.writeInt32(${this.convertorArg(value, printer)})`)
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
-        printer.print(`${value} = ${param}Deserializer.readInt32();`)
+        const accessor = printer.getObjectAccessor(this, param, value)
+        printer.writeStatement(
+            printer.makeAssign(accessor, undefined,
+                printer.makeString(`${param}Deserializer.readInt32()`), false))
     }
     nativeType(impl: boolean): string {
         return PrimitiveType.Int32.getText()
@@ -449,7 +449,11 @@ export class ImportTypeConvertor extends BaseArgConvertor {
         printer.print(`${param}Serializer.writeCustomObject("${this.importedName}", ${value})`)
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
-        printer.print(`${value} = ${param}Deserializer.readCustomObject("${this.importedName}");`)
+        const accessor = printer.getObjectAccessor(this, param, value)
+        printer.writeStatement(
+            printer.makeAssign(accessor, undefined,
+                printer.makeString(`${param}Deserializer.readCustomObject("${this.importedName}")`), false))
+
     }
     nativeType(impl: boolean): string {
         // return this.importedName
@@ -634,8 +638,9 @@ export class InterfaceConvertor extends BaseArgConvertor {
         printer.writeMethodCall(`${param}Serializer`, this.table.serializerName(this.tsTypeName, this.type), [value])
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
+        const accessor = printer.getObjectAccessor(this, param, value)
         printer.writeStatement(
-            printer.makeAssign(value, undefined,
+            printer.makeAssign(accessor, undefined,
                 printer.makeMethodCall(`${param}Deserializer`, this.table.deserializerName(this.tsTypeName, this.type), []), false))
     }
     nativeType(impl: boolean): string {
@@ -670,8 +675,9 @@ export class FunctionConvertor extends BaseArgConvertor {
         throw new Error("Must never be used")
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
+        const accessor = printer.getObjectAccessor(this, param, value)
         printer.writeStatement(
-            printer.makeAssign(value, undefined,
+            printer.makeAssign(accessor, undefined,
                 printer.makeString(`${param}Deserializer.readFunction()`), false))
     }
     nativeType(impl: boolean): string {
