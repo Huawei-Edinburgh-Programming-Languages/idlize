@@ -109,6 +109,13 @@ export class CppAssignStatement extends AssignStatement {
     }
 }
 
+export class CDefinedExpression implements LanguageExpression {
+    constructor(private value: string) { }
+    asString(): string {
+        return `${this.value} != ARK_TAG_UNDEFINED`
+    }
+}
+
 export class CheckDefinedExpression implements LanguageExpression {
     constructor(private value: string) { }
     asString(): string {
@@ -364,8 +371,6 @@ export abstract class LanguageWriter {
     abstract writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void): void
     abstract writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void): void
 
-    abstract makeTestNotUndef(expr: LanguageExpression): LanguageExpression
-
     writeSuperCall(params: string[]): void {
         this.printer.print(`super(${params.join(", ")});`)
     }
@@ -530,9 +535,7 @@ export class TSLanguageWriter extends LanguageWriter {
     mapType(type: Type): string {
         return `${type.name}`
     }
-    makeTestNotUndef(expr: LanguageExpression): LanguageExpression {
-        return this.makeString(`${expr.asString()} != RuntimeType.UNDEFINED`);
-    }
+
     makeForLoop(count: string, statement: LanguageStatement): LanguageStatement {
         return this.makeStatementFromOp((writer)=> {
             writer.print(`for (let i = 0; i < ${count}; i++) {`)
@@ -683,9 +686,6 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         }
         return super.mapType(type)
     }
-    makeTestNotUndef(expr: LanguageExpression): LanguageExpression {
-        throw new Error("Method not implemented.")
-    }
     makeForLoop(count: string, statement: LanguageStatement): LanguageStatement {
         throw new Error("Method not implemented.")
     }
@@ -759,6 +759,11 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     writePrintLog(message: string): void {
         this.print(`printf("${message}\n")`)
     }
+
+    makeDefinedCheck(value: string): LanguageExpression {
+        return new CDefinedExpression(value);
+    }
+
     mapType(type: Type): string {
         switch (type.name) {
             case 'KPointer': return 'void*'
@@ -771,10 +776,6 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         }
         return super.mapType(type)
     }
-
-    makeTestNotUndef(expr: LanguageExpression): LanguageExpression {
-        return this.makeString(`${expr.asString()} != ARK_TAG_UNDEFINED`);
-    }
     makeForLoop(count: string, statement: LanguageStatement): LanguageStatement {
         return this.makeStatementFromOp((writer)=> {
             writer.print(`for (int64_t i = 0; i < ${count}; i++) {`)
@@ -784,6 +785,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
             writer.print("}")
         })
     }
+
     prepareTargetObject(convertor: BaseArgConvertor, param: string, value: string, tag?: string, length?: string): LanguageStatement {
         if (convertor instanceof ArrayConvertor) {
             return this.makeArrayResize(value, length!, `${param}Deserializer`)

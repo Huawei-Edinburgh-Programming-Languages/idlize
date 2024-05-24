@@ -542,7 +542,7 @@ export class OptionConvertor extends BaseArgConvertor {
             })
         ])
         printer.writeStatement(printer.makeCondition(
-            printer.makeTestNotUndef(printer.makeString(tag)),
+            printer.makeDefinedCheck(tag),
             thenStatement!))
     }
     nativeType(impl: boolean): string {
@@ -719,7 +719,7 @@ export class TupleConvertor extends BaseArgConvertor {
             })
         ])
         printer.writeStatement(printer.makeCondition(
-            printer.makeTestNotUndef(printer.makeString(`${param}Deserializer.readInt8()`)),
+            printer.makeDefinedCheck(`${param}Deserializer.readInt8()`),
             thenStatement!))
     }
     nativeType(impl: boolean): string {
@@ -789,7 +789,7 @@ export class ArrayConvertor extends BaseArgConvertor {
             }))
         ])
         printer.writeStatement(
-            printer.makeCondition(printer.makeTestNotUndef(printer.makeString(`${runtimeType}`)), thenStatement))
+            printer.makeCondition(printer.makeDefinedCheck(runtimeType), thenStatement))
     }
     nativeType(impl: boolean): string {
         return `Array_${this.table.computeTypeName(undefined, this.elementType, false)}`
