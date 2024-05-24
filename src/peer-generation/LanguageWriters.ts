@@ -15,7 +15,6 @@
 
 import { IndentedPrinter } from "../IndentedPrinter";
 import { Language, stringOrNone } from "../util";
-import { ArrayConvertor, BaseArgConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "./Convertors";
 
 export class Type {
     constructor(public name: string, public nullable = false) {}
@@ -29,7 +28,9 @@ export class Type {
 
 export enum MethodModifier {
     PUBLIC,
-    STATIC
+    PRIVATE,
+    STATIC,
+    NATIVE  ,
 }
 
 export interface LanguageStatement {
@@ -76,6 +77,18 @@ export class JavaAssignStatement extends AssignStatement {
             writer.print(`${typeSpec} ${this.variableName} = ${this.expression.asString()};`)
         } else {
             writer.print(`${this.variableName} = ${this.expression.asString()};`)
+        }
+    }
+}
+
+export class EtsAssignStatement implements LanguageStatement {
+    constructor(public variableName: string, public type: Type | undefined, public expression: LanguageExpression, public isDeclared: boolean = true) { }
+    write(writer: LanguageWriter): void {
+        if (this.isDeclared) {
+            const typeSpec = ""
+            writer.print(`const ${this.variableName}${typeSpec} = ${this.expression.asString()}`)
+        } else {
+            writer.print(`${this.variableName} = ${this.expression.asString()}`)
         }
     }
 }
@@ -150,7 +163,7 @@ export class TSReturnStatement extends ReturnStatement {
     constructor(public expression: LanguageExpression) { super(expression) }
 }
 
-export class JavaReturnStatement extends ReturnStatement {
+export class CLikeReturnStatement extends ReturnStatement {
     constructor(public expression: LanguageExpression) { super(expression) }
     write(writer: LanguageWriter): void {
         writer.print(this.expression ? `return ${this.expression.asString()};` : "return;")
@@ -345,7 +358,7 @@ export abstract class LanguageWriter {
 
     abstract writeFieldDeclaration(name: string, type: Type, modifiers: string[]|undefined, optional: boolean): void
 
-    abstract writeMethodDeclaration(name: string, signature: MethodSignature, prefix?: string): void
+    abstract writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void
 
     abstract writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void): void
     abstract writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void): void
@@ -430,6 +443,9 @@ export abstract class LanguageWriter {
     mapType(type: Type): string {
         return type.name
     }
+    mapMethodModifier(modifier: MethodModifier): string {
+        return `${MethodModifier[modifier].toLowerCase()}`
+    }
     makeStatementFromOp(op: (writer: LanguageWriter) => void): LanguageStatement {
         return new class implements LanguageStatement {
             write(writer: LanguageWriter): void {
@@ -469,8 +485,8 @@ export class TSLanguageWriter extends LanguageWriter {
     writeFieldDeclaration(name: string, type: Type, modifiers: string[]|undefined, optional: boolean): void {
         this.printer.print(`${modifiers?.join(' ') ?? ""} ${name}${optional ? "?"  : ""}: ${type.name}`)
     }
-    writeMethodDeclaration(name: string, signature: MethodSignature, prefix?: string): void {
-        this.writeDeclaration(name, signature, true, false, prefix)
+    writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void {
+        this.writeDeclaration(name, signature, true, false, modifiers)
     }
     writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void) {
         this.writeDeclaration('constructor', signature, false, true)
@@ -481,14 +497,16 @@ export class TSLanguageWriter extends LanguageWriter {
 
     }
     writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void) {
-        this.writeDeclaration(method.name, method.signature, true, true, method.modifiers?.includes(MethodModifier.STATIC) ? "static " : "")
+        this.writeDeclaration(method.name, method.signature, true, true, method.modifiers)
         this.pushIndent()
         op(this)
         this.popIndent()
         this.printer.print(`}`)
     }
-    private writeDeclaration(name: string, signature: MethodSignature, needReturn: boolean, needBracket: boolean, prefix?: string) {
-        this.printer.print(`${prefix ?? ""}${name}(${signature.args.map((it, index) => `${signature.argName(index)}${it.nullable ? "?" : ""}: ${this.mapType(it)}${signature.argDefault(index) ? ' = ' + signature.argDefault(index) : ""}`).join(", ")})${needReturn ? ": " + this.mapType(signature.returnType) : ""} ${needBracket ? "{" : ""}`)
+    private writeDeclaration(name: string, signature: MethodSignature, needReturn: boolean, needBracket: boolean, modifiers?: MethodModifier[]) {
+        let prefix = modifiers?.map(it => this.mapMethodModifier(it)).join(" ")
+        prefix = prefix ? prefix + " " : ""
+        this.printer.print(`${prefix}${name}(${signature.args.map((it, index) => `${signature.argName(index)}${it.nullable ? "?" : ""}: ${this.mapType(it)}${signature.argDefault(index) ? ' = ' + signature.argDefault(index) : ""}`).join(", ")})${needReturn ? ": " + this.mapType(signature.returnType) : ""} ${needBracket ? "{" : ""}`)
     }
     makeAssign(variableName: string, type: Type, expr: LanguageExpression, isDeclared: boolean = true): LanguageStatement {
         return new AssignStatement(variableName, type, expr, isDeclared)
@@ -552,7 +570,10 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     }
 
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
-        this.writeMethodDeclaration(name, signature, "static native ")
+        this.writeMethodDeclaration(name, signature, [MethodModifier.STATIC, MethodModifier.NATIVE])
+    }
+    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean = true): LanguageStatement {
+        return new EtsAssignStatement(variableName, type, expr, isDeclared)
     }
 
     mapType(type: Type): string {
@@ -567,7 +588,35 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     }
 }
 
-export class JavaLanguageWriter extends LanguageWriter {
+abstract class CLikeLanguageWriter extends LanguageWriter {
+    protected constructor(printer: IndentedPrinter, language: Language) {
+        super(printer, language)
+    }
+    writeMethodCall(receiver: string, method: string, params: string[], nullable = false): void {
+        this.printer.print(`${receiver}.${method}(${params.join(", ")});`)
+    }
+    writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void {
+        let prefix = modifiers?.map(it => this.mapMethodModifier(it)).join(" ")
+        prefix = prefix ? prefix + " " : ""
+        this.printer.print(`${prefix}${this.mapType(signature.returnType)} ${name}(${signature.args.map((it, index) => `${this.mapType(it)} ${signature.argName(index)}`).join(", ")});`)
+    }
+    writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void) {
+        this.printer.print(`${className}(${signature.args.map((it, index) => `${this.mapType(it)} ${signature.argName(index)}`).join(", ")}) {`)
+        this.pushIndent()
+        op(this)
+        this.popIndent()
+        this.printer.print(`}`)
+    }
+    writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void) {
+        this.printer.print(`${this.mapType(method.signature.returnType)} ${method.name}(${method.signature.args.map((it, index) => `${this.mapType(it)} ${method.signature.argName(index)}`).join(", ")}) {`)
+        this.pushIndent()
+        op(this)
+        this.popIndent()
+        this.printer.print(`}`)
+    }
+}
+
+export class JavaLanguageWriter extends CLikeLanguageWriter {
     constructor(printer: IndentedPrinter) {
         super(printer, Language.JAVA)
     }
@@ -592,37 +641,20 @@ export class JavaLanguageWriter extends LanguageWriter {
         if (nullable) {
             this.printer.print(`if (${receiver} != null) ${receiver}.${method}(${params.join(", ")});`)
         } else {
-            this.printer.print(`${receiver}.${method}(${params.join(", ")});`)
+            super.writeMethodCall(receiver, method, params, nullable)
         }
     }
     writeFieldDeclaration(name: string, type: Type, modifiers: string[]|undefined, optional: boolean): void {
         this.printer.print(`${modifiers?.join(' ') ?? ""}  ${type.name} ${name}${optional ? " = null"  : ""};`)
     }
-    writeMethodDeclaration(name: string, signature: MethodSignature, prefix?: string): void {
-        this.printer.print(`${prefix ?? ""}${this.mapType(signature.returnType)} ${name}(${signature.args.map((it, index) => `${this.mapType(it)} ${signature.argName(index)}`).join(", ")});`)
-    }
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
-        this.writeMethodDeclaration(name, signature, "static native ")
-    }
-    writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void) {
-        this.printer.print(`${className}(${signature.args.map((it, index) => `${this.mapType(it)} ${signature.argName(index)}`).join(", ")}) {`)
-        this.pushIndent()
-        op(this)
-        this.popIndent()
-        this.printer.print(`}`)
-    }
-    writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void) {
-        this.printer.print(`${this.mapType(method.signature.returnType)} ${method.name}(${method.signature.args.map((it, index) => `${this.mapType(it)} ${method.signature.argName(index)}`).join(", ")}) {`)
-        this.pushIndent()
-        op(this)
-        this.popIndent()
-        this.printer.print(`}`)
+        this.writeMethodDeclaration(name, signature, [MethodModifier.STATIC, MethodModifier.NATIVE])
     }
     makeAssign(variableName: string, type: Type, expr: LanguageExpression, isDeclared: boolean = true): LanguageStatement {
         return new JavaAssignStatement(variableName, type, expr, isDeclared)
     }
     makeReturn(expr: LanguageExpression): LanguageStatement {
-        return new JavaReturnStatement(expr)
+        return new CLikeReturnStatement(expr)
     }
     makeDefinedCheck(value: string): LanguageExpression {
         return new JavaCheckDefinedExpression(value)
@@ -667,33 +699,43 @@ export class JavaLanguageWriter extends LanguageWriter {
     }
 }
 
-export class CppLanguageWriter extends LanguageWriter {
+export class CppLanguageWriter extends CLikeLanguageWriter {
     constructor(printer: IndentedPrinter) {
         super(printer, Language.CPP)
     }
-    writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string | undefined, interfaces?: string[] | undefined): void {
+    writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string, interfaces?: string[]): void {
+        const superClasses = (superClass ? [superClass] : []).concat(interfaces ?? [])
+        const extendsClause = superClasses ? ` : ${superClasses.map(c => `public ${c}`).join(", ")}` : ''
+        this.printer.print(`class ${name}${extendsClause} {`)
+        this.pushIndent()
+        op(this)
+        this.popIndent()
+        this.printer.print(`}`)
+    }
+    writeInterface(name: string, op: (writer: LanguageWriter) => void, superInterfaces?: string[]): void {
         throw new Error("Method not implemented.")
     }
-    writeInterface(name: string, op: (writer: LanguageWriter) => void, superInterfaces?: string[] | undefined): void {
-        throw new Error("Method not implemented.")
+    writeMethodCall(receiver: string, method: string, params: string[], nullable = false): void {
+        if (nullable) {
+            this.printer.print(`if (${receiver}) ${receiver}.${method}(${params.join(", ")});`)
+        } else {
+            super.writeMethodCall(receiver, method, params, nullable)
+        }
     }
     writeFieldDeclaration(name: string, type: Type, modifiers: string[] | undefined, optional: boolean): void {
-        throw new Error("Method not implemented.")
-    }
-    writeMethodDeclaration(name: string, signature: MethodSignature, prefix?: string | undefined): void {
-        throw new Error("Method not implemented.")
-    }
-    writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void): void {
-        throw new Error("Method not implemented.")
-    }
-    writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void): void {
-        throw new Error("Method not implemented.")
+        const modifier = modifiers?.find(mod => mod !== "static")
+        if (modifier) {
+            this.printer.print(`${modifier}:`)
+        }
+        this.printer.pushIndent()
+        this.printer.print(`${type.name} ${name};`)
+        this.printer.popIndent()
     }
     makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression | undefined, isDeclared: boolean = true): LanguageStatement {
         return new CppAssignStatement(variableName, type, expr, isDeclared)
     }
     makeReturn(expr: LanguageExpression): LanguageStatement {
-        throw new Error("Method not implemented.")
+        return new CLikeReturnStatement(expr)
     }
     makeArrayLength(array: string, length: string): LanguageExpression {
         return new StringExpression(length)
@@ -714,7 +756,7 @@ export class CppLanguageWriter extends LanguageWriter {
         return new CppCastExpression(expr, type, unsafe)
     }
     writePrintLog(message: string): void {
-        throw new Error("Method not implemented.")
+        this.print(`printf("${message}\n")`)
     }
     mapType(type: Type): string {
         switch (type.name) {
