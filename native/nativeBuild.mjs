@@ -64,8 +64,6 @@ let ohosSdkRoot = process.env.OHOS_SDK ?? '../koala-ui/ohos-sdk/ohos-sdk'
 let ohosSdkVersion = process.env.OHOS_SDK_VERSION ?? 'HarmonyOS-NEXT-DP1'
 
 const sysrootDir = crossPathResolve(`${ohosSdkRoot}/${ohosSdkVersion}/base/native/sysroot`)
-let builtInArgs = `${isArm64 ? '\'--target=aarch64-linux-ohos\'' : '\'--target=arm-linux-ohos\', \'-m32\''}`
-
 let crossFileContent = `
 [binaries]
 c = \'${crossPathResolve(`${ohosSdkRoot}/${ohosSdkVersion}/base/native/llvm/bin/clang${exeSuffix}`)}\'
@@ -74,14 +72,14 @@ cpp = \'${crossPathResolve(`${ohosSdkRoot}/${ohosSdkVersion}/base/native/llvm/bi
 strip = \'${crossPathResolve(`${ohosSdkRoot}/${ohosSdkVersion}/base/native/llvm/bin/llvm-strip${exeSuffix}`)}\'
 
 [built-in options]
-c_args = ['--sysroot=${sysrootDir}', '-fno-builtin', ${builtInArgs}]
-c_link_args = ['--sysroot=${sysrootDir}', ${builtInArgs}]
-cpp_args = ['--sysroot=${sysrootDir}', '-fno-builtin', ${builtInArgs}]
-cpp_link_args = ['--sysroot=${sysrootDir}', ${builtInArgs}]
+c_args = ['--sysroot=${sysrootDir}']
+c_link_args = ['--sysroot=${sysrootDir}']
+cpp_args = ['--sysroot=${sysrootDir}']
+cpp_link_args = ['--sysroot=${sysrootDir}']
 
 [host_machine]
 system = 'ohos'
-cpu_family = ${isArm64 ? "'aarch64'" : "'armv7a'"}
+cpu_family = ${isArm64 ? "'aarch64'" : "'arm'"}
 cpu = ${isArm64 ? "'aarch64'" : "'arm'"}
 endian = 'little'
 `

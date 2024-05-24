@@ -187,6 +187,14 @@ ohos_cflags += [
     '-DKOALA_OHOS',
     '-D__MUSL__',
 ]
+if arch == 'arm'
+ohos_cflags += ['--target=arm-linux-ohos'] #, '-m32', '-march=armv7-a']
+endif
+if arch == 'aarch64'
+ohos_cflags += ['--target=aarch64-linux-ohos']
+endif
+
+message(ohos_cflags)
 
 ohos_ldflags = [
     '-lhilog_ndk.z',
@@ -217,7 +225,7 @@ shared_library(ohos_library_name,
 endif
 
 # TODO: fix on Windows as well
-if os != 'windows'
+if os != 'windows' and not is_ohos
 executable('test_arkoala_api',
     gen_dir / 'api_test.c',
     c_args: cflags

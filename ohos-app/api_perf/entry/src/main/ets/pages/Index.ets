@@ -1,8 +1,9 @@
-import { NodeController, FrameNode } from '@ohos.arkui.node';
+//import { NodeController, FrameNode } from '@ohos.arkui.node';
 import { startPerformanceTest, RunPerformanceTest } from '../idlize/test_performance';
 import { testString1000, testLength_10_percent, testLength_number100, testNumber100 } from '../idlize/test_data'
 
-function startFrameNodePerformanceTest(node: FrameNode) {
+function startFrameNodePerformanceTest() {
+  /*
   RunPerformanceTest("frameNode_restoreId_testNumber100", 1, 10000, () => {
     node.commonAttribute.restoreId(testNumber100)
   })
@@ -30,9 +31,10 @@ function startFrameNodePerformanceTest(node: FrameNode) {
         grayscale: [1, 1]
       }
     })
-  })
+  }) */
 }
 
+/*
 class MyNodeController extends NodeController {
   private rootNode: FrameNode | null = null;
 
@@ -58,6 +60,25 @@ struct Index {
   build() {
     Row() {
       NodeContainer(this.myNodeController)
+    }
+  }
+}
+*/
+@Entry
+@Component
+struct Index {
+  //private myNodeController: MyNodeController = new MyNodeController();
+
+  build() {
+    Row() {
+      Button("Start")
+      .onClick(() => {
+        try {
+          startPerformanceTest()
+        } catch (e) {
+          console.log("E=" + e)
+        }
+      })
     }
   }
 }

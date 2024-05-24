@@ -21,7 +21,10 @@
         "node-addon-api": "^8.0.0",
         "node-api-headers": "^1.1.0",
         "typescript": "^4.9.5",
-        "webidl2": "^24.4.1"
+        "webidl2": "^24.4.1",
+	"progress-stream": "^2.0.0",
+        "request": "^2.88.2",
+        "decompress": "^4.2.1"
     },
     "devDependencies": {
         "@rollup/plugin-node-resolve": "^15.2.3",

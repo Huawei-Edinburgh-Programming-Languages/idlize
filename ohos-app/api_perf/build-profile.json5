@@ -5,13 +5,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "certpath": "C:\\Users\\liyou\\.ohos\\config\\default_api_perf_bZewzDL4oBKR3X_qqGhxjFg0vaM7quGUne_ixmGk37E=.cer",
-          "storePassword": "0000001B6133D1D56F5478DC2F707E68E36345C559D908BA0CE66D40233553DF1EFE9EDF3C8B90FE7CFD9A",
+          "certpath": "C:\\Users\\n00657515\\.ohos\\config\\default_api_perf_UyGpC7X-QKDruXPFjfEzwtSx31-i9GNwy7KVWVCzh_c=.cer",
+          "storePassword": "0000001A18C12072C76E1BE6DD489CD3BC844907465001D1E855FEF9890DFF363805F424198905FFD830",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001B99113ADC02EBD291F037AFE3A483FFD33DA849DB48E12EEEAECC557B23CC90E57A34C24C75FEE3",
-          "profile": "C:\\Users\\liyou\\.ohos\\config\\default_api_perf_bZewzDL4oBKR3X_qqGhxjFg0vaM7quGUne_ixmGk37E=.p7b",
+          "keyPassword": "0000001A1079363604A6F21962F8A26BF1A63B368AA19F736B4C86B53F5930DD423E98ADAEC390145064",
+          "profile": "C:\\Users\\n00657515\\.ohos\\config\\default_api_perf_UyGpC7X-QKDruXPFjfEzwtSx31-i9GNwy7KVWVCzh_c=.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\liyou\\.ohos\\config\\default_api_perf_bZewzDL4oBKR3X_qqGhxjFg0vaM7quGUne_ixmGk37E=.p12"
+          "storeFile": "C:\\Users\\n00657515\\.ohos\\config\\default_api_perf_UyGpC7X-QKDruXPFjfEzwtSx31-i9GNwy7KVWVCzh_c=.p12"
         }
       }
     ],
@@ -19,7 +19,6 @@
       {
         "name": "default",
         "signingConfig": "default",
-        "compileSdkVersion": "4.1.0(11)",
         "compatibleSdkVersion": "4.1.0(11)",
         "runtimeOS": "HarmonyOS",
       }
