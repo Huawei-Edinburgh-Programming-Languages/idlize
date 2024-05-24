@@ -15,6 +15,7 @@
 
 import { IndentedPrinter } from "../IndentedPrinter";
 import { Language, stringOrNone } from "../util";
+import { ArrayConvertor, BaseArgConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "./Convertors";
 
 export class Type {
     constructor(public name: string, public nullable = false) {}
@@ -40,13 +41,13 @@ export interface LanguageExpression {
 }
 
 export class AssignStatement implements LanguageStatement {
-    constructor(public variableName: string, public type: Type | undefined, public expression: LanguageExpression, public isDeclared: boolean = true) { }
+    constructor(public variableName: string, public type: Type | undefined, public expression: LanguageExpression | undefined, public isDeclared: boolean = true) { }
     write(writer: LanguageWriter): void {
         if (this.isDeclared) {
             const typeSpec = this.type ? `: ${writer.mapType(this.type)}` : ""
-            writer.print(`const ${this.variableName}${typeSpec} = ${this.expression.asString()}`)
+            writer.print(`let ${this.variableName}${typeSpec} = ${this.expression?.asString()}`)
         } else {
-            writer.print(`${this.variableName} = ${this.expression.asString()}`)
+            writer.print(`${this.variableName} = ${this.expression?.asString()}`)
         }
     }
 }
@@ -80,15 +81,16 @@ export class JavaAssignStatement extends AssignStatement {
 }
 
 export class CppAssignStatement extends AssignStatement {
-    constructor(public variableName: string, public type: Type | undefined, public expression: LanguageExpression, public isDeclared: boolean = true) {
+    constructor(public variableName: string, public type: Type | undefined, public expression: LanguageExpression | undefined, public isDeclared: boolean = true) {
         super(variableName, type, expression)
      }
      write(writer: LanguageWriter): void{
         if (this.isDeclared) {
             const typeSpec = this.type ? writer.mapType(this.type) : "auto"
-            writer.print(`const ${typeSpec} ${this.variableName} = ${this.expression.asString()};`)
+            const initValue = this.expression ? this.expression.asString() : "{}"
+            writer.print(`${typeSpec} ${this.variableName} = ${initValue};`)
         } else {
-            writer.print(`${this.variableName} = ${this.expression.asString()};`)
+            writer.print(`${this.variableName} = ${this.expression!.asString()};`)
         }
     }
 }
@@ -368,7 +370,7 @@ export abstract class LanguageWriter {
     makeMethodCall(receiver: string, method: string, params: LanguageExpression[], nullable?: boolean): LanguageExpression {
         return new MethodCallExpression(receiver, method, params, nullable)
     }
-    abstract makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean): LanguageStatement;
+    abstract makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression | undefined, isDeclared: boolean): LanguageStatement;
     abstract makeReturn(expr?: LanguageExpression): LanguageStatement;
     makeDefinedCheck(value: string): LanguageExpression {
         return new CheckDefinedExpression(value)
@@ -399,6 +401,11 @@ export abstract class LanguageWriter {
     makeStatement(expr: LanguageExpression): LanguageStatement {
         return new ExpressionStatement(expr)
     }
+
+    abstract prepareTargetObject(p: BaseArgConvertor, param: string, value: string, tag?: string): LanguageStatement
+    abstract getObjectAccessor(p: BaseArgConvertor, param: string, value: string, index?: number): string
+    abstract convertRuntimeTypeToTag(name: string): LanguageExpression
+
     abstract makeCast(value: LanguageExpression, type: Type): LanguageExpression
     abstract makeCast(value: LanguageExpression, type: Type, unsafe: boolean): LanguageExpression
     abstract writePrintLog(message: string): void
@@ -515,6 +522,24 @@ export class TSLanguageWriter extends LanguageWriter {
             writer.print("}")
         })
     }
+    prepareTargetObject(p: BaseArgConvertor, param: string, value: string, tag?: string): LanguageStatement {
+        if (!(p instanceof OptionConvertor) && p.useArray) {
+            return this.makeAssign(`${param}.${value}`, Type.Any, this.makeString("[]"), false)
+        }
+        return this.makeAssign(`${param}.${value}`, Type.Any, this.makeString("{}"), false)
+    }
+    getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, index?: number): string {
+        if (convertor instanceof OptionConvertor) {
+            return `${param}.${value}`
+        }
+        if (convertor.useArray && index != undefined) {
+            return `${param}.${value}[${index}]`
+        }
+        return `${param}.${value}`
+    }
+    convertRuntimeTypeToTag(name: string): LanguageExpression {
+        return this.makeString(`${name}`)
+    }
 }
 
 export class ETSLanguageWriter extends TSLanguageWriter {
@@ -627,6 +652,15 @@ export class JavaLanguageWriter extends LanguageWriter {
     makeForLoop(count: string, statement: LanguageStatement): LanguageStatement {
         throw new Error("Method not implemented.")
     }
+    prepareTargetObject(p: BaseArgConvertor, param: string, value: string, tag?: string): LanguageStatement {
+        throw new Error("Method not implemented.")
+    }
+    getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, index: number): string {
+        throw new Error("Method not implemented.")
+    }
+    convertRuntimeTypeToTag(name: string): LanguageExpression {
+        throw new Error("Method not implemented.")
+    }
 }
 
 export class CppLanguageWriter extends LanguageWriter {
@@ -651,7 +685,7 @@ export class CppLanguageWriter extends LanguageWriter {
     writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void): void {
         throw new Error("Method not implemented.")
     }
-    makeAssign(variableName: string, type: Type, expr: LanguageExpression, isDeclared: boolean = true): LanguageStatement {
+    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression | undefined, isDeclared: boolean = true): LanguageStatement {
         return new CppAssignStatement(variableName, type, expr, isDeclared)
     }
     makeReturn(expr: LanguageExpression): LanguageStatement {
@@ -702,6 +736,28 @@ export class CppLanguageWriter extends LanguageWriter {
             writer.popIndent()
             writer.print("}")
         })
+    }
+    prepareTargetObject(convertor: BaseArgConvertor, param: string, value: string, tag?: string): LanguageStatement {
+        return new class implements LanguageStatement {
+            write(writer: LanguageWriter): void {
+                writer.print(`${value} = {${tag ? ".tag = " + tag : ""}};`)
+            }
+        }
+    }
+    getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, index?: number): string {
+        if (convertor instanceof OptionConvertor) {
+            return `${value}.value`
+        }
+        if (convertor instanceof ArrayConvertor
+            || convertor instanceof UnionConvertor
+            || convertor instanceof TupleConvertor) {
+            return `${value}.value${index}`
+        }
+        return `${value}`
+    }
+    convertRuntimeTypeToTag(name: string): LanguageExpression {
+        return this.makeTernary(this.makeString(`${name} == ARK_RUNTIME_UNDEFINED`),
+            this.makeString("ARK_TAG_UNDEFINED"), this.makeString("ARK_TAG_OBJECT"))
     }
 }
 

@@ -1373,23 +1373,18 @@ export class DeclarationTable {
                         new Type("Deserializer"),
                         writer.makeString("this"), true)
                 )
-                struct.getFields().forEach((it) => {
-                    writer.writeStatement(
-                        new DeclareStatement(this.createValueFieldName(it.name),
-                            Type.Any)
-                    )
-                })
                 let resultObjArgs: string[] = []
-                struct.getFields().forEach(it => {
-                    let typeConvertor = this.typeConvertor(resultVarName, it.type!, it.optional)
-                    typeConvertor.convertorDeserialize(resultVarName, this.createValueFieldName(it.name), writer, Language.TS)
-                    resultObjArgs.push(`${it.name}: ${this.createValueFieldName(it.name)}`)
+                struct.getFields().forEach((it) => {
+                    resultObjArgs.push(`${it.name}: undefined`)
                 })
-
                 writer.writeStatement(writer.makeAssign(resultVarName,
                     Type.Any,
                     writer.makeString(`{${resultObjArgs.join(",")}}`),
                     true))
+                struct.getFields().forEach(it => {
+                    let typeConvertor = this.typeConvertor(resultVarName, it.type!, it.optional)
+                    typeConvertor.convertorDeserialize(resultVarName, `${it.name}`, writer, Language.TS)
+                })
             } else {
                 let typeConvertor = this.typeConvertor(resultVarName, target, false)
                 typeConvertor.convertorDeserialize(resultVarName, resultVarName, writer, Language.TS)

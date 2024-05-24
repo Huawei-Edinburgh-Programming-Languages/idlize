@@ -84,7 +84,7 @@ export class StringConvertor extends BaseArgConvertor {
         writer.writeMethodCall(`${param}Serializer`, `writeString`, [value])
     }
     convertorDeserialize(param: string, value: string, writer: LanguageWriter): void {
-        writer.print(`${value} = ${param}Deserializer.readString();`)
+        writer.writeStatement(writer.makeAssign(value, undefined, writer.makeString(`${param}Deserializer.readString()`), false))
     }
     nativeType(impl: boolean): string {
         return PrimitiveType.String.getText()
@@ -138,7 +138,8 @@ export class BooleanConvertor extends BaseArgConvertor {
         printer.print(`${param}Serializer.writeBoolean(${value})`)
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
-        printer.print(`${value} = ${param}Deserializer.readBoolean();`)
+        const accessor = printer.getObjectAccessor(this, param, value)
+        printer.writeStatement(printer.makeAssign(accessor, undefined, printer.makeString(`${param}Deserializer.readBoolean()`), false))
     }
     nativeType(impl: boolean): string {
         return PrimitiveType.Boolean.getText()
@@ -291,7 +292,9 @@ export class LengthConvertor extends BaseArgConvertor {
         )
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
-        printer.print(`${value} = ${param}Deserializer.readLength();`)
+        printer.writeStatement(
+            printer.makeAssign(value, undefined,
+                printer.makeString(`${param}Deserializer.readLength()`), false))
     }
     nativeType(impl: boolean): string {
         return PrimitiveType.Length.getText()
@@ -369,7 +372,8 @@ export class UnionConvertor extends BaseArgConvertor {
 
                 printer.print(`${maybeElse}if (${conditions.asString()}) {`)
                 printer.pushIndent()
-                it.convertorDeserialize(param, value, printer, language)
+                const accessor = printer.getObjectAccessor(this, param, value, index)
+                it.convertorDeserialize(param, accessor, printer, language)
                 printer.popIndent()
                 printer.print(`}`)
             })
@@ -475,7 +479,8 @@ export class CustomTypeConvertor extends BaseArgConvertor {
         printer.print(`${param}Serializer.writeCustomObject("${this.customName}", ${value})`)
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
-        printer.print(`${value} = ${param}Deserializer.readCustomObject("${this.customName}");`)
+        const accessor = printer.getObjectAccessor(this, param, value)
+        printer.print(`${accessor} = ${param}Deserializer.readCustomObject("${this.customName}");`)
     }
     nativeType(impl: boolean): string {
         return PrimitiveType.CustomObject.getText()
@@ -521,32 +526,23 @@ export class OptionConvertor extends BaseArgConvertor {
         throw new Error("Must never be used")
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter, lang: Language): void {
-        let valueName: string = value
-        let readStatement: LanguageStatement
-        let ifCondExpr: LanguageExpression
+        const runtimeType = `runtime_type_${uniqueCounter++}`
+        const tag = `tag_${uniqueCounter++}`
+        printer.writeStatement(printer.makeAssign(runtimeType, undefined,
+            printer.makeString(`${param}Deserializer.readInt8()`), true))
+        printer.writeStatement(printer.makeAssign(tag, undefined,
+            printer.convertRuntimeTypeToTag(runtimeType), true))
 
-        if (lang == Language.CPP) {
-            valueName = `${value}.value`
-            const valueTypeVar = `${value}.tag`
-            readStatement = printer.makeAssign(valueTypeVar,
-                undefined,
-                printer.makeString(`${param}Deserializer.readInt8() == ${PrimitiveType.UndefinedRuntime} ? ARK_TAG_UNDEFINED : ARK_TAG_OBJECT;`),
-                false)
-            ifCondExpr = printer.makeString(`${valueTypeVar} != ${PrimitiveType.UndefinedTag}`)
-        } else if (lang == Language.TS) {
-            const valueTypeVar = `${value.replaceAll(".", "_")}_type`
-            readStatement = printer.makeAssign(valueTypeVar,
-                undefined,
-                printer.makeString(`runtimeType(${param}Deserializer.readInt8())`),
-                true)
-            ifCondExpr = printer.makeString(`${valueTypeVar} != RuntimeType.UNDEFINED`)
-        }
-
-        printer.writeStatement(readStatement!)
-        printer.writeStatement(printer.makeCondition(ifCondExpr!,
-            printer.makeStatementFromOp((writer) =>
-                this.typeConvertor.convertorDeserialize(param, valueName, writer, lang)
-            )))
+        let thenStatement = new BlockStatement([
+            printer.prepareTargetObject(this, param, value, tag),
+            printer.makeStatementFromOp(writer => {
+                const accessor = printer.getObjectAccessor(this, param, value)
+                this.typeConvertor.convertorDeserialize(param, accessor, writer, lang)
+            })
+        ])
+        printer.writeStatement(printer.makeCondition(
+            printer.makeTestNotUndef(printer.makeString(tag)),
+            thenStatement!))
     }
     nativeType(impl: boolean): string {
         return impl
@@ -712,30 +708,18 @@ export class TupleConvertor extends BaseArgConvertor {
         printer.print(`}`)
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
-        let block: BlockStatement
-        if (language == Language.CPP) {
-            block = new BlockStatement([
-                printer.makeStatementFromOp(writer => {
-                    this.memberConvertors.forEach((it, index) => {
-                        it.convertorDeserialize(param, `${value}.value${index}`, writer, language)
-                    })
+        let thenStatement = new BlockStatement([
+            printer.prepareTargetObject(this, param, value),
+            printer.makeStatementFromOp(writer => {
+                this.memberConvertors.forEach((it, index) => {
+                    const accessor = printer.getObjectAccessor(this, param, value, index)
+                    it.convertorDeserialize(param, accessor, writer, language)
                 })
-            ])
-        } else if (language == Language.TS) {
-            block = new BlockStatement([
-                printer.makeAssign(value, undefined, printer.makeString("[]"), false),
-                printer.makeStatementFromOp(writer => {
-                    this.memberConvertors.forEach((it, index) => {
-                        writer.writeStatement(new DeclareStatement(`value${index}`, Type.Any))
-                        it.convertorDeserialize(param, `value${index}`, writer, language)
-                        writer.writeStatement(writer.makeStatementFromOp(writer => writer.print(`${value}.push(value${index})`)))
-                    })
-                })
-            ])
-        }
+            })
+        ])
         printer.writeStatement(printer.makeCondition(
             printer.makeTestNotUndef(printer.makeString(`${param}Deserializer.readInt8()`)),
-            block!))
+            thenStatement!))
     }
     nativeType(impl: boolean): string {
         return impl
@@ -933,11 +917,8 @@ export class NumberConvertor extends BaseArgConvertor {
         printer.print(`${param}Serializer.writeNumber(${value})`)
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
-        if (language == Language.TS) {
-            printer.print(`${value} = ${param}Deserializer.readNumber()`)
-        } else if (language == Language.CPP) {
-            printer.print(`${value} = ${param}Deserializer.readNumber();`)
-        }
+        const accessor = printer.getObjectAccessor(this, param, value)
+        printer.writeStatement(printer.makeAssign(accessor, undefined, printer.makeString(`${param}Deserializer.readNumber()`), false))
     }
     nativeType(): string {
         return PrimitiveType.Number.getText()
