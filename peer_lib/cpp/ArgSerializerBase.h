@@ -29,17 +29,17 @@ public:
     ArgSerializerBase(uint8_t* data): data(data), position(0) {}
 
     void writeInt8(Ark_Int8 value) {
-        memcpy(data + position, &value, 1);
-        position += 1;        
+        *((Ark_Int8*)(data + position)) = value;
+        position += 1;
     }
 
     void writeInt32(Ark_Int32 value) {
-        memcpy(data + position, &value, 4);
+        *((Ark_Int32*)(data + position)) = value;
         position += 4;
     }
 
     void writeFloat32(Ark_Float32 value) {
-        memcpy(data + position, &value, 4);
+        *((Ark_Float32*)(data + position)) = value;
         position += 4;
     }
 
@@ -56,9 +56,9 @@ public:
     }
 
     void writeString(Ark_String value) {
-        writeInt32(value.length);
+        writeInt32(value.length + 1);
         strcpy((char*)(data + position), value.chars);
-        position += value.length;
+        position += value.length + 1;
     }
 };
 

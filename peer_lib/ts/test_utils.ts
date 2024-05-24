@@ -49,7 +49,7 @@ export function checkResult(name: string, test: () => void, expected: string) {
     }
 }
 
-export function assertEquals(name: string, expected: string | number | bigint, actual: string | number | bigint) {
+export function assertEquals(name: string, expected: any, actual: any) {
     if (expected != actual ) {
         failedTestsCount++
         console.log(`TEST ${name} FAIL:\n  EXPECTED "${expected}"\n  ACTUAL   "${actual}"`)
