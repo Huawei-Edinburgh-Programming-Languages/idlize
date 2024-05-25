@@ -15,7 +15,8 @@
 
 import { IndentedPrinter } from "../IndentedPrinter";
 import { Language, stringOrNone } from "../util";
-import { ArrayConvertor, BaseArgConvertor, EnumConvertor, FunctionConvertor, InterfaceConvertor, OptionConvertor, PrimitiveType, TupleConvertor, UnionConvertor } from "./Convertors";
+import { ArrayConvertor, BaseArgConvertor, EnumConvertor, FunctionConvertor, InterfaceConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "./Convertors";
+import { PrimitiveType } from "./DeclarationTable";
 
 export class Type {
     constructor(public name: string, public nullable = false) {}
@@ -299,6 +300,35 @@ export class IfStatement implements LanguageStatement {
     }
 }
 
+export type BranchStatement = [LanguageExpression, LanguageStatement]
+
+export class MultiBranchIfStatement implements LanguageStatement {
+    constructor(private readonly statements: BranchStatement[],
+                private readonly elseStatement: LanguageStatement | undefined) { }
+    write(writer: LanguageWriter): void {
+        this.statements.forEach((value, index) => {
+            const [expr, stmt]= value
+            if (index == 0) {
+                writer.print(`if (${expr.asString()}) {`)
+            } else {
+                writer.print(`else if (${expr.asString()}) {`)
+            }
+            writer.pushIndent()
+            stmt.write(writer)
+            writer.popIndent()
+            writer.print("}")
+        })
+
+        if (this.elseStatement !== undefined) {
+            writer.print(" else {")
+            writer.pushIndent()
+            this.elseStatement.write(writer)
+            writer.popIndent()
+            writer.print("}")
+        }
+    }
+}
+
 export class TernaryExpression implements LanguageExpression {
     constructor(public condition: LanguageExpression,
         public trueExpression: LanguageExpression,
@@ -358,6 +388,10 @@ export function mangleMethodName(method: Method): string {
     return `${method.name}_${argsPostfix}`
 }
 
+export interface ObjectArgs {
+    [name: string]: string
+}
+
 export abstract class LanguageWriter {
     constructor(public printer: IndentedPrinter, public language: Language) {}
 
@@ -398,6 +432,9 @@ export abstract class LanguageWriter {
     makeCondition(condition: LanguageExpression, thenStatement: LanguageStatement, elseStatement?: LanguageStatement): LanguageStatement {
         return new IfStatement(condition, thenStatement, elseStatement)
     }
+    makeMultiBranchCondition(conditions: BranchStatement[], elseStatement?: LanguageStatement): LanguageStatement {
+        return new MultiBranchIfStatement(conditions, elseStatement)
+    }
     makeTernary(condition: LanguageExpression, trueExpression: LanguageExpression, falseExpression: LanguageExpression): LanguageExpression {
         return new TernaryExpression(condition, trueExpression, falseExpression)
     }
@@ -422,7 +459,7 @@ export abstract class LanguageWriter {
         return new ExpressionStatement(expr)
     }
 
-    abstract prepareTargetObject(p: BaseArgConvertor, param: string, value: string, tag?: string, length?: string): LanguageStatement
+    abstract prepareTargetObject(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): LanguageStatement
     abstract getObjectAccessor(p: BaseArgConvertor, param: string, value: string, index?: number | string): string
     abstract convertRuntimeTypeToTag(name: string): LanguageExpression
 
@@ -515,7 +552,7 @@ export class TSLanguageWriter extends LanguageWriter {
         prefix = prefix ? prefix + " " : ""
         this.printer.print(`${prefix}${name}(${signature.args.map((it, index) => `${signature.argName(index)}${it.nullable ? "?" : ""}: ${this.mapType(it)}${signature.argDefault(index) ? ' = ' + signature.argDefault(index) : ""}`).join(", ")})${needReturn ? ": " + this.mapType(signature.returnType) : ""} ${needBracket ? "{" : ""}`)
     }
-    makeAssign(variableName: string, type: Type, expr: LanguageExpression, isDeclared: boolean = true): LanguageStatement {
+    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean = true): LanguageStatement {
         return new AssignStatement(variableName, type, expr, isDeclared)
     }
     makeReturn(expr: LanguageExpression): LanguageStatement {
@@ -546,11 +583,15 @@ export class TSLanguageWriter extends LanguageWriter {
             writer.print("}")
         })
     }
-    prepareTargetObject(p: BaseArgConvertor, param: string, value: string, tag?: string, length?: string): LanguageStatement {
-        if (!(p instanceof OptionConvertor) && p.useArray) {
-            return this.makeAssign(`${param}.${value}`, Type.Any, this.makeString("[]"), false)
+    prepareTargetObject(convertor: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): LanguageStatement {
+        if (convertor instanceof MapConvertor) {
+            const ctor = `new ${convertor.tsTypeName}()`
+            return this.makeAssign(`${param}.${value}`, undefined, this.makeString(ctor), false)
         }
-        return this.makeAssign(`${param}.${value}`, Type.Any, this.makeString("{}"), false)
+        if (!(convertor instanceof OptionConvertor)) {
+            return this.makeAssign(`${param}.${value}`, undefined, this.makeString("[]"), false)
+        }
+        return this.makeAssign(`${param}.${value}`, undefined, this.makeString("{}"), false)
     }
     getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, index?: number|string): string {
         if (convertor instanceof OptionConvertor) {
@@ -705,7 +746,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     makeForLoop(count: string, statement: LanguageStatement): LanguageStatement {
         throw new Error("Method not implemented.")
     }
-    prepareTargetObject(p: BaseArgConvertor, param: string, value: string, tag?: string, length?: string): LanguageStatement {
+    prepareTargetObject(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): LanguageStatement {
         throw new Error("Method not implemented.")
     }
     getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, index: number): string {
@@ -805,25 +846,28 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         })
     }
 
-    prepareTargetObject(convertor: BaseArgConvertor, param: string, value: string, tag?: string, length?: string): LanguageStatement {
-        if (convertor instanceof ArrayConvertor) {
-            return this.makeArrayResize(value, length!, `${param}Deserializer`)
+    prepareTargetObject(convertor: BaseArgConvertor, param: string, value: string , args?: ObjectArgs): LanguageStatement {
+        if (convertor instanceof ArrayConvertor && args?.length) {
+            return this.makeArrayResize(value, args.length, `${param}Deserializer`)
         }
-        return new class implements LanguageStatement {
-            write(writer: LanguageWriter): void {
-                writer.print(`${value} = {${tag ? ".tag = " + tag : ""}};`)
-            }
+        if (convertor instanceof OptionConvertor && args?.tag) {
+            return this.makeAssign(`${value}.tag`, undefined,
+                this.makeString(args.tag), false)
         }
+        if (convertor instanceof UnionConvertor && args?.index) {
+            return this.makeAssign(`${value}.selector`, undefined,
+                this.makeString(args.index), false)
+        }
+        return this.makeAssign(value, undefined, this.makeString("{}"), false)
     }
-    getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, index?: number|string): string {
+    getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, index?: number | string): string {
         if (convertor instanceof OptionConvertor) {
             return `${value}.value`
         }
         if (convertor instanceof ArrayConvertor) {
             return `${value}.array${index}`
         }
-        if (convertor instanceof UnionConvertor
-            || convertor instanceof TupleConvertor) {
+        if (convertor instanceof UnionConvertor || convertor instanceof TupleConvertor) {
             return `${value}.value${index}`
         }
         return `${value}`
