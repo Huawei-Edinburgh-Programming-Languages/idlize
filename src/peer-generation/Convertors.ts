@@ -523,9 +523,8 @@ export class OptionConvertor extends BaseArgConvertor {
             printer.makeString(`${param}Deserializer.readInt8()`), true))
         printer.writeStatement(printer.makeAssign(tag, undefined,
             printer.convertRuntimeTypeToTag(runtimeType), true))
-
-        let thenStatement = new BlockStatement([
-            printer.prepareTargetObject(this, param, value, {tag: tag}),
+        printer.writeStatement(printer.prepareTargetObject(this, param, value, {tag: tag}))
+        const thenStatement = new BlockStatement([
             printer.makeStatementFromOp(writer => {
                 const accessor = printer.getObjectAccessor(this, param, value)
                 this.typeConvertor.convertorDeserialize(param, accessor, writer, lang)
