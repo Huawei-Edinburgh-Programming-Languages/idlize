@@ -765,6 +765,7 @@ export class ArrayConvertor extends BaseArgConvertor {
         // Array length.
         const runtimeType = `runtimeType${uniqueCounter++}`;
         const arrayLength = `arrayLength${uniqueCounter++}`;
+        const forCounterName = `i_${uniqueCounter++}`
         printer.writeStatement(printer.makeAssign(runtimeType,
             undefined,
             printer.makeString(`${param}Deserializer.readInt8()`), true))
@@ -774,8 +775,8 @@ export class ArrayConvertor extends BaseArgConvertor {
             // prepare object
             printer.prepareTargetObject(this, param, value, {length: arrayLength}),
             // store
-            printer.makeForLoop(arrayLength, printer.makeStatementFromOp((writer) => {
-                const accessor = printer.getObjectAccessor(this, param, value, "[i]")
+            printer.makeForLoop(forCounterName, arrayLength, printer.makeStatementFromOp((writer) => {
+                const accessor = printer.getObjectAccessor(this, param, value, `[${forCounterName}]`)
                 this.elementConvertor.convertorDeserialize(param, accessor, writer, language)
             }))
         ])

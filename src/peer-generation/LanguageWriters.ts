@@ -502,7 +502,7 @@ export abstract class LanguageWriter {
         }
     }
 
-    abstract makeForLoop(count: string, statement: LanguageStatement): LanguageStatement
+    abstract makeForLoop(varCounter: string, count: string, statement: LanguageStatement): LanguageStatement
 }
 
 export class TSLanguageWriter extends LanguageWriter {
@@ -574,9 +574,9 @@ export class TSLanguageWriter extends LanguageWriter {
         return `${type.name}`
     }
 
-    makeForLoop(count: string, statement: LanguageStatement): LanguageStatement {
+    makeForLoop(varCounter: string, count: string, statement: LanguageStatement): LanguageStatement {
         return this.makeStatementFromOp((writer)=> {
-            writer.print(`for (let i = 0; i < ${count}; i++) {`)
+            writer.print(`for (let ${varCounter} = 0; ${varCounter} < ${count}; ${varCounter}++) {`)
             writer.pushIndent()
             statement.write(writer)
             writer.popIndent()
@@ -743,7 +743,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         }
         return super.mapType(type)
     }
-    makeForLoop(count: string, statement: LanguageStatement): LanguageStatement {
+    makeForLoop(varCounter: string, count: string, statement: LanguageStatement): LanguageStatement {
         throw new Error("Method not implemented.")
     }
     prepareTargetObject(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): LanguageStatement {
@@ -836,9 +836,9 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         }
         return super.mapType(type)
     }
-    makeForLoop(count: string, statement: LanguageStatement): LanguageStatement {
+    makeForLoop(counterName: string, count: string, statement: LanguageStatement): LanguageStatement {
         return this.makeStatementFromOp((writer)=> {
-            writer.print(`for (int64_t i = 0; i < ${count}; i++) {`)
+            writer.print(`for (int64_t ${counterName} = 0; ${counterName} < ${count}; ${counterName}++) {`)
             writer.pushIndent()
             statement.write(writer)
             writer.popIndent()
