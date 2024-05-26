@@ -16,7 +16,7 @@ import { Language, identName, importTypeName, mapType, typeName } from "../util"
 import { DeclarationTable, PrimitiveType } from "./DeclarationTable"
 import { RuntimeType } from "./PeerGeneratorVisitor"
 import * as ts from "typescript"
-import { BlockStatement, BranchStatement, LanguageExpression, LanguageWriter, Type } from "./LanguageWriters"
+import { BlockStatement, BranchStatement, LanguageExpression, LanguageWriter, ProxyStatement, Type } from "./LanguageWriters"
 
 let uniqueCounter = 0
 
@@ -373,11 +373,11 @@ export class UnionConvertor extends BaseArgConvertor {
             }
             const expr = printer.makeNaryOp("||",
                 it.runtimeTypes.map(rt => printer.makeNaryOp("==", [ printer.makeString(`ARK_RUNTIME_${RuntimeType[rt]}`), printer.makeString(runtimeType)])))
-            const stmt = printer.makeStatementFromOp((writer) => {
+            const stmt = new ProxyStatement((writer) => {
                 it.convertorDeserialize(param, `${value}.value${index}`, printer, language)
-                printer.writeStatement(printer.prepareTargetObject(this, param, value, {index: `${index}`}))
+                writer.writeStatement(writer.applyToObject(this, param, value, {index: `${index}`}))
             })
-            branches.push([expr, stmt])
+            branches.push({expr: expr, stmt: stmt})
         })
         printer.writeStatement(printer.makeMultiBranchCondition(branches))
     }
@@ -517,15 +517,15 @@ export class OptionConvertor extends BaseArgConvertor {
         throw new Error("Must never be used")
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter, lang: Language): void {
-        const runtimeType = `runtime_type_${uniqueCounter++}`
-        const tag = `tag_${uniqueCounter++}`
+        const runtimeType = `runtimeType${uniqueCounter++}`
+        const tag = `tag${uniqueCounter++}`
         printer.writeStatement(printer.makeAssign(runtimeType, undefined,
             printer.makeString(`${param}Deserializer.readInt8()`), true))
         printer.writeStatement(printer.makeAssign(tag, undefined,
             printer.convertRuntimeTypeToTag(runtimeType), true))
-        printer.writeStatement(printer.prepareTargetObject(this, param, value, {tag: tag}))
+        printer.writeStatement(printer.applyToObject(this, param, value, {tag: tag}))
         const thenStatement = new BlockStatement([
-            printer.makeStatementFromOp(writer => {
+            new ProxyStatement(writer => {
                 const accessor = printer.getObjectAccessor(this, param, value)
                 this.typeConvertor.convertorDeserialize(param, accessor, writer, lang)
             })
@@ -700,8 +700,7 @@ export class TupleConvertor extends BaseArgConvertor {
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
         let thenStatement = new BlockStatement([
-            printer.prepareTargetObject(this, param, value),
-            printer.makeStatementFromOp(writer => {
+            new ProxyStatement(writer => {
                 this.memberConvertors.forEach((it, index) => {
                     const accessor = printer.getObjectAccessor(this, param, value, {index: `${index}`})
                     it.convertorDeserialize(param, accessor, writer, language)
@@ -764,7 +763,7 @@ export class ArrayConvertor extends BaseArgConvertor {
         // Array length.
         const runtimeType = `runtimeType${uniqueCounter++}`;
         const arrayLength = `arrayLength${uniqueCounter++}`;
-        const forCounterName = `i_${uniqueCounter++}`
+        const forCounterName = `i${uniqueCounter++}`
         printer.writeStatement(printer.makeAssign(runtimeType,
             undefined,
             printer.makeString(`${param}Deserializer.readInt8()`), true))
@@ -772,12 +771,14 @@ export class ArrayConvertor extends BaseArgConvertor {
             // read length
             printer.makeAssign(arrayLength, undefined, printer.makeString(`${param}Deserializer.readInt32()`), true),
             // prepare object
-            printer.prepareTargetObject(this, param, value, {length: arrayLength}),
+            printer.makeArrayResize(value, arrayLength, `${param}Deserializer`),
             // store
-            printer.makeForLoop(forCounterName, arrayLength, printer.makeStatementFromOp((writer) => {
+            printer.makeLoop(forCounterName, arrayLength),
+            new ProxyStatement((writer)=> {
                 const accessor = printer.getObjectAccessor(this, param, value, {index: `[${forCounterName}]`})
                 this.elementConvertor.convertorDeserialize(param, accessor, writer, language)
-            }))
+            }),
+            printer.makeStatement(printer.makeString("}"))
         ])
         printer.writeStatement(
             printer.makeCondition(printer.makeDefinedCheck(runtimeType), thenStatement))
@@ -833,14 +834,13 @@ export class MapConvertor extends BaseArgConvertor {
         const keyTypeName = this.table.computeTargetName(this.table.toTarget(this.keyType), false)
         const valueTypeName = this.table.computeTargetName(this.table.toTarget(this.valueType), false)
 
-        printer.writeStatement(printer.prepareTargetObject(this, param, value))
         printer.writeStatement(
             printer.makeAssign(runtimeType, undefined,
                 printer.makeString(`${param}Deserializer.readInt8()`), true))
         printer.writeStatement(
             printer.makeAssign(mapSize, undefined, printer.makeString(`${param}Deserializer.readInt32()`), true))
         printer.writeStatement(printer.makeMapResize(keyTypeName, valueTypeName, value, mapSize, `${param}Deserializer`))
-        const counterVar = `i_${uniqueCounter++}`
+        const counterVar = `i${uniqueCounter++}`
         printer.writeStatement(printer.makeLoop(counterVar, mapSize))
         printer.pushIndent()
         const keyAccessor = printer.getObjectAccessor(this, param, value, {index: counterVar, field: "keys"})

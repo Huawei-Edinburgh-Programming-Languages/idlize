@@ -303,14 +303,21 @@ export class IfStatement implements LanguageStatement {
     }
 }
 
-export type BranchStatement = [LanguageExpression, LanguageStatement]
+export class ProxyStatement implements LanguageStatement {
+    constructor(private op: (writer: LanguageWriter) => void) { }
+    write(writer: LanguageWriter) {
+        this.op(writer)
+    }
+}
+
+export type BranchStatement = {expr: LanguageExpression, stmt: LanguageStatement}
 
 export class MultiBranchIfStatement implements LanguageStatement {
     constructor(private readonly statements: BranchStatement[],
                 private readonly elseStatement: LanguageStatement | undefined) { }
     write(writer: LanguageWriter): void {
         this.statements.forEach((value, index) => {
-            const [expr, stmt]= value
+            const {expr, stmt}= value
             if (index == 0) {
                 writer.print(`if (${expr.asString()}) {`)
             } else {
@@ -446,7 +453,7 @@ export abstract class LanguageWriter {
     }
     abstract makeLoop(counter: string, limit: string): LanguageStatement
     abstract makeMapForEach(map: string, key: string, value: string): LanguageStatement
-    makeArrayResize(elementType: string, array: string, length: string, deserializer: string): LanguageStatement {
+    makeArrayResize(array: string, length: string, deserializer: string): LanguageStatement {
         throw new Error("Method not implemented.")
     }
     makeMapResize(keyType: string, valueType: string, map: string, size: string, deserializer: string): LanguageStatement {
@@ -461,11 +468,9 @@ export abstract class LanguageWriter {
     makeStatement(expr: LanguageExpression): LanguageStatement {
         return new ExpressionStatement(expr)
     }
-
-    abstract prepareTargetObject(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): LanguageStatement
+    abstract applyToObject(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): LanguageStatement
     abstract getObjectAccessor(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): string
     abstract convertRuntimeTypeToTag(name: string): LanguageExpression
-
     abstract makeCast(value: LanguageExpression, type: Type): LanguageExpression
     abstract makeCast(value: LanguageExpression, type: Type, unsafe: boolean): LanguageExpression
     abstract writePrintLog(message: string): void
@@ -493,19 +498,6 @@ export abstract class LanguageWriter {
     mapMethodModifier(modifier: MethodModifier): string {
         return `${MethodModifier[modifier].toLowerCase()}`
     }
-    makeStatementFromOp(op: (writer: LanguageWriter) => void): LanguageStatement {
-        return new class implements LanguageStatement {
-            write(writer: LanguageWriter): void {
-                writer.print("{")
-                writer.pushIndent()
-                op(writer)
-                writer.popIndent()
-                writer.print("}")
-            }
-        }
-    }
-
-    abstract makeForLoop(varCounter: string, count: string, statement: LanguageStatement): LanguageStatement
 }
 
 export class TSLanguageWriter extends LanguageWriter {
@@ -576,17 +568,7 @@ export class TSLanguageWriter extends LanguageWriter {
     mapType(type: Type): string {
         return `${type.name}`
     }
-
-    makeForLoop(varCounter: string, count: string, statement: LanguageStatement): LanguageStatement {
-        return this.makeStatementFromOp((writer)=> {
-            writer.print(`for (let ${varCounter} = 0; ${varCounter} < ${count}; ${varCounter}++) {`)
-            writer.pushIndent()
-            statement.write(writer)
-            writer.popIndent()
-            writer.print("}")
-        })
-    }
-    prepareTargetObject(convertor: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): LanguageStatement {
+    applyToObject(convertor: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): LanguageStatement {
         if (convertor instanceof MapConvertor) {
             const ctor = `new ${convertor.tsTypeName}()`
             return this.makeAssign(`${param}.${value}`, undefined, this.makeString(ctor), false)
@@ -746,10 +728,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         }
         return super.mapType(type)
     }
-    makeForLoop(varCounter: string, count: string, statement: LanguageStatement): LanguageStatement {
-        throw new Error("Method not implemented.")
-    }
-    prepareTargetObject(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): LanguageStatement {
+    applyToObject(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): LanguageStatement {
         throw new Error("Method not implemented.")
     }
     getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): string {
@@ -810,7 +789,6 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     makeMapForEach(map: string, key: string, value: string): LanguageStatement {
         return new CppMapForEachStatement(map, key, value)
     }
-
     makeArrayResize(array: string, length: string, deserializer: string): LanguageStatement {
         return new CppArrayResizeStatement(array, length, deserializer)
     }
@@ -823,11 +801,9 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     writePrintLog(message: string): void {
         this.print(`printf("${message}\n")`)
     }
-
     makeDefinedCheck(value: string, isRuntimeType: boolean): LanguageExpression {
         return new CDefinedExpression(value, isRuntimeType);
     }
-
     mapType(type: Type): string {
         switch (type.name) {
             case 'KPointer': return 'void*'
@@ -840,20 +816,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         }
         return super.mapType(type)
     }
-    makeForLoop(counterName: string, count: string, statement: LanguageStatement): LanguageStatement {
-        return this.makeStatementFromOp((writer)=> {
-            writer.print(`for (int64_t ${counterName} = 0; ${counterName} < ${count}; ${counterName}++) {`)
-            writer.pushIndent()
-            statement.write(writer)
-            writer.popIndent()
-            writer.print("}")
-        })
-    }
-
-    prepareTargetObject(convertor: BaseArgConvertor, param: string, value: string , args?: ObjectArgs): LanguageStatement {
-        if (convertor instanceof ArrayConvertor && args?.length) {
-            return this.makeArrayResize(value, args.length, `${param}Deserializer`)
-        }
+    applyToObject(convertor: BaseArgConvertor, param: string, value: string , args?: ObjectArgs): LanguageStatement {
         if (convertor instanceof OptionConvertor && args?.tag) {
             return this.makeAssign(`${value}.tag`, undefined,
                 this.makeString(args.tag), false)
