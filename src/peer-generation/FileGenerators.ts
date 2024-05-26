@@ -205,7 +205,7 @@ ${deserializer.getOutput().join("\n")}
 
 export function makeTSDeserializer(table: DeclarationTable): string {
     const deserializer = createLanguageWriter(new IndentedPrinter(), Language.TS)
-    table.generateTSDeserializers(deserializer)
+    // table.generateTSDeserializers(deserializer)
     return `
 import { runtimeType, Tags, RuntimeType, Function } from "./SerializerBase"
 import { DeserializerBase} from "./DeserializerBase"
