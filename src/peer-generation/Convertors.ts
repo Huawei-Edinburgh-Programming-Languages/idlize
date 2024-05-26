@@ -703,7 +703,7 @@ export class TupleConvertor extends BaseArgConvertor {
             printer.prepareTargetObject(this, param, value),
             printer.makeStatementFromOp(writer => {
                 this.memberConvertors.forEach((it, index) => {
-                    const accessor = printer.getObjectAccessor(this, param, value, index)
+                    const accessor = printer.getObjectAccessor(this, param, value, {index: `${index}`})
                     it.convertorDeserialize(param, accessor, writer, language)
                 })
             })
@@ -775,7 +775,7 @@ export class ArrayConvertor extends BaseArgConvertor {
             printer.prepareTargetObject(this, param, value, {length: arrayLength}),
             // store
             printer.makeForLoop(forCounterName, arrayLength, printer.makeStatementFromOp((writer) => {
-                const accessor = printer.getObjectAccessor(this, param, value, `[${forCounterName}]`)
+                const accessor = printer.getObjectAccessor(this, param, value, {index: `[${forCounterName}]`})
                 this.elementConvertor.convertorDeserialize(param, accessor, writer, language)
             }))
         ])
@@ -828,47 +828,27 @@ export class MapConvertor extends BaseArgConvertor {
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
         // Map size.
-        let runtimeType = `runtimeType${uniqueCounter++}`;
-        let mapSize = `mapSize${uniqueCounter++}`;
-        let keyTypeName = this.table.computeTargetName(this.table.toTarget(this.keyType), false)
-        let valueTypeName = this.table.computeTargetName(this.table.toTarget(this.valueType), false)
+        const runtimeType = `runtimeType${uniqueCounter++}`;
+        const mapSize = `mapSize${uniqueCounter++}`;
+        const keyTypeName = this.table.computeTargetName(this.table.toTarget(this.keyType), false)
+        const valueTypeName = this.table.computeTargetName(this.table.toTarget(this.valueType), false)
 
         printer.writeStatement(printer.prepareTargetObject(this, param, value))
-
-        if (language == Language.TS) {
-            printer.print(`const ${runtimeType} = ${param}Deserializer.readInt8();`)
-            printer.print(`if (${runtimeType} != RuntimeType.UNDEFINED) {`)
-            printer.pushIndent()
-            // printer.print(`${value} = new Map<${keyTypeName.replace("Ark_", "").toLowerCase()}, ${valueTypeName.replace("Ark_", "").toLowerCase()}>()`)
-            printer.print(`const ${mapSize} = ${param}Deserializer.readInt32();`)
-            printer.print(`for (let i = 0; i < ${mapSize}; i++) {`)
-            printer.pushIndent()
-            printer.print("let key: any")
-            this.keyConvertor.convertorDeserialize(param, "key", printer, Language.TS)
-            printer.print("let value: any")
-            this.valueConvertor.convertorDeserialize(param, "value", printer, Language.TS)
-            printer.print(`${param}.${value}.set(key, value)`)
-            printer.popIndent()
-            printer.print(`}`)
-            printer.popIndent()
-            printer.print(`}`)
-        } else if (language == Language.CPP) {
-            printer.writeStatement(
-            printer.makeAssign(runtimeType, undefined, printer.makeString(`${param}Deserializer.readInt8()`), true))
-            printer.print(`if (${runtimeType} != ${PrimitiveType.UndefinedRuntime}) {`) // TODO: `else value = nullptr` ?
-            printer.pushIndent()
-            printer.writeStatement(
+        printer.writeStatement(
+            printer.makeAssign(runtimeType, undefined,
+                printer.makeString(`${param}Deserializer.readInt8()`), true))
+        printer.writeStatement(
             printer.makeAssign(mapSize, undefined, printer.makeString(`${param}Deserializer.readInt32()`), true))
-            printer.writeStatement(printer.makeMapResize(keyTypeName, valueTypeName, value, mapSize, `${param}Deserializer`))
-            printer.writeStatement(printer.makeLoop("i", mapSize))
-            printer.pushIndent()
-            this.keyConvertor.convertorDeserialize(param, `${value}.keys[i]`, printer, Language.CPP)
-            this.valueConvertor.convertorDeserialize(param, `${value}.values[i]`, printer, Language.CPP)
-            printer.popIndent()
-            printer.print(`}`)
-            printer.popIndent()
-            printer.print(`}`)
-        }
+        printer.writeStatement(printer.makeMapResize(keyTypeName, valueTypeName, value, mapSize, `${param}Deserializer`))
+        const counterVar = `i_${uniqueCounter++}`
+        printer.writeStatement(printer.makeLoop(counterVar, mapSize))
+        printer.pushIndent()
+        const keyAccessor = printer.getObjectAccessor(this, param, value, {index: counterVar, field: "keys"})
+        this.keyConvertor.convertorDeserialize(param, keyAccessor, printer, language)
+        const valueAccessor = printer.getObjectAccessor(this, param, value, {index: counterVar, field: "values"})
+        this.valueConvertor.convertorDeserialize(param, valueAccessor, printer, language)
+        printer.popIndent()
+        printer.print(`}`)
     }
     nativeType(impl: boolean): string {
         const keyTypeName = this.table.computeTypeName(undefined, this.keyType, false)
@@ -933,7 +913,9 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
         printer.print(`${param}Serializer.writeMaterialized(${value})`)
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
-        printer.print(`${value} = ${param}Deserializer.readMaterialized();`)
+        const accessor = printer.getObjectAccessor(this, param, value)
+        printer.writeStatement(
+            printer.makeAssign(accessor, undefined, printer.makeString(`${param}Deserializer.readMaterialized()`), false))
     }
     nativeType(impl: boolean): string {
         return PrimitiveType.Materialized.getText()
@@ -961,7 +943,9 @@ export class PredefinedConvertor extends BaseArgConvertor {
         printer.print(`${param}Serializer.write${this.convertorName}(${value})`)
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
-        printer.print(`${value} = ${param}Deserializer.read${this.convertorName}();`)
+        const accessor = printer.getObjectAccessor(this, param, value)
+        printer.writeStatement(
+            printer.makeAssign(accessor, undefined, printer.makeString(`${param}Deserializer.read${this.convertorName}()`), false))
     }
     nativeType(impl: boolean): string {
         return this.cType

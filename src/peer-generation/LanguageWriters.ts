@@ -111,9 +111,9 @@ export class CppAssignStatement extends AssignStatement {
 }
 
 export class CDefinedExpression implements LanguageExpression {
-    constructor(private value: string) { }
+    constructor(private value: string, private isRuntimeType: boolean) { }
     asString(): string {
-        return `${this.value} != ARK_TAG_UNDEFINED`
+        return `${this.value} != ${this.isRuntimeType ? "ARK_RUNTIME_UNDEFINED" : "ARK_TAG_UNDEFINED"}`
     }
 }
 
@@ -157,7 +157,10 @@ export class MethodCallExpression extends FunctionCallExpression {
 export class ExpressionStatement implements LanguageStatement {
     constructor(public expression: LanguageExpression) { }
     write(writer: LanguageWriter): void {
-        writer.print(`${this.expression.asString()};`)
+        const text = this.expression.asString()
+        if (text.length > 0) {
+            writer.print(`${text};`)
+        }
     }
 }
 
@@ -426,7 +429,7 @@ export abstract class LanguageWriter {
     }
     abstract makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression | undefined, isDeclared: boolean): LanguageStatement;
     abstract makeReturn(expr?: LanguageExpression): LanguageStatement;
-    makeDefinedCheck(value: string): LanguageExpression {
+    makeDefinedCheck(value: string, isRuntimeType: boolean = false): LanguageExpression {
         return new CheckDefinedExpression(value)
     }
     makeCondition(condition: LanguageExpression, thenStatement: LanguageStatement, elseStatement?: LanguageStatement): LanguageStatement {
@@ -460,7 +463,7 @@ export abstract class LanguageWriter {
     }
 
     abstract prepareTargetObject(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): LanguageStatement
-    abstract getObjectAccessor(p: BaseArgConvertor, param: string, value: string, index?: number | string): string
+    abstract getObjectAccessor(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): string
     abstract convertRuntimeTypeToTag(name: string): LanguageExpression
 
     abstract makeCast(value: LanguageExpression, type: Type): LanguageExpression
@@ -593,12 +596,12 @@ export class TSLanguageWriter extends LanguageWriter {
         }
         return this.makeAssign(`${param}.${value}`, undefined, this.makeString("{}"), false)
     }
-    getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, index?: number|string): string {
+    getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): string {
         if (convertor instanceof OptionConvertor) {
             return `${value}`
         }
         if (convertor instanceof ArrayConvertor) {
-            return `${param}.${value}${index??""}`
+            return `${param}.${value}${args?.index??""}`
         }
         if (convertor instanceof UnionConvertor) {
             return value
@@ -612,8 +615,8 @@ export class TSLanguageWriter extends LanguageWriter {
         if (convertor instanceof InterfaceConvertor) {
             return `${param}.${value}`
         }
-        if (convertor.useArray && index != undefined) {
-            return `${param}.${value}[${index}]`
+        if (convertor.useArray && args?.index != undefined) {
+            return `${param}.${value}[${args.index}]`
         }
         return `${param}.${value}`
     }
@@ -749,7 +752,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     prepareTargetObject(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): LanguageStatement {
         throw new Error("Method not implemented.")
     }
-    getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, index: number): string {
+    getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): string {
         throw new Error("Method not implemented.")
     }
     convertRuntimeTypeToTag(name: string): LanguageExpression {
@@ -807,6 +810,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     makeMapForEach(map: string, key: string, value: string): LanguageStatement {
         return new CppMapForEachStatement(map, key, value)
     }
+
     makeArrayResize(array: string, length: string, deserializer: string): LanguageStatement {
         return new CppArrayResizeStatement(array, length, deserializer)
     }
@@ -820,8 +824,8 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         this.print(`printf("${message}\n")`)
     }
 
-    makeDefinedCheck(value: string): LanguageExpression {
-        return new CDefinedExpression(value);
+    makeDefinedCheck(value: string, isRuntimeType: boolean): LanguageExpression {
+        return new CDefinedExpression(value, isRuntimeType);
     }
 
     mapType(type: Type): string {
@@ -858,17 +862,20 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
             return this.makeAssign(`${value}.selector`, undefined,
                 this.makeString(args.index), false)
         }
-        return this.makeAssign(value, undefined, this.makeString("{}"), false)
+        return this.makeStatement(this.makeString(""))
     }
-    getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, index?: number | string): string {
+    getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): string {
         if (convertor instanceof OptionConvertor) {
             return `${value}.value`
         }
-        if (convertor instanceof ArrayConvertor) {
-            return `${value}.array${index}`
+        if (convertor instanceof ArrayConvertor && args?.index) {
+            return `${value}.array${args.index}`
         }
-        if (convertor instanceof UnionConvertor || convertor instanceof TupleConvertor) {
-            return `${value}.value${index}`
+        if ((convertor instanceof UnionConvertor || convertor instanceof TupleConvertor) && args?.index) {
+            return `${value}.value${args.index}`
+        }
+        if (convertor instanceof MapConvertor && args?.index && args?.field) {
+            return `${value}.${args.field}[${args.index}]`
         }
         return `${value}`
     }
