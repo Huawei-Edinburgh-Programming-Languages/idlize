@@ -15,6 +15,19 @@
 
 import { KPointer, KStringPtr, KInt, KUint8ArrayPtr, KInt32ArrayPtr } from "@koalaui/interop"
 
+enum RuntimeType {
+    UNEXPECTED = -1,
+    NUMBER = 1,
+    STRING = 2,
+    OBJECT = 3,
+    BOOLEAN = 4,
+    UNDEFINED = 5,
+    BIGINT = 6,
+    FUNCTION = 7,
+    SYMBOL = 8,
+    MATERIALIZED = 9,
+}
+
 export class NativeModuleBase {
     _GetGroupedLog(index: KInt): KPointer {
         throw new Error("_GetResultString")
@@ -51,4 +64,16 @@ export class NativeModuleBase {
     _StartPerf(traceName: KStringPtr): void {}
     _EndPerf(traceName: KStringPtr): void {}
     _DumpPerf(options: KInt): KPointer { return 0 }
+    _RuntimeType(value: any): KInt {
+        let type = typeof value
+        if (type == "number") return RuntimeType.NUMBER
+        if (type == "string") return RuntimeType.STRING
+        if (type == "undefined") return RuntimeType.UNDEFINED
+        if (type == "object") return RuntimeType.OBJECT
+        if (type == "boolean") return RuntimeType.BOOLEAN
+        if (type == "bigint") return RuntimeType.BIGINT
+        if (type == "function") return RuntimeType.FUNCTION
+        if (type == "symbol") return RuntimeType.SYMBOL
+        throw new Error(`bug: ${value} is ${type}`)
+    }
 }

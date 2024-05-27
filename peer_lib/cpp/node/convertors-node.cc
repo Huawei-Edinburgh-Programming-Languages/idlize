@@ -167,6 +167,63 @@ Exports* Exports::getInstance() {
     return instance;
 }
 
+enum Ark_RuntimeType
+{
+  ARK_RUNTIME_UNEXPECTED = -1,
+  ARK_RUNTIME_NUMBER = 1,
+  ARK_RUNTIME_STRING = 2,
+  ARK_RUNTIME_OBJECT = 3,
+  ARK_RUNTIME_BOOLEAN = 4,
+  ARK_RUNTIME_UNDEFINED = 5,
+  ARK_RUNTIME_BIGINT = 6,
+  ARK_RUNTIME_FUNCTION = 7,
+  ARK_RUNTIME_SYMBOL = 8,
+  ARK_RUNTIME_MATERIALIZED = 9,
+};
+
+Napi::Value Node_RuntimeType(const Napi::CallbackInfo& info) {
+     if (info.Length() != 1) return makeInt32(info, ARK_RUNTIME_UNEXPECTED);
+    napi_valuetype type;
+    napi_status status = napi_typeof(info.Env(), info[0], &type);
+    if (status != 0) return makeInt32(info, ARK_RUNTIME_UNEXPECTED);
+    int32_t result = ARK_RUNTIME_UNEXPECTED;
+    switch (type) {
+        case napi_undefined:
+            result = ARK_RUNTIME_UNDEFINED;
+            break;
+        case napi_null:
+            // what to do here?
+            result = ARK_RUNTIME_OBJECT;
+            break;
+        case napi_boolean:
+            result = ARK_RUNTIME_BOOLEAN;
+            break;
+        case napi_number:
+            result = ARK_RUNTIME_NUMBER;
+            break;
+        case napi_string:
+            result = ARK_RUNTIME_STRING;
+            break;
+        case napi_symbol:
+            result = ARK_RUNTIME_SYMBOL;
+            break;
+        case napi_object:
+            result = ARK_RUNTIME_OBJECT;
+            break;
+        case napi_function:
+            result = ARK_RUNTIME_FUNCTION;
+            break;
+        case napi_external:
+            result = ARK_RUNTIME_UNEXPECTED;
+            break;
+        case napi_bigint:
+            result = ARK_RUNTIME_BIGINT;
+            break;
+    }
+    return makeInt32(info, result);
+}
+MAKE_NODE_EXPORT(RuntimeType)
+
 /**
  * Sets a new callback and returns its previous value.
  */

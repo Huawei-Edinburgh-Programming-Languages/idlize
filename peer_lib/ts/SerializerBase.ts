@@ -46,7 +46,7 @@ export enum Tags {
     OBJECT = 107,
 }
 
-export function runtimeType(value: any): int32 {
+export function runtimeType0(value: any): int32 {
     let type = typeof value
     if (type == "number") return RuntimeType.NUMBER
     if (type == "string") return RuntimeType.STRING
@@ -58,6 +58,10 @@ export function runtimeType(value: any): int32 {
     if (type == "symbol") return RuntimeType.SYMBOL
 
     throw new Error(`bug: ${value} is ${type}`)
+}
+
+export function runtimeType(value: any): int32 {
+    return nativeModule()._RuntimeType(value)
 }
 
 export type Function = object
