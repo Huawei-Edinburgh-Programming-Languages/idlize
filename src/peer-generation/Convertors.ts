@@ -375,7 +375,7 @@ export class UnionConvertor extends BaseArgConvertor {
                 it.runtimeTypes.map(rt => printer.makeNaryOp("==", [ printer.makeString(`ARK_RUNTIME_${RuntimeType[rt]}`), printer.makeString(runtimeType)])))
             const stmt = new ProxyStatement((writer) => {
                 it.convertorDeserialize(param, `${value}.value${index}`, printer)
-                writer.writeStatement(writer.applyToObject(this, param, value, {index: `${index}`}))
+                writer.writeStatement(writer.makeSetUnionSelector(value, `${index}`))
             })
             branches.push({expr: expr, stmt: stmt})
         })
@@ -523,7 +523,7 @@ export class OptionConvertor extends BaseArgConvertor {
             printer.makeString(`${param}Deserializer.readInt8()`), true))
         printer.writeStatement(printer.makeAssign(tag, undefined,
             printer.convertRuntimeTypeToTag(runtimeType), true))
-        printer.writeStatement(printer.applyToObject(this, param, value, {tag: tag}))
+        printer.writeStatement(printer.makeSetOptionTag(value, tag))
         const thenStatement = new BlockStatement([
             new ProxyStatement(writer => {
                 const accessor = printer.getObjectAccessor(this, param, value)

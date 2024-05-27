@@ -157,10 +157,7 @@ export class MethodCallExpression extends FunctionCallExpression {
 export class ExpressionStatement implements LanguageStatement {
     constructor(public expression: LanguageExpression) { }
     write(writer: LanguageWriter): void {
-        const text = this.expression.asString()
-        if (text.length > 0) {
-            writer.print(`${text};`)
-        }
+        writer.print(`${this.expression.asString()};`)
     }
 }
 
@@ -467,6 +464,12 @@ export abstract class LanguageWriter {
     makeMapResize(keyType: string, valueType: string, map: string, size: string, deserializer: string): LanguageStatement {
         return new ExpressionStatement(new StringExpression("// TODO: TS map resize"))
     }
+    makeSetUnionSelector(value: string, index: string): LanguageStatement {
+        return new ExpressionStatement(new StringExpression("// TODO: implement setting union selector"))
+    }
+    makeSetOptionTag(value: string, tag: string): LanguageStatement {
+        return new ExpressionStatement(new StringExpression("// TODO: implement setting option tag"))
+    }
     makeString(value: string): LanguageExpression {
         return new StringExpression(value)
     }
@@ -476,7 +479,6 @@ export abstract class LanguageWriter {
     makeStatement(expr: LanguageExpression): LanguageStatement {
         return new ExpressionStatement(expr)
     }
-    abstract applyToObject(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): LanguageStatement
     abstract getObjectAccessor(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): string
     abstract convertRuntimeTypeToTag(name: string): LanguageExpression
     abstract makeCast(value: LanguageExpression, type: Type): LanguageExpression
@@ -836,16 +838,11 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         }
         return super.mapType(type)
     }
-    applyToObject(convertor: BaseArgConvertor, param: string, value: string , args?: ObjectArgs): LanguageStatement {
-        if (convertor instanceof OptionConvertor && args?.tag) {
-            return this.makeAssign(`${value}.tag`, undefined,
-                this.makeString(args.tag), false)
-        }
-        if (convertor instanceof UnionConvertor && args?.index) {
-            return this.makeAssign(`${value}.selector`, undefined,
-                this.makeString(args.index), false)
-        }
-        return this.makeStatement(this.makeString(""))
+    makeSetUnionSelector(value: string, index: string): LanguageStatement {
+        return this.makeAssign(`${value}.selector`, undefined, this.makeString(index), false)
+    }
+    makeSetOptionTag(value: string, tag: string): LanguageStatement {
+        return this.makeAssign(`${value}.tag`, undefined, this.makeString(tag), false)
     }
     getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): string {
         if (convertor instanceof OptionConvertor) {
