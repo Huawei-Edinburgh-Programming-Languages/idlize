@@ -276,13 +276,17 @@ class CppMapResizeStatement implements LanguageStatement {
 }
 
 export class BlockStatement implements LanguageStatement {
-    constructor(public statements: LanguageStatement[]) { }
+    constructor(public statements: LanguageStatement[], private inScope: boolean = true) { }
     write(writer: LanguageWriter): void {
-        writer.print("{")
-        writer.pushIndent()
+        if (this.inScope) {
+            writer.print("{")
+            writer.pushIndent()
+        }
         this.statements.forEach(s => s.write(writer))
-        writer.popIndent()
-        writer.print("}")
+        if (this.inScope) {
+            writer.popIndent()
+            writer.print("}")
+        }
     }
 }
 
@@ -297,13 +301,6 @@ export class IfStatement implements LanguageStatement {
             writer.print(" else ")
             this.elseStatement.write(writer)
         }
-    }
-}
-
-export class ProxyStatement implements LanguageStatement {
-    constructor(private op: (writer: LanguageWriter) => void) { }
-    write(writer: LanguageWriter) {
-        this.op(writer)
     }
 }
 
