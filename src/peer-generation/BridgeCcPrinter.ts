@@ -68,7 +68,7 @@ class BridgeCcVisitor {
                 this.C.print(`Deserializer ${it.param}Deserializer(${it.param}Array, ${it.param}Length);`)
                 let result = `${it.param}_value`
                 this.C.print(`${it.nativeType(false)} ${result};`)
-                this.C.writeStatement(it.convertorDeserializeStatement(it.param, result, this.C))
+                this.C.writeStatement(it.convertorDeserialize(it.param, result, this.C))
             }
         })
         this.printAPICall(method)

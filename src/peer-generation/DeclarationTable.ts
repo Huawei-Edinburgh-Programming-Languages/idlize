@@ -1341,11 +1341,11 @@ export class DeclarationTable {
                 let struct = this.targetStruct(target)
                 struct.getFields().forEach(it => {
                     let typeConvertor = this.typeConvertor(`value`, it.type!, it.optional)
-                    writer.writeStatement(typeConvertor.convertorDeserializeStatement(`value`, `value.${it.name}`, writer))
+                    writer.writeStatement(typeConvertor.convertorDeserialize(`value`, `value.${it.name}`, writer))
                 })
             } else {
                 let typeConvertor = this.typeConvertor("value", target, false)
-                writer.writeStatement(typeConvertor.convertorDeserializeStatement(`value`, `value`, writer))
+                writer.writeStatement(typeConvertor.convertorDeserialize(`value`, `value`, writer))
             }
             writer.writeStatement(writer.makeReturn(writer.makeString("value")))
         })
@@ -1378,11 +1378,11 @@ export class DeclarationTable {
                     true))
                 struct.getFields().forEach(it => {
                     let typeConvertor = this.typeConvertor(resultVarName, it.type!, it.optional)
-                    writer.writeStatement(typeConvertor.convertorDeserializeStatement(resultVarName, `${it.name}`, writer))
+                    writer.writeStatement(typeConvertor.convertorDeserialize(resultVarName, `${it.name}`, writer))
                 })
             } else {
                 let typeConvertor = this.typeConvertor(resultVarName, target, false)
-                writer.writeStatement(typeConvertor.convertorDeserializeStatement(resultVarName, resultVarName, writer))
+                writer.writeStatement(typeConvertor.convertorDeserialize(resultVarName, resultVarName, writer))
             }
             writer.print(`return ${resultVarName}`)
         }
