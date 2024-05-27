@@ -1345,11 +1345,11 @@ export class DeclarationTable {
             let struct = this.targetStruct(target)
             struct.getFields().forEach(it => {
                 let typeConvertor = this.typeConvertor(`value`, it.type!, it.optional)
-                typeConvertor.convertorDeserialize(`value`, `value.${it.name}`, printer, Language.CPP)
+                typeConvertor.convertorDeserialize(`value`, `value.${it.name}`, printer)
             })
         } else {
             let typeConvertor = this.typeConvertor("value", target, false)
-            typeConvertor.convertorDeserialize(`value`, `value`, printer, Language.CPP)
+            typeConvertor.convertorDeserialize(`value`, `value`, printer)
         }
         printer.print(`return value;`)
         printer.popIndent()
@@ -1383,11 +1383,11 @@ export class DeclarationTable {
                     true))
                 struct.getFields().forEach(it => {
                     let typeConvertor = this.typeConvertor(resultVarName, it.type!, it.optional)
-                    typeConvertor.convertorDeserialize(resultVarName, `${it.name}`, writer, Language.TS)
+                    typeConvertor.convertorDeserialize(resultVarName, `${it.name}`, writer)
                 })
             } else {
                 let typeConvertor = this.typeConvertor(resultVarName, target, false)
-                typeConvertor.convertorDeserialize(resultVarName, resultVarName, writer, Language.TS)
+                typeConvertor.convertorDeserialize(resultVarName, resultVarName, writer)
             }
             writer.print(`return ${resultVarName}`)
         }

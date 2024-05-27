@@ -31,7 +31,7 @@ export interface ArgConvertor {
     scopeEnd?(param: string, language: Language): string
     convertorArg(param: string, writer: LanguageWriter): string
     convertorSerialize(param: string, value: string, writer: LanguageWriter): void
-    convertorDeserialize(param: string, value: string, writer: LanguageWriter, language: Language): void
+    convertorDeserialize(param: string, value: string, writer: LanguageWriter): void
     interopType(language: Language): string
     nativeType(impl: boolean): string
     isPointerType(): boolean
@@ -64,7 +64,7 @@ export abstract class BaseArgConvertor implements ArgConvertor {
     scopeEnd?(param: string, language: Language): string
     abstract convertorArg(param: string, writer: LanguageWriter): string
     abstract convertorSerialize(param: string, value: string, writer: LanguageWriter): void
-    abstract convertorDeserialize(param: string, value: string, writer: LanguageWriter, language: Language): void
+    abstract convertorDeserialize(param: string, value: string, writer: LanguageWriter): void
     hasCustomDiscriminator(): boolean {
         return false
     }
@@ -357,7 +357,7 @@ export class UnionConvertor extends BaseArgConvertor {
             printer.print(`}`)
         })
     }
-    convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
+    convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
         let runtimeType = `runtimeType${uniqueCounter++}`;
         printer.writeStatement(printer.makeAssign(runtimeType,
             undefined,
@@ -374,7 +374,7 @@ export class UnionConvertor extends BaseArgConvertor {
             const expr = printer.makeNaryOp("||",
                 it.runtimeTypes.map(rt => printer.makeNaryOp("==", [ printer.makeString(`ARK_RUNTIME_${RuntimeType[rt]}`), printer.makeString(runtimeType)])))
             const stmt = new ProxyStatement((writer) => {
-                it.convertorDeserialize(param, `${value}.value${index}`, printer, language)
+                it.convertorDeserialize(param, `${value}.value${index}`, printer)
                 writer.writeStatement(writer.applyToObject(this, param, value, {index: `${index}`}))
             })
             branches.push({expr: expr, stmt: stmt})
@@ -516,7 +516,7 @@ export class OptionConvertor extends BaseArgConvertor {
     convertorCArg(param: string): string {
         throw new Error("Must never be used")
     }
-    convertorDeserialize(param: string, value: string, printer: LanguageWriter, lang: Language): void {
+    convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
         const runtimeType = `runtimeType${uniqueCounter++}`
         const tag = `tag${uniqueCounter++}`
         printer.writeStatement(printer.makeAssign(runtimeType, undefined,
@@ -527,7 +527,7 @@ export class OptionConvertor extends BaseArgConvertor {
         const thenStatement = new BlockStatement([
             new ProxyStatement(writer => {
                 const accessor = printer.getObjectAccessor(this, param, value)
-                this.typeConvertor.convertorDeserialize(param, accessor, writer, lang)
+                this.typeConvertor.convertorDeserialize(param, accessor, writer)
             })
         ])
         printer.writeStatement(printer.makeCondition(
@@ -577,10 +577,10 @@ export class AggregateConvertor extends BaseArgConvertor {
             it.convertorSerialize(param, `${value}_${memberName}`, printer)
         })
     }
-    convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
+    convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
         let struct = this.table.targetStruct(this.table.toTarget(this.type))
         this.memberConvertors.forEach((it, index) => {
-            it.convertorDeserialize(param, `${value}.${struct.getFields()[index].name}`, printer, language)
+            it.convertorDeserialize(param, `${value}.${struct.getFields()[index].name}`, printer)
         })
     }
     nativeType(impl: boolean): string {
@@ -698,12 +698,12 @@ export class TupleConvertor extends BaseArgConvertor {
         printer.popIndent()
         printer.print(`}`)
     }
-    convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
+    convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
         let thenStatement = new BlockStatement([
             new ProxyStatement(writer => {
                 this.memberConvertors.forEach((it, index) => {
                     const accessor = printer.getObjectAccessor(this, param, value, {index: `${index}`})
-                    it.convertorDeserialize(param, accessor, writer, language)
+                    it.convertorDeserialize(param, accessor, writer)
                 })
             })
         ])
@@ -759,7 +759,7 @@ export class ArrayConvertor extends BaseArgConvertor {
         printer.popIndent()
         printer.print(`}`)
     }
-    convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
+    convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
         // Array length.
         const runtimeType = `runtimeType${uniqueCounter++}`;
         const arrayLength = `arrayLength${uniqueCounter++}`;
@@ -776,7 +776,7 @@ export class ArrayConvertor extends BaseArgConvertor {
             printer.makeLoop(forCounterName, arrayLength),
             new ProxyStatement((writer)=> {
                 const accessor = printer.getObjectAccessor(this, param, value, {index: `[${forCounterName}]`})
-                this.elementConvertor.convertorDeserialize(param, accessor, writer, language)
+                this.elementConvertor.convertorDeserialize(param, accessor, writer)
             }),
             printer.makeStatement(printer.makeString("}"))
         ])
@@ -827,7 +827,7 @@ export class MapConvertor extends BaseArgConvertor {
         printer.popIndent()
         printer.print(`}`)
     }
-    convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
+    convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
         // Map size.
         const runtimeType = `runtimeType${uniqueCounter++}`;
         const mapSize = `mapSize${uniqueCounter++}`;
@@ -844,9 +844,9 @@ export class MapConvertor extends BaseArgConvertor {
         printer.writeStatement(printer.makeLoop(counterVar, mapSize))
         printer.pushIndent()
         const keyAccessor = printer.getObjectAccessor(this, param, value, {index: counterVar, field: "keys"})
-        this.keyConvertor.convertorDeserialize(param, keyAccessor, printer, language)
+        this.keyConvertor.convertorDeserialize(param, keyAccessor, printer)
         const valueAccessor = printer.getObjectAccessor(this, param, value, {index: counterVar, field: "values"})
-        this.valueConvertor.convertorDeserialize(param, valueAccessor, printer, language)
+        this.valueConvertor.convertorDeserialize(param, valueAccessor, printer)
         printer.popIndent()
         printer.print(`}`)
     }
@@ -968,8 +968,8 @@ class ProxyConvertor extends BaseArgConvertor {
     convertorArg(param: string, writer: LanguageWriter): string {
         return this.convertor.convertorArg(param, writer)
     }
-    convertorDeserialize(param: string, value: string, printer: LanguageWriter, language: Language): void {
-        this.convertor.convertorDeserialize(param, value, printer, language)
+    convertorDeserialize(param: string, value: string, printer: LanguageWriter): void {
+        this.convertor.convertorDeserialize(param, value, printer)
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         this.convertor.convertorSerialize(param, value, printer)
