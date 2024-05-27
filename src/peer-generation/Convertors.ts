@@ -381,11 +381,10 @@ export class UnionConvertor extends BaseArgConvertor {
     }
     convertorDeserializeStatement(param: string, value: string, printer: LanguageWriter): LanguageStatement {
         let runtimeType = `runtimeType${uniqueCounter++}`;
-        const statements: LanguageStatement[] = []
-        statements.push(printer.makeAssign(runtimeType,
+        const statements = [printer.makeAssign(runtimeType,
             undefined,
             printer.makeString(`${param}Deserializer.readInt8()`),
-            true))
+            true)]
         const branches : BranchStatement[] = []
         this.memberConvertors.forEach((it, index) => {
             if (it.runtimeTypes.length == 0) {
@@ -396,14 +395,12 @@ export class UnionConvertor extends BaseArgConvertor {
             }
             const expr = printer.makeNaryOp("||",
                 it.runtimeTypes.map(rt => printer.makeNaryOp("==", [ printer.makeString(`ARK_RUNTIME_${RuntimeType[rt]}`), printer.makeString(runtimeType)])))
-
             branches.push({expr: expr, stmt: new BlockStatement([
                     it.convertorDeserializeStatement(param, `${value}.value${index}`, printer),
                     printer.makeSetUnionSelector(value, `${index}`)
                 ], false)})
         })
         statements.push(printer.makeMultiBranchCondition(branches))
-
         return new BlockStatement(statements, false)
     }
     nativeType(impl: boolean): string {
@@ -610,7 +607,7 @@ export class AggregateConvertor extends BaseArgConvertor {
         printer.writeStatement(this.convertorDeserializeStatement(param, value, printer))
     }
     convertorDeserializeStatement(param: string, value: string, printer: LanguageWriter): LanguageStatement {
-        let statements: LanguageStatement[] = []
+        const statements: LanguageStatement[] = []
         let struct = this.table.targetStruct(this.table.toTarget(this.type))
         this.memberConvertors.forEach((it, index) => {
             statements.push(it.convertorDeserializeStatement(param, `${value}.${struct.getFields()[index].name}`, printer))
