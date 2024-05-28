@@ -834,15 +834,17 @@ export class MapConvertor extends BaseArgConvertor {
         const statements = [
             printer.makeAssign(runtimeType, undefined,
                 printer.makeString(`${param}Deserializer.readInt8()`), true),
-            printer.makeAssign(mapSize, undefined, printer.makeString(`${param}Deserializer.readInt32()`), true),
-            printer.makeMapResize(keyTypeName, valueTypeName, value, mapSize, `${param}Deserializer`),
-            printer.makeLoop(counterVar, mapSize),
-            printer.makeAssign(tmpKey, new Type(keyTypeName), undefined, true),
-            this.keyConvertor.convertorDeserialize(param, tmpKey, printer),
-            printer.makeAssign(tmpValue, new Type(keyTypeName), undefined, true),
-            this.valueConvertor.convertorDeserialize(param, tmpValue, printer),
-            printer.makeMapInsert(keyAccessor, tmpKey, valueAccessor, tmpValue),
-            printer.makeStatement(printer.makeString("}"))
+            printer.makeCondition(printer.makeTagDefinedCheck(runtimeType), new BlockStatement([
+                printer.makeAssign(mapSize, undefined, printer.makeString(`${param}Deserializer.readInt32()`), true),
+                printer.makeMapResize(keyTypeName, valueTypeName, value, mapSize, `${param}Deserializer`),
+                printer.makeLoop(counterVar, mapSize),
+                printer.makeAssign(tmpKey, new Type(keyTypeName), undefined, true),
+                this.keyConvertor.convertorDeserialize(param, tmpKey, printer),
+                printer.makeAssign(tmpValue, new Type(keyTypeName), undefined, true),
+                this.valueConvertor.convertorDeserialize(param, tmpValue, printer),
+                printer.makeMapInsert(keyAccessor, tmpKey, valueAccessor, tmpValue),
+                printer.makeStatement(printer.makeString("}"))
+            ])),
         ]
         return new BlockStatement(statements, false)
     }
