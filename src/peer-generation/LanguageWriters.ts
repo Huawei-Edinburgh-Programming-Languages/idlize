@@ -17,6 +17,7 @@ import { IndentedPrinter } from "../IndentedPrinter";
 import { Language, stringOrNone } from "../util";
 import { ArrayConvertor, BaseArgConvertor, EnumConvertor, FunctionConvertor, InterfaceConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "./Convertors";
 import { PrimitiveType } from "./DeclarationTable";
+import {RuntimeType} from "./PeerGeneratorVisitor";
 
 export class Type {
     constructor(public name: string, public nullable = false) {}
@@ -48,7 +49,8 @@ export class AssignStatement implements LanguageStatement {
     write(writer: LanguageWriter): void {
         if (this.isDeclared) {
             const typeSpec = this.type ? `: ${writer.mapType(this.type)}` : ""
-            writer.print(`let ${this.variableName}${typeSpec} = ${this.expression?.asString()}`)
+            const initValue = this.expression ? `= ${this.expression.asString()}` : ""
+            writer.print(`let ${this.variableName}${typeSpec} ${initValue}`)
         } else {
             writer.print(`${this.variableName} = ${this.expression?.asString()}`)
         }
@@ -117,6 +119,20 @@ export class CDefinedExpression implements LanguageExpression {
     }
 }
 
+export class CLikeCheckDefinedExpression implements LanguageExpression {
+    constructor(private value: string) { }
+    asString(): string {
+        return `${this.value} != ARK_TAG_UNDEFINED`
+    }
+}
+
+export class TsCheckDefinedExpression implements LanguageExpression {
+    constructor(private value: string) { }
+    asString(): string {
+        return `${this.value} != Tags.UNDEFINED`
+    }
+}
+
 export class CheckDefinedExpression implements LanguageExpression {
     constructor(private value: string) { }
     asString(): string {
@@ -157,7 +173,10 @@ export class MethodCallExpression extends FunctionCallExpression {
 export class ExpressionStatement implements LanguageStatement {
     constructor(public expression: LanguageExpression) { }
     write(writer: LanguageWriter): void {
-        writer.print(`${this.expression.asString()};`)
+        const text = this.expression.asString()
+        if (text.length > 0) {
+            writer.print(`${this.expression.asString()};`)
+        }
     }
 }
 
@@ -272,6 +291,20 @@ class CppMapResizeStatement implements LanguageStatement {
     constructor(private keyType: string, private valueType: string, private map: string, private size: string, private deserializer: string) {}
     write(writer: LanguageWriter): void {
         writer.print(`${this.deserializer}.resizeMap<Map_${this.keyType}_${this.valueType}, ${this.keyType}, ${this.valueType}>(&${this.map}, ${this.size});`)
+    }
+}
+
+class TsTupleAllocStatement implements LanguageStatement {
+    constructor(private tuple: string) {}
+    write(writer: LanguageWriter): void {
+        writer.writeStatement(writer.makeAssign(this.tuple, undefined, writer.makeString("[]"), false))
+    }
+}
+
+class TsObjectAllocStatement implements LanguageStatement {
+    constructor(private object: string) {}
+    write(writer: LanguageWriter): void {
+        writer.writeStatement(writer.makeAssign(this.object, undefined, writer.makeString("{}"), false))
     }
 }
 
@@ -441,6 +474,7 @@ export abstract class LanguageWriter {
     makeDefinedCheck(value: string, isRuntimeType: boolean = false): LanguageExpression {
         return new CheckDefinedExpression(value)
     }
+    abstract makeTagDefinedCheck(value: string): LanguageExpression
     makeCondition(condition: LanguageExpression, thenStatement: LanguageStatement, elseStatement?: LanguageStatement): LanguageStatement {
         return new IfStatement(condition, thenStatement, elseStatement)
     }
@@ -456,16 +490,24 @@ export abstract class LanguageWriter {
     abstract makeLoop(counter: string, limit: string): LanguageStatement
     abstract makeMapForEach(map: string, key: string, value: string): LanguageStatement
     makeArrayResize(array: string, length: string, deserializer: string): LanguageStatement {
-        return new ExpressionStatement(new StringExpression("// TODO: TS array resize"))
+        return new ExpressionStatement(this.makeString(`${array} = []`))
     }
     makeMapResize(keyType: string, valueType: string, map: string, size: string, deserializer: string): LanguageStatement {
         return new ExpressionStatement(new StringExpression("// TODO: TS map resize"))
     }
+    makeTupleAlloc(option: string): LanguageStatement {
+        return new ExpressionStatement(new StringExpression(""))
+    }
+    makeObjectAlloc(object: string): LanguageStatement {
+        return new ExpressionStatement(new StringExpression(""))
+    }
     makeSetUnionSelector(value: string, index: string): LanguageStatement {
-        return new ExpressionStatement(new StringExpression("// TODO: implement setting union selector"))
+        // empty expression
+        return new ExpressionStatement(new StringExpression(""))
     }
     makeSetOptionTag(value: string, tag: string): LanguageStatement {
-        return new ExpressionStatement(new StringExpression("// TODO: implement setting option tag"))
+        // empty expression
+        return new ExpressionStatement(new StringExpression(""))
     }
     makeString(value: string): LanguageExpression {
         return new StringExpression(value)
@@ -476,6 +518,7 @@ export abstract class LanguageWriter {
     makeStatement(expr: LanguageExpression): LanguageStatement {
         return new ExpressionStatement(expr)
     }
+    abstract makeRuntimeType(rt: RuntimeType): LanguageExpression
     abstract getObjectAccessor(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): string
     abstract convertRuntimeTypeToTag(name: string): LanguageExpression
     abstract makeCast(value: LanguageExpression, type: Type): LanguageExpression
@@ -505,6 +548,9 @@ export abstract class LanguageWriter {
     mapMethodModifier(modifier: MethodModifier): string {
         return `${MethodModifier[modifier].toLowerCase()}`
     }
+    abstract makeMapKeyTypeName(c: MapConvertor): string
+    abstract makeMapValueTypeName(c: MapConvertor): string
+    abstract makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement
 }
 
 export class TSLanguageWriter extends LanguageWriter {
@@ -554,7 +600,7 @@ export class TSLanguageWriter extends LanguageWriter {
         prefix = prefix ? prefix + " " : ""
         this.printer.print(`${prefix}${name}(${signature.args.map((it, index) => `${signature.argName(index)}${it.nullable ? "?" : ""}: ${this.mapType(it)}${signature.argDefault(index) ? ' = ' + signature.argDefault(index) : ""}`).join(", ")})${needReturn ? ": " + this.mapType(signature.returnType) : ""} ${needBracket ? "{" : ""}`)
     }
-    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean = true): LanguageStatement {
+    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression | undefined, isDeclared: boolean = true): LanguageStatement {
         return new AssignStatement(variableName, type, expr, isDeclared)
     }
     makeReturn(expr: LanguageExpression): LanguageStatement {
@@ -575,45 +621,58 @@ export class TSLanguageWriter extends LanguageWriter {
     mapType(type: Type): string {
         return `${type.name}`
     }
-    applyToObject(convertor: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): LanguageStatement {
-        if (convertor instanceof MapConvertor) {
-            const ctor = `new ${convertor.tsTypeName}()`
-            return this.makeAssign(`${param}.${value}`, undefined, this.makeString(ctor), false)
-        }
-        if (!(convertor instanceof OptionConvertor)) {
-            return this.makeAssign(`${param}.${value}`, undefined, this.makeString("[]"), false)
-        }
-        return this.makeAssign(`${param}.${value}`, undefined, this.makeString("{}"), false)
-    }
     getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): string {
-        if (convertor instanceof OptionConvertor) {
-            return `${value}`
-        }
-        if (convertor instanceof ArrayConvertor) {
-            return `${param}.${value}${args?.index??""}`
-        }
-        if (convertor instanceof UnionConvertor) {
+        if (convertor instanceof OptionConvertor || convertor instanceof UnionConvertor) {
             return value
         }
-        if (convertor instanceof EnumConvertor) {
-            return `${param}.${value}`
+        if (convertor instanceof ArrayConvertor && args?.index != undefined) {
+            return `${value}${args.index}`
         }
-        if (convertor instanceof FunctionConvertor) {
-            return `${param}.${value}`
+        if (convertor instanceof ArrayConvertor) {
+            return `${value}`
         }
-        if (convertor instanceof InterfaceConvertor) {
-            return `${param}.${value}`
+        if (convertor instanceof TupleConvertor && args?.index != undefined) {
+            return `${value}[${args.index}]`
+        }
+        if (convertor instanceof MapConvertor) {
+            return `${value}`
         }
         if (convertor.useArray && args?.index != undefined) {
-            return `${param}.${value}[${args.index}]`
+            return `${value}[${args.index}]`
         }
-        return `${param}.${value}`
+        return `${value}`
     }
     convertRuntimeTypeToTag(name: string): LanguageExpression {
-        return this.makeString(`${name}`)
+        return this.makeTernary(this.makeString(`${name} == RuntimeType.UNDEFINED`),
+            this.makeString("undefined"), this.makeString("{}"))
     }
     makeUndefined(): LanguageExpression {
         return this.makeString("undefined")
+    }
+    makeRuntimeType(rt: RuntimeType): LanguageExpression {
+        return this.makeString(`RuntimeType.${RuntimeType[rt]}`)
+    }
+    makeTagDefinedCheck(value: string): LanguageExpression {
+        return new TsCheckDefinedExpression(value)
+    }
+    makeTupleAlloc(option: string): LanguageStatement {
+        return new TsTupleAllocStatement(option)
+    }
+    makeObjectAlloc(object: string): LanguageStatement {
+        return new TsObjectAllocStatement(object)
+    }
+    makeMapResize(keyType: string, valueType: string, map: string, size: string, deserializer: string): LanguageStatement {
+        return this.makeAssign(map, undefined, this.makeString(`new Map<${keyType}, ${valueType}>()`), false)
+    }
+    makeMapKeyTypeName(c: MapConvertor): string {
+        return c.keyConvertor.tsTypeName;
+    }
+    makeMapValueTypeName(c: MapConvertor): string {
+        return c.valueConvertor.tsTypeName;
+    }
+    makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement {
+        // keyAccessor and valueAccessor are equal in TS
+        return this.makeAssign(`${keyAccessor}[${key}]`, undefined, this.makeString(`${value}`), false)
     }
 }
 
@@ -666,6 +725,9 @@ abstract class CLikeLanguageWriter extends LanguageWriter {
         op(this)
         this.popIndent()
         this.printer.print(`}`)
+    }
+    makeTagDefinedCheck(value: string): LanguageExpression {
+        return new CLikeCheckDefinedExpression(value)
     }
 }
 
@@ -746,6 +808,21 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     }
     makeUndefined(): LanguageExpression {
         return this.makeString("undefined")
+    }
+    makeRuntimeType(rt: RuntimeType): LanguageExpression {
+        return this.makeString(`${RuntimeType[rt]}`)
+    }
+    makeTagDefinedCheck(value: string): LanguageExpression {
+        throw new Error("Method not implemented.")
+    }
+    makeMapKeyTypeName(c: MapConvertor): string {
+        throw new Error("Method not implemented.")
+    }
+    makeMapValueTypeName(c: MapConvertor): string {
+        throw new Error("Method not implemented.")
+    }
+    makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement {
+        throw new Error("Method not implemented.")
     }
 }
 
@@ -854,7 +931,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         if (convertor instanceof MapConvertor && args?.index && args?.field) {
             return `${value}.${args.field}[${args.index}]`
         }
-        return `${value}`
+        return value
     }
     convertRuntimeTypeToTag(name: string): LanguageExpression {
         return this.makeTernary(this.makeString(`${name} == ARK_RUNTIME_UNDEFINED`),
@@ -862,6 +939,22 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     }
     makeUndefined(): LanguageExpression {
         return this.makeString(`${PrimitiveType.Undefined.getText()}()`)
+    }
+    makeRuntimeType(rt: RuntimeType): LanguageExpression {
+        return this.makeString(`ARK_RUNTIME_${RuntimeType[rt]}`)
+    }
+    makeMapKeyTypeName(c: MapConvertor): string {
+        return c.table.computeTargetName(c.table.toTarget(c.keyType), false)
+    }
+    makeMapValueTypeName(c: MapConvertor): string {
+        return c.table.computeTargetName(c.table.toTarget(c.valueType), false)
+    }
+    makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement {
+        // TODO: maybe use std::move?
+        return new BlockStatement([
+            this.makeAssign(keyAccessor, undefined, this.makeString(key), false),
+            this.makeAssign(valueAccessor, undefined, this.makeString(value), false)
+        ], false)
     }
 }
 

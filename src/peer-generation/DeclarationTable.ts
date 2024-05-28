@@ -1378,7 +1378,7 @@ export class DeclarationTable {
                     true))
                 struct.getFields().forEach(it => {
                     let typeConvertor = this.typeConvertor(resultVarName, it.type!, it.optional)
-                    writer.writeStatement(typeConvertor.convertorDeserialize(resultVarName, `${it.name}`, writer))
+                    writer.writeStatement(typeConvertor.convertorDeserialize(resultVarName, `value.${it.name}`, writer))
                 })
             } else {
                 let typeConvertor = this.typeConvertor(resultVarName, target, false)
