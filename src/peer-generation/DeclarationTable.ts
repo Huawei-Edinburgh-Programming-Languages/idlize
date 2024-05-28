@@ -1354,7 +1354,7 @@ export class DeclarationTable {
             writer.writeStatement(
                 writer.makeAssign("valueDeserializer", new Type(writer.makeRef("Deserializer")), writer.makeThis(), true))
             // using list initialization to prevent uninitialized value errors
-            writer.writeStatement(writer.makeStructDeclare("value", type, this.targetStruct(target).getFields()))
+            writer.writeStatement(writer.makeObjectDeclare("value", type, this.targetStruct(target).getFields()))
             if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {
                 let struct = this.targetStruct(target)
                 struct.getFields().forEach(it => {

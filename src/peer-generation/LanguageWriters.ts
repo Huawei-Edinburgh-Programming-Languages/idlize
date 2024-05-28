@@ -15,7 +15,7 @@
 
 import { IndentedPrinter } from "../IndentedPrinter";
 import { Language, stringOrNone } from "../util";
-import { ArrayConvertor, BaseArgConvertor, MapConvertor, OptionConvertor, ToStringConvertor, TupleConvertor, UnionConvertor } from "./Convertors";
+import { ArrayConvertor, BaseArgConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "./Convertors";
 import { FieldRecord, PrimitiveType } from "./DeclarationTable";
 import { RuntimeType } from "./PeerGeneratorVisitor";
 
@@ -309,10 +309,13 @@ class TsTupleAllocStatement implements LanguageStatement {
     }
 }
 
-class TsObjectAllocStatement implements LanguageStatement {
-    constructor(private object: string) {}
+class TsObjectAssignStatement implements LanguageStatement {
+    constructor(private object: string, private type: Type | undefined, private fields: readonly FieldRecord[], private isDeclare: boolean) {}
     write(writer: LanguageWriter): void {
-        writer.writeStatement(writer.makeAssign(this.object, undefined, writer.makeString("{}"), false))
+        writer.writeStatement(writer.makeAssign(this.object,
+            this.type,
+            writer.makeString(`{${this.fields.map(it=>`${it.name}: undefined`).join(",")}}`),
+            this.isDeclare))
     }
 }
 
@@ -442,21 +445,30 @@ export abstract class LanguageWriter {
 
     abstract writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string, interfaces?: string[]): void
     abstract writeInterface(name: string, op: (writer: LanguageWriter) => void, superInterfaces?: string[]): void
-
     abstract writeFieldDeclaration(name: string, type: Type, modifiers: string[]|undefined, optional: boolean): void
-
     abstract writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void
-
     abstract writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method): void
     abstract writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void): void
+    abstract makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression | undefined, isDeclared: boolean): LanguageStatement;
+    abstract makeReturn(expr?: LanguageExpression): LanguageStatement;
+    abstract makeRuntimeType(rt: RuntimeType): LanguageExpression
+    abstract getObjectAccessor(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): string
+    abstract convertRuntimeTypeToTag(name: string): LanguageExpression
+    abstract makeCast(value: LanguageExpression, type: Type): LanguageExpression
+    abstract makeCast(value: LanguageExpression, type: Type, unsafe: boolean): LanguageExpression
+    abstract writePrintLog(message: string): void
+    abstract makeUndefined(): LanguageExpression
+    abstract makeMapKeyTypeName(c: MapConvertor): string
+    abstract makeMapValueTypeName(c: MapConvertor): string
+    abstract makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement
+    abstract makeLoop(counter: string, limit: string): LanguageStatement
+    abstract makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement
     writeSuperCall(params: string[]): void {
         this.printer.print(`super(${params.join(", ")});`)
     }
-
     writeMethodCall(receiver: string, method: string, params: string[], nullable = false): void {
         this.printer.print(`${receiver}${nullable ? "?" : ""}.${method}(${params.join(", ")})`)
     }
-
     writeStatement(stmt: LanguageStatement) {
         //this.printer.print(stmt.asString())
         stmt.write(this)
@@ -486,8 +498,6 @@ export abstract class LanguageWriter {
     makeMethodCall(receiver: string, method: string, params: LanguageExpression[], nullable?: boolean): LanguageExpression {
         return new MethodCallExpression(receiver, method, params, nullable)
     }
-    abstract makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression | undefined, isDeclared: boolean): LanguageStatement;
-    abstract makeReturn(expr?: LanguageExpression): LanguageStatement;
     makeDefinedCheck(value: string, isRuntimeType: boolean = false): LanguageExpression {
         return new CheckDefinedExpression(value)
     }
@@ -519,8 +529,6 @@ export abstract class LanguageWriter {
     makeUnionVariantCast(value: string, type: string, index?: number): LanguageExpression {
         return this.makeString(`unsafeCast<${type}>(${value})`)
     }
-    abstract makeLoop(counter: string, limit: string): LanguageStatement
-    abstract makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement
     makeArrayResize(array: string, length: string, deserializer: string): LanguageStatement {
         return new ExpressionStatement(this.makeString(`${array} = []`))
     }
@@ -550,13 +558,6 @@ export abstract class LanguageWriter {
     makeStatement(expr: LanguageExpression): LanguageStatement {
         return new ExpressionStatement(expr)
     }
-    abstract makeRuntimeType(rt: RuntimeType): LanguageExpression
-    abstract getObjectAccessor(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): string
-    abstract convertRuntimeTypeToTag(name: string): LanguageExpression
-    abstract makeCast(value: LanguageExpression, type: Type): LanguageExpression
-    abstract makeCast(value: LanguageExpression, type: Type, unsafe: boolean): LanguageExpression
-    abstract writePrintLog(message: string): void
-    abstract makeUndefined(): LanguageExpression
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
         this.writeMethodDeclaration(name, signature)
     }
@@ -579,12 +580,9 @@ export abstract class LanguageWriter {
     mapMethodModifier(modifier: MethodModifier): string {
         return `${MethodModifier[modifier].toLowerCase()}`
     }
-    makeStructDeclare(name: string, type: Type, fields: readonly FieldRecord[]): LanguageStatement {
+    makeObjectDeclare(name: string, type: Type, fields: readonly FieldRecord[]): LanguageStatement {
         return this.makeAssign(name, type, this.makeString("{}"), true)
     }
-    abstract makeMapKeyTypeName(c: MapConvertor): string
-    abstract makeMapValueTypeName(c: MapConvertor): string
-    abstract makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement
 }
 
 export class TSLanguageWriter extends LanguageWriter {
@@ -696,7 +694,7 @@ export class TSLanguageWriter extends LanguageWriter {
         return new TsTupleAllocStatement(option)
     }
     makeObjectAlloc(object: string): LanguageStatement {
-        return new TsObjectAllocStatement(object)
+        return new TsObjectAssignStatement(object, undefined, [], false)
     }
     makeMapResize(keyType: string, valueType: string, map: string, size: string, deserializer: string): LanguageStatement {
         return this.makeAssign(map, undefined, this.makeString(`new Map<${keyType}, ${valueType}>()`), false)
@@ -711,11 +709,8 @@ export class TSLanguageWriter extends LanguageWriter {
         // keyAccessor and valueAccessor are equal in TS
         return this.makeStatement(this.makeMethodCall(keyAccessor, "set", [this.makeString(key), this.makeString(value)]))
     }
-    makeStructDeclare(name: string, type: Type, fields: readonly FieldRecord[]): LanguageStatement {
-        return this.makeAssign(name,
-            new Type("any"),
-            this.makeString(`{${fields.map(it=>`${it.name}: undefined`).join(",")}}`),
-            true)
+    makeObjectDeclare(name: string, type: Type, fields: readonly FieldRecord[]): LanguageStatement {
+        return new TsObjectAssignStatement(name, new Type("any"), fields, true)
     }
 }
 
