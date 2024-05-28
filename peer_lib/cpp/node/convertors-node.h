@@ -118,16 +118,27 @@ inline ElemType* getTypedElements(Napi::Env env, Napi::Value value) {
     return nullptr;
   }
   Napi::TypedArray array = value.As<Napi::TypedArray>();
-
-  if (array.TypedArrayType() != getNapiType<ElemType>()) {
-    printf("Array type mismatch. Expected %d got %d\n", getNapiType<ElemType>(), array.TypedArrayType());
+  napi_value arrayBuffer;
+  size_t length;
+  void* data = nullptr;
+  size_t byteLength;
+  size_t byteOffset;
+  napi_typedarray_type type;
+  napi_status status = napi_get_typedarray_info(env,
+                                                value,
+                                                &type,
+                                                &byteLength,
+                                                &data,
+                                                &arrayBuffer,
+                                                &byteOffset);
+   if (type != getNapiType<ElemType>()) {
+    printf("Array type mismatch. Expected %d got %d\n", getNapiType<ElemType>(), type);
     Napi::Error::New(env, "Array type mismatch")
         .ThrowAsJavaScriptException();
     return nullptr;
   }
-  Napi::ArrayBuffer buffer = array.ArrayBuffer();
-
-  return reinterpret_cast<ElemType*>(buffer.Data());
+  if (status != 0) return nullptr;
+  return reinterpret_cast<ElemType*>(data);
 }
 
 template <typename ElemType>

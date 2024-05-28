@@ -19,12 +19,14 @@ import { EnumEntity, PeerFile } from "./PeerFile";
 import { PeerLibrary } from "./PeerLibrary";
 import { Language, isStatic, renameDtsToPeer, throwException } from "../util";
 import { ImportsCollector } from "./ImportsCollector";
-import { PeerClass } from "./PeerClass";
+import { PeerClass, PeerClassBase } from "./PeerClass";
 import { InheritanceRole, determineParentRole, isHeir, isRoot } from "./inheritance";
 import { PeerMethod } from "./PeerMethod";
 import {
     LanguageWriter,
     Method,
+    MethodModifier,
+    MethodSignature,
     NamedMethodSignature,
     Type,
     createLanguageWriter
@@ -214,10 +216,10 @@ class PeerFileVisitor {
             case Language.TS: {
                 return [
                     `import { int32 } from "@koalaui/common"`,
-                    `import { PeerNode } from "@koalaui/arkoala"`,
+                    `import { PeerNode } from "./PeerNode"`,
                     `import { nullptr, KPointer } from "@koalaui/interop"`,
-                    `import { runtimeType, RuntimeType } from "./SerializerBase"`,
-                    `import { Serializer } from "./Serializer"`,
+                    `import { runtimeType, RuntimeType, SerializerBase } from "./SerializerBase"`,
+                    `import { createSerializer } from "./Serializer"`,
                     `import { nativeModule } from "./NativeModule"`,
                     `import { ArkUINodeType } from "./ArkUINodeType"`,
                     `import { ArkCommon } from "./ArkCommon"`,
@@ -226,10 +228,10 @@ class PeerFileVisitor {
             case Language.ARKTS: {
                 return [
                     `import { int32 } from "@koalaui/common"`,
-                    `import { PeerNode } from "@koalaui/arkoala"`,
+                    `import { PeerNode } from "Finalizable"`,
                     `import { nullptr, KPointer } from "@koalaui/interop"`,
-                    `import { runtimeType, RuntimeType } from "./SerializerBase"`,
-                    `import { Serializer } from "./Serializer"`,
+                    `import { runtimeType, RuntimeType, SerializerBase  } from "./SerializerBase"`,
+                    `import { createSerializer } from "./Serializer"`,
                     `import { ArkUINodeType } from "./ArkUINodeType"`,
                     `import { ArkCommon } from "./ArkCommon"`,
                     `${collectDtsImports().trim()}`
@@ -274,6 +276,19 @@ export function printPeers(peerLibrary: PeerLibrary, dumpSerialized: boolean): M
     return result
 }
 
+export function printPeerFinalizer(peerClassBase: PeerClassBase, writer: LanguageWriter): void {
+    const className = peerClassBase.getComponentName()
+    const finalizer = new Method(
+        "getFinalizer",
+        new MethodSignature(Type.Pointer, []),
+        [MethodModifier.PRIVATE, MethodModifier.STATIC])
+    writer.writeMethodImplementation(finalizer, writer => {
+        writer.writeStatement(
+            writer.makeReturn(
+                writer.makeMethodCall("nativeModule()", `_${className}_getFinalizer`, [])))
+    })
+}
+
 export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, dumpSerialized: boolean,
     methodPostfix: string, ptr: string, returnType: Type = Type.Void) {
     if (printer.language != Language.TS) return
@@ -288,10 +303,10 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, dum
         writer.pushIndent()
         writer.print(it.scopeStart?.(it.param, printer.language))
     })
-    method.argConvertors.forEach(it => {
+    method.argConvertors.forEach((it, index) => {
         if (it.useArray) {
             let size = it.estimateSize()
-            writer.print(`const ${it.param}Serializer = new Serializer(${size})`)
+            writer.print(`const ${it.param}Serializer = SerializerBase.get(createSerializer, ${index})`)
             // TODO: pass writer to convertors!
             it.convertorSerialize(it.param, it.param, writer)
         }
@@ -323,10 +338,6 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, dum
         writer.popIndent()
         writer.print(it.scopeEnd!(it.param, writer.language))
     })
-    method.argConvertors.forEach(it => {
-        if (it.useArray) writer.print(`${it.param}Serializer.close()`)
-    })
-
     if (returnType != Type.Void) {
         let result = returnValName
         if (method.hasReceiver() && returnType === Type.This) {
@@ -335,7 +346,9 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, dum
             const obj = `new ${method.originalParentName}(${signature.argsNames.map(it => "undefined").join(",")})`
             const objType = new Type(method.originalParentName)
             writer.writeStatement(writer.makeAssign("obj", objType, writer.makeString(obj), true))
-            writer.writeStatement(writer.makeAssign("obj.peer", new Type("Finalizable"), writer.makeString(`new Finalizable(${returnValName})`), false))
+            writer.writeStatement(
+                writer.makeAssign("obj.peer", new Type("Finalizable"),
+                    writer.makeString(`new Finalizable(${returnValName}, ${method.originalParentName}.getFinalizer())`), false))
             result = "obj"
         }
         writer.writeStatement(writer.makeReturn(writer.makeString(result)))
