@@ -672,7 +672,7 @@ export class TSLanguageWriter extends LanguageWriter {
     }
     makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement {
         // keyAccessor and valueAccessor are equal in TS
-        return this.makeAssign(`${keyAccessor}[${key}]`, undefined, this.makeString(`${value}`), false)
+        return this.makeStatement(this.makeMethodCall(keyAccessor, "set", [this.makeString(key), this.makeString(value)]))
     }
 }
 
