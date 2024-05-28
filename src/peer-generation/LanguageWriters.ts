@@ -461,9 +461,6 @@ export abstract class LanguageWriter {
         //this.printer.print(stmt.asString())
         stmt.write(this)
     }
-    makeRuntimeType(runtimeType: string): string {///rm?
-        return "RuntimeType." + runtimeType
-    }
     makeTag(tag: string): string {
         return "Tag." + tag
     }
@@ -855,7 +852,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         return this.makeString("undefined")
     }
     makeRuntimeType(rt: RuntimeType): LanguageExpression {
-        return this.makeString(`${RuntimeType[rt]}`)
+        throw new Error("Method not implemented.")
     }
     makeTagDefinedCheck(value: string): LanguageExpression {
         throw new Error("Method not implemented.")
@@ -914,9 +911,6 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         op(this)
         this.popIndent()
         this.print(`}`)
-    }
-    override makeRuntimeType(runtimeType: string): string {
-        return "ARK_RUNTIME_" + runtimeType
     }
     override makeTag(tag: string): string {
         return "ARK_TAG_" + tag
