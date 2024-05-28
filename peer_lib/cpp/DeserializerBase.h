@@ -188,7 +188,7 @@ inline Ark_Length Length_from_array(Ark_Int32 *array)
   return result;
 }
 
-class ArgDeserializerBase;
+class DeserializerBase;
 
 inline void WriteToString(string *result, Ark_Undefined value)
 {
@@ -217,7 +217,7 @@ struct CustomDeserializer
 {
   virtual ~CustomDeserializer() {}
   virtual bool supports(const string &kind) { return false; }
-  virtual Ark_CustomObject deserialize(ArgDeserializerBase *deserializer, const string &kind)
+  virtual Ark_CustomObject deserialize(DeserializerBase *deserializer, const string &kind)
   {
     Ark_CustomObject result;
     strcpy(result.kind, "error");
@@ -226,7 +226,7 @@ struct CustomDeserializer
   CustomDeserializer *next = nullptr;
 };
 
-class ArgDeserializerBase
+class DeserializerBase
 {
 protected:
   uint8_t *data;
@@ -237,10 +237,10 @@ protected:
   static CustomDeserializer *customDeserializers;
 
 public:
-  ArgDeserializerBase(uint8_t *data, int32_t length)
+  DeserializerBase(uint8_t *data, int32_t length)
       : data(data), length(length), position(0) {}
 
-  ~ArgDeserializerBase()
+  ~DeserializerBase()
   {
     for (auto data : toClean)
     {
@@ -250,13 +250,13 @@ public:
 
   static void registerCustomDeserializer(CustomDeserializer *deserializer)
   {
-    if (ArgDeserializerBase::customDeserializers == nullptr)
+    if (DeserializerBase::customDeserializers == nullptr)
     {
-      ArgDeserializerBase::customDeserializers = deserializer;
+      DeserializerBase::customDeserializers = deserializer;
     }
     else
     {
-      auto *current = ArgDeserializerBase::customDeserializers;
+      auto *current = DeserializerBase::customDeserializers;
       while (current->next != nullptr)
         current = current->next;
       current->next = deserializer;
@@ -273,7 +273,7 @@ public:
       memset(value, 0, length * sizeof(E));
       toClean.push_back(value);
     }
-    array->array_length = length;
+    array->length = length;
     array->array = reinterpret_cast<E *>(value);
   }
 
@@ -292,7 +292,7 @@ public:
       memset(values, 0, length * sizeof(V));
       toClean.push_back(values);
     }
-    map->map_length = length;
+    map->size = length;
     map->keys = reinterpret_cast<K *>(keys);
     map->values = reinterpret_cast<V *>(values);
   }
@@ -309,7 +309,7 @@ public:
 
   Ark_CustomObject readCustomObject(string kind)
   {
-    auto *current = ArgDeserializerBase::customDeserializers;
+    auto *current = DeserializerBase::customDeserializers;
     while (current)
     {
       if (current->supports(kind))
