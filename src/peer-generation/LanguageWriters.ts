@@ -118,24 +118,10 @@ export class CDefinedExpression implements LanguageExpression {
     }
 }
 
-export class CLikeCheckDefinedExpression implements LanguageExpression {
-    constructor(private value: string) { }
-    asString(): string {
-        return `${this.value} != ARK_TAG_UNDEFINED`
-    }
-}
-
-export class TsCheckDefinedExpression implements LanguageExpression {
-    constructor(private value: string) { }
-    asString(): string {
-        return `${this.value} != Tags.UNDEFINED`
-    }
-}
-
 export class CheckDefinedExpression implements LanguageExpression {
-    constructor(private value: string) { }
+    constructor(private value: string, private isRuntimeType: boolean) { }
     asString(): string {
-        return this.value
+        return `${this.value} != ${this.isRuntimeType ? "RuntimeType.UNDEFINED" : "undefined"}`
     }
 }
 
@@ -216,6 +202,9 @@ export class JavaCastExpression implements LanguageExpression {
 export class CppCastExpression implements LanguageExpression {
     constructor(public value: LanguageExpression, public type: Type, private unsafe = false) {}
     asString(): string {
+        if (this.type.name === PrimitiveType.Tag.getText()) {
+            return `${this.value.asString()} == ARK_RUNTIME_UNDEFINED ? ARK_TAG_UNDEFINED : ARK_TAG_OBJECT`
+        }
         return this.unsafe
             ? `reinterpret_cast<${this.type.name}>(${this.value.asString()})`
             : `(${this.type.name})(${this.value.asString()})`
@@ -453,7 +442,6 @@ export abstract class LanguageWriter {
     abstract makeReturn(expr?: LanguageExpression): LanguageStatement;
     abstract makeRuntimeType(rt: RuntimeType): LanguageExpression
     abstract getObjectAccessor(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): string
-    abstract convertRuntimeTypeToTag(name: string): LanguageExpression
     abstract makeCast(value: LanguageExpression, type: Type): LanguageExpression
     abstract makeCast(value: LanguageExpression, type: Type, unsafe: boolean): LanguageExpression
     abstract writePrintLog(message: string): void
@@ -463,6 +451,7 @@ export abstract class LanguageWriter {
     abstract makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement
     abstract makeLoop(counter: string, limit: string): LanguageStatement
     abstract makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement
+    abstract getTagType(): Type
     writeSuperCall(params: string[]): void {
         this.printer.print(`super(${params.join(", ")});`)
     }
@@ -496,9 +485,8 @@ export abstract class LanguageWriter {
         return new MethodCallExpression(receiver, method, params, nullable)
     }
     makeDefinedCheck(value: string, isRuntimeType: boolean = false): LanguageExpression {
-        return new CheckDefinedExpression(value)
+        return new CheckDefinedExpression(value, isRuntimeType)
     }
-    abstract makeTagDefinedCheck(value: string): LanguageExpression
     makeCondition(condition: LanguageExpression, thenStatement: LanguageStatement, elseStatement?: LanguageStatement): LanguageStatement {
         return new IfStatement(condition, thenStatement, elseStatement)
     }
@@ -542,7 +530,7 @@ export abstract class LanguageWriter {
         // empty expression
         return new ExpressionStatement(new StringExpression(""))
     }
-    makeSetOptionTag(value: string, tag: string): LanguageStatement {
+    makeSetOptionTag(value: string, tag: LanguageExpression): LanguageStatement {
         // empty expression
         return new ExpressionStatement(new StringExpression(""))
     }
@@ -674,18 +662,11 @@ export class TSLanguageWriter extends LanguageWriter {
         }
         return `${value}`
     }
-    convertRuntimeTypeToTag(name: string): LanguageExpression {
-        return this.makeTernary(this.makeString(`${name} == RuntimeType.UNDEFINED`),
-            this.makeString("undefined"), this.makeString("{}"))
-    }
     makeUndefined(): LanguageExpression {
         return this.makeString("undefined")
     }
     makeRuntimeType(rt: RuntimeType): LanguageExpression {
         return this.makeString(`RuntimeType.${RuntimeType[rt]}`)
-    }
-    makeTagDefinedCheck(value: string): LanguageExpression {
-        return new TsCheckDefinedExpression(value)
     }
     makeTupleAlloc(option: string): LanguageStatement {
         return new TsTupleAllocStatement(option)
@@ -708,6 +689,9 @@ export class TSLanguageWriter extends LanguageWriter {
     }
     makeObjectDeclare(name: string, type: Type, fields: readonly FieldRecord[]): LanguageStatement {
         return new TsObjectAssignStatement(name, new Type("any"), fields, true)
+    }
+    getTagType(): Type {
+        return new Type("Tags");
     }
 }
 
@@ -752,9 +736,6 @@ abstract class CLikeLanguageWriter extends LanguageWriter {
         op(this)
         this.popIndent()
         this.printer.print(`}`)
-    }
-    makeTagDefinedCheck(value: string): LanguageExpression {
-        return new CLikeCheckDefinedExpression(value)
     }
 }
 
@@ -837,16 +818,10 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): string {
         throw new Error("Method not implemented.")
     }
-    convertRuntimeTypeToTag(name: string): LanguageExpression {
-        throw new Error("Method not implemented.")
-    }
     makeUndefined(): LanguageExpression {
         return this.makeString("undefined")
     }
     makeRuntimeType(rt: RuntimeType): LanguageExpression {
-        throw new Error("Method not implemented.")
-    }
-    makeTagDefinedCheck(value: string): LanguageExpression {
         throw new Error("Method not implemented.")
     }
     makeMapKeyTypeName(c: MapConvertor): string {
@@ -856,6 +831,9 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         throw new Error("Method not implemented.")
     }
     makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement {
+        throw new Error("Method not implemented.")
+    }
+    getTagType(): Type {
         throw new Error("Method not implemented.")
     }
 }
@@ -990,8 +968,8 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     makeSetUnionSelector(value: string, index: string): LanguageStatement {
         return this.makeAssign(`${value}.selector`, undefined, this.makeString(index), false)
     }
-    makeSetOptionTag(value: string, tag: string): LanguageStatement {
-        return this.makeAssign(`${value}.tag`, undefined, this.makeString(tag), false)
+    makeSetOptionTag(value: string, tag: LanguageExpression): LanguageStatement {
+        return this.makeAssign(`${value}.tag`, undefined, tag, false)
     }
     getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): string {
         if (convertor instanceof OptionConvertor) {
@@ -1007,10 +985,6 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
             return `${value}.${args.field}[${args.index}]`
         }
         return value
-    }
-    convertRuntimeTypeToTag(name: string): LanguageExpression {
-        return this.makeTernary(this.makeString(`${name} == ARK_RUNTIME_UNDEFINED`),
-            this.makeString("ARK_TAG_UNDEFINED"), this.makeString("ARK_TAG_OBJECT"))
     }
     makeUndefined(): LanguageExpression {
         return this.makeString(`${PrimitiveType.Undefined.getText()}()`)
@@ -1030,6 +1004,9 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
             this.makeAssign(keyAccessor, undefined, this.makeString(key), false),
             this.makeAssign(valueAccessor, undefined, this.makeString(value), false)
         ], false)
+    }
+    getTagType(): Type {
+        return new Type(PrimitiveType.Tag.getText())
     }
 }
 
