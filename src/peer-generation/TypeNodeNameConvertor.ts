@@ -1,9 +1,8 @@
 import * as ts from 'typescript'
-import { LiteralTypeNodeConvertor, TypeNodeConvertor, convertLiteralTypeNode, convertTypeNode } from './TypeNodeConvertor'
+import { TypeNodeConvertor, convertTypeNode } from './TypeNodeConvertor'
 
 export class TSTypeNodeNameConvertor implements 
-    TypeNodeConvertor<string>, 
-    LiteralTypeNodeConvertor<string>
+    TypeNodeConvertor<string>
 {
     convertUnion(node: ts.UnionTypeNode): string {
         return node.types.map(it => this.convert(it)).join(" | ")
@@ -20,10 +19,6 @@ export class TSTypeNodeNameConvertor implements
         })
         return `{${members.join(', ')}}`
     }
-
-    convertLiteralType(node: ts.LiteralTypeNode): string {
-        return convertLiteralTypeNode(this, node)
-    }
     convertLiteralTypeBooleanTrue(): string {
         return `true`
     }
@@ -36,7 +31,6 @@ export class TSTypeNodeNameConvertor implements
     convertLiteralTypeString(text: string): string {
         return `"${text}"`
     }
-
     convertTuple(node: ts.TupleTypeNode): string {
         const members = node.elements.map(it => {
             if (ts.isNamedTupleMember(it)) {
