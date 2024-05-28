@@ -15,9 +15,9 @@
 
 import { IndentedPrinter } from "../IndentedPrinter";
 import { Language, stringOrNone } from "../util";
-import { ArrayConvertor, BaseArgConvertor, EnumConvertor, FunctionConvertor, InterfaceConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "./Convertors";
-import { PrimitiveType } from "./DeclarationTable";
-import {RuntimeType} from "./PeerGeneratorVisitor";
+import { ArrayConvertor, BaseArgConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "./Convertors";
+import { FieldRecord, PrimitiveType } from "./DeclarationTable";
+import { RuntimeType } from "./PeerGeneratorVisitor";
 
 export class Type {
     constructor(public name: string, public nullable = false) {}
@@ -26,7 +26,6 @@ export class Type {
     static Pointer = new Type('KPointer')
     static This = new Type('this')
     static Void = new Type('void')
-    static Any = new Type('any')
 }
 
 export enum MethodModifier {
@@ -548,6 +547,9 @@ export abstract class LanguageWriter {
     mapMethodModifier(modifier: MethodModifier): string {
         return `${MethodModifier[modifier].toLowerCase()}`
     }
+    makeStructDeclare(name: string, type: Type, fields: readonly FieldRecord[]): LanguageStatement {
+        return this.makeAssign(name, type, this.makeString("{}"), true)
+    }
     abstract makeMapKeyTypeName(c: MapConvertor): string
     abstract makeMapValueTypeName(c: MapConvertor): string
     abstract makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement
@@ -673,6 +675,12 @@ export class TSLanguageWriter extends LanguageWriter {
     makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement {
         // keyAccessor and valueAccessor are equal in TS
         return this.makeStatement(this.makeMethodCall(keyAccessor, "set", [this.makeString(key), this.makeString(value)]))
+    }
+    makeStructDeclare(name: string, type: Type, fields: readonly FieldRecord[]): LanguageStatement {
+        return this.makeAssign(name,
+            new Type("any"),
+            this.makeString(`{${fields.map(it=>`${it.name}: undefined`).join(",")}}`),
+            true)
     }
 }
 
