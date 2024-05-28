@@ -482,12 +482,9 @@ export abstract class LanguageWriter {
     makeThis(): LanguageExpression {
         return new StringExpression("this")
     }
-    makeRuntimeTypeCondition(typeVarName: string, equals: boolean, type: string, typeIndex?: number): LanguageExpression {
+    makeRuntimeTypeCondition(typeVarName: string, equals: boolean, type: string): LanguageExpression {
         const op = equals ? "==" : "!="
         return this.makeString(`${typeVarName} ${op} RuntimeType.${type}`)
-    }
-    makeRuntimeTypeCast(varName: string, type: Type, typeIndex: number): LanguageExpression {///need this?
-        return this.makeCast(this.makeString(varName), type)
     }
     makeValueFromOption(value: string): LanguageExpression {
         return this.makeString(`${value}!`)
@@ -749,13 +746,6 @@ abstract class CLikeLanguageWriter extends LanguageWriter {
         prefix = prefix ? prefix + " " : ""
         this.printer.print(`${prefix}${this.mapType(signature.returnType)} ${name}(${signature.args.map((it, index) => `${this.mapType(it)} ${signature.argName(index)}`).join(", ")});`)
     }
-    writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method) {
-        this.printer.print(`${className}(${signature.args.map((it, index) => `${this.mapType(it)} ${signature.argName(index)}`).join(", ")}) {`)
-        this.pushIndent()
-        op(this)
-        this.popIndent()
-        this.printer.print(`}`)
-    }
     writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void) {
         this.printer.print(`${this.mapType(method.signature.returnType)} ${method.name}(${method.signature.args.map((it, index) => `${this.mapType(it)} ${method.signature.argName(index)}`).join(", ")}) {`)
         this.pushIndent()
@@ -801,6 +791,13 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     }
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
         this.writeMethodDeclaration(name, signature, [MethodModifier.STATIC, MethodModifier.NATIVE])
+    }
+    writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method) {
+        this.printer.print(`${className}(${signature.args.map((it, index) => `${this.mapType(it)} ${signature.argName(index)}`).join(", ")}) {`)
+        this.pushIndent()
+        op(this)
+        this.popIndent()
+        this.printer.print(`}`)
     }
     makeAssign(variableName: string, type: Type, expr: LanguageExpression, isDeclared: boolean = true): LanguageStatement {
         return new JavaAssignStatement(variableName, type, expr, isDeclared)
@@ -895,7 +892,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         this.printer.print(`${type.name} ${name};`)
         this.printer.popIndent()
     }
-    override writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method) {
+    writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method) {
         const superInvocation = superCall
             ? ` : ${superCall.name}(${superCall.signature.args.map((_, i) => superCall?.signature.argName(i)).join(", ")})`
             : ""
@@ -919,9 +916,6 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     override makeRuntimeTypeCondition(typeVarName: string, equals: boolean, type: string): LanguageExpression {
         const op = equals ? "==" : "!="
         return new StringExpression(`${typeVarName} ${op} ARK_RUNTIME_${type.toUpperCase()}`)
-    }
-    override makeRuntimeTypeCast(varName: string, type: Type, typeIndex: number): LanguageExpression {
-        return this.makeCast(new StringExpression(varName), type)
     }
     override makeValueFromOption(value: string): LanguageExpression {
         return this.makeString(`${value}.value`)
@@ -999,7 +993,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     makeSetOptionTag(value: string, tag: string): LanguageStatement {
         return this.makeAssign(`${value}.tag`, undefined, this.makeString(tag), false)
     }
-    getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): string {///mv to ArgConvertor
+    getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): string {
         if (convertor instanceof OptionConvertor) {
             return `${value}.value`
         }
