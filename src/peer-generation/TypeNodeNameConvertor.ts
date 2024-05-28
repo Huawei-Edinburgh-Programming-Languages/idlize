@@ -19,17 +19,12 @@ export class TSTypeNodeNameConvertor implements
         })
         return `{${members.join(', ')}}`
     }
-    convertLiteralTypeBooleanTrue(): string {
-        return `true`
-    }
-    convertLiteralTypeBooleanFalse(): string {
-        return `false`
-    }
-    convertLiteralTypeNull(): string {
-        return `null`
-    }
-    convertLiteralTypeString(text: string): string {
-        return `"${text}"`
+    convertLiteralType(node: ts.LiteralTypeNode): string {
+        if (node.literal.kind === ts.SyntaxKind.TrueKeyword) return `true`
+        if (node.literal.kind === ts.SyntaxKind.FalseKeyword) return `false`
+        if (node.literal.kind === ts.SyntaxKind.NullKeyword) return `null`
+        if (node.literal.kind === ts.SyntaxKind.StringLiteral) return `"${node.literal.text}"` 
+        throw new Error(`Unknown LiteralTypeNode ${ts.SyntaxKind[node.literal.kind]}`)
     }
     convertTuple(node: ts.TupleTypeNode): string {
         const members = node.elements.map(it => {

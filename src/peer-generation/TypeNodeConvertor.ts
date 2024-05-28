@@ -3,10 +3,7 @@ import * as ts from 'typescript'
 export interface TypeNodeConvertor<T> {
     convertUnion(node: ts.UnionTypeNode): T
     convertTypeLiteral(node: ts.TypeLiteralNode): T
-    convertLiteralTypeBooleanTrue(): T
-    convertLiteralTypeBooleanFalse(): T
-    convertLiteralTypeNull(): T
-    convertLiteralTypeString(text: string): T
+    convertLiteralType(node: ts.LiteralTypeNode): T
     convertTuple(node: ts.TupleTypeNode): T
     convertArray(node: ts.ArrayTypeNode): T
     convertOptional(node: ts.OptionalTypeNode): T
@@ -30,13 +27,7 @@ export interface TypeNodeConvertor<T> {
 export function convertTypeNode<T>(convertor: TypeNodeConvertor<T>, node: ts.TypeNode): T {
     if (ts.isUnionTypeNode(node)) return convertor.convertUnion(node)
     if (ts.isTypeLiteralNode(node)) return convertor.convertTypeLiteral(node)
-    if (ts.isLiteralTypeNode(node)) {
-        if (node.literal.kind === ts.SyntaxKind.TrueKeyword) return convertor.convertLiteralTypeBooleanTrue()
-        if (node.literal.kind === ts.SyntaxKind.FalseKeyword) return convertor.convertLiteralTypeBooleanFalse()
-        if (node.literal.kind === ts.SyntaxKind.NullKeyword) return convertor.convertLiteralTypeNull()
-        if (node.literal.kind === ts.SyntaxKind.StringLiteral) return convertor.convertLiteralTypeString(node.literal.text)
-        throw new Error(`Unknown LiteralTypeNode ${ts.SyntaxKind[node.literal.kind]}`)
-    }
+    if (ts.isLiteralTypeNode(node)) return convertor.convertLiteralType(node)
     if (ts.isTupleTypeNode(node)) return convertor.convertTuple(node)
     if (ts.isArrayTypeNode(node)) return convertor.convertArray(node)
     if (ts.isOptionalTypeNode(node)) return convertor.convertOptional(node)
