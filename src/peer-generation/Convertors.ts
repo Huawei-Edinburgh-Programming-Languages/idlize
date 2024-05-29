@@ -507,7 +507,7 @@ export class OptionConvertor extends BaseArgConvertor {
         printer.writeStatement(printer.makeAssign(valueType, undefined,
             printer.makeFunctionCall("runtimeType", [printer.makeString(value)]), true))
         printer.writeMethodCall(`${param}Serializer`, "writeInt8", [valueType])
-        printer.print(`if (${printer.makeRuntimeTypeCondition(valueType, false, "UNDEFINED").asString()}) {`)
+        printer.print(`if (${printer.makeRuntimeTypeCondition(valueType, false, RuntimeType.UNDEFINED).asString()}) {`)
         printer.pushIndent()
         printer.writeStatement(printer.makeAssign(`${value}_value`, undefined, printer.makeValueFromOption(value), true))
         this.typeConvertor.convertorSerialize(param, `${value}_value`, printer)
@@ -527,7 +527,7 @@ export class OptionConvertor extends BaseArgConvertor {
             printer.makeAssign(runtimeType, undefined,
                 printer.makeString(`${param}Deserializer.readInt8()`), true),
             printer.makeSetOptionTag(value, printer.makeCast(printer.makeString(runtimeType), printer.getTagType())),
-            printer.makeCondition(printer.makeDefinedCheck(runtimeType, true), thenStatement)
+            printer.makeCondition(printer.makeRuntimeTypeDefinedCheck(runtimeType), thenStatement)
         ], false)
     }
     nativeType(impl: boolean): string {
@@ -703,7 +703,7 @@ export class TupleConvertor extends BaseArgConvertor {
         })
         let thenStatement = new BlockStatement(statements)
         return printer.makeCondition(
-            printer.makeDefinedCheck(`${param}Deserializer.readInt8()`, true),
+            printer.makeRuntimeTypeDefinedCheck(`${param}Deserializer.readInt8()`),
             thenStatement)
     }
     nativeType(impl: boolean): string {
@@ -773,7 +773,7 @@ export class ArrayConvertor extends BaseArgConvertor {
             printer.makeAssign(runtimeType,
                 undefined,
                 printer.makeString(`${param}Deserializer.readInt8()`), true),
-            printer.makeCondition(printer.makeDefinedCheck(runtimeType, true), thenStatement)
+            printer.makeCondition(printer.makeRuntimeTypeDefinedCheck(runtimeType), thenStatement)
         ]
         return new BlockStatement(statements, false)
     }
@@ -832,7 +832,7 @@ export class MapConvertor extends BaseArgConvertor {
         const statements = [
             printer.makeAssign(runtimeType, undefined,
                 printer.makeString(`${param}Deserializer.readInt8()`), true),
-            printer.makeCondition(printer.makeDefinedCheck(runtimeType, true), new BlockStatement([
+            printer.makeCondition(printer.makeRuntimeTypeDefinedCheck(runtimeType), new BlockStatement([
                 printer.makeAssign(mapSize, undefined, printer.makeString(`${param}Deserializer.readInt32()`), true),
                 printer.makeMapResize(keyTypeName, valueTypeName, value, mapSize, `${param}Deserializer`),
                 printer.makeLoop(counterVar, mapSize),

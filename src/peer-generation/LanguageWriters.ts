@@ -471,9 +471,9 @@ export abstract class LanguageWriter {
     makeThis(): LanguageExpression {
         return new StringExpression("this")
     }
-    makeRuntimeTypeCondition(typeVarName: string, equals: boolean, type: string): LanguageExpression {
+    makeRuntimeTypeCondition(typeVarName: string, equals: boolean, type: RuntimeType): LanguageExpression {
         const op = equals ? "==" : "!="
-        return this.makeString(`${typeVarName} ${op} RuntimeType.${type}`)
+        return this.makeNaryOp(op, [this.makeRuntimeType(type), this.makeString(typeVarName)])
     }
     makeValueFromOption(value: string): LanguageExpression {
         return this.makeString(`${value}!`)
@@ -484,8 +484,11 @@ export abstract class LanguageWriter {
     makeMethodCall(receiver: string, method: string, params: LanguageExpression[], nullable?: boolean): LanguageExpression {
         return new MethodCallExpression(receiver, method, params, nullable)
     }
-    makeDefinedCheck(value: string, isRuntimeType: boolean = false): LanguageExpression {
-        return new CheckDefinedExpression(value, isRuntimeType)
+    makeDefinedCheck(value: string): LanguageExpression {
+        return new CheckDefinedExpression(value)
+    }
+    makeRuntimeTypeDefinedCheck(runtimeType: string): LanguageExpression {
+        return this.makeRuntimeTypeCondition(runtimeType, false, RuntimeType.UNDEFINED)
     }
     makeCondition(condition: LanguageExpression, thenStatement: LanguageStatement, elseStatement?: LanguageStatement): LanguageStatement {
         return new IfStatement(condition, thenStatement, elseStatement)
@@ -891,10 +894,6 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     override makeThis(): LanguageExpression {
         return new StringExpression("*this")
     }
-    override makeRuntimeTypeCondition(typeVarName: string, equals: boolean, type: string): LanguageExpression {
-        const op = equals ? "==" : "!="
-        return new StringExpression(`${typeVarName} ${op} ARK_RUNTIME_${type.toUpperCase()}`)
-    }
     override makeValueFromOption(value: string): LanguageExpression {
         return this.makeString(`${value}.value`)
     }
@@ -937,8 +936,8 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     writePrintLog(message: string): void {
         this.print(`printf("${message}\n")`)
     }
-    makeDefinedCheck(value: string, isRuntimeType: boolean): LanguageExpression {
-        return new CDefinedExpression(value, isRuntimeType);
+    makeDefinedCheck(value: string): LanguageExpression {
+        return new CDefinedExpression(value);
     }
     mapType(type: Type): string {
         switch (type.name) {
