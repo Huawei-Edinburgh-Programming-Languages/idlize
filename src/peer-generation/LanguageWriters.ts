@@ -18,6 +18,7 @@ import { Language, stringOrNone } from "../util";
 import { ArrayConvertor, BaseArgConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "./Convertors";
 import { FieldRecord, PrimitiveType } from "./DeclarationTable";
 import { RuntimeType } from "./PeerGeneratorVisitor";
+import { mapType } from "./TypeNodeNameConvertor";
 
 export class Type {
     constructor(public name: string, public nullable = false) {}
@@ -553,7 +554,7 @@ export abstract class LanguageWriter {
     makeTupleAlloc(option: string): LanguageStatement {
         return new ExpressionStatement(new StringExpression(""))
     }
-    makeObjectAlloc(object: string): LanguageStatement {
+    makeObjectAlloc(object: string, fields: readonly FieldRecord[]): LanguageStatement {
         return new ExpressionStatement(new StringExpression(""))
     }
     makeSetUnionSelector(value: string, index: string): LanguageStatement {
@@ -703,8 +704,14 @@ export class TSLanguageWriter extends LanguageWriter {
     makeTupleAlloc(option: string): LanguageStatement {
         return new TsTupleAllocStatement(option)
     }
-    makeObjectAlloc(object: string): LanguageStatement {
-        return new TsObjectAssignStatement(object, undefined, [], false)
+    makeObjectAlloc(object: string, fields: readonly FieldRecord[]): LanguageStatement {
+        if (fields.length > 0) {
+            return this.makeAssign(object, undefined,
+                this.makeCast(this.makeString("{}"),
+                    new Type(`{${fields.map(it=>`${it.name}: ${mapType(it.type)}`).join(",")}}`)),
+                false)
+        }
+        return new TsObjectAssignStatement(object, undefined, fields, false)
     }
     makeMapResize(keyType: string, valueType: string, map: string, size: string, deserializer: string): LanguageStatement {
         return this.makeAssign(map, undefined, this.makeString(`new Map<${keyType}, ${valueType}>()`), false)
