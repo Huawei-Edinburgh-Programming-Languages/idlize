@@ -1049,7 +1049,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         return new Type(PrimitiveType.Tag.getText())
     }
     getRuntimeType(): Type {
-        return new Type("Ark_RuntimeType")
+        return new Type(PrimitiveType.RuntimeType.getText())
     }
 }
 

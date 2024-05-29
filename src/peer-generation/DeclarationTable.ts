@@ -35,6 +35,7 @@ export class PrimitiveType {
     static Number = new PrimitiveType("Ark_Number", true)
     static Int32 = new PrimitiveType("Ark_Int32")
     static Tag = new PrimitiveType("Ark_Tag")
+    static RuntimeType = new PrimitiveType("Ark_RuntimeType")
     static Boolean = new PrimitiveType("Ark_Boolean")
     static Function = new PrimitiveType("Ark_Function", true)
     static Materialized = new PrimitiveType("Ark_Materialized", true)
