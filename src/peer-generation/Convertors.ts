@@ -576,8 +576,9 @@ export class AggregateConvertor extends BaseArgConvertor {
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
         const structAccessor = printer.getObjectAccessor(this, param, value)
         const statements = [printer.makeObjectAlloc(structAccessor)]
-        let struct = this.table.targetStruct(this.table.toTarget(this.type))
+        const struct = this.table.targetStruct(this.table.toTarget(this.type))
         this.memberConvertors.forEach((it, index) => {
+            // TODO: maybe use accessor?
             statements.push(it.convertorDeserialize(param, `${value}.${struct.getFields()[index].name}`, printer))
         })
         return new BlockStatement(statements, false)
