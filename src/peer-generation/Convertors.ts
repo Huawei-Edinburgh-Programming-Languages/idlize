@@ -701,7 +701,7 @@ export class TupleConvertor extends BaseArgConvertor {
             const accessor = printer.getObjectAccessor(this, param, value, {index: `${index}`})
             statements.push(it.convertorDeserialize(param, accessor, printer))
         })
-        let thenStatement = new BlockStatement(statements)
+        const thenStatement = new BlockStatement(statements)
         return printer.makeCondition(
             printer.makeRuntimeTypeDefinedCheck(`${param}Deserializer.readInt8()`),
             thenStatement)
@@ -765,9 +765,8 @@ export class ArrayConvertor extends BaseArgConvertor {
             // prepare object
             printer.makeArrayResize(arrayAccessor, arrayLength, `${param}Deserializer`),
             // store
-            printer.makeLoop(forCounterName, arrayLength),
-            this.elementConvertor.convertorDeserialize(param, accessor, printer),
-            printer.makeStatement(printer.makeString("}"))
+            printer.makeLoop(forCounterName, arrayLength,
+                this.elementConvertor.convertorDeserialize(param, accessor, printer)),
         ])
         const statements = [
             printer.makeAssign(runtimeType,
@@ -835,13 +834,13 @@ export class MapConvertor extends BaseArgConvertor {
             printer.makeCondition(printer.makeRuntimeTypeDefinedCheck(runtimeType), new BlockStatement([
                 printer.makeAssign(mapSize, undefined, printer.makeString(`${param}Deserializer.readInt32()`), true),
                 printer.makeMapResize(keyTypeName, valueTypeName, value, mapSize, `${param}Deserializer`),
-                printer.makeLoop(counterVar, mapSize),
-                printer.makeAssign(tmpKey, new Type(keyTypeName), undefined, true),
-                this.keyConvertor.convertorDeserialize(param, tmpKey, printer),
-                printer.makeAssign(tmpValue, new Type(keyTypeName), undefined, true),
-                this.valueConvertor.convertorDeserialize(param, tmpValue, printer),
-                printer.makeMapInsert(keyAccessor, tmpKey, valueAccessor, tmpValue),
-                printer.makeStatement(printer.makeString("}"))
+                printer.makeLoop(counterVar, mapSize, new BlockStatement([
+                    printer.makeAssign(tmpKey, new Type(keyTypeName), undefined, true, false),
+                    this.keyConvertor.convertorDeserialize(param, tmpKey, printer),
+                    printer.makeAssign(tmpValue, new Type(keyTypeName), undefined, true, false),
+                    this.valueConvertor.convertorDeserialize(param, tmpValue, printer),
+                    printer.makeMapInsert(keyAccessor, tmpKey, valueAccessor, tmpValue),
+                ], false)),
             ])),
         ]
         return new BlockStatement(statements, false)

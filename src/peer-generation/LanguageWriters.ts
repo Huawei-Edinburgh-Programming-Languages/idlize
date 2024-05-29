@@ -228,16 +228,28 @@ export class ConditionStatement implements LanguageExpression {
 */
 
 class TSLoopStatement implements LanguageStatement {
-    constructor(private counter: string, private limit: string) {}
+    constructor(private counter: string, private limit: string, private statement: LanguageStatement | undefined) {}
     write(writer: LanguageWriter): void {
         writer.print(`for (let ${this.counter} = 0; ${this.counter} < ${this.limit}; ${this.counter}++) {`)
+        if (this.statement) {
+            writer.pushIndent()
+            this.statement.write(writer)
+            writer.popIndent()
+            writer.print("}")
+        }
     }
 }
 
 class CLikeLoopStatement implements LanguageStatement {
-    constructor(private counter: string, private limit: string) {}
+    constructor(private counter: string, private limit: string, private statement: LanguageStatement | undefined) {}
     write(writer: LanguageWriter): void {
         writer.print(`for (int ${this.counter} = 0; ${this.counter} < ${this.limit}; ${this.counter}++) {`)
+        if (this.statement) {
+            writer.pushIndent()
+            this.statement.write(writer)
+            writer.popIndent()
+            writer.print("}")
+        }
     }
 }
 
@@ -450,6 +462,7 @@ export abstract class LanguageWriter {
     abstract makeMapValueTypeName(c: MapConvertor): string
     abstract makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement
     abstract makeLoop(counter: string, limit: string): LanguageStatement
+    abstract makeLoop(counter: string, limit: string, statement: LanguageStatement): LanguageStatement
     abstract makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement
     abstract getTagType(): Type
     writeSuperCall(params: string[]): void {
@@ -558,7 +571,6 @@ export abstract class LanguageWriter {
     print(string: stringOrNone) {
         this.printer.print(string)
     }
-
     getOutput(): string[] {
         return this.printer.getOutput()
     }
@@ -629,8 +641,8 @@ export class TSLanguageWriter extends LanguageWriter {
     makeReturn(expr: LanguageExpression): LanguageStatement {
         return new TSReturnStatement(expr)
     }
-    makeLoop(counter: string, limit: string): LanguageStatement {
-        return new TSLoopStatement(counter, limit)
+    makeLoop(counter: string, limit: string, statement?: LanguageStatement): LanguageStatement {
+        return new TSLoopStatement(counter, limit, statement)
     }
     makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement {
         return new TSMapForEachStatement(map, key, value, op)
@@ -792,8 +804,8 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     makeDefinedCheck(value: string): LanguageExpression {
         return new JavaCheckDefinedExpression(value)
     }
-    makeLoop(counter: string, limit: string): LanguageStatement {
-        return new CLikeLoopStatement(counter, limit)
+    makeLoop(counter: string, limit: string, statement?: LanguageStatement): LanguageStatement {
+        return new CLikeLoopStatement(counter, limit, statement)
     }
     makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement {
         return new JavaMapForEachStatement(map, key, value, op)
@@ -918,8 +930,8 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     override makeUnionVariantCast(value: string, type: string, index: number) {
         return this.makeString(`${value}.value${index}`)
     }
-    makeLoop(counter: string, limit: string): LanguageStatement {
-        return new CLikeLoopStatement(counter, limit)
+    makeLoop(counter: string, limit: string, statement?: LanguageStatement): LanguageStatement {
+        return new CLikeLoopStatement(counter, limit, statement)
     }
     makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement {
         return new CppMapForEachStatement(map, key, value, op)
