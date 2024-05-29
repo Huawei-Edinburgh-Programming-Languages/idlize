@@ -706,12 +706,11 @@ export class TupleConvertor extends BaseArgConvertor {
         const thenStatement = new BlockStatement(statements)
         return new BlockStatement([
             printer.makeAssign(runtimeType, undefined,
-                printer.makeCast(printer.makeString(`${param}Deserializer.readInt8()`), printer.getRuntimeType()), true),
+                printer.makeCast(printer.makeString(`${param}Deserializer.readInt8()`, true), printer.getRuntimeType()), true),
             printer.makeCondition(
                 printer.makeRuntimeTypeDefinedCheck(runtimeType),
                 thenStatement)
         ], false)
-
     }
     nativeType(impl: boolean): string {
         return impl
@@ -779,7 +778,7 @@ export class ArrayConvertor extends BaseArgConvertor {
             printer.makeAssign(runtimeType,
                 undefined,
                 printer.makeCast(printer.makeString(`${param}Deserializer.readInt8()`), printer.getRuntimeType()), true),
-            printer.makeCondition(printer.makeRuntimeTypeDefinedCheck(runtimeType), thenStatement)
+            printer.makeCondition(printer.makeRuntimeTypeDefinedCheck(runtimeType, true), thenStatement)
         ]
         return new BlockStatement(statements, false)
     }

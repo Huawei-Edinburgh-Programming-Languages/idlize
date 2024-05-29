@@ -137,7 +137,7 @@ export class CDefinedExpression implements LanguageExpression {
 }
 
 export class CheckDefinedExpression implements LanguageExpression {
-    constructor(private value: string) { }
+    constructor(private value: string, private isRuntimeType: boolean) { }
     asString(): string {
         return `${this.value} != "undefined"`
     }
@@ -175,6 +175,16 @@ export class MethodCallExpression extends FunctionCallExpression {
 
 export class ExpressionStatement implements LanguageStatement {
     constructor(public expression: LanguageExpression) { }
+    write(writer: LanguageWriter): void {
+        const text = this.expression.asString()
+        if (text.length > 0) {
+            writer.print(`${this.expression.asString()}`)
+        }
+    }
+}
+
+export class CLikeExpressionStatement extends ExpressionStatement {
+    constructor(public expression: LanguageExpression) { super(expression) }
     write(writer: LanguageWriter): void {
         const text = this.expression.asString()
         if (text.length > 0) {
@@ -228,22 +238,6 @@ export class CppCastExpression implements LanguageExpression {
             : `static_cast<${this.type.name}>(${this.value.asString()})`
     }
 }
-
-/*
-export class ConditionStatement implements LanguageExpression {
-    constructor(public condition: LanguageStatement,
-        public trueStatement: LanguageStatement,
-        public falseStatement: LanguageStatement | undefined,
-        public ternary = false) { }
-    asString(): string {
-        if (this.ternary) {
-            return `(${this.condition.asString()}) ? ${this.trueStatement.asString()} : ${this.falseStatement?.asString()}`
-        }
-        const elseStatement = this.falseStatement === undefined ? "" : ` else { ${this.falseStatement.asString()} }`
-        return `if (${this.condition.asString()}) ${this.trueStatement.asString()}${elseStatement}`
-    }
-}
-*/
 
 class TSLoopStatement implements LanguageStatement {
     constructor(private counter: string, private limit: string, private statement: LanguageStatement | undefined) {}
@@ -518,7 +512,7 @@ export abstract class LanguageWriter {
         return new MethodCallExpression(receiver, method, params, nullable)
     }
     makeDefinedCheck(value: string): LanguageExpression {
-        return new CheckDefinedExpression(value)
+        return new CheckDefinedExpression(value, isRuntimeType)
     }
     makeRuntimeTypeDefinedCheck(runtimeType: string): LanguageExpression {
         return this.makeRuntimeTypeCondition(runtimeType, false, RuntimeType.UNDEFINED)
@@ -660,6 +654,9 @@ export class TSLanguageWriter extends LanguageWriter {
     }
     makeReturn(expr: LanguageExpression): LanguageStatement {
         return new TSReturnStatement(expr)
+    }
+    makeStatement(expr: LanguageExpression): LanguageStatement {
+        return new ExpressionStatement(expr)
     }
     makeLoop(counter: string, limit: string, statement?: LanguageStatement): LanguageStatement {
         return new TSLoopStatement(counter, limit, statement)
@@ -836,6 +833,9 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     makeCast(value: LanguageExpression, type: Type, unsafe = false): LanguageExpression {
         return new JavaCastExpression(value, type, unsafe)
     }
+    makeStatement(expr: LanguageExpression): LanguageStatement {
+        return new CLikeExpressionStatement(expr)
+    }
     writePrintLog(message: string): void {
         this.print(`System.out.println("${message}")`)
     }
@@ -940,6 +940,9 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     }
     makeReturn(expr: LanguageExpression): LanguageStatement {
         return new CLikeReturnStatement(expr)
+    }
+    makeStatement(expr: LanguageExpression): LanguageStatement {
+        return new CLikeExpressionStatement(expr)
     }
     override makeArrayAccess(value: string, indexVar: string) {
         return this.makeString(`${value}.array[${indexVar}]`)
