@@ -137,7 +137,7 @@ export class CDefinedExpression implements LanguageExpression {
 }
 
 export class CheckDefinedExpression implements LanguageExpression {
-    constructor(private value: string, private isRuntimeType: boolean) { }
+    constructor(private value: string) { }
     asString(): string {
         return `${this.value} != "undefined"`
     }
@@ -512,7 +512,7 @@ export abstract class LanguageWriter {
         return new MethodCallExpression(receiver, method, params, nullable)
     }
     makeDefinedCheck(value: string): LanguageExpression {
-        return new CheckDefinedExpression(value, isRuntimeType)
+        return new CheckDefinedExpression(value)
     }
     makeRuntimeTypeDefinedCheck(runtimeType: string): LanguageExpression {
         return this.makeRuntimeTypeCondition(runtimeType, false, RuntimeType.UNDEFINED)
