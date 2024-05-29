@@ -164,8 +164,6 @@ export class DeclarationTable {
 
     computeTypeName(suggestedName: string | undefined, type: ts.TypeNode, optional: boolean = false): string {
         let name = this.computeTypeNameImpl(suggestedName, type, optional)
-        if (ts.isTypeAliasDeclaration(type))
-            console.log("AAA")
         this.pendingRequests.push(new PendingTypeRequest(name, type))
         return name
     }
@@ -199,8 +197,6 @@ export class DeclarationTable {
             !ts.isInterfaceDeclaration(target) && !ts.isClassDeclaration(target) && !ts.isEnumDeclaration(target))
         ) {
             // TODO: get rid of this queue.
-            if (ts.isTypeAliasDeclaration(target))
-                console.log("AAA")
             this.pendingRequests.push(new PendingTypeRequest(name, target))
         }
         return name
