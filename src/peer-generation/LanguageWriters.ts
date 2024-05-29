@@ -45,12 +45,17 @@ export interface LanguageExpression {
 }
 
 export class AssignStatement implements LanguageStatement {
-    constructor(public variableName: string, public type: Type | undefined, public expression: LanguageExpression | undefined, public isDeclared: boolean = true) { }
+    constructor(public variableName: string,
+                public type: Type | undefined,
+                public expression: LanguageExpression | undefined,
+                public isDeclared: boolean = true,
+                protected isConst: boolean = true) { }
     write(writer: LanguageWriter): void {
         if (this.isDeclared) {
             const typeSpec = this.type ? `: ${writer.mapType(this.type)}` : ""
             const initValue = this.expression ? `= ${this.expression.asString()}` : ""
-            writer.print(`let ${this.variableName}${typeSpec} ${initValue}`)
+            const constSpec = this.isConst ? "const" : "let"
+            writer.print(`${constSpec} ${this.variableName}${typeSpec} ${initValue}`)
         } else {
             writer.print(`${this.variableName} = ${this.expression?.asString()}`)
         }
@@ -72,8 +77,12 @@ export class DeclareStatement implements LanguageStatement {
 }
 
 export class JavaAssignStatement extends AssignStatement {
-    constructor(public variableName: string, public type: Type | undefined, public expression: LanguageExpression, public isDeclared: boolean = true) {
-        super(variableName, type, expression)
+    constructor(public variableName: string,
+                public type: Type | undefined,
+                public expression: LanguageExpression,
+                public isDeclared: boolean = true,
+                protected isConst: boolean = true) {
+        super(variableName, type, expression, isDeclared, isConst)
      }
      write(writer: LanguageWriter): void{
         if (this.isDeclared) {
@@ -86,7 +95,11 @@ export class JavaAssignStatement extends AssignStatement {
 }
 
 export class EtsAssignStatement implements LanguageStatement {
-    constructor(public variableName: string, public type: Type | undefined, public expression: LanguageExpression, public isDeclared: boolean = true) { }
+    constructor(public variableName: string,
+                public type: Type | undefined,
+                public expression: LanguageExpression,
+                public isDeclared: boolean = true,
+                protected isConst: boolean = true) { }
     write(writer: LanguageWriter): void {
         if (this.isDeclared) {
             const typeSpec = ""
@@ -98,14 +111,19 @@ export class EtsAssignStatement implements LanguageStatement {
 }
 
 export class CppAssignStatement extends AssignStatement {
-    constructor(public variableName: string, public type: Type | undefined, public expression: LanguageExpression | undefined, public isDeclared: boolean = true) {
-        super(variableName, type, expression)
+    constructor(public variableName: string,
+                public type: Type | undefined,
+                public expression: LanguageExpression | undefined,
+                public isDeclared: boolean = true,
+                public isConst: boolean = true) {
+        super(variableName, type, expression, isDeclared, isConst)
      }
      write(writer: LanguageWriter): void{
         if (this.isDeclared) {
             const typeSpec = this.type ? writer.mapType(this.type) : "auto"
             const initValue = this.expression ? this.expression.asString() : "{}"
-            writer.print(`${typeSpec} ${this.variableName} = ${initValue};`)
+            const constSpec = this.isConst ? "const" : ""
+            writer.print(`${constSpec} ${typeSpec} ${this.variableName} = ${initValue};`)
         } else {
             writer.print(`${this.variableName} = ${this.expression!.asString()};`)
         }
@@ -113,16 +131,16 @@ export class CppAssignStatement extends AssignStatement {
 }
 
 export class CDefinedExpression implements LanguageExpression {
-    constructor(private value: string, private isRuntimeType: boolean) { }
+    constructor(private value: string) { }
     asString(): string {
-        return `${this.value} != ${this.isRuntimeType ? "ARK_RUNTIME_UNDEFINED" : "ARK_TAG_UNDEFINED"}`
+        return `${this.value} != ARK_TAG_UNDEFINED`
     }
 }
 
 export class CheckDefinedExpression implements LanguageExpression {
-    constructor(private value: string, private isRuntimeType: boolean) { }
+    constructor(private value: string) { }
     asString(): string {
-        return `${this.value} != ${this.isRuntimeType ? "RuntimeType.UNDEFINED" : "undefined"}`
+        return `${this.value} != "undefined"`
     }
 }
 
@@ -218,21 +236,33 @@ export class CppCastExpression implements LanguageExpression {
         }
         return this.unsafe
             ? `reinterpret_cast<${this.type.name}>(${this.value.asString()})`
-            : `(${this.type.name})(${this.value.asString()})`
+            : `static_cast<${this.type.name}>(${this.value.asString()})`
     }
 }
 
 class TSLoopStatement implements LanguageStatement {
-    constructor(private counter: string, private limit: string) {}
+    constructor(private counter: string, private limit: string, private statement: LanguageStatement | undefined) {}
     write(writer: LanguageWriter): void {
         writer.print(`for (let ${this.counter} = 0; ${this.counter} < ${this.limit}; ${this.counter}++) {`)
+        if (this.statement) {
+            writer.pushIndent()
+            this.statement.write(writer)
+            writer.popIndent()
+            writer.print("}")
+        }
     }
 }
 
 class CLikeLoopStatement implements LanguageStatement {
-    constructor(private counter: string, private limit: string) {}
+    constructor(private counter: string, private limit: string, private statement: LanguageStatement | undefined) {}
     write(writer: LanguageWriter): void {
         writer.print(`for (int ${this.counter} = 0; ${this.counter} < ${this.limit}; ${this.counter}++) {`)
+        if (this.statement) {
+            writer.pushIndent()
+            this.statement.write(writer)
+            writer.popIndent()
+            writer.print("}")
+        }
     }
 }
 
@@ -289,7 +319,7 @@ class CppMapResizeStatement implements LanguageStatement {
 class TsTupleAllocStatement implements LanguageStatement {
     constructor(private tuple: string) {}
     write(writer: LanguageWriter): void {
-        writer.writeStatement(writer.makeAssign(this.tuple, undefined, writer.makeString("[]"), false))
+        writer.writeStatement(writer.makeAssign(this.tuple, undefined, writer.makeString("[]"), false, false))
     }
 }
 
@@ -299,7 +329,8 @@ class TsObjectAssignStatement implements LanguageStatement {
         writer.writeStatement(writer.makeAssign(this.object,
             this.type,
             writer.makeString(`{${this.fields.map(it=>`${it.name}: undefined`).join(",")}}`),
-            this.isDeclare))
+            this.isDeclare,
+            false))
     }
 }
 
@@ -433,7 +464,7 @@ export abstract class LanguageWriter {
     abstract writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void
     abstract writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method): void
     abstract writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void): void
-    abstract makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression | undefined, isDeclared: boolean): LanguageStatement;
+    abstract makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression | undefined, isDeclared: boolean, isConst?: boolean): LanguageStatement;
     abstract makeReturn(expr?: LanguageExpression): LanguageStatement;
     abstract makeRuntimeType(rt: RuntimeType): LanguageExpression
     abstract getObjectAccessor(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): string
@@ -445,8 +476,10 @@ export abstract class LanguageWriter {
     abstract makeMapValueTypeName(c: MapConvertor): string
     abstract makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement
     abstract makeLoop(counter: string, limit: string): LanguageStatement
+    abstract makeLoop(counter: string, limit: string, statement: LanguageStatement): LanguageStatement
     abstract makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement
     abstract getTagType(): Type
+    abstract getRuntimeType(): Type
     writeSuperCall(params: string[]): void {
         this.printer.print(`super(${params.join(", ")});`)
     }
@@ -466,9 +499,9 @@ export abstract class LanguageWriter {
     makeThis(): LanguageExpression {
         return new StringExpression("this")
     }
-    makeRuntimeTypeCondition(typeVarName: string, equals: boolean, type: string): LanguageExpression {
+    makeRuntimeTypeCondition(typeVarName: string, equals: boolean, type: RuntimeType): LanguageExpression {
         const op = equals ? "==" : "!="
-        return this.makeString(`${typeVarName} ${op} RuntimeType.${type}`)
+        return this.makeNaryOp(op, [this.makeRuntimeType(type), this.makeString(typeVarName)])
     }
     makeValueFromOption(value: string): LanguageExpression {
         return this.makeString(`${value}!`)
@@ -479,8 +512,11 @@ export abstract class LanguageWriter {
     makeMethodCall(receiver: string, method: string, params: LanguageExpression[], nullable?: boolean): LanguageExpression {
         return new MethodCallExpression(receiver, method, params, nullable)
     }
-    makeDefinedCheck(value: string, isRuntimeType: boolean = false): LanguageExpression {
-        return new CheckDefinedExpression(value, isRuntimeType)
+    makeDefinedCheck(value: string): LanguageExpression {
+        return new CheckDefinedExpression(value)
+    }
+    makeRuntimeTypeDefinedCheck(runtimeType: string): LanguageExpression {
+        return this.makeRuntimeTypeCondition(runtimeType, false, RuntimeType.UNDEFINED)
     }
     makeCondition(condition: LanguageExpression, thenStatement: LanguageStatement, elseStatement?: LanguageStatement): LanguageStatement {
         return new IfStatement(condition, thenStatement, elseStatement)
@@ -535,7 +571,9 @@ export abstract class LanguageWriter {
     makeNaryOp(op: string, args: LanguageExpression[]): LanguageExpression {
         return new NaryOpExpression(op, args)
     }
-    abstract makeStatement(expr: LanguageExpression): LanguageStatement
+    makeStatement(expr: LanguageExpression): LanguageStatement {
+        return new ExpressionStatement(expr)
+    }
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
         this.writeMethodDeclaration(name, signature)
     }
@@ -548,7 +586,6 @@ export abstract class LanguageWriter {
     print(string: stringOrNone) {
         this.printer.print(string)
     }
-
     getOutput(): string[] {
         return this.printer.getOutput()
     }
@@ -559,7 +596,7 @@ export abstract class LanguageWriter {
         return `${MethodModifier[modifier].toLowerCase()}`
     }
     makeObjectDeclare(name: string, type: Type, fields: readonly FieldRecord[]): LanguageStatement {
-        return this.makeAssign(name, type, this.makeString("{}"), true)
+        return this.makeAssign(name, type, this.makeString("{}"), true, false)
     }
 }
 
@@ -613,8 +650,8 @@ export class TSLanguageWriter extends LanguageWriter {
         prefix = prefix ? prefix + " " : ""
         this.printer.print(`${prefix}${name}(${signature.args.map((it, index) => `${signature.argName(index)}${it.nullable ? "?" : ""}: ${this.mapType(it)}${signature.argDefault(index) ? ' = ' + signature.argDefault(index) : ""}`).join(", ")})${needReturn ? ": " + this.mapType(signature.returnType) : ""} ${needBracket ? "{" : ""}`)
     }
-    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression | undefined, isDeclared: boolean = true): LanguageStatement {
-        return new AssignStatement(variableName, type, expr, isDeclared)
+    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression | undefined, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
+        return new AssignStatement(variableName, type, expr, isDeclared, isConst)
     }
     makeReturn(expr: LanguageExpression): LanguageStatement {
         return new TSReturnStatement(expr)
@@ -622,8 +659,8 @@ export class TSLanguageWriter extends LanguageWriter {
     makeStatement(expr: LanguageExpression): LanguageStatement {
         return new ExpressionStatement(expr)
     }
-    makeLoop(counter: string, limit: string): LanguageStatement {
-        return new TSLoopStatement(counter, limit)
+    makeLoop(counter: string, limit: string, statement?: LanguageStatement): LanguageStatement {
+        return new TSLoopStatement(counter, limit, statement)
     }
     makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement {
         return new TSMapForEachStatement(map, key, value, op)
@@ -695,6 +732,9 @@ export class TSLanguageWriter extends LanguageWriter {
     getTagType(): Type {
         return new Type("Tags");
     }
+    getRuntimeType(): Type {
+        return new Type("number");
+    }
 }
 
 export class ETSLanguageWriter extends TSLanguageWriter {
@@ -704,8 +744,8 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
         this.writeMethodDeclaration(name, signature, [MethodModifier.STATIC, MethodModifier.NATIVE])
     }
-    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean = true): LanguageStatement {
-        return new EtsAssignStatement(variableName, type, expr, isDeclared)
+    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
+        return new EtsAssignStatement(variableName, type, expr, isDeclared, isConst)
     }
 
     mapType(type: Type): string {
@@ -782,8 +822,8 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         this.popIndent()
         this.printer.print(`}`)
     }
-    makeAssign(variableName: string, type: Type, expr: LanguageExpression, isDeclared: boolean = true): LanguageStatement {
-        return new JavaAssignStatement(variableName, type, expr, isDeclared)
+    makeAssign(variableName: string, type: Type, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
+        return new JavaAssignStatement(variableName, type, expr, isDeclared, isConst)
     }
     makeReturn(expr: LanguageExpression): LanguageStatement {
         return new CLikeReturnStatement(expr)
@@ -791,8 +831,8 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     makeDefinedCheck(value: string): LanguageExpression {
         return new JavaCheckDefinedExpression(value)
     }
-    makeLoop(counter: string, limit: string): LanguageStatement {
-        return new CLikeLoopStatement(counter, limit)
+    makeLoop(counter: string, limit: string, statement?: LanguageStatement): LanguageStatement {
+        return new CLikeLoopStatement(counter, limit, statement)
     }
     makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement {
         return new JavaMapForEachStatement(map, key, value, op)
@@ -839,6 +879,9 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         throw new Error("Method not implemented.")
     }
     getTagType(): Type {
+        throw new Error("Method not implemented.")
+    }
+    getRuntimeType(): Type {
         throw new Error("Method not implemented.")
     }
 }
@@ -896,15 +939,11 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     override makeThis(): LanguageExpression {
         return new StringExpression("*this")
     }
-    override makeRuntimeTypeCondition(typeVarName: string, equals: boolean, type: string): LanguageExpression {
-        const op = equals ? "==" : "!="
-        return new StringExpression(`${typeVarName} ${op} ARK_RUNTIME_${type.toUpperCase()}`)
-    }
     override makeValueFromOption(value: string): LanguageExpression {
         return this.makeString(`${value}.value`)
     }
-    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression | undefined, isDeclared: boolean = true): LanguageStatement {
-        return new CppAssignStatement(variableName, type, expr, isDeclared)
+    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression | undefined, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
+        return new CppAssignStatement(variableName, type, expr, isDeclared, isConst)
     }
     makeReturn(expr: LanguageExpression): LanguageStatement {
         return new CLikeReturnStatement(expr)
@@ -927,8 +966,8 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     override makeUnionVariantCast(value: string, type: string, index: number) {
         return this.makeString(`${value}.value${index}`)
     }
-    makeLoop(counter: string, limit: string): LanguageStatement {
-        return new CLikeLoopStatement(counter, limit)
+    makeLoop(counter: string, limit: string, statement?: LanguageStatement): LanguageStatement {
+        return new CLikeLoopStatement(counter, limit, statement)
     }
     makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement {
         return new CppMapForEachStatement(map, key, value, op)
@@ -945,8 +984,8 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     writePrintLog(message: string): void {
         this.print(`printf("${message}\n")`)
     }
-    makeDefinedCheck(value: string, isRuntimeType: boolean): LanguageExpression {
-        return new CDefinedExpression(value, isRuntimeType);
+    makeDefinedCheck(value: string): LanguageExpression {
+        return new CDefinedExpression(value);
     }
     mapType(type: Type): string {
         switch (type.name) {
@@ -1015,6 +1054,9 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     }
     getTagType(): Type {
         return new Type(PrimitiveType.Tag.getText())
+    }
+    getRuntimeType(): Type {
+        return new Type(PrimitiveType.RuntimeType.getText())
     }
 }
 
