@@ -170,7 +170,7 @@ export class UndefinedConvertor extends BaseArgConvertor {
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
         const accessor = printer.getObjectAccessor(this, param, value)
-       return printer.makeAssign(accessor, undefined,
+        return printer.makeAssign(accessor, undefined,
                 printer.makeUndefined(), false)
     }
     nativeType(impl: boolean): string {
@@ -364,7 +364,7 @@ export class UnionConvertor extends BaseArgConvertor {
         let runtimeType = `runtimeType${uniqueCounter++}`;
         const statements = [printer.makeAssign(runtimeType,
             undefined,
-            printer.makeString(`${param}Deserializer.readInt8()`),
+            printer.makeCast(printer.makeString(`${param}Deserializer.readInt8()`), printer.getRuntimeType()),
             true)]
         const branches : BranchStatement[] = []
         this.memberConvertors.forEach((it, index) => {
@@ -525,7 +525,7 @@ export class OptionConvertor extends BaseArgConvertor {
         ])
         return new BlockStatement([
             printer.makeAssign(runtimeType, undefined,
-                printer.makeString(`${param}Deserializer.readInt8()`), true),
+                printer.makeCast(printer.makeString(`${param}Deserializer.readInt8()`), printer.getRuntimeType()), true),
             printer.makeSetOptionTag(value, printer.makeCast(printer.makeString(runtimeType), printer.getTagType())),
             printer.makeCondition(printer.makeRuntimeTypeDefinedCheck(runtimeType), thenStatement)
         ], false)
@@ -694,6 +694,7 @@ export class TupleConvertor extends BaseArgConvertor {
         })
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
+        const runtimeType = `runtimeType${uniqueCounter++}`
         const accessor = printer.getObjectAccessor(this, param, value)
         const statements: LanguageStatement[] = [
             printer.makeTupleAlloc(accessor)
@@ -703,9 +704,14 @@ export class TupleConvertor extends BaseArgConvertor {
             statements.push(it.convertorDeserialize(param, accessor, printer))
         })
         const thenStatement = new BlockStatement(statements)
-        return printer.makeCondition(
-            printer.makeRuntimeTypeDefinedCheck(`${param}Deserializer.readInt8()`),
-            thenStatement)
+        return new BlockStatement([
+            printer.makeAssign(runtimeType, undefined,
+                printer.makeCast(printer.makeString(`${param}Deserializer.readInt8()`), printer.getRuntimeType()), true),
+            printer.makeCondition(
+                printer.makeRuntimeTypeDefinedCheck(runtimeType),
+                thenStatement)
+        ], false)
+
     }
     nativeType(impl: boolean): string {
         return impl
@@ -772,7 +778,7 @@ export class ArrayConvertor extends BaseArgConvertor {
         const statements = [
             printer.makeAssign(runtimeType,
                 undefined,
-                printer.makeString(`${param}Deserializer.readInt8()`), true),
+                printer.makeCast(printer.makeString(`${param}Deserializer.readInt8()`), printer.getRuntimeType()), true),
             printer.makeCondition(printer.makeRuntimeTypeDefinedCheck(runtimeType), thenStatement)
         ]
         return new BlockStatement(statements, false)
@@ -831,7 +837,7 @@ export class MapConvertor extends BaseArgConvertor {
         const tmpValue = `tmpValue${uniqueCounter++}`
         const statements = [
             printer.makeAssign(runtimeType, undefined,
-                printer.makeString(`${param}Deserializer.readInt8()`), true),
+                printer.makeCast(printer.makeString(`${param}Deserializer.readInt8()`), printer.getRuntimeType()), true),
             printer.makeCondition(printer.makeRuntimeTypeDefinedCheck(runtimeType), new BlockStatement([
                 printer.makeAssign(mapSize, undefined, printer.makeString(`${param}Deserializer.readInt32()`), true),
                 printer.makeMapResize(keyTypeName, valueTypeName, value, mapSize, `${param}Deserializer`),

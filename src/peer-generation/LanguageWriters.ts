@@ -225,7 +225,7 @@ export class CppCastExpression implements LanguageExpression {
         }
         return this.unsafe
             ? `reinterpret_cast<${this.type.name}>(${this.value.asString()})`
-            : `(${this.type.name})(${this.value.asString()})`
+            : `static_cast<${this.type.name}>(${this.value.asString()})`
     }
 }
 
@@ -484,6 +484,7 @@ export abstract class LanguageWriter {
     abstract makeLoop(counter: string, limit: string, statement: LanguageStatement): LanguageStatement
     abstract makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement
     abstract getTagType(): Type
+    abstract getRuntimeType(): Type
     writeSuperCall(params: string[]): void {
         this.printer.print(`super(${params.join(", ")});`)
     }
@@ -727,6 +728,9 @@ export class TSLanguageWriter extends LanguageWriter {
     getTagType(): Type {
         return new Type("Tags");
     }
+    getRuntimeType(): Type {
+        return new Type("number");
+    }
 }
 
 export class ETSLanguageWriter extends TSLanguageWriter {
@@ -868,6 +872,9 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         throw new Error("Method not implemented.")
     }
     getTagType(): Type {
+        throw new Error("Method not implemented.")
+    }
+    getRuntimeType(): Type {
         throw new Error("Method not implemented.")
     }
 }
@@ -1037,6 +1044,9 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     }
     getTagType(): Type {
         return new Type(PrimitiveType.Tag.getText())
+    }
+    getRuntimeType(): Type {
+        return new Type("Ark_RuntimeType")
     }
 }
 
