@@ -1364,7 +1364,8 @@ export class DeclarationTable {
                 let typeConvertor = this.typeConvertor("value", target, false)
                 writer.writeStatement(typeConvertor.convertorDeserialize(`value`, `value`, writer))
             }
-            writer.writeStatement(writer.makeReturn(writer.makeString("value")))
+            writer.writeStatement(writer.makeReturn(
+                writer.makeCast(writer.makeString("value"), new Type(name))))
         })
         this.setCurrentContext(undefined)
     }

@@ -20,6 +20,8 @@ import { FieldRecord, PrimitiveType } from "./DeclarationTable";
 import { RuntimeType } from "./PeerGeneratorVisitor";
 import { mapType } from "./TypeNodeNameConvertor";
 
+import * as ts from "typescript"
+
 export class Type {
     constructor(public name: string, public nullable = false) {}
     static Int32 = new Type('int32')
@@ -52,7 +54,7 @@ export class AssignStatement implements LanguageStatement {
                 protected isConst: boolean = true) { }
     write(writer: LanguageWriter): void {
         if (this.isDeclared) {
-            const typeSpec = this.type ? `: ${writer.mapType(this.type)}` : ""
+            const typeSpec = this.type ? `: ${writer.mapType(this.type)}${this.type.nullable ? "|undefined" : ""}` : ""
             const initValue = this.expression ? `= ${this.expression.asString()}` : ""
             const constSpec = this.isConst ? "const" : "let"
             writer.print(`${constSpec} ${this.variableName}${typeSpec} ${initValue}`)
@@ -122,8 +124,8 @@ export class CppAssignStatement extends AssignStatement {
         if (this.isDeclared) {
             const typeSpec = this.type ? writer.mapType(this.type) : "auto"
             const initValue = this.expression ? this.expression.asString() : "{}"
-            const constSpec = this.isConst ? "const" : ""
-            writer.print(`${constSpec} ${typeSpec} ${this.variableName} = ${initValue};`)
+            const constSpec = this.isConst ? "const " : ""
+            writer.print(`${constSpec}${typeSpec} ${this.variableName} = ${initValue};`)
         } else {
             writer.print(`${this.variableName} = ${this.expression!.asString()};`)
         }
@@ -326,9 +328,17 @@ class TsTupleAllocStatement implements LanguageStatement {
 class TsObjectAssignStatement implements LanguageStatement {
     constructor(private object: string, private type: Type | undefined, private fields: readonly FieldRecord[], private isDeclare: boolean) {}
     write(writer: LanguageWriter): void {
+        const type = new Type(`{${this.fields.map(it => {
+            let typeNode = "any"
+            if (it.type && ts.isTupleTypeNode(it.type)) {
+                typeNode = mapType(it.type)
+            }
+            return `${it.name}?: ${typeNode}`
+        }
+        ).join(",")}}`)
         writer.writeStatement(writer.makeAssign(this.object,
-            this.type,
-            writer.makeString(`{${this.fields.map(it=>`${it.name}: undefined`).join(",")}}`),
+            type,
+            writer.makeString(`{}`),
             this.isDeclare,
             false))
     }
@@ -480,6 +490,7 @@ export abstract class LanguageWriter {
     abstract makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement
     abstract getTagType(): Type
     abstract getRuntimeType(): Type
+    abstract makeTupleAssign(receiver: string, tupleFields: string[]): LanguageStatement
     writeSuperCall(params: string[]): void {
         this.printer.print(`super(${params.join(", ")});`)
     }
@@ -597,6 +608,9 @@ export abstract class LanguageWriter {
     }
     makeObjectDeclare(name: string, type: Type, fields: readonly FieldRecord[]): LanguageStatement {
         return this.makeAssign(name, type, this.makeString("{}"), true, false)
+    }
+    makeType(typeName: string, nullable: boolean, receiver?: string): Type {
+        return new Type(typeName, nullable)
     }
 }
 
@@ -734,6 +748,10 @@ export class TSLanguageWriter extends LanguageWriter {
     }
     getRuntimeType(): Type {
         return new Type("number");
+    }
+    makeTupleAssign(receiver: string, fields: string[]): LanguageStatement {
+        return this.makeAssign(receiver, undefined,
+            this.makeString(`[${fields.map(it=> `${it}!`).join(",")}]`), false)
     }
 }
 
@@ -884,6 +902,9 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     getRuntimeType(): Type {
         throw new Error("Method not implemented.")
     }
+    makeTupleAssign(receiver: string, tupleFields: string[]): LanguageStatement {
+        throw new Error("Method not implemented.")
+    }
 }
 
 export class CppLanguageWriter extends CLikeLanguageWriter {
@@ -1007,7 +1028,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
             const elementType = this.mapType(new Type(typeSpec[1]))
             return `Array_${elementType}`
         }
-        if (type.name.includes("<")) {
+        if (!type.name.includes("std::decay<") && type.name.includes("<")) {
             return type.name.replace(/<(.*)>/, "")
         }
         return super.mapType(type)
@@ -1057,6 +1078,21 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     }
     getRuntimeType(): Type {
         return new Type(PrimitiveType.RuntimeType.getText())
+    }
+    makeType(typeName: string, nullable: boolean, receiver?: string): Type {
+        // make deducing type from receiver
+        if (receiver != undefined) {
+            return new Type(`std::decay<decltype(${receiver})>::type`)
+        }
+        return new Type(typeName)
+    }
+    makeTupleAssign(receiver: string, tupleFields: string[]): LanguageStatement {
+        const statements =
+            tupleFields.map((field, index) => {
+                //TODO: maybe use std::move?
+                return this.makeAssign(`${receiver}.value${index}`, undefined, this.makeString(field), false)
+            })
+        return new BlockStatement(statements, false)
     }
 }
 
