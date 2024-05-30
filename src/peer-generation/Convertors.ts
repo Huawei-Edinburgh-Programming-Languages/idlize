@@ -496,8 +496,7 @@ export class OptionConvertor extends BaseArgConvertor {
         if (!runtimeTypes.includes(RuntimeType.UNDEFINED)) {
             runtimeTypes.push(RuntimeType.UNDEFINED)
         }
-        // TODO: is a question suffix necessary for the type?
-        super(`${typeConvertor.tsTypeName}`, runtimeTypes, typeConvertor.isScoped, true, param)
+        super(`(${typeConvertor.tsTypeName})?`, runtimeTypes, typeConvertor.isScoped, true, param)
         this.typeConvertor = typeConvertor
     }
     convertorArg(param: string, writer: LanguageWriter): string {
@@ -703,9 +702,12 @@ export class TupleConvertor extends BaseArgConvertor {
             const tmpTupleId = `tmpTuple${uniqueCounter++}`
             tmpTupleIds.push(tmpTupleId)
             const receiver = printer.getObjectAccessor(this, param, value, {index: `${index}`})
+            // need to remove the mark '?' from Optional type
+            const tsTypeName = mapType(this.type.elements[index]).replace("?", "")
             statements.push(
                 printer.makeAssign(tmpTupleId,
-                    printer.makeType(it.tsTypeName, true, receiver),undefined, true, false),
+                    // makeType - creating the correct type for TS(using tsTypeName) or C++(use decltype(receiver))
+                    printer.makeType(tsTypeName, true, receiver),undefined, true, false),
                 it.convertorDeserialize(param, tmpTupleId, printer)
             )
         })
