@@ -689,14 +689,20 @@ export class TupleConvertor extends BaseArgConvertor {
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
         const runtimeType = `runtimeType${uniqueCounter++}`
-        const accessor = printer.getObjectAccessor(this, param, value)
-        const statements: LanguageStatement[] = [
-            printer.makeTupleAlloc(accessor)
-        ]
+        const receiver = printer.getObjectAccessor(this, param, value)
+        const statements: LanguageStatement[] = []
+        const tmpTupleIds: string[] = []
         this.memberConvertors.forEach((it, index) => {
-            const accessor = printer.getObjectAccessor(this, param, value, {index: `${index}`})
-            statements.push(it.convertorDeserialize(param, accessor, printer))
+            const tmpTupleId = `tmpTuple${uniqueCounter++}`
+            tmpTupleIds.push(tmpTupleId)
+            const receiver = printer.getObjectAccessor(this, param, value, {index: `${index}`})
+            statements.push(
+                printer.makeAssign(tmpTupleId,
+                    printer.makeType(it.tsTypeName, true, receiver),undefined, true, false),
+                it.convertorDeserialize(param, tmpTupleId, printer)
+            )
         })
+        statements.push(printer.makeTupleAssign(receiver, tmpTupleIds))
         const thenStatement = new BlockStatement(statements)
         return new BlockStatement([
             printer.makeAssign(runtimeType, undefined,
