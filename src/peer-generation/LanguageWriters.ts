@@ -326,21 +326,29 @@ class TsTupleAllocStatement implements LanguageStatement {
 }
 
 class TsObjectAssignStatement implements LanguageStatement {
-    constructor(private object: string, private type: Type | undefined, private fields: readonly FieldRecord[], private isDeclare: boolean) {}
+    constructor(private object: string, private type: Type | undefined, private isDeclare: boolean) {}
     write(writer: LanguageWriter): void {
-        const type = new Type(`{${this.fields.map(it => {
-            let typeNode = "any"
-            if (it.type && ts.isTupleTypeNode(it.type)) {
-                typeNode = mapType(it.type)
-            }
-            return `${it.name}?: ${typeNode}`
-        }
-        ).join(",")}}`)
         writer.writeStatement(writer.makeAssign(this.object,
-            type,
+            this.type,
             writer.makeString(`{}`),
             this.isDeclare,
             false))
+    }
+}
+
+class TsObjectDeclareStatement implements LanguageStatement {
+    constructor(private object: string, private type: Type | undefined, private fields: readonly FieldRecord[]) {}
+    write(writer: LanguageWriter): void {
+        // Constructing a new type with all optional fields
+        const objectType = new Type(`{${this.fields.map(it => {
+                let typeNode = "any"
+                if (it.type && ts.isTupleTypeNode(it.type)) {
+                    typeNode = mapType(it.type)
+                }
+                return `${it.name}?: ${typeNode}`
+            }
+        ).join(",")}}`)
+        new TsObjectAssignStatement(this.object, objectType, true).write(writer)
     }
 }
 
@@ -606,7 +614,7 @@ export abstract class LanguageWriter {
     mapMethodModifier(modifier: MethodModifier): string {
         return `${MethodModifier[modifier].toLowerCase()}`
     }
-    makeObjectDeclare(name: string, type: Type, fields: readonly FieldRecord[]): LanguageStatement {
+    makeObjectDeclare(name: string, type: Type | undefined, fields: readonly FieldRecord[]): LanguageStatement {
         return this.makeAssign(name, type, this.makeString("{}"), true, false)
     }
     makeType(typeName: string, nullable: boolean, receiver?: string): Type {
@@ -725,7 +733,7 @@ export class TSLanguageWriter extends LanguageWriter {
                     new Type(`{${fields.map(it=>`${it.name}: ${mapType(it.type)}`).join(",")}}`)),
                 false)
         }
-        return new TsObjectAssignStatement(object, undefined, fields, false)
+        return new TsObjectAssignStatement(object, undefined, false)
     }
     makeMapResize(keyType: string, valueType: string, map: string, size: string, deserializer: string): LanguageStatement {
         return this.makeAssign(map, undefined, this.makeString(`new Map<${keyType}, ${valueType}>()`), false)
@@ -741,7 +749,7 @@ export class TSLanguageWriter extends LanguageWriter {
         return this.makeStatement(this.makeMethodCall(keyAccessor, "set", [this.makeString(key), this.makeString(value)]))
     }
     makeObjectDeclare(name: string, type: Type, fields: readonly FieldRecord[]): LanguageStatement {
-        return new TsObjectAssignStatement(name, new Type("any"), fields, true)
+        return new TsObjectDeclareStatement(name, type, fields)
     }
     getTagType(): Type {
         return new Type("Tags");
