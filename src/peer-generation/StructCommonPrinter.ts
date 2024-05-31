@@ -13,12 +13,14 @@
  * limitations under the License.
  */
 
+import { printCommonComponent } from "./ComponentsPrinter";
 import { makeStructCommon } from "./FileGenerators";
 import { PeerLibrary } from "./PeerLibrary";
 
 export function printStructCommon(peerLibrary: PeerLibrary): string {
+    const commonComponentBody = printCommonComponent(peerLibrary)
     return makeStructCommon(
-        peerLibrary.commonMethods,
+        commonComponentBody,
         peerLibrary.customComponentMethods,
     )
 }

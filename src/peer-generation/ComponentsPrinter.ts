@@ -24,12 +24,14 @@ import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
 import { InheritanceRole, determineInheritanceRole, isCommonMethod } from "./inheritance";
 import { PeerMethod } from "./PeerMethod";
 import { componentToPeerClass } from "./PeersPrinter";
-import { OverloadsPrinter, collapseSameNamedMethods, groupOverloads } from "./OverloadsPrinter";
+import { OverloadsPrinter, collapseSameNamedMethods } from "./OverloadsPrinter";
 import { Type, createLanguageWriter } from "./LanguageWriters";
 
 class ComponentFileVisitor {
     readonly printer = createLanguageWriter(new IndentedPrinter(), this.file.declarationTable.language)
+    readonly commonPrinter = createLanguageWriter(new IndentedPrinter(), this.file.declarationTable.language)
     private overloadsPrinter = new OverloadsPrinter(this.printer, this.library)
+    private commonOverloadsPrinter = new OverloadsPrinter(this.commonPrinter, this.library)
 
     constructor(
         private library: PeerLibrary,
@@ -41,6 +43,8 @@ class ComponentFileVisitor {
     }
 
     private canGenerateComponent(peer: PeerClass) {
+        if (isCommonMethod(peer.originalClassName!))
+            return true;
         return !PeerGeneratorConfig.skipComponentGeneration.includes(peer.originalClassName!)
             && determineInheritanceRole(peer.originalClassName!) == InheritanceRole.Heir
     }
@@ -84,9 +88,18 @@ class ComponentFileVisitor {
         return groups
     }
 
+    private printCommonComponent(peer: PeerClass) {
+        this.commonPrinter.pushIndent()
+        for (const grouped of this.groupOverloads(peer.methods))
+            this.commonOverloadsPrinter.printGroupedComponentOverloads(peer, grouped)
+        this.commonPrinter.popIndent()
+    }
+
     private printComponent(peer: PeerClass) {
         if (!this.canGenerateComponent(peer))
             return
+        if (isCommonMethod(peer.originalClassName!))
+            return this.printCommonComponent(peer)
         const callableMethods = peer.methods.filter(it => it.isCallSignature).map(it => it.method)
         const callableMethod = callableMethods.length ? collapseSameNamedMethods(callableMethods) : undefined
         const mappedCallableParams = callableMethod?.signature.args.map((it, index) => `${callableMethod.signature.argName(index)}${it.nullable ? "?" : ""}: ${it.name}`)
@@ -171,6 +184,7 @@ ${parentStructClass.typesLines.map(it => indentedBy(it, 2)).join("\n")}
 
 class ComponentsVisitor {
     readonly components: Map<string, string[]> = new Map()
+    readonly commonComponent: string[] = []
 
     constructor(
         private readonly peerLibrary: PeerLibrary
@@ -181,6 +195,7 @@ class ComponentsVisitor {
             const visitor = new ComponentFileVisitor(this.peerLibrary, file)
             visitor.printFile()
             this.components.set(visitor.targetBasename, visitor.printer.getOutput())
+            this.commonComponent.push(...visitor.commonPrinter.getOutput())
         }
     }
 }
@@ -198,4 +213,14 @@ export function printComponents(peerLibrary: PeerLibrary): Map<string, string> {
         result.set(key, content.join('\n'))
     }
     return result
+}
+
+export function printCommonComponent(peerLibrary: PeerLibrary): string {
+    // TODO: support other output languages
+    if (peerLibrary.declarationTable.language != Language.TS)
+        return ""
+
+    const visitor = new ComponentsVisitor(peerLibrary)
+    visitor.printComponents()
+    return visitor.commonComponent.join("\n")
 }
