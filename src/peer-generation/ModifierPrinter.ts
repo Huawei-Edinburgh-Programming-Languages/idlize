@@ -115,7 +115,9 @@ class MethodSeparatorPrinter extends MethodSeparatorVisitor {
         const argChain = this.accessChain[argIndex]
         const arg = argChain[argChain.length - 1]
         const type = this.declarationTable.computeTargetName(arg.type, false)
-        const maybePointer = arg.isPointerType ? '*' : '&'
+        const maybePointer = arg.isPointerType 
+            ? '*' 
+            : arg.type !== PrimitiveType.Undefined ? '&' : ''
         this.printer.print(`const ${type} ${maybePointer}${this.generateInseparableFieldName(argIndex)} = ${this.generateAccessTo(argIndex)};`)
     }
 
