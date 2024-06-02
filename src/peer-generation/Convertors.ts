@@ -75,8 +75,8 @@ export abstract class BaseArgConvertor implements ArgConvertor {
 }
 
 export class StringConvertor extends BaseArgConvertor {
-    constructor(param: string) {
-        super("string", [RuntimeType.STRING], false, false, param)
+    constructor(param: string, receiverType: ts.TypeNode) {
+        super(mapType(receiverType), [RuntimeType.STRING], false, false, param)
     }
     convertorArg(param: string, writer: LanguageWriter): string {
         return writer.language == Language.CPP ? `(const ${PrimitiveType.String.getText()}*)&${param}` : param
@@ -85,8 +85,11 @@ export class StringConvertor extends BaseArgConvertor {
         writer.writeMethodCall(`${param}Serializer`, `writeString`, [value])
     }
     convertorDeserialize(param: string, value: string, writer: LanguageWriter): LanguageStatement {
-        const accessor = writer.getObjectAccessor(this, param, value)
-        return writer.makeAssign(accessor, undefined, writer.makeString(`${param}Deserializer.readString()`), false)
+        const receiver = writer.getObjectAccessor(this, param, value)
+        return writer.makeAssign(receiver, undefined,
+            writer.makeCast(writer.makeString(`${param}Deserializer.readString()`),
+                writer.makeType(this.tsTypeName, false, receiver)),
+            false)
     }
     nativeType(impl: boolean): string {
         return PrimitiveType.String.getText()
