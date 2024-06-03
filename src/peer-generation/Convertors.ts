@@ -546,7 +546,7 @@ export class AggregateConvertor extends BaseArgConvertor {
     private members: string[] = []
 
     constructor(param: string, private table: DeclarationTable, private type: ts.TypeLiteralNode) {
-        super(`any`, [RuntimeType.OBJECT], false, true, param)
+        super(mapType(type), [RuntimeType.OBJECT], false, true, param)
         this.memberConvertors = type
             .members
             .filter(ts.isPropertySignature)
@@ -570,10 +570,18 @@ export class AggregateConvertor extends BaseArgConvertor {
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
         const structAccessor = printer.getObjectAccessor(this, param, value)
         let struct = this.table.targetStruct(this.table.toTarget(this.type))
-        const statements = [printer.makeObjectAlloc(structAccessor, struct.getFields())]
+        const typedStruct = `typedStruct${uniqueCounter++}`
+        const statements = [
+            printer.makeObjectAlloc(structAccessor, struct.getFields()),
+            printer.makeAssign(typedStruct, new Type(printer.makeRef(printer.makeType(this.tsTypeName, false, structAccessor).name)),
+                printer.makeString(structAccessor),true, false
+            )
+        ]
         this.memberConvertors.forEach((it, index) => {
             // TODO: maybe use accessor?
-            statements.push(it.convertorDeserialize(param, `${value}.${struct.getFields()[index].name}`, printer))
+            statements.push(
+                it.convertorDeserialize(param, `${typedStruct}.${struct.getFields()[index].name}`, printer)
+            )
         })
         return new BlockStatement(statements, false)
     }
