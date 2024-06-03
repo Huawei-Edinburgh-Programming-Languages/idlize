@@ -13,14 +13,20 @@
  * limitations under the License.
  */
 
-import { printCommonComponent } from "./ComponentsPrinter";
+import { IndentedPrinter } from "../IndentedPrinter";
+import { Language } from "../util";
+import { writeCommonComponent } from "./ComponentsPrinter";
 import { makeStructCommon } from "./FileGenerators";
+import { createLanguageWriter } from "./LanguageWriters";
 import { PeerLibrary } from "./PeerLibrary";
 
 export function printStructCommon(peerLibrary: PeerLibrary): string {
-    const commonComponentBody = printCommonComponent(peerLibrary)
+    const writer = createLanguageWriter(new IndentedPrinter(), Language.TS)
+    writer.pushIndent()
+    writeCommonComponent(peerLibrary, writer)
+    writer.popIndent()
     return makeStructCommon(
-        commonComponentBody,
+        writer.getOutput().join('\n'),
         peerLibrary.customComponentMethods,
     )
 }

@@ -25,18 +25,22 @@ import { InheritanceRole, determineInheritanceRole, isCommonMethod } from "./inh
 import { PeerMethod } from "./PeerMethod";
 import { componentToPeerClass } from "./PeersPrinter";
 import { OverloadsPrinter, collapseSameNamedMethods } from "./OverloadsPrinter";
-import { Type, createLanguageWriter } from "./LanguageWriters";
+import { LanguageWriter, Type, createLanguageWriter } from "./LanguageWriters";
 
 class ComponentFileVisitor {
     readonly printer = createLanguageWriter(new IndentedPrinter(), this.file.declarationTable.language)
-    readonly commonPrinter = createLanguageWriter(new IndentedPrinter(), this.file.declarationTable.language)
-    private overloadsPrinter = new OverloadsPrinter(this.printer, this.library)
-    private commonOverloadsPrinter = new OverloadsPrinter(this.commonPrinter, this.library)
+    readonly commonPrinter: LanguageWriter
+    private readonly overloadsPrinter = new OverloadsPrinter(this.printer, this.library)
+    private readonly commonOverloadsPrinter: OverloadsPrinter
 
     constructor(
         private library: PeerLibrary,
         private file: PeerFile,
-    ) { }
+        commonPrinter: LanguageWriter | undefined
+    ) { 
+        this.commonPrinter = commonPrinter ?? createLanguageWriter(new IndentedPrinter(), this.file.declarationTable.language)
+        this.commonOverloadsPrinter = new OverloadsPrinter(this.commonPrinter, this.library)
+    }
 
     get targetBasename() {
         return renameDtsToComponent(path.basename(this.file.originalFilename), this.file.declarationTable.language)
@@ -89,10 +93,8 @@ class ComponentFileVisitor {
     }
 
     private printCommonComponent(peer: PeerClass) {
-        this.commonPrinter.pushIndent()
         for (const grouped of this.groupOverloads(peer.methods))
             this.commonOverloadsPrinter.printGroupedComponentOverloads(peer, grouped)
-        this.commonPrinter.popIndent()
     }
 
     private printComponent(peer: PeerClass) {
@@ -184,18 +186,17 @@ ${parentStructClass.typesLines.map(it => indentedBy(it, 2)).join("\n")}
 
 class ComponentsVisitor {
     readonly components: Map<string, string[]> = new Map()
-    readonly commonComponent: string[] = []
 
     constructor(
-        private readonly peerLibrary: PeerLibrary
+        private readonly peerLibrary: PeerLibrary,
+        private readonly commonComponentWriter?: LanguageWriter,
     ) { }
 
     printComponents(): void {
         for (const file of this.peerLibrary.files.values()) {
-            const visitor = new ComponentFileVisitor(this.peerLibrary, file)
+            const visitor = new ComponentFileVisitor(this.peerLibrary, file, this.commonComponentWriter)
             visitor.printFile()
             this.components.set(visitor.targetBasename, visitor.printer.getOutput())
-            this.commonComponent.push(...visitor.commonPrinter.getOutput())
         }
     }
 }
@@ -215,12 +216,10 @@ export function printComponents(peerLibrary: PeerLibrary): Map<string, string> {
     return result
 }
 
-export function printCommonComponent(peerLibrary: PeerLibrary): string {
+export function writeCommonComponent(peerLibrary: PeerLibrary, writer: LanguageWriter): void {
     // TODO: support other output languages
-    if (peerLibrary.declarationTable.language != Language.TS)
-        return ""
-
-    const visitor = new ComponentsVisitor(peerLibrary)
-    visitor.printComponents()
-    return visitor.commonComponent.join("\n")
+    if (peerLibrary.declarationTable.language === Language.TS) {
+        const visitor = new ComponentsVisitor(peerLibrary, writer)
+        visitor.printComponents()
+    }
 }
