@@ -745,7 +745,7 @@ export class TupleConvertor extends BaseArgConvertor {
 
 export class ArrayConvertor extends BaseArgConvertor {
     elementConvertor: ArgConvertor
-    constructor(param: string, public table: DeclarationTable, type: ts.TypeNode, public elementType: ts.TypeNode) {
+    constructor(param: string, public table: DeclarationTable, private type: ts.TypeNode, public elementType: ts.TypeNode) {
         super(`Array<${mapType(elementType)}>`, [RuntimeType.OBJECT], false, true, param, true)
         this.elementConvertor = table.typeConvertor(param, elementType)
     }
@@ -772,13 +772,13 @@ export class ArrayConvertor extends BaseArgConvertor {
         const runtimeType = `runtimeType${uniqueCounter++}`;
         const arrayLength = `arrayLength${uniqueCounter++}`;
         const forCounterName = `i${uniqueCounter++}`
-        const accessor = printer.getObjectAccessor(this, param, value, {index: `[${forCounterName}]`})
         const arrayAccessor = printer.getObjectAccessor(this, param, value)
+        const accessor = printer.getObjectAccessor(this, param, arrayAccessor, {index: `[${forCounterName}]`})
         const thenStatement = new BlockStatement([
             // read length
             printer.makeAssign(arrayLength, undefined, printer.makeString(`${param}Deserializer.readInt32()`), true),
             // prepare object
-            printer.makeArrayResize(arrayAccessor, arrayLength, `${param}Deserializer`),
+            printer.makeArrayResize(arrayAccessor, mapType(this.type), arrayLength, `${param}Deserializer`),
             // store
             printer.makeLoop(forCounterName, arrayLength,
                 this.elementConvertor.convertorDeserialize(param, accessor, printer)),
