@@ -650,8 +650,8 @@ export class ClassConvertor extends InterfaceConvertor {
 export class FunctionConvertor extends BaseArgConvertor {
     constructor(
         param: string,
-        protected table: DeclarationTable
-    ) {
+        protected table: DeclarationTable,
+        private type: ts.TypeNode) {
         // TODO: pass functions as integers to native side.
         super("Function", [RuntimeType.FUNCTION], false, true, param)
     }
@@ -667,7 +667,9 @@ export class FunctionConvertor extends BaseArgConvertor {
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
         const accessor = printer.getObjectAccessor(this, param, value)
         return printer.makeAssign(accessor, undefined,
-                printer.makeString(`${param}Deserializer.readFunction()`), false)
+            printer.makeCast(printer.makeString(`${param}Deserializer.readFunction()`),
+                printer.makeType(mapType(this.type), true, accessor))
+            , false)
     }
     nativeType(impl: boolean): string {
         return PrimitiveType.Function.getText()
