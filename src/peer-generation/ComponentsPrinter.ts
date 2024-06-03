@@ -28,19 +28,15 @@ import { OverloadsPrinter, collapseSameNamedMethods } from "./OverloadsPrinter";
 import { LanguageWriter, Type, createLanguageWriter } from "./LanguageWriters";
 
 class ComponentFileVisitor {
-    readonly printer = createLanguageWriter(new IndentedPrinter(), this.file.declarationTable.language)
-    readonly commonPrinter: LanguageWriter
     private readonly overloadsPrinter = new OverloadsPrinter(this.printer, this.library)
-    private readonly commonOverloadsPrinter: OverloadsPrinter
+    private readonly commonOverloadsPrinter = new OverloadsPrinter(this.commonPrinter, this.library)
 
     constructor(
         private library: PeerLibrary,
         private file: PeerFile,
-        commonPrinter: LanguageWriter | undefined
-    ) { 
-        this.commonPrinter = commonPrinter ?? createLanguageWriter(new IndentedPrinter(), this.file.declarationTable.language)
-        this.commonOverloadsPrinter = new OverloadsPrinter(this.commonPrinter, this.library)
-    }
+        readonly printer: LanguageWriter,
+        readonly commonPrinter: LanguageWriter,
+    ) { }
 
     get targetBasename() {
         return renameDtsToComponent(path.basename(this.file.originalFilename), this.file.declarationTable.language)
@@ -185,18 +181,22 @@ ${parentStructClass.typesLines.map(it => indentedBy(it, 2)).join("\n")}
 }
 
 class ComponentsVisitor {
-    readonly components: Map<string, string[]> = new Map()
+    readonly components: Map<string, LanguageWriter> = new Map()
+    readonly commonComponentWriter: LanguageWriter
 
     constructor(
         private readonly peerLibrary: PeerLibrary,
-        private readonly commonComponentWriter?: LanguageWriter,
-    ) { }
+        commonComponentWriter?: LanguageWriter,
+    ) { 
+        this.commonComponentWriter = commonComponentWriter ?? createLanguageWriter(new IndentedPrinter(), Language.TS)
+    }
 
     printComponents(): void {
         for (const file of this.peerLibrary.files.values()) {
-            const visitor = new ComponentFileVisitor(this.peerLibrary, file, this.commonComponentWriter)
+            const writer = createLanguageWriter(new IndentedPrinter(), Language.TS)
+            const visitor = new ComponentFileVisitor(this.peerLibrary, file, writer, this.commonComponentWriter)
             visitor.printFile()
-            this.components.set(visitor.targetBasename, visitor.printer.getOutput())
+            this.components.set(visitor.targetBasename, writer)
         }
     }
 }
@@ -209,9 +209,9 @@ export function printComponents(peerLibrary: PeerLibrary): Map<string, string> {
     const visitor = new ComponentsVisitor(peerLibrary)
     visitor.printComponents()
     const result = new Map<string, string>()
-    for (const [key, content] of visitor.components) {
-        if (content.length === 0) continue
-        result.set(key, content.join('\n'))
+    for (const [key, writer] of visitor.components) {
+        if (writer.getOutput().length === 0) continue
+        result.set(key, writer.getOutput().join('\n'))
     }
     return result
 }
