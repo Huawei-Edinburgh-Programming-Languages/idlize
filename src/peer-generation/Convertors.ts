@@ -817,7 +817,7 @@ export class MapConvertor extends BaseArgConvertor {
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         // Map size.
         printer.writeMethodCall(`${param}Serializer`, "writeInt8", [
-            printer.makeFunctionCall("runtimeType", [ printer.makeString(value +  + castToInt(printer.language)) ]).asString()])
+            printer.makeFunctionCall("runtimeType", [ printer.makeString(value + castToInt(printer.language)) ]).asString()])
         printer.writeMethodCall(`${param}Serializer`, "writeInt32", [`${value}.size`])
         printer.writeStatement(printer.makeMapForEach(value, `${value}_key`, `${value}_value`, () => {
             this.keyConvertor.convertorSerialize(param, `${value}_key`, printer)
