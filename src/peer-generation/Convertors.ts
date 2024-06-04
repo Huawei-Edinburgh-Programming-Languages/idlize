@@ -942,7 +942,7 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
         const accessor = printer.getObjectAccessor(this, param, value)
         const readStatement = printer.makeCast(
-            printer.makeString(`${param}Deserializer.readMaterialized()`),
+            printer.makeMethodCall(`${param}Deserializer`, `readMaterialized`, []),
             new Type(this.table.computeTargetName(this.type, false)!),
         )
         return printer.makeAssign(accessor, undefined, readStatement, false)
