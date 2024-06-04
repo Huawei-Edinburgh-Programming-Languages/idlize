@@ -535,7 +535,7 @@ export class DeclarationTable {
             case `Length`:
                 return new LengthConvertor(param)
             case `Date`:
-                return new ToStringConvertor(param)
+                return new DateConvertor(param)
             case `AttributeModifier`:
                 return new PredefinedConvertor(param, "AttributeModifier<any>", "AttributeModifier", "CustomObject")
             case `AnimationRange`:
