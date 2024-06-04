@@ -12,9 +12,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {float32, int32} from "@koalaui/common"
-import {pointer} from "@koalaui/interop"
-import {RuntimeType, Tags} from "@arkoala/arkui/SerializerBase";
+import { float32, int32 } from "@koalaui/common"
+import { KPointer, pointer } from "@koalaui/interop"
+import { RuntimeType, Tags } from "@arkoala/arkui/SerializerBase";
 
 export class DeserializerBase {
     private position = 0
@@ -101,9 +101,8 @@ export class DeserializerBase {
         return DeserializerBase._stubFunction
     }
 
-    readMaterialized(): object {
-        const id = this.readInt32()
-        return {}
+    readMaterialized(): object | undefined {
+        return createMaterialized(this.readPointer())
     }
 
     readString(): string {
@@ -205,6 +204,11 @@ class OurCustomDeserializer extends CustomDeserializer {
     }
 }
 DeserializerBase.registerCustomDeserializer(new OurCustomDeserializer())
+
+function createMaterialized(pointer: KPointer): object | undefined {
+    // TODO: need to be implemented
+    return {}
+}
 
 class DateDeserializer extends CustomDeserializer {
     constructor() {
