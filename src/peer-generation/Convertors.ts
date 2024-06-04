@@ -103,7 +103,7 @@ export class StringConvertor extends BaseArgConvertor {
     }
 }
 
-export class DateConvertor extends BaseArgConvertor {
+export class ToStringConvertor extends BaseArgConvertor {
     constructor(param: string) {
         super("string", [RuntimeType.OBJECT], false, false, param)
     }
@@ -115,10 +115,7 @@ export class DateConvertor extends BaseArgConvertor {
             writer.language == Language.CPP ? value : `${value}.toString()`])///
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
-        return printer.makeAssign(value,
-            undefined,
-            printer.makeDate(printer.makeString(`${param}Deserializer.readString()`)),
-            false)
+        return printer.makeAssign(value, undefined, printer.makeString(`${param}Deserializer.readString()`), false)
     }
     nativeType(impl: boolean): string {
         return PrimitiveType.String.getText()
