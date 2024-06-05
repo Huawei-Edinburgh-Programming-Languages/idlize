@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import * as ts from 'typescript'
 import { Language } from "../util";
 import { DeclarationTable, DeclarationTarget, PrimitiveType } from "./DeclarationTable";
@@ -5,7 +20,7 @@ import { LanguageWriter, Method, NamedMethodSignature, Type } from "./LanguageWr
 import { PeerGeneratorConfig } from './PeerGeneratorConfig';
 import { isMaterialized } from './Materialized';
 
-export function canSerializeTarget(declaration: ts.ClassDeclaration | ts.InterfaceDeclaration): boolean {
+function canSerializeTarget(declaration: ts.ClassDeclaration | ts.InterfaceDeclaration): boolean {
     // we can not generate serializer/deserializer for targets, where
     // type parameters are in signature and some of this parameters has not
     // default value. At all we should not generate even classes with default values,
@@ -16,7 +31,7 @@ export function canSerializeTarget(declaration: ts.ClassDeclaration | ts.Interfa
     })
 }
 
-export function ignoreSerializeTarget(table: DeclarationTable, target: DeclarationTarget): target is PrimitiveType | ts.EnumDeclaration {
+function ignoreSerializeTarget(table: DeclarationTable, target: DeclarationTarget): target is PrimitiveType | ts.EnumDeclaration {
     const name = table.computeTargetName(target, false)
     if (PeerGeneratorConfig.ignoreSerialization.includes(name)) return true
     if (target instanceof PrimitiveType) return true
@@ -38,7 +53,7 @@ class SerializerPrinter {
         if (target instanceof PrimitiveType) throw new Error("Unexpected")
         if (ts.isInterfaceDeclaration(target) && target.typeParameters != undefined) {
             if (target.typeParameters.length != 1) throw new Error("Unexpected")
-            return `${name}<any>`
+            return `${name}<object>`
         } else {
             return name
         }
