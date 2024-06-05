@@ -15,8 +15,9 @@
 
 import { IndentedPrinter } from "../IndentedPrinter";
 import { Language, stringOrNone } from "../util";
-import { ArrayConvertor, BaseArgConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "./Convertors";
+import { ArrayConvertor, BaseArgConvertor, EnumConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "./Convertors";
 import { FieldRecord, PrimitiveType } from "./DeclarationTable";
+import { EnumEntity } from "./PeerFile";
 import { RuntimeType } from "./PeerGeneratorVisitor";
 import { mapType } from "./TypeNodeNameConvertor";
 
@@ -502,6 +503,7 @@ export abstract class LanguageWriter {
     abstract makeTupleAssign(receiver: string, tupleFields: string[]): LanguageStatement
     abstract get supportedModifiers(): MethodModifier[]
     abstract makeDate(value: LanguageExpression): LanguageExpression
+
     writeSuperCall(params: string[]): void {
         this.printer.print(`super(${params.join(", ")});`)
     }
@@ -598,6 +600,21 @@ export abstract class LanguageWriter {
     }
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
         this.writeMethodDeclaration(name, signature)
+    }
+    writeEnum(enumEntity: EnumEntity): void{
+        this.printer.print(enumEntity.comment)
+        this.printer.print(`enum Ark${enumEntity.name} {`)
+        this.printer.pushIndent()
+        for (const member of enumEntity.members) {
+            this.printer.print(member.comment)
+            if (member.initializerText != undefined) {
+                this.printer.print(`${member.name} = ${member.initializerText},`)
+            } else {
+                this.printer.print(`${member.name},`)
+            }
+        }
+        this.printer.popIndent()
+        this.printer.print(`}`)
     }
     pushIndent() {
         this.printer.pushIndent()
@@ -795,6 +812,9 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         }
         return super.mapType(type)
     }
+    override writeEnum(enumEntity: EnumEntity) {
+        return   
+    }
     get supportedModifiers(): MethodModifier[] {
         return [MethodModifier.PUBLIC, MethodModifier.PRIVATE, MethodModifier.NATIVE, MethodModifier.STATIC]
     }
@@ -816,6 +836,9 @@ abstract class CLikeLanguageWriter extends LanguageWriter {
         op(this)
         this.popIndent()
         this.printer.print(`}`)
+    }
+    override writeEnum(enumEntity: EnumEntity) {
+        return   
     }
     private writeDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[], postfix?: string): void {
         let prefix = modifiers

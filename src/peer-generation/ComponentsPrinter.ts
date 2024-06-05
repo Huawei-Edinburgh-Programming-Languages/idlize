@@ -222,4 +222,14 @@ export function writeCommonComponent(peerLibrary: PeerLibrary, writer: LanguageW
         const visitor = new ComponentsVisitor(peerLibrary, writer)
         visitor.printComponents()
     }
+    if (peerLibrary.declarationTable.language === Language.ARKTS) {
+        writer.printer.print(`stateStyles(value: StateStyles): this { throw new Error("not implemented") };
+    backdropBlur(value: number, options?: BlurOptions): this { throw new Error("not implemented") };
+    width(value: Length): this { throw new Error("not implemented") };
+    height(value: Length): this { throw new Error("not implemented") };
+    bindSheet(isShow: boolean, builder: () => void, options?: SheetOptions): this { throw new Error("not implemented") };
+    backgroundBlurStyle(value: BlurStyle, options?: BackgroundBlurStyleOptions): this { throw new Error("not implemented") };
+    dragPreviewOptions(value: DragPreviewOptions, options?: DragInteractionOptions): this { throw new Error("not implemented") };
+        `)
+    }
 }

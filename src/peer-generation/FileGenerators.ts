@@ -399,7 +399,6 @@ export class ArkCommon extends ComponentNode implements CommonMethod<CommonAttri
       name: string
   ): boolean { throw new Error("not implemented") }
   protected applyAttributesFinish(): void { throw new Error("not implemented") }
-  attributeModifier(modifier: AttributeModifier<this>): this { throw new Error("not implemented") }
 
   ${commonComponentBody}
 }
