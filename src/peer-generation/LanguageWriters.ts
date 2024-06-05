@@ -512,7 +512,8 @@ export abstract class LanguageWriter {
     abstract getRuntimeType(): Type
     abstract makeTupleAssign(receiver: string, tupleFields: string[]): LanguageStatement
     abstract get supportedModifiers(): MethodModifier[]
-    abstract makeDate(value: LanguageExpression): LanguageExpression
+    abstract enumValueFromOrdinal(value: LanguageExpression, enumType: string): LanguageExpression
+    abstract ordinalFromEnumValue(value: LanguageExpression, enumType: string): LanguageExpression
     writeGetterImplementation(method: Method, op: (writer: LanguageWriter) => void): void {
         this.writeMethodImplementation(new Method(method.name, method.signature, [MethodModifier.GETTER].concat(method.modifiers ?? [])), op)
     }
@@ -792,8 +793,11 @@ export class TSLanguageWriter extends LanguageWriter {
     get supportedModifiers(): MethodModifier[] {
         return [MethodModifier.PUBLIC, MethodModifier.PRIVATE, MethodModifier.STATIC]
     }
-    makeDate(value: LanguageExpression): LanguageExpression {
-        return this.makeString(`new Date(${value.asString()})`)
+    enumValueFromOrdinal(value: LanguageExpression, enumType: string): LanguageExpression {
+        return this.makeString(`Object.values(${enumType})[${value.asString()}]`);
+    }
+    ordinalFromEnumValue(value: LanguageExpression, enumType: string): LanguageExpression {
+        return this.makeString(`Object.keys(${enumType}).indexOf(${value.asString()})`);
     }
 }
 
@@ -958,7 +962,10 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     get supportedModifiers(): MethodModifier[] {
         return [MethodModifier.PUBLIC, MethodModifier.PRIVATE, MethodModifier.STATIC, MethodModifier.NATIVE]
     }
-    makeDate(value: LanguageExpression): LanguageExpression {
+    enumValueFromOrdinal(value: LanguageExpression, enumType: string): LanguageExpression {
+        throw new Error("Method not implemented.")
+    }
+    ordinalFromEnumValue(value: LanguageExpression, enumType: string): LanguageExpression {
         throw new Error("Method not implemented.")
     }
 }
@@ -1153,7 +1160,10 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     get supportedModifiers(): MethodModifier[] {
         return [MethodModifier.INLINE, MethodModifier.STATIC]
     }
-    makeDate(value: LanguageExpression): LanguageExpression {
+    enumValueFromOrdinal(value: LanguageExpression, enumType: string): LanguageExpression {
+        return value;
+    }
+    ordinalFromEnumValue(value: LanguageExpression, enumType: string): LanguageExpression {
         return value;
     }
 }

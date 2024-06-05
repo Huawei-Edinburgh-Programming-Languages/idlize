@@ -18,6 +18,7 @@ import { RuntimeType } from "./PeerGeneratorVisitor"
 import * as ts from "typescript"
 import { BlockStatement, BranchStatement, LanguageExpression, LanguageStatement, LanguageWriter, Type } from "./LanguageWriters"
 import { mapType } from "./TypeNodeNameConvertor"
+import { EnumMember, NodeArray } from "typescript";
 
 let uniqueCounter = 0
 
@@ -201,12 +202,24 @@ export class EnumConvertor extends BaseArgConvertor {
         return writer.language == Language.CPP ? param : `unsafeCast<int32>(${param})`
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
+        if (EnumConvertor.isStringLiteralEnum(this.enumType.members)) {
+            const receiver = printer.getObjectAccessor(this, param, value)
+            value = printer.ordinalFromEnumValue(printer.makeCast(printer.makeString(value),
+                printer.makeType("string", true, receiver), true), identName(this.enumType.name)!
+            ).asString()
+        }
         printer.writeMethodCall(`${param}Serializer`, "writeInt32", [this.convertorArg(value, printer)])
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
-        const accessor = printer.getObjectAccessor(this, param, value)
-        return printer.makeAssign(accessor, undefined,
-            printer.makeString(`${param}Deserializer.readInt32()`), false)
+        const receiver = printer.getObjectAccessor(this, param, value)
+        let readExpr = printer.makeMethodCall(`${param}Deserializer`, "readInt32", [])
+        if (EnumConvertor.isStringLiteralEnum(this.enumType.members)) {
+            readExpr = printer.makeCast(
+                printer.enumValueFromOrdinal(readExpr, identName(this.enumType.name)!),
+                printer.makeType(identName(this.enumType.name)!, false, receiver)
+            )
+        }
+        return printer.makeAssign(receiver, undefined, readExpr, false)
     }
     nativeType(impl: boolean): string {
         return PrimitiveType.Int32.getText()
@@ -241,6 +254,11 @@ export class EnumConvertor extends BaseArgConvertor {
             writer.makeNaryOp(">=", [writer.makeUnionVariantCast(value, Type.Number.name, index), writer.makeString(low!.toString())]),
             writer.makeNaryOp("<=",  [writer.makeUnionVariantCast(value, Type.Number.name, index), writer.makeString(high!.toString())])
         ])
+    }
+    private static isStringLiteralEnum(members: NodeArray<EnumMember>): boolean {
+        return members.find((value) => {
+            return value.initializer && ts.isStringLiteral(value.initializer)
+        }) != undefined
     }
 }
 
