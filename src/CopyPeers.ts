@@ -98,10 +98,8 @@ export function copyPeersToLibace(peersDir: string, destinationDir: string) {
     // Assume foundation/arkui/ace_engine/frameworks/core/interfaces/arkoala to be root
     const libaceImplementation = path.join(destinationDir, 'implementation')
     const libaceGeneratedInterface = path.join(destinationDir, 'generated/interface')
-    const libaceGeneratedUtility = path.join(destinationDir, 'generated/utility')
     fs.mkdirSync(libaceImplementation, {recursive: true})
     fs.mkdirSync(libaceGeneratedInterface, {recursive: true})
-    fs.mkdirSync(libaceGeneratedUtility, {recursive: true})
 
     copyFile(peersDir, libaceGeneratedInterface, 'arkoala_api.h', 'arkoala_api_generated.h')
     copyFile(peersDir, libaceImplementation, 'delegates.cc')
