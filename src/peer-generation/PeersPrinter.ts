@@ -163,19 +163,7 @@ class PeerFileVisitor {
     }
 
     private printEnum(enumEntity: EnumEntity) {
-        this.printer.print(enumEntity.comment)
-        this.printer.print(`enum Ark${enumEntity.name} {`)
-        this.printer.pushIndent()
-        for (const member of enumEntity.members) {
-            this.printer.print(member.comment)
-            if (member.initializerText != undefined) {
-                this.printer.print(`${member.name} = ${member.initializerText},`)
-            } else {
-                this.printer.print(`${member.name},`)
-            }
-        }
-        this.printer.popIndent()
-        this.printer.print(`}`)
+        this.printer.writeEnum(enumEntity)
     }
 
     private printEnums(peerFile: PeerFile) {
@@ -184,7 +172,7 @@ class PeerFileVisitor {
     }
 
     private printAssignEnumsToGlobalScope(peerFile: PeerFile) {
-        if (!(this.isTs||this.isArkTs)) return
+        if (!(this.isTs)) return
         if (peerFile.enums.length != 0) {
             this.printer.print(`Object.assign(globalThis, {`)
             this.printer.pushIndent()

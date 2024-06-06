@@ -25,6 +25,7 @@ import { PeerMethod } from "./PeerMethod";
 import { componentToPeerClass } from "./PeersPrinter";
 import { OverloadsPrinter, collapseSameNamedMethods } from "./OverloadsPrinter";
 import { LanguageWriter, Type, createLanguageWriter } from "./LanguageWriters";
+import { collectDtsImports } from "./DtsImportsGenerator";
 
 function generateArkComponentName(component: string) {
     return `Ark${component}Component`
@@ -99,7 +100,7 @@ class ComponentFileVisitor {
                 this.overloadsPrinter.printGroupedComponentOverloads(peer, grouped)
             // todo stub until we can process AttributeModifier
             if (isCommonMethod(peer.originalClassName!))
-                writer.print(`attributeModifier(modifier: AttributeModifier<any>): this { throw new Error("not implemented") }`)
+                writer.print(`attributeModifier(modifier: AttributeModifier<${writer.language == Language.ARKTS ? "object" : "any"}>): this { throw new Error("not implemented") }`)
         }, parentComponentClassName, [attributeClassName])
 
 
@@ -127,6 +128,7 @@ export function ${componentFunctionName}(
 
     printFile(): void {
         this.printImports()
+        this.printer.print(collectDtsImports())
         this.file.peers.forEach(peer => {
             this.printComponent(peer)
         })
@@ -142,7 +144,7 @@ class ComponentsVisitor {
 
     printComponents(): void {
         for (const file of this.peerLibrary.files.values()) {
-            const writer = createLanguageWriter(new IndentedPrinter(), Language.TS)
+            const writer = createLanguageWriter(new IndentedPrinter(), this.peerLibrary.declarationTable.language)
             const visitor = new ComponentFileVisitor(this.peerLibrary, file, writer)
             visitor.printFile()
             this.components.set(visitor.targetBasename, writer)
@@ -152,7 +154,7 @@ class ComponentsVisitor {
 
 export function printComponents(peerLibrary: PeerLibrary): Map<string, string> {
     // TODO: support other output languages
-    if (peerLibrary.declarationTable.language != Language.TS)
+    if (peerLibrary.declarationTable.language != (Language.TS && Language.ARKTS))
         return new Map()
 
     const visitor = new ComponentsVisitor(peerLibrary)

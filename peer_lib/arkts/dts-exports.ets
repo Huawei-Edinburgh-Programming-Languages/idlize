@@ -28,12 +28,12 @@
  * limitations under the License.
  */
 
-export interface CustomComponent extends CommonAttribute {
-    build(): void;
-    aboutToAppear(): void;
-    aboutToDisappear(): void;
-    aboutToReuse(params: object): void;
-    aboutToRecycle(): void;
+export class CustomComponent extends CommonAttribute {
+    build(): void {}
+    aboutToAppear(): void {}
+    aboutToDisappear(): void {}
+    aboutToReuse(params: object): void {}
+    aboutToRecycle(): void {}
 }
 
 export interface Resource {
@@ -171,6 +171,16 @@ export interface DragPreviewOptions {
     numberBadge?: boolean | number;
 }
 
+export class CommonShapeMethod<T> extends CommonMethod<T> {
+    constructor() {};
+    stroke(value: ResourceColor): T {throw new Error()};
+}
+
+export class ScrollableCommonMethod<T> extends CommonMethod<T> {
+    scrollBarWidth(value: number | string): T {throw new Error()};;
+}
+
+
 export interface DragInteractionOptions {
 
     isMultiSelectionEnabled?: boolean;
@@ -178,21 +188,27 @@ export interface DragInteractionOptions {
     defaultAnimationBeforeLifting?: boolean;
 }
 
-export interface CommonMethod<T> {
-    stateStyles(value: StateStyles): this;
+export class CommonMethod<T> {
+    constructor() {}
 
-    backdropBlur(value: number, options?: BlurOptions): this;
+    stateStyles(value: StateStyles): this {throw new Error()};
 
-    width(value: Length): this;
+    backdropBlur(value: number, options?: BlurOptions): this {throw new Error()};
 
-    height(value: Length): this;
+    width(value: Length): this {throw new Error()};
 
-    bindSheet(isShow: boolean, builder: () => void, options?: SheetOptions): this;
+    height(value: Length): this {throw new Error()};
 
-    backgroundBlurStyle(value: BlurStyle, options?: BackgroundBlurStyleOptions): this;
+    bindSheet(isShow: boolean, builder: () => void, options?: SheetOptions): this {throw new Error()};
 
-    dragPreviewOptions(value: DragPreviewOptions, options?: DragInteractionOptions): this;
+    backgroundBlurStyle(value: BlurStyle, options?: BackgroundBlurStyleOptions): this {throw new Error()};
+
+    dragPreviewOptions(value: DragPreviewOptions, options?: DragInteractionOptions): this {throw new Error()};
 }
 
-export interface CommonAttribute extends CommonMethod<CommonAttribute> {
+export class CommonAttribute extends CommonMethod<CommonAttribute> {
+}
+
+export class BlankAttribute extends CommonMethod<BlankAttribute> {
+  color(value: ResourceColor): BlankAttribute {throw new Error()}
 }

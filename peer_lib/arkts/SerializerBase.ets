@@ -63,6 +63,14 @@ export function runtimeType<T>(value: T): RuntimeType {
 
 export type Function = object
 
+export function isPixelMap(value: Object): void {
+    return
+}
+
+export function isResource(value: Object): void {
+    return
+}
+
 function registerCallback(value: object|undefined): number {
     // TODO: fix me!
     return 42
