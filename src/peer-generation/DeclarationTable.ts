@@ -647,10 +647,15 @@ export class DeclarationTable {
         }
     }
 
+    private printStructField(structs: IndentedPrinter, field: FieldRecord) {
+        structs.print(`${this.cFieldKind(field.declaration)}${field.optional ? PrimitiveType.OptionalPrefix : ""}${this.computeTargetName(field.declaration, false)} ${field.name};`)
+    }
+
     generateStructs(structs: IndentedPrinter, typedefs: IndentedPrinter, writeToString: LanguageWriter) {
         const seenNames = new Set<string>()
         seenNames.clear()
         let noDeclaration = [PrimitiveType.Int32, PrimitiveType.Tag, PrimitiveType.Number, PrimitiveType.Boolean, PrimitiveType.String]
+        let sizeOfStructs: string[] = []
         for (let target of this.orderedDependencies) {
             let nameAssigned = this.computeTargetName(target, false)
             if (nameAssigned === PrimitiveType.Tag.getText(this)) {
@@ -660,12 +665,14 @@ export class DeclarationTable {
                 throw new Error(`No assigned name for ${(target as ts.TypeNode).getText()} shall be ${this.computeTargetName(target, false)}`)
             }
             if (seenNames.has(nameAssigned)) continue
+            sizeOfStructs.push(`sizeof(${nameAssigned})`)
             seenNames.add(nameAssigned)
             let isPointer = this.isPointerDeclaration(target)
             let isEnum = !(target instanceof PrimitiveType) && ts.isEnumDeclaration(target)
             let isAccessor = !(target instanceof PrimitiveType) && ts.isClassDeclaration(target) && isMaterialized(target)
             let noBasicDecl = isAccessor || (target instanceof PrimitiveType && noDeclaration.includes(target))
             let nameOptional = PrimitiveType.OptionalPrefix + nameAssigned
+            let isUnionOrTuple = this.isMaybeWrapped(target, ts.isTupleTypeNode) || this.isMaybeWrapped(target, ts.isUnionTypeNode)
             if (isEnum) {
                 structs.print(`typedef ${PrimitiveType.Int32.getText()} ${nameAssigned};`)
                 if (!seenNames.has(nameOptional)) {
@@ -679,7 +686,20 @@ export class DeclarationTable {
             const structDescriptor = this.targetStruct(target)
             if (!noBasicDecl && !this.ignoreTarget(target)) {
                 this.printStructsCHead(nameAssigned, structDescriptor, structs)
-                structDescriptor.getFields().forEach(it => structs.print(`${this.cFieldKind(it.declaration)}${it.optional ? PrimitiveType.OptionalPrefix : ""}${this.computeTargetName(it.declaration, false)} ${it.name};`))
+                if (isUnionOrTuple) {
+                    const selector = structDescriptor.getFields().find(value => {return value.name === "selector"})
+                    if (selector) {
+                        this.printStructField(structs, selector)
+                    }
+                    structs.print("union {")
+                    structs.pushIndent()
+                    structDescriptor.getFields().filter(value => value.name !== "selector")
+                        .forEach(it => this.printStructField(structs, it))
+                    structs.popIndent()
+                    structs.print("};")
+                } else {
+                    structDescriptor.getFields().forEach(it => this.printStructField(structs, it))
+                }
                 this.printStructsCTail(nameAssigned, structDescriptor.isPacked, structs)
             }
             if (isAccessor) {
@@ -701,6 +721,7 @@ export class DeclarationTable {
                 this.writeRuntimeType(target, nameOptional, true, writeToString)
             }
         }
+        structs.print(`const uint64_t TOTAL_SIZE = ${sizeOfStructs.join("+")};`)
         for (let declarationTarget of this.typeMap.values()) {
             let target = declarationTarget[0]
             let aliasNames = declarationTarget[1]
