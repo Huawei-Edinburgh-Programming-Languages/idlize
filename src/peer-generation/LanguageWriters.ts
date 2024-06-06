@@ -349,13 +349,10 @@ class TsObjectDeclareStatement implements LanguageStatement {
     write(writer: LanguageWriter): void {
         // Constructing a new type with all optional fields
         const objectType = new Type(`{${this.fields.map(it => {
-                let typeNode = "any"
-                if (it.type && (ts.isTupleTypeNode(it.type) || ts.isUnionTypeNode(it.type))) {
-                    typeNode = mapType(it.type)
-                }
-                return `${it.name}?: ${typeNode}`
-            }
-        ).join(",")}}`)
+            //TODO: to preventing an error IMPORT_* types were  not found  
+            const typeNode = it.type && ts.isImportTypeNode(it.type) ? "any" : mapType(it.type)
+            return `${it.name}?: ${typeNode}`
+        }).join(",")}}`)
         new TsObjectAssignStatement(this.object, objectType, true).write(writer)
     }
 }
@@ -512,8 +509,8 @@ export abstract class LanguageWriter {
     abstract getRuntimeType(): Type
     abstract makeTupleAssign(receiver: string, tupleFields: string[]): LanguageStatement
     abstract get supportedModifiers(): MethodModifier[]
-    abstract enumValueFromOrdinal(value: LanguageExpression, enumType: string): LanguageExpression
-    abstract ordinalFromEnumValue(value: LanguageExpression, enumType: string): LanguageExpression
+    abstract enumFromOrdinal(value: LanguageExpression, enumType: string): LanguageExpression
+    abstract ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression
     writeGetterImplementation(method: Method, op: (writer: LanguageWriter) => void): void {
         this.writeMethodImplementation(new Method(method.name, method.signature, [MethodModifier.GETTER].concat(method.modifiers ?? [])), op)
     }
@@ -793,10 +790,10 @@ export class TSLanguageWriter extends LanguageWriter {
     get supportedModifiers(): MethodModifier[] {
         return [MethodModifier.PUBLIC, MethodModifier.PRIVATE, MethodModifier.STATIC]
     }
-    enumValueFromOrdinal(value: LanguageExpression, enumType: string): LanguageExpression {
+    enumFromOrdinal(value: LanguageExpression, enumType: string): LanguageExpression {
         return this.makeString(`Object.values(${enumType})[${value.asString()}]`);
     }
-    ordinalFromEnumValue(value: LanguageExpression, enumType: string): LanguageExpression {
+    ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression {
         return this.makeString(`Object.keys(${enumType}).indexOf(${value.asString()})`);
     }
 }
@@ -962,10 +959,10 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     get supportedModifiers(): MethodModifier[] {
         return [MethodModifier.PUBLIC, MethodModifier.PRIVATE, MethodModifier.STATIC, MethodModifier.NATIVE]
     }
-    enumValueFromOrdinal(value: LanguageExpression, enumType: string): LanguageExpression {
+    enumFromOrdinal(value: LanguageExpression, enumType: string): LanguageExpression {
         throw new Error("Method not implemented.")
     }
-    ordinalFromEnumValue(value: LanguageExpression, enumType: string): LanguageExpression {
+    ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression {
         throw new Error("Method not implemented.")
     }
 }
@@ -1160,10 +1157,10 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     get supportedModifiers(): MethodModifier[] {
         return [MethodModifier.INLINE, MethodModifier.STATIC]
     }
-    enumValueFromOrdinal(value: LanguageExpression, enumType: string): LanguageExpression {
+    enumFromOrdinal(value: LanguageExpression, enumType: string): LanguageExpression {
         return value;
     }
-    ordinalFromEnumValue(value: LanguageExpression, enumType: string): LanguageExpression {
+    ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression {
         return value;
     }
 }

@@ -194,31 +194,29 @@ export class UndefinedConvertor extends BaseArgConvertor {
 }
 
 export class EnumConvertor extends BaseArgConvertor {
-    constructor(param: string, table: DeclarationTable, private enumType: ts.EnumDeclaration) {
-        // Enums are integers in runtime.
-        super("number", [RuntimeType.NUMBER], false, false, param, true)
+    constructor(param: string,
+                private enumType: ts.EnumDeclaration,
+                private readonly isStringEnum: boolean) {
+        super(isStringEnum ?  "string" : "number",
+            [isStringEnum ? RuntimeType.STRING : RuntimeType.NUMBER],
+            false, false, param, true)
     }
     convertorArg(param: string, writer: LanguageWriter): string {
         return writer.language == Language.CPP ? param : `unsafeCast<int32>(${param})`
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
-        if (EnumConvertor.isStringLiteralEnum(this.enumType.members)) {
-            const receiver = printer.getObjectAccessor(this, param, value)
-            value = printer.ordinalFromEnumValue(printer.makeCast(printer.makeString(value),
-                printer.makeType("string", true, receiver), true), identName(this.enumType.name)!
-            ).asString()
+        if (this.isStringEnum) {
+            value = printer.ordinalFromEnum(printer.makeString(value),
+                identName(this.enumType.name)!).asString()
         }
         printer.writeMethodCall(`${param}Serializer`, "writeInt32", [this.convertorArg(value, printer)])
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
-        const receiver = printer.getObjectAccessor(this, param, value)
         let readExpr = printer.makeMethodCall(`${param}Deserializer`, "readInt32", [])
-        if (EnumConvertor.isStringLiteralEnum(this.enumType.members)) {
-            readExpr = printer.makeCast(
-                printer.enumValueFromOrdinal(readExpr, identName(this.enumType.name)!),
-                printer.makeType(identName(this.enumType.name)!, false, receiver)
-            )
+        if (this.isStringEnum) {
+            readExpr = printer.enumFromOrdinal(readExpr, identName(this.enumType.name)!)
         }
+        const receiver = printer.getObjectAccessor(this, param, value)
         return printer.makeAssign(receiver, undefined, readExpr, false)
     }
     nativeType(impl: boolean): string {
@@ -242,23 +240,20 @@ export class EnumConvertor extends BaseArgConvertor {
             let value = index
             if (member.initializer) {
                 let tsValue = member.initializer
-                if (ts.isLiteralExpression(tsValue)) {
+                if (ts.isLiteralExpression(tsValue) && !this.isStringEnum) {
                     value = parseInt(tsValue.text)
-                    if (Number.isNaN(value)) value = index
                 }
             }
             if (low === undefined || low > value) low = value
             if (high === undefined || high < value) high = value
         })
+        const ordinal = this.isStringEnum
+            ? writer.ordinalFromEnum(writer.makeString(value), identName(this.enumType.name)!)
+            : writer.makeUnionVariantCast(value, Type.Number.name, index)
         return writer.makeNaryOp("&&", [
-            writer.makeNaryOp(">=", [writer.makeUnionVariantCast(value, Type.Number.name, index), writer.makeString(low!.toString())]),
-            writer.makeNaryOp("<=",  [writer.makeUnionVariantCast(value, Type.Number.name, index), writer.makeString(high!.toString())])
+            writer.makeNaryOp(">=", [ordinal, writer.makeString(low!.toString())]),
+            writer.makeNaryOp("<=",  [ordinal, writer.makeString(high!.toString())])
         ])
-    }
-    private static isStringLiteralEnum(members: NodeArray<EnumMember>): boolean {
-        return members.find((value) => {
-            return value.initializer && ts.isStringLiteral(value.initializer)
-        }) != undefined
     }
 }
 
