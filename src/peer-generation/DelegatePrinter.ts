@@ -6,6 +6,7 @@ import { completeDelegatesImpl } from "./FileGenerators";
 import { PeerLibrary } from "./PeerLibrary";
 import { MethodSeparatorVisitor, PeerMethod } from "./PeerMethod";
 import { PeerClass } from "./PeerClass";
+import { MaterializedClass } from "./Materialized";
 
 export class DelegateSignatureBuilder {
     constructor(
@@ -203,14 +204,27 @@ class MultiFileDelegateVisitor {
     }
 
     private onPeerStart(peer: PeerClass) {
-        let api = this.api = new IndentedPrinter()
-        let impl = this.impl = new IndentedPrinter()
-        let slug = (peer.componentName.toLowerCase())
-        this.printers.set(slug, { api, impl })
+        let slug = peer.componentName.toLowerCase()
+        this.pushPrinters(slug)
     }
 
     private onPeerEnd(peer: PeerClass) {
         this.api = this.impl = undefined;
+    }
+
+    private onMaterializedClassStart(peer: MaterializedClass) {
+        let slug = peer.className.toLowerCase()
+        this.pushPrinters(slug)
+    }
+
+    private onMaterializedClassEnd(peer: MaterializedClass) {
+        this.api = this.impl = undefined;
+    }
+
+    private pushPrinters(slug: string) {
+        let api = this.api = new IndentedPrinter()
+        let impl = this.impl = new IndentedPrinter()
+        this.printers.set(slug, { api, impl })
     }
 
     print() {
@@ -223,13 +237,15 @@ class MultiFileDelegateVisitor {
                 this.onPeerEnd(peer)
             }
         }
-        // for (const materialized of this.library.materializedClasses.values()) {
-        //     this.printMethod(materialized.ctor)
-        //     this.printMethod(materialized.finalizer)
-        //     for (const method of materialized.methods) {
-        //         this.printMethod(method)
-        //     }
-        // }
+        for (const materialized of this.library.materializedClasses.values()) {
+            this.onMaterializedClassStart(materialized)
+            this.printMethod(materialized.ctor)
+            this.printMethod(materialized.finalizer)
+            for (const method of materialized.methods) {
+                this.printMethod(method)
+            }
+            this.onMaterializedClassEnd(materialized)
+        }
     }
 
     emitSync(outputDirectory: string): void {
