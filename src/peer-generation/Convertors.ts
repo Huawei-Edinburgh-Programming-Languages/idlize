@@ -301,8 +301,8 @@ export class LengthConvertorScoped extends BaseArgConvertor {
 }
 
 export class LengthConvertor extends BaseArgConvertor {
-    constructor(param: string) {
-        super("Length", [RuntimeType.NUMBER, RuntimeType.STRING, RuntimeType.OBJECT], false, false, param, true)
+    constructor(name: string, param: string) {
+        super(name, [RuntimeType.NUMBER, RuntimeType.STRING, RuntimeType.OBJECT], false, false, param, true)
     }
     convertorArg(param: string, writer: LanguageWriter): string {
         return writer.language == Language.CPP ? `(const ${PrimitiveType.Length.getText()}*)&${param}` : param

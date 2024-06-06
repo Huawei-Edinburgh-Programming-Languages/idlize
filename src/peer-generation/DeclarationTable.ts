@@ -538,7 +538,7 @@ export class DeclarationTable {
         switch (name) {
             case `Dimension`:
             case `Length`:
-                return new LengthConvertor(param)
+                return new LengthConvertor(name, param)
             case `Date`:
                 return new CustomTypeConvertor(param, name, name)
             case `AttributeModifier`:
