@@ -53,7 +53,7 @@ import { printNodeTypes } from "./peer-generation/NodeTypesPrinter"
 import { printNativeModule, printNativeModuleEmpty } from "./peer-generation/NativeModulePrinter"
 import { printBridgeCc } from "./peer-generation/BridgeCcPrinter"
 import { printImportsStubs } from "./peer-generation/ImportsStubsPrinter"
-import { printDelegatesHeaders, printDelegatesImplementation } from "./peer-generation/DelegatePrinter"
+import { printDelegatesHeaders, printDelegatesImplementation, writeDelegatesAsMultipleFiles } from "./peer-generation/DelegatePrinter"
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig";
 import { printEvents, printEventsCImpl } from "./peer-generation/EventsPrinter"
 import { collectDtsImports } from "./peer-generation/DtsImportsGenerator"
@@ -375,6 +375,8 @@ if (options.dts2peer) {
                 fs.writeFileSync(path.join(outDir, 'arkoala_api.h'), api)
                 fs.writeFileSync(path.join(outDir, 'delegates.h'), printDelegatesHeaders(peerLibrary))
                 fs.writeFileSync(path.join(outDir, 'delegates.cc'), printDelegatesImplementation(peerLibrary))
+
+                writeDelegatesAsMultipleFiles(peerLibrary, path.join(outDir, 'delegates'))
 
                 const modifiers = printRealAndDummyModifiers(peerLibrary)
                 const accessors = printRealAndDummyAccessors(peerLibrary)

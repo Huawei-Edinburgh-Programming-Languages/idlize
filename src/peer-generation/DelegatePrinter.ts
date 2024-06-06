@@ -1,8 +1,11 @@
+import * as path from "path";
+import * as fs from "fs";
 import { IndentedPrinter } from "../IndentedPrinter";
 import { DeclarationTable, DeclarationTarget, FieldRecord, PrimitiveType } from "./DeclarationTable";
 import { completeDelegatesImpl } from "./FileGenerators";
 import { PeerLibrary } from "./PeerLibrary";
 import { MethodSeparatorVisitor, PeerMethod } from "./PeerMethod";
+import { PeerClass } from "./PeerClass";
 
 export class DelegateSignatureBuilder {
     constructor(
@@ -164,4 +167,91 @@ export function printDelegatesImplementation(library: PeerLibrary): string {
     // TODO here can be conflicts between different union filds with same types
     const uniqueDeclarations = Array.from(new Set(visitor.impl.getOutput()))
     return completeDelegatesImpl(uniqueDeclarations.join('\n'))
+}
+
+
+export function writeDelegatesAsMultipleFiles(library: PeerLibrary, outputDir: string) {
+    const visitor = new MultiFileDelegateVisitor(library)
+    visitor.print()
+
+    visitor.emitSync(outputDir)
+}
+
+
+interface MultiFileDelegatePrinters {
+    api: IndentedPrinter
+    impl: IndentedPrinter
+}
+
+class MultiFileDelegateVisitor {
+    private readonly printers: Map<string, MultiFileDelegatePrinters> = new Map();
+    private api?: IndentedPrinter
+    private impl?: IndentedPrinter
+    
+    constructor(
+        private readonly library: PeerLibrary,
+    ) {}
+
+    private printMethod(method: PeerMethod) {
+        const visitor = new MethodDelegatePrinter(
+            this.library.declarationTable,
+            method,
+        )
+        visitor.visit()
+        visitor.declPrinter.getOutput().forEach(it => this.api!.print(it))
+        visitor.implPrinter.getOutput().forEach(it => this.impl!.print(it))
+    }
+
+    private onPeerStart(peer: PeerClass) {
+        let api = this.api = new IndentedPrinter()
+        let impl = this.impl = new IndentedPrinter()
+        let slug = (peer.componentName.toLowerCase())
+        this.printers.set(slug, { api, impl })
+    }
+
+    private onPeerEnd(peer: PeerClass) {
+        this.api = this.impl = undefined;
+    }
+
+    print() {
+        for (const file of this.library.files) {
+            for (const peer of file.peers.values()) {
+                this.onPeerStart(peer)
+                for (const method of peer.methods) {
+                    this.printMethod(method)
+                }
+                this.onPeerEnd(peer)
+            }
+        }
+        // for (const materialized of this.library.materializedClasses.values()) {
+        //     this.printMethod(materialized.ctor)
+        //     this.printMethod(materialized.finalizer)
+        //     for (const method of materialized.methods) {
+        //         this.printMethod(method)
+        //     }
+        // }
+    }
+
+    emitSync(outputDirectory: string): void {
+        fs.mkdirSync(outputDirectory, { recursive: true });
+        for (const [slug, { api, impl }] of this.printers) {
+            writeIndentPrinterOutputSync(path.join(outputDirectory, `${slug}_delegates.h`), api);
+            writeIndentPrinterOutputSync(path.join(outputDirectory, `${slug}_delegates.cc`), impl, completeDelegatesImpl);
+        }
+    }
+}
+
+function writeIndentPrinterOutputSync(filePath: string, printer: IndentedPrinter, postProcess?: (code: string) => string) {
+    // let output = fs.createWriteStream(filePath, { encoding: "utf-8", autoClose: true})
+    // let unique = new Set(printer.getOutput())
+    // for (const entry of unique) {
+    //     output.write(entry);
+    //     output.write("\n");
+    // }
+    // output.end()
+    // compl
+    let unique = new Set(printer.getOutput())
+    let code = [...unique].join('\n')
+    code = postProcess?.(code) ?? code
+    fs.writeFileSync(filePath, code, { encoding: "utf-8" })
 }
