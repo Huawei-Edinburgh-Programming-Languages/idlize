@@ -655,7 +655,6 @@ export class DeclarationTable {
         const seenNames = new Set<string>()
         seenNames.clear()
         let noDeclaration = [PrimitiveType.Int32, PrimitiveType.Tag, PrimitiveType.Number, PrimitiveType.Boolean, PrimitiveType.String]
-        let sizeOfStructs: string[] = []
         for (let target of this.orderedDependencies) {
             let nameAssigned = this.computeTargetName(target, false)
             if (nameAssigned === PrimitiveType.Tag.getText(this)) {
@@ -665,7 +664,6 @@ export class DeclarationTable {
                 throw new Error(`No assigned name for ${(target as ts.TypeNode).getText()} shall be ${this.computeTargetName(target, false)}`)
             }
             if (seenNames.has(nameAssigned)) continue
-            sizeOfStructs.push(`sizeof(${nameAssigned})`)
             seenNames.add(nameAssigned)
             let isPointer = this.isPointerDeclaration(target)
             let isEnum = !(target instanceof PrimitiveType) && ts.isEnumDeclaration(target)
@@ -721,7 +719,6 @@ export class DeclarationTable {
                 this.writeRuntimeType(target, nameOptional, true, writeToString)
             }
         }
-        structs.print(`const uint64_t TOTAL_SIZE = ${sizeOfStructs.join("+")};`)
         for (let declarationTarget of this.typeMap.values()) {
             let target = declarationTarget[0]
             let aliasNames = declarationTarget[1]
