@@ -362,8 +362,7 @@ class TsObjectDeclareStatement implements LanguageStatement {
         const nameConvertor = new TsObjectDeclareNodeNameConvertor()
         // Constructing a new type with all optional fields
         const objectType = new Type(`{${this.fields.map(it => {
-            const typeNode = nameConvertor.convert(it.type ?? ts.factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword))
-            return `${it.name}?: ${typeNode}`
+            return `${it.name}?: ${nameConvertor.convert(it.type)}`
         }).join(",")}}`)
         new TsObjectAssignStatement(this.object, objectType, true).write(writer)
     }
@@ -1202,11 +1201,17 @@ export function createLanguageWriter(language: Language): LanguageWriter {
 }
 
 class TsObjectDeclareNodeNameConvertor extends TSTypeNodeNameConvertor {
-    convertTupleElement(node: ts.TypeNode): string {
+    override convertTupleElement(node: ts.TypeNode): string {
         return `${super.convertTupleElement(node)}${ts.isParenthesizedTypeNode(node) ? '?' : ''}`
     }
-    convertImport(_node: ts.ImportTypeNode): string {
+    override convertImport(_node: ts.ImportTypeNode): string {
         //TODO: to preventing an error IMPORT_* types were  not found
         return "object"
+    }
+    override convert(node: ts.Node | undefined): string {
+        if (node) {
+            return super.convert(node)
+        }
+        return "undefined";
     }
 }
