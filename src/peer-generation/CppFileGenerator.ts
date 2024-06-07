@@ -33,9 +33,18 @@ export abstract class CppFileWriter {
         this.output.write(code)
     }
 
+    beginNamespace(namespace: string) {
+        this.writeLine(`namespace ${namespace} {`)
+    }
+
+    endNamespace() {
+        this.writeLine(`}`)
+        this.writeLine()
+    }
+
     end() {
         this.writeOutro()
-        this.output.end();
+        this.output.end()
     }
 
     private writeIntro() {
