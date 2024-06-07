@@ -18,13 +18,14 @@ import * as path from "path"
 
 import { IndentedPrinter } from "../IndentedPrinter";
 import { DeclarationTable, DeclarationTarget, FieldRecord, PrimitiveType } from "./DeclarationTable";
-import { accessorStructList, extendedAPIStructList, modifierStructList, modifierStructs } from "./FileGenerators";
+import { accessorStructList, completeImplementations, extendedAPIStructList, modifierStructList, modifierStructs } from "./FileGenerators";
 import { PeerClass } from "./PeerClass";
 import { PeerLibrary } from "./PeerLibrary";
 import { MethodSeparatorVisitor, PeerMethod } from "./PeerMethod";
 import { DelegateSignatureBuilder } from "./DelegatePrinter";
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
 import { MaterializedClass, MaterializedMethod } from "./Materialized";
+import { CppSourceFileGenerator } from "./CppFileGenerator";
 
 class MethodSeparatorPrinter extends MethodSeparatorVisitor {
     public readonly printer = new IndentedPrinter()
@@ -235,9 +236,6 @@ class ModifierVisitor {
 }
 
 class AccessorVisitor extends ModifierVisitor {
-    emitSync(outputDir: string) {
-        throw new Error("Method not implemented.");
-    }
     accessors = new IndentedPrinter()
     accessorList = new IndentedPrinter()
 
@@ -328,14 +326,22 @@ class MultiFileModifiersVisitor extends AccessorVisitor {
         fs.mkdirSync(outputDirectory, { recursive: true });
 
         for (const [slug, state] of this.stateByFile) {
-            const real =
-                state.real.getOutput().join("\n") +
-                modifierStructs(state.modifiers.getOutput()) +
-                modifierStructList(state.modifierList.getOutput()) +
-                state.real.getOutput().join("\n") + "\n" +
-                modifierStructs(state.accessors.getOutput()) +
-                accessorStructList(state.accessorList.getOutput())
-            fs.writeFileSync(path.join(outputDirectory, `${slug}_modifiers.cc`), real, { encoding: "utf-8" })
+            const filePath = path.join(outputDirectory, `${slug}_modifiers.cc`)
+            const output = new CppSourceFileGenerator(filePath)
+            output.writeInclude("Interop.h")
+            output.writeInclude("Serializers.h")
+            output.writeInclude(`${slug}_delegates.h`)
+            output.writeLine()
+
+            state.real.getOutput().forEach(block => output.writeLine(block))
+            output.writeLine(modifierStructs(state.modifiers.getOutput()))
+            output.writeLine(modifierStructList(state.modifierList.getOutput()))
+            output.writeLine(accessorStructList(state.accessorList.getOutput()))
+            output.writeLine(extendedAPIStructList(false))
+            
+            output.writeLine(completeImplementations())
+
+            output.end()
         }
     }
 }
