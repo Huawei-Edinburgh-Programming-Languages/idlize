@@ -362,7 +362,7 @@ class TsObjectDeclareStatement implements LanguageStatement {
         const nameConvertor = new TsObjectDeclareNodeNameConvertor()
         // Constructing a new type with all optional fields
         const objectType = new Type(`{${this.fields.map(it => {
-            const typeNode = nameConvertor.convert(it.type ?? ts.factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword))
+            const typeNode = nameConvertor.convert(it.type ?? ts.factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword))
             return `${it.name}?: ${typeNode}`
         }).join(",")}}`)
         new TsObjectAssignStatement(this.object, objectType, true).write(writer)
