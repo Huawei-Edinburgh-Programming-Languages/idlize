@@ -31,7 +31,7 @@ function dateChunk(): string {
     return `${currentYear}`
 }
 
-const cStyleCopyright =
+export const cStyleCopyright =
 `/*
  * Copyright (c) ${dateChunk()} Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,7 +48,7 @@ const cStyleCopyright =
  */
 `
 
-const sharpCopyright =
+export const sharpCopyright =
 `# Copyright (c) ${dateChunk()} Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

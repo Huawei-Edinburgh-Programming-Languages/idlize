@@ -2,7 +2,7 @@ import * as path from "path";
 import * as fs from "fs";
 import { IndentedPrinter } from "../IndentedPrinter";
 import { DeclarationTable, DeclarationTarget, FieldRecord, PrimitiveType } from "./DeclarationTable";
-import { completeDelegatesImpl } from "./FileGenerators";
+import { cStyleCopyright, completeDelegatesImpl } from "./FileGenerators";
 import { PeerLibrary } from "./PeerLibrary";
 import { MethodSeparatorVisitor, PeerMethod } from "./PeerMethod";
 import { PeerClass } from "./PeerClass";
@@ -170,8 +170,7 @@ export function printDelegatesImplementation(library: PeerLibrary): string {
     return completeDelegatesImpl(uniqueDeclarations.join('\n'))
 }
 
-
-export function writeDelegatesAsMultipleFiles(library: PeerLibrary, outputDir: string) {
+export function printDelegatesAsMultipleFiles(library: PeerLibrary, outputDir: string) {
     const visitor = new MultiFileDelegateVisitor(library)
     visitor.print()
     visitor.emitSync(outputDir)
@@ -266,22 +265,6 @@ class MultiFileDelegateVisitor {
 }
 
 abstract class DelegateFilePrinter {
-    static readonly LICENSE = `/*
- * Copyright (c) ${new Date().getFullYear()} Huawei Device Co., Ltd.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-`
-
     static readonly GENERATED_WARNING = `/*
  * WARNING! THIS FILE IS GENERATED, DO NOT MAKE CHANGES, THEY WILL BE LOST ON NEXT GENERATION!
  */
@@ -298,7 +281,7 @@ abstract class DelegateFilePrinter {
         output.end()
     }
     protected printFileIntro(output: fs.WriteStream, filePath: string) {
-        output.write(DelegateFilePrinter.LICENSE)
+        output.write(cStyleCopyright)
         output.write("\n")
         output.write(DelegateFilePrinter.GENERATED_WARNING)
         output.write("\n")

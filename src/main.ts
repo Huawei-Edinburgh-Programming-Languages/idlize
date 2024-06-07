@@ -27,7 +27,6 @@ import { TestGeneratorVisitor } from "./TestGeneratorVisitor"
 import { copyPeersToKoalaUi, copyPeersToLibace } from "./CopyPeers"
 import {
     copyPeerLib,
-    completeImplementations,
     dummyImplementations,
     makeArkuiModule,
     makeTSSerializer,
@@ -42,7 +41,7 @@ import { defaultCompilerOptions, isDefined, toSet, Language } from "./util"
 import { TypeChecker } from "./typecheck"
 import { initRNG } from "./rand_utils"
 import { DeclarationTable } from "./peer-generation/DeclarationTable"
-import { printRealAndDummyAccessors } from "./peer-generation/AccessorPrinter"
+import { printRealAndDummyAccessors, printRealModifiersAsMultipleFiles } from "./peer-generation/ModifierPrinter"
 import { printRealAndDummyModifiers } from "./peer-generation/ModifierPrinter"
 import { PeerLibrary } from "./peer-generation/PeerLibrary"
 import { printComponents } from "./peer-generation/ComponentsPrinter"
@@ -53,10 +52,9 @@ import { printNodeTypes } from "./peer-generation/NodeTypesPrinter"
 import { printNativeModule, printNativeModuleEmpty } from "./peer-generation/NativeModulePrinter"
 import { printBridgeCc } from "./peer-generation/BridgeCcPrinter"
 import { printImportsStubs } from "./peer-generation/ImportsStubsPrinter"
-import { printDelegatesHeaders, printDelegatesImplementation, writeDelegatesAsMultipleFiles } from "./peer-generation/DelegatePrinter"
+import { printDelegatesAsMultipleFiles } from "./peer-generation/DelegatePrinter"
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig";
 import { printEvents, printEventsCImpl } from "./peer-generation/EventsPrinter"
-import { collectDtsImports } from "./peer-generation/DtsImportsGenerator"
 import { printGniSources } from "./peer-generation/GniPrinter"
 
 const options = program
@@ -374,7 +372,8 @@ if (options.dts2peer) {
                 fs.writeFileSync(path.join(outDir, 'Serializers.h'), serializers)
                 fs.writeFileSync(path.join(outDir, 'arkoala_api.h'), api)
 
-                writeDelegatesAsMultipleFiles(peerLibrary, outDir)
+                printDelegatesAsMultipleFiles(peerLibrary, outDir)
+                printRealModifiersAsMultipleFiles(peerLibrary, outDir)
 
                 const modifiers = printRealAndDummyModifiers(peerLibrary)
                 const accessors = printRealAndDummyAccessors(peerLibrary)
