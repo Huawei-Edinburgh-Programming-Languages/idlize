@@ -5,7 +5,7 @@ import { cStyleCopyright } from "./FileGenerators";
 export interface CppFileOptions {
 }
 
-abstract class CppFileWriter {
+export abstract class CppFileWriter {
     protected readonly output: fs.WriteStream
 
     constructor(filePath: string, protected readonly options: Partial<CppFileOptions> = {}) {
@@ -64,11 +64,12 @@ export class CppHeaderFileGenerator extends CppFileWriter {
             this.write(`#ifndef ${this.includeGuardDefine}\n`)
             this.write(`#define ${this.includeGuardDefine}\n`)
         }
+        this.writeLine()
     }
 
     end() {
         if (this.includeGuardDefine) {
-            this.writeLine(`#endif // ${this.includeGuardDefine}`)
+            this.writeLine(`\n#endif // ${this.includeGuardDefine}`)
         }
         super.end()
     }
@@ -86,8 +87,5 @@ export class CppSourceFileGenerator extends CppFileWriter {
 
 function makeIncludeGuardDefine(filePath: string) {
     let basename = path.basename(filePath);
-    let ext = path.extname(basename);
-    if (ext) ext = ext.slice(1); // remove leading dot
-
-    return `${basename}_${ext}`.toUpperCase()
+    return basename.replace(/[.\- ]/g, "_").toUpperCase()
 }

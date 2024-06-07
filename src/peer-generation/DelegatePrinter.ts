@@ -2,11 +2,12 @@ import * as path from "path";
 import * as fs from "fs";
 import { IndentedPrinter } from "../IndentedPrinter";
 import { DeclarationTable, DeclarationTarget, FieldRecord, PrimitiveType } from "./DeclarationTable";
-import { cStyleCopyright, completeDelegatesImpl } from "./FileGenerators";
+import { completeDelegatesImpl } from "./FileGenerators";
 import { PeerLibrary } from "./PeerLibrary";
 import { MethodSeparatorVisitor, PeerMethod } from "./PeerMethod";
 import { PeerClass } from "./PeerClass";
 import { MaterializedClass } from "./Materialized";
+import { CppFileWriter, CppHeaderFileGenerator as CppHeaderFileWriter, CppSourceFileGenerator as CppSourceFileWriter } from "./CppFileGenerator";
 
 export class DelegateSignatureBuilder {
     constructor(
@@ -270,39 +271,31 @@ abstract class DelegateFilePrinter {
  */
 `
     public printFile(filePath: string, source: IndentedPrinter) {
-        let output = fs.createWriteStream(filePath, { encoding: "utf-8", autoClose: true })
-        this.printFileIntro(output, filePath)
+        let output = this.createFileWriter(filePath)
+        output.writeLine(DelegateFilePrinter.GENERATED_WARNING)
         let uniqueDecls = new Set(source.getOutput())
         for (const decl of uniqueDecls) {
-            output.write(decl)
-            output.write("\n")
+            output.writeLine(decl)
         }
-        this.printFileOutro(output, filePath);
         output.end()
     }
-    protected printFileIntro(output: fs.WriteStream, filePath: string) {
-        output.write(cStyleCopyright)
-        output.write("\n")
-        output.write(DelegateFilePrinter.GENERATED_WARNING)
-        output.write("\n")
-    }
-    protected printFileOutro(output: fs.WriteStream, filePath: string) {}
+
+    protected abstract createFileWriter(filePath: string): CppFileWriter
 }
 
 class DelegateHeaderPrinter extends DelegateFilePrinter {
-    protected printFileIntro(output: fs.WriteStream, filePath: string): void {
-        super.printFileIntro(output, filePath)
-        output.write(`#pragma once\n`) // TODO #ifndef?
-        output.write("\n")
+    protected createFileWriter(filePath: string): CppFileWriter {
+        return new CppHeaderFileWriter(filePath)
     }
 }
 
 class DelegateImplementationPrinter extends DelegateFilePrinter {
-    protected printFileIntro(output: fs.WriteStream, filePath: string): void {
-        super.printFileIntro(output, filePath);
-        output.write(`#include "Serializers.h"\n`);
+    protected createFileWriter(filePath: string): CppFileWriter {
+        const output = new CppSourceFileWriter(filePath)
         const headerName = path.basename(filePath, ".cc") + ".h"
-        output.write(`#include "${headerName}"\n`)
-        output.write("\n")
+        output.writeInclude("Serializers.h")
+        output.writeInclude(headerName)
+        output.writeLine()
+        return output
     }
 }
