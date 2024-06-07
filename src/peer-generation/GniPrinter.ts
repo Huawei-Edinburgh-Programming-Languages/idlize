@@ -27,15 +27,19 @@ export class GniVisitor {
 
     printGniEntries(clazz: PeerClass): void {
         const className = clazz.componentName.toLowerCase()
-        this.gni.print(`"arkoala/generated/${className}_delegate.cpp",`)
-        this.gni.print(`"arkoala/generated/${className}_modifier.cpp",`)
+        this.gni.print(`"../arkoala/implementation/${className}_delegate.cpp",`)
+        this.gni.print(`"../arkoala/generated/${className}_modifier.cpp",`)
     }
 
     // TODO: have a proper Peer module visitor
     printGniSource() {
+        this.gni.print("generated_sources = [")
+        this.gni.pushIndent()
         this.library.files.forEach(file => {
             file.peers.forEach(clazz => this.printGniEntries(clazz))
         })
+        this.gni.popIndent()
+        this.gni.print("]")
     }
 }
 

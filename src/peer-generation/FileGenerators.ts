@@ -500,8 +500,6 @@ return `${sharpCopyright}
 
 # ${warning}
 
-generated_sources = [
 ${gniSources}
-]
 `
 }

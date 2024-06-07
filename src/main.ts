@@ -383,7 +383,7 @@ if (options.dts2peer) {
                 fs.writeFileSync(path.join(outDir, 'all_events.cc'), completeEventsImplementations(printEventsCImpl(peerLibrary)))
 
                 const gniSources = printGniSources(peerLibrary)
-                fs.writeFileSync(path.join(outDir, 'generated.gni'), gniFile(gniSources))
+                fs.writeFileSync(path.join(outDir, 'node_interfaces.gni'), gniFile(gniSources))
 
                 copyPeerLib(path.join(__dirname, '..', 'peer_lib'), outDir)
             }
