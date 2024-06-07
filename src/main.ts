@@ -373,10 +373,8 @@ if (options.dts2peer) {
                 const {api, serializers} = printApiAndSerializers(options.apiVersion, peerLibrary)
                 fs.writeFileSync(path.join(outDir, 'Serializers.h'), serializers)
                 fs.writeFileSync(path.join(outDir, 'arkoala_api.h'), api)
-                fs.writeFileSync(path.join(outDir, 'delegates.h'), printDelegatesHeaders(peerLibrary))
-                fs.writeFileSync(path.join(outDir, 'delegates.cc'), printDelegatesImplementation(peerLibrary))
 
-                writeDelegatesAsMultipleFiles(peerLibrary, path.join(outDir, 'delegates'))
+                writeDelegatesAsMultipleFiles(peerLibrary, outDir)
 
                 const modifiers = printRealAndDummyModifiers(peerLibrary)
                 const accessors = printRealAndDummyAccessors(peerLibrary)

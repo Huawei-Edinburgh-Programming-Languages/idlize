@@ -174,7 +174,6 @@ export function printDelegatesImplementation(library: PeerLibrary): string {
 export function writeDelegatesAsMultipleFiles(library: PeerLibrary, outputDir: string) {
     const visitor = new MultiFileDelegateVisitor(library)
     visitor.print()
-
     visitor.emitSync(outputDir)
 }
 
@@ -203,25 +202,31 @@ class MultiFileDelegateVisitor {
         visitor.implPrinter.getOutput().forEach(it => this.impl!.print(it))
     }
 
-    private onPeerStart(peer: PeerClass) {
-        let slug = peer.componentName.toLowerCase()
+    private onPeerStart(clazz: PeerClass) {
+        let slug = clazz.componentName.toLowerCase()
         this.pushPrinters(slug)
     }
 
-    private onPeerEnd(peer: PeerClass) {
-        this.api = this.impl = undefined;
+    private onPeerEnd(_clazz: PeerClass) {
+        this.api = this.impl = undefined
     }
 
-    private onMaterializedClassStart(peer: MaterializedClass) {
-        let slug = peer.className.toLowerCase()
+    private onMaterializedClassStart(clazz: MaterializedClass) {
+        let slug = clazz.className.toLowerCase()
         this.pushPrinters(slug)
     }
 
-    private onMaterializedClassEnd(peer: MaterializedClass) {
-        this.api = this.impl = undefined;
+    private onMaterializedClassEnd(_clazz: MaterializedClass) {
+        this.api = this.impl = undefined
     }
 
     private pushPrinters(slug: string) {
+        let printers = this.printers.get(slug)
+        if (printers) {
+            this.api = printers.api
+            this.impl = printers.impl
+            return
+        }
         let api = this.api = new IndentedPrinter()
         let impl = this.impl = new IndentedPrinter()
         this.printers.set(slug, { api, impl })
@@ -250,24 +255,71 @@ class MultiFileDelegateVisitor {
 
     emitSync(outputDirectory: string): void {
         fs.mkdirSync(outputDirectory, { recursive: true });
+        let implPrinter = new DelegateImplementationPrinter();
+        let headerPrinter = new DelegateHeaderPrinter();
+
         for (const [slug, { api, impl }] of this.printers) {
-            writeIndentPrinterOutputSync(path.join(outputDirectory, `${slug}_delegates.h`), api);
-            writeIndentPrinterOutputSync(path.join(outputDirectory, `${slug}_delegates.cc`), impl, completeDelegatesImpl);
+            implPrinter.printFile(path.join(outputDirectory, `${slug}_delegates.cc`), impl);
+            headerPrinter.printFile(path.join(outputDirectory, `${slug}_delegates.h`), api);
         }
     }
 }
 
-function writeIndentPrinterOutputSync(filePath: string, printer: IndentedPrinter, postProcess?: (code: string) => string) {
-    // let output = fs.createWriteStream(filePath, { encoding: "utf-8", autoClose: true})
-    // let unique = new Set(printer.getOutput())
-    // for (const entry of unique) {
-    //     output.write(entry);
-    //     output.write("\n");
-    // }
-    // output.end()
-    // compl
-    let unique = new Set(printer.getOutput())
-    let code = [...unique].join('\n')
-    code = postProcess?.(code) ?? code
-    fs.writeFileSync(filePath, code, { encoding: "utf-8" })
+abstract class DelegateFilePrinter {
+    static readonly LICENSE = `/*
+ * Copyright (c) ${new Date().getFullYear()} Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+`
+
+    static readonly GENERATED_WARNING = `/*
+ * WARNING! THIS FILE IS GENERATED, DO NOT MAKE CHANGES, THEY WILL BE LOST ON NEXT GENERATION!
+ */
+`
+    public printFile(filePath: string, source: IndentedPrinter) {
+        let output = fs.createWriteStream(filePath, { encoding: "utf-8", autoClose: true })
+        this.printFileIntro(output, filePath)
+        let uniqueDecls = new Set(source.getOutput())
+        for (const decl of uniqueDecls) {
+            output.write(decl)
+            output.write("\n")
+        }
+        this.printFileOutro(output, filePath);
+        output.end()
+    }
+    protected printFileIntro(output: fs.WriteStream, filePath: string) {
+        output.write(DelegateFilePrinter.LICENSE)
+        output.write("\n")
+        output.write(DelegateFilePrinter.GENERATED_WARNING)
+        output.write("\n")
+    }
+    protected printFileOutro(output: fs.WriteStream, filePath: string) {}
+}
+
+class DelegateHeaderPrinter extends DelegateFilePrinter {
+    protected printFileIntro(output: fs.WriteStream, filePath: string): void {
+        super.printFileIntro(output, filePath)
+        output.write(`#pragma once\n`) // TODO #ifndef?
+        output.write("\n")
+    }
+}
+
+class DelegateImplementationPrinter extends DelegateFilePrinter {
+    protected printFileIntro(output: fs.WriteStream, filePath: string): void {
+        super.printFileIntro(output, filePath);
+        output.write(`#include "Serializers.h"\n`);
+        const headerName = path.basename(filePath, ".cc") + ".h"
+        output.write(`#include "${headerName}"\n`)
+        output.write("\n")
+    }
 }
