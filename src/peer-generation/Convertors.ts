@@ -140,7 +140,12 @@ export class BooleanConvertor extends BaseArgConvertor {
         super("boolean", [RuntimeType.BOOLEAN], false, false, param)
     }
     convertorArg(param: string, writer: LanguageWriter): string {
-        return writer.language == Language.CPP ? param : `+${param}`
+        switch (writer.language) {
+            case Language.CPP: return param
+            case Language.TS: return `+${param}`
+            case Language.ARKTS: return `${param} ? 1 : 0`
+            default: throw new Error(`Unsupported`)
+        }        
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         printer.writeMethodCall(`${param}Serializer`, "writeBoolean", [value])
@@ -1026,8 +1031,8 @@ export class PredefinedConvertor extends BaseArgConvertor {
 }
 
 class ProxyConvertor extends BaseArgConvertor {
-    constructor(protected convertor: ArgConvertor) {
-        super(convertor.tsTypeName, convertor.runtimeTypes, convertor.isScoped, convertor.useArray, convertor.param, convertor.hasUnionDiscriminator)
+    constructor(protected convertor: ArgConvertor, desiredName?: string) {
+        super(desiredName ?? convertor.tsTypeName, convertor.runtimeTypes, convertor.isScoped, convertor.useArray, convertor.param, convertor.hasUnionDiscriminator)
     }
     convertorArg(param: string, writer: LanguageWriter): string {
         return this.convertor.convertorArg(param, writer)
@@ -1059,7 +1064,7 @@ export class TypeAliasConvertor extends ProxyConvertor {
         declaration: ts.TypeAliasDeclaration,
         private typeArguments?: ts.NodeArray<ts.TypeNode>
     ) {
-        super(table.typeConvertor(param, declaration.type))
+        super(table.typeConvertor(param, declaration.type), identName(declaration.name))
     }
 }
 

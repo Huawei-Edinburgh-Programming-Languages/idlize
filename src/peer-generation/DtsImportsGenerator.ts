@@ -69,7 +69,10 @@ const dtsImports = `import {
     PixelMap,
     NavigationTitleMode,
     RectResult,
-    TouchTestInfo
+    TouchTestInfo,
+    BottomTabBarStyle,
+    CustomBuilder,
+    CalendarAlign
 } from "./dts-exports"
 `
 

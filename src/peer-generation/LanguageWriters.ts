@@ -557,6 +557,10 @@ export abstract class LanguageWriter {
     makeFunctionCall(name: string, params: LanguageExpression[]): LanguageExpression {
         return new FunctionCallExpression(name, params)
     }
+    makeNativeReceiver(): string { return "nativeModule()" }
+    makeNativeCall(method: string, params: LanguageExpression[]): LanguageExpression {
+        return new MethodCallExpression(this.makeNativeReceiver(), method, params, false)
+    }
     makeMethodCall(receiver: string, method: string, params: LanguageExpression[], nullable?: boolean): LanguageExpression {
         return new MethodCallExpression(receiver, method, params, nullable)
     }
@@ -819,6 +823,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
         return new EtsAssignStatement(variableName, type, expr, isDeclared, isConst)
     }
+    makeNativeReceiver(): string { return "NativeModule" }
     makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement {
         return new ArkTSMapForEachStatement(map, key, value, op)
     }

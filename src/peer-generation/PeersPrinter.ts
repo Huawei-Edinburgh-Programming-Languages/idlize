@@ -95,6 +95,9 @@ class PeerFileVisitor {
                 imports.addFeatureByBasename(parentAttributesClass, parentBasename)
         })
         imports.addFeature("unsafeCast", "./generated-utils")
+        if (this.file.declarationTable.language == Language.ARKTS) {
+            imports.addFeature("NativeModule", "./NativeModule")
+        }
         imports.print(this.printer)
     }
 
@@ -280,13 +283,13 @@ export function printPeerFinalizer(peerClassBase: PeerClassBase, writer: Languag
     writer.writeMethodImplementation(finalizer, writer => {
         writer.writeStatement(
             writer.makeReturn(
-                writer.makeMethodCall("nativeModule()", `_${className}_getFinalizer`, [])))
+                writer.makeNativeCall(`_${className}_getFinalizer`, [])))
     })
 }
 
 export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, dumpSerialized: boolean,
     methodPostfix: string, ptr: string, returnType: Type = Type.Void) {
-    if (printer.language != Language.TS) return
+    if (printer.language != Language.TS && printer.language != Language.ARKTS) return
     const signature = method.method.signature as NamedMethodSignature
     let peerMethod = new Method(
         `${method.overloadedName}${methodPostfix}`,
@@ -329,8 +332,7 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, dum
             params.push(writer.makeString(it.convertorArg(it.param, writer)))
         }
     })
-    let call = writer.makeMethodCall(
-        `nativeModule()`,
+    let call = writer.makeNativeCall(
         `_${method.originalParentName}_${method.overloadedName}`,
         params)
     if (returnType != Type.Void) {

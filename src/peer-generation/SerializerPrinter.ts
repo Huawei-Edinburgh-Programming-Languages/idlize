@@ -86,7 +86,7 @@ class SerializerPrinter {
         let ctorSignature: NamedMethodSignature | undefined = undefined
         switch (this.writer.language) {
             case Language.ARKTS:
-                ctorSignature = new NamedMethodSignature(Type.Void, [Type.Int32], ["expectedSize"])
+                ctorSignature = new NamedMethodSignature(Type.Void, [], ["expectedSize"])
                 break;
             case Language.CPP:
                 ctorSignature = new NamedMethodSignature(Type.Void, [new Type("uint8_t*")], ["data"])

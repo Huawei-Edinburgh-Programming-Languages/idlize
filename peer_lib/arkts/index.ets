@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 import { NativeModule } from "./NativeModule" 
+import { ArkCommonPeer } from "@arkoala/arkui/ArkCommonPeer"
+import { ArkUINodeType } from "@arkoala/arkui/ArkUINodeType"
 
 /*
 V8:
@@ -49,6 +51,29 @@ function checkPerf(count: number) {
     console.log(`ARRAY: ${passed}ms for ${count} iteration, ${Math.round(passed / count * 1000000)}ms per 1M iterations`)
 }
 
+enum DumpOptions {
+    TOTAL = 0,
+    AVERAGE,
+    PEAK,
+    DETAILS,
+    CLEAR
+}
+
+export function RunPerformanceTest(testName: string, count: int, testFunc: () => void) {
+    let start = Date.now()
+    for (let i = 0; i < count; ++i) {
+        testFunc()
+    }
+    let passed = Date.now() - start
+    console.log("passed: " + passed)
+    console.log(`${testName}: ${passed}ms for ${count} iteration, ${Math.round(passed / count * 1000000)}ms per 1M iterations`)
+}
+
 export function main(): void {
     checkPerf(100000)
+
+    let peer = new ArkCommonPeer(ArkUINodeType.Common as int);
+    RunPerformanceTest("restoreIdAttribute", 100000, () => {
+        peer.restoreIdAttribute(100)
+    })
 }

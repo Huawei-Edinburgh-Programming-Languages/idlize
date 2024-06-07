@@ -356,7 +356,7 @@ import { int32 } from "@koalaui/common"
 import { unsafeCast } from "./generated-utils"
 ${table.language == Language.ARKTS ? collectDtsImports().trim() : ""}
 
-export function createSerializer() { return new Serializer(16) }
+export function createSerializer(): Serializer { return new Serializer() }
 
 ${printer.getOutput().join("\n")}
 `

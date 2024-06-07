@@ -212,12 +212,14 @@ declare class CommonMethod<T> {
 
     dragPreviewOptions(value: DragPreviewOptions, options?: DragInteractionOptions): T;
 
+    // TODO: restore!
+    /*
     linearGradient(value: {
         angle?: number | string;
         direction?: GradientDirection;
         colors: Array<[ResourceColor, number]>;
         repeating?: boolean;
-    }): T;
+    }): T; */
 
     border(value: BorderOptions): T;
 

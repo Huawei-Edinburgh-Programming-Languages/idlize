@@ -279,14 +279,72 @@ export interface LabelStyle {
 export declare type Dimension = string | Resource;
 export class BarMode {}
 export class ButtonType {}
-export interface SubTabBarStyle {}
 export interface HorizontalAlign {}
 export interface OnScrollVisibleContentChangeCallback {}
-export interface Vector1 {}
-export interface Vector2 {}
+export interface Vector1 {
+    x0: number
+    x1: number
+    x2: number
+    x3: number
+}
+export interface Vector2 {
+    t: number
+    x: number
+    y: number
+    z: number
+}
 export interface PixelMap {}
 export interface GradientDirection {}
 export interface NavigationTitleMode {}
+
+export type CustomBuilder = (() => Object) | void;
+
+export enum CalendarAlign {
+    START = 0,
+    CENTER = 1,
+    END = 2
+}
+
+
+export class BottomTabBarStyle {
+
+    constructor(icon: ResourceStr | TabBarSymbol, text: ResourceStr) {}
+
+    id(value: string): BottomTabBarStyle {
+        throw new Error("unimplmented")
+    }
+
+    static of(icon: ResourceStr | TabBarSymbol, text: ResourceStr): BottomTabBarStyle {
+        throw new Error("unimplmented")
+    }
+
+    labelStyle(value: LabelStyle): BottomTabBarStyle {
+        throw new Error("unimplmented")
+    }
+
+    padding(value: Padding | Dimension | LocalizedPadding): BottomTabBarStyle {
+        throw new Error("unimplmented")
+    }
+}
+
+export class SubTabBarStyle {
+
+    constructor(content: ResourceStr) {}
+
+    // constructor(content: ResourceStr | ComponentContent);
+
+    static of(content: ResourceStr|string): SubTabBarStyle {
+        throw new Error("unimplmented")
+    }
+
+    indicator(value: IndicatorStyle): SubTabBarStyle {
+        throw new Error("unimplmented")
+    }
+
+    id(value: string): SubTabBarStyle {
+        throw new Error("unimplmented")
+    }
+}
 
 export interface RectResult {
     x: number;

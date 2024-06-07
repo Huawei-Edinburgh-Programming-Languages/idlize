@@ -12,10 +12,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { pointer } from "@koalaui/interop"
-import { nativeModule } from "./NativeModule";
-
 export class Finalizable {
     public ptr: long;
 

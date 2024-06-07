@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 import { float32, int32 } from "@koalaui/common"
-import { pointer } from "@koalaui/interop"
 import { Length, Resource } from "./dts-exports"
+import { NativeModule } from "./NativeModule"
 
 /**
  * Value representing possible JS runtime object type.
@@ -47,7 +47,7 @@ export enum Tags {
     OBJECT = 107,
 }
 
-export function runtimeType(value: Object|String|number|undefined): RuntimeType {
+export function runtimeType(value: Object|String|number|undefined|null|(() => object)): RuntimeType {
     let type = typeof value
     if (type == "number") return RuntimeType.NUMBER
     if (type == "string") return RuntimeType.STRING
@@ -94,12 +94,34 @@ export abstract class CustomSerializer {
     next: CustomSerializer | undefined = undefined
 }
 
+
+class SerializersCache {
+    cache: Array<SerializerBase|undefined>
+    constructor(maxCount: number) {
+        this.cache = new Array<SerializerBase|undefined>(maxCount)
+    }
+    get<T extends SerializerBase>(factory: () => T, index: int32): T {
+        let result = this.cache[index]
+        if (result) {
+            result.resetCurrentPosition()
+            return result as T
+        }
+        result = factory()
+        this.cache[index] = result
+        return result as T
+    }
+}
+
 export class SerializerBase {
-    // private static bufferCache = new ArrayBufferCache(4096)
+    private static cache = new SerializersCache(22)
 
     private position = 0
-    private buffer: ArrayBuffer
-    private view: DataView
+    private buffer: byte[]
+
+    static get<T extends SerializerBase>(factory: () => T, index: int32): T {
+        return SerializerBase.cache.get<T>(factory, index)
+    }
+    resetCurrentPosition(): void { this.position = 0 }
 
     private static customSerializers: CustomSerializer | undefined = undefined
     static registerCustomSerializer(serializer: CustomSerializer) {
@@ -113,15 +135,9 @@ export class SerializerBase {
             */
         }
     }
-    constructor(expectedSize: int32) {
-        // this.buffer = SerializerBase.bufferCache.get(expectedSize)
-        this.view = new DataView(this.buffer)
-    }
-    close() {
-        // SerializerBase.bufferCache.release(this.buffer)
-    }
-    asArray(): Uint8Array {
-        return new Uint8Array(this.buffer)
+    constructor() {}
+    asArray(): byte[] {
+        return this.buffer
     }
     length(): int32 {
         return this.position
@@ -131,30 +147,26 @@ export class SerializerBase {
         if (value < 1) {
             throw new Error(`${value} is less than 1`)
         }
-        let buffSize = this.buffer.byteLength
+        let buffSize = this.buffer.length
         if (this.position > buffSize - value) {
             const minSize = this.position + value
             const resizedSize = Math.max(minSize, Math.round(3 * buffSize / 2))
-            /*
-            let resizedBuffer = SerializerBase.bufferCache.get(resizedSize)
-            // TODO: can we grow without new?
-            new Uint8Array(resizedBuffer).set(new Uint8Array(this.buffer))
-            SerializerBase.bufferCache.release(this.buffer)
+            let resizedBuffer = new byte[resizedSize]
+            // TODO: make faster copy
+            for (let i = 0; i < buffSize; i++) {
+                resizedBuffer[i] = this.buffer[i]
+            }
             this.buffer = resizedBuffer
-            this.view = new DataView(resizedBuffer)
-            */
         }
     }
     writeCustomObject(kind: string, value: object) {
         let current = SerializerBase.customSerializers
-        /*
         while (current) {
             if (current.supports(kind)) {
-                current.serialize(this, value, kind)
+                current!.serialize(this, value, kind)
                 return
             }
         }
-        */
         console.log(`Unsupported custom serialization for ${kind}, write undefined`)
         this.writeInt8(Tags.UNDEFINED as int32)
     }
@@ -165,58 +177,65 @@ export class SerializerBase {
         this.checkCapacity(5)
         if (value == undefined) {
             // this.view.setInt8(this.position, Tags.UNDEFINED)
+            this.writeInt8(101 /* Tags.UNDEFINED */)
             this.position++
             return
         }
         if (value == Math.round(value)) {
-            // this.view.setInt8(this.position, Tags.INT32)
-            this.view.setInt32(this.position + 1, value, true)
-            this.position += 5
-            return
+            this.writeInt8(102 /* Tags.INT32 */)
+            this.writeInt32(value as int32)
+        } else {
+            this.writeInt8(103 /* Tags.FLOAT32 */)         
+            this.writeFloat32(value as float32)
         }
-        // this.view.setInt8(this.position, Tags.FLOAT32)
-        this.view.setFloat32(this.position + 1, value, true)
-        this.position += 5
     }
     writeInt8(value: int32) {
         this.checkCapacity(1)
-        this.view.setInt8(this.position, value)
+        this.buffer[this.position] = (value & 0xff) as byte
         this.position += 1
     }
     writeInt32(value: int32) {
         this.checkCapacity(4)
-        this.view.setInt32(this.position, value, true)
+        this.buffer[this.position + 0] = ((value     )  & 0xff) as byte
+        this.buffer[this.position + 1] = ((value >> 8)  & 0xff) as byte
+        this.buffer[this.position + 2] = ((value >> 16) & 0xff) as byte
+        this.buffer[this.position + 3] = ((value >> 24) & 0xff) as byte
         this.position += 4
     }
-    writePointer(value: pointer) {
+    writePointer(value: long) {
         this.checkCapacity(8)
-        // this.view.setBigInt64(this.position, BigInt(value), true)
+        this.buffer[this.position + 0] = ((value     )  & 0xff) as byte
+        this.buffer[this.position + 1] = ((value >> 8)  & 0xff) as byte
+        this.buffer[this.position + 2] = ((value >> 16) & 0xff) as byte
+        this.buffer[this.position + 3] = ((value >> 24) & 0xff) as byte
+        this.buffer[this.position + 4] = ((value >> 32) & 0xff) as byte
+        this.buffer[this.position + 5] = ((value >> 40) & 0xff) as byte
+        this.buffer[this.position + 6] = ((value >> 48) & 0xff) as byte
+        this.buffer[this.position + 7] = ((value >> 56) & 0xff) as byte
         this.position += 8
     }
     writeFloat32(value: float32) {
         this.checkCapacity(4)
-        this.view.setFloat32(this.position, value, true)
+        // TODO: wrong, provide operation!
+        this.buffer[this.position + 0] = ((value      ) & 0xff) as byte
+        this.buffer[this.position + 1] = ((value >>  8) & 0xff) as byte
+        this.buffer[this.position + 2] = ((value >> 16) & 0xff) as byte
+        this.buffer[this.position + 3] = ((value >> 24) & 0xff) as byte
         this.position += 4
     }
     writeBoolean(value: boolean|undefined) {
         this.checkCapacity(1)
-        // this.view.setInt8(this.position, value == undefined ? RuntimeType.UNDEFINED : +value)
+        this.buffer[this.position] = (value == undefined) ? 5/* RuntimeType.UNDEFINED */ : (value ? 1 : 0)
         this.position++
-    }
-    /*
-    writeFunction(value: object | undefined) {
-        this.writeInt32(registerCallback(value))
     }
     writeMaterialized(value: object | undefined) {
         this.writePointer(registerMaterialized(value))
     }
-    */
     writeString(value: string) {
         this.checkCapacity(4 + value.length as int32 * 4) // length, data
-        // let encodedLength =
-        //     nativeModule()._ManagedStringWrite(value, new Uint8Array(this.view.buffer, 0), this.position + 4)
-        // this.view.setInt32(this.position, encodedLength, true)
-        // this.position += encodedLength + 4
+        let encodedLength = NativeModule._ManagedStringWrite(value, this.buffer, this.position + 4)
+        this.writeInt32(encodedLength)
+        this.position += encodedLength
     }
     // Length is an important common case.
     writeLength(value: Length|undefined) {
