@@ -46,3 +46,19 @@ export function convertTypeNode<T>(convertor: TypeNodeConvertor<T>, node: ts.Typ
     if (node.kind == ts.SyntaxKind.UnknownKeyword) return convertor.convertUnknownKeyword(node)
     throw new Error(`Unknown TypeNode ${ts.SyntaxKind[node.kind]}`)
 }
+
+export interface DeclarationConvertor<T> {
+    convertClass(node: ts.ClassDeclaration): T
+    convertInterface(node: ts.InterfaceDeclaration): T
+    convertEnum(node: ts.EnumDeclaration): T
+    convertTypeAlias(node: ts.TypeAliasDeclaration): T
+}
+
+export function convertDeclaration<T>(convertor: DeclarationConvertor<T>, node: ts.Declaration): T {
+    if (ts.isClassDeclaration(node)) return convertor.convertClass(node)
+    if (ts.isInterfaceDeclaration(node)) return convertor.convertInterface(node)
+    if (ts.isEnumDeclaration(node)) return convertor.convertEnum(node)
+    if (ts.isEnumMember(node)) return convertor.convertEnum(node.parent)
+    if (ts.isTypeAliasDeclaration(node)) return convertor.convertTypeAlias(node)
+    throw new Error(`Unknown declaration type ${ts.SyntaxKind[node.kind]}`)
+}

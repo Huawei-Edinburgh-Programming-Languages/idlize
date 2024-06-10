@@ -13,7 +13,7 @@ class ImportsStubsVisitor {
         for (const type of this.library.importTypesStubs) {
             if (printedStubs.includes(type)) continue
             printedStubs.push(type)
-            this.printer.print(`export declare interface ${type} {}`)
+            this.printer.print(`export type ${type} = any;`)
         }
     }
 }

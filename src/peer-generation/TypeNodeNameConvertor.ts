@@ -15,9 +15,24 @@ export class TSTypeNodeNameConvertor implements
                 const type = this.convert(it.type!)
                 return `${name}${maybeQuestion}: ${type}`
             }
-            throw `Unknown member type ${it}`
+            if (ts.isIndexSignatureDeclaration(it)) {
+                if (it.modifiers) throw 'Not implemented'
+                if (it.typeParameters) throw 'Not implemented'
+                if (it.questionToken) throw 'Not implemented'
+                if (it.name) throw 'Not implemented'
+                const parameters = it.parameters.map(it => this.convertParameterDeclaration(it))
+                return `[${parameters.join(', ')}]: ${this.convert(it.type)}`
+            }
+            throw `Unknown member type ${ts.SyntaxKind[it.kind]}`
         })
         return `{${members.join(', ')}}`
+    }
+    private convertParameterDeclaration(node: ts.ParameterDeclaration): string {
+        if (node.modifiers) throw 'Not implemented'
+        if (!node.type) throw 'Expected ParameterDeclaration to have a type'
+        const maybeQuestion = node.questionToken ? '?' : ''
+        const name = this.convert(node.name)
+        return `${name}${maybeQuestion}: ${this.convert(node.type!)}`
     }
     convertLiteralType(node: ts.LiteralTypeNode): string {
         if (node.literal.kind === ts.SyntaxKind.TrueKeyword) return `true`
@@ -61,9 +76,13 @@ export class TSTypeNodeNameConvertor implements
         }).join()
     }
     convertImport(node: ts.ImportTypeNode): string {
-        const from = this.convert(node.argument).match(/[a-zA-Z]+/g)!.join('_')
-        const qualifier = this.convert(node.qualifier!).match(/[a-zA-Z]+/g)!.join('_')
-        return `IMPORT_${qualifier}_FROM_${from}`
+        const from = this.convert(node.argument)
+        const qualifier = this.convert(node.qualifier!)
+        const maybeTypeArguments = node.typeArguments?.length
+            ? '_' + node.typeArguments.map(it => this.convert(it)).join('_')
+            : ''
+        return `IMPORT_${qualifier}${maybeTypeArguments}_FROM_${from}`
+            .match(/[a-zA-Z]+/g)!.join('_')
     }
     convertTypeReference(node: ts.TypeReferenceNode): string {
         const name = this.convert(node.typeName)

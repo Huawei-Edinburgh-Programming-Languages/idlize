@@ -8,6 +8,7 @@ import { makeMaterializedPrologue } from "./FileGenerators";
 import { OverloadsPrinter, collapseSameNamedMethods, groupOverloads } from "./OverloadsPrinter";
 
 import { printPeerFinalizer } from "./PeersPrinter"
+import { ImportsCollector } from "./ImportsCollector";
 
 class MaterializedFileVisitor {
 
@@ -21,7 +22,15 @@ class MaterializedFileVisitor {
         private readonly dumpSerialized: boolean,
     ) {}
 
+    private printImports() {
+        const imports = new ImportsCollector()
+        imports.addFilterByBasename(renameClassToMaterialized(this.clazz.className, this.library.declarationTable.language))
+        this.clazz.importFeatures.forEach(it => imports.addFeature(it.feature, it.module))
+        imports.print(this.printer)
+    }
+
     private printMaterializedClass(clazz: MaterializedClass) {
+        this.printImports()
         const printer = this.printer
         printer.print(makeMaterializedPrologue(this.language))
 
