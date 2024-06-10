@@ -18,7 +18,7 @@ import * as path from "path"
 
 import { IndentedPrinter } from "../IndentedPrinter";
 import { DeclarationTable, DeclarationTarget, FieldRecord, PrimitiveType } from "./DeclarationTable";
-import { accessorStructList, modifierStructList } from "./FileGenerators";
+import { accessorStructList, completeImplementations, modifierStructList } from "./FileGenerators";
 import { PeerClass } from "./PeerClass";
 import { PeerLibrary } from "./PeerLibrary";
 import { MethodSeparatorVisitor, PeerMethod } from "./PeerMethod";
@@ -144,6 +144,7 @@ export class ModifierVisitor {
     dummy = createLanguageWriter(Language.CPP)
     real = createLanguageWriter(Language.CPP)
     modifiers = createLanguageWriter(Language.CPP)
+    getterDeclarations = createLanguageWriter(Language.CPP)
     modifierList = createLanguageWriter(Language.CPP)
 
     constructor(
@@ -227,6 +228,7 @@ export class ModifierVisitor {
         this.modifiers.print(`};\n`)
         const name = clazz.componentName
         this.modifiers.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUI${name}Modifier* Get${name}Modifier() { return &ArkUI${name}ModifierImpl; }\n\n`)
+        this.getterDeclarations.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUI${name}Modifier* Get${name}Modifier();`)
     }
 
     printPeerClassModifiers(clazz: PeerClass) {
@@ -280,6 +282,7 @@ class AccessorVisitor extends ModifierVisitor {
         this.accessors.print(`};\n`)
         const accessor = `${clazz.className}Accessor`
         this.accessors.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUI${accessor}* Get${accessor}() { return &${accessor}Impl; }\n\n`)
+        this.getterDeclarations.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUI${accessor}* Get${accessor}();`)
     }
 
     printMaterializedMethod(printer: LanguageWriter, method: MaterializedMethod, printBody: (m: MaterializedMethod) => void) {
@@ -296,6 +299,7 @@ class MultiFileModifiersVisitorState {
     accessors = createLanguageWriter(Language.CPP)
     modifierList = createLanguageWriter(Language.CPP)
     modifiers = createLanguageWriter(Language.CPP)
+    getterDeclarations = createLanguageWriter(Language.CPP)
 }
 
 class MultiFileModifiersVisitor extends AccessorVisitor {
@@ -319,6 +323,7 @@ class MultiFileModifiersVisitor extends AccessorVisitor {
         this.accessorList = state.accessorList
         this.modifiers = state.modifiers
         this.modifierList = state.modifierList
+        this.getterDeclarations = state.getterDeclarations
     }
 
     onFileEnd() {
@@ -333,6 +338,10 @@ class MultiFileModifiersVisitor extends AccessorVisitor {
     emitRealSync(outputDirectory: string): void {
         fs.mkdirSync(outputDirectory, { recursive: true });
 
+        const modifierList = createLanguageWriter(Language.CPP)
+        const accessorList = createLanguageWriter(Language.CPP)
+        const getterDeclarations = createLanguageWriter(Language.CPP)
+
         for (const [slug, state] of this.stateByFile) {
             const filePath = path.join(outputDirectory, `${slug}_modifiers.cc`)
             const output = new CppSourceFileGenerator(filePath)
@@ -343,13 +352,22 @@ class MultiFileModifiersVisitor extends AccessorVisitor {
 
             state.real.getOutput().forEach(block => output.writeLine(block))
             output.appendLanguageWriter(state.modifiers)
-            output.appendLanguageWriter(modifierStructList(state.modifierList))
-            output.appendLanguageWriter(accessorStructList(state.accessorList))
-
-            // output.writeLine(completeImplementations()) // TODO implement with versions
-
             output.end()
+            
+            modifierList.concat(state.modifierList)
+            accessorList.concat(state.accessorList)
+            getterDeclarations.concat(state.getterDeclarations)
         }
+
+        const commonFilePath = path.join(outputDirectory, "all_modifiers.cc")
+        const commonOutput = new CppSourceFileGenerator(commonFilePath);
+        commonOutput.writeInclude("arkoala_api.h")
+        commonOutput.writeLine()
+        commonOutput.appendLanguageWriter(getterDeclarations)
+        commonOutput.appendLanguageWriter(modifierStructList(modifierList))
+        commonOutput.appendLanguageWriter(accessorStructList(accessorList))
+        // TODO write completeImplementations()
+        commonOutput.end()
     }
 }
 
