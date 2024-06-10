@@ -172,10 +172,6 @@ export function dummyImplementations(modifiers: LanguageWriter, accessors: Langu
     return result
 }
 
-export function modifierStructs(lines: string[]): string {
-    return lines.join("\n")
-}
-
 export function modifierStructList(lines: LanguageWriter): LanguageWriter {
     let result = createLanguageWriter(Language.CPP)
     result.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUINodeModifiers modifiersImpl = {`)
