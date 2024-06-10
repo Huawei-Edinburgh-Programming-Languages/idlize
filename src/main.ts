@@ -400,7 +400,8 @@ if (options.dts2peer) {
                 const accessors = printRealAndDummyAccessors(peerLibrary)
                 dummyImplementations(modifiers.dummy, accessors.dummy, 1, options.apiVersion, 6)
                     .printTo(path.join(outDir, 'dummy_impl.cc'))
-                fs.writeFileSync(path.join(outDir, 'all_modifiers.cc'), completeImplementations(modifiers.real + accessors.real,  1, options.apiVersion, 6))
+                completeImplementations(modifiers.real, accessors.real,  1, options.apiVersion, 6)
+                    .printTo(path.join(outDir, 'all_modifiers.cc'))
                 fs.writeFileSync(path.join(outDir, 'all_events.cc'), completeEventsImplementations(printEventsCImpl(peerLibrary)))
 
                 const gniSources = printGniSources(peerLibrary)

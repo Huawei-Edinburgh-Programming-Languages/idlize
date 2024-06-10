@@ -525,7 +525,7 @@ export abstract class LanguageWriter {
     abstract ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression
 
     concat(other: LanguageWriter): LanguageWriter {
-        other.printer.getOutput().forEach(it => this.printer.print(it))
+        other.getOutput().forEach(it => this.print(it))
         return this
     }
     printTo(file: string): void {
