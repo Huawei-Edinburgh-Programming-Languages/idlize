@@ -182,7 +182,7 @@ export function modifierStructList(lines: LanguageWriter): LanguageWriter {
     result.pushIndent()
     result.concat(lines)
     result.popIndent()
-    result.print(`}`)
+    result.print(`};`)
     result.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUINodeModifiers* ${PeerGeneratorConfig.cppPrefix}GetArkUINodeModifiers() { return &modifiersImpl; }`)
     return result
 }

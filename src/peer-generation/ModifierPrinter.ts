@@ -350,7 +350,7 @@ export function printRealAndDummyModifiers(peerLibrary: PeerLibrary): {dummy: La
     const visitor = new ModifierVisitor(peerLibrary)
     visitor.printRealAndDummyModifiers()
     const dummy =
-        visitor.dummy.concat(visitor.modifiers).concat(visitor.modifierList)
+        visitor.dummy.concat(visitor.modifiers).concat(modifierStructList(visitor.modifierList))
     const real =
         visitor.real.concat(visitor.modifiers).concat(modifierStructList(visitor.real))
     return {dummy, real}
