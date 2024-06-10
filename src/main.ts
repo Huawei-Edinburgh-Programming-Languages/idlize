@@ -32,7 +32,8 @@ import {
     makeTSSerializer,
     completeEventsImplementations,
     makeTSDeserializer,
-    gniFile
+    gniFile,
+    mesonBuildFile
 } from "./peer-generation/FileGenerators"
 import {
     PeerGeneratorVisitor,
@@ -56,6 +57,7 @@ import { printDelegatesAsMultipleFiles } from "./peer-generation/DelegatePrinter
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig";
 import { printEvents, printEventsCImpl } from "./peer-generation/EventsPrinter"
 import { printGniSources } from "./peer-generation/GniPrinter"
+import { printMesonBuild } from "./peer-generation/MesonPrinter"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -371,10 +373,6 @@ if (options.dts2peer) {
                 const {api, serializers} = printApiAndSerializers(options.apiVersion, peerLibrary)
                 fs.writeFileSync(path.join(outDir, 'Serializers.h'), serializers)
                 fs.writeFileSync(path.join(outDir, 'arkoala_api.h'), api)
-
-                printDelegatesAsMultipleFiles(peerLibrary, outDir)
-                printRealModifiersAsMultipleFiles(peerLibrary, outDir)
-
                 const modifiers = printRealAndDummyModifiers(peerLibrary)
                 const accessors = printRealAndDummyAccessors(peerLibrary)
                 fs.writeFileSync(path.join(outDir, 'dummy_impl.cc'), dummyImplementations(modifiers.dummy + accessors.dummy, 1, options.apiVersion, 6))
@@ -385,6 +383,13 @@ if (options.dts2peer) {
                 fs.writeFileSync(path.join(outDir, 'node_interfaces.gni'), gniFile(gniSources))
 
                 copyPeerLib(path.join(__dirname, '..', 'peer_lib'), outDir)
+
+                let newOutDir = path.join(outDir, "refactor")
+                printDelegatesAsMultipleFiles(peerLibrary, newOutDir)
+                printRealModifiersAsMultipleFiles(peerLibrary, newOutDir)
+
+                const mesonBuild = printMesonBuild(peerLibrary)
+                fs.writeFileSync(path.join(newOutDir, 'meson.build'), mesonBuildFile(mesonBuild))
             }
         }
     )

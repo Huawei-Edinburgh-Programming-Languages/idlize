@@ -476,3 +476,12 @@ return `${sharpCopyright}
 ${gniSources}
 `
 }
+
+export function mesonBuildFile(gniSources: string): string {
+return `${sharpCopyright}
+
+# ${warning}
+
+${gniSources}
+`
+}
