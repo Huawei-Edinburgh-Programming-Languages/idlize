@@ -33,7 +33,8 @@ import {
     completeEventsImplementations,
     makeTSDeserializer,
     gniFile,
-    mesonBuildFile
+    mesonBuildFile,
+    completeImplementations
 } from "./peer-generation/FileGenerators"
 import {
     PeerGeneratorVisitor,
@@ -53,7 +54,7 @@ import { printNodeTypes } from "./peer-generation/NodeTypesPrinter"
 import { printNativeModule, printNativeModuleEmpty } from "./peer-generation/NativeModulePrinter"
 import { printBridgeCc } from "./peer-generation/BridgeCcPrinter"
 import { printImportsStubs } from "./peer-generation/ImportsStubsPrinter"
-import { printDelegatesAsMultipleFiles } from "./peer-generation/DelegatePrinter"
+import { printDelegatesAsMultipleFiles, printDelegatesHeaders, printDelegatesImplementation } from "./peer-generation/DelegatePrinter"
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig";
 import { printEvents, printEventsCImpl } from "./peer-generation/EventsPrinter"
 import { printGniSources } from "./peer-generation/GniPrinter"
@@ -373,6 +374,9 @@ if (options.dts2peer) {
                 const {api, serializers} = printApiAndSerializers(options.apiVersion, peerLibrary)
                 fs.writeFileSync(path.join(outDir, 'Serializers.h'), serializers)
                 fs.writeFileSync(path.join(outDir, 'arkoala_api.h'), api)
+                fs.writeFileSync(path.join(outDir, 'delegates.h'), printDelegatesHeaders(peerLibrary))
+                fs.writeFileSync(path.join(outDir, 'delegates.cc'), printDelegatesImplementation(peerLibrary))
+
                 const modifiers = printRealAndDummyModifiers(peerLibrary)
                 const accessors = printRealAndDummyAccessors(peerLibrary)
                 fs.writeFileSync(path.join(outDir, 'dummy_impl.cc'), dummyImplementations(modifiers.dummy + accessors.dummy, 1, options.apiVersion, 6))

@@ -18,7 +18,7 @@ import * as path from "path"
 
 import { IndentedPrinter } from "../IndentedPrinter";
 import { DeclarationTable, DeclarationTarget, FieldRecord, PrimitiveType } from "./DeclarationTable";
-import { accessorStructList, completeImplementations, extendedAPIStructList, modifierStructList, modifierStructs } from "./FileGenerators";
+import { accessorStructList, modifierStructList, modifierStructs } from "./FileGenerators";
 import { PeerClass } from "./PeerClass";
 import { PeerLibrary } from "./PeerLibrary";
 import { MethodSeparatorVisitor, PeerMethod } from "./PeerMethod";
@@ -337,9 +337,8 @@ class MultiFileModifiersVisitor extends AccessorVisitor {
             output.writeLine(modifierStructs(state.modifiers.getOutput()))
             output.writeLine(modifierStructList(state.modifierList.getOutput()))
             output.writeLine(accessorStructList(state.accessorList.getOutput()))
-            output.writeLine(extendedAPIStructList(false))
             
-            output.writeLine(completeImplementations())
+            // output.writeLine(completeImplementations()) // TODO implement with versions
 
             output.end()
         }
