@@ -807,7 +807,7 @@ export class TSLanguageWriter extends LanguageWriter {
     }
     makeTupleAssign(receiver: string, fields: string[]): LanguageStatement {
         return this.makeAssign(receiver, undefined,
-            this.makeString(`[${fields.map(it=> `${it}`).join(",")}]`), false)
+            this.makeString(`[${fields.map(it=> `${it}!`).join(",")}]`), false)
     }
     get supportedModifiers(): MethodModifier[] {
         return [MethodModifier.PUBLIC, MethodModifier.PRIVATE, MethodModifier.STATIC]
@@ -1201,8 +1201,20 @@ export function createLanguageWriter(language: Language): LanguageWriter {
 }
 
 class TsObjectDeclareNodeNameConvertor extends TSTypeNodeNameConvertor {
-    override convertTupleElement(node: ts.TypeNode): string {
-        return `${super.convertTupleElement(node)}${ts.isParenthesizedTypeNode(node) ? '?' : ''}`
+    private useOptionalTypes = true
+
+    override convertTuple(node: ts.TupleTypeNode): string {
+        this.useOptionalTypes = false
+        const name = super.convertTuple(node);
+        this.useOptionalTypes = true
+        return name
+    }
+    override convertOptional(node: ts.OptionalTypeNode): string {
+        let name = super.convertOptional(node);
+        if (!this.useOptionalTypes) {
+            name = name.replace("?", "")
+        }
+        return name
     }
     override convertImport(_node: ts.ImportTypeNode): string {
         //TODO: to preventing an error IMPORT_* types were  not found
