@@ -255,9 +255,9 @@ class AccessorVisitor extends ModifierVisitor {
             this.printMaterializedMethod(this.dummy, method, m => this.printDummyImplFunctionBody(m))
             this.printMaterializedMethod(this.real, method, m => this.printModifierImplFunctionBody(m))
             this.accessors.print(`${method.originalParentName}_${method.overloadedName},`)
-        });
+        })
         this.printMaterializedClassEpilog(clazz)
-        this.accessorList.popIndent();
+        this.accessorList.popIndent()
     }
 
     printMaterializedClassProlog(clazz: MaterializedClass) {
@@ -361,7 +361,7 @@ export function printRealAndDummyModifiers(peerLibrary: PeerLibrary): {dummy: st
     return {dummy, real}
 }
 
-export function printRealAndDummyAccessors(peerLibrary: PeerLibrary): { dummy: string; real: string; } {
+export function printRealAndDummyAccessors(peerLibrary: PeerLibrary): {dummy: string, real: string} {
     const visitor = new AccessorVisitor(peerLibrary)
     peerLibrary.materializedClasses.forEach(c => visitor.printRealAndDummyAccessor(c))
 
