@@ -23,7 +23,7 @@ import { PeerEventKind } from "./EventsPrinter"
 import { collectDtsImports } from "./DtsImportsGenerator"
 import { writeDeserializer, writeSerializer } from "./SerializerPrinter"
 
-const warning = "WARNING! THIS FILE IS AUTO-GENERATED, DO NOT MAKE CHANGES, THEY WILL BE LOST ON NEXT GENERATION!"
+export const warning = "WARNING! THIS FILE IS AUTO-GENERATED, DO NOT MAKE CHANGES, THEY WILL BE LOST ON NEXT GENERATION!"
 
 function dateChunk(): string {
     const currentYear = (new Date()).getFullYear()

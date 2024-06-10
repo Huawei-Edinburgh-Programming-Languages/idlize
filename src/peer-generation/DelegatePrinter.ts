@@ -17,7 +17,7 @@ import * as path from "path";
 import * as fs from "fs";
 import { IndentedPrinter } from "../IndentedPrinter";
 import { DeclarationTable, DeclarationTarget, FieldRecord, PrimitiveType } from "./DeclarationTable";
-import { completeDelegatesImpl } from "./FileGenerators";
+import { completeDelegatesImpl, warning } from "./FileGenerators";
 import { PeerLibrary } from "./PeerLibrary";
 import { MethodSeparatorVisitor, PeerMethod } from "./PeerMethod";
 import { PeerClass } from "./PeerClass";
@@ -282,7 +282,7 @@ class MultiFileDelegateVisitor {
 
 abstract class DelegateFilePrinter {
     static readonly GENERATED_WARNING = `/*
- * WARNING! THIS FILE IS GENERATED, DO NOT MAKE CHANGES, THEY WILL BE LOST ON NEXT GENERATION!
+ * ${warning}
  */
 `
     public printFile(filePath: string, source: IndentedPrinter) {
