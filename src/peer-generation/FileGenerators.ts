@@ -17,7 +17,7 @@ import * as path from "path"
 import { IndentedPrinter } from "../IndentedPrinter"
 import { PrimitiveType } from "./DeclarationTable"
 import { Language } from "../util"
-import { createLanguageWriter } from "./LanguageWriters"
+import { CppLanguageWriter, createLanguageWriter, LanguageWriter } from "./LanguageWriters"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
 import { PeerEventKind } from "./EventsPrinter"
 import { writeDeserializer, writeSerializer } from "./SerializerPrinter"
@@ -151,7 +151,7 @@ ${lines}
 `
 }
 
-export function dummyImplementations(lines: string, basicVersion: number, fullVersion: number, extendedVersion: number): string {
+export function dummyImplementations(modifiers: LanguageWriter, accessors: LanguageWriter, basicVersion: number, fullVersion: number, extendedVersion: number): LanguageWriter {
     let prologue = readTemplate('dummy_impl_prologue.cc')
     let epilogue = readTemplate('dummy_impl_epilogue.cc')
 
@@ -162,25 +162,33 @@ export function dummyImplementations(lines: string, basicVersion: number, fullVe
         .replaceAll(`%ARKUI_BASIC_API_VERSION_VALUE%`, basicVersion.toString())
         .replaceAll(`%ARKUI_FULL_API_VERSION_VALUE%`, fullVersion.toString())
         .replaceAll(`%ARKUI_EXTENDED_API_VERSION_VALUE%`, extendedVersion.toString())
-    return prologue.concat("\n").concat(lines).concat("\n").concat(epilogue)
+
+    let result = createLanguageWriter(Language.CPP)
+    result.writeLines(prologue)
+    result.concat(modifiers).concat(accessors)
+    result.writeLines(epilogue)
+
+    return result
 }
 
 export function modifierStructs(lines: string[]): string {
     return lines.join("\n")
 }
 
-export function modifierStructList(lines: string[]): string {
-    return `
-const ${PeerGeneratorConfig.cppPrefix}ArkUINodeModifiers modifiersImpl = {
-${lines.join("\n")}
-};
+export function modifierStructList(lines: LanguageWriter): LanguageWriter {
+    let result = createLanguageWriter(Language.CPP)
+    result.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUINodeModifiers modifiersImpl = {`)
+    result.pushIndent()
+    result.concat(lines)
+    result.popIndent()
+    result.print(`}`)
 
-const ${PeerGeneratorConfig.cppPrefix}ArkUINodeModifiers* ${PeerGeneratorConfig.cppPrefix}GetArkUINodeModifiers()
-{
-    return &modifiersImpl;
-}
+    result.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUINodeModifiers* ${PeerGeneratorConfig.cppPrefix}GetArkUINodeModifiers() {`)
+    result.pushIndent()
+    result.writeStatement(result.makeReturn(result.makeString(`&modifiersImpl;`)))\
+    result.popIndent()
 
-`
+    return result
 }
 
 export function accessorStructList(lines: string[]): string {
