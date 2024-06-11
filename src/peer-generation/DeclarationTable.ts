@@ -670,7 +670,7 @@ export class DeclarationTable {
             let isAccessor = !(target instanceof PrimitiveType) && ts.isClassDeclaration(target) && isMaterialized(target)
             let noBasicDecl = isAccessor || (target instanceof PrimitiveType && noDeclaration.includes(target))
             let nameOptional = PrimitiveType.OptionalPrefix + nameAssigned
-            let isUnionOrTuple = this.isMaybeWrapped(target, ts.isTupleTypeNode) || this.isMaybeWrapped(target, ts.isUnionTypeNode)
+            let isUnion = this.isMaybeWrapped(target, ts.isUnionTypeNode)
             if (isEnum) {
                 structs.print(`typedef ${PrimitiveType.Int32.getText()} ${nameAssigned};`)
                 if (!seenNames.has(nameOptional)) {
@@ -684,7 +684,7 @@ export class DeclarationTable {
             const structDescriptor = this.targetStruct(target)
             if (!noBasicDecl && !this.ignoreTarget(target)) {
                 this.printStructsCHead(nameAssigned, structDescriptor, structs)
-                if (isUnionOrTuple) {
+                if (isUnion) {
                     const selector = structDescriptor.getFields().find(value => {return value.name === "selector"})
                     if (selector) {
                         this.printStructField(structs, selector)
