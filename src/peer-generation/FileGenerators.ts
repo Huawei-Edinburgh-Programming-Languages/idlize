@@ -471,12 +471,12 @@ ${gniSources}
 `
 }
 
-export function mesonBuildFile(gniSources: string): string {
+export function mesonBuildFile(content: string): string {
 return `${sharpCopyright}
 
 # ${warning}
 
-${gniSources}
+${content}
 `
 }
 export function makeIncludeGuardDefine(filePath: string) {
