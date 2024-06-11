@@ -58,25 +58,26 @@ export class LibaceInstall extends Install {
     libace = this.mkdir(this.test ? path.join(this.outDir, "libace") : this.outDir)
     implementationDir = this.mkdir(path.join(this.libace, "implementation"))
     generatedInterface = this.mkdir(path.join(this.libace, "generated", "interface"))
-    generated_arkoala_api = path.join(this.generatedInterface, "arkoala_api_generated.h")
-    gni_components = path.join(this.generatedInterface, "node_interface.gni")
-    all_modifiers = path.join(this.generatedInterface, "all_modifiers.cpp")
+    generatedArkoalaApi = path.join(this.generatedInterface, "arkoala_api_generated.h")
+    gniComponents = path.join(this.generatedInterface, "node_interface.gni")
+    mesonBuild = path.join(this.libace, "meson.build")
+    allModifiers = path.join(this.generatedInterface, "all_modifiers.cpp")
     interface(name: string) {
         return path.join(this.generatedInterface, name)
     }
     implementation(name: string) {
         return path.join(this.implementationDir, name)
     }
-    modifier_header(component: string) {
+    modifierHeader(component: string) {
         return this.interface(`${component}_modifier.h`)
     }
-    modifier_cpp(component: string) {
+    modifierCpp(component: string) {
         return this.interface(`${component}_modifier.cpp`)
     }
-    delegate_header(component: string) {
+    delegateHeader(component: string) {
         return this.interface(`${component}_delegate.h`)
     }
-    delegate_cpp(component: string) {
+    delegateCpp(component: string) {
         return this.implementation(`${component}_delegate.cpp`)
     }
 }

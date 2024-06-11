@@ -343,7 +343,7 @@ if (options.dts2peer) {
 
                 fs.writeFileSync(
                     arkoala.tsLib('NativeModule'),
-                    printNativeModule(peerLibrary, options.nativeBridgeDir ?? "../../../../native/NativeBridgeNapi")
+                    printNativeModule(peerLibrary, options.nativeBridgeDir ?? "../../../../../../../native/NativeBridgeNapi")
                 )
                 if (lang == Language.TS) {
                     // todo I think we want to generate them for ARKTS too
@@ -405,33 +405,32 @@ if (options.dts2peer) {
                 const {api, serializers} = printApiAndSerializers(options.apiVersion, peerLibrary)
                 fs.writeFileSync(arkoala.native('Serializers.h'), serializers)
                 fs.writeFileSync(arkoala.native('arkoala_api.h'), api)
-                fs.writeFileSync(libace.interface('delegates.h'), printDelegatesHeaders(peerLibrary))
-                fs.writeFileSync(arkoala.native('delegates.cc'), printDelegatesImplementation(peerLibrary))
+                // fs.writeFileSync(libace.interface('delegates.h'), printDelegatesHeaders(peerLibrary))
+                // fs.writeFileSync(arkoala.native('delegates.cc'), printDelegatesImplementation(peerLibrary))
 
                 const modifiers = printRealAndDummyModifiers(peerLibrary)
                 const accessors = printRealAndDummyAccessors(peerLibrary)
                 dummyImplementations(modifiers.dummy, accessors.dummy, 1, options.apiVersion, 6)
                     .printTo(arkoala.native('dummy_impl.cc'))
-                completeImplementations(modifiers.real, accessors.real,  1, options.apiVersion, 6)
-                    .printTo(libace.all_modifiers)
                 fs.writeFileSync(arkoala.native('all_events.cc'), completeEventsImplementations(printEventsCImpl(peerLibrary)))
 
                 const gniSources = printGniSources(peerLibrary)
-                fs.writeFileSync(libace.gni_components, gniFile(gniSources))
+                fs.writeFileSync(libace.gniComponents, gniFile(gniSources))
 
                 copyPeerLib(path.join(__dirname, '..', 'peer_lib'), arkoala)
 
-                let newOutDir = path.join(outDir, "refactor")
-                printDelegatesAsMultipleFiles(peerLibrary, newOutDir, { namespace: "OHOS::Ace::NG::Delegate" })
-                printRealModifiersAsMultipleFiles(peerLibrary, newOutDir, {
+                printDelegatesAsMultipleFiles(peerLibrary, libace, { namespace: "OHOS::Ace::NG::Delegate" })
+                printRealModifiersAsMultipleFiles(peerLibrary, libace, {
                     namespace: "OHOS::Ace::NG::GeneratedModifier",
                     basicVersion: 1,
                     fullVersion: options.apiVersion,
                     extendedVersion: 6,
                 })
 
-                const mesonBuild = printMesonBuild(peerLibrary)
-                fs.writeFileSync(path.join(newOutDir, 'meson.build'), mesonBuildFile(mesonBuild))
+                if (!options.libaceDestination) {
+                    const mesonBuild = printMesonBuild(peerLibrary)
+                    fs.writeFileSync(libace.mesonBuild, mesonBuildFile(mesonBuild))
+                }
             }
         }
     )
