@@ -26,7 +26,6 @@ compile_events_test = get_option('events_test')
 
 gen_dir = '../generated/' + source_set
 arkoala_dir = gen_dir + '/koalaui/arkoala/native/src'
-arkoala_dir = gen_dir + '/koalaui/arkoala/native/src'
 libace_dir = gen_dir + '/libace'
 
 include_dirs = [
@@ -102,10 +101,11 @@ if is_clang
 cflags += ['-Wall', '-Werror', '-Wno-unused-variable', '-Wno-unused-but-set-variable', '-Wno-extern-c-compat', '-Wno-error=deprecated-declarations', '-Wno-unknown-warning-option']
 endif
 
-node_cflags = ['-DKOALA_USE_NODE_VM', '-DKOALA_NAPI', '-DINTEROP_LIBRARY_NAME=' + node_library_name]
+node_cflags = ['-DKOALA_USE_NODE_VM', '-DKOALA_NAPI', '-DINTEROP_LIBRARY_NAME=' + node_library_name ]
 node_include_dirs = [
     '../node_modules/node-api-headers/include',
-    '../node_modules/node-addon-api'
+    '../node_modules/node-addon-api',
+    arkoala_dir / 'node'
 ]
 node_sources = [
     arkoala_dir + '/node/convertors-node.cc'
@@ -128,7 +128,9 @@ node_module_prefix = ''
 node_module_suffix = 'node'
 
 arkts_cflags = ['-DKOALA_USE_ARK_VM', '-DKOALA_USE_ARK_VM_WITH_ETS', '-DKOALA_ETS_NAPI']
-arkts_include_dirs = []
+arkts_include_dirs = [
+    arkoala_dir / 'arkts'
+]
 arkts_sources = [
     arkoala_dir / 'arkts/convertors-ark.cc',
     arkoala_dir / 'arkts/convertors-ets.cc',
@@ -136,7 +138,11 @@ arkts_sources = [
 
 if is_jni
     jni_cflags = ['-DKOALA_USE_JAVA_VM', '-DKOALA_JNI']
-    jni_include_dirs = [ java_home / 'include', java_home / 'include' / jni_os ]
+    jni_include_dirs = [
+        java_home / 'include',
+        java_home / 'include' / jni_os,
+        arkoala_dir / 'jni'
+    ]
     jni_sources = [
         arkoala_dir / 'convertors-jni.cc',
     ]

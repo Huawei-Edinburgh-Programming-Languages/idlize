@@ -77,15 +77,15 @@ private:
 };
 
 #if defined KOALA_USE_NODE_VM
-#include "node/convertors-node.h"
+#include "convertors-node.h"
 #elif defined KOALA_USE_JSC_VM
-#include "jsc/convertors-jsc.h"
+#include "convertors-jsc.h"
 #elif KOALA_USE_ARK_VM
-#include "arkts/convertors-ark.h"
+#include "convertors-ark.h"
 #elif KOALA_USE_JAVA_VM
-#include "jni/convertors-jni.h"
+#include "convertors-jni.h"
 #elif KOALA_WASM
-#include "wasm/convertors-wasm.h"
+#include "convertors-wasm.h"
 #else
 #error "One of above branches must be taken"
 #endif

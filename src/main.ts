@@ -56,7 +56,7 @@ import { printNodeTypes } from "./peer-generation/NodeTypesPrinter"
 import { printNativeModule, printNativeModuleEmpty } from "./peer-generation/NativeModulePrinter"
 import { printBridgeCc } from "./peer-generation/BridgeCcPrinter"
 import { printImportsStubs } from "./peer-generation/ImportsStubsPrinter"
-import { printDelegatesAsMultipleFiles, printDelegatesHeaders, printDelegatesImplementation } from "./peer-generation/DelegatePrinter"
+import { printDelegatesAsMultipleFiles } from "./peer-generation/DelegatePrinter"
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig";
 import { printEvents, printEventsCImpl } from "./peer-generation/EventsPrinter"
 import { printGniSources } from "./peer-generation/GniPrinter"
@@ -405,8 +405,6 @@ if (options.dts2peer) {
                 const {api, serializers} = printApiAndSerializers(options.apiVersion, peerLibrary)
                 fs.writeFileSync(arkoala.native('Serializers.h'), serializers)
                 fs.writeFileSync(arkoala.native('arkoala_api.h'), api)
-                // fs.writeFileSync(libace.interface('delegates.h'), printDelegatesHeaders(peerLibrary))
-                // fs.writeFileSync(arkoala.native('delegates.cc'), printDelegatesImplementation(peerLibrary))
 
                 const modifiers = printRealAndDummyModifiers(peerLibrary)
                 const accessors = printRealAndDummyAccessors(peerLibrary)
@@ -435,28 +433,6 @@ if (options.dts2peer) {
         }
     )
     didJob = true
-
-    // if (options.copyPeersTarget) {
-    //     console.log('\nCopying generated peers to external repositories')
-
-    //     const KOALA_UI = 'koala-ui'
-    //     const LIBACE = 'libace'
-
-    //     if (![KOALA_UI, LIBACE].includes(options.copyPeersTarget)) {
-    //         const err = `--copy-peers-target must be either '${KOALA_UI}' or '${LIBACE}'`
-    //         throw new Error(err)
-    //     }
-    //     if (!options.copyPeersDestination) {
-    //         throw new Error('--copy-peers-destination is expected for copying peers with --copy-peers-target')
-    //     }
-
-    //     if (options.copyPeersTarget == KOALA_UI) {
-    //         copyPeersToKoalaUi(generatedPeersDir, options.arkoalaDestination, options.copyPeersComponents ?? [])
-    //     }
-    //     else if (options.copyPeersTarget == LIBACE) {
-    //         copyPeersToLibace(generatedPeersDir, options.libaceDestination)
-    //     }
-    // }
 }
 
 if (!didJob) {
