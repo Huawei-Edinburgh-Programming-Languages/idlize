@@ -128,7 +128,9 @@ export function ${componentFunctionName}(
 
     printFile(): void {
         this.printImports()
-        this.printer.print(collectDtsImports())
+        if (this.printer.language == Language.ARKTS) {
+            this.printer.print(collectDtsImports())
+        }
         this.file.peers.forEach(peer => {
             this.printComponent(peer)
         })
@@ -154,7 +156,7 @@ class ComponentsVisitor {
 
 export function printComponents(peerLibrary: PeerLibrary): Map<string, string> {
     // TODO: support other output languages
-    if (peerLibrary.declarationTable.language != (Language.TS && Language.ARKTS))
+    if (![Language.TS, Language.ARKTS].includes(peerLibrary.declarationTable.language))
         return new Map()
 
     const visitor = new ComponentsVisitor(peerLibrary)
