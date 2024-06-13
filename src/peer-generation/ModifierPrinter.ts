@@ -421,11 +421,16 @@ function printModifiersCommonImplFile(filePath: string, content: LanguageWriter,
     writer.writeMultilineCommentBlock(warning)
     writer.print("")
 
+    writer.writeInclude('arkoala_api_generated.h')
+    writer.print("")
+
     if (options.namespace) {
         writer.pushNamespace(options.namespace)
     }
 
-    writer.concat(completeModifiersContent(content, options.basicVersion, options.fullVersion, options.extendedVersion))
+    writer.concat(content)
+    // TODO check what we need from dummy_impl_epilogue.cc
+    // writer.concat(completeModifiersContent(content, options.basicVersion, options.fullVersion, options.extendedVersion))
 
     if (options.namespace) {
         writer.popNamespace()

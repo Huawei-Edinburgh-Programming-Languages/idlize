@@ -29,8 +29,8 @@ export class MesonVisitor {
     printPeerClassSourcePaths(clazz: PeerClass): void {
         const className = makeFileNameFromClassName(clazz.componentName)
         // TODO use names from Libace;
-        this.printer.print(`'${className}_delegates.cc',`)
-        this.printer.print(`'${className}_modifiers.cc',`)
+        this.printer.print(`'implementation/${className}_delegate.cpp',`)
+        this.printer.print(`'generated/interface/${className}_modifier.cpp',`)
     }
     // TODO materialized class
 
@@ -38,7 +38,7 @@ export class MesonVisitor {
     printMesonBuildContent() {
         this.printer.print("generated_sources = files(")
         this.printer.pushIndent()
-        this.printer.print("all_modifiers.cc")
+        this.printer.print(`'generated/interface/all_modifiers.cpp',`)
         this.library.files.forEach(file => {
             file.peers.forEach(clazz => this.printPeerClassSourcePaths(clazz))
         })
@@ -47,7 +47,7 @@ export class MesonVisitor {
         
         this.printer.print("")
 
-        this.printer.print("generated_include_directories = include_directories('.')")
+        this.printer.print("generated_include_directories = include_directories('generated/interface')")
     }
 }
 
