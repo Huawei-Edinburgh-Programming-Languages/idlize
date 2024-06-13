@@ -406,6 +406,7 @@ function printModifiersImplFile(filePath: string, slug: string, state: MultiFile
 
     writer.concat(state.real)
     writer.concat(state.modifiers)
+    writer.concat(state.accessors)
 
     if (options.namespace) {
         writer.popNamespace()

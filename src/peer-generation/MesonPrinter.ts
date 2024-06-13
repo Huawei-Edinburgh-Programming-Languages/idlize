@@ -15,6 +15,7 @@
 
 import { IndentedPrinter } from "../IndentedPrinter"
 import { makeFileNameFromClassName } from "./FileGenerators"
+import { MaterializedClass } from "./Materialized"
 import { PeerClass } from "./PeerClass"
 import { PeerLibrary } from "./PeerLibrary"
 
@@ -32,7 +33,13 @@ export class MesonVisitor {
         this.printer.print(`'implementation/${className}_delegate.cpp',`)
         this.printer.print(`'generated/interface/${className}_modifier.cpp',`)
     }
-    // TODO materialized class
+
+    printMaterializedClassSourcePaths(clazz: MaterializedClass) {
+        const className = makeFileNameFromClassName(clazz.className)
+        // TODO use names from Libace;
+        this.printer.print(`'implementation/${className}_delegate.cpp',`)
+        this.printer.print(`'generated/interface/${className}_modifier.cpp',`)
+    }
 
     // TODO: have a proper Peer module visitor
     printMesonBuildContent() {
@@ -41,6 +48,9 @@ export class MesonVisitor {
         this.printer.print(`'generated/interface/all_modifiers.cpp',`)
         this.library.files.forEach(file => {
             file.peers.forEach(clazz => this.printPeerClassSourcePaths(clazz))
+        })
+        this.library.materializedClasses.forEach(clazz => {
+            this.printMaterializedClassSourcePaths(clazz)
         })
         this.printer.popIndent()
         this.printer.print(")")
