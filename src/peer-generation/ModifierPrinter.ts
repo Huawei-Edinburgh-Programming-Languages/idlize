@@ -430,8 +430,7 @@ function printModifiersCommonImplFile(filePath: string, content: LanguageWriter,
     }
 
     writer.concat(content)
-    // TODO check what we need from dummy_impl_epilogue.cc
-    // writer.concat(completeModifiersContent(content, options.basicVersion, options.fullVersion, options.extendedVersion))
+    writer.concat(completeModifiersContent(content, options.basicVersion, options.fullVersion, options.extendedVersion))
 
     if (options.namespace) {
         writer.popNamespace()
