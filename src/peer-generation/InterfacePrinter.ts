@@ -24,7 +24,7 @@ import { IndentedPrinter } from '../IndentedPrinter'
 import { EnumEntity, PeerFile } from './PeerFile'
 import { DeclarationConvertor, convertDeclaration } from './TypeNodeConvertor'
 
-class DeclarationGenerator implements DeclarationConvertor<string> {
+export class DeclarationGenerator implements DeclarationConvertor<string> {
     constructor(
         private readonly library: PeerLibrary,
     ) {}
@@ -71,12 +71,8 @@ class InterfacesVisitor {
 
     private printImports(writer: LanguageWriter, file: PeerFile) {
         const imports = new ImportsCollector()
-        for (const importType of this.peerLibrary.importTypesStubs)
-            imports.addFeatureByBasename(importType, 'ImportsStubs.ts')
         imports.addFilterByBasename(this.generateFileBasename(file.originalFilename))
         file.importFeatures.forEach(it => imports.addFeature(it.feature, it.module))
-        for (const importType of this.peerLibrary.importTypesStubs)
-            imports.addFeatureByBasename(importType, 'ImportsStubs.ts')
         imports.print(writer)
     }
 
