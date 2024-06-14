@@ -108,8 +108,6 @@ class ComponentFileVisitor {
             // todo stub until we can process AttributeModifier
             if (isCommonMethod(peer.originalClassName!) || peer.originalClassName == "ContainerSpanAttribute")
                 writer.print(`attributeModifier(modifier: AttributeModifier<object>): this { throw new Error("not implemented") }`)
-            if (peer.originalClassName === 'ContainerSpanAttribute')
-                writer.print(`attributeModifier(modifier: AttributeModifier<object>): this { throw new Error("not implemented") }`)
             const attributesSignature = new MethodSignature(Type.Void, [])
             writer.writeMethodImplementation(new Method('applyAttributesFinish', attributesSignature, [MethodModifier.PUBLIC]), (writer) => {
                 writer.print('// we calls this function outside of class, so need to make it public')
