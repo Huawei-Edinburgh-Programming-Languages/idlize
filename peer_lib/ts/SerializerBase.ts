@@ -174,8 +174,8 @@ export class SerializerBase {
             current.next = serializer
         }
     }
-    constructor(initialSize?: number) {
-        this.buffer = new ArrayBuffer(initialSize ?? 96)
+    constructor() {
+        this.buffer = new ArrayBuffer(96)
         this.view = new DataView(this.buffer)
     }
 
