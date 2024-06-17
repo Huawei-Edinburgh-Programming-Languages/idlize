@@ -310,7 +310,7 @@ if (options.dts2peer) {
             },
             onEnd(outDir: string) {
                 let lang = declarationTable.language
-                const peerProcessor = new PeerProcessor(peerLibrary, false)
+                const peerProcessor = new PeerProcessor(peerLibrary)
                 peerProcessor.process()
                 declarationTable.analyze(peerLibrary)
 

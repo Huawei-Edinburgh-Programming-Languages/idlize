@@ -564,7 +564,6 @@ export class PeerProcessor {
 
     constructor(
         private readonly library: PeerLibrary,
-        private readonly needInterfaces: boolean,
     ) { 
         this.typeDependenciesCollector = new ImportsAggregateCollector(this.library, false)
         this.declDependenciesCollector = new DeclarationDependenciesCollector(this.declarationTable.typeChecker!, this.typeDependenciesCollector)
@@ -583,7 +582,7 @@ export class PeerProcessor {
 
         const importFeatures = this.declDependenciesCollector.convert(target)
             .filter(it => this.isSourceDecl(it))
-            .filter(it => this.needInterfaces || isFakeDeclaration(it))
+            .filter(it => PeerGeneratorConfig.needInterfaces || isFakeDeclaration(it))
             .map(it => convertDeclToFeature(this.library, it))
         let constructor = target.members.find(ts.isConstructorDeclaration)!
         let mConstructor = this.makeMaterializedMethod(className, constructor)
@@ -712,14 +711,14 @@ export class PeerProcessor {
             }
 
             this.declDependenciesCollector.convert(dep).forEach(it => {
-                if (this.isSourceDecl(it) && (this.needInterfaces || isFakeDeclaration(it)))
+                if (this.isSourceDecl(it) && (PeerGeneratorConfig.needInterfaces || isFakeDeclaration(it)))
                     file.importFeatures.push(convertDeclToFeature(this.library, it))
             })
             this.serializeDepsCollector.convert(dep).forEach(it => {
-                if (this.isSourceDecl(it) && this.needInterfaces)
+                if (this.isSourceDecl(it) && PeerGeneratorConfig.needInterfaces)
                     file.serializeImportFeatures.push(convertDeclToFeature(this.library, it))
             })
-            if (this.needInterfaces) {
+            if (PeerGeneratorConfig.needInterfaces) {
                 file.declarations.add(dep)
                 file.importFeatures.push(convertDeclToFeature(this.library, dep))
             }
