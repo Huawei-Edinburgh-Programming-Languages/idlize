@@ -238,7 +238,7 @@ export function makeJavaSerializerWriter(library: PeerLibrary): LanguageWriter {
     return result
 }
 
-export function makeCSerializers(library: PeerLibrary, structs: IndentedPrinter, typedefs: IndentedPrinter): string {
+export function makeCSerializers(library: PeerLibrary, structs: IndentedPrinter, typedefs: IndentedPrinter, userConvertors: LanguageWriter): string {
 
     const serializers = createLanguageWriter(Language.CPP)
     const writeToString = createLanguageWriter(Language.CPP)
@@ -246,7 +246,7 @@ export function makeCSerializers(library: PeerLibrary, structs: IndentedPrinter,
     writeSerializer(library, serializers)
     serializers.print("\n// Deserializers\n")
     writeDeserializer(library, serializers)
-    library.declarationTable.generateStructs(structs, typedefs, writeToString)
+    library.declarationTable.generateStructs(structs, typedefs, writeToString, userConvertors)
 
     return `
 #include "SerializerBase.h"

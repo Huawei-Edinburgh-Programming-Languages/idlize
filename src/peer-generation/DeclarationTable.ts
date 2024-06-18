@@ -658,7 +658,7 @@ export class DeclarationTable {
         structs.print(`${this.cFieldKind(field.declaration)}${field.optional ? PrimitiveType.OptionalPrefix : ""}${this.computeTargetName(field.declaration, false)} ${field.name};`)
     }
 
-    generateStructs(structs: IndentedPrinter, typedefs: IndentedPrinter, writeToString: LanguageWriter) {
+    generateStructs(structs: IndentedPrinter, typedefs: IndentedPrinter, writeToString: LanguageWriter, userConvertors: LanguageWriter) {
         const seenNames = new Set<string>()
         seenNames.clear()
         let noDeclaration = [PrimitiveType.Int32, PrimitiveType.Tag, PrimitiveType.Number, PrimitiveType.Boolean, PrimitiveType.String]
@@ -684,6 +684,7 @@ export class DeclarationTable {
                     seenNames.add(nameOptional)
                     structs.print(`typedef struct ${nameOptional}{ enum ${PrimitiveType.Tag.getText()} tag; ${nameAssigned} value; } ${nameOptional};`)
                     this.writeOptional(nameOptional, writeToString, isPointer)
+                    this.writeOptionalConvertor(nameOptional, userConvertors, isPointer)
                     this.writeRuntimeType(target, nameOptional, true, writeToString)
                 }
                 continue
@@ -713,6 +714,7 @@ export class DeclarationTable {
             let skipWriteToString = (target instanceof PrimitiveType) || ts.isEnumDeclaration(target) || ts.isFunctionTypeNode(target)
             if (!noBasicDecl && !skipWriteToString) {
                 this.generateWriteToString(nameAssigned, target, writeToString, isPointer)
+                this.generateUserConvertors(nameAssigned, target, userConvertors, isPointer)
             }
             this.writeRuntimeType(target, nameAssigned, false, writeToString)
             if (seenNames.has(nameOptional)) continue
@@ -723,6 +725,7 @@ export class DeclarationTable {
                 structs.print(`${nameAssigned} value;`)
                 this.printStructsCTail(nameOptional, structDescriptor.isPacked, structs)
                 this.writeOptional(nameOptional, writeToString, isPointer)
+                this.writeOptionalConvertor(nameOptional, userConvertors, isPointer)
                 this.writeRuntimeType(target, nameOptional, true, writeToString)
             }
         }
@@ -856,6 +859,24 @@ export class DeclarationTable {
         printer.print(`}`)
         printer.popIndent()
         printer.print(`result->append("}");`)
+        printer.print(`}`)
+    }
+
+    writeOptionalConvertor(nameOptional: string, printer: LanguageWriter, isPointer: boolean) {
+        printer.print(`template <>`)
+        printer.print(`inline void convertor(const ${nameOptional}* value) {`)
+        printer.pushIndent()
+        printer.print(`if (value->tag != ${PrimitiveType.UndefinedTag}) {`)
+        printer.pushIndent()
+        printer.print(`convertor(${isPointer ? "&" : ""}value->value);`)
+        printer.popIndent()
+        printer.print(`} else {`)
+        printer.pushIndent()
+        printer.print(`${PrimitiveType.Undefined.getText()} undefined = { 0 };`)
+        printer.print(`convertor(undefined);`)
+        printer.popIndent()
+        printer.print(`}`)
+        printer.popIndent()
         printer.print(`}`)
     }
 
@@ -1000,6 +1021,78 @@ export class DeclarationTable {
         printer.print(`result->append("}");`)
         printer.popIndent()
         printer.print(`}`)
+    }
+
+    private generateUserConvertors(name: string, target: DeclarationTarget, printer: LanguageWriter, isPointer: boolean) {
+        if (target instanceof PrimitiveType) throw new Error("Impossible")
+
+        this.setCurrentContext(`convert(${name})`)
+        let isUnion = this.isMaybeWrapped(target, ts.isUnionTypeNode)
+        let isArray = this.isMaybeWrapped(target, ts.isArrayTypeNode)
+        let isMap = ts.isTypeReferenceNode(target) && identName(target.typeName) === "Map"
+        let isOptional = this.isMaybeWrapped(target, ts.isOptionalTypeNode)
+        let isTuple = this.isMaybeWrapped(target, ts.isTupleTypeNode)
+        let access = isPointer ? "->" : "."
+
+        // treat Array<T> as array
+        if (!isArray && ts.isTypeReferenceNode(target)) {
+            isArray = identName(target.typeName) === "Array"
+        }
+        if (isArray) {
+            this.generateStdArrayDefinition(name, target, printer)
+            this.generateArrayWriteToString(name, target, printer)
+        } else if (isMap) {
+            this.generateMapWriteToString(name, target, printer)
+        } else {
+            printer.print(`template <>`)
+            printer.print(`inline void convertor(const ${name}${isPointer ? "*" : ""} value) {`)
+            printer.pushIndent()
+
+            if (isUnion) {
+                this.targetStruct(target).getFields().forEach((field, index) => {
+                    let isPointerField = this.isPointerDeclaration(field.declaration, field.optional)
+                    if (index != 0) {
+                        printer.print(`// ${this.computeTargetName(field.declaration, false)}`)
+                        printer.print(`if (value${access}selector == ${index - 1}) {`)
+                        printer.pushIndent()
+                        printer.print(`convertor(${isPointerField ? "&" : ""}value${access}${field.name});`)
+                        printer.popIndent()
+                        printer.print(`}`)
+                    }
+                })
+            } else if (isTuple) {
+                const fields = this.targetStruct(target).getFields()
+                fields.forEach((field, index) => {
+                    printer.print(`// ${this.computeTargetName(field.declaration, false)}`)
+                    let isPointerField = this.isPointerDeclaration(field.declaration, field.optional)
+                    printer.print(`convertor(${isPointerField ? "&" : ""}value${access}${field.name});`)
+                })
+            } else if (isOptional) {
+                const fields = this.targetStruct(target).getFields()
+                fields.forEach((field, index) => {
+                    printer.print(`// ${this.computeTargetName(field.declaration, false)}`)
+                    let isPointerField = this.isPointerDeclaration(field.declaration, field.optional)
+                    printer.print(`convertor(${isPointerField ? "&" : ""}value${access}${field.name});`)
+                    if (index == 0) {
+                        printer.print(`if (value${access}${field.name} != ${PrimitiveType.UndefinedTag}) {`)
+                        printer.pushIndent()
+                    }
+                    if (index == fields.length - 1) {
+                        printer.popIndent()
+                        printer.print("}")
+                    }
+                })
+            } else {
+                this.targetStruct(target).getFields().forEach((field, index) => {
+                    printer.print(`// ${this.computeTargetName(field.declaration, false)}`)
+                    let isPointerField = this.isPointerDeclaration(field.declaration, field.optional)
+                    printer.print(`convertor(${isPointerField ? "&" : ""}value${access}${field.name});`)
+                })
+            }
+            printer.popIndent()
+            printer.print(`}`)
+        }
+        this.setCurrentContext(undefined)
     }
 
     private generateWriteToString(name: string, target: DeclarationTarget, printer: LanguageWriter, isPointer: boolean) {
