@@ -398,7 +398,7 @@ function printModifiersImplFile(filePath: string, slug: string, state: MultiFile
     // writer.writeMultilineCommentBlock(warning)
     // writer.print("")
 
-    writer.writeInclude(`core/interfaces/arkoala/generated/interface/arkoala_api_generated.h`)
+    writer.writeInclude(`arkoala_api_generated.h`)
     // writer.writeInclude(`${slug}_delegate.h`)
     writer.print("")
 
@@ -424,8 +424,8 @@ function printModifiersCommonImplFile(filePath: string, content: LanguageWriter,
     writer.writeMultilineCommentBlock(warning)
     writer.print("")
 
-    writer.writeInclude('core/interfaces/arkoala/generated/interface/arkoala-macros.h')
-    writer.writeInclude('core/interfaces/arkoala/generated/interface/arkoala_api_generated.h')
+    writer.writeInclude('arkoala-macros.h')
+    writer.writeInclude('arkoala_api_generated.h')
     writer.print("")
 
     writer.concat(appendApiImplPrologue())
