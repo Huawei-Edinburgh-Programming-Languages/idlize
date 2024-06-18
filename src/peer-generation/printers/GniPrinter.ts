@@ -47,6 +47,8 @@ export class GniVisitor {
         this.library.materializedClasses.forEach(clazz => {
             this.printMaterializedClassSourcePaths(clazz)
         })
+
+        this.gni.print(`"../arkoala/utility/utils.cpp",`)
         this.gni.print(`"../arkoala/implementation/api_impl.cpp",`)
         this.gni.print(`"../arkoala/generated/interface/all_modifiers.cpp",`)
 
