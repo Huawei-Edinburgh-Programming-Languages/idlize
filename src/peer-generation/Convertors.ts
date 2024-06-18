@@ -614,7 +614,7 @@ export class OptionConvertor extends BaseArgConvertor {
         const serializedType = (printer.language == Language.JAVA ? undefined : Type.Int32)
         printer.writeStatement(printer.makeAssign(valueType, serializedType, printer.makeRuntimeType(RuntimeType.UNDEFINED), true, false))
         printer.runtimeType(this, valueType, value)
-        printer.writeMethodCall(`${param}Serializer`, "writeInt8", [castToInt8(valueType, printer.language)])
+        printer.writeMethodCall(`${param}Serializer`, "writeInt8", [valueType  + castToInt(printer.language)])
         printer.print(`if (${printer.makeRuntimeTypeCondition(valueType, false, RuntimeType.UNDEFINED).asString()}) {`)
         printer.pushIndent()
         printer.writeStatement(printer.makeAssign(`${value}_value`, undefined, printer.makeValueFromOption(value, this.typeConvertor), true))
