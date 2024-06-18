@@ -41,6 +41,7 @@ export class GniVisitor {
     printGniSource() {
         this.gni.print("generated_sources = [")
         this.gni.pushIndent()
+        this.gni.print(`"../arkoala/implementation/all_modifiers.cpp",`)
         this.library.files.forEach(file => {
             file.peers.forEach(clazz => this.printGniEntries(clazz))
         })
