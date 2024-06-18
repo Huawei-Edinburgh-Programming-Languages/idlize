@@ -15,13 +15,14 @@
 
 import * as ts from 'typescript'
 import * as path from 'path'
-import { PeerLibrary } from "../PeerLibrary"
-import { LanguageWriter, createLanguageWriter } from '../LanguageWriters'
-import { mapType } from '../TypeNodeNameConvertor'
-import { Language, renameDtsToInterfaces } from '../../util'
-import { ImportsCollector } from '../ImportsCollector'
-import { EnumEntity, PeerFile } from '../PeerFile'
-import { DeclarationConvertor, convertDeclaration } from '../TypeNodeConvertor'
+import { PeerLibrary } from "./PeerLibrary"
+import { LanguageWriter, createLanguageWriter } from './LanguageWriters'
+import { mapType } from './TypeNodeNameConvertor'
+import { Language, renameDtsToInterfaces } from '../util'
+import { ImportsCollector } from './ImportsCollector'
+import { EnumEntity, PeerFile } from './PeerFile'
+import { DeclarationConvertor, convertDeclaration } from './TypeNodeConvertor'
+import { IndentedPrinter } from "../IndentedPrinter"
 
 export class DeclarationGenerator implements DeclarationConvertor<string> {
     constructor(
@@ -29,21 +30,41 @@ export class DeclarationGenerator implements DeclarationConvertor<string> {
     ) {}
 
     convertClass(node: ts.ClassDeclaration): string {
-        let text = node.getText()
-        for (const [stub, src] of [...this.library.importTypesStubToSource.entries()].reverse()) {
-            text = text.replaceAll(src, stub)
-        }
-        return 'export ' + text
+        let printer = new IndentedPrinter()
+        let className = this.className(node)
+        let parentClassName = this.extendsClause(node)
+        printer.print(`export declare class ${className} ${parentClassName} {`)
+        printer.pushIndent()
+        node.members
+            .filter(ts.isMethodDeclaration)
+            .forEach(it => {
+                printer.print(`/** @memo */`)
+                printer.print(it.getText())
+            })
+        printer.popIndent()
+        printer.print(`}`)
+
+        return this.replaceImportTypeNodes(printer.getOutput().join('\n'))
     }
     convertInterface(node: ts.InterfaceDeclaration): string {
-        let text = node.getText()
-        for (const [stub, src] of [...this.library.importTypesStubToSource.entries()].reverse()) {
-            text = text.replaceAll(src, stub)
-        }
-        return 'export ' + text
+        let printer = new IndentedPrinter()
+        let className = this.className(node)
+        let extendsClause = this.extendsClause(node)
+        printer.print(`export declare interface ${className} ${extendsClause} {`)
+        printer.pushIndent()
+        node.members
+            .filter(ts.isMethodSignature)
+            .forEach(it => {
+                printer.print(`/** @memo */`)
+                printer.print(it.getText())
+            })
+        printer.popIndent()
+        printer.print(`}`)
+
+        return this.replaceImportTypeNodes(printer.getOutput().join('\n'))
     }
     convertEnum(node: ts.EnumDeclaration): string {
-        throw "Enums are processed separatedly"
+        throw "Enums are processed separately"
     }
     convertTypeAlias(node: ts.TypeAliasDeclaration): string {
         const maybeTypeArguments = node.typeParameters?.length
@@ -51,6 +72,28 @@ export class DeclarationGenerator implements DeclarationConvertor<string> {
             : ''
         let type = mapType(node.type)
         return `export declare type ${node.name.text}${maybeTypeArguments} = ${type};`
+    }
+
+    private replaceImportTypeNodes(text: string): string {
+        for (const [stub, src] of [...this.library.importTypesStubToSource.entries()].reverse()) {
+            text = text.replaceAll(src, stub)
+        }
+        return text
+    }
+
+    private extendsClause(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
+        let parent = node.heritageClauses
+            ?.filter(it => it.token == ts.SyntaxKind.ExtendsKeyword)[0]
+            ?.types[0]
+        if (parent === undefined) return ""
+        return `extends ${parent.getText()}`
+    }
+
+    private className(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
+        let name = ts.idText(node.name as ts.Identifier)
+        let typeParams = node.typeParameters?.map(it => it.getText()).join(', ')
+        let typeParamsClause = typeParams ? `<${typeParams}>` : ``
+        return `${name}${typeParamsClause}`
     }
 }
 
