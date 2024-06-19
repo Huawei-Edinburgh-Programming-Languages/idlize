@@ -96,11 +96,11 @@ export class DeclarationGenerator implements DeclarationConvertor<string> {
 
     private declarationMembers(
         node: ts.ClassDeclaration | ts.InterfaceDeclaration
-    ): readonly (ts.MethodSignature | ts.MethodDeclaration)[] {
+    ): readonly (ts.MethodDeclaration | ts.CallSignatureDeclaration)[] {
         if (ts.isClassDeclaration(node) && node.members.every(ts.isMethodDeclaration)) {
             return node.members
         }
-        if (ts.isInterfaceDeclaration(node) && node.members.every(ts.isMethodSignature)) {
+        if (ts.isInterfaceDeclaration(node) && node.members.every(ts.isCallSignatureDeclaration) ) {
             return node.members
         }
         throw new Error(`Encountered component with member that is not method: ${node}`)
