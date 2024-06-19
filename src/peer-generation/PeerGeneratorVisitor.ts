@@ -355,6 +355,23 @@ class ImportsAggregateCollector extends TypeDependenciesCollector {
     }
 }
 
+class FilteredDeclarationCollector extends DeclarationDependenciesCollector {
+    constructor(
+        private readonly library: PeerLibrary,
+        typeDepsCollector: TypeDependenciesCollector,
+    ) {
+        super(library.declarationTable.typeChecker!, typeDepsCollector)
+    }
+
+    protected override convertHeritageClause(clause: ts.HeritageClause): ts.Declaration[] {
+        const parent = clause.parent
+        if (ts.isClassDeclaration(parent) && this.library.isComponentDeclaration(parent)) {
+            return []
+        }
+        return super.convertHeritageClause(clause)
+    }    
+}
+
 class ComponentsCompleter {
     constructor(
         private readonly library: PeerLibrary,
@@ -612,9 +629,9 @@ export class PeerProcessor {
         private readonly componentsToGenerate?: Set<string>,
     ) { 
         this.typeDependenciesCollector = new ImportsAggregateCollector(this.library, false)
-        this.declDependenciesCollector = new DeclarationDependenciesCollector(this.declarationTable.typeChecker!, this.typeDependenciesCollector)
-        this.serializeDepsCollector = new DeclarationDependenciesCollector(
-            this.declarationTable.typeChecker!, new ImportsAggregateCollector(this.library, true))
+        this.declDependenciesCollector = new FilteredDeclarationCollector(this.library, this.typeDependenciesCollector)
+        this.serializeDepsCollector = new FilteredDeclarationCollector(
+            this.library, new ImportsAggregateCollector(this.library, true))
     }
     private get declarationTable(): DeclarationTable {
         return this.library.declarationTable
@@ -725,8 +742,8 @@ export class PeerProcessor {
             return components
         const entryComponents = components.filter(it => this.componentsToGenerate!.has(it.name))
         return components.filter(component => {
-            return entryComponents.includes(component) ||
-                entryComponents.some(entryComponent => isSubclassComponent(this.declarationTable.typeChecker!, entryComponent, component))
+            return entryComponents.includes(component) 
+                // entryComponents.some(entryComponent => isSubclassComponent(this.declarationTable.typeChecker!, entryComponent, component))
         })
     }
 
