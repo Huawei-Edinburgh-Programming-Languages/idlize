@@ -36,7 +36,7 @@ import { deserializePeerEvent, PeerEventKind,
     TextPicker_onAccept_event
 } from "./peer_events"
 // imports required interfaces (now generation is disabled)
-// import { Resource, BackgroundBlurStyleOptions, TouchTestInfo } from "@arkoala/arkui"
+import { Resource, BackgroundBlurStyleOptions, TouchTestInfo } from "@arkoala/arkui"
 
 import {
     getNativeLog,

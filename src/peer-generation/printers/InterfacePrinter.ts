@@ -15,14 +15,14 @@
 
 import * as ts from 'typescript'
 import * as path from 'path'
-import { PeerLibrary } from "./PeerLibrary"
-import { LanguageWriter, createLanguageWriter } from './LanguageWriters'
-import { mapType } from './TypeNodeNameConvertor'
-import { Language, renameDtsToInterfaces } from '../util'
-import { ImportsCollector } from './ImportsCollector'
-import { EnumEntity, PeerFile } from './PeerFile'
-import { DeclarationConvertor, convertDeclaration } from './TypeNodeConvertor'
-import { IndentedPrinter } from "../IndentedPrinter"
+import { PeerLibrary } from "../PeerLibrary"
+import { LanguageWriter, createLanguageWriter } from '../LanguageWriters'
+import { mapType } from '../TypeNodeNameConvertor'
+import { Language, renameDtsToInterfaces } from '../../util'
+import { ImportsCollector } from '../ImportsCollector'
+import { EnumEntity, PeerFile } from '../PeerFile'
+import { DeclarationConvertor, convertDeclaration } from '../TypeNodeConvertor'
+import { IndentedPrinter } from "../../IndentedPrinter"
 
 export class DeclarationGenerator implements DeclarationConvertor<string> {
     constructor(
@@ -30,42 +30,17 @@ export class DeclarationGenerator implements DeclarationConvertor<string> {
     ) {}
 
     convertClass(node: ts.ClassDeclaration): string {
-        let printer = new IndentedPrinter()
-        let className = this.className(node)
-        let parentClassName = this.extendsClause(node)
-        printer.print(`export declare class ${className} ${parentClassName} {`)
-        printer.pushIndent()
-        node.members
-            .filter(ts.isMethodDeclaration)
-            .forEach(it => {
-                printer.print(`/** @memo */`)
-                printer.print(it.getText())
-            })
-        printer.popIndent()
-        printer.print(`}`)
-
-        return this.replaceImportTypeNodes(printer.getOutput().join('\n'))
+        return this.convertDeclaration(node)
     }
+
     convertInterface(node: ts.InterfaceDeclaration): string {
-        let printer = new IndentedPrinter()
-        let className = this.className(node)
-        let extendsClause = this.extendsClause(node)
-        printer.print(`export declare interface ${className} ${extendsClause} {`)
-        printer.pushIndent()
-        node.members
-            .filter(ts.isMethodSignature)
-            .forEach(it => {
-                printer.print(`/** @memo */`)
-                printer.print(it.getText())
-            })
-        printer.popIndent()
-        printer.print(`}`)
-
-        return this.replaceImportTypeNodes(printer.getOutput().join('\n'))
+        return this.convertDeclaration(node)
     }
+
     convertEnum(node: ts.EnumDeclaration): string {
         throw "Enums are processed separately"
     }
+
     convertTypeAlias(node: ts.TypeAliasDeclaration): string {
         const maybeTypeArguments = node.typeParameters?.length
             ? `<${node.typeParameters.map(it => it.getText()).join(', ')}>`
@@ -89,11 +64,45 @@ export class DeclarationGenerator implements DeclarationConvertor<string> {
         return `extends ${parent.getText()}`
     }
 
-    private className(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
+    private declarationName(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
         let name = ts.idText(node.name as ts.Identifier)
         let typeParams = node.typeParameters?.map(it => it.getText()).join(', ')
         let typeParamsClause = typeParams ? `<${typeParams}>` : ``
         return `${name}${typeParamsClause}`
+    }
+
+    private convertDeclaration(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
+        if (!this.library.isComponentDeclaration((node))) {
+            return 'export ' + this.replaceImportTypeNodes(node.getText())
+        }
+        let printer = new IndentedPrinter()
+        let className = this.declarationName(node)
+        let extendsClause = this.extendsClause(node)
+
+        let classOrInterface = ts.isClassDeclaration(node) ? `class` : `interface`
+        printer.print(`export declare ${classOrInterface} ${className} ${extendsClause} {`)
+        printer.pushIndent()
+        this.declarationMembers(node)
+            .forEach(it => {
+                printer.print(`/** @memo */`)
+                printer.print(it.getText())
+            })
+        printer.popIndent()
+        printer.print(`}`)
+
+        return this.replaceImportTypeNodes(printer.getOutput().join('\n'))
+    }
+
+    private declarationMembers(
+        node: ts.ClassDeclaration | ts.InterfaceDeclaration
+    ): (ts.MethodSignature | ts.MethodDeclaration)[] {
+        if (ts.isClassDeclaration(node)) {
+            return node.members.filter(ts.isMethodDeclaration)
+        }
+        if (ts.isInterfaceDeclaration(node)) {
+            return node.members.filter(ts.isMethodSignature)
+        }
+        throw new Error(`Should never happen`)
     }
 }
 
