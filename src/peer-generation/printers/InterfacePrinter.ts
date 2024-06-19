@@ -23,6 +23,7 @@ import { ImportsCollector } from '../ImportsCollector'
 import { EnumEntity, PeerFile } from '../PeerFile'
 import { DeclarationConvertor, convertDeclaration } from '../TypeNodeConvertor'
 import { IndentedPrinter } from "../../IndentedPrinter"
+import { read } from "node:fs";
 
 export class DeclarationGenerator implements DeclarationConvertor<string> {
     constructor(
@@ -95,14 +96,14 @@ export class DeclarationGenerator implements DeclarationConvertor<string> {
 
     private declarationMembers(
         node: ts.ClassDeclaration | ts.InterfaceDeclaration
-    ): (ts.MethodSignature | ts.MethodDeclaration)[] {
-        if (ts.isClassDeclaration(node)) {
-            return node.members.filter(ts.isMethodDeclaration)
+    ): readonly (ts.MethodSignature | ts.MethodDeclaration)[] {
+        if (ts.isClassDeclaration(node) && node.members.every(ts.isMethodDeclaration)) {
+            return node.members
         }
-        if (ts.isInterfaceDeclaration(node)) {
-            return node.members.filter(ts.isMethodSignature)
+        if (ts.isInterfaceDeclaration(node) && node.members.every(ts.isMethodSignature)) {
+            return node.members
         }
-        throw new Error(`Should never happen`)
+        throw new Error(`Encountered component with member that is not method: ${node}`)
     }
 }
 
