@@ -31,7 +31,7 @@ Benefit: End-to-end performance can be measured and optimized.
 The generated TS code and C++ bridge code are generated to some Blue zone workspace.
 Something like SIG.
 
-Benefit: Allows Blue zone Arkoala/TS to be tested with 
+Benefit: Allows Blue zone Arkoala/TS to be tested with
 
 ## Integration Step 3: generated modifiers cover more than manual
 
@@ -57,8 +57,10 @@ producing the same results
 
 Benefit: the IDL allows ArkTS peer generation
 
-## Integration Step 5: ArkTS
+## Integration Step 5: First ArkTS
 
 First ArkTS Peers and C++ bridge code created and checked to the BZ workspace (a sig workspace?).
 
 Benefit: can measure ArkTS component performance
+
+## The rest is to be covered by Arkoala/ArkTS project
