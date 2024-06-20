@@ -302,6 +302,12 @@ export class EnumConvertor extends BaseArgConvertor {
             writer.makeNaryOp("<=",  [ordinal, writer.makeString(high!.toString())])
         ])
     }
+    convertorTargetTypeName(language: Language): string {
+        if (language == Language.ARKTS && !this.isStringEnum) {
+            return "int"
+        }
+        return super.convertorTargetTypeName(language);
+    }
 }
 
 export class LengthConvertorScoped extends BaseArgConvertor {
