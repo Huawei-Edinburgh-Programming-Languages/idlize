@@ -385,7 +385,7 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
         const outComponentFile = arkoala.component(targetBasename)
         console.log("producing", outComponentFile)
         if (options.verbose) console.log(component)
-            writeFile(outComponentFile, component, true)
+        writeFile(outComponentFile, component, true)
         arkuiComponentsFiles.push(outComponentFile)
     }
 
