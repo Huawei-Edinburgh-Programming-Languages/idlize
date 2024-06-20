@@ -58,10 +58,15 @@ export class DeclarationGenerator implements DeclarationConvertor<string> {
     }
 
     private extendsClause(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
-        let parent = node.heritageClauses
-            ?.filter(it => it.token == ts.SyntaxKind.ExtendsKeyword)[0]
-            ?.types[0]
-        if (parent === undefined) return ""
+        if (!node.heritageClauses?.length)
+            return ``
+        if (node.heritageClauses!.some(it => it.token !== ts.SyntaxKind.ExtendsKeyword))
+            throw "Expected to have only extend clauses"
+        if (this.library.isComponentDeclaration(node))
+            // do not extend parent component interface to provide smooth integration
+            return ``
+
+        let parent = node.heritageClauses[0]!.types[0]
         return `extends ${parent.getText()}`
     }
 
@@ -97,11 +102,15 @@ export class DeclarationGenerator implements DeclarationConvertor<string> {
     private declarationMembers(
         node: ts.ClassDeclaration | ts.InterfaceDeclaration
     ): readonly (ts.MethodDeclaration | ts.CallSignatureDeclaration)[] {
-        if (ts.isClassDeclaration(node) && node.members.every(ts.isMethodDeclaration)) {
-            return node.members
+        if (ts.isClassDeclaration(node)) {
+            const members = node.members.filter(it => !ts.isConstructorDeclaration(it))
+            if (members.every(ts.isMethodDeclaration))
+                return members
         }
-        if (ts.isInterfaceDeclaration(node) && node.members.every(ts.isCallSignatureDeclaration) ) {
-            return node.members
+        if (ts.isInterfaceDeclaration(node) ) {
+            const members = node.members.filter(it => !ts.isConstructSignatureDeclaration(it))
+            if (members.every(ts.isCallSignatureDeclaration))
+                return members
         }
         throw new Error(`Encountered component with member that is not method: ${node}`)
     }
