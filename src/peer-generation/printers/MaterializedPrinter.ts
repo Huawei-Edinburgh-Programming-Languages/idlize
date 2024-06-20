@@ -18,7 +18,7 @@ import { Language, renameClassToMaterialized, capitalize } from "../../util";
 import { PeerLibrary } from "../PeerLibrary";
 import { writePeerMethod } from "./PeersPrinter"
 import { LanguageWriter, MethodModifier, NamedMethodSignature, Method, Type, createLanguageWriter, FieldModifier, MethodSignature } from "../LanguageWriters";
-import { MaterializedClass, MaterializedMethod } from "../Materialized"
+import { MaterializedClass, MaterializedMethod, mapInteropReturnType } from "../Materialized"
 import { makeMaterializedPrologue } from "../FileGenerators";
 import { OverloadsPrinter, groupOverloads } from "./OverloadsPrinter";
 
@@ -149,7 +149,7 @@ class MaterializedFileVisitor {
 
             clazz.methods.forEach(method => {
                 makePrivate(method.method)
-                const returnType = method.tsReturnType()
+                const returnType = mapInteropReturnType(method.tsReturnType())
                 this.library.declarationTable.setCurrentContext(`${method.originalParentName}.${method.overloadedName}`)
                 writePeerMethod(writer, method, this.dumpSerialized, "_serialize", "this.peer!.ptr", returnType)
                 this.library.declarationTable.setCurrentContext(undefined)
@@ -159,18 +159,6 @@ class MaterializedFileVisitor {
 
     printFile(): void {
         this.printMaterializedClass(this.clazz)
-    }
-
-    private getReturnValue(className: string, retType: string| undefined): string| undefined {
-        if (retType === undefined || retType === "void") {
-            return ""
-        } else if(retType === className) {
-            return (`this`)
-        } else if (retType === "boolean") {
-            return `true`
-        } else {
-            return undefined
-        }
     }
 }
 

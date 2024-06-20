@@ -304,9 +304,11 @@ ${accessors.join("\n")}
 } ${PeerGeneratorConfig.cppPrefix}ArkUIAccessors;
 
 typedef struct ${PeerGeneratorConfig.cppPrefix}ArkUIAnimation {
+    int dummy;
 } ${PeerGeneratorConfig.cppPrefix}ArkUIAnimation;
 
 typedef struct ${PeerGeneratorConfig.cppPrefix}ArkUINavigation {
+    int dummy;
 } ${PeerGeneratorConfig.cppPrefix}ArkUINavigation;
 
 typedef struct ${PeerGeneratorConfig.cppPrefix}ArkUIGraphicsAPI {

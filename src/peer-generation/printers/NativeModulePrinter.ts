@@ -13,13 +13,13 @@
  * limitations under the License.
  */
 
-import { IndentedPrinter } from "../../IndentedPrinter";
 import { generateEventsBridgeSignature } from "./EventsPrinter";
 import { nativeModuleDeclaration, nativeModuleEmptyDeclaration } from "../FileGenerators";
 import { LanguageWriter, Method, NamedMethodSignature, StringExpression, Type, createLanguageWriter } from "../LanguageWriters";
 import { PeerClass, PeerClassBase } from "../PeerClass";
 import { PeerLibrary } from "../PeerLibrary";
 import { PeerMethod } from "../PeerMethod";
+import { mapInteropReturnType } from "../Materialized";
 
 class NativeModuleVisitor {
     readonly nativeModule: LanguageWriter
@@ -42,8 +42,7 @@ class NativeModuleVisitor {
             printPeerMethod(clazz, clazz.finalizer, nativeModule, nativeModuleEmpty, Type.Pointer)
             clazz.methods.forEach(method => {
                 const returnType = method.tsReturnType()
-                printPeerMethod(clazz, method, nativeModule, nativeModuleEmpty,
-                    returnType === Type.This || method.originalParentName === returnType?.name? Type.Pointer : returnType)
+                printPeerMethod(clazz, method, nativeModule, nativeModuleEmpty, mapInteropReturnType(method.tsReturnType()))
             })
         })
     }
@@ -87,14 +86,11 @@ function printPeerMethod(clazz: PeerClassBase, method: PeerMethod, nativeModule:
             }
         })
     let maybeReceiver = method.hasReceiver() ? [{ name: 'ptr', type: 'KPointer' }] : []
-    const parameters = NamedMethodSignature.make(returnType?.name ?? 'void', maybeReceiver.concat(args))
+    const parameters = NamedMethodSignature.make(returnType ? nativeModuleEmpty.mapType(returnType) : 'void', maybeReceiver.concat(args))
     let name = `_${component}_${method.overloadedName}`
     nativeModule.writeNativeMethodDeclaration(name, parameters)
     nativeModuleEmpty.writeMethodImplementation(new Method(name, parameters), (printer) => {
-        printer.writePrintLog(name)
-        if (returnType !== undefined && returnType.name !== Type.Void.name) {
-            printer.writeStatement(printer.makeReturn(printer.makeString(getReturnValue(returnType))))
-        }
+        printer.writeUnsupported(name)
     })
     clazz.setGenerationContext(undefined)
 }
@@ -110,13 +106,4 @@ export function printNativeModuleEmpty(peerLibrary: PeerLibrary): string {
     const visitor = new NativeModuleVisitor(peerLibrary)
     visitor.print()
     return nativeModuleEmptyDeclaration(visitor.nativeModuleEmpty.getOutput())
-}
-
-function getReturnValue(type: Type): string {
-    switch(type.name) {
-        case Type.Boolean.name : return "false"
-        case Type.Number.name: return "1"
-        case Type.Pointer.name: return "-1"
-    }
-    throw new Error(`Unknown return type: ${type.name}`)
 }

@@ -29,8 +29,12 @@ export class Type {
     static Boolean = new Type('boolean')
     static Number = new Type('number')
     static Pointer = new Type('KPointer')
+    static String = new Type('string')
     static This = new Type('this')
     static Void = new Type('void')
+    static Uint8ClampedArray = new Type('Uint8ClampedArray')
+    static Unknown = new Type('unknown')
+    static Callback = new Type('Callback')
 }
 
 export enum FieldModifier {
@@ -552,6 +556,9 @@ export abstract class LanguageWriter {
     }
     writeLines(lines: string): void {
         lines.split("\n").forEach(it => this.print(it))
+    }
+    writeUnsupported(what?: string) {
+        this.printer.print(`throw new Error("Unsupported${what ? " " + what : ""}")`)
     }
     writeGetterImplementation(method: Method, op: (writer: LanguageWriter) => void): void {
         this.writeMethodImplementation(new Method(method.name, method.signature, [MethodModifier.GETTER].concat(method.modifiers ?? [])), op)

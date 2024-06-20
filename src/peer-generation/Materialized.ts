@@ -26,20 +26,21 @@ const ignoredMaterializedClasses = [
     //"CanvasRenderingContext2D", // has data
     "NavPathStack",             // has data
     "TransitionEffect",         // unknown types `Type` and `Effect`
+    "WrappedBuilder",
+    "CanvasRenderer", // temporary
+    "RichEditorParagraphStyle", // temporary
+    "LeadingMarginPlaceholder", // temporary
+    "ParagraphStyle", // temporary
 ]
 
 export function isMaterialized(declaration: ts.ClassDeclaration): boolean {
 
     if (ignoredMaterializedClasses.includes(identName(declaration)!)) return false
 
-
     // A materialized class is a class which has both constructors and methods
 
-    if (declaration.members.find(ts.isConstructorDeclaration) === undefined) {
-        return false;
-    }
-
-    if (declaration.members.find(ts.isMethodDeclaration) === undefined) {
+    if ((declaration.members.find(ts.isConstructorDeclaration) === undefined &&
+        declaration.members.find(ts.isMethodDeclaration) === undefined)) {
         return false;
     }
 
@@ -113,6 +114,15 @@ export class MaterializedMethod extends PeerMethod {
     tsReturnType(): Type | undefined {
         const returnType = this.method.signature.returnType
         return this.hasReceiver() && returnType.name === this.originalParentName ? Type.This : returnType
+    }
+}
+
+export function mapInteropReturnType(type: Type|undefined): Type {
+    if (!type) return Type.Void
+    switch (type.name) {
+        case 'number': return Type.Number
+        case Type.Void.name: return Type.Void
+        default: return Type.Pointer
     }
 }
 

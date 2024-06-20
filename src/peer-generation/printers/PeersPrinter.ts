@@ -14,10 +14,9 @@
  */
 
 import * as path from "path"
-import { IndentedPrinter } from "../../IndentedPrinter";
-import { EnumEntity, PeerFile } from "../PeerFile";
+import { PeerFile } from "../PeerFile";
 import { PeerLibrary } from "../PeerLibrary";
-import { Language, isStatic, renameDtsToPeer, throwException } from "../../util";
+import { Language, renameDtsToPeer, throwException } from "../../util";
 import { ImportsCollector } from "../ImportsCollector";
 import { PeerClass, PeerClassBase } from "../PeerClass";
 import { InheritanceRole, determineParentRole, isHeir, isRoot, isStandalone } from "../inheritance";
@@ -268,7 +267,6 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, dum
             writer.pushIndent()
             writer.print(it.scopeStart?.(it.param, printer.language))
         })
-        printer.writeStatement(printer.makeStatement(printer.makeString("/////")))
         method.argConvertors.forEach((it, index) => {
             if (it.useArray) {
                 writer.writeStatement(
@@ -280,7 +278,6 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, dum
                 it.convertorSerialize(it.param, it.param, writer)
             }
         })
-        printer.writeStatement(printer.makeStatement(printer.makeString("/////")))
         // Enable to see serialized data.
         if (dumpSerialized) {
             method.argConvertors.forEach((it, index) => {
@@ -319,7 +316,6 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, dum
             if (method.hasReceiver() && returnType === Type.This) {
                 result = `this`
             } else if (method instanceof MaterializedMethod && method.peerMethodName !== "ctor") {
-                const isStatic = method.method.modifiers?.includes(MethodModifier.STATIC)
                 if (!method.hasReceiver()) {
                     const obj = `new ${method.originalParentName}(${signature.argsNames.map(it => "undefined").join(", ")})`
                     const objType = new Type(method.originalParentName)

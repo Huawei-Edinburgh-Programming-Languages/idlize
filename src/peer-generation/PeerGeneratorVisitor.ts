@@ -42,7 +42,7 @@ import { PeerMethod } from "./PeerMethod"
 import { PeerFile, EnumEntity } from "./PeerFile"
 import { PeerLibrary } from "./PeerLibrary"
 import { MaterializedClass, MaterializedField, MaterializedMethod, isMaterialized } from "./Materialized"
-import { Field, FieldModifier, Method, MethodModifier, NamedMethodSignature, Type } from "./LanguageWriters";
+import { Field, FieldModifier, Method, MethodModifier, MethodSignature, NamedMethodSignature, Type } from "./LanguageWriters";
 import { mapType } from "./TypeNodeNameConvertor";
 import { convertDeclaration, convertTypeNode } from "./TypeNodeConvertor";
 import { DeclarationDependenciesCollector, TypeDependenciesCollector } from "./dependencies_collector";
@@ -174,7 +174,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
     }
 
     private interfaceToComponentAttributes(node: ts.InterfaceDeclaration | undefined): ts.ClassDeclaration | undefined {
-        if (!node) 
+        if (!node)
             return undefined
         const members = node.members.filter(it => !ts.isConstructSignatureDeclaration(it))
         if (!members.length || !members.every(it => ts.isCallSignatureDeclaration(it)))
@@ -182,7 +182,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
         const callable = members[0] as ts.CallSignatureDeclaration
         const retDecl = this.maybeTypeReferenceToDeclaration(callable.type)
         const isSameReturnType = (node: ts.TypeElement): boolean => {
-            if (!ts.isCallSignatureDeclaration(node)) 
+            if (!ts.isCallSignatureDeclaration(node))
                 throw "Expected to be a call signature"
             const otherRetDecl = this.maybeTypeReferenceToDeclaration(node.type)
             return otherRetDecl === retDecl
@@ -302,6 +302,14 @@ function mapCInteropRetType(type: ts.TypeNode): string {
         // return array by some way
         return "void"
     }
+    if (type.kind == ts.SyntaxKind.UnknownKeyword) {
+        /* HACK, fix */
+        return "void"
+    }
+    if (ts.isImportTypeNode(type)) {
+        if (identName(type.qualifier) == "Callback") return PrimitiveType.Int32.getText()
+        throw new Error("OK" + type.parent.getText())
+    }
     throw new Error(type.getText())
 }
 
@@ -322,8 +330,8 @@ class ImportsAggregateCollector extends TypeDependenciesCollector {
         return [
             ...super.convertImport(node),
             makeFakeTypeAliasDeclaration(
-                'FakeDeclarations', 
-                generatedName, 
+                'FakeDeclarations',
+                generatedName,
                 ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword)
             ),
         ]
@@ -372,7 +380,7 @@ class ComponentsCompleter {
             const attributes = this.library.componentsDeclarations[i].attributesDeclarations
             if ((attributes.heritageClauses?.length ?? 0) > 1)
                 throw new Error("Expected component attributes to have single heritage clause at most")
-            const heritage = attributes.heritageClauses?.[0] 
+            const heritage = attributes.heritageClauses?.[0]
             if (!heritage)
                 continue
             const parentDecls = getDeclarationsByNode(this.library.declarationTable.typeChecker!, heritage.types[0].expression)
@@ -450,7 +458,7 @@ class PeersGenerator {
         parameters.forEach((param, index) => {
             if (param.type) {
                 this.declarationTable.requestType(
-                    `Type_${originalParentName}_${methodName}${methodIndex == 0 ? "" : methodIndex.toString()}_Arg${index}`, 
+                    `Type_${originalParentName}_${methodName}${methodIndex == 0 ? "" : methodIndex.toString()}_Arg${index}`,
                     param.type
                 )
             }
@@ -614,7 +622,7 @@ export class PeerProcessor {
 
     constructor(
         private readonly library: PeerLibrary,
-    ) { 
+    ) {
         this.typeDependenciesCollector = new ImportsAggregateCollector(this.library, false)
         this.declDependenciesCollector = new DeclarationDependenciesCollector(this.declarationTable.typeChecker!, this.typeDependenciesCollector)
         this.serializeDepsCollector = new DeclarationDependenciesCollector(
@@ -634,8 +642,8 @@ export class PeerProcessor {
             .filter(it => this.isSourceDecl(it))
             .filter(it => PeerGeneratorConfig.needInterfaces || isFakeDeclaration(it))
             .map(it => convertDeclToFeature(this.library, it))
-        let constructor = target.members.find(ts.isConstructorDeclaration)!
-        let mConstructor = this.makeMaterializedMethod(className, constructor)
+        let constructor = target.members.find(ts.isConstructorDeclaration)
+        let mConstructor = constructor ? this.makeMaterializedMethod(className, constructor) : this.makeDefaultCtor(className)
         const finalizerReturnType = {isVoid: false, nativeType: () => PrimitiveType.NativePointer.getText(), macroSuffixPart: () => ""}
         let mFinalizer = new MaterializedMethod(className, [], [], finalizerReturnType, false,
             new Method("getFinalizer", new NamedMethodSignature(Type.Pointer, [], [], []), [MethodModifier.STATIC]))
@@ -644,6 +652,7 @@ export class PeerProcessor {
             .map(it => this.makeMaterializedField(it))
         let mMethods = target.members
             .filter(ts.isMethodDeclaration)
+            .filter(it => it != undefined)
             .map(method => this.makeMaterializedMethod(className, method))
         this.library.materializedClasses.set(className,
             new MaterializedClass(className, mFields, mConstructor, mFinalizer, importFeatures, mMethods))
@@ -659,7 +668,14 @@ export class PeerProcessor {
             new Field(name, new Type(identName(property.type)!), modifiers))
     }
 
-    private makeMaterializedMethod(parentName: string, method: ts.ConstructorDeclaration | ts.MethodDeclaration) {
+    private makeDefaultCtor(parentName: string): MaterializedMethod {
+        return new MaterializedMethod(parentName, [], [], generateRetConvertor(), false,
+            new Method("ctor", new NamedMethodSignature(new Type(parentName), []), [MethodModifier.STATIC]))
+    }
+
+    private makeMaterializedMethod(parentName: string, method: ts.ConstructorDeclaration | ts.MethodDeclaration): MaterializedMethod {
+        if (!method) throw new Error("OK " + parentName)
+        console.log(method.getText())
         this.declarationTable.setCurrentContext(`materialized_${identName(method.name)}`)
         const declarationTargets = method.parameters.map(param =>
             this.declarationTable.toTarget(param.type ??

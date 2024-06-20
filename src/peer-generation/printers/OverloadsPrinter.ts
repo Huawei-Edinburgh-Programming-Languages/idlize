@@ -25,7 +25,7 @@ export function collapseSameNamedMethods(methods: Method[]): Method {
     if (methods.some(it => it.signature.defaults?.length))
         throw "Can not process defaults in collapsed method"
     const maxArgLength = Math.max(...methods.map(it => it.signature.args.length))
-    const collapsedArgs: Type[] = Array.from({length: maxArgLength}, (_, argIndex) => {
+    const collapsedArgs: Type[] = Array.from({ length: maxArgLength }, (_, argIndex) => {
         const name = methods.map(it => it.signature.args[argIndex]?.name).filter(isDefined).join(' | ')
         const optional = methods.some(it => it.signature.args[argIndex]?.nullable ?? true)
         return new Type(name, optional)
@@ -55,7 +55,7 @@ export function groupOverloads(peerMethods: PeerMethod[]): PeerMethod[][] {
 export class OverloadsPrinter {
     private static undefinedConvertor = new UndefinedConvertor("OverloadsPrinter")
 
-    constructor(private printer: LanguageWriter, private library: PeerLibrary, private isComponent: boolean = true) {}
+    constructor(private printer: LanguageWriter, private library: PeerLibrary, private isComponent: boolean = true) { }
 
     printGroupedComponentOverloads(peer: PeerClassBase, peerMethods: PeerMethod[]) {
         const orderedMethods = Array.from(peerMethods)
@@ -101,11 +101,12 @@ export class OverloadsPrinter {
     }
 
     private printPeerCallAndReturn(peer: PeerClassBase, collapsedMethod: Method, peerMethod: PeerMethod) {
+        const _ = this.printer
         const argsNames = peerMethod.argConvertors.map((conv, index) => {
             const argName = collapsedMethod.signature.argName(index)
             const castedArgName = `${argName}_casted`
             const castedType = peerMethod.method.signature.args[index].name
-            this.printer.print(`const ${castedArgName} = ${argName} as (${castedType})`)
+            _.print(`const ${castedArgName} = ${argName} as (${castedType})`)
             return castedArgName
         })
         const isStatic = collapsedMethod.modifiers?.includes(MethodModifier.STATIC)
@@ -121,7 +122,7 @@ export class OverloadsPrinter {
                 if (!callback || !canProcessCallback(this.library.declarationTable, callback))
                     return
                 const argName = argsNames[index]
-                this.printer.writeStatement(new ExpressionStatement(this.printer.makeFunctionCall(`UseProperties`,[
+                _.writeStatement(new ExpressionStatement(_.makeFunctionCall(`UseProperties`, [
                     new StringExpression(`{${callbackIdByInfo(callback)}: ${argName}}`)
                 ])))
             }
@@ -129,16 +130,20 @@ export class OverloadsPrinter {
 
         const returnType = collapsedMethod.signature.returnType
         if (returnType === Type.This || returnType === Type.Void) {
-            this.printer.writeMethodCall(receiver, methodName, argsNames, !isStatic)
+            _.writeMethodCall(receiver, methodName, argsNames, !isStatic)
             if (returnType === Type.This) {
-                this.printer.print(`return this`)
+                _.writeStatement(_.makeReturn(_.makeString("this")))
             }
         } else {
-            this.printer.writeStatement(
-                this.printer.makeReturn(
-                    this.printer.makeMethodCall(receiver, methodName,
-                        argsNames.map(it => this.printer.makeString(it)))
-                ))
+            if (returnType == Type.Number) {
+                _.writeStatement(
+                    _.makeReturn(
+                        _.makeMethodCall(receiver, methodName,
+                            argsNames.map(it => _.makeString(it)))
+                    ))
+            } else {
+                _.writeUnsupported(peerMethod.overloadedName)
+            }
         }
     }
 }
