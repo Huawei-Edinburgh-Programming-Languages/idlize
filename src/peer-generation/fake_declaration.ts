@@ -1,13 +1,23 @@
 import * as ts from 'typescript'
+import { ImportFeature, ImportsCollector } from './ImportsCollector'
 
-const fakeDeclarations: Map<string, {node: ts.Declaration, filename: string}> = new Map()
+const fakeDeclarations: Map<string, {node: ts.Declaration, filename: string, dependencies: ImportFeature[]}> = new Map()
 export function makeFakeDeclaration(targetFilename: string, declName: string, factory: () => ts.Declaration): ts.Declaration {
     if (!fakeDeclarations.has(declName))
-        fakeDeclarations.set(declName, {node: factory(), filename: targetFilename})
+        fakeDeclarations.set(declName, {node: factory(), filename: targetFilename, dependencies: []})
     const decl = fakeDeclarations.get(declName)!
     if (decl.filename !== targetFilename)
         throw "Two declarations with same name were declared"
     return decl.node
+}
+
+export function addFakeDeclarationDependency(node: ts.Declaration, dependency: ImportFeature) {
+    for (const decl of fakeDeclarations.values())
+        if (decl.node === node) {
+            decl.dependencies.push(dependency)
+            return
+        }
+    throw "Declaration is not fake"
 }
 
 export function makeFakeTypeAliasDeclaration(targetFilename: string, declName: string, type: ts.TypeNode): ts.TypeAliasDeclaration {
@@ -38,12 +48,13 @@ export function fakeDeclarationFilename(node: ts.Declaration): string {
     throw "Declaration is not fake"
 }
 
-export function makeFakeDeclarationsFiles(): Map<string, ts.Declaration[]> {
-    const files = new Map<string, ts.Declaration[]>()
+export function makeFakeDeclarationsFiles(): Map<string, {dependencies: ImportFeature[], declarations: ts.Declaration[]}> {
+    const files = new Map<string, {dependencies: ImportFeature[], declarations: ts.Declaration[]}>()
     for (const decl of fakeDeclarations.values()) {
         if (!files.has(decl.filename))
-            files.set(decl.filename, [])
-        files.get(decl.filename)!.push(decl.node)
+            files.set(decl.filename, {dependencies: [], declarations: []})
+        files.get(decl.filename)!.declarations.push(decl.node)
+        files.get(decl.filename)!.dependencies.push(...decl.dependencies)
     }
     return files
 }

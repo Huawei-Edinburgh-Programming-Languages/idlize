@@ -48,7 +48,7 @@ import { mapType } from "./TypeNodeNameConvertor";
 import { convertDeclaration, convertTypeNode } from "./TypeNodeConvertor";
 import { DeclarationDependenciesCollector, TypeDependenciesCollector } from "./dependencies_collector";
 import { convertDeclToFeature } from "./ImportsCollector";
-import { isFakeDeclaration, makeFakeTypeAliasDeclaration } from "./fake_declaration";
+import { addFakeDeclarationDependency, isFakeDeclaration, makeFakeTypeAliasDeclaration } from "./fake_declaration";
 
 export enum RuntimeType {
     UNEXPECTED = -1,
@@ -336,13 +336,25 @@ class ImportsAggregateCollector extends TypeDependenciesCollector {
         if (!this.peerLibrary.importTypesStubToSource.has(generatedName)) {
             this.peerLibrary.importTypesStubToSource.set(generatedName, node.getText())
         }
-        return [
-            ...super.convertImport(node),
-            makeFakeTypeAliasDeclaration(
+        let fakeDeclaration: ts.Declaration
+        
+        if (node.qualifier?.getText() === 'Resource') {
+            fakeDeclaration = makeFakeTypeAliasDeclaration(
                 'FakeDeclarations', 
                 generatedName, 
-                ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword)
-            ),
+                ts.factory.createTypeReferenceNode("ArkResource"),
+            )
+            addFakeDeclarationDependency(fakeDeclaration, {feature: "ArkResource", module: "./ArkResource"})
+        } else {
+            fakeDeclaration = makeFakeTypeAliasDeclaration(
+                'FakeDeclarations', 
+                generatedName, 
+                ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
+            )
+        }
+        return [
+            ...super.convertImport(node),
+            fakeDeclaration
         ]
     }
 

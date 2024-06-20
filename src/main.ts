@@ -422,7 +422,6 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
         writeFile(
             arkoala.tsLib('ConflictedDeclarations'),
             printConflictedDeclarations(peerLibrary),
-            true,
         )
         writeFile(
             arkoala.tsLib('NativeModuleEmpty'),
@@ -478,8 +477,10 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
 
     const modifiers = printRealAndDummyModifiers(peerLibrary)
     const accessors = printRealAndDummyAccessors(peerLibrary)
-    dummyImplementations(modifiers.dummy, accessors.dummy, 1, options.apiVersion, 6)
-        .printTo(arkoala.native('dummy_impl.cc'))
+    writeFile(
+        arkoala.native('dummy_impl.cc'),
+        dummyImplementations(modifiers.dummy, accessors.dummy, 1, options.apiVersion, 6).getOutput().join('\n'),
+    )
     writeFile(arkoala.native('all_events.cc'), completeEventsImplementations(printEventsCImpl(peerLibrary)))
 
     if (!options.onlyIntegrated)
