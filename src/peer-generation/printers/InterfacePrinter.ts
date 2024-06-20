@@ -86,6 +86,9 @@ export class DeclarationGenerator implements DeclarationConvertor<string> {
         let extendsClause = this.extendsClause(node)
 
         let classOrInterface = ts.isClassDeclaration(node) ? `class` : `interface`
+        if (this.library.isComponentDeclaration(node))
+            // because we write `ArkBlank implements BlankAttributes`
+            classOrInterface = `interface`
         printer.print(`export declare ${classOrInterface} ${className} ${extendsClause} {`)
         printer.pushIndent()
         this.declarationMembers(node)
@@ -101,16 +104,18 @@ export class DeclarationGenerator implements DeclarationConvertor<string> {
 
     private declarationMembers(
         node: ts.ClassDeclaration | ts.InterfaceDeclaration
-    ): readonly (ts.MethodDeclaration | ts.CallSignatureDeclaration)[] {
+    ): readonly (ts.MethodDeclaration)[] {
         if (ts.isClassDeclaration(node)) {
             const members = node.members.filter(it => !ts.isConstructorDeclaration(it))
             if (members.every(ts.isMethodDeclaration))
                 return members
         }
         if (ts.isInterfaceDeclaration(node) ) {
-            const members = node.members.filter(it => !ts.isConstructSignatureDeclaration(it))
-            if (members.every(ts.isCallSignatureDeclaration))
-                return members
+            const members = node.members.filter(it => 
+                !ts.isConstructSignatureDeclaration(it) &&
+                !ts.isCallSignatureDeclaration(it))
+            if (members.length === 0)
+                return []
         }
         throw new Error(`Encountered component with member that is not method: ${node}`)
     }
