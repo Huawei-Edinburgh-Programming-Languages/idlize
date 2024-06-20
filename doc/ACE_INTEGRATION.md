@@ -18,7 +18,9 @@ The produced C API headers and Modifier signatures are compilable within libace 
 The generator source code is NOT in the ace_engine workspace.
 The generator tool can be run from the workspace.
 The generator tool allows to regenerate the interface when needed.
-The first demonstratory components are checked into workspace and working from DevEco with Arkoala enabled SDK.
+
+The first demonstratory modifiers are checked into `ace_engine` workspace
+and working with Arkoala enabled SDK.
 Allowing to establish a process of updating components one by one to work through generated interface.
 
 Code produced by the generator will be integrated to ACE engine according to the following scheme.
@@ -28,10 +30,9 @@ Benefit: End-to-end performance can be measured and optimized.
 
 ## Integration Step 2: TS and C++ bridges have some BZ workspace
 
-The generated TS code and C++ bridge code are generated to some Blue zone workspace.
-Something like SIG.
+The generated TS code and C++ bridge code are generated to a `sig bindings workspace`.
 
-Benefit: Allows Blue zone Arkoala/TS to be tested with
+Benefit: allows CI of generated TS and bridges.
 
 ## Integration Step 3: generated modifiers cover more than manual
 
@@ -47,20 +48,28 @@ It needs to be decided, when to regenerate the bindings:
 
 ## Integration Step 4: reversible *d.ts -> IDL -> *.dts
 
-The ohos component *.d.ts files are not wel lfit for ArkTS interface generations.
+The ohos component `*.d.ts` files are not well fit for ArkTS interface generation.
 So before we have ArkTS we'd need IDL integrated.
-It is more convenient not to force complete switch to IDL,
+It is more convenient not to force complete switch to `IDL`,
 so we integrate the tool invocation infrastructure with two reversible operations:
-    * d.ts -> idl
-    * idl -> d.ts
+    * `d.ts -> idl`
+    * `idl -> d.ts`
 producing the same results
 
-Benefit: the IDL allows ArkTS peer generation
+Benefit: the `IDL` allows ArkTS peer generation
+
 
 ## Integration Step 5: First ArkTS
 
-First ArkTS Peers and C++ bridge code created and checked to the BZ workspace (a sig workspace?).
+In parallel with TS, the First ArkTS Peers and C++ bridge code created and checked to the `sig bindings workspace`.
+The interface `d.ets` files are generated from the `IDL`.
 
 Benefit: can measure ArkTS component performance
 
-## The rest is to be covered by Arkoala/ArkTS project
+## Integration Step 6: Complete ArkTS
+
+Complete set of ArkTS components, peers merged into `sig bindings workspace` workspace.
+
+Benefit: needed for Arkoala/ArkTS
+
+
