@@ -303,7 +303,7 @@ export class EnumConvertor extends BaseArgConvertor {
         ])
     }
     targetTypeName(language: Language): string {
-        if (language == Language.ARKTS && !this.isStringEnum) {
+        if (language == Language.ARKTS) {
             return "int"
         }
         return super.targetTypeName(language);
