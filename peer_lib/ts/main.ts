@@ -129,6 +129,11 @@ function checkNodeAPI() {
         () => ptr = nativeModule()._CreateNode(ARKUI_TEXT, id, flags),
         `createNode(${ARKUI_TEXT}, ${id}, ${flags})`)
     assertEquals("BasicNodeAPI createNode result", 123, ptr)
+
+    checkResult("BasicNodeAPI disposeNode",
+        () => nativeModule()._DisposeNode(ptr),
+        `disposeNode(0x123)`)
+
 }
 
 function checkButton() {
