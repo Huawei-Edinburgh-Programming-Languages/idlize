@@ -302,11 +302,11 @@ export class EnumConvertor extends BaseArgConvertor {
             writer.makeNaryOp("<=",  [ordinal, writer.makeString(high!.toString())])
         ])
     }
-    convertorTargetTypeName(language: Language): string {
+    targetTypeName(language: Language): string {
         if (language == Language.ARKTS && !this.isStringEnum) {
             return "int"
         }
-        return super.convertorTargetTypeName(language);
+        return super.targetTypeName(language);
     }
 }
 
@@ -935,6 +935,12 @@ export class ArrayConvertor extends BaseArgConvertor {
     }
     isPointerType(): boolean {
         return true
+    }
+    targetTypeName(language: Language): string {
+        if (language === Language.ARKTS) {
+            return `${mapType(this.elementType)}[]`
+        }
+        return super.targetTypeName(language);
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
         return this.discriminatorFromExpressions(value, RuntimeType.OBJECT, writer,
