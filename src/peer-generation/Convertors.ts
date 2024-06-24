@@ -727,6 +727,12 @@ export class AggregateConvertor extends BaseArgConvertor {
         const uniqueFields = this.members.filter(it => !duplicates.has(it[0]))
         return this.discriminatorFromFields(value, writer, uniqueFields, it => it[0], it => it[1])
     }
+    targetTypeName(language: Language): string {
+        if (language == Language.ARKTS && this.aliasName !== undefined) {
+            return this.aliasName
+        }
+        return super.targetTypeName(language);
+    }
 }
 
 export class InterfaceConvertor extends BaseArgConvertor {
