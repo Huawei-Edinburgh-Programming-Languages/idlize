@@ -50,5 +50,62 @@ Ark_NodeHandle CreateNode(GENERATED_Ark_NodeType type, Ark_Int32 id, Ark_Int32 f
     appendGroupedLog(1, out);
     return result;
 }
+namespace ApiImpl {
+Ark_NodeHandle GetNodeByViewStack() {
+    Ark_NodeHandle result = (Ark_NodeHandle) 123;
+    if (!needGroupedLog(1)) {
+        return result;
+    }
+    string out("getNodeByViewStack()");
+    appendGroupedLog(1, out);
+    return result;
 }
 
+void DisposeNode(Ark_NodeHandle node) {
+    if (!needGroupedLog(1)) {
+        return;
+    }
+
+    string out("disposeNode(");
+    WriteToString(&out, node);
+    out.append(")");
+    appendGroupedLog(1, out);
+}
+
+Ark_Int32 AddChild(Ark_NodeHandle parent, Ark_NodeHandle child) {
+    return 0;
+}
+
+void RemoveChild(Ark_NodeHandle parent, Ark_NodeHandle child) {
+
+}
+
+Ark_Int32 InsertChildAfter(Ark_NodeHandle parent, Ark_NodeHandle child, Ark_NodeHandle sibling) {
+    return 0;
+}
+
+Ark_Int32 InsertChildBefore(Ark_NodeHandle parent, Ark_NodeHandle child, Ark_NodeHandle sibling) {
+    return 0;
+}
+
+Ark_Int32 InsertChildAt(Ark_NodeHandle parent, Ark_NodeHandle child, Ark_Int32 position) {
+    return 0;
+}
+
+void ApplyModifierFinish(Ark_NodeHandle node) {
+
+}
+
+void MarkDirty(Ark_NodeHandle node, Ark_UInt32 flag) {
+
+}
+
+Ark_Boolean IsBuilderNode(Ark_NodeHandle node) {
+    return 0;
+}
+
+Ark_Float32 ConvertLengthMetricsUnit(Ark_Float32 value, Ark_Int32 originUnit, Ark_Int32 targetUnit) {
+    return 0.0f;
+}
+}
+}
