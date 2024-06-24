@@ -465,7 +465,7 @@ ${callGroupLog}
 }`
 if (callGroupLog.length > 0) {
     console.log(callLogCppCode)
-    writeFileSync('./peer_lib/call_log/main.cpp', callLogCppCode)
+    writeFileSync('./generated/call_log/main.cpp', callLogCppCode)
 }
 checkTabContent()
 checkCanvasRenderingContext2D()
