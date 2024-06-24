@@ -13,4 +13,3 @@ namespace ApiImpl {
   Ark_Boolean IsBuilderNode(Ark_NodeHandle node);
   Ark_Float32 ConvertLengthMetricsUnit(Ark_Float32 value, Ark_Int32 originUnit, Ark_Int32 targetUnit);
 } // namespace OHOS::Ace::NG::ApiImpl
-} // namespace OHOS::Ace::NG
