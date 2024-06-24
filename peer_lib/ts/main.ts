@@ -141,6 +141,20 @@ function checkNodeAPI() {
         () => nativeModule()._DisposeNode(ptr),
         `disposeNode(0x123)`)
 
+    checkResult("BasicNodeAPI addChild",
+        () => nativeModule()._AddChild(ptr, stackPtr),
+        `addChild(0x123, 0x234)`
+    )
+
+    checkResult("BasicNodeAPI removeChild",
+        () => nativeModule()._RemoveChild(ptr, stackPtr),
+        `removeChild(0x123, 0x234)`
+    )
+
+    checkResult("BasicNodeAPI insertChildAfter",
+        () => nativeModule()._InsertChildAfter(ptr, stackPtr, nullptr),
+        `insertChildAfter(0x123, 0x234, 0x0)`
+    )
 }
 
 function checkButton() {

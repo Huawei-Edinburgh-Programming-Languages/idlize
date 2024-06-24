@@ -73,16 +73,48 @@ void DisposeNode(Ark_NodeHandle node) {
 }
 
 Ark_Int32 AddChild(Ark_NodeHandle parent, Ark_NodeHandle child) {
+    if (!needGroupedLog(1)) {
+        return 0;
+    }
+
+    string out("addChild(");
+    WriteToString(&out, parent);
+    out.append(", ");
+    WriteToString(&out, child);
+    out.append(")");
+    appendGroupedLog(1, out);
+
     // TODO: implement test
     return 0; // ERROR_CODE_NO_ERROR
 }
 
 void RemoveChild(Ark_NodeHandle parent, Ark_NodeHandle child) {
-// TODO: implement test
+    if (!needGroupedLog(1)) {
+        return;
+    }
+
+    string out("removeChild(");
+    WriteToString(&out, parent);
+    out.append(", ");
+    WriteToString(&out, child);
+    out.append(")");
+    appendGroupedLog(1, out);
 }
 
 Ark_Int32 InsertChildAfter(Ark_NodeHandle parent, Ark_NodeHandle child, Ark_NodeHandle sibling) {
-    return 0; // TODO: implement test
+    if (!needGroupedLog(1)) {
+        return 0;
+    }
+
+    string out("insertChildAfter(");
+    WriteToString(&out, parent);
+    out.append(", ");
+    WriteToString(&out, child);
+    out.append(", ");
+    WriteToString(&out, sibling);
+    out.append(")");
+    appendGroupedLog(1, out);
+    return 0;
 }
 
 Ark_Int32 InsertChildBefore(Ark_NodeHandle parent, Ark_NodeHandle child, Ark_NodeHandle sibling) {
