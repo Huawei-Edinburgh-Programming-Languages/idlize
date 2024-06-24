@@ -35,7 +35,8 @@ import {
     makeTSDeserializer,
     gniFile,
     mesonBuildFile,
-    completeImplementations
+    completeImplementations,
+    copyToLibace
 } from "./peer-generation/FileGenerators"
 import {
     PeerGeneratorVisitor,
@@ -357,6 +358,8 @@ function generateLibace(outDir: string, peerLibrary: PeerLibrary) {
         const mesonBuild = printMesonBuild(peerLibrary)
         fs.writeFileSync(libace.mesonBuild, mesonBuildFile(mesonBuild))
     }
+
+    copyToLibace(path.join(__dirname, '..', 'peer_lib'), libace)
 }
 
 function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Language) {
