@@ -20,7 +20,7 @@
     // setCallbackMethod
     // setCustomMethodFlag
 
-    // registerCutomNodeAsyncEvent
+    // registerCustomNodeAsyncEvent
     // unregisterCustomNodeAsyncEvent
     // registerCustomNodeAsyncEventReceiver
 

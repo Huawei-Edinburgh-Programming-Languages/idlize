@@ -118,27 +118,86 @@ Ark_Int32 InsertChildAfter(Ark_NodeHandle parent, Ark_NodeHandle child, Ark_Node
 }
 
 Ark_Int32 InsertChildBefore(Ark_NodeHandle parent, Ark_NodeHandle child, Ark_NodeHandle sibling) {
-    return 0; // TODO: implement test
+    if (!needGroupedLog(1)) {
+        return 0;
+    }
+
+    string out("insertChildBefore(");
+    WriteToString(&out, parent);
+    out.append(", ");
+    WriteToString(&out, child);
+    out.append(", ");
+    WriteToString(&out, sibling);
+    out.append(")");
+    appendGroupedLog(1, out);
+    return 0;
 }
 
 Ark_Int32 InsertChildAt(Ark_NodeHandle parent, Ark_NodeHandle child, Ark_Int32 position) {
-    return 0; // TODO: implement test
+    if (!needGroupedLog(1)) {
+        return 0;
+    }
+
+    string out("insertChildAt(");
+    WriteToString(&out, parent);
+    out.append(", ");
+    WriteToString(&out, child);
+    out.append(", ");
+    WriteToString(&out, position);
+    out.append(")");
+    appendGroupedLog(1, out);
+    return 0;
 }
 
 void ApplyModifierFinish(Ark_NodeHandle node) {
-// TODO: implement test
+    if (!needGroupedLog(1)) {
+        return;
+    }
+    string out("applyModifierFinish(");
+    WriteToString(&out, node);
+    out.append(")");
+    appendGroupedLog(1, out);
 }
 
 void MarkDirty(Ark_NodeHandle node, Ark_UInt32 flag) {
-// TODO: implement test
+    if (!needGroupedLog(1)) {
+        return;
+    }
+    string out("markDirty(");
+    WriteToString(&out, node);
+    out.append(", ");
+    WriteToString(&out, flag);
+    out.append(")");
+    appendGroupedLog(1, out);
 }
 
 Ark_Boolean IsBuilderNode(Ark_NodeHandle node) {
-    return 0; // TODO: implement test
+    Ark_Boolean result = true;
+    if (!needGroupedLog(1)) {
+        return result;
+    }
+    string out("isBuilderNode(");
+    WriteToString(&out, node);
+    out.append(")");
+    appendGroupedLog(1, out);
+    return result;
 }
 
 Ark_Float32 ConvertLengthMetricsUnit(Ark_Float32 value, Ark_Int32 originUnit, Ark_Int32 targetUnit) {
-    return 0.0f; // TODO: implement test
+    Ark_Float32 result = value * originUnit;
+    if (!needGroupedLog(1)) {
+        return result;
+    }
+
+    string out("convertLengthMetricsUnit(");
+    WriteToString(&out, value);
+    out.append(", ");
+    WriteToString(&out, originUnit);
+    out.append(", ");
+    WriteToString(&out, targetUnit);
+    out.append(")");
+    appendGroupedLog(1, out);
+    return result;
 }
 }
 }
