@@ -17,14 +17,14 @@ import { DeclarationGenerator } from "./InterfacePrinter";
 import { createLanguageWriter } from "../LanguageWriters";
 import { PeerLibrary } from "../PeerLibrary";
 import { convertDeclaration } from "../TypeNodeConvertor";
-import { makeFakeDeclarationsFiles } from "../fake_declaration";
+import { makeSyntheticDeclarationsFiles } from "../synthetic_declaration";
 import { ImportsCollector } from "../ImportsCollector";
 
 export function printFakeDeclarations(library: PeerLibrary): Map<string, string> {
     const lang = library.declarationTable.language
     const declarationGenerator = new DeclarationGenerator(library)
     const result = new Map<string, string>()
-    for (const [filename, {dependencies, declarations}] of makeFakeDeclarationsFiles()) {
+    for (const [filename, {dependencies, declarations}] of makeSyntheticDeclarationsFiles()) {
         const writer = createLanguageWriter(lang)
         const imports = new ImportsCollector()
         dependencies.forEach(it => imports.addFeature(it.feature, it.module))
