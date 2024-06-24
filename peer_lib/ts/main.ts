@@ -130,6 +130,13 @@ function checkNodeAPI() {
         `createNode(${ARKUI_TEXT}, ${id}, ${flags})`)
     assertEquals("BasicNodeAPI createNode result", 123, ptr)
 
+    let stackPtr: pointer = 0
+    checkResult("BasicNodeAPI getNodeByViewStack",
+        () => stackPtr = nativeModule()._GetNodeByViewStack(),
+        `getNodeByViewStack()`
+    )
+    assertEquals("BasicNodeAPI getNodeByViewStack result", 234, stackPtr)
+
     checkResult("BasicNodeAPI disposeNode",
         () => nativeModule()._DisposeNode(ptr),
         `disposeNode(0x123)`)

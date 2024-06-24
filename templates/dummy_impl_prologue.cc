@@ -52,7 +52,7 @@ Ark_NodeHandle CreateNode(GENERATED_Ark_NodeType type, Ark_Int32 id, Ark_Int32 f
 }
 namespace ApiImpl {
 Ark_NodeHandle GetNodeByViewStack() {
-    Ark_NodeHandle result = (Ark_NodeHandle) 123;
+    Ark_NodeHandle result = (Ark_NodeHandle) 234;
     if (!needGroupedLog(1)) {
         return result;
     }
@@ -73,7 +73,8 @@ void DisposeNode(Ark_NodeHandle node) {
 }
 
 Ark_Int32 AddChild(Ark_NodeHandle parent, Ark_NodeHandle child) {
-    return 0; // TODO: implement test
+    // TODO: implement test
+    return 0; // ERROR_CODE_NO_ERROR
 }
 
 void RemoveChild(Ark_NodeHandle parent, Ark_NodeHandle child) {
