@@ -302,12 +302,6 @@ export class EnumConvertor extends BaseArgConvertor {
             writer.makeNaryOp("<=",  [ordinal, writer.makeString(high!.toString())])
         ])
     }
-    targetTypeName(language: Language): string {
-        if (language == Language.ARKTS) {
-            return "int"
-        }
-        return super.targetTypeName(language);
-    }
 }
 
 export class LengthConvertorScoped extends BaseArgConvertor {
@@ -727,12 +721,6 @@ export class AggregateConvertor extends BaseArgConvertor {
         const uniqueFields = this.members.filter(it => !duplicates.has(it[0]))
         return this.discriminatorFromFields(value, writer, uniqueFields, it => it[0], it => it[1])
     }
-    targetTypeName(language: Language): string {
-        if (language == Language.ARKTS && this.aliasName !== undefined) {
-            return this.aliasName
-        }
-        return super.targetTypeName(language);
-    }
 }
 
 export class InterfaceConvertor extends BaseArgConvertor {
@@ -887,7 +875,7 @@ export class TupleConvertor extends BaseArgConvertor {
 
 export class ArrayConvertor extends BaseArgConvertor {
     elementConvertor: ArgConvertor
-    constructor(param: string, public table: DeclarationTable, private type: ts.TypeNode, private elementType: ts.TypeNode) {
+    constructor(param: string, public table: DeclarationTable, private type: ts.TypeNode, public elementType: ts.TypeNode) {
         super(`Array<${mapType(elementType)}>`, [RuntimeType.OBJECT], false, true, param)
         this.elementConvertor = table.typeConvertor(param, elementType)
     }
@@ -941,12 +929,6 @@ export class ArrayConvertor extends BaseArgConvertor {
     }
     isPointerType(): boolean {
         return true
-    }
-    targetTypeName(language: Language): string {
-        if (language === Language.ARKTS) {
-            return `${mapType(this.elementType, language)}[]`
-        }
-        return super.targetTypeName(language);
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
         return this.discriminatorFromExpressions(value, RuntimeType.OBJECT, writer,
