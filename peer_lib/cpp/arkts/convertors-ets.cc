@@ -36,7 +36,7 @@ void addType(const std::string& type, std::string* result) {
         result->append("J");
     else if (type == "KByte*" || type == "uint8_t*")
         result->append("[B");
-     else if (type == "KFloatArray")
+     else if (type == "KFloatArray" || type == "Ark_Float32")
         result->append("[F");
     else if (type == "KStringPtr")
         result->append("Lstd/core/String;");
