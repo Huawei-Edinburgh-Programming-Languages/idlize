@@ -394,7 +394,17 @@ export interface Vector2 {
     z: number;
 }
 export interface PixelMap {}
-export interface GradientDirection {}
+export enum GradientDirection {
+    Left,
+    Top,
+    Right,
+    Bottom,
+    LeftTop,
+    LeftBottom,
+    RightTop,
+    RightBottom,
+    None
+}
 export enum NavigationTitleMode {
     Free = 0,
     Full,

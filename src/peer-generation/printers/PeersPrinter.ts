@@ -264,7 +264,7 @@ export function printPeerFinalizer(peerClassBase: PeerClassBase, writer: Languag
 export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, dumpSerialized: boolean,
                                 methodPostfix: string, ptr: string, returnType: Type = Type.Void, generics?: string[]) {
     // Not yet!
-    if (printer.language != Language.TS/* && printer.language != Language.ARKTS */) return
+    if (printer.language != Language.TS && printer.language != Language.ARKTS) return
     const signature = method.method.signature as NamedMethodSignature
     let peerMethod = new Method(
         `${method.overloadedName}${methodPostfix}`,
