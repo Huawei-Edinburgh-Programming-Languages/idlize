@@ -875,7 +875,7 @@ export class TupleConvertor extends BaseArgConvertor {
 
 export class ArrayConvertor extends BaseArgConvertor {
     elementConvertor: ArgConvertor
-    constructor(param: string, public table: DeclarationTable, private type: ts.TypeNode, public elementType: ts.TypeNode) {
+    constructor(param: string, public table: DeclarationTable, private type: ts.TypeNode, private elementType: ts.TypeNode) {
         super(`Array<${mapType(elementType)}>`, [RuntimeType.OBJECT], false, true, param)
         this.elementConvertor = table.typeConvertor(param, elementType)
     }
