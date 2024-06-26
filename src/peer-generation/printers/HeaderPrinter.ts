@@ -167,7 +167,6 @@ export function printApiAndSerializers(apiVersion: string|undefined, peerLibrary
 
     const structs = new IndentedPrinter()
     const typedefs = new IndentedPrinter()
-    const userConvertors = createLanguageWriter(Language.CPP)
 
     const convertors = makeConvertors(peerLibrary, structs, typedefs)
     const serializers = makeCSerializers(peerLibrary, structs, typedefs)
