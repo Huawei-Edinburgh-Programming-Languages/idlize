@@ -51,11 +51,15 @@ providePlatformDefinedData({
 })
 
 export interface NativeModuleIntegrated extends NativeModuleBase {
+// #region GENERATED API
 %GENERATED_METHODS%
+// #endregion
 }
 
 export interface NativeModule extends NativeModuleBase {
+// #region GENERATED API
 %GENERATED_METHODS%
+// #endregion
 
 // #region BASIC NODE
     _CreateNode(type: KInt, id: KInt, flags: KInt): NodePointer
