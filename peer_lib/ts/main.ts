@@ -51,7 +51,7 @@ import {
     assertEquals,
     assertTrue,
 } from "./test_utils"
-import { nativeModule } from "@arkoala/arkui//NativeModule"
+import { nativeModule } from "@koalaui/arkoala"
 import { mkdirSync, writeFileSync } from "fs"
 
 // TODO: hacky way to detect subset vs full.

@@ -400,10 +400,25 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
         writeFile(outMaterilizedFile, materializedClass)
     }
 
-    writeFile(
-        arkoala.langLib('NativeModule'),
-        printNativeModule(peerLibrary, options.nativeBridgeDir ?? "../../../../../../../native/NativeBridgeNapi")
-    )
+    // NativeModule
+    if (lang === Language.TS) {
+        writeFile(
+            arkoala.tsArkoalaLib('NativeModuleEmpty'),
+            printNativeModuleEmpty(peerLibrary),
+            true
+        )
+        writeFile(
+            arkoala.tsArkoalaLib('NativeModule'),
+            printNativeModule(peerLibrary, options.nativeBridgeDir ?? "../../../../../../../native/NativeBridgeNapi"),
+            true
+        )
+    } else {
+        writeFile(
+            arkoala.langLib('NativeModule'),
+            printNativeModule(peerLibrary, options.nativeBridgeDir ?? "../../../../../../../native/NativeBridgeNapi")
+        )
+    }
+        
     if (lang == Language.TS) {
         // todo I think we want to generate them for ARKTS too
         const interfaces = printInterfaces(peerLibrary, lang)
@@ -427,10 +442,6 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
         writeFile(
             arkoala.tsLib('ConflictedDeclarations'),
             printConflictedDeclarations(peerLibrary),
-        )
-        writeFile(
-            arkoala.tsLib('NativeModuleEmpty'),
-            printNativeModuleEmpty(peerLibrary)
         )
         writeFile(
             arkoala.tsLib('ArkUINodeType'),
