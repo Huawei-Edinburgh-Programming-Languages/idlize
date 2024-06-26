@@ -46,7 +46,7 @@ function componentToAttributesClass(component: string) {
 
 class PeerFileVisitor {
     readonly printer: LanguageWriter = createLanguageWriter(this.file.declarationTable.language)
-    //
+    //TODO: Ignore until bugs are fixed in https://rnd-gitlab-msc.huawei.com/rus-os-team/virtual-machines-and-tools/panda/-/issues/17850
     private static readonly ArkTsIgnoredMethods = ["testTupleNumberStringEnum", "testTupleOptional", "testTupleUnion"]
 
     // Temporary, until other languages supported.
