@@ -52,12 +52,13 @@ Ark_NodeHandle CreateNode(GENERATED_Ark_NodeType type, Ark_Int32 id, Ark_Int32 f
     return result;
 }
 
-void SetCallbackMethod(%CPP_PREFIX%Ark_APICallbackMethod* method) {
+void SetCallbackMethod(%CPP_PREFIX%Ark_APICallbackMethod* method) {}
+void RegisterCustomNodeEventReceiver(%CPP_PREFIX%CustomEventReceiver eventReceiver) {}
+int CheckEvent(%CPP_PREFIX%Ark_NodeEvent* event) {
+    return 0;
 }
-
-void RegisterCustomNodeEventReceiver(%CPP_PREFIX%CustomEventReceiver eventReceiver) {
-
-}
+void SendAsyncEvent(%CPP_PREFIX%Ark_NodeEvent* event) {}
+void CallContinuation(Ark_Int32 continuationId, Ark_Int32 argCount, %CPP_PREFIX%Ark_EventCallbackArg* args) {}
 }
 
 Ark_Float32 GetDensity(Ark_Int32 deviceId) {

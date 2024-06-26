@@ -3,6 +3,10 @@ Ark_Float32 GetDensity(Ark_Int32 deviceId);
 Ark_Float32 GetFontScale(Ark_Int32 deviceId);
 Ark_Float32 GetDesignWidthScale(Ark_Int32 deviceId);
 
+namespace NodeEvent {
+  int CheckEvent(ArkUINodeEvent* event);
+  void SendArkUIAsyncEvent(ArkUINodeEvent* event);
+}
 namespace ApiImpl {
   // Basic API
   Ark_NodeHandle GetNodeByViewStack();
@@ -47,6 +51,7 @@ namespace ApiImpl {
   Ark_PipelineContext GetPipelineContext(Ark_NodeHandle node);
   void SetVsyncCallback(Ark_VMContext vmContext, Ark_PipelineContext pipelineContext, Ark_Int32 callbackId);
   void UnblockVsyncWait(Ark_VMContext vmContext, Ark_PipelineContext pipelineContext);
+  void CallContinuation(Ark_Int32 continuationId, Ark_Int32 argCount, ArkUIEventCallbackArg* args);
   void SetChildTotalCount(Ark_NodeHandle node, Ark_Int32 totalCount);
   void ShowCrash(Ark_CharPtr message);
 } // namespace OHOS::Ace::NG::ApiImpl
@@ -56,5 +61,16 @@ namespace Bridge {
   void SetCallbackMethod(%CPP_PREFIX%Ark_APICallbackMethod* method);
   void RegisterCustomNodeEventReceiver(%CPP_PREFIX%CustomEventReceiver eventReceiver) {
     ApiImpl::RegisterCustomNodeEventReceiver(reinterpret_cast<CustomEventReceiver>(eventReceiver));
+  }
+  int CheckEvent(%CPP_PREFIX%Ark_NodeEvent* event) {
+    return NodeEvent::CheckEvent(reinterpret_cast<ArkUINodeEvent*>(event));
+  }
+
+  void SendAsyncEvent(%CPP_PREFIX%Ark_NodeEvent* event) {
+    NodeEvent::SendArkUIAsyncEvent(reinterpret_cast<ArkUINodeEvent*>(event));
+  }
+
+  void CallContinuation(Ark_Int32 continuationId, Ark_Int32 argCount, %CPP_PREFIX%Ark_EventCallbackArg* args) {
+    ApiImpl::CallContinuation(continuationId, argCount, reinterpret_cast<ArkUIEventCallbackArg*>(args));
   }
 }

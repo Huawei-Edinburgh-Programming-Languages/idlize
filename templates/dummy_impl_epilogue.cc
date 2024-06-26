@@ -67,9 +67,9 @@ const %CPP_PREFIX%ArkUIExtendedNodeAPI extendedNodeAPIImpl = {
     OHOS::Ace::NG::ApiImpl::GetPipelineContext,
     OHOS::Ace::NG::ApiImpl::SetVsyncCallback,
     OHOS::Ace::NG::ApiImpl::UnblockVsyncWait,
-    nullptr, // checkEvent
-    nullptr, // sendEvent
-    nullptr, // callContinuation
+    OHOS::Ace::NG::Bridge::CheckEvent,
+    OHOS::Ace::NG::Bridge::SendAsyncEvent,
+    OHOS::Ace::NG::Bridge::CallContinuation,
     OHOS::Ace::NG::ApiImpl::SetChildTotalCount,
     OHOS::Ace::NG::ApiImpl::ShowCrash
 };
