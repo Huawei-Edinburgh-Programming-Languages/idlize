@@ -79,7 +79,8 @@ export class LibaceInstall extends Install {
     libace = this.mkdir(this.test ? path.join(this.outDir, "libace") : this.outDir)
     implementationDir = this.mkdir(path.join(this.libace, "implementation"))
     generatedInterface = this.mkdir(path.join(this.libace, "generated", "interface"))
-    userConvertors = path.join(this.generatedInterface, "convertors_generated.h")
+    generatedUtility = this.mkdir(path.join(this.libace, "utility", "generated"))
+    userConvertors = path.join(this.generatedUtility, "convertors_generated.h")
     mesonBuild = path.join(this.libace, "meson.build")
 
     arkoalaMacros = this.interface("arkoala-macros.h")
