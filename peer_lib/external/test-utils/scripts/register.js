@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2024 Huawei Device Co., Ltd.
+ * Copyright (c) 2022-2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,13 +12,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { float64 } from "./types"
 
-export function asFloat64(value: string): float64 {
-    return (new Number(value)).valueOf()
+const tsNode = require("ts-node")
+const path = require("path")
+const { goldenSetup } = require("@koalaui/common/golden")
+
+goldenSetup('.', '.')
+
+unmemoized_suffix = process.env.UNMEMOIZED_SUFFIX
+if (unmemoized_suffix == undefined) {
+    unmemoized_suffix = ''
 }
 
-export function asString(value: float64 | undefined): string | undefined {
-    if (value === undefined) return undefined
-    return (new Number(value)).toString()
-}
+tsNode.register({
+    files: true,
+    // If uncommented, running tests doesn't perform type checks.
+    // transpileOnly: true,
+    project: path.resolve(`test`, `tsconfig${unmemoized_suffix}.json`),
+})
