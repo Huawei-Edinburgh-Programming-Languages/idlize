@@ -111,9 +111,11 @@ struct InteropTypeConverter<KLength> {
         env->GetStringUTFRegion(static_cast<ets_string>(value), 0, len, str.data());
         KLength result = {};
         parseKLength(str, &result);
+        result.type = 1;
+        result.resource = 0;
         return result;
     }
-    static InteropType convertTo(EtsEnv* env, KLength* value) = delete;
+    static InteropType convertTo(EtsEnv* env, KLength value) = delete;
     static void release(EtsEnv* env, InteropType value, KLength converted) {}
 };
 
