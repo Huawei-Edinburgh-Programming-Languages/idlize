@@ -85,9 +85,9 @@ function checkButton() {
         () => NativeModule._TestPerfNumberWithArray(data, data.length), 
         "TestPerfNumberWithArray(42, 5)")
     let peer = new ArkButtonPeer(ArkUINodeType.Button)
-/*
     checkResult("width", () => peer.widthAttribute("42%"),
-        "width(Length {value=42.000000, unit=%, resource=0})")
+        "width({0, 42.000000, 3, 0})")
+/*
     checkResult("height", () => peer.heightAttribute({ id: 43, bundleName: "MyApp", moduleName: "MyApp" }),
         "height(Length {value=0.000000, unit=vp, resource=43})")
     checkResult("bindSheet", () =>
