@@ -12,9 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { NativeModule } from "./NativeModule" 
+import { NativeModule } from "./NativeModule"
 import { ArkButtonPeer } from "@arkoala/arkui/ArkButtonPeer"
 import { ArkUINodeType } from "@arkoala/arkui/ArkUINodeType"
+import { ButtonType, LabelStyle } from "./dts-exports"
 
 /*
 V8:
@@ -81,12 +82,13 @@ export function checkResult(name: string, test: () => void, expected: string) {
 function checkButton() {
     let data = new byte[5]
     data[0] = 42
-    checkResult("TestPerfNumberWithArray", 
-        () => NativeModule._TestPerfNumberWithArray(data, data.length), 
+    checkResult("TestPerfNumberWithArray",
+        () => NativeModule._TestPerfNumberWithArray(data, data.length),
         "TestPerfNumberWithArray(42, 5)")
     let peer = new ArkButtonPeer(ArkUINodeType.Button)
     checkResult("width", () => peer.widthAttribute("42%"),
         "width({1, 42.000000, 3, 0})")
+    checkResult("type", () => peer.typeAttribute(1 as ButtonType), "type(1)")
 /*
     checkResult("height", () => peer.heightAttribute({ id: 43, bundleName: "MyApp", moduleName: "MyApp" }),
         "height(Length {value=0.000000, unit=vp, resource=43})")
@@ -98,12 +100,11 @@ function checkButton() {
         }),
         `bindSheet(false, "Function 42", {backgroundColor: undefined, title: {title: Custom kind=NativeErrorResource id=0, subtitle: undefined}, detents: undefined})`
     )
-    checkResult("type", () => peer.typeAttribute(1), "type(1)")
-    checkResult("labelStyle", () => peer.labelStyleAttribute({maxLines: 3}),
-        "labelStyle({maxLines: 3})")
-    checkResult("labelStyle2", () => peer.labelStyleAttribute({}),
+    checkResult("labelStyle", () => peer.labelStyleAttribute(new LabelStyleImpl(3)),
+         "labelStyle({maxLines: 3})")
+    checkResult("labelStyle2", () => peer.labelStyleAttribute(new LabelStyle())
         "labelStyle({maxLines: undefined})")
-        */
+*/
 }
 
 export function main(): void {
