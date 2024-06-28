@@ -502,8 +502,8 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
     writeFile(arkoala.native('bridge.cc'), printBridgeCc(peerLibrary, options.callLog ?? false))
 
     const { api, serializers } = printApiAndSerializers(options.apiVersion, peerLibrary)
-    writeFile(arkoala.native('Serializers.h'), serializers)
-    writeFile(arkoala.native('arkoala_api_generated.h'), api)
+    writeFile(arkoala.native('Serializers.h'), serializers, true)
+    writeFile(arkoala.native('arkoala_api_generated.h'), api, true)
 
     const modifiers = printRealAndDummyModifiers(peerLibrary)
     const accessors = printRealAndDummyAccessors(peerLibrary)
@@ -511,7 +511,7 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
         arkoala.native('dummy_impl.cc'),
         dummyImplementations(modifiers.dummy, accessors.dummy, 1, options.apiVersion, 6).getOutput().join('\n'),
     )
-    writeFile(arkoala.native('all_events.cc'), completeEventsImplementations(printEventsCImpl(peerLibrary)))
+    writeFile(arkoala.native('all_events.cc',), completeEventsImplementations(printEventsCImpl(peerLibrary)), true)
 
     if (!options.onlyIntegrated)
         copyPeerLib(path.join(__dirname, '..', 'peer_lib'), arkoala)
