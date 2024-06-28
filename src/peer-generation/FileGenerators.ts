@@ -426,13 +426,14 @@ ${epilogue}
 `
 }
 
-export function copyPeerLib(from: string, arkoala: ArkoalaInstall) {
+export function copyPeerLib(from: string, arkoala: ArkoalaInstall, filters?: string[]) {
+    filters = filters?.map(it => path.join(from, it))
     const recursive = true
-    copyDir(path.join(from, 'ts'), arkoala.tsDir, !recursive)
-    copyDir(path.join(from, 'ts/arkoala'), arkoala.tsArkoalaDir, recursive)
-    copyDir(path.join(from, 'cpp'), arkoala.nativeDir, recursive)
-    copyDir(path.join(from, 'arkts'), arkoala.arktsDir, recursive)
-    copyDir(path.join(from, 'java'), arkoala.javaDir, recursive)
+    copyDir(path.join(from, 'ts'), arkoala.tsDir, !recursive, filters)
+    copyDir(path.join(from, 'ts/arkoala'), arkoala.tsArkoalaDir, recursive, filters)
+    copyDir(path.join(from, 'cpp'), arkoala.nativeDir, recursive, filters)
+    copyDir(path.join(from, 'arkts'), arkoala.arktsDir, recursive, filters)
+    copyDir(path.join(from, 'java'), arkoala.javaDir, recursive, filters)
 }
 
 export function copyToLibace(from: string, libace: LibaceInstall) {
@@ -440,12 +441,14 @@ export function copyToLibace(from: string, libace: LibaceInstall) {
     fs.copyFileSync(macros, libace.arkoalaMacros)
 }
 
-function copyDir(from: string, to: string, recursive: boolean) {
+function copyDir(from: string, to: string, recursive: boolean, filters?: string[]) {
     fs.readdirSync(from).forEach(it => {
         const sourcePath = path.join(from, it)
         const targetPath = path.join(to, it)
         const statInfo = fs.statSync(sourcePath)
         if (statInfo.isFile()) {
+            if (filters && !filters.includes(sourcePath))
+                return
             fs.copyFileSync(sourcePath, targetPath)
         }
         else if (recursive && statInfo.isDirectory()) {

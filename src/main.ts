@@ -513,6 +513,9 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
     )
     writeFile(arkoala.native('all_events.cc',), completeEventsImplementations(printEventsCImpl(peerLibrary)), true)
 
-    if (!options.onlyIntegrated)
-        copyPeerLib(path.join(__dirname, '..', 'peer_lib'), arkoala)
+    copyPeerLib(path.join(__dirname, '..', 'peer_lib'), arkoala, !options.onlyIntegrated ? undefined : [
+        'cpp/SerializerBase.h',
+        'cpp/DeserializerBase.h',
+        'cpp/Interop.h',
+    ])
 }
