@@ -229,7 +229,7 @@ class BridgeCcVisitor {
 
     print(): void {
         for (const file of this.library.files) {
-            for (const peer of file.peers.values()) {
+            for (const peer of file.peersToGenerate.values()) {
                 for (const method of peer.methods) {
                     this.printMethod(method, peer.componentName)
                 }
