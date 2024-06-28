@@ -467,7 +467,8 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
         )
         writeFile(
             arkoala.tsLib("peer_events"),
-            printEvents(peerLibrary)
+            printEvents(peerLibrary),
+            true
         )
         writeFile(arkoala.tsLib('Serializer'),
             makeTSSerializer(peerLibrary),
@@ -517,5 +518,7 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
         'cpp/SerializerBase.h',
         'cpp/DeserializerBase.h',
         'cpp/Interop.h',
+        'ts/SerializerBase.ts',
+        'ts/DeserializerBase.ts',
     ])
 }
