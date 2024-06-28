@@ -31,7 +31,8 @@ export class PeerLibrary {
     public readonly materializedClasses: Map<string, MaterializedClass> = new Map()
 
     constructor(
-        public declarationTable: DeclarationTable
+        public declarationTable: DeclarationTable,
+        public componentsToGenerate: Set<string>,
     ) {}
 
     readonly customComponentMethods: string[] = []
