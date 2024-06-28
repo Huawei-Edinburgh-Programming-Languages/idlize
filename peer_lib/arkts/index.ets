@@ -163,7 +163,7 @@ function checkButton() {
 }
 
 export function main(): void {
-    // checkPerf(100000)
+    checkPerf(100000)
 
     checkButton()
 }
