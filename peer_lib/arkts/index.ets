@@ -15,7 +15,7 @@
 import { NativeModule } from "./NativeModule"
 import { ArkButtonPeer } from "@arkoala/arkui/ArkButtonPeer"
 import { ArkUINodeType } from "@arkoala/arkui/ArkUINodeType"
-import { ButtonType, LabelStyle } from "./dts-exports"
+import { ButtonType, LabelStyle, TextOverflow, ResourceStr, TextHeightAdaptivePolicy, Font } from "./dts-exports"
 
 /*
 V8:
@@ -79,6 +79,61 @@ export function checkResult(name: string, test: () => void, expected: string) {
     }
 }
 
+class LabelStyleImpl implements LabelStyle {
+    _textOverflow: TextOverflow | undefined
+    _maxLines: number | undefined
+    _minFontSize: number | ResourceStr | undefined
+    _maxFontSize: number | ResourceStr | undefined
+    _heightAdaptivePolicy: TextHeightAdaptivePolicy | undefined
+    _font: Font | undefined
+
+    constructor(maxLines?: number) {
+        this._maxLines = maxLines
+    }
+
+    get overflow(): TextOverflow | undefined {
+        return this._textOverflow
+    }
+    set overflow(arg: TextOverflow | undefined) {
+        this._textOverflow = arg
+    }
+
+    get maxLines(): number | undefined {
+        return this._maxLines
+    }
+    set maxLines(arg: number | undefined) {
+        this._maxLines = arg
+    }
+
+    get minFontSize(): number | ResourceStr | undefined {
+        return this._minFontSize
+    }
+    set minFontSize(arg: number | ResourceStr | undefined) {
+        this._minFontSize = arg
+    }
+
+    get maxFontSize(): number | ResourceStr | undefined {
+        return this._maxFontSize
+    }
+    set maxFontSize(arg: number | ResourceStr | undefined) {
+        this._maxFontSize = arg
+    }
+
+    get heightAdaptivePolicy(): TextHeightAdaptivePolicy | undefined {
+        return this._heightAdaptivePolicy
+    }
+    set heightAdaptivePolicy(arg: TextHeightAdaptivePolicy | undefined) {
+        this._heightAdaptivePolicy = arg
+    }
+
+    get font(): Font | undefined {
+        return this._font
+    }
+    set font(arg: Font | undefined) {
+        this._font = arg
+    }
+}
+
 function checkButton() {
     let data = new byte[5]
     data[0] = 42
@@ -89,6 +144,10 @@ function checkButton() {
     checkResult("width", () => peer.widthAttribute("42%"),
         "width({1, 42.000000, 3, 0})")
     checkResult("type", () => peer.typeAttribute(1 as ButtonType), "type(1)")
+    checkResult("labelStyle", () => peer.labelStyleAttribute(new LabelStyleImpl(3)),
+         "labelStyle({{ARK_TAG_UNDEFINED, {}}, {ARK_TAG_OBJECT, {102, .i32=3}}, {ARK_TAG_UNDEFINED, {}}, {ARK_TAG_UNDEFINED, {}}, {ARK_TAG_UNDEFINED, {}}, {ARK_TAG_UNDEFINED, {}}})")
+    checkResult("labelStyle2", () => peer.labelStyleAttribute(new LabelStyleImpl()),
+        "labelStyle({{ARK_TAG_UNDEFINED, {}}, {ARK_TAG_UNDEFINED, {}}, {ARK_TAG_UNDEFINED, {}}, {ARK_TAG_UNDEFINED, {}}, {ARK_TAG_UNDEFINED, {}}, {ARK_TAG_UNDEFINED, {}}})")
 /*
     checkResult("height", () => peer.heightAttribute({ id: 43, bundleName: "MyApp", moduleName: "MyApp" }),
         "height(Length {value=0.000000, unit=vp, resource=43})")
@@ -100,15 +159,11 @@ function checkButton() {
         }),
         `bindSheet(false, "Function 42", {backgroundColor: undefined, title: {title: Custom kind=NativeErrorResource id=0, subtitle: undefined}, detents: undefined})`
     )
-    checkResult("labelStyle", () => peer.labelStyleAttribute(new LabelStyleImpl(3)),
-         "labelStyle({maxLines: 3})")
-    checkResult("labelStyle2", () => peer.labelStyleAttribute(new LabelStyle())
-        "labelStyle({maxLines: undefined})")
 */
 }
 
 export function main(): void {
-    checkPerf(100000)
+    // checkPerf(100000)
 
     checkButton()
 }
