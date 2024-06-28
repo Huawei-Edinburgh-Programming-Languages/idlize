@@ -66,8 +66,6 @@ std::string etsType(const std::string &type)
         return "Object";
     else if (type == "KInteropNumber")
         return "long";
-    else if (type == "KLength")
-        return "Object";
     else {
         fprintf(stderr, "Unhandled type (etsType): %s\n", type.c_str());
         throw "Error";

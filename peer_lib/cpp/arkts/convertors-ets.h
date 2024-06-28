@@ -101,6 +101,24 @@ struct InteropTypeConverter<KByte*> {
     }
 };
 
+template<>
+struct InteropTypeConverter<KLength> {
+    using InteropType = ets_object;
+    static KLength convertFrom(EtsEnv* env, InteropType value) {
+        const auto len = env->GetStringLength(static_cast<ets_string>(value));
+        KStringPtr str;
+        str.resize(len);
+        env->GetStringUTFRegion(static_cast<ets_string>(value), 0, len, str.data());
+        KLength result = {};
+        parseKLength(str, &result);
+        result.type = 1;
+        result.resource = 0;
+        return result;
+    }
+    static InteropType convertTo(EtsEnv* env, KLength value) = delete;
+    static void release(EtsEnv* env, InteropType value, KLength converted) {}
+};
+
 template <typename Type>
 inline typename InteropTypeConverter<Type>::InteropType makeResult(EtsEnv* env, Type value) {
   return InteropTypeConverter<Type>::convertTo(env, value);

@@ -394,7 +394,17 @@ export interface Vector2 {
     z: number;
 }
 export interface PixelMap {}
-export interface GradientDirection {}
+export enum GradientDirection {
+    Left,
+    Top,
+    Right,
+    Bottom,
+    LeftTop,
+    LeftBottom,
+    RightTop,
+    RightBottom,
+    None
+}
 export enum NavigationTitleMode {
     Free = 0,
     Full,
@@ -785,3 +795,32 @@ enum GestureJudgeResult {
 }
 
 export type GestureRecognizerJudgeBeginCallback = (event: BaseGestureEvent, current: GestureRecognizer, recognizers: Array<GestureRecognizer>) => GestureJudgeResult;
+
+export class CanvasRenderingContext2D implements CanvasRenderer {
+  readonly height: number;
+  readonly width: number;
+  globalAlpha: number;
+  globalCompositeOperation: string;
+  stopImageAnalyzer(): void {}
+  constructor(settings?: RenderingContextSettings) {}
+  static of(height: number, width: number): CanvasRenderingContext2D {
+    return new CanvasRenderingContext2D()
+  }
+  rect(x: number, y: number, w: number, h: number): void {}
+  arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, counterclockwise?: boolean): void {}
+  closePath(): void {}
+}
+
+interface DrawingCanvas {}
+
+interface Size {
+  width: number
+  height: number
+}
+
+export class DrawingRenderingContext {
+  // get size(): Size
+  // get canvas(): DrawingCanvas;
+  invalidate(): void {}
+  constructor(unit?: LengthMetricsUnit) {}
+}
