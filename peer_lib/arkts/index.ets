@@ -489,9 +489,9 @@ function checkButton() {
 }
 
 export function main(): void {
-    checkPerf(100000)
-    checkPerf2(200 * 1000)
-    checkPerf3(200 * 1000)
+    checkPerf(5 * 1000 * 1000)
+    checkPerf2(5 * 1000 * 1000)
+    checkPerf3(5 * 1000 * 1000)
 
     checkButton()
 }
