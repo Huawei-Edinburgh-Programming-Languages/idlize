@@ -72,7 +72,7 @@ class ComponentFileVisitor {
             for (const method of peer.methods) {
                 for (const target of method.declarationTargets)
                     if (convertToCallback(peer, method, target))
-                        imports.addFeature("UseProperties", './use_properties')
+                        imports.addFeature("UseEventsProperties", './use_properties')
             }
             // TBD
             // peer.materializedClasses.forEach(it => {
