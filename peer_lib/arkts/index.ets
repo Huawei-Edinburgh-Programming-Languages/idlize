@@ -44,7 +44,10 @@ import { ButtonType,
         ShadowStyle,
         SheetMode,
         UIContext,
-        Callback } from "./dts-exports"
+        Callback,
+        BlurOptions } from "./dts-exports"
+
+const testString1000 = "One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand";
 
 /*
 V8:
@@ -417,6 +420,50 @@ class SheetOptionsImpl implements SheetOptions {
     }
 }
 
+class BlurOptionsImpl implements BlurOptions {
+    _grayscale: [number, number]
+
+    constructor(grayscale: [number, number]) {
+        this._grayscale = grayscale
+    }
+
+    get grayscale(): [number, number] {
+        return this._grayscale
+    }
+    set grayscale(arg: [number, number]) {
+        this._grayscale = arg
+    }
+}
+
+function checkPerf2(count: number) {
+    // let peer = new ArkButtonPeer(ArkUINodeType.Button)
+    let start = Date.now()
+    for (let i = 0; i < count; i++) {
+        let data: byte[]
+        if ( i % 2 == 0) {
+            data = new byte[2]
+            data[0] = 1
+            data[1] = 2
+        } else {
+            data = new byte[0]
+        }
+        NativeModule._TestPerfNumberWithDoubleAndArray(i, data, data.length)
+        // peer.backdropBlurAttribute(i, i % 2 == 0 ? undefined : data)
+    }
+    let passed = Date.now() - start
+    console.log(`backdropBlur: ${Math.round(passed)}ms for ${count} iteration, ${Math.round(passed / count * 1000000)}ms per 1M iterations`)
+}
+
+function checkPerf3(count: number) {
+    let peer = new ArkButtonPeer(ArkUINodeType.Button)
+    let start = Date.now()
+    for (let i = 0; i < count; i++) {
+        peer.widthAttribute(testString1000)
+    }
+    let passed = Date.now() - start
+    console.log(`widthAttributeString: ${Math.round(passed)}ms for ${count} iteration, ${Math.round(passed / count * 1000000)}ms per 1M iterations`)
+}
+
 function checkButton() {
     let data = new byte[5]
     data[0] = 42
@@ -443,6 +490,8 @@ function checkButton() {
 
 export function main(): void {
     checkPerf(100000)
+    checkPerf2(200 * 1000)
+    checkPerf3(200 * 1000)
 
     checkButton()
 }
