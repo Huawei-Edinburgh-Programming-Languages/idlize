@@ -128,7 +128,8 @@ const dtsImports = `import {
     GestureModifier,
     GestureRecognizerJudgeBeginCallback,
     CanvasRenderingContext2D,
-    DrawingRenderingContext
+    DrawingRenderingContext,
+    BoardStyle
 } from "./dts-exports"
 `
 

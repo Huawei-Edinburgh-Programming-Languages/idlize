@@ -374,7 +374,26 @@ export enum ButtonType {
     Capsule,
     Circle,
 }
-export interface SubTabBarStyle {}
+export enum SelectedMode {
+  INDICATOR,
+  BOARD,
+}
+export interface SubTabBarStyle {
+    _indicator?: IndicatorStyle;
+    _selectedMode?: SelectedMode;
+    _board?: BoardStyle;
+    _labelStyle?: LabelStyle;
+    _padding?: Padding | Dimension | LocalizedPadding;
+    _id?: string;
+
+    indicator(value: IndicatorStyle): SubTabBarStyle;
+    selectedMode(value: SelectedMode): SubTabBarStyle;
+    board(value: BoardStyle): SubTabBarStyle;
+    labelStyle(value: LabelStyle): SubTabBarStyle;
+    padding(value: Padding | Dimension): SubTabBarStyle;
+    padding(padding: LocalizedPadding): SubTabBarStyle;
+    id(value: string): SubTabBarStyle;
+}
 export enum HorizontalAlign {
     Start = 0,
     Center = 1,
@@ -578,6 +597,9 @@ export class ClassWithConstructorAndAllOptionalParamsDTS {
 export type CustomBuilder = (() => Object | void)
 
 export class BottomTabBarStyle {
+    _id?: string;
+    _labelStyle?: LabelStyle;
+    _padding?: Padding | Dimension | LocalizedPadding;
 
     constructor(icon: ResourceStr | TabBarSymbol, text: ResourceStr) {}
     id(value: string): BottomTabBarStyle { throw new Error() }
@@ -823,4 +845,8 @@ export class DrawingRenderingContext {
   // get canvas(): DrawingCanvas;
   invalidate(): void {}
   constructor(unit?: LengthMetricsUnit) {}
+}
+
+export interface BoardStyle {
+  borderRadius?: Length;
 }
