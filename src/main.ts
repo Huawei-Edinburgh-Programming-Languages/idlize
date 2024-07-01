@@ -57,7 +57,6 @@ import { printMaterialized } from "./peer-generation/printers/MaterializedPrinte
 import { printApiAndSerializers } from "./peer-generation/printers/HeaderPrinter"
 import { printNodeTypes } from "./peer-generation/printers/NodeTypesPrinter"
 import { printNativeModule, printNativeModuleEmpty } from "./peer-generation/printers/NativeModulePrinter"
-import { printBridgeCc } from "./peer-generation/printers/BridgeCcPrinter"
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig";
 import { printEvents, printEventsCImpl } from "./peer-generation/printers/EventsPrinter"
 import { printGniSources } from "./peer-generation/printers/GniPrinter"
@@ -67,6 +66,7 @@ import { printConflictedDeclarations } from "./peer-generation/printers/Conflict
 import { printFakeDeclarations } from "./peer-generation/printers/FakeDeclarationsPrinter"
 import { printBuilderClasses } from "./peer-generation/printers/BuilderClassPrinter"
 import { ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from "./lang/java"
+import { printBridgeCcCustom, printBridgeCcGenerated } from "./peer-generation/printers/BridgeCcPrinter"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -502,7 +502,8 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
         const writer = makeJavaSerializerWriter(peerLibrary)
         writer.printTo(arkoala.javaLib(ARKOALA_PACKAGE_PATH, 'Serializer'))
     }
-    writeFile(arkoala.native('bridge.cc'), printBridgeCc(peerLibrary, options.callLog ?? false), true)
+    writeFile(arkoala.native('bridge_generated.cc'), printBridgeCcGenerated(peerLibrary, options.callLog ?? false), true)
+    writeFile(arkoala.native('bridge_custom.cc'), printBridgeCcCustom(peerLibrary, options.callLog ?? false))
 
     const { api, serializers } = printApiAndSerializers(options.apiVersion, peerLibrary)
     writeFile(arkoala.native('Serializers.h'), serializers, true)

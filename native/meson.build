@@ -41,7 +41,8 @@ include_dirs = [
 sources = [
     arkoala_dir + '/common-interop.cc',
     arkoala_dir + '/custom.cc',
-    arkoala_dir + '/bridge.cc',
+    arkoala_dir + '/bridge_generated.cc',
+    arkoala_dir + '/bridge_custom.cc',
     arkoala_dir + '/events.cc',
     arkoala_dir + '/all_events.cc',
     arkoala_dir + '/load-library.cc',

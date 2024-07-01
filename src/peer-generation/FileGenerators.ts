@@ -117,13 +117,20 @@ export function libraryCcDeclaration(): string {
         .replaceAll(`%CPP_PREFIX%`, PeerGeneratorConfig.cppPrefix)
 }
 
-export function bridgeCcDeclaration(bridgeCc: string[]): string {
-    let prologue = readTemplate('bridge_prologue.cc')
-        .replaceAll(`%CPP_PREFIX%`, PeerGeneratorConfig.cppPrefix)
-    let epilogue = readTemplate('bridge_epilogue.cc')
+export function bridgeCcGeneratedDeclaration(generatedApi: string[]): string {
+    let prologue = readTemplate('bridge_generated_prologue.cc')
         .replaceAll(`%CPP_PREFIX%`, PeerGeneratorConfig.cppPrefix)
 
-    return prologue.concat("\n").concat(bridgeCc.join("\n")).concat(epilogue).concat("\n")
+    return prologue.concat("\n")
+        .concat(generatedApi.join("\n"))
+}
+
+export function bridgeCcCustomDeclaration(customApi: string[]): string {
+    let prologue = readTemplate('bridge_custom_prologue.cc')
+        .replaceAll(`%CPP_PREFIX%`, PeerGeneratorConfig.cppPrefix)
+
+    return prologue.concat("\n")
+        .concat(customApi.join("\n"))
 }
 
 export function completeImplementations(modifiers: LanguageWriter, accessors: LanguageWriter, basicVersion: number, fullVersion: number, extendedVersion: number): LanguageWriter {

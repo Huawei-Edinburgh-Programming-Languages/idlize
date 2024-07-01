@@ -15,21 +15,8 @@
 #include "Interop.h"
 #include "arkoala_api_generated.h"
 #include "Serializers.h"
-#include "load-library.h"
 #include "arkoala-logging.h"
 #include "library.h"
-
-const %CPP_PREFIX%ArkUIFullNodeAPI* GetFullImpl() {
-    return reinterpret_cast<const %CPP_PREFIX%ArkUIFullNodeAPI*>(GetAnyImpl(%CPP_PREFIX%Ark_APIVariantKind::%CPP_PREFIX%FULL, %CPP_PREFIX%ARKUI_FULL_API_VERSION));
-}
-
-const %CPP_PREFIX%ArkUINodeModifiers* GetNodeModifiers() {
-    return GetFullImpl()->getNodeModifiers();
-}
-
-const %CPP_PREFIX%ArkUIAccessors* GetAccessors() {
-    return GetFullImpl()->getAccessors();
-}
 
 const %CPP_PREFIX%ArkUIBasicNodeAPI* GetArkUIBasicNodeAPI() {
     return reinterpret_cast<const %CPP_PREFIX%ArkUIBasicNodeAPI*>(GetAnyImpl(%CPP_PREFIX%Ark_APIVariantKind::%CPP_PREFIX%BASIC, %CPP_PREFIX%ARKUI_BASIC_NODE_API_VERSION));
@@ -45,3 +32,8 @@ CONSTRUCTOR(init) {
         if (setAppendGroupedLog) setAppendGroupedLog((void*)GetArkUIExtendedNodeAPI);
     }
 }
+
+void impl_ShowCrash(const KStringPtr& messagePtr) {
+    GetArkUIExtendedNodeAPI()->showCrash(messagePtr.c_str());
+}
+KOALA_INTEROP_V1(ShowCrash, KStringPtr)
