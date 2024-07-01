@@ -436,7 +436,7 @@ class BlurOptionsImpl implements BlurOptions {
 }
 
 function checkPerf2(count: number) {
-    // let peer = new ArkButtonPeer(ArkUINodeType.Button)
+    let peer = new ArkButtonPeer(ArkUINodeType.Button)
     let start = Date.now()
     for (let i = 0; i < count; i++) {
         let data: byte[]
@@ -447,11 +447,10 @@ function checkPerf2(count: number) {
         } else {
             data = new byte[0]
         }
-        NativeModule._TestPerfNumberWithDoubleAndArray(i, data, data.length)
-        // peer.backdropBlurAttribute(i, i % 2 == 0 ? undefined : data)
+        peer.backdropBlurAttribute(i, i % 2 == 0 ? undefined : new BlurOptionsImpl([1, 2] as [number, number]))
     }
     let passed = Date.now() - start
-    console.log(`backdropBlur: ${Math.round(passed)}ms for ${count} iteration, ${Math.round(passed / count * 1000000)}ms per 1M iterations`)
+    console.log(`backdropBlur: ${Math.round(passed)}ms for ${count} iteration, ${Math.round(passed / count * 1_000_000)}ns per ${count} iterations`)
 }
 
 function checkPerf3(count: number) {
@@ -461,7 +460,7 @@ function checkPerf3(count: number) {
         peer.widthAttribute(testString1000)
     }
     let passed = Date.now() - start
-    console.log(`widthAttributeString: ${Math.round(passed)}ms for ${count} iteration, ${Math.round(passed / count * 1000000)}ms per 1M iterations`)
+    console.log(`widthAttributeString: ${Math.round(passed)}ms for ${count} iteration, ${Math.round(passed / count * 1_000_000)}ns per ${count} iterations`)
 }
 
 function checkButton() {
