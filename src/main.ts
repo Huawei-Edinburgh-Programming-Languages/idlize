@@ -36,7 +36,9 @@ import {
     gniFile,
     mesonBuildFile,
     completeImplementations,
-    copyToLibace
+    copyToLibace,
+    libraryCcDeclaration,
+    libraryHDeclaration
 } from "./peer-generation/FileGenerators"
 import {
     PeerGeneratorVisitor,
@@ -513,6 +515,8 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
         dummyImplementations(modifiers.dummy, accessors.dummy, 1, options.apiVersion, 6).getOutput().join('\n'),
     )
     writeFile(arkoala.native('all_events.cc',), completeEventsImplementations(printEventsCImpl(peerLibrary)), true)
+    writeFile(arkoala.native('library.h'), libraryHDeclaration())
+    writeFile(arkoala.native('library.cc'), libraryCcDeclaration())
 
     copyPeerLib(path.join(__dirname, '..', 'peer_lib'), arkoala, !options.onlyIntegrated ? undefined : [
         'cpp/SerializerBase.h',

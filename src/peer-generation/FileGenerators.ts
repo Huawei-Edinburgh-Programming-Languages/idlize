@@ -107,6 +107,16 @@ ${readTemplate('NativeModuleEmpty_template.ts')
 `
 }
 
+export function libraryHDeclaration(): string {
+    return readTemplate('library_template.h')
+        .replaceAll(`%CPP_PREFIX%`, PeerGeneratorConfig.cppPrefix)
+}
+
+export function libraryCcDeclaration(): string {
+    return readTemplate('library_template.cc')
+        .replaceAll(`%CPP_PREFIX%`, PeerGeneratorConfig.cppPrefix)
+}
+
 export function bridgeCcDeclaration(bridgeCc: string[]): string {
     let prologue = readTemplate('bridge_prologue.cc')
         .replaceAll(`%CPP_PREFIX%`, PeerGeneratorConfig.cppPrefix)
@@ -206,8 +216,12 @@ export function dummyImplementations(modifiers: LanguageWriter, accessors: Langu
 
     let result = createLanguageWriter(Language.CPP)
     result.writeLines(prologue)
+    result.print("namespace OHOS::Ace::NG::GeneratedModifier {")
+    result.pushIndent()
     result.concat(modifiers).concat(accessors)
     result.writeLines(epilogue)
+    result.popIndent()
+    result.print("}")
 
     return result
 }
