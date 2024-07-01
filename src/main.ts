@@ -524,6 +524,7 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
         'cpp/SerializerBase.h',
         'cpp/DeserializerBase.h',
         'cpp/Interop.h',
+        'cpp/arkoala-macros.h',
         'ts/SerializerBase.ts',
         'ts/DeserializerBase.ts',
     ])
