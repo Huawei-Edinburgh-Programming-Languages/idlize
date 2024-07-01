@@ -107,11 +107,6 @@ ${readTemplate('NativeModuleEmpty_template.ts')
 `
 }
 
-export function libraryHDeclaration(): string {
-    return readTemplate('library_template.h')
-        .replaceAll(`%CPP_PREFIX%`, PeerGeneratorConfig.cppPrefix)
-}
-
 export function libraryCcDeclaration(): string {
     return readTemplate('library_template.cc')
         .replaceAll(`%CPP_PREFIX%`, PeerGeneratorConfig.cppPrefix)

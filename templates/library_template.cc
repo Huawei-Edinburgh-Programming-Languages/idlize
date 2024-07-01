@@ -6,7 +6,7 @@
 static %CPP_PREFIX%ArkUIAnyAPI* impls[%CPP_PREFIX%Ark_APIVariantKind::%CPP_PREFIX%COUNT] = { 0 };
 const char* getArkAnyAPIFuncName = "%CPP_PREFIX%GetArkAnyAPI";
 
-const %CPP_PREFIX%ArkUIAnyAPI* GetAnyImpl(%CPP_PREFIX%Ark_APIVariantKind kind, int version, std::string* result) {
+const ArkUIAnyAPI* GetAnyImpl(ArkUIAPIVariantKind kind, int version, std::string* result) {
     if (!impls[kind]) {
         %CPP_PREFIX%ArkUIAnyAPI* impl = nullptr;
         typedef %CPP_PREFIX%ArkUIAnyAPI* (*GetAPI_t)(int, int);
@@ -54,5 +54,5 @@ const %CPP_PREFIX%ArkUIAnyAPI* GetAnyImpl(%CPP_PREFIX%Ark_APIVariantKind kind, i
         }
         impls[kind] = impl;
     }
-    return impls[kind];
+    return reinterpret_cast<ArkUIAnyAPI*>(impls[kind]);
 }

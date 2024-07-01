@@ -38,7 +38,6 @@ import {
     completeImplementations,
     copyToLibace,
     libraryCcDeclaration,
-    libraryHDeclaration
 } from "./peer-generation/FileGenerators"
 import {
     PeerGeneratorVisitor,
@@ -514,10 +513,13 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
     writeFile(
         arkoala.native('dummy_impl.cc'),
         dummyImplementations(modifiers.dummy, accessors.dummy, 1, options.apiVersion, 6).getOutput().join('\n'),
+    )
+    writeFile(
+        arkoala.native('real_impl.cc'),
+        dummyImplementations(modifiers.real, accessors.real, 1, options.apiVersion, 6).getOutput().join('\n'),
         true,
     )
     writeFile(arkoala.native('all_events.cc',), completeEventsImplementations(printEventsCImpl(peerLibrary)), true)
-    writeFile(arkoala.native('library.h'), libraryHDeclaration())
     writeFile(arkoala.native('library.cc'), libraryCcDeclaration())
 
     copyPeerLib(path.join(__dirname, '..', 'peer_lib'), arkoala, !options.onlyIntegrated ? undefined : [

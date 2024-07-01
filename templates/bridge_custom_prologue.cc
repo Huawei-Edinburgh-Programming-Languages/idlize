@@ -12,18 +12,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "library.h"
 #include "Interop.h"
 #include "arkoala_api_generated.h"
 #include "Serializers.h"
 #include "arkoala-logging.h"
-#include "library.h"
 
 const %CPP_PREFIX%ArkUIBasicNodeAPI* GetArkUIBasicNodeAPI() {
-    return reinterpret_cast<const %CPP_PREFIX%ArkUIBasicNodeAPI*>(GetAnyImpl(%CPP_PREFIX%Ark_APIVariantKind::%CPP_PREFIX%BASIC, %CPP_PREFIX%ARKUI_BASIC_NODE_API_VERSION));
+    return reinterpret_cast<const %CPP_PREFIX%ArkUIBasicNodeAPI*>(
+        GetAnyImpl(static_cast<ArkUIAPIVariantKind>(%CPP_PREFIX%Ark_APIVariantKind::%CPP_PREFIX%BASIC), 
+        %CPP_PREFIX%ARKUI_BASIC_NODE_API_VERSION));
 }
 
 const %CPP_PREFIX%ArkUIExtendedNodeAPI* GetArkUIExtendedNodeAPI() {
-    return reinterpret_cast<const %CPP_PREFIX%ArkUIExtendedNodeAPI*>(GetAnyImpl(%CPP_PREFIX%Ark_APIVariantKind::%CPP_PREFIX%EXTENDED, %CPP_PREFIX%ARKUI_EXTENDED_NODE_API_VERSION));
+    return reinterpret_cast<const %CPP_PREFIX%ArkUIExtendedNodeAPI*>(
+        GetAnyImpl(static_cast<ArkUIAPIVariantKind>(%CPP_PREFIX%Ark_APIVariantKind::%CPP_PREFIX%EXTENDED), 
+        %CPP_PREFIX%ARKUI_EXTENDED_NODE_API_VERSION));
 }
 
 CONSTRUCTOR(init) {
