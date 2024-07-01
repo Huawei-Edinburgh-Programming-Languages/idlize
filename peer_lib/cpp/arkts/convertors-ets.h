@@ -22,9 +22,9 @@
 #include <vector>
 #include <string>
 
-#include "interop-types.h"
-
+#include "arkoala_api_generated.h"
 #include "etsapi.h"
+#include "interop-types.h"
 
 template<class T>
 struct InteropTypeConverter {
@@ -117,6 +117,16 @@ struct InteropTypeConverter<KLength> {
     }
     static InteropType convertTo(EtsEnv* env, KLength value) = delete;
     static void release(EtsEnv* env, InteropType value, KLength converted) {}
+};
+
+template <> struct InteropTypeConverter<KInteropNumber> {
+  using InteropType = ets_double;
+  static KInteropNumber convertFrom(EtsEnv *env, InteropType value) {
+    return {.tag = ARK_TAG_FLOAT32, .f32 = static_cast<float>(value)};
+  }
+  static InteropType convertTo(EtsEnv *env, KInteropNumber value) = delete;
+  static void release(EtsEnv *env, InteropType value,
+                      KInteropNumber converted) {}
 };
 
 template <typename Type>
