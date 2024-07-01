@@ -61,7 +61,6 @@ class ComponentFileVisitor {
                 imports.addFeatureByBasename(attrType.typeName,
                     renameDtsToPeer(path.basename(peer.originalFilename), peer.declarationTable.language))
             )
-            imports.addFeature("ArkUINodeType", "./ArkUINodeType")
             imports.addFeature("runtimeType", "./SerializerBase")
             imports.addFeature("RuntimeType", "./SerializerBase")
             imports.addFeature("isPixelMap", "./SerializerBase")
@@ -133,7 +132,7 @@ export function ${componentFunctionName}(
     const receiver = remember(() => {
         return new ${componentClassName}()
     })
-    NodeAttach(() => new ${peerClassName}(ArkUINodeType.${peer.componentName}, receiver), () => {
+    NodeAttach(() => new ${peerClassName}(receiver), () => {
         ${callableMethod ? `receiver.${callableMethod.name}(${mappedCallableParamsValues})` : ""}
         style?.(receiver)
         content_?.()

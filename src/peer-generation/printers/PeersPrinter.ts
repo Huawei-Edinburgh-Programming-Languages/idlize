@@ -14,13 +14,12 @@
  */
 
 import * as path from "path"
-import { IndentedPrinter } from "../../IndentedPrinter";
-import { EnumEntity, PeerFile } from "../PeerFile";
+import { PeerFile } from "../PeerFile";
 import { PeerLibrary } from "../PeerLibrary";
-import { Language, isStatic, renameDtsToPeer, throwException } from "../../util";
+import { Language, renameDtsToPeer, throwException } from "../../util";
 import { ImportsCollector } from "../ImportsCollector";
 import { PeerClass, PeerClassBase } from "../PeerClass";
-import { InheritanceRole, determineParentRole, isHeir, isRoot, isStandalone } from "../inheritance";
+import { InheritanceRole, determineParentRole, isCommonMethod, isHeir, isRoot } from "../inheritance";
 import { PeerMethod } from "../PeerMethod";
 import {
     LanguageExpression,
@@ -129,18 +128,21 @@ class PeerFileVisitor {
         const printer = this.printer
         const parentRole = determineParentRole(peer.originalClassName, peer.originalParentName)
         const isNode = parentRole !== InheritanceRole.Finalizable
+        const isAbstractSuperclass = isCommonMethod(peer.componentName)
+        const typeArgTypes = isAbstractSuperclass ? [new Type('int32', !isNode)] : []
+        const typeArgNames = isAbstractSuperclass ? ['type'] : []
         const signature = new NamedMethodSignature(
             Type.Void,
-            [new Type('ArkUINodeType', !isNode), new Type('ComponentBase', true), new Type('int32')],
-            ['type', 'component', 'flags'],
-            [undefined, undefined, '0'])
+            [...typeArgTypes, new Type('PeerReceiver', true), new Type('int32', !isAbstractSuperclass)],
+            [...typeArgNames, 'component', 'flags'],
+            [undefined, undefined, isAbstractSuperclass ? '0' : undefined])
 
         printer.writeConstructorImplementation(componentToPeerClass(peer.componentName), signature, (writer) => {
             if (parentRole === InheritanceRole.PeerNode) {
                 writer.writeSuperCall([`type`, 'flags'])
                 writer.writeMethodCall('component', 'setPeer', ['this'], true)
             } else if (parentRole === InheritanceRole.Heir || parentRole === InheritanceRole.Root) {
-                writer.writeSuperCall([`type`, 'component', 'flags'])
+                writer.writeSuperCall([`ArkUINodeType.${peer.componentName}`, 'component', 'flags'])
             } else {
                 throwException(`Unexpected parent inheritance role: ${parentRole}`)
             }
@@ -197,7 +199,7 @@ class PeerFileVisitor {
                     `import { createSerializer, Serializer } from "./Serializer"`,
                     `import { nativeModule } from "@koalaui/arkoala"`,
                     `import { ArkUINodeType } from "./ArkUINodeType"`,
-                    `import { ComponentBase } from "./ComponentBase"`,
+                    `import { PeerReceiver } from "./PeerReceiver"`,
                 ]
             }
             case Language.ARKTS: {
@@ -207,7 +209,7 @@ class PeerFileVisitor {
                     `import { isPixelMap, isResource, isInstanceOf, runtimeType, RuntimeType, SerializerBase } from "./SerializerBase"`,
                     `import { createSerializer, Serializer } from "./Serializer"`,
                     `import { ArkUINodeType } from "./ArkUINodeType"`,
-                    `import { ComponentBase } from "./ComponentBase"`,
+                    `import { PeerReceiver } from "./PeerReceiver"`,
                     `import { NativeModule } from "./NativeModule"`,
                     `${collectDtsImports().trim()}`
                 ]

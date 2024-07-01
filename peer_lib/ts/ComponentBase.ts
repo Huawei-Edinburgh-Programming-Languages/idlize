@@ -14,8 +14,9 @@
  */
 
 import { PeerNode } from './PeerNode'
+import { PeerReceiver } from './PeerReceiver'
 
-export class ComponentBase {
+export class ComponentBase implements PeerReceiver {
     protected peer?: PeerNode
     setPeer(peer: PeerNode) {
         this.peer = peer
