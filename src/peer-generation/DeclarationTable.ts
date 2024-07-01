@@ -417,8 +417,7 @@ export class DeclarationTable {
         const callbacks = collectCallbacks(library)
         for (const callback of callbacks) {
             callback.args.forEach(arg => {
-                const useToGenerate = !library.componentsToGenerate.size || 
-                    library.componentsToGenerate.has(callback.componentName)
+                const useToGenerate = library.shouldGenerateComponent(callback.componentName)
                 this.requestType(undefined, arg.type, useToGenerate)
             })
         }

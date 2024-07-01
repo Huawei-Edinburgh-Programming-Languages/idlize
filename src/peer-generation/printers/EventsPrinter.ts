@@ -182,7 +182,7 @@ class CEventsVisitor {
     private printReceiversList(callbacks: Map<string, CallbackInfo[]>) {
         this.receiversList.pushIndent()
         for (const componentName of callbacks.keys()) {
-            if (this.library.componentsToGenerate.has(componentName))
+            if (this.library.shouldGenerateComponent(componentName))
                 this.receiversList.print(`Get${componentName}EventsReceiver,`)
             else 
                 this.receiversList.print(`0,`)
@@ -195,14 +195,14 @@ class CEventsVisitor {
         const groupedCallbacks = groupCallbacks(listedCallbacks)
         this.printEventsKinds(listedCallbacks)
         for (const [name, callbacks] of groupedCallbacks) {
-            if (!this.library.componentsToGenerate.has(name))
+            if (!this.library.shouldGenerateComponent(name))
                 continue
             for (const callback of callbacks) {
                 this.printEventImpl(callback)
             }
         }
         for (const [name, callbacks] of groupedCallbacks) {
-            if (!this.library.componentsToGenerate.has(name))
+            if (!this.library.shouldGenerateComponent(name))
                 continue
             this.printReceiver(name, callbacks)
         }
@@ -349,7 +349,7 @@ class TSEventsVisitor {
 
     print(): void {
         const callbacks = collectCallbacks(this.library)
-            .filter(it => this.library.componentsToGenerate.has(it.componentName))
+            .filter(it => this.library.shouldGenerateComponent(it.componentName))
         this.printImports()
         this.printEventsClasses(callbacks)
         this.printEventsEnum(callbacks)

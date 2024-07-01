@@ -479,7 +479,7 @@ class PeersGenerator {
                 this.declarationTable.requestType(
                     `Type_${originalParentName}_${methodName}${methodIndex == 0 ? "" : methodIndex.toString()}_Arg${index}`,
                     param.type,
-                    this.library.componentsToGenerate.has(peer.componentName),
+                    this.library.shouldGenerateComponent(peer.componentName),
                 )
             }
         })
@@ -814,7 +814,7 @@ export class PeerProcessor {
         const components = this.library.componentsDeclarations
         if (!this.library.componentsToGenerate.size)
             return components
-        const entryComponents = components.filter(it => this.library.componentsToGenerate.has(it.name))
+        const entryComponents = components.filter(it => this.library.shouldGenerateComponent(it.name))
         return components.filter(component => {
             return entryComponents.includes(component)
                 // entryComponents.some(entryComponent => isSubclassComponent(this.declarationTable.typeChecker!, entryComponent, component))

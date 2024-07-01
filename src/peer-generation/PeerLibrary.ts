@@ -63,4 +63,8 @@ export class PeerLibrary {
     isComponentDeclaration(node: ts.Declaration): boolean {
         return this.findComponentByDeclaration(node) !== undefined
     }
+
+    shouldGenerateComponent(name: string): boolean {
+        return !this.componentsToGenerate.size || this.componentsToGenerate.has(name)
+    }
 }
