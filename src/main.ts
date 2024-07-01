@@ -502,7 +502,7 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
         const writer = makeJavaSerializerWriter(peerLibrary)
         writer.printTo(arkoala.javaLib(ARKOALA_PACKAGE_PATH, 'Serializer'))
     }
-    writeFile(arkoala.native('bridge.cc'), printBridgeCc(peerLibrary, options.callLog ?? false))
+    writeFile(arkoala.native('bridge.cc'), printBridgeCc(peerLibrary, options.callLog ?? false), true)
 
     const { api, serializers } = printApiAndSerializers(options.apiVersion, peerLibrary)
     writeFile(arkoala.native('Serializers.h'), serializers, true)
@@ -513,6 +513,7 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
     writeFile(
         arkoala.native('dummy_impl.cc'),
         dummyImplementations(modifiers.dummy, accessors.dummy, 1, options.apiVersion, 6).getOutput().join('\n'),
+        true,
     )
     writeFile(arkoala.native('all_events.cc',), completeEventsImplementations(printEventsCImpl(peerLibrary)), true)
     writeFile(arkoala.native('library.h'), libraryHDeclaration())
