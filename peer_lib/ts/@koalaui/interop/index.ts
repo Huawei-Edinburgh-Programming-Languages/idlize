@@ -205,5 +205,3 @@ export abstract class ArrayDecoder<T> {
 export interface CallbackRegistry {
     registerCallback(callback: any, obj: any): KPointer
 }
-
-export * from './Events'
