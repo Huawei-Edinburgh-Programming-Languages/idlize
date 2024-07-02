@@ -30,13 +30,6 @@ const %CPP_PREFIX%ArkUIExtendedNodeAPI* GetArkUIExtendedNodeAPI() {
         %CPP_PREFIX%ARKUI_EXTENDED_NODE_API_VERSION));
 }
 
-CONSTRUCTOR(init) {
-    if (GetArkUIExtendedNodeAPI()) {
-        auto setAppendGroupedLog = GetArkUIExtendedNodeAPI()->setAppendGroupedLog;
-        if (setAppendGroupedLog) setAppendGroupedLog((void*)GetArkUIExtendedNodeAPI);
-    }
-}
-
 void impl_ShowCrash(const KStringPtr& messagePtr) {
     GetArkUIExtendedNodeAPI()->showCrash(messagePtr.c_str());
 }
