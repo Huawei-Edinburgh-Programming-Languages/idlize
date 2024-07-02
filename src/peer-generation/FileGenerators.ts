@@ -471,7 +471,7 @@ function copyDir(from: string, to: string, recursive: boolean, filters?: string[
             if (!fs.existsSync(targetPath)) {
                 fs.mkdirSync(targetPath)
             }
-            copyDir(sourcePath, targetPath, recursive)
+            copyDir(sourcePath, targetPath, recursive, filters)
         }
     })
 }
