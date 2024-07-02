@@ -185,7 +185,7 @@ class CEventsVisitor {
             if (this.library.shouldGenerateComponent(componentName))
                 this.receiversList.print(`Get${componentName}EventsReceiver,`)
             else 
-                this.receiversList.print(`0,`)
+                this.receiversList.print(`nullptr,`)
         }
         this.receiversList.popIndent()
     }
