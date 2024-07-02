@@ -19,7 +19,7 @@ import { PeerLibrary } from "../PeerLibrary";
 import { Language, renameDtsToPeer, throwException } from "../../util";
 import { ImportsCollector } from "../ImportsCollector";
 import { PeerClass, PeerClassBase } from "../PeerClass";
-import { InheritanceRole, determineParentRole, isCommonMethod, isHeir, isRoot } from "../inheritance";
+import { InheritanceRole, determineParentRole, isExtensibleAbstractClass, isHeir, isRoot } from "../inheritance";
 import { PeerMethod } from "../PeerMethod";
 import {
     LanguageExpression,
@@ -128,7 +128,7 @@ class PeerFileVisitor {
         const printer = this.printer
         const parentRole = determineParentRole(peer.originalClassName, peer.originalParentName)
         const isNode = parentRole !== InheritanceRole.Finalizable
-        const isAbstractSuperclass = isCommonMethod(peer.componentName)
+        const isAbstractSuperclass = isExtensibleAbstractClass(peer.componentName)
         const typeArgTypes = isAbstractSuperclass ? [new Type('int32', !isNode)] : []
         const typeArgNames = isAbstractSuperclass ? ['type'] : []
         const signature = new NamedMethodSignature(

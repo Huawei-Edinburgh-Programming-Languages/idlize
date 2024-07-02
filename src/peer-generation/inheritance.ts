@@ -32,6 +32,14 @@ export function determineInheritanceRole(name: string): InheritanceRole {
     return InheritanceRole.Heir
 }
 
+export function isExtensibleAbstractClass(name: string): boolean {
+    return isRoot(name) || [
+        "ScrollableCommonMethod",
+        "BaseSpan",
+        "CommonShapeMethod",
+    ].includes(name)
+}
+
 export function determineParentRole(name: string|undefined, parent: string | undefined): InheritanceRole {
     if (!name) throw new Error(`name must be known: ${parent}`)
     if (parent === undefined) {
