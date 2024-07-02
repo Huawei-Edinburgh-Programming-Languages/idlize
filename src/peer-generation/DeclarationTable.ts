@@ -692,7 +692,7 @@ export class DeclarationTable {
             name: string;
         }
 
-        const unions: UnionType[] = []
+        const unions = new Map<string, Selector[]>()
         for (let target of this.orderedDependencies) {
             let nameAssigned = this.computeTargetName(target, false)
             if (nameAssigned === PrimitiveType.Tag.getText(this)) {
@@ -708,7 +708,8 @@ export class DeclarationTable {
                     if (index === 0) return
                     selectors.push({ id: index, name: field.name })
                 })
-                unions.push({ typename: nameAssigned, selectors: selectors })
+
+                unions.set(nameAssigned, selectors )
             }
         }
         return unions
