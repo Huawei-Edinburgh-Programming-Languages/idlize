@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 import { float32, int32 } from "@koalaui/common"
-import { pointer, registerCallback as wrapCallback } from "@koalaui/interop"
+import { pointer, wrapCallback } from "@koalaui/interop"
 import { nativeModule } from "@koalaui/arkoala"
 // imports required intarfaces (now generation is disabled)
 // import { Resource, Length, PixelMap } from "@arkoala/arkui"
