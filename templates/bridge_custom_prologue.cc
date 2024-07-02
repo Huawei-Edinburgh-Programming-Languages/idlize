@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 #include "library.h"
-#include "Interop.h"
+#include "common-interop.h"
 #include "arkoala_api_generated.h"
 #include "Serializers.h"
 #include "arkoala-logging.h"
