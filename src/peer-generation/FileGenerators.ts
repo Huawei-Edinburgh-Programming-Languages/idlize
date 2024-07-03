@@ -456,6 +456,9 @@ export function copyPeerLib(from: string, arkoala: ArkoalaInstall, filters?: str
     filters = filters?.map(it => path.join(from, it))
     const recursive = true
     copyDir(path.join(from, 'ts'), arkoala.tsDir, !recursive, filters)
+    copyDir(path.join(from, 'ts/components'), path.join(arkoala.tsDir, 'components'), recursive, filters)
+    copyDir(path.join(from, 'ts/runtime'), path.join(arkoala.tsDir, 'runtime'), recursive, filters)
+    copyDir(path.join(from, 'ts/peers'), path.join(arkoala.tsDir, 'peers'), recursive, filters)
     copyDir(path.join(from, 'ts/arkoala'), arkoala.tsArkoalaDir, recursive, filters)
     copyDir(path.join(from, 'cpp'), arkoala.nativeDir, recursive, filters)
     copyDir(path.join(from, 'arkts'), arkoala.arktsDir, recursive, filters)

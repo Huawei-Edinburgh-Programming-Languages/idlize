@@ -104,7 +104,7 @@ class PeerFileVisitor {
             imports.addFeature('GestureName', './generated-utils')
             imports.addFeature('GestureComponent', './generated-utils')
         }
-        imports.addFeature("unsafeCast", "./generated-utils")
+        imports.addFeature("unsafeCast", "../generated-utils")
         imports.addFeature("registerCallback", "./SerializerBase")
         Array.from(this.library.builderClasses.keys())
             .forEach((className) => imports.addFeature(className, `./Ark${className}Builder`))

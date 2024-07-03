@@ -14,9 +14,8 @@
  */
 
 import { nativeModule } from "@koalaui/arkoala"
-import { ArkCommonPeer } from "@arkoala/arkui/ArkCommonPeer"
-import { ArkNavigationPeer } from "@arkoala/arkui/ArkNavigationPeer"
-import { ArkUINodeType } from "@arkoala/arkui/ArkUINodeType"
+import { ArkCommonPeer } from "@arkoala/arkui/peers/ArkCommonPeer"
+import { ArkNavigationPeer } from "@arkoala/arkui/peers/ArkNavigationPeer"
 // imports required intarfaces (now generation is disabled)
 // import { NavigationTitleMode } from "@arkoala/arkui/ArkNavigationInterfaces"
 

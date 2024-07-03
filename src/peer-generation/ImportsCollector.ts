@@ -36,9 +36,9 @@ export class ImportsCollector {
         dependencies.add(feature)
     }
 
-    addFeatureByBasename(feature: string, basename: string) {
+    addFeatureByBasename(feature: string, basename: string, dir = ".") {
         const basenameNoExt = basename.replaceAll(path.extname(basename), '')
-        this.addFeature(feature, `./${basenameNoExt}`)
+        this.addFeature(feature, `${dir}/${basenameNoExt}`)
     }
 
     addFilter(filter: ImportsCollectorFilter) {

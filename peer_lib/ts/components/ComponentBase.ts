@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import { PeerNode } from './PeerNode'
-import { PeerReceiver } from './PeerReceiver'
+import { PeerNode } from '../peers/PeerNode'
+import { PeerReceiver } from '../peers/PeerReceiver'
 
 export class ComponentBase implements PeerReceiver {
     protected peer?: PeerNode

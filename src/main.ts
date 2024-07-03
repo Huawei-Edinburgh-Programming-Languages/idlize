@@ -370,8 +370,10 @@ function generateLibace(outDir: string, peerLibrary: PeerLibrary) {
 }
 
 function writeFile(filename: string, content: string, integrated: boolean = false) {
-    if (integrated || !options.onlyIntegrated)
+    if (integrated || !options.onlyIntegrated) {
+        fs.mkdirSync(path.dirname(filename), { recursive: true })
         fs.writeFileSync(filename, content)
+    }
 }
 
 function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Language) {
@@ -385,14 +387,14 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
 
     const peers = printPeers(peerLibrary, options.dumpSerialized ?? false)
     for (const [targetBasename, peer] of peers) {
-        const outPeerFile = arkoala.peer(new TargetFile(targetBasename))
+        const outPeerFile = arkoala.peer(new TargetFile(targetBasename, "peers"))
         console.log("producing", outPeerFile)
         writeFile(outPeerFile, peer, true)
     }
 
     const components = printComponents(peerLibrary)
     for (const [targetBasename, component] of components) {
-        const outComponentFile = arkoala.component(new TargetFile(targetBasename))
+        const outComponentFile = arkoala.component(new TargetFile(targetBasename, "components"))
         console.log("producing", outComponentFile)
         if (options.verbose) console.log(component)
         writeFile(outComponentFile, component, true)
@@ -401,13 +403,13 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
 
     const builderClasses = printBuilderClasses(peerLibrary, options.dumpSerialized ?? false)
     for (const [targetBasename, builderClass] of builderClasses) {
-        const outBuilderFile = arkoala.builderClass(new TargetFile(targetBasename))
-        fs.writeFileSync(outBuilderFile, builderClass)
+        const outBuilderFile = arkoala.builderClass(new TargetFile(targetBasename, "runtime"))
+        writeFile(outBuilderFile, builderClass, true)
     }
 
     const materialized = printMaterialized(peerLibrary, options.dumpSerialized ?? false)
     for (const [targetBasename, materializedClass] of materialized) {
-        const outMaterializedFile = arkoala.materialized(new TargetFile(targetBasename))
+        const outMaterializedFile = arkoala.materialized(new TargetFile(targetBasename, "runtime"))
         writeFile(outMaterializedFile, materializedClass)
     }
 
@@ -449,7 +451,7 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
 
         const fakeDeclarations = printFakeDeclarations(peerLibrary)
         for (const [filename, data] of fakeDeclarations) {
-            const outComponentFile = arkoala.interface(new TargetFile(filename))
+            const outComponentFile = arkoala.interface(new TargetFile(filename, "runtime"))
             console.log("producing", outComponentFile)
             if (options.verbose) console.log(data)
             writeFile(outComponentFile, data, true)

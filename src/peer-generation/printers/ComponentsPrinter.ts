@@ -56,10 +56,10 @@ class ComponentFileVisitor {
                 imports.addFeature(generateArkComponentName(peer.parentComponentName!), `./${parentBasename}`)
             }
             imports.addFeatureByBasename(componentToPeerClass(peer.componentName),
-                renameDtsToPeer(path.basename(peer.originalFilename), peer.declarationTable.language))
+                renameDtsToPeer(path.basename(peer.originalFilename), peer.declarationTable.language), "../peers")
             peer.attributesTypes.forEach((attrType) =>
                 imports.addFeatureByBasename(attrType.typeName,
-                    renameDtsToPeer(path.basename(peer.originalFilename), peer.declarationTable.language))
+                    renameDtsToPeer(path.basename(peer.originalFilename), peer.declarationTable.language), "../peers")
             )
             imports.addFeature("runtimeType", "./SerializerBase")
             imports.addFeature("RuntimeType", "./SerializerBase")
@@ -67,7 +67,7 @@ class ComponentFileVisitor {
             imports.addFeature("isResource", "./SerializerBase")
             imports.addFeature("isInstanceOf", "./SerializerBase")
             imports.addFeature('ComponentBase', './ComponentBase')
-            imports.addFeature('unsafeCast', './generated-utils')
+            imports.addFeature('unsafeCast', '../generated-utils')
             for (const method of peer.methods) {
                 for (const target of method.declarationTargets)
                     if (convertToCallback(peer, method, target))

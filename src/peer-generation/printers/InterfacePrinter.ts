@@ -193,7 +193,7 @@ class TSInterfacesVisitor implements InterfacesVisitor {
             file.declarations.forEach(it => writer.print(convertDeclaration(this.generator, it)))
             file.enums.forEach(it => this.printEnum(writer, it))
             this.printAssignEnumsToGlobalScope(writer, file)
-            this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), writer)
+            this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename), "runtime"), writer)
         }
     }
 }
@@ -609,7 +609,7 @@ class ArkTSInterfacesVisitor extends TSInterfacesVisitor {
         for (const file of this.peerLibrary.files.values()) {
             const writer = createLanguageWriter(Language.ARKTS)
             file.enums.forEach(it => this.printEnum(writer, it))
-            this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), writer)
+            this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename), "runtime"), writer)
         }
     }
 }
