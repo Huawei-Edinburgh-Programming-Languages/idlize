@@ -28,7 +28,6 @@ import { ArkSideBarContainerComponent } from "@arkoala/arkui/ArkSidebar"
 import { ArkTabContentPeer } from "@arkoala/arkui/ArkTabContentPeer"
 import { SubTabBarStyle } from "@arkoala/arkui/ArkSubTabBarStyleBuilder"
 import { CanvasRenderingContext2D } from "@arkoala/arkui/ArkCanvasRenderingContext2DMaterialized"
-import { ArkUINodeType } from "@arkoala/arkui/ArkUINodeType"
 import { startPerformanceTest } from "@arkoala/arkui/test_performance"
 import { testLength_10_lpx } from "@arkoala/arkui/test_data"
 import { deserializePeerEvent, PeerEventKind,
@@ -57,7 +56,7 @@ import { mkdirSync, writeFileSync } from "fs"
 
 // TODO: hacky way to detect subset vs full.
 startNativeLog(TEST_GROUP_LOG)
-new ArkButtonPeer(0).labelStyleAttribute({maxLines: 3})
+new ArkButtonPeer().labelStyleAttribute({maxLines: 3})
 setReportTestFailures(getNativeLog().indexOf("heightAdaptivePolicy") == -1)
 stopNativeLog(TEST_GROUP_LOG)
 
@@ -216,7 +215,7 @@ function checkWriteFunction() {
 }
 
 function checkButton() {
-    let peer = new ArkButtonPeer(ArkUINodeType.Button)
+    let peer = new ArkButtonPeer()
 
     checkResult("width", () => peer.widthAttribute("42%"),
         "width({1, 42.000000, 3, 0})")
@@ -240,7 +239,7 @@ function checkButton() {
 }
 
 function checkCalendar() {
-    let peer = new ArkCalendarPickerPeer(ArkUINodeType.CalendarPicker)
+    let peer = new ArkCalendarPickerPeer()
     checkResult("edgeAlign1", () => peer.edgeAlignAttribute(2, {dx: 5, dy: 6}),
         `edgeAlign(2, {ARK_TAG_OBJECT, {{1, 5.000000, 1, 0}, {1, 6.000000, 1, 0}}})`)
     checkResult("edgeAlign2", () => peer.edgeAlignAttribute(2),
@@ -248,7 +247,7 @@ function checkCalendar() {
 }
 
 function checkFormComponent() {
-    let peer = new ArkFormComponentPeer(ArkUINodeType.FormComponent)
+    let peer = new ArkFormComponentPeer()
     checkResult("size int", () => peer.sizeAttribute({width: 5, height: 6}),
         `size({{102, .i32=5}, {102, .i32=6}})`)
     checkResult("size float", () => peer.sizeAttribute({width: 5.5, height: 6.789}),
@@ -258,7 +257,7 @@ function checkFormComponent() {
 }
 
 function checkCommon() {
-    let peer = new ArkCommonPeer(ArkUINodeType.Common)
+    let peer = new ArkCommonPeer()
     // check backgroundBlurStyle and check the heritance by the way
     let backgroundBlurStyle: BackgroundBlurStyleOptions = {
         colorMode: 0,
@@ -296,7 +295,7 @@ class ArkSideBarContainerComponentTest extends ArkSideBarContainerComponent {
 }
 
 function checkOverloads() {
-    const peer = new ArkSideBarContainerPeer(ArkUINodeType.SideBarContainer)
+    const peer = new ArkSideBarContainerPeer()
     const component = new ArkSideBarContainerComponentTest(peer)
     checkResult("Test number implementation for SideBarContainer.minSideBarWidth",
         () => component.minSideBarWidth(11),
@@ -309,13 +308,13 @@ function checkOverloads() {
 }
 
 function checkNavigation() {
-    let peer = new ArkNavigationPeer(ArkUINodeType.Navigation)
+    let peer = new ArkNavigationPeer()
     checkResult("backButtonIcon", () => peer.backButtonIconAttribute("attr"),
         `backButtonIcon({0, .value0={"attr", 4}})`)
 }
 
 function checkTabContent() {
-    let peer = new ArkTabContentPeer(ArkUINodeType.TabContent)
+    let peer = new ArkTabContentPeer()
 
     let subTabBarStyle: SubTabBarStyle = new SubTabBarStyle("Resource").id("testID")
     assertEquals("SubTabBarStyle id", "testID", subTabBarStyle._id)
@@ -377,7 +376,7 @@ function checkPerf1(count: number) {
 }
 
 function checkPerf2(count: number) {
-    let peer = new ArkButtonPeer(ArkUINodeType.Button)
+    let peer = new ArkButtonPeer()
     let start = performance.now()
     for (let i = 0; i < count; i++) {
         peer.backdropBlurAttribute(i, i % 2 == 0 ? undefined : {grayscale: [1, 2]})
@@ -387,7 +386,7 @@ function checkPerf2(count: number) {
 }
 
 function checkPerf3(count: number) {
-    let peer = new ArkButtonPeer(ArkUINodeType.Button)
+    let peer = new ArkButtonPeer()
     let start = performance.now()
     for (let i = 0; i < count; i++) {
         peer.widthAttribute(testLength_10_lpx)

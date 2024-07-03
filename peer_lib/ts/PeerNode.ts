@@ -8,9 +8,9 @@ export class NativePeerNode extends Finalizable {
 
 export class PeerNode {
     peer: NativePeerNode
-    constructor(type: number, flags: int32) {
+    constructor(flags: int32 = 0) {
         const id = 0 // TODO: use id
-        const ptr = nativeModule()._CreateNode(type, id, flags)
+        const ptr = nativeModule()._CreateNode(id, flags)
         this.peer = new NativePeerNode(ptr, getNodeFinalizer())
     }
     applyAttributes(attrs: Object) {}

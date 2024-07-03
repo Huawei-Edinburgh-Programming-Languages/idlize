@@ -19,7 +19,7 @@ import { PeerLibrary } from "../PeerLibrary";
 import { Language, renameDtsToPeer, throwException } from "../../util";
 import { ImportsCollector } from "../ImportsCollector";
 import { PeerClass, PeerClassBase } from "../PeerClass";
-import { InheritanceRole, determineParentRole, isExtensibleAbstractClass, isHeir, isRoot } from "../inheritance";
+import { InheritanceRole, determineParentRole, isHeir, isRoot } from "../inheritance";
 import { PeerMethod } from "../PeerMethod";
 import {
     LanguageExpression,
@@ -128,7 +128,7 @@ class PeerFileVisitor {
         const printer = this.printer
         const parentRole = determineParentRole(peer.originalClassName, peer.originalParentName)
         const isNode = parentRole !== InheritanceRole.Finalizable
-        const isAbstractSuperclass = isExtensibleAbstractClass(peer.componentName)
+        const isAbstractSuperclass = isRoot(peer.componentName)
         const typeArgTypes = isAbstractSuperclass ? [new Type('int32', !isNode)] : []
         const typeArgNames = isAbstractSuperclass ? ['type'] : []
         const signature = new NamedMethodSignature(
@@ -139,7 +139,7 @@ class PeerFileVisitor {
 
         printer.writeConstructorImplementation(componentToPeerClass(peer.componentName), signature, (writer) => {
             if (parentRole === InheritanceRole.PeerNode) {
-                writer.writeSuperCall([`type`, 'flags'])
+                writer.writeSuperCall(['flags'])
                 writer.writeMethodCall('component', 'setPeer', ['this'], true)
             } else if (parentRole === InheritanceRole.Heir || parentRole === InheritanceRole.Root) {
                 writer.writeSuperCall([`ArkUINodeType.${peer.componentName}`, 'component', 'flags'])
@@ -160,7 +160,7 @@ class PeerFileVisitor {
         const name = peer.originalClassName!
         const typeParam = componentToAttributesClass(peer.componentName)
         if (isRoot(name)) {
-            this.printer.print(`applyAttributes(attributes: ${typeParam}): void {}`)
+            this.printer.print(`applyAttributes<T extends ${typeParam}>(attributes: T): void {}`)
             return
         }
 

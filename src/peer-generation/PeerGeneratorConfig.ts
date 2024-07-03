@@ -46,6 +46,9 @@ export class PeerGeneratorConfig {
         "CommonTransition",
         "CalendarAttribute",
         "ContainerSpanAttribute",
+        "ScrollableCommonMethod",
+        "BaseSpan",
+        "CommonShapeMethod",
     ]
 
     public static standaloneComponents = [
