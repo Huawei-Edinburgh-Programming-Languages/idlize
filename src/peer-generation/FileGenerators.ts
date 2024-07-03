@@ -254,16 +254,17 @@ export function accessorStructList(lines: LanguageWriter): LanguageWriter {
 export function makeTSSerializer(library: PeerLibrary): string {
     let printer = createLanguageWriter(library.declarationTable.language)
     const builderClassImports = Array.from(library.builderClasses.keys())
-        .map(it => `import { ${it} } from "@arkoala/arkui/Ark${it}Builder"`)
+        .map(it => `import { ${it} } from "@arkoala/arkui/runtime/Ark${it}Builder"`)
     writeSerializer(library, printer)
     //TODO: need to determine imports when generating serializer
     const extraImports = library.declarationTable.language === Language.ARKTS ?
         'import { AdaptiveColor, BlurStyle, BorderStyle, DismissReason, DragPreviewMode, GradientDirection, ShadowStyle, ShadowType, SheetMode, SheetSize, SheetType, ThemeColorMode } from "./ArkCommonInterfaces"' : ''
     return `
 ${extraImports}
-import { SerializerBase, Tags, RuntimeType, runtimeType, isPixelMap, isResource, isInstanceOf } from "./SerializerBase"
+import { RuntimeType, runtimeType, isPixelMap, isResource, isInstanceOf } from "../type_utils"
+import { SerializerBase, Tags } from "./SerializerBase"
 import { int32 } from "@koalaui/common"
-import { unsafeCast } from "./generated-utils"
+import { unsafeCast } from "../generated-utils"
 
 ${builderClassImports.join("\n")}
 
@@ -332,10 +333,11 @@ export function makeTSDeserializer(library: PeerLibrary): string {
     const deserializer = createLanguageWriter(Language.TS)
     writeDeserializer(library, deserializer)
     return `
-import { runtimeType, Tags, RuntimeType } from "./SerializerBase"
+import { runtimeType, RuntimeType } from "../type_utils"
+import { Tags } from "./SerializerBase"
 import { DeserializerBase } from "./DeserializerBase"
 import { int32 } from "@koalaui/common"
-import { unsafeCast } from "./generated-utils"
+import { unsafeCast } from "../generated-utils"
 
 ${deserializer.getOutput().join("\n")}
 `
@@ -497,12 +499,15 @@ ${enumValues}
 `.trim()
 }
 
-export function makeArkuiModule(componentsFiles: string[]): string {
-    return componentsFiles.map(file => {
+export function makeArkuiModule(componentsFiles: string[], runtimeFiles: string[]): string {
+    const makePath = (file: string, dir: string) => {
         const basename = path.basename(file)
         const basenameNoExt = basename.replaceAll(path.extname(basename), "")
-        return `export * from "./${basenameNoExt}"`
-    }).join("\n")
+        return `export * from "./${dir}/${basenameNoExt}"`
+    }
+    return componentsFiles.map(file => makePath(file, 'components'))
+        .concat(runtimeFiles.map(file => makePath(file, 'runtime')))
+        .join("\n")
 }
 
 export function makeMaterializedPrologue(lang: Language): string {
@@ -535,8 +540,8 @@ export function componentFileTemplate(content: string): string {
 
 export function makePeerEvents(data: string): string {
     return `
-import { Deserializer } from './Deserializer'
-import { RuntimeType } from "./SerializerBase"
+import { Deserializer } from './peers/Deserializer'
+import { RuntimeType } from "./type_utils"
 import { int32 } from "@koalaui/common"
 
 interface PeerEvent {

@@ -383,6 +383,7 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
     arkoala.createDirs([ARKOALA_PACKAGE_PATH, INTEROP_PACKAGE_PATH].map(dir => path.join(arkoala.javaDir, dir)))
 
     const arkuiComponentsFiles: string[] = []
+    const arkuiRuntimeFiles: string[] = []
 
 
     const peers = printPeers(peerLibrary, options.dumpSerialized ?? false)
@@ -446,7 +447,7 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
             console.log("producing", outComponentFile)
             if (options.verbose) console.log(data)
             writeFile(outComponentFile, data)
-            arkuiComponentsFiles.push(outComponentFile)
+            arkuiRuntimeFiles.push(outComponentFile)
         }
 
         const fakeDeclarations = printFakeDeclarations(peerLibrary)
@@ -455,7 +456,7 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
             console.log("producing", outComponentFile)
             if (options.verbose) console.log(data)
             writeFile(outComponentFile, data, true)
-            arkuiComponentsFiles.push(outComponentFile)
+            arkuiRuntimeFiles.push(outComponentFile)
         }
 
         writeFile(
@@ -463,23 +464,23 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
             printConflictedDeclarations(peerLibrary),
         )
         writeFile(
-            arkoala.tsLib(new TargetFile('ArkUINodeType')),
+            arkoala.tsLib(new TargetFile('ArkUINodeType', 'peers')),
             printNodeTypes(peerLibrary),
         )
         writeFile(
             arkoala.tsLib(new TargetFile('index')),
-            makeArkuiModule(arkuiComponentsFiles),
+            makeArkuiModule(arkuiComponentsFiles, arkuiRuntimeFiles),
         )
         writeFile(
             arkoala.tsLib(new TargetFile("peer_events")),
             printEvents(peerLibrary),
             true
         )
-        writeFile(arkoala.tsLib(new TargetFile('Serializer')),
+        writeFile(arkoala.tsLib(new TargetFile('Serializer', 'peers')),
             makeTSSerializer(peerLibrary),
             true,
         )
-        writeFile(arkoala.tsLib(new TargetFile('Deserializer')),
+        writeFile(arkoala.tsLib(new TargetFile('Deserializer', 'peers')),
             makeTSDeserializer(peerLibrary),
             true,
         )

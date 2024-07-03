@@ -68,7 +68,7 @@ export function convertDeclToFeature(library: PeerLibrary, node: ts.Declaration)
     if (isSyntheticDeclaration(node))
         return {
             feature: convertDeclaration(DeclarationNameConvertor.I, node), 
-            module: `./${syntheticDeclarationFilename(node)}`
+            module: `../runtime/${syntheticDeclarationFilename(node)}`
         }
     if (PeerGeneratorConfig.isConflictedDeclaration(node)) {
         const parent = node.parent

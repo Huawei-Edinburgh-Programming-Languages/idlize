@@ -61,11 +61,11 @@ class ComponentFileVisitor {
                 imports.addFeatureByBasename(attrType.typeName,
                     renameDtsToPeer(path.basename(peer.originalFilename), peer.declarationTable.language), "../peers")
             )
-            imports.addFeature("runtimeType", "./SerializerBase")
-            imports.addFeature("RuntimeType", "./SerializerBase")
-            imports.addFeature("isPixelMap", "./SerializerBase")
-            imports.addFeature("isResource", "./SerializerBase")
-            imports.addFeature("isInstanceOf", "./SerializerBase")
+            imports.addFeature("runtimeType", "../type_utils")
+            imports.addFeature("RuntimeType", "../type_utils")
+            imports.addFeature("isPixelMap", "../type_utils")
+            imports.addFeature("isResource", "../type_utils")
+            imports.addFeature("isInstanceOf", "../type_utils")
             imports.addFeature('ComponentBase', './ComponentBase')
             imports.addFeature('unsafeCast', '../generated-utils')
             for (const method of peer.methods) {
