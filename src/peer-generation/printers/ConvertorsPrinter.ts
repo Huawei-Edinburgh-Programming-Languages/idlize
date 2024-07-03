@@ -78,8 +78,27 @@ class ConvertorsPrinter {
         this.writer.print("#undef ASSIGN_OPT")
     }
 
+    writeLiteralConvertors() {
+
+        this.writer.print('template<typename T, typename P>')
+        this.writer.print('void assign_literal_to(std::optional<T>& dst, const P& src);')
+        this.writer.print("")
+
+        for (const [name, type] of this.table.allLiteralTypes()) {
+            this.writer.print('template<typename T>')
+            this.writer.print(`void assign_literal_to(std::optional<T>& dst, const ${name}& src) {`)
+            this.writer.pushIndent()
+            this.writer.print(`assign_to(dst, src.${type}); `)
+            this.writer.popIndent()
+            this.writer.print(`}`)
+            this.writer.print("")
+        }
+        this.writer.print("")
+    }
+
     print() {
         this.writeUnionConvertors()
+        this.writeLiteralConvertors()
         this.writeOptionalConvertors()
     }
 }
