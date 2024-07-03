@@ -48,7 +48,7 @@ export class NativeModuleEmptyIntegrated implements NativeModuleIntegrated {
 
 export class NativeModuleEmpty extends NativeModuleEmptyIntegrated implements NativeModule {
     // BasicNodeAPI
-    _CreateNode(type: KInt, id: KInt, flags: KInt): NodePointer { return nullptr }
+    _CreateNode(id: KInt, flags: KInt): NodePointer { return nullptr }
     _GetNodeByViewStack(): NodePointer { return nullptr }
     _DisposeNode(ptr: NodePointer): void {}
     _AddChild(parent: NodePointer, child: NodePointer): KInt { return 0 }

@@ -124,7 +124,7 @@ function checkNodeAPI() {
     const ARKUI_TEXT = 1
     const id = 12
     const flags = 7
-    let ptr: pointer = nativeModule()._CreateNode(ARKUI_TEXT, id, flags)
+    let ptr: pointer = nativeModule()._CreateNode(id, flags)
 
     let stackPtr: pointer = 0
     checkResult("BasicNodeAPI getNodeByViewStack",

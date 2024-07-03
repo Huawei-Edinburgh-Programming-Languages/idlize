@@ -75,7 +75,7 @@ export interface GraphicsOps {
 }
 
 export interface NodeOps {
-    _CreateNode(type: KInt, id: KInt, flags: KInt): NodePointer
+    _CreateNode(id: KInt, flags: KInt): NodePointer
     _GetNodeByViewStack(): NodePointer
     _DisposeNode(ptr: NodePointer): void
 

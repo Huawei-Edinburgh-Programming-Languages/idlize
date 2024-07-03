@@ -74,8 +74,8 @@ class PeerFileVisitor {
     }
 
     private generateAttributesParentClass(peer: PeerClass): string | undefined {
-        if (!isHeir(peer.originalClassName!)) return undefined
-        return componentToAttributesClass(peer.parentComponentName!)
+        if (peer.parentComponentName === undefined) return undefined
+        return componentToAttributesClass(peer.parentComponentName)
     }
 
     private printImports(): void {
@@ -117,10 +117,14 @@ class PeerFileVisitor {
             this.printer.print(attributeType.content)
 
         const parent = this.generateAttributesParentClass(peer)
-        this.printer.writeInterface(componentToAttributesClass(peer.componentName), (writer) => {
-            for (const field of peer.attributesFields)
-                writer.print(field)
-        }, parent ? [parent] : undefined)
+        this.printer.writeInterface(
+            componentToAttributesClass(peer.componentName),
+            (writer) => {
+                for (const field of peer.attributesFields)
+                    writer.print(field)
+            },
+            parent ? [parent] : undefined
+        )
     }
 
     private printPeerConstructor(peer: PeerClass): void {
