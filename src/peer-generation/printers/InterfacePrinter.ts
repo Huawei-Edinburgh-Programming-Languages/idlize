@@ -609,7 +609,7 @@ class ArkTSInterfacesVisitor extends TSInterfacesVisitor {
         for (const file of this.peerLibrary.files.values()) {
             const writer = createLanguageWriter(Language.ARKTS)
             file.enums.forEach(it => this.printEnum(writer, it))
-            this.interfaces.set(this.generateFileBasename(file.originalFilename), writer)
+            this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), writer)
         }
     }
 }
