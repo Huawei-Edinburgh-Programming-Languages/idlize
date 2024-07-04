@@ -117,12 +117,6 @@ export interface UICommonEvent {
     setOnClick(callback: Callback<ClickEvent> | undefined): void;
 }
 
-//export class SheetSize {
-//    MEDIUM = 0
-//    LARGE = 1
-//    FIT_CONTENT = 2
-//}
-
 export interface BindOptions {
     backgroundColor?: ResourceColor;
     onAppear?: () => void;
@@ -130,12 +124,6 @@ export interface BindOptions {
     onWillAppear?: () => void;
     onWillDisappear?: () => void;
 }
-
-//export enum SheetType {
-//    BOTTOM = 0,
-//    CENTER = 1,
-//    POPUP = 2
-//}
 
 export interface SheetDismiss {
     dismiss: () => void;
@@ -146,33 +134,12 @@ export interface DismissSheetAction {
     reason: DismissReason;
 }
 
-//export enum DismissReason {
-//    PRESS_BACK = 0,
-//    TOUCH_OUTSIDE = 1,
-//    CLOSE_BUTTON = 2,
-//    SLIDE_DOWN = 3
-//}
-
 export interface SpringBackAction {
     springBack: Callback<void>;
 }
 
-//export enum ShadowStyle {
-//    OUTER_DEFAULT_XS,
-//    OUTER_DEFAULT_SM,
-//    OUTER_DEFAULT_MD,
-//    OUTER_DEFAULT_LG,
-//    OUTER_FLOATING_SM,
-//    OUTER_FLOATING_MD,
-//}
-
 export interface UIContext {
 }
-
-// export enum SheetMode {
-//     OVERLAY = 0,
-//     EMBEDDED = 1,
-// }
 
 export interface SheetOptions extends BindOptions {
     title?: SheetTitleOptions | CustomBuilder;
@@ -199,16 +166,6 @@ export interface SheetOptions extends BindOptions {
     onTypeDidChange?: Callback<int>;
     uiContext?: UIContext;
 }
-
-// export enum ThemeColorMode {
-//     SYSTEM = 0,
-//     LIGHT = 1,
-//     DARK = 2
-// }
-
-// export enum AdaptiveColor {
-//     DEFAULT = 0
-// }
 
 export interface BlurOptions {
     grayscale: [number, number];
@@ -370,17 +327,7 @@ export class RenderingContextSettings {
 
     constructor(antialias?: boolean) {}
 }
-// export enum TextOverflow {
-//   None,
-//   Clip,
-//   Ellipsis,
-//   MARQUEE,
-// }
-// export enum TextHeightAdaptivePolicy {
-//   MAX_LINES_FIRST,
-//   MIN_FONT_SIZE_FIRST,
-//   LAYOUT_CONSTRAINT_FIRST,
-// }
+
 export interface LabelStyle {
     overflow?: TextOverflow;
     maxLines?: number;
@@ -390,19 +337,6 @@ export interface LabelStyle {
     font?: Font;
 }
 export declare type Dimension = string | Resource;
-// export enum BarMode {
-//   Scrollable = 0,
-//   Fixed = 1,
-// }
-// export enum SelectedMode {
-//   INDICATOR,
-//   BOARD,
-// }
-// export enum HorizontalAlign {
-//     Start = 0,
-//     Center = 1,
-//     End = 2
-// }
 export interface OnScrollVisibleContentChangeCallback {}
 export interface Vector1 {
     x0: number;
@@ -417,12 +351,6 @@ export interface Vector2 {
     z: number;
 }
 export interface PixelMap {}
-
-// export enum NavigationTitleMode {
-//     Free = 0,
-//     Full,
-//     Mini,
-// }
 
 export interface RectResult {
     x: number;
@@ -441,12 +369,6 @@ export class TouchTestInfo {
     rect: RectResult;
     id: string;
 }
-
-// export enum EnumDTS {
-//     ELEM_0 = 0,
-//     ELEM_1 = 1,
-//     ELEM_2 = 2,
-// }
 
 export interface  BooleanInterfaceDTS {
     valBool: boolean
@@ -590,23 +512,6 @@ export class ClassWithConstructorAndAllOptionalParamsDTS {
 
 export type CustomBuilder = (() => Object | void)
 
-// export enum CalendarAlign {
-//     START = 0,
-//     CENTER = 1,
-//     END = 2
-// }
-
-// export enum ShadowType {
-//     COLOR = 0,
-//     BLUR = 1
-// }
-
-// export enum ColoringStrategy {
-//   INVERT = 'invert',
-//   AVERAGE = 'average',
-//   PRIMARY = 'primary'
-// }
-
 export interface ShadowOptions {
     radius: number | Resource;
     type?: ShadowType;
@@ -630,20 +535,6 @@ export interface LocalizedEdgeWidths {
     start?: LengthMetrics;
 }
 
-// export enum FontWeight {
-//   Lighter,
-//   Normal,
-//   Regular,
-//   Medium,
-//   Bold,
-//   Bolder,
-// }
-
-// export enum FontStyle {
-//   Normal,
-//   Italic,
-// }
-
 export interface Font {
   size?: Length;
   weight?: FontWeight | number | string;
@@ -651,25 +542,12 @@ export interface Font {
   style?: FontStyle;
 }
 
-// export enum DragPreviewMode {
-//   AUTO = 1,
-//   DISABLE_SCALE = 2,
-//   ENABLE_DEFAULT_SHADOW = 3,
-//   ENABLE_DEFAULT_RADIUS = 4
-// }
-
 export interface EdgeColors {
     top?: ResourceColor;
     right?: ResourceColor;
     bottom?: ResourceColor;
     left?: ResourceColor;
 }
-
-// export enum BorderStyle {
-//     Dotted,
-//     Dashed,
-//     Solid
-// }
 
 export interface EdgeStyles {
   top?: BorderStyle;
@@ -709,25 +587,6 @@ export class ImageData {
     this.data = data ?? new Uint8ClampedArray(0)
   }
 }
-
-// export enum GesturePriority {
-//   NORMAL = 0,
-//   PRIORITY = 1,
-// }
-
-// export enum GestureMask {
-//   Normal,
-//   IgnoreInternal,
-// }
-
-// export enum SourceTool {
-//     Unknown,
-//     Finger,
-//     Pen,
-//     MOUSE,
-//     TOUCHPAD,
-//     JOYSTICK,
-// }
 
 export interface GestureInterface<T> {
   tag(tag: string): T;
@@ -789,11 +648,6 @@ interface GestureRecognizer {
 
   getEventTargetInfo(): EventTargetInfo;
 }
-
-//enum GestureJudgeResult {
-//  CONTINUE = 0,
-//  REJECT = 1,
-//}
 
 export type GestureRecognizerJudgeBeginCallback = (event: BaseGestureEvent, current: GestureRecognizer, recognizers: Array<GestureRecognizer>) => GestureJudgeResult;
 
