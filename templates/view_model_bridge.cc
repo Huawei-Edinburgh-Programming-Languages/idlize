@@ -21,7 +21,9 @@ namespace ViewModel {
     Ark_NodeHandle createRefreshNode(Ark_Int32 nodeId);
     Ark_NodeHandle createRootNode(Ark_Int32 nodeId);
     Ark_NodeHandle createComponentRootNode(Ark_Int32 nodeId);
+#ifdef XCOMPONENT_SUPPORTED
     Ark_NodeHandle createXComponentNode(Ark_Int32 nodeId);
+#endif
     Ark_NodeHandle createListItemGroupNode(Ark_Int32 nodeId);
     Ark_NodeHandle createSliderNode(Ark_Int32 nodeId);
     Ark_NodeHandle createCanvasNode(Ark_Int32 nodeId);
@@ -81,7 +83,9 @@ namespace Bridge {
             case %CPP_PREFIX%ARKUI_REFRESH: return ViewModel::createRefreshNode(id);
             case %CPP_PREFIX%ARKUI_ROOT: return ViewModel::createRootNode(id);
             case %CPP_PREFIX%ARKUI_COMPONENT_ROOT: return ViewModel::createComponentRootNode(id);
+#ifdef XCOMPONENT_SUPPORTED
             case %CPP_PREFIX%ARKUI_XCOMPONENT: return ViewModel::createXComponentNode(id);
+#endif
             case %CPP_PREFIX%ARKUI_LIST_ITEM_GROUP: return ViewModel::createListItemGroupNode(id);
             case %CPP_PREFIX%ARKUI_SLIDER: return ViewModel::createSliderNode(id);
             case %CPP_PREFIX%ARKUI_CANVAS: return ViewModel::createCanvasNode(id);

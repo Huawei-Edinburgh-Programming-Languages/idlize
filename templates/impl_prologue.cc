@@ -65,11 +65,9 @@ namespace Bridge {
     int CheckEvent(%CPP_PREFIX%Ark_NodeEvent* event) {
         return NodeEvent::CheckEvent(reinterpret_cast<ArkUINodeEvent*>(event));
     }
-
     void SendAsyncEvent(%CPP_PREFIX%Ark_NodeEvent* event) {
         NodeEvent::SendArkUIAsyncEvent(reinterpret_cast<ArkUINodeEvent*>(event));
     }
-
     void CallContinuation(Ark_Int32 continuationId, Ark_Int32 argCount, %CPP_PREFIX%Ark_EventCallbackArg* args) {
         ApiImpl::CallContinuation(continuationId, argCount, reinterpret_cast<ArkUIEventCallbackArg*>(args));
     }
