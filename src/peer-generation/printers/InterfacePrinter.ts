@@ -608,7 +608,6 @@ class ArkTSInterfacesVisitor extends TSInterfacesVisitor {
     override printInterfaces() {
         for (const file of this.peerLibrary.files.values()) {
             const writer = createLanguageWriter(Language.ARKTS)
-            file.declarations.forEach(it => writer.print(convertDeclaration(this.generator, it)))
             file.enums.forEach(it => this.printEnum(writer, it))
             this.interfaces.set(this.generateFileBasename(file.originalFilename), writer)
         }
