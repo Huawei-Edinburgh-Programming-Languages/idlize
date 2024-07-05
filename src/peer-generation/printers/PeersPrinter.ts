@@ -101,13 +101,13 @@ class PeerFileVisitor {
             || this.file.declarationTable.language === Language.ARKTS) {
             this.file.importFeatures.forEach(it => imports.addFeature(it.feature, it.module))
             this.file.serializeImportFeatures.forEach(it => imports.addFeature(it.feature, it.module))
-            imports.addFeature('GestureName', './generated-utils')
-            imports.addFeature('GestureComponent', './generated-utils')
+            imports.addFeature('GestureName', '../generated-utils')
+            imports.addFeature('GestureComponent', '../generated-utils')
         }
         imports.addFeature("unsafeCast", "../generated-utils")
         imports.addFeature("registerCallback", "./SerializerBase")
         Array.from(this.library.builderClasses.keys())
-            .forEach((className) => imports.addFeature(className, `./Ark${className}Builder`))
+            .forEach((className) => imports.addFeature(className, `../runtime/Ark${className}Builder`))
         imports.print(this.printer)
     }
 
