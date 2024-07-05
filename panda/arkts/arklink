@@ -17,7 +17,4 @@ SCRIPT_DIR=`dirname "${BASH_SOURCE[0]}"`
 
 . $SCRIPT_DIR/common
 
-PANDA_LIB_FILES=$(echo $(find $PANDA_LIB_PATH -name $NAME -exec echo {} \;))
-
-$PANDA_SDK/$ARCH_TOOLS/bin/ark_link $@ -- $PANDA_LIB_FILES && \
-find $PANDA_LIB_PATH -name $NAME -exec rm -f {} \;
+$PANDA_SDK/$ARCH_TOOLS/bin/ark_link $@
