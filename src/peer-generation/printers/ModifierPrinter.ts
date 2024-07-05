@@ -307,16 +307,20 @@ class AccessorVisitor extends ModifierVisitor {
 
     printMaterializedClassProlog(clazz: MaterializedClass) {
         const accessor = `${clazz.className}Accessor`
-        this.accessors.print(`${PeerGeneratorConfig.cppPrefix}ArkUI${accessor} ${accessor}Impl {`)
+        this.accessors.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUI${accessor}* Get${accessor}() {`)
+        this.accessors.pushIndent()
+        this.accessors.print(`static const ${PeerGeneratorConfig.cppPrefix}ArkUI${accessor} ${accessor}Impl {`)
         this.accessors.pushIndent()
         this.accessorList.print(`Get${accessor},`)
     }
 
     printMaterializedClassEpilog(clazz: MaterializedClass) {
-        this.accessors.popIndent()
-        this.accessors.print(`};\n`)
         const accessor = `${clazz.className}Accessor`
-        this.accessors.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUI${accessor}* Get${accessor}() { return &${accessor}Impl; }\n`)
+        this.accessors.popIndent()
+        this.accessors.print(`};`)
+        this.accessors.print(`return &${accessor}Impl;`)
+        this.accessors.popIndent()
+        this.accessors.print(`}\n`)
         this.getterDeclarations.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUI${accessor}* Get${accessor}();`)
     }
 
