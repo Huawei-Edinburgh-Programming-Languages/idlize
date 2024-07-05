@@ -440,7 +440,7 @@ function printModifiersImplFile(filePath: string, slug: string, state: MultiFile
     writer.print("")
 
     if (options.namespaces) {
-        writer.pushNamespace(`${options.namespaces.generated}`)
+        writer.pushNamespace(options.namespaces.generated)
     }
 
     writer.concat(state.real)
