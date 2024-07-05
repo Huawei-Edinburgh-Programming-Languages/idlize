@@ -32,8 +32,7 @@ import { mapType, TSTypeNodeNameConvertor } from "./TypeNodeNameConvertor";
 
 import * as ts from "typescript"
 import * as fs from "fs"
-import { PeerFile } from "./PeerFile";
-import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
+import { EnumEntity } from "./PeerFile";
 
 export class Type {
     constructor(public name: string, public nullable = false) {}
@@ -494,6 +493,27 @@ export class NamedMethodSignature extends MethodSignature {
     }
 }
 
+export class TsEnumEntityStatement implements LanguageStatement {
+    constructor(private readonly enumEntity: EnumEntity, private readonly isExport: boolean) {}
+
+    write(writer: LanguageWriter) {
+        writer.print(this.enumEntity.comment)
+        writer.print(`${this.isExport ? "export " : ""}enum ${this.enumEntity.name} {`)
+        writer.pushIndent()
+        this.enumEntity.members.forEach((member, index) => {
+            writer.print(member.comment)
+            const commaOp = index < this.enumEntity.members.length - 1 ? ',' : ''
+            if (member.initializerText != undefined) {
+                writer.print(`${member.name} = ${member.initializerText}${commaOp}`)
+            } else {
+                writer.print(`${member.name}${commaOp}`)
+            }
+        })
+        writer.popIndent()
+        writer.print(`}`)
+    }
+}
+
 export class Field {
     constructor(
         public name: string,
@@ -724,8 +744,11 @@ export abstract class LanguageWriter {
         return this.makeString(`(${this.makeNaryOp("||",
             accessors.map(it => this.makeString(`${value}!.hasOwnProperty("${it}")`))).asString()})`)
     }
-    makeCallIsResource(value: string) {
+    makeCallIsResource(value: string): LanguageExpression {
         return this.makeString(`isResource(${value})`)
+    }
+    makeEnumEntity(enumEntity: EnumEntity, isExport: boolean): LanguageStatement {
+        return new TsEnumEntityStatement(enumEntity, isExport)
     }
 }
 
