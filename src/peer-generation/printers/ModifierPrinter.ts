@@ -220,19 +220,24 @@ export class ModifierVisitor {
         const component = clazz.componentName
         const modifierStructImpl = `ArkUI${component}ModifierImpl`
 
-        this.modifiers.print(`${PeerGeneratorConfig.cppPrefix}ArkUI${component}Modifier ${modifierStructImpl} {`)
+        this.modifiers.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUI${component}Modifier* Get${component}Modifier() {`)
+        this.modifiers.pushIndent()
+        this.modifiers.print(`static const ${PeerGeneratorConfig.cppPrefix}ArkUI${component}Modifier ${modifierStructImpl} {`)
         this.modifiers.pushIndent()
 
-        this.modifierList.pushIndent()
         this.modifierList.print(`Get${component}Modifier,`)
-        this.modifierList.popIndent()
     }
 
     printClassEpilog(clazz: PeerClass) {
-        this.modifiers.popIndent()
-        this.modifiers.print(`};\n`)
         const name = clazz.componentName
-        this.modifiers.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUI${name}Modifier* Get${name}Modifier() { return &ArkUI${name}ModifierImpl; }\n`)
+        const modifierStructImpl = `ArkUI${name}ModifierImpl`
+
+        this.modifiers.popIndent()
+        this.modifiers.print(`};`)
+        this.modifiers.print(`return &${modifierStructImpl};`)
+        this.modifiers.popIndent()
+        this.modifiers.print(`}\n`)
+
         this.getterDeclarations.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUI${name}Modifier* Get${name}Modifier();`)
     }
 
@@ -286,7 +291,6 @@ class AccessorVisitor extends ModifierVisitor {
     }
 
     printRealAndDummyAccessor(clazz: MaterializedClass) {
-        this.accessorList.pushIndent()
         this.printMaterializedClassProlog(clazz)
         // Materialized class methods share the same namespace
         // so take the first one.
@@ -299,7 +303,6 @@ class AccessorVisitor extends ModifierVisitor {
         })
         this.popNamespace(namespaceName)
         this.printMaterializedClassEpilog(clazz)
-        this.accessorList.popIndent()
     }
 
     printMaterializedClassProlog(clazz: MaterializedClass) {
