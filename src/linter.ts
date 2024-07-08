@@ -196,8 +196,8 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
             })
         }
         if (ts.isTypeReferenceNode(type)) {
-            const declarations = getDeclarationsByNode(this.typeChecker, type.typeName)
             if (this.inParamCheck) {
+                const declarations = getDeclarationsByNode(this.typeChecker, type.typeName)
                 if (declarations.length > 0 && ts.isClassDeclaration(declarations[0])
                     && isCommonMethodOrSubclass(this.typeChecker, declarations[0])) {
                     this.report(type, LinterError.USE_COMPONENT_AS_PARAM, `Component ${identName(declarations[0].name)} used as parameter`)
@@ -207,7 +207,7 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
                 this.report(type, LinterError.TYPE_ELEMENT_TYPE,
                     `Type element types unsupported, use type "${ts.idText(type.typeName.left as ts.Identifier)}" itself: ${type.getText(this.sourceFile)}`)
             }
-            if (ts.isUnionTypeNode(type.parent) && declarations.length > 0 && ts.isEnumDeclaration(declarations[0])) {
+            if (this.isEnumPartOfUnion(type)) {
                 this.report(type, LinterError.UNION_CONTAINS_ENUM, `Union contains type Enum: ${type.parent.getText()}`)
             }
         }
@@ -378,6 +378,11 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
                 )
             }
         })
+    }
+
+    private isEnumPartOfUnion(type: ts.TypeReferenceNode) {
+        const declarations = getDeclarationsByNode(this.typeChecker, type.typeName)
+        return ts.isUnionTypeNode(type.parent) && declarations.length > 0 && ts.isEnumDeclaration(declarations[0])
     }
 
     private getMethodsTypes(node: ts.ClassDeclaration): Map<string, ts.FunctionTypeNode> {
