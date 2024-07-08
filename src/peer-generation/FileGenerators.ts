@@ -538,7 +538,7 @@ export function makeCEventsArkoalaImpl(implData: LanguageWriter, receiversList: 
     writer.pushNamespace("Generated")
     writer.concat(implData)
     writer.writeMethodImplementation(new Method(
-        `${PeerGeneratorConfig.cppPrefix}GetArkUiEventsAPI`,
+        `GetArkUiEventsAPI`,
         new MethodSignature(new Type(`const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI*`), []),
     ), (writer) => {
         writer.print(`static const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI eventsImpl = {`)

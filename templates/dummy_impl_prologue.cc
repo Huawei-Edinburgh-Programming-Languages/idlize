@@ -334,7 +334,8 @@ void ShowCrash(Ark_CharPtr message) {}
 }
 
 namespace GeneratedEvents {
-  const %CPP_PREFIX%ArkUIEventsAPI* %CPP_PREFIX%GetArkUiEventsAPI() { return nullptr; }
-  void %CPP_PREFIX%SetArkUiEventsAPI(const %CPP_PREFIX%ArkUIEventsAPI* api) { }
+    const %CPP_PREFIX%ArkUIEventsAPI* g_OverriddenEventsImpl = nullptr;
+    const %CPP_PREFIX%ArkUIEventsAPI* %CPP_PREFIX%GetArkUiEventsAPI() { return g_OverriddenEventsImpl; }
+    void %CPP_PREFIX%SetArkUiEventsAPI(const %CPP_PREFIX%ArkUIEventsAPI* api) { g_OverriddenEventsImpl = api; }
 }
 }
