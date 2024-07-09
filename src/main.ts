@@ -26,7 +26,7 @@ import { CompileContext, IDLVisitor } from "./IDLVisitor"
 import { TestGeneratorVisitor } from "./TestGeneratorVisitor"
 import { ArkoalaInstall, LibaceInstall } from "./Install"
 import {
-    copyPeerLib,
+    copyToArkoala,
     dummyImplementations,
     makeArkuiModule,
     makeTSSerializer,
@@ -533,13 +533,13 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
     writeFile(arkoala.native(new TargetFile('all_events.cc'),), printEventsCArkoalaImpl(peerLibrary), true)
     writeFile(arkoala.native(new TargetFile('library.cc')), libraryCcDeclaration())
 
-    copyPeerLib(path.join(__dirname, '..', 'peer_lib'), arkoala, !options.onlyIntegrated ? undefined : [
+    copyToArkoala(path.join(__dirname, '..', 'peer_lib'), arkoala, !options.onlyIntegrated ? undefined : [
         'cpp/SerializerBase.h',
         'cpp/DeserializerBase.h',
         'cpp/Interop.h',
         'cpp/arkoala-macros.h',
         'ts/SerializerBase.ts',
         'ts/DeserializerBase.ts',
-        'ts/callback_registry.ts'
+        'ts/shared/callback_registry.ts'
     ])
 }
