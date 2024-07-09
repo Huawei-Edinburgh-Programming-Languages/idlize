@@ -534,12 +534,12 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
     writeFile(arkoala.native(new TargetFile('library.cc')), libraryCcDeclaration())
 
     copyToArkoala(path.join(__dirname, '..', 'peer_lib'), arkoala, !options.onlyIntegrated ? undefined : [
-        'cpp/SerializerBase.h',
-        'cpp/DeserializerBase.h',
-        'cpp/Interop.h',
-        'cpp/arkoala-macros.h',
-        'ts/SerializerBase.ts',
-        'ts/DeserializerBase.ts',
-        'ts/shared/callback_registry.ts'
+        'koala-ui/arkoala/native/src/generated/SerializerBase.h',
+        'koala-ui/arkoala/native/src/generated/DeserializerBase.h',
+        'koala-ui/arkoala/native/src/generated/Interop.h',
+        'koala-ui/arkoala/native/src/generated/arkoala-macros.h',
+        'koala-ui/arkoala-arkui/src/SerializerBase.ts',
+        'koala-ui/arkoala-arkui/src/DeserializerBase.ts',
+        'koala-ui/arkoala-arkui/src/callback_registry.ts'
     ])
 }
