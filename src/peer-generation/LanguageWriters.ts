@@ -497,17 +497,18 @@ export class TsEnumEntityStatement implements LanguageStatement {
     constructor(private readonly enumEntity: EnumEntity, private readonly isExport: boolean) {}
 
     write(writer: LanguageWriter) {
-        writer.print(this.enumEntity.comment)
+        if (this.enumEntity.comment.length > 0) {
+            writer.print(this.enumEntity.comment)
+        }
         writer.print(`${this.isExport ? "export " : ""}enum ${this.enumEntity.name} {`)
         writer.pushIndent()
         this.enumEntity.members.forEach((member, index) => {
-            writer.print(member.comment)
-            const commaOp = index < this.enumEntity.members.length - 1 ? ',' : ''
-            if (member.initializerText != undefined) {
-                writer.print(`${member.name} = ${member.initializerText}${commaOp}`)
-            } else {
-                writer.print(`${member.name}${commaOp}`)
+            if (member.comment.length > 0) {
+                writer.print(member.comment)
             }
+            const commaOp = index < this.enumEntity.members.length - 1 ? ',' : ''
+            const initValue = member.initializerText ? ` = ${member.initializerText}` : ``
+            writer.print(`${member.name}${initValue}${commaOp}`)
         })
         writer.popIndent()
         writer.print(`}`)
@@ -518,28 +519,49 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
     constructor(private readonly enumEntity: EnumEntity, private readonly isExport: boolean) {}
 
     write(writer: LanguageWriter) {
-        writer.print(this.enumEntity.comment)
-        writer.print(`${this.isExport ? "export " : ""}class ${this.enumEntity.name} {`)
-        writer.pushIndent()
-        let isTypeInt = true
-        this.enumEntity.members.forEach((member, index) => {
-            writer.print(member.comment)
-            const initText = member.initializerText ?? `${index}`
-            isTypeInt &&= !isNaN(Number(initText))
-            writer.print(`static ${member.name} =
-                new ${this.enumEntity.name}(${initText}${!isTypeInt ? `,${index}` : ""})`)
-        })
-        const typeName = isTypeInt ? "int" : "string"
-        writer.print(`private constructor(value: ${typeName}${!isTypeInt ? ", ordinal: int" : ""})
-            {this.value = value${!isTypeInt ? "; this.ordinal = ordinal" : ""}}`)
-        writer.print(`public value: ${typeName}`);
-        if (!isTypeInt) {
-            writer.print(`public ordinal: int`);
+        if (this.enumEntity.comment.length > 0) {
+            writer.print(this.enumEntity.comment)
         }
-        writer.print(`public static of(value: ${typeName}): ${this.enumEntity.name}
-            {return new ${this.enumEntity.name}(value${!isTypeInt ? ", 0" : ""})}`)
-        writer.popIndent()
-        writer.print(`}`)
+        writer.writeClass(this.enumEntity.name, (writer) => {
+            let isTypeString = true
+            this.enumEntity.members.forEach((member, index) => {
+                writer.print(member.comment)
+                const initText = member.initializerText ?? `${index}`
+                isTypeString &&= isNaN(Number(initText))
+                writer.print(`static ${member.name} = 
+                new ${this.enumEntity.name}(${initText}${isTypeString ? `,${index}` : ""})`)
+            })
+            const typeName = isTypeString ? "string" : "int"
+            let argTypes = [new Type(typeName)]
+            let argNames = ["value"]
+            if (isTypeString) {
+                argTypes.push(new Type("int"))
+                argNames.push("ordinal")
+            }
+            writer.writeConstructorImplementation(this.enumEntity.name,
+                new NamedMethodSignature(Type.Void, argTypes, argNames), (writer) => {
+                    writer.writeStatement(writer.makeAssign("this.value", undefined, writer.makeString("value"), false))
+                    if (isTypeString) {
+                        writer.writeStatement(writer.makeAssign("this.ordinal", undefined, writer.makeString("ordinal"), false))
+                    }
+            })
+            writer.print(`public value: ${typeName}`);
+            if (isTypeString) {
+                writer.print(`public ordinal: int`);
+            }
+            writer.writeMethodImplementation(new Method("of", new MethodSignature(new Type(this.enumEntity.name), [argTypes[0]]), [MethodModifier.PUBLIC, MethodModifier.STATIC]),
+                (writer)=> {
+                    this.enumEntity.members.forEach((member) => {
+                        const memberName = `${this.enumEntity.name}.${member.name}`
+                        writer.writeStatement(
+                            writer.makeCondition(
+                                writer.makeNaryOp('==', [writer.makeString('arg0'), writer.makeString(`${memberName}.value`)]),
+                                writer.makeReturn(writer.makeString(memberName)))
+                        )
+                    })
+                    writer.print(`throw new Error(\`Enum member \'$\{arg0\}\' not found\`)`)
+            })
+        })
     }
 }
 
