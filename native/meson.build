@@ -20,12 +20,13 @@ java_home = run_command('node', '-e', 'console.log(process.env.JAVA_HOME)').stdo
 
 is_node = true
 is_arkts = true
+is_cj = true
 is_jni = java_home != 'undefined'
 
 compile_events_test = get_option('events_test')
 
 gen_dir = '../generated/' + source_set
-arkoala_dir = gen_dir + '/koalaui/arkoala/native/src/generated'
+arkoala_dir = gen_dir + '/koalaui/arkoala/native/src'
 libace_dir = gen_dir + '/libace'
 
 cxx = meson.get_compiler('cpp')
@@ -41,12 +42,10 @@ include_dirs = [
 sources = [
     arkoala_dir + '/common-interop.cc',
     arkoala_dir + '/custom.cc',
-    arkoala_dir + '/bridge_generated.cc',
-    arkoala_dir + '/bridge_custom.cc',
+    arkoala_dir + '/bridge.cc',
     arkoala_dir + '/events.cc',
     arkoala_dir + '/all_events.cc',
     arkoala_dir + '/load-library.cc',
-    arkoala_dir + '/library.cc',
 ]
 if compile_events_test
     sources += [
@@ -101,6 +100,7 @@ node_library_name = 'NativeBridgeNapi'
 arkts_library_name = 'NativeBridgeArk'
 jni_library_name = 'NativeBridgeJni'
 ohos_library_name = 'NativeBridge_ohos'
+cj_library_name = 'NativeBridgeCJ'
 
 if is_clang
 # TODO: remove all -Wno-* when generation is fixed.
@@ -177,75 +177,74 @@ node_cflags += [
     '-DKOALA_OHOS',
 ]
 endif
-shared_library(node_library_name,
-    sources + node_sources,
-    override_options: [
-        'b_lundef=false',
-    ],
-    install: true,
-    name_prefix: node_module_prefix,
-    name_suffix: node_module_suffix,
-    include_directories: include_dirs + node_include_dirs,
-    install_dir: meson.current_source_dir(),
-    cpp_args: cflags + node_cflags,
-    link_args: ldflags + node_ldflags,
-    dependencies: []
-)
-if use_libace
-shared_library(libace_name,
-    libace_sources,
-    override_options: [
-        'b_lundef=false',
-    ],
-    install: true,
-    name_prefix: node_module_prefix,
-    name_suffix: 'dll',
-    include_directories: include_dirs + node_include_dirs,
-    install_dir: meson.current_source_dir(),
-    cpp_args: cflags + node_cflags,
-    link_args: ldflags + node_ldflags,
-    dependencies: []
-)
-endif
+# shared_library(node_library_name,
+#     sources + node_sources,
+#     override_options: [
+#         'b_lundef=false',
+#     ],
+#     install: true,
+#     name_prefix: node_module_prefix,
+#     name_suffix: node_module_suffix,
+#     include_directories: include_dirs + node_include_dirs,
+#     install_dir: meson.current_source_dir(),
+#     cpp_args: cflags + node_cflags,
+#     link_args: ldflags + node_ldflags,
+#     dependencies: []
+# )
+# if use_libace
+# shared_library(libace_name,
+#     libace_sources,
+#     override_options: [
+#         'b_lundef=false',
+#     ],
+#     install: true,
+#     name_prefix: node_module_prefix,
+#     name_suffix: 'dll',
+#     include_directories: include_dirs + node_include_dirs,
+#     install_dir: meson.current_source_dir(),
+#     cpp_args: cflags + node_cflags,
+#     link_args: ldflags + node_ldflags,
+#     dependencies: []
+# )
+# endif
 endif
 
-if is_arkts
-shared_library(arkts_library_name,
-    sources + arkts_sources,
-    override_options: [
-        'b_lundef=false',
-    ],
-    install: true,
-    include_directories: include_dirs + arkts_include_dirs,
-    install_dir: meson.current_source_dir(),
-    cpp_args: cflags + arkts_cflags,
-    link_args: ldflags,
-    dependencies: []
-)
-endif
+# if is_arkts
+# shared_library(arkts_library_name,
+#     sources + arkts_sources,
+#     override_options: [
+#         'b_lundef=false',
+#     ],
+#     install: true,
+#     include_directories: include_dirs + arkts_include_dirs,
+#     install_dir: meson.current_source_dir(),
+#     cpp_args: cflags + arkts_cflags,
+#     link_args: ldflags,
+#     dependencies: []
+# )
+# endif
 
 if is_cj
 shared_library(cj_library_name,
     cj_sources,
     install: true,
-    dependencies: []
 )
 endif
 
-if is_jni and not is_ohos
-shared_library(jni_library_name,
-    sources + jni_sources,
-    override_options: [
-        'b_lundef=false',
-    ],
-    install: true,
-    include_directories: include_dirs + jni_include_dirs,
-    install_dir: meson.current_source_dir(),
-    cpp_args: cflags + jni_cflags,
-    link_args: ldflags,
-    dependencies: []
-)
-endif
+# if is_jni and not is_ohos
+# shared_library(jni_library_name,
+#     sources + jni_sources,
+#     override_options: [
+#         'b_lundef=false',
+#     ],
+#     install: true,
+#     include_directories: include_dirs + jni_include_dirs,
+#     install_dir: meson.current_source_dir(),
+#     cpp_args: cflags + jni_cflags,
+#     link_args: ldflags,
+#     dependencies: []
+# )
+# endif
 
 if is_ohos
 ohos_library_name = ohos_library_name + '_' + arch
@@ -275,47 +274,47 @@ ohos_sources = [
     arkoala_dir + '/node/convertors-node.cc'
 ]
 
-shared_library(ohos_library_name,
-    sources + ohos_sources,
-    override_options: [
-        'b_lundef=false',
-    ],
-    install: true,
-    name_prefix: module_prefix,
-    name_suffix: module_suffix,
-    include_directories: include_dirs + ohos_include_dirs,
-    install_dir: meson.current_source_dir(),
-    cpp_args: cflags + ohos_cflags,
-    link_args: ldflags + ohos_ldflags
-)
-if use_libace
-shared_library(libace_name,
-    libace_sources,
-    override_options: [
-        'b_lundef=false',
-    ],
-    install: true,
-    name_prefix: module_prefix,
-    name_suffix: module_suffix,
-    include_directories: include_dirs + ohos_include_dirs,
-    install_dir: meson.current_source_dir(),
-    cpp_args: cflags + ohos_cflags,
-    link_args: ldflags + ohos_ldflags
-)
-endif
+# shared_library(ohos_library_name,
+#     sources + ohos_sources,
+#     override_options: [
+#         'b_lundef=false',
+#     ],
+#     install: true,
+#     name_prefix: module_prefix,
+#     name_suffix: module_suffix,
+#     include_directories: include_dirs + ohos_include_dirs,
+#     install_dir: meson.current_source_dir(),
+#     cpp_args: cflags + ohos_cflags,
+#     link_args: ldflags + ohos_ldflags
+# )
+# if use_libace
+# shared_library(libace_name,
+#     libace_sources,
+#     override_options: [
+#         'b_lundef=false',
+#     ],
+#     install: true,
+#     name_prefix: module_prefix,
+#     name_suffix: module_suffix,
+#     include_directories: include_dirs + ohos_include_dirs,
+#     install_dir: meson.current_source_dir(),
+#     cpp_args: cflags + ohos_cflags,
+#     link_args: ldflags + ohos_ldflags
+# )
+# endif
 endif
 
 # TODO: fix on Windows as well
 if os != 'windows'
-executable('test_arkoala_api',
-    arkoala_dir / 'api_test.c',
-    c_args: cflags,
-    include_directories: include_dirs
-)
-executable('test_arkoala_compat',
-    arkoala_dir / 'compat_test.cc',
-    cpp_args: cflags,
-    include_directories: include_dirs
-)
+# executable('test_arkoala_api',
+#     arkoala_dir / 'api_test.c',
+#     c_args: cflags,
+#     include_directories: include_dirs
+# )
+# executable('test_arkoala_compat',
+#     arkoala_dir / 'compat_test.cc',
+#     cpp_args: cflags,
+#     include_directories: include_dirs
+# )
 
 endif
