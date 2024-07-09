@@ -526,16 +526,18 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
             writer.print(member.comment)
             const initText = member.initializerText ?? `${index}`
             isTypeInt &&= !isNaN(Number(initText))
-            writer.print(`static ${member.name} = 
+            writer.print(`static ${member.name} =
                 new ${this.enumEntity.name}(${initText}${!isTypeInt ? `,${index}` : ""})`)
         })
-        const type = isTypeInt ? "int" : "string"
-        writer.print(`private constructor(value: ${type}${!isTypeInt ? ", ordinal: int" : ""}) 
+        const typeName = isTypeInt ? "int" : "string"
+        writer.print(`private constructor(value: ${typeName}${!isTypeInt ? ", ordinal: int" : ""})
             {this.value = value${!isTypeInt ? "; this.ordinal = ordinal" : ""}}`)
-        writer.print(`public value: ${type}`);
+        writer.print(`public value: ${typeName}`);
         if (!isTypeInt) {
             writer.print(`public ordinal: int`);
         }
+        writer.print(`public static of(value: ${typeName}): ${this.enumEntity.name}
+            {return new ${this.enumEntity.name}(value${!isTypeInt ? ", 0" : ""})}`)
         writer.popIndent()
         writer.print(`}`)
     }

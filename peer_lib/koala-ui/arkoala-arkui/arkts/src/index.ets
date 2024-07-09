@@ -475,7 +475,7 @@ function checkButton() {
     let peer = new ArkButtonPeer(ArkUINodeType.Button)
     checkResult("width", () => peer.widthAttribute("42%"),
         "width({1, 42.000000, 3, 0})")
-    checkResult("type", () => peer.typeAttribute(1 as ButtonType), "type(1)")
+    checkResult("type", () => peer.typeAttribute(ButtonType.of(1)), "type(1)")
     checkResult("labelStyle", () => peer.labelStyleAttribute(new LabelStyleImpl(3)),
          "labelStyle({{ARK_TAG_UNDEFINED, {}}, {ARK_TAG_OBJECT, {102, .i32=3}}, {ARK_TAG_UNDEFINED, {}}, {ARK_TAG_UNDEFINED, {}}, {ARK_TAG_UNDEFINED, {}}, {ARK_TAG_UNDEFINED, {}}})")
     checkResult("labelStyle2", () => peer.labelStyleAttribute(new LabelStyleImpl()),
