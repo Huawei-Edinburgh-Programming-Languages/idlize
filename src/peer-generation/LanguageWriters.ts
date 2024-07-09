@@ -514,6 +514,33 @@ export class TsEnumEntityStatement implements LanguageStatement {
     }
 }
 
+export class ArkTSEnumEntityStatement implements LanguageStatement {
+    constructor(private readonly enumEntity: EnumEntity, private readonly isExport: boolean) {}
+
+    write(writer: LanguageWriter) {
+        writer.print(this.enumEntity.comment)
+        writer.print(`${this.isExport ? "export " : ""}class ${this.enumEntity.name} {`)
+        writer.pushIndent()
+        let isTypeInt = true
+        this.enumEntity.members.forEach((member, index) => {
+            writer.print(member.comment)
+            const initText = member.initializerText ?? `${index}`
+            isTypeInt &&= !isNaN(Number(initText))
+            writer.print(`static ${member.name} = 
+                new ${this.enumEntity.name}(${initText}${!isTypeInt ? `,${index}` : ""})`)
+        })
+        const type = isTypeInt ? "int" : "string"
+        writer.print(`private constructor(value: ${type}${!isTypeInt ? ", ordinal: int" : ""}) 
+            {this.value = value${!isTypeInt ? "; this.ordinal = ordinal" : ""}}`)
+        writer.print(`public value: ${type}`);
+        if (!isTypeInt) {
+            writer.print(`public ordinal: int`);
+        }
+        writer.popIndent()
+        writer.print(`}`)
+    }
+}
+
 export class Field {
     constructor(
         public name: string,
@@ -562,7 +589,7 @@ export abstract class LanguageWriter {
     abstract makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression | undefined, isDeclared: boolean, isConst?: boolean): LanguageStatement;
     abstract makeReturn(expr?: LanguageExpression): LanguageStatement;
     abstract makeRuntimeType(rt: RuntimeType): LanguageExpression
-    abstract getObjectAccessor(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): string
+    abstract getObjectAccessor(p: ArgConvertor, value: string, args?: ObjectArgs): string
     abstract makeCast(value: LanguageExpression, type: Type): LanguageExpression
     abstract makeCast(value: LanguageExpression, type: Type, unsafe: boolean): LanguageExpression
     abstract writePrintLog(message: string): void
@@ -665,7 +692,7 @@ export abstract class LanguageWriter {
     makeUnionVariantCondition(value: string, type: string, index?: number): LanguageExpression {
         return this.makeString(`RuntimeType.${type.toUpperCase()} == ${value}`)
     }
-    makeUnionVariantCast(value: string, type: Type, index?: number): LanguageExpression {
+    makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index?: number): LanguageExpression {
         return this.makeString(`unsafeCast<${type.name}>(${value})`)
     }
     makeUnionTypeDefaultInitializer() {
@@ -833,7 +860,7 @@ export class TSLanguageWriter extends LanguageWriter {
     makeCast(value: LanguageExpression, type: Type, unsafe = false): LanguageExpression {
         return new TSCastExpression(value, type, unsafe)
     }
-    getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): string {
+    getObjectAccessor(convertor: BaseArgConvertor, value: string, args?: ObjectArgs): string {
         if (convertor instanceof OptionConvertor || convertor instanceof UnionConvertor) {
             return value
         }
@@ -953,8 +980,8 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     }
     nativeReceiver(): string { return 'NativeModule' }
     makeUnsafeCast(convertor: ArgConvertor, param: string): string {
-        if (convertor instanceof EnumConvertor) {
-            return `${param} as int32`
+        if (convertor instanceof EnumConvertor && !param.endsWith(".value")) {
+            return `(${param} as ${convertor.enumTypeName()}).value`
         }
         return super.makeUnsafeCast(convertor, param)
     }
@@ -978,7 +1005,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         })
         return new BlockStatement(statements)
     }
-    makeUnionVariantCast(value: string, type: Type, index?: number): LanguageExpression {
+    makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index?: number): LanguageExpression {
         return this.makeString(`${value} as ${type.name}`)
     }
     ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression {
@@ -988,14 +1015,22 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         return this.makeString(`${value} instanceof ${convertor.targetType(this).name}`)
     }
     makeValueFromOption(value: string, destinationConvertor: ArgConvertor): LanguageExpression {
-        // This preventing arkts compiler from segfault. No need to apply the assertion operator (!) to enum.
         if (destinationConvertor instanceof EnumConvertor) {
-            return this.makeString(`${value}`)
+            return this.makeString(`${value}!`)
         }
         return super.makeValueFromOption(value, destinationConvertor)
     }
     makeCallIsResource(value: string): LanguageExpression {
         return this.makeString(`(${value} instanceof Resource)`);
+    }
+    makeEnumEntity(enumEntity: EnumEntity, isExport: boolean): LanguageStatement {
+        return new ArkTSEnumEntityStatement(enumEntity, isExport);
+    }
+    getObjectAccessor(convertor: BaseArgConvertor, value: string, args?: ObjectArgs): string {
+        if (convertor instanceof EnumConvertor) {
+            return `(${value} as ${convertor.enumTypeName()}).${convertor.isStringEnum ? "ordinal" : "value"}`
+        }
+        return super.getObjectAccessor(convertor, value, args);
     }
 }
 
@@ -1096,7 +1131,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     makeUnionVariantCondition(value: string, type: string, index: number): LanguageExpression {
         return this.makeString(`${value} == ${index}`)
     }
-    makeUnionVariantCast(value: string, type: Type, index: number) {
+    makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index: number) {
         return this.makeMethodCall(value, `getValue${index}`, [])
     }
     makeUnionTypeDefaultInitializer() {
@@ -1119,7 +1154,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     applyToObject(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): LanguageStatement {
         throw new Error("Method not implemented.")
     }
-    getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): string {
+    getObjectAccessor(convertor: BaseArgConvertor, value: string, args?: ObjectArgs): string {
         throw new Error("Method not implemented.")
     }
     makeUndefined(): LanguageExpression {
@@ -1294,7 +1329,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     override makeUnionVariantCondition(value: string, type: string, index: number) {
         return this.makeString(`${value} == ${index}`)
     }
-    override makeUnionVariantCast(value: string, type: Type, index: number) {
+    override makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index: number) {
         return this.makeString(`${value}.value${index}`)
     }
     makeLoop(counter: string, limit: string, statement?: LanguageStatement): LanguageStatement {
@@ -1349,7 +1384,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     makeSetOptionTag(value: string, tag: LanguageExpression): LanguageStatement {
         return this.makeAssign(`${value}.tag`, undefined, tag, false)
     }
-    getObjectAccessor(convertor: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): string {
+    getObjectAccessor(convertor: BaseArgConvertor, value: string, args?: ObjectArgs): string {
         if (convertor instanceof OptionConvertor) {
             return `${value}.value`
         }
