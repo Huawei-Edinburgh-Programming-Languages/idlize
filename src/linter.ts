@@ -53,7 +53,6 @@ export enum LinterError {
     CPP_KEYWORDS,
     INCORRECT_DATA_CLASS,
     EMPTY_DECLARATION,
-    UNION_TYPE,
     UNION_CONTAINS_ENUM,
 }
 
@@ -190,7 +189,6 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
             })
         }
         if (ts.isUnionTypeNode(type)) {
-            this.report(type, LinterError.UNION_TYPE, "Union type")
             type.types.forEach(it => {
                 this.checkType(it)
             })
