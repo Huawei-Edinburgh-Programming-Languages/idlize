@@ -147,6 +147,11 @@ arkts_sources = [
     arkoala_dir / 'arkts/convertors-ets.cc',
 ]
 
+cj_sources = [
+    arkoala_dir / 'cj/dummy.c',
+    arkoala_dir / 'cj/dummy.h',
+]
+
 if is_jni
     jni_cflags = ['-DKOALA_USE_JAVA_VM', '-DKOALA_JNI']
     jni_include_dirs = [
@@ -215,6 +220,14 @@ shared_library(arkts_library_name,
     install_dir: meson.current_source_dir(),
     cpp_args: cflags + arkts_cflags,
     link_args: ldflags,
+    dependencies: []
+)
+endif
+
+if is_cj
+shared_library(cj_library_name,
+    cj_sources,
+    install: true,
     dependencies: []
 )
 endif

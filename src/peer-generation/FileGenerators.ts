@@ -442,6 +442,7 @@ export function copyPeerLib(from: string, arkoala: ArkoalaInstall, filters?: str
     copyDir(path.join(from, 'cpp'), arkoala.nativeDir, recursive, filters)
     copyDir(path.join(from, 'arkts'), arkoala.arktsDir, recursive, filters)
     copyDir(path.join(from, 'java'), arkoala.javaDir, recursive, filters)
+    copyDir(path.join(from, 'cj'), arkoala.cjDir, recursive)
 }
 
 export function copyToLibace(from: string, libace: LibaceInstall) {
