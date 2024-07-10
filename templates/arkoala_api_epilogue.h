@@ -9,7 +9,8 @@ struct Ark_AnyAPI {
 
 #endif  // GENERATED_FOUNDATION_ACE_FRAMEWORKS_CORE_INTERFACES_ARKOALA_API_H
 
-/**
- * For debug purpose:
- * Last commit of idlize - %COMMIT_HASH%
+/*
+  For debug purpose:
+  Current commit of idlize
+  %COMMIT_HASH%
  */
