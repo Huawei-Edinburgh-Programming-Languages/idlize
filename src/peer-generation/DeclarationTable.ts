@@ -674,6 +674,7 @@ export class DeclarationTable {
     }
 
     allOptionalTypes(): Set<string> {
+        const ignoreTypes: string[] = ["RelativeIndexable"]
         const seenNames = new Set<string>()
         seenNames.clear()
         for (let target of this.orderedDependencies) {
@@ -686,7 +687,11 @@ export class DeclarationTable {
                 throw new Error(`No assigned name for ${(target as ts.TypeNode).getText()} shall be ${this.computeTargetName(target, false)}`)
             }
             if (seenNames.has(nameAssigned)) continue
-            let nameOptional = PrimitiveType.OptionalPrefix + nameAssigned
+
+            let nameOptional = nameAssigned
+            if (!ignoreTypes.includes(nameAssigned)) {
+                nameOptional = PrimitiveType.OptionalPrefix + nameAssigned
+            }
             seenNames.add(nameOptional)
         }
         return seenNames
