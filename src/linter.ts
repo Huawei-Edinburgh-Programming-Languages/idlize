@@ -189,6 +189,10 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
             })
         }
         if (ts.isUnionTypeNode(type)) {
+            const enumType = findEnumType(type.types, this.typeChecker)
+            if (enumType != undefined) {
+                this.report(type, LinterError.UNION_CONTAINS_ENUM, `Union: '${type.getText()}' contains type Enum: '${enumType.name.text}'`)
+            }
             type.types.forEach(it => {
                 this.checkType(it)
             })
@@ -204,9 +208,6 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
             if (ts.isQualifiedName(type.typeName)) {
                 this.report(type, LinterError.TYPE_ELEMENT_TYPE,
                     `Type element types unsupported, use type "${ts.idText(type.typeName.left as ts.Identifier)}" itself: ${type.getText(this.sourceFile)}`)
-            }
-            if (this.isEnumPartOfUnion(type)) {
-                this.report(type, LinterError.UNION_CONTAINS_ENUM, `Union contains type Enum: ${type.parent.getText()}`)
             }
         }
         if (ts.isParenthesizedTypeNode(type)) {
@@ -378,11 +379,6 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
         })
     }
 
-    private isEnumPartOfUnion(type: ts.TypeReferenceNode) {
-        const declarations = getDeclarationsByNode(this.typeChecker, type.typeName)
-        return ts.isUnionTypeNode(type.parent) && declarations.length > 0 && ts.isEnumDeclaration(declarations[0])
-    }
-
     private getMethodsTypes(node: ts.ClassDeclaration): Map<string, ts.FunctionTypeNode> {
         const map = new Map()
         node.members
@@ -488,6 +484,30 @@ function updateHistogram(message: LinterMessage, histogram: Map<LinterError, num
 function printHistogram(histogram: Map<LinterError, number>): string {
     let sorted = Array.from(histogram.entries()).sort((a, b) => b[1] - a[1])
     return sorted.map(it => `${LinterError[it[0]]}: ${it[1]}`).join("\n")
+}
+
+function findEnumDFS(type: ts.TypeNode, typeChecker: ts.TypeChecker): ts.EnumDeclaration | undefined {
+    if (ts.isTypeReferenceNode(type)) {
+        for (const decl of getDeclarationsByNode(typeChecker, type.typeName)) {
+            if (ts.isEnumDeclaration(decl)) {
+                return decl
+            }
+            if (ts.isTypeAliasDeclaration(decl)) {
+                return findEnumDFS(decl.type, typeChecker)
+            }
+        }
+    }
+    return undefined
+}
+
+function findEnumType(types: ts.NodeArray<ts.TypeNode>, typeChecker: ts.TypeChecker): ts.EnumDeclaration | undefined {
+    for (const type of types) {
+        const enumType = findEnumDFS(type, typeChecker)
+        if (enumType != undefined) {
+            return enumType
+        }
+    }
+    return undefined
 }
 
 export function toLinterString(
