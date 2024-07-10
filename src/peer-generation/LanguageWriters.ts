@@ -613,7 +613,7 @@ export abstract class LanguageWriter {
     abstract makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression | undefined, isDeclared: boolean, isConst?: boolean): LanguageStatement;
     abstract makeReturn(expr?: LanguageExpression): LanguageStatement;
     abstract makeRuntimeType(rt: RuntimeType): LanguageExpression
-    abstract getObjectAccessor(p: ArgConvertor, value: string, args?: ObjectArgs): string
+    abstract getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string
     abstract makeCast(value: LanguageExpression, type: Type): LanguageExpression
     abstract makeCast(value: LanguageExpression, type: Type, unsafe: boolean): LanguageExpression
     abstract writePrintLog(message: string): void
@@ -884,7 +884,7 @@ export class TSLanguageWriter extends LanguageWriter {
     makeCast(value: LanguageExpression, type: Type, unsafe = false): LanguageExpression {
         return new TSCastExpression(value, type, unsafe)
     }
-    getObjectAccessor(convertor: BaseArgConvertor, value: string, args?: ObjectArgs): string {
+    getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string {
         if (convertor instanceof OptionConvertor || convertor instanceof UnionConvertor) {
             return value
         }
@@ -1050,7 +1050,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     makeEnumEntity(enumEntity: EnumEntity, isExport: boolean): LanguageStatement {
         return new ArkTSEnumEntityStatement(enumEntity, isExport);
     }
-    getObjectAccessor(convertor: BaseArgConvertor, value: string, args?: ObjectArgs): string {
+    getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string {
         if (convertor instanceof EnumConvertor) {
             return `(${value} as ${convertor.enumTypeName()}).${convertor.isStringEnum ? "ordinal" : "value"}`
         }
@@ -1178,7 +1178,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     applyToObject(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): LanguageStatement {
         throw new Error("Method not implemented.")
     }
-    getObjectAccessor(convertor: BaseArgConvertor, value: string, args?: ObjectArgs): string {
+    getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string {
         throw new Error("Method not implemented.")
     }
     makeUndefined(): LanguageExpression {

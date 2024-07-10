@@ -42,7 +42,7 @@ export interface ArgConvertor {
     scopeStart?(param: string, language: Language): string
     scopeEnd?(param: string, language: Language): string
     convertorArg(param: string, writer: LanguageWriter): string
-    convertorSerialize(param: string, value: string, writer: LanguageWriter, type?: Type): void
+    convertorSerialize(param: string, value: string, writer: LanguageWriter): void
     convertorDeserialize(param: string, value: string, writer: LanguageWriter): LanguageStatement
     interopType(language: Language): string
     nativeType(impl: boolean): string
@@ -257,7 +257,7 @@ export class EnumConvertor extends BaseArgConvertor {
     convertorArg(param: string, writer: LanguageWriter): string {
         return writer.makeUnsafeCast(this, param)
     }
-    convertorSerialize(param: string, value: string, printer: LanguageWriter, type?: Type): void {
+    convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         if (this.isStringEnum) {
             value = printer.ordinalFromEnum(printer.makeString(value),
                 identName(this.enumType.name)!).asString()
@@ -472,7 +472,7 @@ export class UnionConvertor extends BaseArgConvertor {
                 printer.writeStatement(
                         printer.makeAssign(`${value}_${index}`, undefined,
                             printer.makeUnionVariantCast(printer.getObjectAccessor(it, value), it.targetType(printer), it, index), true))
-                it.convertorSerialize(param, `${value}_${index}`, printer, it.targetType(printer))
+                it.convertorSerialize(param, `${value}_${index}`, printer)
             }
             printer.popIndent()
             printer.print(`}`)
