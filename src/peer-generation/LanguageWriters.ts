@@ -497,15 +497,11 @@ export class TsEnumEntityStatement implements LanguageStatement {
     constructor(private readonly enumEntity: EnumEntity, private readonly isExport: boolean) {}
 
     write(writer: LanguageWriter) {
-        if (this.enumEntity.comment.length > 0) {
-            writer.print(this.enumEntity.comment)
-        }
+        writer.print(this.enumEntity.comment.length > 0 ? this.enumEntity.comment : undefined)
         writer.print(`${this.isExport ? "export " : ""}enum ${this.enumEntity.name} {`)
         writer.pushIndent()
         this.enumEntity.members.forEach((member, index) => {
-            if (member.comment.length > 0) {
-                writer.print(member.comment)
-            }
+            writer.print(member.comment.length > 0 ? member.comment : undefined)
             const commaOp = index < this.enumEntity.members.length - 1 ? ',' : ''
             const initValue = member.initializerText ? ` = ${member.initializerText}` : ``
             writer.print(`${member.name}${initValue}${commaOp}`)
@@ -519,17 +515,15 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
     constructor(private readonly enumEntity: EnumEntity, private readonly isExport: boolean) {}
 
     write(writer: LanguageWriter) {
-        if (this.enumEntity.comment.length > 0) {
-            writer.print(this.enumEntity.comment)
-        }
+        writer.print(this.enumEntity.comment.length > 0 ? this.enumEntity.comment : undefined)
         writer.writeClass(this.enumEntity.name, (writer) => {
             let isTypeString = true
             this.enumEntity.members.forEach((member, index) => {
-                writer.print(member.comment)
+                writer.print(member.comment.length > 0 ? member.comment : undefined)
                 const initText = member.initializerText ?? `${index}`
                 isTypeString &&= isNaN(Number(initText))
-                writer.print(`static ${member.name} = 
-                new ${this.enumEntity.name}(${initText}${isTypeString ? `,${index}` : ""})`)
+                writer.writeFieldDeclaration(member.name, new Type(this.enumEntity.name), ["static"], false,
+                    writer.makeString(`new ${this.enumEntity.name}(${initText}${isTypeString ? `,${index}` : ""})`))
             })
             const typeName = isTypeString ? "string" : "int"
             let argTypes = [new Type(typeName)]
@@ -545,9 +539,9 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
                         writer.writeStatement(writer.makeAssign("this.ordinal", undefined, writer.makeString("ordinal"), false))
                     }
             })
-            writer.print(`public value: ${typeName}`);
+            writer.writeFieldDeclaration("value", new Type(typeName), ["public", "readonly"], false)
             if (isTypeString) {
-                writer.print(`public ordinal: int`);
+                writer.writeFieldDeclaration("ordinal", new Type("int"), ["public", "readonly"], false)
             }
             writer.writeMethodImplementation(new Method("of", new MethodSignature(new Type(this.enumEntity.name), [argTypes[0]]), [MethodModifier.PUBLIC, MethodModifier.STATIC]),
                 (writer)=> {
@@ -559,7 +553,7 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
                                 writer.makeReturn(writer.makeString(memberName)))
                         )
                     })
-                    writer.print(`throw new Error(\`Enum member \'$\{arg0\}\' not found\`)`)
+                    writer.print("throw new Error(`Enum member '$\{arg0\}' not found`)")
             })
         })
     }
@@ -606,7 +600,7 @@ export abstract class LanguageWriter {
 
     abstract writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string, interfaces?: string[], generics?: string[]): void
     abstract writeInterface(name: string, op: (writer: LanguageWriter) => void, superInterfaces?: string[]): void
-    abstract writeFieldDeclaration(name: string, type: Type, modifiers: string[]|undefined, optional: boolean): void
+    abstract writeFieldDeclaration(name: string, type: Type, modifiers: string[]|undefined, optional: boolean, initExpr?: LanguageExpression): void
     abstract writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void
     abstract writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method): void
     abstract writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void): void
@@ -825,8 +819,9 @@ export class TSLanguageWriter extends LanguageWriter {
         this.popIndent()
         this.printer.print(`}`)
     }
-    writeFieldDeclaration(name: string, type: Type, modifiers: string[]|undefined, optional: boolean): void {
-        this.printer.print(`${modifiers?.join(' ') ?? ""} ${name}${optional ? "?"  : ""}: ${type.name}`)
+    writeFieldDeclaration(name: string, type: Type, modifiers: string[]|undefined, optional: boolean, initExpr?: LanguageExpression): void {
+        const init = initExpr != undefined ? ` = ${initExpr.asString()}` : ``
+        this.printer.print(`${modifiers?.join(' ') ?? ""} ${name}${optional ? "?"  : ""}: ${type.name}${init}`)
     }
     writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void {
         this.writeDeclaration(name, signature, true, false, modifiers)
