@@ -68,6 +68,7 @@ class ComponentFileVisitor {
             imports.addFeature("isInstanceOf", "./SerializerBase")
             imports.addFeature('ComponentBase', './ComponentBase')
             imports.addFeature('unsafeCast', './generated-utils')
+            imports.addFeature('WrapperNode', './WrapperNode')
             for (const method of peer.methods) {
                 for (const target of method.declarationTargets)
                     if (convertToCallback(peer, method, target))
@@ -128,17 +129,18 @@ export function ${componentFunctionName}(
   style: ((attributes: ${componentClassName}) => void) | undefined,
   /** @memo */
   content_: (() => void) | undefined,
-  ${mappedCallableParams?.join(", ") ?? ""}
+  ${mappedCallableParams?.join(",\n") ?? ""}
 ) {
-    const receiver = remember(() => {
-        return new ${componentClassName}()
-    })
-    NodeAttach(() => new ${peerClassName}(receiver), () => {
-        ${callableMethod ? `receiver.${callableMethod.name}(${mappedCallableParamsValues})` : ""}
-        style?.(receiver)
-        content_?.()
-        receiver.applyAttributesFinish()
-    })
+    NodeAttach(
+        () => new WrapperNode<${componentClassName}>(new ${componentClassName}()),
+        (node: WrapperNode<${componentClassName}>) => {
+            const receiver = node.component
+            ${callableMethod ? `receiver.${callableMethod.name}(${mappedCallableParamsValues})` : ""}
+            style?.(receiver)
+            content_?.()
+            receiver.applyAttributesFinish()
+        }
+    )
 }
 `)
     }

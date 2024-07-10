@@ -137,16 +137,17 @@ class PeerFileVisitor {
         const typeArgNames = isAbstractSuperclass ? ['type'] : []
         const signature = new NamedMethodSignature(
             Type.Void,
-            [...typeArgTypes, new Type('PeerReceiver', true), new Type('int32', !isAbstractSuperclass)],
-            [...typeArgNames, 'component', 'flags'],
-            [undefined, undefined, isAbstractSuperclass ? '0' : undefined])
+            [new Type('int32', false)],
+            ['flags'],
+            ['0']
+        )
 
         printer.writeConstructorImplementation(componentToPeerClass(peer.componentName), signature, (writer) => {
+            // TODO: unite
             if (parentRole === InheritanceRole.PeerNode) {
                 writer.writeSuperCall(['flags'])
-                writer.writeMethodCall('component', 'setPeer', ['this'], true)
             } else if (parentRole === InheritanceRole.Heir || parentRole === InheritanceRole.Root) {
-                writer.writeSuperCall([`ArkUINodeType.${peer.componentName}`, 'component', 'flags'])
+                writer.writeSuperCall(['flags'])
             } else {
                 throwException(`Unexpected parent inheritance role: ${parentRole}`)
             }
