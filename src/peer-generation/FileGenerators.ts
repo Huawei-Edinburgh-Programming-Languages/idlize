@@ -243,7 +243,7 @@ export function makeTSSerializer(library: PeerLibrary): string {
         'import { FontWeight, FontStyle, TextOverflow, TextHeightAdaptivePolicy, Color, ColoringStrategy } from "./ArkEnumInterfaces"\n' +
         'import { SelectedMode } from "./ArkTabContentInterfaces"'
         : ''
-    return `
+    return `${cStyleCopyright}
 ${extraImports}
 import { SerializerBase, Tags, RuntimeType, runtimeType, isPixelMap, isResource, isInstanceOf } from "./SerializerBase"
 import { int32 } from "@koalaui/common"
@@ -315,7 +315,7 @@ ${serializers.getOutput().join("\n")}
 export function makeTSDeserializer(library: PeerLibrary): string {
     const deserializer = createLanguageWriter(Language.TS)
     writeDeserializer(library, deserializer)
-    return `
+    return `${cStyleCopyright}
 import { runtimeType, Tags, RuntimeType } from "./SerializerBase"
 import { DeserializerBase } from "./DeserializerBase"
 import { int32 } from "@koalaui/common"
@@ -517,7 +517,7 @@ export function componentFileTemplate(content: string): string {
 }
 
 export function makePeerEvents(data: string): string {
-    return `
+    return `${cStyleCopyright}
 import { Deserializer } from './peers/Deserializer'
 import { RuntimeType } from "./peers/SerializerBase"
 import { int32 } from "@koalaui/common"
