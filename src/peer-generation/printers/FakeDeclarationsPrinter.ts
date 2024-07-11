@@ -13,10 +13,9 @@
  * limitations under the License.
  */
 
-import { TSDeclarationGenerator } from "./InterfacePrinter";
+import { TSTypeConvertor } from "./InterfacePrinter";
 import { createLanguageWriter } from "../LanguageWriters";
 import { PeerLibrary } from "../PeerLibrary";
-import { convertDeclaration } from "../TypeNodeConvertor";
 import { makeSyntheticDeclarationsFiles } from "../synthetic_declaration";
 import { ImportsCollector } from "../ImportsCollector";
 import { cStyleCopyright } from "../FileGenerators";
@@ -24,7 +23,7 @@ import { removeExt } from "../../util";
 
 export function printFakeDeclarations(library: PeerLibrary): Map<string, string> {
     const lang = library.declarationTable.language
-    const declarationGenerator = new TSDeclarationGenerator(library)
+    const convertor = new TSTypeConvertor(library)
     const result = new Map<string, string>()
     for (const [filename, {dependencies, declarations}] of makeSyntheticDeclarationsFiles()) {
         const writer = createLanguageWriter(lang)
@@ -33,7 +32,7 @@ export function printFakeDeclarations(library: PeerLibrary): Map<string, string>
         dependencies.forEach(it => imports.addFeature(it.feature, it.module))
         imports.print(writer, removeExt(filename))
         for (const node of declarations) {
-            writer.print(convertDeclaration(declarationGenerator, node))
+            convertor.convert(writer, node)
         }
         result.set(`${filename}${lang.extension}`, writer.getOutput().join('\n'))
     }

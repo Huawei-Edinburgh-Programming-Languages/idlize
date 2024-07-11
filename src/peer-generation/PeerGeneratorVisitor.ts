@@ -901,7 +901,7 @@ function needImportFeature(language: Language, decl: ts.Declaration): boolean {
         if (ts.isEnumDeclaration(decl)) {
             return true
         }
-        return ts.isInterfaceDeclaration(decl) && decl.name.text === "StateStyles";
+        return ts.isInterfaceDeclaration(decl) && (decl.name.text === "StateStyles" || decl.name.text === "ResourceColor");
     }
     return true;
 }

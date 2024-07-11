@@ -21,39 +21,60 @@ import { mapType } from '../TypeNodeNameConvertor'
 import { Language, removeExt, renameDtsToInterfaces } from '../../util'
 import { ImportsCollector } from '../ImportsCollector'
 import { EnumEntity, PeerFile } from '../PeerFile'
-import { DeclarationConvertor, convertDeclaration } from '../TypeNodeConvertor'
 import { IndentedPrinter } from "../../IndentedPrinter"
 import { TargetFile } from './TargetFile'
 import { PrinterContext } from './PrinterContext'
 import { ARK_OBJECTBASE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from './lang/Java'
 
-export class TSDeclarationGenerator implements DeclarationConvertor<string> {
-    constructor(
-        protected readonly library: PeerLibrary,
-    ) {}
+interface InterfacesVisitor {
+    getInterfaces(): Map<TargetFile, LanguageWriter>
+    printInterfaces(): void
+}
 
-    convertClass(node: ts.ClassDeclaration): string {
-        return this.convertDeclaration(node)
+abstract class DefaultInterfacesVisitor implements InterfacesVisitor {
+    protected readonly interfaces: Map<TargetFile, LanguageWriter> = new Map()
+    getInterfaces(): Map<TargetFile, LanguageWriter> {
+        return this.interfaces
+    }
+    abstract printInterfaces(): void
+}
+
+abstract class TypeConvertor {
+    public convert(writer: LanguageWriter, node: ts.Declaration) {
+        if (ts.isClassDeclaration(node)) this.convertClass(writer, node)
+        else if (ts.isInterfaceDeclaration(node)) this.convertInterface(writer, node)
+        else if (ts.isTypeAliasDeclaration(node)) this.convertTypeAlias(writer, node)
+        else throw new Error("Unknown node")
+    }
+    abstract convertClass(writer: LanguageWriter, node: ts.ClassDeclaration): void
+    abstract convertInterface(writer: LanguageWriter, node: ts.InterfaceDeclaration): void
+    abstract convertTypeAlias(writer: LanguageWriter, node: ts.TypeAliasDeclaration): void
+    convertEnum(writer: LanguageWriter, enumEntity: EnumEntity) {
+        writer.writeStatement(writer.makeEnumEntity(enumEntity, true))
+    }
+}
+
+export class TSTypeConvertor extends TypeConvertor {
+    constructor(private readonly peerLibrary: PeerLibrary) {
+        super();
+    }
+    convertClass(writer: LanguageWriter, node: ts.ClassDeclaration): void {
+        writer.print(this.convertDeclaration(node))
+    }
+    convertInterface(writer: LanguageWriter, node: ts.InterfaceDeclaration): void {
+        writer.print(this.convertDeclaration(node))
     }
 
-    convertInterface(node: ts.InterfaceDeclaration): string {
-        return this.convertDeclaration(node)
-    }
-
-    convertEnum(node: ts.EnumDeclaration): string {
-        throw "Enums are processed separately"
-    }
-
-    convertTypeAlias(node: ts.TypeAliasDeclaration): string {
+    convertTypeAlias(writer: LanguageWriter, node: ts.TypeAliasDeclaration): void {
         const maybeTypeArguments = node.typeParameters?.length
             ? `<${node.typeParameters.map(it => it.getText()).join(', ')}>`
             : ''
         let type = mapType(node.type)
-        return `export declare type ${node.name.text}${maybeTypeArguments} = ${type};`
+        writer.print(`export declare type ${node.name.text}${maybeTypeArguments} = ${type};`)
     }
 
     private replaceImportTypeNodes(text: string): string {
-        for (const [stub, src] of [...this.library.importTypesStubToSource.entries()].reverse()) {
+        for (const [stub, src] of [...this.peerLibrary.importTypesStubToSource.entries()].reverse()) {
             text = text.replaceAll(src, stub)
         }
         return text
@@ -64,7 +85,7 @@ export class TSDeclarationGenerator implements DeclarationConvertor<string> {
             return ``
         if (node.heritageClauses!.some(it => it.token !== ts.SyntaxKind.ExtendsKeyword))
             throw "Expected to have only extend clauses"
-        if (this.library.isComponentDeclaration(node))
+        if (this.peerLibrary.isComponentDeclaration(node))
             // do not extend parent component interface to provide smooth integration
             return ``
 
@@ -80,7 +101,7 @@ export class TSDeclarationGenerator implements DeclarationConvertor<string> {
     }
 
     private convertDeclaration(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
-        if (!this.library.isComponentDeclaration((node))) {
+        if (!this.peerLibrary.isComponentDeclaration((node))) {
             return 'export ' + this.replaceImportTypeNodes(node.getText())
         }
         let printer = new IndentedPrinter()
@@ -88,7 +109,7 @@ export class TSDeclarationGenerator implements DeclarationConvertor<string> {
         let extendsClause = this.extendsClause(node)
 
         let classOrInterface = ts.isClassDeclaration(node) ? `class` : `interface`
-        if (this.library.isComponentDeclaration(node))
+        if (this.peerLibrary.isComponentDeclaration(node))
             // because we write `ArkBlank implements BlankAttributes`
             classOrInterface = `interface`
         printer.print(`export declare ${classOrInterface} ${className} ${extendsClause} {`)
@@ -113,7 +134,7 @@ export class TSDeclarationGenerator implements DeclarationConvertor<string> {
                 return members
         }
         if (ts.isInterfaceDeclaration(node) ) {
-            const members = node.members.filter(it => 
+            const members = node.members.filter(it =>
                 !ts.isConstructSignatureDeclaration(it) &&
                 !ts.isCallSignatureDeclaration(it))
             if (members.length === 0)
@@ -123,39 +144,11 @@ export class TSDeclarationGenerator implements DeclarationConvertor<string> {
     }
 }
 
-export class ArkTSDeclarationGenerator extends TSDeclarationGenerator {
-    override convertInterface(node: ts.InterfaceDeclaration): string {
-        let className = this.declarationName(node)
-        if (className === "StateStyles") {
-            return `export declare interface ${className} {
-            ${this.library.declarationTable.targetStruct(node).getFields().map(it => {
-                let type = it.type?.getText()
-                if (it.type != undefined && ts.isTupleTypeNode(it.type)) {
-                    type = type?.replaceAll("?", "")
-                    console.log("convertInterface " + type)
-                }
-                if (type === "any") {
-                    type = "object"
-                }
-                return `${it.name}${it.optional ? "?" : ""}: ${type}`
-            }).join("\n")}}`
-        }
-        return ""
-    }
-}
-
-interface InterfacesVisitor {
-    getInterfaces(): Map<TargetFile, LanguageWriter>
-    printInterfaces(): void
-}
-
-class TSInterfacesVisitor implements InterfacesVisitor {
-    protected readonly interfaces: Map<TargetFile, LanguageWriter> = new Map()
-    protected readonly generator: DeclarationConvertor<string>
-    protected readonly writer = createLanguageWriter(Language.TS)
+class TSInterfacesVisitor extends DefaultInterfacesVisitor {
+    protected readonly typeConvertor = new TSTypeConvertor(this.peerLibrary)
 
     constructor(protected readonly peerLibrary: PeerLibrary) {
-        this.generator = new TSDeclarationGenerator(peerLibrary)
+        super()
     }
 
     protected generateFileBasename(originalFilename: string): string {
@@ -166,10 +159,6 @@ class TSInterfacesVisitor implements InterfacesVisitor {
         const imports = new ImportsCollector()
         file.importFeatures.forEach(it => imports.addFeature(it.feature, it.module))
         imports.print(writer, removeExt(this.generateFileBasename(file.originalFilename)))
-    }
-
-    protected printEnum(writer: LanguageWriter, enumEntity: EnumEntity) {
-        writer.writeStatement(writer.makeEnumEntity(enumEntity, true))
     }
 
     private printAssignEnumsToGlobalScope(writer: LanguageWriter, peerFile: PeerFile) {
@@ -185,21 +174,17 @@ class TSInterfacesVisitor implements InterfacesVisitor {
         }
     }
 
-    getInterfaces(): Map<TargetFile, LanguageWriter> {
-        return this.interfaces
-    }
-
     printInterfaces() {
         for (const file of this.peerLibrary.files.values()) {
-            this.printImports(this.writer, file)
-            file.declarations.forEach(it => this.writer.print(convertDeclaration(this.generator, it)))
-            file.enums.forEach(it => this.printEnum(this.writer, it))
-            this.printAssignEnumsToGlobalScope(this.writer, file)
-            this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), this.writer)
+            const writer = createLanguageWriter(this.peerLibrary.declarationTable.language)
+            this.printImports(writer, file)
+            file.declarations.forEach(it => this.typeConvertor.convert(writer, it))
+            file.enums.forEach(it => this.typeConvertor.convertEnum(writer, it))
+            this.printAssignEnumsToGlobalScope(writer, file)
+            this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), writer)
         }
     }
 }
-
 
 class JavaInterfacesVisitor {
     private readonly interfaces: Map<string, LanguageWriter> = new Map()
@@ -281,21 +266,92 @@ class JavaInterfacesVisitor {
     }
 }
 
-class ArkTSInterfacesVisitor extends TSInterfacesVisitor {
-    protected readonly writer = createLanguageWriter(Language.ARKTS)
-    protected readonly generator: DeclarationConvertor<string>
+class ArkTSTypeConvertor extends TypeConvertor {
+    constructor(private readonly peerLibrary: PeerLibrary) {
+        super();
+    }
+    convertClass(writer: LanguageWriter, node: ts.ClassDeclaration): void {
 
-    constructor(protected readonly peerLibrary: PeerLibrary) {
-        super(peerLibrary);
-        this.generator = new ArkTSDeclarationGenerator(peerLibrary)
+    }
+    convertInterface(writer: LanguageWriter, node: ts.InterfaceDeclaration): void {
+        let className = this.declarationName(node)
+        if (className === "StateStyles" || className === "ResourceColor") {
+            writer.print(`export declare interface ${className} {
+            ${this.peerLibrary.declarationTable.targetStruct(node).getFields().map(it => {
+                let type = it.type?.getText()
+                if (it.type != undefined && ts.isTupleTypeNode(it.type)) {
+                    type = type?.replaceAll("?", "")
+                    console.log("convertInterface " + type)
+                }
+                if (type === "any") {
+                    type = "object"
+                }
+                return `${it.name}${it.optional ? "?" : ""}: ${type}`
+            }).join("\n")}}`)
+        }
+    }
+    convertTypeAlias(writer: LanguageWriter, node: ts.TypeAliasDeclaration): void {
+
+    }
+    private declarationName(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
+        let name = ts.idText(node.name as ts.Identifier)
+        let typeParams = node.typeParameters?.map(it => it.getText()).join(', ')
+        let typeParamsClause = typeParams ? `<${typeParams}>` : ``
+        return `${name}${typeParamsClause}`
+    }
+}
+
+class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
+    private readonly typeConvertor = new ArkTSTypeConvertor(this.peerLibrary)
+
+    constructor(private readonly peerLibrary: PeerLibrary) {
+        super()
+    }
+
+    protected generateFileBasename(originalFilename: string): string {
+        return renameDtsToInterfaces(path.basename(originalFilename), this.peerLibrary.declarationTable.language)
     }
 
     override printInterfaces() {
         for (const file of this.peerLibrary.files.values()) {
-            file.declarations.forEach(it => this.writer.print(convertDeclaration(this.generator, it)))
-            file.enums.forEach(it => this.printEnum(this.writer, it))
-            this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), this.writer)
+            const writer = createLanguageWriter(this.peerLibrary.declarationTable.language)
+            file.declarations.forEach(it => this.typeConvertor.convert(writer, it))
+            file.enums.forEach(it => this.typeConvertor.convertEnum(writer, it))
+            this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), writer)
         }
+    }
+
+    convertClass(writer: LanguageWriter, node: ts.ClassDeclaration) {
+
+    }
+
+    convertTypeAlias(writer: LanguageWriter, node: ts.TypeAliasDeclaration) {
+
+    }
+
+    convertInterface(writer: LanguageWriter, node: ts.InterfaceDeclaration) {
+        let className = this.declarationName(node)
+        if (className === "StateStyles" || className === "ResourceColor") {
+            writer.print(`export declare interface ${className} {
+            ${this.peerLibrary.declarationTable.targetStruct(node).getFields().map(it => {
+                let type = it.type?.getText()
+                if (it.type != undefined && ts.isTupleTypeNode(it.type)) {
+                    type = type?.replaceAll("?", "")
+                    console.log("convertInterface " + type)
+                }
+                if (type === "any") {
+                    type = "object"
+                }
+                return `${it.name}${it.optional ? "?" : ""}: ${type}`
+            }).join("\n")}}`)
+        }
+    }
+
+    protected declarationName(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
+        let name = ts.idText(node.name as ts.Identifier)
+        let typeParams = node.typeParameters?.map(it => it.getText()).join(', ')
+        let typeParamsClause = typeParams ? `<${typeParams}>` : ``
+        return `${name}${typeParamsClause}`
     }
 }
 
