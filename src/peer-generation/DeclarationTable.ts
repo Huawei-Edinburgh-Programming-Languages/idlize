@@ -35,10 +35,15 @@ import { EnumMember, NodeArray } from "typescript";
 import { extractBuilderFields } from "./BuilderClass"
 import { setEngine } from "node:crypto"
 
+function cleanPrefixIfNeeded(name: string, prefix: string, clean: boolean = false): string {
+    return clean ? name.replace(prefix, "") : name
+}
+
 export class PrimitiveType {
     constructor(private name: string, public isPointer = false) { }
     getText(table?: DeclarationTable): string { return this.name }
     static ArkPrefix = "Ark_"
+    static ArkPrefixCpp = "Idl"
     static String = new PrimitiveType(`${PrimitiveType.ArkPrefix}String`, true)
     static Number = new PrimitiveType(`${PrimitiveType.ArkPrefix}Number`, true)
     static Int32 = new PrimitiveType(`${PrimitiveType.ArkPrefix}Int32`)
@@ -164,22 +169,23 @@ export class DeclarationTable {
         return false
     }
 
-    computeTypeName(suggestedName: string | undefined, type: ts.TypeNode, optional: boolean = false): string {
-        return this.computeTypeNameImpl(suggestedName, type, optional)
+    computeTypeName(suggestedName: string | undefined, type: ts.TypeNode, optional: boolean = false, additionalPrefixCpp: string = PrimitiveType.ArkPrefixCpp): string {
+        return this.computeTypeNameImpl(suggestedName, type, optional, additionalPrefixCpp)
     }
 
     toTarget(node: ts.TypeNode): DeclarationTarget {
         return convertTypeNode(this.toTargetConvertor, node)
     }
 
-    computeTargetName(target: DeclarationTarget, optional: boolean): string {
-        return this.computeTargetNameImpl(target, optional)
+    computeTargetName(target: DeclarationTarget, optional: boolean, additionalPrefixCpp: string = PrimitiveType.ArkPrefixCpp): string {
+        return this.computeTargetNameImpl(target, optional, additionalPrefixCpp)
     }
 
-    computeTargetNameImpl(target: DeclarationTarget, optional: boolean): string {
+    computeTargetNameImpl(target: DeclarationTarget, optional: boolean, additionalPrefixCpp: string): string {
         const prefix = optional ? PrimitiveType.OptionalPrefix : ""
         if (target instanceof PrimitiveType) {
-            return prefix + target.getText(this)
+            const name = cleanPrefixIfNeeded(target.getText(this), PrimitiveType.ArkPrefix, additionalPrefixCpp == "")
+            return prefix + name
         }
         if (ts.isTypeLiteralNode(target)) {
             if (target.members.some(ts.isIndexSignatureDeclaration)) {
@@ -190,7 +196,7 @@ export class DeclarationTable {
                 if (ts.isPropertySignature(member)) {
                     let target = this.toTarget(member.type!)
                     let field = identName(member.name)
-                    return `${field}_${this.computeTargetName(target, member.questionToken != undefined)}`
+                    return `${field}_${this.computeTargetName(target, member.questionToken != undefined, "")}`
                 } else {
                     return undefined
                 }
@@ -220,16 +226,17 @@ export class DeclarationTable {
             return prefix + PrimitiveType.CustomObject.getText()
         }
         if (ts.isEnumDeclaration(target)) {
-            return prefix + this.enumName(target.name)
+            const name = cleanPrefixIfNeeded(this.enumName(target.name), PrimitiveType.ArkPrefix, additionalPrefixCpp == "")
+            return prefix + name
         }
         if (ts.isUnionTypeNode(target)) {
-            return prefix + `Union_${target.types.map(it => this.computeTargetName(this.toTarget(it), false)).join("_")}`
+            return prefix + `Union_${target.types.map(it => this.computeTargetName(this.toTarget(it), false, "")).join("_")}`
         }
         if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {
             let name = identName(target.name)
             if (name == "Function")
                 return prefix + PrimitiveType.Function.getText()
-            return prefix + name
+            return prefix + additionalPrefixCpp + name
         }
         if (ts.isFunctionTypeNode(target)) {
             return prefix + PrimitiveType.Function.getText()
@@ -237,37 +244,38 @@ export class DeclarationTable {
         if (ts.isTupleTypeNode(target)) {
             return prefix + `Tuple_${target.elements.map(it => {
                 if (ts.isNamedTupleMember(it)) {
-                    return this.computeTargetName(this.toTarget(it.type), it.questionToken != undefined)
+                    return this.computeTargetName(this.toTarget(it.type), it.questionToken != undefined, "")
                 } else {
-                    return this.computeTargetName(this.toTarget(it), false)
+                    return this.computeTargetName(this.toTarget(it), false, "")
                 }
             }).join("_")}`
         }
         if (ts.isArrayTypeNode(target)) {
-            return prefix + `Array_` + this.computeTargetName(this.toTarget(target.elementType), false)
+            return prefix + `Array_` + this.computeTargetName(this.toTarget(target.elementType), false, "")
         }
         if (ts.isImportTypeNode(target)) {
             return prefix + this.mapImportType(target).getText()
         }
         if (ts.isOptionalTypeNode(target)) {
-            let name = this.computeTargetName(this.toTarget(target.type), false)
+            let name = this.computeTargetName(this.toTarget(target.type), false, "")
             return `${PrimitiveType.OptionalPrefix}${name}`
         }
         if (ts.isParenthesizedTypeNode(target)) {
-            return this.computeTargetName(this.toTarget(target.type), optional)
+            return this.computeTargetName(this.toTarget(target.type), optional, additionalPrefixCpp)
         }
         if (ts.isEnumMember(target)) {
-            return this.computeTargetName((target as any).parent as DeclarationTarget, optional)
+            return this.computeTargetName((target as any).parent as DeclarationTarget, optional, additionalPrefixCpp)
         }
         if (ts.isTypeReferenceNode(target)) {
             let name = identName(target.typeName)
             if (!target.typeArguments) throw new Error("Only type references with type arguments allowed here: " + name)
             if (name == "Optional")
-                return this.computeTargetName(this.toTarget(target.typeArguments[0]), true)
+                return this.computeTargetName(this.toTarget(target.typeArguments[0]), true, additionalPrefixCpp)
             if (name == "Array")
-                return prefix + `Array_` + this.computeTargetName(this.toTarget(target.typeArguments[0]), false)
+                return prefix + `Array_` + this.computeTargetName(this.toTarget(target.typeArguments[0]), false, "")
             if (name == "Map")
-                return prefix + `Map_` + this.computeTargetName(this.toTarget(target.typeArguments[0]), false) + '_' + this.computeTargetName(this.toTarget(target.typeArguments[1]), false)
+                return prefix + `Map_` + this.computeTargetName(this.toTarget(target.typeArguments[0]), false, "")
+                    + '_' + this.computeTargetName(this.toTarget(target.typeArguments[1]), false, "")
             if (name == "Callback")
                 return prefix + PrimitiveType.Function.getText()
             if (PeerGeneratorConfig.isKnownParametrized(name))
@@ -285,7 +293,7 @@ export class DeclarationTable {
         }
     }
 
-    private computeTypeNameImpl(suggestedName: string | undefined, type: ts.TypeNode, optional: boolean): string {
+    private computeTypeNameImpl(suggestedName: string | undefined, type: ts.TypeNode, optional: boolean, additionalPrefixCpp: string): string {
         const prefix = optional ? PrimitiveType.OptionalPrefix : ""
         if (ts.isImportTypeNode(type)) {
             return prefix + this.mapImportType(type).getText()
@@ -293,48 +301,59 @@ export class DeclarationTable {
         if (ts.isTypeReferenceNode(type)) {
             const typeName = identName(type.typeName)
             let declaration = this.toTarget(type)
-            if (!(declaration instanceof PrimitiveType) && ts.isEnumDeclaration(declaration))
-                return this.enumName(declaration.name)
+            if (!(declaration instanceof PrimitiveType) && ts.isEnumDeclaration(declaration)) {
+                return cleanPrefixIfNeeded(this.enumName(declaration.name), PrimitiveType.ArkPrefix, additionalPrefixCpp == "")
+            }
             if (typeName === "Array") {
-                const elementTypeName = this.computeTypeNameImpl(undefined, type.typeArguments![0], false)
+                const elementTypeName = this.computeTypeNameImpl(undefined, type.typeArguments![0], false, "")
                 return `${prefix}Array_${elementTypeName}`
             } else if (typeName === "Map") {
-                const keyTypeName = this.computeTypeNameImpl(undefined, type.typeArguments![0], false)
-                const valueTypeName = this.computeTypeNameImpl(undefined, type.typeArguments![1], false)
+                const keyTypeName = this.computeTypeNameImpl(undefined, type.typeArguments![0], false, "")
+                const valueTypeName = this.computeTypeNameImpl(undefined, type.typeArguments![1], false, "")
                 return `${prefix}Map_${keyTypeName}_${valueTypeName}`
             } else if (typeName === "Resource") {
                 return `${prefix}${PrimitiveType.Resource.getText()}`
+            } else if (typeName === "Callback") {
+                return prefix + typeName
+            }
+            if (!(declaration instanceof PrimitiveType)) {
+                if (ts.isUnionTypeNode(declaration) && typeName === "GestureType" ||
+                    ts.isInterfaceDeclaration(declaration) ||
+                    ts.isClassDeclaration(declaration)
+                ) {
+                    return prefix + additionalPrefixCpp + typeName;
+                }
             }
             return prefix + typeName
         }
         if (ts.isUnionTypeNode(type)) {
             if (suggestedName) return suggestedName
-            return prefix + `Union_${type.types.map(it => this.computeTypeNameImpl(undefined, it, optional)).join("_")}`
+            return prefix + `Union_${type.types.map(it => this.computeTypeNameImpl(undefined, it, optional, "")).join("_")}`
         }
         if (ts.isOptionalTypeNode(type)) {
             if (suggestedName) return suggestedName
-            return PrimitiveType.OptionalPrefix + this.computeTypeNameImpl(undefined, type.type, false)
+            return PrimitiveType.OptionalPrefix + this.computeTypeNameImpl(undefined, type.type, false, "")
         }
         if (ts.isTupleTypeNode(type)) {
             if (suggestedName) return suggestedName
             return prefix + `Tuple_${type.elements.map(it => {
                 if (ts.isNamedTupleMember(it)) {
-                    return this.computeTypeNameImpl(undefined, it.type, optional)
+                    return this.computeTypeNameImpl(undefined, it.type, optional, "")
                 } else {
-                    return this.computeTypeNameImpl(undefined, it, optional)
+                    return this.computeTypeNameImpl(undefined, it, optional, "")
                 }
 
             }).join("_")}`
         }
         if (ts.isParenthesizedTypeNode(type)) {
-            return this.computeTypeNameImpl(suggestedName, type.type!, optional)
+            return this.computeTypeNameImpl(suggestedName, type.type!, optional, additionalPrefixCpp)
         }
         if (ts.isTypeLiteralNode(type)) {
             if (suggestedName) return suggestedName
             return prefix + `Literal_${type.members.map(member => {
                 if (ts.isPropertySignature(member)) {
                     let field = identName(member.name)
-                    return `${field}_${this.computeTypeNameImpl(undefined, member.type!, member.questionToken != undefined)}`
+                    return `${field}_${this.computeTypeNameImpl(undefined, member.type!, member.questionToken != undefined, "")}`
                 } else {
                     return undefined
                 }
@@ -363,7 +382,7 @@ export class DeclarationTable {
         }
         if (ts.isArrayTypeNode(type)) {
             if (suggestedName) return suggestedName
-            return prefix + `Array_` + this.computeTypeNameImpl(undefined, type.elementType, false)
+            return prefix + `Array_` + this.computeTypeNameImpl(undefined, type.elementType, false, "")
         }
         if (type.kind == ts.SyntaxKind.NumberKeyword) {
             return prefix + PrimitiveType.Number.getText()
@@ -777,8 +796,8 @@ export class DeclarationTable {
             if (!noBasicDecl && !this.ignoreTarget(target)) {
 
                 // TODO: fix it to define array type after its elements types
-                if (nameAssigned === "Array_GestureRecognizer") {
-                    structs.print("typedef Ark_Materialized GestureRecognizer;")
+                if (nameAssigned === `Array_GestureRecognizer`) {
+                    structs.print(`typedef Ark_Materialized ${PrimitiveType.ArkPrefixCpp}GestureRecognizer;`)
                 }
 
                 this.printStructsCHead(nameAssigned, structDescriptor, structs)
@@ -1430,7 +1449,10 @@ class ToDeclarationTargetConvertor implements TypeNodeConvertor<DeclarationTarge
             return PrimitiveType.CustomObject
         if (ts.isTypeAliasDeclaration(declaration)) {
             const node = declaration.type
-            this.table.requestType(identName(declaration.name), node, false)
+            let name = identName(declaration.name)
+            if (name === "GestureType")
+                name = PrimitiveType.ArkPrefixCpp + name
+            this.table.requestType(name, node, false)
             return convertTypeNode(this, node)
         }
         if (ts.isEnumMember(declaration)) {
