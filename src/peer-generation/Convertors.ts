@@ -752,7 +752,7 @@ export class InterfaceConvertor extends BaseArgConvertor {
                 printer.makeMethodCall(`${param}Deserializer`, this.table.deserializerName(this.tsTypeName, this.type), []), false)
     }
     nativeType(impl: boolean): string {
-        return PrimitiveType.ArkPrefixCpp + this.tsTypeName
+        return PrimitiveType.IdlPrefix + this.tsTypeName
     }
     interopType(language: Language): string {
         throw new Error("Must never be used")
@@ -1069,7 +1069,7 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
         const accessor = printer.getObjectAccessor(this, value)
-        const prefix = printer.language === Language.CPP ? PrimitiveType.ArkPrefixCpp : ""
+        const prefix = printer.language === Language.CPP ? PrimitiveType.IdlPrefix : ""
         const readStatement = printer.makeCast(
             printer.makeMethodCall(`${param}Deserializer`, `readMaterialized`, []),
             new Type(this.table.computeTargetName(this.type, false, prefix)!),
