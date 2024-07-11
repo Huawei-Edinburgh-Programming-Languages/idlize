@@ -201,8 +201,8 @@ class PeerFileVisitor {
                     `import { createSerializer, Serializer } from "./Serializer"`,
                     `import { ArkUINodeType } from "./ArkUINodeType"`,
                     `import { ComponentBase } from "../ComponentBase"`,
-                    `import { NativeModule } from "./NativeModule"`,
-                    `${collectDtsImports().trim()}`
+                    `import { NativeModule } from "../NativeModule"`,
+                    `${collectDtsImports('..').trim()}`
                 ]
             }
         }
