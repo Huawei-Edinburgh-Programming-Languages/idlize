@@ -247,7 +247,7 @@ export function makeTSSerializer(library: PeerLibrary): string {
 ${extraImports}
 import { SerializerBase, Tags, RuntimeType, runtimeType, isPixelMap, isResource, isInstanceOf } from "./SerializerBase"
 import { int32 } from "@koalaui/common"
-import { unsafeCast } from "./generated-utils"
+import { unsafeCast } from "../shared/generated-utils"
 
 ${builderClassImports.join("\n")}
 
@@ -319,7 +319,7 @@ export function makeTSDeserializer(library: PeerLibrary): string {
 import { runtimeType, Tags, RuntimeType } from "./SerializerBase"
 import { DeserializerBase } from "./DeserializerBase"
 import { int32 } from "@koalaui/common"
-import { unsafeCast } from "./generated-utils"
+import { unsafeCast } from "../shared/generated-utils"
 
 ${deserializer.getOutput().join("\n")}
 `
@@ -518,8 +518,8 @@ export function componentFileTemplate(content: string): string {
 
 export function makePeerEvents(data: string): string {
     return `
-import { Deserializer } from './Deserializer'
-import { RuntimeType } from "./SerializerBase"
+import { Deserializer } from './peers/Deserializer'
+import { RuntimeType } from "./peers/SerializerBase"
 import { int32 } from "@koalaui/common"
 
 interface PeerEvent {

@@ -15,8 +15,8 @@
 import { float32, int32 } from "@koalaui/common"
 import { pointer } from "@koalaui/interop"
 import { nativeModule } from "@koalaui/arkoala"
-import { wrapCallback } from "./callback_registry"
-import { FinalizableBase } from "./Finalizable"
+import { wrapCallback } from "../shared/callback_registry"
+import { FinalizableBase } from "../Finalizable"
 
 // imports required intarfaces (now generation is disabled)
 // import { Resource, Length, PixelMap } from "@arkoala/arkui"
