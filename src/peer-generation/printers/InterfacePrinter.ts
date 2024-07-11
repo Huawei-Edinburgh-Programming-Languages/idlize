@@ -130,15 +130,17 @@ export class ArkTSDeclarationGenerator extends TSDeclarationGenerator {
             return `export declare interface ${className} {
             ${this.library.declarationTable.targetStruct(node).getFields().map(it => {
                 let type = it.type?.getText()
+                if (it.type != undefined && ts.isTupleTypeNode(it.type)) {
+                    type = type?.replaceAll("?", "")
+                    console.log("convertInterface " + type)
+                }
                 if (type === "any") {
                     type = "object"
                 }
                 return `${it.name}${it.optional ? "?" : ""}: ${type}`
-            })}
-            }`
+            }).join("\n")}}`
         }
         return ""
-        // return super.convertInterface(node)
     }
 }
 
@@ -149,11 +151,12 @@ interface InterfacesVisitor {
 
 class TSInterfacesVisitor implements InterfacesVisitor {
     protected readonly interfaces: Map<TargetFile, LanguageWriter> = new Map()
+    protected readonly generator: DeclarationConvertor<string>
+    protected readonly writer = createLanguageWriter(Language.TS)
 
-    constructor(
-        protected readonly peerLibrary: PeerLibrary,
-        protected readonly generator: DeclarationConvertor<string>
-    ) {}
+    constructor(protected readonly peerLibrary: PeerLibrary) {
+        this.generator = new TSDeclarationGenerator(peerLibrary)
+    }
 
     protected generateFileBasename(originalFilename: string): string {
         return renameDtsToInterfaces(path.basename(originalFilename), this.peerLibrary.declarationTable.language)
@@ -188,13 +191,11 @@ class TSInterfacesVisitor implements InterfacesVisitor {
 
     printInterfaces() {
         for (const file of this.peerLibrary.files.values()) {
-            const writer = createLanguageWriter(Language.TS)
-
-            this.printImports(writer, file)
-            file.declarations.forEach(it => writer.print(convertDeclaration(this.generator, it)))
-            file.enums.forEach(it => this.printEnum(writer, it))
-            this.printAssignEnumsToGlobalScope(writer, file)
-            this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), writer)
+            this.printImports(this.writer, file)
+            file.declarations.forEach(it => this.writer.print(convertDeclaration(this.generator, it)))
+            file.enums.forEach(it => this.printEnum(this.writer, it))
+            this.printAssignEnumsToGlobalScope(this.writer, file)
+            this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), this.writer)
         }
     }
 }
@@ -281,25 +282,32 @@ class JavaInterfacesVisitor {
 }
 
 class ArkTSInterfacesVisitor extends TSInterfacesVisitor {
+    protected readonly writer = createLanguageWriter(Language.ARKTS)
+    protected readonly generator: DeclarationConvertor<string>
+
+    constructor(protected readonly peerLibrary: PeerLibrary) {
+        super(peerLibrary);
+        this.generator = new ArkTSDeclarationGenerator(peerLibrary)
+    }
+
     override printInterfaces() {
         for (const file of this.peerLibrary.files.values()) {
-            const writer = createLanguageWriter(Language.ARKTS)
-            file.enums.forEach(it => this.printEnum(writer, it))
-            file.declarations.forEach(it => writer.print(convertDeclaration(this.generator, it)))
-            this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), writer)
+            file.declarations.forEach(it => this.writer.print(convertDeclaration(this.generator, it)))
+            file.enums.forEach(it => this.printEnum(this.writer, it))
+            this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), this.writer)
         }
     }
 }
 
 function getVisitor(peerLibrary: PeerLibrary, context: PrinterContext): InterfacesVisitor | undefined {
     if (context.language == Language.TS) {
-        return new TSInterfacesVisitor(peerLibrary, new TSDeclarationGenerator(peerLibrary))
+        return new TSInterfacesVisitor(peerLibrary)
     }
     if (context.language == Language.JAVA) {
         return new JavaInterfacesVisitor(peerLibrary, context)
     }
     if (context.language == Language.ARKTS) {
-        return new ArkTSInterfacesVisitor(peerLibrary, new ArkTSDeclarationGenerator(peerLibrary))
+        return new ArkTSInterfacesVisitor(peerLibrary)
     }
 }
 
