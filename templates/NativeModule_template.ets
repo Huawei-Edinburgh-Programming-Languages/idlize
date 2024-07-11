@@ -116,4 +116,8 @@ export class NativeModule {
   static native _ShowCrash(messagePtr: String): void
 
   static native _GetPipelineContext(nodePtr: long): long
+
+  static native _TestCallIntNoArgs(arg1: int): int
+  static native _TestCallIntInt32ArraySum(arg1: int, arg2: Int32Array, arg3: int): int
+  static native _TestCallVoidInt32ArrayPrefixSum(arg1: int, arg2: int[], arg3: int): int
 }
