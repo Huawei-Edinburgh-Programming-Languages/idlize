@@ -27,9 +27,9 @@ import { TargetFile } from './TargetFile'
 import { PrinterContext } from './PrinterContext'
 import { ARK_OBJECTBASE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from './lang/Java'
 
-export class DeclarationGenerator implements DeclarationConvertor<string> {
+export class TSDeclarationGenerator implements DeclarationConvertor<string> {
     constructor(
-        private readonly library: PeerLibrary,
+        protected readonly library: PeerLibrary,
     ) {}
 
     convertClass(node: ts.ClassDeclaration): string {
@@ -72,7 +72,7 @@ export class DeclarationGenerator implements DeclarationConvertor<string> {
         return `extends ${parent.getText()}`
     }
 
-    private declarationName(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
+    protected declarationName(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
         let name = ts.idText(node.name as ts.Identifier)
         let typeParams = node.typeParameters?.map(it => it.getText()).join(', ')
         let typeParamsClause = typeParams ? `<${typeParams}>` : ``
@@ -123,6 +123,25 @@ export class DeclarationGenerator implements DeclarationConvertor<string> {
     }
 }
 
+export class ArkTSDeclarationGenerator extends TSDeclarationGenerator {
+    override convertInterface(node: ts.InterfaceDeclaration): string {
+        let className = this.declarationName(node)
+        if (className === "StateStyles") {
+            return `export declare interface ${className} {
+            ${this.library.declarationTable.targetStruct(node).getFields().map(it => {
+                let type = it.type?.getText()
+                if (type === "any") {
+                    type = "object"
+                }
+                return `${it.name}${it.optional ? "?" : ""}: ${type}`
+            })}
+            }`
+        }
+        return ""
+        // return super.convertInterface(node)
+    }
+}
+
 interface InterfacesVisitor {
     getInterfaces(): Map<TargetFile, LanguageWriter>
     printInterfaces(): void
@@ -130,13 +149,11 @@ interface InterfacesVisitor {
 
 class TSInterfacesVisitor implements InterfacesVisitor {
     protected readonly interfaces: Map<TargetFile, LanguageWriter> = new Map()
-    protected readonly generator: DeclarationGenerator
 
     constructor(
         protected readonly peerLibrary: PeerLibrary,
-    ) {
-        this.generator = new DeclarationGenerator(peerLibrary)
-    }
+        protected readonly generator: DeclarationConvertor<string>
+    ) {}
 
     protected generateFileBasename(originalFilename: string): string {
         return renameDtsToInterfaces(path.basename(originalFilename), this.peerLibrary.declarationTable.language)
@@ -268,6 +285,7 @@ class ArkTSInterfacesVisitor extends TSInterfacesVisitor {
         for (const file of this.peerLibrary.files.values()) {
             const writer = createLanguageWriter(Language.ARKTS)
             file.enums.forEach(it => this.printEnum(writer, it))
+            file.declarations.forEach(it => writer.print(convertDeclaration(this.generator, it)))
             this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), writer)
         }
     }
@@ -275,13 +293,13 @@ class ArkTSInterfacesVisitor extends TSInterfacesVisitor {
 
 function getVisitor(peerLibrary: PeerLibrary, context: PrinterContext): InterfacesVisitor | undefined {
     if (context.language == Language.TS) {
-        return new TSInterfacesVisitor(peerLibrary)
+        return new TSInterfacesVisitor(peerLibrary, new TSDeclarationGenerator(peerLibrary))
     }
     if (context.language == Language.JAVA) {
         return new JavaInterfacesVisitor(peerLibrary, context)
     }
     if (context.language == Language.ARKTS) {
-        return new ArkTSInterfacesVisitor(peerLibrary)
+        return new ArkTSInterfacesVisitor(peerLibrary, new ArkTSDeclarationGenerator(peerLibrary))
     }
 }
 

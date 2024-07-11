@@ -31,7 +31,6 @@ const dtsImports = `import {
     ResourceStr,
     ResourceColor,
     SheetOptions,
-    StateStyles,
     SheetTitleOptions,
     CustomComponent,
     CanvasPath,

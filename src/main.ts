@@ -492,7 +492,6 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
             console.log("producing", outComponentFile)
             if (options.verbose) console.log(data)
             writeFile(outComponentFile, data)
-            arkuiComponentsFiles.push(outComponentFile)
         }
         writeFile(
             arkoala.peer(new TargetFile('ArkUINodeType')),

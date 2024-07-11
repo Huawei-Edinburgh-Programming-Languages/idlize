@@ -25,6 +25,7 @@ import { BlurStyle,
          BorderStyle,
          DragPreviewMode,
          AdaptiveColor,
+         StateStyles,
          ThemeColorMode } from './ArkCommonInterfaces'
 import { GestureMask,
          GesturePriority,
@@ -94,11 +95,6 @@ export interface ClickEvent {
     displayX: number;
 
     displayY: number;
-}
-
-export interface StateStyles {
-
-    normal?: object;
 }
 
 export interface AttributeModifier<T>{}
