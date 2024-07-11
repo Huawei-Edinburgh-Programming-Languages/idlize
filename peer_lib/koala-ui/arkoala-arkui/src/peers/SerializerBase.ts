@@ -13,9 +13,8 @@
  * limitations under the License.
  */
 import { float32, int32 } from "@koalaui/common"
-import { pointer } from "@koalaui/interop"
+import { pointer, wrapCallback} from "@koalaui/interop"
 import { nativeModule } from "@koalaui/arkoala"
-import { wrapCallback } from "../shared/callback_registry"
 import { FinalizableBase } from "../Finalizable"
 
 // imports required intarfaces (now generation is disabled)

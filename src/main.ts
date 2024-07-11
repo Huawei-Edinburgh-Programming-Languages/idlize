@@ -550,6 +550,5 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
         'koala-ui/arkoala/native/src/generated/arkoala-macros.h',
         'koala-ui/arkoala-arkui/src/SerializerBase.ts',
         'koala-ui/arkoala-arkui/src/DeserializerBase.ts',
-        'koala-ui/arkoala-arkui/src/shared/callback_registry.ts'
     ])
 }
