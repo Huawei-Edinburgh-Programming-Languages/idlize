@@ -16,7 +16,7 @@
 import * as ts from 'typescript'
 import * as path from 'path'
 import { PeerLibrary } from "../PeerLibrary"
-import { FieldModifier, LanguageWriter, createLanguageWriter } from '../LanguageWriters'
+import { FieldModifier, LanguageWriter, createLanguageWriter, Type } from '../LanguageWriters'
 import { mapType } from '../TypeNodeNameConvertor'
 import { Language, removeExt, renameDtsToInterfaces } from '../../util'
 import { ImportsCollector } from '../ImportsCollector'
@@ -274,21 +274,18 @@ class ArkTSTypeConvertor extends TypeConvertor {
 
     }
     convertInterface(writer: LanguageWriter, node: ts.InterfaceDeclaration): void {
-        let className = this.declarationName(node)
-        if (className === "StateStyles" || className === "ResourceColor") {
-            writer.print(`export declare interface ${className} {
-            ${this.peerLibrary.declarationTable.targetStruct(node).getFields().map(it => {
-                let type = it.type?.getText()
-                if (it.type != undefined && ts.isTupleTypeNode(it.type)) {
+        writer.writeInterface(this.declarationName(node), writer => {
+            this.peerLibrary.declarationTable.targetStruct(node).getFields().map(it => {
+                let type = it.type!!.getText()
+                if (ts.isTupleTypeNode(it.type!!)) {
                     type = type?.replaceAll("?", "")
-                    console.log("convertInterface " + type)
                 }
                 if (type === "any") {
                     type = "object"
                 }
-                return `${it.name}${it.optional ? "?" : ""}: ${type}`
-            }).join("\n")}}`)
-        }
+                writer.writeFieldDeclaration(it.name, new Type(type, it.optional), undefined, it.optional)
+            })
+        })
     }
     convertTypeAlias(writer: LanguageWriter, node: ts.TypeAliasDeclaration): void {
 
@@ -315,43 +312,10 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
     override printInterfaces() {
         for (const file of this.peerLibrary.files.values()) {
             const writer = createLanguageWriter(this.peerLibrary.declarationTable.language)
-            file.declarations.forEach(it => this.typeConvertor.convert(writer, it))
             file.enums.forEach(it => this.typeConvertor.convertEnum(writer, it))
+            file.declarations.forEach(it => this.typeConvertor.convert(writer, it))
             this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), writer)
         }
-    }
-
-    convertClass(writer: LanguageWriter, node: ts.ClassDeclaration) {
-
-    }
-
-    convertTypeAlias(writer: LanguageWriter, node: ts.TypeAliasDeclaration) {
-
-    }
-
-    convertInterface(writer: LanguageWriter, node: ts.InterfaceDeclaration) {
-        let className = this.declarationName(node)
-        if (className === "StateStyles" || className === "ResourceColor") {
-            writer.print(`export declare interface ${className} {
-            ${this.peerLibrary.declarationTable.targetStruct(node).getFields().map(it => {
-                let type = it.type?.getText()
-                if (it.type != undefined && ts.isTupleTypeNode(it.type)) {
-                    type = type?.replaceAll("?", "")
-                    console.log("convertInterface " + type)
-                }
-                if (type === "any") {
-                    type = "object"
-                }
-                return `${it.name}${it.optional ? "?" : ""}: ${type}`
-            }).join("\n")}}`)
-        }
-    }
-
-    protected declarationName(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
-        let name = ts.idText(node.name as ts.Identifier)
-        let typeParams = node.typeParameters?.map(it => it.getText()).join(', ')
-        let typeParamsClause = typeParams ? `<${typeParams}>` : ``
-        return `${name}${typeParamsClause}`
     }
 }
 
