@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,7 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <string>
+
+#include "common.h"
 
 #ifdef KOALA_WINDOWS
 #include <windows.h>
@@ -34,7 +35,7 @@ std::string libName(const char* lib) {
     return std::string(lib) + ".dll";
 }
 
-#else
+#elif defined(KOALA_LINUX) || defined(KOALA_MACOS)
 #include <dlfcn.h>
 
 void* loadLibrary(const std::string& libPath) {
@@ -62,53 +63,6 @@ std::string libName(const char* lib) {
     return result;
 }
 
+#else
+#error "Unknown platform"
 #endif
-#include <stdio.h>
-
-#include <string>
-
-#include "etsapi.h"
-
-// Emulator of Panda VM to simplify other platform development.
-
-typedef ets_int ETS_CALL (*EtsNapiOnLoad_t)(EtsEnv *env);
-
-ets_int registerNatives(EtsEnv *env, ets_class cls, const EtsNativeMethod *methods, ets_int nMethods) {
-    fprintf(stderr, "registerNatives: %d\n", nMethods);
-    for (int i = 0; i < nMethods; i++) {
-        fprintf(stderr, "registerNative: %s %s %p\n", methods[i].name, methods[i].signature, methods[i].func);
-    }
-    return 0;
-}
-
-ets_class dummyNativeModule = (ets_class)42;
-
-ets_class findClass(EtsEnv *env, const char *name) {
-    fprintf(stderr, "findClass: %s\n", name);
-    return dummyNativeModule;
-}
-
-int main(int argc, const char** argv) {
-    std::string libPath = std::string("./native/") + libName("NativeBridgeArk");
-    void* lib = loadLibrary(libPath);
-    if (!lib) {
-        fprintf(stderr, "Cannot load library %s: %s\n", libPath.c_str(), libraryError());
-        return 1;
-    }
-    EtsNapiOnLoad_t onLoad = reinterpret_cast<EtsNapiOnLoad_t>(findSymbol(lib, "EtsNapiOnLoad"));
-    if (!onLoad) {
-        fprintf(stderr, "Cannot find entry point\n");
-        return 1;
-    }
-
-    EtsEnv env;
-    ETS_NativeInterface* native_interface = new ETS_NativeInterface();
-    native_interface->RegisterNatives = registerNatives;
-    native_interface->FindClass = findClass;
-
-    env.native_interface = native_interface;
-
-    onLoad(&env);
-
-    return 0;
-}

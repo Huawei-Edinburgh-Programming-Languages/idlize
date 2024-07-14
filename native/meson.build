@@ -10,6 +10,7 @@ source_set = 'peers'
 endif
 use_libace = false
 use_dummy_libace = true
+use_dummy_panda = true
 if get_option('arkts')
 is_arkts = true
 else
@@ -119,8 +120,8 @@ ohos_library_name = 'NativeBridge_ohos'
 if is_clang
 # TODO: remove all -Wno-* when generation is fixed.
 cflags += [
-    '-Wall', '-Werror', '-Wno-unused-variable', '-Wno-unused-but-set-variable', 
-    '-Wno-extern-c-compat', '-Wno-error=deprecated-declarations', 
+    '-Wall', '-Werror', '-Wno-unused-variable', '-Wno-unused-but-set-variable',
+    '-Wno-extern-c-compat', '-Wno-error=deprecated-declarations',
     '-Wno-unknown-warning-option', '-Wno-parentheses-equality', '-Wno-unused-function'
 ]
 endif
@@ -347,6 +348,18 @@ executable('test_arkoala_compat',
     cpp_args: cflags,
     include_directories: include_dirs
 )
-
 endif
+
+if use_dummy_panda
+libdummy_sources = [
+    'dummy-panda' / 'loader.cc',
+    'dummy-panda' / 'etsapi.cc'
+]
+shared_library('panda',
+    libdummy_sources,
+    install: true,
+    cpp_args: cflags,
+    include_directories: arkts_include_dirs,
+    install_dir: meson.current_source_dir(),
+)
 endif
