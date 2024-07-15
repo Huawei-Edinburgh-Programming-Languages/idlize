@@ -121,16 +121,16 @@ class PeerFileVisitor {
         const isNode = parentRole !== InheritanceRole.Finalizable
         const signature = new NamedMethodSignature(
             Type.Void,
-            [new Type('ArkUINodeType', !isNode), new Type('ComponentBase', true), new Type('int32')],
-            ['type', 'component', 'flags'],
-            [undefined, undefined, '0'])
+            [new Type('ComponentBase', true), new Type('int32')],
+            ['component', 'flags'],
+            [undefined, '0'])
 
         printer.writeConstructorImplementation(componentToPeerClass(peer.componentName), signature, (writer) => {
             if (parentRole === InheritanceRole.PeerNode) {
-                writer.writeSuperCall([`type`, 'flags'])
+                writer.writeSuperCall(['flags'])
                 writer.writeMethodCall('component', 'setPeer', ['this'], true)
             } else if (parentRole === InheritanceRole.Heir || parentRole === InheritanceRole.Root) {
-                writer.writeSuperCall([`type`, 'component', 'flags'])
+                writer.writeSuperCall(['component', 'flags'])
             } else {
                 throwException(`Unexpected parent inheritance role: ${parentRole}`)
             }
@@ -161,6 +161,12 @@ class PeerFileVisitor {
     protected printPeer(peer: PeerClass, printer: LanguageWriter) {
         printer.writeClass(componentToPeerClass(peer.componentName), (writer) => {
             this.printPeerConstructor(peer, writer)
+            writer.writeMethodImplementation(
+                new Method('nodeType', new MethodSignature(new Type('ArkUINodeType'), []), [MethodModifier.GETTER]),
+                (writer) => {
+                    writer.writeStatement(writer.makeReturn(writer.makeString(`ArkUINodeType.${peer.componentName}`)))
+                }
+            )            
             peer.methods.filter((method) =>
                 writer.language == Language.ARKTS ? !PeerFileVisitor.ArkTsIgnoredMethods.includes(method.overloadedName) : true
             ).forEach((method) => this.printPeerMethod(method, writer))

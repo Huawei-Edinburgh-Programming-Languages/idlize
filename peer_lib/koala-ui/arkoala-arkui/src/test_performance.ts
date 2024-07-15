@@ -16,7 +16,6 @@
 import { nativeModule } from "@koalaui/arkoala"
 import { ArkCommonPeer } from "@arkoala/arkui/peers/ArkCommonPeer"
 import { ArkNavigationPeer } from "@arkoala/arkui/peers/ArkNavigationPeer"
-import { ArkUINodeType } from "@arkoala/arkui/peers/ArkUINodeType"
 // imports required intarfaces (now generation is disabled)
 // import { NavigationTitleMode } from "@arkoala/arkui/ArkNavigationInterfaces"
 
@@ -50,7 +49,7 @@ export function RunPerformanceTest(testName: string, testCnt: number, callCnt: n
 }
 
 export function startPerformanceTest() {
-    let peer = new ArkCommonPeer(ArkUINodeType.Common);
+    let peer = new ArkCommonPeer();
     RunPerformanceTest("idlize_restoreIdAttribute_testNumber100", TEST_COUNT, CALL_COUNT, () => {
         peer.restoreIdAttribute(testNumber100)
     });
@@ -96,7 +95,7 @@ export function startPerformanceTest() {
             style: 1 // BorderStyle.Solid
         })
     });
-    let navigation = new ArkNavigationPeer(ArkUINodeType.Common);
+    let navigation = new ArkNavigationPeer();
     RunPerformanceTest("idlize_navigation_titleModeAttribute", TEST_COUNT, CALL_COUNT, () => {
         navigation.titleModeAttribute(/*NavigationTitleMode.Free*/0)
     });
