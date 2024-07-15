@@ -276,10 +276,7 @@ class ArkTSTypeConvertor extends TypeConvertor {
     convertInterface(writer: LanguageWriter, node: ts.InterfaceDeclaration): void {
         writer.writeInterface(this.declarationName(node), writer => {
             this.peerLibrary.declarationTable.targetStruct(node).getFields().map(it => {
-                let type = it.type!!.getText()
-                if (ts.isTupleTypeNode(it.type!!)) {
-                    type = type?.replaceAll("?", "")
-                }
+                let type = ts.isTupleTypeNode(it.type!!) ? it.type.getText().replaceAll("?", "") : it.type!.getText()
                 if (type === "any") {
                     type = "object"
                 }
@@ -288,7 +285,31 @@ class ArkTSTypeConvertor extends TypeConvertor {
         })
     }
     convertTypeAlias(writer: LanguageWriter, node: ts.TypeAliasDeclaration): void {
-
+        if (ts.isTypeLiteralNode(node.type)) {
+            const members = node.type.members
+            writer.writeInterface(node.name.text, writer => {
+                members.map(it => {
+                    if (ts.isPropertySignature(it)) {
+                        writer.writeFieldDeclaration(it.name?.getText(),
+                            new Type(it.type!.getText(), it?.questionToken != undefined), undefined, it?.questionToken != undefined)
+                    }
+                })
+            })
+            return
+        }
+        const maybeTypeArguments = node.typeParameters?.length
+            ? `<${node.typeParameters.map(it => it.getText()).join(', ')}>`
+            : ''
+        let type = mapType(node.type).replaceAll("any", "Object")
+        const isUnionWithLiteralType = ts.isUnionTypeNode(node.type) && node.type.types.find(type => {
+            return ts.isLiteralTypeNode(type) || ts.isTemplateLiteralTypeNode(type);
+        })
+        const isTemplateLiteralTypeNode = ts.isTemplateLiteralTypeNode(node.type)
+        const isImportTypeNode = ts.isImportTypeNode(node.type)
+        if (isUnionWithLiteralType || isTemplateLiteralTypeNode || isImportTypeNode) {
+            type = "object"
+        }
+        writer.print(`export declare type ${node.name.text}${maybeTypeArguments} = ${type};`)
     }
     private declarationName(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
         let name = ts.idText(node.name as ts.Identifier)
@@ -305,17 +326,30 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
         super()
     }
 
-    protected generateFileBasename(originalFilename: string): string {
+    private generateFileBasename(originalFilename: string): string {
         return renameDtsToInterfaces(path.basename(originalFilename), this.peerLibrary.declarationTable.language)
+    }
+
+    private printImports(writer: LanguageWriter, file: PeerFile) {
+        const imports = new ImportsCollector()
+        imports.addFilterByBasename(this.generateFileBasename(file.originalFilename))
+        file.importFeatures.forEach(it => imports.addFeature(it.feature, it.module))
+        imports.print(writer)
     }
 
     override printInterfaces() {
         for (const file of this.peerLibrary.files.values()) {
             const writer = createLanguageWriter(this.peerLibrary.declarationTable.language)
+            this.addExtraImports(file)
+            this.printImports(writer, file)
             file.enums.forEach(it => this.typeConvertor.convertEnum(writer, it))
             file.declarations.forEach(it => this.typeConvertor.convert(writer, it))
             this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), writer)
         }
+    }
+
+    private addExtraImports(file: PeerFile) {
+        file.importFeatures.push({feature: "GestureRecognizer", module: "./dts-exports.ets"})
     }
 }
 

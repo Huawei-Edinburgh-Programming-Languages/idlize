@@ -239,9 +239,16 @@ export function makeTSSerializer(library: PeerLibrary): string {
     writeSerializer(library, printer)
     //TODO: need to determine imports when generating serializer
     const extraImports = library.declarationTable.language === Language.ARKTS ?
-        'import { AdaptiveColor, BlurStyle, BorderStyle, DismissReason, DragPreviewMode, GradientDirection, ShadowStyle, ShadowType, SheetMode, SheetSize, SheetType, StateStyles, ThemeColorMode } from "../ArkCommonInterfaces"\n' +
+        'import { AdaptiveColor, BlurOptions, BlurStyle, BorderStyle, CustomBuilder, DismissReason, DragPreviewMode, GradientDirection, ShadowStyle, ShadowType, SheetMode, SheetSize, SheetType, StateStyles, ThemeColorMode, ShadowOptions, LocalizedEdgeColors, LocalizedEdgeWidths, SheetTitleOptions, SheetOptions, BaseEvent, RectResult, BlurStyleOptions, BindOptions, UIGestureEvent, BorderOptions, DragInteractionOptions, DragPreviewOptions, BackgroundBlurStyleOptions, Padding, EdgeWidths, EdgeColors, EdgeStyles } from "../ArkCommonInterfaces"\n' +
         'import { FontWeight, FontStyle, TextOverflow, TextHeightAdaptivePolicy, Color, ColoringStrategy } from "../ArkEnumInterfaces"\n' +
-        'import { SelectedMode } from "../ArkTabContentInterfaces"'
+        'import { SelectedMode, BoardStyle, IndicatorStyle } from "../ArkTabContentInterfaces"\n' +
+        'import { LabelStyle } from "./ArkButtonInterfaces"\n' +
+        'import { NativeEmbedInfo, NativeEmbedDataInfo } from "./ArkWebInterfaces"\n' +
+        'import { DividerOptions, TextCascadePickerRangeContent, TextPickerRangeContent, TextPickerOptions } from "./ArkTextPickerInterfaces"\n' +
+        'import { VisibleListContentInfo } from "./ArkListInterfaces"\n' +
+        'import { ArrayRefNumberInterfaceDTS, BooleanInterfaceDTS, OptionInterfaceDTS, TupleInterfaceDTS, UnionOptionalInterfaceDTS, UnionInterfaceDTS, StringInterfaceDTS, NumberInterfaceDTS } from "./ArkTestInterfaces"\n' +
+        'import { BaseGestureEvent, FingerInfo } from "./ArkGestureInterfaces"\n' +
+        'import { Dimension, Length, LengthMetrics, Resource, ResourceColor, ResourceStr, LocalizedPadding, Font } from "./ArkUnitsInterfaces"\n'
         : ''
     return `${cStyleCopyright}
 ${extraImports}
