@@ -11,7 +11,7 @@ function pack() {
     if (fs.existsSync(prebuiltPath))
         fs.rmSync(prebuiltPath, { recursive: true })
     fs.mkdirSync(prebuiltPath)
-    execCmdSync(`npm pack --pack-destination ${ prebuiltPath }`)
+    execSync(`npm pack --pack-destination ${ prebuiltPath }`)
 }
 
 function publish() {
@@ -20,15 +20,8 @@ function publish() {
     let packageName = fs.readdirSync(prebuiltPath)[0]
 
     console.log(chalk.green(`> Publishing ${ packageName }...`))
-    execCmdSync(`npm publish ${ path.join(prebuiltPath, packageName) } --registry https://nexus.bz-openlab.ru:10443/repository/koala-npm/${packageName}`)
+    execSync(`npm publish ${ path.join(prebuiltPath, packageName) } --registry https://nexus.bz-openlab.ru:10443/repository/koala-npm/${packageName}`)
 }
 
-function execCmdSync(cmd, options) {
-    try {
-        execSync(cmd, options)
-    } catch (e) {
-        // empty
-    }
-}
 
 publish()
