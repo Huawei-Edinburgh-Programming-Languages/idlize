@@ -369,7 +369,7 @@ function generateLibace(outDir: string, peerLibrary: PeerLibrary) {
         fs.writeFileSync(libace.mesonBuild, mesonBuildFile(mesonBuild))
     }
 
-    copyToLibace(path.join(__dirname, '..', 'peer_lib'), libace)
+    copyToLibace(path.join(__dirname, '..', 'external', 'peer_lib', 'incremental'), libace)
 }
 
 function writeFile(filename: string, content: string, integrated: boolean = false) {
@@ -543,7 +543,7 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
     writeFile(arkoala.native(new TargetFile('all_events.cc'),), printEventsCArkoalaImpl(peerLibrary), true)
     writeFile(arkoala.native(new TargetFile('library.cc')), libraryCcDeclaration())
 
-    copyToArkoala(path.join(__dirname, '..', 'peer_lib'), arkoala, !options.onlyIntegrated ? undefined : [
+    copyToArkoala(path.join(__dirname, '..', 'external', 'peer_lib', 'incremental'), arkoala, !options.onlyIntegrated ? undefined : [
         'koala-ui/arkoala/native/src/generated/SerializerBase.h',
         'koala-ui/arkoala/native/src/generated/DeserializerBase.h',
         'koala-ui/arkoala/native/src/generated/Interop.h',
