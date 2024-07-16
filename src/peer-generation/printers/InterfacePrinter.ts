@@ -276,7 +276,7 @@ class ArkTSTypeConvertor extends TypeConvertor {
     convertInterface(writer: LanguageWriter, node: ts.InterfaceDeclaration): void {
         writer.writeInterface(this.declarationName(node), writer => {
             this.peerLibrary.declarationTable.targetStruct(node).getFields().map(it => {
-                let type = ts.isTupleTypeNode(it.type!!) ? it.type.getText().replaceAll("?", "") : it.type!.getText()
+                let type = ts.isTupleTypeNode(it.type!!) ? this.convertTuple(it.type) : mapType(it.type)
                 if (type === "any") {
                     type = "object"
                 }
@@ -291,7 +291,7 @@ class ArkTSTypeConvertor extends TypeConvertor {
                 members.map(it => {
                     if (ts.isPropertySignature(it)) {
                         writer.writeFieldDeclaration(it.name?.getText(),
-                            new Type(it.type!.getText(), it?.questionToken != undefined), undefined, it?.questionToken != undefined)
+                            new Type(mapType(it.type), it?.questionToken != undefined), undefined, it?.questionToken != undefined)
                     }
                 })
             })
@@ -307,31 +307,31 @@ class ArkTSTypeConvertor extends TypeConvertor {
     }
     private declarationName(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
         let name = ts.idText(node.name as ts.Identifier)
-        let typeParams = node.typeParameters?.map(it => it.getText()).join(', ')
+        let typeParams = node.typeParameters?.map(it => it.name.text).join(', ')
         let typeParamsClause = typeParams ? `<${typeParams}>` : ``
         return `${name}${typeParamsClause}`
     }
-
-    getSynthesizedTypes(node: ts.TypeAliasDeclaration): {type: string, isImported: boolean}[] {
+    getSynthesizedTypes(node: ts.TypeAliasDeclaration): {type: string, needImport: boolean}[] {
         if (ts.isUnionTypeNode(node.type)) {
             return node.type.types.map(it => {
                 if (ts.isTemplateLiteralTypeNode(it)) {
                     return {type: `TEMPLATE_LITERAL_${it.templateSpans
-                            .map(it => `${mapType(it.type)}_${it.literal.text}`).join('_')}`,
-                        isImported: true}
+                            .map(it => `${mapType(it.type)}_${it.literal.text}`).join('_')}`, needImport: true}
                 } else if (ts.isLiteralTypeNode(it)) {
-                    return {type: `LITERAL_${mapType(it).replaceAll('"', '')}`,
-                        isImported: true}
+                    return {type: `LITERAL_${mapType(it).replaceAll('"', '')}`, needImport: true}
                 }
-                return {type: mapType(it), isImported: false}
+                return {type: mapType(it), needImport: false}
             })
         }
         if (ts.isImportTypeNode(node.type)) {
-            return [{type: `IMPORT_${node.name.text}`, isImported: true}]
+            return [{type: `IMPORT_${node.name.text}`, needImport: true}]
         } else if (ts.isTemplateLiteralTypeNode(node.type)) {
-            return [{type: `TEMPLATE_LITERAL_${node.name.text}`, isImported: true}]
+            return [{type: `TEMPLATE_LITERAL_${node.name.text}`, needImport: true}]
         }
         return []
+    }
+    private convertTuple(node: ts.TupleTypeNode): string {
+        return mapType(node).replaceAll("?", " | undefined")
     }
 }
 
@@ -359,7 +359,7 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
                 if (ts.isTypeAliasDeclaration(it)) {
                     this.typeConvertor
                         .getSynthesizedTypes(it)
-                        .filter(it => it.isImported)
+                        .filter(it => it.needImport)
                         .forEach(it => this.addExtraImports(file, it.type))
                 }
             })

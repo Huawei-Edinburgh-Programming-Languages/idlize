@@ -193,7 +193,7 @@ class SheetTitleOptionsImpl implements SheetTitleOptions {
 
 class SheetOptionsImpl implements SheetOptions {
     _title: SheetTitleOptions | CustomBuilder| undefined
-    _detents: [(SheetSize | Length), (SheetSize | Length), (SheetSize | Length)] | undefined
+    _detents: [(SheetSize | Length), (SheetSize | Length) | undefined, (SheetSize | Length) | undefined] | undefined
     _height: SheetSize | Length| undefined
     _dragBar: boolean| undefined
     _maskColor: ResourceColor| undefined
@@ -239,10 +239,10 @@ class SheetOptionsImpl implements SheetOptions {
         this._onWillDismiss = arg
     }
 
-    get detents(): [(SheetSize | Length), (SheetSize | Length), (SheetSize | Length)] | undefined {
+    get detents(): [(SheetSize | Length), (SheetSize | Length) | undefined, (SheetSize | Length) | undefined] | undefined {
         return this._detents
     }
-    set detents(arg: [(SheetSize | Length), (SheetSize | Length), (SheetSize | Length)] | undefined) {
+    set detents(arg: [(SheetSize | Length), (SheetSize | Length) | undefined, (SheetSize | Length) | undefined] | undefined) {
         this._detents = arg
     }
 
