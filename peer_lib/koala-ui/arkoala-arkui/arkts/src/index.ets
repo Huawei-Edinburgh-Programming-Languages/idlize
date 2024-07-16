@@ -441,14 +441,6 @@ function checkPerf2(count: number) {
     let peer = new ArkButtonPeer(ArkUINodeType.Button)
     let start = Date.now()
     for (let i = 0; i < count; i++) {
-        let data: byte[]
-        if ( i % 2 == 0) {
-            data = new byte[2]
-            data[0] = 1
-            data[1] = 2
-        } else {
-            data = new byte[0]
-        }
         peer.backdropBlurAttribute(i, i % 2 == 0 ? undefined : new BlurOptionsImpl([1, 2] as [number, number]))
     }
     let passed = Date.now() - start

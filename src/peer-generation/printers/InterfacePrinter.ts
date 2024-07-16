@@ -285,6 +285,9 @@ class ArkTSTypeConvertor extends TypeConvertor {
         })
     }
     convertTypeAlias(writer: LanguageWriter, node: ts.TypeAliasDeclaration): void {
+        if (ts.isImportTypeNode(node.type)) {
+            return;
+        }
         if (ts.isTypeLiteralNode(node.type)) {
             const members = node.type.members
             writer.writeInterface(node.name.text, writer => {
@@ -332,9 +335,8 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
 
     private printImports(writer: LanguageWriter, file: PeerFile) {
         const imports = new ImportsCollector()
-        imports.addFilterByBasename(this.generateFileBasename(file.originalFilename))
         file.importFeatures.forEach(it => imports.addFeature(it.feature, it.module))
-        imports.print(writer)
+        imports.print(writer, removeExt(this.generateFileBasename(file.originalFilename)))
     }
 
     override printInterfaces() {
