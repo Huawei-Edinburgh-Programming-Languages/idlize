@@ -210,8 +210,6 @@ export interface GestureRecognizer {
   getEventTargetInfo(): EventTargetInfo;
 }
 
-// export type GestureRecognizerJudgeBeginCallback = (event: BaseGestureEvent, current: GestureRecognizer, recognizers: Array<GestureRecognizer>) => GestureJudgeResult;
-
 interface CanvasPath {
     rect(x: number, y: number, w: number, h: number): void;
     arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, counterclockwise?: boolean): void;
@@ -257,3 +255,42 @@ export class DotIndicator extends Indicator<DotIndicator> {
     return this;
   }
 }
+
+export interface IMPORT_Resource {
+  bundleName: string;
+  moduleName: string;
+  id: number;
+  params?: object[];
+  type?: number;
+}
+
+export interface IMPORT_UIContext {}
+
+export class IMPORT_ImageModifier {}
+
+export interface IMPORT_PixelMap {}
+
+export interface IMPORT_ComponentContent {}
+
+export type IMPORT_SymbolGlyphModifier = string
+
+export type TEMPLATE_LITERAL_PX = string
+
+export type TEMPLATE_LITERAL_FP = string
+
+export type TEMPLATE_LITERAL_LPX = string
+
+export type TEMPLATE_LITERAL_number_vp = string
+
+export type TEMPLATE_LITERAL_Percentage = string
+
+export enum IMPORT_LengthMetricsUnit {
+  DEFAULT = 0,
+  PX = 1
+}
+
+export type IMPORT_LengthMetrics = string
+
+export type LITERAL_evenodd = string
+
+export type LITERAL_nonzero = string

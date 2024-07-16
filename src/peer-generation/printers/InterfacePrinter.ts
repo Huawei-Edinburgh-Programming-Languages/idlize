@@ -285,9 +285,6 @@ class ArkTSTypeConvertor extends TypeConvertor {
         })
     }
     convertTypeAlias(writer: LanguageWriter, node: ts.TypeAliasDeclaration): void {
-        if (ts.isImportTypeNode(node.type)) {
-            return;
-        }
         if (ts.isTypeLiteralNode(node.type)) {
             const members = node.type.members
             writer.writeInterface(node.name.text, writer => {
@@ -298,27 +295,43 @@ class ArkTSTypeConvertor extends TypeConvertor {
                     }
                 })
             })
-            return
+        } else {
+            let typeName = this.getSynthesizedTypes(node).map(it => it.type).join('|')
+            if (typeName.length == 0) {
+                typeName = mapType(node.type)
+            }
+            const maybeTypeArguments = node.typeParameters?.length
+                ? `<${node.typeParameters.map(it => it.name.text).join(', ')}>` : ''
+            writer.print(`export declare type ${node.name.text}${maybeTypeArguments} = ${typeName.replaceAll("any", "Object")};`)
         }
-        const maybeTypeArguments = node.typeParameters?.length
-            ? `<${node.typeParameters.map(it => it.getText()).join(', ')}>`
-            : ''
-        let type = mapType(node.type).replaceAll("any", "Object")
-        const isUnionWithLiteralType = ts.isUnionTypeNode(node.type) && node.type.types.find(type => {
-            return ts.isLiteralTypeNode(type) || ts.isTemplateLiteralTypeNode(type);
-        })
-        const isTemplateLiteralTypeNode = ts.isTemplateLiteralTypeNode(node.type)
-        const isImportTypeNode = ts.isImportTypeNode(node.type)
-        if (isUnionWithLiteralType || isTemplateLiteralTypeNode || isImportTypeNode) {
-            type = "object"
-        }
-        writer.print(`export declare type ${node.name.text}${maybeTypeArguments} = ${type};`)
     }
     private declarationName(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
         let name = ts.idText(node.name as ts.Identifier)
         let typeParams = node.typeParameters?.map(it => it.getText()).join(', ')
         let typeParamsClause = typeParams ? `<${typeParams}>` : ``
         return `${name}${typeParamsClause}`
+    }
+
+    getSynthesizedTypes(node: ts.TypeAliasDeclaration): {type: string, isImported: boolean}[] {
+        if (ts.isUnionTypeNode(node.type)) {
+            return node.type.types.map(it => {
+                if (ts.isTemplateLiteralTypeNode(it)) {
+                    return {type: `TEMPLATE_LITERAL_${it.templateSpans
+                            .map(it => `${mapType(it.type)}_${it.literal.text}`).join('_')}`,
+                        isImported: true}
+                } else if (ts.isLiteralTypeNode(it)) {
+                    return {type: `LITERAL_${mapType(it).replaceAll('"', '')}`,
+                        isImported: true}
+                }
+                return {type: mapType(it), isImported: false}
+            })
+        }
+        if (ts.isImportTypeNode(node.type)) {
+            return [{type: `IMPORT_${node.name.text}`, isImported: true}]
+        } else if (ts.isTemplateLiteralTypeNode(node.type)) {
+            return [{type: `TEMPLATE_LITERAL_${node.name.text}`, isImported: true}]
+        }
+        return []
     }
 }
 
@@ -342,7 +355,15 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
     override printInterfaces() {
         for (const file of this.peerLibrary.files.values()) {
             const writer = createLanguageWriter(this.peerLibrary.declarationTable.language)
-            this.addExtraImports(file)
+            file.declarations.forEach(it => {
+                if (ts.isTypeAliasDeclaration(it)) {
+                    this.typeConvertor
+                        .getSynthesizedTypes(it)
+                        .filter(it => it.isImported)
+                        .forEach(it => this.addExtraImports(file, it.type))
+                }
+            })
+            this.addExtraImports(file, "GestureRecognizer")
             this.printImports(writer, file)
             file.enums.forEach(it => this.typeConvertor.convertEnum(writer, it))
             file.declarations.forEach(it => this.typeConvertor.convert(writer, it))
@@ -350,8 +371,8 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
         }
     }
 
-    private addExtraImports(file: PeerFile) {
-        file.importFeatures.push({feature: "GestureRecognizer", module: "./dts-exports.ets"})
+    private addExtraImports(file: PeerFile, feature: string) {
+        file.importFeatures.push({feature: feature, module: "./dts-exports.ets"})
     }
 }
 
