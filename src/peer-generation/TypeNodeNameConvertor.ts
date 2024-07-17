@@ -170,3 +170,16 @@ export function mapType(type: ts.TypeNode | undefined): string {
     type ??= ts.factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword)
     return nameConvertorInstance.convert(type)
 }
+
+export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
+    convertAnyKeyword(node: ts.TypeNode): string {
+        return "Object"
+    }
+    protected convertTupleElement(node: ts.TypeNode): string {
+        return super.convertTupleElement(node).replaceAll("?", " | undefined")
+    }
+
+    convertVoidKeyword(node: ts.TypeNode): string {
+        return "Void"
+    }
+}

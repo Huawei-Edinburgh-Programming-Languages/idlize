@@ -17,7 +17,7 @@ import * as ts from 'typescript'
 import * as path from 'path'
 import { PeerLibrary } from "../PeerLibrary"
 import { FieldModifier, LanguageWriter, createLanguageWriter, Type } from '../LanguageWriters'
-import { mapType } from '../TypeNodeNameConvertor'
+import { ArkTSTypeNodeNameConvertor, mapType } from '../TypeNodeNameConvertor'
 import { Language, removeExt, renameDtsToInterfaces } from '../../util'
 import { ImportsCollector } from '../ImportsCollector'
 import { EnumEntity, PeerFile } from '../PeerFile'
@@ -267,6 +267,7 @@ class JavaInterfacesVisitor {
 }
 
 class ArkTSTypeConvertor extends TypeConvertor {
+    private readonly typeConvertor = new ArkTSTypeNodeNameConvertor()
     constructor(private readonly peerLibrary: PeerLibrary) {
         super();
     }
@@ -276,11 +277,7 @@ class ArkTSTypeConvertor extends TypeConvertor {
     convertInterface(writer: LanguageWriter, node: ts.InterfaceDeclaration): void {
         writer.writeInterface(this.declarationName(node), writer => {
             this.peerLibrary.declarationTable.targetStruct(node).getFields().map(it => {
-                let type = ts.isTupleTypeNode(it.type!!) ? this.convertTuple(it.type) : mapType(it.type)
-                if (type === "any") {
-                    type = "object"
-                }
-                writer.writeFieldDeclaration(it.name, new Type(type, it.optional), undefined, it.optional)
+                writer.writeFieldDeclaration(it.name, new Type(this.mapType(it.type), it.optional), undefined, it.optional)
             })
         })
     }
@@ -291,14 +288,14 @@ class ArkTSTypeConvertor extends TypeConvertor {
                 members.map(it => {
                     if (ts.isPropertySignature(it)) {
                         writer.writeFieldDeclaration(it.name?.getText(),
-                            new Type(mapType(it.type), it?.questionToken != undefined), undefined, it?.questionToken != undefined)
+                            new Type(this.mapType(it.type), it?.questionToken != undefined), undefined, it?.questionToken != undefined)
                     }
                 })
             })
         } else {
             let typeName = this.getSynthesizedTypes(node).map(it => it.type).join('|')
             if (typeName.length == 0) {
-                typeName = mapType(node.type)
+                typeName = this.mapType(node.type)
             }
             const maybeTypeArguments = node.typeParameters?.length
                 ? `<${node.typeParameters.map(it => it.name.text).join(', ')}>` : ''
@@ -316,11 +313,11 @@ class ArkTSTypeConvertor extends TypeConvertor {
             return node.type.types.map(it => {
                 if (ts.isTemplateLiteralTypeNode(it)) {
                     return {type: `TEMPLATE_LITERAL_${it.templateSpans
-                            .map(it => `${mapType(it.type)}_${it.literal.text}`).join('_')}`, needImport: true}
+                            .map(it => `${this.mapType(it.type)}_${it.literal.text}`).join('_')}`, needImport: true}
                 } else if (ts.isLiteralTypeNode(it)) {
-                    return {type: `LITERAL_${mapType(it).replaceAll('"', '')}`, needImport: true}
+                    return {type: `LITERAL_${this.mapType(it).replaceAll('"', '')}`, needImport: true}
                 }
-                return {type: mapType(it), needImport: false}
+                return {type: this.mapType(it), needImport: false}
             })
         }
         if (ts.isImportTypeNode(node.type)) {
@@ -330,8 +327,11 @@ class ArkTSTypeConvertor extends TypeConvertor {
         }
         return []
     }
-    private convertTuple(node: ts.TupleTypeNode): string {
-        return mapType(node).replaceAll("?", " | undefined")
+    private mapType(type: ts.TypeNode | undefined): string {
+        if (type !== undefined) {
+            return this.typeConvertor.convert(type)
+        }
+        throw new Error(`Unexpected type: ${type}`)
     }
 }
 
