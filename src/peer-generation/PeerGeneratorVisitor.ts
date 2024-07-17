@@ -898,8 +898,7 @@ export class PeerProcessor {
 
 function needImportFeature(language: Language, decl: ts.Declaration): boolean {
     if (language === Language.ARKTS) {
-        if ((ts.isInterfaceDeclaration(decl) && isMaterialized(decl))
-            || isSyntheticDeclaration(decl)) {
+        if (ts.isInterfaceDeclaration(decl) && isMaterialized(decl)) {
             return false
         }
         return ts.isEnumDeclaration(decl)

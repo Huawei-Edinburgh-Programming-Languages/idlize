@@ -493,6 +493,13 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
             if (options.verbose) console.log(data)
             writeFile(outComponentFile, data)
         }
+        const fakeDeclarations = printFakeDeclarations(peerLibrary)
+        for (const [filename, data] of fakeDeclarations) {
+            const outComponentFile = arkoala.interface(new TargetFile(filename))
+            console.log("producing", outComponentFile)
+            if (options.verbose) console.log(data)
+            writeFile(outComponentFile, data, true)
+        }
         writeFile(
             arkoala.peer(new TargetFile('ArkUINodeType')),
             printNodeTypes(peerLibrary),

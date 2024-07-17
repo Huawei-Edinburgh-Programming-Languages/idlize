@@ -256,24 +256,6 @@ export class DotIndicator extends Indicator<DotIndicator> {
   }
 }
 
-export interface IMPORT_Resource {
-  bundleName: string;
-  moduleName: string;
-  id: number;
-  params?: object[];
-  type?: number;
-}
-
-export interface IMPORT_UIContext {}
-
-export class IMPORT_ImageModifier {}
-
-export interface IMPORT_PixelMap {}
-
-export interface IMPORT_ComponentContent {}
-
-export type IMPORT_SymbolGlyphModifier = string
-
 export type TEMPLATE_LITERAL_PX = string
 
 export type TEMPLATE_LITERAL_FP = string
@@ -283,13 +265,6 @@ export type TEMPLATE_LITERAL_LPX = string
 export type TEMPLATE_LITERAL_number_vp = string
 
 export type TEMPLATE_LITERAL_Percentage = string
-
-export enum IMPORT_LengthMetricsUnit {
-  DEFAULT = 0,
-  PX = 1
-}
-
-export type IMPORT_LengthMetrics = string
 
 export type LITERAL_evenodd = string
 

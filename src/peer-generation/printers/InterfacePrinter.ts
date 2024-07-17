@@ -20,11 +20,12 @@ import { FieldModifier, LanguageWriter, createLanguageWriter, Type } from '../La
 import { ArkTSTypeNodeNameConvertor, mapType } from '../TypeNodeNameConvertor'
 import { Language, removeExt, renameDtsToInterfaces } from '../../util'
 import { ImportsCollector } from '../ImportsCollector'
-import { EnumEntity, PeerFile } from '../PeerFile'
+import { PeerFile } from '../PeerFile'
 import { IndentedPrinter } from "../../IndentedPrinter"
 import { TargetFile } from './TargetFile'
 import { PrinterContext } from './PrinterContext'
 import { ARK_OBJECTBASE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from './lang/Java'
+import { convertDeclaration, DeclarationConvertor } from "../TypeNodeConvertor";
 
 interface InterfacesVisitor {
     getInterfaces(): Map<TargetFile, LanguageWriter>
@@ -39,40 +40,26 @@ abstract class DefaultInterfacesVisitor implements InterfacesVisitor {
     abstract printInterfaces(): void
 }
 
-abstract class TypeConvertor {
-    public convert(writer: LanguageWriter, node: ts.Declaration) {
-        if (ts.isClassDeclaration(node)) this.convertClass(writer, node)
-        else if (ts.isInterfaceDeclaration(node)) this.convertInterface(writer, node)
-        else if (ts.isTypeAliasDeclaration(node)) this.convertTypeAlias(writer, node)
-        else throw new Error("Unknown node")
-    }
-    abstract convertClass(writer: LanguageWriter, node: ts.ClassDeclaration): void
-    abstract convertInterface(writer: LanguageWriter, node: ts.InterfaceDeclaration): void
-    abstract convertTypeAlias(writer: LanguageWriter, node: ts.TypeAliasDeclaration): void
-    convertEnum(writer: LanguageWriter, enumEntity: EnumEntity) {
-        writer.writeStatement(writer.makeEnumEntity(enumEntity, true))
-    }
-}
+export class TSDeclConvertor implements DeclarationConvertor<void> {
+    constructor(private readonly writer: LanguageWriter, readonly peerLibrary: PeerLibrary) {
 
-export class TSTypeConvertor extends TypeConvertor {
-    constructor(private readonly peerLibrary: PeerLibrary) {
-        super();
     }
-    convertClass(writer: LanguageWriter, node: ts.ClassDeclaration): void {
-        writer.print(this.convertDeclaration(node))
+    convertEnum(node: ts.EnumDeclaration): string {
+        throw "Enums are processed separately"
     }
-    convertInterface(writer: LanguageWriter, node: ts.InterfaceDeclaration): void {
-        writer.print(this.convertDeclaration(node))
+    convertClass(node: ts.ClassDeclaration): void {
+        this.writer.print(this.convertDeclaration(node))
     }
-
-    convertTypeAlias(writer: LanguageWriter, node: ts.TypeAliasDeclaration): void {
+    convertInterface(node: ts.InterfaceDeclaration): void {
+        this.writer.print(this.convertDeclaration(node))
+    }
+    convertTypeAlias(node: ts.TypeAliasDeclaration): void {
         const maybeTypeArguments = node.typeParameters?.length
             ? `<${node.typeParameters.map(it => it.getText()).join(', ')}>`
             : ''
         let type = mapType(node.type)
-        writer.print(`export declare type ${node.name.text}${maybeTypeArguments} = ${type};`)
+        this.writer.print(`export declare type ${node.name.text}${maybeTypeArguments} = ${type};`)
     }
-
     private replaceImportTypeNodes(text: string): string {
         for (const [stub, src] of [...this.peerLibrary.importTypesStubToSource.entries()].reverse()) {
             text = text.replaceAll(src, stub)
@@ -145,8 +132,6 @@ export class TSTypeConvertor extends TypeConvertor {
 }
 
 class TSInterfacesVisitor extends DefaultInterfacesVisitor {
-    protected readonly typeConvertor = new TSTypeConvertor(this.peerLibrary)
-
     constructor(protected readonly peerLibrary: PeerLibrary) {
         super()
     }
@@ -177,9 +162,10 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
     printInterfaces() {
         for (const file of this.peerLibrary.files.values()) {
             const writer = createLanguageWriter(this.peerLibrary.declarationTable.language)
+            const typeConvertor = new TSDeclConvertor(writer, this.peerLibrary)
             this.printImports(writer, file)
-            file.declarations.forEach(it => this.typeConvertor.convert(writer, it))
-            file.enums.forEach(it => this.typeConvertor.convertEnum(writer, it))
+            file.declarations.forEach(it => convertDeclaration(typeConvertor, it))
+            file.enums.forEach(it => writer.writeStatement(writer.makeEnumEntity(it, true)))
             this.printAssignEnumsToGlobalScope(writer, file)
             this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), writer)
         }
@@ -266,25 +252,27 @@ class JavaInterfacesVisitor {
     }
 }
 
-class ArkTSTypeConvertor extends TypeConvertor {
+export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
     private readonly typeConvertor = new ArkTSTypeNodeNameConvertor()
-    constructor(private readonly peerLibrary: PeerLibrary) {
-        super();
-    }
-    convertClass(writer: LanguageWriter, node: ts.ClassDeclaration): void {
+    constructor(private readonly writer: LanguageWriter, private readonly peerLibrary: PeerLibrary) {
 
     }
-    convertInterface(writer: LanguageWriter, node: ts.InterfaceDeclaration): void {
-        writer.writeInterface(this.declarationName(node), writer => {
+    convertEnum(node: ts.EnumDeclaration): void {
+    }
+    convertClass(node: ts.ClassDeclaration): void {
+
+    }
+    convertInterface(node: ts.InterfaceDeclaration): void {
+        this.writer.writeInterface(this.declarationName(node), writer => {
             this.peerLibrary.declarationTable.targetStruct(node).getFields().map(it => {
                 writer.writeFieldDeclaration(it.name, new Type(this.mapType(it.type), it.optional), undefined, it.optional)
             })
         })
     }
-    convertTypeAlias(writer: LanguageWriter, node: ts.TypeAliasDeclaration): void {
+    convertTypeAlias(node: ts.TypeAliasDeclaration): void {
         if (ts.isTypeLiteralNode(node.type)) {
             const members = node.type.members
-            writer.writeInterface(node.name.text, writer => {
+            this.writer.writeInterface(node.name.text, writer => {
                 members.map(it => {
                     if (ts.isPropertySignature(it)) {
                         writer.writeFieldDeclaration(it.name?.getText(),
@@ -299,7 +287,7 @@ class ArkTSTypeConvertor extends TypeConvertor {
             }
             const maybeTypeArguments = node.typeParameters?.length
                 ? `<${node.typeParameters.map(it => it.name.text).join(', ')}>` : ''
-            writer.print(`export declare type ${node.name.text}${maybeTypeArguments} = ${typeName.replaceAll("any", "Object")};`)
+            this.writer.print(`export declare type ${node.name.text}${maybeTypeArguments} = ${typeName};`)
         }
     }
     private declarationName(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
@@ -320,9 +308,6 @@ class ArkTSTypeConvertor extends TypeConvertor {
                 }
                 return {type: this.mapType(it), needImport: false}
             })
-        }
-        if (ts.isImportTypeNode(node.type)) {
-            return [{type: `IMPORT_${node.name.text}`, needImport: true}]
         } else if (ts.isTemplateLiteralTypeNode(node.type)) {
             return [{type: `TEMPLATE_LITERAL_${node.name.text}`, needImport: true}]
         }
@@ -337,8 +322,6 @@ class ArkTSTypeConvertor extends TypeConvertor {
 }
 
 class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
-    private readonly typeConvertor = new ArkTSTypeConvertor(this.peerLibrary)
-
     constructor(private readonly peerLibrary: PeerLibrary) {
         super()
     }
@@ -356,27 +339,30 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
     override printInterfaces() {
         for (const file of this.peerLibrary.files.values()) {
             const writer = createLanguageWriter(this.peerLibrary.declarationTable.language)
+            const typeConvertor = new ArkTSDeclConvertor(writer, this.peerLibrary)
+            const extraImports = new ImportsCollector()
             file.declarations.forEach(it => {
                 if (ts.isTypeAliasDeclaration(it)) {
-                    this.typeConvertor
+                    typeConvertor
                         .getSynthesizedTypes(it)
                         .filter(it => it.needImport)
-                        .forEach(it => this.addExtraImports(file, it.type))
+                        .forEach(it => this.addExtraImports(extraImports, it.type))
                 }
             })
             //TODO: imports are needed until the classes generate
             if ("ArkCommonInterfaces.ets" == this.generateFileBasename(file.originalFilename)) {
-                this.addExtraImports(file, "GestureRecognizer")
+                this.addExtraImports(extraImports, "GestureRecognizer")
             }
             this.printImports(writer, file)
-            file.enums.forEach(it => this.typeConvertor.convertEnum(writer, it))
-            file.declarations.forEach(it => this.typeConvertor.convert(writer, it))
+            extraImports.print(writer, removeExt(this.generateFileBasename(file.originalFilename)))
+            file.enums.forEach(it => writer.writeStatement(writer.makeEnumEntity(it, true)))
+            file.declarations.forEach(it => convertDeclaration(typeConvertor, it))
             this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), writer)
         }
     }
 
-    private addExtraImports(file: PeerFile, feature: string) {
-        file.importFeatures.push({feature: feature, module: "./dts-exports.ets"})
+    private addExtraImports(collector: ImportsCollector, feature: string) {
+        collector.addFeature(feature, "./dts-exports.ets")
     }
 }
 
@@ -405,4 +391,10 @@ export function printInterfaces(peerLibrary: PeerLibrary, context: PrinterContex
         result.set(key, writer.getOutput().join('\n'))
     }
     return result
+}
+
+export function createDeclarationConvertor(writer: LanguageWriter, peerLibrary: PeerLibrary) {
+    return writer.language == Language.TS
+        ? new TSDeclConvertor(writer, peerLibrary)
+        : new ArkTSDeclConvertor(writer, peerLibrary)
 }
