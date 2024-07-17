@@ -309,6 +309,7 @@ class ArkTSTypeConvertor extends TypeConvertor {
         return `${name}${typeParamsClause}`
     }
     getSynthesizedTypes(node: ts.TypeAliasDeclaration): {type: string, needImport: boolean}[] {
+        // needed to be replaced unsupported language features with similar types
         if (ts.isUnionTypeNode(node.type)) {
             return node.type.types.map(it => {
                 if (ts.isTemplateLiteralTypeNode(it)) {
@@ -363,7 +364,10 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
                         .forEach(it => this.addExtraImports(file, it.type))
                 }
             })
-            this.addExtraImports(file, "GestureRecognizer")
+            //TODO: imports are needed until the classes generate
+            if ("ArkCommonInterfaces.ets" == this.generateFileBasename(file.originalFilename)) {
+                this.addExtraImports(file, "GestureRecognizer")
+            }
             this.printImports(writer, file)
             file.enums.forEach(it => this.typeConvertor.convertEnum(writer, it))
             file.declarations.forEach(it => this.typeConvertor.convert(writer, it))
