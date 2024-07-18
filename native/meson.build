@@ -53,6 +53,8 @@ sources = [
     arkoala_dir / 'all_events.cc',
     arkoala_dir / 'load-library.cc',
     arkoala_dir / 'library.cc',
+    arkoala_dir / 'arkts/panda-loader.cc',
+
 ]
 if compile_events_test
     sources += [
@@ -195,12 +197,12 @@ node_ldflags += [
     '-lnode'
 ]
 endif
+endif
 if is_ohos
 node_cflags += [
     '-DKOALA_OHOS',
 ]
 endif
-
 
 if is_cj
 shared_library(cj_library_name,
@@ -334,6 +336,7 @@ shared_library(libace_name,
     link_args: ldflags + ohos_ldflags
 )
 endif
+
 endif
 
 # TODO: fix on Windows as well
@@ -352,14 +355,14 @@ endif
 
 if use_dummy_panda
 libdummy_sources = [
-    'dummy-panda' / 'loader.cc',
-    'dummy-panda' / 'etsapi.cc'
+    'dummy-panda' / 'etsapi.cc',
+    'dummy-panda' / 'vm.cc',
 ]
 shared_library('panda',
     libdummy_sources,
     install: true,
     cpp_args: cflags,
-    include_directories: arkts_include_dirs,
+    include_directories: arkts_include_dirs + [ external_dir ],
     install_dir: meson.current_source_dir(),
 )
 endif

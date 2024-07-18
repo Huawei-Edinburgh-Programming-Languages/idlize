@@ -13,10 +13,20 @@
  * limitations under the License.
  */
 #include <stdio.h>
+#include <stdint.h>
 
 #include "common.h"
 #include "etsapi.h"
 
 ETS_EXPORT ets_int ETS_CreateVM(EtsVM **pVm, EtsEnv **pEnv, EtsVMInitArgs *vmArgs) {
+    return 0;
+}
+
+extern "C" ETS_EXPORT void* InitVirtualMachine(int32_t kind, void** env) {
+    return nullptr;
+}
+
+extern "C" ETS_EXPORT int RunVirtualMachine(void* env, int32_t what, uint8_t* data, int32_t length) {
+    fprintf(stderr, "Run VM %d\n", what);
     return 0;
 }

@@ -15,10 +15,6 @@
 #include <string>
 
 #include "etsapi.h"
-
-void* loadLibrary(const std::string& libPath);
-const char* libraryError();
-void* findSymbol(void* library, const char* name);
-std::string libName(const char* lib);
+#include "dynamic-loader.h"
 
 int loadEtsNativeLib(const char* path, const char* name);
