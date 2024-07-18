@@ -17,8 +17,8 @@
 
 #include <jni.h>
 
-#include "common.h"
 #include "etsapi.h"
+#include "dynamic-loader.h"
 
 ETS_EXPORT ets_int ETS_CreateVM(EtsVM **pVm, EtsEnv **pEnv, EtsVMInitArgs *vmArgs) {
     return 0;
