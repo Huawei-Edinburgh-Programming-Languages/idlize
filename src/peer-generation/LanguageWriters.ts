@@ -1096,6 +1096,10 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         }
         return super.getObjectAccessor(convertor, value, args);
     }
+    writeMethodCall(receiver: string, method: string, params: string[], nullable: boolean = false) {
+        // ArkTS does not support - 'this.?'
+        super.writeMethodCall(receiver, method, params, nullable && receiver !== "this");
+    }
 }
 
 abstract class CLikeLanguageWriter extends LanguageWriter {

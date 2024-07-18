@@ -349,7 +349,7 @@ class MaterializedVisitor {
             else {
                 throw new Error(`Unsupported language ${this.printerContext.language} in MaterializedPrinter.ts`)
             }
-            
+
             visitor.visit()
             this.materialized.set(visitor.getTargetFile(), visitor.getOutput())
         }
@@ -359,7 +359,7 @@ class MaterializedVisitor {
 export function printMaterialized(peerLibrary: PeerLibrary, printerContext: PrinterContext, dumpSerialized: boolean): Map<TargetFile, string> {
 
     // TODO: support other output languages
-    if (![Language.TS, Language.JAVA].includes(printerContext.language))
+    if (![Language.ARKTS, Language.TS, Language.JAVA].includes(printerContext.language))
         return new Map()
 
     const visitor = new MaterializedVisitor(peerLibrary, printerContext, dumpSerialized)
