@@ -281,13 +281,9 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
                 })
             })
         } else {
-            let typeName = this.getSynthesizedTypes(node).map(it => it.type).join('|')
-            if (typeName.length == 0) {
-                typeName = this.mapType(node.type)
-            }
             const maybeTypeArguments = node.typeParameters?.length
                 ? `<${node.typeParameters.map(it => it.name.text).join(', ')}>` : ''
-            this.writer.print(`export declare type ${node.name.text}${maybeTypeArguments} = ${typeName};`)
+            this.writer.print(`export declare type ${node.name.text}${maybeTypeArguments} = ${this.mapType(node.type)}`)
         }
     }
     private declarationName(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
@@ -295,23 +291,6 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
         let typeParams = node.typeParameters?.map(it => it.name.text).join(', ')
         let typeParamsClause = typeParams ? `<${typeParams}>` : ``
         return `${name}${typeParamsClause}`
-    }
-    getSynthesizedTypes(node: ts.TypeAliasDeclaration): {type: string, needImport: boolean}[] {
-        // needed to be replaced unsupported language features with similar types
-        if (ts.isUnionTypeNode(node.type)) {
-            return node.type.types.map(it => {
-                if (ts.isTemplateLiteralTypeNode(it)) {
-                    return {type: `TEMPLATE_LITERAL_${it.templateSpans
-                            .map(it => `${this.mapType(it.type)}_${it.literal.text}`).join('_')}`, needImport: true}
-                } else if (ts.isLiteralTypeNode(it)) {
-                    return {type: `LITERAL_${this.mapType(it).replaceAll('"', '')}`, needImport: true}
-                }
-                return {type: this.mapType(it), needImport: false}
-            })
-        } else if (ts.isTemplateLiteralTypeNode(node.type)) {
-            return [{type: `TEMPLATE_LITERAL_${node.name.text}`, needImport: true}]
-        }
-        return []
     }
     private mapType(type: ts.TypeNode | undefined): string {
         if (type !== undefined) {
@@ -341,14 +320,6 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
             const writer = createLanguageWriter(this.peerLibrary.declarationTable.language)
             const typeConvertor = new ArkTSDeclConvertor(writer, this.peerLibrary)
             const extraImports = new ImportsCollector()
-            file.declarations.forEach(it => {
-                if (ts.isTypeAliasDeclaration(it)) {
-                    typeConvertor
-                        .getSynthesizedTypes(it)
-                        .filter(it => it.needImport)
-                        .forEach(it => this.addExtraImports(extraImports, it.type))
-                }
-            })
             //TODO: imports are needed until the classes generate
             if ("ArkCommonInterfaces.ets" == this.generateFileBasename(file.originalFilename)) {
                 this.addExtraImports(extraImports, "GestureRecognizer")
@@ -362,7 +333,7 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
     }
 
     private addExtraImports(collector: ImportsCollector, feature: string) {
-        collector.addFeature(feature, "./dts-exports.ets")
+        collector.addFeature(feature, "./shared/dts-exports")
     }
 }
 

@@ -32,7 +32,7 @@ const dtsImports = `import {
     DrawingRenderingContext,
     TabBarSymbol,
     DotIndicator
-} from "%ROOT%/dts-exports"
+} from "%ROOT%/shared/dts-exports"
 `
 
 export function collectDtsImports(pathToRoot: string = '.') {

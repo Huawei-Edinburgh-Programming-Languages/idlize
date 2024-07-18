@@ -13,54 +13,56 @@
  * limitations under the License.
  */
 
-import {
-         CustomBuilder,
+import { AdaptiveColor,
+         BackgroundBlurStyleOptions,
+         BorderStyle,
          BlurStyle,
          BlurOptions,
-         GradientDirection,
+         CustomBuilder,
          DismissReason,
+         DragInteractionOptions,
+         DragPreviewMode,
+         DragPreviewOptions,
+         EdgeWidths,
+         GradientDirection,
          ShadowStyle,
          ShadowType,
          SheetMode,
          SheetSize,
+         SheetOptions,
          SheetType,
          SourceTool,
-         BorderStyle,
-         DragPreviewMode,
-         AdaptiveColor,
          StateStyles,
-         SheetOptions,
-         ThemeColorMode,
-         EdgeWidths,
-         BackgroundBlurStyleOptions,
-         DragPreviewOptions,
-         DragInteractionOptions,
          SymbolGlyphModifier,
-         UIGestureEvent,
-         RectResult } from './ArkCommonInterfaces'
-import { GestureMask,
-         GesturePriority,
-        GestureJudgeResult,
-        GestureInterface } from './ArkGestureInterfaces'
-import { CalendarAlign } from './ArkCalendarPickerInterfaces'
-import { EnumDTS } from './ArkTestInterfaces'
-import { NavigationTitleMode } from './ArkNavigationInterfaces'
-import { HorizontalAlign } from './ArkColumnInterfaces'
-import { SelectedMode } from './ArkTabContentInterfaces'
-import { BarMode } from './ArkTabsInterfaces'
-import { TextHeightAdaptivePolicy,
-         Color,
-         FontStyle,
-         TextOverflow,
+         RectResult,
+         ThemeColorMode,
+         UIGestureEvent } from '@arkoala/arkui/ArkCommonInterfaces'
+import { GestureInterface
+         GestureJudgeResult,
+         GestureMask,
+         GesturePriority } from '@arkoala/arkui/ArkGestureInterfaces'
+import { CalendarAlign } from '@arkoala/arkui/ArkCalendarPickerInterfaces'
+import { EnumDTS } from '@arkoala/arkui/ArkTestInterfaces'
+import { NavigationTitleMode } from '@arkoala/arkui/ArkNavigationInterfaces'
+import { HorizontalAlign } from '@arkoala/arkui/ArkColumnInterfaces'
+import { SelectedMode } from '@arkoala/arkui/ArkTabContentInterfaces'
+import { BarMode } from '@arkoala/arkui/ArkTabsInterfaces'
+import { Color,
+         ColoringStrategy,
          FontWeight,
-         ColoringStrategy } from './ArkEnumInterfaces'
-
-import { Dimension, Length, LengthMetrics, Resource, ResourceColor, ResourceStr, LengthMetricsUnit,
- Font,
- LocalizedPadding
- } from "./ArkUnitsInterfaces"
-
-import { NativeEmbedDataInfo } from './ArkWebInterfaces'
+         FontStyle,
+         TextHeightAdaptivePolicy,
+         TextOverflow } from '@arkoala/arkui/ArkEnumInterfaces'
+import { Dimension,
+         Font,
+         Length,
+         LengthMetrics,
+         LengthMetricsUnit,
+         LocalizedPadding,
+         Resource,
+         ResourceColor,
+         ResourceStr } from "@arkoala/arkui/ArkUnitsInterfaces"
+import { NativeEmbedDataInfo } from '@arkoala/arkui/ArkWebInterfaces'
 
 export class TabBarSymbol {
     normal: SymbolGlyphModifier
@@ -256,16 +258,11 @@ export class DotIndicator extends Indicator<DotIndicator> {
   }
 }
 
-export type TEMPLATE_LITERAL_PX = string
-
-export type TEMPLATE_LITERAL_FP = string
-
-export type TEMPLATE_LITERAL_LPX = string
-
-export type TEMPLATE_LITERAL_number_vp = string
-
-export type TEMPLATE_LITERAL_Percentage = string
-
-export type LITERAL_evenodd = string
-
-export type LITERAL_nonzero = string
+export type External_LITERAL_evenodd = string
+export type External_LITERAL_onzero = string
+export type External_LITERAL_nonzero = string
+export type External_TEMPLATE_LITERAL_number_FP = string
+export type External_TEMPLATE_LITERAL_number_LPX = string
+export type External_TEMPLATE_LITERAL_number_vp = string
+export type External_TEMPLATE_LITERAL_number_Percentage = string
+export type External_TEMPLATE_LITERAL_number_PX = string
