@@ -265,13 +265,60 @@ class JavaInterfacesVisitor {
 
 export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
     private readonly typeConvertor = new ArkTSTypeNodeNameConvertor()
-    constructor(private readonly writer: LanguageWriter, private readonly peerLibrary: PeerLibrary) {
-
+    constructor(private readonly writer: LanguageWriter,
+                private readonly peerLibrary: PeerLibrary) {
     }
     convertEnum(node: ts.EnumDeclaration): void {
     }
     convertClass(node: ts.ClassDeclaration): void {
+        let className = this.declarationName(node)
+        let extendsClause = this.extendsClause(node)
+        let classOrInterface = ts.isClassDeclaration(node) ? `class` : `interface`
+        if (this.peerLibrary.isComponentDeclaration(node)) {
+            // because we write `ArkBlank implements BlankAttributes`
+            classOrInterface = `interface`
+        }
+        console.log(`convertClass ${classOrInterface} ${className}`)
+        this.writer.print(`export declare ${classOrInterface} ${className} ${extendsClause} {`)
+        this.writer.pushIndent()
+        this.declarationMembers(node)
+            .forEach((member) => {
+                const methodName = member.name.getText()
+                const returnType = member.type?.getText()
+                const parameters = member.parameters.map((param) => {
+                    if (param.type != undefined && ts.isTypeLiteralNode(param.type)) {
+                        return `${param.name.getText()}: ${param.type.members.map(it => it.name?.getText()).join('_')}`
+                    }
+                    return param.getText()
+                }).join(',')
+                this.writer.print(`${methodName}(${parameters}): ${returnType};`)
+                // this.writer.print(member.getText())
+            })
+        this.writer.popIndent()
+        this.writer.print(`}`)
+    }
+    private extendsClause(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
+        if (!node.heritageClauses?.length)
+            return ``
+        // if (node.heritageClauses!.some(it => it.token !== ts.SyntaxKind.ExtendsKeyword))
+        //     throw "Expected to have only extend clauses"
+        if (this.peerLibrary.isComponentDeclaration(node))
+            // do not extend parent component interface to provide smooth integration
+            return ``
 
+        let parent = node.heritageClauses[0]!.types[0]
+        return `extends ${parent.getText()}`
+    }
+    private declarationMembers(
+        node: ts.ClassDeclaration | ts.InterfaceDeclaration
+    ): readonly (ts.MethodDeclaration)[] {
+        if (ts.isClassDeclaration(node)) {
+            const members = node.members.filter(it => !ts.isConstructorDeclaration(it))
+            if (members.every(ts.isMethodDeclaration))
+                return members
+        }
+        // throw new Error(`Encountered component with member that is not method: ${node}`)
+        return []
     }
     convertInterface(node: ts.InterfaceDeclaration): void {
         this.writer.writeInterface(this.declarationName(node), writer => {
@@ -280,6 +327,7 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
             })
         })
     }
+
     convertTypeAlias(node: ts.TypeAliasDeclaration): void {
         if (ts.isTypeLiteralNode(node.type)) {
             const members = node.type.members
@@ -330,13 +378,15 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
         for (const file of this.peerLibrary.files.values()) {
             const writer = createLanguageWriter(this.peerLibrary.declarationTable.language)
             const typeConvertor = new ArkTSDeclConvertor(writer, this.peerLibrary)
-            const extraImports = new ImportsCollector()
-            //TODO: imports are needed until the classes generate
-            if ("ArkCommonInterfaces.ets" == this.generateFileBasename(file.originalFilename)) {
-                this.addExtraImports(extraImports, "GestureRecognizer")
-            }
-            this.printImports(writer, file)
-            extraImports.print(writer, removeExt(this.generateFileBasename(file.originalFilename)))
+
+            // const extraImports = new ImportsCollector()
+            // //TODO: imports are needed until the classes generate
+            // if ("ArkCommonInterfaces.ets" == this.generateFileBasename(file.originalFilename)) {
+            //     this.addExtraImports(extraImports, "GestureRecognizer")
+            // }
+            // this.printImports(writer, file)
+            // extraImports.print(writer, removeExt(this.generateFileBasename(file.originalFilename)))
+
             file.enums.forEach(it => writer.writeStatement(writer.makeEnumEntity(it, true)))
             file.declarations.forEach(it => convertDeclaration(typeConvertor, it))
             this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), writer)

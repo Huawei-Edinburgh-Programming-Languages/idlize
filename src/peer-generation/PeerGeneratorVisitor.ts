@@ -48,7 +48,12 @@ import { ArkTSTypeNodeNameConvertor, mapType } from "./TypeNodeNameConvertor";
 import { convertDeclaration, convertTypeNode } from "./TypeNodeConvertor";
 import { DeclarationDependenciesCollector, TypeDependenciesCollector } from "./dependencies_collector";
 import { convertDeclToFeature } from "./ImportsCollector";
-import { addSyntheticDeclarationDependency, isSyntheticDeclaration, makeSyntheticTypeAliasDeclaration } from "./synthetic_declaration";
+import {
+    addSyntheticDeclarationDependency,
+    isSyntheticDeclaration,
+    makeSyntheticDeclaration,
+    makeSyntheticTypeAliasDeclaration
+} from "./synthetic_declaration";
 import { isBuilderClass, isCustomBuilderClass, toBuilderClass } from "./BuilderClass";
 
 export enum RuntimeType {
@@ -382,6 +387,14 @@ class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
 
     override convertTemplateLiteral(node: ts.TemplateLiteralTypeNode): ts.Declaration[] {
         return [this.addSyntheticDeclarationDependency(this.typeConvertor.convertTemplateLiteral(node))]
+    }
+
+    override convertTypeLiteral(node: ts.TypeLiteralNode): ts.Declaration[] {
+        const decl = makeSyntheticDeclaration('SyntheticDeclarations',
+            node.members.map(it=>it.name?.getText()).join('_'), () => {
+            return ts.factory.createInterfaceDeclaration([], node.members.map(it=>it.name?.getText()).join('_'), [], [], node.members)
+        })
+        return [decl]
     }
 
     private addSyntheticDeclarationDependency(generatedName: string): ts.TypeAliasDeclaration {
@@ -913,8 +926,14 @@ export class PeerProcessor {
         const actualDeclarations = this.generateDeclarations(this.generateActualComponents())
 
         for (const dep of allDeclarations) {
-            if (isSyntheticDeclaration(dep))
+            if (isSyntheticDeclaration(dep)) {
+                this.declDependenciesCollector.convert(dep).forEach(it => {
+                    if (this.isSourceDecl(it) && (PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it))
+                        && needImportFeature(this.library.declarationTable.language, it))
+                        addSyntheticDeclarationDependency(dep, convertDeclToFeature(this.library, it))
+                })
                 continue
+            }
             const file = this.library.findFileByOriginalFilename(this.getDeclSourceFile(dep).fileName)!
             const isPeerDecl = this.library.isComponentDeclaration(dep)
             const isActualDeclaration = actualDeclarations.has(dep)
