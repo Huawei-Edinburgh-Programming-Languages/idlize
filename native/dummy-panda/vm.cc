@@ -26,7 +26,6 @@ ETS_EXPORT ets_int ETS_CreateVM(EtsVM **pVm, EtsEnv **pEnv, EtsVMInitArgs *vmArg
 
 typedef jint JNICALL (*JNI_CreateJavaVM_t)(JavaVM **pvm, void **penv, void *args);
 
-
 jobject app = nullptr;
 
 extern "C" ETS_EXPORT void* InitVirtualMachine(int32_t kind, const char* classPath, const char* libPath, void** env) {
@@ -54,7 +53,6 @@ extern "C" ETS_EXPORT void* InitVirtualMachine(int32_t kind, const char* classPa
 
 extern "C" ETS_EXPORT int RunVirtualMachine(void* env, int32_t what, uint8_t* data, int32_t length) {
     JNIEnv* jenv = (JNIEnv*)env;
-    fprintf(stderr, "Run VM %d\n", what);
     static jclass appClass = nullptr;
     if (!appClass) appClass = (jclass)jenv->NewGlobalRef(jenv->FindClass("org/koalaui/arkoala/Application"));
     static jmethodID mid = nullptr;
