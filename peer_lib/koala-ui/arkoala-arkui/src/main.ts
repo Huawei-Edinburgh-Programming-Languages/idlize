@@ -526,14 +526,7 @@ function checkNativeCallback() {
     assertEquals("NativeCallback Int32Array PrefixSum [3]", -400, arr3[3])
 }
 
-const onlyCheckLoader = true
-
 function main() {
-    if (onlyCheckLoader) {
-        checkLoader()
-        return
-    }
-
     checkSerdeBaseLength()
     checkSerdeBaseText()
     checkSerdeBasePrimitive()

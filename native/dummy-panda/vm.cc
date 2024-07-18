@@ -15,6 +15,8 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#include <jni.h>
+
 #include "common.h"
 #include "etsapi.h"
 
@@ -22,11 +24,40 @@ ETS_EXPORT ets_int ETS_CreateVM(EtsVM **pVm, EtsEnv **pEnv, EtsVMInitArgs *vmArg
     return 0;
 }
 
-extern "C" ETS_EXPORT void* InitVirtualMachine(int32_t kind, void** env) {
-    return nullptr;
+typedef jint JNICALL (*JNI_CreateJavaVM_t)(JavaVM **pvm, void **penv, void *args);
+
+
+jobject app = nullptr;
+
+extern "C" ETS_EXPORT void* InitVirtualMachine(int32_t kind, const char* classPath, const char* libPath, void** env) {
+    std::string jvmLibDir = std::string(getenv("JAVA_HOME")) + "/lib/server";
+    std::string jvmLibName = jvmLibDir + "/" + libName("jvm");
+    void* jvmLib = loadLibrary(jvmLibName);
+    JNI_CreateJavaVM_t createJavaVM = (JNI_CreateJavaVM_t)findSymbol(jvmLib, "JNI_CreateJavaVM");
+    fprintf(stderr, "Init VM %d sym=%p\n", kind, createJavaVM);
+    JavaVM* vm = nullptr;
+    JavaVMInitArgs vm_args;
+    JavaVMOption* options = new JavaVMOption[2];
+    options[0].optionString = (char*)strdup((std::string("-Djava.class.path=") + classPath).c_str());
+    options[1].optionString = (char*)strdup((std::string("-Djava.library.path=") + libPath).c_str());
+    vm_args.version = JNI_VERSION_10;
+    vm_args.nOptions = 2;
+    vm_args.options = options;
+    vm_args.ignoreUnrecognized = false;
+    int result = createJavaVM(&vm, env, &vm_args);
+    JNIEnv* jenv = (JNIEnv*)*env;
+    jclass clazz = jenv->FindClass("org/koalaui/arkoala/Application");
+    jmethodID start = jenv->GetStaticMethodID(clazz, "startApplication", "()Lorg/koalaui/arkoala/Application;");
+    if (start) app = jenv->NewGlobalRef(jenv->CallStaticObjectMethod(clazz, start));
+    return vm;
 }
 
 extern "C" ETS_EXPORT int RunVirtualMachine(void* env, int32_t what, uint8_t* data, int32_t length) {
+    JNIEnv* jenv = (JNIEnv*)env;
     fprintf(stderr, "Run VM %d\n", what);
-    return 0;
+    static jclass appClass = nullptr;
+    if (!appClass) appClass = (jclass)jenv->NewGlobalRef(jenv->FindClass("org/koalaui/arkoala/Application"));
+    static jmethodID mid = nullptr;
+    if (!mid) mid = jenv->GetMethodID(appClass, "enter", "(I[BI)V");
+    return mid ? jenv->CallIntMethod(app, mid, what, nullptr, 0) : 0;
 }

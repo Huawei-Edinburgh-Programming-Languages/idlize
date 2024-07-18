@@ -83,7 +83,7 @@ export interface GraphicsOps {
 }
 
 export interface LoaderOps {
-    _LoadVirtualMachine(directory: string, kind: KInt): pointer
+    _LoadVirtualMachine(classPath: string, libPath: string, kind: KInt): pointer
     _RunVirtualMachine(env: pointer, what: KInt, data: KUint8ArrayPtr, length: KInt): KInt
 }
 

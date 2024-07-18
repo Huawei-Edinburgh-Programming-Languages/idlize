@@ -16,7 +16,7 @@
 #include "common-interop.h"
 #include "dynamic-loader.h"
 
-typedef void* (*InitVirtualMachineFunc)(int kind, void** env);
+typedef void* (*InitVirtualMachineFunc)(int kind, const char* managedPath, const char* nativePath, void** env);
 typedef int (*RunVirtualMachineFunc)(void* env, KInt what, KByte* data, KInt length);
 
 // Singleton for now.
@@ -25,21 +25,29 @@ struct VMControl {
     RunVirtualMachineFunc runner;
 } g_VM;
 
-KNativePointer impl_LoadVirtualMachine(const KStringPtr& path, KInt kind) {
-    auto lib = std::string(path.c_str()) + "/" + libName("panda");
-    fprintf(stderr, "would load from %s %s: %d\n", path.c_str(), lib.c_str(), kind);
+KNativePointer impl_LoadVirtualMachine(const KStringPtr& libPath, const KStringPtr& classPath, KInt kind) {
+    auto lib = std::string(libPath.c_str()) + "/" + libName("panda");
+    fprintf(stderr, "would load from %s %s: %d\n", libPath.c_str(), lib.c_str(), kind);
     void* handle = loadLibrary(lib);
-    fprintf(stderr, "got %p\n", handle);
-    if (!handle) return nullptr;
+    if (!handle) {
+        fprintf(stderr, "Cannot load library %s\n", lib.c_str());
+        return nullptr;
+    }
     auto initFunc = (InitVirtualMachineFunc)findSymbol(handle, "InitVirtualMachine");
-    fprintf(stderr, "got %p\n", initFunc);
-    if (!initFunc) return nullptr;
+    if (!initFunc) {
+        fprintf(stderr, "Cannot find InitVirtualMachine in %s\n", lib.c_str());
+        return nullptr;
+    }
     void* env = nullptr;
-    g_VM.vm = initFunc(kind, &env);
+    g_VM.vm = initFunc(kind, classPath.c_str(), libPath.c_str(), &env);
     g_VM.runner = (RunVirtualMachineFunc)findSymbol(handle, "RunVirtualMachine");
+    if (!g_VM.runner) {
+        fprintf(stderr, "Cannot find RunVirtualMachine in %s\n", lib.c_str());
+        return nullptr;
+    }
     return env;
 }
-KOALA_INTEROP_2(LoadVirtualMachine, KNativePointer, KStringPtr, KInt)
+KOALA_INTEROP_3(LoadVirtualMachine, KNativePointer, KStringPtr, KStringPtr, KInt)
 
 KInt impl_RunVirtualMachine(KNativePointer env, KInt what, KByte* data, KInt length) {
      return g_VM.runner(env, what, data, length);

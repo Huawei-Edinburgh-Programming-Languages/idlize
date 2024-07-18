@@ -353,7 +353,7 @@ executable('test_arkoala_compat',
 )
 endif
 
-if use_dummy_panda
+if use_dummy_panda and is_jni
 libdummy_sources = [
     'dummy-panda' / 'etsapi.cc',
     'dummy-panda' / 'vm.cc',
@@ -362,7 +362,7 @@ shared_library('panda',
     libdummy_sources,
     install: true,
     cpp_args: cflags,
-    include_directories: arkts_include_dirs + [ external_dir ],
+    include_directories: arkts_include_dirs + jni_include_dirs + [ external_dir ],
     install_dir: meson.current_source_dir(),
 )
 endif
