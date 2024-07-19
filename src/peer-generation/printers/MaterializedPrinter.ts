@@ -154,7 +154,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
 
                 const allOptional = ctorSig.args.every(it => it.nullable)
                 const hasStaticMethods = clazz.methods.some(it => it.method.modifiers?.includes(MethodModifier.STATIC))
-                const allUndefined = ctorSig.argsNames.map(it => `${it} === undefined`).join(` && `)
+                const allUndefined = ctorSig.argsNames.map(it => `${it} !== undefined`).join(` && `)
 
                 if (hasStaticMethods) {
                     if (allOptional) {
@@ -166,27 +166,25 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                         writer.print(`// It means that the static method call invokes ctor method as well`)
                         writer.print(`// when all arguments are undefined.`)
                     } else {
+                        const args = ctorSig.args.map((it, index) => writer.makeString(`${ctorSig.argsNames[index]}`))
                         writer.writeStatement(
                             writer.makeCondition(
                                 writer.makeString(ctorSig.args.length === 0 ? "true" : allUndefined),
-                                writer.makeReturn()
+                                new BlockStatement([
+                                    writer.makeAssign("ctorPtr", Type.Pointer,
+                                        writer.makeMethodCall(clazz.className, "ctor", args),
+                                        true),
+                                    writer.makeAssign(
+                                        "this.peer",
+                                        finalizableType,
+                                        writer.makeString(`new Finalizable(ctorPtr, ${clazz.className}.getFinalizer())`),
+                                        false
+                                    )
+                                ], false)
                             )
                         )
                     }
                 }
-
-                const args = ctorSig.args.map((it, index) => writer.makeString(`${ctorSig.argsNames[index]}${it.nullable ? "" : "!"}`))
-                writer.writeStatement(
-                    writer.makeAssign("ctorPtr", Type.Pointer,
-                        writer.makeMethodCall(clazz.className, "ctor", args),
-                        true))
-
-                writer.writeStatement(writer.makeAssign(
-                    "this.peer",
-                    finalizableType,
-                    writer.makeString(`new Finalizable(ctorPtr, ${clazz.className}.getFinalizer())`),
-                    false
-                ))
             })
 
             printPeerFinalizer(clazz, writer)
@@ -199,8 +197,8 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                 let privateMethod = method
                 if (!privateMethod.method.modifiers?.includes(MethodModifier.PRIVATE))
                     privateMethod = copyMaterializedMethod(method, {
-                        method: copyMethod(method.method, { 
-                            modifiers: (method.method.modifiers ?? []).concat([MethodModifier.PRIVATE]) 
+                        method: copyMethod(method.method, {
+                            modifiers: (method.method.modifiers ?? []).concat([MethodModifier.PRIVATE])
                         })
                     })
                 const returnType = privateMethod.tsReturnType()
