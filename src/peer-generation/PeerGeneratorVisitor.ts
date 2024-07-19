@@ -979,7 +979,9 @@ function needImportFeature(language: Language, decl: ts.Declaration): boolean {
         if (ts.isInterfaceDeclaration(decl) && isMaterialized(decl)) {
             return true
         }
-        if (ts.isClassDeclaration(decl) && decl.name?.text == "GestureRecognizer") {
+        if (ts.isClassDeclaration(decl) && ["ImageData",
+            "GestureRecognizer",
+            "RenderingContextSettings"].includes(decl.name!.text)) {
             return true
         }
         return ts.isEnumDeclaration(decl)

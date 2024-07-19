@@ -249,7 +249,8 @@ export function makeTSSerializer(library: PeerLibrary): string {
         'import { VisibleListContentInfo } from "@arkoala/arkui/ArkListInterfaces"\n' +
         'import { ArrayRefNumberInterfaceDTS, BooleanInterfaceDTS, OptionInterfaceDTS, TupleInterfaceDTS, UnionOptionalInterfaceDTS, UnionInterfaceDTS, StringInterfaceDTS, NumberInterfaceDTS } from "@arkoala/arkui/ArkTestInterfaces"\n' +
         'import { BaseGestureEvent, FingerInfo } from "@arkoala/arkui/ArkGestureInterfaces"\n' +
-        'import { Dimension, Length, LengthMetrics, Resource, ResourceColor, ResourceStr, LocalizedPadding, Font } from "@arkoala/arkui/ArkUnitsInterfaces"\n'
+        'import { Dimension, Length, LengthMetrics, Resource, ResourceColor, ResourceStr, LocalizedPadding, Font } from "../ArkUnitsInterfaces"\n' +
+        'import { ImageData, RenderingContextSettings } from "../ArkCanvasInterfaces"\n'
         : ''
     return `${cStyleCopyright}
 ${extraImports}
