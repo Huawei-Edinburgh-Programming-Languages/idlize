@@ -11,5 +11,10 @@
             "@koalaui/runtime": ["generated/subset/koalaui/arkoala"]
         }
     },
-    "include": ["./generated/subset/**/*.ets"]
+    "include": [
+        "./generated/subset/koalaui/arkoala-arkui/arkts/src/*.ets",
+        "./generated/subset/koalaui/arkoala-arkui/arkts/src/peers/*.ets",
+        "./generated/subset/koalaui/arkoala-arkui/arkts/src/shared/ArkResource.ets",
+        "./generated/subset/koalaui/arkoala-arkui/arkts/src/shared/generated-utils.ets"
+    ]
 }
