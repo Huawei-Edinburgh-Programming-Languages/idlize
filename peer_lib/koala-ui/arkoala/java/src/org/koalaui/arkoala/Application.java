@@ -18,7 +18,16 @@ public class Application {
     Application() {}
 
     public static void main(String[] args) {
-        Application.startApplication().run();
+        var app = Application.startApplication();
+         try {
+            for (int i = 0; i < 10; i++) {
+                app.loopIteration(i);
+                Thread.sleep(100);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
     public static Application startApplication() {
         return new Application().start();
@@ -51,18 +60,5 @@ public class Application {
 
     public Application start() {
         return this;
-    }
-
-    public void run() {
-        try {
-
-            while (true) {
-                loopIteration(0);
-                System.out.println("loopIteration");
-                Thread.sleep(100);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 }

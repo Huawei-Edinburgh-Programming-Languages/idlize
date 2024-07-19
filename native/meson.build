@@ -355,7 +355,6 @@ endif
 
 if use_dummy_panda and is_jni
 libdummy_sources = [
-    'dummy-panda' / 'etsapi.cc',
     'dummy-panda' / 'vm.cc',
 ]
 shared_library('panda',
