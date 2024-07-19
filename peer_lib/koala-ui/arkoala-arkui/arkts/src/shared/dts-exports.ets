@@ -176,6 +176,7 @@ export interface GestureModifier {
   applyGesture(event: UIGestureEvent): void;
 }
 
+// todo: es2panda doesn't compile namespaces properly (as of @panda/sdk/1.5.0-dev.1349)
 //declare namespace GestureControl {
   enum GestureType {
     TAP_GESTURE = 0,
