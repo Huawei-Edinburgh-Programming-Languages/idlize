@@ -30,7 +30,7 @@ KNativePointer impl_LoadVirtualMachine(const KStringPtr& libPath, const KStringP
     fprintf(stderr, "would load from %s %s: %d\n", libPath.c_str(), lib.c_str(), kind);
     void* handle = loadLibrary(lib);
     if (!handle) {
-        fprintf(stderr, "Cannot load library %s\n", lib.c_str());
+        fprintf(stderr, "Cannot load library %s: %s\n", lib.c_str(), libraryError());
         return nullptr;
     }
     auto initFunc = (InitVirtualMachineFunc)findSymbol(handle, "InitVirtualMachine");

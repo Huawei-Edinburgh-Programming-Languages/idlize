@@ -20,16 +20,19 @@
 #include "etsapi.h"
 #include "dynamic-loader.h"
 
-ETS_EXPORT ets_int ETS_CreateVM(EtsVM **pVm, EtsEnv **pEnv, EtsVMInitArgs *vmArgs) {
-    return 0;
-}
-
-typedef jint JNICALL (*JNI_CreateJavaVM_t)(JavaVM **pvm, void **penv, void *args);
+typedef jint (*JNI_CreateJavaVM_t)(JavaVM **pvm, void **penv, void *args);
 
 jobject app = nullptr;
 
 extern "C" ETS_EXPORT void* InitVirtualMachine(int32_t kind, const char* classPath, const char* libPath, void** env) {
-    std::string jvmLibDir = std::string(getenv("JAVA_HOME")) + "/lib/server";
+
+    std::string jvmLibDir = std::string(getenv("JAVA_HOME")) +
+#ifdef KOALA_WINDOWS
+        "/bin/server"
+#else
+        "/lib/server"
+#endif
+    ;
     std::string jvmLibName = jvmLibDir + "/" + libName("jvm");
     void* jvmLib = loadLibrary(jvmLibName);
     JNI_CreateJavaVM_t createJavaVM = (JNI_CreateJavaVM_t)findSymbol(jvmLib, "JNI_CreateJavaVM");
