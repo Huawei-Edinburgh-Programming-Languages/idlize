@@ -974,9 +974,20 @@ export class PeerProcessor {
         }
     }
 }
-
 function needImportFeature(language: Language, decl: ts.Declaration): boolean {
-    return true;
+    if (language == Language.ARKTS) {
+        if (ts.isInterfaceDeclaration(decl) && isMaterialized(decl)) {
+            return true
+        }
+        if (ts.isClassDeclaration(decl) && decl.name?.text == "GestureRecognizer") {
+            return true
+        }
+        return ts.isEnumDeclaration(decl)
+            || ts.isInterfaceDeclaration(decl)
+            || ts.isTypeAliasDeclaration(decl)
+            // || ts.isClassDeclaration(decl)
+    }
+    return true
 }
 
 function createTypeDependenciesCollector(library: PeerLibrary): TypeDependenciesCollector {

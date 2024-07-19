@@ -19,7 +19,7 @@ import { writePeerMethod } from "./PeersPrinter"
 import { LanguageWriter, MethodModifier, NamedMethodSignature, Method, Type, createLanguageWriter, FieldModifier, MethodSignature, copyMethod } from "../LanguageWriters";
 import { copyMaterializedMethod, MaterializedClass } from "../Materialized"
 import { makeMaterializedPrologue, tsCopyrightAndWarning } from "../FileGenerators";
-import { OverloadsPrinter, groupOverloads } from "./OverloadsPrinter";
+import { OverloadsPrinter, groupOverloads, collapseSameNamedMethods } from "./OverloadsPrinter";
 
 import { printPeerFinalizer } from "./PeersPrinter"
 import { ImportsCollector } from "../ImportsCollector";
@@ -77,10 +77,25 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
 
         const superClass = clazz.superClass
         let superClassName = superClass ? `${superClass.name}${superClass.generics ? `<${superClass.generics.join(", ")}>` : ""}` : undefined
-        const selfInterface = clazz.isInterface ? `${clazz.className}${clazz.generics ? `<${clazz.generics.join(", ")}>` : `` }` : undefined
+        let selfInterface = clazz.isInterface ? `${clazz.className}${clazz.generics ? `<${clazz.generics.join(", ")}>` : `` }` : undefined
 
         const interfaces: string[] = []
         if (clazz.isInterface) {
+
+            selfInterface = `I_${clazz.className}`
+            for (const grouped of groupOverloads(clazz.methods)) {
+                const collapsedMethod = collapseSameNamedMethods(
+                    Array.from(grouped)
+                    .sort((a, b) => b.argConvertors.length - a.argConvertors.length)
+                    .map(it => it.method)
+                )
+                printer.writeInterface(selfInterface, (writer) => {
+                    writer.writeMethodDeclaration(collapsedMethod.name,
+                        collapsedMethod.signature,
+                        collapsedMethod.modifiers)
+                })
+            }
+
             if (selfInterface) interfaces.push(selfInterface)
             if (superClassName && !this.library.materializedClasses.has(superClassName)) {
                 interfaces.push(superClassName)

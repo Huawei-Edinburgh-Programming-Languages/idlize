@@ -269,6 +269,7 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
                 private readonly peerLibrary: PeerLibrary) {
     }
     convertEnum(node: ts.EnumDeclaration): void {
+        throw `Wrong enum type conversion: ${node.name.text}`
     }
     convertClass(node: ts.ClassDeclaration): void {
         let className = this.declarationName(node)
@@ -278,7 +279,6 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
             // because we write `ArkBlank implements BlankAttributes`
             classOrInterface = `interface`
         }
-        console.log(`convertClass ${classOrInterface} ${className}`)
         this.writer.print(`export declare ${classOrInterface} ${className} ${extendsClause} {`)
         this.writer.pushIndent()
         this.declarationMembers(node)
@@ -300,24 +300,21 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
     private extendsClause(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
         if (!node.heritageClauses?.length)
             return ``
-        // if (node.heritageClauses!.some(it => it.token !== ts.SyntaxKind.ExtendsKeyword))
-        //     throw "Expected to have only extend clauses"
         if (this.peerLibrary.isComponentDeclaration(node))
             // do not extend parent component interface to provide smooth integration
             return ``
-
-        let parent = node.heritageClauses[0]!.types[0]
+        let parent = node.heritageClauses[0]?.types[0]
+        if (node.heritageClauses!.some(it => it.token === ts.SyntaxKind.ImplementsKeyword)) {
+            return `implements ${parent.getText()}`
+        }
         return `extends ${parent.getText()}`
     }
-    private declarationMembers(
-        node: ts.ClassDeclaration | ts.InterfaceDeclaration
-    ): readonly (ts.MethodDeclaration)[] {
+    private declarationMembers(node: ts.ClassDeclaration | ts.InterfaceDeclaration): readonly (ts.MethodDeclaration)[] {
         if (ts.isClassDeclaration(node)) {
             const members = node.members.filter(it => !ts.isConstructorDeclaration(it))
             if (members.every(ts.isMethodDeclaration))
                 return members
         }
-        // throw new Error(`Encountered component with member that is not method: ${node}`)
         return []
     }
     convertInterface(node: ts.InterfaceDeclaration): void {
@@ -377,18 +374,9 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
     override printInterfaces() {
         for (const file of this.peerLibrary.files.values()) {
             const writer = createLanguageWriter(this.peerLibrary.declarationTable.language)
-            const typeConvertor = new ArkTSDeclConvertor(writer, this.peerLibrary)
-
-            // const extraImports = new ImportsCollector()
-            // //TODO: imports are needed until the classes generate
-            // if ("ArkCommonInterfaces.ets" == this.generateFileBasename(file.originalFilename)) {
-            //     this.addExtraImports(extraImports, "GestureRecognizer")
-            // }
-            // this.printImports(writer, file)
-            // extraImports.print(writer, removeExt(this.generateFileBasename(file.originalFilename)))
-
+            this.printImports(writer, file)
             file.enums.forEach(it => writer.writeStatement(writer.makeEnumEntity(it, true)))
-            file.declarations.forEach(it => convertDeclaration(typeConvertor, it))
+            file.declarations.forEach(it => convertDeclaration(new ArkTSDeclConvertor(writer, this.peerLibrary), it))
             this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), writer)
         }
     }
