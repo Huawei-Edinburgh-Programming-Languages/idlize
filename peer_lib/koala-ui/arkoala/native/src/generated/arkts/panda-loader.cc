@@ -17,7 +17,7 @@
 #include "dynamic-loader.h"
 
 typedef void* (*InitVirtualMachineFunc)(int kind, const char* managedPath, const char* nativePath, void** env);
-typedef int (*RunVirtualMachineFunc)(void* env, KInt what, KByte* data, KInt length);
+typedef int (*RunVirtualMachineFunc)(void* env, KInt what);
 
 // Singleton for now.
 struct VMControl {
@@ -49,7 +49,7 @@ KNativePointer impl_LoadVirtualMachine(const KStringPtr& libPath, const KStringP
 }
 KOALA_INTEROP_3(LoadVirtualMachine, KNativePointer, KStringPtr, KStringPtr, KInt)
 
-KInt impl_RunVirtualMachine(KNativePointer env, KInt what, KByte* data, KInt length) {
-     return g_VM.runner(env, what, data, length);
+KInt impl_RunVirtualMachine(KNativePointer env, KInt what) {
+     return g_VM.runner(env, what);
 }
-KOALA_INTEROP_4(RunVirtualMachine, KInt, KNativePointer, KInt, KByte*, KInt)
+KOALA_INTEROP_2(RunVirtualMachine, KInt, KNativePointer, KInt)

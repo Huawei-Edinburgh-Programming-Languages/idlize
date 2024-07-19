@@ -24,7 +24,7 @@ public class Application {
         return new Application().start();
     }
 
-    public void enter(int what, byte[] data, int length) {
+    public void enter(int what) {
         loopIteration(what);
     }
 

@@ -54,11 +54,11 @@ extern "C" ETS_EXPORT void* InitVirtualMachine(int32_t kind, const char* classPa
     return vm;
 }
 
-extern "C" ETS_EXPORT int RunVirtualMachine(void* env, int32_t what, uint8_t* data, int32_t length) {
+extern "C" ETS_EXPORT int RunVirtualMachine(void* env, int32_t what) {
     JNIEnv* jenv = (JNIEnv*)env;
     static jclass appClass = nullptr;
     if (!appClass) appClass = (jclass)jenv->NewGlobalRef(jenv->FindClass("org/koalaui/arkoala/Application"));
     static jmethodID mid = nullptr;
-    if (!mid) mid = jenv->GetMethodID(appClass, "enter", "(I[BI)V");
+    if (!mid) mid = jenv->GetMethodID(appClass, "enter", "(I)V");
     return mid ? jenv->CallIntMethod(app, mid, what, nullptr, 0) : 0;
 }

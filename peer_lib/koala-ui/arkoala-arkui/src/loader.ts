@@ -14,16 +14,25 @@
 */
 
 import { nativeModule } from "@koalaui/arkoala"
+import { pointer, nullptr } from "@koalaui/interop"
+
+function waitVSync(): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, 100) )
+}
+
+export async function runEventLoop(env: pointer) {
+    for (let i = 0; i < 5; i++) {
+        nativeModule()._RunVirtualMachine(env, i)
+        await waitVSync()
+    }
+}
 
 export function checkLoader() {
     console.log("checkLoader")
     let classPath = __dirname + "/../generated/java-subset/bin"
     let libPath = __dirname + "/../native"
     let env = nativeModule()._LoadVirtualMachine(libPath, classPath, 0)
-    let data = new Uint8Array(0)
-    for (let i = 0; i < 5; i++) {
-        nativeModule()._RunVirtualMachine(env, i, data, data.length)
-    }
+    setTimeout(async () => runEventLoop(env), 0)
 }
 
 checkLoader()
