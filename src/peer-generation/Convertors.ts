@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 import { Language, identName, importTypeName } from "../util"
-import { DeclarationTable, FieldRecord, PrimitiveType } from "./DeclarationTable"
+import { DeclarationTable, FieldRecord, PrimitiveType, StructDescriptor } from "./DeclarationTable"
 import { RuntimeType } from "./PeerGeneratorVisitor"
 import * as ts from "typescript"
 import { BlockStatement, BranchStatement, LanguageExpression, LanguageStatement, LanguageWriter, Type } from "./LanguageWriters"
@@ -102,9 +102,9 @@ export abstract class BaseArgConvertor implements ArgConvertor {
 
 export class StringConvertor extends BaseArgConvertor {
     private literalValue?: string
-    constructor(param: string, receiverType: ts.TypeNode) {
-        super(mapType(receiverType), [RuntimeType.STRING], false, false, param)
-        if (ts.isLiteralTypeNode(receiverType) && ts.isStringLiteral(receiverType.literal)) {
+    constructor(param: string, receiverType: ts.TypeNode | undefined) {
+        super(receiverType ? mapType(receiverType) : "string", [RuntimeType.STRING], false, false, param)
+        if (receiverType && ts.isLiteralTypeNode(receiverType) && ts.isStringLiteral(receiverType.literal)) {
             this.literalValue = receiverType.literal.text
         }
     }
@@ -659,50 +659,64 @@ export class OptionConvertor extends BaseArgConvertor {
 }
 
 export class AggregateConvertor extends BaseArgConvertor {
-    private memberConvertors: ArgConvertor[]
-    private members: [string, boolean][] = []
-    public readonly aliasName: string | undefined
+    constructor(
+        param: string, 
+        tsTypeName: string, 
+        private readonly nativeTypeName: string,
+        private readonly tsMembers: { name: [string, boolean], convertor: ArgConvertor }[],
+        private readonly nativeDescriptor: StructDescriptor,
+        public readonly aliasName?: string,
+    ) {
+        super(tsTypeName, [RuntimeType.OBJECT], false, true, param)
+    }
 
-    constructor(param: string, private table: DeclarationTable, private type: ts.TypeLiteralNode) {
-        super(mapType(type), [RuntimeType.OBJECT], false, true, param)
-        this.aliasName = ts.isTypeAliasDeclaration(this.type.parent) ? identName(this.type.parent.name) : undefined
-        this.memberConvertors = type
-            .members
+    static fromTypeLiteral(param: string, table: DeclarationTable, type: ts.TypeLiteralNode) {
+        const members: { name: [string, boolean], convertor: ArgConvertor }[] = type.members
             .filter(ts.isPropertySignature)
             .map((member, index) => {
-                this.members[index] = [identName(member.name)!, member.questionToken != undefined]
-                return table.typeConvertor(param, member.type!, member.questionToken != undefined)
+                return {
+                    name: [identName(member.name)!, member.questionToken != undefined],
+                    convertor: table.typeConvertor(param, member.type!, member.questionToken != undefined)
+                }
             })
+        return new AggregateConvertor(
+            param,
+            mapType(type),
+            table.getTypeName(type),
+            members,
+            table.targetStruct(table.toTarget(type)),
+            ts.isTypeAliasDeclaration(type.parent) ? identName(type.parent.name) : undefined,
+        )
     }
+
     convertorArg(param: string, writer: LanguageWriter): string {
         throw new Error("Do not use for aggregates")
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
-        this.memberConvertors.forEach((it, index) => {
-            let memberName = this.members[index][0]
+        this.tsMembers.forEach((it, index) => {
+            let memberName = it.name[0]
             printer.writeStatement(
                 printer.makeAssign(`${value}_${memberName}`, undefined,
                     printer.makeString(`${value}.${memberName}`), true))
-            it.convertorSerialize(param, `${value}_${memberName}`, printer)
+            it.convertor.convertorSerialize(param, `${value}_${memberName}`, printer)
         })
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
         const structAccessor = printer.getObjectAccessor(this, value)
-        let struct = this.table.targetStruct(this.table.toTarget(this.type))
         // Typed structs may refer each other, so use indent level to discriminate.
         // Somewhat ugly, but works.
         const typedStruct = `typedStruct${printer.indentDepth()}`
         printer.pushIndent()
         const statements = [
-            printer.makeObjectAlloc(structAccessor, struct.getFields()),
+            printer.makeObjectAlloc(structAccessor, this.nativeDescriptor.getFields()),
             printer.makeAssign(typedStruct, new Type(printer.makeRef(printer.makeType(this.tsTypeName, false, structAccessor).name)),
                 printer.makeString(structAccessor),true, false
             )
         ]
-        this.memberConvertors.forEach((it, index) => {
+        this.tsMembers.forEach((it, index) => {
             // TODO: maybe use accessor?
             statements.push(
-                it.convertorDeserialize(param, `${typedStruct}.${struct.getFields()[index].name}`, printer)
+                it.convertor.convertorDeserialize(param, `${typedStruct}.${this.nativeDescriptor.getFields()[index].name}`, printer)
             )
         })
         printer.popIndent()
@@ -711,9 +725,9 @@ export class AggregateConvertor extends BaseArgConvertor {
     nativeType(impl: boolean): string {
         return impl
             ? `struct { ` +
-            `${this.memberConvertors.map((it, index) => `${it.nativeType(true)} value${index};`).join(" ")}` +
+            `${this.tsMembers.map((it, index) => `${it.convertor.nativeType(true)} value${index};`).join(" ")}` +
             '} '
-            : this.table.getTypeName(this.type)
+            : this.nativeTypeName
     }
     interopType(language: Language): string {
         throw new Error("Must never be used")
@@ -722,11 +736,31 @@ export class AggregateConvertor extends BaseArgConvertor {
         return true
     }
     getMembers(): string[] {
-        return this.members.map(it => it[0])
+        return this.tsMembers.map(it => it.name[0])
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        const uniqueFields = this.members.filter(it => !duplicates.has(it[0]))
-        return this.discriminatorFromFields(value, writer, uniqueFields, it => it[0], it => it[1])
+        const uniqueFields = this.tsMembers.filter(it => !duplicates.has(it.name[0]))
+        return this.discriminatorFromFields(value, writer, uniqueFields, it => it.name[0], it => it.name[1])
+    }
+}
+
+export class ResourceConvertor extends AggregateConvertor {
+    constructor(param: string, table: DeclarationTable) {
+        super(
+            param,
+            "Resource",
+            "Ark_Resource",
+            [{name: ["id", false], convertor: new NumberConvertor("id")},
+            {name: ["type", false], convertor: new NumberConvertor("type")},
+            {name: ["name", false], convertor: new StringConvertor("name", undefined)},
+            {name: ["moduleName", false], convertor: new StringConvertor("moduleName", undefined)},
+            {name: ["bundleName", false], convertor: new StringConvertor("bundleName", undefined)}],
+            table.targetStruct(PrimitiveType.Resource)
+        )
+    }
+    override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
+        return this.discriminatorFromExpressions(value, RuntimeType.OBJECT, writer,
+            [writer.makeCallIsResource(value)])
     }
 }
 

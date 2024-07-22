@@ -141,7 +141,13 @@ typedef struct Ark_Materialized {
   Ark_NativePointer ptr;
 } Ark_Materialized;
 
-typedef Ark_CustomObject Ark_Resource;
+typedef struct Ark_Resource {
+  Ark_Number id;
+  Ark_Number type;
+  Ark_String name;
+  Ark_String moduleName;
+  Ark_String bundleName;
+} Ark_Resource;
 
 // TODO: generate!
 typedef struct Opt_Ark_Callback {

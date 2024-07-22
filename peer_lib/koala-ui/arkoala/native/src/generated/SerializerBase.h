@@ -35,6 +35,11 @@ inline Ark_RuntimeType runtimeType(const Ark_Materialized& value) {
   return ARK_RUNTIME_OBJECT;
 }
 
+template <>
+inline Ark_RuntimeType runtimeType(const Ark_Resource& value) {
+    return ARK_RUNTIME_OBJECT;
+}
+
 class SerializerBase {
 private:
     uint8_t* data;

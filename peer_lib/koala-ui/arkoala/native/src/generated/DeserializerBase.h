@@ -535,3 +535,18 @@ inline void WriteToString(string *result, const Ark_String *value)
   WriteToString(result, value->length);
   result->append("}");
 }
+
+inline void WriteToString(string *result, const Ark_Resource *value) {
+  result->append("{");
+  result->append(".id=");
+  WriteToString(result, &value->id);
+  result->append(", .type=");
+  WriteToString(result, &value->type);
+  result->append(", .name=\"");
+  WriteToString(result, &value->name);
+  result->append("\", .moduleName=\"");
+  WriteToString(result, &value->moduleName);
+  result->append("\", .bundleName=\"");
+  WriteToString(result, &value->bundleName);
+  result->append("\"}");
+}

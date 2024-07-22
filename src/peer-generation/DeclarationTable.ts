@@ -21,7 +21,7 @@ import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
 import {
     AggregateConvertor, ArgConvertor, ArrayConvertor, BooleanConvertor, ClassConvertor, CustomTypeConvertor,
     EnumConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, LengthConvertor, MapConvertor,
-    MaterializedClassConvertor, NullConvertor, NumberConvertor, OptionConvertor, PredefinedConvertor, StringConvertor,
+    MaterializedClassConvertor, NullConvertor, NumberConvertor, OptionConvertor, PredefinedConvertor, ResourceConvertor, StringConvertor,
     ToStringConvertor, TupleConvertor, TypeAliasConvertor, UndefinedConvertor, UnionConvertor
 } from "./Convertors"
 import { DependencySorter } from "./DependencySorter"
@@ -95,7 +95,7 @@ export interface StructVisitor {
     visitInseparable(): void
 }
 
-class StructDescriptor {
+export class StructDescriptor {
     supers: DeclarationTarget[] = []
     deps = new Set<DeclarationTarget>()
     isPacked: boolean = false
@@ -533,6 +533,9 @@ export class DeclarationTable {
             if (identName(type.qualifier) === "Callback") {
                 return new FunctionConvertor(param, this, type)
             }
+            if (identName(type.qualifier) === "Resource") {
+                return new ResourceConvertor(param, this)
+            }
             return new ImportTypeConvertor(param, this, type)
         }
         if (ts.isTypeReferenceNode(type)) {
@@ -546,7 +549,7 @@ export class DeclarationTable {
             return new UnionConvertor(param, this, type)
         }
         if (ts.isTypeLiteralNode(type)) {
-            return new AggregateConvertor(param, this, type)
+            return AggregateConvertor.fromTypeLiteral(param, this, type)
         }
         if (ts.isArrayTypeNode(type)) {
             return new ArrayConvertor(param, this, type, type.elementType)
@@ -1302,6 +1305,13 @@ export class DeclarationTable {
         }
 
         if (target instanceof PrimitiveType) {
+            if (target === PrimitiveType.Resource) {
+                result.addField(new FieldRecord(PrimitiveType.Number, undefined, "id"))
+                result.addField(new FieldRecord(PrimitiveType.Number, undefined, "type"))
+                result.addField(new FieldRecord(PrimitiveType.String, undefined, "name"))
+                result.addField(new FieldRecord(PrimitiveType.String, undefined, "bundleName"))
+                result.addField(new FieldRecord(PrimitiveType.String, undefined, "moduleName"))
+            }
             return result
         }
         else if (ts.isArrayTypeNode(target)) {
