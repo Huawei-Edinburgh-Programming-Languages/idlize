@@ -15,7 +15,9 @@
 
 package org.koalaui.arkoala;
 
+import java.nio.ByteBuffer;
 import java.util.Map;
+import java.util.function.Function;
 
 public class Main {
     public static void main(String[] args) {
@@ -26,6 +28,7 @@ public class Main {
         Main.checkPerf2(5*1000*1000);
         Main.checkPerf3(5*1000*1000);
         Main.checkPeers();
+        Main.checkCallback();
         //NativeModule._StopGroupedLog(1);
     }
 
@@ -139,6 +142,36 @@ public class Main {
         var unionWithMap = new Union_double_Map_Double_String(doubleStringMap);
         peer.testUnionWithMapAttribute(unionWithMap); // +union
         peer.testMapAttribute(doubleStringMap); // +map in peer method
+    }
+
+    static void checkCallback() {
+        Integer id1 = CallbackRegistry.wrap(new CallbackType() {
+            @Override
+            public int apply(ByteBuffer args, int length) {
+                return 2024;
+            }
+        });
+        Integer id2 = CallbackRegistry.wrap(new CallbackType() {
+            @Override
+            public int apply(ByteBuffer args, int length) {
+                return 2025;
+            }
+        });
+
+        TestUtils.assertEquals("Call callback 1", 2024, CallbackRegistry.call(id1, ByteBuffer.wrap(new byte[] { }), 0));
+        TestUtils.assertEquals("Call callback 2", 2025, CallbackRegistry.call(id2, ByteBuffer.wrap(new byte[] { }), 0));
+        TestUtils.assertThrows("Call disposed callback 1", new Function<Void, Integer>() {
+            @Override
+            public Integer apply(Void v) {
+                return CallbackRegistry.call(id1, ByteBuffer.wrap(new byte[] { }), 0);
+            }
+        });
+        TestUtils.assertThrows("Call callback 0", new Function<Void, Integer>() {
+            @Override
+            public Integer apply(Void v) {
+                return CallbackRegistry.call(0, ByteBuffer.wrap(new byte[] { 2, 4, 6, 8 }), 4);
+            }
+        });
     }
 }
 
