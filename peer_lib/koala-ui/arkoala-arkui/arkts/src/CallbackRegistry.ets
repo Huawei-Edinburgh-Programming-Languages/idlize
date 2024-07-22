@@ -31,15 +31,16 @@ class CallbackRegistry {
     static INSTANCE = new CallbackRegistry()
 
     private callbacks = new Map<int, CallbackRecord>()
-    private id = 1
+    private id = 0
 
     constructor() {
-        this.callbacks.set(0, new CallbackRecord(
+        this.callbacks.set(this.id, new CallbackRecord(
             (args: byte[], length: int): int => {
                 console.log(`Callback 0 called with args = ${args} and length = ${length}`)
                 throw new Error(`Null callback called`)
             }, false)
         )
+        this.id++
     }
 
     wrap(callback: CallbackType, autoDisposable: boolean): int {
