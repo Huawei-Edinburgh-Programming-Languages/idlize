@@ -14,11 +14,6 @@
  */
 
 const dtsImports = `import {
-    ClassWithConstructorAndFieldsDTS,
-    ClassWithConstructorDTS,
-    ClassDTS,
-    TouchTestInfo,
-    TabBarSymbol,
     DotIndicator
 } from "%ROOT%/shared/dts-exports"
 `

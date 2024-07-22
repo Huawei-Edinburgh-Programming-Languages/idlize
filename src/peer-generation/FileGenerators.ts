@@ -240,14 +240,14 @@ export function makeTSSerializer(library: PeerLibrary): string {
     writeSerializer(library, printer)
     //TODO: need to determine imports when generating serializer
     const extraImports = library.declarationTable.language === Language.ARKTS ?
-        'import { AdaptiveColor, BlurOptions, BlurStyle, BorderStyle, CustomBuilder, DismissReason, DragPreviewMode, GradientDirection, ShadowStyle, ShadowType, SheetMode, SheetSize, SheetType, StateStyles, ThemeColorMode, ShadowOptions, LocalizedEdgeColors, LocalizedEdgeWidths, SheetTitleOptions, SheetOptions, BaseEvent, RectResult, BlurStyleOptions, BindOptions, UIGestureEvent, BorderOptions, DragInteractionOptions, DragPreviewOptions, BackgroundBlurStyleOptions, Padding, EdgeWidths, EdgeColors, EdgeStyles } from "@arkoala/arkui/ArkCommonInterfaces"\n' +
+        'import { AdaptiveColor, BlurOptions, BlurStyle, BorderStyle, CustomBuilder, DismissReason, DragPreviewMode, GradientDirection, ShadowStyle, ShadowType, SheetMode, SheetSize, SheetType, StateStyles, ThemeColorMode, ShadowOptions, LocalizedEdgeColors, LocalizedEdgeWidths, SheetTitleOptions, SheetOptions, BaseEvent, RectResult, BlurStyleOptions, BindOptions, UIGestureEvent, BorderOptions, DragInteractionOptions, DragPreviewOptions, BackgroundBlurStyleOptions, Padding, EdgeWidths, EdgeColors, EdgeStyles, TouchTestInfo } from "@arkoala/arkui/ArkCommonInterfaces"\n' +
         'import { FontWeight, FontStyle, TextOverflow, TextHeightAdaptivePolicy, Color, ColoringStrategy } from "@arkoala/arkui/ArkEnumInterfaces"\n' +
         'import { SelectedMode, BoardStyle, IndicatorStyle } from "@arkoala/arkui/ArkTabContentInterfaces"\n' +
         'import { LabelStyle } from "@arkoala/arkui/ArkButtonInterfaces"\n' +
         'import { NativeEmbedInfo, NativeEmbedDataInfo } from "@arkoala/arkui/ArkWebInterfaces"\n' +
         'import { DividerOptions, TextCascadePickerRangeContent, TextPickerRangeContent, TextPickerOptions } from "@arkoala/arkui/ArkTextPickerInterfaces"\n' +
         'import { VisibleListContentInfo } from "@arkoala/arkui/ArkListInterfaces"\n' +
-        'import { ArrayRefNumberInterfaceDTS, BooleanInterfaceDTS, OptionInterfaceDTS, TupleInterfaceDTS, UnionOptionalInterfaceDTS, UnionInterfaceDTS, StringInterfaceDTS, NumberInterfaceDTS } from "@arkoala/arkui/ArkTestInterfaces"\n' +
+        'import { ArrayRefNumberInterfaceDTS, BooleanInterfaceDTS, OptionInterfaceDTS, TupleInterfaceDTS, UnionOptionalInterfaceDTS, UnionInterfaceDTS, StringInterfaceDTS, NumberInterfaceDTS, ClassDTS, ClassWithConstructorAndFieldsDTS, ClassWithConstructorDTS} from "@arkoala/arkui/ArkTestInterfaces"\n' +
         'import { BaseGestureEvent, FingerInfo } from "@arkoala/arkui/ArkGestureInterfaces"\n' +
         'import { Dimension, Length, LengthMetrics, Resource, ResourceColor, ResourceStr, LocalizedPadding, Font } from "../ArkUnitsInterfaces"\n' +
         'import { ImageData, RenderingContextSettings } from "../ArkCanvasInterfaces"\n'

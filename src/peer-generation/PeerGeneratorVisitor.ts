@@ -941,6 +941,7 @@ export class PeerProcessor {
             if (!isPeerDecl && (ts.isClassDeclaration(dep) || ts.isInterfaceDeclaration(dep))) {
                 if (isBuilderClass(dep)) {
                     this.processBuilder(dep, isActualDeclaration)
+                    continue
                 } else if (isMaterialized(dep)) {
                     this.processMaterialized(dep, isActualDeclaration)
                     continue
@@ -974,29 +975,19 @@ export class PeerProcessor {
         }
     }
 }
+
 function needImportFeature(language: Language, decl: ts.Declaration): boolean {
     if (language == Language.ARKTS) {
-        if (ts.isInterfaceDeclaration(decl) && isMaterialized(decl)) {
-            return true
-        }
-        if (ts.isClassDeclaration(decl) && ["ImageData",
-            "GestureRecognizer",
-            "RenderingContextSettings",
-            "CanvasRenderingContext2D",
-            "ClassWithConstructorAndMethodsDTS",
-            "ClassWithConstructorAndStaticMethodsDTS",
-            "ClassWithConstructorAndFieldsAndMethodsDTS",
-            "ClassWithConstructorAndNonOptionalParamsDTS",
-            "ClassWithConstructorAndSomeOptionalParamsDTS",
-            "ClassWithConstructorAndAllOptionalParamsDTS",
-            "ClassWithConstructorAndWithoutParamsDTS",
-            "DrawingRenderingContext"].includes(decl.name!.text)) {
-            return true
+        if (ts.isClassDeclaration(decl)
+            && ["CalendarPickerAttribute",
+            "CommonMethod",
+            "TestAttribute"].includes(decl.name!.text)) {
+            return false
         }
         return ts.isEnumDeclaration(decl)
             || ts.isInterfaceDeclaration(decl)
             || ts.isTypeAliasDeclaration(decl)
-            // || ts.isClassDeclaration(decl)
+            || ts.isClassDeclaration(decl)
     }
     return true
 }
