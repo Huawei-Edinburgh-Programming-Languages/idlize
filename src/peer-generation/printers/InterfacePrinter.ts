@@ -268,35 +268,54 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
     constructor(private readonly writer: LanguageWriter,
                 private readonly peerLibrary: PeerLibrary) {
     }
+
     convertEnum(node: ts.EnumDeclaration): void {
         throw `Wrong enum type conversion: ${node.name.text}`
     }
+
     convertClass(node: ts.ClassDeclaration): void {
         let className = this.declarationName(node)
         let extendsClause = this.extendsClause(node)
-        let classOrInterface = ts.isClassDeclaration(node) ? `class` : `interface`
-        if (this.peerLibrary.isComponentDeclaration(node)) {
-            // because we write `ArkBlank implements BlankAttributes`
-            classOrInterface = `interface`
-        }
+        // because we write `ArkBlank implements BlankAttributes`
+        let classOrInterface = this.peerLibrary.isComponentDeclaration(node) ? `interface` : `class`
         this.writer.print(`export declare ${classOrInterface} ${className} ${extendsClause} {`)
         this.writer.pushIndent()
-        this.declarationMembers(node)
-            .forEach((member) => {
-                const methodName = member.name.getText()
-                const returnType = member.type?.getText()
-                const parameters = member.parameters.map((param) => {
-                    if (param.type != undefined && ts.isTypeLiteralNode(param.type)) {
-                        return `${param.name.getText()}: ${param.type.members.map(it => it.name?.getText()).join('_')}`
-                    }
-                    return param.getText()
-                }).join(',')
-                this.writer.print(`${methodName}(${parameters}): ${returnType};`)
-                // this.writer.print(member.getText())
-            })
+        this.declarationMembers(node).forEach(member => {
+            if (ts.isPropertyDeclaration(member)) {
+                this.printProperty(member)
+            } else {
+                this.printMethod(member)
+            }
+        })
         this.writer.popIndent()
         this.writer.print(`}`)
     }
+
+    private printProperty(property: ts.PropertyDeclaration) {
+        const propName = property.name.getText()
+        const propType = property.type?.getText()
+        const isOptional = property.questionToken
+        const modifiers = property.modifiers?.map(it => {
+            if (it.kind == ts.SyntaxKind.ReadonlyKeyword) {
+                return it.getText()
+            }
+            throw "Unexpected property modifier: " + it.kind
+        }) ?? ""
+        this.writer.print(`${propName}${isOptional ? "?" : ""}: ${propType};`)
+    }
+
+    private printMethod(method: ts.MethodDeclaration) {
+        const methodName = method.name.getText()
+        const returnType = method.type?.getText()
+        const parameters = method.parameters.map((param) => {
+            if (param.type != undefined && ts.isTypeLiteralNode(param.type)) {
+                return `${param.name.getText()}: ${param.type.members.map(it => it.name?.getText()).join('_')}`
+            }
+            return param.getText()
+        }).join(',')
+        this.writer.print(`${methodName}(${parameters}): ${returnType};`)
+    }
+
     private extendsClause(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
         if (!node.heritageClauses?.length)
             return ``
@@ -309,14 +328,17 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
         }
         return `extends ${parent.getText()}`
     }
-    private declarationMembers(node: ts.ClassDeclaration | ts.InterfaceDeclaration): readonly (ts.MethodDeclaration)[] {
-        if (ts.isClassDeclaration(node)) {
-            const members = node.members.filter(it => !ts.isConstructorDeclaration(it))
-            if (members.every(ts.isMethodDeclaration))
-                return members
+
+    private declarationMembers(node: ts.ClassDeclaration): ts.MethodDeclaration[] | ts.PropertyDeclaration[] {
+        const members = node.members.filter(it => !ts.isConstructorDeclaration(it))
+        if (members.every(ts.isMethodDeclaration))
+            return members
+        if (members.every(ts.isPropertyDeclaration)) {
+            return members
         }
         return []
     }
+
     convertInterface(node: ts.InterfaceDeclaration): void {
         this.writer.writeInterface(this.declarationName(node), writer => {
             this.peerLibrary.declarationTable.targetStruct(node).getFields().map(it => {
@@ -342,12 +364,14 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
             this.writer.print(`export declare type ${node.name.text}${maybeTypeArguments} = ${this.mapType(node.type)}`)
         }
     }
+
     private declarationName(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
         let name = ts.idText(node.name as ts.Identifier)
         let typeParams = node.typeParameters?.map(it => it.name.text).join(', ')
         let typeParamsClause = typeParams ? `<${typeParams}>` : ``
         return `${name}${typeParamsClause}`
     }
+
     private mapType(type: ts.TypeNode | undefined): string {
         if (type !== undefined) {
             return this.typeConvertor.convert(type)

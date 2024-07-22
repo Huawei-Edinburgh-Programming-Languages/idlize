@@ -981,7 +981,16 @@ function needImportFeature(language: Language, decl: ts.Declaration): boolean {
         }
         if (ts.isClassDeclaration(decl) && ["ImageData",
             "GestureRecognizer",
-            "RenderingContextSettings"].includes(decl.name!.text)) {
+            "RenderingContextSettings",
+            "CanvasRenderingContext2D",
+            "ClassWithConstructorAndMethodsDTS",
+            "ClassWithConstructorAndStaticMethodsDTS",
+            "ClassWithConstructorAndFieldsAndMethodsDTS",
+            "ClassWithConstructorAndNonOptionalParamsDTS",
+            "ClassWithConstructorAndSomeOptionalParamsDTS",
+            "ClassWithConstructorAndAllOptionalParamsDTS",
+            "ClassWithConstructorAndWithoutParamsDTS",
+            "DrawingRenderingContext"].includes(decl.name!.text)) {
             return true
         }
         return ts.isEnumDeclaration(decl)
