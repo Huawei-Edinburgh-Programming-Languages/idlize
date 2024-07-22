@@ -16,7 +16,18 @@
 import { Language, renameClassToMaterialized, capitalize, removeExt } from "../../util";
 import { PeerLibrary } from "../PeerLibrary";
 import { writePeerMethod } from "./PeersPrinter"
-import { LanguageWriter, MethodModifier, NamedMethodSignature, Method, Type, createLanguageWriter, FieldModifier, MethodSignature, copyMethod } from "../LanguageWriters";
+import {
+    LanguageWriter,
+    MethodModifier,
+    NamedMethodSignature,
+    Method,
+    Type,
+    createLanguageWriter,
+    FieldModifier,
+    MethodSignature,
+    copyMethod,
+    BlockStatement
+} from "../LanguageWriters";
 import { copyMaterializedMethod, MaterializedClass } from "../Materialized"
 import { makeMaterializedPrologue, tsCopyrightAndWarning } from "../FileGenerators";
 import { OverloadsPrinter, groupOverloads, collapseSameNamedMethods } from "./OverloadsPrinter";
