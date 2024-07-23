@@ -220,7 +220,7 @@ export function idlToString(name: string, content: string): string {
     return printer.output.join("\n")
 }
 
-export function printTypeForTS(type: IDLType | undefined, undefinedToVoid?: boolean): string {
+export function printTypeForTS(type: IDLType | undefined, undefinedToVoid?: boolean, sequenceToArrayInterface: boolean = false): string {
     if (!type) throw new Error("Missing type")
     if (type.name == "undefined" && undefinedToVoid) return "void"
     if (type.name == "int32" || type.name == "float32") return "number"
@@ -228,8 +228,11 @@ export function printTypeForTS(type: IDLType | undefined, undefinedToVoid?: bool
     if (type.name == "this") return "T"
     if (type.name == "void_") return "void"
     if (isPrimitiveType(type)) return type.name
-    if (isContainerType(type))
+    if (isContainerType(type)) {
+        if (!sequenceToArrayInterface && type.name == "sequence") 
+            return `${type.elementType.map(it => printTypeForTS(it)).join(",")}[]`
         return `${mapContainerType(type.name)}<${type.elementType.map(it => printTypeForTS(it)).join(",")}>`
+    }
     if (isReferenceType(type)) return toTypeName(type, "TypeArguments")
     if (isUnionType(type)) return `(${type.types.map(it => printTypeForTS(it)).join("|")})`
     if (isEnumType(type)) return type.name
