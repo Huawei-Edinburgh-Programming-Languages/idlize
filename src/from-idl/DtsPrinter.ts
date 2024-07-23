@@ -133,7 +133,7 @@ export class CustomPrintVisitor  {
         let isProtected = hasExtAttribute(node, "Protected")
         if (isCommonMethod) {
             let returnType = this.currentInterface!.name == "CommonMethod" ? "T" : this.currentInterface!.name
-            this.print(`${getName(node)}(value: ${printTypeForTS(node.type)}): ${returnType};`)
+            this.print(`${getName(node)}(value: ${printTypeForTS(node.type, undefined, undefined, isCommonMethod)}): ${returnType};`)
         } else if (hasExtAttribute(node, "Accessor")) {
             const accessorName = getExtAttribute(node, "Accessor")
             if (accessorName == "Getter") {
@@ -220,11 +220,11 @@ export function idlToString(name: string, content: string): string {
     return printer.output.join("\n")
 }
 
-export function printTypeForTS(type: IDLType | undefined, undefinedToVoid?: boolean, sequenceToArrayInterface: boolean = false): string {
+export function printTypeForTS(type: IDLType | undefined, undefinedToVoid?: boolean, sequenceToArrayInterface: boolean = false, isCommonMethod = false): string {
     if (!type) throw new Error("Missing type")
     if (type.name == "undefined" && undefinedToVoid) return "void"
     if (type.name == "DOMString") return "string"
-    if (type.name == "this") return "T"
+    if (isCommonMethod && type.name == "this") return "T"
     if (type.name == "void_") return "void"
     if (isPrimitiveType(type)) return type.name
     if (isContainerType(type)) {
