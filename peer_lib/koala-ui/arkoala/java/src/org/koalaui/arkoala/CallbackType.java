@@ -14,8 +14,6 @@
  */
 package org.koalaui.arkoala;
 
-import java.nio.ByteBuffer;
-
 public interface CallbackType {
-    public int apply(ByteBuffer args, int length);
+    public int apply(byte[] args, int length);
 }
