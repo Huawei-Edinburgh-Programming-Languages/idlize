@@ -14,7 +14,6 @@
  */
 package org.koalaui.arkoala;
 
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.TreeMap;
 
@@ -27,13 +26,17 @@ class CallbackRegistry {
         CallbackRegistry.callbacks.put(id, new CallbackRecord(
             new CallbackType() {
                 @Override
-                public int apply(ByteBuffer args, int length) {
-                    System.out.printf("Callback 0 called with args = %s and length = %d\n", Arrays.toString(args.array()), length);
+                public int apply(byte[] args, int length) {
+                    System.out.printf("Callback 0 called with args = %s and length = %d\n", Arrays.toString(args), length);
                     throw new Error("Null callback called");
                 }
             }, false)
         );
         CallbackRegistry.id++;
+    }
+
+    private CallbackRegistry() {
+        
     }
 
     public static Integer wrap(CallbackType callback) {
@@ -48,7 +51,7 @@ class CallbackRegistry {
         return id;
     }
 
-    public static int call(Integer id, ByteBuffer args, int length) {
+    public static int call(Integer id, byte[] args, int length) {
         if (!CallbackRegistry.callbacks.containsKey(id)) {
             System.out.printf("Callback %d is not known\n", id);
             throw new Error(String.format("Disposed or unwrapped callback called (id = %d)", id));
