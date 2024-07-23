@@ -13,56 +13,7 @@
  * limitations under the License.
  */
 
-import { AdaptiveColor,
-         BackgroundBlurStyleOptions,
-         BorderStyle,
-         BlurStyle,
-         BlurOptions,
-         CustomBuilder,
-         DismissReason,
-         DragInteractionOptions,
-         DragPreviewMode,
-         DragPreviewOptions,
-         EdgeWidths,
-         GradientDirection,
-         ShadowStyle,
-         ShadowType,
-         SheetMode,
-         SheetSize,
-         SheetOptions,
-         SheetType,
-         SourceTool,
-         StateStyles,
-         SymbolGlyphModifier,
-         RectResult,
-         ThemeColorMode,
-         UIGestureEvent } from '@arkoala/arkui/ArkCommonInterfaces'
-import { GestureInterface
-         GestureJudgeResult,
-         GestureMask,
-         GesturePriority } from '@arkoala/arkui/ArkGestureInterfaces'
-import { CalendarAlign } from '@arkoala/arkui/ArkCalendarPickerInterfaces'
-import { EnumDTS } from '@arkoala/arkui/ArkTestInterfaces'
-import { NavigationTitleMode } from '@arkoala/arkui/ArkNavigationInterfaces'
-import { HorizontalAlign } from '@arkoala/arkui/ArkColumnInterfaces'
-import { SelectedMode } from '@arkoala/arkui/ArkTabContentInterfaces'
-import { BarMode } from '@arkoala/arkui/ArkTabsInterfaces'
-import { Color,
-         ColoringStrategy,
-         FontWeight,
-         FontStyle,
-         TextHeightAdaptivePolicy,
-         TextOverflow } from '@arkoala/arkui/ArkEnumInterfaces'
-import { Dimension,
-         Font,
-         Length,
-         LengthMetrics,
-         LengthMetricsUnit,
-         LocalizedPadding,
-         Resource,
-         ResourceColor,
-         ResourceStr } from "@arkoala/arkui/ArkUnitsInterfaces"
-import { NativeEmbedDataInfo } from '@arkoala/arkui/ArkWebInterfaces'
+import { Length } from "@arkoala/arkui/ArkUnitsInterfaces"
 
 declare class Indicator<T> {}
 
