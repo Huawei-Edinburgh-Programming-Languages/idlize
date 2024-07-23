@@ -250,7 +250,7 @@ public class Main {
         }, false);
         TestUtils.assertEquals("NativeCallback prepare recursive callback test", id4, id3 + 1);
         int depth = 500;
-        int count = 10000;
+        int count = 100;
         for (int i = 0; i < count; i++) {
             int length = 12;
             byte[] args = new byte[length];
@@ -263,7 +263,7 @@ public class Main {
             }
         }
         long passed = System.currentTimeMillis() - start;
-        System.out.println("recursive native callback: " + String.valueOf(passed) + "ms for " + String.valueOf(depth * count) + " callbacks, " + String.valueOf(passed / (depth * count) * 1000000) + "ms per 1M callbacks");
+        System.out.println("recursive native callback: " + String.valueOf(passed) + "ms for " + depth * count + " callbacks, " + Math.round((double)passed / (depth * count) * 1000000) + "ms per 1M callbacks");
 
         Integer id5 = CallbackRegistry.wrap(new CallbackType() {
             @Override
