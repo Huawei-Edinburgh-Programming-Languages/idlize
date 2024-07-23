@@ -15,11 +15,11 @@
 package org.koalaui.arkoala;
 
 import java.util.Arrays;
-import java.util.TreeMap;
+import java.util.HashMap;
 
 class CallbackRegistry {
 
-    private static TreeMap<Integer, CallbackRecord> callbacks = new TreeMap<Integer, CallbackRecord>();
+    private static HashMap<Integer, CallbackRecord> callbacks = new HashMap<Integer, CallbackRecord>();
     private static Integer id = 0;
 
     static {
