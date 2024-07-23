@@ -29,7 +29,7 @@ public class TestUtils {
         boolean caught = false;
         try {
             fn.apply(null);
-        } catch (Error e) {
+        } catch (Throwable e) {
             caught = true;
         }
         if (!caught) {
