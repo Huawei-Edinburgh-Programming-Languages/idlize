@@ -223,7 +223,6 @@ export function idlToString(name: string, content: string): string {
 export function printTypeForTS(type: IDLType | undefined, undefinedToVoid?: boolean, sequenceToArrayInterface: boolean = false): string {
     if (!type) throw new Error("Missing type")
     if (type.name == "undefined" && undefinedToVoid) return "void"
-    if (type.name == "int32" || type.name == "float32") return "number"
     if (type.name == "DOMString") return "string"
     if (type.name == "this") return "T"
     if (type.name == "void_") return "void"
