@@ -92,19 +92,21 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
 
         const interfaces: string[] = []
         if (clazz.isInterface) {
-
-            selfInterface = `I_${clazz.className}`
-            for (const grouped of groupOverloads(clazz.methods)) {
-                const collapsedMethod = collapseSameNamedMethods(
-                    Array.from(grouped)
-                    .sort((a, b) => b.argConvertors.length - a.argConvertors.length)
-                    .map(it => it.method)
-                )
-                printer.writeInterface(selfInterface, (writer) => {
-                    writer.writeMethodDeclaration(collapsedMethod.name,
-                        collapsedMethod.signature,
-                        collapsedMethod.modifiers)
-                })
+            // self-interface is not supported ArkTS
+            if (this.library.declarationTable.language == Language.ARKTS) {
+                selfInterface = `I_${clazz.className}`
+                for (const grouped of groupOverloads(clazz.methods)) {
+                    const collapsedMethod = collapseSameNamedMethods(
+                        Array.from(grouped)
+                            .sort((a, b) => b.argConvertors.length - a.argConvertors.length)
+                            .map(it => it.method)
+                    )
+                    printer.writeInterface(selfInterface, (writer) => {
+                        writer.writeMethodDeclaration(collapsedMethod.name,
+                            collapsedMethod.signature,
+                            collapsedMethod.modifiers)
+                    })
+                }
             }
 
             if (selfInterface) interfaces.push(selfInterface)
@@ -165,7 +167,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
 
                 const allOptional = ctorSig.args.every(it => it.nullable)
                 const hasStaticMethods = clazz.methods.some(it => it.method.modifiers?.includes(MethodModifier.STATIC))
-                const allUndefined = ctorSig.argsNames.map(it => `${it} !== undefined`).join(` && `)
+                const allDefinedArgs = ctorSig.argsNames.map(it => `${it} !== undefined`).join(` && `)
 
                 if (hasStaticMethods) {
                     if (allOptional) {
@@ -180,7 +182,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                         const args = ctorSig.args.map((it, index) => writer.makeString(`${ctorSig.argsNames[index]}`))
                         writer.writeStatement(
                             writer.makeCondition(
-                                writer.makeString(ctorSig.args.length === 0 ? "true" : allUndefined),
+                                writer.makeString(ctorSig.args.length === 0 ? "true" : allDefinedArgs),
                                 new BlockStatement([
                                     writer.makeAssign("ctorPtr", Type.Pointer,
                                         writer.makeMethodCall(clazz.className, "ctor", args),

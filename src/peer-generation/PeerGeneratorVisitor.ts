@@ -928,9 +928,11 @@ export class PeerProcessor {
         for (const dep of allDeclarations) {
             if (isSyntheticDeclaration(dep)) {
                 this.declDependenciesCollector.convert(dep).forEach(it => {
-                    if (this.isSourceDecl(it) && (PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it))
-                        && needImportFeature(this.library.declarationTable.language, it))
+                    if (this.isSourceDecl(it)
+                        && (PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it))
+                        && needImportFeature(this.library.declarationTable.language, it)) {
                         addSyntheticDeclarationDependency(dep, convertDeclToFeature(this.library, it))
+                    }
                 })
                 continue
             }
@@ -978,6 +980,7 @@ export class PeerProcessor {
 
 function needImportFeature(language: Language, decl: ts.Declaration): boolean {
     if (language == Language.ARKTS) {
+        //TODO: Skip these classes temporarily, this crashes es2panda.
         if (ts.isClassDeclaration(decl)
             && ["CalendarPickerAttribute",
             "CommonMethod",

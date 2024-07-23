@@ -274,59 +274,36 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
     }
 
     convertClass(node: ts.ClassDeclaration): void {
-        let className = this.declarationName(node)
-        let extendsClause = this.extendsClause(node)
-        // because we write `ArkBlank implements BlankAttributes`
-        let classOrInterface = this.peerLibrary.isComponentDeclaration(node) ? `interface` : `class`
-        this.writer.print(`export declare ${classOrInterface} ${className} ${extendsClause} {`)
-        this.writer.pushIndent()
-        this.declarationMembers(node).forEach(member => {
-            if (ts.isPropertyDeclaration(member)) {
-                this.printProperty(member)
-            } else {
-                this.printMethod(member)
-            }
-        })
-        this.writer.popIndent()
-        this.writer.print(`}`)
-    }
-
-    private printProperty(property: ts.PropertyDeclaration) {
-        const propName = property.name.getText()
-        const propType = property.type?.getText()
-        const isOptional = property.questionToken
-        const modifiers = property.modifiers?.map(it => {
-            if (it.kind == ts.SyntaxKind.ReadonlyKeyword) {
-                return it.getText()
-            }
-            throw "Unexpected property modifier: " + it.kind
-        }) ?? ""
-        this.writer.print(`${propName}${isOptional ? "?" : ""}: ${propType};`)
-    }
-
-    private printMethod(method: ts.MethodDeclaration) {
-        const methodName = method.name.getText()
-        const returnType = method.type?.getText()
-        const parameters = method.parameters.map((param) => {
-            if (param.type != undefined && ts.isTypeLiteralNode(param.type)) {
-                return `${param.name.getText()}: ${param.type.members.map(it => it.name?.getText()).join('_')}`
-            }
-            return param.getText()
-        }).join(',')
-        this.writer.print(`${methodName}(${parameters}): ${returnType};`)
-    }
-
-    private extendsClause(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string {
-        if (!node.heritageClauses?.length)
-            return ``
-        if (this.peerLibrary.isComponentDeclaration(node))
-            // do not extend parent component interface to provide smooth integration
-            return ``
-        let parent = node.heritageClauses[0]?.types[0]
-        if (node.heritageClauses!.some(it => it.token === ts.SyntaxKind.ImplementsKeyword)) {
-            return `implements ${parent.getText()}`
+        const writer = (writer: LanguageWriter) => {
+            this.declarationMembers(node).forEach(member => {
+                if (ts.isPropertyDeclaration(member)) {
+                    printProperty(writer, member)
+                } else {
+                    printMethod(writer, member)
+                }
+            })
+        };
+        if (this.peerLibrary.isComponentDeclaration(node)) {
+            // because we write `ArkBlank implements BlankAttributes`
+            this.writer.writeInterface(this.declarationName(node), writer, this.extendsClause(node), true)
+        } else {
+            this.writer.writeClass(this.declarationName(node), writer, undefined, this.extendsClause(node), undefined, true)
         }
-        return `extends ${parent.getText()}`
+    }
+
+    private extendsClause(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string[] | undefined {
+        if (!node.heritageClauses?.length) {
+            return undefined
+        }
+        if (this.peerLibrary.isComponentDeclaration(node)) {
+            // do not extend parent component interface to provide smooth integration
+            return undefined
+        }
+        const parent = node.heritageClauses[0]?.types[0]
+        if (node.heritageClauses!.some(it => it.token === ts.SyntaxKind.ImplementsKeyword)) {
+            return [parent.getText()]
+        }
+        return [parent.getText()]
     }
 
     private declarationMembers(node: ts.ClassDeclaration): ts.MethodDeclaration[] | ts.PropertyDeclaration[] {
@@ -441,4 +418,29 @@ export function createDeclarationConvertor(writer: LanguageWriter, peerLibrary: 
     return writer.language == Language.TS
         ? new TSDeclConvertor(writer, peerLibrary)
         : new ArkTSDeclConvertor(writer, peerLibrary)
+}
+
+function printProperty(writer: LanguageWriter, property: ts.PropertyDeclaration) {
+    const propName = property.name.getText()
+    const propType = property.type?.getText()
+    const isOptional = property.questionToken
+    const modifiers = property.modifiers?.map(it => {
+        if (it.kind == ts.SyntaxKind.ReadonlyKeyword) {
+            return it.getText()
+        }
+        throw "Unexpected property modifier: " + it.kind
+    }) ?? ""
+    writer.print(`${propName}${isOptional ? "?" : ""}: ${propType};`)
+}
+
+function printMethod(writer: LanguageWriter, method: ts.MethodDeclaration) {
+    const methodName = method.name.getText()
+    const returnType = method.type?.getText()
+    const parameters = method.parameters.map((param) => {
+        if (param.type != undefined && ts.isTypeLiteralNode(param.type)) {
+            return `${param.name.getText()}: ${param.type.members.map(it => it.name?.getText()).join('_')}`
+        }
+        return param.getText()
+    }).join(',')
+    writer.print(`${methodName}(${parameters}): ${returnType};`)
 }
