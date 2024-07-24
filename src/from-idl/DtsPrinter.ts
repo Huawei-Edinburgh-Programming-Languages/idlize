@@ -56,6 +56,12 @@ export class CustomPrintVisitor  {
             ?.initializer as string
         if (imports)
             this.print(imports.slice(1, -1))
+
+        const exports = node.elements
+            .find(it => it.name === "exports")
+            ?.initializer as string
+        if (exports)
+            this.print(exports.slice(1, -1))
     }
 
     printInterface(node: IDLInterface) {

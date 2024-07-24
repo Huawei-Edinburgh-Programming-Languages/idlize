@@ -57,6 +57,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
     private currentScope:  IDLEntry[] = []
     scopes: IDLEntry[][] = []
     imports: string[] = []
+    exports: string[] = []
     namespaces: string[] = []
     globalConstants: IDLConstant[] = []
     globalFunctions: IDLMethod[] = []
@@ -109,6 +110,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             elements: [
                 this.makeEnumMember("package", "org.openharmony.arkui"),
                 this.makeEnumMember("imports", this.imports.join("\n")),
+                this.makeEnumMember("exports", this.exports.join("\n")),
             ]
         } as IDLEnum)
     }
@@ -140,6 +142,8 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             this.globalConstants.push(...this.serializeConstants(node))
         } else if (ts.isImportDeclaration(node)) {
             this.imports.push(node.getText())
+        } else if (ts.isExportDeclaration(node)) {
+            this.exports.push(node.getText())
         }
     }
 
