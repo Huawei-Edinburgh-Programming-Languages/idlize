@@ -26,7 +26,7 @@ import {
     FieldModifier,
     MethodSignature,
     copyMethod,
-    BlockStatement
+    BlockStatement, LanguageStatement
 } from "../LanguageWriters";
 import { copyMaterializedMethod, MaterializedClass } from "../Materialized"
 import { makeMaterializedPrologue, tsCopyrightAndWarning } from "../FileGenerators";
@@ -155,37 +155,38 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
 
                 const allOptional = ctorSig.args.every(it => it.nullable)
                 const hasStaticMethods = clazz.methods.some(it => it.method.modifiers?.includes(MethodModifier.STATIC))
-                const allDefinedArgs = ctorSig.argsNames.map(it => `${it} !== undefined`).join(` && `)
-
-                if (hasStaticMethods) {
-                    if (allOptional) {
-                        if (ctorSig.args.length == 0) {
-                            writer.print(`// Constructor does not have parameters.`)
-                        } else {
-                            writer.print(`// All constructor parameters are optional.`)
-                        }
-                        writer.print(`// It means that the static method call invokes ctor method as well`)
-                        writer.print(`// when all arguments are undefined.`)
+                if (hasStaticMethods && allOptional) {
+                    if (ctorSig.args.length == 0) {
+                        writer.print(`// Constructor does not have parameters.`)
                     } else {
-                        const args = ctorSig.args.map((it, index) => writer.makeString(`${ctorSig.argsNames[index]}`))
-                        writer.writeStatement(
-                            writer.makeCondition(
-                                writer.makeString(ctorSig.args.length === 0 ? "true" : allDefinedArgs),
-                                new BlockStatement([
-                                    writer.makeAssign("ctorPtr", Type.Pointer,
-                                        writer.makeMethodCall(clazz.className, "ctor", args),
-                                        true),
-                                    writer.makeAssign(
-                                        "this.peer",
-                                        finalizableType,
-                                        writer.makeString(`new Finalizable(ctorPtr, ${clazz.className}.getFinalizer())`),
-                                        false
-                                    )
-                                ], false)
-                            )
-                        )
+                        writer.print(`// All constructor parameters are optional.`)
                     }
+                    writer.print(`// It means that the static method call invokes ctor method as well`)
+                    writer.print(`// when all arguments are undefined.`)
                 }
+                let ctorStatements: LanguageStatement = new BlockStatement([
+                    writer.makeAssign("ctorPtr", Type.Pointer,
+                        writer.makeMethodCall(clazz.className, "ctor",
+                            ctorSig.args.map((it, index) => writer.makeString(`${ctorSig.argsNames[index]}`))),
+                        true),
+                    writer.makeAssign(
+                        "this.peer",
+                        finalizableType,
+                        writer.makeString(`new Finalizable(ctorPtr, ${clazz.className}.getFinalizer())`),
+                        false
+                    )
+                ], false)
+                if (!allOptional) {
+                    ctorStatements =
+                        writer.makeCondition(
+                            ctorSig.args.length === 0 ? writer.makeString("true") :
+                                writer.makeNaryOp('&&', ctorSig.argsNames.map(it =>
+                                    writer.makeNaryOp('!==', [writer.makeString(it), writer.makeUndefined()]))
+                                ),
+                            ctorStatements
+                        )
+                }
+                writer.writeStatement(ctorStatements)
             })
 
             printPeerFinalizer(clazz, writer)
