@@ -378,26 +378,34 @@ class ImportsAggregateCollector extends TypeDependenciesCollector {
 
 class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
     private readonly typeConvertor = new ArkTSTypeNodeNameConvertor()
+    private declDependenciesCollector: DeclarationDependenciesCollector | undefined
 
     override convertLiteralType(node: ts.LiteralTypeNode): ts.Declaration[] {
         if (ts.isUnionTypeNode(node.parent) && ts.isStringLiteral(node.literal)) {
-            return [this.addSyntheticDeclarationDependency(this.typeConvertor.convertLiteralType(node))]
+            return [this.makeSyntheticTypeAliasDeclaration(this.typeConvertor.convertLiteralType(node))]
         }
         return super.convertLiteralType(node)
     }
 
     override convertTemplateLiteral(node: ts.TemplateLiteralTypeNode): ts.Declaration[] {
-        return [this.addSyntheticDeclarationDependency(this.typeConvertor.convertTemplateLiteral(node))]
+        return [this.makeSyntheticTypeAliasDeclaration(this.typeConvertor.convertTemplateLiteral(node))]
     }
 
     override convertTypeLiteral(node: ts.TypeLiteralNode): ts.Declaration[] {
         const decl = makeSyntheticDeclaration('SyntheticDeclarations',
             createLiteralTypeName(node),
             () => ts.factory.createInterfaceDeclaration([], createLiteralTypeName(node), [], [], node.members))
+        this.declDependenciesCollector?.convert(decl).forEach(it => {
+            if (isSourceDecl(it)
+                && (PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it))
+                && needImportFeature(this.peerLibrary.declarationTable.language, it)) {
+                addSyntheticDeclarationDependency(decl, convertDeclToFeature(this.peerLibrary, it))
+            }
+        })
         return [decl]
     }
 
-    private addSyntheticDeclarationDependency(generatedName: string): ts.TypeAliasDeclaration {
+    private makeSyntheticTypeAliasDeclaration(generatedName: string): ts.TypeAliasDeclaration {
         const typeRef = `External_${generatedName}`
         const syntheticDeclaration = makeSyntheticTypeAliasDeclaration(
             'SyntheticDeclarations',
@@ -409,6 +417,11 @@ class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
             module: "./shared/dts-exports"
         })
         return syntheticDeclaration
+    }
+
+    override setDeclDependenciesCollector(declDependenciesCollector: DeclarationDependenciesCollector) {
+        super.setDeclDependenciesCollector(declDependenciesCollector);
+        this.declDependenciesCollector = declDependenciesCollector
     }
 }
 
@@ -695,6 +708,7 @@ export class PeerProcessor {
     ) {
         this.typeDependenciesCollector = createTypeDependenciesCollector(this.library)
         this.declDependenciesCollector = new FilteredDeclarationCollector(this.library, this.typeDependenciesCollector)
+        this.typeDependenciesCollector.setDeclDependenciesCollector(this.declDependenciesCollector)
         this.serializeDepsCollector = new FilteredDeclarationCollector(
             this.library, new ImportsAggregateCollector(this.library, true))
     }
@@ -736,7 +750,7 @@ export class PeerProcessor {
             : undefined
 
         const importFeatures = this.serializeDepsCollector.convert(target)
-            .filter(it => this.isSourceDecl(it))
+            .filter(it => isSourceDecl(it))
             .filter(it => PeerGeneratorConfig.needInterfaces || checkTSDeclarationMaterialized(it) || isSyntheticDeclaration(it))
             .map(it => convertDeclToFeature(this.library, it))
         const generics = target.typeParameters?.map(it => it.getText())
@@ -795,7 +809,7 @@ export class PeerProcessor {
             const decl = makeSyntheticDeclaration('SyntheticDeclarations', declName,
                 () => ts.factory.createInterfaceDeclaration([], declName, [], [], target.members))
             this.declDependenciesCollector.convert(decl).forEach(it => {
-                if (this.isSourceDecl(it)
+                if (isSourceDecl(it)
                     && (PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it))
                     && needImportFeature(this.library.declarationTable.language, it)) {
                     addSyntheticDeclarationDependency(decl, convertDeclToFeature(this.library, it))
@@ -854,7 +868,7 @@ export class PeerProcessor {
             : convertDeclaration(this.declDependenciesCollector, node)
         for (const dep of currentDeps) {
             if (deps.has(dep)) continue
-            if (!this.isSourceDecl(dep)) continue
+            if (!isSourceDecl(dep)) continue
             deps.add(dep)
             this.collectDepsRecursive(dep, deps)
         }
@@ -873,18 +887,6 @@ export class PeerProcessor {
             }
         })
         this.library.findFileByOriginalFilename(file.fileName)!.pushEnum(enumEntity)
-    }
-
-    private isSourceDecl(node: ts.Declaration): boolean {
-        if (isSyntheticDeclaration(node))
-            return true
-        if (ts.isModuleBlock(node.parent))
-            return this.isSourceDecl(node.parent.parent)
-        if (ts.isTypeParameterDeclaration(node))
-            return false
-        if (!ts.isSourceFile(node.parent))
-            throw 'Expected declaration to be at file root'
-        return !node.parent.fileName.endsWith('stdlib.d.ts')
     }
 
     private getDeclSourceFile(node: ts.Declaration): ts.SourceFile {
@@ -942,13 +944,6 @@ export class PeerProcessor {
 
         for (const dep of allDeclarations) {
             if (isSyntheticDeclaration(dep)) {
-                this.declDependenciesCollector.convert(dep).forEach(it => {
-                    if (this.isSourceDecl(it)
-                        && (PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it))
-                        && needImportFeature(this.library.declarationTable.language, it)) {
-                        addSyntheticDeclarationDependency(dep, convertDeclToFeature(this.library, it))
-                    }
-                })
                 continue
             }
             const file = this.library.findFileByOriginalFilename(this.getDeclSourceFile(dep).fileName)!
@@ -974,12 +969,12 @@ export class PeerProcessor {
             }
 
             this.declDependenciesCollector.convert(dep).forEach(it => {
-                if (this.isSourceDecl(it) && (PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it))
+                if (isSourceDecl(it) && (PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it))
                     && needImportFeature(this.library.declarationTable.language, it))
                     file.importFeatures.push(convertDeclToFeature(this.library, it))
             })
             this.serializeDepsCollector.convert(dep).forEach(it => {
-                if (this.isSourceDecl(it) && PeerGeneratorConfig.needInterfaces
+                if (isSourceDecl(it) && PeerGeneratorConfig.needInterfaces
                     && needImportFeature(this.library.declarationTable.language, it)) {
                     file.serializeImportFeatures.push(convertDeclToFeature(this.library, it))
                 }
@@ -1026,4 +1021,16 @@ export function createMaterializedDeclName(declName: string): string {
 
 export function generateMethodModifiers(method: ts.ConstructorDeclaration | ts.MethodDeclaration | ts.MethodSignature) {
     return ts.isConstructorDeclaration(method) || isStatic(method.modifiers) ? [MethodModifier.STATIC] : []
+}
+
+function isSourceDecl(node: ts.Declaration): boolean {
+    if (isSyntheticDeclaration(node))
+        return true
+    if (ts.isModuleBlock(node.parent))
+        return isSourceDecl(node.parent.parent)
+    if (ts.isTypeParameterDeclaration(node))
+        return false
+    if (!ts.isSourceFile(node.parent))
+        throw 'Expected declaration to be at file root'
+    return !node.parent.fileName.endsWith('stdlib.d.ts')
 }
