@@ -126,7 +126,7 @@ export class CustomPrintVisitor  {
         this.print(`${isGlobal ? `${isExport ? "export ": ""}declare function `: ""}${isProtected ? "protected " : ""}${isStatic ? "static " : ""}${name}${isOptional ?"?":""}${typeParams}(${node.parameters.map(p => this.paramText(p)).join(", ")})${returnType};`)
     }
     paramText(param: IDLParameter): string {
-        return `${param.isVariadic ? "..." : ""}${param.name}${param.isOptional ? "?" : ""}: ${printTypeForTS(param.type)}`
+        return `${param.isVariadic ? "..." : ""}${getName(param)}${param.isOptional ? "?" : ""}: ${printTypeForTS(param.type)}`
     }
     printProperty(node: IDLProperty) {
         const isCommonMethod = hasExtAttribute(node, "CommonMethod")
