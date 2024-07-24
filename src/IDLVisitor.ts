@@ -563,7 +563,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             if (declaration.length == 0) {
                 let name = type.typeName.getText(type.typeName.getSourceFile())
                 this.warn(`Do not know type ${name}`)
-                return createReferenceType(name)
+                return createReferenceType(name, type.typeArguments)
             }
             let isEnum = ts.isEnumDeclaration(declaration[0])
             const rawType = sanitize(getExportedDeclarationNameByNode(this.typeChecker, type.typeName))!
@@ -574,16 +574,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             if (isEnum) {
                 return createEnumType(transformedType)
             }
-            let result = createReferenceType(transformedType)
-            if (type.typeArguments) {
-                result.extendedAttributes = [{
-                    name : "TypeArguments",
-                    value: type.typeArguments!
-                        .map(it => it.getText())
-                        .join(",")
-                }]
-            }
-            return result;
+            return createReferenceType(transformedType, type.typeArguments);
         }
         if (ts.isThisTypeNode(type)) {
             return createReferenceType("this")
