@@ -18,7 +18,7 @@ import { heritageDeclarations, identName, isReadonly, isStatic } from "../util"
 import { Field, FieldModifier, Method, MethodModifier, MethodSignature, NamedMethodSignature, Type } from "./LanguageWriters"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
 import { DeclarationTable, FieldRecord } from "./DeclarationTable"
-import { generateSignature } from "./PeerGeneratorVisitor"
+import { generateMethodModifiers, generateSignature } from "./PeerGeneratorVisitor"
 import { SuperElement } from "./Materialized"
 import { ImportFeature } from "./ImportsCollector"
 import { mapType } from "./TypeNodeNameConvertor"
@@ -163,7 +163,7 @@ function toBuilderMethod(method: ts.ConstructorDeclaration | ts.MethodDeclaratio
 
     const generics = method.typeParameters?.map(it => it.getText())
     const signature = generateSignature(method)
-    const modifiers = ts.isConstructorDeclaration(method) || isStatic(method.modifiers) ? [MethodModifier.STATIC] : []
+    const modifiers = generateMethodModifiers(method)
 
     return new Method(methodName, signature, modifiers, generics)
 }

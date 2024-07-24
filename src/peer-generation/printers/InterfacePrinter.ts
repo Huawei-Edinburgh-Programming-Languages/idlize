@@ -16,7 +16,7 @@
 import * as ts from 'typescript'
 import * as path from 'path'
 import { PeerLibrary } from "../PeerLibrary"
-import { FieldModifier, LanguageWriter, createLanguageWriter, Type } from '../LanguageWriters'
+import { FieldModifier, LanguageWriter, createLanguageWriter, Type, MethodModifier } from '../LanguageWriters'
 import { ArkTSTypeNodeNameConvertor, mapType } from '../TypeNodeNameConvertor'
 import { identName, Language, removeExt, renameDtsToInterfaces } from '../../util'
 import { ImportsCollector } from '../ImportsCollector'
@@ -26,6 +26,8 @@ import { TargetFile } from './TargetFile'
 import { PrinterContext } from './PrinterContext'
 import { ARK_OBJECTBASE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from './lang/Java'
 import { convertDeclaration, DeclarationConvertor } from "../TypeNodeConvertor";
+import { createLiteralTypeName, generateMethodModifiers, generateSignature } from "../PeerGeneratorVisitor";
+import { isMaterialized } from "../Materialized";
 import { ResourceDeclaration } from '../DeclarationTable'
 
 interface InterfacesVisitor {
@@ -321,7 +323,16 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
             this.peerLibrary.declarationTable.targetStruct(node).getFields().map(it => {
                 writer.writeFieldDeclaration(it.name, new Type(this.mapType(it.type), it.optional), undefined, it.optional)
             })
-        })
+            if (isMaterialized(node)) {
+                node.members.forEach(method => {
+                    if (ts.isMethodSignature(method)) {
+                        writer.writeMethodDeclaration(generateMethodName(method),
+                            generateSignature(method),
+                            generateMethodModifiers(method))
+                    }
+                })
+            }
+         })
     }
 
     convertTypeAlias(node: ts.TypeAliasDeclaration): void {
@@ -381,10 +392,6 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
             this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), writer)
         }
     }
-
-    private addExtraImports(collector: ImportsCollector, feature: string) {
-        collector.addFeature(feature, "./shared/dts-exports")
-    }
 }
 
 function getVisitor(peerLibrary: PeerLibrary, context: PrinterContext): InterfacesVisitor | undefined {
@@ -438,9 +445,14 @@ function printMethod(writer: LanguageWriter, method: ts.MethodDeclaration) {
     const returnType = method.type?.getText()
     const parameters = method.parameters.map((param) => {
         if (param.type != undefined && ts.isTypeLiteralNode(param.type)) {
-            return `${param.name.getText()}: ${param.type.members.map(it => it.name?.getText()).join('_')}`
+            return `${param.name.getText()}: ${createLiteralTypeName(param.type)}`
         }
         return param.getText()
     }).join(',')
     writer.print(`${methodName}(${parameters}): ${returnType};`)
+}
+
+function generateMethodName(method: ts.MethodSignature): string {
+    const typeParams = method.typeParameters?.map(it => it.name.text).join(', ')
+    return `${method.name.getText()}${typeParams ? `<${typeParams}>` : ``}`
 }

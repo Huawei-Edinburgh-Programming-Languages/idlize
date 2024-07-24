@@ -27,7 +27,8 @@ import {
     getComment,
     isReadonly,
     getDeclarationsByNode,
-    Language
+    Language,
+    snakeCaseToCamelCase
 } from "../util"
 import { GenericVisitor } from "../options"
 import {
@@ -391,9 +392,8 @@ class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
 
     override convertTypeLiteral(node: ts.TypeLiteralNode): ts.Declaration[] {
         const decl = makeSyntheticDeclaration('SyntheticDeclarations',
-            node.members.map(it=>it.name?.getText()).join('_'), () => {
-            return ts.factory.createInterfaceDeclaration([], node.members.map(it=>it.name?.getText()).join('_'), [], [], node.members)
-        })
+            createLiteralTypeName(node),
+            () => ts.factory.createInterfaceDeclaration([], createLiteralTypeName(node), [], [], node.members))
         return [decl]
     }
 
@@ -789,6 +789,21 @@ export class PeerProcessor {
             }
         })
 
+        // In ArkTS we need generate a real interface in SyntheticDeclarations
+        if (this.library.declarationTable.language == Language.ARKTS && ts.isInterfaceDeclaration(target)) {
+            const declName = createMaterializedDeclName(identName(target)!)
+            const decl = makeSyntheticDeclaration('SyntheticDeclarations', declName,
+                () => ts.factory.createInterfaceDeclaration([], declName, [], [], target.members))
+            this.declDependenciesCollector.convert(decl).forEach(it => {
+                if (this.isSourceDecl(it)
+                    && (PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it))
+                    && needImportFeature(this.library.declarationTable.language, it)) {
+                    addSyntheticDeclarationDependency(decl, convertDeclToFeature(this.library, it))
+                }
+            })
+            importFeatures.push(convertDeclToFeature(this.library, decl))
+        }
+
         this.library.materializedClasses.set(name,
             new MaterializedClass(name, isInterface, superClass, generics, mFields, mConstructor, mFinalizer, importFeatures, mMethods, isActualDeclaration))
     }
@@ -827,7 +842,7 @@ export class PeerProcessor {
         method.parameters.forEach(it => this.declarationTable.requestType(undefined, it.type!, isActualDeclaration))
         const argConvertors = method.parameters.map(param => generateArgConvertor(this.declarationTable, param))
         const signature = generateSignature(method)
-        const modifiers = ts.isConstructorDeclaration(method) || isStatic(method.modifiers) ? [MethodModifier.STATIC] : []
+        const modifiers = generateMethodModifiers(method)
         this.declarationTable.setCurrentContext(undefined)
         return new MaterializedMethod(parentName, declarationTargets, argConvertors, retConvertor, false,
             new Method(methodName, signature, modifiers, generics))
@@ -999,4 +1014,16 @@ function createTypeDependenciesCollector(library: PeerLibrary): TypeDependencies
     return library.declarationTable.language == Language.TS
         ? new ImportsAggregateCollector(library, false)
         : new ArkTSImportsAggregateCollector(library, false)
+}
+
+export function createLiteralTypeName(node: ts.TypeLiteralNode): string {
+    return `LITERAL_${snakeCaseToCamelCase(node.members.map(it => it.name?.getText()).join('_'))}`
+}
+
+export function createMaterializedDeclName(declName: string): string {
+    return `MATERIALIZED_${declName}`
+}
+
+export function generateMethodModifiers(method: ts.ConstructorDeclaration | ts.MethodDeclaration | ts.MethodSignature) {
+    return ts.isConstructorDeclaration(method) || isStatic(method.modifiers) ? [MethodModifier.STATIC] : []
 }

@@ -37,6 +37,7 @@ import { ImportsCollector } from "../ImportsCollector";
 import { PrinterContext } from "./PrinterContext";
 import { TargetFile } from "./TargetFile";
 import { ARK_MATERIALIZEDBASE, ARK_MATERIALIZEDBASE_EMPTY_PARAMETER, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from "./lang/Java";
+import { createMaterializedDeclName } from "../PeerGeneratorVisitor";
 
 interface MaterializedFileVisitor {
     visit(): void
@@ -94,21 +95,8 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
         if (clazz.isInterface) {
             // self-interface is not supported ArkTS
             if (this.library.declarationTable.language == Language.ARKTS) {
-                selfInterface = `I_${clazz.className}`
-                for (const grouped of groupOverloads(clazz.methods)) {
-                    const collapsedMethod = collapseSameNamedMethods(
-                        Array.from(grouped)
-                            .sort((a, b) => b.argConvertors.length - a.argConvertors.length)
-                            .map(it => it.method)
-                    )
-                    printer.writeInterface(selfInterface, (writer) => {
-                        writer.writeMethodDeclaration(collapsedMethod.name,
-                            collapsedMethod.signature,
-                            collapsedMethod.modifiers)
-                    })
-                }
+                selfInterface = createMaterializedDeclName(selfInterface!)
             }
-
             if (selfInterface) interfaces.push(selfInterface)
             if (superClassName && !this.library.materializedClasses.has(superClassName)) {
                 interfaces.push(superClassName)
