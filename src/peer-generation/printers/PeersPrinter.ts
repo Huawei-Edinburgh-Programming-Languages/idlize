@@ -134,7 +134,7 @@ class PeerFileVisitor {
             } else {
                 throwException(`Unexpected parent inheritance role: ${parentRole}`)
             }
-        })
+        }, undefined, [MethodModifier.PROTECTED])
     }
 
     protected printCreateMethod(peer: PeerClass, writer: LanguageWriter): void {
