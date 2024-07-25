@@ -172,7 +172,9 @@ export class CustomPrintVisitor  {
     printTypedef(node: IDLTypedef) {
         let text = getVerbatimDts(node) ?? printTypeForTS(node.type)
         let isExport = hasExtAttribute(node, "Export")
-        this.print(`${isExport ? "export ": ""}declare type ${(node.name)} = ${text};`)
+        const typeParamsAttr = getExtAttribute(node, "TypeParameters")
+        const typeParams = typeParamsAttr ? `<${typeParamsAttr}>` : ""
+        this.print(`${isExport ? "export ": ""}declare type ${(node.name)}${typeParams} = ${text};`)
     }
 
     printModuleType(node: IDLModuleType) {

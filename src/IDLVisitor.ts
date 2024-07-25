@@ -182,10 +182,15 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             }
         }
         this.startScope()
+        let extendedAttributes = this.computeDeprecatedExtendAttributes(node, node.typeParameters ? [{
+            name: "TypeParameters",
+            value: node.typeParameters.map(it => it.getText()).join(",")
+        }] : undefined)
+
         return {
             kind: IDLKind.Typedef,
             name: name,
-            extendedAttributes: this.computeDeprecatedExtendAttributes(node),
+            extendedAttributes: extendedAttributes,
             type: this.serializeType(node.type, name),
             scope: this.endScope()
         }
