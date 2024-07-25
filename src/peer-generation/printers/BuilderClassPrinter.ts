@@ -28,6 +28,7 @@ class BuilderClassFileVisitor {
             writer.print("import { SheetTitleOptions, Padding, ComponentContent } from '@arkoala/arkui/ArkCommonInterfaces'")
             writer.print("import { LabelStyle } from '@arkoala/arkui/ArkButtonInterfaces'")
             writer.print("import { NativeEmbedDataInfo } from '@arkoala/arkui/ArkWebInterfaces'")
+            writer.print("import { DotIndicator } from '@arkoala/arkui/ArkDotIndicatorBuilder'")
         }
 
         writer.writeClass(clazz.name, writer => {

@@ -1011,12 +1011,12 @@ function createTypeDependenciesCollector(library: PeerLibrary): TypeDependencies
         : new ArkTSImportsAggregateCollector(library, false)
 }
 
-export function createLiteralTypeName(node: ts.TypeLiteralNode): string {
+export function createTypeLiteralName(node: ts.TypeLiteralNode): string {
     return `LITERAL_${snakeCaseToCamelCase(node.members.map(it => it.name?.getText()).join('_'))}`
 }
 
-export function createMaterializedDeclName(declName: string): string {
-    return `MATERIALIZED_${declName}`
+export function createInterfaceDeclName(declName: string): string {
+    return `INTERFACE_${declName}`
 }
 
 export function generateMethodModifiers(method: ts.ConstructorDeclaration | ts.MethodDeclaration | ts.MethodSignature) {

@@ -201,7 +201,6 @@ export function extractBuilderFields(target: ts.InterfaceDeclaration | ts.ClassD
     let records: FieldRecord[] = []
 
     methods.forEach(method => {
-        const sig = generateSignature(method)
         const parameters = Array.from(method.parameters)
         if (parameters.length === 1) {
             const param = parameters[0]

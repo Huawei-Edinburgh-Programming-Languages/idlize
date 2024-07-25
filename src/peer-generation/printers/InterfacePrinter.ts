@@ -26,7 +26,7 @@ import { TargetFile } from './TargetFile'
 import { PrinterContext } from './PrinterContext'
 import { ARK_OBJECTBASE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from './lang/Java'
 import { convertDeclaration, DeclarationConvertor } from "../TypeNodeConvertor";
-import { createLiteralTypeName, generateMethodModifiers, generateSignature } from "../PeerGeneratorVisitor";
+import { createTypeLiteralName, generateMethodModifiers, generateSignature } from "../PeerGeneratorVisitor";
 import { isMaterialized } from "../Materialized";
 import { ResourceDeclaration } from '../DeclarationTable'
 
@@ -445,7 +445,7 @@ function printMethod(writer: LanguageWriter, method: ts.MethodDeclaration) {
     const returnType = method.type?.getText()
     const parameters = method.parameters.map((param) => {
         if (param.type != undefined && ts.isTypeLiteralNode(param.type)) {
-            return `${param.name.getText()}: ${createLiteralTypeName(param.type)}`
+            return `${param.name.getText()}: ${createTypeLiteralName(param.type)}`
         }
         return param.getText()
     }).join(',')

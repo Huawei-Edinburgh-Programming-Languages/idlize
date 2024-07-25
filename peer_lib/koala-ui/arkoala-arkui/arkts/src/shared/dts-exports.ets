@@ -13,20 +13,6 @@
  * limitations under the License.
  */
 
-import { Length } from "@arkoala/arkui/ArkUnitsInterfaces"
-
-declare class Indicator<T> {}
-
-export class DotIndicator extends Indicator<DotIndicator> {
-  constructor() {}
-  itemWidth(value: Length): DotIndicator {
-    return this;
-  }
-  itemHeight(value: Length): DotIndicator {
-    return this;
-  }
-}
-
 export type External_LITERAL_evenodd = string
 export type External_LITERAL_onzero = string
 export type External_LITERAL_nonzero = string

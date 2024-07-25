@@ -13,10 +13,7 @@
  * limitations under the License.
  */
 
-const dtsImports = `import {
-    DotIndicator
-} from "%ROOT%/shared/dts-exports"
-`
+const dtsImports = ``
 
 export function collectDtsImports(pathToRoot: string = '.') {
     return dtsImports.replaceAll('%ROOT%', pathToRoot) // for now
