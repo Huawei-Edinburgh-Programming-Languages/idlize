@@ -147,7 +147,6 @@ class PeerFileVisitor {
         writer.writeMethodImplementation(new Method('create', signature, [MethodModifier.STATIC, MethodModifier.PUBLIC]), (writer) => {
             const parentRole = determineParentRole(peer.originalClassName, peer.originalParentName)
             writer.print(`let _peer = new ${componentToPeerClass(peer.componentName)}(type, component, flags)`)
-            // here we have to invoke 
             if (parentRole === InheritanceRole.PeerNode) {
                 writer.writeMethodCall('component', 'setPeer', ['_peer'], true)
             }
@@ -180,7 +179,6 @@ class PeerFileVisitor {
     protected printPeer(peer: PeerClass, printer: LanguageWriter) {
         printer.writeClass(componentToPeerClass(peer.componentName), (writer) => {
             this.printPeerConstructor(peer, writer)
-            // this is exact place where i should wtite
             this.printCreateMethod(peer, writer)
             peer.methods.filter((method) =>
                 writer.language == Language.ARKTS ? !PeerFileVisitor.ArkTsIgnoredMethods.includes(method.overloadedName) : true
