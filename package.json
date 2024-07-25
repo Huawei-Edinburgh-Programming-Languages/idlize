@@ -43,6 +43,7 @@
     "source-map-support": "^0.5.21"
   },
   "scripts": {
+    "preinstall": "cd external && npm i --prefix incremental && npm i --prefix interop && npm i --prefix arkoala",
     "download:sdk": "node ./download-sdk.mjs",
     "publish": "npm run compile && node tools/publish.mjs",
     "setup-out": "node tools/setup/setup.mjs",
