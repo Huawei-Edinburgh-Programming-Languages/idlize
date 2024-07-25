@@ -1,4 +1,5 @@
 image: "gitlab.bz-openlab.ru:10443/huawei/koala-ci:0.1"
+
 idlize build:
   stage: build
   tags:
