@@ -1,4 +1,6 @@
 image: "nexus.bz-openlab.ru:10443/huawei/koala-ci:0.1"
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
 
 idlize build:
   stage: build
