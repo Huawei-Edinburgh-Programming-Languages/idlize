@@ -785,8 +785,9 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
     /** Serialize a signature (call or construct) */
     serializeMethod(method: ts.MethodDeclaration | ts.MethodSignature | ts.IndexSignatureDeclaration | ts.FunctionDeclaration, namePrefix: string, isGlobal: boolean = false): IDLMethod {
         if (isGlobal) this.startScope()
+        let extendedAttributes: IDLExtendedAttribute[] = isGlobal ? this.computeNamespaceAttribute() : []
         const typeParams = method.typeParameters?.map(it => it.getText()).join(",")
-        let extendedAttributes: IDLExtendedAttribute[] = typeParams ? [{name: "TypeParameters", value: typeParams}] : []
+        if (typeParams) extendedAttributes.push({name: "TypeParameters", value: typeParams})
         if (ts.isIndexSignatureDeclaration(method)) {
             extendedAttributes.push({name: 'IndexSignature' })
             return {

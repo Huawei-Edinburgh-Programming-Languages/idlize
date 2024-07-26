@@ -116,6 +116,8 @@ export class CustomPrintVisitor  {
     }
 
     printMethod(node: IDLMethod|IDLConstructor, isGlobal : boolean = false) {
+        const namespace = getExtAttribute(node, "Namespace")?.slice(1, -1).split(",").reverse()
+        this.openNamespace(namespace)
         let returnType = node.returnType ? `: ${printTypeForTS(node.returnType, true)}` : ""
         let isStatic = isMethod(node) && node.isStatic
         let name = isConstructor(node) ? "constructor" : getName(node)
@@ -129,7 +131,8 @@ export class CustomPrintVisitor  {
         const typeParamsAttr = getExtAttribute(node, "TypeParameters")
         const typeParams = typeParamsAttr ? `<${typeParamsAttr}>` : ""
         let isExport = hasExtAttribute(node, "Export")
-        this.print(`${isGlobal ? `${isExport ? "export ": ""}declare function `: ""}${isProtected ? "protected " : ""}${isStatic ? "static " : ""}${name}${isOptional ?"?":""}${typeParams}(${node.parameters.map(p => this.paramText(p)).join(", ")})${returnType};`)
+        this.print(`${isGlobal ? `${isExport ? "export ": ""}${namespace ? "" : "declare "}function `: ""}${isProtected ? "protected " : ""}${isStatic ? "static " : ""}${name}${isOptional ?"?":""}${typeParams}(${node.parameters.map(p => this.paramText(p)).join(", ")})${returnType};`)
+        this.closeNamespace(namespace)
     }
     paramText(param: IDLParameter): string {
         return `${param.isVariadic ? "..." : ""}${getName(param)}${param.isOptional ? "?" : ""}: ${printTypeForTS(param.type)}`
