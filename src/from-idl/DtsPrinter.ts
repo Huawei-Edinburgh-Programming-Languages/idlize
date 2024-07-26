@@ -189,8 +189,14 @@ export class CustomPrintVisitor  {
     openNamespace(names: string[] | undefined) {
         names?.forEach((it, idx) => {
             if (it) {
-                this.print(`${idx ? "" : "declare "}namespace ${it} {`)
-                this.pushIndent()
+                if (it.startsWith("Export ") && it.length > "Export ".length) {
+                    it = it.split(' ')[1]
+                    this.print(`export ${idx ? "" : "declare "}namespace ${it} {`)
+                    this.pushIndent()
+                } else {
+                    this.print(`${idx ? "" : "declare "}namespace ${it} {`)
+                    this.pushIndent()
+                }
             }
         })
     }
