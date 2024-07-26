@@ -70,11 +70,11 @@ export class CustomPrintVisitor  {
         let typeSpec = toTypeName(node, "TypeParameters")
         const entity = getExtAttribute(node, "Entity")
         if (entity === IDLEntity.Literal) {
-            this.print(`declare type ${typeSpec} = ${literal(node, false, true)}`)
+            this.print(`${namespace ? "" : "declare "}type ${typeSpec} = ${literal(node, false, true)}`)
         } else if (entity === IDLEntity.Tuple) {
-            this.print(`declare type ${typeSpec} = ${literal(node, true, false)}`)
+            this.print(`${namespace ? "" : "declare "}type ${typeSpec} = ${literal(node, true, false)}`)
         } else if (entity === IDLEntity.NamedTuple) {
-            this.print(`declare type ${typeSpec} = ${literal(node, true, true)}`)
+            this.print(`${namespace ? "" : "declare "}type ${typeSpec} = ${literal(node, true, true)}`)
         } else {
             // restore globalScope
             if (hasExtAttribute(node,"GlobalScope")) {
@@ -91,7 +91,7 @@ export class CustomPrintVisitor  {
                 typeSpec += ` implements ${interfaces}`
             }
             let isExport = hasExtAttribute(node, "Export")
-            this.print(`${isExport ? "export ": ""}declare ${entity!.toLowerCase()} ${typeSpec} {`)
+            this.print(`${isExport ? "export ": ""}${namespace ? "" : "declare "}${entity!.toLowerCase()} ${typeSpec} {`)
             this.currentInterface = node
             this.pushIndent()
             node.constructors.map(it => this.visit(it))
@@ -108,8 +108,8 @@ export class CustomPrintVisitor  {
             this.popIndent()
             this.print("}")
             if (component) {
-                this.print(`declare const ${component}Instance: ${component}Attribute;`)
-                this.print(`declare const ${component}: ${component}Interface;`)
+                this.print(`${namespace ? "" : "declare "}const ${component}Instance: ${component}Attribute;`)
+                this.print(`${namespace ? "" : "declare "}const ${component}: ${component}Interface;`)
             }
         }
         this.closeNamespace(namespace)
@@ -156,7 +156,7 @@ export class CustomPrintVisitor  {
         const namespace = getExtAttribute(node, "Namespace")?.slice(1, -1).split(",").reverse()
         this.openNamespace(namespace)
         let isExport = hasExtAttribute(node, "Export")
-        this.print(`${isExport ? "export ": ""}declare enum ${node.name} {`)
+        this.print(`${isExport ? "export ": ""}${namespace ? "" : "declare "}enum ${node.name} {`)
         this.pushIndent()
         node.elements.forEach((it, index) => {
             this.print(`${getName(it)}${it.initializer ? " = " + it.initializer : ""}${index < node.elements.length - 1 ? "," : ""}`)
@@ -184,9 +184,9 @@ export class CustomPrintVisitor  {
     }
 
     openNamespace(names: string[] | undefined) {
-        names?.forEach(it => {
+        names?.forEach((it, idx) => {
             if (it) {
-                this.print(`declare namespace ${it} {`)
+                this.print(`${idx ? "" : "declare "}namespace ${it} {`)
                 this.pushIndent()
             }
         })
