@@ -10,6 +10,8 @@ idlize build:
   before_script:
     - node --version
     - npm --version
+    - npm config set registry https://repo.huaweicloud.com/repository/npm/
+    - npm config set @ohos:registry https://repo.harmonyos.com/npm/
     - npm i --no-audit --no-fund
   script:
     - npm run compile
