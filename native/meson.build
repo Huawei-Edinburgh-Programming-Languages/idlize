@@ -6,7 +6,7 @@ project('NativeBridge', 'c', 'cpp',
 if get_option('source_set') != ''
 source_set = get_option('source_set')
 else
-source_set = 'peers'
+source_set = 'ts_peers'
 endif
 use_libace = false
 use_dummy_libace = true
