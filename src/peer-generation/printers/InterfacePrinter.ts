@@ -26,7 +26,7 @@ import { TargetFile } from './TargetFile'
 import { PrinterContext } from './PrinterContext'
 import { ARK_OBJECTBASE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from './lang/Java'
 import { convertDeclaration, DeclarationConvertor } from "../TypeNodeConvertor";
-import { createTypeLiteralName, generateMethodModifiers, generateSignature } from "../PeerGeneratorVisitor";
+import { createTypeNodeConvertor, generateMethodModifiers, generateSignature } from "../PeerGeneratorVisitor";
 import { isMaterialized } from "../Materialized";
 import { ResourceDeclaration } from '../DeclarationTable'
 
@@ -279,9 +279,20 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
         const writer = (writer: LanguageWriter) => {
             this.declarationMembers(node).forEach(member => {
                 if (ts.isPropertyDeclaration(member)) {
-                    printProperty(writer, member)
+                    const propName = member.name.getText()
+                    const propType = member.type?.getText()
+                    const isOptional = member.questionToken
+                    writer.print(`${propName}${isOptional ? "?" : ""}: ${propType};`)
                 } else {
-                    printMethod(writer, member)
+                    const methodName = member.name.getText()
+                    const returnType = member.type?.getText()
+                    const parameters = member.parameters.map((param) => {
+                        if (param.type != undefined && ts.isTypeLiteralNode(param.type)) {
+                            return `${param.name.getText()}: ${this.typeConvertor.convert(param.type)}`
+                        }
+                        return param.getText()
+                    }).join(',')
+                    writer.print(`${methodName}(${parameters}): ${returnType};`)
                 }
             })
         };
@@ -327,7 +338,7 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
                 node.members.forEach(method => {
                     if (ts.isMethodSignature(method)) {
                         writer.writeMethodDeclaration(generateMethodName(method),
-                            generateSignature(method),
+                            generateSignature(method, createTypeNodeConvertor(this.peerLibrary)),
                             generateMethodModifiers(method))
                     }
                 })
@@ -425,31 +436,6 @@ export function createDeclarationConvertor(writer: LanguageWriter, peerLibrary: 
     return writer.language == Language.TS
         ? new TSDeclConvertor(writer, peerLibrary)
         : new ArkTSDeclConvertor(writer, peerLibrary)
-}
-
-function printProperty(writer: LanguageWriter, property: ts.PropertyDeclaration) {
-    const propName = property.name.getText()
-    const propType = property.type?.getText()
-    const isOptional = property.questionToken
-    const modifiers = property.modifiers?.map(it => {
-        if (it.kind == ts.SyntaxKind.ReadonlyKeyword) {
-            return it.getText()
-        }
-        throw "Unexpected property modifier: " + it.kind
-    }) ?? ""
-    writer.print(`${propName}${isOptional ? "?" : ""}: ${propType};`)
-}
-
-function printMethod(writer: LanguageWriter, method: ts.MethodDeclaration) {
-    const methodName = method.name.getText()
-    const returnType = method.type?.getText()
-    const parameters = method.parameters.map((param) => {
-        if (param.type != undefined && ts.isTypeLiteralNode(param.type)) {
-            return `${param.name.getText()}: ${createTypeLiteralName(param.type)}`
-        }
-        return param.getText()
-    }).join(',')
-    writer.print(`${methodName}(${parameters}): ${returnType};`)
 }
 
 function generateMethodName(method: ts.MethodSignature): string {
