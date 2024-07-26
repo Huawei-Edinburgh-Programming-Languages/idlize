@@ -353,7 +353,7 @@ class MaterializedVisitor {
         console.log(`Materialized classes: ${this.library.materializedClasses.size}`)
         for (const clazz of this.library.materializedToGenerate) {
             let visitor: MaterializedFileVisitor
-            if (this.printerContext.language == Language.TS) {
+            if ([Language.ARKTS, Language.TS].includes(this.printerContext.language)) {
                 visitor = new TSMaterializedFileVisitor(
                     this.library, this.printerContext, clazz, this.dumpSerialized)
             }
