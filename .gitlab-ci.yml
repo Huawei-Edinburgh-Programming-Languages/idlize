@@ -6,7 +6,9 @@ idlize build:
     - idlize-ci
     - koala-ci
   before_script:
-    - npm ci --no-audit --no-fund
+    - node --version
+    - npm --version
+    - npm i --no-audit --no-fund
   script:
     - npm run compile
 
@@ -16,7 +18,7 @@ pg check peers run:
     - idlize-ci
     - koala-ci
   before_script:
-    - npm ci --no-audit --no-fund
+    - npm i --no-audit --no-fund
   script:
     - npm run check:peers:run
 
