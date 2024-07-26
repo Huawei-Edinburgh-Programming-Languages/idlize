@@ -65,7 +65,7 @@ export class CustomPrintVisitor  {
     }
 
     printInterface(node: IDLInterface) {
-        const namespace = getExtAttribute(node, "Namespace")
+        const namespace = getExtAttribute(node, "Namespace")?.slice(1, -1).split(",").reverse()
         this.openNamespace(namespace)
         let typeSpec = toTypeName(node, "TypeParameters")
         const entity = getExtAttribute(node, "Entity")
@@ -153,7 +153,7 @@ export class CustomPrintVisitor  {
         }
     }
     printEnum(node: IDLEnum) {
-        const namespace = getExtAttribute(node, "Namespace")
+        const namespace = getExtAttribute(node, "Namespace")?.slice(1, -1).split(",").reverse()
         this.openNamespace(namespace)
         let isExport = hasExtAttribute(node, "Export")
         this.print(`${isExport ? "export ": ""}declare enum ${node.name} {`)
@@ -183,17 +183,21 @@ export class CustomPrintVisitor  {
         this.print(`${text}`)
     }
 
-    openNamespace(name: string | undefined) {
-        if (name) {
-            this.print(`declare namespace ${name} {`)
-            this.pushIndent()
-        }
+    openNamespace(names: string[] | undefined) {
+        names?.forEach(it => {
+            if (it) {
+                this.print(`declare namespace ${it} {`)
+                this.pushIndent()
+            }
+        })
     }
-    closeNamespace(name: string | undefined) {
-        if (name) {
-            this.popIndent()
-            this.print("}")
-        }
+    closeNamespace(names: string[] | undefined) {
+        names?.forEach(it => {
+            if (it) {
+                this.popIndent()
+                this.print("}")
+            }
+        })
     }
 
     checkVerbatim(node: IDLEntry) {
