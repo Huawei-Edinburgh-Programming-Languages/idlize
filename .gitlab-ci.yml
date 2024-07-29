@@ -1,8 +1,7 @@
-image: "nexus.bz-openlab.ru:10443/huawei/koala-ci:0.1"
+image: "nexus.bz-openlab.ru:10443/huawei/koala-ci:0.2"
 
 stages:
   - test
-  - java-test
 
 workflow:
   rules:
@@ -39,11 +38,10 @@ idlize sanity:
     - npm run sanity
 
 pg java:run:
-  stage: java-test
+  stage: test
   tags:
     - idlize-ci
     - koala-ci
-    - "0.2"
   before_script:
     - !reference [.setup, script]
   script:
