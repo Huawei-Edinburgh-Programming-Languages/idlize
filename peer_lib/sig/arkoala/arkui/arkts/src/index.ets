@@ -440,7 +440,7 @@ class BlurOptionsImpl implements BlurOptions {
 }
 
 function checkPerf2(count: number) {
-    let peer = new ArkButtonPeer(ArkUINodeType.Button)
+    let peer = ArkButtonPeer.create(ArkUINodeType.Button)
     let start = Date.now()
     for (let i = 0; i < count; i++) {
         peer.backdropBlurAttribute(i, i % 2 == 0 ? undefined : new BlurOptionsImpl([1, 2] as [number, number]))
@@ -450,7 +450,7 @@ function checkPerf2(count: number) {
 }
 
 function checkPerf3(count: number) {
-    let peer = new ArkButtonPeer(ArkUINodeType.Button)
+    let peer = ArkButtonPeer.create(ArkUINodeType.Button)
     let start = Date.now()
     for (let i = 0; i < count; i++) {
         peer.widthAttribute(testString1000)
@@ -465,7 +465,7 @@ function checkButton() {
     checkResult("TestPerfNumberWithArray",
         () => NativeModule._TestPerfNumberWithArray(data, data.length),
         "TestPerfNumberWithArray(42, 5)")
-    let peer = new ArkButtonPeer(ArkUINodeType.Button)
+    let peer = ArkButtonPeer.create(ArkUINodeType.Button)
     checkResult("width", () => peer.widthAttribute("42%"),
         "width({.type=1, .value=42.000000, .unit=3, .resource=0})")
     checkResult("type", () => peer.typeAttribute(ButtonType.of(1)), "type(1)")
