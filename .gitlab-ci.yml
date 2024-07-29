@@ -14,7 +14,7 @@ idlize build:
     - idlize-ci
     - koala-ci
   before_script:
-    - !reference [.setup]
+    - !reference [.setup, script]
   script:
     - npm run compile
 
@@ -24,7 +24,7 @@ pg check peers run:
     - idlize-ci
     - koala-ci
   before_script:
-    - !reference [.setup]
+    - !reference [.setup, script]
   script:
     - npm run check:peers:run
 
@@ -34,7 +34,7 @@ idlize sanity:
     - idlize-ci
     - koala-ci
   before_script:
-    - !reference [.setup]
+    - !reference [.setup, script]
   script:
     - npm run sanity
 
@@ -44,7 +44,7 @@ pg java:run:
     - idlize-ci
     - koala-ci
   before_script:
-    - npm i --no-audit --no-fund
+    - !reference [.setup, script]
   script:
     - npm run run:java
 
