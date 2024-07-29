@@ -38,7 +38,8 @@ import { BlurOptions,
          SheetOptions,
          CustomBuilder,
          EdgeStyles,
-         UIContext, } from "@arkoala/arkui/ArkCommonInterfaces"
+         UIContext,
+         ScrollSizeMode } from "@arkoala/arkui/ArkCommonInterfaces"
 import { Dimension,
          Length,
          LengthMetrics,
@@ -213,6 +214,7 @@ class SheetOptionsImpl implements SheetOptions {
     _shadow: ShadowOptions | ShadowStyle| undefined
     _onHeightDidChange: Callback<number>| undefined
     _mode: SheetMode| undefined
+    _scrollSizeMode?: ScrollSizeMode | undefined
     _onDetentsDidChange: Callback<number>| undefined
     _onWidthDidChange: Callback<number>| undefined
     _onTypeDidChange: Callback<SheetType>| undefined
@@ -358,6 +360,13 @@ class SheetOptionsImpl implements SheetOptions {
     }
     set mode(arg: SheetMode| undefined) {
         this._mode = arg
+    }
+
+    get scrollSizeMode(): ScrollSizeMode| undefined {
+        return this._scrollSizeMode
+    }
+    set scrollSizeMode(arg: ScrollSizeMode| undefined) {
+        this._scrollSizeMode = arg
     }
 
     get onDetentsDidChange(): Callback<number>| undefined {
