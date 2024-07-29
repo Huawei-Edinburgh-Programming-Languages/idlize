@@ -1,12 +1,8 @@
 image: "nexus.bz-openlab.ru:10443/huawei/koala-ci:0.1"
 
 stages:
-  - build
-  - ts-test
-  - arkts-test
   - test
   - java-test
-  - cj-test
 
 workflow:
   rules:
@@ -22,18 +18,8 @@ variables:
         - npm config set @ohos:registry https://repo.harmonyos.com/npm/
         - npm i --no-audit --no-fund
 
-idlize build:
-  stage: build
-  tags:
-    - idlize-ci
-    - koala-ci
-  before_script:
-    - !reference [.setup, script]
-  script:
-    - npm run compile
-
 pg check peers run:
-  stage: ts-test
+  stage: test
   tags:
     - idlize-ci
     - koala-ci
