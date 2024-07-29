@@ -14,6 +14,7 @@
  */
 
 import * as webidl2 from "webidl2"
+import { ExtendedAttributes } from "./extendedAttributes";
 import { indentedBy, isDefined, stringOrNone } from "./util";
 import { NodeArray, TypeNode } from "typescript";
 
@@ -295,7 +296,7 @@ export function isModuleType(node: IDLEntry): node is IDLModuleType {
     return node.kind === IDLKind.ModuleType
 }
 export function isSyntheticEntry(node: IDLEntry): boolean {
-    return isDefined(node.extendedAttributes?.find(it => it.name === "Synthetic"))
+    return isDefined(node.extendedAttributes?.find(it => it.name === ExtendedAttributes.Synthetic))
 }
 
 function createPrimitiveType(name: string): IDLPrimitiveType {
@@ -453,7 +454,7 @@ function printExtendedAttributes(idl: IDLEntry, indentLevel: number): stringOrNo
     let attributes = idl.extendedAttributes
     if (idl.documentation) {
         let docs: IDLExtendedAttribute = {
-            name: 'Documentation',
+            name: ExtendedAttributes.Documentation,
             value: idl.documentation
         }
         if (attributes)
@@ -465,7 +466,14 @@ function printExtendedAttributes(idl: IDLEntry, indentLevel: number): stringOrNo
     return attrSpec ? [indentedBy(`[${attrSpec}]`, indentLevel)] : []
 }
 
-const attributesToQuote = new Set(["Documentation", "DtsName", "Import", "Interfaces", "TypeArguments", "TypeParameters"])
+const attributesToQuote = new Set([
+    ExtendedAttributes.Documentation, 
+    ExtendedAttributes.DtsName, 
+    ExtendedAttributes.Import, 
+    ExtendedAttributes.Interfaces, 
+    ExtendedAttributes.TypeArguments, 
+    ExtendedAttributes.TypeParameters,
+])
 
 function quoteAttributeValues(attributes?: IDLExtendedAttribute[]): stringOrNone {
     return attributes
@@ -473,7 +481,7 @@ function quoteAttributeValues(attributes?: IDLExtendedAttribute[]): stringOrNone
             let attr = it.name
             if (it.value) {
                 const value = it.value.replaceAll('"', "'")
-                attr += `=${attributesToQuote.has(it.name) ? `"${value}"` : it.value}`
+                attr += `=${attributesToQuote.has(it.name as ExtendedAttributes) ? `"${value}"` : it.value}`
             }
             return attr})
         .join(", ")
@@ -627,11 +635,11 @@ function printScopes(entries: IDLEntry[]) {
         .flatMap((it: IDLEntry[]) => it.map(printScoped))
 }
 
-export function hasExtAttribute(node: IDLEntry, attribute: string): boolean {
+export function hasExtAttribute(node: IDLEntry, attribute: ExtendedAttributes): boolean {
     return node.extendedAttributes?.find((it) => it.name == attribute) != undefined
 }
 
-export function getExtAttribute(node: IDLEntry, name: string): stringOrNone {
+export function getExtAttribute(node: IDLEntry, name: ExtendedAttributes): stringOrNone {
     let value: stringOrNone = undefined
     node.extendedAttributes?.forEach(it => {
         if (it.name == name) value = it.value
@@ -640,6 +648,6 @@ export function getExtAttribute(node: IDLEntry, name: string): stringOrNone {
 }
 
 export function getVerbatimDts(node: IDLEntry): stringOrNone {
-    let value = getExtAttribute(node, "VerbatimDts")
+    let value = getExtAttribute(node, ExtendedAttributes.VerbatimDts)
     return value ? value.substring(1, value.length - 1) : undefined
 }
