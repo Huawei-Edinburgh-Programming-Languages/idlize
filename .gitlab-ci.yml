@@ -1,4 +1,13 @@
 image: "nexus.bz-openlab.ru:10443/huawei/koala-ci:0.1"
+
+stages:
+  - build
+  - test
+  - java-test
+  - ts-test
+  - arkts-test
+  - cj-test
+
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == "pipeline"
