@@ -43,7 +43,7 @@ pg java:run:
   tags:
     - idlize-ci
     - koala-ci
-    - "2.0"
+    - "0.2"
   before_script:
     - !reference [.setup, script]
   script:
