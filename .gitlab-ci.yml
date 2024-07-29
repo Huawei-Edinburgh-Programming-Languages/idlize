@@ -1,4 +1,9 @@
 image: "nexus.bz-openlab.ru:10443/huawei/koala-ci:0.1"
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "pipeline"
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
 
