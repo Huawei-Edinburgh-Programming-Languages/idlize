@@ -24,7 +24,7 @@ idlize build:
     - npm run compile
 
 pg check peers run:
-  stage: test
+  stage: ts-test
   tags:
     - idlize-ci
     - koala-ci
@@ -44,7 +44,7 @@ idlize sanity:
     - npm run sanity
 
 pg java:run:
-  stage: test
+  stage: java-test
   tags:
     - idlize-ci
     - koala-ci
