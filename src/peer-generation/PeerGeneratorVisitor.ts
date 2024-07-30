@@ -427,7 +427,7 @@ class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
     }
 }
 
-class FilteredDeclarationCollector extends DeclarationDependenciesCollector {
+export class FilteredDeclarationCollector extends DeclarationDependenciesCollector {
     constructor(
         private readonly library: PeerLibrary,
         typeDepsCollector: TypeDependenciesCollector,
@@ -995,7 +995,7 @@ export class PeerProcessor {
     }
 }
 
-function createTypeDependenciesCollector(library: PeerLibrary): TypeDependenciesCollector {
+export function createTypeDependenciesCollector(library: PeerLibrary): TypeDependenciesCollector {
     return library.declarationTable.language == Language.TS
         ? new ImportsAggregateCollector(library, false)
         : new ArkTSImportsAggregateCollector(library, false)

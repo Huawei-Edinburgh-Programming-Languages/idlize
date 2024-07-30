@@ -19,9 +19,11 @@ import { DeclarationTable, DeclarationTarget, PrimitiveType } from "../Declarati
 import { LanguageWriter, Method, NamedMethodSignature, Type } from "../LanguageWriters";
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig';
 import { checkDeclarationTargetMaterialized } from '../Materialized';
-import { ImportsCollector } from '../ImportsCollector';
+import {convertDeclToFeature, ImportFeature, ImportsCollector} from '../ImportsCollector';
 import { PeerLibrary } from '../PeerLibrary';
 import { collectDtsImports } from '../DtsImportsGenerator';
+import {createTypeDependenciesCollector, FilteredDeclarationCollector, isSourceDecl} from "../PeerGeneratorVisitor";
+import {isSyntheticDeclaration} from "../synthetic_declaration";
 
 function collectAllInterfacesImports(library: PeerLibrary, imports: ImportsCollector) {
     for (const file of library.files)
@@ -122,6 +124,7 @@ class SerializerPrinter {
             }
         let seenNames = new Set<string>()
         printSerializerImports(this.library, this.writer)
+        const importFeatures: ImportFeature[] = []
         this.writer.writeClass(className, writer => {
             if (ctorSignature) {
                 const ctorMethod = new Method(superName, ctorSignature)
@@ -134,14 +137,33 @@ class SerializerPrinter {
                 if (seenNames.has(name)) continue
                 seenNames.add(name)
                 if (ts.isInterfaceDeclaration(declaration) || ts.isClassDeclaration(declaration))
-                    if (canSerializeTarget(declaration))
+                    if (canSerializeTarget(declaration)) {
+                        const typeDependenciesCollector = createTypeDependenciesCollector(this.library)
+                        const declDependenciesCollector = new FilteredDeclarationCollector(this.library, typeDependenciesCollector)
+
+                        // const currentDeps = convertDeclaration(declDependenciesCollector, declaration)
+                        // for (const dep of currentDeps) {
+                        //     if (deps.has(dep)) continue
+                        //     if (!isSourceDecl(dep)) continue
+                        //     deps.add(dep)
+                        //     this.collectDepsRecursive(dep, deps)
+                        // }
+                        declDependenciesCollector.convert(declaration).forEach(it => {
+                            if (isSourceDecl(it) || (isSyntheticDeclaration(it))) {
+                                importFeatures.push(convertDeclToFeature(this.library, it))
+                            }
+                        })
                         this.generateSerializer(declaration, prefix)
+                    }
             }
             if (this.writer.language == Language.JAVA) {
                 // TODO: somewhat ugly.
                 this.writer.print(`static Serializer createSerializer() { return new Serializer(); }`)
             }
         }, superName)
+        for (const i of importFeatures) {
+            console.log(`import ${i.feature} ${i.module}`)
+        }
     }
 }
 
