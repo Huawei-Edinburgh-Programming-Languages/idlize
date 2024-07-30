@@ -42,7 +42,7 @@ export class CustomPrintVisitor  {
         } else if (isEnum(node)) {
             this.printEnum(node)
         } else if (isCallback(node)) {
-            this.printCallbackDeclaration(node)
+            this.printTypedef(node)
         } else if (isModuleType(node)) {
             this.printModuleType(node)
         } else {
@@ -165,16 +165,17 @@ export class CustomPrintVisitor  {
         this.print("}")
         this.closeNamespace(namespace)
     }
-    printCallbackDeclaration(node: IDLCallback) {
-        // TODO: is it correct.
-        this.print(`declare type ${getName(node)} = ${callbackType(node)};`)
-    }
-    printTypedef(node: IDLTypedef) {
-        let text = getVerbatimDts(node) ?? printTypeForTS(node.type)
+    printTypedef(node: IDLTypedef | IDLCallback) {
+        let text = ""
+        if (isCallback(node)) {
+            text = callbackType(node)
+        } else {
+            text = getVerbatimDts(node) ?? printTypeForTS(node.type)
+        }
         let isExport = hasExtAttribute(node, "Export")
         const typeParamsAttr = getExtAttribute(node, "TypeParameters")
         const typeParams = typeParamsAttr ? `<${typeParamsAttr}>` : ""
-        this.print(`${isExport ? "export ": ""}declare type ${(node.name)}${typeParams} = ${text};`)
+        this.print(`${isExport ? "export ": ""}declare type ${getName(node)}${typeParams} = ${text};`)
     }
 
     printModuleType(node: IDLModuleType) {

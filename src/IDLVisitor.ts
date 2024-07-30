@@ -167,8 +167,13 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
                 type: createReferenceType(`Imported${name}`)
             }
         }
+
+        let extendedAttributes = this.computeDeprecatedExtendAttributes(node, node.typeParameters ? [{
+            name: "TypeParameters",
+            value: node.typeParameters.map(it => it.getText()).join(",")
+        }] : undefined)
         if (ts.isFunctionTypeNode(node.type)) {
-            return this.serializeFunctionType(name, node.type)
+            return this.serializeFunctionType(name, node.type, extendedAttributes)
         }
         if (ts.isTypeLiteralNode(node.type)) {
             return this.serializeObjectType(name, node.type, node.typeParameters)
@@ -182,10 +187,6 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             }
         }
         this.startScope()
-        let extendedAttributes = this.computeDeprecatedExtendAttributes(node, node.typeParameters ? [{
-            name: "TypeParameters",
-            value: node.typeParameters.map(it => it.getText()).join(",")
-        }] : undefined)
 
         return {
             kind: IDLKind.Typedef,
@@ -459,12 +460,13 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         }
     }
 
-    serializeFunctionType(name: string, signature: ts.SignatureDeclarationBase): IDLCallback {
+    serializeFunctionType(name: string, signature: ts.SignatureDeclarationBase, extendedAttributes?: IDLExtendedAttribute[]): IDLCallback {
         return {
             kind: IDLKind.Callback,
             name: name,
             parameters: signature.parameters.map(it => this.serializeParameter(it, name)),
             returnType: this.serializeType(signature.type, name),
+            extendedAttributes: extendedAttributes,
         };
     }
 
