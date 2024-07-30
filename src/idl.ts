@@ -531,7 +531,7 @@ export function printInterface(idl: IDLInterface): stringOrNone[] {
     })
         .filter(isDefined)
         .map(scope => {
-            idl.scope ? idl.scope.concat(scope) : idl.scope = scope
+            idl.scope ? idl.scope.push(...scope) : idl.scope = scope
         })
     return [
         ...printExtendedAttributes(idl, 0),
