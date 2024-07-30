@@ -192,7 +192,7 @@ if (options.linter) {
                 console.log(histogram)
                 if (!outFile || options.verbose) console.log(generated)
                 if (outFile) fs.writeFileSync(outFile, generated)
-                if (histogramFile) fs.writeFileSync(histogramFile, generated)
+                if (histogramFile) fs.writeFileSync(histogramFile, histogram)
                 process.exit(exitCode)
             }
         }
