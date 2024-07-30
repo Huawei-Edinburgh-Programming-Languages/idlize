@@ -45,5 +45,6 @@ pg java:run:
   before_script:
     - !reference [.setup, script]
   script:
+    - ls /usr/lib/jvm
     - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 npm run run:java
 
