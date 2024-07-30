@@ -1,0 +1,428 @@
+ability_component.d.ts:44:10 - [TYPE_LITERAL] Type literal
+ability_component.d.ts:44:18 - [IMPORT_TYPE] Import type: import('../api/@ohos.app.ability.Want').default
+action_sheet.d.ts:274:12 - [TYPE_LITERAL] Type literal
+action_sheet.d.ts:513:11 - [TYPE_LITERAL] Type literal
+alert_dialog.d.ts:1012:12 - [TYPE_LITERAL] Type literal
+alert_dialog.d.ts:1184:0 - [DUPLICATE_INTERFACE] Duplicate interface DismissDialogAction: /home/huawei/idlize/interface_sdk-js/api/@internal/component/ets/alert_dialog.d.ts and /home/huawei/idlize/interface_sdk-js/api/@internal/component/ets/action_sheet.d.ts
+alert_dialog.d.ts:1255:17 - [TYPE_LITERAL] Type literal
+alert_dialog.d.ts:1442:19 - [TYPE_LITERAL] Type literal
+alphabet_indexer.d.ts:166:10 - [TYPE_LITERAL] Type literal
+animator.d.ts:28:0 - [INCORRECT_DATA_CLASS] Data class SpringProp declared wrong way: use class/interface with fields
+animator.d.ts:49:0 - [INCORRECT_DATA_CLASS] Data class SpringMotion declared wrong way: use class/interface with fields
+animator.d.ts:71:0 - [INCORRECT_DATA_CLASS] Data class FrictionMotion declared wrong way: use class/interface with fields
+animator.d.ts:92:0 - [INCORRECT_DATA_CLASS] Data class ScrollMotion declared wrong way: use class/interface with fields
+button.d.ts:352:2 - [ENUM_WITH_INIT] Enum ControlSize.SMALL with non-int initializer: 'small'
+button.d.ts:371:2 - [ENUM_WITH_INIT] Enum ControlSize.NORMAL with non-int initializer: 'normal'
+calendar.d.ts:1538:14 - [TYPE_LITERAL] Type literal
+calendar.d.ts:1578:10 - [TYPE_LITERAL] Type literal
+calendar.d.ts:1579:10 - [TYPE_LITERAL] Type literal
+canvas.d.ts:28:29 - [IMPORT_TYPE] Import type: import('../api/@ohos.graphics.drawing').default.Canvas
+canvas.d.ts:2351:0 - [METHOD_OVERLOADING] Method overloaded: drawImage
+canvas.d.ts:2351:0 - [METHOD_OVERLOADING] Method overloaded: drawImage
+canvas.d.ts:2351:0 - [METHOD_OVERLOADING] Method overloaded: clip
+canvas.d.ts:2351:0 - [METHOD_OVERLOADING] Method overloaded: fill
+canvas.d.ts:2351:0 - [METHOD_OVERLOADING] Method overloaded: stroke
+canvas.d.ts:2351:0 - [METHOD_OVERLOADING] Method overloaded: createImageData
+canvas.d.ts:2351:0 - [METHOD_OVERLOADING] Method overloaded: putImageData
+canvas.d.ts:2351:0 - [METHOD_OVERLOADING] Method overloaded: setTransform
+canvas.d.ts:5174:37 - [ANY_KEYWORD] Keyword "any" is disallowed: quality?: any
+canvas.d.ts:5325:37 - [ANY_KEYWORD] Keyword "any" is disallowed: quality?: any
+column.d.ts:102:11 - [TYPE_LITERAL] Type literal
+common.d.ts:1257:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function getContext(component?: Object): Context;
+common.d.ts:1300:23 - [IMPORT_TYPE] Import type: import('../api/application/Context').default
+common.d.ts:1335:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function postCardAction(component: Object, action: Object): void;
+common.d.ts:1703:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function $r(value: string, ...params: any[]): Resource;
+common.d.ts:1703:46 - [ANY_KEYWORD] Keyword "any" is disallowed: any[]
+common.d.ts:1743:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function $rawfile(value: string): Resource;
+common.d.ts:3091:9 - [TYPE_LITERAL] Type literal
+common.d.ts:3120:10 - [TYPE_LITERAL] Type literal
+common.d.ts:3149:11 - [TYPE_LITERAL] Type literal
+common.d.ts:3178:8 - [TYPE_LITERAL] Type literal
+common.d.ts:3205:11 - [TYPE_LITERAL] Type literal
+common.d.ts:3234:11 - [TYPE_LITERAL] Type literal
+common.d.ts:3922:33 - [TYPE_LITERAL] Type literal
+common.d.ts:3930:14 - [TYPE_LITERAL] Type literal
+common.d.ts:4284:20 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: Type
+common.d.ts:4284:34 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: Effect
+common.d.ts:4777:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function animateTo(value: AnimateParam, event: () => void): void;
+common.d.ts:4788:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function animateToImmediately(value: AnimateParam, event: () => void): void;
+common.d.ts:4828:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function vp2px(value: number): number;
+common.d.ts:4868:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function px2vp(value: number): number;
+common.d.ts:4908:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function fp2px(value: number): number;
+common.d.ts:4948:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function px2fp(value: number): number;
+common.d.ts:4988:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function lpx2px(value: number): number;
+common.d.ts:5028:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function px2lpx(value: number): number;
+common.d.ts:5049:0 - [NAMESPACE] Namespace detected: focusControl
+common.d.ts:5093:28 - [IMPORT_TYPE] Import type: import('../api/@ohos.multimodalInput.pointer').default.PointerStyle
+common.d.ts:5110:0 - [NAMESPACE] Namespace detected: cursorControl
+common.d.ts:6239:13 - [TUPLE_TYPE] Tuple type: [number, number]
+common.d.ts:8989:24 - [IMPORT_TYPE] Import type: import('../api/@ohos.multimedia.image').default.PixelMap
+common.d.ts:9071:27 - [IMPORT_TYPE] Import type: import('../api/@ohos.data.unifiedDataChannel').default.UnifiedData
+common.d.ts:9086:23 - [IMPORT_TYPE] Import type: import('../api/@ohos.data.unifiedDataChannel').default.Summary
+common.d.ts:9101:31 - [IMPORT_TYPE] Import type: import('../api/@ohos.data.uniformTypeDescriptor').default.UniformDataType
+common.d.ts:9845:29 - [IMPORT_TYPE] Import type: import('../api/@ohos.multimodalInput.intentionCode').IntentionCode
+common.d.ts:10678:12 - [TUPLE_TYPE] Tuple type: [(SheetSize | Length), (SheetSize | Length)?, (SheetSize | Length)?]
+common.d.ts:11016:11 - [ANY_KEYWORD] Keyword "any" is disallowed: normal?: any;
+common.d.ts:11052:12 - [ANY_KEYWORD] Keyword "any" is disallowed: pressed?: any;
+common.d.ts:11088:13 - [ANY_KEYWORD] Keyword "any" is disallowed: disabled?: any;
+common.d.ts:11124:12 - [ANY_KEYWORD] Keyword "any" is disallowed: focused?: any;
+common.d.ts:11160:12 - [ANY_KEYWORD] Keyword "any" is disallowed: clicked?: any;
+common.d.ts:11426:18 - [TYPE_LITERAL] Type literal
+common.d.ts:11504:20 - [TYPE_LITERAL] Type literal
+common.d.ts:11676:19 - [TYPE_LITERAL] Type literal
+common.d.ts:12242:19 - [TYPE_LITERAL] Type literal
+common.d.ts:12534:33 - [TUPLE_TYPE] Tuple type: [from: T, to: T]
+common.d.ts:13944:29 - [IMPORT_TYPE] Import type: import('../api/arkui/ImageModifier').ImageModifier
+common.d.ts:13954:35 - [IMPORT_TYPE] Import type: import('../api/arkui/SymbolGlyphModifier').SymbolGlyphModifier
+common.d.ts:14137:27 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.shape').CircleShape
+common.d.ts:14147:28 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.shape').EllipseShape
+common.d.ts:14157:25 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.shape').PathShape
+common.d.ts:14167:25 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.shape').RectShape
+common.d.ts:14725:47 - [TYPE_LITERAL] Type literal
+common.d.ts:17670:21 - [TYPE_LITERAL] Type literal
+common.d.ts:17671:18 - [TYPE_LITERAL] Type literal
+common.d.ts:17672:18 - [TYPE_LITERAL] Type literal
+common.d.ts:17673:18 - [TYPE_LITERAL] Type literal
+common.d.ts:17674:18 - [TYPE_LITERAL] Type literal
+common.d.ts:18055:51 - [TYPE_LITERAL] Type literal
+common.d.ts:18055:81 - [TYPE_LITERAL] Type literal
+common.d.ts:18126:24 - [TYPE_LITERAL] Type literal
+common.d.ts:18217:23 - [TYPE_LITERAL] Type literal
+common.d.ts:18218:12 - [TUPLE_TYPE] Tuple type: [Length, Length]
+common.d.ts:18295:24 - [TYPE_LITERAL] Type literal
+common.d.ts:18296:12 - [TUPLE_TYPE] Tuple type: [Length, Length]
+common.d.ts:18452:24 - [USE_COMPONENT_AS_PARAM] Component CircleAttribute used as parameter
+common.d.ts:18452:42 - [USE_COMPONENT_AS_PARAM] Component EllipseAttribute used as parameter
+common.d.ts:18452:61 - [USE_COMPONENT_AS_PARAM] Component PathAttribute used as parameter
+common.d.ts:18452:77 - [USE_COMPONENT_AS_PARAM] Component RectAttribute used as parameter
+common.d.ts:18518:14 - [USE_COMPONENT_AS_PARAM] Component CircleAttribute used as parameter
+common.d.ts:18518:32 - [USE_COMPONENT_AS_PARAM] Component EllipseAttribute used as parameter
+common.d.ts:18518:51 - [USE_COMPONENT_AS_PARAM] Component PathAttribute used as parameter
+common.d.ts:18518:67 - [USE_COMPONENT_AS_PARAM] Component RectAttribute used as parameter
+common.d.ts:14211:0 - [METHOD_OVERLOADING] Method overloaded: transition
+common.d.ts:14211:0 - [METHOD_OVERLOADING] Method overloaded: alignRules
+common.d.ts:14211:0 - [METHOD_OVERLOADING] Method overloaded: clip
+common.d.ts:14211:0 - [METHOD_OVERLOADING] Method overloaded: mask
+common.d.ts:14211:0 - [METHOD_OVERLOADING] Method overloaded: geometryTransition
+common.d.ts:14211:0 - [METHOD_OVERLOADING] Method overloaded: bindMenu
+common.d.ts:14211:0 - [METHOD_OVERLOADING] Method overloaded: bindContextMenu
+common.d.ts:14211:0 - [METHOD_OVERLOADING] Method overloaded: bindContentCover
+common.d.ts:19607:28 - [TUPLE_TYPE] Tuple type: [ number, number ]
+common.d.ts:20865:34 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.observer').default.NavDestinationInfo
+common.d.ts:20875:31 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.observer').default.RouterPageInfo
+common.d.ts:20885:30 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.observer').default.NavigationInfo
+common.d.ts:20903:25 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.UIContext').UIContext
+common.d.ts:20912:27 - [IMPORT_TYPE] Import type: import('../api/arkui/Graphics').DrawContext
+common.d.ts:20922:28 - [IMPORT_TYPE] Import type: import('../api/@ohos.graphics.uiEffect').default.VisualEffect
+common.d.ts:20933:22 - [IMPORT_TYPE] Import type: import('../api/@ohos.graphics.uiEffect').default.Filter
+common.d.ts:20943:32 - [IMPORT_TYPE] Import type: import('../api/arkui/ComponentContent').ComponentContent
+common.d.ts:20954:21 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.theme').Theme
+common.d.ts:21120:24 - [TYPE_LITERAL] Type literal
+common.d.ts:21120:26 - [INDEX_SIGNATURE] Index signature type: { [key: string]: unknown }
+common.d.ts:21503:22 - [ANY_KEYWORD] Keyword "any" is disallowed: create(value: any): any;
+common.d.ts:21503:16 - [ANY_KEYWORD] Keyword "any" is disallowed: value: any
+common.d.ts:22008:44 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+common.d.ts:22284:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function wrapBuilder<Args extends Object[]>(builder: (...args: Args) => void): WrappedBuilder<Args>;
+common_ts_ets_api.d.ts:84:33 - [ANY_KEYWORD] Keyword "any" is disallowed: static Link(propName: string): any;
+common_ts_ets_api.d.ts:177:33 - [ANY_KEYWORD] Keyword "any" is disallowed: static Prop(propName: string): any;
+common_ts_ets_api.d.ts:785:2 - [PRIVATE_VISIBILITY] Private visibility is useless: private id_;
+common_ts_ets_api.d.ts:794:2 - [PRIVATE_VISIBILITY] Private visibility is useless: private info_?;
+common_ts_ets_api.d.ts:888:18 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+common_ts_ets_api.d.ts:939:25 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+common_ts_ets_api.d.ts:983:39 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+common_ts_ets_api.d.ts:1066:0 - [MULTIPLE_INHERITANCE] Multiple inheritance for class SyncedPropertyTwoWay
+common_ts_ets_api.d.ts:1077:2 - [PRIVATE_VISIBILITY] Private visibility is useless: private source_;
+common_ts_ets_api.d.ts:1109:23 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+common_ts_ets_api.d.ts:1119:9 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+common_ts_ets_api.d.ts:1129:16 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+common_ts_ets_api.d.ts:1066:0 - [INTERFACE_METHOD_TYPE_INCONSISTENT_WITH_PARENT] SyncedPropertyTwoWay - aboutToBeDeleted
+common_ts_ets_api.d.ts:1140:0 - [MULTIPLE_INHERITANCE] Multiple inheritance for class SyncedPropertyOneWay
+common_ts_ets_api.d.ts:1151:2 - [PRIVATE_VISIBILITY] Private visibility is useless: private wrappedValue_;
+common_ts_ets_api.d.ts:1160:2 - [PRIVATE_VISIBILITY] Private visibility is useless: private source_;
+common_ts_ets_api.d.ts:1192:23 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+common_ts_ets_api.d.ts:1202:9 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+common_ts_ets_api.d.ts:1212:16 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+common_ts_ets_api.d.ts:1140:0 - [INTERFACE_METHOD_TYPE_INCONSISTENT_WITH_PARENT] SyncedPropertyOneWay - aboutToBeDeleted
+common_ts_ets_api.d.ts:1250:2 - [PRIVATE_VISIBILITY] Private visibility is useless: private owningProperties_: Set<number>;
+common_ts_ets_api.d.ts:1270:65 - [ANY_KEYWORD] Keyword "any" is disallowed: newValue: any
+common_ts_ets_api.d.ts:1443:11 - [TYPE_LITERAL] Type literal
+common_ts_ets_api.d.ts:1445:20 - [ANY_KEYWORD] Keyword "any" is disallowed: defaultValue: any;
+common_ts_ets_api.d.ts:1668:16 - [TYPE_LITERAL] Type literal
+common_ts_ets_api.d.ts:1670:20 - [ANY_KEYWORD] Keyword "any" is disallowed: defaultValue: any;
+component3d.d.ts:28:21 - [IMPORT_TYPE] Import type: import('../api/@ohos.graphics.scene').Scene
+content_slot.d.ts:29:23 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.node').Content
+content_slot.d.ts:38:0 - [INCORRECT_DATA_CLASS] Data class ContentSlotAttribute declared wrong way: use class/interface with fields
+content_slot.d.ts:38:0 - [EMPTY_DECLARATION] Empty class or interface declaration ContentSlotAttribute
+custom_dialog_controller.d.ts:70:11 - [ANY_KEYWORD] Keyword "any" is disallowed: builder: any;
+custom_dialog_controller.d.ts:471:0 - [DUPLICATE_INTERFACE] Duplicate interface DismissDialogAction: /home/huawei/idlize/interface_sdk-js/api/@internal/component/ets/custom_dialog_controller.d.ts and /home/huawei/idlize/interface_sdk-js/api/@internal/component/ets/alert_dialog.d.ts
+data_panel.d.ts:134:25 - [TYPE_LITERAL] Type literal
+data_panel.d.ts:185:0 - [DUPLICATE_INTERFACE] Duplicate interface LinearGradient: /home/huawei/idlize/interface_sdk-js/api/@internal/component/ets/data_panel.d.ts and /home/huawei/idlize/interface_sdk-js/api/@internal/component/ets/common.d.ts
+data_panel.d.ts:185:0 - [INCORRECT_DATA_CLASS] Data class LinearGradient declared wrong way: use class/interface with fields
+ellipse.d.ts:94:15 - [TYPE_LITERAL] Type literal
+ellipse.d.ts:134:11 - [TYPE_LITERAL] Type literal
+embedded_component.d.ts:42:12 - [IMPORT_TYPE] Import type: import('../api/@ohos.app.ability.Want').default
+embedded_component.d.ts:71:10 - [IMPORT_TYPE] Import type: import('../api/@ohos.app.ability.Want').default
+embedded_component.d.ts:90:25 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').Callback<TerminationInfo>
+embedded_component.d.ts:100:20 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').ErrorCallback
+enums.d.ts:527:2 - [ENUM_WITH_INIT] Enum ColoringStrategy.INVERT with non-int initializer: 'invert'
+enums.d.ts:544:2 - [ENUM_WITH_INIT] Enum ColoringStrategy.AVERAGE with non-int initializer: 'average'
+enums.d.ts:561:2 - [ENUM_WITH_INIT] Enum ColoringStrategy.PRIMARY with non-int initializer: 'primary'
+enums.d.ts:7424:2 - [ENUM_WITH_INIT] Enum ArrowPointPosition.START with non-int initializer: 'Start'
+enums.d.ts:7441:2 - [ENUM_WITH_INIT] Enum ArrowPointPosition.CENTER with non-int initializer: 'Center'
+enums.d.ts:7458:2 - [ENUM_WITH_INIT] Enum ArrowPointPosition.END with non-int initializer: 'End'
+enums.d.ts:9199:2 - [ENUM_WITH_INIT] Enum OptionWidthMode.FIT_CONTENT with non-int initializer: 'fit_content'
+enums.d.ts:9216:2 - [ENUM_WITH_INIT] Enum OptionWidthMode.FIT_TRIGGER with non-int initializer: 'fit_trigger'
+folder_stack.d.ts:28:32 - [IMPORT_TYPE] Import type: import('../api/@ohos.window').default.WindowStatusType
+folder_stack.d.ts:68:11 - [TYPE_LITERAL] Type literal
+form_component.d.ts:239:9 - [IMPORT_TYPE] Import type: import('../api/@ohos.app.ability.Want').default
+form_component.d.ts:365:14 - [TYPE_LITERAL] Type literal
+gauge.d.ts:102:12 - [TYPE_LITERAL] Type literal
+gesture.d.ts:586:0 - [NAMESPACE] Namespace detected: GestureControl
+gesture.d.ts:797:8 - [TYPE_ELEMENT_TYPE] Type element types unsupported, use type "GestureControl" itself: GestureControl.GestureType
+gesture.d.ts:1864:11 - [TYPE_LITERAL] Type literal
+gesture.d.ts:1957:11 - [TYPE_LITERAL] Type literal
+gesture.d.ts:2093:22 - [TYPE_LITERAL] Type literal
+gesture.d.ts:2236:11 - [TYPE_LITERAL] Type literal
+gesture.d.ts:2407:11 - [TYPE_LITERAL] Type literal
+gesture.d.ts:2491:11 - [TYPE_LITERAL] Type literal
+gesture.d.ts:2662:11 - [TYPE_LITERAL] Type literal
+gesture.d.ts:3046:20 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+gesture.d.ts:3056:42 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+gesture.d.ts:3783:13 - [TYPE_ELEMENT_TYPE] Type element types unsupported, use type "GestureControl" itself: GestureControl.GestureType
+grid.d.ts:56:15 - [TUPLE_TYPE] Tuple type: [number, number]
+image.d.ts:34:34 - [IMPORT_TYPE] Import type: import ('../api/@ohos.arkui.drawableDescriptor').DrawableDescriptor
+image.d.ts:44:34 - [IMPORT_TYPE] Import type: import('../api/@ohos.graphics.drawing').default.ColorFilter
+image.d.ts:54:34 - [IMPORT_TYPE] Import type: import('../api/@ohos.multimedia.image').default.ResolutionQuality
+image.d.ts:865:20 - [TYPE_LITERAL] Type literal
+lazy_for_each.d.ts:37:2 - [ENUM_WITH_INIT] Enum DataOperationType.ADD with non-int initializer: 'add'
+lazy_for_each.d.ts:46:2 - [ENUM_WITH_INIT] Enum DataOperationType.DELETE with non-int initializer: 'delete'
+lazy_for_each.d.ts:55:2 - [ENUM_WITH_INIT] Enum DataOperationType.EXCHANGE with non-int initializer: 'exchange'
+lazy_for_each.d.ts:64:2 - [ENUM_WITH_INIT] Enum DataOperationType.MOVE with non-int initializer: 'move'
+lazy_for_each.d.ts:73:2 - [ENUM_WITH_INIT] Enum DataOperationType.CHANGE with non-int initializer: 'change'
+lazy_for_each.d.ts:82:2 - [ENUM_WITH_INIT] Enum DataOperationType.RELOAD with non-int initializer: 'reload'
+lazy_for_each.d.ts:102:8 - [TYPE_ELEMENT_TYPE] Type element types unsupported, use type "DataOperationType" itself: DataOperationType.ADD
+lazy_for_each.d.ts:154:8 - [TYPE_ELEMENT_TYPE] Type element types unsupported, use type "DataOperationType" itself: DataOperationType.DELETE
+lazy_for_each.d.ts:196:8 - [TYPE_ELEMENT_TYPE] Type element types unsupported, use type "DataOperationType" itself: DataOperationType.CHANGE
+lazy_for_each.d.ts:323:8 - [TYPE_ELEMENT_TYPE] Type element types unsupported, use type "DataOperationType" itself: DataOperationType.MOVE
+lazy_for_each.d.ts:363:8 - [TYPE_ELEMENT_TYPE] Type element types unsupported, use type "DataOperationType" itself: DataOperationType.EXCHANGE
+lazy_for_each.d.ts:403:8 - [TYPE_ELEMENT_TYPE] Type element types unsupported, use type "DataOperationType" itself: DataOperationType.RELOAD
+lazy_for_each.d.ts:705:26 - [ANY_KEYWORD] Keyword "any" is disallowed: getData(index: number): any;
+line.d.ts:102:15 - [TYPE_LITERAL] Type literal
+line.d.ts:150:11 - [TYPE_LITERAL] Type literal
+list.d.ts:894:11 - [TYPE_LITERAL] Type literal
+list.d.ts:1199:11 - [TYPE_LITERAL] Type literal
+list_item_group.d.ts:316:11 - [TYPE_LITERAL] Type literal
+matrix2d.d.ts:51:0 - [METHOD_OVERLOADING] Method overloaded: rotate
+marquee.d.ts:94:10 - [TYPE_LITERAL] Type literal
+nav_destination.d.ts:598:20 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').Callback<NavDestinationContext>
+navigation.d.ts:28:30 - [IMPORT_TYPE] Import type: import('../api/@ohos.window').default.SystemBarStyle
+navigation.d.ts:671:52 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').Callback<PopInfo>
+navigation.d.ts:728:10 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').Callback<PopInfo>
+navigation.d.ts:965:53 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').Callback<PopInfo>
+navigation.d.ts:1045:60 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').Callback<PopInfo>
+navigation.d.ts:815:0 - [METHOD_OVERLOADING] Method overloaded: pushPath
+navigation.d.ts:815:0 - [METHOD_OVERLOADING] Method overloaded: pushDestination
+navigation.d.ts:815:0 - [METHOD_OVERLOADING] Method overloaded: pushPathByName
+navigation.d.ts:815:0 - [METHOD_OVERLOADING] Method overloaded: pushDestinationByName
+navigation.d.ts:815:0 - [METHOD_OVERLOADING] Method overloaded: replacePath
+navigation.d.ts:815:0 - [METHOD_OVERLOADING] Method overloaded: pop
+navigation.d.ts:815:0 - [METHOD_OVERLOADING] Method overloaded: popToName
+navigation.d.ts:815:0 - [METHOD_OVERLOADING] Method overloaded: popToIndex
+navigation.d.ts:2131:26 - [TUPLE_TYPE] Tuple type: [Dimension, Dimension]
+navigator.d.ts:168:11 - [TYPE_LITERAL] Type literal
+node_container.d.ts:58:15 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.node').NodeController
+page_transition.d.ts:353:19 - [TYPE_LITERAL] Type literal
+page_transition.d.ts:382:15 - [TYPE_LITERAL] Type literal
+panel.d.ts:278:2 - [ENUM_WITH_INIT] Enum PanelHeight.WRAP_CONTENT with non-int initializer: 'wrapContent'
+particle.d.ts:136:13 - [TYPE_LITERAL] Type literal
+particle.d.ts:137:11 - [TUPLE_TYPE] Tuple type: [number, number]
+particle.d.ts:138:11 - [TUPLE_TYPE] Tuple type: [number, number]
+particle.d.ts:158:17 - [TYPE_LITERAL] Type literal
+particle.d.ts:265:8 - [TUPLE_TYPE] Tuple type: [Dimension, Dimension]
+particle.d.ts:318:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ParticleType.POINT]
+particle.d.ts:335:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ParticleType.IMAGE]
+particle.d.ts:420:12 - [TYPE_LITERAL] Type literal
+particle.d.ts:452:12 - [INDEXED_ACCESS_TYPE] Indexed access type: ParticleConfigs[PARTICLE]
+particle.d.ts:561:13 - [TUPLE_TYPE] Tuple type: [Dimension, Dimension]
+particle.d.ts:584:9 - [TUPLE_TYPE] Tuple type: [Dimension, Dimension]
+particle.d.ts:616:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ParticleUpdater.NONE]
+particle.d.ts:633:28 - [TUPLE_TYPE] Tuple type: [T, T]
+particle.d.ts:633:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ParticleUpdater.RANDOM]
+particle.d.ts:650:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ParticleUpdater.CURVE]
+particle.d.ts:684:9 - [TUPLE_TYPE] Tuple type: [TYPE, TYPE]
+particle.d.ts:703:12 - [TYPE_LITERAL] Type literal
+particle.d.ts:705:12 - [INDEXED_ACCESS_TYPE] Indexed access type: ParticlePropertyUpdaterConfigs<TYPE>[UPDATER]
+particle.d.ts:738:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ParticleUpdater.NONE]
+particle.d.ts:755:28 - [TYPE_LITERAL] Type literal
+particle.d.ts:756:7 - [TUPLE_TYPE] Tuple type: [number, number]
+particle.d.ts:757:7 - [TUPLE_TYPE] Tuple type: [number, number]
+particle.d.ts:758:7 - [TUPLE_TYPE] Tuple type: [number, number]
+particle.d.ts:759:7 - [TUPLE_TYPE] Tuple type: [number, number]
+particle.d.ts:755:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ParticleUpdater.RANDOM]
+particle.d.ts:779:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ParticleUpdater.CURVE]
+particle.d.ts:813:9 - [TUPLE_TYPE] Tuple type: [ResourceColor, ResourceColor]
+particle.d.ts:842:12 - [TYPE_LITERAL] Type literal
+particle.d.ts:844:12 - [INDEXED_ACCESS_TYPE] Indexed access type: ParticleColorPropertyUpdaterConfigs[UPDATER]
+particle.d.ts:995:11 - [TYPE_LITERAL] Type literal
+particle.d.ts:1039:2 - [ENUM_WITH_INIT] Enum ParticleType.POINT with non-int initializer: 'point'
+particle.d.ts:1054:2 - [ENUM_WITH_INIT] Enum ParticleType.IMAGE with non-int initializer: 'image'
+particle.d.ts:1086:2 - [ENUM_WITH_INIT] Enum ParticleEmitterShape.RECTANGLE with non-int initializer: 'rectangle'
+particle.d.ts:1101:2 - [ENUM_WITH_INIT] Enum ParticleEmitterShape.CIRCLE with non-int initializer: 'circle'
+particle.d.ts:1116:2 - [ENUM_WITH_INIT] Enum ParticleEmitterShape.ELLIPSE with non-int initializer: 'ellipse'
+particle.d.ts:1176:2 - [ENUM_WITH_INIT] Enum ParticleUpdater.NONE with non-int initializer: 'none'
+particle.d.ts:1191:2 - [ENUM_WITH_INIT] Enum ParticleUpdater.RANDOM with non-int initializer: 'random'
+particle.d.ts:1206:2 - [ENUM_WITH_INIT] Enum ParticleUpdater.CURVE with non-int initializer: 'curve'
+particle.d.ts:1218:24 - [IMPORT_TYPE] Import type: import('../../../../api/arkui/Graphics').SizeT<T>
+particle.d.ts:1229:28 - [IMPORT_TYPE] Import type: import('../../../../api/arkui/Graphics').PositionT<T>
+path.d.ts:94:15 - [TYPE_LITERAL] Type literal
+path.d.ts:134:11 - [TYPE_LITERAL] Type literal
+pattern_lock.d.ts:389:25 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').Callback<number>
+plugin_component.d.ts:68:10 - [TYPE_LITERAL] Type literal
+plugin_component.d.ts:68:12 - [CPP_KEYWORDS] Use C/C++ keyword as the field name: template
+plugin_component.d.ts:68:53 - [ANY_KEYWORD] Keyword "any" is disallowed: data: any
+polygon.d.ts:85:15 - [TYPE_LITERAL] Type literal
+polygon.d.ts:125:11 - [TYPE_LITERAL] Type literal
+polyline.d.ts:86:15 - [TYPE_LITERAL] Type literal
+polyline.d.ts:126:11 - [TYPE_LITERAL] Type literal
+progress.d.ts:749:0 - [MULTIPLE_INHERITANCE] Multiple inheritance for interface RingStyleOptions
+progress.d.ts:821:0 - [MULTIPLE_INHERITANCE] Multiple inheritance for interface LinearStyleOptions
+progress.d.ts:876:0 - [MULTIPLE_INHERITANCE] Multiple inheritance for interface CapsuleStyleOptions
+progress.d.ts:1213:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ProgressType.Linear]
+progress.d.ts:1228:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ProgressType.Ring]
+progress.d.ts:1243:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ProgressType.Eclipse]
+progress.d.ts:1258:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ProgressType.ScaleRing]
+progress.d.ts:1273:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ProgressType.Capsule]
+rating.d.ts:94:13 - [TYPE_LITERAL] Type literal
+rating.d.ts:310:19 - [TYPE_LITERAL] Type literal
+rect.d.ts:96:6 - [TYPE_LITERAL] Type literal
+rect.d.ts:101:8 - [TYPE_LITERAL] Type literal
+rect.d.ts:153:6 - [TYPE_LITERAL] Type literal
+rect.d.ts:158:8 - [TYPE_LITERAL] Type literal
+relative_container.d.ts:367:0 - [METHOD_OVERLOADING] Method overloaded: barrier
+rich_editor.d.ts:258:13 - [TUPLE_TYPE] Tuple type: [number, number]
+rich_editor.d.ts:384:15 - [TYPE_LITERAL] Type literal
+rich_editor.d.ts:496:8 - [TUPLE_TYPE] Tuple type: [Dimension, Dimension]
+rich_editor.d.ts:760:9 - [TUPLE_TYPE] Tuple type: [Dimension, Dimension]
+rich_editor.d.ts:1055:14 - [TYPE_LITERAL] Type literal
+rich_editor.d.ts:1147:9 - [TUPLE_TYPE] Tuple type: [number, number]
+rich_editor.d.ts:1351:16 - [TUPLE_TYPE] Tuple type: [number, number]
+rich_editor.d.ts:1446:8 - [TUPLE_TYPE] Tuple type: [number, number]
+rich_editor.d.ts:1600:16 - [TUPLE_TYPE] Tuple type: [number, number]
+rich_editor.d.ts:2302:13 - [TUPLE_TYPE] Tuple type: [number, number]
+rich_editor.d.ts:3082:0 - [MULTIPLE_INHERITANCE] Multiple inheritance for class RichEditorStyledStringController
+root_scene.d.ts:29:0 - [EMPTY_DECLARATION] Empty class or interface declaration RootSceneSession
+row.d.ts:94:11 - [TYPE_LITERAL] Type literal
+scroll.d.ts:433:18 - [TYPE_LITERAL] Type literal
+scroll.d.ts:599:20 - [TYPE_LITERAL] Type literal
+scroll.d.ts:385:0 - [METHOD_OVERLOADING] Method overloaded: scrollPage
+scroll.d.ts:955:0 - [INTERFACE_METHOD_TYPE_INCONSISTENT_WITH_PARENT] ScrollAttribute - onDidScroll
+search.d.ts:353:13 - [TYPE_LITERAL] Type literal
+search.d.ts:682:22 - [TYPE_LITERAL] Type literal
+shape.d.ts:210:18 - [TYPE_LITERAL] Type literal
+stack.d.ts:94:11 - [TYPE_LITERAL] Type literal
+state_management.d.ts:169:24 - [ANY_KEYWORD] Keyword "any" is disallowed: val: any
+stepper.d.ts:73:11 - [TYPE_LITERAL] Type literal
+swiper.d.ts:201:23 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+swiper.d.ts:224:22 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+swiper.d.ts:247:24 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+swiper.d.ts:270:25 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+swiper.d.ts:283:31 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+swiper.d.ts:296:29 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+swiper.d.ts:572:30 - [TYPE_LITERAL] Type literal
+symbolglyph.d.ts:290:0 - [INCORRECT_DATA_CLASS] Data class SymbolEffect declared wrong way: use class/interface with fields
+symbolglyph.d.ts:290:0 - [EMPTY_DECLARATION] Empty class or interface declaration SymbolEffect
+symbolglyph.d.ts:523:0 - [METHOD_OVERLOADING] Method overloaded: symbolEffect
+tabs.d.ts:416:11 - [TYPE_LITERAL] Type literal
+tabs.d.ts:906:17 - [TYPE_ELEMENT_TYPE] Type element types unsupported, use type "BarMode" itself: BarMode.Fixed
+tabs.d.ts:929:17 - [TYPE_ELEMENT_TYPE] Type element types unsupported, use type "BarMode" itself: BarMode.Scrollable
+tabs.d.ts:799:0 - [METHOD_OVERLOADING] Method overloaded: barMode
+tabs.d.ts:799:0 - [METHOD_OVERLOADING] Method overloaded: barMode
+tab_content.d.ts:164:0 - [DUPLICATE_INTERFACE] Duplicate interface IndicatorStyle: /home/huawei/idlize/interface_sdk-js/api/@internal/component/ets/tab_content.d.ts and /home/huawei/idlize/interface_sdk-js/api/@internal/component/ets/swiper.d.ts
+tab_content.d.ts:324:0 - [DUPLICATE_INTERFACE] Duplicate interface LabelStyle: /home/huawei/idlize/interface_sdk-js/api/@internal/component/ets/tab_content.d.ts and /home/huawei/idlize/interface_sdk-js/api/@internal/component/ets/button.d.ts
+tab_content.d.ts:539:0 - [METHOD_OVERLOADING] Method overloaded: of
+tab_content.d.ts:539:0 - [METHOD_OVERLOADING] Method overloaded: padding
+tab_content.d.ts:1109:2 - [TYPE_LITERAL] Type literal
+tab_content.d.ts:1072:0 - [METHOD_OVERLOADING] Method overloaded: tabBar
+text.d.ts:514:22 - [TYPE_LITERAL] Type literal
+text_clock.d.ts:221:13 - [TYPE_LITERAL] Type literal
+text_common.d.ts:586:24 - [IMPORT_TYPE] Import type: import('../api/@ohos.graphics.text').default.Affinity
+text_common.d.ts:597:27 - [IMPORT_TYPE] Import type: import('../api/@ohos.graphics.text').default.LineMetrics
+text_input.d.ts:2196:22 - [TYPE_LITERAL] Type literal
+time_picker.d.ts:292:31 - [IMPORT_TYPE] Import type: import('../api/@ohos.intl').default.DateTimeOptions
+toggle.d.ts:317:12 - [TYPE_LITERAL] Type literal
+with_theme.d.ts:26:27 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.theme').CustomTheme
+with_theme.d.ts:81:0 - [INCORRECT_DATA_CLASS] Data class WithThemeAttribute declared wrong way: use class/interface with fields
+with_theme.d.ts:81:0 - [EMPTY_DECLARATION] Empty class or interface declaration WithThemeAttribute
+units.d.ts:53:24 - [IMPORT_TYPE] Import type: import('../api/global/resource').Resource
+units.d.ts:100:18 - [TEMPLATE_LITERAL] Template literal: `${number}px`
+units.d.ts:115:18 - [TEMPLATE_LITERAL] Template literal: `${number}vp`
+units.d.ts:130:18 - [TEMPLATE_LITERAL] Template literal: `${number}fp`
+units.d.ts:145:19 - [TEMPLATE_LITERAL] Template literal: `${number}lpx`
+units.d.ts:160:26 - [TEMPLATE_LITERAL] Template literal: `${number}%`
+units.d.ts:175:22 - [TEMPLATE_LITERAL] Template literal: `${number}deg`
+units.d.ts:254:23 - [TYPE_LITERAL] Type literal
+units.d.ts:533:26 - [TYPE_LITERAL] Type literal
+units.d.ts:728:33 - [TYPE_LITERAL] Type literal
+units.d.ts:798:30 - [TYPE_LITERAL] Type literal
+units.d.ts:993:31 - [TYPE_LITERAL] Type literal
+units.d.ts:1063:26 - [TYPE_LITERAL] Type literal
+units.d.ts:1277:26 - [TYPE_LITERAL] Type literal
+units.d.ts:1412:33 - [TYPE_LITERAL] Type literal
+units.d.ts:1479:22 - [TYPE_LITERAL] Type literal
+units.d.ts:1589:31 - [TYPE_LITERAL] Type literal
+units.d.ts:1669:33 - [IMPORT_TYPE] Import type: import('../api/arkui/Graphics').LengthMetricsUnit
+units.d.ts:1680:29 - [IMPORT_TYPE] Import type: import('../api/arkui/Graphics').LengthMetrics
+units.d.ts:1691:28 - [IMPORT_TYPE] Import type: import('../api/arkui/Graphics').ColorMetrics
+units.d.ts:3061:0 - [INCORRECT_DATA_CLASS] Data class ColorFilter declared wrong way: use class/interface with fields
+video.d.ts:449:0 - [METHOD_OVERLOADING] Method overloaded: setCurrentTime
+web.d.ts:42:33 - [IMPORT_TYPE] Import type: import('../api/@ohos.web.webview').default.WebviewController
+web.d.ts:1782:0 - [METHOD_OVERLOADING] Method overloaded: confirm
+web.d.ts:1895:2 - [ENUM_WITH_INIT] Enum ProtectedResourceType.MidiSysex with non-int initializer: 'TYPE_MIDI_SYSEX'
+web.d.ts:1911:2 - [ENUM_WITH_INIT] Enum ProtectedResourceType.VIDEO_CAPTURE with non-int initializer: 'TYPE_VIDEO_CAPTURE'
+web.d.ts:1927:2 - [ENUM_WITH_INIT] Enum ProtectedResourceType.AUDIO_CAPTURE with non-int initializer: 'TYPE_AUDIO_CAPTURE'
+web.d.ts:2507:2 - [ENUM_WITH_INIT] Enum ContextMenuEditStateFlags.CAN_CUT with non-int initializer: 1 << 0
+web.d.ts:2521:2 - [ENUM_WITH_INIT] Enum ContextMenuEditStateFlags.CAN_COPY with non-int initializer: 1 << 1
+web.d.ts:2535:2 - [ENUM_WITH_INIT] Enum ContextMenuEditStateFlags.CAN_PASTE with non-int initializer: 1 << 2
+web.d.ts:2549:2 - [ENUM_WITH_INIT] Enum ContextMenuEditStateFlags.CAN_SELECT_ALL with non-int initializer: 1 << 3
+web.d.ts:3994:25 - [TYPE_LITERAL] Type literal
+web.d.ts:4005:20 - [TYPE_LITERAL] Type literal
+web.d.ts:4016:19 - [TYPE_LITERAL] Type literal
+web.d.ts:4047:35 - [TYPE_LITERAL] Type literal
+web.d.ts:6001:0 - [METHOD_OVERLOADING] Method overloaded: onRenderExited
+web.d.ts:8474:0 - [DUPLICATE_INTERFACE] Duplicate interface ExpandedMenuItemOptions: /home/huawei/idlize/interface_sdk-js/api/@internal/component/ets/web.d.ts and /home/huawei/idlize/interface_sdk-js/api/@internal/component/ets/text_common.d.ts
+xcomponent.d.ts:167:34 - [TYPE_LITERAL] Type literal
+xcomponent.d.ts:332:10 - [TYPE_LITERAL] Type literal
+xcomponent.d.ts:352:10 - [TYPE_LITERAL] Type literal
+sidebar.d.ts:345:10 - [TYPE_LITERAL] Type literal
+sidebar.d.ts:426:0 - [DUPLICATE_INTERFACE] Duplicate interface DividerStyle: /home/huawei/idlize/interface_sdk-js/api/@internal/component/ets/sidebar.d.ts and /home/huawei/idlize/interface_sdk-js/api/@internal/component/ets/tabs.d.ts
+sidebar.d.ts:530:0 - [METHOD_OVERLOADING] Method overloaded: sideBarWidth
+sidebar.d.ts:530:0 - [METHOD_OVERLOADING] Method overloaded: minSideBarWidth
+sidebar.d.ts:530:0 - [METHOD_OVERLOADING] Method overloaded: maxSideBarWidth
+ui_extension_component.d.ts:101:0 - [DUPLICATE_INTERFACE] Duplicate interface TerminationInfo: /home/huawei/idlize/interface_sdk-js/api/@internal/component/ets/ui_extension_component.d.ts and /home/huawei/idlize/interface_sdk-js/api/@internal/component/ets/embedded_component.d.ts
+ui_extension_component.d.ts:120:10 - [IMPORT_TYPE] Import type: import('../api/@ohos.app.ability.Want').default
+ui_extension_component.d.ts:142:13 - [TYPE_LITERAL] Type literal
+ui_extension_component.d.ts:142:15 - [INDEX_SIGNATURE] Index signature type: { [key: string]: Object }
+ui_extension_component.d.ts:155:45 - [TYPE_LITERAL] Type literal
+ui_extension_component.d.ts:155:47 - [INDEX_SIGNATURE] Index signature type: { [key: string]: Object }
+ui_extension_component.d.ts:155:17 - [TYPE_LITERAL] Type literal
+ui_extension_component.d.ts:155:19 - [INDEX_SIGNATURE] Index signature type: { [key: string]: Object }
+ui_extension_component.d.ts:133:0 - [METHOD_OVERLOADING] Method overloaded: on
+ui_extension_component.d.ts:133:0 - [METHOD_OVERLOADING] Method overloaded: off
+ui_extension_component.d.ts:234:10 - [IMPORT_TYPE] Import type: import('../api/@ohos.app.ability.Want').default
+ui_extension_component.d.ts:258:14 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').Callback<UIExtensionProxy>
+ui_extension_component.d.ts:270:14 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').Callback<{ [key: string]: Object }>
+ui_extension_component.d.ts:284:14 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').Callback<{
+      code: number;
+      want?: import('../api/@ohos.app.ability.Want').default;
+    }>
+ui_extension_component.d.ts:302:14 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').Callback<number>
+ui_extension_component.d.ts:314:14 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').ErrorCallback
+isolated_component.d.ts:29:32 - [IMPORT_TYPE] Import type: import('../api/@ohos.worker').default.RestrictedWorker
+isolated_component.d.ts:39:29 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').ErrorCallback
+isolated_component.d.ts:49:20 - [IMPORT_TYPE] Import type: import('../api/@ohos.app.ability.Want').default
+styled_string.d.ts:213:0 - [DUPLICATE_INTERFACE] Duplicate interface TextStyle: /home/huawei/idlize/interface_sdk-js/api/@internal/component/ets/styled_string.d.ts and /home/huawei/idlize/interface_sdk-js/api/@internal/component/ets/alert_dialog.d.ts
+styled_string.d.ts:541:0 - [INCORRECT_DATA_CLASS] Data class GestureStyle declared wrong way: use class/interface with fields
+inspector.d.ts:31:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function getInspectorNodes(): object;
+inspector.d.ts:44:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function getInspectorNodeById(id: number): object;
+inspector.d.ts:55:0 - [NAMESPACE] Namespace detected: Profiler
+inspector.d.ts:87:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function setAppBgColor(value: string): void;
