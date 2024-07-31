@@ -19,25 +19,30 @@ import { DeclarationTable, DeclarationTarget, PrimitiveType } from "../Declarati
 import { LanguageWriter, Method, NamedMethodSignature, Type } from "../LanguageWriters";
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig';
 import { checkDeclarationTargetMaterialized } from '../Materialized';
-import {convertDeclToFeature, ImportFeature, ImportsCollector} from '../ImportsCollector';
+import {convertDeclToFeature, ImportsCollector} from '../ImportsCollector';
 import { PeerLibrary } from '../PeerLibrary';
-import { collectDtsImports } from '../DtsImportsGenerator';
-import {createTypeDependenciesCollector, FilteredDeclarationCollector, isSourceDecl} from "../PeerGeneratorVisitor";
+import {createTypeDependenciesCollector, isSourceDecl} from "../PeerGeneratorVisitor";
 import {isSyntheticDeclaration} from "../synthetic_declaration";
-
-function collectAllInterfacesImports(library: PeerLibrary, imports: ImportsCollector) {
-    for (const file of library.files)
-        file.importFeatures.forEach(it => imports.addFeature(it.feature, it.module))
-}
+import { DeclarationDependenciesCollector } from "../dependencies_collector";
 
 function printSerializerImports(library: PeerLibrary, writer: LanguageWriter) {
-    if (writer.language === Language.TS) {
-        const collector = new ImportsCollector()
-        collectAllInterfacesImports(library, collector)
-        collector.print(writer, './peers/Serializer.ts')
-    } else if (writer.language === Language.ARKTS) {
-        writer.print(collectDtsImports('..').trim())
+    const collector = new ImportsCollector()
+    const serializerCollector = createSerializerDependenciesCollector(writer.language, collector, library)
+    if (serializerCollector != undefined) {
+        for (const decl of library.declarationTable.orderedDependenciesToGenerate) {
+            if (ignoreSerializeTarget(library.declarationTable, decl)) {
+                continue
+            }
+            if (!ts.isInterfaceDeclaration(decl) && !ts.isClassDeclaration(decl)) {
+                continue
+            }
+            if (!canSerializeTarget(decl)) {
+                continue
+            }
+            serializerCollector.collect(decl)
+        }
     }
+    collector.print(writer, `./peers/Serializer.${writer.language.extension}`)
 }
 
 function canSerializeTarget(declaration: ts.ClassDeclaration | ts.InterfaceDeclaration): boolean {
@@ -124,7 +129,6 @@ class SerializerPrinter {
             }
         let seenNames = new Set<string>()
         printSerializerImports(this.library, this.writer)
-        const importFeatures: ImportFeature[] = []
         this.writer.writeClass(className, writer => {
             if (ctorSignature) {
                 const ctorMethod = new Method(superName, ctorSignature)
@@ -137,33 +141,14 @@ class SerializerPrinter {
                 if (seenNames.has(name)) continue
                 seenNames.add(name)
                 if (ts.isInterfaceDeclaration(declaration) || ts.isClassDeclaration(declaration))
-                    if (canSerializeTarget(declaration)) {
-                        const typeDependenciesCollector = createTypeDependenciesCollector(this.library)
-                        const declDependenciesCollector = new FilteredDeclarationCollector(this.library, typeDependenciesCollector)
-
-                        // const currentDeps = convertDeclaration(declDependenciesCollector, declaration)
-                        // for (const dep of currentDeps) {
-                        //     if (deps.has(dep)) continue
-                        //     if (!isSourceDecl(dep)) continue
-                        //     deps.add(dep)
-                        //     this.collectDepsRecursive(dep, deps)
-                        // }
-                        declDependenciesCollector.convert(declaration).forEach(it => {
-                            if (isSourceDecl(it) || (isSyntheticDeclaration(it))) {
-                                importFeatures.push(convertDeclToFeature(this.library, it))
-                            }
-                        })
+                    if (canSerializeTarget(declaration))
                         this.generateSerializer(declaration, prefix)
-                    }
             }
             if (this.writer.language == Language.JAVA) {
                 // TODO: somewhat ugly.
                 this.writer.print(`static Serializer createSerializer() { return new Serializer(); }`)
             }
         }, superName)
-        for (const i of importFeatures) {
-            console.log(`import ${i.feature} ${i.module}`)
-        }
     }
 }
 
@@ -246,4 +231,53 @@ export function writeSerializer(library: PeerLibrary, writer: LanguageWriter) {
 export function writeDeserializer(library: PeerLibrary, writer: LanguageWriter) {
     const printer = new DeserializerPrinter(library, writer)
     printer.print()
+}
+
+interface SerializerDependenciesCollector {
+    collect(decl: ts.Declaration): void
+}
+
+class TSSerializerDependenciesCollector implements SerializerDependenciesCollector {
+    constructor(private readonly collector: ImportsCollector, private readonly library: PeerLibrary) {
+        for (const file of this.library.files) {
+            file.importFeatures.forEach(it => this.collector.addFeature(it.feature, it.module))
+        }
+    }
+    collect(decl: ts.Declaration) {
+
+    }
+}
+
+class ArkTSSerializerDependenciesCollector implements SerializerDependenciesCollector {
+    private readonly declDependenciesCollector: DeclarationDependenciesCollector
+    constructor(private readonly collector: ImportsCollector, private readonly library: PeerLibrary) {
+        this.declDependenciesCollector = new DeclarationDependenciesCollector(
+            library.declarationTable.typeChecker!,
+            createTypeDependenciesCollector(library))
+    }
+
+    collect(decl: ts.Declaration): void {
+        this.declDependenciesCollector.convert(decl).forEach(it => {
+            if (isSourceDecl(it) || isSyntheticDeclaration(it)) {
+                const feature = convertDeclToFeature(this.library, it)
+                this.collector.addFeature(feature.feature, feature.module)
+            }
+        })
+        if (decl.parent && isSourceDecl(decl)) {
+            const feature = convertDeclToFeature(this.library, decl)
+            this.collector.addFeature(feature.feature, feature.module)
+        }
+    }
+}
+
+function createSerializerDependenciesCollector(language: Language,
+                                               collector: ImportsCollector,
+                                               library: PeerLibrary): SerializerDependenciesCollector | undefined {
+    switch (language) {
+        case Language.TS:
+            return new TSSerializerDependenciesCollector(collector, library)
+        case Language.ARKTS:
+            return new ArkTSSerializerDependenciesCollector(collector, library)
+    }
+    return undefined
 }
