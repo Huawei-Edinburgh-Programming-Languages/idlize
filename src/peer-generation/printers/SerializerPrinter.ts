@@ -24,6 +24,7 @@ import { PeerLibrary } from '../PeerLibrary';
 import {createTypeDependenciesCollector, isSourceDecl} from "../PeerGeneratorVisitor";
 import {isSyntheticDeclaration} from "../synthetic_declaration";
 import { DeclarationDependenciesCollector } from "../dependencies_collector";
+import { isBuilderClass } from "../BuilderClass";
 
 function printSerializerImports(table: (ts.ClassDeclaration | ts.InterfaceDeclaration)[], library: PeerLibrary, writer: LanguageWriter) {
     const collector = new ImportsCollector()
@@ -118,6 +119,8 @@ class SerializerPrinter {
         }
         const serializerDeclarations = generateSerializerDeclarationsTable(prefix, this.table)
         printSerializerImports(serializerDeclarations, this.library, this.writer)
+        // just a separator
+        this.writer.print("")
         this.writer.writeClass(className, writer => {
             if (ctorSignature) {
                 const ctorMethod = new Method(superName, ctorSignature)
@@ -182,6 +185,7 @@ class DeserializerPrinter {
         }
         const serializerDeclarations = generateSerializerDeclarationsTable(prefix, this.table)
         printSerializerImports(serializerDeclarations, this.library, this.writer)
+        this.writer.print("")
         this.writer.writeClass(className, writer => {
             if (ctorSignature) {
                 const ctorMethod = new Method(`${className}Base`, ctorSignature)
@@ -207,13 +211,29 @@ interface SerializerDependenciesCollector {
 }
 
 class TSSerializerDependenciesCollector implements SerializerDependenciesCollector {
+    private readonly declDependenciesCollector: DeclarationDependenciesCollector
     constructor(private readonly collector: ImportsCollector, private readonly library: PeerLibrary) {
+        this.declDependenciesCollector = new DeclarationDependenciesCollector(
+            library.declarationTable.typeChecker!,
+            createTypeDependenciesCollector(library))
         for (const file of this.library.files) {
             file.importFeatures.forEach(it => this.collector.addFeature(it.feature, it.module))
         }
     }
     collect(decl: ts.Declaration) {
-
+        this.declDependenciesCollector.convert(decl).forEach(it => {
+            if (this.isBuilderClassDeclaration(it)) {
+                const feature = convertDeclToFeature(this.library, it)
+                this.collector.addFeature(feature.feature, feature.module)
+            }
+        })
+        if (this.isBuilderClassDeclaration(decl)) {
+            const feature = convertDeclToFeature(this.library, decl)
+            this.collector.addFeature(feature.feature, feature.module)
+        }
+    }
+    isBuilderClassDeclaration(decl: ts.Declaration): boolean {
+        return (ts.isInterfaceDeclaration(decl) || ts.isClassDeclaration(decl)) && isBuilderClass(decl)
     }
 }
 
@@ -251,21 +271,24 @@ function createSerializerDependenciesCollector(language: Language,
     return undefined
 }
 
-function generateSerializerDeclarationsTable(prefix: string, table: DeclarationTable) : (ts.ClassDeclaration | ts.InterfaceDeclaration)[] {
+function generateSerializerDeclarationsTable(prefix: string, table: DeclarationTable):
+        (ts.ClassDeclaration | ts.InterfaceDeclaration)[] {
     const declarations = new Array<ts.ClassDeclaration | ts.InterfaceDeclaration>()
     const seenNames = new Set<string>()
     for (let declaration of table.orderedDependenciesToGenerate) {
-        if (ignoreSerializeTarget(table, declaration))
+        if (ignoreSerializeTarget(table, declaration)) {
             continue
+        }
 
-        let name = table.computeTargetName(declaration, false, prefix)
-        if (seenNames.has(name)) continue
+        const name = table.computeTargetName(declaration, false, prefix)
+        if (seenNames.has(name)) {
+            continue
+        }
         seenNames.add(name)
 
-        if (ts.isClassDeclaration(declaration) || ts.isInterfaceDeclaration(declaration)) {
-            if (canSerializeTarget(declaration)) {
-                declarations.push(declaration)
-            }
+        if ((ts.isClassDeclaration(declaration) || ts.isInterfaceDeclaration(declaration))
+            && canSerializeTarget(declaration)) {
+            declarations.push(declaration)
         }
     }
     return declarations
