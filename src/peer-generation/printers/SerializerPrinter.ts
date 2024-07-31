@@ -25,22 +25,11 @@ import {createTypeDependenciesCollector, isSourceDecl} from "../PeerGeneratorVis
 import {isSyntheticDeclaration} from "../synthetic_declaration";
 import { DeclarationDependenciesCollector } from "../dependencies_collector";
 
-function printSerializerImports(library: PeerLibrary, writer: LanguageWriter) {
+function printSerializerImports(table: (ts.ClassDeclaration | ts.InterfaceDeclaration)[], library: PeerLibrary, writer: LanguageWriter) {
     const collector = new ImportsCollector()
     const serializerCollector = createSerializerDependenciesCollector(writer.language, collector, library)
     if (serializerCollector != undefined) {
-        for (const decl of library.declarationTable.orderedDependenciesToGenerate) {
-            if (ignoreSerializeTarget(library.declarationTable, decl)) {
-                continue
-            }
-            if (!ts.isInterfaceDeclaration(decl) && !ts.isClassDeclaration(decl)) {
-                continue
-            }
-            if (!canSerializeTarget(decl)) {
-                continue
-            }
-            serializerCollector.collect(decl)
-        }
+        table.forEach(decl => serializerCollector.collect(decl))
     }
     collector.print(writer, `./peers/Serializer.${writer.language.extension}`)
 }
@@ -126,24 +115,16 @@ class SerializerPrinter {
             case Language.JAVA:
                 ctorSignature = new NamedMethodSignature(Type.Void, [], [])
                 break;
-            }
-        let seenNames = new Set<string>()
-        printSerializerImports(this.library, this.writer)
+        }
+        const serializerDeclarations = generateSerializerDeclarationsTable(prefix, this.table)
+        printSerializerImports(serializerDeclarations, this.library, this.writer)
         this.writer.writeClass(className, writer => {
             if (ctorSignature) {
                 const ctorMethod = new Method(superName, ctorSignature)
-                writer.writeConstructorImplementation(className, ctorSignature, writer => {}, ctorMethod)
+                writer.writeConstructorImplementation(className, ctorSignature, writer => {
+                }, ctorMethod)
             }
-            for (let declaration of this.table.orderedDependenciesToGenerate) {
-                if (ignoreSerializeTarget(this.table, declaration))
-                    continue
-                let name = this.table.computeTargetName(declaration, false, prefix)
-                if (seenNames.has(name)) continue
-                seenNames.add(name)
-                if (ts.isInterfaceDeclaration(declaration) || ts.isClassDeclaration(declaration))
-                    if (canSerializeTarget(declaration))
-                        this.generateSerializer(declaration, prefix)
-            }
+            serializerDeclarations.forEach(decl => this.generateSerializer(decl, prefix))
             if (this.writer.language == Language.JAVA) {
                 // TODO: somewhat ugly.
                 this.writer.print(`static Serializer createSerializer() { return new Serializer(); }`)
@@ -199,26 +180,14 @@ class DeserializerPrinter {
             ctorSignature = new NamedMethodSignature(Type.Void, [new Type("uint8_t*"), Type.Int32], ["data", "length"])
             prefix = PrimitiveType.ArkPrefix
         }
-        printSerializerImports(this.library, this.writer)
+        const serializerDeclarations = generateSerializerDeclarationsTable(prefix, this.table)
+        printSerializerImports(serializerDeclarations, this.library, this.writer)
         this.writer.writeClass(className, writer => {
             if (ctorSignature) {
                 const ctorMethod = new Method(`${className}Base`, ctorSignature)
                 writer.writeConstructorImplementation(className, ctorSignature, writer => {}, ctorMethod)
             }
-            const seenNames = new Set<string>()
-            for (let declaration of this.table.orderedDependenciesToGenerate) {
-                if (ignoreSerializeTarget(this.table, declaration))
-                    continue
-
-                let name = this.table.computeTargetName(declaration, false, prefix)
-                if (seenNames.has(name)) continue
-                seenNames.add(name)
-
-                if (ts.isClassDeclaration(declaration) || ts.isInterfaceDeclaration(declaration)) {
-                    if (canSerializeTarget(declaration))
-                        this.generateDeserializer(declaration, prefix)
-                }
-            }
+            serializerDeclarations.forEach(decl => this.generateDeserializer(decl, prefix))
         }, superName)
     }
 }
@@ -280,4 +249,24 @@ function createSerializerDependenciesCollector(language: Language,
             return new ArkTSSerializerDependenciesCollector(collector, library)
     }
     return undefined
+}
+
+function generateSerializerDeclarationsTable(prefix: string, table: DeclarationTable) : (ts.ClassDeclaration | ts.InterfaceDeclaration)[] {
+    const declarations = new Array<ts.ClassDeclaration | ts.InterfaceDeclaration>()
+    const seenNames = new Set<string>()
+    for (let declaration of table.orderedDependenciesToGenerate) {
+        if (ignoreSerializeTarget(table, declaration))
+            continue
+
+        let name = table.computeTargetName(declaration, false, prefix)
+        if (seenNames.has(name)) continue
+        seenNames.add(name)
+
+        if (ts.isClassDeclaration(declaration) || ts.isInterfaceDeclaration(declaration)) {
+            if (canSerializeTarget(declaration)) {
+                declarations.push(declaration)
+            }
+        }
+    }
+    return declarations
 }
