@@ -37,7 +37,9 @@ export class NativeModule {
   }
 
   static native _LoadVirtualMachine(classPath: String, libPath: String, kind: int): long;
-  static native _RunVirtualMachine(env: long, what: int): int;
+  static native _RunVirtualMachine(env: long, what: int, arg0: int): int;
+  static native _CallExternalAPI(env: long, what: int, buffer: byte[], len: int): int;
+  static native void _SetCallbackMethod(method: long);
 
 %GENERATED_METHODS%
 

@@ -27,7 +27,6 @@ struct CallbackMethod {
 };
 
 jobject app = nullptr;
-CallbackMethod* g_callbacks = nullptr;
 
 extern "C" JNIEXPORT void* InitVirtualMachine(
     int32_t kind,
@@ -35,7 +34,6 @@ extern "C" JNIEXPORT void* InitVirtualMachine(
     const char* libPath,
     void** env,
     CallbackMethod* callbacks) {
-    g_callbacks = callbacks;
     std::string jvmLibDir = std::string(getenv("JAVA_HOME")) +
 #ifdef KOALA_WINDOWS
         "/bin/server"
@@ -59,17 +57,21 @@ extern "C" JNIEXPORT void* InitVirtualMachine(
     int result = createJavaVM(&vm, env, &vm_args);
     JNIEnv* jenv = (JNIEnv*)*env;
     jclass clazz = jenv->FindClass("org/koalaui/arkoala/Application");
-    jmethodID start = jenv->GetStaticMethodID(clazz, "startApplication", "()Lorg/koalaui/arkoala/Application;");
-    if (start) app = jenv->NewGlobalRef(jenv->CallStaticObjectMethod(clazz, start));
+    jmethodID start = jenv->GetStaticMethodID(clazz, "startApplication", "(J)Lorg/koalaui/arkoala/Application;");
+    if (start) app = jenv->NewGlobalRef(jenv->CallStaticObjectMethod(clazz, start, callbacks));
     return vm;
 }
 
-extern "C" JNIEXPORT int RunVirtualMachine(void* jvmEnv, void* jsEnv, int32_t what) {
+extern "C" JNIEXPORT int RunVirtualMachine(void* jvmEnv, void* jsEnv, int32_t what, int32_t arg0) {
     JNIEnv* jenv = (JNIEnv*)jvmEnv;
     static jclass appClass = nullptr;
     if (!appClass) appClass = (jclass)jenv->NewGlobalRef(jenv->FindClass("org/koalaui/arkoala/Application"));
     static jmethodID mid = nullptr;
-    fprintf(stderr, "RunVirtualMachine jvm=%p js=%p clazz=%p\n", jvmEnv, jsEnv, appClass);
-    if (appClass && !mid) mid = jenv->GetMethodID(appClass, "enter", "(JI)V");
-    return mid ? jenv->CallIntMethod(app, mid, (jlong)jsEnv, what, nullptr, 0) : 0;
+    if (appClass && !mid) mid = jenv->GetMethodID(appClass, "enter", "(JII)V");
+    auto result = mid ? jenv->CallIntMethod(app, mid, (jlong)jsEnv, what, arg0) : 0;
+    if (jenv->ExceptionCheck()) {
+        jenv->ExceptionDescribe();
+        jenv->ExceptionClear();
+    }
+    return result;
 }

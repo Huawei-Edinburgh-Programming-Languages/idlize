@@ -16,47 +16,52 @@
 #include "common-interop.h"
 #include "dynamic-loader.h"
 
-struct CallbackMethod {
-    int (*CallInt) (void* env, int methodId, uint8_t* data, int dataSize);
+struct CallbackMethod
+{
+    int (*CallInt)(void *env, int methodId, uint8_t *data, int dataSize);
 };
 
-typedef void* (*InitVirtualMachineFunc)(
-    int kind, const char* managedPath, const char* nativePath, void** env,
-    CallbackMethod* callbacks);
-typedef int (*RunVirtualMachineFunc)(void* jvmEnv, void* jsEnv, KInt what);
+CallbackMethod* g_callbacks = nullptr;
+
+typedef void *(*InitVirtualMachineFunc)(
+    int kind, const char *managedPath, const char *nativePath, void **env,
+    CallbackMethod *callbacks);
+typedef int (*RunVirtualMachineFunc)(void *jvmEnv, void *jsEnv, KInt what, KInt arg0);
 
 // Singleton for now.
-struct VMControl {
-    void* vm;
+struct VMControl
+{
+    void *vm;
     RunVirtualMachineFunc runner;
 } g_VM;
 
-int CallInt(void* vmContext, int methodId, uint8_t* data, int length) {
-    KOALA_INTEROP_CALL_INT(vmContext, methodId, length, data)
+int CallInt(void *vmContext, int methodId, uint8_t *data, int length){
+    KOALA_INTEROP_CALL_INT(vmContext, methodId, length, data);
 }
 
-CallbackMethod g_callbacks {
-    CallInt
-};
-
 KNativePointer impl_LoadVirtualMachine(
-    const KStringPtr& libPath, const KStringPtr& classPath, KInt kind) {
+    const KStringPtr &libPath, const KStringPtr &classPath, KInt kind)
+{
     auto lib = std::string(libPath.c_str()) + "/" + libName("panda");
     fprintf(stderr, "would load from %s %s: %d\n", libPath.c_str(), lib.c_str(), kind);
-    void* handle = loadLibrary(lib);
-    if (!handle) {
+    void *handle = loadLibrary(lib);
+    if (!handle)
+    {
         fprintf(stderr, "Cannot load library %s: %s\n", lib.c_str(), libraryError());
         return nullptr;
     }
     auto initFunc = (InitVirtualMachineFunc)findSymbol(handle, "InitVirtualMachine");
-    if (!initFunc) {
+    if (!initFunc)
+    {
         fprintf(stderr, "Cannot find InitVirtualMachine in %s\n", lib.c_str());
         return nullptr;
     }
-    void* env = nullptr;
-    g_VM.vm = initFunc(kind, classPath.c_str(), libPath.c_str(), &env, &g_callbacks);
+    void *env = nullptr;
+    static CallbackMethod callbacks = { CallInt };
+    g_VM.vm = initFunc(kind, classPath.c_str(), libPath.c_str(), &env, &callbacks);
     g_VM.runner = (RunVirtualMachineFunc)findSymbol(handle, "RunVirtualMachine");
-    if (!g_VM.runner) {
+    if (!g_VM.runner)
+    {
         fprintf(stderr, "Cannot find RunVirtualMachine in %s\n", lib.c_str());
         return nullptr;
     }
@@ -64,25 +69,19 @@ KNativePointer impl_LoadVirtualMachine(
 }
 KOALA_INTEROP_3(LoadVirtualMachine, KNativePointer, KStringPtr, KStringPtr, KInt)
 
-KInt impl_RunVirtualMachine(KVMContext vmContext, KNativePointer env, KInt what) {
-     return g_VM.runner(env, vmContext, what);
+KInt impl_RunVirtualMachine(KVMContext vmContext, KNativePointer env, KInt what, KInt arg0)
+{
+    return g_VM.runner(env, vmContext, what, arg0);
 }
-KOALA_INTEROP_CTX_2(RunVirtualMachine, KInt, KNativePointer, KInt)
+KOALA_INTEROP_CTX_3(RunVirtualMachine, KInt, KNativePointer, KInt, KInt)
 
-KInt impl_CallExternalAPI(KInt vm, KNativePointer envArg, KInt what, KByte* data, KInt length) {
-    fprintf(stderr, "CallExternalVM: %d %d\n", what, length);
-    switch (vm) {
-    case 1: /* JS VM */
-        KOALA_INTEROP_CALL_INT(envArg, what, length, data);
-        return 0;
-    case 2: /* ArkTS VM */
-        fprintf(stderr, "CallExternalVM: ArkTS VM unsupported\n");
-        return -1;
-    case 3: /* JVM */
-        fprintf(stderr, "CallExternalVM: JVM unsupported\n");
-        return -1;
-    default:
-        return -1;
-    }
+void impl_SetCallbackMethod(KNativePointer method) {
+    g_callbacks = (CallbackMethod*)method;
 }
-KOALA_INTEROP_5(CallExternalAPI, KInt, KInt, KNativePointer, KInt, KByte*, KInt)
+KOALA_INTEROP_V1(SetCallbackMethod, KNativePointer)
+
+KInt impl_CallExternalAPI(KNativePointer env, KInt what, KByte *data, KInt length)
+{
+    return g_callbacks ? g_callbacks->CallInt(env, what, data, length) : -1;
+}
+KOALA_INTEROP_4(CallExternalAPI, KInt, KNativePointer, KInt, KByte*, KInt)

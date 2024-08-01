@@ -14,15 +14,25 @@
 */
 
 import { nativeModule } from "@koalaui/arkoala"
-import { pointer, nullptr } from "@koalaui/interop"
+import { int32 } from "@koalaui/common"
+import { pointer, wrapCallback } from "@koalaui/interop"
+import { Deserializer } from "./peers/Deserializer";
 
 function waitVSync(): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, 100) )
 }
 
 export async function runEventLoop(env: pointer) {
+    let cb = wrapCallback((data: Uint8Array, length: int32) => {
+        let deserializer = new Deserializer(data.buffer, length)
+        let parameter = {
+            key: deserializer.readString(),
+            value: deserializer.readString()
+        }
+        console.log(`JS: key: ${parameter.key} value: ${parameter.value}`)
+    })
     for (let i = 0; i < 5; i++) {
-        nativeModule()._RunVirtualMachine(env, i)
+        nativeModule()._RunVirtualMachine(env, i, cb)
         await waitVSync()
     }
 }
