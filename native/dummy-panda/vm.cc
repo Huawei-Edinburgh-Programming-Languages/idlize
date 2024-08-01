@@ -18,15 +18,24 @@
 
 #include <jni.h>
 
-#include "etsapi.h"
 #include "dynamic-loader.h"
 
 typedef jint (*JNI_CreateJavaVM_t)(JavaVM **pvm, void **penv, void *args);
 
+struct CallbackMethod {
+    int (*CallInt) (void* env, int methodId, uint8_t* data, int dataSize);
+};
+
 jobject app = nullptr;
+CallbackMethod* g_callbacks = nullptr;
 
-extern "C" ETS_EXPORT void* InitVirtualMachine(int32_t kind, const char* classPath, const char* libPath, void** env) {
-
+extern "C" JNIEXPORT void* InitVirtualMachine(
+    int32_t kind,
+    const char* classPath,
+    const char* libPath,
+    void** env,
+    CallbackMethod* callbacks) {
+    g_callbacks = callbacks;
     std::string jvmLibDir = std::string(getenv("JAVA_HOME")) +
 #ifdef KOALA_WINDOWS
         "/bin/server"
@@ -55,11 +64,12 @@ extern "C" ETS_EXPORT void* InitVirtualMachine(int32_t kind, const char* classPa
     return vm;
 }
 
-extern "C" ETS_EXPORT int RunVirtualMachine(void* env, int32_t what) {
-    JNIEnv* jenv = (JNIEnv*)env;
+extern "C" JNIEXPORT int RunVirtualMachine(void* jvmEnv, void* jsEnv, int32_t what) {
+    JNIEnv* jenv = (JNIEnv*)jvmEnv;
     static jclass appClass = nullptr;
     if (!appClass) appClass = (jclass)jenv->NewGlobalRef(jenv->FindClass("org/koalaui/arkoala/Application"));
     static jmethodID mid = nullptr;
-    if (!mid) mid = jenv->GetMethodID(appClass, "enter", "(I)V");
-    return mid ? jenv->CallIntMethod(app, mid, what, nullptr, 0) : 0;
+    fprintf(stderr, "RunVirtualMachine %p\n", jsEnv);
+    if (!mid) mid = jenv->GetMethodID(appClass, "enter", "(JI)V");
+    return mid ? jenv->CallIntMethod(app, mid, (jlong)jsEnv, what, nullptr, 0) : 0;
 }

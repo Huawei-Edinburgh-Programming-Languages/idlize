@@ -52,6 +52,7 @@ public class NativeModule {
   static native void _TestCallVoidInt32ArrayPrefixSum(int arg1, int[] arg2, int arg3);
   static native int _TestCallIntRecursiveCallback(int arg1, byte[] arg2, int arg3);
   static native int _TestCallIntMemory(int arg1, int arg2);
+  static native int _CallExternalAPI(int vm, long env, int what, byte[] buffer, int length);
 
   static native long _CreateNode(int type, int id, int flags);
   static native long _GetNodeByViewStack();
