@@ -38,8 +38,6 @@ public class Application {
         }
     }
 
-    static native void setCallbackMethod(long method);
-
     public static Application startApplication(long callbacks) {
         NativeModule._SetCallbackMethod(callbacks);
         return new Application().start();

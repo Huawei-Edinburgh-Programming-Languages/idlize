@@ -57,6 +57,9 @@ KNativePointer impl_LoadVirtualMachine(
         return nullptr;
     }
     void *env = nullptr;
+    // Callbacks mechanism is a bit clumsy:
+    // when loading VM we provide a pointer to a structure which performs callbacks in terms of
+    // our VM, and VM remembers that pointer and uses it to call back into our VM.
     static CallbackMethod callbacks = { CallInt };
     g_VM.vm = initFunc(kind, classPath.c_str(), libPath.c_str(), &env, &callbacks);
     g_VM.runner = (RunVirtualMachineFunc)findSymbol(handle, "RunVirtualMachine");
