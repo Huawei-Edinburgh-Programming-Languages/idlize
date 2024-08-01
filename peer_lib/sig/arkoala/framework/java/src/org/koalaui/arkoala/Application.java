@@ -28,7 +28,7 @@ public class Application {
 
     public static void main(String[] args) {
         var app = Application.startApplication();
-         try {
+        try {
             for (int i = 0; i < 10; i++) {
                 app.loopIteration(0, i);
                 Thread.sleep(100);

@@ -69,7 +69,7 @@ extern "C" JNIEXPORT int RunVirtualMachine(void* jvmEnv, void* jsEnv, int32_t wh
     static jclass appClass = nullptr;
     if (!appClass) appClass = (jclass)jenv->NewGlobalRef(jenv->FindClass("org/koalaui/arkoala/Application"));
     static jmethodID mid = nullptr;
-    fprintf(stderr, "RunVirtualMachine %p\n", jsEnv);
-    if (!mid) mid = jenv->GetMethodID(appClass, "enter", "(JI)V");
+    fprintf(stderr, "RunVirtualMachine jvm=%p js=%p clazz=%p\n", jvmEnv, jsEnv, appClass);
+    if (appClass && !mid) mid = jenv->GetMethodID(appClass, "enter", "(JI)V");
     return mid ? jenv->CallIntMethod(app, mid, (jlong)jsEnv, what, nullptr, 0) : 0;
 }

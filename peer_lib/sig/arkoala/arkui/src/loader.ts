@@ -29,7 +29,7 @@ export async function runEventLoop(env: pointer) {
 
 export function checkLoader() {
     console.log("checkLoader")
-    let classPath = __dirname + "/../generated/java-subset/bin"
+    let classPath = __dirname + "/../out/java-subset/bin"
     let libPath = __dirname + "/../native"
     let env = nativeModule()._LoadVirtualMachine(libPath, classPath, 0)
     setTimeout(async () => runEventLoop(env), 0)
