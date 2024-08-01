@@ -21,14 +21,14 @@ function installExternal() {
         `incremental/runtime`,
         `interop`,
     ]
-    execOut(`npm i`)
+    execOut(`npm i -d`)
     for (const pkg of externalPackagesToInstall) {
         const pkgRelative = path.relative(options.out, path.join('external', pkg))
         // TODO need to precompile globally (on idlize repo init f.e.). And maybe cache `npm i` results in root
         console.log(`Compiling package <${pkg}>`)
         execOut(`cd ${pkgRelative} && npm run compile`)
         console.log(`Installing package <${pkg}>`)
-        execOut(`npm i ${pkgRelative}`)
+        execOut(`npm i -d ${pkgRelative}`)
     }
 }
 
@@ -45,7 +45,7 @@ function main() {
         },
     }
 
-    fs.rmSync(options.out, { recursive: true, force: true })
+    //fs.rmSync(options.out, { recursive: true, force: true })
     fs.cpSync(path.join(CWD, 'tools/setup/templates', options.template), options.out, { recursive: true })
     templatesHandlers[options.template]()
 }
