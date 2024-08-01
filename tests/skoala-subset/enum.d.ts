@@ -17,3 +17,8 @@ declare enum Color {
     White,
     Black,
 }
+
+declare enum ColorSecond {
+    Red,
+    Yellow,
+}
