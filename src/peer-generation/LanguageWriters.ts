@@ -1772,7 +1772,7 @@ export function createLanguageWriter(language: Language): LanguageWriter {
         case Language.ARKTS: return new ETSLanguageWriter(new IndentedPrinter())
         case Language.JAVA: return new JavaLanguageWriter(new IndentedPrinter())
         case Language.CPP: return new CppLanguageWriter(new IndentedPrinter())
-        case Language.CJ: return new CJLanguageWriter(new IndentedPrinter())
+        case Language.CJ: return new CJLanguageWriter(new IndentedPrinter()) // test
         default: throw new Error(`Language ${language.toString()} is not supported`)
     }
 }
