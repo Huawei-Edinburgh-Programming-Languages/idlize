@@ -1,12 +1,16 @@
 {
     "compilerOptions": {
         "outDir": "build/abc/peers",
-        "rootDir": "./generated/peers",
+        "rootDir": "./out/arkts-peers/generated",
         "paths": {
-            "@arkoala/arkui": ["./generated/subset", "./"],
-            "@arkoala/arkui/*": ["./generated/subset/*", "./*"],
-            "@koalaui/common": ["./generated/subset/koalaui-common"]
+            "@arkoala/arkui": ["./out/arkts-peers/generated/sig/arkoala/arkui/arkts/src", "./"],
+            "@arkoala/arkui/*": ["./out/arkts-peers/generated/sig/arkoala/arkui/arkts/src/*", "./*"],
+            "@koalaui/arkoala": ["./out/arkts-peers/generated/koalaui/arkoala"],
+            "@koalaui/common": ["./out/arkts-peers/generated/sig/arkoala/arkui/arkts/src/common"],
+            "@koalaui/interop": ["./out/arkts-peers/generated/sig/arkoala/arkui/arkts/src/interop"],
+            "@koalaui/runtime": ["./out/arkts-peers/generated/koalaui/arkoala"]
         }
     },
-    "include": ["./generated/peers/**/*.ets"]
+    "include": ["./out/arkts-peers/generated/**/*.ets"],
+    "exclude": ["./out/arkts-peers/generated/sig/arkoala/arkui/arkts/src/shared/dts-exports.ets"]
 }
