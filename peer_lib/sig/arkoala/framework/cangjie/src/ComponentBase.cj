@@ -14,15 +14,9 @@
  */
 package peers
 
-foreign {
-    func _TestPerfNumber(value: Int32): Int32
-}
-
-open class NativeModule {
-    public static func TestPerfNumber(arg1: Int32): Int32 {
-        return unsafe{_TestPerfNumber(arg1)}
-    }
-    public static func hello(): String {
-        return "hello"
+public open class ComponentBase {
+    protected var peer: ?PeerNode = Option.None
+    public func setPeer(peer: PeerNode): Unit {
+        this.peer = peer
     }
 }

@@ -14,15 +14,14 @@
  */
 package peers
 
-foreign {
-    func _TestPerfNumber(value: Int32): Int32
-}
+from std import collection.*
 
-open class NativeModule {
-    public static func TestPerfNumber(arg1: Int32): Int32 {
-        return unsafe{_TestPerfNumber(arg1)}
+public open class PeerNode {
+    public var peer: NativePeerNode
+    public PeerNode(nodeType: ArkUINodeType, flags: Int32) {
+        // const id = 0
+        // const ptr = NativeModule._CreateNode(nodeType, id, flags)
+        this.peer = NativePeerNode(42, 0);
     }
-    public static func hello(): String {
-        return "hello"
-    }
+    func applyAttributes(attrs: HashMap<String, Object>): Unit {}
 }

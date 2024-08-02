@@ -14,15 +14,12 @@
  */
 package peers
 
-foreign {
-    func _TestPerfNumber(value: Int32): Int32
-}
+public open class Finalizable {
+    public var ptr: Int64
+    public var finalizer: Int64
 
-open class NativeModule {
-    public static func TestPerfNumber(arg1: Int32): Int32 {
-        return unsafe{_TestPerfNumber(arg1)}
-    }
-    public static func hello(): String {
-        return "hello"
+    public Finalizable(ptr: Int64, finalizer: Int64) {
+        this.ptr = ptr
+        this.finalizer = finalizer
     }
 }

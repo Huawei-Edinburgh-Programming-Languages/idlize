@@ -14,15 +14,6 @@
  */
 package peers
 
-foreign {
-    func _TestPerfNumber(value: Int32): Int32
-}
-
-open class NativeModule {
-    public static func TestPerfNumber(arg1: Int32): Int32 {
-        return unsafe{_TestPerfNumber(arg1)}
-    }
-    public static func hello(): String {
-        return "hello"
-    }
+public enum ArkUINodeType {
+    Root | Component
 }
