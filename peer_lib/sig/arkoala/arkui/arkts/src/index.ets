@@ -110,7 +110,7 @@ export function checkResult(name: string, test: () => void, expected: string) {
     const actual = getNativeLog()
     if (actual != expected) {
         console.log(`TEST ${name} FAIL:\n  EXPECTED "${expected}"\n  ACTUAL   "${actual}"`)
-        console.log(`output: ${actual}`)
+        throw new Error(`TEST ${name} FAIL`)
     } else {
         console.log(`TEST ${name} PASS`)
     }
