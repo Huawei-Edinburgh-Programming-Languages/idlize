@@ -120,7 +120,9 @@ export class DeclarationDependenciesCollector implements DeclarationConvertor<ts
     constructor(
         private readonly typeChecker: ts.TypeChecker,
         private readonly typeDepsCollector: TypeDependenciesCollector,
-    ) {}
+    ) {
+        typeDepsCollector.setDeclDependenciesCollector(this)
+    }
 
     convertClass(node: ts.ClassDeclaration): ts.Declaration[] {
         return [
