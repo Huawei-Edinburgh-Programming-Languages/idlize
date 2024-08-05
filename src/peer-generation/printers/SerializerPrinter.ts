@@ -16,19 +16,22 @@
 import * as ts from 'typescript'
 import { Language } from "../../util";
 import { DeclarationTable, DeclarationTarget, PrimitiveType } from "../DeclarationTable";
-import { LanguageWriter, Method, NamedMethodSignature, Type } from "../LanguageWriters";
+import { createLanguageWriter, LanguageWriter, Method, NamedMethodSignature, Type } from "../LanguageWriters";
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig';
 import { checkDeclarationTargetMaterialized } from '../Materialized';
-import {convertDeclToFeature, ImportsCollector} from '../ImportsCollector';
+import { convertDeclToFeature, ImportFeature, ImportsCollector } from '../ImportsCollector';
 import { PeerLibrary } from '../PeerLibrary';
-import {createTypeDependenciesCollector, isSourceDecl} from "../PeerGeneratorVisitor";
-import {isSyntheticDeclaration} from "../synthetic_declaration";
+import { createTypeDependenciesCollector, createTypeNodeConvertor, isSourceDecl } from "../PeerGeneratorVisitor";
+import { isSyntheticDeclaration } from "../synthetic_declaration";
 import { DeclarationDependenciesCollector } from "../dependencies_collector";
 import { isBuilderClass } from "../BuilderClass";
 import { lazy, lazyThrow } from '../lazy';
+import { TypeNodeNameConvertor } from "../TypeNodeNameConvertor";
 
-function printSerializerImports(table: (ts.ClassDeclaration | ts.InterfaceDeclaration)[], library: PeerLibrary, writer: LanguageWriter) {
-    const collector = new ImportsCollector()
+function printSerializerImports(table: (ts.ClassDeclaration | ts.InterfaceDeclaration)[],
+                                library: PeerLibrary,
+                                writer: LanguageWriter,
+                                collector: ImportsCollector) {
     const serializerCollector = createSerializerDependenciesCollector(writer.language, collector, library)
     if (serializerCollector != undefined) {
         table.forEach(decl => serializerCollector.collect(decl))
@@ -79,12 +82,14 @@ class SerializerPrinter {
         }
     }
 
-    private generateSerializer(target: ts.ClassDeclaration | ts.InterfaceDeclaration, prefix: string = "") {
+    private generateSerializer(writer: LanguageWriter, target: ts.ClassDeclaration | ts.InterfaceDeclaration,
+                               prefix: string,
+                               typeNodeNameConvertor: TypeNodeNameConvertor) {
         const name = this.table.computeTargetName(target, false, prefix)
         const methodName = this.table.computeTargetName(target, false, "")
         this.table.setCurrentContext(`write${methodName}()`)
 
-        this.writer.writeMethodImplementation(
+        writer.writeMethodImplementation(
             new Method(`write${methodName}`,
                 new NamedMethodSignature(Type.Void, [new Type(this.translateSerializerType(name, target))], ["value"])),
             writer => {
@@ -96,7 +101,7 @@ class SerializerPrinter {
                 struct.getFields().forEach(it => {
                     let field = `value_${it.name}`
                     writer.writeStatement(writer.makeAssign(field, undefined, writer.makeString(`value.${writer.languageKeywordProtection(it.name)}`), true))
-                    let typeConvertor = this.table.typeConvertor(`value`, it.type!, it.optional)
+                    let typeConvertor = this.table.typeConvertor(`value`, it.type!, it.optional, typeNodeNameConvertor)
                     typeConvertor.convertorSerialize(`value`, field, writer)
                 })
             })
@@ -121,21 +126,32 @@ class SerializerPrinter {
                 break;
         }
         const serializerDeclarations = generateSerializerDeclarationsTable(prefix, this.table)
-        printSerializerImports(serializerDeclarations, this.library, this.writer)
+        const serializerWriter = createLanguageWriter(this.writer.language)
+        const collectorImportsFeatures: ImportFeature[] = []
+        const typeNodeNameConvertor = createTypeNodeConvertor(this.library,
+            createTypeNodeConvertor(this.library),
+            new DeclarationDependenciesCollector(
+                this.library.declarationTable.typeChecker!,
+                createTypeDependenciesCollector(this.library)),
+            collectorImportsFeatures)
         // just a separator
-        this.writer.print("")
-        this.writer.writeClass(className, writer => {
+        serializerWriter.print("")
+        serializerWriter.writeClass(className, writer => {
             if (ctorSignature) {
                 const ctorMethod = new Method(superName, ctorSignature)
                 writer.writeConstructorImplementation(className, ctorSignature, writer => {
                 }, ctorMethod)
             }
-            serializerDeclarations.forEach(decl => this.generateSerializer(decl, prefix))
-            if (this.writer.language == Language.JAVA) {
+            serializerDeclarations.forEach(decl => this.generateSerializer(serializerWriter, decl, prefix, typeNodeNameConvertor))
+            if (serializerWriter.language == Language.JAVA) {
                 // TODO: somewhat ugly.
-                this.writer.print(`static Serializer createSerializer() { return new Serializer(); }`)
+                serializerWriter.print(`static Serializer createSerializer() { return new Serializer(); }`)
             }
         }, superName)
+        const convertorImportsCollector = new ImportsCollector()
+        collectorImportsFeatures.forEach(feature => convertorImportsCollector.addFeature(feature.feature, feature.module))
+        printSerializerImports(serializerDeclarations, this.library, this.writer, convertorImportsCollector)
+        this.writer.print(serializerWriter.printer.getOutput().join("\n"))
     }
 }
 
@@ -193,7 +209,7 @@ class DeserializerPrinter {
             prefix = PrimitiveType.ArkPrefix
         }
         const serializerDeclarations = generateSerializerDeclarationsTable(prefix, this.table)
-        printSerializerImports(serializerDeclarations, this.library, this.writer)
+        printSerializerImports(serializerDeclarations, this.library, this.writer, new ImportsCollector())
         this.writer.print("")
         this.writer.writeClass(className, writer => {
             if (ctorSignature) {

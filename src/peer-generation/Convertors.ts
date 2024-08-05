@@ -17,7 +17,7 @@ import { DeclarationTable, FieldRecord, PrimitiveType } from "./DeclarationTable
 import { RuntimeType } from "./PeerGeneratorVisitor"
 import * as ts from "typescript"
 import { BlockStatement, BranchStatement, LanguageExpression, LanguageStatement, LanguageWriter, NamedMethodSignature, Type } from "./LanguageWriters"
-import { mapType } from "./TypeNodeNameConvertor"
+import { mapType, TypeNodeNameConvertor } from "./TypeNodeNameConvertor"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
 
 function castToInt8(value: string, lang: Language): string {
@@ -463,11 +463,11 @@ export class UnionConvertor extends BaseArgConvertor {
     private memberConvertors: ArgConvertor[]
     private unionChecker: UnionRuntimeTypeChecker
 
-    constructor(param: string, private table: DeclarationTable, private type: ts.UnionTypeNode) {
+    constructor(param: string, private table: DeclarationTable, private type: ts.UnionTypeNode, typeNodeNameConvertor?: TypeNodeNameConvertor) {
         super(`object`, [], false, true, param)
         this.memberConvertors = type
             .types
-            .map(member => table.typeConvertor(param, member))
+            .map(member => table.typeConvertor(param, member, false, typeNodeNameConvertor))
         this.unionChecker = new UnionRuntimeTypeChecker(this.memberConvertors)
         this.runtimeTypes = this.memberConvertors.flatMap(it => it.runtimeTypes)
         this.tsTypeName = this.memberConvertors.map(it => it.tsTypeName).join(" | ")
@@ -616,8 +616,8 @@ export class CustomTypeConvertor extends BaseArgConvertor {
 export class OptionConvertor extends BaseArgConvertor {
     private typeConvertor: ArgConvertor
     // TODO: be smarter here, and for smth like Length|undefined or number|undefined pass without serializer.
-    constructor(param: string, private table: DeclarationTable, public type: ts.TypeNode) {
-        let typeConvertor = table.typeConvertor(param, type)
+    constructor(param: string, private table: DeclarationTable, public type: ts.TypeNode, typeNodeNameConvertor?: TypeNodeNameConvertor) {
+        let typeConvertor = table.typeConvertor(param, type, false, typeNodeNameConvertor)
         let runtimeTypes = typeConvertor.runtimeTypes;
         if (!runtimeTypes.includes(RuntimeType.UNDEFINED)) {
             runtimeTypes.push(RuntimeType.UNDEFINED)
@@ -675,15 +675,18 @@ export class AggregateConvertor extends BaseArgConvertor {
     private members: [string, boolean][] = []
     public readonly aliasName: string | undefined
 
-    constructor(param: string, private table: DeclarationTable, private type: ts.TypeLiteralNode) {
-        super(mapType(type), [RuntimeType.OBJECT], false, true, param)
+    constructor(param: string,
+                private table: DeclarationTable,
+                private type: ts.TypeLiteralNode,
+                typeNodeNameConvertor?: TypeNodeNameConvertor) {
+        super(typeNodeNameConvertor?.convert(type) ?? mapType(type), [RuntimeType.OBJECT], false, true, param)
         this.aliasName = ts.isTypeAliasDeclaration(this.type.parent) ? identName(this.type.parent.name) : undefined
         this.memberConvertors = type
             .members
             .filter(ts.isPropertySignature)
             .map((member, index) => {
                 this.members[index] = [identName(member.name)!, member.questionToken != undefined]
-                return table.typeConvertor(param, member.type!, member.questionToken != undefined)
+                return table.typeConvertor(param, member.type!, member.questionToken != undefined, typeNodeNameConvertor)
             })
     }
     convertorArg(param: string, writer: LanguageWriter): string {
