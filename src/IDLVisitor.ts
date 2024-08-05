@@ -18,7 +18,8 @@ import { parse } from 'comment-parser'
 import {
     createBooleanType, createContainerType, createEnumType, createNullType, createNumberType, createReferenceType, createStringType, createTypedef,
     createTypeParameterReference, createUndefinedType, createUnionType, createVoidType, IDLCallable, IDLCallback, IDLConstant, IDLConstructor,
-    IDLEntity, IDLEntry, IDLEnum, IDLEnumMember, IDLExtendedAttribute, IDLFunction, IDLInterface, IDLKind, IDLMethod, IDLModuleType, IDLParameter, IDLProperty, IDLTopType, IDLType, IDLTypedef
+    IDLEntity, IDLEntry, IDLEnum, IDLEnumMember, IDLExtendedAttribute, IDLFunction, IDLInterface, IDLKind, IDLMethod, IDLModuleType, IDLParameter, IDLProperty, IDLTopType, IDLType, IDLTypedef,
+    IDLAccessorAttribute, IDLExtendedAttributes
 } from "./idl"
 import {
     asString, capitalize, getComment, getDeclarationsByNode, getExportedDeclarationNameByDecl, getExportedDeclarationNameByNode, identName, isCommonMethodOrSubclass, isExport, isNodePublic, isPrivate, isProtected, isReadonly, isStatic, nameOrNull, nameOrNullForIdl as nameOrUndefined, stringOrNone
@@ -26,7 +27,6 @@ import {
 import { GenericVisitor } from "./options"
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig"
 import { OptionValues } from "commander"
-import { ExtendedAttributes } from "./extendedAttributes"
 
 const typeMapper = new Map<string, string>(
     [
@@ -87,7 +87,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             this.output.push({
                 kind: IDLKind.Interface,
                 name: `GlobalScope_${path.basename(this.sourceFile.fileName).replace(".d.ts", "")}`,
-                extendedAttributes: [ {name: "GlobalScope" } ],
+                extendedAttributes: [ {name: IDLExtendedAttributes.GlobalScope } ],
                 methods: this.globalFunctions,
                 constants: this.globalConstants,
                 properties: [],
@@ -107,7 +107,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         this.output.unshift({
             kind: IDLKind.Enum,
             name: `Metadata`,
-            extendedAttributes: [ {name: "Synthetic" } ],
+            extendedAttributes: [ {name: IDLExtendedAttributes.Synthetic } ],
             elements: [
                 this.makeEnumMember("package", "org.openharmony.arkui"),
                 this.makeEnumMember("imports", this.imports.join("\n")),
@@ -157,7 +157,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         return {
             kind: IDLKind.ModuleType,
             name: name,
-            extendedAttributes: [ {name: ExtendedAttributes.VerbatimDts, value: `"${escapeAmbientModuleContent(this.sourceFile, node)}"`}]
+            extendedAttributes: [ {name: IDLExtendedAttributes.VerbatimDts, value: `"${escapeAmbientModuleContent(this.sourceFile, node)}"`}]
         }
     }
 
@@ -166,7 +166,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         let extendedAttributes = this.computeDeprecatedExtendAttributes(node)
         if (ts.isImportTypeNode(node.type)) {
             let original = node.type.getText()
-            extendedAttributes.push({ name: ExtendedAttributes.VerbatimDts, value: `"${original}"` })
+            extendedAttributes.push({ name: IDLExtendedAttributes.VerbatimDts, value: `"${original}"` })
             return {
                 kind: IDLKind.Typedef,
                 name: name,
@@ -228,7 +228,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
 
     computeNamespaceAttribute(): IDLExtendedAttribute[] {
         const namespace = this.namespaces.join(',')
-        return namespace ? [{name: "Namespace", value: `"${namespace}"`}] : []
+        return namespace ? [{name: IDLExtendedAttributes.Namespace, value: `"${namespace}"`}] : []
     }
 
     computeExtendedAttributes(
@@ -243,7 +243,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             const isNamedTuple = node.elements.some(it => ts.isNamedTupleMember(it))
             entityValue = isNamedTuple ? IDLEntity.NamedTuple : IDLEntity.Tuple
         }
-        result.push({name: ExtendedAttributes.Entity, value: entityValue })
+        result.push({name: IDLExtendedAttributes.Entity, value: entityValue })
         this.computeTypeParametersAttribute(typeParameters, result)
         this.computeExportAttribute(node, result)
         return result
@@ -253,10 +253,10 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         let result: IDLExtendedAttribute[] = this.computeExtendedAttributes(node, node.typeParameters)
         let name = identName(node.name)
         if (name && ts.isClassDeclaration(node) && isCommonMethodOrSubclass(this.typeChecker, node)) {
-            result.push({name: ExtendedAttributes.Component, value: PeerGeneratorConfig.mapComponentName(name)})
+            result.push({name: IDLExtendedAttributes.Component, value: PeerGeneratorConfig.mapComponentName(name)})
         }
         if (inheritance.length > 1) {
-            result.push({name: ExtendedAttributes.Interfaces, value: inheritance.slice(1).map(it => it.name).join(", ")})
+            result.push({name: IDLExtendedAttributes.Interfaces, value: inheritance.slice(1).map(it => it.name).join(", ")})
         }
         this.computeExportAttribute(node, result)
         return this.computeDeprecatedExtendAttributes(node, result)
@@ -264,7 +264,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
 
     computeDeprecatedExtendAttributes(node: ts.Node, attributes: IDLExtendedAttribute[] = []): IDLExtendedAttribute[] {
         if (isDeprecatedNode(this.sourceFile,node)) {
-            attributes.push({ name: "Deprecated" })
+            attributes.push({ name: IDLExtendedAttributes.Deprecated })
         }
         return attributes
     }
@@ -276,23 +276,23 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         extendedAttributes: IDLExtendedAttribute[] = []
     ): IDLExtendedAttribute[] {
         if (nodeName !== escapedName) {
-            extendedAttributes.push({ name: ExtendedAttributes.DtsName, value: nodeName })
+            extendedAttributes.push({ name: IDLExtendedAttributes.DtsName, value: nodeName })
         }
 
         if (ts.isFunctionLike(node) || ts.isPropertyDeclaration(node) || ts.isPropertySignature(node)) { // ??
             if (!!node.questionToken) {
-                extendedAttributes.push({ name: ExtendedAttributes.Optional })
+                extendedAttributes.push({ name: IDLExtendedAttributes.Optional })
             }
         } else {
             const isOptional = ts.isOptionalTypeNode(node)
             if (isOptional) {
-                extendedAttributes.push({ name: ExtendedAttributes.Optional })
+                extendedAttributes.push({ name: IDLExtendedAttributes.Optional })
             }
         }
 
         if (ts.canHaveModifiers(node)) {
             if (isProtected(node.modifiers))
-                extendedAttributes.push({ name: ExtendedAttributes.Protected })
+                extendedAttributes.push({ name: IDLExtendedAttributes.Protected })
         }
 
         return extendedAttributes
@@ -300,10 +300,10 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
 
     computeExportAttribute(node: ts.Node, attributes: IDLExtendedAttribute[] = []): IDLExtendedAttribute[] {
         if (ts.canHaveModifiers(node)) {
-            if (!attributes.find(it => it.name == ExtendedAttributes.Export)) {
+            if (!attributes.find(it => it.name == IDLExtendedAttributes.Export)) {
                 if (isExport(node.modifiers)) {
                     attributes.push({
-                        name: ExtendedAttributes.Export
+                        name: IDLExtendedAttributes.Export
                     })
                 }
             }
@@ -507,7 +507,12 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             ? this.serializeType(accessor.type, typePrefix)
             : this.serializeType(accessor.parameters[0].type, typePrefix)
         let attributes: IDLExtendedAttribute[] = [
-            { name: ExtendedAttributes.Accessor, value: ts.isGetAccessorDeclaration(accessor) ? "Getter" : "Setter" }
+            {
+                name: IDLExtendedAttributes.Accessor,
+                value: ts.isGetAccessorDeclaration(accessor)
+                    ? IDLAccessorAttribute.Getter
+                    : IDLAccessorAttribute.Setter
+            }
         ]
         return {
             kind: IDLKind.Property,
@@ -522,7 +527,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
 
     addToScope(entry: IDLEntry) {
         entry.extendedAttributes ??= []
-        entry.extendedAttributes.push({ name: "Synthetic" })
+        entry.extendedAttributes.push({ name: IDLExtendedAttributes.Synthetic })
         this.currentScope.push(entry)
     }
 
@@ -599,7 +604,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         if (ts.isTypeReferenceNode(type)) {
             if (ts.isQualifiedName(type.typeName)) {
                 const result = createReferenceType(type.typeName.right.getText())
-                result.extendedAttributes = [{name: ExtendedAttributes.Qualifier, value: type.typeName.left.getText()}]
+                result.extendedAttributes = [{name: IDLExtendedAttributes.Qualifier, value: type.typeName.left.getText()}]
                 return result
             }
             let declaration = getDeclarationsByNode(this.typeChecker, type.typeName)
@@ -675,7 +680,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             let what = asString(type.qualifier)
             let typeName = `/* ${type.getText(this.sourceFile)} */ ` + sanitize(what == "default" ? "Imported" + where[where.length - 1] : "Imported" +  what)
             let result = createReferenceType(typeName)
-            result.extendedAttributes = [{ name: ExtendedAttributes.Import, value: originalText}]
+            result.extendedAttributes = [{ name: IDLExtendedAttributes.Import, value: originalText}]
             return result
         }
         if (ts.isNamedTupleMember(type)) {
@@ -728,7 +733,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         this.computeDeprecatedExtendAttributes(property, extendedAttributes)
         if (ts.isMethodDeclaration(property) || ts.isMethodSignature(property)) {
             if (!this.isCommonMethodUsedAsProperty(property)) throw new Error("Wrong")
-            extendedAttributes.push({ name: ExtendedAttributes.CommonMethod })
+            extendedAttributes.push({ name: IDLExtendedAttributes.CommonMethod })
             return {
                 kind: IDLKind.Property,
                 name: escapedName,
@@ -767,7 +772,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
                 isReadonly: isReadonly,
                 isStatic: false,
                 isOptional: !!property.questionToken,
-                extendedAttributes: !!property.questionToken ? [{name: ExtendedAttributes.Optional}] : undefined,
+                extendedAttributes: !!property.questionToken ? [{name: IDLExtendedAttributes.Optional}] : undefined,
             }
         }
         const isOptional = ts.isOptionalTypeNode(property)
@@ -780,7 +785,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             isReadonly: isReadonly,
             isStatic: false,
             isOptional: isOptional,
-            extendedAttributes: isOptional ? [{name: ExtendedAttributes.Optional}] : undefined,
+            extendedAttributes: isOptional ? [{name: IDLExtendedAttributes.Optional}] : undefined,
         }
     }
 
@@ -813,7 +818,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
     computeTypeParametersAttribute(typeParameters: ts.NodeArray<ts.TypeParameterDeclaration> | undefined, attributes: IDLExtendedAttribute[] = []) {
         if (typeParameters) {
             attributes.push({
-                name: ExtendedAttributes.TypeParameters,
+                name: IDLExtendedAttributes.TypeParameters,
                 value: typeParameters.map(it => it.getText()).join(",")
             })
         }
@@ -829,7 +834,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         this.computeExportAttribute(method, extendedAttributes)
 
         if (ts.isIndexSignatureDeclaration(method)) {
-            extendedAttributes.push({name: ExtendedAttributes.IndexSignature })
+            extendedAttributes.push({name: IDLExtendedAttributes.IndexSignature })
             return {
                 kind: IDLKind.Method,
                 name: "indexSignature",
@@ -863,7 +868,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         const returnType = this.serializeType(method.type, `${namePrefix}_invoke_Type`)
         let extendedAttributes = this.computeDeprecatedExtendAttributes(method)
         this.liftExtendedAttributes(returnType, extendedAttributes)
-        extendedAttributes.push({ name: ExtendedAttributes.CallSignature })
+        extendedAttributes.push({ name: IDLExtendedAttributes.CallSignature })
         return {
             kind: IDLKind.Callable,
             name: "invoke",

@@ -23,6 +23,7 @@ We use WebIDL language with several custom extension attributes documented below
    * `Export` - if given node has `export` modifier
    * `Accessor = Getter | Setter` - if given node is accessor
    * `Protected` - if given attribute is protected
+   * `Namespace` - namespace name for given node
    * `Interfaces`
    * `GlobalScope`
-   * `Namespace` - namespace name for given node
+   * `Deprecated`
