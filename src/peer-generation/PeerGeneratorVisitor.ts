@@ -271,7 +271,7 @@ function generateArgConvertor(table: DeclarationTable, param: ts.ParameterDeclar
     if (!param.type) throw new Error("Type is needed")
     let paramName = asString(param.name)
     let optional = param.questionToken !== undefined
-    return table.typeConvertor(paramName, param.type, optional)
+    return table.typeConvertor(paramName, param.type, optional, undefined)
 }
 
 function generateRetConvertor(typeNode?: ts.TypeNode): RetConvertor {

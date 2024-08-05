@@ -34,7 +34,7 @@ import { PeerLibrary } from "./PeerLibrary"
 import { CallbackInfo, collectCallbacks } from "./printers/EventsPrinter"
 import { EnumMember, NodeArray } from "typescript";
 import { extractBuilderFields } from "./BuilderClass"
-import { setEngine } from "node:crypto"
+import { TypeNodeNameConvertor } from "./TypeNodeNameConvertor";
 
 export const ResourceDeclaration = ts.factory.createInterfaceDeclaration(undefined, "Resource", undefined, undefined, [
     ts.factory.createPropertySignature(undefined, "id", undefined, ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)),
@@ -514,10 +514,13 @@ export class DeclarationTable {
         throw new Error("Unsupported type: " + target.getText())
     }
 
-    typeConvertor(param: string, type: ts.TypeNode, isOptionalParam = false): ArgConvertor {
+    typeConvertor(param: string,
+                  type: ts.TypeNode,
+                  isOptionalParam: boolean = false,
+                  typeNodeNameConvertor: TypeNodeNameConvertor | undefined = undefined): ArgConvertor {
         if (!type) throw new Error("Impossible")
         if (isOptionalParam) {
-            return new OptionConvertor(param, this, type)
+            return new OptionConvertor(param, this, type, typeNodeNameConvertor)
         }
         if (type.kind == ts.SyntaxKind.ObjectKeyword) {
             return new CustomTypeConvertor(param, "Object")
@@ -554,10 +557,10 @@ export class DeclarationTable {
             return new EnumConvertor(param, type.parent, this.isStringEnum(type.parent.members))
         }
         if (ts.isUnionTypeNode(type)) {
-            return new UnionConvertor(param, this, type)
+            return new UnionConvertor(param, this, type, typeNodeNameConvertor)
         }
         if (ts.isTypeLiteralNode(type)) {
-            return new AggregateConvertor(param, this, type)
+            return new AggregateConvertor(param, this, type, typeNodeNameConvertor)
         }
         if (ts.isArrayTypeNode(type)) {
             return new ArrayConvertor(param, this, type, type.elementType)
