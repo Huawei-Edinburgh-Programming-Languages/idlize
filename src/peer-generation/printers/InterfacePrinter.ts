@@ -401,15 +401,14 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
             this.declarationMembers(node).forEach(member => {
                 if (ts.isPropertyDeclaration(member)) {
                     const propName = member.name.getText()
-                    const propType = member.type?.getText()
+                    const propType = this.typeConvertor.convert(member.type!)
                     const isOptional = member.questionToken
                     writer.print(`${propName}${isOptional ? "?" : ""}: ${propType};`)
                 } else {
                     const methodName = member.name.getText()
                     const returnType = this.typeConvertor.convert(member.type!)
                     const parameters = member.parameters.map((param) => {
-                        if (param.type != undefined &&
-                            (ts.isTypeLiteralNode(param.type) || ts.isImportTypeNode(param.type))) {
+                        if (param.type != undefined) {
                             return `${param.name.getText()}: ${this.typeConvertor.convert(param.type)}`
                         }
                         return param.getText()
