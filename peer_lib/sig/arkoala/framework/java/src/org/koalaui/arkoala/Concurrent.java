@@ -105,10 +105,10 @@ class WorkerResult {
 }
 
 class CreateTreeTask implements WorkerTask {
-    Supplier<Node> builder;
+    Function<Integer, Node> builder;
     int breadth;
     int depth;
-    CreateTreeTask(Supplier<Node> builder, int breadth, int depth) {
+    CreateTreeTask(Function<Integer, Node> builder, int breadth, int depth) {
         this.builder = builder;
         this.breadth = breadth;
         this.depth = depth;
@@ -117,13 +117,13 @@ class CreateTreeTask implements WorkerTask {
         return new WorkerResult(makeLayer(breadth, depth));
     }
     Node makeLayer(int breadth, int depth) {
-        Node layer = builder.get();
+        Node layer = builder.apply(depth);
         for (int i = 0; i < breadth; i++) {
-            if (depth > 0) {
+            if (depth > 1) {
                 Node child = makeLayer(breadth, depth - 1);
                 layer.insertChildAfter(child, null);
             } else {
-                return builder.get();
+                return builder.apply(depth);
             }
         }
         return layer;
@@ -167,7 +167,7 @@ class Worker implements Runnable {
 
 public class Concurrent implements ResultConsumer {
     public static void main(String[] args) {
-        new Concurrent(10, 5, 4).start();
+        new Concurrent(4, 5, 4).start();
     }
     int breadth;
     int depth;
@@ -207,14 +207,14 @@ public class Concurrent implements ResultConsumer {
     void start() {
         Node root = Node.create(1);
         mapReduce("create", breadth,
-            (index) -> new CreateTreeTask(() -> Node.createWithCost(2, 100), breadth, depth - 1),
+            (index) -> new CreateTreeTask((id) -> Node.createWithCost(2 + id, 100), breadth, depth - 1),
             (result) -> {
                 for (WorkerResult r : result) {
                     root.insertChildAfterWithCost((Node)r.get(), null, 10);
                 }
             }
         );
-        //root.dump();
+        // root.dump();
         System.out.println(Node.currentId.get() + " nodes created");
         mapReduce("stop", numWorkers,
             (index) -> new StopTask(),
