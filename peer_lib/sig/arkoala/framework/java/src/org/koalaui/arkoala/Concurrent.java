@@ -164,7 +164,7 @@ class Worker implements Runnable {
 
 public class Concurrent implements ResultConsumer {
     public static void main(String[] args) {
-        new Concurrent(10, 5, 4).start();
+        new Concurrent(6, 7, 4).start();
     }
     int breadth;
     int depth;
@@ -191,7 +191,7 @@ public class Concurrent implements ResultConsumer {
     }
 
     <T> void reduce(Consumer<ArrayList<WorkerResult<T>>> consumer, int count) {
-        var result = new ArrayList<WorkerResult<T>>();
+        var result = new ArrayList<WorkerResult<T>>(count);
         for (int i = 0; i < count; i++) {
             try {
                 result.add((WorkerResult<T>)this.queue.take());
