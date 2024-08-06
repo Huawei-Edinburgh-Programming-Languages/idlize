@@ -20,7 +20,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.BlockingQueue;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.function.Supplier;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -120,10 +119,8 @@ class CreateTreeTask implements WorkerTask<Node> {
         Node layer = builder.apply(depth);
         if (depth > 1) {
             for (int i = 0; i < breadth; i++) {
-                if (depth > 1) {
-                    Node child = makeLayer(breadth, depth - 1);
-                    layer.insertChildAfter(child, null);
-                }
+                Node child = makeLayer(breadth, depth - 1);
+                layer.insertChildAfterWithCost(child, null, 10);
             }
         }
         return layer;
