@@ -88,23 +88,23 @@ class Node {
     }
 }
 
-interface WorkerTask {
-    WorkerResult run(Worker worker);
+interface WorkerTask<T> {
+    WorkerResult<T> run(Worker worker);
 }
 
-class WorkerResult {
-    static WorkerResult Empty = new WorkerResult(null);
+class WorkerResult<T> {
+    static WorkerResult Empty = new WorkerResult<Object>(null);
 
-    Object result;
-    WorkerResult(Object result) {
+    T result;
+    WorkerResult(T result) {
         this.result = result;
     }
-    Object get() {
+    T get() {
         return this.result;
     }
 }
 
-class CreateTreeTask implements WorkerTask {
+class CreateTreeTask implements WorkerTask<Node> {
     Function<Integer, Node> builder;
     int breadth;
     int depth;
@@ -113,7 +113,7 @@ class CreateTreeTask implements WorkerTask {
         this.breadth = breadth;
         this.depth = depth;
     }
-    public WorkerResult run(Worker worker) {
+    public WorkerResult<Node> run(Worker worker) {
         return new WorkerResult(makeLayer(breadth, depth));
     }
     Node makeLayer(int breadth, int depth) {
@@ -130,19 +130,19 @@ class CreateTreeTask implements WorkerTask {
     }
 }
 
-class StopTask implements WorkerTask {
-    public WorkerResult run(Worker worker) {
+class StopTask implements WorkerTask<Object> {
+    public WorkerResult<Object> run(Worker worker) {
         worker.stop();
         return WorkerResult.Empty;
     }
 }
 
 interface ResultConsumer {
-    public void provide(WorkerResult result);
+    public void provide(WorkerResult<Object> result);
 }
 
 class Worker implements Runnable {
-    final BlockingQueue<WorkerTask> queue = new LinkedBlockingDeque<WorkerTask>();
+    final BlockingQueue<WorkerTask<Object>> queue = new LinkedBlockingDeque<WorkerTask<Object>>();
     volatile boolean stopped = false;
     ResultConsumer consumer;
     Random random;
@@ -167,7 +167,7 @@ class Worker implements Runnable {
 
 public class Concurrent implements ResultConsumer {
     public static void main(String[] args) {
-        new Concurrent(4, 5, 4).start();
+        new Concurrent(10, 5, 4).start();
     }
     int breadth;
     int depth;
@@ -187,22 +187,21 @@ public class Concurrent implements ResultConsumer {
         }
     }
 
-    void map(Function<Integer, WorkerTask> supplier, int count) {
+    <T> void map(Function<Integer, WorkerTask<T>> supplier, int count) {
         for (int i = 0; i < count; i++) {
             this.workers[i % numWorkers].add(supplier.apply(i));
         }
     }
 
-    void reduce(Consumer<WorkerResult[]> consumer, int count) {
-        WorkerResult[] result = new WorkerResult[count];
+    <T> void reduce(Consumer<ArrayList<WorkerResult<T>>> consumer, int count) {
+        ArrayList<WorkerResult<T>> result = new ArrayList<WorkerResult<T>>();
         for (int i = 0; i < count; i++) {
             try {
-                result[i] = this.queue.take();
+                result.add(this.queue.take());
             } catch (InterruptedException e) {}
         }
         consumer.accept(result);
     }
-
 
     void start() {
         Node root = Node.create(1);
@@ -222,11 +221,11 @@ public class Concurrent implements ResultConsumer {
         );
     }
 
-    void mapReduce(
+    <T> void mapReduce(
         String name,
         int count,
-        Function<Integer, WorkerTask> supplier,
-        Consumer<WorkerResult[]> consumer
+        Function<Integer, WorkerTask<T>> supplier,
+        Consumer<ArrayList<WorkerResult<T>>> consumer
      ) {
         long start = System.nanoTime();
         map(supplier, count);
