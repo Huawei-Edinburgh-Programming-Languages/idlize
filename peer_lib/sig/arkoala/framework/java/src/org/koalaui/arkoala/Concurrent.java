@@ -227,7 +227,7 @@ public class Concurrent implements ResultConsumer {
         map(supplier, count);
         reduce(consumer, count);
         long end = System.nanoTime();
-        System.out.println(name + ": " + (end - start) / 1000 + "μs");
+        System.out.println(name + ": " + (end - start) / 1000 + "us");
     }
 
     public void provide(WorkerResult<Object> result) {
