@@ -118,12 +118,12 @@ class CreateTreeTask implements WorkerTask<Node> {
     }
     Node makeLayer(int breadth, int depth) {
         Node layer = builder.apply(depth);
-        for (int i = 0; i < breadth; i++) {
-            if (depth > 1) {
-                Node child = makeLayer(breadth, depth - 1);
-                layer.insertChildAfter(child, null);
-            } else {
-                return builder.apply(depth);
+        if (depth > 1) {
+            for (int i = 0; i < breadth; i++) {
+                if (depth > 1) {
+                    Node child = makeLayer(breadth, depth - 1);
+                    layer.insertChildAfter(child, null);
+                }
             }
         }
         return layer;
