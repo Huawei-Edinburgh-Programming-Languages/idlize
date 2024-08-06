@@ -204,7 +204,8 @@ export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
     }
 
     convertLiteralType(node: ts.LiteralTypeNode): string {
-        if (ts.isUnionTypeNode(node.parent) && ts.isStringLiteral(node.literal)) {
+        if ((ts.isUnionTypeNode(node.parent)
+            || ts.isTypeReferenceNode(node.parent)) && ts.isStringLiteral(node.literal)) {
             return `LITERAL_${node.literal.getText().replaceAll('"', '')}`
         } else {
             return super.convertLiteralType(node)
@@ -223,6 +224,18 @@ export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
         }
         return `TEMPLATE_LITERAL_${node.templateSpans
             .map(it => `${this.convert(it.type)}_${it.literal.text}`).join('_')}`
+    }
+
+    convertFunction(node: ts.FunctionTypeNode): string {
+        if (node.typeParameters?.length) {
+            throw "Not implemented"
+        }
+        const parameters = node.parameters.map(it => {
+            const name = this.convert(it.name)
+            const type = this.convert(it.type!)
+            return `${name}: ${type}${it.questionToken ? `|undefined` : ``}`
+        })
+        return `((${parameters.join(', ')}) => ${this.convert(node.type)})`
     }
 }
 

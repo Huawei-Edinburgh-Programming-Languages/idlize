@@ -267,11 +267,13 @@ export function generateSignature(method: ts.ConstructorDeclaration | ts.MethodD
     )
 }
 
-function generateArgConvertor(table: DeclarationTable, param: ts.ParameterDeclaration): ArgConvertor {
+function generateArgConvertor(table: DeclarationTable,
+                              param: ts.ParameterDeclaration,
+                              typeNodeNameConvertor: TypeNodeNameConvertor): ArgConvertor {
     if (!param.type) throw new Error("Type is needed")
     let paramName = asString(param.name)
     let optional = param.questionToken !== undefined
-    return table.typeConvertor(paramName, param.type, optional, undefined)
+    return table.typeConvertor(paramName, param.type, optional, typeNodeNameConvertor)
 }
 
 function generateRetConvertor(typeNode?: ts.TypeNode): RetConvertor {
@@ -539,7 +541,7 @@ class PeersGenerator {
             }
         })
         const argConvertors = parameters
-            .map((param) => generateArgConvertor(this.declarationTable, param))
+            .map((param) => generateArgConvertor(this.declarationTable, param, typeNodeConvertor))
         const declarationTargets = parameters
             .map((param) => this.declarationTable.toTarget(param.type ??
                 throwException(`Expected a type for ${asString(param)} in ${asString(method)}`)))
@@ -593,7 +595,10 @@ class PeersGenerator {
         peer.attributesFields.push(`${methodName}?: ${type}`)
     }
 
-    private argumentType(methodName: string, parameters: ts.ParameterDeclaration[], peer: PeerClass, typeNodeConvertor: TypeNodeNameConvertor): string {
+    private argumentType(methodName: string,
+                         parameters: ts.ParameterDeclaration[],
+                         peer: PeerClass,
+                         typeNodeConvertor: TypeNodeNameConvertor): string {
         const argumentTypeName = capitalize(methodName) + "ValuesType"
         if (parameters.length === 1 && ts.isTypeLiteralNode(parameters[0].type!)) {
             const typeLiteralStatements = parameters[0].type!.members
@@ -616,8 +621,9 @@ class PeersGenerator {
                     }
                 })
 
-            peer.attributesTypes.push(
-                {typeName: argumentTypeName, content: this.createParameterType(argumentTypeName, typeLiteralStatements)}
+            peer.attributesTypes.push({
+                typeName: argumentTypeName,
+                content: this.createParameterType(argumentTypeName, typeNodeConvertor, typeLiteralStatements)}
             )
             // Arkts needs a named type as its argument method, not an anonymous type
             // at which producing 'SyntaxError: Invalid Type' error
@@ -633,8 +639,9 @@ class PeersGenerator {
                 type: it.type!,
                 questionToken: !!it.questionToken
             }))
-            peer.attributesTypes.push(
-                {typeName: argumentTypeName, content: this.createParameterType(argumentTypeName, attributeInterfaceStatements)}
+            peer.attributesTypes.push({
+                typeName: argumentTypeName,
+                content: this.createParameterType(argumentTypeName, typeNodeConvertor, attributeInterfaceStatements)}
             )
             return argumentTypeName
         }
@@ -644,10 +651,11 @@ class PeersGenerator {
 
     private createParameterType(
         name: string,
+        typeNodeConvertor: TypeNodeNameConvertor,
         attributes: { name: string, type: ts.TypeNode, questionToken: boolean }[]
     ): string {
         const attributeDeclarations = attributes
-            .map(it => `\n  ${it.name}${it.questionToken ? "?" : ""}: ${mapType(it.type)}`)
+            .map(it => `\n  ${it.name}${it.questionToken ? "?" : ""}: ${typeNodeConvertor.convert(it.type)}`)
             .join('')
         return `export interface ${name} {${attributeDeclarations}\n}`
     }
@@ -864,7 +872,7 @@ export class PeerProcessor {
             this.declarationTable.toTarget(param.type ??
                 throwException(`Expected a type for ${asString(param)} in ${asString(method)}`)))
         method.parameters.forEach(it => this.declarationTable.requestType(undefined, it.type!, isActualDeclaration))
-        const argConvertors = method.parameters.map(param => generateArgConvertor(this.declarationTable, param))
+        const argConvertors = method.parameters.map(param => generateArgConvertor(this.declarationTable, param, typeNodeConverter))
         const signature = generateSignature(method, typeNodeConverter)
         const modifiers = generateMethodModifiers(method)
         this.declarationTable.setCurrentContext(undefined)
