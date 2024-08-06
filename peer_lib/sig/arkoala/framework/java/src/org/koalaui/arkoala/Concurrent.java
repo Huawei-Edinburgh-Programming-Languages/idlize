@@ -16,6 +16,7 @@
 package org.koalaui.arkoala;
 
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.BlockingQueue;
 import java.util.ArrayList;
 import java.util.Random;
@@ -26,10 +27,10 @@ import java.util.function.Function;
 class Node {
     int kind;
     int id;
-    static int currentId = 1;
+    static AtomicInteger currentId = new AtomicInteger(1);
     ArrayList<Node> children = new ArrayList<Node>(0);
     Node(int kind, int id) {
-        this.id = id == 0 ? Node.currentId++ : id;
+        this.id = id == 0 ? Node.currentId.getAndIncrement() : id;
         this.kind = kind;
     }
     static Node create(int kind) {
@@ -105,12 +106,27 @@ class WorkerResult {
 
 class CreateTreeTask implements WorkerTask {
     Supplier<Node> builder;
+    int breadth;
+    int depth;
     CreateTreeTask(Supplier<Node> builder, int breadth, int depth) {
         this.builder = builder;
+        this.breadth = breadth;
+        this.depth = depth;
     }
     public WorkerResult run(Worker worker) {
-        Node root = builder.get();
-        return new WorkerResult(root);
+        return new WorkerResult(makeLayer(breadth, depth));
+    }
+    Node makeLayer(int breadth, int depth) {
+        Node layer = builder.get();
+        for (int i = 0; i < breadth; i++) {
+            if (depth > 0) {
+                Node child = makeLayer(breadth, depth - 1);
+                layer.insertChildAfter(child, null);
+            } else {
+                return builder.get();
+            }
+        }
+        return layer;
     }
 }
 
@@ -151,7 +167,7 @@ class Worker implements Runnable {
 
 public class Concurrent implements ResultConsumer {
     public static void main(String[] args) {
-        new Concurrent(30, 10, 4).start();
+        new Concurrent(10, 5, 4).start();
     }
     int breadth;
     int depth;
@@ -171,15 +187,15 @@ public class Concurrent implements ResultConsumer {
         }
     }
 
-    void map(Function<Integer, WorkerTask> supplier) {
-        for (int i = 0; i < numWorkers; i++) {
-            this.workers[i].add(supplier.apply(i));
+    void map(Function<Integer, WorkerTask> supplier, int count) {
+        for (int i = 0; i < count; i++) {
+            this.workers[i % numWorkers].add(supplier.apply(i));
         }
     }
 
-    void reduce(Consumer<WorkerResult[]> consumer) {
-        WorkerResult[] result = new WorkerResult[numWorkers];
-        for (int i = 0; i < numWorkers; i++) {
+    void reduce(Consumer<WorkerResult[]> consumer, int count) {
+        WorkerResult[] result = new WorkerResult[count];
+        for (int i = 0; i < count; i++) {
             try {
                 result[i] = this.queue.take();
             } catch (InterruptedException e) {}
@@ -190,27 +206,33 @@ public class Concurrent implements ResultConsumer {
 
     void start() {
         Node root = Node.create(1);
-        mapReduce("create",
-            (index) -> new CreateTreeTask(() -> Node.createWithCost(2, 100), breadth, depth),
+        mapReduce("create", breadth,
+            (index) -> new CreateTreeTask(() -> Node.createWithCost(2, 100), breadth, depth - 1),
             (result) -> {
                 for (WorkerResult r : result) {
                     root.insertChildAfterWithCost((Node)r.get(), null, 10);
                 }
             }
         );
-        root.dump();
-        mapReduce("stop",
+        //root.dump();
+        System.out.println(Node.currentId.get() + " nodes created");
+        mapReduce("stop", numWorkers,
             (index) -> new StopTask(),
             (result) -> {}
         );
     }
 
-    void mapReduce(String name, Function<Integer, WorkerTask> supplier, Consumer<WorkerResult[]> consumer) {
+    void mapReduce(
+        String name,
+        int count,
+        Function<Integer, WorkerTask> supplier,
+        Consumer<WorkerResult[]> consumer
+     ) {
         long start = System.nanoTime();
-        map(supplier);
-        reduce(consumer);
+        map(supplier, count);
+        reduce(consumer, count);
         long end = System.nanoTime();
-        System.out.println(name + ": " + (end - start) + "ns");
+        System.out.println(name + ": " + (end - start) / 1000 + "μs");
     }
 
     public void provide(WorkerResult result) {

@@ -54,5 +54,11 @@ For updates scenario, forth parameter is added:
 
 
 
+## Results
 
+### Concurrent tree building
 
+Build large tree (211K nodes) with uniform graph structure (depth 5, breadth 10) on Apple M1 laptop with 8 (4+4) cores
+on OpenJDK 20 JVM as function of number of concurrent workers used. Clear sweet spot around 6 cores is reached.
+
+![create1](create1.png)
