@@ -93,7 +93,7 @@ interface WorkerTask<T> {
 }
 
 class WorkerResult<T> {
-    static WorkerResult Empty = new WorkerResult<Object>(null);
+    static WorkerResult<Object> Empty = new WorkerResult<Object>(null);
 
     T result;
     WorkerResult(T result) {
@@ -114,7 +114,7 @@ class CreateTreeTask implements WorkerTask<Node> {
         this.depth = depth;
     }
     public WorkerResult<Node> run(Worker worker) {
-        return new WorkerResult(makeLayer(breadth, depth));
+        return new WorkerResult<Node>(makeLayer(breadth, depth));
     }
     Node makeLayer(int breadth, int depth) {
         Node layer = builder.apply(depth);
@@ -160,7 +160,7 @@ class Worker implements Runnable {
     public void stop() {
         this.stopped = true;
     }
-    public void add(WorkerTask task) {
+    public void add(WorkerTask<Object> task) {
         this.queue.add(task);
     }
 }
@@ -173,7 +173,7 @@ public class Concurrent implements ResultConsumer {
     int depth;
     int numWorkers;
     Worker[] workers;
-    final BlockingQueue<WorkerResult> queue = new LinkedBlockingDeque<WorkerResult>();
+    final BlockingQueue<WorkerResult<Object>> queue = new LinkedBlockingDeque<WorkerResult<Object>>();
 
     Concurrent(int breadth, int depth, int numWorkers) {
         this.breadth = breadth;
@@ -189,15 +189,15 @@ public class Concurrent implements ResultConsumer {
 
     <T> void map(Function<Integer, WorkerTask<T>> supplier, int count) {
         for (int i = 0; i < count; i++) {
-            this.workers[i % numWorkers].add(supplier.apply(i));
+            this.workers[i % numWorkers].add((WorkerTask<Object>)supplier.apply(i));
         }
     }
 
     <T> void reduce(Consumer<ArrayList<WorkerResult<T>>> consumer, int count) {
-        ArrayList<WorkerResult<T>> result = new ArrayList<WorkerResult<T>>();
+        var result = new ArrayList<WorkerResult<T>>();
         for (int i = 0; i < count; i++) {
             try {
-                result.add(this.queue.take());
+                result.add((WorkerResult<T>)this.queue.take());
             } catch (InterruptedException e) {}
         }
         consumer.accept(result);
@@ -208,9 +208,8 @@ public class Concurrent implements ResultConsumer {
         mapReduce("create", breadth,
             (index) -> new CreateTreeTask((id) -> Node.createWithCost(2 + id, 100), breadth, depth - 1),
             (result) -> {
-                for (WorkerResult r : result) {
-                    root.insertChildAfterWithCost((Node)r.get(), null, 10);
-                }
+                for (var r : result)
+                    root.insertChildAfterWithCost(r.get(), null, 10);
             }
         );
         // root.dump();
@@ -234,7 +233,7 @@ public class Concurrent implements ResultConsumer {
         System.out.println(name + ": " + (end - start) / 1000 + "μs");
     }
 
-    public void provide(WorkerResult result) {
+    public void provide(WorkerResult<Object> result) {
         this.queue.add(result);
     }
 }
