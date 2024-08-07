@@ -399,7 +399,8 @@ class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
     }
 
     override convertLiteralType(node: ts.LiteralTypeNode): ts.Declaration[] {
-        if (ts.isUnionTypeNode(node.parent) && ts.isStringLiteral(node.literal)) {
+        if ((ts.isUnionTypeNode(node.parent) || ts.isTypeReferenceNode(node.parent))
+            && ts.isStringLiteral(node.literal)) {
             return [this.makeSyntheticTypeAliasDeclaration(this.typeConvertor.convertLiteralType(node))]
         }
         return super.convertLiteralType(node)
@@ -410,7 +411,13 @@ class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
     }
 
     override convertTypeLiteral(node: ts.TypeLiteralNode): ts.Declaration[] {
-        return [makeSyntheticInterfaceDeclaration('SyntheticDeclarations',
+        const membersDecls: ts.Declaration[] = []
+        for (const member of node.members) {
+            if (ts.isPropertySignature(member)) {
+                membersDecls.push(...this.convert(member.type))
+            }
+        }
+        return [...membersDecls, makeSyntheticInterfaceDeclaration('SyntheticDeclarations',
             this.typeConvertor.convert(node),
             node.members,
             this.declDependenciesCollector.value,
