@@ -196,7 +196,7 @@ export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
     }
 
     convertVoidKeyword(node: ts.TypeNode): string {
-        return "Void"
+        return "void"
     }
 
     convertImport(node: ts.ImportTypeNode): string {
