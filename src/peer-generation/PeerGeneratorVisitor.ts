@@ -399,7 +399,9 @@ class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
     }
 
     override convertLiteralType(node: ts.LiteralTypeNode): ts.Declaration[] {
-        if ((ts.isUnionTypeNode(node.parent) || ts.isTypeReferenceNode(node.parent))
+        if ((ts.isUnionTypeNode(node.parent)
+                || ts.isTypeReferenceNode(node.parent)
+                || ts.isTypeAliasDeclaration(node.parent))
             && ts.isStringLiteral(node.literal)) {
             return [this.makeSyntheticTypeAliasDeclaration(this.typeConvertor.convertLiteralType(node))]
         }
