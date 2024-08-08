@@ -1,4 +1,13 @@
 # All components
+
+
+| Status       | Components | Classes | Functions |
+| -----------  | ---------- | ------- | --------- |
+| Total        | 111      | 72     | 1763     |
+| In Progress  | 0      | 0     | 1     |
+| Done         | 0      | 0     | 1     |
+
+
 | Name | Kind | Owner | Status |
 | ---- | ---- | ----- | ------ |
 |*AbilityComponent*| *Component* | | |
@@ -167,7 +176,6 @@
 |`foregroundColor`| Function | | |
 |`onClick`| Function | | |
 |`onHover`| Function | | |
-|`onAccessibilityHover`| Function | | |
 |`hoverEffect`| Function | | |
 |`onMouse`| Function | | |
 |`onTouch`| Function | | |
@@ -433,7 +441,6 @@
 |`nestedScroll`| Function | | |
 |`enableScrollInteraction`| Function | | |
 |`friction`| Function | | |
-|`alignItems`| Function | | |
 |`onScroll`| Function | | |
 |`onReachStart`| Function | | |
 |`onReachEnd`| Function | | |
@@ -509,7 +516,6 @@
 |*ImageSpan*| *Component* | | |
 |`_setImageSpanOptions`| Function | | |
 |`verticalAlign`| Function | | |
-|`colorFilter`| Function | | |
 |`objectFit`| Function | | |
 |`onComplete`| Function | | |
 |`onError`| Function | | |
@@ -767,7 +773,7 @@
 |`onDidChange`| Function | | |
 |`onCut`| Function | | |
 |`onCopy`| Function | | |
-|`editMenuOptions`| Function | | |
+|`selectionMenuOptions`| Function | | |
 |*RichText*| *Component* | | |
 |`_setRichTextOptions`| Function | | |
 |`onStart`| Function | | |
@@ -849,8 +855,7 @@
 |`onDidInsert`| Function | | |
 |`onWillDelete`| Function | | |
 |`onDidDelete`| Function | | |
-|`editMenuOptions`| Function | | |
-|`enablePreviewText`| Function | | |
+|`selectionMenuOptions`| Function | | |
 |*SecurityComponentMethod*| *Component* | | |
 |`iconSize`| Function | | |
 |`layoutDirection`| Function | | |
@@ -1021,7 +1026,6 @@
 |`barHeight`| Function | | |
 |`animationDuration`| Function | | |
 |`animationMode`| Function | | |
-|`edgeEffect`| Function | | |
 |`onChange`| Function | | |
 |`onTabBarClick`| Function | | |
 |`onAnimationStart`| Function | | |
@@ -1047,8 +1051,6 @@
 |`fontSize`| Function | | |
 |`minFontSize`| Function | | |
 |`maxFontSize`| Function | | |
-|`minFontScale`| Function | | |
-|`maxFontScale`| Function | | |
 |`fontStyle`| Function | | |
 |`fontWeight`| Function | | |
 |`lineSpacing`| Function | | |
@@ -1076,10 +1078,11 @@
 |`bindSelectionMenu`| Function | | |
 |`onTextSelectionChange`| Function | | |
 |`fontFeature`| Function | | |
+|`marqueeOptions`| Function | | |
+|`onMarqueeStateChange`| Function | | |
 |`privacySensitive`| Function | | |
 |`textSelectable`| Function | | |
-|`editMenuOptions`| Function | | |
-|`halfLeading`| Function | | |
+|`selectionMenuOptions`| Function | | |
 |*TextArea*| *Component* | | |
 |`_setTextAreaOptions`| Function | | |
 |`placeholderColor`| Function | | |
@@ -1131,8 +1134,7 @@
 |`onDidInsert`| Function | | |
 |`onWillDelete`| Function | | |
 |`onDidDelete`| Function | | |
-|`editMenuOptions`| Function | | |
-|`enablePreviewText`| Function | | |
+|`selectionMenuOptions`| Function | | |
 |*TextClock*| *Component* | | |
 |`_setTextClockOptions`| Function | | |
 |`format`| Function | | |
@@ -1145,7 +1147,6 @@
 |`textShadow`| Function | | |
 |`fontFeature`| Function | | |
 |`contentModifier`| Function | | |
-|`dateTimeOptions`| Function | | |
 |*TextInput*| *Component* | | |
 |`_setTextInputOptions`| Function | | |
 |`type`| Function | | |
@@ -1209,8 +1210,7 @@
 |`onDidInsert`| Function | | |
 |`onWillDelete`| Function | | |
 |`onDidDelete`| Function | | |
-|`editMenuOptions`| Function | | |
-|`enablePreviewText`| Function | | |
+|`selectionMenuOptions`| Function | | |
 |*TextPicker*| *Component* | | |
 |`_setTextPickerOptions`| Function | | |
 |`defaultPickerItemHeight`| Function | | |
@@ -1388,10 +1388,8 @@
 |`onViewportFitChanged`| Function | | |
 |`onInterceptKeyboardAttach`| Function | | |
 |`onAdsBlocked`| Function | | |
-|`keyboardAvoidMode`| Function | | |
 |*WindowScene*| *Component* | | |
 |`_setWindowSceneOptions`| Function | | |
-|`attractionEffect`| Function | | |
 |*XComponent*| *Component* | | |
 |`_setXComponentOptions`| Function | | |
 |`onLoad`| Function | | |
@@ -1645,9 +1643,6 @@
 |*PatternLockController*| *Class* | | |
 |`reset`| Function | | |
 |`setChallengeResult`| Function | | |
-|*EditMenuOptions*| *Class* | | |
-|`onCreateMenu`| Function | | |
-|`onMenuItemClick`| Function | | |
 |*RichEditorController*| *Class* | | |
 |`addTextSpan`| Function | | |
 |`addImageSpan`| Function | | |
@@ -1659,8 +1654,6 @@
 |`getSpans`| Function | | |
 |`getParagraphs`| Function | | |
 |`getSelection`| Function | | |
-|`fromStyledString`| Function | | |
-|`toStyledString`| Function | | |
 |*RichEditorBaseController*| *Class* | | |
 |`getCaretOffset`| Function | | |
 |`setCaretOffset`| Function | | |
@@ -1671,13 +1664,11 @@
 |`isEditing`| Function | | |
 |`stopEditing`| Function | | |
 |`getLayoutManager`| Function | | |
-|`getPreviewText`| Function | | |
 |*TextEditControllerEx*| *Class* | | |
 |`isEditing`| Function | | |
 |`stopEditing`| Function | | |
 |`setCaretOffset`| Function | | |
 |`getCaretOffset`| Function | | |
-|`getPreviewText`| Function | | |
 |*TextBaseController*| *Class* | | |
 |`setSelection`| Function | | |
 |`closeSelectionMenu`| Function | | |
@@ -1686,6 +1677,14 @@
 |`getLineCount`| Function | | |
 |`getGlyphPositionAtCoordinate`| Function | | |
 |`getLineMetrics`| Function | | |
+|*RichEditorStyledStringController*| *Class* | | |
+|`setStyledString`| Function | | |
+|`getStyledString`| Function | | |
+|`getSelection`| Function | | |
+|`onContentChanged`| Function | | |
+|*StyledStringController*| *Class* | | |
+|`setStyledString`| Function | | |
+|`getStyledString`| Function | | |
 |*StyledString*| *Class* | | |
 |`getString`| Function | | |
 |`getStyles`| Function | | |
@@ -1695,14 +1694,6 @@
 |*CustomSpan*| *Class* | | |
 |`onMeasure`| Function | | |
 |`onDraw`| Function | | |
-|*RichEditorStyledStringController*| *Class* | | |
-|`setStyledString`| Function | | |
-|`getStyledString`| Function | | |
-|`getSelection`| Function | | |
-|`onContentChanged`| Function | | |
-|*StyledStringController*| *Class* | | |
-|`setStyledString`| Function | | |
-|`getStyledString`| Function | | |
 |*MutableStyledString*| *Class* | | |
 |`replaceString`| Function | | |
 |`insertString`| Function | | |
