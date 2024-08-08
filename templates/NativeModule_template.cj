@@ -13,12 +13,13 @@
  * limitations under the License.
  */
 
+package peers
 
 foreign {
     func _TestPerfNumber(value: Int32): Int32
 }
 
-class NativeModule {
+public open class NativeModule {
     public static func TestPerfNumber(arg1: Int32): Int32 {
         return unsafe{_TestPerfNumber(arg1)}
     }

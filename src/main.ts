@@ -426,35 +426,34 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
     }
 
     // NativeModule
-    switch(lang) {
-        case Language.TS: {
-            writeFile(
-                arkoala.tsArkoalaLib(new TargetFile('NativeModuleEmpty')),
-                printNativeModuleEmpty(peerLibrary),
-                true
-            )
-            break
-        }
-        case Language.JAVA: {
-            writeFile(
-                arkoala.javaLib(new TargetFile('NativeModule', ARKOALA_PACKAGE_PATH)),
-                printNativeModule(peerLibrary, options.nativeBridgeDir ?? "../../../../../../../native/NativeBridgeNapi")
-            )
-            break
-        }
-        case Language.CJ: {
-            writeFile(
-                arkoala.cjLib(new TargetFile('NativeModule', '.')),
-                printNativeModule(peerLibrary, options.nativeBridgeDir ?? "../../../../../../../native/NativeBridgeNapi")
-            )
-            break
-        }
-        default: {
-            writeFile(
-                arkoala.langLib(new TargetFile('NativeModule')),
-                printNativeModule(peerLibrary, options.nativeBridgeDir ?? "../../../../../../../native/NativeBridgeNapi")
-            )
-        }
+    if (lang === Language.TS) {
+        writeFile(
+            arkoala.tsArkoalaLib(new TargetFile('NativeModuleEmpty')),
+            printNativeModuleEmpty(peerLibrary),
+            true
+        )
+        writeFile(
+            arkoala.tsArkoalaLib(new TargetFile('NativeModule')),
+            printNativeModule(peerLibrary, options.nativeBridgeDir ?? "../../../../../../../native/NativeBridgeNapi"),
+            true
+        )
+    }
+    else if (lang === Language.JAVA) {
+        writeFile(
+            arkoala.javaLib(new TargetFile('NativeModule', ARKOALA_PACKAGE_PATH)),
+            printNativeModule(peerLibrary, options.nativeBridgeDir ?? "../../../../../../../native/NativeBridgeNapi")
+        )
+    } else if (lang === Language.CJ) {
+        writeFile(
+            arkoala.cjLib(new TargetFile('NativeModule', '')),
+            printNativeModule(peerLibrary, options.nativeBridgeDir ?? "../../../../../../../native/NativeBridgeNapi")
+        )
+    }
+    else {
+        writeFile(
+            arkoala.langLib(new TargetFile('NativeModule')),
+            printNativeModule(peerLibrary, options.nativeBridgeDir ?? "../../../../../../../native/NativeBridgeNapi")
+        )
     }
 
     if (lang == Language.TS) {

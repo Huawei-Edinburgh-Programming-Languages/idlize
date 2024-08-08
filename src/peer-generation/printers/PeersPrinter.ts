@@ -170,8 +170,7 @@ class PeerFileVisitor {
             printer.print(`applyAttributes(attributes: ${typeParam}): void {}`)
             return
         }
-
-        printer.print(`applyAttributes<T extends ${typeParam}>(attributes: T): void {`)
+        printer.print(`applyAttributes<T extends ${typeParam}>(attributes: T): ${printer.mapType(Type.Void)} {`)
         printer.pushIndent()
         printer.print(`super.applyAttributes(attributes)`)
         printer.popIndent()
