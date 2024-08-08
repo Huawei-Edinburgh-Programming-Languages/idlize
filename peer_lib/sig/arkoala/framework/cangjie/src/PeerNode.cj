@@ -18,7 +18,7 @@ from std import collection.*
 
 public open class PeerNode {
     public var peer: NativePeerNode
-    public PeerNode(nodeType: ArkUINodeType, flags: Int32) {
+    public PeerNode(nodeType: ArkUINodeType, component: ?ComponentBase, flags: Int32) {
         // const id = 0
         // const ptr = NativeModule._CreateNode(nodeType, id, flags)
         this.peer = NativePeerNode(42, 0);
