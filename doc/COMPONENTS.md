@@ -52,13 +52,10 @@
 |`onFrame`| Function | | |
 |*Badge*| *Component* | Lena | In Progress |
 |`_setBadgeOptions`| Function | | |
-|`_setBadgeOptions`| Function | | |
 |*Blank*| *Component* | | |
 |`_setBlankOptions`| Function | | |
 |`color`| Function | | |
 |*Button*| *Component* | | |
-|`_setButtonOptions`| Function | | |
-|`_setButtonOptions`| Function | | |
 |`_setButtonOptions`| Function | | |
 |`type`| Function | | |
 |`stateEffect`| Function | | |
@@ -93,7 +90,6 @@
 |`textStyle`| Function | | |
 |`onChange`| Function | | |
 |*Canvas*| *Component* | | |
-|`_setCanvasOptions`| Function | | |
 |`_setCanvasOptions`| Function | | |
 |`onReady`| Function | | |
 |`enableAnalyzer`| Function | | |
@@ -189,7 +185,6 @@
 |`focusScopePriority`| Function | | |
 |`animation`| Function | | |
 |`transition`| Function | | |
-|`transition`| Function | | |
 |`gesture`| Function | | |
 |`priorityGesture`| Function | | |
 |`parallelGesture`| Function | | |
@@ -237,7 +232,6 @@
 |`enabled`| Function | | |
 |`useSizeType`| Function | | |
 |`alignRules`| Function | | |
-|`alignRules`| Function | | |
 |`chainMode`| Function | | |
 |`aspectRatio`| Function | | |
 |`clickEffect`| Function | | |
@@ -260,21 +254,15 @@
 |`shadow`| Function | | |
 |`blendMode`| Function | | |
 |`clip`| Function | | |
-|`clip`| Function | | |
 |`clipShape`| Function | | |
-|`mask`| Function | | |
 |`mask`| Function | | |
 |`maskShape`| Function | | |
 |`key`| Function | | |
 |`id`| Function | | |
 |`geometryTransition`| Function | | |
-|`geometryTransition`| Function | | |
 |`bindPopup`| Function | | |
 |`bindMenu`| Function | | |
-|`bindMenu`| Function | | |
 |`bindContextMenu`| Function | | |
-|`bindContextMenu`| Function | | |
-|`bindContentCover`| Function | | |
 |`bindContentCover`| Function | | |
 |`bindSheet`| Function | | |
 |`stateStyles`| Function | | |
@@ -286,9 +274,7 @@
 |`keyboardShortcut`| Function | | |
 |`accessibilityGroup`| Function | | |
 |`accessibilityText`| Function | | |
-|`accessibilityText`| Function | | |
 |`accessibilityTextHint`| Function | | |
-|`accessibilityDescription`| Function | | |
 |`accessibilityDescription`| Function | | |
 |`accessibilityLevel`| Function | | |
 |`accessibilityVirtualNode`| Function | | |
@@ -480,8 +466,6 @@
 |`color`| Function | | |
 |*Image*| *Component* | | |
 |`_setImageOptions`| Function | | |
-|`_setImageOptions`| Function | | |
-|`_setImageOptions`| Function | | |
 |`alt`| Function | | |
 |`matchTextDirection`| Function | | |
 |`fitOriginalSize`| Function | | |
@@ -573,7 +557,6 @@
 |`onScrollFrameBegin`| Function | | |
 |*ListItem*| *Component* | | |
 |`_setListItemOptions`| Function | | |
-|`_setListItemOptions`| Function | | |
 |`sticky`| Function | | |
 |`editable`| Function | | |
 |`selectable`| Function | | |
@@ -590,7 +573,6 @@
 |`enableLoading`| Function | | |
 |`contentModifier`| Function | | |
 |*LocationButton*| *Component* | | |
-|`_setLocationButtonOptions`| Function | | |
 |`_setLocationButtonOptions`| Function | | |
 |`onClick`| Function | | |
 |*Marquee*| *Component* | | |
@@ -645,11 +627,9 @@
 |`systemBarStyle`| Function | | |
 |*NavRouter*| *Component* | | |
 |`_setNavRouterOptions`| Function | | |
-|`_setNavRouterOptions`| Function | | |
 |`onStateChange`| Function | | |
 |`mode`| Function | | |
 |*Navigation*| *Component* | | |
-|`_setNavigationOptions`| Function | | |
 |`_setNavigationOptions`| Function | | |
 |`navBarWidth`| Function | | |
 |`navBarPosition`| Function | | |
@@ -676,7 +656,6 @@
 |`systemBarStyle`| Function | | |
 |*Navigator*| *Component* | | |
 |`_setNavigatorOptions`| Function | | |
-|`_setNavigatorOptions`| Function | | |
 |`active`| Function | | |
 |`type`| Function | | |
 |`target`| Function | | |
@@ -698,7 +677,6 @@
 |`onChange`| Function | | |
 |`onHeightChange`| Function | | |
 |*PasteButton*| *Component* | | |
-|`_setPasteButtonOptions`| Function | | |
 |`_setPasteButtonOptions`| Function | | |
 |`onClick`| Function | | |
 |*Path*| *Component* | | |
@@ -763,9 +741,7 @@
 |`_setRelativeContainerOptions`| Function | | |
 |`guideLine`| Function | | |
 |`barrier`| Function | | |
-|`barrier`| Function | | |
 |*RichEditor*| *Component* | | |
-|`_setRichEditorOptions`| Function | | |
 |`_setRichEditorOptions`| Function | | |
 |`onReady`| Function | | |
 |`onSelect`| Function | | |
@@ -807,7 +783,6 @@
 |`_setRowSplitOptions`| Function | | |
 |`resizeable`| Function | | |
 |*SaveButton*| *Component* | | |
-|`_setSaveButtonOptions`| Function | | |
 |`_setSaveButtonOptions`| Function | | |
 |`onClick`| Function | | |
 |*Screen*| *Component* | | |
@@ -925,7 +900,6 @@
 |`divider`| Function | | |
 |*Shape*| *Component* | | |
 |`_setShapeOptions`| Function | | |
-|`_setShapeOptions`| Function | | |
 |`viewPort`| Function | | |
 |`stroke`| Function | | |
 |`fill`| Function | | |
@@ -1030,7 +1004,6 @@
 |`effectStrategy`| Function | | |
 |`renderingStrategy`| Function | | |
 |`symbolEffect`| Function | | |
-|`symbolEffect`| Function | | |
 |*SymbolSpan*| *Component* | | |
 |`_setSymbolSpanOptions`| Function | | |
 |`fontSize`| Function | | |
@@ -1043,8 +1016,6 @@
 |`vertical`| Function | | |
 |`barPosition`| Function | | |
 |`scrollable`| Function | | |
-|`barMode`| Function | | |
-|`barMode`| Function | | |
 |`barMode`| Function | | |
 |`barWidth`| Function | | |
 |`barHeight`| Function | | |
@@ -1066,7 +1037,6 @@
 |`onContentWillChange`| Function | | |
 |*TabContent*| *Component* | | |
 |`_setTabContentOptions`| Function | | |
-|`tabBar`| Function | | |
 |`tabBar`| Function | | |
 |`onWillShow`| Function | | |
 |`onWillHide`| Function | | |
@@ -1347,7 +1317,6 @@
 |`onSslErrorReceive`| Function | | |
 |`onRenderExited`| Function | | |
 |`onShowFileSelector`| Function | | |
-|`onRenderExited`| Function | | |
 |`onFileSelectorShow`| Function | | |
 |`onResourceLoad`| Function | | |
 |`onFullScreenExit`| Function | | |
@@ -1425,8 +1394,6 @@
 |`attractionEffect`| Function | | |
 |*XComponent*| *Component* | | |
 |`_setXComponentOptions`| Function | | |
-|`_setXComponentOptions`| Function | | |
-|`_setXComponentOptions`| Function | | |
 |`onLoad`| Function | | |
 |`onDestroy`| Function | | |
 |`enableAnalyzer`| Function | | |
@@ -1436,9 +1403,6 @@
 |`controlButton`| Function | | |
 |`showControlButton`| Function | | |
 |`onChange`| Function | | |
-|`sideBarWidth`| Function | | |
-|`minSideBarWidth`| Function | | |
-|`maxSideBarWidth`| Function | | |
 |`sideBarWidth`| Function | | |
 |`minSideBarWidth`| Function | | |
 |`maxSideBarWidth`| Function | | |
@@ -1519,24 +1483,17 @@
 |`getWidth`| Function | | |
 |*CanvasRenderer*| *Class* | | |
 |`drawImage`| Function | | |
-|`drawImage`| Function | | |
-|`drawImage`| Function | | |
 |`beginPath`| Function | | |
 |`clip`| Function | | |
-|`clip`| Function | | |
 |`fill`| Function | | |
-|`fill`| Function | | |
-|`stroke`| Function | | |
 |`stroke`| Function | | |
 |`createLinearGradient`| Function | | |
 |`createPattern`| Function | | |
 |`createRadialGradient`| Function | | |
 |`createConicGradient`| Function | | |
 |`createImageData`| Function | | |
-|`createImageData`| Function | | |
 |`getImageData`| Function | | |
 |`getPixelMap`| Function | | |
-|`putImageData`| Function | | |
 |`putImageData`| Function | | |
 |`getLineDash`| Function | | |
 |`setLineDash`| Function | | |
@@ -1552,7 +1509,6 @@
 |`resetTransform`| Function | | |
 |`rotate`| Function | | |
 |`scale`| Function | | |
-|`setTransform`| Function | | |
 |`setTransform`| Function | | |
 |`transform`| Function | | |
 |`translate`| Function | | |
@@ -1614,7 +1570,6 @@
 |`invert`| Function | | |
 |`multiply`| Function | | |
 |`rotate`| Function | | |
-|`rotate`| Function | | |
 |`translate`| Function | | |
 |`scale`| Function | | |
 |`getScaleX`| Function | | |
@@ -1642,7 +1597,6 @@
 |`scrollEdge`| Function | | |
 |`fling`| Function | | |
 |`scrollPage`| Function | | |
-|`scrollPage`| Function | | |
 |`currentOffset`| Function | | |
 |`scrollToIndex`| Function | | |
 |`scrollBy`| Function | | |
@@ -1661,23 +1615,15 @@
 |`setIsInteractive`| Function | | |
 |*NavPathStack*| *Class* | | |
 |`pushPath`| Function | | |
-|`pushPath`| Function | | |
-|`pushDestination`| Function | | |
 |`pushDestination`| Function | | |
 |`pushPathByName`| Function | | |
-|`pushPathByName`| Function | | |
 |`pushDestinationByName`| Function | | |
-|`pushDestinationByName`| Function | | |
-|`replacePath`| Function | | |
 |`replacePath`| Function | | |
 |`replacePathByName`| Function | | |
 |`removeByIndexes`| Function | | |
 |`removeByName`| Function | | |
 |`pop`| Function | | |
-|`pop`| Function | | |
 |`popToName`| Function | | |
-|`popToName`| Function | | |
-|`popToIndex`| Function | | |
 |`popToIndex`| Function | | |
 |`moveToTop`| Function | | |
 |`moveIndexToTop`| Function | | |
@@ -1827,7 +1773,6 @@
 |`setCurrentTime`| Function | | |
 |`requestFullscreen`| Function | | |
 |`exitFullscreen`| Function | | |
-|`setCurrentTime`| Function | | |
 |`reset`| Function | | |
 |*WebController*| *Class* | | |
 |`onInactive`| Function | | |
@@ -1933,7 +1878,6 @@
 |`handleConfirm`| Function | | |
 |`handleCancel`| Function | | |
 |*ClientAuthenticationHandler*| *Class* | | |
-|`confirm`| Function | | |
 |`confirm`| Function | | |
 |`cancel`| Function | | |
 |`ignore`| Function | | |

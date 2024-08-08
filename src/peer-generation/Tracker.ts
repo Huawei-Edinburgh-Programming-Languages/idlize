@@ -38,16 +38,24 @@ class TrackerVisitor {
     }
 
     printPeerClass(clazz: PeerClass): void {
+        let seen = new Set<string>()
         this.out.print(`|*${clazz.componentName}*| *Component* | ${this.tracking(clazz.componentName, "")}`)
         clazz.methods.forEach(method => {
-            this.out.print(`|\`${method.method.name}\`| Function | ${this.tracking(clazz.componentName, method.method.name)}`)
+            if (!seen.has(method.method.name)) {
+                this.out.print(`|\`${method.method.name}\`| Function | ${this.tracking(clazz.componentName, method.method.name)}`)
+                seen.add(method.method.name)
+            }
         })
     }
 
     printMaterializedClass(clazz: MaterializedClass) {
+        let seen = new Set<string>()
         this.out.print(`|*${clazz.className}*| *Class* | ${this.tracking(clazz.className, "")}`)
         clazz.methods.forEach(method => {
-            this.out.print(`|\`${method.method.name}\`| Function | ${this.tracking(clazz.className, method.method.name)}`)
+            if (!seen.has(method.method.name)) {
+                this.out.print(`|\`${method.method.name}\`| Function | ${this.tracking(clazz.className, method.method.name)}`)
+                seen.add(method.method.name)
+            }
         })
     }
 
