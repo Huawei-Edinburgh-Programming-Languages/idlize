@@ -205,8 +205,10 @@ export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
 
     convertLiteralType(node: ts.LiteralTypeNode): string {
         if ((ts.isUnionTypeNode(node.parent)
-            || ts.isTypeReferenceNode(node.parent)) && ts.isStringLiteral(node.literal)) {
-            return `LITERAL_${node.literal.getText().replaceAll('"', '')}`
+            || ts.isTypeReferenceNode(node.parent)
+            || ts.isTypeAliasDeclaration(node.parent)
+        ) && ts.isStringLiteral(node.literal)) {
+            return `LITERAL_${node.literal.getText().replaceAll('\'', '').replaceAll('"', '')}`
         } else {
             return super.convertLiteralType(node)
         }
