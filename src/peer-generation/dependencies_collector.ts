@@ -158,8 +158,10 @@ export class DeclarationDependenciesCollector implements DeclarationConvertor<ts
         throw new Error(`Not implemented ${ts.SyntaxKind[member.kind]}`)
     }
     private convertExpression(expression: ts.ExpressionWithTypeArguments) {
+        const declsByNode = getDeclarationsByNode(this.typeChecker, expression.expression)
         return [
-            ...getDeclarationsByNode(this.typeChecker, expression.expression),
+            ...declsByNode,
+            ...declsByNode.flatMap(it => this.convert(it)),
             ...expression.typeArguments?.flatMap(type => this.typeDepsCollector.convert(type)) ?? []
         ]
     }
