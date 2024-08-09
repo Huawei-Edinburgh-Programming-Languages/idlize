@@ -388,7 +388,7 @@ class ImportsAggregateCollector extends TypeDependenciesCollector {
 }
 
 class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
-    private readonly typeConvertor = new ArkTSTypeNodeNameConvertor()
+    private readonly typeToStringConvertor = new ArkTSTypeNodeNameConvertor()
 
     constructor(
         peerLibrary: PeerLibrary,
@@ -403,13 +403,31 @@ class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
                 || ts.isTypeReferenceNode(node.parent)
                 || ts.isTypeAliasDeclaration(node.parent))
             && ts.isStringLiteral(node.literal)) {
-            return [this.makeSyntheticTypeAliasDeclaration(this.typeConvertor.convertLiteralType(node))]
+            return [this.makeSyntheticTypeAliasDeclaration(this.typeToStringConvertor.convertLiteralType(node))]
         }
         return super.convertLiteralType(node)
     }
 
+    convertUnion(node: ts.UnionTypeNode): ts.Declaration[] {
+        if (node?.parent?.parent != undefined && ts.isTupleTypeNode(node.parent) && ts.isTypeReferenceNode(node.parent.parent)) {
+            //TODO: Fix 'Comma is mandatory between elements in a tuple type declaration' error
+            const typeAliasDecl = makeSyntheticTypeAliasDeclaration(
+                'SyntheticDeclarations',
+                this.typeToStringConvertor.convertUnion(node),
+                ts.factory.createUnionTypeNode(node.types),
+            )
+            this.declDependenciesCollector?.convert(typeAliasDecl).forEach(it => {
+                if (isSourceDecl(it) && (PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it))) {
+                    addSyntheticDeclarationDependency(typeAliasDecl, convertDeclToFeature(this.peerLibrary, it))
+                }
+            })
+            return [typeAliasDecl]
+        }
+        return super.convertUnion(node);
+    }
+
     override convertTemplateLiteral(node: ts.TemplateLiteralTypeNode): ts.Declaration[] {
-        return [this.makeSyntheticTypeAliasDeclaration(this.typeConvertor.convertTemplateLiteral(node))]
+        return [this.makeSyntheticTypeAliasDeclaration(this.typeToStringConvertor.convertTemplateLiteral(node))]
     }
 
     override convertTypeLiteral(node: ts.TypeLiteralNode): ts.Declaration[] {
@@ -420,7 +438,7 @@ class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
             }
         }
         return [...membersDecls, makeSyntheticInterfaceDeclaration('SyntheticDeclarations',
-            this.typeConvertor.convert(node),
+            this.typeToStringConvertor.convert(node),
             node.members,
             this.declDependenciesCollector.value,
             this.peerLibrary)]
@@ -723,8 +741,8 @@ export class PeerProcessor {
     constructor(
         private readonly library: PeerLibrary,
     ) {
-        this.typeDependenciesCollector = createTypeDependenciesCollector(this.library, { 
-            declDependenciesCollector: lazy(() => this.declDependenciesCollector) 
+        this.typeDependenciesCollector = createTypeDependenciesCollector(this.library, {
+            declDependenciesCollector: lazy(() => this.declDependenciesCollector)
         })
         this.declDependenciesCollector = new FilteredDeclarationCollector(this.library, this.typeDependenciesCollector)
         this.serializeDepsCollector = new FilteredDeclarationCollector(
@@ -1015,7 +1033,7 @@ export class PeerProcessor {
 }
 
 export function createTypeDependenciesCollector(
-    library: PeerLibrary, 
+    library: PeerLibrary,
     arkts: {
         declDependenciesCollector: Lazy<DeclarationDependenciesCollector>
     }

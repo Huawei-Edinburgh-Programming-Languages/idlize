@@ -203,6 +203,17 @@ export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
         return super.convertImport(node);
     }
 
+    convertTuple(node: ts.TupleTypeNode): string {
+        return super.convertTuple(node);
+    }
+
+    convertUnion(node: ts.UnionTypeNode): string {
+        if (node?.parent?.parent !== undefined && ts.isTupleTypeNode(node.parent) && ts.isTypeReferenceNode(node.parent.parent)) {
+            return `UNION_${node.types.map(it=>this.convert(it)).join("_")}`
+        }
+        return super.convertUnion(node);
+    }
+
     convertLiteralType(node: ts.LiteralTypeNode): string {
         if ((ts.isUnionTypeNode(node.parent)
             || ts.isTypeReferenceNode(node.parent)
