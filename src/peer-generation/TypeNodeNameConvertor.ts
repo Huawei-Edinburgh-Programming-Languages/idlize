@@ -207,6 +207,10 @@ export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
         return super.convertTuple(node);
     }
 
+    convertUnknownKeyword(node: ts.TypeNode): string {
+        return "Object"
+    }
+
     convertUnion(node: ts.UnionTypeNode): string {
         if (node?.parent?.parent !== undefined && ts.isTupleTypeNode(node.parent) && ts.isTypeReferenceNode(node.parent.parent)) {
             return `UNION_${node.types.map(it=>this.convert(it)).join("_")}`
