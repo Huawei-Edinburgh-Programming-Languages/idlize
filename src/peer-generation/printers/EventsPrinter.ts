@@ -210,11 +210,11 @@ class CEventsVisitor {
         for (const [name, callbacks] of groupedCallbacks) {
             if (!this.library.shouldGenerateComponent(name))
                 continue
-            this.impl.pushNamespace(name)
+            this.impl.pushNamespace(name, false)
             for (const callback of callbacks) {
                 this.printEventImpl(callback)
             }
-            this.impl.popNamespace()
+            this.impl.popNamespace(false)
         }
         for (const [name, callbacks] of groupedCallbacks) {
             if (!this.library.shouldGenerateComponent(name))

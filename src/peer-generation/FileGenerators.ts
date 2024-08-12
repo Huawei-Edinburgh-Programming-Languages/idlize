@@ -552,7 +552,7 @@ export function makeCEventsLibaceImpl(implData: PrinterLike, receiversList: Prin
     writer.print("")
     writer.writeInclude(`arkoala_api_generated.h`)
     writer.print("")
-    writer.pushNamespace(namespace)
+    writer.pushNamespace(namespace, false)
 
     writer.concat(implData)
 
@@ -580,7 +580,7 @@ export function makeCEventsLibaceImpl(implData: PrinterLike, receiversList: Prin
         writer.writeStatement(writer.makeReturn(writer.makeString(`&eventsImpl`)))
     })
 
-    writer.popNamespace()
+    writer.popNamespace(false)
     return writer.getOutput().join('\n')
 }
 
