@@ -22,7 +22,7 @@ import { PeerMethod } from "../PeerMethod";
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { CallbackInfo, collectCallbacks, groupCallbacks } from "./EventsPrinter";
 import { DeclarationTable, PrimitiveType } from "../DeclarationTable";
-import { NamedMethodSignature, Type, createLanguageWriter } from "../LanguageWriters";
+import { NamedMethodSignature, Type, printMethodDeclaration } from "../LanguageWriters";
 import { Language } from "../../util";
 import { LibaceInstall } from "../../Install";
 
@@ -41,20 +41,6 @@ export function generateEventSignature(table: DeclarationTable, event: CallbackI
         [nodeType, ...argsTypes],
         ['nodeId', ...event.args.map(it => it.name)]
     )
-}
-
-function printMethodDeclaration(printer: IndentedPrinter, retType: string, methodName: string, apiParameters: string[], postfix: string = "") {
-    if (apiParameters.length > 1) {
-        const methodTypeName = `${retType} ${methodName}`
-        const indent = ` `.repeat(methodTypeName.length + 1)
-        printer.print(`${methodTypeName}(${apiParameters[0]},`)
-        for (let i = 1; i < apiParameters.length; i++) {
-            printer.print(indent + apiParameters[i] + ((i === apiParameters.length - 1) ? `)${postfix}` : ","))
-        }
-    } else {
-        const signature = `${retType} ${methodName}(${apiParameters.join(", ")})${postfix}`
-        printer.print(signature)
-    }
 }
 
 class HeaderVisitor {
