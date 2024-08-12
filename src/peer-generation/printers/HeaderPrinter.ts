@@ -43,6 +43,20 @@ export function generateEventSignature(table: DeclarationTable, event: CallbackI
     )
 }
 
+function printMethodDeclaration(printer: IndentedPrinter, retType: string, methodName: string, apiParameters: string[], postfix: string = "") {
+    if (apiParameters.length > 1) {
+        const methodTypeName = `${retType} ${methodName}`
+        const indent = ` `.repeat(methodTypeName.length + 1)
+        printer.print(`${methodTypeName}(${apiParameters[0]},`)
+        for (let i = 1; i < apiParameters.length; i++) {
+            printer.print(indent + apiParameters[i] + ((i === apiParameters.length - 1) ? `)${postfix}` : ","))
+        }
+    } else {
+        const signature = `${retType} ${methodName}(${apiParameters.join(", ")})${postfix}`
+        printer.print(signature)
+    }
+}
+
 class HeaderVisitor {
     constructor(
         private library: PeerLibrary,
@@ -64,8 +78,8 @@ class HeaderVisitor {
     }
 
     private printMethod(method: PeerMethod) {
-        const apiParameters = method.generateAPIParameters().join(", ")
-        this.api.print(`${method.retType} (*${method.fullMethodName})(${apiParameters});`)
+        const apiParameters = method.generateAPIParameters()
+        printMethodDeclaration(this.api, method.retType, `(*${method.fullMethodName})`, apiParameters, `;`)
     }
 
     private printClassEpilog(clazz: PeerClass) {
