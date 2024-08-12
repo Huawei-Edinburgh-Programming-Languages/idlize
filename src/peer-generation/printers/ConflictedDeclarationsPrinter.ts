@@ -64,7 +64,19 @@ class ArkTSConflictedDeclarationsVisitor extends ConflictedDeclarationsVisitor {
                 maybeGenerics = `<${decl.typeParameters.map((_, i) => `T${i}=Object`).join(',')}>`
             }
         }
-        writer.print(`export type ${name}${maybeGenerics} = T0`)
+        writer.print(`export type ${name}${maybeGenerics} = ${maybeGenerics ? "T0" : "Object"}`)
+    }
+
+    print() {
+        const printedNames = new Set<string>()
+        for (const decl of this.library.conflictedDeclarations) {
+            const name = convertDeclaration(DeclarationNameConvertor.I, decl)
+            if (printedNames.has(name)) {
+                continue
+            }
+            printedNames.add(name)
+            this.convertDeclaration(name, decl, this.writer)
+        }
     }
 }
 

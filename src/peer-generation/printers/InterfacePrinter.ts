@@ -387,7 +387,7 @@ class CJInterfacesVisitor {
 }
 
 export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
-    private readonly typeConvertor = new ArkTSTypeNodeNameConvertor()
+    private readonly typeConvertor = new ArkTSTypeNodeNameConvertor(this.peerLibrary)
     constructor(private readonly writer: LanguageWriter,
                 private readonly peerLibrary: PeerLibrary) {
     }

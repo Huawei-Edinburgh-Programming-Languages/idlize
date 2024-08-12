@@ -14,8 +14,10 @@
  */
 
 import * as ts from 'typescript'
-import { TypeNodeConvertor, convertTypeNode } from './TypeNodeConvertor'
+import { TypeNodeConvertor, convertTypeNode, convertDeclaration } from './TypeNodeConvertor'
 import { snakeCaseToCamelCase } from "../util";
+import { PeerLibrary } from "./PeerLibrary";
+import { DeclarationNameConvertor } from "./dependencies_collector";
 
 export interface TypeNodeNameConvertor extends TypeNodeConvertor<string> {
     convert(node: ts.Node): string
@@ -179,6 +181,9 @@ export function mapType(type: ts.TypeNode | undefined): string {
 }
 
 export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
+    constructor(private readonly peerLibrary: PeerLibrary) {
+        super();
+    }
     convertAnyKeyword(node: ts.TypeNode): string {
         return "Object"
     }
@@ -253,6 +258,21 @@ export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
             return `${name}: ${type}${it.questionToken ? `|undefined` : ``}`
         })
         return `((${parameters.join(', ')}) => ${this.convert(node.type)})`
+    }
+
+    convertQualifiedName(node: ts.QualifiedName): string {
+        const name = Array.from(this.peerLibrary.conflictedDeclarations)
+            .map(it => {
+                if ((ts.isInterfaceDeclaration(it) || ts.isClassDeclaration(it) || ts.isEnumDeclaration(it)) &&
+                    ts.isModuleBlock(it.parent) && super.convert(node.right) === it.name?.text) {
+                    return convertDeclaration(DeclarationNameConvertor.I, it)
+                }
+            })
+            .find(it => it != undefined)
+        if (name !== undefined) {
+            return name
+        }
+        return super.convertQualifiedName(node);
     }
 }
 

@@ -388,7 +388,7 @@ class ImportsAggregateCollector extends TypeDependenciesCollector {
 }
 
 class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
-    private readonly typeToStringConvertor = new ArkTSTypeNodeNameConvertor()
+    private readonly typeToStringConvertor: ArkTSTypeNodeNameConvertor = new ArkTSTypeNodeNameConvertor(this.peerLibrary)
 
     constructor(
         peerLibrary: PeerLibrary,
@@ -1079,7 +1079,7 @@ export function createTypeNodeConvertor(library: PeerLibrary,
                 return new ArkTSTypeNodeNameConvertorProxy(typeNodeConvertor,
                     library, declarationDependenciesCollector, importFeatures)
             }
-            return new ArkTSTypeNodeNameConvertor()
+            return new ArkTSTypeNodeNameConvertor(library)
         }
         case Language.TS: {
             return new TSTypeNodeNameConvertor()
