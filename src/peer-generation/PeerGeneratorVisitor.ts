@@ -439,6 +439,7 @@ class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
         }
         return [...membersDecls, makeSyntheticInterfaceDeclaration('SyntheticDeclarations',
             this.typeToStringConvertor.convert(node),
+            undefined,
             node.members,
             this.declDependenciesCollector.value,
             this.peerLibrary)]
@@ -854,9 +855,14 @@ export class PeerProcessor {
 
         // In ArkTS we need generate a real interface in SyntheticDeclarations
         if (this.library.declarationTable.language == Language.ARKTS && ts.isInterfaceDeclaration(target)) {
-            const declName = createInterfaceDeclName(identName(target)!)
+            const declName = createInterfaceDeclName(`${identName(target)!}`)
             importFeatures.push(convertDeclToFeature(this.library,
-                makeSyntheticInterfaceDeclaration('SyntheticDeclarations', declName, target.members, this.declDependenciesCollector!, this.library)))
+                makeSyntheticInterfaceDeclaration('SyntheticDeclarations',
+                    declName,
+                    target.typeParameters,
+                    target.members,
+                    this.declDependenciesCollector!,
+                    this.library)))
         }
 
         this.library.materializedClasses.set(name,

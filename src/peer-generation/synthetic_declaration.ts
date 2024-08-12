@@ -80,13 +80,14 @@ export function makeSyntheticDeclarationsFiles(): Map<string, {dependencies: Imp
 }
 
 export function makeSyntheticInterfaceDeclaration(targetFileName: string,
-                                                  typeName: string,
+                                                  interfaceName: string,
+                                                  typeParameters: ts.NodeArray<ts.TypeParameterDeclaration> | undefined,
                                                   members: ts.NodeArray<ts.TypeElement>,
                                                   declDependenciesCollector: DeclarationDependenciesCollector,
                                                   peerLibrary: PeerLibrary): ts.Declaration {
     const decl = makeSyntheticDeclaration(targetFileName,
-        typeName,
-        () => ts.factory.createInterfaceDeclaration([], typeName, [], [], members)
+        interfaceName,
+        () => ts.factory.createInterfaceDeclaration([], interfaceName, typeParameters, [], members)
     )
     declDependenciesCollector.convert(decl).forEach(it => {
         if (isSourceDecl(it) && (PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it))) {
@@ -109,7 +110,12 @@ export class ArkTSTypeNodeNameConvertorProxy implements TypeNodeNameConvertor {
         const typeName = this.convertor.convertTypeLiteral(node)
         if (this.importFeatures != undefined && this.peerLibrary != undefined && this.declDependenciesCollector != undefined) {
             this.importFeatures.push(convertDeclToFeature(this.peerLibrary,
-                makeSyntheticInterfaceDeclaration('SyntheticDeclarations', typeName, node.members, this.declDependenciesCollector, this.peerLibrary))
+                makeSyntheticInterfaceDeclaration('SyntheticDeclarations',
+                    typeName,
+                    undefined,
+                    node.members,
+                    this.declDependenciesCollector,
+                    this.peerLibrary))
             )
         }
         return typeName
