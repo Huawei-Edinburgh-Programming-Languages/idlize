@@ -187,6 +187,9 @@ export class DeclarationNameConvertor implements DeclarationConvertor<string> {
         return node.name!.text
     }
     convertEnum(node: ts.EnumDeclaration): string {
+        if (ts.isModuleBlock(node.parent)) {
+            return `${node.parent.parent.name.text}_${node.name!.text}`
+        }
         return node.name!.text
     }
     convertTypeAlias(node: ts.TypeAliasDeclaration): string {
