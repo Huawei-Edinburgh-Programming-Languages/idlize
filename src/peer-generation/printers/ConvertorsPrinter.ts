@@ -57,7 +57,7 @@ class ConvertorsPrinter {
 
     writeOptionalConvertors() {
         this.writer.print("#define ASSIGN_OPT(name) \\")
-        this.writer.pushIndent()
+        //this.writer.pushIndent()
         this.writer.print("template<typename T> \\")
         this.writer.print("void AssignOptionalTo(std::optional<T>& dst, const name& src) { \\")
         this.writer.pushIndent()
@@ -84,7 +84,7 @@ class ConvertorsPrinter {
         this.table.allOptionalTypes().forEach(optionalName => {
             this.writer.print(`ASSIGN_OPT(${optionalName})`)
         })
-        this.writer.popIndent()
+        //this.writer.popIndent()
         this.writer.print("#undef ASSIGN_OPT")
     }
 
