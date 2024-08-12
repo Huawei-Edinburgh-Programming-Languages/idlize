@@ -279,9 +279,10 @@ export function makeConverterHeader(path: string, namespace: string, library: Pe
     }
     converter.print("")
 
-    converter.pushNamespace(namespace)
+    converter.pushNamespace(namespace, false)
+    converter.print("")
     writeConvertors(library, converter)
-    converter.popNamespace()
+    converter.popNamespace(false)
     converter.print(`\n#endif // ${includeGuardDefine}`)
     converter.print("")
     return converter
