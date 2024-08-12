@@ -30,7 +30,8 @@ class ConvertorsPrinter {
 
         for (const [typename, selectors] of this.table.allUnionTypes()) {
             this.writer.print('template<typename T>')
-            this.writer.print(`void AssignUnionTo(std::optional<T>& dst, const ${ typename }& src)`)
+            this.writer.print(`void AssignUnionTo(std::optional<T>& dst`)
+            this.writer.print(`                   const ${typename}& src)`)
             this.writer.print("{")
             this.writer.pushIndent()
             this.writer.print(`switch (src.selector) {`)
@@ -95,7 +96,8 @@ class ConvertorsPrinter {
 
         for (const [name, fields] of this.table.allLiteralTypes()) {
             this.writer.print('template<typename T>')
-            this.writer.print(`void AssignLiteralTo(std::optional<T>& dst, const ${name}& src)`)
+            this.writer.print(`void AssignLiteralTo(std::optional<T>& dst,`)
+            this.writer.print(`                     const ${name}& src)`)
             this.writer.print("{")
             this.writer.pushIndent()
             if (fields.length > 0) {
