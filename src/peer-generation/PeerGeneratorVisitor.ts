@@ -157,12 +157,15 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
         } else if (ts.isClassDeclaration(node) ||
             ts.isInterfaceDeclaration(node) ||
             ts.isEnumDeclaration(node) ||
-            ts.isVariableStatement(node) ||
             ts.isExportDeclaration(node) ||
             ts.isTypeAliasDeclaration(node) ||
             ts.isFunctionDeclaration(node) ||
-            ts.isEmptyStatement(node) ||
+            ts.isExportDeclaration(node)) {
+            this.peerLibrary.freeDeclarations.push(node)
+        } else if (
             ts.isImportDeclaration(node) ||
+            ts.isEmptyStatement(node) ||
+            ts.isVariableStatement(node) ||
             node.kind == ts.SyntaxKind.EndOfFileToken) {
             // Do nothing.
         } else {
@@ -917,13 +920,15 @@ export class PeerProcessor {
         })
     }
 
-    private generateDeclarations(components: ComponentDeclaration[]): Set<ts.Declaration> {
-        const deps = new Set(components.flatMap(it => {
-            const decls: ts.Declaration[] = [it.attributesDeclarations]
-            if (it.interfaceDeclaration)
-                decls.push(it.interfaceDeclaration)
-            return decls
-        }))
+    private generateDeclarations(components: ComponentDeclaration[], freeDeclaration?: ts.Declaration[]): Set<ts.Declaration> {
+        const deps = freeDeclaration
+            ? new Set(freeDeclaration)
+            : new Set(components.flatMap(it => {
+                const decls: ts.Declaration[] = [it.attributesDeclarations]
+                if (it.interfaceDeclaration)
+                    decls.push(it.interfaceDeclaration)
+                return decls
+            }))
         const depsCopy = Array.from(deps)
         for (const dep of depsCopy) {
             this.collectDepsRecursive(dep, deps)
@@ -953,13 +958,16 @@ export class PeerProcessor {
         const allDeclarations = this.generateDeclarations(this.library.componentsDeclarations)
         const actualDeclarations = this.generateDeclarations(this.generateActualComponents())
 
-        for (const dep of allDeclarations) {
+        const allFreeDecl = this.generateDeclarations(this.library.componentsDeclarations, this.library.freeDeclarations)
+        console.log(allFreeDecl.size)
+
+        for (const dep of allFreeDecl) {
             if (isSyntheticDeclaration(dep)) {
                 continue
             }
             const file = this.library.findFileByOriginalFilename(this.getDeclSourceFile(dep).fileName)!
             const isPeerDecl = this.library.isComponentDeclaration(dep)
-            const isActualDeclaration = actualDeclarations.has(dep)
+            const isActualDeclaration = true // actualDeclarations.has(dep)
 
             if (!isPeerDecl && (ts.isClassDeclaration(dep) || ts.isInterfaceDeclaration(dep))) {
                 if (isBuilderClass(dep)) {
@@ -1020,6 +1028,9 @@ export function isSourceDecl(node: ts.Declaration): boolean {
         return true
     if (ts.isModuleBlock(node.parent))
         return isSourceDecl(node.parent.parent)
+    if (ts.isNamedImports(node.parent)) {
+        return false
+    }
     if (ts.isTypeParameterDeclaration(node))
         return false
     if (!ts.isSourceFile(node.parent))

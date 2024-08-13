@@ -128,5 +128,7 @@ function getReturnValue(type: Type): string {
         case Type.Pointer.name: return "-1"
         case "string": return `"some string"`
     }
-    throw new Error(`Unknown return type: ${type.name}`)
+    console.log(`Unknown return type: ${type.name}`)
+    return type.name
+    // throw new Error(`Unknown return type: ${type.name}`)
 }

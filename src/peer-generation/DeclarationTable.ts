@@ -16,7 +16,8 @@
 import * as ts from "typescript"
 import { Language, asString, getDeclarationsByNode, getNameWithoutQualifiersRight, heritageDeclarations,
      identName, isStatic, throwException, typeEntityName, identNameWithNamespace,
-     isCommonMethodOrSubclass} from "../util"
+     isCommonMethodOrSubclass,
+     getExportedDeclarationNameByDecl} from "../util"
 import { IndentedPrinter } from "../IndentedPrinter"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
 import {
@@ -691,8 +692,9 @@ export class DeclarationTable {
             // TODO: incorrect, we must use actual, not formal type parameter.
             return new CustomTypeConvertor(param, identName(declaration.name)!)
         }
-        console.log(`${declaration.getText()}`)
-        throw new Error(`Unknown kind: ${declaration.kind}`)
+        return new CustomTypeConvertor(param, declarationName)
+        // console.log(`${declaration.getText()}`)
+        // throw new Error(`Unknown kind: ${declaration.kind}`)
     }
 
     private printStructsCHead(name: string, descriptor: StructDescriptor, structs: IndentedPrinter) {
@@ -1525,6 +1527,10 @@ class ToDeclarationTargetConvertor implements TypeNodeConvertor<DeclarationTarge
             ts.isInterfaceDeclaration(declaration) ||
             ts.isEnumDeclaration(declaration))
             return declaration
+        if (ts.isTypeReferenceNode(node)) {
+            const rawType = getExportedDeclarationNameByDecl(declaration)
+            return PrimitiveType.CustomObject
+        }
         throw new Error(`Unknown declaration type ${ts.SyntaxKind[declaration.kind]}`)
     }
     convertParenthesized(node: ts.ParenthesizedTypeNode): DeclarationTarget {
