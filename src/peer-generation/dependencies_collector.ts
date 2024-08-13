@@ -68,8 +68,13 @@ export class TypeDependenciesCollector implements TypeNodeConvertor<ts.Declarati
     convertTypeReference(node: ts.TypeReferenceNode): ts.Declaration[] {
         let declarations = getDeclarationsByNode(this.typeChecker, node.typeName)
         if (declarations.length > 1) {
-            console.log(`WARNING: Duplicate declarations temporary unsupported: ${mapType(node)}`)
-            declarations = [declarations[0]]
+            const likelyDecl = declarations.find(decl => findNodeSourceFile(decl) == findNodeSourceFile(node))
+            if (likelyDecl) {
+                declarations = [likelyDecl]
+            } else {
+                console.log(`WARNING: Duplicate declarations temporary unsupported: ${mapType(node)}`)
+                declarations = [declarations[0]]
+            }
         }
         return [
             ...(node.typeArguments?.flatMap(it => convertTypeNode(this, it)) ?? []),
@@ -197,4 +202,16 @@ export class DeclarationNameConvertor implements DeclarationConvertor<string> {
     }
 
     static readonly I = new DeclarationNameConvertor()
+}
+
+function findNodeSourceFile(node: ts.Node): ts.SourceFile | undefined {
+    let sourceFile: ts.SourceFile | undefined = undefined
+    do {
+        if (ts.isSourceFile(node.parent)) {
+            sourceFile = node.parent
+        } else {
+            node = node.parent
+        }
+    } while (node != undefined && sourceFile == undefined)
+    return sourceFile
 }
