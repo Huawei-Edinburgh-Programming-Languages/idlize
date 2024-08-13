@@ -71,10 +71,15 @@ export class NativeModule {
   static native _TestCallVoidInt32ArrayPrefixSum(arg1: int, arg2: int[], arg3: int): void
   static native _TestCallIntRecursiveCallback(arg1: int, arg2: byte[], arg3: int): int
   static native _TestCallIntMemory(arg1: int, arg2: int): int
+  static native _SetCreateNodeDelay(type: int, nanoseconds: long): void
+  static native _SetMeasureNodeDelay(type: int, nanoseconds: long): void
+  static native _SetLayoutNodeDelay(type: int, nanoseconds: long): void
+  static native _SetDrawNodeDelay(type: int, nanoseconds: long): void
 
   // BasicNodeAPI
   static native _CreateNode(type: int, id: int, flags: int): long
   static native _DisposeNode(ptr: long): void
+  static native _DumpTreeNode(ptr: long): void
   static native _ApplyModifierFinish(ptr: long): void
   static native _Dump(nodePtr: long): void
   static native _AddChild(parent: long, child: long): int
