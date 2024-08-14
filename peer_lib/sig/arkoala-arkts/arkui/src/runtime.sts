@@ -1,0 +1,11 @@
+export function NodeAttach<Node>(
+    create: () => Node,
+    /** @memo */
+    update: (node: Node) => void
+): void {
+    
+}
+
+export function remember<Value>(compute: () => Value): Value {
+    return compute()
+}

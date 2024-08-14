@@ -8,7 +8,7 @@
             "@koalaui/arkoala": ["./out/arkts-subset/generated/sig/arkoala-arkts/framework/src"],
             "@koalaui/interop": ["./out/arkts-subset/generated/sig/arkoala-arkts/arkui/src/interop"],
             "@koalaui/common": ["./out/arkts-subset/generated/sig/arkoala-arkts/arkui/src/common"],
-            "@koalaui/runtime": ["./out/arkts-subset/generated/sig/incremental/src/runtime"]
+            "@koalaui/runtime": ["./out/arkts-subset/generated/sig/arkoala-arkts/arkui/src/runtime.sts"]
         }
     },
     "include": ["out/arkts-subset/generated/**/*.sts"],
