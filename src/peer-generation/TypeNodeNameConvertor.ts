@@ -235,7 +235,14 @@ export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
     }
 
     convertTypeLiteral(node: ts.TypeLiteralNode): string {
-        return `LITERAL_${snakeCaseToCamelCase(node.members.map(it => it.name?.getText()).join('_'))}`
+        return `LITERAL_${snakeCaseToCamelCase(node.members.map(it => {
+            if (ts.isIndexSignatureDeclaration(it)) {
+                return `${it.parameters.map(
+                    it => ts.isIdentifier(it.name) ? it.name.text : it.getText()
+                )}_${this.convert(it.type)}`
+            }
+            return it.name?.getText()
+        }).join('_'))}`
     }
 
     convertTemplateLiteral(node: ts.TemplateLiteralTypeNode): string {

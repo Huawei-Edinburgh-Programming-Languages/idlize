@@ -159,7 +159,9 @@ export class DeclarationDependenciesCollector implements DeclarationConvertor<ts
             ]
         if (ts.isConstructorDeclaration(member) || ts.isConstructSignatureDeclaration(member))
             return member.parameters.flatMap(param => this.typeDepsCollector.convert(param.type))
-
+        if (ts.isIndexSignatureDeclaration(member)) {
+            return []
+        }
         throw new Error(`Not implemented ${ts.SyntaxKind[member.kind]}`)
     }
     private convertExpression(expression: ts.ExpressionWithTypeArguments) {
