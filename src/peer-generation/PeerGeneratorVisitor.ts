@@ -335,6 +335,9 @@ function mapCInteropRetType(type: ts.TypeNode): string {
     if (ts.isParenthesizedTypeNode(type)) {
         return mapCInteropRetType(type.type)
     }
+    if (ts.isTypeLiteralNode(type)) {
+        return "void"
+    }
     throw new Error(type.getText())
 }
 
@@ -401,7 +404,8 @@ class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
     override convertLiteralType(node: ts.LiteralTypeNode): ts.Declaration[] {
         if ((ts.isUnionTypeNode(node.parent)
                 || ts.isTypeReferenceNode(node.parent)
-                || ts.isTypeAliasDeclaration(node.parent))
+                || ts.isTypeAliasDeclaration(node.parent)
+                || ts.isParameter(node.parent))
             && ts.isStringLiteral(node.literal)) {
             return [this.makeSyntheticTypeAliasDeclaration(this.typeToStringConvertor.convertLiteralType(node))]
         }

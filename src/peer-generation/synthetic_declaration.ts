@@ -108,20 +108,18 @@ export class ArkTSTypeNodeNameConvertorProxy implements TypeNodeNameConvertor {
     }
     convertTypeLiteral(node: ts.TypeLiteralNode): string {
         const typeName = this.convertor.convertTypeLiteral(node)
-        if (this.importFeatures != undefined && this.peerLibrary != undefined && this.declDependenciesCollector != undefined) {
-            this.importFeatures.push(convertDeclToFeature(this.peerLibrary,
-                makeSyntheticInterfaceDeclaration('SyntheticDeclarations',
-                    typeName,
-                    undefined,
-                    node.members,
-                    this.declDependenciesCollector,
-                    this.peerLibrary))
-            )
-        }
+        this.addDeclToImports(makeSyntheticInterfaceDeclaration('SyntheticDeclarations',
+            typeName,
+            undefined,
+            node.members,
+            this.declDependenciesCollector,
+            this.peerLibrary))
         return typeName
     }
     convertLiteralType(node: ts.LiteralTypeNode): string {
-        return this.convertor.convertLiteralType(node)
+        const typeName = this.convertor.convertLiteralType(node)
+        this.addDeclToImports(makeSyntheticTypeAliasDeclaration('SyntheticDeclarations', typeName, node))
+        return typeName
     }
     convertTuple(node: ts.TupleTypeNode): string {
         return this.convertor.convertTuple(node)
@@ -185,5 +183,10 @@ export class ArkTSTypeNodeNameConvertorProxy implements TypeNodeNameConvertor {
         if (ts.isIdentifier(node)) return this.convertIdentifier(node)
         if (ts.isTypeNode(node)) return convertTypeNode(this, node)
         throw new Error(`Unknown node type ${ts.SyntaxKind[node.kind]}`)
+    }
+    private addDeclToImports(decl: ts.Declaration) {
+        if (this.importFeatures != undefined && this.peerLibrary != undefined && this.declDependenciesCollector != undefined) {
+            this.importFeatures.push(convertDeclToFeature(this.peerLibrary, decl))
+        }
     }
 }

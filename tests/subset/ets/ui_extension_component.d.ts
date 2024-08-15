@@ -30,12 +30,12 @@ declare interface TerminationInfo {
 }
 
 declare interface UIExtensionProxy {
-   // send(data: { [key: string]: Object }): void;
-   // sendSync(data: { [key: string]: Object }): { [key: string]: Object };
-   // on(type: 'asyncReceiverRegister', callback: (proxy: UIExtensionProxy) => void): void;
-   // on(type: 'syncReceiverRegister', callback: (proxy: UIExtensionProxy) => void): void;
-   // off(type: 'asyncReceiverRegister', callback?: (proxy: UIExtensionProxy) => void): void;
-   // off(type: 'syncReceiverRegister', callback?: (proxy: UIExtensionProxy) => void): void;
+   send(data: { [key: string]: Object }): void;
+   sendSync(data: { [key: string]: Object }): { [key: string]: Object };
+   on(type: 'asyncReceiverRegister', callback: (proxy: UIExtensionProxy) => void): void;
+   on(type: 'syncReceiverRegister', callback: (proxy: UIExtensionProxy) => void): void;
+   off(type: 'asyncReceiverRegister', callback?: (proxy: UIExtensionProxy) => void): void;
+   off(type: 'syncReceiverRegister', callback?: (proxy: UIExtensionProxy) => void): void;
 }
 
 interface UIExtensionComponentInterface {
