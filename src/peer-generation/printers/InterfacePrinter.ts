@@ -452,10 +452,12 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
 
     convertInterface(node: ts.InterfaceDeclaration): void {
         this.writer.writeInterface(this.declarationName(node), writer => {
-            this.peerLibrary.declarationTable.targetStruct(node).getFields().map(it => {
-                writer.writeFieldDeclaration(it.name, new Type(this.mapType(it.type), it.optional), undefined, it.optional)
-            })
-            if (isMaterialized(node)) {
+            const fields = this.peerLibrary.declarationTable.targetStruct(node).getFields()
+            if (fields.length > 0) {
+                fields.map(it => {
+                    writer.writeFieldDeclaration(it.name, new Type(this.mapType(it.type), it.optional), undefined, it.optional)
+                })
+            } else if (isMaterialized(node)) {
                 node.members.forEach(method => {
                     if (ts.isMethodSignature(method)) {
                         writer.writeMethodDeclaration(generateMethodName(method),
@@ -523,7 +525,7 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
             const writer = createLanguageWriter(this.peerLibrary.declarationTable.language)
             this.printImports(writer, file)
             file.enums.forEach(it => writer.writeStatement(writer.makeEnumEntity(it, true)))
-            file.declarations.forEach(it => convertDeclaration(new ArkTSDeclConvertor(writer, this.peerLibrary), it))
+            file.declarations.forEach(it => convertDeclaration(createDeclarationConvertor(writer, this.peerLibrary), it))
             this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), writer)
         }
     }

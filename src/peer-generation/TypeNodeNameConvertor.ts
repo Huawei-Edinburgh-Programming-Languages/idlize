@@ -227,6 +227,7 @@ export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
         if ((ts.isUnionTypeNode(node.parent)
             || ts.isTypeReferenceNode(node.parent)
             || ts.isTypeAliasDeclaration(node.parent)
+            || ts.isParameter(node.parent)
         ) && ts.isStringLiteral(node.literal)) {
             return `LITERAL_${node.literal.getText().replaceAll('\'', '').replaceAll('"', '')}`
         } else {

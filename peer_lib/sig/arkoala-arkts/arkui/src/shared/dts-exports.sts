@@ -53,3 +53,5 @@ export type External_LITERAL_middle = string
 export type External_LITERAL_top = string
 export type External_LITERAL_auto = string
 export type External_LITERAL_navBar = string
+export interface External_LITERAL_asyncReceiverRegister {}
+export interface External_LITERAL_syncReceiverRegister {}
