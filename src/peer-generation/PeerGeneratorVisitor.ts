@@ -420,7 +420,7 @@ class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
                 this.typeToStringConvertor.convertUnion(node),
                 ts.factory.createUnionTypeNode(node.types),
             )
-            this.declDependenciesCollector?.convert(typeAliasDecl).forEach(it => {
+            this.declDependenciesCollector.value.convert(typeAliasDecl).forEach(it => {
                 if (isSourceDecl(it) && (PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it))) {
                     addSyntheticDeclarationDependency(typeAliasDecl, convertDeclToFeature(this.peerLibrary, it))
                 }
