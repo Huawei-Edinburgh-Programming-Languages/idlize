@@ -302,7 +302,11 @@ export class DeclarationTable {
         }
         if (ts.isTypeReferenceNode(target)) {
             let name = identName(target.typeName)
-            if (!target.typeArguments) throw new Error("Only type references with type arguments allowed here: " + name)
+            if (!target.typeArguments) {
+                console.log("Only type references with type arguments allowed here: " + name)
+                return name ?? 'WTF'
+                // throw new Error("Only type references with type arguments allowed here: " + name)
+            }
             if (name == "Optional")
                 return this.computeTargetName(this.toTarget(target.typeArguments[0]), true, idlPrefix)
             if (name == "Array")
@@ -692,9 +696,8 @@ export class DeclarationTable {
             // TODO: incorrect, we must use actual, not formal type parameter.
             return new CustomTypeConvertor(param, identName(declaration.name)!)
         }
-        return new CustomTypeConvertor(param, declarationName)
-        // console.log(`${declaration.getText()}`)
-        // throw new Error(`Unknown kind: ${declaration.kind}`)
+        console.log(`create custom type convertor for ${declaration.getText()}`)
+        return new CustomTypeConvertor(param, declarationName) // todo
     }
 
     private printStructsCHead(name: string, descriptor: StructDescriptor, structs: IndentedPrinter) {
@@ -1326,7 +1329,7 @@ export class DeclarationTable {
         }
 
         if (target instanceof PrimitiveType) {
-            return result
+            return result // later THIS
         }
         else if (ts.isArrayTypeNode(target)) {
             result.isArray = true
@@ -1395,7 +1398,11 @@ export class DeclarationTable {
             // TODO: is it really correct
         }
         else if (ts.isTypeReferenceNode(target)) {
-            if (!target.typeArguments) throw new Error("Only type references with type arguments allowed")
+            // if (!target.typeArguments) throw new Error("Only type references with type arguments allowed")
+            if (!target.typeArguments) {
+                console.log("Only type references with type arguments allowed (", identName(target.typeName), ")")
+                return result
+            }
             let name = identName(target.typeName)
             if (name == "Optional") {
                 let type = target.typeArguments[0]
@@ -1527,9 +1534,13 @@ class ToDeclarationTargetConvertor implements TypeNodeConvertor<DeclarationTarge
             ts.isInterfaceDeclaration(declaration) ||
             ts.isEnumDeclaration(declaration))
             return declaration
+        if (ts.isImportSpecifier(node)) {
+            console.log('ImportSpecifier!')
+        }
         if (ts.isTypeReferenceNode(node)) {
-            const rawType = getExportedDeclarationNameByDecl(declaration)
-            return PrimitiveType.CustomObject
+            const rawType = getExportedDeclarationNameByDecl(declaration) // todo
+            console.log('convertTypeReference -', rawType);
+            return node // return PrimitiveType.CustomObject
         }
         throw new Error(`Unknown declaration type ${ts.SyntaxKind[declaration.kind]}`)
     }

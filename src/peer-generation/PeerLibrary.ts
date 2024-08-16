@@ -26,8 +26,6 @@ export type PeerLibraryOutput = {
 }
 
 export class PeerLibrary {
-    freeDeclarations: ts.Declaration[] = []
-    
     public readonly files: PeerFile[] = []
     public readonly builderClasses: Map<string, BuilderClass> = new Map()
     public get buildersToGenerate(): BuilderClass[] {

@@ -75,5 +75,8 @@ export function convertDeclaration<T>(convertor: DeclarationConvertor<T>, node: 
     if (ts.isEnumDeclaration(node)) return convertor.convertEnum(node)
     if (ts.isEnumMember(node)) return convertor.convertEnum(node.parent)
     if (ts.isTypeAliasDeclaration(node)) return convertor.convertTypeAlias(node)
+    if (ts.isImportSpecifier(node)) {
+        return [node] as T
+    }
     throw new Error(`Unknown declaration type ${ts.SyntaxKind[node.kind]}`)
 }

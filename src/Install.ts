@@ -18,7 +18,7 @@ import * as path from 'path'
 import { Language } from './util'
 import { TargetFile } from './peer-generation/printers/TargetFile'
 
-class Install {
+export class Install {
     mkdir(path: string): string {
         fs.mkdirSync(path, { recursive: true })
         return path

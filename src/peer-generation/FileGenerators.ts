@@ -24,6 +24,7 @@ import { writeDeserializer, writeSerializer } from "./printers/SerializerPrinter
 import { SELECTOR_ID_PREFIX, writeConvertors } from "./printers/ConvertorsPrinter"
 import { PeerLibrary } from "./PeerLibrary"
 import { ArkoalaInstall, LibaceInstall } from "../Install"
+import { SkoalaInstall } from "../skoala-generation/SkoalaGeneratorVisitor"
 
 export const warning = "WARNING! THIS FILE IS AUTO-GENERATED, DO NOT MAKE CHANGES, THEY WILL BE LOST ON NEXT GENERATION!"
 

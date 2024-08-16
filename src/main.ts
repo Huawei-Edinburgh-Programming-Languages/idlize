@@ -73,12 +73,14 @@ import { generateTracker } from "./peer-generation/Tracker"
 import { IdlPeerLibrary } from "./peer-generation/idl/IdlPeerLibrary"
 import { IdlPeerFile } from "./peer-generation/idl/IdlPeerFile"
 import { IdlPeerGeneratorVisitor, IdlPeerProcessor } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
+import { dtsToSkoala } from "./skoala-generation/generateSkoala"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
     .option('--dts2h', 'Convert .d.ts to .h definitions')
     .option('--dts2test', 'Generate tests from .d.ts to .h')
     .option('--dts2peer', 'Convert .d.ts to peer drafts')
+    .option('--dts2skoala', 'Convert .d.ts to skoala')
     .option('--ets2ts', 'Convert .ets to .ts')
     .option('--input-dir <path>', 'Path to input dir')
     .option('--output-dir <path>', 'Path to output dir')
@@ -413,6 +415,11 @@ if (options.dts2peer) {
             }
         }
     )
+    didJob = true
+}
+
+if (options.dts2skoala) {
+    dtsToSkoala(options)
     didJob = true
 }
 

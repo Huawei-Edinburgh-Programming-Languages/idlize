@@ -15,7 +15,7 @@
 
 import * as ts from 'typescript'
 import { DeclarationConvertor, TypeNodeConvertor, convertDeclaration, convertTypeNode } from "./TypeNodeConvertor";
-import { getDeclarationsByNode } from '../util';
+import { findRealDeclarations, getDeclarationsByNode } from '../util';
 import { mapType } from './TypeNodeNameConvertor';
 
 export class TypeDependenciesCollector implements TypeNodeConvertor<ts.Declaration[]> {
@@ -66,7 +66,7 @@ export class TypeDependenciesCollector implements TypeNodeConvertor<ts.Declarati
         return []
     }
     convertTypeReference(node: ts.TypeReferenceNode): ts.Declaration[] {
-        let declarations = getDeclarationsByNode(this.typeChecker, node.typeName)
+        let declarations = findRealDeclarations(this.typeChecker, node.typeName)
         if (declarations.length > 1) {
             console.log(`WARNING: Duplicate declarations temporary unsupported: ${mapType(node)}`)
             declarations = [declarations[0]]

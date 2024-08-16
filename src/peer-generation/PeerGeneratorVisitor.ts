@@ -157,15 +157,12 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
         } else if (ts.isClassDeclaration(node) ||
             ts.isInterfaceDeclaration(node) ||
             ts.isEnumDeclaration(node) ||
+            ts.isVariableStatement(node) ||
             ts.isExportDeclaration(node) ||
             ts.isTypeAliasDeclaration(node) ||
             ts.isFunctionDeclaration(node) ||
-            ts.isExportDeclaration(node)) {
-            this.peerLibrary.freeDeclarations.push(node)
-        } else if (
-            ts.isImportDeclaration(node) ||
             ts.isEmptyStatement(node) ||
-            ts.isVariableStatement(node) ||
+            ts.isImportDeclaration(node) ||
             node.kind == ts.SyntaxKind.EndOfFileToken) {
             // Do nothing.
         } else {
@@ -270,14 +267,14 @@ export function generateSignature(method: ts.ConstructorDeclaration | ts.MethodD
     )
 }
 
-function generateArgConvertor(table: DeclarationTable, param: ts.ParameterDeclaration): ArgConvertor {
+export function generateArgConvertor(table: DeclarationTable, param: ts.ParameterDeclaration): ArgConvertor {
     if (!param.type) throw new Error("Type is needed")
     let paramName = asString(param.name)
     let optional = param.questionToken !== undefined
     return table.typeConvertor(paramName, param.type, optional)
 }
 
-function generateRetConvertor(typeNode?: ts.TypeNode): RetConvertor {
+export function generateRetConvertor(typeNode?: ts.TypeNode): RetConvertor {
     let nativeType = typeNode ? mapCInteropRetType(typeNode) : "void"
     let isVoid = nativeType == "void"
     return {
@@ -340,7 +337,7 @@ function mapCInteropRetType(type: ts.TypeNode): string {
 }
 
 
-class ImportsAggregateCollector extends TypeDependenciesCollector {
+export class ImportsAggregateCollector extends TypeDependenciesCollector {
     constructor(
         protected readonly peerLibrary: PeerLibrary,
         private readonly expandAliases: boolean,
@@ -450,7 +447,7 @@ export class FilteredDeclarationCollector extends DeclarationDependenciesCollect
     }
 }
 
-class ComponentsCompleter {
+export class ComponentsCompleter {
     constructor(
         private readonly library: PeerLibrary,
     ) {}
@@ -497,7 +494,7 @@ class ComponentsCompleter {
     }
 }
 
-class PeersGenerator {
+export class PeersGenerator {
     constructor(
         private readonly library: PeerLibrary,
     ) {}
@@ -920,15 +917,13 @@ export class PeerProcessor {
         })
     }
 
-    private generateDeclarations(components: ComponentDeclaration[], freeDeclaration?: ts.Declaration[]): Set<ts.Declaration> {
-        const deps = freeDeclaration
-            ? new Set(freeDeclaration)
-            : new Set(components.flatMap(it => {
-                const decls: ts.Declaration[] = [it.attributesDeclarations]
-                if (it.interfaceDeclaration)
-                    decls.push(it.interfaceDeclaration)
-                return decls
-            }))
+    private generateDeclarations(components: ComponentDeclaration[]): Set<ts.Declaration> {
+        const deps = new Set(components.flatMap(it => {
+            const decls: ts.Declaration[] = [it.attributesDeclarations]
+            if (it.interfaceDeclaration)
+                decls.push(it.interfaceDeclaration)
+            return decls
+        }))
         const depsCopy = Array.from(deps)
         for (const dep of depsCopy) {
             this.collectDepsRecursive(dep, deps)
@@ -958,16 +953,13 @@ export class PeerProcessor {
         const allDeclarations = this.generateDeclarations(this.library.componentsDeclarations)
         const actualDeclarations = this.generateDeclarations(this.generateActualComponents())
 
-        const allFreeDecl = this.generateDeclarations(this.library.componentsDeclarations, this.library.freeDeclarations)
-        console.log(allFreeDecl.size)
-
-        for (const dep of allFreeDecl) {
+        for (const dep of allDeclarations) {
             if (isSyntheticDeclaration(dep)) {
                 continue
             }
             const file = this.library.findFileByOriginalFilename(this.getDeclSourceFile(dep).fileName)!
             const isPeerDecl = this.library.isComponentDeclaration(dep)
-            const isActualDeclaration = true // actualDeclarations.has(dep)
+            const isActualDeclaration = actualDeclarations.has(dep)
 
             if (!isPeerDecl && (ts.isClassDeclaration(dep) || ts.isInterfaceDeclaration(dep))) {
                 if (isBuilderClass(dep)) {
@@ -1029,7 +1021,7 @@ export function isSourceDecl(node: ts.Declaration): boolean {
     if (ts.isModuleBlock(node.parent))
         return isSourceDecl(node.parent.parent)
     if (ts.isNamedImports(node.parent)) {
-        return false
+        return true
     }
     if (ts.isTypeParameterDeclaration(node))
         return false
@@ -1064,7 +1056,7 @@ export function createTypeNodeConvertor(library: PeerLibrary,
     }
 }
 
-function getMethodIndex(methodName: string, method: ts.MethodDeclaration | ts.MethodSignature | ts.ConstructorDeclaration | ts.CallSignatureDeclaration | undefined): number {
+export function getMethodIndex(methodName: string, method: ts.MethodDeclaration | ts.MethodSignature | ts.ConstructorDeclaration | ts.CallSignatureDeclaration | undefined): number {
     if (!method) {
         return 0
     }
