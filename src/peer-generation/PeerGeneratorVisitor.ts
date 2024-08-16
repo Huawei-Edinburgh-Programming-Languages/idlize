@@ -347,7 +347,7 @@ class ImportsAggregateCollector extends TypeDependenciesCollector {
         protected readonly peerLibrary: PeerLibrary,
         private readonly expandAliases: boolean,
     ) {
-        super(peerLibrary.declarationTable.typeChecker!)
+        super(peerLibrary.declarationTable.typeChecker!, peerLibrary.declarationTable.language)
     }
 
     override convertImport(node: ts.ImportTypeNode): ts.Declaration[] {

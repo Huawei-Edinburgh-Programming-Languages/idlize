@@ -149,7 +149,10 @@ class SerializerPrinter {
             }
         }, superName)
         const convertorImportsCollector = new ImportsCollector()
-        collectorImportsFeatures.forEach(feature => convertorImportsCollector.addFeature(feature.feature, feature.module))
+        //TODO: needs to be rework
+        if (this.writer.language === Language.ARKTS) {
+            collectorImportsFeatures.forEach(feature => convertorImportsCollector.addFeature(feature.feature, feature.module))
+        }
         printSerializerImports(serializerDeclarations, this.library, this.writer, convertorImportsCollector)
         this.writer.print(serializerWriter.printer.getOutput().join("\n"))
     }

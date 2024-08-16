@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-export type External_LITERAL_evenodd = string
-export type External_LITERAL_onzero = string
+export final class External_LITERAL_evenodd {}
+export final class External_LITERAL_onzero {}
 export type External_LITERAL_nonzero = string
 export type External_TEMPLATE_LITERAL_number_FP = string
 export type External_TEMPLATE_LITERAL_number_LPX = string
@@ -53,5 +53,5 @@ export type External_LITERAL_middle = string
 export type External_LITERAL_top = string
 export type External_LITERAL_auto = string
 export type External_LITERAL_navBar = string
-export interface External_LITERAL_asyncReceiverRegister {}
-export interface External_LITERAL_syncReceiverRegister {}
+export final class External_LITERAL_asyncReceiverRegister {}
+export final class External_LITERAL_syncReceiverRegister {}

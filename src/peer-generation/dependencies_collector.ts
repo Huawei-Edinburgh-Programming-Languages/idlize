@@ -15,11 +15,11 @@
 
 import * as ts from 'typescript'
 import { DeclarationConvertor, TypeNodeConvertor, convertDeclaration, convertTypeNode } from "./TypeNodeConvertor";
-import { getDeclarationsByNode } from '../util';
+import {getDeclarationsByNode, Language} from '../util';
 import { mapType } from './TypeNodeNameConvertor';
 
 export class TypeDependenciesCollector implements TypeNodeConvertor<ts.Declaration[]> {
-    constructor(protected readonly typeChecker: ts.TypeChecker) {}
+    constructor(protected readonly typeChecker: ts.TypeChecker, private readonly language: Language) {}
 
     convertUnion(node: ts.UnionTypeNode): ts.Declaration[] {
         return node.types.flatMap(type => convertTypeNode(this, type))
@@ -68,13 +68,15 @@ export class TypeDependenciesCollector implements TypeNodeConvertor<ts.Declarati
     convertTypeReference(node: ts.TypeReferenceNode): ts.Declaration[] {
         let declarations = getDeclarationsByNode(this.typeChecker, node.typeName)
         if (declarations.length > 1) {
-            const likelyDecl = declarations.find(decl => findNodeSourceFile(decl) == findNodeSourceFile(node))
-            if (likelyDecl) {
-                declarations = [likelyDecl]
-            } else {
-                console.log(`WARNING: Duplicate declarations temporary unsupported: ${mapType(node)}`)
-                declarations = [declarations[0]]
+            //TODO: needs to be rework
+            if (this.language == Language.ARKTS) {
+                const likelyDecl = declarations.find(decl => findNodeSourceFile(decl) == findNodeSourceFile(node))
+                if (likelyDecl) {
+                    declarations = [likelyDecl]
+                }
             }
+            console.log(`WARNING: Duplicate declarations temporary unsupported: ${mapType(node)}`)
+            declarations = [declarations[0]]
         }
         return [
             ...(node.typeArguments?.flatMap(it => convertTypeNode(this, it)) ?? []),
