@@ -391,7 +391,7 @@ class ImportsAggregateCollector extends TypeDependenciesCollector {
 }
 
 class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
-    private readonly typeToStringConvertor: ArkTSTypeNodeNameConvertor = new ArkTSTypeNodeNameConvertor(this.peerLibrary)
+    private readonly typeToStringConvertor = new ArkTSTypeNodeNameConvertor(this.peerLibrary)
 
     constructor(
         peerLibrary: PeerLibrary,
@@ -461,6 +461,35 @@ class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
             module: "./shared/dts-exports"
         })
         return syntheticDeclaration
+    }
+
+    //TODO: needs to be rework
+    override convertImport(node: ts.ImportTypeNode): ts.Declaration[] {
+        const generatedName = this.typeToStringConvertor.convert(node)
+        if (!this.peerLibrary.importTypesStubToSource.has(generatedName)) {
+            this.peerLibrary.importTypesStubToSource.set(generatedName, node.getText())
+        }
+        let syntheticDeclaration: ts.Declaration
+
+        if (node.qualifier?.getText() === 'Resource') {
+            syntheticDeclaration = makeSyntheticTypeAliasDeclaration(
+                'SyntheticDeclarations',
+                generatedName,
+                ts.factory.createTypeReferenceNode("ArkResource"),
+            )
+            addSyntheticDeclarationDependency(syntheticDeclaration, {feature: "ArkResource", module: "./shared/ArkResource"})
+        } else {
+            syntheticDeclaration = makeSyntheticTypeAliasDeclaration(
+                'SyntheticDeclarations',
+                generatedName,
+                ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
+            )
+        }
+
+        return [
+            ...node.typeArguments?.flatMap(it=>this.convert(it)) || [],
+            syntheticDeclaration
+        ]
     }
 }
 
