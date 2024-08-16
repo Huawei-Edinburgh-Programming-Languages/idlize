@@ -535,7 +535,7 @@ export class DeclarationTable {
             return new NumberConvertor(param)
         }
         if (type.kind == ts.SyntaxKind.StringKeyword) {
-            return new StringConvertor(param, type)
+            return new StringConvertor(param, type, typeNodeNameConvertor)
         }
         if (type.kind == ts.SyntaxKind.BooleanKeyword) {
             return new BooleanConvertor(param)
@@ -551,7 +551,7 @@ export class DeclarationTable {
         }
         if (ts.isTypeReferenceNode(type)) {
             const declaration = getDeclarationsByNode(this.typeChecker!, type.typeName)[0]
-            return this.declarationConvertor(param, type, declaration)
+            return this.declarationConvertor(param, type, declaration, typeNodeNameConvertor)
         }
         if (ts.isEnumMember(type)) {
             return new EnumConvertor(param, type.parent, this.isStringEnum(type.parent.members))
@@ -570,7 +570,7 @@ export class DeclarationTable {
                 return new NullConvertor(param)
             }
             if (type.literal.kind == ts.SyntaxKind.StringLiteral) {
-                return new StringConvertor(param, type)
+                return new StringConvertor(param, type, typeNodeNameConvertor)
             }
             throw new Error(`Unsupported literal type: ${type.literal.kind}` + type.getText())
         }
@@ -590,7 +590,7 @@ export class DeclarationTable {
             return new OptionConvertor(param, this, type.type)
         }
         if (ts.isTemplateLiteralTypeNode(type)) {
-            return new StringConvertor(param, type)
+            return new StringConvertor(param, type, typeNodeNameConvertor)
         }
         if (ts.isNamedTupleMember(type)) {
             return this.typeConvertor(param, type.type)
@@ -657,7 +657,8 @@ export class DeclarationTable {
         return true
     }
 
-    declarationConvertor(param: string, type: ts.TypeReferenceNode, declaration: ts.NamedDeclaration | undefined): ArgConvertor {
+    declarationConvertor(param: string, type: ts.TypeReferenceNode, declaration: ts.NamedDeclaration | undefined,
+                         typeNodeNameConvertor: TypeNodeNameConvertor | undefined): ArgConvertor {
         const entityName = typeEntityName(type)
         if (!declaration) {
             return this.customConvertor(entityName, param, type) ?? throwException(`Declaration not found for: ${type.getText()}`)
@@ -676,7 +677,7 @@ export class DeclarationTable {
             return new EnumConvertor(param, declaration.parent, this.isStringEnum(declaration.parent.members))
         }
         if (ts.isTypeAliasDeclaration(declaration)) {
-            return new TypeAliasConvertor(param, this, declaration, type.typeArguments)
+            return new TypeAliasConvertor(param, this, declaration, type.typeArguments, typeNodeNameConvertor)
         }
         if (ts.isInterfaceDeclaration(declaration)) {
             if (isMaterialized(declaration)) {

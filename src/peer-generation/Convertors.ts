@@ -103,15 +103,16 @@ export abstract class BaseArgConvertor implements ArgConvertor {
 }
 
 export class StringConvertor extends BaseArgConvertor {
-    private literalValue?: string
-    constructor(param: string, receiverType: ts.TypeNode) {
-        super(mapType(receiverType), [RuntimeType.STRING], false, false, param)
+    private readonly literalValue?: string
+    constructor(param: string, receiverType: ts.TypeNode, typeNodeNameConvertor: TypeNodeNameConvertor | undefined) {
+        super(typeNodeNameConvertor?.convert(receiverType) ?? mapType(receiverType), [RuntimeType.STRING], false, false, param)
         if (ts.isLiteralTypeNode(receiverType) && ts.isStringLiteral(receiverType.literal)) {
             this.literalValue = receiverType.literal.text
         }
     }
     convertorArg(param: string, writer: LanguageWriter): string {
-        return writer.language == Language.CPP ? `(const ${PrimitiveType.String.getText()}*)&${param}` : param
+        return writer.language == Language.CPP ? `(const ${PrimitiveType.String.getText()}*)&${param}` :
+            this.isLiteral() ? `${param}.toString()` : param
     }
     convertorSerialize(param: string, value: string, writer: LanguageWriter): void {
         writer.writeMethodCall(`${param}Serializer`, `writeString`, [value])
@@ -133,15 +134,23 @@ export class StringConvertor extends BaseArgConvertor {
         return true
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        return this.literalValue
+        if (writer.language == Language.ARKTS) {
+            return this.isLiteral()
+                ? writer.makeString(`${value} instanceof LITERAL_${this.literalValue}`)
+                : undefined
+        }
+        return this.isLiteral()
             ? writer.makeString(`${value} === "${this.literalValue}"`)
             : undefined
     }
     targetType(writer: LanguageWriter): Type {
-        if (this.literalValue) {
+        if (this.isLiteral()) {
             return new Type("string")
         }
         return super.targetType(writer);
+    }
+    isLiteral(): boolean {
+        return this.literalValue !== undefined
     }
 }
 
@@ -1274,9 +1283,10 @@ export class TypeAliasConvertor extends ProxyConvertor {
         param: string,
         private table: DeclarationTable,
         declaration: ts.TypeAliasDeclaration,
-        private typeArguments?: ts.NodeArray<ts.TypeNode>
+        private typeArguments: ts.NodeArray<ts.TypeNode> | undefined,
+        typeNodeNameConvertor: TypeNodeNameConvertor | undefined
     ) {
-        super(table.typeConvertor(param, declaration.type), identName(declaration.name))
+        super(table.typeConvertor(param, declaration.type, false, typeNodeNameConvertor), identName(declaration.name))
     }
 }
 

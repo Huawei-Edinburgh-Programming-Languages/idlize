@@ -23,6 +23,7 @@ import {
     EnumConvertor,
     MapConvertor,
     OptionConvertor,
+    StringConvertor,
     TupleConvertor,
     UnionConvertor
 } from "./Convertors";
@@ -1241,6 +1242,9 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string {
         if (convertor instanceof EnumConvertor) {
             return `(${value} as ${convertor.enumTypeName()}).${convertor.isStringEnum ? "ordinal" : "value"}`
+        }
+        if (convertor instanceof StringConvertor && convertor.isLiteral()) {
+            return `${value}.toString()`
         }
         return super.getObjectAccessor(convertor, value, args);
     }
