@@ -128,11 +128,14 @@ class SerializerPrinter {
         const serializerDeclarations = generateSerializerDeclarationsTable(prefix, this.table)
         const serializerWriter = createLanguageWriter(this.writer.language)
         const collectorImportsFeatures: ImportFeature[] = []
+        const declDependenciesCollector: DeclarationDependenciesCollector = new DeclarationDependenciesCollector(
+            this.library.declarationTable.typeChecker!,
+            createTypeDependenciesCollector(this.library, {
+                declDependenciesCollector: lazy(() => declDependenciesCollector)
+            }))
         const typeNodeNameConvertor = createTypeNodeConvertor(this.library,
             createTypeNodeConvertor(this.library),
-            new DeclarationDependenciesCollector(
-                this.library.declarationTable.typeChecker!,
-                createTypeDependenciesCollector(this.library)),
+            declDependenciesCollector,
             collectorImportsFeatures)
         // just a separator
         serializerWriter.print("")
