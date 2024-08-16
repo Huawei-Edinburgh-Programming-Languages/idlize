@@ -358,7 +358,8 @@ class TSEventsVisitor {
                     info.args.map(it => new Type(mapType(it.type), it.nullable)),
                     info.args.map(it => it.name),
                 )
-                writer.writeMethodDeclaration(callbackIdByInfo(info), signature)
+                const lambda = `(${signature.args.map((it, index) => `${signature.argName(index)}${it.nullable ? "?" : ""}: ${writer.mapType(it)}${signature.argDefault(index) ? ' = ' + signature.argDefault(index) : ""}`).join(", ")}) => ${writer.mapType(signature.returnType)}`
+                writer.print(`${callbackIdByInfo(info)}?: ${lambda}`)
             }
         })
     }
