@@ -19,6 +19,7 @@ variables:
         - npm config set //nexus.bz-openlab.ru:10443/repository/koala-npm/:_auth "a3d4MTIxOTMzNTpzMG1lcGFzcw=="
         - npm i --no-audit --no-fund
 
+
 pg check peers run:
   stage: test
   tags:
@@ -48,4 +49,18 @@ pg java:run:
     - !reference [.setup, script]
   script:
     - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-arm64 npm run run:java
+
+publish idlize:
+    stage: test
+    # rules:
+    #   - if: $CI_PIPELINE_SOURCE == "schedule"
+    #     when: never
+    #   - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    #     when: on_success
+    before_script:
+      - !reference [.setup, script]
+    script:
+        - cd $CI_PROJECT_DIR
+        - sed -i "s/+devel/-dev.$CI_PIPELINE_IID/" package.json
+        - KOALA_BZ=1 npm run upload -- --dry-run
 
