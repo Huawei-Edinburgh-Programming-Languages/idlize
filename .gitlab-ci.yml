@@ -65,5 +65,5 @@ publish idlize:
     script:
         - cd $CI_PROJECT_DIR
         - sed -i "s/+devel/-dev.$CI_PIPELINE_IID/" package.json
-        - KOALA_BZ=1 npm run upload -- --dry-run
+        - KOALA_BZ=1 npm run upload
 
