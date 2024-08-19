@@ -52,6 +52,9 @@ pg java:run:
 
 publish idlize:
     stage: test
+    tags:
+      - idlize-ci
+      - koala-ci
     # rules:
     #   - if: $CI_PIPELINE_SOURCE == "schedule"
     #     when: never
