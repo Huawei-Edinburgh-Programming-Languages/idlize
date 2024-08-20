@@ -18,8 +18,9 @@ import { TypeNodeNameConvertor } from "./TypeNodeNameConvertor";
 import { PeerLibrary } from "./PeerLibrary";
 import { DeclarationDependenciesCollector } from "./dependencies_collector";
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
-import { isSourceDecl } from "./PeerGeneratorVisitor";
+import { ArkTSTypeDepsCollector, isSourceDecl } from "./PeerGeneratorVisitor";
 import { convertTypeNode } from "./TypeNodeConvertor";
+import { lazy } from "./lazy";
 
 const syntheticDeclarations: Map<string, {node: ts.Declaration, filename: string, dependencies: ImportFeature[]}> = new Map()
 export function makeSyntheticDeclaration(targetFilename: string, declName: string, factory: () => ts.Declaration): ts.Declaration {
@@ -97,7 +98,10 @@ export function makeSyntheticInterfaceDeclaration(targetFileName: string,
     return decl
 }
 
-export class ArkTSTypeNodeNameConvertorProxy implements TypeNodeNameConvertor {
+export class ArkTSTypeNodeNameConvertorWithDepsCollector implements TypeNodeNameConvertor {
+    private readonly depsCollector = new ArkTSTypeDepsCollector(this.peerLibrary, true,
+        lazy(() => this.declDependenciesCollector))
+
     constructor(private readonly convertor: TypeNodeNameConvertor,
                 private readonly peerLibrary: PeerLibrary,
                 private readonly declDependenciesCollector: DeclarationDependenciesCollector,
@@ -107,19 +111,12 @@ export class ArkTSTypeNodeNameConvertorProxy implements TypeNodeNameConvertor {
         return this.convertor.convertUnion(node)
     }
     convertTypeLiteral(node: ts.TypeLiteralNode): string {
-        const typeName = this.convertor.convertTypeLiteral(node)
-        this.addDeclToImports(makeSyntheticInterfaceDeclaration('SyntheticDeclarations',
-            typeName,
-            undefined,
-            node.members,
-            this.declDependenciesCollector,
-            this.peerLibrary))
-        return typeName
+        this.depsCollector.convertTypeLiteral(node).forEach(it => this.addDeclToImports(it))
+        return this.convertor.convertTypeLiteral(node)
     }
     convertLiteralType(node: ts.LiteralTypeNode): string {
-        const typeName = this.convertor.convertLiteralType(node)
-        this.addDeclToImports(makeSyntheticTypeAliasDeclaration('SyntheticDeclarations', typeName, node))
-        return typeName
+        this.depsCollector.convertLiteralType(node).forEach(it => this.addDeclToImports(it))
+        return this.convertor.convertLiteralType(node)
     }
     convertTuple(node: ts.TupleTypeNode): string {
         return this.convertor.convertTuple(node)
