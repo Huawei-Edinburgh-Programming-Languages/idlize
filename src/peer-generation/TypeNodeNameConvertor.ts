@@ -210,14 +210,15 @@ export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
 
     convertUnion(node: ts.UnionTypeNode): string {
         const isTypeAliasDecl = node.parent && ts.isTypeAliasDeclaration(node.parent)
-        const result = node.types
+        const unionTypes = node.types
             .filter(type => !(isTypeAliasDecl && type.kind == ts.SyntaxKind.VoidKeyword))
             .map(it => this.convert(it))
-            .join(" | ");
-        if (node?.parent?.parent !== undefined && ts.isTupleTypeNode(node.parent) && ts.isTypeReferenceNode(node.parent.parent)) {
-            return `UNION_${result}`
+        if (node?.parent?.parent !== undefined
+            && ts.isTupleTypeNode(node.parent)
+            && ts.isTypeReferenceNode(node.parent.parent)) {
+            return `UNION_${unionTypes.join('_')}`
         }
-        return result;
+        return unionTypes.join(" | ");
     }
 
     convertLiteralType(node: ts.LiteralTypeNode): string {
