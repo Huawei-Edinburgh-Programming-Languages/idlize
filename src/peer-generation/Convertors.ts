@@ -134,13 +134,8 @@ export class StringConvertor extends BaseArgConvertor {
         return true
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        if (writer.language == Language.ARKTS) {
-            return this.isLiteral()
-                ? writer.makeString(`${value} instanceof LITERAL_${this.literalValue}`)
-                : undefined
-        }
         return this.isLiteral()
-            ? writer.makeString(`${value} === "${this.literalValue}"`)
+            ? writer.compareLiterals(writer.makeString(value), writer.makeString(this.literalValue!))
             : undefined
     }
     targetType(writer: LanguageWriter): Type {
