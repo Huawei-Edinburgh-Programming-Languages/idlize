@@ -182,7 +182,10 @@ export class ArkTSTypeNodeNameConvertorWithDepsCollector implements TypeNodeName
         throw new Error(`Unknown node type ${ts.SyntaxKind[node.kind]}`)
     }
     private addDeclToImports(decl: ts.Declaration) {
-        if (this.importFeatures != undefined && this.peerLibrary != undefined && this.declDependenciesCollector != undefined) {
+        if (this.importFeatures != undefined
+            && this.peerLibrary != undefined
+            && this.declDependenciesCollector != undefined
+            && isSourceDecl(decl)) {
             this.importFeatures.push(convertDeclToFeature(this.peerLibrary, decl))
         }
     }
