@@ -57,8 +57,10 @@ import { convertDeclaration, convertTypeNode, TypeNodeConvertor } from "./TypeNo
 import { DeclarationDependenciesCollector, TypeDependenciesCollector } from "./dependencies_collector";
 import { convertDeclToFeature, ImportFeature } from "./ImportsCollector";
 import {
-    addSyntheticDeclarationDependency, ArkTSTypeNodeNameConvertorProxy,
+    addSyntheticDeclarationDependency,
+    ArkTSTypeNodeNameConvertorWithDepsCollector,
     isSyntheticDeclaration,
+    makeSyntheticDeclaration,
     makeSyntheticInterfaceDeclaration,
     makeSyntheticTypeAliasDeclaration
 } from "./synthetic_declaration";
@@ -390,9 +392,9 @@ class ImportsAggregateCollector extends TypeDependenciesCollector {
     }
 }
 
-class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
+export class ArkTSTypeDepsCollector extends ImportsAggregateCollector {
     private readonly typeToStringConvertor = new ArkTSTypeNodeNameConvertor(this.peerLibrary)
-
+    public static readonly SYNTH_TYPE_FILE_NAME = 'SyntheticDeclarations'
     constructor(
         peerLibrary: PeerLibrary,
         expandAliases: boolean,
@@ -407,7 +409,14 @@ class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
                 || ts.isTypeAliasDeclaration(node.parent)
                 || ts.isParameter(node.parent))
             && ts.isStringLiteral(node.literal)) {
-            return [this.makeSyntheticTypeAliasDeclaration(this.typeToStringConvertor.convertLiteralType(node))]
+            return [makeSyntheticDeclaration(ArkTSTypeDepsCollector.SYNTH_TYPE_FILE_NAME,
+                this.typeToStringConvertor.convertLiteralType(node), () => {
+                    return ts.factory.createClassDeclaration([],
+                        this.typeToStringConvertor.convertLiteralType(node),
+                        undefined,
+                        undefined,
+                        [])
+                })]
         }
         return super.convertLiteralType(node)
     }
@@ -416,7 +425,7 @@ class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
         if (node?.parent?.parent != undefined && ts.isTupleTypeNode(node.parent) && ts.isTypeReferenceNode(node.parent.parent)) {
             //TODO: Fix 'Comma is mandatory between elements in a tuple type declaration' error
             const typeAliasDecl = makeSyntheticTypeAliasDeclaration(
-                'SyntheticDeclarations',
+                ArkTSTypeDepsCollector.SYNTH_TYPE_FILE_NAME,
                 this.typeToStringConvertor.convertUnion(node),
                 ts.factory.createUnionTypeNode(node.types),
             )
@@ -431,7 +440,11 @@ class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
     }
 
     override convertTemplateLiteral(node: ts.TemplateLiteralTypeNode): ts.Declaration[] {
-        return [this.makeSyntheticTypeAliasDeclaration(this.typeToStringConvertor.convertTemplateLiteral(node))]
+        return [makeSyntheticTypeAliasDeclaration(
+            ArkTSTypeDepsCollector.SYNTH_TYPE_FILE_NAME,
+            this.typeToStringConvertor.convertTemplateLiteral(node),
+            ts.factory.createTypeReferenceNode("String"),
+        )]
     }
 
     override convertTypeLiteral(node: ts.TypeLiteralNode): ts.Declaration[] {
@@ -441,26 +454,12 @@ class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
                 membersDecls.push(...this.convert(member.type))
             }
         }
-        return [...membersDecls, makeSyntheticInterfaceDeclaration('SyntheticDeclarations',
+        return [...membersDecls, makeSyntheticInterfaceDeclaration(ArkTSTypeDepsCollector.SYNTH_TYPE_FILE_NAME,
             this.typeToStringConvertor.convert(node),
             undefined,
             node.members,
             this.declDependenciesCollector.value,
             this.peerLibrary)]
-    }
-
-    private makeSyntheticTypeAliasDeclaration(generatedName: string): ts.TypeAliasDeclaration {
-        const typeRef = `External_${generatedName}`
-        const syntheticDeclaration = makeSyntheticTypeAliasDeclaration(
-            'SyntheticDeclarations',
-            generatedName,
-            ts.factory.createTypeReferenceNode(typeRef),
-        )
-        addSyntheticDeclarationDependency(syntheticDeclaration, {
-            feature: typeRef,
-            module: "./shared/dts-exports"
-        })
-        return syntheticDeclaration
     }
 
     //TODO: needs to be rework
@@ -473,21 +472,21 @@ class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
 
         if (node.qualifier?.getText() === 'Resource') {
             syntheticDeclaration = makeSyntheticTypeAliasDeclaration(
-                'SyntheticDeclarations',
+                ArkTSTypeDepsCollector.SYNTH_TYPE_FILE_NAME,
                 generatedName,
                 ts.factory.createTypeReferenceNode("ArkResource"),
             )
             addSyntheticDeclarationDependency(syntheticDeclaration, {feature: "ArkResource", module: "./shared/ArkResource"})
         } else {
             syntheticDeclaration = makeSyntheticTypeAliasDeclaration(
-                'SyntheticDeclarations',
+                ArkTSTypeDepsCollector.SYNTH_TYPE_FILE_NAME,
                 generatedName,
                 ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
             )
         }
 
         return [
-            ...node.typeArguments?.flatMap(it=>this.convert(it)) || [],
+            ...node.typeArguments?.flatMap(it => this.convert(it)) || [],
             syntheticDeclaration
         ]
     }
@@ -890,7 +889,7 @@ export class PeerProcessor {
         if (this.library.declarationTable.language == Language.ARKTS && ts.isInterfaceDeclaration(target)) {
             const declName = createInterfaceDeclName(`${identName(target)!}`)
             importFeatures.push(convertDeclToFeature(this.library,
-                makeSyntheticInterfaceDeclaration('SyntheticDeclarations',
+                makeSyntheticInterfaceDeclaration(ArkTSTypeDepsCollector.SYNTH_TYPE_FILE_NAME,
                     declName,
                     target.typeParameters,
                     target.members,
@@ -1079,7 +1078,7 @@ export function createTypeDependenciesCollector(
 ): TypeDependenciesCollector {
     return library.declarationTable.language == Language.TS
         ? new ImportsAggregateCollector(library, false)
-        : new ArkTSImportsAggregateCollector(library, false, arkts.declDependenciesCollector)
+        : new ArkTSTypeDepsCollector(library, false, arkts.declDependenciesCollector)
 }
 
 export function createInterfaceDeclName(declName: string): string {
@@ -1109,7 +1108,7 @@ export function createTypeNodeConvertor(library: PeerLibrary,
     switch (library.declarationTable.language) {
         case Language.ARKTS: {
             if (typeNodeConvertor != undefined && declarationDependenciesCollector != undefined && importFeatures != undefined) {
-                return new ArkTSTypeNodeNameConvertorProxy(typeNodeConvertor,
+                return new ArkTSTypeNodeNameConvertorWithDepsCollector(typeNodeConvertor,
                     library, declarationDependenciesCollector, importFeatures)
             }
             return new ArkTSTypeNodeNameConvertor(library)
