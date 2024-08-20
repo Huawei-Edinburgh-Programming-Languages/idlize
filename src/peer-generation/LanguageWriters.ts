@@ -974,8 +974,8 @@ export abstract class LanguageWriter {
     languageKeywordProtection(keyword: string): string {
         return keyword
     }
-    compareLiterals(lhs: LanguageExpression, rhs: LanguageExpression): LanguageExpression {
-        return this.makeNaryOp('===', [lhs, rhs])
+    compareLiteral(expr: LanguageExpression, literal: string): LanguageExpression {
+        return this.makeNaryOp('===', [expr, this.makeString(`"${literal}"`)])
     }
 }
 
@@ -1255,8 +1255,8 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         // ArkTS does not support - 'this.?'
         super.writeMethodCall(receiver, method, params, nullable && receiver !== "this");
     }
-    compareLiterals(lhs: LanguageExpression, rhs: LanguageExpression): LanguageExpression {
-        return super.makeNaryOp('instanceof', [lhs, this.makeString(`LITERAL_${rhs.asString()}`)]);
+    compareLiteral(expr: LanguageExpression, literal: string): LanguageExpression {
+        return super.makeNaryOp('instanceof', [expr, this.makeString(`LITERAL_${literal}`)]);
     }
 }
 

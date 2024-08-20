@@ -135,7 +135,7 @@ export class StringConvertor extends BaseArgConvertor {
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
         return this.isLiteral()
-            ? writer.compareLiterals(writer.makeString(value), writer.makeString(this.literalValue!))
+            ? writer.compareLiteral(writer.makeString(value), this.literalValue!)
             : undefined
     }
     targetType(writer: LanguageWriter): Type {
