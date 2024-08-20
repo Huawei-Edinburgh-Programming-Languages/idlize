@@ -209,7 +209,7 @@ export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
     }
 
     convertUnion(node: ts.UnionTypeNode): string {
-        const isTypeAliasDecl = ts.isTypeAliasDeclaration(node.parent)
+        const isTypeAliasDecl = node.parent && ts.isTypeAliasDeclaration(node.parent)
         const result = node.types
             .filter(type => !(isTypeAliasDecl && type.kind == ts.SyntaxKind.VoidKeyword))
             .map(it => this.convert(it))
