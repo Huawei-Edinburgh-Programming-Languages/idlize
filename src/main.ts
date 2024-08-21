@@ -23,6 +23,7 @@ import { IDLEntry, forEachChild, toIDLString } from "./idl"
 import { printHeader, toHeaderString, wrapWithPrologueAndEpilogue } from "./idl2h"
 import { LinterMessage, LinterVisitor, toLinterString } from "./linter"
 import { CompileContext, IDLVisitor } from "./IDLVisitor"
+import { SKOALAVisitor } from "./SkoalaVisitor"
 import { TestGeneratorVisitor } from "./TestGeneratorVisitor"
 import { ArkoalaInstall, LibaceInstall } from "./Install"
 import {
@@ -36,6 +37,7 @@ import {
     mesonBuildFile,
     copyToLibace,
     libraryCcDeclaration,
+    cStyleCopyright
 } from "./peer-generation/FileGenerators"
 import {
     PeerGeneratorVisitor,
@@ -50,7 +52,6 @@ import { printRealAndDummyModifiers } from "./peer-generation/printers/ModifierP
 import { PeerLibrary } from "./peer-generation/PeerLibrary"
 import { printComponents } from "./peer-generation/printers/ComponentsPrinter"
 import { printPeers } from "./peer-generation/printers/PeersPrinter"
-import { printPeers as printIdlPeers } from "./peer-generation/idl/IdlPeerPrinter"
 import { printMaterialized } from "./peer-generation/printers/MaterializedPrinter"
 import { printSerializers, printUserConverter } from "./peer-generation/printers/HeaderPrinter"
 import { printNodeTypes } from "./peer-generation/printers/NodeTypesPrinter"
@@ -68,9 +69,6 @@ import { TargetFile } from "./peer-generation/printers/TargetFile"
 import { printBridgeCcCustom, printBridgeCcGenerated } from "./peer-generation/printers/BridgeCcPrinter"
 import { createPrinterContext } from "./peer-generation/printers/PrinterContext/PrinterContextImpl"
 import { generateTracker } from "./peer-generation/Tracker"
-import { IdlPeerLibrary } from "./peer-generation/idl/IdlPeerLibrary"
-import { IdlPeerFile } from "./peer-generation/idl/IdlPeerFile"
-import { IdlPeerGeneratorVisitor, IdlPeerProcessor } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -82,6 +80,7 @@ const options = program
     .option('--output-dir <path>', 'Path to output dir')
     .option('--input-file <name>', 'Name of file to convert, all files in input-dir if none')
     .option('--idl2dts', 'Convert IDL to .d.ts definitions')
+    .option('--dts2skoala', 'Convert DTS to skoala definitions')
     .option('--idl2h', 'Convert IDL to .h definitions')
     .option('--linter', 'Run linter')
     .option('--linter-suppress-errors <suppress>', 'Error codes to suppress, comma separated, no space')
@@ -104,8 +103,7 @@ const options = program
     .option('--need-interfaces', 'Generate interfaces to resolve all .d.ts dependencies', false)
     .option('--only-integrated', 'Generate only thoose files that can be integrated to target', false)
     .option('--version')
-    .option('--generator-target <all|arkoala|libace|none>', 'Copy peers to arkoala or libace (use with --dts2peer)', "all")
-    .option('--skip-idl', 'Generate peers directly from .d.ts files (use with --dts2peer)', false)
+    .option('--generator-target <all|arkoala|libace|none>', 'Copy peers to arkoala or libace (use with --dts2peer)', "arkoala")
     .option('--arkoala-destination <path>', 'Location of arkoala repository')
     .option('--libace-destination <path>', 'Location of libace repository')
     .option('--copy-peers-components <name...>', 'List of components to copy (omit to copy all)')
@@ -161,6 +159,51 @@ if (options.dts2idl) {
         }
     )
     didJob = true
+}
+
+if (options.dts2skoala) {
+
+    // Initialize compilation context
+    const licenseHeader = cStyleCopyright
+
+    generate(
+        options.inputDir,
+        options.inputFile,
+        options.outputDir ?? "./skoala_gen",
+        (sourceFile) => new SKOALAVisitor(sourceFile),
+        {
+            compilerOptions: defaultCompilerOptions,
+            onSingleFile: (entries: IDLEntry[], outputDir, sourceFile) => {
+                console.log('producing', path.relative(options.inputDir, sourceFile.fileName));
+                const outFile = path.join(outputDir,
+                    path.relative(options.inputDir, sourceFile.fileName).replace(".d.ts", ".cc"));
+                console.log("saved", outFile);
+                
+                if (options.skipDocs) {
+                    entries.forEach(it => forEachChild(
+                        it, (it) => it.documentation = undefined));
+                }
+
+                // Initializing a string with a license and generated content
+                let generated = licenseHeader + "\n" 
+                // + 
+                // toIDLString(entries, {
+                //     verifyIdl: options.verifyIdl ?? false,
+                //     disableEnumInitializers: options.disableEnumInitializers ?? false
+                // })
+
+                if (options.verbose) console.log(generated);
+
+                if (!fs.existsSync(path.dirname(outFile))){
+                    fs.mkdirSync(path.dirname(outFile), { recursive: true });
+                }
+
+                // Write the generated C file
+                fs.writeFileSync(outFile, generated);
+            }
+        }
+    );
+    didJob = true;
 }
 
 if (options.dts2h) {
@@ -301,67 +344,13 @@ if (options.idl2h) {
 }
 
 if (options.dts2peer) {
-    PeerGeneratorConfig.needInterfaces = options.needInterfaces
-    const generatedPeersDir = options.outputDir ?? "./out/ts-peers/generated"
-    const lang = Language.fromString(options.language ?? "ts")
-    const skipIdl = options.skipIdl || lang !== Language.TS
-
-    if (!skipIdl) {
-        // For now, we only generate TS peers from IDL representation.
-        // In the future, more stuff will be generated from IDL, and more languages will be supported.
-        const tsCompileContext = new CompileContext()
-        const idlLibrary = new IdlPeerLibrary(lang, toSet(options.generateInterface))
-        // First convert DTS to IDL
-        generate(
-            options.inputDir,
-            options.inputFile,
-            generatedPeersDir,
-            (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, tsCompileContext, options),
-            {
-                compilerOptions: defaultCompilerOptions,
-                onSingleFile(entries: IDLEntry[], outputDir, sourceFile) {
-                    const file = new IdlPeerFile(sourceFile.fileName, entries, idlLibrary.componentsToGenerate)
-                    idlLibrary.files.push(file)
-                },
-                onEnd(outDir) {
-                    // Visit IDL peer files
-                    idlLibrary.files.forEach(file => {
-                        const visitor = new IdlPeerGeneratorVisitor({
-                            sourceFile: file.originalFilename,
-                            peerLibrary: idlLibrary,
-                            peerFile: file,
-                        })
-                        visitor.visitWholeFile()
-                    })
-                    const peerProcessor = new IdlPeerProcessor(idlLibrary)
-                    peerProcessor.process()
-                    // declarationTable.analyze(peerLibrary)
-
-                    // Write out peers
-                    const arkoala = options.arkoalaDestination ?
-                        new ArkoalaInstall(options.arkoalaDestination, lang, false) :
-                        new ArkoalaInstall(outDir, lang, true)
-                    arkoala.createDirs([ARKOALA_PACKAGE_PATH, INTEROP_PACKAGE_PATH].map(dir => path.join(arkoala.javaDir, dir)))
-
-                    const context = {
-                        language: lang,
-                        synthesizedTypes: undefined,
-                        imports: undefined
-                    }
-                    const peers = printIdlPeers(idlLibrary, context, options.dumpSerialized ?? false)
-                    for (const [targetFile, peer] of peers) {
-                        const outPeerFile = arkoala.peer(targetFile)
-                        writeFile(outPeerFile, peer, true)
-                    }
-                }
-            }
-        )
-    }
     if (options.apiPrefix !== undefined) {
         PeerGeneratorConfig.cppPrefix = options.apiPrefix
     }
+    PeerGeneratorConfig.needInterfaces = options.needInterfaces
     const declarationTable = new DeclarationTable(options.language ?? "ts")
     const peerLibrary = new PeerLibrary(declarationTable, toSet(options.generateInterface))
+    const generatedPeersDir = options.outputDir ?? "./out/ts-peers/generated"
 
     generate(
         options.inputDir,
@@ -386,7 +375,7 @@ if (options.dts2peer) {
 
                 if (options.generatorTarget == "arkoala" ||
                     options.generatorTarget == "all") {
-                    generateArkoala(outDir, peerLibrary, lang, skipIdl)
+                    generateArkoala(outDir, peerLibrary, lang)
                 }
 
                 if (options.generatorTarget == "libace" ||
@@ -446,7 +435,7 @@ function writeFile(filename: string, content: string, integrated: boolean = fals
         fs.writeFileSync(filename, content)
 }
 
-function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Language, includePeers: boolean) {
+function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Language) {
     const arkoala = options.arkoalaDestination ?
         new ArkoalaInstall(options.arkoalaDestination, lang, false) :
         new ArkoalaInstall(outDir, lang, true)
@@ -456,14 +445,11 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
     const arkuiComponentsFiles: string[] = []
     const context = createPrinterContext(peerLibrary.declarationTable)
 
-    // We might already have generated peers from IDL
-    if (includePeers) {
-        const peers = printPeers(peerLibrary, context, options.dumpSerialized ?? false)
-        for (const [targetFile, peer] of peers) {
-            const outPeerFile = arkoala.peer(targetFile)
-            console.log("producing", outPeerFile)
-            writeFile(outPeerFile, peer, true)
-        }
+    const peers = printPeers(peerLibrary, context, options.dumpSerialized ?? false)
+    for (const [targetFile, peer] of peers) {
+        const outPeerFile = arkoala.peer(targetFile)
+        console.log("producing", outPeerFile)
+        writeFile(outPeerFile, peer, true)
     }
 
     const components = printComponents(peerLibrary)
