@@ -3,7 +3,6 @@ import { LanguageWriter, MethodModifier, Method, Type, createLanguageWriter, Fie
 import { PeerLibrary } from "../PeerLibrary"
 import { BuilderClass, methodsGroupOverloads, CUSTOM_BUILDER_CLASSES, BuilderMethod, BuilderField } from "../BuilderClass";
 import { collapseSameNamedMethods } from "./OverloadsPrinter";
-import { collectDtsImports } from "../DtsImportsGenerator";
 import { TargetFile } from "./TargetFile";
 import { PrinterContext } from "./PrinterContext";
 import { SuperElement } from "../Materialized";
