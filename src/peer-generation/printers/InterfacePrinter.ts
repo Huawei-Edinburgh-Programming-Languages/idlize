@@ -397,24 +397,31 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
     }
 
     convertClass(node: ts.ClassDeclaration): void {
+        const seenMethods = new Set<string>()
         const writer = (writer: LanguageWriter) => {
-            this.declarationMembers(node).forEach(member => {
-                if (ts.isPropertyDeclaration(member)) {
-                    const propName = member.name.getText()
-                    const propType = this.typeConvertor.convert(member.type!)
-                    const isOptional = member.questionToken
-                    writer.print(`${propName}${isOptional ? "?" : ""}: ${propType};`)
-                } else {
-                    const methodName = member.name.getText()
-                    const returnType = this.typeConvertor.convert(member.type!)
-                    const parameters = member.parameters.map((param) => {
-                        if (param.type != undefined) {
-                            return `${param.name.getText()}: ${this.typeConvertor.convert(param.type)}`
+            this.declarationMembers(node)
+                .forEach(member => {
+                    if (ts.isPropertyDeclaration(member)) {
+                        const propName = member.name.getText()
+                        const propType = this.typeConvertor.convert(member.type!)
+                        const isOptional = member.questionToken
+                        writer.print(`${propName}${isOptional ? "?" : ""}: ${propType};`)
+                    } else {
+                        const methodName = member.name.getText()
+                        if (seenMethods.has(methodName)) {
+                            console.log(`Method '${methodName}' already declared in ${node.name?.text}`)
+                            return
                         }
-                        return param.getText()
-                    }).join(',')
-                    writer.print(`${methodName}(${parameters}): ${returnType};`)
-                }
+                        seenMethods.add(methodName)
+                        const returnType = this.typeConvertor.convert(member.type!)
+                        const parameters = member.parameters.map((param) => {
+                            if (param.type != undefined) {
+                                return `${param.name.getText()}: ${this.typeConvertor.convert(param.type)}`
+                            }
+                            return param.getText()
+                        }).join(',')
+                        writer.print(`${methodName}(${parameters}): ${returnType};`)
+                    }
             })
         };
         if (this.peerLibrary.isComponentDeclaration(node)) {
