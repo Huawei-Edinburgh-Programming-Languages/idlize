@@ -462,7 +462,7 @@ export class ArkTSTypeDepsCollector extends ImportsAggregateCollector {
             }
         }
         return [...membersDecls, makeSyntheticInterfaceDeclaration(ArkTSTypeDepsCollector.SYNTH_TYPE_FILE_NAME,
-            this.typeToStringConvertor.convert(node),
+            this.typeToStringConvertor.convertTypeLiteral(node),
             undefined,
             node.members,
             this.declDependenciesCollector.value,

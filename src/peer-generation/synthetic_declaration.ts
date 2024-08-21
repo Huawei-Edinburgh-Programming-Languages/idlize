@@ -88,7 +88,25 @@ export function makeSyntheticInterfaceDeclaration(targetFileName: string,
                                                   peerLibrary: PeerLibrary): ts.Declaration {
     const decl = makeSyntheticDeclaration(targetFileName,
         interfaceName,
-        () => ts.factory.createInterfaceDeclaration([], interfaceName, typeParameters, [], members)
+        () => ts.factory.createInterfaceDeclaration([], interfaceName, typeParameters, [], members.map(
+            it => {
+                // Replacing the Function type with Function<void>
+                if (ts.isPropertySignature(it)
+                    && it.type
+                    && ts.isTypeReferenceNode(it.type)
+                    && it.type.typeName.getText() == "Function") {
+                    return ts.factory.createPropertySignature(
+                        it.modifiers,
+                        it.name,
+                        it.questionToken,
+                        ts.factory.createTypeReferenceNode(it.type.typeName, ts.factory.createNodeArray([
+                            ts.factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword)
+                        ]))
+                    )
+                }
+                return it
+            }
+        ))
     )
     declDependenciesCollector.convert(decl).forEach(it => {
         if (isSourceDecl(it) && (PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it))) {
