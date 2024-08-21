@@ -216,7 +216,7 @@ export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
         if (node?.parent?.parent !== undefined
             && ts.isTupleTypeNode(node.parent)
             && ts.isTypeReferenceNode(node.parent.parent)) {
-            return `UNION_${unionTypes.join('_')}`
+            return createUnionDeclName(unionTypes.join('_'))
         }
         return unionTypes.join(" | ");
     }
@@ -227,31 +227,27 @@ export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
             || ts.isTypeAliasDeclaration(node.parent)
             || ts.isParameter(node.parent)
         ) && ts.isStringLiteral(node.literal)) {
-            return `LITERAL_${node.literal.getText().replaceAll('\'', '').replaceAll('"', '')}`
+            return createLiteralDeclName(node.literal.getText().replaceAll(/['"]+/g, ''))
         } else {
             return super.convertLiteralType(node)
         }
     }
 
     convertTypeLiteral(node: ts.TypeLiteralNode): string {
-        return `LITERAL_${snakeCaseToCamelCase(node.members.map(it => {
+        return createLiteralDeclName(snakeCaseToCamelCase(node.members.map(it => {
             if (ts.isIndexSignatureDeclaration(it)) {
                 return `${it.parameters.map(
                     it => ts.isIdentifier(it.name) ? it.name.text : it.getText()
                 )}_${this.convert(it.type)}`
             }
             return it.name?.getText()
-        }).join('_'))}`
+        }).join('_')))
     }
 
     convertTemplateLiteral(node: ts.TemplateLiteralTypeNode): string {
-        const parent = node.parent
-        if (ts.isTypeAliasDeclaration(parent)) {
-            return `TEMPLATE_LITERAL_${node.templateSpans
-                .map(it => `${this.convert(it.type)}_${parent.name.text}`).join('_')}`
-        }
-        return `TEMPLATE_LITERAL_${node.templateSpans
-            .map(it => `${this.convert(it.type)}_${it.literal.text}`).join('_')}`
+        const typeSuffix = ts.isTypeAliasDeclaration(node.parent) ? node.parent.name.text : undefined
+        return createTemplateLiteralDeclName(node.templateSpans
+            .map(it => `${this.convert(it.type)}_${typeSuffix ?? it.literal.text}`).join('_'))
     }
 
     convertFunction(node: ts.FunctionTypeNode): string {
@@ -431,3 +427,16 @@ export class CJTypeNodeNameConvertor implements TypeNodeNameConvertor {
 
 // Java printers does not use this in fact
 export class JavaTypeNodeNameConvertor extends TSTypeNodeNameConvertor {}
+
+export function createInterfaceDeclName(name: string): string {
+    return `INTERFACE_${name}`
+}
+export function createTemplateLiteralDeclName(name: string): string {
+    return `TEMPLATE_LITERAL_${name}`
+}
+export function createLiteralDeclName(name: string): string {
+    return `LITERAL_${name}`
+}
+export function createUnionDeclName(name: string): string {
+    return `UNION_${name}`
+}
