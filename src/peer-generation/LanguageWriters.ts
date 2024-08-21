@@ -29,7 +29,7 @@ import {
 } from "./Convertors";
 import { FieldRecord, PrimitiveType } from "./DeclarationTable";
 import { RuntimeType } from "./PeerGeneratorVisitor";
-import { mapType, TSTypeNodeNameConvertor } from "./TypeNodeNameConvertor";
+import { createLiteralDeclName, mapType, TSTypeNodeNameConvertor } from "./TypeNodeNameConvertor";
 
 import * as ts from "typescript"
 import * as fs from "fs"
@@ -1256,7 +1256,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         super.writeMethodCall(receiver, method, params, nullable && receiver !== "this");
     }
     compareLiteral(expr: LanguageExpression, literal: string): LanguageExpression {
-        return super.makeNaryOp('instanceof', [expr, this.makeString(`LITERAL_${literal}`)]);
+        return super.makeNaryOp('instanceof', [expr, this.makeString(createLiteralDeclName(literal))]);
     }
 }
 

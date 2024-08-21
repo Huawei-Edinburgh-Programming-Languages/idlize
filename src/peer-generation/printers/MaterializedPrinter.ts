@@ -37,7 +37,7 @@ import { ImportsCollector } from "../ImportsCollector";
 import { PrinterContext } from "./PrinterContext";
 import { TargetFile } from "./TargetFile";
 import { ARK_MATERIALIZEDBASE, ARK_MATERIALIZEDBASE_EMPTY_PARAMETER, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from "./lang/Java";
-import { createInterfaceDeclName } from "../PeerGeneratorVisitor";
+import { createInterfaceDeclName } from "../TypeNodeNameConvertor";
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
 
 interface MaterializedFileVisitor {

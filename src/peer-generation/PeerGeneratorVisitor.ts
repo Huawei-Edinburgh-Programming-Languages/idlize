@@ -48,6 +48,7 @@ import { Field, FieldModifier, Method, MethodModifier, NamedMethodSignature, Typ
 import {
     ArkTSTypeNodeNameConvertor,
     CJTypeNodeNameConvertor,
+    createInterfaceDeclName,
     JavaTypeNodeNameConvertor,
     mapType,
     TSTypeNodeNameConvertor,
@@ -1079,10 +1080,6 @@ export function createTypeDependenciesCollector(
     return library.declarationTable.language == Language.TS
         ? new ImportsAggregateCollector(library, false)
         : new ArkTSTypeDepsCollector(library, false, arkts.declDependenciesCollector)
-}
-
-export function createInterfaceDeclName(declName: string): string {
-    return `INTERFACE_${declName}`
 }
 
 export function generateMethodModifiers(method: ts.ConstructorDeclaration | ts.MethodDeclaration | ts.MethodSignature) {
