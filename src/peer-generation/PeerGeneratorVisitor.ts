@@ -54,7 +54,7 @@ import {
     TSTypeNodeNameConvertor,
     TypeNodeNameConvertor
 } from "./TypeNodeNameConvertor";
-import { convertDeclaration, convertTypeNode, TypeNodeConvertor } from "./TypeNodeConvertor";
+import { convertDeclaration, convertTypeNode } from "./TypeNodeConvertor";
 import { DeclarationDependenciesCollector, TypeDependenciesCollector } from "./dependencies_collector";
 import { convertDeclToFeature, ImportFeature } from "./ImportsCollector";
 import {
@@ -65,7 +65,13 @@ import {
     makeSyntheticInterfaceDeclaration,
     makeSyntheticTypeAliasDeclaration
 } from "./synthetic_declaration";
-import { initCustomBuilderClasses, isBuilderClass, isCustomBuilderClass, toBuilderClass } from "./BuilderClass";
+import {
+    CUSTOM_BUILDER_CLASSES,
+    initCustomBuilderClasses,
+    isBuilderClass,
+    isCustomBuilderClass,
+    toBuilderClass
+} from "./BuilderClass";
 import { Lazy, lazy } from "./lazy";
 
 export enum RuntimeType {
@@ -795,12 +801,19 @@ export class PeerProcessor {
         }
 
         if (isCustomBuilderClass(name)) {
+            // HACK: for custom builder classes also need to collect dependencies
+            const customBuilderClass = CUSTOM_BUILDER_CLASSES.find(it => it.name === name)
+            if (customBuilderClass) {
+                collectDeclarationDeps(target, this.declDependenciesCollector, this.library)
+                    .forEach(it => customBuilderClass.importFeatures.push(it))
+            }
             return
         }
         const builderClass = toBuilderClass(this.declarationTable,
             name,
             target,
-            this.declarationTable.typeChecker!,
+            this.library,
+            this.declDependenciesCollector,
             isActualDeclaration,
             typeNodeConvertor)
         this.library.builderClasses.set(name, builderClass)
@@ -1054,10 +1067,8 @@ export class PeerProcessor {
                 continue
             }
 
-            this.declDependenciesCollector.convert(dep).forEach(it => {
-                if (isSourceDecl(it) && (PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it)))
-                    file.importFeatures.push(convertDeclToFeature(this.library, it))
-            })
+            collectDeclarationDeps(dep, this.declDependenciesCollector, this.library)
+                .forEach(it => file.importFeatures.push(it))
             this.serializeDepsCollector.convert(dep).forEach(it => {
                 if (isSourceDecl(it) && PeerGeneratorConfig.needInterfaces) {
                     file.serializeImportFeatures.push(convertDeclToFeature(this.library, it))
@@ -1146,4 +1157,13 @@ function getMethodIndex(methodName: string, method: ts.MethodDeclaration | ts.Me
             .findIndex(it => method === it)
     }
     return 0
+}
+
+export function collectDeclarationDeps(target: ts.Declaration,
+                                declDependenciesCollector: DeclarationDependenciesCollector,
+                                peerLibrary: PeerLibrary): ImportFeature[] {
+    return declDependenciesCollector.convert(target)
+        .filter(it => isSourceDecl(it))
+        .filter(it => PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it))
+        .map(it => convertDeclToFeature(peerLibrary, it))
 }
