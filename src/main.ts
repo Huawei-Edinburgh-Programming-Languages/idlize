@@ -52,6 +52,7 @@ import { printRealAndDummyModifiers } from "./peer-generation/printers/ModifierP
 import { PeerLibrary } from "./peer-generation/PeerLibrary"
 import { printComponents } from "./peer-generation/printers/ComponentsPrinter"
 import { printPeers } from "./peer-generation/printers/PeersPrinter"
+import { printPeers as printIdlPeers } from "./peer-generation/idl/IdlPeerPrinter"
 import { printMaterialized } from "./peer-generation/printers/MaterializedPrinter"
 import { printSerializers, printUserConverter } from "./peer-generation/printers/HeaderPrinter"
 import { printNodeTypes } from "./peer-generation/printers/NodeTypesPrinter"
@@ -69,6 +70,9 @@ import { TargetFile } from "./peer-generation/printers/TargetFile"
 import { printBridgeCcCustom, printBridgeCcGenerated } from "./peer-generation/printers/BridgeCcPrinter"
 import { createPrinterContext } from "./peer-generation/printers/PrinterContext/PrinterContextImpl"
 import { generateTracker } from "./peer-generation/Tracker"
+import { IdlPeerLibrary } from "./peer-generation/idl/IdlPeerLibrary"
+import { IdlPeerFile } from "./peer-generation/idl/IdlPeerFile"
+import { IdlPeerGeneratorVisitor, IdlPeerProcessor } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -403,10 +407,8 @@ if (options.dts2peer) {
     if (options.apiPrefix !== undefined) {
         PeerGeneratorConfig.cppPrefix = options.apiPrefix
     }
-    PeerGeneratorConfig.needInterfaces = options.needInterfaces
     const declarationTable = new DeclarationTable(options.language ?? "ts")
     const peerLibrary = new PeerLibrary(declarationTable, toSet(options.generateInterface))
-    const generatedPeersDir = options.outputDir ?? "./out/ts-peers/generated"
 
     generate(
         options.inputDir,
@@ -431,7 +433,7 @@ if (options.dts2peer) {
 
                 if (options.generatorTarget == "arkoala" ||
                     options.generatorTarget == "all") {
-                    generateArkoala(outDir, peerLibrary, lang)
+                    generateArkoala(outDir, peerLibrary, lang, skipIdl)
                 }
 
                 if (options.generatorTarget == "libace" ||
@@ -491,7 +493,7 @@ function writeFile(filename: string, content: string, integrated: boolean = fals
         fs.writeFileSync(filename, content)
 }
 
-function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Language) {
+function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Language, includePeers: boolean) {
     const arkoala = options.arkoalaDestination ?
         new ArkoalaInstall(options.arkoalaDestination, lang, false) :
         new ArkoalaInstall(outDir, lang, true)
@@ -501,11 +503,12 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
     const arkuiComponentsFiles: string[] = []
     const context = createPrinterContext(peerLibrary.declarationTable)
 
-    const peers = printPeers(peerLibrary, context, options.dumpSerialized ?? false)
-    for (const [targetFile, peer] of peers) {
-        const outPeerFile = arkoala.peer(targetFile)
-        console.log("producing", outPeerFile)
-        writeFile(outPeerFile, peer, true)
+    if (includePeers) {
+        const peers = printPeers(peerLibrary, context, options.dumpSerialized ?? false)
+        for (const [targetFile, peer] of peers) {
+            const outPeerFile = arkoala.peer(targetFile)
+            console.log("producing", outPeerFile)
+            writeFile(outPeerFile, peer, true)
     }
 
     const components = printComponents(peerLibrary)
