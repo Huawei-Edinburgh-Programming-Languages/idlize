@@ -1,6 +1,6 @@
 {
   "name": "@azanat/idlize",
-  "version": "1.3.0",
+  "version": "1.3.6+devel",
   "description": "",
   "main": "lib/index.js",
   "bin": "lib/index.js",
@@ -43,9 +43,9 @@
     "source-map-support": "^0.5.21"
   },
   "scripts": {
-    "preinstall": "cd external/incremental && npm i && cd ../interop && npm i && cd ../arkoala && npm i",
+    "prepare": "cd external/incremental && npm i && cd ../interop && npm i && cd ../arkoala && npm i",
     "download:sdk": "node ./download-sdk.mjs",
-    "publish": "npm run compile && node tools/publish.mjs",
+    "upload": "npm run compile && node tools/publish.mjs",
     "setup-out": "node tools/setup/setup.mjs",
     "compile": "npm run download:sdk && rollup -c",
     "clean": "rimraf build dist lib generated native/build* native/lib* native/cross* native/NativeBridge* native/ace* out",
@@ -69,7 +69,7 @@
     "check:subset": "npm run compile && npm run setup-out -- --out out/ts-subset --template ts_subset && node . --api-version 99 --dts2peer --input-dir ./tests/subset/ets/ --output-dir ./out/ts-subset/generated && cp -r tests/subset out/ts-subset/generated/tests && cd out/ts-subset && tsc -p .",
     "check:subset:run": "npm run rollup:host:subset && npm run compile:native-node-host-ts-subset && node out/ts-subset/lib/main.js",
     "check:peers:run": "npm run rollup:host:full && npm run compile:native-node-host-full && node tools/check-headers.mjs && node out/ts-peers/lib/main.js",
-    "check:peers:idl": "npm run compile && npm run setup-out -- --out=out/ts-peers --template=ts_peers && node . --dts2idl --input-dir ./interface_sdk-js/api/@internal/component/ets/ --output-dir ./out/idl --verify-idl --common-to-attributes --docs=none && node . --idl2dts --input-dir ./out/idl && node --stack_trace_limit=200 . --api-version 99  --dts2peer --input-dir ./out/dts/ --output-dir ./out/ts-peers/generated && npm run compile:native-node-host-full && cd ./out/ts-peers && tsc -p . && rollup -c && node lib/main.js",
+    "check:peers:idl": "npm run compile && npm run setup-out -- --out=out/ts-peers --template=ts_peers && node . --dts2idl --input-dir ./interface_sdk-js/api/@internal/component/ets/ --output-dir ./out/idl --verify-idl --common-to-attributes --docs=none && node . --idl2dts --input-dir ./out/idl --output-dir ./out/dts && node --stack_trace_limit=200 . --api-version 99  --dts2peer --input-dir ./out/dts/ --output-dir ./out/ts-peers/generated --skip-idl && npm run compile:native-node-host-full && cd ./out/ts-peers && tsc -p . && rollup -c && node lib/main.js",
     "test:subset": "npm run check:subset && mocha ./out/ts-subset/build/tests/subset/unit/",
     "check:subset:fuzz": "npm run compile && npm run check:subset && node . --dts2test --input-dir ./tests/subset/ets --output-dir ./out/ts-subset/generated/fuzz && npm run compile:native-node-host-ts-subset && tsc -p ./out/ts-subset && node ./out/ts-subset/generated/fuzz",
     "check:peers:native": "npm run run2peer:all && npm run compile:native-node-host-full",
