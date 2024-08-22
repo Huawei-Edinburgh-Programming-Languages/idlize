@@ -387,7 +387,7 @@ class CJInterfacesVisitor {
 }
 
 export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
-    private readonly typeConvertor = new ArkTSTypeNodeNameConvertor(this.peerLibrary)
+    private readonly declToStringConvertor = new ArkTSTypeNodeNameConvertor(this.peerLibrary)
     constructor(private readonly writer: LanguageWriter,
                 private readonly peerLibrary: PeerLibrary) {
     }
@@ -403,7 +403,7 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
                 .forEach(member => {
                     if (ts.isPropertyDeclaration(member)) {
                         const propName = member.name.getText()
-                        const propType = this.typeConvertor.convert(member.type!)
+                        const propType = this.declToStringConvertor.convert(member.type!)
                         const isOptional = member.questionToken
                         writer.print(`${propName}${isOptional ? "?" : ""}: ${propType};`)
                     } else {
@@ -413,10 +413,10 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
                             return
                         }
                         seenMethods.add(methodName)
-                        const returnType = this.typeConvertor.convert(member.type!)
+                        const returnType = this.declToStringConvertor.convert(member.type!)
                         const parameters = member.parameters.map((param) => {
                             if (param.type != undefined) {
-                                return `${param.name.getText()}: ${this.typeConvertor.convert(param.type)}`
+                                return `${param.name.getText()}: ${this.declToStringConvertor.convert(param.type)}`
                             }
                             return param.getText()
                         }).join(',')
@@ -488,9 +488,10 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
                 })
             })
         } else {
-            const maybeTypeArguments = node.typeParameters?.length
+            const typeName = this.mapType(node.name)
+            const maybeTypeArguments = node.typeParameters?.length && typeName !== "ComponentContent"
                 ? `<${node.typeParameters.map(it => it.name.text).join(', ')}>` : ''
-            this.writer.print(`export declare type ${node.name.text}${maybeTypeArguments} = ${this.mapType(node.type)}`)
+            this.writer.print(`export declare type ${typeName}${maybeTypeArguments} = ${this.mapType(node.type)}`)
         }
     }
 
@@ -504,9 +505,9 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
         return `${name}${typeParamsClause}`
     }
 
-    private mapType(type: ts.TypeNode | undefined): string {
+    private mapType(type: ts.TypeNode | ts.Identifier | undefined): string {
         if (type !== undefined) {
-            return this.typeConvertor.convert(type)
+            return this.declToStringConvertor.convert(type)
         }
         throw new Error(`Unexpected type: ${type}`)
     }
