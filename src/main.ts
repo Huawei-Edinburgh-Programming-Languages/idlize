@@ -108,6 +108,7 @@ const options = program
     .option('--only-integrated', 'Generate only thoose files that can be integrated to target', false)
     .option('--version')
     .option('--generator-target <all|arkoala|libace|none>', 'Copy peers to arkoala or libace (use with --dts2peer)', "all")
+    .option('--skip-idl', 'Generate peers directly from .d.ts files (use with --dts2peer)', false)
     .option('--arkoala-destination <path>', 'Location of arkoala repository')
     .option('--libace-destination <path>', 'Location of libace repository')
     .option('--copy-peers-components <name...>', 'List of components to copy (omit to copy all)')
@@ -503,13 +504,14 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
     const arkuiComponentsFiles: string[] = []
     const context = createPrinterContext(peerLibrary.declarationTable)
 
+    // We might already have generated peers from IDL
     if (includePeers) {
         const peers = printPeers(peerLibrary, context, options.dumpSerialized ?? false)
         for (const [targetFile, peer] of peers) {
             const outPeerFile = arkoala.peer(targetFile)
             console.log("producing", outPeerFile)
             writeFile(outPeerFile, peer, true)
-    }
+        }
 
     const components = printComponents(peerLibrary)
     for (const [targetBasename, component] of components) {
