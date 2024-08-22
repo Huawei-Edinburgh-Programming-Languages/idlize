@@ -53,7 +53,6 @@
     "run:all": "npm run compile && node . --dts2idl --input-dir ./interface_sdk-js/api/@internal/component/ets/ --verify-idl --common-to-attributes --docs=opt",
     "run2h": "npm run compile && node . --idl2h --input-dir ./idl",
     "run2dts": "npm run compile && node . --idl2dts --input-dir ./idl",
-    "dts2peer":  "npm run compile && node . --dts2peer --input-dir ./tests/skoala-subset/ --output-dir ./dts2peer",
     "dts2skoala":  "npm run compile && node . --dts2skoala --input-dir ./tests/skoala-subset/ ",
     "check:skoala": "npm run compile && node . --api-version 99 --dts2peer --input-dir ./tests/skoala-subset/ --output-dir ./out/skoala-subset",
     "run2peer:target": "node --stack_trace_limit=200 . --api-version 99 --dts2peer --input-dir ./interface_sdk-js/api/@internal/component/ets/ --output-dir ./out/ts-peers/generated",
