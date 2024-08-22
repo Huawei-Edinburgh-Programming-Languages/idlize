@@ -60,8 +60,4 @@ export class SKOALAVisitor implements GenericVisitor<IDLEntry[]> {
     serializeConstants(stmt: ts.VariableStatement): IDLConstant[] {
         return []
     }
-
-    isKnownAmbientModuleDeclaration(type: ts.Node): boolean {
-        return false
-    }
 }
