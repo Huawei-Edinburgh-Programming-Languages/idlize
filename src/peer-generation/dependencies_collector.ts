@@ -207,7 +207,7 @@ export class DeclarationNameConvertor implements DeclarationConvertor<string> {
     static readonly I = new DeclarationNameConvertor()
 }
 
-function findNodeSourceFile(node: ts.Node): ts.SourceFile | undefined {
+export function findNodeSourceFile(node: ts.Node): ts.SourceFile | undefined {
     let sourceFile: ts.SourceFile | undefined = undefined
     do {
         if (ts.isSourceFile(node.parent)) {

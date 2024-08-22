@@ -15,9 +15,9 @@
 
 import * as ts from 'typescript'
 import { TypeNodeConvertor, convertTypeNode, convertDeclaration } from './TypeNodeConvertor'
-import { snakeCaseToCamelCase } from "../util";
+import { getDeclarationsByNode, snakeCaseToCamelCase } from "../util";
 import { PeerLibrary } from "./PeerLibrary";
-import { DeclarationNameConvertor } from "./dependencies_collector";
+import { DeclarationNameConvertor, findNodeSourceFile } from "./dependencies_collector";
 
 export interface TypeNodeNameConvertor extends TypeNodeConvertor<string> {
     convert(node: ts.Node): string
@@ -273,6 +273,17 @@ export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
             .find(it => it != undefined)
         if (name !== undefined) {
             return name
+        }
+        // Fixing a method parameter with an enum type like 'barMode (value: BarMode.Fixed)'
+        if (ts.isIdentifier(node.left) && ts.isIdentifier(node.right)) {
+            const declarations = getDeclarationsByNode(this.peerLibrary.declarationTable.typeChecker!,
+                node.left)
+            if (declarations.length) {
+                const likelyDecl = declarations.find(decl => findNodeSourceFile(decl) == findNodeSourceFile(node))
+                if (likelyDecl && ts.isEnumDeclaration(likelyDecl)) {
+                    return this.convert(node.left)
+                }
+            }
         }
         return super.convertQualifiedName(node);
     }
