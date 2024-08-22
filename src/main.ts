@@ -344,6 +344,62 @@ if (options.idl2h) {
 }
 
 if (options.dts2peer) {
+    PeerGeneratorConfig.needInterfaces = options.needInterfaces
+    const generatedPeersDir = options.outputDir ?? "./out/ts-peers/generated"
+    const lang = Language.fromString(options.language ?? "ts")
+    const skipIdl = options.skipIdl || lang !== Language.TS
+
+    if (!skipIdl) {
+        // For now, we only generate TS peers from IDL representation.
+        // In the future, more stuff will be generated from IDL, and more languages will be supported.
+        const tsCompileContext = new CompileContext()
+        const idlLibrary = new IdlPeerLibrary(lang, toSet(options.generateInterface))
+        // First convert DTS to IDL
+        generate(
+            options.inputDir,
+            options.inputFile,
+            generatedPeersDir,
+            (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, tsCompileContext, options),
+            {
+                compilerOptions: defaultCompilerOptions,
+                onSingleFile(entries: IDLEntry[], outputDir, sourceFile) {
+                    const file = new IdlPeerFile(sourceFile.fileName, entries, idlLibrary.componentsToGenerate)
+                    idlLibrary.files.push(file)
+                },
+                onEnd(outDir) {
+                    // Visit IDL peer files
+                    idlLibrary.files.forEach(file => {
+                        const visitor = new IdlPeerGeneratorVisitor({
+                            sourceFile: file.originalFilename,
+                            peerLibrary: idlLibrary,
+                            peerFile: file,
+                        })
+                        visitor.visitWholeFile()
+                    })
+                    const peerProcessor = new IdlPeerProcessor(idlLibrary)
+                    peerProcessor.process()
+                    // declarationTable.analyze(peerLibrary)
+
+                    // Write out peers
+                    const arkoala = options.arkoalaDestination ?
+                        new ArkoalaInstall(options.arkoalaDestination, lang, false) :
+                        new ArkoalaInstall(outDir, lang, true)
+                    arkoala.createDirs([ARKOALA_PACKAGE_PATH, INTEROP_PACKAGE_PATH].map(dir => path.join(arkoala.javaDir, dir)))
+
+                    const context = {
+                        language: lang,
+                        synthesizedTypes: undefined,
+                        imports: undefined
+                    }
+                    const peers = printIdlPeers(idlLibrary, context, options.dumpSerialized ?? false)
+                    for (const [targetFile, peer] of peers) {
+                        const outPeerFile = arkoala.peer(targetFile)
+                        writeFile(outPeerFile, peer, true)
+                    }
+                }
+            }
+        )
+    }
     if (options.apiPrefix !== undefined) {
         PeerGeneratorConfig.cppPrefix = options.apiPrefix
     }
