@@ -103,7 +103,7 @@ const options = program
     .option('--need-interfaces', 'Generate interfaces to resolve all .d.ts dependencies', false)
     .option('--only-integrated', 'Generate only thoose files that can be integrated to target', false)
     .option('--version')
-    .option('--generator-target <all|arkoala|libace|none>', 'Copy peers to arkoala or libace (use with --dts2peer)', "arkoala")
+    .option('--generator-target <all|arkoala|libace|none>', 'Copy peers to arkoala or libace (use with --dts2peer)', "all")
     .option('--arkoala-destination <path>', 'Location of arkoala repository')
     .option('--libace-destination <path>', 'Location of libace repository')
     .option('--copy-peers-components <name...>', 'List of components to copy (omit to copy all)')
