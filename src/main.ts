@@ -511,6 +511,7 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
             const outPeerFile = arkoala.peer(targetFile)
             console.log("producing", outPeerFile)
             writeFile(outPeerFile, peer, true)
+        }
     }
 
     const components = printComponents(peerLibrary)
