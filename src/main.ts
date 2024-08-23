@@ -73,6 +73,7 @@ import { generateTracker } from "./peer-generation/Tracker"
 import { IdlPeerLibrary } from "./peer-generation/idl/IdlPeerLibrary"
 import { IdlPeerFile } from "./peer-generation/idl/IdlPeerFile"
 import { IdlPeerGeneratorVisitor, IdlPeerProcessor } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
+import { SkoalaCCodeGenerator } from "./peer-generation/printers/SkoalaPrinter"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -167,48 +168,24 @@ if (options.dts2idl) {
 }
 
 if (options.dts2skoala) {
+    const idlDir = options.inputDir ?? "./idl_gen"
+    const outputDir = options.outputDir ?? "./skoala_gen"
 
-    // Initialize compilation context
-    const licenseHeader = cStyleCopyright
+    if (!fs.existsSync(idlDir)) {
+        console.error(`Directory with IDL files does not exist: ${idlDir}`)
+    }
 
-    generate(
-        options.inputDir,
-        options.inputFile,
-        options.outputDir ?? "./skoala_gen",
-        (sourceFile) => new SKOALAVisitor(sourceFile),
-        {
-            compilerOptions: defaultCompilerOptions,
-            onSingleFile: (entries: IDLEntry[], outputDir, sourceFile) => {
-                console.log('producing', path.relative(options.inputDir, sourceFile.fileName));
-                const outFile = path.join(outputDir,
-                    path.relative(options.inputDir, sourceFile.fileName).replace(".d.ts", ".cc"));
-                console.log("saved", outFile);
-                
-                if (options.skipDocs) {
-                    entries.forEach(it => forEachChild(
-                        it, (it) => it.documentation = undefined));
-                }
+    if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir, { recursive: true })
+    }
 
-                // Initializing a string with a license and generated content
-                let generated = licenseHeader + "\n" 
-                // + 
-                // toIDLString(entries, {
-                //     verifyIdl: options.verifyIdl ?? false,
-                //     disableEnumInitializers: options.disableEnumInitializers ?? false
-                // })
+    const idlFiles = fs.readdirSync(idlDir).filter(file => file.endsWith(".idl"))
 
-                if (options.verbose) console.log(generated);
-
-                if (!fs.existsSync(path.dirname(outFile))){
-                    fs.mkdirSync(path.dirname(outFile), { recursive: true });
-                }
-
-                // Write the generated C file
-                fs.writeFileSync(outFile, generated);
-            }
-        }
-    );
-    didJob = true;
+    idlFiles.forEach(idlFile => {
+        const idlFilePath = path.join(idlDir, idlFile)
+        const printer = new SkoalaCCodeGenerator(idlFilePath, outputDir)
+        printer.generate()
+    })
 }
 
 if (options.dts2h) {
