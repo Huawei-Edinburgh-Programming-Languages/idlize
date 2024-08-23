@@ -19,7 +19,7 @@ import { DeclarationTable, DeclarationTarget, PrimitiveType } from "../Declarati
 import { createLanguageWriter, LanguageWriter, Method, NamedMethodSignature, Type } from "../LanguageWriters";
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig';
 import { checkDeclarationTargetMaterialized } from '../Materialized';
-import { convertDeclToFeature, ImportFeature, ImportsCollector } from '../ImportsCollector';
+import { convertDeclToFeature, ImportsCollector } from '../ImportsCollector';
 import { PeerLibrary } from '../PeerLibrary';
 import { createTypeDependenciesCollector, createTypeNodeConvertor, isSourceDecl } from "../PeerGeneratorVisitor";
 import { isSyntheticDeclaration } from "../synthetic_declaration";
@@ -30,13 +30,17 @@ import { TypeNodeNameConvertor } from "../TypeNodeNameConvertor";
 
 function printSerializerImports(table: (ts.ClassDeclaration | ts.InterfaceDeclaration)[],
                                 library: PeerLibrary,
-                                writer: LanguageWriter,
-                                collector: ImportsCollector) {
-    const serializerCollector = createSerializerDependenciesCollector(writer.language, collector, library)
+                                writer: LanguageWriter) {
+    const convertorImportsCollector = new ImportsCollector()
+    if (writer.language === Language.ARKTS) {
+        library.files.forEach(peer => peer.serializeImportFeatures
+            .forEach(importFeature => convertorImportsCollector.addFeature(importFeature.feature, importFeature.module)))
+    }
+    const serializerCollector = createSerializerDependenciesCollector(writer.language, convertorImportsCollector, library)
     if (serializerCollector != undefined) {
         table.forEach(decl => serializerCollector.collect(decl))
     }
-    collector.print(writer, `./peers/Serializer.${writer.language.extension}`)
+    convertorImportsCollector.print(writer, `./peers/Serializer.${writer.language.extension}`)
 }
 
 function canSerializeTarget(declaration: ts.ClassDeclaration | ts.InterfaceDeclaration): boolean {
@@ -127,36 +131,22 @@ class SerializerPrinter {
         }
         const serializerDeclarations = generateSerializerDeclarationsTable(prefix, this.table)
         const serializerWriter = createLanguageWriter(this.writer.language)
-        const collectorImportsFeatures: ImportFeature[] = []
-        const declDependenciesCollector: DeclarationDependenciesCollector = new DeclarationDependenciesCollector(
-            this.library.declarationTable.typeChecker!,
-            createTypeDependenciesCollector(this.library, {
-                declDependenciesCollector: lazy(() => declDependenciesCollector)
-            }))
-        const typeNodeNameConvertor = createTypeNodeConvertor(this.library,
-            createTypeNodeConvertor(this.library),
-            declDependenciesCollector,
-            collectorImportsFeatures)
+        const typeNodeNameConvertor = createTypeNodeConvertor(this.library)
         // just a separator
         serializerWriter.print("")
         serializerWriter.writeClass(className, writer => {
             if (ctorSignature) {
                 const ctorMethod = new Method(superName, ctorSignature)
-                writer.writeConstructorImplementation(className, ctorSignature, writer => {
-                }, ctorMethod)
+                writer.writeConstructorImplementation(className, ctorSignature, _ => {}, ctorMethod)
             }
-            serializerDeclarations.forEach(decl => this.generateSerializer(serializerWriter, decl, prefix, typeNodeNameConvertor))
+            serializerDeclarations.forEach(decl =>
+                this.generateSerializer(serializerWriter, decl, prefix, typeNodeNameConvertor))
             if (serializerWriter.language == Language.JAVA) {
                 // TODO: somewhat ugly.
                 serializerWriter.print(`static Serializer createSerializer() { return new Serializer(); }`)
             }
         }, superName)
-        const convertorImportsCollector = new ImportsCollector()
-        //TODO: needs to be rework
-        if (this.writer.language === Language.ARKTS) {
-            collectorImportsFeatures.forEach(feature => convertorImportsCollector.addFeature(feature.feature, feature.module))
-        }
-        printSerializerImports(serializerDeclarations, this.library, this.writer, convertorImportsCollector)
+        printSerializerImports(serializerDeclarations, this.library, this.writer)
         this.writer.print(serializerWriter.printer.getOutput().join("\n"))
     }
 }
@@ -215,7 +205,7 @@ class DeserializerPrinter {
             prefix = PrimitiveType.ArkPrefix
         }
         const serializerDeclarations = generateSerializerDeclarationsTable(prefix, this.table)
-        printSerializerImports(serializerDeclarations, this.library, this.writer, new ImportsCollector())
+        printSerializerImports(serializerDeclarations, this.library, this.writer)
         this.writer.print("")
         this.writer.writeClass(className, writer => {
             if (ctorSignature) {
