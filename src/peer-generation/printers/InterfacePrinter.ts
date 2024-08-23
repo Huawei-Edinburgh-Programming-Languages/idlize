@@ -315,6 +315,7 @@ class CJInterfacesVisitor {
     ])
 
     private printClassOrInterface(node: ts.ClassDeclaration | ts.InterfaceDeclaration, writer: LanguageWriter) {
+        console.log(node.name)
         type MemberInfo = {name: string, type: Type, optional: boolean}
         const membersInfo: MemberInfo[] = node.members.map(property => {
             if (!ts.isPropertyDeclaration(property) && !ts.isPropertySignature(property)) {
@@ -372,6 +373,7 @@ class CJInterfacesVisitor {
                 if (!ts.isClassDeclaration(it) && !ts.isInterfaceDeclaration(it)) {
                     return
                 }
+                console.log(it.name)
                 this.addInterfaceDeclaration(it)
             })
         }
