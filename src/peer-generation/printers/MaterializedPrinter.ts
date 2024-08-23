@@ -117,14 +117,13 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
 
                 // TBD: use deserializer to get complex type from native
                 const isSimpleType = !f.argConvertor.useArray // type needs to be deserialized from the native
-                if (isSimpleType) {
-                    const getSignature = new MethodSignature(field.type, [])
-                    writer.writeGetterImplementation(new Method(field.name, getSignature), writer => {
-                        writer.writeStatement(
-                            writer.makeReturn(
-                                writer.makeMethodCall("this", `get${capitalize(field.name)}`, [])))
-                    });
-                }
+                writer.writeGetterImplementation(new Method(field.name, new MethodSignature(field.type, [])), writer => {
+                    writer.writeStatement(
+                        isSimpleType
+                            ? writer.makeReturn(writer.makeMethodCall("this", `get${capitalize(field.name)}`, []))
+                            : writer.makeStatement(writer.makeString("throw new Error(\"Not implemented\")"))
+                    )
+                });
 
                 const isReadOnly = field.modifiers.includes(FieldModifier.READONLY)
                 if (!isReadOnly) {
