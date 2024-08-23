@@ -1037,7 +1037,7 @@ export class TSLanguageWriter extends LanguageWriter {
             prefix = `set ${prefix}`
             needReturn = false
         }
-        prefix = prefix ? prefix + " " : ""
+        prefix = prefix ? prefix.trim() + " " : ""
         const typeParams = generics ? `<${generics.join(", ")}>` : ""
         this.printer.print(`${prefix}${name}${typeParams}(${signature.args.map((it, index) => `${signature.argName(index)}${it.nullable ? "?" : ""}: ${this.mapType(it)}${signature.argDefault(index) ? ' = ' + signature.argDefault(index) : ""}`).join(", ")})${needReturn ? ": " + this.mapType(signature.returnType) : ""} ${needBracket ? "{" : ""}`)
     }
