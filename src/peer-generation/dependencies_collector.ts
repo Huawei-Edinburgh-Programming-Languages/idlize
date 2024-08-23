@@ -68,13 +68,6 @@ export class TypeDependenciesCollector implements TypeNodeConvertor<ts.Declarati
     convertTypeReference(node: ts.TypeReferenceNode): ts.Declaration[] {
         let declarations = getDeclarationsByNode(this.typeChecker, node.typeName)
         if (declarations.length > 1) {
-            //TODO: needs to be rework
-            if (this.language == Language.ARKTS) {
-                const likelyDecl = declarations.find(decl => findNodeSourceFile(decl) == findNodeSourceFile(node))
-                if (likelyDecl) {
-                    declarations = [likelyDecl]
-                }
-            }
             console.log(`WARNING: Duplicate declarations temporary unsupported: ${mapType(node)}`)
             declarations = [declarations[0]]
         }
