@@ -23,7 +23,6 @@ import { IDLEntry, forEachChild, toIDLString } from "./idl"
 import { printHeader, toHeaderString, wrapWithPrologueAndEpilogue } from "./idl2h"
 import { LinterMessage, LinterVisitor, toLinterString } from "./linter"
 import { CompileContext, IDLVisitor } from "./IDLVisitor"
-import { SKOALAVisitor } from "./SkoalaVisitor"
 import { TestGeneratorVisitor } from "./TestGeneratorVisitor"
 import { ArkoalaInstall, LibaceInstall } from "./Install"
 import {
