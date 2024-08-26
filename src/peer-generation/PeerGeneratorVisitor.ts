@@ -855,11 +855,11 @@ export class PeerProcessor {
         let mFields = isClass
             ? target.members
                 .filter(ts.isPropertyDeclaration)
-                .map(it => this.makeMaterializedField(name, it))
+                .map(it => this.makeMaterializedField(name, it, typeNodeConvertor))
             : isInterface
                 ? target.members
                     .filter(ts.isPropertySignature)
-                    .map(it => this.makeMaterializedField(name, it))
+                    .map(it => this.makeMaterializedField(name, it, typeNodeConvertor))
                 : []
 
         let mMethods = isClass
@@ -915,17 +915,19 @@ export class PeerProcessor {
             new MaterializedClass(name, isInterface, superClass, generics, mFields, mConstructor, mFinalizer, importFeatures, mMethods, isActualDeclaration))
     }
 
-    private makeMaterializedField(className: string, property: ts.PropertyDeclaration | ts.PropertySignature): MaterializedField {
+    private makeMaterializedField(className: string,
+                                  property: ts.PropertyDeclaration | ts.PropertySignature,
+                                  typeNodeNameConvertor: TypeNodeNameConvertor): MaterializedField {
         const name = identName(property.name)!
         this.declarationTable.setCurrentContext(`Materialized_${className}_${name}`)
         const declarationTarget = this.declarationTable.toTarget(property.type!)
-        const argConvertor = this.declarationTable.typeConvertor(name, property.type!)
+        const argConvertor = this.declarationTable.typeConvertor(name, property.type!, false, typeNodeNameConvertor)
         const retConvertor = generateRetConvertor(property.type!)
         const modifiers = isReadonly(property.modifiers) ? [FieldModifier.READONLY] : []
         this.declarationTable.setCurrentContext(undefined)
         return new MaterializedField(
             new Field(name, new Type(mapType(property.type)), modifiers),
-            argConvertor, retConvertor, declarationTarget)
+            argConvertor, retConvertor, declarationTarget, property.questionToken !== undefined)
     }
 
     private makeMaterializedMethod(parentName: string,
