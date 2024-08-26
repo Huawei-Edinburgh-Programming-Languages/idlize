@@ -182,7 +182,7 @@ if (options.dts2skoala) {
             onSingleFile: (entries: IDLEntry[], outputDir, sourceFile) => {
                 generatedIDL.push(...entries)
 
-                outputDir = options.outputDir ?? "./skoala_gen"
+                outputDir = options.outputDir ?? "./generated/skoala"
                 if (!fs.existsSync(outputDir)) {
                     fs.mkdirSync(outputDir, { recursive: true })
                 }
