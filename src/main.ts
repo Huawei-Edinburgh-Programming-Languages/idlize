@@ -168,14 +168,14 @@ if (options.dts2idl) {
     didJob = true
 }
 
-if (options.dts2skoala) {
+
     const tsCompileContext = new CompileContext()
     const generatedIDL: IDLEntry[] = []
 
     generate(
         options.inputDir,
         options.inputFile,
-        options.outputDir ?? "./skoala_gen",
+        options.outputDir,
         (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, tsCompileContext, options),
         {
             compilerOptions: defaultCompilerOptions,
@@ -184,7 +184,7 @@ if (options.dts2skoala) {
 
                 const idlContent = toIDLString(generatedIDL, options)
                 
-                outputDir = options.outputDir
+                outputDir = options.outputDir ?? "./skoala_gen"
                 if (!fs.existsSync(outputDir)) {
                     fs.mkdirSync(outputDir, { recursive: true })
                 }
