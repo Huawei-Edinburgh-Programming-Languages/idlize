@@ -29,14 +29,11 @@ export class SkoalaCCodeGenerator {
 
     private visit(node: IDLEntry, printer: IndentedPrinter): void {
         console.log(`Processing IDLEntry with kind: ${node.kind}, name: ${(node as any).name || "Unnamed"}`)
-        switch (node.kind) {
-            case IDLKind.Interface:
-            case IDLKind.Class:
-                this.visitInterface(node as IDLInterface, printer)
-                break
-            default:
-                console.log(`Skipping unsupported IDLEntry kind: ${node.kind}`)
-                break
+
+        if (this.isInterface(node) || this.isClass(node)) {
+            this.visitInterface(node as IDLInterface, printer)
+        } else {
+            console.log(`Skipping unsupported IDLEntry kind: ${node.kind}`)
         }
     }
 
@@ -107,5 +104,13 @@ export class SkoalaCCodeGenerator {
         } catch (error) {
             console.error("Error saving C code:", error)
         }
+    }
+
+    private isInterface(node: IDLEntry): node is IDLInterface {
+        return node.kind === IDLKind.Interface
+    }
+
+    private isClass(node: IDLEntry): node is IDLInterface {
+        return node.kind === IDLKind.Class
     }
 }
