@@ -171,30 +171,27 @@ if (options.dts2idl) {
 if (options.dts2skoala) {
     const tsCompileContext = new CompileContext()
     const generatedIDL: IDLEntry[] = []
-    let outputDir: string
+    const outputDir: string = options.outputDir ?? "./generated/skoala"
     let outputFileName: string
+
+    if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir, { recursive: true })
+    }
 
     generate(
         options.inputDir,
         options.inputFile,
-        options.outputDir,
+        outputDir,
         (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, tsCompileContext, options),
         {
             compilerOptions: defaultCompilerOptions,
             onSingleFile: (entries: IDLEntry[], outputDirectory, sourceFile) => {
                 generatedIDL.push(...entries)
-
-                outputDir = options.outputDir ?? "./generated/skoala"
-
-                if (!fs.existsSync(outputDir)) {
-                    fs.mkdirSync(outputDir, { recursive: true })
-                } 
-
                 outputFileName = path.basename(sourceFile.fileName, ".d.ts")
             },
             onEnd: () => {
-                if (!outputDir || !outputFileName) {
-                    console.error("Output directory or file name is undefined. Exiting the process.")
+                if (!outputFileName) {
+                    console.error("Output file name is undefined. Exiting the process.")
                     return
                 }
 
@@ -215,7 +212,6 @@ if (options.dts2skoala) {
     )
     didJob = true
 }
-
 
 if (options.dts2h) {
     const allEntries = new Array<IDLEntry[]>()
