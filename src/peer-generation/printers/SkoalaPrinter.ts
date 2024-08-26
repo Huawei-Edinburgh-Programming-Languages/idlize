@@ -15,60 +15,70 @@ export class SkoalaCCodeGenerator {
     }
 
     public generate(): void {
-        const methods = this.extractMethods(this.entries)
-        if (methods.length === 0) {
-            return
-        }
-        const cCode = this.generateCCode(methods)
-        this.saveCCode(cCode)
-    }
-
-    private extractMethods(entries: IDLEntry[]): IDLMethod[] {
-        return entries
-            .filter(entry => entry.kind === IDLKind.Interface || entry.kind === IDLKind.Class)
-            .flatMap(entry => (entry as IDLInterface).methods || [])
-            .filter((method: IDLMethod) => method.kind === IDLKind.Method)
-    }
-
-    private generateCCode(methods: IDLMethod[]): string {
         const printer = new IndentedPrinter()
 
-        printer.print("#include <stdio.h>")
-        printer.print("#include <stdlib.h>")
-        printer.print("")
+        this.entries.forEach(entry => this.visit(entry, printer))
 
-        methods.forEach(method => {
-            const returnType = method.returnType ? this.convertType(method.returnType.name) : "void"
-            const signature = `${returnType} ${method.name}(`
-            printer.print(signature)
-        
-            printer.pushIndent()
-            const parameters = method.parameters
-                .map(param => {
-                    if (!param.type) {
-                        throw new Error(`Parameter type is not defined for parameter ${param.name} in method ${method.name}`)
-                    }
-                    const typeName = this.convertType(param.type.name)
-                    return `${typeName} ${param.name}`
-                })
-                .join(", ")
-            printer.print(parameters)
-            printer.popIndent()
-        
-            printer.print(") {")
-            printer.pushIndent()
-            printer.print(`// TODO: Implement ${method.name}`)
-            
-            if (returnType !== "void") {
-                printer.print(`return (${returnType})0; // Placeholder return value`)
-            }
-        
-            printer.popIndent()
-            printer.print("}")
-            printer.print("")
-        })
-        
-        return printer.getOutput().join("\n")
+        const cCode = printer.getOutput().join("\n")
+        if (cCode.trim()) {
+            this.saveCCode(cCode)
+        } else {
+            console.log("C code generation failed, no code to save.")
+        }
+    }
+
+    private visit(node: IDLEntry, printer: IndentedPrinter): void {
+        console.log(`Processing IDLEntry with kind: ${node.kind}, name: ${(node as any).name || "Unnamed"}`)
+        switch (node.kind) {
+            case IDLKind.Interface:
+            case IDLKind.Class:
+                this.visitInterface(node as IDLInterface, printer)
+                break
+            default:
+                console.log(`Skipping unsupported IDLEntry kind: ${node.kind}`)
+                break
+        }
+    }
+
+    private visitInterface(node: IDLInterface, printer: IndentedPrinter): void {
+        const methods = node.methods || []
+        if (methods.length === 0) {
+            console.log(`No methods found in interface/class ${node.name}`)
+            return
+        }
+
+        methods.forEach(method => this.visitMethod(method, printer))
+    }
+
+    private visitMethod(method: IDLMethod, printer: IndentedPrinter): void {
+        const returnType = method.returnType ? this.convertType(method.returnType.name) : "void"
+        const signature = `${returnType} ${method.name}(`
+        printer.print(signature)
+
+        printer.pushIndent()
+        const parameters = method.parameters
+            .map(param => {
+                if (!param.type) {
+                    throw new Error(`Parameter type is not defined for parameter ${param.name} in method ${method.name}`)
+                }
+                const typeName = this.convertType(param.type.name)
+                return `${typeName} ${param.name}`
+            })
+            .join(", ")
+        printer.print(parameters)
+        printer.popIndent()
+
+        printer.print(") {")
+        printer.pushIndent()
+        printer.print(`// TODO: Implement ${method.name}`)
+
+        if (returnType !== "void") {
+            printer.print(`return (${returnType})0; // Placeholder return value`)
+        }
+
+        printer.popIndent()
+        printer.print("}")
+        printer.print("")
     }
 
     private convertType(idlType: string): string {
