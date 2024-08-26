@@ -38,27 +38,36 @@ export class SkoalaCCodeGenerator {
         printer.print("")
 
         methods.forEach(method => {
-            const signature = `void ${method.name}(`
+            const returnType = method.returnType ? this.convertType(method.returnType.name) : "void"
+            const signature = `${returnType} ${method.name}(`
             printer.print(signature)
-
+        
             printer.pushIndent()
             const parameters = method.parameters
                 .map(param => {
-                    const typeName = param.type ? this.convertType(param.type.name) : "void*"
+                    if (!param.type) {
+                        throw new Error(`Parameter type is not defined for parameter ${param.name} in method ${method.name}`)
+                    }
+                    const typeName = this.convertType(param.type.name)
                     return `${typeName} ${param.name}`
                 })
                 .join(", ")
             printer.print(parameters)
             printer.popIndent()
-
+        
             printer.print(") {")
             printer.pushIndent()
             printer.print(`// TODO: Implement ${method.name}`)
+            
+            if (returnType !== "void") {
+                printer.print(`return (${returnType})0; // Placeholder return value`)
+            }
+        
             printer.popIndent()
             printer.print("}")
             printer.print("")
         })
-
+        
         return printer.getOutput().join("\n")
     }
 
