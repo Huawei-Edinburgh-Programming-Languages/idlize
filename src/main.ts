@@ -171,6 +171,8 @@ if (options.dts2idl) {
 if (options.dts2skoala) {
     const tsCompileContext = new CompileContext()
     const generatedIDL: IDLEntry[] = []
+    let outputDir: string
+    let outputFileName: string
 
     generate(
         options.inputDir,
@@ -179,21 +181,41 @@ if (options.dts2skoala) {
         (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, tsCompileContext, options),
         {
             compilerOptions: defaultCompilerOptions,
-            onSingleFile: (entries: IDLEntry[], outputDir, sourceFile) => {
+            onSingleFile: (entries: IDLEntry[], outputDirectory, sourceFile) => {
                 generatedIDL.push(...entries)
 
                 outputDir = options.outputDir ?? "./generated/skoala"
+
                 if (!fs.existsSync(outputDir)) {
                     fs.mkdirSync(outputDir, { recursive: true })
+                } 
+
+                outputFileName = path.basename(sourceFile.fileName, ".d.ts")
+            },
+            onEnd: () => {
+                if (!outputDir || !outputFileName) {
+                    console.error("Output directory or file name is undefined. Exiting the process.")
+                    return
                 }
 
-                const printer = new SkoalaCCodeGenerator(generatedIDL, outputDir, sourceFile.fileName)
-                printer.generate()
+                const printer = new SkoalaCCodeGenerator(generatedIDL, outputDir, outputFileName)
+                
+                try {
+                    printer.generate()
+                    console.log("Code generation completed.")
+                } catch (error) {
+                    if (error instanceof Error) {
+                        console.error(`Error during code generation: ${error.message}`)
+                    } else {
+                        console.error("Unknown error during code generation:", error)
+                    }
+                }
             }
         }
     )
     didJob = true
 }
+
 
 if (options.dts2h) {
     const allEntries = new Array<IDLEntry[]>()
