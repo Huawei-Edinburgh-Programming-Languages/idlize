@@ -1,6 +1,7 @@
 import * as fs from "fs"
 import * as path from "path"
-import { IDLEntry, IDLMethod, IDLKind, IDLInterface } from "../../idl";
+import { IDLEntry, IDLMethod, IDLKind, IDLInterface } from "../../idl"
+import { IndentedPrinter } from "../../IndentedPrinter"
 
 export class SkoalaCCodeGenerator {
     private entries: IDLEntry[]
@@ -26,26 +27,40 @@ export class SkoalaCCodeGenerator {
         return entries
             .filter(entry => entry.kind === IDLKind.Interface || entry.kind === IDLKind.Class)
             .flatMap(entry => (entry as IDLInterface).methods || [])
-            .filter((method: IDLMethod) => method.kind === IDLKind.Method);
-    }    
-    
-    private generateCCode(methods: IDLMethod[]): string {
-        let cCode = `#include <stdio.h>\n#include <stdlib.h>\n\n`;
-    
-        methods.forEach(method => {
-            cCode += `void ${method.name}(`;
-            cCode += method.parameters
-                .map(param => {
-                    const typeName = param.type ? this.convertType(param.type.name) : "void*";
-                    return `${typeName} ${param.name}`;
-                })
-                .join(", ");
-            cCode += `) {\n    // TODO: Implement ${method.name}\n}\n\n`;
-        });
-    
-        return cCode;
+            .filter((method: IDLMethod) => method.kind === IDLKind.Method)
     }
-    
+
+    private generateCCode(methods: IDLMethod[]): string {
+        const printer = new IndentedPrinter()
+
+        printer.print("#include <stdio.h>")
+        printer.print("#include <stdlib.h>")
+        printer.print("")
+
+        methods.forEach(method => {
+            const signature = `void ${method.name}(`
+            printer.print(signature)
+
+            printer.pushIndent()
+            const parameters = method.parameters
+                .map(param => {
+                    const typeName = param.type ? this.convertType(param.type.name) : "void*"
+                    return `${typeName} ${param.name}`
+                })
+                .join(", ")
+            printer.print(parameters)
+            printer.popIndent()
+
+            printer.print(") {")
+            printer.pushIndent()
+            printer.print(`// TODO: Implement ${method.name}`)
+            printer.popIndent()
+            printer.print("}")
+            printer.print("")
+        })
+
+        return printer.getOutput().join("\n")
+    }
 
     private convertType(idlType: string): string {
         const typeMapping: { [key: string]: string } = {
@@ -57,8 +72,7 @@ export class SkoalaCCodeGenerator {
             "void_": "void",
         }
 
-        const convertedType = typeMapping[idlType] || "void*"
-        return convertedType
+        return typeMapping[idlType] || "void*"
     }
 
     private saveCCode(cCode: string): void {
