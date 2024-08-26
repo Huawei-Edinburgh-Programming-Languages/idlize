@@ -175,7 +175,7 @@ if (options.dts2skoala) {
     generate(
         options.inputDir,
         options.inputFile,
-        options.outputDir ?? "./idl_temp",
+        options.outputDir ?? "./skoala_gen",
         (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, tsCompileContext, options),
         {
             compilerOptions: defaultCompilerOptions,
@@ -184,7 +184,7 @@ if (options.dts2skoala) {
 
                 const idlContent = toIDLString(generatedIDL, options)
                 
-                outputDir = options.outputDir ?? "./skoala_gen"
+                outputDir = options.outputDir
                 if (!fs.existsSync(outputDir)) {
                     fs.mkdirSync(outputDir, { recursive: true })
                 }
