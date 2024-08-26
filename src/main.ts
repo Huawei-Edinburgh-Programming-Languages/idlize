@@ -168,7 +168,7 @@ if (options.dts2idl) {
     didJob = true
 }
 
-
+if (options.dts2skoala) {
     const tsCompileContext = new CompileContext()
     const generatedIDL: IDLEntry[] = []
 
@@ -182,14 +182,12 @@ if (options.dts2idl) {
             onSingleFile: (entries: IDLEntry[], outputDir, sourceFile) => {
                 generatedIDL.push(...entries)
 
-                const idlContent = toIDLString(generatedIDL, options)
-                
                 outputDir = options.outputDir ?? "./skoala_gen"
                 if (!fs.existsSync(outputDir)) {
                     fs.mkdirSync(outputDir, { recursive: true })
                 }
-                
-                const printer = new SkoalaCCodeGenerator(idlContent, outputDir, sourceFile.fileName)
+
+                const printer = new SkoalaCCodeGenerator(generatedIDL, outputDir, sourceFile.fileName)
                 printer.generate()
             }
         }
