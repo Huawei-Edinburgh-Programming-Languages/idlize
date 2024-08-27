@@ -631,15 +631,33 @@ export class OptionConvertor extends BaseArgConvertor {
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         const valueType = `${value}_type`
         const serializedType = (printer.language == Language.JAVA ? undefined : Type.Int32)
-        printer.writeStatement(printer.makeAssign(valueType, serializedType, printer.makeRuntimeType(RuntimeType.UNDEFINED), true, false))
-        printer.runtimeType(this, valueType, value)
-        printer.writeMethodCall(`${param}Serializer`, "writeInt8", [castToInt8(valueType, printer.language)])
-        printer.print(`if (${printer.makeRuntimeTypeCondition(valueType, false, RuntimeType.UNDEFINED).asString()}) {`)
-        printer.pushIndent()
-        printer.writeStatement(printer.makeAssign(`${value}_value`, undefined, printer.makeValueFromOption(value, this.typeConvertor), true))
-        this.typeConvertor.convertorSerialize(param, printer.getObjectAccessor(this.typeConvertor, `${value}_value`), printer)
-        printer.popIndent()
-        printer.print(`}`)
+        if(printer.language != Language.CJ) {
+            printer.writeStatement(printer.makeAssign(valueType, serializedType, printer.makeRuntimeType(RuntimeType.UNDEFINED), true, false))
+            printer.runtimeType(this, valueType, value)
+            printer.writeMethodCall(`${param}Serializer`, "writeInt8", [castToInt8(valueType, printer.language)])
+            printer.print(`if (${printer.makeRuntimeTypeCondition(valueType, false, RuntimeType.UNDEFINED).asString()}) {`)
+            printer.pushIndent()
+            printer.writeStatement(printer.makeAssign(`${value}_value`, undefined, printer.makeValueFromOption(value, this.typeConvertor), true))
+            this.typeConvertor.convertorSerialize(param, printer.getObjectAccessor(this.typeConvertor, `${value}_value`), printer)
+            printer.popIndent()
+            printer.print(`}`)
+        }
+        else {
+            printer.writeStatement(printer.makeAssign(valueType, serializedType, printer.makeRuntimeType(RuntimeType.UNDEFINED), true, false))
+            printer.print(`if (let Some(${value}) <- ${value}) {`)
+            printer.pushIndent()
+            printer.runtimeType(this, valueType, value)
+            printer.writeMethodCall(`${param}Serializer`, "writeInt8", [castToInt8(valueType, printer.language)])            
+            printer.writeStatement(printer.makeAssign(`${value}_value`, undefined, printer.makeValueFromOption(value, this.typeConvertor), true))
+            this.typeConvertor.convertorSerialize(param, printer.getObjectAccessor(this.typeConvertor, `${value}_value`), printer)
+            printer.popIndent()
+            printer.print(`}`)
+            printer.print(`else {`)
+            printer.pushIndent()
+            printer.writeMethodCall(`${param}Serializer`, "writeInt8", [castToInt8(valueType, printer.language)])
+            printer.popIndent()
+            printer.print(`}`)
+        }
     }
     convertorCArg(param: string): string {
         throw new Error("Must never be used")

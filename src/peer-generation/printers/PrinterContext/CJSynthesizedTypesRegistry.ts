@@ -355,7 +355,7 @@ export class CJSynthesizedTypesRegistry implements SynthesizedTypesRegistry {
             const param = 'param'
             for (const [index, memberInfo] of membersInfo.entries()) {
                 let optionalType = new Type(memberInfo.type.name, true)
-                writer.writeFieldDeclaration(memberInfo.name, optionalType, [FieldModifier.PRIVATE], false, new StringExpression(`None<${memberInfo.type}>`) )
+                writer.writeFieldDeclaration(memberInfo.name, optionalType, [FieldModifier.PRIVATE], true, new StringExpression(`None<${memberInfo.type}>`) )
 
                 writer.writeConstructorImplementation(
                     "init",

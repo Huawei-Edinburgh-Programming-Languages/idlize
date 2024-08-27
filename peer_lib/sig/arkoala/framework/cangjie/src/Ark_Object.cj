@@ -14,12 +14,18 @@
  */
 package idlize
 
+import std.collection.*
+
 public abstract class Ark_Object {
     static func getRuntimeType(object: String): RuntimeType {
         return RuntimeType.STRING
     }
 
     static func getRuntimeType(object: Object): RuntimeType {
+        return RuntimeType.OBJECT
+    }
+
+    static func getRuntimeType<T>(object: ArrayList<T>): RuntimeType {
         return RuntimeType.OBJECT
     }
 }

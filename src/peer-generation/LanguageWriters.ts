@@ -1466,7 +1466,7 @@ export class CJLanguageWriter extends LanguageWriter {
     writeFieldDeclaration(name: string, type: Type, modifiers: FieldModifier[]|undefined, optional: boolean, initExpr?: LanguageExpression): void {
         const init = initExpr != undefined ? ` = ${initExpr.asString()}` : ``
         let prefix = this.makeFieldModifiersList(modifiers)
-        this.printer.print(`${prefix} var ${name}: ${type.nullable ? '?' : ''}${this.mapType(type)}${init}`)
+        this.printer.print(`${prefix} var ${name}: ${optional ? '?' : ''}${this.mapType(type)}${init}`)
     }
     writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void { }
     writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method, modifiers?: MethodModifier[]) {
@@ -1579,6 +1579,9 @@ export class CJLanguageWriter extends LanguageWriter {
     }
     get supportedFieldModifiers(): FieldModifier[] {
         return [FieldModifier.PUBLIC, FieldModifier.PRIVATE, FieldModifier.PROTECTED, FieldModifier.READONLY, FieldModifier.STATIC]
+    }
+    makeTupleAccess(value: string, index: number): LanguageExpression {
+        return this.makeString(`${value}.value${index}`)
     }
     enumFromOrdinal(value: LanguageExpression, enumType: string): LanguageExpression {
         throw new Error('Not yet implemented')
