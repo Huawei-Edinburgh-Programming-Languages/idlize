@@ -170,9 +170,8 @@ if (options.dts2idl) {
 
 if (options.dts2skoala) {
     const tsCompileContext = new CompileContext()
-    const generatedIDL: IDLEntry[] = []
+    const generatedIDLMap: Record<string, IDLEntry[]> = {}
     const outputDir: string = options.outputDir ?? "./generated/skoala"
-    let outputFileName: string
 
     if (!fs.existsSync(outputDir)) {
         fs.mkdirSync(outputDir, { recursive: true })
@@ -186,32 +185,35 @@ if (options.dts2skoala) {
         {
             compilerOptions: defaultCompilerOptions,
             onSingleFile: (entries: IDLEntry[], outputDirectory, sourceFile) => {
-                generatedIDL.push(...entries)
-                outputFileName = path.basename(sourceFile.fileName, ".d.ts")
+                const fileName = path.basename(sourceFile.fileName, ".d.ts")
+                if (!generatedIDLMap[fileName]) {
+                    generatedIDLMap[fileName] = []
+                }
+                generatedIDLMap[fileName].push(...entries)
             },
             onEnd: () => {
-                if (!outputFileName) {
-                    console.error("Output file name is undefined. Exiting the process.")
-                    return
-                }
+                Object.entries(generatedIDLMap).forEach(([fileName, entries]) => {
+                    const printer = new SkoalaCCodeGenerator(entries, outputDir, fileName)
 
-                const printer = new SkoalaCCodeGenerator(generatedIDL, outputDir, outputFileName)
-                
-                try {
-                    printer.generate()
-                    console.log("Code generation completed.")
-                } catch (error) {
-                    if (error instanceof Error) {
-                        console.error(`Error during code generation: ${error.message}`)
-                    } else {
-                        console.error("Unknown error during code generation:", error)
+                    try {
+                        printer.generate()
+                        console.log(`Code generation completed for ${fileName}.cc`)
+                    } catch (error) {
+                        if (error instanceof Error) {
+                            console.error(`Error during code generation for ${fileName}.cc: ${error.message}`)
+                        } else {
+                            console.error(`Unknown error during code generation for ${fileName}.cc:`, error)
+                        }
                     }
-                }
+                })
+
+                console.log("All files processed.")
             }
         }
     )
     didJob = true
 }
+
 
 if (options.dts2h) {
     const allEntries = new Array<IDLEntry[]>()
