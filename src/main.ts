@@ -170,7 +170,7 @@ if (options.dts2idl) {
 
 if (options.dts2skoala) {
     const tsCompileContext = new CompileContext()
-    const generatedIDLMap: Record<string, IDLEntry[]> = {}
+    const generatedIDLMap = new Map<string, IDLEntry[]>()
     const outputDir: string = options.outputDir ?? "./generated/skoala"
 
     if (!fs.existsSync(outputDir)) {
@@ -186,13 +186,15 @@ if (options.dts2skoala) {
             compilerOptions: defaultCompilerOptions,
             onSingleFile: (entries: IDLEntry[], outputDirectory, sourceFile) => {
                 const fileName = path.basename(sourceFile.fileName, ".d.ts")
-                if (!generatedIDLMap[fileName]) {
-                    generatedIDLMap[fileName] = []
+
+                if (!generatedIDLMap.has(fileName)) {
+                    generatedIDLMap.set(fileName, [])
                 }
-                generatedIDLMap[fileName].push(...entries)
+                
+                generatedIDLMap.get(fileName)?.push(...entries)
             },
             onEnd: () => {
-                Object.entries(generatedIDLMap).forEach(([fileName, entries]) => {
+                generatedIDLMap.forEach((entries, fileName) => {
                     const printer = new SkoalaCCodeGenerator(entries, outputDir, fileName)
 
                     try {
@@ -213,7 +215,6 @@ if (options.dts2skoala) {
     )
     didJob = true
 }
-
 
 if (options.dts2h) {
     const allEntries = new Array<IDLEntry[]>()
