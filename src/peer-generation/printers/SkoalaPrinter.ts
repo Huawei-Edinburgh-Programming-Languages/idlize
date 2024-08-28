@@ -1,6 +1,6 @@
 import * as fs from "fs"
 import * as path from "path"
-import { IDLEntry, IDLMethod, IDLInterface, isInterface, isClass } from "../../idl"
+import { IDLEntry, IDLMethod, IDLInterface, IDLProperty, isInterface, isClass, isProperty } from "../../idl"
 import { IndentedPrinter } from "../../IndentedPrinter"
 
 export class SkoalaCCodeGenerator {
@@ -39,12 +39,15 @@ export class SkoalaCCodeGenerator {
 
     private visitInterface(node: IDLInterface, printer: IndentedPrinter): void {
         const methods = node.methods || []
-        if (methods.length === 0) {
-            console.log(`No methods found in interface/class ${node.name}`)
+        const properties = node.properties || []
+
+        if (methods.length === 0 && properties.length === 0) {
+            console.log(`No methods or properties found in interface/class ${node.name}`)
             return
         }
 
         methods.forEach(method => this.visitMethod(method, printer))
+        properties.forEach(property => this.visitProperty(property, printer))
     }
 
     private visitMethod(method: IDLMethod, printer: IndentedPrinter): void {
@@ -73,6 +76,32 @@ export class SkoalaCCodeGenerator {
             printer.print(`return (${returnType})0; // Placeholder return value`)
         }
 
+        printer.popIndent()
+        printer.print("}")
+        printer.print("")
+    }
+
+    private visitProperty(property: IDLProperty, printer: IndentedPrinter): void {
+        const type = this.convertType(property.type!.name)
+        const propertyName = property.name
+
+        // Generate getter
+        const getterSignature = `${type} get_${propertyName}()`
+        printer.print(getterSignature)
+        printer.print("{")
+        printer.pushIndent()
+        printer.print(`// TODO: Implement getter for ${propertyName}`)
+        printer.print(`return (${type})0; // Placeholder return value`)
+        printer.popIndent()
+        printer.print("}")
+        printer.print("")
+
+        // Generate setter
+        const setterSignature = `void set_${propertyName}(${type} value)`
+        printer.print(setterSignature)
+        printer.print("{")
+        printer.pushIndent()
+        printer.print(`// TODO: Implement setter for ${propertyName}`)
         printer.popIndent()
         printer.print("}")
         printer.print("")
