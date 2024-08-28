@@ -634,14 +634,22 @@ export class OptionConvertor extends BaseArgConvertor {
         printer.writeStatement(printer.makeAssign(valueType, serializedType, printer.makeRuntimeType(RuntimeType.UNDEFINED), true, false))
         printer.runtimeType(this, valueType, value)
         printer.writeMethodCall(`${param}Serializer`, "writeInt8", [castToInt8(valueType, printer.language)])
-        printer.language == Language.CJ
-        ? printer.print(`if (let Some(${value}) <- ${value}) {`)
-        : printer.print(`if (${printer.makeRuntimeTypeCondition(valueType, false, RuntimeType.UNDEFINED).asString()}) {`)
-        printer.pushIndent()
-        printer.writeStatement(printer.makeAssign(`${value}_value`, undefined, printer.makeValueFromOption(value, this.typeConvertor), true))
-        this.typeConvertor.convertorSerialize(param, printer.getObjectAccessor(this.typeConvertor, `${value}_value`), printer)
-        printer.popIndent()
-        printer.print(`}`)
+        if(printer.language != Language.CJ) {
+            printer.makeCondition(
+                printer.makeRuntimeTypeCondition(valueType, false, RuntimeType.UNDEFINED),
+                printer.makeAssign(`${value}_value`, undefined, printer.makeValueFromOption(value, this.typeConvertor), true),
+                undefined,
+                () => { this.typeConvertor.convertorSerialize(param, printer.getObjectAccessor(this.typeConvertor, `${value}_value`), printer) }
+            ).write(printer)
+        }
+        else {
+            printer.makeCondition(
+                printer.makeString(`let Some(${value}) <- ${value}`),
+                printer.makeAssign(`${value}_value`, undefined, printer.makeValueFromOption(value, this.typeConvertor), true),
+                undefined,
+                () => { this.typeConvertor.convertorSerialize(param, printer.getObjectAccessor(this.typeConvertor, `${value}_value`), printer) }
+            ).write(printer)
+        }
     }
     convertorCArg(param: string): string {
         throw new Error("Must never be used")
