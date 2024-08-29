@@ -108,7 +108,7 @@ export class OverloadsPrinter {
             const argName = collapsedMethod.signature.argName(index)
             const castedArgName = `${argName}_casted`
             const castedType = peerMethod.method.signature.args[index]
-            if (this.library.declarationTable.language == Language.ARKTS
+            if (this.language == Language.ARKTS
                 && collapsedMethod.signature.args[index].nullable) {
                 this.printer.writeStatement(
                     this.printer.makeCondition(this.printer.makeNaryOp("==",
