@@ -812,7 +812,7 @@ export abstract class LanguageWriter {
     makeNull(): LanguageExpression {
         return new StringExpression("null")
     }
-    makeRuntimeTypeCondition(typeVarName: string, equals: boolean, type: RuntimeType): LanguageExpression {
+    makeRuntimeTypeCondition(typeVarName: string, equals: boolean, type: RuntimeType, varName?: string): LanguageExpression {
         const op = equals ? "==" : "!="
         return this.makeNaryOp(op, [this.makeRuntimeType(type), this.makeString(typeVarName)])
     }
@@ -1504,11 +1504,8 @@ export class CJLanguageWriter extends LanguageWriter {
     makeArrayLength(array: string, length?: string): LanguageExpression {
         return this.makeString(`${array}.size`)
     }
-    makeRuntimeTypeCondition(typeVarName: string, equals: boolean, type: RuntimeType): LanguageExpression {
-        if(typeVarName.endsWith('_type')) {
-            typeVarName = typeVarName.substring(0, typeVarName.length - 5)
-        }
-        return this.makeString(`let Some(${typeVarName}) <- ${typeVarName}`)
+    makeRuntimeTypeCondition(typeVarName: string, equals: boolean, type: RuntimeType, varName: string): LanguageExpression {
+        return this.makeString(`let Some(${varName}) <- ${varName}`)
     }
     makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression {
         throw new Error(`TBD`)
