@@ -507,7 +507,8 @@ export class IfStatement implements LanguageStatement {
     constructor(public condition: LanguageExpression,
         public thenStatement: LanguageStatement,
         public elseStatement: LanguageStatement | undefined,
-        public insideIfOp: (() => void) | undefined
+        public insideIfOp: (() => void) | undefined,
+        public insideElseOp: (() => void) | undefined
     ) { }
     write(writer: LanguageWriter): void {
         writer.print(`if (${this.condition.asString()}) {`)
@@ -519,6 +520,7 @@ export class IfStatement implements LanguageStatement {
             writer.print("} else {")
             writer.pushIndent()
             this.elseStatement.write(writer)
+            if (this.insideElseOp) { this.insideElseOp!() }
             writer.popIndent()
             writer.print("}")
         } else {
@@ -836,8 +838,8 @@ export abstract class LanguageWriter {
     makeRuntimeTypeDefinedCheck(runtimeType: string): LanguageExpression {
         return this.makeRuntimeTypeCondition(runtimeType, false, RuntimeType.UNDEFINED)
     }
-    makeCondition(condition: LanguageExpression, thenStatement: LanguageStatement, elseStatement?: LanguageStatement, insideIfOp?: () => void): LanguageStatement {
-        return new IfStatement(condition, thenStatement, elseStatement, insideIfOp)
+    makeCondition(condition: LanguageExpression, thenStatement: LanguageStatement, elseStatement?: LanguageStatement, insideIfOp?: () => void, insideElseOp?: () => void): LanguageStatement {
+        return new IfStatement(condition, thenStatement, elseStatement, insideIfOp, insideElseOp)
     }
     makeMultiBranchCondition(conditions: BranchStatement[], elseStatement?: LanguageStatement): LanguageStatement {
         return new MultiBranchIfStatement(conditions, elseStatement)
@@ -1502,8 +1504,11 @@ export class CJLanguageWriter extends LanguageWriter {
     makeArrayLength(array: string, length?: string): LanguageExpression {
         return this.makeString(`${array}.size`)
     }
-    makeCondition(condition: LanguageExpression, thenStatement: LanguageStatement, elseStatement?: LanguageStatement, insideIfOp?: () => void): LanguageStatement {
-        return new IfStatement(condition, thenStatement, elseStatement, insideIfOp)
+    makeRuntimeTypeCondition(typeVarName: string, equals: boolean, type: RuntimeType): LanguageExpression {
+        if(typeVarName.endsWith('_type')) {
+            typeVarName = typeVarName.substring(0, typeVarName.length - 5)
+        }
+        return this.makeString(`let Some(${typeVarName}) <- ${typeVarName}`)
     }
     makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression {
         throw new Error(`TBD`)
