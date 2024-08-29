@@ -201,7 +201,15 @@ export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
     }
 
     convertTuple(node: ts.TupleTypeNode): string {
-        return super.convertTuple(node);
+        if (node.parent == undefined) {
+            return super.convertTuple(node);
+        }
+        //TODO: need to create an alias for ts.TupleTypeNode to prevent es2panda segmentation fault
+        return createTupleDeclName(node.elements
+            .map(e => this.convert(e))
+            .map(e => e.replaceAll("?", "Opt"))
+            .map(e => e.replace(/[\W_]+/g, ""))
+            .join("_"))
     }
 
     convertUnknownKeyword(node: ts.TypeNode): string {
@@ -450,4 +458,7 @@ export function createLiteralDeclName(name: string): string {
 }
 export function createUnionDeclName(name: string): string {
     return `UNION_${name}`
+}
+export function createTupleDeclName(name: string): string {
+    return `TUPLE_${name}`
 }
