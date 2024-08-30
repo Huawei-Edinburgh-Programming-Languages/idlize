@@ -47,6 +47,9 @@ export class TypeDependenciesCollector implements TypeNodeConvertor<ts.Declarati
             return convertTypeNode(this, it)
         })
     }
+    convertNamedTupleMember(node: ts.NamedTupleMember): ts.Declaration[] {
+        return convertTypeNode(this, node)
+    }
     convertArray(node: ts.ArrayTypeNode): ts.Declaration[] {
         return convertTypeNode(this, node.elementType)
     }
