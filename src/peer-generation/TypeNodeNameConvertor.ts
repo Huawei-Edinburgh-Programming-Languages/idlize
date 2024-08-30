@@ -67,6 +67,9 @@ export class TSTypeNodeNameConvertor implements
         const members = node.elements.map(it => this.convertTupleElement(it))
         return `[${members.join(', ')}]`
     }
+    convertNamedTupleMember(node: ts.NamedTupleMember): string {
+        return `${node.name.text}${this.convert(node.type)}`
+    }
     protected convertTupleElement(node: ts.TypeNode): string {
         if (ts.isNamedTupleMember(node)) {
             const name = this.convert(node.name)
@@ -205,11 +208,16 @@ export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
             return super.convertTuple(node);
         }
         //TODO: need to create an alias for ts.TupleTypeNode to prevent es2panda segmentation fault
-        return createTupleDeclName(node.elements
+        const name = createTupleDeclName(node.elements
             .map(e => this.convert(e))
             .map(e => e.replaceAll("?", "Opt"))
             .map(e => e.replace(/[\W_]+/g, ""))
             .join("_"))
+        const genericsTypes = Array.from(
+            new Set(searchTypeParameters(node.parent)
+                ?.map(it => it.name.text)))
+            .join(",")
+        return `${name}${genericsTypes.length > 0 ? ''.concat('<', genericsTypes, '>') : ''}`
     }
 
     convertUnknownKeyword(node: ts.TypeNode): string {
@@ -339,6 +347,9 @@ export class CJTypeNodeNameConvertor implements TypeNodeNameConvertor {
         const members = node.elements.map(it => this.convertTupleElement(it))
         return `[${members.join(', ')}]`
     }
+    convertNamedTupleMember(node: ts.NamedTupleMember): string {
+        throw new Error('Method not implemented.')
+    }
     protected convertTupleElement(node: ts.TypeNode): string {
         if (ts.isNamedTupleMember(node)) {
             const name = this.convert(node.name)
@@ -461,4 +472,16 @@ export function createUnionDeclName(name: string): string {
 }
 export function createTupleDeclName(name: string): string {
     return `TUPLE_${name}`
+}
+
+export function searchTypeParameters(node: ts.Node): ts.NodeArray<ts.TypeParameterDeclaration> | undefined {
+    if (ts.isTypeAliasDeclaration(node)
+        || ts.isClassDeclaration(node)
+        || ts.isInterfaceDeclaration(node)
+        || ts.isMethodDeclaration(node)) {
+        return node.typeParameters
+    }
+    if (node.parent != null && !ts.isSourceFile(node.parent)) {
+        return searchTypeParameters(node.parent)
+    }
 }

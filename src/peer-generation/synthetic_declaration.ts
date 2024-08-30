@@ -41,12 +41,17 @@ export function addSyntheticDeclarationDependency(node: ts.Declaration, dependen
     throw "Declaration is not synthetic"
 }
 
-export function makeSyntheticTypeAliasDeclaration(targetFilename: string, declName: string, type: ts.TypeNode): ts.TypeAliasDeclaration {
+export function makeSyntheticTypeAliasDeclaration(targetFilename: string,
+                                                  declName: string,
+                                                  type: ts.TypeNode,
+                                                  typeParameters?: readonly ts.TypeParameterDeclaration[]
+                                                  ): ts.TypeAliasDeclaration {
+    declName = declName.replace(/<.*>/g, '')
     const decl = makeSyntheticDeclaration(targetFilename, declName, () => {
         return ts.factory.createTypeAliasDeclaration(
             undefined,
             declName,
-            undefined,
+            typeParameters,
             type
         )
     })
@@ -138,6 +143,9 @@ export class ArkTSTypeNodeNameConvertorWithDepsCollector implements TypeNodeName
     }
     convertTuple(node: ts.TupleTypeNode): string {
         return this.convertor.convertTuple(node)
+    }
+    convertNamedTupleMember(node: ts.NamedTupleMember): string {
+        return this.convertor.convertNamedTupleMember(node)
     }
     convertArray(node: ts.ArrayTypeNode): string {
         return this.convertor.convertArray(node)

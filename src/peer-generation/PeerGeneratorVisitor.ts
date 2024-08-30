@@ -51,6 +51,7 @@ import {
     createInterfaceDeclName,
     JavaTypeNodeNameConvertor,
     mapType,
+    searchTypeParameters,
     TSTypeNodeNameConvertor,
     TypeNodeNameConvertor
 } from "./TypeNodeNameConvertor";
@@ -505,6 +506,7 @@ export class ArkTSTypeDepsCollector extends ImportsAggregateCollector {
                 ArkTSTypeDepsCollector.SYNTH_TYPE_FILE_NAME,
                 this.typeToStringConvertor.convertTuple(node),
                 ts.factory.createTupleTypeNode(node.elements),
+                searchTypeParameters(node.parent),
             )
             this.declDependenciesCollector.value.convert(aliasDeclaration).forEach(it => {
                 if (isSourceDecl(it) && (PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it))) {

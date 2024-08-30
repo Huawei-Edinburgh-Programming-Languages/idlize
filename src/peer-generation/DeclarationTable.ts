@@ -89,7 +89,7 @@ export class PointerType extends PrimitiveType {
 
 export type DeclarationTarget =
     ts.ClassDeclaration | ts.InterfaceDeclaration | ts.EnumDeclaration
-    | ts.UnionTypeNode | ts.TypeLiteralNode | ts.ImportTypeNode | ts.FunctionTypeNode | ts.TupleTypeNode
+    | ts.UnionTypeNode | ts.TypeLiteralNode | ts.ImportTypeNode | ts.FunctionTypeNode | ts.TupleTypeNode | ts.NamedTupleMember
     | ts.TemplateLiteralTypeNode | ts.TypeReferenceNode
     | ts.ArrayTypeNode | ts.ParenthesizedTypeNode | ts.OptionalTypeNode | ts.LiteralTypeNode
     | PrimitiveType
@@ -1467,6 +1467,9 @@ class ToDeclarationTargetConvertor implements TypeNodeConvertor<DeclarationTarge
         return node
     }
     convertTuple(node: ts.TupleTypeNode): DeclarationTarget {
+        return node
+    }
+    convertNamedTupleMember(node: ts.NamedTupleMember): DeclarationTarget {
         return node
     }
     convertArray(node: ts.ArrayTypeNode): DeclarationTarget {
