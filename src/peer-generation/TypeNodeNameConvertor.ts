@@ -225,9 +225,10 @@ export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
     }
 
     convertUnion(node: ts.UnionTypeNode): string {
-        const isTypeAliasDecl = node.parent && ts.isTypeAliasDeclaration(node.parent)
+        const isAliasOrFunction = node.parent && (ts.isTypeAliasDeclaration(node.parent)
+            || ts.isFunctionTypeNode(getFirstNotParenthesizedNode(node.parent)))
         const unionTypes = node.types
-            .filter(type => !(isTypeAliasDecl && type.kind == ts.SyntaxKind.VoidKeyword))
+            .filter(type => !(isAliasOrFunction && type.kind == ts.SyntaxKind.VoidKeyword))
             .map(it => this.convert(it))
         if (node?.parent?.parent !== undefined
             && ts.isTupleTypeNode(node.parent)
@@ -484,4 +485,11 @@ export function searchTypeParameters(node: ts.Node): ts.NodeArray<ts.TypeParamet
     if (node.parent != null && !ts.isSourceFile(node.parent)) {
         return searchTypeParameters(node.parent)
     }
+}
+
+function getFirstNotParenthesizedNode(node: ts.Node): ts.Node {
+    if (ts.isParenthesizedTypeNode(node) && node.parent !== undefined) {
+        return getFirstNotParenthesizedNode(node.parent)
+    }
+    return node
 }
