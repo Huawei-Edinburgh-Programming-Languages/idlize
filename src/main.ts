@@ -79,6 +79,10 @@ import { IdlPeerFile } from "./peer-generation/idl/IdlPeerFile"
 import { IdlPeerGeneratorVisitor, IdlPeerProcessor } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
 import { SkoalaCCodeGenerator } from "./peer-generation/printers/SkoalaPrinter"
 
+import { SkoalaVisitor, WrapperProcessor } from "./skoala-generation/SkoalaVisitor"
+import { SkoalaLibrary } from "./skoala-generation/SkoalaLibrary"
+import { generateSkoala } from "./skoala-generation/SkoalaGeneration"
+
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
     .option('--dts2h', 'Convert .d.ts to .h definitions')
@@ -90,6 +94,7 @@ const options = program
     .option('--input-file <name>', 'Name of file to convert, all files in input-dir if none')
     .option('--idl2dts', 'Convert IDL to .d.ts definitions')
     .option('--dts2skoala', 'Convert DTS to skoala definitions')
+    .option('--dts2skoaladraft')
     .option('--idl2h', 'Convert IDL to .h definitions')
     .option('--linter', 'Run linter')
     .option('--linter-suppress-errors <suppress>', 'Error codes to suppress, comma separated, no space')
@@ -217,6 +222,46 @@ if (options.dts2skoala) {
         }
     )
     didJob = true
+}
+
+if (options.dts2skoaladraft) {
+    let skoalaLibrary = new SkoalaLibrary()
+    let processor: WrapperProcessor
+    generate(
+        options.inputDir,
+        undefined,
+        options.outputDir ?? "./out/",
+        (sourceFile, typeChecker) => {
+            processor = new WrapperProcessor(typeChecker)
+            return new SkoalaVisitor({
+                sourceFile: sourceFile,
+                typeChecker: typeChecker,
+                skoalaLibrary: skoalaLibrary,
+            })
+        },
+        {
+            compilerOptions: {
+                ...defaultCompilerOptions,
+                paths: {
+                    "@koalaui/common": [
+                        "/home/huawei/idlize/external/incremental/compat/src/typescript",
+                        // "/home/huawei/idlize/external/incremental/common/src",
+                    ],
+                    "@koalaui/interop": ["/home/huawei/idlize/external/interop/src/interop"],
+                    "@koalaui/arkoala": ["/home/huawei/idlize/external/arkoala/framework/src"],
+                },
+                // traceResolution: true
+            },
+            onEnd(outDir: string) {
+                // const peerProcessor = new LocalPeerProcessor(peerLibrary, declarationTable.typeChecker)
+                processor.process(skoalaLibrary)
+                console.log('TODO: declarationTable.analyze(peerLibrary)');
+                // declarationTable.analyze(peerLibrary)
+
+                generateSkoala(outDir, skoalaLibrary, options)
+            }
+        }
+    )
 }
 
 if (options.dts2h) {
