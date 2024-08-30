@@ -22,6 +22,7 @@ import { RuntimeType, ArgConvertor, BaseArgConvertor, ProxyConvertor, UndefinedC
 import { generateCallbackAPIArguments } from "./StructPrinter"
 import { CppCastExpression } from "../LanguageWriters/writers/CppLanguageWriter"
 import { generateCallbackKindAccess } from "../printers/CallbacksPrinter"
+import { IdlSkoalaLibrary } from "../../skoala-generation/idl/idlSkoalaLibrary"
 
 
 export class StringConvertor extends BaseArgConvertor {
@@ -152,7 +153,7 @@ export class UnionConvertor extends BaseArgConvertor { //
     private memberConvertors: ArgConvertor[]
     private unionChecker: UnionRuntimeTypeChecker
 
-    constructor(private library: IdlPeerLibrary, param: string, private type: idl.IDLUnionType) {
+    constructor(private library: IdlPeerLibrary | IdlSkoalaLibrary, param: string, private type: idl.IDLUnionType) {
         super(idl.toIDLType(`object`), [], false, true, param)
         this.memberConvertors = type.types.map(member => library.typeConvertor(param, member))
         this.unionChecker = new UnionRuntimeTypeChecker(this.memberConvertors)
@@ -802,7 +803,7 @@ export class MaterializedClassConvertor extends BaseArgConvertor { //
 }
 
 export class TypeAliasConvertor extends ProxyConvertor { //
-    constructor(library: IdlPeerLibrary, param: string, typedef: idl.IDLTypedef) {///, private typeArguments?: ts.NodeArray<ts.TypeNode>) {
+    constructor(library: IdlPeerLibrary | IdlSkoalaLibrary, param: string, typedef: idl.IDLTypedef) {///, private typeArguments?: ts.NodeArray<ts.TypeNode>) {
         super(library.typeConvertor(param, typedef.type), typedef.name)
     }
 }
@@ -817,7 +818,7 @@ export interface RetConvertor {
     macroSuffixPart: () => string
 }
 
-export function stubReferenceIfCpp(library: IdlPeerLibrary, type: idl.IDLType, language: Language): idl.IDLType {
+export function stubReferenceIfCpp(library: IdlPeerLibrary | IdlSkoalaLibrary, type: idl.IDLType, language: Language): idl.IDLType {
     if (language === Language.CPP)
         return idl.createReferenceType(library.getTypeName(type))
     return type
