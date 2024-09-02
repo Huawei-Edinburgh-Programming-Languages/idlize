@@ -16,7 +16,7 @@
 import * as ts from "typescript"
 import * as idl from "../../idl"
 import { IndentedPrinter } from "../../IndentedPrinter"
-import { DeclarationTable, DeclarationTarget, PrimitiveType } from "../DeclarationTable"
+import { DeclarationTarget, PrimitiveType } from "../DeclarationTable"
 import { BlockStatement, CppLanguageWriter, ExpressionStatement, FieldModifier, LanguageWriter, Method, NamedMethodSignature, printMethodDeclaration, StringExpression, TSLanguageWriter, Type } from "../LanguageWriters"
 import { PeerClassBase } from "../PeerClass"
 import { PeerLibrary } from "../PeerLibrary"
@@ -24,6 +24,7 @@ import { PeerMethod } from "../PeerMethod"
 import { makeCEventsArkoalaImpl, makeCEventsLibaceImpl } from "../FileGenerators"
 import { generateEventReceiverName, generateEventSignature } from "./HeaderPrinter"
 import { Language, asString, identName } from "../../util"
+import { mapType } from "../TypeNodeNameConvertor"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig"
 import { ImportsCollector } from "../ImportsCollector"
 import { IdlPeerMethod } from "../idl/IdlPeerMethod"
@@ -353,7 +354,6 @@ interface PeerEvent {
     readonly nodeId: number
 }
 `)
-        const typeNodeConvertor = createTypeNodeConvertor(this.library)
         for (const info of infos) {
             const eventClassName = callbackEventNameByInfo(info)
             this.printer.writeInterface(eventClassName, (writer) => {
@@ -470,7 +470,9 @@ interface PeerEvent {
         const contentOp = (writer: LanguageWriter) => {
             for (const info of infos) {
                 writer.writeFieldDeclaration(callbackIdByInfo(info),
-                    new Type(this.mapType(info.originTarget)), undefined, true)
+                    new Type(this.mapType(info.originTarget)),
+                    undefined,
+                    true)
             }
         }
         if (this.library.language == Language.ARKTS)
@@ -479,7 +481,7 @@ interface PeerEvent {
             this.printer.writeInterface(PeerEventsProperties, contentOp)
     }
 
-    protected printCallbackInfo(callbackInfo: CallbackInfo) {
+    protected printCallbackInfo(callbackInfo: CallbackInfo | IdlCallbackInfo) {
         const infoFields = callbackInfo.args.map(it => `(event as ${callbackEventNameByInfo(callbackInfo)}).${it.name}`).join(', ')
         this.printer.print(`case ${PeerEventKind}.${callbackIdByInfo(callbackInfo)}: properties.${callbackIdByInfo(callbackInfo)}?.(${infoFields}); break`)
     }
@@ -507,6 +509,32 @@ interface PeerEvent {
         this.printParseFunction(filteredCallbacks)
         this.printProperties(filteredCallbacks)
         this.printEventsDeliverer(filteredCallbacks)
+    }
+}
+
+class ArkTSEventsVisitor extends TSEventsVisitorBase {
+    private readonly  typeNodeConvertor = createTypeNodeConvertor(this.library)
+    constructor(protected readonly library: PeerLibrary) {
+        super(library)
+    }
+    protected printCallbackInfo(callbackInfo: CallbackInfo | IdlCallbackInfo) {
+        //TODO: causes compile error
+        const isSupport = !this.typeNodeConvertor.convert(callbackInfo.originTarget as ts.TypeNode).startsWith("Callback")
+        if (isSupport) {
+            super.printCallbackInfo(callbackInfo);
+        }
+    }
+
+    protected typeConvertor(param: string, type: ts.TypeNode, isOptional: boolean): ArgConvertor {
+        return this.library.declarationTable.typeConvertor(param, type, isOptional)
+    }
+
+    protected printParseFunction(infos: CallbackInfo[]) {
+        //TODO: Not implemented yet
+    }
+
+    protected mapType(type: ts.TypeNode): string {
+        return this.typeNodeConvertor.convert(type)
     }
 }
 
@@ -538,35 +566,14 @@ class IdlTSEventsVisitor extends TSEventsVisitorBase {
     }
 }
 
-class ArkTSEventsVisitor extends TSEventsVisitor {
-    protected printCallbackInfo(callbackInfo: CallbackInfo) {
-        const typeNodeConvertor = createTypeNodeConvertor(this.library)
-        //TODO: causes compile error
-        const isSupport = !typeNodeConvertor.convert(callbackInfo.originTarget).startsWith("Callback")
-        if (isSupport) {
-            super.printCallbackInfo(callbackInfo);
-        }
-    }
-
-    protected printParseFunction(infos: CallbackInfo[]) {
-        //TODO: Not implemented yet
-    }
-}
-
 export function printEvents(library: PeerLibrary | IdlPeerLibrary): string {
-    const visitor = library instanceof PeerLibrary
-        ? new TSEventsVisitor(library) : new IdlTSEventsVisitor(library)
-    visitor.print()
-    return visitor.printer.getOutput().join("\n")
-
-
     let visitor
-    switch (library.declarationTable.language) {
+    switch (library.language) {
         case Language.ARKTS:
-            visitor = new ArkTSEventsVisitor(library)
+            visitor = library instanceof PeerLibrary ? new ArkTSEventsVisitor(library) : new IdlTSEventsVisitor(library)
             break
         case Language.TS:
-            visitor = new TSEventsVisitor(library)
+            visitor = library instanceof PeerLibrary ? new TSEventsVisitor(library) : new IdlTSEventsVisitor(library)
             break
         default:
             throw new Error("Not implemented yet")
