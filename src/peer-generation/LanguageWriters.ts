@@ -1237,7 +1237,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         return super.makeValueFromOption(value, destinationConvertor)
     }
     makeCallIsResource(value: string): LanguageExpression {
-        return this.makeString(`(${value} instanceof Resource)`);
+        return this.makeString(`isResource(${value})`);
     }
     makeEnumEntity(enumEntity: EnumEntity, isExport: boolean): LanguageStatement {
         return new ArkTSEnumEntityStatement(enumEntity, isExport);
