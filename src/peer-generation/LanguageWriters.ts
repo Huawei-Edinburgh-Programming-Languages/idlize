@@ -1179,7 +1179,9 @@ export class ETSLanguageWriter extends TSLanguageWriter {
             return convertor.aliasName
         }
         if (convertor instanceof ArrayConvertor) {
-            return `${convertor.elementTypeName()}[]`
+            return convertor.isArrayType
+                ? `${convertor.elementTypeName()}[]`
+                : `Array<${convertor.elementTypeName()}>`
         }
         switch (type.name) {
             case 'KPointer': return 'long'
