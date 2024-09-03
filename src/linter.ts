@@ -22,6 +22,7 @@ import {
     getLineNumberString,
     identName,
     isCommonMethodOrSubclass,
+    Language,
     nameOrNull,
     zip
 } from "./util"
@@ -57,6 +58,27 @@ export enum LinterError {
     EVENT_HANDLER_WITH_FUNCTIONAL_PARAM_TYPE,
     CALLBACK_WITH_FUNCTIONAL_PARAM_TYPE,
 }
+
+export const CJKeywords = [
+    'Int8', 'Int16', 'Int32', 'Int64', 'IntNative',
+    'UInt8', 'UInt16', 'UInt32', 'UInt64', 'UIntNative',
+    'Float16', 'Float32', 'Float64', 'Rune',
+    'Bool', 'Unit', 'Nothing', 'struct',
+    'enum', 'This', 'package', 'import',
+    'class', 'interface', 'func', 'main',
+    'let', 'var', 'const', 'type', 'init',
+    'this', 'super', 'if', 'else', 'case',
+    'try', 'catch', 'finally', 'for', 'do',
+    'while', 'throw', 'return', 'continue',
+    'break', 'is', 'as', 'in', 'match',
+    'from', 'where', 'extend', 'spawn',
+    'synchronized', 'macro', 'quote', 'true',
+    'false', 'static', 'public', 'private',
+    'protected', 'override', 'redef', 'abstract',
+    'open', 'operator', 'foreign', 'inout',
+    'prop', 'mut', 'unsafe', 'get', 'set',
+    'min', 'max'
+]
 
 export interface LinterMessage {
     file: ts.SourceFile
@@ -595,4 +617,14 @@ export function toLinterString(
         )
         .filter(element => (element?.length ?? 0) > 0)
     return [errors.join("\n"), errors.length > 0 ? 1 : 0, printHistogram(histogram)]
+}
+
+export function filterLanguageKeywords(word: string, lang?: Language): string {
+    if(lang) {
+        switch(lang) {
+            case Language.CJ: return (CJKeywords.indexOf(word) > -1  ? word + "Var" : word)
+            default: return word
+        }
+    }
+    return word
 }
