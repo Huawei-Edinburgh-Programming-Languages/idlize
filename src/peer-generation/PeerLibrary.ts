@@ -21,12 +21,13 @@ import { PeerFile } from "./PeerFile";
 import { ComponentDeclaration } from './PeerGeneratorVisitor';
 import { BuilderClass } from './BuilderClass';
 import { Language } from '../util';
+import { Library } from '../Library';
 
 export type PeerLibraryOutput = {
     outputC: string[]
 }
 
-export class PeerLibrary {
+export class PeerLibrary implements Library<PeerFile> {
     public readonly files: PeerFile[] = []
     public readonly builderClasses: Map<string, BuilderClass> = new Map()
     public get buildersToGenerate(): BuilderClass[] {

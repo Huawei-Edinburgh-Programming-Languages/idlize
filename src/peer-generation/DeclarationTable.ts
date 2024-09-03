@@ -35,6 +35,7 @@ import { CallbackInfo, collectCallbacks } from "./printers/EventsPrinter"
 import { EnumMember, NodeArray } from "typescript";
 import { extractBuilderFields } from "./BuilderClass"
 import { setEngine } from "node:crypto"
+import { DeclTable, FieldInterface, StructInterface } from "../Library"
 
 export const ResourceDeclaration = ts.factory.createInterfaceDeclaration(undefined, "Resource", undefined, undefined, [
     ts.factory.createPropertySignature(undefined, "id", undefined, ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)),
@@ -94,7 +95,7 @@ export type DeclarationTarget =
     | ts.ArrayTypeNode | ts.ParenthesizedTypeNode | ts.OptionalTypeNode | ts.LiteralTypeNode
     | PrimitiveType
 
-export class FieldRecord {
+export class FieldRecord implements FieldInterface<DeclarationTarget> {
     constructor(public declaration: DeclarationTarget, public type: ts.TypeNode | undefined, public name: string, public optional: boolean = false) { }
 }
 
@@ -104,7 +105,7 @@ export interface StructVisitor {
     visitInseparable(): void
 }
 
-class StructDescriptor {
+export class StructDescriptor implements StructInterface<DeclarationTarget> {
     supers: DeclarationTarget[] = []
     deps = new Set<DeclarationTarget>()
     isPacked: boolean = false
@@ -127,7 +128,7 @@ class StructDescriptor {
     }
 }
 
-export class DeclarationTable {
+export class DeclarationTable implements DeclTable<DeclarationTarget> {
     private typeMap = new Map<ts.TypeNode, [DeclarationTarget, string[], boolean]>()
     private toTargetConvertor: ToDeclarationTargetConvertor
     typeChecker: ts.TypeChecker | undefined = undefined
@@ -188,7 +189,7 @@ export class DeclarationTable {
         return convertTypeNode(this.toTargetConvertor, node)
     }
 
-    computeTargetName(target: DeclarationTarget, optional: boolean, idlPrefix: string = PrimitiveType.ArkPrefix): string {
+    computeTargetName(target: DeclarationTarget, optional: boolean = false, idlPrefix: string = PrimitiveType.ArkPrefix): string {
         return this.computeTargetNameImpl(target, optional, idlPrefix)
     }
 
