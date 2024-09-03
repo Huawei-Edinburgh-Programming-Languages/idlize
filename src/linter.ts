@@ -22,7 +22,6 @@ import {
     getLineNumberString,
     identName,
     isCommonMethodOrSubclass,
-    Language,
     nameOrNull,
     zip
 } from "./util"
@@ -619,12 +618,6 @@ export function toLinterString(
     return [errors.join("\n"), errors.length > 0 ? 1 : 0, printHistogram(histogram)]
 }
 
-export function filterLanguageKeywords(word: string, lang?: Language): string {
-    if(lang) {
-        switch(lang) {
-            case Language.CJ: return (CJKeywords.indexOf(word) > -1  ? word + "Var" : word)
-            default: return word
-        }
-    }
+export function filterLanguageKeywords(word: string): string {
     return word
 }
