@@ -1,0 +1,85 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import { nativeModule } from "./NativeModule"
+import { SerializerBase } from "@arkoala/arkui/peers/SerializerBase"
+import { createSerializer } from "@arkoala/arkui/peers/Serializer"
+
+class JSAPIArgument {
+    name: String
+    value: String
+
+    constructor(name: String, value: String) {
+        this.name = name;
+        this.value = value;
+    }
+}
+
+export class Application {
+    private buffer = new byte[256];
+
+    constructor() {
+
+    }
+
+    private start(): Application {
+        return this
+    }
+
+    private checkEvents(what: int) {
+        console.log("checkEvents " + what);
+        nativeModule()._CheckArkoalaGeneratedEvents(this.buffer, this.buffer.length);
+    }
+
+    private updateState() {
+        console.log("updateState")
+    }
+
+    private render() {
+        console.log("render")
+    }
+
+    private callJSAPI(env: long, arg: JSAPIArgument, callback: int) {
+        const serializer = SerializerBase.get(createSerializer, 0);
+        serializer.writeString(arg.name);
+        serializer.writeString(arg.value);
+        nativeModule()._CallExternalAPI(env, callback, serializer.asArray(), serializer.currentPosition());
+    }
+
+    loopInteration(env: long, what: int, arg0: int) {
+        if (what == 3 && env != 0) {
+            this.callJSAPI(env, new JSAPIArgument("test", "arg" + what), arg0);
+        }
+        this.checkEvents(what)
+        this.updateState()
+        this.render()
+    }
+
+    static startApplication(callbacks: long): Application {
+        nativeModule()._SetCallbackMethod(callbacks)
+        return new Application().start()
+    }
+}
+
+export function main() {
+    const app = Application.startApplication(0)
+    try {
+        for (let i = 0; i < 10; i++) {
+            app.loopInteration(0, i, 0)
+        }
+    } catch (e: Error) {
+        console.log(e.stack)
+    }
+}
