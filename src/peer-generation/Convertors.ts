@@ -580,7 +580,7 @@ export class CustomTypeConvertor extends BaseArgConvertor {
     private static knownTypes: Map<string, [string, boolean][]> = new Map([
         ["LinearGradient", [["angle", true], ["direction", true], ["colors", false], ["repeating", true]]]
     ])
-    private customName: string
+    public readonly customName: string
     constructor(param: string, customName: string, tsType?: string) {
         super(tsType ?? "Object", [RuntimeType.OBJECT], false, true, param)
         this.customName = customName

@@ -20,6 +20,7 @@ import {
     ArgConvertor,
     ArrayConvertor,
     BaseArgConvertor,
+    CustomTypeConvertor,
     EnumConvertor,
     MapConvertor,
     OptionConvertor,
@@ -1211,18 +1212,6 @@ export class ETSLanguageWriter extends TSLanguageWriter {
             super.runtimeType(param, valueType, value);
         }
     }
-    makeUnionSelector(value: string, valueType: string): LanguageStatement {
-        let statements = [this.makeAssign("type", undefined, this.makeString(`typeof ${value}`))]
-        Object.keys(RuntimeType)
-            .filter((value) => isNaN(Number(value)))
-            .forEach((value) => {
-                statements.push(
-                    this.makeCondition(this.makeNaryOp("==", [this.makeString("type"), this.makeString(`"${value.toLowerCase()}"`)]),
-                        this.makeAssign(valueType, undefined, this.makeString(`RuntimeType.${value}`), false))
-                )
-        })
-        return new BlockStatement(statements)
-    }
     makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index?: number): LanguageExpression {
         return this.makeString(`${value} as ${type.name}`)
     }
@@ -1230,6 +1219,9 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         return this.makeCast(value, new Type('int'));
     }
     makeDiscriminatorFromFields(convertor: {targetType: (writer: LanguageWriter) => Type}, value: string, accessors: string[]): LanguageExpression {
+        if (convertor instanceof CustomTypeConvertor) {
+            return this.makeString(`${value} instanceof ${convertor.customName}`)
+        }
         return this.makeString(`${value} instanceof ${convertor.targetType(this).name}`)
     }
     makeValueFromOption(value: string, destinationConvertor: ArgConvertor): LanguageExpression {
