@@ -275,7 +275,7 @@ export class EnumConvertor extends BaseArgConvertor {
             value = printer.ordinalFromEnum(printer.makeString(value),
                 identName(this.enumType.name)!).asString()
         }
-        printer.writeMethodCall(`${param}Serializer`, "writeInt32", [value])
+        printer.writeMethodCall(`${param}Serializer`, "writeInt32", [printer.makeCastEnumToInt(this, value)])
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
         let readExpr = printer.makeMethodCall(`${param}Deserializer`, "readInt32", [])
@@ -295,6 +295,10 @@ export class EnumConvertor extends BaseArgConvertor {
     }
     // TODO: bit clumsy.
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
+        //TODO: move to LanguageWrites
+        if (writer.language == Language.ARKTS) {
+            return writer.makeString(`${value} instanceof ${this.enumTypeName()}`)
+        }
         let low: number|undefined = undefined
         let high: number|undefined = undefined
         // TODO: proper enum value computation for cases where enum members have computed initializers.
@@ -316,6 +320,13 @@ export class EnumConvertor extends BaseArgConvertor {
             writer.makeNaryOp(">=", [ordinal, writer.makeString(low!.toString())]),
             writer.makeNaryOp("<=",  [ordinal, writer.makeString(high!.toString())])
         ])
+    }
+    targetType(writer: LanguageWriter): Type {
+        //TODO: move to LanguageWrites
+        if (writer.language == Language.ARKTS) {
+            return new Type(this.enumTypeName())
+        }
+        return super.targetType(writer);
     }
 }
 
@@ -453,7 +464,7 @@ export class UnionRuntimeTypeChecker {
             if (discriminator) return discriminator
         }
         return writer.makeNaryOp("||", convertor.runtimeTypes.map(it =>
-            writer.makeNaryOp("==", [writer.makeUnionVariantCondition(`${value}_type`, RuntimeType[it], index)])))
+            writer.makeNaryOp("==", [writer.makeUnionVariantCondition(convertor, `${value}_type`, RuntimeType[it], index)])))
     }
     reportConflicts(context: string) {
         if (this.discriminators.filter(([discriminator, _, __]) => discriminator === undefined).length > 1) {
@@ -482,6 +493,9 @@ export class UnionConvertor extends BaseArgConvertor {
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         printer.writeStatement(printer.makeAssign(`${value}_type`, Type.Int32, printer.makeUnionTypeDefaultInitializer(), true, false))
         printer.writeStatement(printer.makeUnionSelector(value, `${value}_type`))
+        if (this.type.getText().includes("Color | string | Resource | ColoringStrategy")) {
+            console.log("Color | string | Resource | ColoringStrategy")
+        }
         this.memberConvertors.forEach((it, index) => {
             const maybeElse = (index > 0 && this.memberConvertors[index - 1].runtimeTypes.length > 0) ? "else " : ""
             const conditions = this.unionChecker.makeDiscriminator(value, index, printer)
@@ -697,8 +711,14 @@ export class AggregateConvertor extends BaseArgConvertor {
         throw new Error("Do not use for aggregates")
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
+        if (this.tsTypeName.includes("LITERAL_TypeIsOn")) {
+            console.log("ToggleOptions")
+        }
         this.memberConvertors.forEach((it, index) => {
             let memberName = this.members[index][0]
+            if (`${value}_${memberName}` == "value_borderColor_value_1_left") {
+                console.log("`${value}.${memberName}`")
+            }
             printer.writeStatement(
                 printer.makeAssign(`${value}_${memberName}`, undefined,
                     printer.makeString(`${value}.${memberName}`), true))

@@ -868,7 +868,7 @@ export abstract class LanguageWriter {
     makeUnionSelector(value: string, valueType: string): LanguageStatement {
         return this.makeAssign(valueType, undefined, this.makeString(`runtimeType(${value})`), false)
     }
-    makeUnionVariantCondition(value: string, type: string, index?: number): LanguageExpression {
+    makeUnionVariantCondition(_: ArgConvertor, value: string, type: string, index?: number): LanguageExpression {
         return this.makeString(`RuntimeType.${type.toUpperCase()} == ${value}`)
     }
     makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index?: number): LanguageExpression {
@@ -977,6 +977,9 @@ export abstract class LanguageWriter {
     }
     compareLiteral(expr: LanguageExpression, literal: string): LanguageExpression {
         return this.makeNaryOp('===', [expr, this.makeString(`"${literal}"`)])
+    }
+    makeCastEnumToInt(_: EnumConvertor, value: string): string {
+        return value;
     }
 }
 
@@ -1200,7 +1203,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     nativeReceiver(): string { return 'NativeModule' }
     makeUnsafeCast(convertor: ArgConvertor, param: string): string {
         if (convertor instanceof EnumConvertor && !param.endsWith(".value")) {
-            return `(${param} as ${convertor.enumTypeName()}).value`
+            return `(${param} as ${convertor.enumTypeName()}).${convertor.isStringEnum ? 'ordinal' : 'value'}`
         }
         return super.makeUnsafeCast(convertor, param)
     }
@@ -1216,7 +1219,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         return this.makeString(`${value} as ${type.name}`)
     }
     ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression {
-        return this.makeCast(value, new Type('int'));
+        return value;
     }
     makeDiscriminatorFromFields(convertor: {targetType: (writer: LanguageWriter) => Type}, value: string, accessors: string[]): LanguageExpression {
         if (convertor instanceof CustomTypeConvertor) {
@@ -1237,9 +1240,6 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         return new ArkTSEnumEntityStatement(enumEntity, isExport);
     }
     getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string {
-        if (convertor instanceof EnumConvertor) {
-            return `(${value} as ${convertor.enumTypeName()}).${convertor.isStringEnum ? "ordinal" : "value"}`
-        }
         if (convertor instanceof StringConvertor && convertor.isLiteral()) {
             return `${value}.toString()`
         }
@@ -1251,6 +1251,15 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     }
     compareLiteral(expr: LanguageExpression, literal: string): LanguageExpression {
         return super.makeNaryOp('instanceof', [expr, this.makeString(createLiteralDeclName(literal))]);
+    }
+    makeCastEnumToInt(convertor: EnumConvertor, value: string): string {
+        return `${value}.${convertor.isStringEnum ? "ordinal" : "value"}`;
+    }
+    makeUnionVariantCondition(convertor: ArgConvertor, value: string, type: string, index?: number): LanguageExpression {
+        if (convertor instanceof EnumConvertor) {
+            return this.makeString(`${value.replace("_type", "")} instanceof ${convertor.enumTypeName()}`)
+        }
+        return super.makeUnionVariantCondition(convertor, value, type, index);
     }
 }
 
@@ -1356,7 +1365,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     makeUnionSelector(value: string, valueType: string): LanguageStatement {
         return this.makeAssign(valueType, undefined, this.makeMethodCall(value, "getSelector", []), false)
     }
-    makeUnionVariantCondition(value: string, type: string, index: number): LanguageExpression {
+    makeUnionVariantCondition(_: ArgConvertor, value: string, type: string, index: number): LanguageExpression {
         return this.makeString(`${value} == ${index}`)
     }
     makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index: number) {
@@ -1762,7 +1771,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     override makeUnionSelector(value: string, valueType: string): LanguageStatement {
         return this.makeAssign(valueType, undefined, this.makeString(`${value}.selector`), false)
     }
-    override makeUnionVariantCondition(value: string, type: string, index: number) {
+    override makeUnionVariantCondition(_: ArgConvertor, value: string, type: string, index: number) {
         return this.makeString(`${value} == ${index}`)
     }
     override makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index: number) {
