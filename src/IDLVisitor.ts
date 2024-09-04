@@ -19,7 +19,8 @@ import {
     createBooleanType, createContainerType, createEnumType, createNullType, createNumberType, createReferenceType, createStringType, createTypedef,
     createTypeParameterReference, createUndefinedType, createUnionType, createVoidType, IDLCallable, IDLCallback, IDLConstant, IDLConstructor,
     IDLEntity, IDLEntry, IDLEnum, IDLEnumMember, IDLExtendedAttribute, IDLFunction, IDLInterface, IDLKind, IDLMethod, IDLModuleType, IDLParameter, IDLProperty, IDLTopType, IDLType, IDLTypedef,
-    IDLAccessorAttribute, IDLExtendedAttributes, isConstant, isProperty, createAnyType
+    IDLAccessorAttribute, IDLExtendedAttributes, isConstant, isProperty, createAnyType,
+    getExtAttribute
 } from "./idl"
 import {
     asString, capitalize, getComment, getDeclarationsByNode, getExportedDeclarationNameByDecl, getExportedDeclarationNameByNode, identName, isCommonMethodOrSubclass, isDefined, isExport, isNodePublic, isPrivate, isProtected, isReadonly, isStatic, nameOrNull, stringOrNone
@@ -232,7 +233,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             (ts.isIdentifier(it.expression)) ?
                 ts.idText(it.expression) :
                     `NON_IDENTIFIER_HERITAGE ${asString(it)}`
-            return createReferenceType(name)
+            return createReferenceType(name, it.typeArguments)
         })
     }
 
@@ -273,6 +274,13 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         if (name && ts.isClassDeclaration(node) && isCommonMethodOrSubclass(this.typeChecker, node)) {
             result.push({name: IDLExtendedAttributes.Component, value: PeerGeneratorConfig.mapComponentName(name)})
         }
+        inheritance.forEach(it => {
+            let typeParams = getExtAttribute(it, IDLExtendedAttributes.TypeArguments)
+            if (typeParams) {
+                result.push({ name: IDLExtendedAttributes.TypeParameters, value:typeParams })
+                it.extendedAttributes = undefined
+            }
+        })
         if (inheritance.length > 1) {
             result.push({name: IDLExtendedAttributes.Interfaces, value: inheritance.slice(1).map(it => it.name).join(", ")})
         }
