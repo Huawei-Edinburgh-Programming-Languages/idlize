@@ -110,9 +110,9 @@ export class WrapperMethod {
 export class WrapperField {
     constructor(
         // public declarationTarget: DeclarationTarget,
+        public field: Field,
         public argConvertor?: ArgConvertor,
         public retConvertor?: RetConvertor,
-        public field?: Field
     ) { }
 }
 
@@ -123,7 +123,7 @@ export class WrapperClass {
         public readonly superClass: WrapperClass | ts.InterfaceDeclaration | ts.ClassDeclaration | string,
         public readonly isSuperClassWrapper: boolean,
         public readonly fields: WrapperField[],
-        public readonly ctor: WrapperMethod,
+        public readonly ctor: WrapperMethod | undefined,
         public readonly finalizer: WrapperMethod,
         public readonly importFeatures: ImportFeature[],
         public readonly methods: WrapperMethod[],

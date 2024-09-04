@@ -1,6 +1,8 @@
 import * as path from "path"
 import * as ts from "typescript"
 import { WrapperClass } from "./WrapperClass";
+import { Library } from "../Library";
+import { Language } from "../util";
 
 export type ImportFeature = { 
     feature: string, 
@@ -17,17 +19,23 @@ export class SkoalaFile {
     readonly draftImports: Set<ts.ImportDeclaration> = new Set()
     readonly importFeatures: Set<ImportFeature> = new Set()
 
-    readonly name: string
+    readonly originalFilename: string
     readonly baseName: string
 
     constructor(
         public readonly originalFile: ts.SourceFile
     ) {
-        this.name = originalFile.fileName
-        this.baseName = path.basename(this.name)
+        this.originalFilename = originalFile.fileName
+        this.baseName = path.basename(this.originalFilename)
     }
 }
 
-export class SkoalaLibrary {
+export class SkoalaLibrary implements Library<SkoalaFile> {
     public readonly files: SkoalaFile[] = []
+    get language(): Language {
+        return Language.TS
+    }
+    findFileByOriginalFilename(filename: string): SkoalaFile | undefined {
+        return this.files.find(it => it.originalFilename === filename)
+    }
 }

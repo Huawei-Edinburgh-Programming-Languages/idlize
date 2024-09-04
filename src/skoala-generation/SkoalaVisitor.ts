@@ -6,7 +6,7 @@ import { WrapperClass, WrapperField, WrapperMethod } from './WrapperClass';
 import { ImportExport } from './ImportExport';
 import { TypeNodeConvertor } from '../peer-generation/TypeNodeConvertor';
 import { TSTypeNodeNameConvertor, TypeNodeNameConvertor } from '../peer-generation/TypeNodeNameConvertor';
-import { Method, NamedMethodSignature, Type } from '../peer-generation/LanguageWriters';
+import { Field, FieldModifier, Method, MethodModifier, MethodSignature, NamedMethodSignature, Type } from '../peer-generation/LanguageWriters';
 
 export type SkoalaGeneratorVisitorOptions = {
     sourceFile: ts.SourceFile
@@ -16,13 +16,8 @@ export type SkoalaGeneratorVisitorOptions = {
 
 export class SkoalaVisitor implements GenericVisitor<void> {
     private readonly sourceFile: ts.SourceFile
-    // declarationTable: DeclarationTable
-
-    // static readonly serializerBaseMethods = serializerBaseMethods()
-
     readonly skoalaLibrary: SkoalaLibrary
     readonly currentFile: SkoalaFile
-
 
     constructor(options: SkoalaGeneratorVisitorOptions) {
         this.sourceFile = options.sourceFile
@@ -126,7 +121,7 @@ export class WrapperProcessor {
         let isSuperClassWrapper = heritageClasses.length > 1
         let superClassName = heritageClasses.pop()!
         let constructor = ts.isClassDeclaration(node) ? node.members.find(ts.isConstructorDeclaration) : undefined
-        let wConstructor = this.makeWrapperMethod(name, constructor, this.typeNodeConvertor)
+        let wConstructor = constructor ? this.makeWrapperMethod(name, constructor, this.typeNodeConvertor) : undefined
         let wFields = ts.isInterfaceDeclaration(node)
             ? node.members
                 .filter(ts.isPropertySignature)
@@ -161,14 +156,63 @@ export class WrapperProcessor {
     private makeWrapperField(className: string,
         property: ts.PropertyDeclaration | ts.PropertySignature
     ): WrapperField {
-        return new WrapperField()
+        let modifiers: FieldModifier[] = []
+        property.modifiers?.forEach(modifier => {
+            if (modifier.kind == ts.SyntaxKind.PublicKeyword) {
+                modifiers.push(FieldModifier.PUBLIC)
+            }
+            if (modifier.kind == ts.SyntaxKind.PrivateKeyword) {
+                modifiers.push(FieldModifier.PRIVATE)
+            }
+            if (modifier.kind == ts.SyntaxKind.StaticKeyword) {
+                modifiers.push(FieldModifier.STATIC)
+            }
+            if (modifier.kind == ts.SyntaxKind.ReadonlyKeyword) {
+                modifiers.push(FieldModifier.READONLY)
+            }
+        })
+        // TODO: add convertor to convers property.type, property.name
+        // TODO: add arg and ret convertors
+        return new WrapperField(
+            new Field(property.name.getText(), new Type(property.type?.getText() ?? ""), modifiers),
+            undefined,
+            undefined,
+        )
     }
 
     private makeWrapperMethod(parentName: string,
-        method: ts.ConstructorDeclaration | ts.MethodDeclaration | ts.MethodSignature | undefined,
+        method: ts.ConstructorDeclaration | ts.MethodDeclaration | ts.MethodSignature,
         typeNodeConverter: TypeNodeNameConvertor
     ): WrapperMethod {
-        return new WrapperMethod(parentName, new Method(method ? (method.name?.getText() ?? "_") : "ctor", new NamedMethodSignature(Type.Void, [], []), []))
+        // TODO: add convertor to convers method.type, method.name, method.parameters[..].type, method.parameters[..].name
+        // TODO: add arg and ret convertors
+        let args: Type[] = []
+        let argsNames: string[] = []
+        method.parameters.forEach(param => {
+            args.push(new Type(param.type?.getText() ?? ""))
+            argsNames.push(param.name.getText())
+        })
+
+        let modifiers: MethodModifier[] = []
+        method.modifiers?.forEach(modifier => {
+            if (modifier.kind == ts.SyntaxKind.PublicKeyword) {
+                modifiers.push(MethodModifier.PUBLIC)
+            }
+            if (modifier.kind == ts.SyntaxKind.PrivateKeyword) {
+                modifiers.push(MethodModifier.PRIVATE)
+            }
+            if (modifier.kind == ts.SyntaxKind.StaticKeyword) {
+                modifiers.push(MethodModifier.STATIC)
+            }
+        })
+
+        if (ts.isConstructorDeclaration(method)) {
+            return new WrapperMethod(parentName, new Method("constructor", new NamedMethodSignature(Type.Void, args, argsNames), modifiers))
+        } else {
+            if (ts.isGetAccessor(method)) modifiers.push(MethodModifier.GETTER)
+            if (ts.isSetAccessor(method)) modifiers.push(MethodModifier.SETTER)
+            return new WrapperMethod(parentName, new Method(method.name.getText(), new NamedMethodSignature(new Type(method.type?.getText() ?? ""), args, argsNames), modifiers))
+        } 
     }
 
     private makeFinalizerMethod(parentName: string): WrapperMethod {
