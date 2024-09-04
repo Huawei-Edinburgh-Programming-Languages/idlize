@@ -277,7 +277,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         inheritance.forEach(it => {
             let typeParams = getExtAttribute(it, IDLExtendedAttributes.TypeArguments)
             if (typeParams) {
-                result.push({ name: IDLExtendedAttributes.TypeParameters, value:typeParams })
+                result.push({ name: IDLExtendedAttributes.HeritageTypeParameters, value:typeParams })
                 it.extendedAttributes = undefined
             }
         })
