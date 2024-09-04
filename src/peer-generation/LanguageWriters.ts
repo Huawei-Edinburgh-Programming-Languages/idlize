@@ -911,8 +911,8 @@ export abstract class LanguageWriter {
     makeUnionSelector(value: string, valueType: string): LanguageStatement {
         return this.makeAssign(valueType, undefined, this.makeString(`runtimeType(${value})`), false)
     }
-    makeUnionVariantCondition(_: ArgConvertor, value: string, type: string, index?: number): LanguageExpression {
-        return this.makeString(`RuntimeType.${type.toUpperCase()} == ${value}`)
+    makeUnionVariantCondition(_convertor: ArgConvertor, _valueName: string, valueType: string, type: string, index?: number): LanguageExpression {
+        return this.makeString(`RuntimeType.${type.toUpperCase()} == ${valueType}`)
     }
     makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index?: number): LanguageExpression {
         return this.makeString(`unsafeCast<${type.name}>(${value})`)
@@ -1299,11 +1299,13 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     makeCastEnumToInt(convertor: EnumConvertor, value: string): string {
         return `${value}.${convertor.isStringEnum ? "ordinal" : "value"}`;
     }
-    makeUnionVariantCondition(convertor: ArgConvertor, value: string, type: string, index?: number): LanguageExpression {
+    makeUnionVariantCondition(convertor: ArgConvertor, valueName: string, valueType: string, type: string, index?: number): LanguageExpression {
         if (convertor instanceof EnumConvertor) {
-            return this.makeString(`${value.replace("_type", "")} instanceof ${convertor.enumTypeName()}`)
+            return this.makeString(`${valueName} instanceof ${convertor.enumTypeName()}`)
+        } else if (convertor instanceof StringConvertor && convertor.isLiteral()) {
+            return this.makeString(`${valueName} instanceof ${convertor.tsTypeName}`)
         }
-        return super.makeUnionVariantCondition(convertor, value, type, index);
+        return super.makeUnionVariantCondition(convertor, valueName, valueType, type, index);
     }
 }
 
@@ -1413,8 +1415,8 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     makeUnionSelector(value: string, valueType: string): LanguageStatement {
         return this.makeAssign(valueType, undefined, this.makeMethodCall(value, "getSelector", []), false)
     }
-    makeUnionVariantCondition(_: ArgConvertor, value: string, type: string, index: number): LanguageExpression {
-        return this.makeString(`${value} == ${index}`)
+    makeUnionVariantCondition(_convertor: ArgConvertor, valueName: string, _valueType: string, type: string, index: number): LanguageExpression {
+        return this.makeString(`${valueName} == ${index}`)
     }
     makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index: number) {
         return this.makeMethodCall(value, `getValue${index}`, [])
@@ -1870,8 +1872,8 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     override makeUnionSelector(value: string, valueType: string): LanguageStatement {
         return this.makeAssign(valueType, undefined, this.makeString(`${value}.selector`), false)
     }
-    override makeUnionVariantCondition(_: ArgConvertor, value: string, type: string, index: number) {
-        return this.makeString(`${value} == ${index}`)
+    override makeUnionVariantCondition(_convertor: ArgConvertor, _valueName: string, valueType: string, type: string, index: number) {
+        return this.makeString(`${valueType} == ${index}`)
     }
     override makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index: number) {
         return this.makeString(`${value}.value${index}`)
