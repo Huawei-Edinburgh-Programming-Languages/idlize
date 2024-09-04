@@ -563,7 +563,7 @@ export class DeclarationTable {
             return new AggregateConvertor(param, this, type, typeNodeNameConvertor)
         }
         if (ts.isArrayTypeNode(type)) {
-            return new ArrayConvertor(param, this, type, type.elementType)
+            return new ArrayConvertor(param, this, type, type.elementType, typeNodeNameConvertor)
         }
         if (ts.isLiteralTypeNode(type)) {
             if (type.literal.kind == ts.SyntaxKind.NullKeyword) {
@@ -617,7 +617,8 @@ export class DeclarationTable {
         this._currentContext = context
     }
 
-    private customConvertor(typeName: ts.EntityName | undefined, param: string, type: ts.TypeReferenceNode | ts.ImportTypeNode): ArgConvertor | undefined {
+    private customConvertor(typeName: ts.EntityName | undefined, param: string, type: ts.TypeReferenceNode | ts.ImportTypeNode,
+                            typeNodeNameConvertor: TypeNodeNameConvertor | undefined): ArgConvertor | undefined {
         let name = getNameWithoutQualifiersRight(typeName)
         switch (name) {
             case `Dimension`:
@@ -634,7 +635,7 @@ export class DeclarationTable {
             case `Record`:
                 return new CustomTypeConvertor(param, "Record", "Record<string, string>")
             case `Array`:
-                return new ArrayConvertor(param, this, type, type.typeArguments![0])
+                return new ArrayConvertor(param, this, type, type.typeArguments![0], typeNodeNameConvertor)
             case `Map`:
                 return new MapConvertor(param, this, type, type.typeArguments![0], type.typeArguments![1])
             case `Callback`:
@@ -661,12 +662,12 @@ export class DeclarationTable {
                          typeNodeNameConvertor: TypeNodeNameConvertor | undefined): ArgConvertor {
         const entityName = typeEntityName(type)
         if (!declaration) {
-            return this.customConvertor(entityName, param, type) ?? throwException(`Declaration not found for: ${type.getText()}`)
+            return this.customConvertor(entityName, param, type, typeNodeNameConvertor) ?? throwException(`Declaration not found for: ${type.getText()}`)
         }
         if (PeerGeneratorConfig.isConflictedDeclaration(declaration))
             return new CustomTypeConvertor(param, identName(declaration.name)!)
         const declarationName = identName(declaration.name)!
-        let customConvertor = this.customConvertor(entityName, param, type)
+        let customConvertor = this.customConvertor(entityName, param, type, typeNodeNameConvertor)
         if (customConvertor) {
             return customConvertor
         }

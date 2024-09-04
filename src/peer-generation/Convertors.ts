@@ -1036,8 +1036,12 @@ export class TupleConvertor extends BaseArgConvertor {
 export class ArrayConvertor extends BaseArgConvertor {
     elementConvertor: ArgConvertor
     readonly isArrayType = ts.isArrayTypeNode(this.type) // Array type - Type[], otherwise - Array<Type>
-    constructor(param: string, public table: DeclarationTable, private type: ts.TypeNode, private elementType: ts.TypeNode) {
-        super(`Array<${mapType(elementType)}>`, [RuntimeType.OBJECT], false, true, param)
+    constructor(param: string,
+                public table: DeclarationTable,
+                private type: ts.TypeNode,
+                private elementType: ts.TypeNode,
+                private typeNodeNameConvertor: TypeNodeNameConvertor | undefined) {
+        super(`Array<${typeNodeNameConvertor?.convert(elementType) ?? mapType(elementType)}>`, [RuntimeType.OBJECT], false, true, param)
         this.elementConvertor = table.typeConvertor(param, elementType)
     }
     convertorArg(param: string, writer: LanguageWriter): string {
@@ -1096,7 +1100,7 @@ export class ArrayConvertor extends BaseArgConvertor {
             [writer.makeString(`${value} instanceof ${this.targetType(writer).name}`)])
     }
     elementTypeName(): string {
-        return mapType(this.elementType)
+        return this.typeNodeNameConvertor?.convert(this.elementType) ?? mapType(this.elementType)
     }
 }
 
