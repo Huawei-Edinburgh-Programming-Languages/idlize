@@ -49,7 +49,7 @@ import { Dimension,
          ResourceStr,
          Font } from "@arkoala/arkui/ArkUnitsInterfaces"
 
-import { TextOverflow, TextHeightAdaptivePolicy } from "@arkoala/arkui/ArkEnumInterfaces"
+import { TextOverflow, TextHeightAdaptivePolicy } from "@arkoala/arkui/ArkEnumsInterfaces"
 
 const testString1000 = "One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand";
 
