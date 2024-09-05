@@ -709,7 +709,12 @@ export class AggregateConvertor extends BaseArgConvertor {
             .members
             .filter(ts.isPropertySignature)
             .map((member, index) => {
-                this.members[index] = [identName(member.name)!, member.questionToken != undefined]
+                let memberName = identName(member.name)!
+                if (table.language === Language.ARKTS ) {
+                    // 'template' is a keyword for C++
+                    memberName = memberName.replace("template", "template_")
+                }
+                this.members[index] = [memberName, member.questionToken != undefined]
                 return table.typeConvertor(param, member.type!, member.questionToken != undefined, typeNodeNameConvertor)
             })
     }
