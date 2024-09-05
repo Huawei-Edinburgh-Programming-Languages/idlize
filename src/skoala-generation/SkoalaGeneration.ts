@@ -37,10 +37,13 @@ export function printSkoala(library: SkoalaLibrary): Map<TargetFile, LanguageWri
 
     for (let file of library.files) {
         const writer = createLanguageWriter(Language.TS)
+        intVis.printImports(file, writer)
+        wrVis.printImports(file, writer)
+        
         intVis.printInterfaces(file, writer)
         wrVis.printWrappers(file, writer)
         result.set(
-            new TargetFile(file.baseName),
+            new TargetFile(file.baseName.replace(".d.ts", ".ts")),
             writer
         )
     }

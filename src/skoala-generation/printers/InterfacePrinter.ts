@@ -5,13 +5,13 @@ export class TSInterfacesVisitor {
     constructor() {
     }
 
-    printInterfaces(file: SkoalaFile, writer: LanguageWriter) {
+    printImports(file: SkoalaFile, writer: LanguageWriter) {
         file.draftImports.forEach(imprt => {
             writer.print(imprt.getText())
         })
-        if (file.wrapperClasses.size) {
-            writer.print(`import { nativeModule } from "@koalaui/arkoala"`)
-        }
+    }
+
+    printInterfaces(file: SkoalaFile, writer: LanguageWriter) {
         file.declarations.forEach(decl => {
             writer.print(decl.getText())
         })

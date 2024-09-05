@@ -120,11 +120,11 @@ export class WrapperClass {
     constructor(
         public readonly className: string,
         public readonly isInterface: boolean,
-        public readonly superClass: WrapperClass | ts.InterfaceDeclaration | ts.ClassDeclaration | string,
+        public readonly superClass: string,
         public readonly isSuperClassWrapper: boolean,
         public readonly fields: WrapperField[],
         public readonly ctor: WrapperMethod | undefined,
-        public readonly finalizer: WrapperMethod,
+        public readonly finalizer: WrapperMethod | undefined,
         public readonly importFeatures: ImportFeature[],
         public readonly methods: WrapperMethod[],
         public readonly needBeGenerated: boolean = true,

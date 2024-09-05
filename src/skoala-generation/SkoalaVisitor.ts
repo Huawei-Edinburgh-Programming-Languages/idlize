@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { SkoalaFile, SkoalaLibrary } from "./SkoalaLibrary";
+import { ImportFeature, SkoalaFile, SkoalaLibrary } from "./SkoalaLibrary";
 import { GenericVisitor } from '../options';
 import { getDeclarationsByNode, identName, nameOrNull } from '../util';
 import { WrapperClass, WrapperField, WrapperMethod } from './WrapperClass';
@@ -7,6 +7,7 @@ import { ImportExport } from './ImportExport';
 import { TypeNodeConvertor } from '../peer-generation/TypeNodeConvertor';
 import { TSTypeNodeNameConvertor, TypeNodeNameConvertor } from '../peer-generation/TypeNodeNameConvertor';
 import { Field, FieldModifier, Method, MethodModifier, MethodSignature, NamedMethodSignature, Type } from '../peer-generation/LanguageWriters';
+import { Skoala } from './utils';
 
 export type SkoalaGeneratorVisitorOptions = {
     sourceFile: ts.SourceFile
@@ -80,23 +81,23 @@ export class WrapperProcessor {
     process(library: SkoalaLibrary) {
         for (let file of library.files) {
             for (let importDecl of file.draftImports) {
-                let namedImportBindings = importDecl.importClause?.namedBindings
-                let module = importDecl.moduleSpecifier.getText()
-                if (namedImportBindings && ts.isNamedImports(namedImportBindings)) {
-                    namedImportBindings.elements.forEach(importSpec => {
-                        let realDeclaration = this.importExport.findRealDeclaration(importSpec.name)                        
-                        file.importFeatures.add({
-                            feature: importSpec.getText(),
-                            module: module,
-                            realDeclaration: realDeclaration,
-                            kind: realDeclaration?.kind,
-                        })
-                    })
-                } else if (namedImportBindings && ts.isNamespaceImport(namedImportBindings)) {
-                    // xzy
-                } else {
-                    // xyz
-                }
+                // let namedImportBindings = importDecl.importClause?.namedBindings
+                // let module = importDecl.moduleSpecifier.getText()
+                // if (namedImportBindings && ts.isNamedImports(namedImportBindings)) {
+                //     namedImportBindings.elements.forEach(importSpec => {
+                //         let realDeclaration = this.importExport.findRealDeclaration(importSpec.name)                        
+                //         file.importFeatures.add({
+                //             feature: importSpec.getText(),
+                //             module: module,
+                //             realDeclaration: realDeclaration,
+                //             kind: realDeclaration?.kind,
+                //         })
+                //     })
+                // } else if (namedImportBindings && ts.isNamespaceImport(namedImportBindings)) {
+                //     // xzy
+                // } else {
+                //     // xyz
+                // }
             }
 
             for (let decl of file.declarations) {
@@ -116,12 +117,18 @@ export class WrapperProcessor {
     private tryProcessWrapper(node: ts.InterfaceDeclaration | ts.ClassDeclaration): WrapperClass | undefined {
         let heritageClasses = this.findHeritageClasses(node)
         if (!heritageClasses?.length) return undefined
+        // todo: save heritage classes somewhere
 
         let name = nameOrNull(node.name)!
         let isSuperClassWrapper = heritageClasses.length > 1
-        let superClassName = heritageClasses.pop()!
+        let superClassName = heritageClasses.reverse().pop()!
         let constructor = ts.isClassDeclaration(node) ? node.members.find(ts.isConstructorDeclaration) : undefined
         let wConstructor = constructor ? this.makeWrapperMethod(name, constructor, this.typeNodeConvertor) : undefined
+        let finalizer = ts.isClassDeclaration(node)
+            ? node.members.filter(ts.isMethodDeclaration).find(it => it.name.getText() == Skoala.getFinalizer)
+            : node.members.filter(ts.isMethodSignature).find(it => it.name.getText() == Skoala.getFinalizer)
+        let wFinalizer = finalizer ? this.makeWrapperMethod(name, finalizer, this.typeNodeConvertor) : undefined
+
         let wFields = ts.isInterfaceDeclaration(node)
             ? node.members
                 .filter(ts.isPropertySignature)
@@ -132,13 +139,13 @@ export class WrapperProcessor {
 
         let wMethods = ts.isInterfaceDeclaration(node)
             ? node.members
-                .filter(ts.isMethodSignature)
+                .filter(ts.isMethodSignature).filter(it => it.name.getText() != Skoala.getFinalizer)
                 .map(method => this.makeWrapperMethod(name, method, this.typeNodeConvertor))
             : node.members
-                .filter(ts.isMethodDeclaration)
+                .filter(ts.isMethodDeclaration).filter(it => it.name.getText() != Skoala.getFinalizer)
                 .map(method => this.makeWrapperMethod(name, method, this.typeNodeConvertor))
-
-        let wFinalizer = this.makeFinalizerMethod(name)
+        
+        let wImports = this.collectRequiredImports(node)
 
         return new WrapperClass(
             name,
@@ -148,7 +155,7 @@ export class WrapperProcessor {
             wFields,
             wConstructor,
             wFinalizer,
-            [], /*importFeatures: ImportFeature[],*/
+            wImports,
             wMethods
         )
     }
@@ -212,11 +219,21 @@ export class WrapperProcessor {
             if (ts.isGetAccessor(method)) modifiers.push(MethodModifier.GETTER)
             if (ts.isSetAccessor(method)) modifiers.push(MethodModifier.SETTER)
             return new WrapperMethod(parentName, new Method(method.name.getText(), new NamedMethodSignature(new Type(method.type?.getText() ?? ""), args, argsNames), modifiers))
-        } 
+        }
     }
 
-    private makeFinalizerMethod(parentName: string): WrapperMethod {
-        return new WrapperMethod(parentName, new Method("getFinalizer", new NamedMethodSignature(Type.Pointer, [], []), []))
+    private collectRequiredImports(node: ts.InterfaceDeclaration | ts.ClassDeclaration): ImportFeature[] {
+        let importFeatures: ImportFeature[] = []
+        let methods = ts.isClassDeclaration(node) ? node.members.filter(ts.isMethodDeclaration) : node.members.filter(ts.isMethodSignature)
+        methods.forEach(it => {
+            if (it.name.getText().startsWith('make')) {
+                importFeatures.push({
+                    feature: "isNullPtr",
+                    module: "@koalaui/interop",
+                })
+            }
+        })
+        return importFeatures
     }
 
     private findHeritageClasses(declaration: ts.InterfaceDeclaration | ts.ClassDeclaration, heritageClasses: string[] = []): string[] | undefined {
@@ -226,7 +243,7 @@ export class WrapperProcessor {
         if (superClassType) {
             const superClassName = identName(superClassType.expression)!
             heritageClasses.push(superClassName)
-            if (superClassName == "Finalizable" || superClassName == "RefCounted") {
+            if (superClassName == Skoala.Finalizable || superClassName == Skoala.RefCounted) {
                 return heritageClasses
             }
 

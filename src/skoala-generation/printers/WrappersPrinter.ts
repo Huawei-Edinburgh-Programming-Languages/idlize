@@ -4,10 +4,22 @@ import { TargetFile } from "../../peer-generation/printers/TargetFile"
 import { capitalize, Language, snakeCaseToCamelCase } from "../../util"
 import { SkoalaFile, SkoalaLibrary } from "../SkoalaLibrary"
 import { WrapperClass, WrapperField, WrapperMethod } from "../WrapperClass"
+import { Skoala } from "../utils"
 
 
 export class TSWrappersVisitor {
     constructor() { }
+
+    printImports(file: SkoalaFile, writer: LanguageWriter): void {
+        if (file.wrapperClasses.size) {
+            writer.print(Skoala.NativeModuleImport)
+            file.wrapperClasses.forEach(it => {
+                it.importFeatures.forEach(feature => {
+                    writer.print(`import { ${feature.feature} } from "${feature.module}"`)
+                })
+            })
+        }
+    }
 
     printWrappers(file: SkoalaFile, writer: LanguageWriter): void {
         if (!file.wrapperClasses.size) return
@@ -19,6 +31,7 @@ export class TSWrappersVisitor {
     private printWrapper(clazz: WrapperClass, printer: LanguageWriter) {
         printer.writeClass(clazz.className, (writer) => {
             this.printCtor(clazz, writer)
+            this.printFinalizer(clazz, writer)
             clazz.methods.forEach(method => {
                 this.printMethod(clazz.className, method, writer)
             })
@@ -30,40 +43,43 @@ export class TSWrappersVisitor {
 
     private printCtor(clazz: WrapperClass, writer: LanguageWriter) {
         // 1. TODO: handle clazz.ctor instead
-        // 2. TODO: handle clazz.finalizer instead
 
-        if (clazz.superClass.toString() == "Finalizable") {
-            writer.print(`constructor(ptr: KNativePointer) { super(ptr, ${clazz.className}.getFinalizer()) } \n`)
+        if (!clazz.ctor) return
+        let argsNames = (clazz.ctor?.method.signature as NamedMethodSignature).argsNames
+        writer.writeConstructorImplementation(clazz.className, clazz.ctor.method.signature, writer => {
+            if (clazz.superClass.toString() == Skoala.Finalizable) {
+                writer.writeSuperCall(["ptr", `${clazz.className}.getFinalizer()`])
+            } else if (clazz.superClass.toString() == Skoala.RefCounted) {
+                writer.writeSuperCall(argsNames)
+            } else {
+                writer.writeSuperCall(argsNames)
+            }
+        })
+    }
 
-            const finalizer = new Method("getFinalizer", new MethodSignature(Type.Pointer, []), [MethodModifier.STATIC])
-            writer.writeMethodImplementation(finalizer, writer => {
-                writer.writeStatement(
-                    writer.makeReturn(
-                        writer.makeNativeCall(`_skoala_${clazz.className}_getFinalizer`, [])))
-            })
-        } else {
-            writer.print('constructor(ptr: KNativePointer, allowClose = true) { super(ptr, allowClose) } \n')
-        }
+    private printFinalizer(clazz: WrapperClass, writer: LanguageWriter) {
+        if (!clazz.finalizer) return
+        writer.writeMethodImplementation(clazz.finalizer.method, writer => {
+            writer.writeStatement(
+                writer.makeReturn(
+                    writer.makeNativeCall(Skoala.nativeMethod(clazz.className, clazz.finalizer!.toStringName), [])))
+        })
     }
 
     private printMethod(className: string, method: WrapperMethod, writer: LanguageWriter) {
-        if (method.toStringName == "ctor" || method.toStringName == "getFinalizer") return
-
-        if (method.toStringName.startsWith('make')) {
-            writer.print(
-                `public static ${method.toStringName}(): ${method.retType} {
-    const ptr = Module._skoala_${className}__${method.toStringName}()
-    if (isNullPtr(ptr)) throw new TypeError("can not create an instance of type ${className}")
-    return new ${className}(ptr)
-}`
-            )
+        let returnType = method.method.signature.returnType
+        let params: LanguageExpression[] = []
+        let call = writer.makeNativeCall(Skoala.nativeMethod(method.originalParentName, method.toStringName), params)
+        if (method.toStringName.startsWith('make') && returnType.name == className) {
+            writer.writeMethodImplementation(method.method, writer => {
+                writer.writeStatement(writer.makeAssign("ptr", undefined, call, true))
+                writer.print(`if (isNullPtr(ptr)) throw new TypeError("can not create an instance of type ${className}")`)
+                writer.writeStatement(writer.makeReturn(writer.makeString(`new ${className}(ptr)`)))
+            })
             return
         }
 
         writer.writeMethodImplementation(method.method, writer => {
-            let params: LanguageExpression[] = []
-            let returnType = method.method.signature.returnType
-            let call = writer.makeNativeCall(`_skoala_${method.originalParentName}_${method.toStringName}`, params)
             if (returnType != Type.Void) {
                 writer.writeStatement(writer.makeAssign("retval", undefined, call, true))
                 writer.writeStatement(writer.makeReturn(writer.makeString("retval")))
