@@ -269,14 +269,14 @@ export class EnumConvertor extends BaseArgConvertor {
         return identName(this.enumType.name)!
     }
     convertorArg(param: string, writer: LanguageWriter): string {
-        return (writer.language == Language.JAVA || writer.language == Language.CJ) ? `${param}.getIntValue()` : writer.makeUnsafeCast(this, param)
+        return writer.writeEnumToInt(this, param)
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         if (this.isStringEnum) {
             value = printer.ordinalFromEnum(printer.makeString(value),
                 identName(this.enumType.name)!).asString()
         }
-        printer.writeMethodCall(`${param}Serializer`, "writeInt32", [printer.writeEnumCall(value)])
+        printer.writeMethodCall(`${param}Serializer`, "writeInt32", [printer.writeEnumToInt(this, value)])
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
         let readExpr = printer.makeMethodCall(`${param}Deserializer`, "readInt32", [])

@@ -843,7 +843,10 @@ export abstract class LanguageWriter {
         //this.printer.print(stmt.asString())
         stmt.write(this)
     }
-    writeEnumCall(enumName: string): string {
+    writeEnumToInt(convertor: EnumConvertor, enumName: string, unsafe?: boolean): string {
+        if (unsafe) {
+            return this.makeUnsafeCast(convertor, enumName)
+        }
         return enumName
     }
     makeTag(tag: string): string {
@@ -1498,6 +1501,9 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     makeSerializerCreator() {
         return this.makeString('Serializer::createSerializer');
     }
+    writeEnumToInt(convertor: EnumConvertor, enumName: string): string {
+        return `${enumName}.getIntValue()`
+    }
 }
 
 export class CJLanguageWriter extends LanguageWriter {
@@ -1573,8 +1579,8 @@ export class CJLanguageWriter extends LanguageWriter {
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
         this.print(`func ${name}(${signature.args.map((it, index) => `${this.languageKeywordProtection(signature.argName(index))}: ${it.nullable ? '?' : ''}${this.mapCType(it)}`).join(", ")}): ${this.mapCType(signature.returnType)}`)
     }
-    writeEnumCall(enumName: string): string {
-        return enumName + '.getIntValue()'
+    writeEnumToInt(convertor: EnumConvertor, enumName: string): string {
+        return `${enumName}.getIntValue()`
     }
     makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
         return new CJAssignStatement(variableName, type, expr, isDeclared, isConst)
