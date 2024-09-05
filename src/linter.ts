@@ -573,7 +573,3 @@ export function toLinterString(
         .filter(element => (element?.length ?? 0) > 0)
     return [errors.join("\n"), errors.length > 0 ? 1 : 0, printHistogram(histogram)]
 }
-
-export function filterLanguageKeywords(word: string): string {
-    return word
-}
