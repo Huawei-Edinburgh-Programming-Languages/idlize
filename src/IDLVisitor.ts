@@ -274,15 +274,22 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         if (name && ts.isClassDeclaration(node) && isCommonMethodOrSubclass(this.typeChecker, node)) {
             result.push({name: IDLExtendedAttributes.Component, value: PeerGeneratorConfig.mapComponentName(name)})
         }
-        inheritance.forEach(it => {
-            let typeParams = getExtAttribute(it, IDLExtendedAttributes.TypeArguments)
+        if (inheritance.length) {
+            let typeParams = getExtAttribute(inheritance[0], IDLExtendedAttributes.TypeArguments)
             if (typeParams) {
-                result.push({ name: IDLExtendedAttributes.HeritageTypeParameters, value:typeParams })
-                it.extendedAttributes = undefined
+                result.push({ name: IDLExtendedAttributes.ParentTypeArguments, value: `"${typeParams}"` })
+                inheritance[0].extendedAttributes = undefined
             }
-        })
+        }
+
         if (inheritance.length > 1) {
-            result.push({name: IDLExtendedAttributes.Interfaces, value: inheritance.slice(1).map(it => it.name).join(", ")})
+            result.push({ name: IDLExtendedAttributes.Interfaces, value: inheritance.slice(1).map(it => it.name).join(", ") })
+            let intTypeParams = inheritance.slice(1).map(it => {
+                let typeParams = getExtAttribute(it, IDLExtendedAttributes.TypeArguments)
+                if (typeParams) it.extendedAttributes = undefined
+                return typeParams
+            }).join(", ")
+            if (intTypeParams.length) result.push({ name: IDLExtendedAttributes.InterfaceTypeArguments, value: `"${intTypeParams}"` })
         }
         this.computeExportAttribute(node, result)
         return this.computeDeprecatedExtendAttributes(node, result)
