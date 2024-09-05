@@ -24,11 +24,17 @@ import { IdlPeerFile } from './IdlPeerFile'
 import { IndentedPrinter } from "../../IndentedPrinter"
 import { TargetFile } from '../printers/TargetFile'
 import { PrinterContext } from '../printers/PrinterContext'
-import { ARK_OBJECTBASE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from '../printers/lang/Java'
+import { ARK_CUSTOM_OBJECT, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from '../printers/lang/Java'
 import { convertDeclaration, DeclarationConvertor } from "./IdlTypeConvertor";
 // import { createTypeNodeConvertor, generateMethodModifiers, generateSignature } from "./IdlPeerGeneratorVisitor";
 import { isMaterialized } from "../Materialized";
 import { ResourceDeclaration } from './IdlPeerLibrary'
+import { JavaDataClass, JavaEnum } from '../printers/lang/JavaPrinters'
+import { EnumEntity } from '../PeerFile'
+import { JavaTypeNameConvertor } from './IdlTypeNameConvertor'
+import { IdlSyntheticType } from './IdlSyntheticType'
+import { collectJavaImports } from '../printers/lang/JavaIdlUtils'
+
 
 interface InterfacesVisitor {
     getInterfaces(): Map<TargetFile, LanguageWriter>
@@ -170,95 +176,102 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
     }
 }
 
-// class JavaInterfacesVisitor {
-//     private readonly interfaces: Map<string, LanguageWriter> = new Map()
 
-//     constructor(
-//         private readonly peerLibrary: IdlPeerLibrary,
-//         private readonly context: PrinterContext,
-//     ) {}
+class JavaDeclaration {
+    constructor(public readonly targetFile: TargetFile, public readonly writer: LanguageWriter) {}
+}
 
-//     private addInterface(name: string, writer: LanguageWriter) {
-//         this.interfaces.set(name, writer)
-//     }
+export class JavaDeclarationConvertor implements DeclarationConvertor<void> {
+    // TODO: duplicate with JavaTypeAliasConvertor.customTypeMapping
+    public readonly customTypeMapping = new Map<string, string>([
+        ['Dimension', 'Ark_Length'],
+        ['Length', 'Ark_Length'],
+        ['ContentModifier', ARK_CUSTOM_OBJECT],
+        ['PixelMap', ARK_CUSTOM_OBJECT],
+        ['Date', ARK_CUSTOM_OBJECT],
+        ['Optional', ''],
+        // ??? ['Style', 'Object'],
+    ])
+    constructor(private readonly peerLibrary: IdlPeerLibrary, private readonly onNewDeclaration: (declaration: JavaDeclaration) => void) {}
+    convertCallback(node: idl.IDLCallback): void {
+    }
+    convertEnum(node: idl.IDLEnum): void {
+        throw new Error("Enums are processed separately")
+    }
+    convertTypedef(node: idl.IDLTypedef): void {
+        const isUnion = idl.isUnionType(node.type)
+        const isTupleLike = idl.isSyntheticEntry(node.type) && idl.getExtAttribute(node.type, idl.IDLExtendedAttributes.Entity)
+        if (!(isUnion || isTupleLike) || this.customTypeMapping.has(node.name)) {
+            console.log(`Skipped type ${node.name}. It must not be implemented as separate type in Java.`)
+            return
+        }
+        const typeNameConvertor = new JavaTypeNameConvertor(this.peerLibrary, (type: IdlSyntheticType) => {
+            if (type.isMadeFrom(node.type)) {
+                const writer = createLanguageWriter(Language.JAVA)
+                writer.print(`package ${ARKOALA_PACKAGE};\n`)
+                type.setName(node.name)
+                type.print(writer)
+                this.onNewDeclaration(new JavaDeclaration(new TargetFile(node.name + writer.language.extension, ARKOALA_PACKAGE_PATH), writer))
+            }
+            else {
+                this.peerLibrary.syntheticTypes.set(type.getName(), type)
+            }
+        })
+        typeNameConvertor.convert(node.type)
+    }
+    convertInterface(node: idl.IDLInterface): void {
+        // TODO: remove log
+        console.log(`interface ${node.name}, isClass=${idl.isClass(node)}, isComponent=${this.peerLibrary.isComponentDeclaration(node)}`)
+        let javaDataClass: JavaDataClass
+        const superClassName = node.inheritance.length > 0 && node.inheritance[0].name != '__Top__' ? node.inheritance[0].name : undefined
+        if (this.peerLibrary.isComponentDeclaration(node)) {
+            // TODO: empty for now
+            javaDataClass = new JavaDataClass(node, node.name, superClassName, [], [])
+        }
+        else {
+            const members = node.properties.map(it => {
+                return {name: it.name, type: new Type(this.peerLibrary.mapType(it.type), it.isOptional), modifiers: [FieldModifier.PUBLIC]}
+            })
+            const imports = collectJavaImports(node.properties.map(it => it.type))
+            javaDataClass = new JavaDataClass(node, node.name, superClassName, members, imports)
+        }
+        const writer = createLanguageWriter(Language.JAVA)
+        writer.print(`package ${ARKOALA_PACKAGE};\n`)
+        javaDataClass.print(writer)
+        this.onNewDeclaration(new JavaDeclaration(new TargetFile(node.name + writer.language.extension, ARKOALA_PACKAGE_PATH), writer))
+    }
+}
 
-//     private getName(node: ts.NamedDeclaration): string {
-//         if (!node.name) {
-//             throw new Error(`Empty name for node\n${node}`)
-//         }
-//         return identName(node.name)!
-//     }
+class JavaInterfacesVisitor extends DefaultInterfacesVisitor {
+    constructor(protected readonly peerLibrary: IdlPeerLibrary) {
+        super()
+    }
 
-//     private getSuperClass(node: ts.ClassDeclaration | ts.InterfaceDeclaration): string | undefined {
-//         if (!node.heritageClauses) {
-//             return
-//         }
+    printInterfaces() {
+        const declarationConverter = new JavaDeclarationConvertor(this.peerLibrary, (declaration: JavaDeclaration) => {
+            this.interfaces.set(declaration.targetFile, declaration.writer)
+        })
+        for (const file of this.peerLibrary.files.values()) {
+            file.enums.forEach(it => this.printEnum(it))
+            file.declarations.forEach(it => convertDeclaration(declarationConverter, it))
+        }
+    }
 
-//         for (const clause of node.heritageClauses) {
-//             if (clause.token == ts.SyntaxKind.ExtendsKeyword) {
-//                 return clause.types[0].expression.getText()
-//             }
-//         }
-//     }
+    private printPackage(writer: LanguageWriter): void {
+        writer.print(`package ${ARKOALA_PACKAGE};\n`)
+    }
 
-//     private printPackage(writer: LanguageWriter): void {
-//         writer.print(`package ${ARKOALA_PACKAGE};\n`)
-//     }
-
-//     private printClassOrInterface(node: ts.ClassDeclaration | ts.InterfaceDeclaration, writer: LanguageWriter) {
-//         type MemberInfo = {name: string, type: Type, optional: boolean}
-//         const membersInfo: MemberInfo[] = node.members.map(property => {
-//             if (!ts.isPropertyDeclaration(property) && !ts.isPropertySignature(property)) {
-//                 return
-//             }
-//             if (!property.type) {
-//                 throw new Error(`Unexpected member type: ${property.type}`);
-//             }
-
-//             const propertyName = this.getName(property)
-//             const propertyDeclarationTarget = this.peerLibrary.declarationTable.toTarget(property.type)
-//             const optional = !!property.questionToken
-//             const propertyType = this.context.synthesizedTypes!.getTargetType(propertyDeclarationTarget, optional)
-//             return {name: propertyName, type: propertyType, optional: optional}
-//         }).filter((it): it is MemberInfo => !!it)
-
-//         this.context.imports?.printImportsForTypes(membersInfo.map(it => it.type), writer)
-
-//         const superClass = this.getSuperClass(node) ?? ARK_OBJECTBASE
-//         writer.writeClass(this.getName(node), () => {
-//             for (const member of membersInfo) {
-//                 writer.writeFieldDeclaration(member.name, member.type, [FieldModifier.PUBLIC], member.optional)
-//             }
-//         }, superClass)
-//     }
-
-//     getInterfaces(): Map<TargetFile, LanguageWriter> {
-//         const result =  new Map<TargetFile, LanguageWriter>()
-//         for (const [name, writer] of this.interfaces) {
-//             result.set(new TargetFile(name, ARKOALA_PACKAGE_PATH), writer)
-//         }
-//         return result
-//     }
-
-//     private addInterfaceDeclaration(it: ts.ClassDeclaration | ts.InterfaceDeclaration) {
-//         const writer = createLanguageWriter(Language.JAVA)
-//         this.printPackage(writer);
-//         this.printClassOrInterface(it, writer)
-//         this.addInterface(this.getName(it), writer)
-//     }
-
-//     printInterfaces() {
-//         for (const file of this.peerLibrary.files.values()) {
-//             file.declarations.forEach(it => {
-//                 if (!ts.isClassDeclaration(it) && !ts.isInterfaceDeclaration(it)) {
-//                     return
-//                 }
-//                 this.addInterfaceDeclaration(it)
-//             })
-//         }
-//         this.addInterfaceDeclaration(ResourceDeclaration)
-//     }
-// }
+    private printEnum(enumDecl: EnumEntity): void {
+        const members = enumDecl.members.map(it => {
+            return {name: it.name, id: isNaN(parseInt(it.initializerText as string, 10)) ? it.initializerText : parseInt(it.initializerText as string, 10)}
+        })
+        const javaEnum = new JavaEnum(enumDecl, enumDecl.name, members)
+        const writer = createLanguageWriter(Language.JAVA)
+        this.printPackage(writer)
+        javaEnum.print(writer)
+        this.interfaces.set(new TargetFile(javaEnum.name, ARKOALA_PACKAGE), writer)
+    }
+}
 
 // class CJInterfacesVisitor {
 //     private readonly interfaces: Map<string, LanguageWriter> = new Map()
@@ -497,9 +510,9 @@ function getVisitor(peerLibrary: IdlPeerLibrary, context: PrinterContext): Inter
     if (context.language == Language.TS) {
         return new TSInterfacesVisitor(peerLibrary)
     }
-    // if (context.language == Language.JAVA) {
-    //     return new JavaInterfacesVisitor(peerLibrary, context)
-    // }
+    if (context.language == Language.JAVA) {
+        return new JavaInterfacesVisitor(peerLibrary)
+    }
     // if (context.language == Language.ARKTS) {
     //     return new ArkTSInterfacesVisitor(peerLibrary)
     // }

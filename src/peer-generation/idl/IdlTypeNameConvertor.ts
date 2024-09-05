@@ -13,16 +13,22 @@
  * limitations under the License.
  */
 
+import * as assert from 'assert'
 import * as idl from '../../idl'
 import { throwException } from '../../util'
 import { IdlPeerLibrary } from './IdlPeerLibrary'
 import { TypeConvertor, convertType } from './IdlTypeConvertor'
+import { JavaDataClass, JavaEnum, JavaTuple, JavaUnion } from '../printers/lang/JavaPrinters'
+import { collectJavaImports } from '../printers/lang/JavaIdlUtils'
+import { IdlSyntheticType } from './IdlSyntheticType'
+import { ARK_CUSTOM_OBJECT, ARK_OBJECTBASE, convertJavaOptional } from '../printers/lang/Java'
+import { FieldModifier, Type } from '../LanguageWriters'
 
-export interface IdlTypeNameConvertor extends TypeConvertor<string> {
+export interface IdlTypeNameConvertor {
     convert(type: idl.IDLType): string
 }
 
-export class TSTypeNameConvertor implements IdlTypeNameConvertor {
+export class TSTypeNameConvertor implements IdlTypeNameConvertor, TypeConvertor<string> {
     constructor(private library: IdlPeerLibrary) {}
     convertUnion(type: idl.IDLUnionType): string {
         return type.types.map(it => this.convert(it)).join(" | ")
@@ -263,4 +269,209 @@ export class ArkTSTypeNameConvertor extends TSTypeNameConvertor {
     //     return `TEMPLATE_LITERAL_${node.templateSpans
     //         .map(it => `${this.convert(it.type)}_${it.literal.text}`).join('_')}`
     // }
+}
+
+
+class JavaTypeAlias {
+    // Java type itself
+    // string representation can contain special characters (e.g. String[])
+    readonly type: Type
+
+    // synthetic identifier for internal use cases: naming classes/files etc. 
+    // string representation contains only letters, numbers and underscores (e.g. Array_String)
+    readonly alias: string
+
+    static fromTypeName(typeName: string, optional: boolean): JavaTypeAlias {
+        return new JavaTypeAlias(new Type(typeName, optional), optional ? convertJavaOptional(typeName) : typeName)
+    }
+
+    static fromTypeAlias(typeAlias: JavaTypeAlias, optional: boolean): JavaTypeAlias {
+        return new JavaTypeAlias(new Type(typeAlias.type.name, optional), optional ? convertJavaOptional(typeAlias.alias) : typeAlias.alias)
+    }
+
+    constructor(type: Type, alias: string) {
+        this.type = type
+        this.alias = alias
+    }
+}
+
+class JavaTypeAliasConvertor implements TypeConvertor<JavaTypeAlias> {
+    constructor(private readonly library: IdlPeerLibrary, private readonly onNewSyntheticType: (type: IdlSyntheticType) => void) {}
+
+    // TODO: combine with decl convertor
+    readonly customTypeMapping = new Map<string, string>([
+        ['Dimension', 'Ark_Length'],
+        ['Length', 'Ark_Length'],
+        ['ContentModifier', ARK_CUSTOM_OBJECT],
+        ['PixelMap', ARK_CUSTOM_OBJECT],
+        ['Date', ARK_CUSTOM_OBJECT],
+        // ??? ['Style', 'Object'],
+    ])
+
+    convertUnion(type: idl.IDLUnionType): JavaTypeAlias {
+        const javaTypeAliases = type.types.map(it => convertType(this, it))
+        const result = JavaTypeAlias.fromTypeName(`Union_${javaTypeAliases.map(it => it.alias).join("_")}`, false)
+        const subTypes = javaTypeAliases.map(it => it.type)
+        const imports = collectJavaImports(type.types)
+        this.onNewSyntheticType(new JavaUnion(type, result.alias, subTypes, imports))
+        return result
+    }
+    convertContainer(type: idl.IDLContainerType): JavaTypeAlias {
+        switch (type.name) {
+            case "sequence": {
+                const javaTypeAlias = convertType(this, type.elementType[0])
+                return new JavaTypeAlias(new Type(`${javaTypeAlias.type}[]`), `Array_${javaTypeAlias.alias}`)
+            }
+            case "record": {
+                const javaTypeAliases = type.elementType.slice(0, 2).map(it => convertType(this, it)).map(this.maybeConvertPrimitiveType, this)
+                const result = new JavaTypeAlias(new Type(`Map<${javaTypeAliases[0].type}, ${javaTypeAliases[1].type}>`), `Map_${javaTypeAliases[0].alias}_${javaTypeAliases[1].alias}`)
+                return result
+            }
+            case "Promise":
+            default:
+                throw new Error(`IDL type '${type.name}' not supported`)
+        }
+    }
+    convertEnum(type: idl.IDLEnumType): JavaTypeAlias {
+        // TODO: remove after fixing IdlPeerFile.enums
+        const enumDecl = this.library.resolveTypeReference(type) as idl.IDLEnum
+        // TODO: remove prefix after full migration to IDL
+        const enumName = `Ark_${type.name}`
+        const members = enumDecl.elements.map(it => {
+            return {name: it.name, id: isNaN(parseInt(it.initializer as string, 10)) ? it.initializer : parseInt(it.initializer as string, 10)}
+        })
+        this.onNewSyntheticType(new JavaEnum(enumDecl, enumName, members))
+        return JavaTypeAlias.fromTypeName(enumName, false)
+
+        // TODO: remove prefix after full migration to IDL
+        // return JavaTypeAlias.fromTypeName(`Ark_${type.name}`)
+    }
+    convertCallback(type: idl.IDLCallback): JavaTypeAlias {
+        // TODO
+        return JavaTypeAlias.fromTypeName(`???Callback`, false)
+    }
+    convertImport(type: idl.IDLReferenceType, importClause: string): JavaTypeAlias {
+        // TODO
+        if (type.name === 'Resource') {
+            const members = [
+                {name: 'id', type: new Type('double'), modifiers: [FieldModifier.PUBLIC]},
+                {name: 'type', type: new Type('double'), modifiers: [FieldModifier.PUBLIC]},
+                {name: 'moduleName', type: new Type('String'), modifiers: [FieldModifier.PUBLIC]},
+                {name: 'bundleName', type: new Type('String'), modifiers: [FieldModifier.PUBLIC]},
+                {name: 'params', type: new Type('String[]'), modifiers: [FieldModifier.PUBLIC]},
+            ]
+            this.onNewSyntheticType(new JavaDataClass(type, type.name, ARK_CUSTOM_OBJECT, members, []))
+        }
+        else {
+            this.onNewSyntheticType(new JavaDataClass(type, type.name, ARK_CUSTOM_OBJECT, [], []))
+        }
+        return JavaTypeAlias.fromTypeName(type.name, false)
+    }
+    convertTypeReference(type: idl.IDLReferenceType): JavaTypeAlias {
+        const importAttr = idl.getExtAttribute(type, idl.IDLExtendedAttributes.Import)
+        if (importAttr) {
+            return this.convertImport(type, importAttr)
+        }
+            
+        // TODO: resolve most types except Union/Tuple/Enum
+
+        // resolve synthetic types
+        const decl = this.library.resolveTypeReference(type)!
+        if (decl && idl.isSyntheticEntry(decl)) {
+            if (idl.isCallback(decl)) {
+                return this.callbackType(decl)
+            }
+            const entity = idl.getExtAttribute(decl, idl.IDLExtendedAttributes.Entity)
+            if (entity) {
+                const isTuple = entity === idl.IDLEntity.Tuple
+                return this.productType(decl as idl.IDLInterface, isTuple, !isTuple)
+            }
+        }
+
+        let typeSpec = type.name ?? "MISSING_TYPE_NAME"
+        if (this.customTypeMapping.has(typeSpec)) {
+            typeSpec = this.customTypeMapping.get(typeSpec)!
+        }
+        // const qualifier = idl.getExtAttribute(type, idl.IDLExtendedAttributes.Qualifier)
+        // if (qualifier) {
+        //     typeSpec = `${qualifier}.${typeSpec}`
+        // }
+        let typeArgs = idl.getExtAttribute(type, idl.IDLExtendedAttributes.TypeArguments)?.split(",")
+        if (typeSpec === `Optional`) {
+            return JavaTypeAlias.fromTypeName(typeArgs![0], true)
+        }
+        if (typeSpec === `RenderingContextSettings`) {
+            // TODO: maybe this type must be in interfaces
+            const members = [
+                {name: 'antialias', type: new Type('boolean', true), modifiers: [FieldModifier.PUBLIC]},
+            ]
+            this.onNewSyntheticType(new JavaDataClass(decl, typeSpec, ARK_OBJECTBASE, members, []))
+        }
+        return JavaTypeAlias.fromTypeName(typeSpec, false)
+    }
+    convertTypeParameter(type: idl.IDLTypeParameterType): JavaTypeAlias {
+        // TODO
+        return JavaTypeAlias.fromTypeName(type.name, false)
+    }
+    convertPrimitiveType(type: idl.IDLPrimitiveType): JavaTypeAlias {
+        // TODO
+        if (this.idlPrimitiveToJavaMap.has(type.name)) {
+            return this.idlPrimitiveToJavaMap.get(type.name)!
+        }
+        throw new Error(`Unsupported IDL primitive ${type.name}`)
+    }
+
+    private readonly idlPrimitiveToJavaMap = new Map([
+        ['DOMString', JavaTypeAlias.fromTypeName('String', false)],
+        ['number', JavaTypeAlias.fromTypeName('double', false)],
+        ['boolean', JavaTypeAlias.fromTypeName('boolean', false)],
+        ['undefined', JavaTypeAlias.fromTypeName('Ark_Undefined', false)],
+        ['any', JavaTypeAlias.fromTypeName(ARK_CUSTOM_OBJECT, false)],
+        // TODO: add other primitive types
+    ])
+    private readonly javaPrimitiveToReferenceTypeMap = new Map([
+        ['byte', JavaTypeAlias.fromTypeName('Byte', false)],
+        ['short', JavaTypeAlias.fromTypeName('Short', false)],
+        ['int', JavaTypeAlias.fromTypeName('Integer', false)],
+        ['float', JavaTypeAlias.fromTypeName('Float', false)],
+        ['double', JavaTypeAlias.fromTypeName('Double', false)],
+        ['boolean', JavaTypeAlias.fromTypeName('Boolean', false)],
+        ['char', JavaTypeAlias.fromTypeName('Character', false)],
+    ])
+    private maybeConvertPrimitiveType(javaType: JavaTypeAlias): JavaTypeAlias {
+        if (this.javaPrimitiveToReferenceTypeMap.has(javaType.type.name)) {
+            return this.javaPrimitiveToReferenceTypeMap.get(javaType.type.name)!
+        }
+        return javaType
+    }
+
+    private callbackType(decl: idl.IDLCallback): JavaTypeAlias {
+        // TODO
+        //const params = decl.parameters.map(it => `${it.isVariadic ? "..." : ""}${it.name}: ${this.library.mapType(it.type)}`)
+        //`((${params.join(", ")}) => ${this.library.mapType(decl.returnType)})`
+        return JavaTypeAlias.fromTypeName('Callback', false)
+    }
+
+    // Tuple + ??? AnonymousClass 
+    private productType(decl: idl.IDLInterface, isTuple: boolean, includeFieldNames: boolean): JavaTypeAlias {
+        // TODO: other types
+        assert.strictEqual(isTuple, true)
+        const javaTypeAliases = decl.properties.map(it => JavaTypeAlias.fromTypeAlias(convertType(this, it.type), it.isOptional))
+        const result = JavaTypeAlias.fromTypeName(`Tuple_${javaTypeAliases.map(it => it.alias, false).join('_')}`, false)
+        const subTypes = javaTypeAliases.map(it => it.type)
+        const imports = collectJavaImports(decl.properties.map(it => it.type))
+        this.onNewSyntheticType(new JavaTuple(decl, result.alias, subTypes, imports))
+        return result
+    }
+}
+
+export class JavaTypeNameConvertor implements IdlTypeNameConvertor {
+    private readonly typeAliasConvertor = new JavaTypeAliasConvertor(this.library, this.onNewSyntheticType)
+    constructor(private readonly library: IdlPeerLibrary, private readonly onNewSyntheticType: (type: IdlSyntheticType) => void) {}
+    convert(type: idl.IDLType): string {
+        // if (ts.isQualifiedName(type)) return this.convertQualifiedName(type)
+        // if (ts.isIdentifier(type)) return this.convertIdentifier(type)
+        const typeAlias = convertType(this.typeAliasConvertor, type)
+        return typeAlias.type.nullable ? convertJavaOptional(typeAlias.type.name) : typeAlias.type.name
+    }
 }

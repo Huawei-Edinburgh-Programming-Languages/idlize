@@ -168,6 +168,8 @@ declare class BlankAttribute extends CommonMethod<BlankAttribute> {
    * @form
    */
   color(value: ResourceColor): BlankAttribute;
+
+  optNumber(value?: number): BlankAttribute;
 }
 
 /**

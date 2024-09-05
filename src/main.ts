@@ -74,6 +74,7 @@ import { IdlPeerLibrary } from "./peer-generation/idl/IdlPeerLibrary"
 import { IdlPeerFile } from "./peer-generation/idl/IdlPeerFile"
 import { IdlPeerGeneratorVisitor, IdlPeerProcessor } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
 import { SkoalaCCodeGenerator } from "./peer-generation/printers/SkoalaPrinter"
+import { printSyntheticTypes } from "./peer-generation/printers/SyntheticTypesPrinter"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -435,11 +436,20 @@ if (options.dts2peer) {
                             arkuiComponentsFiles.push(outComponentFile)
                         }
                     }
-                    writeFile(
-                        arkoala.tsLib(new TargetFile("peer_events")),
-                        printEvents(idlLibrary),
-                        true
-                    )
+                    if (lang == Language.TS) {
+                        writeFile(
+                            arkoala.tsLib(new TargetFile("peer_events")),
+                            printEvents(idlLibrary),
+                            true
+                        )
+                    }
+
+                    // must be last for java
+                    const syntheticTypes = printSyntheticTypes(idlLibrary)
+                    for (const [targetFile, type] of syntheticTypes) {
+                        const outPeerFile = arkoala.peer(targetFile)
+                        writeFile(outPeerFile, type, true, "producing [idl]")
+                    }
                 }
             }
         )
@@ -553,8 +563,10 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
             const outPeerFile = arkoala.peer(targetFile)
             writeFile(outPeerFile, peer, true, "producing")
         }
+    }
 
-        const components = printComponents(peerLibrary, context)
+    if (complete || lang == Language.JAVA) {
+            const components = printComponents(peerLibrary, context)
         for (const [targetFile, component] of components) {
             const outComponentFile = arkoala.component(targetFile)
             writeFile(outComponentFile, component, true, "producing")
@@ -569,7 +581,7 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
         fs.writeFileSync(outBuilderFile, builderClass)
     }
 
-    if (complete) {
+    if (complete || lang == Language.JAVA) {
         const materialized = printMaterialized(peerLibrary, context, options.dumpSerialized ?? false)
         for (const [targetFile, materializedClass] of materialized) {
             const outMaterializedFile = arkoala.materialized(targetFile)
@@ -695,12 +707,14 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
         )
     }
     if (lang == Language.JAVA) {
-        const interfaces = printInterfaces(peerLibrary, context)
-        for (const [targetFile, data] of interfaces) {
-            const outComponentFile = arkoala.javaLib(targetFile)
-            console.log("producing", outComponentFile)
-            if (options.verbose) console.log(data)
-            fs.writeFileSync(outComponentFile, data)
+        if (complete) {
+            const interfaces = printInterfaces(peerLibrary, context)
+            for (const [targetFile, data] of interfaces) {
+                const outComponentFile = arkoala.javaLib(targetFile)
+                console.log("producing", outComponentFile)
+                if (options.verbose) console.log(data)
+                fs.writeFileSync(outComponentFile, data)
+            }
         }
 
         const synthesizedTypes = context.synthesizedTypes!.getDefinitions()

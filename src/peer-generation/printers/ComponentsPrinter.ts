@@ -169,6 +169,10 @@ class JavaComponentFileVisitor implements ComponentFileVisitor {
     ) { }
 
     visit(): void {
+        if (this.file instanceof IdlPeerFile) {
+            // TODO: temp
+            return
+        }
         this.file.peersToGenerate.forEach(peer => {
             this.printComponent(peer as PeerClass) // TODO: temp
         })
@@ -201,7 +205,7 @@ class JavaComponentFileVisitor implements ComponentFileVisitor {
                     writer.writeStatement(writer.makeCondition(
                         writer.makeString(`checkPriority("${method.name}")`),
                         writer.makeBlock([
-                            writer.makeStatement(writer.makeMethodCall(`((${peerClassName})peer)`, `${method.name}Attribute`, originalSignature.argsNames.map(it => writer.makeString(it)))),
+                            writer.makeStatement(writer.makeMethodCall(`((${peerClassName})peer)`, `${peerMethod.overloadedName}Attribute`, originalSignature.argsNames.map(it => writer.makeString(it)))),
                             writer.makeReturn(thiz),
                         ], false)))
                     writer.writeStatement(writer.makeReturn(thiz))

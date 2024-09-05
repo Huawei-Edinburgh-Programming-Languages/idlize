@@ -349,6 +349,10 @@ class JavaMaterializedFileVisitor extends MaterializedFileVisitorBase {
     }
 
     visit(): void {
+        if (this.library instanceof IdlPeerLibrary) {
+            // TODO: temp
+            return
+        }
         this.printMaterializedClass(this.clazz)
     }
 
