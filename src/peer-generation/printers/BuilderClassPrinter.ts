@@ -18,6 +18,7 @@ interface BuilderClassFileVisitor {
 class TSBuilderClass {
     constructor(
         public readonly name: string,
+        public readonly generics: string[] | undefined,
         public readonly isInterface: boolean,
         public readonly superClass: SuperElement | undefined,
         public readonly fields: Field[],
@@ -98,7 +99,7 @@ class TSBuilderClassFileVisitor implements BuilderClassFileVisitor {
                         writer.writeStatement(writer.makeReturn(writer.makeString("this")))
                     })
                 })
-        }, superType)
+        }, superType, undefined, clazz.generics?.map(it => it))
     }
 
     printFile(): void {
@@ -158,6 +159,7 @@ class JavaBuilderClassFileVisitor implements BuilderClassFileVisitor {
     
         return new BuilderClass(
             clazz.name,
+            clazz.generics,
             clazz.isInterface,
             clazz.superClass,
             fields,
@@ -289,6 +291,7 @@ function collapse(methods: Method[]): Method[] {
 function toTSBuilderClass(clazz: BuilderClass): TSBuilderClass {
     return new TSBuilderClass(
         clazz.name,
+        clazz.generics,
         clazz.isInterface,
         clazz.superClass,
         clazz.fields.map(it => it.field),
@@ -332,6 +335,7 @@ function processTSBuilderClass(clazz: TSBuilderClass): TSBuilderClass {
 
     return new TSBuilderClass(
         clazz.name,
+        clazz.generics,
         clazz.isInterface,
         clazz.superClass,
         fields,
