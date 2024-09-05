@@ -44,6 +44,8 @@ class TSBuilderClassFileVisitor implements BuilderClassFileVisitor {
 
         const imports = new ImportsCollector()
         clazz.importFeatures.map(it => imports.addFeature(it.feature, it.module))
+        if (clazz.superClass)
+            imports.addFeature(clazz.superClass.name, renameClassToBuilderClass(clazz.superClass.name, writer.language, false))
         const currentModule = removeExt(renameClassToBuilderClass(clazz.name, this.peerLibrary.declarationTable.language))
         imports.print(this.printer, currentModule)
 

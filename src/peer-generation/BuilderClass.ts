@@ -137,7 +137,10 @@ export function toBuilderClass(declarationTable: DeclarationTable,
     const isClass = ts.isClassDeclaration(target)
     const isInterface = ts.isInterfaceDeclaration(target)
 
-    const superClass = extractSuperElement(target)
+    let superClass = extractSuperElement(target)
+    if (superClass?.generics)
+        // we do not want builder class to have generics
+        superClass = new SuperElement(superClass.name)
 
     const fields = isClass
         ? target.members
@@ -168,7 +171,7 @@ function getBuilderMethods(declarationTable: DeclarationTable,
     const className = identName(target.name)!
     const heritageMethods = target.heritageClauses
         ?.flatMap(it => heritageDeclarations(typeChecker, it))
-        .flatMap(it => (ts.isClassDeclaration(it) || ts.isInterfaceDeclaration(it))
+        .flatMap(it => ts.isInterfaceDeclaration(it)
             ? getBuilderMethods(declarationTable, it, typeChecker, typeNodeNameConvertor, className)
             : [])
         ?? []
