@@ -15,6 +15,7 @@
 
 import { IndentedPrinter } from "../IndentedPrinter";
 import { isDefined, Language, stringOrNone } from "../util";
+import { capitalize, Language, stringOrNone } from "../util";
 import {
     AggregateConvertor,
     ArgConvertor,
@@ -1294,7 +1295,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         super.writeMethodCall(receiver, method, params, nullable && receiver !== "this");
     }
     compareLiteral(expr: LanguageExpression, literal: string): LanguageExpression {
-        return super.makeNaryOp('instanceof', [expr, this.makeString(createLiteralDeclName(literal))]);
+        return super.makeNaryOp('instanceof', [expr, this.makeString(createLiteralDeclName(capitalize(literal)))]);
     }
     makeCastEnumToInt(convertor: EnumConvertor, value: string): string {
         return `${value}.${convertor.isStringEnum ? "ordinal" : "value"}`;
@@ -1523,7 +1524,7 @@ export class CJLanguageWriter extends LanguageWriter {
         let inheritancePart = [extendsClause, implementsClause]
             .filter(isDefined)
             .join(' & ')
-        inheritancePart = inheritancePart.length != 0 ? ' <: '.concat(inheritancePart) : '' 
+        inheritancePart = inheritancePart.length != 0 ? ' <: '.concat(inheritancePart) : ''
         this.printer.print(`public open class ${name}${inheritancePart} {`)
         this.pushIndent()
         op(this)
