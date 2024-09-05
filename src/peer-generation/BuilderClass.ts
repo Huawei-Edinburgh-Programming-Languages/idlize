@@ -138,7 +138,10 @@ export function toBuilderClass(declarationTable: DeclarationTable,
     const isClass = ts.isClassDeclaration(target)
     const isInterface = ts.isInterfaceDeclaration(target)
 
-    const superClass = extractSuperElement(target)
+    let superClass = extractSuperElement(target)
+    if (superClass?.generics)
+        // we do not want builder class to have generics
+        superClass = new SuperElement(superClass.name)
 
     const fields = isClass
         ? target.members
