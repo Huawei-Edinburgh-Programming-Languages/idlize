@@ -678,7 +678,7 @@ export class DeclarationTable {
             return new EnumConvertor(param, declaration.parent, this.isStringEnum(declaration.parent.members))
         }
         if (ts.isTypeAliasDeclaration(declaration)) {
-            return new TypeAliasConvertor(param, this, declaration, type.typeArguments, typeNodeNameConvertor)
+            return new TypeAliasConvertor(param, this, declaration, typeNodeNameConvertor)
         }
         if (ts.isInterfaceDeclaration(declaration)) {
             if (isMaterialized(declaration)) {

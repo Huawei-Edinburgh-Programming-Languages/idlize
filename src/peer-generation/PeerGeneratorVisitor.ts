@@ -1125,7 +1125,7 @@ export function createTypeDependenciesCollector(
 ): TypeDependenciesCollector {
     return library.declarationTable.language == Language.TS
         ? new ImportsAggregateCollector(library, false)
-        : new ArkTSTypeDepsCollector(library, false, arkts.declDependenciesCollector)
+        : new ArkTSTypeDepsCollector(library, true, arkts.declDependenciesCollector)
 }
 
 export function generateMethodModifiers(method: ts.ConstructorDeclaration | ts.MethodDeclaration | ts.MethodSignature) {

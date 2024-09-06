@@ -1312,7 +1312,6 @@ export class TypeAliasConvertor extends ProxyConvertor {
         param: string,
         private table: DeclarationTable,
         declaration: ts.TypeAliasDeclaration,
-        private typeArguments: ts.NodeArray<ts.TypeNode> | undefined,
         typeNodeNameConvertor: TypeNodeNameConvertor | undefined
     ) {
         super(table.typeConvertor(param, declaration.type, false, typeNodeNameConvertor), identName(declaration.name))
