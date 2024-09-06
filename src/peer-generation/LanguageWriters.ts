@@ -1028,6 +1028,9 @@ export abstract class LanguageWriter {
     makeCastEnumToInt(_: EnumConvertor, value: string): string {
         return value;
     }
+    makeCastCustomObject(customName: string, _isGenericType: boolean): LanguageExpression {
+        return this.makeString(customName)
+    }
 }
 
 export class TSLanguageWriter extends LanguageWriter {
@@ -1268,7 +1271,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     }
     makeDiscriminatorFromFields(convertor: {targetType: (writer: LanguageWriter) => Type}, value: string, accessors: string[]): LanguageExpression {
         if (convertor instanceof CustomTypeConvertor) {
-            return this.makeString(`${value} instanceof ${convertor.customName}`)
+            return this.makeString(`${value} instanceof ${convertor.customTypeName}`)
         }
         return this.makeString(`${value} instanceof ${convertor.targetType(this).name}`)
     }
@@ -1307,6 +1310,12 @@ export class ETSLanguageWriter extends TSLanguageWriter {
             return this.makeString(`${valueName} instanceof ${convertor.tsTypeName}`)
         }
         return super.makeUnionVariantCondition(convertor, valueName, valueType, type, index);
+    }
+    makeCastCustomObject(customName: string, isGenericType: boolean): LanguageExpression {
+        if (isGenericType) {
+            return this.makeCast(this.makeString(customName), new Type("Object"))
+        }
+        return super.makeCastCustomObject(customName, isGenericType);
     }
 }
 

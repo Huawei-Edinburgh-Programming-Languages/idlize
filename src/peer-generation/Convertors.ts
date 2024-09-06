@@ -18,7 +18,6 @@ import { RuntimeType } from "./PeerGeneratorVisitor"
 import * as ts from "typescript"
 import { BlockStatement, BranchStatement, LanguageExpression, LanguageStatement, LanguageWriter, NamedMethodSignature, Type } from "./LanguageWriters"
 import { mapType, TypeNodeNameConvertor } from "./TypeNodeNameConvertor"
-import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
 
 function castToInt8(value: string, lang: Language): string {
     switch (lang) {
@@ -600,23 +599,28 @@ export class CustomTypeConvertor extends BaseArgConvertor {
     private static knownTypes: Map<string, [string, boolean][]> = new Map([
         ["LinearGradient", [["angle", true], ["direction", true], ["colors", false], ["repeating", true]]]
     ])
-    public readonly customName: string
-    constructor(param: string, customName: string, tsType?: string) {
+    constructor(param: string,
+                public readonly customTypeName: string,
+                private readonly isGenericType: boolean,
+                tsType?: string) {
         super(tsType ?? "Object", [RuntimeType.OBJECT], false, true, param)
-        this.customName = customName
     }
     convertorArg(param: string, writer: LanguageWriter): string {
         throw new Error("Must never be used")
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
-        printer.writeMethodCall(`${param}Serializer`, `writeCustomObject`, [`"${this.customName}"`, value])
+        printer.writeMethodCall(
+            `${param}Serializer`,
+            `writeCustomObject`,
+            [`"${this.customTypeName}"`, printer.makeCastCustomObject(value, this.isGenericType).asString()]
+        )
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
         const receiver = printer.getObjectAccessor(this, value)
         return printer.makeAssign(receiver, undefined,
                 printer.makeCast(printer.makeMethodCall(`${param}Deserializer`,
                         "readCustomObject",
-                        [printer.makeString(`"${this.customName}"`)]),
+                        [printer.makeString(`"${this.customTypeName}"`)]),
                     printer.makeType(this.tsTypeName, false, receiver)), false)
     }
     nativeType(impl: boolean): string {
@@ -629,10 +633,10 @@ export class CustomTypeConvertor extends BaseArgConvertor {
         return true
     }
     override getMembers(): string[] {
-        return CustomTypeConvertor.knownTypes.get(this.customName)?.map(it => it[0]) ?? super.getMembers()
+        return CustomTypeConvertor.knownTypes.get(this.customTypeName)?.map(it => it[0]) ?? super.getMembers()
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        const uniqueFields = CustomTypeConvertor.knownTypes.get(this.customName)?.filter(it => !duplicates.has(it[0]))
+        const uniqueFields = CustomTypeConvertor.knownTypes.get(this.customTypeName)?.filter(it => !duplicates.has(it[0]))
         return this.discriminatorFromFields(value, writer, uniqueFields, it => it[0], it => it[1])
     }
 }
