@@ -70,9 +70,6 @@ if compile_callbacks_test
         arkoala_dir + '/callbacks_test.cc',
     ]
 endif
-# if source_set == 'cangjie-subset'
-# sources = []
-# endif
 
 is_msvc = meson.get_compiler('cpp').get_id() == 'msvc'
 is_clang = meson.get_compiler('cpp').get_id() == 'clang'
@@ -150,6 +147,10 @@ node_include_dirs = [
 node_sources = [
     external_interop_dir / 'napi/convertors-napi.cc'
 ]
+cj_cflags = ['-DKOALA_CJ']
+cj_include_dirs = [
+    external_interop_dir / 'cangjie'
+]
 if os == 'windows'
     cflags += ['-DKOALA_WINDOWS']
     node_sources += [ external_interop_dir / 'napi' / 'win-dynamic-node.cc' ]
@@ -215,14 +216,14 @@ endif
 
 if is_cj
 shared_library(cj_library_name,
-    cj_sources,
+    sources + cj_sources,
     override_options: [
         'b_lundef=false',
     ],
     install: true,
-    include_directories: cj_include_dirs,
+    include_directories: include_dirs + cj_include_dirs,
     install_dir: meson.current_source_dir(),
-    cpp_args: cflags,
+    cpp_args: cflags + cj_cflags,
     link_args: ldflags,
     dependencies: []
 )

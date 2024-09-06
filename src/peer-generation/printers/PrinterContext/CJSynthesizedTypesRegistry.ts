@@ -338,6 +338,8 @@ export class CJSynthesizedTypesRegistry implements SynthesizedTypesRegistry {
             return {name: `value${index}`, type: this.getTargetType(this.toTarget(subType), false)}
         })
 
+        writer.print('import std.collection.*')
+
         this.imports.printImportsForTypes(membersInfo.map(it => it.type), writer)
 
         writer.writeClass(CJType.alias, () => {
