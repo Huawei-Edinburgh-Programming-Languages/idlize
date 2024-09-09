@@ -277,9 +277,13 @@ export class EnumConvertor extends BaseArgConvertor {
         printer.writeMethodCall(`${param}Serializer`, "writeInt32", [printer.makeCastEnumToInt(this, value)])
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
+        const isCpp = printer.language === Language.CPP
+        const name = isCpp ? `Ark_${this.enumTypeName()}` : this.enumTypeName()
         let readExpr = printer.makeMethodCall(`${param}Deserializer`, "readInt32", [])
-        if (this.isStringEnum) {
-            readExpr = printer.enumFromOrdinal(readExpr, identName(this.enumType.name)!)
+        if (this.isStringEnum && !isCpp) {
+            readExpr = printer.enumFromOrdinal(readExpr, name)
+        } else {
+            readExpr = printer.makeCast(readExpr, new Type(name))
         }
         return printer.makeAssign(printer.getObjectAccessor(this, value), undefined, readExpr, false)
     }
