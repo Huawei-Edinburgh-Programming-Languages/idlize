@@ -185,6 +185,12 @@ cj_sources = [
     external_interop_dir / 'cangjie/convertors-cj.cc',
     external_interop_dir / 'cangjie/convertors-cj.h',
 ]
+compilable_cj_sources = [
+    arkoala_dir / 'arkoala.cc',
+    external_interop_dir / 'common-interop.cc',
+    external_interop_dir / 'cangjie/convertors-cj.cc',
+    external_interop_dir / 'cangjie/convertors-cj.h'
+]
 
 if is_jni
     jni_cflags = ['-DKOALA_USE_JAVA_VM', '-DKOALA_JNI']
@@ -216,7 +222,7 @@ endif
 
 if is_cj
 shared_library(cj_library_name,
-    sources + cj_sources,
+    compilable_cj_sources,
     override_options: [
         'b_lundef=false',
     ],
