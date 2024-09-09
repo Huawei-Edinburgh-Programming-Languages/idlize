@@ -833,6 +833,20 @@ export class DeclarationTable {
         })
         structs.popIndent()
         structs.print(`};`)
+
+        writeToString.print(`inline void WriteToString(string* result, enum ${enumName} value) {`)
+        writeToString.pushIndent()
+        writeToString.print(`// TBD`)
+        writeToString.popIndent()
+        writeToString.print(`}`)
+
+        writeToString.print(`template <>`)
+        writeToString.print(`inline Ark_RuntimeType runtimeType(const enum ${enumName}& value) {`)
+        writeToString.pushIndent()
+        writeToString.print(`return ARK_RUNTIME_NUMBER;`)
+        writeToString.popIndent()
+        writeToString.print(`}`)
+
         const nameOptional = PrimitiveType.OptionalPrefix + cleanPrefix(enumName, PrimitiveType.ArkPrefix)
         if (!seenNames.has(nameOptional)) {
             seenNames.add(nameOptional)
