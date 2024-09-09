@@ -829,8 +829,12 @@ export class DeclarationTable {
         structs.print(`enum ${enumName}`)
         structs.print(`{`)
         structs.pushIndent()
-        target.members.map(it => identName(it.name)).forEach(it => {
-            structs.print(`${enumName}_${it},`)
+        target.members.forEach(it => {
+            let initializer = ""
+            if (it.initializer && ts.isNumericLiteral(it.initializer)) {
+                initializer = ` = ${it.initializer.getText()}`
+            }
+            structs.print(`${enumName}_${identName(it.name)}${initializer},`)
         })
         structs.popIndent()
         structs.print(`};`)
