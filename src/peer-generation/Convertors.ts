@@ -278,11 +278,17 @@ export class EnumConvertor extends BaseArgConvertor {
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
         const isCpp = printer.language === Language.CPP
-        const name = isCpp ? `Ark_${this.enumTypeName()}` : this.enumTypeName()
+        let name = isCpp ? `Ark_${this.enumTypeName()}` : this.enumTypeName()
         let readExpr = printer.makeMethodCall(`${param}Deserializer`, "readInt32", [])
         if (this.isStringEnum && !isCpp) {
             readExpr = printer.enumFromOrdinal(readExpr, name)
         } else {
+            if (name.includes("GestureType")) {
+                name = `GestureControl.${name}`
+                name = isCpp
+                    ? "Ark_GestureControl_GestureType"
+                    : "GestureControl.GestureType"
+            }
             readExpr = printer.makeCast(readExpr, new Type(name))
         }
         return printer.makeAssign(printer.getObjectAccessor(this, value), undefined, readExpr, false)
