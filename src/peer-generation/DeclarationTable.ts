@@ -16,7 +16,8 @@
 import * as ts from "typescript"
 import { Language, asString, getDeclarationsByNode, getNameWithoutQualifiersRight, heritageDeclarations,
      identName, isStatic, throwException, typeEntityName, identNameWithNamespace,
-     isCommonMethodOrSubclass} from "../util"
+     isCommonMethodOrSubclass,
+     camelCaseToUpperSnakeCase} from "../util"
 import { IndentedPrinter } from "../IndentedPrinter"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
 import {
@@ -834,7 +835,7 @@ export class DeclarationTable {
             if (it.initializer && ts.isNumericLiteral(it.initializer)) {
                 initializer = ` = ${it.initializer.getText()}`
             }
-            structs.print(`${enumName}_${identName(it.name)}${initializer},`)
+            structs.print(`${camelCaseToUpperSnakeCase(enumName)}_${identName(it.name)}${initializer},`)
         })
         structs.popIndent()
         structs.print(`};`)
