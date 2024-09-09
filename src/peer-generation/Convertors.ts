@@ -903,7 +903,9 @@ abstract class CallbackConvertor extends FunctionConvertor {
 
         writer.writeStatement(
             writer.makeAssign(`${callbackName}`, undefined,
-                writer.makeLambda(new NamedMethodSignature(Type.Void, [new Type("Uint8Array"), new Type("int32")], ["args", "length"]),
+                writer.makeLambda(new NamedMethodSignature(Type.Void,
+                        [new Type(writer.mapType(new Type("Uint8Array"))), new Type(writer.mapType(new Type("int32")))],
+                        ["args", "length"]),
                     [
                         this.args.length > 0
                             ? writer.makeAssign("callbackDeserializer", new Type("Deserializer"),
