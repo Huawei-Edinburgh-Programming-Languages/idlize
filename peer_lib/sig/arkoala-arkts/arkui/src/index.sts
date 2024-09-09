@@ -532,7 +532,7 @@ function checkNativeCallback() {
         return sum
     })
     const arr2: int[] = [100, 200, 300, -1000]
-    assertEquals("NativeCallback Int32Array sum", -400, nativeModule()._TestCallIntInt32ArraySum(id2, arr2, arr2.length))
+    assertEquals("NativeCallback Int32Array sum", -400, nativeModule()._TestCallIntKIntArraySum(id2, arr2, arr2.length))
 
     const id3 = wrapCallback((args: byte[], length: int): int => {
         const buf = new ArrayBuffer(length)
@@ -550,7 +550,7 @@ function checkNativeCallback() {
         return 0
     })
     const arr3: int[] = [100, 200, 300, -1000]
-    nativeModule()._TestCallVoidInt32ArrayPrefixSum(id3, arr3, arr3.length)
+    nativeModule()._TestCallVoidKIntArrayPrefixSum(id3, arr3, arr3.length)
     assertEquals("NativeCallback Int32Array PrefixSum [0]", 100, arr3[0])
     assertEquals("NativeCallback Int32Array PrefixSum [1]", 300, arr3[1])
     assertEquals("NativeCallback Int32Array PrefixSum [2]", 600, arr3[2])

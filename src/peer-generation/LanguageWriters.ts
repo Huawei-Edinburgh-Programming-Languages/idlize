@@ -1297,7 +1297,8 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         return super.makeNaryOp('instanceof', [expr, this.makeString(createLiteralDeclName(capitalize(literal)))]);
     }
     makeCastEnumToInt(convertor: EnumConvertor, value: string, _unsafe?: boolean): string {
-        return `${value}.${convertor.isStringEnum ? "ordinal" : "value"}`;
+        return this.makeCast(this.makeString(`${value}.${convertor.isStringEnum ? "ordinal" : "value"}`),
+            new Type('int32')).asString();
     }
     makeUnionVariantCondition(convertor: ArgConvertor, valueName: string, valueType: string, type: string, index?: number): LanguageExpression {
         if (convertor instanceof EnumConvertor) {
