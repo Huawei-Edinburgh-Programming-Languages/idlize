@@ -237,7 +237,7 @@ shared_library(node_library_name,
     name_suffix: node_module_suffix,
     include_directories: include_dirs + node_include_dirs + arkts_include_dirs + jni_include_dirs, # vmloader
     install_dir: meson.current_source_dir(),
-    cpp_args: cflags + node_cflags + ['-DKOALA_ETS_NAPI', '-DKOALA_JNI', '-DKOALA_BBB'],
+    cpp_args: cflags + node_cflags + ['-DKOALA_ETS_NAPI', '-DKOALA_JNI'],
     link_args: ldflags + node_ldflags,
     dependencies: []
 )
