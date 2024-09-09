@@ -318,11 +318,12 @@ export function zip<A, B>(left: readonly A[], right: readonly B[]): [A, B][] {
     return left.map((_, i) => [left[i], right[i]])
 }
 
-export function identNameWithNamespace(node: ts.Node): string {
+export function identNameWithNamespace(node: ts.Node, language: Language): string {
     let parent = node.parent
     while (parent && !ts.isModuleDeclaration(parent)) parent = parent.parent
     if (parent) {
-        return `${identName(parent.name)}_${identName(node)}`
+        const separator = language === Language.CPP ? '_' : '.'
+        return `${identName(parent.name)}${separator}${identName(node)}`
     } else {
         return identName(node)!
     }

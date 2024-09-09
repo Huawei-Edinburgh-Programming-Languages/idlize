@@ -458,7 +458,7 @@ export class DeclarationTable {
 
     public enumName(name: ts.PropertyName): string {
         // TODO: support namespaces in other declarations.
-        return `${PrimitiveType.ArkPrefix}${identNameWithNamespace(name)}`
+        return `${PrimitiveType.ArkPrefix}${identNameWithNamespace(name, Language.CPP)}`
     }
 
     public get orderedDependencies(): DeclarationTarget[] {
