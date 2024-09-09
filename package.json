@@ -11,19 +11,22 @@
     "peer_lib/**/*",
     "templates/**/*"
   ],
+  "workspaces": [
+    "webidl2.js"
+  ],
   "license": "Apache-2.0",
   "keywords": [],
   "dependencies": {
     "@rollup/plugin-commonjs": "^26.0.1",
     "@types/node": "^18.0.0",
-    "@types/webidl2": "^24.4.1",
+    "@types/webidl2": "file:webidl2.js/types",
     "commander": "^10.0.0",
     "comment-parser": "^1.4.1",
     "cross-env": "^7.0.3",
     "node-addon-api": "^8.0.0",
     "node-api-headers": "^1.1.0",
     "typescript": "^4.9.5",
-    "webidl2": "^24.4.1"
+    "webidl2": "file:webidl2.js"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.2.3",
