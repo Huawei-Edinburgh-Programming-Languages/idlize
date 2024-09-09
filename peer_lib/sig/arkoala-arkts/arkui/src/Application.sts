@@ -58,10 +58,14 @@ export class Application {
         nativeModule()._CallExternalAPI(env, callback, serializer.asArray(), serializer.currentPosition());
     }
 
-    loopInteration(env: long, what: int, arg0: int) {
-        if (what == 3 && env != 0) {
-            this.callJSAPI(env, new JSAPIArgument("test", "arg" + what), arg0);
-        }
+    enter(env: long, what: int, arg0: int) {
+        this.loopIteration(env, what, arg0)
+    }
+
+    loopIteration(env: long, what: int, arg0: int) {
+        // if (what == 3 && env != 0) {
+        //     this.callJSAPI(env, new JSAPIArgument("test", "arg" + what), arg0);
+        // }
         this.checkEvents(what)
         this.updateState()
         this.render()
@@ -77,7 +81,7 @@ export function main() {
     const app = Application.startApplication(0)
     try {
         for (let i = 0; i < 10; i++) {
-            app.loopInteration(0, i, 0)
+            app.loopIteration(0, i, 0)
         }
     } catch (e: Error) {
         console.log(e.stack)

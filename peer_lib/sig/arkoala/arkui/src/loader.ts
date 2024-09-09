@@ -22,7 +22,7 @@ function waitVSync(): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, 100) )
 }
 
-export async function runEventLoop(env: pointer) {
+export async function runEventLoop(vmEntry: pointer) {
     let cb = wrapCallback((data: Uint8Array, length: int32) => {
         let deserializer = new Deserializer(data.buffer, length)
         let parameter = {
@@ -32,29 +32,24 @@ export async function runEventLoop(env: pointer) {
         console.log(`JS: key: ${parameter.key} value: ${parameter.value}`)
     })
     for (let i = 0; i < 5; i++) {
-        nativeModule()._RunVirtualMachine(env, i, cb)
+        nativeModule()._RunApplication(vmEntry, i, 0)
         await waitVSync()
     }
 }
 
 export function checkLoader() {
-    {
-        let ptr = nativeModule()._LoadVirtualMachine2("java", __dirname + "/../out/java-subset/bin", __dirname + "/../native");
-        console.log(ptr);
-        nativeModule()._StartApplication(ptr, "org/koalaui/arkoala/Application", "startApplication", "(J)Lorg/koalaui/arkoala/Application;");
+    let vmEntry: pointer = 0
+    if (process.argv[process.argv.length - 1] == 'java') {
+        vmEntry = nativeModule()._LoadVirtualMachine2("java", __dirname + "/../out/java-subset/bin", __dirname + "/../native");
+        nativeModule()._StartApplication(vmEntry, "org/koalaui/arkoala/Application", "startApplication", "(J)Lorg/koalaui/arkoala/Application;",  "enter", "(JII)V");
     }
-    {
-        let ptr = nativeModule()._LoadVirtualMachine2("panda", __dirname + "/../build/abc/subset/sig/arkoala-arkts/arkui/src", __dirname + "/../native");
-        console.log(ptr);
-        nativeModule()._StartApplication(ptr, "Application", "startApplication", "J:LApplication;");
+    if (process.argv[process.argv.length - 1] == 'panda') {
+        vmEntry = nativeModule()._LoadVirtualMachine2("panda", __dirname + "/../build/abc/subset/sig/arkoala-arkts/arkui/src", __dirname + "/../native");
+        nativeModule()._StartApplication(vmEntry, "Application", "startApplication", "J:LApplication;", "enter", "JII:V");
     }
-    return
-
-    console.log("checkLoader")
-    let classPath = __dirname + "/../out/java-subset/bin"
-    let libPath = __dirname + "/../native"
-    let env = nativeModule()._LoadVirtualMachine(libPath, classPath, 0)
-    setTimeout(async () => runEventLoop(env), 0)
+    if (vmEntry != 0) {
+        setTimeout(async () => runEventLoop(vmEntry), 0)
+    }
 }
 
 checkLoader()

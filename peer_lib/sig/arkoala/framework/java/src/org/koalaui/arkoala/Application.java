@@ -48,9 +48,9 @@ public class Application {
     }
 
     public void loopIteration(long env, int what, int arg0) {
-        if (what == 3 && env != 0) {
-            callJSAPI(env, new JSAPIArgument("test", "arg" + what), arg0);
-        }
+        // if (what == 3 && env != 0) {
+        //     callJSAPI(env, new JSAPIArgument("test", "arg" + what), arg0);
+        // }
         checkEvents(what);
         updateState();
         render();

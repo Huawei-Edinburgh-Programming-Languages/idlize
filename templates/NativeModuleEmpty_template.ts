@@ -112,6 +112,7 @@ export class NativeModuleEmpty extends NativeModuleEmptyIntegrated implements Na
 
     _LoadVirtualMachine(classPath: string, libPath: string, kind: KInt): pointer { throw new Error("unsupported") }
     _LoadVirtualMachine2(arg1: string, arg2: string, arg3: string): pointer { throw new Error("unsupported") }
-    _StartApplication(arg1: pointer, arg2: string, arg3: string, arg4: string): pointer { throw new Error("unsupported") }
+    _StartApplication(arg1: pointer, arg2: string, arg3: string, arg4: string, arg5: string, arg6: string): pointer { throw new Error("unsupported") }
+    _RunApplication(arg1: pointer, arg2: KInt, arg3: KInt): KInt { throw new Error("unsupported") }
     _RunVirtualMachine(env: pointer, what: KInt): KInt { throw new Error("unsupported") }
 }
