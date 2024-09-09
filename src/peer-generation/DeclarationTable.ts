@@ -746,7 +746,8 @@ export class DeclarationTable {
         if (field.optional) {
             name = cleanPrefix(name, PrimitiveType.ArkPrefix)
         }
-        structs.print(`${this.cFieldKind(field.declaration)}${prefix}${name} ${field.name};`)
+        const cKind = field.optional ? "" : this.cFieldKind(field.declaration)
+        structs.print(`${cKind}${prefix}${name} ${field.name};`)
     }
 
     allOptionalTypes(): Set<string> {
@@ -853,7 +854,7 @@ export class DeclarationTable {
             structs.print(`typedef struct ${nameOptional} {`)
             structs.pushIndent()
             structs.print(`enum ${PrimitiveType.Tag.getText()} tag;`)
-            structs.print(`${enumName} value;`)
+            structs.print(`enum ${enumName} value;`)
             structs.popIndent()
             structs.print(`} ${nameOptional};`)
             this.writeOptional(nameOptional, writeToString, this.isPointerDeclaration(target))
@@ -1038,7 +1039,7 @@ export class DeclarationTable {
     cFieldKind(declaration: DeclarationTarget): string {
         if (declaration instanceof PointerType) return this.cFieldKind(declaration.pointed)
         if (declaration instanceof PrimitiveType) return ""
-        if (ts.isEnumDeclaration(declaration)) return ""
+        if (ts.isEnumDeclaration(declaration)) return "enum "
         if (ts.isImportTypeNode(declaration)) return ""
         if (checkDeclarationTargetMaterialized(declaration)) return ""
         return `struct `
