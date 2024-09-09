@@ -837,7 +837,7 @@ export class DeclarationTable {
 
         writeToString.print(`inline void WriteToString(string* result, enum ${enumName} value) {`)
         writeToString.pushIndent()
-        writeToString.print(`// TBD`)
+        writeToString.print(`WriteToString(result, (${PrimitiveType.Int32.getText()}) value);`)
         writeToString.popIndent()
         writeToString.print(`}`)
 
