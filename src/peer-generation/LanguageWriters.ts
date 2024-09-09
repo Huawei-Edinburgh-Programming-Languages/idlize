@@ -14,8 +14,7 @@
  */
 
 import { IndentedPrinter } from "../IndentedPrinter";
-import { isDefined, Language, stringOrNone } from "../util";
-import { capitalize, Language, stringOrNone } from "../util";
+import { capitalize, isDefined, Language, stringOrNone } from "../util";
 import {
     AggregateConvertor,
     ArgConvertor,
@@ -844,7 +843,7 @@ export abstract class LanguageWriter {
         //this.printer.print(stmt.asString())
         stmt.write(this)
     }
-    writeEnumToInt(convertor: EnumConvertor, enumName: string, unsafe?: boolean): string {
+    makeCastEnumToInt(convertor: EnumConvertor, enumName: string, unsafe?: boolean): string {
         if (unsafe) {
             return this.makeUnsafeCast(convertor, enumName)
         }
@@ -1024,9 +1023,6 @@ export abstract class LanguageWriter {
     }
     compareLiteral(expr: LanguageExpression, literal: string): LanguageExpression {
         return this.makeNaryOp('===', [expr, this.makeString(`"${literal}"`)])
-    }
-    makeCastEnumToInt(_: EnumConvertor, value: string): string {
-        return value;
     }
     makeCastCustomObject(customName: string, _isGenericType: boolean): LanguageExpression {
         return this.makeString(customName)
@@ -1300,7 +1296,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     compareLiteral(expr: LanguageExpression, literal: string): LanguageExpression {
         return super.makeNaryOp('instanceof', [expr, this.makeString(createLiteralDeclName(capitalize(literal)))]);
     }
-    makeCastEnumToInt(convertor: EnumConvertor, value: string): string {
+    makeCastEnumToInt(convertor: EnumConvertor, value: string, _unsafe?: boolean): string {
         return `${value}.${convertor.isStringEnum ? "ordinal" : "value"}`;
     }
     makeUnionVariantCondition(convertor: ArgConvertor, valueName: string, valueType: string, type: string, index?: number): LanguageExpression {
@@ -1518,7 +1514,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     makeSerializerCreator() {
         return this.makeString('Serializer::createSerializer');
     }
-    writeEnumToInt(convertor: EnumConvertor, enumName: string): string {
+    makeCastEnumToInt(convertor: EnumConvertor, enumName: string, _unsafe?: boolean): string {
         return `${enumName}.getIntValue()`
     }
 }
@@ -1596,7 +1592,7 @@ export class CJLanguageWriter extends LanguageWriter {
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
         this.print(`func ${name}(${signature.args.map((it, index) => `${this.languageKeywordProtection(signature.argName(index))}: ${it.nullable ? '?' : ''}${this.mapCType(it)}`).join(", ")}): ${this.mapCType(signature.returnType)}`)
     }
-    writeEnumToInt(convertor: EnumConvertor, enumName: string): string {
+    makeCastEnumToInt(convertor: EnumConvertor, enumName: string, _unsafe?: boolean): string {
         return `${enumName}.getIntValue()`
     }
     makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
@@ -1696,8 +1692,8 @@ export class CJLanguageWriter extends LanguageWriter {
     makeUnionSelector(value: string, valueType: string): LanguageStatement {
         return this.makeAssign(valueType, undefined, this.makeMethodCall(value, "getSelector", []), false)
     }
-    makeUnionVariantCondition(value: string, type: string, index: number): LanguageExpression {
-        return this.makeString(`${value} == ${index}`)
+    makeUnionVariantCondition(_convertor: ArgConvertor, _valueName: string, valueType: string, type: string, index?: number): LanguageExpression {
+        return this.makeString(`${valueType} == ${index}`)
     }
     makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index: number) {
         return this.makeMethodCall(value, `getValue${index}`, [])

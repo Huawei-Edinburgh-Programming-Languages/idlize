@@ -432,6 +432,13 @@ class SheetOptionsImpl implements SheetOptions {
     set onWillDisappear(arg: (() => void) | undefined) {
         this._onWillDisappear = arg
     }
+
+    get expandSafeAreaInEmbeddedMode(): boolean | undefined {
+        throw new Error("Not implemented")
+    }
+    set expandSafeAreaInEmbeddedMode(arg: boolean | undefined) {
+        throw new Error("Not implemented")
+    }
 }
 
 class BlurOptionsImpl implements BlurOptions {
