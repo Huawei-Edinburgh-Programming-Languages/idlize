@@ -111,5 +111,7 @@ export class NativeModuleEmpty extends NativeModuleEmptyIntegrated implements Na
     _TestCallIntMemory(arg1: KInt, arg2: KInt): KInt { return -1 }
 
     _LoadVirtualMachine(classPath: string, libPath: string, kind: KInt): pointer { throw new Error("unsupported") }
+    _LoadVirtualMachine2(arg1: string, arg2: string, arg3: string): pointer { throw new Error("unsupported") }
+    _StartApplication(arg1: pointer, arg2: string, arg3: string, arg4: string): pointer { throw new Error("unsupported") }
     _RunVirtualMachine(env: pointer, what: KInt): KInt { throw new Error("unsupported") }
 }

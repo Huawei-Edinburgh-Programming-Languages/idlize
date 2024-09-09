@@ -50,7 +50,7 @@ KNativePointer impl_LoadVirtualMachine(
         fprintf(stderr, "Cannot load library %s: %s\n", lib.c_str(), libraryError());
         return nullptr;
     }
-    auto initFunc = (InitVirtualMachineFunc)findSymbol(handle, "InitVirtualMachine");
+    auto initFunc = (InitVirtualMachineFunc)findSymbol(handle, "InitVirtualMachine42");
     if (!initFunc)
     {
         fprintf(stderr, "Cannot find InitVirtualMachine in %s\n", lib.c_str());
@@ -79,6 +79,7 @@ KInt impl_RunVirtualMachine(KVMContext vmContext, KNativePointer env, KInt what,
 KOALA_INTEROP_CTX_3(RunVirtualMachine, KInt, KNativePointer, KInt, KInt)
 
 void impl_SetCallbackMethod(KNativePointer method) {
+    printf("dbg string\n");
     g_callbacks = (CallbackMethod*)method;
 }
 KOALA_INTEROP_V1(SetCallbackMethod, KNativePointer)

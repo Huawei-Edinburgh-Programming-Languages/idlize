@@ -38,6 +38,18 @@ export async function runEventLoop(env: pointer) {
 }
 
 export function checkLoader() {
+    {
+        let ptr = nativeModule()._LoadVirtualMachine2("java", __dirname + "/../out/java-subset/bin", __dirname + "/../native");
+        console.log(ptr);
+        nativeModule()._StartApplication(ptr, "org/koalaui/arkoala/Application", "startApplication", "(J)Lorg/koalaui/arkoala/Application;");
+    }
+    {
+        let ptr = nativeModule()._LoadVirtualMachine2("panda", __dirname + "/../build/abc/subset/sig/arkoala-arkts/arkui/src", __dirname + "/../native");
+        console.log(ptr);
+        nativeModule()._StartApplication(ptr, "Application", "startApplication", "J:LApplication;");
+    }
+    return
+
     console.log("checkLoader")
     let classPath = __dirname + "/../out/java-subset/bin"
     let libPath = __dirname + "/../native"

@@ -228,16 +228,16 @@ shared_library(cj_library_name,
 )
 else
 shared_library(node_library_name,
-    sources + node_sources,
+    sources + node_sources + [external_interop_dir / 'vmloader.cc'], # vmloader
     override_options: [
         'b_lundef=false',
     ],
     install: true,
     name_prefix: node_module_prefix,
     name_suffix: node_module_suffix,
-    include_directories: include_dirs + node_include_dirs,
+    include_directories: include_dirs + node_include_dirs + arkts_include_dirs + jni_include_dirs, # vmloader
     install_dir: meson.current_source_dir(),
-    cpp_args: cflags + node_cflags,
+    cpp_args: cflags + node_cflags + ['-DKOALA_ETS_NAPI', '-DKOALA_JNI', '-DKOALA_BBB'],
     link_args: ldflags + node_ldflags,
     dependencies: []
 )
