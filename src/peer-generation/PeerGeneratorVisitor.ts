@@ -504,25 +504,6 @@ export class ArkTSTypeDepsCollector extends ImportsAggregateCollector {
             syntheticDeclaration
         ]
     }
-
-    convertTuple(node: ts.TupleTypeNode): ts.Declaration[] {
-        //TODO: need a proper way to detect synthetic ts.TupleTypeNode
-        if (node.parent != undefined) {
-            const aliasDeclaration = makeSyntheticTypeAliasDeclaration(
-                ArkTSTypeDepsCollector.SYNTH_TYPE_FILE_NAME,
-                this.typeToStringConvertor.convertTuple(node),
-                ts.factory.createTupleTypeNode(node.elements),
-                searchTypeParameters(node.parent),
-            )
-            this.declDependenciesCollector.value.convert(aliasDeclaration).forEach(it => {
-                if (isSourceDecl(it) && (PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it))) {
-                    addSyntheticDeclarationDependency(aliasDeclaration, convertDeclToFeature(this.peerLibrary, it))
-                }
-            })
-            return [...super.convertTuple(node), aliasDeclaration]
-        }
-        return super.convertTuple(node)
-    }
 }
 
 export class FilteredDeclarationCollector extends DeclarationDependenciesCollector {

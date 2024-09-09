@@ -209,23 +209,6 @@ export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
         return super.convertImport(node);
     }
 
-    convertTuple(node: ts.TupleTypeNode): string {
-        if (node.parent == undefined) {
-            return super.convertTuple(node);
-        }
-        //TODO: need to create an alias for ts.TupleTypeNode to prevent es2panda segmentation fault
-        const name = createTupleDeclName(node.elements
-            .map(e => this.convert(e))
-            .map(e => e.replaceAll("?", "Opt"))
-            .map(e => e.replace(/[\W_]+/g, ""))
-            .join("_"))
-        const genericsTypes = Array.from(
-            new Set(searchTypeParameters(node.parent)
-                ?.map(it => it.name.text)))
-            .join(",")
-        return `${name}${genericsTypes.length > 0 ? ''.concat('<', genericsTypes, '>') : ''}`
-    }
-
     convertUnknownKeyword(node: ts.TypeNode): string {
         return "Object"
     }
