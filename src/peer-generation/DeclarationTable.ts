@@ -17,7 +17,8 @@ import * as ts from "typescript"
 import { Language, asString, getDeclarationsByNode, getNameWithoutQualifiersRight, heritageDeclarations,
      identName, isStatic, throwException, typeEntityName, identNameWithNamespace,
      isCommonMethodOrSubclass,
-     camelCaseToUpperSnakeCase} from "../util"
+     camelCaseToUpperSnakeCase,
+     isUpperCase} from "../util"
 import { IndentedPrinter } from "../IndentedPrinter"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
 import {
@@ -849,7 +850,10 @@ export class DeclarationTable {
             if (it.initializer && ts.isNumericLiteral(it.initializer)) {
                 initializer = ` = ${it.initializer.getText()}`
             }
-            structs.print(`${camelCaseToUpperSnakeCase(enumName)}_${identName(it.name)}${initializer},`)
+            let valueName = identName(it.name)!
+            // FLC prefix stands for "From Lower Case"
+            valueName = isUpperCase(valueName) ? valueName : `FLC_${camelCaseToUpperSnakeCase(valueName)}`
+            structs.print(`${camelCaseToUpperSnakeCase(enumName)}_${valueName}${initializer},`)
         })
         structs.popIndent()
         structs.print(`};`)
