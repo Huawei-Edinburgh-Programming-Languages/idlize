@@ -79,7 +79,6 @@ KInt impl_RunVirtualMachine(KVMContext vmContext, KNativePointer env, KInt what,
 KOALA_INTEROP_CTX_3(RunVirtualMachine, KInt, KNativePointer, KInt, KInt)
 
 void impl_SetCallbackMethod(KNativePointer method) {
-    printf("dbg string\n");
     g_callbacks = (CallbackMethod*)method;
 }
 KOALA_INTEROP_V1(SetCallbackMethod, KNativePointer)

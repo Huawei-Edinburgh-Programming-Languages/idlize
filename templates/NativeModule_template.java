@@ -104,7 +104,7 @@ public class NativeModule {
   static native float _ConvertLengthMetricsUnit(float value, int originUnit, int targetUnit);
 
   static native long _LoadVirtualMachine(String classPath, String libPath, int kind);
-  static native long _LoadVirtualMachine2(String name, String classPath, String libPath);
+  static native long _LoadVirtualMachine2(int name, String classPath, String libPath);
   static native long _StartApplication(long arg1, String arg2, String arg3, String arg4, String arg5, String arg6);
   static native int _RunApplication(long arg1, int arg2, int arg3);
   static native int _RunVirtualMachine(long env, int what, int arg0);

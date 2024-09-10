@@ -40,11 +40,11 @@ export async function runEventLoop(vmEntry: pointer) {
 export function checkLoader() {
     let vmEntry: pointer = 0
     if (process.argv[process.argv.length - 1] == 'java') {
-        vmEntry = nativeModule()._LoadVirtualMachine2("java", __dirname + "/../out/java-subset/bin", __dirname + "/../native");
+        vmEntry = nativeModule()._LoadVirtualMachine2(1, __dirname + "/../out/java-subset/bin", __dirname + "/../native");
         nativeModule()._StartApplication(vmEntry, "org/koalaui/arkoala/Application", "startApplication", "(J)Lorg/koalaui/arkoala/Application;",  "enter", "(JII)V");
     }
     if (process.argv[process.argv.length - 1] == 'panda') {
-        vmEntry = nativeModule()._LoadVirtualMachine2("panda", __dirname + "/../build/abc/subset/sig/arkoala-arkts/arkui/src", __dirname + "/../native");
+        vmEntry = nativeModule()._LoadVirtualMachine2(2, __dirname + "/../build/abc/subset/sig/arkoala-arkts/arkui/src", __dirname + "/../native");
         nativeModule()._StartApplication(vmEntry, "Application", "startApplication", "J:LApplication;", "enter", "JII:V");
     }
     if (vmEntry != 0) {
