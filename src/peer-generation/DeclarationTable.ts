@@ -710,8 +710,10 @@ export class DeclarationTable {
             if (!(elementTypePointer instanceof PointerType))
                 throw new Error(`Unexpected ${this.computeTargetName(elementTypePointer, false)}`)
             let elementType = elementTypePointer.pointed
-            if (!(elementType instanceof PrimitiveType)) {
-                if (ts.isEnumDeclaration(elementType)) {
+            if (!(elementType instanceof PrimitiveType) && ts.isEnumDeclaration(elementType)) {
+                const enumName = this.enumName(elementType.name)
+                if (!seenNames.has(enumName)) {
+                    seenNames.add(enumName)
                     this.generateEnum(structs, writeToString, elementType, seenNames)
                 }
             }
@@ -823,10 +825,6 @@ export class DeclarationTable {
 
     private generateEnum(structs: IndentedPrinter, writeToString: LanguageWriter, target: ts.EnumDeclaration, seenNames: Set<string>) {
         const enumName = this.enumName(target.name)
-        if (seenNames.has(enumName)) {
-            return
-        }
-        seenNames.add(enumName)
         structs.print(`enum ${enumName}`)
         structs.print(`{`)
         structs.pushIndent()
@@ -880,6 +878,7 @@ export class DeclarationTable {
                 throw new Error(`No assigned name for ${(target as ts.TypeNode).getText()} shall be ${this.computeTargetName(target, false)}`)
             }
             if (seenNames.has(nameAssigned)) continue
+            seenNames.add(nameAssigned)
             let isPointer = this.isPointerDeclaration(target)
             let isAccessor = checkDeclarationTargetMaterialized(target)
             let noBasicDecl = isAccessor || (target instanceof PrimitiveType && noDeclaration.includes(target))
@@ -925,9 +924,7 @@ export class DeclarationTable {
                 this.generateWriteToString(nameAssigned, target, writeToString, isPointer)
             }
             this.writeRuntimeType(target, nameAssigned, false, writeToString)
-            seenNames.add(nameAssigned)
             if (seenNames.has(nameOptional)) continue
-            // TODO: properly handle seen names for enums
             seenNames.add(nameOptional)
             if (!(target instanceof PointerType) && nameAssigned != "Optional" && nameAssigned != "RelativeIndexable") {
                 this.printStructsCHead(nameOptional, structDescriptor, structs, writeToString, seenNames)
