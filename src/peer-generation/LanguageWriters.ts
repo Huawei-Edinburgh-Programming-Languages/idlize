@@ -14,21 +14,23 @@
  */
 
 import { IndentedPrinter } from "../IndentedPrinter";
-import { Language, stringOrNone } from "../util";
+import { capitalize, isDefined, Language, stringOrNone } from "../util";
 import {
     AggregateConvertor,
     ArgConvertor,
     ArrayConvertor,
     BaseArgConvertor,
+    CustomTypeConvertor,
     EnumConvertor,
     MapConvertor,
     OptionConvertor,
+    StringConvertor,
     TupleConvertor,
     UnionConvertor
 } from "./Convertors";
 import { FieldRecord, PrimitiveType } from "./DeclarationTable";
 import { RuntimeType } from "./PeerGeneratorVisitor";
-import { mapType, TSTypeNodeNameConvertor } from "./TypeNodeNameConvertor";
+import { createLiteralDeclName, mapType, TSTypeNodeNameConvertor } from "./TypeNodeNameConvertor";
 
 import * as ts from "typescript"
 import * as fs from "fs"
@@ -43,8 +45,17 @@ export class Type {
     static This = new Type('this')
     static Void = new Type('void')
 
+    private static PRIMITIVE_TYPES = new Set(
+        [Type.Boolean, Type.Int32, Type.Number, Type.Pointer, Type.Void]
+            .map(it => it.name)
+    )
+
     toString(): string {
         return `${this.name}${this.nullable ? "?" : ""}`
+    }
+
+    isPrimitive(): boolean {
+        return Type.PRIMITIVE_TYPES.has(this.name)
     }
 }
 
@@ -211,6 +222,15 @@ export class CJCheckDefinedExpression implements LanguageExpression {
     }
 }
 
+export class NewObjectExpression implements LanguageExpression {
+    constructor(
+        private objectName: string,
+        private params: LanguageExpression[]) { }
+    asString(): string {
+        return `new ${this.objectName}(${this.params.map(it => it.asString()).join(", ")})`
+    }
+}
+
 export class FunctionCallExpression implements LanguageExpression {
     constructor(
         private name: string,
@@ -285,6 +305,20 @@ class JavaLambdaExpression extends LambdaExpression {
     asString(): string {
         const params = this.signature.args.map((it, i) => `${it.name} ${this.signature.argName(i)}`)
         return `(${params.join(", ")}) -> { ${this.bodyAsString()} }`
+    }
+}
+
+class TSThrowErrorStatement implements LanguageStatement {
+    constructor(public message: string) { }
+    write(writer: LanguageWriter): void {
+        writer.print(`throw new Error("${this.message}")`)
+    }
+}
+
+class CLikeThrowErrorStatement implements LanguageStatement {
+    constructor(public message: string) { }
+    write(writer: LanguageWriter): void {
+        writer.print(`throw new Error("${this.message}");`)
     }
 }
 
@@ -650,11 +684,11 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
                 writer.writeFieldDeclaration(member.name, new Type(this.enumEntity.name), [FieldModifier.STATIC], false,
                     writer.makeString(`new ${this.enumEntity.name}(${initText}${isTypeString ? `,${index}` : ""})`))
             })
-            const typeName = isTypeString ? "string" : "int"
+            const typeName = isTypeString ? "string" : "KInt"
             let argTypes = [new Type(typeName)]
             let argNames = ["value"]
             if (isTypeString) {
-                argTypes.push(new Type("int"))
+                argTypes.push(new Type("KInt"))
                 argNames.push("ordinal")
             }
             writer.writeConstructorImplementation(this.enumEntity.name,
@@ -666,7 +700,7 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
             })
             writer.writeFieldDeclaration("value", new Type(typeName), [FieldModifier.PUBLIC, FieldModifier.READONLY], false)
             if (isTypeString) {
-                writer.writeFieldDeclaration("ordinal", new Type("int"), [FieldModifier.PUBLIC, FieldModifier.READONLY], false)
+                writer.writeFieldDeclaration("ordinal", new Type("KInt"), [FieldModifier.PUBLIC, FieldModifier.READONLY], false)
             }
             writer.writeMethodImplementation(new Method("of", new MethodSignature(new Type(this.enumEntity.name), [argTypes[0]]), [MethodModifier.PUBLIC, MethodModifier.STATIC]),
                 (writer)=> {
@@ -760,6 +794,7 @@ export abstract class LanguageWriter {
     abstract writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void): void
     abstract makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression | undefined, isDeclared: boolean, isConst?: boolean): LanguageStatement;
     abstract makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression;
+    abstract makeThrowError(message: string): LanguageStatement;
     abstract makeReturn(expr?: LanguageExpression): LanguageStatement;
     abstract makeRuntimeType(rt: RuntimeType): LanguageExpression
     abstract getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string
@@ -780,6 +815,7 @@ export abstract class LanguageWriter {
     abstract get supportedFieldModifiers(): FieldModifier[]
     abstract enumFromOrdinal(value: LanguageExpression, enumType: string): LanguageExpression
     abstract ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression
+
 
     concat(other: PrinterLike): this {
         other.getOutput().forEach(it => this.print(it))
@@ -807,6 +843,12 @@ export abstract class LanguageWriter {
         //this.printer.print(stmt.asString())
         stmt.write(this)
     }
+    makeCastEnumToInt(convertor: EnumConvertor, enumName: string, unsafe?: boolean): string {
+        if (unsafe) {
+            return this.makeUnsafeCast(convertor, enumName)
+        }
+        return enumName
+    }
     makeTag(tag: string): string {
         return "Tag." + tag
     }
@@ -825,6 +867,9 @@ export abstract class LanguageWriter {
     }
     makeValueFromOption(value: string, destinationConvertor: ArgConvertor): LanguageExpression {
         return this.makeString(`${value}!`)
+    }
+    makeNewObject(objectName: string, params: LanguageExpression[] = []): LanguageExpression {
+        return new NewObjectExpression(objectName, params)
     }
     makeFunctionCall(name: string, params: LanguageExpression[]): LanguageExpression {
         return new FunctionCallExpression(name, params)
@@ -866,8 +911,8 @@ export abstract class LanguageWriter {
     makeUnionSelector(value: string, valueType: string): LanguageStatement {
         return this.makeAssign(valueType, undefined, this.makeString(`runtimeType(${value})`), false)
     }
-    makeUnionVariantCondition(value: string, type: string, index?: number): LanguageExpression {
-        return this.makeString(`RuntimeType.${type.toUpperCase()} == ${value}`)
+    makeUnionVariantCondition(_convertor: ArgConvertor, _valueName: string, valueType: string, type: string, index?: number): LanguageExpression {
+        return this.makeString(`RuntimeType.${type.toUpperCase()} == ${valueType}`)
     }
     makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index?: number): LanguageExpression {
         return this.makeString(`unsafeCast<${type.name}>(${value})`)
@@ -910,8 +955,11 @@ export abstract class LanguageWriter {
     makeStatement(expr: LanguageExpression): LanguageStatement {
         return new ExpressionStatement(expr)
     }
-    writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
+    writeNativeMethodDeclaration(name: string, signature: MethodSignature, isNative?: boolean): void {
         this.writeMethodDeclaration(name, signature)
+    }
+    writeUnsafeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
+        return
     }
     pushIndent() {
         this.printer.pushIndent()
@@ -973,6 +1021,12 @@ export abstract class LanguageWriter {
     languageKeywordProtection(keyword: string): string {
         return keyword
     }
+    compareLiteral(expr: LanguageExpression, literal: string): LanguageExpression {
+        return this.makeNaryOp('===', [expr, this.makeString(`"${literal}"`)])
+    }
+    makeCastCustomObject(customName: string, _isGenericType: boolean): LanguageExpression {
+        return this.makeString(customName)
+    }
 }
 
 export class TSLanguageWriter extends LanguageWriter {
@@ -1033,7 +1087,7 @@ export class TSLanguageWriter extends LanguageWriter {
             prefix = `set ${prefix}`
             needReturn = false
         }
-        prefix = prefix ? prefix + " " : ""
+        prefix = prefix ? prefix.trim() + " " : ""
         const typeParams = generics ? `<${generics.join(", ")}>` : ""
         this.printer.print(`${prefix}${name}${typeParams}(${signature.args.map((it, index) => `${signature.argName(index)}${it.nullable ? "?" : ""}: ${this.mapType(it)}${signature.argDefault(index) ? ' = ' + signature.argDefault(index) : ""}`).join(", ")})${needReturn ? ": " + this.mapType(signature.returnType) : ""} ${needBracket ? "{" : ""}`)
     }
@@ -1042,6 +1096,9 @@ export class TSLanguageWriter extends LanguageWriter {
     }
     makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression {
         return new TSLambdaExpression(signature, body)
+    }
+    makeThrowError(message: string): LanguageStatement {
+        return new TSThrowErrorStatement(message)
     }
     makeReturn(expr: LanguageExpression): LanguageStatement {
         return new TSReturnStatement(expr)
@@ -1169,21 +1226,18 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     }
     mapType(type: Type, convertor?: ArgConvertor): string {
         if (convertor instanceof EnumConvertor) {
-            return 'int'
+            return convertor.enumTypeName(this.language)
         }
         if (convertor instanceof AggregateConvertor && convertor.aliasName !== undefined) {
             return convertor.aliasName
         }
         if (convertor instanceof ArrayConvertor) {
-            return `${convertor.elementTypeName()}[]`
+            return convertor.isArrayType
+                ? `${convertor.elementTypeName()}[]`
+                : `Array<${convertor.elementTypeName()}>`
         }
         switch (type.name) {
-            case 'KPointer': return 'long'
-            case 'Uint8Array': return 'byte[]'
-            case 'int32': case 'KInt': return 'int'
-            case 'KStringPtr': return 'String'
-            case 'KLength': return 'Object'
-            case 'number': return 'double'
+            case 'Uint8Array': return 'KUint8ArrayPtr'
         }
         return super.mapType(type)
     }
@@ -1193,7 +1247,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     nativeReceiver(): string { return 'NativeModule' }
     makeUnsafeCast(convertor: ArgConvertor, param: string): string {
         if (convertor instanceof EnumConvertor && !param.endsWith(".value")) {
-            return `(${param} as ${convertor.enumTypeName()}).value`
+            return `(${param} as ${convertor.enumTypeName(this.language)}).${convertor.isStringEnum ? 'ordinal' : 'value'}`
         }
         return super.makeUnsafeCast(convertor, param)
     }
@@ -1205,25 +1259,16 @@ export class ETSLanguageWriter extends TSLanguageWriter {
             super.runtimeType(param, valueType, value);
         }
     }
-    makeUnionSelector(value: string, valueType: string): LanguageStatement {
-        let statements = [this.makeAssign("type", undefined, this.makeString(`typeof ${value}`))]
-        Object.keys(RuntimeType)
-            .filter((value) => isNaN(Number(value)))
-            .forEach((value) => {
-                statements.push(
-                    this.makeCondition(this.makeNaryOp("==", [this.makeString("type"), this.makeString(`"${value.toLowerCase()}"`)]),
-                        this.makeAssign(valueType, undefined, this.makeString(`RuntimeType.${value}`), false))
-                )
-        })
-        return new BlockStatement(statements)
-    }
     makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index?: number): LanguageExpression {
         return this.makeString(`${value} as ${type.name}`)
     }
     ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression {
-        return this.makeCast(value, new Type('int'));
+        return value;
     }
     makeDiscriminatorFromFields(convertor: {targetType: (writer: LanguageWriter) => Type}, value: string, accessors: string[]): LanguageExpression {
+        if (convertor instanceof CustomTypeConvertor) {
+            return this.makeString(`${value} instanceof ${convertor.customTypeName}`)
+        }
         return this.makeString(`${value} instanceof ${convertor.targetType(this).name}`)
     }
     makeValueFromOption(value: string, destinationConvertor: ArgConvertor): LanguageExpression {
@@ -1233,14 +1278,14 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         return super.makeValueFromOption(value, destinationConvertor)
     }
     makeCallIsResource(value: string): LanguageExpression {
-        return this.makeString(`(${value} instanceof Resource)`);
+        return this.makeString(`isResource(${value})`);
     }
     makeEnumEntity(enumEntity: EnumEntity, isExport: boolean): LanguageStatement {
         return new ArkTSEnumEntityStatement(enumEntity, isExport);
     }
     getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string {
-        if (convertor instanceof EnumConvertor) {
-            return `(${value} as ${convertor.enumTypeName()}).${convertor.isStringEnum ? "ordinal" : "value"}`
+        if (convertor instanceof StringConvertor && convertor.isLiteral()) {
+            return `${value}.toString()`
         }
         return super.getObjectAccessor(convertor, value, args);
     }
@@ -1248,11 +1293,35 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         // ArkTS does not support - 'this.?'
         super.writeMethodCall(receiver, method, params, nullable && receiver !== "this");
     }
+    compareLiteral(expr: LanguageExpression, literal: string): LanguageExpression {
+        return super.makeNaryOp('instanceof', [expr, this.makeString(createLiteralDeclName(capitalize(literal)))]);
+    }
+    makeCastEnumToInt(convertor: EnumConvertor, value: string, _unsafe?: boolean): string {
+        return this.makeCast(this.makeString(`${value}.${convertor.isStringEnum ? "ordinal" : "value"}`),
+            new Type('int32')).asString();
+    }
+    makeUnionVariantCondition(convertor: ArgConvertor, valueName: string, valueType: string, type: string, index?: number): LanguageExpression {
+        if (convertor instanceof EnumConvertor) {
+            return this.makeString(`${valueName} instanceof ${convertor.enumTypeName(this.language)}`)
+        } else if (convertor instanceof StringConvertor && convertor.isLiteral()) {
+            return this.makeString(`${valueName} instanceof ${convertor.tsTypeName}`)
+        }
+        return super.makeUnionVariantCondition(convertor, valueName, valueType, type, index);
+    }
+    makeCastCustomObject(customName: string, isGenericType: boolean): LanguageExpression {
+        if (isGenericType) {
+            return this.makeCast(this.makeString(customName), new Type("Object"))
+        }
+        return super.makeCastCustomObject(customName, isGenericType);
+    }
 }
 
 abstract class CLikeLanguageWriter extends LanguageWriter {
     protected constructor(printer: IndentedPrinter, language: Language) {
         super(printer, language)
+    }
+    makeThrowError(message: string): LanguageStatement {
+        return new CLikeThrowErrorStatement(message)
     }
     writeMethodCall(receiver: string, method: string, params: string[], nullable = false): void {
         this.printer.print(`${receiver}.${method}(${params.join(", ")});`)
@@ -1281,10 +1350,11 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     constructor(printer: IndentedPrinter) {
         super(printer, Language.JAVA)
     }
-    writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string, interfaces?: string[]): void {
+    writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string, interfaces?: string[], generics?: string[]): void {
+        let genericsClause = generics?.length ? `<${generics.join(', ')}> ` : ``
         let extendsClause = superClass ? ` extends ${superClass}` : ''
         let implementsClause = interfaces ? ` implements ${interfaces.join(",")}` : ''
-        this.printer.print(`class ${name}${extendsClause}${implementsClause} {`)
+        this.printer.print(`class ${name}${genericsClause}${extendsClause}${implementsClause} {`)
         this.pushIndent()
         op(this)
         this.popIndent()
@@ -1352,8 +1422,12 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     makeUnionSelector(value: string, valueType: string): LanguageStatement {
         return this.makeAssign(valueType, undefined, this.makeMethodCall(value, "getSelector", []), false)
     }
-    makeUnionVariantCondition(value: string, type: string, index: number): LanguageExpression {
-        return this.makeString(`${value} == ${index}`)
+    makeUnionVariantCondition(_convertor: ArgConvertor,
+                              _valueName: string,
+                              valueType: string,
+                              _type: string,
+                              index: number): LanguageExpression {
+        return this.makeString(`${valueType} == ${index}`)
     }
     makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index: number) {
         return this.makeMethodCall(value, `getValue${index}`, [])
@@ -1445,6 +1519,9 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     makeSerializerCreator() {
         return this.makeString('Serializer::createSerializer');
     }
+    makeCastEnumToInt(convertor: EnumConvertor, enumName: string, _unsafe?: boolean): string {
+        return `${enumName}.getIntValue()`
+    }
 }
 
 export class CJLanguageWriter extends LanguageWriter {
@@ -1452,9 +1529,13 @@ export class CJLanguageWriter extends LanguageWriter {
         super(printer, language)
     }
     writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string, interfaces?: string[], generics?: string[]): void {
-        let extendsClause = superClass ? ` <: ${superClass}` : ''
-        let implementsClause = interfaces ? `<: ${interfaces.join("&")}` : ''
-        this.printer.print(`public open class ${name}${extendsClause}${implementsClause} {`)
+        let extendsClause = superClass ? `${superClass}` : undefined
+        let implementsClause = interfaces ? `${interfaces.join(' & ')}` : undefined
+        let inheritancePart = [extendsClause, implementsClause]
+            .filter(isDefined)
+            .join(' & ')
+        inheritancePart = inheritancePart.length != 0 ? ' <: '.concat(inheritancePart) : ''
+        this.printer.print(`public open class ${name}${inheritancePart} {`)
         this.pushIndent()
         op(this)
         this.popIndent()
@@ -1469,6 +1550,8 @@ export class CJLanguageWriter extends LanguageWriter {
         this.printer.print(`}`)
     }
     writeMethodCall(receiver: string, method: string, params: string[], nullable = false): void {
+        receiver = this.languageKeywordProtection(receiver)
+        params = params.map(argName => this.languageKeywordProtection(argName))
         if (nullable) {
             this.printer.print(`if (let Some(${receiver}) <- ${receiver}) { ${receiver}.${method}(${params.join(", ")}) }`)
         } else {
@@ -1480,7 +1563,9 @@ export class CJLanguageWriter extends LanguageWriter {
         let prefix = this.makeFieldModifiersList(modifiers)
         this.printer.print(`${prefix} var ${name}: ${optional ? '?' : ''}${this.mapType(type)}${init}`)
     }
-    writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void { }
+    writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void {
+        this.writeDeclaration(name, signature, modifiers)
+    }
     writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method, modifiers?: MethodModifier[]) {
         this.printer.print(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') + ' ' : ''}${className}(${signature.args.map((it, index) => `${signature.argName(index)}: ${it.nullable ? '?' : ''}${this.mapType(it)}`).join(", ")}) {`)
         this.pushIndent()
@@ -1505,6 +1590,16 @@ export class CJLanguageWriter extends LanguageWriter {
         prefix = prefix ? prefix + " " : ""
         this.print(`${prefix}func ${name}(${signature.args.map((it, index) => `${signature.argName(index)}: ${it.nullable ? '?' : ''}${this.mapType(it)}`).join(", ")}): ${this.mapType(signature.returnType)}${postfix ?? ""}`)
     }
+    nativeReceiver(): string { return 'NativeModule' }
+    writeNativeFunctionCall(printer: LanguageWriter, name: string, signature: MethodSignature) {
+        printer.print(`return unsafe { ${name}(${signature.args.map((it, index) => `${signature.argName(index)}`).join(", ")}) }`)
+    }
+    writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
+        this.print(`func ${name}(${signature.args.map((it, index) => `${this.languageKeywordProtection(signature.argName(index))}: ${it.nullable ? '?' : ''}${this.mapCType(it)}`).join(", ")}): ${this.mapCType(signature.returnType)}`)
+    }
+    makeCastEnumToInt(convertor: EnumConvertor, enumName: string, _unsafe?: boolean): string {
+        return `${enumName}.getIntValue()`
+    }
     makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
         return new CJAssignStatement(variableName, type, expr, isDeclared, isConst)
     }
@@ -1512,9 +1607,13 @@ export class CJLanguageWriter extends LanguageWriter {
         return this.makeString(`${array}.size`)
     }
     makeRuntimeTypeCondition(typeVarName: string, equals: boolean, type: RuntimeType, varName: string): LanguageExpression {
+        varName = this.languageKeywordProtection(varName)
         return this.makeString(`let Some(${varName}) <- ${varName}`)
     }
     makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression {
+        throw new Error(`TBD`)
+    }
+    makeThrowError(message: string): LanguageStatement {
         throw new Error(`TBD`)
     }
     makeReturn(expr: LanguageExpression): LanguageStatement {
@@ -1595,6 +1694,15 @@ export class CJLanguageWriter extends LanguageWriter {
     get supportedFieldModifiers(): FieldModifier[] {
         return [FieldModifier.PUBLIC, FieldModifier.PRIVATE, FieldModifier.PROTECTED, FieldModifier.READONLY, FieldModifier.STATIC]
     }
+    makeUnionSelector(value: string, valueType: string): LanguageStatement {
+        return this.makeAssign(valueType, undefined, this.makeMethodCall(value, "getSelector", []), false)
+    }
+    makeUnionVariantCondition(_convertor: ArgConvertor, _valueName: string, valueType: string, type: string, index?: number): LanguageExpression {
+        return this.makeString(`${valueType} == ${index}`)
+    }
+    makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index: number) {
+        return this.makeMethodCall(value, `getValue${index}`, [])
+    }
     makeTupleAccess(value: string, index: number): LanguageExpression {
         return this.makeString(`${value}.value${index}`)
     }
@@ -1623,6 +1731,23 @@ export class CJLanguageWriter extends LanguageWriter {
             case 'Length': return 'String'
             case 'void': return 'Unit'
             case 'double': return 'Float64'
+            case 'Uint8Array': return 'ArrayList<Int8>'
+        }
+        return super.mapType(type)
+    }
+    mapCType(type: Type): string {
+        switch (type.name) {
+            case 'KPointer': return 'Int64'
+            case 'int32': case 'KInt': return 'Int32'
+            case 'KStringPtr': return 'CString'
+            case 'string': return 'CString'
+            case 'String': return 'CString'
+            case 'number': return 'Float64'
+            case 'boolean': return 'Bool'
+            case 'Length': return 'CString'
+            case 'void': return 'Unit'
+            case 'double': return 'Float64'
+            case 'Uint8Array': return 'CPointer<Int8>'
         }
         return super.mapType(type)
     }
@@ -1758,8 +1883,8 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     override makeUnionSelector(value: string, valueType: string): LanguageStatement {
         return this.makeAssign(valueType, undefined, this.makeString(`${value}.selector`), false)
     }
-    override makeUnionVariantCondition(value: string, type: string, index: number) {
-        return this.makeString(`${value} == ${index}`)
+    override makeUnionVariantCondition(_convertor: ArgConvertor, _valueName: string, valueType: string, type: string, index: number) {
+        return this.makeString(`${valueType} == ${index}`)
     }
     override makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index: number) {
         return this.makeString(`${value}.value${index}`)

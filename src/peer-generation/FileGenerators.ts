@@ -16,7 +16,7 @@ import * as fs from "fs"
 import * as path from "path"
 import { IndentedPrinter } from "../IndentedPrinter"
 import { PrimitiveType } from "./DeclarationTable"
-import { Language, lastCommitInfo } from "../util"
+import { Language, camelCaseToUpperSnakeCase, lastCommitInfo } from "../util"
 import { CppLanguageWriter, createLanguageWriter, LanguageWriter, Method, MethodSignature, NamedMethodSignature, PrinterLike, Type } from "./LanguageWriters"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
 import { PeerEventKind } from "./printers/EventsPrinter"
@@ -24,6 +24,7 @@ import { writeDeserializer, writeSerializer } from "./printers/SerializerPrinter
 import { SELECTOR_ID_PREFIX, writeConvertors } from "./printers/ConvertorsPrinter"
 import { PeerLibrary } from "./PeerLibrary"
 import { ArkoalaInstall, LibaceInstall } from "../Install"
+import { ImportsCollector } from "./ImportsCollector"
 
 export const warning = "WARNING! THIS FILE IS AUTO-GENERATED, DO NOT MAKE CHANGES, THEY WILL BE LOST ON NEXT GENERATION!"
 
@@ -85,14 +86,15 @@ import {
 } from "@koalaui/interop"
 `.trim()
 
-export function nativeModuleDeclaration(methods: LanguageWriter, nativeBridgePath: string, useEmpty: boolean, language: Language): string {
+export function nativeModuleDeclaration(methods: LanguageWriter, nativeBridgePath: string, useEmpty: boolean, language: Language, nativeMethods?: LanguageWriter): string {
     return `
   ${language == Language.TS ? importTsInteropTypes : ""}
 
 ${readLangTemplate("NativeModule_template", language)
     .replace("%NATIVE_BRIDGE_PATH%", nativeBridgePath)
     .replace("%USE_EMPTY%", useEmpty.toString())
-    .replaceAll("%GENERATED_METHODS%", methods.getOutput().join('\n'))}
+    .replaceAll("%GENERATED_METHODS%", methods.getOutput().join('\n'))
+    .replaceAll("%GENERATED_NATIVE_FUNCTIONS%", nativeMethods ? nativeMethods.getOutput().join('\n') : "")}
 `
 }
 
@@ -138,10 +140,21 @@ export function appendModifiersCommonPrologue(): LanguageWriter {
     return result
 }
 
-export function appendViewModelBridge(): LanguageWriter {
+export function appendViewModelBridge(library: PeerLibrary): LanguageWriter {
     let result = createLanguageWriter(Language.CPP)
     let body = readTemplate('view_model_bridge.cc')
 
+    let createNodeSwitch: string[] = []
+
+    const space = "            "
+    for(const file of library.files) {
+        for(const peer of file.peers.values()) {
+            const name = `${PeerGeneratorConfig.cppPrefix}ARKUI_${camelCaseToUpperSnakeCase(peer.componentName)}`
+            createNodeSwitch.push(`${space}case ${name}: return ViewModel::create${peer.componentName}Node(id);`)
+        }
+    }
+
+    body = body.replaceAll("%CREATE_NODE_SWITCH%", createNodeSwitch.join("\n"))
     body = body.replaceAll("%CPP_PREFIX%", PeerGeneratorConfig.cppPrefix)
 
     result.writeLines(body)
@@ -236,11 +249,14 @@ export function accessorStructList(lines: LanguageWriter): LanguageWriter {
 
 export function makeTSSerializer(library: PeerLibrary): string {
     let printer = createLanguageWriter(library.declarationTable.language)
+    const imports = new ImportsCollector()
+    imports.addFeatures(["SerializerBase", "Tags", "RuntimeType", "runtimeType", "isPixelMap", "isResource", "isInstanceOf"], "./SerializerBase")
+    imports.addFeatures(["int32"], "@koalaui/common")
+    if (printer.language == Language.TS)
+        imports.addFeatures(["unsafeCast"], "../shared/generated-utils")
+    imports.print(printer, '')
     writeSerializer(library, printer)
     return `${cStyleCopyright}
-import { SerializerBase, Tags, RuntimeType, runtimeType, isPixelMap, isResource, isInstanceOf } from "./SerializerBase"
-import { int32 } from "@koalaui/common"
-import { unsafeCast } from "../shared/generated-utils"
 
 ${printer.getOutput().join("\n")}
 
@@ -252,6 +268,7 @@ export function makeCJSerializer(library: PeerLibrary): LanguageWriter {
     let result = createLanguageWriter(library.declarationTable.language)
     result.print(`package idlize\n`)
     writeSerializer(library, result)
+    result.print('public func createSerializer(): Serializer { return Serializer() }')
     return result
 }
 
@@ -273,7 +290,7 @@ export function makeConverterHeader(path: string, namespace: string, library: Pe
     converter.writeInclude('base/log/log_wrapper.h')
     converter.print("")
 
-    const MAX_SELECTORS_IDS = 12
+    const MAX_SELECTORS_IDS = 16
     for(let i = 0; i < MAX_SELECTORS_IDS; i++) {
         converter.print(`#define ${SELECTOR_ID_PREFIX}${i} ${i}`)
     }

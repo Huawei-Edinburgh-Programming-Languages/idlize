@@ -22,13 +22,12 @@ if (fs.existsSync(dir)) {
     //execSync(`cd ${dir} && git pull`)
 } else {
     console.log("Downloading sdk")
-    execSync("git clone https://gitee.com/openharmony/interface_sdk-js.git")
+    execSync("git clone --depth=1 https://gitee.com/openharmony/interface_sdk-js.git")
 }
 
 let sdk = "./sdk"
 let components = "./interface_sdk-js/api/\@internal/component/ets"
 if (!fs.existsSync(sdk)) {
-    execSync("cd ./interface_sdk-js && git checkout cdee3f3a35c1d20680b13d8f3d17e30d63dcedab")
     fs.mkdirSync(sdk)
     try {
       fs.symlinkSync("." + components, sdk + "/component")

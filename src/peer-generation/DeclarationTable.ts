@@ -16,7 +16,9 @@
 import * as ts from "typescript"
 import { Language, asString, getDeclarationsByNode, getNameWithoutQualifiersRight, heritageDeclarations,
      identName, isStatic, throwException, typeEntityName, identNameWithNamespace,
-     isCommonMethodOrSubclass} from "../util"
+     isCommonMethodOrSubclass,
+     camelCaseToUpperSnakeCase,
+     isUpperCase} from "../util"
 import { IndentedPrinter } from "../IndentedPrinter"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
 import {
@@ -34,7 +36,7 @@ import { PeerLibrary } from "./PeerLibrary"
 import { CallbackInfo, collectCallbacks } from "./printers/EventsPrinter"
 import { EnumMember, NodeArray } from "typescript";
 import { extractBuilderFields } from "./BuilderClass"
-import { setEngine } from "node:crypto"
+import { searchTypeParameters, TypeNodeNameConvertor } from "./TypeNodeNameConvertor";
 
 export const ResourceDeclaration = ts.factory.createInterfaceDeclaration(undefined, "Resource", undefined, undefined, [
     ts.factory.createPropertySignature(undefined, "id", undefined, ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)),
@@ -89,7 +91,7 @@ export class PointerType extends PrimitiveType {
 
 export type DeclarationTarget =
     ts.ClassDeclaration | ts.InterfaceDeclaration | ts.EnumDeclaration
-    | ts.UnionTypeNode | ts.TypeLiteralNode | ts.ImportTypeNode | ts.FunctionTypeNode | ts.TupleTypeNode
+    | ts.UnionTypeNode | ts.TypeLiteralNode | ts.ImportTypeNode | ts.FunctionTypeNode | ts.TupleTypeNode | ts.NamedTupleMember
     | ts.TemplateLiteralTypeNode | ts.TypeReferenceNode
     | ts.ArrayTypeNode | ts.ParenthesizedTypeNode | ts.OptionalTypeNode | ts.LiteralTypeNode
     | PrimitiveType
@@ -458,7 +460,7 @@ export class DeclarationTable {
 
     public enumName(name: ts.PropertyName): string {
         // TODO: support namespaces in other declarations.
-        return `${PrimitiveType.ArkPrefix}${identNameWithNamespace(name)}`
+        return `${PrimitiveType.ArkPrefix}${identNameWithNamespace(name, Language.CPP)}`
     }
 
     public get orderedDependencies(): DeclarationTarget[] {
@@ -514,13 +516,16 @@ export class DeclarationTable {
         throw new Error("Unsupported type: " + target.getText())
     }
 
-    typeConvertor(param: string, type: ts.TypeNode, isOptionalParam = false): ArgConvertor {
+    typeConvertor(param: string,
+                  type: ts.TypeNode,
+                  isOptionalParam: boolean = false,
+                  typeNodeNameConvertor: TypeNodeNameConvertor | undefined = undefined): ArgConvertor {
         if (!type) throw new Error("Impossible")
         if (isOptionalParam) {
-            return new OptionConvertor(param, this, type)
+            return new OptionConvertor(param, this, type, typeNodeNameConvertor)
         }
         if (type.kind == ts.SyntaxKind.ObjectKeyword) {
-            return new CustomTypeConvertor(param, "Object")
+            return new CustomTypeConvertor(param, "Object", false)
         }
         if (type.kind == ts.SyntaxKind.UndefinedKeyword || type.kind == ts.SyntaxKind.VoidKeyword) {
             return new UndefinedConvertor(param)
@@ -532,7 +537,7 @@ export class DeclarationTable {
             return new NumberConvertor(param)
         }
         if (type.kind == ts.SyntaxKind.StringKeyword) {
-            return new StringConvertor(param, type)
+            return new StringConvertor(param, type, typeNodeNameConvertor)
         }
         if (type.kind == ts.SyntaxKind.BooleanKeyword) {
             return new BooleanConvertor(param)
@@ -548,26 +553,26 @@ export class DeclarationTable {
         }
         if (ts.isTypeReferenceNode(type)) {
             const declaration = getDeclarationsByNode(this.typeChecker!, type.typeName)[0]
-            return this.declarationConvertor(param, type, declaration)
+            return this.declarationConvertor(param, type, declaration, typeNodeNameConvertor)
         }
         if (ts.isEnumMember(type)) {
             return new EnumConvertor(param, type.parent, this.isStringEnum(type.parent.members))
         }
         if (ts.isUnionTypeNode(type)) {
-            return new UnionConvertor(param, this, type)
+            return new UnionConvertor(param, this, type, typeNodeNameConvertor)
         }
         if (ts.isTypeLiteralNode(type)) {
-            return new AggregateConvertor(param, this, type)
+            return new AggregateConvertor(param, this, type, typeNodeNameConvertor)
         }
         if (ts.isArrayTypeNode(type)) {
-            return new ArrayConvertor(param, this, type, type.elementType)
+            return new ArrayConvertor(param, this, type, type.elementType, typeNodeNameConvertor)
         }
         if (ts.isLiteralTypeNode(type)) {
             if (type.literal.kind == ts.SyntaxKind.NullKeyword) {
                 return new NullConvertor(param)
             }
             if (type.literal.kind == ts.SyntaxKind.StringLiteral) {
-                return new StringConvertor(param, type)
+                return new StringConvertor(param, type, typeNodeNameConvertor)
             }
             throw new Error(`Unsupported literal type: ${type.literal.kind}` + type.getText())
         }
@@ -587,7 +592,7 @@ export class DeclarationTable {
             return new OptionConvertor(param, this, type.type)
         }
         if (ts.isTemplateLiteralTypeNode(type)) {
-            return new StringConvertor(param, type)
+            return new StringConvertor(param, type, typeNodeNameConvertor)
         }
         if (ts.isNamedTupleMember(type)) {
             return this.typeConvertor(param, type.type)
@@ -596,11 +601,11 @@ export class DeclarationTable {
             type.kind == ts.SyntaxKind.UnknownKeyword ||
             ts.isIndexedAccessTypeNode(type)
         ) {
-            return new CustomTypeConvertor(param, "Any")
+            return new CustomTypeConvertor(param, "Any", false)
         }
         if (ts.isTypeParameterDeclaration(type)) {
             // TODO: unlikely correct.
-            return new CustomTypeConvertor(param, identName(type.name)!)
+            return new CustomTypeConvertor(param, identName(type.name)!, false)
         }
         console.log(type)
         throw new Error(`Cannot convert: ${asString(type)} ${type.getText()} ${type.kind}`)
@@ -614,24 +619,25 @@ export class DeclarationTable {
         this._currentContext = context
     }
 
-    private customConvertor(typeName: ts.EntityName | undefined, param: string, type: ts.TypeReferenceNode | ts.ImportTypeNode): ArgConvertor | undefined {
+    private customConvertor(typeName: ts.EntityName | undefined, param: string, type: ts.TypeReferenceNode | ts.ImportTypeNode,
+                            typeNodeNameConvertor: TypeNodeNameConvertor | undefined): ArgConvertor | undefined {
         let name = getNameWithoutQualifiersRight(typeName)
         switch (name) {
             case `Dimension`:
             case `Length`:
                 return new LengthConvertor(name, param)
             case `Date`:
-                return new CustomTypeConvertor(param, name, name)
+                return new CustomTypeConvertor(param, name, false, name)
             case `AttributeModifier`:
                 return new PredefinedConvertor(param, "AttributeModifier<any>", "AttributeModifier", "CustomObject")
             case `AnimationRange`:
-                return new CustomTypeConvertor(param, "AnimationRange", "AnimationRange<number>")
+                return new CustomTypeConvertor(param, "AnimationRange", false, "AnimationRange<number>")
             case `ContentModifier`:
-                return new CustomTypeConvertor(param, "ContentModifier", "ContentModifier<any>")
+                return new CustomTypeConvertor(param, "ContentModifier", false, "ContentModifier<any>")
             case `Record`:
-                return new CustomTypeConvertor(param, "Record", "Record<string, string>")
+                return new CustomTypeConvertor(param, "Record", false, "Record<string, string>")
             case `Array`:
-                return new ArrayConvertor(param, this, type, type.typeArguments![0])
+                return new ArrayConvertor(param, this, type, type.typeArguments![0], typeNodeNameConvertor)
             case `Map`:
                 return new MapConvertor(param, this, type, type.typeArguments![0], type.typeArguments![1])
             case `Callback`:
@@ -654,15 +660,16 @@ export class DeclarationTable {
         return true
     }
 
-    declarationConvertor(param: string, type: ts.TypeReferenceNode, declaration: ts.NamedDeclaration | undefined): ArgConvertor {
+    declarationConvertor(param: string, type: ts.TypeReferenceNode, declaration: ts.NamedDeclaration | undefined,
+                         typeNodeNameConvertor: TypeNodeNameConvertor | undefined): ArgConvertor {
         const entityName = typeEntityName(type)
         if (!declaration) {
-            return this.customConvertor(entityName, param, type) ?? throwException(`Declaration not found for: ${type.getText()}`)
+            return this.customConvertor(entityName, param, type, typeNodeNameConvertor) ?? throwException(`Declaration not found for: ${type.getText()}`)
         }
         if (PeerGeneratorConfig.isConflictedDeclaration(declaration))
-            return new CustomTypeConvertor(param, identName(declaration.name)!)
+            return new CustomTypeConvertor(param, identName(declaration.name)!, false)
         const declarationName = identName(declaration.name)!
-        let customConvertor = this.customConvertor(entityName, param, type)
+        let customConvertor = this.customConvertor(entityName, param, type, typeNodeNameConvertor)
         if (customConvertor) {
             return customConvertor
         }
@@ -673,7 +680,7 @@ export class DeclarationTable {
             return new EnumConvertor(param, declaration.parent, this.isStringEnum(declaration.parent.members))
         }
         if (ts.isTypeAliasDeclaration(declaration)) {
-            return new TypeAliasConvertor(param, this, declaration, type.typeArguments)
+            return new TypeAliasConvertor(param, this, declaration, typeNodeNameConvertor)
         }
         if (ts.isInterfaceDeclaration(declaration)) {
             if (isMaterialized(declaration)) {
@@ -689,23 +696,27 @@ export class DeclarationTable {
         }
         if (ts.isTypeParameterDeclaration(declaration)) {
             // TODO: incorrect, we must use actual, not formal type parameter.
-            return new CustomTypeConvertor(param, identName(declaration.name)!)
+            const isGenericType = searchTypeParameters(declaration)
+                ?.find(it => ts.isIdentifier(it.name) && it.name.text == identName(declaration.name)!) !== undefined
+            return new CustomTypeConvertor(param, identName(declaration.name)!, isGenericType)
         }
         console.log(`${declaration.getText()}`)
         throw new Error(`Unknown kind: ${declaration.kind}`)
     }
 
-    private printStructsCHead(name: string, descriptor: StructDescriptor, structs: IndentedPrinter) {
+    private printStructsCHead(name: string, descriptor: StructDescriptor, structs: IndentedPrinter, writeToString: LanguageWriter, seenNames: Set<string>) {
         if (descriptor.isArray) {
             // Forward declaration of element type.
             let elementTypePointer = descriptor.getFields()[0].declaration
             if (!(elementTypePointer instanceof PointerType))
                 throw new Error(`Unexpected ${this.computeTargetName(elementTypePointer, false)}`)
             let elementType = elementTypePointer.pointed
-            if (!(elementType instanceof PrimitiveType)) {
-                let name = this.computeTargetName(elementType, false)
-                if (ts.isEnumDeclaration(elementType)) {
-                    structs.print(`typedef int32_t ${this.enumName(elementType.name)};`)
+            if (!(elementType instanceof PrimitiveType) && ts.isEnumDeclaration(elementType)) {
+                const enumName = this.enumName(elementType.name)
+                if (!seenNames.has(enumName)) {
+                    seenNames.add(enumName)
+                    this.generateEnum(structs, writeToString, elementType)
+                    this.generateOptional(structs, writeToString, elementType, enumName, seenNames)
                 }
             }
         }
@@ -740,7 +751,8 @@ export class DeclarationTable {
         if (field.optional) {
             name = cleanPrefix(name, PrimitiveType.ArkPrefix)
         }
-        structs.print(`${this.cFieldKind(field.declaration)}${prefix}${name} ${field.name};`)
+        const cKind = field.optional ? "" : this.cFieldKind(field.declaration)
+        structs.print(`${cKind}${prefix}${name} ${field.name};`)
     }
 
     allOptionalTypes(): Set<string> {
@@ -813,6 +825,52 @@ export class DeclarationTable {
         return unions
     }
 
+    private generateOptional(structs: IndentedPrinter, writeToString: LanguageWriter, target: DeclarationTarget, elemName: string, seenNames: Set<string>) {
+        const nameOptional = PrimitiveType.OptionalPrefix + cleanPrefix(elemName, PrimitiveType.ArkPrefix)
+        if (!seenNames.has(nameOptional)) {
+            seenNames.add(nameOptional)
+            structs.print(`typedef struct ${nameOptional} {`)
+            structs.pushIndent()
+            structs.print(`enum ${PrimitiveType.Tag.getText()} tag;`)
+            structs.print(`${this.cFieldKind(target)} ${elemName} value;`)
+            structs.popIndent()
+            structs.print(`} ${nameOptional};`)
+            this.writeOptional(nameOptional, writeToString, this.isPointerDeclaration(target))
+            this.writeRuntimeType(target, nameOptional, true, writeToString)
+        }
+    }
+
+    private generateEnum(structs: IndentedPrinter, writeToString: LanguageWriter, target: ts.EnumDeclaration) {
+        const enumName = this.enumName(target.name)
+        structs.print(`enum ${enumName}`)
+        structs.print(`{`)
+        structs.pushIndent()
+        target.members.forEach(it => {
+            let initializer = ""
+            if (it.initializer && ts.isNumericLiteral(it.initializer)) {
+                initializer = ` = ${it.initializer.getText()}`
+            }
+            let valueName = identName(it.name)!
+            valueName = isUpperCase(valueName) ? valueName : `DEPRECATED_${camelCaseToUpperSnakeCase(valueName)}`
+            structs.print(`${camelCaseToUpperSnakeCase(enumName)}_${valueName}${initializer},`)
+        })
+        structs.popIndent()
+        structs.print(`};`)
+
+        writeToString.print(`inline void WriteToString(string* result, enum ${enumName} value) {`)
+        writeToString.pushIndent()
+        writeToString.print(`WriteToString(result, (${PrimitiveType.Int32.getText()}) value);`)
+        writeToString.popIndent()
+        writeToString.print(`}`)
+
+        writeToString.print(`template <>`)
+        writeToString.print(`inline Ark_RuntimeType runtimeType(const enum ${enumName}& value) {`)
+        writeToString.pushIndent()
+        writeToString.print(`return ARK_RUNTIME_NUMBER;`)
+        writeToString.popIndent()
+        writeToString.print(`}`)
+    }
+
     generateStructs(structs: IndentedPrinter, typedefs: IndentedPrinter, writeToString: LanguageWriter) {
         const seenNames = new Set<string>()
         seenNames.clear()
@@ -828,24 +886,13 @@ export class DeclarationTable {
             if (seenNames.has(nameAssigned)) continue
             seenNames.add(nameAssigned)
             let isPointer = this.isPointerDeclaration(target)
-            let isEnum = !(target instanceof PrimitiveType) && ts.isEnumDeclaration(target)
             let isAccessor = checkDeclarationTargetMaterialized(target)
             let noBasicDecl = isAccessor || (target instanceof PrimitiveType && noDeclaration.includes(target))
             const nameOptional = PrimitiveType.OptionalPrefix + cleanPrefix(nameAssigned, PrimitiveType.ArkPrefix)
             let isUnion = this.isMaybeWrapped(target, ts.isUnionTypeNode)
-            if (isEnum) {
-                structs.print(`typedef ${PrimitiveType.Int32.getText()} ${nameAssigned};`)
-                if (!seenNames.has(nameOptional)) {
-                    seenNames.add(nameOptional)
-                    structs.print(`typedef struct ${nameOptional} {`)
-                    structs.pushIndent()
-                    structs.print(`enum ${PrimitiveType.Tag.getText()} tag;`)
-                    structs.print(`${nameAssigned} value;`)
-                    structs.popIndent()
-                    structs.print(`} ${nameOptional};`)
-                    this.writeOptional(nameOptional, writeToString, isPointer)
-                    this.writeRuntimeType(target, nameOptional, true, writeToString)
-                }
+            if (!(target instanceof PrimitiveType) && ts.isEnumDeclaration(target)) {
+                this.generateEnum(structs, writeToString, target)
+                this.generateOptional(structs, writeToString, target, this.enumName(target.name), seenNames)
                 continue
             }
             const structDescriptor = this.targetStruct(target)
@@ -856,7 +903,7 @@ export class DeclarationTable {
                     structs.print(`typedef Ark_Materialized ${PrimitiveType.ArkPrefix}GestureRecognizer;`)
                 }
 
-                this.printStructsCHead(nameAssigned, structDescriptor, structs)
+                this.printStructsCHead(nameAssigned, structDescriptor, structs, writeToString, seenNames)
                 if (isUnion) {
                     const selector = structDescriptor.getFields().find(value => {return value.name === "selector"})
                     if (selector) {
@@ -887,7 +934,7 @@ export class DeclarationTable {
             if (seenNames.has(nameOptional)) continue
             seenNames.add(nameOptional)
             if (!(target instanceof PointerType) && nameAssigned != "Optional" && nameAssigned != "RelativeIndexable") {
-                this.printStructsCHead(nameOptional, structDescriptor, structs)
+                this.printStructsCHead(nameOptional, structDescriptor, structs, writeToString, seenNames)
                 structs.print(`enum ${PrimitiveType.Tag.getText()} tag;`)
                 structs.print(`${nameAssigned} value;`)
                 this.printStructsCTail(nameOptional, structDescriptor.isPacked, structs)
@@ -1001,7 +1048,7 @@ export class DeclarationTable {
     cFieldKind(declaration: DeclarationTarget): string {
         if (declaration instanceof PointerType) return this.cFieldKind(declaration.pointed)
         if (declaration instanceof PrimitiveType) return ""
-        if (ts.isEnumDeclaration(declaration)) return ""
+        if (ts.isEnumDeclaration(declaration)) return "enum "
         if (ts.isImportTypeNode(declaration)) return ""
         if (checkDeclarationTargetMaterialized(declaration)) return ""
         return `struct `
@@ -1463,6 +1510,9 @@ class ToDeclarationTargetConvertor implements TypeNodeConvertor<DeclarationTarge
         return node
     }
     convertTuple(node: ts.TupleTypeNode): DeclarationTarget {
+        return node
+    }
+    convertNamedTupleMember(node: ts.NamedTupleMember): DeclarationTarget {
         return node
     }
     convertArray(node: ts.ArrayTypeNode): DeclarationTarget {

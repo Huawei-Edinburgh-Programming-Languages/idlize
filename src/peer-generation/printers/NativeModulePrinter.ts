@@ -15,27 +15,32 @@
 
 import { generateEventsBridgeSignature } from "./EventsPrinter";
 import { nativeModuleDeclaration, nativeModuleEmptyDeclaration } from "../FileGenerators";
-import { LanguageWriter, Method, NamedMethodSignature, StringExpression, Type, createLanguageWriter } from "../LanguageWriters";
+import { FunctionCallExpression, LanguageWriter, Method, MethodModifier, NamedMethodSignature, StringExpression, Type, createLanguageWriter } from "../LanguageWriters";
 import { PeerClass, PeerClassBase } from "../PeerClass";
 import { PeerLibrary } from "../PeerLibrary";
 import { PeerMethod } from "../PeerMethod";
 import { IdlPeerClass } from "../idl/IdlPeerClass";
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
 import { IdlPeerMethod } from "../idl/IdlPeerMethod";
+import { Language } from "../../util";
 
 class NativeModuleVisitor {
     readonly nativeModule: LanguageWriter
     readonly nativeModuleEmpty: LanguageWriter
+    readonly nativeFunctions?: LanguageWriter
 
     constructor(
         private readonly library: PeerLibrary | IdlPeerLibrary,
     ) {
         this.nativeModule = createLanguageWriter(library.language)
         this.nativeModuleEmpty = createLanguageWriter(library.language)
+        if(library.language == Language.CJ) {
+            this.nativeFunctions = createLanguageWriter(library.language)
+        }
     }
 
     private printPeerMethods(peer: PeerClass | IdlPeerClass) {
-        peer.methods.forEach(it => printPeerMethod(peer, it, this.nativeModule, this.nativeModuleEmpty))
+        peer.methods.forEach(it => printPeerMethod(peer, it, this.nativeModule, this.nativeModuleEmpty, undefined, this.nativeFunctions))
     }
 
     private printMaterializedMethods(nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter) {
@@ -44,10 +49,8 @@ class NativeModuleVisitor {
             printPeerMethod(clazz, clazz.finalizer, nativeModule, nativeModuleEmpty, Type.Pointer)
             clazz.methods.forEach(method => {
                 const returnType = method.tsReturnType()
-                // TODO: DotIndicator and DigitIndicator implements Indicator
-                const subType = returnType?.name.includes(method.originalParentName)
                 printPeerMethod(clazz, method, nativeModule, nativeModuleEmpty,
-                    returnType === Type.This || subType ? Type.Pointer : returnType)
+                    returnType?.isPrimitive() ? returnType : Type.Pointer)
             })
         })
     }
@@ -72,14 +75,15 @@ class NativeModuleVisitor {
             }
         }
         this.printMaterializedMethods(this.nativeModule, this.nativeModuleEmpty)
-        this.printEventMethods(this.nativeModule, this.nativeModuleEmpty)
+        if(!(this.nativeModule.language == Language.CJ)) this.printEventMethods(this.nativeModule, this.nativeModuleEmpty)
         this.nativeModule.popIndent()
         this.nativeModuleEmpty.popIndent()
     }
 }
 
 function printPeerMethod(clazz: PeerClassBase, method: PeerMethod | IdlPeerMethod, nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter,
-    returnType?: Type
+    returnType?: Type,
+    nativeFunctions?: LanguageWriter
 ) {
     const component = clazz.generatedName(method.isCallSignature)
     clazz.setGenerationContext(`${method.isCallSignature ? "" : method.overloadedName}()`)
@@ -101,7 +105,17 @@ function printPeerMethod(clazz: PeerClassBase, method: PeerMethod | IdlPeerMetho
     let maybeReceiver = method.hasReceiver() ? [{ name: 'ptr', type: 'KPointer' }] : []
     const parameters = NamedMethodSignature.make(returnType?.name ?? 'void', maybeReceiver.concat(args))
     let name = `_${component}_${method.overloadedName}`
-    nativeModule.writeNativeMethodDeclaration(name, parameters)
+    if (nativeModule.language != Language.CJ) {
+        nativeModule.writeNativeMethodDeclaration(name, parameters)
+    } else {
+        nativeModule.writeMethodImplementation(new Method(name, parameters, [MethodModifier.PUBLIC, MethodModifier.STATIC]),(printer) => {
+            printer.print(`return unsafe { ${new FunctionCallExpression(name, [printer.makeString('ptr')].concat(args.map((it) => printer.makeString(`${it.name}`)))).asString()} }`)
+        })
+        nativeFunctions!.pushIndent()
+        nativeFunctions!.writeNativeMethodDeclaration(name, parameters)
+        nativeFunctions!.popIndent()
+    }
+    
     nativeModuleEmpty.writeMethodImplementation(new Method(name, parameters), (printer) => {
         printer.writePrintLog(name)
         if (returnType !== undefined && returnType.name !== Type.Void.name) {
@@ -115,7 +129,7 @@ export function printNativeModule(peerLibrary: PeerLibrary | IdlPeerLibrary, nat
     const lang = peerLibrary.language
     const visitor = new NativeModuleVisitor(peerLibrary)
     visitor.print()
-    return nativeModuleDeclaration(visitor.nativeModule, nativeBridgePath, false, lang)
+    return nativeModuleDeclaration(visitor.nativeModule, nativeBridgePath, false, lang, visitor.nativeFunctions)
 }
 
 export function printNativeModuleEmpty(peerLibrary: PeerLibrary | IdlPeerLibrary): string {

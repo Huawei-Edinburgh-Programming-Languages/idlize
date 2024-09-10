@@ -28,7 +28,6 @@ import {
     isReadonly,
     getDeclarationsByNode,
     Language,
-    snakeCaseToCamelCase
 } from "../util"
 import { GenericVisitor } from "../options"
 import {
@@ -43,26 +42,36 @@ import { PeerClass } from "./PeerClass"
 import { PeerMethod } from "./PeerMethod"
 import { PeerFile, EnumEntity } from "./PeerFile"
 import { PeerLibrary } from "./PeerLibrary"
-import { MaterializedClass, MaterializedField, MaterializedMethod, SuperElement, checkTSDeclarationMaterialized, isMaterialized } from "./Materialized"
+import { MaterializedClass, MaterializedField, MaterializedMethod, extractSuperElement, checkTSDeclarationMaterialized, isMaterialized } from "./Materialized"
 import { Field, FieldModifier, Method, MethodModifier, NamedMethodSignature, Type } from "./LanguageWriters";
 import {
     ArkTSTypeNodeNameConvertor,
     CJTypeNodeNameConvertor,
+    createInterfaceDeclName,
     JavaTypeNodeNameConvertor,
     mapType,
+    searchTypeParameters,
     TSTypeNodeNameConvertor,
     TypeNodeNameConvertor
 } from "./TypeNodeNameConvertor";
-import { convertDeclaration, convertTypeNode, TypeNodeConvertor } from "./TypeNodeConvertor";
+import { convertDeclaration, convertTypeNode } from "./TypeNodeConvertor";
 import { DeclarationDependenciesCollector, TypeDependenciesCollector } from "./dependencies_collector";
 import { convertDeclToFeature, ImportFeature } from "./ImportsCollector";
 import {
-    addSyntheticDeclarationDependency, ArkTSTypeNodeNameConvertorProxy,
+    addSyntheticDeclarationDependency,
+    ArkTSTypeNodeNameConvertorWithDepsCollector,
     isSyntheticDeclaration,
+    makeSyntheticDeclaration,
     makeSyntheticInterfaceDeclaration,
     makeSyntheticTypeAliasDeclaration
 } from "./synthetic_declaration";
-import { initCustomBuilderClasses, isBuilderClass, isCustomBuilderClass, toBuilderClass } from "./BuilderClass";
+import {
+    CUSTOM_BUILDER_CLASSES,
+    initCustomBuilderClasses,
+    isBuilderClass,
+    isCustomBuilderClass,
+    toBuilderClass
+} from "./BuilderClass";
 import { Lazy, lazy } from "./lazy";
 
 export enum RuntimeType {
@@ -254,11 +263,18 @@ function tempExtractParameters(method: ts.ConstructorDeclaration | ts.MethodDecl
 }
 
 export function generateSignature(method: ts.ConstructorDeclaration | ts.MethodDeclaration | ts.MethodSignature | ts.CallSignatureDeclaration,
-                                  typeNodeConvertor: TypeNodeNameConvertor): NamedMethodSignature {
+                                  typeNodeConvertor: TypeNodeNameConvertor,
+                                  isComponent = true,
+                                  genericsSubstitution: Map<string, string> | undefined = undefined): NamedMethodSignature {
     const parameters = tempExtractParameters(method)
-    const returnName = identName(method.type)!
-    const returnType = returnName === "void" ? Type.Void
-        : isStatic(method.modifiers) ? new Type(returnName) : Type.This
+    let returnName = method.type ? typeNodeConvertor.convert(method.type) : ""
+    const substitutedReturnName = genericsSubstitution?.get(returnName)
+    returnName = substitutedReturnName ? substitutedReturnName : returnName
+
+    const parent = method.parent
+    const parentName = ts.isClassDeclaration(parent) || ts.isInterfaceDeclaration(parent) ? identName(parent.name) : ""
+    const returnType = returnName === "void" || returnName === "" ? Type.Void
+        : isComponent || (returnName === parentName && !isStatic(method.modifiers)) ? Type.This : new Type(returnName)
     return new NamedMethodSignature(returnType,
         parameters
             .map(it => new Type(typeNodeConvertor.convert(it.type!), it.questionToken != undefined)),
@@ -267,11 +283,13 @@ export function generateSignature(method: ts.ConstructorDeclaration | ts.MethodD
     )
 }
 
-function generateArgConvertor(table: DeclarationTable, param: ts.ParameterDeclaration): ArgConvertor {
+function generateArgConvertor(table: DeclarationTable,
+                              param: ts.ParameterDeclaration,
+                              typeNodeNameConvertor: TypeNodeNameConvertor): ArgConvertor {
     if (!param.type) throw new Error("Type is needed")
     let paramName = asString(param.name)
     let optional = param.questionToken !== undefined
-    return table.typeConvertor(paramName, param.type, optional)
+    return table.typeConvertor(paramName, param.type, optional, typeNodeNameConvertor)
 }
 
 function generateRetConvertor(typeNode?: ts.TypeNode): RetConvertor {
@@ -333,6 +351,9 @@ function mapCInteropRetType(type: ts.TypeNode): string {
     if (ts.isParenthesizedTypeNode(type)) {
         return mapCInteropRetType(type.type)
     }
+    if (ts.isTypeLiteralNode(type)) {
+        return "void"
+    }
     throw new Error(type.getText())
 }
 
@@ -342,7 +363,7 @@ class ImportsAggregateCollector extends TypeDependenciesCollector {
         protected readonly peerLibrary: PeerLibrary,
         private readonly expandAliases: boolean,
     ) {
-        super(peerLibrary.declarationTable.typeChecker!)
+        super(peerLibrary.declarationTable.typeChecker!, peerLibrary.declarationTable.language)
     }
 
     override convertImport(node: ts.ImportTypeNode): ts.Declaration[] {
@@ -385,9 +406,9 @@ class ImportsAggregateCollector extends TypeDependenciesCollector {
     }
 }
 
-class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
-    private readonly typeConvertor = new ArkTSTypeNodeNameConvertor()
-
+export class ArkTSTypeDepsCollector extends ImportsAggregateCollector {
+    private readonly typeToStringConvertor = new ArkTSTypeNodeNameConvertor(this.peerLibrary)
+    public static readonly SYNTH_TYPE_FILE_NAME = 'SyntheticDeclarations'
     constructor(
         peerLibrary: PeerLibrary,
         expandAliases: boolean,
@@ -397,36 +418,91 @@ class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
     }
 
     override convertLiteralType(node: ts.LiteralTypeNode): ts.Declaration[] {
-        if (ts.isUnionTypeNode(node.parent) && ts.isStringLiteral(node.literal)) {
-            return [this.makeSyntheticTypeAliasDeclaration(this.typeConvertor.convertLiteralType(node))]
+        if ((ts.isUnionTypeNode(node.parent)
+                || ts.isTypeReferenceNode(node.parent)
+                || ts.isTypeAliasDeclaration(node.parent)
+                || ts.isParameter(node.parent))
+            && ts.isStringLiteral(node.literal)) {
+            return [makeSyntheticDeclaration(ArkTSTypeDepsCollector.SYNTH_TYPE_FILE_NAME,
+                this.typeToStringConvertor.convertLiteralType(node), () => {
+                    return ts.factory.createClassDeclaration([],
+                        this.typeToStringConvertor.convertLiteralType(node),
+                        undefined,
+                        undefined,
+                        [])
+                })]
         }
         return super.convertLiteralType(node)
     }
 
+    convertUnion(node: ts.UnionTypeNode): ts.Declaration[] {
+        if (node?.parent?.parent != undefined && ts.isTupleTypeNode(node.parent) && ts.isTypeReferenceNode(node.parent.parent)) {
+            //TODO: Fix 'Comma is mandatory between elements in a tuple type declaration' error
+            const typeAliasDecl = makeSyntheticTypeAliasDeclaration(
+                ArkTSTypeDepsCollector.SYNTH_TYPE_FILE_NAME,
+                this.typeToStringConvertor.convertUnion(node),
+                ts.factory.createUnionTypeNode(node.types),
+            )
+            this.declDependenciesCollector.value.convert(typeAliasDecl).forEach(it => {
+                if (isSourceDecl(it) && (PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it))) {
+                    addSyntheticDeclarationDependency(typeAliasDecl, convertDeclToFeature(this.peerLibrary, it))
+                }
+            })
+            return [typeAliasDecl]
+        }
+        return super.convertUnion(node);
+    }
+
     override convertTemplateLiteral(node: ts.TemplateLiteralTypeNode): ts.Declaration[] {
-        return [this.makeSyntheticTypeAliasDeclaration(this.typeConvertor.convertTemplateLiteral(node))]
+        return [makeSyntheticTypeAliasDeclaration(
+            ArkTSTypeDepsCollector.SYNTH_TYPE_FILE_NAME,
+            this.typeToStringConvertor.convertTemplateLiteral(node),
+            ts.factory.createTypeReferenceNode("String"),
+        )]
     }
 
     override convertTypeLiteral(node: ts.TypeLiteralNode): ts.Declaration[] {
-        return [makeSyntheticInterfaceDeclaration('SyntheticDeclarations',
-            this.typeConvertor.convert(node),
+        const membersDecls: ts.Declaration[] = []
+        for (const member of node.members) {
+            if (ts.isPropertySignature(member)) {
+                membersDecls.push(...this.convert(member.type))
+            }
+        }
+        return [...membersDecls, makeSyntheticInterfaceDeclaration(ArkTSTypeDepsCollector.SYNTH_TYPE_FILE_NAME,
+            this.typeToStringConvertor.convertTypeLiteral(node),
+            undefined,
             node.members,
             this.declDependenciesCollector.value,
             this.peerLibrary)]
     }
 
-    private makeSyntheticTypeAliasDeclaration(generatedName: string): ts.TypeAliasDeclaration {
-        const typeRef = `External_${generatedName}`
-        const syntheticDeclaration = makeSyntheticTypeAliasDeclaration(
-            'SyntheticDeclarations',
-            generatedName,
-            ts.factory.createTypeReferenceNode(typeRef),
-        )
-        addSyntheticDeclarationDependency(syntheticDeclaration, {
-            feature: typeRef,
-            module: "./shared/dts-exports"
-        })
-        return syntheticDeclaration
+    //TODO: needs to be rework
+    override convertImport(node: ts.ImportTypeNode): ts.Declaration[] {
+        const generatedName = this.typeToStringConvertor.convert(node)
+        if (!this.peerLibrary.importTypesStubToSource.has(generatedName)) {
+            this.peerLibrary.importTypesStubToSource.set(generatedName, node.getText())
+        }
+        let syntheticDeclaration: ts.Declaration
+
+        if (node.qualifier?.getText() === 'Resource') {
+            syntheticDeclaration = makeSyntheticTypeAliasDeclaration(
+                ArkTSTypeDepsCollector.SYNTH_TYPE_FILE_NAME,
+                generatedName,
+                ts.factory.createTypeReferenceNode("ArkResource"),
+            )
+            addSyntheticDeclarationDependency(syntheticDeclaration, {feature: "ArkResource", module: "./shared/ArkResource"})
+        } else {
+            syntheticDeclaration = makeSyntheticTypeAliasDeclaration(
+                ArkTSTypeDepsCollector.SYNTH_TYPE_FILE_NAME,
+                generatedName,
+                ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
+            )
+        }
+
+        return [
+            ...node.typeArguments?.flatMap(it => this.convert(it)) || [],
+            syntheticDeclaration
+        ]
     }
 }
 
@@ -497,7 +573,8 @@ class ComponentsCompleter {
 class PeersGenerator {
     constructor(
         private readonly library: PeerLibrary,
-    ) {}
+        private readonly typeNodeConvertor: TypeNodeNameConvertor,
+        private readonly declDependenciesCollector: DeclarationDependenciesCollector) {}
 
     private get declarationTable(): DeclarationTable {
         return this.library.declarationTable
@@ -512,9 +589,7 @@ class PeersGenerator {
     private processMethodOrCallable(
         method: ts.MethodDeclaration | ts.CallSignatureDeclaration,
         peer: PeerClass,
-        typeNodeConvertor: TypeNodeNameConvertor,
-        parentName?: string
-    ): PeerMethod | undefined {
+        parentName?: string): PeerMethod | undefined {
         const isCallSignature = ts.isCallSignatureDeclaration(method)
         // Some method have other parents as part of their names
         // Such as the ones coming from thr friend interfaces
@@ -539,14 +614,14 @@ class PeersGenerator {
             }
         })
         const argConvertors = parameters
-            .map((param) => generateArgConvertor(this.declarationTable, param))
+            .map((param) => generateArgConvertor(this.declarationTable, param, this.typeNodeConvertor))
         const declarationTargets = parameters
             .map((param) => this.declarationTable.toTarget(param.type ??
                 throwException(`Expected a type for ${asString(param)} in ${asString(method)}`)))
         const retConvertor = generateRetConvertor(method.type)
 
         // TODO: restore collapsing logic!
-        const signature = /* collapsed?.signature ?? */ generateSignature(method, typeNodeConvertor)
+        const signature = /* collapsed?.signature ?? */ generateSignature(method, this.typeNodeConvertor)
 
         const peerMethod = new PeerMethod(
             originalParentName,
@@ -562,22 +637,22 @@ class PeersGenerator {
         return peerMethod
     }
 
-    private createComponentAttributesDeclaration(node: ts.ClassDeclaration, peer: PeerClass, typeNodeConvertor: TypeNodeNameConvertor): void {
+    private createComponentAttributesDeclaration(node: ts.ClassDeclaration,
+                                                 peer: PeerClass): void {
         if (PeerGeneratorConfig.invalidAttributes.includes(peer.componentName)) {
             return
         }
         const seenAttributes = new Set<string>()
         node.members.forEach(child => {
             if (ts.isMethodDeclaration(child)) {
-                this.processOptionAttribute(seenAttributes, child, peer, typeNodeConvertor)
+                this.processOptionAttribute(seenAttributes, this.processMethodDeclaration(child, peer), peer)
             }
         })
     }
 
     private processOptionAttribute(seenAttributes: Set<string>,
                                    method: ts.MethodDeclaration | ts.MethodSignature,
-                                   peer: PeerClass,
-                                   typeNodeConvertor: TypeNodeNameConvertor): void {
+                                   peer: PeerClass): void {
         const methodName = method.name.getText()
         if (seenAttributes.has(methodName)) {
             console.log(`WARNING: ignore seen method: ${methodName}`)
@@ -589,11 +664,13 @@ class PeersGenerator {
             return
         }
         seenAttributes.add(methodName)
-        const type = this.argumentType(methodName, parameters, peer, typeNodeConvertor)
+        const type = this.argumentType(methodName, parameters, peer)
         peer.attributesFields.push(`${methodName}?: ${type}`)
     }
 
-    private argumentType(methodName: string, parameters: ts.ParameterDeclaration[], peer: PeerClass, typeNodeConvertor: TypeNodeNameConvertor): string {
+    private argumentType(methodName: string,
+                         parameters: ts.ParameterDeclaration[],
+                         peer: PeerClass): string {
         const argumentTypeName = capitalize(methodName) + "ValuesType"
         if (parameters.length === 1 && ts.isTypeLiteralNode(parameters[0].type!)) {
             const typeLiteralStatements = parameters[0].type!.members
@@ -616,8 +693,9 @@ class PeersGenerator {
                     }
                 })
 
-            peer.attributesTypes.push(
-                {typeName: argumentTypeName, content: this.createParameterType(argumentTypeName, typeLiteralStatements)}
+            peer.attributesTypes.push({
+                typeName: argumentTypeName,
+                content: this.createParameterType(argumentTypeName, typeLiteralStatements)}
             )
             // Arkts needs a named type as its argument method, not an anonymous type
             // at which producing 'SyntaxError: Invalid Type' error
@@ -633,37 +711,38 @@ class PeersGenerator {
                 type: it.type!,
                 questionToken: !!it.questionToken
             }))
-            peer.attributesTypes.push(
-                {typeName: argumentTypeName, content: this.createParameterType(argumentTypeName, attributeInterfaceStatements)}
+            peer.attributesTypes.push({
+                typeName: argumentTypeName,
+                content: this.createParameterType(argumentTypeName, attributeInterfaceStatements)}
             )
             return argumentTypeName
         }
 
-        return parameters.map(it => typeNodeConvertor.convert(it.type!)).join(', ')
+        return parameters.map(it => this.typeNodeConvertor.convert(it.type!)).join(', ')
     }
 
     private createParameterType(
         name: string,
-        attributes: { name: string, type: ts.TypeNode, questionToken: boolean }[]
-    ): string {
+        attributes: { name: string, type: ts.TypeNode, questionToken: boolean }[]): string {
         const attributeDeclarations = attributes
-            .map(it => `\n  ${it.name}${it.questionToken ? "?" : ""}: ${mapType(it.type)}`)
+            .map(it => `\n  ${it.name}${it.questionToken ? "?" : ""}: ${this.typeNodeConvertor.convert(it.type)}`)
             .join('')
         return `export interface ${name} {${attributeDeclarations}\n}`
     }
 
-    private fillInterface(peer: PeerClass, node: ts.InterfaceDeclaration, typeNodeConvertor: TypeNodeNameConvertor) {
+    private fillInterface(peer: PeerClass, node: ts.InterfaceDeclaration) {
         peer.originalInterfaceName = identName(node.name)!
         const tsMethods = this.extractMethods(node)
         const peerMethods = tsMethods
             .filter(it => ts.isCallSignatureDeclaration(it))
-            .map(it => this.processMethodOrCallable(it, peer, typeNodeConvertor, identName(node)!))
+            .map(it => this.processMethodOrCallable(it, peer, identName(node)!))
             .filter(isDefined)
         PeerMethod.markOverloads(peerMethods)
         peer.methods.push(...peerMethods)
     }
 
-    private fillClass(peer: PeerClass, node: ts.ClassDeclaration, typeNodeConvertor: TypeNodeNameConvertor) {
+    private fillClass(peer: PeerClass,
+                      node: ts.ClassDeclaration) {
         peer.originalClassName = className(node)
         peer.hasGenericType = (node.typeParameters?.length ?? 0) > 0
         const parent = singleParentDeclaration(this.declarationTable.typeChecker!, node) as ts.ClassDeclaration
@@ -675,15 +754,15 @@ class PeersGenerator {
         }
 
         const peerMethods = this.extractMethods(node)
-            .map(it => this.processMethodOrCallable(it, peer, typeNodeConvertor))
+            .map(it => this.processMethodOrCallable(it, peer))
             .filter(isDefined)
         PeerMethod.markOverloads(peerMethods)
         peer.methods.push(...peerMethods)
 
-        this.createComponentAttributesDeclaration(node, peer, typeNodeConvertor)
+        this.createComponentAttributesDeclaration(node, peer)
     }
 
-    public generatePeer(component: ComponentDeclaration, typeNodeConvertor: TypeNodeNameConvertor): void {
+    public generatePeer(component: ComponentDeclaration): void {
         const sourceFile = component.attributesDeclarations.parent
         if (!ts.isSourceFile(sourceFile))
             throw new Error("Expected parent of attributes to be a SourceFile")
@@ -692,9 +771,32 @@ class PeersGenerator {
             throw new Error("Not found a file corresponding to attributes class")
         const peer = new PeerClass(file, component.name, sourceFile.fileName, this.declarationTable)
         if (component.interfaceDeclaration)
-            this.fillInterface(peer, component.interfaceDeclaration, typeNodeConvertor)
-        this.fillClass(peer, component.attributesDeclarations, typeNodeConvertor)
+            this.fillInterface(peer, component.interfaceDeclaration)
+        this.fillClass(peer, component.attributesDeclarations)
         file.peers.set(component.name, peer)
+    }
+
+    private processMethodDeclaration(method: ts.MethodDeclaration, peer: PeerClass): ts.MethodDeclaration {
+        if (ts.isClassDeclaration(method.parent) && this.library.language === Language.ARKTS) {
+            const baseMethods = getMembersFromClassDeclarations(
+                getHeritageClassDeclarations(
+                    method.parent.heritageClauses,
+                    this.library.declarationTable.typeChecker!))
+                .filter(it => {
+                    if (ts.isIdentifier(method.name) && ts.isIdentifier(it.name) && it.name.text == method.name.text) {
+                        return it
+                    }
+                })
+            if (baseMethods.length == 1) {
+                method = baseMethods[0] as ts.MethodDeclaration
+                //TODO: needs to be moved to PeerProcessor.generateDeclarations(components: ComponentDeclaration[])
+                peer.file.importFeatures.push(...collectDeclarationDeps(method.parent,
+                    this.declDependenciesCollector,
+                    this.library))
+                console.log(`the parameter type of base method is taken: '${method.parameters[0].type?.getText()}'`)
+            }
+        }
+        return method
     }
 }
 
@@ -706,8 +808,8 @@ export class PeerProcessor {
     constructor(
         private readonly library: PeerLibrary,
     ) {
-        this.typeDependenciesCollector = createTypeDependenciesCollector(this.library, { 
-            declDependenciesCollector: lazy(() => this.declDependenciesCollector) 
+        this.typeDependenciesCollector = createTypeDependenciesCollector(this.library, {
+            declDependenciesCollector: lazy(() => this.declDependenciesCollector)
         })
         this.declDependenciesCollector = new FilteredDeclarationCollector(this.library, this.typeDependenciesCollector)
         this.serializeDepsCollector = new FilteredDeclarationCollector(
@@ -726,12 +828,19 @@ export class PeerProcessor {
         }
 
         if (isCustomBuilderClass(name)) {
+            // HACK: for custom builder classes also need to collect dependencies
+            const customBuilderClass = CUSTOM_BUILDER_CLASSES.find(it => it.name === name)
+            if (customBuilderClass) {
+                collectDeclarationDeps(target, this.declDependenciesCollector, this.library)
+                    .forEach(it => customBuilderClass.importFeatures.push(it))
+            }
             return
         }
         const builderClass = toBuilderClass(this.declarationTable,
             name,
             target,
-            this.declarationTable.typeChecker!,
+            this.library,
+            this.declDependenciesCollector,
             isActualDeclaration,
             typeNodeConvertor)
         this.library.builderClasses.set(name, builderClass)
@@ -748,15 +857,7 @@ export class PeerProcessor {
         const isClass = ts.isClassDeclaration(target)
         const isInterface = ts.isInterfaceDeclaration(target)
 
-        const superClassType = target.heritageClauses
-            ?.filter(it => it.token == ts.SyntaxKind.ExtendsKeyword)[0]?.types[0]
-
-
-        const superClass = superClassType ?
-            new SuperElement(
-                identName(superClassType.expression)!,
-                superClassType.typeArguments?.filter(ts.isTypeReferenceNode).map(it => identName(it.typeName)!))
-            : undefined
+        const superClass = extractSuperElement(target)
 
         const importFeatures = this.serializeDepsCollector.convert(target)
             .filter(it => isSourceDecl(it))
@@ -773,11 +874,11 @@ export class PeerProcessor {
         let mFields = isClass
             ? target.members
                 .filter(ts.isPropertyDeclaration)
-                .map(it => this.makeMaterializedField(name, it))
+                .map(it => this.makeMaterializedField(name, it, typeNodeConvertor))
             : isInterface
                 ? target.members
                     .filter(ts.isPropertySignature)
-                    .map(it => this.makeMaterializedField(name, it))
+                    .map(it => this.makeMaterializedField(name, it, typeNodeConvertor))
                 : []
 
         let mMethods = isClass
@@ -789,11 +890,6 @@ export class PeerProcessor {
                 .filter(ts.isMethodSignature)
                 .map(method => this.makeMaterializedMethod(name, method, isActualDeclaration, typeNodeConvertor))
                 : []
-
-        // TODO: Properly handle methods with return Promise<T> type
-        mMethods = mMethods.filter(it => !PeerGeneratorConfig.ignoreReturnTypes.has(
-            it.method.signature.returnType.name
-        ))
 
         mFields.forEach(f => {
             const field = f.field
@@ -819,26 +915,33 @@ export class PeerProcessor {
 
         // In ArkTS we need generate a real interface in SyntheticDeclarations
         if (this.library.declarationTable.language == Language.ARKTS && ts.isInterfaceDeclaration(target)) {
-            const declName = createInterfaceDeclName(identName(target)!)
+            const declName = createInterfaceDeclName(`${identName(target)!}`)
             importFeatures.push(convertDeclToFeature(this.library,
-                makeSyntheticInterfaceDeclaration('SyntheticDeclarations', declName, target.members, this.declDependenciesCollector!, this.library)))
+                makeSyntheticInterfaceDeclaration(ArkTSTypeDepsCollector.SYNTH_TYPE_FILE_NAME,
+                    declName,
+                    target.typeParameters,
+                    target.members,
+                    this.declDependenciesCollector!,
+                    this.library)))
         }
 
         this.library.materializedClasses.set(name,
             new MaterializedClass(name, isInterface, superClass, generics, mFields, mConstructor, mFinalizer, importFeatures, mMethods, isActualDeclaration))
     }
 
-    private makeMaterializedField(className: string, property: ts.PropertyDeclaration | ts.PropertySignature): MaterializedField {
+    private makeMaterializedField(className: string,
+                                  property: ts.PropertyDeclaration | ts.PropertySignature,
+                                  typeNodeNameConvertor: TypeNodeNameConvertor): MaterializedField {
         const name = identName(property.name)!
         this.declarationTable.setCurrentContext(`Materialized_${className}_${name}`)
         const declarationTarget = this.declarationTable.toTarget(property.type!)
-        const argConvertor = this.declarationTable.typeConvertor(name, property.type!)
+        const argConvertor = this.declarationTable.typeConvertor(name, property.type!, false, typeNodeNameConvertor)
         const retConvertor = generateRetConvertor(property.type!)
         const modifiers = isReadonly(property.modifiers) ? [FieldModifier.READONLY] : []
         this.declarationTable.setCurrentContext(undefined)
         return new MaterializedField(
             new Field(name, new Type(mapType(property.type)), modifiers),
-            argConvertor, retConvertor, declarationTarget)
+            argConvertor, retConvertor, declarationTarget, property.questionToken !== undefined)
     }
 
     private makeMaterializedMethod(parentName: string,
@@ -864,8 +967,8 @@ export class PeerProcessor {
             this.declarationTable.toTarget(param.type ??
                 throwException(`Expected a type for ${asString(param)} in ${asString(method)}`)))
         method.parameters.forEach(it => this.declarationTable.requestType(undefined, it.type!, isActualDeclaration))
-        const argConvertors = method.parameters.map(param => generateArgConvertor(this.declarationTable, param))
-        const signature = generateSignature(method, typeNodeConverter)
+        const argConvertors = method.parameters.map(param => generateArgConvertor(this.declarationTable, param, typeNodeConverter))
+        const signature = generateSignature(method, typeNodeConverter, false)
         const modifiers = generateMethodModifiers(method)
         this.declarationTable.setCurrentContext(undefined)
         return new MaterializedMethod(parentName, declarationTargets, argConvertors, retConvertor, false,
@@ -947,10 +1050,10 @@ export class PeerProcessor {
     process(): void {
         initCustomBuilderClasses()
         new ComponentsCompleter(this.library).process()
-        const peerGenerator = new PeersGenerator(this.library)
         const typeNodeConvertor = createTypeNodeConvertor(this.library)
+        const peerGenerator = new PeersGenerator(this.library, typeNodeConvertor, this.declDependenciesCollector)
         for (const component of this.library.componentsDeclarations)
-            peerGenerator.generatePeer(component, typeNodeConvertor)
+            peerGenerator.generatePeer(component)
         const allDeclarations = this.generateDeclarations(this.library.componentsDeclarations)
         const actualDeclarations = this.generateDeclarations(this.generateActualComponents())
 
@@ -980,10 +1083,8 @@ export class PeerProcessor {
                 continue
             }
 
-            this.declDependenciesCollector.convert(dep).forEach(it => {
-                if (isSourceDecl(it) && (PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it)))
-                    file.importFeatures.push(convertDeclToFeature(this.library, it))
-            })
+            collectDeclarationDeps(dep, this.declDependenciesCollector, this.library)
+                .forEach(it => file.importFeatures.push(it))
             this.serializeDepsCollector.convert(dep).forEach(it => {
                 if (isSourceDecl(it) && PeerGeneratorConfig.needInterfaces) {
                     file.serializeImportFeatures.push(convertDeclToFeature(this.library, it))
@@ -998,18 +1099,14 @@ export class PeerProcessor {
 }
 
 export function createTypeDependenciesCollector(
-    library: PeerLibrary, 
+    library: PeerLibrary,
     arkts: {
         declDependenciesCollector: Lazy<DeclarationDependenciesCollector>
     }
 ): TypeDependenciesCollector {
     return library.declarationTable.language == Language.TS
         ? new ImportsAggregateCollector(library, false)
-        : new ArkTSImportsAggregateCollector(library, false, arkts.declDependenciesCollector)
-}
-
-export function createInterfaceDeclName(declName: string): string {
-    return `INTERFACE_${declName}`
+        : new ArkTSTypeDepsCollector(library, true, arkts.declDependenciesCollector)
 }
 
 export function generateMethodModifiers(method: ts.ConstructorDeclaration | ts.MethodDeclaration | ts.MethodSignature) {
@@ -1035,10 +1132,10 @@ export function createTypeNodeConvertor(library: PeerLibrary,
     switch (library.declarationTable.language) {
         case Language.ARKTS: {
             if (typeNodeConvertor != undefined && declarationDependenciesCollector != undefined && importFeatures != undefined) {
-                return new ArkTSTypeNodeNameConvertorProxy(typeNodeConvertor,
+                return new ArkTSTypeNodeNameConvertorWithDepsCollector(typeNodeConvertor,
                     library, declarationDependenciesCollector, importFeatures)
             }
-            return new ArkTSTypeNodeNameConvertor()
+            return new ArkTSTypeNodeNameConvertor(library)
         }
         case Language.TS: {
             return new TSTypeNodeNameConvertor()
@@ -1076,4 +1173,27 @@ function getMethodIndex(methodName: string, method: ts.MethodDeclaration | ts.Me
             .findIndex(it => method === it)
     }
     return 0
+}
+
+export function collectDeclarationDeps(target: ts.Declaration,
+                                declDependenciesCollector: DeclarationDependenciesCollector,
+                                peerLibrary: PeerLibrary): ImportFeature[] {
+    return declDependenciesCollector.convert(target)
+        .filter(it => isSourceDecl(it))
+        .filter(it => PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it))
+        .map(it => convertDeclToFeature(peerLibrary, it))
+}
+
+function getHeritageClassDeclarations(heritageClauses: ts.NodeArray<ts.HeritageClause> | undefined,
+                                      typeChecker: ts.TypeChecker): ts.ClassDeclaration[] {
+    return heritageClauses
+        ?.flatMap(it => it.types)
+        .flatMap(it => getDeclarationsByNode(typeChecker, it.expression))
+        .filter(it => it != undefined) as ts.ClassDeclaration[] ?? []
+}
+
+function getMembersFromClassDeclarations(classes: ts.ClassDeclaration[]): ts.MethodDeclaration[] {
+    return classes
+        .flatMap(it => it.members)
+        .filter(it => ts.isMethodDeclaration(it)) as ts.MethodDeclaration[]
 }

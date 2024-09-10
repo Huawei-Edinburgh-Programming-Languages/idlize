@@ -164,6 +164,7 @@ declare interface SheetOptions extends BindOptions {
     onDetentsDidChange?: Callback<number>;
     onWidthDidChange?: Callback<number>;
     onTypeDidChange?: Callback<SheetType>;
+    expandSafeAreaInEmbeddedMode?: boolean;
     uiContext?: UIContext;
 }
 
@@ -405,6 +406,10 @@ declare class CommonMethod<T> {
     gestureModifier(modifier: GestureModifier): T;
 
     onGestureRecognizerJudgeBegin(callback: GestureRecognizerJudgeBeginCallback): T;
+
+    onClick(event: (event: ClickEvent) => void): T;
+
+    onClick(event: Callback<ClickEvent>, distanceThreshold: number): T;
 }
 
 declare interface Rectangle {

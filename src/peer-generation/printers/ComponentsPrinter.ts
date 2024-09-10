@@ -22,7 +22,7 @@ import { PeerLibrary } from "../PeerLibrary";
 import { isCommonMethod } from "../inheritance";
 import { PeerMethod } from "../PeerMethod";
 import { componentToPeerClass } from "./PeersPrinter";
-import { OverloadsPrinter, collapseSameNamedMethods } from "./OverloadsPrinter";
+import { OverloadsPrinter, collapseSameNamedMethods, groupOverloads } from "./OverloadsPrinter";
 import { FieldModifier, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, Type, createLanguageWriter } from "../LanguageWriters";
 import { convertToCallback } from "./EventsPrinter";
 import { tsCopyrightAndWarning } from "../FileGenerators";
@@ -94,7 +94,8 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
             imports.addFeature("isResource", "./peers/SerializerBase")
             imports.addFeature("isInstanceOf", "./peers/SerializerBase")
             imports.addFeature('ComponentBase', './ComponentBase')
-            imports.addFeature('unsafeCast', './shared/generated-utils')
+            if (this.printer.language == Language.TS)
+                imports.addFeature('unsafeCast', './shared/generated-utils')
             for (const method of peer.methods) {
                 for (const argType of method.declarationTargets)
                     if (convertToCallback(peer, method, argType))
@@ -107,18 +108,6 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
         })
         this.file.importFeatures.forEach(it => imports.addFeature(it.feature, it.module))
         imports.print(this.printer, removeExt(this.targetBasename))
-    }
-
-    private groupOverloads<T extends PeerMethod | IdlPeerMethod>(peerMethods: T[]): T[][] {
-        const seenNames = new Set<string>()
-        const groups: T[][] = []
-        for (const method of peerMethods) {
-            if (seenNames.has(method.method.name))
-                continue
-            seenNames.add(method.method.name)
-            groups.push(peerMethods.filter(it => it.method.name === method.method.name))
-        }
-        return groups
     }
 
     private printComponent(peer: PeerClass | IdlPeerClass) {
@@ -135,7 +124,7 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
             writer.writeFieldDeclaration('peer', new Type(peerClassName), [FieldModifier.PROTECTED], true)
             const filteredMethods = (peer.methods as any[]).filter(it =>
                 this.language !== Language.ARKTS || !PeerGeneratorConfig.ArkTsIgnoredMethods.includes(it.overloadedName))
-            for (const grouped of this.groupOverloads(filteredMethods))
+            for (const grouped of groupOverloads(filteredMethods))
                 this.overloadsPrinter.printGroupedComponentOverloads(peer, grouped)
             // todo stub until we can process AttributeModifier
             if (isCommonMethod(peer.originalClassName!) || peer.originalClassName == "ContainerSpanAttribute")

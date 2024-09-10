@@ -35,6 +35,7 @@ import { ImportFeature } from "../ImportsCollector";
 import { DeclarationNameConvertor } from "./IdlDependenciesCollector";
 import { ArkTSTypeNameConvertor } from "./IdlTypeNameConvertor";
 import { PrimitiveType } from "../DeclarationTable"
+import { collapseIdlEventsOverloads } from "../printers/EventsPrinter"
 
 export enum RuntimeType {
     UNEXPECTED = -1,
@@ -515,6 +516,7 @@ class PeersGenerator {
         if (component.interfaceDeclaration)
             this.fillInterface(peer, component.interfaceDeclaration)
         this.fillClass(peer, component.attributesDeclarations)
+        collapseIdlEventsOverloads(this.library, peer)
         file.peers.set(component.name, peer)
     }
 }
@@ -877,7 +879,8 @@ function toBuilderClass(name: string, target: idl.IDLInterface, needBeGenerated:
     // const constructors = target.constructors.map(method => toBuilderMethod(method))
         // : [toBuilderMethod(undefined)]
     // const methods = getBuilderMethods(target)
-    return new BuilderClass(name, isIface, undefined, [], [], []/*fields, constructors, methods*/, [], needBeGenerated)
+    const generics = idl.getExtAttribute(target, idl.IDLExtendedAttributes.TypeParameters)?.split(",")
+    return new BuilderClass(name, generics, isIface, undefined, [], [], []/*fields, constructors, methods*/, [], needBeGenerated)
 }
 
 // function getBuilderMethods(target: IDLInterface): Method[] {

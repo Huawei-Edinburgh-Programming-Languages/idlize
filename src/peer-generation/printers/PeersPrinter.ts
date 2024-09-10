@@ -23,6 +23,7 @@ import { InheritanceRole, determineParentRole, isHeir, isRoot } from "../inherit
 import { PeerMethod } from "../PeerMethod";
 import {
     LanguageExpression,
+    LanguageStatement,
     LanguageWriter,
     Method,
     MethodModifier,
@@ -32,7 +33,6 @@ import {
     createLanguageWriter
 } from "../LanguageWriters";
 import { MaterializedMethod } from "../Materialized";
-import { collectDtsImports } from "../DtsImportsGenerator";
 import { tsCopyrightAndWarning } from "../FileGenerators";
 import { ARK_MATERIALIZEDBASE_EMPTY_PARAMETER, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from "./lang/Java";
 import { TargetFile } from "./TargetFile";
@@ -101,7 +101,8 @@ class PeerFileVisitor {
             imports.addFeature('GestureName', './shared/generated-utils')
             imports.addFeature('GestureComponent', './shared/generated-utils')
         }
-        imports.addFeature("unsafeCast", "./shared/generated-utils")
+        if (printer.language == Language.TS)
+            imports.addFeature("unsafeCast", "./shared/generated-utils")
         imports.addFeature("registerCallback", "./peers/SerializerBase")
         imports.addFeature("wrapCallback", "@koalaui/interop")
         if (this.library.language !== Language.ARKTS) {
@@ -206,29 +207,22 @@ class PeerFileVisitor {
     }
 
     protected getDefaultPeerImports(lang: Language) {
+        const defaultPeerImports =  [
+            `import { int32 } from "@koalaui/common"`,
+            `import { nullptr, KPointer, KInt } from "@koalaui/interop"`,
+            `import { isPixelMap, isResource, isInstanceOf, runtimeType, RuntimeType, SerializerBase } from "./SerializerBase"`,
+            `import { createSerializer, Serializer } from "./Serializer"`,
+            `import { ArkUINodeType } from "./ArkUINodeType"`,
+            `import { ComponentBase } from "../ComponentBase"`,
+        ]
         switch(lang) {
             case Language.TS: {
-                return [
-                    `import { int32 } from "@koalaui/common"`,
-                    `import { nullptr, KPointer } from "@koalaui/interop"`,
-                    `import { isPixelMap, isResource, isInstanceOf, runtimeType, RuntimeType, SerializerBase } from "./SerializerBase"`,
-                    `import { createSerializer, Serializer } from "./Serializer"`,
-                    `import { nativeModule } from "@koalaui/arkoala"`,
-                    `import { ArkUINodeType } from "./ArkUINodeType"`,
-                    `import { ComponentBase } from "../ComponentBase"`,
-                ]
+                return [...defaultPeerImports,
+                    `import { nativeModule } from "@koalaui/arkoala"`,]
             }
             case Language.ARKTS: {
-                return [
-                    `import { int32 } from "@koalaui/common"`,
-                    `import { nullptr, KPointer } from "@koalaui/interop"`,
-                    `import { isPixelMap, isResource, isInstanceOf, runtimeType, RuntimeType, SerializerBase } from "./SerializerBase"`,
-                    `import { createSerializer, Serializer } from "./Serializer"`,
-                    `import { ArkUINodeType } from "./ArkUINodeType"`,
-                    `import { ComponentBase } from "../ComponentBase"`,
-                    `import { NativeModule } from "../NativeModule"`,
-                    `${collectDtsImports('..').trim()}`
-                ]
+                return [...defaultPeerImports,
+                    `import { NativeModule } from "../NativeModule"`,]
             }
             default: {
                 return []
@@ -311,24 +305,11 @@ class CJPeerFileVisitor extends PeerFileVisitor {
     }
 
     protected printApplyMethod(peer: PeerClass, printer: LanguageWriter) {
-        // TODO: attributes
-        // const name = peer.originalClassName!
-        // const typeParam = componentToAttributesClass(peer.componentName)
-        // if (isRoot(name)) {
-        //     printer.print(`void applyAttributes(${typeParam} attributes) {}`)
-        //     return
-        // }
-
-        // printer.print(`void applyAttributes(${typeParam} attributes) {`)
-        // printer.pushIndent()
-        // printer.print(`super.applyAttributes(attributes)`)
-        // printer.popIndent()
-        // printer.print(`}`)
     }
 
     printFile(): void {
+        const printer = createLanguageWriter(this.library.declarationTable.language)
         this.file.peers.forEach(peer => {
-            let printer = createLanguageWriter(this.library.language)
             const peerName = componentToPeerClass(peer.componentName)
             this.printers.set(new TargetFile(peerName, ''), printer)
 
@@ -339,14 +320,6 @@ class CJPeerFileVisitor extends PeerFileVisitor {
             this.printPackage(printer)
             this.printerContext.imports?.printImportsForTypes(allTypesInPeer, printer)
             this.printPeer(peer, printer)
-
-            // TODO: attributes
-            // printer = createLanguageWriter(this.library.declarationTable.language)
-            // const attributesName = componentToAttributesClass(peer.componentName)
-            // this.printers.set(new TargetFile(attributesName, ARKOALA_PACKAGE_PATH), printer)
-
-            // this.printPackage(printer)
-            // this.printAttributes(peer, printer)
         })
     }
 }
@@ -410,6 +383,7 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod | Id
 ) {
     const isTsLike = [Language.ARKTS, Language.TS].includes(printerContext.language)
     const isJava = printerContext.language == Language.JAVA
+    const isCJ = printerContext.language == Language.CJ
 
     const signature = method.method.signature as NamedMethodSignature
     let peerMethod: Method
@@ -425,6 +399,15 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod | Id
         })
         peerMethod = new Method(
             `${method.method.name}${methodPostfix}`,
+            new NamedMethodSignature(returnType, args, signature.argsNames),
+            method.method.modifiers, method.method.generics)
+    }
+    else if (isCJ) {
+        const args = (method as PeerMethod).declarationTargets.map((declarationTarget, index) => {
+            return printerContext.synthesizedTypes!.getTargetType(declarationTarget, signature.args[index].nullable)
+        })
+        peerMethod = new Method(
+            `${method.overloadedName}${methodPostfix}`,
             new NamedMethodSignature(returnType, args, signature.argsNames),
             method.method.modifiers, method.method.generics)
     }
@@ -478,12 +461,18 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod | Id
             }
         })
         let call = writer.makeNativeCall(
+            // here we write methods
             `_${method.originalParentName}_${method.overloadedName}`,
             params)
-        if (returnType != Type.Void) {
-            writer.writeStatement(writer.makeAssign(returnValName, undefined, call, true))
+        
+        if (writer.language != Language.CJ) {
+            if (returnType != Type.Void) {
+                writer.writeStatement(writer.makeAssign(returnValName, undefined, call, true))
+            } else {
+                writer.writeStatement(writer.makeStatement(call))
+            }
         } else {
-            writer.writeStatement(writer.makeStatement(call))
+            writer.print('NativeModule.TestPerfNumber(1337)')
         }
         scopes.reverse().forEach(it => {
             writer.popIndent()
@@ -491,31 +480,37 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod | Id
         })
         // TODO: refactor
         if (returnType != Type.Void) {
-            let result = returnValName
+            let result: LanguageStatement[] = [writer.makeReturn(writer.makeString(returnValName))]
             if (method.hasReceiver() && returnType === Type.This) {
-                result = `this`
+                result = [writer.makeReturn(writer.makeString("this"))]
             } else if (method instanceof MaterializedMethod && method.peerMethodName !== "ctor") {
-                const isStatic = method.method.modifiers?.includes(MethodModifier.STATIC)
-                if (!method.hasReceiver()) {
-                    const retType = signature.returnType
-                    let obj: string
-                    if (isTsLike) {
-                        obj = `new ${retType.name}(${signature.argsNames.map(it => "undefined").join(", ")})`
+                // const isStatic = method.method.modifiers?.includes(MethodModifier.STATIC)
+                if (returnType.name === method.originalParentName) {
+                    if (!method.hasReceiver()) {
+                        result = [
+                            ...constructMaterializedObject(writer, signature, "obj", returnValName),
+                            writer.makeReturn(writer.makeString("obj"))
+                        ]
                     }
-                    else if (isJava) {
-                        obj = `new ${retType.name}((${ARK_MATERIALIZEDBASE_EMPTY_PARAMETER})null)`
-                    }
-                    else {
-                        throw new Error(`Need add support for peer methods in ${printerContext.language.toString()}`);
-                    }
-                    writer.writeStatement(writer.makeAssign("obj", retType, writer.makeString(obj), true))
-                    writer.writeStatement(
-                        writer.makeAssign("obj.peer", new Type("Finalizable"),
-                            writer.makeString(`new Finalizable(${returnValName}, ${method.originalParentName}.getFinalizer())`), false))
-                    result = "obj"
+                } else if (!returnType.isPrimitive()) {
+                    result = [
+                        writer.makeThrowError("Object deserialization is not implemented.")
+                    ]
                 }
             }
-            writer.writeStatement(writer.makeReturn(writer.makeString(result)))
+            for (const stmt of result) {
+                writer.writeStatement(stmt)
+            }
         }
     })
+}
+
+function constructMaterializedObject(writer: LanguageWriter, signature: MethodSignature,
+    resultName: string, peerPtrName: string): LanguageStatement[] {
+    const retType = signature.returnType
+    return [
+        writer.makeAssign(`${resultName}`, retType, writer.makeNewObject(retType.name), true),
+        writer.makeAssign(`${resultName}.peer`, new Type("Finalizable"),
+            writer.makeString(`new Finalizable(${peerPtrName}, ${retType.name}.getFinalizer())`), false),
+    ]
 }

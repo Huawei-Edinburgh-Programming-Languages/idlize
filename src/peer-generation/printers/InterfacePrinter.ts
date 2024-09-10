@@ -146,6 +146,7 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
     private printImports(writer: LanguageWriter, file: PeerFile) {
         const imports = new ImportsCollector()
         file.importFeatures.forEach(it => imports.addFeature(it.feature, it.module))
+        imports.addFeature("KInt", "@koalaui/interop")
         imports.print(writer, removeExt(this.generateFileBasename(file.originalFilename)))
     }
 
@@ -315,7 +316,6 @@ class CJInterfacesVisitor {
     ])
 
     private printClassOrInterface(node: ts.ClassDeclaration | ts.InterfaceDeclaration, writer: LanguageWriter) {
-        console.log(node.name)
         type MemberInfo = {name: string, type: Type, optional: boolean}
         const membersInfo: MemberInfo[] = node.members.map(property => {
             if (!ts.isPropertyDeclaration(property) && !ts.isPropertySignature(property)) {
@@ -378,7 +378,6 @@ class CJInterfacesVisitor {
                 if (!ts.isClassDeclaration(it) && !ts.isInterfaceDeclaration(it)) {
                     return
                 }
-                console.log(it.name)
                 this.addInterfaceDeclaration(it)
             })
         }
@@ -387,7 +386,7 @@ class CJInterfacesVisitor {
 }
 
 export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
-    private readonly typeConvertor = new ArkTSTypeNodeNameConvertor()
+    private readonly declToStringConvertor = new ArkTSTypeNodeNameConvertor(this.peerLibrary)
     constructor(private readonly writer: LanguageWriter,
                 private readonly peerLibrary: PeerLibrary) {
     }
@@ -397,24 +396,31 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
     }
 
     convertClass(node: ts.ClassDeclaration): void {
+        const seenMethods = new Set<string>()
         const writer = (writer: LanguageWriter) => {
-            this.declarationMembers(node).forEach(member => {
-                if (ts.isPropertyDeclaration(member)) {
-                    const propName = member.name.getText()
-                    const propType = member.type?.getText()
-                    const isOptional = member.questionToken
-                    writer.print(`${propName}${isOptional ? "?" : ""}: ${propType};`)
-                } else {
-                    const methodName = member.name.getText()
-                    const returnType = member.type?.getText()
-                    const parameters = member.parameters.map((param) => {
-                        if (param.type != undefined && ts.isTypeLiteralNode(param.type)) {
-                            return `${param.name.getText()}: ${this.typeConvertor.convert(param.type)}`
+            this.declarationMembers(node)
+                .forEach(member => {
+                    if (ts.isPropertyDeclaration(member)) {
+                        const propName = member.name.getText()
+                        const propType = this.declToStringConvertor.convert(member.type!)
+                        const isOptional = member.questionToken
+                        writer.print(`${propName}${isOptional ? "?" : ""}: ${propType};`)
+                    } else {
+                        const methodName = member.name.getText()
+                        if (seenMethods.has(methodName)) {
+                            console.log(`Method '${methodName}' already declared in ${node.name?.text}`)
+                            return
                         }
-                        return param.getText()
-                    }).join(',')
-                    writer.print(`${methodName}(${parameters}): ${returnType};`)
-                }
+                        seenMethods.add(methodName)
+                        const returnType = this.declToStringConvertor.convert(member.type!)
+                        const parameters = member.parameters.map((param) => {
+                            if (param.type != undefined) {
+                                return `${param.name.getText()}: ${this.declToStringConvertor.convert(param.type)}`
+                            }
+                            return param.getText()
+                        }).join(',')
+                        writer.print(`${methodName}(${parameters}): ${returnType};`)
+                    }
             })
         };
         if (this.peerLibrary.isComponentDeclaration(node)) {
@@ -452,14 +458,16 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
 
     convertInterface(node: ts.InterfaceDeclaration): void {
         this.writer.writeInterface(this.declarationName(node), writer => {
-            this.peerLibrary.declarationTable.targetStruct(node).getFields().map(it => {
-                writer.writeFieldDeclaration(it.name, new Type(this.mapType(it.type), it.optional), undefined, it.optional)
-            })
-            if (isMaterialized(node)) {
+            const fields = this.peerLibrary.declarationTable.targetStruct(node).getFields()
+            if (fields.length > 0) {
+                fields.map(it => {
+                    writer.writeFieldDeclaration(it.name, new Type(this.mapType(it.type), it.optional), undefined, it.optional)
+                })
+            } else if (isMaterialized(node)) {
                 node.members.forEach(method => {
                     if (ts.isMethodSignature(method)) {
                         writer.writeMethodDeclaration(generateMethodName(method),
-                            generateSignature(method, createTypeNodeConvertor(this.peerLibrary)),
+                            generateSignature(method, createTypeNodeConvertor(this.peerLibrary), false),
                             generateMethodModifiers(method))
                     }
                 })
@@ -479,9 +487,10 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
                 })
             })
         } else {
-            const maybeTypeArguments = node.typeParameters?.length
+            const typeName = this.mapType(node.name)
+            const maybeTypeArguments = node.typeParameters?.length && typeName !== "ComponentContent"
                 ? `<${node.typeParameters.map(it => it.name.text).join(', ')}>` : ''
-            this.writer.print(`export declare type ${node.name.text}${maybeTypeArguments} = ${this.mapType(node.type)}`)
+            this.writer.print(`export declare type ${typeName}${maybeTypeArguments} = ${this.mapType(node.type)}`)
         }
     }
 
@@ -495,9 +504,9 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
         return `${name}${typeParamsClause}`
     }
 
-    private mapType(type: ts.TypeNode | undefined): string {
+    private mapType(type: ts.TypeNode | ts.Identifier | undefined): string {
         if (type !== undefined) {
-            return this.typeConvertor.convert(type)
+            return this.declToStringConvertor.convert(type)
         }
         throw new Error(`Unexpected type: ${type}`)
     }
@@ -515,6 +524,7 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
     private printImports(writer: LanguageWriter, file: PeerFile) {
         const imports = new ImportsCollector()
         file.importFeatures.forEach(it => imports.addFeature(it.feature, it.module))
+        imports.addFeature("KInt", "@koalaui/interop")
         imports.print(writer, removeExt(this.generateFileBasename(file.originalFilename)))
     }
 
@@ -523,7 +533,7 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
             const writer = createLanguageWriter(this.peerLibrary.declarationTable.language)
             this.printImports(writer, file)
             file.enums.forEach(it => writer.writeStatement(writer.makeEnumEntity(it, true)))
-            file.declarations.forEach(it => convertDeclaration(new ArkTSDeclConvertor(writer, this.peerLibrary), it))
+            file.declarations.forEach(it => convertDeclaration(createDeclarationConvertor(writer, this.peerLibrary), it))
             this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), writer)
         }
     }

@@ -1,13 +1,12 @@
-import { Language, renameClassToBuilderClass } from "../../util"
+import { Language, removeExt, renameClassToBuilderClass, renameClassToMaterialized } from "../../util"
 import { LanguageWriter, MethodModifier, Method, Type, createLanguageWriter, Field, NamedMethodSignature } from "../LanguageWriters";
 import { PeerLibrary } from "../PeerLibrary"
 import { BuilderClass, methodsGroupOverloads, CUSTOM_BUILDER_CLASSES, BuilderMethod, BuilderField } from "../BuilderClass";
 import { collapseSameNamedMethods } from "./OverloadsPrinter";
-import { collectDtsImports } from "../DtsImportsGenerator";
 import { TargetFile } from "./TargetFile";
 import { PrinterContext } from "./PrinterContext";
 import { SuperElement } from "../Materialized";
-import { ImportFeature } from "../ImportsCollector";
+import { ImportFeature, ImportsCollector } from "../ImportsCollector";
 import { ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from "./lang/Java";
 
 interface BuilderClassFileVisitor {
@@ -19,6 +18,7 @@ interface BuilderClassFileVisitor {
 class TSBuilderClass {
     constructor(
         public readonly name: string,
+        public readonly generics: string[] | undefined,
         public readonly isInterface: boolean,
         public readonly superClass: SuperElement | undefined,
         public readonly fields: Field[],
@@ -37,22 +37,20 @@ class TSBuilderClassFileVisitor implements BuilderClassFileVisitor {
         private readonly language: Language,
         private readonly builderClass: BuilderClass,
         private readonly dumpSerialized: boolean,
-    ) { }
+        private readonly peerLibrary: PeerLibrary) { }
 
     private printBuilderClass(builderClass: TSBuilderClass) {
         const writer = this.printer
         const clazz = processTSBuilderClass(builderClass)
 
-        //TODO: in the future it is necessary to import elements from generated ets files
-        if (writer.language == Language.ARKTS) {
-            writer.print(collectDtsImports().trim())
-            writer.print("import { SelectedMode, IndicatorStyle, BoardStyle, TabBarSymbol } from '@arkoala/arkui/ArkTabContentInterfaces'")
-            writer.print("import { Dimension, Length, LengthMetrics, Resource, ResourceColor, ResourceStr, LocalizedPadding } from '@arkoala/arkui/ArkUnitsInterfaces'")
-            writer.print("import { SheetTitleOptions, Padding, ComponentContent } from '@arkoala/arkui/ArkCommonInterfaces'")
-            writer.print("import { LabelStyle } from '@arkoala/arkui/ArkButtonInterfaces'")
-            writer.print("import { NativeEmbedDataInfo } from '@arkoala/arkui/ArkWebInterfaces'")
-            writer.print("import { DotIndicator } from '@arkoala/arkui/ArkDotIndicatorBuilder'")
-        }
+        const imports = new ImportsCollector()
+        clazz.importFeatures.map(it => imports.addFeature(it.feature, it.module))
+        if (clazz.superClass)
+            imports.addFeature(clazz.superClass.name, "./" + renameClassToBuilderClass(clazz.superClass.name, writer.language, false))
+        const currentModule = removeExt(renameClassToBuilderClass(clazz.name, this.peerLibrary.declarationTable.language))
+        imports.print(this.printer, currentModule)
+
+        const superType = clazz.superClass?.getSyperType()
 
         writer.writeClass(clazz.name, writer => {
 
@@ -63,6 +61,9 @@ class TSBuilderClassFileVisitor implements BuilderClassFileVisitor {
             clazz.constructors
                 .forEach(ctor => {
                     writer.writeConstructorImplementation(ctor.name, ctor.signature, writer => {
+                        if (superType) {
+                            writer.writeSuperCall([])
+                        }
                         /*
                         const typeFiledName = syntheticName("type")
                         writer.writeStatement(writer.makeAssign(`this.${typeFiledName}`, undefined, writer.makeString(`"${clazz.name}"`), false))
@@ -98,7 +99,7 @@ class TSBuilderClassFileVisitor implements BuilderClassFileVisitor {
                         writer.writeStatement(writer.makeReturn(writer.makeString("this")))
                     })
                 })
-        })
+        }, superType, undefined, clazz.generics?.map(it => it))
     }
 
     printFile(): void {
@@ -158,6 +159,7 @@ class JavaBuilderClassFileVisitor implements BuilderClassFileVisitor {
     
         return new BuilderClass(
             clazz.name,
+            clazz.generics,
             clazz.isInterface,
             clazz.superClass,
             fields,
@@ -240,7 +242,7 @@ class BuilderClassVisitor {
         for (const clazz of builderClasses) {
             let visitor: BuilderClassFileVisitor
             if ([Language.ARKTS, Language.TS].includes(language)) {
-                visitor = new TSBuilderClassFileVisitor(language, clazz, this.dumpSerialized)
+                visitor = new TSBuilderClassFileVisitor(language, clazz, this.dumpSerialized, this.library)
             }
             else if ([Language.JAVA].includes(language)) {
                 visitor = new JavaBuilderClassFileVisitor(this.printerContext, clazz, this.dumpSerialized)
@@ -289,6 +291,7 @@ function collapse(methods: Method[]): Method[] {
 function toTSBuilderClass(clazz: BuilderClass): TSBuilderClass {
     return new TSBuilderClass(
         clazz.name,
+        clazz.generics,
         clazz.isInterface,
         clazz.superClass,
         clazz.fields.map(it => it.field),
@@ -332,6 +335,7 @@ function processTSBuilderClass(clazz: TSBuilderClass): TSBuilderClass {
 
     return new TSBuilderClass(
         clazz.name,
+        clazz.generics,
         clazz.isInterface,
         clazz.superClass,
         fields,

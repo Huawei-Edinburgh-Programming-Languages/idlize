@@ -4,7 +4,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,12 +12,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package idlize
 
-export type External_LITERAL_evenodd = string
-export type External_LITERAL_onzero = string
-export type External_LITERAL_nonzero = string
-export type External_TEMPLATE_LITERAL_number_FP = string
-export type External_TEMPLATE_LITERAL_number_LPX = string
-export type External_TEMPLATE_LITERAL_number_vp = string
-export type External_TEMPLATE_LITERAL_number_Percentage = string
-export type External_TEMPLATE_LITERAL_number_PX = string
+public class Opt_Number <: Ark_ObjectBase {
+    public var value: Float64
+    public Opt_Number(v: Float64) {
+        this.value = v;
+    }
+
+    public static func getRuntimeType(): RuntimeType {
+        return RuntimeType.NUMBER;
+    }
+}

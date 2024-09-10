@@ -1,6 +1,6 @@
 {
   "name": "@azanat/idlize",
-  "version": "1.3.6+devel",
+  "version": "1.3.7+devel",
   "description": "",
   "main": "lib/index.js",
   "bin": "lib/index.js",
@@ -9,21 +9,25 @@
     "stdlib.d.ts",
     "whitelist.json",
     "peer_lib/**/*",
-    "templates/**/*"
+    "templates/**/*",
+    "webidl2.js/**/*"
+  ],
+  "workspaces": [
+    "webidl2.js"
   ],
   "license": "Apache-2.0",
   "keywords": [],
   "dependencies": {
     "@rollup/plugin-commonjs": "^26.0.1",
     "@types/node": "^18.0.0",
-    "@types/webidl2": "^24.4.1",
     "commander": "^10.0.0",
     "comment-parser": "^1.4.1",
     "cross-env": "^7.0.3",
     "node-addon-api": "^8.0.0",
     "node-api-headers": "^1.1.0",
     "typescript": "^4.9.5",
-    "webidl2": "^24.4.1"
+    "webidl2": "file:webidl2.js",
+    "@types/webidl2": "file:webidl2.js/types"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.2.3",
@@ -45,7 +49,8 @@
   "scripts": {
     "prepare": "cd external/incremental && npm i && cd ../interop && npm i && cd ../arkoala && npm i",
     "download:sdk": "node ./download-sdk.mjs",
-    "upload": "npm run compile && node tools/publish.mjs",
+    "upload": "npm run compile && npm run webidl2 && node tools/publish.mjs",
+    "webidl2": "cd ./webidl2.js && npm i && npm run build",
     "setup-out": "node tools/setup/setup.mjs",
     "compile": "npm run download:sdk && rollup -c",
     "clean": "rimraf build dist lib generated native/build* native/lib* native/cross* native/NativeBridge* native/ace* out",
@@ -64,12 +69,12 @@
     "idl2peer:compile": "npm run compile && npm run idl2peer:libace && npm run idl2peer:arkoala && cd out/ts-peers && tsc -p . && rollup -c",
     "tracker": "npm run compile && node . --dts2peer --input-dir ./interface_sdk-js/api/@internal/component/ets/ --output-dir ./doc --generator-target tracker --tracker-status ./doc/COMPONENTS_STATUS.md",
     "run2peer:all": "npm run compile && npm run run2peer:libace && npm run run2peer:arkoala",
-    "run2peer": "npm run compile && node . --api-version 99 --dts2peer --input-dir ./interface_sdk-js/api/@internal/component/ets/ --generate-interface Blank --output-dir ./out/ts-peers/generated --need-interfaces",
+    "run2peer": "npm run compile && node . --api-version 99 --dts2peer --input-dir ./interface_sdk-js/api/@internal/component/ets/ --output-dir ./out/ts-peers/generated --need-interfaces --via-idl",
     "lint": "npm run compile && node . --linter --input-dir ./interface_sdk-js/api/@internal/component/ets/ --input-file common.d.ts --output-dir linter --linter-whitelist whitelist.json",
     "lint:all": "npm run compile && node . --linter --input-dir ./interface_sdk-js/api/@internal/component/ets/ --output-dir out/linter --linter-whitelist whitelist.json",
     "lint:test": "rimraf out/linter && npm run lint:all ; diff tests/lint/golden_histogram.txt out/linter/histogram.txt",
     "check:peers": "npm run setup-out -- --out out/ts-peers  --template ts_peers && npm run run2peer:all && cd out/ts-peers && tsc -p .",
-    "check:subset": "npm run compile && npm run setup-out -- --out out/ts-subset --template ts_subset && node . --api-version 99 --dts2peer --input-dir ./tests/subset/ets/ --output-dir ./out/ts-subset/generated && cp -r tests/subset out/ts-subset/generated/tests && cd out/ts-subset && tsc -p .",
+    "check:subset": "npm run compile && npm run setup-out -- --out out/ts-subset --template ts_subset && node . --api-version 99 --dts2peer --input-dir ./tests/subset/ets/ --output-dir ./out/ts-subset/generated --via-idl && cp -r tests/subset out/ts-subset/generated/tests && cd out/ts-subset && tsc -p .",
     "check:subset:run": "npm run rollup:host:subset && npm run compile:native-node-host-ts-subset && node out/ts-subset/lib/main.js",
     "check:peers:run": "npm run rollup:host:full && npm run compile:native-node-host-full && node tools/check-headers.mjs && node out/ts-peers/lib/main.js",
     "dts2idl:peers:run": "npm run setup-out -- --out out/ts-peers  --template ts_peers && npm run idl2peer:compile && npm run compile:native-node-host-full && node tools/check-headers.mjs && node out/ts-peers/lib/main.js",
@@ -88,10 +93,15 @@
     "sanity": "npm run check:subset:run && npm run dts2idl:peers:run && npm run run:all && npm run lint:test && npm run make:arkts",
     "panda:sdk:install": "npm run panda:sdk:install --prefix external/incremental/tools/panda",
     "make:arkts": "npm run compile && node . --api-version 99 --dts2peer --need-interfaces --input-dir ./tests/subset/ets --output-dir ./out/arkts-subset/generated --language arkts",
+    "make:arkts:peers": "npm run compile && node . --api-version 99 --dts2peer --need-interfaces --input-dir ./interface_sdk-js/api/@internal/component/ets/ --output-dir ./out/arkts-peers/generated --language arkts",
     "compile:arkts": "bash ./external/incremental/tools/panda/arkts/arktsc --arktsconfig ./arktsconfig-subset.json --ets-module && bash ./external/incremental/tools/panda/arkts/arktsc --arktsconfig ./arktsconfig-subset-index.json",
+    "compile:arkts:incremental": "bash ./external/incremental/tools/panda/arkts/arktsc --arktsconfig ./external/incremental/runtime/arktsconfig.json --ets-module",
+    "compile:arkts:peers": "bash ./external/incremental/tools/panda/arkts/arktsc --arktsconfig ./arktsconfig-peers.json --ets-module",
     "compile:arkts:subset": "npm run make:arkts && npm run compile:arkts",
+    "make:compile:arkts:peers": "npm run make:arkts:peers && npm run compile:arkts:peers",
     "run:arkts-link-interfaces": "bash ./external/incremental/tools/panda/arkts/arklink --output ./build/abc/subset/sig/arkoala-arkts/arkui/src/dts_interfaces.abc -- `find ./build/abc/subset/sig/arkoala-arkts/arkui/src/ -name *Interfaces.abc`",
-    "run:panda": "npm run compile:arkts:subset && npm run run:arkts-link-interfaces && npm run compile:native-node-host-arkts-subset && LD_LIBRARY_PATH=./native PANDA_LIB_PATH=./build/abc/subset/sig/arkoala-arkts/arkui/src/ bash ./external/incremental/tools/panda/arkts/ark --ark-boot-files ./build/abc/subset/sig/arkoala-arkts/arkui/src ./build/abc/subset/sig/arkoala-arkts/arkui/src/index.abc",
+    "run:panda": "npm run compile:arkts:subset && npm run run:arkts-link-interfaces && npm run compile:native-node-host-arkts-subset && npm run compile:arkts:incremental && cp -R ./external/incremental/runtime/build/abc/src ./build/abc/subset/sig/arkoala-arkts/arkui/ && LD_LIBRARY_PATH=./native PANDA_LIB_PATH=./build/abc/subset/sig/arkoala-arkts/arkui/src/ bash ./external/incremental/tools/panda/arkts/ark --ark-boot-files ./build/abc/subset/sig/arkoala-arkts/arkui/src ./build/abc/subset/sig/arkoala-arkts/arkui/src/main.abc",
+    "run:panda:peers": "npm run make:compile:arkts:peers",
     "compile:java": "npm run compile && node . --api-version 99 --dts2peer --input-dir ./tests/java-subset/ets/ --output-dir ./out/java-subset/generated --language java --need-interfaces && npm run compile:native-node-host-java-subset && javac -sourcepath ./out/java-subset/generated/sig/arkoala/framework/java/src -d ./out/java-subset/bin ./out/java-subset/generated/sig/arkoala/framework/java/src/org/koalaui/arkoala/*.java",
     "run:java": "npm run compile:java && npm run compile:native-node-host-java-subset && java -Djava.library.path=./native -cp ./out/java-subset/bin org.koalaui.arkoala.Main",
     "run:java:concurrent": "npm run compile:java && npm run compile:native-node-host-java-subset && java -Djava.library.path=./native -cp ./out/java-subset/bin org.koalaui.arkoala.Concurrent",
