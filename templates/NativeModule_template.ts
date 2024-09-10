@@ -83,17 +83,14 @@ export interface GraphicsOps {
 }
 
 export interface LoaderOps {
-    _LoadVirtualMachine2(arg1: KInt, arg2: string, arg3: string): pointer
-    _SimulateVirtualMachine(arg1: KInt): pointer
-    _StartApplication(arg1: pointer, arg2: string, arg3: string, arg4: string, arg5: string, arg6: string): pointer
-    _RunApplication(arg1: pointer, arg2: KInt, arg3: KInt): KInt
-    _ProvideIntCallbackOnHost(arg1: pointer): void
-    _ProvideCallbackRegistryOnGuest(arg1: pointer): void;
-    _CallIntCallbackOnHost(arg1: pointer, arg2: KInt, arg3: Uint8Array, arg4: KInt): KInt
-    _CallIntCallbackOnGuest(arg1: pointer, arg2: KInt, arg3: Uint8Array, arg4: KInt): KInt
-
-    _LoadVirtualMachine(classPath: string, libPath: string, kind: KInt): pointer
-    _RunVirtualMachine(env: pointer, what: KInt, arg0: KInt): KInt
+    _LoadVirtualMachine(vmKind: KInt, appClassPath: string, appLibPath: string): pointer
+    _SimulateVirtualMachine(vmKind: KInt): pointer
+    _StartApplication(vmEntry: pointer, className: string, startMethodName: string, startMethodSig: string, enterMethodName: string, enterMethodSig: string): pointer
+    _RunApplication(vmEntry: pointer, arg2: KInt, arg3: KInt): KInt
+    _ProvideIntCallbackOnHost(vmEntry: pointer): void
+    _ProvideCallbackRegistryOnGuest(vmEntry: pointer): void
+    _CallIntCallbackOnHost(vmEntry: pointer, methodId: KInt, args: Uint8Array, length: KInt): KInt
+    _CallIntCallbackOnGuest(vmEntry: pointer, methodId: KInt, args: Uint8Array, length: KInt): KInt
 }
 
 export interface NodeOps {

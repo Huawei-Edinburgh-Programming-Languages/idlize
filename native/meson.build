@@ -10,7 +10,6 @@ source_set = 'ts_peers'
 endif
 use_libace = false
 use_dummy_libace = true
-use_dummy_panda = true
 if get_option('arkts')
 is_arkts = true
 else
@@ -57,7 +56,6 @@ sources = [
     external_framework_dir / 'events.cc',
     arkoala_dir / 'all_events.cc',
     arkoala_dir / 'library.cc',
-    arkoala_dir / 'arkts/panda-loader.cc',
     external_interop_dir / 'vmloader.cc',
 ]
 if compile_events_test
@@ -235,9 +233,10 @@ shared_library(node_library_name,
     install: true,
     name_prefix: node_module_prefix,
     name_suffix: node_module_suffix,
-    include_directories: include_dirs + node_include_dirs + arkts_include_dirs + jni_include_dirs, # vmloader
+    include_directories: include_dirs + node_include_dirs + arkts_include_dirs + jni_include_dirs,
     install_dir: meson.current_source_dir(),
     cpp_args: cflags + node_cflags + ['-DKOALA_ETS_NAPI', '-DKOALA_JNI'],
+    # vmloader requires etsapi.h or jni.h header and -DKOALA_ETS_NAPI or -DKOALA_JNI to load the corresponding VM
     link_args: ldflags + node_ldflags,
     dependencies: []
 )
@@ -363,19 +362,6 @@ executable('test_converter',
     arkoala_dir / 'converter_test.cc',
     cpp_args: cflags,
     include_directories: include_dirs + [libace_dir + '/utility/generated']
-)
-endif
-
-if use_dummy_panda and is_jni
-libdummy_sources = [
-    'dummy-panda' / 'vm.cc',
-]
-shared_library('panda',
-    libdummy_sources,
-    install: true,
-    cpp_args: cflags,
-    include_directories: arkts_include_dirs + jni_include_dirs + [ external_interop_dir ],
-    install_dir: meson.current_source_dir(),
 )
 endif
 endif
