@@ -851,8 +851,7 @@ export class DeclarationTable {
                 initializer = ` = ${it.initializer.getText()}`
             }
             let valueName = identName(it.name)!
-            // FLC prefix stands for "From Lower Case"
-            valueName = isUpperCase(valueName) ? valueName : `FLC_${camelCaseToUpperSnakeCase(valueName)}`
+            valueName = isUpperCase(valueName) ? valueName : `DEPRECATED_${camelCaseToUpperSnakeCase(valueName)}`
             structs.print(`${camelCaseToUpperSnakeCase(enumName)}_${valueName}${initializer},`)
         })
         structs.popIndent()
