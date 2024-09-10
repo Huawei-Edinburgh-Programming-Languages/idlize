@@ -69,13 +69,28 @@ public open class NativeModule {
         return unsafe{ InsertChildAt(ptr, node, position) }
     }
     public static func _MeasureNode(ptr: Int64, data: ArrayList<Float32>): Int32 {
-        return unsafe{ MeasureNode(ptr, data) }
+        return unsafe{
+            let handle_1 = acquireArrayRawData(data.toArray())
+            let output = MeasureNode(ptr, handle_1.pointer)
+            releaseArrayRawData(handle_1)
+            return output
+        }
     }
     public static func _LayoutNode(ptr: Int64, data: ArrayList<Float32>): Int32 {
-        return unsafe{ LayoutNode(ptr, data) }
+        return unsafe{
+            let handle_1 = acquireArrayRawData(data.toArray())
+            let output = LayoutNode(ptr, handle_1.pointer)
+            releaseArrayRawData(handle_1)
+            return output
+        }
     }
     public static func _DrawNode(ptr: Int64, data: ArrayList<Float32>): Int32 {
-        return unsafe{ DrawNode(ptr, data) }
+        unsafe {
+            let handle_1 = acquireArrayRawData(data.toArray())
+            let output = DrawNode(ptr, handle_1.pointer)
+            releaseArrayRawData(handle_1)
+            return output
+        }
     }
     public static func _MeasureLayoutAndDraw(ptr: Int64): Unit {
         unsafe{ MeasureLayoutAndDraw(ptr) }

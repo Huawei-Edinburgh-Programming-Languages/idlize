@@ -34,7 +34,7 @@ type MemberInfo = {
 }
 
 class CJType {
-    // Java type itself
+    // CJ type itself
     // string representation can contain special characters (e.g. String[])
     readonly type: Type
 

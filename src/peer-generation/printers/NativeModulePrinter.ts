@@ -110,24 +110,30 @@ function printPeerMethod(clazz: PeerClassBase, method: PeerMethod | IdlPeerMetho
     } else {
         let nativeName = name.substring(1)
         nativeModule.writeMethodImplementation(new Method(name, parameters, [MethodModifier.PUBLIC, MethodModifier.STATIC]), (printer) => {
-            // let arrayLikeArgsIndices = parameters.args.map(it => it.name == 'Uint8Array'? parameters.args.indexOf(it): null)
             let functionCllArgs: Array<string> = []
+            const arrayLikeTypes = new Set(['Uint8Array'])
+            const stringLikeTypes = new Set(['String'])
             printer.print('return unsafe {')
             printer.pushIndent()
             for(let param of parameters.args) {
                 let ordinal = parameters.args.indexOf(param)
-                if (param.name == 'Uint8Array') {
+                if (arrayLikeTypes.has(param.name)) {
                     functionCllArgs.push(`handle_${ordinal}.pointer`)
                     printer.print(`let handle_${ordinal} = acquireArrayRawData(${parameters.argsNames[ordinal]}.toArray())`)
+                } else if (stringLikeTypes.has(param.name)) {
+                    printer.print(`let ${parameters.argsNames[ordinal]} = unsafe { LibC.mallocCString(${parameters.argsNames[ordinal]}) }`)
+                    functionCllArgs.push(parameters.argsNames[ordinal])
                 } else {
                     functionCllArgs.push(parameters.argsNames[ordinal])
                 }
             }
             printer.print(`${new FunctionCallExpression(nativeName, functionCllArgs.map(it => printer.makeString(it))).asString()}`)
             for(let param of parameters.args) {
-                if (param.name == 'Uint8Array') {
-                    let ordinal = parameters.args.indexOf(param)
+                let ordinal = parameters.args.indexOf(param)
+                if (arrayLikeTypes.has(param.name)) {
                     printer.print(`releaseArrayRawData(handle_${ordinal})`)
+                } else if (stringLikeTypes.has(param.name)) {
+                    printer.print(`unsafe { LibC.free(${parameters.argsNames[ordinal]}) }`)
                 }
             }
             printer.popIndent()
