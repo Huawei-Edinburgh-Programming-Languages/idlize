@@ -831,7 +831,7 @@ export class DeclarationTable {
             structs.print(`typedef struct ${nameOptional} {`)
             structs.pushIndent()
             structs.print(`enum ${PrimitiveType.Tag.getText()} tag;`)
-            structs.print(`enum ${elemName} value;`)
+            structs.print(`${this.cFieldKind(target)} ${elemName} value;`)
             structs.popIndent()
             structs.print(`} ${nameOptional};`)
             this.writeOptional(nameOptional, writeToString, this.isPointerDeclaration(target))
