@@ -1422,8 +1422,12 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     makeUnionSelector(value: string, valueType: string): LanguageStatement {
         return this.makeAssign(valueType, undefined, this.makeMethodCall(value, "getSelector", []), false)
     }
-    makeUnionVariantCondition(_convertor: ArgConvertor, valueName: string, _valueType: string, type: string, index: number): LanguageExpression {
-        return this.makeString(`${valueName} == ${index}`)
+    makeUnionVariantCondition(_convertor: ArgConvertor,
+                              _valueName: string,
+                              valueType: string,
+                              _type: string,
+                              index: number): LanguageExpression {
+        return this.makeString(`${valueType} == ${index}`)
     }
     makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index: number) {
         return this.makeMethodCall(value, `getValue${index}`, [])
