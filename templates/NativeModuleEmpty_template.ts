@@ -110,9 +110,15 @@ export class NativeModuleEmpty extends NativeModuleEmptyIntegrated implements Na
     _TestCallIntRecursiveCallback(arg1: KInt, arg2: Uint8Array, arg3: KInt): KInt { return -1 }
     _TestCallIntMemory(arg1: KInt, arg2: KInt): KInt { return -1 }
 
-    _LoadVirtualMachine(classPath: string, libPath: string, kind: KInt): pointer { throw new Error("unsupported") }
     _LoadVirtualMachine2(arg1: KInt, arg2: string, arg3: string): pointer { throw new Error("unsupported") }
+    _SimulateVirtualMachine(arg1: KInt): pointer { throw new Error("unsupported") }
     _StartApplication(arg1: pointer, arg2: string, arg3: string, arg4: string, arg5: string, arg6: string): pointer { throw new Error("unsupported") }
     _RunApplication(arg1: pointer, arg2: KInt, arg3: KInt): KInt { throw new Error("unsupported") }
+    _ProvideIntCallbackOnHost(arg1: pointer): void { throw new Error("unsupported") }
+    _ProvideCallbackRegistryOnGuest(arg1: pointer): void { throw new Error("unsupported") }
+    _CallIntCallbackOnHost(arg1: pointer, arg2: KInt, arg3: Uint8Array, arg4: KInt): KInt { throw new Error("unsupported") }
+    _CallIntCallbackOnGuest(arg1: pointer, arg2: KInt, arg3: Uint8Array, arg4: KInt): KInt { throw new Error("unsupported") }
+
+    _LoadVirtualMachine(classPath: string, libPath: string, kind: KInt): pointer { throw new Error("unsupported") }
     _RunVirtualMachine(env: pointer, what: KInt): KInt { throw new Error("unsupported") }
 }

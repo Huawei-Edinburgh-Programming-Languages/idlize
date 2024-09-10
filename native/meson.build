@@ -58,7 +58,7 @@ sources = [
     arkoala_dir / 'all_events.cc',
     arkoala_dir / 'library.cc',
     arkoala_dir / 'arkts/panda-loader.cc',
-
+    external_interop_dir / 'vmloader.cc',
 ]
 if compile_events_test
     sources += [
@@ -228,7 +228,7 @@ shared_library(cj_library_name,
 )
 else
 shared_library(node_library_name,
-    sources + node_sources + [external_interop_dir / 'vmloader.cc'], # vmloader
+    sources + node_sources,
     override_options: [
         'b_lundef=false',
     ],

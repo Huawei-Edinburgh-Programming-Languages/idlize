@@ -24,15 +24,16 @@ function waitVSync(): Promise<void> {
 
 export async function runEventLoop(vmEntry: pointer) {
     let cb = wrapCallback((data: Uint8Array, length: int32) => {
-        let deserializer = new Deserializer(data.buffer, length)
-        let parameter = {
-            key: deserializer.readString(),
-            value: deserializer.readString()
-        }
-        console.log(`JS: key: ${parameter.key} value: ${parameter.value}`)
-    })
+        console.log(`JS: length = ${length}`)
+    }, false)
     for (let i = 0; i < 5; i++) {
-        nativeModule()._RunApplication(vmEntry, i, 0)
+        nativeModule()._RunApplication(vmEntry, i, cb)
+        if (i == 1) {
+            nativeModule()._CallIntCallbackOnHost(vmEntry, 1, new Uint8Array([1]), 1)
+        }
+        if (i == 2) {
+            nativeModule()._CallIntCallbackOnGuest(vmEntry, 1, new Uint8Array([1, 2]), 2)
+        }
         await waitVSync()
     }
 }
@@ -48,6 +49,7 @@ export function checkLoader() {
         nativeModule()._StartApplication(vmEntry, "Application", "startApplication", "J:LApplication;", "enter", "JII:V");
     }
     if (vmEntry != 0) {
+        nativeModule()._ProvideIntCallbackOnHost(vmEntry)
         setTimeout(async () => runEventLoop(vmEntry), 0)
     }
 }

@@ -14,7 +14,8 @@
     },
     "include": [
         "out/arkts-subset/generated/**/NativeModule.sts",
-        "out/arkts-subset/generated/**/SerializerBase.sts"
+        "out/arkts-subset/generated/**/SerializerBase.sts",
+        "out/arkts-subset/generated/**/CallbackRegistry.sts"
     ],
     "comment": "See https://rnd-gitlab-msc.huawei.com/rus-os-team/virtual-machines-and-tools/panda/-/issues/19336"
 }
