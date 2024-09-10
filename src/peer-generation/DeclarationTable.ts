@@ -824,7 +824,7 @@ export class DeclarationTable {
         return unions
     }
 
-    private generateOptional(structs: IndentedPrinter, writeToString: LanguageWriter, target: DeclarationTarget, elemName: string, seenNames: Set<String>) {
+    private generateOptional(structs: IndentedPrinter, writeToString: LanguageWriter, target: DeclarationTarget, elemName: string, seenNames: Set<string>) {
         const nameOptional = PrimitiveType.OptionalPrefix + cleanPrefix(elemName, PrimitiveType.ArkPrefix)
         if (!seenNames.has(nameOptional)) {
             seenNames.add(nameOptional)
