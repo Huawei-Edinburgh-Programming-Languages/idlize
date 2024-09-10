@@ -257,15 +257,14 @@ export class NullConvertor extends BaseArgConvertor {
 }
 
 export class EnumConvertor extends BaseArgConvertor {
+    public readonly enumTypeName = identName(this.enumType.name)!
+
     constructor(param: string,
                 private enumType: ts.EnumDeclaration,
                 public readonly isStringEnum: boolean) {
         super(isStringEnum ?  "string" : "number",
             [isStringEnum ? RuntimeType.STRING : RuntimeType.NUMBER],
             false, false, param)
-    }
-    enumTypeName(): string {
-        return identName(this.enumType.name)!
     }
     convertorArg(param: string, writer: LanguageWriter): string {
         return writer.makeCastEnumToInt(this, param)
@@ -297,7 +296,7 @@ export class EnumConvertor extends BaseArgConvertor {
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
         //TODO: move to LanguageWrites
         if (writer.language == Language.ARKTS) {
-            return writer.makeString(`${value} instanceof ${this.enumTypeName()}`)
+            return writer.makeString(`${value} instanceof ${this.enumTypeName}`)
         }
         let low: number|undefined = undefined
         let high: number|undefined = undefined
@@ -320,13 +319,6 @@ export class EnumConvertor extends BaseArgConvertor {
             writer.makeNaryOp(">=", [ordinal, writer.makeString(low!.toString())]),
             writer.makeNaryOp("<=",  [ordinal, writer.makeString(high!.toString())])
         ])
-    }
-    targetType(writer: LanguageWriter): Type {
-        //TODO: move to LanguageWrites
-        if (writer.language == Language.ARKTS) {
-            return new Type(this.enumTypeName())
-        }
-        return super.targetType(writer);
     }
 }
 
