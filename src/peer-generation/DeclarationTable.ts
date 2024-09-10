@@ -714,7 +714,8 @@ export class DeclarationTable {
                 const enumName = this.enumName(elementType.name)
                 if (!seenNames.has(enumName)) {
                     seenNames.add(enumName)
-                    this.generateEnum(structs, writeToString, elementType, seenNames)
+                    this.generateEnum(structs, writeToString, elementType)
+                    this.generateOptional(structs, writeToString, elementType, enumName, seenNames)
                 }
             }
         }
@@ -823,7 +824,22 @@ export class DeclarationTable {
         return unions
     }
 
-    private generateEnum(structs: IndentedPrinter, writeToString: LanguageWriter, target: ts.EnumDeclaration, seenNames: Set<string>) {
+    private generateOptional(structs: IndentedPrinter, writeToString: LanguageWriter, target: DeclarationTarget, elemName: string, seenNames: Set<String>) {
+        const nameOptional = PrimitiveType.OptionalPrefix + cleanPrefix(elemName, PrimitiveType.ArkPrefix)
+        if (!seenNames.has(nameOptional)) {
+            seenNames.add(nameOptional)
+            structs.print(`typedef struct ${nameOptional} {`)
+            structs.pushIndent()
+            structs.print(`enum ${PrimitiveType.Tag.getText()} tag;`)
+            structs.print(`enum ${elemName} value;`)
+            structs.popIndent()
+            structs.print(`} ${nameOptional};`)
+            this.writeOptional(nameOptional, writeToString, this.isPointerDeclaration(target))
+            this.writeRuntimeType(target, nameOptional, true, writeToString)
+        }
+    }
+
+    private generateEnum(structs: IndentedPrinter, writeToString: LanguageWriter, target: ts.EnumDeclaration) {
         const enumName = this.enumName(target.name)
         structs.print(`enum ${enumName}`)
         structs.print(`{`)
@@ -850,19 +866,6 @@ export class DeclarationTable {
         writeToString.print(`return ARK_RUNTIME_NUMBER;`)
         writeToString.popIndent()
         writeToString.print(`}`)
-
-        const nameOptional = PrimitiveType.OptionalPrefix + cleanPrefix(enumName, PrimitiveType.ArkPrefix)
-        if (!seenNames.has(nameOptional)) {
-            seenNames.add(nameOptional)
-            structs.print(`typedef struct ${nameOptional} {`)
-            structs.pushIndent()
-            structs.print(`enum ${PrimitiveType.Tag.getText()} tag;`)
-            structs.print(`enum ${enumName} value;`)
-            structs.popIndent()
-            structs.print(`} ${nameOptional};`)
-            this.writeOptional(nameOptional, writeToString, this.isPointerDeclaration(target))
-            this.writeRuntimeType(target, nameOptional, true, writeToString)
-        }
     }
 
     generateStructs(structs: IndentedPrinter, typedefs: IndentedPrinter, writeToString: LanguageWriter) {
@@ -885,7 +888,8 @@ export class DeclarationTable {
             const nameOptional = PrimitiveType.OptionalPrefix + cleanPrefix(nameAssigned, PrimitiveType.ArkPrefix)
             let isUnion = this.isMaybeWrapped(target, ts.isUnionTypeNode)
             if (!(target instanceof PrimitiveType) && ts.isEnumDeclaration(target)) {
-                this.generateEnum(structs, writeToString, target, seenNames)
+                this.generateEnum(structs, writeToString, target)
+                this.generateOptional(structs, writeToString, target, this.enumName(target.name), seenNames)
                 continue
             }
             const structDescriptor = this.targetStruct(target)
