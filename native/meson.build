@@ -168,7 +168,6 @@ node_module_suffix = 'node'
 arkts_cflags = ['-DKOALA_USE_PANDA_VM', '-DKOALA_ETS_NAPI']
 arkts_include_dirs = [
     external_interop_dir / 'ets',
-    arkoala_dir / 'arkts'
 ]
 arkts_sources = [
     external_interop_dir / 'ets/convertors-ets.cc',
