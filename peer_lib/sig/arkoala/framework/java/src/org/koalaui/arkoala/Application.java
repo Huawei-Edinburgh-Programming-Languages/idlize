@@ -14,25 +14,14 @@
  */
 package org.koalaui.arkoala;
 
-class JSAPIArgument {
-    JSAPIArgument(String name, String value) {
-        this.name = name;
-        this.value = value;
-    }
-    String name;
-    String value;
-}
-
 public class Application {
     Application() {}
 
     public static void main(String[] args) {
-        var vmEntry = NativeModule._SimulateVirtualMachine(1);
-        NativeModule._ProvideCallbacksOnHost(vmEntry);
-        var app = Application.startApplication(vmEntry);
+        var app = Application.startApplication();
         try {
             for (int i = 0; i < 10; i++) {
-                app.loopIteration(vmEntry, i, 0);
+                app.loopIteration(i, 0);
                 Thread.sleep(100);
             }
         } catch (InterruptedException e) {
@@ -40,38 +29,22 @@ public class Application {
         }
     }
 
-    public static Application startApplication(long vmEntry) {
+    public static Application startApplication() {
         return new Application().start();
     }
 
-    public void enter(long env, int what, int arg0) {
-        loopIteration(env, what, arg0);
+    public void enter(int arg0, int arg1) {
+        loopIteration(arg0, arg1);
     }
 
-    public void loopIteration(long vmEntry, int what, int arg0) {
-        if (what == 3 && arg0 != 0) {
-            NativeModule._CallIntCallbackOnHost(vmEntry, arg0, new byte[]{1, 2, 3}, 3);
-        }
-        if (what == 4 && arg0 != 0) {
-            NativeModule._CallIntCallbackOnGuest(vmEntry, arg0, new byte[]{1, 2, 3, 4}, 4);
-        }
-        checkEvents(what);
+    public void loopIteration(int arg0, int arg1) {
+        checkEvents(arg0);
         updateState();
         render();
     }
 
-    private void callJSAPI(long vmEntry, JSAPIArgument arg, int callback) {
-        var serializer = SerializerBase.get(Serializer::createSerializer, 0);
-        serializer.writeString(arg.name);
-        serializer.writeString(arg.value);
-        NativeModule._CallExternalAPI(vmEntry, callback, serializer.asArray(), serializer.currentPosition());
-    }
-
-    private byte[] buffer = new byte[256];
-
     void checkEvents(int what) {
         System.out.println("checkEvents " + what);
-        NativeModule._CheckArkoalaGeneratedEvents(buffer, buffer.length);
     }
 
     void updateState() {

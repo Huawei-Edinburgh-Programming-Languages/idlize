@@ -22,35 +22,24 @@ function waitVSync(): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, 100) )
 }
 
-export async function runEventLoop(vmEntry: pointer) {
-    let cb = wrapCallback((data: Uint8Array, length: int32) => {
-        console.log(`JS: length = ${length}`)
-    }, false)
+export async function runEventLoop() {
     for (let i = 0; i < 5; i++) {
-        nativeModule()._RunApplication(vmEntry, i, cb)
-        if (i == 1) {
-            nativeModule()._CallIntCallbackOnHost(vmEntry, 1, new Uint8Array([1]), 1)
-        }
-        if (i == 2) {
-            nativeModule()._CallIntCallbackOnGuest(vmEntry, 1, new Uint8Array([1, 2]), 2)
-        }
+        nativeModule()._RunApplication(i, i * i)
         await waitVSync()
     }
 }
 
 export function checkLoader() {
-    let vmEntry: pointer = 0
+    let res = 0
     if (process.argv[process.argv.length - 1] == 'java') {
-        vmEntry = nativeModule()._LoadVirtualMachine(1, __dirname + "/../out/java-subset/bin", __dirname + "/../native");
-        nativeModule()._StartApplication(vmEntry, "org/koalaui/arkoala/Application", "startApplication", "(J)Lorg/koalaui/arkoala/Application;",  "enter", "(JII)V");
+        res = nativeModule()._LoadVirtualMachine(1, __dirname + "/../out/java-subset/bin", __dirname + "/../native");
     }
     if (process.argv[process.argv.length - 1] == 'panda') {
-        vmEntry = nativeModule()._LoadVirtualMachine(2, __dirname + "/../build/abc/subset/sig/arkoala-arkts/arkui/src", __dirname + "/../native");
-        nativeModule()._StartApplication(vmEntry, "Application", "startApplication", "J:LApplication;", "enter", "JII:V");
+        res = nativeModule()._LoadVirtualMachine(2, __dirname + "/../build/abc/subset/sig/arkoala-arkts/arkui/src", __dirname + "/../native");
     }
-    if (vmEntry != 0) {
-        nativeModule()._ProvideCallbacksOnHost(vmEntry)
-        setTimeout(async () => runEventLoop(vmEntry), 0)
+    if (res == 0) {
+        nativeModule()._StartApplication();
+        setTimeout(async () => runEventLoop(), 0)
     }
 }
 

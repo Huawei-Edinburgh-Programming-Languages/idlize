@@ -18,19 +18,7 @@ import { SerializerBase } from "@arkoala/arkui/peers/SerializerBase"
 import { createSerializer } from "@arkoala/arkui/peers/Serializer"
 import { wrapCallback } from "./CallbackRegistry"
 
-class JSAPIArgument {
-    name: String
-    value: String
-
-    constructor(name: String, value: String) {
-        this.name = name;
-        this.value = value;
-    }
-}
-
 export class Application {
-    private buffer = new byte[256];
-
     constructor() {
 
     }
@@ -41,7 +29,6 @@ export class Application {
 
     private checkEvents(what: int) {
         console.log("checkEvents " + what);
-        nativeModule()._CheckArkoalaGeneratedEvents(this.buffer, this.buffer.length);
     }
 
     private updateState() {
@@ -52,46 +39,26 @@ export class Application {
         console.log("render")
     }
 
-    private callJSAPI(vmEntry: long, arg: JSAPIArgument, callback: int) {
-        const serializer = SerializerBase.get(createSerializer, 0);
-        serializer.writeString(arg.name);
-        serializer.writeString(arg.value);
-        nativeModule()._CallIntCallbackOnGuest(vmEntry, callback, serializer.asArray(), serializer.currentPosition());
+    enter(arg0: int, arg1: int) {
+        this.loopIteration(arg0, arg1)
     }
 
-    enter(vmEntry: long, what: int, arg0: int) {
-        this.loopIteration(vmEntry, what, arg0)
-    }
-
-    loopIteration(vmEntry: long, what: int, arg0: int) {
-        if (what == 3) {
-            nativeModule()._CallIntCallbackOnHost(vmEntry, arg0, [1, 2, 3] as byte[], 3);
-        }
-        if (what == 4) {
-            nativeModule()._CallIntCallbackOnGuest(vmEntry, arg0, [1, 2, 3, 4] as byte[], 4);
-        }
-        this.checkEvents(what)
+    loopIteration(arg0: int, arg1: int) {
+        this.checkEvents(arg0)
         this.updateState()
         this.render()
     }
 
-    static startApplication(vmEntry: long): Application {
-        nativeModule()._ProvideCallbacksOnGuest(vmEntry)
-        let cb = wrapCallback((args: byte[], length: int): int => {
-            console.log(`PANDA: length = ${length}`)
-            return 0
-        }, false)
+    static startApplication(): Application {
         return new Application().start()
     }
 }
 
 export function main() {
-    let vmEntry = nativeModule()._SimulateVirtualMachine(2)
-    nativeModule()._ProvideCallbacksOnHost(vmEntry)
-    const app = Application.startApplication(vmEntry)
+    const app = Application.startApplication()
     try {
         for (let i = 0; i < 10; i++) {
-            app.loopIteration(vmEntry, i, 1)
+            app.loopIteration(i, 1)
         }
     } catch (e: Error) {
         console.log(e.stack)

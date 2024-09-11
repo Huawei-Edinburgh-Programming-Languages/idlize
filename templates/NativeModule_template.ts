@@ -83,14 +83,9 @@ export interface GraphicsOps {
 }
 
 export interface LoaderOps {
-    _LoadVirtualMachine(vmKind: KInt, appClassPath: string, appLibPath: string): pointer
-    _SimulateVirtualMachine(vmKind: KInt): pointer
-    _StartApplication(vmEntry: pointer, className: string, startMethodName: string, startMethodSig: string, enterMethodName: string, enterMethodSig: string): pointer
-    _RunApplication(vmEntry: pointer, arg2: KInt, arg3: KInt): KInt
-    _ProvideCallbacksOnHost(vmEntry: pointer): void
-    _ProvideCallbacksOnGuest(vmEntry: pointer): void
-    _CallIntCallbackOnHost(vmEntry: pointer, methodId: KInt, args: Uint8Array, length: KInt): KInt
-    _CallIntCallbackOnGuest(vmEntry: pointer, methodId: KInt, args: Uint8Array, length: KInt): KInt
+    _LoadVirtualMachine(vmKind: KInt, appClassPath: String, appLibPath: String): KInt
+    _StartApplication(): KInt
+    _RunApplication(arg0: KInt, arg1: KInt): KInt
 }
 
 export interface NodeOps {
