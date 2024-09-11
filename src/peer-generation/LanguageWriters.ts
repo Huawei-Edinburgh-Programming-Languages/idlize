@@ -1332,6 +1332,10 @@ export class ETSLanguageWriter extends TSLanguageWriter {
             this.makeString(`${value} instanceof ${valueTypeName}`),
             this.makeString(`${value}.${property} instanceof ${propertyTypeName}`)])
     }
+    makeNaryOp(op: string, args: LanguageExpression[]): LanguageExpression {
+        // Error elimination: 'TypeError: Both operands have to be reference types'
+        return super.makeNaryOp(op.replace("===", "==").replace("!==", "!="), args);
+    }
 }
 
 abstract class CLikeLanguageWriter extends LanguageWriter {
