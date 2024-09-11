@@ -187,6 +187,10 @@ cj_sources = [
 ]
 compilable_cj_sources = [
     arkoala_dir / 'arkoala.cc',
+    arkoala_dir / 'bridge_custom.cc',
+    arkoala_dir / 'bridge_generated.cc',
+    arkoala_dir / 'library.cc',
+    arkoala_dir / 'dummy_impl.cc',
     external_interop_dir / 'common-interop.cc',
     external_interop_dir / 'cangjie/convertors-cj.cc',
     external_interop_dir / 'cangjie/convertors-cj.h'
