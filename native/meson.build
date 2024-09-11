@@ -178,11 +178,11 @@ arkts_sources = [
 ]
 
 cj_include_dirs = [
-    arkoala_dir / 'cj'
+    external_interop_dir/ 'cangjie'
 ]
 cj_sources = [
-    arkoala_dir / 'cj/dummy.c',
-    arkoala_dir / 'cj/dummy.h',
+    external_interop_dir / 'cangjie/convertors-cj.cc',
+    external_interop_dir / 'cangjie/convertors-cj.h',
 ]
 
 if is_jni
