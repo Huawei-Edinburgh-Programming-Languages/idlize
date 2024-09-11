@@ -87,8 +87,8 @@ export interface LoaderOps {
     _SimulateVirtualMachine(vmKind: KInt): pointer
     _StartApplication(vmEntry: pointer, className: string, startMethodName: string, startMethodSig: string, enterMethodName: string, enterMethodSig: string): pointer
     _RunApplication(vmEntry: pointer, arg2: KInt, arg3: KInt): KInt
-    _ProvideIntCallbackOnHost(vmEntry: pointer): void
-    _ProvideCallbackRegistryOnGuest(vmEntry: pointer): void
+    _ProvideCallbacksOnHost(vmEntry: pointer): void
+    _ProvideCallbacksOnGuest(vmEntry: pointer): void
     _CallIntCallbackOnHost(vmEntry: pointer, methodId: KInt, args: Uint8Array, length: KInt): KInt
     _CallIntCallbackOnGuest(vmEntry: pointer, methodId: KInt, args: Uint8Array, length: KInt): KInt
 }

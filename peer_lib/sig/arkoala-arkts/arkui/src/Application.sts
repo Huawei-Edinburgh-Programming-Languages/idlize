@@ -76,7 +76,7 @@ export class Application {
     }
 
     static startApplication(vmEntry: long): Application {
-        nativeModule()._ProvideCallbackRegistryOnGuest(vmEntry)
+        nativeModule()._ProvideCallbacksOnGuest(vmEntry)
         let cb = wrapCallback((args: byte[], length: int): int => {
             console.log(`PANDA: length = ${length}`)
             return 0
@@ -87,7 +87,7 @@ export class Application {
 
 export function main() {
     let vmEntry = nativeModule()._SimulateVirtualMachine(2)
-    nativeModule()._ProvideIntCallbackOnHost(vmEntry)
+    nativeModule()._ProvideCallbacksOnHost(vmEntry)
     const app = Application.startApplication(vmEntry)
     try {
         for (let i = 0; i < 10; i++) {

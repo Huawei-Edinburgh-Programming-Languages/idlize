@@ -49,7 +49,7 @@ export function checkLoader() {
         nativeModule()._StartApplication(vmEntry, "Application", "startApplication", "J:LApplication;", "enter", "JII:V");
     }
     if (vmEntry != 0) {
-        nativeModule()._ProvideIntCallbackOnHost(vmEntry)
+        nativeModule()._ProvideCallbacksOnHost(vmEntry)
         setTimeout(async () => runEventLoop(vmEntry), 0)
     }
 }

@@ -28,7 +28,7 @@ public class Application {
 
     public static void main(String[] args) {
         var vmEntry = NativeModule._SimulateVirtualMachine(1);
-        NativeModule._ProvideIntCallbackOnHost(vmEntry);
+        NativeModule._ProvideCallbacksOnHost(vmEntry);
         var app = Application.startApplication(vmEntry);
         try {
             for (int i = 0; i < 10; i++) {

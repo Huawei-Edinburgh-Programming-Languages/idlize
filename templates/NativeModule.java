@@ -107,8 +107,8 @@ public class NativeModule {
   static native long _SimulateVirtualMachine(int vmKind);
   static native long _StartApplication(long vmEntry, String className, String startMethodName, String startMethodSig, String enterMethodName, String enterMethodSig);
   static native int _RunApplication(long vmEntry, int arg2, int arg3);
-  static native void _ProvideIntCallbackOnHost(long vmEntry);
-  static native void _ProvideCallbackRegistryOnGuest(long vmEntry);
+  static native void _ProvideCallbacksOnHost(long vmEntry);
+  static native void _ProvideCallbacksOnGuest(long vmEntry);
   static native int _CallIntCallbackOnHost(long vmEntry, int methodId, byte[] args, int length);
   static native int _CallIntCallbackOnGuest(long vmEntry, int methodId, byte[] args, int length);
 }

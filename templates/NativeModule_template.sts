@@ -42,8 +42,8 @@ export class NativeModule {
   static native _SimulateVirtualMachine(vmKind: int): long;
   static native _StartApplication(vmEntry: long, className: String, startMethodName: String, startMethodSig: String, enterMethodName: String, enterMethodSig: String): long;
   static native _RunApplication(vmEntry: long, arg2: int, arg3: int): int;
-  static native _ProvideIntCallbackOnHost(vmEntry: long): void;
-  static native _ProvideCallbackRegistryOnGuest(vmEntry: long): void;
+  static native _ProvideCallbacksOnHost(vmEntry: long): void;
+  static native _ProvideCallbacksOnGuest(vmEntry: long): void;
   static native _CallIntCallbackOnHost(vmEntry: long, methodId: int, args: byte[], length: int): int;
   static native _CallIntCallbackOnGuest(vmEntry: long, methodId: int, args: byte[], length: int): int;
 
