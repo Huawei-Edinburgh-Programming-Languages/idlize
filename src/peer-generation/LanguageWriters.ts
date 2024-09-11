@@ -1037,6 +1037,19 @@ export abstract class LanguageWriter {
         }
         return this.makeNaryOp("&&", expressions)
     }
+
+    makeDiscriminatorFromExpressions(convertor: EnumConvertor, value: string, index: number): LanguageExpression | undefined {
+        const ordinal = convertor.isStringEnum
+            ? this.ordinalFromEnum(this.makeString(
+                this.getObjectAccessor(convertor, value)),
+                convertor.enumTypeName(this.language))
+            : this.makeUnionVariantCast(this.getObjectAccessor(convertor, value), Type.Number, convertor, index)
+        const {low, high} = convertor.extremumOfOrdinals()
+        return convertor.discriminatorFromExpressions(value, convertor.runtimeTypes[0], this, [
+            this.makeNaryOp(">=", [ordinal, this.makeString(low.toString())]),
+            this.makeNaryOp("<=",  [ordinal, this.makeString(high.toString())])
+        ])
+    }
 }
 
 export class TSLanguageWriter extends LanguageWriter {
@@ -1335,6 +1348,10 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     makeNaryOp(op: string, args: LanguageExpression[]): LanguageExpression {
         // Error elimination: 'TypeError: Both operands have to be reference types'
         return super.makeNaryOp(op.replace("===", "==").replace("!==", "!="), args);
+    }
+
+    makeDiscriminatorFromExpressions(convertor: EnumConvertor, value: string, index: number): LanguageExpression | undefined {
+        return this.makeString(`${value} instanceof ${convertor.enumTypeName(this.language)}`)
     }
 }
 
