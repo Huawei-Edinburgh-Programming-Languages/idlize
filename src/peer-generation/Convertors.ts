@@ -853,9 +853,7 @@ export class InterfaceConvertor extends BaseArgConvertor {
                 writer.makeString(`GestureName.${gestureType}`)])
         }
         if (this.tsTypeName === "CancelButtonSymbolOptions") {
-            return writer.makeNaryOp("&&", [
-                writer.makeString(`${value}.hasOwnProperty("icon")`),
-                writer.makeString(`isInstanceOf("SymbolGlyphModifier", ${value}.icon)`)])
+            return writer.makeHasOwnProperty(value, "CancelButtonSymbolOptions", "icon", "SymbolGlyphModifier")
         }
         // Try to figure out interface by examining field sets
         const uniqueFields = this.table

@@ -1027,6 +1027,16 @@ export abstract class LanguageWriter {
     makeCastCustomObject(customName: string, _isGenericType: boolean): LanguageExpression {
         return this.makeString(customName)
     }
+    makeHasOwnProperty(value: string,
+                       _valueTypeName: string,
+                       property: string,
+                       propertyTypeName?: string): LanguageExpression {
+        const expressions = [this.makeString(`${value}.hasOwnProperty("${property}")`)]
+        if (propertyTypeName) {
+            expressions.push(this.makeString(`isInstanceOf("${propertyTypeName}", ${value}.${property})`))
+        }
+        return this.makeNaryOp("&&", expressions)
+    }
 }
 
 export class TSLanguageWriter extends LanguageWriter {
@@ -1313,6 +1323,14 @@ export class ETSLanguageWriter extends TSLanguageWriter {
             return this.makeCast(this.makeString(customName), new Type("Object"))
         }
         return super.makeCastCustomObject(customName, isGenericType);
+    }
+    makeHasOwnProperty(value: string,
+                       valueTypeName: string,
+                       property: string,
+                       propertyTypeName: string): LanguageExpression {
+        return this.makeNaryOp("&&", [
+            this.makeString(`${value} instanceof ${valueTypeName}`),
+            this.makeString(`${value}.${property} instanceof ${propertyTypeName}`)])
     }
 }
 
