@@ -58,6 +58,7 @@ export enum LinterError {
     UNION_CONTAINS_ENUM,
     EVENT_HANDLER_WITH_FUNCTIONAL_PARAM_TYPE,
     CALLBACK_WITH_FUNCTIONAL_PARAM_TYPE,
+    CALLBACK_WITH_NON_VOID_RETURN_TYPE,
 }
 
 export interface LinterMessage {
@@ -72,6 +73,7 @@ const suppressed = new Set([
     LinterError.UNION_CONTAINS_ENUM,
     LinterError.EVENT_HANDLER_WITH_FUNCTIONAL_PARAM_TYPE,
     LinterError.CALLBACK_WITH_FUNCTIONAL_PARAM_TYPE,
+    LinterError.CALLBACK_WITH_NON_VOID_RETURN_TYPE,
 ])
 
 function stringMessage(message: LinterMessage): string {
@@ -292,8 +294,10 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
             return
         }
 
+        let clazzName: string | undefined
+
         if (ts.isClassDeclaration(clazz) || ts.isInterfaceDeclaration(clazz)) {
-            const clazzName = identName(clazz.name)
+            clazzName = identName(clazz.name)
             type.parameters.forEach(it => {
                 if (it.type && this.isInvalidHandlerParamType(it.type)) {
                     const error = ts.isClassDeclaration(clazz!) && isCommonMethodOrSubclass(this.typeChecker, clazz!)
@@ -304,6 +308,14 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
                         `Callback ${clazzName}.${memberName} has functional type for param ${paramName}`)
                 }
             })
+        }
+
+        const returnType = identName(type.type)
+        if (returnType !== "void") {
+            const params = type.parameters.map(it => `${identName(it.name)}: ${identName(it.type)}`)
+            this.report(type, LinterError.CALLBACK_WITH_NON_VOID_RETURN_TYPE,
+                `Callback ` + (clazzName ? `for member ${clazzName}.${memberName} ` : ``) +
+                `has non void return type: (${params.join(", ")}) => ${returnType}`)
         }
     }
 
