@@ -50,7 +50,7 @@
   "scripts": {
     "prepare": "cd external/incremental && npm i && cd ../interop && npm i && cd ../arkoala && npm i",
     "download:sdk": "node ./download-sdk.mjs",
-    "upload": "node tools/publish.mjs --tag next",
+    "upload": "npm run compile && npm run webidl2 && node tools/publish.mjs --tag next",
     "webidl2": "cd ./webidl2.js && npm i && npm run build",
     "setup-out": "node tools/setup/setup.mjs",
     "compile": "npm run download:sdk && rollup -c",
