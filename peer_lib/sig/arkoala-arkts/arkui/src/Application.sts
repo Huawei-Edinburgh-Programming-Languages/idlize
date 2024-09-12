@@ -20,7 +20,6 @@ import { wrapCallback } from "./CallbackRegistry"
 
 export class Application {
     constructor() {
-
     }
 
     private start(): Application {
@@ -28,15 +27,15 @@ export class Application {
     }
 
     private checkEvents(what: int) {
-        console.log("checkEvents " + what);
+        console.log("ARKTS: checkEvents " + what);
     }
 
     private updateState() {
-        console.log("updateState")
+        console.log("ARKTS: updateState")
     }
 
     private render() {
-        console.log("render")
+        console.log("ARKTS: render")
     }
 
     enter(arg0: int, arg1: int) {

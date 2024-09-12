@@ -29,18 +29,31 @@ export async function runEventLoop() {
     }
 }
 
-export function checkLoader() {
-    let res = 0
-    if (process.argv[process.argv.length - 1] == 'java') {
-        res = nativeModule()._LoadVirtualMachine(1, __dirname + "/../out/java-subset/bin", __dirname + "/../native");
+export function checkLoader(variant: string) {
+    let vm = -1
+    let classPath = ""
+    let nativePath = __dirname + "/../native"
+    
+    switch (variant) {
+        case 'java': {
+            vm = 1
+            classPath = __dirname + "/../out/java-subset/bin"
+            break
+        }
+        case 'panda': {
+            vm = 2
+            classPath = __dirname + "/../build/abc/subset/sig/arkoala-arkts/arkui/src"
+            break
+        }
     }
-    if (process.argv[process.argv.length - 1] == 'panda') {
-        res = nativeModule()._LoadVirtualMachine(2, __dirname + "/../build/abc/subset/sig/arkoala-arkts/arkui/src", __dirname + "/../native");
-    }
+    let res = nativeModule()._LoadVirtualMachine(vm, classPath, nativePath)
+
     if (res == 0) {
         nativeModule()._StartApplication();
         setTimeout(async () => runEventLoop(), 0)
+    } else {
+        throw new Error(`Cannot start VM: ${res}`)
     }
 }
 
-checkLoader()
+checkLoader(process.argv.length > 1 ? process.argv[process.argv.length - 1] : "panda")
