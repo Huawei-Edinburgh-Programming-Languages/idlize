@@ -303,3 +303,4 @@
 |`shadow`| Function | Roman Sedaikin | in progress |
 |*SwiperController*| *Class* | swx781919 Skroba Gleb | InProgress |
 |`showNext`| Function | swx781919 Skroba Gleb | done |
+
