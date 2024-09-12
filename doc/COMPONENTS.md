@@ -4,9 +4,9 @@
 | Status       | Components | Classes | Functions |
 | -----------  | ---------- | ------- | --------- |
 | Total        | 112      | 74     | 1792     |
-| In Progress  | 16      | 0     | 43     |
-| Done         | 7      | 0     | 184     |
-| Blocked      | 4      | 0     | 20     |
+| In Progress  | 16      | 0     | 46     |
+| Done         | 7      | 0     | 199     |
+| Blocked      | 4      | 0     | 22     |
 
 
 | Name | Kind | Owner | Status |
@@ -797,26 +797,26 @@
 |*Screen*| *Component* | | |
 |`setScreenOptions`| Function | | |
 |*Scroll*| *Component* | bwx1356458 Kirill Berezin | in progress |
-|`setScrollOptions`| Function | | |
-|`scrollable`| Function | | |
-|`onScroll`| Function | | |
-|`onWillScroll`| Function | | |
-|`onDidScroll`| Function | | |
-|`onScrollEdge`| Function | | |
-|`onScrollStart`| Function | | |
-|`onScrollEnd`| Function | | |
-|`onScrollStop`| Function | | |
-|`scrollBar`| Function | | |
-|`scrollBarColor`| Function | | |
-|`scrollBarWidth`| Function | | |
-|`edgeEffect`| Function | | |
-|`onScrollFrameBegin`| Function | | |
-|`nestedScroll`| Function | | |
-|`enableScrollInteraction`| Function | | |
-|`friction`| Function | | |
-|`scrollSnap`| Function | | |
-|`enablePaging`| Function | | |
-|`initialOffset`| Function | | |
+|`setScrollOptions`| Function | bwx1356458 Kirill Berezin | Done |
+|`scrollable`| Function | bwx1356458 Kirill Berezin | In progress |
+|`onScroll`| Function | bwx1356458 Kirill Berezin | Done |
+|`onWillScroll`| Function | bwx1356458 Kirill Berezin | Blocked |
+|`onDidScroll`| Function | bwx1356458 Kirill Berezin | Done |
+|`onScrollEdge`| Function | bwx1356458 Kirill Berezin | Done |
+|`onScrollStart`| Function | bwx1356458 Kirill Berezin | Done |
+|`onScrollEnd`| Function | bwx1356458 Kirill Berezin | Done |
+|`onScrollStop`| Function | bwx1356458 Kirill Berezin | Done |
+|`scrollBar`| Function | bwx1356458 Kirill Berezin | Done |
+|`scrollBarColor`| Function | bwx1356458 Kirill Berezin | Done |
+|`scrollBarWidth`| Function | bwx1356458 Kirill Berezin | Done |
+|`edgeEffect`| Function | bwx1356458 Kirill Berezin | Done |
+|`onScrollFrameBegin`| Function | bwx1356458 Kirill Berezin | Blocked |
+|`nestedScroll`| Function | bwx1356458 Kirill Berezin | Done |
+|`enableScrollInteraction`| Function | bwx1356458 Kirill Berezin | In progress |
+|`friction`| Function | bwx1356458 Kirill Berezin | In progress |
+|`scrollSnap`| Function | bwx1356458 Kirill Berezin | Done |
+|`enablePaging`| Function | bwx1356458 Kirill Berezin | Done |
+|`initialOffset`| Function | bwx1356458 Kirill Berezin | Done |
 |*ScrollBar*| *Component* | | |
 |`setScrollBarOptions`| Function | | |
 |*Search*| *Component* | ewx1298574 Roman | In Progress |
