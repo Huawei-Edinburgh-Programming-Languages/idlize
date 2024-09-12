@@ -380,11 +380,11 @@ loader_include_dirs = include_dirs
 loader_cflags = cflags
 if is_jni
 loader_include_dirs += jni_include_dirs
-cflags += jni_cflags
+loader_cflags += jni_cflags
 endif
 if is_arkts
 loader_include_dirs += arkts_include_dirs
-cflags += arkts_cflags
+loader_cflags += arkts_cflags
 endif
 shared_library('vmloader',
     external_interop_dir / 'vmloader.cc',
