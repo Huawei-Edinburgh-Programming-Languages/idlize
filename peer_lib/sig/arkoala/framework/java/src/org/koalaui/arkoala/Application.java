@@ -44,15 +44,15 @@ public class Application {
     }
 
     void checkEvents(int what) {
-        System.out.println("checkEvents " + what);
+        System.out.println("JAVA: checkEvents " + what);
     }
 
     void updateState() {
-        System.out.println("updateState");
+        System.out.println("JAVA: updateState");
     }
 
     void render() {
-        System.out.println("render");
+        System.out.println("JAVA: render");
     }
 
     public Application start() {
