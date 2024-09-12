@@ -3,7 +3,7 @@
 
 | Status       | Components | Classes | Functions |
 | -----------  | ---------- | ------- | --------- |
-| Total        | 112      | 74     | 1819     |
+| Total        | 112      | 74     | 1792     |
 | In Progress  | 16      | 0     | 43     |
 | Done         | 7      | 0     | 184     |
 | Blocked      | 4      | 0     | 20     |
@@ -127,7 +127,6 @@
 |`alignItems`| Function | | |
 |`justifyContent`| Function | | |
 |`pointLight`| Function | | |
-|`reverse`| Function | | |
 |*ColumnSplit*| *Component* | | |
 |`setColumnSplitOptions`| Function | | |
 |`resizeable`| Function | | |
@@ -264,7 +263,6 @@
 |`motionPath`| Function | | |
 |`shadow`| Function | Roman Sedaikin | in progress |
 |`blendMode`| Function | | |
-|`advancedBlendMode`| Function | | |
 |`clip`| Function | | |
 |`clipShape`| Function | | |
 |`mask`| Function | | |
@@ -320,7 +318,6 @@
 |`scrollBarColor`| Function | | |
 |`scrollBarWidth`| Function | | |
 |`edgeEffect`| Function | | |
-|`fadingEdge`| Function | | |
 |`nestedScroll`| Function | | |
 |`enableScrollInteraction`| Function | | |
 |`friction`| Function | | |
@@ -446,7 +443,6 @@
 |`nestedScroll`| Function | iwx498619 Ilya Erokhin | done |
 |`enableScrollInteraction`| Function | iwx498619 Ilya Erokhin | done |
 |`friction`| Function | iwx498619 Ilya Erokhin | blocked |
-|`alignItems`| Function | | |
 |`onScroll`| Function | iwx498619 Ilya Erokhin | done |
 |`onReachStart`| Function | iwx498619 Ilya Erokhin | done |
 |`onReachEnd`| Function | iwx498619 Ilya Erokhin | done |
@@ -538,6 +534,7 @@
 |`listDirection`| Function | mWX997882 Morozov Sergey | done |
 |`scrollBar`| Function | mWX997882 Morozov Sergey | done |
 |`edgeEffect`| Function | mWX997882 Morozov Sergey | done |
+|`fadingEdge`| Function | mWX997882 Morozov Sergey | in progress |
 |`contentStartOffset`| Function | mWX997882 Morozov Sergey | done |
 |`contentEndOffset`| Function | mWX997882 Morozov Sergey | done |
 |`divider`| Function | mWX997882 Morozov Sergey | done |
@@ -552,7 +549,6 @@
 |`enableScrollInteraction`| Function | mWX997882 Morozov Sergey | done |
 |`friction`| Function | mWX997882 Morozov Sergey | done |
 |`childrenMainSize`| Function | mWX997882 Morozov Sergey | blocked |
-|`maintainVisibleContentPosition`| Function | | |
 |`onScroll`| Function | | |
 |`onScrollIndex`| Function | | |
 |`onScrollVisibleContentChange`| Function | | |
@@ -638,7 +634,6 @@
 |`onWillHide`| Function | | |
 |`ignoreLayoutSafeArea`| Function | | |
 |`systemBarStyle`| Function | | |
-|`systemTransition`| Function | | |
 |*NavRouter*| *Component* | | |
 |`setNavRouterOptions`| Function | | |
 |`onStateChange`| Function | | |
@@ -762,7 +757,6 @@
 |`onSelectionChange`| Function | | |
 |`aboutToIMEInput`| Function | | |
 |`onIMEInputComplete`| Function | | |
-|`onDidIMEInput`| Function | | |
 |`aboutToDelete`| Function | | |
 |`onDeleteComplete`| Function | | |
 |`copyOptions`| Function | | |
@@ -783,9 +777,6 @@
 |`onCut`| Function | | |
 |`onCopy`| Function | | |
 |`editMenuOptions`| Function | | |
-|`enableKeyboardOnFocus`| Function | | |
-|`enableHapticFeedback`| Function | | |
-|`barState`| Function | | |
 |*RichText*| *Component* | | |
 |`setRichTextOptions`| Function | | |
 |`onStart`| Function | | |
@@ -797,7 +788,6 @@
 |`alignItems`| Function | | |
 |`justifyContent`| Function | | |
 |`pointLight`| Function | | |
-|`reverse`| Function | | |
 |*RowSplit*| *Component* | | |
 |`setRowSplitOptions`| Function | | |
 |`resizeable`| Function | | |
@@ -829,7 +819,6 @@
 |`initialOffset`| Function | | |
 |*ScrollBar*| *Component* | | |
 |`setScrollBarOptions`| Function | | |
-|`enableNestedScroll`| Function | | |
 |*Search*| *Component* | ewx1298574 Roman | In Progress |
 |`setSearchOptions`| Function |  | In progress / Test disabled |
 |`searchButton`| Function |  | Done/Test disabled |
@@ -1096,10 +1085,11 @@
 |`bindSelectionMenu`| Function | | |
 |`onTextSelectionChange`| Function | | |
 |`fontFeature`| Function | | |
+|`marqueeOptions`| Function | | |
+|`onMarqueeStateChange`| Function | | |
 |`privacySensitive`| Function | | |
 |`textSelectable`| Function | | |
 |`editMenuOptions`| Function | | |
-|`halfLeading`| Function | | |
 |*TextArea*| *Component* | twx480581 Ivan Tuzhilkin | in progress |
 |`setTextAreaOptions`| Function | | |
 |`placeholderColor`| Function |  | done |
@@ -1396,7 +1386,6 @@
 |`enableNativeEmbedMode`| Function | | |
 |`registerNativeEmbedRule`| Function | | |
 |`onNativeEmbedLifecycleChange`| Function | | |
-|`onNativeEmbedVisibilityChange`| Function | | |
 |`onNativeEmbedGestureEvent`| Function | | |
 |`copyOptions`| Function | | |
 |`onOverrideUrlLoading`| Function | | |
@@ -1410,8 +1399,6 @@
 |`onInterceptKeyboardAttach`| Function | | |
 |`onAdsBlocked`| Function | | |
 |`keyboardAvoidMode`| Function | | |
-|`editMenuOptions`| Function | | |
-|`enableHapticFeedback`| Function | | |
 |*WindowScene*| *Component* | | |
 |`setWindowSceneOptions`| Function | | |
 |`attractionEffect`| Function | | |
@@ -1496,7 +1483,6 @@
 |`isEnabled`| Function | | |
 |`getState`| Function | | |
 |`getEventTargetInfo`| Function | | |
-|`isValid`| Function | | |
 |*EventTargetInfo*| *Class* | | |
 |`getId`| Function | | |
 |*ContentModifier*| *Class* | | |
@@ -1631,7 +1617,6 @@
 |`scrollBy`| Function | | |
 |`isAtEnd`| Function | | |
 |`getItemRect`| Function | | |
-|`getItemIndex`| Function | | |
 |*ChildrenMainSize*| *Class* | | |
 |`splice`| Function | | |
 |`update`| Function | | |
@@ -1652,7 +1637,6 @@
 |`replacePathByName`| Function | | |
 |`removeByIndexes`| Function | | |
 |`removeByName`| Function | | |
-|`removeByNavDestinationId`| Function | | |
 |`pop`| Function | | |
 |`popToName`| Function | | |
 |`popToIndex`| Function | | |
@@ -1717,20 +1701,15 @@
 |`getLineCount`| Function | | |
 |`getGlyphPositionAtCoordinate`| Function | | |
 |`getLineMetrics`| Function | | |
-|`getRectsForRange`| Function | | |
 |*StyledString*| *Class* | | |
 |`getString`| Function | | |
 |`getStyles`| Function | | |
 |`equals`| Function | | |
 |`subStyledString`| Function | | |
-|`fromHtml`| Function | | |
-|`marshalling`| Function | | |
-|`unmarshalling`| Function | | |
 |`getLength`| Function | | |
 |*CustomSpan*| *Class* | | |
 |`onMeasure`| Function | | |
 |`onDraw`| Function | | |
-|`invalidate`| Function | | |
 |*RichEditorStyledStringController*| *Class* | | |
 |`setStyledString`| Function | | |
 |`getStyledString`| Function | | |
