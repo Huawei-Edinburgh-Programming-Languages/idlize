@@ -59,5 +59,5 @@ func checkPerf2(count: Int64) {
 
 main(): Unit {
     checkPerf(5 * 1000 * 1000)
-    checkPerf2(1)
+    checkPerf2(100)
 }

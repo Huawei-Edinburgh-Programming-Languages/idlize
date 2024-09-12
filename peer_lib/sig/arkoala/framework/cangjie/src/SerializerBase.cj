@@ -15,6 +15,7 @@
 
 package idlize
 
+import std.binary.*
 import std.math.*
 import std.reflect.*
 import std.collection.*
@@ -94,7 +95,7 @@ public open class SerializerBase {
     private static var cache = SerializersCache(22)
 
     private var position: Int32 = 0
-    private var buffer: ArrayList<Int8> = ArrayList<Int8>()
+    private var buffer: ArrayList<UInt8> = ArrayList<UInt8>()
 
     private static var customSerializers: ?CustomSerializer = Option.None
     static func registerCustomSerializer(serializer: CustomSerializer) {
@@ -110,7 +111,9 @@ public open class SerializerBase {
     static func get<T>(factory: () -> T, index: Int32): T where T <: SerializerBase {
         return SerializerBase.cache.getCached(factory, index)
     }
-    func asArray(): ArrayList<Int8> {
+    func asArray(): ArrayList<UInt8> {
+        println(this.buffer.size)
+        println(this.position)
         return this.buffer
     }
     func length(): Int32 {
@@ -125,9 +128,9 @@ public open class SerializerBase {
         if (this.position > Int32(buffSize) - value) {
             let minSize = this.position + value
             let resizedSize = max(minSize, Int32(round(3.0 * Float64(buffSize) / 2.0)))
-            var resizedBuffer =  ArrayList<Int8>(Int64(resizedSize))
+            var resizedBuffer =  ArrayList<UInt8>(Int64(resizedSize))
             for (i in 0..this.buffer.size) {
-                resizedBuffer[i] = this.buffer[i]
+                resizedBuffer.append(this.buffer[i])
             }
             this.buffer = resizedBuffer
         }
@@ -141,77 +144,55 @@ public open class SerializerBase {
     func writeFunction(value: Object): Unit {
         // TODO
     }
+    private func setBytes<V, T>(position: Int32, value: T): Unit where T <: LittleEndianOrder<V>{
+        var arr = Array<Byte>(20, item: 0)
+        let n = value.writeLittleEndian(arr)
+        this.checkCapacity(Int32(n))
+        for (i in 0..n) {
+            this.buffer[Int64(this.position) + i] = arr[i]
+        }
+        println("we moved position for ${n} bytes")
+        this.position += Int32(n)
+    }
     func writeTag(tag: Int32): Unit {
-        this.buffer[Int64(this.position)] = Int8(tag)
-        this.position++
+        this.setBytes(this.position, tag)
     }
     func writeNumber(value: Float32): Unit {
-        this.checkCapacity(5)
-        // TODO
+        this.setBytes(this.position, value)
     }
     func writeNumber(value: Float64): Unit {
-        this.checkCapacity(5)
-        // TODO
+        this.setBytes(this.position, value)
     }
     func writeNumber(value: Int64): Unit {
-        this.checkCapacity(5)
-        // TODO
+        this.setBytes(this.position, value)
     }
     func writeNumber(value: Opt_Number): Unit {
         this.writeNumber(value.value);
     }
     func writeInt8(value: Int8): Unit {
-        this.checkCapacity(1)
-        this.buffer[Int64(this.position)] = value
-        this.position += 1
+        this.setBytes(this.position, value)
     }
     func writeInt8(value: Int32): Unit {
-        this.checkCapacity(1)
-        this.buffer[Int64(this.position)] = Int8(value)
-        this.position += 1
-    }
-    private func setInt32(position: Int32, value: Int32): Unit {
-        this.buffer[Int64(position + 0)] = Int8(((value      ) & 0xff))
-        this.buffer[Int64(position + 1)] = Int8(((value >>  8) & 0xff))
-        this.buffer[Int64(position + 2)] = Int8(((value >> 16) & 0xff))
-        this.buffer[Int64(position + 3)] = Int8(((value >> 24) & 0xff))
+        this.setBytes(this.position, value)
     }
     func writeInt32(value: Int32): Unit {
-        this.checkCapacity(4)
-        this.setInt32(this.position, value)
-        this.position += 4
+        this.setBytes(this.position, value)
     }
     func writeFloat32(value: Float32): Unit {
-        // TODO: this is wrong!
-        this.checkCapacity(4)
-        this.position += 4
+        this.setBytes(this.position, value)
     }
-    func writePointer(value: Int64): Unit {
-        this.checkCapacity(8)
-        this.buffer[Int64(this.position + 0)] = Int8(((value       ) & 0xff))
-        this.buffer[Int64(this.position + 1)] = Int8(((value >>   8) & 0xff))
-        this.buffer[Int64(this.position + 2)] = Int8(((value >>  16) & 0xff))
-        this.buffer[Int64(this.position + 3)] = Int8(((value >>  24) & 0xff))
-        this.buffer[Int64(this.position + 4)] = Int8(((value >>  32) & 0xff))
-        this.buffer[Int64(this.position + 5)] = Int8(((value >>  40) & 0xff))
-        this.buffer[Int64(this.position + 6)] = Int8(((value >>  48) & 0xff))
-        this.buffer[Int64(this.position + 7)] = Int8(((value >>  56) & 0xff))
-        this.position += 8
+    func writePointer(ptr: Int64): Unit {
+        this.setBytes(this.position, ptr)
     }
     func writeBoolean(value: ?Bool): Unit {
         this.checkCapacity(1)
         if(let Some(value) <- value) {
-            if (value) {
-                this.buffer[Int64(this.position)] = Int8(1)
-            }
-            else {
-                this.buffer[Int64(this.position)] = Int8(0)
-            }
+            this.setBytes(this.position, value)
         }
         else {
-            // this.buffer[Int64(this.position)] = RuntimeType.UNDEFINED.ordinal
+            this.buffer[Int64(this.position)] = UInt8(RuntimeType.UNDEFINED.ordinal)
+            this.position++
         }
-        this.position++
     }
     func writeMaterialized(value: Object): Unit {
         // TODO
@@ -220,13 +201,11 @@ public open class SerializerBase {
         this.checkCapacity(Int32((4 + value.size * 4 + 1))) // length, data
         let encodedLength = Int32(42) // for now
         // let encodedLength = NativeModule._ManagedStringWrite(value, this.buffer, this.position + 4)
-        this.setInt32(this.position, encodedLength)
         this.position += encodedLength + 4
     }
     // Length is an important common case.
-    // TODO
     func writeLength(value: Ark_Length): Unit {
-        this.buffer[Int64(this.position)] = Int8(RuntimeType.STRING.ordinal)
+        this.buffer[Int64(this.position)] = UInt8(RuntimeType.STRING.ordinal)
         this.position++
         this.writeString(value.value);
     }

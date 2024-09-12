@@ -18,6 +18,7 @@ import std.collection.*
 import std.reflect.*
 
 public abstract class Ark_Object {
+
     static func getRuntimeType(object: String): RuntimeType {
         return RuntimeType.STRING
     }
@@ -30,12 +31,12 @@ public abstract class Ark_Object {
         return RuntimeType.OBJECT
     }
     
-    static func getRuntimeType<T>(object: Option<T>): RuntimeType {
-        if(object.isNone()) {
-            return RuntimeType.UNDEFINED
+    static func getRuntimeType<T>(object: ?T): RuntimeType {
+        if(let Some(obj) <- object) {
+            return Ark_Object.getRuntimeType(object as Object)
         }
         else {
-            throw Exception("Wrong overload of getRuntimeType() has been used for the type ${TypeInfo.of(object)}")
+            return RuntimeType.UNDEFINED
         }
     }
 }
