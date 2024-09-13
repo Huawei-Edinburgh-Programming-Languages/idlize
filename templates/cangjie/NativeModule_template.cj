@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2024 Huawei Device Co., Ltd.
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -18,7 +18,32 @@ package idlize
 import std.collection.*
 
 foreign {
+    func StringMake(string: CString): Int64
+    func StringLength(ptr: Int32): Int32
+    func StringData(ptr: Int32, data: CPointer<UInt8>, arg2: Int32): Unit
+    func GetStringFinalizer(): Int32
+    func GetPtrVectorSize(ptr: Int32): Int32
+    func GetGroupedLog(kind: Int32): Int32
+    func GetPtrVectorElement(ptr: Int32, index: Int32): Int32
+    func InvokeFinalizer(fn: Int32, obj: Int32): Unit
+    func GetNodeFinalizer(): Int32
+    func StartGroupedLog(index: Int32): Unit
+    func StopGroupedLog(index: Int32): Unit
     func TestPerfNumber(value: Int32): Int32
+    func TestPerfNumberWithArray(data: CPointer<UInt8>, length: Int32): Unit
+    func StartPerf(traceName: CString): Unit
+    func EndPerf(traceName: CString): Unit
+    func DumpPerf(options: Int32): Int32
+    func ManagedStringWrite(string: CString, buffer: CPointer<UInt8>, offset: Int32): Int32
+    func SetEventsApi(): Unit
+    func OnChildTouchTest(valueArray: CPointer<UInt8>, valueSerializerLength: Int32): Unit
+    func OnScrollVisibleContentChange(valueArray: CPointer<UInt8>, valueSerializerLength: Int32): Unit
+    func OnAccept(valueArray: CPointer<UInt8>, valueSerializerLength: Int32): Unit
+    func TestCallIntNoArgs(arg: Int32): Int32
+    func TestCallIntIntArraySum(arg1: Int32, arg2: CPointer<Int32>, arg3: Int32): Int32
+    func TestCallVoidIntArrayPrefixSum(arg1: Int32, arg2: CPointer<Int32>, arg3: Int32): Unit
+    func TestCallIntRecursiveCallback(arg1: Int32, arg2: CPointer<UInt8>, arg3: Int32): Int32
+    func TestCallIntMemory(arg1: Int32, arg2: Int32): Int32
 
     // Node API
     func CreateNode(type_: Int32, id: Int32, flags: Int32): Int64
@@ -37,11 +62,54 @@ foreign {
 }
 
 public open class NativeModule {
-    public static func _TestPerfNumber(arg1: Int32): Int32 {
-        return unsafe{ TestPerfNumber(arg1) }
-    }
 
 %GENERATED_METHODS%
+    public static func _StringMake(string: String): Unit {
+        return unsafe {
+            let value = LibC.mallocCString(string)
+            StringMake(value)
+            LibC.free(value)
+        }
+    }
+    public static func _StringLength(ptr: Int32): Int32 {
+        return unsafe { StringLength(ptr) }
+    }
+    public static func _StringData(ptr: Int32, data: ArrayList<UInt8>, arg2: Int32): Unit {
+        unsafe {
+            let handle_1 = acquireArrayRawData(data.toArray())
+            StringData(ptr, handle_1.pointer, arg2)
+            releaseArrayRawData(handle_1)
+        }
+    }
+    public static func _GetStringFinalizer(): Int32 {
+        return unsafe { GetStringFinalizer() }
+    }
+    public static func _GetPtrVectorSize(ptr: Int32): Int32 {
+        return unsafe { GetPtrVectorSize(ptr) } 
+    }
+    public static func _GetGroupedLog(kind: Int32)
+    public static func _GetPtrVectorElement(ptr: Int32, index: Int32)
+    public static func _InvokeFinalizer(fn: Int32, obj: Int32)
+    public static func _GetNodeFinalizer()
+    public static func _StartGroupedLog(index: Int32)
+    public static func _StopGroupedLog(index: Int32)
+    public static func _TestPerfNumber(value: Int32): Int32 {
+        return unsafe{ TestPerfNumber(value) }
+    }
+    public static func _TestPerfNumberWithArray(data: ArrayList<UInt8>, length: Int32)
+    public static func _StartPerf(traceName: String)
+    public static func _EndPerf(traceName: String)
+    public static func _DumpPerf(options: Int32)
+    public static func _ManagedStringWrite(string: String, buffer: ArrayList<UInt8>, offset: Int32)
+    public static func _SetEventsApi()
+    public static func _OnChildTouchTest(valueArray: ArrayList<UInt8>, valueSerializerLength: Int32)
+    public static func _OnScrollVisibleContentChange(valueArray: ArrayList<UInt8>, valueSerializerLength: Int32)
+    public static func _OnAccept(valueArray: ArrayList<UInt8>, valueSerializerLength: Int32)
+    public static func _TestCallIntNoArgs(arg: Int32)
+    public static func _TestCallIntIntArraySum(arg1: Int32, arg2: ArrayList<Int32>, arg3: Int32)
+    public static func _TestCallVoidIntArrayPrefixSum(arg1: Int32, arg2: ArrayList<Int32>, arg3: Int32)
+    public static func _TestCallIntRecursiveCallback(arg1: Int32, arg2: ArrayList<UInt8>, arg3: Int32)
+    public static func _TestCallIntMemory(arg1: Int32, arg2: Int32)
 
     // Node API
     public static func _CreateNode(type_: Int32, id: Int32, flags: Int32): Int64 {

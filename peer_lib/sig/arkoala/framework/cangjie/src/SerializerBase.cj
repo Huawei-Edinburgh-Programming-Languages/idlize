@@ -114,8 +114,8 @@ public open class SerializerBase {
     func asArray(): ArrayList<UInt8> {
         return this.buffer
     }
-    func length(): Int64 {
-        return this.position
+    func length(): Int32 {
+        return Int32(this.position)
     }
     func currentPosition(): Int64 { return this.position }
     private func checkCapacity(value: Int64) {
@@ -196,14 +196,14 @@ public open class SerializerBase {
     }
     func writeString(value: String): Unit {
         this.checkCapacity(4 + value.size * 4 + 1) // length, data
-        let encodedLength = 42 // for now
-        // let encodedLength = NativeModule._ManagedStringWrite(value, this.buffer, this.position + 4)
+        // let encodedLength = 42 // for now
+        // let encodedLength = NativeModule.ManagedStringWrite(value, this.buffer, this.position + 4)
         this.position += encodedLength + 4
     }
     // Length is an important common case.
-    func writeLength(value: Ark_Length): Unit {
-        this.buffer[this.position] = UInt8(RuntimeType.STRING.ordinal)
-        this.position++
-        this.writeString(value.value);
-    }
+    func writeLength(value: Ark_Length) {
+        this.checkCapacity(1)
+        this.writeInt8(RuntimeType.STRING.ordinal)
+        this.writeString(value.value)
+    }    
 }

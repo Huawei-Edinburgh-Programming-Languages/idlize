@@ -56,8 +56,21 @@ func checkPerf2(count: Int64) {
     println("backdropBlur: ${passed} ns for ${count} iteration,  ${Int32(round(Float64(passed) / Float64(count)))} ms per 1M iterations");
 }
 
+func checkPerf3(count: Int32): Unit {
+    var peer = ArkButtonPeer.create(ArkUINodeType.Button, None<ComponentBase>, 0)
+    var testLength_10_lpx = Ark_Length("10lpx")
+    let start = DateTime.now().nanosecond
+    for (i in 0..count) {
+        peer.widthAttribute(testLength_10_lpx);
+    }
+    let passed = DateTime.now().nanosecond - start;
+    println("widthAttributeString: ${passed} ms for ${count} iteration")
+}
+
+
 
 main(): Unit {
     checkPerf(5 * 1000 * 1000)
     checkPerf2(100)
+    checkPerf3(100)
 }
