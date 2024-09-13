@@ -1037,17 +1037,26 @@ export abstract class LanguageWriter {
         }
         return this.makeNaryOp("&&", expressions)
     }
-
-    makeDiscriminatorFromExpressions(convertor: EnumConvertor, value: string, index: number): LanguageExpression | undefined {
+    discriminatorFromExpressions(value: string,
+                                 runtimeType: RuntimeType,
+                                 writer: LanguageWriter,
+                                 exprs: LanguageExpression[]) {
+        return writer.makeNaryOp("&&", [
+            writer.makeNaryOp("==", [writer.makeRuntimeType(runtimeType), writer.makeString(`${value}_type`)]),
+            ...exprs
+        ])
+    }
+    makeDiscriminatorConvertor(convertor: EnumConvertor, value: string, index: number): LanguageExpression {
         const ordinal = convertor.isStringEnum
-            ? this.ordinalFromEnum(this.makeString(
-                this.getObjectAccessor(convertor, value)),
-                convertor.enumTypeName(this.language))
+            ? this.ordinalFromEnum(
+                this.makeString(this.getObjectAccessor(convertor, value)),
+                convertor.enumTypeName(this.language)
+            )
             : this.makeUnionVariantCast(this.getObjectAccessor(convertor, value), Type.Number, convertor, index)
         const {low, high} = convertor.extremumOfOrdinals()
-        return convertor.discriminatorFromExpressions(value, convertor.runtimeTypes[0], this, [
-            this.makeNaryOp(">=", [ordinal, this.makeString(low.toString())]),
-            this.makeNaryOp("<=",  [ordinal, this.makeString(high.toString())])
+        return this.discriminatorFromExpressions(value, convertor.runtimeTypes[0], this, [
+            this.makeNaryOp(">=", [ordinal, this.makeString(low!.toString())]),
+            this.makeNaryOp("<=",  [ordinal, this.makeString(high!.toString())])
         ])
     }
 }
@@ -1349,9 +1358,10 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         // Error elimination: 'TypeError: Both operands have to be reference types'
         return super.makeNaryOp(op.replace("===", "==").replace("!==", "!="), args);
     }
-
-    makeDiscriminatorFromExpressions(convertor: EnumConvertor, value: string, index: number): LanguageExpression | undefined {
-        return this.makeString(`${value} instanceof ${convertor.enumTypeName(this.language)}`)
+    makeDiscriminatorConvertor(convertor: EnumConvertor, value: string, index: number): LanguageExpression {
+        return this.discriminatorFromExpressions(value, RuntimeType.OBJECT, this, [
+            this.makeString(`${value} instanceof ${convertor.enumTypeName(this.language)}`)
+        ])
     }
 }
 

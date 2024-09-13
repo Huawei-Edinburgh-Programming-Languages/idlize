@@ -84,18 +84,12 @@ export abstract class BaseArgConvertor implements ArgConvertor {
         return undefined
     }
     getMembers(): string[] { return [] }
-    public discriminatorFromExpressions(value: string, runtimeType: RuntimeType, writer: LanguageWriter, exprs: LanguageExpression[]) {
-        return writer.makeNaryOp("&&", [
-            writer.makeNaryOp("==", [writer.makeRuntimeType(runtimeType), writer.makeString(`${value}_type`)]),
-            ...exprs
-        ])
-    }
     protected discriminatorFromFields<T>(value: string, writer: LanguageWriter,
         uniqueFields: T[] | undefined, nameAccessor: (field: T) => string, optionalAccessor: (field: T) => boolean)
     {
         if (!uniqueFields || uniqueFields.length === 0) return undefined
         const firstNonOptional = uniqueFields.find(it => !optionalAccessor(it))
-        return this.discriminatorFromExpressions(value, RuntimeType.OBJECT, writer, [
+        return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT, writer, [
             writer.makeDiscriminatorFromFields(this, value,
                 firstNonOptional ? [nameAccessor(firstNonOptional)] : uniqueFields.map(it => nameAccessor(it)))
         ])
@@ -317,7 +311,7 @@ export class EnumConvertor extends BaseArgConvertor {
                                 index: number,
                                 writer: LanguageWriter,
                                 duplicates: Set<string>): LanguageExpression | undefined {
-        return writer.makeDiscriminatorFromExpressions(this, value, index)
+        return writer.makeDiscriminatorConvertor(this, value, index)
     }
     public extremumOfOrdinals(): {low: number, high: number} {
         let low: number = Number.MAX_VALUE
@@ -617,7 +611,7 @@ export class ImportTypeConvertor extends BaseArgConvertor {
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
         const handler = ImportTypeConvertor.knownTypes.get(this.importedName)
         return handler
-            ? this.discriminatorFromExpressions(value, RuntimeType.OBJECT, writer,
+            ? writer.discriminatorFromExpressions(value, RuntimeType.OBJECT, writer,
                 [writer.makeString(`${handler[0]}(${handler.slice(1).concat(value).join(", ")})`)])
             : undefined
     }
@@ -864,7 +858,7 @@ export class ClassConvertor extends InterfaceConvertor {
         super(name, param, declaration, table)
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        return this.discriminatorFromExpressions(value, RuntimeType.OBJECT, writer,
+        return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT, writer,
             [writer.makeString(`${value} instanceof ${this.tsTypeName}`)])
     }
 }
@@ -1138,7 +1132,7 @@ export class ArrayConvertor extends BaseArgConvertor {
         return true
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        return this.discriminatorFromExpressions(value, RuntimeType.OBJECT, writer,
+        return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT, writer,
             [writer.makeString(`${value} instanceof ${this.targetType(writer).name}`)])
     }
     elementTypeName(): string {
@@ -1210,7 +1204,7 @@ export class MapConvertor extends BaseArgConvertor {
         return true
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        return this.discriminatorFromExpressions(value, RuntimeType.OBJECT, writer,
+        return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT, writer,
             [writer.makeString(`${value} instanceof Map`)])
     }
 }
@@ -1280,7 +1274,7 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
         return true
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        return this.discriminatorFromExpressions(value, RuntimeType.OBJECT, writer,
+        return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT, writer,
             [writer.makeString(`${value} instanceof ${this.tsTypeName}`)])
     }
 }
