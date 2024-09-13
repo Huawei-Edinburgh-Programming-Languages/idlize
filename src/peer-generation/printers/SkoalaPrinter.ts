@@ -1,6 +1,6 @@
 import * as fs from "fs"
 import * as path from "path"
-import { IDLEntry, IDLMethod, IDLInterface, isInterface, isClass } from "../../idl"
+import { IDLEntry, IDLMethod, IDLInterface, isInterface, isClass, printType } from "../../idl"
 import { IndentedPrinter } from "../../IndentedPrinter"
 
 export class SkoalaCCodeGenerator {
@@ -28,7 +28,7 @@ export class SkoalaCCodeGenerator {
     }
 
     private visit(node: IDLEntry, printer: IndentedPrinter): void {
-        console.log(`Processing IDLEntry with kind: ${node.kind}, name: ${(node as any).name || "Unnamed"}`)
+        console.log(`Processing IDLEntry with kind: ${node.kind}, name: ${(node as any).name || "Unnamed"}`);
 
         if (isInterface(node) || isClass(node)) {
             this.visitInterface(node as IDLInterface, printer)
@@ -44,38 +44,51 @@ export class SkoalaCCodeGenerator {
             return
         }
 
-        methods.forEach(method => this.visitMethod(method, printer))
+        methods.forEach(method => this.visitMethod(method, node, printer))
     }
 
-    private visitMethod(method: IDLMethod, printer: IndentedPrinter): void {
+    private visitMethod(method: IDLMethod, parentNode: IDLInterface, printer: IndentedPrinter): void {
         const returnType = method.returnType ? this.convertType(method.returnType.name) : "void"
-        const signature = `${returnType} ${method.name}(`
+
+        const capitalizedMethodName = this.capitalizeFirstLetter(method.name)
+        const methodNameWithPrefix = `impl_skoala_${parentNode.name}__1n${capitalizedMethodName}`
+        const signature = `${returnType} ${methodNameWithPrefix}(`
+
         printer.print(signature)
 
         printer.pushIndent()
-        const parameters = method.parameters
+
+        const parametersList: string[] = [];
+
+        const pointerName = `${parentNode.name.toLowerCase()}Ptr`
+
+        const isStaticMethod = method.isStatic || false 
+
+        if (!isStaticMethod) {
+            parametersList.push(`KNativePointer ${pointerName}`)
+        }
+
+        const methodParameters = method.parameters
             .map(param => {
                 if (!param.type) {
-                    throw new Error(`Parameter type is not defined for parameter ${param.name} in method ${method.name}`)
+                    throw new Error(`Parameter type is not defined for parameter ${param.name} in method ${method.name}`);
                 }
                 const typeName = this.convertType(param.type.name)
                 return `${typeName} ${param.name}`
             })
-            .join(", ")
+
+        const parameters = parametersList.concat(methodParameters).join(", ")
         printer.print(parameters)
         printer.popIndent()
 
-        printer.print(") {")
-        printer.pushIndent()
-        printer.print(`// TODO: Implement ${method.name}`)
-
-        if (returnType !== "void") {
-            printer.print(`return (${returnType})0; // Placeholder return value`)
-        }
-
-        printer.popIndent()
-        printer.print("}")
+        printer.print(");")
         printer.print("")
+    }
+
+    // Helper function to capitalize the first letter of a string
+    private capitalizeFirstLetter(str: string): string {
+        if (!str) return str
+        return str.charAt(0).toUpperCase() + str.slice(1)
     }
 
     private convertType(idlType: string): string {
@@ -86,6 +99,7 @@ export class SkoalaCCodeGenerator {
             "boolean": "bool",
             "DOMString": "char*",
             "void_": "void",
+            "KNativePointer": "KNativePointer", 
         }
 
         return typeMapping[idlType] || "void*"
@@ -93,7 +107,7 @@ export class SkoalaCCodeGenerator {
 
     private saveCCode(cCode: string): void {
         const baseFileName = path.basename(this.fileName, ".d.ts")
-        const outputFileName = `${baseFileName}.cc`
+        const outputFileName = `${baseFileName}.h`
         const outputPath = path.join(this.outputDir, outputFileName)
 
         console.log("Saving C Code to:", outputPath)
