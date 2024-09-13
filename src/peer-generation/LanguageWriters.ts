@@ -708,7 +708,7 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
                         const memberName = `${this.enumEntity.name}.${member.name}`
                         writer.writeStatement(
                             writer.makeCondition(
-                                writer.makeNaryOp('==', [writer.makeString('arg0'), writer.makeString(`${memberName}.value`)]),
+                                writer.makeEquals([writer.makeString('arg0'), writer.makeString(`${memberName}.value`)]),
                                 writer.makeReturn(writer.makeString(memberName)))
                         )
                     })
@@ -1022,7 +1022,7 @@ export abstract class LanguageWriter {
         return keyword
     }
     compareLiteral(expr: LanguageExpression, literal: string): LanguageExpression {
-        return this.makeNaryOp('===', [expr, this.makeString(`"${literal}"`)])
+        return this.makeEquals([expr, this.makeString(`"${literal}"`)])
     }
     makeCastCustomObject(customName: string, _isGenericType: boolean): LanguageExpression {
         return this.makeString(customName)
@@ -1058,6 +1058,12 @@ export abstract class LanguageWriter {
             this.makeNaryOp(">=", [ordinal, this.makeString(low!.toString())]),
             this.makeNaryOp("<=",  [ordinal, this.makeString(high!.toString())])
         ])
+    }
+    makeNot(expr: LanguageExpression): LanguageExpression {
+        return this.makeString(`!${expr.asString()}`)
+    }
+    makeEquals(args: LanguageExpression[]): LanguageExpression {
+        return this.makeNaryOp("===", args)
     }
 }
 
@@ -1354,9 +1360,10 @@ export class ETSLanguageWriter extends TSLanguageWriter {
             this.makeString(`${value} instanceof ${valueTypeName}`),
             this.makeString(`${value}.${property} instanceof ${propertyTypeName}`)])
     }
-    makeNaryOp(op: string, args: LanguageExpression[]): LanguageExpression {
-        // Error elimination: 'TypeError: Both operands have to be reference types'
-        return super.makeNaryOp(op.replace("===", "==").replace("!==", "!="), args);
+    makeEquals(args: LanguageExpression[]): LanguageExpression {
+        // TODO: Error elimination: 'TypeError: Both operands have to be reference types'
+        // the '==' operator must be used when one of the operands is a reference
+        return super.makeNaryOp('==', args);
     }
     makeDiscriminatorConvertor(convertor: EnumConvertor, value: string, index: number): LanguageExpression {
         return this.discriminatorFromExpressions(value, RuntimeType.OBJECT, this, [
