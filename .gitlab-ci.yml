@@ -67,3 +67,21 @@ publish idlize:
         - sed -i "s/+devel/-dev.$CI_PIPELINE_IID/" package.json
         - KOALA_BZ=1 npm run upload
 
+publish idl:
+    stage: test
+    tags:
+      - idlize-ci
+      - koala-ci
+    rules:
+      - if: $CI_PIPELINE_SOURCE == "schedule"
+        when: never
+      - if: $CI_COMMIT_BRANCH == "master"
+        when: on_success
+    before_script:
+      - !reference [.setup, script]
+    script:
+        - cd $CI_PROJECT_DIR
+        - sed -i "s/+devel/-dev.$CI_PIPELINE_IID/" package.json
+        - npm run publish:idl
+
+
