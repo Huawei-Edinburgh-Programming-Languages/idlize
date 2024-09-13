@@ -41,20 +41,20 @@ func checkPerf(count: Int64) {
 }
 
 func checkPerf2(count: Int64) {
-        var peer = ArkBlankPeer.create(ArkUINodeType.Root, None<ComponentBase>, 0)
-        var start = DateTime.now().nanosecond
-        for (i in 0..count) {
-            if (i % 2 == 0) {
-                peer.backdropBlurAttribute(Float64(i), Option.None)
-            }
-            else {
-                let options: BlurOptions = BlurOptions(Tuple_Float64_Float64(1.0, 2.0))                
-                peer.backdropBlurAttribute(Float64(i), options);
-            }
+    var peer = ArkBlankPeer.create(ArkUINodeType.Root, None<ComponentBase>, 0)
+    var start = DateTime.now().nanosecond
+    for (i in 0..count) {
+        if (i % 2 == 0) {
+            peer.backdropBlurAttribute(Float64(i), Option.None)
         }
-        var passed = DateTime.now().nanosecond - start;
-        println("backdropBlur: ${passed} ns for ${count} iteration,  ${Int32(round(Float64(passed) / Float64(count)))} ms per 1M iterations");
+        else {
+            let options: BlurOptions = BlurOptions(Tuple_Float64_Float64(1.0, 2.0))                
+            peer.backdropBlurAttribute(Float64(i), options);
+        }
     }
+    var passed = DateTime.now().nanosecond - start;
+    println("backdropBlur: ${passed} ns for ${count} iteration,  ${Int32(round(Float64(passed) / Float64(count)))} ms per 1M iterations");
+}
 
 
 main(): Unit {

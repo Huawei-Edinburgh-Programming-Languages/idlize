@@ -23,17 +23,26 @@ public abstract class Ark_Object {
         return RuntimeType.STRING
     }
 
-    static func getRuntimeType(object: Object): RuntimeType {
+    static func getRuntimeType<T>(object: T): RuntimeType where T <: Ark_Object {
         return RuntimeType.OBJECT
     }
 
     static func getRuntimeType<T>(object: ArrayList<T>): RuntimeType {
         return RuntimeType.OBJECT
     }
-    
-    static func getRuntimeType<T>(object: ?T): RuntimeType {
+
+    static func getRuntimeType<T>(object: ?ArrayList<T>): RuntimeType {
         if(let Some(obj) <- object) {
-            return Ark_Object.getRuntimeType(object as Object)
+            return Ark_Object.getRuntimeType(object as ArrayList<T>)
+        }
+        else {
+            return RuntimeType.UNDEFINED
+        }
+    }
+    
+    static func getRuntimeType<T>(object: ?T): RuntimeType where T <: Ark_Object {
+        if(let Some(obj) <- object) {
+            return Ark_Object.getRuntimeType(object as Ark_Object)
         }
         else {
             return RuntimeType.UNDEFINED

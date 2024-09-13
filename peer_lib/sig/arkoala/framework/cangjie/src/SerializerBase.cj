@@ -94,7 +94,7 @@ class SerializersCache {
 public open class SerializerBase {
     private static var cache = SerializersCache(22)
 
-    private var position: Int32 = 0
+    private var position: Int64 = 0
     private var buffer: ArrayList<UInt8> = ArrayList<UInt8>()
 
     private static var customSerializers: ?CustomSerializer = Option.None
@@ -112,23 +112,21 @@ public open class SerializerBase {
         return SerializerBase.cache.getCached(factory, index)
     }
     func asArray(): ArrayList<UInt8> {
-        println(this.buffer.size)
-        println(this.position)
         return this.buffer
     }
-    func length(): Int32 {
+    func length(): Int64 {
         return this.position
     }
-    func currentPosition(): Int32 { return this.position }
-    private func checkCapacity(value: Int32) {
+    func currentPosition(): Int64 { return this.position }
+    private func checkCapacity(value: Int64) {
         if (value < 1) {
             throw Exception("${value} is less than 1")
         }
         var buffSize = this.buffer.size
-        if (this.position > Int32(buffSize) - value) {
+        if (this.position > buffSize - value) {
             let minSize = this.position + value
-            let resizedSize = max(minSize, Int32(round(3.0 * Float64(buffSize) / 2.0)))
-            var resizedBuffer =  ArrayList<UInt8>(Int64(resizedSize))
+            let resizedSize = max(minSize, Int64(round(3.0 * Float64(buffSize) / 2.0)))
+            var resizedBuffer =  ArrayList<UInt8>(resizedSize)
             for (i in 0..this.buffer.size) {
                 resizedBuffer.append(this.buffer[i])
             }
@@ -144,15 +142,14 @@ public open class SerializerBase {
     func writeFunction(value: Object): Unit {
         // TODO
     }
-    private func setBytes<V, T>(position: Int32, value: T): Unit where T <: LittleEndianOrder<V>{
-        var arr = Array<Byte>(20, item: 0)
+    private func setBytes<V, T>(position: Int64, value: T): Unit where T <: LittleEndianOrder<V>{
+        var arr = Array<Byte>(100, item: 0)
         let n = value.writeLittleEndian(arr)
-        this.checkCapacity(Int32(n))
+        this.checkCapacity(n)
         for (i in 0..n) {
-            this.buffer[Int64(this.position) + i] = arr[i]
+            this.buffer[this.position + i] = arr[i]
         }
-        println("we moved position for ${n} bytes")
-        this.position += Int32(n)
+        this.position += n
     }
     func writeTag(tag: Int32): Unit {
         this.setBytes(this.position, tag)
@@ -198,14 +195,14 @@ public open class SerializerBase {
         // TODO
     }
     func writeString(value: String): Unit {
-        this.checkCapacity(Int32((4 + value.size * 4 + 1))) // length, data
-        let encodedLength = Int32(42) // for now
+        this.checkCapacity(4 + value.size * 4 + 1) // length, data
+        let encodedLength = 42 // for now
         // let encodedLength = NativeModule._ManagedStringWrite(value, this.buffer, this.position + 4)
         this.position += encodedLength + 4
     }
     // Length is an important common case.
     func writeLength(value: Ark_Length): Unit {
-        this.buffer[Int64(this.position)] = UInt8(RuntimeType.STRING.ordinal)
+        this.buffer[this.position] = UInt8(RuntimeType.STRING.ordinal)
         this.position++
         this.writeString(value.value);
     }
