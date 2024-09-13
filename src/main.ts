@@ -443,6 +443,13 @@ if (options.dts2peer) {
                             true
                         )
                     }
+                    else if (lang == Language.JAVA) {
+                        const nodeTypes = makeJavaNodeTypes(idlLibrary)
+                        nodeTypes.writer.printTo(arkoala.javaLib(nodeTypes.targetFile))
+
+                        const arkComponents = makeJavaArkComponents(idlLibrary, context)
+                        arkComponents.writer.printTo(arkoala.javaLib(arkComponents.targetFile))
+                    }
 
                     // must be last for java
                     const syntheticTypes = printSyntheticTypes(idlLibrary)
@@ -565,8 +572,8 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
         }
     }
 
-    if (complete || lang == Language.JAVA) {
-            const components = printComponents(peerLibrary, context)
+    if (complete) {
+        const components = printComponents(peerLibrary, context)
         for (const [targetFile, component] of components) {
             const outComponentFile = arkoala.component(targetFile)
             writeFile(outComponentFile, component, true, "producing")
@@ -728,11 +735,13 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
         const serializer = makeJavaSerializer(peerLibrary)
         serializer.writer.printTo(arkoala.javaLib(serializer.targetFile))
 
-        const nodeTypes = makeJavaNodeTypes(peerLibrary)
-        nodeTypes.writer.printTo(arkoala.javaLib(nodeTypes.targetFile))
+        if (complete) { 
+            const nodeTypes = makeJavaNodeTypes(peerLibrary)
+            nodeTypes.writer.printTo(arkoala.javaLib(nodeTypes.targetFile))
 
-        const arkComponents = makeJavaArkComponents(peerLibrary, context)
-        arkComponents.writer.printTo(arkoala.javaLib(arkComponents.targetFile))
+            const arkComponents = makeJavaArkComponents(peerLibrary, context)
+            arkComponents.writer.printTo(arkoala.javaLib(arkComponents.targetFile))
+        }
     }
     if (lang == Language.CJ) {
         const interfaces = printInterfaces(peerLibrary, context)

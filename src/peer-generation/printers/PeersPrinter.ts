@@ -264,33 +264,6 @@ class JavaPeerFileVisitor extends PeerFileVisitor {
         // printer.print(`}`)
     }
 
-    // TODO: remove after migrating to IDL
-    protected printPeer(peer: PeerClass | IdlPeerClass, printer: LanguageWriter) {
-        const peerName = componentToPeerClass(peer.componentName)
-        printer.writeClass(peerName, (writer) => {
-            this.printPeerConstructor(peer, writer)
-            this.printCreateMethod(peer, writer);
-            (peer.methods as any[])
-                .forEach(method => this.printPeerMethod(method, writer))
-
-            // hack
-            if (peer instanceof IdlPeerClass && peerName == 'ArkBlankPeer') {
-                const colorMethod = peer.methods.filter(it => it.overloadedName == 'color')[0]
-                const oldSignature = colorMethod.method.signature as NamedMethodSignature
-                const signature = new NamedMethodSignature(oldSignature.returnType, [new Type('Union_Ark_Color_double_String_Resource')], oldSignature.argsNames, oldSignature.defaults)
-                const newColorMethod = new IdlPeerMethod(
-                    colorMethod.originalParentName,
-                    colorMethod.declarationTargets,
-                    colorMethod.argConvertors,
-                    colorMethod.isCallSignature,
-                    new Method(colorMethod.method.name, signature, colorMethod.method.modifiers))
-                this.printPeerMethod(newColorMethod, writer)
-            }
-
-            this.printApplyMethod(peer, writer)
-        }, this.generatePeerParentName(peer))
-    }
-
     printFile(): void {
         const isIDL = this.library instanceof IdlPeerLibrary
         this.file.peers.forEach(peer => {
