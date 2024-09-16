@@ -2,7 +2,7 @@ import * as fs from "fs"
 import * as path from "path"
 import { IDLEntry, IDLMethod, IDLInterface, isInterface, isClass, printType } from "../../idl"
 import { IndentedPrinter } from "../../IndentedPrinter"
-
+import { capitalize, toCamelCase } from "../../util"
 export class SkoalaCCodeGenerator {
     private entries: IDLEntry[]
     private outputDir: string
@@ -50,7 +50,7 @@ export class SkoalaCCodeGenerator {
     private visitMethod(method: IDLMethod, parentNode: IDLInterface, printer: IndentedPrinter): void {
         const returnType = method.returnType ? this.convertType(method.returnType.name) : "void"
 
-        const capitalizedMethodName = this.capitalizeFirstLetter(method.name)
+        const capitalizedMethodName = capitalize(method.name)
         const methodNameWithPrefix = `impl_skoala_${parentNode.name}__1n${capitalizedMethodName}`
         const signature = `${returnType} ${methodNameWithPrefix}(`
 
@@ -60,7 +60,7 @@ export class SkoalaCCodeGenerator {
 
         const parametersList: string[] = [];
 
-        const pointerName = `${parentNode.name.toLowerCase()}Ptr`
+        const pointerName = `${toCamelCase(parentNode.name)}Ptr`
 
         const isStaticMethod = method.isStatic || false 
 
@@ -83,12 +83,6 @@ export class SkoalaCCodeGenerator {
 
         printer.print(");")
         printer.print("")
-    }
-
-    // Helper function to capitalize the first letter of a string
-    private capitalizeFirstLetter(str: string): string {
-        if (!str) return str
-        return str.charAt(0).toUpperCase() + str.slice(1)
     }
 
     private convertType(idlType: string): string {
