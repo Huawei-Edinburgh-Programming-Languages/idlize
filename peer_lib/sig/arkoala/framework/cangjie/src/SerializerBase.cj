@@ -196,9 +196,10 @@ public open class SerializerBase {
     }
     func writeString(value: String): Unit {
         this.checkCapacity(4 + value.size * 4 + 1) // length, data
-        // let encodedLength = 42 // for now
-        // let encodedLength = NativeModule.ManagedStringWrite(value, this.buffer, this.position + 4)
-        this.position += encodedLength + 4
+        this.writeInt32(Int32(value.size))
+        for (i in 0..value.size) {
+            this.setBytes(this.position, value[i])
+        }
     }
     // Length is an important common case.
     func writeLength(value: Ark_Length) {
