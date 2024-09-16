@@ -28,7 +28,7 @@ export class SkoalaCCodeGenerator {
     }
 
     private visit(node: IDLEntry, printer: IndentedPrinter): void {
-        console.log(`Processing IDLEntry with kind: ${node.kind}, name: ${(node as any).name || "Unnamed"}`);
+        console.log(`Processing IDLEntry with kind: ${node.kind}, name: ${(node as any).name || "Unnamed"}`)
 
         if (isInterface(node) || isClass(node)) {
             this.visitInterface(node as IDLInterface, printer)
