@@ -13,11 +13,6 @@
  * limitations under the License.
  */
 
-import { nativeModule } from "./NativeModule"
-import { SerializerBase } from "@arkoala/arkui/peers/SerializerBase"
-import { createSerializer } from "@arkoala/arkui/peers/Serializer"
-import { wrapCallback } from "./CallbackRegistry"
-
 export class Application {
     constructor() {
     }
