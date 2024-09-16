@@ -486,6 +486,66 @@ function checkPerf3(count: number) {
     console.log(`widthAttributeString: ${Math.round(passed)}ms for ${count} iteration, ${Math.round(passed / count * 1_000_000)}ms per 1M iterations`)
 }
 
+export class ArkResourceImpl implements Resource {
+    private name_: string = ""
+    private id_: number = 0
+    private type_: number = 0
+    private bundleName_: string = ""
+    private moduleName_: string = ""
+    private params_: string[] | undefined
+
+    get name(): string {
+        return this.name_
+    }
+    set name(value: string) {
+        this.name_ = value
+    }
+
+    public get id(): number {
+        return this.id_
+    }
+    set id(value: number) {
+        this.id_ = value
+    }
+    public getId(): number {
+        return this.id
+    }
+
+    get type(): number {
+        return this.type_
+    }
+    set type(value: number) {
+        this.type_ = value
+    }
+
+    get bundleName(): string {
+        return this.bundleName_
+    }
+    set bundleName(value: string) {
+        this.bundleName_ = value
+    }
+    public getBundleName(): string {
+        return this.bundleName
+    }
+
+    get moduleName(): string {
+        return this.moduleName_
+    }
+    set moduleName(value: string) {
+        this.moduleName_ = value
+    }
+    public getModuleName(): string {
+        return this.moduleName_
+    }
+
+    get params(): string[] | undefined {
+        return this.params_
+    }
+    set params(value: string[] | undefined) {
+        this.params_ = value
+    }
+}
+
 function checkButton() {
     let data = new byte[5]
     data[0] = 42
@@ -500,10 +560,14 @@ function checkButton() {
          "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=3}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})")
     checkResult("labelStyle2", () => peer.labelStyleAttribute(new LabelStyleImpl()),
         "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_UNDEFINED, .value={}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})")
-/*
-    checkResult("height", () => peer.heightAttribute({ id: 43, bundleName: "MyApp", moduleName: "MyApp" }),
-        "height(Length {value=0.000000, unit=vp, resource=43})")
-*/
+
+    const resource = new ArkResourceImpl()
+    resource.id = 43
+    resource.bundleName = "MyApp"
+    resource.moduleName = "MyApp"
+    checkResult("height", () => peer.heightAttribute(resource),
+        "height({.type=2, .value=0.000000, .unit=1, .resource=43})")
+
     checkResult("bindSheet", () =>
         peer.bindSheetAttribute(false, (): Object => {}, new SheetOptionsImpl(new SheetTitleOptionsImpl("My App"))),
         "bindSheet({.tag=ARK_TAG_OBJECT, .value=false}, {.selector=0, .value0={.id=42}}, {.tag=ARK_TAG_OBJECT, .value={.backgroundColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .onAppear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onDisappear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillAppear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillDisappear={.tag=ARK_TAG_UNDEFINED, .value={}}, .height={.tag=ARK_TAG_UNDEFINED, .value={}}, .dragBar={.tag=ARK_TAG_UNDEFINED, .value={}}, .maskColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .detents={.tag=ARK_TAG_UNDEFINED, .value={}}, .blurStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, .showClose={.tag=ARK_TAG_UNDEFINED, .value={}}, .preferType={.tag=ARK_TAG_UNDEFINED, .value={}}, .title={.tag=ARK_TAG_OBJECT, .value={.selector=0, .value0={.title={.selector=0, .value0={.chars=\"My App\", .length=6}}, .subtitle={.tag=ARK_TAG_UNDEFINED, .value={}}}}}, .shouldDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillSpringBackWhenDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .enableOutsideInteractive={.tag=ARK_TAG_UNDEFINED, .value={}}, .width={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderWidth={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, .shadow={.tag=ARK_TAG_UNDEFINED, .value={}}, .onHeightDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .mode={.tag=ARK_TAG_UNDEFINED, .value={}}, .scrollSizeMode={.tag=ARK_TAG_UNDEFINED, .value={}}, .onDetentsDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWidthDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .onTypeDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .expandSafeAreaInEmbeddedMode={.tag=ARK_TAG_UNDEFINED, .value={}}, .uiContext={.tag=ARK_TAG_UNDEFINED, .value={}}}})"
