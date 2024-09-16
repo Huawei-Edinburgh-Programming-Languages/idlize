@@ -74,9 +74,11 @@ import { IdlPeerLibrary } from "./peer-generation/idl/IdlPeerLibrary"
 import { IdlPeerFile } from "./peer-generation/idl/IdlPeerFile"
 import { IdlPeerGeneratorVisitor, IdlPeerProcessor } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
 import { SkoalaCCodeGenerator } from "./peer-generation/printers/SkoalaPrinter"
+import { h2idl } from "./h2idl"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
+    .option('--h2idl', 'Convert .h to IDL definitions')
     .option('--dts2h', 'Convert .d.ts to .h definitions')
     .option('--dts2test', 'Generate tests from .d.ts to .h')
     .option('--dts2peer', 'Convert .d.ts to peer drafts')
@@ -163,6 +165,16 @@ if (options.dts2idl) {
                 fs.writeFileSync(outFile, generated)
             }
         }
+    )
+    didJob = true
+}
+
+if (options.h2idl) {
+    const tsCompileContext = new CompileContext()
+    h2idl(
+        options.inputDir,
+        options.inputFile,
+        options.outputDir ?? "./idl"
     )
     didJob = true
 }
