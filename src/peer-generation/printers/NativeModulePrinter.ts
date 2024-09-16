@@ -113,7 +113,7 @@ function printPeerMethod(clazz: PeerClassBase, method: PeerMethod | IdlPeerMetho
             let functionCllArgs: Array<string> = []
             const arrayLikeTypes = new Set(['Uint8Array'])
             const stringLikeTypes = new Set(['String'])
-            printer.print('return unsafe {')
+            printer.print('unsafe {')
             printer.pushIndent()
             for(let param of parameters.args) {
                 let ordinal = parameters.args.indexOf(param)
@@ -121,7 +121,7 @@ function printPeerMethod(clazz: PeerClassBase, method: PeerMethod | IdlPeerMetho
                     functionCllArgs.push(`handle_${ordinal}.pointer`)
                     printer.print(`let handle_${ordinal} = acquireArrayRawData(${parameters.argsNames[ordinal]}.toArray())`)
                 } else if (stringLikeTypes.has(param.name)) {
-                    printer.print(`let ${parameters.argsNames[ordinal]} = unsafe { LibC.mallocCString(${parameters.argsNames[ordinal]}) }`)
+                    printer.print(`let ${parameters.argsNames[ordinal]} =  LibC.mallocCString(${parameters.argsNames[ordinal]})`)
                     functionCllArgs.push(parameters.argsNames[ordinal])
                 } else {
                     functionCllArgs.push(parameters.argsNames[ordinal])
@@ -133,7 +133,7 @@ function printPeerMethod(clazz: PeerClassBase, method: PeerMethod | IdlPeerMetho
                 if (arrayLikeTypes.has(param.name)) {
                     printer.print(`releaseArrayRawData(handle_${ordinal})`)
                 } else if (stringLikeTypes.has(param.name)) {
-                    printer.print(`unsafe { LibC.free(${parameters.argsNames[ordinal]}) }`)
+                    printer.print(`LibC.free(${parameters.argsNames[ordinal]})`)
                 }
             }
             printer.popIndent()
