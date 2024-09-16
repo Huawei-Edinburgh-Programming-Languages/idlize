@@ -17,6 +17,7 @@ package idlize
 
 import std.time.DateTime
 import std.math.round
+import std.collection.*
 
 func checkPerf(count: Int64) {
     var start = DateTime.now().nanosecond
@@ -28,13 +29,13 @@ func checkPerf(count: Int64) {
 
     start = DateTime.now().nanosecond
     for (i in 0..count) {
-        var data = Array<?Int8>(5, item: 0)
-        data[0] = 1
-        data[1] = (i >> 24) as Int8
-        data[2] = (i >> 16) as Int8
-        data[3] = (i >> 8) as Int8
-        data[4] = (i >> 0) as Int8
-        // NativeModule._TestPerfNumberWithArray(data, data.length)
+        var data = ArrayList<UInt8>()
+        data.append(1)
+        data.append(UInt8((i >> 0 ) & (0xff)))
+        data.append(UInt8((i >> 8 ) & (0xff)))
+        data.append(UInt8((i >> 16 ) & (0xff)))
+        data.append(UInt8((i >> 24 ) & (0xff)))
+        NativeModule._TestPerfNumberWithArray(data, Int32(data.size))
     }
     passed = DateTime.now().nanosecond - start
     println("ARRAY: ${Float64(passed) / 1000000.0}ms for ${count} iteration, ${Int32(round(Float64(passed) / Float64(count)))}ms per 1M iterations")
