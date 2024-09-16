@@ -69,7 +69,6 @@ func checkPerf3(count: Int32): Unit {
 }
 
 
-
 main(): Unit {
     checkPerf(5 * 1000 * 1000)
     checkPerf2(100)
