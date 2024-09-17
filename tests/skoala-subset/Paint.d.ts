@@ -7,7 +7,9 @@ export declare class Paint extends Finalizable {
     constructor(ptr: pointer);
     static getFinalizer(): KNativePointer;
     static make(): Paint;
-    testMethod(param: float32, param_: int32): MyClass
+    testMethod(param: float32, param_?: int32): MyClass
+    testMethod1(param: float32 | int32 | string | MyClass): MyClass
+    testMethod2(param: float32 | int32, param_: MyClass): MyClass
 }
 
 export declare class CustomPaint extends Paint {

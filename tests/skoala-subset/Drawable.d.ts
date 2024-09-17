@@ -35,8 +35,8 @@ export declare abstract class CustomDrawable extends Drawable {
      */
     abstract onGetBounds(): Rect;
     constructor(ptr: pointer);
-    onDrawCallback(this: CustomDrawable): void;
-    onGetBoundsCallback(this: CustomDrawable): void;
+    onDrawCallback(instance: CustomDrawable): void;
+    onGetBoundsCallback(instance: CustomDrawable): void;
     /**
      * Returns drawable bounds.
      *
@@ -51,7 +51,8 @@ export declare abstract class CustomDrawable extends Drawable {
      * @returns the new drawable
      *
      */
-    static make<CustomDrawableType extends CustomDrawable>(drawableType: new (ptr: pointer) => CustomDrawableType): CustomDrawableType;
+    static make<CustomDrawableType extends CustomDrawable>(): CustomDrawableType;
+    // static make<CustomDrawableType extends CustomDrawable>(drawableType: new (ptr: pointer) => CustomDrawableType): CustomDrawableType;
     /**
      * Invalidates this drawable generation Id.
      * Should be called each time the drawable invalidates (drawing changes).

@@ -1,6 +1,6 @@
 export class MyClass {
     a: number
-    hi(): void
+    hi(): void {}
 }
 
 export class MyCustomClass extends MyClass {

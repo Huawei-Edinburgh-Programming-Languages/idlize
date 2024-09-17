@@ -17,6 +17,14 @@
  * @file
  * @kit ArkUI
  */
+declare class MyClass {
+  a: number
+}
+
+declare class MyCustomClass extends MyClass {
+  b: number
+  hi(): void
+}
 
 /**
  * Create Blank.
@@ -168,6 +176,7 @@ declare class BlankAttribute extends CommonMethod<BlankAttribute> {
    * @form
    */
   color(value: ResourceColor): BlankAttribute;
+  testMethod1(param: MyClass | number, param_: MyCustomClass): BlankAttribute
 }
 
 /**
