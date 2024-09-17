@@ -23,8 +23,8 @@ export class SkoalaInstall extends Install {
         }
     }
     sig = this.mkdir(this.test ? path.join(this.outDir, "sig") : this.outDir)
-    tsDir = this.mkdir(path.join(this.sig, "arkoala/arkui/src/"))
-    frameworkDir = this.mkdir(path.join(this.sig, "arkoala/framework"))
+    tsDir = this.mkdir(path.join(this.sig, "skoala/arkui/src/"))
+    frameworkDir = this.mkdir(path.join(this.sig, "skoala/framework"))
     tsSkoalaDir = this.mkdir(path.join(this.frameworkDir, "src/generated/"))
     nativeDir = this.mkdir(path.join(this.frameworkDir, "native/src/generated/"))
     // peer(targetFile: TargetFile): string {

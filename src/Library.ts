@@ -1,6 +1,8 @@
 import * as ts from "typescript"
 import { Language } from "./util"
 import { ArgConvertor } from "./peer-generation/Convertors"
+import { TypeNodeConvertor } from "./peer-generation/TypeNodeConvertor"
+import { DeclarationTarget, StructDescriptor } from "./peer-generation/DeclarationTable"
 
 
 export interface Library<FileType> {
@@ -9,30 +11,26 @@ export interface Library<FileType> {
     findFileByOriginalFilename(filename: string): FileType | undefined 
 }
 
-export interface FieldInterface<T> {
-    declaration: T
-    type: ts.TypeNode | undefined
-    name: string
-    optional: boolean
-}
-
-export interface StructInterface<T> {
-    addField(field: FieldInterface<T>): void
-    getFields(): readonly FieldInterface<T>[]
-    isEmpty(): boolean
-}
-
-export interface DeclTable<T> {
+export interface TypeProcessor {
     language: Language
-    computeTypeName(suggestedName: string | undefined, type: ts.TypeNode): string
-    computeTargetName(target: T): string
-    toTarget(node: ts.TypeNode): T
-
-    targetStruct(target: T): StructInterface<T>
-
+    typeChecker: ts.TypeChecker | undefined
+    computeTypeName(suggestedName: string | undefined, type: ts.TypeNode, optional?: boolean, prefix?: string): string
     serializerName(name: string): string
     deserializerName(name: string): string
+    typeConvertor(paramName: string, 
+        type: ts.TypeNode, 
+        isOptional?: boolean, 
+        nodeConv?: TypeNodeConvertor<string>
+    ): ArgConvertor
+    declarationConvertor(paramName: string, 
+        type: ts.TypeReferenceNode, 
+        declaration?: ts.NamedDeclaration, 
+        nodeConv?: TypeNodeConvertor<string>
+    ): ArgConvertor
 
-    typeConvertor(param: string, type: ts.TypeNode): ArgConvertor
-    declarationConvertor(param: string, type: ts.TypeReferenceNode, declaration?: ts.NamedDeclaration): ArgConvertor
+    targetStruct(target: DeclarationTarget): StructDescriptor
+
+    computeTargetName(target: DeclarationTarget, optional: boolean): string
+    getTypeName(type: ts.TypeNode, optional?: boolean): string
+    toTarget(node: ts.TypeNode): DeclarationTarget
 }

@@ -1,7 +1,12 @@
 export namespace Skoala {
-    export const Finalizable = "Finalizable"
-    export const RefCounted = "RefCounted"
-    export const NativeModuleImport = `import { nativeModule } from "@koalaui/arkoala"`
+    export enum BaseClasses {
+        Finalizable = "Finalizable",
+        RefCounted = "RefCounted"
+    }
+    export const NativeModuleImportFeature = {
+        module: "@koalaui/arkoala",
+        features: ["nativeModule"]
+    }
     export const getFinalizer = "getFinalizer"
     export function nativeMethod(className: string, methodName: string) {
         return `_skoala_${className}_${methodName}`

@@ -4,12 +4,6 @@ import { WrapperClass } from "./WrapperClass";
 import { Library } from "../Library";
 import { Language } from "../util";
 
-export type ImportFeature = { 
-    feature: string, 
-    module: string,
-    realDeclaration?: ts.Declaration,
-    kind?: ts.SyntaxKind
-}
 
 export class SkoalaFile {
     readonly declarations: Set<ts.Declaration> = new Set()
@@ -17,7 +11,7 @@ export class SkoalaFile {
     readonly wrapperClasses: Map<string, WrapperClass> = new Map()
 
     readonly draftImports: Set<ts.ImportDeclaration> = new Set()
-    readonly importFeatures: Set<ImportFeature> = new Set()
+    readonly importFeatures: Map<string, Set<string>> = new Map()
 
     readonly originalFilename: string
     readonly baseName: string
@@ -28,9 +22,21 @@ export class SkoalaFile {
         this.originalFilename = originalFile.fileName
         this.baseName = path.basename(this.originalFilename)
     }
+
+    addImportFeature(module: string, features: string[]) {
+        if (this.importFeatures.has(module)) {
+            features.forEach(f => {
+                this.importFeatures.get(module)?.add(f)
+            })
+        } else {
+            this.importFeatures.set(module, new Set(features))
+        }
+    }
 }
 
 export class SkoalaLibrary implements Library<SkoalaFile> {
+    constructor(public typeChecker: ts.TypeChecker) { }
+    public readonly serializerDeclarations: (ts.ClassDeclaration | ts.InterfaceDeclaration)[] = []
     public readonly files: SkoalaFile[] = []
     get language(): Language {
         return Language.TS

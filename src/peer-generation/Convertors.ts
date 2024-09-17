@@ -18,6 +18,7 @@ import { RuntimeType } from "./PeerGeneratorVisitor"
 import * as ts from "typescript"
 import { BlockStatement, BranchStatement, LanguageExpression, LanguageStatement, LanguageWriter, NamedMethodSignature, Type } from "./LanguageWriters"
 import { mapType, TypeNodeNameConvertor } from "./TypeNodeNameConvertor"
+import { TypeProcessor } from "../Library"
 import { makeArrayTypeCheckCall, makeInterfaceTypeCheckerCall } from "./printers/TypeCheckPrinter"
 
 function castToInt8(value: string, lang: Language): string {
@@ -488,7 +489,7 @@ export class UnionConvertor extends BaseArgConvertor {
     private memberConvertors: ArgConvertor[]
     private unionChecker: UnionRuntimeTypeChecker
 
-    constructor(param: string, private table: DeclarationTable, private type: ts.UnionTypeNode, typeNodeNameConvertor?: TypeNodeNameConvertor) {
+    constructor(param: string, private table: TypeProcessor, private type: ts.UnionTypeNode, typeNodeNameConvertor?: TypeNodeNameConvertor) {
         super(`object`, [], false, true, param)
         this.memberConvertors = type
             .types
@@ -538,7 +539,7 @@ export class UnionConvertor extends BaseArgConvertor {
             printer.popIndent()
             printer.print(`}`)
         })
-        this.unionChecker.reportConflicts(this.table.getCurrentContext() ?? "<unknown context>")
+        this.unionChecker.reportConflicts(/*this.table.getCurrentContext() ??*/ "<unknown context>")
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
         let selector = `selector`
@@ -583,7 +584,7 @@ export class ImportTypeConvertor extends BaseArgConvertor {
         ["PixelMap", ["isPixelMap"]],
         ["Resource", ["isResource"]]])
     private importedName: string
-    constructor(param: string, private table: DeclarationTable, type: ts.ImportTypeNode) {
+    constructor(param: string, private table: TypeProcessor, type: ts.ImportTypeNode) {
         super("Object", [RuntimeType.OBJECT], false, true, param)
         this.importedName = importTypeName(type)
     }
@@ -667,7 +668,7 @@ export class CustomTypeConvertor extends BaseArgConvertor {
 export class OptionConvertor extends BaseArgConvertor {
     private typeConvertor: ArgConvertor
     // TODO: be smarter here, and for smth like Length|undefined or number|undefined pass without serializer.
-    constructor(param: string, private table: DeclarationTable, public type: ts.TypeNode, typeNodeNameConvertor?: TypeNodeNameConvertor) {
+    constructor(param: string, private table: TypeProcessor, public type: ts.TypeNode, typeNodeNameConvertor?: TypeNodeNameConvertor) {
         let typeConvertor = table.typeConvertor(param, type, false, typeNodeNameConvertor)
         let runtimeTypes = typeConvertor.runtimeTypes;
         if (!runtimeTypes.includes(RuntimeType.UNDEFINED)) {
@@ -727,7 +728,7 @@ export class AggregateConvertor extends BaseArgConvertor {
     public readonly aliasName: string | undefined
 
     constructor(param: string,
-                private table: DeclarationTable,
+                private table: TypeProcessor,
                 private type: ts.TypeLiteralNode,
                 typeNodeNameConvertor?: TypeNodeNameConvertor) {
         super(typeNodeNameConvertor?.convert(type) ?? mapType(type), [RuntimeType.OBJECT], false, true, param)
@@ -808,7 +809,7 @@ export class InterfaceConvertor extends BaseArgConvertor {
         name: string,
         param: string,
         private declaration: ts.InterfaceDeclaration | ts.ClassDeclaration,
-        protected table: DeclarationTable) {
+        protected table: TypeProcessor) {
         super(name, [RuntimeType.OBJECT], false, true, param)
     }
 
@@ -859,7 +860,7 @@ export class InterfaceConvertor extends BaseArgConvertor {
 }
 
 export class ClassConvertor extends InterfaceConvertor {
-    constructor(name: string, param: string, declaration: ts.ClassDeclaration, table: DeclarationTable) {
+    constructor(name: string, param: string, declaration: ts.ClassDeclaration, table: TypeProcessor) {
         super(name, param, declaration, table)
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
@@ -871,7 +872,7 @@ export class ClassConvertor extends InterfaceConvertor {
 export class FunctionConvertor extends BaseArgConvertor {
     constructor(
         param: string,
-        protected table: DeclarationTable,
+        protected table: TypeProcessor,
         protected type: ts.TypeNode) {
         // TODO: pass functions as integers to native side.
         super("Function", [RuntimeType.FUNCTION], false, false, param)
@@ -1011,7 +1012,7 @@ export class CallbackTypeReferenceConvertor extends CallbackConvertor {
 }
 
 export class TupleConvertor extends BaseArgConvertor {
-    constructor(param: string, protected table: DeclarationTable, private type: ts.TupleTypeNode) {
+    constructor(param: string, protected table: TypeProcessor, private type: ts.TupleTypeNode) {
         super(`[${type.elements.map(it => mapType(it)).join(",")}]`, [RuntimeType.OBJECT], false, true, param)
         this.memberConvertors = type
             .elements
@@ -1078,7 +1079,7 @@ export class ArrayConvertor extends BaseArgConvertor {
     elementConvertor: ArgConvertor
     readonly isArrayType = ts.isArrayTypeNode(this.type) // Array type - Type[], otherwise - Array<Type>
     constructor(param: string,
-                public table: DeclarationTable,
+                public table: TypeProcessor,
                 private type: ts.TypeNode,
                 private elementType: ts.TypeNode,
                 private typeNodeNameConvertor: TypeNodeNameConvertor | undefined) {
@@ -1290,6 +1291,45 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
     }
 }
 
+export class WrapperClassConvertor extends BaseArgConvertor {
+    constructor(
+        name: string,
+        param: string,
+        protected table: TypeProcessor,
+        private type: ts.InterfaceDeclaration | ts.ClassDeclaration,
+    ) {
+        super(name, [RuntimeType.OBJECT], false, true, param)
+    }
+
+    convertorArg(param: string, writer: LanguageWriter): string {
+        throw new Error("Must never be used")
+    }
+    convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
+        printer.writeMethodCall(`${param}Serializer`, "writeMaterialized", [value])
+    }
+    convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
+        const accessor = printer.getObjectAccessor(this, value)
+        const readStatement = printer.makeCast(
+            printer.makeMethodCall(`${param}Deserializer`, `readMaterialized`, []),
+            new Type(this.table.computeTargetName(this.type, false)!),
+        )
+        return printer.makeAssign(accessor, undefined, readStatement, false)
+    }
+    nativeType(impl: boolean): string {
+        return PrimitiveType.Materialized.getText()
+    }
+    interopType(language: Language): string {
+        throw new Error("Must never be used")
+    }
+    isPointerType(): boolean {
+        return true
+    }
+    override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
+        return this.discriminatorFromExpressions(value, RuntimeType.OBJECT, writer,
+            [writer.makeString(`${value} instanceof ${this.tsTypeName}`)])
+    }
+}
+
 export class PredefinedConvertor extends BaseArgConvertor {
     constructor(param: string, tsType: string, private convertorName: string, private cType: string) {
         super(tsType, [RuntimeType.OBJECT, RuntimeType.UNDEFINED], false, true, param)
@@ -1348,7 +1388,7 @@ class ProxyConvertor extends BaseArgConvertor {
 export class TypeAliasConvertor extends ProxyConvertor {
     constructor(
         param: string,
-        private table: DeclarationTable,
+        private table: TypeProcessor,
         declaration: ts.TypeAliasDeclaration,
         typeNodeNameConvertor: TypeNodeNameConvertor | undefined
     ) {

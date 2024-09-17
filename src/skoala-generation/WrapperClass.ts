@@ -1,35 +1,28 @@
-import { Field, mangleMethodName, Method, MethodModifier } from "../peer-generation/LanguageWriters"
+import { ArgConvertor, RetConvertor } from "../peer-generation/Convertors"
+import { Field, Method, MethodModifier } from "../peer-generation/LanguageWriters"
 import { capitalize } from "../util"
-import { ArgConvertor, RetConvertor } from "./SkoalaConvertors"
-import { ImportFeature } from "./SkoalaLibrary"
-import * as ts from "typescript"
+import { Skoala } from './utils';
 
 export class WrapperMethod {
+    // todo
     constructor(
         public originalParentName: string,
-        // public declarationTargets: DeclarationTarget[],
         public method: Method,
-        public argConvertors?: ArgConvertor[],
+        public argConvertors: ArgConvertor[],
         public retConvertor?: RetConvertor,
-        public isCallSignature?: boolean,
-        public isOverloaded?: boolean,
-        public index?: number,
     ) { }
+
+    public isMakeMethod(): boolean {
+        return this.toStringName.startsWith("make") 
+        && (this.method.modifiers ? this.method.modifiers.includes(MethodModifier.STATIC) : true)
+    }
 
     public hasReceiver(): boolean {
         return !this.method.modifiers?.includes(MethodModifier.STATIC)
     }
 
-    get overloadedName(): string {
-        return this.isOverloaded ? mangleMethodName(this.method, this.index) : this.method.name
-    }
-
-    get fullMethodName(): string {
-        return this.isCallSignature ? this.overloadedName : this.peerMethodName
-    }
-
     get peerMethodName() {
-        const name = this.overloadedName
+        const name = this.toStringName
         if (!this.hasReceiver()) return name
         if (name.startsWith("set") ||
             name.startsWith("get")
@@ -42,7 +35,7 @@ export class WrapperMethod {
     }
 
     get implName(): string {
-        return `${capitalize(this.overloadedName)}Impl`
+        return `${capitalize(this.toStringName)}Impl`
     }
 
     get toStringName(): string {
@@ -55,7 +48,6 @@ export class WrapperMethod {
 
     get retType(): string {
         return "void"
-        // return this.maybeCRetType(this.retConvertor) ?? "void"
     }
 
     get receiverType(): string {
@@ -76,14 +68,13 @@ export class WrapperMethod {
     }
 
     generateAPIParameters(): string[] {
-        return []
-        // const args = this.argConvertors.map(it => {
-        //     let isPointer = it.isPointerType()
-        //     return `${isPointer ? "const ": ""}${it.nativeType(false)}${isPointer ? "*": ""} ${it.param}`
-        // })
-        // const receiver = this.generateReceiver()
-        // if (receiver) return [`${receiver.argType} ${receiver.argName}`, ...args]
-        // return args
+        const args = this.argConvertors.map(it => {
+            let isPointer = it.isPointerType()
+            return `${isPointer ? "const ": ""}${it.nativeType(false)}${isPointer ? "*": ""} ${it.param}`
+        })
+        const receiver = this.generateReceiver()
+        if (receiver) return [`${receiver.argType} ${receiver.argName}`, ...args]
+        return args
     }
 
     generateReceiver(): {argName: string, argType: string} | undefined {
@@ -93,23 +84,10 @@ export class WrapperMethod {
             argType: "NativePointer"
         }
     }
-
-    static markOverloads(methods: WrapperMethod[]): void {
-        for (const method of methods)
-            method.isOverloaded = false
-
-        for (const method of methods) {
-            if (method.isOverloaded) continue
-            const sameNamedMethods = methods.filter(it => it.method.name === method.method.name)
-            if (sameNamedMethods.length <= 1) continue
-            sameNamedMethods.forEach((method) => method.isOverloaded = true)
-        }
-    }
 }
 
 export class WrapperField {
     constructor(
-        // public declarationTarget: DeclarationTarget,
         public field: Field,
         public argConvertor?: ArgConvertor,
         public retConvertor?: RetConvertor,
@@ -120,16 +98,16 @@ export class WrapperClass {
     constructor(
         public readonly className: string,
         public readonly isInterface: boolean,
-        public readonly superClass: string,
-        public readonly isSuperClassWrapper: boolean,
+        public readonly baseClass: Skoala.BaseClasses,
+        private heritages: string[],
         public readonly fields: WrapperField[],
         public readonly ctor: WrapperMethod | undefined,
         public readonly finalizer: WrapperMethod | undefined,
-        public readonly importFeatures: ImportFeature[],
         public readonly methods: WrapperMethod[],
-        public readonly needBeGenerated: boolean = true,
-    ) {
-        // PeerMethod.markOverloads(methods)
+    ) { }
+
+    get superClassName(): string {
+        return this.heritages[0]
     }
 
     getComponentName(): string {

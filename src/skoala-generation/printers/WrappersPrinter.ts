@@ -1,8 +1,6 @@
-import * as path from "path"
-import { createLanguageWriter, FieldModifier, LanguageExpression, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, Type } from "../../peer-generation/LanguageWriters"
-import { TargetFile } from "../../peer-generation/printers/TargetFile"
+import { FieldModifier, LanguageExpression, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, Type } from "../../peer-generation/LanguageWriters"
 import { capitalize, Language, snakeCaseToCamelCase } from "../../util"
-import { SkoalaFile, SkoalaLibrary } from "../SkoalaLibrary"
+import { SkoalaFile } from "../SkoalaLibrary"
 import { WrapperClass, WrapperField, WrapperMethod } from "../WrapperClass"
 import { Skoala } from "../utils"
 
@@ -11,14 +9,9 @@ export class TSWrappersVisitor {
     constructor() { }
 
     printImports(file: SkoalaFile, writer: LanguageWriter): void {
-        if (file.wrapperClasses.size) {
-            writer.print(Skoala.NativeModuleImport)
-            file.wrapperClasses.forEach(it => {
-                it.importFeatures.forEach(feature => {
-                    writer.print(`import { ${feature.feature} } from "${feature.module}"`)
-                })
-            })
-        }
+        file.importFeatures.forEach((features, module) => {
+            writer.print(`import { ${[...features].join(', ')} } from "${module}"`)
+        })
     }
 
     printWrappers(file: SkoalaFile, writer: LanguageWriter): void {
@@ -38,7 +31,7 @@ export class TSWrappersVisitor {
             clazz.fields.forEach(field => {
                 this.printField(clazz.className, field, writer)
             })
-        }, clazz.superClass.toString())
+        }, clazz.superClassName)
     }
 
     private printCtor(clazz: WrapperClass, writer: LanguageWriter) {
@@ -47,13 +40,15 @@ export class TSWrappersVisitor {
         if (!clazz.ctor) return
         let argsNames = (clazz.ctor?.method.signature as NamedMethodSignature).argsNames
         writer.writeConstructorImplementation(clazz.className, clazz.ctor.method.signature, writer => {
-            if (clazz.superClass.toString() == Skoala.Finalizable) {
-                writer.writeSuperCall(["ptr", `${clazz.className}.getFinalizer()`])
-            } else if (clazz.superClass.toString() == Skoala.RefCounted) {
-                writer.writeSuperCall(argsNames)
-            } else {
-                writer.writeSuperCall(argsNames)
+            if (clazz.superClassName == Skoala.BaseClasses.Finalizable) {
+                if (argsNames.length) {
+                    argsNames = [argsNames[0], `${clazz.className}.getFinalizer()`, ...argsNames.slice(1)]
+                } else {
+                    // todo: case not used?
+                    argsNames.push(`${clazz.className}.getFinalizer()`)
+                }
             }
+            writer.writeSuperCall(argsNames)
         })
     }
 
@@ -67,22 +62,52 @@ export class TSWrappersVisitor {
     }
 
     private printMethod(className: string, method: WrapperMethod, writer: LanguageWriter) {
-        let returnType = method.method.signature.returnType
         let params: LanguageExpression[] = []
-        let call = writer.makeNativeCall(Skoala.nativeMethod(method.originalParentName, method.toStringName), params)
-        if (method.toStringName.startsWith('make') && returnType.name == className) {
-            writer.writeMethodImplementation(method.method, writer => {
-                writer.writeStatement(writer.makeAssign("ptr", undefined, call, true))
-                writer.print(`if (isNullPtr(ptr)) throw new TypeError("can not create an instance of type ${className}")`)
-                writer.writeStatement(writer.makeReturn(writer.makeString(`new ${className}(ptr)`)))
-            })
-            return
+        if (method.hasReceiver()) {
+            params.push(writer.makeString('this.ptr'))
         }
+        let serializerPushed = false
+        method.argConvertors.forEach(it => {
+            if (it.useArray) {
+                if (!serializerPushed) {
+                    params.push(writer.makeMethodCall(`thisSerializer`, 'asArray', []))
+                    params.push(writer.makeMethodCall(`thisSerializer`, 'length', []))
+                    serializerPushed = true
+                }
+            } else {
+                params.push(writer.makeString(it.convertorArg(it.param, writer)))
+            }
+        })
+
+        let call = writer.makeNativeCall(Skoala.nativeMethod(method.originalParentName, method.toStringName), params)
+        let returnType = method.method.signature.returnType
 
         writer.writeMethodImplementation(method.method, writer => {
+            let serializerCreated = false
+            method.argConvertors.forEach((it, index) => {
+                if (it.useArray) {
+                    if (!serializerCreated) {
+                        writer.writeStatement(
+                            writer.makeAssign(`thisSerializer`, new Type('Serializer'),
+                                writer.makeMethodCall('SerializerBase', 'get', [
+                                    writer.makeSerializerCreator(), writer.makeString(index.toString())
+                                ]), true)
+                        )
+                        serializerCreated = true
+                    }
+                    it.convertorSerialize(`this`, it.param, writer)
+                }
+            })
+
             if (returnType != Type.Void) {
-                writer.writeStatement(writer.makeAssign("retval", undefined, call, true))
-                writer.writeStatement(writer.makeReturn(writer.makeString("retval")))
+                if (method.isMakeMethod()) {
+                    writer.writeStatement(writer.makeAssign("ptr", undefined, call, true))
+                    writer.print(`if (isNullPtr(ptr)) throw new TypeError("can not create an instance of type ${className}")`)
+                    writer.writeStatement(writer.makeReturn(writer.makeString(`new ${className}(ptr)`)))
+                } else {
+                    writer.writeStatement(writer.makeAssign("retval", undefined, call, true))
+                    writer.writeStatement(writer.makeReturn(writer.makeString("retval")))
+                }
             } else {
                 writer.writeStatement(writer.makeStatement(call))
             }

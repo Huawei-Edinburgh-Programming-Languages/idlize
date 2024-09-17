@@ -225,14 +225,13 @@ if (options.dts2skoala) {
 }
 
 if (options.dts2skoaladraft) {
-    let skoalaLibrary = new SkoalaLibrary()
+    let skoalaLibrary: SkoalaLibrary
     let processor: WrapperProcessor
     generate(
         options.inputDir,
         undefined,
         options.outputDir ?? "./out/",
         (sourceFile, typeChecker) => {
-            processor = new WrapperProcessor(typeChecker)
             return new SkoalaVisitor({
                 sourceFile: sourceFile,
                 typeChecker: typeChecker,
@@ -251,6 +250,10 @@ if (options.dts2skoaladraft) {
                     "@koalaui/arkoala": ["/home/huawei/idlize/external/arkoala/framework/src"],
                 },
                 // traceResolution: true
+            },
+            onBegin(outDir, typeChecker) {
+                skoalaLibrary = new SkoalaLibrary(typeChecker)
+            processor = new WrapperProcessor(typeChecker)
             },
             onEnd(outDir: string) {
                 // const peerProcessor = new LocalPeerProcessor(peerLibrary, declarationTable.typeChecker)

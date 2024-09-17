@@ -1,25 +1,32 @@
+import * as path from "path"
 import * as fs from "fs"
 import { OptionValues } from "commander"
 import { SkoalaLibrary } from "./SkoalaLibrary"
 import { SkoalaInstall } from "./SkoalaInstall"
-import { ARKOALA_PACKAGE_PATH, INTEROP_PACKAGE_PATH } from "../peer-generation/printers/lang/Java"
 import { TSInterfacesVisitor } from "./printers/InterfacePrinter"
 import { TSWrappersVisitor } from "./printers/WrappersPrinter"
 import { TargetFile } from "../peer-generation/printers/TargetFile"
 import { createLanguageWriter, LanguageWriter } from "../peer-generation/LanguageWriters"
 import { Language } from "../util"
+import { makeTSSerializer } from "./printers/SerializerPrinter"
 
 export function generateSkoala(outDir: string, skoalaLibrary: SkoalaLibrary, options: OptionValues) {
     const skoala = new SkoalaInstall(outDir, true)
-    skoala.createDirs([ARKOALA_PACKAGE_PATH, INTEROP_PACKAGE_PATH])
 
     const skoalaFiles: string[] = []
-    const interfaces = printSkoala(skoalaLibrary)
-    for (const [targetFile, data] of interfaces) {
+    const result = printSkoala(skoalaLibrary)
+    for (const [targetFile, data] of result) {
         const outComponentFile = skoala.interface(targetFile)
         writeFile(outComponentFile, data.getOutput().join('\n'), !options.onlyIntegrated)
         skoalaFiles.push(outComponentFile)
     }
+
+    writeFile(skoala.interface(new TargetFile('Serializer.ts')),
+        makeTSSerializer(skoalaLibrary),
+        true,
+    )
+
+    copyToSkoala(path.join(__dirname, '..', 'skoala_lib'), skoala)
 
     return
 }
@@ -37,11 +44,9 @@ export function printSkoala(library: SkoalaLibrary): Map<TargetFile, LanguageWri
 
     for (let file of library.files) {
         const writer = createLanguageWriter(Language.TS)
-        intVis.printImports(file, writer)
         wrVis.printImports(file, writer)
-        
-        intVis.printInterfaces(file, writer)
         wrVis.printWrappers(file, writer)
+        intVis.printInterfaces(file, writer)
         result.set(
             new TargetFile(file.baseName.replace(".d.ts", ".ts")),
             writer
@@ -49,4 +54,31 @@ export function printSkoala(library: SkoalaLibrary): Map<TargetFile, LanguageWri
     }
 
     return result
+}
+
+export function copyToSkoala(from: string, skoala: SkoalaInstall, filters?: string[]) {
+    filters = filters?.map(it => path.join(from, it))
+    copyDir(path.join(from, 'sig'), skoala.sig, true, filters)
+}
+
+function copyDir(from: string, to: string, recursive: boolean, filters?: string[]) {
+    fs.readdirSync(from).forEach(it => {
+        const sourcePath = path.join(from, it)
+        const targetPath = path.join(to, it)
+        const statInfo = fs.statSync(sourcePath)
+        if (statInfo.isFile()) {
+            copyFile(sourcePath, targetPath, filters)
+        }
+        else if (recursive && statInfo.isDirectory()) {
+            if (!fs.existsSync(targetPath)) {
+                fs.mkdirSync(targetPath)
+            }
+            copyDir(sourcePath, targetPath, recursive, filters)
+        }
+    })
+}
+function copyFile(from: string, to: string, filters?: string[]) {
+    if (filters && !filters.includes(from))
+        return
+    fs.copyFileSync(from, to)
 }

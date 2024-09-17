@@ -1,0 +1,1413 @@
+import * as ts from "typescript"
+import { TypeProcessor } from "../Library"
+import { DeclarationTarget, FieldRecord, PointerType, PrimitiveType, StructDescriptor, StructVisitor } from "../peer-generation/DeclarationTable"
+import { convertTypeNode, TypeNodeConvertor } from "../peer-generation/TypeNodeConvertor"
+import { asString, getDeclarationsByNode, heritageDeclarations, identName, identNameWithNamespace, isStatic, Language, typeEntityName } from "../util"
+import { LanguageWriter, Method, MethodModifier, NamedMethodSignature, Type } from "../peer-generation/LanguageWriters"
+import { AggregateConvertor, ArgConvertor, ArrayConvertor, BooleanConvertor, ClassConvertor, CustomTypeConvertor, EnumConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, NullConvertor, NumberConvertor, OptionConvertor, StringConvertor, TupleConvertor, TypeAliasConvertor, UndefinedConvertor, UnionConvertor, WrapperClassConvertor } from "../peer-generation/Convertors"
+import { PeerGeneratorConfig } from "../peer-generation/PeerGeneratorConfig"
+import { TypeNodeNameConvertor } from "../peer-generation/TypeNodeNameConvertor"
+import { ImportExport } from "./ImportExport"
+import { RuntimeType } from "../peer-generation/PeerGeneratorVisitor"
+import { WrapperProcessor } from "./SkoalaVisitor"
+
+export class SkoalaTypeProcessor implements TypeProcessor {
+    private typeMap = new Map<ts.TypeNode, [DeclarationTarget, string[], boolean]>()
+    private toTargetConvertor: ToDeclarationTargetConvertor
+    typeChecker: ts.TypeChecker | undefined = undefined
+    language: Language = Language.TS
+
+    constructor(typeChecker?: ts.TypeChecker) {
+        this.typeChecker = typeChecker
+        this.toTargetConvertor = new ToDeclarationTargetConvertor(this)
+    }
+
+    getTypeName(type: ts.TypeNode, optional: boolean = false): string {
+        let declaration = this.typeMap.get(type)
+        if (declaration !== undefined) {
+            return declaration[1][0]
+        }
+        return this.computeTargetName(this.toTarget(type), optional)
+    }
+
+    requestType(name: string | undefined, type: ts.TypeNode, useToGenerate: boolean) {
+        let declaration = this.typeMap.get(type)
+        if (declaration) {
+            declaration[2] ||= useToGenerate
+            if (name && !declaration[1].includes(name)) {
+                declaration[1].push(name)
+            }
+            return
+        }
+        name = this.computeTypeName(name, type, false)
+        let target = this.toTarget(type)
+        if (!target) throw new Error(`Cannot find declaration: ${type.getText()}`)
+        this.typeMap.set(type, [target, [name], useToGenerate])
+    }
+
+    private isDeclarationTarget(type: ts.TypeNode): boolean {
+        if (ts.isUnionTypeNode(type)) return true
+        if (ts.isTypeLiteralNode(type)) return true
+        if (ts.isLiteralTypeNode(type)) return true
+        if (ts.isTupleTypeNode(type)) return true
+        if (ts.isArrayTypeNode(type)) return true
+        if (ts.isOptionalTypeNode(type)) return true
+        if (ts.isFunctionTypeNode(type)) return true
+        // TODO: shall we map it to string type here or later?
+        if (ts.isTemplateLiteralTypeNode(type)) return true
+        return false
+    }
+
+    computeTypeName(suggestedName: string | undefined, type: ts.TypeNode, optional: boolean = false, idlPrefix: string = PrimitiveType.ArkPrefix): string {
+        return this.computeTypeNameImpl(suggestedName, type, optional, idlPrefix)
+    }
+
+    toTarget(node: ts.TypeNode): DeclarationTarget {
+        return convertTypeNode(this.toTargetConvertor, node)
+    }
+
+    computeTargetName(target: DeclarationTarget, optional: boolean, idlPrefix: string = PrimitiveType.ArkPrefix): string {
+        return this.computeTargetNameImpl(target, optional, idlPrefix)
+    }
+
+    private computeTargetTypeLiteralName(type: ts.TypeLiteralNode, prefix: string): string {
+        const props = type.members.filter(ts.isPropertySignature)
+        const map = new Map<string, string[]>()
+        for (const prop of props) {
+            const target = this.toTarget(prop.type!)
+            const type = this.computeTargetName(target, prop.questionToken != undefined, "")
+            const field = identName(prop.name)!
+            const values = map.has(type) ? map.get(type)! : []
+            values.push(field)
+            map.set(type, values)
+        }
+        const names = Array.from(map.keys()).map(key => `${key}_${map.get(key)!.join('_')}`)
+        return prefix + `Literal_${names.join('_')}`
+    }
+
+    private computeTargetNameImpl(target: DeclarationTarget, optional: boolean, idlPrefix: string): string {
+        const prefix = optional ? PrimitiveType.OptionalPrefix : ""
+        if (target instanceof PrimitiveType) {
+            const name = target.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.ArkPrefix) : name)
+        }
+        if (ts.isTypeLiteralNode(target)) {
+            if (target.members.some(ts.isIndexSignatureDeclaration)) {
+                // For indexed access we just replace the whole type to a custom accessor.
+                return prefix + `CustomMap`
+            }
+
+            const parent = target.parent
+            if (ts.isTypeAliasDeclaration(parent)) {
+                return `${PrimitiveType.ArkPrefix}${identName(parent.name)}`
+            }
+
+            return this.computeTargetTypeLiteralName(target, prefix)
+        }
+        if (ts.isLiteralTypeNode(target)) {
+            const literal = target.literal
+            if (ts.isStringLiteral(literal) || ts.isNoSubstitutionTemplateLiteral(literal) || ts.isRegularExpressionLiteral(literal)) {
+                let name = PrimitiveType.String.getText()
+                return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.ArkPrefix) : name)
+            }
+            if (ts.isNumericLiteral(literal)) {
+                let name = PrimitiveType.Number.getText()
+                return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.ArkPrefix) : name)
+            }
+            if (literal.kind == ts.SyntaxKind.NullKeyword) {
+                // TODO: Is it correct to have undefined for null?
+                return PrimitiveType.Undefined.getText()
+            }
+        }
+        if (ts.isTemplateLiteralTypeNode(target)) {
+            // TODO: likely incorrect
+            let name = PrimitiveType.String.getText()
+                return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.ArkPrefix) : name)
+        }
+        if (ts.isTypeParameterDeclaration(target)) {
+            // TODO: likely incorrect
+            let name = PrimitiveType.CustomObject.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.ArkPrefix) : name)
+        }
+        if (ts.isEnumDeclaration(target)) {
+            const name = this.enumName(target.name)
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.ArkPrefix) : name)
+        }
+        if (ts.isUnionTypeNode(target)) {
+            const parent = target.parent
+            if (ts.isTypeAliasDeclaration(parent)) {
+                return `${PrimitiveType.ArkPrefix}${identName(parent.name)}`
+            }
+            return prefix + `Union_${target.types.map(it => this.computeTargetName(this.toTarget(it), false, "")).join("_")}`
+        }
+        if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {
+            let name = identName(target.name)
+            if (name == "Function") {
+                const name = PrimitiveType.Function.getText()
+                return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.ArkPrefix) : name)
+            }
+            return prefix + (optional ? "" : idlPrefix) + name
+        }
+        if (ts.isFunctionTypeNode(target)) {
+            let name = PrimitiveType.Function.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.ArkPrefix) : name)
+        }
+        if (ts.isTupleTypeNode(target)) {
+            return prefix + `Tuple_${target.elements.map(it => {
+                if (ts.isNamedTupleMember(it)) {
+                    return this.computeTargetName(this.toTarget(it.type), it.questionToken != undefined, "")
+                } else {
+                    return this.computeTargetName(this.toTarget(it), false, "")
+                }
+            }).join("_")}`
+        }
+        if (ts.isArrayTypeNode(target)) {
+            return prefix + `Array_` + this.computeTargetName(this.toTarget(target.elementType), false, "")
+        }
+        if (ts.isImportTypeNode(target)) {
+            return prefix + this.mapImportTypeName(target)
+        }
+        if (ts.isOptionalTypeNode(target)) {
+            let name = this.computeTargetName(this.toTarget(target.type), false, "")
+            return `${PrimitiveType.OptionalPrefix}${cleanPrefix(name, PrimitiveType.ArkPrefix)}`
+        }
+        if (ts.isParenthesizedTypeNode(target)) {
+            return this.computeTargetName(this.toTarget(target.type), optional, idlPrefix)
+        }
+        if (ts.isEnumMember(target)) {
+            return this.computeTargetName((target as any).parent as DeclarationTarget, optional, idlPrefix)
+        }
+        if (ts.isTypeReferenceNode(target)) {
+            let name = identName(target.typeName)
+            if (!target.typeArguments) throw new Error("Only type references with type arguments allowed here: " + name)
+            if (name == "Optional")
+                return this.computeTargetName(this.toTarget(target.typeArguments[0]), true, idlPrefix)
+            if (name == "Array")
+                return prefix + `Array_` + this.computeTargetName(this.toTarget(target.typeArguments[0]), false, "")
+            if (name == "Map")
+                return prefix + `Map_` + this.computeTargetName(this.toTarget(target.typeArguments[0]), false, "")
+                    + '_' + this.computeTargetName(this.toTarget(target.typeArguments[1]), false, "")
+            if (name == "Callback") {
+                return prefix + PrimitiveType.Function.getText()
+            }
+        }
+        throw new Error(`Cannot compute target name: ${(target as any).getText()} ${(target as any).kind}`)
+    }
+
+    private mapImportTypeName(type: ts.ImportTypeNode): string {
+        let name = identName(type.qualifier)!
+        switch (name) {
+            case "Resource": return "Resource"
+            case "Callback": return PrimitiveType.Function.getText()
+            default: return PrimitiveType.CustomObject.getText()
+        }
+    }
+
+    private computeTypeNameImpl(suggestedName: string | undefined, type: ts.TypeNode, optional: boolean, idlPrefix: string): string {
+        const prefix = optional ? PrimitiveType.OptionalPrefix : ""
+        if (ts.isImportTypeNode(type)) {
+            return prefix + this.mapImportTypeName(type)
+        }
+        if (ts.isTypeReferenceNode(type)) {
+            const typeName = identName(type.typeName)
+            let declaration = this.toTarget(type)
+            if (!(declaration instanceof PrimitiveType) && ts.isEnumDeclaration(declaration)) {
+                const name = this.enumName(declaration.name)
+                return (optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.ArkPrefix) : name
+            }
+            if (typeName === "Array") {
+                const elementTypeName = this.computeTypeNameImpl(undefined, type.typeArguments![0], false, "")
+                return `${prefix}Array_${elementTypeName}`
+            } else if (typeName === "Map") {
+                const keyTypeName = this.computeTypeNameImpl(undefined, type.typeArguments![0], false, "")
+                const valueTypeName = this.computeTypeNameImpl(undefined, type.typeArguments![1], false, "")
+                return `${prefix}Map_${keyTypeName}_${valueTypeName}`
+            } else if (typeName === "Callback") {
+                return prefix + typeName
+            }
+            if (!(declaration instanceof PrimitiveType)) {
+                if (ts.isUnionTypeNode(declaration) && typeName === "GestureType" ||
+                    ts.isInterfaceDeclaration(declaration) ||
+                    ts.isClassDeclaration(declaration)
+                ) {
+                    return prefix + (optional ? "" : idlPrefix) + typeName;
+                }
+            }
+            return prefix + typeName
+        }
+        if (ts.isUnionTypeNode(type)) {
+            if (suggestedName) return suggestedName
+            return prefix + `Union_${type.types.map(it => this.computeTypeNameImpl(undefined, it, optional, "")).join("_")}`
+        }
+        if (ts.isOptionalTypeNode(type)) {
+            if (suggestedName) return suggestedName
+            const name = this.computeTypeNameImpl(undefined, type.type, false, "")
+            return PrimitiveType.OptionalPrefix + cleanPrefix(name, PrimitiveType.ArkPrefix)
+        }
+        if (ts.isTupleTypeNode(type)) {
+            if (suggestedName) return suggestedName
+            return prefix + `Tuple_${type.elements.map(it => {
+                if (ts.isNamedTupleMember(it)) {
+                    return this.computeTypeNameImpl(undefined, it.type, optional, "")
+                } else {
+                    return this.computeTypeNameImpl(undefined, it, optional, "")
+                }
+
+            }).join("_")}`
+        }
+        if (ts.isParenthesizedTypeNode(type)) {
+            return this.computeTypeNameImpl(suggestedName, type.type!, optional, idlPrefix)
+        }
+        if (ts.isTypeLiteralNode(type)) {
+            if (suggestedName) return suggestedName
+            return this.computeTargetTypeLiteralName(type, prefix)
+        }
+        if (ts.isLiteralTypeNode(type)) {
+            const literal = type.literal
+            if (ts.isStringLiteral(literal) || ts.isNoSubstitutionTemplateLiteral(literal) || ts.isRegularExpressionLiteral(literal)) {
+                return PrimitiveType.String.getText()
+            }
+            if (ts.isNumericLiteral(literal)) {
+                return PrimitiveType.Number.getText()
+            }
+            if (literal.kind == ts.SyntaxKind.NullKeyword) {
+                return PrimitiveType.Undefined.getText()
+            }
+            throw new Error(`Unknown literal type: ${type.getText()}`)
+        }
+        if (ts.isTemplateLiteralTypeNode(type)) {
+            const name = PrimitiveType.String.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.ArkPrefix) : name)
+        }
+        if (ts.isFunctionTypeNode(type)) {
+            const name = PrimitiveType.Function.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.ArkPrefix) : name)
+        }
+        if (ts.isArrayTypeNode(type)) {
+            if (suggestedName) return suggestedName
+            return prefix + `Array_` + this.computeTypeNameImpl(undefined, type.elementType, false, "")
+        }
+        if (type.kind == ts.SyntaxKind.NumberKeyword) {
+            const name = PrimitiveType.Number.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.ArkPrefix) : name)
+        }
+        if (
+            type.kind == ts.SyntaxKind.UndefinedKeyword ||
+            type.kind == ts.SyntaxKind.NullKeyword ||
+            type.kind == ts.SyntaxKind.VoidKeyword
+        ) {
+            return PrimitiveType.Undefined.getText()
+        }
+        if (type.kind == ts.SyntaxKind.StringKeyword) {
+            const name = PrimitiveType.String.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.ArkPrefix) : name)
+        }
+        if (type.kind == ts.SyntaxKind.BooleanKeyword) {
+            const name = PrimitiveType.Boolean.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.ArkPrefix) : name)
+        }
+        if (type.kind == ts.SyntaxKind.ObjectKeyword ||
+            type.kind == ts.SyntaxKind.UnknownKeyword) {
+            const name = PrimitiveType.CustomObject.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.ArkPrefix) : name)
+        }
+        if (type.kind == ts.SyntaxKind.AnyKeyword) {
+            const name = PrimitiveType.CustomObject.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.ArkPrefix) : name)
+        }
+        if (ts.isTypeParameterDeclaration(type)) {
+            const name = PrimitiveType.CustomObject.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.ArkPrefix) : name)
+        }
+        if (ts.isIndexedAccessTypeNode(type)) {
+            const name = PrimitiveType.CustomObject.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.ArkPrefix) : name)
+        }
+        if (ts.isEnumMember(type)) {
+            const name = this.enumName(type.name)
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.ArkPrefix) : name)
+        }
+        throw new Error(`Cannot compute type name: ${type.getText()} ${type.kind}`)
+    }
+
+    public enumName(name: ts.PropertyName): string {
+        // TODO: support namespaces in other declarations.
+        return `${PrimitiveType.ArkPrefix}${identNameWithNamespace(name, this.language)}`
+    }
+
+    public get orderedDependencies(): DeclarationTarget[] {
+        return this._orderedDependencies
+    }
+    private _orderedDependencies: DeclarationTarget[] = []
+
+    public get orderedDependenciesToGenerate(): DeclarationTarget[] {
+        return this._orderedDependenciesToGenerate
+    }
+    private _orderedDependenciesToGenerate: DeclarationTarget[] = []
+
+    serializerName(name: string): string {
+        return `write${name}`
+    }
+
+    deserializerName(name: string): string {
+        return `read${name}`
+    }
+
+    declTargetConvertor(param: string, target: DeclarationTarget, isOptionalParam = false): ArgConvertor {
+        if (target instanceof PrimitiveType) {
+            if (target == PrimitiveType.Number || target == PrimitiveType.Int32) {
+                return new NumberConvertor(param)
+            }
+            if (target == PrimitiveType.Boolean) {
+                return new BooleanConvertor(param)
+            }
+            throw new Error("Unsupported primitive type: " + target.getText())
+        }
+        throw new Error("Unsupported type: " + target.getText())
+    }
+
+    typeConvertor(param: string,
+                  type: ts.TypeNode,
+                  isOptionalParam: boolean = false,
+                  typeNodeNameConvertor: TypeNodeNameConvertor | undefined = undefined): ArgConvertor {
+        if (!type) throw new Error("Impossible")
+        if (isOptionalParam) {
+            return new OptionConvertor(param, this, type, typeNodeNameConvertor)
+        }
+        if (type.kind == ts.SyntaxKind.ObjectKeyword) {
+            return new CustomTypeConvertor(param, "Object", false)
+        }
+        if (type.kind == ts.SyntaxKind.UndefinedKeyword || type.kind == ts.SyntaxKind.VoidKeyword) {
+            return new UndefinedConvertor(param)
+        }
+        if (type.kind == ts.SyntaxKind.NullKeyword) {
+            throw new Error("Unsupported null")
+        }
+        if (type.kind == ts.SyntaxKind.NumberKeyword || type.kind == ts.SyntaxKind.BigIntKeyword) {
+            return new NumberConvertor(param)
+        }
+        if (type.kind == ts.SyntaxKind.StringKeyword) {
+            return new StringConvertor(param, type, typeNodeNameConvertor)
+        }
+        if (type.kind == ts.SyntaxKind.BooleanKeyword) {
+            return new BooleanConvertor(param)
+        }
+        if (ts.isImportTypeNode(type)) {
+            return new ImportTypeConvertor(param, this, type)
+        }
+        if (ts.isTypeReferenceNode(type)) {
+            const declaration = getDeclarationsByNode(this.typeChecker!, type.typeName)[0]
+            return this.declarationConvertor(param, type, declaration, typeNodeNameConvertor)
+        }
+        if (ts.isEnumMember(type)) {
+            return new EnumConvertor(param, type.parent, this.isStringEnum(type.parent.members), this.language)
+        }
+        if (ts.isUnionTypeNode(type)) {
+            return new UnionConvertor(param, this, type, typeNodeNameConvertor)
+        }
+        if (ts.isTypeLiteralNode(type)) {
+            return new AggregateConvertor(param, this, type, typeNodeNameConvertor)
+        }
+        if (ts.isArrayTypeNode(type)) {
+            return new ArrayConvertor(param, this, type, type.elementType, typeNodeNameConvertor)
+        }
+        if (ts.isLiteralTypeNode(type)) {
+            if (type.literal.kind == ts.SyntaxKind.NullKeyword) {
+                return new NullConvertor(param)
+            }
+            if (type.literal.kind == ts.SyntaxKind.StringLiteral) {
+                return new StringConvertor(param, type, typeNodeNameConvertor)
+            }
+            throw new Error(`Unsupported literal type: ${type.literal.kind}` + type.getText())
+        }
+        if (ts.isTupleTypeNode(type)) {
+            return new TupleConvertor(param, this, type)
+        }
+        if (ts.isFunctionTypeNode(type)) {
+            // todo check callbacks
+            // if (isCallback(type, this)) { 
+            //     return new CallbackFunctionConvertor(param, this, type)
+            // }
+            return new FunctionConvertor(param, this, type)
+        }
+        if (ts.isParenthesizedTypeNode(type)) {
+            return this.typeConvertor(param, type.type, isOptionalParam)
+        }
+        if (ts.isOptionalTypeNode(type)) {
+            return new OptionConvertor(param, this, type.type)
+        }
+        if (ts.isTemplateLiteralTypeNode(type)) {
+            return new StringConvertor(param, type, typeNodeNameConvertor)
+        }
+        if (ts.isNamedTupleMember(type)) {
+            return this.typeConvertor(param, type.type, isOptionalParam)
+        }
+        if (type.kind == ts.SyntaxKind.AnyKeyword ||
+            type.kind == ts.SyntaxKind.UnknownKeyword ||
+            ts.isIndexedAccessTypeNode(type)
+        ) {
+            return new CustomTypeConvertor(param, "Any", false)
+        }
+        if (ts.isTypeParameterDeclaration(type)) {
+            // TODO: unlikely correct.
+            return new CustomTypeConvertor(param, identName(type.name)!, false)
+        }
+        console.log(type)
+        throw new Error(`Cannot convert: ${asString(type)} ${type.getText()} ${type.kind}`)
+    }
+
+    private _currentContext: string | undefined = undefined
+    getCurrentContext(): string | undefined {
+        return this._currentContext
+    }
+    setCurrentContext(context: string | undefined) {
+        this._currentContext = context
+    }
+
+    private customConvertor(typeName: ts.EntityName | undefined, param: string, type: ts.TypeReferenceNode | ts.ImportTypeNode): ArgConvertor | undefined {
+        // let name = getNameWithoutQualifiersRight(typeName)
+        // switch (name) {
+        //     case `Dimension`:
+        //     case `Length`:
+        //         return new LengthConvertor(name, param)
+        //     case `Date`:
+        //         return new CustomTypeConvertor(param, name, name)
+        //     case `AttributeModifier`:
+        //         return new PredefinedConvertor(param, "AttributeModifier<any>", "AttributeModifier", "CustomObject")
+        //     case `AnimationRange`:
+        //         return new CustomTypeConvertor(param, "AnimationRange", "AnimationRange<number>")
+        //     case `ContentModifier`:
+        //         return new CustomTypeConvertor(param, "ContentModifier", "ContentModifier<any>")
+        //     case `Record`:
+        //         return new CustomTypeConvertor(param, "Record", "Record<string, string>")
+        //     case `Array`:
+        //         return new ArrayConvertor(param, this, type, type.typeArguments![0])
+        //     case `Map`:
+        //         return new MapConvertor(param, this, type, type.typeArguments![0], type.typeArguments![1])
+        //     case `Callback`:
+        //         if (ts.isTypeReferenceNode(type) && isCallback(type, this)) {
+        //             return new CallbackTypeReferenceConvertor(param, this, type)
+        //         }
+        //         return new FunctionConvertor(param, this, type)
+        //     case `Optional`:
+        //         if (type.typeArguments && type.typeArguments.length == 1)
+        //             return new OptionConvertor(param, this, type.typeArguments![0])
+        // }
+        return undefined
+    }
+
+    isPointerDeclaration(target: DeclarationTarget, isOptional: boolean = false): boolean {
+        if (isOptional) return true
+        if (target instanceof PrimitiveType) return target.isPointer
+        if (ts.isEnumDeclaration(target)) return false
+        if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) return true
+        return true
+    }
+
+    declarationConvertor(param: string, type: ts.TypeReferenceNode, declaration: ts.NamedDeclaration | undefined,
+                         typeNodeNameConvertor: TypeNodeNameConvertor | undefined): ArgConvertor {
+        const entityName = typeEntityName(type)
+        if (!declaration) {
+            console.log(`Declaration not found for: ${type.getText()}`)
+            throw Error()
+        }
+        if (ts.isImportSpecifier(declaration)) {
+            let imprtExprt = new ImportExport(this.typeChecker!)
+            declaration = imprtExprt.findRealDeclaration(declaration.name) ?? declaration
+        }
+        if (PeerGeneratorConfig.isConflictedDeclaration(declaration))
+            return new CustomTypeConvertor(param, identName(declaration.name)!, false)
+        const declarationName = identName(declaration.name)!
+        let customConvertor = this.customConvertor(entityName, param, type)
+        if (customConvertor) {
+            return customConvertor
+        }
+        if (ts.isEnumDeclaration(declaration)) {
+            return new EnumConvertor(param, declaration, this.isStringEnum(declaration.members), this.language)
+        }
+        if (ts.isEnumMember(declaration)) {
+            return new EnumConvertor(param, declaration.parent, this.isStringEnum(declaration.parent.members), this.language)
+        }
+        if (ts.isTypeAliasDeclaration(declaration)) {
+            return new TypeAliasConvertor(param, this, declaration, typeNodeNameConvertor)
+        }
+        let processor = new WrapperProcessor(this.typeChecker!)
+        if (ts.isInterfaceDeclaration(declaration)) {
+            if (processor.isWrapper(declaration)) {
+                return new WrapperClassConvertor(declarationName, param, this, declaration)
+            }
+            return new InterfaceConvertor(declarationName, param, declaration, this)
+        }
+        if (ts.isClassDeclaration(declaration)) {
+            if (processor.isWrapper(declaration)) {
+                return new WrapperClassConvertor(declarationName, param, this, declaration)
+            }
+            return new ClassConvertor(declarationName, param, declaration, this)
+        }
+        if (ts.isTypeParameterDeclaration(declaration)) {
+            // TODO: incorrect, we must use actual, not formal type parameter.
+            return new CustomTypeConvertor(param, identName(declaration.name)!, false)
+        }
+        console.log(`${declaration.getText()}`)
+        throw new Error(`Unknown kind: ${declaration.kind}`)
+    }
+
+    // private printStructsCHead(name: string, descriptor: StructDescriptor, structs: IndentedPrinter) {
+    //     if (descriptor.isArray) {
+    //         // Forward declaration of element type.
+    //         let elementTypePointer = descriptor.getFields()[0].declaration
+    //         if (!(elementTypePointer instanceof PointerType))
+    //             throw new Error(`Unexpected ${this.computeTargetName(elementTypePointer, false)}`)
+    //         let elementType = elementTypePointer.pointed
+    //         if (!(elementType instanceof PrimitiveType)) {
+    //             let name = this.computeTargetName(elementType, false)
+    //             if (ts.isEnumDeclaration(elementType)) {
+    //                 structs.print(`typedef int32_t ${this.enumName(elementType.name)};`)
+    //             }
+    //         }
+    //     }
+    //     if (descriptor.isPacked) {
+    //         structs.print(`#ifdef _MSC_VER`)
+    //         structs.print(`#pragma pack(push, 1)`)
+    //         structs.print(`#endif`)
+    //     }
+    //     structs.print(`typedef struct ${name} {`)
+    //     structs.pushIndent()
+    // }
+
+    // private printStructsCTail(name: string, needPacked: boolean, structs: IndentedPrinter) {
+    //     structs.popIndent()
+    //     if (needPacked) {
+    //         structs.print(`#ifdef _MSC_VER`)
+    //         structs.print(`}`)
+    //         structs.print(`#pragma pack(pop)`)
+    //         structs.print(`#else`)
+    //         structs.print(`} __attribute__((packed))`)
+    //         structs.print(`#endif`)
+    //         structs.print(`${name};`)
+    //     } else {
+    //         structs.print(`} ${name};`)
+    //     }
+    // }
+
+    // private printStructField(structs: IndentedPrinter, field: FieldRecord) {
+    //     const prefix = field.optional ? PrimitiveType.OptionalPrefix : ""
+    //     let name = this.computeTargetName(field.declaration, false)
+    //     if (field.optional) {
+    //         name = cleanPrefix(name, PrimitiveType.ArkPrefix)
+    //     }
+    //     structs.print(`${this.cFieldKind(field.declaration)}${prefix}${name} ${field.name};`)
+    // }
+
+    allOptionalTypes(): Set<string> {
+        const seenNames = new Set<string>()
+        seenNames.clear()
+        for (let target of this.orderedDependencies) {
+            if (target instanceof PointerType) continue
+            let nameAssigned = this.computeTargetName(target, false)
+            if (nameAssigned === PrimitiveType.Tag.getText()) {
+                continue
+            }
+            if (!nameAssigned) {
+                throw new Error(`No assigned name for ${(target as ts.TypeNode).getText()} shall be ${this.computeTargetName(target, false)}`)
+            }
+            if (seenNames.has(nameAssigned)) continue
+            const nameOptional = PrimitiveType.OptionalPrefix + cleanPrefix(nameAssigned, PrimitiveType.ArkPrefix)
+            seenNames.add(nameOptional)
+        }
+        return seenNames
+    }
+
+    allLiteralTypes(): Map<string, string[]> {
+        const literals = new Map<string, string[]>()
+        for (let target of this.orderedDependencies) {
+
+            let nameAssigned = this.computeTargetName(target, false)
+            if (nameAssigned === PrimitiveType.Tag.getText()) {
+                continue
+            }
+            if (!nameAssigned) {
+                throw new Error(`No assigned name for ${(target as ts.TypeNode).getText()} shall be ${this.computeTargetName(target, false)}`)
+            }
+            if (literals.has(nameAssigned)) continue
+            if (nameAssigned.startsWith("Literal_")) {
+                const fields = this.targetStruct(target).getFields()
+                literals.set(nameAssigned, fields.map(it => it.name))
+            }
+
+        }
+        return literals
+    }
+
+    // allUnionTypes() {
+
+    //     type Selector = {
+    //         id: number;
+    //         name: string;
+    //     }
+
+    //     const unions = new Map<string, Selector[]>()
+    //     for (let target of this.orderedDependencies) {
+    //         let nameAssigned = this.computeTargetName(target, false)
+    //         if (nameAssigned === PrimitiveType.Tag.getText()) {
+    //             continue
+    //         }
+    //         if (!nameAssigned) {
+    //             throw new Error(`No assigned name for ${(target as ts.TypeNode).getText()} shall be ${this.computeTargetName(target, false)}`)
+    //         }
+
+    //         if (this.isMaybeWrapped(target, ts.isUnionTypeNode)) {
+    //             const selectors: Selector[] = []
+    //             this.targetStruct(target).getFields().forEach((field, index) => {
+    //                 if (index === 0) return
+    //                 selectors.push({ id: index, name: field.name })
+    //             })
+
+    //             unions.set(nameAssigned, selectors )
+    //         }
+    //     }
+    //     return unions
+    // }
+
+    // generateStructs(structs: IndentedPrinter, typedefs: IndentedPrinter, writeToString: LanguageWriter) {
+    //     const seenNames = new Set<string>()
+    //     seenNames.clear()
+    //     let noDeclaration = [PrimitiveType.Int32, PrimitiveType.Tag, PrimitiveType.Number, PrimitiveType.Boolean, PrimitiveType.String]
+    //     for (let target of this.orderedDependencies) {
+    //         let nameAssigned = this.computeTargetName(target, false)
+    //         if (nameAssigned === PrimitiveType.Tag.getText()) {
+    //             continue
+    //         }
+    //         if (!nameAssigned) {
+    //             throw new Error(`No assigned name for ${(target as ts.TypeNode).getText()} shall be ${this.computeTargetName(target, false)}`)
+    //         }
+    //         if (seenNames.has(nameAssigned)) continue
+    //         seenNames.add(nameAssigned)
+    //         let isPointer = this.isPointerDeclaration(target)
+    //         let isEnum = !(target instanceof PrimitiveType) && ts.isEnumDeclaration(target)
+    //         let isAccessor = checkDeclarationTargetMaterialized(target)
+    //         let noBasicDecl = isAccessor || (target instanceof PrimitiveType && noDeclaration.includes(target))
+    //         const nameOptional = PrimitiveType.OptionalPrefix + cleanPrefix(nameAssigned, PrimitiveType.ArkPrefix)
+    //         let isUnion = this.isMaybeWrapped(target, ts.isUnionTypeNode)
+    //         if (isEnum) {
+    //             structs.print(`typedef ${PrimitiveType.Int32.getText()} ${nameAssigned};`)
+    //             if (!seenNames.has(nameOptional)) {
+    //                 seenNames.add(nameOptional)
+    //                 structs.print(`typedef struct ${nameOptional} {`)
+    //                 structs.pushIndent()
+    //                 structs.print(`enum ${PrimitiveType.Tag.getText()} tag;`)
+    //                 structs.print(`${nameAssigned} value;`)
+    //                 structs.popIndent()
+    //                 structs.print(`} ${nameOptional};`)
+    //                 this.writeOptional(nameOptional, writeToString, isPointer)
+    //                 this.writeRuntimeType(target, nameOptional, true, writeToString)
+    //             }
+    //             continue
+    //         }
+    //         const structDescriptor = this.targetStruct(target)
+    //         if (!noBasicDecl && !this.ignoreTarget(target)) {
+
+    //             // TODO: fix it to define array type after its elements types
+    //             if (nameAssigned === `Array_GestureRecognizer`) {
+    //                 structs.print(`typedef Ark_Materialized ${PrimitiveType.ArkPrefix}GestureRecognizer;`)
+    //             }
+
+    //             this.printStructsCHead(nameAssigned, structDescriptor, structs)
+    //             if (isUnion) {
+    //                 const selector = structDescriptor.getFields().find(value => {return value.name === "selector"})
+    //                 if (selector) {
+    //                     this.printStructField(structs, selector)
+    //                 }
+    //                 structs.print("union {")
+    //                 structs.pushIndent()
+    //                 structDescriptor.getFields().filter(value => value.name !== "selector")
+    //                     .forEach(it => this.printStructField(structs, it))
+    //                 structs.popIndent()
+    //                 structs.print("};")
+    //             } else {
+    //                 if (structDescriptor.getFields().length === 0) {
+    //                     structs.print(`void *handle;`)
+    //                 }
+    //                 structDescriptor.getFields().forEach(it => this.printStructField(structs, it))
+    //             }
+    //             this.printStructsCTail(nameAssigned, structDescriptor.isPacked, structs)
+    //         }
+    //         if (isAccessor) {
+    //             structs.print(`typedef Ark_Materialized ${nameAssigned};`)
+    //         }
+    //         let skipWriteToString = (target instanceof PrimitiveType) || ts.isEnumDeclaration(target) || ts.isFunctionTypeNode(target)
+    //         if (!noBasicDecl && !skipWriteToString) {
+    //             this.generateWriteToString(nameAssigned, target, writeToString, isPointer)
+    //         }
+    //         this.writeRuntimeType(target, nameAssigned, false, writeToString)
+    //         if (seenNames.has(nameOptional)) continue
+    //         seenNames.add(nameOptional)
+    //         if (!(target instanceof PointerType) && nameAssigned != "Optional" && nameAssigned != "RelativeIndexable") {
+    //             this.printStructsCHead(nameOptional, structDescriptor, structs)
+    //             structs.print(`enum ${PrimitiveType.Tag.getText()} tag;`)
+    //             structs.print(`${nameAssigned} value;`)
+    //             this.printStructsCTail(nameOptional, structDescriptor.isPacked, structs)
+    //             this.writeOptional(nameOptional, writeToString, isPointer)
+    //             this.writeRuntimeType(target, nameOptional, true, writeToString)
+    //         }
+    //     }
+    //     for (let declarationTarget of this.typeMap.values()) {
+    //         let target = declarationTarget[0]
+    //         let aliasNames = declarationTarget[1]
+    //         let declarationName = this.computeTargetName(target, false)
+    //         aliasNames.forEach(aliasName => this.addNameAlias(target, declarationName, aliasName, seenNames, typedefs))
+    //     }
+    //     // TODO: hack, remove me!
+    //     typedefs.print(`typedef ${PrimitiveType.OptionalPrefix}Length ${PrimitiveType.OptionalPrefix}Dimension;`)
+    // }
+
+    // private writeRuntimeType(target: DeclarationTarget, targetTypeName: string, isOptional: boolean, writer: LanguageWriter) {
+    //     const resultType = new Type("Ark_RuntimeType")
+    //     const op = this.writeRuntimeTypeOp(target, targetTypeName, resultType, isOptional, writer)
+    //     if (op) {
+    //         writer.print("template <>")
+    //         writer.writeMethodImplementation(
+    //             new Method("runtimeType",
+    //                 new NamedMethodSignature(resultType, [new Type(`const ${targetTypeName}&`)], ["value"]),
+    //                 [MethodModifier.INLINE]),
+    //             op)
+    //     }
+    // }
+
+    // private writeRuntimeTypeOp(
+    //     target: DeclarationTarget, targetTypeName: string, resultType: Type, isOptional: boolean, writer: LanguageWriter
+    // ) : ((writer: LanguageWriter) => void) | undefined
+    // {
+    //     let result: LanguageExpression
+    //     if (isOptional) {
+    //         result = writer.makeTernary(writer.makeDefinedCheck("value.tag"),
+    //             writer.makeRuntimeType(RuntimeType.OBJECT), writer.makeRuntimeType(RuntimeType.UNDEFINED))
+    //     } else if (target instanceof PointerType) {
+    //         return
+    //     } else if (target instanceof PrimitiveType) {
+    //         switch (target) {
+    //             case PrimitiveType.Boolean:
+    //                 result = writer.makeRuntimeType(RuntimeType.BOOLEAN)
+    //                 break
+    //             case PrimitiveType.CustomObject:
+    //             case PrimitiveType.Materialized:
+    //             case PrimitiveType.NativePointer:
+    //             case PrimitiveType.Tag:
+    //                 return undefined
+    //             case PrimitiveType.Function:
+    //                 result = writer.makeRuntimeType(RuntimeType.FUNCTION)
+    //                 break
+    //             case PrimitiveType.Int32:
+    //             case PrimitiveType.Number:
+    //                 result = writer.makeRuntimeType(RuntimeType.NUMBER)
+    //                 break
+    //             case PrimitiveType.Length:
+    //                 result = writer.makeCast(writer.makeString("value.type"), resultType)
+    //                 break
+    //             case PrimitiveType.String:
+    //                 result = writer.makeRuntimeType(RuntimeType.STRING)
+    //                 break
+    //             case PrimitiveType.Undefined:
+    //                 result = writer.makeRuntimeType(RuntimeType.UNDEFINED)
+    //                 break
+    //             default:
+    //                 throw new Error(`Unexpected PrimitiveType ${target.getText()}`)
+    //         }
+    //     } else if (ts.isEnumDeclaration(target)) {
+    //         result = writer.makeRuntimeType(RuntimeType.NUMBER)
+    //     } else if (checkDeclarationTargetMaterialized(target)) {
+    //         return undefined
+    //     } else if (ts.isOptionalTypeNode(target)) {
+    //         result = writer.makeTernary(writer.makeDefinedCheck("value.tag"),
+    //             writer.makeRuntimeType(RuntimeType.OBJECT), writer.makeRuntimeType(RuntimeType.UNDEFINED))
+    //     } else if (ts.isUnionTypeNode(target)) {
+    //         return writer => {
+    //             writer.print("switch (value.selector) {")
+    //             writer.pushIndent()
+    //             for (let i = 0; i < target.types.length; i++) {
+    //                 writer.print(`case ${i}: return runtimeType(value.value${i});`)
+    //             }
+    //             writer.print(`default: throw "Bad selector in ${targetTypeName}: " + std::to_string(value.selector);`)
+    //             writer.popIndent()
+    //             writer.print("}")
+    //         }
+    //     } else {
+    //         result = writer.makeRuntimeType(RuntimeType.OBJECT)
+    //     }
+    //     return writer => writer.writeStatement(writer.makeReturn(result))
+    // }
+
+    // private addNameAlias(target: DeclarationTarget, declarationName: string, aliasName: string,
+    //     seenNames: Set<string>, typedefs: IndentedPrinter
+    // ): void {
+    //     if (seenNames.has(aliasName)) return
+    //     if (this.ignoreTarget(target) && target != PrimitiveType.CustomObject) return
+    //     seenNames.add(aliasName)
+    //     typedefs.print(`typedef ${declarationName} ${aliasName};`)
+    //     // TODO: hacky
+    //     aliasName = cleanPrefix(aliasName, PrimitiveType.ArkPrefix)
+    //     let optAliasName = `${PrimitiveType.OptionalPrefix}${aliasName}`
+    //     if (!declarationName.startsWith(PrimitiveType.OptionalPrefix) && !seenNames.has(optAliasName)) {
+    //         seenNames.add(optAliasName)
+    //         declarationName = cleanPrefix(declarationName, PrimitiveType.ArkPrefix)
+    //         typedefs.print(`typedef ${PrimitiveType.OptionalPrefix}${declarationName} ${optAliasName};`)
+    //     }
+    // }
+
+    // cFieldKind(declaration: DeclarationTarget): string {
+    //     if (declaration instanceof PointerType) return this.cFieldKind(declaration.pointed)
+    //     if (declaration instanceof PrimitiveType) return ""
+    //     if (ts.isEnumDeclaration(declaration)) return ""
+    //     if (ts.isImportTypeNode(declaration)) return ""
+    //     if (checkDeclarationTargetMaterialized(declaration)) return ""
+    //     return `struct `
+    // }
+
+    writeOptional(nameOptional: string, printer: LanguageWriter, isPointer: boolean) {
+        printer.print(`template <>`)
+        printer.print(`inline void WriteToString(string* result, const ${nameOptional}* value) {`)
+        printer.print(`result->append("{.tag=");`)
+        printer.print(`result->append(tagNameExact((${PrimitiveType.Tag.getText()})(value->tag)));`)
+        printer.print(`result->append(", .value=");`)
+        printer.pushIndent()
+        printer.print(`if (value->tag != ${PrimitiveType.UndefinedTag}) {`)
+        printer.pushIndent()
+        printer.print(`WriteToString(result, ${isPointer ? "&" : ""}value->value);`)
+        printer.popIndent()
+        printer.print(`} else {`)
+        printer.pushIndent()
+        printer.print(`${PrimitiveType.Undefined.getText()} undefined = { 0 };`)
+        printer.print(`WriteToString(result, undefined);`)
+        printer.popIndent()
+        printer.print(`}`)
+        printer.popIndent()
+        printer.print(`result->append("}");`)
+        printer.print(`}`)
+    }
+
+    writeOptionalConvertor(nameOptional: string, printer: LanguageWriter, isPointer: boolean) {
+        printer.print(`template <>`)
+        printer.print(`inline void convertor(const ${nameOptional}* value) {`)
+        printer.pushIndent()
+        printer.print(`if (value->tag != ${PrimitiveType.UndefinedTag}) {`)
+        printer.pushIndent()
+        printer.print(`convertor(${isPointer ? "&" : ""}value->value);`)
+        printer.popIndent()
+        printer.print(`} else {`)
+        printer.pushIndent()
+        printer.print(`${PrimitiveType.Undefined.getText()} undefined = { 0 };`)
+        printer.print(`convertor(undefined);`)
+        printer.popIndent()
+        printer.print(`}`)
+        printer.popIndent()
+        printer.print(`}`)
+    }
+
+    visitDeclaration(
+        target: DeclarationTarget,
+        visitor: StructVisitor,
+    ): void {
+        if (this.isMaybeWrapped(target, ts.isUnionTypeNode)) {
+            this.targetStruct(target).getFields().forEach((field, index) => {
+                if (index === 0) return
+                visitor.visitUnionField(field, index - 1)
+            })
+        } else {
+            visitor.visitInseparable()
+        }
+    }
+
+    private isMaybeWrapped(target: DeclarationTarget, predicate: (type: ts.Node) => boolean): boolean {
+        if (target instanceof PrimitiveType) return false
+        return predicate(target) ||
+            ts.isParenthesizedTypeNode(target) &&
+            this.isDeclarationTarget(target.type) &&
+            predicate(target.type)
+    }
+
+    // private generateArrayWriteToString(name: string, target: DeclarationTarget, printer: LanguageWriter) {
+    //     if (target instanceof PrimitiveType) throw new Error("Impossible")
+    //     let elementType = ts.isArrayTypeNode(target)
+    //         ? target.elementType
+    //         : ts.isTypeReferenceNode(target) && target.typeArguments
+    //             ? target.typeArguments[0]
+    //             : undefined
+
+    //     if (!elementType) throw new Error("Impossible")
+    //     let convertor = this.typeConvertor("param", elementType)
+    //     let isPointerField = convertor.isPointerType()
+    //     let elementNativeType = convertor.nativeType(false)
+    //     let constCast = isPointerField ? `(const ${elementNativeType}*)` : ``
+
+    //     printer.print(`inline void WriteToString(string* result, const ${name}* value, const std::string& ptrName = std::string()) {`)
+    //     printer.pushIndent()
+    //     printer.print(`result->append("{");`)
+    //     printer.print(`if (ptrName.empty()) {`)
+    //     printer.pushIndent()
+    //     printer.print(`int32_t count = value->length;`)
+    //     printer.print(`if (count > 0) result->append("{");`)
+    //     printer.print(`for (int i = 0; i < count; i++) {`)
+    //     printer.pushIndent()
+    //     printer.print(`if (i > 0) result->append(", ");`)
+    //     printer.print(`WriteToString(result, ${constCast}${isPointerField ? "&" : ""}value->array[i]);`)
+    //     printer.popIndent()
+    //     printer.print(`}`)
+    //     printer.print(`if (count == 0) result->append("{}");`)
+    //     printer.print(`if (count > 0) result->append("}");`)
+    //     printer.popIndent()
+    //     printer.print(`} else {`)
+    //     printer.pushIndent()
+    //     printer.print(`result->append(ptrName + ".data()");`)
+    //     printer.popIndent()
+    //     printer.print(`}`)
+    //     printer.print(`result->append(", .length=");`)
+    //     printer.print(`result->append(std::to_string(value->length));`)
+    //     printer.print(`result->append("}");`)
+    //     printer.popIndent()
+    //     printer.print(`}`)
+    // }
+
+    // private generateStdArrayDefinition(name: string, target: DeclarationTarget, printer: LanguageWriter) {
+    //     if (target instanceof PrimitiveType) throw new Error("Impossible")
+    //     let elementType = ts.isArrayTypeNode(target)
+    //         ? target.elementType
+    //         : ts.isTypeReferenceNode(target) && target.typeArguments
+    //             ? target.typeArguments[0]
+    //             : undefined
+
+    //     if (!elementType) throw new Error("Impossible")
+    //     let convertor = this.typeConvertor("param", elementType)
+    //     let isPointerField = convertor.isPointerType()
+    //     let elementNativeType = convertor.nativeType(false)
+    //     let constCast = isPointerField ? `(const ${elementNativeType}*)` : ``
+
+    //     // Provide prototype of element printer.
+    //     printer.print(`template <>`)
+    //     printer.print(`inline void WriteToString(string* result, const ${elementNativeType}${isPointerField ? "*" : ""} value);`)
+
+    //     // Printer.
+    //     printer.print(`inline void generateStdArrayDefinition(string* result, const ${name}* value) {`)
+    //     printer.pushIndent()
+    //     printer.print(`int32_t count = value->length;`)
+    //     printer.print(`result->append("std::array<${elementNativeType}, " + std::to_string(count) + ">{{");`)
+    //     printer.print(`for (int i = 0; i < count; i++) {`);
+    //     printer.pushIndent()
+    //     printer.print(`std::string tmp;`)
+    //     printer.print(`WriteToString(result, ${constCast}${isPointerField ? "&" : ""}value->array[i]);`)
+    //     printer.print(`result->append(tmp);`);
+    //     printer.print(`result->append(", ");`)
+    //     printer.popIndent()
+    //     printer.print(`}`)
+    //     printer.print(`result->append("}}");`)
+    //     printer.popIndent()
+    //     printer.print(`}`)
+    // }
+
+    // private generateMapWriteToString(name: string, target: DeclarationTarget, printer: LanguageWriter) {
+    //     if (target instanceof PrimitiveType)
+    //         throw new Error("Impossible")
+    //     const [keyType, valueType] = ts.isTypeReferenceNode(target) && target.typeArguments
+    //         ? target.typeArguments
+    //         : [undefined, undefined]
+    //     if (!keyType || !valueType)
+    //         throw new Error("Impossible")
+    //     const keyConvertor = this.typeConvertor("_", keyType)
+    //     const valueConvertor = this.typeConvertor("_", valueType)
+    //     let isPointerKeyField = keyConvertor.isPointerType()
+    //     let isPointerValueField = valueConvertor.isPointerType()
+    //     let keyNativeType = keyConvertor.nativeType(false)
+    //     let valueNativeType = valueConvertor.nativeType(false)
+    //     let keyConstCast = isPointerKeyField ? `(const ${keyNativeType}*)` : ``
+    //     let valueConstCast = isPointerValueField ? `(const ${valueNativeType}*)` : ``
+
+    //     // Provide prototype of keys printer.
+    //     printer.print(`template <>`)
+    //     printer.print(`inline void WriteToString(string* result, const ${keyNativeType}${isPointerKeyField ? "*" : ""} value);`)
+    //     // Provide prototype of values printer.
+    //     printer.print(`template <>`)
+    //     printer.print(`inline void WriteToString(string* result, const ${valueNativeType}${isPointerValueField ? "*" : ""} value);`)
+
+    //     // Printer.
+    //     printer.print(`template <>`)
+    //     printer.print(`inline void WriteToString(string* result, const ${name}* value) {`)
+    //     printer.pushIndent()
+    //     printer.print(`result->append("{");`)
+    //     printer.print(`int32_t count = value->size;`)
+    //     printer.print(`for (int i = 0; i < count; i++) {`)
+    //     printer.pushIndent()
+    //     printer.print(`if (i > 0) result->append(", ");`)
+    //     printer.print(`WriteToString(result, ${keyConstCast}${isPointerKeyField ? "&" : ""}value->keys[i]);`)
+    //     printer.print(`result->append(": ");`)
+    //     printer.print(`WriteToString(result, ${valueConstCast}${isPointerValueField ? "&" : ""}value->values[i]);`)
+    //     printer.popIndent()
+    //     printer.print(`}`)
+    //     printer.print(`result->append("}");`)
+    //     printer.popIndent()
+    //     printer.print(`}`)
+    // }
+
+    // private generateWriteToString(name: string, target: DeclarationTarget, printer: LanguageWriter, isPointer: boolean) {
+    //     if (target instanceof PrimitiveType) throw new Error("Impossible")
+
+    //     this.setCurrentContext(`writeToString(${name})`)
+    //     let isUnion = this.isMaybeWrapped(target, ts.isUnionTypeNode)
+    //     let isArray = this.isMaybeWrapped(target, ts.isArrayTypeNode)
+    //     let isMap = ts.isTypeReferenceNode(target) && identName(target.typeName) === "Map"
+    //     let isOptional = this.isMaybeWrapped(target, ts.isOptionalTypeNode)
+    //     let isTuple = this.isMaybeWrapped(target, ts.isTupleTypeNode)
+    //     let access = isPointer ? "->" : "."
+
+    //     // treat Array<T> as array
+    //     if (!isArray && ts.isTypeReferenceNode(target)) {
+    //         isArray = identName(target.typeName) === "Array"
+    //     }
+    //     if (isArray) {
+    //         this.generateStdArrayDefinition(name, target, printer)
+    //         this.generateArrayWriteToString(name, target, printer)
+    //     } else if (isMap) {
+    //         this.generateMapWriteToString(name, target, printer)
+    //     } else {
+    //         printer.print(`template <>`)
+    //         printer.print(`inline void WriteToString(string* result, const ${name}${isPointer ? "*" : ""} value) {`)
+    //         printer.pushIndent()
+
+    //         if (isUnion) {
+    //             printer.print(`result->append("{");`);
+    //             printer.print(`result->append(".selector=");`)
+    //             printer.print(`result->append(std::to_string(value->selector));`);
+    //             printer.print(`result->append(", ");`);
+    //             this.targetStruct(target).getFields().forEach((field, index) => {
+    //                 let isPointerField = this.isPointerDeclaration(field.declaration, field.optional)
+    //                 if (index != 0) printer.print(`// ${this.computeTargetName(field.declaration, false)}`)
+    //                 printer.print(`if (value${access}selector == ${index - 1}) {`)
+    //                 printer.pushIndent()
+    //                 printer.print(`result->append(".${field.name}=");`);
+    //                 printer.print(`WriteToString(result, ${isPointerField ? "&" : ""}value${access}${field.name});`)
+    //                 printer.popIndent()
+    //                 printer.print(`}`)
+    //             })
+    //             if (false) {
+    //                 printer.print(`result->append(" /* ${name} [variant ");`)
+    //                 printer.print(`result->append(std::to_string(value${access}selector));`)
+    //                 printer.print(`result->append("]*/");`)
+    //             }
+    //             printer.print(`result->append("}");`);
+    //         } else if (isTuple) {
+    //             printer.print(`result->append("{");`)
+    //             const fields = this.targetStruct(target).getFields()
+    //             fields.forEach((field, index) => {
+    //                 printer.print(`// ${this.computeTargetName(field.declaration, false)}`)
+    //                 let isPointerField = this.isPointerDeclaration(field.declaration, field.optional)
+    //                 if (index > 0) printer.print(`result->append(", ");`)
+    //                 printer.print(`result->append(".${field.name}=");`)
+    //                 printer.print(`WriteToString(result, ${isPointerField ? "&" : ""}value${access}${field.name});`)
+    //             })
+    //             printer.print(`result->append("}");`)
+    //         } else if (isOptional) {
+    //             printer.print(`result->append("{");`)
+    //             const fields = this.targetStruct(target).getFields()
+    //             fields.forEach((field, index) => {
+    //                 printer.print(`// ${this.computeTargetName(field.declaration, false)}`)
+    //                 if (index > 0) printer.print(`result->append(", ");`)
+    //                 printer.print(`result->append("${field.name}: ");`)
+    //                 let isPointerField = this.isPointerDeclaration(field.declaration, field.optional)
+    //                 printer.print(`WriteToString(result, ${isPointerField ? "&" : ""}value${access}${field.name});`)
+    //                 if (index == 0) {
+    //                     printer.print(`if (value${access}${field.name} != ${PrimitiveType.UndefinedTag}) {`)
+    //                     printer.pushIndent()
+    //                 }
+    //                 if (index == fields.length - 1) {
+    //                     printer.popIndent()
+    //                     printer.print("}")
+    //                 }
+    //             })
+    //             printer.print(`result->append("}");`)
+    //         } else {
+    //             printer.print(`result->append("{");`)
+    //             this.targetStruct(target).getFields().forEach((field, index) => {
+    //                 printer.print(`// ${this.computeTargetName(field.declaration, false)}`)
+    //                 if (index > 0) printer.print(`result->append(", ");`)
+    //                 printer.print(`result->append(".${field.name}=");`)
+    //                 let isPointerField = this.isPointerDeclaration(field.declaration, field.optional)
+    //                 printer.print(`WriteToString(result, ${isPointerField ? "&" : ""}value${access}${field.name});`)
+    //             })
+    //             printer.print(`result->append("}");`)
+    //         }
+    //         printer.popIndent()
+    //         printer.print(`}`)
+    //     }
+    //     this.setCurrentContext(undefined)
+    // }
+
+    private fieldsForClass(clazz: ts.ClassDeclaration | ts.InterfaceDeclaration, result: StructDescriptor) {
+        clazz.heritageClauses?.forEach(it => {
+            heritageDeclarations(this.typeChecker!, it).forEach(it => {
+                if (ts.isClassDeclaration(it) || ts.isInterfaceDeclaration(it)) {
+                    result.supers.push(it)
+                    result.isPacked = false
+                    this.fieldsForClass(it, result)
+                }
+            })
+        })
+        if (ts.isClassDeclaration(clazz)) {
+            clazz
+                .members
+                .filter(ts.isPropertyDeclaration)
+                .filter(it => !isStatic(it.modifiers))
+                .forEach(it => {
+                    result.addField(new FieldRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
+                })
+        } else {
+            clazz
+                .members
+                .filter(ts.isPropertySignature)
+                .filter(it => !isStatic(it.modifiers))
+                .forEach(it => {
+                    result.addField(new FieldRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
+                })
+        }
+    }
+
+    targetStruct(target: DeclarationTarget): StructDescriptor {
+        let result = new StructDescriptor()
+        if (target instanceof PointerType) {
+            // Break the dependency cycle.
+            // result.deps.add(target.pointed)
+            return result
+        }
+
+        if (target instanceof PrimitiveType) {
+            return result
+        }
+        else if (ts.isArrayTypeNode(target)) {
+            result.isArray = true
+            let element = this.toTarget(target.elementType)
+            result.addField(new FieldRecord(PrimitiveType.pointerTo(element), target, "array"))
+            result.addField(new FieldRecord(PrimitiveType.Int32, undefined, "length"))
+        }
+        else if (ts.isInterfaceDeclaration(target)) {
+            this.fieldsForClass(target, result)
+        }
+        else if (ts.isClassDeclaration(target)) {
+            this.fieldsForClass(target, result)
+        }
+        else if (ts.isUnionTypeNode(target)) {
+            result.addField(new FieldRecord(PrimitiveType.Int32, undefined, `selector`, false))
+            target
+                .types
+                .forEach((it, index) => {
+                    result.addField(new FieldRecord(this.toTarget(it), it, `value${index}`, false))
+                })
+        }
+        else if (ts.isTypeLiteralNode(target)) {
+            if (target.members.some(ts.isIndexSignatureDeclaration)) {
+                // For indexed access we just replace the whole type to a custom accessor.
+                result.addField(new FieldRecord(PrimitiveType.CustomObject, undefined, "keyAccessor", false))
+            } else {
+                target
+                    .members
+                    .forEach(it => {
+                        if (ts.isPropertySignature(it))
+                            result.addField(new FieldRecord(this.toTarget(it.type!), it.type, identName(it.name)!, it.questionToken != undefined))
+                    })
+            }
+        }
+        else if (ts.isTupleTypeNode(target)) {
+            target
+                .elements
+                .forEach((it, index) => {
+                    if (ts.isNamedTupleMember(it)) {
+                        result.addField(new FieldRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
+                    } else {
+                        result.addField(new FieldRecord(this.toTarget(it), it, `value${index}`, false))
+                    }
+                })
+        }
+        else if (ts.isOptionalTypeNode(target)) {
+            result.addField(new FieldRecord(PrimitiveType.Tag, undefined, "tag"))
+            result.addField(new FieldRecord(this.toTarget(target.type), target.type, "value"))
+        }
+        else if (ts.isParenthesizedTypeNode(target)) {
+            // TODO: is it correct?
+            return this.targetStruct(this.toTarget(target.type))
+        }
+        else if (ts.isEnumDeclaration(target) || ts.isEnumMember(target)) {
+            result.addField(new FieldRecord(PrimitiveType.Int32, undefined, "value"))
+        }
+        else if (ts.isFunctionTypeNode(target)) {
+        }
+        else if (ts.isImportTypeNode(target)) {
+        }
+        else if (ts.isTemplateLiteralTypeNode(target)) {
+        }
+        else if (ts.isLiteralTypeNode(target)) {
+        }
+        else if (ts.isTypeParameterDeclaration(target)) {
+            // TODO: is it really correct
+        }
+        else if (ts.isTypeReferenceNode(target)) {
+            if (!target.typeArguments) throw new Error("Only type references with type arguments allowed")
+            let name = identName(target.typeName)
+            if (name == "Optional") {
+                let type = target.typeArguments[0]
+                result.addField(new FieldRecord(PrimitiveType.Tag, undefined, "tag"))
+                result.addField(new FieldRecord(this.toTarget(type), type, "value"))
+            } else if (name == "Array") {
+                let type = target.typeArguments[0]
+                result.isArray = true
+                result.addField(new FieldRecord(PrimitiveType.pointerTo(this.toTarget(type)), undefined, "array"))
+                result.addField(new FieldRecord(PrimitiveType.Int32, undefined, "length"))
+            } else if (name == "Map") {
+                let keyType = target.typeArguments[0]
+                let valueType = target.typeArguments[1]
+                result.addField(new FieldRecord(PrimitiveType.Int32, undefined, "size"))
+                result.addField(new FieldRecord(PrimitiveType.pointerTo(this.toTarget(keyType)), undefined, "keys"))
+                result.addField(new FieldRecord(PrimitiveType.pointerTo(this.toTarget(valueType)), undefined, "values"))
+            } else if (name == "ContentModifier") {
+                let type = target.typeArguments[0]
+                result.addField(new FieldRecord(PrimitiveType.pointerTo(this.toTarget(type)), undefined, "config"))
+            } else if (name == "Callback") {
+                result.addField(new FieldRecord(PrimitiveType.Int32, undefined, "id"))
+            } else {
+                throw new Error(`Parametrized type unknown: ${name} ${(target as any).getText()}`)
+            }
+        }
+        else {
+            throw new Error(`Unsupported field getter: ${asString(target)} ${(target as any).getText()}`)
+        }
+        return result
+    }
+
+    private ignoreTarget(target: DeclarationTarget): target is PrimitiveType | ts.EnumDeclaration {
+        const name = this.computeTargetName(target, false)
+        if (target instanceof PrimitiveType) return true
+        if (ts.isEnumDeclaration(target)) return true
+        if (ts.isFunctionTypeNode(target)) return true
+        if (ts.isImportTypeNode(target)) return true
+        if (ts.isTemplateLiteralTypeNode(target)) return true
+        return false
+    }
+
+    private isStringEnum(members: ts.NodeArray<ts.EnumMember>): boolean {
+        return members.find((value) => {
+            return value.initializer && ts.isStringLiteral(value.initializer)
+        }) != undefined
+    }
+}
+
+function cleanPrefix(name: string, prefix: string): string {
+    return name.replace(prefix, "")
+}
+
+export class ToDeclarationTargetConvertor implements TypeNodeConvertor<DeclarationTarget> {
+    private imprtExprt: ImportExport
+    constructor(
+        private readonly table: TypeProcessor,
+    ) {
+        this.imprtExprt = new ImportExport(this.table.typeChecker!)
+    }
+
+    convertUnion(node: ts.UnionTypeNode): DeclarationTarget {
+        return node
+    }
+    convertTypeLiteral(node: ts.TypeLiteralNode): DeclarationTarget {
+        return node
+    }
+    convertLiteralType(node: ts.LiteralTypeNode): DeclarationTarget {
+        return node
+    }
+    convertTuple(node: ts.TupleTypeNode): DeclarationTarget {
+        return node
+    }
+    convertNamedTupleMember(node: ts.NamedTupleMember): DeclarationTarget {
+        return node
+    }
+    convertArray(node: ts.ArrayTypeNode): DeclarationTarget {
+        return node
+    }
+    convertOptional(node: ts.OptionalTypeNode): DeclarationTarget {
+        return node
+    }
+    convertFunction(node: ts.FunctionTypeNode): DeclarationTarget {
+        return node
+    }
+    convertTemplateLiteral(node: ts.TemplateLiteralTypeNode): DeclarationTarget {
+        return node
+    }
+    convertImport(node: ts.ImportTypeNode): DeclarationTarget {
+        let name = identName(node.qualifier)!
+        console.log('todo: convert import', name)
+        switch (name) {
+            default: return PrimitiveType.CustomObject
+        }
+    }
+    convertTypeReference(node: ts.TypeReferenceNode): DeclarationTarget {
+        let name = identName(node)
+        switch (name) {
+            case `Function`: return PrimitiveType.Function
+        }
+        // Types with type arguments are declarations!
+        if (node.typeArguments) {
+            return node
+        }
+
+        let declarations = getDeclarationsByNode(this.table.typeChecker!, node.typeName)
+        if (declarations.length == 0) {
+            throw new Error(`No declaration for ${node.getText()} ${asString(node)}`)
+        }
+        let declaration = declarations[0]
+        if (ts.isImportSpecifier(declaration)) {
+            let realDecl = this.imprtExprt.findRealDeclaration(declaration.name)
+            if (!realDecl) {
+                throw new Error(`No declaration for ${node.getText()} ${asString(node)}`)
+            }
+            declaration = realDecl
+        }
+        if (ts.isTypeAliasDeclaration(declaration)) {
+            const node = declaration.type
+            return convertTypeNode(this, node)
+        }
+        if (ts.isEnumMember(declaration)) {
+            return declaration.parent
+        }
+        if (ts.isTypeParameterDeclaration(declaration)) {
+            return PrimitiveType.CustomObject
+        }
+        if (ts.isClassDeclaration(declaration) ||
+            ts.isInterfaceDeclaration(declaration) ||
+            ts.isEnumDeclaration(declaration))
+            return declaration
+        throw new Error(`Unknown declaration type ${ts.SyntaxKind[declaration.kind]}`)
+    }
+    convertParenthesized(node: ts.ParenthesizedTypeNode): DeclarationTarget {
+        return convertTypeNode(this, node.type)
+    }
+    convertIndexedAccess(node: ts.IndexedAccessTypeNode): DeclarationTarget {
+        return PrimitiveType.CustomObject
+    }
+    convertStringKeyword(node: ts.TypeNode): DeclarationTarget {
+        return PrimitiveType.String
+    }
+    convertNumberKeyword(node: ts.TypeNode): DeclarationTarget {
+        return PrimitiveType.Number
+    }
+    convertBooleanKeyword(node: ts.TypeNode): DeclarationTarget {
+        return PrimitiveType.Boolean
+    }
+    convertUndefinedKeyword(node: ts.TypeNode): DeclarationTarget {
+        return PrimitiveType.Undefined
+    }
+    convertVoidKeyword(node: ts.TypeNode): DeclarationTarget {
+        // TODO: shall it be distinct type.
+        return PrimitiveType.Undefined
+    }
+    convertObjectKeyword(node: ts.TypeNode): DeclarationTarget {
+        return PrimitiveType.CustomObject
+    }
+    convertAnyKeyword(node: ts.TypeNode): DeclarationTarget {
+        return PrimitiveType.CustomObject
+    }
+    convertUnknownKeyword(node: ts.TypeNode): DeclarationTarget {
+        return PrimitiveType.CustomObject
+    }
+}

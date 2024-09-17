@@ -5,12 +5,6 @@ export class TSInterfacesVisitor {
     constructor() {
     }
 
-    printImports(file: SkoalaFile, writer: LanguageWriter) {
-        file.draftImports.forEach(imprt => {
-            writer.print(imprt.getText())
-        })
-    }
-
     printInterfaces(file: SkoalaFile, writer: LanguageWriter) {
         file.declarations.forEach(decl => {
             writer.print(decl.getText())
