@@ -47,10 +47,6 @@ export class IndentedPrinter {
         return this.output
     }
 
-    clearAll(): void {
-        this.output = []
-    }
-
     printTo(file: string): void {
         fs.writeFileSync(file, this.getOutput().join("\n"))
     }

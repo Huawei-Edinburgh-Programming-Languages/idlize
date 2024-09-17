@@ -16,7 +16,6 @@
 import * as ts from 'typescript';
 import { arrayAt, getDeclarationsByNode } from '../util';
 
-
 export class ImportExport {
     constructor(
         public typeChecker: ts.TypeChecker
@@ -29,7 +28,7 @@ export class ImportExport {
         return true
     }
 
-    followDefaultImport(identifier: ts.Identifier, importClause: ts.ImportClause): ts.Declaration | undefined {
+    private followDefaultImport(identifier: ts.Identifier, importClause: ts.ImportClause): ts.Declaration | undefined {
         const moduleSpecifier = importClause.parent.moduleSpecifier
         const importSym = this.typeChecker.getSymbolAtLocation(moduleSpecifier)
         if (importSym === undefined) {
@@ -41,7 +40,7 @@ export class ImportExport {
         return arrayAt(exports?.[0]?.declarations, 0)
     }
 
-    followModuleSpecifier(identifier: ts.Identifier, moduleSpecifier: ts.StringLiteral): ts.Declaration | undefined {
+    private followModuleSpecifier(identifier: ts.Identifier, moduleSpecifier: ts.StringLiteral): ts.Declaration | undefined {
         const moduleSym = this.typeChecker.getSymbolAtLocation(moduleSpecifier)
         if (moduleSym === undefined) {
             // TODO: The typechecker doesn't give us the symbol in this case
@@ -58,7 +57,7 @@ export class ImportExport {
         return arrayAt(found?.declarations, 0)
     }
 
-    followImport(identifier: ts.Identifier, declaration: ts.ImportSpecifier): ts.Declaration | undefined {
+    private followImport(identifier: ts.Identifier, declaration: ts.ImportSpecifier): ts.Declaration | undefined {
         if (declaration.propertyName) {
             const real = getDeclarationsByNode(this.typeChecker, declaration.propertyName)[0]
             if (real && this.isRealDeclaration(real)) {
@@ -76,7 +75,7 @@ export class ImportExport {
         return this.followModuleSpecifier(identifier, moduleSpecifier)
     }
 
-    followExport(identifier: ts.Identifier, exportDeclaration: ts.ExportSpecifier): ts.Declaration | undefined {
+    private followExport(identifier: ts.Identifier, exportDeclaration: ts.ExportSpecifier): ts.Declaration | undefined {
         const moduleSpecifier = exportDeclaration.parent.parent.moduleSpecifier
         const name = exportDeclaration.propertyName ? exportDeclaration.propertyName : identifier
 

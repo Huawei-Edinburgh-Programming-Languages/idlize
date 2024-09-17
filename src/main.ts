@@ -242,25 +242,18 @@ if (options.dts2skoaladraft) {
             compilerOptions: {
                 ...defaultCompilerOptions,
                 paths: {
-                    "@koalaui/common": [
-                        "/home/huawei/idlize/external/incremental/compat/src/typescript",
-                        // "/home/huawei/idlize/external/incremental/common/src",
-                    ],
+                    "@koalaui/common": ["/home/huawei/idlize/external/incremental/common/src"],
+                    "@koalaui/compat": ["/home/huawei/idlize/external/incremental/compat/src/typescript"],
                     "@koalaui/interop": ["/home/huawei/idlize/external/interop/src/interop"],
                     "@koalaui/arkoala": ["/home/huawei/idlize/external/arkoala/framework/src"],
                 },
-                // traceResolution: true
             },
             onBegin(outDir, typeChecker) {
                 skoalaLibrary = new SkoalaLibrary(typeChecker)
-            processor = new WrapperProcessor(typeChecker)
+                processor = new WrapperProcessor(typeChecker)
             },
             onEnd(outDir: string) {
-                // const peerProcessor = new LocalPeerProcessor(peerLibrary, declarationTable.typeChecker)
                 processor.process(skoalaLibrary)
-                console.log('TODO: declarationTable.analyze(peerLibrary)');
-                // declarationTable.analyze(peerLibrary)
-
                 generateSkoala(outDir, skoalaLibrary, options)
             }
         }

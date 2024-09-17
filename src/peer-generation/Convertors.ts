@@ -1292,6 +1292,7 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
 }
 
 export class WrapperClassConvertor extends BaseArgConvertor {
+    // TODO: 
     constructor(
         name: string,
         param: string,
@@ -1325,7 +1326,7 @@ export class WrapperClassConvertor extends BaseArgConvertor {
         return true
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        return this.discriminatorFromExpressions(value, RuntimeType.OBJECT, writer,
+        return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT, writer,
             [writer.makeString(`${value} instanceof ${this.tsTypeName}`)])
     }
 }

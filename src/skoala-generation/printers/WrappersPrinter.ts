@@ -35,8 +35,6 @@ export class TSWrappersVisitor {
     }
 
     private printCtor(clazz: WrapperClass, writer: LanguageWriter) {
-        // 1. TODO: handle clazz.ctor instead
-
         if (!clazz.ctor) return
         let argsNames = (clazz.ctor?.method.signature as NamedMethodSignature).argsNames
         writer.writeConstructorImplementation(clazz.className, clazz.ctor.method.signature, writer => {
