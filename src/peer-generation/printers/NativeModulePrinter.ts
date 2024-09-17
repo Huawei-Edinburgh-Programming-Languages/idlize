@@ -37,7 +37,7 @@ class NativeModuleVisitor {
     }
 
     protected printPeerMethods(peer: PeerClass | IdlPeerClass) {
-        peer.methods.forEach(it => this.printPeerMethod(peer, it, this.nativeModule, this.nativeModuleEmpty))
+        peer.methods.forEach(it => this.printPeerMethod(peer, it, this.nativeModule, this.nativeModuleEmpty, undefined, this.nativeFunctions))
     }
 
     protected printMaterializedMethods(nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter) {
@@ -195,7 +195,7 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
 
 export function printNativeModule(peerLibrary: PeerLibrary | IdlPeerLibrary, nativeBridgePath: string): string {
     const lang = peerLibrary.language
-    const visitor = lang == Language.CJ ? new CJNativeModuleVisitor(peerLibrary) : new NativeModuleVisitor(peerLibrary)
+    const visitor = (lang == Language.CJ) ? new CJNativeModuleVisitor(peerLibrary) : new NativeModuleVisitor(peerLibrary)
     visitor.print()
     return nativeModuleDeclaration(visitor.nativeModule, nativeBridgePath, false, lang, visitor.nativeFunctions)
 }
