@@ -17,7 +17,6 @@ import * as path from 'path'
 import * as ts from "typescript"
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig"
 import { isRoot } from "./peer-generation/inheritance";
-import {execSync} from "node:child_process";
 
 export class Language {
     public static TS = new Language("TS", ".ts", true)
@@ -464,6 +463,12 @@ export function snakeCaseToCamelCase(input: string): string {
         .join("")
 }
 
+export function toCamelCase(input: string): string {
+    return input
+        .replace(/([-_][a-z])/g, group => group.toUpperCase().replace('-', '').replace('_', ''))
+        .replace(/^[A-Z]/, match => match.toLowerCase());
+}
+
 export function isUpperCase(s: string): boolean {
     return s === s.toUpperCase()
 }
@@ -600,10 +605,6 @@ export function groupBy<K, V>(values: V[], selector: (value: V) => K): Map<K, V[
         getOrPut(map, key, it => []).push(value)
     })
     return map
-}
-
-export function lastCommitInfo() {
-    return execSync('git log -1 --date=format:"%Y/%m/%d %T" --format="%ad %H %B"').toString().trim()
 }
 
 export function removeExt(filename: string) {
