@@ -115,6 +115,9 @@ class NativeModuleVisitor {
 }
 
 class CJNativeModuleVisitor extends NativeModuleVisitor {
+    private arrayLikeTypes = new Set(['Uint8Array'])
+    private stringLikeTypes = new Set(['String'])
+
     constructor(
         protected readonly library: PeerLibrary | IdlPeerLibrary,
     ) {
@@ -149,16 +152,14 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
         let nativeName = name.substring(1)
         nativeModule.writeMethodImplementation(new Method(name, parameters, [MethodModifier.PUBLIC, MethodModifier.STATIC]), (printer) => {
             let functionCallArgs: Array<string> = []
-            const arrayLikeTypes = new Set(['Uint8Array'])
-            const stringLikeTypes = new Set(['String'])
             printer.print('unsafe {')
             printer.pushIndent()
             for(let param of parameters.args) {
                 let ordinal = parameters.args.indexOf(param)
-                if (arrayLikeTypes.has(param.name)) {
+                if (this.arrayLikeTypes.has(param.name)) {
                     functionCallArgs.push(`handle_${ordinal}.pointer`)
                     printer.print(`let handle_${ordinal} = acquireArrayRawData(${parameters.argsNames[ordinal]}.toArray())`)
-                } else if (stringLikeTypes.has(param.name)) {
+                } else if (this.stringLikeTypes.has(param.name)) {
                     printer.print(`let ${parameters.argsNames[ordinal]} =  LibC.mallocCString(${parameters.argsNames[ordinal]})`)
                     functionCallArgs.push(parameters.argsNames[ordinal])
                 } else {
@@ -168,9 +169,9 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
             printer.print(`${new FunctionCallExpression(nativeName, functionCallArgs.map(it => printer.makeString(it))).asString()}`)
             for(let param of parameters.args) {
                 let ordinal = parameters.args.indexOf(param)
-                if (arrayLikeTypes.has(param.name)) {
+                if (this.arrayLikeTypes.has(param.name)) {
                     printer.print(`releaseArrayRawData(handle_${ordinal})`)
-                } else if (stringLikeTypes.has(param.name)) {
+                } else if (this.stringLikeTypes.has(param.name)) {
                     printer.print(`LibC.free(${parameters.argsNames[ordinal]})`)
                 }
             }
