@@ -19,13 +19,13 @@ import std.collection.*
 
 foreign {
     func StringMake(string: CString): Int64
-    func StringLength(ptr: Int32): Int32
-    func StringData(ptr: Int32, data: CPointer<UInt8>, arg2: Int32): Unit
-    func GetStringFinalizer(): Int32
-    func GetPtrVectorSize(ptr: Int32): Int32
-    func GetGroupedLog(kind: Int32): Int32
-    func GetPtrVectorElement(ptr: Int32, index: Int32): Int32
-    func InvokeFinalizer(fn: Int32, obj: Int32): Unit
+    func StringLength(ptr: Int64): Int32
+    func StringData(ptr: Int64, data: CPointer<UInt8>, arg2: Int32): Unit
+    func GetStringFinalizer(): Int64
+    func GetPtrVectorSize(ptr: Int64): Int32
+    func GetGroupedLog(kind: Int32): Int64
+    func GetPtrVectorElement(ptr: Int64, index: Int32): Int32
+    func InvokeFinalizer(obj: Int64, fn: Int64): Unit
     func GetNodeFinalizer(): Int32
     func StartGroupedLog(index: Int32): Unit
     func StopGroupedLog(index: Int32): Unit
@@ -71,30 +71,30 @@ public open class NativeModule {
             LibC.free(value)
         }
     }
-    public static func _StringLength(ptr: Int32): Int32 {
+    public static func _StringLength(ptr: Int64): Int32 {
         return unsafe { StringLength(ptr) }
     }
-    public static func _StringData(ptr: Int32, data: ArrayList<UInt8>, arg2: Int32): Unit {
+    public static func _StringData(ptr: Int64, data: ArrayList<UInt8>, arg2: Int32): Unit {
         unsafe {
             let handle_1 = acquireArrayRawData(data.toArray())
             StringData(ptr, handle_1.pointer, arg2)
             releaseArrayRawData(handle_1)
         }
     }
-    public static func _GetStringFinalizer(): Int32 {
+    public static func _GetStringFinalizer(): Int64 {
         return unsafe { GetStringFinalizer() }
     }
-    public static func _GetPtrVectorSize(ptr: Int32): Int32 {
+    public static func _GetPtrVectorSize(ptr: Int64): Int32 {
         return unsafe { GetPtrVectorSize(ptr) } 
     }
-    public static func _GetGroupedLog(kind: Int32): Int32 {
+    public static func _GetGroupedLog(kind: Int32): Int64 {
         return unsafe { GetGroupedLog(kind) }
     }
-    public static func _GetPtrVectorElement(ptr: Int32, index: Int32): Int32 {
+    public static func _GetPtrVectorElement(ptr: Int64, index: Int32): Int32 {
         return unsafe { GetPtrVectorElement(ptr, index) }
     }
-    public static func _InvokeFinalizer(fn: Int32, obj: Int32): Unit {
-        return unsafe { InvokeFinalizer(fn, obj) }
+    public static func _InvokeFinalizer(obj: Int64, fn: Int64): Unit {
+        return unsafe { InvokeFinalizer(obj, fn) }
     }
     public static func _GetNodeFinalizer(): Int32 {
         return unsafe { GetNodeFinalizer() }
