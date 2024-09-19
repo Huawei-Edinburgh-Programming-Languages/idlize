@@ -107,32 +107,29 @@ export class WrapperProcessor {
             }
 
             for (let decl of file.declarations) {
-                if (ts.isClassDeclaration(decl) || ts.isInterfaceDeclaration(decl)) {
-                    let result = this.tryProcessWrapper(decl, file)
-                    if (result) {
-                        file.declarations.delete(decl)
-                        file.wrapperClasses.set(result.className, result)
-                        continue
-                    } else {
-                        library.serializerDeclarations.push(decl)
-                    }
-                }
-
                 let dependencies = this.declDependenciesCollector.convert(decl)
-                    .filter(it => isSourceDecl(it))
                     .map(it => {
                         if (ts.isImportSpecifier(it)) {
                             return this.importExport.findRealDeclaration(it.name)
                         } else return it
                     })
-                    .filter(it => !!it)
+                    .filter(it => isSourceDecl(it))
 
-                let depToSerialize: ts.Declaration[] = []
                 dependencies.forEach(it => {
                     if (it && (ts.isClassDeclaration(it) || ts.isClassDeclaration(it))) {
-                        depToSerialize.push(it)
+                        library.serializerDeclarations.add(it)
                     }
                 })
+
+                if (ts.isClassDeclaration(decl) || ts.isInterfaceDeclaration(decl)) {
+                    let wrapperClass = this.tryProcessWrapper(decl, file)
+                    if (wrapperClass) {
+                        file.declarations.delete(decl)
+                        file.wrapperClasses.set(wrapperClass.className, wrapperClass)
+                    } else {
+                        library.serializerDeclarations.add(decl)
+                    }
+                }
             }
         }
     }
@@ -348,14 +345,12 @@ function generateRetConvertor(): RetConvertor {
     }
 }
 
-function isSourceDecl(node: ts.Declaration): boolean {
+function isSourceDecl(node: ts.Declaration | undefined): boolean {
+    if (!node) return false
     if (ts.isModuleBlock(node.parent))
         return isSourceDecl(node.parent.parent)
     if (ts.isTypeParameterDeclaration(node))
         return false
-    if (ts.isImportSpecifier(node)) {
-        return true
-    }
     if (!ts.isSourceFile(node.parent))
         throw 'Expected declaration to be at file root'
     return !node.parent.fileName.endsWith('stdlib.d.ts')

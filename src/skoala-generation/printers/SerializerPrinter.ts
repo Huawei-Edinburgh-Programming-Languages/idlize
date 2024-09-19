@@ -50,7 +50,7 @@ class SerializerPrinter {
             })
     }
 
-    private printImports(writer: LanguageWriter, serializerDeclarations?: (ts.ClassDeclaration | ts.InterfaceDeclaration)[]) {
+    private printImports(writer: LanguageWriter, serializerDeclarations?: Set<ts.ClassDeclaration | ts.InterfaceDeclaration>) {
         writer.print(`import { SerializerBase, Tags, RuntimeType, runtimeType, isInstanceOf } from "./SerializerBase"`)
         writer.print(`import { int32 } from "@koalaui/common"`)
         writer.print(`import { unsafeCast } from "./utils"`)

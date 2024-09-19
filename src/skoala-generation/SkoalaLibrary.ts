@@ -36,7 +36,7 @@ export class SkoalaFile {
 
 export class SkoalaLibrary implements Library<SkoalaFile> {
     constructor(public typeChecker: ts.TypeChecker) { }
-    public readonly serializerDeclarations: (ts.ClassDeclaration | ts.InterfaceDeclaration)[] = []
+    public readonly serializerDeclarations: Set<ts.ClassDeclaration | ts.InterfaceDeclaration> = new Set()
     public readonly files: SkoalaFile[] = []
     get language(): Language {
         return Language.TS
