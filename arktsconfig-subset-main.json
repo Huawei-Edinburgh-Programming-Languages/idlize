@@ -13,7 +13,6 @@
             "@koalaui/runtime": ["./external/incremental/runtime/src"]
         }
     },
-    "include": ["out/arkts-subset/generated/sig/arkoala-arkts/**/*\\.ts"],
-    "exclude": ["out/arkts-subset/generated/sig/arkoala-arkts/arkui/src/generated/ts/*\\.ts",
-                "out/arkts-subset/generated/sig/arkoala-arkts/arkui/src/generated/main.ts"]
+    "include": ["./out/arkts-subset/generated/sig/arkoala-arkts/**/main.ts"],
+    "exclude": ["out/arkts-subset/generated/sig/arkoala-arkts/arkui/src/generated/ts/*\\.ts"]
 }
