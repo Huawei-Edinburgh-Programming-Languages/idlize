@@ -92,10 +92,6 @@ export function initWorker() {
     }
 }
 
-if (!isMainThread) {
-    initWorker()
-}
-
 export function checkLoader(variant: string): int32 {
     let vm = -1
     let classPath = ""
@@ -128,5 +124,8 @@ export function checkLoader(variant: string): int32 {
     return result
 }
 
-if
-checkLoader(process.argv.length >= 1 ? process.argv[process.argv.length - 1] : "java")
+if (isMainThread) {
+    checkLoader(process.argv.length >= 1 ? process.argv[process.argv.length - 1] : "java")
+} else {
+    initWorker()
+}
