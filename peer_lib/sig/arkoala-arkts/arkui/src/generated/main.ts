@@ -558,7 +558,7 @@ function checkButton() {
     let peer = ArkButtonPeer.create(ArkUINodeType.Button)
     checkResult("width", () => peer.widthAttribute("42%"),
         "width({.type=2, .value=42.000000, .unit=3, .resource=0})")
-    checkResult("type", () => peer.typeAttribute(ButtonType.of(1)), "type(1)")
+    checkResult("type", () => peer.typeAttribute(ButtonType.of(1)), "type(Ark_ButtonType(1))")
     checkResult("labelStyle", () => peer.labelStyleAttribute(new LabelStyleImpl(3)),
          "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=3}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})")
     checkResult("labelStyle2", () => peer.labelStyleAttribute(new LabelStyleImpl()),
