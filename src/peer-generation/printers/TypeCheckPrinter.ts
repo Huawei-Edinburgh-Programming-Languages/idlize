@@ -132,10 +132,13 @@ class ARKTSTypeCheckerPrinter extends TypeCheckerPrinter {
                 ['value', ...argsNames]),
             [MethodModifier.STATIC],
         ), writer => {
-            // TODO: lead to compilation errors
-            // const statement = writer.makeReturn(writer.makeString(`value instanceof ${typeName}`))
-            // writer.writeStatement(statement)
-            writer.writeStatement(writer.makeStatement(writer.makeString("throw new Error(\"Not implemented\")")))
+            writer.writeStatement(
+                writer.makeReturn(
+                    writer.makeEquals([
+                        writer.makeString(`Type.resolve('LArk${typeName}/${typeName};')?.getId()`),
+                        writer.makeString("Type.of(value).getId()")]
+                    )
+                ))
         })
     }
 
