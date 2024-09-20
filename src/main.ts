@@ -176,7 +176,7 @@ if (options.dts2idl) {
     didJob = true
 }
 
-if (options.dts2skoala) {
+
     const tsCompileContext = new CompileContext()
     const generatedIDLMap = new Map<string, IDLEntry[]>()
     const outputDir: string = options.outputDir ?? "./generated/skoala"
@@ -184,6 +184,16 @@ if (options.dts2skoala) {
     if (!fs.existsSync(outputDir)) {
         fs.mkdirSync(outputDir, { recursive: true })
     }
+
+    let combinedDeserializerPrinter = new IndentedPrinter()
+
+    combinedDeserializerPrinter.print(`#include "SkoalaDeserializerBase.h"`)
+    combinedDeserializerPrinter.print("")
+    combinedDeserializerPrinter.print(`class Deserializer : public SkoalaDeserializerBase {`)
+    combinedDeserializerPrinter.print(`public:`)
+    combinedDeserializerPrinter.pushIndent()
+    combinedDeserializerPrinter.print(`Deserializer(uint8_t* data, int32_t length) : SkoalaDeserializerBase(data, length) {}`)
+    combinedDeserializerPrinter.print(``)
 
     generate(
         options.inputDir,
@@ -203,11 +213,15 @@ if (options.dts2skoala) {
             },
             onEnd: () => {
                 generatedIDLMap.forEach((entries, fileName) => {
-                    const printer = new SkoalaCCodeGenerator(entries, outputDir, fileName)
+                    const codeGenerator = new SkoalaCCodeGenerator(entries, outputDir, fileName)
 
                     try {
-                        printer.generate()
+                        codeGenerator.generate()
                         console.log(`Code generation completed for ${fileName}.h`)
+
+                        const deserializerGenerator = new DeserializerPrinter(entries)
+                        deserializerGenerator.generateDeserializer(combinedDeserializerPrinter)
+                        console.log(`Methods added to deserializer for ${fileName}.`)
                     } catch (error) {
                         if (error instanceof Error) {
                             console.error(`Error during code generation for ${fileName}.h: ${error.message}`)
@@ -216,6 +230,20 @@ if (options.dts2skoala) {
                         }
                     }
                 })
+
+                combinedDeserializerPrinter.popIndent()
+                combinedDeserializerPrinter.print("};")
+                combinedDeserializerPrinter.print("")
+
+                const deserializerCode = combinedDeserializerPrinter.getOutput().join("\n")
+
+                if (deserializerCode.trim()) {
+                    const deserializerFilePath = path.join(outputDir, "deserializer.h")
+                    fs.writeFileSync(deserializerFilePath, deserializerCode)
+                    console.log(`Combined Deserializer generated and saved to: ${deserializerFilePath}`)
+                } else {
+                    console.log("No deserializer code generated")
+                }
 
                 console.log("All files processed.")
             }
