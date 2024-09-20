@@ -132,8 +132,10 @@ class ARKTSTypeCheckerPrinter extends TypeCheckerPrinter {
                 ['value', ...argsNames]),
             [MethodModifier.STATIC],
         ), writer => {
-            const statement = writer.makeReturn(writer.makeString(`value instanceof ${typeName}`))
-            writer.writeStatement(statement)
+            // TODO: lead to compilation errors
+            // const statement = writer.makeReturn(writer.makeString(`value instanceof ${typeName}`))
+            // writer.writeStatement(statement)
+            writer.writeStatement(writer.makeStatement(writer.makeString("throw new Error(\"Not implemented\")")))
         })
     }
 
@@ -143,6 +145,11 @@ class ARKTSTypeCheckerPrinter extends TypeCheckerPrinter {
 
     protected writeArrayChecker(typeName: string): void {
         this.writeInstanceofChecker(typeName, generateTypeCheckerName(typeName), 0)
+    }
+
+    protected writeImports(features: ImportFeature[]) {
+        // TODO: lead to compilation errors
+        // super.writeImports(features)
     }
 }
 
