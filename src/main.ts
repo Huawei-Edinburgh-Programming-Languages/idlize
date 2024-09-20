@@ -563,12 +563,18 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
     for (const [targetFile, builderClass] of builderClasses) {
         const outBuilderFile = arkoala.builderClass(targetFile)
         fs.writeFileSync(outBuilderFile, builderClass)
+        if (lang === Language.ARKTS) {
+            arkuiComponentsFiles.push(outBuilderFile);
+        }
     }
 
     const materialized = printMaterialized(peerLibrary, context, options.dumpSerialized ?? false)
     for (const [targetFile, materializedClass] of materialized) {
         const outMaterializedFile = arkoala.materialized(targetFile)
         writeFile(outMaterializedFile, materializedClass, peerLibrary.declarationTable.language === Language.ARKTS)
+        if (lang === Language.ARKTS) {
+            arkuiComponentsFiles.push(outMaterializedFile)
+        }
     }
 
     // NativeModule
@@ -659,6 +665,7 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
             console.log("producing", outComponentFile)
             if (options.verbose) console.log(data)
             writeFile(outComponentFile, data, true)
+            arkuiComponentsFiles.push(outComponentFile)
         }
         const fakeDeclarations = printFakeDeclarations(peerLibrary)
         for (const [filename, data] of fakeDeclarations) {
@@ -666,6 +673,7 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
             console.log("producing", outComponentFile)
             if (options.verbose) console.log(data)
             writeFile(outComponentFile, data, true)
+            arkuiComponentsFiles.push(outComponentFile)
         }
         writeFile(
             arkoala.arktsLib(new TargetFile('ConflictedDeclarations')),
@@ -681,6 +689,10 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
             arkoala.arktsLib(new TargetFile("peer_events")),
             printEvents(peerLibrary),
             true
+        )
+        writeFile(
+            arkoala.arktsLib(new TargetFile('index')),
+            makeArkuiModule(arkuiComponentsFiles),
         )
         writeFile(arkoala.peer(new TargetFile('Serializer')),
             makeTSSerializer(peerLibrary),
