@@ -153,6 +153,7 @@ export class WrapperProcessor {
         let heritageClasses = this.findHeritageClasses(node)
         if (!heritageClasses?.length) return undefined
 
+        let typeProcessor = new SkoalaTypeProcessor(this.typeChecker)
         let name = nameOrNull(node.name)!
         let baseClass = heritageClasses[heritageClasses.length - 1]
         if (!(baseClass in Skoala.BaseClasses)) {
@@ -160,32 +161,32 @@ export class WrapperProcessor {
             throw Error()
         }
         let constructor = ts.isClassDeclaration(node) ? node.members.find(ts.isConstructorDeclaration) : undefined
-        let wConstructor = constructor ? this.makeWrapperMethod(name, constructor, this.typeNodeConvertor) : undefined
+        let wConstructor = constructor ? this.makeWrapperMethod(name, constructor, this.typeNodeConvertor, typeProcessor) : undefined
         let finalizer = ts.isClassDeclaration(node)
             ? node.members.filter(ts.isMethodDeclaration).find(it => it.name.getText() == Skoala.getFinalizer)
             : node.members.filter(ts.isMethodSignature).find(it => it.name.getText() == Skoala.getFinalizer)
-        let wFinalizer = finalizer ? this.makeWrapperMethod(name, finalizer, this.typeNodeConvertor) : undefined
+        let wFinalizer = finalizer ? this.makeWrapperMethod(name, finalizer, this.typeNodeConvertor, typeProcessor) : undefined
 
         let wFields = ts.isInterfaceDeclaration(node)
             ? node.members
                 .filter(ts.isPropertySignature)
-                .map(it => this.makeWrapperField(name, it))
+                .map(property => this.makeWrapperField(name, property, this.typeNodeConvertor, typeProcessor))
             : node.members
                 .filter(ts.isPropertyDeclaration)
-                .map(it => this.makeWrapperField(name, it))
+                .map(property => this.makeWrapperField(name, property, this.typeNodeConvertor, typeProcessor))
 
         let wMethods = ts.isInterfaceDeclaration(node)
             ? node.members
                 .filter(ts.isMethodSignature).filter(it => it.name.getText() != Skoala.getFinalizer)
-                .map(method => this.makeWrapperMethod(name, method, this.typeNodeConvertor))
+                .map(method => this.makeWrapperMethod(name, method, this.typeNodeConvertor, typeProcessor))
             : node.members
                 .filter(ts.isMethodDeclaration).filter(it => it.name.getText() != Skoala.getFinalizer)
-                .map(method => this.makeWrapperMethod(name, method, this.typeNodeConvertor))
+                .map(method => this.makeWrapperMethod(name, method, this.typeNodeConvertor, typeProcessor))
         
         wFields.forEach(f => {
             const field = f.field
             // TBD: use deserializer to get complex type from native
-            const isSimpleType = f.argConvertor ? !f.argConvertor.useArray : true // type needs to be deserialized from the native
+            const isSimpleType = !f.argConvertor.useArray // type needs to be deserialized from the native
             if (isSimpleType) {
                 const getAccessor = new WrapperMethod(name, 
                     new Method(`get${capitalize(field.name)}`, new NamedMethodSignature(field.type, [], []), [MethodModifier.PRIVATE]),
@@ -221,7 +222,9 @@ export class WrapperProcessor {
     }
 
     private makeWrapperField(className: string,
-        property: ts.PropertyDeclaration | ts.PropertySignature
+        property: ts.PropertyDeclaration | ts.PropertySignature,
+        typeNodeConverter: TypeNodeNameConvertor,
+        typeProcessor: TypeProcessor
     ): WrapperField {
         let modifiers: FieldModifier[] = []
         property.modifiers?.forEach(modifier => {
@@ -242,21 +245,21 @@ export class WrapperProcessor {
         // TODO: add arg and ret convertors
         return new WrapperField(
             new Field(property.name.getText(), new Type(property.type?.getText() ?? ""), modifiers),
-            undefined,
+            generateArgConvertor(typeProcessor, property, typeNodeConverter),
             undefined,
         )
     }
 
     private makeWrapperMethod(parentName: string,
         tsMethod: ts.ConstructorDeclaration | ts.MethodDeclaration | ts.MethodSignature,
-        typeNodeConverter: TypeNodeNameConvertor
+        typeNodeConverter: TypeNodeNameConvertor,
+        typeProcessor: TypeProcessor
     ): WrapperMethod {
         // TODO: add convertor to convers method.type, method.name, method.parameters[..].type, method.parameters[..].name
         // TODO: add arg and ret convertors
         let args: Type[] = []
         let argsNames: string[] = []
         let defaults: stringOrNone[] = []
-        let typeProcessor = new SkoalaTypeProcessor()
         typeProcessor.typeChecker = this.importExport.typeChecker
         let argConvertors = tsMethod.parameters.map(param => {
             defaults.push(param.initializer?.getText())
@@ -343,7 +346,7 @@ export class WrapperProcessor {
 }
 
 function generateArgConvertor(typeProcessor: TypeProcessor,
-    param: ts.ParameterDeclaration,
+    param: ts.ParameterDeclaration | ts.PropertyDeclaration | ts.PropertySignature,
     typeNodeNameConvertor: TypeNodeNameConvertor): ArgConvertor {
     if (!param.type) throw new Error("Type is needed")
     let paramName = asString(param.name)

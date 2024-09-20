@@ -127,13 +127,20 @@ export class TSWrappersVisitor {
         })
     }
 
+    private convertToPropertyType(field: WrapperField): Type {
+        return new Type(field.field.type.name)
+    }
+
     private printField(className: string, field: WrapperField, writer: LanguageWriter) {
-        const getSignature = new MethodSignature(field.field.type, [])
-        writer.writeGetterImplementation(new Method(field.field.name, getSignature), writer => {
-            writer.writeStatement(
-                writer.makeReturn(
-                    writer.makeMethodCall("this", `get${capitalize(field.field.name)}`, [])))
-        })
+        const isSimpleType = !field.argConvertor.useArray // type needs to be deserialized from the native
+        writer.writeGetterImplementation(new Method(field.field.name,
+            new MethodSignature(this.convertToPropertyType(field), [])), writer => {
+                writer.writeStatement(
+                    isSimpleType
+                        ? writer.makeReturn(writer.makeMethodCall("this", `get${capitalize(field.field.name)}`, []))
+                        : writer.makeStatement(writer.makeString("throw new Error(\"Not implemented\")"))
+                )
+            });
 
         const isReadOnly = field.field.modifiers.includes(FieldModifier.READONLY)
         if (!isReadOnly) {

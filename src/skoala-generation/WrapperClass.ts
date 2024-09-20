@@ -104,7 +104,7 @@ export class WrapperMethod {
 export class WrapperField {
     constructor(
         public field: Field,
-        public argConvertor?: ArgConvertor,
+        public argConvertor: ArgConvertor,
         public retConvertor?: RetConvertor,
     ) { }
 }
