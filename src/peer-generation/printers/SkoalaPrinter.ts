@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import * as fs from "fs"
 import * as path from "path"
 import * as idl from '../../idl'
@@ -113,4 +114,130 @@ export class SkoalaCCodeGenerator {
             console.error("Error saving C code:", error)
         }
     }
+=======
+import * as fs from "fs"
+import * as path from "path"
+import { IDLEntry, IDLMethod, IDLInterface, isInterface, isClass, printType } from "../../idl"
+import { IndentedPrinter } from "../../IndentedPrinter"
+import { camelCaseToUpperSnakeCase, capitalize, toCamelCase } from "../../util"
+export class SkoalaCCodeGenerator {
+    private entries: IDLEntry[]
+    private outputDir: string
+    private fileName: string
+
+    constructor(entries: IDLEntry[], outputDir: string, fileName: string) {
+        this.entries = entries
+        this.outputDir = outputDir
+        this.fileName = fileName
+    }
+
+    public generate(): void {
+        const printer = new IndentedPrinter()
+
+        printer.print(`#ifndef ${camelCaseToUpperSnakeCase(this.fileName)}_H
+#define ${camelCaseToUpperSnakeCase(this.fileName)}_H`)
+        printer.print(`#include <koala-types.h>
+#include "common-interop.h"\n`)
+
+        this.entries.forEach(entry => this.visit(entry, printer))
+
+        printer.print(`#endif // ${camelCaseToUpperSnakeCase(this.fileName)}_H`)
+
+        const cCode = printer.getOutput().join("\n")
+        if (cCode.trim()) {
+            this.saveCCode(cCode)
+        } else {
+            console.log("C code generation failed, no code to save.")
+        }
+    }
+
+    private visit(node: IDLEntry, printer: IndentedPrinter): void {
+        console.log(`Processing IDLEntry with kind: ${node.kind}, name: ${(node as any).name || "Unnamed"}`)
+
+        if (isInterface(node) || isClass(node)) {
+            this.visitInterface(node as IDLInterface, printer)
+        } else {
+            console.log(`Skipping unsupported IDLEntry kind: ${node.kind}`)
+        }
+    }
+
+    private visitInterface(node: IDLInterface, printer: IndentedPrinter): void {
+        const methods = node.methods || []
+        if (methods.length === 0) {
+            console.log(`No methods found in interface/class ${node.name}`)
+            return
+        }
+
+        methods.forEach(method => this.visitMethod(method, node, printer))
+    }
+
+    private visitMethod(method: IDLMethod, parentNode: IDLInterface, printer: IndentedPrinter): void {
+        const returnType = method.returnType ? this.convertType(method.returnType.name) : "void"
+
+        const capitalizedMethodName = capitalize(method.name)
+        const methodNameWithPrefix = `impl_skoala_${parentNode.name}__1n${capitalizedMethodName}`
+        const signature = `${returnType} ${methodNameWithPrefix}(`
+
+        printer.print(signature)
+        printer.pushIndent()
+
+        let parametersTypes: string[] = []
+        let parametersNames: string[] = []
+
+        const isStaticMethod = method.isStatic || false
+        if (!isStaticMethod) {
+            const pointerName = `${toCamelCase(parentNode.name)}Ptr`
+            parametersTypes.push(`KNativePointer`)
+            parametersNames.push(pointerName)
+        }
+
+        method.parameters.map(param => {
+            if (!param.type) {
+                throw new Error(`Parameter type is not defined for parameter ${param.name} in method ${method.name}`);
+            }
+            parametersTypes.push(this.convertType(param.type.name))
+            parametersNames.push(param.name)
+        })
+
+        const parametersStr = parametersTypes.map((it, idx) => {
+            return `${it} ${parametersNames[idx]}`
+        }).join(", ")
+    
+        printer.print(parametersStr)
+        printer.popIndent()
+        printer.print(");")
+
+        printer.print(`KOALA_INTEROP_${parametersTypes.length}(${methodNameWithPrefix}, ${returnType}${parametersTypes.length ? ", " + parametersTypes.join(", ") : ""})`)
+        printer.print("")
+    }
+
+    private convertType(idlType: string): string {
+        const typeMapping: { [key: string]: string } = {
+            "float32": "float",
+            "int32": "int",
+            "uint32": "unsigned int",
+            "boolean": "bool",
+            "DOMString": "char*",
+            "void_": "void",
+            "KNativePointer": "KNativePointer", 
+        }
+
+        return typeMapping[idlType] || "void*"
+    }
+
+    private saveCCode(cCode: string): void {
+        const baseFileName = path.basename(this.fileName, ".d.ts")
+        const outputFileName = `${baseFileName}.h`
+        const outputPath = path.join(this.outputDir, outputFileName)
+
+        console.log("Saving C Code to:", outputPath)
+
+        try {
+            fs.writeFileSync(outputPath, cCode)
+            console.log("C code generated and saved to:", outputPath)
+        } catch (error) {
+            console.error("Error saving C code:", error)
+        }
+    }
+>>>>>>> adcf566f (Scoala Deserializer)
 }

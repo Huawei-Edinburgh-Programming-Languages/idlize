@@ -75,9 +75,14 @@ import { IdlPeerLibrary } from "./peer-generation/idl/IdlPeerLibrary"
 import { IdlPeerFile } from "./peer-generation/idl/IdlPeerFile"
 import { IdlPeerGeneratorVisitor, IdlPeerProcessor, IdlPredefinedGeneratorVisitor } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
 import { SkoalaCCodeGenerator } from "./peer-generation/printers/SkoalaPrinter"
+<<<<<<< HEAD
 import { generateOhos } from "./peer-generation/OhosGenerator"
 import * as webidl2 from "webidl2"
 import { toIDLNode } from "./from-idl/deserialize"
+=======
+import { IndentedPrinter } from "./IndentedPrinter"
+import { DeserializerPrinter } from "./peer-generation/printers/DeserializerPrinter"
+>>>>>>> adcf566f (Scoala Deserializer)
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -181,6 +186,16 @@ if (options.dts2skoala) {
         fs.mkdirSync(outputDir, { recursive: true })
     }
 
+    let combinedDeserializerPrinter = new IndentedPrinter()
+
+    combinedDeserializerPrinter.print(`#include "SkoalaDeserializerBase.h"`)
+    combinedDeserializerPrinter.print("")
+    combinedDeserializerPrinter.print(`class Deserializer : public SkoalaDeserializerBase {`)
+    combinedDeserializerPrinter.print(`public:`)
+    combinedDeserializerPrinter.pushIndent()
+    combinedDeserializerPrinter.print(`Deserializer(uint8_t* data, int32_t length) : SkoalaDeserializerBase(data, length) {}`)
+    combinedDeserializerPrinter.print(``)
+
     generate(
         options.inputDir.split(','),
         options.inputFile,
@@ -199,11 +214,15 @@ if (options.dts2skoala) {
             },
             onEnd: () => {
                 generatedIDLMap.forEach((entries, fileName) => {
-                    const printer = new SkoalaCCodeGenerator(entries, outputDir, fileName)
+                    const codeGenerator = new SkoalaCCodeGenerator(entries, outputDir, fileName)
 
                     try {
-                        printer.generate()
+                        codeGenerator.generate()
                         console.log(`Code generation completed for ${fileName}.h`)
+
+                        const deserializerGenerator = new DeserializerPrinter(entries)
+                        deserializerGenerator.generateDeserializer(combinedDeserializerPrinter)
+                        console.log(`Methods added to deserializer for ${fileName}.`)
                     } catch (error) {
                         if (error instanceof Error) {
                             console.error(`Error during code generation for ${fileName}.h: ${error.message}`)
@@ -212,6 +231,20 @@ if (options.dts2skoala) {
                         }
                     }
                 })
+
+                combinedDeserializerPrinter.popIndent()
+                combinedDeserializerPrinter.print("};")
+                combinedDeserializerPrinter.print("")
+
+                const deserializerCode = combinedDeserializerPrinter.getOutput().join("\n")
+
+                if (deserializerCode.trim()) {
+                    const deserializerFilePath = path.join(outputDir, "deserializer.h")
+                    fs.writeFileSync(deserializerFilePath, deserializerCode)
+                    console.log(`Combined Deserializer generated and saved to: ${deserializerFilePath}`)
+                } else {
+                    console.log("No deserializer code generated")
+                }
 
                 console.log("All files processed.")
             }
