@@ -14,8 +14,9 @@
 */
 
 import { nativeModule } from "@koalaui/arkoala"
-import { int32 } from "@koalaui/common"
 import { Worker, isMainThread, parentPort } from "node:worker_threads"
+
+type int32 = number
 
 function waitVSync(): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, 100) )
