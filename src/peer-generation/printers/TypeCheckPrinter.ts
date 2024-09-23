@@ -8,7 +8,7 @@ import { Language } from "../../util";
 import { StructDescriptor } from "../DeclarationTable";
 
 export function importTypeChecker(library: PeerLibrary, imports: ImportsCollector): void {
-    imports.addFeature("TypeChecker", "#arkui")
+    imports.addFeature("TypeChecker", "#arkui/type_check")
 }
 
 export function makeEnumTypeCheckerCall(valueAccessor: string, enumName: string, writer: LanguageWriter): LanguageExpression {
@@ -132,13 +132,8 @@ class ARKTSTypeCheckerPrinter extends TypeCheckerPrinter {
                 ['value', ...argsNames]),
             [MethodModifier.STATIC],
         ), writer => {
-            writer.writeStatement(
-                writer.makeReturn(
-                    writer.makeEquals([
-                        writer.makeString(`Type.resolve('LArk${typeName}/${typeName};')?.getId()`),
-                        writer.makeString("Type.of(value).getId()")]
-                    )
-                ))
+            const statement = writer.makeReturn(writer.makeString(`value instanceof ${typeName}`))
+            writer.writeStatement(statement)
         })
     }
 
@@ -148,11 +143,6 @@ class ARKTSTypeCheckerPrinter extends TypeCheckerPrinter {
 
     protected writeArrayChecker(typeName: string): void {
         this.writeInstanceofChecker(typeName, generateTypeCheckerName(typeName), 0)
-    }
-
-    protected writeImports(features: ImportFeature[]) {
-        // TODO: lead to compilation errors
-        // super.writeImports(features)
     }
 }
 
