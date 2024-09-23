@@ -14,7 +14,7 @@
  */
 // Not needed for now
 
-// package idlize
+package idlize
 
 // public class Opt_Number <: Ark_ObjectBase {
 //     public var value: Float64
