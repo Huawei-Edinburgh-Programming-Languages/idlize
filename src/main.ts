@@ -526,13 +526,15 @@ function generateLibaceFromIdl(outDir: string, peerLibrary: IdlPeerLibrary) {
     copyToLibace(path.join(__dirname, '..', 'peer_lib'), libace)
 }
 
-function writeFile(filename: string, content: string, integrated: boolean = false, message?: string) {
+function writeFile(filename: string, content: string, integrated: boolean = false, message?: string): boolean {
     if (integrated || !options.onlyIntegrated) {
         if (message)
             console.log(message, filename)
         fs.mkdirSync(path.dirname(filename), { recursive: true })
         fs.writeFileSync(filename, content)
+        return true
     }
+    return false
 }
 
 function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Language) {
@@ -563,16 +565,13 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
     for (const [targetFile, builderClass] of builderClasses) {
         const outBuilderFile = arkoala.builderClass(targetFile)
         fs.writeFileSync(outBuilderFile, builderClass)
-        if (lang === Language.ARKTS) {
-            arkuiComponentsFiles.push(outBuilderFile);
-        }
+        arkuiComponentsFiles.push(outBuilderFile)
     }
 
     const materialized = printMaterialized(peerLibrary, context, options.dumpSerialized ?? false)
     for (const [targetFile, materializedClass] of materialized) {
         const outMaterializedFile = arkoala.materialized(targetFile)
-        writeFile(outMaterializedFile, materializedClass, peerLibrary.declarationTable.language === Language.ARKTS)
-        if (lang === Language.ARKTS) {
+        if (writeFile(outMaterializedFile, materializedClass, peerLibrary.declarationTable.language === Language.ARKTS)) {
             arkuiComponentsFiles.push(outMaterializedFile)
         }
     }
