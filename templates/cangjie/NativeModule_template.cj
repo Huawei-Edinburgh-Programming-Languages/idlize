@@ -18,7 +18,7 @@ package idlize
 import std.collection.*
 
 foreign {
-    func StringMake(string: CString): Int64
+    func StringMake(string: CPointer<UInt8>): Int64
     func StringLength(ptr: Int64): Int32
     func StringData(ptr: Int64, data: CPointer<UInt8>, arg2: Int32): Unit
     func GetStringFinalizer(): Int64
@@ -64,11 +64,11 @@ foreign {
 public open class NativeModule {
 
 %GENERATED_METHODS%
-    public static func _StringMake(string: String): Unit {
-        return unsafe {
-            let value = LibC.mallocCString(string)
-            StringMake(value)
-            LibC.free(value)
+    public static func _StringMake(string: ArrayList<UInt8>): Unit {
+        unsafe {
+            let handle_1 = acquireArrayRawData(string.toArray())
+            StringMake(handle_1.pointer)
+            releaseArrayRawData(handle_1)
         }
     }
     public static func _StringLength(ptr: Int64): Int32 {

@@ -20,19 +20,18 @@ import std.math.round
 import std.collection.*
 
 public func getNativeLog(): String {
-    var ptr = NativeModule._GetGroupedLog(1) // xddd
+    var ptr = NativeModule._GetGroupedLog(1)
     var length = NativeModule._StringLength(ptr)
     let data = ArrayList<UInt8>(Array<UInt8>(Int64(length), item: 0))
     NativeModule._StringData(ptr, data, length)
     NativeModule._InvokeFinalizer(ptr, NativeModule._GetStringFinalizer())
     // TODO: better string decoding.
-    var result = String()
-    for (i in 0..length) {
-        result += 'a'
+    var result = StringBuilder()
+    for (i in 0..length) { 
+        result.append(Rune(data[Int64(i)]))
     }
     return result.toString()
 }
-
 public func checkResult(name: String, test: () -> Unit, expected: String) {
     // NativeModule._StartGroupedLog(1)
     test()
@@ -102,7 +101,7 @@ func peersTest(): Unit {
     let buttonPeer = ArkButtonPeer.create(ArkUINodeType.Button, Option.None, 0)
     let labelStyle = LabelStyle(
                         Option.None,
-                        Opt_Number(5.0),
+                        5.0,
                         Option.None,
                         Option.None,
                         Option.None,
@@ -115,9 +114,18 @@ func peersTest(): Unit {
 
 
 main(): Unit {
-    println("hello")
     // checkPerf(5 * 1000 * 1000)
     // checkPerf2(100)
     // checkPerf3(100)
-    peersTest()
+    // peersTest()
+    // let buttonPeer = ArkButtonPeer.create(ArkUINodeType.Button, Option.None, 0)
+    // let labelStyle = LabelStyle(
+    //                     Option.None,
+    //                     5.0,
+    //                     Option.None,
+    //                     Option.None,
+    //                     Option.None,
+    //                     Option.None
+    //                 )
+    // buttonPeer.labelStyleAttribute(labelStyle)
 }

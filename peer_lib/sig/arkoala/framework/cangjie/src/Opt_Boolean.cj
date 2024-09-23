@@ -12,15 +12,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package idlize
+// Not needed for now
 
-public class Opt_Boolean <: Ark_ObjectBase {
-    public var value: Bool
-    public Opt_Boolean(v: Bool) {
-        this.value = v;
-    }
+// package idlize
 
-    public static func getRuntimeType(): RuntimeType {
-        return RuntimeType.BOOLEAN;
-    }
-}
+// public class Opt_Boolean <: Ark_ObjectBase {
+//     public var value: Bool
+//     public Opt_Boolean(v: Bool) {
+//         this.value = v;
+//     }
+
+//     override public func runtimeType(): RuntimeType {
+//         return RuntimeType.BOOLEAN;
+//     }
+// }

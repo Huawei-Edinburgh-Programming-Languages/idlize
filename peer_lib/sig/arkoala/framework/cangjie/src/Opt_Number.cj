@@ -12,15 +12,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package idlize
+// Not needed for now
 
-public class Opt_Number <: Ark_ObjectBase {
-    public var value: Float64
-    public Opt_Number(v: Float64) {
-        this.value = v;
-    }
+// package idlize
 
-    public static func getRuntimeType(): RuntimeType {
-        return RuntimeType.NUMBER;
-    }
-}
+// public class Opt_Number <: Ark_ObjectBase {
+//     public var value: Float64
+//     public Opt_Number(v: Float64) {
+//         this.value = v;
+//     }
+
+//     override public func runtimeType(): RuntimeType {
+//         return RuntimeType.NUMBER;
+//     }
+// }

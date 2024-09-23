@@ -15,7 +15,7 @@
 package idlize
 
 public abstract class Ark_ObjectBase <: Ark_Object {
-    public static func getRuntimeType(): RuntimeType {
+    public open func runtimeType(): RuntimeType {
         return RuntimeType.OBJECT
     }
 }
