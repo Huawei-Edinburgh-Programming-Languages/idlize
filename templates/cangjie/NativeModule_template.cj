@@ -74,11 +74,13 @@ public open class NativeModule {
     public static func _StringLength(ptr: Int64): Int32 {
         return unsafe { StringLength(ptr) }
     }
-    public static func _StringData(ptr: Int64, data: ArrayList<UInt8>, arg2: Int32): Unit {
+    public static func _StringData(ptr: Int64, data: ArrayList<UInt8>, arg2: Int32): ArrayList<UInt8> {
         unsafe {
             let handle_1 = acquireArrayRawData(data.toArray())
             StringData(ptr, handle_1.pointer, arg2)
+            let outputData = ArrayList<UInt8>(handle_1.array)
             releaseArrayRawData(handle_1)
+            return outputData
         }
     }
     public static func _GetStringFinalizer(): Int64 {

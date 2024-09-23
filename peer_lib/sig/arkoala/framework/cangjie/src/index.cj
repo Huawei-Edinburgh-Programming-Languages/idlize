@@ -19,31 +19,29 @@ import std.time.DateTime
 import std.math.round
 import std.collection.*
 
-public func getNativeLog(): String {
-    var ptr = NativeModule._GetGroupedLog(1)
-    var length = NativeModule._StringLength(ptr)
-    let data = ArrayList<UInt8>(Array<UInt8>(Int64(length), item: 0))
-    NativeModule._StringData(ptr, data, length)
-    NativeModule._InvokeFinalizer(ptr, NativeModule._GetStringFinalizer())
-    println(data)
-    // TODO: better string decoding.
+
+public func getNativeString(ptr: Int64): String {
+    let length = NativeModule._StringLength(ptr)
+    var data = ArrayList<UInt8>(Array<UInt8>(Int64(length), item: 0))
+    data = NativeModule._StringData(ptr, data, length)
     var result = StringBuilder()
     for (i in 0..length) { 
         result.append(Rune(data[Int64(i)]))
     }
     return result.toString()
 }
+
 public func checkResult(name: String, test: () -> Unit, expected: String) {
     NativeModule._StartGroupedLog(1)
     test()
     NativeModule._StopGroupedLog(1)
-    let actual = getNativeLog()
-//     if (actual != expected) {
-//         println("TEST ${name} FAIL:\n  EXPECTED \"${expected}\"\n  ACTUAL   \"${actual}\"")
-//         throw Exception("TEST ${name} FAIL")
-//     } else {
-//         println("TEST ${name} PASS")
-//     }
+    let actual = getNativeString(NativeModule._GetGroupedLog(1))
+    if (actual != expected) {
+        println("TEST ${name} FAIL:\n  EXPECTED \"${expected}\"\n  ACTUAL   \"${actual}\"")
+        throw Exception("TEST ${name} FAIL")
+    } else {
+        println("TEST ${name} PASS")
+    }
 }
 
 
@@ -115,18 +113,18 @@ func peersTest(): Unit {
 
 
 main(): Unit {
-    checkPerf(5 * 1000 * 1000)
-    checkPerf2(100)
-    checkPerf3(100)
+    // checkPerf(5 * 1000 * 1000)
+    // checkPerf2(100)
+    // checkPerf3(100)
     peersTest()
-    let buttonPeer = ArkButtonPeer.create(ArkUINodeType.Button, Option.None, 0)
-    let labelStyle = LabelStyle(
-                        Option.None,
-                        37.0,
-                        Option.None,
-                        Option.None,
-                        Option.None,
-                        Option.None
-                    )
-    buttonPeer.labelStyleAttribute(labelStyle)
+    // let buttonPeer = ArkButtonPeer.create(ArkUINodeType.Button, Option.None, 0)
+    // let labelStyle = LabelStyle(
+    //                     Option.None,
+    //                     37.0,
+    //                     Option.None,
+    //                     Option.None,
+    //                     Option.None,
+    //                     Option.None
+    //                 )
+    // buttonPeer.labelStyleAttribute(labelStyle)
 }
