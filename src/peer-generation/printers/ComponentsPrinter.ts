@@ -94,6 +94,7 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
             imports.addFeature("isResource", "./peers/SerializerBase")
             imports.addFeature("isInstanceOf", "./peers/SerializerBase")
             imports.addFeature('ComponentBase', './ComponentBase')
+            imports.addFeature('TypeChecker', '#arkui/type_check')
             if (this.printer.language == Language.TS)
                 imports.addFeature('unsafeCast', './shared/generated-utils')
             for (const method of peer.methods) {

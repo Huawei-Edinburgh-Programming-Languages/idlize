@@ -224,7 +224,7 @@ class PeerFileVisitor {
             }
             case Language.ARKTS: {
                 return [...defaultPeerImports,
-                    `import { NativeModule } from "#arkui"`,]
+                    `import { NativeModule } from "#arkui/NativeModule"`,]
             }
             default: {
                 return []

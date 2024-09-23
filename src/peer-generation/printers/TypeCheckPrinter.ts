@@ -34,6 +34,10 @@ export function makeInterfaceTypeCheckerCall(
         // todo stub or not?
         return writer.makeString(`${valueAccessor} instanceof Object`)
     }
+    if (interfaceName == "ArrayBuffer") {
+        // todo stub or not?
+        return writer.makeString(`${valueAccessor} instanceof ArrayBuffer`)
+    }
     return writer.makeMethodCall(
         "TypeChecker",
         generateTypeCheckerName(interfaceName), [writer.makeString(valueAccessor),

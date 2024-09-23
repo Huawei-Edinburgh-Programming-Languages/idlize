@@ -800,8 +800,11 @@ export class AggregateConvertor extends BaseArgConvertor {
         return this.members.map(it => it[0])
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        if (writer.language === Language.ARKTS)
-            return makeInterfaceTypeCheckerCall(value, this.aliasName!, this.members.map(it => it[0]), duplicates, writer)
+        if (writer.language === Language.ARKTS) {
+            return makeInterfaceTypeCheckerCall(value,
+                this.aliasName !== undefined ? this.aliasName : this.tsTypeName,
+                this.members.map(it => it[0]), duplicates, writer)
+        }
         const uniqueFields = this.members.filter(it => !duplicates.has(it[0]))
         return this.discriminatorFromFields(value, writer, uniqueFields, it => it[0], it => it[1])
     }
