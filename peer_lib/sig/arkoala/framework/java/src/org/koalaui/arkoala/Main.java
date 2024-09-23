@@ -135,7 +135,7 @@ public class Main {
             "someOptional({.tag=ARK_TAG_OBJECT, .value=false})");
 
         // enum
-        TestUtils.checkResult("[Enum] ButtonPeer.type", () -> { buttonPeer.typeAttribute(Ark_ButtonType.Capsule); }, "type(0)");
+        TestUtils.checkResult("[Enum] ButtonPeer.type", () -> { buttonPeer.typeAttribute(Ark_ButtonType.Capsule); }, "type(Ark_ButtonType(0))");
         var sheetOptions = new SheetOptions();
         sheetOptions.mode = Ark_SheetMode.EMBEDDED;
         TestUtils.checkResult("[Enum + Interface] ButtonPeer.bindSheet",
