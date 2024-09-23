@@ -37,10 +37,11 @@ export class Application {
         this.loopIteration(arg0, arg1)
     }
 
-    loopIteration(arg0: int, arg1: int) {
+    loopIteration(arg0: int, arg1: int): int {
         this.checkEvents(arg0)
         this.updateState()
         this.render()
+        return arg0
     }
 
     static startApplication(): Application {
