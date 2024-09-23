@@ -113,18 +113,8 @@ func peersTest(): Unit {
 
 
 main(): Unit {
-    // checkPerf(5 * 1000 * 1000)
-    // checkPerf2(100)
-    // checkPerf3(100)
+    checkPerf(5 * 1000 * 1000)
+    checkPerf2(100)
+    checkPerf3(100)
     peersTest()
-    // let buttonPeer = ArkButtonPeer.create(ArkUINodeType.Button, Option.None, 0)
-    // let labelStyle = LabelStyle(
-    //                     Option.None,
-    //                     37.0,
-    //                     Option.None,
-    //                     Option.None,
-    //                     Option.None,
-    //                     Option.None
-    //                 )
-    // buttonPeer.labelStyleAttribute(labelStyle)
 }
