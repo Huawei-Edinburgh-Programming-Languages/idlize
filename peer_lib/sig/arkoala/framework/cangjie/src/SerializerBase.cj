@@ -152,30 +152,30 @@ public open class SerializerBase {
     func writeTag(tag: Int32): Unit {
         this.setBytes(this.position, tag)
     }
-    func writeNumber(value: Float32): Unit {
-        if(value == Float32(Int32(value))) {
-            this.writeNumber(Int32(value))
-        } else {
-            this.setBytes(this.position, Tag.FLOAT32.ordinal)
-            this.setBytes(this.position, value)
-        }
-    }
-    func writeNumber(value: Float64): Unit {
-        if(value == Float64(Int32(value))) {
-            this.writeNumber(Int32(value))
-        } else {
-            this.setBytes(this.position, Tag.FLOAT32.ordinal)
-            this.setBytes(this.position, Float32(value))
-        }
-    }
-    func writeNumber(value: Int32): Unit {
-        this.setBytes(this.position, Tag.INT32.ordinal)
-        this.setBytes(this.position, value)
-    }
-    func writeNumber(value: Int64): Unit {
-        this.setBytes(this.position, Tag.INT32.ordinal)
-        this.setBytes(this.position, Int32(value))
-    }
+    // func writeNumber(value: Float32): Unit {
+    //     if(value == Float32(Int32(value))) {
+    //         this.writeNumber(Int32(value))
+    //     } else {
+    //         this.setBytes(this.position, Tag.FLOAT32.ordinal)
+    //         this.setBytes(this.position, value)
+    //     }
+    // }
+    // func writeNumber(value: Float64): Unit {
+    //     if(value == Float64(Int32(value))) {
+    //         this.writeNumber(Int32(value))
+    //     } else {
+    //         this.setBytes(this.position, Tag.FLOAT32.ordinal)
+    //         this.setBytes(this.position, Float32(value))
+    //     }
+    // }
+    // func writeNumber(value: Int32): Unit {
+    //     this.setBytes(this.position, Tag.INT32.ordinal)
+    //     this.setBytes(this.position, value)
+    // }
+    // func writeNumber(value: Int64): Unit {
+    //     this.setBytes(this.position, Tag.INT32.ordinal)
+    //     this.setBytes(this.position, Int32(value))
+    // }
     func writeNumber(value: ?Float32): Unit {
         if (let Some(value) <- value) {
             if(value == Float32(Int32(value))) {
@@ -224,9 +224,6 @@ public open class SerializerBase {
             this.position++
         }
     }
-    // func writeNumber(value: Opt_Number): Unit {
-    //     this.writeNumber(value.value);
-    // }
     func writeInt8(value: Int8): Unit {
         this.setBytes(this.position, value)
     }
