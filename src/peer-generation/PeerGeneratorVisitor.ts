@@ -73,6 +73,7 @@ import {
     toBuilderClass
 } from "./BuilderClass";
 import { Lazy, lazy } from "./lazy";
+import { convertTargetToCallback } from "./printers/EventsPrinter";
 
 export enum RuntimeType {
     UNEXPECTED = -1,
@@ -602,6 +603,12 @@ class PeersGenerator {
         ) as (ts.MethodDeclaration | ts.CallSignatureDeclaration)[]
     }
 
+    private generatePeerArgsFilter(peer: PeerClass) {
+        return (method: PeerMethod, index: number) => {
+            return !convertTargetToCallback("", "", method.originalDeclarationTargets[index])
+        }
+    }
+
     private processMethodOrCallable(
         method: ts.MethodDeclaration | ts.CallSignatureDeclaration,
         peer: PeerClass,
@@ -648,6 +655,7 @@ class PeersGenerator {
             false,
             new Method(methodName, signature, isStatic(method.modifiers) ? [MethodModifier.STATIC] : []),
             methodIndex,
+            this.generatePeerArgsFilter(peer),
         )
         this.declarationTable.setCurrentContext(undefined)
         return peerMethod
@@ -717,7 +725,7 @@ class PeersGenerator {
             // at which producing 'SyntaxError: Invalid Type' error
             const peerMethod = peer.methods.find((method) => method.overloadedName == methodName)
             if (peerMethod !== undefined) {
-                peerMethod.method.signature.args = [new Type(argumentTypeName)]
+                peerMethod.peerMethod.signature.args = [new Type(argumentTypeName)]
             }
             return argumentTypeName
         }

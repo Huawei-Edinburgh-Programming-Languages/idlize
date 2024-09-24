@@ -16,7 +16,7 @@
 
 import { capitalize, isDefined } from "../../util"
 import { ArgConvertor, RetConvertor } from "./IdlArgConvertors"
-import { Method, MethodModifier, mangleMethodName } from "../LanguageWriters"
+import { Method, MethodModifier, NamedMethodSignature, copyMethod, mangleMethodName } from "../LanguageWriters"
 import { PrimitiveType } from "../DeclarationTable"
 import { IDLType } from "../../idl"
 
@@ -24,15 +24,38 @@ export class IdlPeerMethod {
     private overloadIndex?: number
     constructor(
         public originalParentName: string,
-        public declarationTargets: IDLType[],
-        public argConvertors: ArgConvertor[],
+        public originalDeclarationTargets: IDLType[],
+        public originalArgConvertors: ArgConvertor[],
         public retConvertor: RetConvertor,
         public isCallSignature: boolean,
-        public method: Method,
+        public originalMethod: Method,
+        public peerArgsFilter: ((method: IdlPeerMethod, index: number) => boolean) | undefined,
     ) { }
 
+    public get peerDeclarationTargets(): IDLType[] {
+        return this.originalDeclarationTargets.filter((it, index) => this.peerArgsFilter?.(this, index) ?? true)
+    }
+    public get peerArgConvertors(): ArgConvertor[] {
+        return this.originalArgConvertors.filter((it, index) => this.peerArgsFilter?.(this, index) ?? true)
+    }
+    public get peerMethod(): Method {
+        if (!this.peerArgsFilter)
+            return this.originalMethod
+        const signature = this.originalMethod.signature
+        return copyMethod(this.originalMethod, {
+            signature: new NamedMethodSignature(
+                signature.returnType,
+                signature.args
+                    .filter((it, index) => this.peerArgsFilter!(this, index)),
+                signature.args.map((_, index) => signature.argName(index))
+                    .filter((it, index) => this.peerArgsFilter!(this, index)),
+                signature.defaults
+            )
+        })
+    }
+
     get overloadedName(): string {
-        return mangleMethodName(this.method, this.overloadIndex)
+        return mangleMethodName(this.peerMethod, this.overloadIndex)
     }
     get fullMethodName(): string {
         return this.isCallSignature ? this.overloadedName : this.peerMethodName
@@ -52,7 +75,7 @@ export class IdlPeerMethod {
         return `${capitalize(this.overloadedName)}Impl`
     }
     get toStringName(): string {
-        return this.method.name
+        return this.peerMethod.name
     }
     get dummyReturnValue(): string | undefined {
         return undefined
@@ -71,7 +94,7 @@ export class IdlPeerMethod {
     }
 
     hasReceiver(): boolean {
-        return !this.method.modifiers?.includes(MethodModifier.STATIC)
+        return !this.peerMethod.modifiers?.includes(MethodModifier.STATIC)
     }
 
     maybeCRetType(retConvertor: RetConvertor): string | undefined {
@@ -80,7 +103,7 @@ export class IdlPeerMethod {
     }
 
     generateAPIParameters(): string[] {
-        const args = this.argConvertors.map(it => {
+        const args = this.peerArgConvertors.map(it => {
             let isPointer = it.isPointerType()
             return `${isPointer ? "const ": ""}${it.nativeType(false)}${isPointer ? "*": ""} ${it.param}`
         })
@@ -100,7 +123,7 @@ export class IdlPeerMethod {
     static markOverloads(methods: IdlPeerMethod[]): void {
         for (const peerMethod of methods) {
             if (isDefined(peerMethod.overloadIndex)) continue
-            const sameNamedMethods = methods.filter(it => it.method.name === peerMethod.method.name)
+            const sameNamedMethods = methods.filter(it => it.peerMethod.name === peerMethod.peerMethod.name)
             if (sameNamedMethods.length > 1)
                 sameNamedMethods.forEach((it, index) => it.overloadIndex = index)
         }

@@ -53,7 +53,7 @@ class BridgeCcVisitor {
 
     private printAPICall(method: PeerMethod | IdlPeerMethod, modifierName?: string) {
         const hasReceiver = method.hasReceiver()
-        const argConvertors = method.argConvertors
+        const argConvertors = method.peerArgConvertors
         const isVoid = method.retConvertor.isVoid
         const modifier = this.generateApiCall(method, modifierName)
         const peerMethod = method.peerMethodName
@@ -72,7 +72,7 @@ class BridgeCcVisitor {
             this.generatedApi.print(`${method.receiverType} self = reinterpret_cast<${method.receiverType}>(thisPtr);`)
         }
         let deserializerCreated = false
-        method.argConvertors.forEach(it => {
+        method.peerArgConvertors.forEach(it => {
             if (it.useArray) {
                 if (!deserializerCreated) {
                     this.generatedApi.print(`Deserializer thisDeserializer(thisArray, thisLength);`)
@@ -96,8 +96,8 @@ class BridgeCcVisitor {
         this.generatedApi.print('std::string _tmp;')
         this.generatedApi.print('static int _num = 0;')
         let varNames : string[] = new Array<string>()
-        for (let i = 0; i < method.argConvertors.length; ++i) {
-            let it = method.argConvertors[i]
+        for (let i = 0; i < method.peerArgConvertors.length; ++i) {
+            let it = method.peerArgConvertors[i]
             let name = this.generateApiArgument(it) // it.param + '_value'
             this.generatedApi.print(`_tmp = "", WriteToString(&_tmp, ${name});`)
             varNames.push(`var${BridgeCcVisitor.varCnt}`)
@@ -110,17 +110,17 @@ class BridgeCcVisitor {
         if (method.hasReceiver()) {
             this.generatedApi.print(`_logData.append("(Ark_NativePointer)");`)
             this.generatedApi.print(`_logData.append("peer" + std::to_string((uintptr_t)thisPtr));`);
-            if (method.argConvertors.length > 0)
+            if (method.peerArgConvertors.length > 0)
                 this.generatedApi.print(`_logData.append(", ");`)
         }
-        method.argConvertors.forEach((it, index) => {
+        method.peerArgConvertors.forEach((it, index) => {
             if (it.nativeType(false) != "Ark_Number"
                 && (it.tsTypeName == "number" || it.tsTypeName == "boolean")) {
                 this.generatedApi.print(`_logData.append("${varNames[index]}_" + std::to_string(_num));`)
             } else {
                 this.generatedApi.print(`_logData.append("&${varNames[index]}_" + std::to_string(_num));`)
             }
-            if (index < method.argConvertors.length - 1)
+            if (index < method.peerArgConvertors.length - 1)
                 this.generatedApi.print(`_logData.append(", ");`)
         })
         this.generatedApi.print("_num += 1;")
@@ -150,7 +150,7 @@ class BridgeCcVisitor {
     private generateCMacroSuffix(method: PeerMethod | IdlPeerMethod): string {
         let counter = method.hasReceiver() ? 1 : 0
         let arrayAdded = false
-        method.argConvertors.forEach(it => {
+        method.peerArgConvertors.forEach(it => {
             if (it.useArray) {
                 if (!arrayAdded) {
                     counter += 2
@@ -191,7 +191,7 @@ class BridgeCcVisitor {
 
     private printMethod(method: PeerMethod | IdlPeerMethod, modifierName?: string) {
         const retConvertor = method.retConvertor
-        const argConvertors = method.argConvertors
+        const argConvertors = method.peerArgConvertors
 
         let cName = `${method.originalParentName}_${method.overloadedName}`
         let rv = retConvertor.nativeType()

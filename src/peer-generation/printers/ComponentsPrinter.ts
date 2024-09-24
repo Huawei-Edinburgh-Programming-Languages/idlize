@@ -97,7 +97,7 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
             if (this.printer.language == Language.TS)
                 imports.addFeature('unsafeCast', './shared/generated-utils')
             for (const method of peer.methods) {
-                for (const argType of method.declarationTargets)
+                for (const argType of method.originalDeclarationTargets)
                     if (convertToCallback(peer, method, argType))
                         imports.addFeature("UseEventsProperties", './use_properties')
             }
@@ -111,7 +111,7 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
     }
 
     private printComponent(peer: PeerClass | IdlPeerClass) {
-        const callableMethods = (peer.methods as any[]).filter(it => it.isCallSignature).map(it => it.method)
+        const callableMethods = (peer.methods as any[]).filter(it => it.isCallSignature).map(it => it.peerMethod)
         const callableMethod = callableMethods.length ? collapseSameNamedMethods(callableMethods) : undefined
         const mappedCallableParams = callableMethod?.signature.args.map((it, index) => `${callableMethod.signature.argName(index)}${it.nullable ? "?" : ""}: ${it.name}`)
         const mappedCallableParamsValues = callableMethod?.signature.args.map((_, index) => callableMethod.signature.argName(index))
@@ -189,19 +189,20 @@ class JavaComponentFileVisitor implements ComponentFileVisitor {
 
         printer.writeClass(componentClassName, (writer) => {
             peer.methods.forEach(peerMethod => {
-                const originalSignature = peerMethod.method.signature as NamedMethodSignature
-                const types = peerMethod.declarationTargets.map((declarationTarget, index) => {
+                const originalSignature = peerMethod.originalMethod.signature as NamedMethodSignature
+                const types = peerMethod.originalDeclarationTargets.map((declarationTarget, index) => {
                     return this.printerContext.synthesizedTypes!.getTargetType(declarationTarget, originalSignature.args[index].nullable)
                 })
                 usedTypes.push(...types)
-                const signature = new NamedMethodSignature(componentType, types, originalSignature.argsNames)
-                const method = new Method(peerMethod.method.name, signature, [MethodModifier.PUBLIC])
-                writer.writeMethodImplementation(method, writer => {
+                const componentSignature = new NamedMethodSignature(componentType, types, originalSignature.argsNames)
+                const peerSignature = peerMethod.peerMethod.signature as NamedMethodSignature
+                const componentMethod = new Method(peerMethod.peerMethod.name, componentSignature, [MethodModifier.PUBLIC])
+                writer.writeMethodImplementation(componentMethod, writer => {
                     const thiz = writer.makeString('this')
                     writer.writeStatement(writer.makeCondition(
-                        writer.makeString(`checkPriority("${method.name}")`),
+                        writer.makeString(`checkPriority("${componentMethod.name}")`),
                         writer.makeBlock([
-                            writer.makeStatement(writer.makeMethodCall(`((${peerClassName})peer)`, `${method.name}Attribute`, originalSignature.argsNames.map(it => writer.makeString(it)))),
+                            writer.makeStatement(writer.makeMethodCall(`((${peerClassName})peer)`, `${componentMethod.name}Attribute`, peerSignature.argsNames.map(it => writer.makeString(it)))),
                             writer.makeReturn(thiz),
                         ], false)))
                     writer.writeStatement(writer.makeReturn(thiz))

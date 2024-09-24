@@ -70,8 +70,8 @@ class NativeModuleVisitor {
         clazz.setGenerationContext(`${method.isCallSignature ? "" : method.overloadedName}()`)
         let serializerArgCreated = false
         let args: ({name: string, type: string})[] = []
-        for (let i = 0; i < method.argConvertors.length; ++i) {
-            let it = method.argConvertors[i]
+        for (let i = 0; i < method.peerArgConvertors.length; ++i) {
+            let it = method.peerArgConvertors[i]
             if (it.useArray) {
                 if (!serializerArgCreated) {
                     const array = `thisSerializer`
@@ -133,8 +133,8 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
         clazz.setGenerationContext(`${method.isCallSignature ? "" : method.overloadedName}()`)
         let serializerArgCreated = false
         let args: ({name: string, type: string})[] = []
-        for (let i = 0; i < method.argConvertors.length; ++i) {
-            let it = method.argConvertors[i]
+        for (let i = 0; i < method.peerArgConvertors.length; ++i) {
+            let it = method.peerArgConvertors[i]
             if (it.useArray) {
                 if (!serializerArgCreated) {
                     const array = `thisSerializer`

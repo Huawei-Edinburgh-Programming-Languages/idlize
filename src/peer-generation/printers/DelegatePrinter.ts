@@ -30,7 +30,7 @@ export class DelegateSignatureBuilder {
         private readonly declarationTable: DeclarationTable,
         private readonly method: PeerMethod
     ) {
-        this.args = method.argConvertors.map((convertor, index) => {
+        this.args = method.peerArgConvertors.map((convertor, index) => {
             return [{
                 argName: convertor.param,
                 argType: convertor.nativeType(false),

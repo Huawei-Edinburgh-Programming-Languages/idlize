@@ -72,7 +72,7 @@ export class MaterializedMethod extends PeerMethod {
         method: Method,
         index: number,
     ) {
-        super(originalParentName, declarationTargets, argConvertors, retConvertor, isCallSignature, false, method, index)
+        super(originalParentName, declarationTargets, argConvertors, retConvertor, isCallSignature, false, method, index, undefined)
     }
 
     override get peerMethodName() {
@@ -80,7 +80,7 @@ export class MaterializedMethod extends PeerMethod {
     }
 
     override get toStringName(): string {
-        switch (this.method.name) {
+        switch (this.peerMethod.name) {
             case "ctor": return `new ${this.originalParentName}`
             case "destructor": return `delete ${this.originalParentName}`
             default: return super.toStringName
@@ -88,9 +88,9 @@ export class MaterializedMethod extends PeerMethod {
     }
 
     override get dummyReturnValue(): string | undefined {
-        if (this.method.name === "ctor") return `(void*) 100`
-        if (this.method.name === "getFinalizer") return `fnPtr<KNativePointer>(dummyClassFinalizer)`
-        if (this.method.modifiers?.includes(MethodModifier.STATIC)) return `(void*) 300`
+        if (this.peerMethod.name === "ctor") return `(void*) 100`
+        if (this.peerMethod.name === "getFinalizer") return `fnPtr<KNativePointer>(dummyClassFinalizer)`
+        if (this.peerMethod.modifiers?.includes(MethodModifier.STATIC)) return `(void*) 300`
         return undefined;
     }
 
@@ -115,7 +115,7 @@ export class MaterializedMethod extends PeerMethod {
     }
 
     tsReturnType(): Type | undefined {
-        const returnType = this.method.signature.returnType
+        const returnType = this.peerMethod.signature.returnType
         return this.hasReceiver() && returnType.name === this.originalParentName ? Type.This : returnType
     }
 }
@@ -126,11 +126,11 @@ export function copyMaterializedMethod(method: MaterializedMethod, overrides: {
 }) {
     const newMethod = new MaterializedMethod(
         method.originalParentName,
-        method.declarationTargets,
-        method.argConvertors,
+        method.peerDeclarationTargets,
+        method.peerArgConvertors,
         method.retConvertor,
         method.isCallSignature,
-        overrides.method ?? method.method,
+        overrides.method ?? method.peerMethod,
         method.index
     )
     newMethod.isOverloaded = method.isOverloaded

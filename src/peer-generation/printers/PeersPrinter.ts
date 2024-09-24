@@ -272,7 +272,7 @@ class JavaPeerFileVisitor extends PeerFileVisitor {
             this.printers.set(new TargetFile(peerName, ARKOALA_PACKAGE_PATH), printer)
 
             const allTypesInPeer = peer.methods.flatMap((method) => {
-                return method.declarationTargets.map(target => this.printerContext.synthesizedTypes!.getTargetType(target, false))
+                return method.peerDeclarationTargets.map(target => this.printerContext.synthesizedTypes!.getTargetType(target, false))
             })
 
             this.printPackage(printer)
@@ -316,7 +316,7 @@ class CJPeerFileVisitor extends PeerFileVisitor {
             this.printers.set(new TargetFile(peerName, ''), printer)
 
             const allTypesInPeer = peer.methods.flatMap((method) => {
-                return method.declarationTargets.map(target => this.printerContext.synthesizedTypes!.getTargetType(target, false))
+                return method.peerDeclarationTargets.map(target => this.printerContext.synthesizedTypes!.getTargetType(target, false))
             })
 
             this.printPackage(printer)
@@ -387,43 +387,43 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod | Id
     const isJava = printerContext.language == Language.JAVA
     const isCJ = printerContext.language == Language.CJ
 
-    const signature = method.method.signature as NamedMethodSignature
+    const signature = method.peerMethod.signature as NamedMethodSignature
     let peerMethod: Method
     if (isTsLike) {
         peerMethod = new Method(
             `${method.overloadedName}${methodPostfix}`,
             new NamedMethodSignature(returnType, signature.args, signature.argsNames),
-            method.method.modifiers, method.method.generics)
+            method.peerMethod.modifiers, method.peerMethod.generics)
     }
     else if (isJava) {
-        const args = (method as PeerMethod).declarationTargets.map((declarationTarget, index) => {
+        const args = (method as PeerMethod).peerDeclarationTargets.map((declarationTarget, index) => {
             return printerContext.synthesizedTypes!.getTargetType(declarationTarget, signature.args[index].nullable)
         })
         peerMethod = new Method(
-            `${method.method.name}${methodPostfix}`,
+            `${method.peerMethod.name}${methodPostfix}`,
             new NamedMethodSignature(returnType, args, signature.argsNames),
-            method.method.modifiers, method.method.generics)
+            method.peerMethod.modifiers, method.peerMethod.generics)
     }
     else if (isCJ) {
-        const args = (method as PeerMethod).declarationTargets.map((declarationTarget, index) => {
+        const args = (method as PeerMethod).peerDeclarationTargets.map((declarationTarget, index) => {
             return printerContext.synthesizedTypes!.getTargetType(declarationTarget, signature.args[index].nullable)
         })
         peerMethod = new Method(
             `${method.overloadedName}${methodPostfix}`,
             new NamedMethodSignature(returnType, args, signature.argsNames),
-            method.method.modifiers, method.method.generics)
+            method.peerMethod.modifiers, method.peerMethod.generics)
     }
     else {
         return
     }
     printer.writeMethodImplementation(peerMethod, (writer) => {
-        let scopes = method.argConvertors.filter(it => it.isScoped)
+        let scopes = method.peerArgConvertors.filter(it => it.isScoped)
         scopes.forEach(it => {
             writer.pushIndent()
             writer.print(it.scopeStart?.(it.param, printer.language))
         })
         let serializerCreated = false
-        method.argConvertors.forEach((it, index) => {
+        method.peerArgConvertors.forEach((it, index) => {
             if (it.useArray) {
                 if (!serializerCreated) {
                     writer.writeStatement(
@@ -440,7 +440,7 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod | Id
         // Enable to see serialized data.
         if (dumpSerialized) {
             let arrayNum = 0
-            method.argConvertors.forEach((it, index) => {
+            method.peerArgConvertors.forEach((it, index) => {
                 if (it.useArray) {
                     writer.writePrintLog(`"${it.param}:", thisSerializer.asArray(), thisSerializer.length())`)
                 }
@@ -451,7 +451,7 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod | Id
             params.push(writer.makeString(ptr))
         }
         let serializerPushed = false
-        method.argConvertors.forEach(it => {
+        method.peerArgConvertors.forEach(it => {
             if (it.useArray) {
                 if (!serializerPushed) {
                     params.push(writer.makeMethodCall(`thisSerializer`, 'asArray', []))

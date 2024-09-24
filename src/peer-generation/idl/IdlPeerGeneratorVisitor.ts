@@ -33,7 +33,7 @@ import { isRoot } from "../inheritance";
 import { ImportFeature } from "../ImportsCollector";
 import { DeclarationNameConvertor } from "./IdlNameConvertor";
 import { PrimitiveType } from "../DeclarationTable"
-import { collapseIdlEventsOverloads } from "../printers/EventsPrinter"
+import { collapseIdlEventsOverloads, convertIdlToCallback } from "../printers/EventsPrinter"
 import { convert } from "./common"
 
 export enum RuntimeType {
@@ -288,6 +288,12 @@ class PeersGenerator {
         private readonly library: IdlPeerLibrary,
     ) {}
 
+    private generatePeerArgsFilter(peer: IdlPeerClass) {
+        return (method: IdlPeerMethod, index: number) => {
+            return !convertIdlToCallback("", "", method.originalDeclarationTargets[index])
+        }
+    }
+
     private processProperty(prop: idl.IDLProperty,
         peer: IdlPeerClass, maybeCallback: boolean, parentName?: string): IdlPeerMethod | undefined
     {
@@ -314,7 +320,8 @@ class PeersGenerator {
             [argConvertor],
             generateRetConvertor(idl.createVoidType()), ///constant?,
             false,
-            new Method(prop.name, signature, []))
+            new Method(prop.name, signature, []),
+            this.generatePeerArgsFilter(peer))
     }
 
     private processMethodOrCallable(method: idl.IDLMethod | idl.IDLCallable,
@@ -341,7 +348,8 @@ class PeersGenerator {
             argConvertors,
             generateRetConvertor(method.returnType),
             isCallSignature,
-            new Method(methodName, signature, method.isStatic ? [MethodModifier.STATIC] : []))
+            new Method(methodName, signature, method.isStatic ? [MethodModifier.STATIC] : []),
+            this.generatePeerArgsFilter(peer))
     }
 
     private toDeclaration(type: idl.IDLType): idl.IDLType {
@@ -398,7 +406,7 @@ class PeersGenerator {
                     content: `export interface ${fixedTypeName} {\n${attributeDeclarations}\n}`})
                 const peerMethod = peer.methods.find((method) => method.overloadedName == name)
                 if (peerMethod !== undefined) {
-                    peerMethod.method.signature.args = [new Type(fixedTypeName)]
+                    peerMethod.peerMethod.signature.args = [new Type(fixedTypeName)]
                 }
                 return fixedTypeName
             }
@@ -546,7 +554,7 @@ export class IdlPeerProcessor {
         const mMethods = decl.methods
             // TODO: Properly handle methods with return Promise<T> type
             .map(method => this.makeMaterializedMethod(decl, method, isActualDeclaration))
-            .filter(it => !PeerGeneratorConfig.ignoreReturnTypes.has(it.method.signature.returnType.name))
+            .filter(it => !PeerGeneratorConfig.ignoreReturnTypes.has(it.peerMethod.signature.returnType.name))
 
         mFields.forEach(f => {
             const field = f.field

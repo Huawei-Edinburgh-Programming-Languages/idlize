@@ -45,9 +45,9 @@ class TrackerVisitor {
         let seen = new Set<string>()
         this.out.print(`|*${clazz.componentName}*| *Component* | ${this.tracking(clazz.componentName, "Component")}`)
         clazz.methods.forEach(method => {
-            if (!seen.has(method.method.name)) {
-                this.out.print(`|\`${method.method.name}\`| Function | ${this.tracking(clazz.componentName, method.method.name)}`)
-                seen.add(method.method.name)
+            if (!seen.has(method.peerMethod.name)) {
+                this.out.print(`|\`${method.peerMethod.name}\`| Function | ${this.tracking(clazz.componentName, method.peerMethod.name)}`)
+                seen.add(method.peerMethod.name)
             }
         })
     }
@@ -56,9 +56,9 @@ class TrackerVisitor {
         let seen = new Set<string>()
         this.out.print(`|*${clazz.className}*| *Class* | ${this.tracking(clazz.className, "Class")}`)
         clazz.methods.forEach(method => {
-            if (!seen.has(method.method.name)) {
-                this.out.print(`|\`${method.method.name}\`| Function | ${this.tracking(clazz.className, method.method.name)}`)
-                seen.add(method.method.name)
+            if (!seen.has(method.peerMethod.name)) {
+                this.out.print(`|\`${method.peerMethod.name}\`| Function | ${this.tracking(clazz.className, method.peerMethod.name)}`)
+                seen.add(method.peerMethod.name)
             }
         })
     }
@@ -77,7 +77,7 @@ class TrackerVisitor {
                 const compKey = key(component.componentName, "Component")
                 this.incAllStatus(compKey, allComponents)
                 component.methods.forEach(method => {
-                    const funcKey = key(component.componentName, method.method.name)
+                    const funcKey = key(component.componentName, method.peerMethod.name)
                     this.incAllStatus(funcKey, allFunctions)
                 })
             })
@@ -86,7 +86,7 @@ class TrackerVisitor {
             const classKey = key(clazz.className, "Class")
             this.incAllStatus(classKey, allMaterialized)
             clazz.methods.forEach(method => {
-                const funcKey = key(clazz.className, method.method.name)
+                const funcKey = key(clazz.className, method.peerMethod.name)
                 this.incAllStatus(funcKey, allFunctions)
             })
         })

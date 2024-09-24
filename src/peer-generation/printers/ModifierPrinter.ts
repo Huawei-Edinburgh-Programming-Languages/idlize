@@ -44,9 +44,9 @@ class MethodSeparatorPrinter extends MethodSeparatorVisitor {
     ) {
         super(declarationTable, method)
         this.delegateSignatureBuilder = new DelegateSignatureBuilder(declarationTable, method)
-        this.accessChain = method.argConvertors.map((convertor, index) => [{
+        this.accessChain = method.peerArgConvertors.map((convertor, index) => [{
             name: convertor.param,
-            type: method.declarationTargets[index],
+            type: method.peerDeclarationTargets[index],
             isPointerType: convertor.isPointerType(),
         }])
     }
@@ -138,7 +138,7 @@ class MethodSeparatorPrinter extends MethodSeparatorVisitor {
     onVisitInseparable(): void {
         super.onVisitInseparable()
         const delegateIdentifier = this.delegateSignatureBuilder.buildIdentifier()
-        let delegateArgs = Array.from({length: this.method.argConvertors.length}, (_, argIndex) => {
+        let delegateArgs = Array.from({length: this.method.peerArgConvertors.length}, (_, argIndex) => {
             return this.generateInseparableFieldName(argIndex)
         })
         if (this.method.hasReceiver())
@@ -166,7 +166,7 @@ export class ModifierVisitor {
                 _.makeReturn(
                     method.retConvertor.isVoid ? undefined : _.makeString(method.dummyReturnValue ?? "0"))))
         _.print(`string out("${method.toStringName}(");`)
-        method.argConvertors.forEach((argConvertor, index) => {
+        method.peerArgConvertors.forEach((argConvertor, index) => {
             if (index > 0) this.dummy.print(`out.append(", ");`)
             _.print(`WriteToString(&out, ${argConvertor.param});`)
         })

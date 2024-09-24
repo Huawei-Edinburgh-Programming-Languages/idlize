@@ -168,7 +168,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
             writePeerMethod(writer, clazz.ctor, this.printerContext, this.dumpSerialized, "", "", pointerType)
             this.library.setCurrentContext(undefined)
 
-            const ctorSig = clazz.ctor.method.signature as NamedMethodSignature
+            const ctorSig = clazz.ctor.peerMethod.signature as NamedMethodSignature
             const sigWithPointer = new NamedMethodSignature(
                 ctorSig.returnType,
                 ctorSig.args.map(it => new Type(it.name, true)),
@@ -182,7 +182,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                 }
 
                 const allOptional = ctorSig.args.every(it => it.nullable)
-                const hasStaticMethods = clazz.methods.some(it => it.method.modifiers?.includes(MethodModifier.STATIC))
+                const hasStaticMethods = clazz.methods.some(it => it.peerMethod.modifiers?.includes(MethodModifier.STATIC))
                 if (hasStaticMethods && allOptional) {
                     if (ctorSig.args.length == 0) {
                         writer.print(`// Constructor does not have parameters.`)
@@ -225,10 +225,10 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
 
             clazz.methods.forEach(method => {
                 let privateMethod = method
-                if (!privateMethod.method.modifiers?.includes(MethodModifier.PRIVATE))
+                if (!privateMethod.peerMethod.modifiers?.includes(MethodModifier.PRIVATE))
                     privateMethod = copyMaterializedMethod(method, {
-                        method: copyMethod(method.method, {
-                            modifiers: (method.method.modifiers ?? []).concat([MethodModifier.PRIVATE])
+                        method: copyMethod(method.peerMethod, {
+                            modifiers: (method.peerMethod.modifiers ?? []).concat([MethodModifier.PRIVATE])
                         })
                     })
                 const returnType = privateMethod.tsReturnType()
@@ -308,10 +308,10 @@ class JavaMaterializedFileVisitor extends MaterializedFileVisitorBase {
                 writer.writeSuperCall([emptySignature.argName(0)]);
             })
 
-            const ctorSig = clazz.ctor.method.signature as NamedMethodSignature
+            const ctorSig = clazz.ctor.peerMethod.signature as NamedMethodSignature
             const signatureWithJavaTypes = new NamedMethodSignature(
                 ctorSig.returnType,
-                clazz.ctor.declarationTargets.map((declarationTarget, index) => {
+                clazz.ctor.peerDeclarationTargets.map((declarationTarget, index) => {
                     return this.printerContext.synthesizedTypes!.getTargetType(declarationTarget, ctorSig.args[index].nullable)
                 }),
                 ctorSig.argsNames,
@@ -346,7 +346,7 @@ class JavaMaterializedFileVisitor extends MaterializedFileVisitorBase {
 
             clazz.methods.forEach(method => {
                 this.library.setCurrentContext(`${method.originalParentName}.${method.overloadedName}`)
-                writePeerMethod(writer, method, this.printerContext, this.dumpSerialized, '', 'this.peer.ptr', method.method.signature.returnType)
+                writePeerMethod(writer, method, this.printerContext, this.dumpSerialized, '', 'this.peer.ptr', method.peerMethod.signature.returnType)
                 this.library.setCurrentContext(undefined)
             })
         }, superClassName, undefined, clazz.generics)

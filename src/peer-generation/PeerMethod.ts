@@ -14,27 +14,50 @@
  */
 import { capitalize } from "../util"
 import { ArgConvertor, OptionConvertor, RetConvertor } from "./Convertors"
-import { Method, MethodModifier, mangleMethodName } from "./LanguageWriters"
+import { Method, MethodModifier, NamedMethodSignature, copyMethod, mangleMethodName } from "./LanguageWriters"
 import { DeclarationTable, DeclarationTarget, FieldRecord, PrimitiveType, StructVisitor } from "./DeclarationTable"
 
 export class PeerMethod {
     constructor(
         public originalParentName: string,
-        public declarationTargets: DeclarationTarget[],
-        public argConvertors: ArgConvertor[],
+        public originalDeclarationTargets: DeclarationTarget[],
+        public originalArgConvertors: ArgConvertor[],
         public retConvertor: RetConvertor,
         public isCallSignature: boolean,
         public isOverloaded: boolean,
-        public method: Method,
+        public originalMethod: Method,
         public index: number,
+        public peerArgsFilter: ((method: PeerMethod, index: number) => boolean) | undefined,
     ) { }
 
+    public get peerDeclarationTargets(): DeclarationTarget[] {
+        return this.originalDeclarationTargets.filter((it, index) => this.peerArgsFilter?.(this, index) ?? true)
+    }
+    public get peerArgConvertors(): ArgConvertor[] {
+        return this.originalArgConvertors.filter((it, index) => this.peerArgsFilter?.(this, index) ?? true)
+    }
+    public get peerMethod(): Method {
+        if (!this.peerArgsFilter)
+            return this.originalMethod
+        const signature = this.originalMethod.signature
+        return copyMethod(this.originalMethod, {
+            signature: new NamedMethodSignature(
+                signature.returnType,
+                signature.args
+                    .filter((it, index) => this.peerArgsFilter!(this, index)),
+                signature.args.map((_, index) => signature.argName(index))
+                    .filter((it, index) => this.peerArgsFilter!(this, index)),
+                signature.defaults
+            )
+        })
+    }
+
     public hasReceiver(): boolean {
-        return !this.method.modifiers?.includes(MethodModifier.STATIC)
+        return !this.peerMethod.modifiers?.includes(MethodModifier.STATIC)
     }
 
     get overloadedName(): string {
-        return this.isOverloaded ? mangleMethodName(this.method, this.index) : this.method.name
+        return this.isOverloaded ? mangleMethodName(this.peerMethod, this.index) : this.peerMethod.name
     }
 
     get fullMethodName(): string {
@@ -59,7 +82,7 @@ export class PeerMethod {
     }
 
     get toStringName(): string {
-        return this.method.name
+        return this.peerMethod.name
     }
 
     get dummyReturnValue(): string | undefined {
@@ -88,7 +111,7 @@ export class PeerMethod {
     }
 
     generateAPIParameters(): string[] {
-        const args = this.argConvertors.map(it => {
+        const args = this.peerArgConvertors.map(it => {
             let isPointer = it.isPointerType()
             return `${isPointer ? "const ": ""}${it.nativeType(false)}${isPointer ? "*": ""} ${it.param}`
         })
@@ -111,7 +134,7 @@ export class PeerMethod {
 
         for (const peerMethod of methods) {
             if (peerMethod.isOverloaded) continue
-            const sameNamedMethods = methods.filter(it => it.method.name === peerMethod.method.name)
+            const sameNamedMethods = methods.filter(it => it.peerMethod.name === peerMethod.peerMethod.name)
             if (sameNamedMethods.length <= 1) continue
             sameNamedMethods.forEach((method) => method.isOverloaded = true)
         }
@@ -132,7 +155,7 @@ export class MethodSeparatorVisitor {
     protected onVisitInseparable() {}
 
     private visitArg(argIndex: number): void {
-        if (argIndex >= this.method.argConvertors.length) {
+        if (argIndex >= this.method.peerArgConvertors.length) {
             this.onVisitInseparable()
             return
         }
@@ -148,9 +171,9 @@ export class MethodSeparatorVisitor {
                 this.visitArg(argIndex + 1)
             }
         }
-        if (this.method.argConvertors[argIndex] instanceof OptionConvertor) {
+        if (this.method.peerArgConvertors[argIndex] instanceof OptionConvertor) {
             // todo does we have optionals only on root?
-            const conv = this.method.argConvertors[argIndex] as OptionConvertor
+            const conv = this.method.peerArgConvertors[argIndex] as OptionConvertor
             const target = this.declarationTable.toTarget(conv.type)
 
             this.onPushOptionScope(argIndex, target, true)
@@ -161,7 +184,7 @@ export class MethodSeparatorVisitor {
             visitor.visitInseparable()
             this.onPopOptionScope(argIndex)
         } else
-            this.declarationTable.visitDeclaration(this.method.declarationTargets[argIndex], visitor)
+            this.declarationTable.visitDeclaration(this.method.peerDeclarationTargets[argIndex], visitor)
     }
 
     visit(): void {

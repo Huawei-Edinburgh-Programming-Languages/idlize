@@ -70,8 +70,8 @@ export function makeJavaArkComponents(library: PeerLibrary, printerContext: Prin
                 }
                 else if (callableMethods.length == 1) {
                     callableMethod = callableMethods[0]
-                    const callableSignature = callableMethod.method.signature
-                    callableMethod.declarationTargets.forEach((it, index) => {
+                    const callableSignature = callableMethod.peerMethod.signature
+                    callableMethod.peerDeclarationTargets.forEach((it, index) => {
                         const javaType = printerContext.synthesizedTypes!.getTargetType(it, callableSignature.args[index].nullable)
                         usedTypes.push(javaType)
                         paramTypes.push(javaType)
@@ -96,7 +96,7 @@ export function makeJavaArkComponents(library: PeerLibrary, printerContext: Prin
                     writer.writeStatement(
                         writer.makeAssign(update, new Type(`Consumer<${arkPeer}>`),
                             writer.makeLambda(new NamedMethodSignature(Type.Void, [arkPeerType], ['peer']), (callableMethod ?
-                                [writer.makeStatement(writer.makeMethodCall(receiver, callableMethod.method.name,
+                                [writer.makeStatement(writer.makeMethodCall(receiver, callableMethod.peerMethod.name,
                                     signature.argsNames.slice(2).map(it => writer.makeString(it))))] : []).concat(
                                         writer.makeCondition(writer.makeDefinedCheck(signature.argName(0)),
                                             writer.makeStatement(writer.makeMethodCall(signature.argName(0), 'accept', [writer.makeString(receiver)]))),
