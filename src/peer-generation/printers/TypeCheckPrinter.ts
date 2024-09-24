@@ -2,16 +2,13 @@ import * as ts from "typescript"
 import { convertDeclToFeature, ImportFeature, ImportsCollector } from "../ImportsCollector";
 import { PeerLibrary } from "../PeerLibrary";
 import {
-    DeclarationDependenciesCollector,
     DeclarationNameConvertor
 } from "../dependencies_collector";
 import { convertDeclaration } from "../TypeNodeConvertor";
 import { createLanguageWriter, LanguageExpression, LanguageWriter, Method, MethodModifier, NamedMethodSignature, Type } from "../LanguageWriters";
 import { Language } from "../../util";
 import { StructDescriptor } from "../DeclarationTable";
-import { createTypeDependenciesCollector, isSourceDecl } from "../PeerGeneratorVisitor";
-import { lazy } from "../lazy";
-import { isSyntheticDeclaration } from "../synthetic_declaration";
+import { getSyntheticDeclarationList } from "../synthetic_declaration";
 
 export function importTypeChecker(library: PeerLibrary, imports: ImportsCollector): void {
     imports.addFeature("TypeChecker", "#arkui/type_check")
@@ -72,18 +69,10 @@ export function generateTypeCheckerName(typeName: string): string {
 }
 
 abstract class TypeCheckerPrinter {
-    private readonly declDependenciesCollector: DeclarationDependenciesCollector
     constructor(
         protected readonly library: PeerLibrary,
         public readonly writer: LanguageWriter,
-    ) {
-        this.declDependenciesCollector = new DeclarationDependenciesCollector(
-            this.library.declarationTable.typeChecker!,
-            createTypeDependenciesCollector(this.library, {
-                declDependenciesCollector: lazy(() => this.declDependenciesCollector)
-            })
-        )
-    }
+    ) {}
 
     protected writeImports(features: ImportFeature[]): void {
         const imports = new ImportsCollector()
@@ -116,20 +105,19 @@ abstract class TypeCheckerPrinter {
                         descriptor: this.library.declarationTable.targetStruct(decl)
                     })
                 }
-
-                // Collecting of synthetic types. This is necessary for the arkts
-                this.collectSyntheticInterfaces(decl).forEach(it => {
-                    const declName = convertDeclaration(DeclarationNameConvertor.I, it)
-                    if (interfaces.find(it => it.name === declName) === undefined) {
-                        importFeatures.push(convertDeclToFeature(this.library, it))
-                        interfaces.push({
-                            name: declName,
-                            descriptor: this.library.declarationTable.targetStruct(it)
-                        })
-                    }
-                })
             }
         }
+
+        // Collecting of synthetic types. This is necessary for the arkts
+        getSyntheticDeclarationList()
+            .filter(ts.isInterfaceDeclaration)
+            .forEach(it => {
+                importFeatures.push(convertDeclToFeature(this.library, it))
+                interfaces.push({
+                    name: convertDeclaration(DeclarationNameConvertor.I, it),
+                    descriptor: this.library.declarationTable.targetStruct(it)
+                })
+        })
 
         this.writeImports(importFeatures)
         this.writer.writeClass("TypeChecker", writer => {
@@ -143,25 +131,6 @@ abstract class TypeCheckerPrinter {
                 }
             }
         })
-    }
-
-    private collectSyntheticInterfaces(decl: ts.Declaration): ts.InterfaceDeclaration[] {
-        const total = new Set<ts.InterfaceDeclaration>()
-        const deps = convertDeclaration(this.declDependenciesCollector, decl)
-            .filter(isSyntheticDeclaration)
-            .filter(ts.isInterfaceDeclaration)
-        while (deps.length > 0) {
-            const dep = deps.splice(0, 1)[0]
-            if (total.has(dep) || !isSourceDecl(dep)) {
-                continue
-            }
-            total.add(dep)
-            deps.push(...convertDeclaration(this.declDependenciesCollector, dep)
-                .filter(isSyntheticDeclaration)
-                .filter(ts.isInterfaceDeclaration)
-            )
-        }
-        return [...total]
     }
 }
 
