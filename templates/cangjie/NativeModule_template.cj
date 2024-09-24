@@ -18,14 +18,14 @@ package idlize
 import std.collection.*
 
 foreign {
-    func StringMake(string: CPointer<UInt8>): Int64
-    func StringLength(ptr: Int64): Int32
-    func StringData(ptr: Int64, data: CPointer<UInt8>, arg2: Int32): Unit
-    func GetStringFinalizer(): Int64
-    func GetPtrVectorSize(ptr: Int64): Int32
-    func GetGroupedLog(kind: Int32): Int64
-    func GetPtrVectorElement(ptr: Int64, index: Int32): Int32
-    func InvokeFinalizer(obj: Int64, fn: Int64): Unit
+    func StringMake(string: CPointer<UInt8>): KPointer
+    func StringLength(ptr: KPointer): Int32
+    func StringData(ptr: KPointer, data: CPointer<UInt8>, arg2: Int32): Unit
+    func GetStringFinalizer(): KPointer
+    func GetPtrVectorSize(ptr: KPointer): Int32
+    func GetGroupedLog(kind: Int32): KPointer
+    func GetPtrVectorElement(ptr: KPointer, index: Int32): Int32
+    func InvokeFinalizer(obj: KPointer, fn: Int64): Unit
     func GetNodeFinalizer(): Int32
     func StartGroupedLog(index: Int32): Unit
     func StopGroupedLog(index: Int32): Unit
@@ -46,17 +46,17 @@ foreign {
     // func TestCallIntMemory(arg1: Int32, arg2: Int32): Int32
 
     // Node API
-    func CreateNode(type_: Int32, id: Int32, flags: Int32): Int64
-    func DisposeNode(ptr: Int64): Unit
-    func DumpTreeNode(ptr: Int64): Unit
-    func AddChild(ptr: Int64, node: Int64): Unit
-    func RemoveChild(ptr: Int64, node: Int64): Unit
-    func InsertChildAfter(ptr: Int64, node: Int64, sibling: Int64): Int32
-    func InsertChildBefore(ptr: Int64, node: Int64, sibling: Int64): Int32
-    func InsertChildAt(ptr: Int64, node: Int64, position: Int32): Int32
-    func MeasureNode(ptr: Int64, data: CPointer<Float32>): Int32
-    func LayoutNode(ptr: Int64, data: CPointer<Float32>): Int32
-    func DrawNode(ptr: Int64, data: CPointer<Float32>): Int32
+    func CreateNode(type_: Int32, id: Int32, flags: Int32): KPointer
+    func DisposeNode(ptr: KPointer): Unit
+    func DumpTreeNode(ptr: KPointer): Unit
+    func AddChild(ptr: KPointer, node: Int64): Unit
+    func RemoveChild(ptr: KPointer, node: Int64): Unit
+    func InsertChildAfter(ptr: KPointer, node: Int64, sibling: Int64): Int32
+    func InsertChildBefore(ptr: KPointer, node: Int64, sibling: Int64): Int32
+    func InsertChildAt(ptr: KPointer, node: Int64, position: Int32): Int32
+    func MeasureNode(ptr: KPointer, data: CPointer<Float32>): Int32
+    func LayoutNode(ptr: KPointer, data: CPointer<Float32>): Int32
+    func DrawNode(ptr: KPointer, data: CPointer<Float32>): Int32
     func MeasureLayoutAndDraw(ptr: Int64): Unit
 %GENERATED_NATIVE_FUNCTIONS%
 }
