@@ -1504,14 +1504,24 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     }
     mapType(type: Type): string {
         switch (type.name) {
-            case 'KPointer': return 'long'
-            case 'Uint8Array': return 'byte[]'
-            case 'int32': case 'KInt': return 'int'
-            case 'KStringPtr': return 'String'
+            case 'int32': return 'int'
             case 'string': return 'String'
             case 'number': return 'double'
             case 'boolean': return 'boolean'
+            case 'Uint8Array': return 'byte[]'
             case 'Length': return 'Ark_Length'
+
+            case 'KInt': case 'KUInt': return 'int'
+            case 'KLong': return 'long'
+            case 'KFloat': return 'float'
+            case 'KStringPtr': case 'KString': return 'String'
+            case 'KUint8ArrayPtr': return 'byte[]'
+            case 'KPointer': return 'long'
+            case 'KBoolean': return 'boolean'
+            case 'KInt32ArrayPtr': return 'int[]'
+            case 'KFloat32ArrayPtr': return 'float[]'
+            case 'NodePointer': return 'long'
+            case 'PipelineContext': return 'long'
         }
         return super.mapType(type)
     }
@@ -1788,32 +1798,51 @@ export class CJLanguageWriter extends LanguageWriter {
     }
     mapType(type: Type): string {
         switch (type.name) {
-            case 'KPointer': return 'Int64'
             case 'int32': case 'KInt': return 'Int32'
-            case 'KStringPtr': return 'String'
             case 'string': return 'String'
             case 'number': return 'Float64'
             case 'boolean': return 'Bool'
-            case 'Length': return 'String'
-            case 'void': return 'Unit'
             case 'double': return 'Float64'
             case 'Uint8Array': return 'ArrayList<UInt8>'
+            case 'Length': return 'String'
+            case 'void': return 'Unit'
+
+            case 'KInt': case 'KUInt': return 'Int32'
+            case 'KLong': return 'Int64'
+            case 'KFloat': return 'Float32'
+            case 'KStringPtr': case 'KString': return 'String'
+            case 'KUint8ArrayPtr': return 'ArrayList<UInt8>'
+            case 'KPointer': return 'Int64'
+            case 'KBoolean': return 'Bool'
+            case 'KInt32ArrayPtr': return 'ArrayList<Int32>'
+            case 'KFloat32ArrayPtr': return 'ArrayList<Float32>'
+            case 'NodePointer': return 'Int64'
+            case 'PipelineContext': return 'Int64'
         }
         return super.mapType(type)
     }
     mapCType(type: Type): string {
         switch (type.name) {
-            case 'KPointer': return 'Int64'
             case 'int32': case 'KInt': return 'Int32'
-            case 'KStringPtr': return 'CString'
-            case 'string': return 'CString'
-            case 'String': return 'CString'
+            case 'string': case 'String': return 'CString'
             case 'number': return 'Float64'
             case 'boolean': return 'Bool'
-            case 'Length': return 'CString'
-            case 'void': return 'Unit'
             case 'double': return 'Float64'
             case 'Uint8Array': return 'CPointer<UInt8>'
+            case 'Length': return 'CString'
+            case 'void': return 'Unit'
+
+            case 'KInt': case 'KUInt': return 'Int32'
+            case 'KLong': return 'Int64'
+            case 'KFloat': return 'Float32'
+            case 'KStringPtr': case 'KString': return 'CString'
+            case 'KUint8ArrayPtr': return 'CPointer<UInt8>'
+            case 'KPointer': return 'Int64'
+            case 'KBoolean': return 'Bool'
+            case 'KInt32ArrayPtr': return 'CPointer<Int32>'
+            case 'KFloat32ArrayPtr': return 'CPointer<Float32>'
+            case 'NodePointer': return 'Int64'
+            case 'PipelineContext': return 'Int64'
         }
         return super.mapType(type)
     }

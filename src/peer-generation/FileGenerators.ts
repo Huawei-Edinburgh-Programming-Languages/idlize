@@ -75,6 +75,7 @@ import {
 } from "@koalaui/common"
 import {
     KInt,
+    KLong,
     KBoolean,
     KFloat,
     KUInt,
@@ -88,15 +89,21 @@ import {
 } from "@koalaui/interop"
 `.trim()
 
-export function nativeModuleDeclaration(methods: LanguageWriter, nativeBridgePath: string, useEmpty: boolean, language: Language, nativeMethods?: LanguageWriter): string {
+export function nativeModuleDeclaration(methods: LanguageWriter, commons: Map<string, LanguageWriter>, nativeBridgePath: string, useEmpty: boolean, language: Language, nativeMethods?: LanguageWriter): string {
+    let templateText = readLangTemplate("NativeModule_template", language)
+        .replace("%NATIVE_BRIDGE_PATH%", nativeBridgePath)
+        .replace("%USE_EMPTY%", useEmpty.toString())
+        .replaceAll("%GENERATED_METHODS%", methods.getOutput().join('\n'))
+        .replaceAll("%GENERATED_NATIVE_FUNCTIONS%", nativeMethods ? nativeMethods.getOutput().join('\n') : "")
+    
+    for (const [ commonMethodsGroupName, writer ] of commons) {
+        templateText = templateText.replaceAll(`%GENERATED_COMMON_${commonMethodsGroupName}%`, writer.getOutput().join('\n'));
+    }
+    
     return `
   ${language == Language.TS ? importTsInteropTypes : ""}
 
-${readLangTemplate("NativeModule_template", language)
-    .replace("%NATIVE_BRIDGE_PATH%", nativeBridgePath)
-    .replace("%USE_EMPTY%", useEmpty.toString())
-    .replaceAll("%GENERATED_METHODS%", methods.getOutput().join('\n'))
-    .replaceAll("%GENERATED_NATIVE_FUNCTIONS%", nativeMethods ? nativeMethods.getOutput().join('\n') : "")}
+${templateText}
 `
 }
 
