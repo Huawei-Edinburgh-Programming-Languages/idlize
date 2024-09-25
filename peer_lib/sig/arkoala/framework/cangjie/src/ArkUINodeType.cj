@@ -15,5 +15,5 @@
 package idlize
 
 public enum ArkUINodeType {
-    Root | Component | Button
+    Root | Component | Button |Blank
 }

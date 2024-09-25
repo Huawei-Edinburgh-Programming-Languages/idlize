@@ -149,8 +149,13 @@ public open class SerializerBase {
         }
         this.position += n
     }
-    func writeTag(tag: Int32): Unit {
-        this.setBytes(this.position, tag)
+    func writeTag(tag: ?Int32): Unit {
+        if(let Some(tag) <- tag) {
+            this.setBytes(this.position, tag)
+        } else {
+            this.buffer[Int64(this.position)] = UInt8(RuntimeType.UNDEFINED.ordinal)
+            this.position++
+        }
     }
     func writeNumber(value: ?Float32): Unit {
         if (let Some(value) <- value) {
@@ -200,20 +205,45 @@ public open class SerializerBase {
             this.position++
         }
     }
-    func writeInt8(value: Int8): Unit {
-        this.setBytes(this.position, value)
+    func writeInt8(value: ?Int8): Unit {
+        if (let Some(value) <- value) {
+            this.setBytes(this.position, value)
+        } else {
+            this.buffer[Int64(this.position)] = UInt8(RuntimeType.UNDEFINED.ordinal)
+            this.position++
+        }
     }
-    func writeInt8(value: Int32): Unit {
-        this.setBytes(this.position, value)
+    func writeInt8(value: ?Int32): Unit {
+        if (let Some(value) <- value) {
+            this.setBytes(this.position, Int8(value))
+        } else {
+            this.buffer[Int64(this.position)] = UInt8(RuntimeType.UNDEFINED.ordinal)
+            this.position++
+        }
     }
-    func writeInt32(value: Int32): Unit {
-        this.setBytes(this.position, value)
+    func writeInt32(value: ?Int32): Unit {
+        if (let Some(value) <- value) {
+            this.setBytes(this.position, value)
+        } else {
+            this.buffer[Int64(this.position)] = UInt8(RuntimeType.UNDEFINED.ordinal)
+            this.position++
+        }
     }
-    func writeFloat32(value: Float32): Unit {
-        this.setBytes(this.position, value)
+    func writeFloat32(value: ?Float32): Unit {
+        if (let Some(value) <- value) {
+            this.setBytes(this.position, value)
+        } else {
+            this.buffer[Int64(this.position)] = UInt8(RuntimeType.UNDEFINED.ordinal)
+            this.position++
+        }
     }
-    func writePointer(ptr: Int64): Unit {
-        this.setBytes(this.position, ptr)
+    func writePointer(ptr: ?KPointer): Unit {
+        if (let Some(ptr) <- ptr) {
+            this.setBytes(this.position, ptr)
+        } else {
+            this.buffer[Int64(this.position)] = UInt8(RuntimeType.UNDEFINED.ordinal)
+            this.position++
+        }
     }
     func writeBoolean(value: ?Bool): Unit {
         this.checkCapacity(1)
@@ -228,11 +258,16 @@ public open class SerializerBase {
     func writeMaterialized(value: Object): Unit {
         // TODO
     }
-    func writeString(value: String): Unit {
-        this.checkCapacity(4 + value.size * 4 + 1) // length, data
-        this.writeInt32(Int32(value.size))
-        for (i in 0..value.size) {
-            this.setBytes(this.position, value[i])
+    func writeString(value: ?String): Unit {
+        if(let Some(value) <- value) {
+            this.checkCapacity(4 + value.size * 4 + 1) // length, data
+            this.writeInt32(Int32(value.size))
+            for (i in 0..value.size) {
+                this.setBytes(this.position, value[i])
+            }
+        } else {
+            this.buffer[Int64(this.position)] = UInt8(RuntimeType.UNDEFINED.ordinal)
+            this.position++
         }
     }
     // Length is an important common case.

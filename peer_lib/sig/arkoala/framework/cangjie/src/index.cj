@@ -23,12 +23,7 @@ import std.collection.*
 public func getNativeString(ptr: Int64): String {
     let length = NativeModule._StringLength(ptr)
     var data = ArrayList<UInt8>(Array<UInt8>(Int64(length), item: 0))
-    data = NativeModule._StringData(ptr, data, length)
-    var result = StringBuilder()
-    for (i in 0..length) { 
-        result.append(Rune(data[Int64(i)]))
-    }
-    return result.toString()
+    return NativeModule._StringData(ptr, data, length)
 }
 
 public func checkResult(name: String, test: () -> Unit, expected: String) {
@@ -109,6 +104,14 @@ func peersTest(): Unit {
     checkResult("[Interface + Optional] ButtonPeer.labelStyle",
         { => buttonPeer.labelStyleAttribute(labelStyle) },
         "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=5}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})")
+    // union
+    let blankPeer = ArkBlankPeer.create(ArkUINodeType.Blank, Option.None, 0)
+    checkResult("[Union] BlankPeer.color",
+        { => blankPeer.colorAttribute(Union_Ark_Color_Float64_String_Resource(5.5))},
+        "color({.selector=1, .value1={.tag=103, .f32=5.50}})")
+    checkResult("[Union + Enum] BlankPeer.color",
+        { => blankPeer.colorAttribute(Union_Ark_Color_Float64_String_Resource(Ark_Color.White)); },
+        "color({.selector=0, .value0=Ark_Color(0)})")
 }
 
 
