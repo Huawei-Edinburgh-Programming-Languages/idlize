@@ -50,7 +50,7 @@ pg java:run:
   script:
     - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-arm64 npm run run:java
 
-unmemoize arkts subset:
+arkts subset tsc:
   stage: test
   tags:
     - idlize-ci
@@ -58,7 +58,7 @@ unmemoize arkts subset:
   before_script:
     - !reference [.setup, script]
   script:
-    - npm run check:arkts:subset:unmemoizing
+    - npm run check:arkts:subset:tsc
 
 publish idlize:
     stage: test

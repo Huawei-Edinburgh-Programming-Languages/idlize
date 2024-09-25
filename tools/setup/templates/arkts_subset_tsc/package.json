@@ -4,8 +4,7 @@
         "build/*.js"
     ],
     "scripts": {
-        "compile": "npx tsc -b ./tsconfig.json",
-        "unmemoize": "../../external/node_modules/typescript/bin/tsc -b ./tsconfig-unmemoize.json"
+        "compile": "npx tsc -b ./tsconfig.json"
     },
     "dependencies": {
         "@types/node": "^20.14.11",
