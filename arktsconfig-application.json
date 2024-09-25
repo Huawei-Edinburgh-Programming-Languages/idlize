@@ -3,6 +3,7 @@
         "outDir": "build/abc/subset",
         "rootDir": "./out/arkts-subset/generated",
         "paths": {
+            "#arkui": ["./out/arkts-subset/generated/sig/arkoala-arkts/arkui/src/generated/arkts"],
             "@arkoala/arkui": ["./out/arkts-subset/generated/sig/arkoala-arkts/arkui/src/generated", "./"],
             "@arkoala/arkui/*": ["./out/arkts-subset/generated/sig/arkoala-arkts/arkui/src/generated/*", "./*"],
             "@koalaui/arkoala": ["./out/arkts-subset/generated/sig/arkoala-arkts/framework/src"],
