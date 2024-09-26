@@ -954,9 +954,6 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
                 parameters: method.parameters.map(it => this.serializeParameter(it, `${namePrefix}_indexSignature`))
             }
         }
-        if (!method.name) {
-            throw new Error(">>> " + method.getText())
-        }
         const [methodName, escapedName] = escapeName(nameOrNull(method.name) ?? "_unknown")
         this.computeClassMemberExtendedAttributes(method as ts.ClassElement, methodName, escapedName, extendedAttributes)
         const returnType = this.serializeType(method.type, `${namePrefix}_${escapedName}_Type`)
