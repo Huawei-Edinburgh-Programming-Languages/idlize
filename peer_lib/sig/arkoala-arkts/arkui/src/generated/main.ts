@@ -489,66 +489,6 @@ function checkPerf3(count: number) {
     console.log(`widthAttributeString: ${Math.round(passed)}ms for ${count} iteration, ${Math.round(passed / count * 1_000_000)}ms per 1M iterations`)
 }
 
-export class ArkResourceImpl implements Resource {
-    private name_: string = ""
-    private id_: number = 0
-    private type_: number = 0
-    private bundleName_: string = ""
-    private moduleName_: string = ""
-    private params_: string[] | undefined
-
-    get name(): string {
-        return this.name_
-    }
-    set name(value: string) {
-        this.name_ = value
-    }
-
-    public get id(): number {
-        return this.id_
-    }
-    set id(value: number) {
-        this.id_ = value
-    }
-    public getId(): number {
-        return this.id
-    }
-
-    get type(): number {
-        return this.type_
-    }
-    set type(value: number) {
-        this.type_ = value
-    }
-
-    get bundleName(): string {
-        return this.bundleName_
-    }
-    set bundleName(value: string) {
-        this.bundleName_ = value
-    }
-    public getBundleName(): string {
-        return this.bundleName
-    }
-
-    get moduleName(): string {
-        return this.moduleName_
-    }
-    set moduleName(value: string) {
-        this.moduleName_ = value
-    }
-    public getModuleName(): string {
-        return this.moduleName_
-    }
-
-    get params(): string[] | undefined {
-        return this.params_
-    }
-    set params(value: string[] | undefined) {
-        this.params_ = value
-    }
-}
-
 function checkButton() {
     let data = new byte[5]
     data[0] = 42
@@ -563,10 +503,11 @@ function checkButton() {
          "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=3}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})")
     checkResult("labelStyle2", () => peer.labelStyleAttribute(new LabelStyleImpl()),
         "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_UNDEFINED, .value={}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})")
-    const resource = new ArkResourceImpl()
-    resource.id = 43
-    resource.bundleName = "MyApp"
-    resource.moduleName = "MyApp"
+    const resource: Resource = {
+        id: 43,
+        bundleName: "MyApp",
+        moduleName: "MyApp"
+    }
     checkResult("height", () => peer.heightAttribute(resource),
         "height({.type=3, .value=0.000000, .unit=1, .resource=43})")
     checkResult("height", () => peer.heightAttribute(44),
