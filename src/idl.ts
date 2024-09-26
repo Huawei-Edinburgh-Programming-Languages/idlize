@@ -301,7 +301,7 @@ export function isUndefinedType(type: IDLEntry): type is IDLPrimitiveType {
     return isPrimitiveType(type) && type.name === "undefined"
 }
 export function isVoidType(type: IDLEntry): type is IDLPrimitiveType {
-    return isPrimitiveType(type) && (type.name === "void_" || type.name === "undefined")
+    return isPrimitiveType(type) && type.name === "void_"
 }
 export function isPrimitiveType(type: IDLEntry): type is IDLPrimitiveType {
     return type.kind == IDLKind.PrimitiveType

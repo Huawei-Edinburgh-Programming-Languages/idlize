@@ -657,8 +657,8 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             return IDLNullType
         }
         if (type.kind == ts.SyntaxKind.VoidKeyword) {
-            //return IDLVoidType
-            return IDLUndefinedType
+            return IDLVoidType
+            // return IDLUndefinedType
         }
         if (type.kind == ts.SyntaxKind.UnknownKeyword) {
             return createReferenceType("unknown")
@@ -766,8 +766,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             }
             if (literal.kind == ts.SyntaxKind.NullKeyword) {
                 // TODO: Is it correct to have undefined for null?
-                // return IDLNullType
-                return IDLUndefinedType
+                return IDLNullType
             }
             if (literal.kind == ts.SyntaxKind.FalseKeyword || literal.kind == ts.SyntaxKind.TrueKeyword) {
                 return IDLBooleanType
