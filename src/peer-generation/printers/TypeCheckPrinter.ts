@@ -33,14 +33,6 @@ export function makeInterfaceTypeCheckerCall(
         // todo stub or not?
         return writer.makeCallIsResource(valueAccessor)
     }
-    if (interfaceName == "Object") {
-        // todo stub or not?
-        return writer.makeString(`${valueAccessor} instanceof Object`)
-    }
-    if (interfaceName == "ArrayBuffer") {
-        // todo stub or not?
-        return writer.makeString(`${valueAccessor} instanceof ArrayBuffer`)
-    }
     return writer.makeMethodCall(
         "TypeChecker",
         generateTypeCheckerName(interfaceName), [writer.makeString(valueAccessor),
@@ -69,6 +61,10 @@ export function generateTypeCheckerName(typeName: string): string {
 }
 
 abstract class TypeCheckerPrinter {
+    private readonly builtInInterfaceTypes = [
+        "Object",
+        "ArrayBuffer"
+    ]
     constructor(
         protected readonly library: PeerLibrary,
         public readonly writer: LanguageWriter,
@@ -130,7 +126,13 @@ abstract class TypeCheckerPrinter {
                     writtenTypes.add(arrayType)
                 }
             }
+            this.writeBuiltinInterfaceTypes()
         })
+    }
+
+    protected writeBuiltinInterfaceTypes() {
+        this.builtInInterfaceTypes
+            .forEach(it => this.writeInterfaceChecker(it, new StructDescriptor()))
     }
 }
 
@@ -141,7 +143,7 @@ class ARKTSTypeCheckerPrinter extends TypeCheckerPrinter {
         super(library, createLanguageWriter(Language.ARKTS))
     }
 
-    private writeInstanceofChecker(typeName: string, checkerName: string, fieldsCount: number) {
+    protected writeInstanceofChecker(typeName: string, checkerName: string, fieldsCount: number) {
         const argsNames = Array.from({length: fieldsCount}, (_, index) => `arg${index}`)
         this.writer.writeMethodImplementation(new Method(
             checkerName,
