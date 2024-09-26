@@ -687,10 +687,6 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
                 .reduce<IDLType[]>((uniqueTypes, it) => uniqueTypes.concat(uniqueTypes.includes(it) ? []: [it]), [])
             return typeOrUnion(types)
         }
-        if (ts.isTypeQueryNode(type)) {
-            console.log(`WARNING: unsupported type query: ${type.getText()}`)
-            return IDLAnyType
-        }
         if (ts.isIntersectionTypeNode(type)) {
             const name = this.compileContext.uniqualize(`${nameSuggestion}_Intersection`)
             const intersection = this.serializeIntersectionType(name, type)
@@ -779,6 +775,10 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         if (ts.isTypeOperatorNode(type)) {
             console.log("WARNING: typeof is not supported properly, return string")
             return IDLStringType
+        }
+        if (ts.isTypeQueryNode(type)) {
+            console.log(`WARNING: unsupported type query: ${type.getText()}`)
+            return IDLAnyType
         }
         if (ts.isImportTypeNode(type)) {
             let originalText = `${type.getText(this.sourceFile)}`
