@@ -156,7 +156,7 @@ export class SerializerBase {
         if (this.position > buffSize - value) {
             const minSize = this.position + value
             const resizedSize = Math.max(minSize, Math.round(3 * buffSize / 2))
-            let resizedBuffer = new KBuffer(resizedSize)
+            let resizedBuffer = new KBuffer(resizedSize as int32)
             for (let i = 0; i < this.buffer.length; i++) {
                 resizedBuffer.set(i, this.buffer.get(i))
             }
