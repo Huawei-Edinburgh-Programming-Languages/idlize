@@ -143,7 +143,7 @@ class ARKTSTypeCheckerPrinter extends TypeCheckerPrinter {
         super(library, createLanguageWriter(Language.ARKTS))
     }
 
-    protected writeInstanceofChecker(typeName: string, checkerName: string, fieldsCount: number) {
+    private writeInstanceofChecker(typeName: string, checkerName: string, fieldsCount: number) {
         const argsNames = Array.from({length: fieldsCount}, (_, index) => `arg${index}`)
         this.writer.writeMethodImplementation(new Method(
             checkerName,
