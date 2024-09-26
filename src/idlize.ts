@@ -45,10 +45,10 @@ export function generate<T>(
     options.onBegin?.(outputDir, typeChecker)
 
     // Visit every sourceFile in the program
+    let cared = inputDirs.map(it => path.resolve(it))
     for (const sourceFile of program.getSourceFiles()) {
-
-        if (!inputDirs.some(it => path.resolve(sourceFile.fileName).indexOf(it))) {
-            console.log("Ignore ", path.resolve(sourceFile.fileName) , "wrt", inputDirs)
+        if (!cared.some(it => path.resolve(sourceFile.fileName).indexOf(it) >= 0)) {
+            // console.log("Ignore ", path.resolve(sourceFile.fileName) , "wrt", inputDirs)
             continue
         }
         if (inputFile && path.basename(sourceFile.fileName) != inputFile) {
