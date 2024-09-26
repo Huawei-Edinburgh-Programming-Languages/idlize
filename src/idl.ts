@@ -301,7 +301,7 @@ export function isUndefinedType(type: IDLEntry): type is IDLPrimitiveType {
     return isPrimitiveType(type) && type.name === "undefined"
 }
 export function isVoidType(type: IDLEntry): type is IDLPrimitiveType {
-    return isPrimitiveType(type) && type.name === "void_"
+    return isPrimitiveType(type) && (type.name === "void_" || type.name === "undefined")
 }
 export function isPrimitiveType(type: IDLEntry): type is IDLPrimitiveType {
     return type.kind == IDLKind.PrimitiveType
@@ -383,6 +383,7 @@ function createPrimitiveType(name: string): IDLPrimitiveType {
 
 export const IDLAnyType: IDLPrimitiveType = createPrimitiveType("any")
 export const IDLBooleanType: IDLPrimitiveType = createPrimitiveType("boolean")
+export const IDLBigintType: IDLPrimitiveType = createPrimitiveType("bigint")
 export const IDLNullType: IDLPrimitiveType = createPrimitiveType("null_")
 export const IDLNumberType: IDLPrimitiveType = createPrimitiveType("number")
 export const IDLStringType: IDLPrimitiveType = createPrimitiveType("DOMString")
