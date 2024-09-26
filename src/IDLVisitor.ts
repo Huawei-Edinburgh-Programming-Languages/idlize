@@ -142,11 +142,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             } else {
                 // This is a namespace, visit its children
                 if (node.body) {
-                    if (isExport(node.modifiers)) {
-                        this.namespaces.unshift(`Export ${node.name.getText()}`)
-                    } else {
-                        this.namespaces.unshift(node.name.getText())
-                    }
+                    this.namespaces.unshift(node.name.getText())
                     ts.forEachChild(node.body, (node) => this.visit(node));
                     this.namespaces.shift()
                 }
