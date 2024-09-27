@@ -177,7 +177,7 @@ if (options.dts2idl) {
     didJob = true
 }
 
-if (options.dts2skoala) {
+
     const tsCompileContext = new CompileContext()
     const generatedIDLMap = new Map<string, IDLEntry[]>()
     const outputDir: string = options.outputDir ?? "./generated/skoala"
@@ -188,6 +188,7 @@ if (options.dts2skoala) {
 
     let combinedDeserializerPrinter = new IndentedPrinter()
 
+    combinedDeserializerPrinter.print(cStyleCopyright)
     combinedDeserializerPrinter.print(`#include "SkoalaDeserializerBase.h"`)
     combinedDeserializerPrinter.print("")
     combinedDeserializerPrinter.print(`class Deserializer : public SkoalaDeserializerBase {`)
