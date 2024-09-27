@@ -73,7 +73,6 @@ const suppressed = new Set([
     LinterError.UNION_CONTAINS_ENUM,
     LinterError.EVENT_HANDLER_WITH_FUNCTIONAL_PARAM_TYPE,
     LinterError.CALLBACK_WITH_FUNCTIONAL_PARAM_TYPE,
-    LinterError.CALLBACK_WITH_NON_VOID_RETURN_TYPE,
 ])
 
 function stringMessage(message: LinterMessage): string {
@@ -212,9 +211,14 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
         if (ts.isTypeReferenceNode(type)) {
             if (this.inParamCheck) {
                 const declarations = getDeclarationsByNode(this.typeChecker, type.typeName)
-                if (declarations.length > 0 && ts.isClassDeclaration(declarations[0])
-                    && isCommonMethodOrSubclass(this.typeChecker, declarations[0])) {
-                    this.report(type, LinterError.USE_COMPONENT_AS_PARAM, `Component ${identName(declarations[0].name)} used as parameter`)
+                if (declarations.length > 0) {
+                    const decl = declarations[0]
+                    if (ts.isClassDeclaration(decl) && isCommonMethodOrSubclass(this.typeChecker, decl)) {
+                        this.report(type, LinterError.USE_COMPONENT_AS_PARAM, `Component ${identName(decl.name)} used as parameter`)
+                    }
+                    if (ts.isInterfaceDeclaration(decl)) {
+                        this.checkCallback(type)
+                    }
                 }
             }
             if (ts.isQualifiedName(type.typeName)) {
@@ -274,6 +278,19 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
                     LinterError.CPP_KEYWORDS,
                     `Use C/C++ keyword as the field name: ${nameString}`
                 )
+            }
+        }
+    }
+
+    checkCallback(type: ts.TypeReferenceNode) {
+        if ("Callback" === `${identName(type)}`) {
+            const typeArgs = type.typeArguments
+            if (typeArgs && typeArgs.length > 1) {
+                const returnType = typeArgs[1]
+                if (returnType.kind !== ts.SyntaxKind.VoidKeyword) {
+                    this.report(type, LinterError.CALLBACK_WITH_NON_VOID_RETURN_TYPE,
+                        `Callback<${typeArgs.map(it => identName(it)).join(", ")}> has non void return type`)
+                }
             }
         }
     }
