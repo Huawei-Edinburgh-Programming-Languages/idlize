@@ -177,7 +177,7 @@ if (options.dts2idl) {
     didJob = true
 }
 
-
+if (options.dts2skoala) {
     const tsCompileContext = new CompileContext()
     const generatedIDLMap = new Map<string, IDLEntry[]>()
     const outputDir: string = options.outputDir ?? "./generated/skoala"
