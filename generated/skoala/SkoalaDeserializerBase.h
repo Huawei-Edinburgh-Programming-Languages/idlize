@@ -22,8 +22,6 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
 struct Skoala_Paint {
     bool isAntiAlias;           // Anti-aliasing flag
     bool isDither;              // Dither flag
