@@ -462,7 +462,7 @@ class JavaMaterializedFileVisitor extends MaterializedFileVisitorBase {
 class ArkTSMaterializedFileVisitor extends TSMaterializedFileVisitor {
     protected collectImports(imports: ImportsCollector): void {
         super.collectImports(imports)
-        imports.addFeature("TypeChecker", "#arkui/type_check")
+        imports.addFeature("TypeChecker", "#arkui")
     }
 
     convertToPropertyType(field: MaterializedField): Type {

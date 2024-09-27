@@ -11,7 +11,7 @@ import { StructDescriptor } from "../DeclarationTable";
 import { getSyntheticDeclarationList } from "../synthetic_declaration";
 
 export function importTypeChecker(library: PeerLibrary, imports: ImportsCollector): void {
-    imports.addFeature("TypeChecker", "#arkui/type_check")
+    imports.addFeature("TypeChecker", "#arkui")
 }
 
 export function makeEnumTypeCheckerCall(valueAccessor: string, enumName: string, writer: LanguageWriter): LanguageExpression {
@@ -115,9 +115,11 @@ abstract class TypeCheckerPrinter {
                 })
         })
 
-        this.writeImports(importFeatures)
+        // Imports leads to error: "SyntaxError: Cannot find imported element 'TypeChecker'"
+        // Need some workarounds for this case
+        // this.writeImports(importFeatures)
         this.writer.writeClass("TypeChecker", writer => {
-            for (const struct of interfaces) 
+            for (const struct of interfaces)
                 this.writeInterfaceChecker(struct.name, struct.descriptor)
             const writtenTypes = new Set()
             for (const arrayType of this.library.arrayTypeCheckeres) {
@@ -152,7 +154,9 @@ class ARKTSTypeCheckerPrinter extends TypeCheckerPrinter {
                 ['value', ...argsNames]),
             [MethodModifier.STATIC],
         ), writer => {
-            const statement = writer.makeReturn(writer.makeString(`value instanceof ${typeName}`))
+            // const statement = writer.makeReturn(writer.makeString(`value instanceof ${typeName}`))
+            // Checking type without 'instanceof'
+            const statement = writer.makeReturn(writer.makeString(`Type.of(value).getName().endsWith(".${typeName}")`))
             writer.writeStatement(statement)
         })
     }
