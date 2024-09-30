@@ -135,14 +135,7 @@ export class SkoalaCCodeGenerator {
     public generate(): void {
         const printer = new IndentedPrinter()
 
-        printer.print(`#ifndef ${camelCaseToUpperSnakeCase(this.fileName)}_H
-#define ${camelCaseToUpperSnakeCase(this.fileName)}_H`)
-        printer.print(`#include <koala-types.h>
-#include "common-interop.h"\n`)
-
         this.entries.forEach(entry => this.visit(entry, printer))
-
-        printer.print(`#endif // ${camelCaseToUpperSnakeCase(this.fileName)}_H`)
 
         const cCode = printer.getOutput().join("\n")
         if (cCode.trim()) {
