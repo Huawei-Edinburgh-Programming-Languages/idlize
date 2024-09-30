@@ -352,6 +352,11 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
         const filePos = `${path.basename(this.sourceFile.fileName)}:${getLineNumberString(this.sourceFile, node.getStart(this.sourceFile, false))}`
         const prefix = `${filePos}: `.padEnd(36)
 
+        if (ts.isUnionTypeNode(node)) {
+            signature = `${signature} | union`
+            node = node.parent
+        }
+
         if (ts.isPropertySignature(node) || ts.isPropertyDeclaration(node)) {
             const clazz = node.parent
             console.log(`${prefix} ${identName(clazz)}.${identName(node.name)}: ${signature}`)
@@ -367,7 +372,7 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
             return
         }
 
-        console.log(`Unknown: ${signature}`)
+        console.log(`${prefix} Unknown ${signature}`)
     }
 
     dumpCallback(type: ts.TypeReferenceNode) {
