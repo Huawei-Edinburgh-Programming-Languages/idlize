@@ -348,8 +348,15 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
     }
 
     attrPrefix(node: ts.Node): string {
-        const prefix = "common"
-        return ts.isClassDeclaration(node) && isCommonMethodOrSubclass(this.typeChecker, node) ? prefix : " ".padEnd(prefix.length)
+        const COMMON = "common"
+        const BLANK = " ".padEnd(COMMON.length)
+
+        if (ts.isClassDeclaration(node)) {
+            return `c|${isCommonMethodOrSubclass(this.typeChecker, node) ? COMMON : BLANK}`
+        } else if (ts.isInterfaceDeclaration(node)) {
+            return `i|${BLANK}`
+        }
+        return ` |${BLANK}`
     }
 
     dumpCallbackOrHandler(node: ts.Node, signature: string) {
@@ -368,7 +375,18 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
         let description: string = "Unknown "
         if (ts.isPropertySignature(node) || ts.isPropertyDeclaration(node)) {
             isAttr = true
-            const clazz = node.parent
+            let clazz = node.parent
+            if (ts.isTypeLiteralNode(clazz)) {
+                const parent = clazz.parent
+                if (ts.isPropertySignature(parent)) {
+                    clazz = parent.parent
+                } else if (ts.isParameter(parent)) {
+                    // TBD: parse
+                    // class C {
+                    //     run(options: { script: string, callback?: (result: string) => void });
+                    //  }
+                }
+            }
             attributes.push(this.attrPrefix(clazz))
             description = `${identName(clazz)}.${identName(node.name)}: ${signature}`
         } else {
@@ -383,6 +401,7 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
         }
 
         attributes.push(isAttr ? "attr" : "    ")
+        attributes.push(ts.isTypeLiteralNode(node.parent) ? "tl" : "  ")
         console.log(`${prefix} [${attributes.join("|")}] ${description}`)
     }
 
