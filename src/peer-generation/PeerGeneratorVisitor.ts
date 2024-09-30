@@ -886,7 +886,7 @@ export class PeerProcessor {
         let mConstructor = this.makeMaterializedMethod(name, constructor, isActualDeclaration, typeNodeConvertor)
         const finalizerReturnType = {isVoid: false, nativeType: () => PrimitiveType.NativePointer.getText(), macroSuffixPart: () => ""}
         let mFinalizer = new MaterializedMethod(name, [], [], finalizerReturnType, false,
-            new Method("getFinalizer", new NamedMethodSignature(Type.Pointer, [], [], []), [MethodModifier.STATIC]), 0)
+            new Method("getFinalizer", new NamedMethodSignature(Type.Pointer, [], [], []), [MethodModifier.STATIC]), 0, [])
         let mFields = isClass
             ? target.members
                 .filter(ts.isPropertyDeclaration)
@@ -913,7 +913,7 @@ export class PeerProcessor {
             const isSimpleType = !f.argConvertor.useArray // type needs to be deserialized from the native
             if (isSimpleType) {
                 const getAccessor = new MaterializedMethod(name, [], [], f.retConvertor, false,
-                    new Method(`get${capitalize(field.name)}`, new NamedMethodSignature(field.type, [], []), [MethodModifier.PRIVATE]), 0
+                    new Method(`get${capitalize(field.name)}`, new NamedMethodSignature(field.type, [], []), [MethodModifier.PRIVATE]), 0,[]
                 )
                 mMethods.push(getAccessor)
             }
@@ -923,7 +923,7 @@ export class PeerProcessor {
                 const setSignature = new NamedMethodSignature(Type.Void, [field.type], [field.name])
                 const retConvertor = { isVoid: true, nativeType: () => Type.Void.name, macroSuffixPart: () => "V" }
                 const setAccessor = new MaterializedMethod(name, [f.declarationTarget!], [f.argConvertor], retConvertor, false,
-                    new Method(`set${capitalize(field.name)}`, setSignature, [MethodModifier.PRIVATE]), 0
+                    new Method(`set${capitalize(field.name)}`, setSignature, [MethodModifier.PRIVATE]), 0,[]
                 )
                 mMethods.push(setAccessor)
             }
@@ -975,7 +975,7 @@ export class PeerProcessor {
             // interface or class without constructors
             const ctor = new Method("ctor", new NamedMethodSignature(Type.Void, [], []), [MethodModifier.STATIC])
             this.declarationTable.setCurrentContext(undefined)
-            return new MaterializedMethod(parentName, [], [], retConvertor, false, ctor, 0)
+            return new MaterializedMethod(parentName, [], [], retConvertor, false, ctor, 0,[])
         }
 
         const generics = method.typeParameters?.map(it => it.getText())
@@ -988,7 +988,7 @@ export class PeerProcessor {
         const modifiers = generateMethodModifiers(method)
         this.declarationTable.setCurrentContext(undefined)
         return new MaterializedMethod(parentName, declarationTargets, argConvertors, retConvertor, false,
-            new Method(methodName, signature, modifiers, generics), getMethodIndex(methodName, method))
+            new Method(methodName, signature, modifiers, generics), getMethodIndex(methodName, method),[])
     }
 
     private collectDepsRecursive(node: ts.Declaration | ts.TypeNode, deps: Set<ts.Declaration>): void {

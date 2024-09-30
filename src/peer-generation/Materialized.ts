@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import * as idl from "../idl"
 import * as ts from "typescript"
 import { ArgConvertor, RetConvertor } from "./Convertors"
 import { Field, Method, MethodModifier, MethodSignature, Type } from "./LanguageWriters"
@@ -71,6 +72,7 @@ export class MaterializedMethod extends PeerMethod {
         isCallSignature: boolean,
         method: Method,
         index: number,
+        public readonly idlTargets: idl.IDLType[],
     ) {
         super(originalParentName, declarationTargets, argConvertors, retConvertor, isCallSignature, false, method, index)
     }
@@ -131,7 +133,8 @@ export function copyMaterializedMethod(method: MaterializedMethod, overrides: {
         method.retConvertor,
         method.isCallSignature,
         overrides.method ?? method.method,
-        method.index
+        method.index,
+        method.idlTargets,
     )
     newMethod.isOverloaded = method.isOverloaded
     return newMethod

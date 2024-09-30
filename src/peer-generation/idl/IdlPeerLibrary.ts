@@ -99,6 +99,8 @@ export class IdlPeerLibrary {
     }
 
     mapType(type: idl.IDLType | idl.IDLCallback | undefined): string {
+        if (type && idl.isEnum(type))
+            return "enum"
         return this.nameConvertorInstance.convert(type ?? idl.createVoidType())
     }
 

@@ -78,6 +78,7 @@ import { IdlPeerLibrary } from "./peer-generation/idl/IdlPeerLibrary"
 import { IdlPeerFile } from "./peer-generation/idl/IdlPeerFile"
 import { IdlPeerGeneratorVisitor, IdlPeerProcessor } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
 import { SkoalaCCodeGenerator } from "./peer-generation/printers/SkoalaPrinter"
+import { TestCallbacks } from "./peer-generation/test_callbacks"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -390,6 +391,7 @@ if (options.dts2peer) {
                     const peerProcessor = new IdlPeerProcessor(idlLibrary)
                     peerProcessor.process()
                     idlLibrary.analyze()
+                    TestCallbacks(idlLibrary)
 
                     if (options.generatorTarget == "arkoala" ||
                         options.generatorTarget == "all") {

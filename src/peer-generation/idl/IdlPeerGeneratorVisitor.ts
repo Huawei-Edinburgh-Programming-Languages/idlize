@@ -89,6 +89,9 @@ export class IdlPeerGeneratorVisitor implements GenericVisitor<void> {
         this.peerFile.entries
             .filter(it => idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Component))
             .forEach(it => this.visitComponent(it as idl.IDLInterface))
+        this.peerFile.entries
+            .filter(idl.isInterface)
+            .forEach(it => this.peerFile.allInterfaces.push(it))
     }
 
     visitComponent(component: idl.IDLInterface) {
@@ -538,7 +541,7 @@ export class IdlPeerProcessor {
         const mConstructor = this.makeMaterializedMethod(decl, constructor, isActualDeclaration)
         const finalizerReturnType = {isVoid: false, nativeType: () => PrimitiveType.NativePointer.getText(), macroSuffixPart: () => ""}
         const mFinalizer = new MaterializedMethod(name, [], [], finalizerReturnType, false,
-            new Method("getFinalizer", new NamedMethodSignature(Type.Pointer, [], [], []), [MethodModifier.STATIC]), 0)
+            new Method("getFinalizer", new NamedMethodSignature(Type.Pointer, [], [], []), [MethodModifier.STATIC]), 0,[])
         const mFields = decl.properties
             // TODO what to do with setter accessors? Do we need FieldModifier.WRITEONLY? For now, just skip them
             .filter(it => idl.getExtAttribute(it, idl.IDLExtendedAttributes.Accessor) !== idl.IDLAccessorAttribute.Setter)
@@ -548,7 +551,11 @@ export class IdlPeerProcessor {
             .map(method => this.makeMaterializedMethod(decl, method, isActualDeclaration))
             .filter(it => !PeerGeneratorConfig.ignoreReturnTypes.has(it.method.signature.returnType.name))
 
-        mFields.forEach(f => {
+        mFields.forEach((f, index) => {
+            const testType = decl.properties
+            // TODO what to do with setter accessors? Do we need FieldModifier.WRITEONLY? For now, just skip them
+            .filter(it => idl.getExtAttribute(it, idl.IDLExtendedAttributes.Accessor) !== idl.IDLAccessorAttribute.Setter)
+            [index].type
             const field = f.field
             // TBD: use deserializer to get complex type from native
             const isSimpleType = !f.argConvertor.useArray // type needs to be deserialized from the native
@@ -556,7 +563,7 @@ export class IdlPeerProcessor {
                 const getSignature = new NamedMethodSignature(field.type, [], [])
                 const getAccessor = new MaterializedMethod(
                     name, [], [], f.retConvertor, false,
-                    new Method(`get${capitalize(field.name)}`, getSignature, [MethodModifier.PRIVATE]), 0)
+                    new Method(`get${capitalize(field.name)}`, getSignature, [MethodModifier.PRIVATE]), 0,[testType])
                 mMethods.push(getAccessor)
             }
             const isReadOnly = field.modifiers.includes(FieldModifier.READONLY)
@@ -565,7 +572,7 @@ export class IdlPeerProcessor {
                 const retConvertor = { isVoid: true, nativeType: () => Type.Void.name, macroSuffixPart: () => "V" }
                 const setAccessor = new MaterializedMethod(
                     name, [], [f.argConvertor], retConvertor, false,
-                    new Method(`set${capitalize(field.name)}`, setSignature, [MethodModifier.PRIVATE]), 0)
+                    new Method(`set${capitalize(field.name)}`, setSignature, [MethodModifier.PRIVATE]), 0,[testType])
                 mMethods.push(setAccessor)
             }
         })
@@ -592,7 +599,7 @@ export class IdlPeerProcessor {
         if (method === undefined) {
             // interface or class without constructors
             const ctor = new Method("ctor", new NamedMethodSignature(Type.Void, [], []), [MethodModifier.STATIC])
-            return new MaterializedMethod(decl.name, [], [], retConvertor, false, ctor, 0)
+            return new MaterializedMethod(decl.name, [], [], retConvertor, false, ctor, 0, [])
         }
 
         const generics = undefined // method.typeParameters?.map(it => it.getText())
@@ -601,7 +608,7 @@ export class IdlPeerProcessor {
         const signature = generateSignature(this.library, method)
         const modifiers = idl.isConstructor(method) || method.isStatic ? [MethodModifier.STATIC] : []
         return new MaterializedMethod(decl.name, /*declarationTargets*/ [], argConvertors, retConvertor, false,
-            new Method(methodName, signature, modifiers, generics), getMethodIndex(decl, method))
+            new Method(methodName, signature, modifiers, generics), getMethodIndex(decl, method), method.parameters.map(it => it.type ?? idl.createVoidType()))
     }
 
     private collectDepsRecursive(decl: idl.IDLEntry, deps: Set<idl.IDLEntry>): void {

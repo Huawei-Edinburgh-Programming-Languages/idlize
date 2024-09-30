@@ -23,6 +23,8 @@ export class IdlPeerFile {
     readonly declarations: Set<idl.IDLEntry> = new Set()
     readonly importFeatures: ImportFeature[] = []
     readonly serializeImportFeatures: ImportFeature[] = []
+
+    readonly allInterfaces: idl.IDLInterface[] = []
     constructor(
         public readonly originalFilename: string,
         public readonly entries: idl.IDLEntry[],
