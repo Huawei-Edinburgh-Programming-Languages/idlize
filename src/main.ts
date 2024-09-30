@@ -189,6 +189,11 @@ if (options.dts2skoala) {
     let combinedDeserializerPrinter = new IndentedPrinter()
 
     combinedDeserializerPrinter.print(cStyleCopyright)
+
+    combinedDeserializerPrinter.print(`#ifndef DESERIALIZER_H`)
+    combinedDeserializerPrinter.print(`#define DESERIALIZER_H`)
+    combinedDeserializerPrinter.print("")
+
     combinedDeserializerPrinter.print(`#include "SkoalaDeserializerBase.h"`)
     combinedDeserializerPrinter.print("")
     combinedDeserializerPrinter.print(`class Deserializer : public SkoalaDeserializerBase {`)
@@ -236,6 +241,8 @@ if (options.dts2skoala) {
                 combinedDeserializerPrinter.popIndent()
                 combinedDeserializerPrinter.print("};")
                 combinedDeserializerPrinter.print("")
+
+                combinedDeserializerPrinter.print("#endif")
 
                 const deserializerCode = combinedDeserializerPrinter.getOutput().join("\n")
 
