@@ -347,10 +347,15 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
         this.dumpHandler(type)
     }
 
+    attrPrefix(node: ts.Node): string {
+        return ts.isClassDeclaration(node) && isCommonMethodOrSubclass(this.typeChecker, node) ? `attr` : `    `
+    }
+
     dumpCallbackOrHandler(node: ts.Node, signature: string) {
 
         const filePos = `${path.basename(this.sourceFile.fileName)}:${getLineNumberString(this.sourceFile, node.getStart(this.sourceFile, false))}`
         const prefix = `${filePos}: `.padEnd(36)
+        let attrPrefix = `    `
 
         if (ts.isUnionTypeNode(node)) {
             signature = `${signature} | union`
@@ -359,7 +364,8 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
 
         if (ts.isPropertySignature(node) || ts.isPropertyDeclaration(node)) {
             const clazz = node.parent
-            console.log(`${prefix} ${identName(clazz)}.${identName(node.name)}: ${signature}`)
+            attrPrefix = this.attrPrefix(clazz)
+            console.log(`${prefix} ${attrPrefix} ${identName(clazz)}.${identName(node.name)}: ${signature}`)
             return
         }
 
@@ -368,7 +374,8 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
             const param = node
             const paramName = ts.isParameter(param) ? `${identName(param.name)}` : `unnamed`
             const clazz = method.parent
-            console.log(`${prefix} ${identName(clazz)}.${identName(method.name)}(${paramName}: ${signature})`)
+            attrPrefix = this.attrPrefix(clazz)
+            console.log(`${prefix} ${attrPrefix} ${identName(clazz)}.${identName(method.name)}(${paramName}: ${signature})`)
             return
         }
 
