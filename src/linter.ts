@@ -348,9 +348,13 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
     }
 
     dumpCallbackOrHandler(node: ts.Node, signature: string) {
+
+        const filePos = `${path.basename(this.sourceFile.fileName)}:${getLineNumberString(this.sourceFile, node.getStart(this.sourceFile, false))}`
+        const prefix = `${filePos}: `.padEnd(36)
+
         if (ts.isPropertySignature(node) || ts.isPropertyDeclaration(node)) {
             const clazz = node.parent
-            console.log(`Property : ${identName(clazz)}.${identName(node.name)}: ${signature}`)
+            console.log(`${prefix} ${identName(clazz)}.${identName(node.name)}: ${signature}`)
             return
         }
 
@@ -359,7 +363,7 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
             const param = node
             const paramName = ts.isParameter(param) ? `${identName(param.name)}` : `unnamed`
             const clazz = method.parent
-            console.log(`Parameter: ${identName(clazz)}.${identName(method.name)}(${paramName}: ${signature})`)
+            console.log(`${prefix} ${identName(clazz)}.${identName(method.name)}(${paramName}: ${signature})`)
             return
         }
 
