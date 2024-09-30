@@ -347,32 +347,36 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
         this.dumpHandler(type)
     }
 
-    dumpCallback(type: ts.TypeReferenceNode) {
-        const typeArgs = type.typeArguments
-        const signature = `Callback<${typeArgs?.map(it => identName(it)).join(", ")}>`
-        console.log(`Callback : ${signature}`)
-    }
-
-    dumpHandler(type: ts.FunctionTypeNode) {
-
-        const returnType = identName(type.type)
-        const params = type.parameters.map(it => `${identName(it.name)}: ${identName(it.type)}`)
-        const signature = `(${params.join(", ")}) => ${returnType}`
-
-        const prop = type.parent
-        if (ts.isPropertySignature(prop) || ts.isPropertyDeclaration(prop)) {
-            const clazz = prop.parent
-            console.log(`Property : ${identName(clazz)}.${identName(prop.name)}: ${signature}`)
+    dumpCallbackOrHandler(node: ts.Node, signature: string) {
+        if (ts.isPropertySignature(node) || ts.isPropertyDeclaration(node)) {
+            const clazz = node.parent
+            console.log(`Property : ${identName(clazz)}.${identName(node.name)}: ${signature}`)
             return
         }
 
-        const method = type.parent.parent
+        const method = node.parent
         if (ts.isMethodSignature(method) || ts.isMethodDeclaration(method)) {
-            const param = type.parent
+            const param = node
             const paramName = ts.isParameter(param) ? `${identName(param.name)}` : `unnamed`
             const clazz = method.parent
             console.log(`Parameter: ${identName(clazz)}.${identName(method.name)}(${paramName}: ${signature})`)
+            return
         }
+
+        console.log(`Unknown: ${signature}`)
+    }
+
+    dumpCallback(type: ts.TypeReferenceNode) {
+        const typeArgs = type.typeArguments
+        const signature = `Callback<${typeArgs?.map(it => identName(it)).join(", ")}>`
+        this.dumpCallbackOrHandler(type.parent, signature)
+    }
+
+    dumpHandler(type: ts.FunctionTypeNode) {
+        const returnType = identName(type.type)
+        const params = type.parameters.map(it => `${identName(it.name)}: ${identName(it.type)}`)
+        const signature = `(${params.join(", ")}) => ${returnType}`
+        this.dumpCallbackOrHandler(type.parent, signature)
     }
 
     isInvalidHandlerParamType(type: ts.Node): boolean {
