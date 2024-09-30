@@ -116,8 +116,8 @@ abstract class TypeCheckerPrinter {
         })
 
         // Imports leads to error: "SyntaxError: Cannot find imported element 'TypeChecker'"
-        // Need some workarounds for this case
-        // this.writeImports(importFeatures)
+        // To resolve this error need to use the patched panda sdk(npm run panda:sdk:build)
+        //this.writeImports(importFeatures)
         this.writer.writeClass("TypeChecker", writer => {
             for (const struct of interfaces)
                 this.writeInterfaceChecker(struct.name, struct.descriptor)
