@@ -348,38 +348,42 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
     }
 
     attrPrefix(node: ts.Node): string {
-        return ts.isClassDeclaration(node) && isCommonMethodOrSubclass(this.typeChecker, node) ? `attr` : `    `
+        const prefix = "common"
+        return ts.isClassDeclaration(node) && isCommonMethodOrSubclass(this.typeChecker, node) ? prefix : " ".padEnd(prefix.length)
     }
 
     dumpCallbackOrHandler(node: ts.Node, signature: string) {
 
         const filePos = `${path.basename(this.sourceFile.fileName)}:${getLineNumberString(this.sourceFile, node.getStart(this.sourceFile, false))}`
         const prefix = `${filePos}: `.padEnd(36)
-        let attrPrefix = `    `
+
+        const attributes: string[] = []
 
         if (ts.isUnionTypeNode(node)) {
             signature = `${signature} | union`
             node = node.parent
         }
 
+        let isAttr = false
+        let description: string = "Unknown "
         if (ts.isPropertySignature(node) || ts.isPropertyDeclaration(node)) {
+            isAttr = true
             const clazz = node.parent
-            attrPrefix = this.attrPrefix(clazz)
-            console.log(`${prefix} ${attrPrefix} ${identName(clazz)}.${identName(node.name)}: ${signature}`)
-            return
+            attributes.push(this.attrPrefix(clazz))
+            description = `${identName(clazz)}.${identName(node.name)}: ${signature}`
+        } else {
+            const method = node.parent
+            if (ts.isMethodSignature(method) || ts.isMethodDeclaration(method)) {
+                const param = node
+                const paramName = ts.isParameter(param) ? `${identName(param.name)}` : `unnamed`
+                const clazz = method.parent
+                attributes.push(this.attrPrefix(clazz))
+                description = `${identName(clazz)}.${identName(method.name)}(${paramName}: ${signature})`
+            }
         }
 
-        const method = node.parent
-        if (ts.isMethodSignature(method) || ts.isMethodDeclaration(method)) {
-            const param = node
-            const paramName = ts.isParameter(param) ? `${identName(param.name)}` : `unnamed`
-            const clazz = method.parent
-            attrPrefix = this.attrPrefix(clazz)
-            console.log(`${prefix} ${attrPrefix} ${identName(clazz)}.${identName(method.name)}(${paramName}: ${signature})`)
-            return
-        }
-
-        console.log(`${prefix} Unknown ${signature}`)
+        attributes.push(isAttr ? "attr" : "    ")
+        console.log(`${prefix} [${attributes.join("|")}] ${description}`)
     }
 
     dumpCallback(type: ts.TypeReferenceNode) {
