@@ -59,6 +59,7 @@ export enum LinterError {
     EVENT_HANDLER_WITH_FUNCTIONAL_PARAM_TYPE,
     CALLBACK_WITH_FUNCTIONAL_PARAM_TYPE,
     CALLBACK_WITH_NON_VOID_RETURN_TYPE,
+    CALLBACK_AND_EVENT_HANDLERS,
 }
 
 export interface LinterMessage {
@@ -285,6 +286,8 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
     checkCallback(type: ts.TypeReferenceNode) {
         if ("Callback" === `${identName(type)}`) {
             const typeArgs = type.typeArguments
+            this.report(type, LinterError.CALLBACK_AND_EVENT_HANDLERS,
+                `Callback<${typeArgs?.map(it => identName(it)).join(", ")}>`)
             if (typeArgs && typeArgs.length > 1) {
                 const returnType = typeArgs[1]
                 if (returnType.kind !== ts.SyntaxKind.VoidKeyword) {
@@ -292,6 +295,7 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
                         `Callback<${typeArgs.map(it => identName(it)).join(", ")}> has non void return type`)
                 }
             }
+            this.dumpCallback(type)
         }
     }
 
@@ -333,6 +337,41 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
             this.report(type, LinterError.CALLBACK_WITH_NON_VOID_RETURN_TYPE,
                 `Callback ` + (clazzName ? `for member ${clazzName}.${memberName} ` : ``) +
                 `has non void return type: (${params.join(", ")}) => ${returnType}`)
+        }
+
+        const params = type.parameters.map(it => `${identName(it.name)}: ${identName(it.type)}`)
+        this.report(type, LinterError.CALLBACK_AND_EVENT_HANDLERS,
+            `Callback ` + (clazzName ? `for member ${clazzName}.${memberName} ` : ``) +
+            `(${params.join(", ")}) => ${returnType}`)
+
+        this.dumpHandler(type)
+    }
+
+    dumpCallback(type: ts.TypeReferenceNode) {
+        const typeArgs = type.typeArguments
+        const signature = `Callback<${typeArgs?.map(it => identName(it)).join(", ")}>`
+        console.log(`Callback : ${signature}`)
+    }
+
+    dumpHandler(type: ts.FunctionTypeNode) {
+
+        const returnType = identName(type.type)
+        const params = type.parameters.map(it => `${identName(it.name)}: ${identName(it.type)}`)
+        const signature = `(${params.join(", ")}) => ${returnType}`
+
+        const prop = type.parent
+        if (ts.isPropertySignature(prop) || ts.isPropertyDeclaration(prop)) {
+            const clazz = prop.parent
+            console.log(`Property : ${identName(clazz)}.${identName(prop.name)}: ${signature}`)
+            return
+        }
+
+        const method = type.parent.parent
+        if (ts.isMethodSignature(method) || ts.isMethodDeclaration(method)) {
+            const param = type.parent
+            const paramName = ts.isParameter(param) ? `${identName(param.name)}` : `unnamed`
+            const clazz = method.parent
+            console.log(`Parameter: ${identName(clazz)}.${identName(method.name)}(${paramName}: ${signature})`)
         }
     }
 
