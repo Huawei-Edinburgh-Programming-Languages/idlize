@@ -1,6 +1,7 @@
 package "org.openharmony.idl";
 
-[GlobalScope]
+[GlobalScope, NoBridge]
 interface Interop {
     undefined CleanCallbackDispatcher();
-}
+    int StringLength(pointer ptr);
+};

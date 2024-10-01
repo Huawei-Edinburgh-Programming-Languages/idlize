@@ -22,7 +22,7 @@ We use WebIDL language with several custom extension attributes documented below
    * `DtsName` - original name in case it is not allowed in IDL, e.g. is an IDL keyword
    * `Entity = Class | Interface | Literal | NamedTuple | Tuple` - what to produce from and IDL interface declaration
    * `Export` - if given node has `export` modifier
-   * `GlobalScope`
+   * `GlobalScope` - if interface functions are actually top level functions (to be replaced with regular top level functions)
    * `Import` - complete TS import expression for inline imports
    * `IndexSignature` - marker for index signature methods
    * `Interfaces` - name of implemented interface
@@ -35,3 +35,4 @@ We use WebIDL language with several custom extension attributes documented below
    * `TypeParameters` - type parameters for a parameterized type
    * `TypeArguments` - concrete types used as values for type parameters
    * `VerbatimDts` - code to add "as-is" to produced .d.ts, for language-specific features, avoid when possible
+   * `NoBridge` - if no bridging code to be generated

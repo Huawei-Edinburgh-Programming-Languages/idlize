@@ -10,6 +10,7 @@
     "whitelist.json",
     "peer_lib/**/*",
     "templates/**/*",
+    "predefined/**/*.idl",
     "webidl2.js/dist/**/*",
     "webidl2.js/package.json"
   ],

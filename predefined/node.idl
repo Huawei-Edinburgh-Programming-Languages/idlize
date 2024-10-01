@@ -1,0 +1,6 @@
+package "org.openharmony.arkui";
+
+[GlobalScope]
+interface Node {
+    pointer CreateNode(int type, int id, int flags);
+};
