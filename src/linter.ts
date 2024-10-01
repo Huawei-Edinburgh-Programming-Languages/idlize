@@ -371,10 +371,10 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
             node = node.parent
         }
 
-        let isAttr = false
+        let propAttr = "    "
         let description: string = "Unknown "
         if (ts.isPropertySignature(node) || ts.isPropertyDeclaration(node)) {
-            isAttr = true
+            propAttr = "prop"
             let clazz = node.parent
             if (ts.isTypeLiteralNode(clazz)) {
                 const parent = clazz.parent
@@ -392,6 +392,7 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
         } else {
             const method = node.parent
             if (ts.isMethodSignature(method) || ts.isMethodDeclaration(method)) {
+                propAttr = "meth"
                 const param = node
                 const paramName = ts.isParameter(param) ? `${identName(param.name)}` : `unnamed`
                 const clazz = method.parent
@@ -400,7 +401,7 @@ export class LinterVisitor implements GenericVisitor<LinterMessage[]> {
             }
         }
 
-        attributes.push(isAttr ? "attr" : "    ")
+        attributes.push(propAttr)
         attributes.push(ts.isTypeLiteralNode(node.parent) ? "tl" : "  ")
         console.log(`${prefix} [${attributes.join("|")}] ${description}`)
     }
