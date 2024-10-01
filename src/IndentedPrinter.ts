@@ -19,7 +19,7 @@ import * as fs from "fs"
 
 export class IndentedPrinter {
     constructor (private output: string[] = []) {}
-    private indent = 0
+        private indent = 0
 
     print(value: stringOrNone): void {
         if (value != undefined) this.output.push(this.indented(value))

@@ -135,27 +135,33 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
             // todo stub until we can process AttributeModifier
             if (isCommonMethod(peer.originalClassName!) || peer.originalClassName == "ContainerSpanAttribute")
                 writer.print(`attributeModifier(modifier: AttributeModifier<object>): this { throw new Error("not implemented") }`)
-            const attributesSignature = new MethodSignature(Type.Void, [])
-            writer.writeMethodImplementation(new Method('applyAttributesFinish', attributesSignature, [MethodModifier.PUBLIC]), (writer) => {
-                writer.print('// we calls this function outside of class, so need to make it public')
-                writer.writeMethodCall('super', 'applyAttributesFinish', [])
-            })
         }, parentComponentClassName)
 
+        if (this.library.findComponentByName(peer.componentName)?.interfaceDeclaration) {
+            const factoryClassName = `Ark${peer.componentName}Factory`
+            this.printer.writeClass(factoryClassName, (writer) => {
+                writer.writeLines(`
+/** @BuilderLambda("_instantiate") */
+static instantiate(
+  /** @memo */
+  content_: (() => void) | undefined,
+  ${mappedCallableParams?.join(", ") ?? ""}
+) { 
+    throw new Error("Not implemented");
+}
 
-        this.printer.print(`
 /** @memo */
-export function ${componentFunctionName}(
+static _instantiate(
   /** @memo */
   style: ((attributes: ${componentClassName}) => void) | undefined,
   /** @memo */
   content_: (() => void) | undefined,
   ${mappedCallableParams?.join(", ") ?? ""}
-) {
+): void {
     const receiver = remember(() => {
-        return new ${componentClassName}()
+        return new ${factoryClassName}()
     })
-    NodeAttach<${peerClassName}>((): ${peerClassName} => ${peerClassName}.create(ArkUINodeType.${peer.componentName}, receiver), (_: ${peerClassName}) => {
+    NodeAttach<${peerClassName}>((): ${peerClassName} => ${peerClassName}.create(ArkUINodeType.${peer.getComponentName()}, receiver), (_: ${peerClassName}) => {
         ${callableMethod ? `receiver.${callableMethod.name}(${mappedCallableParamsValues})` : ""}
         style?.(receiver)
         content_?.()
@@ -163,6 +169,22 @@ export function ${componentFunctionName}(
     })
 }
 `)
+            }, componentClassName)
+
+
+            this.printer.writeLines(`
+/** @memo */
+export function ${componentFunctionName}(
+  /** @memo */
+  style: ((attributes: ${componentClassName}) => void) | undefined,
+  /** @memo */
+  content_: (() => void) | undefined,
+  ${mappedCallableParams?.join(", ") ?? ""}
+): void {
+    ${factoryClassName}._instantiate(style, content_, ${mappedCallableParamsValues});
+}
+`)
+        }
     }
 }
 
@@ -261,12 +283,6 @@ class JavaComponentFileVisitor implements ComponentFileVisitor {
                         ], false)))
                     writer.writeStatement(writer.makeReturn(thiz))
                 })
-            })
-
-            const attributesSignature = new MethodSignature(Type.Void, [])
-            const applyAttributesFinish = 'applyAttributesFinish'
-            writer.writeMethodImplementation(new Method(applyAttributesFinish, attributesSignature, [MethodModifier.PUBLIC]), (writer) => {
-                writer.writeMethodCall('super', applyAttributesFinish, [])
             })
         }, parentComponentClassName)
 

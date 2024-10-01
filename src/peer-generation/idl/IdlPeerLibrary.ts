@@ -84,6 +84,10 @@ export class IdlPeerLibrary {
             it.interfaceDeclaration === iface || it.attributesDeclarations === iface)
     }
 
+    findComponentByName(name: string): IdlComponentDeclaration | undefined {
+        return this.componentsDeclarations.find(it => it.name == name)
+    }
+
     findComponentByType(type: idl.IDLType): IdlComponentDeclaration | undefined {
         return this.componentsDeclarations.find(it =>
             it.interfaceDeclaration?.name === type.name || it.attributesDeclarations.name === type.name)

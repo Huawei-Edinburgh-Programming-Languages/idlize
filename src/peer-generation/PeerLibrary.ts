@@ -93,6 +93,10 @@ export class PeerLibrary {
         })
     }
 
+    findComponentByName(name: string): ComponentDeclaration | undefined {
+        return this.componentsDeclarations.find(it => it.name == name)
+    }
+
     isComponentDeclaration(node: ts.Declaration): boolean {
         return this.findComponentByDeclaration(node) !== undefined
     }
