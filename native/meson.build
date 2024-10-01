@@ -305,8 +305,6 @@ ohos_ldflags = [
     '-lace_napi.z',
 ]
 
-node_addon_api = run_command('node', '-p', 'require.resolve("node-addon-api/package.json").slice(0, -12)').stdout().strip()
-
 ohos_include_dirs = [
     node_addon_api,
     external_interop_dir / 'node',
