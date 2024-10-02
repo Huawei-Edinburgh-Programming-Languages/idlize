@@ -10,6 +10,17 @@ import { Language } from "../../util";
 import { StructDescriptor } from "../DeclarationTable";
 import { getSyntheticDeclarationList } from "../synthetic_declaration";
 
+const builtInInterfaceTypes = new Map<string,
+    (writer: LanguageWriter, value: string) => LanguageExpression>([
+        ["Resource",
+            (writer: LanguageWriter, value: string) => writer.makeCallIsResource(value)],
+        ["Object",
+            (writer: LanguageWriter, value: string) => writer.makeCallIsObject(value)],
+        ["ArrayBuffer",
+            (writer: LanguageWriter, value: string) => writer.makeCallIsArrayBuffer(value)]
+    ],
+)
+
 export function importTypeChecker(library: PeerLibrary, imports: ImportsCollector): void {
     imports.addFeature("TypeChecker", "#arkui")
 }
@@ -29,9 +40,8 @@ export function makeInterfaceTypeCheckerCall(
     duplicates: Set<string>, 
     writer: LanguageWriter,
 ): LanguageExpression {
-    if (interfaceName == "Resource") {
-        // todo stub or not?
-        return writer.makeCallIsResource(valueAccessor)
+    if (builtInInterfaceTypes.has(interfaceName)) {
+        return builtInInterfaceTypes.get(interfaceName)!(writer, valueAccessor)
     }
     return writer.makeMethodCall(
         "TypeChecker",
@@ -61,10 +71,6 @@ export function generateTypeCheckerName(typeName: string): string {
 }
 
 abstract class TypeCheckerPrinter {
-    private readonly builtInInterfaceTypes = [
-        "Object",
-        "ArrayBuffer"
-    ]
     constructor(
         protected readonly library: PeerLibrary,
         public readonly writer: LanguageWriter,
@@ -128,13 +134,7 @@ abstract class TypeCheckerPrinter {
                     writtenTypes.add(arrayType)
                 }
             }
-            this.writeBuiltinInterfaceTypes()
         })
-    }
-
-    protected writeBuiltinInterfaceTypes() {
-        this.builtInInterfaceTypes
-            .forEach(it => this.writeInterfaceChecker(it, new StructDescriptor()))
     }
 }
 
