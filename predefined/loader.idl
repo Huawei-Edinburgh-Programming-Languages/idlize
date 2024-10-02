@@ -1,0 +1,8 @@
+package "org.openharmony.idl";
+
+[GlobalScope, NativeModule, NoBridge]
+interface Loader {
+    KInt LoadVirtualMachine(KInt arg0, String arg1, String arg2);
+    KInt RunApplication(KInt arg0, KInt arg1);
+    KInt StartApplication();
+};

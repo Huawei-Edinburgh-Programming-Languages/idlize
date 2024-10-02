@@ -1,6 +1,29 @@
 package "org.openharmony.idl";
 
-[GlobalScope]
+[GlobalScope, NativeModule, NoBridge]
 interface Interop {
-    undefined CleanCallbackDispatcher();
-}
+    void StartNativeTest(KStringPtr ptr, KInt arg);
+    void StopNativeTest(KInt arg0);
+    KPointer GetGroupedLog(KInt arg0);
+    void StartGroupedLog(KInt arg0);
+    void StopGroupedLog(KInt arg0);
+    KPointer GetStringFinalizer();
+    void InvokeFinalizer(KPointer ptr1, KPointer ptr2);
+    KPointer GetPtrVectorElement(KPointer ptr, KInt arg);
+    KPointer GetNodeFinalizer();
+    KInt StringLength(KPointer ptr);
+    [Exclude=CangJie]
+    void StringData(KPointer ptr, KUint8ArrayPtr arr, KInt i); // { exclude: [ Language.CJ ] })
+    KPointer StringMake(KStringPtr str);
+    KInt GetPtrVectorSize(KPointer ptr);
+    KInt ManagedStringWrite(KStringPtr str, KUint8ArrayPtr arr, KInt arg);
+    void Test_SetEventsApi();
+    void Test_Common_OnChildTouchTest(KUint8ArrayPtr arr, KInt arg);
+    void Test_List_OnScrollVisibleContentChange(KUint8ArrayPtr arr, KInt arg);
+    void Test_TextPicker_OnAccept(KUint8ArrayPtr arr, KInt arg);
+    KInt TestPerfNumber(KInt arg);
+    void TestPerfNumberWithArray(KUint8ArrayPtr arr, KInt arg);
+    void StartPerf(KStringPtr str);
+    void EndPerf(KStringPtr str);
+    KPointer DumpPerf(KInt arg); 
+};

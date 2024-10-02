@@ -1,0 +1,48 @@
+package "org.openharmony.arkui";
+
+[GlobalScope, NativeModule]
+interface Node {
+    KPointer CreateNode(KInt ptr, KInt arg0, KInt arg1);
+    KPointer GetNodeByViewStack();
+    void DisposeNode(KPointer ptr);
+    void DumpTreeNode(KPointer ptr);
+    void SetCreateNodeDelay(KInt arg0, KLong arg1);
+    void SetMeasureNodeDelay(KInt arg0, KLong arg1);
+    void SetLayoutNodeDelay(KInt arg0, KLong arg1);
+    void SetDrawNodeDelay(KInt arg0, KLong arg1);
+    KInt AddChild(KPointer ptr, KPointer ptr2);
+    void RemoveChild(KPointer ptr, KPointer ptr2);
+    KInt InsertChildAfter(KPointer ptr0, KPointer ptr1, KPointer ptr2);
+    KInt InsertChildBefore(KPointer ptr0, KPointer ptr1, KPointer ptr2);
+    KInt InsertChildAt(KPointer ptr0, KPointer ptr1, KInt arg);
+    void ApplyModifierFinish(KPointer ptr);
+    void MarkDirty(KPointer ptr, KUInt arg);
+    KBoolean IsBuilderNode(KPointer ptr);
+    KFloat ConvertLengthMetricsUnit(KFloat arg0, KInt arg1, KInt arg2);
+    void SetCustomCallback(KPointer ptr, KInt arg);
+    void MeasureLayoutAndDraw(KPointer ptr);
+    KInt MeasureNode(KPointer ptr, KFloat32ArrayPtr arr);
+    KInt LayoutNode(KPointer ptr, KFloat32ArrayPtr arr);
+    KInt DrawNode(KPointer ptr, KFloat32ArrayPtr arr);
+    void SetMeasureWidth(KPointer ptr, KInt arg);
+    KInt GetMeasureWidth(KPointer ptr);
+    void SetMeasureHeight(KPointer ptr, KInt arg);
+    KInt GetMeasureHeight(KPointer ptr);
+    void SetX(KPointer ptr, KInt arg);
+    KInt GetX(KPointer ptr);
+    void SetY(KPointer ptr, KInt arg);
+    KInt GetY(KPointer ptr);
+    void SetAlignment(KPointer ptr, KInt arg);
+    KInt GetAlignment(KPointer ptr);
+    KInt IndexerChecker(KPointer ptr);
+    void SetRangeUpdater(KPointer ptr, KInt arg);
+    void SetLazyItemIndexer(KPointer ptr, KInt arg);
+    KPointer GetPipelineContext(KPointer ptr);
+    void SetVsyncCallback(KPointer ptr, KInt arg);
+    void UnblockVsyncWait(KPointer ptr);
+    void SetChildTotalCount(KPointer ptr, KInt arg);
+    [Exclude=Java, Exclude=CangJie, Exclude=ArkTS]
+    void ShowCrash(KPointer ptr);
+    [Exclude=TS]
+    void ShowCrash(String message);
+};
