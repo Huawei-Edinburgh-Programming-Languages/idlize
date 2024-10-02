@@ -124,6 +124,7 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
         const parentComponentClassName = peer.parentComponentName ? generateArkComponentName(peer.parentComponentName!) : `ComponentBase`
         const componentFunctionName = `Ark${peer.componentName}`
         const peerClassName = componentToPeerClass(peer.componentName)
+        const instantiateName = `instantiate_${peer.componentName}`
 
         this.printer.print(`/** @memo:stable */`)
         this.printer.writeClass(componentClassName, (writer) => {
@@ -135,53 +136,50 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
             // todo stub until we can process AttributeModifier
             if (isCommonMethod(peer.originalClassName!) || peer.originalClassName == "ContainerSpanAttribute")
                 writer.print(`attributeModifier(modifier: AttributeModifier<object>): this { throw new Error("not implemented") }`)
-        }, parentComponentClassName)
 
-        if (this.library.findComponentByName(peer.componentName)?.interfaceDeclaration) {
-            const factoryClassName = `Ark${peer.componentName}Factory`
-            this.printer.writeClass(factoryClassName, (writer) => {
+            if (this.library.findComponentByName(peer.componentName)?.interfaceDeclaration) {
                 writer.writeLines(`
-/** @BuilderLambda("_instantiate") */
-static instantiate(
-  /** @memo */
-  content_: (() => void) | undefined,
-  ${mappedCallableParams?.join(", ") ?? ""}
-) { 
+static ${instantiateName}(
+    factory: () => ${componentClassName},
+    ${mappedCallableParams?.map(it => `${it},`).join(" ") ?? ""}
+    /** @memo */
+    content_?: () => void,
+): ${componentClassName} { 
     throw new Error("Not implemented");
 }
 
 /** @memo */
-static _instantiate(
-  /** @memo */
-  style: ((attributes: ${componentClassName}) => void) | undefined,
-  /** @memo */
-  content_: (() => void) | undefined,
-  ${mappedCallableParams?.join(", ") ?? ""}
+static _${instantiateName}(
+    /** @memo */
+    style: ((attributes: ${componentClassName}) => void) | undefined,
+    factory: () => ${componentClassName},
+    ${mappedCallableParams?.map(it => `${it},`).join(" ") ?? ""}
+    /** @memo */
+    content_?: () => void,
 ): void {
-    const receiver = remember(() => {
-        return new ${factoryClassName}()
-    })
+    const receiver = remember(factory)
     NodeAttach<${peerClassName}>((): ${peerClassName} => ${peerClassName}.create(ArkUINodeType.${peer.getComponentName()}, receiver), (_: ${peerClassName}) => {
-        ${callableMethod ? `receiver.${callableMethod.name}(${mappedCallableParamsValues})` : ""}
+        ${callableMethod ? `receiver.${callableMethod.name}(${mappedCallableParamsValues!.map(it => `${it},`).join(" ")})` : ""}
         style?.(receiver)
         content_?.()
         receiver.applyAttributesFinish()
     })
 }
 `)
-            }, componentClassName)
+            }
+        }, parentComponentClassName)
 
-
+        if (this.library.findComponentByName(peer.componentName)?.interfaceDeclaration) {
             this.printer.writeLines(`
 /** @memo */
 export function ${componentFunctionName}(
-  /** @memo */
-  style: ((attributes: ${componentClassName}) => void) | undefined,
-  /** @memo */
-  content_: (() => void) | undefined,
-  ${mappedCallableParams?.join(", ") ?? ""}
+    /** @memo */
+    style: ((attributes: ${componentClassName}) => void) | undefined,
+    /** @memo */
+    content_: (() => void) | undefined,
+    ${mappedCallableParams?.join(", ") ?? ""}
 ): void {
-    ${factoryClassName}._instantiate(style, content_, ${mappedCallableParamsValues});
+    ${componentClassName}._${instantiateName}(style, () => new ${componentClassName}, ${mappedCallableParamsValues!.map(it => `${it},`).join(" ")} content_);
 }
 `)
         }

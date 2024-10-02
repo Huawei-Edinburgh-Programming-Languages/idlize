@@ -95,10 +95,14 @@ export class IdlPeerGeneratorVisitor implements GenericVisitor<void> {
             .forEach(it => this.visitComponent(it as idl.IDLInterface))
     }
 
-    visitComponent(component: idl.IDLInterface) {
+    visitComponent(component: idl.IDLInterface): IdlComponentDeclaration | undefined {
         const componentName = component.name.replace("Attribute", "")
         if (PeerGeneratorConfig.ignoreComponents.includes(componentName))
-            return
+            return undefined
+        if (component.documentation?.includes("@deprecated")) {
+            console.log(`Component ${componentName} is deprecated and will not be generated`)
+            return undefined
+        }
         const compInterface = this.peerLibrary.resolveTypeReference(
             idl.createReferenceType(`${componentName}Interface`),
             this.peerFile.entries)
