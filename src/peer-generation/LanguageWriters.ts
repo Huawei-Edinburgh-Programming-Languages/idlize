@@ -1852,7 +1852,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     }
     writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string, interfaces?: string[]): void {
         const superClasses = (superClass ? [superClass] : []).concat(interfaces ?? [])
-        const extendsClause = superClasses ? ` : ${superClasses.map(c => `public ${c}`).join(", ")}` : ''
+        const extendsClause = superClasses.length > 0 ? ` : ${superClasses.map(c => `public ${c}`).join(", ")}` : ''
         this.printer.print(`class ${name}${extendsClause} {`)
         this.pushIndent()
         op(this)
