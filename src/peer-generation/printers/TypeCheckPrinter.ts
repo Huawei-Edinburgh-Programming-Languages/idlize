@@ -116,8 +116,8 @@ abstract class TypeCheckerPrinter {
         })
 
         // Imports leads to error: "SyntaxError: Cannot find imported element 'TypeChecker'"
-        // To resolve this error need to use the patched panda sdk(npm run panda:sdk:build)
-        //this.writeImports(importFeatures)
+        // To resolve this error need to use the patched panda sdk(npm run panda:sdk:build) or remove './' from paths in arktsconfig.json
+        this.writeImports(importFeatures)
         this.writer.writeClass("TypeChecker", writer => {
             for (const struct of interfaces)
                 this.writeInterfaceChecker(struct.name, struct.descriptor)
@@ -154,9 +154,7 @@ class ARKTSTypeCheckerPrinter extends TypeCheckerPrinter {
                 ['value', ...argsNames]),
             [MethodModifier.STATIC],
         ), writer => {
-            // const statement = writer.makeReturn(writer.makeString(`value instanceof ${typeName}`))
-            // Checking type without 'instanceof'
-            const statement = writer.makeReturn(writer.makeString(`Type.of(value).getName().endsWith(".${typeName}")`))
+            const statement = writer.makeReturn(writer.makeString(`value instanceof ${typeName}`))
             writer.writeStatement(statement)
         })
     }
