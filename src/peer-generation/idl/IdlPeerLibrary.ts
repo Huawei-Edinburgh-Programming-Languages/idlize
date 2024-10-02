@@ -26,7 +26,7 @@ import { collectCallbacks, IdlCallbackInfo } from '../printers/EventsPrinter';
 import { PrimitiveType } from '../DeclarationTable';
 import { DependencySorter } from './DependencySorter';
 import { IndentedPrinter } from '../../IndentedPrinter';
-import { LanguageWriter } from '../LanguageWriters';
+import { LanguageWriter, MethodSignature, Type } from '../LanguageWriters';
 import { isImport, isStringEnum } from './common';
 import { StructPrinter } from './StructPrinter';
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig';

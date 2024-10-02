@@ -37,6 +37,7 @@ import * as fs from "fs"
 import { EnumEntity } from "./PeerFile";
 import { CJKeywords, cppKeywords } from "../languageSpecificKeywords";
 import { convertJavaOptional } from "./printers/lang/Java";
+import { IDLBigintType, IDLBooleanType, IDLNumberType, IDLParameter, IDLStringType, IDLType, IDLVoidType, isPrimitiveType, isUndefinedType, isUnionType } from "../idl";
 
 export class Type {
     constructor(public name: string, public nullable = false) {}
@@ -46,6 +47,7 @@ export class Type {
     static Pointer = new Type('KPointer')
     static This = new Type('this')
     static Void = new Type('void')
+    static String = new Type('string')
 
     private static PRIMITIVE_TYPES = new Set(
         [Type.Boolean, Type.Int32, Type.Number, Type.Pointer, Type.Void]
@@ -977,6 +979,21 @@ export abstract class LanguageWriter {
     }
     mapType(type: Type, convertor?: ArgConvertor): string {
         return type.name
+    }
+    mapIDLType(type: IDLType): Type {
+        if (isPrimitiveType(type)) {
+            switch (type) {
+                case IDLNumberType: return Type.Int32
+                case IDLBooleanType: return Type.Boolean
+                case IDLVoidType: return Type.Void
+                case IDLStringType: return Type.String
+                default: throw new Error(`Unmapped IDL type: ${type.name}`)
+            }
+        }
+        return new Type(type.name)
+    }
+    makeSignature(returnType: IDLType, parameters: IDLParameter[]): MethodSignature {
+        return new MethodSignature(this.mapIDLType(returnType), parameters.map(it => this.mapIDLType(it.type!)))
     }
     mapFieldModifier(modifier: FieldModifier): string {
         return `${FieldModifier[modifier].toLowerCase()}`
@@ -2005,6 +2022,13 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         }
         return super.mapType(type)
     }
+    mapIDLType(type: IDLType): Type {
+        if (isUnionType(type)) {
+            return new Type(`Union_${type.types.map(it => this.mapIDLType(it)).join("_")}`)
+        }
+        return super.mapIDLType(type)
+    }
+
     makeSetUnionSelector(value: string, index: string): LanguageStatement {
         return this.makeAssign(`${value}.selector`, undefined, this.makeString(index), false)
     }
