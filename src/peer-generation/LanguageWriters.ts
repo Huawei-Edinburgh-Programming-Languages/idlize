@@ -1510,13 +1510,32 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
             if (optionalType != type.name) return optionalType
         }
         switch (type.name) {
+            // Pointer
             case 'KPointer': return 'long'
-            case 'Uint8Array': return 'byte[]'
+        
+            // Integral
+            case 'boolean': case 'KBoolean': return 'boolean'
+            case 'KUInt': return 'int'
             case 'int32': case 'KInt': return 'int'
+            case 'int64': case 'KLong': return 'long'
+            
+            // Number
+            case 'number': return 'double'
+            case 'float32': case 'KFloat': return 'float'
+            
+            // Array like
+            case 'Uint8Array': return 'byte[]'
+            case 'KUint8ArrayPtr': return 'byte[]'
+            case 'KInt32ArrayPtr': return 'int[]'
+            case 'KFloat32ArrayPtr': return 'float[]'
+            
+            // String like
             case 'KStringPtr': return 'String'
             case 'string': return 'String'
-            case 'number': return 'double'
-            case 'boolean': return 'boolean'
+
+            // void
+            
+            //  Other
             case 'Length': return 'Ark_Length'
         }
         return super.mapType(type)
@@ -1794,32 +1813,71 @@ export class CJLanguageWriter extends LanguageWriter {
     }
     mapType(type: Type): string {
         switch (type.name) {
+            // Pointer
             case 'KPointer': return 'Int64'
+            
+            // Integral
+            case 'boolean': case 'KBoolean': return 'Bool'
+            case 'KUInt': return 'Int32' // ?? 
             case 'int32': case 'KInt': return 'Int32'
-            case 'KStringPtr': return 'String'
-            case 'string': return 'String'
+            case 'KLong': return 'Int64'
+            
+            // Number
             case 'number': return 'Float64'
-            case 'boolean': return 'Bool'
-            case 'Length': return 'String'
-            case 'void': return 'Unit'
             case 'double': return 'Float64'
+            case 'KFloat': return 'Float32'
+            
+            // Array like
             case 'Uint8Array': return 'ArrayList<UInt8>'
+            case 'KUint8ArrayPtr': return 'ArrayList<UInt8>'
+            case 'KInt32ArrayPtr': return 'ArrayList<Int32>'
+            case 'KFloat32ArrayPtr': return 'ArrayList<Float32>'
+            
+            // String like
+            case 'KStringPtr': case 'String': case 'string': return 'String'
+
+            // void
+            case 'void': return 'Unit'
+            
+            //  Other
+            case 'Length': return 'String'
+
         }
         return super.mapType(type)
     }
     mapCType(type: Type): string {
         switch (type.name) {
+            // Pointer
             case 'KPointer': return 'Int64'
+        
+            // Integral
+            case 'boolean': return 'Bool'
+            case 'KBoolean': return 'Bool'
+            case 'KUInt': return 'Int32' // ??
             case 'int32': case 'KInt': return 'Int32'
+            case 'KLong': return 'Int64'
+            
+            // Number
+            case 'number': return 'Float64'
+            case 'double': return 'Float64'
+            case 'KFloat': return 'Float32'
+            
+            // Array like
+            case 'Uint8Array': return 'CPointer<UInt8>'
+            case 'KUint8ArrayPtr': return 'CPointer<UInt8>'
+            case 'KInt32ArrayPtr': return 'CPointer<Int32>'
+            case 'KFloat32ArrayPtr': return 'CPointer<Float32>'
+            
+            // String like
             case 'KStringPtr': return 'CString'
             case 'string': return 'CString'
             case 'String': return 'CString'
-            case 'number': return 'Float64'
-            case 'boolean': return 'Bool'
-            case 'Length': return 'CString'
+
+            // void
             case 'void': return 'Unit'
-            case 'double': return 'Float64'
-            case 'Uint8Array': return 'CPointer<UInt8>'
+            
+            //  Other
+            case 'Length': return 'CString'
         }
         return super.mapType(type)
     }
