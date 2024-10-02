@@ -21,25 +21,49 @@ import { EnumEntity } from './PeerFile';
 import { IdlPeerLibrary } from './idl/IdlPeerLibrary';
 import { IdlPeerClass } from './idl/IdlPeerClass';
 import { CppLanguageWriter, Method, MethodSignature, Type } from './LanguageWriters';
-import { IDLEntry, IDLInterface, IDLType, IDLVoidType, isClass, isInterface } from '../idl';
+import { IDLEntry, IDLInterface, IDLType, IDLVoidType, isClass, isInterface, isReferenceType } from '../idl';
 import { readLangTemplate } from './FileGenerators';
 import { capitalize, Language } from '../util';
 import { PrimitiveType } from './DeclarationTable';
+import { isMaterialized } from './idl/IdlPeerGeneratorVisitor';
 
 
 class OHOSVisitor {
     hWriter = new CppLanguageWriter(new IndentedPrinter())
     cppWriter = new CppLanguageWriter(new IndentedPrinter())
 
+    libraryName: string = ""
+
     interfaces = new Array<IDLInterface>()
+    data = new Array<IDLInterface>()
 
     constructor(
         protected library: IdlPeerLibrary
     ) { }
 
-    private writeModifier(libraryName: string, clazz: IDLInterface) {
-        let name = this.modifierName(libraryName, clazz.name)
-        let handleType = this.handleType(libraryName, clazz.name)
+    mapType(type: IDLType): string {
+        if (isReferenceType(type)) {
+            return `${PrimitiveType.Prefix}${this.libraryName}_${type.name!}`
+        }
+        return this.hWriter.mapType(this.hWriter.mapIDLType(type))
+    }
+
+    private writeData(clazz: IDLInterface) {
+        let name = `${PrimitiveType.Prefix}${this.libraryName}_${clazz.name}`
+        let _ = this.hWriter
+        _.print(`typedef struct ${name}`)
+        _.pushIndent()
+        clazz.properties.forEach(it => {
+            _.print(`${this.mapType(it.type)} ${it.name};`)
+        })
+        _.popIndent()
+        _.print(`} ${name};`)
+
+    }
+
+    private writeModifier(clazz: IDLInterface) {
+        let name = this.modifierName(clazz.name)
+        let handleType = this.handleType(clazz.name)
         let _ = this.hWriter
         _.print(`typedef struct ${handleType}Opaque;`)
         _.print(`typedef struct ${handleType}Opaque* ${handleType};`)
@@ -54,34 +78,35 @@ class OHOSVisitor {
             if (!method.isStatic) {
                 params.push(["thiz", new Type(handleType)])
             }
-            let returnType = _.mapIDLType(method.returnType)
             params = params.concat(method.parameters.map(it => [it.name, this.hWriter.mapIDLType(it.type!)]))
-            this.hWriter.print(`${_.mapType(returnType)} (*${method.name})(${params.map(it => `${_.mapType(it[1])} ${it[0]}`).join(", ")});`)
+            this.hWriter.print(`${this.mapType(method.returnType)} (*${method.name})(${params.map(it => `${_.mapType(it[1])} ${it[0]}`).join(", ")});`)
         })
         this.hWriter.popIndent()
         this.hWriter.print(`} ${name};`)
     }
 
-    private modifierName(libraryName: string, name: string): string {
-        return `${PrimitiveType.Prefix}${libraryName}_${name}Modifier`
+    private modifierName(name: string): string {
+        return `${PrimitiveType.Prefix}${this.libraryName}_${name}Modifier`
     }
-    private handleType(libraryName: string, name: string): string {
-        return `${PrimitiveType.Prefix}${libraryName}_${name}Handle`
+    private handleType(name: string): string {
+        return `${PrimitiveType.Prefix}${this.libraryName}_${name}Handle`
     }
 
     private writeModifiers() {
-        let libraryName = 'xml' // TODO: deduce from package/smth.
+        this.libraryName = 'xml' // TODO: deduce from package/smth.
 
         this.interfaces.forEach(it => {
-            this.writeModifier(libraryName, it)
+            this.writeModifier(it)
         })
-        let name = `${PrimitiveType.Prefix}${libraryName}_API`
+        this.data.forEach(it => {
+            this.writeData(it)
+        })
+        let name = `${PrimitiveType.Prefix}${this.libraryName}_API`
         this.hWriter.print(`typedef struct ${name} {`)
         this.hWriter.pushIndent()
         this.hWriter.print(`${PrimitiveType.Prefix}Int32 version;`)
         this.interfaces.forEach(it => {
-            let name = this.modifierName(libraryName, it.name)
-            this.hWriter.print(`const ${name}* (*${capitalize(it.name)})();`)
+            this.hWriter.print(`const ${this.modifierName(it.name)}* (*${capitalize(it.name)})();`)
         })
         this.hWriter.popIndent()
         this.hWriter.print(`} ${name};`)
@@ -113,7 +138,12 @@ class OHOSVisitor {
 
         this.library.files.forEach(file => {
             file.entries.forEach(entry => {
-                if (isInterface(entry) || isClass(entry)) this.interfaces.push(entry)
+                if (isInterface(entry) || isClass(entry)) {
+                    if (isMaterialized(entry))
+                        this.interfaces.push(entry)
+                    else
+                        this.data.push(entry)
+                }
             })
         })
 
