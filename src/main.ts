@@ -19,8 +19,7 @@ import * as path from "path"
 import { fromIDL, scanIDL } from "./from-idl/common"
 import { idlToString } from "./from-idl/DtsPrinter"
 import { generate } from "./idlize"
-import { IDLEntry, forEachChild, toIDLString } from "./idl"
-import { printHeader, toHeaderString, wrapWithPrologueAndEpilogue } from "./idl2h"
+import { IDLEntry, forEachChild, toIDLString, isInterface, hasExtAttribute, IDLExtendedAttributes } from "./idl"
 import { LinterMessage, LinterVisitor, toLinterString } from "./linter"
 import { CompileContext, IDLVisitor } from "./IDLVisitor"
 import { TestGeneratorVisitor } from "./TestGeneratorVisitor"
@@ -36,7 +35,6 @@ import {
     copyToLibace,
     libraryCcDeclaration,
     makeCJSerializer,
-    cStyleCopyright,
     makeTypeChecker
 } from "./peer-generation/FileGenerators"
 import { makeJavaArkComponents, makeJavaNodeTypes, makeJavaSerializer } from "./peer-generation/printers/lang/JavaPrinters"
@@ -45,7 +43,6 @@ import {
     PeerProcessor,
 } from "./peer-generation/PeerGeneratorVisitor"
 import { defaultCompilerOptions, isDefined, toSet, Language } from "./util"
-import { TypeChecker } from "./typecheck"
 import { initRNG } from "./rand_utils"
 import { DeclarationTable } from "./peer-generation/DeclarationTable"
 import { printRealAndDummyAccessors, printRealModifiersAsMultipleFiles } from "./peer-generation/printers/ModifierPrinter"
@@ -78,6 +75,8 @@ import { IdlPeerLibrary } from "./peer-generation/idl/IdlPeerLibrary"
 import { IdlPeerFile } from "./peer-generation/idl/IdlPeerFile"
 import { IdlPeerGeneratorVisitor, IdlPeerProcessor } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
 import { SkoalaCCodeGenerator } from "./peer-generation/printers/SkoalaPrinter"
+import * as webidl2 from "webidl2"
+import { toIDLNode } from "./from-idl/deserialize"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -317,9 +316,24 @@ if (options.dts2peer) {
     const generatedPeersDir = options.outputDir ?? "./out/ts-peers/generated"
     const lang = Language.fromString(options.language ?? "ts")
 
+
+    function addToLibrary(library: { files: IdlPeerFile[], componentsToGenerate: Set<string> }, dir: string) {
+        fs.readdirSync(dir).forEach(it => {
+            const idlFile = path.resolve(path.join(dir, it))
+            const content = fs.readFileSync(path.resolve(path.join(dir, it))).toString()
+            const nodes = webidl2.parse(content).map(it => toIDLNode(idlFile, it))
+            library.files.push(
+                new IdlPeerFile(idlFile, nodes, library.componentsToGenerate)
+            )
+        })
+    }
+
+    const PREDEFINED_PATH = path.join(__dirname, "..", "predefined")
+
     if (options.idl) {
         options.docs = "all"
         const idlLibrary = new IdlPeerLibrary(lang, toSet(options.generateInterface))
+        addToLibrary(idlLibrary, PREDEFINED_PATH)
         // First convert DTS to IDL
         generate(
             options.inputDir.split(','),
@@ -367,6 +381,20 @@ if (options.dts2peer) {
         }
         const declarationTable = new DeclarationTable(options.language ?? "ts")
         const peerLibrary = new PeerLibrary(declarationTable, toSet(options.generateInterface))
+
+        // stub while we migrating to idl
+        const kindOfLibrary = {
+            files: [] as IdlPeerFile[],
+            componentsToGenerate: new Set<string>()
+        }
+        addToLibrary(kindOfLibrary, PREDEFINED_PATH)
+        for (const file of kindOfLibrary.files) {
+            for (const entry of file.entries) {
+                if (isInterface(entry) && hasExtAttribute(entry, IDLExtendedAttributes.NativeModule)) {
+                    peerLibrary.predefinedDeclarations.push(entry)
+                }
+            }
+        }
 
         generate(
             options.inputDir.split(','),

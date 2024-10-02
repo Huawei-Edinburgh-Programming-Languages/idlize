@@ -79,6 +79,7 @@ export enum IDLExtendedAttributes {
     GlobalScope = "GlobalScope",
     Namespace = "Namespace",
     Deprecated = "Deprecated",
+    NativeModule = "NativeModule"
 }
 
 export enum IDLAccessorAttribute {
