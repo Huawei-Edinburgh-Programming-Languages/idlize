@@ -20,11 +20,14 @@ import { MaterializedClass } from "./Materialized";
 import { EnumEntity } from './PeerFile';
 import { IdlPeerLibrary } from './idl/IdlPeerLibrary';
 import { IdlPeerClass } from './idl/IdlPeerClass';
-import { CppLanguageWriter, MethodSignature, Type } from './LanguageWriters';
+import { CppLanguageWriter, Method, MethodSignature, Type } from './LanguageWriters';
 import { IDLEntry, IDLType, IDLVoidType, isClass } from '../idl';
+import { readLangTemplate } from './FileGenerators';
+import { Language } from '../util';
 
 
 class OHOSVisitor {
+    hWriter = new CppLanguageWriter(new IndentedPrinter())
     cppWriter = new CppLanguageWriter(new IndentedPrinter())
 
     constructor(
@@ -39,15 +42,25 @@ class OHOSVisitor {
                         this.cppWriter.makeSignature(IDLVoidType, it.parameters), (writer) => {
                     })
                 })
+                entry.methods.forEach(it => {
+                    writer.writeMethodImplementation(new Method(it.name,
+                        this.cppWriter.makeSignature(it.returnType, it.parameters)), (writer) => {
+                    })
+                })
             })
         }
     }
 
     execute(outDir: string) {
+        this.hWriter.writeLines(readLangTemplate('ohos_api_prologue.h', Language.CPP))
+        this.hWriter.writeLines(readLangTemplate('ohos_api_epilogue.h', Language.CPP))
+        this.hWriter.printTo(path.join(outDir, "libxml.h"))
+
         this.library.files.forEach(file => {
             file.entries.forEach(entry => this.visitDeclaration(entry))
+
         })
-        this.cppWriter.printTo(path.join(outDir, "main.cc"))
+        this.cppWriter.printTo(path.join(outDir, "libxml.cc"))
     }
 }
 

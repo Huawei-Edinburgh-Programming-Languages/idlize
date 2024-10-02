@@ -19,7 +19,6 @@ import { PrimitiveType } from "./DeclarationTable"
 import { Language, camelCaseToUpperSnakeCase } from "../util"
 import { CppLanguageWriter, createLanguageWriter, LanguageWriter, Method, MethodSignature, NamedMethodSignature, PrinterLike, Type } from "./LanguageWriters"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
-import { PeerEventKind } from "./printers/EventsPrinter"
 import { writeDeserializer, writeSerializer } from "./printers/SerializerPrinter"
 import { SELECTOR_ID_PREFIX, writeConvertors } from "./printers/ConvertorsPrinter"
 import { PeerLibrary } from "./PeerLibrary"
@@ -434,10 +433,9 @@ function readTemplate(name: string): string {
     return template
 }
 
-function readLangTemplate(name: string, lang: Language): string {
-    return fs.readFileSync(path.join(__dirname, `../templates/${lang.directory}/${name + lang.extension}`), 'utf8')
+export function readLangTemplate(name: string, lang: Language): string {
+    return fs.readFileSync(path.join(__dirname, `../templates/${lang.directory}/${name}`), 'utf8')
 }
-
 
 export function makeAPI(
     apiVersion: string,
@@ -518,7 +516,7 @@ export function makeArkuiModule(componentsFiles: string[]): string {
 }
 
 export function makeMaterializedPrologue(lang: Language): string {
-    let prologue = readLangTemplate('materialized_class_prologue', lang)
+    let prologue = readLangTemplate('materialized_class_prologue' + lang.extension, lang)
     return `
 ${prologue}
 
