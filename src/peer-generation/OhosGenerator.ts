@@ -15,18 +15,14 @@
 import * as fs from 'fs'
 import * as path from 'path'
 
-import { IndentedPrinter } from "../IndentedPrinter";
-import { MaterializedClass } from "./Materialized";
-import { EnumEntity } from './PeerFile';
-import { IdlPeerLibrary } from './idl/IdlPeerLibrary';
-import { IdlPeerClass } from './idl/IdlPeerClass';
-import { CppLanguageWriter, Method, MethodSignature, Type } from './LanguageWriters';
-import { IDLEntry, IDLInterface, IDLType, IDLVoidType, isClass, isInterface, isReferenceType } from '../idl';
-import { readLangTemplate } from './FileGenerators';
-import { capitalize, Language } from '../util';
-import { PrimitiveType } from './DeclarationTable';
-import { isMaterialized } from './idl/IdlPeerGeneratorVisitor';
-
+import { IndentedPrinter } from "../IndentedPrinter"
+import { IdlPeerLibrary } from './idl/IdlPeerLibrary'
+import { CppLanguageWriter, Method, Type } from './LanguageWriters'
+import { IDLEntry, IDLInterface, IDLType, IDLVoidType, isClass, isInterface, isReferenceType } from '../idl'
+import { readLangTemplate } from './FileGenerators'
+import { capitalize, Language } from '../util'
+import { PrimitiveType } from './DeclarationTable'
+import { isMaterialized } from './idl/IdlPeerGeneratorVisitor'
 
 class OHOSVisitor {
     hWriter = new CppLanguageWriter(new IndentedPrinter())
@@ -80,6 +76,12 @@ class OHOSVisitor {
             }
             params = params.concat(method.parameters.map(it => [it.name, this.hWriter.mapIDLType(it.type!)]))
             this.hWriter.print(`${this.mapType(method.returnType)} (*${method.name})(${params.map(it => `${_.mapType(it[1])} ${it[0]}`).join(", ")});`)
+        })
+        clazz.properties.forEach(property => {
+            this.hWriter.print(`${this.mapType(property.type)} (*get${capitalize(property.name)})(${handleType} thiz);`)
+            if (!property.isReadonly) {
+                this.hWriter.print(`void (*set${capitalize(property.name)})(${handleType} thiz, ${this.mapType(property.type)} value);`)
+            }
         })
         this.hWriter.popIndent()
         this.hWriter.print(`} ${name};`)
