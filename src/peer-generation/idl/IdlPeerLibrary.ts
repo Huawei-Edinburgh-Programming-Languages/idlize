@@ -56,6 +56,8 @@ export class IdlPeerLibrary {
         return Array.from(this.materializedClasses.values()).filter(it => it.needBeGenerated)
     }
 
+    public readonly predefinedDeclarations: idl.IDLInterface[] = []
+
     constructor(
         public language: Language,
         public componentsToGenerate: Set<string>,

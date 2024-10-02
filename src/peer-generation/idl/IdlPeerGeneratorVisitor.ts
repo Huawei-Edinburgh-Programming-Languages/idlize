@@ -88,9 +88,14 @@ export class IdlPeerGeneratorVisitor implements GenericVisitor<void> {
     }
 
     visitWholeFile(): void {
-        this.peerFile.entries
-            .filter(it => idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Component))
-            .forEach(it => this.visitComponent(it as idl.IDLInterface))
+        this.peerFile.entries.forEach(it => {
+            if (idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Component)) {
+                this.visitComponent(it as idl.IDLInterface)
+            }
+            if (idl.hasExtAttribute(it, idl.IDLExtendedAttributes.NativeModule)) {
+                this.visitPredefinedDeclaration(it as idl.IDLInterface)
+            }
+        })
     }
 
     visitComponent(component: idl.IDLInterface) {
@@ -104,6 +109,10 @@ export class IdlPeerGeneratorVisitor implements GenericVisitor<void> {
             this.peerLibrary.componentsDeclarations.push(
                 new IdlComponentDeclaration(componentName, compInterface, component))
         }
+    }
+    
+    visitPredefinedDeclaration(declaration: idl.IDLInterface) {
+        this.peerLibrary.predefinedDeclarations.push(declaration)
     }
 }
 
@@ -795,7 +804,6 @@ export class IdlPeerProcessor {
             peerGenerator.generatePeer(component)
         const allDeclarations = this.generateDeclarations(this.library.componentsDeclarations)
         const actualDeclarations = this.generateDeclarations(this.generateActualComponents())
-
         for (const dep of allDeclarations) {
             if (isSyntheticDeclaration(dep))
                 continue
