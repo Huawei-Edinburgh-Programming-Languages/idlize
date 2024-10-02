@@ -1,42 +1,47 @@
 #include <stdint.h>
+
 /* clang-format off */
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-enum Ark_Tag
+enum OH_Tag
 {
-  ARK_TAG_UNDEFINED = 101,
-  ARK_TAG_INT32 = 102,
-  ARK_TAG_FLOAT32 = 103,
-  ARK_TAG_STRING = 104,
-  ARK_TAG_LENGTH = 105,
-  ARK_TAG_RESOURCE = 106,
-  ARK_TAG_OBJECT = 107,
+  OH_TAG_UNDEFINED = 101,
+  OH_TAG_INT32 = 102,
+  OH_TAG_FLOAT32 = 103,
+  OH_TAG_STRING = 104,
+  OH_TAG_LENGTH = 105,
+  OH_TAG_RESOURCE = 106,
+  OH_TAG_OBJECT = 107,
 };
 
-enum Ark_RuntimeType
+enum OH_RuntimeType
 {
-  ARK_RUNTIME_UNEXPECTED = -1,
-  ARK_RUNTIME_NUMBER = 1,
-  ARK_RUNTIME_STRING = 2,
-  ARK_RUNTIME_OBJECT = 3,
-  ARK_RUNTIME_BOOLEAN = 4,
-  ARK_RUNTIME_UNDEFINED = 5,
-  ARK_RUNTIME_BIGINT = 6,
-  ARK_RUNTIME_FUNCTION = 7,
-  ARK_RUNTIME_SYMBOL = 8,
-  ARK_RUNTIME_MATERIALIZED = 9,
+  OH_RUNTIME_UNEXPECTED = -1,
+  OH_RUNTIME_NUMBER = 1,
+  OH_RUNTIME_STRING = 2,
+  OH_RUNTIME_OBJECT = 3,
+  OH_RUNTIME_BOOLEAN = 4,
+  OH_RUNTIME_UNDEFINED = 5,
+  OH_RUNTIME_BIGINT = 6,
+  OH_RUNTIME_FUNCTION = 7,
+  OH_RUNTIME_SYMBOL = 8,
+  OH_RUNTIME_MATERIALIZED = 9,
 };
 
-typedef float Ark_Float32;
-typedef double Ark_Float64;
-typedef int32_t Ark_Int32;
-typedef unsigned int Ark_UInt32; // TODO: update unsigned int
-typedef int64_t Ark_Int64;
-typedef int8_t Ark_Int8;
-typedef int8_t Ark_Boolean;
-typedef const char* Ark_CharPtr;
-typedef void* Ark_NativePointer;
+typedef float OH_Float32;
+typedef double OH_Float64;
+typedef int32_t OH_Int32;
+typedef unsigned int OH_UInt32;
+typedef int64_t OH_Int64;
+typedef int8_t OH_Int8;
+typedef int8_t OH_Boolean;
+typedef const char* OH_CharPtr;
+typedef void* OH_NativePointer;
+typedef const char* OH_String;
 
+typedef struct OH_AnyAPI {
+    OH_Int32 version;
+} OH_AnyAPI;

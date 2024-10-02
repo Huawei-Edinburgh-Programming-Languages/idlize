@@ -499,7 +499,7 @@ class CppArrayResizeStatement implements LanguageStatement {
 class CppMapResizeStatement implements LanguageStatement {
     constructor(private keyType: string, private valueType: string, private map: string, private size: string, private deserializer: string) {}
     write(writer: LanguageWriter): void {
-        writer.print(`${this.deserializer}.resizeMap<Map_${this.keyType.replace(PrimitiveType.ArkPrefix, "")}_${this.valueType.replace(PrimitiveType.ArkPrefix, "")}, ${this.keyType}, ${this.valueType}>(&${this.map}, ${this.size});`)
+        writer.print(`${this.deserializer}.resizeMap<Map_${this.keyType.replace(PrimitiveType.Prefix, "")}_${this.valueType.replace(PrimitiveType.Prefix, "")}, ${this.keyType}, ${this.valueType}>(&${this.map}, ${this.size});`)
     }
 }
 
@@ -2002,13 +2002,13 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
             case 'KPointer': return 'void*'
             case 'Uint8Array': return 'byte[]'
             case 'int32':
-            case 'KInt': return 'int32_t'
+            case 'KInt': return `${PrimitiveType.Prefix}Int32`
             case 'string':
-            case 'KStringPtr': return 'Ark_String'
-            case 'number': return 'Ark_Number'
-            case 'boolean': return 'Ark_Boolean'
-            case 'Function': return `Ark_Function`
-            case 'Length': return 'Ark_Length'
+            case 'KStringPtr': return `${PrimitiveType.Prefix}String`
+            case 'number': return `${PrimitiveType.Prefix}Number`
+            case 'boolean': return `${PrimitiveType.Prefix}Boolean`
+            case 'Function': return `${PrimitiveType.Prefix}Function`
+            case 'Length': return `${PrimitiveType.Prefix}Length`
             // TODO: oh no
             case 'Array<string[]>' : return `Array_Array_${PrimitiveType.String.getText()}`
         }
