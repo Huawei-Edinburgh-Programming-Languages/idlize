@@ -33,7 +33,7 @@ class ConvertorsPrinter {
             this.writer.print(`switch (src.selector) {`)
             this.writer.pushIndent()
             selectors.forEach(selector => {
-                this.writer.print(`case ${SELECTOR_ID_PREFIX}${selector.id}: AssignTo(dst, src.${selector.name}); break;`)
+                this.writer.print(`case ${SELECTOR_ID_PREFIX}${selector.id}: AssignTo(dst, src.${this.writer.escapeKeyword(selector.name)}); break;`)
             })
             this.writer.print(`default:`)
             this.writer.print(`{`)
