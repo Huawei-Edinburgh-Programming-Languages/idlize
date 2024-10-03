@@ -1997,3 +1997,32 @@ export class CJLanguageWriter extends LanguageWriter {
         const mapper = createPrimitiveTypeMapper({
             ptr: 'Int64',
     
+            void: 'Unit',
+
+            bool: 'Bool',
+            i8: 'Int8',
+            u8: 'UInt8',
+            i16: 'Int16',
+            u16: 'UInt16',
+            i32: 'Int32',
+            u32: 'UInt32',
+            i64: 'Int64',
+            u64: 'UInt64',
+            
+            f32: 'Float32',
+            f64: 'Float64',
+
+            str: 'CString'
+        })
+        const [ success, resultType ] = mapper(type.name)
+        if (success) {
+            return resultType
+        }
+        return super.mapType(type)
+    }
+    escapeKeyword(word: string): string {
+        return CJKeywords.has(word) ? word + "_" : word
+    }
+    override castToBoolean(value: string): string { return `if (${value} { 1 } else { 0 })` }
+}
+
