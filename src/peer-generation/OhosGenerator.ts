@@ -18,11 +18,12 @@ import * as path from 'path'
 import { IndentedPrinter } from "../IndentedPrinter"
 import { IdlPeerLibrary } from './idl/IdlPeerLibrary'
 import { CppLanguageWriter, Method, MethodSignature, Type } from './LanguageWriters'
-import { IDLCallback, IDLEntry, IDLInterface, IDLParameter, IDLType, IDLVoidType, isCallback, isClass, isConstructor, isInterface, isMethod, isPrimitiveType, isReferenceType, isUnionType } from '../idl'
+import { IDLCallback, IDLEntry, IDLEnum, IDLInterface, IDLParameter, IDLType, IDLVoidType, isCallback, isClass, isConstructor, isEnum, isInterface, isMethod, isPrimitiveType, isReferenceType, isUnionType } from '../idl'
 import { readLangTemplate } from './FileGenerators'
 import { capitalize, Language } from '../util'
 import { PrimitiveType } from './DeclarationTable'
 import { isMaterialized } from './idl/IdlPeerGeneratorVisitor'
+import { isEnumDeclaration } from 'typescript'
 
 class NameType {
     constructor(public name: string, public type: string) {}
@@ -47,7 +48,7 @@ class OHOSVisitor {
 
     mapType(type: IDLType): string {
         this.library.requestType(type, true)
-        if (isReferenceType(type)) {
+        if (isReferenceType(type) || isEnum(type)) {
             return `${PrimitiveType.Prefix}${this.libraryName}_${type.name!}`
         }
         return this.hWriter.mapIDLType(type)
@@ -146,6 +147,8 @@ class OHOSVisitor {
         this.impls.forEach((signature, name) => {
             _.print(`${signature.returnType} ${name}(${signature.params.map(it => `${it.type} ${it.name}`).join(", ")}) {`)
             _.pushIndent()
+            if (signature.returnType != "void")
+                _.print('return 0;')
             _.popIndent()
             _.print(`}`)
         })
@@ -164,7 +167,7 @@ class OHOSVisitor {
         // Create API.
         let api = this.libraryName
         let _c = writer
-        _c.print(`const ${PrimitiveType.Prefix}${api}_API* Get${api}APIImpl() {`)
+        _c.print(`const ${PrimitiveType.Prefix}${api}_API* Get${api}APIImpl(int version) {`)
         _c.pushIndent()
         _c.print(`const static ${PrimitiveType.Prefix}${api}_API api = {`)
         _c.pushIndent()
@@ -174,6 +177,7 @@ class OHOSVisitor {
         })
         _c.popIndent()
         _c.print(`};`)
+        _c.print(`if (version != api.version) return nullptr;`)
         _c.print(`return &api;`)
         _c.popIndent()
         _c.print(`}`)
@@ -222,6 +226,8 @@ class OHOSVisitor {
         } else if (isMethod(entry) || isCallback(entry)) {
             entry.parameters.forEach(it => this.requestType(it.type!))
             this.requestType(entry.returnType)
+        } else if (isEnum(entry)) {
+            this.requestType(entry)
         }
         entry.scope?.forEach(it => this.requestTypes(it))
     }
@@ -247,6 +253,16 @@ class OHOSVisitor {
                 _.print(`};`)
                 _.popIndent()
                 _.print(`};`)
+            }
+            if (isEnum(type)) {
+                let declaration = this.library.toDeclaration(type) as IDLEnum
+                _.print(`typedef enum {`)
+                _.pushIndent()
+                declaration.elements.forEach(it => {
+                    _.print(`${it.name},`)
+                })
+                _.popIndent()
+                _.print(`} ${this.mapType(type)};`)
             }
         })
     }
