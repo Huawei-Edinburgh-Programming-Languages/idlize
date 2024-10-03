@@ -118,6 +118,8 @@ const options = program
     .parse()
     .opts()
 
+let apiVersion = options.apiVersion ?? 9999
+
 function findVersion() {
     if (process.env.npm_package_version) return process.env.npm_package_version
     let packageJson = path.join(__dirname, '..', 'package.json')
@@ -428,12 +430,12 @@ function generateLibace(outDir: string, peerLibrary: PeerLibrary) {
             generated: "OHOS::Ace::NG::GeneratedModifier"
         },
         basicVersion: 1,
-        fullVersion: options.apiVersion,
+        fullVersion: apiVersion,
         extendedVersion: 6,
     })
 
     const converterNamespace = "OHOS::Ace::NG::Converter"
-    const { api, converterHeader } = printUserConverter(libace.userConverterHeader, converterNamespace, options.apiVersion, peerLibrary)
+    const { api, converterHeader } = printUserConverter(libace.userConverterHeader, converterNamespace, apiVersion, peerLibrary)
     fs.writeFileSync(libace.generatedArkoalaApi, api)
     fs.writeFileSync(libace.userConverterHeader, converterHeader)
     const events = printEventsCLibaceImpl(peerLibrary, {namespace: "OHOS::Ace::NG::GeneratedEvents"})
@@ -462,12 +464,12 @@ function generateLibaceFromIdl(outDir: string, peerLibrary: IdlPeerLibrary) {
             generated: "OHOS::Ace::NG::GeneratedModifier"
         },
         basicVersion: 1,
-        fullVersion: options.apiVersion,
+        fullVersion: apiVersion,
         extendedVersion: 6,
     })
 
     const converterNamespace = "OHOS::Ace::NG::Converter"
-    const { api, converterHeader } = printUserConverter(libace.userConverterHeader, converterNamespace, options.apiVersion, peerLibrary)
+    const { api, converterHeader } = printUserConverter(libace.userConverterHeader, converterNamespace, apiVersion, peerLibrary)
     fs.writeFileSync(libace.generatedArkoalaApi, api)
     fs.writeFileSync(libace.userConverterHeader, converterHeader)
     const events = printEventsCLibaceImpl(peerLibrary, {namespace: "OHOS::Ace::NG::GeneratedEvents"})
@@ -719,7 +721,7 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
     writeFile(arkoala.native(new TargetFile('bridge_generated.cc')), printBridgeCcGenerated(peerLibrary, options.callLog ?? false), true)
     writeFile(arkoala.native(new TargetFile('bridge_custom.cc')), printBridgeCcCustom(peerLibrary, options.callLog ?? false))
 
-    const { api, serializers } = printSerializers(options.apiVersion, peerLibrary)
+    const { api, serializers } = printSerializers(apiVersion, peerLibrary)
     writeFile(arkoala.native(new TargetFile('Serializers.h')), serializers, true)
     writeFile(arkoala.native(new TargetFile('arkoala_api_generated.h')), api, true)
 
@@ -727,11 +729,11 @@ function generateArkoala(outDir: string, peerLibrary: PeerLibrary, lang: Languag
     const accessors = printRealAndDummyAccessors(peerLibrary)
     writeFile(
         arkoala.native(new TargetFile('dummy_impl.cc')),
-        dummyImplementations(modifiers.dummy, accessors.dummy, 1, options.apiVersion, 6).getOutput().join('\n'),
+        dummyImplementations(modifiers.dummy, accessors.dummy, 1, apiVersion, 6).getOutput().join('\n'),
     )
     writeFile(
         arkoala.native(new TargetFile('real_impl.cc')),
-        dummyImplementations(modifiers.real, accessors.real, 1, options.apiVersion, 6).getOutput().join('\n'),
+        dummyImplementations(modifiers.real, accessors.real, 1, apiVersion, 6).getOutput().join('\n'),
         true,
     )
     writeFile(arkoala.native(new TargetFile('all_events.cc'),), printEventsCArkoalaImpl(peerLibrary), true)
@@ -870,7 +872,7 @@ function generateArkoalaFromIdl(outDir: string, peerLibrary: IdlPeerLibrary, lan
     writeFile(arkoala.native(new TargetFile('bridge_generated.cc')), printBridgeCcGenerated(peerLibrary, options.callLog ?? false), true)
     writeFile(arkoala.native(new TargetFile('bridge_custom.cc')), printBridgeCcCustom(peerLibrary, options.callLog ?? false))
 
-    const { api, serializers } = printSerializers(options.apiVersion, peerLibrary)
+    const { api, serializers } = printSerializers(apiVersion, peerLibrary)
     writeFile(arkoala.native(new TargetFile('Serializers.h')), serializers, true)
     writeFile(arkoala.native(new TargetFile('arkoala_api_generated.h')), api, true)
 
@@ -878,11 +880,11 @@ function generateArkoalaFromIdl(outDir: string, peerLibrary: IdlPeerLibrary, lan
     const accessors = printRealAndDummyAccessors(peerLibrary)
     writeFile(
         arkoala.native(new TargetFile('dummy_impl.cc')),
-        dummyImplementations(modifiers.dummy, accessors.dummy, 1, options.apiVersion, 6).getOutput().join('\n'),
+        dummyImplementations(modifiers.dummy, accessors.dummy, 1, apiVersion , 6).getOutput().join('\n'),
     )
     writeFile(
         arkoala.native(new TargetFile('real_impl.cc')),
-        dummyImplementations(modifiers.real, accessors.real, 1, options.apiVersion, 6).getOutput().join('\n'),
+        dummyImplementations(modifiers.real, accessors.real, 1, apiVersion, 6).getOutput().join('\n'),
         true,
     )
     writeFile(arkoala.native(new TargetFile('all_events.cc'),), printEventsCArkoalaImpl(peerLibrary), true)

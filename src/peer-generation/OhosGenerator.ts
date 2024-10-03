@@ -23,7 +23,6 @@ import { readLangTemplate } from './FileGenerators'
 import { capitalize, Language } from '../util'
 import { PrimitiveType } from './DeclarationTable'
 import { isMaterialized } from './idl/IdlPeerGeneratorVisitor'
-import { isEnumDeclaration } from 'typescript'
 
 class NameType {
     constructor(public name: string, public type: string) {}
@@ -269,7 +268,7 @@ class OHOSVisitor {
 
     execute(outDir: string) {
         PrimitiveType.Prefix = "OH_"
-        this.libraryName = 'XML' // TODO: deduce from package/smth.
+        this.libraryName = this.library.files[0].packageName().toUpperCase()
 
         this.library.files.forEach(file => {
             file.entries.forEach(entry => {
