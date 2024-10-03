@@ -166,8 +166,8 @@ export class EtsAssignStatement implements LanguageStatement {
     write(writer: LanguageWriter): void {
         if (this.isDeclared) {
             const typeSpec = ""
-            const initValue = this.expression !== undefined ? this.expression.asString() : "undefined"
-            writer.print(`${this.isConst ? "const" : "let"} ${this.variableName}${typeSpec} = ${initValue}`)
+            const initValue = this.expression !== undefined ? this.expression : writer.makeUndefined()
+            writer.print(`${this.isConst ? "const" : "let"} ${this.variableName}${typeSpec} = ${initValue.asString()}`)
         } else {
             writer.print(`${this.variableName} = ${this.expression.asString()}`)
         }
