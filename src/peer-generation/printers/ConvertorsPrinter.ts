@@ -96,7 +96,7 @@ class ConvertorsPrinter {
             this.writer.print("{")
             this.writer.pushIndent()
             if (fields.length > 0) {
-                this.writer.print(`AssignTo(dst, src.${fields[0]});`)
+                this.writer.print(`AssignTo(dst, src.${this.writer.escapeKeyword(fields[0])});`)
             }
             this.writer.popIndent()
             this.writer.print(`}`)
