@@ -14,7 +14,6 @@
  */
 
 import * as idl from "../../idl"
-import { UndefinedConvertor, UnionRuntimeTypeChecker } from "../Convertors"
 import { Method, MethodSignature, Type, LanguageWriter, MethodModifier, ExpressionStatement, StringExpression, NamedMethodSignature } from "../LanguageWriters";
 import { PeerClass, PeerClassBase } from "../PeerClass";
 import { PeerMethod } from "../PeerMethod";
@@ -22,7 +21,8 @@ import { isDefined, Language } from "../../util";
 import { callbackIdByInfo, canProcessCallback, convertToCallback } from "./EventsPrinter";
 import { IdlPeerMethod } from "../idl/IdlPeerMethod";
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
-import { ArgConvertor as IdlArgConvertor } from "../idl/IdlArgConvertors"
+// import { ArgConvertor as IdlArgConvertor } from "../idl/IdlArgConvertors"
+import { ArgConvertor, UndefinedConvertor, UnionRuntimeTypeChecker } from '../ArgConvertors';
 import { typeOrUnion } from "../idl/common";
 
 export function collapseSameNamedMethods(methods: Method[], selectMaxMethodArgs?: number[]): Method {
@@ -65,7 +65,7 @@ export function collapseIdlPeerMethods(library: IdlPeerLibrary, overloads: IdlPe
             return [target]
         }))
     })
-    const typeConvertors: IdlArgConvertor[] = targets.map((target, index) => {
+    const typeConvertors: ArgConvertor[] = targets.map((target, index) => {
         if (selectMaxMethodArgs?.includes(index)) {
             const convertor = maxMethod.argConvertors[index]
             convertor.param = method.signature.argName(index)
