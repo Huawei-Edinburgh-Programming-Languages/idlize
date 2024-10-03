@@ -19,7 +19,7 @@ import * as path from "path"
 import { fromIDL, scanIDL } from "./from-idl/common"
 import { idlToString } from "./from-idl/DtsPrinter"
 import { generate } from "./idlize"
-import { IDLEntry, forEachChild, toIDLString, isInterface, hasExtAttribute, IDLExtendedAttributes } from "./idl"
+import { IDLEntry, forEachChild, toIDLString, isInterface, hasExtAttribute, IDLExtendedAttributes, isPackage } from "./idl"
 import { LinterMessage, LinterVisitor, toLinterString } from "./linter"
 import { CompileContext, IDLVisitor } from "./IDLVisitor"
 import { TestGeneratorVisitor } from "./TestGeneratorVisitor"
@@ -382,19 +382,24 @@ if (options.dts2peer) {
         const declarationTable = new DeclarationTable(options.language ?? "ts")
         const peerLibrary = new PeerLibrary(declarationTable, toSet(options.generateInterface))
 
-        // stub while we migrating to idl
+        /* ---------- stub while we migrating to idl --------- */
         const kindOfLibrary = {
             files: [] as IdlPeerFile[],
             componentsToGenerate: new Set<string>()
         }
         addToLibrary(kindOfLibrary, PREDEFINED_PATH)
         for (const file of kindOfLibrary.files) {
+            const pkgs = file.entries.filter(isPackage)
+            if (pkgs.length !== 1 || pkgs[0]?.name !== `"org.openharmony.idlize.predefined"`) {
+                continue
+            }
             for (const entry of file.entries) {
-                if (isInterface(entry) && hasExtAttribute(entry, IDLExtendedAttributes.NativeModule)) {
+                if (isInterface(entry)) {
                     peerLibrary.predefinedDeclarations.push(entry)
                 }
             }
         }
+        /* --------------------------------------------------- */
 
         generate(
             options.inputDir.split(','),
