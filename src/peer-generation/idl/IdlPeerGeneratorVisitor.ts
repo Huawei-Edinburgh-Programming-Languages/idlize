@@ -73,6 +73,7 @@ export class IdlComponentDeclaration {
     ) {}
 }
 
+const PREDEFINED_PACKAGE = 'org.openharmony.idlize.predefined'
 export class IdlPeerGeneratorVisitor implements GenericVisitor<void> {
     private readonly sourceFile: string
 
@@ -87,15 +88,29 @@ export class IdlPeerGeneratorVisitor implements GenericVisitor<void> {
         this.peerFile = options.peerFile
     }
 
+    isPredefinedPackage(file:IdlPeerFile): boolean {
+        const packageDeclarations = file.entries.filter(entry => idl.isPackage(entry))
+        if (packageDeclarations.length !== 1) {
+            return false
+        }
+        const [ pkg ] = packageDeclarations
+        let pkgName = pkg.name ?? ''
+        if (pkgName.startsWith('"')) {
+            pkgName = pkgName.substring(1, pkgName.length - 1)
+        }
+        return pkgName === PREDEFINED_PACKAGE
+    }
+
     visitWholeFile(): void {
-        this.peerFile.entries.forEach(it => {
-            if (idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Component)) {
-                this.visitComponent(it as idl.IDLInterface)
-            }
-            if (idl.hasExtAttribute(it, idl.IDLExtendedAttributes.NativeModule)) {
-                this.visitPredefinedDeclaration(it as idl.IDLInterface)
-            }
-        })
+        if (this.isPredefinedPackage(this.peerFile)) {
+            this.peerFile.entries
+                .filter(it => idl.isInterface(it))
+                .forEach(it => this.visitPredefinedDeclaration(it as idl.IDLInterface))
+        } else {
+            this.peerFile.entries
+                .filter(it => idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Component))
+                .forEach(it => this.visitComponent(it as idl.IDLInterface))
+        }
     }
 
     visitComponent(component: idl.IDLInterface) {
