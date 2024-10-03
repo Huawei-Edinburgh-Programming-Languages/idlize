@@ -21,15 +21,18 @@ import { IdlPeerClass } from "./IdlPeerClass";
 import { IdlPeerFile } from "./IdlPeerFile";
 import { IdlTypeNameConvertor, JavaTypeNameConvertor, TSTypeNameConvertor } from './IdlNameConvertor';
 import { capitalize, isDefined, Language } from '../../util';
-import { AggregateConvertor, ArgConvertor, ArrayConvertor, BooleanConvertor, CallbackFunctionConvertor, ClassConvertor, CustomTypeConvertor, EnumConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, LengthConvertor, MapConvertor, MaterializedClassConvertor, NullConvertor, NumberConvertor, OptionConvertor, PredefinedConvertor, StringConvertor, TupleConvertor, TypeAliasConvertor, UndefinedConvertor, UnionConvertor } from './IdlArgConvertors';
+import { AggregateConvertor, ArrayConvertor, CallbackFunctionConvertor, ClassConvertor, cppEscape, EnumConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, MapConvertor, MaterializedClassConvertor, OptionConvertor, StringConvertor, TupleConvertor, TypeAliasConvertor, UnionConvertor } from './IdlArgConvertors';
 import { collectCallbacks, IdlCallbackInfo } from '../printers/EventsPrinter';
-import { PrimitiveType } from '../DeclarationTable';
+import { ArkPrimitiveType } from "../ArkPrimitiveType"
 import { DependencySorter } from './DependencySorter';
 import { IndentedPrinter } from '../../IndentedPrinter';
 import { LanguageWriter } from '../LanguageWriters';
 import { isImport, isStringEnum } from './common';
 import { StructPrinter } from './StructPrinter';
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig';
+import { Library } from '../../Library';
+import { DeclarationProcessor } from '../../DeclarationProcessor';
+import { ArgConvertor, BooleanConvertor, UndefinedConvertor, CustomTypeConvertor, LengthConvertor, LengthConvertorScoped, NumberConvertor, PredefinedConvertor, NullConvertor } from '../ArgConvertors';
 
 export type IdlPeerLibraryOutput = {
     outputC: string[]
@@ -44,7 +47,7 @@ function createTypeNameConvertor(library: IdlPeerLibrary): IdlTypeNameConvertor 
     throw new Error(`Convertor from IDL to ${language} not implemented`)
 }
 
-export class IdlPeerLibrary {
+export class IdlPeerLibrary implements Library<IdlPeerFile>, DeclarationProcessor<idl.IDLType, idl.IDLEntry> {
     public readonly files: IdlPeerFile[] = []
     public readonly builderClasses: Map<string, BuilderClass> = new Map()
     public get buildersToGenerate(): BuilderClass[] {
@@ -187,7 +190,7 @@ export class IdlPeerLibrary {
         if (customConv)
             return customConv
         if (!declaration || isConflictingDeclaration(declaration))
-            return new CustomTypeConvertor(param, type.name, type.name) // assume some predefined type
+            return new CustomTypeConvertor(param, type.name, false, type.name) // assume some predefined type
 
         const declarationName = declaration.name!
         if (isImport(declaration)) {
@@ -236,11 +239,11 @@ export class IdlPeerLibrary {
             case `Function`:
                 return new FunctionConvertor(this, param, type as idl.IDLReferenceType)
             case `AnimationRange`:
-                return new CustomTypeConvertor(param, "AnimationRange", "AnimationRange<number>")
+                return new CustomTypeConvertor(param, "AnimationRange", false, "AnimationRange<number>")
             case `ContentModifier`:
-                return new CustomTypeConvertor(param, "ContentModifier", "ContentModifier<any>")
+                return new CustomTypeConvertor(param, "ContentModifier", false, "ContentModifier<any>")
             case `Record`:
-                return new CustomTypeConvertor(param, "Record", "Record<string, string>")
+                return new CustomTypeConvertor(param, "Record", false, "Record<string, string>")
             case `Optional`:
                 const wrappedType = idl.getExtAttribute(type, idl.IDLExtendedAttributes.TypeArguments)!
                 return new OptionConvertor(this, param, idl.toIDLType(wrappedType))
@@ -248,22 +251,22 @@ export class IdlPeerLibrary {
         return undefined
     }
 
-    private typeMap = new Map<idl.IDLType, [idl.IDLEntry, string, boolean]>()
+    readonly typeMap = new Map<idl.IDLType, [idl.IDLEntry, string[], boolean]>()
 
     private cleanPrefix(name: string, prefix: string): string {
         return name.replace(prefix, "")
     }
 
     getTypeName(type: idl.IDLType, optional: boolean = false): string {
-        let prefix = optional ? PrimitiveType.OptionalPrefix : ""
+        let prefix = optional ? ArkPrimitiveType.OptionalPrefix : ""
         let declaration = this.typeMap.get(type)
         if (!declaration) {
             this.requestType(type, false)
             declaration = this.typeMap.get(type)!
         }
-        let name = declaration[1]
+        let name = declaration[1][0]
         if (optional) {
-            name = this.cleanPrefix(name, PrimitiveType.ArkPrefix)
+            name = this.cleanPrefix(name, ArkPrimitiveType.Prefix)
         }
         return prefix + name
     }
@@ -306,8 +309,8 @@ export class IdlPeerLibrary {
         const decl = this.toDeclaration(type)
         let name = this.computeTargetName(decl, false)
         if (type.name === "Optional")
-            name = "Opt_" + cleanPrefix(name, PrimitiveType.ArkPrefix)
-        this.typeMap.set(type, [decl, name, useToGenerate])
+            name = "Opt_" + cleanPrefix(name, ArkPrimitiveType.Prefix)
+        this.typeMap.set(type, [decl, [name], useToGenerate])
     }
 
     public get orderedDependencies(): idl.IDLEntry[] {
@@ -360,8 +363,8 @@ export class IdlPeerLibrary {
         return prefix + `Literal_${names.join('_')}`
     }
 
-    computeTargetName(target: idl.IDLEntry, optional: boolean, idlPrefix: string = PrimitiveType.ArkPrefix): string {
-        const prefix = optional ? PrimitiveType.OptionalPrefix : ""
+    computeTargetName(target: idl.IDLEntry, optional: boolean, idlPrefix: string = ArkPrimitiveType.Prefix): string {
+        const prefix = optional ? ArkPrimitiveType.OptionalPrefix : ""
         if (idl.isPrimitiveType(target)) {
             let name: string = ""
             switch (target) {
@@ -380,12 +383,12 @@ export class IdlPeerLibrary {
         }
         if (idl.isTypeParameterType(target)) {
             // TODO: likely incorrect
-            let name = PrimitiveType.CustomObject.getText()
-            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.ArkPrefix) : name)
+            let name = ArkPrimitiveType.CustomObject.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.ArkPrefix) : name)
         }
         if (idl.isEnum(target) || idl.isEnumType(target)) {
             const name = this.enumName(target)
-            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.ArkPrefix) : name)
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.ArkPrefix) : name)
         }
         if (idl.isUnionType(target)) {
             return prefix + `Union_${target.types.map(it => this.computeTargetName(it, false, "")).join("_")}`
@@ -421,8 +424,8 @@ export class IdlPeerLibrary {
             if (name === "ResourceColor")
                 return "Union_Color_Number_String_Resource"///hack
             if (PeerGeneratorConfig.isKnownParametrized(name)) {
-                const name = PrimitiveType.CustomObject.getText()
-                return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.ArkPrefix) : name)
+                let name = ArkPrimitiveType.CustomObject.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
             }
             return (optional ? prefix : idlPrefix) + name
         }
@@ -438,15 +441,15 @@ export class IdlPeerLibrary {
     private mapImportTypeName(type: idl.IDLEntry): string {
         switch (type.name) {
             case "Resource": return "Resource"
-            case "Callback": return PrimitiveType.Function.getText()
-            default: return PrimitiveType.CustomObject.getText()
+            case "Callback": return ArkPrimitiveType.Function.getText()
+            default: return ArkPrimitiveType.CustomObject.getText()
         }
     }
 
     private enumName(target: idl.IDLEnum | idl.IDLEnumType): string {
         // TODO: support namespaces in other declarations.
         const namespace = idl.getExtAttribute(target, idl.IDLExtendedAttributes.Namespace)
-        return `${PrimitiveType.ArkPrefix}${namespace ? namespace + "_" : ""}${target.name}`
+        return `${ArkPrimitiveType.Prefix}${namespace ? namespace + "_" : ""}${target.name}`
     }
 
     private allTypes<T extends idl.IDLEntry>(predicate: (e: idl.IDLEntry) => e is T): T[] {
