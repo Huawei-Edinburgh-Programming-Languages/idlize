@@ -16,11 +16,10 @@
 import { program } from "commander"
 import * as fs from "fs"
 import * as path from "path"
-import { fromIDL, scanIDL } from "./from-idl/common"
+import { fromIDL } from "./from-idl/common"
 import { idlToString } from "./from-idl/DtsPrinter"
 import { generate } from "./idlize"
 import { IDLEntry, forEachChild, toIDLString } from "./idl"
-import { printHeader, toHeaderString, wrapWithPrologueAndEpilogue } from "./idl2h"
 import { LinterMessage, LinterVisitor, toLinterString } from "./linter"
 import { CompileContext, IDLVisitor } from "./IDLVisitor"
 import { TestGeneratorVisitor } from "./TestGeneratorVisitor"
@@ -36,7 +35,6 @@ import {
     copyToLibace,
     libraryCcDeclaration,
     makeCJSerializer,
-    cStyleCopyright,
     makeTypeChecker
 } from "./peer-generation/FileGenerators"
 import { makeJavaArkComponents, makeJavaNodeTypes, makeJavaSerializer } from "./peer-generation/printers/lang/JavaPrinters"
@@ -45,7 +43,6 @@ import {
     PeerProcessor,
 } from "./peer-generation/PeerGeneratorVisitor"
 import { defaultCompilerOptions, isDefined, toSet, Language } from "./util"
-import { TypeChecker } from "./typecheck"
 import { initRNG } from "./rand_utils"
 import { DeclarationTable } from "./peer-generation/DeclarationTable"
 import { printRealAndDummyAccessors, printRealModifiersAsMultipleFiles } from "./peer-generation/printers/ModifierPrinter"
@@ -90,7 +87,6 @@ const options = program
     .option('--input-file <name>', 'Name of file to convert, all files in input-dir if none')
     .option('--idl2dts', 'Convert IDL to .d.ts definitions')
     .option('--dts2skoala', 'Convert DTS to skoala definitions')
-    .option('--idl2h', 'Convert IDL to .h definitions')
     .option('--linter', 'Run linter')
     .option('--linter-suppress-errors <suppress>', 'Error codes to suppress, comma separated, no space')
     .option('--linter-whitelist <whitelist.json>', 'Whitelist for linter')
