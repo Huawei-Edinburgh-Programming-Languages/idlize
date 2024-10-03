@@ -31,6 +31,16 @@ class NativeModuleVisitor {
     readonly nativeModuleEmpty: LanguageWriter
     nativeFunctions?: LanguageWriter
 
+    protected readonly excludes = new Map<string, Set<string>>([
+        [Language.CJ.name, new Set([
+            "StringData"
+        ])],
+        [Language.JAVA.name, new Set()],
+        [Language.CPP.name, new Set()],
+        [Language.TS.name, new Set()],
+        [Language.ARKTS.name, new Set()],
+    ])
+
     constructor(
         protected readonly library: PeerLibrary | IdlPeerLibrary,
     ) {
@@ -102,16 +112,9 @@ class NativeModuleVisitor {
     }
 
     shouldPrintPredefineMethod(inputMethod:idl.IDLMethod): boolean {
-        const excludeAttrs = inputMethod.extendedAttributes?.filter(attr => 
-            attr.name === 'Exclude'
-        )
-        if (!excludeAttrs) {
-            return true
-        }
-        for (const attr of excludeAttrs) {
-            if (attr.value && this.library.language.name === attr.value) {
-                return false
-            } 
+        const langExcludes = this.excludes.get(this.library.language.name)
+        if (langExcludes) {
+            return !langExcludes.has(inputMethod.name)
         }
         return true
     }
@@ -156,7 +159,7 @@ class NativeModuleVisitor {
         this.nativeModuleEmpty.pushIndent()
         this.nativeFunctions?.pushIndent()
         for (const declaration of this.library.predefinedDeclarations) {
-            const writer =  createLanguageWriter(this.library.language)
+            const writer = createLanguageWriter(this.library.language)
             this.nativeModulePredefined.set(
                 declaration.name, 
                 writer               
@@ -189,8 +192,8 @@ class NativeModuleVisitor {
 }
 
 class CJNativeModuleVisitor extends NativeModuleVisitor {
-    private arrayLikeTypes = new Set(['Uint8Array', 'KUint8ArrayPtr', 'KInt32ArrayPtr', 'KFloat32ArrayPtr'])
-    private stringLikeTypes = new Set(['String', 'KString', 'KStringPtr', 'string'])
+    private arrayLikeTypes = new Set(['Uint8Array', 'KUint8ArrayPtr', 'KInt32ArrayPtr', 'KFloat32ArrayPtr', 'Vec_u8', 'Vec_i32', 'Vec_f32'])
+    private stringLikeTypes = new Set(['String', 'KString', 'KStringPtr', 'string', 'str'])
 
     constructor(
         protected readonly library: PeerLibrary | IdlPeerLibrary,
@@ -357,6 +360,32 @@ export function printNativeModuleEmpty(peerLibrary: PeerLibrary | IdlPeerLibrary
 }
 
 function getReturnValue(type: Type): string {
+
+    const pointers = new Set(['ptr'])
+    const integrals = new Set([
+        'bool',
+        'i8',  'u8',
+        'i16', 'u16',
+        'i32', 'u32',
+        'i64', 'u64'
+    ])
+    const numeric = new Set([
+        ...integrals, 'f32', 'f64'
+    ])
+    const strings = new Set([
+        'str'
+    ])
+
+    if (pointers.has(type.name)) {
+        return '-1'
+    }
+    if (numeric.has(type.name)) {
+        return '0'
+    }
+    if (strings.has(type.name)) {
+        return `""`
+    }
+
     switch(type.name) {
         case Type.Boolean.name : return "false"
         case Type.Number.name: case "int": case "KInt": case "KLong": return "1"

@@ -1,8 +1,7 @@
-package "org.openharmony.idl";
+package "org.openharmony.idlize.predefined";
 
-[GlobalScope, NativeModule, NoBridge]
 interface Loader {
-    KInt LoadVirtualMachine(KInt arg0, String arg1, String arg2);
-    KInt RunApplication(KInt arg0, KInt arg1);
-    KInt StartApplication();
+    i32 LoadVirtualMachine(i32 arg0, str arg1, str arg2);
+    i32 RunApplication(i32 arg0, i32 arg1);
+    i32 StartApplication();
 };
