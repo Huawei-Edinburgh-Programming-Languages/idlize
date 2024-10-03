@@ -998,3 +998,1002 @@ export abstract class LanguageWriter {
         this.writeStatement(this.makeAssign(valueType, Type.Int32,
             this.makeFunctionCall("runtimeType", [this.makeString(value)]), false))
     }
+    makeDiscriminatorFromFields(convertor: {targetType: (writer: LanguageWriter) => Type}, value: string, accessors: string[]): LanguageExpression {
+        return this.makeString(`(${this.makeNaryOp("||",
+            accessors.map(it => this.makeString(`${value}!.hasOwnProperty("${it}")`))).asString()})`)
+    }
+    makeSerializerCreator() {
+        return this.makeString('createSerializer');
+    }
+    makeCallIsResource(value: string): LanguageExpression {
+        return this.makeString(`isResource(${value})`)
+    }
+    makeEnumEntity(enumEntity: EnumEntity, isExport: boolean): LanguageStatement {
+        return new TsEnumEntityStatement(enumEntity, isExport)
+    }
+    makeFieldModifiersList(modifiers: FieldModifier[] | undefined, customFieldFilter?: (field :FieldModifier) => boolean) : string {
+        let allowedModifiers = this.supportedFieldModifiers
+        let modifierFilter = customFieldFilter ? customFieldFilter : function(field: FieldModifier) {
+            return allowedModifiers.includes(field)
+        }
+        let prefix = modifiers
+            ?.filter(modifierFilter)
+            .map(it => this.mapFieldModifier(it)).join(" ")
+        return prefix ? prefix : ""
+    }
+    escapeKeyword(keyword: string): string {
+        return keyword
+    }
+    compareLiteral(expr: LanguageExpression, literal: string): LanguageExpression {
+        return this.makeEquals([expr, this.makeString(`"${literal}"`)])
+    }
+    makeCastCustomObject(customName: string, _isGenericType: boolean): LanguageExpression {
+        return this.makeString(customName)
+    }
+    makeHasOwnProperty(value: string,
+                       _valueTypeName: string,
+                       property: string,
+                       propertyTypeName?: string): LanguageExpression {
+        const expressions = [this.makeString(`${value}.hasOwnProperty("${property}")`)]
+        if (propertyTypeName) {
+            expressions.push(this.makeString(`isInstanceOf("${propertyTypeName}", ${value}.${property})`))
+        }
+        return this.makeNaryOp("&&", expressions)
+    }
+    discriminatorFromExpressions(value: string,
+                                 runtimeType: RuntimeType,
+                                 writer: LanguageWriter,
+                                 exprs: LanguageExpression[]) {
+        return writer.makeNaryOp("&&", [
+            writer.makeNaryOp("==", [writer.makeRuntimeType(runtimeType), writer.makeString(`${value}_type`)]),
+            ...exprs
+        ])
+    }
+    makeDiscriminatorConvertor(convertor: EnumConvertor, value: string, index: number): LanguageExpression {
+        const ordinal = convertor.isStringEnum
+            ? this.ordinalFromEnum(
+                this.makeString(this.getObjectAccessor(convertor, value)),
+                convertor.enumTypeName(this.language)
+            )
+            : this.makeUnionVariantCast(this.getObjectAccessor(convertor, value), Type.Number, convertor, index)
+        const {low, high} = convertor.extremumOfOrdinals()
+        return this.discriminatorFromExpressions(value, convertor.runtimeTypes[0], this, [
+            this.makeNaryOp(">=", [ordinal, this.makeString(low!.toString())]),
+            this.makeNaryOp("<=",  [ordinal, this.makeString(high!.toString())])
+        ])
+    }
+    makeNot(expr: LanguageExpression): LanguageExpression {
+        return this.makeString(`!${expr.asString()}`)
+    }
+    makeEquals(args: LanguageExpression[]): LanguageExpression {
+        return this.makeNaryOp("===", args)
+    }
+    castToInt(value: string, bitness: 8|32): string{ return value }
+    castToBoolean(value: string): string { return value }
+    castToEnum(value: string, enumName: string): string { return value }
+}
+
+export class TSLanguageWriter extends LanguageWriter {
+    constructor(printer: IndentedPrinter, language: Language = Language.TS) {
+        super(printer, language)
+    }
+    writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string, interfaces?: string[], generics?: string[], isDeclared?: boolean): void {
+        let extendsClause = superClass ? ` extends ${superClass}` : ''
+        let implementsClause = interfaces ? ` implements ${interfaces.join(",")}` : ''
+        const genericsClause = generics ? `<${generics.join(", ")}>` : ''
+        this.printer.print(`export${isDeclared ? " declare" : ""} class ${name}${genericsClause}${extendsClause}${implementsClause} {`)
+        this.pushIndent()
+        op(this)
+        this.popIndent()
+        this.printer.print(`}`)
+    }
+    writeInterface(name: string, op: (writer: LanguageWriter) => void, superInterfaces?: string[], isDeclared?: boolean): void {
+        let extendsClause = superInterfaces ? ` extends ${superInterfaces.join(",")}` : ''
+        this.printer.print(`export ${isDeclared ? "declare " : ""}interface ${name}${extendsClause} {`)
+        this.pushIndent()
+        op(this)
+        this.popIndent()
+        this.printer.print(`}`)
+    }
+    writeFieldDeclaration(name: string, type: Type, modifiers: FieldModifier[]|undefined, optional: boolean, initExpr?: LanguageExpression): void {
+        const init = initExpr != undefined ? ` = ${initExpr.asString()}` : ``
+        let prefix = this.makeFieldModifiersList(modifiers)
+        this.printer.print(`${prefix} ${name}${optional ? "?"  : ""}: ${type.name}${init}`)
+    }
+    writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void {
+        this.writeDeclaration(name, signature, true, false, modifiers)
+    }
+    writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method, modifiers?: MethodModifier[]) {
+        this.writeDeclaration(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') : ''} constructor`, signature, false, true)
+        this.pushIndent()
+        if (superCall) {
+            this.print(`super(${superCall.signature.args.map((_, i) => superCall?.signature.argName(i)).join(", ")})`)
+        }
+        op(this)
+        this.popIndent()
+        this.printer.print(`}`)
+
+    }
+    writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void) {
+        this.writeDeclaration(method.name, method.signature, true, true, method.modifiers, method.generics)
+        this.pushIndent()
+        op(this)
+        this.popIndent()
+        this.printer.print(`}`)
+    }
+    private writeDeclaration(name: string, signature: MethodSignature, needReturn: boolean, needBracket: boolean, modifiers?: MethodModifier[], generics?: string[]) {
+        let prefix = !modifiers ? undefined : this.supportedModifiers
+            .filter(it => modifiers.includes(it))
+            .map(it => this.mapMethodModifier(it)).join(" ")
+        if (modifiers?.includes(MethodModifier.GETTER)) {
+            prefix = `get ${prefix}`
+        } else if (modifiers?.includes(MethodModifier.SETTER)) {
+            prefix = `set ${prefix}`
+            needReturn = false
+        }
+        prefix = prefix ? prefix.trim() + " " : ""
+        const typeParams = generics ? `<${generics.join(", ")}>` : ""
+        this.printer.print(`${prefix}${name}${typeParams}(${signature.args.map((it, index) => `${signature.argName(index)}${it.nullable ? "?" : ""}: ${this.mapType(it)}${signature.argDefault(index) ? ' = ' + signature.argDefault(index) : ""}`).join(", ")})${needReturn ? ": " + this.mapType(signature.returnType) : ""} ${needBracket ? "{" : ""}`)
+    }
+    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression | undefined, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
+        return new AssignStatement(variableName, type, expr, isDeclared, isConst)
+    }
+    makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression {
+        return new TSLambdaExpression(signature, body)
+    }
+    makeThrowError(message: string): LanguageStatement {
+        return new TSThrowErrorStatement(message)
+    }
+    makeReturn(expr: LanguageExpression): LanguageStatement {
+        return new TSReturnStatement(expr)
+    }
+    makeStatement(expr: LanguageExpression): LanguageStatement {
+        return new ExpressionStatement(expr)
+    }
+    makeLoop(counter: string, limit: string, statement?: LanguageStatement): LanguageStatement {
+        return new TSLoopStatement(counter, limit, statement)
+    }
+    makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement {
+        return new TSMapForEachStatement(map, key, value, op)
+    }
+    writePrintLog(message: string): void {
+        this.print(`console.log("${message}")`)
+    }
+    makeCast(value: LanguageExpression, type: Type, unsafe = false): LanguageExpression {
+        return new TSCastExpression(value, type, unsafe)
+    }
+    getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string {
+        if (convertor instanceof OptionConvertor || convertor instanceof UnionConvertor) {
+            return value
+        }
+        if (convertor instanceof ArrayConvertor && args?.index != undefined) {
+            return `${value}${args.index}`
+        }
+        if (convertor instanceof ArrayConvertor) {
+            return `${value}`
+        }
+        if (convertor instanceof TupleConvertor && args?.index != undefined) {
+            return `${value}[${args.index}]`
+        }
+        if (convertor instanceof MapConvertor) {
+            return `${value}`
+        }
+        if (convertor.useArray && args?.index != undefined) {
+            return `${value}[${args.index}]`
+        }
+        return `${value}`
+    }
+    makeUndefined(): LanguageExpression {
+        return this.makeString("undefined")
+    }
+    makeRuntimeType(rt: RuntimeType): LanguageExpression {
+        return this.makeString(`RuntimeType.${RuntimeType[rt]}`)
+    }
+    makeTupleAlloc(option: string): LanguageStatement {
+        return new TsTupleAllocStatement(option)
+    }
+    makeObjectAlloc(object: string, fields: readonly FieldRecord[]): LanguageStatement {
+        if (fields.length > 0) {
+            return this.makeAssign(object, undefined,
+                this.makeCast(this.makeString("{}"),
+                    new Type(`{${fields.map(it=>`${it.name}: ${mapType(it.type)}`).join(",")}}`)),
+                false)
+        }
+        return new TsObjectAssignStatement(object, undefined, false)
+    }
+    makeMapResize(keyType: string, valueType: string, map: string, size: string, deserializer: string): LanguageStatement {
+        return this.makeAssign(map, undefined, this.makeString(`new Map<${keyType}, ${valueType}>()`), false)
+    }
+    makeMapKeyTypeName(c: MapConvertor): string {
+        return c.keyConvertor.tsTypeName;
+    }
+    makeMapValueTypeName(c: MapConvertor): string {
+        return c.valueConvertor.tsTypeName;
+    }
+    makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement {
+        // keyAccessor and valueAccessor are equal in TS
+        return this.makeStatement(this.makeMethodCall(keyAccessor, "set", [this.makeString(key), this.makeString(value)]))
+    }
+    makeObjectDeclare(name: string, type: Type, fields: readonly FieldRecord[]): LanguageStatement {
+        return new TsObjectDeclareStatement(name, type, fields)
+    }
+    getTagType(): Type {
+        return new Type("Tags");
+    }
+    getRuntimeType(): Type {
+        return new Type("number");
+    }
+    makeTupleAssign(receiver: string, fields: string[]): LanguageStatement {
+        return this.makeAssign(receiver, undefined,
+            this.makeString(`[${fields.map(it=> `${it}!`).join(",")}]`), false)
+    }
+    get supportedModifiers(): MethodModifier[] {
+        return [MethodModifier.PUBLIC, MethodModifier.PRIVATE, MethodModifier.STATIC]
+    }
+    get supportedFieldModifiers(): FieldModifier[] {
+        return [FieldModifier.PUBLIC, FieldModifier.PRIVATE, FieldModifier.PROTECTED, FieldModifier.READONLY, FieldModifier.STATIC]
+    }
+    enumFromOrdinal(value: LanguageExpression, enumType: string): LanguageExpression {
+        return this.makeString(`Object.values(${enumType})[${value.asString()}]`);
+    }
+    ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression {
+        return this.makeString(`Object.keys(${enumType}).indexOf(${this.makeCast(value, new Type('string')).asString()})`);
+    }
+    mapType(type: Type, convertor?: ArgConvertor): string {
+        switch (type.name) {
+            case 'Function': return 'Object'
+
+            case 'Vec_u8': return 'Uint8Array'
+            case 'Vec_i32': return 'Int32Array'
+            case 'Vec_f32': return 'Float32Array'
+        }
+        const mapper = createPrimitiveTypeMapper({
+            ptr: 'number | bigint',
+            void: 'void',
+            bool: 'number', // boolean ?
+            i8: 'number',
+            u8: 'number',
+            i16: 'number',
+            u16: 'number',
+            i32: 'number',
+            u32: 'number',
+            i64: 'number', // bigint ?
+            u64: 'number',
+            f32: 'number',
+            f64: 'number',
+            str: 'string'
+        })
+        return mapper(type.name)[1]
+    }
+    override castToBoolean(value: string): string { return `+${value}` }
+}
+
+export class ETSLanguageWriter extends TSLanguageWriter {
+    constructor(printer: IndentedPrinter) {
+        super(printer, Language.ARKTS)
+    }
+    writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
+        this.writeMethodDeclaration(name, signature, [MethodModifier.STATIC, MethodModifier.NATIVE])
+    }
+    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
+        return new EtsAssignStatement(variableName, type, expr, isDeclared, isConst)
+    }
+    makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression {
+        return new TSLambdaExpression(signature, body)
+    }
+    makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement {
+        return new ArkTSMapForEachStatement(map, key, value, op)
+    }
+    makeMapSize(map: string): LanguageExpression {
+        return this.makeString(`${super.makeMapSize(map).asString()} as int32`) // TODO: cast really needed?
+    }
+    mapType(type: Type, convertor?: ArgConvertor): string {
+        if (convertor instanceof EnumConvertor) {
+            return convertor.enumTypeName(this.language)
+        }
+        if (convertor instanceof AggregateConvertor && convertor.aliasName !== undefined) {
+            return convertor.aliasName
+        }
+        if (convertor instanceof ArrayConvertor) {
+            return convertor.isArrayType
+                ? `${convertor.elementTypeName()}[]`
+                : `Array<${convertor.elementTypeName()}>`
+        }
+        switch (type.name) {
+            case 'Uint8Array': return 'KUint8ArrayPtr'
+            case 'Vec_u8': return 'KUint8ArrayPtr'
+            case 'Vec_i32': return 'KInt32ArrayPtr'
+            case 'Vec_f32': return 'KFloat32ArrayPtr'
+        }
+        const mapper = createPrimitiveTypeMapper({
+            ptr: 'KPointer',
+            void: 'void',
+            bool: 'KBoolean',
+            i8: 'KInt',
+            u8: 'KInt',
+            i16: 'KInt',
+            u16: 'KInt',
+            i32: 'KInt',
+            u32: 'KUInt',
+            i64: 'KLong',
+            u64: 'KLong', // ??
+            f32: 'KFloat',
+            f64: 'number',
+            str: 'KStringPtr'
+        })
+        const [ success, resultType ] = mapper(type.name)
+        if (success) {
+            return resultType
+        }
+        return super.mapType(type)
+    }
+    get supportedModifiers(): MethodModifier[] {
+        return [MethodModifier.PUBLIC, MethodModifier.PRIVATE, MethodModifier.NATIVE, MethodModifier.STATIC]
+    }
+    nativeReceiver(): string { return 'NativeModule' }
+    makeUnsafeCast(convertor: ArgConvertor, param: string): string {
+        if (convertor instanceof EnumConvertor && !param.endsWith(".value")) {
+            return `(${param} as ${convertor.enumTypeName(this.language)}).${convertor.isStringEnum ? 'ordinal' : 'value'}`
+        }
+        return super.makeUnsafeCast(convertor, param)
+    }
+    runtimeType(param: ArgConvertor, valueType: string, value: string) {
+        if (param instanceof OptionConvertor) {
+            this.writeStatement(this.makeCondition(this.makeString(`${value} != undefined`), this.makeAssign(valueType, undefined,
+                this.makeRuntimeType(RuntimeType.OBJECT), false)))
+        } else {
+            super.runtimeType(param, valueType, value);
+        }
+    }
+    makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index?: number): LanguageExpression {
+        return this.makeString(`${value} as ${type.name}`)
+    }
+    ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression {
+        return value;
+    }
+    makeDiscriminatorFromFields(convertor: {targetType: (writer: LanguageWriter) => Type}, value: string, accessors: string[]): LanguageExpression {
+        if (convertor instanceof CustomTypeConvertor) {
+            return this.makeString(`${value} instanceof ${convertor.customTypeName}`)
+        }
+        return this.makeString(`${value} instanceof ${convertor.targetType(this).name}`)
+    }
+    makeValueFromOption(value: string, destinationConvertor: ArgConvertor): LanguageExpression {
+        if (destinationConvertor instanceof EnumConvertor) {
+            return this.makeString(`${value}!`)
+        }
+        return super.makeValueFromOption(value, destinationConvertor)
+    }
+    makeCallIsResource(value: string): LanguageExpression {
+        return this.makeString(`isResource(${value})`);
+    }
+    makeEnumEntity(enumEntity: EnumEntity, isExport: boolean): LanguageStatement {
+        return new ArkTSEnumEntityStatement(enumEntity, isExport);
+    }
+    getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string {
+        if (convertor instanceof StringConvertor && convertor.isLiteral()) {
+            return `${value}.toString()`
+        }
+        return super.getObjectAccessor(convertor, value, args);
+    }
+    writeMethodCall(receiver: string, method: string, params: string[], nullable: boolean = false) {
+        // ArkTS does not support - 'this.?'
+        super.writeMethodCall(receiver, method, params, nullable && receiver !== "this");
+    }
+    compareLiteral(expr: LanguageExpression, literal: string): LanguageExpression {
+        return super.makeNaryOp('instanceof', [expr, this.makeString(createLiteralDeclName(capitalize(literal)))]);
+    }
+    makeCastEnumToInt(convertor: EnumConvertor, value: string, _unsafe?: boolean): string {
+        return this.makeCast(this.makeString(`${value}.${convertor.isStringEnum ? "ordinal" : "value"}`),
+            new Type('int32')).asString();
+    }
+    makeUnionVariantCondition(convertor: ArgConvertor, valueName: string, valueType: string, type: string, index?: number): LanguageExpression {
+        if (convertor instanceof EnumConvertor) {
+            return this.makeString(`${valueName} instanceof ${convertor.enumTypeName(this.language)}`)
+        } else if (convertor instanceof StringConvertor && convertor.isLiteral()) {
+            return this.makeString(`${valueName} instanceof ${convertor.tsTypeName}`)
+        }
+        return super.makeUnionVariantCondition(convertor, valueName, valueType, type, index);
+    }
+    makeCastCustomObject(customName: string, isGenericType: boolean): LanguageExpression {
+        if (isGenericType) {
+            return this.makeCast(this.makeString(customName), new Type("Object"))
+        }
+        return super.makeCastCustomObject(customName, isGenericType);
+    }
+    makeHasOwnProperty(value: string,
+                       valueTypeName: string,
+                       property: string,
+                       propertyTypeName: string): LanguageExpression {
+        return this.makeNaryOp("&&", [
+            this.makeString(`${value} instanceof ${valueTypeName}`),
+            this.makeString(`${value}.${property} instanceof ${propertyTypeName}`)])
+    }
+    makeEquals(args: LanguageExpression[]): LanguageExpression {
+        // TODO: Error elimination: 'TypeError: Both operands have to be reference types'
+        // the '==' operator must be used when one of the operands is a reference
+        return super.makeNaryOp('==', args);
+    }
+    makeDiscriminatorConvertor(convertor: EnumConvertor, value: string, index: number): LanguageExpression {
+        return this.discriminatorFromExpressions(value, RuntimeType.OBJECT, this, [
+            this.makeString(`${value} instanceof ${convertor.enumTypeName(this.language)}`)
+        ])
+    }
+    override castToInt(value: string, bitness: 8 | 32): string {
+        return `${value} as int32` // FIXME: is there int8 in ARKTS?
+    }
+    override castToBoolean(value: string): string { return `${value} ? 1 : 0` }
+}
+
+abstract class CLikeLanguageWriter extends LanguageWriter {
+    protected constructor(printer: IndentedPrinter, language: Language) {
+        super(printer, language)
+    }
+    makeThrowError(message: string): LanguageStatement {
+        return new CLikeThrowErrorStatement(message)
+    }
+    writeMethodCall(receiver: string, method: string, params: string[], nullable = false): void {
+        this.printer.print(`${receiver}.${method}(${params.join(", ")});`)
+    }
+    writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void {
+        this.writeDeclaration(name, signature, modifiers, ";")
+    }
+    writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void) {
+        this.writeDeclaration(method.name, method.signature, method.modifiers)
+        this.printer.print(`{`)
+        this.pushIndent()
+        op(this)
+        this.popIndent()
+        this.printer.print(`}`)
+    }
+    private writeDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[], postfix?: string): void {
+        let prefix = modifiers
+            ?.filter(it => this.supportedModifiers.includes(it))
+            .map(it => this.mapMethodModifier(it)).join(" ")
+        prefix = prefix ? prefix + " " : ""
+        this.print(`${prefix}${this.mapType(signature.returnType)} ${name}(${signature.args.map((it, index) => `${this.mapType(it)} ${signature.argName(index)}`).join(", ")})${postfix ?? ""}`)
+    }
+}
+
+export class JavaLanguageWriter extends CLikeLanguageWriter {
+    constructor(printer: IndentedPrinter) {
+        super(printer, Language.JAVA)
+    }
+    writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string, interfaces?: string[], generics?: string[]): void {
+        let genericsClause = generics?.length ? `<${generics.join(', ')}> ` : ``
+        let extendsClause = superClass ? ` extends ${superClass}` : ''
+        let implementsClause = interfaces ? ` implements ${interfaces.join(",")}` : ''
+        this.printer.print(`class ${name}${genericsClause}${extendsClause}${implementsClause} {`)
+        this.pushIndent()
+        op(this)
+        this.popIndent()
+        this.printer.print(`}`)
+    }
+    writeInterface(name: string, op: (writer: LanguageWriter) => void, superInterfaces?: string[]): void {
+        let extendsClause = superInterfaces ? ` extends ${superInterfaces.join(",")}` : ''
+        this.printer.print(`interface ${name}${extendsClause} {`)
+        this.pushIndent()
+        op(this)
+        this.popIndent()
+        this.printer.print(`}`)
+    }
+    writeMethodCall(receiver: string, method: string, params: string[], nullable = false): void {
+        if (nullable) {
+            this.printer.print(`if (${receiver} != null) ${receiver}.${method}(${params.join(", ")});`)
+        } else {
+            super.writeMethodCall(receiver, method, params, nullable)
+        }
+    }
+    writeFieldDeclaration(name: string, type: Type, modifiers: FieldModifier[] | undefined, optional: boolean, initExpr?: LanguageExpression): void {
+        let prefix = this.makeFieldModifiersList(modifiers)
+        this.printer.print(`${prefix} ${this.mapType(type)} ${name}${initExpr ? ` = ${initExpr.asString()}` : ""};`)
+    }
+    writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
+        this.writeMethodDeclaration(name, signature, [MethodModifier.STATIC, MethodModifier.NATIVE])
+    }
+    writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method, modifiers?: MethodModifier[]) {
+        this.printer.print(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') : ''} ${className}(${signature.args.map((it, index) => `${this.mapType(it)} ${signature.argName(index)}`).join(", ")}) {`)
+        this.pushIndent()
+        if (superCall) {
+            this.print(`super(${superCall.signature.args.map((_, i) => superCall?.signature.argName(i)).join(", ")});`)
+        }
+        op(this)
+        this.popIndent()
+        this.printer.print(`}`)
+    }
+    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
+        return new JavaAssignStatement(variableName, type, expr, isDeclared, isConst)
+    }
+    makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression {
+        return new JavaLambdaExpression(signature, body)
+    }
+    makeReturn(expr: LanguageExpression): LanguageStatement {
+        return new CLikeReturnStatement(expr)
+    }
+    makeDefinedCheck(value: string): LanguageExpression {
+        return new JavaCheckDefinedExpression(value)
+    }
+    makeLoop(counter: string, limit: string, statement?: LanguageStatement): LanguageStatement {
+        return new CLikeLoopStatement(counter, limit, statement)
+    }
+    makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement {
+        return new JavaMapForEachStatement(map, key, value, op)
+    }
+    makeMapSize(map: string): LanguageExpression {
+        return this.makeString(`${map}.size()`)
+    }
+    makeCast(value: LanguageExpression, type: Type, unsafe = false): LanguageExpression {
+        return new JavaCastExpression(value, this.mapType(type), unsafe)
+    }
+    makeStatement(expr: LanguageExpression): LanguageStatement {
+        return new CLikeExpressionStatement(expr)
+    }
+    makeUnionSelector(value: string, valueType: string): LanguageStatement {
+        return this.makeAssign(valueType, undefined, this.makeMethodCall(value, "getSelector", []), false)
+    }
+    makeUnionVariantCondition(_convertor: ArgConvertor,
+                              _valueName: string,
+                              valueType: string,
+                              _type: string,
+                              index: number): LanguageExpression {
+        return this.makeString(`${valueType} == ${index}`)
+    }
+    makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index: number) {
+        return this.makeMethodCall(value, `getValue${index}`, [])
+    }
+    makeUnionTypeDefaultInitializer() {
+        return this.makeString("-1")
+    }
+    writePrintLog(message: string): void {
+        this.print(`System.out.println("${message}")`)
+    }
+    mapType(type: Type): string {
+        if (type.nullable) {
+            const optionalType = convertJavaOptional(type.name)
+            if (optionalType != type.name) return optionalType
+        }
+        switch (type.name) {
+
+            /////////////////////////////
+            // OLD ONES 
+
+            // other
+            case 'Length': return 'String'
+
+            // Pointer
+            case 'KPointer': return 'long'
+        
+            // Integral
+            case 'boolean': case 'KBoolean': return 'boolean'
+            case 'KUInt': return 'int'
+            case 'int32': case 'KInt': return 'int'
+            case 'int64': case 'KLong': return 'long'
+            
+            // Number
+            case 'number': return 'double'
+            case 'float32': case 'KFloat': return 'float'
+            
+            // Array like
+            case 'Uint8Array': return 'byte[]'
+            case 'KUint8ArrayPtr': return 'byte[]'
+            case 'KInt32ArrayPtr': return 'int[]'
+            case 'KFloat32ArrayPtr': return 'float[]'
+            
+            // String like
+            case 'KStringPtr': return 'String'
+            case 'string': return 'String'
+
+            /////////////////////////////
+            // NEW ONES 
+
+            // Array like
+            case 'Vec_u8': return 'byte[]'
+            case 'Vec_i32': return 'int[]'
+            case 'Vec_f32': return 'float[]'
+        }
+        const mapper = createPrimitiveTypeMapper({
+            ptr: 'long',
+    
+            void: 'void',
+
+            bool: 'boolean',
+            i8: 'byte',
+            u8: 'byte', // mb fix
+            i16: 'short',
+            u16: 'short', // mb fix
+            i32: 'int',
+            u32: 'int', // mb fix
+            i64: 'long',
+            u64: 'long', // mb fix
+            
+            f32: 'float',
+            f64: 'double',
+
+            str: 'String'
+        })
+        const [ success, resultType ] = mapper(type.name)
+        if (success) {
+            return resultType
+        }
+        return super.mapType(type)
+    }
+    nativeReceiver(): string { return 'NativeModule' }
+    applyToObject(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): LanguageStatement {
+        throw new Error("Method not implemented.")
+    }
+    getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string {
+        if (convertor instanceof OptionConvertor) {
+            return `${value}`
+        }
+        if (convertor instanceof TupleConvertor && args?.index) {
+            return `${value}.value${args.index}`
+        }
+        if (convertor instanceof UnionConvertor && args?.index) {
+            return `${value}.getValue${args.index}()`
+        }
+        return value
+    }
+    makeUndefined(): LanguageExpression {
+        return this.makeString("undefined")
+    }
+    makeRuntimeType(rt: RuntimeType): LanguageExpression {
+        return this.makeString(`RuntimeType.${RuntimeType[rt]}`)
+    }
+    makeRuntimeTypeGetterCall(value: string): LanguageExpression {
+        return this.makeMethodCall("Ark_Object", "getRuntimeType", [this.makeString(value)])
+    }
+    makeMapKeyTypeName(c: MapConvertor): string {
+        throw new Error("Method not implemented.")
+    }
+    makeMapValueTypeName(c: MapConvertor): string {
+        throw new Error("Method not implemented.")
+    }
+    makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement {
+        throw new Error("Method not implemented.")
+    }
+    getTagType(): Type {
+        throw new Error("Method not implemented.")
+    }
+    getRuntimeType(): Type {
+        throw new Error("Method not implemented.")
+    }
+    makeTupleAssign(receiver: string, tupleFields: string[]): LanguageStatement {
+        throw new Error("Method not implemented.")
+    }
+    get supportedModifiers(): MethodModifier[] {
+        return [MethodModifier.PUBLIC, MethodModifier.PRIVATE, MethodModifier.STATIC, MethodModifier.NATIVE]
+    }
+    get supportedFieldModifiers(): FieldModifier[] {
+        return [FieldModifier.PUBLIC, FieldModifier.PRIVATE, FieldModifier.PROTECTED, FieldModifier.STATIC, FieldModifier.FINAL]
+    }
+    makeTupleAccess(value: string, index: number): LanguageExpression {
+        return this.makeString(`${value}.value${index}`)
+    }
+    enumFromOrdinal(value: LanguageExpression, enumType: string): LanguageExpression {
+        throw new Error("Method not implemented.")
+    }
+    ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression {
+        throw new Error("Method not implemented.")
+    }
+    makeValueFromOption(value: string): LanguageExpression {
+        return this.makeString(`${value}`)
+    }
+    runtimeType(param: ArgConvertor, valueType: string, value: string) {
+        this.writeStatement(this.makeAssign(valueType, undefined,
+            this.makeRuntimeTypeGetterCall(value), false))
+    }
+    makeSerializerCreator() {
+        return this.makeString('Serializer::createSerializer');
+    }
+    makeCastEnumToInt(convertor: EnumConvertor, enumName: string, _unsafe?: boolean): string {
+        return `${enumName}.getIntValue()`
+    }
+    override castToBoolean(value: string): string { return `${value} ? 1 : 0` }
+    override castToEnum(value: string, enumName: string): string { return `${value}.getIntValue()` }
+}
+
+export class CJLanguageWriter extends LanguageWriter {
+    constructor(printer: IndentedPrinter, language: Language = Language.CJ) {
+        super(printer, language)
+    }
+    writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string, interfaces?: string[], generics?: string[]): void {
+        let extendsClause = superClass ? `${superClass}` : undefined
+        let implementsClause = interfaces ? `${interfaces.join(' & ')}` : undefined
+        let inheritancePart = [extendsClause, implementsClause]
+            .filter(isDefined)
+            .join(' & ')
+        inheritancePart = inheritancePart.length != 0 ? ' <: '.concat(inheritancePart) : ''
+        this.printer.print(`public open class ${name}${inheritancePart} {`)
+        this.pushIndent()
+        op(this)
+        this.popIndent()
+        this.printer.print(`}`)
+    }
+    writeInterface(name: string, op: (writer: LanguageWriter) => void, superInterfaces?: string[]): void {
+        let extendsClause = superInterfaces ? ` <: ${superInterfaces.join(" & ")}` : ''
+        this.printer.print(`interface ${name}${extendsClause} {`)
+        this.pushIndent()
+        op(this)
+        this.popIndent()
+        this.printer.print(`}`)
+    }
+    writeMethodCall(receiver: string, method: string, params: string[], nullable = false): void {
+        receiver = this.escapeKeyword(receiver)
+        params = params.map(argName => this.escapeKeyword(argName))
+        if (nullable) {
+            this.printer.print(`if (let Some(${receiver}) <- ${receiver}) { ${receiver}.${method}(${params.join(", ")}) }`)
+        } else {
+            super.writeMethodCall(receiver, method, params, nullable)
+        }
+    }
+    writeFieldDeclaration(name: string, type: Type, modifiers: FieldModifier[]|undefined, optional: boolean, initExpr?: LanguageExpression): void {
+        const init = initExpr != undefined ? ` = ${initExpr.asString()}` : ``
+        let prefix = this.makeFieldModifiersList(modifiers)
+        this.printer.print(`${prefix} var ${name}: ${optional ? '?' : ''}${this.mapType(type)}${init}`)
+    }
+    writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void {
+        this.writeDeclaration(name, signature, modifiers)
+    }
+    writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method, modifiers?: MethodModifier[]) {
+        this.printer.print(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') + ' ' : ''}${className}(${signature.args.map((it, index) => `${signature.argName(index)}: ${it.nullable ? '?' : ''}${this.mapType(it)}`).join(", ")}) {`)
+        this.pushIndent()
+        if (superCall) {
+            this.print(`super(${superCall.signature.args.map((_, i) => superCall?.signature.argName(i)).join(", ")});`)
+        }
+        op(this)
+        this.popIndent()
+        this.printer.print(`}`)
+    }
+    writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void) {
+        this.writeDeclaration(method.name, method.signature, method.modifiers, " {")
+        this.pushIndent()
+        op(this)
+        this.popIndent()
+        this.printer.print(`}`)
+    }
+    private writeDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[], postfix?: string): void {
+        let prefix = modifiers
+            ?.filter(it => this.supportedModifiers.includes(it))
+            .map(it => this.mapMethodModifier(it)).join(" ")
+        prefix = prefix ? prefix + " " : ""
+        this.print(`${prefix}func ${name}(${signature.args.map((it, index) => `${signature.argName(index)}: ${it.nullable ? '?' : ''}${this.mapType(it)}`).join(", ")}): ${this.mapType(signature.returnType)}${postfix ?? ""}`)
+    }
+    nativeReceiver(): string { return 'NativeModule' }
+    writeNativeFunctionCall(printer: LanguageWriter, name: string, signature: MethodSignature) {
+        printer.print(`return unsafe { ${name}(${signature.args.map((it, index) => `${signature.argName(index)}`).join(", ")}) }`)
+    }
+    writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
+        this.print(`func ${name}(${signature.args.map((it, index) => `${this.escapeKeyword(signature.argName(index))}: ${it.nullable ? '?' : ''}${this.mapCType(it)}`).join(", ")}): ${this.mapCType(signature.returnType)}`)
+    }
+    makeCastEnumToInt(convertor: EnumConvertor, enumName: string, _unsafe?: boolean): string {
+        return `${enumName}.getIntValue()`
+    }
+    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
+        return new CJAssignStatement(variableName, type, expr, isDeclared, isConst)
+    }
+    makeArrayLength(array: string, length?: string): LanguageExpression {
+        return this.makeString(`${array}.size`)
+    }
+    makeRuntimeTypeCondition(typeVarName: string, equals: boolean, type: RuntimeType, varName: string): LanguageExpression {
+        varName = this.escapeKeyword(varName)
+        return this.makeString(`let Some(${varName}) <- ${varName}`)
+    }
+    makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression {
+        throw new Error(`TBD`)
+    }
+    makeThrowError(message: string): LanguageStatement {
+        throw new Error(`TBD`)
+    }
+    makeReturn(expr: LanguageExpression): LanguageStatement {
+        return new ReturnStatement(expr)
+    }
+    makeStatement(expr: LanguageExpression): LanguageStatement {
+        return new ExpressionStatement(expr)
+    }
+    makeLoop(counter: string, limit: string, statement?: LanguageStatement): LanguageStatement {
+        return new CJLoopStatement(counter, limit, statement)
+    }
+    makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement {
+        return new CJMapForEachStatement(map, key, value, op)
+    }
+    writePrintLog(message: string): void {
+        this.print(`println("${message}")`)
+    }
+    makeCast(value: LanguageExpression, type: Type, unsafe = false): LanguageExpression {
+        return new TSCastExpression(value, type, unsafe)
+    }
+    getObjectAccessor(convertor: BaseArgConvertor, value: string, args?: ObjectArgs): string {
+        return `${value}`
+    }
+    makeUndefined(): LanguageExpression {
+        return this.makeString("Option.None")
+    }
+    makeValueFromOption(value: string, destinationConvertor: ArgConvertor): LanguageExpression {
+        return this.makeString(`${value}`)
+    }
+    makeRuntimeType(rt: RuntimeType): LanguageExpression {
+        return this.makeString(`RuntimeType.${RuntimeType[rt]}.ordinal`)
+    }
+    makeRuntimeTypeGetterCall(value: string): LanguageExpression {
+        let methodCall = this.makeMethodCall("Ark_Object", "getRuntimeType", [this.makeString(value)])
+        return this.makeString(methodCall.asString() + '.ordinal')
+    }
+    makeTupleAlloc(option: string): LanguageStatement {
+        return new TsTupleAllocStatement(option)
+    }
+    makeObjectAlloc(object: string, fields: readonly FieldRecord[]): LanguageStatement {
+        if (fields.length > 0) {
+            return this.makeAssign(object, undefined,
+                this.makeCast(this.makeString("{}"),
+                    new Type(`{${fields.map(it=>`${it.name}: ${mapType(it.type)}`).join(",")}}`)),
+                false)
+        }
+        return new TsObjectAssignStatement(object, undefined, false)
+    }
+    makeMapResize(keyType: string, valueType: string, map: string, size: string, deserializer: string): LanguageStatement {
+        return this.makeAssign(map, undefined, this.makeString(`new Map<${keyType}, ${valueType}>()`), false)
+    }
+    makeMapKeyTypeName(c: MapConvertor): string {
+        return c.keyConvertor.tsTypeName;
+    }
+    makeMapValueTypeName(c: MapConvertor): string {
+        return c.valueConvertor.tsTypeName;
+    }
+    makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement {
+        // keyAccessor and valueAccessor are equal in TS
+        return this.makeStatement(this.makeMethodCall(keyAccessor, "set", [this.makeString(key), this.makeString(value)]))
+    }
+    makeObjectDeclare(name: string, type: Type, fields: readonly FieldRecord[]): LanguageStatement {
+        return new TsObjectDeclareStatement(name, type, fields)
+    }
+    getTagType(): Type {
+        return new Type("Tags");
+    }
+    getRuntimeType(): Type {
+        return new Type("number");
+    }
+    makeTupleAssign(receiver: string, fields: string[]): LanguageStatement {
+        return this.makeAssign(receiver, undefined,
+            this.makeString(`[${fields.map(it=> `${it}!`).join(",")}]`), false)
+    }
+    get supportedModifiers(): MethodModifier[] {
+        return [MethodModifier.PUBLIC, MethodModifier.PRIVATE, MethodModifier.STATIC]
+    }
+    get supportedFieldModifiers(): FieldModifier[] {
+        return [FieldModifier.PUBLIC, FieldModifier.PRIVATE, FieldModifier.PROTECTED, FieldModifier.READONLY, FieldModifier.STATIC]
+    }
+    makeUnionSelector(value: string, valueType: string): LanguageStatement {
+        return this.makeAssign(valueType, undefined, this.makeMethodCall(value, "getSelector", []), false)
+    }
+    makeUnionVariantCondition(_convertor: ArgConvertor, _valueName: string, valueType: string, type: string, index?: number): LanguageExpression {
+        return this.makeString(`${valueType} == ${index}`)
+    }
+    makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index: number) {
+        return this.makeMethodCall(value, `getValue${index}`, [])
+    }
+    makeTupleAccess(value: string, index: number): LanguageExpression {
+        return this.makeString(`${value}.value${index}`)
+    }
+    enumFromOrdinal(value: LanguageExpression, enumType: string): LanguageExpression {
+        throw new Error('Not yet implemented')
+    }
+    ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression {
+        throw new Error('Not yet implemented')
+    }
+
+    makeEnumEntity(enumEntity: EnumEntity, isExport: boolean): LanguageStatement {
+        return new CJEnumEntityStatement(enumEntity, isExport)
+    }
+    runtimeType(param: ArgConvertor, valueType: string, value: string) {
+        this.writeStatement(this.makeAssign(valueType, undefined,
+            this.makeRuntimeTypeGetterCall(value), false))
+    }
+    mapType(type: Type): string {
+        switch (type.name) {
+            // Pointer
+            case 'KPointer': return 'Int64'
+            
+            // Integral
+            case 'boolean': case 'KBoolean': return 'Bool'
+            case 'KUInt': return 'Int32' // ?? 
+            case 'int32': case 'KInt': return 'Int32'
+            case 'KLong': return 'Int64'
+            
+            // Number
+            case 'number': return 'Float64'
+            case 'double': return 'Float64'
+            case 'KFloat': return 'Float32'
+            
+            // Array like
+            case 'Uint8Array': return 'ArrayList<UInt8>'
+            case 'KUint8ArrayPtr': return 'ArrayList<UInt8>'
+            case 'KInt32ArrayPtr': return 'ArrayList<Int32>'
+            case 'KFloat32ArrayPtr': return 'ArrayList<Float32>'
+            
+            // String like
+            case 'KStringPtr': case 'String': case 'string': return 'String'
+
+            // void
+            case 'void': return 'Unit'
+            
+            //  Other
+            case 'Length': return 'String'
+
+            /////////////////////////////
+            // NEW ONES 
+
+            // Array like
+            case 'Vec_u8': return 'ArrayList<UInt8>'
+            case 'Vec_i32': return 'ArrayList<Int32>'
+            case 'Vec_f32': return 'ArrayList<Float32>'
+        }
+        const mapper = createPrimitiveTypeMapper({
+            ptr: 'Int64',
+    
+            void: 'Unit',
+
+            bool: 'Bool',
+            i8: 'Int8',
+            u8: 'UInt8',
+            i16: 'Int16',
+            u16: 'UInt16',
+            i32: 'Int32',
+            u32: 'UInt32',
+            i64: 'Int64',
+            u64: 'UInt64',
+            
+            f32: 'Float32',
+            f64: 'Float64',
+
+            str: 'String'
+        })
+        const [ success, resultType ] = mapper(type.name)
+        if (success) {
+            return resultType
+        }
+        return super.mapType(type)
+    }
+    mapCType(type: Type): string {
+        switch (type.name) {
+            // Pointer
+            case 'KPointer': return 'Int64'
+        
+            // Integral
+            case 'boolean': return 'Bool'
+            case 'KBoolean': return 'Bool'
+            case 'KUInt': return 'Int32' // ??
+            case 'int32': case 'KInt': return 'Int32'
+            case 'KLong': return 'Int64'
+            
+            // Number
+            case 'number': return 'Float64'
+            case 'double': return 'Float64'
+            case 'KFloat': return 'Float32'
+            
+            // Array like
+            case 'Uint8Array': return 'CPointer<UInt8>'
+            case 'KUint8ArrayPtr': return 'CPointer<UInt8>'
+            case 'KInt32ArrayPtr': return 'CPointer<Int32>'
+            case 'KFloat32ArrayPtr': return 'CPointer<Float32>'
+            
+            // String like
+            case 'KStringPtr': return 'CString'
+            case 'string': return 'CString'
+            case 'String': return 'CString'
+
+            // void
+            case 'void': return 'Unit'
+            
+            //  Other
+            case 'Length': return 'CString'
+
+            /////////////////////////////
+            // NEW ONES 
+
+            // Array like
+            case 'Vec_u8': return 'CPointer<UInt8>'
+            case 'Vec_i32': return 'CPointer<Int32>'
+            case 'Vec_f32': return 'CPointer<Float32>'
+        }
+        const mapper = createPrimitiveTypeMapper({
+            ptr: 'Int64',
+    
