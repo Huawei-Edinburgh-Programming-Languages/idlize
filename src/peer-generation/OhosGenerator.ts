@@ -41,7 +41,7 @@ class OHOSVisitor {
         if (isReferenceType(type)) {
             return `${PrimitiveType.Prefix}${this.libraryName}_${type.name!}`
         }
-        return this.hWriter.mapType(this.hWriter.mapIDLType(type))
+        return this.hWriter.mapIDLType(type)
     }
 
     private writeData(clazz: IDLInterface) {
@@ -70,12 +70,12 @@ class OHOSVisitor {
             this.hWriter.print(`${handleType} (*${name})();`)
         })
         clazz.methods.forEach((method, index) => {
-            let params = new Array<[string, Type]>()
+            let params = new Array<[string, string]>()
             if (!method.isStatic) {
-                params.push(["thiz", new Type(handleType)])
+                params.push(["thiz", handleType])
             }
             params = params.concat(method.parameters.map(it => [it.name, this.hWriter.mapIDLType(it.type!)]))
-            this.hWriter.print(`${this.mapType(method.returnType)} (*${method.name})(${params.map(it => `${_.mapType(it[1])} ${it[0]}`).join(", ")});`)
+            this.hWriter.print(`${this.mapType(method.returnType)} (*${method.name})(${params.map(it => `${it[1]} ${it[0]}`).join(", ")});`)
         })
         clazz.properties.forEach(property => {
             this.hWriter.print(`${this.mapType(property.type)} (*get${capitalize(property.name)})(${handleType} thiz);`)

@@ -292,7 +292,7 @@ export function makeCJSerializer(library: PeerLibrary): LanguageWriter {
 }
 
 export function makeConverterHeader(path: string, namespace: string, library: PeerLibrary | IdlPeerLibrary): LanguageWriter {
-    const converter = createLanguageWriter(Language.CPP) as CppLanguageWriter
+    const converter = new CppLanguageWriter(new IndentedPrinter())
     converter.writeLines(cStyleCopyright)
     converter.writeLines(`/*
  * ${warning}
