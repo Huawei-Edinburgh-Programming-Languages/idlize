@@ -39,7 +39,7 @@ class CJType {
     // string representation can contain special characters (e.g. String[])
     readonly type: Type
 
-    // synthetic identifier for internal use cases: naming classes/files etc. 
+    // synthetic identifier for internal use cases: naming classes/files etc.
     // string representation contains only letters, numbers and underscores (e.g. Array_String)
     readonly alias: string
 
@@ -56,7 +56,7 @@ class CJType {
 export class CJSynthesizedTypesRegistry implements SynthesizedTypesRegistry {
     // maps type name in CJ (e.g. `Union_double_String`) to its definition (LanguageWriter containing `package X; class Union_double_String {...}`)
     private readonly types = new Map<Type, LanguageWriter>()
-    
+
     constructor(private readonly table: DeclarationTable, private readonly imports: ImportTable) {}
 
     getDefinitions(): Map<TargetFile, string> {

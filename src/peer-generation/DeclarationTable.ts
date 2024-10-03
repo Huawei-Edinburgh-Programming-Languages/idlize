@@ -54,7 +54,9 @@ function cleanPrefix(name: string, prefix: string): string {
     return name.replace(prefix, "")
 }
 
+
 class PointersCollector {
+
     private static pointersMap = new Map<DeclarationTarget, PointerType>()
     static pointerTo(name: string, target: DeclarationTarget): PointerType {
         if (PointersCollector.pointersMap.has(target)) return PointersCollector.pointersMap.get(target)!
@@ -124,7 +126,9 @@ export class DeclarationTable implements DeclarationProcessor<ts.TypeNode, Decla
         if (declaration !== undefined) {
             let name = declaration[1][0]
             if (optional) {
+
                 name = cleanPrefix(name, ArkPrimitiveType.Prefix)
+
             }
             return prefix + name
         }
@@ -170,6 +174,7 @@ export class DeclarationTable implements DeclarationProcessor<ts.TypeNode, Decla
     toTarget(node: ts.TypeNode): DeclarationTarget {
         return convertTypeNode(this.toTargetConvertor, node)
     }
+
 
     computeTargetName(target: DeclarationTarget, optional: boolean, idlPrefix: string = ArkPrimitiveType.Prefix): string {
         return this.computeTargetNameImpl(target, optional, idlPrefix)
@@ -226,6 +231,7 @@ export class DeclarationTable implements DeclarationProcessor<ts.TypeNode, Decla
         }
         if (ts.isTemplateLiteralTypeNode(target)) {
             // TODO: likely incorrect
+
             let name = ArkPrimitiveType.String.getText()
                 return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
         }
@@ -254,6 +260,7 @@ export class DeclarationTable implements DeclarationProcessor<ts.TypeNode, Decla
             return prefix + (optional ? "" : idlPrefix) + name
         }
         if (ts.isFunctionTypeNode(target)) {
+
             let name = ArkPrimitiveType.Function.getText()
             return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
         }
@@ -274,6 +281,7 @@ export class DeclarationTable implements DeclarationProcessor<ts.TypeNode, Decla
         }
         if (ts.isOptionalTypeNode(target)) {
             let name = this.computeTargetName(this.toTarget(target.type), false, "")
+
             return `${ArkPrimitiveType.OptionalPrefix}${cleanPrefix(name, ArkPrimitiveType.Prefix)}`
         }
         if (ts.isParenthesizedTypeNode(target)) {
@@ -296,6 +304,7 @@ export class DeclarationTable implements DeclarationProcessor<ts.TypeNode, Decla
                 return prefix + ArkPrimitiveType.Function.getText()
             }
             if (PeerGeneratorConfig.isKnownParametrized(name)) {
+
                 let name = ArkPrimitiveType.CustomObject.getText()
                 return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
             }
@@ -322,6 +331,7 @@ export class DeclarationTable implements DeclarationProcessor<ts.TypeNode, Decla
             let declaration = this.toTarget(type)
             if (!(declaration instanceof ArkPrimitiveType) && ts.isEnumDeclaration(declaration)) {
                 const name = this.enumName(declaration.name)
+
                 return (optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name
             }
             if (typeName === "Array") {
@@ -385,6 +395,7 @@ export class DeclarationTable implements DeclarationProcessor<ts.TypeNode, Decla
             throw new Error(`Unknown literal type: ${type.getText()}`)
         }
         if (ts.isTemplateLiteralTypeNode(type)) {
+
             const name = ArkPrimitiveType.String.getText()
             return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
         }
@@ -441,6 +452,7 @@ export class DeclarationTable implements DeclarationProcessor<ts.TypeNode, Decla
 
     public enumName(name: ts.PropertyName): string {
         // TODO: support namespaces in other declarations.
+
         return `${ArkPrimitiveType.Prefix}${identNameWithNamespace(name, Language.CPP)}`
     }
 
@@ -732,6 +744,7 @@ export class DeclarationTable implements DeclarationProcessor<ts.TypeNode, Decla
         const prefix = field.optional ? ArkPrimitiveType.OptionalPrefix : ""
         let name = this.computeTargetName(field.declaration, false)
         if (field.optional) {
+
             name = cleanPrefix(name, ArkPrimitiveType.Prefix)
         }
         const cKind = field.optional ? "" : this.cFieldKind(field.declaration)
@@ -751,6 +764,7 @@ export class DeclarationTable implements DeclarationProcessor<ts.TypeNode, Decla
                 throw new Error(`No assigned name for ${(target as ts.TypeNode).getText()} shall be ${this.computeTargetName(target, false)}`)
             }
             if (seenNames.has(nameAssigned)) continue
+
             const nameOptional = ArkPrimitiveType.OptionalPrefix + cleanPrefix(nameAssigned, ArkPrimitiveType.Prefix)
             seenNames.add(nameOptional)
         }
@@ -869,6 +883,7 @@ export class DeclarationTable implements DeclarationProcessor<ts.TypeNode, Decla
             seenNames.add(nameAssigned)
             let isPointer = this.isPointerDeclaration(target)
             let isAccessor = checkDeclarationTargetMaterialized(target)
+
             let noBasicDecl = isAccessor || (target instanceof ArkPrimitiveType && noDeclaration.includes(target))
             const nameOptional = ArkPrimitiveType.OptionalPrefix + cleanPrefix(nameAssigned, ArkPrimitiveType.Prefix)
             let isUnion = this.isMaybeWrapped(target, ts.isUnionTypeNode)
@@ -1018,6 +1033,7 @@ export class DeclarationTable implements DeclarationProcessor<ts.TypeNode, Decla
         seenNames.add(aliasName)
         typedefs.print(`typedef ${declarationName} ${aliasName};`)
         // TODO: hacky
+
         aliasName = cleanPrefix(aliasName, ArkPrimitiveType.Prefix)
         let optAliasName = `${ArkPrimitiveType.OptionalPrefix}${aliasName}`
         if (!declarationName.startsWith(ArkPrimitiveType.OptionalPrefix) && !seenNames.has(optAliasName)) {
@@ -1119,17 +1135,17 @@ inline void WriteToString(string* result, const ${elementNativeType}${isPointerF
 
 inline void WriteToString(string* result, const ${name}* value) {
     int32_t count = value->length;
-    
+
     result->append("{.array=allocArray<${elementNativeType}, " + std::to_string(count) + ">({{");
     for (int i = 0; i < count; i++) {
         if (i > 0) result->append(", ");
         WriteToString(result, ${constCast}${isPointerField ? "&" : ""}value->array[i]);
     }
     result->append("}})");
-    
+
     result->append(", .length=");
     result->append(std::to_string(value->length));
-    
+
     result->append("}");
 }
 `)

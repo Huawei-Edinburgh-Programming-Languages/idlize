@@ -756,6 +756,7 @@ export class MapConvertor extends BaseArgConvertor { //
     }
 
     nativeType(impl: boolean): string {
+
         const keyTypeName = cleanPrefix(this.library.getTypeName(this.keyType, false), ArkPrimitiveType.Prefix)
         const valueTypeName = cleanPrefix(this.library.getTypeName(this.valueType, false), ArkPrimitiveType.Prefix)
         return `Map_${keyTypeName}_${valueTypeName}`

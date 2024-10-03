@@ -26,7 +26,7 @@ import { collectCallbacks, IdlCallbackInfo } from '../printers/EventsPrinter';
 import { ArkPrimitiveType } from "../ArkPrimitiveType"
 import { DependencySorter } from './DependencySorter';
 import { IndentedPrinter } from '../../IndentedPrinter';
-import { LanguageWriter } from '../LanguageWriters';
+import { LanguageWriter, MethodSignature, Type } from '../LanguageWriters';
 import { isImport, isStringEnum } from './common';
 import { StructPrinter } from './StructPrinter';
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig';
@@ -309,6 +309,7 @@ export class IdlPeerLibrary implements Library<IdlPeerFile>, DeclarationProcesso
         const decl = this.toDeclaration(type)
         let name = this.computeTargetName(decl, false)
         if (type.name === "Optional")
+
             name = "Opt_" + cleanPrefix(name, ArkPrimitiveType.Prefix)
         this.typeMap.set(type, [decl, [name], useToGenerate])
     }
@@ -363,6 +364,7 @@ export class IdlPeerLibrary implements Library<IdlPeerFile>, DeclarationProcesso
         return prefix + `Literal_${names.join('_')}`
     }
 
+
     computeTargetName(target: idl.IDLEntry, optional: boolean, idlPrefix: string = ArkPrimitiveType.Prefix): string {
         const prefix = optional ? ArkPrimitiveType.OptionalPrefix : ""
         if (idl.isPrimitiveType(target)) {
@@ -383,6 +385,7 @@ export class IdlPeerLibrary implements Library<IdlPeerFile>, DeclarationProcesso
         }
         if (idl.isTypeParameterType(target)) {
             // TODO: likely incorrect
+
             let name = ArkPrimitiveType.CustomObject.getText()
             return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.ArkPrefix) : name)
         }

@@ -126,7 +126,9 @@ export class EnumConvertor extends BaseArgConvertor {
         )
     }
     enumTypeName(language: Language): string {
+
         const prefix = language === Language.CPP ? ArkPrimitiveType.Prefix : ""
+
         return `${prefix}${identNameWithNamespace(this.enumType, language)}`
     }
     convertorArg(param: string, writer: LanguageWriter): string {
@@ -484,7 +486,10 @@ export class InterfaceConvertor extends BaseArgConvertor {
                 printer.makeMethodCall(`${param}Deserializer`, this.table.deserializerName(this.tsTypeName), []), false)
     }
     nativeType(impl: boolean): string {
+
         return ArkPrimitiveType.Prefix + this.tsTypeName
+
+
     }
     interopType(language: Language): string {
         throw new Error("Must never be used")
