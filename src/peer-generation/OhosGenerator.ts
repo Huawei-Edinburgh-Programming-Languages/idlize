@@ -18,7 +18,7 @@ import * as path from 'path'
 import { IndentedPrinter } from "../IndentedPrinter"
 import { IdlPeerLibrary } from './idl/IdlPeerLibrary'
 import { CppLanguageWriter, Method, MethodSignature, Type } from './LanguageWriters'
-import { IDLCallback, IDLEntry, IDLEnum, IDLInterface, IDLParameter, IDLType, IDLVoidType, isCallback, isClass, isConstructor, isEnum, isInterface, isMethod, isPrimitiveType, isReferenceType, isUnionType } from '../idl'
+import { hasExtAttribute, IDLCallback, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLInterface, IDLParameter, IDLType, IDLVoidType, isCallback, isClass, isConstructor, isEnum, isEnumType, isInterface, isMethod, isPrimitiveType, isReferenceType, isUnionType } from '../idl'
 import { readLangTemplate } from './FileGenerators'
 import { capitalize, Language } from '../util'
 import { PrimitiveType } from './DeclarationTable'
@@ -45,9 +45,15 @@ class OHOSVisitor {
 
     constructor(protected library: IdlPeerLibrary) { }
 
+    private static knownBasicTypes = new Set(['ArrayBuffer', 'DataView'])
+
     mapType(type: IDLType): string {
         this.library.requestType(type, true)
-        if (isReferenceType(type) || isEnum(type)) {
+
+        if (OHOSVisitor.knownBasicTypes.has(type.name))
+            return `${PrimitiveType.Prefix}${type.name}`
+
+        if (isReferenceType(type) || isEnum(type) || isEnumType(type)) {
             return `${PrimitiveType.Prefix}${this.libraryName}_${type.name!}`
         }
         return this.hWriter.mapIDLType(type)
@@ -79,7 +85,7 @@ class OHOSVisitor {
     private impls = new Map<string, SignatureDescriptor>()
 
     private writeModifier(clazz: IDLInterface, writer: CppLanguageWriter) {
-        let name = this.modifierName(clazz.name)
+        let name = this.modifierName(clazz)
         let handleType = this.handleType(clazz.name)
         let _h = this.hWriter
         let _c = writer
@@ -99,9 +105,17 @@ class OHOSVisitor {
             _c.print(`&${implName},`)
             this.impls.set(implName, { params, returnType: handleType})
         })
+        if (clazz.constructors.length > 0) {
+            let destructName = `${clazz.name}_destructImpl`
+            let params = [new NameType("thiz", handleType)]
+            _h.print(`void (*destruct)(${params.map(it => `${it.type} ${it.name}`).join(", ")});`)
+            _c.print(`&${destructName},`)
+            this.impls.set(destructName, { params, returnType: 'void'})
+        }
+        let isGlobalScope = hasExtAttribute(clazz, IDLExtendedAttributes.GlobalScope)
         clazz.methods.forEach(method => {
             let params = new Array<NameType>()
-            if (!method.isStatic) {
+            if (!method.isStatic && !isGlobalScope) {
                 params.push(new NameType("thiz", handleType))
             }
             params = params.concat(method.parameters.map(it => new NameType(_h.escapeKeyword(it.name), this.mapType(it.type!))))
@@ -134,8 +148,11 @@ class OHOSVisitor {
         _c.print(`}`)
     }
 
-    private modifierName(name: string): string {
-        return `${PrimitiveType.Prefix}${this.libraryName}_${name}Modifier`
+    private modifierName(clazz: IDLInterface): string {
+        if (hasExtAttribute(clazz, IDLExtendedAttributes.GlobalScope)) {
+            return `${PrimitiveType.Prefix}${this.libraryName}_Modifier`
+        }
+        return `${PrimitiveType.Prefix}${this.libraryName}_${clazz.name}Modifier`
     }
     private handleType(name: string): string {
         return `${PrimitiveType.Prefix}${this.libraryName}_${name}Handle`
@@ -172,7 +189,7 @@ class OHOSVisitor {
         _c.pushIndent()
         _c.print(`1, // version`)
         this.interfaces.forEach(it => {
-            _c.print(`&${this.modifierName(it.name)}Impl,`)
+            _c.print(`&${this.modifierName(it)}Impl,`)
         })
         _c.popIndent()
         _c.print(`};`)
@@ -186,10 +203,15 @@ class OHOSVisitor {
         _h.pushIndent()
         _h.print(`${PrimitiveType.Prefix}Int32 version;`)
         this.interfaces.forEach(it => {
-            _h.print(`const ${this.modifierName(it.name)}* (*${capitalize(it.name)})();`)
+            _h.print(`const ${this.modifierName(it)}* (*${this.apiName(it)})();`)
         })
         _h.popIndent()
         _h.print(`} ${name};`)
+    }
+
+    private apiName(clazz: IDLInterface): string {
+        if (hasExtAttribute(clazz, IDLExtendedAttributes.GlobalScope)) return capitalize(this.libraryName)
+        return capitalize(clazz.name)
     }
 
     private writeClass(clazz: IDLInterface) {
@@ -258,7 +280,7 @@ class OHOSVisitor {
                 _.print(`typedef enum {`)
                 _.pushIndent()
                 declaration.elements.forEach(it => {
-                    _.print(`${it.name},`)
+                    _.print(`${PrimitiveType.Prefix}${this.libraryName}_${it.name},`)
                 })
                 _.popIndent()
                 _.print(`} ${this.mapType(type)};`)
@@ -268,6 +290,10 @@ class OHOSVisitor {
 
     execute(outDir: string) {
         PrimitiveType.Prefix = "OH_"
+
+        if (this.library.files.length == 0)
+            throw new Error("No files in library")
+
         this.libraryName = this.library.files[0].packageName().toUpperCase()
 
         this.library.files.forEach(file => {

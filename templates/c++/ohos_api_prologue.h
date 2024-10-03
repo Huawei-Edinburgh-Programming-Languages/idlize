@@ -56,8 +56,9 @@ typedef const char* OH_CharPtr;
 typedef void* OH_NativePointer;
 typedef const char* OH_String;
 
-typedef void* OH_XML_ArrayBuffer;
-typedef void* OH_XML_DataView;
+// TODO: wrong, provide real definitions.
+typedef void* OH_ArrayBuffer;
+typedef void* OH_DataView;
 
 typedef struct OH_AnyAPI {
     OH_Int32 version;
