@@ -91,7 +91,7 @@ export function nativeModuleDeclaration(methods: LanguageWriter, nativeBridgePat
     return `
   ${language == Language.TS ? importTsInteropTypes : ""}
 
-${readLangTemplate("NativeModule_template", language)
+${readLangTemplate("NativeModule_template" + language.extension, language)
     .replace("%NATIVE_BRIDGE_PATH%", nativeBridgePath)
     .replace("%USE_EMPTY%", useEmpty.toString())
     .replaceAll("%GENERATED_METHODS%", methods.getOutput().join('\n'))
