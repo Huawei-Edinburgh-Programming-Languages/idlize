@@ -96,7 +96,7 @@ export class StructPrinter {
 
                 this.printStructsCHead(nameAssigned, target, structs)
                 if (idl.isUnionType(target)) {
-                    structs.print("Ark_Int32 selector;")
+                    structs.print(`${PrimitiveType.Prefix}Int32 selector;`)
                     structs.print("union {")
                     structs.pushIndent()
                     target.types.forEach((it, index) =>

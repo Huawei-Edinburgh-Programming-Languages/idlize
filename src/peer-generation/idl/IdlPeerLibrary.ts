@@ -413,6 +413,7 @@ export class IdlPeerLibrary implements Library<IdlPeerFile>, DeclarationProcesso
                 case "record": return prefix + `Map_` +
                     this.computeTargetName(target.elementType[0], false, "") + "_" +
                     this.computeTargetName(target.elementType[1], false, "")
+                case "Promise": return prefix + `Promise_` + this.computeTargetName(target.elementType[0], false)
             }
         }
         if (idl.isReferenceType(target)) {
