@@ -456,6 +456,10 @@ export function createEnumType(name: string): IDLEnumType {
 }
 
 export function createContainerType(container: string, element: IDLType[]): IDLContainerType {
+    if (container == "Promise") {
+        // A bit ugly, but we cannot do that.
+        element.forEach(it => { it.extendedAttributes = []})
+    }
     return {
         kind: IDLKind.ContainerType,
         name: container,
