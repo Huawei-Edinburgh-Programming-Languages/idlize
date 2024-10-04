@@ -2027,13 +2027,13 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
             case 'KPointer': return 'void*'
             case 'Uint8Array': return 'byte[]'
             case 'int32':
-            case 'KInt': return `${PrimitiveType.Prefix}Int32`
+            case 'KInt': return `${ArkPrimitiveType.Prefix}Int32`
             case 'string':
-            case 'KStringPtr': return `${PrimitiveType.Prefix}String`
-            case 'number': return `${PrimitiveType.Prefix}Number`
-            case 'boolean': return `${PrimitiveType.Prefix}Boolean`
-            case 'Function': return `${PrimitiveType.Prefix}Function`
-            case 'Length': return `${PrimitiveType.Prefix}Length`
+            case 'KStringPtr': return `${ArkPrimitiveType.Prefix}String`
+            case 'number': return `${ArkPrimitiveType.Prefix}Number`
+            case 'boolean': return `${ArkPrimitiveType.Prefix}Boolean`
+            case 'Function': return `${ArkPrimitiveType.Prefix}Function`
+            case 'Length': return `${ArkPrimitiveType.Prefix}Length`
             // TODO: oh no
             case 'Array<string[]>' : return `Array_Array_${ArkPrimitiveType.String.getText()}`
         }
