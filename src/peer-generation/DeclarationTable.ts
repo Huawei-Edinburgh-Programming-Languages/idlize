@@ -70,6 +70,36 @@ export class PointerType extends ArkPrimitiveType {
     }
 }
 
+
+export class PrimitiveType {
+    constructor(private name: string, public isPointer = false) { }
+    getText(table?: DeclarationTable): string { return this.name }
+    static Prefix = "Ark_"
+    static String = new PrimitiveType(`${PrimitiveType.Prefix}String`, true)
+    static Number = new PrimitiveType(`${PrimitiveType.Prefix}Number`, true)
+    static Int32 = new PrimitiveType(`${PrimitiveType.Prefix}Int32`)
+    static Tag = new PrimitiveType(`${PrimitiveType.Prefix}Tag`)
+    static RuntimeType = new PrimitiveType(`${PrimitiveType.Prefix}RuntimeType`)
+    static Boolean = new PrimitiveType(`${PrimitiveType.Prefix}Boolean`)
+    static Function = new PrimitiveType(`${PrimitiveType.Prefix}Function`, false)
+    static Materialized = new PrimitiveType(`${PrimitiveType.Prefix}Materialized`, true)
+    static Undefined = new PrimitiveType(`${PrimitiveType.Prefix}Undefined`)
+    static NativePointer = new PrimitiveType(`${PrimitiveType.Prefix}NativePointer`)
+    static ObjectHandle = new PrimitiveType(`${PrimitiveType.Prefix}ObjectHandle`)
+    static Length = new PrimitiveType(`${PrimitiveType.Prefix}Length`, true)
+    static CustomObject = new PrimitiveType(`${PrimitiveType.Prefix}CustomObject`, true)
+    private static pointersMap = new Map<DeclarationTarget, PointerType>()
+    static pointerTo(target: DeclarationTarget) {
+        if (PrimitiveType.pointersMap.has(target)) return PrimitiveType.pointersMap.get(target)!
+        let result = new PointerType("", target)
+        PrimitiveType.pointersMap.set(target, result)
+        return result
+    }
+    static UndefinedTag = "ARK_TAG_UNDEFINED"
+    static UndefinedRuntime = "ARK_RUNTIME_UNDEFINED"
+    static OptionalPrefix = "Opt_"
+}
+
 export type DeclarationTarget =
     ts.ClassDeclaration | ts.InterfaceDeclaration | ts.EnumDeclaration
     | ts.UnionTypeNode | ts.TypeLiteralNode | ts.ImportTypeNode | ts.FunctionTypeNode | ts.TupleTypeNode | ts.NamedTupleMember
