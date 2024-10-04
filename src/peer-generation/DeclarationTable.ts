@@ -12,626 +12,1559 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as fs from "fs"
-import * as path from "path"
+
+import * as ts from "typescript"
+import { Language, asString, getDeclarationsByNode, getNameWithoutQualifiersRight, heritageDeclarations,
+     identName, isStatic, throwException, typeEntityName, identNameWithNamespace,
+     isCommonMethodOrSubclass,
+     camelCaseToUpperSnakeCase,
+     nameEnumValues,
+    } from "../util"
 import { IndentedPrinter } from "../IndentedPrinter"
-import { ArkPrimitiveType } from "./ArkPrimitiveType"
-import { Language, camelCaseToUpperSnakeCase } from "../util"
-import { CppLanguageWriter, createLanguageWriter, LanguageWriter, Method, MethodSignature, NamedMethodSignature, PrinterLike, Type } from "./LanguageWriters"
-import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
-import { PeerEventKind } from "./printers/EventsPrinter"
-import { writeDeserializer, writeSerializer } from "./printers/SerializerPrinter"
-import { SELECTOR_ID_PREFIX, writeConvertors } from "./printers/ConvertorsPrinter"
+import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
+import {
+    AggregateConvertor, ArrayConvertor, CallbackFunctionConvertor, CallbackTypeReferenceConvertor, ClassConvertor,
+    EnumConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, MapConvertor,
+    MaterializedClassConvertor, OptionConvertor, StringConvertor,
+    ToStringConvertor, TupleConvertor, TypeAliasConvertor, UnionConvertor
+} from "./Convertors"
+import { RuntimeType, ArgConvertor, BooleanConvertor, LengthConvertor, NullConvertor, NumberConvertor, PredefinedConvertor, UndefinedConvertor, CustomTypeConvertor } from "./ArgConvertors"
+import { DependencySorter } from "./DependencySorter"
+import { checkDeclarationTargetMaterialized, isMaterialized } from "./Materialized"
+    import { LanguageExpression, LanguageWriter, Method, MethodModifier, NamedMethodSignature, Type } from "./LanguageWriters"
+import { TypeNodeConvertor, convertTypeNode } from "./TypeNodeConvertor"
 import { PeerLibrary } from "./PeerLibrary"
-import { ArkoalaInstall, LibaceInstall } from "../Install"
-import { ImportsCollector } from "./ImportsCollector"
-import { IdlPeerLibrary } from "./idl/IdlPeerLibrary"
-import { writeARKTSTypeCheckers, writeTSTypeCheckers } from "./printers/TypeCheckPrinter"
+import { CallbackInfo, collectCallbacks } from "./printers/EventsPrinter"
+import { EnumMember, NodeArray } from "typescript";
+import { extractBuilderFields } from "./BuilderClass"
+import { searchTypeParameters, TypeNodeNameConvertor } from "./TypeNodeNameConvertor";
+import { DeclarationProcessor } from "../DeclarationProcessor"
+import { ArkPrimitiveType } from "./ArkPrimitiveType"
 
-export const warning = "WARNING! THIS FILE IS AUTO-GENERATED, DO NOT MAKE CHANGES, THEY WILL BE LOST ON NEXT GENERATION!"
+export const ResourceDeclaration = ts.factory.createInterfaceDeclaration(undefined, "Resource", undefined, undefined, [
+    ts.factory.createPropertySignature(undefined, "id", undefined, ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)),
+    ts.factory.createPropertySignature(undefined, "type", undefined, ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)),
+    ts.factory.createPropertySignature(undefined, "moduleName", undefined, ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)),
+    ts.factory.createPropertySignature(undefined, "bundleName", undefined, ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)),
+    ts.factory.createPropertySignature(undefined, "params", ts.factory.createToken(ts.SyntaxKind.QuestionToken),
+        ts.factory.createArrayTypeNode(ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword))),
+])
 
-function dateChunk(): string {
-    const currentYear = (new Date()).getFullYear()
-    if (currentYear > 2024) return `2024-${currentYear}`
-    return `${currentYear}`
+function cleanPrefix(name: string, prefix: string): string {
+    return name.replace(prefix, "")
 }
 
-export const cStyleCopyright =
-`/*
- * Copyright (c) ${dateChunk()} Huawei Device Co., Ltd.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-`
-
-export const sharpCopyright =
-`# Copyright (c) ${dateChunk()} Huawei Device Co., Ltd.
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-`
-
-const importTsInteropTypes = `
-import {
-    int32,
-    float32
-} from "@koalaui/common"
-import {
-    KInt,
-    KBoolean,
-    KFloat,
-    KUInt,
-    KStringPtr,
-    KPointer,
-    KNativePointer,
-    KInt32ArrayPtr,
-    KUint8ArrayPtr,
-    KFloat32ArrayPtr,
-    pointer
-} from "@koalaui/interop"
-`.trim()
-
-export function nativeModuleDeclaration(methods: LanguageWriter, nativeBridgePath: string, useEmpty: boolean, language: Language, nativeMethods?: LanguageWriter): string {
-    return `
-  ${language == Language.TS ? importTsInteropTypes : ""}
-
-${readLangTemplate("NativeModule_template", language)
-    .replace("%NATIVE_BRIDGE_PATH%", nativeBridgePath)
-    .replace("%USE_EMPTY%", useEmpty.toString())
-    .replaceAll("%GENERATED_METHODS%", methods.getOutput().join('\n'))
-    .replaceAll("%GENERATED_NATIVE_FUNCTIONS%", nativeMethods ? nativeMethods.getOutput().join('\n') : "")}
-`
+class PointersCollector {
+    private static pointersMap = new Map<DeclarationTarget, PointerType>()
+    static pointerTo(name: string, target: DeclarationTarget): PointerType {
+        if (PointersCollector.pointersMap.has(target)) return PointersCollector.pointersMap.get(target)!
+        let result = new PointerType(name, target)
+        PointersCollector.pointersMap.set(target, result)
+        return result
+    }
 }
 
-export function nativeModuleEmptyDeclaration(methods: string[]): string {
-    return `
-${importTsInteropTypes}
-import { NativeModule, NativeModuleIntegrated, NodePointer, PipelineContext } from "./NativeModule"
-import { nullptr } from "@koalaui/interop"
-
-${readTemplate('NativeModuleEmpty_template.ts')
-    .replaceAll("%GENERATED_EMPTY_METHODS%", methods.join('\n'))}
-`
+export class PointerType extends ArkPrimitiveType {
+    constructor(name: string, public pointed: DeclarationTarget) {
+        super(name, true)
+    }
 }
 
-export function libraryCcDeclaration(): string {
-    return readTemplate('library_template.cc')
-        .replaceAll(`%CPP_PREFIX%`, PeerGeneratorConfig.cppPrefix)
+export type DeclarationTarget =
+    ts.ClassDeclaration | ts.InterfaceDeclaration | ts.EnumDeclaration
+    | ts.UnionTypeNode | ts.TypeLiteralNode | ts.ImportTypeNode | ts.FunctionTypeNode | ts.TupleTypeNode | ts.NamedTupleMember
+    | ts.TemplateLiteralTypeNode | ts.TypeReferenceNode | ts.NamedDeclaration
+    | ts.ArrayTypeNode | ts.ParenthesizedTypeNode | ts.OptionalTypeNode | ts.LiteralTypeNode
+    | ArkPrimitiveType
+
+export class FieldRecord {
+    constructor(public declaration: DeclarationTarget, public type: ts.TypeNode | undefined, public name: string, public optional: boolean = false) { }
 }
 
-export function bridgeCcGeneratedDeclaration(generatedApi: string[]): string {
-    let prologue = readTemplate('bridge_generated_prologue.cc')
-        .replaceAll(`%CPP_PREFIX%`, PeerGeneratorConfig.cppPrefix)
-
-    return prologue.concat("\n")
-        .concat(generatedApi.join("\n"))
+export interface StructVisitor {
+    visitUnionField(field: FieldRecord, selectorValue: number): void
+    // visitOptionalField(field?: FieldRecord): void;
+    visitInseparable(): void
 }
 
-export function bridgeCcCustomDeclaration(customApi: string[]): string {
-    let prologue = readTemplate('bridge_custom_prologue.cc')
-        .replaceAll(`%CPP_PREFIX%`, PeerGeneratorConfig.cppPrefix)
-
-    return prologue.concat("\n")
-        .concat(customApi.join("\n"))
-}
-
-export function appendModifiersCommonPrologue(): LanguageWriter {
-    let result = createLanguageWriter(Language.CPP)
-    let body = readTemplate('impl_prologue.cc')
-
-    body = body.replaceAll("%CPP_PREFIX%", PeerGeneratorConfig.cppPrefix)
-
-    result.writeLines(body)
-    return result
-}
-
-export function appendViewModelBridge(library: PeerLibrary | IdlPeerLibrary): LanguageWriter {
-    let result = createLanguageWriter(Language.CPP)
-    let body = readTemplate('view_model_bridge.cc')
-
-    const createNodeSwitch = new IndentedPrinter()
-    const createNodeMethods = new IndentedPrinter()
-
-    createNodeMethods.pushIndent()
-    createNodeSwitch.pushIndent(3)
-    for (const file of library.files) {
-        for (const peer of file.peers.values()) {
-            const createNodeMethod = `create${peer.componentName}Node`
-            createNodeMethods.print(`Ark_NodeHandle ${createNodeMethod}(Ark_Int32 nodeId);`)
-            const name = `${PeerGeneratorConfig.cppPrefix}ARKUI_${camelCaseToUpperSnakeCase(peer.componentName)}`
-            createNodeSwitch.print(`case ${name}: return ViewModel::${createNodeMethod}(id);`)
+export class StructDescriptor {
+    supers: DeclarationTarget[] = []
+    deps = new Set<DeclarationTarget>()
+    isPacked: boolean = false
+    isArray: boolean = false
+    private fields: FieldRecord[] = []
+    private seenFields = new Set<string>()
+    addField(field: FieldRecord) {
+        if (!this.seenFields.has(field.name)) {
+            this.seenFields.add(field.name)
+            // TODO: kind of wrong
+            if (field.name == `template`) field.name = `template_`
+            this.fields.push(field)
         }
     }
-    createNodeSwitch.popIndent(3)
-    createNodeMethods.popIndent()
-
-    body = body.replaceAll("%CREATE_NODE_METHODS%", createNodeMethods.getOutput().join("\n"))
-    body = body.replaceAll("%CREATE_NODE_SWITCH%", createNodeSwitch.getOutput().join("\n"))
-    body = body.replaceAll("%CPP_PREFIX%", PeerGeneratorConfig.cppPrefix)
-
-    result.writeLines(body)
-    return result
-}
-
-export function completeModifiersContent(content: PrinterLike, basicVersion: number, fullVersion: number, extendedVersion: number): LanguageWriter {
-    let result = createLanguageWriter(Language.CPP)
-    let epilogue = readTemplate('dummy_impl_epilogue.cc')
-
-    epilogue = epilogue
-        .replaceAll("%CPP_PREFIX%", PeerGeneratorConfig.cppPrefix)
-        .replaceAll(`%ARKUI_BASIC_NODE_API_VERSION_VALUE%`, basicVersion.toString())
-        .replaceAll(`%ARKUI_FULL_API_VERSION_VALUE%`, fullVersion.toString())
-        .replaceAll(`%ARKUI_EXTENDED_NODE_API_VERSION_VALUE%`, extendedVersion.toString())
-    result.writeLines(`
-void SetAppendGroupedLog(void* pFunc) {}
-`)
-    result.concat(content)
-    result.writeLines(epilogue)
-    return result
-}
-
-export function completeDelegatesImpl(lines: string): string {
-    return `
-#include "delegates.h"
-
-${lines}
-`
-}
-
-export function dummyImplementations(modifiers: LanguageWriter, accessors: LanguageWriter, basicVersion: number, fullVersion: number, extendedVersion: number): LanguageWriter {
-    let prologue = readTemplate('dummy_impl_prologue.cc')
-    let epilogue = readTemplate('dummy_impl_epilogue.cc')
-
-    prologue = prologue
-        .replaceAll(`%CPP_PREFIX%`, PeerGeneratorConfig.cppPrefix)
-    epilogue = epilogue
-        .replaceAll("%CPP_PREFIX%", PeerGeneratorConfig.cppPrefix)
-        .replaceAll(`%ARKUI_BASIC_NODE_API_VERSION_VALUE%`, basicVersion.toString())
-        .replaceAll(`%ARKUI_FULL_API_VERSION_VALUE%`, fullVersion.toString())
-        .replaceAll(`%ARKUI_EXTENDED_NODE_API_VERSION_VALUE%`, extendedVersion.toString())
-
-    let result = createLanguageWriter(Language.CPP)
-    result.writeLines(prologue)
-    result.print("namespace OHOS::Ace::NG::GeneratedModifier {")
-    result.pushIndent()
-    result.concat(modifiers).concat(accessors)
-    result.writeLines(epilogue)
-    result.popIndent()
-    result.print("}")
-
-    return result
-}
-
-export function modifierStructList(lines: LanguageWriter): LanguageWriter {
-    let result = createLanguageWriter(Language.CPP)
-    result.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUINodeModifiers* ${PeerGeneratorConfig.cppPrefix}GetArkUINodeModifiers()`)
-    result.print("{")
-    result.pushIndent()
-
-    result.print(`static const ${PeerGeneratorConfig.cppPrefix}ArkUINodeModifiers modifiersImpl = {`)
-    result.pushIndent()
-    result.concat(lines)
-    result.popIndent()
-    result.print(`};`)
-
-    result.print(`return &modifiersImpl;`)
-    result.popIndent()
-    result.print(`}`)
-    return result
-}
-
-export function accessorStructList(lines: LanguageWriter): LanguageWriter {
-    let result = createLanguageWriter(Language.CPP)
-    result.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUIAccessors* ${PeerGeneratorConfig.cppPrefix}GetArkUIAccessors()`)
-    result.print("{")
-    result.pushIndent()
-
-    result.print(`static const ${PeerGeneratorConfig.cppPrefix}ArkUIAccessors accessorsImpl = {`)
-    result.pushIndent()
-    result.concat(lines)
-    result.popIndent()
-    result.print(`};`)
-
-    result.print(`return &accessorsImpl;`)
-    result.popIndent()
-    result.print('}')
-
-    return result
-}
-
-export function makeTSSerializer(library: PeerLibrary | IdlPeerLibrary): string {
-    let printer = createLanguageWriter(library.language)
-    const imports = new ImportsCollector()
-    imports.addFeatures(["SerializerBase", "Tags", "RuntimeType", "runtimeType", "isPixelMap", "isResource", "isInstanceOf"], "./SerializerBase")
-    imports.addFeatures(["int32"], "@koalaui/common")
-    if (printer.language == Language.TS)
-        imports.addFeatures(["unsafeCast"], "../shared/generated-utils")
-    imports.print(printer, '')
-    writeSerializer(library, printer)
-    return `${cStyleCopyright}
-
-${printer.getOutput().join("\n")}
-
-export function createSerializer(): Serializer { return new Serializer() }
-`
-}
-
-export function makeTypeChecker(library: PeerLibrary): { arkts: string, ts: string } {
-    let arktsPrinter = createLanguageWriter(Language.ARKTS)
-    writeARKTSTypeCheckers(library, arktsPrinter)
-    let tsPrinter = createLanguageWriter(Language.TS)
-    writeTSTypeCheckers(library, tsPrinter)
-    return {
-        arkts: arktsPrinter.getOutput().join("\n"),
-        ts: tsPrinter.getOutput().join("\n"),
+    getFields(): readonly FieldRecord[] {
+        return this.fields
+    }
+    isEmpty(): boolean {
+        return this.fields.length == 0
     }
 }
 
-export function makeCJSerializer(library: PeerLibrary): LanguageWriter {
-    let result = createLanguageWriter(library.declarationTable.language)
-    result.print(`package idlize\n`)
-    writeSerializer(library, result)
-    result.print('public func createSerializer(): Serializer { return Serializer() }')
-    return result
-}
+export class DeclarationTable implements DeclarationProcessor<ts.TypeNode, DeclarationTarget> {
+    readonly typeMap = new Map<ts.TypeNode, [DeclarationTarget, string[], boolean]>()
+    private toTargetConvertor: ToDeclarationTargetConvertor
+    typeChecker: ts.TypeChecker | undefined = undefined
+    public language: Language
 
-export function makeConverterHeader(path: string, namespace: string, library: PeerLibrary | IdlPeerLibrary): LanguageWriter {
-    const converter = createLanguageWriter(Language.CPP) as CppLanguageWriter
-    converter.writeLines(cStyleCopyright)
-    converter.writeLines(`/*
- * ${warning}
- */
-`)
-    const includeGuardDefine = makeIncludeGuardDefine(path)
-    converter.print(`#ifndef ${includeGuardDefine}`)
-    converter.print(`#define ${includeGuardDefine}`)
-    converter.print("")
-
-    converter.writeGlobalInclude('optional')
-    converter.writeGlobalInclude('cstdlib')
-    converter.writeInclude('arkoala_api_generated.h')
-    converter.writeInclude('base/log/log_wrapper.h')
-    converter.print("")
-
-    const MAX_SELECTORS_IDS = 16
-    for(let i = 0; i < MAX_SELECTORS_IDS; i++) {
-        converter.print(`#define ${SELECTOR_ID_PREFIX}${i} ${i}`)
+    constructor(language: string) {
+        this.language = Language.fromString(language)
+        console.log(`Emit for ${this.language.toString()}`)
+        this.toTargetConvertor = new ToDeclarationTargetConvertor(this)
     }
-    converter.print("")
 
-    converter.pushNamespace(namespace, false)
-    converter.print("")
-    writeConvertors(library, converter)
-    converter.popNamespace(false)
-    converter.print(`\n#endif // ${includeGuardDefine}`)
-    converter.print("")
-    return converter
-}
-
-export function makeCSerializers(library: PeerLibrary | IdlPeerLibrary, structs: IndentedPrinter, typedefs: IndentedPrinter): string {
-
-    const serializers = createLanguageWriter(Language.CPP)
-    const writeToString = createLanguageWriter(Language.CPP)
-    serializers.print("\n// Serializers\n")
-    writeSerializer(library, serializers)
-    serializers.print("\n// Deserializers\n")
-    writeDeserializer(library, serializers)
-    library.generateStructs(structs, typedefs, writeToString)
-
-    return `
-#include "SerializerBase.h"
-#include "DeserializerBase.h"
-#include "arkoala_api_generated.h"
-#include <string>
-
-${writeToString.getOutput().join("\n")}
-
-${serializers.getOutput().join("\n")}
-`
-}
-
-export function makeTSDeserializer(library: PeerLibrary | IdlPeerLibrary): string {
-    const deserializer = createLanguageWriter(Language.TS)
-    writeDeserializer(library, deserializer)
-    return `${cStyleCopyright}
-import { runtimeType, Tags, RuntimeType } from "./SerializerBase"
-import { DeserializerBase } from "./DeserializerBase"
-import { int32 } from "@koalaui/common"
-import { unsafeCast } from "../shared/generated-utils"
-
-${deserializer.getOutput().join("\n")}
-
-export function createDeserializer(args: Uint8Array, length: int32): Deserializer { return new Deserializer(args, length) }
-`
-}
-
-export function makeApiModifiers(modifiers: string[], accessors: string[], events: string[], nodeTypes: string[]): string {
-    let node_api = readTemplate('arkoala_node_api.h')
-        .replaceAll(`%CPP_PREFIX%`, PeerGeneratorConfig.cppPrefix)
-
-    return `
-/**
- * An API to control an implementation. When making changes modifying binary
- * layout, i.e. adding new events - increase ARKUI_API_VERSION above for binary
- * layout checks.
- */
-typedef struct ${PeerGeneratorConfig.cppPrefix}ArkUINodeModifiers {
-${modifiers.join("\n")}
-} ${PeerGeneratorConfig.cppPrefix}ArkUINodeModifiers;
-
-typedef struct ${PeerGeneratorConfig.cppPrefix}ArkUIAccessors {
-${accessors.join("\n")}
-} ${PeerGeneratorConfig.cppPrefix}ArkUIAccessors;
-
-typedef struct ${PeerGeneratorConfig.cppPrefix}ArkUIGraphicsAPI {
-    ${ArkPrimitiveType.Int32.getText()} version;
-} ${PeerGeneratorConfig.cppPrefix}ArkUIGraphicsAPI;
-
-typedef struct ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI {
-${events.join("\n")}
-} ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI;
-
-typedef enum ${PeerGeneratorConfig.cppPrefix}Ark_NodeType {
-    ${PeerGeneratorConfig.cppPrefix}ARKUI_ROOT,
-${nodeTypes.join(",\n")}
-} ${PeerGeneratorConfig.cppPrefix}Ark_NodeType;
-
-${node_api}
-
-/**
- * An API to control an implementation. When making changes modifying binary
- * layout, i.e. adding new events - increase ARKUI_NODE_API_VERSION above for binary
- * layout checks.
- */
-typedef struct ${PeerGeneratorConfig.cppPrefix}ArkUIFullNodeAPI {
-    ${ArkPrimitiveType.Int32.getText()} version;
-    const ${PeerGeneratorConfig.cppPrefix}ArkUINodeModifiers* (*getNodeModifiers)();
-    const ${PeerGeneratorConfig.cppPrefix}ArkUIAccessors* (*getAccessors)();
-    const ${PeerGeneratorConfig.cppPrefix}ArkUIGraphicsAPI* (*getGraphicsAPI)();
-    const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI* (*getEventsAPI)();
-    const ${PeerGeneratorConfig.cppPrefix}ArkUIExtendedNodeAPI* (*getExtendedAPI)();
-    void (*setArkUIEventsAPI)(const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI* api);
-} ${PeerGeneratorConfig.cppPrefix}ArkUIFullNodeAPI;
-
-typedef struct ${PeerGeneratorConfig.cppPrefix}ArkUIAnyAPI {
-    ${ArkPrimitiveType.Int32.getText()} version;
-} ${PeerGeneratorConfig.cppPrefix}ArkUIAnyAPI;
-`
-}
-
-export function makeApiHeaders(lines: string[]): string {
-    return `
-
-${lines.join("\n")}
-`
-}
-
-const TEMPLATES_CACHE = new Map<string, string>()
-
-function readTemplate(name: string): string {
-    let template = TEMPLATES_CACHE.get(name);
-    if (template == undefined) {
-        template = fs.readFileSync(path.join(__dirname, `../templates/${name}`), 'utf8')
-        TEMPLATES_CACHE.set(name, template)
-    }
-    return template
-}
-
-function readLangTemplate(name: string, lang: Language): string {
-    return fs.readFileSync(path.join(__dirname, `../templates/${lang.directory}/${name + lang.extension}`), 'utf8')
-}
-
-
-export function makeAPI(
-    apiVersion: string,
-    headers: string[], modifiers: string[], accessors: string[], events: string[], nodeTypes: string[],
-    structs: IndentedPrinter, typedefs: IndentedPrinter
-): string {
-
-    let prologue = readTemplate('arkoala_api_prologue.h')
-    let epilogue = readTemplate('arkoala_api_epilogue.h')
-
-    prologue = prologue
-        .replaceAll(`%ARKUI_FULL_API_VERSION_VALUE%`, apiVersion)
-        .replaceAll(`%CPP_PREFIX%`, PeerGeneratorConfig.cppPrefix)
-    epilogue = epilogue
-        .replaceAll("%CPP_PREFIX%", PeerGeneratorConfig.cppPrefix)
-
-    return `
-${prologue}
-
-${structs.getOutput().join("\n")}
-
-${typedefs.getOutput().join("\n")}
-
-${makeApiHeaders(headers)}
-
-${makeApiModifiers(modifiers, accessors, events, nodeTypes)}
-
-${epilogue}
-`
-}
-
-export function copyToArkoala(from: string, arkoala: ArkoalaInstall, filters?: string[]) {
-    filters = filters?.map(it => path.join(from, it))
-    copyDir(path.join(from, 'sig'), arkoala.sig, true, filters)
-}
-
-export function copyToLibace(from: string, libace: LibaceInstall) {
-    const macros = path.join(from, 'shared', 'arkoala-macros.h')
-    fs.copyFileSync(macros, libace.arkoalaMacros)
-}
-
-function copyDir(from: string, to: string, recursive: boolean, filters?: string[]) {
-    fs.readdirSync(from).forEach(it => {
-        const sourcePath = path.join(from, it)
-        const targetPath = path.join(to, it)
-        const statInfo = fs.statSync(sourcePath)
-        if (statInfo.isFile()) {
-            copyFile(sourcePath, targetPath, filters)
-        }
-        else if (recursive && statInfo.isDirectory()) {
-            if (!fs.existsSync(targetPath)) {
-                fs.mkdirSync(targetPath)
+    getTypeName(type: ts.TypeNode, optional: boolean = false): string {
+        let declaration = this.typeMap.get(type)
+        let prefix = optional ? ArkPrimitiveType.OptionalPrefix : ""
+        if (declaration !== undefined) {
+            let name = declaration[1][0]
+            if (optional) {
+                name = cleanPrefix(name, ArkPrimitiveType.Prefix)
             }
-            copyDir(sourcePath, targetPath, recursive, filters)
+            return prefix + name
         }
-    })
-}
-function copyFile(from: string, to: string, filters?: string[]) {
-    if (filters && !filters.includes(from))
-        return
-    fs.copyFileSync(from, to)
-}
-export function makeNodeTypes(types: string[]): string {
-    const enumValues = types.map(it => `  ${it},`).join("\n")
-    return `
-export enum ArkUINodeType {
-${enumValues}
-}
-`.trim()
-}
+        return this.computeTargetName(this.toTarget(type), optional)
+    }
 
-export function makeArkuiModule(componentsFiles: string[]): string {
-    return componentsFiles.map(file => {
-        const basename = path.basename(file)
-        const basenameNoExt = basename.replaceAll(path.extname(basename), "")
-        return `export * from "./${basenameNoExt}"`
-    }).join("\n")
-}
+    requestType(type: ts.TypeNode, useToGenerate: boolean, name: string | undefined) {
+        let declaration = this.typeMap.get(type)
+        if (declaration) {
+            declaration[2] ||= useToGenerate
+            if (name && !declaration[1].includes(name)) {
+                declaration[1].push(name)
+            }
+            return
+        }
+        name = this.computeTypeName(name, type, false)
+        let target = this.toTarget(type)
+        if (!target) throw new Error(`Cannot find declaration: ${type.getText()}`)
+        this.typeMap.set(type, [target, [name], useToGenerate])
+    }
 
-export function makeMaterializedPrologue(lang: Language): string {
-    let prologue = readLangTemplate('materialized_class_prologue', lang)
-    return `
-${prologue}
+    private isDeclarationTarget(type: ts.TypeNode): boolean {
+        if (ts.isUnionTypeNode(type)) return true
+        if (ts.isTypeLiteralNode(type)) return true
+        if (ts.isLiteralTypeNode(type)) return true
+        if (ts.isTupleTypeNode(type)) return true
+        if (ts.isArrayTypeNode(type)) return true
+        if (ts.isOptionalTypeNode(type)) return true
+        if (ts.isFunctionTypeNode(type)) return true
+        // TODO: shall we map it to string type here or later?
+        if (ts.isTemplateLiteralTypeNode(type)) return true
+        return false
+    }
 
-${importTsInteropTypes}
+    computeTypeName(suggestedName: string | undefined, type: ts.TypeNode, optional: boolean = false, idlPrefix: string = ArkPrimitiveType.Prefix): string {
+        return this.computeTypeNameImpl(suggestedName, type, optional, idlPrefix)
+    }
 
+    toDeclaration(node: ts.TypeNode): DeclarationTarget {
+        return this.toTarget(node)
+    }
+
+    toTarget(node: ts.TypeNode): DeclarationTarget {
+        return convertTypeNode(this.toTargetConvertor, node)
+    }
+
+    computeTargetName(target: DeclarationTarget, optional: boolean, idlPrefix: string = ArkPrimitiveType.Prefix): string {
+        return this.computeTargetNameImpl(target, optional, idlPrefix)
+    }
+
+    computeTargetTypeLiteralName(type: ts.TypeLiteralNode, prefix: string): string {
+        const props = type.members.filter(ts.isPropertySignature)
+        const map = new Map<string, string[]>()
+        for (const prop of props) {
+            const target = this.toTarget(prop.type!)
+            const type = this.computeTargetName(target, prop.questionToken != undefined, "")
+            const field = identName(prop.name)!
+            const values = map.has(type) ? map.get(type)! : []
+            values.push(field)
+            map.set(type, values)
+        }
+        const names = Array.from(map.keys()).map(key => `${key}_${map.get(key)!.join('_')}`)
+        return prefix + `Literal_${names.join('_')}`
+    }
+
+    computeTargetNameImpl(target: DeclarationTarget, optional: boolean, idlPrefix: string): string {
+        const prefix = optional ? ArkPrimitiveType.OptionalPrefix : ""
+        if (target instanceof ArkPrimitiveType) {
+            const name = target.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
+        }
+        if (ts.isTypeLiteralNode(target)) {
+            if (target.members.some(ts.isIndexSignatureDeclaration)) {
+                // For indexed access we just replace the whole type to a custom accessor.
+                return prefix + `CustomMap`
+            }
+
+            const parent = target.parent
+            if (ts.isTypeAliasDeclaration(parent)) {
+                return `${ArkPrimitiveType.Prefix}${identName(parent.name)}`
+            }
+
+            return this.computeTargetTypeLiteralName(target, prefix)
+        }
+        if (ts.isLiteralTypeNode(target)) {
+            const literal = target.literal
+            if (ts.isStringLiteral(literal) || ts.isNoSubstitutionTemplateLiteral(literal) || ts.isRegularExpressionLiteral(literal)) {
+                let name = ArkPrimitiveType.String.getText()
+                return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
+            }
+            if (ts.isNumericLiteral(literal)) {
+                let name = ArkPrimitiveType.Number.getText()
+                return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
+            }
+            if (literal.kind == ts.SyntaxKind.NullKeyword) {
+                // TODO: Is it correct to have undefined for null?
+                return ArkPrimitiveType.Undefined.getText()
+            }
+        }
+        if (ts.isTemplateLiteralTypeNode(target)) {
+            // TODO: likely incorrect
+            let name = ArkPrimitiveType.String.getText()
+                return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
+        }
+        if (ts.isTypeParameterDeclaration(target)) {
+            // TODO: likely incorrect
+            let name = ArkPrimitiveType.CustomObject.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
+        }
+        if (ts.isEnumDeclaration(target)) {
+            const name = this.enumName(target.name)
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
+        }
+        if (ts.isUnionTypeNode(target)) {
+            const parent = target.parent
+            if (ts.isTypeAliasDeclaration(parent)) {
+                return `${ArkPrimitiveType.Prefix}${identName(parent.name)}`
+            }
+            return prefix + `Union_${target.types.map(it => this.computeTargetName(this.toTarget(it), false, "")).join("_")}`
+        }
+        if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {
+            let name = identName(target.name)
+            if (name == "Function") {
+                const name = ArkPrimitiveType.Function.getText()
+                return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
+            }
+            return prefix + (optional ? "" : idlPrefix) + name
+        }
+        if (ts.isFunctionTypeNode(target)) {
+            let name = ArkPrimitiveType.Function.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
+        }
+        if (ts.isTupleTypeNode(target)) {
+            return prefix + `Tuple_${target.elements.map(it => {
+                if (ts.isNamedTupleMember(it)) {
+                    return this.computeTargetName(this.toTarget(it.type), it.questionToken != undefined, "")
+                } else {
+                    return this.computeTargetName(this.toTarget(it), false, "")
+                }
+            }).join("_")}`
+        }
+        if (ts.isArrayTypeNode(target)) {
+            return prefix + `Array_` + this.computeTargetName(this.toTarget(target.elementType), false, "")
+        }
+        if (ts.isImportTypeNode(target)) {
+            return prefix + this.mapImportTypeName(target)
+        }
+        if (ts.isOptionalTypeNode(target)) {
+            let name = this.computeTargetName(this.toTarget(target.type), false, "")
+            return `${ArkPrimitiveType.OptionalPrefix}${cleanPrefix(name, ArkPrimitiveType.Prefix)}`
+        }
+        if (ts.isParenthesizedTypeNode(target)) {
+            return this.computeTargetName(this.toTarget(target.type), optional, idlPrefix)
+        }
+        if (ts.isEnumMember(target)) {
+            return this.computeTargetName((target as any).parent as DeclarationTarget, optional, idlPrefix)
+        }
+        if (ts.isTypeReferenceNode(target)) {
+            let name = identName(target.typeName)
+            if (!target.typeArguments) throw new Error("Only type references with type arguments allowed here: " + name)
+            if (name == "Optional")
+                return this.computeTargetName(this.toTarget(target.typeArguments[0]), true, idlPrefix)
+            if (name == "Array")
+                return prefix + `Array_` + this.computeTargetName(this.toTarget(target.typeArguments[0]), false, "")
+            if (name == "Map")
+                return prefix + `Map_` + this.computeTargetName(this.toTarget(target.typeArguments[0]), false, "")
+                    + '_' + this.computeTargetName(this.toTarget(target.typeArguments[1]), false, "")
+            if (name == "Callback") {
+                return prefix + ArkPrimitiveType.Function.getText()
+            }
+            if (PeerGeneratorConfig.isKnownParametrized(name)) {
+                let name = ArkPrimitiveType.CustomObject.getText()
+                return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
+            }
+        }
+        throw new Error(`Cannot compute target name: ${(target as any).getText()} ${(target as any).kind}`)
+    }
+
+    private mapImportTypeName(type: ts.ImportTypeNode): string {
+        let name = identName(type.qualifier)!
+        switch (name) {
+            case "Resource": return "Resource"
+            case "Callback": return ArkPrimitiveType.Function.getText()
+            default: return ArkPrimitiveType.CustomObject.getText()
+        }
+    }
+
+    private computeTypeNameImpl(suggestedName: string | undefined, type: ts.TypeNode, optional: boolean, idlPrefix: string): string {
+        const prefix = optional ? ArkPrimitiveType.OptionalPrefix : ""
+        if (ts.isImportTypeNode(type)) {
+            return prefix + this.mapImportTypeName(type)
+        }
+        if (ts.isTypeReferenceNode(type)) {
+            const typeName = identName(type.typeName)
+            let declaration = this.toTarget(type)
+            if (!(declaration instanceof ArkPrimitiveType) && ts.isEnumDeclaration(declaration)) {
+                const name = this.enumName(declaration.name)
+                return (optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name
+            }
+            if (typeName === "Array") {
+                const elementTypeName = this.computeTypeNameImpl(undefined, type.typeArguments![0], false, "")
+                return `${prefix}Array_${elementTypeName}`
+            } else if (typeName === "Map") {
+                const keyTypeName = this.computeTypeNameImpl(undefined, type.typeArguments![0], false, "")
+                const valueTypeName = this.computeTypeNameImpl(undefined, type.typeArguments![1], false, "")
+                return `${prefix}Map_${keyTypeName}_${valueTypeName}`
+            } else if (typeName === "Callback") {
+                return prefix + typeName
+            }
+            if (!(declaration instanceof ArkPrimitiveType)) {
+                if (ts.isUnionTypeNode(declaration) && typeName === "GestureType" ||
+                    ts.isInterfaceDeclaration(declaration) ||
+                    ts.isClassDeclaration(declaration)
+                ) {
+                    return prefix + (optional ? "" : idlPrefix) + typeName;
+                }
+            }
+            return prefix + typeName
+        }
+        if (ts.isUnionTypeNode(type)) {
+            if (suggestedName) return suggestedName
+            return prefix + `Union_${type.types.map(it => this.computeTypeNameImpl(undefined, it, optional, "")).join("_")}`
+        }
+        if (ts.isOptionalTypeNode(type)) {
+            if (suggestedName) return suggestedName
+            const name = this.computeTypeNameImpl(undefined, type.type, false, "")
+            return ArkPrimitiveType.OptionalPrefix + cleanPrefix(name, ArkPrimitiveType.Prefix)
+        }
+        if (ts.isTupleTypeNode(type)) {
+            if (suggestedName) return suggestedName
+            return prefix + `Tuple_${type.elements.map(it => {
+                if (ts.isNamedTupleMember(it)) {
+                    return this.computeTypeNameImpl(undefined, it.type, optional, "")
+                } else {
+                    return this.computeTypeNameImpl(undefined, it, optional, "")
+                }
+
+            }).join("_")}`
+        }
+        if (ts.isParenthesizedTypeNode(type)) {
+            return this.computeTypeNameImpl(suggestedName, type.type!, optional, idlPrefix)
+        }
+        if (ts.isTypeLiteralNode(type)) {
+            if (suggestedName) return suggestedName
+            return this.computeTargetTypeLiteralName(type, prefix)
+        }
+        if (ts.isLiteralTypeNode(type)) {
+            const literal = type.literal
+            if (ts.isStringLiteral(literal) || ts.isNoSubstitutionTemplateLiteral(literal) || ts.isRegularExpressionLiteral(literal)) {
+                return ArkPrimitiveType.String.getText()
+            }
+            if (ts.isNumericLiteral(literal)) {
+                return ArkPrimitiveType.Number.getText()
+            }
+            if (literal.kind == ts.SyntaxKind.NullKeyword) {
+                return ArkPrimitiveType.Undefined.getText()
+            }
+            throw new Error(`Unknown literal type: ${type.getText()}`)
+        }
+        if (ts.isTemplateLiteralTypeNode(type)) {
+            const name = ArkPrimitiveType.String.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
+        }
+        if (ts.isFunctionTypeNode(type)) {
+            const name = ArkPrimitiveType.Function.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
+        }
+        if (ts.isArrayTypeNode(type)) {
+            if (suggestedName) return suggestedName
+            return prefix + `Array_` + this.computeTypeNameImpl(undefined, type.elementType, false, "")
+        }
+        if (type.kind == ts.SyntaxKind.NumberKeyword) {
+            const name = ArkPrimitiveType.Number.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
+        }
+        if (
+            type.kind == ts.SyntaxKind.UndefinedKeyword ||
+            type.kind == ts.SyntaxKind.NullKeyword ||
+            type.kind == ts.SyntaxKind.VoidKeyword
+        ) {
+            return ArkPrimitiveType.Undefined.getText()
+        }
+        if (type.kind == ts.SyntaxKind.StringKeyword) {
+            const name = ArkPrimitiveType.String.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
+        }
+        if (type.kind == ts.SyntaxKind.BooleanKeyword) {
+            const name = ArkPrimitiveType.Boolean.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
+        }
+        if (type.kind == ts.SyntaxKind.ObjectKeyword ||
+            type.kind == ts.SyntaxKind.UnknownKeyword) {
+            const name = ArkPrimitiveType.CustomObject.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
+        }
+        if (type.kind == ts.SyntaxKind.AnyKeyword) {
+            const name = ArkPrimitiveType.CustomObject.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
+        }
+        if (ts.isTypeParameterDeclaration(type)) {
+            const name = ArkPrimitiveType.CustomObject.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
+        }
+        if (ts.isIndexedAccessTypeNode(type)) {
+            const name = ArkPrimitiveType.CustomObject.getText()
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
+        }
+        if (ts.isEnumMember(type)) {
+            const name = this.enumName(type.name)
+            return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, ArkPrimitiveType.Prefix) : name)
+        }
+        throw new Error(`Cannot compute type name: ${type.getText()} ${type.kind}`)
+    }
+
+    public enumName(name: ts.PropertyName): string {
+        // TODO: support namespaces in other declarations.
+        return `${ArkPrimitiveType.Prefix}${identNameWithNamespace(name, Language.CPP)}`
+    }
+
+    public get orderedDependencies(): DeclarationTarget[] {
+        return this._orderedDependencies
+    }
+    private _orderedDependencies: DeclarationTarget[] = []
+
+    public get orderedDependenciesToGenerate(): DeclarationTarget[] {
+        return this._orderedDependenciesToGenerate
+    }
+    private _orderedDependenciesToGenerate: DeclarationTarget[] = []
+    analyze(library: PeerLibrary) {
+        const callbacks = collectCallbacks(library) as CallbackInfo[]
+        for (const callback of callbacks) {
+            callback.args.forEach(arg => {
+                const useToGenerate = library.shouldGenerateComponent(callback.componentName)
+                this.requestType(arg.type, useToGenerate, undefined)
+            })
+        }
+
+        let orderer = new DependencySorter(this)
+        for (let declaration of this.typeMap.values()) {
+            orderer.addDep(declaration[0])
+        }
+        this._orderedDependencies = orderer.getToposorted()
+
+        let toGenerateOrderer = new DependencySorter(this)
+        for (let declaration of this.typeMap.values()) {
+            if (declaration[2])
+                toGenerateOrderer.addDep(declaration[0])
+        }
+        this._orderedDependenciesToGenerate = toGenerateOrderer.getToposorted()
+    }
+
+    serializerName(name: string): string {
+        return `write${name}`
+    }
+
+    deserializerName(name: string): string {
+        return `read${name}`
+    }
+
+    declTargetConvertor(param: string, target: DeclarationTarget, isOptionalParam = false): ArgConvertor {
+        if (target instanceof ArkPrimitiveType) {
+            if (target == ArkPrimitiveType.Number || target == ArkPrimitiveType.Int32) {
+                return new NumberConvertor(param)
+            }
+            if (target == ArkPrimitiveType.Boolean) {
+                return new BooleanConvertor(param)
+            }
+            throw new Error("Unsupported primitive type: " + target.getText())
+        }
+        throw new Error("Unsupported type: " + target.getText())
+    }
+
+    typeConvertor(param: string,
+                  type: ts.TypeNode,
+                  isOptionalParam: boolean = false,
+                  maybeCallback: boolean = false,
+                  typeNodeNameConvertor: TypeNodeNameConvertor | undefined = undefined): ArgConvertor {
+        if (!type) throw new Error("Impossible")
+        if (isOptionalParam) {
+            return new OptionConvertor(param, this, type, typeNodeNameConvertor)
+        }
+        if (type.kind == ts.SyntaxKind.ObjectKeyword) {
+            return new CustomTypeConvertor(param, "Object", false)
+        }
+        if (type.kind == ts.SyntaxKind.UndefinedKeyword || type.kind == ts.SyntaxKind.VoidKeyword) {
+            return new UndefinedConvertor(param)
+        }
+        if (type.kind == ts.SyntaxKind.NullKeyword) {
+            throw new Error("Unsupported null")
+        }
+        if (type.kind == ts.SyntaxKind.NumberKeyword) {
+            return new NumberConvertor(param)
+        }
+        if (type.kind == ts.SyntaxKind.StringKeyword) {
+            return new StringConvertor(param, type, typeNodeNameConvertor)
+        }
+        if (type.kind == ts.SyntaxKind.BooleanKeyword) {
+            return new BooleanConvertor(param)
+        }
+        if (ts.isImportTypeNode(type)) {
+            if (identName(type.qualifier) === "Callback") {
+                return new FunctionConvertor(param, this, type)
+            }
+            if (identName(type.qualifier) === "Resource") {
+                return new InterfaceConvertor("Resource", param, ResourceDeclaration, this)
+            }
+            return new ImportTypeConvertor(param, this, type)
+        }
+        if (ts.isTypeReferenceNode(type)) {
+            const declaration = getDeclarationsByNode(this.typeChecker!, type.typeName)[0]
+            return this.declarationConvertor(param, type, declaration, undefined, typeNodeNameConvertor)
+        }
+        if (ts.isEnumMember(type)) {
+            return new EnumConvertor(param, type.parent, this.isStringEnum(type.parent.members), this.language)
+        }
+        if (ts.isUnionTypeNode(type)) {
+            return new UnionConvertor(param, this, type, typeNodeNameConvertor)
+        }
+        if (ts.isTypeLiteralNode(type)) {
+            return new AggregateConvertor(param, this, type, typeNodeNameConvertor)
+        }
+        if (ts.isArrayTypeNode(type)) {
+            return new ArrayConvertor(param, this, type, type.elementType, typeNodeNameConvertor)
+        }
+        if (ts.isLiteralTypeNode(type)) {
+            if (type.literal.kind == ts.SyntaxKind.NullKeyword) {
+                return new NullConvertor(param)
+            }
+            if (type.literal.kind == ts.SyntaxKind.StringLiteral) {
+                return new StringConvertor(param, type, typeNodeNameConvertor)
+            }
+            throw new Error(`Unsupported literal type: ${type.literal.kind}` + type.getText())
+        }
+        if (ts.isTupleTypeNode(type)) {
+            return new TupleConvertor(param, this, type)
+        }
+        if (ts.isFunctionTypeNode(type)) {
+            if (isCallback(type, this)) {
+                return new CallbackFunctionConvertor(param, this, type)
+            }
+            return new FunctionConvertor(param, this, type)
+        }
+        if (ts.isParenthesizedTypeNode(type)) {
+            return this.typeConvertor(param, type.type)
+        }
+        if (ts.isOptionalTypeNode(type)) {
+            return new OptionConvertor(param, this, type.type)
+        }
+        if (ts.isTemplateLiteralTypeNode(type)) {
+            return new StringConvertor(param, type, typeNodeNameConvertor)
+        }
+        if (ts.isNamedTupleMember(type)) {
+            return this.typeConvertor(param, type.type)
+        }
+        if (type.kind == ts.SyntaxKind.AnyKeyword ||
+            type.kind == ts.SyntaxKind.UnknownKeyword ||
+            ts.isIndexedAccessTypeNode(type)
+        ) {
+            return new CustomTypeConvertor(param, "Any", false)
+        }
+        if (ts.isTypeParameterDeclaration(type)) {
+            // TODO: unlikely correct.
+            return new CustomTypeConvertor(param, identName(type.name)!, false)
+        }
+        console.log(type)
+        throw new Error(`Cannot convert: ${asString(type)} ${type.getText()} ${type.kind}`)
+    }
+
+    private _currentContext: string | undefined = undefined
+    getCurrentContext(): string | undefined {
+        return this._currentContext
+    }
+    setCurrentContext(context: string | undefined) {
+        this._currentContext = context
+    }
+
+    private customConvertor(typeName: ts.EntityName | undefined, param: string, type: ts.TypeReferenceNode | ts.ImportTypeNode,
+                            typeNodeNameConvertor: TypeNodeNameConvertor | undefined): ArgConvertor | undefined {
+        let name = getNameWithoutQualifiersRight(typeName)
+        switch (name) {
+            case `Dimension`:
+            case `Length`:
+                return new LengthConvertor(name, param)
+            case `Date`:
+                return new CustomTypeConvertor(param, name, false, name)
+            case `AttributeModifier`:
+                return new PredefinedConvertor(param, "AttributeModifier<any>", "AttributeModifier", "CustomObject")
+            case `AnimationRange`:
+                return new CustomTypeConvertor(param, "AnimationRange", false, "AnimationRange<number>")
+            case `ContentModifier`:
+                return new CustomTypeConvertor(param, "ContentModifier", false, "ContentModifier<any>")
+            case `Record`:
+                return new CustomTypeConvertor(param, "Record", false, "Record<string, string>")
+            case `Array`:
+                return new ArrayConvertor(param, this, type, type.typeArguments![0], typeNodeNameConvertor)
+            case `Map`:
+                return new MapConvertor(param, this, type, type.typeArguments![0], type.typeArguments![1])
+            case `Callback`:
+                if (ts.isTypeReferenceNode(type) && isCallback(type, this)) {
+                    return new CallbackTypeReferenceConvertor(param, this, type)
+                }
+                return new FunctionConvertor(param, this, type)
+            case `Optional`:
+                if (type.typeArguments && type.typeArguments.length == 1)
+                    return new OptionConvertor(param, this, type.typeArguments![0])
+        }
+        return undefined
+    }
+
+    isPointerDeclaration(target: DeclarationTarget, isOptional: boolean = false): boolean {
+        if (isOptional) return true
+        if (target instanceof ArkPrimitiveType) return target.isPointer
+        if (ts.isEnumDeclaration(target)) return false
+        if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) return true
+        return true
+    }
+
+    declarationConvertor(param: string, type: ts.TypeReferenceNode, declaration: ts.NamedDeclaration | undefined,
+        maybeCallback: boolean = false,
+        typeNodeNameConvertor?: TypeNodeNameConvertor): ArgConvertor {
+        const entityName = typeEntityName(type)
+        if (!declaration) {
+            return this.customConvertor(entityName, param, type, typeNodeNameConvertor) ?? throwException(`Declaration not found for: ${type.getText()}`)
+        }
+        if (PeerGeneratorConfig.isConflictedDeclaration(declaration))
+            return new CustomTypeConvertor(param, identName(declaration.name)!, false)
+        const declarationName = identName(declaration.name)!
+        let customConvertor = this.customConvertor(entityName, param, type, typeNodeNameConvertor)
+        if (customConvertor) {
+            return customConvertor
+        }
+        if (ts.isEnumDeclaration(declaration)) {
+            return new EnumConvertor(param, declaration, this.isStringEnum(declaration.members), this.language)
+        }
+        if (ts.isEnumMember(declaration)) {
+            return new EnumConvertor(param, declaration.parent, this.isStringEnum(declaration.parent.members), this.language)
+        }
+        if (ts.isTypeAliasDeclaration(declaration)) {
+            return new TypeAliasConvertor(param, this, declaration, typeNodeNameConvertor)
+        }
+        if (ts.isInterfaceDeclaration(declaration)) {
+            if (isMaterialized(declaration)) {
+                return new MaterializedClassConvertor(declarationName, param, this, declaration)
+            }
+            return new InterfaceConvertor(declarationName, param, declaration, this)
+        }
+        if (ts.isClassDeclaration(declaration)) {
+            if (isMaterialized(declaration)) {
+                return new MaterializedClassConvertor(declarationName, param, this, declaration)
+            }
+            return new ClassConvertor(declarationName, param, declaration, this)
+        }
+        if (ts.isTypeParameterDeclaration(declaration)) {
+            // TODO: incorrect, we must use actual, not formal type parameter.
+            const isGenericType = searchTypeParameters(declaration)
+                ?.find(it => ts.isIdentifier(it.name) && it.name.text == identName(declaration.name)!) !== undefined
+            return new CustomTypeConvertor(param, identName(declaration.name)!, isGenericType)
+        }
+        console.log(`${declaration.getText()}`)
+        throw new Error(`Unknown kind: ${declaration.kind}`)
+    }
+
+    private printStructsCHead(name: string, descriptor: StructDescriptor, structs: IndentedPrinter, writeToString: LanguageWriter, seenNames: Set<string>) {
+        if (descriptor.isArray) {
+            // Forward declaration of element type.
+            let elementTypePointer = descriptor.getFields()[0].declaration
+            if (!(elementTypePointer instanceof PointerType))
+                throw new Error(`Unexpected ${this.computeTargetName(elementTypePointer, false)}`)
+            let elementType = elementTypePointer.pointed
+            if (!(elementType instanceof ArkPrimitiveType) && ts.isEnumDeclaration(elementType)) {
+                const enumName = this.enumName(elementType.name)
+                if (!seenNames.has(enumName)) {
+                    seenNames.add(enumName)
+                    this.generateEnum(structs, writeToString, elementType)
+                    this.generateOptional(structs, writeToString, elementType, enumName, seenNames)
+                }
+            }
+        }
+        if (descriptor.isPacked) {
+            structs.print(`#ifdef _MSC_VER`)
+            structs.print(`#pragma pack(push, 1)`)
+            structs.print(`#endif`)
+        }
+        structs.print(`typedef struct ${name} {`)
+        structs.pushIndent()
+    }
+
+
+    private printStructsCTail(name: string, needPacked: boolean, structs: IndentedPrinter) {
+        structs.popIndent()
+        if (needPacked) {
+            structs.print(`#ifdef _MSC_VER`)
+            structs.print(`}`)
+            structs.print(`#pragma pack(pop)`)
+            structs.print(`#else`)
+            structs.print(`} __attribute__((packed))`)
+            structs.print(`#endif`)
+            structs.print(`${name};`)
+        } else {
+            structs.print(`} ${name};`)
+        }
+    }
+
+    private printStructField(structs: IndentedPrinter, field: FieldRecord) {
+        const prefix = field.optional ? ArkPrimitiveType.OptionalPrefix : ""
+        let name = this.computeTargetName(field.declaration, false)
+        if (field.optional) {
+            name = cleanPrefix(name, ArkPrimitiveType.Prefix)
+        }
+        const cKind = field.optional ? "" : this.cFieldKind(field.declaration)
+        structs.print(`${cKind}${prefix}${name} ${field.name};`)
+    }
+
+    allOptionalTypes(): Set<string> {
+        const seenNames = new Set<string>()
+        seenNames.clear()
+        for (let target of this.orderedDependencies) {
+            if (target instanceof PointerType) continue
+            let nameAssigned = this.computeTargetName(target, false)
+            if (nameAssigned === ArkPrimitiveType.Tag.getText()) {
+                continue
+            }
+            if (!nameAssigned) {
+                throw new Error(`No assigned name for ${(target as ts.TypeNode).getText()} shall be ${this.computeTargetName(target, false)}`)
+            }
+            if (seenNames.has(nameAssigned)) continue
+            const nameOptional = ArkPrimitiveType.OptionalPrefix + cleanPrefix(nameAssigned, ArkPrimitiveType.Prefix)
+            seenNames.add(nameOptional)
+        }
+        return seenNames
+    }
+
+    allLiteralTypes(): Map<string, string[]> {
+        const literals = new Map<string, string[]>()
+        for (let target of this.orderedDependencies) {
+
+            let nameAssigned = this.computeTargetName(target, false)
+            if (nameAssigned === ArkPrimitiveType.Tag.getText()) {
+                continue
+            }
+            if (!nameAssigned) {
+                throw new Error(`No assigned name for ${(target as ts.TypeNode).getText()} shall be ${this.computeTargetName(target, false)}`)
+            }
+            if (literals.has(nameAssigned)) continue
+            if (nameAssigned.startsWith("Literal_")) {
+                const fields = this.targetStruct(target).getFields()
+                literals.set(nameAssigned, fields.map(it => it.name))
+            }
+
+        }
+        return literals
+    }
+
+    allUnionTypes() {
+
+        type Selector = {
+            id: number;
+            name: string;
+        }
+
+        const unions = new Map<string, Selector[]>()
+        for (let target of this.orderedDependencies) {
+            let nameAssigned = this.computeTargetName(target, false)
+            if (nameAssigned === ArkPrimitiveType.Tag.getText()) {
+                continue
+            }
+            if (!nameAssigned) {
+                throw new Error(`No assigned name for ${(target as ts.TypeNode).getText()} shall be ${this.computeTargetName(target, false)}`)
+            }
+
+            if (this.isMaybeWrapped(target, ts.isUnionTypeNode)) {
+                unions.set(nameAssigned,
+                    this.targetStruct(target).getFields().slice(1).map((field, index) => {
+                        return { id: index, name: field.name }
+                    }))
+            }
+        }
+        return unions
+    }
+
+    private generateOptional(structs: IndentedPrinter, writeToString: LanguageWriter, target: DeclarationTarget, elemName: string, seenNames: Set<string>) {
+        const nameOptional = ArkPrimitiveType.OptionalPrefix + cleanPrefix(elemName, ArkPrimitiveType.Prefix)
+        if (!seenNames.has(nameOptional)) {
+            seenNames.add(nameOptional)
+            structs.print(`typedef struct ${nameOptional} {`)
+            structs.pushIndent()
+            structs.print(`enum ${ArkPrimitiveType.Tag.getText()} tag;`)
+            structs.print(`${this.cFieldKind(target)} ${elemName} value;`)
+            structs.popIndent()
+            structs.print(`} ${nameOptional};`)
+            this.writeOptional(nameOptional, writeToString, this.isPointerDeclaration(target))
+            this.writeRuntimeType(target, nameOptional, true, writeToString)
+        }
+    }
+
+    private generateEnum(structs: IndentedPrinter, writeToString: LanguageWriter, target: ts.EnumDeclaration) {
+        const enumName = this.enumName(target.name)
+        structs.print(`enum ${enumName}`)
+        structs.print(`{`)
+        structs.pushIndent()
+        const enumValues = nameEnumValues(target)
+        const enumPrefix = camelCaseToUpperSnakeCase(enumName)
+        target.members.forEach((it, index) => {
+            let initializer = ""
+            if (it.initializer && ts.isNumericLiteral(it.initializer)) {
+                initializer = ` = ${it.initializer.getText()}`
+            }
+            structs.print(`${enumPrefix}_${enumValues[index]}${initializer},`)
+        })
+        structs.popIndent()
+        structs.print(`};`)
+
+        writeToString.print(`inline void WriteToString(string* result, enum ${enumName} value) {`)
+        writeToString.pushIndent()
+        writeToString.print(`result->append("${enumName}(");`)
+        writeToString.print(`WriteToString(result, (${ArkPrimitiveType.Int32.getText()}) value);`)
+        writeToString.print(`result->append(")");`)
+        writeToString.popIndent()
+        writeToString.print(`}`)
+
+        writeToString.print(`template <>`)
+        writeToString.print(`inline Ark_RuntimeType runtimeType(const enum ${enumName}& value) {`)
+        writeToString.pushIndent()
+        writeToString.print(`return ARK_RUNTIME_NUMBER;`)
+        writeToString.popIndent()
+        writeToString.print(`}`)
+    }
+
+    generateStructs(structs: IndentedPrinter, typedefs: IndentedPrinter, writeToString: LanguageWriter) {
+        const seenNames = new Set<string>()
+        seenNames.clear()
+        let noDeclaration = [ArkPrimitiveType.Int32, ArkPrimitiveType.Tag, ArkPrimitiveType.Number, ArkPrimitiveType.Boolean, ArkPrimitiveType.String]
+        for (let target of this.orderedDependencies) {
+            let nameAssigned = this.computeTargetName(target, false)
+            if (nameAssigned === ArkPrimitiveType.Tag.getText()) {
+                continue
+            }
+            if (!nameAssigned) {
+                throw new Error(`No assigned name for ${(target as ts.TypeNode).getText()} shall be ${this.computeTargetName(target, false)}`)
+            }
+            if (seenNames.has(nameAssigned)) continue
+            seenNames.add(nameAssigned)
+            let isPointer = this.isPointerDeclaration(target)
+            let isAccessor = checkDeclarationTargetMaterialized(target)
+            let noBasicDecl = isAccessor || (target instanceof ArkPrimitiveType && noDeclaration.includes(target))
+            const nameOptional = ArkPrimitiveType.OptionalPrefix + cleanPrefix(nameAssigned, ArkPrimitiveType.Prefix)
+            let isUnion = this.isMaybeWrapped(target, ts.isUnionTypeNode)
+            if (!(target instanceof ArkPrimitiveType) && ts.isEnumDeclaration(target)) {
+                this.generateEnum(structs, writeToString, target)
+                this.generateOptional(structs, writeToString, target, this.enumName(target.name), seenNames)
+                continue
+            }
+            const structDescriptor = this.targetStruct(target)
+            if (!noBasicDecl && !this.ignoreTarget(target)) {
+
+                // TODO: fix it to define array type after its elements types
+                if (nameAssigned === `Array_GestureRecognizer`) {
+                    structs.print(`typedef Ark_Materialized ${ArkPrimitiveType.Prefix}GestureRecognizer;`)
+                }
+
+                this.printStructsCHead(nameAssigned, structDescriptor, structs, writeToString, seenNames)
+                if (isUnion) {
+                    const selector = structDescriptor.getFields().find(value => {return value.name === "selector"})
+                    if (selector) {
+                        this.printStructField(structs, selector)
+                    }
+                    structs.print("union {")
+                    structs.pushIndent()
+                    structDescriptor.getFields().filter(value => value.name !== "selector")
+                        .forEach(it => this.printStructField(structs, it))
+                    structs.popIndent()
+                    structs.print("};")
+                } else {
+                    if (structDescriptor.getFields().length === 0) {
+                        structs.print(`void *handle;`)
+                    }
+                    structDescriptor.getFields().forEach(it => this.printStructField(structs, it))
+                }
+                this.printStructsCTail(nameAssigned, structDescriptor.isPacked, structs)
+            }
+            if (isAccessor) {
+                structs.print(`typedef Ark_Materialized ${nameAssigned};`)
+            }
+            let skipWriteToString = (target instanceof ArkPrimitiveType) || ts.isEnumDeclaration(target) || ts.isFunctionTypeNode(target)
+            if (!noBasicDecl && !skipWriteToString) {
+                this.generateWriteToString(nameAssigned, target, writeToString, isPointer)
+            }
+            this.writeRuntimeType(target, nameAssigned, false, writeToString)
+            if (seenNames.has(nameOptional)) continue
+            seenNames.add(nameOptional)
+            if (!(target instanceof PointerType) && nameAssigned != "Optional" && nameAssigned != "RelativeIndexable") {
+                this.printStructsCHead(nameOptional, structDescriptor, structs, writeToString, seenNames)
+                structs.print(`enum ${ArkPrimitiveType.Tag.getText()} tag;`)
+                structs.print(`${nameAssigned} value;`)
+                this.printStructsCTail(nameOptional, structDescriptor.isPacked, structs)
+                this.writeOptional(nameOptional, writeToString, isPointer)
+                this.writeRuntimeType(target, nameOptional, true, writeToString)
+            }
+        }
+        for (let declarationTarget of this.typeMap.values()) {
+            let target = declarationTarget[0]
+            let aliasNames = declarationTarget[1]
+            let declarationName = this.computeTargetName(target, false)
+            aliasNames.forEach(aliasName => this.addNameAlias(target, declarationName, aliasName, seenNames, typedefs))
+        }
+        // TODO: hack, remove me!
+        typedefs.print(`typedef ${ArkPrimitiveType.OptionalPrefix}Length ${ArkPrimitiveType.OptionalPrefix}Dimension;`)
+    }
+
+    private writeRuntimeType(target: DeclarationTarget, targetTypeName: string, isOptional: boolean, writer: LanguageWriter) {
+        const resultType = new Type("Ark_RuntimeType")
+        const op = this.writeRuntimeTypeOp(target, targetTypeName, resultType, isOptional, writer)
+        if (op) {
+            writer.print("template <>")
+            writer.writeMethodImplementation(
+                new Method("runtimeType",
+                    new NamedMethodSignature(resultType, [new Type(`const ${targetTypeName}&`)], ["value"]),
+                    [MethodModifier.INLINE]),
+                op)
+        }
+    }
+
+    private writeRuntimeTypeOp(
+        target: DeclarationTarget, targetTypeName: string, resultType: Type, isOptional: boolean, writer: LanguageWriter
+    ) : ((writer: LanguageWriter) => void) | undefined
+    {
+        let result: LanguageExpression
+        if (isOptional) {
+            result = writer.makeTernary(writer.makeDefinedCheck("value.tag"),
+                writer.makeRuntimeType(RuntimeType.OBJECT), writer.makeRuntimeType(RuntimeType.UNDEFINED))
+        } else if (target instanceof PointerType) {
+            return
+        } else if (target instanceof ArkPrimitiveType) {
+            switch (target) {
+                case ArkPrimitiveType.Boolean:
+                    result = writer.makeRuntimeType(RuntimeType.BOOLEAN)
+                    break
+                case ArkPrimitiveType.CustomObject:
+                case ArkPrimitiveType.Materialized:
+                case ArkPrimitiveType.NativePointer:
+                case ArkPrimitiveType.Tag:
+                    return undefined
+                case ArkPrimitiveType.Function:
+                    result = writer.makeRuntimeType(RuntimeType.FUNCTION)
+                    break
+                case ArkPrimitiveType.Int32:
+                case ArkPrimitiveType.Number:
+                    result = writer.makeRuntimeType(RuntimeType.NUMBER)
+                    break
+                case ArkPrimitiveType.Length:
+                    result = writer.makeCast(writer.makeString("value.type"), resultType)
+                    break
+                case ArkPrimitiveType.String:
+                    result = writer.makeRuntimeType(RuntimeType.STRING)
+                    break
+                case ArkPrimitiveType.Undefined:
+                    result = writer.makeRuntimeType(RuntimeType.UNDEFINED)
+                    break
+                default:
+                    throw new Error(`Unexpected PrimitiveType ${target.getText()}`)
+            }
+        } else if (ts.isEnumDeclaration(target)) {
+            result = writer.makeRuntimeType(RuntimeType.NUMBER)
+        } else if (checkDeclarationTargetMaterialized(target)) {
+            return undefined
+        } else if (ts.isOptionalTypeNode(target)) {
+            result = writer.makeTernary(writer.makeDefinedCheck("value.tag"),
+                writer.makeRuntimeType(RuntimeType.OBJECT), writer.makeRuntimeType(RuntimeType.UNDEFINED))
+        } else if (ts.isUnionTypeNode(target)) {
+            return writer => {
+                writer.print("switch (value.selector) {")
+                writer.pushIndent()
+                for (let i = 0; i < target.types.length; i++) {
+                    writer.print(`case ${i}: return runtimeType(value.value${i});`)
+                }
+                writer.print(`default: throw "Bad selector in ${targetTypeName}: " + std::to_string(value.selector);`)
+                writer.popIndent()
+                writer.print("}")
+            }
+        } else {
+            result = writer.makeRuntimeType(RuntimeType.OBJECT)
+        }
+        return writer => writer.writeStatement(writer.makeReturn(result))
+    }
+
+    private addNameAlias(target: DeclarationTarget, declarationName: string, aliasName: string,
+        seenNames: Set<string>, typedefs: IndentedPrinter
+    ): void {
+        if (seenNames.has(aliasName)) return
+        if (this.ignoreTarget(target) && target != ArkPrimitiveType.CustomObject) return
+        seenNames.add(aliasName)
+        typedefs.print(`typedef ${declarationName} ${aliasName};`)
+        // TODO: hacky
+        aliasName = cleanPrefix(aliasName, ArkPrimitiveType.Prefix)
+        let optAliasName = `${ArkPrimitiveType.OptionalPrefix}${aliasName}`
+        if (!declarationName.startsWith(ArkPrimitiveType.OptionalPrefix) && !seenNames.has(optAliasName)) {
+            seenNames.add(optAliasName)
+            declarationName = cleanPrefix(declarationName, ArkPrimitiveType.Prefix)
+            typedefs.print(`typedef ${ArkPrimitiveType.OptionalPrefix}${declarationName} ${optAliasName};`)
+        }
+    }
+
+    cFieldKind(declaration: DeclarationTarget): string {
+        if (declaration instanceof PointerType) return this.cFieldKind(declaration.pointed)
+        if (declaration instanceof ArkPrimitiveType) return ""
+        if (ts.isEnumDeclaration(declaration)) return "enum "
+        if (ts.isImportTypeNode(declaration)) return ""
+        if (checkDeclarationTargetMaterialized(declaration)) return ""
+        return `struct `
+    }
+
+    writeOptional(nameOptional: string, printer: LanguageWriter, isPointer: boolean) {
+        printer.print(`template <>`)
+        printer.print(`inline void WriteToString(string* result, const ${nameOptional}* value) {`)
+        printer.print(`result->append("{.tag=");`)
+        printer.print(`result->append(tagNameExact((${ArkPrimitiveType.Tag.getText()})(value->tag)));`)
+        printer.print(`result->append(", .value=");`)
+        printer.pushIndent()
+        printer.print(`if (value->tag != ${ArkPrimitiveType.UndefinedTag}) {`)
+        printer.pushIndent()
+        printer.print(`WriteToString(result, ${isPointer ? "&" : ""}value->value);`)
+        printer.popIndent()
+        printer.print(`} else {`)
+        printer.pushIndent()
+        printer.print(`${ArkPrimitiveType.Undefined.getText()} undefined = { 0 };`)
+        printer.print(`WriteToString(result, undefined);`)
+        printer.popIndent()
+        printer.print(`}`)
+        printer.popIndent()
+        printer.print(`result->append("}");`)
+        printer.print(`}`)
+    }
+
+    writeOptionalConvertor(nameOptional: string, printer: LanguageWriter, isPointer: boolean) {
+        printer.print(`template <>`)
+        printer.print(`inline void convertor(const ${nameOptional}* value) {`)
+        printer.pushIndent()
+        printer.print(`if (value->tag != ${ArkPrimitiveType.UndefinedTag}) {`)
+        printer.pushIndent()
+        printer.print(`convertor(${isPointer ? "&" : ""}value->value);`)
+        printer.popIndent()
+        printer.print(`} else {`)
+        printer.pushIndent()
+        printer.print(`${ArkPrimitiveType.Undefined.getText()} undefined = { 0 };`)
+        printer.print(`convertor(undefined);`)
+        printer.popIndent()
+        printer.print(`}`)
+        printer.popIndent()
+        printer.print(`}`)
+    }
+
+    visitDeclaration(
+        target: DeclarationTarget,
+        visitor: StructVisitor,
+    ): void {
+        if (this.isMaybeWrapped(target, ts.isUnionTypeNode)) {
+            this.targetStruct(target).getFields().forEach((field, index) => {
+                if (index === 0) return
+                visitor.visitUnionField(field, index - 1)
+            })
+        } else {
+            visitor.visitInseparable()
+        }
+    }
+
+    private isMaybeWrapped(target: DeclarationTarget, predicate: (type: ts.Node) => boolean): boolean {
+        if (target instanceof ArkPrimitiveType) return false
+        return predicate(target) ||
+            ts.isParenthesizedTypeNode(target) &&
+            this.isDeclarationTarget(target.type) &&
+            predicate(target.type)
+    }
+
+    private generateArrayWriteToString(name: string, target: DeclarationTarget, printer: LanguageWriter) {
+        if (target instanceof ArkPrimitiveType) throw new Error("Impossible")
+        let elementType = ts.isArrayTypeNode(target)
+            ? target.elementType
+            : ts.isTypeReferenceNode(target) && target.typeArguments
+                ? target.typeArguments[0]
+                : undefined
+
+        if (!elementType) throw new Error("Impossible")
+        let convertor = this.typeConvertor("param", elementType)
+        let isPointerField = convertor.isPointerType()
+        let elementNativeType = convertor.nativeType(false)
+        let constCast = isPointerField ? `(const ${elementNativeType}*)` : ``
+
+        printer.print(
 `
+template <>
+inline void WriteToString(string* result, const ${elementNativeType}${isPointerField ? "*" : ""} value);
+
+inline void WriteToString(string* result, const ${name}* value) {
+    int32_t count = value->length;
+    
+    result->append("{.array=allocArray<${elementNativeType}, " + std::to_string(count) + ">({{");
+    for (int i = 0; i < count; i++) {
+        if (i > 0) result->append(", ");
+        WriteToString(result, ${constCast}${isPointerField ? "&" : ""}value->array[i]);
+    }
+    result->append("}})");
+    
+    result->append(", .length=");
+    result->append(std::to_string(value->length));
+    
+    result->append("}");
+}
+`)
+    }
+
+    private generateMapWriteToString(name: string, target: DeclarationTarget, printer: LanguageWriter) {
+        if (target instanceof ArkPrimitiveType)
+            throw new Error("Impossible")
+        const [keyType, valueType] = ts.isTypeReferenceNode(target) && target.typeArguments
+            ? target.typeArguments
+            : [undefined, undefined]
+        if (!keyType || !valueType)
+            throw new Error("Impossible")
+        const keyConvertor = this.typeConvertor("_", keyType)
+        const valueConvertor = this.typeConvertor("_", valueType)
+        let isPointerKeyField = keyConvertor.isPointerType()
+        let isPointerValueField = valueConvertor.isPointerType()
+        let keyNativeType = keyConvertor.nativeType(false)
+        let valueNativeType = valueConvertor.nativeType(false)
+        let keyConstCast = isPointerKeyField ? `(const ${keyNativeType}*)` : ``
+        let valueConstCast = isPointerValueField ? `(const ${valueNativeType}*)` : ``
+
+        // Provide prototype of keys printer.
+        printer.print(`template <>`)
+        printer.print(`inline void WriteToString(string* result, const ${keyNativeType}${isPointerKeyField ? "*" : ""} value);`)
+        // Provide prototype of values printer.
+        printer.print(`template <>`)
+        printer.print(`inline void WriteToString(string* result, const ${valueNativeType}${isPointerValueField ? "*" : ""} value);`)
+
+        // Printer.
+        printer.print(`template <>`)
+        printer.print(`inline void WriteToString(string* result, const ${name}* value) {`)
+        printer.pushIndent()
+        printer.print(`result->append("{");`)
+        printer.print(`int32_t count = value->size;`)
+        printer.print(`for (int i = 0; i < count; i++) {`)
+        printer.pushIndent()
+        printer.print(`if (i > 0) result->append(", ");`)
+        printer.print(`WriteToString(result, ${keyConstCast}${isPointerKeyField ? "&" : ""}value->keys[i]);`)
+        printer.print(`result->append(": ");`)
+        printer.print(`WriteToString(result, ${valueConstCast}${isPointerValueField ? "&" : ""}value->values[i]);`)
+        printer.popIndent()
+        printer.print(`}`)
+        printer.print(`result->append("}");`)
+        printer.popIndent()
+        printer.print(`}`)
+    }
+
+    private generateWriteToString(name: string, target: DeclarationTarget, printer: LanguageWriter, isPointer: boolean) {
+        if (target instanceof ArkPrimitiveType) throw new Error("Impossible")
+
+        this.setCurrentContext(`writeToString(${name})`)
+        let isUnion = this.isMaybeWrapped(target, ts.isUnionTypeNode)
+        let isArray = this.isMaybeWrapped(target, ts.isArrayTypeNode)
+        let isMap = ts.isTypeReferenceNode(target) && identName(target.typeName) === "Map"
+        let isOptional = this.isMaybeWrapped(target, ts.isOptionalTypeNode)
+        let isTuple = this.isMaybeWrapped(target, ts.isTupleTypeNode)
+        let access = isPointer ? "->" : "."
+
+        // treat Array<T> as array
+        if (!isArray && ts.isTypeReferenceNode(target)) {
+            isArray = identName(target.typeName) === "Array"
+        }
+        if (isArray) {
+            this.generateArrayWriteToString(name, target, printer)
+        } else if (isMap) {
+            this.generateMapWriteToString(name, target, printer)
+        } else {
+            printer.print(`template <>`)
+            printer.print(`inline void WriteToString(string* result, const ${name}${isPointer ? "*" : ""} value) {`)
+            printer.pushIndent()
+
+            if (isUnion) {
+                printer.print(`result->append("{");`);
+                printer.print(`result->append(".selector=");`)
+                printer.print(`result->append(std::to_string(value->selector));`);
+                printer.print(`result->append(", ");`);
+                this.targetStruct(target).getFields().forEach((field, index) => {
+                    let isPointerField = this.isPointerDeclaration(field.declaration, field.optional)
+                    if (index != 0) printer.print(`// ${this.computeTargetName(field.declaration, false)}`)
+                    printer.print(`if (value${access}selector == ${index - 1}) {`)
+                    printer.pushIndent()
+                    printer.print(`result->append(".${field.name}=");`);
+                    printer.print(`WriteToString(result, ${isPointerField ? "&" : ""}value${access}${field.name});`)
+                    printer.popIndent()
+                    printer.print(`}`)
+                })
+                if (false) {
+                    printer.print(`result->append(" /* ${name} [variant ");`)
+                    printer.print(`result->append(std::to_string(value${access}selector));`)
+                    printer.print(`result->append("]*/");`)
+                }
+                printer.print(`result->append("}");`);
+            } else if (isTuple) {
+                printer.print(`result->append("{");`)
+                const fields = this.targetStruct(target).getFields()
+                fields.forEach((field, index) => {
+                    printer.print(`// ${this.computeTargetName(field.declaration, false)}`)
+                    let isPointerField = this.isPointerDeclaration(field.declaration, field.optional)
+                    if (index > 0) printer.print(`result->append(", ");`)
+                    printer.print(`result->append(".${field.name}=");`)
+                    printer.print(`WriteToString(result, ${isPointerField ? "&" : ""}value${access}${field.name});`)
+                })
+                printer.print(`result->append("}");`)
+            } else if (isOptional) {
+                printer.print(`result->append("{");`)
+                const fields = this.targetStruct(target).getFields()
+                fields.forEach((field, index) => {
+                    printer.print(`// ${this.computeTargetName(field.declaration, false)}`)
+                    if (index > 0) printer.print(`result->append(", ");`)
+                    printer.print(`result->append("${field.name}: ");`)
+                    let isPointerField = this.isPointerDeclaration(field.declaration, field.optional)
+                    printer.print(`WriteToString(result, ${isPointerField ? "&" : ""}value${access}${field.name});`)
+                    if (index == 0) {
+                        printer.print(`if (value${access}${field.name} != ${ArkPrimitiveType.UndefinedTag}) {`)
+                        printer.pushIndent()
+                    }
+                    if (index == fields.length - 1) {
+                        printer.popIndent()
+                        printer.print("}")
+                    }
+                })
+                printer.print(`result->append("}");`)
+            } else {
+                printer.print(`result->append("{");`)
+                this.targetStruct(target).getFields().forEach((field, index) => {
+                    printer.print(`// ${this.computeTargetName(field.declaration, false)}`)
+                    if (index > 0) printer.print(`result->append(", ");`)
+                    printer.print(`result->append(".${field.name}=");`)
+                    let isPointerField = this.isPointerDeclaration(field.declaration, field.optional)
+                    printer.print(`WriteToString(result, ${isPointerField ? "&" : ""}value${access}${field.name});`)
+                })
+                printer.print(`result->append("}");`)
+            }
+            printer.popIndent()
+            printer.print(`}`)
+        }
+        this.setCurrentContext(undefined)
+    }
+
+    private fieldsForClass(clazz: ts.ClassDeclaration | ts.InterfaceDeclaration, result: StructDescriptor) {
+        clazz.heritageClauses?.forEach(it => {
+            heritageDeclarations(this.typeChecker!, it).forEach(it => {
+                if (ts.isClassDeclaration(it) || ts.isInterfaceDeclaration(it)) {
+                    result.supers.push(it)
+                    result.isPacked = false
+                    this.fieldsForClass(it, result)
+                }
+            })
+        })
+        if (ts.isClassDeclaration(clazz)) {
+            clazz
+                .members
+                .filter(ts.isPropertyDeclaration)
+                .filter(it => !isStatic(it.modifiers))
+                .forEach(it => {
+                    result.addField(new FieldRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
+                })
+                extractBuilderFields(clazz, this).forEach(field => {
+                    result.addField(field)
+                })
+        } else {
+            clazz
+                .members
+                .filter(ts.isPropertySignature)
+                .filter(it => !isStatic(it.modifiers))
+                .forEach(it => {
+                    result.addField(new FieldRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
+                })
+        }
+    }
+
+    targetStruct(target: DeclarationTarget): StructDescriptor { //
+        let result = new StructDescriptor()
+        if (target instanceof PointerType) {
+            // Break the dependency cycle.
+            // result.deps.add(target.pointed)
+            return result
+        }
+
+        if (target instanceof ArkPrimitiveType) {
+            return result
+        }
+        else if (ts.isArrayTypeNode(target)) {
+            result.isArray = true
+            let element = this.toTarget(target.elementType)
+            result.addField(new FieldRecord(PointersCollector.pointerTo(this.computeTargetName(element, false), element), target, "array"))
+            result.addField(new FieldRecord(ArkPrimitiveType.Int32, undefined, "length"))
+        }
+        else if (ts.isInterfaceDeclaration(target)) {
+            this.fieldsForClass(target, result)
+        }
+        else if (ts.isClassDeclaration(target)) {
+            this.fieldsForClass(target, result)
+        }
+        else if (ts.isUnionTypeNode(target)) {
+            result.addField(new FieldRecord(ArkPrimitiveType.Int32, undefined, `selector`, false))
+            target
+                .types
+                .forEach((it, index) => {
+                    result.addField(new FieldRecord(this.toTarget(it), it, `value${index}`, false))
+                })
+        }
+        else if (ts.isTypeLiteralNode(target)) {
+            if (target.members.some(ts.isIndexSignatureDeclaration)) {
+                // For indexed access we just replace the whole type to a custom accessor.
+                result.addField(new FieldRecord(ArkPrimitiveType.CustomObject, undefined, "keyAccessor", false))
+            } else {
+                target
+                    .members
+                    .forEach(it => {
+                        if (ts.isPropertySignature(it))
+                            result.addField(new FieldRecord(this.toTarget(it.type!), it.type, identName(it.name)!, it.questionToken != undefined))
+                    })
+            }
+        }
+        else if (ts.isTupleTypeNode(target)) {
+            target
+                .elements
+                .forEach((it, index) => {
+                    if (ts.isNamedTupleMember(it)) {
+                        result.addField(new FieldRecord(this.toTarget(it.type!), it.type!, identName(it.name)!, it.questionToken != undefined))
+                    } else {
+                        result.addField(new FieldRecord(this.toTarget(it), it, `value${index}`, false))
+                    }
+                })
+        }
+        else if (ts.isOptionalTypeNode(target)) {
+            result.addField(new FieldRecord(ArkPrimitiveType.Tag, undefined, "tag"))
+            result.addField(new FieldRecord(this.toTarget(target.type), target.type, "value"))
+        }
+        else if (ts.isParenthesizedTypeNode(target)) {
+            // TODO: is it correct?
+            return this.targetStruct(this.toTarget(target.type))
+        }
+        else if (ts.isEnumDeclaration(target) || ts.isEnumMember(target)) {
+            result.addField(new FieldRecord(ArkPrimitiveType.Int32, undefined, "value"))
+        }
+        else if (ts.isFunctionTypeNode(target)) {
+        }
+        else if (ts.isImportTypeNode(target)) {
+        }
+        else if (ts.isTemplateLiteralTypeNode(target)) {
+        }
+        else if (ts.isLiteralTypeNode(target)) {
+        }
+        else if (ts.isTypeParameterDeclaration(target)) {
+            // TODO: is it really correct
+        }
+        else if (ts.isTypeReferenceNode(target)) {
+            if (!target.typeArguments) throw new Error("Only type references with type arguments allowed")
+            let name = identName(target.typeName)
+            if (name == "Optional") {
+                let type = target.typeArguments[0]
+                result.addField(new FieldRecord(ArkPrimitiveType.Tag, undefined, "tag"))
+                result.addField(new FieldRecord(this.toTarget(type), type, "value"))
+            } else if (name == "Array") {
+                let type = target.typeArguments[0]
+                result.isArray = true
+                let element = this.toTarget(type)
+                result.addField(new FieldRecord(PointersCollector.pointerTo(this.computeTargetName(element, false), element), undefined, "array"))
+                result.addField(new FieldRecord(ArkPrimitiveType.Int32, undefined, "length"))
+            } else if (name == "Map") {
+                let keyType = target.typeArguments[0]
+                let valueType = target.typeArguments[1]
+                result.addField(new FieldRecord(ArkPrimitiveType.Int32, undefined, "size"))
+                let keyElement = this.toTarget(keyType)
+                result.addField(new FieldRecord(PointersCollector.pointerTo(this.computeTargetName(keyElement, false), keyElement), undefined, "keys"))
+                let valueElement = this.toTarget(valueType)
+                result.addField(new FieldRecord(PointersCollector.pointerTo(this.computeTargetName(valueElement, false), valueElement), undefined, "values"))
+            } else if (name == "ContentModifier") {
+                let type = target.typeArguments[0]
+                let element = this.toTarget(type)
+                result.addField(new FieldRecord(PointersCollector.pointerTo(this.computeTargetName(element, false), element), undefined, "config"))
+            } else if (name == "Callback") {
+                result.addField(new FieldRecord(ArkPrimitiveType.Int32, undefined, "id"))
+            } else if (PeerGeneratorConfig.isKnownParametrized(name)) {
+                // TODO: not this way yet!
+                // let type = target.typeArguments[0]
+                // result.addField(new FieldRecord(this.toTarget(type), type, "value0"))
+                // result.addField(new FieldRecord(this.toTarget(type), type, "value1"))
+            } else {
+                throw new Error(`Parametrized type unknown: ${name} ${(target as any).getText()}`)
+            }
+        }
+        else {
+            throw new Error(`Unsupported field getter: ${asString(target)} ${(target as any).getText()}`)
+        }
+        return result
+    }
+
+    private ignoreTarget(target: DeclarationTarget): target is ArkPrimitiveType | ts.EnumDeclaration {
+        const name = this.computeTargetName(target, false)
+        if (PeerGeneratorConfig.ignoreSerialization.includes(name)) return true
+        if (target instanceof ArkPrimitiveType) return true
+        if (ts.isEnumDeclaration(target)) return true
+        if (ts.isFunctionTypeNode(target)) return true
+        if (ts.isImportTypeNode(target)) return true
+        if (ts.isTemplateLiteralTypeNode(target)) return true
+        return false
+    }
+
+    private isStringEnum(members: NodeArray<EnumMember>): boolean {
+        return members.find((value) => {
+            return value.initializer && ts.isStringLiteral(value.initializer)
+        }) != undefined
+    }
 }
 
-export function tsCopyrightAndWarning(content: string): string {
-    return `${cStyleCopyright}
+class ToDeclarationTargetConvertor implements TypeNodeConvertor<DeclarationTarget> {
+    constructor(
+        private readonly table: DeclarationTable,
+    ) {}
 
-// ${warning}
+    convertUnion(node: ts.UnionTypeNode): DeclarationTarget {
+        return node
+    }
+    convertTypeLiteral(node: ts.TypeLiteralNode): DeclarationTarget {
+        return node
+    }
+    convertLiteralType(node: ts.LiteralTypeNode): DeclarationTarget {
+        return node
+    }
+    convertTuple(node: ts.TupleTypeNode): DeclarationTarget {
+        return node
+    }
+    convertNamedTupleMember(node: ts.NamedTupleMember): DeclarationTarget {
+        return node
+    }
+    convertArray(node: ts.ArrayTypeNode): DeclarationTarget {
+        return node
+    }
+    convertOptional(node: ts.OptionalTypeNode): DeclarationTarget {
+        return node
+    }
+    convertFunction(node: ts.FunctionTypeNode): DeclarationTarget {
+        return node
+    }
+    convertTemplateLiteral(node: ts.TemplateLiteralTypeNode): DeclarationTarget {
+        return node
+    }
+    convertImport(node: ts.ImportTypeNode): DeclarationTarget {
+        let name = identName(node.qualifier)!
+        switch (name) {
+            case "Resource": return ResourceDeclaration
+            case "Callback": return ArkPrimitiveType.Function
+            default: return ArkPrimitiveType.CustomObject
+        }
+    }
+    convertTypeReference(node: ts.TypeReferenceNode): DeclarationTarget {
+        let name = identName(node)
+        switch (name) {
+            case `Dimension`: case `Length`: return ArkPrimitiveType.Length
+            case `AnimationRange`: return ArkPrimitiveType.CustomObject
+            case `ContentModifier`: return ArkPrimitiveType.CustomObject
+            case `Date`: return ArkPrimitiveType.CustomObject
+            // stub required to compile arkoala patched sdk
+            case `Function`: return ArkPrimitiveType.Function
+        }
+        // Types with type arguments are declarations!
+        if (node.typeArguments) {
+            return node
+        }
 
-${content}
-`
+        let declarations = getDeclarationsByNode(this.table.typeChecker!, node.typeName)
+        if (declarations.length == 0) {
+            throw new Error(`No declaration for ${node.getText()} ${asString(node)}`)
+        }
+        let declaration = declarations[0]
+        if (PeerGeneratorConfig.isConflictedDeclaration(declaration))
+            return ArkPrimitiveType.CustomObject
+        if (ts.isTypeAliasDeclaration(declaration)) {
+            const node = declaration.type
+            let name = identName(declaration.name)
+            if (name === "GestureType")
+                name = ArkPrimitiveType.Prefix + name
+            this.table.requestType(node, false, name)
+            return convertTypeNode(this, node)
+        }
+        if (ts.isEnumMember(declaration)) {
+            return declaration.parent
+        }
+        if (ts.isTypeParameterDeclaration(declaration)) {
+            return ArkPrimitiveType.CustomObject
+        }
+        if (ts.isClassDeclaration(declaration) ||
+            ts.isInterfaceDeclaration(declaration) ||
+            ts.isEnumDeclaration(declaration))
+            return declaration
+        throw new Error(`Unknown declaration type ${ts.SyntaxKind[declaration.kind]}`)
+    }
+    convertParenthesized(node: ts.ParenthesizedTypeNode): DeclarationTarget {
+        return convertTypeNode(this, node.type)
+    }
+    convertIndexedAccess(node: ts.IndexedAccessTypeNode): DeclarationTarget {
+        return ArkPrimitiveType.CustomObject
+    }
+    convertStringKeyword(node: ts.TypeNode): DeclarationTarget {
+        return ArkPrimitiveType.String
+    }
+    convertNumberKeyword(node: ts.TypeNode): DeclarationTarget {
+        return ArkPrimitiveType.Number
+    }
+    convertBooleanKeyword(node: ts.TypeNode): DeclarationTarget {
+        return ArkPrimitiveType.Boolean
+    }
+    convertUndefinedKeyword(node: ts.TypeNode): DeclarationTarget {
+        return ArkPrimitiveType.Undefined
+    }
+    convertVoidKeyword(node: ts.TypeNode): DeclarationTarget {
+        // TODO: shall it be distinct type.
+        return ArkPrimitiveType.Undefined
+    }
+    convertObjectKeyword(node: ts.TypeNode): DeclarationTarget {
+        return ArkPrimitiveType.CustomObject
+    }
+    convertAnyKeyword(node: ts.TypeNode): DeclarationTarget {
+        return ArkPrimitiveType.CustomObject
+    }
+    convertUnknownKeyword(node: ts.TypeNode): DeclarationTarget {
+        return ArkPrimitiveType.CustomObject
+    }
 }
 
-
-export function peerFileTemplate(content: string): string {
-    return tsCopyrightAndWarning(content)
-}
-
-export function componentFileTemplate(content: string): string {
-    return tsCopyrightAndWarning(content)
-}
-
-export function makeCEventsArkoalaImpl(implData: LanguageWriter, receiversList: LanguageWriter): string {
-    const writer = new CppLanguageWriter(new IndentedPrinter())
-    writer.print(cStyleCopyright)
-    writer.writeInclude("arkoala_api_generated.h")
-    writer.writeInclude("events.h")
-    writer.writeInclude("Serializers.h")
-    writer.print("")
-
-    writer.pushNamespace("Generated")
-    writer.concat(implData)
-    writer.writeMethodImplementation(new Method(
-        `GetArkUiEventsAPI`,
-        new MethodSignature(new Type(`const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI*`), []),
-    ), (writer) => {
-        writer.print(`static const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI eventsImpl = {`)
-        writer.pushIndent()
-        writer.concat(receiversList)
-        writer.popIndent()
-        writer.print(`};`)
-        writer.writeStatement(writer.makeReturn(writer.makeString(`&eventsImpl`)))
-    })
-    writer.popNamespace()
-    return writer.getOutput().join('\n')
-}
-
-export function makeCEventsLibaceImpl(implData: PrinterLike, receiversList: PrinterLike, namespace: string): string {
-    const writer = new CppLanguageWriter(new IndentedPrinter())
-    writer.writeLines(cStyleCopyright)
-    writer.print("")
-    writer.writeInclude(`arkoala_api_generated.h`)
-    writer.print("")
-    writer.pushNamespace(namespace, false)
-
-    writer.concat(implData)
-
-    writer.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI* g_OverriddenEventsImpl = nullptr;`)
-    writer.writeMethodImplementation(new Method(
-        `${PeerGeneratorConfig.cppPrefix}SetArkUiEventsAPI`,
-        new NamedMethodSignature(Type.Void, [new Type(`const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI*`)], [`api`]),
-    ), (writer) => {
-        writer.writeStatement(writer.makeAssign(`g_OverriddenEventsImpl`, undefined, writer.makeString(`api`), false))
-    })
-
-    writer.writeMethodImplementation(new Method(
-        `${PeerGeneratorConfig.cppPrefix}GetArkUiEventsAPI`,
-        new MethodSignature(new Type(`const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI*`), []),
-    ), (writer) => {
-        writer.print(`static const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI eventsImpl = {`)
-        writer.pushIndent()
-        writer.concat(receiversList)
-        writer.popIndent()
-        writer.print(`};`)
-        writer.writeStatement(writer.makeCondition(
-            writer.makeNaryOp("!=", [writer.makeString(`g_OverriddenEventsImpl`), writer.makeString(`nullptr`)]),
-            writer.makeReturn(writer.makeString(`g_OverriddenEventsImpl`)),
-        ))
-        writer.writeStatement(writer.makeReturn(writer.makeString(`&eventsImpl`)))
-    })
-
-    writer.popNamespace(false)
-    return writer.getOutput().join('\n')
-}
-
-export function gniFile(gniSources: string): string {
-return `${sharpCopyright}
-
-# ${warning}
-
-${gniSources}
-`
-}
-
-export function mesonBuildFile(content: string): string {
-return `${sharpCopyright}
-
-# ${warning}
-
-${content}
-`
-}
-
-export function makeIncludeGuardDefine(filePath: string) {
-    let basename = path.basename(filePath);
-    return basename.replace(/[.\- ]/g, "_").toUpperCase()
-}
-
-export function makeFileNameFromClassName(className: string) {
-    // transfroms camel-case name to snake-case
-    return className.split(/(?=[A-Z][a-z])/g).join("_").toLowerCase()
+function isCallback(type: ts.TypeNode, table: DeclarationTable): boolean {
+        const m = type.parent.parent
+        if (ts.isMethodDeclaration(m)) {
+            const c = m.parent
+            if (ts.isClassDeclaration(c) && !isCommonMethodOrSubclass(table.typeChecker!, c)) {
+                return true
+            }
+        }
+    return false
 }
