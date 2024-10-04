@@ -460,6 +460,12 @@ export function createContainerType(container: string, element: IDLType[]): IDLC
         // A bit ugly, but we cannot do that.
         element.forEach(it => { it.extendedAttributes = []})
     }
+    if (container == "Record") {
+        container = "record"
+    }
+    if (element[0].name == "PropertyKey") {
+        element[0].name = "DOMString"
+    }
     return {
         kind: IDLKind.ContainerType,
         name: container,

@@ -706,6 +706,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
                 console.log(`WARNING: ${type.getText()} is a union of Promises. This is not supported by the IDL.`)
                 return aPromise
             }
+            if (types.find(it => it.name == "any")) return IDLAnyType
             return typeOrUnion(types)
         }
         if (ts.isIntersectionTypeNode(type)) {
@@ -732,7 +733,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             let isEnum = ts.isEnumDeclaration(declaration[0])
             const rawType = sanitize(getExportedDeclarationNameByNode(this.typeChecker, type.typeName))!
             const transformedType = typeMapper.get(rawType) ?? rawType
-            if (rawType == "Array" || rawType == "Promise" || rawType == "Map") {
+            if (rawType == "Array" || rawType == "Promise" || rawType == "Map" || rawType == "Record") {
                 return createContainerType(transformedType, type.typeArguments!.map((it, index) => this.serializeType(it, `${nameSuggestion}_Param${index}`)))
             }
             if (isEnum) {
