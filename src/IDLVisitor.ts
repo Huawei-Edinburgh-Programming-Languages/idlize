@@ -721,7 +721,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         if (ts.isTypeReferenceNode(type)) {
             if (ts.isQualifiedName(type.typeName)) {
                 const result = createReferenceType(type.typeName.right.getText())
-                //result.extendedAttributes = [{name: IDLExtendedAttributes.Qualifier, value: type.typeName.left.getText()}]
+                result.extendedAttributes = [{name: IDLExtendedAttributes.Qualifier, value: type.typeName.left.getText()}]
                 return result
             }
             let declaration = getDeclarationsByNode(this.typeChecker, type.typeName)
@@ -733,7 +733,8 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             let isEnum = ts.isEnumDeclaration(declaration[0])
             const rawType = sanitize(getExportedDeclarationNameByNode(this.typeChecker, type.typeName))!
             const transformedType = typeMapper.get(rawType) ?? rawType
-            if (rawType == "Array" || rawType == "Promise" || rawType == "Map" || rawType == "Record") {
+            // TODO: support Record here as well.
+            if (rawType == "Array" || rawType == "Promise" || rawType == "Map") {
                 return createContainerType(transformedType, type.typeArguments!.map((it, index) => this.serializeType(it, `${nameSuggestion}_Param${index}`)))
             }
             if (isEnum) {
