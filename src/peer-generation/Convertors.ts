@@ -218,11 +218,11 @@ export class LengthConvertorScoped extends BaseArgConvertor {
             printer.makeString(`${param}Deserializer.readLength()`), false)
     }
     nativeType(impl: boolean): string {
-        return PrimitiveType.Length.getText()
+        return ArkPrimitiveType.Length.getText()
     }
     interopType(language: Language): string {
         switch (language) {
-            case Language.CPP: return PrimitiveType.ObjectHandle.getText()
+            case Language.CPP: return ArkPrimitiveType.ObjectHandle.getText()
             case Language.TS: case Language.ARKTS: return 'object'
             case Language.JAVA: return 'Object'
             case Language.CJ: return 'Object'
@@ -244,7 +244,7 @@ export class LengthConvertor extends BaseArgConvertor {
     }
     convertorArg(param: string, writer: LanguageWriter): string {
         switch (writer.language) {
-            case Language.CPP: return `(const ${PrimitiveType.Length.getText()}*)&${param}`
+            case Language.CPP: return `(const ${ArkPrimitiveType.Length.getText()}*)&${param}`
             case Language.JAVA: return `${param}.value`
             case Language.CJ: return `${param}.value`
             default: return param
@@ -265,7 +265,7 @@ export class LengthConvertor extends BaseArgConvertor {
                 printer.makeType(this.tsTypeName, false, receiver), false), false)
     }
     nativeType(impl: boolean): string {
-        return PrimitiveType.Length.getText()
+        return ArkPrimitiveType.Length.getText()
     }
     interopType(language: Language): string {
         switch (language) {
@@ -287,66 +287,6 @@ export class LengthConvertor extends BaseArgConvertor {
                 writer.makeNaryOp("==", [writer.makeRuntimeType(RuntimeType.OBJECT), writer.makeString(`${value}_type`)]),
                 writer.makeCallIsResource(value)
             ])])
-    }
-}
-
-export class UnionRuntimeTypeChecker {
-    private conflictingConvertors: Set<ArgConvertor> = new Set()
-    private duplicateMembers: Set<string> = new Set()
-    private discriminators: [LanguageExpression | undefined, ArgConvertor, number][] = []
-
-    constructor(private convertors: ArgConvertor[]) {
-        this.checkConflicts()
-    }
-    private checkConflicts() {
-        const runtimeTypeConflicts: Map<RuntimeType, ArgConvertor[]> = new Map()
-        this.convertors.forEach(conv => {
-            conv.runtimeTypes.forEach(rtType => {
-                const convertors = runtimeTypeConflicts.get(rtType)
-                if (convertors) convertors.push(conv)
-                else runtimeTypeConflicts.set(rtType, [conv])
-            })
-        })
-        runtimeTypeConflicts.forEach((convertors, rtType) => {
-            if (convertors.length > 1) {
-                const allMembers: Set<string> = new Set()
-                if (rtType === RuntimeType.OBJECT) {
-                    convertors.forEach(convertor => {
-                        convertor.getMembers().forEach(member => {
-                            if (allMembers.has(member)) this.duplicateMembers.add(member)
-                            allMembers.add(member)
-                        })
-                    })
-                }
-                convertors.forEach(convertor => {
-                    this.conflictingConvertors.add(convertor)
-                })
-            }
-        })
-    }
-    makeDiscriminator(value: string, index: number, writer: LanguageWriter): LanguageExpression {
-        const convertor = this.convertors[index]
-        if (this.conflictingConvertors.has(convertor) && writer.language.needsUnionDiscrimination) {
-            const discriminator = convertor.unionDiscriminator(value, index, writer, this.duplicateMembers)
-            this.discriminators.push([discriminator, convertor, index])
-            if (discriminator) return discriminator
-        }
-        const uniqRuntimeTypes = Array.from(new Set(convertor.runtimeTypes))
-        return writer.makeNaryOp("||", uniqRuntimeTypes.map(it =>
-            writer.makeNaryOp("==", [
-                writer.makeUnionVariantCondition(
-                    convertor,
-                    value,
-                    `${value}_type`,
-                    RuntimeType[it],
-                    index)])))
-    }
-    reportConflicts(context: string) {
-        if (this.discriminators.filter(([discriminator, _, __]) => discriminator === undefined).length > 1) {
-            console.log(`WARNING: runtime type conflict in "${context}`)
-            this.discriminators.forEach(([discr, conv, n]) =>
-                console.log(`   ${n} : ${conv.constructor.name} : ${discr ? discr.asString() : "<undefined>"}`))
-        }
     }
 }
 
