@@ -31,14 +31,14 @@ class NativeModuleVisitor {
     readonly nativeModuleEmpty: LanguageWriter
     nativeFunctions?: LanguageWriter
 
-    protected readonly excludes = new Map<string, Set<string>>([
-        [Language.CJ.name, new Set([
+    protected readonly excludes = new Map<Language, Set<string>>([
+        [Language.CJ, new Set([
             "StringData"
         ])],
-        [Language.JAVA.name, new Set()],
-        [Language.CPP.name, new Set()],
-        [Language.TS.name, new Set()],
-        [Language.ARKTS.name, new Set()],
+        [Language.JAVA, new Set()],
+        [Language.CPP, new Set()],
+        [Language.TS, new Set()],
+        [Language.ARKTS, new Set()],
     ])
 
     constructor(
@@ -112,7 +112,7 @@ class NativeModuleVisitor {
     }
 
     shouldPrintPredefineMethod(inputMethod:idl.IDLMethod): boolean {
-        const langExcludes = this.excludes.get(this.library.language.name)
+        const langExcludes = this.excludes.get(this.library.language)
         if (langExcludes) {
             return !langExcludes.has(inputMethod.name)
         }

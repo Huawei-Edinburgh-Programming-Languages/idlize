@@ -15,7 +15,7 @@
 
 import * as ts from "typescript"
 import { heritageDeclarations, identName, isReadonly, isStatic, Language } from "../util"
-import { Field, FieldModifier, Method, MethodModifier, MethodSignature, NamedMethodSignature, Type } from "./LanguageWriters/"
+import { Field, FieldModifier, Method, MethodModifier, MethodSignature, NamedMethodSignature, Type } from "./LanguageWriters"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
 import { DeclarationTable, DeclarationTarget, FieldRecord, PrimitiveType } from "./DeclarationTable"
 import {
