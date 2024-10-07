@@ -40,7 +40,7 @@ export type IdlPeerLibraryOutput = {
 
 function createTypeNameConvertor(library: IdlPeerLibrary): IdlTypeNameConvertor {
     const language = library.language
-    if (language == Language.TS)
+    if ([Language.TS, Language.ARKTS].includes(language))
         return new TSTypeNameConvertor(library)
     if (language == Language.JAVA)
         return new JavaTypeNameConvertor(library)
@@ -58,6 +58,8 @@ export class IdlPeerLibrary implements Library<IdlPeerFile>, DeclarationProcesso
     public get materializedToGenerate(): MaterializedClass[] {
         return Array.from(this.materializedClasses.values()).filter(it => it.needBeGenerated)
     }
+
+    public readonly predefinedDeclarations: idl.IDLInterface[] = []
 
     constructor(
         public language: Language,
