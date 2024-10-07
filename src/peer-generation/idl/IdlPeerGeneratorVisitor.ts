@@ -167,15 +167,15 @@ function generateRetConvertor(type?: idl.IDLType): RetConvertor {
 function mapCInteropRetType(type: idl.IDLType): string {
     if (idl.isPrimitiveType(type)) {
         switch (type) {
-            case idl.IDLBooleanType: return PrimitiveType.Boolean.getText()
-            case idl.IDLNumberType: return PrimitiveType.Int32.getText()
-            case idl.IDLStringType:
+            case idl.IDLTypes.IDLBooleanType: return PrimitiveType.Boolean.getText()
+            case idl.IDLTypes.IDLNumberType: return PrimitiveType.Int32.getText()
+            case idl.IDLTypes.IDLStringType:
                 /* HACK, fix */
                 // return `KStringPtr`
                 return "void"
-            case idl.IDLVoidType:
-            case idl.IDLAnyType:
-            case idl.IDLUndefinedType:
+            case idl.IDLTypes.IDLVoidType:
+            case idl.IDLTypes.IDLAnyType:
+            case idl.IDLTypes.IDLUndefinedType:
                 return "void"
         }
     }
@@ -223,7 +223,7 @@ class ImportsAggregateCollector extends TypeDependenciesCollector {
             addSyntheticDeclarationDependency(syntheticDeclaration, {feature: "ArkResource", module: "./shared/ArkResource"})
         } else {
             syntheticDeclaration = makeSyntheticTypeAliasDeclaration(
-                'SyntheticDeclarations', generatedName, idl.IDLAnyType)
+                'SyntheticDeclarations', generatedName, idl.IDLTypes.IDLAnyType)
         }
         return [
             ...super.convertImport(type, importClause),
@@ -478,7 +478,7 @@ class PeersGenerator {
              * `onWillScroll(handler: ScrollOnWillScrollCallback): ScrollAttribute;`. So that override is not
              * valid and cannot be correctly processed and we want to stub this for now.
              */
-            prop.type = idl.IDLAnyType
+            prop.type = idl.IDLTypes.IDLAnyType
         }
         const decl = this.toDeclaration(prop.type)
         this.library.requestType(decl, this.library.shouldGenerateComponent(peer.componentName))
@@ -490,7 +490,7 @@ class PeersGenerator {
             originalParentName,
             [decl],
             [argConvertor],
-            generateRetConvertor(idl.IDLVoidType),
+            generateRetConvertor(idl.IDLTypes.IDLVoidType),
             false,
             new Method(prop.name, signature, []))
     }
