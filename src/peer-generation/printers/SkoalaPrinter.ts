@@ -1,7 +1,7 @@
 import * as fs from "fs"
 import * as path from "path"
 import * as idl from '../../idl'
-import { IDLEntry, IDLMethod, IDLInterface, isInterface, isClass, printType, IDLVoidType } from "../../idl"
+import { IDLEntry, IDLMethod, IDLInterface, isInterface, isClass, printType } from "../../idl"
 import { IndentedPrinter } from "../../IndentedPrinter"
 import { capitalize, toCamelCase } from "../../util"
 export class SkoalaCCodeGenerator {
@@ -91,9 +91,9 @@ export class SkoalaCCodeGenerator {
             case "float32": return "float"
             case "int32": return "int"
             case "uint32": return "unsigned int"
-            case idl.IDLBooleanType.name: return "bool"
-            case idl.IDLStringType.name: return "char*"
-            case idl.IDLVoidType.name: return "void"
+            case idl.IDLTypes.IDLBooleanType.name: return "bool"
+            case idl.IDLTypes.IDLStringType.name: return "char*"
+            case idl.IDLTypes.IDLVoidType.name: return "void"
             case "KNativePointer": return "KNativePointer"
             default: return "void*"
         }

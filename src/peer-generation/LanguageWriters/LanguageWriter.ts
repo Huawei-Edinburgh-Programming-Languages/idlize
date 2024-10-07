@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { IDLBooleanType, IDLContainerType, IDLNumberType, IDLParameter, IDLPrimitiveType, IDLStringType, IDLType, IDLUnionType, IDLVoidType, isContainerType, isPrimitiveType, isUnionType } from "../../idl"
+import { IDLContainerType, IDLParameter, IDLPrimitiveType, IDLType, IDLTypes, IDLUnionType, isContainerType, isPrimitiveType, isUnionType } from "../../idl"
 import { IndentedPrinter } from "../../IndentedPrinter"
 import { Language, stringOrNone } from "../../util"
 import { ArgConvertor, EnumConvertor, MapConvertor } from "../Convertors"
@@ -565,10 +565,10 @@ export abstract class LanguageWriter {
     }
     mapIDLPrimitiveType(type: IDLPrimitiveType): string {
         switch (type) {
-            case IDLNumberType: return this.mapType(Type.Int32)
-            case IDLBooleanType: return this.mapType(Type.Boolean)
-            case IDLVoidType: return this.mapType(Type.Void)
-            case IDLStringType: return this.mapType(Type.String)
+            case IDLTypes.IDLNumberType: return this.mapType(Type.Int32)
+            case IDLTypes.IDLBooleanType: return this.mapType(Type.Boolean)
+            case IDLTypes.IDLVoidType: return this.mapType(Type.Void)
+            case IDLTypes.IDLStringType: return this.mapType(Type.String)
             default: throw new Error(`Unmapped IDL type: ${type.name}`)
         }
     }
@@ -702,5 +702,29 @@ export abstract class LanguageWriter {
     }
     makeCallIsArrayBuffer(value: string): LanguageExpression {
         return this.makeString(`${value} instanceof ArrayBuffer`)
+    }
+
+    protected mapIDLPrimitiveTypeWith(type:IDLType, op:(d:IDLPrimitiveTypeMapDescriber) => void): string | undefined {
+        const rules: IDLTypeMapRules = []
+        op(IDLPrimitiveTypeMapDescriber.make(rules))
+        for (const [ types, resultTypeName ] of rules) {
+            if (types.find(it => it.name === type.name)) {
+                return resultTypeName
+            }
+        }
+    }
+}
+
+type IDLTypeMapRules = [IDLType[], string][]
+class IDLPrimitiveTypeMapDescriber {
+    private constructor (
+        private rules:IDLTypeMapRules = []
+    ) {}
+    match(types:IDLPrimitiveType[], to:string) {
+        this.rules.push([types, to])
+        return this
+    }
+    static make(rules:IDLTypeMapRules) {
+        return new IDLPrimitiveTypeMapDescriber(rules)
     }
 }

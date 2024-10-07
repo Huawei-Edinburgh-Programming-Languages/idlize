@@ -251,7 +251,7 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
             printer.writePrintLog(name)
             if (returnType !== undefined 
                 && returnType.name !== Type.Void.name
-                && returnType.name !== idl.IDLTypes.void.name
+                && returnType.name !== idl.IDLTypes.IDLVoidType.name
                 && returnType.name !== 'Void'
             ) {
                 printer.writeStatement(printer.makeReturn(printer.makeString(getReturnValue(returnType))))
@@ -334,7 +334,7 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
             printer.writePrintLog(method.name)
             if (inputMethod.returnType !== undefined 
                 && inputMethod.returnType.name !== Type.Void.name 
-                && inputMethod.returnType.name !== idl.IDLTypes.void.name
+                && inputMethod.returnType.name !== idl.IDLTypes.IDLVoidType.name
                 && inputMethod.returnType.name !== 'Void'
             ) {
                 printer.writeStatement(printer.makeReturn(printer.makeString(getReturnValue(inputMethod.returnType))))
