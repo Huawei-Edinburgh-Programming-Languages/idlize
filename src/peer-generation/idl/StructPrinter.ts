@@ -142,7 +142,7 @@ export class StructPrinter {
             seenNames.add(nameOptional)
             if (nameAssigned !== "Optional" && nameAssigned !== "RelativeIndexable") {
                 this.printStructsCHead(nameOptional, target, structs)
-                structs.print(`enum ${ArkPrimitiveType.Tag.getText} tag;`)
+                structs.print(`enum ${ArkPrimitiveType.Tag.getText()} tag;`)
                 structs.print(`${nameAssigned} value;`)
                 this.printStructsCTail(nameOptional, structs)
                 this.writeOptional(nameOptional, writeToString, isPointer)
@@ -371,7 +371,7 @@ inline void WriteToString(string* result, const ${name}* value) {
                         const isPointerField = this.isPointerDeclaration(field.type, field.isOptional)
                         printer.print(`WriteToString(result, ${isPointerField ? "&" : ""}value${access}${field.name});`)
                         if (index == 0) {
-                            printer.print(`if (value${access}${field.name} != ${ArkPrimitiveType.UndefinedTag}) {
+                            printer.print(`if (value${access}${field.name} != ${ArkPrimitiveType.UndefinedTag}) {`)
                             printer.pushIndent()
                         }
                     })
