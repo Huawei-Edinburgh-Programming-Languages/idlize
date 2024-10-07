@@ -17,7 +17,6 @@ import * as idl from '../../idl'
 import { BuilderClass } from '../BuilderClass';
 import { MaterializedClass } from "../Materialized";
 import { IdlComponentDeclaration, isConflictingDeclaration, isMaterialized } from './IdlPeerGeneratorVisitor';
-import { IdlPeerClass } from "./IdlPeerClass";
 import { IdlPeerFile } from "./IdlPeerFile";
 import { IdlTypeNameConvertor, JavaTypeNameConvertor, TSTypeNameConvertor } from './IdlNameConvertor';
 import { capitalize, isDefined, Language } from '../../util';
@@ -33,10 +32,6 @@ import { PeerGeneratorConfig } from '../PeerGeneratorConfig';
 import { Library } from '../../Library';
 import { DeclarationProcessor } from '../../DeclarationProcessor';
 import { ArgConvertor, BooleanConvertor, UndefinedConvertor, CustomTypeConvertor, LengthConvertor, LengthConvertorScoped, NumberConvertor, PredefinedConvertor, NullConvertor } from '../ArgConvertors';
-
-export type IdlPeerLibraryOutput = {
-    outputC: string[]
-}
 
 function createTypeNameConvertor(library: IdlPeerLibrary): IdlTypeNameConvertor {
     const language = library.language
@@ -82,14 +77,6 @@ export class IdlPeerLibrary implements Library<IdlPeerFile>, DeclarationProcesso
         this.context = context
     }
 
-    findPeerByComponentName(componentName: string): IdlPeerClass | undefined {
-        for (const file of this.files)
-            for (const peer of file.peers.values())
-                if (peer.componentName == componentName)
-                    return peer
-        return undefined
-    }
-
     findFileByOriginalFilename(filename: string): IdlPeerFile | undefined {
         return this.files.find(it => it.originalFilename === filename)
     }
@@ -128,14 +115,17 @@ export class IdlPeerLibrary implements Library<IdlPeerFile>, DeclarationProcesso
             return entries.find(it =>
                 it.name === type.name && idl.getExtAttribute(it, idl.IDLExtendedAttributes.Namespace) === qualifier)
         }
-        const result = entries.find(it =>
-            it.name === type.name && !idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Namespace))
-        return result ??
-            entries
+
+        const candidates = entries.filter(it => it.name === type.name)
+        switch (candidates.length) {
+            case 0: return entries
                 .map(it => it.scope)
                 .filter(isDefined)
                 .flat()
                 .find(it => it.name === type.name)
+            case 1: return candidates[0]
+            default: return candidates.find(it => !idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Import))
+        }
     }
 
     typeConvertor(param: string, type: idl.IDLType, isOptionalParam = false, maybeCallback: boolean = false): ArgConvertor {
