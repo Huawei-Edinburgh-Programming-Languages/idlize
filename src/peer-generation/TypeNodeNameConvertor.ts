@@ -287,6 +287,24 @@ export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
         }
         return super.convertQualifiedName(node);
     }
+
+    convertTypeReference(node: ts.TypeReferenceNode): string {
+        const nodeDecl = getDeclarationsByNode(this.peerLibrary.declarationTable.typeChecker!,
+            node.typeName)[0]
+        // if node is a callback then add missing type arguments void
+        if (nodeDecl !== undefined &&
+            ts.isInterfaceDeclaration(nodeDecl)
+            && nodeDecl.typeParameters?.length == 2
+            && nodeDecl.members.length === 1
+            && ts.isCallSignatureDeclaration(nodeDecl.members[0])) {
+            node = ts.factory.createTypeReferenceNode(
+                node.typeName,
+                [...node.typeArguments!,
+                    ts.factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword)].splice(0, 2)
+            )
+        }
+        return super.convertTypeReference(node);
+    }
 }
 
 // CJ printers does not use this in fact

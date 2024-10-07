@@ -450,22 +450,38 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
     }
 
     convertInterface(node: ts.InterfaceDeclaration): void {
-        this.writer.writeInterface(this.declarationName(node), writer => {
-            const fields = this.peerLibrary.declarationTable.targetStruct(node).getFields()
-            if (fields.length > 0) {
-                fields.map(it => {
-                    writer.writeFieldDeclaration(it.name, new Type(this.mapType(it.type), it.optional), undefined, it.optional)
-                })
-            } else if (isMaterialized(node)) {
-                node.members.forEach(method => {
-                    if (ts.isMethodSignature(method)) {
-                        writer.writeMethodDeclaration(generateMethodName(method),
-                            generateSignature(method, createTypeNodeConvertor(this.peerLibrary), false),
-                            generateMethodModifiers(method))
-                    }
-                })
-            }
-         })
+        if (node.typeParameters?.length == 2
+            && node.members.length === 1
+            && ts.isCallSignatureDeclaration(node.members[0])) {
+            const parameters = node.members[0].parameters
+            const returnTypeNode = node.members[0].type!
+            this.convertTypeAlias(ts.factory.createTypeAliasDeclaration(
+                undefined,
+                node.name.text,
+                node.typeParameters,
+                ts.factory.createFunctionTypeNode(undefined,
+                    parameters,
+                    returnTypeNode
+                )
+            ))
+        } else {
+            this.writer.writeInterface(this.declarationName(node), writer => {
+                const fields = this.peerLibrary.declarationTable.targetStruct(node).getFields()
+                if (fields.length > 0) {
+                    fields.map(it => {
+                        writer.writeFieldDeclaration(it.name, new Type(this.mapType(it.type), it.optional), undefined, it.optional)
+                    })
+                } else if (isMaterialized(node)) {
+                    node.members.forEach(method => {
+                        if (ts.isMethodSignature(method)) {
+                            writer.writeMethodDeclaration(generateMethodName(method),
+                                generateSignature(method, createTypeNodeConvertor(this.peerLibrary), false),
+                                generateMethodModifiers(method))
+                        }
+                    })
+                }
+            })
+        }
     }
 
     convertTypeAlias(node: ts.TypeAliasDeclaration): void {
