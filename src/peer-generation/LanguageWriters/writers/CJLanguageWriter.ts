@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { createPrimitiveTypeMapper, IDLContainerType, IDLParameter, IDLType, isContainerType, isPrimitiveType } from "../../../idl"
+import { createPrimitiveTypeMapper, IDLContainerType, IDLParameter, IDLStringType, IDLType, isContainerType, isPrimitiveType } from "../../../idl"
 import { IndentedPrinter } from "../../../IndentedPrinter"
 import { CJKeywords } from "../../../languageSpecificKeywords"
 import { isDefined, Language } from "../../../util"
@@ -314,8 +314,8 @@ export class CJLanguageWriter extends LanguageWriter {
     }
     mapCIDLType(type:IDLType): string {
         if (isPrimitiveType(type)) {
-            switch (type.name) {
-                case 'str': return 'CString'
+            switch (type) {
+                case IDLStringType: return 'CString'
             }
         }
         if (isContainerType(type)) {
@@ -329,36 +329,36 @@ export class CJLanguageWriter extends LanguageWriter {
         switch (type.name) {
             // Pointer
             case 'KPointer': return 'Int64'
-            
+
             // Integral
             case 'boolean': case 'KBoolean': return 'Bool'
-            case 'KUInt': return 'Int32' // ?? 
+            case 'KUInt': return 'Int32' // ??
             case 'int32': case 'KInt': return 'Int32'
             case 'KLong': return 'Int64'
-            
+
             // Number
             case 'number': return 'Float64'
             case 'double': return 'Float64'
             case 'KFloat': return 'Float32'
-            
+
             // Array like
             case 'Uint8Array': return 'ArrayList<UInt8>'
             case 'KUint8ArrayPtr': return 'ArrayList<UInt8>'
             case 'KInt32ArrayPtr': return 'ArrayList<Int32>'
             case 'KFloat32ArrayPtr': return 'ArrayList<Float32>'
-            
+
             // String like
             case 'KStringPtr': case 'String': case 'string': return 'String'
 
             // void
             case 'void': return 'Unit'
             case 'Void': return 'Unit'
-            
+
             //  Other
             case 'Length': return 'String'
 
             /////////////////////////////
-            // NEW ONES 
+            // NEW ONES
 
             // Array like
             case 'Vec_u8': return 'ArrayList<UInt8>'
@@ -367,7 +367,7 @@ export class CJLanguageWriter extends LanguageWriter {
         }
         const mapper = createPrimitiveTypeMapper({
             ptr: 'Int64',
-    
+
             void: 'Unit',
 
             bool: 'Bool',
@@ -379,7 +379,7 @@ export class CJLanguageWriter extends LanguageWriter {
             u32: 'UInt32',
             i64: 'Int64',
             u64: 'UInt64',
-            
+
             f32: 'Float32',
             f64: 'Float64',
 
@@ -395,25 +395,25 @@ export class CJLanguageWriter extends LanguageWriter {
         switch (type.name) {
             // Pointer
             case 'KPointer': return 'Int64'
-        
+
             // Integral
             case 'boolean': return 'Bool'
             case 'KBoolean': return 'Bool'
             case 'KUInt': return 'Int32' // ??
             case 'int32': case 'KInt': return 'Int32'
             case 'KLong': return 'Int64'
-            
+
             // Number
             case 'number': return 'Float64'
             case 'double': return 'Float64'
             case 'KFloat': return 'Float32'
-            
+
             // Array like
             case 'Uint8Array': return 'CPointer<UInt8>'
             case 'KUint8ArrayPtr': return 'CPointer<UInt8>'
             case 'KInt32ArrayPtr': return 'CPointer<Int32>'
             case 'KFloat32ArrayPtr': return 'CPointer<Float32>'
-            
+
             // String like
             case 'KStringPtr': return 'CString'
             case 'string': return 'CString'
@@ -421,12 +421,12 @@ export class CJLanguageWriter extends LanguageWriter {
 
             // void
             case 'void': return 'Unit'
-            
+
             //  Other
             case 'Length': return 'CString'
 
             /////////////////////////////
-            // NEW ONES 
+            // NEW ONES
 
             // Array like
             case 'Vec_u8': return 'CPointer<UInt8>'
@@ -435,7 +435,7 @@ export class CJLanguageWriter extends LanguageWriter {
         }
         const mapper = createPrimitiveTypeMapper({
             ptr: 'Int64',
-    
+
             void: 'Unit',
 
             bool: 'Bool',
@@ -447,7 +447,7 @@ export class CJLanguageWriter extends LanguageWriter {
             u32: 'UInt32',
             i64: 'Int64',
             u64: 'UInt64',
-            
+
             f32: 'Float32',
             f64: 'Float64',
 

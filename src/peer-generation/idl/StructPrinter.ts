@@ -29,7 +29,7 @@ export class StructPrinter {
     private isPointerDeclaration(target: idl.IDLEntry, isOptional: boolean = false): boolean {
         if (isOptional) return true
         if (idl.isPrimitiveType(target))
-            return ["any", "DOMString", "number", "Length", "CustomObject"].includes(target.name)
+            return ["any", idl.IDLStringType.name, "number", "Length", "CustomObject"].includes(target.name)
         if (idl.isEnum(target) || idl.isEnumType(target)) return false
         if (idl.isReferenceType(target) && target.name === "GestureType") return false
         return true
@@ -62,7 +62,7 @@ export class StructPrinter {
     generateStructs(structs: LanguageWriter, typedefs: IndentedPrinter, writeToString: LanguageWriter) {
         const seenNames = new Set<string>()
         seenNames.clear()
-        let noDeclaration = ["Int32", "Tag", "number", "boolean", "DOMString"]
+        let noDeclaration = ["Int32", "Tag", idl.IDLNumberType.name, idl.IDLBooleanType.name, idl.IDLStringType.name]
         for (let target of this.library.orderedDependencies) {
             let nameAssigned = this.library.computeTargetName(target, false)
             if (!nameAssigned) {
@@ -201,13 +201,13 @@ export class StructPrinter {
                     result = writer.makeRuntimeType(RuntimeType.FUNCTION)
                     break
                 case "Int32":
-                case "number":
+                case idl.IDLNumberType.name:
                     result = writer.makeRuntimeType(RuntimeType.NUMBER)
                     break
                 case "Length":
                     result = writer.makeCast(writer.makeString("value.type"), resultType)
                     break
-                case "DOMString":
+                case idl.IDLStringType.name:
                     result = writer.makeRuntimeType(RuntimeType.STRING)
                     break
                 case "undefined":

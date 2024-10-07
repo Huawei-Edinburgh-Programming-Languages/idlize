@@ -36,7 +36,7 @@ const typeMapper = new Map<string, string>(
     [
         ["object", "Object"],
         ["Array", "sequence"],
-        ["string", "DOMString"],
+        ["string", IDLStringType.name],
         ["Map", "record"],
         // TODO: rethink that
         ["\"2d\"", "string"],
@@ -116,7 +116,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             name,
             kind: IDLKind.EnumMember,
             parent,
-            type: { name: "DOMString", kind: IDLKind.PrimitiveType },
+            type: IDLStringType,
             initializer: value
         }
         parent.elements.push(result)

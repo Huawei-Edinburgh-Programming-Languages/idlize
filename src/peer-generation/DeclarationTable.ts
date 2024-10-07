@@ -502,19 +502,6 @@ export class DeclarationTable {
         return `read${name}`
     }
 
-    declTargetConvertor(param: string, target: DeclarationTarget, isOptionalParam = false): ArgConvertor {
-        if (target instanceof PrimitiveType) {
-            if (target == PrimitiveType.Number || target == PrimitiveType.Int32) {
-                return new NumberConvertor(param)
-            }
-            if (target == PrimitiveType.Boolean) {
-                return new BooleanConvertor(param)
-            }
-            throw new Error("Unsupported primitive type: " + target.getText())
-        }
-        throw new Error("Unsupported type: " + target.getText())
-    }
-
     typeConvertor(param: string,
                   type: ts.TypeNode,
                   isOptionalParam: boolean = false,

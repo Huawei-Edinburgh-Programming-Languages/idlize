@@ -161,13 +161,13 @@ function toIDLType(file: string, type: webidl2.IDLTypeDescription | string, extA
     }
     if (isSingleTypeDescription(type)) {
         switch (type.idlType) {
-            case "any": return IDLAnyType
-            case "boolean": return IDLBooleanType
-            case "null_": return IDLNullType
-            case "number": return IDLNumberType
-            case "DOMString": return IDLStringType
-            case "undefined": return IDLUndefinedType
-            case "void": return IDLVoidType
+            case IDLAnyType.name: return IDLAnyType
+            case IDLBooleanType.name: return IDLBooleanType
+            case IDLNullType.name: return IDLNullType
+            case IDLNumberType.name: return IDLNumberType
+            case IDLStringType.name: return IDLStringType
+            case IDLUndefinedType.name: return IDLUndefinedType
+            case IDLVoidType.name: return IDLVoidType
         }
         const combinedExtAttrs = extAttrs
             ? type.extAttrs ? extAttrs.concat(type.extAttrs) : extAttrs

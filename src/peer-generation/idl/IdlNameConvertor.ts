@@ -143,7 +143,7 @@ class JavaTypeAlias {
     // string representation can contain special characters (e.g. String[])
     readonly type: Type
 
-    // synthetic identifier for internal use cases: naming classes/files etc. 
+    // synthetic identifier for internal use cases: naming classes/files etc.
     // string representation contains only letters, numbers and underscores (e.g. Array_String)
     readonly alias: string
 
@@ -201,7 +201,7 @@ class JavaTypeAliasConvertor implements TypeConvertor<JavaTypeAlias> {
         if (importAttr) {
             return this.convertImport(type, importAttr)
         }
-            
+
         // resolve synthetic types
         const decl = this.library.resolveTypeReference(type)!
         if (decl && idl.isSyntheticEntry(decl)) {
@@ -242,11 +242,11 @@ class JavaTypeAliasConvertor implements TypeConvertor<JavaTypeAlias> {
     }
 
     private readonly idlPrimitiveToJavaMap = new Map([
-        ['DOMString', JavaTypeAlias.fromTypeName('String', false)],
-        ['number', JavaTypeAlias.fromTypeName('double', false)],
-        ['boolean', JavaTypeAlias.fromTypeName('boolean', false)],
-        ['undefined', JavaTypeAlias.fromTypeName('Ark_Undefined', false)],
-        ['any', JavaTypeAlias.fromTypeName(ARK_CUSTOM_OBJECT, false)],
+        [idl.IDLStringType.name, JavaTypeAlias.fromTypeName('String', false)],
+        [idl.IDLNumberType.name, JavaTypeAlias.fromTypeName('double', false)],
+        [idl.IDLBooleanType.name, JavaTypeAlias.fromTypeName('boolean', false)],
+        [idl.IDLUndefinedType.name, JavaTypeAlias.fromTypeName('Ark_Undefined', false)],
+        [idl.IDLAnyType.name, JavaTypeAlias.fromTypeName(ARK_CUSTOM_OBJECT, false)],
         // TODO: add other primitive types
     ])
     private readonly javaPrimitiveToReferenceTypeMap = new Map([
@@ -272,7 +272,7 @@ class JavaTypeAliasConvertor implements TypeConvertor<JavaTypeAlias> {
         return JavaTypeAlias.fromTypeName('???Callback', false)
     }
 
-    // Tuple + ??? AnonymousClass 
+    // Tuple + ??? AnonymousClass
     private productType(decl: idl.IDLInterface, isTuple: boolean, includeFieldNames: boolean): JavaTypeAlias {
         // // TODO: other types
         if (!isTuple) throw new Error('Only tuples supported from IDL synthetic types for now')

@@ -51,7 +51,7 @@ export class TypeTable {
     table = new Map<string, TypeInfo[]>([
         ["undefined", [new TypeInfo(TypeKind.Primitive, undefined, undefined)]],
         ["boolean", [new TypeInfo(TypeKind.Primitive, undefined, undefined)]],
-        ["DOMString", [new TypeInfo(TypeKind.String, undefined, undefined)]],
+        ["String", [new TypeInfo(TypeKind.String, undefined, undefined)]],
         ["number", [new TypeInfo(TypeKind.Primitive, undefined, undefined)]],
         ["Object", [new TypeInfo(TypeKind.Interface, undefined, undefined)]],
         ["Promise", [new TypeInfo(TypeKind.Interface, undefined, undefined)]],

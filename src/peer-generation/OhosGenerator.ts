@@ -339,4 +339,3 @@ export function generateOhos(outDir: string, peerLibrary: IdlPeerLibrary): void 
     const visitor = new OHOSVisitor(peerLibrary)
     visitor.execute(outDir)
 }
-
