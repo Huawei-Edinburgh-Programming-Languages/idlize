@@ -721,7 +721,7 @@ export class DeclarationTable implements DeclarationProcessor<ts.TypeNode, Decla
         throw new Error(`Unknown kind: ${declaration.kind}`)
     }
 
-    private printStructsCHead(name: string, descriptor: StructDescriptor, structs: IndentedPrinter, writeToString: LanguageWriter, seenNames: Set<string>) {
+    private printStructsCHead(name: string, descriptor: StructDescriptor, structs: LanguageWriter, writeToString: LanguageWriter, seenNames: Set<string>) {
         if (descriptor.isArray) {
             // Forward declaration of element type.
             let elementTypePointer = descriptor.getFields()[0].declaration
@@ -747,7 +747,7 @@ export class DeclarationTable implements DeclarationProcessor<ts.TypeNode, Decla
     }
 
 
-    private printStructsCTail(name: string, needPacked: boolean, structs: IndentedPrinter) {
+    private printStructsCTail(name: string, needPacked: boolean, structs: LanguageWriter) {
         structs.popIndent()
         if (needPacked) {
             structs.print(`#ifdef _MSC_VER`)
@@ -762,7 +762,7 @@ export class DeclarationTable implements DeclarationProcessor<ts.TypeNode, Decla
         }
     }
 
-    private printStructField(structs: IndentedPrinter, field: FieldRecord) {
+    private printStructField(structs: LanguageWriter, field: FieldRecord) {
         const prefix = field.optional ? ArkPrimitiveType.OptionalPrefix : ""
         let name = this.computeTargetName(field.declaration, false)
         if (field.optional) {
@@ -839,7 +839,7 @@ export class DeclarationTable implements DeclarationProcessor<ts.TypeNode, Decla
         return unions
     }
 
-    private generateOptional(structs: IndentedPrinter, writeToString: LanguageWriter, target: DeclarationTarget, elemName: string, seenNames: Set<string>) {
+    private generateOptional(structs: LanguageWriter, writeToString: LanguageWriter, target: DeclarationTarget, elemName: string, seenNames: Set<string>) {
         const nameOptional = ArkPrimitiveType.OptionalPrefix + cleanPrefix(elemName, ArkPrimitiveType.Prefix)
         if (!seenNames.has(nameOptional)) {
             seenNames.add(nameOptional)
@@ -854,7 +854,7 @@ export class DeclarationTable implements DeclarationProcessor<ts.TypeNode, Decla
         }
     }
 
-    private generateEnum(structs: IndentedPrinter, writeToString: LanguageWriter, target: ts.EnumDeclaration) {
+    private generateEnum(structs: LanguageWriter, writeToString: LanguageWriter, target: ts.EnumDeclaration) {
         const enumName = this.enumName(target.name)
         structs.print(`enum ${enumName}`)
         structs.print(`{`)
@@ -887,7 +887,7 @@ export class DeclarationTable implements DeclarationProcessor<ts.TypeNode, Decla
         writeToString.print(`}`)
     }
 
-    generateStructs(structs: IndentedPrinter, typedefs: IndentedPrinter, writeToString: LanguageWriter) {
+    generateStructs(structs: LanguageWriter, typedefs: IndentedPrinter, writeToString: LanguageWriter) {
         const seenNames = new Set<string>()
         seenNames.clear()
         let noDeclaration = [ArkPrimitiveType.Int32, ArkPrimitiveType.Tag, ArkPrimitiveType.Number, ArkPrimitiveType.Boolean, ArkPrimitiveType.String]
