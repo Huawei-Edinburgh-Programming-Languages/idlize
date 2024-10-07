@@ -17,9 +17,9 @@ import { IndentedPrinter } from "../../../IndentedPrinter"
 import { Language } from "../../../util"
 import { ArgConvertor, BaseArgConvertor, EnumConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "../../Convertors"
 import { convertJavaOptional } from "../../printers/lang/Java"
-import { AssignStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, ObjectArgs, Type } from "../LanguageWriter"
+import { AssignStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, ObjectArgs, ReturnStatement, Type } from "../LanguageWriter"
 import { CLikeExpressionStatement, CLikeLanguageWriter, CLikeLoopStatement, CLikeReturnStatement } from "./CLikeLanguageWriter"
-import { createPrimitiveTypeMapper, IDLContainerType } from '../../../idl'
+import { IDLContainerType, IDLPrimitiveType, IDLTypes } from '../../../idl'
 import { RuntimeType } from "../../PeerGeneratorVisitor"
 import { LambdaExpression } from "./TsLanguageWriter"
 
@@ -230,40 +230,31 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
             // String like
             case 'KStringPtr': return 'String'
             case 'string': return 'String'
-
-            /////////////////////////////
-            // NEW ONES 
-
-            // Array like
-            case 'Vec_u8': return 'byte[]'
-            case 'Vec_i32': return 'int[]'
-            case 'Vec_f32': return 'float[]'
-        }
-        const mapper = createPrimitiveTypeMapper({
-            ptr: 'long',
-    
-            void: 'void',
-
-            bool: 'boolean',
-            i8: 'byte',
-            u8: 'byte', // mb fix
-            i16: 'short',
-            u16: 'short', // mb fix
-            i32: 'int',
-            u32: 'int', // mb fix
-            i64: 'long',
-            u64: 'long', // mb fix
-            
-            f32: 'float',
-            f64: 'double',
-
-            str: 'String'
-        })
-        const [ success, resultType ] = mapper(type.name)
-        if (success) {
-            return resultType
         }
         return super.mapType(type)
+    }
+    mapIDLPrimitiveType(type: IDLPrimitiveType): string {
+        return this.mapIDLPrimitiveTypeWith(type, rules => {
+            rules.match([IDLTypes.IDLVoidType], 'void')
+            rules.match([IDLTypes.IDLBoolType, IDLTypes.IDLBooleanType], 'boolean')
+
+            rules.match([IDLTypes.IDLI8Type], 'byte')
+            rules.match([IDLTypes.IDLU8Type], 'byte') // not really
+            rules.match([IDLTypes.IDLI16Type], 'short')
+            rules.match([IDLTypes.IDLU16Type], 'short') // not really
+            rules.match([IDLTypes.IDLI32Type], 'int')
+            rules.match([IDLTypes.IDLU32Type], 'int') // not really
+            rules.match([IDLTypes.IDLI64Type], 'long')
+            rules.match([IDLTypes.IDLU64Type], 'long') // not really
+            
+            rules.match([IDLTypes.IDLF32Type], 'float')
+            rules.match([IDLTypes.IDLF64Type, IDLTypes.IDLNumberType], 'double')
+
+            rules.match([IDLTypes.IDLStrType, IDLTypes.IDLStringType], 'String')
+
+            rules.match([IDLTypes.IDLPtrType], 'long')
+
+        }) ?? super.mapIDLPrimitiveType(type)
     }
     nativeReceiver(): string { return 'NativeModule' }
     applyToObject(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): LanguageStatement {
