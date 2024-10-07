@@ -17,7 +17,7 @@ import * as ts from 'typescript'
 import * as path from 'path'
 import { PeerLibrary } from "../PeerLibrary"
 import { FieldModifier, LanguageWriter, createLanguageWriter, Type, MethodModifier, MethodSignature } from '../LanguageWriters'
-import { ArkTSTypeNodeNameConvertor, mapType } from '../TypeNodeNameConvertor'
+import { ArkTSTypeNodeNameConvertor, isCallable, mapType } from '../TypeNodeNameConvertor'
 import { identName, Language, removeExt, renameDtsToInterfaces } from '../../util'
 import { ImportFeature, ImportsCollector } from '../ImportsCollector'
 import { PeerFile } from '../PeerFile'
@@ -450,11 +450,10 @@ export class ArkTSDeclConvertor implements DeclarationConvertor<void> {
     }
 
     convertInterface(node: ts.InterfaceDeclaration): void {
-        if (node.typeParameters?.length == 2
-            && node.members.length === 1
-            && ts.isCallSignatureDeclaration(node.members[0])) {
-            const parameters = node.members[0].parameters
-            const returnTypeNode = node.members[0].type!
+        if (isCallable(node)) {
+            const callSignature = node.members[0] as ts.CallSignatureDeclaration
+            const parameters = callSignature.parameters
+            const returnTypeNode = callSignature.type!
             this.convertTypeAlias(ts.factory.createTypeAliasDeclaration(
                 undefined,
                 node.name.text,

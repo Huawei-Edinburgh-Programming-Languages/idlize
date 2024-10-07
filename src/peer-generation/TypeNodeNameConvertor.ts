@@ -292,11 +292,7 @@ export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
         const nodeDecl = getDeclarationsByNode(this.peerLibrary.declarationTable.typeChecker!,
             node.typeName)[0]
         // if node is a callback then add missing type arguments void
-        if (nodeDecl !== undefined &&
-            ts.isInterfaceDeclaration(nodeDecl)
-            && nodeDecl.typeParameters?.length == 2
-            && nodeDecl.members.length === 1
-            && ts.isCallSignatureDeclaration(nodeDecl.members[0])) {
+        if (nodeDecl !== undefined && ts.isInterfaceDeclaration(nodeDecl) && isCallable(nodeDecl)) {
             node = ts.factory.createTypeReferenceNode(
                 node.typeName,
                 [...node.typeArguments!,
@@ -381,4 +377,10 @@ function createDeclNameFromNode(node: ts.Node, nodeConvertor: TypeNodeNameConver
         .map(it => nodeConvertor.convert(it!))
         .map(it => capitalize(it.replaceAll("?", "Opt").replace(/[\W_]+/g, "")))
         .join("")
+}
+
+export function isCallable(node: ts.InterfaceDeclaration): boolean {
+    return node.typeParameters?.length == 2
+        && node.members.length === 1
+        && ts.isCallSignatureDeclaration(node.members[0])
 }
