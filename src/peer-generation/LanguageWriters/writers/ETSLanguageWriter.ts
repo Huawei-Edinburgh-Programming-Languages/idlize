@@ -18,7 +18,7 @@ import { capitalize, Language } from "../../../util"
 import { AggregateConvertor, ArgConvertor, ArrayConvertor, CustomTypeConvertor, EnumConvertor, OptionConvertor, StringConvertor } from "../../Convertors"
 import { FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, ObjectArgs, Type } from "../LanguageWriter"
 import { TSLambdaExpression, TSLanguageWriter } from "./TsLanguageWriter"
-import { createPrimitiveTypeMapper, IDLContainerType, IDLTypes  } from '../../../idl'
+import { IDLContainerType, IDLPrimitiveType, IDLTypes  } from '../../../idl'
 import { RuntimeType } from "../../PeerGeneratorVisitor"
 import { EnumEntity } from "../../PeerFile"
 import { createLiteralDeclName } from "../../TypeNodeNameConvertor"
@@ -126,9 +126,9 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         switch (type.name) {
             case 'sequence': {
                 switch (type.elementType[0].name) {
-                    case IDLTypes.u8.name: return 'KUint8ArrayPtr'
-                    case IDLTypes.i32.name: return 'KInt32ArrayPtr'
-                    case IDLTypes.f32.name: return 'KFloat32ArrayPtr'
+                    case IDLTypes.IDLU8Type.name: return 'KUint8ArrayPtr'
+                    case IDLTypes.IDLI32Type.name: return 'KInt32ArrayPtr'
+                    case IDLTypes.IDLF32Type.name: return 'KFloat32ArrayPtr'
                 }
             }
         }
@@ -148,31 +148,31 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         }
         switch (type.name) {
             case 'Uint8Array': return 'KUint8ArrayPtr'
-            case 'Vec_u8': return 'KUint8ArrayPtr'
-            case 'Vec_i32': return 'KInt32ArrayPtr'
-            case 'Vec_f32': return 'KFloat32ArrayPtr'
-        }
-        const mapper = createPrimitiveTypeMapper({
-            ptr: 'KPointer',
-            void: 'void',
-            bool: 'KBoolean',
-            i8: 'KInt',
-            u8: 'KInt',
-            i16: 'KInt',
-            u16: 'KInt',
-            i32: 'KInt',
-            u32: 'KUInt',
-            i64: 'KLong',
-            u64: 'KLong', // ??
-            f32: 'KFloat',
-            f64: 'number',
-            str: 'KStringPtr'
-        })
-        const [ success, resultType ] = mapper(type.name)
-        if (success) {
-            return resultType
         }
         return super.mapType(type)
+    }
+    mapIDLPrimitiveType(type: IDLPrimitiveType): string {
+        return this.mapIDLPrimitiveTypeWith(type, rules => {
+            rules.match([IDLTypes.IDLPtrType], 'KPointer')
+            rules.match([IDLTypes.IDLVoidType], 'void')
+            rules.match([IDLTypes.IDLBoolType, IDLTypes.IDLBooleanType], 'KBoolean')
+            rules.match([
+                IDLTypes.IDLI8Type,
+                IDLTypes.IDLU8Type,
+                IDLTypes.IDLI16Type,
+                IDLTypes.IDLU16Type,
+                IDLTypes.IDLI32Type,
+                IDLTypes.IDLU32Type,
+            ], 'KInt')
+            rules.match([
+                IDLTypes.IDLI64Type,
+                IDLTypes.IDLU64Type,
+            ], 'KLong')
+            rules.match([IDLTypes.IDLF32Type], 'KFloat')
+            rules.match([IDLTypes.IDLNumberType, IDLTypes.IDLF64Type], 'number')
+
+            rules.match([IDLTypes.IDLStrType, IDLTypes.IDLStringType], 'KStringPtr')
+        }) ?? super.mapIDLPrimitiveType(type)
     }
     get supportedModifiers(): MethodModifier[] {
         return [MethodModifier.PUBLIC, MethodModifier.PRIVATE, MethodModifier.NATIVE, MethodModifier.STATIC]

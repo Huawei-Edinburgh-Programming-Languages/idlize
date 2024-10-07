@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { createPrimitiveTypeMapper, IDLContainerType, IDLParameter, IDLType, isContainerType, isPrimitiveType } from "../../../idl"
+import { IDLContainerType, IDLParameter, IDLPrimitiveType, IDLType, IDLTypes, isContainerType, isPrimitiveType } from "../../../idl"
 import { IndentedPrinter } from "../../../IndentedPrinter"
 import { CJKeywords } from "../../../languageSpecificKeywords"
 import { isDefined, Language } from "../../../util"
@@ -325,6 +325,27 @@ export class CJLanguageWriter extends LanguageWriter {
         }
         return this.mapIDLType(type)
     }
+    mapIDLPrimitiveType(type: IDLPrimitiveType): string {
+        return this.mapIDLPrimitiveTypeWith(type, rules => {
+            rules.match([IDLTypes.IDLPtrType], 'Int64')
+            rules.match([IDLTypes.IDLVoidType], 'Unit')
+            rules.match([IDLTypes.IDLBoolType, IDLTypes.IDLBooleanType], 'Bool')
+            
+            rules.match([IDLTypes.IDLI8Type], 'Int8')
+            rules.match([IDLTypes.IDLU8Type], 'UInt8')
+            rules.match([IDLTypes.IDLI16Type], 'Int16')
+            rules.match([IDLTypes.IDLU16Type], 'UInt16')
+            rules.match([IDLTypes.IDLI32Type], 'Int32')
+            rules.match([IDLTypes.IDLU32Type], 'UInt32')
+            rules.match([IDLTypes.IDLI64Type], 'Int64')
+            rules.match([IDLTypes.IDLU64Type], 'UInt64')
+            
+            rules.match([IDLTypes.IDLF32Type], 'Float32')
+            rules.match([IDLTypes.IDLF64Type, IDLTypes.IDLNumberType], 'Float64')
+
+            rules.match([IDLTypes.IDLStrType, IDLTypes.IDLStringType], 'String')
+        }) ?? super.mapIDLPrimitiveType(type)
+    }
     mapType(type: Type): string {
         switch (type.name) {
             // Pointer
@@ -356,38 +377,6 @@ export class CJLanguageWriter extends LanguageWriter {
             
             //  Other
             case 'Length': return 'String'
-
-            /////////////////////////////
-            // NEW ONES 
-
-            // Array like
-            case 'Vec_u8': return 'ArrayList<UInt8>'
-            case 'Vec_i32': return 'ArrayList<Int32>'
-            case 'Vec_f32': return 'ArrayList<Float32>'
-        }
-        const mapper = createPrimitiveTypeMapper({
-            ptr: 'Int64',
-    
-            void: 'Unit',
-
-            bool: 'Bool',
-            i8: 'Int8',
-            u8: 'UInt8',
-            i16: 'Int16',
-            u16: 'UInt16',
-            i32: 'Int32',
-            u32: 'UInt32',
-            i64: 'Int64',
-            u64: 'UInt64',
-            
-            f32: 'Float32',
-            f64: 'Float64',
-
-            str: 'String'
-        })
-        const [ success, resultType ] = mapper(type.name)
-        if (success) {
-            return resultType
         }
         return super.mapType(type)
     }
@@ -424,38 +413,6 @@ export class CJLanguageWriter extends LanguageWriter {
             
             //  Other
             case 'Length': return 'CString'
-
-            /////////////////////////////
-            // NEW ONES 
-
-            // Array like
-            case 'Vec_u8': return 'CPointer<UInt8>'
-            case 'Vec_i32': return 'CPointer<Int32>'
-            case 'Vec_f32': return 'CPointer<Float32>'
-        }
-        const mapper = createPrimitiveTypeMapper({
-            ptr: 'Int64',
-    
-            void: 'Unit',
-
-            bool: 'Bool',
-            i8: 'Int8',
-            u8: 'UInt8',
-            i16: 'Int16',
-            u16: 'UInt16',
-            i32: 'Int32',
-            u32: 'UInt32',
-            i64: 'Int64',
-            u64: 'UInt64',
-            
-            f32: 'Float32',
-            f64: 'Float64',
-
-            str: 'CString'
-        })
-        const [ success, resultType ] = mapper(type.name)
-        if (success) {
-            return resultType
         }
         return super.mapType(type)
     }
