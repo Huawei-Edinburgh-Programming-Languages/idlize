@@ -302,7 +302,7 @@ export function isUndefinedType(type: IDLEntry): type is IDLPrimitiveType {
     return isPrimitiveType(type) && type.name === "undefined"
 }
 export function isVoidType(type: IDLEntry): type is IDLPrimitiveType {
-    return isPrimitiveType(type) && type.name === IDLVoidType.name
+    return isPrimitiveType(type) && type.name === IDLTypes.IDLVoidType.name
 }
 export function isPrimitiveType(type: IDLEntry): type is IDLPrimitiveType {
     return type.kind == IDLKind.PrimitiveType
@@ -383,51 +383,38 @@ function createPrimitiveType(name: string): IDLPrimitiveType {
 }
 
 export const IDLTypes = {
-    ptr: createPrimitiveType('ptr'),
+    IDLPtrType: createPrimitiveType('ptr'),
     
-    void: createPrimitiveType("void"),
-
-    bool: createPrimitiveType('bool'),
-    i8: createPrimitiveType('i8'),
-    u8: createPrimitiveType('u8'),
-    i16: createPrimitiveType('i16'),
-    u16: createPrimitiveType('u16'),
-    i32: createPrimitiveType('i32'),
-    u32: createPrimitiveType('u32'),
-    i64: createPrimitiveType('i64'),
-    u64: createPrimitiveType('u64'),
+    IDLVoidType: createPrimitiveType('void'),
     
-    f32: createPrimitiveType('f32'),
-    f64: createPrimitiveType('f64'),
+    IDLBoolType: createPrimitiveType('bool'),
+    IDLBooleanType: createPrimitiveType('boolean'),
 
-    str: createPrimitiveType('str')
+    IDLI8Type: createPrimitiveType('i8'),
+    IDLU8Type: createPrimitiveType('u8'),
+    IDLI16Type: createPrimitiveType('i16'),
+    IDLU16Type: createPrimitiveType('u16'),
+    IDLI32Type: createPrimitiveType('i32'),
+    IDLU32Type: createPrimitiveType('u32'),
+    IDLI64Type: createPrimitiveType('i64'),
+    IDLU64Type: createPrimitiveType('u64'),
+    
+    IDLF32Type: createPrimitiveType('f32'),
+    IDLF64Type: createPrimitiveType('f64'),
+
+    IDLBigintType: createPrimitiveType("bigint"),
+    IDLNumberType: createPrimitiveType('number'),
+
+    IDLStrType: createPrimitiveType('str'),
+    IDLStringType: createPrimitiveType('DOMString'),
+
+    IDLAnyType: createPrimitiveType('any'),
+    IDLNullType: createPrimitiveType('null'),
+    IDLUndefinedType: createPrimitiveType('undefined'),
+
+    IDLSequenceType: (element:IDLType) => createContainerType('sequence', [element]),
+    IDLRecordType: (key:IDLType, value:IDLType) => createContainerType('record', [key, value])
 }
-
-type KeyToStringMapper<T extends object> = { [x in keyof T]: string }
-type IDLTypesMapper = KeyToStringMapper<typeof IDLTypes>
-
-type TypeMapHelper = (x:string) => [boolean, string]
-export function createPrimitiveTypeMapper(mapper:IDLTypesMapper): TypeMapHelper {
-    return (input:string) => {
-        for (const key in IDLTypes) {
-            if (IDLTypes[key as keyof typeof IDLTypes].name === input) {
-                return [true, mapper[key as keyof IDLTypesMapper]]
-            }
-        }
-        return [false, input]
-    }
-}
-
-export const IDLAnyType: IDLPrimitiveType = createPrimitiveType("any")
-export const IDLBooleanType: IDLPrimitiveType = createPrimitiveType("boolean")
-export const IDLBigintType: IDLPrimitiveType = createPrimitiveType("bigint")
-// TODO: use void (need to fix IDL parser)
-export const IDLNullType: IDLPrimitiveType = createPrimitiveType("Null")
-export const IDLNumberType: IDLPrimitiveType = createPrimitiveType("number")
-export const IDLStringType: IDLPrimitiveType = createPrimitiveType("DOMString")
-export const IDLUndefinedType: IDLPrimitiveType = createPrimitiveType("undefined")
-// TODO: use void (need to fix IDL parser)
-export const IDLVoidType: IDLPrimitiveType = createPrimitiveType("Void")
 
 export function createReferenceType(name: string, typeArguments?: NodeArray<TypeNode>): IDLReferenceType {
     if (typeArguments) {
@@ -790,12 +777,12 @@ export function toIDLType(typeName: string): IDLType {
     if (arrayMatch)
         return createContainerType("sequence", [toIDLType(arrayMatch[1])])
     switch (typeName) {
-        case "boolean": return IDLBooleanType
-        case "null": return IDLNullType
-        case "number": return IDLNumberType
-        case "string": return IDLStringType
-        case "undefined": return IDLUndefinedType
-        case "void": return IDLVoidType
+        case "boolean": return IDLTypes.IDLBooleanType
+        case "null": return IDLTypes.IDLNullType
+        case "number": return IDLTypes.IDLNumberType
+        case "string": return IDLTypes.IDLStringType
+        case "undefined": return IDLTypes.IDLUndefinedType
+        case "void": return IDLTypes.IDLVoidType
         default: return createReferenceType(typeName)
     }
 }
