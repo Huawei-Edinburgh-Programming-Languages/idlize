@@ -18,7 +18,7 @@ import { capitalize, Language } from "../../../util"
 import { AggregateConvertor, ArrayConvertor, EnumConvertor, OptionConvertor, StringConvertor } from "../../Convertors"
 import { FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, ObjectArgs, Type } from "../LanguageWriter"
 import { TSLambdaExpression, TSLanguageWriter } from "./TsLanguageWriter"
-import { createPrimitiveTypeMapper, IDLContainerType, IDLTypes  } from '../../../idl'
+import { createPrimitiveTypeMapper, IDLContainerType, IDLType, IDLTypes  } from '../../../idl'
 import { EnumEntity } from "../../PeerFile"
 import { createLiteralDeclName } from "../../TypeNodeNameConvertor"
 import { ArgConvertor, CustomTypeConvertor, RuntimeType } from "../../ArgConvertors"
@@ -134,46 +134,6 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         }
         return super.mapIDLContainerType(type, args)
     }
-    mapType(type: Type, convertor?: ArgConvertor): string {
-        if (convertor instanceof EnumConvertor) {
-            return convertor.enumTypeName(this.language)
-        }
-        if (convertor instanceof AggregateConvertor && convertor.aliasName !== undefined) {
-            return convertor.aliasName
-        }
-        if (convertor instanceof ArrayConvertor) {
-            return convertor.isArrayType
-                ? `${convertor.elementTypeName()}[]`
-                : `Array<${convertor.elementTypeName()}>`
-        }
-        switch (type.name) {
-            case 'Uint8Array': return 'KUint8ArrayPtr'
-            case 'Vec_u8': return 'KUint8ArrayPtr'
-            case 'Vec_i32': return 'KInt32ArrayPtr'
-            case 'Vec_f32': return 'KFloat32ArrayPtr'
-        }
-        const mapper = createPrimitiveTypeMapper({
-            ptr: 'KPointer',
-            void: 'void',
-            bool: 'KBoolean',
-            i8: 'KInt',
-            u8: 'KInt',
-            i16: 'KInt',
-            u16: 'KInt',
-            i32: 'KInt',
-            u32: 'KUInt',
-            i64: 'KLong',
-            u64: 'KLong', // ??
-            f32: 'KFloat',
-            f64: 'number',
-            str: 'KStringPtr'
-        })
-        const [ success, resultType ] = mapper(type.name)
-        if (success) {
-            return resultType
-        }
-        return super.mapType(type)
-    }
     get supportedModifiers(): MethodModifier[] {
         return [MethodModifier.PUBLIC, MethodModifier.PRIVATE, MethodModifier.NATIVE, MethodModifier.STATIC]
     }
@@ -192,7 +152,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
             super.runtimeType(param, valueType, value);
         }
     }
-    makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index?: number): LanguageExpression {
+    makeUnionVariantCast(value: string, type: IDLType, convertor: ArgConvertor, index?: number): LanguageExpression {
         return this.makeString(`${value} as ${type.name}`)
     }
     ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression {

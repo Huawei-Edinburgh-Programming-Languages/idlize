@@ -18,8 +18,8 @@ import { Language } from "../../../util"
 import { ArrayConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "../../Convertors"
 import { FieldRecord } from "../../DeclarationTable"
 import { mapType, TSTypeNodeNameConvertor } from "../../TypeNodeNameConvertor"
-import { AssignStatement, ExpressionStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, ObjectArgs, ReturnStatement, Type } from "../LanguageWriter"
-import { createPrimitiveTypeMapper, IDLContainerType, IDLTypes } from '../../../idl'
+import { AssignStatement, ExpressionStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, ObjectArgs, ReturnStatement } from "../LanguageWriter"
+import { IDLContainerType, IDLInt32Type, IDLStringType, IDLType, IDLTypes, toIDLType } from '../../../idl'
 import * as ts from 'typescript'
 import { ArgConvertor, RuntimeType } from "../../ArgConvertors"
 
@@ -68,7 +68,7 @@ export class TSLambdaExpression extends LambdaExpression {
 }
 
 export class TSCastExpression implements LanguageExpression {
-    constructor(public value: LanguageExpression, public type: Type, private unsafe = false) {}
+    constructor(public value: LanguageExpression, public type: IDLType, private unsafe = false) {}
     asString(): string {
         return this.unsafe
             ? `unsafeCast<${this.type.name}>(${this.value.asString()})`
@@ -122,7 +122,7 @@ export class TsTupleAllocStatement implements LanguageStatement {
 }
 
 export class TsObjectAssignStatement implements LanguageStatement {
-    constructor(private object: string, private type: Type | undefined, private isDeclare: boolean) {}
+    constructor(private object: string, private type: IDLType | undefined, private isDeclare: boolean) {}
     write(writer: LanguageWriter): void {
         writer.writeStatement(writer.makeAssign(this.object,
             this.type,
@@ -133,11 +133,11 @@ export class TsObjectAssignStatement implements LanguageStatement {
 }
 
 export class TsObjectDeclareStatement implements LanguageStatement {
-    constructor(private object: string, private type: Type | undefined, private fields: readonly FieldRecord[]) {}
+    constructor(private object: string, private type: IDLType | undefined, private fields: readonly FieldRecord[]) {}
     write(writer: LanguageWriter): void {
         const nameConvertor = new TsObjectDeclareNodeNameConvertor()
         // Constructing a new type with all optional fields
-        const objectType = new Type(`{${this.fields.map(it => {
+        const objectType = toIDLType(`{${this.fields.map(it => {
             return `${it.name}?: ${nameConvertor.convert(it.type)}`
         }).join(",")}}`)
         new TsObjectAssignStatement(this.object, objectType, true).write(writer)
@@ -202,7 +202,7 @@ export class TSLanguageWriter extends LanguageWriter {
         this.popIndent()
         this.printer.print(`}`)
     }
-    writeFieldDeclaration(name: string, type: Type, modifiers: FieldModifier[]|undefined, optional: boolean, initExpr?: LanguageExpression): void {
+    writeFieldDeclaration(name: string, type: IDLType, modifiers: FieldModifier[]|undefined, optional: boolean, initExpr?: LanguageExpression): void {
         const init = initExpr != undefined ? ` = ${initExpr.asString()}` : ``
         let prefix = this.makeFieldModifiersList(modifiers)
         this.printer.print(`${prefix} ${name}${optional ? "?"  : ""}: ${type.name}${init}`)
@@ -242,7 +242,7 @@ export class TSLanguageWriter extends LanguageWriter {
         const typeParams = generics ? `<${generics.join(", ")}>` : ""
         this.printer.print(`${prefix}${name}${typeParams}(${signature.args.map((it, index) => `${signature.argName(index)}${it.nullable ? "?" : ""}: ${this.mapType(it)}${signature.argDefault(index) ? ' = ' + signature.argDefault(index) : ""}`).join(", ")})${needReturn ? ": " + this.mapType(signature.returnType) : ""} ${needBracket ? "{" : ""}`)
     }
-    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression | undefined, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
+    makeAssign(variableName: string, type: IDLType | undefined, expr: LanguageExpression | undefined, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
         return new AssignStatement(variableName, type, expr, isDeclared, isConst)
     }
     makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression {
@@ -266,7 +266,7 @@ export class TSLanguageWriter extends LanguageWriter {
     writePrintLog(message: string): void {
         this.print(`console.log("${message}")`)
     }
-    makeCast(value: LanguageExpression, type: Type, unsafe = false): LanguageExpression {
+    makeCast(value: LanguageExpression, type: IDLType, unsafe = false): LanguageExpression {
         return new TSCastExpression(value, type, unsafe)
     }
     getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string {
@@ -303,7 +303,7 @@ export class TSLanguageWriter extends LanguageWriter {
         if (fields.length > 0) {
             return this.makeAssign(object, undefined,
                 this.makeCast(this.makeString("{}"),
-                    new Type(`{${fields.map(it=>`${it.name}: ${mapType(it.type)}`).join(",")}}`)),
+                    toIDLType(`{${fields.map(it=>`${it.name}: ${mapType(it.type)}`).join(",")}}`)),
                 false)
         }
         return new TsObjectAssignStatement(object, undefined, false)
@@ -321,14 +321,14 @@ export class TSLanguageWriter extends LanguageWriter {
         // keyAccessor and valueAccessor are equal in TS
         return this.makeStatement(this.makeMethodCall(keyAccessor, "set", [this.makeString(key), this.makeString(value)]))
     }
-    makeObjectDeclare(name: string, type: Type, fields: readonly FieldRecord[]): LanguageStatement {
+    makeObjectDeclare(name: string, type: IDLType, fields: readonly FieldRecord[]): LanguageStatement {
         return new TsObjectDeclareStatement(name, type, fields)
     }
-    getTagType(): Type {
-        return new Type("Tags");
+    getTagType(): IDLType {
+        return toIDLType("Tags");
     }
-    getRuntimeType(): Type {
-        return new Type("number");
+    getRuntimeType(): IDLType {
+        return IDLInt32Type;
     }
     makeTupleAssign(receiver: string, fields: string[]): LanguageStatement {
         return this.makeAssign(receiver, undefined,
@@ -344,7 +344,7 @@ export class TSLanguageWriter extends LanguageWriter {
         return this.makeString(`Object.values(${enumType})[${value.asString()}]`);
     }
     ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression {
-        return this.makeString(`Object.keys(${enumType}).indexOf(${this.makeCast(value, new Type('string')).asString()})`);
+        return this.makeString(`Object.keys(${enumType}).indexOf(${this.makeCast(value, IDLStringType).asString()})`);
     }
     mapIDLContainerType(type: IDLContainerType, args: string[]): string {
         switch (type.name) {
@@ -357,32 +357,6 @@ export class TSLanguageWriter extends LanguageWriter {
             }
         }
         return super.mapIDLContainerType(type, args)
-    }
-    mapType(type: Type, convertor?: ArgConvertor): string {
-        switch (type.name) {
-            case 'Function': return 'Object'
-
-            case 'Vec_u8': return 'Uint8Array'
-            case 'Vec_i32': return 'Int32Array'
-            case 'Vec_f32': return 'Float32Array'
-        }
-        const mapper = createPrimitiveTypeMapper({
-            ptr: 'number | bigint',
-            void: 'void',
-            bool: 'number', // boolean ?
-            i8: 'number',
-            u8: 'number',
-            i16: 'number',
-            u16: 'number',
-            i32: 'number',
-            u32: 'number',
-            i64: 'number', // bigint ?
-            u64: 'number',
-            f32: 'number',
-            f64: 'number',
-            str: 'string'
-        })
-        return mapper(type.name)[1]
     }
     override castToBoolean(value: string): string { return `+${value}` }
     override makeCallIsObject(value: string): LanguageExpression {

@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
+import { toIDLNode } from "../from-idl/deserialize"
+import { toIDLType } from "../idl"
 import { Language } from "../util"
 import { ArkPrimitiveType } from "./ArkPrimitiveType"
 import { LanguageExpression, LanguageStatement, LanguageWriter, Type } from "./LanguageWriters"
@@ -36,7 +38,7 @@ export interface RetConvertor {
     macroSuffixPart: () => string
 }
 
-export interface ArgConvertor { // todo: 
+export interface ArgConvertor { // todo:
     param: string
     tsTypeName: string
     isScoped: boolean
@@ -330,7 +332,7 @@ export class LengthConvertor extends BaseArgConvertor {
         return printer.makeAssign(receiver, undefined,
             printer.makeCast(
                 printer.makeString(`${param}Deserializer.readLength()`),
-                printer.makeType(this.tsTypeName, false, receiver), false), false)
+                toIDLType(this.tsTypeName), false), false)
     }
     nativeType(impl: boolean): string {
         return ArkPrimitiveType.Length.getText()
@@ -385,7 +387,7 @@ export class CustomTypeConvertor extends BaseArgConvertor {
                 printer.makeCast(printer.makeMethodCall(`${param}Deserializer`,
                         "readCustomObject",
                         [printer.makeString(`"${this.customTypeName}"`)]),
-                    printer.makeType(this.tsTypeName, false, receiver)), false)
+                    toIDLType(this.tsTypeName)), false)
     }
     nativeType(impl: boolean): string {
         return ArkPrimitiveType.CustomObject.getText()
@@ -422,7 +424,7 @@ export class NumberConvertor extends BaseArgConvertor {
         return writer.makeAssign(receiver, undefined,
             writer.makeCast(
                 writer.makeString(`${param}Deserializer.readNumber()`),
-                writer.makeType(this.tsTypeName, false, receiver)), false)
+                toIDLType(this.tsTypeName)), false)
     }
     nativeType(): string {
         return ArkPrimitiveType.Number.getText()

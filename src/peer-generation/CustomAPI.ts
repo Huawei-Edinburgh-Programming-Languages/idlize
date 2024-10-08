@@ -2,7 +2,10 @@
 import {Type, Method, NamedMethodSignature} from "./LanguageWriters"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
 import { capitalize } from "../util";
+import { toIDLType } from "../idl";
 
+
+// TODO: remove this API.
 
 const K_VMCONTEXT_TYPE = new Type("KVMContext");
 const ARK_VMCONTEXT_TYPE = new Type(`Ark_VMContext`);
@@ -73,7 +76,7 @@ export class CustomAPI {
 }
 
 function method(name: string, returnType: Type, args: Type[], argsNames: string[]) {
-    return new Method(name, new NamedMethodSignature(returnType, args, argsNames))
+    return new Method(name, new NamedMethodSignature(toIDLType(returnType.name), args.map(it => toIDLType(it.name)), argsNames))
 }
 
 export const CUSTOM_API: CustomAPI[] = [
@@ -157,8 +160,8 @@ export const CUSTOM_API: CustomAPI[] = [
 
 function printCustomApiMethodTS(c: CustomAPI, m: Method) {
     const sig = m.signature as NamedMethodSignature
-    const ret = c.getArgType(sig.returnType).name
-    let args = sig.args.map((type, index) => `${sig.argsNames[index]}: ${c.getArgType(type).name} `)
+    const ret = c.getArgType(new Type(sig.returnType.name)).name
+    let args = sig.args.map((type, index) => `${sig.argsNames[index]}: ${c.getArgType(new Type(type.name)).name} `)
     args = c.withContext ? args.slice(1) : args
     const name = `_${capitalize(m.name)}`
     console.log(`  ${name}(${args.join(", ")}): ${ret}`)
@@ -166,8 +169,8 @@ function printCustomApiMethodTS(c: CustomAPI, m: Method) {
 
 function printCustomApiMethodJNI(c: CustomAPI, m: Method) {
     const sig = m.signature as NamedMethodSignature
-    const ret = c.getJniType(sig.returnType).name
-    let args = sig.args.map((type, index) => `${c.getJniType(type).name} ${sig.argsNames[index]}`)
+    const ret = c.getJniType(new Type(sig.returnType.name)).name
+    let args = sig.args.map((type, index) => `${c.getJniType(new Type(type.name)).name} ${sig.argsNames[index]}`)
     args = c.withContext ? args.slice(1) : args
     const name = `_${capitalize(m.name)}`
     console.log(`  static native ${ret} ${name}(${args.join(", ")});`)
@@ -175,8 +178,8 @@ function printCustomApiMethodJNI(c: CustomAPI, m: Method) {
 
 function printCustomApiMethodETS(c: CustomAPI, m: Method) {
     const sig = m.signature as NamedMethodSignature
-    const ret = c.getJniType(sig.returnType).name
-    let args = sig.args.map((type, index) => `${sig.argsNames[index]}: ${c.getJniType(type).name} `)
+    const ret = c.getJniType(new Type(sig.returnType.name)).name
+    let args = sig.args.map((type, index) => `${sig.argsNames[index]}: ${c.getJniType(new Type(type.name)).name} `)
     args = c.withContext ? args.slice(1) : args
     const name = `_${capitalize(m.name)}`
     console.log(`  static native ${name}(${args.join(", ")}): ${ret}`)

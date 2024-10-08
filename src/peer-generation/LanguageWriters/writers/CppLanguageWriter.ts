@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { IDLType, isContainerType, isUnionType } from "../../../idl"
+import { IDLType, isContainerType, isUnionType, toIDLType } from "../../../idl"
 import { IndentedPrinter } from "../../../IndentedPrinter"
 import { cppKeywords } from "../../../languageSpecificKeywords"
 import { Language } from "../../../util"
@@ -28,7 +28,7 @@ import { CDefinedExpression, CLikeExpressionStatement, CLikeLanguageWriter, CLik
 ////////////////////////////////////////////////////////////////
 
 export class CppCastExpression implements LanguageExpression {
-    constructor(public value: LanguageExpression, public type: Type, private unsafe = false) {}
+    constructor(public value: LanguageExpression, public type: IDLType, private unsafe = false) {}
     asString(): string {
         if (this.type.name === ArkPrimitiveType.Tag.getText()) {
             return `${this.value.asString()} == ARK_RUNTIME_UNDEFINED ? ARK_TAG_UNDEFINED : ARK_TAG_OBJECT`
@@ -46,7 +46,7 @@ export class CppCastExpression implements LanguageExpression {
 
 export class CppAssignStatement extends AssignStatement {
     constructor(public variableName: string,
-                public type: Type | undefined,
+                public type: IDLType | undefined,
                 public expression: LanguageExpression | undefined,
                 public isDeclared: boolean = true,
                 public isConst: boolean = true) {
@@ -54,7 +54,7 @@ export class CppAssignStatement extends AssignStatement {
      }
      write(writer: LanguageWriter): void{
         if (this.isDeclared) {
-            const typeSpec = this.type ? writer.mapType(this.type) : "auto"
+            const typeSpec = this.type ? writer.mapIDLType(this.type) : "auto"
             const initValue = this.expression ? this.expression.asString() : "{}"
             const constSpec = this.isConst ? "const " : ""
             writer.print(`${constSpec}${typeSpec} ${this.variableName} = ${initValue};`)
@@ -119,7 +119,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
             super.writeMethodCall(receiver, method, params, nullable)
         }
     }
-    writeFieldDeclaration(name: string, type: Type, modifiers: FieldModifier[] | undefined, optional: boolean, initExpr?: LanguageExpression): void {
+    writeFieldDeclaration(name: string, type: IDLType, modifiers: FieldModifier[] | undefined, optional: boolean, initExpr?: LanguageExpression): void {
         let filter = function(modifier_name : FieldModifier) {
             return modifier_name !== FieldModifier.STATIC
         }
@@ -133,7 +133,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         const superInvocation = superCall
             ? ` : ${superCall.name}(${superCall.signature.args.map((_, i) => superCall?.signature.argName(i)).join(", ")})`
             : ""
-        const argList = signature.args.map((it, index) => `${this.mapType(it)} ${signature.argName(index)}`).join(", ");
+        const argList = signature.args.map((it, index) => `${this.mapIDLType(it)} ${signature.argName(index)}`).join(", ");
         this.print("public:")
         this.print(`${className}(${argList})${superInvocation} {`)
         this.pushIndent()
@@ -199,7 +199,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     override makeValueFromOption(value: string): LanguageExpression {
         return this.makeString(`${value}.value`)
     }
-    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression | undefined, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
+    makeAssign(variableName: string, type: IDLType | undefined, expr: LanguageExpression | undefined, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
         return new CppAssignStatement(variableName, type, expr, isDeclared, isConst)
     }
     makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression {
@@ -238,7 +238,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     makeMapResize(keyType: string, valueType: string, map: string, size: string, deserializer: string): LanguageStatement {
         return new CppMapResizeStatement(keyType, valueType, map, size, deserializer)
     }
-    makeCast(expr: LanguageExpression, type: Type, unsafe = false): LanguageExpression {
+    makeCast(expr: LanguageExpression, type: IDLType, unsafe = false): LanguageExpression {
         return new CppCastExpression(expr, type, unsafe)
     }
     writePrintLog(message: string): void {
@@ -324,11 +324,11 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
             this.makeAssign(valueAccessor, undefined, this.makeString(value), false)
         ], false)
     }
-    getTagType(): Type {
-        return new Type(ArkPrimitiveType.Tag.getText())
+    getTagType(): IDLType {
+        return toIDLType(ArkPrimitiveType.Tag.getText())
     }
-    getRuntimeType(): Type {
-        return new Type(ArkPrimitiveType.RuntimeType.getText())
+    getRuntimeType(): IDLType {
+        return toIDLType(ArkPrimitiveType.RuntimeType.getText())
     }
     makeType(typeName: string, nullable: boolean, receiver?: string): Type {
         // make deducing type from receiver

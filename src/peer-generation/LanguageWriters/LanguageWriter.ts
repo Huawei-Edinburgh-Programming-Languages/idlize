@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { IDLBooleanType, IDLContainerType, IDLNumberType, IDLParameter, IDLPrimitiveType, IDLStringType, IDLType, IDLUnionType, IDLVoidType, isContainerType, isPrimitiveType, isUnionType } from "../../idl"
+import { IDLBooleanType, IDLContainerType, IDLInt32Type, IDLNumberType, IDLParameter, IDLPrimitiveType, IDLStringType, IDLType, IDLUnionType, IDLVoidType, isContainerType, isPrimitiveType, isUnionType } from "../../idl"
 import { IndentedPrinter } from "../../IndentedPrinter"
 import { Language, stringOrNone } from "../../util"
 import { EnumConvertor, MapConvertor } from "../Convertors"
@@ -144,13 +144,13 @@ export interface LanguageStatement {
 
 export class AssignStatement implements LanguageStatement {
     constructor(public variableName: string,
-                public type: Type | undefined,
+                public type: IDLType | undefined,
                 public expression: LanguageExpression | undefined,
                 public isDeclared: boolean = true,
                 protected isConst: boolean = true) { }
     write(writer: LanguageWriter): void {
         if (this.isDeclared) {
-            const typeSpec = this.type ? `: ${writer.mapType(this.type)}${this.type.nullable ? "|undefined" : ""}` : ""
+            const typeSpec = this.type ? `: ${writer.mapIDLType(this.type)}${this.type.optional ? "|undefined" : ""}` : ""
             const initValue = this.expression ? `= ${this.expression.asString()}` : ""
             const constSpec = this.isConst ? "const" : "let"
             writer.print(`${constSpec} ${this.variableName}${typeSpec} ${initValue}`)
@@ -325,7 +325,7 @@ export class Method {
 }
 
 export class MethodSignature {
-    constructor(public returnType: Type, public args: Type[], public defaults: stringOrNone[]|undefined = undefined) {}
+    constructor(public returnType: IDLType, public args: IDLType[], public defaults: stringOrNone[]|undefined = undefined) {}
 
     argName(index: number): string {
         return `arg${index}`
@@ -340,12 +340,12 @@ export class MethodSignature {
 }
 
 export class NamedMethodSignature extends MethodSignature {
-    constructor(returnType: Type, args: Type[] = [], public argsNames: string[] = [], defaults: stringOrNone[]|undefined = undefined) {
+    constructor(returnType: IDLType, args: IDLType[] = [], public argsNames: string[] = [], defaults: stringOrNone[]|undefined = undefined) {
         super(returnType, args, defaults)
     }
 
-    static make(returnType: string, args: {name: string, type: string}[]): NamedMethodSignature {
-        return new NamedMethodSignature(new Type(returnType), args.map(it => new Type(it.type)), args.map(it => it.name))
+    static make(returnType: IDLType, args: {name: string, type: IDLType}[]): NamedMethodSignature {
+        return new NamedMethodSignature(returnType, args.map(it => it.type), args.map(it => it.name))
     }
 
     argName(index: number): string {
@@ -374,18 +374,18 @@ export abstract class LanguageWriter {
 
     abstract writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string, interfaces?: string[], generics?: string[], isDeclared?: boolean): void
     abstract writeInterface(name: string, op: (writer: LanguageWriter) => void, superInterfaces?: string[], isDeclared?: boolean): void
-    abstract writeFieldDeclaration(name: string, type: Type, modifiers: FieldModifier[]|undefined, optional: boolean, initExpr?: LanguageExpression): void
+    abstract writeFieldDeclaration(name: string, type: IDLType, modifiers: FieldModifier[]|undefined, optional: boolean, initExpr?: LanguageExpression): void
     abstract writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void
     abstract writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method, modifiers?: MethodModifier[]): void
     abstract writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void): void
-    abstract makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression | undefined, isDeclared: boolean, isConst?: boolean): LanguageStatement;
+    abstract makeAssign(variableName: string, type: IDLType | undefined, expr: LanguageExpression | undefined, isDeclared: boolean, isConst?: boolean): LanguageStatement;
     abstract makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression;
     abstract makeThrowError(message: string): LanguageStatement;
     abstract makeReturn(expr?: LanguageExpression): LanguageStatement;
     abstract makeRuntimeType(rt: RuntimeType): LanguageExpression
     abstract getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string
-    abstract makeCast(value: LanguageExpression, type: Type): LanguageExpression
-    abstract makeCast(value: LanguageExpression, type: Type, unsafe: boolean): LanguageExpression
+    abstract makeCast(value: LanguageExpression, type: IDLType): LanguageExpression
+    abstract makeCast(value: LanguageExpression, type: IDLType, unsafe: boolean): LanguageExpression
     abstract writePrintLog(message: string): void
     abstract makeUndefined(): LanguageExpression
     abstract makeMapKeyTypeName(c: MapConvertor): string
@@ -394,8 +394,9 @@ export abstract class LanguageWriter {
     abstract makeLoop(counter: string, limit: string): LanguageStatement
     abstract makeLoop(counter: string, limit: string, statement: LanguageStatement): LanguageStatement
     abstract makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement
-    abstract getTagType(): Type
-    abstract getRuntimeType(): Type
+    // No need for these two.
+    abstract getTagType(): IDLType
+    abstract getRuntimeType(): IDLType
     abstract makeTupleAssign(receiver: string, tupleFields: string[]): LanguageStatement
     abstract get supportedModifiers(): MethodModifier[]
     abstract get supportedFieldModifiers(): FieldModifier[]
@@ -500,7 +501,7 @@ export abstract class LanguageWriter {
     makeUnionVariantCondition(_convertor: ArgConvertor, _valueName: string, valueType: string, type: string, index?: number): LanguageExpression {
         return this.makeString(`RuntimeType.${type.toUpperCase()} == ${valueType}`)
     }
-    makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index?: number): LanguageExpression {
+    makeUnionVariantCast(value: string, type: IDLType, convertor: ArgConvertor, index?: number): LanguageExpression {
         return this.makeString(`unsafeCast<${type.name}>(${value})`)
     }
     makeUnionTypeDefaultInitializer() {
@@ -593,13 +594,13 @@ export abstract class LanguageWriter {
         return this.mapType(new Type(type.name))
     }
     makeSignature(returnType: IDLType, parameters: IDLParameter[]): MethodSignature {
-        return new MethodSignature(Type.fromName(this.mapIDLType(returnType)),
-            parameters.map(it => Type.fromName(this.mapIDLType(it.type!))))
+        return new MethodSignature(returnType,
+            parameters.map(it => it.type!))
     }
     makeNamedSignature(returnType: IDLType, parameters: IDLParameter[]): NamedMethodSignature {
         return NamedMethodSignature.make(
-            this.mapIDLType(returnType),
-            parameters.map(it => ({ name: it.name, type: this.mapIDLType(it.type!) }))
+            returnType,
+            parameters.map(it => ({ name: it.name, type: it.type! }))
         )
     }
     makeNativeMethodNamedSignature(returnType: IDLType, parameters: IDLParameter[]): NamedMethodSignature {
@@ -611,17 +612,14 @@ export abstract class LanguageWriter {
     mapMethodModifier(modifier: MethodModifier): string {
         return `${MethodModifier[modifier].toLowerCase()}`
     }
-    makeObjectDeclare(name: string, type: Type | undefined, fields: readonly FieldRecord[]): LanguageStatement {
+    makeObjectDeclare(name: string, type: IDLType | undefined, fields: readonly FieldRecord[]): LanguageStatement {
         return this.makeAssign(name, type, this.makeString("{}"), true, false)
-    }
-    makeType(typeName: string, nullable: boolean, receiver?: string): Type {
-        return new Type(typeName, nullable)
     }
     makeUnsafeCast(convertor: ArgConvertor, param: string): string {
         return `unsafeCast<int32>(${param})`
     }
     runtimeType(param: ArgConvertor, valueType: string, value: string) {
-        this.writeStatement(this.makeAssign(valueType, Type.Int32,
+        this.writeStatement(this.makeAssign(valueType, IDLInt32Type,
             this.makeFunctionCall("runtimeType", [this.makeString(value)]), false))
     }
     makeDiscriminatorFromFields(convertor: {targetType: (writer: LanguageWriter) => Type}, value: string, accessors: string[]): LanguageExpression {

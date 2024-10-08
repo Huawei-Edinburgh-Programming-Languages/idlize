@@ -31,6 +31,7 @@ import { ImportFeature } from "./ImportsCollector"
 import { TypeNodeNameConvertor } from "./TypeNodeNameConvertor"
 import { DeclarationDependenciesCollector } from "./dependencies_collector";
 import { PeerLibrary } from "./PeerLibrary";
+import { createReferenceType, IDLThisType, IDLType, IDLVoidType } from "../idl"
 
 export function isBuilderClass(declaration: ts.InterfaceDeclaration | ts.ClassDeclaration): boolean {
 
@@ -69,8 +70,8 @@ export function isBuilderClass(declaration: ts.InterfaceDeclaration | ts.ClassDe
     */
 }
 
-function builderMethod(name: string, typeName: string, declarationTarget: DeclarationTarget): BuilderMethod {
-    const method = new Method(name, new NamedMethodSignature(Type.This, [new Type(typeName)], ["value"]))
+function builderMethod(name: string, type: IDLType, declarationTarget: DeclarationTarget): BuilderMethod {
+    const method = new Method(name, new NamedMethodSignature(IDLThisType, [type], ["value"]))
     return new BuilderMethod(method, [declarationTarget])
 }
 
@@ -109,11 +110,11 @@ export function initCustomBuilderClasses() {
     CUSTOM_BUILDER_CLASSES.push(
         new BuilderClass("Indicator", ["T"], false, undefined,
             [], // fields
-            [new BuilderMethod(new Method("constructor", new MethodSignature(Type.Void, [])), [])],
+            [new BuilderMethod(new Method("constructor", new MethodSignature(IDLVoidType, [])), [])],
             [
-                ...["left", "top", "right", "bottom"].map(it => builderMethod(it, "Length", ArkPrimitiveType.Length)),
-                ...["start", "end"].map(it => builderMethod(it, "LengthMetrics", ArkPrimitiveType.CustomObject)),
-                new BuilderMethod(new Method("dot", new MethodSignature(new Type("DotIndicator"), []), [MethodModifier.STATIC]), [ArkPrimitiveType.CustomObject]),
+                ...["left", "top", "right", "bottom"].map(it => builderMethod(it, createReferenceType("Length"), ArkPrimitiveType.Length)),
+                ...["start", "end"].map(it => builderMethod(it, createReferenceType("LengthMetrics"), ArkPrimitiveType.CustomObject)),
+                new BuilderMethod(new Method("dot", new MethodSignature(createReferenceType("DotIndicator"), []), [MethodModifier.STATIC]), [ArkPrimitiveType.CustomObject]),
             ],
             [], // imports
         )
@@ -219,7 +220,7 @@ function toBuilderMethod(declarationTable: DeclarationTable,
     const methodName = method === undefined || ts.isConstructorDeclaration(method) ? "constructor" : identName(method.name)!
 
     if (method === undefined) {
-        return new BuilderMethod(new Method(methodName, new NamedMethodSignature(Type.Void)), [])
+        return new BuilderMethod(new Method(methodName, new NamedMethodSignature(IDLVoidType)), [])
     }
 
     const generics = method.typeParameters?.map(it => it.getText())

@@ -30,6 +30,7 @@ import { EnumEntity } from '../PeerFile'
 import { ARK_OBJECTBASE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH, INT_VALUE_GETTER } from '../printers/lang/Java'
 import { printJavaImports } from '../printers/lang/JavaPrinters'
 import { collectJavaImports } from '../printers/lang/JavaIdlUtils'
+import { toIDLNode } from '../../from-idl/deserialize'
 
 interface InterfacesVisitor {
     getInterfaces(): Map<TargetFile, LanguageWriter>
@@ -221,12 +222,10 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
         const imports = collectJavaImports(type.types)
         printJavaImports(writer, imports)
 
-        const members = type.types.map(it => new Type(this.peerLibrary.mapType(it), false) )
         writer.writeClass(alias, () => {
-            const intType = new Type('int')
             const selector = 'selector'
-            writer.writeFieldDeclaration(selector, intType, [FieldModifier.PRIVATE], false)
-            writer.writeMethodImplementation(new Method('getSelector', new MethodSignature(intType, []), [MethodModifier.PUBLIC]), () => {
+            writer.writeFieldDeclaration(selector, idl.IDLInt32Type, [FieldModifier.PRIVATE], false)
+            writer.writeMethodImplementation(new Method('getSelector', new MethodSignature(idl.IDLInt32Type, []), [MethodModifier.PUBLIC]), () => {
                 writer.writeStatement(
                     writer.makeReturn(
                         writer.makeString(selector)
@@ -235,13 +234,13 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
             })
 
             const param = 'param'
-            for (const [index, memberType] of members.entries()) {
+            for (const [index, memberType] of type.types.entries()) {
                 const memberName = `value${index}`
                 writer.writeFieldDeclaration(memberName, memberType, [FieldModifier.PRIVATE], false)
 
                 writer.writeConstructorImplementation(
                     alias,
-                    new NamedMethodSignature(Type.Void, [memberType], [param]),
+                    new NamedMethodSignature(idl.IDLVoidType, [idl.toIDLType(memberType.name)], [param]),
                     () => {
                         writer.writeStatement(
                             writer.makeAssign(memberName, undefined, writer.makeString(param), false)
@@ -253,7 +252,7 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
                 )
 
                 writer.writeMethodImplementation(
-                    new Method(`getValue${index}`, new MethodSignature(memberType, []), [MethodModifier.PUBLIC]),
+                    new Method(`getValue${index}`, new MethodSignature(idl.toIDLType(memberType.name), []), [MethodModifier.PUBLIC]),
                     () => {
                         writer.writeStatement(
                             writer.makeReturn(
@@ -275,14 +274,14 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
         const imports = collectJavaImports(type.properties.map(it => it.type))
         printJavaImports(writer, imports)
 
-        const members = type.properties.map(it => new Type(this.peerLibrary.mapType(it.type), it.isOptional))
+        const members = type.properties.map(it => idl.maybeOptional(it.type, it.isOptional))
         const memberNames: string[] = members.map((_, index) => `value${index}`)
         writer.writeClass(alias, () => {
             for (let i = 0; i < memberNames.length; i++) {
                 writer.writeFieldDeclaration(memberNames[i], members[i], [FieldModifier.PUBLIC], false)
             }
 
-            const signature = new MethodSignature(Type.Void, members)
+            const signature = new MethodSignature(idl.IDLVoidType, members)
             writer.writeConstructorImplementation(alias, signature, () => {
                 for (let i = 0; i < memberNames.length; i++) {
                     writer.writeStatement(
@@ -331,25 +330,25 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
         }
 
         writer.writeClass(alias, () => {
-            const enumType = new Type(alias)
+            const enumType = idl.toIDLType(alias)
             members.forEach(it => {
                 writer.writeFieldDeclaration(it.name, enumType, [FieldModifier.PUBLIC, FieldModifier.STATIC, FieldModifier.FINAL], false,
                     writer.makeString(`new ${alias}(${it.numberId})`)
                 )
             })
-    
+
             const value = 'value'
             const intType = new Type('int')
-            writer.writeFieldDeclaration(value, intType, [FieldModifier.PUBLIC, FieldModifier.FINAL], false)
-    
-            const signature = new MethodSignature(Type.Void, [intType])
+            writer.writeFieldDeclaration(value, idl.IDLInt32Type, [FieldModifier.PUBLIC, FieldModifier.FINAL], false)
+
+            const signature = new MethodSignature(idl.IDLVoidType, [idl.IDLInt32Type])
             writer.writeConstructorImplementation(alias, signature, () => {
                 writer.writeStatement(
                     writer.makeAssign(value, undefined, writer.makeString(signature.argName(0)), false)
                 )
             })
-    
-            const getIntValue = new Method('getIntValue', new MethodSignature(intType, []), [MethodModifier.PUBLIC])
+
+            const getIntValue = new Method('getIntValue', new MethodSignature(idl.IDLInt32Type, []), [MethodModifier.PUBLIC])
             writer.writeMethodImplementation(getIntValue, () => {
                 writer.writeStatement(
                     writer.makeReturn(writer.makeString(value))
@@ -370,7 +369,7 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
         // TODO: *Attribute classes are empty for now
         const members = this.peerLibrary.isComponentDeclaration(type) ? []
             : type.properties.map(it => {
-                return {name: it.name, type: new Type(this.peerLibrary.mapType(it.type), it.isOptional), modifiers: [FieldModifier.PUBLIC]}
+                return {name: it.name, type: idl.maybeOptional(it.type, it.isOptional), modifiers: [FieldModifier.PUBLIC]}
             })
         writer.writeClass(alias, () => {
             members.forEach(it => {

@@ -40,6 +40,7 @@ import { extractBuilderFields } from "./BuilderClass"
 import { searchTypeParameters, TypeNodeNameConvertor } from "./TypeNodeNameConvertor";
 import { DeclarationProcessor } from "../DeclarationProcessor"
 import { ArkPrimitiveType } from "./ArkPrimitiveType"
+import { IDLType, toIDLType } from "../idl"
 
 export const ResourceDeclaration = ts.factory.createInterfaceDeclaration(undefined, "Resource", undefined, undefined, [
     ts.factory.createPropertySignature(undefined, "id", undefined, ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)),
@@ -940,20 +941,20 @@ export class DeclarationTable implements DeclarationProcessor<ts.TypeNode, Decla
     }
 
     private writeRuntimeType(target: DeclarationTarget, targetTypeName: string, isOptional: boolean, writer: LanguageWriter) {
-        const resultType = new Type("Ark_RuntimeType")
+        const resultType = toIDLType("Ark_RuntimeType")
         const op = this.writeRuntimeTypeOp(target, targetTypeName, resultType, isOptional, writer)
         if (op) {
             writer.print("template <>")
             writer.writeMethodImplementation(
                 new Method("runtimeType",
-                    new NamedMethodSignature(resultType, [new Type(`const ${targetTypeName}&`)], ["value"]),
+                    new NamedMethodSignature(toIDLType(resultType.name), [toIDLType(`const ${targetTypeName}&`)], ["value"]),
                     [MethodModifier.INLINE]),
                 op)
         }
     }
 
     private writeRuntimeTypeOp(
-        target: DeclarationTarget, targetTypeName: string, resultType: Type, isOptional: boolean, writer: LanguageWriter
+        target: DeclarationTarget, targetTypeName: string, resultType: IDLType, isOptional: boolean, writer: LanguageWriter
     ) : ((writer: LanguageWriter) => void) | undefined
     {
         let result: LanguageExpression

@@ -37,6 +37,7 @@ import { collapseIdlEventsOverloads } from "../printers/EventsPrinter"
 import { convert } from "./common"
 import { collectJavaImportsForDeclaration } from "../printers/lang/JavaIdlUtils"
 import { ARK_CUSTOM_OBJECT, javaCustomTypeMapping } from "../printers/lang/Java"
+import { maybeOptional } from "../../idl"
 
 /**
  * Theory of operations.
@@ -359,11 +360,11 @@ class JavaTypeDependenciesCollector extends TypeDependenciesCollector {
         return result
     }
 
-    // Tuple + ??? AnonymousClass 
+    // Tuple + ??? AnonymousClass
     private productType(type: idl.IDLReferenceType, decl: idl.IDLInterface, isTuple: boolean, includeFieldNames: boolean): idl.IDLEntry[] {
         // TODO: other types
         if (!isTuple) throw new Error('Only tuples supported from IDL synthetic types for now')
-        
+
         if (!this.ignoredType(decl)) {
             const typeName = this.library.mapType(type)
             this.onNewSyntheticTypeAlias(typeName, decl)
@@ -471,8 +472,7 @@ class PeersGenerator {
         this.library.requestType(decl, this.library.shouldGenerateComponent(peer.componentName))
         const originalParentName = parentName ?? peer.originalClassName!
         const argConvertor = this.library.typeConvertor("value", prop.type, prop.isOptional, maybeCallback)
-        const argType = new Type(this.library.mapType(prop.type), prop.isOptional)
-        const signature = new NamedMethodSignature(Type.This, [argType], ["value"])
+        const signature = new NamedMethodSignature(idl.IDLThisType, [maybeOptional(prop.type, prop.isOptional)], ["value"])
         return new IdlPeerMethod(
             originalParentName,
             [decl],
@@ -563,7 +563,7 @@ class PeersGenerator {
                     content: `export interface ${fixedTypeName} {\n${attributeDeclarations}\n}`})
                 const peerMethod = peer.methods.find((method) => method.overloadedName == name)
                 if (peerMethod !== undefined) {
-                    peerMethod.method.signature.args = [new Type(fixedTypeName)]
+                    peerMethod.method.signature.args = [idl.toIDLType(fixedTypeName)]
                 }
                 return fixedTypeName
             }
@@ -671,7 +671,7 @@ export class IdlPeerProcessor {
 
     private toBuilderMethod(method: idl.IDLConstructor | idl.IDLMethod | undefined): BuilderMethod {
         if (!method)
-            return new BuilderMethod(new Method("constructor", new NamedMethodSignature(Type.Void)), [])
+            return new BuilderMethod(new Method("constructor", new NamedMethodSignature(idl.IDLVoidType)), [])
         const methodName = idl.isConstructor(method) ? "constructor" : method.name
         // const generics = method.typeParameters?.map(it => it.getText())
         const signature = generateSignature(this.library, method)
@@ -704,7 +704,7 @@ export class IdlPeerProcessor {
         const mConstructor = this.makeMaterializedMethod(decl, constructor)
         const finalizerReturnType = {isVoid: false, nativeType: () => ArkPrimitiveType.NativePointer.getText(), macroSuffixPart: () => ""}
         const mFinalizer = new MaterializedMethod(name, [], [], finalizerReturnType, false,
-            new Method("getFinalizer", new NamedMethodSignature(Type.Pointer, [], [], []), [MethodModifier.STATIC]), 0)
+            new Method("getFinalizer", new NamedMethodSignature(idl.IDLPointerType, [], [], []), [MethodModifier.STATIC]), 0)
         const mFields = decl.properties
             // TODO what to do with setter accessors? Do we need FieldModifier.WRITEONLY? For now, just skip them
             .filter(it => idl.getExtAttribute(it, idl.IDLExtendedAttributes.Accessor) !== idl.IDLAccessorAttribute.Setter)
@@ -716,10 +716,11 @@ export class IdlPeerProcessor {
 
         mFields.forEach(f => {
             const field = f.field
+            const idlType = idl.toIDLType(field.type.name)
             // TBD: use deserializer to get complex type from native
             const isSimpleType = !f.argConvertor.useArray // type needs to be deserialized from the native
             if (isSimpleType) {
-                const getSignature = new NamedMethodSignature(field.type, [], [])
+                const getSignature = new NamedMethodSignature(idlType, [], [])
                 const getAccessor = new MaterializedMethod(
                     name, [], [], f.retConvertor, false,
                     new Method(`get${capitalize(field.name)}`, getSignature, [MethodModifier.PRIVATE]), 0)
@@ -727,7 +728,7 @@ export class IdlPeerProcessor {
             }
             const isReadOnly = field.modifiers.includes(FieldModifier.READONLY)
             if (!isReadOnly) {
-                const setSignature = new NamedMethodSignature(Type.Void, [field.type], [field.name])
+                const setSignature = new NamedMethodSignature(idl.IDLVoidType, [idlType], [field.name])
                 const retConvertor = { isVoid: true, nativeType: () => Type.Void.name, macroSuffixPart: () => "V" }
                 const setAccessor = new MaterializedMethod(
                     name, [], [f.argConvertor], retConvertor, false,
@@ -757,7 +758,7 @@ export class IdlPeerProcessor {
 
         if (method === undefined) {
             // interface or class without constructors
-            const ctor = new Method("ctor", new NamedMethodSignature(Type.Void, [], []), [MethodModifier.STATIC])
+            const ctor = new Method("ctor", new NamedMethodSignature(idl.IDLVoidType, [], []), [MethodModifier.STATIC])
             return new MaterializedMethod(decl.name, [], [], retConvertor, false, ctor, 0)
         }
 
@@ -1019,11 +1020,10 @@ export function isSourceDecl(node: idl.IDLEntry): boolean {
 }
 
 function generateSignature(library: IdlPeerLibrary, method: idl.IDLCallable | idl.IDLMethod | idl.IDLConstructor): NamedMethodSignature {
-    const returnName = method.returnType!.name
-    const returnType = idl.isVoidType(method.returnType!) ? Type.Void
-        : idl.isConstructor(method) || !method.isStatic ? Type.This : new Type(returnName)
+    const returnType = idl.isVoidType(method.returnType!) ? idl.IDLVoidType
+        : idl.isConstructor(method) || !method.isStatic ? idl.IDLThisType : method.returnType!
     return new NamedMethodSignature(returnType,
-        method.parameters.map(it => new Type(library.mapType(it.type!), it.isOptional)),
+        method.parameters.map(it => maybeOptional(it.type!, it.isOptional)),
         method.parameters.map(it => it.name))
 }
 

@@ -121,7 +121,7 @@ export class MaterializedMethod extends PeerMethod {
 
     tsReturnType(): Type | undefined {
         const returnType = this.method.signature.returnType
-        return this.hasReceiver() && returnType.name === this.originalParentName ? Type.This : returnType
+        return this.hasReceiver() && returnType.name === this.originalParentName ? Type.This : new Type(returnType.name, returnType.optional)
     }
 }
 

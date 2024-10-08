@@ -26,6 +26,8 @@ import { ArkoalaInstall, LibaceInstall } from "../Install"
 import { ImportsCollector } from "./ImportsCollector"
 import { IdlPeerLibrary } from "./idl/IdlPeerLibrary"
 import { writeARKTSTypeCheckers, writeTSTypeCheckers } from "./printers/TypeCheckPrinter"
+import { toIDLNode } from "../from-idl/deserialize"
+import { IDLVoidType, toIDLType } from "../idl"
 
 export const warning = "WARNING! THIS FILE IS AUTO-GENERATED, DO NOT MAKE CHANGES, THEY WILL BE LOST ON NEXT GENERATION!"
 
@@ -88,17 +90,17 @@ import {
 `.trim()
 
 export function nativeModuleDeclaration(methods: LanguageWriter, predefinedMethods: Map<string, LanguageWriter>, nativeBridgePath: string, useEmpty: boolean, language: Language, nativeMethods?: LanguageWriter): string {
-    
+
     let text = readLangTemplate("NativeModule_template" + language.extension, language)
         .replace("%NATIVE_BRIDGE_PATH%", nativeBridgePath)
         .replace("%USE_EMPTY%", useEmpty.toString())
         .replaceAll("%GENERATED_METHODS%", methods.getOutput().join('\n'))
         .replaceAll("%GENERATED_NATIVE_FUNCTIONS%", nativeMethods ? nativeMethods.getOutput().join('\n') : "")
-    
+
     for (const [title, printer] of predefinedMethods) {
         text = text.replaceAll(`%GENERATED_PREDEFINED_${title}%`, printer.getOutput().join('\n'))
     }
-    
+
     return `
   ${language == Language.TS ? importTsInteropTypes : ""}
 
@@ -569,7 +571,7 @@ export function makeCEventsArkoalaImpl(implData: LanguageWriter, receiversList: 
     writer.concat(implData)
     writer.writeMethodImplementation(new Method(
         `GetArkUiEventsAPI`,
-        new MethodSignature(new Type(`const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI*`), []),
+        new MethodSignature(toIDLType(`const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI*`), []),
     ), (writer) => {
         writer.print(`static const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI eventsImpl = {`)
         writer.pushIndent()
@@ -595,14 +597,14 @@ export function makeCEventsLibaceImpl(implData: PrinterLike, receiversList: Prin
     writer.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI* g_OverriddenEventsImpl = nullptr;`)
     writer.writeMethodImplementation(new Method(
         `${PeerGeneratorConfig.cppPrefix}SetArkUiEventsAPI`,
-        new NamedMethodSignature(Type.Void, [new Type(`const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI*`)], [`api`]),
+        new NamedMethodSignature(IDLVoidType, [toIDLType(`const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI*`)], [`api`]),
     ), (writer) => {
         writer.writeStatement(writer.makeAssign(`g_OverriddenEventsImpl`, undefined, writer.makeString(`api`), false))
     })
 
     writer.writeMethodImplementation(new Method(
         `${PeerGeneratorConfig.cppPrefix}GetArkUiEventsAPI`,
-        new MethodSignature(new Type(`const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI*`), []),
+        new MethodSignature(toIDLType(`const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI*`), []),
     ), (writer) => {
         writer.print(`static const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI eventsImpl = {`)
         writer.pushIndent()

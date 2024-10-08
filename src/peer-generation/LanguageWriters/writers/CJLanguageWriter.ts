@@ -42,7 +42,7 @@ export class CJCheckDefinedExpression implements LanguageExpression {
 
 export class CJAssignStatement extends AssignStatement {
     constructor(public variableName: string,
-        public type: Type | undefined,
+        public type: IDLType | undefined,
         public expression: LanguageExpression,
         public isDeclared: boolean = true,
         public isConst: boolean = true) {
@@ -51,7 +51,7 @@ export class CJAssignStatement extends AssignStatement {
 
         write(writer: LanguageWriter): void {
             if (this.isDeclared) {
-                const typeSpec = this.type ? ': ' + writer.mapType(this.type) : ''
+                const typeSpec = this.type ? ': ' + writer.mapIDLType(this.type) : ''
                 writer.print(`${this.isConst ? "let" : "var"} ${this.variableName}${typeSpec} = ${this.expression.asString()}`)
             } else {
                 writer.print(`${this.variableName} = ${this.expression.asString()}`)
@@ -139,10 +139,10 @@ export class CJLanguageWriter extends LanguageWriter {
             super.writeMethodCall(receiver, method, params, nullable)
         }
     }
-    writeFieldDeclaration(name: string, type: Type, modifiers: FieldModifier[]|undefined, optional: boolean, initExpr?: LanguageExpression): void {
+    writeFieldDeclaration(name: string, type: IDLType, modifiers: FieldModifier[]|undefined, optional: boolean, initExpr?: LanguageExpression): void {
         const init = initExpr != undefined ? ` = ${initExpr.asString()}` : ``
         let prefix = this.makeFieldModifiersList(modifiers)
-        this.printer.print(`${prefix} var ${name}: ${optional ? '?' : ''}${this.mapType(type)}${init}`)
+        this.printer.print(`${prefix} var ${name}: ${optional ? '?' : ''}${this.mapIDLType(type)}${init}`)
     }
     writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void {
         this.writeDeclaration(name, signature, modifiers)
@@ -187,7 +187,7 @@ export class CJLanguageWriter extends LanguageWriter {
     makeCastEnumToInt(convertor: EnumConvertor, enumName: string, _unsafe?: boolean): string {
         return `${enumName}.getIntValue()`
     }
-    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
+    makeAssign(variableName: string, type: IDLType | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
         return new CJAssignStatement(variableName, type, expr, isDeclared, isConst)
     }
     makeArrayLength(array: string, length?: string): LanguageExpression {
@@ -329,36 +329,36 @@ export class CJLanguageWriter extends LanguageWriter {
         switch (type.name) {
             // Pointer
             case 'KPointer': return 'Int64'
-            
+
             // Integral
             case 'boolean': case 'KBoolean': return 'Bool'
-            case 'KUInt': return 'Int32' // ?? 
+            case 'KUInt': return 'Int32' // ??
             case 'int32': case 'KInt': return 'Int32'
             case 'KLong': return 'Int64'
-            
+
             // Number
             case 'number': return 'Float64'
             case 'double': return 'Float64'
             case 'KFloat': return 'Float32'
-            
+
             // Array like
             case 'Uint8Array': return 'ArrayList<UInt8>'
             case 'KUint8ArrayPtr': return 'ArrayList<UInt8>'
             case 'KInt32ArrayPtr': return 'ArrayList<Int32>'
             case 'KFloat32ArrayPtr': return 'ArrayList<Float32>'
-            
+
             // String like
             case 'KStringPtr': case 'String': case 'string': return 'String'
 
             // void
             case 'void': return 'Unit'
             case 'Void': return 'Unit'
-            
+
             //  Other
             case 'Length': return 'String'
 
             /////////////////////////////
-            // NEW ONES 
+            // NEW ONES
 
             // Array like
             case 'Vec_u8': return 'ArrayList<UInt8>'
@@ -367,7 +367,7 @@ export class CJLanguageWriter extends LanguageWriter {
         }
         const mapper = createPrimitiveTypeMapper({
             ptr: 'Int64',
-    
+
             void: 'Unit',
 
             bool: 'Bool',
@@ -379,7 +379,7 @@ export class CJLanguageWriter extends LanguageWriter {
             u32: 'UInt32',
             i64: 'Int64',
             u64: 'UInt64',
-            
+
             f32: 'Float32',
             f64: 'Float64',
 
@@ -395,25 +395,25 @@ export class CJLanguageWriter extends LanguageWriter {
         switch (type.name) {
             // Pointer
             case 'KPointer': return 'Int64'
-        
+
             // Integral
             case 'boolean': return 'Bool'
             case 'KBoolean': return 'Bool'
             case 'KUInt': return 'Int32' // ??
             case 'int32': case 'KInt': return 'Int32'
             case 'KLong': return 'Int64'
-            
+
             // Number
             case 'number': return 'Float64'
             case 'double': return 'Float64'
             case 'KFloat': return 'Float32'
-            
+
             // Array like
             case 'Uint8Array': return 'CPointer<UInt8>'
             case 'KUint8ArrayPtr': return 'CPointer<UInt8>'
             case 'KInt32ArrayPtr': return 'CPointer<Int32>'
             case 'KFloat32ArrayPtr': return 'CPointer<Float32>'
-            
+
             // String like
             case 'KStringPtr': return 'CString'
             case 'string': return 'CString'
@@ -421,12 +421,12 @@ export class CJLanguageWriter extends LanguageWriter {
 
             // void
             case 'void': return 'Unit'
-            
+
             //  Other
             case 'Length': return 'CString'
 
             /////////////////////////////
-            // NEW ONES 
+            // NEW ONES
 
             // Array like
             case 'Vec_u8': return 'CPointer<UInt8>'
@@ -435,7 +435,7 @@ export class CJLanguageWriter extends LanguageWriter {
         }
         const mapper = createPrimitiveTypeMapper({
             ptr: 'Int64',
-    
+
             void: 'Unit',
 
             bool: 'Bool',
@@ -447,7 +447,7 @@ export class CJLanguageWriter extends LanguageWriter {
             u32: 'UInt32',
             i64: 'Int64',
             u64: 'UInt64',
-            
+
             f32: 'Float32',
             f64: 'Float64',
 

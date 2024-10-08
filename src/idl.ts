@@ -108,6 +108,7 @@ export interface IDLType {
     fileName?: string
     extendedAttributes?: IDLExtendedAttribute[]
     documentation?: string
+    optional?: boolean
 }
 
 export const IDLTopType = { name: "__Top__", kind: IDLKind.Interface }
@@ -384,7 +385,7 @@ function createPrimitiveType(name: string): IDLPrimitiveType {
 
 export const IDLTypes = {
     ptr: createPrimitiveType('ptr'),
-    
+
     void: createPrimitiveType("void"),
 
     bool: createPrimitiveType('bool'),
@@ -396,7 +397,7 @@ export const IDLTypes = {
     u32: createPrimitiveType('u32'),
     i64: createPrimitiveType('i64'),
     u64: createPrimitiveType('u64'),
-    
+
     f32: createPrimitiveType('f32'),
     f64: createPrimitiveType('f64'),
 
@@ -428,6 +429,9 @@ export const IDLStringType: IDLPrimitiveType = createPrimitiveType("DOMString")
 export const IDLUndefinedType: IDLPrimitiveType = createPrimitiveType("undefined")
 // TODO: use void (need to fix IDL parser)
 export const IDLVoidType: IDLPrimitiveType = createPrimitiveType("Void")
+export const IDLInt32Type: IDLPrimitiveType = createPrimitiveType("int32")
+export const IDLPointerType: IDLPrimitiveType = createPrimitiveType("pointer")
+export const IDLThisType: IDLReferenceType = createReferenceType("this")
 
 export function createReferenceType(name: string, typeArguments?: NodeArray<TypeNode>): IDLReferenceType {
     if (typeArguments) {
@@ -796,6 +800,14 @@ export function toIDLType(typeName: string): IDLType {
         case "string": return IDLStringType
         case "undefined": return IDLUndefinedType
         case "void": return IDLVoidType
+        case "int32": return IDLInt32Type
+        case "pointer": return IDLPointerType
+        case "this": return IDLThisType
         default: return createReferenceType(typeName)
     }
+}
+
+export function maybeOptional(type: IDLType, optional: boolean|undefined): IDLType {
+    if (type.optional == optional) return type
+    return {...type, optional: optional}
 }

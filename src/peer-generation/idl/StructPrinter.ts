@@ -14,6 +14,7 @@
  */
 
 import * as idl from "../../idl"
+import { IDLEntry, IDLType } from "../../idl"
 import { IndentedPrinter } from "../../IndentedPrinter"
 import { camelCaseToUpperSnakeCase } from "../../util"
 import { RuntimeType } from "../ArgConvertors"
@@ -156,20 +157,20 @@ export class StructPrinter {
     }
 
     private writeRuntimeType(target: idl.IDLEntry, targetTypeName: string, isOptional: boolean, writer: LanguageWriter) {
-        const resultType = new Type("Ark_RuntimeType")
+        const resultType = idl.toIDLType("Ark_RuntimeType")
         const op = this.writeRuntimeTypeOp(target, targetTypeName, resultType, isOptional, writer)
         if (op) {
             writer.print("template <>")
             writer.writeMethodImplementation(
                 new Method("runtimeType",
-                    new NamedMethodSignature(resultType, [new Type(`const ${targetTypeName}&`)], ["value"]),
+                    new NamedMethodSignature(resultType, [idl.toIDLType(`const ${targetTypeName}&`)], ["value"]),
                     [MethodModifier.INLINE]),
                 op)
         }
     }
 
     private writeRuntimeTypeOp(
-        target: idl.IDLEntry, targetTypeName: string, resultType: Type, isOptional: boolean, writer: LanguageWriter
+        target: IDLEntry, targetTypeName: string, resultType: IDLType, isOptional: boolean, writer: LanguageWriter
     ) : ((writer: LanguageWriter) => void) | undefined
     {
         let result: LanguageExpression
