@@ -13,14 +13,14 @@
  * limitations under the License.
  */
 
-import { IDLContainerType, IDLParameter, IDLPrimitiveType, IDLType, IDLTypes, isContainerType, isPrimitiveType } from "../../../idl"
+import { IDLBooleanType, IDLContainerType, IDLF32Type, IDLF64Type, IDLI16Type, IDLI32Type, IDLI64Type, IDLI8Type, IDLNumberType, IDLParameter, IDLPointerType, IDLPrimitiveType, IDLStringType, IDLType, IDLU16Type, IDLU32Type, IDLU64Type, IDLU8Type, IDLVoidType, isContainerType, isPrimitiveType } from "../../../idl"
 import { IndentedPrinter } from "../../../IndentedPrinter"
 import { CJKeywords } from "../../../languageSpecificKeywords"
 import { isDefined, Language } from "../../../util"
-import { ArgConvertor, BaseArgConvertor, EnumConvertor, MapConvertor } from "../../Convertors"
+import { ArgConvertor, BaseArgConvertor, RuntimeType } from "../../ArgConvertors"
+import { EnumConvertor, MapConvertor } from "../../Convertors"
 import { FieldRecord } from "../../DeclarationTable"
 import { EnumEntity } from "../../PeerFile"
-import { RuntimeType } from "../../PeerGeneratorVisitor"
 import { mapType } from "../../TypeNodeNameConvertor"
 import { AssignStatement, ExpressionStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, ObjectArgs, ReturnStatement, Type } from "../LanguageWriter"
 import { TSCastExpression, TsObjectAssignStatement, TsObjectDeclareStatement, TsTupleAllocStatement } from "./TsLanguageWriter"
@@ -314,8 +314,8 @@ export class CJLanguageWriter extends LanguageWriter {
     }
     mapCIDLType(type:IDLType): string {
         if (isPrimitiveType(type)) {
-            switch (type.name) {
-                case 'str': return 'CString'
+            switch (type) {
+                case IDLStringType: return 'CString'
             }
         }
         if (isContainerType(type)) {
@@ -326,25 +326,23 @@ export class CJLanguageWriter extends LanguageWriter {
         return this.mapIDLType(type)
     }
     mapIDLPrimitiveType(type: IDLPrimitiveType): string {
-        return this.mapIDLPrimitiveTypeWith(type, rules => {
-            rules.match([IDLTypes.IDLPtrType], 'Int64')
-            rules.match([IDLTypes.IDLVoidType], 'Unit')
-            rules.match([IDLTypes.IDLBoolType, IDLTypes.IDLBooleanType], 'Bool')
-            
-            rules.match([IDLTypes.IDLI8Type], 'Int8')
-            rules.match([IDLTypes.IDLU8Type], 'UInt8')
-            rules.match([IDLTypes.IDLI16Type], 'Int16')
-            rules.match([IDLTypes.IDLU16Type], 'UInt16')
-            rules.match([IDLTypes.IDLI32Type], 'Int32')
-            rules.match([IDLTypes.IDLU32Type], 'UInt32')
-            rules.match([IDLTypes.IDLI64Type], 'Int64')
-            rules.match([IDLTypes.IDLU64Type], 'UInt64')
-            
-            rules.match([IDLTypes.IDLF32Type], 'Float32')
-            rules.match([IDLTypes.IDLF64Type, IDLTypes.IDLNumberType], 'Float64')
-
-            rules.match([IDLTypes.IDLStrType, IDLTypes.IDLStringType], 'String')
-        }) ?? super.mapIDLPrimitiveType(type)
+        switch (type) {
+            case IDLPointerType: return 'Int64'
+            case IDLVoidType: return 'Unit'
+            case IDLBooleanType:  return 'Bool'
+            case IDLI8Type: return 'Int8'
+            case IDLU8Type: return 'UInt8'
+            case IDLI16Type: return 'Int16'
+            case IDLU16Type: return 'UInt16'
+            case IDLI32Type: return 'Int32'
+            case IDLU32Type: return 'UInt32'
+            case IDLI64Type: return 'Int64'
+            case IDLU64Type: return 'UInt64'
+            case IDLF32Type: return 'Float32'
+            case IDLF64Type: case IDLNumberType: return 'Float64'
+            case IDLStringType: return 'String'
+        }
+        return super.mapIDLPrimitiveType(type)
     }
     mapType(type: Type): string {
         switch (type.name) {

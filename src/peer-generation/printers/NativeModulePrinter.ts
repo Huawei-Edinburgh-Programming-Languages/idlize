@@ -180,8 +180,8 @@ class NativeModuleVisitor {
 
 class CJNativeModuleVisitor extends NativeModuleVisitor {
     private arrayLikeTypes = new Set([
-        'Uint8Array', 'KUint8ArrayPtr', 'KInt32ArrayPtr', 'KFloat32ArrayPtr', 'Vec_u8', 'Vec_i32', 'Vec_f32'])
-    private stringLikeTypes = new Set(['String', 'KString', 'KStringPtr', 'string', 'str'])
+        'Uint8Array', 'KUint8ArrayPtr', 'KInt32ArrayPtr', 'KFloat32ArrayPtr'])
+    private stringLikeTypes = new Set(['String', 'KString', 'KStringPtr', 'string'])
 
     constructor(
         protected readonly library: PeerLibrary | IdlPeerLibrary,
@@ -251,7 +251,7 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
             printer.writePrintLog(name)
             if (returnType !== undefined 
                 && returnType.name !== Type.Void.name
-                && returnType.name !== idl.IDLTypes.IDLVoidType.name
+                && returnType.name !== idl.IDLVoidType.name
                 && returnType.name !== 'Void'
             ) {
                 printer.writeStatement(printer.makeReturn(printer.makeString(getReturnValue(returnType))))
@@ -334,7 +334,7 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
             printer.writePrintLog(method.name)
             if (inputMethod.returnType !== undefined 
                 && inputMethod.returnType.name !== Type.Void.name 
-                && inputMethod.returnType.name !== idl.IDLTypes.IDLVoidType.name
+                && inputMethod.returnType.name !== idl.IDLVoidType.name
                 && inputMethod.returnType.name !== 'Void'
             ) {
                 printer.writeStatement(printer.makeReturn(printer.makeString(getReturnValue(inputMethod.returnType))))
@@ -359,7 +359,7 @@ export function printNativeModuleEmpty(peerLibrary: PeerLibrary | IdlPeerLibrary
 
 function getReturnValue(type: idl.IDLType | Type): string {
 
-    const pointers = new Set(['ptr'])
+    const pointers = new Set(['pointer'])
     const integrals = new Set([
         'bool',
         'i8',  'u8',
@@ -371,7 +371,7 @@ function getReturnValue(type: idl.IDLType | Type): string {
         ...integrals, 'f32', 'f64'
     ])
     const strings = new Set([
-        'str'
+        'String'
     ])
 
     if (pointers.has(type.name)) {

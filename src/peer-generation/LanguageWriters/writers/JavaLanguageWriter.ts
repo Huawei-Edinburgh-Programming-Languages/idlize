@@ -15,13 +15,13 @@
 
 import { IndentedPrinter } from "../../../IndentedPrinter"
 import { Language } from "../../../util"
-import { ArgConvertor, BaseArgConvertor, EnumConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "../../Convertors"
+import { EnumConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "../../Convertors"
 import { convertJavaOptional } from "../../printers/lang/Java"
 import { AssignStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, ObjectArgs, ReturnStatement, Type } from "../LanguageWriter"
 import { CLikeExpressionStatement, CLikeLanguageWriter, CLikeLoopStatement, CLikeReturnStatement } from "./CLikeLanguageWriter"
-import { IDLContainerType, IDLPrimitiveType, IDLTypes } from '../../../idl'
-import { RuntimeType } from "../../PeerGeneratorVisitor"
+import { IDLBooleanType, IDLContainerType, IDLF32Type, IDLF64Type, IDLI16Type, IDLI32Type, IDLI64Type, IDLI8Type, IDLNumberType, IDLPointerType, IDLPrimitiveType, IDLStringType, IDLU16Type, IDLU32Type, IDLU64Type, IDLU8Type, IDLVoidType } from '../../../idl'
 import { LambdaExpression } from "./TsLanguageWriter"
+import { ArgConvertor, BaseArgConvertor, RuntimeType } from "../../ArgConvertors"
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -234,27 +234,23 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         return super.mapType(type)
     }
     mapIDLPrimitiveType(type: IDLPrimitiveType): string {
-        return this.mapIDLPrimitiveTypeWith(type, rules => {
-            rules.match([IDLTypes.IDLVoidType], 'void')
-            rules.match([IDLTypes.IDLBoolType, IDLTypes.IDLBooleanType], 'boolean')
-
-            rules.match([IDLTypes.IDLI8Type], 'byte')
-            rules.match([IDLTypes.IDLU8Type], 'byte') // not really
-            rules.match([IDLTypes.IDLI16Type], 'short')
-            rules.match([IDLTypes.IDLU16Type], 'short') // not really
-            rules.match([IDLTypes.IDLI32Type], 'int')
-            rules.match([IDLTypes.IDLU32Type], 'int') // not really
-            rules.match([IDLTypes.IDLI64Type], 'long')
-            rules.match([IDLTypes.IDLU64Type], 'long') // not really
-            
-            rules.match([IDLTypes.IDLF32Type], 'float')
-            rules.match([IDLTypes.IDLF64Type, IDLTypes.IDLNumberType], 'double')
-
-            rules.match([IDLTypes.IDLStrType, IDLTypes.IDLStringType], 'String')
-
-            rules.match([IDLTypes.IDLPtrType], 'long')
-
-        }) ?? super.mapIDLPrimitiveType(type)
+        switch (type) {
+            case IDLVoidType: return 'void'
+            case IDLBooleanType: return 'boolean'
+            case IDLI8Type: return 'byte'
+            case IDLU8Type: return 'byte' // not really
+            case IDLI16Type: return 'short'
+            case IDLU16Type: return 'short' // not really
+            case IDLI32Type: return 'int'
+            case IDLU32Type: return 'int' // not really
+            case IDLI64Type: return 'long'
+            case IDLU64Type: return 'long' // not really
+            case IDLF32Type: return 'float'
+            case IDLF64Type: case IDLNumberType: return 'double'
+            case IDLStringType: return 'String'
+            case IDLPointerType: return'long'
+        }
+        return super.mapIDLPrimitiveType(type)
     }
     nativeReceiver(): string { return 'NativeModule' }
     applyToObject(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): LanguageStatement {
