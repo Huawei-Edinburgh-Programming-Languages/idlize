@@ -15,13 +15,13 @@
 
 import { IndentedPrinter } from "../../../IndentedPrinter"
 import { capitalize, Language } from "../../../util"
-import { AggregateConvertor, ArgConvertor, ArrayConvertor, CustomTypeConvertor, EnumConvertor, OptionConvertor, StringConvertor } from "../../Convertors"
+import { AggregateConvertor, ArrayConvertor, EnumConvertor, OptionConvertor, StringConvertor } from "../../Convertors"
 import { FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, ObjectArgs, Type } from "../LanguageWriter"
 import { TSLambdaExpression, TSLanguageWriter } from "./TsLanguageWriter"
-import { IDLContainerType, IDLPrimitiveType, IDLTypes  } from '../../../idl'
-import { RuntimeType } from "../../PeerGeneratorVisitor"
+import { IDLBooleanType, IDLContainerType, IDLF32Type, IDLF64Type, IDLI16Type, IDLI32Type, IDLI64Type, IDLI8Type, IDLNumberType, IDLPointerType, IDLPrimitiveType, IDLStringType, IDLU16Type, IDLU32Type, IDLU64Type, IDLU8Type, IDLVoidType  } from '../../../idl'
 import { EnumEntity } from "../../PeerFile"
 import { createLiteralDeclName } from "../../TypeNodeNameConvertor"
+import { ArgConvertor, CustomTypeConvertor, RuntimeType } from "../../ArgConvertors"
 
 ////////////////////////////////////////////////////////////////
 //                         STATEMENTS                         //
@@ -126,9 +126,9 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         switch (type.name) {
             case 'sequence': {
                 switch (type.elementType[0].name) {
-                    case IDLTypes.IDLU8Type.name: return 'KUint8ArrayPtr'
-                    case IDLTypes.IDLI32Type.name: return 'KInt32ArrayPtr'
-                    case IDLTypes.IDLF32Type.name: return 'KFloat32ArrayPtr'
+                    case IDLU8Type.name: return 'KUint8ArrayPtr'
+                    case IDLI32Type.name: return 'KInt32ArrayPtr'
+                    case IDLF32Type.name: return 'KFloat32ArrayPtr'
                 }
             }
         }
@@ -152,27 +152,33 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         return super.mapType(type)
     }
     mapIDLPrimitiveType(type: IDLPrimitiveType): string {
-        return this.mapIDLPrimitiveTypeWith(type, rules => {
-            rules.match([IDLTypes.IDLPtrType], 'KPointer')
-            rules.match([IDLTypes.IDLVoidType], 'void')
-            rules.match([IDLTypes.IDLBoolType, IDLTypes.IDLBooleanType], 'KBoolean')
-            rules.match([
-                IDLTypes.IDLI8Type,
-                IDLTypes.IDLU8Type,
-                IDLTypes.IDLI16Type,
-                IDLTypes.IDLU16Type,
-                IDLTypes.IDLI32Type,
-                IDLTypes.IDLU32Type,
-            ], 'KInt')
-            rules.match([
-                IDLTypes.IDLI64Type,
-                IDLTypes.IDLU64Type,
-            ], 'KLong')
-            rules.match([IDLTypes.IDLF32Type], 'KFloat')
-            rules.match([IDLTypes.IDLNumberType, IDLTypes.IDLF64Type], 'number')
+        switch (type) {
+            case IDLPointerType: return 'KPointer'
+            case IDLVoidType: return 'void'
+            case IDLBooleanType: return 'KBoolean'
+            
+            case IDLI8Type:
+            case IDLU8Type:
+            case IDLI16Type:
+            case IDLU16Type:
+            case IDLI32Type:
+            case IDLU32Type:
+                return 'KInt'
 
-            rules.match([IDLTypes.IDLStrType, IDLTypes.IDLStringType], 'KStringPtr')
-        }) ?? super.mapIDLPrimitiveType(type)
+            case IDLI64Type:
+            case IDLU64Type:
+                return 'KLong'
+
+            case IDLF32Type:
+                return 'KFloat'
+
+            case IDLF64Type:
+            case IDLNumberType:
+                return 'number'
+
+            case IDLStringType: return 'KStringPtr'
+        }
+        return super.mapIDLPrimitiveType(type)
     }
     get supportedModifiers(): MethodModifier[] {
         return [MethodModifier.PUBLIC, MethodModifier.PRIVATE, MethodModifier.NATIVE, MethodModifier.STATIC]

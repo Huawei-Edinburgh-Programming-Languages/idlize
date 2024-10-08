@@ -21,7 +21,14 @@ import {
     IDLEntity, IDLEntry, IDLEnum, IDLEnumMember, IDLExtendedAttribute, IDLFunction, IDLInterface, IDLKind, IDLMethod, IDLModuleType, IDLParameter, IDLProperty, IDLTopType, IDLType, IDLTypedef,
     IDLAccessorAttribute, IDLExtendedAttributes, getExtAttribute, IDLPackage, IDLImport,
     isContainerType,
-    IDLTypes
+    IDLStringType,
+    IDLNumberType,
+    IDLUndefinedType,
+    IDLNullType,
+    IDLVoidType,
+    IDLAnyType,
+    IDLBooleanType,
+    IDLBigintType,
 } from "./idl"
 import {
     asString, getComment, getDeclarationsByNode, getExportedDeclarationNameByDecl, getExportedDeclarationNameByNode, identName, isCommonMethodOrSubclass, isDefined, isExport, isNodePublic, isPrivate, isProtected, isReadonly, isStatic, nameOrNull, stringOrNone
@@ -36,7 +43,7 @@ const typeMapper = new Map<string, string>(
     [
         ["object", "Object"],
         ["Array", "sequence"],
-        ["string", "DOMString"],
+        ["string",IDLStringType.name],
         ["Map", "record"],
         // TODO: rethink that
         ["\"2d\"", "string"],
@@ -116,7 +123,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             name,
             kind: IDLKind.EnumMember,
             parent,
-            type: { name: "DOMString", kind: IDLKind.PrimitiveType },
+            type: IDLStringType,
             initializer: value
         }
         parent.elements.push(result)
@@ -593,7 +600,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             parent,
             fileName: node.getSourceFile().fileName,
             documentation: getDocumentation(this.sourceFile, node, this.options.docs),
-            type: isString ? IDLTypes.IDLStringType : IDLTypes.IDLNumberType,
+            type: isString ? IDLStringType : IDLNumberType,
             initializer: initializer
         }
     }
@@ -664,38 +671,38 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
     }
 
     serializeType(type: ts.TypeNode | undefined, nameSuggestion: string): IDLType {
-        if (type == undefined) return IDLTypes.IDLUndefinedType // TODO: can we have implicit types in d.ts?
+        if (type == undefined) return IDLUndefinedType // TODO: can we have implicit types in d.ts?
 
         if (type.kind == ts.SyntaxKind.UndefinedKeyword) {
-            return IDLTypes.IDLUndefinedType
+            return IDLUndefinedType
         }
         if (type.kind == ts.SyntaxKind.NullKeyword) {
-            return IDLTypes.IDLNullType
+            return IDLNullType
         }
         if (type.kind == ts.SyntaxKind.VoidKeyword) {
-            return IDLTypes.IDLVoidType
+            return IDLVoidType
             // return IDLUndefinedType
         }
         if (type.kind == ts.SyntaxKind.UnknownKeyword) {
             return createReferenceType("unknown")
         }
         if (type.kind == ts.SyntaxKind.AnyKeyword) {
-            return IDLTypes.IDLAnyType
+            return IDLAnyType
         }
         if (type.kind == ts.SyntaxKind.ObjectKeyword) {
             return createReferenceType("object")
         }
         if (type.kind == ts.SyntaxKind.NumberKeyword) {
-            return IDLTypes.IDLNumberType
+            return IDLNumberType
         }
         if (type.kind == ts.SyntaxKind.BooleanKeyword) {
-            return IDLTypes.IDLBooleanType
+            return IDLBooleanType
         }
         if (type.kind == ts.SyntaxKind.StringKeyword) {
-            return IDLTypes.IDLStringType
+            return IDLStringType
         }
         if (type.kind == ts.SyntaxKind.BigIntKeyword) {
-            return IDLTypes.IDLBigintType
+            return IDLBigintType
         }
         if (ts.isUnionTypeNode(type)) {
             const types = type.types
@@ -706,7 +713,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
                 console.log(`WARNING: ${type.getText()} is a union of Promises. This is not supported by the IDL.`)
                 return aPromise
             }
-            if (types.find(it => it.name == "any")) return IDLTypes.IDLAnyType
+            if (types.find(it => it.name == "any")) return IDLAnyType
             return typeOrUnion(types)
         }
         if (ts.isIntersectionTypeNode(type)) {
@@ -766,7 +773,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         }
         if (ts.isIndexedAccessTypeNode(type)) {
             // TODO: plain wrong.
-            return IDLTypes.IDLStringType
+            return IDLStringType
         }
         if (ts.isTypeLiteralNode(type)) {
             const name = this.compileContext.uniqualize(`${nameSuggestion}_Object`)
@@ -777,31 +784,31 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         if (ts.isLiteralTypeNode(type)) {
             const literal = type.literal
             if (ts.isStringLiteral(literal) || ts.isNoSubstitutionTemplateLiteral(literal) || ts.isRegularExpressionLiteral(literal)) {
-                return IDLTypes.IDLStringType
+                return IDLStringType
             }
             // Unary expressions for negative values.
             if (ts.isNumericLiteral(literal) || ts.isPrefixUnaryExpression(literal)) {
-                return IDLTypes.IDLNumberType
+                return IDLNumberType
             }
             if (literal.kind == ts.SyntaxKind.NullKeyword) {
                 // TODO: Is it correct to have undefined for null?
-                return IDLTypes.IDLNullType
+                return IDLNullType
             }
             if (literal.kind == ts.SyntaxKind.FalseKeyword || literal.kind == ts.SyntaxKind.TrueKeyword) {
-                return IDLTypes.IDLBooleanType
+                return IDLBooleanType
             }
             throw new Error(`Non-representable type: ${asString(type)}: ${type.getText()} ${type.kind}`)
         }
         if (ts.isTemplateLiteralTypeNode(type)) {
-            return IDLTypes.IDLStringType
+            return IDLStringType
         }
         if (ts.isTypeOperatorNode(type)) {
             console.log("WARNING: typeof is not supported properly, return string")
-            return IDLTypes.IDLStringType
+            return IDLStringType
         }
         if (ts.isTypeQueryNode(type)) {
             console.log(`WARNING: unsupported type query: ${type.getText()}`)
-            return IDLTypes.IDLAnyType
+            return IDLAnyType
         }
         if (ts.isImportTypeNode(type)) {
             let originalText = `${type.getText(this.sourceFile)}`

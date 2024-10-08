@@ -87,9 +87,9 @@ export class TSTypeNameConvertor implements IdlTypeNameConvertor, TypeConvertor<
     }
     convertPrimitiveType(type: idl.IDLPrimitiveType): string {
         switch (type) {
-            case idl.IDLTypes.IDLStringType: return "string"
-            case idl.IDLTypes.IDLNullType: return "null"
-            case idl.IDLTypes.IDLVoidType: return "void"
+            case idl.IDLStringType: return "string"
+            case idl.IDLNullType: return "null"
+            case idl.IDLVoidType: return "void"
         }
         return type.name
     }
@@ -234,37 +234,26 @@ class JavaTypeAliasConvertor implements TypeConvertor<JavaTypeAlias> {
         return JavaTypeAlias.fromTypeName(type.name, false)
     }
     convertPrimitiveType(type: idl.IDLPrimitiveType): JavaTypeAlias {
-        // TODO
-        if (this.idlPrimitiveToJavaMap.has(type.name)) {
-            return this.idlPrimitiveToJavaMap.get(type.name)!
+        switch (type) {
+            case idl.IDLStringType: return JavaTypeAlias.fromTypeName('String', false)
+            case idl.IDLNumberType: return JavaTypeAlias.fromTypeName('double', false)
+            case idl.IDLBooleanType: return JavaTypeAlias.fromTypeName('boolean', false)
+            case idl.IDLUndefinedType: return JavaTypeAlias.fromTypeName('Ark_Undefined', false)
+            case idl.IDLAnyType: return JavaTypeAlias.fromTypeName(ARK_CUSTOM_OBJECT, false)
+            case idl.IDLI8Type: return JavaTypeAlias.fromTypeName('byte', false)
+            case idl.IDLU8Type: return JavaTypeAlias.fromTypeName('byte', false)
+            case idl.IDLI16Type: return JavaTypeAlias.fromTypeName('short', false)
+            case idl.IDLU16Type: return JavaTypeAlias.fromTypeName('short', false)
+            case idl.IDLI32Type: return JavaTypeAlias.fromTypeName('int', false)
+            case idl.IDLU32Type: return JavaTypeAlias.fromTypeName('int', false)
+            case idl.IDLI64Type: return JavaTypeAlias.fromTypeName('long', false)
+            case idl.IDLU64Type: return JavaTypeAlias.fromTypeName('long', false)
+            case idl.IDLF32Type: return JavaTypeAlias.fromTypeName('float', false)
+            case idl.IDLF64Type: return JavaTypeAlias.fromTypeName('double', false)
+            case idl.IDLPointerType: return JavaTypeAlias.fromTypeName('long', false)
         }
         throw new Error(`Unsupported IDL primitive ${type.name}`)
     }
-
-    private readonly idlPrimitiveToJavaMap = new Map([
-        [idl.IDLTypes.IDLStringType.name, JavaTypeAlias.fromTypeName('String', false)],
-        [idl.IDLTypes.IDLNumberType.name, JavaTypeAlias.fromTypeName('double', false)],
-        [idl.IDLTypes.IDLBooleanType.name, JavaTypeAlias.fromTypeName('boolean', false)],
-        [idl.IDLTypes.IDLUndefinedType.name, JavaTypeAlias.fromTypeName('Ark_Undefined', false)],
-        [idl.IDLTypes.IDLAnyType.name, JavaTypeAlias.fromTypeName(ARK_CUSTOM_OBJECT, false)],
-       
-        [idl.IDLTypes.IDLBoolType.name, JavaTypeAlias.fromTypeName('boolean', false)],
-        [idl.IDLTypes.IDLI8Type.name, JavaTypeAlias.fromTypeName('byte', false)],
-        [idl.IDLTypes.IDLU8Type.name, JavaTypeAlias.fromTypeName('byte', false)],
-        [idl.IDLTypes.IDLI16Type.name, JavaTypeAlias.fromTypeName('short', false)],
-        [idl.IDLTypes.IDLU16Type.name, JavaTypeAlias.fromTypeName('short', false)],
-        [idl.IDLTypes.IDLI32Type.name, JavaTypeAlias.fromTypeName('int', false)],
-        [idl.IDLTypes.IDLU32Type.name, JavaTypeAlias.fromTypeName('int', false)],
-        [idl.IDLTypes.IDLI64Type.name, JavaTypeAlias.fromTypeName('long', false)],
-        [idl.IDLTypes.IDLU64Type.name, JavaTypeAlias.fromTypeName('long', false)],
-
-        [idl.IDLTypes.IDLF32Type.name, JavaTypeAlias.fromTypeName('float', false)],
-        [idl.IDLTypes.IDLF64Type.name, JavaTypeAlias.fromTypeName('double', false)],
-
-        [idl.IDLTypes.IDLStrType.name, JavaTypeAlias.fromTypeName('String', false)],
-        [idl.IDLTypes.IDLPtrType.name, JavaTypeAlias.fromTypeName('long', false)],
-        // TODO: add other primitive types
-    ])
     private readonly javaPrimitiveToReferenceTypeMap = new Map([
         ['byte', JavaTypeAlias.fromTypeName('Byte', false)],
         ['short', JavaTypeAlias.fromTypeName('Short', false)],
