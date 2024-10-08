@@ -313,3 +313,8 @@ export class JavaTypeNameConvertor implements IdlTypeNameConvertor {
         return typeAlias.type.nullable ? convertJavaOptional(typeAlias.type.name) : typeAlias.type.name
     }
 }
+
+
+export class ArkTSTypeNameConvertor extends TSTypeNameConvertor {
+
+}
