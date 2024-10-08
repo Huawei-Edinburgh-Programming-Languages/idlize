@@ -120,7 +120,7 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
         imports.print(writer, removeExt(this.generateFileBasename(file.originalFilename)))
     }
 
-    private printAssignEnumsToGlobalScope(writer: LanguageWriter, peerFile: IdlPeerFile) {
+    protected printAssignEnumsToGlobalScope(writer: LanguageWriter, peerFile: IdlPeerFile) {
         if (![Language.TS, Language.ARKTS].includes(writer.language)) return
         if (peerFile.enums.length != 0) {
             writer.print(`Object.assign(globalThis, {`)
@@ -398,12 +398,26 @@ class JavaInterfacesVisitor extends DefaultInterfacesVisitor {
     }
 }
 
+class ArkTSDeclConvertor extends TSDeclConvertor {
+
+}
+
+
+class ArkTSInterfacesVisitor extends TSInterfacesVisitor {
+    protected printAssignEnumsToGlobalScope(writer_: LanguageWriter, peerFile_: IdlPeerFile) {
+        // Not supported
+    }
+}
+
 function getVisitor(peerLibrary: IdlPeerLibrary, context: PrinterContext): InterfacesVisitor | undefined {
     if (context.language == Language.TS) {
         return new TSInterfacesVisitor(peerLibrary)
     }
     if (context.language == Language.JAVA) {
         return new JavaInterfacesVisitor(peerLibrary)
+    }
+    if (context.language == Language.ARKTS) {
+        return new ArkTSInterfacesVisitor(peerLibrary)
     }
 }
 
@@ -428,6 +442,9 @@ export function createDeclarationConvertor(writer: LanguageWriter, peerLibrary: 
     }
     if (writer.language === Language.JAVA) {
         return new JavaDeclarationConvertor(peerLibrary, decl => writer.concat(decl.writer))
+    }
+    if (writer.language === Language.ARKTS) {
+        return new ArkTSDeclConvertor(writer, peerLibrary)
     }
     throwException("new ArkTSDeclConvertor(writer, peerLibrary)")
 }

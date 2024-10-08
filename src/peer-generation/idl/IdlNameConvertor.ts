@@ -19,6 +19,7 @@ import { IdlPeerLibrary } from './IdlPeerLibrary'
 import { DeclarationConvertor, TypeConvertor, convertType } from './IdlTypeConvertor'
 import { Type } from '../LanguageWriters'
 import { ARK_CUSTOM_OBJECT, convertJavaOptional, javaCustomTypeMapping } from '../printers/lang/Java'
+import { IDLPrimitiveType } from "../../idl";
 
 export interface IdlTypeNameConvertor {
     convert(type: idl.IDLType): string
@@ -316,5 +317,10 @@ export class JavaTypeNameConvertor implements IdlTypeNameConvertor {
 
 
 export class ArkTSTypeNameConvertor extends TSTypeNameConvertor {
-
+    convertPrimitiveType(type: IDLPrimitiveType): string {
+        switch (type) {
+            case idl.IDLAnyType: return "object"
+        }
+        return super.convertPrimitiveType(type);
+    }
 }

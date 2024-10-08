@@ -38,6 +38,7 @@ import { convert } from "./common"
 import { collectJavaImportsForDeclaration } from "../printers/lang/JavaIdlUtils"
 import { ARK_CUSTOM_OBJECT, javaCustomTypeMapping } from "../printers/lang/Java"
 import { Language } from "../../Language"
+import { IDLEntry } from "../../idl";
 
 /**
  * Theory of operations.
@@ -416,6 +417,18 @@ class JavaDeclarationCollector extends DeclarationDependenciesCollector {
     }
 }
 
+
+class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
+
+}
+
+
+class ArkTSFilteredDeclarationCollector extends FilteredDeclarationCollector {
+    convert(node: IDLEntry | undefined): IDLEntry[] {
+        const res = super.convert(node)
+        return res;
+    }
+}
 
 class ComponentsCompleter {
     constructor(
@@ -915,6 +928,9 @@ function createTypeDependenciesCollector(library: IdlPeerLibrary): TypeDependenc
         case Language.ARKTS: return new ArkTSTypeDependenciesCollector(library, false)
         case Language.JAVA: return new JavaTypeDependenciesCollector(library, true)
     }
+    if (library.language === Language.ARKTS) {
+        return new ArkTSImportsAggregateCollector(library, true)
+    }
     // TODO: support other languages
     return new ImportsAggregateCollector(library, false)
 }
@@ -924,6 +940,9 @@ function createDeclDependenciesCollector(library: IdlPeerLibrary, typeDependenci
         case Language.TS: return new FilteredDeclarationCollector(library, typeDependenciesCollector)
         case Language.ARKTS: return new FilteredDeclarationCollector(library, typeDependenciesCollector)
         case Language.JAVA: return new JavaDeclarationCollector(library, typeDependenciesCollector)
+    }
+    if (library.language == Language.ARKTS) {
+        return new ArkTSFilteredDeclarationCollector(library, typeDependenciesCollector)
     }
     // TODO: support other languages
     return new FilteredDeclarationCollector(library, typeDependenciesCollector)
@@ -935,6 +954,9 @@ function createSerializeDeclDependenciesCollector(library: IdlPeerLibrary): Decl
         case Language.TS: return new FilteredDeclarationCollector(library, new ImportsAggregateCollector(library, expandAliases))
         case Language.ARKTS: return new FilteredDeclarationCollector(library, new ArkTSTypeDependenciesCollector(library, expandAliases))
         case Language.JAVA: return new JavaDeclarationCollector(library, new JavaTypeDependenciesCollector(library, expandAliases))
+    }
+    if (library.language === Language.ARKTS) {
+        return new ArkTSFilteredDeclarationCollector(library, new ImportsAggregateCollector(library, expandAliases))
     }
     // TODO: support other languages
     return new FilteredDeclarationCollector(library, new ImportsAggregateCollector(library, expandAliases))
