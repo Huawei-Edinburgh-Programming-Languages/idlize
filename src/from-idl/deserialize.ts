@@ -22,9 +22,14 @@ import {
     isSingleTypeDescription, isTypedef, isUnionTypeDescription
 } from "./webidl2-utils"
 import { toString } from "./toString"
-import { createContainerType, createUnionType, IDLCallable, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLEnumMember, IDLExtendedAttribute, IDLImport, IDLInterface, IDLKind,
-    IDLMethod, IDLModuleType, IDLPackage, IDLParameter, IDLPrimitiveType, IDLProperty, IDLType, IDLTypedef,
-    IDLTypes
+import { createContainerType, createUnionType, IDLAnyType, IDLBooleanType, IDLCallable, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLEnumMember, IDLExtendedAttribute, IDLF32Type, IDLF64Type, IDLI16Type, IDLI32Type, IDLI64Type, IDLI8Type, IDLImport, IDLInterface, IDLKind,
+    IDLMethod, IDLModuleType, IDLNullType, IDLNumberType, IDLPackage, IDLParameter, IDLPointerType, IDLPrimitiveType, IDLProperty, IDLStringType, IDLType, IDLTypedef,
+    IDLU16Type,
+    IDLU32Type,
+    IDLU64Type,
+    IDLU8Type,
+    IDLUndefinedType,
+    IDLVoidType
 } from "../idl"
 import { isDefined, stringOrNone } from "../util"
 
@@ -160,30 +165,24 @@ function toIDLType(file: string, type: webidl2.IDLTypeDescription | string, extA
     }
     if (isSingleTypeDescription(type)) {
         switch (type.idlType) {
-            case "any": return IDLTypes.IDLAnyType
-            case "boolean": return IDLTypes.IDLBooleanType
-            case "null_": return IDLTypes.IDLNullType
-            case "number": return IDLTypes.IDLNumberType
-            case "DOMString": return IDLTypes.IDLStringType
-            case "undefined": return IDLTypes.IDLUndefinedType
-            case "void": return IDLTypes.IDLVoidType
-
-            case "i8": return IDLTypes.IDLI8Type
-            case "u8": return IDLTypes.IDLU8Type
-            case "i16": return IDLTypes.IDLI16Type
-            case "u16": return IDLTypes.IDLU16Type
-            case "i32": return IDLTypes.IDLI32Type
-            case "u32": return IDLTypes.IDLU32Type
-            case "i64": return IDLTypes.IDLI64Type
-            case "u64": return IDLTypes.IDLU64Type
-
-            case 'f32': return IDLTypes.IDLF32Type
-            case 'f64': return IDLTypes.IDLF64Type
-
-            case 'bool': return IDLTypes.IDLBoolType
-            case 'ptr': return IDLTypes.IDLPtrType
-
-            case 'str': return IDLTypes.IDLStrType
+            case IDLAnyType.name: return IDLAnyType
+            case IDLBooleanType.name: return IDLBooleanType
+            case IDLNullType.name: return IDLNullType
+            case IDLNumberType.name: return IDLNumberType
+            case IDLStringType.name: return IDLStringType
+            case IDLUndefinedType.name: return IDLUndefinedType
+            case IDLVoidType.name: return IDLVoidType
+            case IDLI8Type.name: return IDLI8Type
+            case IDLU8Type.name: return IDLU8Type
+            case IDLI16Type.name: return IDLI16Type
+            case IDLU16Type.name: return IDLU16Type
+            case IDLI32Type.name: return IDLI32Type
+            case IDLU32Type.name: return IDLU32Type
+            case IDLI64Type.name: return IDLI64Type
+            case IDLU64Type.name: return IDLU64Type
+            case IDLF32Type.name: return IDLF32Type
+            case IDLF64Type.name: return IDLF64Type
+            case IDLPointerType.name: return IDLPointerType
 
         }
         const combinedExtAttrs = extAttrs
@@ -379,7 +378,7 @@ function toIDLEnum(file: string, node: webidl2.EnumType): IDLEnum {
             kind: IDLKind.EnumMember,
             name: it.value,
             parent: result,
-            type: IDLTypes.IDLNumberType,
+            type: IDLNumberType,
             initializer: undefined
         }
     })
