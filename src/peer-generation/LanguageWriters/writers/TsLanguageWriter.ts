@@ -15,13 +15,13 @@
 
 import { IndentedPrinter } from "../../../IndentedPrinter"
 import { Language } from "../../../util"
-import { ArgConvertor, ArrayConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "../../Convertors"
+import { ArrayConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "../../Convertors"
 import { FieldRecord } from "../../DeclarationTable"
-import { RuntimeType } from "../../PeerGeneratorVisitor"
 import { mapType, TSTypeNodeNameConvertor } from "../../TypeNodeNameConvertor"
 import { AssignStatement, ExpressionStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, ObjectArgs, ReturnStatement, Type } from "../LanguageWriter"
-import { IDLContainerType, IDLPrimitiveType, IDLTypes } from '../../../idl'
+import { IDLContainerType, IDLF32Type, IDLF64Type, IDLI16Type, IDLI32Type, IDLI64Type, IDLI8Type, IDLNumberType, IDLPointerType, IDLPrimitiveType, IDLStringType, IDLU16Type, IDLU32Type, IDLU64Type, IDLU8Type, IDLVoidType } from '../../../idl'
 import * as ts from 'typescript'
+import { ArgConvertor, RuntimeType } from "../../ArgConvertors"
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -350,9 +350,9 @@ export class TSLanguageWriter extends LanguageWriter {
         switch (type.name) {
             case 'sequence': {
                 switch (type.elementType[0].name) {
-                    case IDLTypes.IDLU8Type.name: return 'Uint8Array'
-                    case IDLTypes.IDLI32Type.name: return 'Int32Array'
-                    case IDLTypes.IDLF32Type.name: return 'Float32Array'
+                    case IDLU8Type.name: return 'Uint8Array'
+                    case IDLI32Type.name: return 'Int32Array'
+                    case IDLF32Type.name: return 'Float32Array'
                 }
             }
         }
@@ -365,27 +365,27 @@ export class TSLanguageWriter extends LanguageWriter {
         return super.mapType(type)
     }
     mapIDLPrimitiveType(type: IDLPrimitiveType): string {
-        return this.mapIDLPrimitiveTypeWith(type, rules => {
-            rules.match([IDLTypes.IDLPtrType], 'number | bigint')
-            rules.match([IDLTypes.IDLVoidType], 'void')
-            rules.match([IDLTypes.IDLBoolType, IDLTypes.IDLBooleanType], 'number') // mb boolean
-            rules.match([
-                IDLTypes.IDLI8Type,
-                IDLTypes.IDLU8Type,
-                IDLTypes.IDLI16Type,
-                IDLTypes.IDLU16Type,
-                IDLTypes.IDLI32Type,
-                IDLTypes.IDLU32Type,
-                IDLTypes.IDLI64Type,
-                IDLTypes.IDLU64Type,
-                IDLTypes.IDLF32Type,
-                IDLTypes.IDLF64Type,
-                IDLTypes.IDLNumberType
-            ], 'number')
-            rules.match([
-                IDLTypes.IDLStrType, IDLTypes.IDLStringType
-            ], 'string')
-        }) ?? super.mapIDLPrimitiveType(type)
+        switch (type) {
+            case IDLPointerType: return 'number | bigint'
+            case IDLVoidType: return 'void'
+
+            case IDLI8Type:
+            case IDLU8Type:
+            case IDLI16Type:
+            case IDLU16Type:
+            case IDLI32Type:
+            case IDLU32Type:
+            case IDLI64Type:
+            case IDLU64Type:
+            case IDLF32Type:
+            case IDLF64Type:
+            case IDLNumberType:
+                return 'number'
+
+            case IDLStringType:
+                return 'string'
+        }
+        return super.mapIDLPrimitiveType(type)
     }
     override castToBoolean(value: string): string { return `+${value}` }
     override makeCallIsObject(value: string): LanguageExpression {

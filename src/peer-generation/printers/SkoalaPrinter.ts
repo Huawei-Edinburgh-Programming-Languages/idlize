@@ -91,9 +91,9 @@ export class SkoalaCCodeGenerator {
             case "float32": return "float"
             case "int32": return "int"
             case "uint32": return "unsigned int"
-            case idl.IDLTypes.IDLBooleanType.name: return "bool"
-            case idl.IDLTypes.IDLStringType.name: return "char*"
-            case idl.IDLTypes.IDLVoidType.name: return "void"
+            case idl.IDLBooleanType.name: return "bool"
+            case idl.IDLStringType.name: return "char*"
+            case idl.IDLVoidType.name: return "void"
             case "KNativePointer": return "KNativePointer"
             default: return "void*"
         }
