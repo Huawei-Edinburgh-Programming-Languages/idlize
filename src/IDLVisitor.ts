@@ -17,7 +17,7 @@ import * as path from "path"
 import { parse } from 'comment-parser'
 import {
     createContainerType, createEnumType, createReferenceType,
-    createTypeParameterReference, createUnionType, IDLCallable, IDLCallback, IDLConstant, IDLConstructor,
+    createTypeParameterReference, IDLCallable, IDLCallback, IDLConstant, IDLConstructor,
     IDLEntity, IDLEntry, IDLEnum, IDLEnumMember, IDLExtendedAttribute, IDLFunction, IDLInterface, IDLKind, IDLMethod, IDLModuleType, IDLParameter, IDLProperty, IDLTopType, IDLType, IDLTypedef,
     IDLAccessorAttribute, IDLExtendedAttributes, getExtAttribute, IDLPackage, IDLImport,
     isContainerType,
@@ -719,7 +719,8 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
 
             if (types.find(it => it == IDLVoidType)) {
                 console.log(`WARNING: ${type.getText()} is union with 'void', which is not supported, remove 'void' variant`)
-                types = types.filter(it => it != IDLVoidType)
+                // TODO: remove void from union when original SDK is removed from compilation.
+                // types = types.filter(it => it != IDLVoidType)
             }
             return typeOrUnion(types)
         }
