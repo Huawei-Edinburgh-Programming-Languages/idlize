@@ -1,4 +1,4 @@
-type Pointer = number
+type Pointer = bigint
 type int32 = number
 type EventType = number // actually enum
 

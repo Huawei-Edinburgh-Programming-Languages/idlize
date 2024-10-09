@@ -22,7 +22,7 @@ import { hasExtAttribute, IDLCallback, IDLEntry, IDLEnum, IDLExtendedAttributes,
 import { readLangTemplate } from './FileGenerators'
 import { capitalize, Language } from '../util'
 import { isMaterialized } from './idl/IdlPeerGeneratorVisitor'
-import { ArkPrimitiveType } from './ArkPrimitiveType'
+import { PrimitiveType } from './ArkPrimitiveType'
 
 class NameType {
     constructor(public name: string, public type: string) {}
@@ -61,10 +61,10 @@ class OHOSVisitor {
         this.library.requestType(type, true)
 
         if (OHOSVisitor.knownBasicTypes.has(type.name))
-            return `${ArkPrimitiveType.Prefix}${type.name}`
+            return `${PrimitiveType.Prefix}${type.name}`
 
         if (isReferenceType(type) || isEnum(type) || isEnumType(type)) {
-            return `${ArkPrimitiveType.Prefix}${this.libraryName}_${type.name!}`
+            return `${PrimitiveType.Prefix}${this.libraryName}_${type.name!}`
         }
         return this.hWriter.mapIDLType(type)
     }
@@ -75,7 +75,7 @@ class OHOSVisitor {
     }
 
     private writeData(clazz: IDLInterface) {
-        let name = `${ArkPrimitiveType.Prefix}${this.libraryName}_${clazz.name}`
+        let name = `${PrimitiveType.Prefix}${this.libraryName}_${clazz.name}`
         let _ = this.hWriter
         _.print(`typedef struct ${name} {`)
         _.pushIndent()
@@ -89,7 +89,7 @@ class OHOSVisitor {
     private writeCallback(callback: IDLCallback) {
         let _ = this.hWriter
         // Stub for now, fix.
-        _.print(`typedef void* ${ArkPrimitiveType.Prefix}${this.libraryName}_${callback.name};`)
+        _.print(`typedef void* ${PrimitiveType.Prefix}${this.libraryName}_${callback.name};`)
     }
 
     private impls = new Map<string, SignatureDescriptor>()
@@ -160,12 +160,12 @@ class OHOSVisitor {
 
     private modifierName(clazz: IDLInterface): string {
         if (hasExtAttribute(clazz, IDLExtendedAttributes.GlobalScope)) {
-            return `${ArkPrimitiveType.Prefix}${this.libraryName}_Modifier`
+            return `${PrimitiveType.Prefix}${this.libraryName}_Modifier`
         }
-        return `${ArkPrimitiveType.Prefix}${this.libraryName}_${clazz.name}Modifier`
+        return `${PrimitiveType.Prefix}${this.libraryName}_${clazz.name}Modifier`
     }
     private handleType(name: string): string {
-        return `${ArkPrimitiveType.Prefix}${this.libraryName}_${name}Handle`
+        return `${PrimitiveType.Prefix}${this.libraryName}_${name}Handle`
     }
 
     private writeImpls() {
@@ -193,9 +193,9 @@ class OHOSVisitor {
         // Create API.
         let api = this.libraryName
         let _c = writer
-        _c.print(`const ${ArkPrimitiveType.Prefix}${api}_API* Get${api}APIImpl(int version) {`)
+        _c.print(`const ${PrimitiveType.Prefix}${api}_API* Get${api}APIImpl(int version) {`)
         _c.pushIndent()
-        _c.print(`const static ${ArkPrimitiveType.Prefix}${api}_API api = {`)
+        _c.print(`const static ${PrimitiveType.Prefix}${api}_API api = {`)
         _c.pushIndent()
         _c.print(`1, // version`)
         this.interfaces.forEach(it => {
@@ -207,11 +207,11 @@ class OHOSVisitor {
         _c.print(`return &api;`)
         _c.popIndent()
         _c.print(`}`)
-        let name = `${ArkPrimitiveType.Prefix}${api}_API`
+        let name = `${PrimitiveType.Prefix}${api}_API`
         let _h = this.hWriter
         _h.print(`typedef struct ${name} {`)
         _h.pushIndent()
-        _h.print(`${ArkPrimitiveType.Prefix}Int32 version;`)
+        _h.print(`${PrimitiveType.Prefix}Int32 version;`)
         this.interfaces.forEach(it => {
             _h.print(`const ${this.modifierName(it)}* (*${this.apiName(it)})();`)
         })
@@ -290,7 +290,7 @@ class OHOSVisitor {
                 _.print(`typedef enum {`)
                 _.pushIndent()
                 declaration.elements.forEach(it => {
-                    _.print(`${ArkPrimitiveType.Prefix}${this.libraryName}_${it.name},`)
+                    _.print(`${PrimitiveType.Prefix}${this.libraryName}_${it.name},`)
                 })
                 _.popIndent()
                 _.print(`} ${this.mapType(type)};`)
@@ -332,7 +332,7 @@ class OHOSVisitor {
         this.nativeWriter.writeInterface(className, writer => {
             this.interfaces.flatMap(it => it.methods).forEach(method => {
                 const signature = writer.makeNamedSignature(method.returnType, method.parameters)
-                signature.args.unshift(Type.fromName('Pointer'))
+                signature.args.unshift(Type.fromName('pointer'))
                 signature.argsNames.unshift('self')
                 writer.writeNativeMethodDeclaration(`_${this.libraryName}_${method.name}`, signature)
             })
@@ -376,7 +376,7 @@ class OHOSVisitor {
         })
         this.interfaces.forEach(int => {
             this.peerWriter.writeClass(`${int.name}`, writer => {
-                writer.writeFieldDeclaration('peer', Type.fromName('Pointer'), [FieldModifier.PRIVATE], false)
+                writer.writeFieldDeclaration('peer', Type.fromName('pointer'), [FieldModifier.PRIVATE], false)
                 const ctors = int.constructors.map(it => ({ parameters: it.parameters, returnType: it.returnType }))
                 if (ctors.length === 0) {
                     ctors.push({
@@ -441,6 +441,8 @@ class OHOSVisitor {
 
         this.libraryName = this.library.files[0].packageName().toUpperCase()
 
+        console.log(`GENERATE OHOS API for ${this.libraryName}`)
+
         this.library.files.forEach(file => {
             file.entries.forEach(entry => {
                 this.requestTypes(entry)
@@ -485,25 +487,26 @@ class OHOSVisitor {
         this.printManaged()
         this.printC()
 
-        const nativeModuleTemaplte = readLangTemplate(`${this.libraryName}NativeModule_template${this.library.language.extension}`, this.library.language)
+        const nativeModuleTemaplte = readLangTemplate(`OHOSNativeModule_template${this.library.language.extension}`, this.library.language)
         const nativeModuleText = nativeModuleTemaplte
             .replaceAll('%NATIVE_MODULE_NAME%', this.libraryName)
             .replaceAll('%NATIVE_MODULE_CONTENT%', this.nativeWriter.getOutput().join('\n'))
         fs.writeFileSync(path.join(managedOutDir, `${this.libraryName.toLowerCase()}Native${this.library.language.extension}`), nativeModuleText, 'utf-8')
 
-        const peerTemplate = readLangTemplate(`${this.libraryName}Peer_template${this.library.language.extension}`, this.library.language)
+        const peerTemplate = readLangTemplate(`OHOSPeer_template${this.library.language.extension}`, this.library.language)
         const peerText = peerTemplate
             .replaceAll('%PEER_CONTENT%', this.peerWriter.getOutput().join('\n'))
         fs.writeFileSync(path.join(managedOutDir, `${this.libraryName.toLowerCase()}${this.library.language.extension}`), peerText, 'utf-8')
 
         this.hWriter.printTo(path.join(outDir, "xml.h"))
         this.cppWriter.printTo(path.join(outDir, "xml.cc"))
+
+        fs.writeFileSync(path.join(managedOutDir, `${this.libraryName.toLowerCase()}${this.library.language.extension}`), peerText, 'utf-8')
+        fs.writeFileSync(path.join(managedOutDir, `types.ts`), readLangTemplate(`types${this.library.language.extension}`, this.library.language))
     }
 }
 
 export function generateOhos(outDir: string, peerLibrary: IdlPeerLibrary): void {
-    console.log("GENERATE OHOS API")
-
     const managedOutDir = path.join(outDir, peerLibrary.language.name.toLocaleLowerCase())
     if (!fs.existsSync(outDir)) fs.mkdirSync(outDir)
     if (!fs.existsSync(managedOutDir)) fs.mkdirSync(managedOutDir)
