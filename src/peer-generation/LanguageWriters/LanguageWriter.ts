@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { IDLBooleanType, IDLContainerType, IDLInt32Type, IDLNumberType, IDLParameter, IDLPrimitiveType, IDLStringType, IDLType, IDLUnionType, IDLVoidType, isContainerType, isPrimitiveType, isUnionType } from "../../idl"
+import { IDLBooleanType, IDLContainerType, IDLI32Type, IDLNumberType, IDLParameter, IDLPrimitiveType, IDLReferenceType, IDLStringType, IDLType, IDLUnionType, IDLVoidType, isContainerType, isPrimitiveType, isReferenceType, isUnionType } from "../../idl"
 import { IndentedPrinter } from "../../IndentedPrinter"
 import { Language, stringOrNone } from "../../util"
 import { EnumConvertor, MapConvertor } from "../Convertors"
@@ -22,47 +22,13 @@ import { FieldRecord } from "../DeclarationTable"
 import { EnumEntity } from "../PeerFile"
 import * as fs from "fs"
 
-////////////////////////////////////////////////////////////////
-//                           TYPE                             //
-////////////////////////////////////////////////////////////////
-
-export class Type {
-    constructor(public name: string, public nullable = false) {}
-    static Int32 = new Type('int32')
-    static Boolean = new Type('boolean')
-    static Number = new Type('number')
-    static Pointer = new Type('KPointer')
-    static This = new Type('this')
-    static Void = new Type('void')
-    static String = new Type('string')
-
-    private static PRIMITIVE_TYPES = new Set(
-        [Type.Boolean, Type.Int32, Type.Number, Type.Pointer, Type.Void, Type.String]
-            .map(it => it.name)
-    )
-
-    static fromName(name: string): Type {
-        if (this.PRIMITIVE_TYPES.has(name)) {
-            switch (name) {
-                case Type.Int32.name: return Type.Int32
-                case Type.Boolean.name: return Type.Boolean
-                case Type.Number.name: return Type.Number
-                case Type.Pointer.name: return Type.Pointer
-                case Type.Void.name: return Type.Void
-                case Type.String.name: return Type.String
-            }
-        }
-        return new Type(name)
-    }
-
-    toString(): string {
-        return `${this.name}${this.nullable ? "?" : ""}`
-    }
-
-    isPrimitive(): boolean {
-        return Type.PRIMITIVE_TYPES.has(this.name)
-    }
-}
+// static Int32 = new Type('int32')
+// static Boolean = new Type('boolean')
+// static Number = new Type('number')
+// static Pointer = new Type('KPointer')
+// static This = new Type('this')
+// static Void = new Type('void')
+// static String = new Type('string')
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -172,7 +138,7 @@ export class ExpressionStatement implements LanguageStatement {
 
 export class DeclareStatement implements LanguageStatement {
     constructor(public variableName: string,
-                public type: Type,
+                public type: IDLType,
                 public expression: LanguageExpression | undefined = undefined) { }
     write(writer: LanguageWriter): void {
         const type = this.type ? `: ${this.type.name}` : ""
@@ -310,7 +276,7 @@ export enum MethodModifier {
 export class Field {
     constructor(
         public name: string,
-        public type: Type,
+        public type: IDLType,
         public modifiers: FieldModifier[] = []
     ) {}
 }
@@ -560,38 +526,32 @@ export abstract class LanguageWriter {
     getOutput(): string[] {
         return this.printer.getOutput()
     }
-    // TODO: remove it!
-    mapType(type: Type, convertor?: ArgConvertor): string {
-        return type.name
-    }
     mapIDLPrimitiveType(type: IDLPrimitiveType): string {
-        switch (type) {
-            case IDLNumberType: return this.mapType(Type.Int32)
-            case IDLBooleanType: return this.mapType(Type.Boolean)
-            case IDLVoidType: return this.mapType(Type.Void)
-            case IDLStringType: return this.mapType(Type.String)
-            default: throw new Error(`Unmapped IDL type: ${type.name}`)
-        }
+        throw new Error(`Unmapped IDL primitive type: ${type.name}`)
     }
-    mapIDLContainerType(type:IDLContainerType, args:string[]): string {
-        return `${type.name}__${args.join('_')}`
+    mapIDLContainerType(type:IDLContainerType): string {
+        throw new Error(`Unmapped IDL container type: ${type.name}`)
     }
-    mapIDLUnionType(_:IDLUnionType, args:string[]): string {
-        return `${args.join(' | ')}`
+    mapIDLUnionType(type:IDLUnionType): string {
+        throw new Error(`Unmapped IDL union type: ${type.name}`)
+    }
+    mapIDLReferenceType(type:IDLReferenceType): string {
+        throw new Error(`Unmapped IDL reference type: ${type.name}`)
     }
     mapIDLType(type: IDLType): string {
         if (isPrimitiveType(type)) {
             return this.mapIDLPrimitiveType(type)
         }
         if (isContainerType(type)) {
-            const args = type.elementType.map(it => this.mapIDLType(it))
-            return this.mapIDLContainerType(type, args)
+            return this.mapIDLContainerType(type)
         }
         if (isUnionType(type)) {
-            const args = type.types.map(it => this.mapIDLType(it))
-            return this.mapIDLUnionType(type, args)
+            return this.mapIDLUnionType(type)
         }
-        return this.mapType(new Type(type.name))
+        if (isReferenceType(type)) {
+            return this.mapIDLReferenceType(type)
+        }
+        throw new Error(`Unmapped IDL type: ${type.name}`)
     }
     makeSignature(returnType: IDLType, parameters: IDLParameter[]): MethodSignature {
         return new MethodSignature(returnType,
@@ -619,10 +579,10 @@ export abstract class LanguageWriter {
         return `unsafeCast<int32>(${param})`
     }
     runtimeType(param: ArgConvertor, valueType: string, value: string) {
-        this.writeStatement(this.makeAssign(valueType, IDLInt32Type,
+        this.writeStatement(this.makeAssign(valueType, IDLI32Type,
             this.makeFunctionCall("runtimeType", [this.makeString(value)]), false))
     }
-    makeDiscriminatorFromFields(convertor: {targetType: (writer: LanguageWriter) => Type}, value: string, accessors: string[]): LanguageExpression {
+    makeDiscriminatorFromFields(convertor: {targetType: (writer: LanguageWriter) => IDLType}, value: string, accessors: string[]): LanguageExpression {
         return this.makeString(`(${this.makeNaryOp("||",
             accessors.map(it => this.makeString(`${value}!.hasOwnProperty("${it}")`))).asString()})`)
     }
@@ -679,7 +639,7 @@ export abstract class LanguageWriter {
                 this.makeString(this.getObjectAccessor(convertor, value)),
                 convertor.enumTypeName(this.language)
             )
-            : this.makeUnionVariantCast(this.getObjectAccessor(convertor, value), Type.Number, convertor, index)
+            : this.makeUnionVariantCast(this.getObjectAccessor(convertor, value), IDLI32Type, convertor, index)
         const {low, high} = convertor.extremumOfOrdinals()
         return this.discriminatorFromExpressions(value, convertor.runtimeTypes[0], this, [
             this.makeNaryOp(">=", [ordinal, this.makeString(low!.toString())]),

@@ -17,7 +17,7 @@ import * as path from 'path'
 
 import { IndentedPrinter } from "../IndentedPrinter"
 import { IdlPeerLibrary } from './idl/IdlPeerLibrary'
-import { CppLanguageWriter, Method, MethodSignature, Type } from './LanguageWriters'
+import { CppLanguageWriter, Method, MethodSignature } from './LanguageWriters'
 import { hasExtAttribute, IDLCallback, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLInterface, IDLParameter, IDLType, IDLVoidType, isCallback, isClass, isConstructor, isEnum, isEnumType, isInterface, isMethod, isPrimitiveType, isReferenceType, isUnionType } from '../idl'
 import { readLangTemplate } from './FileGenerators'
 import { capitalize, Language } from '../util'
@@ -60,8 +60,7 @@ class OHOSVisitor {
     }
 
     makeSignature(returnType: IDLType, parameters: IDLParameter[]): MethodSignature {
-        return new MethodSignature(Type.fromName(this.mapType(returnType)),
-            parameters.map(it => Type.fromName(this.mapType(it.type!))))
+        return new MethodSignature(returnType, parameters)
     }
 
     private writeData(clazz: IDLInterface) {
