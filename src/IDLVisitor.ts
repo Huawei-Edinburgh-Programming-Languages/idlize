@@ -620,6 +620,20 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         };
     }
 
+    serializeSyntheticFunctionType(fileName: string, parameters: ts.ParameterDeclaration[], returnType: ts.TypeNode, name?: string, extendedAttributes?: IDLExtendedAttribute[]): IDLCallback {
+        const parametersIdl = parameters.map(it => this.serializeParameter(it))
+        const returnIdlType = this.serializeType(returnType, name)
+        name ??= `Callback_${parametersIdl.map(it => it.type!).concat(returnIdlType).map(it => this.computeTypeName(it)).join("_")}`
+        return {
+            kind: IDLKind.Callback,
+            name: name,
+            fileName: fileName,
+            parameters: parametersIdl,
+            returnType: returnIdlType,
+            extendedAttributes: extendedAttributes,
+        };
+    }
+
     serializeAccessor(accessor: ts.GetAccessorDeclaration | ts.SetAccessorDeclaration): IDLProperty {
         const [accessorType, accessorAttr, readonly] = ts.isGetAccessorDeclaration(accessor)
             ? [accessor.type, IDLAccessorAttribute.Getter, true]
@@ -772,6 +786,19 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             }
             if (isEnum) {
                 return createEnumType(transformedType)
+            }
+            if (rawType == "Callback") {
+                const typeArgumentsLength = type.typeArguments?.length ?? 0
+                const callback = this.serializeSyntheticFunctionType(
+                    type.getSourceFile().fileName,
+                    typeArgumentsLength > 0 && type.typeArguments![0].kind != ts.SyntaxKind.VoidKeyword 
+                        ? [ts.factory.createParameterDeclaration(undefined, undefined, 'value', undefined, type.typeArguments![0])] 
+                        : [],
+                    typeArgumentsLength > 1 ? type.typeArguments![1] : ts.factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword),
+                    nameSuggestion,
+                )
+                this.addToScope(callback)
+                return createReferenceType(callback.name)
             }
             return createReferenceType(transformedType, type.typeArguments);
         }
