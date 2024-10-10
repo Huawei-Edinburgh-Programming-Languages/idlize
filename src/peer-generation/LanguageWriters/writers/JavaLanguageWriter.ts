@@ -17,9 +17,9 @@ import { IndentedPrinter } from "../../../IndentedPrinter"
 import { Language } from "../../../util"
 import { EnumConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "../../Convertors"
 import { convertJavaOptional } from "../../printers/lang/Java"
-import { AssignStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, ObjectArgs, Type } from "../LanguageWriter"
+import { AssignStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, ObjectArgs, ReturnStatement } from "../LanguageWriter"
 import { CLikeExpressionStatement, CLikeLanguageWriter, CLikeLoopStatement, CLikeReturnStatement } from "./CLikeLanguageWriter"
-import { createPrimitiveTypeMapper, IDLContainerType } from '../../../idl'
+import { IDLBooleanType, IDLContainerType, IDLF32Type, IDLF64Type, IDLI16Type, IDLI32Type, IDLI64Type, IDLI8Type, IDLNumberType, IDLPointerType, IDLPrimitiveType, IDLReferenceType, IDLStringType, IDLType, IDLU16Type, IDLU32Type, IDLU64Type, IDLU8Type, IDLVoidType } from '../../../idl'
 import { LambdaExpression } from "./TsLanguageWriter"
 import { ArgConvertor, BaseArgConvertor, RuntimeType } from "../../ArgConvertors"
 
@@ -62,7 +62,7 @@ export class JavaCastExpression implements LanguageExpression {
 
 export class JavaAssignStatement extends AssignStatement {
     constructor(public variableName: string,
-                public type: Type | undefined,
+                public type: IDLType | undefined,
                 public expression: LanguageExpression,
                 public isDeclared: boolean = true,
                 protected isConst: boolean = true) {
@@ -70,7 +70,7 @@ export class JavaAssignStatement extends AssignStatement {
      }
      write(writer: LanguageWriter): void{
         if (this.isDeclared) {
-            const typeSpec = this.type ? writer.mapType(this.type) : "var"
+            const typeSpec = this.type ? writer.mapIDLType(this.type) : "var"
             writer.print(`${typeSpec} ${this.variableName} = ${this.expression.asString()};`)
         } else {
             writer.print(`${this.variableName} = ${this.expression.asString()};`)
@@ -126,15 +126,15 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
             super.writeMethodCall(receiver, method, params, nullable)
         }
     }
-    writeFieldDeclaration(name: string, type: Type, modifiers: FieldModifier[] | undefined, optional: boolean, initExpr?: LanguageExpression): void {
+    writeFieldDeclaration(name: string, type: IDLType, modifiers: FieldModifier[] | undefined, optional: boolean, initExpr?: LanguageExpression): void {
         let prefix = this.makeFieldModifiersList(modifiers)
-        this.printer.print(`${prefix} ${this.mapType(type)} ${name}${initExpr ? ` = ${initExpr.asString()}` : ""};`)
+        this.printer.print(`${prefix} ${this.mapIDLType(type)} ${name}${initExpr ? ` = ${initExpr.asString()}` : ""};`)
     }
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
         this.writeMethodDeclaration(name, signature, [MethodModifier.STATIC, MethodModifier.NATIVE])
     }
     writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method, modifiers?: MethodModifier[]) {
-        this.printer.print(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') : ''} ${className}(${signature.args.map((it, index) => `${this.mapType(it)} ${signature.argName(index)}`).join(", ")}) {`)
+        this.printer.print(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') : ''} ${className}(${signature.args.map((it, index) => `${this.mapIDLType(it)} ${signature.argName(index)}`).join(", ")}) {`)
         this.pushIndent()
         if (superCall) {
             this.print(`super(${superCall.signature.args.map((_, i) => superCall?.signature.argName(i)).join(", ")});`)
@@ -143,7 +143,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         this.popIndent()
         this.printer.print(`}`)
     }
-    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
+    makeAssign(variableName: string, type: IDLType | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
         return new JavaAssignStatement(variableName, type, expr, isDeclared, isConst)
     }
     makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression {
@@ -164,8 +164,8 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     makeMapSize(map: string): LanguageExpression {
         return this.makeString(`${map}.size()`)
     }
-    makeCast(value: LanguageExpression, type: Type, unsafe = false): LanguageExpression {
-        return new JavaCastExpression(value, this.mapType(type), unsafe)
+    makeCast(value: LanguageExpression, type: IDLType, unsafe = false): LanguageExpression {
+        return new JavaCastExpression(value, this.mapIDLType(type), unsafe)
     }
     makeStatement(expr: LanguageExpression): LanguageStatement {
         return new CLikeExpressionStatement(expr)
@@ -180,7 +180,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
                               index: number): LanguageExpression {
         return this.makeString(`${valueType} == ${index}`)
     }
-    makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index: number) {
+    makeUnionVariantCast(value: string, type: IDLType, convertor: ArgConvertor, index: number) {
         return this.makeMethodCall(value, `getValue${index}`, [])
     }
     makeUnionTypeDefaultInitializer() {
@@ -189,81 +189,52 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     writePrintLog(message: string): void {
         this.print(`System.out.println("${message}")`)
     }
-    override mapIDLContainerType(type: IDLContainerType, args: string[]): string {
+    override mapIDLContainerType(type: IDLContainerType): string {
         switch (type.name) {
-            case "sequence": return `${args[0]}[]`
+            case "sequence": return `${this.mapIDLType(type.elementType[0])}[]`
         }
-        return super.mapIDLContainerType(type, args)
+        return super.mapIDLContainerType(type)
     }
-    override mapType(type: Type): string {
-        if (type.nullable) {
-            const optionalType = convertJavaOptional(type.name)
-            if (optionalType != type.name) return optionalType
-        }
-        switch (type.name) {
-
-            /////////////////////////////
-            // OLD ONES 
-
-            // other
-            case 'Length': return 'String'
-
-            // Pointer
-            case 'KPointer': return 'long'
+    override mapIDLReferenceType(type: IDLReferenceType): string {
         
-            // Integral
-            case 'boolean': case 'KBoolean': return 'boolean'
+        // legacy type mapping. 
+        // If no code relies on this mapping 
+        // we should remove it
+        switch (type.name) {
+            case 'Length': return 'String'
+            case 'KPointer': return 'long'
+            case 'KBoolean': return 'boolean'
             case 'KUInt': return 'int'
             case 'int32': case 'KInt': return 'int'
             case 'int64': case 'KLong': return 'long'
-            
-            // Number
-            case 'number': return 'double'
             case 'float32': case 'KFloat': return 'float'
-            
-            // Array like
             case 'Uint8Array': return 'byte[]'
             case 'KUint8ArrayPtr': return 'byte[]'
             case 'KInt32ArrayPtr': return 'int[]'
             case 'KFloat32ArrayPtr': return 'float[]'
-            
-            // String like
             case 'KStringPtr': return 'String'
             case 'string': return 'String'
-
-            /////////////////////////////
-            // NEW ONES 
-
-            // Array like
-            case 'Vec_u8': return 'byte[]'
-            case 'Vec_i32': return 'int[]'
-            case 'Vec_f32': return 'float[]'
         }
-        const mapper = createPrimitiveTypeMapper({
-            ptr: 'long',
-    
-            void: 'void',
-
-            bool: 'boolean',
-            i8: 'byte',
-            u8: 'byte', // mb fix
-            i16: 'short',
-            u16: 'short', // mb fix
-            i32: 'int',
-            u32: 'int', // mb fix
-            i64: 'long',
-            u64: 'long', // mb fix
-            
-            f32: 'float',
-            f64: 'double',
-
-            str: 'String'
-        })
-        const [ success, resultType ] = mapper(type.name)
-        if (success) {
-            return resultType
+        return super.mapIDLReferenceType(type)
+    }
+    mapIDLPrimitiveType(type: IDLPrimitiveType): string {
+        switch (type) {
+            case IDLVoidType: return 'void'
+            case IDLBooleanType: return 'boolean'
+            case IDLI8Type: return 'byte'
+            case IDLU8Type: return 'byte' // not really
+            case IDLI16Type: return 'short'
+            case IDLU16Type: return 'short' // not really
+            case IDLI32Type: return 'int'
+            case IDLU32Type: return 'int' // not really
+            case IDLI64Type: return 'long'
+            case IDLU64Type: return 'long' // not really
+            case IDLF32Type: return 'float'
+            case IDLF64Type: case IDLNumberType: return 'double'
+            case IDLStringType: return 'String'
+            case IDLPointerType: return'long'
         }
-        return super.mapType(type)
+        return super.mapIDLPrimitiveType(type)
     }
     nativeReceiver(): string { return 'NativeModule' }
     applyToObject(p: BaseArgConvertor, param: string, value: string, args?: ObjectArgs): LanguageStatement {
@@ -299,10 +270,10 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement {
         throw new Error("Method not implemented.")
     }
-    getTagType(): Type {
+    getTagType(): IDLType {
         throw new Error("Method not implemented.")
     }
-    getRuntimeType(): Type {
+    getRuntimeType(): IDLType {
         throw new Error("Method not implemented.")
     }
     makeTupleAssign(receiver: string, tupleFields: string[]): LanguageStatement {
