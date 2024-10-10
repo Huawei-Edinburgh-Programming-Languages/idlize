@@ -33,7 +33,7 @@ export {
     MethodSignature, 
     ExpressionStatement,
     NamedMethodSignature, 
-    Type, BlockStatement, 
+    BlockStatement, 
     BranchStatement, 
     LanguageExpression, 
     FunctionCallExpression,
