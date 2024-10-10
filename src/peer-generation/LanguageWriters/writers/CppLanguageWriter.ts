@@ -13,14 +13,14 @@
  * limitations under the License.
  */
 
-import { IDLType, isContainerType, isUnionType, toIDLType } from "../../../idl"
+import { IDLBooleanType, IDLI16Type, IDLI32Type, IDLI64Type, IDLI8Type, IDLPointerType, IDLPrimitiveType, IDLReferenceType, IDLType, IDLU16Type, IDLU32Type, IDLU64Type, IDLU8Type, IDLVoidType, isContainerType, isReferenceType, isUnionType, toIDLType } from "../../../idl"
 import { IndentedPrinter } from "../../../IndentedPrinter"
 import { cppKeywords } from "../../../languageSpecificKeywords"
 import { Language } from "../../../util"
 import { ArgConvertor, BaseArgConvertor, RuntimeType } from "../../ArgConvertors"
 import { ArkPrimitiveType } from "../../ArkPrimitiveType"
 import { ArrayConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "../../Convertors"
-import { AssignStatement, BlockStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, ObjectArgs, StringExpression, Type } from "../LanguageWriter"
+import { AssignStatement, BlockStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, ObjectArgs, StringExpression } from "../LanguageWriter"
 import { CDefinedExpression, CLikeExpressionStatement, CLikeLanguageWriter, CLikeLoopStatement, CLikeReturnStatement } from "./CLikeLanguageWriter"
 
 ////////////////////////////////////////////////////////////////
@@ -223,7 +223,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     override makeUnionVariantCondition(_convertor: ArgConvertor, _valueName: string, valueType: string, type: string, index: number) {
         return this.makeString(`${valueType} == ${index}`)
     }
-    override makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index: number) {
+    override makeUnionVariantCast(value: string, type: IDLType, convertor: ArgConvertor, index: number) {
         return this.makeString(`${value}.value${index}`)
     }
     makeLoop(counter: string, limit: string, statement?: LanguageStatement): LanguageStatement {
@@ -247,7 +247,11 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     makeDefinedCheck(value: string): LanguageExpression {
         return new CDefinedExpression(value);
     }
-    mapType(type: Type): string {
+    mapIDLReferenceType(type: IDLReferenceType): string {
+        /***************************************************************/
+        // legacy type mapping. 
+        // If no code relies on this mapping 
+        // we should remove it
         switch (type.name) {
             case 'KPointer': return 'void*'
             case 'Uint8Array': return 'byte[]'
@@ -264,13 +268,37 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         }
         if (type.name.startsWith("Array<")) {
             const typeSpec = type.name.match(/<(.*)>/)!
-            const elementType = this.mapType(new Type(typeSpec[1]))
+            const elementType = this.mapIDLType(toIDLType(typeSpec[1]))
             return `Array_${elementType}`
         }
         if (!type.name.includes("std::decay<") && type.name.includes("<")) {
             return type.name.replace(/<(.*)>/, "")
         }
-        return super.mapType(type)
+        /***************************************************************/
+        return super.mapIDLReferenceType(type)
+    }
+    mapIDLPrimitiveType(type: IDLPrimitiveType): string {
+
+        function arkType(text:TemplateStringsArray): string {
+            return `${ArkPrimitiveType.Prefix}${text.join('')}`
+        }
+
+        switch (type) {
+            case IDLVoidType: return 'void'
+            // mb we should map another way
+            case IDLI8Type: return arkType`Number`  // char / int8_t
+            case IDLU8Type: return arkType`Number`  // unsigned char / uint8_t
+            case IDLI16Type: return arkType`Number` // short / int16_t
+            case IDLU16Type: return arkType`Number` // unsigned short / uint16_t
+            case IDLI32Type: return arkType`Number` // int / int32_t
+            case IDLU32Type: return arkType`Number` // unsigned int / uint32_t
+            case IDLI64Type: return arkType`Number` // long long / int64_t
+            case IDLU64Type: return arkType`Number` // unsigned long long / uint64_t
+
+            case IDLBooleanType: return `${ArkPrimitiveType.Prefix}Boolean`
+            case IDLPointerType: return 'void*'
+        }
+        return super.mapIDLPrimitiveType(type)
     }
     mapIDLType(type: IDLType): string {
         if (isUnionType(type)) {
@@ -330,12 +358,12 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     getRuntimeType(): IDLType {
         return toIDLType(ArkPrimitiveType.RuntimeType.getText())
     }
-    makeType(typeName: string, nullable: boolean, receiver?: string): Type {
+    makeType(typeName: string, nullable: boolean, receiver?: string): IDLType {
         // make deducing type from receiver
         if (receiver != undefined) {
-            return new Type(`std::decay<decltype(${receiver})>::type`)
+            return toIDLType(`std::decay<decltype(${receiver})>::type`)
         }
-        return new Type(typeName)
+        return toIDLType(typeName)
     }
     makeTupleAssign(receiver: string, tupleFields: string[]): LanguageStatement {
         const statements =

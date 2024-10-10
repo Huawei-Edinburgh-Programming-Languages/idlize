@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { createPrimitiveTypeMapper, IDLContainerType, IDLParameter, IDLType, isContainerType, isPrimitiveType } from "../../../idl"
+import { IDLBooleanType, IDLContainerType, IDLF32Type, IDLF64Type, IDLI16Type, IDLI32Type, IDLI64Type, IDLI8Type, IDLNumberType, IDLParameter, IDLPointerType, IDLPrimitiveType, IDLReferenceType, IDLStringType, IDLType, IDLU16Type, IDLU32Type, IDLU64Type, IDLU8Type, IDLVoidType, isContainerType, isPrimitiveType, isReferenceType, toIDLType } from "../../../idl"
 import { IndentedPrinter } from "../../../IndentedPrinter"
 import { CJKeywords } from "../../../languageSpecificKeywords"
 import { isDefined, Language } from "../../../util"
@@ -22,7 +22,7 @@ import { EnumConvertor, MapConvertor } from "../../Convertors"
 import { FieldRecord } from "../../DeclarationTable"
 import { EnumEntity } from "../../PeerFile"
 import { mapType } from "../../TypeNodeNameConvertor"
-import { AssignStatement, ExpressionStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, ObjectArgs, ReturnStatement, Type } from "../LanguageWriter"
+import { AssignStatement, ExpressionStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, ObjectArgs, ReturnStatement } from "../LanguageWriter"
 import { TSCastExpression, TsObjectAssignStatement, TsObjectDeclareStatement, TsTupleAllocStatement } from "./TsLanguageWriter"
 
 ////////////////////////////////////////////////////////////////
@@ -148,7 +148,7 @@ export class CJLanguageWriter extends LanguageWriter {
         this.writeDeclaration(name, signature, modifiers)
     }
     writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method, modifiers?: MethodModifier[]) {
-        this.printer.print(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') + ' ' : ''}${className}(${signature.args.map((it, index) => `${signature.argName(index)}: ${it.nullable ? '?' : ''}${this.mapType(it)}`).join(", ")}) {`)
+        this.printer.print(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') + ' ' : ''}${className}(${signature.args.map((it, index) => `${signature.argName(index)}: ${it.optional ? '?' : ''}${this.mapIDLType(it)}`).join(", ")}) {`)
         this.pushIndent()
         if (superCall) {
             this.print(`super(${superCall.signature.args.map((_, i) => superCall?.signature.argName(i)).join(", ")});`)
@@ -169,20 +169,14 @@ export class CJLanguageWriter extends LanguageWriter {
             ?.filter(it => this.supportedModifiers.includes(it))
             .map(it => this.mapMethodModifier(it)).join(" ")
         prefix = prefix ? prefix + " " : ""
-        this.print(`${prefix}func ${name}(${signature.args.map((it, index) => `${signature.argName(index)}: ${it.nullable ? '?' : ''}${this.mapType(it)}`).join(", ")}): ${this.mapType(signature.returnType)}${postfix ?? ""}`)
+        this.print(`${prefix}func ${name}(${signature.args.map((it, index) => `${signature.argName(index)}: ${it.optional ? '?' : ''}${this.mapIDLType(it)}`).join(", ")}): ${this.mapIDLType(signature.returnType)}${postfix ?? ""}`)
     }
     nativeReceiver(): string { return 'NativeModule' }
-    makeNativeMethodNamedSignature(returnType: IDLType, parameters: IDLParameter[]): NamedMethodSignature {
-        return NamedMethodSignature.make(
-            this.mapCIDLType(returnType),
-            parameters.map(it => ({ name: it.name, type: this.mapCIDLType(it.type!) }))
-        )
-    }
     writeNativeFunctionCall(printer: LanguageWriter, name: string, signature: MethodSignature) {
         printer.print(`return unsafe { ${name}(${signature.args.map((it, index) => `${signature.argName(index)}`).join(", ")}) }`)
     }
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
-        this.print(`func ${name}(${signature.args.map((it, index) => `${this.escapeKeyword(signature.argName(index))}: ${it.nullable ? '?' : ''}${this.mapCType(it)}`).join(", ")}): ${this.mapCType(signature.returnType)}`)
+        this.print(`func ${name}(${signature.args.map((it, index) => `${this.escapeKeyword(signature.argName(index))}: ${it.optional ? '?' : ''}${this.mapCIDLType(it)}`).join(", ")}): ${this.mapCIDLType(signature.returnType)}`)
     }
     makeCastEnumToInt(convertor: EnumConvertor, enumName: string, _unsafe?: boolean): string {
         return `${enumName}.getIntValue()`
@@ -218,7 +212,7 @@ export class CJLanguageWriter extends LanguageWriter {
     writePrintLog(message: string): void {
         this.print(`println("${message}")`)
     }
-    makeCast(value: LanguageExpression, type: Type, unsafe = false): LanguageExpression {
+    makeCast(value: LanguageExpression, type: IDLType, unsafe = false): LanguageExpression {
         return new TSCastExpression(value, type, unsafe)
     }
     getObjectAccessor(convertor: BaseArgConvertor, value: string, args?: ObjectArgs): string {
@@ -244,7 +238,7 @@ export class CJLanguageWriter extends LanguageWriter {
         if (fields.length > 0) {
             return this.makeAssign(object, undefined,
                 this.makeCast(this.makeString("{}"),
-                    new Type(`{${fields.map(it=>`${it.name}: ${mapType(it.type)}`).join(",")}}`)),
+                   toIDLType(`{${fields.map(it=>`${it.name}: ${mapType(it.type)}`).join(",")}}`)),
                 false)
         }
         return new TsObjectAssignStatement(object, undefined, false)
@@ -262,14 +256,14 @@ export class CJLanguageWriter extends LanguageWriter {
         // keyAccessor and valueAccessor are equal in TS
         return this.makeStatement(this.makeMethodCall(keyAccessor, "set", [this.makeString(key), this.makeString(value)]))
     }
-    makeObjectDeclare(name: string, type: Type, fields: readonly FieldRecord[]): LanguageStatement {
+    makeObjectDeclare(name: string, type: IDLType, fields: readonly FieldRecord[]): LanguageStatement {
         return new TsObjectDeclareStatement(name, type, fields)
     }
-    getTagType(): Type {
-        return new Type("Tags");
+    getTagType(): IDLType {
+        return toIDLType("Tags");
     }
-    getRuntimeType(): Type {
-        return new Type("number");
+    getRuntimeType(): IDLType {
+        return IDLNumberType
     }
     makeTupleAssign(receiver: string, fields: string[]): LanguageStatement {
         return this.makeAssign(receiver, undefined,
@@ -287,7 +281,7 @@ export class CJLanguageWriter extends LanguageWriter {
     makeUnionVariantCondition(_convertor: ArgConvertor, _valueName: string, valueType: string, type: string, index?: number): LanguageExpression {
         return this.makeString(`${valueType} == ${index}`)
     }
-    makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index: number) {
+    makeUnionVariantCast(value: string, type: IDLType, convertor: ArgConvertor, index: number) {
         return this.makeMethodCall(value, `getValue${index}`, [])
     }
     makeTupleAccess(value: string, index: number): LanguageExpression {
@@ -306,16 +300,16 @@ export class CJLanguageWriter extends LanguageWriter {
         this.writeStatement(this.makeAssign(valueType, undefined,
             this.makeRuntimeTypeGetterCall(value), false))
     }
-    mapIDLContainerType(type: IDLContainerType, args: string[]): string {
+    mapIDLContainerType(type: IDLContainerType): string {
         switch (type.name) {
-            case 'sequence': return `ArrayList<${args[0]}>`
+            case 'sequence': return `ArrayList<${this.mapIDLType(type.elementType[0])}>`
         }
-        return super.mapIDLContainerType(type, args)
+        return super.mapIDLContainerType(type)
     }
     mapCIDLType(type:IDLType): string {
         if (isPrimitiveType(type)) {
-            switch (type.name) {
-                case 'str': return 'CString'
+            switch (type) {
+                case IDLStringType: return 'CString'
             }
         }
         if (isContainerType(type)) {
@@ -325,139 +319,45 @@ export class CJLanguageWriter extends LanguageWriter {
         }
         return this.mapIDLType(type)
     }
-    mapType(type: Type): string {
-        switch (type.name) {
-            // Pointer
-            case 'KPointer': return 'Int64'
-
-            // Integral
-            case 'boolean': case 'KBoolean': return 'Bool'
-            case 'KUInt': return 'Int32' // ??
-            case 'int32': case 'KInt': return 'Int32'
-            case 'KLong': return 'Int64'
-
-            // Number
-            case 'number': return 'Float64'
-            case 'double': return 'Float64'
-            case 'KFloat': return 'Float32'
-
-            // Array like
-            case 'Uint8Array': return 'ArrayList<UInt8>'
-            case 'KUint8ArrayPtr': return 'ArrayList<UInt8>'
-            case 'KInt32ArrayPtr': return 'ArrayList<Int32>'
-            case 'KFloat32ArrayPtr': return 'ArrayList<Float32>'
-
-            // String like
-            case 'KStringPtr': case 'String': case 'string': return 'String'
-
-            // void
-            case 'void': return 'Unit'
-            case 'Void': return 'Unit'
-
-            //  Other
-            case 'Length': return 'String'
-
-            /////////////////////////////
-            // NEW ONES
-
-            // Array like
-            case 'Vec_u8': return 'ArrayList<UInt8>'
-            case 'Vec_i32': return 'ArrayList<Int32>'
-            case 'Vec_f32': return 'ArrayList<Float32>'
+    mapIDLPrimitiveType(type: IDLPrimitiveType): string {
+        switch (type) {
+            case IDLPointerType: return 'Int64'
+            case IDLVoidType: return 'Unit'
+            case IDLBooleanType:  return 'Bool'
+            case IDLI8Type: return 'Int8'
+            case IDLU8Type: return 'UInt8'
+            case IDLI16Type: return 'Int16'
+            case IDLU16Type: return 'UInt16'
+            case IDLI32Type: return 'Int32'
+            case IDLU32Type: return 'UInt32'
+            case IDLI64Type: return 'Int64'
+            case IDLU64Type: return 'UInt64'
+            case IDLF32Type: return 'Float32'
+            case IDLF64Type: case IDLNumberType: return 'Float64'
+            case IDLStringType: return 'String'
         }
-        const mapper = createPrimitiveTypeMapper({
-            ptr: 'Int64',
-
-            void: 'Unit',
-
-            bool: 'Bool',
-            i8: 'Int8',
-            u8: 'UInt8',
-            i16: 'Int16',
-            u16: 'UInt16',
-            i32: 'Int32',
-            u32: 'UInt32',
-            i64: 'Int64',
-            u64: 'UInt64',
-
-            f32: 'Float32',
-            f64: 'Float64',
-
-            str: 'String'
-        })
-        const [ success, resultType ] = mapper(type.name)
-        if (success) {
-            return resultType
-        }
-        return super.mapType(type)
+        return super.mapIDLPrimitiveType(type)
     }
-    mapCType(type: Type): string {
+    mapIDLReferenceType(type: IDLReferenceType): string {
+        // legacy type mapping. 
+        // If no code relies on this mapping 
+        // we should remove it
         switch (type.name) {
-            // Pointer
             case 'KPointer': return 'Int64'
-
-            // Integral
-            case 'boolean': return 'Bool'
             case 'KBoolean': return 'Bool'
             case 'KUInt': return 'Int32' // ??
             case 'int32': case 'KInt': return 'Int32'
             case 'KLong': return 'Int64'
-
-            // Number
-            case 'number': return 'Float64'
             case 'double': return 'Float64'
             case 'KFloat': return 'Float32'
-
-            // Array like
-            case 'Uint8Array': return 'CPointer<UInt8>'
-            case 'KUint8ArrayPtr': return 'CPointer<UInt8>'
-            case 'KInt32ArrayPtr': return 'CPointer<Int32>'
-            case 'KFloat32ArrayPtr': return 'CPointer<Float32>'
-
-            // String like
-            case 'KStringPtr': return 'CString'
-            case 'string': return 'CString'
-            case 'String': return 'CString'
-
-            // void
-            case 'void': return 'Unit'
-
-            //  Other
-            case 'Length': return 'CString'
-
-            /////////////////////////////
-            // NEW ONES
-
-            // Array like
-            case 'Vec_u8': return 'CPointer<UInt8>'
-            case 'Vec_i32': return 'CPointer<Int32>'
-            case 'Vec_f32': return 'CPointer<Float32>'
+            case 'Uint8Array': return 'ArrayList<UInt8>'
+            case 'KUint8ArrayPtr': return 'ArrayList<UInt8>'
+            case 'KInt32ArrayPtr': return 'ArrayList<Int32>'
+            case 'KFloat32ArrayPtr': return 'ArrayList<Float32>'
+            case 'KStringPtr': case 'String': case 'string': return 'String'
+            case 'Length': return 'String'
         }
-        const mapper = createPrimitiveTypeMapper({
-            ptr: 'Int64',
-
-            void: 'Unit',
-
-            bool: 'Bool',
-            i8: 'Int8',
-            u8: 'UInt8',
-            i16: 'Int16',
-            u16: 'UInt16',
-            i32: 'Int32',
-            u32: 'UInt32',
-            i64: 'Int64',
-            u64: 'UInt64',
-
-            f32: 'Float32',
-            f64: 'Float64',
-
-            str: 'CString'
-        })
-        const [ success, resultType ] = mapper(type.name)
-        if (success) {
-            return resultType
-        }
-        return super.mapType(type)
+        return super.mapIDLReferenceType(type)
     }
     escapeKeyword(word: string): string {
         return CJKeywords.has(word) ? word + "_" : word

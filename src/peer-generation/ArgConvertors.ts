@@ -14,10 +14,10 @@
  */
 
 import { toIDLNode } from "../from-idl/deserialize"
-import { toIDLType } from "../idl"
+import { IDLType, toIDLType } from "../idl"
 import { Language } from "../util"
 import { ArkPrimitiveType } from "./ArkPrimitiveType"
-import { LanguageExpression, LanguageStatement, LanguageWriter, Type } from "./LanguageWriters"
+import { LanguageExpression, LanguageStatement, LanguageWriter } from "./LanguageWriters"
 
 export enum RuntimeType {
     UNEXPECTED = -1,
@@ -51,7 +51,7 @@ export interface ArgConvertor { // todo:
     convertorDeserialize(param: string, value: string, writer: LanguageWriter): LanguageStatement
     interopType(language: Language): string
     nativeType(impl: boolean): string
-    targetType(writer: LanguageWriter): Type
+    targetType(writer: LanguageWriter): IDLType
     isPointerType(): boolean
     unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression|undefined
     getMembers(): string[]
@@ -76,8 +76,8 @@ export abstract class BaseArgConvertor implements ArgConvertor {
     interopType(language: Language): string {
         throw new Error("Define")
     }
-    targetType(writer: LanguageWriter): Type {
-        return new Type(writer.mapType(new Type(this.tsTypeName), this))
+    targetType(writer: LanguageWriter): IDLType {
+        return toIDLType(writer.mapIDLType(toIDLType(this.tsTypeName), this))
     }
     scopeStart?(param: string, language: Language): string
     scopeEnd?(param: string, language: Language): string
