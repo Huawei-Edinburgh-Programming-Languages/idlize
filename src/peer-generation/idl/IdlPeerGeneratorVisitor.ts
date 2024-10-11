@@ -38,7 +38,7 @@ import { convert } from "./common"
 import { collectJavaImportsForDeclaration } from "../printers/lang/JavaIdlUtils"
 import { ARK_CUSTOM_OBJECT, javaCustomTypeMapping } from "../printers/lang/Java"
 import { Language } from "../../Language"
-import { IDLEntry } from "../../idl";
+import { IDLEntry, IDLEnumType, IDLType } from "../../idl";
 
 /**
  * Theory of operations.
@@ -419,7 +419,13 @@ class JavaDeclarationCollector extends DeclarationDependenciesCollector {
 
 
 class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
-
+    convertEnum(type: IDLEnumType): IDLEntry[] {
+        const decl = this.library.resolveTypeReference(type)
+        if (decl !== undefined) {
+            return [decl]
+        }
+        return []
+    }
 }
 
 
