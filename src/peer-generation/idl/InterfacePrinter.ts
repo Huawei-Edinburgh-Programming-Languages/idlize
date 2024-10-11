@@ -14,9 +14,34 @@
  */
 
 import * as idl from '../../idl'
+import {
+    escapeKeyword,
+    hasSuperType,
+    IDLConstant,
+    IDLEntry,
+    IDLFunction,
+    IDLInterface,
+    IDLMethod,
+    IDLParameter,
+    IDLProperty,
+    IDLTypedef,
+    IDLVariable,
+    nameWithType,
+    printParameters,
+    printType
+} from '../../idl'
 import * as path from 'path'
 import { IdlPeerLibrary } from "./IdlPeerLibrary"
-import { FieldModifier, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, Type, createLanguageWriter } from '../LanguageWriters'
+import {
+    createLanguageWriter,
+    FieldModifier,
+    LanguageWriter,
+    Method,
+    MethodModifier,
+    MethodSignature,
+    NamedMethodSignature,
+    Type
+} from '../LanguageWriters'
 import { removeExt, renameDtsToInterfaces, throwException } from '../../util'
 import {
     indentedBy,
@@ -166,6 +191,8 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
             const writer = createLanguageWriter(this.peerLibrary.language)
             this.printImports(writer, file)
             const typeConvertor = this.createDeclarationConvertor(writer)
+            file.entries.filter(idl.isAnonymousInterface)
+                .forEach(it => convertDeclaration(typeConvertor, it))
             file.declarations.forEach(it => convertDeclaration(typeConvertor, it))
             file.enums.forEach(it => writer.writeStatement(writer.makeEnumEntity(this.toEnumEntity(it), true)))
             this.printAssignEnumsToGlobalScope(writer, file)
