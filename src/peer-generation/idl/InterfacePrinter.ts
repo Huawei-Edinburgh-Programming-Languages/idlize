@@ -79,7 +79,7 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
     }
     protected replaceImportTypeNodes(text: string): string {///operate on stringOrNone[]
         for (const [stub, src] of [...this.peerLibrary.importTypesStubToSource.entries()].reverse()) {
-            text = text.replaceAll(src, stub)
+            text = text.replaceAll(new RegExp(`^${src}$`, 'g'), stub)
         }
         return text
     }
