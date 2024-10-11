@@ -319,6 +319,7 @@ export class JavaTypeNameConvertor implements IdlTypeNameConvertor {
 export class ArkTSTypeNameConvertor extends TSTypeNameConvertor {
     convertPrimitiveType(type: IDLPrimitiveType): string {
         switch (type) {
+            case idl.IDLVoidType: return "void"
             case idl.IDLAnyType: return "object"
         }
         return super.convertPrimitiveType(type);
