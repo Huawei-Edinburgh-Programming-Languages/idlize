@@ -191,8 +191,6 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
             const writer = createLanguageWriter(this.peerLibrary.language)
             this.printImports(writer, file)
             const typeConvertor = this.createDeclarationConvertor(writer)
-            file.entries.filter(idl.isAnonymousInterface)
-                .forEach(it => convertDeclaration(typeConvertor, it))
             file.declarations.forEach(it => convertDeclaration(typeConvertor, it))
             file.enums.forEach(it => writer.writeStatement(writer.makeEnumEntity(this.toEnumEntity(it), true)))
             this.printAssignEnumsToGlobalScope(writer, file)

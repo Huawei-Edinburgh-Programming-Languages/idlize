@@ -417,7 +417,6 @@ class JavaDeclarationCollector extends DeclarationDependenciesCollector {
     }
 }
 
-
 class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
     convertEnum(type: IDLEnumType): IDLEntry[] {
         const decl = this.library.resolveTypeReference(type)
@@ -428,12 +427,8 @@ class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
     }
 }
 
-
 class ArkTSFilteredDeclarationCollector extends FilteredDeclarationCollector {
-    convert(node: IDLEntry | undefined): IDLEntry[] {
-        const res = super.convert(node)
-        return res;
-    }
+
 }
 
 class ComponentsCompleter {
@@ -931,11 +926,8 @@ export function convertDeclToFeature(library: IdlPeerLibrary, node: idl.IDLEntry
 function createTypeDependenciesCollector(library: IdlPeerLibrary): TypeDependenciesCollector {
     switch (library.language) {
         case Language.TS: return new ImportsAggregateCollector(library, false)
-        case Language.ARKTS: return new ArkTSTypeDependenciesCollector(library, false)
+        case Language.ARKTS: return new ArkTSImportsAggregateCollector(library, true)
         case Language.JAVA: return new JavaTypeDependenciesCollector(library, true)
-    }
-    if (library.language === Language.ARKTS) {
-        return new ArkTSImportsAggregateCollector(library, true)
     }
     // TODO: support other languages
     return new ImportsAggregateCollector(library, false)
@@ -944,11 +936,8 @@ function createTypeDependenciesCollector(library: IdlPeerLibrary): TypeDependenc
 function createDeclDependenciesCollector(library: IdlPeerLibrary, typeDependenciesCollector: TypeDependenciesCollector): DeclarationDependenciesCollector {
     switch (library.language) {
         case Language.TS: return new FilteredDeclarationCollector(library, typeDependenciesCollector)
-        case Language.ARKTS: return new FilteredDeclarationCollector(library, typeDependenciesCollector)
+        case Language.ARKTS: return new ArkTSFilteredDeclarationCollector(library, typeDependenciesCollector)
         case Language.JAVA: return new JavaDeclarationCollector(library, typeDependenciesCollector)
-    }
-    if (library.language == Language.ARKTS) {
-        return new ArkTSFilteredDeclarationCollector(library, typeDependenciesCollector)
     }
     // TODO: support other languages
     return new FilteredDeclarationCollector(library, typeDependenciesCollector)
@@ -958,11 +947,8 @@ function createSerializeDeclDependenciesCollector(library: IdlPeerLibrary): Decl
     const expandAliases = true
     switch (library.language) {
         case Language.TS: return new FilteredDeclarationCollector(library, new ImportsAggregateCollector(library, expandAliases))
-        case Language.ARKTS: return new FilteredDeclarationCollector(library, new ArkTSTypeDependenciesCollector(library, expandAliases))
+        case Language.ARKTS: return new ArkTSFilteredDeclarationCollector(library, new ArkTSTypeDependenciesCollector(library, expandAliases))
         case Language.JAVA: return new JavaDeclarationCollector(library, new JavaTypeDependenciesCollector(library, expandAliases))
-    }
-    if (library.language === Language.ARKTS) {
-        return new ArkTSFilteredDeclarationCollector(library, new ImportsAggregateCollector(library, expandAliases))
     }
     // TODO: support other languages
     return new FilteredDeclarationCollector(library, new ImportsAggregateCollector(library, expandAliases))
