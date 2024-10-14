@@ -44,7 +44,7 @@ import { toIDLNode } from "./from-idl/deserialize"
 import { generateArkoala, generateArkoalaFromIdl, generateLibace, generateLibaceFromIdl } from "./peer-generation/arkoala"
 import { Language } from "./Language"
 import { IndentedPrinter } from "./IndentedPrinter"
-import { DeserializerPrinter } from "./peer-generation/printers/DeserializerPrinter.ts"
+import { DeserializerPrinter } from "./peer-generation/printers/DeserializerPrinter"
 import { cStyleCopyright } from "./peer-generation/FileGenerators"
 import { loadPlugin } from "./peer-generation/plugin-api"
 
