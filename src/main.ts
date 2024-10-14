@@ -373,6 +373,9 @@ if (options.dts2peer) {
                     if (options.plugin) {
                         loadPlugin(options.plugin)
                             .then(plugin => plugin.process({outDir: outDir}, idlLibrary))
+                            .then(result => {
+                                console.log(`Plugin ${options.plugin} process returned ${result}`)
+                            })
                             .catch(error => console.error(`Plugin ${options.plugin} not found: ${error}`))
                     }
                 }

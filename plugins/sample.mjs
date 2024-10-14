@@ -14,7 +14,10 @@
  */
 
 async function process(options, library) {
-    console.log(`process: ${library} with ${options}`)
+    return new Promise((resolve, reject) => {
+        console.log(`process: ${library.files.map(it => it.originalFilename).join(",")} with ${Object.keys(options).join(",")}`)
+        resolve(true)
+    })
 }
 
 function entry(host) {

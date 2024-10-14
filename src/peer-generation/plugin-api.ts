@@ -21,7 +21,7 @@ export interface PluginHost {
 
 export type PluginOptions = any
 
-class PluginHostImpl implements PluginHost{
+class PluginHostImpl implements PluginHost {
     log(message: string): void {
         console.log(message)
     }
@@ -34,5 +34,5 @@ export interface Plugin {
 export async function loadPlugin(path: string): Promise<Plugin> {
     let host = new PluginHostImpl()
     return import(path)
-        .then((plugin) => plugin.default(host))
+        .then(plugin => plugin.default(host))
 }
