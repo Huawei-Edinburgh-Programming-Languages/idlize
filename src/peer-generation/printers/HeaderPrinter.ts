@@ -191,7 +191,7 @@ class HeaderVisitor {
     }
 }
 
-export function printUserConverter(headerPath: string, namespace: string, apiVersion: string|undefined, peerLibrary: PeerLibrary | IdlPeerLibrary) :
+export function printUserConverter(headerPath: string, namespace: string, apiVersion: number, peerLibrary: PeerLibrary | IdlPeerLibrary) :
         {api: string, converterHeader: string}
 {
     const apiHeader = new IndentedPrinter()
@@ -208,11 +208,11 @@ export function printUserConverter(headerPath: string, namespace: string, apiVer
 
     const converterHeader = makeConverterHeader(headerPath, namespace, peerLibrary).getOutput().join("\n")
     makeCSerializers(peerLibrary, structs, typedefs)
-    const api = makeAPI(apiVersion ?? "0", apiHeader.getOutput(), modifierList.getOutput(), accessorList.getOutput(), eventsList.getOutput(), nodeTypesList.getOutput(), structs, typedefs)
+    const api = makeAPI(apiVersion.toString(), apiHeader.getOutput(), modifierList.getOutput(), accessorList.getOutput(), eventsList.getOutput(), nodeTypesList.getOutput(), structs, typedefs)
     return {api, converterHeader}
 }
 
-export function printSerializers(apiVersion: string|undefined, peerLibrary: PeerLibrary | IdlPeerLibrary): {api: string, serializers: string} {
+export function printSerializers(apiVersion: number, peerLibrary: PeerLibrary | IdlPeerLibrary): {api: string, serializers: string} {
     const apiHeader = new IndentedPrinter()
     const modifierList = new IndentedPrinter()
     const accessorList = new IndentedPrinter()
@@ -226,7 +226,7 @@ export function printSerializers(apiVersion: string|undefined, peerLibrary: Peer
     const typedefs = new IndentedPrinter()
 
     const serializers = makeCSerializers(peerLibrary, structs, typedefs)
-    const api = makeAPI(apiVersion ?? "0", apiHeader.getOutput(), modifierList.getOutput(), accessorList.getOutput(), eventsList.getOutput(), nodeTypesList.getOutput(), structs, typedefs)
+    const api = makeAPI(apiVersion.toString(), apiHeader.getOutput(), modifierList.getOutput(), accessorList.getOutput(), eventsList.getOutput(), nodeTypesList.getOutput(), structs, typedefs)
 
     return {api, serializers}
 }
