@@ -26,6 +26,8 @@ import {
     IDLMethod,
     IDLParameter,
     IDLProperty,
+    IDLType,
+    IDLTypedef,
     IDLVariable,
     nameWithType,
     printParameters,
@@ -450,6 +452,14 @@ class JavaInterfacesVisitor extends DefaultInterfacesVisitor {
 
 class ArkTSDeclConvertor extends TSDeclConvertor {
     private typeNameConvertor = new ArkTSTypeNameConvertor(this.peerLibrary)
+    private readonly IGNORES_TYPES = ["GestureType"]
+
+    convertTypedef(node: IDLTypedef) {
+        if (this.IGNORES_TYPES.includes(node.name)) {
+            return
+        }
+        super.convertTypedef(node);
+    }
 
     convertInterface(node: IDLInterface) {
         if (!this.peerLibrary.isComponentDeclaration((node))) {
@@ -503,12 +513,14 @@ class ArkTSDeclConvertor extends TSDeclConvertor {
     private printConstructor(constructor: IDLFunction): stringOrNone[] {
         return [indentedBy(`constructor(${printParameters(constructor.parameters)});`, 1)]
     }
+
     private printConstant(constant: IDLConstant): stringOrNone[] {
         return [
             ...this.printExtendedAttributes(constant, 1),
             indentedBy(`const ${nameWithType(constant)} = ${constant.value};`, 1)
         ]
     }
+
     private printProperty(prop: IDLProperty): stringOrNone[] {
         const staticMod = prop.isStatic ? "static " : ""
         const readonlyMod = prop.isReadonly ? "readonly " : ""
@@ -517,14 +529,21 @@ class ArkTSDeclConvertor extends TSDeclConvertor {
             indentedBy(`${staticMod}${readonlyMod} ${this.nameWithType(prop)};`, 1)
         ]
     }
+
     private printMethod(idl: IDLMethod): stringOrNone[] {
         return [
             ...this.printExtendedAttributes(idl, 1),
-            indentedBy(`${idl.name}${this.printTypeParameters(idl.extendedAttributes)}(${this.printParameters(idl.parameters)}): ${this.typeNameConvertor.convert(idl.returnType)}`, 1)
+            indentedBy(`${idl.name}${this.printTypeParameters(idl.extendedAttributes)}(${this.printParameters(idl.parameters)}): ${this.convertType(idl.returnType)}`, 1)
         ]
     }
-    private printFunction(idl: IDLFunction): string {
-        return ""
+    private printFunction(idl: IDLFunction): stringOrNone[] {
+        if (idl.name?.startsWith("__")) {
+            console.log(`Ignore ${idl.name}`)
+            return []
+        }
+        return [
+            indentedBy(`${idl.name}(${this.printParameters(idl.parameters)}): ${this.convertType(idl.returnType!)};`, 1)
+        ]
     }
 
     private printExtendedAttributes(idl: IDLEntry, indentLevel: number): stringOrNone[] {
@@ -532,7 +551,7 @@ class ArkTSDeclConvertor extends TSDeclConvertor {
     }
 
     private nameWithType(prop: IDLProperty): string {
-        return `${prop.name}${prop.isOptional ? "?" : ""}: ${this.typeNameConvertor.convert(prop.type)}`
+        return `${prop.name}${prop.isOptional ? "?" : ""}: ${this.convertType(prop.type)}`
     }
 
     private printParameters(parameters: IDLParameter[]): string {
@@ -548,7 +567,7 @@ class ArkTSDeclConvertor extends TSDeclConvertor {
         isVariadic: boolean = false,
         isOptional: boolean = false
     ): string {
-        const type = idl.type ? this.typeNameConvertor.convert(idl.type) : ""
+        const type = idl.type ? this.convertType(idl.type) : ""
         const optional = isOptional ? "optional " : ""
         return `${escapeKeyword(idl.name!)}${optional ? "?" : ""}: ${type}`
     }
@@ -558,6 +577,10 @@ class ArkTSDeclConvertor extends TSDeclConvertor {
             ?.filter(it => it.name === IDLExtendedAttributes.TypeParameters)
             .map(it => it.value) ?? []
         return typeParameters.length ? `<${typeParameters.join(",")}>` : ""
+    }
+
+    private convertType(idlType: IDLType): string {
+        return this.typeNameConvertor.convert(idlType)
     }
 }
 
