@@ -31,13 +31,14 @@ import { DelegateSignatureBuilder } from "./DelegatePrinter";
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { MaterializedClass, MaterializedMethod } from "../Materialized";
 import { groupBy } from "../../util";
-import { CppLanguageWriter, createLanguageWriter, LanguageWriter, printMethodDeclaration } from "../LanguageWriters";
+import { CppLanguageWriter, createLanguageWriter, LanguageWriter } from "../LanguageWriters";
 import { LibaceInstall } from "../../Install";
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
 import { IdlPeerClass } from "../idl/IdlPeerClass";
 import { IdlPeerMethod } from "../idl/IdlPeerMethod";
 import { Language } from "../../Language";
 import { MethodSeparatorVisitor } from "../MethodSeparator";
+import { printMethodDeclaration } from "../LanguageWriters/LanguageWriter";
 
 class MethodSeparatorPrinter extends MethodSeparatorVisitor {
     public readonly printer = new IndentedPrinter()

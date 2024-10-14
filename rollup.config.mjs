@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 import nodeResolve from "@rollup/plugin-node-resolve";
-import circularDependencies from 'rollup-plugin-circular-dependencies';
 import typescript from "@rollup/plugin-typescript";
 import * as path from "path";
 
@@ -33,7 +32,6 @@ export default {
             return relative
         },
         plugins: [
-            //circularDependencies()
             // terser()
         ],
         banner: [
