@@ -75,14 +75,11 @@ import { IdlPeerLibrary } from "./peer-generation/idl/IdlPeerLibrary"
 import { IdlPeerFile } from "./peer-generation/idl/IdlPeerFile"
 import { IdlPeerGeneratorVisitor, IdlPeerProcessor, IdlPredefinedGeneratorVisitor } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
 import { SkoalaCCodeGenerator } from "./peer-generation/printers/SkoalaPrinter"
-<<<<<<< HEAD
 import { generateOhos } from "./peer-generation/OhosGenerator"
 import * as webidl2 from "webidl2"
 import { toIDLNode } from "./from-idl/deserialize"
-=======
 import { IndentedPrinter } from "./IndentedPrinter"
 import { DeserializerPrinter } from "./peer-generation/printers/DeserializerPrinter"
->>>>>>> adcf566f (Scoala Deserializer)
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
