@@ -297,6 +297,8 @@ export class IdlPeerLibrary {
             declaration[2] ||= useToGenerate
             return
         }
+        if (type.name === "ResourceColor")
+            console.log("AAA")
         const decl = this.toDeclaration(type)
         let name = this.computeTargetName(decl, false)
         if (type.name === "Optional")

@@ -456,6 +456,25 @@ export function createUnionType(types: IDLType[], name?: string): IDLUnionType {
     }
 }
 
+export function createParameter(name: string, type: IDLType | undefined): IDLParameter {
+    return {
+        kind: IDLKind.Parameter,
+        name: name,
+        type: type,
+        isOptional: false,
+        isVariadic: false,
+    }
+}
+
+export function createCallback(name: string, parameters: IDLParameter[], returnType: IDLType): IDLCallback {
+    return {
+        kind: IDLKind.Callback,
+        name: name,
+        parameters: parameters,
+        returnType: returnType,
+    }
+}
+
 export function createTypeParameterReference(name: string): IDLTypeParameterType {
     return {
         kind: IDLKind.TypeParameterType,

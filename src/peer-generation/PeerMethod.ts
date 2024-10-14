@@ -92,6 +92,8 @@ export class PeerMethod {
     generateAPIParameters(): string[] {
         const args = this.argConvertors.map(it => {
             let isPointer = it.isPointerType()
+            if (it.nativeType(false) === "Array_Union_Color_Number_String_Resource")
+                console.log("AAA")
             return `${isPointer ? "const ": ""}${it.nativeType(false)}${isPointer ? "*": ""} ${it.param}`
         })
         const receiver = this.generateReceiver()

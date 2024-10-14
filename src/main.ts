@@ -78,6 +78,7 @@ import { SkoalaCCodeGenerator } from "./peer-generation/printers/SkoalaPrinter"
 import { generateOhos } from "./peer-generation/OhosGenerator"
 import * as webidl2 from "webidl2"
 import { toIDLNode } from "./from-idl/deserialize"
+import { printCallbacks } from "./peer-generation/printers/CallbacksPrinter"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -826,6 +827,8 @@ function generateArkoalaFromIdl(outDir: string, peerLibrary: IdlPeerLibrary, lan
         imports: undefined
     }
     const arkuiComponentsFiles: string[] = []
+
+    writeFile(arkoala.component(new TargetFile("callbacks.txt")), printCallbacks(peerLibrary))
 
     const peers = printPeers(peerLibrary, context, options.dumpSerialized ?? false)
     for (const [targetFile, peer] of peers) {

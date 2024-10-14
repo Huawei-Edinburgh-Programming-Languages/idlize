@@ -81,6 +81,8 @@ export class IdlPeerMethod {
 
     generateAPIParameters(): string[] {
         const args = this.argConvertors.map(it => {
+            if (it.nativeType(false) === "Array_Union_Color_Number_String_Resource")
+                console.log("AAA")
             let isPointer = it.isPointerType()
             return `${isPointer ? "const ": ""}${it.nativeType(false)}${isPointer ? "*": ""} ${it.param}`
         })
