@@ -13,7 +13,8 @@ import {
     copyToLibace,
     libraryCcDeclaration,
     makeCJSerializer,
-    makeTypeChecker
+    makeTypeChecker,
+    makeTypeCheckerFromDTS
 } from "./FileGenerators"
 import { makeJavaArkComponents, makeJavaNodeTypes, makeJavaSerializer } from "./printers/lang/JavaPrinters"
 import { PeerLibrary } from "./PeerLibrary"
@@ -386,14 +387,14 @@ export function generateArkoala(config: {
             }
         )
         writeFile(arkoala.arktsLib(new TargetFile('type_check', 'arkts')),
-            makeTypeChecker(peerLibrary).arkts,
+            makeTypeCheckerFromDTS(peerLibrary).arkts,
             {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true
             }
         )
         writeFile(arkoala.arktsLib(new TargetFile('type_check', 'ts')),
-            makeTypeChecker(peerLibrary).ts,
+            makeTypeCheckerFromDTS(peerLibrary).ts,
             {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true
