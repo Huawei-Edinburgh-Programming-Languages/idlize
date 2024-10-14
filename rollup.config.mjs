@@ -40,9 +40,9 @@ export default {
         ].join("\n"),
     },
     onwarn: (message) => {
-        // fail build if circular dependencies are found
         if (message.code === 'CIRCULAR_DEPENDENCY') {
-          console.error(message);
+          console.error(message)
+          // TODO: stop build on circular dependencies.
           // process.exit(-1);
         }
     },
