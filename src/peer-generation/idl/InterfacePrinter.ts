@@ -542,6 +542,7 @@ class ArkTSDeclConvertor extends TSDeclConvertor {
             return []
         }
         return [
+            ...this.printExtendedAttributes(idl, 1),
             indentedBy(`${idl.name}(${this.printParameters(idl.parameters)}): ${this.convertType(idl.returnType!)};`, 1)
         ]
     }

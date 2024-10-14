@@ -19,14 +19,14 @@ import { IdlPeerLibrary } from './IdlPeerLibrary'
 import { DeclarationConvertor, TypeConvertor, convertType } from './IdlTypeConvertor'
 import { Type } from '../LanguageWriters'
 import { ARK_CUSTOM_OBJECT, convertJavaOptional, javaCustomTypeMapping } from '../printers/lang/Java'
-import { IDLPrimitiveType } from "../../idl";
+import { IDLInterface, IDLPrimitiveType, IDLProperty } from "../../idl";
 
 export interface IdlTypeNameConvertor {
     convert(type: idl.IDLType): string
 }
 
 export class TSTypeNameConvertor implements IdlTypeNameConvertor, TypeConvertor<string> {
-    constructor(private library: IdlPeerLibrary) {}
+    constructor(protected library: IdlPeerLibrary) {}
     convertUnion(type: idl.IDLUnionType): string {
         return type.types.map(it => this.convert(it)).join(" | ")
     }
@@ -106,7 +106,7 @@ export class TSTypeNameConvertor implements IdlTypeNameConvertor, TypeConvertor<
         return `((${params.join(", ")}) => ${this.library.mapType(decl.returnType)})`
     }
 
-    private productType(decl: idl.IDLInterface, isTuple: boolean, includeFieldNames: boolean): string {
+    protected productType(decl: idl.IDLInterface, isTuple: boolean, includeFieldNames: boolean): string {
         return `${
                 isTuple ? "[" : "{"
             } ${
@@ -311,5 +311,33 @@ export class ArkTSTypeNameConvertor extends TSTypeNameConvertor {
             case idl.IDLAnyType: return "object"
         }
         return super.convertPrimitiveType(type);
+    }
+
+    protected productType(decl: IDLInterface, isTuple: boolean, includeFieldNames: boolean): string {
+        return `${
+            isTuple ? "[" : "{"
+        } ${
+            decl.properties
+                .map(it => this.processTupleType(it))
+                .map(it => {
+                    const type = this.library.mapType(it.type)
+                    return it.isOptional
+                        ? includeFieldNames ? `${it.name}?: ${type}` : `(${type})?`
+                        : includeFieldNames ? `${it.name}: ${type}` : `${type}`
+            }).join(", ")
+        } ${
+            isTuple ? "]" : "}"
+        }`
+    }
+
+    private processTupleType(idlProperty: IDLProperty): IDLProperty {
+        if (idlProperty.isOptional) {
+            return {
+                ...idlProperty,
+                isOptional: false,
+                type: idl.createUnionType([idlProperty.type, idl.createReferenceType("undefined")])
+            }
+        }
+        return idlProperty
     }
 }
