@@ -44,10 +44,6 @@ export {
 } from './LanguageWriter'
 export { CppLanguageWriter, TSLanguageWriter }
 
-export function mangleMethodName(method: Method, id?: number): string {
-    return `${method.name}${id ?? ""}`
-}
-
 export function copyMethod(method: Method, overrides: {
     name?: string,
     signature?: MethodSignature,

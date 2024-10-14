@@ -711,3 +711,7 @@ export abstract class LanguageWriter {
         return this.makeString(`${value} instanceof ArrayBuffer`)
     }
 }
+
+export function mangleMethodName(method: Method, id?: number): string {
+    return `${method.name}${id ?? ""}`
+}

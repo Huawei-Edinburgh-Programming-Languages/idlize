@@ -14,7 +14,7 @@
  */
 
 import * as idl from "../../idl"
-import { Method, Type, LanguageWriter, MethodModifier, ExpressionStatement, StringExpression, NamedMethodSignature } from "../LanguageWriters";
+import { Method, Type, LanguageWriter, MethodModifier, ExpressionStatement, StringExpression, NamedMethodSignature } from "../LanguageWriters/LanguageWriter";
 import { PeerClassBase } from "../PeerClass";
 import { PeerMethod } from "../PeerMethod";
 import { isDefined } from "../../util";

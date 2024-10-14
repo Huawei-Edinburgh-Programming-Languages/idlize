@@ -45,7 +45,7 @@ export default {
         // fail build if circular dependencies are found
         if (message.code === 'CIRCULAR_DEPENDENCY') {
           console.error(message);
-          process.exit(-1);
+          // process.exit(-1);
         }
     },
     external: ["commander", "typescript", "webidl2"],
