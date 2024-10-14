@@ -23,7 +23,7 @@ export type PluginOptions = any
 
 class PluginHostImpl implements PluginHost {
     log(message: string): void {
-        console.log(message)
+        console.log(`PLUGIN: ${message}`)
     }
 }
 

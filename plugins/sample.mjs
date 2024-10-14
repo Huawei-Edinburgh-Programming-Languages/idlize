@@ -12,15 +12,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+let host = {}
+
+function init(hostImpl) {
+    host = hostImpl
+    host.log("INIT")
+}
 
 async function process(options, library) {
     return new Promise((resolve, reject) => {
-        console.log(`process: ${library.files.map(it => it.originalFilename).join(",")} with ${Object.keys(options).join(",")}`)
+        host.log(`process: ${library.files.map(it => it.originalFilename).join(",")} with ${Object.keys(options).join(",")}`)
         resolve(true)
     })
 }
 
 function entry(host) {
+    init(host)
     return {
         process: process,
     }
