@@ -15,12 +15,13 @@
 
 import { IDLBooleanType, IDLContainerType, IDLNumberType, IDLParameter, IDLPrimitiveType, IDLStringType, IDLType, IDLUndefinedType, IDLUnionType, IDLVoidType, isContainerType, isPrimitiveType, isUnionType } from "../../idl"
 import { IndentedPrinter } from "../../IndentedPrinter"
-import { Language, stringOrNone } from "../../util"
+import { stringOrNone } from "../../util"
 import { EnumConvertor, MapConvertor } from "../Convertors"
 import { ArgConvertor, RuntimeType } from "../ArgConvertors"
 import { FieldRecord } from "../DeclarationTable"
 import { EnumEntity } from "../PeerFile"
 import * as fs from "fs"
+import { Language } from "../../Language"
 
 ////////////////////////////////////////////////////////////////
 //                           TYPE                             //

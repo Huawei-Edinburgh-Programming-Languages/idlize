@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { capitalize, Language, removeExt, renameClassToMaterialized } from "../../util";
+import { capitalize, removeExt, renameClassToMaterialized } from "../../util";
 import { PeerLibrary } from "../PeerLibrary";
 import { printPeerFinalizer, writePeerMethod } from "./PeersPrinter"
 import {
@@ -45,6 +45,7 @@ import { createInterfaceDeclName } from "../TypeNodeNameConvertor";
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
 import { collectJavaImports } from "./lang/JavaIdlUtils";
 import { printJavaImports } from "./lang/JavaPrinters";
+import { Language } from "../../Language";
 
 interface MaterializedFileVisitor {
     visit(): void

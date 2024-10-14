@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 import nodeResolve from "@rollup/plugin-node-resolve";
-import terser from "@rollup/plugin-terser";
+import circularDependencies from 'rollup-plugin-circular-dependencies';
 import typescript from "@rollup/plugin-typescript";
 import * as path from "path";
 
@@ -33,12 +33,20 @@ export default {
             return relative
         },
         plugins: [
+            //circularDependencies()
             // terser()
         ],
         banner: [
             "#!/usr/bin/env node",
             APACHE_LICENSE_HEADER()
         ].join("\n"),
+    },
+    onwarn: (message) => {
+        // fail build if circular dependencies are found
+        if (message.code === 'CIRCULAR_DEPENDENCY') {
+          console.error(message);
+          process.exit(-1);
+        }
     },
     external: ["commander", "typescript", "webidl2"],
     plugins: [

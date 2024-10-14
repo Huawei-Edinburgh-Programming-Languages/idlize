@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { Language } from "../util"
+import { Language } from "../Language"
 import { PrimitiveType } from "./ArkPrimitiveType"
 import { LanguageExpression, LanguageStatement, LanguageWriter, Type } from "./LanguageWriters"
 

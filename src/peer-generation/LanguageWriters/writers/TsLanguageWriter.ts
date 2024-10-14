@@ -14,7 +14,7 @@
  */
 
 import { IndentedPrinter } from "../../../IndentedPrinter"
-import { Language } from "../../../util"
+import { Language } from "../../../Language"
 import { ArrayConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "../../Convertors"
 import { FieldRecord } from "../../DeclarationTable"
 import { mapType, TSTypeNodeNameConvertor } from "../../TypeNodeNameConvertor"

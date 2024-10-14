@@ -27,7 +27,7 @@ import {
     PeerGeneratorVisitor,
     PeerProcessor,
 } from "./peer-generation/PeerGeneratorVisitor"
-import { defaultCompilerOptions, isDefined, toSet, Language } from "./util"
+import { defaultCompilerOptions, toSet } from "./util"
 import { initRNG } from "./rand_utils"
 import { DeclarationTable } from "./peer-generation/DeclarationTable"
 import { PeerLibrary } from "./peer-generation/PeerLibrary"
@@ -41,6 +41,7 @@ import { generateOhos } from "./peer-generation/OhosGenerator"
 import * as webidl2 from "webidl2"
 import { toIDLNode } from "./from-idl/deserialize"
 import { generateArkoala, generateArkoalaFromIdl, generateLibace, generateLibaceFromIdl } from "./peer-generation/arkoala"
+import { Language } from "./Language"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')

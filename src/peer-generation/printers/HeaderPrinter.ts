@@ -24,10 +24,11 @@ import { CallbackInfo, collectCallbacks, groupCallbacks, IdlCallbackInfo } from 
 import { DeclarationTable } from "../DeclarationTable";
 import { PrimitiveType } from "../ArkPrimitiveType"
 import { NamedMethodSignature, Type, createLanguageWriter, printMethodDeclaration } from "../LanguageWriters";
-import { camelCaseToUpperSnakeCase, Language } from "../../util";
+import { camelCaseToUpperSnakeCase } from "../../util";
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
 import { IdlPeerClass } from "../idl/IdlPeerClass";
 import { IdlPeerMethod } from "../idl/IdlPeerMethod";
+import { Language } from "../../Language";
 
 export function generateEventReceiverName(componentName: string) {
     return `${PeerGeneratorConfig.cppPrefix}ArkUI${componentName}EventsReceiver`

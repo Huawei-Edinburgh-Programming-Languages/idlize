@@ -22,12 +22,12 @@ import {
     getLineNumberString,
     identName,
     isAbstract,
-    isCommonMethodOrSubclass,
     nameOrNull,
     zip
 } from "./util"
 import { LinterWhitelist } from "./LinterWhitelist"
 import { cppKeywords } from "./languageSpecificKeywords"
+import { isCommonMethodOrSubclass } from "./peer-generation/inheritance"
 
 export enum LinterError {
     NONE,

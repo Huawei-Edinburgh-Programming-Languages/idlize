@@ -42,7 +42,7 @@ import { ARKOALA_PACKAGE_PATH, INTEROP_PACKAGE_PATH } from "./printers/lang/Java
 import { TargetFile } from "./printers/TargetFile"
 import { printBridgeCcCustom, printBridgeCcGenerated } from "./printers/BridgeCcPrinter"
 import { createPrinterContext } from "./printers/PrinterContext/PrinterContextImpl"
-import { Language } from "../util"
+import { Language } from "../Language"
 import { IdlPeerLibrary } from "./idl/IdlPeerLibrary"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
 
