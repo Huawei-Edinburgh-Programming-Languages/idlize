@@ -19,12 +19,13 @@ import {
     hasSuperType,
     IDLConstant,
     IDLEntry,
+    IDLExtendedAttribute,
+    IDLExtendedAttributes,
     IDLFunction,
     IDLInterface,
     IDLMethod,
     IDLParameter,
     IDLProperty,
-    IDLTypedef,
     IDLVariable,
     nameWithType,
     printParameters,
@@ -486,10 +487,11 @@ class ArkTSDeclConvertor extends TSDeclConvertor {
                 idl.scope ? idl.scope.push(...scope) : idl.scope = scope
             })
 
-        return ([
-            `interface ${idl.name}${hasSuperType(idl) ? ` extends ${printType(idl.inheritance[0])}` : ""} {`,
-            // TODO: type system hack!
-        ] as stringOrNone[])
+        const name = [idl.name,
+            this.printTypeParameters(idl.extendedAttributes),
+            hasSuperType(idl) ? ` extends ${printType(idl.inheritance[0])}` : ""]
+            .join("")
+        return ([`interface ${name} {`] as stringOrNone[])
             .concat(idl.constructors.map(it => this.printConstructor(it)).flat())
             .concat(idl.constants.map(it => this.printConstant(it)).flat())
             .concat(idl.properties.map(it => this.printProperty(it)).flat())
@@ -518,7 +520,7 @@ class ArkTSDeclConvertor extends TSDeclConvertor {
     private printMethod(idl: IDLMethod): stringOrNone[] {
         return [
             ...this.printExtendedAttributes(idl, 1),
-            indentedBy(`${idl.name}(${this.printParameters(idl.parameters)}): ${this.typeNameConvertor.convert(idl.returnType)}`, 1)
+            indentedBy(`${idl.name}${this.printTypeParameters(idl.extendedAttributes)}(${this.printParameters(idl.parameters)}): ${this.typeNameConvertor.convert(idl.returnType)}`, 1)
         ]
     }
     private printFunction(idl: IDLFunction): string {
@@ -549,6 +551,13 @@ class ArkTSDeclConvertor extends TSDeclConvertor {
         const type = idl.type ? this.typeNameConvertor.convert(idl.type) : ""
         const optional = isOptional ? "optional " : ""
         return `${escapeKeyword(idl.name!)}${optional ? "?" : ""}: ${type}`
+    }
+
+    private printTypeParameters(extendedAttributes: IDLExtendedAttribute[] | undefined): string {
+        const typeParameters = extendedAttributes
+            ?.filter(it => it.name === IDLExtendedAttributes.TypeParameters)
+            .map(it => it.value) ?? []
+        return typeParameters.length ? `<${typeParameters.join(",")}>` : ""
     }
 }
 
