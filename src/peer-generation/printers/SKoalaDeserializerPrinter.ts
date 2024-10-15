@@ -1,7 +1,7 @@
 import { IDLEntry, IDLInterface, isInterface, isClass, IDLType } from "../../idl"
 import { IndentedPrinter } from "../../IndentedPrinter"
 
-export class DeserializerPrinter {
+export class SKoalaDeserializerPrinter {
     private entries: IDLEntry[]
 
     constructor(entries: IDLEntry[]) {
