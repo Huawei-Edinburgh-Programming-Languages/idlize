@@ -8,15 +8,15 @@ export class SKoalaDeserializerPrinter {
         this.entries = entries
     }
 
-    public generateDeserializer(printer: IndentedPrinter): void {
+    public generateSKoalaDeserializer(printer: IndentedPrinter): void {
         this.entries.forEach(entry => {
             if (isInterface(entry) || isClass(entry)) {
-                this.visitDeserializer(entry as IDLInterface, printer)
+                this.visitSKoalaDeserializer(entry as IDLInterface, printer)
             }
         })
     }
 
-    private visitDeserializer(node: IDLInterface, printer: IndentedPrinter): void {
+    private visitSKoalaDeserializer(node: IDLInterface, printer: IndentedPrinter): void {
         const className = `Skoala_${node.name}`
         const deserializerName = `read${node.name}`
         printer.print(`${className} ${deserializerName}() {`)
