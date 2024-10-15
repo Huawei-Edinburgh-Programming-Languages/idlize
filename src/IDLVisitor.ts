@@ -741,8 +741,6 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         }
     }
 
-    private seenInScope = new Map<Object, Set<string>>()
-
     addToScope(entry: IDLEntry) {
         entry.extendedAttributes ??= []
         entry.extendedAttributes.push({ name: IDLExtendedAttributes.Synthetic })
