@@ -49,7 +49,7 @@ pg run:panda:
   before_script:
     - !reference [.setup, script]
   script:
-    - npm run install:panda:sdk
+    - npm run panda:sdk:install
     - npm run run:panda
 
 arkts subset tsc:
