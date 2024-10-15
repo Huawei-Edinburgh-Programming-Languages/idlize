@@ -259,7 +259,7 @@ class ArkTSTypeDependenciesCollector extends ImportsAggregateCollector {
 
     override convertContainer(type: idl.IDLContainerType): idl.IDLEntry[] {
         if (type.name == 'sequence') {
-            this.peerLibrary.seenArrayTypes.push(this.peerLibrary.getTypeName(type))
+            this.peerLibrary.seenArrayTypes.set(this.peerLibrary.getTypeName(type), type)
         }
         return super.convertContainer(type)
     }

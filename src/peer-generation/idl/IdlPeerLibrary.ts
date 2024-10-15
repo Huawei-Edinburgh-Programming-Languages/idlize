@@ -75,7 +75,7 @@ export class IdlPeerLibrary {
     readonly componentsDeclarations: IdlComponentDeclaration[] = []
     readonly conflictedDeclarations: Set<idl.IDLEntry> = new Set()
     readonly nameConvertorInstance: IdlTypeNameConvertor = createTypeNameConvertor(this)
-    readonly seenArrayTypes: string[] = []
+    readonly seenArrayTypes: Map<string, idl.IDLType> = new Map()
 
     private context: string | undefined
     getCurrentContext(): string | undefined {
