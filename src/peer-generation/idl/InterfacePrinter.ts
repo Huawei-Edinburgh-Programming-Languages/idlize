@@ -14,25 +14,6 @@
  */
 
 import * as idl from '../../idl'
-import {
-    escapeKeyword,
-    hasSuperType,
-    IDLConstant,
-    IDLEntry,
-    IDLExtendedAttribute,
-    IDLExtendedAttributes,
-    IDLFunction,
-    IDLInterface,
-    IDLMethod,
-    IDLParameter,
-    IDLProperty,
-    IDLType,
-    IDLTypedef,
-    IDLVariable,
-    nameWithType,
-    printParameters,
-    printType
-} from '../../idl'
 import * as path from 'path'
 import { IdlPeerLibrary } from "./IdlPeerLibrary"
 import {
@@ -45,11 +26,8 @@ import {
     NamedMethodSignature,
     Type
 } from '../LanguageWriters'
-import { removeExt, renameDtsToInterfaces, throwException } from '../../util'
 import {
-    indentedBy,
     isDefined,
-    Language,
     removeExt,
     renameDtsToInterfaces,
     stringOrNone,
@@ -69,13 +47,21 @@ import { printJavaImports } from '../printers/lang/JavaPrinters'
 import { collectJavaImports } from '../printers/lang/JavaIdlUtils'
 import { Language } from '../../Language'
 import {
-    attributesToQuote, escapeKeyword,
-    hasSuperType, IDLConstant, IDLConstructor, IDLEntry, IDLExtendedAttribute, IDLExtendedAttributes, IDLFunction,
+    escapeKeyword,
+    hasSuperType,
+    IDLConstant,
+    IDLEntry,
+    IDLExtendedAttribute,
+    IDLExtendedAttributes,
+    IDLFunction,
     IDLInterface,
-    IDLMethod, IDLParameter, IDLProperty, IDLVariable, nameWithType,
-    printConstant,
-    printConstructor, printFunction, printMethod, printParameters,
-    printProperty,
+    IDLMethod,
+    IDLParameter,
+    IDLProperty,
+    IDLType,
+    IDLTypedef,
+    IDLVariable,
+    nameWithType,
     printType
 } from "../../idl";
 import { ArkTSTypeNameConvertor } from "./IdlNameConvertor";

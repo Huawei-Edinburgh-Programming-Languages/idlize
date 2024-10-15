@@ -44,7 +44,6 @@ import { toIDLNode } from "./from-idl/deserialize"
 import { generateArkoala, generateArkoalaFromIdl, generateLibace, generateLibaceFromIdl } from "./peer-generation/arkoala"
 import { Language } from "./Language"
 import { loadPlugin } from "./peer-generation/plugin-api"
-import { printConflictedDeclarationsIdl } from "./peer-generation/idl/ConflictedDeclarationsPrinterIdl";
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')

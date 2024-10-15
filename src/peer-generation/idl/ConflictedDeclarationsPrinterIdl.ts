@@ -14,12 +14,11 @@
  */
 
 import { createLanguageWriter, LanguageWriter } from "../LanguageWriters";
-import { Language } from "../../util";
 import { IdlPeerLibrary } from "./IdlPeerLibrary";
 import { DeclarationNameConvertor } from "./IdlNameConvertor";
 import { convertDeclaration } from "./IdlTypeConvertor";
 import * as idl from "../../idl";
-import * as ts from "typescript";
+import { Language } from "../../Language";
 
 class ConflictedDeclarationsVisitorIdl {
     readonly writer = createLanguageWriter(this.library.language)
