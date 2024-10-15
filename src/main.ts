@@ -192,8 +192,8 @@ if (options.dts2skoala) {
                         codeGenerator.generate()
                         console.log(`Code generation completed for ${fileName}.h`)
                     
-                        const deserializerGenerator = new DeserializerPrinter(entries)
-                        deserializerGenerator.generateDeserializer(combinedDeserializerPrinter)
+                        const deserializerGenerator = new SKoalaDeserializerPrinter(entries)
+                        deserializerGenerator.generateSKoalaDeserializer(combinedDeserializerPrinter)
                         console.log(`Methods added to deserializer for ${fileName}.`)
                     } catch (error) {
                         if (error instanceof Error) {
