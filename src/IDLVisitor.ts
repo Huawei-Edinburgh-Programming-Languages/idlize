@@ -666,7 +666,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
     serializeFunctionType(signature: ts.SignatureDeclarationBase, nameSuggestion?: NameSuggestion, extendedAttributes?: IDLExtendedAttribute[]): IDLCallback {
         const parameters = signature.parameters.map(it => this.serializeParameter(it, nameSuggestion))
         const returnType = this.serializeType(signature.type, nameSuggestion?.extend('ret'))
-        const syntheticName = this.generateSyntheticFunctionName(parameters, returnType)
+        const syntheticName = this.generateSyntheticFunctionName("Callback", parameters, returnType)
         const selectedName = selectName(nameSuggestion, syntheticName)
         return {
             name: selectedName,
@@ -680,7 +680,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
     serializeSyntheticFunctionType(fileName: string, parameters: ts.ParameterDeclaration[], returnType: ts.TypeNode, nameSuggestion?: NameSuggestion, extendedAttributes?: IDLExtendedAttribute[]): IDLCallback {
         const parametersIdl = parameters.map(it => this.serializeParameter(it, nameSuggestion))
         const returnIdlType = this.serializeType(returnType, nameSuggestion?.extend('ret'))
-        const syntheticName = this.generateSyntheticFunctionName(parametersIdl, returnIdlType)
+        const syntheticName = this.generateSyntheticFunctionName("Callback", parametersIdl, returnIdlType)
         const selectedName = selectName(nameSuggestion, syntheticName)
         return {
             kind: IDLKind.Callback,
@@ -692,13 +692,13 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         };
     }
 
-    private generateSyntheticFunctionName(parameters: IDLParameter[], returnType: IDLType): string {
-        const names = parameters.map(it => `${it.name}_${this.computeTypeName(it.type!)}`).concat(this.computeTypeName(returnType))
-        return `Callback_${names.join("_")}`
+    private generateSyntheticFunctionName(prefix: string, parameters: IDLParameter[], returnType: IDLType): string {
+        const names = parameters.map(it => `${this.computeTypeName(it.type!)}`).concat(this.computeTypeName(returnType))
+        return `${prefix}_${names.join("_")}`
     }
 
-    serializeCallback(rawType: string, type: ts.TypeReferenceNode): IDLCallback {
-        const types = type.typeArguments!.map(it => this.serializeType(it))
+    serializeCallback(rawType: string, type: ts.TypeReferenceNode, nameSuggestion: NameSuggestion | undefined): IDLCallback {
+        const types = type.typeArguments!.map(it => this.serializeType(it, nameSuggestion))
         const returnType = types[0]
         const parameters = types.splice(1).map((it, index) => {
             let param = {
@@ -712,7 +712,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         })
         let isAsync = rawType == "AsyncCallback"
         let extendedAttributes = isAsync ? [{name: IDLExtendedAttributes.Async}] : []
-        let name = `${isAsync ? "Async" : ""}Callback_${parameters.map(it => it.type!).concat(returnType).map(it => this.computeTypeName(it)).join("_")}`
+        let name = this.generateSyntheticFunctionName(isAsync ? "AsyncCallback" : "Callback", parameters, returnType)
         return {
             name,
             parameters,
@@ -879,11 +879,11 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             const rawType = sanitize(getExportedDeclarationNameByNode(this.typeChecker, type.typeName))!
             const transformedType = typeMapper.get(rawType) ?? rawType
             // TODO: support Record here as well.
-            if (rawType == "Array" || rawType == "Promise" || rawType == "Map" /*|| rawType == "Record"*/) {
-                return createContainerType(transformedType, type.typeArguments!.map(it => this.serializeType(it)))
+            if (rawType == "Array" || rawType == "Promise" || rawType == "Map"/* || rawType == "Record"*/) {
+                return createContainerType(transformedType, type.typeArguments!.map(it => this.serializeType(it, nameSuggestion)))
             }
             if (rawType == "Callback" || rawType == "AsyncCallback") {
-                const funcType = this.serializeCallback(rawType, type)
+                const funcType = this.serializeCallback(rawType, type, NameSuggestion.make("Callback"))
                 this.addToScope(funcType)
                 return createReferenceType(funcType.name)
             }
