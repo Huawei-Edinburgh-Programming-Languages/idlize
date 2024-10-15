@@ -86,13 +86,14 @@ export class DeserializerPrinter {
 
     private getReadMethodForType(type: string): string {
         const typeMapping: { [key: string]: string } = {
-            "Int32": "readSkoala_Int32",
-            "Float32": "readSkoala_Float32",
-            "Boolean": "readSkoala_Boolean",
-            "String": "readSkoala_String",
+            "Int32": "read_Int32", 
+            "Float32": "read_Float32",
+            "Boolean": "read_Boolean",
+            "String": "read_String",
         }
-        return typeMapping[type] || `readSkoala_${type}`
+        return typeMapping[type] || `read_${type}`
     }
+    
 
     private isArrayType(type: IDLType): boolean {
         return type.name.endsWith("[]")
