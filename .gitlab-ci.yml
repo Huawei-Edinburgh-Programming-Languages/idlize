@@ -41,6 +41,17 @@ pg java:run:
   script:
     - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-arm64 npm run run:java
 
+pg run:panda:
+  stage: test
+  tags:
+    - idlize-ci
+    - koala-ci
+  before_script:
+    - !reference [.setup, script]
+  script:
+    - npm run install:panda:sdk
+    - npm run run:panda
+
 arkts subset tsc:
   stage: test
   tags:
