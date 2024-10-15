@@ -297,7 +297,7 @@ function checkCommon() {
     }
     checkResult("Test backgroundBlurStyle for BackgroundBlurStyleOptions",
         () => peer.backgroundBlurStyleAttribute(0, backgroundBlurStyle),
-        `backgroundBlurStyle(Ark_BlurStyle(0), {.tag=ARK_TAG_OBJECT, .value={.colorMode={.tag=ARK_TAG_OBJECT, .value=Ark_ThemeColorMode(0)}, .adaptiveColor={.tag=ARK_TAG_OBJECT, .value=Ark_AdaptiveColor(0)}, .scale={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=1}}, .blurOptions={.tag=ARK_TAG_OBJECT, .value={.grayscale={.value0={.tag=102, .i32=1}, .value1={.tag=102, .i32=1}}}}, .policy={.tag=ARK_TAG_UNDEFINED, .value={}}, .inactiveColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .type={.tag=ARK_TAG_UNDEFINED, .value={}}}})`
+        `backgroundBlurStyle(Ark_BlurStyle(0), {.tag=ARK_TAG_OBJECT, .value={.colorMode={.tag=ARK_TAG_OBJECT, .value=Ark_ThemeColorMode(0)}, .adaptiveColor={.tag=ARK_TAG_OBJECT, .value=Ark_AdaptiveColor(0)}, .scale={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=1}}, .blurOptions={.tag=ARK_TAG_OBJECT, .value={.grayscale={.value0={.tag=102, .i32=1}, .value1={.tag=102, .i32=1}}}}, .policy={.tag=ARK_TAG_UNDEFINED, .value={}}, .inactiveColor={.tag=ARK_TAG_UNDEFINED, .value={}}}})`
     )
 
     checkResult("Test dragPreviewOptions numberBadge with number",
