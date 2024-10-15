@@ -77,7 +77,7 @@ export class TSTypeNameConvertor implements IdlTypeNameConvertor, TypeConvertor<
         if (typeSpec === `AttributeModifier`)
             typeArgs = [`object`]
         if (typeSpec === `ContentModifier`)
-            typeArgs = [`any`] //this.convert(ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword))]
+            typeArgs = [this.convert(idl.IDLAnyType)] //this.convert(ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword))]
         if (typeSpec === `Optional`)
             return `${typeArgs} | undefined`
         const maybeTypeArguments = !typeArgs?.length ? '' : `<${typeArgs.join(', ')}>`
@@ -110,7 +110,9 @@ export class TSTypeNameConvertor implements IdlTypeNameConvertor, TypeConvertor<
         return `${
                 isTuple ? "[" : "{"
             } ${
-                decl.properties.map(it => {
+                decl.properties
+                    .map(it => this.processTupleType(it))
+                    .map(it => {
                     const type = this.library.mapType(it.type)
                     return it.isOptional
                         ? includeFieldNames ? `${it.name}?: ${type}` : `(${type})?`
@@ -119,6 +121,10 @@ export class TSTypeNameConvertor implements IdlTypeNameConvertor, TypeConvertor<
             } ${
                 isTuple ? "]" : "}"
             }`
+    }
+
+    protected processTupleType(idlProperty: IDLProperty): IDLProperty {
+        return idlProperty
     }
 }
 
@@ -305,6 +311,7 @@ export class ArkTSTypeNameConvertor extends TSTypeNameConvertor {
         }
         return super.convertContainer(type)
     }
+
     convertPrimitiveType(type: IDLPrimitiveType): string {
         switch (type) {
             case idl.IDLVoidType: return "void"
@@ -313,29 +320,12 @@ export class ArkTSTypeNameConvertor extends TSTypeNameConvertor {
         return super.convertPrimitiveType(type);
     }
 
-    protected productType(decl: IDLInterface, isTuple: boolean, includeFieldNames: boolean): string {
-        return `${
-            isTuple ? "[" : "{"
-        } ${
-            decl.properties
-                .map(it => this.processTupleType(it))
-                .map(it => {
-                    const type = this.library.mapType(it.type)
-                    return it.isOptional
-                        ? includeFieldNames ? `${it.name}?: ${type}` : `(${type})?`
-                        : includeFieldNames ? `${it.name}: ${type}` : `${type}`
-            }).join(", ")
-        } ${
-            isTuple ? "]" : "}"
-        }`
-    }
-
-    private processTupleType(idlProperty: IDLProperty): IDLProperty {
+    protected processTupleType(idlProperty: IDLProperty): IDLProperty {
         if (idlProperty.isOptional) {
             return {
                 ...idlProperty,
                 isOptional: false,
-                type: idl.createUnionType([idlProperty.type, idl.createReferenceType("undefined")])
+                type: idl.createUnionType([idlProperty.type, idl.IDLUndefinedType])
             }
         }
         return idlProperty

@@ -94,7 +94,8 @@ abstract class DefaultInterfacesVisitor implements InterfacesVisitor {
 }
 
 export class TSDeclConvertor implements DeclarationConvertor<void> {
-    constructor(protected readonly writer: LanguageWriter, readonly peerLibrary: IdlPeerLibrary) {
+    constructor(protected readonly writer: LanguageWriter,
+                readonly peerLibrary: IdlPeerLibrary) {
     }
     convertCallback(node: idl.IDLCallback): void {
     }
@@ -453,6 +454,7 @@ class JavaInterfacesVisitor extends DefaultInterfacesVisitor {
 class ArkTSDeclConvertor extends TSDeclConvertor {
     private typeNameConvertor = new ArkTSTypeNameConvertor(this.peerLibrary)
     private readonly IGNORES_TYPES = ["GestureType"]
+    private seenInterfaceNames = new Set<string>()
 
     convertTypedef(node: IDLTypedef) {
         if (this.IGNORES_TYPES.includes(node.name)) {
@@ -462,7 +464,15 @@ class ArkTSDeclConvertor extends TSDeclConvertor {
     }
 
     convertInterface(node: IDLInterface) {
+        if (this.IGNORES_TYPES.includes(node.name)) {
+            return
+        }
         if (!this.peerLibrary.isComponentDeclaration((node))) {
+            if (this.seenInterfaceNames.has(node.name)) {
+                console.log(`interface name: '${node.name}' already exists`)
+                return;
+            }
+            this.seenInterfaceNames.add(node.name)
             this.writer.print('export ' + this.replaceImportTypeNodes(this.printInterface(node).join("\n")))
             return
         }
@@ -486,38 +496,35 @@ class ArkTSDeclConvertor extends TSDeclConvertor {
         this.writer.print(this.replaceImportTypeNodes(printer.getOutput().join('\n')))
     }
 
-    private printInterface(idl: IDLInterface): stringOrNone[] {
-        idl.methods.map((it: IDLMethod) => {
+    private printInterface(idlInterface: IDLInterface): stringOrNone[] {
+        idlInterface.methods.map((it: IDLMethod) => {
             let result = it.scope
             it.scope = undefined
             return result
         })
             .filter(isDefined)
             .map(scope => {
-                idl.scope ? idl.scope.push(...scope) : idl.scope = scope
+                idlInterface.scope ? idlInterface.scope.push(...scope) : idlInterface.scope = scope
             })
 
-        const name = [idl.name,
-            this.printTypeParameters(idl.extendedAttributes),
-            hasSuperType(idl) ? ` extends ${printType(idl.inheritance[0])}` : ""]
-            .join("")
-        return ([`interface ${name} {`] as stringOrNone[])
-            .concat(idl.constructors.map(it => this.printConstructor(it)).flat())
-            .concat(idl.constants.map(it => this.printConstant(it)).flat())
-            .concat(idl.properties.map(it => this.printProperty(it)).flat())
-            .concat(idl.methods.map(it => this.printMethod(it)).flat())
-            .concat(idl.callables.map(it => this.printFunction(it)).flat())
+        return ([`interface ${this.printInterfaceName(idlInterface)} {`] as stringOrNone[])
+            .concat(idlInterface.constants.map(it => this.printConstant(it)).flat())
+            .concat(idlInterface.properties.map(it => this.printProperty(it)).flat())
+            .concat(idlInterface.methods.map(it => this.printMethod(it)).flat())
+            .concat(idlInterface.callables.map(it => this.printFunction(it)).flat())
             .concat(["}"])
     }
 
-    private printConstructor(constructor: IDLFunction): stringOrNone[] {
-        return [indentedBy(`constructor(${printParameters(constructor.parameters)});`, 1)]
+    private printInterfaceName(idlInterface: IDLInterface): string {
+        return [idlInterface.name,
+            this.printTypeParameters(idlInterface.extendedAttributes),
+            hasSuperType(idlInterface) ? ` extends ${printType(idlInterface.inheritance[0])}` : ""].join("")
     }
 
     private printConstant(constant: IDLConstant): stringOrNone[] {
         return [
-            ...this.printExtendedAttributes(constant, 1),
-            indentedBy(`const ${nameWithType(constant)} = ${constant.value};`, 1)
+            ...this.printExtendedAttributes(constant),
+            `const ${nameWithType(constant)} = ${constant.value};`
         ]
     }
 
@@ -525,15 +532,15 @@ class ArkTSDeclConvertor extends TSDeclConvertor {
         const staticMod = prop.isStatic ? "static " : ""
         const readonlyMod = prop.isReadonly ? "readonly " : ""
         return [
-            ...this.printExtendedAttributes(prop, 1),
-            indentedBy(`${staticMod}${readonlyMod} ${this.nameWithType(prop)};`, 1)
+            ...this.printExtendedAttributes(prop),
+            `${staticMod}${readonlyMod} ${this.printPropNameWithType(prop)};`
         ]
     }
 
     private printMethod(idl: IDLMethod): stringOrNone[] {
         return [
-            ...this.printExtendedAttributes(idl, 1),
-            indentedBy(`${idl.name}${this.printTypeParameters(idl.extendedAttributes)}(${this.printParameters(idl.parameters)}): ${this.convertType(idl.returnType)}`, 1)
+            ...this.printExtendedAttributes(idl),
+            `${idl.name}${this.printTypeParameters(idl.extendedAttributes)}(${this.printParameters(idl.parameters)}): ${this.convertType(idl.returnType)}`
         ]
     }
     private printFunction(idl: IDLFunction): stringOrNone[] {
@@ -542,32 +549,29 @@ class ArkTSDeclConvertor extends TSDeclConvertor {
             return []
         }
         return [
-            ...this.printExtendedAttributes(idl, 1),
-            indentedBy(`${idl.name}(${this.printParameters(idl.parameters)}): ${this.convertType(idl.returnType!)};`, 1)
+            ...this.printExtendedAttributes(idl),
+            `${idl.name}(${this.printParameters(idl.parameters)}): ${this.convertType(idl.returnType!)};`
         ]
     }
 
-    private printExtendedAttributes(idl: IDLEntry, indentLevel: number): stringOrNone[] {
+    private printExtendedAttributes(idl: IDLEntry): stringOrNone[] {
         return []
     }
 
-    private nameWithType(prop: IDLProperty): string {
+    private printPropNameWithType(prop: IDLProperty): string {
         return `${prop.name}${prop.isOptional ? "?" : ""}: ${this.convertType(prop.type)}`
     }
 
     private printParameters(parameters: IDLParameter[]): string {
         return parameters
-            ?.map(it =>
-                this.nameWithTypeIDLParameter(it, it.isVariadic, it.isOptional)
-            )
+            ?.map(it => this.printNameWithTypeIDLParameter(it, it.isVariadic, it.isOptional))
             ?.join(", ") ?? ""
     }
 
-    private nameWithTypeIDLParameter(
+    private printNameWithTypeIDLParameter(
         idl: IDLVariable,
         isVariadic: boolean = false,
-        isOptional: boolean = false
-    ): string {
+        isOptional: boolean = false): string {
         const type = idl.type ? this.convertType(idl.type) : ""
         const optional = isOptional ? "optional " : ""
         return `${escapeKeyword(idl.name!)}${optional ? "?" : ""}: ${type}`
