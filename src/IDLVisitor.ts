@@ -340,7 +340,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         let result: IDLExtendedAttribute[] = this.computeExtendedAttributes(node, node.typeParameters)
         let name = identName(node.name)
         if (name && ts.isClassDeclaration(node) && isCommonMethodOrSubclass(this.typeChecker, node)) {
-            result.push({name: IDLExtendedAttributes.Component, value: PeerGeneratorConfig.mapComponentName(name)})
+            result.push({name: IDLExtendedAttributes.Component, value: `"${PeerGeneratorConfig.mapComponentName(name)}"`})
         }
         if (inheritance.length) {
             let typeParams = getExtAttribute(inheritance[0], IDLExtendedAttributes.TypeArguments)
@@ -880,7 +880,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             const rawType = sanitize(getExportedDeclarationNameByNode(this.typeChecker, type.typeName))!
             const transformedType = typeMapper.get(rawType) ?? rawType
             // TODO: support Record here as well.
-            if (rawType == "Array" || rawType == "Promise" || rawType == "Map" /*|| rawType == "Record"*/) {
+            if (rawType == "Array" || rawType == "Promise" || rawType == "Map" /* || rawType == "Record" */) {
                 return createContainerType(transformedType, type.typeArguments!.map((it, index) => this.serializeType(it, nameSuggestion?.extend(`p${index}`))))
             }
             if (rawType == "Callback" || rawType == "AsyncCallback") {
@@ -1104,10 +1104,12 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
     }
 
     isCommonMethodUsedAsProperty(member: ts.ClassElement | ts.TypeElement): member is (ts.MethodDeclaration | ts.MethodSignature) {
+        let className = (ts.isClassDeclaration(member.parent)) ? identName(member.parent.name) : undefined
+        let returnType = (ts.isMethodDeclaration(member) || ts.isMethodSignature(member)) ? identName(member.type) : undefined
         return (this.options.commonToAttributes ?? true) &&
             (ts.isMethodDeclaration(member) || ts.isMethodSignature(member)) &&
             this.isCommonAttributeMethod(member) &&
-            member.parameters.length == 1
+            member.parameters.length == 1 && (returnType == "T" || returnType == className)
     }
 
     computeTypeParametersAttribute(typeParameters: ts.NodeArray<ts.TypeParameterDeclaration> | undefined, attributes: IDLExtendedAttribute[] = []) {
