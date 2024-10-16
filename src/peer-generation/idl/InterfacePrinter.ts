@@ -495,23 +495,28 @@ class ArkTSDeclConvertor extends TSDeclConvertor {
 
     private printInterfaceName(idlInterface: IDLInterface): string {
         let inheritanceType = idlInterface.inheritance[0]
-        if (inheritanceType !== undefined && idl.isReferenceType(inheritanceType)) {
+        if (inheritanceType !== undefined) {
             if (inheritanceType.extendedAttributes === undefined) {
                 inheritanceType.extendedAttributes = []
             }
-            this.peerLibrary
-                .resolveTypeReference(inheritanceType)
+            const parentTypeArg = idlInterface
                 ?.extendedAttributes
-                ?.forEach(type => {
-                    inheritanceType.extendedAttributes?.push(type)
-                    if (!idlInterface.extendedAttributes?.find(it => type.name === it.name)) {
-                        idlInterface.extendedAttributes?.push(type)
-                    }
-                })
+                ?.find(it => it.name === IDLExtendedAttributes.ParentTypeArguments)
+            if (parentTypeArg !== undefined) {
+                inheritanceType
+                    .extendedAttributes
+                    .push({
+                        name: IDLExtendedAttributes.TypeParameters,
+                        value: parentTypeArg.value
+                    })
+            }
         }
         return [idlInterface.name,
             this.printTypeParameters(idlInterface.extendedAttributes),
-            hasSuperType(idlInterface) ? ` extends ${inheritanceType.name}${this.printTypeParameters(inheritanceType.extendedAttributes)}` : ""].join("")
+            hasSuperType(idlInterface)
+                ? ` extends ${inheritanceType.name}${this.printTypeParameters(inheritanceType.extendedAttributes)}`
+                : ""
+        ].join("")
     }
 
     private printConstant(constant: IDLConstant): stringOrNone[] {
