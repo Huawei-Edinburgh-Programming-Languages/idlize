@@ -27,6 +27,7 @@ import {
     Type
 } from '../LanguageWriters'
 import {
+    indentedBy,
     isDefined,
     removeExt,
     renameDtsToInterfaces,
@@ -61,8 +62,7 @@ import {
     IDLType,
     IDLTypedef,
     IDLVariable,
-    nameWithType,
-    printType
+    nameWithType
 } from "../../idl";
 import { ArkTSTypeNameConvertor } from "./IdlNameConvertor";
 
@@ -453,33 +453,12 @@ class ArkTSDeclConvertor extends TSDeclConvertor {
         if (this.IGNORES_TYPES.includes(node.name)) {
             return
         }
-        if (!this.peerLibrary.isComponentDeclaration((node))) {
-            if (this.seenInterfaceNames.has(node.name)) {
-                console.log(`interface name: '${node.name}' already exists`)
-                return;
-            }
-            this.seenInterfaceNames.add(node.name)
-            this.writer.print('export ' + this.replaceImportTypeNodes(this.printInterface(node).join("\n")))
-            return
+        if (this.seenInterfaceNames.has(node.name)) {
+            console.log(`interface name: '${node.name}' already exists`)
+            return;
         }
-        let printer = new IndentedPrinter()
-        let extendsClause = this.extendsClause(node)
-
-        let classOrInterface = idl.isClass(node) ? `class` : `interface`
-        if (this.peerLibrary.isComponentDeclaration(node))
-            // because we write `ArkBlank implements BlankAttributes`
-            classOrInterface = `interface`
-        printer.print(`export declare ${classOrInterface} ${node.name} ${extendsClause} {`)
-        printer.pushIndent()
-        node.methods
-            .forEach(it => {
-                printer.print(`/** @memo */`)
-                printer.print(`// ${it.name}`)
-            })
-        printer.popIndent()
-        printer.print(`}`)
-
-        this.writer.print(this.replaceImportTypeNodes(printer.getOutput().join('\n')))
+        this.seenInterfaceNames.add(node.name)
+        this.writer.print('export ' + this.replaceImportTypeNodes(this.printInterface(node).join("\n")))
     }
 
     private printInterface(idlInterface: IDLInterface): stringOrNone[] {
@@ -493,24 +472,52 @@ class ArkTSDeclConvertor extends TSDeclConvertor {
                 idlInterface.scope ? idlInterface.scope.push(...scope) : idlInterface.scope = scope
             })
 
+        //TODO: CommonMethod has a method onClick and a property onClick
+        const seenFields = new Set<string>()
         return ([`interface ${this.printInterfaceName(idlInterface)} {`] as stringOrNone[])
-            .concat(idlInterface.constants.map(it => this.printConstant(it)).flat())
-            .concat(idlInterface.properties.map(it => this.printProperty(it)).flat())
-            .concat(idlInterface.methods.map(it => this.printMethod(it)).flat())
-            .concat(idlInterface.callables.map(it => this.printFunction(it)).flat())
+            .concat(idlInterface.constants
+                .map(it => { seenFields.add(it.name); return it})
+                .map(it => this.printConstant(it)).flat())
+            .concat(idlInterface.properties
+                .filter(it => !seenFields.has(it.name))
+                .map(it => { seenFields.add(it.name); return it})
+                .map(it => this.printProperty(it)).flat())
+            .concat(idlInterface.methods
+                .filter(it => !seenFields.has(it.name))
+                .map(it => { seenFields.add(it.name); return it})
+                .map(it => this.printMethod(it)).flat())
+            .concat(idlInterface.callables
+                .filter(it => !seenFields.has(it.name!))
+                .map(it => { seenFields.add(it.name!); return it})
+                .map(it => this.printFunction(it)).flat())
             .concat(["}"])
     }
 
     private printInterfaceName(idlInterface: IDLInterface): string {
+        let inheritanceType = idlInterface.inheritance[0]
+        if (inheritanceType !== undefined && idl.isReferenceType(inheritanceType)) {
+            if (inheritanceType.extendedAttributes === undefined) {
+                inheritanceType.extendedAttributes = []
+            }
+            this.peerLibrary
+                .resolveTypeReference(inheritanceType)
+                ?.extendedAttributes
+                ?.forEach(type => {
+                    inheritanceType.extendedAttributes?.push(type)
+                    if (!idlInterface.extendedAttributes?.find(it => type.name === it.name)) {
+                        idlInterface.extendedAttributes?.push(type)
+                    }
+                })
+        }
         return [idlInterface.name,
             this.printTypeParameters(idlInterface.extendedAttributes),
-            hasSuperType(idlInterface) ? ` extends ${printType(idlInterface.inheritance[0])}` : ""].join("")
+            hasSuperType(idlInterface) ? ` extends ${inheritanceType.name}${this.printTypeParameters(inheritanceType.extendedAttributes)}` : ""].join("")
     }
 
     private printConstant(constant: IDLConstant): stringOrNone[] {
         return [
             ...this.printExtendedAttributes(constant),
-            `const ${nameWithType(constant)} = ${constant.value};`
+            indentedBy(`const ${nameWithType(constant)} = ${constant.value};`, 1)
         ]
     }
 
@@ -519,14 +526,14 @@ class ArkTSDeclConvertor extends TSDeclConvertor {
         const readonlyMod = prop.isReadonly ? "readonly " : ""
         return [
             ...this.printExtendedAttributes(prop),
-            `${staticMod}${readonlyMod} ${this.printPropNameWithType(prop)};`
+            indentedBy(`${staticMod}${readonlyMod}${this.printPropNameWithType(prop)};`, 1)
         ]
     }
 
     private printMethod(idl: IDLMethod): stringOrNone[] {
         return [
             ...this.printExtendedAttributes(idl),
-            `${idl.name}${this.printTypeParameters(idl.extendedAttributes)}(${this.printParameters(idl.parameters)}): ${this.convertType(idl.returnType)}`
+            indentedBy(`${idl.name}${this.printTypeParameters(idl.extendedAttributes)}(${this.printParameters(idl.parameters)}): ${this.convertType(idl.returnType)}`, 1)
         ]
     }
     private printFunction(idl: IDLFunction): stringOrNone[] {
@@ -536,7 +543,7 @@ class ArkTSDeclConvertor extends TSDeclConvertor {
         }
         return [
             ...this.printExtendedAttributes(idl),
-            `${idl.name}(${this.printParameters(idl.parameters)}): ${this.convertType(idl.returnType!)};`
+            indentedBy(`${idl.name}(${this.printParameters(idl.parameters)}): ${this.convertType(idl.returnType!)};`, 1)
         ]
     }
 

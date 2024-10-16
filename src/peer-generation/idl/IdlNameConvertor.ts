@@ -19,7 +19,7 @@ import { IdlPeerLibrary } from './IdlPeerLibrary'
 import { DeclarationConvertor, TypeConvertor, convertType } from './IdlTypeConvertor'
 import { Type } from '../LanguageWriters'
 import { ARK_CUSTOM_OBJECT, convertJavaOptional, javaCustomTypeMapping } from '../printers/lang/Java'
-import { IDLInterface, IDLPrimitiveType, IDLProperty } from "../../idl";
+import { IDLInterface, IDLPrimitiveType, IDLProperty, isAnonymousInterface } from "../../idl";
 
 export interface IdlTypeNameConvertor {
     convert(type: idl.IDLType): string
@@ -111,7 +111,7 @@ export class TSTypeNameConvertor implements IdlTypeNameConvertor, TypeConvertor<
                 isTuple ? "[" : "{"
             } ${
                 decl.properties
-                    .map(it => this.processTupleType(it))
+                    .map(it => isTuple ? this.processTupleType(it) : it)
                     .map(it => {
                     const type = this.library.mapType(it.type)
                     return it.isOptional
@@ -318,6 +318,13 @@ export class ArkTSTypeNameConvertor extends TSTypeNameConvertor {
             case idl.IDLAnyType: return "object"
         }
         return super.convertPrimitiveType(type);
+    }
+
+    protected productType(decl: IDLInterface, isTuple: boolean, includeFieldNames: boolean): string {
+        if (isAnonymousInterface(decl)) {
+            return decl.name
+        }
+        return super.productType(decl, isTuple, includeFieldNames);
     }
 
     protected processTupleType(idlProperty: IDLProperty): IDLProperty {
