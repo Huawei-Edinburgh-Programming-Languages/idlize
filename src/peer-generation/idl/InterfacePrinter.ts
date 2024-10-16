@@ -587,10 +587,6 @@ class ArkTSInterfacesVisitor extends TSInterfacesVisitor {
         // Not supported
     }
 
-    printInterfaces() {
-        super.printInterfaces();
-    }
-
     protected createDeclarationConvertor(writer: LanguageWriter): DeclarationConvertor<void> {
         return new ArkTSDeclConvertor(writer, this.peerLibrary)
     }
@@ -606,6 +602,7 @@ function getVisitor(peerLibrary: IdlPeerLibrary, context: PrinterContext): Inter
     if (context.language == Language.ARKTS) {
         return new ArkTSInterfacesVisitor(peerLibrary)
     }
+    throwException(`Need to implement InterfacesVisitor for ${context.language} language`)
 }
 
 export function printInterfaces(peerLibrary: IdlPeerLibrary, context: PrinterContext): Map<TargetFile, string> {
@@ -633,7 +630,7 @@ export function createDeclarationConvertor(writer: LanguageWriter, peerLibrary: 
     if (writer.language === Language.ARKTS) {
         return new ArkTSDeclConvertor(writer, peerLibrary)
     }
-    throwException("new ArkTSDeclConvertor(writer, peerLibrary)")
+    throwException(`Need to implement DeclarationConvertor for ${writer.language} language`)
 }
 
 function getTargetFile(filename: string, language: Language): TargetFile {
@@ -645,7 +642,7 @@ function getTargetFile(filename: string, language: Language): TargetFile {
 export function printFakeDeclarations(library: IdlPeerLibrary): Map<TargetFile, string> {///copied from FakeDeclarationsPrinter
     const lang = library.language
     const result = new Map<TargetFile, string>()
-    if (![Language.TS, Language.JAVA, Language.ARKTS].includes(lang)) {
+    if (Language.CJ === lang) {
         return result
     }
     for (const [filename, {dependencies, declarations}] of makeSyntheticDeclarationsFiles()) {
