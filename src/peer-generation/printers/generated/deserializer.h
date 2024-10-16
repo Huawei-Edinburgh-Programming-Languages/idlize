@@ -30,27 +30,19 @@ public:
     Skoala_Rect readRect() {
         Skoala_Rect value = {};
         value.coordinates = this->readFloat32Array();
-        value.left = this->readSkoala_Float32();
-        value.top = this->readSkoala_Float32();
-        value.right = this->readSkoala_Float32();
-        value.bottom = this->readSkoala_Float32();
-        value.width = this->readSkoala_Float32();
-        value.height = this->readSkoala_Float32();
-        value.isEmpty = this->readSkoala_Boolean();
+        value.left = this->readFloat32();
+        value.top = this->readFloat32();
+        value.right = this->readFloat32();
+        value.bottom = this->readFloat32();
+        value.width = this->readFloat32();
+        value.height = this->readFloat32();
+        value.isEmpty = this->readBoolean();
         return value;
     }
 
     Skoala_RRect readRRect() {
         Skoala_RRect value = {};
         value.radii = this->readFloat32Array();
-        return value;
-    }
-
-    Skoala_Canvas readCanvas() {
-        Skoala_Canvas value = {};
-        value.xscale = this->readSkoala_Float32();
-        value.yscale = this->readSkoala_Float32();
-        value.saveCount = this->readSkoala_Int32();
         return value;
     }
 
