@@ -307,6 +307,7 @@ export function identName(node: ts.Node | undefined): string | undefined {
     if (node.kind == ts.SyntaxKind.BigIntKeyword) return `bigint`
     if (node.kind == ts.SyntaxKind.NumberKeyword) return `number`
     if (node.kind == ts.SyntaxKind.VoidKeyword) return `void`
+    if (node.kind == ts.SyntaxKind.UndefinedKeyword) return `undefined`
 
     if (ts.isTypeReferenceNode(node)) {
         return identString(node.typeName)
