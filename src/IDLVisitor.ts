@@ -666,7 +666,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
     serializeFunctionType(signature: ts.SignatureDeclarationBase, nameSuggestion?: NameSuggestion, extendedAttributes?: IDLExtendedAttribute[]): IDLCallback {
         const parameters = signature.parameters.map(it => this.serializeParameter(it, nameSuggestion))
         const returnType = this.serializeType(signature.type, nameSuggestion?.extend('ret'))
-        const syntheticName = this.generateSyntheticFunctionName("Callback", parameters, returnType)
+        const syntheticName = this.generateSyntheticFunctionName(parameters, returnType)
         const selectedName = selectName(nameSuggestion, syntheticName)
         return {
             name: selectedName,
@@ -680,7 +680,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
     serializeSyntheticFunctionType(fileName: string, parameters: ts.ParameterDeclaration[], returnType: ts.TypeNode, nameSuggestion?: NameSuggestion, extendedAttributes?: IDLExtendedAttribute[]): IDLCallback {
         const parametersIdl = parameters.map(it => this.serializeParameter(it, nameSuggestion))
         const returnIdlType = this.serializeType(returnType, nameSuggestion?.extend('ret'))
-        const syntheticName = this.generateSyntheticFunctionName("Callback", parametersIdl, returnIdlType)
+        const syntheticName = this.generateSyntheticFunctionName(parametersIdl, returnIdlType)
         const selectedName = selectName(nameSuggestion, syntheticName)
         return {
             kind: IDLKind.Callback,
@@ -692,7 +692,8 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         };
     }
 
-    private generateSyntheticFunctionName(prefix: string, parameters: IDLParameter[], returnType: IDLType): string {
+    private generateSyntheticFunctionName(parameters: IDLParameter[], returnType: IDLType, isAsync: boolean = false): string {
+        let prefix = isAsync ? "AsyncCallback" : "Callback"
         const names = parameters.map(it => `${this.computeTypeName(it.type!)}`).concat(this.computeTypeName(returnType))
         return `${prefix}_${names.join("_")}`
     }
@@ -712,7 +713,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         })
         let isAsync = rawType == "AsyncCallback"
         let extendedAttributes = isAsync ? [{name: IDLExtendedAttributes.Async}] : []
-        let name = this.generateSyntheticFunctionName(isAsync ? "AsyncCallback" : "Callback", parameters, returnType)
+        let name = this.generateSyntheticFunctionName(parameters, returnType, isAsync)
         return {
             name,
             parameters,
