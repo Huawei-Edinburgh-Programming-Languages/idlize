@@ -159,12 +159,12 @@ if (options.dts2skoala) {
     combinedDeserializerPrinter.print(`#define DESERIALIZER_H`)
     combinedDeserializerPrinter.print("")
 
-    combinedDeserializerPrinter.print(`#include "SkoalaDeserializerBase.h"`)
+    combinedDeserializerPrinter.print(`#include "DeserializerBase.h"`)
     combinedDeserializerPrinter.print("")
-    combinedDeserializerPrinter.print(`class Deserializer : public SkoalaDeserializerBase {`)
+    combinedDeserializerPrinter.print(`class Deserializer : public DeserializerBase {`)
     combinedDeserializerPrinter.print(`public:`)
     combinedDeserializerPrinter.pushIndent()
-    combinedDeserializerPrinter.print(`Deserializer(uint8_t* data, int32_t length) : SkoalaDeserializerBase(data, length) {}`)
+    combinedDeserializerPrinter.print(`Deserializer(uint8_t* data, int32_t length) : DeserializerBase(data, length) {}`)
     combinedDeserializerPrinter.print(``)
 
 
