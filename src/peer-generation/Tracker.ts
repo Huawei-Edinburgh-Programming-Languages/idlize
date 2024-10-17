@@ -153,7 +153,11 @@ function key(component: string, func: string): string {
     return `${component}:${func}`
 }
 
-export function generateTracker(outDir: string, peerLibrary: PeerLibrary | IdlPeerLibrary, trackerStatus: string): void {
+function optionsFunction(component: string) {
+    return `set${component}Options`
+}
+
+export function generateTracker(outDir: string, peerLibrary: PeerLibrary | IdlPeerLibrary, trackerStatus: string, verbose: boolean = false): void {
     if (!fs.existsSync(outDir)) fs.mkdirSync(outDir)
     let track = new Map<string, StatusRecord>()
     if (fs.existsSync(trackerStatus)) {
@@ -180,6 +184,7 @@ export function generateTracker(outDir: string, peerLibrary: PeerLibrary | IdlPe
     const visitor = new TrackerVisitor(peerLibrary, track)
     visitor.print()
     visitor.out.printTo(path.join(outDir, "COMPONENTS.md"))
+    syncDemosStatus(track, verbose)
 }
 
 function  startsIgnoreCase(str1: string, str2: string): boolean {
@@ -193,4 +198,129 @@ function trimName(key: string): string {
     key = trim(key, '*')
     key = trim(key, '`')
     return key
+}
+
+class DemosStatusVerboseLogger {
+    private static readonly HEADER = "> Updates in DEMOS_STATUS.md:"
+    private static headerLogged: boolean = false
+
+    static log(msg: string) {
+        if (!this.headerLogged) {
+            this.headerLogged = true
+            console.log(this.HEADER)
+        }
+        console.log("> " + msg)
+    }
+}
+
+function syncDemosStatus(track: Map<string, StatusRecord>, verbose: boolean = false) {
+    const file = path.join(__dirname, "../doc/DEMOS_STATUS.md")
+    const pattern =
+        /^\|(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)\|.*$/
+
+    const componentsAliases = new Map([
+        ["Shape", "CommonShapeMethod"],
+        ["Common", "CommonMethod"]
+    ])
+
+    let component = "unknown"
+    let beginRows = false
+    const lengths = []
+    let verbosePrinted = false
+    let newContent = ""
+    const content = fs.readFileSync(file) + ""
+
+    for (let row of content.split(/\r?\n/)) {
+        if (!beginRows) {
+            if (row.includes("----------")) {
+                beginRows = true
+                let prevPos = 0
+                for (let pos = 0; pos < row.length; pos++) {
+                    if (pos > 0 && row[pos] === "|") {
+                        lengths.push(pos - prevPos - 1)
+                        prevPos = pos
+                    }
+                }
+            }
+            newContent += row + "\n"
+            continue
+        }
+
+        const match = row.match(pattern)
+        if (match) {
+            const groups = match.splice(1)
+
+            const name = groups[0].trim()
+            const kind = groups[1].trim()
+            const generated = groups[2].trim()
+            const demos = groups[3].trim()
+            const ownerLibace = groups[4].trim()
+            const statusLibace = groups[5].trim().toLowerCase()
+            const ownerTs = groups[6].trim()
+            const statusTs = groups[7].trim().toLowerCase()
+            const priority = groups[8].trim()
+
+            if (kind === "Component" || kind === "Class") {
+                component = name
+
+            } else if (kind === "Function" || kind === "Options") {
+                const func = name.split("`")[1]
+
+                let record = kind === "Function" ?
+                    track.get(key(component, func)) :
+                    track.get(key(component, optionsFunction(component)))
+
+                if (!record) {
+                    const alias = componentsAliases.get(component)
+                    if (alias) {
+                        record = track.get(key(alias, func))
+                    }
+                }
+                if (record) {
+                    if (needUpdateOwner(ownerLibace, record.owner) || needUpdateStatus(statusLibace, record.status)) {
+                        if (verbose) {
+                            DemosStatusVerboseLogger.log(kind === "Function" ? `${component}.${func}` : `${component}({${func}})`)
+                            DemosStatusVerboseLogger.log(`  old: ${ownerLibace}, ${statusLibace}`)
+                            DemosStatusVerboseLogger.log(`  new: ${record.owner}, ${record.status}`)
+                        }
+                        newContent += rowForDemosStatus([
+                            name, kind, generated, demos, record.owner, record.status, ownerTs, statusTs, priority
+                        ], lengths) + "\n"
+                        continue
+                    }
+                }
+            }
+            newContent += row + "\n"
+        }
+    }
+    fs.writeFileSync(file, newContent)
+}
+
+function needUpdateOwner(oldOwner: string, newOwner: string) {
+    const oldOwnerNames = oldOwner.split(" ")
+    if (oldOwnerNames.length > 1) {
+        return !(newOwner.includes(oldOwnerNames[0]) && newOwner.includes(oldOwnerNames[1]))
+    }
+    return oldOwner !== newOwner
+}
+
+function needUpdateStatus(oldStatus: string, newStatus: string) {
+    oldStatus = oldStatus.toLowerCase()
+    newStatus = newStatus.toLowerCase()
+    if (oldStatus === newStatus || newStatus.length === 0) {
+        return false
+    }
+    if (oldStatus === "done/no test" && newStatus === "in progress") {
+        return false
+    }
+    return true
+}
+
+function rowForDemosStatus(values: Array<string>, lengths: Array<number>) {
+    let row = "|"
+    for (let i = 0; i < values.length; i++) {
+        const spacesNum = lengths[i] - values[i].length
+        row += " " + values[i] + " ".repeat(Math.max(0, spacesNum - 1)) + "|"
+    }
+    return row
 }

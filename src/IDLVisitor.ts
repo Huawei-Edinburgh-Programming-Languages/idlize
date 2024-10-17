@@ -31,7 +31,7 @@ import {
     isPrimitiveType,
 } from "./idl"
 import {
-    asString, capitalize, getComment, getDeclarationsByNode, getExportedDeclarationNameByDecl, getExportedDeclarationNameByNode, identName, isDefined, isExport, isNodePublic, isPrivate, isProtected, isReadonly, isStatic, nameOrNull, stringOrNone
+    asString, capitalize, getComment, getDeclarationsByNode, getExportedDeclarationNameByDecl, getExportedDeclarationNameByNode, identName, isDefined, isExport, isNodePublic, isPrivate, isProtected, isReadonly, isStatic, nameEnumValues, nameOrNull, stringOrNone
 } from "./util"
 import { GenericVisitor } from "./options"
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig"
@@ -44,7 +44,7 @@ const typeMapper = new Map<string, string>(
     [
         ["object", "Object"],
         ["Array", "sequence"],
-        ["string",IDLStringType.name],
+        ["string", IDLStringType.name],
         ["Map", "record"],
         // TODO: rethink that
         ["\"2d\"", "string"],
@@ -59,6 +59,37 @@ function escapeIdl(name: string): string {
         return name
 }
 
+const MaxSyntheticTypeLength = 60
+
+class NameSuggestion {
+    protected constructor(
+        readonly name: string,
+        readonly forced: boolean = false,
+    ) { }
+
+    extend(postfix: string, forced: boolean = false): NameSuggestion {
+        return new NameSuggestion(
+            `${this.name}_${postfix}`,
+            forced,
+        )
+    }
+
+    prependType(): NameSuggestion {
+        return new NameSuggestion(`Type_${this.name}`)
+    }
+
+    static make(name: string, forced: boolean = false): NameSuggestion {
+        return new NameSuggestion(name, forced)
+    }
+}
+
+function selectName(nameSuggestion: NameSuggestion | undefined, syntheticName: string): string {
+    if (nameSuggestion?.forced)
+        return nameSuggestion.name
+    if (nameSuggestion?.name && syntheticName.length >= MaxSyntheticTypeLength)
+        return nameSuggestion.name
+    return syntheticName
+}
 
 export class CompileContext {
     typeNames: Set<string> = new Set()
@@ -73,10 +104,18 @@ export class CompileContext {
     }
 }
 
+class Scope {
+    entries: IDLEntry[] = []
+    add(entry: IDLEntry) {
+        this.entries.push(entry)
+    }
+}
+
 export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
     private output: IDLEntry[] = []
-    private currentScope:  IDLEntry[] = []
-    scopes: IDLEntry[][] = []
+    private currentScope = new Scope()
+    private scopes: Scope[] = []
+    private seenNames = new Set<string>()
     imports: IDLImport[] = []
     exports: string[] = []
     namespaces: string[] = []
@@ -85,20 +124,25 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
 
     startScope() {
         this.scopes.push(this.currentScope)
-        this.currentScope = []
+        this.currentScope = new Scope()
     }
 
-    endScope() {
+    endScope(): IDLEntry[] {
         const result = this.currentScope
         this.currentScope = this.scopes.pop()!
-        return result
+        return result.entries
     }
+
+    private defaultPackage: string
+    private convertRecordType: boolean
 
     constructor(
         private sourceFile: ts.SourceFile,
         private typeChecker: ts.TypeChecker,
-        private compileContext: CompileContext,
-        private options: OptionValues) { }
+        private options: OptionValues) {
+        this.defaultPackage = options.defaultIdlPackage as string ?? "arkui"
+        this.convertRecordType = options.convertRecordType as boolean ?? false
+    }
 
     visitWholeFile(): IDLEntry[] {
         ts.forEachChild(this.sourceFile, (node) => this.visit(node))
@@ -107,7 +151,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             this.output.push({
                 kind: IDLKind.Interface,
                 name: `GlobalScope_${path.basename(this.sourceFile.fileName).replace(".d.ts", "").replaceAll("@", "").replaceAll(".", "_")}`,
-                extendedAttributes: [ {name: IDLExtendedAttributes.GlobalScope } ],
+                extendedAttributes: [{ name: IDLExtendedAttributes.GlobalScope }],
                 methods: this.globalFunctions,
                 constants: this.globalConstants,
                 properties: [],
@@ -139,15 +183,23 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         }
         header.push(packageInfo)
         this.imports.forEach(it => header.push(it))
-        this.output.splice(0, 0, ... header)
+        this.output.splice(0, 0, ...header)
     }
 
     detectPackageName(sourceFile: ts.SourceFile): string {
         let ns = sourceFile.statements.find(it => ts.isModuleDeclaration(it)) as ts.ModuleDeclaration
         if (ns) {
-            return `${ns.name.text}`
+            let name = ns.name.text
+            if (name.startsWith("./")) name = name.substring(2)
+            return name
         }
-        return "arkui"
+        let sourceFileName = path.basename(sourceFile.fileName)
+        if (sourceFileName.startsWith("@ohos")) {
+            let result = sourceFileName.split(".")
+            return result.splice(0, result.length - 3).join(".")
+        }
+        if (sourceFile.fileName.indexOf("\@internal/component") != -1) return "@ohos.arkui"
+        return this.defaultPackage
     }
 
     /** visit nodes finding exported classes */
@@ -172,7 +224,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         } else if (ts.isTypeAliasDeclaration(node)) {
             this.output.push(this.serializeTypeAlias(node))
         } else if (ts.isFunctionDeclaration(node)) {
-            this.globalFunctions.push(this.serializeMethod(node, "", true))
+            this.globalFunctions.push(this.serializeMethod(node, undefined, true))
         } else if (ts.isVariableStatement(node)) {
             this.globalConstants.push(...this.serializeConstants(node)) // TODO: Initializers are not allowed in ambient contexts (d.ts).
         } else if (ts.isImportDeclaration(node)) {
@@ -183,9 +235,11 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
     }
 
     serializeImport(node: ts.ImportDeclaration): IDLImport {
+        let name = node.moduleSpecifier.getText().replaceAll('"', '').replaceAll("'", "")
+        //if (name.startsWith("./")) name = name.substring(2)
         const result: IDLImport = {
             kind: IDLKind.Import,
-            name: node.moduleSpecifier.getText().replaceAll('"', '').replaceAll("'", ""),
+            name
         }
         return result
     }
@@ -195,51 +249,51 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         return {
             kind: IDLKind.ModuleType,
             name: name,
-            extendedAttributes: [ {name: IDLExtendedAttributes.VerbatimDts, value: `"${escapeAmbientModuleContent(this.sourceFile, node)}"`}]
+            extendedAttributes: [{ name: IDLExtendedAttributes.VerbatimDts, value: `"${escapeAmbientModuleContent(this.sourceFile, node)}"` }]
         }
     }
 
     serializeTypeAlias(node: ts.TypeAliasDeclaration): IDLTypedef | IDLFunction | IDLInterface {
-        const name = nameOrNull(node.name) ?? "UNDEFINED_TYPE_NAME"
+        const nameSuggestion = NameSuggestion.make(nameOrNull(node.name) ?? "UNDEFINED_TYPE_NAME", true)
         let extendedAttributes = this.computeDeprecatedExtendAttributes(node)
         if (ts.isImportTypeNode(node.type)) {
             const importAttr = { name: IDLExtendedAttributes.Import, value: node.type.getText() }
             extendedAttributes.push(importAttr)
-            const type = createReferenceType(name)
+            const type = createReferenceType(nameSuggestion.name)
             if (type.extendedAttributes) {
                 type.extendedAttributes.push(importAttr)
             } else {
                 type.extendedAttributes = [importAttr]
             }
             return {
-                name, type, extendedAttributes,
+                name: nameSuggestion.name, type, extendedAttributes,
                 kind: IDLKind.Typedef,
                 fileName: node.getSourceFile().fileName,
             }
         }
         this.computeTypeParametersAttribute(node.typeParameters, extendedAttributes)
         if (ts.isFunctionTypeNode(node.type)) {
-            return this.serializeFunctionType(node.type, name, extendedAttributes)
+            return this.serializeFunctionType(node.type, nameSuggestion, extendedAttributes)
         }
         if (ts.isTypeLiteralNode(node.type)) {
-            return this.serializeObjectType(node.type, name, node.typeParameters)
+            return this.serializeObjectType(node.type, nameSuggestion, node.typeParameters)
         }
         if (ts.isTupleTypeNode(node.type)) {
-            return this.serializeTupleType(node.type, name, node.typeParameters)
+            return this.serializeTupleType(node.type, nameSuggestion, node.typeParameters)
         }
         if (ts.isTypeOperatorNode(node.type)) {
             if (ts.isTupleTypeNode(node.type.type)) {
-                return this.serializeTupleType(node.type.type, name, node.typeParameters, true)
+                return this.serializeTupleType(node.type.type, nameSuggestion, node.typeParameters, true)
             }
         }
         this.startScope()
         this.computeExportAttribute(node, extendedAttributes)
         return {
             kind: IDLKind.Typedef,
-            name: name,
+            name: nameSuggestion.name,
             fileName: node.getSourceFile().fileName,
             extendedAttributes: extendedAttributes,
-            type: this.serializeType(node.type, name),
+            type: this.serializeType(node.type, nameSuggestion),
             scope: this.endScope()
         }
     }
@@ -259,10 +313,10 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
     serializeHeritage(heritage: ts.HeritageClause): IDLType[] {
         return heritage.types.map(it => {
             const name =
-            (ts.isIdentifier(it.expression)) ?
-                ts.idText(it.expression) :
+                (ts.isIdentifier(it.expression)) ?
+                    ts.idText(it.expression) :
                     `NON_IDENTIFIER_HERITAGE ${asString(it)}`
-            return createReferenceType(name, it.typeArguments)
+            return createReferenceType(escapeIdl(name), it.typeArguments)
         })
     }
 
@@ -272,7 +326,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
 
     computeNamespaceAttribute(): IDLExtendedAttribute[] {
         const namespace = this.namespaces.join(',')
-        return namespace ? [{name: IDLExtendedAttributes.Namespace, value: namespace}] : []
+        return namespace ? [{ name: IDLExtendedAttributes.Namespace, value: namespace }] : []
     }
 
     computeExtendedAttributes(
@@ -291,7 +345,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             const isNamedTuple = node.elements.some(it => ts.isNamedTupleMember(it))
             entity = isNamedTuple ? IDLEntity.NamedTuple : IDLEntity.Tuple
         }
-        result.push({name: IDLExtendedAttributes.Entity, value: entity })
+        result.push({ name: IDLExtendedAttributes.Entity, value: entity })
         this.computeTypeParametersAttribute(typeParameters, result)
         this.computeExportAttribute(node, result)
         return result
@@ -301,7 +355,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         let result: IDLExtendedAttribute[] = this.computeExtendedAttributes(node, node.typeParameters)
         let name = identName(node.name)
         if (name && ts.isClassDeclaration(node) && isCommonMethodOrSubclass(this.typeChecker, node)) {
-            result.push({name: IDLExtendedAttributes.Component, value: PeerGeneratorConfig.mapComponentName(name)})
+            result.push({ name: IDLExtendedAttributes.Component, value: `"${PeerGeneratorConfig.mapComponentName(name)}"` })
         }
         if (inheritance.length) {
             let typeParams = getExtAttribute(inheritance[0], IDLExtendedAttributes.TypeArguments)
@@ -325,7 +379,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
     }
 
     computeDeprecatedExtendAttributes(node: ts.Node, attributes: IDLExtendedAttribute[] = []): IDLExtendedAttribute[] {
-        if (isDeprecatedNode(this.sourceFile,node)) {
+        if (isDeprecatedNode(this.sourceFile, node)) {
             attributes.push({ name: IDLExtendedAttributes.Deprecated })
         }
         return attributes
@@ -384,45 +438,46 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             .flatMap(it => it.types)
             .find(_ => true)
         if (!hasSuperClass) inheritance.unshift(IDLTopType)
-        const name = getExportedDeclarationNameByDecl(node) ?? "UNDEFINED"
+        const nameSuggestion = NameSuggestion.make(getExportedDeclarationNameByDecl(node) ?? "UNDEFINED")
+        const childNameSuggestion = nameSuggestion.prependType()
         return {
             kind: IDLKind.Class,
             extendedAttributes: this.computeComponentExtendedAttributes(node, inheritance),
-            name: name,
+            name: nameSuggestion.name,
             fileName: node.getSourceFile().fileName,
             documentation: getDocumentation(this.sourceFile, node, this.options.docs),
             inheritance: inheritance,
-            constructors: node.members.filter(ts.isConstructorDeclaration).map(it => this.serializeConstructor(it as ts.ConstructorDeclaration, name)),
+            constructors: node.members.filter(ts.isConstructorDeclaration).map(it => this.serializeConstructor(it as ts.ConstructorDeclaration, childNameSuggestion)),
             constants: [],
-            properties: this.pickProperties(node.members).concat(this.pickAccessors(node.members)),
-            methods: this.pickMethods(node.members, name),
+            properties: this.pickProperties(node.members, childNameSuggestion).concat(this.pickAccessors(node.members, childNameSuggestion)),
+            methods: this.pickMethods(node.members, childNameSuggestion),
             callables: [],
             scope: this.endScope()
         }
     }
 
-    pickConstructors(members: ReadonlyArray<ts.TypeElement>, typePrefix: string): IDLConstructor[] {
+    pickConstructors(members: ReadonlyArray<ts.TypeElement>, nameSuggestion: NameSuggestion): IDLConstructor[] {
         return members.filter(ts.isConstructSignatureDeclaration)
-            .map(it => this.serializeConstructor(it as ts.ConstructSignatureDeclaration, typePrefix))
+            .map(it => this.serializeConstructor(it as ts.ConstructSignatureDeclaration, nameSuggestion))
     }
-    pickProperties(members: ReadonlyArray<ts.TypeElement | ts.ClassElement>): IDLProperty[] {
+    pickProperties(members: ReadonlyArray<ts.TypeElement | ts.ClassElement>, nameSuggestion: NameSuggestion): IDLProperty[] {
         return members
             .filter(it => (ts.isPropertySignature(it) || ts.isPropertyDeclaration(it) || this.isCommonMethodUsedAsProperty(it)) && !isPrivate(it.modifiers))
-            .map(it => this.serializeProperty(it))
+            .map(it => this.serializeProperty(it, nameSuggestion))
     }
-    pickMethods(members: ReadonlyArray<ts.TypeElement | ts.ClassElement>, typePrefix: string): IDLMethod[] {
+    pickMethods(members: ReadonlyArray<ts.TypeElement | ts.ClassElement>, nameSuggestion: NameSuggestion): IDLMethod[] {
         return members
             .filter(it => (ts.isMethodSignature(it) || ts.isMethodDeclaration(it) || ts.isIndexSignatureDeclaration(it)) && !this.isCommonMethodUsedAsProperty(it) && !isPrivate(it.modifiers))
-            .map(it => this.serializeMethod(it as ts.MethodDeclaration|ts.MethodSignature, typePrefix))
+            .map(it => this.serializeMethod(it as ts.MethodDeclaration | ts.MethodSignature, nameSuggestion))
     }
-    pickCallables(members: ReadonlyArray<ts.TypeElement>, typePrefix: string): IDLCallable[] {
+    pickCallables(members: ReadonlyArray<ts.TypeElement>, nameSuggestion: NameSuggestion): IDLCallable[] {
         return members.filter(ts.isCallSignatureDeclaration)
-            .map(it => this.serializeCallable(it, typePrefix))
+            .map(it => this.serializeCallable(it, nameSuggestion))
     }
-    pickAccessors(members: ReadonlyArray<ts.TypeElement | ts.ClassElement>): IDLProperty[] {
+    pickAccessors(members: ReadonlyArray<ts.TypeElement | ts.ClassElement>, nameSuggestion: NameSuggestion | undefined): IDLProperty[] {
         return members
             .filter(it => (ts.isGetAccessorDeclaration(it) || ts.isSetAccessorDeclaration(it)))
-            .map(it => this.serializeAccessor(it as ts.GetAccessorDeclaration | ts.SetAccessorDeclaration))
+            .map(it => this.serializeAccessor(it as ts.GetAccessorDeclaration | ts.SetAccessorDeclaration, nameSuggestion))
     }
 
     fakeOverrides(node: ts.InterfaceDeclaration): ts.TypeElement[] {
@@ -463,25 +518,26 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         this.startScope()
         const allMembers = node.members.filter(it => it.name && ts.isIdentifier(it.name))
         const inheritance = this.serializeInheritance(node.heritageClauses)
-        const name = getExportedDeclarationNameByDecl(node) ?? "UNDEFINED"
+        const nameSuggestion = NameSuggestion.make(getExportedDeclarationNameByDecl(node) ?? "UNDEFINED")
+        const childNameSuggestion = nameSuggestion.prependType()
         return {
             kind: IDLKind.Interface,
-            name: name,
+            name: nameSuggestion.name,
             fileName: node.getSourceFile().fileName,
             extendedAttributes: this.computeComponentExtendedAttributes(node, inheritance),
             documentation: getDocumentation(this.sourceFile, node, this.options.docs),
             inheritance: inheritance,
-            constructors: this.pickConstructors(node.members, name),
+            constructors: this.pickConstructors(node.members, childNameSuggestion),
             constants: [],
-            properties: this.pickProperties(allMembers),
-            methods: this.pickMethods(allMembers, name),
-            callables: this.pickCallables(node.members, name),
+            properties: this.pickProperties(allMembers, childNameSuggestion),
+            methods: this.pickMethods(allMembers, childNameSuggestion),
+            callables: this.pickCallables(node.members, childNameSuggestion),
             scope: this.endScope()
         }
     }
 
-    serializeObjectType(node: ts.TypeLiteralNode, name?: string, typeParameters?: ts.NodeArray<ts.TypeParameterDeclaration>): IDLInterface {
-        const properties = this.pickProperties(node.members)
+    serializeObjectType(node: ts.TypeLiteralNode, nameSuggestion: NameSuggestion, typeParameters?: ts.NodeArray<ts.TypeParameterDeclaration>): IDLInterface {
+        const properties = this.pickProperties(node.members, nameSuggestion ?? NameSuggestion.make("UNDEFINED"))
         const typeMap = new Map<string, string[]>()
         for (const prop of properties) {
             const type = this.computeTypeName(prop.type)
@@ -489,25 +545,29 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             values.push(prop.name)
             typeMap.set(type, values)
         }
-        name ??= `Literal_${Array.from(typeMap.keys()).map(key => `${key}_${typeMap.get(key)!.join('_')}`).join('_')}`
+        const syntheticName = `Literal_${Array.from(typeMap.keys()).map(key => `${key}_${typeMap.get(key)!.join('_')}`).join('_')}`
+        const selectedName = selectName(nameSuggestion, syntheticName)
         return {
-            name, properties,
+            name: selectedName,
+            properties,
             kind: IDLKind.AnonymousInterface,
             fileName: node.getSourceFile().fileName,
             inheritance: [],
-            constructors: this.pickConstructors(node.members, name),
+            constructors: this.pickConstructors(node.members, nameSuggestion),
             constants: [],
-            methods: this.pickMethods(node.members, name),
-            callables: this.pickCallables(node.members, name),
+            methods: this.pickMethods(node.members, nameSuggestion),
+            callables: this.pickCallables(node.members, nameSuggestion),
             extendedAttributes: this.computeExtendedAttributes(node, typeParameters),
         }
     }
 
-    serializeTupleType(node: ts.TupleTypeNode, name?: string, typeParameters?: ts.NodeArray<ts.TypeParameterDeclaration>, withOperator: boolean = false): IDLInterface {
+    serializeTupleType(node: ts.TupleTypeNode, nameSuggestion?: NameSuggestion, typeParameters?: ts.NodeArray<ts.TypeParameterDeclaration>, withOperator: boolean = false): IDLInterface {
         const properties = node.elements.map((it, index) => this.serializeTupleProperty(it, index, withOperator))
-        name ??= `Tuple_${properties.map(it => this.computeTypeName(it.type)).join("_")}`
+        const syntheticName = `Tuple_${properties.map(it => this.computeTypeName(it.type)).join("_")}`
+        const selectedName = selectName(nameSuggestion, syntheticName)
         return {
-            name, properties,
+            name: selectedName,
+            properties,
             kind: IDLKind.TupleInterface,
             fileName: node.getSourceFile().fileName,
             extendedAttributes: this.computeExtendedAttributes(node, typeParameters),
@@ -519,11 +579,13 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         }
     }
 
-    serializeIntersectionType(node: ts.IntersectionTypeNode, name?: string) {
-        const inheritance = node.types.map(it => this.serializeType(it))
-        name ??= `Intersection_${inheritance.map(it => this.computeTypeName(it)).join("_")}`
+    serializeIntersectionType(node: ts.IntersectionTypeNode, nameSuggestion?: NameSuggestion) {
+        const inheritance = node.types.map((it, index) => this.serializeType(it, nameSuggestion?.extend(`intersection${index}`)))
+        const syntheticName = `Intersection_${inheritance.map(it => this.computeTypeName(it)).join("_")}`
+        const selectedName = selectName(nameSuggestion, syntheticName)
         return {
-            name, inheritance,
+            name: selectedName,
+            inheritance,
             kind: IDLKind.AnonymousInterface,
             fileName: node.getSourceFile().fileName,
             extendedAttributes: this.computeExtendedAttributes(node),
@@ -539,6 +601,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         let extendedAttributes = this.computeNamespaceAttribute()
         this.computeDeprecatedExtendAttributes(node, extendedAttributes)
         this.computeExportAttribute(node, extendedAttributes)
+        let names = nameEnumValues(node)
         const result: IDLEnum = {
             kind: IDLKind.Enum,
             name: ts.idText(node.name),
@@ -550,13 +613,13 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         let seenMembers = new Map<string, [string, boolean]>()
         result.elements = node.members
             .filter(ts.isEnumMember)
-            .map(it => this.serializeEnumMember(it, result, seenMembers))
+            .map((it, index) => this.serializeEnumMember(it, result, seenMembers, names[index]))
         return result
     }
 
-    serializeEnumMember(node: ts.EnumMember, parent: IDLEnum, seenMembers: Map<string, [string, boolean]>): IDLEnumMember {
+    serializeEnumMember(node: ts.EnumMember, parent: IDLEnum, seenMembers: Map<string, [string, boolean]>, name: string): IDLEnumMember {
         let isString = false
-        let initializer: string|number|undefined = undefined
+        let initializer: string | number | undefined = undefined
         if (!node.initializer) {
             // Nothing
         } else if (ts.isStringLiteral(node.initializer)) {
@@ -564,10 +627,10 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             initializer = node.initializer.text
             seenMembers.set(nameOrNull(node.name)!, [initializer, true])
         } else if (ts.isNumericLiteral(node.initializer) ||
-                (ts.isPrefixUnaryExpression(node.initializer)  &&
-                node.initializer.operator == ts.SyntaxKind.MinusToken  &&
+            (ts.isPrefixUnaryExpression(node.initializer) &&
+                node.initializer.operator == ts.SyntaxKind.MinusToken &&
                 ts.isNumericLiteral(node.initializer.operand))
-               ) {
+        ) {
             isString = false
             initializer = ts.isPrefixUnaryExpression(node.initializer) ?
                 "-" + node.initializer.operand.getText() :
@@ -601,13 +664,13 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         } else {
             isString = false
             initializer = node.initializer.getText(this.sourceFile)
-            //throw new Error(`Unrepresentable enum initializer: ${initializer} ${node.initializer.kind}`)
-            console.log(`WARNING: Unrepresentable enum initializer: ${initializer} ${node.initializer.kind}`)
+            //throw new Error(`Unpresentable enum initializer: ${initializer} ${node.initializer.kind}`)
+            console.log(`WARNING: Unpresentable enum initializer: ${initializer} ${node.initializer.kind}`)
         }
         return {
             kind: IDLKind.EnumMember,
             extendedAttributes: this.computeDeprecatedExtendAttributes(node),
-            name: nameOrNull(node.name)!,
+            name,
             parent,
             fileName: node.getSourceFile().fileName,
             documentation: getDocumentation(this.sourceFile, node, this.options.docs),
@@ -616,38 +679,103 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         }
     }
 
-    serializeFunctionType(signature: ts.SignatureDeclarationBase, name?: string, extendedAttributes?: IDLExtendedAttribute[]): IDLCallback {
-        const parameters = signature.parameters.map(it => this.serializeParameter(it))
-        const returnType = this.serializeType(signature.type)
-        name ??= `Callback_${parameters.map(it => it.type!).concat(returnType).map(it => this.computeTypeName(it)).join("_")}`
+    serializeFunctionType(signature: ts.SignatureDeclarationBase, nameSuggestion?: NameSuggestion, extendedAttributes?: IDLExtendedAttribute[]): IDLCallback {
+        const parameters = signature.parameters.map(it => this.serializeParameter(it, nameSuggestion))
+        const returnType = this.serializeType(signature.type, nameSuggestion?.extend('ret'))
+        const syntheticName = this.generateSyntheticFunctionName(parameters, returnType)
+        const selectedName = selectName(nameSuggestion, syntheticName)
         return {
-            name, parameters, returnType,
+            name: selectedName,
+            parameters, returnType,
             kind: IDLKind.Callback,
             fileName: signature.getSourceFile().fileName,
             extendedAttributes: extendedAttributes,
         };
     }
 
-    serializeAccessor(accessor: ts.GetAccessorDeclaration | ts.SetAccessorDeclaration): IDLProperty {
+    serializeSyntheticFunctionType(fileName: string, parameters: ts.ParameterDeclaration[], returnType: ts.TypeNode, nameSuggestion?: NameSuggestion, extendedAttributes?: IDLExtendedAttribute[]): IDLCallback {
+        const parametersIdl = parameters.map(it => this.serializeParameter(it, nameSuggestion))
+        const returnIdlType = this.serializeType(returnType, nameSuggestion?.extend('ret'))
+        const syntheticName = this.generateSyntheticFunctionName(parametersIdl, returnIdlType)
+        const selectedName = selectName(nameSuggestion, syntheticName)
+        return {
+            kind: IDLKind.Callback,
+            name: selectedName,
+            fileName: fileName,
+            parameters: parametersIdl,
+            returnType: returnIdlType,
+            extendedAttributes: extendedAttributes,
+        };
+    }
+
+    private generateSyntheticFunctionName(parameters: IDLParameter[], returnType: IDLType, isAsync: boolean = false): string {
+        let prefix = isAsync ? "AsyncCallback" : "Callback"
+        const names = parameters.map(it => `${this.computeTypeName(it.type!)}`).concat(this.computeTypeName(returnType))
+        return `${prefix}_${names.join("_")}`
+    }
+
+    serializeCallback(rawType: string, type: ts.TypeReferenceNode, nameSuggestion: NameSuggestion | undefined): IDLCallback {
+        const types = type.typeArguments!.map((it, index) => this.serializeType(it, nameSuggestion?.extend(`T${index}`)))
+        let isAsync = rawType == "AsyncCallback"
+        let returnType: IDLType
+        let parameters: IDLParameter[]
+        if (isAsync) {
+            returnType = IDLVoidType
+            parameters = types[0] == IDLVoidType ? [] : [{
+                kind: IDLKind.Parameter,
+                name: `result`,
+                type: types[0],
+                isVariadic: false,
+                isOptional: false
+            } as IDLParameter]
+        } else {
+            returnType = types.length > 1 ? types[1] : IDLVoidType
+            parameters = types[0] == IDLVoidType ? [] : [{
+                        kind: IDLKind.Parameter,
+                        name: `parameter`,
+                        type: types[0],
+                        isVariadic: false,
+                        isOptional: false
+                    } as IDLParameter ]
+        }
+        let extendedAttributes = isAsync ? [{ name: IDLExtendedAttributes.Async }] : []
+        let name = this.generateSyntheticFunctionName(parameters, returnType, isAsync)
+        return {
+            name,
+            parameters,
+            returnType,
+            kind: IDLKind.Callback,
+            fileName: type.getSourceFile().fileName,
+            extendedAttributes,
+        };
+    }
+
+    serializeAccessor(accessor: ts.GetAccessorDeclaration | ts.SetAccessorDeclaration, nameSuggestion: NameSuggestion | undefined): IDLProperty {
         const [accessorType, accessorAttr, readonly] = ts.isGetAccessorDeclaration(accessor)
             ? [accessor.type, IDLAccessorAttribute.Getter, true]
             : [accessor.parameters[0].type, IDLAccessorAttribute.Setter, false]
+        const name = asString(accessor.name)
+        nameSuggestion = nameSuggestion?.extend(name)
         return {
             kind: IDLKind.Property,
-            name: asString(accessor.name),
+            name: name,
             fileName: accessor.getSourceFile().fileName,
-            type: this.serializeType(accessorType),
+            type: this.serializeType(accessorType, nameSuggestion),
             isOptional: false,
             isStatic: false,
             isReadonly: readonly,
-            extendedAttributes: [{name: IDLExtendedAttributes.Accessor, value: accessorAttr}]
+            extendedAttributes: [{ name: IDLExtendedAttributes.Accessor, value: accessorAttr }]
         }
     }
 
     addToScope(entry: IDLEntry) {
         entry.extendedAttributes ??= []
         entry.extendedAttributes.push({ name: IDLExtendedAttributes.Synthetic })
-        this.currentScope.push(entry)
+        let name = entry.name
+        if (!name || !this.seenNames.has(name)) {
+            if (name) this.seenNames.add(name)
+            this.currentScope.add(entry)
+        }
     }
 
     isTypeParameterReference(type: ts.TypeNode): boolean {
@@ -674,7 +802,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
     isKnownAmbientModuleDeclaration(type: ts.Node): boolean {
         if (!ts.isModuleDeclaration(type)) return false
         const name = identName(type)
-        const ambientModuleNames = this.typeChecker.getAmbientModules().map(it=>it.name.replaceAll('\"',""))
+        const ambientModuleNames = this.typeChecker.getAmbientModules().map(it => it.name.replaceAll('\"', ""))
         return name != undefined && ambientModuleNames.includes(name)
     }
 
@@ -696,7 +824,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         return type.name
     }
 
-    serializeType(type: ts.TypeNode | undefined, nameSuggestion?: string): IDLType {
+    serializeType(type: ts.TypeNode | undefined, nameSuggestion?: NameSuggestion): IDLType {
         if (type == undefined) return IDLUndefinedType // TODO: can we have implicit types in d.ts?
 
         if (type.kind == ts.SyntaxKind.UndefinedKeyword) {
@@ -732,11 +860,14 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         }
         if (ts.isUnionTypeNode(type)) {
             let types = type.types
-                .map(it => this.serializeType(it))
-                .reduce<IDLType[]>((uniqueTypes, it) => uniqueTypes.concat(uniqueTypes.includes(it) ? []: [it]), [])
+                .map((it, index) => this.serializeType(it, nameSuggestion?.extend(`u${index}`)))
+                .reduce<IDLType[]>((uniqueTypes, it) => uniqueTypes.concat(uniqueTypes.includes(it) ? [] : [it]), [])
+
+            const syntheticUnionName = `Union_${types.map(it => this.computeTypeName(it)).join("_")}`
+            const selectedUnionName = selectName(nameSuggestion, syntheticUnionName)
             let aPromise = types.find(it => isContainerType(it) && it.name == "Promise")
             if (aPromise) {
-                console.log(`WARNING: ${type.getText()} is a union of Promises. This is not supported by the IDL.`)
+                console.log(`WARNING: ${type.getText()} is a union of Promises. This is not supported by the IDL, use only Promise.`)
                 return aPromise
             }
             if (types.find(it => it.name == "any")) {
@@ -749,7 +880,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
                 // TODO: remove void from union when original SDK is removed from compilation.
                 // types = types.filter(it => it != IDLVoidType)
             }
-            return typeOrUnion(types, nameSuggestion ?? `Union_${types.map(it => this.computeTypeName(it)).join("_")}`)
+            return typeOrUnion(types, selectedUnionName)
         }
         if (ts.isIntersectionTypeNode(type)) {
             const intersectionType = this.serializeIntersectionType(type, nameSuggestion)
@@ -760,12 +891,23 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             return createTypeParameterReference(nameOrNull((type as ts.TypeReferenceNode).typeName) ?? "UNEXPECTED_TYPE_PARAMETER")
         }
         if (ts.isTypeReferenceNode(type)) {
+            let declaration = getDeclarationsByNode(this.typeChecker, type.typeName)
+            // Treat enum member type 'value: EnumName.MemberName`
+            // as enum type 'value: EnumName`.
+            if (ts.isQualifiedName(type.typeName)) {
+                if (declaration && declaration.length > 0) {
+                    const decl = declaration[0]
+                    if (ts.isEnumMember(decl)) {
+                        const enumName = identName(decl.parent.name)!
+                        return createEnumType(enumName)
+                    }
+                }
+            }
             if (ts.isQualifiedName(type.typeName)) {
                 const result = createReferenceType(type.typeName.right.getText())
-                result.extendedAttributes = [{name: IDLExtendedAttributes.Qualifier, value: type.typeName.left.getText()}]
+                result.extendedAttributes = [{ name: IDLExtendedAttributes.Qualifier, value: type.typeName.left.getText() }]
                 return result
             }
-            let declaration = getDeclarationsByNode(this.typeChecker, type.typeName)
             if (declaration.length == 0) {
                 let name = type.typeName.getText(type.typeName.getSourceFile())
                 this.warn(`Do not know type ${name}`)
@@ -775,11 +917,29 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             const rawType = sanitize(getExportedDeclarationNameByNode(this.typeChecker, type.typeName))!
             const transformedType = typeMapper.get(rawType) ?? rawType
             // TODO: support Record here as well.
-            if (rawType == "Array" || rawType == "Promise" || rawType == "Map") {
-                return createContainerType(transformedType, type.typeArguments!.map(it => this.serializeType(it)))
+            if (rawType == "Array" || rawType == "Promise" || rawType == "Map" || (this.convertRecordType && rawType == "Record")) {
+                return createContainerType(transformedType, type.typeArguments!.map((it, index) => this.serializeType(it, nameSuggestion?.extend(`p${index}`))))
+            }
+            if (rawType == "Callback" || rawType == "AsyncCallback") {
+                const funcType = this.serializeCallback(rawType, type, NameSuggestion.make("Callback"))
+                this.addToScope(funcType)
+                return createReferenceType(funcType.name)
             }
             if (isEnum) {
                 return createEnumType(transformedType)
+            }
+            if (rawType == "Callback") {
+                const typeArgumentsLength = type.typeArguments?.length ?? 0
+                const callback = this.serializeSyntheticFunctionType(
+                    type.getSourceFile().fileName,
+                    typeArgumentsLength > 0 && type.typeArguments![0].kind != ts.SyntaxKind.VoidKeyword
+                        ? [ts.factory.createParameterDeclaration(undefined, undefined, 'value', undefined, type.typeArguments![0])]
+                        : [],
+                    typeArgumentsLength > 1 ? type.typeArguments![1] : ts.factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword),
+                    nameSuggestion,
+                )
+                this.addToScope(callback)
+                return createReferenceType(callback.name)
             }
             return createReferenceType(transformedType, type.typeArguments);
         }
@@ -787,7 +947,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             return createReferenceType("this")
         }
         if (ts.isArrayTypeNode(type)) {
-            return createContainerType("sequence", [this.serializeType(type.elementType)])
+            return createContainerType("sequence", [this.serializeType(type.elementType, nameSuggestion)])
         }
         if (ts.isTupleTypeNode(type)) {
             const tupleType = this.serializeTupleType(type, nameSuggestion)
@@ -807,6 +967,8 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             return IDLStringType
         }
         if (ts.isTypeLiteralNode(type)) {
+            if (!nameSuggestion)
+                throw new Error("Expected to have name suggestion for type literal")
             const objType = this.serializeObjectType(type, nameSuggestion)
             this.addToScope(objType)
             return createReferenceType(objType.name)
@@ -848,7 +1010,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             let typeName = sanitize(what == "default" ? where[where.length - 1] : what)!
             let result = createReferenceType(typeName, type.typeArguments)
             result.extendedAttributes ??= []
-            result.extendedAttributes.push({ name: IDLExtendedAttributes.Import, value: originalText})
+            result.extendedAttributes.push({ name: IDLExtendedAttributes.Import, value: originalText })
             return result
         }
         if (ts.isNamedTupleMember(type)) {
@@ -895,8 +1057,9 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         return this.deduceFromComputedProperty(name) ?? nameOrNull(name)
     }
 
-    serializeProperty(property: ts.TypeElement | ts.ClassElement): IDLProperty {
+    serializeProperty(property: ts.TypeElement | ts.ClassElement, nameSuggestion?: NameSuggestion): IDLProperty {
         const [propName, escapedName] = escapeName(this.propertyName(property.name!)!)
+        nameSuggestion = nameSuggestion?.extend(escapedName)
         let extendedAttributes: IDLExtendedAttribute[] = this.computeClassMemberExtendedAttributes(property, propName, escapedName)
         this.computeDeprecatedExtendAttributes(property, extendedAttributes)
         if (ts.isMethodDeclaration(property) || ts.isMethodSignature(property)) {
@@ -907,7 +1070,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
                 name: escapedName,
                 extendedAttributes: extendedAttributes,
                 documentation: getDocumentation(this.sourceFile, property, this.options.docs),
-                type: this.serializeType(property.parameters[0].type),
+                type: this.serializeType(property.parameters[0].type, nameSuggestion?.extend(nameOrNull(property.parameters[0].name)!)),
                 isReadonly: false,
                 isStatic: false,
                 isOptional: isDefined(property.parameters[0].questionToken)
@@ -920,7 +1083,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
                 name: escapedName,
                 extendedAttributes: extendedAttributes,
                 documentation: getDocumentation(this.sourceFile, property, this.options.docs),
-                type: this.serializeType(property.type),
+                type: this.serializeType(property.type, nameSuggestion),
                 isReadonly: isReadonly(property.modifiers),
                 isStatic: isStatic(property.modifiers),
                 isOptional: !!property.questionToken,
@@ -940,7 +1103,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
                 isReadonly: isReadonly,
                 isStatic: false,
                 isOptional: !!property.questionToken,
-                extendedAttributes: !!property.questionToken ? [{name: IDLExtendedAttributes.Optional}] : undefined,
+                extendedAttributes: !!property.questionToken ? [{ name: IDLExtendedAttributes.Optional }] : undefined,
             }
         }
         const isOptional = ts.isOptionalTypeNode(property)
@@ -953,22 +1116,23 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             isReadonly: isReadonly,
             isStatic: false,
             isOptional: isOptional,
-            extendedAttributes: isOptional ? [{name: IDLExtendedAttributes.Optional}] : undefined,
+            extendedAttributes: isOptional ? [{ name: IDLExtendedAttributes.Optional }] : undefined,
         }
     }
 
-    serializeParameter(parameter: ts.ParameterDeclaration): IDLParameter {
-        const name = nameOrNull(parameter.name)!
+    serializeParameter(parameter: ts.ParameterDeclaration, nameSuggestion?: NameSuggestion): IDLParameter {
+        const parameterName = nameOrNull(parameter.name)!
+        nameSuggestion = nameSuggestion?.extend(parameterName)
         return {
             kind: IDLKind.Parameter,
-            name: escapeIdl(name),
-            type: this.serializeType(parameter.type),
+            name: escapeIdl(parameterName),
+            type: this.serializeType(parameter.type, nameSuggestion),
             isVariadic: !!parameter.dotDotDotToken,
             isOptional: !!parameter.questionToken
         }
     }
 
-    isCommonAttributeMethod(method: ts.MethodDeclaration|ts.MethodSignature): boolean {
+    isCommonAttributeMethod(method: ts.MethodDeclaration | ts.MethodSignature): boolean {
         let parent = method.parent
         if (ts.isClassDeclaration(parent)) {
             return isCommonMethodOrSubclass(this.typeChecker, parent)
@@ -977,10 +1141,12 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
     }
 
     isCommonMethodUsedAsProperty(member: ts.ClassElement | ts.TypeElement): member is (ts.MethodDeclaration | ts.MethodSignature) {
+        let className = (ts.isClassDeclaration(member.parent)) ? identName(member.parent.name) : undefined
+        let returnType = (ts.isMethodDeclaration(member) || ts.isMethodSignature(member)) ? identName(member.type) : undefined
         return (this.options.commonToAttributes ?? true) &&
             (ts.isMethodDeclaration(member) || ts.isMethodSignature(member)) &&
             this.isCommonAttributeMethod(member) &&
-            member.parameters.length == 1
+            member.parameters.length == 1 && (returnType == "T" || returnType == className)
     }
 
     computeTypeParametersAttribute(typeParameters: ts.NodeArray<ts.TypeParameterDeclaration> | undefined, attributes: IDLExtendedAttribute[] = []) {
@@ -994,36 +1160,36 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
     }
 
     /** Serialize a signature (call or construct) */
-    serializeMethod(method: ts.MethodDeclaration | ts.MethodSignature | ts.IndexSignatureDeclaration | ts.FunctionDeclaration, namePrefix: string, isGlobal: boolean = false): IDLMethod {
+    serializeMethod(method: ts.MethodDeclaration | ts.MethodSignature | ts.IndexSignatureDeclaration | ts.FunctionDeclaration, nameSuggestion: NameSuggestion | undefined, isGlobal: boolean = false): IDLMethod {
         if (isGlobal) this.startScope()
         let extendedAttributes: IDLExtendedAttribute[] = isGlobal ? this.computeNamespaceAttribute() : []
         this.computeTypeParametersAttribute(method.typeParameters, extendedAttributes)
         this.computeDeprecatedExtendAttributes(method, extendedAttributes)
         this.computeExportAttribute(method, extendedAttributes)
-
+        const [methodName, escapedName] = escapeName(nameOrNull(method.name) ?? "_unknown")
+        nameSuggestion = nameSuggestion?.extend(escapedName) ?? NameSuggestion.make(escapedName)
         if (ts.isIndexSignatureDeclaration(method)) {
-            extendedAttributes.push({name: IDLExtendedAttributes.IndexSignature })
+            extendedAttributes.push({ name: IDLExtendedAttributes.IndexSignature })
             return {
                 kind: IDLKind.Method,
                 name: "indexSignature",
                 documentation: getDocumentation(this.sourceFile, method, this.options.docs),
-                returnType: this.serializeType(method.type),
+                returnType: this.serializeType(method.type, nameSuggestion),
                 extendedAttributes: extendedAttributes,
                 isStatic: false,
                 isOptional: false,
                 parameters: method.parameters.map(it => this.serializeParameter(it))
             }
         }
-        const [methodName, escapedName] = escapeName(nameOrNull(method.name) ?? "_unknown")
         this.computeClassMemberExtendedAttributes(method as ts.ClassElement, methodName, escapedName, extendedAttributes)
-        const returnType = this.serializeType(method.type)
+        const returnType = this.serializeType(method.type, nameSuggestion.extend('ret'))
         this.liftExtendedAttributes(returnType, extendedAttributes)
         return {
             kind: IDLKind.Method,
             name: escapedName,
             extendedAttributes: extendedAttributes,
             documentation: getDocumentation(this.sourceFile, method, this.options.docs),
-            parameters: method.parameters.map(it => this.serializeParameter(it)),
+            parameters: method.parameters.map(it => this.serializeParameter(it, nameSuggestion)),
             returnType: returnType,
             isStatic: isStatic(method.modifiers),
             isOptional: !!method.questionToken,
@@ -1031,7 +1197,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         };
     }
 
-    serializeCallable(method: ts.CallSignatureDeclaration, namePrefix: string): IDLCallable {
+    serializeCallable(method: ts.CallSignatureDeclaration, nameSuggestion: NameSuggestion): IDLCallable {
         const returnType = this.serializeType(method.type)
         let extendedAttributes = this.computeDeprecatedExtendAttributes(method)
         this.liftExtendedAttributes(returnType, extendedAttributes)
@@ -1041,7 +1207,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             name: "invoke",
             extendedAttributes: extendedAttributes,
             documentation: getDocumentation(this.sourceFile, method, this.options.docs),
-            parameters: method.parameters.map(it => this.serializeParameter(it)),
+            parameters: method.parameters.map(it => this.serializeParameter(it, nameSuggestion)),
             returnType: returnType,
             isStatic: false
         };
@@ -1056,7 +1222,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         return extendedAttributes
     }
 
-    serializeConstructor(constr: ts.ConstructorDeclaration|ts.ConstructSignatureDeclaration, namePrefix: string): IDLConstructor {
+    serializeConstructor(constr: ts.ConstructorDeclaration | ts.ConstructSignatureDeclaration, nameSuggestion: NameSuggestion): IDLConstructor {
         constr.parameters.forEach(it => {
             if (isNodePublic(it)) console.log("TODO: count public/private/protected constructor args as properties")
         })
@@ -1065,7 +1231,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             kind: IDLKind.Constructor,
             // documentation: getDocumentation(this.sourceFile, constr, this.options.docs),
             extendedAttributes: this.computeDeprecatedExtendAttributes(constr),
-            parameters: constr.parameters.map(it => this.serializeParameter(it)),
+            parameters: constr.parameters.map(it => this.serializeParameter(it, nameSuggestion)),
             returnType: this.serializeType(constr.type),
         };
     }
@@ -1097,29 +1263,29 @@ function sanitize(type: stringOrNone): stringOrNone {
     }
 }
 
-function escapeName(name: string) : [string, string] {
+function escapeName(name: string): [string, string] {
     if (name.startsWith("$")) return [name, name.replace("$", "dollar_")]
     if (name.startsWith("_")) return [name, name.replace("_", "bottom_")]
     return [name, escapeIdl(name)]
 }
 
-function escapeAmbientModuleContent(sourceFile: ts.SourceFile, node: ts.Node) : string {
-    const { pos, end} = node
-    const content = sourceFile.text.substring(pos,end)
+function escapeAmbientModuleContent(sourceFile: ts.SourceFile, node: ts.Node): string {
+    const { pos, end } = node
+    const content = sourceFile.text.substring(pos, end)
     return content.replaceAll('"', "'")
 }
 
-function getDocumentation(sourceFile: ts.SourceFile, node: ts.Node, docsOption: string|undefined): string | undefined {
+function getDocumentation(sourceFile: ts.SourceFile, node: ts.Node, docsOption: string | undefined): string | undefined {
     switch (docsOption) {
         case 'all': return getComment(sourceFile, node)
         case 'opt': return dedupDocumentation(getComment(sourceFile, node))
-        case 'none': case undefined:  return undefined
+        case 'none': case undefined: return undefined
         default: throw new Error(`Unknown option docs=${docsOption}`)
     }
 }
 
 function isDeprecatedNode(sourceFile: ts.SourceFile, node: ts.Node): boolean {
-    const docs = getComment(sourceFile,node)
+    const docs = getComment(sourceFile, node)
     const comments = parse(docs)
     return comments.map(it => it.tags).flatMap(it => it.map(i => i.tag)).some(it => it == 'deprecated')
 
