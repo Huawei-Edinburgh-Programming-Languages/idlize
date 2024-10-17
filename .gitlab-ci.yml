@@ -51,6 +51,8 @@ pg run:panda:
     - !reference [.setup, script]
   script:
     - npm run panda:sdk:install
+    - pwd
+    - ls external/incremental/tools/panda/node_modules/@panda/sdk/ohos_arm64/bin/
     - external/incremental/tools/panda/node_modules/@panda/sdk/ohos_arm64/bin/ark --help
     - npm run run:panda
 
