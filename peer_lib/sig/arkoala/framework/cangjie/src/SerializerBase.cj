@@ -94,6 +94,7 @@ class SerializersCache {
 public open class SerializerBase {
     private static var cache = SerializersCache(22)
 
+    private var isHolding: Bool = false
     private var position: Int64 = 0
     private var buffer: ArrayList<UInt8> = ArrayList<UInt8>()
 

@@ -19,9 +19,8 @@ import { Language } from "../../../Language"
 import { CJKeywords } from "../../../languageSpecificKeywords"
 import { isDefined } from "../../../util"
 import { ArgConvertor, BaseArgConvertor, RuntimeType } from "../../ArgConvertors"
-import { EnumConvertor as EnumConvertorDTS, MapConvertor } from "../../Convertors"
+import { EnumConvertor, MapConvertor } from "../../Convertors"
 import { FieldRecord } from "../../DeclarationTable"
-import { EnumConvertor } from "../../idl/IdlArgConvertors"
 import { EnumEntity } from "../../PeerFile"
 import { mapType } from "../../TypeNodeNameConvertor"
 import { AssignStatement, ExpressionStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, ObjectArgs, ReturnStatement, Type } from "../LanguageWriter"
@@ -186,11 +185,7 @@ export class CJLanguageWriter extends LanguageWriter {
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
         this.print(`func ${name}(${signature.args.map((it, index) => `${this.escapeKeyword(signature.argName(index))}: ${it.nullable ? '?' : ''}${this.mapCType(it)}`).join(", ")}): ${this.mapCType(signature.returnType)}`)
     }
-    override makeCastEnumToInt(convertor: EnumConvertorDTS, enumName: string, _unsafe?: boolean): string {
-        return `${enumName}.getIntValue()`
-    }
-    override makeEnumCast(convertor: EnumConvertor, enumName: string, _unsafe?: boolean): string {
-        // TODO: remove after switching to IDL
+    makeCastEnumToInt(convertor: EnumConvertor, enumName: string, _unsafe?: boolean): string {
         return `${enumName}.getIntValue()`
     }
     makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
@@ -255,7 +250,7 @@ export class CJLanguageWriter extends LanguageWriter {
         }
         return new TsObjectAssignStatement(object, undefined, false)
     }
-    makeMapResize(mapType: string, keyType: string, valueType: string, map: string, size: string, deserializer: string): LanguageStatement {
+    makeMapResize(keyType: string, valueType: string, map: string, size: string, deserializer: string): LanguageStatement {
         return this.makeAssign(map, undefined, this.makeString(`new Map<${keyType}, ${valueType}>()`), false)
     }
     makeMapKeyTypeName(c: MapConvertor): string {
@@ -423,5 +418,5 @@ export class CJLanguageWriter extends LanguageWriter {
     escapeKeyword(word: string): string {
         return CJKeywords.has(word) ? word + "_" : word
     }
-    override castToBoolean(value: string): string { return `if (${value} { 1 } else { 0 })` }
+    override castToBoolean(value: string): string { return `${value}` }
 }
