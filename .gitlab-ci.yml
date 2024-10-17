@@ -51,6 +51,7 @@ pg run:panda:
     - !reference [.setup, script]
   script:
     - npm run panda:sdk:install
+    - external/incremental/tools/panda/node_modules/@panda/sdk/ohos_arm64/bin/ark --help
     - npm run run:panda
 
 arkts subset tsc:
