@@ -53,6 +53,7 @@ pg run:panda:
     - npm run panda:sdk:install
     - pwd
     - ls external/incremental/tools/panda/node_modules/@panda/sdk/ohos_arm64/bin/
+    - ldd external/incremental/tools/panda/node_modules/@panda/sdk/ohos_arm64/bin/ark
     - external/incremental/tools/panda/node_modules/@panda/sdk/ohos_arm64/bin/ark --help
     - npm run run:panda
 
