@@ -720,19 +720,14 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         let returnType: IDLType
         let parameters: IDLParameter[]
         if (isAsync) {
-            returnType = types[0]
-            parameters = types
-                .splice(1, types.length - 1)
-                .map((it, index) => {
-                    let param = {
-                        kind: IDLKind.Parameter,
-                        name: `parameter_${index}`,
-                        type: it,
-                        isVariadic: false,
-                        isOptional: false
-                    } as IDLParameter
-                    return param
-                })
+            returnType = IDLVoidType
+            parameters = types[0] == IDLVoidType ? [] : [{
+                kind: IDLKind.Parameter,
+                name: `result`,
+                type: types[0],
+                isVariadic: false,
+                isOptional: false
+            } as IDLParameter]
         } else {
             returnType = types.length > 1 ? types[types.length - 1] : IDLVoidType
             parameters = types
