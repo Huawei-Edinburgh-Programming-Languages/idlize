@@ -719,7 +719,7 @@ export class IdlPeerProcessor {
         const mConstructor = this.makeMaterializedMethod(decl, constructor)
         const finalizerReturnType = {isVoid: false, nativeType: () => PrimitiveType.NativePointer.getText(), macroSuffixPart: () => ""}
         const mFinalizer = new MaterializedMethod(name, [], [], finalizerReturnType, false,
-            new Method("getFinalizer", new NamedMethodSignature(Type.Pointer, [], [], []), [MethodModifier.STATIC]), 0)
+            new Method("getFinalizer", new NamedMethodSignature(Type.Pointer, [], [], []), [MethodModifier.STATIC]))
         const mFields = decl.properties
             // TODO what to do with setter accessors? Do we need FieldModifier.WRITEONLY? For now, just skip them
             .filter(it => idl.getExtAttribute(it, idl.IDLExtendedAttributes.Accessor) !== idl.IDLAccessorAttribute.Setter)
@@ -737,7 +737,7 @@ export class IdlPeerProcessor {
                 const getSignature = new NamedMethodSignature(field.type, [], [])
                 const getAccessor = new MaterializedMethod(
                     name, [], [], f.retConvertor, false,
-                    new Method(`get${capitalize(field.name)}`, getSignature, [MethodModifier.PRIVATE]), 0)
+                    new Method(`get${capitalize(field.name)}`, getSignature, [MethodModifier.PRIVATE]))
                 mMethods.push(getAccessor)
             }
             const isReadOnly = field.modifiers.includes(FieldModifier.READONLY)
@@ -746,7 +746,7 @@ export class IdlPeerProcessor {
                 const retConvertor = { isVoid: true, nativeType: () => Type.Void.name, macroSuffixPart: () => "V" }
                 const setAccessor = new MaterializedMethod(
                     name, [], [f.argConvertor], retConvertor, false,
-                    new Method(`set${capitalize(field.name)}`, setSignature, [MethodModifier.PRIVATE]), 0)
+                    new Method(`set${capitalize(field.name)}`, setSignature, [MethodModifier.PRIVATE]))
                 mMethods.push(setAccessor)
             }
         })
@@ -773,7 +773,7 @@ export class IdlPeerProcessor {
         if (method === undefined) {
             // interface or class without constructors
             const ctor = new Method("ctor", new NamedMethodSignature(Type.Void, [], []), [MethodModifier.STATIC])
-            return new MaterializedMethod(decl.name, [], [], retConvertor, false, ctor, 0)
+            return new MaterializedMethod(decl.name, [], [], retConvertor, false, ctor)
         }
 
         const generics = undefined // method.typeParameters?.map(it => it.getText())
@@ -782,7 +782,7 @@ export class IdlPeerProcessor {
         const signature = generateSignature(this.library, method)
         const modifiers = idl.isConstructor(method) || method.isStatic ? [MethodModifier.STATIC] : []
         return new MaterializedMethod(decl.name, /*declarationTargets*/ [], argConvertors, retConvertor, false,
-            new Method(methodName, signature, modifiers, generics), getMethodIndex(decl, method))
+            new Method(methodName, signature, modifiers, generics), getMethodOverloadIndex(decl, method))
     }
 
     private collectDepsRecursive(decl: idl.IDLEntry, deps: Set<idl.IDLEntry>): void {
@@ -1028,17 +1028,16 @@ function generateSignature(library: IdlPeerLibrary, method: idl.IDLCallable | id
         method.parameters.map(it => it.name))
 }
 
-function getMethodIndex(clazz: idl.IDLInterface, method: idl.IDLSignature | undefined): number {
-    if (!method || !method.name) {
-        return 0
-    }
-    if (idl.isCallable(method))
-        return clazz.callables.findIndex(it => it === method)
-    else
-        return clazz.methods
-            .filter(it => it.name === method.name)
-            .findIndex(it => method === it)
-}
+function getMethodOverloadIndex(clazz: idl.IDLInterface, method: idl.IDLSignature | undefined): number | undefined {
+    if (!method || !method.name)
+        return void 0
+    const overloadSet:(idl.IDLMethod | idl.IDLCallable)[] = idl.isCallable(method)
+        ? clazz.callables
+        : clazz.methods.filter(it => it.name === method.name)
+    if (overloadSet.length <= 1)
+        return void 0
+    return overloadSet.findIndex(it => it === method)
+ }
 
 export function isMaterialized(declaration: idl.IDLInterface): boolean {
     if (PeerGeneratorConfig.isMaterializedIgnored(declaration.name))
