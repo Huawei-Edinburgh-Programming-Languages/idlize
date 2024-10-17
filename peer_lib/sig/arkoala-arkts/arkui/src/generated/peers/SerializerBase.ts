@@ -122,18 +122,21 @@ export class SerializerBase {
     constructor() {
         this.buffer = new KBuffer(96)
     }
+    private setHold(isHolding: boolean) {
+        this.isHolding = isHolding
+    }
     static hold<T extends SerializerBase>(factory: () => T): T {
         if (!SerializerBase.cache)
             SerializerBase.cache = factory()
         const serializer = SerializerBase.cache as T
-        // TODO: Leads to segmentation fault of es2panda
-        // if (serializer.isHolding)
-        //     throw new Error("Serializer is already being held. Check if you had released is before")
-        // serializer.isHolding = true
+        if (serializer.isHolding)
+            throw new Error("Serializer is already being held. Check if you had released is before")
+        //TODO: Direct use of SerializerBase::isHolding leads to abort(std::bad_alloc exception) of es2panda process
+        serializer.setHold(true)
         return serializer
     }
     public release() {
-        this.isHolding = false
+        this.setHold(false)
         this.releaseResources()
         this.position = 0
     }
