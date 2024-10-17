@@ -15,12 +15,9 @@
 
 import { IndentedPrinter } from "../../../IndentedPrinter"
 import { Language } from "../../../Language"
-import { ArrayConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "../../Convertors"
-import { FieldRecord } from "../../DeclarationTable"
-import { mapType, TSTypeNodeNameConvertor } from "../../TypeNodeNameConvertor"
+import { ArrayConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "../../idl/IdlArgConvertors"
 import { AssignStatement, ExpressionStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, ObjectArgs, ReturnStatement, Type } from "../LanguageWriter"
 import { IDLContainerType, IDLF32Type, IDLF64Type, IDLI16Type, IDLI32Type, IDLI64Type, IDLI8Type, IDLNumberType, IDLPointerType, IDLPrimitiveType, IDLStringType, IDLU16Type, IDLU32Type, IDLU64Type, IDLU8Type, IDLVoidType } from '../../../idl'
-import * as ts from 'typescript'
 import { ArgConvertor, RuntimeType } from "../../ArgConvertors"
 
 ////////////////////////////////////////////////////////////////
@@ -132,49 +129,9 @@ export class TsObjectAssignStatement implements LanguageStatement {
     }
 }
 
-export class TsObjectDeclareStatement implements LanguageStatement {
-    constructor(private object: string, private type: Type | undefined, private fields: readonly FieldRecord[]) {}
-    write(writer: LanguageWriter): void {
-        const nameConvertor = new TsObjectDeclareNodeNameConvertor()
-        // Constructing a new type with all optional fields
-        const objectType = new Type(`{${this.fields.map(it => {
-            return `${it.name}?: ${nameConvertor.convert(it.type)}`
-        }).join(",")}}`)
-        new TsObjectAssignStatement(this.object, objectType, true).write(writer)
-    }
-}
-
 ///////////////////////////////////////////////////////////////
 //                            UTILS                          //
 ///////////////////////////////////////////////////////////////
-
-class TsObjectDeclareNodeNameConvertor extends TSTypeNodeNameConvertor {
-    private useOptionalTypes = true
-
-    override convertTuple(node: ts.TupleTypeNode): string {
-        this.useOptionalTypes = false
-        const name = super.convertTuple(node);
-        this.useOptionalTypes = true
-        return name
-    }
-    override convertOptional(node: ts.OptionalTypeNode): string {
-        let name = super.convertOptional(node);
-        if (!this.useOptionalTypes) {
-            name = name.replace("?", "")
-        }
-        return name
-    }
-    override convertImport(_node: ts.ImportTypeNode): string {
-        //TODO: to preventing an error IMPORT_* types were  not found
-        return "object"
-    }
-    override convert(node: ts.Node | undefined): string {
-        if (node) {
-            return super.convert(node)
-        }
-        return "undefined";
-    }
-}
 
 ////////////////////////////////////////////////////////////////
 //                           WRITER                           //
@@ -299,15 +256,6 @@ export class TSLanguageWriter extends LanguageWriter {
     makeTupleAlloc(option: string): LanguageStatement {
         return new TsTupleAllocStatement(option)
     }
-    makeObjectAlloc(object: string, fields: readonly FieldRecord[]): LanguageStatement {
-        if (fields.length > 0) {
-            return this.makeAssign(object, undefined,
-                this.makeCast(this.makeString("{}"),
-                    new Type(`{${fields.map(it=>`${it.name}: ${mapType(it.type)}`).join(",")}}`)),
-                false)
-        }
-        return new TsObjectAssignStatement(object, undefined, false)
-    }
     makeMapResize(keyType: string, valueType: string, map: string, size: string, deserializer: string): LanguageStatement {
         return this.makeAssign(map, undefined, this.makeString(`new Map<${keyType}, ${valueType}>()`), false)
     }
@@ -320,9 +268,6 @@ export class TSLanguageWriter extends LanguageWriter {
     makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement {
         // keyAccessor and valueAccessor are equal in TS
         return this.makeStatement(this.makeMethodCall(keyAccessor, "set", [this.makeString(key), this.makeString(value)]))
-    }
-    makeObjectDeclare(name: string, type: Type, fields: readonly FieldRecord[]): LanguageStatement {
-        return new TsObjectDeclareStatement(name, type, fields)
     }
     getTagType(): Type {
         return new Type("Tags");

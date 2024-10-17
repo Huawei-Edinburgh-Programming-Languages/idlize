@@ -1,6 +1,5 @@
-import { removeExt, renameClassToBuilderClass, renameClassToMaterialized } from "../../util"
+import { removeExt, renameClassToBuilderClass } from "../../util"
 import { LanguageWriter, MethodModifier, Method, Type, createLanguageWriter, Field, NamedMethodSignature } from "../LanguageWriters";
-import { PeerLibrary } from "../PeerLibrary"
 import { BuilderClass, methodsGroupOverloads, CUSTOM_BUILDER_CLASSES, BuilderMethod, BuilderField } from "../BuilderClass";
 import { collapseSameNamedMethods } from "./OverloadsPrinter";
 import { TargetFile } from "./TargetFile";
@@ -39,7 +38,7 @@ class TSBuilderClassFileVisitor implements BuilderClassFileVisitor {
         private readonly language: Language,
         private readonly builderClass: BuilderClass,
         private readonly dumpSerialized: boolean,
-        private readonly peerLibrary: PeerLibrary | IdlPeerLibrary) { }
+        private readonly peerLibrary: IdlPeerLibrary) { }
 
     private printBuilderClass(builderClass: TSBuilderClass) {
         const writer = this.printer
@@ -118,7 +117,7 @@ class JavaBuilderClassFileVisitor implements BuilderClassFileVisitor {
     private readonly printer: LanguageWriter = createLanguageWriter(this.printerContext.language)
 
     constructor(
-        private readonly library: IdlPeerLibrary | PeerLibrary,
+        private readonly library: IdlPeerLibrary,
         private readonly printerContext: PrinterContext,
         private readonly builderClass: BuilderClass,
         private readonly dumpSerialized: boolean,
@@ -295,10 +294,6 @@ class JavaBuilderClassFileVisitor implements BuilderClassFileVisitor {
     }
 
     printFile(): void {
-        if (this.library instanceof PeerLibrary) {
-            this.printBuilderClassTS(this.builderClass)
-            return
-        }
         this.printBuilderClass(this.builderClass)
     }
 
@@ -315,7 +310,7 @@ class BuilderClassVisitor {
     readonly builderClasses: Map<TargetFile, string[]> = new Map()
 
     constructor(
-        private readonly library: PeerLibrary | IdlPeerLibrary,
+        private readonly library: IdlPeerLibrary,
         private printerContext: PrinterContext,
         private readonly dumpSerialized: boolean,
     ) { }
@@ -343,7 +338,7 @@ class BuilderClassVisitor {
     }
 }
 
-export function printBuilderClasses(peerLibrary: PeerLibrary | IdlPeerLibrary, printerContext: PrinterContext, dumpSerialized: boolean): Map<TargetFile, string> {
+export function printBuilderClasses(peerLibrary: IdlPeerLibrary, printerContext: PrinterContext, dumpSerialized: boolean): Map<TargetFile, string> {
     // TODO: support other output languages
     if (printerContext.language != Language.TS && printerContext.language != Language.ARKTS && printerContext.language != Language.JAVA) {
         return new Map()

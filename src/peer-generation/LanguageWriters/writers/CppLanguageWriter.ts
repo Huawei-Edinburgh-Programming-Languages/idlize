@@ -19,7 +19,7 @@ import { cppKeywords } from "../../../languageSpecificKeywords"
 import { Language } from "../../../Language"
 import { ArgConvertor, BaseArgConvertor, RuntimeType } from "../../ArgConvertors"
 import { PrimitiveType } from "../../ArkPrimitiveType"
-import { ArrayConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "../../Convertors"
+import { ArrayConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "../../idl/IdlArgConvertors"
 import { AssignStatement, BlockStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, ObjectArgs, StringExpression, Type } from "../LanguageWriter"
 import { CDefinedExpression, CLikeExpressionStatement, CLikeLanguageWriter, CLikeLoopStatement, CLikeReturnStatement } from "./CLikeLanguageWriter"
 
@@ -312,10 +312,16 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         return this.makeString(`ARK_RUNTIME_${RuntimeType[rt]}`)
     }
     makeMapKeyTypeName(c: MapConvertor): string {
-        return c.table.computeTargetName(c.table.toTarget(c.keyType), false)
+        // TODO: check next
+        // return c.table.computeTargetName(c.table.toTarget(c.keyType), false)
+        // return c.keyConvertor.interopType(this.language);
+        return this.mapType(c.keyConvertor.targetType(this));
     }
     makeMapValueTypeName(c: MapConvertor): string {
-        return c.table.computeTargetName(c.table.toTarget(c.valueType), false)
+        // TODO: check next
+        // return c.table.computeTargetName(c.table.toTarget(c.valueType), false)
+        // return c.valueConvertor.interopType(this.language);
+        return this.mapType(c.valueConvertor.targetType(this));
     }
     makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement {
         // TODO: maybe use std::move?

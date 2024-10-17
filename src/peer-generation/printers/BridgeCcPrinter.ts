@@ -14,12 +14,11 @@
  */
 
 import { capitalize, dropSuffix, isDefined } from "../../util";
-import { EnumConvertor} from "../Convertors";
+import { EnumConvertor} from "../idl/IdlArgConvertors";
 import { ArgConvertor } from "../ArgConvertors";
 import { PrimitiveType } from "../ArkPrimitiveType"
 import { bridgeCcCustomDeclaration, bridgeCcGeneratedDeclaration } from "../FileGenerators";
 import { createLanguageWriter, Method, NamedMethodSignature, Type } from "../LanguageWriters";
-import { PeerLibrary } from "../PeerLibrary";
 import { PeerMethod } from "../PeerMethod";
 import { CUSTOM_API, CustomAPI } from "../CustomAPI"
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
@@ -33,7 +32,7 @@ class BridgeCcVisitor {
     readonly customApi = createLanguageWriter(Language.CPP)
 
     constructor(
-        private readonly library: PeerLibrary | IdlPeerLibrary,
+        private readonly library: IdlPeerLibrary,
         private readonly callLog: boolean,
     ) {}
 
@@ -267,13 +266,13 @@ class BridgeCcVisitor {
     }
 }
 
-export function printBridgeCcGenerated(peerLibrary: PeerLibrary | IdlPeerLibrary, callLog: boolean): string {
+export function printBridgeCcGenerated(peerLibrary: IdlPeerLibrary, callLog: boolean): string {
     const visitor = new BridgeCcVisitor(peerLibrary, callLog)
     visitor.print()
     return bridgeCcGeneratedDeclaration(visitor.generatedApi.getOutput())
 }
 
-export function printBridgeCcCustom(peerLibrary: PeerLibrary | IdlPeerLibrary, callLog: boolean): string {
+export function printBridgeCcCustom(peerLibrary: IdlPeerLibrary, callLog: boolean): string {
     const visitor = new BridgeCcVisitor(peerLibrary, callLog)
     visitor.print()
     return bridgeCcCustomDeclaration(visitor.customApi.getOutput())

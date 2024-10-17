@@ -19,19 +19,13 @@ import * as path from "path"
 import { fromIDL } from "./from-idl/common"
 import { idlToString } from "./from-idl/DtsPrinter"
 import { generate } from "./idlize"
-import { IDLEntry, forEachChild, toIDLString, isInterface, isPackage } from "./idl"
+import { IDLEntry, forEachChild, toIDLString } from "./idl"
 import { LinterVisitor, toLinterString } from "./linter"
 import { LinterMessage } from "./LinterMessage"
 import { CompileContext, IDLVisitor } from "./IDLVisitor"
 import { TestGeneratorVisitor } from "./TestGeneratorVisitor"
-import {
-    PeerGeneratorVisitor,
-    PeerProcessor,
-} from "./peer-generation/PeerGeneratorVisitor"
 import { defaultCompilerOptions, toSet } from "./util"
 import { initRNG } from "./rand_utils"
-import { DeclarationTable } from "./peer-generation/DeclarationTable"
-import { PeerLibrary } from "./peer-generation/PeerLibrary"
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig";
 import { generateTracker } from "./peer-generation/Tracker"
 import { IdlPeerLibrary } from "./peer-generation/idl/IdlPeerLibrary"
@@ -41,7 +35,7 @@ import { SkoalaCCodeGenerator } from "./peer-generation/printers/SkoalaPrinter"
 import { generateOhos } from "./peer-generation/OhosGenerator"
 import * as webidl2 from "webidl2"
 import { toIDLNode } from "./from-idl/deserialize"
-import { generateArkoala, generateArkoalaFromIdl, generateLibace, generateLibaceFromIdl } from "./peer-generation/arkoala"
+import { generateArkoalaFromIdl, generateLibaceFromIdl } from "./peer-generation/arkoala"
 import { Language } from "./Language"
 import { loadPlugin } from "./peer-generation/plugin-api"
 
@@ -77,8 +71,6 @@ const options = program
     .option('--only-integrated', 'Generate only thoose files that can be integrated to target', false)
     .option('--version')
     .option('--generator-target <all|arkoala|libace|none>', 'Copy peers to arkoala or libace (use with --dts2peer)', "all")
-    .option('--idl', 'Generate peers from IDL (use with --dts2peer)', true)
-    .option('--no-idl', 'Generate peers directly from .d.ts files (use with --dts2peer)', false)
     .option('--arkoala-destination <path>', 'Location of arkoala repository')
     .option('--libace-destination <path>', 'Location of libace repository')
     .option('--copy-peers-components <name...>', 'List of components to copy (omit to copy all)')
@@ -304,163 +296,85 @@ if (options.dts2peer) {
 
     const PREDEFINED_PATH = path.join(__dirname, "..", "predefined")
 
-    if (options.idl) {
-        options.docs = "all"
-        const idlLibrary = new IdlPeerLibrary(lang, toSet(options.generateInterface))
-        // collect predefined files
-        scanPredefinedDirectory(idlLibrary, PREDEFINED_PATH)
-        // process predefined files
-        idlLibrary.predefinedFiles.forEach(file => {
-            IdlPredefinedGeneratorVisitor.create({
-                sourceFile: file.originalFilename,
-                peerLibrary: idlLibrary,
-                peerFile: file
-            }).visitWholeFile()
-        })
-        // First convert DTS to IDL
-        generate(
-            options.inputDir.split(','),
-            options.inputFile,
-            generatedPeersDir,
-            (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, options),
-            {
-                compilerOptions: defaultCompilerOptions,
-                onSingleFile(entries: IDLEntry[], outputDir, sourceFile) {
-                    const file = new IdlPeerFile(sourceFile.fileName, entries, idlLibrary.componentsToGenerate)
-                    idlLibrary.files.push(file)
-                },
-                onEnd(outDir) {
-                    // Visit IDL peer files
-                    idlLibrary.files.forEach(file => {
-                        const visitor = new IdlPeerGeneratorVisitor({
-                            sourceFile: file.originalFilename,
-                            peerLibrary: idlLibrary,
-                            peerFile: file,
-                        })
-                        visitor.visitWholeFile()
+    options.docs = "all"
+    const idlLibrary = new IdlPeerLibrary(lang, toSet(options.generateInterface))
+    // collect predefined files
+    scanPredefinedDirectory(idlLibrary, PREDEFINED_PATH)
+    // process predefined files
+    idlLibrary.predefinedFiles.forEach(file => {
+        IdlPredefinedGeneratorVisitor.create({
+            sourceFile: file.originalFilename,
+            peerLibrary: idlLibrary,
+            peerFile: file
+        }).visitWholeFile()
+    })
+    // First convert DTS to IDL
+    generate(
+        options.inputDir.split(','),
+        options.inputFile,
+        generatedPeersDir,
+        (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, options),
+        {
+            compilerOptions: defaultCompilerOptions,
+            onSingleFile(entries: IDLEntry[], outputDir, sourceFile) {
+                const file = new IdlPeerFile(sourceFile.fileName, entries, idlLibrary.componentsToGenerate)
+                idlLibrary.files.push(file)
+            },
+            onEnd(outDir) {
+                // Visit IDL peer files
+                idlLibrary.files.forEach(file => {
+                    const visitor = new IdlPeerGeneratorVisitor({
+                        sourceFile: file.originalFilename,
+                        peerLibrary: idlLibrary,
+                        peerFile: file,
                     })
-                    const peerProcessor = new IdlPeerProcessor(idlLibrary)
-                    peerProcessor.process()
-                    idlLibrary.analyze()
+                    visitor.visitWholeFile()
+                })
+                const peerProcessor = new IdlPeerProcessor(idlLibrary)
+                peerProcessor.process()
+                idlLibrary.analyze()
 
-                    if (options.generatorTarget == "arkoala" ||
-                        options.generatorTarget == "all") {
-                        generateArkoalaFromIdl({
-                            outDir: outDir,
-                            arkoalaDestination: options.arkoalaDestination,
-                            nativeBridgeFile: options.nativeBridgePath,
-                            apiVersion: apiVersion,
-                            verbose: options.verbose ?? false,
-                            onlyIntegrated: options.onlyIntegrated ?? false,
-                            dumpSerialized: options.dumpSerialized ?? false,
-                            callLog: options.callLog ?? false,
-                            lang: lang
-                        }, idlLibrary)
-                    }
-                    if (options.generatorTarget == "libace" ||
-                        options.generatorTarget == "all") {
-                        generateLibaceFromIdl({
-                            outDir: outDir,
-                            libaceDestination: options.libaceDestination,
-                            apiVersion: apiVersion,
-                        }, idlLibrary)
-                    }
-                    if (options.generatorTarget == "tracker") {
-                        generateTracker(outDir, idlLibrary, options.trackerStatus, options.verbose)
-                    }
-                    if (options.generatorTarget == "ohos") {
-                        generateOhos(outDir, idlLibrary)
-                    }
-
-                    if (options.plugin) {
-                        loadPlugin(options.plugin)
-                            .then(plugin => plugin.process({outDir: outDir}, idlLibrary))
-                            .then(result => {
-                                console.log(`Plugin ${options.plugin} process returned ${result}`)
-                            })
-                            .catch(error => console.error(`Plugin ${options.plugin} not found: ${error}`))
-                    }
+                if (options.generatorTarget == "arkoala" ||
+                    options.generatorTarget == "all") {
+                    generateArkoalaFromIdl({
+                        outDir: outDir,
+                        arkoalaDestination: options.arkoalaDestination,
+                        nativeBridgeFile: options.nativeBridgePath,
+                        apiVersion: apiVersion,
+                        verbose: options.verbose ?? false,
+                        onlyIntegrated: options.onlyIntegrated ?? false,
+                        dumpSerialized: options.dumpSerialized ?? false,
+                        callLog: options.callLog ?? false,
+                        lang: lang
+                    }, idlLibrary)
                 }
-            }
-        )
-    } else {
-        // Generate stuff the old way, directly from DTS files
-        if (options.apiPrefix !== undefined) {
-            PeerGeneratorConfig.cppPrefix = options.apiPrefix
-        }
-        const declarationTable = new DeclarationTable(options.language ?? "ts")
-        const peerLibrary = new PeerLibrary(declarationTable, toSet(options.generateInterface))
+                if (options.generatorTarget == "libace" ||
+                    options.generatorTarget == "all") {
+                    generateLibaceFromIdl({
+                        outDir: outDir,
+                        libaceDestination: options.libaceDestination,
+                        apiVersion: apiVersion,
+                    }, idlLibrary)
+                }
+                if (options.generatorTarget == "tracker") {
+                    generateTracker(outDir, idlLibrary, options.trackerStatus, options.verbose)
+                }
+                if (options.generatorTarget == "ohos") {
+                    generateOhos(outDir, idlLibrary)
+                }
 
-        /* ---------- stub while we migrating to idl --------- */
-        const kindOfLibrary = {
-            predefinedFiles: [] as IdlPeerFile[]
-        }
-        scanPredefinedDirectory(kindOfLibrary, PREDEFINED_PATH)
-        for (const file of kindOfLibrary.predefinedFiles) {
-            const pkgs = file.entries.filter(isPackage)
-            if (pkgs.length !== 1 || pkgs[0]?.name !== `"org.openharmony.idlize.predefined"`) {
-                continue
-            }
-            for (const entry of file.entries) {
-                if (isInterface(entry)) {
-                    peerLibrary.predefinedDeclarations.push(entry)
+                if (options.plugin) {
+                    loadPlugin(options.plugin)
+                        .then(plugin => plugin.process({outDir: outDir}, idlLibrary))
+                        .then(result => {
+                            console.log(`Plugin ${options.plugin} process returned ${result}`)
+                        })
+                        .catch(error => console.error(`Plugin ${options.plugin} not found: ${error}`))
                 }
             }
         }
-        /* --------------------------------------------------- */
+    )
 
-        generate(
-            options.inputDir.split(','),
-            undefined,
-            generatedPeersDir,
-            (sourceFile, typeChecker) => new PeerGeneratorVisitor({
-                sourceFile: sourceFile,
-                typeChecker: typeChecker,
-                declarationTable,
-                peerLibrary
-            }),
-            {
-                compilerOptions: defaultCompilerOptions,
-                onBegin(outDir, typeChecker) {
-                    declarationTable.typeChecker = typeChecker
-                },
-                onEnd(outDir: string) {
-                    let lang = declarationTable.language
-                    const peerProcessor = new PeerProcessor(peerLibrary)
-                    peerProcessor.process()
-                    declarationTable.analyze(peerLibrary)
-
-                    if (options.generatorTarget == "arkoala" ||
-                        options.generatorTarget == "all") {
-                        generateArkoala({
-                            outDir: outDir,
-                            lang: lang,
-                            arkoalaDestination: options.arkoalaDestination,
-                            dumpSerialized: options.dumpSerialized ?? false,
-                            callLog: options.callLog ?? false,
-                            verbose: options.verbose ?? false,
-                            onlyIntegrated: options.onlyIntegrated ?? false,
-                            apiVersion: apiVersion,
-                            nativeBridgeFile: options.nativeBridgePath
-                        }, peerLibrary)
-                    }
-
-                    if (options.generatorTarget == "libace" ||
-                        options.generatorTarget == "all") {
-                        generateLibace({
-                            outDir: outDir,
-                            libaceDestination: options.libaceDestination,
-                            apiVersion: apiVersion
-                         }, peerLibrary)
-                    }
-
-                    if (options.generatorTarget == "tracker") {
-                        generateTracker(outDir, peerLibrary, options.trackerStatus, options.verbose)
-                    }
-                }
-            }
-        )
-    }
     didJob = true
 }
 

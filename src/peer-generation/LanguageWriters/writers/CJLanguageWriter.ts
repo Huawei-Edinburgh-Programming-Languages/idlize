@@ -19,12 +19,10 @@ import { Language } from "../../../Language"
 import { CJKeywords } from "../../../languageSpecificKeywords"
 import { isDefined } from "../../../util"
 import { ArgConvertor, BaseArgConvertor, RuntimeType } from "../../ArgConvertors"
-import { EnumConvertor, MapConvertor } from "../../Convertors"
-import { FieldRecord } from "../../DeclarationTable"
+import { EnumConvertor, MapConvertor } from "../../idl/IdlArgConvertors"
 import { EnumEntity } from "../../PeerFile"
-import { mapType } from "../../TypeNodeNameConvertor"
 import { AssignStatement, ExpressionStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, ObjectArgs, ReturnStatement, Type } from "../LanguageWriter"
-import { TSCastExpression, TsObjectAssignStatement, TsObjectDeclareStatement, TsTupleAllocStatement } from "./TsLanguageWriter"
+import { TSCastExpression, TsTupleAllocStatement } from "./TsLanguageWriter"
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -241,15 +239,6 @@ export class CJLanguageWriter extends LanguageWriter {
     makeTupleAlloc(option: string): LanguageStatement {
         return new TsTupleAllocStatement(option)
     }
-    makeObjectAlloc(object: string, fields: readonly FieldRecord[]): LanguageStatement {
-        if (fields.length > 0) {
-            return this.makeAssign(object, undefined,
-                this.makeCast(this.makeString("{}"),
-                    new Type(`{${fields.map(it=>`${it.name}: ${mapType(it.type)}`).join(",")}}`)),
-                false)
-        }
-        return new TsObjectAssignStatement(object, undefined, false)
-    }
     makeMapResize(keyType: string, valueType: string, map: string, size: string, deserializer: string): LanguageStatement {
         return this.makeAssign(map, undefined, this.makeString(`new Map<${keyType}, ${valueType}>()`), false)
     }
@@ -262,9 +251,6 @@ export class CJLanguageWriter extends LanguageWriter {
     makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement {
         // keyAccessor and valueAccessor are equal in TS
         return this.makeStatement(this.makeMethodCall(keyAccessor, "set", [this.makeString(key), this.makeString(value)]))
-    }
-    makeObjectDeclare(name: string, type: Type, fields: readonly FieldRecord[]): LanguageStatement {
-        return new TsObjectDeclareStatement(name, type, fields)
     }
     getTagType(): Type {
         return new Type("Tags");

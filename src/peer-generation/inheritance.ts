@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 
-
 import * as ts from "typescript";
 import { asString, getDeclarationsByNode, heritageDeclarations, identName } from "../util";
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";

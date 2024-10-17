@@ -16,9 +16,8 @@
 import { IDLBooleanType, IDLContainerType, IDLNumberType, IDLParameter, IDLPrimitiveType, IDLStringType, IDLType, IDLUndefinedType, IDLUnionType, IDLVoidType, isContainerType, isPrimitiveType, isUnionType } from "../../idl"
 import { IndentedPrinter } from "../../IndentedPrinter"
 import { stringOrNone } from "../../util"
-import { EnumConvertor, MapConvertor } from "../Convertors"
+import { EnumConvertor, MapConvertor } from "../idl/IdlArgConvertors"
 import { ArgConvertor, RuntimeType } from "../ArgConvertors"
-import { FieldRecord } from "../DeclarationTable"
 import { EnumEntity } from "../PeerFile"
 import * as fs from "fs"
 import { Language } from "../../Language"
@@ -522,9 +521,6 @@ export abstract class LanguageWriter {
     makeTupleAlloc(option: string): LanguageStatement {
         return new ExpressionStatement(new StringExpression(""))
     }
-    makeObjectAlloc(object: string, fields: readonly FieldRecord[]): LanguageStatement {
-        return new ExpressionStatement(new StringExpression(""))
-    }
     makeSetUnionSelector(value: string, index: string): LanguageStatement {
         // empty expression
         return new ExpressionStatement(new StringExpression(""))
@@ -612,9 +608,6 @@ export abstract class LanguageWriter {
     }
     mapMethodModifier(modifier: MethodModifier): string {
         return `${MethodModifier[modifier].toLowerCase()}`
-    }
-    makeObjectDeclare(name: string, type: Type | undefined, fields: readonly FieldRecord[]): LanguageStatement {
-        return this.makeAssign(name, type, this.makeString("{}"), true, false)
     }
     makeType(typeName: string, nullable: boolean, receiver?: string): Type {
         return new Type(typeName, nullable)

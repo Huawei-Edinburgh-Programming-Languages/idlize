@@ -22,7 +22,6 @@ import { IDLType } from "../../idl"
 import { mangleMethodName } from "../LanguageWriters/LanguageWriter"
 
 export class IdlPeerMethod {
-    private overloadIndex?: number
     constructor(
         public originalParentName: string,
         public declarationTargets: IDLType[],
@@ -30,6 +29,7 @@ export class IdlPeerMethod {
         public retConvertor: RetConvertor,
         public isCallSignature: boolean,
         public method: Method,
+        public overloadIndex?: number,
     ) { }
 
     get overloadedName(): string {

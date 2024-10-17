@@ -16,8 +16,7 @@
 import { generateEventsBridgeSignature } from "./EventsPrinter";
 import { nativeModuleDeclaration, nativeModuleEmptyDeclaration } from "../FileGenerators";
 import { FunctionCallExpression, LanguageExpression, LanguageWriter, Method, MethodModifier, NamedMethodSignature, StringExpression, Type, createLanguageWriter } from "../LanguageWriters";
-import { PeerClass, PeerClassBase } from "../PeerClass";
-import { PeerLibrary } from "../PeerLibrary";
+import { PeerClassBase } from "../PeerClass";
 import { PeerMethod } from "../PeerMethod";
 import { IdlPeerClass } from "../idl/IdlPeerClass";
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
@@ -42,14 +41,14 @@ class NativeModuleVisitor {
     ])
 
     constructor(
-        protected readonly library: PeerLibrary | IdlPeerLibrary,
+        protected readonly library: IdlPeerLibrary,
     ) {
         this.nativeModule = createLanguageWriter(library.language)
         this.nativeModuleEmpty = createLanguageWriter(library.language)
         this.nativeModulePredefined = new Map()
     }
 
-    protected printPeerMethods(peer: PeerClass | IdlPeerClass) {
+    protected printPeerMethods(peer: IdlPeerClass) {
         peer.methods.forEach(it => this.printPeerMethod(peer, it, this.nativeModule, this.nativeModuleEmpty, undefined, this.nativeFunctions))
     }
 
@@ -195,7 +194,7 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
     private stringLikeTypes = new Set(['String', 'KString', 'KStringPtr', 'string'])
 
     constructor(
-        protected readonly library: PeerLibrary | IdlPeerLibrary,
+        protected readonly library: IdlPeerLibrary,
     ) {
         super(library)
         this.nativeFunctions = createLanguageWriter(library.language)
@@ -355,14 +354,14 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
 }
 
 
-export function printNativeModule(peerLibrary: PeerLibrary | IdlPeerLibrary, nativeBridgePath: string): string {
+export function printNativeModule(peerLibrary: IdlPeerLibrary, nativeBridgePath: string): string {
     const lang = peerLibrary.language
     const visitor = (lang == Language.CJ) ? new CJNativeModuleVisitor(peerLibrary) : new NativeModuleVisitor(peerLibrary)
     visitor.print()
     return nativeModuleDeclaration(visitor.nativeModule, visitor.nativeModulePredefined, nativeBridgePath, false, lang, visitor.nativeFunctions)
 }
 
-export function printNativeModuleEmpty(peerLibrary: PeerLibrary | IdlPeerLibrary): string {
+export function printNativeModuleEmpty(peerLibrary: IdlPeerLibrary): string {
     const visitor = new NativeModuleVisitor(peerLibrary)
     visitor.print()
     return nativeModuleEmptyDeclaration(visitor.nativeModuleEmpty.getOutput())

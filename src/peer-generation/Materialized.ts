@@ -13,45 +13,14 @@
  * limitations under the License.
  */
 
-import * as ts from "typescript"
 import { ArgConvertor, RetConvertor } from "./ArgConvertors"
-import { Field, Method, MethodModifier, MethodSignature, Type } from "./LanguageWriters"
-import { PeerMethod } from "./PeerMethod"
-import { capitalize, heritageDeclarations, identName } from "../util"
+import { Field, Method, MethodModifier, Type } from "./LanguageWriters"
+import { IdlPeerMethod } from "./idl/IdlPeerMethod"
+import { capitalize } from "../util"
 import { PeerClassBase } from "./PeerClass"
 import { DeclarationTarget } from "./DeclarationTable"
-import { PrimitiveType } from "./ArkPrimitiveType"
 import { ImportFeature } from "./ImportsCollector"
-import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
-import { isBuilderClass } from "./BuilderClass"
-
-export function checkTSDeclarationMaterialized(declaration: ts.Declaration): boolean {
-    return (ts.isInterfaceDeclaration(declaration) || ts.isClassDeclaration(declaration)) && isMaterialized(declaration)
-}
-
-export function checkDeclarationTargetMaterialized(declaration: DeclarationTarget): boolean {
-    return !(declaration instanceof PrimitiveType) && (ts.isInterfaceDeclaration(declaration) || ts.isClassDeclaration(declaration)) && isMaterialized(declaration)
-}
-
-export function isMaterialized(declaration: ts.InterfaceDeclaration | ts.ClassDeclaration): boolean {
-
-    const name = identName(declaration)!
-
-    if (PeerGeneratorConfig.isMaterializedIgnored(name)) {
-        return false;
-    }
-
-    if (isBuilderClass(declaration)) {
-        return false
-    }
-
-    // TODO: parse Builder classes separatly
-
-    // A materialized class is a class or an interface with methods
-    // excluding components and related classes
-    return (ts.isClassDeclaration(declaration) && declaration.members.some(ts.isMethodDeclaration))
-        || (ts.isInterfaceDeclaration(declaration) && declaration.members.some(ts.isMethodSignature))
-}
+import { IDLType } from "../idl"
 
 export class MaterializedField {
     constructor(
@@ -63,17 +32,17 @@ export class MaterializedField {
     ) { }
 }
 
-export class MaterializedMethod extends PeerMethod {
+export class MaterializedMethod extends IdlPeerMethod {
     constructor(
         originalParentName: string,
-        declarationTargets: DeclarationTarget[],
+        declarationTargets: IDLType[],
         argConvertors: ArgConvertor[],
         retConvertor: RetConvertor,
         isCallSignature: boolean,
         method: Method,
-        index: number,
+        overloadIndex?: number,
     ) {
-        super(originalParentName, declarationTargets, argConvertors, retConvertor, isCallSignature, false, method, index)
+        super(originalParentName, declarationTargets, argConvertors, retConvertor, isCallSignature, method, overloadIndex)
     }
 
     override get peerMethodName() {
@@ -136,9 +105,8 @@ export function copyMaterializedMethod(method: MaterializedMethod, overrides: {
         method.retConvertor,
         method.isCallSignature,
         overrides.method ?? method.method,
-        method.index
+        method.overloadIndex
     )
-    newMethod.isOverloaded = method.isOverloaded
     return newMethod
 }
 
@@ -166,7 +134,7 @@ export class MaterializedClass implements PeerClassBase {
         public readonly methods: MaterializedMethod[],
         public readonly needBeGenerated: boolean = true,
     ) {
-        PeerMethod.markOverloads(methods)
+        IdlPeerMethod.markAndGroupOverloads(methods)
     }
 
     getComponentName(): string {
@@ -180,20 +148,4 @@ export class MaterializedClass implements PeerClassBase {
     generatedName(isCallSignature: boolean): string{
         return this.className
     }
-}
-
-export function extractSuperElement(target: ts.ClassDeclaration | ts.InterfaceDeclaration): SuperElement | undefined {
-
-    const heritageClause = target.heritageClauses
-        ?.find(it => it.token == ts.SyntaxKind.ExtendsKeyword)
-
-    if (!heritageClause) return undefined
-
-    const superClassType = heritageClause.types[0]
-    const superClassName = identName(superClassType.expression)!
-    const superClassTypeArgs = superClassType.typeArguments
-        ?.filter(ts.isTypeReferenceNode)
-        .map(it => identName(it.typeName)!)
-
-    return new SuperElement(superClassName, superClassTypeArgs)
 }

@@ -14,11 +14,9 @@
  */
 
 import * as path from "path"
-import { PeerFile } from "../PeerFile";
-import { PeerLibrary } from "../PeerLibrary";
 import { renameDtsToPeer, throwException } from "../../util";
 import { convertPeerFilenameToModule, ImportsCollector } from "../ImportsCollector";
-import { PeerClass, PeerClassBase } from "../PeerClass";
+import { PeerClassBase } from "../PeerClass";
 import { InheritanceRole, determineParentRole, isHeir, isRoot } from "../inheritance";
 import { PeerMethod } from "../PeerMethod";
 import {
@@ -46,6 +44,7 @@ import { IdlPeerMethod } from "../idl/IdlPeerMethod";
 import { collectJavaImports } from "./lang/JavaIdlUtils";
 import { printJavaImports } from "./lang/JavaPrinters";
 import { Language } from "../../Language";
+import * as assert from "assert";
 
 export function componentToPeerClass(component: string) {
     return `Ark${component}Peer`
@@ -61,13 +60,13 @@ class PeerFileVisitor {
     //TODO: Ignore until bugs are fixed in https://rnd-gitlab-msc.huawei.com/rus-os-team/virtual-machines-and-tools/panda/-/issues/17850
 
     constructor(
-        protected readonly library: PeerLibrary | IdlPeerLibrary,
-        protected readonly file: PeerFile | IdlPeerFile,
+        protected readonly library: IdlPeerLibrary,
+        protected readonly file: IdlPeerFile,
         protected readonly printerContext: PrinterContext,
         protected readonly dumpSerialized: boolean,
     ) { }
 
-    protected generatePeerParentName(peer: PeerClass | IdlPeerClass): string {
+    protected generatePeerParentName(peer: IdlPeerClass): string {
         if (!peer.originalClassName)
             throw new Error(`${peer.componentName} is not supported, use 'uselessConstructorInterfaces' for now`)
         const parentRole = determineParentRole(peer.originalClassName, peer.parentComponentName)
@@ -78,7 +77,7 @@ class PeerFileVisitor {
         return componentToPeerClass(parent)
     }
 
-    protected generateAttributesParentClass(peer: PeerClass | IdlPeerClass): string | undefined {
+    protected generateAttributesParentClass(peer: IdlPeerClass): string | undefined {
         if (!isHeir(peer.originalClassName!)) return undefined
         return componentToAttributesClass(peer.parentComponentName!)
     }
@@ -121,7 +120,7 @@ class PeerFileVisitor {
         imports.print(printer, `./peers/${targetBasename}`)
     }
 
-    protected printAttributes(peer: PeerClass | IdlPeerClass, printer: LanguageWriter) {
+    protected printAttributes(peer: IdlPeerClass, printer: LanguageWriter) {
         for (const attributeType of peer.attributesTypes)
             printer.print(attributeType.content)
 
@@ -132,7 +131,7 @@ class PeerFileVisitor {
         }, parent ? [parent] : undefined)
     }
 
-    protected printPeerConstructor(peer: PeerClass | IdlPeerClass, printer: LanguageWriter): void {
+    protected printPeerConstructor(peer: IdlPeerClass, printer: LanguageWriter): void {
         // TODO: fully switch to writer!
         const parentRole = determineParentRole(peer.originalClassName, peer.originalParentName)
         const isNode = parentRole !== InheritanceRole.Finalizable
@@ -151,7 +150,7 @@ class PeerFileVisitor {
         }, undefined, [MethodModifier.PROTECTED])
     }
 
-    protected printCreateMethod(peer: PeerClass | IdlPeerClass, writer: LanguageWriter): void {
+    protected printCreateMethod(peer: IdlPeerClass, writer: LanguageWriter): void {
         const peerClass = componentToPeerClass(peer.componentName)
         const signature = new NamedMethodSignature(
             new Type(peerClass),
@@ -174,7 +173,7 @@ class PeerFileVisitor {
         this.library.setCurrentContext(undefined)
     }
 
-    protected printApplyMethod(peer: PeerClass | IdlPeerClass, printer: LanguageWriter) {
+    protected printApplyMethod(peer: IdlPeerClass, printer: LanguageWriter) {
         const name = peer.originalClassName!
         const typeParam = componentToAttributesClass(peer.componentName)
         if (isRoot(name)) {
@@ -188,7 +187,7 @@ class PeerFileVisitor {
         printer.print(`}`)
     }
 
-    protected printPeer(peer: PeerClass | IdlPeerClass, printer: LanguageWriter) {
+    protected printPeer(peer: IdlPeerClass, printer: LanguageWriter) {
         printer.writeClass(componentToPeerClass(peer.componentName), (writer) => {
             this.printPeerConstructor(peer, writer)
             this.printCreateMethod(peer, writer);
@@ -239,8 +238,8 @@ class PeerFileVisitor {
 
 class JavaPeerFileVisitor extends PeerFileVisitor {
     constructor(
-        protected readonly library: PeerLibrary | IdlPeerLibrary,
-        protected readonly file: PeerFile | IdlPeerFile,
+        protected readonly library: IdlPeerLibrary,
+        protected readonly file: IdlPeerFile,
         printerContext: PrinterContext,
         dumpSerialized: boolean,
     ) {
@@ -253,7 +252,7 @@ class JavaPeerFileVisitor extends PeerFileVisitor {
         }
     }
 
-    protected printApplyMethod(peer: PeerClass | IdlPeerClass, printer: LanguageWriter) {
+    protected printApplyMethod(peer: IdlPeerClass, printer: LanguageWriter) {
         // TODO: attributes
         // const name = peer.originalClassName!
         // const typeParam = componentToAttributesClass(peer.componentName)
@@ -270,7 +269,6 @@ class JavaPeerFileVisitor extends PeerFileVisitor {
     }
 
     printFile(): void {
-        const isIDL = this.library instanceof IdlPeerLibrary
         this.file.peers.forEach(peer => {
             let printer = createLanguageWriter(this.library.language)
             const peerName = componentToPeerClass(peer.componentName)
@@ -278,17 +276,9 @@ class JavaPeerFileVisitor extends PeerFileVisitor {
 
             this.printPackage(printer)
 
-            if (isIDL) {
-                const idlPeer = peer as IdlPeerClass
-                const imports = collectJavaImports(idlPeer.methods.flatMap(method => method.declarationTargets))
-                printJavaImports(printer, imports)
-            }
-            else {
-                const allTypesInPeer = (peer as PeerClass).methods.flatMap((method) => {
-                    return method.declarationTargets.map(target => this.printerContext.synthesizedTypes!.getTargetType(target, false))
-                })
-                this.printerContext.imports?.printImportsForTypes(allTypesInPeer, printer)
-            }
+            const idlPeer = peer as IdlPeerClass
+            const imports = collectJavaImports(idlPeer.methods.flatMap(method => method.declarationTargets))
+            printJavaImports(printer, imports)
 
             this.printPeer(peer, printer)
 
@@ -303,47 +293,11 @@ class JavaPeerFileVisitor extends PeerFileVisitor {
     }
 }
 
-class CJPeerFileVisitor extends PeerFileVisitor {
-    constructor(
-        protected readonly library: PeerLibrary,
-        protected readonly file: PeerFile,
-        printerContext: PrinterContext,
-        dumpSerialized: boolean,
-    ) {
-        super(library, file, printerContext, dumpSerialized)
-    }
-
-    private printPackage(printer: LanguageWriter): void {
-        if (this.library.language == Language.CJ) {
-            printer.print(`package idlize\n`)
-        }
-    }
-
-    protected printApplyMethod(peer: PeerClass, printer: LanguageWriter) {
-    }
-
-    printFile(): void {
-        const printer = createLanguageWriter(this.library.declarationTable.language)
-        this.file.peers.forEach(peer => {
-            const peerName = componentToPeerClass(peer.componentName)
-            this.printers.set(new TargetFile(peerName, ''), printer)
-
-            const allTypesInPeer = peer.methods.flatMap((method) => {
-                return method.declarationTargets.map(target => this.printerContext.synthesizedTypes!.getTargetType(target, false))
-            })
-
-            this.printPackage(printer)
-            this.printerContext.imports?.printImportsForTypes(allTypesInPeer, printer)
-            this.printPeer(peer, printer)
-        })
-    }
-}
-
 class PeersVisitor {
     readonly peers: Map<TargetFile, string[]> = new Map()
 
     constructor(
-        private readonly library: PeerLibrary | IdlPeerLibrary,
+        private readonly library: IdlPeerLibrary,
         private readonly printerContext: PrinterContext,
         private readonly dumpSerialized: boolean,
     ) { }
@@ -352,11 +306,12 @@ class PeersVisitor {
         for (const file of this.library.files.values()) {
             if (!file.peersToGenerate.length)
                 continue
+
+            assert.notEqual(this.printerContext.language, Language.CJ, "CJ printer is not implemented")
+
             const visitor = this.printerContext.language == Language.JAVA
                 ? new JavaPeerFileVisitor(this.library, file, this.printerContext, this.dumpSerialized)
-                : this.printerContext.language == Language.CJ
-                    ? new CJPeerFileVisitor(this.library as PeerLibrary, file as PeerFile, this.printerContext, this.dumpSerialized)
-                    : new PeerFileVisitor(this.library, file, this.printerContext, this.dumpSerialized)
+                : new PeerFileVisitor(this.library, file, this.printerContext, this.dumpSerialized)
             visitor.printFile()
             visitor.printers.forEach((printer, targetFile) => {
                 this.peers.set(targetFile, printer.getOutput())
@@ -367,7 +322,7 @@ class PeersVisitor {
 
 const returnValName = "retval"  // make sure this doesn't collide with parameter names!
 
-export function printPeers(peerLibrary: PeerLibrary | IdlPeerLibrary, printerContext: PrinterContext, dumpSerialized: boolean): Map<TargetFile, string> {
+export function printPeers(peerLibrary: IdlPeerLibrary, printerContext: PrinterContext, dumpSerialized: boolean): Map<TargetFile, string> {
     const visitor = new PeersVisitor(peerLibrary, printerContext, dumpSerialized)
     visitor.printPeers()
     const result = new Map<TargetFile, string>()

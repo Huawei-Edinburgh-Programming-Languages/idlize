@@ -21,12 +21,10 @@ import { CppLanguageWriter, createLanguageWriter, LanguageWriter, Method, Method
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
 import { writeDeserializer, writeSerializer } from "./printers/SerializerPrinter"
 import { SELECTOR_ID_PREFIX, writeConvertors } from "./printers/ConvertorsPrinter"
-import { PeerLibrary } from "./PeerLibrary"
 import { ArkoalaInstall, LibaceInstall } from "../Install"
 import { ImportsCollector } from "./ImportsCollector"
 import { IdlPeerLibrary } from "./idl/IdlPeerLibrary"
 import { writeARKTSTypeCheckers, writeTSTypeCheckers } from "./printers/TypeCheckPrinter"
-import { writeARKTSTypeCheckerFromDTS, writeTSTypeCheckerFromDTS } from "./printers/TypeCheckFromDTSPrinter"
 import { Language } from "../Language"
 
 export const warning = "WARNING! THIS FILE IS AUTO-GENERATED, DO NOT MAKE CHANGES, THEY WILL BE LOST ON NEXT GENERATION!"
@@ -150,7 +148,7 @@ export function appendModifiersCommonPrologue(): LanguageWriter {
     return result
 }
 
-export function getNodeTypes(library: PeerLibrary | IdlPeerLibrary): string[] {
+export function getNodeTypes(library: IdlPeerLibrary): string[] {
     const components:string[] = []
     for (const file of library.files) {
         for (const peer of file.peers.values()) {
@@ -160,7 +158,7 @@ export function getNodeTypes(library: PeerLibrary | IdlPeerLibrary): string[] {
     return [...PeerGeneratorConfig.customNodeTypes, ...components.sort()]
 }
 
-export function appendViewModelBridge(library: PeerLibrary | IdlPeerLibrary): LanguageWriter {
+export function appendViewModelBridge(library: IdlPeerLibrary): LanguageWriter {
     let result = createLanguageWriter(Language.CPP)
     let body = readTemplate('view_model_bridge.cc')
 
@@ -273,7 +271,7 @@ export function accessorStructList(lines: LanguageWriter): LanguageWriter {
     return result
 }
 
-export function makeTSSerializer(library: PeerLibrary | IdlPeerLibrary): string {
+export function makeTSSerializer(library: IdlPeerLibrary): string {
     let printer = createLanguageWriter(library.language)
     const imports = new ImportsCollector()
     imports.addFeatures(["SerializerBase", "Tags", "RuntimeType", "runtimeType", "isPixelMap", "isResource", "isInstanceOf"], "./SerializerBase")
@@ -290,18 +288,6 @@ export function createSerializer(): Serializer { return new Serializer() }
 `
 }
 
-// TODO: remove after full switching to IDL
-export function makeTypeCheckerFromDTS(library: PeerLibrary): { arkts: string, ts: string } {
-    let arktsPrinter = createLanguageWriter(Language.ARKTS)
-    writeARKTSTypeCheckerFromDTS(library, arktsPrinter)
-    let tsPrinter = createLanguageWriter(Language.TS)
-    writeTSTypeCheckerFromDTS(library, tsPrinter)
-    return {
-        arkts: arktsPrinter.getOutput().join("\n"),
-        ts: tsPrinter.getOutput().join("\n"),
-    }
-}
-
 export function makeTypeChecker(library: IdlPeerLibrary): { arkts: string, ts: string } {
     let arktsPrinter = createLanguageWriter(Language.ARKTS)
     writeARKTSTypeCheckers(library, arktsPrinter)
@@ -313,15 +299,7 @@ export function makeTypeChecker(library: IdlPeerLibrary): { arkts: string, ts: s
     }
 }
 
-export function makeCJSerializer(library: PeerLibrary): LanguageWriter {
-    let result = createLanguageWriter(library.declarationTable.language)
-    result.print(`package idlize\n`)
-    writeSerializer(library, result)
-    result.print('public func createSerializer(): Serializer { return Serializer() }')
-    return result
-}
-
-export function makeConverterHeader(path: string, namespace: string, library: PeerLibrary | IdlPeerLibrary): LanguageWriter {
+export function makeConverterHeader(path: string, namespace: string, library: IdlPeerLibrary): LanguageWriter {
     const converter = new CppLanguageWriter(new IndentedPrinter())
     converter.writeLines(cStyleCopyright)
     converter.writeLines(`/*
@@ -354,7 +332,7 @@ export function makeConverterHeader(path: string, namespace: string, library: Pe
     return converter
 }
 
-export function makeCSerializers(library: PeerLibrary | IdlPeerLibrary, structs: LanguageWriter, typedefs: IndentedPrinter): string {
+export function makeCSerializers(library: IdlPeerLibrary, structs: LanguageWriter, typedefs: IndentedPrinter): string {
 
     const serializers = createLanguageWriter(Language.CPP)
     const writeToString = createLanguageWriter(Language.CPP)
@@ -376,7 +354,7 @@ ${serializers.getOutput().join("\n")}
 `
 }
 
-export function makeTSDeserializer(library: PeerLibrary | IdlPeerLibrary): string {
+export function makeTSDeserializer(library: IdlPeerLibrary): string {
     const deserializer = createLanguageWriter(Language.TS)
     writeDeserializer(library, deserializer)
     return `${cStyleCopyright}

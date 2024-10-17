@@ -1,13 +1,12 @@
 import { PrimitiveType } from "../ArkPrimitiveType"
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
 import { LanguageWriter } from "../LanguageWriters";
-import { PeerLibrary } from "../PeerLibrary";
 
 export const SELECTOR_ID_PREFIX = "SELECTOR_ID_"
 
 class ConvertorsPrinter {
     constructor(
-        private readonly library: PeerLibrary | IdlPeerLibrary,
+        private readonly library: IdlPeerLibrary,
         private readonly writer: LanguageWriter,
     ) {}
 
@@ -113,7 +112,7 @@ class ConvertorsPrinter {
     }
 }
 
-export function writeConvertors(library: PeerLibrary | IdlPeerLibrary, writer: LanguageWriter) {
+export function writeConvertors(library: IdlPeerLibrary, writer: LanguageWriter) {
     const printer = new ConvertorsPrinter(library, writer)
     printer.print()
 }

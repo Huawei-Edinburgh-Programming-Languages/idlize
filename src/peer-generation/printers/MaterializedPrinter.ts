@@ -14,7 +14,6 @@
  */
 
 import { capitalize, removeExt, renameClassToMaterialized } from "../../util";
-import { PeerLibrary } from "../PeerLibrary";
 import { printPeerFinalizer, writePeerMethod } from "./PeersPrinter"
 import {
     BlockStatement,
@@ -28,7 +27,7 @@ import {
     NamedMethodSignature,
     Type
 } from "../LanguageWriters";
-import { copyMaterializedMethod, MaterializedClass, MaterializedField, MaterializedMethod } from "../Materialized"
+import { copyMaterializedMethod, MaterializedClass, MaterializedField } from "../Materialized"
 import { makeMaterializedPrologue, tsCopyrightAndWarning } from "../FileGenerators";
 import { groupOverloads, OverloadsPrinter } from "./OverloadsPrinter";
 import { ImportsCollector } from "../ImportsCollector";
@@ -56,7 +55,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
     protected readonly printer: LanguageWriter = createLanguageWriter(this.printerContext.language)
 
     constructor(
-        protected readonly library: PeerLibrary | IdlPeerLibrary,
+        protected readonly library: IdlPeerLibrary,
         protected readonly printerContext: PrinterContext,
         protected readonly clazz: MaterializedClass,
     ) {}
@@ -76,7 +75,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
     private overloadsPrinter = new OverloadsPrinter(this.printer, this.library.language, false)
 
     constructor(
-        protected readonly library: PeerLibrary | IdlPeerLibrary,
+        protected readonly library: IdlPeerLibrary,
         protected readonly printerContext: PrinterContext,
         protected readonly clazz: MaterializedClass,
         protected readonly dumpSerialized: boolean,
@@ -252,7 +251,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
 
 class JavaMaterializedFileVisitor extends MaterializedFileVisitorBase {
     constructor(
-        protected readonly library: PeerLibrary | IdlPeerLibrary,
+        protected readonly library: IdlPeerLibrary,
         protected readonly printerContext: PrinterContext,
         protected readonly clazz: MaterializedClass,
         protected readonly dumpSerialized: boolean,
@@ -450,11 +449,6 @@ class JavaMaterializedFileVisitor extends MaterializedFileVisitorBase {
     }
 
     visit(): void {
-        if (this.library instanceof PeerLibrary) {
-            // TODO: remove after migrating to IDL
-            this.printMaterializedClassTS(this.clazz)
-            return
-        }
         this.printMaterializedClass(this.clazz)
     }
 
@@ -478,7 +472,7 @@ class MaterializedVisitor {
     readonly materialized: Map<TargetFile, string[]> = new Map()
 
     constructor(
-        private readonly library: PeerLibrary | IdlPeerLibrary,
+        private readonly library: IdlPeerLibrary,
         private readonly printerContext: PrinterContext,
         private readonly dumpSerialized: boolean,
     ) {}
@@ -506,7 +500,7 @@ class MaterializedVisitor {
     }
 }
 
-export function printMaterialized(peerLibrary: PeerLibrary | IdlPeerLibrary, printerContext: PrinterContext, dumpSerialized: boolean): Map<TargetFile, string> {
+export function printMaterialized(peerLibrary: IdlPeerLibrary, printerContext: PrinterContext, dumpSerialized: boolean): Map<TargetFile, string> {
 
     // TODO: support other output languages
     if (![Language.ARKTS, Language.TS, Language.JAVA].includes(printerContext.language))
