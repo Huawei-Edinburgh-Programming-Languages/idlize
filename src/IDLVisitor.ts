@@ -29,6 +29,7 @@ import {
     IDLBooleanType,
     IDLBigintType,
     isPrimitiveType,
+    createUnionType,
 } from "./idl"
 import {
     asString, capitalize, getComment, getDeclarationsByNode, getExportedDeclarationNameByDecl, getExportedDeclarationNameByNode, identName, isDefined, isExport, isNodePublic, isPrivate, isProtected, isReadonly, isStatic, nameEnumValues, nameOrNull, stringOrNone
@@ -903,6 +904,9 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
                 const funcType = this.serializeCallback(rawType, type, NameSuggestion.make("Callback"))
                 this.addToScope(funcType)
                 return createReferenceType(funcType.name)
+            }
+            if (rawType == "Optional") {
+                return createUnionType([this.serializeType(type.typeArguments![0], nameSuggestion), IDLUndefinedType])
             }
             if (isEnum) {
                 return createEnumType(transformedType)

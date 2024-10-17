@@ -450,10 +450,18 @@ export function createContainerType(container: string, element: IDLType[]): IDLC
 export function createUnionType(types: IDLType[], name?: string): IDLUnionType {
     if (types.length < 2)
         throw new Error("IDLUnionType should contain at least 2 types")
+    let seen = new Set<string>()
+    let cleaned: IDLType[] = []
+    types.forEach(it => {
+        if (!seen.has(it.name) || isContainerType(it)) {
+            seen.add(it.name)
+            cleaned.push(it)
+        }
+    })
     return {
         kind: IDLKind.UnionType,
         name: name ?? types.map(it => it.name).join(" or "),
-        types: types
+        types: cleaned
     }
 }
 
