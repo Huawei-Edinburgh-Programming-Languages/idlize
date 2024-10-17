@@ -1,7 +1,48 @@
-import { IDLEntry, IDLInterface, isInterface, isClass, IDLType } from "../../idl"
+import { IDLEntry, IDLInterface, isInterface, isClass } from "../../idl"
 import { IndentedPrinter } from "../../IndentedPrinter"
+import { cStyleCopyright } from "../FileGenerators"
+import * as fs from "fs"
+import * as path from "path"
 
 export class SKoalaDeserializerPrinter {
+    static generateDeserializer(outputDir: string, generatedIDLMap: Map<string, IDLEntry[]>) {
+        let combinedDeserializerPrinter = new IndentedPrinter()
+        
+        combinedDeserializerPrinter.print(cStyleCopyright)
+
+        combinedDeserializerPrinter.print(`#ifndef DESERIALIZER_H`)
+        combinedDeserializerPrinter.print(`#define DESERIALIZER_H`)
+        combinedDeserializerPrinter.print("")
+
+        combinedDeserializerPrinter.print(`#include "DeserializerBase.h"`)
+        combinedDeserializerPrinter.print("")
+        combinedDeserializerPrinter.print(`class Deserializer : public DeserializerBase {`)
+        combinedDeserializerPrinter.print(`public:`)
+        combinedDeserializerPrinter.pushIndent()
+        combinedDeserializerPrinter.print(`Deserializer(uint8_t* data, int32_t length) : DeserializerBase(data, length) {}`)
+        combinedDeserializerPrinter.print(``)
+
+        generatedIDLMap.forEach((entries, fileName) => {
+            const deserializerGenerator = new SKoalaDeserializerPrinter(entries)
+            deserializerGenerator.generateSKoalaDeserializer(combinedDeserializerPrinter)
+            console.log(`Methods added to deserializer for ${fileName}.`)
+        })
+
+        combinedDeserializerPrinter.popIndent()
+        combinedDeserializerPrinter.print("};")
+        combinedDeserializerPrinter.print("")
+        combinedDeserializerPrinter.print("#endif")
+
+        const deserializerCode = combinedDeserializerPrinter.getOutput().join("\n")
+
+        if (deserializerCode.trim()) {
+            const deserializerFilePath = path.join(outputDir, "deserializer.h")
+            fs.writeFileSync(deserializerFilePath, deserializerCode)
+            console.log(`Combined Deserializer generated and saved to: ${deserializerFilePath}`)
+        } else {
+            console.log("No deserializer code generated")
+        }
+    }
     private entries: IDLEntry[]
 
     constructor(entries: IDLEntry[]) {
@@ -35,7 +76,7 @@ export class SKoalaDeserializerPrinter {
                     const readMethod = `read${fieldType}`
                     printer.print(`value.${fieldName} = deserializer.${readMethod}();`)
                 }
-            });
+            })
         }
 
         if (node.constants) {
@@ -62,7 +103,7 @@ export class SKoalaDeserializerPrinter {
             "DOMString": "String",
             "void_": "void",
             "KNativePointer": "NativePointer",
-        }
+        };
 
         return typeMapping[idlType] || idlType
     }
@@ -73,6 +114,13 @@ export class SKoalaDeserializerPrinter {
     }
 
     private getReadMethodForType(type: string): string {
-        return `read${type}`
+        const readMethods: { [key: string]: string } = {
+            "Int32": "readInt32",
+            "Float32": "readFloat32",
+            "Boolean": "readBoolean",
+            "String": "readString",
+        }
+
+        return readMethods[type] || `read${type}`
     }
 }
