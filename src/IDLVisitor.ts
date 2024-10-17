@@ -729,20 +729,14 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
                 isOptional: false
             } as IDLParameter]
         } else {
-            returnType = types.length > 1 ? types[types.length - 1] : IDLVoidType
-            parameters = types
-                .splice(0, types.length > 1 ? types.length - 1 : 1)
-                .filter(it => it != IDLVoidType)
-                .map((it, index) => {
-                    let param = {
+            returnType = types.length > 1 ? types[1] : IDLVoidType
+            parameters = types[0] == IDLVoidType ? [] : [{
                         kind: IDLKind.Parameter,
-                        name: `parameter_${index}`,
-                        type: it,
+                        name: `parameter`,
+                        type: types[0],
                         isVariadic: false,
                         isOptional: false
-                    } as IDLParameter
-                    return param
-                })
+                    } as IDLParameter ]
         }
         let extendedAttributes = isAsync ? [{ name: IDLExtendedAttributes.Async }] : []
         let name = this.generateSyntheticFunctionName(parameters, returnType, isAsync)
