@@ -32,21 +32,18 @@ import { defaultCompilerOptions, toSet } from "./util"
 import { initRNG } from "./rand_utils"
 import { DeclarationTable } from "./peer-generation/DeclarationTable"
 import { PeerLibrary } from "./peer-generation/PeerLibrary"
-import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig";
+import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig"
 import { generateTracker } from "./peer-generation/Tracker"
 import { IdlPeerLibrary } from "./peer-generation/idl/IdlPeerLibrary"
 import { IdlPeerFile } from "./peer-generation/idl/IdlPeerFile"
 import { IdlPeerGeneratorVisitor, IdlPeerProcessor, IdlPredefinedGeneratorVisitor } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
-import { SkoalaCCodeGenerator } from "./peer-generation/printers/SkoalaPrinter"
 import { generateOhos } from "./peer-generation/OhosGenerator"
 import * as webidl2 from "webidl2"
 import { toIDLNode } from "./from-idl/deserialize"
 import { generateArkoala, generateArkoalaFromIdl, generateLibace, generateLibaceFromIdl } from "./peer-generation/arkoala"
 import { Language } from "./Language"
-import { IndentedPrinter } from "./IndentedPrinter"
-import { SKoalaDeserializerPrinter } from "./peer-generation/printers/SKoalaDeserializerPrinter"
-import { cStyleCopyright } from "./peer-generation/FileGenerators"
 import { loadPlugin } from "./peer-generation/plugin-api"
+import { SKoalaDeserializerPrinter } from "./peer-generation/printers/SKoalaDeserializerPrinter"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -151,23 +148,6 @@ if (options.dts2skoala) {
         fs.mkdirSync(outputDir, { recursive: true })
     }
 
-    let combinedDeserializerPrinter = new IndentedPrinter()
-
-    combinedDeserializerPrinter.print(cStyleCopyright)
-
-    combinedDeserializerPrinter.print(`#ifndef DESERIALIZER_H`)
-    combinedDeserializerPrinter.print(`#define DESERIALIZER_H`)
-    combinedDeserializerPrinter.print("")
-
-    combinedDeserializerPrinter.print(`#include "DeserializerBase.h"`)
-    combinedDeserializerPrinter.print("")
-    combinedDeserializerPrinter.print(`class Deserializer : public DeserializerBase {`)
-    combinedDeserializerPrinter.print(`public:`)
-    combinedDeserializerPrinter.pushIndent()
-    combinedDeserializerPrinter.print(`Deserializer(uint8_t* data, int32_t length) : DeserializerBase(data, length) {}`)
-    combinedDeserializerPrinter.print(``)
-
-
     generate(
         options.inputDir.split(','),
         options.inputFile,
@@ -185,41 +165,12 @@ if (options.dts2skoala) {
                 generatedIDLMap.get(fileName)?.push(...entries)
             },
             onEnd: () => {
-                generatedIDLMap.forEach((entries, fileName) => {
-                    const codeGenerator = new SkoalaCCodeGenerator(entries, outputDir, fileName)
-
-                    try {
-                        codeGenerator.generate()
-                        console.log(`Code generation completed for ${fileName}.h`)
-                    
-                        const deserializerGenerator = new SKoalaDeserializerPrinter(entries)
-                        deserializerGenerator.generateSKoalaDeserializer(combinedDeserializerPrinter)
-                        console.log(`Methods added to deserializer for ${fileName}.`)
-                    } catch (error) {
-                        if (error instanceof Error) {
-                            console.error(`Error during code generation for ${fileName}.h: ${error.message}`)
-                        } else {
-                            console.error(`Unknown error during code generation for ${fileName}.h:`, error)
-                        }
-                    }
-                })
-
-                combinedDeserializerPrinter.popIndent()
-                combinedDeserializerPrinter.print("};")
-                combinedDeserializerPrinter.print("")
-
-                combinedDeserializerPrinter.print("#endif")
-
-                const deserializerCode = combinedDeserializerPrinter.getOutput().join("\n")
-
-                if (deserializerCode.trim()) {
-                    const deserializerFilePath = path.join(outputDir, "deserializer.h")
-                    fs.writeFileSync(deserializerFilePath, deserializerCode)
-                    console.log(`Combined Deserializer generated and saved to: ${deserializerFilePath}`)
-                } else {
-                    console.log("No deserializer code generated")
+                try {
+                    SKoalaDeserializerPrinter.generateDeserializer(outputDir, generatedIDLMap)
+                } catch (error) {
+                    console.error("Error during deserializer generation:", error)
                 }
-                
+
                 console.log("All files processed.")
             }
         }
