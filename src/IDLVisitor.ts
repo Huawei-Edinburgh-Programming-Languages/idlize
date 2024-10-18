@@ -122,14 +122,12 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
     globalConstants: IDLConstant[] = []
     globalFunctions: IDLMethod[] = []
     private defaultPackage: string
-    private convertRecordType: boolean
 
     constructor(
         private sourceFile: ts.SourceFile,
         private typeChecker: ts.TypeChecker,
         private options: OptionValues) {
         this.defaultPackage = options.defaultIdlPackage as string ?? "arkui"
-        this.convertRecordType = options.convertRecordType as boolean ?? true
     }
 
     visitWholeFile(): IDLEntry[] {
@@ -818,9 +816,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             // return IDLUndefinedType
         }
         if (type.kind == ts.SyntaxKind.UnknownKeyword) {
-            // TODO: fix this, now we improperly handle that.
             return IDLUnknownType
-            // return createReferenceType("unknown")
         }
         if (type.kind == ts.SyntaxKind.AnyKeyword) {
             return IDLAnyType
@@ -898,7 +894,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             let isEnum = ts.isEnumDeclaration(declaration[0])
             const rawType = sanitize(getExportedDeclarationNameByNode(this.typeChecker, type.typeName))!
             const transformedType = typeMapper.get(rawType) ?? rawType
-            if (rawType == "Array" || rawType == "Promise" || rawType == "Map" || (this.convertRecordType && rawType == "Record")) {
+            if (rawType == "Array" || rawType == "Promise" || rawType == "Map" || rawType == "Record") {
                 return createContainerType(transformedType, type.typeArguments!.map((it, index) => this.serializeType(it, nameSuggestion?.extend(`p${index}`))))
             }
             if (rawType == "Callback" || rawType == "AsyncCallback") {
