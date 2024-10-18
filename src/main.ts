@@ -43,7 +43,7 @@ import { toIDLNode } from "./from-idl/deserialize"
 import { generateArkoala, generateArkoalaFromIdl, generateLibace, generateLibaceFromIdl } from "./peer-generation/arkoala"
 import { Language } from "./Language"
 import { loadPlugin } from "./peer-generation/plugin-api"
-import { SKoalaDeserializerPrinter } from "./peer-generation/printers/SKoalaDeserializerPrinter"
+import { SkoalaDeserializerPrinter } from "./peer-generation/printers/SkoalaDeserializerPrinter"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -168,7 +168,7 @@ if (options.dts2skoala) {
             },
             onEnd: () => {
                 try {
-                    SKoalaDeserializerPrinter.generateDeserializer(outputDir, generatedIDLMap)
+                    SkoalaDeserializerPrinter.generateDeserializer(outputDir, generatedIDLMap)
                 } catch (error) {
                     console.error("Error during deserializer generation:", error)
                 }
