@@ -4,7 +4,7 @@ import { cStyleCopyright } from "../FileGenerators"
 import * as fs from "fs"
 import * as path from "path"
 
-export class SKoalaDeserializerPrinter {
+export class SkoalaDeserializerPrinter {
     static generateDeserializer(outputDir: string, generatedIDLMap: Map<string, IDLEntry[]>) {
         let combinedDeserializerPrinter = new IndentedPrinter()
         
@@ -23,8 +23,8 @@ export class SKoalaDeserializerPrinter {
         combinedDeserializerPrinter.print(``)
 
         generatedIDLMap.forEach((entries, fileName) => {
-            const deserializerGenerator = new SKoalaDeserializerPrinter(entries)
-            deserializerGenerator.generateSKoalaDeserializer(combinedDeserializerPrinter)
+            const deserializerGenerator = new SkoalaDeserializerPrinter(entries)
+            deserializerGenerator.generateSkoalaDeserializer(combinedDeserializerPrinter)
             console.log(`Methods added to deserializer for ${fileName}.`)
         })
 
@@ -49,15 +49,15 @@ export class SKoalaDeserializerPrinter {
         this.entries = entries
     }
 
-    public generateSKoalaDeserializer(printer: IndentedPrinter): void {
+    public generateSkoalaDeserializer(printer: IndentedPrinter): void {
         this.entries.forEach(entry => {
             if (isInterface(entry) || isClass(entry)) {
-                this.visitSKoalaDeserializer(entry as IDLInterface, printer)
+                this.visitSkoalaDeserializer(entry as IDLInterface, printer)
             }
         })
     }
 
-    private visitSKoalaDeserializer(node: IDLInterface, printer: IndentedPrinter): void {
+    private visitSkoalaDeserializer(node: IDLInterface, printer: IndentedPrinter): void {
         const className = `Skoala_${node.name}`
         const deserializerName = `read${node.name}`
         printer.print(`${className} ${deserializerName}(DeserializerBase deserializer) {`)
