@@ -955,7 +955,7 @@ export class MapConvertor extends BaseArgConvertor {
                 printer.makeCast(printer.makeString(`${param}Deserializer.readInt8()`), printer.getRuntimeType()), true),
             printer.makeCondition(printer.makeRuntimeTypeDefinedCheck(runtimeType), new BlockStatement([
                 printer.makeAssign(mapSize, undefined, printer.makeString(`${param}Deserializer.readInt32()`), true),
-                printer.makeMapResize(keyTypeName, valueTypeName, value, mapSize, `${param}Deserializer`),
+                printer.makeMapResize("", keyTypeName, valueTypeName, value, mapSize, `${param}Deserializer`),
                 printer.makeLoop(counterVar, mapSize, new BlockStatement([
                     printer.makeAssign(tmpKey, new Type(keyTypeName), undefined, true, false),
                     this.keyConvertor.convertorDeserialize(param, tmpKey, printer),
@@ -971,7 +971,7 @@ export class MapConvertor extends BaseArgConvertor {
     nativeType(impl: boolean): string {
         const keyTypeName = this.table.computeTypeName(undefined, this.keyType, false, "")
         const valueTypeName = this.table.computeTypeName(undefined, this.valueType, false, "")
-        return `Map_${keyTypeName}_${valueTypeName}`
+        return `LLL3_Map_${keyTypeName}_${valueTypeName}`
     }
     interopType(language: Language): string {
         throw new Error("Must never be used")

@@ -488,7 +488,7 @@ ${structs.getOutput().join("\n")}
 
 ${typedefs.getOutput().join("\n")}
 
-${makeApiHeaders(headers)}
+${headers.join("\n")}
 
 ${makeApiModifiers(modifiers, accessors, events, nodeTypes)}
 
