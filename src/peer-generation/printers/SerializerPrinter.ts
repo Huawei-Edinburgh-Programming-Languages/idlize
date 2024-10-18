@@ -492,7 +492,7 @@ function printIdlImports(library: IdlPeerLibrary, serializerDeclarations: idl.ID
         }
     }
     else if (writer.language === Language.ARKTS) {
-        collector.addFeature("TypeChecker", "#arkui")
+        collector.addFeature("TypeChecker", "#components")
 
         library.files.forEach(peer => peer.serializeImportFeatures
             .forEach(importFeature => collector.addFeature(importFeature.feature, importFeature.module)))
