@@ -855,7 +855,6 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
 
             if (types.find(it => it == IDLVoidType)) {
                 console.log(`WARNING: ${type.getText()} is union with 'void', which is not supported, remove 'void' variant`)
-                // TODO: remove void from union when original SDK is removed from compilation.
                 types = types.filter(it => it != IDLVoidType)
             }
             return typeOrUnion(types, selectedUnionName)

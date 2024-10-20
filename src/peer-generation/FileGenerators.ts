@@ -444,13 +444,6 @@ typedef struct ${PeerGeneratorConfig.cppPrefix}ArkUIAnyAPI {
 `
 }
 
-export function makeApiHeaders(lines: string[]): string {
-    return `
-
-${lines.join("\n")}
-`
-}
-
 const TEMPLATES_CACHE = new Map<string, string>()
 
 function readTemplate(name: string): string {
