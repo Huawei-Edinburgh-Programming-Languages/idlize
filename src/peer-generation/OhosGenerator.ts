@@ -457,6 +457,9 @@ class OHOSVisitor {
                         this.data.push(entry)
                     }
                 }
+                if (isCallback(entry)) {
+                    this.callbacks.push(entry)
+                }
                 entry.scope?.forEach(it => {
                     if (isCallback(it))
                         this.callbacks.push(it)
