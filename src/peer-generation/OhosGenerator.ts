@@ -18,7 +18,7 @@ import * as path from 'path'
 import { IndentedPrinter } from "../IndentedPrinter"
 import { IdlPeerLibrary } from './idl/IdlPeerLibrary'
 import { CppLanguageWriter, createLanguageWriter, FieldModifier, LanguageWriter, Method, MethodSignature, NamedMethodSignature, Type } from './LanguageWriters'
-import { hasExtAttribute, IDLCallback, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLInterface, IDLKind, IDLNumberType, IDLParameter, IDLType, IDLVoidType, isCallback, isClass, isConstructor, isEnum, isEnumType, isInterface, isMethod, isPrimitiveType, isReferenceType, isUnionType } from '../idl'
+import { hasExtAttribute, IDLCallback, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLInterface, IDLKind, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLVoidType, isCallback, isClass, isConstructor, isEnum, isEnumType, isInterface, isMethod, isPrimitiveType, isReferenceType, isUnionType } from '../idl'
 import { readLangTemplate } from './FileGenerators'
 import { capitalize } from '../util'
 import { isMaterialized } from './idl/IdlPeerGeneratorVisitor'
@@ -341,12 +341,13 @@ class OHOSVisitor {
                 const ctors = it.constructors.map(it => ({ parameters: it.parameters, returnType: it.returnType }))
                 if (ctors.length === 0) {
                     ctors.push({
-                        returnType: IDLNumberType,
+                        returnType: IDLNumberType /* unused? */,
                         parameters: []
                     })
                 }
                 ctors.forEach(ctor => {
-                    const signature = writer.makeNamedSignature(IDLNumberType, ctor.parameters)
+                    const signature = writer.makeNamedSignature(IDLPointerType /* ??? */, ctor.parameters)
+                    signature.returnType.name = "pointer" // TODO Better API to construct signature for named type
                     writer.writeNativeMethodDeclaration(`_${it.name}_ctor`, signature)
                 })
             })
