@@ -395,8 +395,8 @@ export class CJTypeAliasConvertor implements TypeConvertor<CJTypeAlias> {
     convertPrimitiveType(type: idl.IDLPrimitiveType): CJTypeAlias {
         switch (type) {
             case idl.IDLStringType: return CJTypeAlias.fromTypeName('String', false)
-            case idl.IDLNumberType: return CJTypeAlias.fromTypeName('double', false)
-            case idl.IDLBooleanType: return CJTypeAlias.fromTypeName('boolean', false)
+            case idl.IDLNumberType: return CJTypeAlias.fromTypeName('Float64', false)
+            case idl.IDLBooleanType: return CJTypeAlias.fromTypeName('Bool', false)
             case idl.IDLUndefinedType: return CJTypeAlias.fromTypeName('Ark_Undefined', false)
             case idl.IDLAnyType: return CJTypeAlias.fromTypeName(ARK_CUSTOM_OBJECT, false)
             case idl.IDLI8Type: return CJTypeAlias.fromTypeName('Int8', false)

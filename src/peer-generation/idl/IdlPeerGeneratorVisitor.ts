@@ -36,9 +36,11 @@ import { PrimitiveType } from "../ArkPrimitiveType"
 import { collapseIdlEventsOverloads } from "../printers/EventsPrinter"
 import { convert } from "./common"
 import { collectJavaImportsForDeclaration } from "../printers/lang/JavaIdlUtils"
+import { collectCJImportsForDeclaration } from "../printers/lang/CJIdlUtils"
 import { ARK_CUSTOM_OBJECT, javaCustomTypeMapping } from "../printers/lang/Java"
 import { Language } from "../../Language"
 import { IDLEntry, IDLEnumType, IDLType } from "../../idl";
+import { cjCustomTypeMapping } from "../printers/lang/Cangjie"
 
 /**
  * Theory of operations.
@@ -439,6 +441,154 @@ class JavaDeclarationCollector extends DeclarationDependenciesCollector {
 }
 
 
+class CJDeclarationCollector extends DeclarationDependenciesCollector {
+    constructor(
+        private readonly library: IdlPeerLibrary,
+        typeDepsCollector: TypeDependenciesCollector,
+    ) {
+        super(typeDepsCollector)
+    }
+
+    convertInterface(decl: idl.IDLInterface): idl.IDLEntry[] {
+        return super.convertInterface(decl)
+    }
+    convertTypedef(decl: idl.IDLTypedef): idl.IDLEntry[] {
+        if (cjCustomTypeMapping.has(decl.name))
+            return []
+        return super.convertTypedef(decl)
+    }
+
+    protected override convertSupertype(type: idl.IDLType): idl.IDLEntry[] {
+        if (idl.isReferenceType(type)) {
+            const decl = this.library.resolveTypeReference(type)
+            return decl && idl.isClass(decl) && this.library.isComponentDeclaration(decl)
+                ? []
+                : super.convertSupertype(type)
+        }
+        throw new Error(`Expected reference type, got ${type.kind} ${type.name}`)
+    }
+}
+
+class CJTypeDependenciesCollector extends TypeDependenciesCollector {
+    constructor(
+        protected readonly library: IdlPeerLibrary,
+        private readonly expandAliases: boolean,
+    ) {
+        super(library)
+    }
+
+    private ignoredTypes: Set<idl.IDLType> = new Set()
+
+    private onNewSyntheticTypeAlias(alias: string, type: idl.IDLType): void {
+        makeSyntheticTypeAliasDeclaration(alias, alias, type)
+    }
+
+    private onNewSyntheticInterface(alias: string, superclassName: string): void {
+        const superClass: idl.IDLInterface = {
+            name: superclassName ?? '',
+            kind: idl.IDLKind.Interface,
+            inheritance: [idl.IDLTopType],
+            constructors: [],
+            constants: [],
+            properties: [],
+            methods: [],
+            callables: [],
+        }
+        const clazz: idl.IDLInterface = {
+            name: alias,
+            kind: idl.IDLKind.Interface,
+            inheritance: [superclassName ? superClass : idl.IDLTopType],
+            constructors: [],
+            constants: [],
+            properties: [],
+            methods: [],
+            callables: [],
+        }
+        this.onNewSyntheticTypeAlias(alias, clazz)
+    }
+
+    private addIgnoredType(type: idl.IDLType): void {
+        this.ignoredTypes.add(type)
+    }
+
+    private ignoredType(type: idl.IDLType): boolean {
+        return this.ignoredTypes.has(type)
+    }
+
+    override convertUnion(type: idl.IDLUnionType): idl.IDLEntry[] {
+        if (!this.ignoredType(type)) {
+            const typeName = this.library.mapType(type)
+            this.onNewSyntheticTypeAlias(typeName, type)
+        }
+
+        return super.convertUnion(type)
+    }
+
+    override convertContainer(type: idl.IDLContainerType): idl.IDLEntry[] {
+        return super.convertContainer(type)
+    }
+
+    override convertEnum(type: idl.IDLEnumType): idl.IDLEntry[] {
+        // TODO: remove prefix after full migration to IDL
+        const enumName = `Ark_${type.name}`
+        this.onNewSyntheticTypeAlias(enumName, type)
+
+        return super.convertEnum(type)
+    }
+
+    override convertImport(type: idl.IDLReferenceType, importClause: string): idl.IDLEntry[] {
+        const generatedName = this.library.mapType(type)
+        if (generatedName != 'Resource') {
+            this.onNewSyntheticInterface(generatedName, ARK_CUSTOM_OBJECT)
+        }
+
+        return super.convertImport(type, importClause)
+    }
+
+    override convertTypeReference(type: idl.IDLReferenceType): idl.IDLEntry[] {
+        if (javaCustomTypeMapping.has(type.name)) {
+            return []
+        }
+
+        const decl = this.library.resolveTypeReference(type)!
+        if (decl && idl.isSyntheticEntry(decl)) {
+            /*if (idl.isCallback(decl)) {
+                return this.callbackType(decl)
+            }*/
+            const entity = idl.getExtAttribute(decl, idl.IDLExtendedAttributes.Entity)
+            if (entity) {
+                const isTuple = entity === idl.IDLEntity.Tuple
+                return this.productType(type, decl as idl.IDLInterface, isTuple, !isTuple)
+            }
+        }
+
+        const declarations = super.convertTypeReference(type)
+        const result = [...declarations]
+        for (const decl of declarations) {
+            // expand type aliaces because we have serialization inside peers methods
+            if (this.expandAliases && idl.isTypedef(decl)) {
+                this.addIgnoredType(decl.type)
+                result.push(...this.convert(decl.type))
+            }
+        }
+        return result
+    }
+
+    // Tuple + ??? AnonymousClass
+    private productType(type: idl.IDLReferenceType, decl: idl.IDLInterface, isTuple: boolean, includeFieldNames: boolean): idl.IDLEntry[] {
+        // TODO: other types
+        if (!isTuple) throw new Error('Only tuples supported from IDL synthetic types for now')
+
+        if (!this.ignoredType(decl)) {
+            const typeName = this.library.mapType(type)
+            this.onNewSyntheticTypeAlias(typeName, decl)
+        }
+
+        return decl.properties.flatMap(it => this.convert(it.type))
+    }
+}
+
+
 class ComponentsCompleter {
     constructor(
         private readonly library: IdlPeerLibrary,
@@ -717,6 +867,7 @@ export class IdlPeerProcessor {
     }
 
     private processMaterialized(decl: idl.IDLInterface) {
+        console.log("processMaterialized")
         const name = decl.name
         if (this.library.materializedClasses.has(name)) {
             return
@@ -731,6 +882,7 @@ export class IdlPeerProcessor {
 
         // TODO: collect imports for Java via serializeDepsCollector
         const importFeatures = this.library.language == Language.JAVA ? collectJavaImportsForDeclaration(decl)
+            : this.library.language == Language.CJ ? collectCJImportsForDeclaration(decl)
             : this.serializeDepsCollector.convert(decl)
             .filter(it => isSourceDecl(it))
             .filter(it => PeerGeneratorConfig.needInterfaces || checkTSDeclarationMaterialized(it) || isSyntheticDeclaration(it))
@@ -961,6 +1113,7 @@ function createDeclDependenciesCollector(library: IdlPeerLibrary, typeDependenci
         case Language.TS: return new FilteredDeclarationCollector(library, typeDependenciesCollector)
         case Language.ARKTS: return new ArkTSDeclarationCollector(typeDependenciesCollector)
         case Language.JAVA: return new JavaDeclarationCollector(library, typeDependenciesCollector)
+        case Language.CJ: return new CJDeclarationCollector(library, typeDependenciesCollector)
     }
     // TODO: support other languages
     return new FilteredDeclarationCollector(library, typeDependenciesCollector)
@@ -972,6 +1125,7 @@ function createSerializeDeclDependenciesCollector(library: IdlPeerLibrary): Decl
         case Language.TS: return new FilteredDeclarationCollector(library, new ImportsAggregateCollector(library, expandAliases))
         case Language.ARKTS: return new ArkTSDeclarationCollector(new ArkTSImportsAggregateCollector(library, expandAliases))
         case Language.JAVA: return new JavaDeclarationCollector(library, new JavaTypeDependenciesCollector(library, expandAliases))
+        case Language.JAVA: return new CJDeclarationCollector(library, new CJTypeDependenciesCollector(library, expandAliases))
     }
     // TODO: support other languages
     return new FilteredDeclarationCollector(library, new ImportsAggregateCollector(library, expandAliases))

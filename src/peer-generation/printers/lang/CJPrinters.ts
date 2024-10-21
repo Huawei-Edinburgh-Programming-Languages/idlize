@@ -52,6 +52,81 @@ export function makeCJNodeTypes(library: PeerLibrary | IdlPeerLibrary): { target
     return { targetFile: new TargetFile(ARK_UI_NODE_TYPE, ARKOALA_PACKAGE_PATH), writer: writer }
 }
 
+export class CJTuple extends IdlSyntheticTypeBase {
+    constructor(source: Object | undefined, readonly name: string, public readonly members: Type[], public readonly imports: ImportFeature[]) {
+        super(source)
+    }
+
+    print(writer: LanguageWriter): void {
+        const memberNames: string[] = this.members.map((_, index) => `value${index}`)
+        writer.writeClass(this.name, () => {
+            for (let i = 0; i < memberNames.length; i++) {
+                writer.writeFieldDeclaration(memberNames[i], this.members[i], [FieldModifier.PUBLIC], false)
+            }
+
+            const signature = new MethodSignature(Type.Void, this.members)
+            writer.writeConstructorImplementation(this.name, signature, () => {
+                for (let i = 0; i < memberNames.length; i++) {
+                    writer.writeStatement(
+                        writer.makeAssign(memberNames[i], this.members[i], writer.makeString(signature.argName(i)), false)
+                    )
+                }
+            })
+        }, ARK_OBJECTBASE)
+    }
+}
+
+export class CJUnion extends IdlSyntheticTypeBase {
+    constructor(source: Object | undefined, public name: string, public readonly members: Type[], public readonly imports: ImportFeature[]) {
+        super(source)
+    }
+
+    print(writer: LanguageWriter): void {
+        writer.writeClass(this.name, () => {
+            const intType = new Type('int')
+            const selector = 'selector'
+            writer.writeFieldDeclaration(selector, intType, [FieldModifier.PRIVATE], false)
+            writer.writeMethodImplementation(new Method('getSelector', new MethodSignature(intType, []), [MethodModifier.PUBLIC]), () => {
+                writer.writeStatement(
+                    writer.makeReturn(
+                        writer.makeString(selector)
+                    )
+                )
+            })
+
+            const param = 'param'
+            for (const [index, memberType] of this.members.entries()) {
+                const memberName = `value${index}`
+                writer.writeFieldDeclaration(memberName, memberType, [FieldModifier.PRIVATE], false)
+
+                writer.writeConstructorImplementation(
+                    this.name,
+                    new NamedMethodSignature(Type.Void, [memberType], [param]),
+                    () => {
+                        writer.writeStatement(
+                            writer.makeAssign(memberName, undefined, writer.makeString(param), false)
+                        )
+                        writer.writeStatement(
+                            writer.makeAssign(selector, undefined, writer.makeString(index.toString()), false)
+                        )
+                    }
+                )
+
+                writer.writeMethodImplementation(
+                    new Method(`getValue${index}`, new MethodSignature(memberType, []), [MethodModifier.PUBLIC]),
+                    () => {
+                        writer.writeStatement(
+                            writer.makeReturn(
+                                writer.makeString(memberName)
+                            )
+                        )
+                    }
+                )
+            }
+        }, ARK_OBJECTBASE)
+    }
+}
+
 export class CJEnum extends IdlSyntheticTypeBase {
     public readonly isStringEnum: boolean
     public readonly members: {

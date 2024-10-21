@@ -548,6 +548,7 @@ function copyArkoalaFiles(config: {
     ])
 }
 
+//
 export function generateArkoalaFromIdl(config: {
             outDir: string,
             arkoalaDestination: string|undefined,
@@ -811,7 +812,6 @@ export function generateArkoalaFromIdl(config: {
             }
         )
 
-        // const nodeTypes = makeJavaNodeTypes(peerLibrary)
         const nodeTypes = makeCJNodeTypes(peerLibrary)
         nodeTypes.writer.printTo(arkoala.cjLib(nodeTypes.targetFile))
 
