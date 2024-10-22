@@ -142,6 +142,7 @@ export class PeerGeneratorConfig {
         "SyncedPropertyOneWay",
         "SyncedPropertyTwoWay",
         "UIExtensionProxy",
+        "IMonitorValue",
     ])
 
     private static ignoredEntriesJava = new Set([
@@ -154,6 +155,15 @@ export class PeerGeneratorConfig {
         "SheetDismiss",
         "SubTabBarStyle",
         "TextPickerDialog",
+    ])
+
+    public static ignoredCallbacks = new Set([
+        // can not support type parameters and varargs
+        "Callback_Args_Void",
+        "Callback_WrappedBuilder_Void",
+        "Callback_AnimatableArithmetic_Void",
+        "Callback_Union_IMonitorValue_Undefined_Void",
+        "Callback_DirectionalEdgesT_Void",
     ])
 
     static ignoreEntry(name: string, language: Language) {
