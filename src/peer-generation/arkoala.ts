@@ -31,7 +31,7 @@ import {
     makeTypeChecker,
     makeCallbacksKinds
 } from "./FileGenerators"
-import { makeCJSerializer } from "./printers/lang/CJPrinters"
+import { makeCJSerializer, makeCJNodeTypes } from "./printers/lang/CJPrinters"
 import { makeJavaArkComponents, makeJavaNodeTypes, makeJavaSerializer } from "./printers/lang/JavaPrinters"
 import { PeerLibrary } from "./PeerLibrary"
 import { printRealAndDummyAccessors, printRealModifiersAsMultipleFiles } from "./printers/ModifierPrinter"
@@ -464,7 +464,7 @@ export function generateArkoala(config: {
         }
 
         const serializer = makeCJSerializer(peerLibrary)
-        serializer.writer.printTo(arkoala.javaLib(serializer.targetFile))
+        serializer.writer.printTo(arkoala.cjLib(serializer.targetFile))
 
         writeFile(
             arkoala.peer(new TargetFile('ArkUINodeType')),
@@ -812,13 +812,14 @@ export function generateArkoalaFromIdl(config: {
         )
 
         // const nodeTypes = makeJavaNodeTypes(peerLibrary)
-        // nodeTypes.writer.printTo(arkoala.cjLib(nodeTypes.targetFile))
+        const nodeTypes = makeCJNodeTypes(peerLibrary)
+        nodeTypes.writer.printTo(arkoala.cjLib(nodeTypes.targetFile))
 
         // const arkComponents = makeJavaArkComponents(peerLibrary, context)
         // arkComponents.writer.printTo(arkoala.javaLib(arkComponents.targetFile))
 
         const serializer = makeCJSerializer(peerLibrary)
-        serializer.writer.printTo(arkoala.javaLib(serializer.targetFile))
+        serializer.writer.printTo(arkoala.cjLib(serializer.targetFile))
     }
 
     // native code

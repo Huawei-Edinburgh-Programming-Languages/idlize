@@ -123,6 +123,16 @@ export class CJLanguageWriter extends LanguageWriter {
         this.popIndent()
         this.printer.print(`}`)
     }
+    writeEnum(name: string, members: { name: string, stringId: string | undefined, numberId: number }[], op: (writer: LanguageWriter) => void): void {
+        this.printer.print(`public enum ${name}{`)
+        this.pushIndent()
+        for (const member of members) {
+            this.print('|'.concat(member.name))
+        }
+        op(this)
+        this.popIndent()
+        this.printer.print(`}`)
+    }
     writeInterface(name: string, op: (writer: LanguageWriter) => void, superInterfaces?: string[]): void {
         let extendsClause = superInterfaces ? ` <: ${superInterfaces.join(" & ")}` : ''
         this.printer.print(`interface ${name}${extendsClause} {`)
@@ -306,6 +316,9 @@ export class CJLanguageWriter extends LanguageWriter {
     runtimeType(param: ArgConvertor, valueType: string, value: string) {
         this.writeStatement(this.makeAssign(valueType, undefined,
             this.makeRuntimeTypeGetterCall(value), false))
+    }
+    makeSerializerCreator() {
+        return this.makeString('createSerializer');
     }
     mapIDLContainerType(type: IDLContainerType, args: string[]): string {
         switch (type.name) {
