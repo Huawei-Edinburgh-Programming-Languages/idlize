@@ -379,7 +379,7 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
                     writer.makeReturn(writer.makeString(value))
                 )
             })
-        }, ARK_OBJECTBASE, [INT_VALUE_GETTER])
+        }, ARK_OBJECTBASE, [INT_VALUE_GETTER + "JavaDeclarationConvertor"])
 
         return new JavaDeclaration(alias, writer)
     }
