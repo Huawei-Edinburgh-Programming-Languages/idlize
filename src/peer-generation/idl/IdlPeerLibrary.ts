@@ -20,7 +20,7 @@ import { IdlComponentDeclaration, isConflictingDeclaration, isMaterialized } fro
 import { IdlPeerFile } from "./IdlPeerFile";
 import { ArkTSTypeNameConvertor, IdlTypeNameConvertor, JavaTypeNameConvertor, TSTypeNameConvertor, CJTypeNameConvertor } from './IdlNameConvertor';
 import { capitalize, isDefined } from '../../util';
-import { AggregateConvertor, ArrayConvertor, CallbackFunctionConvertor, ClassConvertor, EnumConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, MapConvertor, MaterializedClassConvertor, OptionConvertor,  StringConvertor, TupleConvertor, TypeAliasConvertor, UnionConvertor } from './IdlArgConvertors';
+import { AggregateConvertor, ArrayConvertor, CallbackConvertor, ClassConvertor, EnumConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, MapConvertor, MaterializedClassConvertor, OptionConvertor,  StringConvertor, TupleConvertor, TypeAliasConvertor, UnionConvertor } from './IdlArgConvertors';
 import { collectCallbacks, IdlCallbackInfo } from '../printers/EventsPrinter';
 import { PrimitiveType } from "../ArkPrimitiveType"
 import { DependencySorter } from './DependencySorter';
