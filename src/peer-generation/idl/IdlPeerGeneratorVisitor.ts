@@ -25,9 +25,15 @@ import { IdlPeerFile } from "./IdlPeerFile"
 import { IdlPeerLibrary, ArkResource, ArkFunction } from "./IdlPeerLibrary"
 import { MaterializedClass, MaterializedField, MaterializedMethod, SuperElement } from "../Materialized"
 import { Field, FieldModifier, Method, MethodModifier, NamedMethodSignature, Type } from "../LanguageWriters";
-import { convertDeclaration, convertType } from "./IdlTypeConvertor";
+import { convertDeclaration } from "./IdlTypeConvertor";
 import { DeclarationDependenciesCollector, TypeDependenciesCollector } from "./IdlDependenciesCollector";
-import { addSyntheticDeclarationDependency, isSyntheticDeclaration, makeSyntheticTypeAliasDeclaration, syntheticDeclarationFilename } from "./IdlSyntheticDeclarations";
+import {
+    addSyntheticDeclarationDependency,
+    makeSyntheticDeclCompletely,
+    isSyntheticDeclaration,
+    makeSyntheticTypeAliasDeclaration,
+    syntheticDeclarationFilename
+} from "./IdlSyntheticDeclarations";
 import { initCustomBuilderClasses, BuilderClass, isCustomBuilderClass, BuilderMethod, BuilderField } from "../BuilderClass";
 import { isRoot } from "../inheritance";
 import { ImportFeature } from "../ImportsCollector";
@@ -39,7 +45,7 @@ import { collectJavaImportsForDeclaration } from "../printers/lang/JavaIdlUtils"
 import { collectCJImportsForDeclaration } from "../printers/lang/CJIdlUtils"
 import { ARK_CUSTOM_OBJECT, javaCustomTypeMapping } from "../printers/lang/Java"
 import { Language } from "../../Language"
-import { IDLEntry, IDLEnumType, IDLType } from "../../idl";
+import { createInterfaceDeclName } from "../TypeNodeNameConvertor";
 import { cjCustomTypeMapping } from "../printers/lang/Cangjie"
 
 /**
@@ -899,6 +905,23 @@ export class IdlPeerProcessor {
         const signature = generateSignature(this.library, method)
         const modifiers = idl.isConstructor(method) || method.isStatic ? [MethodModifier.STATIC] : []
         return new BuilderMethod(new Method(methodName, signature, modifiers/*, generics*/), [])
+    }
+    private collectDeclDependencies(decl: idl.IDLEntry): ImportFeature[] {
+        let importFeatures: ImportFeature[]
+        if (this.library.language == Language.JAVA) {
+            // TODO: collect imports for Java via serializeDepsCollector
+            importFeatures = collectJavaImportsForDeclaration(decl)
+        } else {
+            importFeatures = this.serializeDepsCollector.convert(decl)
+                .filter(it => isSourceDecl(it))
+                .filter(it => {
+                    return PeerGeneratorConfig.needInterfaces
+                        || checkTSDeclarationMaterialized(it)
+                        || isSyntheticDeclaration(it)
+                })
+                .map(it => convertDeclToFeature(this.library, it))
+        }
+        return importFeatures
     }
 
     private processMaterialized(decl: idl.IDLInterface) {
