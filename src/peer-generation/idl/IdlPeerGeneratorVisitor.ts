@@ -284,9 +284,9 @@ class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
 class ArkTSDeclarationCollector extends DeclarationDependenciesCollector {
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// Java
-///////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+//                         JAVA                               //
+////////////////////////////////////////////////////////////////
 
 class JavaTypeDependenciesCollector extends TypeDependenciesCollector {
     constructor(
@@ -441,6 +441,10 @@ class JavaDeclarationCollector extends DeclarationDependenciesCollector {
 }
 
 
+////////////////////////////////////////////////////////////////
+//                         CANGJIE                            //
+////////////////////////////////////////////////////////////////
+
 class CJDeclarationCollector extends DeclarationDependenciesCollector {
     constructor(
         private readonly library: IdlPeerLibrary,
@@ -546,7 +550,7 @@ class CJTypeDependenciesCollector extends TypeDependenciesCollector {
     }
 
     override convertTypeReference(type: idl.IDLReferenceType): idl.IDLEntry[] {
-        if (javaCustomTypeMapping.has(type.name)) {
+        if (cjCustomTypeMapping.has(type.name)) {
             return []
         }
 
@@ -1103,6 +1107,7 @@ function createTypeDependenciesCollector(library: IdlPeerLibrary): TypeDependenc
         case Language.TS: return new ImportsAggregateCollector(library, false)
         case Language.ARKTS: return new ArkTSImportsAggregateCollector(library, true)
         case Language.JAVA: return new JavaTypeDependenciesCollector(library, true)
+        case Language.CJ: return new CJTypeDependenciesCollector(library, true)
     }
     // TODO: support other languages
     return new ImportsAggregateCollector(library, false)

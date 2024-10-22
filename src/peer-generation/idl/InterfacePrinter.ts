@@ -622,10 +622,13 @@ class CJInterfacesVisitor extends DefaultInterfacesVisitor {
        super()
     }
 
+    // here we write everything
     printInterfaces() {
         const declarationConverter = new CJDeclarationConvertor(this.peerLibrary, (declaration: CJDeclaration) => {
             this.interfaces.set(declaration.targetFile, declaration.writer)
         })
+
+        
         for (const file of this.peerLibrary.files.values()) {
             file.declarations.forEach(it => convertDeclaration(declarationConverter, it))
         }
@@ -694,46 +697,46 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
 
         const members = type.types.map(it => new Type(this.peerLibrary.mapType(it), false) )
         writer.writeClass(alias, () => {
-        //     const intType = new Type('int')
-        //     const selector = 'selector'
-        //     writer.writeFieldDeclaration(selector, intType, [FieldModifier.PRIVATE], false)
-        //     writer.writeMethodImplementation(new Method('getSelector', new MethodSignature(intType, []), [MethodModifier.PUBLIC]), () => {
-        //         writer.writeStatement(
-        //             writer.makeReturn(
-        //                 writer.makeString(selector)
-        //             )
-        //         )
-        //     })
+            const intType = new Type('Int32')
+            const selector = 'selector'
+            writer.writeFieldDeclaration(selector, intType, [FieldModifier.PRIVATE], false)
+            writer.writeMethodImplementation(new Method('getSelector', new MethodSignature(intType, []), [MethodModifier.PUBLIC]), () => {
+                writer.writeStatement(
+                    writer.makeReturn(
+                        writer.makeString(selector)
+                    )
+                )
+            })
 
-        //     const param = 'param'
-        //     for (const [index, memberType] of members.entries()) {
-        //         const memberName = `value${index}`
-        //         writer.writeFieldDeclaration(memberName, memberType, [FieldModifier.PRIVATE], false)
+            const param = 'param'
+            for (const [index, memberType] of members.entries()) {
+                const memberName = `value${index}`
+                writer.writeFieldDeclaration(memberName, memberType, [FieldModifier.PRIVATE], false)
 
-        //         writer.writeConstructorImplementation(
-        //             alias,
-        //             new NamedMethodSignature(Type.Void, [memberType], [param]),
-        //             () => {
-        //                 writer.writeStatement(
-        //                     writer.makeAssign(memberName, undefined, writer.makeString(param), false)
-        //                 )
-        //                 writer.writeStatement(
-        //                     writer.makeAssign(selector, undefined, writer.makeString(index.toString()), false)
-        //                 )
-        //             }
-        //         )
+                writer.writeConstructorImplementation(
+                    'init',
+                    new NamedMethodSignature(Type.Void, [memberType], [param]),
+                    () => {
+                        writer.writeStatement(
+                            writer.makeAssign(memberName, undefined, writer.makeString(param), false)
+                        )
+                        writer.writeStatement(
+                            writer.makeAssign(selector, undefined, writer.makeString(index.toString()), false)
+                        )
+                    }
+                )
 
-        //         writer.writeMethodImplementation(
-        //             new Method(`getValue${index}`, new MethodSignature(memberType, []), [MethodModifier.PUBLIC]),
-        //             () => {
-        //                 writer.writeStatement(
-        //                     writer.makeReturn(
-        //                         writer.makeString(memberName)
-        //                     )
-        //                 )
-        //             }
-        //         )
-        //     }
+                writer.writeMethodImplementation(
+                    new Method(`getValue${index}`, new MethodSignature(memberType, []), [MethodModifier.PUBLIC]),
+                    () => {
+                        writer.writeStatement(
+                            writer.makeReturn(
+                                writer.makeString(memberName)
+                            )
+                        )
+                    }
+                )
+            }
         }, ARK_OBJECTBASE)
 
         return new CJDeclaration(alias, writer)
@@ -767,63 +770,63 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
         const writer = createLanguageWriter(Language.CJ)
         this.printPackage(writer)
 
-        // const enumDecl = this.peerLibrary.resolveTypeReference(type) as idl.IDLEnum
-        // const initializers = enumDecl.elements.map(it => {
-        //     return {name: it.name, id: isNaN(parseInt(it.initializer as string, 10)) ? it.initializer : parseInt(it.initializer as string, 10)}
-        // })
+        const enumDecl = this.peerLibrary.resolveTypeReference(type) as idl.IDLEnum
+        const initializers = enumDecl.elements.map(it => {
+            return {name: it.name, id: isNaN(parseInt(it.initializer as string, 10)) ? it.initializer : parseInt(it.initializer as string, 10)}
+        })
 
-        // const isStringEnum = initializers.every(it => typeof it.id == 'string')
-        // // TODO: string enums
-        // if (isStringEnum) {
-        //     throw new Error(`String enums (${alias}) not supported yet in CJ`)
-        // }
+        const isStringEnum = initializers.every(it => typeof it.id == 'string')
+        // TODO: string enums
+        if (isStringEnum) {
+            throw new Error(`String enums (${alias}) not supported yet in CJ`)
+        }
 
-        // let memberValue = 0
-        // const members: {
-        //     name: string,
-        //     stringId: string | undefined,
-        //     numberId: number,
-        // }[] = []
-        // for (const initializer of initializers) {
-        //     if (typeof initializer.id == 'string') {
-        //         members.push({name: initializer.name, stringId: initializer.id, numberId: memberValue})
-        //     }
-        //     else if (typeof initializer.id == 'number') {
-        //         memberValue = initializer.id
-        //         members.push({name: initializer.name, stringId: undefined, numberId: memberValue})
-        //     }
-        //     else {
-        //         members.push({name: initializer.name, stringId: undefined, numberId: memberValue})
-        //     }
-        //     memberValue += 1
-        // }
+        let memberValue = 0
+        const members: {
+            name: string,
+            stringId: string | undefined,
+            numberId: number,
+        }[] = []
+        for (const initializer of initializers) {
+            if (typeof initializer.id == 'string') {
+                members.push({name: initializer.name, stringId: initializer.id, numberId: memberValue})
+            }
+            else if (typeof initializer.id == 'number') {
+                memberValue = initializer.id
+                members.push({name: initializer.name, stringId: undefined, numberId: memberValue})
+            }
+            else {
+                members.push({name: initializer.name, stringId: undefined, numberId: memberValue})
+            }
+            memberValue += 1
+        }
 
-        // writer.writeClass(alias, () => {
-        //     const enumType = new Type(alias)
-        //     members.forEach(it => {
-        //         writer.writeFieldDeclaration(it.name, enumType, [FieldModifier.PUBLIC, FieldModifier.STATIC, FieldModifier.FINAL], false,
-        //             writer.makeString(`${alias}(${it.numberId})`)
-        //         )
-        //     })
+        writer.writeClass(alias, () => {
+            const enumType = new Type(alias)
+            members.forEach(it => {
+                writer.writeFieldDeclaration(it.name, enumType, [FieldModifier.PUBLIC, FieldModifier.STATIC, FieldModifier.FINAL], false,
+                    writer.makeString(`${alias}(${it.numberId})`)
+                )
+            })
 
-        //     const value = 'value'
-        //     const intType = new Type('int')
-        //     writer.writeFieldDeclaration(value, intType, [FieldModifier.PUBLIC, FieldModifier.FINAL], false)
+            const value = 'value'
+            const intType = new Type('int')
+            writer.writeFieldDeclaration(value, intType, [FieldModifier.PUBLIC, FieldModifier.FINAL], false)
 
-        //     const signature = new MethodSignature(Type.Void, [intType])
-        //     writer.writeConstructorImplementation(alias, signature, () => {
-        //         writer.writeStatement(
-        //             writer.makeAssign(value, undefined, writer.makeString(signature.argName(0)), false)
-        //         )
-        //     })
+            const signature = new MethodSignature(Type.Void, [intType])
+            writer.writeConstructorImplementation(alias, signature, () => {
+                writer.writeStatement(
+                    writer.makeAssign(value, undefined, writer.makeString(signature.argName(0)), false)
+                )
+            })
 
-        //     const getIntValue = new Method('getIntValue', new MethodSignature(intType, []), [MethodModifier.PUBLIC])
-        //     writer.writeMethodImplementation(getIntValue, () => {
-        //         writer.writeStatement(
-        //             writer.makeReturn(writer.makeString(value))
-        //         )
-        //     })
-        // }, ARK_OBJECTBASE, [INT_VALUE_GETTER])
+            const getIntValue = new Method('getIntValue', new MethodSignature(intType, []), [MethodModifier.PUBLIC])
+            writer.writeMethodImplementation(getIntValue, () => {
+                writer.writeStatement(
+                    writer.makeReturn(writer.makeString(value))
+                )
+            })
+        }, ARK_OBJECTBASE, [INT_VALUE_GETTER])
 
         return new CJDeclaration(alias, writer)
     }
@@ -899,7 +902,7 @@ export function createDeclarationConvertor(writer: LanguageWriter, peerLibrary: 
 function getTargetFile(filename: string, language: Language): TargetFile {
     if ([Language.TS, Language.ARKTS].includes(language)) return new TargetFile(`${filename}${language.extension}`)
     if (language == Language.JAVA) return new TargetFile(`${filename}${language.extension}`, ARKOALA_PACKAGE_PATH)
-    if (language == Language.CJ) return new TargetFile(`${filename}${language.extension}`)
+    if (language == Language.CJ) return new TargetFile(`${filename}${language.extension}`, '')
     throw new Error(`FakeDeclarations: need to add support for ${language}`)
 }
 
@@ -909,6 +912,7 @@ export function printFakeDeclarations(library: IdlPeerLibrary): Map<TargetFile, 
     if (![Language.TS, Language.JAVA, Language.CJ].includes(lang)) {
         return result
     }
+    console.log()
     for (const [filename, {dependencies, declarations}] of makeSyntheticDeclarationsFiles()) {
         const writer = createLanguageWriter(lang)
         const imports = new ImportsCollector()
