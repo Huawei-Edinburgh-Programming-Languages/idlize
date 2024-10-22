@@ -919,18 +919,8 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             if (isEnum) {
                 return createReferenceType(transformedType)
             }
-            if (rawType == "Callback") {
-                const typeArgumentsLength = type.typeArguments?.length ?? 0
-                const callback = this.serializeSyntheticFunctionType(
-                    type.getSourceFile().fileName,
-                    typeArgumentsLength > 0 && type.typeArguments![0].kind != ts.SyntaxKind.VoidKeyword
-                        ? [ts.factory.createParameterDeclaration(undefined, undefined, 'value', undefined, type.typeArguments![0])]
-                        : [],
-                    typeArgumentsLength > 1 ? type.typeArguments![1] : ts.factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword),
-                    nameSuggestion,
-                )
-                this.addSyntheticType(callback)
-                return createReferenceType(callback.name)
+            if (rawType == "Optional") {
+                return createUnionType([this.serializeType(type.typeArguments![0], nameSuggestion), IDLUndefinedType])
             }
             return createReferenceType(transformedType, this.mapTypeArgs(type.typeArguments, transformedType));
         }

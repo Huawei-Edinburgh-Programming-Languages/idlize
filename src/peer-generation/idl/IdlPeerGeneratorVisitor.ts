@@ -22,7 +22,7 @@ import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { IdlPeerClass } from "./IdlPeerClass"
 import { IdlPeerMethod } from "./IdlPeerMethod"
 import { IdlPeerFile } from "./IdlPeerFile"
-import { IdlPeerLibrary, ArkResource, ArkFunction } from "./IdlPeerLibrary"
+import { IdlPeerLibrary, ArkResource, ArkFunction, ArkCustomObject } from "./IdlPeerLibrary"
 import { MaterializedClass, MaterializedField, MaterializedMethod, SuperElement } from "../Materialized"
 import { Field, FieldModifier, Method, MethodModifier, NamedMethodSignature, Type } from "../LanguageWriters";
 import { convertDeclaration, convertType } from "./IdlTypeConvertor";
@@ -257,6 +257,9 @@ class FilteredDeclarationCollector extends DeclarationDependenciesCollector {
             return decl && idl.isClass(decl) && this.library.isComponentDeclaration(decl)
                 ? []
                 : super.convertSupertype(type)
+        }
+        if (type == idl.IDLAnyType) {
+            return []
         }
         throw new Error(`Expected reference type, got ${type.kind} ${type.name}`)
     }
