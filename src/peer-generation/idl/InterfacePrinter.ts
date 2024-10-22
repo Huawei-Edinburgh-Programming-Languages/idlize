@@ -908,9 +908,6 @@ function getTargetFile(filename: string, language: Language): TargetFile {
 export function printFakeDeclarations(library: IdlPeerLibrary): Map<TargetFile, string> {///copied from FakeDeclarationsPrinter
     const lang = library.language
     const result = new Map<TargetFile, string>()
-    if (![Language.TS, Language.JAVA, Language.CJ].includes(lang)) {
-        return result
-    }
     for (const [filename, {dependencies, declarations}] of makeSyntheticDeclarationsFiles()) {
         const writer = createLanguageWriter(lang)
         const imports = new ImportsCollector()
