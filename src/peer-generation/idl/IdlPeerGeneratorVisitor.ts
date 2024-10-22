@@ -871,7 +871,6 @@ export class IdlPeerProcessor {
     }
 
     private processMaterialized(decl: idl.IDLInterface) {
-        console.log("processMaterialized")
         const name = decl.name
         if (this.library.materializedClasses.has(name)) {
             return
@@ -1130,7 +1129,7 @@ function createSerializeDeclDependenciesCollector(library: IdlPeerLibrary): Decl
         case Language.TS: return new FilteredDeclarationCollector(library, new ImportsAggregateCollector(library, expandAliases))
         case Language.ARKTS: return new ArkTSDeclarationCollector(new ArkTSImportsAggregateCollector(library, expandAliases))
         case Language.JAVA: return new JavaDeclarationCollector(library, new JavaTypeDependenciesCollector(library, expandAliases))
-        case Language.JAVA: return new CJDeclarationCollector(library, new CJTypeDependenciesCollector(library, expandAliases))
+        case Language.CJ: return new CJDeclarationCollector(library, new CJTypeDependenciesCollector(library, expandAliases))
     }
     // TODO: support other languages
     return new FilteredDeclarationCollector(library, new ImportsAggregateCollector(library, expandAliases))

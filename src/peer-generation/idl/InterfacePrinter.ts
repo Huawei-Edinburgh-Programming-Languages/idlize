@@ -861,10 +861,10 @@ function getVisitor(peerLibrary: IdlPeerLibrary, context: PrinterContext): Inter
     if (context.language == Language.ARKTS) {
         return new ArkTSInterfacesVisitor(peerLibrary)
     }
-    throwException(`Need to implement InterfacesVisitor for ${context.language} language`)
     if (context.language == Language.CJ) {
         return new CJInterfacesVisitor(peerLibrary)
     }
+    throwException(`Need to implement InterfacesVisitor for ${context.language} language`)
 }
 
 export function printInterfaces(peerLibrary: IdlPeerLibrary, context: PrinterContext): Map<TargetFile, string> {
@@ -892,11 +892,10 @@ export function createDeclarationConvertor(writer: LanguageWriter, peerLibrary: 
     if (writer.language === Language.ARKTS) {
         return new ArkTSDeclConvertor(writer, peerLibrary)
     }
-    throwException(`Need to implement DeclarationConvertor for ${writer.language} language`)
     if (writer.language === Language.CJ) {
         return new CJDeclarationConvertor(peerLibrary, decl => writer.concat(decl.writer))
     }
-    throwException("new ArkTSDeclConvertor(writer, peerLibrary)")
+    throwException(`Need to implement DeclarationConvertor for ${writer.language} language`)
 }
 
 function getTargetFile(filename: string, language: Language): TargetFile {
@@ -912,7 +911,6 @@ export function printFakeDeclarations(library: IdlPeerLibrary): Map<TargetFile, 
     if (![Language.TS, Language.JAVA, Language.CJ].includes(lang)) {
         return result
     }
-    console.log()
     for (const [filename, {dependencies, declarations}] of makeSyntheticDeclarationsFiles()) {
         const writer = createLanguageWriter(lang)
         const imports = new ImportsCollector()
