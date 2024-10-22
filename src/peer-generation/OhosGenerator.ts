@@ -490,9 +490,10 @@ class OHOSVisitor {
         this.hWriter.writeLines(readLangTemplate('ohos_api_prologue.h', Language.CPP))
 
         this.writeTypes(this.library.orderedDependenciesToGenerate)
-        writeSerializer(this.library, this.hWriter)
-        writeDeserializer(this.library, this.hWriter)
-
+        const prefix = `${PrimitiveType.Prefix}${this.libraryName}_` // TODO better generate it directly in serializer
+        writeSerializer(this.library, this.cppWriter, prefix)
+        writeDeserializer(this.library, this.cppWriter, prefix)
+        
         let writer = new CppLanguageWriter(new IndentedPrinter())
         this.writeModifiers(writer)
         this.writeImpls()

@@ -198,10 +198,9 @@ class IdlSerializerPrinter {
         this.library.setCurrentContext(undefined)
     }
 
-    print() {
+    print(prefix: string) {
         const className = "Serializer"
         const superName = `${className}Base`
-        let prefix = ""
         let ctorSignature: NamedMethodSignature | undefined = undefined
         switch (this.writer.language) {
             case Language.ARKTS:
@@ -209,7 +208,7 @@ class IdlSerializerPrinter {
                 break;
             case Language.CPP:
                 ctorSignature = new NamedMethodSignature(Type.Void, [new Type("uint8_t*")], ["data"])
-                prefix = PrimitiveType.Prefix
+                prefix = prefix == "" ? PrimitiveType.Prefix : prefix
                 break;
             case Language.JAVA:
                 ctorSignature = new NamedMethodSignature(Type.Void, [], [])
@@ -435,14 +434,13 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
         })
     }
 
-    print() {///converge w/ Ts printers
+    print(prefix: string) {///converge w/ Ts printers
         const className = "Deserializer"
         const superName = `${className}Base`
         let ctorSignature: NamedMethodSignature | undefined = undefined
-        let prefix = ""
         if (this.writer.language == Language.CPP) {
             ctorSignature = new NamedMethodSignature(Type.Void, [new Type("uint8_t*"), Type.Int32], ["data", "length"])
-            prefix = PrimitiveType.Prefix
+            prefix = prefix === "" ? PrimitiveType.Prefix : prefix
         }
         const serializerDeclarations = getSerializers(this.library)
         printIdlImports(this.library, serializerDeclarations, this.writer)
@@ -463,16 +461,16 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
     }
 }
 
-export function writeSerializer(library: PeerLibrary | IdlPeerLibrary, writer: LanguageWriter) {
+export function writeSerializer(library: PeerLibrary | IdlPeerLibrary, writer: LanguageWriter, prefix = "") {
     const printer = library instanceof PeerLibrary
         ? new SerializerPrinter(library, writer) : new IdlSerializerPrinter(library, writer)
-    printer.print()
+    printer.print(prefix)
 }
 
-export function writeDeserializer(library: PeerLibrary | IdlPeerLibrary, writer: LanguageWriter) {
+export function writeDeserializer(library: PeerLibrary | IdlPeerLibrary, writer: LanguageWriter, prefix = "") {
     const printer = library instanceof PeerLibrary
         ? new DeserializerPrinter(library as PeerLibrary, writer) : new IdlDeserializerPrinter(library, writer)
-    printer.print()
+    printer.print(prefix)
 }
 
 interface SerializerDependenciesCollector {
