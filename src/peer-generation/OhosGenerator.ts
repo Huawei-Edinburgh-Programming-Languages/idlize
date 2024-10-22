@@ -18,13 +18,14 @@ import * as path from 'path'
 import { IndentedPrinter } from "../IndentedPrinter"
 import { IdlPeerLibrary } from './idl/IdlPeerLibrary'
 import { CppLanguageWriter, createLanguageWriter, ExpressionStatement, FieldModifier, LanguageWriter, Method, MethodSignature, NamedMethodSignature, Type } from './LanguageWriters'
-import { hasExtAttribute, IDLCallback, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLInterface, IDLKind, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLVoidType, isCallback, isClass, isConstructor, isEnum, isEnumType, isInterface, isMethod, isPrimitiveType, isReferenceType, isUnionType } from '../idl'
+import { hasExtAttribute, IDLCallback, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLInterface, IDLKind, IDLMethod, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLVoidType, isCallback, isClass, isConstructor, isEnum, isEnumType, isInterface, isMethod, isPrimitiveType, isReferenceType, isUnionType } from '../idl'
 import { makeSerializer, readLangTemplate } from './FileGenerators'
 import { capitalize } from '../util'
 import { isMaterialized } from './idl/IdlPeerGeneratorVisitor'
 import { PrimitiveType } from './ArkPrimitiveType'
 import { Language } from '../Language'
 import { ArgConvertor } from './ArgConvertors'
+import { writeDeserializer, writeSerializer } from './printers/SerializerPrinter'
 
 class NameType {
     constructor(public name: string, public type: string) {}
@@ -33,6 +34,7 @@ class NameType {
 interface SignatureDescriptor {
     params: NameType[]
     returnType: string
+    paramsCString?: string
 }
 
 class OHOSVisitor {
@@ -132,10 +134,13 @@ class OHOSVisitor {
             }
             params = params.concat(method.parameters.map(it => new NameType(_h.escapeKeyword(it.name), this.mapType(it.type!))))
             let returnType = this.mapType(method.returnType)
-            _h.print(`${returnType} (*${method.name})(${params.map(it => `${it.type} ${it.name}`).join(", ")});`)
+            const maybeCallback = false
+            const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param, maybeCallback))
+            const args = generateCParameters(method, argConvertors, _h)
+            _h.print(`${returnType} (*${method.name})(${args});`)
             let implName = `${clazz.name}_${method.name}Impl`
             _c.print(`&${implName},`)
-            this.impls.set(implName, { params, returnType })
+            this.impls.set(implName, { params, returnType, paramsCString: args })
         })
         clazz.properties.forEach(property => {
             let returnType = `${this.mapType(property.type)}`
@@ -173,7 +178,7 @@ class OHOSVisitor {
     private writeImpls() {
         let _ = this.cppWriter
         this.impls.forEach((signature, name) => {
-            _.print(`${signature.returnType} ${name}(${signature.params.map(it => `${it.type} ${it.name}`).join(", ")}) {`)
+            _.print(`${signature.returnType} ${name}(${signature.paramsCString ?? signature.params.map(it => `${it.type} ${it.name}`).join(", ")}) {`)
             _.pushIndent()
             if (signature.returnType != "void")
                 _.print('return 0;')
@@ -370,8 +375,6 @@ class OHOSVisitor {
                 })
             })
         })
-
-        // this.nativeWriter.concat(makeSerializer(this.library)) // TODO fix imports and add SerializerBase
     }
 
     private printPeer() {
@@ -487,6 +490,8 @@ class OHOSVisitor {
         this.hWriter.writeLines(readLangTemplate('ohos_api_prologue.h', Language.CPP))
 
         this.writeTypes(this.library.orderedDependenciesToGenerate)
+        writeSerializer(this.library, this.hWriter)
+        writeDeserializer(this.library, this.hWriter)
 
         let writer = new CppLanguageWriter(new IndentedPrinter())
         this.writeModifiers(writer)
@@ -499,6 +504,9 @@ class OHOSVisitor {
 
     execute(outDir: string, managedOutDir: string) {
         PrimitiveType.Prefix = "OH_"
+        PrimitiveType.UndefinedTag = "OH_TAG_UNDEFINED"
+        PrimitiveType.UndefinedRuntime = "OH_RUNTIME_UNDEFINED"
+        PrimitiveType.ObjectTag = "OH_TAG_OBJECT"
 
         if (this.library.files.length == 0)
             throw new Error("No files in library")
@@ -587,4 +595,22 @@ export function generateOhos(outDir: string, peerLibrary: IdlPeerLibrary): void 
 function generateArgConvertor(library: IdlPeerLibrary, param: IDLParameter, maybeCallback: boolean): ArgConvertor {
     if (!param.type) throw new Error("Type is needed")
     return library.typeConvertor(param.name, param.type, param.isOptional, maybeCallback)
+}
+
+// TODO join with generateCParameters(BridgeCcPrinter.ts)
+function generateCParameters(method: IDLMethod, argConvertors: ArgConvertor[], writer: LanguageWriter): string {
+    let args = [`${PrimitiveType.NativePointer.getText()} thisPtr`]
+    let ptrCreated = false;
+    for (let i = 0; i < argConvertors.length; ++i) {
+        let it = argConvertors[i]
+        if (it.useArray) {
+            if (!ptrCreated) {
+                args.push(`uint8_t* thisArray, int32_t thisLength`)
+                ptrCreated = true
+            }
+        } else {
+            args.push(`${writer.mapIDLType(method.parameters[i].type!)} ${method.parameters[i].name}`)
+        }
+    }
+    return args.join(", ")
 }
