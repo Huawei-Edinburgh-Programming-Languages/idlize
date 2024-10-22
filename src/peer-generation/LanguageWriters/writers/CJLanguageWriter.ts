@@ -431,5 +431,8 @@ export class CJLanguageWriter extends LanguageWriter {
     escapeKeyword(word: string): string {
         return CJKeywords.has(word) ? word + "_" : word
     }
+    override makeEnumCast(convertor: ArgConvertor, enumName: string, _unsafe?: boolean): string {
+        return `${enumName}.getIntValue()`
+    }
     override castToBoolean(value: string): string { return `${value}` }
 }

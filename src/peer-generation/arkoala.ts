@@ -26,7 +26,6 @@ import {
     mesonBuildFile,
     copyToLibace,
     libraryCcDeclaration,
-    makeCJSerializer,
     makeTypeCheckerFromDTS,
     makeTypeChecker,
     makeCallbacksKinds
