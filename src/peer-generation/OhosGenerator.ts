@@ -609,7 +609,7 @@ function generateCParameters(method: IDLMethod, argConvertors: ArgConvertor[], w
                 ptrCreated = true
             }
         } else {
-            args.push(`${writer.mapIDLType(method.parameters[i].type!)} ${method.parameters[i].name}`)
+            args.push(`${writer.mapIDLType(method.parameters[i].type!)} ${writer.escapeKeyword(method.parameters[i].name)}`)
         }
     }
     return args.join(", ")
