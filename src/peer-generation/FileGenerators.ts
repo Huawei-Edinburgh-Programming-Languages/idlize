@@ -274,7 +274,7 @@ export function accessorStructList(lines: LanguageWriter): LanguageWriter {
     return result
 }
 
-export function makeTSSerializer(library: PeerLibrary | IdlPeerLibrary): LanguageWriter {
+export function makeTSSerializer(library: PeerLibrary | IdlPeerLibrary, prefix?: string, declarationPath?: string): LanguageWriter {
     let printer = createLanguageWriter(library.language)
     printer.writeLines(cStyleCopyright)
     const imports = new ImportsCollector()
@@ -290,17 +290,17 @@ export function makeTSSerializer(library: PeerLibrary | IdlPeerLibrary): Languag
         imports.addFeatures(["CallbackKind"], "CallbackKind")
     }
     imports.print(printer, '')
-    writeSerializer(library, printer)
+    writeSerializer(library, printer, prefix, declarationPath)
     printer.writeLines(`
 export function createSerializer(): Serializer { return new Serializer() }
 `)
     return printer
 }
 
-export function makeSerializer(library: PeerLibrary | IdlPeerLibrary): LanguageWriter {
+export function makeSerializerForOhos(library: PeerLibrary | IdlPeerLibrary, declarationPath?: string): LanguageWriter {
     // TODO Add Java and migrate arkoala code
     if (library.language == Language.TS || library.language == Language.ARKTS) {
-        return makeTSSerializer(library)
+        return makeTSSerializer(library, undefined, declarationPath)
     } else {
         throw new Error(`unsupported language ${library.language}`)
     }

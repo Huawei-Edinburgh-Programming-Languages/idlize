@@ -36,6 +36,8 @@ import { collectProperties } from '../idl/StructPrinter';
 import { TSTypeNameConvertor } from '../idl/IdlNameConvertor';
 import { ProxyStatement } from '../LanguageWriters/LanguageWriter';
 import { CallbackKind } from './CallbacksPrinter';
+import { convertDeclaration } from '../idl/IdlTypeConvertor';
+import { DeclarationNameConvertor } from '../idl/IdlNameConvertor';
 
 type SerializableTarget = idl.IDLInterface | idl.IDLCallback
 
@@ -198,7 +200,7 @@ class IdlSerializerPrinter {
         this.library.setCurrentContext(undefined)
     }
 
-    print(prefix: string) {
+    print(prefix: string, declarationPath?: string) {
         const className = "Serializer"
         const superName = `${className}Base`
         let ctorSignature: NamedMethodSignature | undefined = undefined
@@ -215,7 +217,7 @@ class IdlSerializerPrinter {
                 break;
         }
         const serializerDeclarations = getSerializers(this.library)
-        printIdlImports(this.library, serializerDeclarations, this.writer)
+        printIdlImports(this.library, serializerDeclarations, this.writer, declarationPath)
         // just a separator
         this.writer.print("")
         this.writer.writeClass(className, writer => {
@@ -434,7 +436,7 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
         })
     }
 
-    print(prefix: string) {///converge w/ Ts printers
+    print(prefix: string, declarationPath?: string) {///converge w/ Ts printers
         const className = "Deserializer"
         const superName = `${className}Base`
         let ctorSignature: NamedMethodSignature | undefined = undefined
@@ -443,7 +445,7 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
             prefix = prefix === "" ? PrimitiveType.Prefix : prefix
         }
         const serializerDeclarations = getSerializers(this.library)
-        printIdlImports(this.library, serializerDeclarations, this.writer)
+        printIdlImports(this.library, serializerDeclarations, this.writer, declarationPath)
         this.writer.print("")
         this.writer.writeClass(className, writer => {
             if (ctorSignature) {
@@ -461,16 +463,16 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
     }
 }
 
-export function writeSerializer(library: PeerLibrary | IdlPeerLibrary, writer: LanguageWriter, prefix = "") {
+export function writeSerializer(library: PeerLibrary | IdlPeerLibrary, writer: LanguageWriter, prefix = "", declarationPath?: string) {
     const printer = library instanceof PeerLibrary
         ? new SerializerPrinter(library, writer) : new IdlSerializerPrinter(library, writer)
-    printer.print(prefix)
+    printer.print(prefix, declarationPath)
 }
 
-export function writeDeserializer(library: PeerLibrary | IdlPeerLibrary, writer: LanguageWriter, prefix = "") {
+export function writeDeserializer(library: PeerLibrary | IdlPeerLibrary, writer: LanguageWriter, prefix = "", declarationPath?: string) {
     const printer = library instanceof PeerLibrary
         ? new DeserializerPrinter(library as PeerLibrary, writer) : new IdlDeserializerPrinter(library, writer)
-    printer.print(prefix)
+    printer.print(prefix, declarationPath)
 }
 
 interface SerializerDependenciesCollector {
@@ -590,7 +592,7 @@ function isParameterized(node: idl.IDLEntry) {
         || ["Record", "Required"].includes(node.name!)
 }
 
-function printIdlImports(library: IdlPeerLibrary, serializerDeclarations: SerializableTarget[], writer: LanguageWriter) {
+function printIdlImports(library: IdlPeerLibrary, serializerDeclarations: SerializableTarget[], writer: LanguageWriter, declarationPath?: string) {
     const collector = new ImportsCollector()
 
     if (writer.language === Language.TS) {
@@ -600,6 +602,19 @@ function printIdlImports(library: IdlPeerLibrary, serializerDeclarations: Serial
 
         for (let builder of library.builderClasses.keys()) {
             collector.addFeature(builder, `Ark${builder}Builder`)
+        }
+
+        if (declarationPath) {
+            // TODO Check for compatibility!
+            const makeFeature = (node: idl.IDLEntry) => {
+                return {
+                    feature: convertDeclaration(DeclarationNameConvertor.I, node),
+                    module: `./${declarationPath}` // TODO resolve
+                }
+            }
+            serializerDeclarations.filter(it => it.fileName)
+                .map(makeFeature)
+                .forEach(it => collector.addFeature(it.feature, it.module))
         }
     }
     else if (writer.language === Language.ARKTS) {
@@ -618,5 +633,6 @@ function printIdlImports(library: IdlPeerLibrary, serializerDeclarations: Serial
         }
     }
 
-    collector.print(writer, `./peers/Serializer.${writer.language.extension}`)
+    // TODO Refactor to remove dependency on hardcoded paths
+    collector.print(writer, (declarationPath ? "." : "./peers/") + `Serializer.${writer.language.extension}`)
 }

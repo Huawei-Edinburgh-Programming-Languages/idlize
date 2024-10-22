@@ -19,7 +19,7 @@ import { IndentedPrinter } from "../IndentedPrinter"
 import { IdlPeerLibrary } from './idl/IdlPeerLibrary'
 import { CppLanguageWriter, createLanguageWriter, ExpressionStatement, FieldModifier, LanguageWriter, Method, MethodSignature, NamedMethodSignature, Type } from './LanguageWriters'
 import { hasExtAttribute, IDLCallback, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLInterface, IDLKind, IDLMethod, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLVoidType, isCallback, isClass, isConstructor, isEnum, isEnumType, isInterface, isMethod, isPrimitiveType, isReferenceType, isUnionType } from '../idl'
-import { makeSerializer, readLangTemplate } from './FileGenerators'
+import { makeSerializerForOhos, readLangTemplate } from './FileGenerators'
 import { capitalize } from '../util'
 import { isMaterialized } from './idl/IdlPeerGeneratorVisitor'
 import { PrimitiveType } from './ArkPrimitiveType'
@@ -577,7 +577,7 @@ class OHOSVisitor {
         this.hWriter.printTo(path.join(outDir, "xml.h"))
         this.cppWriter.printTo(path.join(outDir, "xml.cc"))
 
-        const serializerText = makeSerializer(this.library).getOutput().join("\n") // TODO fix imports and add SerializerBase
+        const serializerText = makeSerializerForOhos(this.library, "xmlNative").getOutput().join("\n") // TODO fix imports and add SerializerBase
         fs.writeFileSync(path.join(managedOutDir, `${this.libraryName.toLowerCase()}${this.library.language.extension}`), peerText, 'utf-8')
         fs.writeFileSync(path.join(managedOutDir, `${this.libraryName.toLowerCase()}Serializer${this.library.language.extension}`), serializerText, 'utf-8')
         fs.writeFileSync(path.join(managedOutDir, `types.ts`), readLangTemplate(`types${this.library.language.extension}`, this.library.language))
