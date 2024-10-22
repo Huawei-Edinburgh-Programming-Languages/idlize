@@ -285,7 +285,7 @@ export function makeTSSerializer(library: PeerLibrary | IdlPeerLibrary): string 
         imports.addFeatures(["CallbackKind"], "CallbackKind")
     } 
     if (printer.language == Language.ARKTS) {
-        imports.addFeatures(["nativeModule"], "#components")
+        imports.addFeatures(["NativeModule"], "#components")
     }
     imports.print(printer, '')
     writeSerializer(library, printer)
