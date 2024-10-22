@@ -374,6 +374,8 @@ class OHOSVisitor {
                     writer.writeNativeMethodDeclaration(`_${it.name}_ctor`, signature)
                 })
             })
+            writer.writeNativeMethodDeclaration("_GetManagerCallbackCaller",
+                    writer.makeNamedSignature(IDLPointerType, []))
         })
     }
 
