@@ -906,7 +906,7 @@ export class IdlPeerProcessor {
         const modifiers = idl.isConstructor(method) || method.isStatic ? [MethodModifier.STATIC] : []
         return new BuilderMethod(new Method(methodName, signature, modifiers/*, generics*/), [])
     }
-    private collectDeclDependencies(decl: idl.IDLEntry): ImportFeature[] {
+    private collectDeclDependencies(decl: idl.IDLInterface): ImportFeature[] {
         let importFeatures: ImportFeature[]
         if (this.library.language == Language.JAVA) {
             // TODO: collect imports for Java via serializeDepsCollector
@@ -921,11 +921,29 @@ export class IdlPeerProcessor {
                 })
                 .map(it => convertDeclToFeature(this.library, it))
         }
+        // self-interface is not supported ArkTS
+        if (idl.isInterface(decl) && this.library.language === Language.ARKTS) {
+            importFeatures.push(convertDeclToFeature(this.library,
+                makeSyntheticDeclCompletely(
+                    decl,
+                    {
+                        ...decl,
+                        name: createInterfaceDeclName(decl.name)
+                    } as idl.IDLInterface,
+                    this.library,
+                    this.declDependenciesCollector,
+                    'SyntheticDeclarations'
+                )))
+        }
         return importFeatures
     }
 
     private processMaterialized(decl: idl.IDLInterface) {
         const name = decl.name
+        // ArkICurveMaterialized does not work correctly with ICurve interface, ignore it until it is fixed.
+        if (this.library.language === Language.ARKTS && "ICurve" === name) {
+            return
+        }
         if (this.library.materializedClasses.has(name)) {
             return
         }
@@ -944,6 +962,8 @@ export class IdlPeerProcessor {
             .filter(it => isSourceDecl(it))
             .filter(it => PeerGeneratorConfig.needInterfaces || checkTSDeclarationMaterialized(it) || isSyntheticDeclaration(it))
             .map(it => convertDeclToFeature(this.library, it))
+        const importFeatures = this.collectDeclDependencies(decl)
+        const isDeclInterface = idl.isInterface(decl)
         const generics = idl.getExtAttribute(decl, idl.IDLExtendedAttributes.TypeParameters)?.split(",")
 
         const constructor = idl.isClass(decl) ? decl.constructors[0] : undefined
@@ -982,7 +1002,7 @@ export class IdlPeerProcessor {
             }
         })
         this.library.materializedClasses.set(name,
-            new MaterializedClass(name, idl.isInterface(decl), superClass, generics,
+            new MaterializedClass(name, isDeclInterface, superClass, generics,
                 mFields, mConstructor, mFinalizer, importFeatures, mMethods))
     }
 
