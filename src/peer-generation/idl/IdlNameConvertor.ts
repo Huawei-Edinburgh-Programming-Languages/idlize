@@ -366,7 +366,7 @@ export class CJTypeAliasConvertor implements TypeConvertor<CJTypeAlias> {
         switch (type.name) {
             case "sequence": {
                 const cjTypeAlias = convertType(this, type.elementType[0])
-                return new CJTypeAlias(new Type(`${cjTypeAlias.type}[]`), `Array_${cjTypeAlias.alias}`)
+                return new CJTypeAlias(new Type(`ArrayList<${cjTypeAlias.type}>`), `Array_${cjTypeAlias.alias}`)
             }
             case "record": {
                 const cjTypeAliases = type.elementType.slice(0, 2).map(it => convertType(this, it)).map(this.maybeConvertPrimitiveType, this)
