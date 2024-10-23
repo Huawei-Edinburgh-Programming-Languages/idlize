@@ -22,7 +22,7 @@ export function makeSyntheticDeclaration(targetFilename: string, declName: strin
         syntheticDeclarations.set(declName, {node: factory(), filename: targetFilename, dependencies: []})
     const decl = syntheticDeclarations.get(declName)!
     if (decl.filename !== targetFilename)
-        throw "Two declarations with same name were declared"
+        throw new Error("Two declarations with same name were declared")
     return decl.node
 }
 
