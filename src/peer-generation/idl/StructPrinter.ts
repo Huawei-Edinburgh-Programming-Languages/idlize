@@ -152,7 +152,7 @@ export class StructPrinter {
                             break
                     }
                 } else if (idl.isCallback(target)) {
-                    concreteDeclarations.print(`Ark_CallbackResource resource;`)
+                    concreteDeclarations.print(`${PrimitiveType.Prefix}CallbackResource resource;`)
                     const args = generateCallbackAPIArguments(this.library, target)
                     concreteDeclarations.print(`void (*call)(${args.join(', ')});`)
                 }

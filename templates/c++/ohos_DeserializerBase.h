@@ -106,6 +106,25 @@ struct Error
 };
 
 template <>
+inline void WriteToString(std::string *result, const OH_Number *value)
+{
+  result->append("{.tag=" + std::to_string(value->tag) + ", ");
+
+  if (value->tag == OH_TAG_FLOAT32)
+  {
+    // print with precision 2 digits after dot
+    std::string fv = std::to_string(value->f32);
+    size_t i = fv.find(".");
+    fv = (i != std::string::npos && (i + 3) < fv.length()) ? fv.substr(0, i + 3) : fv;
+    result->append(".f32=" + fv);
+  } else {
+    result->append(".i32=" + std::to_string(value->i32));
+  }
+
+  result->append("}");
+}
+
+template <>
 inline void WriteToString(std::string *result, OH_Tag value)
 {
   result->append(".tag=");
@@ -140,6 +159,17 @@ inline void WriteToString(std::string *result, const OH_Function* value)
   result->append("}");
 }
 */
+
+template <>
+inline void WriteToString(std::string *result, const OH_Materialized *value)
+{
+  char hex[20];
+  std::snprintf(hex, sizeof(hex), "0x%llx", (long long)value->ptr);
+  result->append("\"");
+  result->append("Materialized ");
+  result->append(hex);
+  result->append("\"");
+}
 
 class DeserializerBase;
 
@@ -335,6 +365,27 @@ public:
     // this->position += length;
     return result;
   }
+
+  OH_Number readNumber()
+  {
+    check(5);
+    OH_Number result;
+    result.tag = readTag();
+    if (result.tag == OH_Tag::OH_TAG_INT32)
+    {
+      result.i32 = readInt32();
+    }
+    else if (result.tag == OH_Tag::OH_TAG_FLOAT32)
+    {
+      result.f32 = readFloat32();
+    }
+    else
+    {
+      fprintf(stderr, "Bad number tag %d\n", result.tag);
+      throw "Unknown number tag";
+    }
+    return result;
+  }
 /*
   OH_Function readFunction()
   {
@@ -348,7 +399,16 @@ public:
     return OH_Undefined();
   }
 */
-  OH_CallbackResource readCallbackResource() {
+
+  OH_Materialized readMaterialized()
+  {
+    OH_Materialized result;
+    result.ptr = readPointer();
+    return result;
+  }
+
+  OH_CallbackResource readCallbackResource()
+  {
     OH_CallbackResource result = {};
     // TODO implement CallbackResource
     return result;

@@ -26,6 +26,7 @@ import { PrimitiveType } from './ArkPrimitiveType'
 import { Language } from '../Language'
 import { ArgConvertor } from './ArgConvertors'
 import { writeDeserializer, writeSerializer } from './printers/SerializerPrinter'
+import { generateCallbackAPIArguments } from './idl/StructPrinter'
 
 class NameType {
     constructor(public name: string, public type: string) {}
@@ -91,9 +92,16 @@ class OHOSVisitor {
     }
 
     private writeCallback(callback: IDLCallback) {
+        // TODO commonize with StructPrinter.ts
+        const callbackTypeName = `${PrimitiveType.Prefix}${this.libraryName}_${callback.name}`;
+        const args = generateCallbackAPIArguments(this.library, callback)
         let _ = this.hWriter
-        // Stub for now, fix.
-        _.print(`typedef void* ${PrimitiveType.Prefix}${this.libraryName}_${callback.name};`)
+        _.print(`typedef struct ${callbackTypeName} {`)
+        _.pushIndent()
+        _.print(`${PrimitiveType.Prefix}CallbackResource resource;`)
+        _.print(`void (*call)(${args.join(', ')});`)
+        _.popIndent()
+        _.print(`} ${callbackTypeName};`)
     }
 
     private impls = new Map<string, SignatureDescriptor>()
@@ -527,6 +535,10 @@ class OHOSVisitor {
 
         console.log(`GENERATE OHOS API for ${this.libraryName}`)
 
+        this.library.continuationCallbacks.forEach(cc => {
+            this.callbacks.push(cc)
+        })
+
         this.library.files.forEach(file => {
             file.entries.forEach(entry => {
                 this.requestTypes(entry)
@@ -547,10 +559,6 @@ class OHOSVisitor {
                         this.callbacks.push(it)
                 })
             })
-        })
-
-        this.library.continuationCallbacks.forEach(cc => {
-            this.callbacks.push(cc)
         })
 
         const callbackInterfaceNames = new Set<string>()

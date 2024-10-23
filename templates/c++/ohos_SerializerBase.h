@@ -69,17 +69,17 @@ public:
         position += 4;
     }
 
-    // void writeNumber(OH_Number value) {
-    //     writeInt8(value.tag);
-    //     if (value.tag == OH_Tag::OH_TAG_INT32) {
-    //         writeInt32(value.i32);
-    //     } else if (value.tag == OH_Tag::OH_TAG_FLOAT32) {
-    //         writeFloat32(value.f32);
-    //     } else {
-    //         fprintf(stderr, "Bad number tag %d\n", value.tag);
-    //         throw "Unknown number tag";
-    //     }
-    // }
+    void writeNumber(OH_Number value) {
+        writeInt8(value.tag);
+        if (value.tag == OH_Tag::OH_TAG_INT32) {
+            writeInt32(value.i32);
+        } else if (value.tag == OH_Tag::OH_TAG_FLOAT32) {
+            writeFloat32(value.f32);
+        } else {
+            fprintf(stderr, "Bad number tag %d\n", value.tag);
+            throw "Unknown number tag";
+        }
+    }
 
     void writeString(OH_String value) {
         // TODO implement string
@@ -98,10 +98,9 @@ public:
     }
 
     void writeCallbackResource(const OH_CallbackResource resource) {
-        // TODO implement OH_CallbackResource
-        // writeInt32(resource.resourceId);
-        // writePointer(reinterpret_cast<void*>(resource.hold));
-        // writePointer(reinterpret_cast<void*>(resource.release));
+        writeInt32(resource.resourceId);
+        writePointer(reinterpret_cast<void*>(resource.hold));
+        writePointer(reinterpret_cast<void*>(resource.release));
     }
 
 /*
@@ -117,12 +116,11 @@ public:
     void writeCustomObject(std::string type, OH_CustomObject value) {
         // TODO implement
     }
-
+*/
     void writeMaterialized(OH_Materialized value) {
         // There should be no need to pass accessors back from native code
         throw "Trying to pass materialized class back from native code -- is that really needed?";
     }
-*/
 };
 
 #endif // _SERIALIZER_BASE_H

@@ -59,8 +59,20 @@ typedef const char* OH_CharPtr;
 typedef void* OH_NativePointer;
 typedef const char* OH_String;
 typedef struct OH_CallbackResource {
-  void* _todo;
+  OH_Int32 resourceId;
+  void (*hold)(OH_Int32 resourceId);
+  void (*release)(OH_Int32 resourceId);
 } OH_CallbackResource;
+typedef struct OH_Number {
+  OH_Int8 tag;
+  union {
+    OH_Float32 f32;
+    OH_Int32 i32;
+  };
+} OH_Number;
+typedef struct OH_Materialized {
+  OH_NativePointer ptr;
+} OH_Materialized;
 
 // TODO: wrong, provide real definitions.
 typedef void* OH_ArrayBuffer;

@@ -39,7 +39,7 @@ export function isStringEnum(decl: idl.IDLEnum): boolean {
 export function qualifiedName(decl: idl.IDLEntry, language: Language): string {
     const namespace = idl.getExtAttribute(decl, idl.IDLExtendedAttributes.Namespace)
     const prefix = namespace
-        ? namespace + (language === Language.CPP ? '_' : '.')
+        ? (language === Language.CPP ? namespace.toUpperCase() + '_' : namespace + '.') // TODO check format and test if it can be used as a replacement for library name
         : ""
     return prefix + decl.name
 }
