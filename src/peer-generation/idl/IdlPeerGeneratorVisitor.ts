@@ -878,15 +878,17 @@ export class IdlPeerProcessor {
         const fields = target.properties.map(it => this.toBuilderField(it))
         const constructors = target.constructors.map(method => this.toBuilderMethod(method))
         const methods = this.getBuilderMethods(target)
-        // this is necessary because getBuilderMethods embeds supertype types
-        methods.forEach(method => {
-            method.method.signature.args.forEach(it => {
-                const type = this.library.resolveTypeReference(idl.createReferenceType(it.name))
-                if (type !== undefined) {
-                    importFeatures.push(convertDeclToFeature(this.library, type))
-                }
+        if (this.library.language === Language.ARKTS) {
+            // this is necessary because getBuilderMethods embeds supertype types
+            methods.forEach(method => {
+                method.method.signature.args.forEach(it => {
+                    const type = this.library.resolveTypeReference(idl.createReferenceType(it.name))
+                    if (type !== undefined) {
+                        importFeatures.push(convertDeclToFeature(this.library, type))
+                    }
+                })
             })
-        })
+        }
         return new BuilderClass(name, undefined, isIface, undefined, fields, constructors, methods, importFeatures)
     }
 
