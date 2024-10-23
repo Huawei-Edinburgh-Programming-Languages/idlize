@@ -874,10 +874,20 @@ export class IdlPeerProcessor {
 
     private toBuilderClass(name: string, target: idl.IDLInterface) {
         const isIface = idl.isInterface(target)
+        const importFeatures = this.collectDeclDependencies(target)
         const fields = target.properties.map(it => this.toBuilderField(it))
         const constructors = target.constructors.map(method => this.toBuilderMethod(method))
         const methods = this.getBuilderMethods(target)
-        return new BuilderClass(name, undefined, isIface, undefined, fields, constructors, methods, [])
+        // this is necessary because getBuilderMethods embeds supertype types
+        methods.forEach(method => {
+            method.method.signature.args.forEach(it => {
+                const type = this.library.resolveTypeReference(idl.createReferenceType(it.name))
+                if (type !== undefined) {
+                    importFeatures.push(convertDeclToFeature(this.library, type))
+                }
+            })
+        })
+        return new BuilderClass(name, undefined, isIface, undefined, fields, constructors, methods, importFeatures)
     }
 
     private toBuilderField(prop: idl.IDLProperty): BuilderField {
@@ -906,7 +916,7 @@ export class IdlPeerProcessor {
         const modifiers = idl.isConstructor(method) || method.isStatic ? [MethodModifier.STATIC] : []
         return new BuilderMethod(new Method(methodName, signature, modifiers/*, generics*/), [])
     }
-    private collectDeclDependencies(decl: idl.IDLInterface): ImportFeature[] {
+    private collectDeclDependencies(decl: idl.IDLEntry): ImportFeature[] {
         let importFeatures: ImportFeature[]
         if (this.library.language == Language.JAVA) {
             // TODO: collect imports for Java via serializeDepsCollector
@@ -1090,7 +1100,7 @@ export class IdlPeerProcessor {
     }
 
     process(): void {
-        initCustomBuilderClasses()
+        initCustomBuilderClasses(this.library.language)
         new ComponentsCompleter(this.library).process()
         const peerGenerator = new PeersGenerator(this.library)
         for (const component of this.library.componentsDeclarations)
