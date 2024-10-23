@@ -27,7 +27,7 @@ import { isBuilderClass, isMaterialized } from "./IdlPeerGeneratorVisitor"
 import { cleanPrefix, IdlPeerLibrary } from "./IdlPeerLibrary"
 
 export function generateCallbackAPIArguments(library: IdlPeerLibrary, callback: idl.IDLCallback): string[] {
-    const args: string[] = [`const Ark_Int32 resourceId`]
+    const args: string[] = [`const ${PrimitiveType.Int32.getText()} resourceId`]
     args.push(...callback.parameters.map(it => {
         const target = library.toDeclaration(it.type!)
         const type = library.typeConvertor(it.name, it.type!, it.isOptional)

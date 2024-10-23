@@ -520,7 +520,7 @@ export class CallbackConvertor extends BaseArgConvertor {
             `${param}Deserializer.read${this.library.computeTargetName(this.decl, false, "")}()`), false)
     }
     nativeType(impl: boolean): string {
-        return PrimitiveType.Prefix + this.decl.name
+        return PrimitiveType.Prefix + PrimitiveType.LibraryPrefix + this.decl.name
     }
     isPointerType(): boolean {
         return true

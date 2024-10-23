@@ -519,15 +519,11 @@ class OHOSVisitor {
     }
 
     execute(outDir: string, managedOutDir: string) {
-        PrimitiveType.Prefix = "OH_"
-        PrimitiveType.UndefinedTag = "OH_TAG_UNDEFINED"
-        PrimitiveType.UndefinedRuntime = "OH_RUNTIME_UNDEFINED"
-        PrimitiveType.ObjectTag = "OH_TAG_OBJECT"
-
         if (this.library.files.length == 0)
             throw new Error("No files in library")
 
         this.libraryName = this.library.files[0].packageName().toUpperCase()
+        PrimitiveType.LibraryPrefix = this.libraryName + "_" // TODO Keep it with other prefix setup code
 
         console.log(`GENERATE OHOS API for ${this.libraryName}`)
 
@@ -551,6 +547,10 @@ class OHOSVisitor {
                         this.callbacks.push(it)
                 })
             })
+        })
+
+        this.library.continuationCallbacks.forEach(cc => {
+            this.callbacks.push(cc)
         })
 
         const callbackInterfaceNames = new Set<string>()

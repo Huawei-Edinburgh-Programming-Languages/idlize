@@ -348,6 +348,11 @@ public:
     return OH_Undefined();
   }
 */
+  OH_CallbackResource readCallbackResource() {
+    OH_CallbackResource result = {};
+    // TODO implement CallbackResource
+    return result;
+  }
 };
 
 inline void WriteToString(std::string *result, OH_Boolean value)

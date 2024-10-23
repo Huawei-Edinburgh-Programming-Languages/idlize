@@ -44,6 +44,7 @@ import { generateArkoala, generateArkoalaFromIdl, generateLibace, generateLibace
 import { Language } from "./Language"
 import { loadPlugin } from "./peer-generation/plugin-api"
 import { SkoalaDeserializerPrinter } from "./peer-generation/printers/SkoalaDeserializerPrinter"
+import { PrimitiveType } from "./peer-generation/ArkPrimitiveType"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -294,6 +295,14 @@ if (options.dts2peer) {
 
     if (options.idl) {
         options.docs = "all"
+
+        // This setup code placed here because wrong prefix may be cached during library creation
+        // TODO find better place for setup?
+        PrimitiveType.Prefix = "OH_"
+        PrimitiveType.UndefinedTag = "OH_TAG_UNDEFINED"
+        PrimitiveType.UndefinedRuntime = "OH_RUNTIME_UNDEFINED"
+        PrimitiveType.ObjectTag = "OH_TAG_OBJECT"
+
         const idlLibrary = new IdlPeerLibrary(lang, toSet(options.generateInterface))
         // collect predefined files
         scanPredefinedDirectory(idlLibrary, PREDEFINED_PATH)
