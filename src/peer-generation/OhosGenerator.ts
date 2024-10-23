@@ -19,7 +19,7 @@ import { IndentedPrinter } from "../IndentedPrinter"
 import { IdlPeerLibrary } from './idl/IdlPeerLibrary'
 import { CppLanguageWriter, createLanguageWriter, ExpressionStatement, FieldModifier, LanguageWriter, Method, MethodSignature, NamedMethodSignature, Type } from './LanguageWriters'
 import { hasExtAttribute, IDLCallback, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLInterface, IDLKind, IDLMethod, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLVoidType, isCallback, isClass, isConstructor, isEnum, isEnumType, isInterface, isMethod, isPrimitiveType, isReferenceType, isUnionType } from '../idl'
-import { makeSerializerForOhos, readLangTemplate } from './FileGenerators'
+import { makeCallbacksKinds, makeSerializerForOhos, readLangTemplate } from './FileGenerators'
 import { capitalize } from '../util'
 import { isMaterialized } from './idl/IdlPeerGeneratorVisitor'
 import { PrimitiveType } from './ArkPrimitiveType'
@@ -329,6 +329,7 @@ class OHOSVisitor {
                 })
             })
         })
+        this.nativeWriter.writeLines(makeCallbacksKinds(this.library, this.library.language))
         this.data.forEach(data => {
             this.nativeWriter.writeClass(data.name, writer => {
                 data.properties.forEach(prop => {
@@ -374,7 +375,11 @@ class OHOSVisitor {
                 })
             })
             writer.writeNativeMethodDeclaration("_GetManagerCallbackCaller",
-                    writer.makeNamedSignature(IDLPointerType, []))
+                NamedMethodSignature.make(
+                    writer.mapIDLType(IDLPointerType),
+                    [{ name: "kind", type: "CallbackKind" }]
+                )
+            )
         })
     }
 
