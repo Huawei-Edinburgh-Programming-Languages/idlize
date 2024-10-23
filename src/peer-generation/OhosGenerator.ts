@@ -316,7 +316,7 @@ class OHOSVisitor {
             if (this.library.language === Language.TS) {
                 const params = callback.parameters.map(it => `${it.name}:${this.nativeWriter.mapIDLType(it.type!)}`).join(', ')
                 const returnTypeName = this.nativeWriter.mapIDLType(callback.returnType)
-                this.nativeWriter.print(`type ${callback.name} = (${params}) => ${returnTypeName}`)
+                this.nativeWriter.print(`export type ${callback.name} = (${params}) => ${returnTypeName}`)
             }
         })
         this.callbackInterfaces.forEach(int => {
@@ -487,8 +487,14 @@ class OHOSVisitor {
     }
 
     private printC() {
-        this.cppWriter.writeLines(readLangTemplate('api_impl_prologue.cc', Language.CPP))
-        this.hWriter.writeLines(readLangTemplate('ohos_api_prologue.h', Language.CPP))
+        this.cppWriter.writeLines(
+            readLangTemplate('api_impl_prologue.cc', Language.CPP)
+                .replaceAll("%API_HEADER_PATH%", `${this.libraryName.toLowerCase()}.h`)
+        )
+        this.hWriter.writeLines(
+            readLangTemplate('ohos_api_prologue.h', Language.CPP)
+                .replaceAll("%INCLUDE_GUARD_DEFINE%", `OH_${this.libraryName.toUpperCase()}_H`)
+        )
 
         this.writeTypes(this.library.orderedDependenciesToGenerate)
         const prefix = `${PrimitiveType.Prefix}${this.libraryName}_` // TODO better generate it directly in serializer
@@ -500,7 +506,10 @@ class OHOSVisitor {
         this.writeImpls()
         this.cppWriter.concat(writer)
 
-        this.hWriter.writeLines(readLangTemplate('ohos_api_epilogue.h', Language.CPP))
+        this.hWriter.writeLines(
+            readLangTemplate('ohos_api_epilogue.h', Language.CPP)
+                .replaceAll("%INCLUDE_GUARD_DEFINE%", `OH_${this.libraryName.toUpperCase()}_H`)
+        )
         this.cppWriter.writeLines(readLangTemplate('api_impl_epilogue.cc', Language.CPP))
     }
 
