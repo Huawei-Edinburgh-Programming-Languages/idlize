@@ -18,7 +18,6 @@ import * as idl from '../../idl';
 const syntheticDeclarations: Map<string, {node: idl.IDLEntry, filename: string, dependencies: ImportFeature[]}> = new Map()
 
 export function makeSyntheticDeclaration(targetFilename: string, declName: string, factory: () => idl.IDLEntry): idl.IDLEntry {
-    // console.log(declName, "+============================================")
     if (!syntheticDeclarations.has(declName))
         syntheticDeclarations.set(declName, {node: factory(), filename: targetFilename, dependencies: []})
     const decl = syntheticDeclarations.get(declName)!

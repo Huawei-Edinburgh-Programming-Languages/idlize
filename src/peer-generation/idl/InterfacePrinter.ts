@@ -685,15 +685,14 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
     }
 
     private printPackage(writer: LanguageWriter): void {
-        writer.print(`package idlize;\n`)
+        writer.print(`package idlize\n`)
     }
 
     private makeUnion(alias: string, type: idl.IDLUnionType): CJDeclaration {
         const writer = createLanguageWriter(Language.CJ)
         this.printPackage(writer)
 
-
-        writer.print('import std.collection.*')
+        writer.print('import std.collection.*\n')
 
         const members = type.types.map(it => new Type(this.peerLibrary.mapType(it), false) )
         writer.writeClass(alias, () => {
@@ -770,6 +769,8 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
       const writer = createLanguageWriter(Language.CJ)
         this.printPackage(writer)
 
+        writer.print('import std.collection.*\n')
+
         const initializers = enumDecl.elements.map(it => {
             return {name: it.name, id: isNaN(parseInt(it.initializer as string, 10)) ? it.initializer : parseInt(it.initializer as string, 10)}
         })
@@ -804,7 +805,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
             })
 
             const value = 'value'
-            const intType = new Type('int')
+            const intType = new Type('int32')
             writer.writeFieldDeclaration(value, intType, [FieldModifier.PUBLIC, FieldModifier.FINAL], false)
 
             const signature = new MethodSignature(Type.Void, [intType])
@@ -828,6 +829,8 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
     private makeInterface(alias: string, type: idl.IDLInterface): CJDeclaration {
         const writer = createLanguageWriter(Language.CJ)
         this.printPackage(writer)
+
+        writer.print('import std.collection.*\n')
 
         // TODO: *Attribute classes are empty for now
         const members = this.peerLibrary.isComponentDeclaration(type) ? []
