@@ -634,9 +634,11 @@ class IdlTSEventsVisitor extends TSEventsVisitorBase {
         return this.library.mapType(type)
     }
 
-    protected override printParseFunction(infos: (CallbackInfo | IdlCallbackInfo)[]): void {
-        if (this.library.language !== Language.ARKTS)
-            super.printParseFunction(infos)
+    protected printParseFunction(infos: (CallbackInfo | IdlCallbackInfo)[]) {
+        // Disable event functions printing until deserializer is ready
+        if (this.library.language !== Language.ARKTS) {
+            super.printParseFunction(infos);
+        }
     }
 }
 
