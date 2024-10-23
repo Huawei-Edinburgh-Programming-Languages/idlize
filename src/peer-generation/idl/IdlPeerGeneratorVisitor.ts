@@ -911,7 +911,9 @@ export class IdlPeerProcessor {
         if (this.library.language == Language.JAVA) {
             // TODO: collect imports for Java via serializeDepsCollector
             importFeatures = collectJavaImportsForDeclaration(decl)
-        } else {
+        } else if (this.library.language == Language.CJ) {
+            importFeatures = collectCJImportsForDeclaration(decl)
+        } else if (this.library.language == Language.TS || this.library.language == Language.ARKTS) {
             importFeatures = this.serializeDepsCollector.convert(decl)
                 .filter(it => isSourceDecl(it))
                 .filter(it => {
@@ -920,20 +922,22 @@ export class IdlPeerProcessor {
                         || isSyntheticDeclaration(it)
                 })
                 .map(it => convertDeclToFeature(this.library, it))
-        }
-        // self-interface is not supported ArkTS
-        if (idl.isInterface(decl) && this.library.language === Language.ARKTS) {
-            importFeatures.push(convertDeclToFeature(this.library,
-                makeSyntheticDeclCompletely(
-                    decl,
-                    {
-                        ...decl,
-                        name: createInterfaceDeclName(decl.name)
-                    } as idl.IDLInterface,
-                    this.library,
-                    this.declDependenciesCollector,
-                    'SyntheticDeclarations'
-                )))
+            // self-interface is not supported ArkTS
+            if (idl.isInterface(decl) && this.library.language == Language.ARKTS) {
+                importFeatures.push(convertDeclToFeature(this.library,
+                    makeSyntheticDeclCompletely(
+                        decl,
+                        {
+                            ...decl,
+                            name: createInterfaceDeclName(decl.name)
+                        } as idl.IDLInterface,
+                        this.library,
+                        this.declDependenciesCollector,
+                        'SyntheticDeclarations'
+                    )))
+            }
+        } else {
+            throwException(`Unsupported language: ${this.library.language}`)
         }
         return importFeatures
     }
@@ -955,13 +959,6 @@ export class IdlPeerProcessor {
                 idl.getExtAttribute(superClassType, idl.IDLExtendedAttributes.TypeArguments)?.split(","))
             : undefined
 
-        // TODO: collect imports for Java via serializeDepsCollector
-        const importFeatures = this.library.language == Language.JAVA ? collectJavaImportsForDeclaration(decl)
-            : this.library.language == Language.CJ ? collectCJImportsForDeclaration(decl)
-            : this.serializeDepsCollector.convert(decl)
-            .filter(it => isSourceDecl(it))
-            .filter(it => PeerGeneratorConfig.needInterfaces || checkTSDeclarationMaterialized(it) || isSyntheticDeclaration(it))
-            .map(it => convertDeclToFeature(this.library, it))
         const importFeatures = this.collectDeclDependencies(decl)
         const isDeclInterface = idl.isInterface(decl)
         const generics = idl.getExtAttribute(decl, idl.IDLExtendedAttributes.TypeParameters)?.split(",")
