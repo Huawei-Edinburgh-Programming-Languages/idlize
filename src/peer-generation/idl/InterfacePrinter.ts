@@ -650,7 +650,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
             this.onNewDeclaration(this.makeUnion(name, type))
             return
         }
-        if (idl.isEnumType(type)) {
+        if (idl.isEnum(type)) {
             this.onNewDeclaration(this.makeEnum(name, type))
             return
         }
@@ -766,20 +766,15 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
         return new CJDeclaration(alias, writer)
     }
 
-    private makeEnum(alias: string, type: idl.IDLEnumType): CJDeclaration {
-        const writer = createLanguageWriter(Language.CJ)
+    private makeEnum(alias: string, enumDecl: idl.IDLEnum): CJDeclaration {
+      const writer = createLanguageWriter(Language.CJ)
         this.printPackage(writer)
 
-        const enumDecl = this.peerLibrary.resolveTypeReference(type) as idl.IDLEnum
         const initializers = enumDecl.elements.map(it => {
             return {name: it.name, id: isNaN(parseInt(it.initializer as string, 10)) ? it.initializer : parseInt(it.initializer as string, 10)}
         })
 
         const isStringEnum = initializers.every(it => typeof it.id == 'string')
-        // TODO: string enums
-        if (isStringEnum) {
-            throw new Error(`String enums (${alias}) not supported yet in CJ`)
-        }
 
         let memberValue = 0
         const members: {
@@ -800,7 +795,6 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
             }
             memberValue += 1
         }
-
         writer.writeClass(alias, () => {
             const enumType = new Type(alias)
             members.forEach(it => {

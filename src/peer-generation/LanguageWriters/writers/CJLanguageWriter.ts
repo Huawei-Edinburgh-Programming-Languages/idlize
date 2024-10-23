@@ -153,6 +153,7 @@ export class CJLanguageWriter extends LanguageWriter {
     }
     writeFieldDeclaration(name: string, type: Type, modifiers: FieldModifier[]|undefined, optional: boolean, initExpr?: LanguageExpression): void {
         const init = initExpr != undefined ? ` = ${initExpr.asString()}` : ``
+        name = this.escapeKeyword(name)
         let prefix = this.makeFieldModifiersList(modifiers)
         this.printer.print(`${prefix} var ${name}: ${optional ? '?' : ''}${this.mapType(type)}${init}`)
     }

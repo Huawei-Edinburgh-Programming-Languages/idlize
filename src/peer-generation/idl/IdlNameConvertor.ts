@@ -370,7 +370,7 @@ export class CJTypeAliasConvertor implements TypeConvertor<CJTypeAlias> {
             }
             case "record": {
                 const cjTypeAliases = type.elementType.slice(0, 2).map(it => convertType(this, it)).map(this.maybeConvertPrimitiveType, this)
-                const result = new JavaTypeAlias(new Type(`Map<${cjTypeAliases[0].type}, ${cjTypeAliases[1].type}>`), `Map_${cjTypeAliases[0].alias}_${cjTypeAliases[1].alias}`)
+                const result = new CJTypeAlias(new Type(`Map<${cjTypeAliases[0].type}, ${cjTypeAliases[1].type}>`), `Map_${cjTypeAliases[0].alias}_${cjTypeAliases[1].alias}`)
                 return result
             }
             case "Promise":
