@@ -297,10 +297,22 @@ export function createSerializer(): Serializer { return new Serializer() }
     return printer
 }
 
-export function makeSerializerForOhos(library: PeerLibrary | IdlPeerLibrary, declarationPath?: string): LanguageWriter {
+export function makeSerializerForOhos(library: PeerLibrary | IdlPeerLibrary, nativeModule: { name: string, path: string }, declarationPath?: string): LanguageWriter {
     // TODO Add Java and migrate arkoala code
     if (library.language == Language.TS || library.language == Language.ARKTS) {
-        return makeTSSerializer(library, undefined, declarationPath)
+        let printer = createLanguageWriter(library.language)
+        printer.nativeModuleAccessor = nativeModule.name
+        printer.writeLines(cStyleCopyright)
+        const imports = new ImportsCollector()
+        imports.addFeatures(["SerializerBase", "Tags", "RuntimeType", "runtimeType", "isPixelMap", "isResource", "isInstanceOf"], "./SerializerBase")
+        imports.addFeatures(["int32"], "./types")
+        imports.addFeatures([nativeModule.name], nativeModule.path)
+        imports.print(printer, '')
+        writeSerializer(library, printer, undefined, declarationPath)
+        printer.writeLines(`
+export function createSerializer(): Serializer { return new Serializer() }
+`)
+        return printer
     } else {
         throw new Error(`unsupported language ${library.language}`)
     }

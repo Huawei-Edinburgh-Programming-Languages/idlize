@@ -565,23 +565,29 @@ class OHOSVisitor {
         this.printManaged()
         this.printC()
 
+        const fileNamePrefix = this.libraryName.toLowerCase()
         const nativeModuleTemaplte = readLangTemplate(`OHOSNativeModule_template${this.library.language.extension}`, this.library.language)
         const nativeModuleText = nativeModuleTemaplte
             .replaceAll('%NATIVE_MODULE_NAME%', this.libraryName)
             .replaceAll('%NATIVE_MODULE_CONTENT%', this.nativeWriter.getOutput().join('\n'))
-        fs.writeFileSync(path.join(managedOutDir, `${this.libraryName.toLowerCase()}Native${this.library.language.extension}`), nativeModuleText, 'utf-8')
+        fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Native${this.library.language.extension}`), nativeModuleText, 'utf-8')
 
         const peerTemplate = readLangTemplate(`OHOSPeer_template${this.library.language.extension}`, this.library.language)
         const peerText = peerTemplate
             .replaceAll('%PEER_CONTENT%', this.peerWriter.getOutput().join('\n'))
-        fs.writeFileSync(path.join(managedOutDir, `${this.libraryName.toLowerCase()}${this.library.language.extension}`), peerText, 'utf-8')
-
+            .replaceAll('%SERIALIZER_PATH%', `./${fileNamePrefix}Serializer`)
+        fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}${this.library.language.extension}`), peerText, 'utf-8')
+        
         this.hWriter.printTo(path.join(outDir, "xml.h"))
         this.cppWriter.printTo(path.join(outDir, "xml.cc"))
-
-        const serializerText = makeSerializerForOhos(this.library, "xmlNative").getOutput().join("\n") // TODO fix imports and add SerializerBase
-        fs.writeFileSync(path.join(managedOutDir, `${this.libraryName.toLowerCase()}${this.library.language.extension}`), peerText, 'utf-8')
-        fs.writeFileSync(path.join(managedOutDir, `${this.libraryName.toLowerCase()}Serializer${this.library.language.extension}`), serializerText, 'utf-8')
+        
+        const nativeModuleInfo = {
+            name: `get${this.libraryName}NativeModule`,
+            path: `./${fileNamePrefix}Native`,
+        }
+        const serializerText = makeSerializerForOhos(this.library, nativeModuleInfo, "xmlNative").getOutput().join("\n") // TODO fix imports and add SerializerBase
+        fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}${this.library.language.extension}`), peerText, 'utf-8')
+        fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Serializer${this.library.language.extension}`), serializerText, 'utf-8')
         fs.writeFileSync(path.join(managedOutDir, `types.ts`), readLangTemplate(`types${this.library.language.extension}`, this.library.language))
     }
 }
