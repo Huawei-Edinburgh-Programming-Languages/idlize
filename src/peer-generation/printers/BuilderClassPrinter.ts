@@ -321,15 +321,6 @@ class BuilderClassVisitor {
     ) { }
 
     customBuildersToGenerate(): BuilderClass[] {
-        if (this.library.language === Language.ARKTS) {
-            CUSTOM_BUILDER_CLASSES.forEach(clazz => {
-                   clazz.importFeatures.push(
-                       {feature: "Length", module: "ArkUnitsInterfaces"},
-                       {feature: "LengthMetrics", module: "ArkUnitsInterfaces"},
-                       {feature: "DotIndicator", module: "ArkSwiperInterfaces"},
-                   )
-            })
-        }
         return CUSTOM_BUILDER_CLASSES
     }
 
