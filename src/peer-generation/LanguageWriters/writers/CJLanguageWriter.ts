@@ -437,5 +437,10 @@ export class CJLanguageWriter extends LanguageWriter {
     escapeKeyword(word: string): string {
         return CJKeywords.has(word) ? word + "_" : word
     }
-    override castToBoolean(value: string): string { return `${value}` }
+    override castToInt(value: string, bitness: 8|32): string {
+        return `Int${bitness}(${value})`
+    }
+    override castToBoolean(value: string): string {
+        return `if (${value}) { Int32(1) } else { Int32(0) }`
+    }
 }
