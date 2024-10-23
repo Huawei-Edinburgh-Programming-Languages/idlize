@@ -580,6 +580,15 @@ class OHOSVisitor {
         
         this.hWriter.printTo(path.join(outDir, `${fileNamePrefix}.h`))
         this.cppWriter.printTo(path.join(outDir, `${fileNamePrefix}.cc`))
+
+        fs.writeFileSync(path.join(outDir, `SerializerBase.h`),
+            readLangTemplate(`ohos_SerializerBase.h`, Language.CPP)
+                .replaceAll("%NATIVE_API_HEADER_PATH%", `${fileNamePrefix}.h`)
+        )
+        fs.writeFileSync(path.join(outDir, `DeserializerBase.h`),
+            readLangTemplate(`ohos_DeserializerBase.h`, Language.CPP)
+                .replaceAll("%NATIVE_API_HEADER_PATH%", `${fileNamePrefix}.h`)
+        )
         
         const nativeModuleInfo = {
             name: `get${this.libraryName}NativeModule`,
