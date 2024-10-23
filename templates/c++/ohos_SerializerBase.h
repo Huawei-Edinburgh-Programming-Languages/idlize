@@ -92,6 +92,18 @@ public:
         writeInt8(value);
     }
 
+    void writePointer(OH_NativePointer value) {
+        *((int64_t*)(data + position)) = reinterpret_cast<int64_t>(value);
+        position += 8;
+    }
+
+    void writeCallbackResource(const OH_CallbackResource resource) {
+        // TODO implement OH_CallbackResource
+        // writeInt32(resource.resourceId);
+        // writePointer(reinterpret_cast<void*>(resource.hold));
+        // writePointer(reinterpret_cast<void*>(resource.release));
+    }
+
 /*
     void writeFunction(OH_Function value) {
         writeInt32(registerCallback(value));

@@ -58,6 +58,9 @@ typedef int8_t OH_Boolean;
 typedef const char* OH_CharPtr;
 typedef void* OH_NativePointer;
 typedef const char* OH_String;
+typedef struct OH_CallbackResource {
+  void* _todo;
+} OH_CallbackResource;
 
 // TODO: wrong, provide real definitions.
 typedef void* OH_ArrayBuffer;
