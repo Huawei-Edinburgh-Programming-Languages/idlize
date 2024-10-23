@@ -304,7 +304,7 @@ export function makeSerializerForOhos(library: PeerLibrary | IdlPeerLibrary, nat
         printer.nativeModuleAccessor = nativeModule.name
         printer.writeLines(cStyleCopyright)
         const imports = new ImportsCollector()
-        imports.addFeatures(["SerializerBase", "Tags", "RuntimeType", "runtimeType", "isPixelMap", "isResource", "isInstanceOf"], "./SerializerBase")
+        imports.addFeatures(["SerializerBase", "Tags", "RuntimeType", "runtimeType", "isInstanceOf"], "./SerializerBase")
         imports.addFeatures(["int32"], "./types")
         imports.addFeatures([nativeModule.name], nativeModule.path)
         imports.print(printer, '')
