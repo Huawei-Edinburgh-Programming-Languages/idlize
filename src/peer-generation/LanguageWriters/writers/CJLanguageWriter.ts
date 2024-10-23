@@ -25,11 +25,26 @@ import { EnumConvertor } from "../../idl/IdlArgConvertors"
 import { EnumEntity } from "../../PeerFile"
 import { mapType } from "../../TypeNodeNameConvertor"
 import { AssignStatement, ExpressionStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, ObjectArgs, ReturnStatement, Type } from "../LanguageWriter"
-import { TSCastExpression, TsObjectAssignStatement, TsObjectDeclareStatement, TsTupleAllocStatement } from "./TsLanguageWriter"
+import { LambdaExpression, TSCastExpression, TsObjectAssignStatement, TsObjectDeclareStatement, TsTupleAllocStatement } from "./TsLanguageWriter"
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
 ////////////////////////////////////////////////////////////////
+
+class CJLambdaExpression extends LambdaExpression {
+    constructor(
+        signature: MethodSignature,
+        body?: LanguageStatement[]) {
+        super(signature, body)
+    }
+    protected get statementHasSemicolon(): boolean {
+        return true
+    }
+    asString(): string {
+        const params = this.signature.args.map((it, i) => `${it.name} ${this.signature.argName(i)}`)
+        return `(${params.join(", ")}) -> { ${this.bodyAsString()} }`
+    }
+}
 
 export class CJCheckDefinedExpression implements LanguageExpression {
     constructor(private value: string) { }
@@ -215,7 +230,7 @@ export class CJLanguageWriter extends LanguageWriter {
         return this.makeString(`let Some(${varName}) <- ${varName}`)
     }
     makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression {
-        throw new Error(`TBD`)
+        return new CJLambdaExpression(signature, body)
     }
     makeThrowError(message: string): LanguageStatement {
         throw new Error(`TBD`)
