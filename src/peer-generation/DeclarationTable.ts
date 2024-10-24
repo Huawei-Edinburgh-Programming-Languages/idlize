@@ -636,6 +636,8 @@ export class DeclarationTable {
             case `Optional`:
                 if (type.typeArguments && type.typeArguments.length == 1)
                     return new OptionConvertor(param, this, type.typeArguments![0])
+            case `Boolean`:
+                return new BooleanConvertor(param)
         }
         return undefined
     }
@@ -1498,6 +1500,7 @@ class ToDeclarationTargetConvertor implements TypeNodeConvertor<DeclarationTarge
             case `Date`: return PrimitiveType.CustomObject
             // stub required to compile arkoala patched sdk
             case `Function`: return PrimitiveType.Function
+            case `Boolean`: return PrimitiveType.Boolean
         }
         // Types with type arguments are declarations!
         if (node.typeArguments) {
