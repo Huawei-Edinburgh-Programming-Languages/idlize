@@ -295,14 +295,6 @@ if (options.dts2peer) {
 
     if (options.idl) {
         options.docs = "all"
-
-        // This setup code placed here because wrong prefix may be cached during library creation
-        // TODO find better place for setup?
-        PrimitiveType.Prefix = "OH_"
-        PrimitiveType.UndefinedTag = "OH_TAG_UNDEFINED"
-        PrimitiveType.UndefinedRuntime = "OH_RUNTIME_UNDEFINED"
-        PrimitiveType.ObjectTag = "OH_TAG_OBJECT"
-
         const idlLibrary = new IdlPeerLibrary(lang, toSet(options.generateInterface))
         // collect predefined files
         scanPredefinedDirectory(idlLibrary, PREDEFINED_PATH)
@@ -327,6 +319,14 @@ if (options.dts2peer) {
                     idlLibrary.files.push(file)
                 },
                 onEnd(outDir) {
+                    if (options.generatorTarget == "ohos") {
+                        // This setup code placed here because wrong prefix may be cached during library creation
+                        // TODO find better place for setup?
+                        PrimitiveType.Prefix = "OH_"
+                        PrimitiveType.UndefinedTag = "OH_TAG_UNDEFINED"
+                        PrimitiveType.UndefinedRuntime = "OH_RUNTIME_UNDEFINED"
+                        PrimitiveType.ObjectTag = "OH_TAG_OBJECT"
+                    }
                     // Visit IDL peer files
                     idlLibrary.files.forEach(file => {
                         const visitor = new IdlPeerGeneratorVisitor({
