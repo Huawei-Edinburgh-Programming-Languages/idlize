@@ -20,7 +20,7 @@ import { IdlComponentDeclaration, isConflictingDeclaration, isMaterialized } fro
 import { IdlPeerFile } from "./IdlPeerFile";
 import { CJTypeNameConvertor } from './IdlNameConvertor';
 import { capitalize, isDefined } from '../../util';
-import { AggregateConvertor, ArrayConvertor, CallbackConvertor, ClassConvertor, EnumConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, MapConvertor, MaterializedClassConvertor, OptionConvertor,  StringConvertor, TupleConvertor, TypeAliasConvertor, UnionConvertor } from './IdlArgConvertors';
+import { AggregateConvertor, ArrayConvertor, CallbackConvertor, ClassConvertor, DateConvertor, EnumConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, MapConvertor, MaterializedClassConvertor, OptionConvertor,  StringConvertor, TupleConvertor, TypeAliasConvertor, UnionConvertor } from './IdlArgConvertors';
 import { PrimitiveType } from "../ArkPrimitiveType"
 import { DependencySorter } from './DependencySorter';
 import { IndentedPrinter } from '../../IndentedPrinter';
@@ -283,6 +283,8 @@ export class IdlPeerLibrary implements ReferenceResolver {
             case `Dimension`:
             case `Length`:
                 return new LengthConvertor(typeName, param, this.language)
+            case `Date`:
+                return new DateConvertor(param)
             case `Function`:
                 return new FunctionConvertor(this, param, type as idl.IDLReferenceType)
             case `AnimationRange`:
@@ -340,6 +342,9 @@ export class IdlPeerLibrary implements ReferenceResolver {
             // TODO: remove all this!
             if (idl.isIDLTypeName(type, 'Dimension') || idl.isIDLTypeName(type, 'Length')) {
                 return ArkLength
+            }
+            if (idl.isIDLTypeName(type, 'Date')) {
+                return ArkInt32
             }
             if (idl.isIDLTypeName(type, 'AnimationRange') || idl.isIDLTypeName(type, 'ContentModifier')) {
                 return ArkCustomObject

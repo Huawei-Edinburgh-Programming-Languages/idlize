@@ -19,6 +19,7 @@
 package org.koalaui.arkoala;
 
 import java.time.Duration;
+import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -209,8 +210,8 @@ public class Main {
 
         // custom object stub
         var datePickerOptions = new DatePickerOptionsTest();
-        datePickerOptions.start = new Ark_CustomObject();
-        datePickerOptions.end = new Ark_CustomObject();
+        datePickerOptions.start = new Date(123);
+        datePickerOptions.end = new Date(456);
         TestUtils.checkResult("[CustomObject] TestPeer.testDateCustomObject",
             () -> { peer.testDateCustomObjectAttribute(datePickerOptions); },
             "testDateCustomObject({.start={.tag=ARK_TAG_OBJECT, .value={.kind=\"Date\", .id=0}}, .end={.tag=ARK_TAG_OBJECT, .value={.kind=\"Date\", .id=0}}})");

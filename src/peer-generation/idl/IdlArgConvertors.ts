@@ -764,6 +764,52 @@ export class MapConvertor extends BaseArgConvertor { //
     }
 }
 
+export class DateConvertor extends BaseArgConvertor { //
+    constructor(param: string) {
+        super(idl.IDLNumberType, [RuntimeType.NUMBER], false, false, param)
+    }
+
+    convertorArg(param: string, writer: LanguageWriter): string {
+        if (writer.language === Language.CPP) {
+            return param
+        }
+        return `${param}.getTime()`
+    }
+    convertorSerialize(param: string, value: string, writer: LanguageWriter): void {
+        // TBD: Use writePointer() to write long value
+        if (writer.language === Language.CPP) {
+            writer.writeMethodCall(`${param}Serializer`, "writeInt32", [value])
+            return
+        }
+        writer.writeMethodCall(`${param}Serializer`, "writeInt32", [`${value}.getTime()`])
+    }
+    convertorDeserialize(param: string, value: string, writer: LanguageWriter): LanguageStatement {
+        // TBD: read long
+        const deserializeTime = writer.makeMethodCall(`${param}Deserializer`, "readInt32", [])
+        if (writer.language === Language.CPP) {
+            return writer.makeAssign(this.getObjectAccessor(writer.language, value), undefined, deserializeTime, false)
+        }
+
+        const timeValue = `timeValue`
+        const stmt1 = writer.makeAssign(timeValue, idl.IDLNumberType, deserializeTime, true, true)
+
+        const receiver = this.getObjectAccessor(writer.language, value, undefined, writer)
+        const stmt2 = writer.makeAssign(receiver, undefined, writer.makeString(`new Date(${timeValue})`), false)
+
+        return new BlockStatement([stmt1, stmt2])
+
+    }
+    nativeType(impl: boolean): string {
+        return PrimitiveType.Int32.getText()
+    }
+    interopType(language: Language): string {
+        return language == Language.CPP ? PrimitiveType.Int32.getText() : "KInt"
+    }
+    isPointerType(): boolean {
+        return false
+    }
+}
+
 export class MaterializedClassConvertor extends BaseArgConvertor { //
     constructor(private library: IdlPeerLibrary, name: string, param: string, private type: idl.IDLInterface) {
         super(idl.toIDLType(name), [RuntimeType.OBJECT], false, true, param)
