@@ -93,11 +93,11 @@ export class CustomPrintVisitor {
 
         const entity = getExtAttribute(node, IDLExtendedAttributes.Entity)
         if (entity === IDLEntity.Literal) {
-            this.print(`${namespace ? "" : "declare "}type ${typeSpec} = ${this.literal(node, false, true)}`)
+            this.print(`export ${namespace ? "" : "declare "}type ${typeSpec} = ${this.literal(node, false, true)}`)
         } else if (entity === IDLEntity.Tuple) {
-            this.print(`${namespace ? "" : "declare "}type ${typeSpec} = ${this.literal(node, true, false)}`)
+            this.print(`export ${namespace ? "" : "declare "}type ${typeSpec} = ${this.literal(node, true, false)}`)
         } else if (entity === IDLEntity.NamedTuple) {
-            this.print(`${namespace ? "" : "declare "}type ${typeSpec} = ${this.literal(node, true, true)}`)
+            this.print(`export ${namespace ? "" : "declare "}type ${typeSpec} = ${this.literal(node, true, true)}`)
         } else {
             // restore globalScope
             if (hasExtAttribute(node,IDLExtendedAttributes.GlobalScope)) {
@@ -123,8 +123,7 @@ export class CustomPrintVisitor {
                     .join(", ")
                 typeSpec += ` ${keyword} ${interfaceList}`
             }
-            let isExport = hasExtAttribute(node, IDLExtendedAttributes.Export)
-            this.print(`${isExport ? "export ": ""}${namespace ? "" : "declare "}${entity!.toLowerCase()} ${typeSpec} {`)
+            this.print(`export ${namespace ? "" : "declare "}${entity!.toLowerCase()} ${typeSpec} {`)
             this.currentInterface = node
             this.pushIndent()
             node.constructors.map(it => this.visit(it))
