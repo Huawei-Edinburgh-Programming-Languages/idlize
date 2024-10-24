@@ -63,6 +63,7 @@ import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
 import { printDeclarations } from "./printers/DeclarationPrinter"
 import { printConflictedDeclarationsIdl } from "./idl/ConflictedDeclarationsPrinterIdl";
 import { printNativeModuleRecorder } from "./printers/NativeModuleRecorderPrinter"
+import { IndentedPrinter } from "../IndentedPrinter"
 
 export function generateLibace(config: {
     libaceDestination: string | undefined,
@@ -638,13 +639,16 @@ export function generateArkoalaFromIdl(config: {
 
     if (peerLibrary.language == Language.TS) {
         const declarations = printDeclarations(peerLibrary)
+        const index = new IndentedPrinter()
         for (const [targetFile, data] of declarations) {
+            index.print(`/// <reference path="${targetFile.path ?? "./"}${targetFile.name}"`)
             const outComponentFile = arkoala.interface(targetFile)
             writeFile(outComponentFile, data, {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true
             })
         }
+        fs.writeFileSync(path.join(arkoala.langDir(), "indexXXX.d.ts"), index.getOutput().join("\n"))
         writeFile(
             arkoala.tsArkoalaLib(new TargetFile('NativeModuleEmpty')),
             printNativeModuleEmpty(peerLibrary),
