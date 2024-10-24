@@ -28,7 +28,8 @@ import {
     libraryCcDeclaration,
     makeTypeCheckerFromDTS,
     makeTypeChecker,
-    makeCallbacksKinds
+    makeCallbacksKinds,
+    tsCopyrightAndWarning
 } from "./FileGenerators"
 import { makeCJSerializer, makeCJNodeTypes } from "./printers/lang/CJPrinters"
 import { makeJavaArkComponents, makeJavaNodeTypes, makeJavaSerializer } from "./printers/lang/JavaPrinters"
@@ -642,7 +643,7 @@ export function generateArkoalaFromIdl(config: {
         const index = new IndentedPrinter()
         for (const [targetFile, data] of declarations) {
             const outComponentFile = arkoala.interface(targetFile)
-            writeFile(outComponentFile, data, {
+            writeFile(outComponentFile, tsCopyrightAndWarning(data), {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true
             })
