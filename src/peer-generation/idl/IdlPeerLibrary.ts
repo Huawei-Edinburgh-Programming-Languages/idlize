@@ -187,6 +187,8 @@ export class IdlPeerLibrary {
         }
         if (idl.isReferenceType(type)) {
             // TODO: do we need it?
+            if (type.name == "Resource")
+                return new InterfaceConvertor("Resource", param, ArkResource)
             if (type == idl.IDLObjectType)
                 return new CustomTypeConvertor(param, "Object")
             if (isImport(type))

@@ -234,6 +234,7 @@ export class ImportTypeConvertor extends BaseArgConvertor { //
         throw new Error("Must never be used")
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
+        if (this.importedName === "Resource") throw new Error("1")
         printer.writeMethodCall(`${param}Serializer`, "writeCustomObject", [`"${this.importedName}"`, value])
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
@@ -510,7 +511,7 @@ export class CallbackConvertor extends BaseArgConvertor {
             return writer.makeBlock([
                 writer.makeAssign(`${value}.resource`, undefined, writer.makeMethodCall(`${param}Deserializer`, `readCallbackResource`, []), false),
                 writer.makeAssign(`${value}.call`, undefined, new CppCastExpression(
-                    writer.makeMethodCall(`${param}Deserializer`, `readPointer`, []), 
+                    writer.makeMethodCall(`${param}Deserializer`, `readPointer`, []),
                     new Type(`void(*)(${generateCallbackAPIArguments(this.library, this.decl).join(", ")})`),
                     true
                 ), false),
