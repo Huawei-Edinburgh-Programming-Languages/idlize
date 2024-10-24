@@ -641,14 +641,14 @@ export function generateArkoalaFromIdl(config: {
         const declarations = printDeclarations(peerLibrary)
         const index = new IndentedPrinter()
         for (const [targetFile, data] of declarations) {
-            index.print(`/// <reference path="${targetFile.path ?? "./"}${targetFile.name}"`)
             const outComponentFile = arkoala.interface(targetFile)
             writeFile(outComponentFile, data, {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true
             })
+            index.print(data)
         }
-        fs.writeFileSync(path.join(arkoala.langDir(), "index_global.d.ts"), index.getOutput().join("\n"))
+        index.printTo(path.join(arkoala.langDir(), "index_global.d.ts"))
         writeFile(
             arkoala.tsArkoalaLib(new TargetFile('NativeModuleEmpty')),
             printNativeModuleEmpty(peerLibrary),
