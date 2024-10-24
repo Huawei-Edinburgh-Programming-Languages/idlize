@@ -778,14 +778,14 @@ export class DateConvertor extends BaseArgConvertor { //
     convertorSerialize(param: string, value: string, writer: LanguageWriter): void {
         // TBD: Use writePointer() to write long value
         if (writer.language === Language.CPP) {
-            writer.writeMethodCall(`${param}Serializer`, "writeInt32", [value])
+            writer.writeMethodCall(`${param}Serializer`, "writeInt64", [value])
             return
         }
-        writer.writeMethodCall(`${param}Serializer`, "writeInt32", [`${value}.getTime()`])
+        writer.writeMethodCall(`${param}Serializer`, "writeInt64", [`${value}.getTime()`])
     }
     convertorDeserialize(param: string, value: string, writer: LanguageWriter): LanguageStatement {
         // TBD: read long
-        const deserializeTime = writer.makeMethodCall(`${param}Deserializer`, "readInt32", [])
+        const deserializeTime = writer.makeMethodCall(`${param}Deserializer`, "readInt64", [])
         if (writer.language === Language.CPP) {
             return writer.makeAssign(this.getObjectAccessor(writer.language, value), undefined, deserializeTime, false)
         }
@@ -800,10 +800,10 @@ export class DateConvertor extends BaseArgConvertor { //
 
     }
     nativeType(impl: boolean): string {
-        return PrimitiveType.Int32.getText()
+        return PrimitiveType.Int64.getText()
     }
     interopType(language: Language): string {
-        return language == Language.CPP ? PrimitiveType.Int32.getText() : "KInt"
+        return language == Language.CPP ? PrimitiveType.Int64.getText() : "KLong"
     }
     isPointerType(): boolean {
         return false
