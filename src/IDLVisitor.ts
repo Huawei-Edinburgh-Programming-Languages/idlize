@@ -412,7 +412,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
     computeExportAttribute(node: ts.Node, attributes: IDLExtendedAttribute[] = []): IDLExtendedAttribute[] {
         if (ts.canHaveModifiers(node)) {
             if (!attributes.find(it => it.name == IDLExtendedAttributes.Export)) {
-                if (isExport(node.modifiers) && false) {
+                if (isExport(node.modifiers)) {
                     attributes.push({
                         name: IDLExtendedAttributes.Export
                     })
@@ -1212,7 +1212,6 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
         }
         this.computeClassMemberExtendedAttributes(method as ts.ClassElement, methodName, escapedName, extendedAttributes)
         const returnType = this.serializeType(method.type, nameSuggestion?.extend('ret'))
-        this.liftExtendedAttributes(returnType, extendedAttributes)
         return {
             kind: IDLKind.Method,
             name: escapedName,
@@ -1228,7 +1227,6 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
     serializeCallable(method: ts.CallSignatureDeclaration, nameSuggestion: NameSuggestion): IDLCallable {
         const returnType = this.serializeType(method.type)
         let extendedAttributes = this.computeDeprecatedExtendAttributes(method)
-        this.liftExtendedAttributes(returnType, extendedAttributes)
         extendedAttributes.push({ name: IDLExtendedAttributes.CallSignature })
         return {
             kind: IDLKind.Callable,
@@ -1239,14 +1237,6 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             returnType: returnType,
             isStatic: false
         };
-    }
-
-    private liftExtendedAttributes(returnType: IDLType, extendedAttributes: IDLExtendedAttribute[]): IDLExtendedAttribute[] {
-        if (returnType.extendedAttributes) {
-            // Lift return type's attributes to method level
-            // extendedAttributes.push(...returnType.extendedAttributes)
-        }
-        return extendedAttributes
     }
 
     serializeConstructor(constr: ts.ConstructorDeclaration | ts.ConstructSignatureDeclaration, nameSuggestion: NameSuggestion): IDLConstructor {
