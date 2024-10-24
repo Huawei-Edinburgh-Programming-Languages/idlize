@@ -648,7 +648,7 @@ export function generateArkoalaFromIdl(config: {
                 integrated: true
             })
         }
-        fs.writeFileSync(path.join(arkoala.langDir(), "indexXXX.d.ts"), index.getOutput().join("\n"))
+        fs.writeFileSync(path.join(arkoala.langDir(), "index_global.d.ts"), index.getOutput().join("\n"))
         writeFile(
             arkoala.tsArkoalaLib(new TargetFile('NativeModuleEmpty')),
             printNativeModuleEmpty(peerLibrary),
