@@ -177,6 +177,9 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
                     this.peerLibrary.isComponentDeclaration(attributesDecl))
                     throw new Error("Component is already defined")
                 const componentName = identName(variable.name)!
+                if (componentName === "Progress") {
+                    return
+                }
                 if (PeerGeneratorConfig.ignoreComponents.includes(componentName))
                     return
                 this.peerLibrary.componentsDeclarations.push(new ComponentDeclaration(

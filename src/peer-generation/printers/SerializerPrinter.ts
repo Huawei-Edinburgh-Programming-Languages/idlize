@@ -47,6 +47,7 @@ function printSerializerImports(table: (ts.ClassDeclaration | ts.InterfaceDeclar
         library.files.forEach(peer => peer.serializeImportFeatures
             .forEach(importFeature => convertorImportsCollector.addFeature(importFeature.feature, importFeature.module)))
         convertorImportsCollector.addFeature("TypeChecker", "#components")
+        convertorImportsCollector.addFeature("KUint8ArrayPtr", "@koalaui/interop")
     }
     if ([Language.TS, Language.ARKTS].includes(writer.language)) {
         convertorImportsCollector.addFeature("KInt", "@koalaui/interop")
