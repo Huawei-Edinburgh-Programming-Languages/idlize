@@ -429,7 +429,9 @@ class ArkTSDeclConvertor extends TSDeclConvertor {
         if (this.IGNORES_TYPES.includes(node.name)) {
             return
         }
-        super.convertTypedef(node);
+        const type = this.peerLibrary.mapType(node.type)
+        const typeParams = this.printTypeParameters(node.extendedAttributes)
+        this.writer.print(`export declare type ${node.name}${typeParams} = ${type};`)
     }
 
     convertCallback(node: idl.IDLCallback) {

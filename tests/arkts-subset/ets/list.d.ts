@@ -19,8 +19,7 @@ declare interface VisibleListContentInfo {
 }
 
 declare type OnScrollVisibleContentChangeCallback = (start: VisibleListContentInfo, end: VisibleListContentInfo) => void;
-// TODO print template params
-//~declare type Optional<T> = T | undefined
+declare type Optional<T> = T | undefined
 
 declare interface ListInterface { 
     (): ListAttribute
