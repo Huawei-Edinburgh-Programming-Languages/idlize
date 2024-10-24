@@ -660,6 +660,7 @@ export function generateArkoalaFromIdl(config: {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true
             })
+            if (data.indexOf("Resource = any") >= 0) throw new Error("Resource = any in " + targetFile.name)
             index.print(data)
         }
         index.printTo(path.join(arkoala.langDir(), "index-full.d.ts.incl"))

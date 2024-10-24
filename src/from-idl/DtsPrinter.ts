@@ -83,6 +83,7 @@ export class CustomPrintVisitor {
     }
 
     printInterface(node: IDLInterface) {
+        if (node.name === "Resource") throw new Error("3")
         const namespace = getExtAttribute(node, IDLExtendedAttributes.Namespace)?.split(",").reverse()
         this.openNamespace(namespace)
         let typeSpec = this.toTypeName(node, IDLExtendedAttributes.TypeParameters)
@@ -203,6 +204,9 @@ export class CustomPrintVisitor {
         this.closeNamespace(namespace)
     }
     printTypedef(node: IDLTypedef | IDLCallback) {
+        if (node.name === "Resource") {
+            throw new Error("Resource type is not supported")
+        }
         const text = isCallback(node) ? this.callback(node)
             : hasExtAttribute(node, IDLExtendedAttributes.Import) ? IDLAnyType.name
             : this.printTypeForTS(node.type)

@@ -318,6 +318,7 @@ export class IdlPeerLibrary {
         if (isImport(type))
             return ArkCustomObject
         if (idl.isReferenceType(type) || idl.isEnumType(type)) {
+            // TODO: remove all this!
             switch (type.name) {
                 case `Dimension`: case `Length`: return ArkLength
                 case `AnimationRange`:
@@ -328,6 +329,7 @@ export class IdlPeerLibrary {
                     return this.toDeclaration(wrappedType)
             }
             const decl = this.resolveTypeReference(type)
+            if (type.name == "Resource") console.log("XXX decl is " + decl?.fileName)
             if (!decl) console.log(`WARNING: undeclared type ${type.name}`)
             return !decl ? ArkCustomObject  // assume some builtin type
                 : idl.isTypedef(decl) ? this.toDeclaration(decl.type)
