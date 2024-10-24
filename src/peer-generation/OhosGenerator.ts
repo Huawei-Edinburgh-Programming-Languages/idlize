@@ -27,6 +27,8 @@ import { Language } from '../Language'
 import { ArgConvertor } from './ArgConvertors'
 import { writeDeserializer, writeSerializer } from './printers/SerializerPrinter'
 import { generateCallbackAPIArguments } from './idl/StructPrinter'
+import { qualifiedName } from './idl/common'
+import { printCallbacksKinds } from './printers/CallbacksPrinter'
 
 class NameType {
     constructor(public name: string, public type: string) {}
@@ -69,7 +71,7 @@ class OHOSVisitor {
             return `${PrimitiveType.Prefix}${type.name}`
 
         if (isReferenceType(type) || isEnum(type) || isEnumType(type)) {
-            return `${PrimitiveType.Prefix}${this.libraryName}_${type.name!}`
+            return `${PrimitiveType.Prefix}${this.libraryName}_${qualifiedName(type, Language.CPP)}`
         }
         return this.hWriter.mapIDLType(type)
     }
@@ -337,7 +339,7 @@ class OHOSVisitor {
                 })
             })
         })
-        this.nativeWriter.writeLines(makeCallbacksKinds(this.library, this.library.language))
+        printCallbacksKinds(this.library, this.nativeWriter)
         this.data.forEach(data => {
             this.nativeWriter.writeClass(data.name, writer => {
                 data.properties.forEach(prop => {

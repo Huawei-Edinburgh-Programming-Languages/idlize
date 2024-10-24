@@ -28,7 +28,7 @@ import { IdlPeerLibrary } from "./idl/IdlPeerLibrary"
 import { writeARKTSTypeCheckers, writeTSTypeCheckers } from "./printers/TypeCheckPrinter"
 import { writeARKTSTypeCheckerFromDTS, writeTSTypeCheckerFromDTS } from "./printers/TypeCheckFromDTSPrinter"
 import { Language } from "../Language"
-import { printCallbacksKinds } from "./printers/CallbacksPrinter"
+import { printCallbacksKinds, printCallbacksKindsImports } from "./printers/CallbacksPrinter"
 import { makeCJSerializer } from "./printers/lang/CJPrinters"
 
 export const warning = "WARNING! THIS FILE IS AUTO-GENERATED, DO NOT MAKE CHANGES, THEY WILL BE LOST ON NEXT GENERATION!"
@@ -654,6 +654,7 @@ export function makeCEventsLibaceImpl(implData: PrinterLike, receiversList: Prin
 
 export function makeCallbacksKinds(library: IdlPeerLibrary, language: Language): string {
     const writer = createLanguageWriter(language)
+    printCallbacksKindsImports(library, writer)
     printCallbacksKinds(library, writer)
     return writer.getOutput().join("\n")
 }
