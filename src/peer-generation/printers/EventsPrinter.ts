@@ -612,7 +612,7 @@ class ArkTSEventsVisitor extends TSEventsVisitorBase {
     }
 
     protected mapType(type: ts.TypeNode): string {
-        return this.typeNodeConvertor.convert(type)+"/*YY*/"
+        return this.typeNodeConvertor.convert(type)
     }
 }
 
@@ -626,7 +626,7 @@ class TSEventsVisitor extends TSEventsVisitorBase {
     }
 
     protected mapType(type: ts.TypeNode): string {
-        return mapType(type)+"/*ZZ*/"
+        return mapType(type)
     }
 }
 
