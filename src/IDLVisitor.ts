@@ -1286,7 +1286,7 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             if (value.startsWith("0x")) {
                 return [IDLNumberType, parseInt(value.substring(2), 16).toString()]
             }
-            if (parseInt(value)) {
+            if (parseInt(value) != undefined) {
                 return [IDLNumberType, parseInt(value).toString()]
             }
             if (parseFloat(value) != undefined) {
