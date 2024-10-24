@@ -19,9 +19,8 @@ import { MaterializedClass } from "../Materialized";
 import { IdlComponentDeclaration, isConflictingDeclaration, isMaterialized } from './IdlPeerGeneratorVisitor';
 import { IdlPeerFile } from "./IdlPeerFile";
 import { ArkTSTypeNameConvertor, IdlTypeNameConvertor, JavaTypeNameConvertor, TSTypeNameConvertor, CJTypeNameConvertor } from './IdlNameConvertor';
-import { capitalize, isDefined } from '../../util';
+import { capitalize } from '../../util';
 import { AggregateConvertor, ArrayConvertor, CallbackConvertor, ClassConvertor, EnumConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, MapConvertor, MaterializedClassConvertor, OptionConvertor,  StringConvertor, TupleConvertor, TypeAliasConvertor, UnionConvertor } from './IdlArgConvertors';
-import { collectCallbacks, IdlCallbackInfo } from '../printers/EventsPrinter';
 import { PrimitiveType } from "../ArkPrimitiveType"
 import { DependencySorter } from './DependencySorter';
 import { IndentedPrinter } from '../../IndentedPrinter';
@@ -187,13 +186,9 @@ export class IdlPeerLibrary {
             }
         }
         if (idl.isReferenceType(type)) {
-            switch (type) {
-                case idl.IDLObjectType: return new CustomTypeConvertor(param, "Object")
-            }
-            switch (type.name) {
-                case "Resource": return new InterfaceConvertor("Resource", param, ArkResource)
-                case "Callback": return new FunctionConvertor(this, param, type)
-            }
+            // TODO: do we need it?
+            if (type == idl.IDLObjectType)
+                return new CustomTypeConvertor(param, "Object")
             if (isImport(type))
                 return new ImportTypeConvertor(param, type)
         }
@@ -315,8 +310,6 @@ export class IdlPeerLibrary {
             case idl.IDLObjectType: return ArkCustomObject
         }
         switch (type.name) {
-            case "Callback": return ArkFunction
-            case "Resource": return ArkResource
             case "object":
             case "Object": return ArkCustomObject
         }
@@ -483,9 +476,8 @@ export class IdlPeerLibrary {
     }
 
     private mapImportTypeName(type: idl.IDLEntry): string {
+        console.log(`Import type: ${type.name}`)
         switch (type.name) {
-            case "Resource": return "Resource"
-            case "Callback": return PrimitiveType.Function.getText()
             default: return PrimitiveType.CustomObject.getText()
         }
     }

@@ -929,12 +929,8 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
                 return createReferenceType(funcType.name)
             }
             if (isEnum) {
-                // TODO: hack!
-                // if (rawType == "Tag") return IDLNumberType
                 return createReferenceType(transformedType)
             }
-            // TODO: hack!
-            // if (rawType == "PRIKeyType") return IDLStringType
             return createReferenceType(transformedType, this.mapTypeArgs(type.typeArguments, transformedType));
         }
         if (ts.isThisTypeNode(type)) {
@@ -997,10 +993,15 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             return IDLAnyType
         }
         if (ts.isImportTypeNode(type)) {
-            let originalText = `${type.getText(this.sourceFile)}`
-            this.warn(`import type: ${originalText}`)
             let where = type.argument.getText(type.getSourceFile()).split("/").map(it => it.replaceAll("'", ""))
             let what = asString(type.qualifier)
+            if ((what == "Callback" || what == "AsyncCallback") {
+                let funcType = this.serializeCallback(what, type.typeArguments![0], NameSuggestion.make(what))
+                this.addSyntheticType(funcType)
+                return createReferenceType(funcType.name)
+            }
+            let originalText = `${type.getText(this.sourceFile)}`
+            this.warn(`import type: ${originalText}`)
             let typeName = sanitize(what == "default" ? where[where.length - 1] : what)!
             let result = createReferenceType(typeName, this.mapTypeArgs(type.typeArguments, typeName))
             result.extendedAttributes ??= []
