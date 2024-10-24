@@ -1094,7 +1094,8 @@ export class IdlPeerProcessor {
         for (const dep of allDeclarations) {
             if (isSyntheticDeclaration(dep))
                 continue
-            const file = this.library.findFileByOriginalFilename(dep.fileName!)!
+            const file = this.library.findFileByOriginalFilename(dep.fileName!)
+            if (!file) throw new Error(`Cannot find file ${dep.fileName}`)
             const isPeerDecl = idl.isInterface(dep) && this.library.isComponentDeclaration(dep)
 
             if (!isPeerDecl && (idl.isClass(dep) || idl.isInterface(dep))) {
