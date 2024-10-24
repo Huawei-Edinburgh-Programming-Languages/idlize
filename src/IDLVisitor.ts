@@ -97,7 +97,7 @@ export function selectName(nameSuggestion: NameSuggestion | undefined, synthetic
 export function generateSyntheticFunctionName(computeTypeName: (type: IDLType) => string, parameters: IDLParameter[], returnType: IDLType, isAsync: boolean = false): string {
     let prefix = isAsync ? "AsyncCallback" : "Callback"
     const names = parameters.map(it => `${computeTypeName(it.type!)}`).concat(computeTypeName(returnType))
-    return `${prefix}_${names.join("_")}`
+    return `${prefix}_${names.join("_").replaceAll(".", "_")}`
 }
 
 const TypeParameterMap: Map<string, Map<string, IDLType>> = new Map([
@@ -1277,6 +1277,13 @@ export class IDLVisitor implements GenericVisitor<IDLEntry[]> {
             if (value.startsWith('"') || value.startsWith("'")) {
                 return [IDLStringType, value.replaceAll("'", '"')]
             }
+            if (value.startsWith("0o")) {
+                return [IDLNumberType, parseInt(value.substring(2), 8).toString()]
+            }
+            if (value.startsWith("0x")) {
+                return [IDLNumberType, parseInt(value.substring(2), 16).toString()]
+            }
+
             if (parseInt(value)) {
                 return [IDLNumberType, parseInt(value).toString()]
             }
