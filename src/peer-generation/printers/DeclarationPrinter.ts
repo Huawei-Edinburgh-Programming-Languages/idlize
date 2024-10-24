@@ -20,7 +20,7 @@ import { IdlPeerLibrary } from "../idl/IdlPeerLibrary"
 import { TargetFile } from "./TargetFile"
 
 export function printDeclarations(peerLibrary: IdlPeerLibrary): Map<TargetFile, string> {
-    const seen = new Set<idl.IDLEntry>()
+    const seen = new Set<string>()
     const result = new Map<TargetFile, string>()
     const extension = peerLibrary.language.extension
     for (const decl of peerLibrary.declarations) {

@@ -186,9 +186,6 @@ export class IdlPeerLibrary {
             }
         }
         if (idl.isReferenceType(type)) {
-            // TODO: do we need it?
-            if (type.name == "Resource")
-                return new InterfaceConvertor("Resource", param, ArkResource)
             if (type == idl.IDLObjectType)
                 return new CustomTypeConvertor(param, "Object")
             if (isImport(type))
@@ -329,7 +326,6 @@ export class IdlPeerLibrary {
                     return this.toDeclaration(wrappedType)
             }
             const decl = this.resolveTypeReference(type)
-            if (type.name == "Resource") console.log("XXX decl is " + decl?.fileName)
             if (!decl) console.log(`WARNING: undeclared type ${type.name}`)
             return !decl ? ArkCustomObject  // assume some builtin type
                 : idl.isTypedef(decl) ? this.toDeclaration(decl.type)
