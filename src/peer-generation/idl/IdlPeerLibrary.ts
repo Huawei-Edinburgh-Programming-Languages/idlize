@@ -536,58 +536,6 @@ export const ArkCustomObject: idl.IDLPrimitiveType = {
     name: "CustomObject"
 }
 
-export const ArkResource: idl.IDLInterface = {
-    name: "Resource",
-    kind: idl.IDLKind.Interface,
-    inheritance: [],
-    constructors: [],
-    constants: [],
-    properties: [
-        {
-            name: "id",
-            kind: idl.IDLKind.Property,
-            type: idl.IDLNumberType,
-            isReadonly: true,
-            isStatic: false,
-            isOptional: false,
-        },
-        {
-            name: "type",
-            kind: idl.IDLKind.Property,
-            type: idl.IDLNumberType,
-            isReadonly: true,
-            isStatic: false,
-            isOptional: false,
-        },
-        {
-            name: "moduleName",
-            kind: idl.IDLKind.Property,
-            type: idl.IDLStringType,
-            isReadonly: true,
-            isStatic: false,
-            isOptional: false,
-        },
-        {
-            name: "bundleName",
-            kind: idl.IDLKind.Property,
-            type: idl.IDLStringType,
-            isReadonly: true,
-            isStatic: false,
-            isOptional: false,
-        },
-        {
-            name: "params",
-            kind: idl.IDLKind.Property,
-            type: idl.createContainerType("sequence", [idl.IDLStringType]),
-            isReadonly: true,
-            isStatic: false,
-            isOptional: true,
-        },
-    ],
-    methods: [],
-    callables: [],
-}
-
 export function cleanPrefix(name: string, prefix: string): string {
     return name.replace(prefix, "")
 }
