@@ -641,6 +641,7 @@ export function generateArkoalaFromIdl(config: {
     if (peerLibrary.language == Language.TS) {
         const declarations = printDeclarations(peerLibrary)
         const index = new IndentedPrinter()
+        index.print(tsCopyrightAndWarning(""))
         for (const [targetFile, data] of declarations) {
             const outComponentFile = arkoala.interface(targetFile)
             writeFile(outComponentFile, tsCopyrightAndWarning(data), {
@@ -649,7 +650,7 @@ export function generateArkoalaFromIdl(config: {
             })
             index.print(data)
         }
-        index.printTo(path.join(arkoala.langDir(), "index-global.d.ts"))
+        index.printTo(path.join(arkoala.langDir(), "index-full.d.ts"))
         writeFile(
             arkoala.tsArkoalaLib(new TargetFile('NativeModuleEmpty')),
             printNativeModuleEmpty(peerLibrary),
