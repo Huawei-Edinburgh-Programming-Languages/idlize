@@ -234,7 +234,6 @@ export class ImportTypeConvertor extends BaseArgConvertor { //
         throw new Error("Must never be used")
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
-        if (this.importedName === "Resource") throw new Error("1")
         printer.writeMethodCall(`${param}Serializer`, "writeCustomObject", [`"${this.importedName}"`, value])
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
