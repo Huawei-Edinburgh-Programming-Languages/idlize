@@ -415,7 +415,7 @@ export class CJTypeAliasConvertor implements TypeConvertor<CJTypeAlias> {
             case idl.IDLNumberType: return CJTypeAlias.fromTypeName('Float64', false)
             case idl.IDLBooleanType: return CJTypeAlias.fromTypeName('Bool', false)
             case idl.IDLUndefinedType: return CJTypeAlias.fromTypeName('Ark_Undefined', false)
-            case idl.IDLAnyType: return CJTypeAlias.fromTypeName('String', false)
+            case idl.IDLAnyType: return CJTypeAlias.fromTypeName(ARK_CUSTOM_OBJECT, false)
             case idl.IDLI8Type: return CJTypeAlias.fromTypeName('Int8', false)
             case idl.IDLU8Type: return CJTypeAlias.fromTypeName('UInt8', false)
             case idl.IDLI16Type: return CJTypeAlias.fromTypeName('Int16', false)
