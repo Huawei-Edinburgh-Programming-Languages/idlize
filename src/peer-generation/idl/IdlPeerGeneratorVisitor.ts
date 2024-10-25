@@ -617,6 +617,9 @@ class SyntheticDependencyConfigurableFilter implements DependencyFilter {
         },
     ) {}
     shouldAdd(node: idl.IDLEntry): boolean {
+        if (node.name === "Resource" && idl.isTypedef(node)) {
+            return false
+        }
         if (!idl.isSyntheticEntry(node)) return true
         if (this.config.skipAnonymousInterfaces && node.kind == idl.IDLKind.AnonymousInterface) return false
         if (this.config.skipCallbacks && node.kind == idl.IDLKind.Callback) return false
