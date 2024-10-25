@@ -776,7 +776,6 @@ export class DateConvertor extends BaseArgConvertor { //
         return `${param}.getTime()`
     }
     convertorSerialize(param: string, value: string, writer: LanguageWriter): void {
-        // TBD: Use writePointer() to write long value
         if (writer.language === Language.CPP) {
             writer.writeMethodCall(`${param}Serializer`, "writeInt64", [value])
             return
@@ -784,20 +783,17 @@ export class DateConvertor extends BaseArgConvertor { //
         writer.writeMethodCall(`${param}Serializer`, "writeInt64", [`${value}.getTime()`])
     }
     convertorDeserialize(param: string, value: string, writer: LanguageWriter): LanguageStatement {
-        // TBD: read long
         const deserializeTime = writer.makeMethodCall(`${param}Deserializer`, "readInt64", [])
         if (writer.language === Language.CPP) {
             return writer.makeAssign(this.getObjectAccessor(writer.language, value), undefined, deserializeTime, false)
         }
 
         const timeValue = `timeValue`
-        const stmt1 = writer.makeAssign(timeValue, idl.IDLNumberType, deserializeTime, true, true)
-
         const receiver = this.getObjectAccessor(writer.language, value, undefined, writer)
-        const stmt2 = writer.makeAssign(receiver, undefined, writer.makeString(`new Date(${timeValue})`), false)
-
-        return new BlockStatement([stmt1, stmt2])
-
+        return new BlockStatement([
+            writer.makeAssign(timeValue, idl.IDLNumberType, deserializeTime, true, true),
+            writer.makeAssign(receiver, undefined, writer.makeString(`new Date(${timeValue})`), false)
+        ])
     }
     nativeType(impl: boolean): string {
         return PrimitiveType.Int64.getText()
