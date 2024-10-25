@@ -205,9 +205,8 @@ export class IdlPeerLibrary implements ReferenceResolver {
         if (idl.isReferenceType(type)) {
             if (type == idl.IDLObjectType)
                 return new CustomTypeConvertor(param, "Object")
-            // FIXME: remove this lines after Date converter is merged!
             if (idl.isIDLTypeName(type, 'Date')) {
-                return new CustomTypeConvertor(param, 'Date', undefined, 'Date')
+                return new DateConvertor(param)
             }
             if (isImport(type))
                 return new ImportTypeConvertor(param, this.nameConvertorInstance.convert(type))
@@ -344,7 +343,7 @@ export class IdlPeerLibrary implements ReferenceResolver {
                 return ArkLength
             }
             if (idl.isIDLTypeName(type, 'Date')) {
-                return ArkInt32
+                return ArkInt64
             }
             if (idl.isIDLTypeName(type, 'AnimationRange') || idl.isIDLTypeName(type, 'ContentModifier')) {
                 return ArkCustomObject
@@ -448,8 +447,8 @@ export class IdlPeerLibrary implements ReferenceResolver {
                 case idl.IDLU16Type: name = "Int32"; break
                 case idl.IDLI32Type: name = "Int32"; break
                 case idl.IDLU32Type: name = "Int32"; break // FIXME: 
-                case idl.IDLI64Type: name = "Int32"; break // FIXME:
-                case idl.IDLU64Type: name = "Int32"; break // FIXME:
+                case idl.IDLI64Type: name = "Int64"; break // FIXME:
+                case idl.IDLU64Type: name = "Int64"; break // FIXME:
                 case idl.IDLBooleanType: name = "Boolean"; break
                 default: name = capitalize(idl.getIDLTypeName(target)); break
             }
@@ -561,6 +560,7 @@ export class IdlPeerLibrary implements ReferenceResolver {
 }
 
 export const ArkInt32 = idl.IDLI32Type
+export const ArkInt64 = idl.IDLI64Type
 export const ArkFunction = idl.IDLFunctionType
 export const ArkLength = idl.IDLLengthType
 export const ArkCustomObject = idl.IDLCustomObjectType

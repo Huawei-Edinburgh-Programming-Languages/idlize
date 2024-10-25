@@ -766,7 +766,7 @@ export class MapConvertor extends BaseArgConvertor { //
 
 export class DateConvertor extends BaseArgConvertor { //
     constructor(param: string) {
-        super(idl.IDLNumberType, [RuntimeType.NUMBER], false, false, param)
+        super(idl.IDLBigintType, [RuntimeType.NUMBER], false, false, param)
     }
 
     convertorArg(param: string, writer: LanguageWriter): string {
