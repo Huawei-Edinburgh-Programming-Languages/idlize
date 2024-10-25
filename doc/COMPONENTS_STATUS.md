@@ -569,9 +569,9 @@
 |`selectIcon`| Function |Morozov Sergey|blocked Arkoala| https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`onChange`| Function |Morozov Sergey|done|  |
 |`contentFont`| Function |Morozov Sergey|done|  |
-|`contentFontColor`| Function |Morozov Sergey|devdone|  |
+|`contentFontColor`| Function |Morozov Sergey|done|  |
 |`labelFont`| Function |Morozov Sergey|done|  |
-|`labelFontColor`| Function |Morozov Sergey|devdone|  |
+|`labelFontColor`| Function |Morozov Sergey|done|  |
 |*MenuItemGroup*| *Component* |Morozov Sergey |blocked Arkoala |  |
 |`setMenuItemGroupOptions`| Function | Morozov Sergey |blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*NavDestination*| *Component* |Kovalev Sergey | in progress |  |
@@ -909,18 +909,18 @@
 |`setStackOptions` | Function | Korobeinikov Evgeny | done |  |
 |`alignContent` | Function | Korobeinikov Evgeny | done |  |
 |`pointLight` | Function | Korobeinikov Evgeny | in progress |  |
-|*Stepper*| *Component* | | |
-|`setStepperOptions`| Function | | |
-|`onFinish`| Function | | |
-|`onSkip`| Function | | |
-|`onChange`| Function | | |
-|`onNext`| Function | | |
-|`onPrevious`| Function | | |
-|*StepperItem*| *Component* | | |
-|`setStepperItemOptions`| Function | | |
-|`prevLabel`| Function | | |
-|`nextLabel`| Function | | |
-|`status`| Function | | |
+|*Stepper*| *Component* | Morozov Sergey | |
+|`setStepperOptions`| Function | Morozov Sergey | |
+|`onFinish`| Function | Morozov Sergey | |
+|`onSkip`| Function | Morozov Sergey | |
+|`onChange`| Function | Morozov Sergey | |
+|`onNext`| Function | Morozov Sergey | |
+|`onPrevious`| Function | Morozov Sergey | |
+|*StepperItem*| *Component* | Morozov Sergey | in progress |
+|`setStepperItemOptions`| Function | Morozov Sergey | in progress |
+|`prevLabel`| Function | Morozov Sergey | in progress |
+|`nextLabel`| Function | Morozov Sergey | in progress |
+|`status`| Function | Morozov Sergey | in progress |
 |*Swiper*| *Component* | Skroba Gleb | done |  |
 |`setSwiperOptions`| Function | Skroba Gleb | done |  |
 |`index`| Function | Skroba Gleb| done |  |
