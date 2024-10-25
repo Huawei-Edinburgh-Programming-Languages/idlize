@@ -413,7 +413,7 @@ function createPrimitiveType(name: string): IDLPrimitiveType {
     }
 }
 
-function createOptionalType(element:IDLType): IDLOptionalType {
+export function createOptionalType(element:IDLType): IDLOptionalType {
     if (isOptionalType(element)) {
         return element
     }

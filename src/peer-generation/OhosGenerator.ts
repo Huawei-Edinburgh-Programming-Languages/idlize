@@ -18,8 +18,8 @@ import * as path from 'path'
 import { IndentedPrinter } from "../IndentedPrinter"
 import { IdlPeerLibrary } from './idl/IdlPeerLibrary'
 import { CppLanguageWriter, createLanguageWriter, ExpressionStatement, FieldModifier, LanguageWriter, Method, MethodSignature, NamedMethodSignature } from './LanguageWriters'
-import { createContainerType, createReferenceType, getIDLTypeName, hasExtAttribute, IDLCallback, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLKind, IDLMethod, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLU8Type, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isEnumType, isInterface, isMethod, isPrimitiveType, isReferenceType, isUnionType } from '../idl'
-import { makeCallbacksKinds, makeSerializerForOhos, readLangTemplate } from './FileGenerators'
+import { createContainerType, createOptionalType, createReferenceType, getIDLTypeName, hasExtAttribute, IDLCallback, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLKind, IDLMethod, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLU8Type, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isEnumType, isInterface, isMethod, isPrimitiveType, isReferenceType, isUnionType, printType } from '../idl'
+import { makeSerializerForOhos, readLangTemplate } from './FileGenerators'
 import { capitalize } from '../util'
 import { isMaterialized } from './idl/IdlPeerGeneratorVisitor'
 import { PrimitiveType } from './ArkPrimitiveType'
@@ -88,10 +88,22 @@ class OHOSVisitor {
     private writeData(clazz: IDLInterface) {
         let name = `${PrimitiveType.Prefix}${this.libraryName}_${clazz.name}`
         let _ = this.hWriter
+        let emittedOptionals = new Set(); // TODO refactor
+        clazz.properties.forEach(prop => {
+            if (prop.isOptional) {
+                const propTypeKey = printType(prop.type)
+                if (!emittedOptionals.has(propTypeKey)) {
+                    let conv = this.library.typeConvertor(prop.name, prop.type, true, false);
+                    _.print(`typedef ${conv.nativeType(true)} ${conv.nativeType(false)};`)
+                    emittedOptionals.add(propTypeKey)
+                }
+            }
+        })
         _.print(`typedef struct ${name} {`)
         _.pushIndent()
         clazz.properties.forEach(it => {
-            _.print(`${this.mapType(it.type)} ${it.name};`)
+            let conv = this.library.typeConvertor(it.name, it.type, it.isOptional, false);
+            _.print(`${conv.nativeType(false)} ${it.name};`)
         })
         _.popIndent()
         _.print(`} ${name};`)
@@ -269,10 +281,16 @@ class OHOSVisitor {
     }
 
     private requestTypes(entry: IDLEntry) {
-        if (isClass(entry)) {
+        if (isClass(entry) || isInterface(entry)) {
             entry.constructors.forEach(it => this.requestTypes(it))
             entry.methods.forEach(it => this.requestTypes(it))
-            entry.properties.forEach(it => this.requestType(it.type))
+            entry.properties.forEach(it => {
+                // TODO check if needed
+                if (it.isOptional) {
+                    this.requestType(createOptionalType(it.type))
+                }
+                this.requestType(it.type)
+            })
         } else if (isConstructor(entry)) {
             entry.parameters.forEach(it => this.requestType(it.type!))
         } else if (isMethod(entry) || isCallback(entry)) {
