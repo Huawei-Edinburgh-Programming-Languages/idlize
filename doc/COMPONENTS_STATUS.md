@@ -1171,10 +1171,10 @@
 |`linearGradient`| Function | Roman Sedaikin | in progress |  |
 |`sweepGradient`| Function | Roman Sedaikin | in progress |  |
 |`shadow`| Function | Roman Sedaikin | in progress |  |
-|*SearchController*| *Class* |Evstigneev Roman |in progress |  |
-|`caretPosition`| Function |Evstigneev Roman |in progress |  |
-|`stopEditing`| Function |Evstigneev Roman |in progress |  |
-|`setTextSelection`| Function |Evstigneev Roman |in progress |  |
+|*SearchController*| *Class* |Evstigneev Roman |done |  |
+|`caretPosition`| Function |Evstigneev Roman | done |  |
+|`stopEditing`| Function |Evstigneev Roman | done |  |
+|`setTextSelection`| Function |Evstigneev Roman | done |  |
 |*SwiperController*| *Class* | Skroba Gleb | done |  |
 |`showNext`| Function | Skroba Gleb | done |  |
 |`showPrevious`| Function | Skroba Gleb | done |  |
