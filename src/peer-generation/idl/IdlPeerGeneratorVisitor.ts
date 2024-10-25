@@ -1292,10 +1292,22 @@ export function isSourceDecl(node: idl.IDLEntry): boolean {
     return !node.fileName?.endsWith('stdlib.d.ts')
 }
 
+
 function generateSignature(library: IdlPeerLibrary, method: idl.IDLCallable | idl.IDLMethod | idl.IDLConstructor): NamedMethodSignature {
     const returnName = method.returnType!.name
-    const returnType = idl.isVoidType(method.returnType!) ? Type.Void
-        : idl.isConstructor(method) || !method.isStatic ? Type.This : new Type(returnName)
+    let returnType: Type
+    if (idl.isVoidType(method.returnType!)) {
+        returnType = Type.Void
+    } else if (idl.isConstructor(method)) {
+        returnType = Type.This
+    } else if (method.name == "interpolate" || method.name == "interpolate_serialize") {
+        returnType = new Type(returnName)
+    } else if (!method.isStatic) {
+        returnType = Type.This
+    } 
+    else {
+        returnType = new Type(returnName)
+    }
     return new NamedMethodSignature(returnType,
         method.parameters.map(it => new Type(library.mapType(it.type!), it.isOptional)),
         method.parameters.map(it => it.name))
