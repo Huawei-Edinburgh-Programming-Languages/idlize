@@ -54,8 +54,11 @@ sources = [
     arkoala_dir / 'bridge_generated.cc',
     arkoala_dir / 'custom.cc',
     arkoala_dir / 'library.cc',
+    arkoala_dir / 'callback_deserialize_call.cc',
+    arkoala_dir / 'callback_managed_caller.cc',
     external_interop_dir / 'common-interop.cc',
     external_framework_dir / 'events.cc',
+    external_framework_dir / 'callbacks.cc',
 ]
 if compile_events_test
     sources += [
