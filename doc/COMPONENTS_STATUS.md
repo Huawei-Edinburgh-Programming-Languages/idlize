@@ -457,31 +457,31 @@
 |`alignItems`| Function |Lobah Mikhail| in progress|  |
 |*Image*| *Component* | Korobeinikov Evgeny | in progress |  |
 |`setImageOptions`| Function | Berezin Kirill | in progress | |
-|`alt`| Function | | | |
-|`matchTextDirection`| Function | | | |
-|`fitOriginalSize`| Function | | | |
+|`alt`| Function | Evstigneev Roman | in progress | |
+|`matchTextDirection`| Function | Evstigneev Roman | in progress | |
+|`fitOriginalSize`| Function | Evstigneev Roman | in progress | |
 |`fillColor`| Function | Evstigneev Roman | done | |
 |`objectFit`| Function |Kirill Berezin| in progress | |
-|`objectRepeat`| Function | | | |
+|`objectRepeat`| Function | Evstigneev Roman | in progress | |
 |`autoResize`| Function | Evstigneev Roman | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IAW529 |
-|`renderMode`| Function | | | |
-|`dynamicRangeMode`| Function | | | |
-|`interpolation`| Function | | | |
-|`sourceSize`| Function | | | |
-|`syncLoad`| Function | | | |
-|`colorFilter`| Function | | | |
-|`copyOption`| Function | | | |
-|`draggable`| Function | | | |
-|`pointLight`| Function | | | |
-|`edgeAntialiasing`| Function | | | |
-|`onComplete`| Function | | | |
+|`renderMode`| Function | Evstigneev Roman | in progress | |
+|`dynamicRangeMode`| Function | Evstigneev Roman | in progress | |
+|`interpolation`| Function | Evstigneev Roman | in progress | |
+|`sourceSize`| Function | Evstigneev Roman | in progress | |
+|`syncLoad`| Function | Evstigneev Roman | in progress | |
+|`colorFilter`| Function | Evstigneev Roman | in progress | |
+|`copyOption`| Function | Evstigneev Roman | in progress | |
+|`draggable`| Function | Evstigneev Roman | in progress | |
+|`pointLight`| Function | Evstigneev Roman | in progress | |
+|`edgeAntialiasing`| Function | Evstigneev Roman | in progress | |
+|`onComplete`| Function | Evstigneev Roman | in progress | |
 |`onError`| Function | Evstigneev Roman | done | |
 |`onFinish`| Function | Evstigneev Roman | done | |
-|`enableAnalyzer`| Function | | | |
-|`analyzerConfig`| Function | | | |
-|`resizable`| Function | | | |
-|`privacySensitive`| Function | | | |
-|`enhancedImageQuality`| Function | | | |
+|`enableAnalyzer`| Function | Evstigneev Roman | in progress | |
+|`analyzerConfig`| Function | Evstigneev Roman | in progress | |
+|`resizable`| Function | Evstigneev Roman | in progress | |
+|`privacySensitive`| Function | Evstigneev Roman | in progress | |
+|`enhancedImageQuality`| Function | Evstigneev Roman | in progress | |
 |*Line*|*Component*|Dudkin Sergey| blocked |  |
 |`setLineOptions`|Function|Dudkin Sergey| done |  |
 |`startPoint`|Function|Dudkin Sergey|blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IAXCBA |
