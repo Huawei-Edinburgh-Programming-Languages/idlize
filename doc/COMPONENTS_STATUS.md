@@ -77,21 +77,21 @@
 |`setCanvasOptions`| Function |Vadim Voronov |In Progress |  |
 |`onReady`| Function |Vadim Voronov | done |  |
 |`enableAnalyzer`| Function |Vadim Voronov | done |  |
-|*Calendar*| *Component* |Lobah Mikhail| in progress|  |
-|`setCalendarOptions`| Function |Lobah Mikhail| in progress|  |
-|`showLunar`| Function |Lobah Mikhail| in progress|  |
-|`showHoliday`| Function |Lobah Mikhail| in progress|  |
-|`needSlide`| Function |Lobah Mikhail| in progress|  |
-|`startOfWeek`| Function |Lobah Mikhail| in progress|  |
-|`offDays`| Function |Lobah Mikhail| in progress|  |
-|`direction`| Function |Lobah Mikhail| in progress|  |
-|`currentDayStyle`| Function |Lobah Mikhail| in progress|  |
-|`nonCurrentDayStyle`| Function |Lobah Mikhail| in progress|  |
-|`todayStyle`| Function |Lobah Mikhail| in progress|  |
-|`weekStyle`| Function |Lobah Mikhail| in progress|  |
-|`workStateStyle`| Function |Lobah Mikhail| in progress|  |
-|`onSelectChange`| Function |Lobah Mikhail| in progress|  |
-|`onRequestData`| Function |Lobah Mikhail| in progress|  |
+|*Calendar*| *Component* | Maksimov Nikita | in progress|  |
+|`setCalendarOptions`| Function | Maksimov Nikita | in progress|  |
+|`showLunar`| Function | Maksimov Nikita | in progress|  |
+|`showHoliday`| Function | Maksimov Nikita | in progress|  |
+|`needSlide`| Function | Maksimov Nikita | in progress|  |
+|`startOfWeek`| Function | Maksimov Nikita | in progress|  |
+|`offDays`| Function | Maksimov Nikita | in progress|  |
+|`direction`| Function | Maksimov Nikita | in progress|  |
+|`currentDayStyle`| Function | Maksimov Nikita | in progress|  |
+|`nonCurrentDayStyle`| Function | Maksimov Nikita | in progress|  |
+|`todayStyle`| Function | Maksimov Nikita | in progress|  |
+|`weekStyle`| Function | Maksimov Nikita | in progress|  |
+|`workStateStyle`| Function | Maksimov Nikita | in progress|  |
+|`onSelectChange`| Function | Maksimov Nikita | in progress|  |
+|`onRequestData`| Function | Maksimov Nikita | in progress|  |
 |*Checkbox*| *Component* | Andrey Khudenkikh | in progress |  |
 |`setCheckboxOptions`| Function | Andrey Khudenkikh | done |  |
 |`select`| Function | Andrey Khudenkikh | done |  |
@@ -387,17 +387,17 @@
 |`onLoad`| Function | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAUYQM| Dudkin Sergey| in progress| |
 |*FormLink*| *Component* | Dmitry A Smirnov| done |  |
 |`setFormLinkOptions`| Function | Dmitry A Smirnov| done |  |
-|*Gauge*| *Component* | Maksimov Nikita | in progress |  |
-|`setGaugeOptions`| Function | Maksimov Nikita | devdone | |
-|`value`| Function | Maksimov Nikita | devdone | |
-|`startAngle`| Function | Maksimov Nikita | devdone | |
-|`endAngle`| Function | Maksimov Nikita | devdone | |
+|*Gauge*| *Component* | Maksimov Nikita | blocked ArKoala |  |
+|`setGaugeOptions`| Function | Maksimov Nikita | done | |
+|`value`| Function | Maksimov Nikita | done | |
+|`startAngle`| Function | Maksimov Nikita | done | |
+|`endAngle`| Function | Maksimov Nikita | done | |
 |`colors`| Function | Maksimov Nikita | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAW4DU |
-|`strokeWidth`| Function | Maksimov Nikita | devdone | |
+|`strokeWidth`| Function | Maksimov Nikita | done | |
 |`description`| Function | Maksimov Nikita | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|`trackShadow`| Function | Maksimov Nikita | in progress |  |
-|`indicator`| Function | Maksimov Nikita | in progress |  |
-|`privacySensitive`| Function | Maksimov Nikita | devdone ||
+|`trackShadow`| Function | Maksimov Nikita | devdone |  |
+|`indicator`| Function | Maksimov Nikita | devdone |  |
+|`privacySensitive`| Function | Maksimov Nikita | done ||
 |`contentModifier`| Function | Maksimov Nikita | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |*Grid*|*Component*| Erokhin Ilya | blocked |  |
 |`setGridOptions`|Function| Erokhin Ilya | blocked ArKoala |https://gitee.com/nikolay-igotti/idlize/issues/IAQIXM|
