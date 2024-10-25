@@ -1292,25 +1292,33 @@ export function isSourceDecl(node: idl.IDLEntry): boolean {
     return !node.fileName?.endsWith('stdlib.d.ts')
 }
 
-
-function generateSignature(library: IdlPeerLibrary, method: idl.IDLCallable | idl.IDLMethod | idl.IDLConstructor): NamedMethodSignature {
+function generateSignature(
+    library: IdlPeerLibrary,
+    method: idl.IDLCallable | idl.IDLMethod | idl.IDLConstructor
+): NamedMethodSignature {
     const returnName = method.returnType!.name
     let returnType: Type
+
     if (idl.isVoidType(method.returnType!)) {
         returnType = Type.Void
     } else if (idl.isConstructor(method)) {
         returnType = Type.This
-    } else if (method.name == "interpolate" || method.name == "interpolate_serialize") {
-        returnType = new Type(returnName)
-    } else if (!method.isStatic) {
+    } 
+    else if (method.name?.startsWith("this") && method.name.endsWith("Options")) {
+        returnType = Type.This
+    }
+    else if (!method.isStatic) {
         returnType = Type.This
     } 
     else {
         returnType = new Type(returnName)
     }
-    return new NamedMethodSignature(returnType,
+
+    return new NamedMethodSignature(
+        returnType,
         method.parameters.map(it => new Type(library.mapType(it.type!), it.isOptional)),
-        method.parameters.map(it => it.name))
+        method.parameters.map(it => it.name)
+    )
 }
 
 function getMethodIndex(clazz: idl.IDLInterface, method: idl.IDLSignature | undefined): number {
