@@ -207,7 +207,7 @@ export class IdlPeerLibrary implements ReferenceResolver {
                 return new CustomTypeConvertor(param, "Object")
             // FIXME: remove this lines after Date converter is merged!
             if (idl.isIDLTypeName(type, 'Date')) {
-                return new CustomTypeConvertor(param, 'Date')
+                return new CustomTypeConvertor(param, 'Date', undefined, 'Date')
             }
             if (isImport(type))
                 return new ImportTypeConvertor(param, this.nameConvertorInstance.convert(type))
