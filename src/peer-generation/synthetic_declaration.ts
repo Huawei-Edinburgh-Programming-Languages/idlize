@@ -108,9 +108,9 @@ export function makeSyntheticInterfaceDeclaration(targetFileName: string,
                         it.modifiers,
                         it.name,
                         it.questionToken,
-                        ts.factory.createTypeReferenceNode(it.type.typeName, ts.factory.createNodeArray([
-                            ts.factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword)
-                        ]))
+                        ts.factory.createFunctionTypeNode(undefined,
+                            [],
+                            ts.factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword))
                     )
                 }
                 return it
