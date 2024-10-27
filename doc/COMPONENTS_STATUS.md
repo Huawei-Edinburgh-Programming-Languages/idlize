@@ -126,8 +126,8 @@
 |`width`| Function | Roman Sedaikin | done | |
 |`height`| Function | Roman Sedaikin | done | |
 |`drawModifier`| Function | | | |
-|`responseRegion`| Function | Skroba Gleb | devdone | |
-|`mouseResponseRegion`| Function | Skroba Gleb | devdone | |
+|`responseRegion`| Function | Skroba Gleb | done | |
+|`mouseResponseRegion`| Function | Skroba Gleb | done | |
 |`size`| Function | Roman Sedaikin | in progress | |
 |`constraintSize`| Function | Roman Sedaikin | in progress | |
 |`touchable`| Function | Roman Sedaikin | in progress | |
@@ -268,7 +268,7 @@
 |`onSizeChange`| Function | | | |
 |`customProperty`| Function | | | |
 |`expandSafeArea`| Function | | | |
-|`background`| Function | Skroba Gleb | in progress | |
+|`background`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`backgroundImage`| Function | Erokhin Ilya | blocked |https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR|
 |`backgroundBlurStyle`| Function | Skroba Gleb | in progress |  |
 |`foregroundBlurStyle`| Function | Roman Sedaikin | in progress | |
@@ -1180,6 +1180,16 @@
 |`showPrevious`| Function | Skroba Gleb | done |  |
 |`changeIndex`| Function | Skroba Gleb | done |  |
 |`finishAnimation`| Function | Skroba Gleb |blocked| https://gitee.com/nikolay-igotti/idlize/issues/IAOKLD |
+|*SwiperContentTransitionProxy*| *Class* | Skroba Gleb | in progress | |
+|`finishTransition`| Function | Skroba Gleb | in progress | |
+|`getSelectedIndex`| Function | Skroba Gleb | in progress | |
+|`setSelectedIndex`| Function | Skroba Gleb | in progress | |
+|`getIndex`| Function | Skroba Gleb | in progress | |
+|`setIndex`| Function | Skroba Gleb | in progress | |
+|`getPosition`| Function | Skroba Gleb | in progress | |
+|`setPosition`| Function | Skroba Gleb | in progress | |
+|`getMainAxisLength`| Function | Skroba Gleb | in progress | |
+|`setMainAxisLength`| Function | Skroba Gleb | in progress | |
 |*TabsController*| *Class* | | in progress |  |
 |`changeIndex`| Function |Skroba Gleb | done |  |
 |`preloadItems`| Function |Skroba Gleb | done |  |
