@@ -39,12 +39,13 @@ import { IDLCallback, IDLConstructor, IDLEntity, IDLEntry, IDLEnum, IDLInterface
     IDLContainerUtils,
     IDLContainerType,
     DebugUtils,
-    isType} from "../idl"
+    isType,
+    createReferenceType,} from "../idl"
 import * as webidl2 from "webidl2"
 import { resolveSyntheticType, toIDLNode } from "./deserialize"
 
 export class CustomPrintVisitor {
-    constructor(private syntheticTypeResolver: (type: IDLReferenceType) => IDLEntry | undefined) {}
+    constructor(private resolver: (type: IDLReferenceType) => IDLEntry | undefined) {}
     output: string[] = []
     currentInterface?: IDLInterface
 
@@ -209,6 +210,15 @@ export class CustomPrintVisitor {
         this.closeNamespace(namespace)
     }
     printTypedef(node: IDLTypedef | IDLCallback) {
+        // Let's skip imported declarations
+        if (isTypedef(node) &&
+            hasExtAttribute(node, IDLExtendedAttributes.Import)) {
+            let definition = this.resolver(createReferenceType(node.name))
+            if (definition && !isTypedef(definition)) {
+                console.log(`Has better definition for ${node.name}: ${definition.fileName} ${definition.kind}`)
+                return
+            }
+        }
         const text = isCallback(node) ? this.callback(node)
             : hasExtAttribute(node, IDLExtendedAttributes.Import) ? getIDLTypeName(IDLAnyType)
             : this.printTypeForTS(node.type)
@@ -300,8 +310,8 @@ export class CustomPrintVisitor {
 
     private toTypeName(node: IDLEntry, typeAttribute: IDLExtendedAttributes): string {
         if (isReferenceType(node)) {
-            const synthDecl = this.syntheticTypeResolver(node)
-            if (synthDecl) {
+            const synthDecl = this.resolver(node)
+            if (synthDecl && isSyntheticEntry(synthDecl)) {
                 if (isInterface(synthDecl) || isAnonymousInterface(synthDecl) || isTupleInterface(synthDecl)) {
                     const isTuple = getExtAttribute(synthDecl, IDLExtendedAttributes.Entity) === IDLEntity.Tuple
                     return this.literal(synthDecl, isTuple, !isTuple)
