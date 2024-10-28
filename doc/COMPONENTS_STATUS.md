@@ -1246,6 +1246,22 @@
 |`sideBarPosition`| Function |Dmitry A Smirnov|done|  |
 |`divider`| Function |Dmitry A Smirnov|done|  |
 |`minContentWidth`| Function |Dmitry A Smirnov|done|  |
+|*WaterFlow*| *Component* | Kovalev Sergey | in progress |  |
+|`setWaterFlowOptions`| Function | Kovalev Sergey | in progress |  |
+|`columnsTemplate`| Function | Kovalev Sergey | in progress |  |
+|`itemConstraintSize`| Function | Kovalev Sergey | in progress |  |
+|`rowsTemplate`| Function | Kovalev Sergey | in progress |  |
+|`columnsGap`| Function | Kovalev Sergey | in progress |  |
+|`rowsGap`| Function |Kovalev Sergey | in progress |  |
+|`layoutDirection`| Function |Kovalev Sergey | in progress |  |
+|`nestedScroll`| Function | Kovalev Sergey | in progress |  |
+|`enableScrollInteraction`| Function | Kovalev Sergey | in progress |  |
+|`friction`| Function | Kovalev Sergey | in progress |  |
+|`cachedCount`| Function |Kovalev Sergey | in progress |  |
+|`onReachStart`| Function | Kovalev Sergey | in progress |  |
+|`onReachEnd`| Function | Kovalev Sergey | in progress |  |
+|`onScrollFrameBegin`| Function | Kovalev Sergey | in progress |  |
+|`onScrollIndex`| Function | Kovalev Sergey | in progress |  |
 |*CanvasRenderingContext2D*| *Class* | Vadim Voronov| in progress| |
 |`toDataURL`| Function |Vadim Voronov| in progress| |
 |`startImageAnalyzer`| Function |Vadim Voronov| in progress| |
