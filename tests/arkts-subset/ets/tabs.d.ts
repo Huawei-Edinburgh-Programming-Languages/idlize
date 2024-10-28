@@ -4,7 +4,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,11 +13,20 @@
  * limitations under the License.
  */
 
-import { IDLType } from "../../idl";
-import { LanguageWriter } from "../LanguageWriters";
-
-export interface ImportTable {
-    getImportsForTypes(types: IDLType[]): string[]
-    setImportsForType(type: IDLType, imports: string[]): void
-    printImportsForTypes(types: IDLType[], printer: LanguageWriter): void
+declare enum BarMode {
+    Scrollable = 0,
+    Fixed = 1,
 }
+
+declare interface TabsInterface { 
+    (): TabsAttribute
+}
+
+declare class TabsAttribute extends CommonMethod<TabsAttribute> {
+
+    // TBD: Fix for the TestGeneratorVisitor
+    // barMode(value: BarMode.Fixed): TabsAttribute;
+    barMode(value: BarMode): TabsAttribute;
+}
+
+declare const Tabs: TabsInterface

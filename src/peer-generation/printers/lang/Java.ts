@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
+import * as idl from "../../../idl"
+
 export const ARKOALA_PACKAGE = 'org.koalaui.arkoala'
 export const INTEROP_PACKAGE = 'org.koalaui.interop'
 
@@ -32,18 +34,17 @@ function getPackagePath(javaPackage: string): string {
     return javaPackage.replaceAll('.', '/')
 }
 
-export function convertJavaOptional(type: string) {
+export function convertJavaOptional(type: string): string {
     switch (type) {
-        case 'boolean': return 'Opt_Boolean'
+        case 'boolean': return  'Opt_Boolean'
         case 'double': return 'Opt_Number'
-        default: return type
     }
+    return type
 }
 
 export const javaCustomTypeMapping = new Map<string, string>([
     ['Dimension', 'Ark_Length'],
     ['Length', 'Ark_Length'],
     ['ContentModifier', ARK_CUSTOM_OBJECT],
-    ['Date', ARK_CUSTOM_OBJECT],
     ['Optional', 'Optional'],
 ])
