@@ -412,17 +412,6 @@ function createPrimitiveType(name: string): IDLPrimitiveType {
     }
 }
 
-function createOptionalType(element:IDLType): IDLOptionalType {
-    if (isOptionalType(element)) {
-        return element
-    }
-    return {
-        ...element,
-        optional: true,
-        element
-    }
-}
-
 export const IDLPointerType = createPrimitiveType('pointer')
 export const IDLVoidType = createPrimitiveType('void')
 export const IDLBooleanType = createPrimitiveType('boolean')
@@ -473,6 +462,17 @@ export function createReferenceType(name: string, typeArguments?: (string | unde
     return {
         kind: IDLKind.ReferenceType,
         [idlTypeName]: name
+    }
+}
+
+export function createOptionalType(element:IDLType): IDLOptionalType {
+    if (isOptionalType(element)) {
+        return element
+    }
+    return {
+        ...element,
+        optional: true,
+        element
     }
 }
 
@@ -979,19 +979,17 @@ export function toIDLType(typeName: string): IDLType {
     }
 }
 
-export function maybeOptional(type: IDLType, optional?: boolean): IDLType {
-    if (optional === undefined) {
-        return type
-    }
+export function unwrapOptional(type: IDLOptionalType): IDLType {
+    return type.element
+}
+
+export function maybeOptional(type: IDLType, optional: boolean = false): IDLType {
     if (optional) {
-        if (isOptionalType(type)) {
-            return type
-        }
         return createOptionalType(type)
     }
 
     if (isOptionalType(type)) {
-        return type.element
+        return unwrapOptional(type)
     }
     return type
 }

@@ -20,7 +20,7 @@ import { BlockStatement, BranchStatement, generateTypeCheckerName, LanguageExpre
 import { mapType, TypeNodeNameConvertor } from "./TypeNodeNameConvertor"
 import { RuntimeType, ArgConvertor, BaseArgConvertor, ProxyConvertor, UndefinedConvertor, UnionRuntimeTypeChecker } from "./ArgConvertors"
 import { Language } from "../Language"
-import { createContainerType, createReferenceType, createUnionType, DebugUtils, getIDLTypeName, IDLI32Type, IDLKind, IDLStringType, IDLType, IDLVoidType, maybeOptional, toIDLType } from "../idl"
+import { createContainerType, createOptionalType, createReferenceType, createUnionType, DebugUtils, getIDLTypeName, IDLI32Type, IDLKind, IDLStringType, IDLType, IDLVoidType, maybeOptional, toIDLType } from "../idl"
 
 
 const builtInInterfaceTypes = new Map<string,
@@ -471,7 +471,7 @@ export class OptionConvertor extends BaseArgConvertor {
         if (!runtimeTypes.includes(RuntimeType.UNDEFINED)) {
             runtimeTypes.push(RuntimeType.UNDEFINED)
         }
-        super(maybeOptional(typeConvertor.idlType, true), runtimeTypes, typeConvertor.isScoped, true, param)
+        super(createOptionalType(typeConvertor.idlType), runtimeTypes, typeConvertor.isScoped, true, param)
         this.typeConvertor = typeConvertor
     }
     convertorArg(param: string, writer: LanguageWriter): string {

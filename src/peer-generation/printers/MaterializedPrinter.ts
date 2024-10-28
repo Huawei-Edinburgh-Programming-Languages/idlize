@@ -44,7 +44,7 @@ import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
 import { printJavaImports } from "./lang/JavaPrinters";
 import { Language } from "../../Language";
 import { copyMethod } from "../LanguageWriters/LanguageWriter";
-import { createReferenceType, getIDLTypeName, IDLPointerType, IDLThisType, IDLType, IDLVoidType, maybeOptional, toIDLType } from "../../idl";
+import { createOptionalType, createReferenceType, getIDLTypeName, IDLPointerType, IDLThisType, IDLType, IDLVoidType, maybeOptional, toIDLType } from "../../idl";
 import { getReferenceResolver } from "../ReferenceResolver";
 
 interface MaterializedFileVisitor {
@@ -174,7 +174,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
             const ctorSig = clazz.ctor.method.signature as NamedMethodSignature
             const sigWithPointer = new NamedMethodSignature(
                 ctorSig.returnType,
-                ctorSig.args.map(it => maybeOptional(it, true)),
+                ctorSig.args.map(it => createOptionalType(it)),
                 ctorSig.argsNames,
                 ctorSig.defaults)
 

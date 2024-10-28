@@ -10,7 +10,7 @@ import { ImportFeature, ImportsCollector } from "../ImportsCollector";
 import { ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from "./lang/Java";
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
 import { Language } from "../../Language";
-import { getIDLTypeName, IDLType, IDLVoidType, maybeOptional, toIDLType } from "../../idl";
+import { createOptionalType, getIDLTypeName, IDLType, IDLVoidType, maybeOptional, toIDLType } from "../../idl";
 import { createEmptyReferenceResolver } from "../ReferenceResolver";
 
 interface BuilderClassFileVisitor {
@@ -380,7 +380,7 @@ function syntheticName(name: string): string {
 
 function toSyntheticField(method: Method): Field {
     const type = method.signature.args[0]
-    return new Field(syntheticName(method.name), maybeOptional(type, true))
+    return new Field(syntheticName(method.name), createOptionalType(type))
 }
 
 function collapse(methods: Method[]): Method[] {
@@ -421,7 +421,7 @@ function processTSBuilderClass(clazz: TSBuilderClass): TSBuilderClass {
 
     const ctorFields = constructors.flatMap(cons => {
         const ctorSig = cons.signature
-        return ctorSig.args.map((type, index) => new Field(syntheticName(ctorSig.argName(index)), maybeOptional(type, true)))
+        return ctorSig.args.map((type, index) => new Field(syntheticName(ctorSig.argName(index)), createOptionalType(type)))
     })
 
     const syntheticFields = methods

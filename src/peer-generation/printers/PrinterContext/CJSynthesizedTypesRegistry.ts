@@ -24,7 +24,7 @@ import { PrimitiveType } from "../../ArkPrimitiveType"
 import { PeerGeneratorConfig } from '../../PeerGeneratorConfig'
 import { ImportTable } from '../ImportTable'
 import { Language } from '../../../Language'
-import { getIDLTypeName, IDLI32Type, IDLType, IDLVoidType, maybeOptional, toIDLType } from '../../../idl'
+import { createOptionalType, getIDLTypeName, IDLI32Type, IDLType, IDLVoidType, maybeOptional, toIDLType } from '../../../idl'
 import { createEmptyReferenceResolver } from '../../ReferenceResolver'
 
 
@@ -331,7 +331,7 @@ export class CJSynthesizedTypesRegistry implements SynthesizedTypesRegistry {
 
             const param = 'param'
             for (const [index, memberInfo] of membersInfo.entries()) {
-                let optionalType = maybeOptional(memberInfo.type, true)
+                let optionalType = createOptionalType(memberInfo.type)
                 writer.writeFieldDeclaration(memberInfo.name, optionalType, [FieldModifier.PRIVATE], true, new StringExpression(`None<${memberInfo.type}>`) )
 
                 writer.writeConstructorImplementation(
