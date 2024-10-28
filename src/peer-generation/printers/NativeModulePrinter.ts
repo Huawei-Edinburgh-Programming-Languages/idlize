@@ -239,7 +239,6 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
             printer.pushIndent()
             for(let param of parameters.args) {
                 let ordinal = parameters.args.indexOf(param)
-                console.log(name, '================', idl.getIDLTypeName(param))
                 if (this.arrayLikeTypes.has(idl.getIDLTypeName(param))) {
                     functionCallArgs.push(`handle_${ordinal}.pointer`)
                     printer.print(`let handle_${ordinal} = acquireArrayRawData(${parameters.argsNames[ordinal]}.toArray())`)
@@ -339,7 +338,6 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
             const cleanUpStmnts: string[] = []
             method.signature.args.forEach((arg, ordinal) => {
                 const paramName = method.signature.argName(ordinal)
-                console.log(method.name, '================', idl.getIDLTypeName(arg))
                 if (this.arrayLikeTypes.has(idl.getIDLTypeName(arg)) || idl.getIDLTypeName(arg).startsWith('ArrayList<') || idl.getIDLTypeName(arg) == 'sequence') {
                     const varName = `handle_${ordinal}`
                     callParameters.push(`${varName}.pointer`)

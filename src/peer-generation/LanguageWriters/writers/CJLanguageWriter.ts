@@ -345,7 +345,6 @@ export class CJLanguageWriter extends LanguageWriter {
         printer.print(`return unsafe { ${name}(${signature.args.map((it, index) => `${signature.argName(index)}`).join(", ")}) }`)
     }
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
-        console.log("name of native method ---------------------", name)
         this.print(`func ${name}(${signature.args.map((it, index) => `${this.escapeKeyword(signature.argName(index))}: ${it.optional ? '?' : ''}${this.mapCIDLType(it)}`).join(", ")}): ${this.mapCIDLType(signature.returnType)}`)
     }
     override makeCastEnumToInt(convertor: EnumConvertorDTS, enumName: string, _unsafe?: boolean): string {
