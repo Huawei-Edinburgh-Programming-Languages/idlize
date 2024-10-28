@@ -297,6 +297,9 @@ export class ArkTSTypeNodeNameConvertor extends TSTypeNodeNameConvertor {
                     ts.factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword)].splice(0, 2)
             )
         }
+        if (ts.isIdentifier(node.typeName) && node.typeName.text === "Boolean") {
+            return "boolean"
+        }
         return super.convertTypeReference(node);
     }
 }
