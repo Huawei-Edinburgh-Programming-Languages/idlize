@@ -186,11 +186,6 @@ export interface IDLReferenceType extends IDLType {
     kind: IDLKind.ReferenceType
 }
 
-export interface IDLEnumType extends IDLType {
-    name: string
-    kind: IDLKind.EnumType
-}
-
 export interface IDLUnionType extends IDLType {
     kind: IDLKind.UnionType
     types: IDLType[]
@@ -363,14 +358,14 @@ export function forEachChild(node: IDLNode, cb: (entry: IDLNode) => void): void 
 //                           DISCRIMINATORS                            //
 /////////////////////////////////////////////////////////////////////////
 
-export function isNullType(type: IDLNode): type is IDLPrimitiveType {
+export function isNullType(type: IDLNode): boolean {
     return isPrimitiveType(type) && type.name === "null_"
 }
-export function isUndefinedType(type: IDLNode): type is IDLPrimitiveType {
+export function isUndefinedType(type: IDLNode): boolean{
     return isPrimitiveType(type) && type.name === "undefined"
 }
 export function isVoidType(type: IDLNode): type is IDLPrimitiveType {
-    return isPrimitiveType(type) && type === IDLVoidType
+    return type === IDLVoidType
 }
 export function isPrimitiveType(type: IDLNode): type is IDLPrimitiveType {
     return type.kind == IDLKind.PrimitiveType
@@ -380,9 +375,6 @@ export function isContainerType(type: IDLNode): type is IDLContainerType {
 }
 export function isReferenceType(type: IDLNode): type is IDLReferenceType {
     return type.kind == IDLKind.ReferenceType
-}
-export function isEnumType(type: IDLNode): type is IDLEnumType {
-    return type.kind == IDLKind.EnumType
 }
 export function isEnum(type: IDLNode): type is IDLEnum {
     return type.kind == IDLKind.Enum
@@ -435,11 +427,11 @@ export function isConstant(node: IDLEntry): node is IDLConstant {
 export function isTypedef(node: IDLEntry): node is IDLTypedef {
     return node.kind === IDLKind.Typedef
 }
-export function isType(node: IDLEntry | IDLType): node is IDLType {
+export function isType(node: IDLNode): node is IDLType {
     return idlTypeAnchor in node
 }
-export function isNamedType(type: IDLType): type is IDLReferenceType | IDLPrimitiveType | IDLEnumType | IDLTypeParameterType {
-    return isReferenceType(type) || isPrimitiveType(type) || isEnumType(type) || isTypeParameterType(type)
+export function isNamedType(type: IDLType): type is IDLReferenceType | IDLPrimitiveType | IDLTypeParameterType {
+    return isReferenceType(type) || isPrimitiveType(type) || isTypeParameterType(type)
 }
 export function isModuleType(node: IDLType): node is IDLModuleType {
     return node.kind === IDLKind.ModuleType
@@ -505,14 +497,6 @@ export function createOptionalType(element:IDLType): IDLOptionalType {
         optional: true,
         element,
         [idlTypeAnchor]: true
-    }
-}
-
-export function createEnumType(name: string): IDLEnumType {
-    return {
-        kind: IDLKind.EnumType,
-        name,
-        [idlTypeAnchor]: true,
     }
 }
 
@@ -598,7 +582,7 @@ export function createProperty(
     }
 }
 
-export function createParameter(name: string, type: IDLType | undefined): IDLParameter {
+export function createParameter(name: string, type?: IDLType): IDLParameter {
     return {
         kind: IDLKind.Parameter,
         name: name,
@@ -697,7 +681,7 @@ export function updateIDLType<T extends IDLType>(type:T, newName:string): T {
     throw new Error("deprecated")
 }
 export function isIDLTypeNameIn(type: IDLType, collection:string[] | Map<string, unknown> | Set<string>): boolean {
-    const isValidType = isTypeParameterType(type) || isReferenceType(type) || isEnumType(type) || isPrimitiveType(type)
+    const isValidType = isTypeParameterType(type) || isReferenceType(type) || isPrimitiveType(type)
     if (!isValidType) {
         return false
     }
@@ -707,7 +691,7 @@ export function isIDLTypeNameIn(type: IDLType, collection:string[] | Map<string,
     return collection.has(type.name)
 } 
 export function isIDLTypeName(type: IDLType , name:string | undefined): boolean {
-    const isValidType = isTypeParameterType(type) || isReferenceType(type) || isEnumType(type) || isPrimitiveType(type)
+    const isValidType = isTypeParameterType(type) || isReferenceType(type) || isPrimitiveType(type)
     if (!isValidType) {
         return false
     }
@@ -728,7 +712,7 @@ export function getIDLContainerTypeKind(type:IDLContainerType): IDLContainerKind
 } 
 type IDLTypePrinter<T> = (x:T, name:string) => string
 export function getIDLTypeName<T extends IDLType>(type:T, print?: IDLTypePrinter<T>): string {
-    if (isPrimitiveType(type) || isReferenceType(type) || isEnumType(type) || isTypeParameterType(type)) {
+    if (isPrimitiveType(type) || isReferenceType(type) || isTypeParameterType(type)) {
         if (print) {
            return print(type, type.name)
         }
@@ -834,7 +818,6 @@ export function printType(type: IDLType | IDLInterface | undefined): string {
         return `${attrSpec}${type.name}`
     }
     if (isUnionType(type)) return `(${type.types.map(printType).join(" or ")})`
-    if (isEnumType(type)) return type.name
     if (isTypeParameterType(type)) return type.name
     throw new Error(`Cannot map type: ${IDLKind[type.kind]}`)
 }
