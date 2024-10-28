@@ -542,13 +542,13 @@
 |`setLocationButtonOptions`| Function |Samarin Sergey| done |  |
 |`onClick`| Function |Samarin Sergey| done |  |
 |*Marquee*| *Component* | Andrey Khudenkikh| in progress |  |
-|`setMarqueeOptions`| Function | Andrey Khudenkikh| in progress |  |
-|`fontColor`| Function |Andrey Khudenkikh | devdone |  |
-|`fontSize`| Function |Andrey Khudenkikh | devdone |  |
-|`allowScale`| Function |Andrey Khudenkikh | devdone |  |
-|`fontWeight`| Function | Andrey Khudenkikh| devdone |  |
-|`fontFamily`| Function | Andrey Khudenkikh| devdone |  |
-|`marqueeUpdateStrategy`| Function |Andrey Khudenkikh | in progress |  |
+|`setMarqueeOptions`| Function | Andrey Khudenkikh| devdone |  |
+|`fontColor`| Function |Andrey Khudenkikh | done |  |
+|`fontSize`| Function |Andrey Khudenkikh | done |  |
+|`allowScale`| Function |Andrey Khudenkikh | done |  |
+|`fontWeight`| Function | Andrey Khudenkikh| done |  |
+|`fontFamily`| Function | Andrey Khudenkikh| done |  |
+|`marqueeUpdateStrategy`| Function |Andrey Khudenkikh | devdone |  |
 |`onStart`| Function | Andrey Khudenkikh| in progress |  |
 |`onBounce`| Function |Andrey Khudenkikh | in progress |  |
 |`onFinish`| Function |Andrey Khudenkikh | in progress |  |
