@@ -312,9 +312,16 @@ export class OptionConvertor extends BaseArgConvertor { //
         ], true)
     }
     nativeType(impl: boolean): string {
-        return impl
-            ? `struct { ${PrimitiveType.Tag.getText()} tag; ${this.library.getTypeName(this.type, false)} value; }`
-            : this.library.getTypeName(this.type, true)
+        if (!impl) {
+            return this.library.getTypeName(this.type, true)
+        }
+        let valueType = this.library.getTypeName(this.type, false)
+        if (!idl.isPrimitiveType(this.type)) {
+            // TODO Get rid of cleanPrefix
+            const strippedTypeName = cleanPrefix(valueType, PrimitiveType.Prefix)
+            valueType = `${PrimitiveType.Prefix}${PrimitiveType.LibraryPrefix}${strippedTypeName}`
+        }
+        return `struct { ${PrimitiveType.Tag.getText()} tag; ${valueType} value; }`
     }
     interopType(language: Language): string {
         return language == Language.CPP ? PrimitiveType.NativePointer.getText() : "KNativePointer"
