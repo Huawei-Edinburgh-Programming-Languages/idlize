@@ -329,7 +329,11 @@ export class IdlPeerLibrary implements ReferenceResolver {
             case idl.IDLUnknownType: return ArkCustomObject
             case idl.IDLObjectType: return ArkCustomObject
         }
-        const typeName = idl.isType(type) ? idl.getIDLTypeName(type, (_, name) => name) : type.name
+        const typeName = idl.isType(type) 
+            ? idl.isNamedType(type)
+                ? type.name
+                : '' 
+            : type.name
         switch (typeName) {
             case "object":
             case "Object": return ArkCustomObject
