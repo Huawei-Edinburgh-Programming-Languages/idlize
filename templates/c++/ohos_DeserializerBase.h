@@ -183,31 +183,31 @@ class DeserializerBase;
 //   result->append("{}");
 // }
 
-// inline void WriteToString(std::string *result, const OH_CustomObject *value)
-// {
-//   if (strcmp(value->kind, "NativeErrorFunction") == 0)
-//   {
-//     result->append("() => {} /* TBD: Function*/");
-//     return;
-//   }
-//   result->append("{");
-//   result->append(".kind=\"");
-//   result->append(value->kind);
-//   result->append("\", .id=" + std::to_string(value->id));
-//   result->append("}");
-// }
+inline void WriteToString(std::string *result, const OH_CustomObject *value)
+{
+  if (strcmp(value->kind, "NativeErrorFunction") == 0)
+  {
+    result->append("() => {} /* TBD: Function*/");
+    return;
+  }
+  result->append("{");
+  result->append(".kind=\"");
+  result->append(value->kind);
+  result->append("\", .id=" + std::to_string(value->id));
+  result->append("}");
+}
 
 // TODO Implement CustomObject
 struct CustomDeserializer
 {
   virtual ~CustomDeserializer() {}
   virtual bool supports(const std::string &kind) { return false; }
-//   virtual OH_CustomObject deserialize(DeserializerBase *deserializer, const std::string &kind)
-//   {
-//     OH_CustomObject result;
-//     strcpy(result.kind, "error");
-//     return result;
-//   }
+  virtual OH_CustomObject deserialize(DeserializerBase *deserializer, const std::string &kind)
+  {
+    OH_CustomObject result;
+    strcpy(result.kind, "error");
+    return result;
+  }
   CustomDeserializer *next = nullptr;
 };
 
@@ -292,26 +292,26 @@ public:
     }
   }
 
-//   OH_CustomObject readCustomObject(std::string kind)
-//   {
-//     auto *current = DeserializerBase::customDeserializers;
-//     while (current)
-//     {
-//       if (current->supports(kind))
-//       {
-//         return current->deserialize(this, kind);
-//       }
-//       current = current->next;
-//     }
-//     fprintf(stderr, "Unsupported custom deserialization for %s\n", kind.c_str());
-//     auto tag = readTag();
-//     assert(tag == OH_TAG_UNDEFINED);
-//     // Skip updefined tag!.
-//     OH_CustomObject result;
-//     strcpy(result.kind, "Error");
-//     strcat(result.kind, kind.c_str());
-//     return result;
-//   }
+  OH_CustomObject readCustomObject(std::string kind)
+  {
+    auto *current = DeserializerBase::customDeserializers;
+    while (current)
+    {
+      if (current->supports(kind))
+      {
+        return current->deserialize(this, kind);
+      }
+      current = current->next;
+    }
+    fprintf(stderr, "Unsupported custom deserialization for %s\n", kind.c_str());
+    auto tag = readTag();
+    assert(tag == OH_TAG_UNDEFINED);
+    // Skip updefined tag!.
+    OH_CustomObject result;
+    strcpy(result.kind, "Error");
+    strcat(result.kind, kind.c_str()); // Segfault!
+    return result;
+  }
 
   int8_t readInt8()
   {

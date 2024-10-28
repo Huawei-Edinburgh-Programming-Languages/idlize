@@ -73,6 +73,17 @@ typedef struct OH_Number {
 typedef struct OH_Materialized {
   OH_NativePointer ptr;
 } OH_Materialized;
+typedef struct OH_CustomObject {
+  char kind[20];
+  OH_Int32 id;
+  // Data of custom object.
+  union {
+    OH_Int32 ints[4];
+    OH_Float32 floats[4];
+    void* pointers[4];
+    OH_String string;
+  };
+} OH_CustomObject;
 
 // TODO: wrong, provide real definitions.
 typedef void* OH_ArrayBuffer;
