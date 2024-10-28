@@ -674,12 +674,12 @@
 |`onChange`| Function | Evstigneev Roman | done |  |
 |`radioStyle`| Function | Evstigneev Roman | done |  |
 |`contentModifier`| Function | Evstigneev Roman |blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
-|*Rating*| *Component* | Lobah Mikhail| in progress|  |
+|*Rating*| *Component* | Lobah Mikhail| done |  |
 |`setRatingOptions`| Function | Lobah Mikhail| done | |
 |`stars`| Function | Lobah Mikhail| done | |
 |`stepSize`| Function | Lobah Mikhail| done | |
 |`starStyle`| Function | Lobah Mikhail| done | |
-|`onChange`| Function | Lobah Mikhail| in progress|  |
+|`onChange`| Function | Lobah Mikhail| done |  |
 |`contentModifier`| Function | Lobah Mikhail| blocked| https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |*Rect*|*Component*|Dudkin Sergey| done |  |
 |`setRectOptions`|Function|Dudkin Sergey| done |  |
