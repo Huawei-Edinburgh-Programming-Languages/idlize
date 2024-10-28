@@ -214,7 +214,8 @@ export class CustomPrintVisitor {
         if (isTypedef(node) &&
             hasExtAttribute(node, IDLExtendedAttributes.Import)) {
             let definition = this.resolver(createReferenceType(node.name))
-            if (definition && !isTypedef(definition)) {
+            // TODO: handle namespace case better!
+            if (definition && !isTypedef(definition) && !hasExtAttribute(definition, IDLExtendedAttributes.Namespace)) {
                 console.log(`Has better definition for ${node.name}: ${definition.fileName} ${definition.kind}`)
                 return
             }
