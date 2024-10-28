@@ -24,6 +24,7 @@ export enum IDLKind {
     Import,
     AnonymousInterface,
     Callback,
+    Var,
     Const,
     Property,
     Parameter,
@@ -93,9 +94,23 @@ export interface IDLExtendedAttribute {
     value?: string
 }
 
-export interface IDLEntry {
+export type IDLEntry = 
+      IDLTypedef 
+    | IDLVariable
+    | IDLEnum
+    | IDLEnumMember
+    | IDLInterface
+    | IDLPackage
+    | IDLImport
+    | IDLCallback
+    | IDLCallable
+    | IDLMethod
+    | IDLConstructor
+    | IDLProperty
+    | IDLParameter
+
+interface IDLBaseEntry {
     name?: string
-    kind?: IDLKind
     fileName?: string
     comment?: string
     documentation?: string
@@ -103,9 +118,20 @@ export interface IDLEntry {
     scope?: IDLEntry[]
 }
 
+export type IDLType =
+      IDLPrimitiveType
+    | IDLOptionalType
+    | IDLContainerType
+    | IDLReferenceType
+    | IDLEnumType
+    | IDLUnionType
+    | IDLTypeParameterType
+    | IDLModuleType
+
+export type IDLNode = IDLType | IDLEntry
+
 const idlTypeAnchor = Symbol('idlTypeAnchor')
-export interface IDLType {
-    kind: IDLKind
+interface IDLTypeBase {
     fileName?: string
     extendedAttributes?: IDLExtendedAttribute[]
     documentation?: string
@@ -114,24 +140,27 @@ export interface IDLType {
     [idlTypeAnchor]: true
 }
 
-export const IDLTopType: IDLType = { 
+export const IDLTopType: IDLPrimitiveType = {
+    name: '__TOP__', 
+    kind: IDLKind.PrimitiveType, // was interface
+    
     [idlTypeAnchor]: true,
-    kind: IDLKind.Interface // FIXME: interface ?
 }
 
-export interface IDLTypedef extends IDLEntry {
+export interface IDLTypedef extends IDLBaseEntry {
     kind: IDLKind.Typedef
     name: string
     type: IDLType
 }
 
-export interface IDLPrimitiveType extends IDLType {
+export interface IDLPrimitiveType extends IDLTypeBase {
     kind: IDLKind.PrimitiveType
     name: string
     [idlTypeAnchor]: true
 }
 
-export interface IDLOptionalType extends IDLType {
+export interface IDLOptionalType extends IDLTypeBase {
+    kind: IDLKind.OptionalType
     optional: true
     element: IDLType
 }
@@ -141,53 +170,54 @@ export type IDLContainerKind =
     | 'record'
     | 'Promise'
 
-export interface IDLContainerType extends IDLType {
+export interface IDLContainerType extends IDLTypeBase {
     kind: IDLKind.ContainerType
     elementType: IDLType[]
     containerKind: IDLContainerKind
 }
 
-export interface IDLReferenceType extends IDLType {
+export interface IDLReferenceType extends IDLTypeBase {
     name: string
     kind: IDLKind.ReferenceType
 }
 
-export interface IDLEnumType extends IDLType {
+export interface IDLEnumType extends IDLTypeBase {
     name: string
     kind: IDLKind.EnumType
 }
 
-export interface IDLUnionType extends IDLType {
+export interface IDLUnionType extends IDLTypeBase {
     kind: IDLKind.UnionType
     types: IDLType[]
     name: string
 }
 
-export interface IDLTypeParameterType extends IDLType {
+export interface IDLTypeParameterType extends IDLTypeBase {
     kind: IDLKind.TypeParameterType,
     name: string
 }
 
-export interface IDLModuleType extends IDLType {
+export interface IDLModuleType extends IDLTypeBase {
     name: string
     kind: IDLKind.ModuleType
 }
 
-export interface IDLVariable extends IDLEntry {
+export interface IDLVariable extends IDLBaseEntry {
+    kind: IDLKind.Const | IDLKind.Var
+    type?: IDLType
+}
+
+export interface IDLTypedEntry extends IDLBaseEntry {
     type?: IDLType;
 }
 
-export interface IDLTypedEntry extends IDLEntry {
-    type?: IDLType;
-}
-
-export interface IDLEnum extends IDLEntry {
+export interface IDLEnum extends IDLBaseEntry {
     kind: IDLKind.Enum
     name: string
     elements: IDLEnumMember[]
 }
 
-export interface IDLEnumMember extends IDLEntry {
+export interface IDLEnumMember extends IDLBaseEntry {
     kind: IDLKind.EnumMember
     name: string
     parent: IDLEnum
@@ -218,15 +248,12 @@ export interface IDLParameter extends IDLTypedEntry {
     isOptional: boolean
 }
 
-export interface IDLSignature extends IDLEntry {
+export interface IDLSignature extends IDLBaseEntry {
     parameters: IDLParameter[]
     returnType?: IDLType
 }
 
-export interface IDLFunction extends IDLSignature {
-}
-
-export interface IDLMethod extends IDLFunction {
+export interface IDLMethod extends IDLSignature {
     kind: IDLKind.Method
     name: string
     returnType: IDLType
@@ -234,16 +261,21 @@ export interface IDLMethod extends IDLFunction {
     isOptional: boolean
 }
 
-export interface IDLCallable extends IDLFunction {
+export interface IDLCallable extends IDLSignature {
     kind: IDLKind.Callable
     isStatic: boolean
 }
+
+export type IDLFunction =
+      IDLMethod
+    | IDLCallable
+    | IDLConstructor
 
 export interface IDLConstructor extends IDLSignature {
     kind: IDLKind.Constructor
 }
 
-export interface IDLInterface extends IDLEntry {
+export interface IDLInterface extends IDLBaseEntry {
     name: string
     kind: IDLKind.Interface | IDLKind.Class | IDLKind.AnonymousInterface | IDLKind.TupleInterface
     inheritance: IDLType[]
@@ -254,21 +286,23 @@ export interface IDLInterface extends IDLEntry {
     callables: IDLCallable[]
 }
 
-export interface IDLPackage extends IDLEntry {
+export interface IDLPackage extends IDLBaseEntry {
+    kind: IDLKind.Package
     name: string
 }
 
-export interface IDLImport extends IDLEntry {
+export interface IDLImport extends IDLBaseEntry {
+    kind: IDLKind.Import
     name: string
 }
 
-export interface IDLCallback extends IDLEntry, IDLSignature {
+export interface IDLCallback extends IDLBaseEntry, IDLSignature {
     kind: IDLKind.Callback
     name: string
     returnType: IDLType
 }
 
-export function forEachChild(node: IDLEntry, cb: (entry: IDLEntry) => void): void {
+export function forEachChild(node: IDLEntry | IDLType, cb: (entry: IDLEntry | IDLType) => void): void {
     cb(node)
     switch (node.kind) {
         case IDLKind.Interface:
@@ -320,52 +354,52 @@ export function forEachChild(node: IDLEntry, cb: (entry: IDLEntry) => void): voi
     }
 }
 
-export function isNullType(type: IDLEntry): type is IDLPrimitiveType {
+export function isNullType(type: IDLNode): type is IDLPrimitiveType {
     return isPrimitiveType(type) && type.name === "null_"
 }
-export function isUndefinedType(type: IDLEntry): type is IDLPrimitiveType {
+export function isUndefinedType(type: IDLNode): type is IDLPrimitiveType {
     return isPrimitiveType(type) && type.name === "undefined"
 }
-export function isVoidType(type: IDLEntry): type is IDLPrimitiveType {
+export function isVoidType(type: IDLNode): type is IDLPrimitiveType {
     return isPrimitiveType(type) && type === IDLVoidType
 }
-export function isPrimitiveType(type: IDLEntry): type is IDLPrimitiveType {
+export function isPrimitiveType(type: IDLNode): type is IDLPrimitiveType {
     return type.kind == IDLKind.PrimitiveType
 }
-export function isContainerType(type: IDLEntry): type is IDLContainerType {
+export function isContainerType(type: IDLNode): type is IDLContainerType {
     return type.kind == IDLKind.ContainerType
 }
-export function isReferenceType(type: IDLEntry): type is IDLReferenceType {
+export function isReferenceType(type: IDLNode): type is IDLReferenceType {
     return type.kind == IDLKind.ReferenceType
 }
-export function isEnumType(type: IDLEntry): type is IDLEnumType {
+export function isEnumType(type: IDLNode): type is IDLEnumType {
     return type.kind == IDLKind.EnumType
 }
-export function isEnum(type: IDLEntry): type is IDLEnum {
+export function isEnum(type: IDLNode): type is IDLEnum {
     return type.kind == IDLKind.Enum
 }
-export function isEnumMember(type: IDLEntry): type is IDLEnumMember {
+export function isEnumMember(type: IDLNode): type is IDLEnumMember {
     return type.kind == IDLKind.EnumMember
 }
-export function isUnionType(type: IDLEntry): type is IDLUnionType {
+export function isUnionType(type: IDLNode): type is IDLUnionType {
     return type.kind == IDLKind.UnionType
 }
-export function isTypeParameterType(type: IDLEntry): type is IDLTypeParameterType {
+export function isTypeParameterType(type: IDLNode): type is IDLTypeParameterType {
     return type.kind == IDLKind.TypeParameterType
 }
-export function isInterface(node: IDLEntry): node is IDLInterface {
+export function isInterface(node: IDLNode): node is IDLInterface {
     return node.kind === IDLKind.Interface
 }
-export function isPackage(type: IDLEntry): type is IDLPackage {
+export function isPackage(type: IDLNode): type is IDLPackage {
     return type.kind == IDLKind.Package
 }
-export function isImport(type: IDLEntry): type is IDLImport {
+export function isImport(type: IDLNode): type is IDLImport {
     return type.kind == IDLKind.Import
 }
-export function isAnonymousInterface(node: IDLEntry): node is IDLInterface {
+export function isAnonymousInterface(node: IDLNode): node is IDLInterface {
     return node.kind === IDLKind.AnonymousInterface
 }
-export function isTupleInterface(node: IDLEntry): node is IDLInterface {
+export function isTupleInterface(node: IDLNode): node is IDLInterface {
     return node.kind === IDLKind.TupleInterface
 }
 export function isClass(node: IDLEntry): node is IDLInterface {
@@ -392,7 +426,7 @@ export function isConstant(node: IDLEntry): node is IDLConstant {
 export function isTypedef(node: IDLEntry): node is IDLTypedef {
     return node.kind === IDLKind.Typedef
 }
-export function isType(node: IDLEntry): node is IDLType {
+export function isType(node: IDLEntry | IDLType): node is IDLType {
     return idlTypeAnchor in node
 }
 
@@ -400,7 +434,7 @@ export function isNamedType(type: IDLType): type is IDLReferenceType | IDLPrimit
     return isReferenceType(type) || isPrimitiveType(type) || isEnumType(type) || isTypeParameterType(type)
 }
 
-export function isModuleType(node: IDLEntry): node is IDLModuleType {
+export function isModuleType(node: IDLType): node is IDLModuleType {
     return node.kind === IDLKind.ModuleType
 }
 export function isSyntheticEntry(node: IDLEntry): boolean {
@@ -408,7 +442,7 @@ export function isSyntheticEntry(node: IDLEntry): boolean {
 }
 
 export function isOptionalType(type: IDLType): type is IDLOptionalType {
-    return type.optional === true && 'element' in type
+    return type.kind === IDLKind.OptionalType
 }
 
 function createPrimitiveType(name: string): IDLPrimitiveType {
@@ -480,9 +514,11 @@ export function createOptionalType(element:IDLType): IDLOptionalType {
         return element
     }
     return {
-        ...element,
+        kind: IDLKind.OptionalType,
         optional: true,
-        element
+        element,
+
+        [idlTypeAnchor]: true
     }
 }
 
@@ -655,7 +691,7 @@ export function printConstructor(idl: IDLFunction): stringOrNone[] {
 }
 
 export function nameWithType(
-    idl: IDLVariable,
+    idl: IDLParameter | IDLConstant | IDLVariable | IDLProperty,
     isVariadic: boolean = false,
     isOptional: boolean = false
 ): string {
@@ -682,7 +718,7 @@ export function printProperty(idl: IDLProperty): stringOrNone[] {
     ]
 }
 
-function printExtendedAttributes(idl: IDLEntry, indentLevel: number): stringOrNone[] {
+function printExtendedAttributes(idl: IDLNode, indentLevel: number): stringOrNone[] {
     let attributes = idl.extendedAttributes
     if (idl.documentation) {
         let docs: IDLExtendedAttribute = {
@@ -848,7 +884,7 @@ export function printTypedef(idl: IDLTypedef): stringOrNone[] {
     ]
 }
 
-export function printIDL(idl: IDLEntry, options?: Partial<IDLPrintOptions>): stringOrNone[] {
+export function printIDL(idl: IDLNode, options?: Partial<IDLPrintOptions>): stringOrNone[] {
     if (idl.kind == IDLKind.Class
         || idl.kind == IDLKind.Interface
         || idl.kind == IDLKind.AnonymousInterface
