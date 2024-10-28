@@ -341,6 +341,9 @@
 |`onDec`| Function | Erokhin Ilya | done |  |
 |`enableDec`| Function | Erokhin Ilya | done |  |
 |`enableInc`| Function | Erokhin Ilya | done |  |
+|*CustomDialogController*| *Class* | Erokhin Ilya | blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IAOKLD |
+|`open`| Function | Erokhin Ilya | blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`close`| Function | Erokhin Ilya | blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*DataPanel*| *Component* | Morozov Sergey |blocked Arkoala |  |
 |`setDataPanelOptions`| Function | Morozov Sergey |done |  |
 |`closeEffect`| Function | Morozov Sergey |done |  |
