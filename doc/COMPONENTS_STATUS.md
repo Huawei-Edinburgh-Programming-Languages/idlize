@@ -1185,13 +1185,13 @@
 |`finishAnimation`| Function | Skroba Gleb |blocked| https://gitee.com/nikolay-igotti/idlize/issues/IAOKLD |
 |*SwiperContentTransitionProxy*| *Class* | Skroba Gleb | in progress | |
 |`finishTransition`| Function | Skroba Gleb | in progress | |
-|`getSelectedIndex`| Function | Skroba Gleb | in progress | |
+|`getSelectedIndex`| Function | Skroba Gleb | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
 |`setSelectedIndex`| Function | Skroba Gleb | in progress | |
-|`getIndex`| Function | Skroba Gleb | in progress | |
+|`getIndex`| Function | Skroba Gleb | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
 |`setIndex`| Function | Skroba Gleb | in progress | |
-|`getPosition`| Function | Skroba Gleb | in progress | |
+|`getPosition`| Function | Skroba Gleb | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
 |`setPosition`| Function | Skroba Gleb | in progress | |
-|`getMainAxisLength`| Function | Skroba Gleb | in progress | |
+|`getMainAxisLength`| Function | Skroba Gleb | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
 |`setMainAxisLength`| Function | Skroba Gleb | in progress | |
 |*TabsController*| *Class* | | in progress |  |
 |`changeIndex`| Function |Skroba Gleb | done |  |
