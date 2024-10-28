@@ -687,13 +687,13 @@
 |`radiusHeight`|Function|Dudkin Sergey| done |  |
 |`radius`|Function|Dudkin Sergey| blocked |https://gitee.com/openharmony/interface_sdk-js/issues/IAXA7J|
 |*Refresh*| *Component* |Politov Mikhail | in progress |  |
-|`setRefreshOptions`| Function |Politov Mikhail | in progress |  |
-|`onStateChange`| Function |Politov Mikhail | in progress |  |
-|`onRefreshing`| Function |Politov Mikhail | in progress |  |
-|`refreshOffset`| Function |Politov Mikhail | in progress |  |
-|`pullToRefresh`| Function |Politov Mikhail | in progress |  |
-|`onOffsetChange`| Function |Politov Mikhail | in progress |  |
-|`pullDownRatio`| Function |Politov Mikhail | in progress |  |
+|`setRefreshOptions`| Function |Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`onStateChange`| Function |Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`onRefreshing`| Function |Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`refreshOffset`| Function |Politov Mikhail | devdone |  |
+|`pullToRefresh`| Function |Politov Mikhail | devdone |  |
+|`onOffsetChange`| Function |Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`pullDownRatio`| Function |Politov Mikhail | devdone |  |
 |*RelativeContainer*| *Component* | Dmitry A Smirnov | done |  |
 |`setRelativeContainerOptions`| Function | Dmitry A Smirnov | done |  |
 |`guideLine`| Function | Dmitry A Smirnov | done |  |
