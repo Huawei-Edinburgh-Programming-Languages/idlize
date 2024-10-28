@@ -180,8 +180,6 @@ class TSTypeCheckerPrinter extends TypeCheckerPrinter {
     }
 
     protected writeInterfaceChecker(name: string, descriptor: StructDescriptor): void {
-        if (descriptor.getFields().length === 0)
-            return
         const argsNames = descriptor.getFields().map(it => `duplicated_${it.name}`)
         this.writer.writeMethodImplementation(new Method(
             generateTypeCheckerName(name),
@@ -195,16 +193,20 @@ class TSTypeCheckerPrinter extends TypeCheckerPrinter {
                 const bWeight = b.optional ? 1 : 0
                 return aWeight - bWeight
             })
-            const statement = writer.makeMultiBranchCondition(orderedFields.map(it => {
-                return {
-                    expr: writer.makeNaryOp("&&", [
-                        writer.makeString(`!duplicated_${it.name}`),
-                        writer.makeString(`value?.hasOwnProperty("${it.name}")`)
-                    ]),
-                    stmt: writer.makeReturn(writer.makeString('true'))
-                }
-            }), writer.makeThrowError(`Can not discriminate value typeof ${name}`))
-            writer.writeStatement(statement)
+            if (orderedFields.length === 0) {
+                writer.writeStatement(writer.makeReturn(writer.makeString("true")))
+            } else {
+                const statement = writer.makeMultiBranchCondition(orderedFields.map(it => {
+                    return {
+                        expr: writer.makeNaryOp("&&", [
+                            writer.makeString(`!duplicated_${it.name}`),
+                            writer.makeString(`value?.hasOwnProperty("${it.name}")`)
+                        ]),
+                        stmt: writer.makeReturn(writer.makeString('true'))
+                    }
+                }), writer.makeThrowError(`Can not discriminate value typeof ${name}`))
+                writer.writeStatement(statement)
+            }
         })
     }
 
