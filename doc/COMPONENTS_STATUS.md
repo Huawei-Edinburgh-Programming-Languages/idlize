@@ -155,11 +155,11 @@
 |`borderColor`| Function | Roman Sedaikin | in progress | |
 |`borderRadius`| Function | Roman Sedaikin | in progress | |
 |`borderImage`| Function | Roman Sedaikin | in progress | |
-|`outline`| Function | | | |
-|`outlineStyle`| Function | | | |
-|`outlineWidth`| Function | | | |
-|`outlineColor`| Function | | | |
-|`outlineRadius`| Function | | | |
+|`outline`| Function | Skroba Gleb | in progress | |
+|`outlineStyle`| Function | Skroba Gleb | in progress | |
+|`outlineWidth`| Function | Skroba Gleb | in progress | |
+|`outlineColor`| Function | Skroba Gleb | in progress | |
+|`outlineRadius`| Function | Skroba Gleb | in progress | |
 |`foregroundColor`| Function | Roman Sedaikin | in progress | |
 |`onClick`| Function | Roman Sedaikin | in progress | |
 |`onHover`| Function | | | |
