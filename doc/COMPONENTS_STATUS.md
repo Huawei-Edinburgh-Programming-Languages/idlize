@@ -1092,6 +1092,9 @@
 |`fontFeature`| Function |Pavelyev Ivan|in progress|  |
 |`contentModifier`| Function |Pavelyev Ivan|blocked Arkoala| https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`dateTimeOptions`| Function |Pavelyev Ivan|in progress|  |
+|*TextClockController*| *Class* |Pavelyev Ivan|in progress|  |
+|`start`| Function |Pavelyev Ivan|in progress|  |
+|`stop`| Function |Pavelyev Ivan|in progress|  |
 |*TextInput*| *Component* | Spirin Andrey | in progress |  |
 |`setTextInputOptions`| Function | Spirin Andrey | in progress |  |
 |`type`| Function | Spirin Andrey | done |  |
