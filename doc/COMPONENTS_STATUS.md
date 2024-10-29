@@ -70,9 +70,9 @@
 |`labelStyle`| Function |Evstigneev Roman | done |  |
 |*CalendarPicker*| *Component* |Politov Mikhail | in progress |  |
 |`setCalendarPickerOptions`| Function |Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`textStyle`| Function |Politov Mikhail | in progress |  |
+|`textStyle`| Function |Politov Mikhail | done |  |
 |`onChange`| Function |Politov Mikhail | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`edgeAlign`| Function |Politov Mikhail | in progress |  |
+|`edgeAlign`| Function |Politov Mikhail | done |  |
 |*Canvas*| *Component* |Vadim Voronov |In Progress |  |
 |`setCanvasOptions`| Function |Vadim Voronov |In Progress |  |
 |`onReady`| Function |Vadim Voronov | done |  |
@@ -696,10 +696,10 @@
 |`setRefreshOptions`| Function |Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`onStateChange`| Function |Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`onRefreshing`| Function |Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`refreshOffset`| Function |Politov Mikhail | devdone |  |
-|`pullToRefresh`| Function |Politov Mikhail | devdone |  |
+|`refreshOffset`| Function |Politov Mikhail | done |  |
+|`pullToRefresh`| Function |Politov Mikhail | done |  |
 |`onOffsetChange`| Function |Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`pullDownRatio`| Function |Politov Mikhail | devdone |  |
+|`pullDownRatio`| Function |Politov Mikhail | done |  |
 |*RelativeContainer*| *Component* | Dmitry A Smirnov | done |  |
 |`setRelativeContainerOptions`| Function | Dmitry A Smirnov | done |  |
 |`guideLine`| Function | Dmitry A Smirnov | done |  |
