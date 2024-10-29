@@ -27,6 +27,7 @@ import { ReferenceResolver } from "../../ReferenceResolver"
 import { IdlTypeNameConvertor } from "../../idl/IdlTypeConvertor"
 import { EnumEntity } from "../../PeerFile"
 import { throwException } from "../../../util";
+import { cleanPrefix } from "../../idl/IdlPeerLibrary"
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -344,7 +345,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         // return super.mapIDLReferenceType(type)   
     }
     mapIDLOptionalType(type:IDLOptionalType): string {
-        return `Opt_${this.convert(type)}`
+        return `Opt_${cleanPrefix(this.convert(type.element), PrimitiveType.Prefix)}`
     }
     mapIDLPrimitiveType(type: IDLPrimitiveType): string {
 

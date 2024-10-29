@@ -18,13 +18,13 @@ import * as path from 'path'
 import { IndentedPrinter } from "../IndentedPrinter"
 import { IdlPeerLibrary } from './idl/IdlPeerLibrary'
 import { CppLanguageWriter, createLanguageWriter, ExpressionStatement, FieldModifier, LanguageWriter, Method, MethodSignature, NamedMethodSignature } from './LanguageWriters'
-import { createContainerType, createOptionalType, createReferenceType, getIDLTypeName, hasExtAttribute, IDLCallback, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLKind, IDLMethod, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLU8Type, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isEnumType, isInterface, isMethod, isPrimitiveType, isReferenceType, isUnionType, printType } from '../idl'
+import { createContainerType, createOptionalType, createReferenceType, getIDLTypeName, hasExtAttribute, IDLCallback, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLKind, IDLMethod, IDLNumberType, IDLOptionalType, IDLParameter, IDLPointerType, IDLType, IDLU8Type, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isEnumType, isInterface, isMethod, isPrimitiveType, isReferenceType, isUnionType, printType } from '../idl'
 import { makeSerializerForOhos, readLangTemplate } from './FileGenerators'
 import { capitalize } from '../util'
 import { isMaterialized } from './idl/IdlPeerGeneratorVisitor'
 import { PrimitiveType } from './ArkPrimitiveType'
 import { Language } from '../Language'
-import { ArgConvertor } from './ArgConvertors'
+import { ArgConvertor, RuntimeType } from './ArgConvertors'
 import { writeDeserializer, writeSerializer } from './printers/SerializerPrinter'
 import { generateCallbackAPIArguments } from './idl/StructPrinter'
 import { qualifiedName } from './idl/common'
@@ -56,6 +56,7 @@ class OHOSVisitor {
     enums = new Array<IDLEnum>()
     callbacks = new Array<IDLCallback>()
     callbackInterfaces = new Array<IDLInterface>()
+    optionals = new Array<IDLOptionalType>()
 
     constructor(protected library: IdlPeerLibrary) {
         this.peerWriter = createLanguageWriter(this.library.language, this.library)
@@ -287,7 +288,9 @@ class OHOSVisitor {
             entry.properties.forEach(it => {
                 // TODO check if needed
                 if (it.isOptional) {
-                    this.requestType(createOptionalType(it.type))
+                    const optType = createOptionalType(it.type)
+                    this.optionals.push(optType)
+                    this.requestType(optType)
                 }
                 this.requestType(it.type)
             })
@@ -535,6 +538,7 @@ class OHOSVisitor {
 
         this.writeTypes(this.library.orderedDependenciesToGenerate)
         const prefix = `${PrimitiveType.Prefix}${this.libraryName}_` // TODO better generate it directly in serializer
+        writeRuntimeTypes(this.optionals, this.cppWriter, prefix)
         writeSerializer(this.library, this.cppWriter, prefix)
         writeDeserializer(this.library, this.cppWriter, prefix)
         
@@ -682,4 +686,32 @@ function generateCParameters(method: IDLMethod, argConvertors: ArgConvertor[], w
         }
     }
     return args.join(", ")
+}
+
+function writeRuntimeTypes(optionals: IDLOptionalType[], writer: CppLanguageWriter, prefix: string) {
+    const emittedOptionals = new Set()
+    for (const type of optionals) {
+        const typeKey = printType(type)
+        if (!emittedOptionals.has(typeKey)) {
+            emittedOptionals.add(typeKey)
+            let targetTypeName = writer.mapIDLOptionalType(type) // getIDLTypeName(type, (t, n) => `Opt_${writer.mapIDLOptionalType(t)}`) // TODO refactor name generation
+            writeOptionalRuntimeType(targetTypeName, writer)
+        }
+    }
+}
+
+// TODO stolen from DeclarationTable, refactor me
+function writeOptionalRuntimeType(targetTypeName: string, writer: LanguageWriter) {
+    const resultType = toIDLType(PrimitiveType.Prefix + "RuntimeType")
+    const result = writer.makeTernary(writer.makeDefinedCheck("value.tag"),
+        writer.makeRuntimeType(RuntimeType.OBJECT), writer.makeRuntimeType(RuntimeType.UNDEFINED))
+    const op = (writer: LanguageWriter) => writer.writeStatement(writer.makeReturn(result))
+    if (op) {
+        writer.print("template <>")
+        writer.writeMethodImplementation(
+            new Method("runtimeType",
+                new NamedMethodSignature(resultType, [toIDLType(`const ${targetTypeName}&`)], ["value"]),
+                [MethodModifier.INLINE]),
+            op)
+    }
 }
