@@ -927,18 +927,18 @@
 |`setStackOptions` | Function | Korobeinikov Evgeny | done |  |
 |`alignContent` | Function | Korobeinikov Evgeny | done |  |
 |`pointLight` | Function | Korobeinikov Evgeny | in progress |  |
-|*Stepper*| *Component* | Morozov Sergey | |
-|`setStepperOptions`| Function | Morozov Sergey | |
-|`onFinish`| Function | Morozov Sergey | |
-|`onSkip`| Function | Morozov Sergey | |
-|`onChange`| Function | Morozov Sergey | |
-|`onNext`| Function | Morozov Sergey | |
-|`onPrevious`| Function | Morozov Sergey | |
-|*StepperItem*| *Component* | Morozov Sergey | in progress |
-|`setStepperItemOptions`| Function | Morozov Sergey | in progress |
-|`prevLabel`| Function | Morozov Sergey | in progress |
-|`nextLabel`| Function | Morozov Sergey | in progress |
-|`status`| Function | Morozov Sergey | in progress |
+|*Stepper*| *Component* | Morozov Sergey |in progress |  |
+|`setStepperOptions`| Function | Morozov Sergey |in progress |  |
+|`onFinish`| Function | Morozov Sergey |in progress |  |
+|`onSkip`| Function | Morozov Sergey |in progress |  |
+|`onChange`| Function | Morozov Sergey |in progress |  |
+|`onNext`| Function | Morozov Sergey |in progress |  |
+|`onPrevious`| Function | Morozov Sergey |in progress |  |
+|*StepperItem*| *Component* | Morozov Sergey | in progress | |
+|`setStepperItemOptions`| Function | Morozov Sergey | in progress | |
+|`prevLabel`| Function | Morozov Sergey | in progress | |
+|`nextLabel`| Function | Morozov Sergey | in progress | |
+|`status`| Function | Morozov Sergey | in progress | |
 |*Swiper*| *Component* | Skroba Gleb | done |  |
 |`setSwiperOptions`| Function | Skroba Gleb | done |  |
 |`index`| Function | Skroba Gleb| done |  |
