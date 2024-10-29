@@ -1185,6 +1185,10 @@
 |`onTimer`| Function |Ekaterina Stepanova|in progress |  |
 |`textShadow`| Function |Ekaterina Stepanova|in progress |  |
 |`contentModifier`| Function |Ekaterina Stepanova|in progress |  |
+|*TextTimerController*| *Class* |Ekaterina Stepanova|in progress |  |
+|`start`| Function |Ekaterina Stepanova|in progress |  |
+|`pause`| Function |Ekaterina Stepanova|in progress |  |
+|`reset`| Function |Ekaterina Stepanova|in progress |  |
 |*TimePicker*| *Component* | Ekaterina Stepanova| blocked |  |
 |`setTimePickerOptions`| Function |Ekaterina Stepanova| blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`useMilitaryTime`| Function |Ekaterina Stepanova| done |  |
