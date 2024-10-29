@@ -1260,9 +1260,11 @@
 |`setPosition`| Function | Skroba Gleb | in progress | |
 |`getMainAxisLength`| Function | Skroba Gleb | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
 |`setMainAxisLength`| Function | Skroba Gleb | in progress | |
-|*TabsController*| *Class* | | in progress |  |
-|`changeIndex`| Function |Skroba Gleb | done |  |
-|`preloadItems`| Function |Skroba Gleb | done |  |
+|*TabsController*| *Class* |  | in progress |
+|`changeIndex`| Function | Skroba Gleb | done | |
+|`preloadItems`| Function | Skroba Gleb | done | |
+|`setTabBarTranslate`| Function | | | |
+|`setTabBarOpacity`| Function | | | |
 |*TabContentTransitionProxy*| *Class* | | |  |
 |`finishTransition`| Function | | |  |
 |`getFrom`| Function | | |  |
