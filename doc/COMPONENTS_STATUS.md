@@ -1511,3 +1511,4 @@
 |`editMenuOptions`| Function | Erokhin Ilya | in progress | |
 |`enableHapticFeedback`| Function | Erokhin Ilya | testskipped | |
 |`registerNativeEmbedRule`| Function | Erokhin Ilya | testskipped | |
+|`bindSelectionMenu`| Function |Erokhin Ilya | in progress | |
