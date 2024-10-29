@@ -38,6 +38,23 @@ class EnumMember {
     ) {}
 }
 
+export class InterfaceEntity {
+    constructor(
+        public readonly name: string,
+        public readonly fields: InterfaceMember[] = [],
+    ) {}
+    pushMember(name: string, type: string) {
+        this.fields.push(new InterfaceMember(name, type))
+    }
+}
+
+class InterfaceMember {
+    constructor(
+        public readonly name: string,
+        public readonly type: string,
+    ) {}
+}
+
 export class PeerFile {
     readonly peers: Map<string, PeerClass> = new Map()
     readonly enums: EnumEntity[] = []

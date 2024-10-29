@@ -243,13 +243,15 @@ class DeserializerPrinter {
         const methodName = this.table.computeTargetName(target, false, "")
         this.table.setCurrentContext(`read${methodName}()`)
         const type = new Type(name)
-        this.writer.writeMethodImplementation(new Method(`read${methodName}`, new NamedMethodSignature(type, [], [])), writer => {
+        console.log(`read${methodName}`)
+        let method: Method = new Method(`read${methodName}`, new NamedMethodSignature(type, [], []))
+        this.writer.writeMethodImplementation(method, writer => {
             function declareDeserializer() {
                 writer.writeStatement(
                     writer.makeAssign("valueDeserializer", new Type(writer.makeRef("Deserializer")), writer.makeThis(), true, false))
             }
-            // using list initialization to prevent uninitialized value errors
-            writer.writeStatement(writer.makeObjectDeclare("value", type, this.table.targetStruct(target).getFields()))
+            // writer.writeStatement(writer.makeInterface(type.name + "Interface", this.table.targetStruct(target).getFields(), [], false))
+            writer.writeStatement(writer.makeObjectAlloc("value", this.table.targetStruct(target).getFields(), type.name/* + "Interface"*/, true))
             if (ts.isInterfaceDeclaration(target) || ts.isClassDeclaration(target)) {
                 let struct = this.table.targetStruct(target)
                 if (struct.getFields().length > 0) {
@@ -257,7 +259,8 @@ class DeserializerPrinter {
                 }
                 struct.getFields().forEach(it => {
                     let typeConvertor = this.table.typeConvertor(`value`, it.type!, it.optional)
-                    writer.writeStatement(typeConvertor.convertorDeserialize(`value`, `value.${writer.escapeKeyword(it.name)}`, writer))
+                    let deserializeResult = typeConvertor.convertorDeserialize(`value`, `value.${writer.escapeKeyword(it.name)}`, writer)
+                    writer.writeStatement(deserializeResult)
                 })
             } else {
                 if (writer.language === Language.CPP) {
@@ -280,6 +283,9 @@ class DeserializerPrinter {
         if (this.writer.language == Language.CPP) {
             ctorSignature = new NamedMethodSignature(Type.Void, [new Type("uint8_t*"), Type.Int32], ["data", "length"])
             prefix = PrimitiveType.Prefix
+        }
+        if (this.writer.language == Language.ARKTS) {
+            ctorSignature = new NamedMethodSignature(Type.Void, [new Type("ArrayBuffer"), Type.Int32], ["data", "length"])
         }
         const serializerDeclarations = generateSerializerDeclarationsTable(prefix, this.table)
         printSerializerImports(serializerDeclarations, this.library, this.writer)

@@ -42,6 +42,9 @@ export interface TypeNodeConvertor<T> {
 export function convertTypeNode<T>(convertor: TypeNodeConvertor<T>, node: ts.TypeNode): T {
     if (ts.isUnionTypeNode(node)) return convertor.convertUnion(node)
     if (ts.isTypeLiteralNode(node)) return convertor.convertTypeLiteral(node)
+    if (ts.isLiteralTypeNode(node) && node.getText().toLowerCase().includes("auto")) {
+        return convertor.convertStringKeyword(node)
+    }
     if (ts.isLiteralTypeNode(node)) return convertor.convertLiteralType(node)
     if (ts.isTupleTypeNode(node)) return convertor.convertTuple(node)
     if (ts.isNamedTupleMember(node)) return convertor.convertNamedTupleMember(node)

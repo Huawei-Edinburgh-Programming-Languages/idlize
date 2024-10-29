@@ -290,6 +290,24 @@ export function createSerializer(): Serializer { return new Serializer() }
 `
 }
 
+export function makeArkTSDeserializer(library: PeerLibrary | IdlPeerLibrary): string {
+    const printer = createLanguageWriter(Language.ARKTS)
+    const imports = new ImportsCollector()
+    imports.addFeatures(["runtimeType", "Tags", "RuntimeType"], "./SerializerBase")
+    imports.addFeature("DeserializerBase", "./DeserializerBase")
+    imports.addFeature("int32", "@koalaui/common")
+    imports.print(printer, '')
+    writeDeserializer(library, printer)
+    return `${cStyleCopyright}
+
+${printer.getOutput().join("\n")}
+
+export function createDeserializer(args: ArrayBuffer, length: int32): Deserializer {
+    return new Deserializer(args, length)
+}
+`
+}
+
 // TODO: remove after full switching to IDL
 export function makeTypeCheckerFromDTS(library: PeerLibrary): { arkts: string, ts: string } {
     let arktsPrinter = createLanguageWriter(Language.ARKTS)

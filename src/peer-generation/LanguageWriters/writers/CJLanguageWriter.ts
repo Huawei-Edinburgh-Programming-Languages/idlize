@@ -23,7 +23,22 @@ import { EnumConvertor, MapConvertor } from "../../Convertors"
 import { FieldRecord } from "../../DeclarationTable"
 import { EnumEntity } from "../../PeerFile"
 import { mapType } from "../../TypeNodeNameConvertor"
-import { AssignStatement, ExpressionStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, ObjectArgs, ReturnStatement, Type } from "../LanguageWriter"
+import {
+    AssignStatement,
+    BlockStatement,
+    ExpressionStatement,
+    FieldModifier,
+    LanguageExpression,
+    LanguageStatement,
+    LanguageWriter,
+    Method,
+    MethodModifier,
+    MethodSignature,
+    NamedMethodSignature,
+    ObjectArgs,
+    ReturnStatement,
+    Type
+} from "../LanguageWriter"
 import { TSCastExpression, TsObjectAssignStatement, TsObjectDeclareStatement, TsTupleAllocStatement } from "./TsLanguageWriter"
 
 ////////////////////////////////////////////////////////////////
@@ -197,6 +212,9 @@ export class CJLanguageWriter extends LanguageWriter {
     makeRuntimeTypeCondition(typeVarName: string, equals: boolean, type: RuntimeType, varName: string): LanguageExpression {
         varName = this.escapeKeyword(varName)
         return this.makeString(`let Some(${varName}) <- ${varName}`)
+    }
+    makeInterface(name: string, fields: readonly FieldRecord[], superInterfaces?: string[], isDeclared?: boolean): LanguageStatement {
+        return new BlockStatement([])
     }
     makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression {
         throw new Error(`TBD`)

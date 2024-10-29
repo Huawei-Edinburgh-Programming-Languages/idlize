@@ -417,12 +417,16 @@ export class NumberConvertor extends BaseArgConvertor {
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         printer.writeMethodCall(`${param}Serializer`, "writeNumber", [value])
     }
-    convertorDeserialize(param: string, value: string, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(param: string, value: string, writer: LanguageWriter, doCast: boolean = true): LanguageStatement {
         const receiver = this.getObjectAccessor(writer.language, value, undefined, writer)
-        return writer.makeAssign(receiver, undefined,
-            writer.makeCast(
-                writer.makeString(`${param}Deserializer.readNumber()`),
-                writer.makeType(this.tsTypeName, false, receiver)), false)
+        let rhs: LanguageExpression;
+        if (writer.language === Language.ARKTS && value.startsWith("tmpTupleItem")) { // todo: hack
+            rhs = writer.makeString(`${param}Deserializer.readNumber()`)
+        } else {
+            rhs = writer.makeString(`${param}Deserializer.readNumber()`)
+            rhs = writer.makeCast(rhs, writer.makeType(this.tsTypeName, false, receiver))
+        }
+        return writer.makeAssign(receiver, undefined, rhs, false)
     }
     nativeType(): string {
         return PrimitiveType.Number.getText()

@@ -17,11 +17,25 @@ import { IndentedPrinter } from "../../../IndentedPrinter"
 import { Language } from "../../../Language"
 import { EnumConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "../../Convertors"
 import { convertJavaOptional } from "../../printers/lang/Java"
-import { AssignStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, ObjectArgs, ReturnStatement, Type } from "../LanguageWriter"
+import {
+    AssignStatement,
+    BlockStatement,
+    FieldModifier,
+    LanguageExpression,
+    LanguageStatement,
+    LanguageWriter,
+    Method,
+    MethodModifier,
+    MethodSignature,
+    ObjectArgs,
+    ReturnStatement,
+    Type
+} from "../LanguageWriter"
 import { CLikeExpressionStatement, CLikeLanguageWriter, CLikeLoopStatement, CLikeReturnStatement } from "./CLikeLanguageWriter"
 import { IDLBooleanType, IDLContainerType, IDLF32Type, IDLF64Type, IDLI16Type, IDLI32Type, IDLI64Type, IDLI8Type, IDLNumberType, IDLPointerType, IDLPrimitiveType, IDLStringType, IDLU16Type, IDLU32Type, IDLU64Type, IDLU8Type, IDLVoidType } from '../../../idl'
 import { LambdaExpression } from "./TsLanguageWriter"
 import { ArgConvertor, BaseArgConvertor, RuntimeType } from "../../ArgConvertors"
+import {FieldRecord} from "../../DeclarationTable";
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -182,6 +196,9 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     }
     makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index: number) {
         return this.makeMethodCall(value, `getValue${index}`, [])
+    }
+    makeInterface(name: string, fields: readonly FieldRecord[], superInterfaces?: string[], isDeclared?: boolean): LanguageStatement {
+        return new BlockStatement([])
     }
     makeUnionTypeDefaultInitializer() {
         return this.makeString("-1")

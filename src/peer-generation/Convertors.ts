@@ -148,8 +148,22 @@ export class EnumConvertor extends BaseArgConvertor {
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
         const isCpp = printer.language === Language.CPP
+        const isArkTs = printer.language === Language.ARKTS
         const name = this.enumTypeName(printer.language)
         let readExpr = printer.makeMethodCall(`${param}Deserializer`, "readInt32", [])
+        if (isArkTs) {
+            const receiver = this.getObjectAccessor(printer.language, value, undefined, printer)
+            return printer.makeAssign(
+                receiver,
+                undefined,
+                printer.makeMethodCall(
+                    `${name}`,
+                    this.isStringEnum ? "byOrdinal" : "of",
+                    // will not work, ColoringStrategy is serialised as int32
+                    [printer.makeMethodCall(`${param}Deserializer`, "readInt32", [])]
+                ),
+                false)
+        }
         if (this.isStringEnum && !isCpp) {
             readExpr = printer.enumFromOrdinal(readExpr, name)
         } else {
@@ -303,7 +317,7 @@ export class UnionConvertor extends BaseArgConvertor {
             .map(member => table.typeConvertor(param, member, false, undefined, typeNodeNameConvertor))
         this.unionChecker = new UnionRuntimeTypeChecker(this.memberConvertors)
         this.runtimeTypes = this.memberConvertors.flatMap(it => it.runtimeTypes)
-        this.tsTypeName = this.memberConvertors.map(it => it.tsTypeName).join(" | ")
+        this.tsTypeName = this.memberConvertors.map(it => it.tsTypeName).map(it => {return it == "\"auto\"" ? "string" : it}).join(" | ")
     }
     convertorArg(param: string, writer: LanguageWriter): string {
         throw new Error("Do not use for union")
@@ -521,15 +535,19 @@ export class AggregateConvertor extends BaseArgConvertor {
     }
     convertorDeserialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
         const structAccessor = printer.getObjectAccessor(this, value)
+        console.log(value)
         let struct = this.table.targetStruct(this.table.toTarget(this.type))
         // Typed structs may refer each other, so use indent level to discriminate.
         // Somewhat ugly, but works.
         const typedStruct = `typedStruct${printer.indentDepth()}`
         printer.pushIndent()
         const statements = [
-            printer.makeObjectAlloc(structAccessor, struct.getFields()),
-            printer.makeAssign(typedStruct, new Type(printer.makeRef(printer.makeType(this.tsTypeName, false, structAccessor).name)),
-                printer.makeString(structAccessor),true, false
+            printer.makeInterface(param+"Interface", struct.getFields(), [], false),
+            printer.makeObjectAlloc(value, struct.getFields(), param+"Interface"),
+            printer.makeAssign(
+                typedStruct,
+                new Type(printer.makeRef(printer.makeType(this.aliasName!, false, structAccessor).name)),
+                printer.makeCast(printer.makeString(structAccessor), new Type(this.aliasName!)),true, false
             )
         ]
         this.memberConvertors.forEach((it, index) => {
@@ -649,10 +667,11 @@ export class FunctionConvertor extends BaseArgConvertor {
     }
     convertorDeserialize(param: string, value: string, writer: LanguageWriter): LanguageStatement {
         const accessor = writer.getObjectAccessor(this, value)
-        return writer.makeAssign(accessor, undefined,
-            writer.makeCast(writer.makeString(`${param}Deserializer.readFunction()`),
-                writer.makeType(mapType(this.type), true, accessor))
-            , false)
+        const data = writer.makeString(`${param}Deserializer.readFunction()`);
+        let type = writer.makeType(mapType(this.type), true, accessor);
+        type.name = type.name.replaceAll("any", "object");
+        const expr = writer.makeCast(data, type);
+        return writer.makeAssign(accessor, undefined, expr, false)
     }
     nativeType(impl: boolean): string {
         return PrimitiveType.Function.getText()
@@ -808,9 +827,14 @@ export class TupleConvertor extends BaseArgConvertor {
             // need to remove the mark '?' from Optional type
             const tsTypeName = mapType(this.type.elements[index]).replace("?", "")
             statements.push(
-                printer.makeAssign(tmpTupleId,
+                printer.makeAssign(
+                    tmpTupleId,
                     // makeType - creating the correct type for TS(using tsTypeName) or C++(use decltype(receiver))
-                    printer.makeType(tsTypeName, true, receiver),undefined, true, false),
+                    printer.makeType(tsTypeName, true, receiver),
+                    undefined,
+                    true,
+                    false
+                ),
                 it.convertorDeserialize(param, tmpTupleId, printer)
             )
         })

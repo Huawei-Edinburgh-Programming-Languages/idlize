@@ -74,7 +74,7 @@ const options = program
     .option('--language [ts|ts|java|cangjie]', 'Output language')
     .option('--api-prefix <string>', 'Cpp prefix to be compatible with manual arkoala implementation')
     .option('--need-interfaces', 'Generate interfaces to resolve all .d.ts dependencies', false)
-    .option('--only-integrated', 'Generate only thoose files that can be integrated to target', false)
+    .option('--only-integrated', 'Generate only those files that can be integrated to target', false)
     .option('--version')
     .option('--generator-target <all|arkoala|libace|none>', 'Copy peers to arkoala or libace (use with --dts2peer)', "all")
     .option('--idl', 'Generate peers from IDL (use with --dts2peer)', true)

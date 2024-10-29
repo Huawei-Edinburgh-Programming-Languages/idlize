@@ -16,14 +16,27 @@
 import { IndentedPrinter } from "../../../IndentedPrinter"
 import { capitalize } from "../../../util"
 import { AggregateConvertor, ArrayConvertor, EnumConvertor, OptionConvertor, StringConvertor } from "../../Convertors"
-import { FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, ObjectArgs, Type } from "../LanguageWriter"
-import { TSLambdaExpression, TSLanguageWriter } from "./TsLanguageWriter"
+import {
+    FieldModifier,
+    LanguageExpression,
+    LanguageStatement,
+    LanguageWriter,
+    Method,
+    MethodModifier,
+    MethodSignature,
+    NamedMethodSignature,
+    ObjectArgs,
+    TsInterfaceStatement,
+    Type
+} from "../LanguageWriter"
+import {TSLambdaExpression, TSLanguageWriter, TsObjectAssignStatement} from "./TsLanguageWriter"
 import { IDLBooleanType, IDLContainerType, IDLF32Type, IDLF64Type, IDLI16Type, IDLI32Type, IDLI64Type, IDLI8Type, IDLNumberType, IDLPointerType, IDLPrimitiveType, IDLStringType, IDLType, IDLU16Type, IDLU32Type, IDLU64Type, IDLU8Type, IDLVoidType  } from '../../../idl'
-import { EnumEntity } from "../../PeerFile"
-import { createLiteralDeclName } from "../../TypeNodeNameConvertor"
+import {EnumEntity, InterfaceEntity} from "../../PeerFile"
+import { createLiteralDeclName, mapType } from "../../TypeNodeNameConvertor"
 import { ArgConvertor, CustomTypeConvertor, RuntimeType } from "../../ArgConvertors"
 import { makeArrayTypeCheckCall } from "../../printers/TypeCheckPrinter"
 import { Language } from "../../../Language"
+import {FieldRecord} from "../../DeclarationTable";
 
 ////////////////////////////////////////////////////////////////
 //                         STATEMENTS                         //
@@ -37,8 +50,14 @@ export class EtsAssignStatement implements LanguageStatement {
                 protected isConst: boolean = true) { }
     write(writer: LanguageWriter): void {
         if (this.isDeclared) {
-            const typeSpec = ""
             const initValue = this.expression !== undefined ? this.expression : writer.makeUndefined()
+            let typeSpec = ""
+            if (this.type !== undefined) {
+                typeSpec += `: ${this.type?.name}`
+                if (this.expression == undefined) {
+                    typeSpec += " | undefined"
+                }
+            }
             writer.print(`${this.isConst ? "const" : "let"} ${this.variableName}${typeSpec} = ${initValue.asString()}`)
         } else {
             writer.print(`${this.variableName} = ${this.expression.asString()}`)
@@ -84,6 +103,18 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
             writer.writeFieldDeclaration("value", new Type(typeName), [FieldModifier.PUBLIC, FieldModifier.READONLY], false)
             if (isTypeString) {
                 writer.writeFieldDeclaration("ordinal", new Type("KInt"), [FieldModifier.PUBLIC, FieldModifier.READONLY], false)
+                writer.writeMethodImplementation(new Method("byOrdinal", new MethodSignature(new Type(this.enumEntity.name), [argTypes[1]]), [MethodModifier.PUBLIC, MethodModifier.STATIC]),
+                    (writer)=> {
+                        this.enumEntity.members.forEach((member) => {
+                            const memberName = `${this.enumEntity.name}.${member.name}`
+                            writer.writeStatement(
+                                writer.makeCondition(
+                                    writer.makeEquals([writer.makeString('arg0'), writer.makeString(`${memberName}.ordinal`)]),
+                                    writer.makeReturn(writer.makeString(memberName)))
+                            )
+                        })
+                        writer.print("throw new Error(`Enum member '$\{arg0\}' not found`)")
+                })
             }
             writer.writeMethodImplementation(new Method("of", new MethodSignature(new Type(this.enumEntity.name), [argTypes[0]]), [MethodModifier.PUBLIC, MethodModifier.STATIC]),
                 (writer)=> {
@@ -202,6 +233,24 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     }
     makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index?: number): LanguageExpression {
         return this.makeString(`${value} as ${type.name}`)
+    }
+    makeInterface(name: string, fields: FieldRecord[], superInterfaces?: string[], isDeclared?: boolean): LanguageStatement {
+        let interfaceEntity = new InterfaceEntity(name)
+        for (let field of fields) {
+            const name = field.name;
+            const type = mapType(field.type)
+                .replaceAll("any", "object")
+                .replaceAll("?", "| undefined")
+                .replaceAll("unknown", "object");
+            interfaceEntity.pushMember(name, type);
+        }
+        return new TsInterfaceStatement(interfaceEntity, false);
+    }
+    makeObjectAlloc(object: string, fields: readonly FieldRecord[], typeName: string = "", isDeclared: boolean = false): LanguageStatement {
+        // if (fields.length > 0) {
+            return this.makeAssign(object, undefined, this.makeCast(this.makeString("{}"), new Type(typeName)), isDeclared)
+        // }
+        // return new TsObjectAssignStatement(object, undefined, isDeclared)
     }
     ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression {
         return value;

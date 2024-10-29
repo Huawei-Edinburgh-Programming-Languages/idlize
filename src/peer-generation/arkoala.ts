@@ -21,13 +21,14 @@ import {
     dummyImplementations,
     makeArkuiModule,
     makeTSSerializer,
+    makeArkTSDeserializer,
     makeTSDeserializer,
     gniFile,
     mesonBuildFile,
     copyToLibace,
     libraryCcDeclaration,
     makeCJSerializer,
-    makeTypeCheckerFromDTS
+    makeTypeCheckerFromDTS,
 } from "./FileGenerators"
 import { makeJavaArkComponents, makeJavaNodeTypes, makeJavaSerializer } from "./printers/lang/JavaPrinters"
 import { PeerLibrary } from "./PeerLibrary"
@@ -400,6 +401,15 @@ export function generateArkoala(config: {
                 integrated: true
             }
         )
+        let deserializerPeer = arkoala.peer(new TargetFile('Deserializer'))
+        let arktsDeserializer = makeArkTSDeserializer(peerLibrary)
+        writeFile(deserializerPeer,
+            arktsDeserializer,
+            {
+                onlyIntegrated: config.onlyIntegrated,
+                integrated: true
+            },
+        )
         writeFile(arkoala.arktsLib(new TargetFile('type_check', 'arkts')),
             makeTypeCheckerFromDTS(peerLibrary).arkts,
             {
@@ -538,6 +548,7 @@ function copyArkoalaFiles(config: {
         'sig/arkoala-arkts/arkui/src/generated/ts/index.ts',
         'sig/arkoala-arkts/arkui/src/generated/ts/NativeModule.ts',
         'sig/arkoala-arkts/arkui/src/generated/peers/SerializerBase.ts',
+        'sig/arkoala-arkts/arkui/src/generated/peers/DeserializerBase.ts',
         'sig/arkoala-arkts/arkui/src/generated/shared/ArkResource.ts',
         'sig/arkoala-arkts/arkui/src/generated/shared/dts-exports.ts',
         'sig/arkoala-arkts/arkui/src/generated/shared/generated-utils.ts',

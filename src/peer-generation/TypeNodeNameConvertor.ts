@@ -30,7 +30,13 @@ export class TSTypeNodeNameConvertor implements
     TypeNodeNameConvertor
 {
     convertUnion(node: ts.UnionTypeNode): string {
-        return node.types.map(it => this.convert(it)).join(" | ")
+        for (let type of node.types) {
+            if (type.getText().toLowerCase().includes("auto")) {
+                console.log("Union: " + type.getText())
+            }
+        }
+        let res = node.types.map(it => this.convert(it)).join(" | ").replace("auto", "string")
+        return res
     }
     convertTypeLiteral(node: ts.TypeLiteralNode): string {
         const members = node.members.map(it => {

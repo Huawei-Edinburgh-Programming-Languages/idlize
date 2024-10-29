@@ -92,7 +92,8 @@ declare interface GridContainerOptions {
    * @since 7
    * @deprecated since 9
    */
-  columns?: number | "auto";
+  // columns?: number | "auto";  todo: fix
+  columns?: number | string;
 
   /**
    * Select the device width type.

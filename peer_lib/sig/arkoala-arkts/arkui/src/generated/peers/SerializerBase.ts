@@ -122,17 +122,20 @@ export class SerializerBase {
     constructor() {
         this.buffer = new KBuffer(96)
     }
+    private setIsHolding(isHolding: boolean): void {
+        this.isHolding = isHolding
+    }
     static hold<T extends SerializerBase>(factory: () => T): T {
         if (!SerializerBase.cache)
             SerializerBase.cache = factory()
         const serializer = SerializerBase.cache!
         if (serializer.isHolding)
             throw new Error("Serializer is already being held. Check if you had released is before")
-        serializer.isHolding = true
+        serializer.setIsHolding(true)
         return serializer as T
     }
     public release() {
-        this.isHolding = false
+        this.setIsHolding(false)
         this.releaseResources()
         this.position = 0
     }
@@ -160,7 +163,7 @@ export class SerializerBase {
     }
     private heldResources: Array<ResourceId> = new Array<ResourceId>()
     writeResource(resource: object) {
-        const resourceId = ResourceManager.registerAndHold(resource)
+        const resourceId: ResourceId = ResourceManager.registerAndHold(resource)
         this.heldResources.push(resourceId)
         this.writeInt32(resourceId)
     }

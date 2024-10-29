@@ -19,7 +19,7 @@ import { stringOrNone } from "../../util"
 import { EnumConvertor, MapConvertor } from "../Convertors"
 import { ArgConvertor, RuntimeType } from "../ArgConvertors"
 import { FieldRecord } from "../DeclarationTable"
-import { EnumEntity } from "../PeerFile"
+import {EnumEntity, InterfaceEntity} from "../PeerFile"
 import * as fs from "fs"
 import { Language } from "../../Language"
 
@@ -275,6 +275,20 @@ export class TsEnumEntityStatement implements LanguageStatement {
     }
 }
 
+export class TsInterfaceStatement implements LanguageStatement {
+    constructor(private readonly interfaceEntity: InterfaceEntity, private readonly isExport: boolean) {}
+    write(writer: LanguageWriter): void {
+        writer.print(`${this.isExport ? "export " : ""}interface ${this.interfaceEntity.name} {`)
+        writer.pushIndent()
+        this.interfaceEntity.fields.forEach((member, index) => {
+            writer.print(`${member.name}: ${member.type},`)
+        })
+        writer.popIndent()
+        writer.print(`}`)
+    }
+}
+
+
 export class ReturnStatement implements LanguageStatement {
     constructor(public expression?: LanguageExpression) { }
     write(writer: LanguageWriter): void {
@@ -402,6 +416,7 @@ export abstract class LanguageWriter {
     abstract get supportedFieldModifiers(): FieldModifier[]
     abstract enumFromOrdinal(value: LanguageExpression, enumType: string): LanguageExpression
     abstract ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression
+    abstract makeInterface(name: string, fields: readonly FieldRecord[], superInterfaces?: string[], isDeclared?: boolean): LanguageStatement
 
 
     concat(other: PrinterLike): this {
@@ -522,7 +537,7 @@ export abstract class LanguageWriter {
     makeTupleAlloc(option: string): LanguageStatement {
         return new ExpressionStatement(new StringExpression(""))
     }
-    makeObjectAlloc(object: string, fields: readonly FieldRecord[]): LanguageStatement {
+    makeObjectAlloc(object: string, fields: readonly FieldRecord[], typeName: string = "", isDeclare: boolean = false): LanguageStatement {
         return new ExpressionStatement(new StringExpression(""))
     }
     makeSetUnionSelector(value: string, index: string): LanguageStatement {

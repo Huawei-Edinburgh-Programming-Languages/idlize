@@ -18,10 +18,25 @@ import { Language } from "../../../Language"
 import { ArrayConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "../../Convertors"
 import { FieldRecord } from "../../DeclarationTable"
 import { mapType, TSTypeNodeNameConvertor } from "../../TypeNodeNameConvertor"
-import { AssignStatement, ExpressionStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, ObjectArgs, ReturnStatement, Type } from "../LanguageWriter"
+import {
+    AssignStatement,
+    ExpressionStatement,
+    FieldModifier,
+    LanguageExpression,
+    LanguageStatement,
+    LanguageWriter,
+    Method,
+    MethodModifier,
+    MethodSignature,
+    ObjectArgs,
+    ReturnStatement,
+    TsInterfaceStatement,
+    Type
+} from "../LanguageWriter"
 import { IDLContainerType, IDLF32Type, IDLF64Type, IDLI16Type, IDLI32Type, IDLI64Type, IDLI8Type, IDLNumberType, IDLPointerType, IDLPrimitiveType, IDLStringType, IDLU16Type, IDLU32Type, IDLU64Type, IDLU8Type, IDLVoidType } from '../../../idl'
 import * as ts from 'typescript'
 import { ArgConvertor, RuntimeType } from "../../ArgConvertors"
+import {InterfaceEntity} from "../../PeerFile";
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -299,14 +314,23 @@ export class TSLanguageWriter extends LanguageWriter {
     makeTupleAlloc(option: string): LanguageStatement {
         return new TsTupleAllocStatement(option)
     }
-    makeObjectAlloc(object: string, fields: readonly FieldRecord[]): LanguageStatement {
+    makeInterface(name: string, fields: FieldRecord[], superInterfaces?: string[], isDeclared?: boolean): LanguageStatement {
+        let interfaceEntity = new InterfaceEntity(name)
+        for (let field of fields) {
+            const name = field.name;
+            const type = mapType(field.type);
+            interfaceEntity.pushMember(name, type);
+        }
+        return new TsInterfaceStatement(interfaceEntity, false);
+    }
+    makeObjectAlloc(object: string, fields: readonly FieldRecord[], typeName: string = "", isDeclared: boolean = false): LanguageStatement {
         if (fields.length > 0) {
             return this.makeAssign(object, undefined,
                 this.makeCast(this.makeString("{}"),
                     new Type(`{${fields.map(it=>`${it.name}: ${mapType(it.type)}`).join(",")}}`)),
-                false)
+                isDeclared)
         }
-        return new TsObjectAssignStatement(object, undefined, false)
+        return new TsObjectAssignStatement(object, undefined, isDeclared)
     }
     makeMapResize(keyType: string, valueType: string, map: string, size: string, deserializer: string): LanguageStatement {
         return this.makeAssign(map, undefined, this.makeString(`new Map<${keyType}, ${valueType}>()`), false)

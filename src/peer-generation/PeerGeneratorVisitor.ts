@@ -167,7 +167,9 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
     }
 
     private processVariableStatement(node: ts.VariableStatement) {
-        node.declarationList.declarations.forEach(variable => {
+        for (let variable of node.declarationList.declarations) {
+            let name = variable.name.getText()
+            let type = variable.type?.getText()
             const interfaceDecl = this.maybeTypeReferenceToDeclaration(variable.type)
             if (!interfaceDecl || !ts.isInterfaceDeclaration(interfaceDecl))
                 return
@@ -185,7 +187,7 @@ export class PeerGeneratorVisitor implements GenericVisitor<void> {
                     attributesDecl,
                 ))
             }
-        })
+        }
     }
 
     private maybeTypeReferenceToDeclaration(node: ts.TypeNode | undefined): ts.Declaration | undefined {
@@ -418,6 +420,16 @@ export class ArkTSTypeDepsCollector extends ImportsAggregateCollector {
                 || ts.isTypeAliasDeclaration(node.parent)
                 || ts.isParameter(node.parent))
             && ts.isStringLiteral(node.literal)) {
+            if (node.literal.getText().toLowerCase().includes("auto")) {
+                return [makeSyntheticDeclaration(ArkTSTypeDepsCollector.SYNTH_TYPE_FILE_NAME,
+                    this.typeToStringConvertor.convertStringKeyword(node), () => {
+                        return ts.factory.createClassDeclaration([],
+                            this.typeToStringConvertor.convertLiteralType(node),
+                            undefined,
+                            undefined,
+                            [])
+                    })]
+            }
             return [makeSyntheticDeclaration(ArkTSTypeDepsCollector.SYNTH_TYPE_FILE_NAME,
                 this.typeToStringConvertor.convertLiteralType(node), () => {
                     return ts.factory.createClassDeclaration([],

@@ -22,6 +22,7 @@ import { PrimitiveType } from "../../ArkPrimitiveType"
 import { ArrayConvertor, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "../../Convertors"
 import { AssignStatement, BlockStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, ObjectArgs, StringExpression, Type } from "../LanguageWriter"
 import { CDefinedExpression, CLikeExpressionStatement, CLikeLanguageWriter, CLikeLoopStatement, CLikeReturnStatement } from "./CLikeLanguageWriter"
+import {FieldRecord} from "../../DeclarationTable";
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -323,6 +324,9 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
             this.makeAssign(keyAccessor, undefined, this.makeString(key), false),
             this.makeAssign(valueAccessor, undefined, this.makeString(value), false)
         ], false)
+    }
+    makeInterface(name: string, fields: readonly FieldRecord[], superInterfaces?: string[], isDeclared?: boolean): LanguageStatement {
+        return new BlockStatement([])
     }
     getTagType(): Type {
         return new Type(PrimitiveType.Tag.getText())
