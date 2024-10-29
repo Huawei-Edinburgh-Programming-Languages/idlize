@@ -262,7 +262,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     }
     makeUnionVariantCast(value: string, type: string, convertor: ArgConvertor, index?: number): LanguageExpression {
         if (convertor instanceof EnumConvertor) {
-            return this.makeString(`${value}`)
+            return this.makeString(value)
         }
         return this.makeString(`${value} as ${type}`)
     }
