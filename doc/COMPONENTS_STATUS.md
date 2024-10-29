@@ -92,6 +92,9 @@
 |`workStateStyle`| Function | Maksimov Nikita | in progress|  |
 |`onSelectChange`| Function | Maksimov Nikita | in progress|  |
 |`onRequestData`| Function | Maksimov Nikita | in progress|  |
+|*CalendarController*| *Class* |Maksimov Nikita | in progress|  |
+|`backToToday`| Function |Maksimov Nikita | in progress|  |
+|`goTo`| Function |Maksimov Nikita | in progress|  |
 |*Checkbox*| *Component* | Andrey Khudenkikh | in progress |  |
 |`setCheckboxOptions`| Function | Andrey Khudenkikh | done |  |
 |`select`| Function | Andrey Khudenkikh | done |  |
