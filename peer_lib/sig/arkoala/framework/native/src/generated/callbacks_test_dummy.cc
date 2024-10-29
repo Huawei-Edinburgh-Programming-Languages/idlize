@@ -16,7 +16,7 @@
 #include "common-interop.h"
 
 void CallVoid(KVMContext vmContext, KInt methodId, KInt length, void* args) {
-#if KOALA_USE_NODE_VM || KOALA_USE_HZ_VM || KOALA_USE_PANDA_VM || KOALA_USE_JAVA_VM || KOALA_USE_CJ_VM
+#if KOALA_USE_NODE_VM || KOALA_USE_HZ_VM || KOALA_USE_PANDA_VM || KOALA_USE_JAVA_VM || KOALA_CJ
     KOALA_INTEROP_CALL_VOID(vmContext, methodId, length, args)
 #else
 #error vm not supported
@@ -24,7 +24,7 @@ void CallVoid(KVMContext vmContext, KInt methodId, KInt length, void* args) {
 }
 
 KInt CallInt(KVMContext vmContext, KInt methodId, KInt length, void* args) {
-#if KOALA_USE_NODE_VM || KOALA_USE_HZ_VM || KOALA_USE_PANDA_VM || KOALA_USE_JAVA_VM || KOALA_USE_CJ_VM
+#if KOALA_USE_NODE_VM || KOALA_USE_HZ_VM || KOALA_USE_PANDA_VM || KOALA_USE_JAVA_VM || KOALA_CJ
     KOALA_INTEROP_CALL_INT(vmContext, methodId, length, args)
 #else
 #error vm not supported
@@ -32,7 +32,7 @@ KInt CallInt(KVMContext vmContext, KInt methodId, KInt length, void* args) {
 }
 
 void CallVoidInts32(KVMContext vmContext, KInt methodId, KInt numArgs, KInt* args) {
-#if KOALA_USE_NODE_VM || KOALA_USE_HZ_VM || KOALA_USE_PANDA_VM || KOALA_USE_JAVA_VM || KOALA_USE_CJ_VM
+#if KOALA_USE_NODE_VM || KOALA_USE_HZ_VM || KOALA_USE_PANDA_VM || KOALA_USE_JAVA_VM || KOALA_CJ
     KOALA_INTEROP_CALL_VOID_INTS32(vmContext, methodId, numArgs, args)
 #else
 #error vm not supported
@@ -40,7 +40,7 @@ void CallVoidInts32(KVMContext vmContext, KInt methodId, KInt numArgs, KInt* arg
 }
 
 KInt CallIntInts32(KVMContext vmContext, KInt methodId, KInt numArgs, KInt* args) {
-#if KOALA_USE_NODE_VM || KOALA_USE_HZ_VM || KOALA_USE_PANDA_VM || KOALA_USE_JAVA_VM || KOALA_USE_CJ_VM
+#if KOALA_USE_NODE_VM || KOALA_USE_HZ_VM || KOALA_USE_PANDA_VM || KOALA_USE_JAVA_VM || KOALA_CJ
     KOALA_INTEROP_CALL_INT_INTS32(vmContext, methodId, numArgs, args)
 #else
 #error vm not supported
