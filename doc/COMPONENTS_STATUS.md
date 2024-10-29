@@ -934,11 +934,11 @@
 |`onChange`| Function | Morozov Sergey |in progress |  |
 |`onNext`| Function | Morozov Sergey |in progress |  |
 |`onPrevious`| Function | Morozov Sergey |in progress |  |
-|*StepperItem*| *Component* | Morozov Sergey | in progress | |
-|`setStepperItemOptions`| Function | Morozov Sergey | in progress | |
-|`prevLabel`| Function | Morozov Sergey | in progress | |
-|`nextLabel`| Function | Morozov Sergey | in progress | |
-|`status`| Function | Morozov Sergey | in progress | |
+|*StepperItem*| *Component* | Morozov Sergey | devdone | |
+|`setStepperItemOptions`| Function | Morozov Sergey | devdone | |
+|`prevLabel`| Function | Morozov Sergey | devdone | |
+|`nextLabel`| Function | Morozov Sergey | devdone | |
+|`status`| Function | Morozov Sergey | devdone | |
 |*Swiper*| *Component* | Skroba Gleb | done |  |
 |`setSwiperOptions`| Function | Skroba Gleb | done |  |
 |`index`| Function | Skroba Gleb| done |  |
