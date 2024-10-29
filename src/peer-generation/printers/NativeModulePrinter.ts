@@ -111,7 +111,7 @@ class NativeModuleVisitor {
 
         nativeModuleEmpty.writeMethodImplementation(new Method(name, parameters), (printer) => {
             printer.writePrintLog(name)
-            if (returnType !== undefined && idl.getIDLTypeName(returnType) !== idl.getIDLTypeName(idl.IDLVoidType)) {
+            if (returnType !== undefined && returnType !== idl.IDLVoidType) {
                 printer.writeStatement(printer.makeReturn(printer.makeString(getReturnValue(returnType))))
             }
         })
