@@ -662,9 +662,9 @@
 |`activeColor`| Function | Dmitry A Smirnov| done|  |
 |`pathColor`| Function | Dmitry A Smirnov| done|  |
 |`pathStrokeWidth`| Function | Dmitry A Smirnov| done|  |
-|`onPatternComplete`| Function | Dmitry A Smirnov| in progress|  |
+|`onPatternComplete`| Function | Dmitry A Smirnov| blocked| waiting for new way implement method with callback |
 |`autoReset`| Function | Dmitry A Smirnov| done|  |
-|`onDotConnect`| Function | Dmitry A Smirnov| in progress|  |
+|`onDotConnect`| Function | Dmitry A Smirnov| blocked| waiting for new way implement method with callback |
 |`activateCircleStyle`| Function | Dmitry A Smirnov| blocked| radius is CustomObject. need activateCircleStyle attribute https://gitee.com/openharmony/arkui_ace_engine/issues/IAYWON |
 |*QRCode*| *Component* | Evstigneev Roman |in progress|  |
 |`setQRCodeOptions`| Function |Evstigneev Roman |in progress|  |
