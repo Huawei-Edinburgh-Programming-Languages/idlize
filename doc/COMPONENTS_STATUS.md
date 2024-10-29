@@ -907,6 +907,9 @@
 |`contentModifier`| Function |Morozov Sergey |blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`slideRange`| Function | Morozov Sergey |done |  |
 |`showTips`| Function |Morozov Sergey |done |  |
+|*BaseSpan*| *Component* |Politov Mikhail | in progress |  |
+|`textBackgroundStyle`| Function | Politov Mikhail | in progress |  |
+|`baselineOffset`| Function | Politov Mikhail | in progress |  |
 |*Span*| *Component* | Politov Mikhail | in progress |  |
 |`setSpanOptions`| Function |Politov Mikhail | in progress |  |
 |`font`| Function | Politov Mikhail | in progress |  |
