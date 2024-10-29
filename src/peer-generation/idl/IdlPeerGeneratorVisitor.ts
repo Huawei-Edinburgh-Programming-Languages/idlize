@@ -1306,29 +1306,33 @@ function generateSignature(
     method: idl.IDLCallable | idl.IDLMethod | idl.IDLConstructor,
     className?: string
 ): NamedMethodSignature {
-    let returnType
+    let returnType;
 
     if (idl.isVoidType(method.returnType!)) {
-        returnType = idl.IDLVoidType
+        returnType = idl.IDLVoidType;
     } 
     else if (
-        idl.isConstructor(method) || !method.isStatic
+        idl.isConstructor(method)
     ) {
         returnType = idl.IDLThisType
     } 
+    else if (method.name?.startsWith("this") && method.name.endsWith("Options")){
+        returnType = idl.IDLThisType
+    }
+    else if (method.name?.startsWith("set") && method.name.endsWith("Options")){
+        returnType = idl.IDLThisType
+    }
     else if (idl.isReferenceType(method.returnType!))
     {
-        if (!method.isStatic && method.returnType && className && idl.getIDLTypeName(method.returnType) === className)
+
+        if (!method.isStatic && method.returnType && className && idl.isIDLTypeName(method.returnType, className))
         {
             returnType = idl.IDLThisType
         }
         else
         {
-            returnType = method.returnType!
+           returnType = method.returnType!
         }
-    }
-    else if (method.name?.startsWith("this") && method.name.endsWith("Options")){
-        returnType = idl.IDLThisType
     }
     else {
         returnType = method.returnType!
