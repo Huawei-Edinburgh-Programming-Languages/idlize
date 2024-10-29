@@ -51,7 +51,6 @@ function printSerializerImports(table: (ts.ClassDeclaration | ts.InterfaceDeclar
         convertorImportsCollector.addFeature("TypeChecker", "#components")
     }
     if ([Language.TS, Language.ARKTS].includes(writer.language)) {
-        convertorImportsCollector.addFeature("KInt", "@koalaui/interop")
         convertorImportsCollector.addFeature("KBoolean", "@koalaui/interop")
     }
     const serializerCollector = createSerializerDependenciesCollector(writer.language, convertorImportsCollector, library)
