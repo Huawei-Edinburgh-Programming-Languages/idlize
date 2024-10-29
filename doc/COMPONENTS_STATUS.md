@@ -967,6 +967,14 @@
 |`customContentTransition`| Function | Skroba Gleb |blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAOKLD |
 |`onContentDidScroll`| Function | Skroba Gleb| blocked UT |  |
 |`indicatorInteractive`| Function | Skroba Gleb| done |  |
+|*IndicatorComponent*| *Component* | Andrey Khudenkikh | in progress |  |
+|`setIndicatorComponentOptions`| Function | Andrey Khudenkikh | in progress |  |
+|`initialIndex`| Function | Andrey Khudenkikh | in progress |  |
+|`count`| Function | Andrey Khudenkikh | in progress |  |
+|`style`| Function |  Andrey Khudenkikh | in progress |  |
+|`loop`| Function |  Andrey Khudenkikh | in progress |  |
+|`vertical`| Function | Andrey Khudenkikh | in progress |  |
+|`onChange`| Function | Andrey Khudenkikh | in progress |  |
 |*Text*| *Component* | Kirill Kirichenko | in progress | |
 |`setTextOptions`| Function | Kirill Kirichenko | in progress |  |
 |`font`| Function | | | |
@@ -1245,6 +1253,10 @@
 |`setPosition`| Function | Skroba Gleb | in progress | |
 |`getMainAxisLength`| Function | Skroba Gleb | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
 |`setMainAxisLength`| Function | Skroba Gleb | in progress | |
+|*IndicatorComponentController*| *Class* | Andrey Khudenkikh | in progress |  |
+|`showNext`| Function | Andrey Khudenkikh | in progress |  |
+|`showPrevious`| Function |  Andrey Khudenkikh | in progress |  |
+|`changeIndex`| Function |  Andrey Khudenkikh | in progress |  |
 |*TabsController*| *Class* | | in progress |  |
 |`changeIndex`| Function |Skroba Gleb | done |  |
 |`preloadItems`| Function |Skroba Gleb | done |  |
