@@ -1258,6 +1258,13 @@
 |`caretPosition`| Function | Spirin Andrey | in progress |  |
 |`setTextSelection`| Function | Spirin Andrey | in progress |  |
 |`stopEditing`| Function |  Spirin Andrey | in progress |  |
+|*SymbolSpan*| *Component* |Dmitry A Smirnov| in progress|  |
+|`setSymbolSpanOptions`| Function |Dmitry A Smirnov| in progress|  |
+|`fontSize`| Function |Dmitry A Smirnov| in progress|  |
+|`fontColor`| Function |Dmitry A Smirnov| in progress|  |
+|`fontWeight`| Function |Dmitry A Smirnov| in progress|  |
+|`effectStrategy`| Function |Dmitry A Smirnov| in progress|  |
+|`renderingStrategy`| Function |Dmitry A Smirnov| in progress|  |
 |*Tabs*| *Component* | Tuzhilkin Ivan | in progress |  |
 |`setTabsOptions`| Function | Skroba Gleb | done |  |
 |`vertical`| Function | Tuzhilkin Ivan | done |  |
