@@ -206,7 +206,7 @@ export class CJLanguageWriter extends LanguageWriter {
         this.printer.print(`}`)
     }
     writeProperty(propName: string, propType: idl.IDLType, mutable?: boolean, getterLambda?: (writer: LanguageWriter) => void, setterLambda?: (writer: LanguageWriter) => void) {
-        this.print(`${mutable ? "mut " : ""}prop ${propName}: ${convertType(this, propType).alias} {`)
+        this.print(`${mutable ? "mut " : ""}prop ${propName}: ${propType.optional ? '?' : ''}${convertType(this, propType).alias} {`)
         this.pushIndent()
         this.print(`get() {`)
         this.pushIndent()
