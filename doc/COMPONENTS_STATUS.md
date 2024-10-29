@@ -1403,16 +1403,16 @@
 |`cacheMode`| Function | Erokhin Ilya | testskipped | |
 |`darkMode`| Function | Erokhin Ilya | testskipped | |
 |`forceDarkAccess`| Function | Erokhin Ilya | testskipped | |
-|`mediaOptions`| Function | Erokhin Ilya | in progress | |
+|`mediaOptions`| Function | Erokhin Ilya | testskipped | |
 |`tableData`| Function | Erokhin Ilya | done | |
 |`wideViewModeAccess`| Function | Erokhin Ilya | done | |
 |`overviewModeAccess`| Function | Erokhin Ilya | testskipped | |
 |`overScrollMode`| Function | Erokhin Ilya | testskipped | |
-|`textZoomAtio`| Function | Erokhin Ilya | in progress | |
-|`textZoomRatio`| Function | Erokhin Ilya | in progress | |
+|`textZoomAtio`| Function | Erokhin Ilya | testskipped | |
+|`textZoomRatio`| Function | Erokhin Ilya | testskipped | |
 |`databaseAccess`| Function | Erokhin Ilya | testskipped | |
-|`initialScale`| Function | Erokhin Ilya | in progress | |
-|`userAgent`| Function | Erokhin Ilya | in progress | |
+|`initialScale`| Function | Erokhin Ilya | testskipped | |
+|`userAgent`| Function | Erokhin Ilya | testskipped | |
 |`metaViewport`| Function | Erokhin Ilya | testskipped | |
 |`onPageEnd`| Function | Erokhin Ilya | in progress | |
 |`onPageBegin`| Function | Erokhin Ilya | in progress | |
@@ -1455,17 +1455,17 @@
 |`onWindowExit`| Function | Erokhin Ilya | in progress | |
 |`multiWindowAccess`| Function | Erokhin Ilya | testskipped | |
 |`onInterceptKeyEvent`| Function | Erokhin Ilya | in progress | |
-|`webStandardFont`| Function | Erokhin Ilya | in progress | |
-|`webSerifFont`| Function | Erokhin Ilya | in progress | |
-|`webSansSerifFont`| Function | Erokhin Ilya | in progress | |
-|`webFixedFont`| Function | Erokhin Ilya | in progress | |
-|`webFantasyFont`| Function | Erokhin Ilya | in progress | |
-|`webCursiveFont`| Function | Erokhin Ilya | in progress | |
-|`defaultFixedFontSize`| Function | Erokhin Ilya | in progress | |
-|`defaultFontSize`| Function | Erokhin Ilya | in progress | |
-|`minFontSize`| Function | Erokhin Ilya | in progress | |
-|`minLogicalFontSize`| Function | Erokhin Ilya | in progress | |
-|`defaultTextEncodingFormat`| Function | Erokhin Ilya | in progress | |
+|`webStandardFont`| Function | Erokhin Ilya | testskipped | |
+|`webSerifFont`| Function | Erokhin Ilya | testskipped | |
+|`webSansSerifFont`| Function | Erokhin Ilya | testskipped | |
+|`webFixedFont`| Function | Erokhin Ilya | testskipped | |
+|`webFantasyFont`| Function | Erokhin Ilya | testskipped | |
+|`webCursiveFont`| Function | Erokhin Ilya | testskipped | |
+|`defaultFixedFontSize`| Function | Erokhin Ilya | testskipped | |
+|`defaultFontSize`| Function | Erokhin Ilya | testskipped | |
+|`minFontSize`| Function | Erokhin Ilya | testskipped | |
+|`minLogicalFontSize`| Function | Erokhin Ilya | testskipped | |
+|`defaultTextEncodingFormat`| Function | Erokhin Ilya | testskipped | |
 |`forceDisplayScrollBar`| Function | Erokhin Ilya | testskipped | |
 |`blockNetwork`| Function | Erokhin Ilya | testskipped | |
 |`horizontalScrollBarAccess`| Function | Erokhin Ilya | testskipped | |
@@ -1497,7 +1497,7 @@
 |`copyOptions`| Function | Erokhin Ilya | testskipped | |
 |`onOverrideUrlLoading`| Function | Erokhin Ilya | in progress | |
 |`textAutosizing`| Function | Erokhin Ilya | testskipped | |
-|`enableNativeMediaPlayer`| Function | Erokhin Ilya | in progress | |
+|`enableNativeMediaPlayer`| Function | Erokhin Ilya | testskipped | |
 |`enableSmoothDragResize`| Function | Erokhin Ilya | testskipped | |
 |`onRenderProcessNotResponding`| Function | Erokhin Ilya | in progress | |
 |`onRenderProcessResponding`| Function | Erokhin Ilya | in progress | |
@@ -1508,4 +1508,4 @@
 |`keyboardAvoidMode`| Function | Erokhin Ilya | testskipped | |
 |`editMenuOptions`| Function | Erokhin Ilya | in progress | |
 |`enableHapticFeedback`| Function | Erokhin Ilya | testskipped | |
-|`registerNativeEmbedRule`| Function | Erokhin Ilya | in progress | |
+|`registerNativeEmbedRule`| Function | Erokhin Ilya | testskipped | |
