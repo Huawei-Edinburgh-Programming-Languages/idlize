@@ -984,46 +984,46 @@
 |`changeIndex`| Function |  Andrey Khudenkikh | in progress |  |
 |*Text*| *Component* | Kirill Kirichenko | in progress | |
 |`setTextOptions`| Function | Kirill Kirichenko | in progress |  |
-|`font`| Function | | | |
-|`fontColor`| Function | | | |
-|`fontSize`| Function | | | |
-|`minFontSize`| Function | | | |
-|`maxFontSize`| Function | | | |
-|`minFontScale`| Function | | | |
-|`maxFontScale`| Function | | | |
-|`fontStyle`| Function | | | |
-|`fontWeight`| Function | | | |
-|`lineSpacing`| Function | | | |
-|`textAlign`| Function | | | |
-|`lineHeight`| Function | | | |
-|`textOverflow`| Function | | | |
-|`fontFamily`| Function | | | |
-|`maxLines`| Function | | | |
-|`decoration`| Function | | | |
-|`letterSpacing`| Function | | | |
-|`textCase`| Function | | | |
-|`baselineOffset`| Function | | | |
-|`copyOption`| Function | | | |
-|`draggable`| Function | | | |
-|`textShadow`| Function | | | |
-|`heightAdaptivePolicy`| Function | | | |
-|`textIndent`| Function | | | |
-|`wordBreak`| Function | | | |
-|`lineBreakStrategy`| Function | | | |
-|`onCopy`| Function | | | |
-|`caretColor`| Function | | | |
-|`selectedBackgroundColor`| Function | | | |
-|`ellipsisMode`| Function | | | |
+|`font`| Function |Samarin Sergey |in progress |  |
+|`fontColor`| Function |Samarin Sergey |in progress |  |
+|`fontSize`| Function |Samarin Sergey |in progress |  |
+|`minFontSize`| Function |Samarin Sergey |in progress |  |
+|`maxFontSize`| Function |Samarin Sergey |in progress |  |
+|`minFontScale`| Function |Samarin Sergey |in progress |  |
+|`maxFontScale`| Function |Samarin Sergey |in progress |  |
+|`fontStyle`| Function |Samarin Sergey |in progress |  |
+|`fontWeight`| Function |Samarin Sergey |in progress |  |
+|`lineSpacing`| Function |Samarin Sergey |in progress |  |
+|`textAlign`| Function |Samarin Sergey |in progress |  |
+|`lineHeight`| Function |Samarin Sergey |in progress |  |
+|`textOverflow`| Function |Samarin Sergey |in progress |  |
+|`fontFamily`| Function |Samarin Sergey |in progress |  |
+|`maxLines`| Function | |Samarin Sergey |in progress |  |
+|`decoration`| Function |Samarin Sergey |in progress |  |
+|`letterSpacing`| Function |Samarin Sergey |in progress |  |
+|`textCase`| Function |Samarin Sergey |in progress |  |
+|`baselineOffset`| Function |Samarin Sergey |in progress |  |
+|`copyOption`| Function |Samarin Sergey |in progress |  |
+|`draggable`| Function |Samarin Sergey |in progress |  |
+|`textShadow`| Function |Samarin Sergey |in progress |  |
+|`heightAdaptivePolicy`| Function |Samarin Sergey |in progress |  |
+|`textIndent`| Function |Samarin Sergey |in progress |  |
+|`wordBreak`| Function | Samarin Sergey |in progress |  |
+|`lineBreakStrategy`| Function |Samarin Sergey |in progress |  |
+|`onCopy`| Function | Samarin Sergey |in progress |  |
+|`caretColor`| Function |Samarin Sergey |in progress |  |
+|`selectedBackgroundColor`| Function |Samarin Sergey |in progress |  |
+|`ellipsisMode`| Function |Samarin Sergey |in progress |  |
 |`EnableDataDetector`| Function | Kirill Kirichenko | in progress |  |
 |`DataDetectorConfig`| Function | Kirill Kirichenko | in progress |  |
-|`onTextSelectionChange`| Function | | | |
-|`fontFeature`| Function | | | |
-|`privacySensitive`| Function | | | |
-|`textSelectable`| Function | | | |
+|`onTextSelectionChange`| Function |Samarin Sergey |in progress |  |
+|`fontFeature`| Function |Samarin Sergey |in progress |  |
+|`privacySensitive`| Function |Samarin Sergey |in progress |  |
+|`textSelectable`| Function |Samarin Sergey |in progress |  |
 |`EditMenuOptions`| Function | Kirill Kirichenko | in progress |  |
-|`halfLeading`| Function | | | |
-|`enableHapticFeedback`| Function | | | |
-|`selection`| Function | | | |
+|`halfLeading`| Function |Samarin Sergey |in progress |  |
+|`enableHapticFeedback`| Function |Samarin Sergey |in progress |  |
+|`selection`| Function |Samarin Sergey |in progress |  |
 |`BindSelectionMenu`| Function | Kirill Kirichenko | in progress |  |
 |*TextArea*|*Component*|Tuzhilkin Ivan|in progress|  |
 |`placeholderColor`|Function|Tuzhilkin Ivan|blocked UT|  |
