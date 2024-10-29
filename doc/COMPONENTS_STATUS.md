@@ -398,8 +398,8 @@
 |`colors`| Function | Maksimov Nikita | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAW4DU |
 |`strokeWidth`| Function | Maksimov Nikita | done | |
 |`description`| Function | Maksimov Nikita | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|`trackShadow`| Function | Maksimov Nikita | devdone |  |
-|`indicator`| Function | Maksimov Nikita | devdone |  |
+|`trackShadow`| Function | Maksimov Nikita | done |  |
+|`indicator`| Function | Maksimov Nikita | done |  |
 |`privacySensitive`| Function | Maksimov Nikita | done ||
 |`contentModifier`| Function | Maksimov Nikita | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |*Grid*|*Component*| Erokhin Ilya | blocked |  |
