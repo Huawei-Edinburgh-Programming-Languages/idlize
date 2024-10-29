@@ -632,20 +632,20 @@
 |`type`| Function | Skroba Gleb | done |  |
 |`target`| Function | Skroba Gleb | done |  |
 |`params`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|*Panel*| *Component* | Pavelyev Ivan|in progress |  |
-|`setPanelOptions`| Function | Pavelyev Ivan|in progress |  |
-|`mode`| Function |Pavelyev Ivan|in progress |  |
+|*Panel*| *Component* | Pavelyev Ivan| done |  |
+|`setPanelOptions`| Function | Pavelyev Ivan| done |  |
+|`mode`| Function |Pavelyev Ivan| done |  |
 |`type`| Function |Pavelyev Ivan| blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAY6MM |
-|`dragBar`| Function |Pavelyev Ivan|in progress |  |
+|`dragBar`| Function |Pavelyev Ivan| done |  |
 |`customHeight`| Function |Pavelyev Ivan| blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ1EF |
-|`fullHeight`| Function |Pavelyev Ivan|in progress |  |
-|`halfHeight`| Function |Pavelyev Ivan|in progress |  |
-|`miniHeight`| Function | Pavelyev Ivan|in progress |  |
-|`show`| Function |Pavelyev Ivan|in progress |  |
+|`fullHeight`| Function |Pavelyev Ivan| done |  |
+|`halfHeight`| Function |Pavelyev Ivan| done |  |
+|`miniHeight`| Function | Pavelyev Ivan| done |  |
+|`show`| Function |Pavelyev Ivan| done |  |
 |`backgroundMask`| Function |Pavelyev Ivan| blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAXD0B |
-|`showCloseIcon`| Function |Pavelyev Ivan|in progress |  |
-|`onChange`| Function |Pavelyev Ivan|in progress |  |
-|`onHeightChange`| Function |Pavelyev Ivan|in progress |  |
+|`showCloseIcon`| Function |Pavelyev Ivan| done |  |
+|`onChange`| Function |Pavelyev Ivan| done |  |
+|`onHeightChange`| Function |Pavelyev Ivan| done |  |
 |*PasteButton*| *Component* | Samarin Sergey| done |  |
 |`setPasteButtonOptions`| Function | Samarin Sergey| done |  |
 |`onClick`| Function | Samarin Sergey| done |  |
