@@ -654,16 +654,16 @@
 |`commands`| Function | Skroba Gleb | done |  |
 |*PatternLock*| *Component* | Dmitry A Smirnov| in progress|  |
 |`setPatternLockOptions`| Function | Dmitry A Smirnov| in progress|  |
-|`sideLength`| Function | Dmitry A Smirnov| devdone|  |
-|`circleRadius`| Function | Dmitry A Smirnov| devdone|  |
-|`backgroundColor`| Function | Dmitry A Smirnov| in progress|common method. https://gitee.com/openharmony/interface_sdk-js/issues/IAZ94U|
-|`regularColor`| Function | Dmitry A Smirnov| devdone|  |
-|`selectedColor`| Function | Dmitry A Smirnov| devdone|  |
-|`activeColor`| Function | Dmitry A Smirnov| devdone|  |
-|`pathColor`| Function | Dmitry A Smirnov| devdone|  |
-|`pathStrokeWidth`| Function | Dmitry A Smirnov| devdone|  |
+|`sideLength`| Function | Dmitry A Smirnov| done|  |
+|`circleRadius`| Function | Dmitry A Smirnov| done|  |
+|`backgroundColor`| Function | Dmitry A Smirnov| done|common method. https://gitee.com/openharmony/interface_sdk-js/issues/IAZ94U|
+|`regularColor`| Function | Dmitry A Smirnov| done|  |
+|`selectedColor`| Function | Dmitry A Smirnov| done|  |
+|`activeColor`| Function | Dmitry A Smirnov| done|  |
+|`pathColor`| Function | Dmitry A Smirnov| done|  |
+|`pathStrokeWidth`| Function | Dmitry A Smirnov| done|  |
 |`onPatternComplete`| Function | Dmitry A Smirnov| in progress|  |
-|`autoReset`| Function | Dmitry A Smirnov| devdone|  |
+|`autoReset`| Function | Dmitry A Smirnov| done|  |
 |`onDotConnect`| Function | Dmitry A Smirnov| in progress|  |
 |`activateCircleStyle`| Function | Dmitry A Smirnov| blocked| radius is CustomObject. need activateCircleStyle attribute https://gitee.com/openharmony/arkui_ace_engine/issues/IAYWON |
 |*QRCode*| *Component* | Evstigneev Roman |in progress|  |
