@@ -420,6 +420,7 @@ export function createOptionalType(element:IDLType): IDLOptionalType {
     return {
         ...element,
         optional: true,
+        kind: IDLKind.ReferenceType, // TODO OptionalType? It exists but seems to be unused
         element
     }
 }
