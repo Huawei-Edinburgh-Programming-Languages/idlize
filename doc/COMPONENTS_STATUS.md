@@ -1324,19 +1324,19 @@
 |`onlineImageAccess`| Function | Erokhin Ilya | testskipped | |
 |`domStorageAccess`| Function | Erokhin Ilya | testskipped | |
 |`imageAccess`| Function | Erokhin Ilya | testskipped | |
-|`mixedMode`| Function | Erokhin Ilya | in progress | |
+|`mixedMode`| Function | Erokhin Ilya | testskipped | |
 |`zoomAccess`| Function | Erokhin Ilya | testskipped | |
 |`geolocationAccess`| Function | Erokhin Ilya | testskipped | |
 |`javaScriptProxy`| Function | Erokhin Ilya | in progress | |
 |`password`| Function | Erokhin Ilya | done | |
-|`cacheMode`| Function | Erokhin Ilya | in progress | |
-|`darkMode`| Function | Erokhin Ilya | in progress | |
+|`cacheMode`| Function | Erokhin Ilya | testskipped | |
+|`darkMode`| Function | Erokhin Ilya | testskipped | |
 |`forceDarkAccess`| Function | Erokhin Ilya | testskipped | |
 |`mediaOptions`| Function | Erokhin Ilya | in progress | |
 |`tableData`| Function | Erokhin Ilya | done | |
 |`wideViewModeAccess`| Function | Erokhin Ilya | done | |
 |`overviewModeAccess`| Function | Erokhin Ilya | testskipped | |
-|`overScrollMode`| Function | Erokhin Ilya | in progress | |
+|`overScrollMode`| Function | Erokhin Ilya | testskipped | |
 |`textZoomAtio`| Function | Erokhin Ilya | in progress | |
 |`textZoomRatio`| Function | Erokhin Ilya | in progress | |
 |`databaseAccess`| Function | Erokhin Ilya | testskipped | |
@@ -1417,13 +1417,13 @@
 |`onIntelligentTrackingPreventionResult`| Function | Erokhin Ilya | in progress | |
 |`javaScriptOnDocumentStart`| Function | Erokhin Ilya | in progress | |
 |`javaScriptOnDocumentEnd`| Function | Erokhin Ilya | in progress | |
-|`layoutMode`| Function | Erokhin Ilya | in progress | |
+|`layoutMode`| Function | Erokhin Ilya | testskipped | |
 |`nestedScroll`| Function | Erokhin Ilya | in progress | |
 |`enableNativeEmbedMode`| Function | Erokhin Ilya | testskipped | |
 |`onNativeEmbedLifecycleChange`| Function | Erokhin Ilya | in progress | |
 |`onNativeEmbedVisibilityChange`| Function | Erokhin Ilya | in progress | |
 |`onNativeEmbedGestureEvent`| Function | Erokhin Ilya | in progress | |
-|`copyOptions`| Function | Erokhin Ilya | in progress | |
+|`copyOptions`| Function | Erokhin Ilya | testskipped | |
 |`onOverrideUrlLoading`| Function | Erokhin Ilya | in progress | |
 |`textAutosizing`| Function | Erokhin Ilya | testskipped | |
 |`enableNativeMediaPlayer`| Function | Erokhin Ilya | in progress | |
@@ -1434,7 +1434,7 @@
 |`onViewportFitChanged`| Function | Erokhin Ilya | in progress | |
 |`onInterceptKeyboardAttach`| Function | Erokhin Ilya | in progress | |
 |`onAdsBlocked`| Function | Erokhin Ilya | in progress | |
-|`keyboardAvoidMode`| Function | Erokhin Ilya | in progress | |
+|`keyboardAvoidMode`| Function | Erokhin Ilya | testskipped | |
 |`editMenuOptions`| Function | Erokhin Ilya | in progress | |
 |`enableHapticFeedback`| Function | Erokhin Ilya | testskipped | |
 |`registerNativeEmbedRule`| Function | Erokhin Ilya | in progress | |
