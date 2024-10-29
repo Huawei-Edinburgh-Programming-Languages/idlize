@@ -592,10 +592,10 @@
 |`onWillShow`| Function |Kovalev Sergey | done | |
 |`onWillHide`| Function | Kovalev Sergey | done | |
 |`systemBarStyle`| Function |Kovalev Sergey | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
-|`recoverable`| Function |Kovalev Sergey | in progress |  |
+|`recoverable`| Function |Kovalev Sergey | done |  |
 |`systemTransition`| Function |Kovalev Sergey | blocked AceEngine | No handlers for Ark_NavigationSystemTransitionType |
-|`title`| Function |Kovalev Sergey | in progress |  |
-|`ignoreLayoutSafeArea`| Function |Kovalev Sergey | in progress |  |
+|`title`| Function |Kovalev Sergey | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`ignoreLayoutSafeArea`| Function |Kovalev Sergey | done |  |
 |*Navigation*| *Component* | Erokhin Ilya | in progress |  |
 |`setNavigationOptions`| Function | Erokhin Ilya | in progress |  |
 |`navBarWidth`|Function| Erokhin Ilya | blocked | can be handled |
