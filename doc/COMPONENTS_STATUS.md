@@ -118,7 +118,7 @@
 |`setColumnOptions`| Function | Politov Mikhail | done |  |
 |`alignItems`| Function | Politov Mikhail | done |  |
 |`justifyContent`| Function | Politov Mikhail | done |  |
-|`pointLight`| Function | Politov Mikhail |in progress |  |
+|`pointLight`| Function | Evstigneev Roman |in progress |  |
 |`reverse`| Function | Politov Mikhail | done |  |
 |*ColumnSplit*| *Component* | Dmitry A Smirnov| done|https://gitee.com/openharmony/arkui_ace_engine/issues/IAX2ZN|
 |`setColumnSplitOptions`| Function | Dmitry A Smirnov| done|  |
@@ -371,7 +371,7 @@
 |`lineCap`| Function | Tuzhilkin Ivan | done |  |
 |*Flex*| *Component* | Kovalev Sergey | in progress |  |
 |`setFlexOptions`| Function | Kovalev Sergey | done |  |
-|`pointLight`| Function | Kovalev Sergey | In Progress |  |
+|`pointLight`| Function | Evstigneev Roman | In Progress |  |
 |*FolderStack*| *Component* | Politov Mikhail | done |  |
 |`setFolderStackOptions`| Function | Politov Mikhail | done |  |
 |`alignContent`| Function | Politov Mikhail | done |  |
@@ -743,7 +743,7 @@
 |`setRowOptions`| Function | Andrey Khudenkikh | done |  |
 |`alignItems`| Function | Andrey Khudenkikh | done |  |
 |`justifyContent`| Function | Andrey Khudenkikh | done |  |
-|`pointLight`| Function | Andrey Khudenkikh | blocked | can be handled |
+|`pointLight`| Function | Evstigneev Roman | in progress |  |
 |`reverse`| Function | Andrey Khudenkikh | blocked |  |
 |*RowSplit*| *Component* | Dmitry A Smirnov| done|https://gitee.com/openharmony/arkui_ace_engine/issues/IAX2ZN|
 |`setRowSplitOptions`| Function | Dmitry A Smirnov| done|  |
@@ -929,7 +929,7 @@
 |*Stack*| *Component* | Korobeinikov Evgeny | in progress |  |
 |`setStackOptions` | Function | Korobeinikov Evgeny | done |  |
 |`alignContent` | Function | Korobeinikov Evgeny | done |  |
-|`pointLight` | Function | Korobeinikov Evgeny | in progress |  |
+|`pointLight` | Function | Evstigneev Roman | in progress |  |
 |*Stepper*| *Component* | Morozov Sergey |in progress |  |
 |`setStepperOptions`| Function | Morozov Sergey |in progress |  |
 |`onFinish`| Function | Morozov Sergey |in progress |  |
