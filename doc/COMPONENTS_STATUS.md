@@ -907,7 +907,19 @@
 |`contentModifier`| Function |Morozov Sergey |blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`slideRange`| Function | Morozov Sergey |done |  |
 |`showTips`| Function |Morozov Sergey |done |  |
-|*Span*| *Component* | Zamsha Vadim | in progress |  |
+|*Span*| *Component* | Politov Mikhail | in progress |  |
+|`setSpanOptions`| Function |Politov Mikhail | in progress |  |
+|`font`| Function | Politov Mikhail | in progress |  |
+|`fontColor`| Function |Politov Mikhail | in progress |  |
+|`fontSize`| Function |Politov Mikhail | in progress |  |
+|`fontStyle`| Function |Politov Mikhail | in progress |  |
+|`fontWeight`| Function |Politov Mikhail | in progress |  |
+|`fontFamily`| Function |Politov Mikhail | in progress |  |
+|`decoration`| Function | Politov Mikhail | in progress |  |
+|`letterSpacing`| Function |Politov Mikhail | in progress |  |
+|`textCase`| Function | Politov Mikhail | in progress |  |
+|`lineHeight`| Function | Politov Mikhail | in progress |  |
+|`textShadow`| Function | Politov Mikhail | in progress |  |
 |*Stack*| *Component* | Korobeinikov Evgeny | in progress |  |
 |`setStackOptions` | Function | Korobeinikov Evgeny | done |  |
 |`alignContent` | Function | Korobeinikov Evgeny | done |  |
