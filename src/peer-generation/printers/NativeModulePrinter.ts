@@ -458,6 +458,7 @@ function getReturnValue(type: idl.IDLType): string {
         case "KString": case "String": case "string": return `"some string"`
         case "KBoolean": return "false"
         case "KFloat": return "0"
+        case "any": return "-1"
     }
     throw new Error(`Unknown return type: ${idl.getIDLTypeName(type)}`)
 }
