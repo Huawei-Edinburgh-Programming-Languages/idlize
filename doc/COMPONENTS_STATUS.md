@@ -447,11 +447,11 @@
 |`selectable`|Function| Erokhin Ilya | done |  |
 |`selected`|Function| Erokhin Ilya | done |  |
 |`onSelect`|Function| Erokhin Ilya | done |  |
-|*GridCol*| *Component* | Lobah Mikhail| in progress|  |
-|`setGridColOptions`| Function |Lobah Mikhail| in progress|  |
+|*GridCol*| *Component* | Lobah Mikhail| done|  |
+|`setGridColOptions`| Function |Lobah Mikhail| done|  |
 |`span`| Function |Lobah Mikhail| in progress|  |
-|`gridColOffset`| Function |Lobah Mikhail| in progress|  |
-|`order`| Function |Lobah Mikhail| in progress|  |
+|`gridColOffset`| Function |Lobah Mikhail| done|  |
+|`order`| Function |Lobah Mikhail| done|  |
 |*GridContainer*| *Component* |Lobah Mikhail| in progress|  |
 |`setGridContainerOptions`| Function |Lobah Mikhail| in progress|  |
 |*GridRow*| *Component* |Lobah Mikhail| in progress|  |
