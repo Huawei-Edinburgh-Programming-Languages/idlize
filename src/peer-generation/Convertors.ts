@@ -902,7 +902,8 @@ export class ArrayConvertor extends BaseArgConvertor {
         const arrayLength = `arrayLength`
         const forCounterName = `i`
         const arrayAccessor = printer.getObjectAccessor(this, value)
-        const accessor = printer.getObjectAccessor(this, arrayAccessor, {index: `[${forCounterName}]`})
+        const indexValue = printer.language === Language.ARKTS ? `![${forCounterName}]` : `![${forCounterName}]`
+        const accessor = printer.getObjectAccessor(this, arrayAccessor, {index: indexValue})
         const thenStatement = new BlockStatement([
             // read length
             printer.makeAssign(arrayLength, undefined, printer.makeString(`${param}Deserializer.readInt32()`), true),
