@@ -1301,41 +1301,44 @@ export function isSourceDecl(node: idl.IDLEntry): boolean {
     return !node.fileName?.endsWith('stdlib.d.ts')
 }
 
-/*
 function generateSignature(
     library: IdlPeerLibrary,
-    method: idl.IDLCallable | idl.IDLMethod | idl.IDLConstructor
+    method: idl.IDLCallable | idl.IDLMethod | idl.IDLConstructor,
+    className?: string
 ): NamedMethodSignature {
-    const returnName = method.returnType!.name
-    let returnType: Type
+    let returnType
 
     if (idl.isVoidType(method.returnType!)) {
-        returnType = Type.Void
-    } else if (idl.isConstructor(method)) {
-        returnType = Type.This
+        returnType = idl.IDLVoidType
     } 
-    else if (method.name?.startsWith("this") && method.name.endsWith("Options")) {
-        returnType = Type.This
+    else if (
+        idl.isConstructor(method) || !method.isStatic
+    ) {
+        returnType = idl.IDLThisType
+    } 
+    else if (idl.isReferenceType(method.returnType!))
+    {
+        if (!method.isStatic && method.returnType && className && idl.getIDLTypeName(method.returnType) === className)
+        {
+            returnType = idl.IDLThisType
+        }
+        else
+        {
+            returnType = method.returnType!
+        }
     }
-    else if (!method.isStatic) {
-        returnType = Type.This
-    } 
+    else if (method.name?.startsWith("this") && method.name.endsWith("Options")){
+        returnType = idl.IDLThisType
+    }
     else {
-        returnType = new Type(returnName)
+        returnType = method.returnType!
     }
-
     return new NamedMethodSignature(
         returnType,
-        method.parameters.map(it => new Type(library.mapType(it.type!), it.isOptional)), */
-
-function generateSignature(library: IdlPeerLibrary, method: idl.IDLCallable | idl.IDLMethod | idl.IDLConstructor): NamedMethodSignature {
-    const returnType = idl.isVoidType(method.returnType!) ? idl.IDLVoidType
-        : idl.isConstructor(method) || !method.isStatic ? idl.IDLThisType : method.returnType!
-    return new NamedMethodSignature(returnType,
         method.parameters.map(it => maybeOptional(it.type!, it.isOptional)),
         method.parameters.map(it => it.name)
     )
-}
+}    
 
 function getMethodIndex(clazz: idl.IDLInterface, method: idl.IDLSignature | undefined): number {
     if (!method || !method.name) {
