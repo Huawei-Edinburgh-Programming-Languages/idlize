@@ -538,7 +538,7 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod | Id
 
 function returnsThis(method: PeerMethod | IdlPeerMethod, returnType: IDLType) {
     return method.hasReceiver() &&
-        (returnType === IDLThisType || getIDLTypeName(returnType) === method.originalParentName)
+        (returnType === IDLThisType || isIDLTypeName(returnType, method.originalParentName))
 }
 
 function constructMaterializedObject(writer: LanguageWriter, signature: MethodSignature,
