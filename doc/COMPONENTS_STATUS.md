@@ -967,12 +967,49 @@
 |`customContentTransition`| Function | Skroba Gleb |blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAOKLD |
 |`onContentDidScroll`| Function | Skroba Gleb| blocked UT |  |
 |`indicatorInteractive`| Function | Skroba Gleb| done |  |
-|*Text*| *Component* | Kirill Kirichenko | in progress |  |
+|*Text*| *Component* | Kirill Kirichenko | in progress | |
 |`setTextOptions`| Function | Kirill Kirichenko | in progress |  |
+|`font`| Function | | | |
+|`fontColor`| Function | | | |
+|`fontSize`| Function | | | |
+|`minFontSize`| Function | | | |
+|`maxFontSize`| Function | | | |
+|`minFontScale`| Function | | | |
+|`maxFontScale`| Function | | | |
+|`fontStyle`| Function | | | |
+|`fontWeight`| Function | | | |
+|`lineSpacing`| Function | | | |
+|`textAlign`| Function | | | |
+|`lineHeight`| Function | | | |
+|`textOverflow`| Function | | | |
+|`fontFamily`| Function | | | |
+|`maxLines`| Function | | | |
+|`decoration`| Function | | | |
+|`letterSpacing`| Function | | | |
+|`textCase`| Function | | | |
+|`baselineOffset`| Function | | | |
+|`copyOption`| Function | | | |
+|`draggable`| Function | | | |
+|`textShadow`| Function | | | |
+|`heightAdaptivePolicy`| Function | | | |
+|`textIndent`| Function | | | |
+|`wordBreak`| Function | | | |
+|`lineBreakStrategy`| Function | | | |
+|`onCopy`| Function | | | |
+|`caretColor`| Function | | | |
+|`selectedBackgroundColor`| Function | | | |
+|`ellipsisMode`| Function | | | |
 |`EnableDataDetector`| Function | Kirill Kirichenko | in progress |  |
 |`DataDetectorConfig`| Function | Kirill Kirichenko | in progress |  |
-|`BindSelectionMenu`| Function | Kirill Kirichenko | in progress |  |
+|`onTextSelectionChange`| Function | | | |
+|`fontFeature`| Function | | | |
+|`privacySensitive`| Function | | | |
+|`textSelectable`| Function | | | |
 |`EditMenuOptions`| Function | Kirill Kirichenko | in progress |  |
+|`halfLeading`| Function | | | |
+|`enableHapticFeedback`| Function | | | |
+|`selection`| Function | | | |
+|`BindSelectionMenu`| Function | Kirill Kirichenko | in progress |  |
 |*TextArea*|*Component*|Tuzhilkin Ivan|in progress|  |
 |`placeholderColor`|Function|Tuzhilkin Ivan|blocked UT|  |
 |`placeholderFont`|Function|Tuzhilkin Ivan|blocked UT|  |
