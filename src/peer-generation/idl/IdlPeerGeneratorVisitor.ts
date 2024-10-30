@@ -625,7 +625,7 @@ class EmptyDependencyFilter implements DependencyFilter {
 
 class SyntheticDependencyConfigurableFilter implements DependencyFilter {
     constructor(
-        private readonly library: IdlPeerLibrary,
+        protected readonly library: IdlPeerLibrary,
         private readonly config: {
             skipAnonymousInterfaces?: boolean,
             skipCallbacks?: boolean,
@@ -633,9 +633,6 @@ class SyntheticDependencyConfigurableFilter implements DependencyFilter {
         },
     ) {}
     shouldAdd(node: idl.IDLEntry): boolean {
-        if (node.name === "Resource" && idl.isTypedef(node)) {
-            return false
-        }
         if (!idl.isSyntheticEntry(node)) return true
         if (this.config.skipAnonymousInterfaces && node.kind == idl.IDLKind.AnonymousInterface) return false
         if (this.config.skipCallbacks && node.kind == idl.IDLKind.Callback) return false
@@ -644,6 +641,18 @@ class SyntheticDependencyConfigurableFilter implements DependencyFilter {
     }
 }
 
+class ArkTSSyntheticDependencyConfigurableFilter extends SyntheticDependencyConfigurableFilter {
+    readonly IGNORE_TYPES = ["Resource"]
+    shouldAdd(node: idl.IDLEntry): boolean {
+        //TODO: Needs to be implemented properly
+        if (this.library.language == Language.ARKTS) {
+            if (node.name !== undefined && this.IGNORE_TYPES.includes(node.name) && idl.isTypedef(node)) {
+                return false
+            }
+        }
+        return super.shouldAdd(node)
+    }
+}
 
 class ComponentsCompleter {
     constructor(
@@ -1230,7 +1239,7 @@ function createSerializeDeclDependenciesCollector(library: IdlPeerLibrary): Decl
 function createDependencyFilter(library: IdlPeerLibrary): DependencyFilter {
     switch (library.language) {
         case Language.TS: return new SyntheticDependencyConfigurableFilter(library, { skipAnonymousInterfaces: true, skipCallbacks: true, skipTuples: true })
-        case Language.ARKTS: return new SyntheticDependencyConfigurableFilter(library, { skipAnonymousInterfaces: false, skipCallbacks: true, skipTuples: true })
+        case Language.ARKTS: return new ArkTSSyntheticDependencyConfigurableFilter(library, { skipAnonymousInterfaces: false, skipCallbacks: true, skipTuples: true })
         case Language.JAVA: return new EmptyDependencyFilter()
         case Language.CJ: return new EmptyDependencyFilter()
     }
