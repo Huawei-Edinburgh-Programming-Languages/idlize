@@ -3,7 +3,7 @@ declare class WebResourceResponse {
 }
 
 declare interface OnHttpErrorReceiveEvent {
-    response: WebResourceResponse;
+    // response: WebResourceResponse;  todo: fix readMaterialized in deserializer
 }
 
 declare interface NativeEmbedInfo {

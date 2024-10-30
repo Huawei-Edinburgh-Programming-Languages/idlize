@@ -17,7 +17,7 @@ declare interface ScrollAnimationOptions {
 
   duration?: number;
 
-  curve?: Curve | ICurve;
+  curve?: Curve /*| ICurve*/;  // todo: fix readMaterialized in deserializer
 
   canOverScroll?: boolean;
 }

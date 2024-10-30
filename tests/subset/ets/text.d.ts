@@ -15,7 +15,7 @@
 
 declare interface TextOptions {
 
-  controller: TextController;
+  // controller: TextController;  todo: fix readMaterialized in deserializer
 }
 
 interface TextInterface {
