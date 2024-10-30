@@ -55,7 +55,6 @@ sources = [
     arkoala_dir / 'custom.cc',
     arkoala_dir / 'library.cc',
     external_interop_dir / 'common-interop.cc',
-    external_interop_dir / 'callbacks.cc',
     external_framework_dir / 'events.cc',
 ]
 if compile_events_test
