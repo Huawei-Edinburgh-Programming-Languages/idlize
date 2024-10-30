@@ -122,7 +122,7 @@ export class MaterializedMethod extends PeerMethod {
 
     tsReturnType(): IDLType | undefined {
         const returnType = this.method.signature.returnType
-        return this.hasReceiver() && isReferenceType(returnType) && isIDLTypeName(returnType, this.originalParentName)? IDLThisType : maybeOptional(returnType, returnType.optional)
+        return this.hasReceiver() && isIDLTypeName(returnType, this.originalParentName)? IDLThisType : maybeOptional(returnType, returnType.optional)
     }
 }
 
