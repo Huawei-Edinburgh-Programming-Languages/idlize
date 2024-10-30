@@ -1301,6 +1301,11 @@ export function isSourceDecl(node: idl.IDLEntry): boolean {
     return !node.fileName?.endsWith('stdlib.d.ts')
 }
 
+
+function isCallSignature(method: idl.IDLCallable | idl.IDLMethod | idl.IDLConstructor): boolean {
+    return !idl.isMethod(method);
+}
+
 function generateSignature(
     library: IdlPeerLibrary,
     method: idl.IDLCallable | idl.IDLMethod | idl.IDLConstructor,
@@ -1308,12 +1313,10 @@ function generateSignature(
 ): NamedMethodSignature {
     let returnType
 
-    const isCallSignature = !idl.isMethod(method);
-
     if (
-        isCallSignature ||
-        idl.isUnionType(method.returnType) ||
-        idl.isIDLTypeName(method.returnType, 'T') ||
+        isCallSignature(method) ||
+        idl.isUnionType(method.returnType!) ||
+        idl.isIDLTypeName(method.returnType!, 'T') ||
         idl.isConstructor(method) ||
         !method.isStatic && method.returnType && className && idl.isIDLTypeName(method.returnType, className)
     ) {
