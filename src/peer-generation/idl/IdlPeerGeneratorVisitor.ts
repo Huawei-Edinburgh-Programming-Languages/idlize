@@ -1315,18 +1315,11 @@ function generateSignature(
         idl.isUnionType(method.returnType) ||
         idl.isIDLTypeName(method.returnType, 'T') ||
         idl.isConstructor(method) ||
-        method.name?.startsWith("this") && method.name.endsWith("Options") ||
-        method.name?.startsWith("set") && method.name.endsWith("Options") ||
-        (idl.isIDLTypeName(method.returnType, 'IMonitorValue<T>'))
+        !method.isStatic && method.returnType && className && idl.isIDLTypeName(method.returnType, className)
     ) {
         returnType = idl.IDLThisType
-    } else if (idl.isVoidType(method.returnType!)) {
-        returnType = idl.IDLVoidType
-    } else if (idl.isReferenceType(method.returnType!)) {
-        returnType = (!method.isStatic && method.returnType && className && idl.isIDLTypeName(method.returnType, className))
-            ? idl.IDLThisType
-            : method.returnType!
-    } else {
+    } 
+    else {
         returnType = method.returnType!
     }
 
