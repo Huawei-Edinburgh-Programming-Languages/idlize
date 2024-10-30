@@ -670,7 +670,7 @@
 |`onDotConnect`| Function | Dmitry A Smirnov| blocked| waiting for new way implement method with callback |
 |`activateCircleStyle`| Function | Dmitry A Smirnov| blocked| radius is CustomObject. need activateCircleStyle attribute https://gitee.com/openharmony/arkui_ace_engine/issues/IAYWON |
 |*QRCode*| *Component* | Evstigneev Roman |in progress|  |
-|`setQRCodeOptions`| Function |Evstigneev Roman |in progress|  |
+|`setQRCodeOptions`| Function |Evstigneev Roman | done |  |
 |`color`| Function |Evstigneev Roman |blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZVOQ |
 |`backgroundColor`| Function |Evstigneev Roman | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZVOQ |
 |`contentOpacity`| Function |Evstigneev Roman | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZVOQ |
