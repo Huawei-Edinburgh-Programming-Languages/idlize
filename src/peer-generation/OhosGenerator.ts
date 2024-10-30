@@ -537,7 +537,6 @@ class OHOSVisitor {
 
         this.libraryName = this.library.files[0].packageName().toUpperCase()
         this.library.name = this.libraryName
-        PrimitiveType.LibraryPrefix = this.libraryName + "_" // TODO Remove me
 
         console.log(`GENERATE OHOS API for ${this.libraryName}`)
 

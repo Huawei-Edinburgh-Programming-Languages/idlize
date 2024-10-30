@@ -405,8 +405,8 @@ export class IdlPeerLibrary implements ReferenceResolver {
         new StructPrinter(this).generateStructs(structs, typedefs, writeToString)
     }
 
-    computeTargetName(target: idl.IDLEntry, optional: boolean, idlPrefix: string = PrimitiveType.Prefix): string {
-        return this.computeTargetNameImpl(target, optional, idlPrefix + this.libraryPrefix)///inline
+    computeTargetName(target: idl.IDLEntry, optional: boolean, idlPrefix: string = PrimitiveType.Prefix + this.libraryPrefix): string {
+        return this.computeTargetNameImpl(target, optional, idlPrefix)///inline
     }
 
     computeTargetTypeLiteralName(decl: idl.IDLInterface, prefix: string): string {

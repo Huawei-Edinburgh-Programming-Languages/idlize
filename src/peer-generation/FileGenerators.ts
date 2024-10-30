@@ -313,7 +313,7 @@ export function makeSerializerForOhos(library: PeerLibrary | IdlPeerLibrary, nat
         imports.addFeatures(["int32"], "./types")
         imports.addFeatures([nativeModule.name, "CallbackKind"], nativeModule.path)
         imports.print(printer, '')
-        writeSerializer(library, printer, undefined, declarationPath)
+        writeSerializer(library, printer, "", declarationPath)
         printer.writeLines(`
 export function createSerializer(): Serializer { return new Serializer() }
 `)
