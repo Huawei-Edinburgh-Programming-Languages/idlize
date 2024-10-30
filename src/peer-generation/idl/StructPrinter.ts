@@ -171,7 +171,9 @@ export class StructPrinter {
         structs.concat(enumsDeclarations)
         structs.concat(concreteDeclarations)
         // TODO: hack, remove me!
-        typedefs.print(`typedef ${PrimitiveType.OptionalPrefix}Length ${PrimitiveType.OptionalPrefix}Dimension;`)
+        if (this.library.name == "") { // TODO we probably don't need this typedef for any library except Ark
+            typedefs.print(`typedef ${PrimitiveType.OptionalPrefix}Length ${PrimitiveType.OptionalPrefix}Dimension;`)
+        }
     }
 
     private printOptionalIfNeeded(
