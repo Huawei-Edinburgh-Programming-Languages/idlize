@@ -1185,7 +1185,7 @@
 |`selectedTextStyle`| Function | Ekaterina Stepanova| devdone |  |
 |`onAccept`| Function |Ekaterina Stepanova | in progress |  |
 |`onCancel`| Function |Ekaterina Stepanova | in progress |  |
-|`onChange`| Function | Tuzhilkin Ivan| blocked UT |  |
+|`onChange`| Function | Tuzhilkin Ivan| blocked UT | https://gitee.com/nikolay-igotti/idlize/issues/IAOKLD  |
 |`selectedIndex`| Function |Ekaterina Stepanova | devdone |  |
 |`divider`| Function |Ekaterina Stepanova | devdone |  |
 |`gradientHeight`| Function | Ekaterina Stepanova| devdone |  |
