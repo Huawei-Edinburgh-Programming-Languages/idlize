@@ -833,19 +833,19 @@ https://gitee.com/openharmony/arkui_ace_engine/issues/IAW529 |
 |`markAnchor`| Function |Samarin Sergey| done |  |
 |`offset`| Function |Samarin Sergey| blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`fontSize`| Function |Samarin Sergey| done |  |
-|`fontStyle`| Function |Samarin Sergey| devdone |  |
-|`fontWeight`| Function |Samarin Sergey| devdone |  |
+|`fontStyle`| Function |Samarin Sergey| done |  |
+|`fontWeight`| Function |Samarin Sergey| done |  |
 |`fontFamily`| Function |Samarin Sergey| blocked UT |  |
 |`fontColor`| Function |Samarin Sergey| done |  |
 |`iconColor`| Function |Samarin Sergey| done |  |
-|`backgroundColor`| Function |Samarin Sergey| devdone |  |
-|`borderStyle`| Function |Samarin Sergey| devdone |  |
-|`borderWidth`| Function |Samarin Sergey| devdone |  |
-|`borderColor`| Function |Samarin Sergey| devdone |  |
-|`borderRadius`| Function |Samarin Sergey| devdone |  |
-|`padding`| Function |Samarin Sergey| devdone |  |
+|`backgroundColor`| Function |Samarin Sergey| done |  |
+|`borderStyle`| Function |Samarin Sergey| done |  |
+|`borderWidth`| Function |Samarin Sergey| done |  |
+|`borderColor`| Function |Samarin Sergey| done |  |
+|`borderRadius`| Function |Samarin Sergey| done |  |
+|`padding`| Function |Samarin Sergey| done |  |
 |`textIconSpace`| Function |Samarin Sergey| done |  |
-|`key`| Function |Samarin Sergey| devdone |  |
+|`key`| Function |Samarin Sergey| done |  |
 |`width`| Function |Samarin Sergey| done |  |
 |`height`| Function |Samarin Sergey| done |  |
 |`size`| Function |Samarin Sergey| done |  |
