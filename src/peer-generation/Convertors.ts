@@ -898,6 +898,12 @@ export class ArrayConvertor extends BaseArgConvertor {
             [RuntimeType.OBJECT], false, true, param)
         this.elementConvertor = table.typeConvertor(param, elementType)
     }
+    static loopCounterNumber: number = 0;
+    private nextLoopCounter(): string {
+        let result = "i" + ArrayConvertor.loopCounterNumber.toString();
+        ArrayConvertor.loopCounterNumber++;
+        return result;
+    }
     convertorArg(param: string, writer: LanguageWriter): string {
         throw new Error("Must never be used")
     }
@@ -906,7 +912,7 @@ export class ArrayConvertor extends BaseArgConvertor {
         printer.writeMethodCall(`${param}Serializer`, "writeInt8", [
             castToInt8(printer.makeRuntimeTypeGetterCall(value).asString(), printer.language)])
         const valueLength = printer.makeArrayLength(value).asString()
-        const loopCounter = "i"
+        const loopCounter = this.nextLoopCounter()
         printer.writeMethodCall(`${param}Serializer`, "writeInt32", [castToInt32(valueLength, printer.language)])
         printer.writeStatement(printer.makeLoop(loopCounter, valueLength))
         printer.pushIndent()
@@ -920,16 +926,16 @@ export class ArrayConvertor extends BaseArgConvertor {
         // Array length.
         const runtimeType = `runtimeType`
         const arrayLength = `arrayLength`
-        const forCounterName = `i`
+        const loopCounter = this.nextLoopCounter()
         const arrayAccessor = printer.getObjectAccessor(this, value)
-        const accessor = printer.getObjectAccessor(this, arrayAccessor, {index: `[${forCounterName}]`})
+        const accessor = printer.getObjectAccessor(this, arrayAccessor, {index: `[${loopCounter}]`})
         const thenStatement = new BlockStatement([
             // read length
             printer.makeAssign(arrayLength, undefined, printer.makeString(`${param}Deserializer.readInt32()`), true),
             // prepare object
             printer.makeArrayResize(arrayAccessor, toIDLType(mapType(this.type)), arrayLength, `${param}Deserializer`),
             // store
-            printer.makeLoop(forCounterName, arrayLength,
+            printer.makeLoop(loopCounter, arrayLength,
                 this.elementConvertor.convertorDeserialize(param, accessor, printer)),
         ])
         const statements = [
