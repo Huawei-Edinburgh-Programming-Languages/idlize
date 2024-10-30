@@ -463,19 +463,20 @@
 |`alignItems`| Function |Lobah Mikhail| in progress|  |
 |*Image*| *Component* | Korobeinikov Evgeny | in progress |  |
 |`setImageOptions`| Function | Berezin Kirill | in progress | |
-|`alt`| Function | Evstigneev Roman | in progress | |
+|`alt`| Function | Evstigneev Roman | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`matchTextDirection`| Function | Evstigneev Roman | in progress | |
 |`fitOriginalSize`| Function | Evstigneev Roman | in progress | |
 |`fillColor`| Function | Evstigneev Roman | done | |
 |`objectFit`| Function |Kirill Berezin| in progress | |
 |`objectRepeat`| Function | Evstigneev Roman | in progress | |
-|`autoResize`| Function | Evstigneev Roman | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IAW529 |
+|`autoResize`| Function | Evstigneev Roman | blocked UT | 
+https://gitee.com/openharmony/arkui_ace_engine/issues/IAW529 |
 |`renderMode`| Function | Evstigneev Roman | in progress | |
-|`dynamicRangeMode`| Function | Evstigneev Roman | in progress | |
+|`dynamicRangeMode`| Function | Evstigneev Roman | blocked UT |  |
 |`interpolation`| Function | Evstigneev Roman | in progress | |
 |`sourceSize`| Function | Evstigneev Roman | in progress | |
 |`syncLoad`| Function | Evstigneev Roman | in progress | |
-|`colorFilter`| Function | Evstigneev Roman | in progress | |
+|`colorFilter`| Function | Evstigneev Roman | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH and https://gitee.com/nikolay-igotti/idlize/issues/IB0Y72 |
 |`copyOption`| Function | Evstigneev Roman | in progress | |
 |`draggable`| Function | Evstigneev Roman | in progress | |
 |`pointLight`| Function | Evstigneev Roman | in progress | |
@@ -484,8 +485,8 @@
 |`onError`| Function | Evstigneev Roman | done | |
 |`onFinish`| Function | Evstigneev Roman | done | |
 |`enableAnalyzer`| Function | Evstigneev Roman | in progress | |
-|`analyzerConfig`| Function | Evstigneev Roman | in progress | |
-|`resizable`| Function | Evstigneev Roman | in progress | |
+|`analyzerConfig`| Function | Evstigneev Roman | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB0Y51 |
+|`resizable`| Function | Evstigneev Roman | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB0Y7V |
 |`privacySensitive`| Function | Evstigneev Roman | in progress | |
 |`enhancedImageQuality`| Function | Evstigneev Roman | in progress | |
 |*Line*|*Component*|Dudkin Sergey| blocked |  |
