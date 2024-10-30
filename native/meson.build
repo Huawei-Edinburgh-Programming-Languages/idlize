@@ -76,7 +76,6 @@ if compile_callbacks_test
 else
     sources += [
         arkoala_dir + '/callbacks_test_dummy.cc',
-        arkoala_dir + '/callback_deserialize_call.cc'
     ]
 endif
 

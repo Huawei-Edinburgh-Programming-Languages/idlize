@@ -211,7 +211,7 @@ export class TSLanguageWriter extends LanguageWriter {
         this.printer.print('}')
     }
     private generateFunctionDeclaration(name: string, signature: MethodSignature): string {
-        const args = signature.args.map((it, index) => `${signature.argName(index)}: ${this.mapIDLType(it)}`)
+        const args = signature.args.map((it, index) => `${signature.argName(index)}: ${this.convert(it)}`)
         return `export function ${name}(${args.join(", ")})`
     }
     writeEnum(name: string, members: { name: string, stringId: string | undefined, numberId: number }[], op: (writer: LanguageWriter) => void): void {

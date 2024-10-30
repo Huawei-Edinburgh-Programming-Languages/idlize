@@ -21,9 +21,11 @@ interface Interop {
     void Test_TextPicker_OnAccept(sequence<u8> arr, i32 arg);
     i32 TestPerfNumber(i32 arg);
     void TestPerfNumberWithArray(sequence<u8> arr, i32 arg);
+    void NativeLog(String str1);
     void StartPerf(String str1);
     void EndPerf(String str1);
     pointer DumpPerf(i32 arg);
+    i32 CheckArkoalaGeneratedEvents(sequence<u8> result, i32 size);
     pointer GetManagerCallbackCaller(i32 callbackKind);
     pointer GetManagedResourceHolder();
     pointer GetManagedResourceReleaser();
