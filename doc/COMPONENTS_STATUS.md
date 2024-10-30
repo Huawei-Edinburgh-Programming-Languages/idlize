@@ -1177,7 +1177,7 @@
 |`customKeyboard`| Function | Spirin Andrey | in progress |  |
 |`showCounter`| Function | Spirin Andrey | in progress |  |
 |*TextPicker*| *Component* |Ekaterina Stepanova |in progress |  |
-|`setTextPickerOptions`| Function | Tuzhilkin Ivan|in progress |  |
+|`setTextPickerOptions`| Function | Tuzhilkin Ivan| done |  |
 |`defaultPickerItemHeight`| Function |Ekaterina Stepanova | devdone |  |
 |`canLoop`| Function |Ekaterina Stepanova | devdone |  |
 |`disappearTextStyle`|Function |Ekaterina Stepanova | devdone |  |
@@ -1185,7 +1185,7 @@
 |`selectedTextStyle`| Function | Ekaterina Stepanova| devdone |  |
 |`onAccept`| Function |Ekaterina Stepanova | in progress |  |
 |`onCancel`| Function |Ekaterina Stepanova | in progress |  |
-|`onChange`| Function | Tuzhilkin Ivan|in progress |  |
+|`onChange`| Function | Tuzhilkin Ivan| blocked UT |  |
 |`selectedIndex`| Function |Ekaterina Stepanova | devdone |  |
 |`divider`| Function |Ekaterina Stepanova | devdone |  |
 |`gradientHeight`| Function | Ekaterina Stepanova| devdone |  |
