@@ -931,13 +931,13 @@ https://gitee.com/openharmony/arkui_ace_engine/issues/IAW529 |
 |`setStackOptions` | Function | Korobeinikov Evgeny | done |  |
 |`alignContent` | Function | Korobeinikov Evgeny | done |  |
 |`pointLight` | Function | Evstigneev Roman | in progress |  |
-|*Stepper*| *Component* | Morozov Sergey |in progress |  |
-|`setStepperOptions`| Function | Morozov Sergey |in progress |  |
-|`onFinish`| Function | Morozov Sergey |in progress |  |
-|`onSkip`| Function | Morozov Sergey |in progress |  |
-|`onChange`| Function | Morozov Sergey |in progress |  |
-|`onNext`| Function | Morozov Sergey |in progress |  |
-|`onPrevious`| Function | Morozov Sergey |in progress |  |
+|*Stepper*| *Component* | Morozov Sergey | blocked Arkoala |  |
+|`setStepperOptions`| Function | Morozov Sergey | devdone |  |
+|`onFinish`| Function | Morozov Sergey | blocked Arkoala |  |
+|`onSkip`| Function | Morozov Sergey | blocked Arkoala |  |
+|`onChange`| Function | Morozov Sergey | blocked Arkoala |  |
+|`onNext`| Function | Morozov Sergey | blocked Arkoala |  |
+|`onPrevious`| Function | Morozov Sergey | blocked Arkoala |  |
 |*StepperItem*| *Component* | Morozov Sergey | done | |
 |`setStepperItemOptions`| Function | Morozov Sergey | done | |
 |`prevLabel`| Function | Morozov Sergey | done | |
