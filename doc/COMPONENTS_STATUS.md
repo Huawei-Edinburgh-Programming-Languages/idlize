@@ -1606,3 +1606,23 @@
 |`enableHapticFeedback`| Function | Erokhin Ilya | testskipped | |
 |`registerNativeEmbedRule`| Function | Erokhin Ilya | testskipped | |
 |`bindSelectionMenu`| Function |Erokhin Ilya | in progress | |
+|*WebController*| *Class* | Erokhin Ilya | in progress | |
+|`onInactive`| Function | Erokhin Ilya | in progress | |
+|`onActive`| Function | Erokhin Ilya | in progress | |
+|`zoom`| Function | Erokhin Ilya | in progress | |
+|`clearHistory`| Function | Erokhin Ilya | in progress | |
+|`runJavaScript`| Function | Erokhin Ilya | in progress | |
+|`loadData`| Function | Erokhin Ilya | in progress | |
+|`loadUrl`| Function | Erokhin Ilya | in progress | |
+|`refresh`| Function | Erokhin Ilya | in progress | |
+|`stop`| Function | Erokhin Ilya | in progress | |
+|`registerJavaScriptProxy`| Function | Erokhin Ilya | in progress | |
+|`deleteJavaScriptRegister`| Function | Erokhin Ilya | in progress | |
+|`getHitTest`| Function | Erokhin Ilya | in progress | |
+|`requestFocus`| Function | Erokhin Ilya | in progress | |
+|`accessBackward`| Function | Erokhin Ilya | in progress | |
+|`accessForward`| Function | Erokhin Ilya | in progress | |
+|`accessStep`| Function | Erokhin Ilya | in progress | |
+|`backward`| Function | Erokhin Ilya | in progress | |
+|`forward`| Function | Erokhin Ilya | in progress | |
+|`getCookieManager`| Function | Erokhin Ilya | in progress | |
