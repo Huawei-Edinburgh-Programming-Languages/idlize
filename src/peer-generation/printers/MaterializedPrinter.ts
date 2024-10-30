@@ -87,6 +87,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
 
     protected collectImports(imports: ImportsCollector) {
         this.clazz.importFeatures.forEach(it => imports.addFeature(it.feature, it.module))
+        imports.addFeature("nullptr", "@koalaui/interop")
     }
 
     private printImports() {

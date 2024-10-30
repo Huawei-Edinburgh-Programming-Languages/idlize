@@ -67,8 +67,8 @@ class OHOSVisitor {
     mapType(type: IDLType | IDLEnum): string {
         this.library.requestType(type, true)
 
-        const typeName = isEnum(type) 
-            ? type.name 
+        const typeName = isEnum(type)
+            ? type.name
             : isContainerType(type) || isUnionType(type)
                 ? ''
                 : getIDLTypeName(type)
@@ -388,12 +388,6 @@ class OHOSVisitor {
                     writer.writeNativeMethodDeclaration(`_${it.name}_ctor`, signature)
                 })
             })
-            writer.writeNativeMethodDeclaration("_GetManagerCallbackCaller",
-                NamedMethodSignature.make(
-                    IDLPointerType,
-                    [{ name: "kind", type: createReferenceType("CallbackKind") }]
-                )
-            )
         })
     }
 
@@ -519,7 +513,7 @@ class OHOSVisitor {
         const prefix = `${PrimitiveType.Prefix}${this.libraryName}_` // TODO better generate it directly in serializer
         writeSerializer(this.library, this.cppWriter, prefix)
         writeDeserializer(this.library, this.cppWriter, prefix)
-        
+
         let writer = new CppLanguageWriter(new IndentedPrinter(), this.library)
         this.writeModifiers(writer)
         this.writeImpls()
@@ -605,7 +599,7 @@ class OHOSVisitor {
             .replaceAll('%PEER_CONTENT%', this.peerWriter.getOutput().join('\n'))
             .replaceAll('%SERIALIZER_PATH%', `./${fileNamePrefix}Serializer`)
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}${ext}`), peerText, 'utf-8')
-        
+
         this.hWriter.printTo(path.join(outDir, `${fileNamePrefix}.h`))
         this.cppWriter.printTo(path.join(outDir, `${fileNamePrefix}.cc`))
 
@@ -617,7 +611,7 @@ class OHOSVisitor {
             readLangTemplate(`ohos_DeserializerBase.h`, Language.CPP)
                 .replaceAll("%NATIVE_API_HEADER_PATH%", `${fileNamePrefix}.h`)
         )
-        
+
         const nativeModuleInfo = {
             name: `get${this.libraryName}NativeModule`,
             path: `./${fileNamePrefix}Native`,

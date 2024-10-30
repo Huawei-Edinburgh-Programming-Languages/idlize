@@ -507,11 +507,7 @@ export class CallbackConvertor extends BaseArgConvertor {
             return
         }
         writer.writeMethodCall(`${param}Serializer`, "writeCallbackResource", [`${value}`])
-        writer.writeMethodCall(`${param}Serializer`, "writePointer", [
-            writer.makeNativeCall(`_GetManagerCallbackCaller`,
-                [writer.makeString(writer.makeEnumCast(`${CallbackKind}.${this.decl.name}`, false, undefined))]
-            ).asString()
-        ])
+        writer.writeMethodCall(`${param}Serializer`, "writePointer", ["nullptr"])
     }
     convertorDeserialize(param: string, value: string, writer: LanguageWriter): LanguageStatement {
         if (writer.language == Language.CPP) {
@@ -519,7 +515,7 @@ export class CallbackConvertor extends BaseArgConvertor {
                 writer.makeAssign(`${value}.resource`, undefined, writer.makeMethodCall(`${param}Deserializer`, `readCallbackResource`, []), false),
                 writer.makeAssign(`${value}.call`, undefined, new CppCastExpression(
                     writer,
-                    writer.makeMethodCall(`${param}Deserializer`, `readPointer`, []),
+                    writer.makeMethodCall(`${param}Deserializer`, `readPointerOrDefault`, [writer.makeFunctionCall("getDefaultCallMethod", [])]),
                     idl.createReferenceType(`void(*)(${generateCallbackAPIArguments(this.library, this.decl).join(", ")})`),
                     true
                 ), false),
@@ -567,9 +563,9 @@ export class TupleConvertor extends BaseArgConvertor { //
             statements.push(
                 printer.makeAssign(tmpTupleId,
                     // makeType - creating the correct type for TS(using tsTypeName) or C++(use decltype(receiver))
-                    printer.makeType(this.decl.properties[index].type, true, receiver), // printer.makeType(this.idlType, true, receiver), 
-                    undefined, 
-                    true, 
+                    printer.makeType(this.decl.properties[index].type, true, receiver), // printer.makeType(this.idlType, true, receiver),
+                    undefined,
+                    true,
                     false
                 ),
                 it.convertorDeserialize(param, tmpTupleId, printer)
@@ -682,10 +678,10 @@ export class MapConvertor extends BaseArgConvertor { //
         super(
             idl.createContainerType(
                 'record', [keyType, valueType]
-            ), 
-            [RuntimeType.OBJECT], 
-            false, 
-            true, 
+            ),
+            [RuntimeType.OBJECT],
+            false,
+            true,
             param
         )
         this.keyConvertor = library.typeConvertor(param, keyType)

@@ -350,7 +350,7 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
 
     private generateCallbackDeserializer(target: idl.IDLCallback): void {
         if (this.writer.language === Language.CPP)
-            // callbacks in native are just CallbackResource while in managed we need to convert them to 
+            // callbacks in native are just CallbackResource while in managed we need to convert them to
             // target language callable
             return
         if (PeerGeneratorConfig.ignoredCallbacks.has(target.name))
@@ -426,10 +426,10 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
                     writer.makeString(`${argsSerializer}Serializer.length()`),
                 ])),
                 new ExpressionStatement(writer.makeMethodCall(`${argsSerializer}Serializer`, `release`, [])),
-                writer.makeReturn(hasContinuation 
+                writer.makeReturn(hasContinuation
                     ? writer.makeCast(
                         writer.makeString(continuationValueName),
-                        target.returnType) 
+                        target.returnType)
                     : undefined),
             ])))
 

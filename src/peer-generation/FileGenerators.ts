@@ -282,6 +282,7 @@ export function makeTSSerializer(library: PeerLibrary | IdlPeerLibrary, prefix?:
     const imports = new ImportsCollector()
     imports.addFeatures(["SerializerBase", "Tags", "RuntimeType", "runtimeType", "isPixelMap", "isResource", "isInstanceOf"], "./SerializerBase")
     imports.addFeatures(["int32"], "@koalaui/common")
+    imports.addFeatures(["nullptr"], "@koalaui/interop")
     if (printer.language == Language.TS) {
         imports.addFeatures(["unsafeCast"], "../shared/generated-utils")
         imports.addFeatures(["nativeModule"], "@koalaui/arkoala")
@@ -411,7 +412,7 @@ import { unsafeCast } from "../shared/generated-utils"
 import { CallbackKind } from "./CallbackKind"
 import { Serializer, createSerializer } from "./Serializer"
 import { nativeModule } from "@koalaui/arkoala"
-import { KPointer } from "@koalaui/interop"
+import { KPointer, nullptr } from "@koalaui/interop"
 
 ${deserializer.getOutput().join("\n")}
 
