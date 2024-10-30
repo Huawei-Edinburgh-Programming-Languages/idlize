@@ -78,8 +78,7 @@ class OHOSVisitor {
         if (isReferenceType(type) || isEnum(type) || isEnumType(type)) {
             return `${PrimitiveType.Prefix}${this.libraryName}_${qualifiedName(type, Language.CPP)}`
         }
-        return this.library.computeTargetName(type, type.optional ?? false);
-        // this.hWriter.convert(type)
+        return this.library.computeTargetName(type, type.optional ?? false)
     }
 
     makeSignature(returnType: IDLType, parameters: IDLParameter[]): MethodSignature {
@@ -126,11 +125,9 @@ class OHOSVisitor {
         _c.print(`const static ${name} instance = {`)
         _c.pushIndent()
         _h.pushIndent()
-        const idlPrefix = `${PrimitiveType.Prefix}${this.libraryName}`
         clazz.constructors.forEach((ctor, index) => {
             let name = `construct${(index > 0) ? index.toString() : ""}`
             let params = ctor.parameters.map(it => new NameType(_h.escapeKeyword(it.name), this.mapType(it.type!)))
-            // TODO use this.library.computeTargetName(type, false, idlPrefix) 
             _h.print(`${handleType} (*${name})(${params.map(it => `${it.type} ${it.name}`).join(", ")});`)
             let implName = `${clazz.name}_${name}Impl`
             _c.print(`&${implName},`)
@@ -208,9 +205,6 @@ class OHOSVisitor {
         this.callbacks.forEach(it => {
             this.writeCallback(it)
         })
-        // this.data.forEach(it => {
-        //     this.writeData(it)
-        // })
         this.interfaces.forEach(it => {
             this.writeModifier(it, writer)
         })
@@ -519,10 +513,8 @@ class OHOSVisitor {
         )
 
 
-        // this.writeTypes(this.library.orderedDependenciesToGenerate)
         let toStringsPrinter = createLanguageWriter(Language.CPP, this.library)
         new StructPrinter(this.library).generateStructs(this.hWriter, this.hWriter.printer, toStringsPrinter)
-        const prefix = `${PrimitiveType.Prefix}${this.libraryName}_` // TODO better generate it directly in serializer
         this.cppWriter.concat(toStringsPrinter)
         writeSerializer(this.library, this.cppWriter)
         writeDeserializer(this.library, this.cppWriter)
@@ -545,7 +537,7 @@ class OHOSVisitor {
 
         this.libraryName = this.library.files[0].packageName().toUpperCase()
         this.library.name = this.libraryName
-        // PrimitiveType.LibraryPrefix = this.libraryName + "_" // TODO Keep it with other prefix setup code
+        PrimitiveType.LibraryPrefix = this.libraryName + "_" // TODO Remove me
 
         console.log(`GENERATE OHOS API for ${this.libraryName}`)
 
