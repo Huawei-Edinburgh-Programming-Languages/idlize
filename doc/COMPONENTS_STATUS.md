@@ -982,6 +982,21 @@
 |`showNext`| Function | Andrey Khudenkikh | in progress |  |
 |`showPrevious`| Function |  Andrey Khudenkikh | in progress |  |
 |`changeIndex`| Function |  Andrey Khudenkikh | in progress |  |
+|*SymbolGlyph*| *Component* |Andrey Khudenkikh | in progress |  |
+|`setSymbolGlyphOptions`| Function |Andrey Khudenkikh | in progress |  |
+|`fontSize`| Function |Andrey Khudenkikh | in progress |  |
+|`fontColor`| Function |Andrey Khudenkikh | in progress |  |
+|`fontWeight`| Function |Andrey Khudenkikh | in progress |  |
+|`effectStrategy`| Function |Andrey Khudenkikh | in progress |  |
+|`renderingStrategy`| Function |Andrey Khudenkikh | in progress |  |
+|`symbolEffect`| Function | Andrey Khudenkikh | in progress |  |
+|*SymbolSpan*| *Component* |Dmitry A Smirnov| in progress|  |
+|`setSymbolSpanOptions`| Function |Dmitry A Smirnov| in progress|  |
+|`fontSize`| Function |Dmitry A Smirnov| in progress|  |
+|`fontColor`| Function |Dmitry A Smirnov| in progress|  |
+|`fontWeight`| Function |Dmitry A Smirnov| in progress|  |
+|`effectStrategy`| Function |Dmitry A Smirnov| in progress|  |
+|`renderingStrategy`| Function |Dmitry A Smirnov| in progress|  |
 |*Text*| *Component* | Kirill Kirichenko | in progress | |
 |`setTextOptions`| Function | Kirill Kirichenko | in progress |  |
 |`font`| Function |Samarin Sergey |in progress |  |
@@ -1282,13 +1297,6 @@
 |`caretPosition`| Function | Spirin Andrey | in progress |  |
 |`setTextSelection`| Function | Spirin Andrey | in progress |  |
 |`stopEditing`| Function |  Spirin Andrey | in progress |  |
-|*SymbolSpan*| *Component* |Dmitry A Smirnov| in progress|  |
-|`setSymbolSpanOptions`| Function |Dmitry A Smirnov| in progress|  |
-|`fontSize`| Function |Dmitry A Smirnov| in progress|  |
-|`fontColor`| Function |Dmitry A Smirnov| in progress|  |
-|`fontWeight`| Function |Dmitry A Smirnov| in progress|  |
-|`effectStrategy`| Function |Dmitry A Smirnov| in progress|  |
-|`renderingStrategy`| Function |Dmitry A Smirnov| in progress|  |
 |*Tabs*| *Component* | Tuzhilkin Ivan | in progress |  |
 |`setTabsOptions`| Function | Skroba Gleb | done |  |
 |`vertical`| Function | Tuzhilkin Ivan | done |  |
