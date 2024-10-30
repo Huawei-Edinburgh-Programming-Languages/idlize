@@ -1221,48 +1221,6 @@
 |`selectedColor`| Function | Morozov Sergey|done |  |
 |`switchPointColor`| Function | Morozov Sergey|done |  |
 |`switchStyle`| Function | Morozov Sergey|done |  |
-|*CommonMethod*| *Component* | Roman Sedaikin | in progress |  |
-|`width`| Function | Roman Sedaikin | done |  |
-|`height`| Function | Roman Sedaikin | done |  |
-|`backgroundColor`| Function | Roman Sedaikin | done |  |
-|`opacity`| Function | Roman Sedaikin | done |  |
-|`responseRegion`| Function | Skroba Gleb | done |  |
-|`constraintSize`| Function | Roman Sedaikin | in progress |  |
-|`size`| Function | Roman Sedaikin | in progress |  |
-|`touchable`| Function | Roman Sedaikin | in progress |  |
-|`hitTestBehavior`| Function | Roman Sedaikin | in progress |  |
-|`layoutWeight`| Function | Roman Sedaikin | in progress |  |
-|`foregroundBlurStyle`| Function | Roman Sedaikin | in progress |  |
-|`border`| Function | Roman Sedaikin | in progress |  |
-|`borderStyle`| Function | Roman Sedaikin | in progress |  |
-|`borderWidth`| Function | Roman Sedaikin | in progress |  |
-|`borderColor`| Function | Roman Sedaikin | in progress |  |
-|`borderRadius`| Function | Roman Sedaikin | in progress |  |
-|`borderImage`| Function | Roman Sedaikin | in progress |  |
-|`foregroundColor`| Function | Roman Sedaikin | in progress |  |
-|`onClick`| Function | Roman Sedaikin | in progress |  |
-|`hoverEffect`| Function | Roman Sedaikin | in progress |  |
-|`onTouch`| Function | Roman Sedaikin | in progress |  |
-|`focusable`| Function | Roman Sedaikin | in progress |  |
-|`onFocus`| Function | Roman Sedaikin | in progress |  |
-|`onBlur`| Function | Roman Sedaikin | in progress |  |
-|`blur`| Function | Roman Sedaikin | in progress |  |
-|`onDisAppear`| Function | Roman Sedaikin | in progress |  |
-|`onAppear`| Function | Roman Sedaikin | in progress |  |
-|`onAreaChange`| Function | Roman Sedaikin | in progress |  |
-|`visibility`| Function | Roman Sedaikin | in progress |  |
-|`alignSelf`| Function | Roman Sedaikin | in progress |  |
-|`displayPriority`| Function | Roman Sedaikin | in progress |  |
-|`zIndex`| Function | Roman Sedaikin | in progress |  |
-|`direction`| Function | Roman Sedaikin | in progress |  |
-|`align`| Function | Roman Sedaikin | in progress |  |
-|`position`| Function | Roman Sedaikin | in progress |  |
-|`enabled`| Function | Roman Sedaikin | in progress |  |
-|`aspectRatio`| Function | Roman Sedaikin | in progress |  |
-|`overlay`| Function | Roman Sedaikin | in progress |  |
-|`linearGradient`| Function | Roman Sedaikin | in progress |  |
-|`sweepGradient`| Function | Roman Sedaikin | in progress |  |
-|`shadow`| Function | Roman Sedaikin | in progress |  |
 |*SearchController*| *Class* |Evstigneev Roman |done |  |
 |`caretPosition`| Function |Evstigneev Roman | done |  |
 |`stopEditing`| Function |Evstigneev Roman | done |  |
