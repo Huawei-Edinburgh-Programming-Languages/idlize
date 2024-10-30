@@ -1250,7 +1250,7 @@ export function isConflictingDeclaration(decl: idl.IDLEntry): boolean {/// stole
     // complicated type arguments
     if (idl.isClass(decl) && decl.name === 'TransitionEffect') return true
     // inside namespace
-    if (idl.isEnum(decl) && decl.name === 'GestureType') return true
+    // if (idl.isEnum(decl) && decl.name === 'GestureType') return true
     // no return type in some methods
     if (idl.isInterface(decl) && decl.name === 'LayoutChild') return true
     return false

@@ -70,7 +70,6 @@ import { Language } from "../../../Language"
 import { EnumConvertor } from "../../idl/IdlArgConvertors"
 import { ReferenceResolver } from "../../ReferenceResolver"
 import { EtsIDLTypeToStringConvertor } from "../convertors/ETSConvertors"
-import { convertDeclaration } from "../../idl/IdlTypeConvertor";
 import { DeclarationNameConvertor } from "../../idl/IdlNameConvertor";
 
 ////////////////////////////////////////////////////////////////
@@ -232,21 +231,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         }
         return this.makeString(`${value} as ${type}`)
     }
-    mapIDLReferenceType(type: IDLReferenceType): string {
-        if (isIDLTypeName(type, 'Function')) {
-            return 'Object'
-        }
-        //TODO: Needs to be implemented properly
-        const types = getIDLTypeName(type).split(".")
-        if (types.length > 1) {
-            // Takes only name without the namespace prefix
-            const decl = this.resolver.resolveTypeReference(createReferenceType(types.slice(-1).join()))
-            if (decl !== undefined) {
-                return convertDeclaration(DeclarationNameConvertor.I, decl)
-            }
-        }
-        return super.mapIDLReferenceType(type)
-    }
+
     ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression {
         return value;
     }
