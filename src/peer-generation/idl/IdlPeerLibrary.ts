@@ -59,8 +59,10 @@ export class IdlPeerLibrary implements ReferenceResolver {
 
     constructor(
         public language: Language,
-        public componentsToGenerate: Set<string>,
+        public componentsToGenerate: Set<string>
     ) {}
+
+    public name: string = ""
 
     readonly customComponentMethods: string[] = []
     // todo really dirty - we use it until we can generate interfaces
@@ -74,6 +76,10 @@ export class IdlPeerLibrary implements ReferenceResolver {
 
     readonly continuationCallbacks: idl.IDLCallback[] = []
     readonly syntheticEntries: idl.IDLEntry[] = []
+
+    get libraryPrefix(): string {
+        return this.name ? this.name + "_" : ""
+    }
 
     addSyntheticInterface(entry: idl.IDLInterface): idl.IDLReferenceType {
         this.syntheticEntries.push(entry)
@@ -400,7 +406,7 @@ export class IdlPeerLibrary implements ReferenceResolver {
     }
 
     computeTargetName(target: idl.IDLEntry, optional: boolean, idlPrefix: string = PrimitiveType.Prefix): string {
-        return this.computeTargetNameImpl(target, optional, idlPrefix)///inline
+        return this.computeTargetNameImpl(target, optional, idlPrefix + this.libraryPrefix)///inline
     }
 
     computeTargetTypeLiteralName(decl: idl.IDLInterface, prefix: string): string {
@@ -417,6 +423,7 @@ export class IdlPeerLibrary implements ReferenceResolver {
 
     computeTargetNameImpl(target: idl.IDLEntry, optional: boolean, idlPrefix: string): string {
         const prefix = optional ? PrimitiveType.OptionalPrefix : ""
+        // const prefix = optional ? idlPrefix + PrimitiveType.OptionalPrefix : ""
         if (idl.isPrimitiveType(target)) {
             let name: string = ""
             switch (target) {
@@ -436,7 +443,8 @@ export class IdlPeerLibrary implements ReferenceResolver {
                 case idl.IDLBooleanType: name = "Boolean"; break
                 default: name = capitalize(idl.getIDLTypeName(target)); break
             }
-            return (optional ? prefix : idlPrefix) + name
+            return (optional ? prefix : PrimitiveType.Prefix) + name
+            // return PrimitiveType.Prefix + (optional ? PrimitiveType.OptionalPrefix : "") + name // TODO Add special prefix arg for primitives only
         }
         if (idl.isAnonymousInterface(target)) {
             return target.name

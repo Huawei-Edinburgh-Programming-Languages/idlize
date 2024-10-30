@@ -320,9 +320,6 @@ if (options.dts2peer) {
                         // This setup code placed here because wrong prefix may be cached during library creation
                         // TODO find better place for setup?
                         PrimitiveType.Prefix = "OH_"
-                        PrimitiveType.UndefinedTag = "OH_TAG_UNDEFINED"
-                        PrimitiveType.UndefinedRuntime = "OH_RUNTIME_UNDEFINED"
-                        PrimitiveType.ObjectTag = "OH_TAG_OBJECT"
                     }
                     // Visit IDL peer files
                     idlLibrary.files.forEach(file => {

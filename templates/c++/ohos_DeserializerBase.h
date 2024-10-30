@@ -173,29 +173,42 @@ inline void WriteToString(std::string *result, const OH_Materialized *value)
 
 class DeserializerBase;
 
-// inline void WriteToString(std::string *result, OH_Undefined value)
-// {
-//   result->append("{}");
-// }
+template <>
+inline void WriteToString(std::string *result, OH_Undefined value)
+{
+  result->append("{}");
+}
 
-// inline void WriteToString(std::string *result, const OH_Undefined *value)
-// {
-//   result->append("{}");
-// }
+template <>
+inline void WriteToString(std::string *result, const OH_Undefined *value)
+{
+  result->append("{}");
+}
 
-// inline void WriteToString(std::string *result, const OH_CustomObject *value)
-// {
-//   if (strcmp(value->kind, "NativeErrorFunction") == 0)
-//   {
-//     result->append("() => {} /* TBD: Function*/");
-//     return;
-//   }
-//   result->append("{");
-//   result->append(".kind=\"");
-//   result->append(value->kind);
-//   result->append("\", .id=" + std::to_string(value->id));
-//   result->append("}");
-// }
+template <>
+inline void WriteToString(std::string *result, const OH_CustomObject *value)
+{
+  if (strcmp(value->kind, "NativeErrorFunction") == 0)
+  {
+    result->append("() => {} /* TBD: Function*/");
+    return;
+  }
+  result->append("{");
+  result->append(".kind=\"");
+  result->append(value->kind);
+  result->append("\", .id=" + std::to_string(value->id));
+  result->append("}");
+}
+
+template<>
+inline void WriteToString(std::string *result, const OH_CallbackResource *value)
+{
+  result->append("{");
+  result->append(".resourceId=" + std::to_string(value->resourceId));
+  result->append(", .hold=0");
+  result->append(", .release=0");
+  result->append("}");
+}
 
 // TODO Implement CustomObject
 struct CustomDeserializer
@@ -393,12 +406,11 @@ public:
     result.id = readInt32();
     return result;
   }
-
+*/
   OH_Undefined readUndefined()
   {
     return OH_Undefined();
   }
-*/
 
   OH_Materialized readMaterialized()
   {
