@@ -830,21 +830,21 @@
 |`layoutDirection`| Function |Samarin Sergey|done |  |
 |`position`| Function |Samarin Sergey| done |  |
 |`markAnchor`| Function |Samarin Sergey| done |  |
-|`offset`| Function |Samarin Sergey|in progress |  |
+|`offset`| Function |Samarin Sergey| blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`fontSize`| Function |Samarin Sergey| done |  |
-|`fontStyle`| Function |Samarin Sergey|in progress |  |
-|`fontWeight`| Function |Samarin Sergey|in progress |  |
-|`fontFamily`| Function |Samarin Sergey|in progress |  |
+|`fontStyle`| Function |Samarin Sergey| devdone |  |
+|`fontWeight`| Function |Samarin Sergey| devdone |  |
+|`fontFamily`| Function |Samarin Sergey| blocked UT |  |
 |`fontColor`| Function |Samarin Sergey| done |  |
 |`iconColor`| Function |Samarin Sergey| done |  |
-|`backgroundColor`| Function |Samarin Sergey| blocked UT |  |
-|`borderStyle`| Function |Samarin Sergey|blocked UT |  |
-|`borderWidth`| Function |Samarin Sergey|in progress |  |
-|`borderColor`| Function |Samarin Sergey| blocked UT |  |
-|`borderRadius`| Function |Samarin Sergey|in progress |  |
-|`padding`| Function |Samarin Sergey|in progress |  |
+|`backgroundColor`| Function |Samarin Sergey| devdone |  |
+|`borderStyle`| Function |Samarin Sergey| devdone |  |
+|`borderWidth`| Function |Samarin Sergey| devdone |  |
+|`borderColor`| Function |Samarin Sergey| devdone |  |
+|`borderRadius`| Function |Samarin Sergey| devdone |  |
+|`padding`| Function |Samarin Sergey| devdone |  |
 |`textIconSpace`| Function |Samarin Sergey| done |  |
-|`key`| Function |Samarin Sergey|in progress |  |
+|`key`| Function |Samarin Sergey| devdone |  |
 |`width`| Function |Samarin Sergey| done |  |
 |`height`| Function |Samarin Sergey| done |  |
 |`size`| Function |Samarin Sergey| done |  |
