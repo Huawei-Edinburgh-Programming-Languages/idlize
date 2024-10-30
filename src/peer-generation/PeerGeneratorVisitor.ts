@@ -398,7 +398,7 @@ export class ArkTSTypeDepsCollector extends ImportsAggregateCollector {
     private readonly typeToStringConvertor = new ArkTSTypeNodeNameConvertor(this.peerLibrary)
     public static readonly SYNTH_TYPE_FILE_NAME = 'SyntheticDeclarations'
     private readonly ALIAS_DECL_LIST = new Set([
-        "TextModifier"
+        "TextModifierABABA"
     ])
     constructor(
         peerLibrary: PeerLibrary,
