@@ -422,8 +422,8 @@ export class IdlPeerLibrary implements ReferenceResolver {
     }
 
     computeTargetNameImpl(target: idl.IDLEntry, optional: boolean, idlPrefix: string): string {
+        // TODO Clarify the actual name of optional type including idlPrefix (with library name included, e.g. OH_XML_)
         const prefix = optional ? PrimitiveType.OptionalPrefix : ""
-        // const prefix = optional ? idlPrefix + PrimitiveType.OptionalPrefix : ""
         if (idl.isPrimitiveType(target)) {
             let name: string = ""
             switch (target) {
@@ -444,7 +444,6 @@ export class IdlPeerLibrary implements ReferenceResolver {
                 default: name = capitalize(idl.getIDLTypeName(target)); break
             }
             return (optional ? prefix : PrimitiveType.Prefix) + name
-            // return PrimitiveType.Prefix + (optional ? PrimitiveType.OptionalPrefix : "") + name // TODO Add special prefix arg for primitives only
         }
         if (idl.isAnonymousInterface(target)) {
             return target.name
