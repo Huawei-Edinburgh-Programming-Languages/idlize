@@ -19,7 +19,7 @@ import { IndentedPrinter } from "../IndentedPrinter"
 import { IdlPeerLibrary } from './idl/IdlPeerLibrary'
 import { CppLanguageWriter, createLanguageWriter, ExpressionStatement, FieldModifier, LanguageWriter, Method, MethodSignature, NamedMethodSignature } from './LanguageWriters'
 import { createContainerType, createReferenceType, getIDLTypeName, hasExtAttribute, IDLCallback, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLKind, IDLMethod, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLU8Type, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isEnumType, isInterface, isMethod, isPrimitiveType, isReferenceType, isUnionType } from '../idl'
-import { makeCallbacksKinds, makeSerializerForOhos, readLangTemplate } from './FileGenerators'
+import { makeSerializerForOhos, readLangTemplate } from './FileGenerators'
 import { capitalize } from '../util'
 import { isMaterialized } from './idl/IdlPeerGeneratorVisitor'
 import { PrimitiveType } from './ArkPrimitiveType'
@@ -341,13 +341,6 @@ class OHOSVisitor {
             })
         })
         printCallbacksKinds(this.library, this.nativeWriter)
-        this.data.forEach(data => {
-            this.nativeWriter.writeInterface(data.name, writer => {
-                data.properties.forEach(prop => {
-                    writer.writeFieldDeclaration(prop.name, prop.type, [], false)
-                })
-            })
-        })
         this.nativeWriter.writeInterface(className, writer => {
             this.interfaces.flatMap(it => it.methods).forEach(method => {
                 // TODO remove duplicated code from NativeModuleVisitor::printPeerMethod (NativeModulePrinter.ts)
@@ -400,14 +393,18 @@ class OHOSVisitor {
         if (this.library.language === Language.TS) {
             this.peerWriter.print('import {')
             this.peerWriter.pushIndent()
-            this.data.forEach(data => {
-                this.peerWriter.print(`${data.name},`)
-            })
             this.peerWriter.print(`${nativeModuleVar},`)
             this.peerWriter.print(`${nativeModuleGetter},`)
             this.peerWriter.popIndent()
             this.peerWriter.print(`} from './${this.libraryName.toLocaleLowerCase()}Native'`)
         }
+        this.data.forEach(data => {
+            this.peerWriter.writeInterface(data.name, writer => {
+                data.properties.forEach(prop => {
+                    writer.writeFieldDeclaration(prop.name, prop.type, [], false)
+                })
+            })
+        })
         this.interfaces.forEach(int => {
             this.peerWriter.writeInterface(`${int.name}Interface`, writer => {
                 int.methods.forEach(method => {
@@ -614,7 +611,7 @@ class OHOSVisitor {
             name: `get${this.libraryName}NativeModule`,
             path: `./${fileNamePrefix}Native`,
         }
-        const serializerText = makeSerializerForOhos(this.library, nativeModuleInfo, "xmlNative").getOutput().join("\n")
+        const serializerText = makeSerializerForOhos(this.library, nativeModuleInfo, fileNamePrefix).getOutput().join("\n")
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}${ext}`), peerText, 'utf-8')
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Serializer${ext}`), serializerText, 'utf-8')
         fs.writeFileSync(path.join(managedOutDir, `types${ext}`), readLangTemplate(`types${ext}`, this.library.language))

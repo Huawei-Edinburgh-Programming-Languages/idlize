@@ -603,7 +603,7 @@ function printIdlImports(library: IdlPeerLibrary, serializerDeclarations: Serial
             collector.addFeature(builder, `Ark${builder}Builder`)
         }
 
-        if (declarationPath) {
+        if (declarationPath) { // This is used for OHOS library generation only
             // TODO Check for compatibility!
             const makeFeature = (node: idl.IDLEntry) => {
                 return {
@@ -612,6 +612,7 @@ function printIdlImports(library: IdlPeerLibrary, serializerDeclarations: Serial
                 }
             }
             serializerDeclarations.filter(it => it.fileName)
+                .filter(it => !idl.isCallback(it))
                 .map(makeFeature)
                 .forEach(it => collector.addFeature(it.feature, it.module))
         }
