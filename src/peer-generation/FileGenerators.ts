@@ -276,7 +276,7 @@ export function accessorStructList(lines: LanguageWriter): LanguageWriter {
     return result
 }
 
-export function makeTSSerializer(library: PeerLibrary | IdlPeerLibrary, prefix?: string, declarationPath?: string): LanguageWriter {
+export function makeTSSerializer(library: PeerLibrary | IdlPeerLibrary): LanguageWriter {
     let printer = createLanguageWriter(library.language, getReferenceResolver(library))
     printer.writeLines(cStyleCopyright)
     const imports = new ImportsCollector()
@@ -295,7 +295,7 @@ export function makeTSSerializer(library: PeerLibrary | IdlPeerLibrary, prefix?:
         imports.addFeature('KInt', '@koalaui/interop')
     }
     imports.print(printer, '')
-    writeSerializer(library, printer, prefix, declarationPath)
+    writeSerializer(library, printer, "")
     printer.writeLines(`
 export function createSerializer(): Serializer { return new Serializer() }
 `)
@@ -403,7 +403,7 @@ ${serializers.getOutput().join("\n")}
 
 export function makeTSDeserializer(library: PeerLibrary | IdlPeerLibrary): string {
     const deserializer = createLanguageWriter(Language.TS, library instanceof IdlPeerLibrary ? library : createEmptyReferenceResolver())
-    writeDeserializer(library, deserializer)
+    writeDeserializer(library, deserializer, "")
     return `${cStyleCopyright}
 import { runtimeType, Tags, RuntimeType, SerializerBase, CallbackResource } from "./SerializerBase"
 import { DeserializerBase } from "./DeserializerBase"
