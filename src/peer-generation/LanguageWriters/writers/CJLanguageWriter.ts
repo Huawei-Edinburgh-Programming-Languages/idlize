@@ -218,8 +218,9 @@ export class CJLanguageWriter extends LanguageWriter {
         if (mutable) {
             this.print(`set(x) { this.${propName} = x }`)
             this.pushIndent()
-            if (setterLambda)
+            if (setterLambda) {
                 setterLambda(this)
+            }
             this.popIndent()
         }
         this.popIndent()
