@@ -171,21 +171,6 @@ export class CJEnum extends IdlSyntheticTypeBase {
                 writer.popIndent()
                 writer.print("}")
             })
-            // writer.print("prop ordinal: Int32 {")
-            // writer.pushIndent()
-            // writer.print("get() {")
-            // writer.pushIndent()
-            // writer.print("match (this) {")
-            // writer.pushIndent()
-            // for (const member of this.members) {
-            //     writer.print(`case ${member.name} => ${member.numberId}`)
-            // }
-            // writer.popIndent()
-            // writer.print("}")
-            // writer.popIndent()
-            // writer.print("}")
-            // writer.popIndent()
-            // writer.print("}")
         })
     }
 }
