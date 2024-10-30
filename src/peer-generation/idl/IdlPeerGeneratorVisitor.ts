@@ -14,27 +14,41 @@
  */
 
 import * as idl from "../../idl"
+import { getIDLTypeName, IDLEntry, IDLReferenceType, IDLType, maybeOptional } from "../../idl"
 import { posix as path } from "path"
-import { serializerBaseMethods, isDefined, renameDtsToInterfaces, renameClassToBuilderClass, renameClassToMaterialized, capitalize, throwException } from "../../util"
+import {
+    capitalize,
+    isDefined,
+    renameClassToBuilderClass,
+    renameClassToMaterialized,
+    renameDtsToInterfaces,
+    serializerBaseMethods,
+    throwException
+} from "../../util"
 import { GenericVisitor } from "../../options"
 import { ArgConvertor, RetConvertor } from "../ArgConvertors"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { IdlPeerClass } from "./IdlPeerClass"
 import { IdlPeerMethod } from "./IdlPeerMethod"
 import { IdlPeerFile } from "./IdlPeerFile"
-import { IdlPeerLibrary, ArkFunction } from "./IdlPeerLibrary"
+import { IdlPeerLibrary } from "./IdlPeerLibrary"
 import { MaterializedClass, MaterializedField, MaterializedMethod, SuperElement } from "../Materialized"
 import { Field, FieldModifier, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters";
-import { convertDeclaration, convertType } from "../LanguageWriters/typeConvertor";
+import { convertDeclaration } from "../LanguageWriters/typeConvertor";
 import { DeclarationDependenciesCollector, TypeDependenciesCollector } from "./IdlDependenciesCollector";
 import {
-    addSyntheticDeclarationDependency,
-    makeSyntheticDeclCompletely,
     isSyntheticDeclaration,
+    makeSyntheticDeclCompletely,
     makeSyntheticTypeAliasDeclaration,
     syntheticDeclarationFilename
 } from "./IdlSyntheticDeclarations";
-import { initCustomBuilderClasses, BuilderClass, isCustomBuilderClass, BuilderMethod, BuilderField } from "../BuilderClass";
+import {
+    BuilderClass,
+    BuilderField,
+    BuilderMethod,
+    initCustomBuilderClasses,
+    isCustomBuilderClass
+} from "../BuilderClass";
 import { isRoot } from "../inheritance";
 import { ImportFeature } from "../ImportsCollector";
 import { DeclarationNameConvertor } from "./IdlNameConvertor";
@@ -47,13 +61,6 @@ import { ARK_CUSTOM_OBJECT, javaCustomTypeMapping } from "../printers/lang/Java"
 import { Language } from "../../Language"
 import { createInterfaceDeclName } from "../TypeNodeNameConvertor";
 import { cjCustomTypeMapping } from "../printers/lang/Cangjie"
-import {
-    getIDLTypeName,
-    IDLEntry,
-    IDLReferenceType,
-    IDLType,
-    maybeOptional
-} from "../../idl";
 
 /**
  * Theory of operations.
@@ -286,11 +293,11 @@ class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
     }
 
     override convertTypeReference(type: IDLReferenceType): IDLEntry[] {
+        // TODO: Needs to be implemented properly
+        // Handling type with the namespace prefix
         const types = getIDLTypeName(type).split(".")
         if (types.length > 1) {
-            const res = super.convertTypeReference(idl.createReferenceType(types[types.length - 1]));
-            console.log(res)
-            return res
+            return super.convertTypeReference(idl.createReferenceType(types.slice(-1).join()))
         }
         return super.convertTypeReference(type);
     }
