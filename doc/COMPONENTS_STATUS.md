@@ -705,7 +705,7 @@
 |`guideLine`| Function | Dmitry A Smirnov | done |  |
 |`barrier`| Function | Dmitry A Smirnov | done |  |
 |*RichEditor*| *Component* | Dudkin Sergey| in progress|  |
-|`setRichEditorOptions`| Function | Dudkin Sergey| in progress|  |
+|`setRichEditorOptions`| Function | Dudkin Sergey| devDone|  |
 |`onReady`| Function | Dudkin Sergey| done|  |
 |`onSelect`| Function | Dudkin Sergey| done|  |
 |`onSelectionChange`| Function | Dudkin Sergey| done|  |
@@ -1441,19 +1441,19 @@
 |`invalidate`| Function |Vadim Voronov| in progress| |
 |*ImageAnalyzerController*| *Class* |Vadim Voronov| in progress| |
 |`getImageAnalyzerSupportTypes`| Function |Vadim Voronov| in progress| |
-|*RichEditorController*| *Class* |Dudkin Sergey| in progress|  |
-|`addTextSpan`| Function |Dudkin Sergey| in progress|  |
-|`addImageSpan`| Function |Dudkin Sergey| in progress|  |
-|`addBuilderSpan`| Function | Dudkin Sergey| in progress|  |
-|`addSymbolSpan`| Function | Dudkin Sergey| in progress|  |
-|`updateSpanStyle`| Function | Dudkin Sergey| in progress|  |
-|`updateParagraphStyle`| Function | Dudkin Sergey| in progress|  |
-|`deleteSpans`| Function |Dudkin Sergey| in progress|  |
-|`getSpans`| Function |Dudkin Sergey| in progress|  |
-|`getParagraphs`| Function |Dudkin Sergey| in progress|  |
-|`getSelection`| Function |Dudkin Sergey| in progress|  |
-|`fromStyledString`| Function | Dudkin Sergey| in progress|  |
-|`toStyledString`| Function | Dudkin Sergey| in progress|  |
+|*RichEditorController*| *Class* |Dudkin Sergey| devDone|  |
+|`addTextSpan`| Function |Dudkin Sergey| devDone|  |
+|`addImageSpan`| Function |Dudkin Sergey| blocked| Ark_CustomObject :: implement setting pixel map aka inValue into options |
+|`addBuilderSpan`| Function | Dudkin Sergey| blocked| related to Ark_CustomBuilder* inValue |
+|`addSymbolSpan`| Function | Dudkin Sergey| devDone|  |
+|`updateSpanStyle`| Function | Dudkin Sergey| devDone|  |
+|`updateParagraphStyle`| Function | Dudkin Sergey| devDone|  |
+|`deleteSpans`| Function |Dudkin Sergey| devDone|  |
+|`getSpans`| Function |Dudkin Sergey| devDone|  |
+|`getParagraphs`| Function |Dudkin Sergey| blocked| GENERATED_ArkUIRichEditorControllerAccessor::getParagraphs should return a value |
+|`getSelection`| Function |Dudkin Sergey| devDone|  |
+|`fromStyledString`| Function | Dudkin Sergey| devDone|  |
+|`toStyledString`| Function | Dudkin Sergey| devDone|  |
 |*PatternLockController*| *Class* |Dmitry A Smirnov| in progress|  |
 |`reset`| Function |Dmitry A Smirnov| in progress|  |
 |`setChallengeResult`| Function |Dmitry A Smirnov| in progress|  |
