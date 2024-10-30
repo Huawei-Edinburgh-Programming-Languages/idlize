@@ -722,7 +722,7 @@ class PeersGenerator {
             this.library.requestType(param.type!, this.library.shouldGenerateComponent(peer.componentName))
             return decl
         })
-        const signature = generateSignature(this.library, method)
+        const signature = generateSignature(this.library, method, originalParentName)
         return new IdlPeerMethod(
             originalParentName,
             declarationTargets,
@@ -1306,43 +1306,36 @@ function generateSignature(
     method: idl.IDLCallable | idl.IDLMethod | idl.IDLConstructor,
     className?: string
 ): NamedMethodSignature {
-    let returnType;
+    let returnType
 
-    if (idl.isVoidType(method.returnType!)) {
-        returnType = idl.IDLVoidType;
-    } 
-    else if (
-        idl.isConstructor(method)
+    const isCallSignature = !idl.isMethod(method);
+
+    if (
+        isCallSignature ||
+        idl.isUnionType(method.returnType) ||
+        idl.isIDLTypeName(method.returnType, 'T') ||
+        idl.isConstructor(method) ||
+        method.name?.startsWith("this") && method.name.endsWith("Options") ||
+        method.name?.startsWith("set") && method.name.endsWith("Options") ||
+        (idl.isIDLTypeName(method.returnType, 'IMonitorValue<T>'))
     ) {
         returnType = idl.IDLThisType
-    } 
-    else if (method.name?.startsWith("this") && method.name.endsWith("Options")){
-        returnType = idl.IDLThisType
-    }
-    else if (method.name?.startsWith("set") && method.name.endsWith("Options")){
-        returnType = idl.IDLThisType
-    }
-    else if (idl.isReferenceType(method.returnType!))
-    {
-
-        if (!method.isStatic && method.returnType && className && idl.isIDLTypeName(method.returnType, className))
-        {
-            returnType = idl.IDLThisType
-        }
-        else
-        {
-           returnType = method.returnType!
-        }
-    }
-    else {
+    } else if (idl.isVoidType(method.returnType!)) {
+        returnType = idl.IDLVoidType
+    } else if (idl.isReferenceType(method.returnType!)) {
+        returnType = (!method.isStatic && method.returnType && className && idl.isIDLTypeName(method.returnType, className))
+            ? idl.IDLThisType
+            : method.returnType!
+    } else {
         returnType = method.returnType!
     }
+
     return new NamedMethodSignature(
         returnType,
         method.parameters.map(it => maybeOptional(it.type!, it.isOptional)),
         method.parameters.map(it => it.name)
     )
-}    
+}  
 
 function getMethodIndex(clazz: idl.IDLInterface, method: idl.IDLSignature | undefined): number {
     if (!method || !method.name) {
