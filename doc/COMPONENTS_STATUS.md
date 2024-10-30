@@ -1485,7 +1485,7 @@
 |`exitFullscreen`| Function | Erokhin Ilya | done |  |
 |`reset`| Function | Erokhin Ilya | done |  |
 |*Web*| *Component* | Erokhin Ilya | in progress | |
-|`setWebOptions`| Function | Erokhin Ilya | in progress | |
+|`setWebOptions`| Function | Erokhin Ilya | blocked | WebController & https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`javaScriptAccess`| Function | Erokhin Ilya | testskipped | |
 |`fileAccess`| Function | Erokhin Ilya | testskipped | |
 |`onlineImageAccess`| Function | Erokhin Ilya | testskipped | |
@@ -1494,7 +1494,7 @@
 |`mixedMode`| Function | Erokhin Ilya | testskipped | |
 |`zoomAccess`| Function | Erokhin Ilya | testskipped | |
 |`geolocationAccess`| Function | Erokhin Ilya | testskipped | |
-|`javaScriptProxy`| Function | Erokhin Ilya | in progress | |
+|`javaScriptProxy`| Function | Erokhin Ilya | blocked | WebController & https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX & https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV |
 |`password`| Function | Erokhin Ilya | done | |
 |`cacheMode`| Function | Erokhin Ilya | testskipped | |
 |`darkMode`| Function | Erokhin Ilya | testskipped | |
@@ -1582,10 +1582,10 @@
 |`onSafeBrowsingCheckResult`| Function | Erokhin Ilya | in progress | |
 |`onNavigationEntryCommitted`| Function | Erokhin Ilya | in progress | |
 |`onIntelligentTrackingPreventionResult`| Function | Erokhin Ilya | in progress | |
-|`javaScriptOnDocumentStart`| Function | Erokhin Ilya | in progress | |
-|`javaScriptOnDocumentEnd`| Function | Erokhin Ilya | in progress | |
+|`javaScriptOnDocumentStart`| Function | Erokhin Ilya | testskipped | |
+|`javaScriptOnDocumentEnd`| Function | Erokhin Ilya | testskipped | |
 |`layoutMode`| Function | Erokhin Ilya | testskipped | |
-|`nestedScroll`| Function | Erokhin Ilya | in progress | |
+|`nestedScroll`| Function | Erokhin Ilya | testskipped | |
 |`enableNativeEmbedMode`| Function | Erokhin Ilya | testskipped | |
 |`onNativeEmbedLifecycleChange`| Function | Erokhin Ilya | in progress | |
 |`onNativeEmbedVisibilityChange`| Function | Erokhin Ilya | in progress | |
