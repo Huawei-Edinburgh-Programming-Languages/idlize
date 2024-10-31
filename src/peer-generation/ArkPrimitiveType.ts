@@ -22,9 +22,9 @@ export class PrimitiveType {
     static LibraryPrefix = ""
     static OptionalPrefix = "Opt_"
     
-    static get UndefinedTag() { return PrimitiveType.Prefix + "TAG_UNDEFINED" }
-    static get UndefinedRuntime() { return PrimitiveType.Prefix + "RUNTIME_UNDEFINED" }
-    static get ObjectTag() { return PrimitiveType.Prefix + "TAG_OBJECT" }
+    static get UndefinedTag() { return PrimitiveType.Prefix.toUpperCase() + "TAG_UNDEFINED" }
+    static get UndefinedRuntime() { return PrimitiveType.Prefix.toUpperCase() + "RUNTIME_UNDEFINED" }
+    static get ObjectTag() { return PrimitiveType.Prefix.toUpperCase() + "TAG_OBJECT" }
 
     static String = new PrimitiveType(`String`, true)
     static Number = new PrimitiveType(`Number`, true)
