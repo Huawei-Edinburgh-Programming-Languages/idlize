@@ -457,7 +457,7 @@
 |`order`| Function |Lobah Mikhail| done|  |
 |*GridContainer*| *Component* |Lobah Mikhail| in progress|  |
 |`setGridContainerOptions`| Function |Lobah Mikhail| in progress|  |
-|*GridRow*| *Component* |Lobah Mikhail| in progress|  |
+|*GridRow*| *Component* |Lobah Mikhail| in progress| https://gitee.com/openharmony/arkui_ace_engine/issues/IB18ZV?from=project-issue |
 |`setGridRowOptions`| Function |Lobah Mikhail| in progress|  |
 |`onBreakpointChange`| Function |Lobah Mikhail| in progress|  |
 |`alignItems`| Function |Lobah Mikhail| in progress|  |
