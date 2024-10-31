@@ -452,15 +452,15 @@
 |`onSelect`|Function| Erokhin Ilya | done |  |
 |*GridCol*| *Component* | Lobah Mikhail| done|  |
 |`setGridColOptions`| Function |Lobah Mikhail| done|  |
-|`span`| Function |Lobah Mikhail| in progress|  |
+|`span`| Function |Lobah Mikhail| done|  |
 |`gridColOffset`| Function |Lobah Mikhail| done|  |
 |`order`| Function |Lobah Mikhail| done|  |
 |*GridContainer*| *Component* |Lobah Mikhail| in progress|  |
 |`setGridContainerOptions`| Function |Lobah Mikhail| in progress|  |
-|*GridRow*| *Component* |Lobah Mikhail| in progress| https://gitee.com/openharmony/arkui_ace_engine/issues/IB18ZV?from=project-issue |
-|`setGridRowOptions`| Function |Lobah Mikhail| in progress|  |
-|`onBreakpointChange`| Function |Lobah Mikhail| in progress|  |
-|`alignItems`| Function |Lobah Mikhail| in progress|  |
+|*GridRow*| *Component* |Lobah Mikhail| blocked| https://gitee.com/openharmony/arkui_ace_engine/issues/IB18ZV?from=project-issue |
+|`setGridRowOptions`| Function |Lobah Mikhail| blocked|  |
+|`onBreakpointChange`| Function |Lobah Mikhail| blocked|  |
+|`alignItems`| Function |Lobah Mikhail| blocked|  |
 |*Image*| *Component* | Korobeinikov Evgeny | in progress |  |
 |`setImageOptions`| Function | Berezin Kirill | in progress | |
 |`alt`| Function | Evstigneev Roman | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
