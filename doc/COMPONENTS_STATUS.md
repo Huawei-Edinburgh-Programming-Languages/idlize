@@ -469,8 +469,7 @@
 |`fillColor`| Function | Evstigneev Roman | done | |
 |`objectFit`| Function |Kirill Berezin| in progress | |
 |`objectRepeat`| Function | Evstigneev Roman | in progress | |
-|`autoResize`| Function | Evstigneev Roman | blocked UT | 
-https://gitee.com/openharmony/arkui_ace_engine/issues/IAW529 |
+|`autoResize`| Function | Evstigneev Roman | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IAW529 |
 |`renderMode`| Function | Evstigneev Roman | in progress | |
 |`dynamicRangeMode`| Function | Evstigneev Roman | blocked UT |  |
 |`interpolation`| Function | Evstigneev Roman | in progress | |
@@ -1014,7 +1013,7 @@ https://gitee.com/openharmony/arkui_ace_engine/issues/IAW529 |
 |`lineHeight`| Function |Samarin Sergey |in progress |  |
 |`textOverflow`| Function |Samarin Sergey |in progress |  |
 |`fontFamily`| Function |Samarin Sergey |in progress |  |
-|`maxLines`| Function | |Samarin Sergey |in progress |  |
+|`maxLines`| Function |Samarin Sergey |in progress |  |
 |`decoration`| Function |Samarin Sergey |in progress |  |
 |`letterSpacing`| Function |Samarin Sergey |in progress |  |
 |`textCase`| Function |Samarin Sergey |in progress |  |
@@ -1398,6 +1397,11 @@ https://gitee.com/openharmony/arkui_ace_engine/issues/IAW529 |
 |`invalidate`| Function |Vadim Voronov| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*ImageAnalyzerController*| *Class* |Vadim Voronov| in progress| |
 |`getImageAnalyzerSupportTypes`| Function |Vadim Voronov| in progress| |
+|*ListScroller*| *Class* |Morozov Sergey |in progress |  |
+|`getItemRectInGroup`| Function |Morozov Sergey |in progress |  |
+|`scrollToItemInGroup`| Function |Morozov Sergey |in progress |  |
+|`closeAllSwipeActions`| Function |Morozov Sergey |in progress |  |
+|`getVisibleListContentInfo`| Function |Morozov Sergey |in progress |  |
 |*RichEditorController*| *Class* |Dudkin Sergey| devDone|  |
 |`addTextSpan`| Function |Dudkin Sergey| devDone|  |
 |`addImageSpan`| Function |Dudkin Sergey| blocked| Ark_CustomObject :: implement setting pixel map aka inValue into options |
