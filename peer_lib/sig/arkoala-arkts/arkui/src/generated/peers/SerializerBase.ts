@@ -170,9 +170,9 @@ export class SerializerBase {
         const resourceId = ResourceManager.registerAndHold(callback)
         this.heldResources.push(resourceId)
         this.writeInt32(resourceId)
-        this.writePointer(NativeModule._GetManagedResourceHolder())
-        this.writePointer(NativeModule._GetManagedResourceReleaser())
-        this.writePointer(NativeModule._GetManagerCallbackCaller(kind.value))
+        this.writePointer(0)
+        this.writePointer(0)
+        this.writePointer(0)
     }
     writeCallbackResource(resource: CallbackResource) {
         this.writeInt32(resource.resourceId)
