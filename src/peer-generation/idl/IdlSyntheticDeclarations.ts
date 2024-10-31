@@ -83,14 +83,11 @@ export function getSyntheticDeclarationList(): idl.IDLEntry[] {
 
 export function makeSyntheticDeclarationsFiles(): Map<string, {dependencies: ImportFeature[], declarations: idl.IDLEntry[]}> {
     const files = new Map<string, {dependencies: ImportFeature[], declarations: idl.IDLEntry[]}>()
-    const imports: ImportFeature[] = [
-        {feature: "KStringPtr", module: "@koalaui/interop"}
-    ];
     for (const decl of syntheticDeclarations.values()) {
         if (!files.has(decl.filename))
             files.set(decl.filename, {dependencies: [], declarations: []})
         files.get(decl.filename)!.declarations.push(decl.node)
-        files.get(decl.filename)!.dependencies.push(...imports, ...decl.dependencies)
+        files.get(decl.filename)!.dependencies.push(...decl.dependencies)
     }
     return files
 }
