@@ -183,18 +183,18 @@
 |`animation`| Function | Erokhin Ilya | blocked |https://gitee.com/nikolay-igotti/idlize/issues/IAXHJP & https://gitee.com/nikolay-igotti/idlize/issues/IAOKLD|
 |`transition`| Function | | | |
 |`motionBlur`| Function | | | |
-|`brightness`| Function | | | |
-|`contrast`| Function | | | |
-|`grayscale`| Function | | | |
-|`colorBlend`| Function | | | |
-|`saturate`| Function | | | |
-|`sepia`| Function | | | |
-|`invert`| Function | | | |
-|`hueRotate`| Function | | | |
-|`useShadowBatching`| Function | | | |
+|`brightness`| Function | Skroba Gleb | in progress | |
+|`contrast`| Function | Skroba Gleb | in progress | |
+|`grayscale`| Function | Skroba Gleb | in progress | |
+|`colorBlend`| Function | Skroba Gleb | in progress | |
+|`saturate`| Function | Skroba Gleb | in progress | |
+|`sepia`| Function | Skroba Gleb | in progress | |
+|`invert`| Function | Skroba Gleb | in progress | |
+|`hueRotate`| Function | Skroba Gleb | in progress | |
+|`useShadowBatching`| Function | Skroba Gleb | in progress | |
 |`useEffect`| Function | | | |
-|`renderGroup`| Function | | | |
-|`freeze`| Function | | | |
+|`renderGroup`| Function | Skroba Gleb | in progress | |
+|`freeze`| Function | Skroba Gleb | in progress | |
 |`translate`| Function | Erokhin Ilya | done |  |
 |`scale`| Function | Erokhin Ilya | done |  |
 |`gridSpan`| Function | | | |
@@ -247,9 +247,9 @@
 |`geometryTransition`| Function | | | |
 |`stateStyles`| Function | | | |
 |`restoreId`| Function | | | |
-|`sphericalEffect`| Function | | | |
-|`lightUpEffect`| Function | | | |
-|`pixelStretchEffect`| Function | | | |
+|`sphericalEffect`| Function | Skroba Gleb | in progress | |
+|`lightUpEffect`| Function | Skroba Gleb | in progress | |
+|`pixelStretchEffect`| Function | Skroba Gleb | in progress | |
 |`accessibilityGroup`| Function | | | |
 |`accessibilityText`| Function | | | |
 |`accessibilityTextHint`| Function | | | |
@@ -281,14 +281,14 @@
 |`priorityGesture`| Function | Erokhin Ilya | blocked ArKoala |https://gitee.com/nikolay-igotti/idlize/issues/IARW2A|
 |`parallelGesture`| Function | Erokhin Ilya | blocked ArKoala |https://gitee.com/nikolay-igotti/idlize/issues/IARW2A|
 |`blur`| Function | Roman Sedaikin | in progress | |
-|`linearGradientBlur`| Function | | | |
-|`systemBarEffect`| Function | | | |
+|`linearGradientBlur`| Function | Skroba Gleb | in progress | |
+|`systemBarEffect`| Function | Skroba Gleb | in progress | |
 |`backdropBlur`| Function | | | |
 |`sharedTransition`|Function|Skroba Gleb | done |  |
 |`chainMode`| Function | | | |
 |`dragPreviewOptions`| Function | | | |
 |`overlay`| Function | Roman Sedaikin | in progress | |
-|`blendMode`| Function | | | |
+|`blendMode`| Function | Skroba Gleb | in progress | |
 |`advancedBlendMode`| Function | | | |
 |`bindPopup`| Function | | | |
 |`bindMenu`| Function | | | |
