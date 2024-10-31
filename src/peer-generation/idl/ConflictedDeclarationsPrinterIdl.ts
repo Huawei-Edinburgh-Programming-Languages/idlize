@@ -19,7 +19,7 @@ import { DeclarationNameConvertor } from "./IdlNameConvertor";
 import { convertDeclaration } from "../LanguageWriters/typeConvertor";
 import * as idl from "../../idl";
 import { Language } from "../../Language";
-import { ArkTSDeclConvertor } from "./InterfacePrinter";
+import { ArkTSDeclConvertor, getCommonImports } from "./InterfacePrinter";
 import {
     convertDeclToFeature,
     createDeclDependenciesCollector,
@@ -70,7 +70,7 @@ class ArkTSConflictedDeclarationsVisitorIdl extends ConflictedDeclarationsVisito
         const typeDependenciesCollector = createTypeDependenciesCollector(this.library)
         const declDependenciesCollector = createDeclDependenciesCollector(this.library, typeDependenciesCollector)
         const importsCollector = new ImportsCollector()
-        importsCollector.addFeature("KStringPtr", "@koalaui/interop")
+        getCommonImports(this.library.language).forEach(it => importsCollector.addFeature(it.feature, it.module))
         this.library.conflictedDeclarations.forEach(it => {
             declDependenciesCollector.convert(it).forEach(it => {
                 const dep = convertDeclToFeature(this.library, it)
