@@ -30,7 +30,11 @@ import { isBuilderClass } from "../BuilderClass";
 import { lazy, lazyThrow } from '../lazy';
 import { TypeNodeNameConvertor } from "../TypeNodeNameConvertor";
 import { IdlPeerLibrary } from '../idl/IdlPeerLibrary';
-import { convertDeclToFeature, isMaterialized, isSourceDecl } from '../idl/IdlPeerGeneratorVisitor';
+import {
+    convertDeclToFeature,
+    createDependencyFilter,
+    isMaterialized,
+} from '../idl/IdlPeerGeneratorVisitor';
 import { isSyntheticDeclaration, makeSyntheticDeclarationsFiles } from '../idl/IdlSyntheticDeclarations';
 import { collectProperties } from '../idl/StructPrinter';
 import { ProxyStatement } from '../LanguageWriters/LanguageWriter';
@@ -575,9 +579,11 @@ function canSerializeDependency(dep: idl.IDLEntry): dep is SerializableTarget  {
 }
 
 function getSerializers(library: IdlPeerLibrary): SerializableTarget[] {
+    const dependencyFilter = createDependencyFilter(library)
     const seenNames = new Set<string>()
     return library.orderedDependenciesToGenerate
         .filter(it => !PeerGeneratorConfig.ignoreSerialization.includes(it.name!))
+        .filter(it => dependencyFilter.shouldAdd(it))
         .filter(canSerializeDependency)
         .filter(it => !isParameterized(it))
         .filter(it => {

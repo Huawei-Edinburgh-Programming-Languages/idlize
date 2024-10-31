@@ -418,7 +418,7 @@ class JavaInterfacesVisitor extends DefaultInterfacesVisitor {
     }
 }
 
-class ArkTSDeclConvertor extends TSDeclConvertor {
+export class ArkTSDeclConvertor extends TSDeclConvertor {
     private typeNameConvertor = new ETSLanguageWriter(new IndentedPrinter(), this.peerLibrary)
     private seenInterfaceNames = new Set<string>()
 

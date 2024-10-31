@@ -652,7 +652,7 @@ class SyntheticDependencyConfigurableFilter implements DependencyFilter {
 }
 
 class ArkTSSyntheticDependencyConfigurableFilter extends SyntheticDependencyConfigurableFilter {
-    readonly IGNORE_TYPES = ["Resource"]
+    readonly IGNORE_TYPES = ["ArrayBuffer", "Uint8Array", "Uint8ClampedArray"]
     shouldAdd(node: idl.IDLEntry): boolean {
         //TODO: Needs to be implemented properly
         // if (node.name !== undefined && this.IGNORE_TYPES.includes(node.name) && idl.isTypedef(node)) {
@@ -961,6 +961,7 @@ export class IdlPeerProcessor {
                         || checkTSDeclarationMaterialized(it)
                         || isSyntheticDeclaration(it)
                 })
+                .filter(it => this.dependencyFilter.shouldAdd(it))
                 .map(it => convertDeclToFeature(this.library, it))
             // self-interface is not supported ArkTS
             if (idl.isInterface(decl) && this.library.language == Language.ARKTS) {
@@ -1154,19 +1155,18 @@ export class IdlPeerProcessor {
                 continue
 
             this.declDependenciesCollector.convert(dep).forEach(it => {
-                if (isSourceDecl(it) &&
-                    (PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it)))
-                {
-                    // Add a type that is not in the file declaration list
-                    if (Array.from(file.declarations.values()).find(decl => decl.name === it.name) === undefined) {
-                        file.importFeatures.push(convertDeclToFeature(this.library, it))
-                    }
+                // Add a type that is not in the file declaration list
+                if (Array.from(file.declarations.values()).find(decl => decl.name === it.name) === undefined
+                    && isSourceDecl(it)
+                    && (PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it))
+                    && this.dependencyFilter.shouldAdd(it)) {
+                    file.importFeatures.push(convertDeclToFeature(this.library, it))
                 }
             })
             this.serializeDepsCollector.convert(dep).forEach(it => {
-                if (isSourceDecl(it) &&
-                    PeerGeneratorConfig.needInterfaces)
-                {
+                if (isSourceDecl(it)
+                    && PeerGeneratorConfig.needInterfaces
+                    && this.dependencyFilter.shouldAdd(it)) {
                     file.serializeImportFeatures.push(convertDeclToFeature(this.library, it))
                 }
             })
@@ -1213,7 +1213,7 @@ export function convertDeclToFeature(library: IdlPeerLibrary, node: idl.IDLEntry
     }
 }
 
-function createTypeDependenciesCollector(library: IdlPeerLibrary): TypeDependenciesCollector {
+export function createTypeDependenciesCollector(library: IdlPeerLibrary): TypeDependenciesCollector {
     switch (library.language) {
         case Language.TS: return new ImportsAggregateCollector(library, false)
         case Language.ARKTS: return new ArkTSImportsAggregateCollector(library, true)
@@ -1224,7 +1224,9 @@ function createTypeDependenciesCollector(library: IdlPeerLibrary): TypeDependenc
     return new ImportsAggregateCollector(library, false)
 }
 
-function createDeclDependenciesCollector(library: IdlPeerLibrary, typeDependenciesCollector: TypeDependenciesCollector): DeclarationDependenciesCollector {
+export function createDeclDependenciesCollector(library: IdlPeerLibrary,
+                                                typeDependenciesCollector: TypeDependenciesCollector
+): DeclarationDependenciesCollector {
     switch (library.language) {
         case Language.TS: return new FilteredDeclarationCollector(library, typeDependenciesCollector)
         case Language.ARKTS: return new ArkTSDeclarationCollector(typeDependenciesCollector)
@@ -1247,7 +1249,7 @@ function createSerializeDeclDependenciesCollector(library: IdlPeerLibrary): Decl
     return new FilteredDeclarationCollector(library, new ImportsAggregateCollector(library, expandAliases))
 }
 
-function createDependencyFilter(library: IdlPeerLibrary): DependencyFilter {
+export function createDependencyFilter(library: IdlPeerLibrary): DependencyFilter {
     switch (library.language) {
         case Language.TS: return new SyntheticDependencyConfigurableFilter(library, { skipAnonymousInterfaces: true, skipCallbacks: true, skipTuples: true })
         case Language.ARKTS: return new ArkTSSyntheticDependencyConfigurableFilter(library, { skipAnonymousInterfaces: false, skipCallbacks: true, skipTuples: true })
