@@ -183,15 +183,15 @@
 |`animation`| Function | Erokhin Ilya | blocked |https://gitee.com/nikolay-igotti/idlize/issues/IAXHJP & https://gitee.com/nikolay-igotti/idlize/issues/IAOKLD|
 |`transition`| Function | | | |
 |`motionBlur`| Function | | | |
-|`brightness`| Function | Skroba Gleb | in progress | |
-|`contrast`| Function | Skroba Gleb | in progress | |
-|`grayscale`| Function | Skroba Gleb | in progress | |
-|`colorBlend`| Function | Skroba Gleb | in progress | |
-|`saturate`| Function | Skroba Gleb | in progress | |
-|`sepia`| Function | Skroba Gleb | in progress | |
-|`invert`| Function | Skroba Gleb | in progress | |
-|`hueRotate`| Function | Skroba Gleb | in progress | |
-|`useShadowBatching`| Function | Skroba Gleb | in progress | |
+|`brightness`| Function | Lobah Mikhail | in progress | |
+|`contrast`| Function | Lobah Mikhail | in progress | |
+|`grayscale`| Function | Lobah Mikhail | in progress | |
+|`colorBlend`| Function | Lobah Mikhail | in progress | |
+|`saturate`| Function | Lobah Mikhail | in progress | |
+|`sepia`| Function | Lobah Mikhail | in progress | |
+|`invert`| Function | Lobah Mikhail | in progress | |
+|`hueRotate`| Function | Lobah Mikhail | in progress | |
+|`useShadowBatching`| Function | Lobah Mikhail | in progress | |
 |`useEffect`| Function | | | |
 |`renderGroup`| Function | Skroba Gleb | in progress | |
 |`freeze`| Function | Skroba Gleb | in progress | |
