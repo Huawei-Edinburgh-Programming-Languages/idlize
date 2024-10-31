@@ -652,11 +652,9 @@ class ArkTSSyntheticDependencyConfigurableFilter extends SyntheticDependencyConf
     readonly IGNORE_TYPES = ["Resource"]
     shouldAdd(node: idl.IDLEntry): boolean {
         //TODO: Needs to be implemented properly
-        if (this.library.language == Language.ARKTS) {
-            if (node.name !== undefined && this.IGNORE_TYPES.includes(node.name) && idl.isTypedef(node)) {
-                return false
-            }
-        }
+        // if (node.name !== undefined && this.IGNORE_TYPES.includes(node.name) && idl.isTypedef(node)) {
+        //     return false
+        // }
         return super.shouldAdd(node)
     }
 }
