@@ -100,7 +100,7 @@ class NativeModuleVisitor {
 
         nativeModuleEmpty.writeMethodImplementation(new Method(name, parameters), (printer) => {
             printer.writePrintLog(name)
-            if (returnType !== undefined && idl.getIDLTypeName(returnType) !== idl.getIDLTypeName(idl.IDLVoidType)) {
+            if (returnType !== undefined && returnType !== idl.IDLVoidType) {
                 printer.writeStatement(printer.makeReturn(printer.makeString(getReturnValue(returnType))))
             }
         })
@@ -441,6 +441,7 @@ function getReturnValue(type: idl.IDLType): string {
         case "KString": case "String": case "string": return `"some string"`
         case "KBoolean": return "false"
         case "KFloat": return "0"
+        case "any": return "-1"
     }
     throw new Error(`Unknown return type: ${idl.getIDLTypeName(type)}`)
 }
