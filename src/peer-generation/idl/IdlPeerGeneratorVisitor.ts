@@ -710,12 +710,12 @@ class PeersGenerator {
     {
         if (PeerGeneratorConfig.ignorePeerMethod.includes(method.name!))
             return
-        const isCallSignature = !idl.isMethod(method)
         // Some method have other parents as part of their names
         // Such as the ones coming from the friend interfaces
         // E.g. ButtonInterface instead of ButtonAttribute
         const originalParentName = parentName ?? peer.originalClassName!
-        const methodName = isCallSignature ? `set${peer.componentName}Options` : method.name
+        const CallSignature = isCallSignature(method)
+        const methodName = CallSignature ? `set${peer.componentName}Options` : method.name
         const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param, maybeCallback))
         const declarationTargets = method.parameters.map(param => {
             const decl = this.toDeclaration(param.type ?? throwException(`Expected a type for ${param.name} in ${method.name}`))
@@ -728,8 +728,8 @@ class PeersGenerator {
             declarationTargets,
             argConvertors,
             generateRetConvertor(method.returnType),
-            isCallSignature,
-            new Method(methodName, signature, method.isStatic ? [MethodModifier.STATIC] : []))
+            CallSignature,
+            new Method(methodName!, signature, method.isStatic ? [MethodModifier.STATIC] : []))
     }
 
     private toDeclaration(type: idl.IDLType): idl.IDLEntry { 
@@ -1302,7 +1302,7 @@ export function isSourceDecl(node: idl.IDLEntry): boolean {
 }
 
 function isCallSignature(method: idl.IDLCallable | idl.IDLMethod | idl.IDLConstructor): boolean {
-    return !idl.isMethod(method);
+    return !idl.isMethod(method)
 }
 
 function generateSignature(
@@ -1311,7 +1311,7 @@ function generateSignature(
     className?: string
 ): NamedMethodSignature {
     let returnType
-
+    
     if (className === "IMonitor" && method.name === "value") { 
         // workaround for generic returnType
         // value<T>(path?: string): IMonitorValue<T> | undefined;
@@ -1322,7 +1322,7 @@ function generateSignature(
         returnType = idl.IDLVoidType
     }
     else if (
-        isCallSignature(method) ||
+        isCallSignature(method) || 
         idl.isIDLTypeName(method.returnType!, 'T') ||
         idl.isConstructor(method) ||
         !method.isStatic && method.returnType && className && idl.isIDLTypeName(method.returnType, className)
