@@ -457,10 +457,10 @@
 |`order`| Function |Lobah Mikhail| done|  |
 |*GridContainer*| *Component* |Lobah Mikhail| in progress|  |
 |`setGridContainerOptions`| Function |Lobah Mikhail| in progress|  |
-|*GridRow*| *Component* |Lobah Mikhail| blocked| https://gitee.com/openharmony/arkui_ace_engine/issues/IB18ZV?from=project-issue |
-|`setGridRowOptions`| Function |Lobah Mikhail| blocked|  |
+|*GridRow*| *Component* |Lobah Mikhail| blocked test| https://gitee.com/openharmony/arkui_ace_engine/issues/IB18ZV?from=project-issue |
+|`setGridRowOptions`| Function |Lobah Mikhail| blocked test|  |
 |`onBreakpointChange`| Function |Lobah Mikhail| blocked|  |
-|`alignItems`| Function |Lobah Mikhail| blocked|  |
+|`alignItems`| Function |Lobah Mikhail| in progress|  |
 |*Image*| *Component* | Korobeinikov Evgeny | in progress |  |
 |`setImageOptions`| Function | Berezin Kirill | in progress | |
 |`alt`| Function | Evstigneev Roman | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
