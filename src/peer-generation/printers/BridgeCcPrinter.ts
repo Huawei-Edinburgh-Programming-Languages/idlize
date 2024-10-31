@@ -209,6 +209,7 @@ class BridgeCcVisitor {
         const suffix = this.generateCMacroSuffix(method)
         this.generatedApi.print(`KOALA_INTEROP_${suffix}(${macroArgs})`)
         this.generatedApi.print(` `)
+        this.library.loopCounter.reset()
     }
 
     printCustomApiMethod(c: CustomAPI, m: Method) {
@@ -242,6 +243,7 @@ class BridgeCcVisitor {
         const comma = args.length > 0 ? ", " : ""
         const CTX = c.withContext ? "_CTX" : ""
         this.customApi.print(`KOALA_INTEROP${CTX}_${v}${size}(${capitalizedName}${comma}${args.map(it => getIDLTypeName(it)).join(", ")})\n`)
+        this.library.loopCounter.reset()
     }
 
     print(): void {

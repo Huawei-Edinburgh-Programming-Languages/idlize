@@ -185,6 +185,7 @@ class PeerFileVisitor {
     protected printPeerMethod(method: PeerMethod | IdlPeerMethod, printer: LanguageWriter) {
         this.library.setCurrentContext(`${method.originalParentName}.${method.overloadedName}`)
         writePeerMethod(printer, method, method instanceof IdlPeerMethod, this.printerContext, this.dumpSerialized, "Attribute", "this.peer.ptr")
+        this.library.loopCounter.reset()
         this.library.setCurrentContext(undefined)
     }
 

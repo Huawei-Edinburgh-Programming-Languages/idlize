@@ -25,6 +25,7 @@ import { IndentedPrinter } from '../IndentedPrinter';
 import { LanguageWriter } from './LanguageWriters';
 import * as idl from '../idl'
 import { ReferenceResolver } from './ReferenceResolver';
+import {LoopCounter} from "../util";
 
 export type PeerLibraryOutput = {
     outputC: string[]
@@ -75,6 +76,7 @@ export class PeerLibrary {
     readonly componentsDeclarations: ComponentDeclaration[] = []
     readonly conflictedDeclarations: Set<ts.Declaration> = new Set()
     readonly arrayTypeCheckeres: string[] = []
+    readonly loopCounter = new LoopCounter()
 
     findPeerByComponentName(componentName: string): PeerClass | undefined {
         for (const file of this.files)

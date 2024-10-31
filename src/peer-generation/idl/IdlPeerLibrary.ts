@@ -19,7 +19,7 @@ import { MaterializedClass } from "../Materialized";
 import { IdlComponentDeclaration, isConflictingDeclaration, isMaterialized } from './IdlPeerGeneratorVisitor';
 import { IdlPeerFile } from "./IdlPeerFile";
 import { CJTypeNameConvertor } from './IdlNameConvertor';
-import { capitalize, isDefined } from '../../util';
+import {capitalize, isDefined, LoopCounter} from '../../util';
 import { AggregateConvertor, ArrayConvertor, CallbackConvertor, ClassConvertor, DateConvertor, EnumConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, MapConvertor, MaterializedClassConvertor, OptionConvertor,  StringConvertor, TupleConvertor, TypeAliasConvertor, UnionConvertor } from './IdlArgConvertors';
 import { PrimitiveType } from "../ArkPrimitiveType"
 import { DependencySorter } from './DependencySorter';
@@ -73,6 +73,7 @@ export class IdlPeerLibrary implements ReferenceResolver {
     readonly conflictedDeclarations: Set<idl.IDLEntry> = new Set()
     readonly nameConvertorInstance: IdlTypeNameConvertor = createTypeNameConvertor(this.language, this)
     readonly seenArrayTypes: Map<string, idl.IDLType> = new Map()
+    readonly loopCounter = new LoopCounter()
 
     readonly continuationCallbacks: idl.IDLCallback[] = []
     readonly syntheticEntries: idl.IDLEntry[] = []

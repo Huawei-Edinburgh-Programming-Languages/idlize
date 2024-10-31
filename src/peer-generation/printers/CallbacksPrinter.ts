@@ -154,6 +154,7 @@ class DeserializeCallbacksVisitor {
             }
             writer.writeExpressionStatement(writer.makeMethodCall(`${resourceName}`, `call`, argsNames.map(it => writer.makeString(it))))
         })
+        this.library.loopCounter.reset()
     }
 
     private writeInteropImplementation(callbacks: idl.IDLCallback[]): void {
@@ -170,6 +171,7 @@ class DeserializeCallbacksVisitor {
             writer.popIndent()
             writer.print(`}`)
         })
+        this.library.loopCounter.reset()
     }
 
     visit(): void {

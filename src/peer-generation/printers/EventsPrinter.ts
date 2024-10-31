@@ -527,6 +527,7 @@ interface PeerEvent {
 
         this.printer.popIndent()
         this.printer.print('}')
+        this.library.loopCounter.reset()
     }
 
     private printProperties(infos: (CallbackInfo | IdlCallbackInfo)[]) {

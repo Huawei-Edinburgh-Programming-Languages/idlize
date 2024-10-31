@@ -114,6 +114,7 @@ class NativeModuleRecorderVisitor {
             }
         })
         clazz.setGenerationContext(undefined)
+        this.library.loopCounter.reset()
     }
 
     printOtherField() {

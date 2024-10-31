@@ -198,6 +198,7 @@ class IdlSerializerPrinter {
                 })
             })
         this.library.setCurrentContext(undefined)
+        this.library.loopCounter.reset()
     }
 
     print(prefix: string, declarationPath?: string) {
@@ -346,6 +347,7 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
             writer.writeStatement(writer.makeReturn(
                 writer.makeCast(writer.makeString("value"), idl.toIDLType(name))))
         })
+        this.library.loopCounter.reset()
     }
 
     private generateCallbackDeserializer(target: idl.IDLCallback): void {

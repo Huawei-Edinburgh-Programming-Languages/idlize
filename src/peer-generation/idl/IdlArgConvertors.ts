@@ -612,12 +612,6 @@ export class ArrayConvertor extends BaseArgConvertor { //
         super(idl.createContainerType('sequence', [elementType]), [RuntimeType.OBJECT], false, true, param)
         this.elementConvertor = library.typeConvertor(param, elementType)
     }
-    static loopCounterNumber: number = 0;
-    private nextLoopCounter(): string {
-        let result = "i" + ArrayConvertor.loopCounterNumber.toString();
-        ArrayConvertor.loopCounterNumber++;
-        return result;
-    }
     convertorArg(param: string, writer: LanguageWriter): string {
         throw new Error("Must never be used")
     }
@@ -626,7 +620,7 @@ export class ArrayConvertor extends BaseArgConvertor { //
         printer.writeMethodCall(`${param}Serializer`, "writeInt8", [
             printer.castToInt(printer.makeRuntimeTypeGetterCall(value).asString(), 8)])
         const valueLength = printer.makeArrayLength(value).asString()
-        const loopCounter = this.nextLoopCounter()
+        const loopCounter = this.library.loopCounter.getNextCounter()
         printer.writeMethodCall(`${param}Serializer`, "writeInt32", [printer.castToInt(valueLength, 32)])
         printer.writeStatement(printer.makeLoop(loopCounter, valueLength))
         printer.pushIndent()
@@ -640,7 +634,7 @@ export class ArrayConvertor extends BaseArgConvertor { //
         // Array length.
         const runtimeType = `runtimeType`
         const arrayLength = `arrayLength`
-        const loopCounter = this.nextLoopCounter()
+        const loopCounter = this.library.loopCounter.getNextCounter()
         const arrayAccessor = this.getObjectAccessor(printer.language, value)
         const accessor = this.getObjectAccessor(printer.language, arrayAccessor, {index: `[${loopCounter}]`})
         const thenStatement = new BlockStatement([

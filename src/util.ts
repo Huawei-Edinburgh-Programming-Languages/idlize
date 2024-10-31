@@ -23,6 +23,21 @@ export interface NameWithType {
     type?: ts.TypeNode
 }
 
+export class LoopCounter {
+    private readonly name: string = "i";
+    private startNumber: number = 0;
+    private currentNumber: number = this.startNumber;
+    constructor() {}
+    public getNextCounter(): string {
+        let nextCounter = this.name + this.currentNumber.toString();
+        this.currentNumber++;
+        return nextCounter;
+    }
+    public reset(): void {
+        this.currentNumber = this.startNumber;
+    }
+}
+
 /** True if this is visible outside this file, false otherwise */
 export function isNodePublic(node: ts.Node): boolean {
     return (ts.getCombinedModifierFlags(node as ts.Declaration) & ts.ModifierFlags.Public) !== 0
