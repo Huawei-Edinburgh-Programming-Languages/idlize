@@ -405,7 +405,7 @@ export class IdlPeerLibrary implements ReferenceResolver {
         new StructPrinter(this).generateStructs(structs, typedefs, writeToString)
     }
 
-    computeTargetName(target: idl.IDLEntry, optional: boolean, idlPrefix: string = PrimitiveType.Prefix + this.libraryPrefix): string {
+    computeTargetName(target: idl.IDLEntry, optional: boolean, idlPrefix: string = PrimitiveType.Prefix): string {
         return this.computeTargetNameImpl(target, optional, idlPrefix)///inline
     }
 
@@ -443,7 +443,7 @@ export class IdlPeerLibrary implements ReferenceResolver {
                 case idl.IDLBooleanType: name = "Boolean"; break
                 default: name = capitalize(idl.getIDLTypeName(target)); break
             }
-            return (optional ? prefix : PrimitiveType.Prefix) + name
+            return (optional ? prefix : idlPrefix) + name
         }
         if (idl.isAnonymousInterface(target)) {
             return target.name

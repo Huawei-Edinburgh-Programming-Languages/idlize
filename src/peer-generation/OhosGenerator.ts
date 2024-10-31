@@ -513,8 +513,9 @@ class OHOSVisitor {
         let toStringsPrinter = createLanguageWriter(Language.CPP, this.library)
         new StructPrinter(this.library).generateStructs(this.hWriter, this.hWriter.printer, toStringsPrinter)
         this.cppWriter.concat(toStringsPrinter)
-        writeSerializer(this.library, this.cppWriter)
-        writeDeserializer(this.library, this.cppWriter)
+        const prefix = PrimitiveType.Prefix + this.library.libraryPrefix
+        writeSerializer(this.library, this.cppWriter, prefix)
+        writeDeserializer(this.library, this.cppWriter, prefix)
         
         let writer = new CppLanguageWriter(new IndentedPrinter(), this.library)
         this.writeModifiers(writer)

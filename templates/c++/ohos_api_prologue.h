@@ -93,7 +93,6 @@ typedef struct OH_Void {
 } OH_Void;
 
 // TODO: wrong, provide real definitions.
-typedef void* OH_ArrayBuffer;
 typedef void* OH_DataView;
 
 typedef struct OH_AnyAPI {

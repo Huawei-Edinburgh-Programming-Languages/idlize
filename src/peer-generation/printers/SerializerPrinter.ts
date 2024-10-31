@@ -177,7 +177,7 @@ class IdlSerializerPrinter {
         private readonly writer: LanguageWriter,
     ) {}
 
-    private generateInterfaceSerializer(target: idl.IDLInterface, prefix?: string) {
+    private generateInterfaceSerializer(target: idl.IDLInterface, prefix: string = "") {
         const name = this.library.computeTargetName(target, false, prefix)
         const methodName = target.name
         this.library.setCurrentContext(`write${methodName}()`)
@@ -200,7 +200,7 @@ class IdlSerializerPrinter {
         this.library.setCurrentContext(undefined)
     }
 
-    print(prefix?: string, declarationPath?: string) {
+    print(prefix: string, declarationPath?: string) {
         const className = "Serializer"
         const superName = `${className}Base`
         let ctorSignature: NamedMethodSignature | undefined = undefined
@@ -210,6 +210,7 @@ class IdlSerializerPrinter {
                 break;
             case Language.CPP:
                 ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [idl.createReferenceType("uint8_t*"), idl.createReferenceType("CallbackResourceHolder*")], ["data", "resourceHolder"], [undefined, `nullptr`])
+                if (prefix == "") prefix = PrimitiveType.Prefix + this.library.libraryPrefix
                 break;
             case Language.JAVA:
                 ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [], [])
@@ -312,7 +313,7 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
         private readonly writer: LanguageWriter,
     ) {}
 
-    private generateInterfaceDeserializer(target: idl.IDLInterface, prefix?: string) {
+    private generateInterfaceDeserializer(target: idl.IDLInterface, prefix: string = "") {
         const name = this.library.computeTargetName(target, false, prefix)
         const methodName = this.library.computeTargetName(target, false, "")
         const type = idl.toIDLType(name)
@@ -435,7 +436,7 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
         })
     }
 
-    print(prefix?: string, declarationPath?: string) {///converge w/ Ts printers
+    print(prefix: string, declarationPath?: string) {///converge w/ Ts printers
         const className = "Deserializer"
         const superName = `${className}Base`
         let ctorSignature: NamedMethodSignature | undefined = undefined
@@ -462,13 +463,13 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
     }
 }
 
-export function writeSerializer(library: PeerLibrary | IdlPeerLibrary, writer: LanguageWriter, prefix?: string, declarationPath?: string) {
+export function writeSerializer(library: PeerLibrary | IdlPeerLibrary, writer: LanguageWriter, prefix: string, declarationPath?: string) {
     const printer = library instanceof PeerLibrary
         ? new SerializerPrinter(library, writer) : new IdlSerializerPrinter(library, writer)
     printer.print(prefix, declarationPath)
 }
 
-export function writeDeserializer(library: PeerLibrary | IdlPeerLibrary, writer: LanguageWriter, prefix?: string, declarationPath?: string) {
+export function writeDeserializer(library: PeerLibrary | IdlPeerLibrary, writer: LanguageWriter, prefix: string, declarationPath?: string) {
     const printer = library instanceof PeerLibrary
         ? new DeserializerPrinter(library as PeerLibrary, writer) : new IdlDeserializerPrinter(library, writer)
     printer.print(prefix, declarationPath)

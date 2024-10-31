@@ -131,7 +131,9 @@ export class StructPrinter {
                         concreteDeclarations.print(`void *handle;`) // avoid empty structs
                     }
                     properties.forEach(it => {
-                        concreteDeclarations.print(`${this.library.computeTargetName(it.type, it.isOptional)} ${concreteDeclarations.escapeKeyword(it.name)};`)
+                        // TODO Change to
+                        // concreteDeclarations.print(`${this.library.computeTargetName(it.type, it.isOptional)} ${concreteDeclarations.escapeKeyword(it.name)};`)
+                        concreteDeclarations.print(`${this.library.getTypeName(it.type, it.isOptional)} ${concreteDeclarations.escapeKeyword(it.name)};`)
                     })
                 } else if (idl.isContainerType(target)) {
                     let fieldNames: string[] = []

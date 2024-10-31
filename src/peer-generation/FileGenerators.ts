@@ -384,9 +384,9 @@ export function makeCSerializers(library: PeerLibrary | IdlPeerLibrary, structs:
     const serializers = createLanguageWriter(Language.CPP, library instanceof IdlPeerLibrary ? library : createEmptyReferenceResolver())
     const writeToString = createLanguageWriter(Language.CPP, library instanceof IdlPeerLibrary ? library : createEmptyReferenceResolver())
     serializers.print("\n// Serializers\n")
-    writeSerializer(library, serializers)
+    writeSerializer(library, serializers, "")
     serializers.print("\n// Deserializers\n")
-    writeDeserializer(library, serializers)
+    writeDeserializer(library, serializers, "")
     library.generateStructs(structs, typedefs, writeToString)
 
     return `
