@@ -145,7 +145,7 @@
 |`backgroundImageSize`| Function | Erokhin Ilya | done |  |
 |`backgroundImagePosition`| Function | Erokhin Ilya | done |  |
 |`backgroundEffect`| Function | Skroba Gleb | done |  |
-|`backgroundImageResizable`| Function | Skroba Gleb | in progress | |
+|`backgroundImageResizable`| Function | Skroba Gleb | done | |
 |`foregroundEffect`| Function | Skroba Gleb | done |  |
 |`visualEffect`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`backgroundFilter`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
@@ -158,11 +158,11 @@
 |`borderColor`| Function | Roman Sedaikin | in progress | |
 |`borderRadius`| Function | Roman Sedaikin | in progress | |
 |`borderImage`| Function | Roman Sedaikin | in progress | |
-|`outline`| Function | Skroba Gleb | in progress | |
-|`outlineStyle`| Function | Skroba Gleb | in progress | |
-|`outlineWidth`| Function | Skroba Gleb | in progress | |
-|`outlineColor`| Function | Skroba Gleb | in progress | |
-|`outlineRadius`| Function | Skroba Gleb | in progress | |
+|`outline`| Function | Skroba Gleb | done | |
+|`outlineStyle`| Function | Skroba Gleb | done | |
+|`outlineWidth`| Function | Skroba Gleb | done | |
+|`outlineColor`| Function | Skroba Gleb | done | |
+|`outlineRadius`| Function | Skroba Gleb | done | |
 |`foregroundColor`| Function | Roman Sedaikin | in progress | |
 |`onClick`| Function | Roman Sedaikin | in progress | |
 |`onHover`| Function | | | |
@@ -262,7 +262,7 @@
 |`reuseId`| Function | | | |
 |`renderFit`| Function | | | |
 |`gestureModifier`| Function | | | |
-|`backgroundBrightness`| Function | Skroba Gleb | in progress | |
+|`backgroundBrightness`| Function | Skroba Gleb | done | |
 |`onGestureJudgeBegin`| Function | | | |
 |`onGestureRecognizerJudgeBegin`| Function | | | |
 |`shouldBuiltInRecognizerParallelWith`| Function | | | |
@@ -273,7 +273,7 @@
 |`expandSafeArea`| Function | | | |
 |`background`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`backgroundImage`| Function | Erokhin Ilya | blocked |https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR|
-|`backgroundBlurStyle`| Function | Skroba Gleb | in progress |  |
+|`backgroundBlurStyle`| Function | Skroba Gleb | done |  |
 |`foregroundBlurStyle`| Function | Roman Sedaikin | in progress | |
 |`focusScopeId`| Function | | | |
 |`focusScopePriority`| Function | | | |
