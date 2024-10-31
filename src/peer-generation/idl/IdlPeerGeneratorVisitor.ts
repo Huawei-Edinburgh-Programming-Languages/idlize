@@ -47,7 +47,7 @@ import { ARK_CUSTOM_OBJECT, javaCustomTypeMapping } from "../printers/lang/Java"
 import { Language } from "../../Language"
 import { createInterfaceDeclName } from "../TypeNodeNameConvertor";
 import { cjCustomTypeMapping } from "../printers/lang/Cangjie"
-import { IDLEntry, IDLEnumType, IDLType, maybeOptional } from "../../idl";
+import { IDLEntry, IDLEnumType, IDLType, IDLUndefinedType, maybeOptional } from "../../idl";
 
 /**
  * Theory of operations.
@@ -1312,10 +1312,14 @@ function generateSignature(
 ): NamedMethodSignature {
     let returnType
 
-    if (className == "IMonitor"){ 
+    if (className === "IMonitor" && method.name === "value") { 
         // workaround for generic returnType
         // value<T>(path?: string): IMonitorValue<T> | undefined;
         returnType = idl.IDLThisType 
+    }
+    else if (idl.isUndefinedType(method.returnType!))
+    {
+        returnType = idl.IDLVoidType
     }
     else if (
         isCallSignature(method) ||
@@ -1335,7 +1339,6 @@ function generateSignature(
         method.parameters.map(it => it.name)
     )
 }
-}  
 
 function getMethodIndex(clazz: idl.IDLInterface, method: idl.IDLSignature | undefined): number {
     if (!method || !method.name) {
