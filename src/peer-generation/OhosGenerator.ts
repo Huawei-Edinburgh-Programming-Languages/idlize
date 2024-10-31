@@ -532,7 +532,7 @@ class OHOSVisitor {
         if (this.library.files.length == 0)
             throw new Error("No files in library")
 
-        this.libraryName = this.library.files[0].packageName().toUpperCase()
+        this.libraryName = this.library.files.filter(f => !f.isPredefined)[0].packageName().toUpperCase()
         this.library.name = this.libraryName
 
         console.log(`GENERATE OHOS API for ${this.libraryName}`)
