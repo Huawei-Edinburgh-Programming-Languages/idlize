@@ -246,7 +246,10 @@ class ImportsAggregateCollector extends TypeDependenciesCollector {
         const result = [...realDeclarations]
 
         // such declarations are not processed by FilteredDeclarationCollector
-        result.push(...syntheticDeclarations.flatMap(decl => convertDeclaration(this.declarationCollector, decl)))
+        result.push(
+            ...syntheticDeclarations.filter(it => idl.isAnonymousInterface(it)),
+            ...syntheticDeclarations.flatMap(decl => convertDeclaration(this.declarationCollector, decl))
+        )
 
         for (const decl of realDeclarations) {
             // expand type aliaces because we have serialization inside peers methods
@@ -1154,7 +1157,10 @@ export class IdlPeerProcessor {
                 if (isSourceDecl(it) &&
                     (PeerGeneratorConfig.needInterfaces || isSyntheticDeclaration(it)))
                 {
-                    file.importFeatures.push(convertDeclToFeature(this.library, it))
+                    // Add a type that is not in the file declaration list
+                    if (Array.from(file.declarations.values()).find(decl => decl.name === it.name) === undefined) {
+                        file.importFeatures.push(convertDeclToFeature(this.library, it))
+                    }
                 }
             })
             this.serializeDepsCollector.convert(dep).forEach(it => {
@@ -1267,6 +1273,7 @@ export function isConflictingDeclaration(decl: idl.IDLEntry): boolean {/// stole
     // if (idl.isEnum(decl) && decl.name === 'GestureType') return true
     // no return type in some methods
     if (idl.isInterface(decl) && decl.name === 'LayoutChild') return true
+    if (idl.isInterface(decl) && decl.name === 'TerminationInfo') return true
     return false
 }
 
