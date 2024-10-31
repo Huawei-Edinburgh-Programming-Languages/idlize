@@ -539,6 +539,7 @@ class OHOSVisitor {
         console.log(`GENERATE OHOS API for ${this.libraryName}`)
 
         this.library.files.forEach(file => {
+            if (file.isPredefined) return
             file.entries.forEach(entry => {
                 this.requestTypes(entry)
                 if (isInterface(entry) || isClass(entry)) {

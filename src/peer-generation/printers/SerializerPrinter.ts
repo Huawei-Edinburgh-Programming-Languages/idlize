@@ -613,7 +613,7 @@ function printIdlImports(library: IdlPeerLibrary, serializerDeclarations: Serial
                 }
             }
             serializerDeclarations.filter(it => it.fileName)
-                .filter(it => !idl.isCallback(it))
+                .filter(it => !idl.isCallback(it) && !(library.files.find(f => f.originalFilename == it.fileName)?.isPredefined))
                 .map(makeFeature)
                 .forEach(it => collector.addFeature(it.feature, it.module))
         }
