@@ -77,24 +77,24 @@
 |`setCanvasOptions`| Function |Vadim Voronov | blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`onReady`| Function |Vadim Voronov | done |  |
 |`enableAnalyzer`| Function |Vadim Voronov | done |  |
-|*Calendar*| *Component* | Maksimov Nikita | in progress|  |
-|`setCalendarOptions`| Function | Maksimov Nikita | in progress|  |
-|`showLunar`| Function | Maksimov Nikita | in progress|  |
-|`showHoliday`| Function | Maksimov Nikita | in progress|  |
-|`needSlide`| Function | Maksimov Nikita | in progress|  |
-|`startOfWeek`| Function | Maksimov Nikita | in progress|  |
-|`offDays`| Function | Maksimov Nikita | in progress|  |
-|`direction`| Function | Maksimov Nikita | in progress|  |
-|`currentDayStyle`| Function | Maksimov Nikita | in progress|  |
-|`nonCurrentDayStyle`| Function | Maksimov Nikita | in progress|  |
-|`todayStyle`| Function | Maksimov Nikita | in progress|  |
-|`weekStyle`| Function | Maksimov Nikita | in progress|  |
-|`workStateStyle`| Function | Maksimov Nikita | in progress|  |
-|`onSelectChange`| Function | Maksimov Nikita | in progress|  |
-|`onRequestData`| Function | Maksimov Nikita | in progress|  |
-|*CalendarController*| *Class* |Maksimov Nikita | in progress|  |
-|`backToToday`| Function |Maksimov Nikita | in progress|  |
-|`goTo`| Function |Maksimov Nikita | in progress|  |
+|*Calendar*| *Component* | Maksimov Nikita | in progress |  |
+|`setCalendarOptions`| Function | Maksimov Nikita | in progress |  |
+|`showLunar`| Function | Maksimov Nikita | in progress |  |
+|`showHoliday`| Function | Maksimov Nikita | in progress |  |
+|`needSlide`| Function | Maksimov Nikita | in progress |  |
+|`startOfWeek`| Function | Maksimov Nikita | in progress |  |
+|`offDays`| Function | Maksimov Nikita | in progress |  |
+|`direction`| Function | Maksimov Nikita | in progress |  |
+|`currentDayStyle`| Function | Maksimov Nikita | in progress |  |
+|`nonCurrentDayStyle`| Function | Maksimov Nikita | in progress |  |
+|`todayStyle`| Function | Maksimov Nikita | in progress |  |
+|`weekStyle`| Function | Maksimov Nikita | in progress |  |
+|`workStateStyle`| Function | Maksimov Nikita | in progress |  |
+|`onSelectChange`| Function | Maksimov Nikita | blocked Arkoala events |  |
+|`onRequestData`| Function | Maksimov Nikita | blocked Arkoala events |  |
+|*CalendarController*| *Class* |Maksimov Nikita | in progress |  |
+|`backToToday`| Function |Maksimov Nikita | in progress |  |
+|`goTo`| Function |Maksimov Nikita | in progress |  |
 |*Checkbox*| *Component* | Andrey Khudenkikh | in progress |  |
 |`setCheckboxOptions`| Function | Andrey Khudenkikh | done |  |
 |`select`| Function | Andrey Khudenkikh | done |  |
