@@ -35,7 +35,7 @@ export class PeerGeneratorConfig {
         "ContentSlot",
     ]
 
-    public static ignoreSerialized = [
+    private static ignoreSerialized = [
             "IMonitor"
     ]
 
