@@ -464,30 +464,31 @@
 |*Image*| *Component* | Korobeinikov Evgeny | in progress |  |
 |`setImageOptions`| Function | Berezin Kirill | in progress | |
 |`alt`| Function | Evstigneev Roman | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
-|`matchTextDirection`| Function | Evstigneev Roman | in progress | |
-|`fitOriginalSize`| Function | Evstigneev Roman | in progress | |
+|`matchTextDirection`| Function | Evstigneev Roman | done | |
+|`fitOriginalSize`| Function | Evstigneev Roman | done | |
 |`fillColor`| Function | Evstigneev Roman | done | |
 |`objectFit`| Function |Kirill Berezin| in progress | |
-|`objectRepeat`| Function | Evstigneev Roman | in progress | |
-|`autoResize`| Function | Evstigneev Roman | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IAW529 |
-|`renderMode`| Function | Evstigneev Roman | in progress | |
-|`dynamicRangeMode`| Function | Evstigneev Roman | blocked UT |  |
-|`interpolation`| Function | Evstigneev Roman | in progress | |
-|`sourceSize`| Function | Evstigneev Roman | in progress | |
-|`syncLoad`| Function | Evstigneev Roman | in progress | |
+|`objectRepeat`| Function | Evstigneev Roman | done | |
+|`autoResize`| Function | Evstigneev Roman | blocked UT | 
+https://gitee.com/openharmony/arkui_ace_engine/issues/IAW529 |
+|`renderMode`| Function | Evstigneev Roman | done | |
+|`dynamicRangeMode`| Function | Evstigneev Roman | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1IEY |
+|`interpolation`| Function | Evstigneev Roman | done | |
+|`sourceSize`| Function | Evstigneev Roman | merged without UT | |
+|`syncLoad`| Function | Evstigneev Roman | done | |
 |`colorFilter`| Function | Evstigneev Roman | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH and https://gitee.com/nikolay-igotti/idlize/issues/IB0Y72 |
-|`copyOption`| Function | Evstigneev Roman | in progress | |
-|`draggable`| Function | Evstigneev Roman | in progress | |
+|`copyOption`| Function | Evstigneev Roman | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1IL0 |
+|`draggable`| Function | Evstigneev Roman | merged without UT | need set default value in the theme |
 |`pointLight`| Function | Evstigneev Roman | in progress | |
-|`edgeAntialiasing`| Function | Evstigneev Roman | in progress | |
-|`onComplete`| Function | Evstigneev Roman | in progress | |
+|`edgeAntialiasing`| Function | Evstigneev Roman | merged without UT | |
+|`onComplete`| Function | Evstigneev Roman | merged without UT | |
 |`onError`| Function | Evstigneev Roman | done | |
 |`onFinish`| Function | Evstigneev Roman | done | |
-|`enableAnalyzer`| Function | Evstigneev Roman | in progress | |
+|`enableAnalyzer`| Function | Evstigneev Roman | done | |
 |`analyzerConfig`| Function | Evstigneev Roman | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB0Y51 |
 |`resizable`| Function | Evstigneev Roman | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB0Y7V |
-|`privacySensitive`| Function | Evstigneev Roman | in progress | |
-|`enhancedImageQuality`| Function | Evstigneev Roman | in progress | |
+|`privacySensitive`| Function | Evstigneev Roman | done | |
+|`enhancedImageQuality`| Function | Evstigneev Roman | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB1ISB |
 |*ImageSpan*| *Component* |Politov Mikhail | in progress |  |
 |`setImageSpanOptions`| Function |Politov Mikhail | in progress |  |
 |`verticalAlign`| Function |Politov Mikhail | in progress |  |
