@@ -1104,7 +1104,7 @@ https://gitee.com/openharmony/arkui_ace_engine/issues/IAW529 |
 |`fontStyle`| Function |Pavelyev Ivan|in progress|  |
 |`fontWeight`| Function |Pavelyev Ivan|in progress|  |
 |`fontFamily`| Function |Pavelyev Ivan| blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1JRR |
-|`textShadow`| Function |Pavelyev Ivan|in progress|  |
+|`textShadow`| Function |Pavelyev Ivan| blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1K3Z |
 |`fontFeature`| Function |Pavelyev Ivan|in progress|  |
 |`contentModifier`| Function |Pavelyev Ivan|blocked Arkoala| https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`dateTimeOptions`| Function |Pavelyev Ivan|in progress|  |
