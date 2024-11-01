@@ -316,13 +316,13 @@
 |`nestedScroll`| Function | Samarin Sergey |in progress |  |
 |`enableScrollInteraction`| Function | Samarin Sergey |in progress |  |
 |`friction`| Function | Samarin Sergey |in progress |  |
-|`onScroll`| Function | Samarin Sergey |in progress |  |
-|`onWillScroll`| Function | Samarin Sergey |in progress |  |
-|`onDidScroll`| Function | Samarin Sergey |in progress |  |
-|`onReachStart`| Function | Samarin Sergey |in progress |  |
-|`onReachEnd`| Function | Samarin Sergey |in progress |  |
-|`onScrollStart`| Function | Samarin Sergey |in progress |  |
-|`onScrollStop`| Function | Samarin Sergey |in progress |  |
+|`onScroll`| Function | Samarin Sergey | blocked |  |
+|`onWillScroll`| Function | Samarin Sergey | blocked |  |
+|`onDidScroll`| Function | Samarin Sergey | blocked |  |
+|`onReachStart`| Function | Samarin Sergey | blocked |  |
+|`onReachEnd`| Function | Samarin Sergey | blocked |  |
+|`onScrollStart`| Function | Samarin Sergey | blocked |  |
+|`onScrollStop`| Function | Samarin Sergey | blocked |  |
 |`flingSpeedLimit`| Function | Samarin Sergey |in progress |  |
 |`edgeEffect`| Function | Samarin Sergey |in progress |  |
 |`fadingEdge`| Function | Samarin Sergey | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
