@@ -1185,25 +1185,25 @@
 |`showCounter`| Function | Spirin Andrey | in progress |  |
 |*TextPicker*| *Component* |Ekaterina Stepanova |in progress |  |
 |`setTextPickerOptions`| Function | Tuzhilkin Ivan| done |  |
-|`defaultPickerItemHeight`| Function |Ekaterina Stepanova | devdone |  |
-|`canLoop`| Function |Ekaterina Stepanova | devdone |  |
-|`disappearTextStyle`|Function |Ekaterina Stepanova | devdone |  |
-|`textStyle`| Function |Ekaterina Stepanova | devdone |  |
-|`selectedTextStyle`| Function | Ekaterina Stepanova| devdone |  |
+|`defaultPickerItemHeight`| Function |Ekaterina Stepanova | done |  |
+|`canLoop`| Function |Ekaterina Stepanova | done |  |
+|`disappearTextStyle`|Function |Ekaterina Stepanova | done |  |
+|`textStyle`| Function |Ekaterina Stepanova | done |  |
+|`selectedTextStyle`| Function | Ekaterina Stepanova| done |  |
 |`onAccept`| Function |Ekaterina Stepanova | in progress |  |
 |`onCancel`| Function |Ekaterina Stepanova | in progress |  |
 |`onChange`| Function | Tuzhilkin Ivan| in progress |  |
-|`selectedIndex`| Function |Ekaterina Stepanova | devdone |  |
-|`divider`| Function |Ekaterina Stepanova | devdone |  |
-|`gradientHeight`| Function | Ekaterina Stepanova| devdone |  |
+|`selectedIndex`| Function |Ekaterina Stepanova | done |  |
+|`divider`| Function |Ekaterina Stepanova | done |  |
+|`gradientHeight`| Function | Ekaterina Stepanova| done |  |
 |*TextTimer*| *Component* |Ekaterina Stepanova|in progress |  |
 |`setTextTimerOptions`| Function |Ekaterina Stepanova|in progress |  |
 |`format`| Function |Ekaterina Stepanova|in progress |  |
-|`fontColor`| Function |Ekaterina Stepanova|in progress |  |
-|`fontSize`| Function |Ekaterina Stepanova|in progress |  |
-|`fontStyle`| Function | Ekaterina Stepanova|in progress |  |
-|`fontWeight`| Function |Ekaterina Stepanova|in progress |  |
-|`fontFamily`| Function |Ekaterina Stepanova|in progress |  |
+|`fontColor`| Function |Ekaterina Stepanova| devdone |  |
+|`fontSize`| Function |Ekaterina Stepanova| devdone |  |
+|`fontStyle`| Function | Ekaterina Stepanova| devdone |  |
+|`fontWeight`| Function |Ekaterina Stepanova| devdone |  |
+|`fontFamily`| Function |Ekaterina Stepanova| devdone |  |
 |`onTimer`| Function |Ekaterina Stepanova|in progress |  |
 |`textShadow`| Function |Ekaterina Stepanova|in progress |  |
 |`contentModifier`| Function |Ekaterina Stepanova|in progress |  |
