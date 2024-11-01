@@ -1306,7 +1306,7 @@
 |`divider`| Function |Dmitry A Smirnov|done|  |
 |`minContentWidth`| Function |Dmitry A Smirnov|done|  |
 |*WaterFlow*| *Component* | Kovalev Sergey | in progress |  |
-|`setWaterFlowOptions`| Function | Kovalev Sergey | in progress |  |
+|`setWaterFlowOptions`| Function | Kovalev Sergey | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`columnsTemplate`| Function | Kovalev Sergey | in progress |  |
 |`itemConstraintSize`| Function | Kovalev Sergey | in progress |  |
 |`rowsTemplate`| Function | Kovalev Sergey | in progress |  |
@@ -1317,10 +1317,10 @@
 |`enableScrollInteraction`| Function | Kovalev Sergey | in progress |  |
 |`friction`| Function | Kovalev Sergey | in progress |  |
 |`cachedCount`| Function |Kovalev Sergey | in progress |  |
-|`onReachStart`| Function | Kovalev Sergey | in progress |  |
-|`onReachEnd`| Function | Kovalev Sergey | in progress |  |
-|`onScrollFrameBegin`| Function | Kovalev Sergey | in progress |  |
-|`onScrollIndex`| Function | Kovalev Sergey | in progress |  |
+|`onReachStart`| Function | Kovalev Sergey | blocked |  |
+|`onReachEnd`| Function | Kovalev Sergey | blocked |  |
+|`onScrollFrameBegin`| Function | Kovalev Sergey | blocked |  |
+|`onScrollIndex`| Function | Kovalev Sergey | blocked |  |
 |*CanvasRenderer*| *Class*  | Vadim Voronov | in progress | |
 |`drawImage`| Function  | Vadim Voronov | in progress | |
 |`beginPath`| Function  | Vadim Voronov | in progress | |
