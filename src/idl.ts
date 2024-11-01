@@ -1018,3 +1018,7 @@ export const DebugUtils = {
         return name
     }
 }
+
+export function isCallSignature(method: IDLCallable | IDLMethod | IDLConstructor): boolean {
+        return !isMethod(method)
+}
