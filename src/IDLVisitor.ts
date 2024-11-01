@@ -197,7 +197,9 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         if (ts.isClassDeclaration(node)) {
             this.output.push(this.serializeClass(node))
         } else if (ts.isInterfaceDeclaration(node)) {
-            this.output.push(this.serializeInterface(node))
+            if (!PeerGeneratorConfig.isIgnoredSerialized(identName(node.name))){
+                this.output.push(this.serializeInterface(node))
+            }
         } else if (ts.isModuleDeclaration(node)) {
             if (this.isKnownAmbientModuleDeclaration(node)) {
                 this.output.push(this.serializeAmbientModuleDeclaration(node))
