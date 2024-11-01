@@ -1599,3 +1599,7 @@
 |`backward`| Function | Erokhin Ilya | in progress | |
 |`forward`| Function | Erokhin Ilya | in progress | |
 |`getCookieManager`| Function | Erokhin Ilya | in progress | |
+|*TextInputController*| *Class* | Spirin Andrey | in progress | |
+|`caretPosition`| Function | Spirin Andrey | in progress | |
+|`setTextSelection`| Function | Spirin Andrey | in progress | |
+|`stopEditing`| Function | Spirin Andrey | in progress | |
