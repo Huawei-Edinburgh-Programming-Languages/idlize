@@ -33,22 +33,22 @@
 |`popupTitleBackground`| Function |Ekaterina Stepanova| done |  |
 |`enableHapticFeedback`| Function |Ekaterina Stepanova| done |  |
 |`alignStyle`| Function |Ekaterina Stepanova| done |  |
-|*Animator*| *Component* | Lobah Mikhail| in progress|  |
-|`setAnimatorOptions`| Function | Lobah Mikhail| in progress|  |
-|`state`| Function | Lobah Mikhail| in progress|  |
-|`duration`| Function | Lobah Mikhail| in progress|  |
-|`curve`| Function | Lobah Mikhail| in progress|  |
-|`delay`| Function | Lobah Mikhail| in progress|  |
-|`fillMode`| Function | Lobah Mikhail| in progress|  |
-|`iterations`| Function | Lobah Mikhail| in progress|  |
-|`playMode`| Function | Lobah Mikhail| in progress|  |
-|`motion`| Function | Lobah Mikhail| in progress|  |
-|`onStart`| Function | Lobah Mikhail| in progress|  |
-|`onPause`| Function | Lobah Mikhail| in progress|  |
-|`onRepeat`| Function | Lobah Mikhail| in progress|  |
-|`onCancel`| Function | Lobah Mikhail| in progress|  |
-|`onFinish`| Function | Lobah Mikhail| in progress|  |
-|`onFrame`| Function | Lobah Mikhail| in progress|  |
+|*Animator*| *Component* | Skroba Gleb | in progress | |
+|`setAnimatorOptions`| Function | Skroba Gleb | in progress | |
+|`state`| Function | Skroba Gleb | in progress | |
+|`duration`| Function | Skroba Gleb | in progress | |
+|`curve`| Function | Skroba Gleb | in progress | |
+|`delay`| Function | Skroba Gleb | in progress | |
+|`fillMode`| Function | Skroba Gleb | in progress | |
+|`iterations`| Function | Skroba Gleb | in progress | |
+|`playMode`| Function | Skroba Gleb | in progress | |
+|`motion`| Function | Skroba Gleb | in progress | |
+|`onStart`| Function | Skroba Gleb | in progress | |
+|`onPause`| Function | Skroba Gleb | in progress | |
+|`onRepeat`| Function | Skroba Gleb | in progress | |
+|`onCancel`| Function | Skroba Gleb | in progress | |
+|`onFinish`| Function | Skroba Gleb | in progress | |
+|`onFrame`| Function | Skroba Gleb | in progress | |
 |*Badge*| *Component* |Vadim Voronov | done |  |
 |`setBadgeOptions`| Function |Vadim Voronov | done |https://gitee.com/openharmony/arkui_ace_engine/issues/IAX28D|
 |*Blank*| *Component* | Skroba Gleb | done |  |
