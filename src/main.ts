@@ -284,7 +284,7 @@ if (options.dts2peer) {
                 const idlFile = path.resolve(path.join(dir, it))
                 const content = fs.readFileSync(path.resolve(path.join(dir, it))).toString()
                 const nodes = webidl2.parse(content).map(it => toIDLNode(idlFile, it))
-                return new IdlPeerFile(idlFile, nodes, new Set())
+                return new IdlPeerFile(idlFile, nodes, new Set(), true)
             })
     }
 
@@ -308,7 +308,7 @@ if (options.dts2peer) {
             options.inputDir.split(','),
             options.inputFile,
             generatedPeersDir,
-            (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, options),
+            (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, options, idlLibrary),
             {
                 compilerOptions: defaultCompilerOptions,
                 onSingleFile(entries: IDLEntry[], outputDir, sourceFile) {
@@ -320,9 +320,6 @@ if (options.dts2peer) {
                         // This setup code placed here because wrong prefix may be cached during library creation
                         // TODO find better place for setup?
                         PrimitiveType.Prefix = "OH_"
-                        PrimitiveType.UndefinedTag = "OH_TAG_UNDEFINED"
-                        PrimitiveType.UndefinedRuntime = "OH_RUNTIME_UNDEFINED"
-                        PrimitiveType.ObjectTag = "OH_TAG_OBJECT"
                     }
                     // Visit IDL peer files
                     idlLibrary.files.forEach(file => {

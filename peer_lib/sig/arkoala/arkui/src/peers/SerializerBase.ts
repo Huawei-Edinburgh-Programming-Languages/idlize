@@ -65,11 +65,6 @@ export function runtimeType(value: any): int32 {
     throw new Error(`bug: ${value} is ${type}`)
 }
 
-export function isPixelMap(value: Object): value is PixelMap {
-    // Object.hasOwn need es2022
-    return value.hasOwnProperty('isEditable') && value.hasOwnProperty('isStrideAlignment')
-}
-
 export function isResource(value: Object): value is Resource {
     return value.hasOwnProperty("bundleName") && value.hasOwnProperty("moduleName")
 }
@@ -218,9 +213,9 @@ export class SerializerBase {
         const resourceId = ResourceManager.registerAndHold(callback)
         this.heldResources.push(resourceId)
         this.writeInt32(resourceId)
-        this.writePointer(nativeModule()._GetManagedResourceHolder())
-        this.writePointer(nativeModule()._GetManagedResourceReleaser())
-        this.writePointer(nativeModule()._GetManagerCallbackCaller(kind))
+        this.writePointer(0)
+        this.writePointer(0)
+        this.writePointer(0)
     }
     writeCallbackResource(resource: CallbackResource) {
         this.writeInt32(resource.resourceId)
@@ -319,16 +314,3 @@ export class SerializerBase {
         }
     }
 }
-
-class OurCustomSerializer extends CustomSerializer {
-    constructor() {
-        super(["PixelMap"])
-    }
-    serialize(serializer: SerializerBase, value: any, kind: string): void {
-        // console.log(`managed serialize() for ${kind}`)
-        serializer.writeString(JSON.stringify(value))
-    }
-}
-
-// TODO, remove me!
-SerializerBase.registerCustomSerializer(new OurCustomSerializer())

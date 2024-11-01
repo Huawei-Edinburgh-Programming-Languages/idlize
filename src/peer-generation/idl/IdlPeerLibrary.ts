@@ -18,8 +18,7 @@ import { BuilderClass } from '../BuilderClass';
 import { MaterializedClass } from "../Materialized";
 import { IdlComponentDeclaration, isConflictingDeclaration, isMaterialized } from './IdlPeerGeneratorVisitor';
 import { IdlPeerFile } from "./IdlPeerFile";
-import { CJTypeNameConvertor } from './IdlNameConvertor';
-import { capitalize, isDefined } from '../../util';
+import { capitalize, throwException } from '../../util';
 import { AggregateConvertor, ArrayConvertor, CallbackConvertor, ClassConvertor, DateConvertor, EnumConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, MapConvertor, MaterializedClassConvertor, OptionConvertor,  StringConvertor, TupleConvertor, TypeAliasConvertor, UnionConvertor } from './IdlArgConvertors';
 import { PrimitiveType } from "../ArkPrimitiveType"
 import { DependencySorter } from './DependencySorter';
@@ -59,8 +58,10 @@ export class IdlPeerLibrary implements ReferenceResolver {
 
     constructor(
         public language: Language,
-        public componentsToGenerate: Set<string>,
+        public componentsToGenerate: Set<string>
     ) {}
+
+    public name: string = ""
 
     readonly customComponentMethods: string[] = []
     // todo really dirty - we use it until we can generate interfaces
@@ -74,6 +75,10 @@ export class IdlPeerLibrary implements ReferenceResolver {
 
     readonly continuationCallbacks: idl.IDLCallback[] = []
     readonly syntheticEntries: idl.IDLEntry[] = []
+
+    get libraryPrefix(): string {
+        return this.name ? this.name + "_" : ""
+    }
 
     addSyntheticInterface(entry: idl.IDLInterface): idl.IDLReferenceType {
         this.syntheticEntries.push(entry)
@@ -146,7 +151,7 @@ export class IdlPeerLibrary implements ReferenceResolver {
         )
     }
 
-    resolveTypeReference(type: idl.IDLEnumType | idl.IDLReferenceType, entries?: idl.IDLEntry[], useSynthetic:boolean = false): idl.IDLEntry | undefined {
+    resolveTypeReference(type: idl.IDLReferenceType, entries?: idl.IDLEntry[], useSynthetic:boolean = false): idl.IDLEntry | undefined {
         const synthetics = useSynthetic ? this.syntheticEntries : []
         entries ??= synthetics
             .concat(this.files.flatMap(it => it.entries))
@@ -172,7 +177,7 @@ export class IdlPeerLibrary implements ReferenceResolver {
             : candidates.find(it => !idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Import))
     }
 
-    typeConvertor(param: string, type: idl.IDLType, isOptionalParam = false, maybeCallback: boolean = false): ArgConvertor {
+    typeConvertor(param: string, type: idl.IDLType, isOptionalParam = false): ArgConvertor {
         if (isOptionalParam) {
             return new OptionConvertor(this, param, type)
         }
@@ -198,9 +203,9 @@ export class IdlPeerLibrary implements ReferenceResolver {
             if (isImport(type))
                 return new ImportTypeConvertor(param, this.nameConvertorInstance.convert(type))
         }
-        if (idl.isReferenceType(type) || idl.isEnumType(type)) {
+        if (idl.isReferenceType(type)) {
             const decl = this.resolveTypeReference(type)
-            return this.declarationConvertor(param, type, decl, maybeCallback)
+            return this.declarationConvertor(param, type, decl)
         }
         if (idl.isUnionType(type)) {
             return new UnionConvertor(this, param, type)
@@ -218,9 +223,7 @@ export class IdlPeerLibrary implements ReferenceResolver {
         throw new Error(`Cannot convert: ${idl.getIDLTypeName(type)} ${type.kind}`)
     }
 
-    declarationConvertor(param: string, type: idl.IDLReferenceType | idl.IDLEnumType,
-        declaration: idl.IDLEntry | undefined, maybeCallback: boolean = false): ArgConvertor
-    {
+    declarationConvertor(param: string, type: idl.IDLReferenceType, declaration: idl.IDLEntry | undefined): ArgConvertor {
         let customConv = this.customConvertor(param, idl.getIDLTypeName(type, idl.DebugUtils.easyGetName), type)
         if (customConv)
             return customConv
@@ -264,7 +267,7 @@ export class IdlPeerLibrary implements ReferenceResolver {
         throw new Error(`Unknown decl ${declarationName} of kind ${declaration.kind}`)
     }
 
-    private customConvertor(param: string, typeName: string, type: idl.IDLReferenceType | idl.IDLEnumType): ArgConvertor | undefined {
+    private customConvertor(param: string, typeName: string, type: idl.IDLReferenceType): ArgConvertor | undefined {
         switch (typeName) {
             case `Dimension`:
             case `Length`:
@@ -324,7 +327,7 @@ export class IdlPeerLibrary implements ReferenceResolver {
         if (isImport(type)) {
             return ArkCustomObject
         }
-        if (idl.isReferenceType(type) || idl.isEnumType(type)) {
+        if (idl.isReferenceType(type)) {
             // TODO: remove all this!
             if (idl.isIDLTypeName(type, 'Dimension') || idl.isIDLTypeName(type, 'Length')) {
                 return ArkLength
@@ -416,6 +419,7 @@ export class IdlPeerLibrary implements ReferenceResolver {
     }
 
     computeTargetNameImpl(target: idl.IDLEntry, optional: boolean, idlPrefix: string): string {
+        // TODO Clarify the actual name of optional type including idlPrefix (with library name included, e.g. OH_XML_)
         const prefix = optional ? PrimitiveType.OptionalPrefix : ""
         if (idl.isPrimitiveType(target)) {
             let name: string = ""
@@ -448,7 +452,7 @@ export class IdlPeerLibrary implements ReferenceResolver {
             let name = PrimitiveType.CustomObject.getText()
             return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.Prefix) : name)
         }
-        if (idl.isEnum(target) || idl.isEnumType(target)) {
+        if (idl.isEnum(target)) {
             const name = this.enumName(target)
             return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.Prefix) : name)
         }
@@ -509,12 +513,9 @@ export class IdlPeerLibrary implements ReferenceResolver {
         }
     }
 
-    private enumName(target: idl.IDLEnum | idl.IDLEnumType): string {
+    private enumName(target: idl.IDLEnum): string {
         // TODO: support namespaces in other declarations.
         const namespace = idl.getExtAttribute(target, idl.IDLExtendedAttributes.Namespace)
-        if (idl.isEnumType(target)) {
-            return `${PrimitiveType.Prefix}${namespace ? namespace + "_" : ""}${idl.getIDLTypeName(target)}`
-        }
         return `${PrimitiveType.Prefix}${namespace ? namespace + "_" : ""}${target.name}`
     }
 

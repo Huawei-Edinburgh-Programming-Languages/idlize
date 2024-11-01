@@ -101,7 +101,7 @@ export class EnumConvertor extends BaseArgConvertor { //
             false, false, param)
     }
     enumTypeName(language: Language): string {
-        const prefix = language === Language.CPP ? PrimitiveType.Prefix + PrimitiveType.LibraryPrefix : ""
+        const prefix = language === Language.CPP ? PrimitiveType.Prefix : ""
         return prefix + qualifiedName(this.enumType, language)
     }
     convertorArg(param: string, writer: LanguageWriter): string {
@@ -231,9 +231,7 @@ export class ImportTypeConvertor extends BaseArgConvertor { //
         ["ComponentContent", ["isInstanceOf", "\"ComponentContent\""]],
         ["DrawableDescriptor", ["isInstanceOf", "\"DrawableDescriptor\""]],
         ["SymbolGlyphModifier", ["isInstanceOf", "\"SymbolGlyphModifier\""]],
-        ["Scene", ["isInstanceOf", "\"Scene\""]],
-        ["PixelMap", ["isPixelMap"]],
-        ["Resource", ["isResource"]]])
+        ["Scene", ["isInstanceOf", "\"Scene\""]]])
     private importedName: string
     constructor(param: string, importedName: string) {
         super(idl.toIDLType("Object"), [RuntimeType.OBJECT], false, true, param)
@@ -514,11 +512,13 @@ export class CallbackConvertor extends BaseArgConvertor {
     }
     convertorDeserialize(param: string, value: string, writer: LanguageWriter): LanguageStatement {
         if (writer.language == Language.CPP) {
+            const callerInvocation = writer.makeString(`getManagedCallbackCaller(${generateCallbackKindAccess(this.decl, writer.language)})`)
             return writer.makeBlock([
                 writer.makeAssign(`${value}.resource`, undefined, writer.makeMethodCall(`${param}Deserializer`, `readCallbackResource`, []), false),
                 writer.makeAssign(`${value}.call`, undefined, new CppCastExpression(
                     writer,
-                    writer.makeMethodCall(`${param}Deserializer`, `readPointer`, []),
+                    writer.makeMethodCall(`${param}Deserializer`, `readPointerOrDefault`, 
+                        [writer.makeCast(callerInvocation, idl.IDLPointerType, true)]),
                     idl.createReferenceType(`void(*)(${generateCallbackAPIArguments(this.library, this.decl).join(", ")})`),
                     true
                 ), false),
@@ -528,7 +528,7 @@ export class CallbackConvertor extends BaseArgConvertor {
             `${param}Deserializer.read${this.library.computeTargetName(this.decl, false, "")}()`), false)
     }
     nativeType(impl: boolean): string {
-        return PrimitiveType.Prefix + PrimitiveType.LibraryPrefix + this.decl.name
+        return PrimitiveType.Prefix + this.library.libraryPrefix + this.decl.name
     }
     isPointerType(): boolean {
         return true
