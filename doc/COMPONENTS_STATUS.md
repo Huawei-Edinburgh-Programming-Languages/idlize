@@ -1100,7 +1100,7 @@ https://gitee.com/openharmony/arkui_ace_engine/issues/IAW529 |
 |`format`| Function |Pavelyev Ivan|in progress|  |
 |`onDateChange`| Function |Pavelyev Ivan|in progress|  |
 |`fontColor`| Function |Pavelyev Ivan|in progress|  |
-|`fontSize`| Function |Pavelyev Ivan|in progress| |
+|`fontSize`| Function |Pavelyev Ivan| blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1J5L |
 |`fontStyle`| Function |Pavelyev Ivan|in progress|  |
 |`fontWeight`| Function |Pavelyev Ivan|in progress|  |
 |`fontFamily`| Function |Pavelyev Ivan|in progress|  |
