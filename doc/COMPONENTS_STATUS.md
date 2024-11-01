@@ -1400,19 +1400,19 @@ https://gitee.com/openharmony/arkui_ace_engine/issues/IAW529 |
 |`invalidate`| Function |Vadim Voronov| in progress| |
 |*ImageAnalyzerController*| *Class* |Vadim Voronov| in progress| |
 |`getImageAnalyzerSupportTypes`| Function |Vadim Voronov| in progress| |
-|*RichEditorController*| *Class* |Dudkin Sergey| devDone|  |
-|`addTextSpan`| Function |Dudkin Sergey| devDone|  |
+|*RichEditorController*| *Class* |Dudkin Sergey| done|  |
+|`addTextSpan`| Function |Dudkin Sergey| done|  |
 |`addImageSpan`| Function |Dudkin Sergey| blocked| Ark_CustomObject :: implement setting pixel map aka inValue into options |
 |`addBuilderSpan`| Function | Dudkin Sergey| blocked| related to Ark_CustomBuilder* inValue |
-|`addSymbolSpan`| Function | Dudkin Sergey| devDone|  |
-|`updateSpanStyle`| Function | Dudkin Sergey| devDone|  |
-|`updateParagraphStyle`| Function | Dudkin Sergey| devDone|  |
-|`deleteSpans`| Function |Dudkin Sergey| devDone|  |
-|`getSpans`| Function |Dudkin Sergey| devDone|  |
+|`addSymbolSpan`| Function | Dudkin Sergey| done|  |
+|`updateSpanStyle`| Function | Dudkin Sergey| done|  |
+|`updateParagraphStyle`| Function | Dudkin Sergey| done|  |
+|`deleteSpans`| Function |Dudkin Sergey| done|  |
+|`getSpans`| Function |Dudkin Sergey| done|  |
 |`getParagraphs`| Function |Dudkin Sergey| blocked| GENERATED_ArkUIRichEditorControllerAccessor::getParagraphs should return a value |
-|`getSelection`| Function |Dudkin Sergey| devDone|  |
-|`fromStyledString`| Function | Dudkin Sergey| devDone|  |
-|`toStyledString`| Function | Dudkin Sergey| devDone|  |
+|`getSelection`| Function |Dudkin Sergey| done|  |
+|`fromStyledString`| Function | Dudkin Sergey| done|  |
+|`toStyledString`| Function | Dudkin Sergey| done|  |
 |*PatternLockController*| *Class* |Dmitry A Smirnov| in progress|  |
 |`reset`| Function |Dmitry A Smirnov| in progress|  |
 |`setChallengeResult`| Function |Dmitry A Smirnov| in progress|  |
