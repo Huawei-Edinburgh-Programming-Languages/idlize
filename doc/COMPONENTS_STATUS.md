@@ -500,8 +500,8 @@
 |`setLineOptions`|Function|Dudkin Sergey| done |  |
 |`startPoint`|Function|Dudkin Sergey|blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IAXCBA |
 |`endPoint`|Function|Dudkin Sergey|blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IAXCBA |
-|*List*|*Component*|Morozov Sergey| blocked Arkoala |  |
-|`setListOptions`|Function|Morozov Sergey|blocked Arkoala | can be handled |
+|*List*|*Component*|Morozov Sergey| in progress |  |
+|`setListOptions`|Function|Morozov Sergey| in progress | can be handled |
 |`lanes`|Function|Morozov Sergey|done|  |
 |`alignListItem`|Function|Morozov Sergey|done|  |
 |`listDirection`|Function|Morozov Sergey|done|  |
@@ -939,7 +939,7 @@
 |`alignContent` | Function | Korobeinikov Evgeny | done |  |
 |`pointLight` | Function | Evstigneev Roman | in progress |  |
 |*Stepper*| *Component* | Morozov Sergey | blocked Arkoala |  |
-|`setStepperOptions`| Function | Morozov Sergey | devdone |  |
+|`setStepperOptions`| Function | Morozov Sergey | done |  |
 |`onFinish`| Function | Morozov Sergey | blocked Arkoala |  |
 |`onSkip`| Function | Morozov Sergey | blocked Arkoala |  |
 |`onChange`| Function | Morozov Sergey | blocked Arkoala |  |
@@ -1409,11 +1409,11 @@
 |`invalidate`| Function |Vadim Voronov| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*ImageAnalyzerController*| *Class* |Vadim Voronov| in progress| |
 |`getImageAnalyzerSupportTypes`| Function |Vadim Voronov| in progress| |
-|*ListScroller*| *Class* |Morozov Sergey |in progress |  |
-|`getItemRectInGroup`| Function |Morozov Sergey |in progress |  |
-|`scrollToItemInGroup`| Function |Morozov Sergey |in progress |  |
-|`closeAllSwipeActions`| Function |Morozov Sergey |in progress |  |
-|`getVisibleListContentInfo`| Function |Morozov Sergey |in progress |  |
+|*ListScroller*| *Class* |Morozov Sergey | in progress |  |
+|`getItemRectInGroup`| Function |Morozov Sergey | in progress |  |
+|`scrollToItemInGroup`| Function |Morozov Sergey | in progress |  |
+|`closeAllSwipeActions`| Function |Morozov Sergey | in progress |  |
+|`getVisibleListContentInfo`| Function |Morozov Sergey | in progress |  |
 |*RichEditorController*| *Class* |Dudkin Sergey| devDone|  |
 |`addTextSpan`| Function |Dudkin Sergey| devDone|  |
 |`addImageSpan`| Function |Dudkin Sergey| blocked| Ark_CustomObject :: implement setting pixel map aka inValue into options |
