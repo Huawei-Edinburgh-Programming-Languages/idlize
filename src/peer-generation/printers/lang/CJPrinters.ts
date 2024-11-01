@@ -31,7 +31,11 @@ import { IdlSyntheticTypeBase } from "./CommonUtils"
 
 export function makeCJSerializer(library: PeerLibrary | IdlPeerLibrary): { targetFile: TargetFile, writer: LanguageWriter } {
     let writer = createLanguageWriter(library.language, getReferenceResolver(library))
-    writer.print(`package idlize\n`)
+    let packageName = "idlize"
+    if ((library instanceof IdlPeerLibrary) && library.name) {
+        packageName = library.name.toLowerCase()
+    }
+    writer.print(`package ${packageName}\n`)
     writeSerializer(library, writer, "")
     writer.print('public func createSerializer(): Serializer { return Serializer() }')
     return { targetFile: new TargetFile('Serializer', ARKOALA_PACKAGE_PATH), writer: writer }

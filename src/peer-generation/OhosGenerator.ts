@@ -585,6 +585,7 @@ class OHOSVisitor {
         const nativeModuleTemaplte = readLangTemplate(`OHOSNativeModule_template${ext}`, this.library.language)
         const nativeModuleText = nativeModuleTemaplte
             .replaceAll('%NATIVE_MODULE_NAME%', this.libraryName)
+            .replaceAll('%PACKAGE_NAME%', fileNamePrefix)
             .replaceAll('%NATIVE_MODULE_CONTENT%', this.nativeWriter.getOutput().join('\n'))
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Native${ext}`), nativeModuleText, 'utf-8')
 
@@ -592,6 +593,7 @@ class OHOSVisitor {
         const peerText = peerTemplate
             .replaceAll('%PEER_CONTENT%', this.peerWriter.getOutput().join('\n'))
             .replaceAll('%SERIALIZER_PATH%', `./${fileNamePrefix}Serializer`)
+            .replaceAll('%PACKAGE_NAME%', fileNamePrefix)
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}${ext}`), peerText, 'utf-8')
         
         this.hWriter.printTo(path.join(outDir, `${fileNamePrefix}.h`))
@@ -618,6 +620,7 @@ class OHOSVisitor {
             readLangTemplate(`SerializerBase${ext}`, this.library.language)
                 .replaceAll("%NATIVE_MODULE_ACCESSOR%", nativeModuleInfo.name)
                 .replaceAll("%NATIVE_MODULE_PATH%", nativeModuleInfo.path)
+                .replaceAll('%PACKAGE_NAME%', fileNamePrefix)
         )
     }
 }

@@ -318,6 +318,8 @@ export function makeSerializerForOhos(library: PeerLibrary | IdlPeerLibrary, nat
 export function createSerializer(): Serializer { return new Serializer() }
 `)
         return printer
+    } else if (library.language == Language.CJ) {
+        return makeCJSerializer(library).writer
     } else {
         throw new Error(`unsupported language ${library.language}`)
     }

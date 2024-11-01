@@ -32,6 +32,7 @@ import { cjCustomTypeMapping, convertCJOptional } from "../../printers/lang/Cang
 import { ARK_CUSTOM_OBJECT } from "../../printers/lang/Java"
 import { IdlTypeNameConvertor } from "../typeConvertor"
 import { CJIDLTypeToForeignStringConvertor, CJIDLTypeToStringConvertor } from "../convertors/CJConvertors"
+import { PrimitiveType } from "../../ArkPrimitiveType"
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -312,7 +313,7 @@ export class CJLanguageWriter extends LanguageWriter {
         return this.makeString(`RuntimeType.${RuntimeType[rt]}.ordinal`)
     }
     makeRuntimeTypeGetterCall(value: string): LanguageExpression {
-        let methodCall = this.makeMethodCall("Ark_Object", "getRuntimeType", [this.makeString(value)])
+        let methodCall = this.makeMethodCall(PrimitiveType.Prefix + "Object", "getRuntimeType", [this.makeString(value)])
         return this.makeString(methodCall.asString() + '.ordinal')
     }
     makeTupleAlloc(option: string): LanguageStatement {

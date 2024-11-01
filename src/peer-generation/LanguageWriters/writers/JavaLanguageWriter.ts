@@ -24,6 +24,7 @@ import { EnumConvertor } from "../../idl/IdlArgConvertors"
 import { ReferenceResolver } from "../../ReferenceResolver"
 import { IdlTypeNameConvertor } from "../typeConvertor"
 import { JavaIDLTypeToStringConvertor } from "../convertors/JavaConvertors"
+import { PrimitiveType } from "../../ArkPrimitiveType"
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -235,7 +236,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         return this.makeString(`RuntimeType.${RuntimeType[rt]}`)
     }
     makeRuntimeTypeGetterCall(value: string): LanguageExpression {
-        return this.makeMethodCall("Ark_Object", "getRuntimeType", [this.makeString(value)])
+        return this.makeMethodCall(PrimitiveType.Prefix + "Object", "getRuntimeType", [this.makeString(value)])
     }
     makeMapKeyTypeName(c: MapConvertor): idl.IDLType {
         throw new Error("Method not implemented.")
