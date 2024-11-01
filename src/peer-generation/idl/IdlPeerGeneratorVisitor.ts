@@ -1345,13 +1345,8 @@ function generateSignature(
     className?: string
 ): NamedMethodSignature {
     let returnType
-    
-    if (className === "IMonitor" && method.name === "value") { 
-        // workaround for generic returnType
-        // value<T>(path?: string): IMonitorValue<T> | undefined;
-        returnType = idl.IDLThisType 
-    }
-    else if (idl.isUndefinedType(method.returnType!))
+
+    if (idl.isUndefinedType(method.returnType!))
     {
         returnType = idl.IDLVoidType
     }
@@ -1368,7 +1363,6 @@ function generateSignature(
     }
     return new NamedMethodSignature(
         returnType,
-
         method.parameters.map(it => maybeOptional(it.type!, it.isOptional)),
         method.parameters.map(it => it.name)
     )
