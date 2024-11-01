@@ -155,6 +155,10 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     makeMapSize(map: string): LanguageExpression {
         return this.makeString(`${super.makeMapSize(map).asString()} as int32`) // TODO: cast really needed?
     }
+    makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement {
+        // keyAccessor and valueAccessor are equal in TS
+        return this.makeStatement(this.makeMethodCall(keyAccessor+"!", "set", [this.makeString(key), this.makeString(value)]))
+    }
     mapIDLContainerType(type: IDLContainerType, args: string[]): string {
         switch (type.name) {
             case 'sequence': {
