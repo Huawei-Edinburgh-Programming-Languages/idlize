@@ -62,7 +62,6 @@ import { Language } from "../../Language"
 import { createInterfaceDeclName } from "../TypeNodeNameConvertor";
 import { cjCustomTypeMapping } from "../printers/lang/Cangjie"
 
-
 /**
  * Theory of operations.
  *
@@ -748,7 +747,7 @@ class PeersGenerator {
         // Such as the ones coming from the friend interfaces
         // E.g. ButtonInterface instead of ButtonAttribute
         const originalParentName = parentName ?? peer.originalClassName!
-        const CallSignature = isCallSignature(method)
+        const CallSignature = idl.isCallSignature(method)
         const methodName = CallSignature ? `set${peer.componentName}Options` : method.name
         const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param, maybeCallback))
         const declarationTargets = method.parameters.map(param => {
@@ -1335,10 +1334,6 @@ export function isSourceDecl(node: idl.IDLEntry): boolean {
     return !node.fileName?.endsWith('stdlib.d.ts')
 }
 
-function isCallSignature(method: idl.IDLCallable | idl.IDLMethod | idl.IDLConstructor): boolean {
-    return !idl.isMethod(method)
-}
-
 function generateSignature(
     library: IdlPeerLibrary,
     method: idl.IDLCallable | idl.IDLMethod | idl.IDLConstructor,
@@ -1351,7 +1346,7 @@ function generateSignature(
         returnType = idl.IDLVoidType
     }
     else if (
-        isCallSignature(method) || 
+        idl.isCallSignature(method) || 
         idl.isIDLTypeName(method.returnType!, 'T') ||
         idl.isConstructor(method) ||
         !method.isStatic && method.returnType && className && idl.isIDLTypeName(method.returnType, className)
