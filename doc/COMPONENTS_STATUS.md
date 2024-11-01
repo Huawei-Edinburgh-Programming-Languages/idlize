@@ -1399,6 +1399,10 @@
 |`toDataURL`| Function |Vadim Voronov| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`startImageAnalyzer`| Function |Vadim Voronov| in progress| |
 |`stopImageAnalyzer`| Function | Vadim Voronov| in progress | |
+|`onOnAttach`| Function | Vadim Voronov| in progress | |
+|`offOnAttach`| Function |Vadim Voronov| in progress | |
+|`onOnDetach`| Function |Vadim Voronov| in progress | |
+|`offOnDetach`| Function |Vadim Voronov| in progress | |
 |`getHeight`| Function |Vadim Voronov| in progress| |
 |`getWidth`| Function |Vadim Voronov| in progress| |
 |*DrawingRenderingContext*| *Class* |Vadim Voronov| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
