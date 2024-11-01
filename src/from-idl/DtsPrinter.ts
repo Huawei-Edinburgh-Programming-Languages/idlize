@@ -43,6 +43,7 @@ import { IDLCallback, IDLConstructor, IDLEntity, IDLEntry, IDLEnum, IDLInterface
     createReferenceType,} from "../idl"
 import * as webidl2 from "webidl2"
 import { resolveSyntheticType, toIDLNode } from "./deserialize"
+import { throwError } from "../../external/arkoala-arkts/libarkts/src/arkts";
 
 export class CustomPrintVisitor {
     constructor(private resolver: (type: IDLReferenceType) => IDLEntry | undefined) {}
@@ -99,6 +100,7 @@ export class CustomPrintVisitor {
             typeSpec = "WrappedBuilder<Args extends any[]>"
 
         const entity = getExtAttribute(node, IDLExtendedAttributes.Entity)
+            ?? throwError(`Interface must be marked with the attribute Entity`)
         if (entity === IDLEntity.Literal) {
             this.print(`${namespace ? "" : "declare "}type ${typeSpec} = ${this.literal(node, false, true)}`)
         } else if (entity === IDLEntity.Tuple) {
@@ -130,7 +132,6 @@ export class CustomPrintVisitor {
                     .join(", ")
                 typeSpec += ` ${keyword} ${interfaceList}`
             }
-            let isExport = hasExtAttribute(node, IDLExtendedAttributes.Export)
             this.print(`${namespace ? "" : "declare "}${entity!.toLowerCase()} ${typeSpec} {`)
             this.currentInterface = node
             this.pushIndent()
