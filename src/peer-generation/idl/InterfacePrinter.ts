@@ -39,14 +39,16 @@ import { IndentedPrinter } from "../../IndentedPrinter"
 import { TargetFile } from '../printers/TargetFile'
 import { PrinterContext } from '../printers/PrinterContext'
 import { convertDeclaration, DeclarationConvertor } from "../LanguageWriters/typeConvertor";
-import { makeSyntheticDeclarationsFiles } from './IdlSyntheticDeclarations'
+import {
+    makeSyntheticDeclarationsFiles
+} from './IdlSyntheticDeclarations'
 import { tsCopyrightAndWarning } from '../FileGenerators'
 import { EnumEntity } from '../PeerFile'
 import { ARK_OBJECTBASE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH, INT_VALUE_GETTER } from '../printers/lang/Java'
 import { printJavaImports } from '../printers/lang/JavaPrinters'
 import { collectJavaImports } from '../printers/lang/JavaIdlUtils'
 import { Language } from '../../Language'
-import { escapeKeyword, IDLExtendedAttributes } from "../../idl";
+import { escapeKeyword, IDLExtendedAttributes, IDLKind } from "../../idl";
 import { ETSLanguageWriter } from '../LanguageWriters/writers/ETSLanguageWriter'
 
 interface InterfacesVisitor {
@@ -423,7 +425,20 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
     convertTypedef(node: idl.IDLTypedef) {
         const type = this.peerLibrary.mapType(node.type)
         const typeParams = this.printTypeParameters(node.extendedAttributes)
-        this.writer.print(`export declare type ${node.name}${typeParams} = ${type};`)
+        // TODO: needs to be implemented correctly on the idl side
+        if (node.name === "Resource") {
+            this.convertInterface(idl.createInterface(node.name,
+                IDLKind.Interface,
+                [], [], [], [
+                    idl.createProperty("bundleName", idl.createReferenceType("KStringPtr")),
+                    idl.createProperty("moduleName", idl.createReferenceType("KStringPtr")),
+                    idl.createProperty("params", idl.createReferenceType("Array<object>"), false, false, true),
+                    idl.createProperty("id", idl.createReferenceType("number")),
+                    idl.createProperty("type", idl.createReferenceType("number"), false, false, true),
+                ], [], [], []))
+        } else {
+            this.writer.print(`export declare type ${node.name}${typeParams} = ${type};`)
+        }
     }
 
     convertCallback(node: idl.IDLCallback) {
