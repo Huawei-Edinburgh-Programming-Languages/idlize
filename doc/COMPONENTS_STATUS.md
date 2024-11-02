@@ -1409,6 +1409,11 @@
 |`invalidate`| Function |Vadim Voronov| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*ImageAnalyzerController*| *Class* |Vadim Voronov| in progress| |
 |`getImageAnalyzerSupportTypes`| Function |Vadim Voronov| in progress| |
+|*ListScroller*| *Class* |Morozov Sergey |in progress |  |
+|`getItemRectInGroup`| Function |Morozov Sergey |in progress |  |
+|`scrollToItemInGroup`| Function |Morozov Sergey |in progress |  |
+|`closeAllSwipeActions`| Function |Morozov Sergey |in progress |  |
+|`getVisibleListContentInfo`| Function |Morozov Sergey |in progress |  |
 |*RichEditorController*| *Class* |Dudkin Sergey| blocked|  |
 |`addTextSpan`| Function |Dudkin Sergey| done|  |
 |`addImageSpan`| Function |Dudkin Sergey| blocked| Ark_CustomObject :: implement setting pixel map aka inValue into options |
