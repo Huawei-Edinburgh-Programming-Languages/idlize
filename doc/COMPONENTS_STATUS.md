@@ -545,7 +545,7 @@
 |`setLocationButtonOptions`| Function |Samarin Sergey| done |  |
 |`onClick`| Function |Samarin Sergey| done |  |
 |*Marquee*| *Component* | Andrey Khudenkikh| blocked |  |
-|`setMarqueeOptions`| Function | Andrey Khudenkikh| blocked |  |
+|`setMarqueeOptions`| Function | Andrey Khudenkikh| blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB1MMI |
 |`fontColor`| Function |Andrey Khudenkikh | done |  |
 |`fontSize`| Function |Andrey Khudenkikh | done |  |
 |`allowScale`| Function |Andrey Khudenkikh | done |  |
