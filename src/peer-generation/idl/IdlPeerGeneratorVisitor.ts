@@ -726,12 +726,15 @@ class PeersGenerator {
     private processMethodOrCallable(method: idl.IDLMethod | idl.IDLCallable, peer: IdlPeerClass, parentName?: string): IdlPeerMethod | undefined {
         if (PeerGeneratorConfig.ignorePeerMethod.includes(method.name!))
             return
+        //const isCallSignature = !idl.isMethod(method)
         // Some method have other parents as part of their names
         // Such as the ones coming from the friend interfaces
         // E.g. ButtonInterface instead of ButtonAttribute
-        const originalParentName = parentName ?? peer.originalClassName!
         const CallSignature = idl.isCallable(method)
         const methodName = CallSignature ? `set${peer.componentName}Options` : method.name
+
+        const originalParentName = parentName ?? peer.originalClassName!
+        // const methodName = isCallSignature ? `set${peer.componentName}Options` : method.name
         const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param))
         const declarationTargets = method.parameters.map(param => {
             const decl = this.toDeclaration(param.type ?? throwException(`Expected a type for ${param.name} in ${method.name}`))
@@ -886,9 +889,7 @@ export class IdlPeerProcessor {
         const importFeatures = this.collectDeclDependencies(target)
         const fields = target.properties.map(it => this.toBuilderField(it))
         const constructors = target.constructors.map(method => this.toBuilderMethod(method, name))
-
         const methods = this.getBuilderMethods(target, name)
-
         if (this.library.language === Language.ARKTS) {
             // this is necessary because getBuilderMethods embeds supertype types
             importFeatures.push(
@@ -913,13 +914,11 @@ export class IdlPeerProcessor {
                 .filter(idl.isReferenceType)
                 .map(it => this.library.resolveTypeReference(it)!)
                 .filter(it => idl.isInterface(it) || idl.isClass(it))
-
                 .flatMap(it => this.getBuilderMethods(it as idl.IDLInterface)),
             ...target.methods.map(it => this.toBuilderMethod(it, className))]
     }
 
     private toBuilderMethod(method: idl.IDLConstructor | idl.IDLMethod | undefined, className?: string): BuilderMethod {
-
         if (!method)
             return new BuilderMethod(new Method("constructor", new NamedMethodSignature(idl.IDLVoidType)), [])
         const methodName = idl.isConstructor(method) ? "constructor" : method.name
