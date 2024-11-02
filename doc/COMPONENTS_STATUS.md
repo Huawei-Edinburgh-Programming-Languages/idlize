@@ -73,10 +73,6 @@
 |`textStyle`| Function |Politov Mikhail | done |  |
 |`onChange`| Function |Politov Mikhail | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`edgeAlign`| Function |Politov Mikhail | done |  |
-|*Canvas*| *Component* |Vadim Voronov | blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
-|`setCanvasOptions`| Function |Vadim Voronov | blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
-|`onReady`| Function |Vadim Voronov | done |  |
-|`enableAnalyzer`| Function |Vadim Voronov | done |  |
 |*Calendar*| *Component* | Maksimov Nikita | in progress|  |
 |`setCalendarOptions`| Function | Maksimov Nikita | in progress|  |
 |`showLunar`| Function | Maksimov Nikita | in progress|  |
@@ -95,6 +91,10 @@
 |*CalendarController*| *Class* |Maksimov Nikita | in progress|  |
 |`backToToday`| Function |Maksimov Nikita | in progress|  |
 |`goTo`| Function |Maksimov Nikita | in progress|  |
+|*Canvas*| *Component* |Vadim Voronov | blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
+|`setCanvasOptions`| Function |Vadim Voronov | blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
+|`onReady`| Function |Vadim Voronov | done |  |
+|`enableAnalyzer`| Function |Vadim Voronov | done |  |
 |*Checkbox*| *Component* | Andrey Khudenkikh | in progress |  |
 |`setCheckboxOptions`| Function | Andrey Khudenkikh | done |  |
 |`select`| Function | Andrey Khudenkikh | done |  |
