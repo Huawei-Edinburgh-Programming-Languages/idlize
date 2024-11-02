@@ -732,7 +732,7 @@ class PeersGenerator {
         const originalParentName = parentName ?? peer.originalClassName!
         const CallSignature = idl.isCallSignature(method)
         const methodName = CallSignature ? `set${peer.componentName}Options` : method.name
-        const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param, maybeCallback))
+        const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param))
         const declarationTargets = method.parameters.map(param => {
             const decl = this.toDeclaration(param.type ?? throwException(`Expected a type for ${param.name} in ${method.name}`))
             this.library.requestType(param.type!, this.library.shouldGenerateComponent(peer.componentName))
