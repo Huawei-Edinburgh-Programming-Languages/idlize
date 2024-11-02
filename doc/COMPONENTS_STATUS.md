@@ -1406,7 +1406,7 @@
 |`invalidate`| Function |Vadim Voronov| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*ImageAnalyzerController*| *Class* |Vadim Voronov| in progress| |
 |`getImageAnalyzerSupportTypes`| Function |Vadim Voronov| in progress| |
-|*RichEditorController*| *Class* |Dudkin Sergey| done|  |
+|*RichEditorController*| *Class* |Dudkin Sergey| blocked|  |
 |`addTextSpan`| Function |Dudkin Sergey| done|  |
 |`addImageSpan`| Function |Dudkin Sergey| blocked| Ark_CustomObject :: implement setting pixel map aka inValue into options |
 |`addBuilderSpan`| Function | Dudkin Sergey| blocked| related to Ark_CustomBuilder* inValue |
@@ -1415,7 +1415,7 @@
 |`updateParagraphStyle`| Function | Dudkin Sergey| done|  |
 |`deleteSpans`| Function |Dudkin Sergey| done|  |
 |`getSpans`| Function |Dudkin Sergey| done|  |
-|`getParagraphs`| Function |Dudkin Sergey| blocked| GENERATED_ArkUIRichEditorControllerAccessor::getParagraphs should return a value |
+|`getParagraphs`| Function |Dudkin Sergey| blocked| https://gitee.com/nikolay-igotti/idlize/issues/IB1LVZ ,GENERATED_ArkUIRichEditorControllerAccessor::getParagraphs should return a value |
 |`getSelection`| Function |Dudkin Sergey| done|  |
 |`fromStyledString`| Function | Dudkin Sergey| done|  |
 |`toStyledString`| Function | Dudkin Sergey| done|  |
