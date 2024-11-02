@@ -1258,6 +1258,9 @@
 |`setFrom`| Function | | |  |
 |`getTo`| Function | | |  |
 |`setTo`| Function | | |  |
+|*EditMenuOptions*| *Class* | Erokhin Ilya | in progress |  |
+|`onCreateMenu`| Function |Erokhin Ilya | in progress |  |
+|`onMenuItemClick`| Function |Erokhin Ilya | in progress |  |
 |*TextInputController*| *Class* | Spirin Andrey | in progress |  |
 |`caretPosition`| Function | Spirin Andrey | in progress |  |
 |`setTextSelection`| Function | Spirin Andrey | in progress |  |
