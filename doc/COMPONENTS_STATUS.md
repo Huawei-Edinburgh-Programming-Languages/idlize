@@ -656,7 +656,7 @@
 |`setPathOptions`| Function | Skroba Gleb | done |  |
 |`commands`| Function | Skroba Gleb | done |  |
 |*PatternLock*| *Component* | Dmitry A Smirnov| in progress|  |
-|`setPatternLockOptions`| Function | Dmitry A Smirnov| devdone|  |
+|`setPatternLockOptions`| Function | Dmitry A Smirnov| done|  |
 |`sideLength`| Function | Dmitry A Smirnov| done|  |
 |`circleRadius`| Function | Dmitry A Smirnov| done|  |
 |`backgroundColor`| Function | Dmitry A Smirnov| done|common method. https://gitee.com/openharmony/interface_sdk-js/issues/IAZ94U|
@@ -1419,9 +1419,9 @@
 |`getSelection`| Function |Dudkin Sergey| done|  |
 |`fromStyledString`| Function | Dudkin Sergey| done|  |
 |`toStyledString`| Function | Dudkin Sergey| done|  |
-|*PatternLockController*| *Class* |Dmitry A Smirnov| devdone|  |
-|`reset`| Function |Dmitry A Smirnov| devdone|  |
-|`setChallengeResult`| Function |Dmitry A Smirnov| devdone|  |
+|*PatternLockController*| *Class* |Dmitry A Smirnov| done|  |
+|`reset`| Function |Dmitry A Smirnov| done|  |
+|`setChallengeResult`| Function |Dmitry A Smirnov| done|  |
 |*Video*| *Component* | Erokhin Ilya | blocked |  |
 |`setVideoOptions`| Function | Erokhin Ilya | blocked | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`muted`| Function | Erokhin Ilya | done |  |
