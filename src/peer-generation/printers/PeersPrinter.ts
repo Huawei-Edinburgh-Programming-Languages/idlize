@@ -336,7 +336,11 @@ class CJPeerFileVisitor extends PeerFileVisitor {
 
     private printPackage(printer: LanguageWriter): void {
         if (this.library.language == Language.CJ) {
-            printer.print(`package idlize\n`)
+            let packageName = "idlize"
+            if ((this.library instanceof IdlPeerLibrary) && this.library.name) {
+                packageName = this.library.name.toLowerCase()
+            }
+            printer.print(`package ${packageName}\n`)
         }
     }
 

@@ -29,6 +29,7 @@ import { writeDeserializer, writeSerializer } from './printers/SerializerPrinter
 import { generateCallbackAPIArguments, StructPrinter } from './idl/StructPrinter'
 import { qualifiedName } from './idl/common'
 import { printCallbacksKinds } from './printers/CallbacksPrinter'
+import { CJNativeModuleVisitor, NativeModuleVisitor } from './printers/NativeModulePrinter'
 
 class NameType {
     constructor(public name: string, public type: string) {}
@@ -48,6 +49,7 @@ class OHOSVisitor {
 
     peerWriter: LanguageWriter
     nativeWriter: LanguageWriter
+    nativeFunctionsWriter: LanguageWriter
 
     libraryName: string = ""
 
@@ -60,6 +62,7 @@ class OHOSVisitor {
     constructor(protected library: IdlPeerLibrary) {
         this.peerWriter = createLanguageWriter(this.library.language, this.library)
         this.nativeWriter = createLanguageWriter(this.library.language, this.library)
+        this.nativeFunctionsWriter = createLanguageWriter(this.library.language, this.library)
     }
 
     private static knownBasicTypes = new Set(['ArrayBuffer', 'DataView'])
@@ -321,68 +324,15 @@ class OHOSVisitor {
     }
 
     private printNative() {
-        const className = `${this.libraryName}NativeModule`
-        this.callbacks.forEach(callback => {
-            if (this.library.language === Language.TS) {
-                const params = callback.parameters.map(it => `${it.name}:${this.nativeWriter.convert(it.type!)}`).join(', ')
-                const returnTypeName = this.nativeWriter.convert(callback.returnType)
-                this.nativeWriter.print(`export type ${callback.name} = (${params}) => ${returnTypeName}`)
-            }
-        })
-        this.callbackInterfaces.forEach(int => {
-            this.nativeWriter.writeInterface(int.name, writer => {
-                int.methods.forEach(method => {
-                    writer.writeMethodDeclaration(
-                        method.name,
-                        writer.makeNamedSignature(method.returnType, method.parameters)
-                    )
-                })
-            })
-        })
-        printCallbacksKinds(this.library, this.nativeWriter)
-        this.nativeWriter.writeInterface(className, writer => {
-            this.interfaces.flatMap(it => it.methods).forEach(method => {
-                // TODO remove duplicated code from NativeModuleVisitor::printPeerMethod (NativeModulePrinter.ts)
-                const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param))
-                const args: ({name: string, type: IDLType})[] = [{ name: 'self', type: IDLPointerType }]
-                let serializerArgCreated = false
-                for (let i = 0; i < argConvertors.length; ++i) {
-                    let it = argConvertors[i]
-                    if (it.useArray) {
-                        if (!serializerArgCreated) {
-                            args.push(
-                                { name: 'thisArray', type: createContainerType('sequence', [IDLU8Type]) },
-                                { name: 'thisLength', type: IDLI32Type },
-                            )
-                            serializerArgCreated = true
-                        }
-                    } else {
-                        args.push({ name: `${it.param}`, type: method.parameters[i].type! })
-                    }
-                }
-                const signature = NamedMethodSignature.make(method.returnType, args)
-                writer.writeNativeMethodDeclaration(`_${this.libraryName}_${method.name}`, signature)
-            })
-            this.interfaces.forEach(it => {
-                const ctors = it.constructors.map(it => ({ parameters: it.parameters, returnType: it.returnType }))
-                if (ctors.length === 0) {
-                    ctors.push({
-                        returnType: IDLNumberType /* unused? */,
-                        parameters: []
-                    })
-                }
-                ctors.forEach(ctor => {
-                    const signature = writer.makeNamedSignature(IDLPointerType, ctor.parameters)
-                    writer.writeNativeMethodDeclaration(`_${it.name}_ctor`, signature)
-                })
-            })
-            writer.writeNativeMethodDeclaration("_GetManagerCallbackCaller",
-                NamedMethodSignature.make(
-                    IDLPointerType,
-                    [{ name: "kind", type: createReferenceType("CallbackKind") }]
-                )
-            )
-        })
+        const peerLibrary = this.library
+        const lang = peerLibrary.language
+        const visitor = (lang == Language.CJ) ? new CJNativeModuleVisitor(peerLibrary) : new NativeModuleVisitor(peerLibrary)
+        visitor.print()
+
+        this.nativeWriter.concat(visitor.nativeModule)
+        if (visitor.nativeFunctions) {
+            this.nativeFunctionsWriter.concat(visitor.nativeFunctions)
+        }
     }
 
     private printPeer() {
@@ -428,7 +378,7 @@ class OHOSVisitor {
                         writer.writeStatement(
                             writer.makeAssign(
                                 'this.peer', undefined,
-                                writer.makeMethodCall(`${nativeModuleGetter}()`, `_${int.name}_ctor`, signature.argsNames.map(it => writer.makeString(it))),
+                                writer.makeMethodCall(`${nativeModuleGetter}()`, `_${this.libraryName}_${int.name}_ctor`, signature.argsNames.map(it => writer.makeString(it))),
                                 false
                             )
                         )
@@ -474,7 +424,7 @@ class OHOSVisitor {
                         })
                         const callExpression = writer.makeMethodCall(
                             `${nativeModuleGetter}()`,
-                            `_${this.libraryName}_${method.name}`,
+                            `_${this.libraryName}_${int.name}_${method.name}`,
                             params
                         )
                         if (method.returnType === IDLVoidType) {
@@ -586,7 +536,8 @@ class OHOSVisitor {
         const nativeModuleText = nativeModuleTemaplte
             .replaceAll('%NATIVE_MODULE_NAME%', this.libraryName)
             .replaceAll('%PACKAGE_NAME%', fileNamePrefix)
-            .replaceAll('%NATIVE_MODULE_CONTENT%', this.nativeWriter.getOutput().join('\n'))
+            .replaceAll('%NATIVE_MODULE_METHODS%', this.nativeWriter.getOutput().join('\n'))
+            .replaceAll('%NATIVE_MODULE_NATIVE_FUNCTIONS%', this.nativeFunctionsWriter.getOutput().join('\n'))
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Native${ext}`), nativeModuleText, 'utf-8')
 
         const peerTemplate = readLangTemplate(`OHOSPeer_template${ext}`, this.library.language)

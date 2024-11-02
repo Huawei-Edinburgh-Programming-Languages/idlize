@@ -1,6 +1,8 @@
-import { pointer, int32, EventType, KPointer } from "./types"
+import { pointer, int32, EventType, KPointer, KStringPtr } from "./types"
 
-%NATIVE_MODULE_CONTENT%
+export interface %NATIVE_MODULE_NAME%NativeModule {
+%NATIVE_MODULE_METHODS%
+}
 
 type NativeModuleType = %NATIVE_MODULE_NAME%NativeModule
 let theModule: NativeModuleType | undefined = undefined

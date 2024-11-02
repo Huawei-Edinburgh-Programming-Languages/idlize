@@ -25,7 +25,7 @@ import { Language } from "../../Language";
 import * as idl from '../../idl'
 import { getReferenceResolver } from "../ReferenceResolver";
 
-class NativeModuleVisitor {
+export class NativeModuleVisitor {
     readonly nativeModulePredefined: Map<string, LanguageWriter>
     readonly nativeModule: LanguageWriter
     readonly nativeModuleEmpty: LanguageWriter
@@ -88,7 +88,8 @@ class NativeModuleVisitor {
         }
         let maybeReceiver = method.hasReceiver() ? [{ name: 'ptr', type: idl.toIDLType('KPointer') }] : []
         const parameters = NamedMethodSignature.make(returnType ?? idl.IDLVoidType, maybeReceiver.concat(args))
-        let name = `_${component}_${method.overloadedName}`
+        const libPrefix = this.library instanceof PeerLibrary ? "" : this.library.libraryPrefix
+        let name = `_${libPrefix}${component}_${method.overloadedName}`
 
         if (this.library.language === Language.ARKTS) {
             if (parameters.returnType === idl.IDLThisType) {
@@ -184,7 +185,7 @@ class NativeModuleVisitor {
     }
 }
 
-class CJNativeModuleVisitor extends NativeModuleVisitor {
+export class CJNativeModuleVisitor extends NativeModuleVisitor {
     private arrayLikeTypes = new Set([
         'Uint8Array', 'KUint8ArrayPtr', 'KInt32ArrayPtr', 'KFloat32ArrayPtr'])
     private stringLikeTypes = new Set(['String', 'KString', 'KStringPtr', 'string'])
@@ -217,9 +218,10 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
                 args.push({ name: `${it.param}`, type: idl.toIDLType(it.interopType(nativeModule.language)) })
             }
         }
-        let maybeReceiver = method.hasReceiver() ? [{ name: 'ptr', type: idl.toIDLType('KPointer') }] : []
+        let maybeReceiver = method.hasReceiver() ? [{ name: 'ptr', type: idl.IDLPointerType as idl.IDLType/* idl.toIDLType('KPointer') */ }] : []
         const parameters = NamedMethodSignature.make(returnType ?? idl.IDLVoidType, maybeReceiver.concat(args))
-        let name = `_${component}_${method.overloadedName}`
+        const libPrefix = this.library instanceof PeerLibrary ? "" : this.library.libraryPrefix
+        let name = `_${libPrefix}${component}_${method.overloadedName}`
         let nativeName = name.substring(1)
         nativeModule.writeMethodImplementation(new Method(name, parameters, [MethodModifier.PUBLIC, MethodModifier.STATIC]), (printer) => {
             let functionCallArgs: Array<string> = []

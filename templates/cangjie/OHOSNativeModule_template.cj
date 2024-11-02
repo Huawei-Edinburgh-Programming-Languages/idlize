@@ -17,4 +17,23 @@ package %PACKAGE_NAME%
 
 import std.collection.*
 
-%NATIVE_MODULE_CONTENT%
+
+foreign {
+    func StringData(ptr: KPointer, data: CPointer<UInt8>, arg2: Int32): Unit
+
+%NATIVE_MODULE_NATIVE_FUNCTIONS%
+}
+
+public open class %NATIVE_MODULE_NAME%NativeModule {
+%NATIVE_MODULE_METHODS%
+
+    public static func _StringData(ptr: Int64, data: ArrayList<UInt8>, arg2: Int32): ArrayList<UInt8> {
+        unsafe {
+            let handle_1 = acquireArrayRawData(data.toArray())
+            StringData(ptr, handle_1.pointer, arg2)
+            let outputData = ArrayList<UInt8>(handle_1.array)
+            releaseArrayRawData(handle_1)
+            return outputData
+        }
+    }
+}
