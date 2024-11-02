@@ -803,7 +803,7 @@
 |`caretStyle`|Function| Evstigneev Roman | done |  |
 |`placeholderColor`|Function| Evstigneev Roman |done |  |
 |`placeholderFont`|Function| Evstigneev Roman | done |  |
-|`textFont`|Function| Evstigneev Roman | devdone |  |
+|`textFont`|Function| Evstigneev Roman | done |  |
 |`enterKeyType`|Function| Evstigneev Roman |done|  |
 |`onSubmit`|Function| Evstigneev Roman |done|  |
 |`onChange`|Function| Evstigneev Roman |done|  |
