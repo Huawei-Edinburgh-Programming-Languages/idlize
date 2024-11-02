@@ -730,7 +730,7 @@ class PeersGenerator {
         // Such as the ones coming from the friend interfaces
         // E.g. ButtonInterface instead of ButtonAttribute
         const originalParentName = parentName ?? peer.originalClassName!
-        const CallSignature = idl.isCallSignature(method)
+        const CallSignature = idl.isCallable(method)
         const methodName = CallSignature ? `set${peer.componentName}Options` : method.name
         const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param))
         const declarationTargets = method.parameters.map(param => {
@@ -1346,7 +1346,7 @@ function generateSignature(
         returnType = idl.IDLVoidType
     }
     else if (
-        idl.isCallSignature(method) || 
+        idl.isCallable(method) || 
         idl.isIDLTypeName(method.returnType!, 'T') ||
         idl.isConstructor(method) ||
         !method.isStatic && method.returnType && className && idl.isIDLTypeName(method.returnType, className)
