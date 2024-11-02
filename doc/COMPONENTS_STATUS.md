@@ -73,8 +73,8 @@
 |`textStyle`| Function |Politov Mikhail | done |  |
 |`onChange`| Function |Politov Mikhail | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`edgeAlign`| Function |Politov Mikhail | done |  |
-|*Canvas*| *Component* |Vadim Voronov |In Progress |  |
-|`setCanvasOptions`| Function |Vadim Voronov |In Progress |  |
+|*Canvas*| *Component* |Vadim Voronov | blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
+|`setCanvasOptions`| Function |Vadim Voronov | blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`onReady`| Function |Vadim Voronov | done |  |
 |`enableAnalyzer`| Function |Vadim Voronov | done |  |
 |*Calendar*| *Component* | Maksimov Nikita | in progress|  |
@@ -1394,16 +1394,16 @@
 |`setTextAlign`| Function  | Vadim Voronov | in progress | |
 |`getTextBaseline`| Function  | Vadim Voronov | in progress | |
 |`setTextBaseline`| Function  | Vadim Voronov | in progress | |
-|*CanvasRenderingContext2D*| *Class* | Vadim Voronov| in progress| |
-|`toDataURL`| Function |Vadim Voronov| in progress| |
+|*CanvasRenderingContext2D*| *Class* | Vadim Voronov| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`toDataURL`| Function |Vadim Voronov| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`startImageAnalyzer`| Function |Vadim Voronov| in progress| |
 |`stopImageAnalyzer`| Function | Vadim Voronov| in progress| |
 |`on`| Function |Vadim Voronov| in progress| |
 |`off`| Function |Vadim Voronov| in progress| |
 |`getHeight`| Function |Vadim Voronov| in progress| |
 |`getWidth`| Function |Vadim Voronov| in progress| |
-|*DrawingRenderingContext*| *Class* |Vadim Voronov| in progress| |
-|`invalidate`| Function |Vadim Voronov| in progress| |
+|*DrawingRenderingContext*| *Class* |Vadim Voronov| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`invalidate`| Function |Vadim Voronov| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*ImageAnalyzerController*| *Class* |Vadim Voronov| in progress| |
 |`getImageAnalyzerSupportTypes`| Function |Vadim Voronov| in progress| |
 |*RichEditorController*| *Class* |Dudkin Sergey| done|  |
