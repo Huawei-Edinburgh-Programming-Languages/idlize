@@ -17,6 +17,7 @@ import { pointer, KUint8ArrayPtr, KBuffer, ResourceId, ResourceManager } from "@
 import { CallbackKind } from "./CallbackKind"
 import { Length, Resource } from "../ArkUnitsInterfaces"
 import { NativeModule } from "#components"
+import { CallbackKind } from "./CallbackKind"
 
 /**
  * Value representing possible JS runtime object type.
@@ -124,6 +125,11 @@ export class SerializerBase {
     constructor() {
         this.buffer = new KBuffer(96)
     }
+
+    holdAndWriteCallback(value: Object, valueType: CallbackKind) {
+        throw new Error(`not implemented`)
+    }
+
     static hold<T extends SerializerBase>(factory: () => T): T {
         if (SerializerBase.cache === undefined)
             SerializerBase.cache = factory()

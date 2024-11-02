@@ -55,7 +55,7 @@ export interface ArgConvertor { // todo:
     isPointerType(): boolean
     unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression|undefined
     getMembers(): string[]
-    getObjectAccessor(languge: Language, value: string, args?: Record<string, string>, writer?: LanguageWriter): string
+    getObjectAccessor(language: Language, value: string, args?: Record<string, string>, writer?: LanguageWriter): string
 }
 
 export abstract class BaseArgConvertor implements ArgConvertor {
