@@ -792,17 +792,17 @@
 |`getItemIndex`| Function | Erokhin Ilya | done |  |
 |*Search*|*Component*| Evstigneev Roman |In Progress|  |
 |`setSearchOptions`|Function| Evstigneev Roman | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAXCOP |
-|`searchButton`|Function| Evstigneev Roman | devdone |  |
-|`fontColor`|Function| Evstigneev Roman | devdone |  |
+|`searchButton`|Function| Evstigneev Roman | done |  |
+|`fontColor`|Function| Evstigneev Roman | done |  |
 |`searchIcon`|Function| Evstigneev Roman |blocked AceEngine| https://gitee.com/openharmony/arkui_ace_engine/issues/IAWF91, https://gitee.com/nikolay-igotti/idlize/issues/IAYXQ8 |
 |`cancelButton`|Function| Evstigneev Roman |blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
-|`textIndent`|Function| Evstigneev Roman | devdone |  |
-|`inputFilter`|Function| Evstigneev Roman | devdone |  |
+|`textIndent`|Function| Evstigneev Roman | done |  |
+|`inputFilter`|Function| Evstigneev Roman | done |  |
 |`onEditChange`|Function| Evstigneev Roman |done|  |
-|`selectedBackgroundColor`|Function| Evstigneev Roman | devdone |  |
-|`caretStyle`|Function| Evstigneev Roman | devdone |  |
-|`placeholderColor`|Function| Evstigneev Roman |devdone |  |
-|`placeholderFont`|Function| Evstigneev Roman | devdone |  |
+|`selectedBackgroundColor`|Function| Evstigneev Roman | done |  |
+|`caretStyle`|Function| Evstigneev Roman | done |  |
+|`placeholderColor`|Function| Evstigneev Roman |done |  |
+|`placeholderFont`|Function| Evstigneev Roman | done |  |
 |`textFont`|Function| Evstigneev Roman | devdone |  |
 |`enterKeyType`|Function| Evstigneev Roman |done|  |
 |`onSubmit`|Function| Evstigneev Roman |done|  |
@@ -811,7 +811,7 @@
 |`onContentScroll`|Function| Evstigneev Roman |done|  |
 |`onCopy`|Function| Evstigneev Roman |done|  |
 |`onCut`|Function| Evstigneev Roman |done|  |
-|`onPaste`|Function| Evstigneev Roman |blocked Arkoala|  |
+|`onPaste`|Function| Evstigneev Roman |blocked Arkoala| https://gitee.com/nikolay-igotti/idlize/issues/IAOKSL  |
 |`copyOption`|Function| Evstigneev Roman |blocked UT| https://gitee.com/openharmony/arkui_ace_engine/issues/IAVPM2 |
 |`maxLength`|Function| Evstigneev Roman |done|  |
 |`textAlign`|Function| Evstigneev Roman |done|  |
@@ -821,17 +821,17 @@
 |`maxFontSize`|Function| Evstigneev Roman |done|  |
 |`customKeyboard`|Function| Evstigneev Roman |blocked Arkoala| https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`decoration`|Function| Evstigneev Roman |done|  |
-|`letterSpacing`|Function| Evstigneev Roman | devdone |  |
-|`lineHeight`|Function| Evstigneev Roman | devdone |  |
+|`letterSpacing`|Function| Evstigneev Roman | done |  |
+|`lineHeight`|Function| Evstigneev Roman | done |  |
 |`type`|Function| Evstigneev Roman |done|  |
 |`fontFeature`|Function| Evstigneev Roman |done|  |
-|`onWillInsert`|Function| Evstigneev Roman |blocked Arkoala|  |
+|`onWillInsert`|Function| Evstigneev Roman |blocked Arkoala| https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
 |`onDidInsert`|Function| Evstigneev Roman |done|  |
-|`onWillDelete`|Function| Evstigneev Roman |blocked Arkoala|  |
+|`onWillDelete`|Function| Evstigneev Roman |blocked Arkoala| https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
 |`onDidDelete`|Function| Evstigneev Roman |done|  |
-|`editMenuOptions`|Function| Evstigneev Roman |blocked Arkoala|  |
+|`editMenuOptions`|Function| Evstigneev Roman |blocked Arkoala| Ark_Materialized possibly can be implemented  |
 |`enablePreviewText`|Function| Evstigneev Roman |done|  |
-|`enableHapticFeedback`|Function|Evstigneev Roman| devdone |  |
+|`enableHapticFeedback`|Function|Evstigneev Roman| done |  |
 |*SecurityComponentMethod*| *Component* | Samarin Sergey|in progress |  |
 |`iconSize`| Function |Samarin Sergey| done |  |
 |`layoutDirection`| Function |Samarin Sergey|done |  |
