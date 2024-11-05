@@ -1599,3 +1599,6 @@
 |`backward`| Function | Erokhin Ilya | in progress | |
 |`forward`| Function | Erokhin Ilya | in progress | |
 |`getCookieManager`| Function | Erokhin Ilya | in progress | |
+|*WebCookie*| *Class* | Erokhin Ilya | in progress | |
+|`setCookie`| Function | Erokhin Ilya | in progress | |
+|`saveCookie`| Function | Erokhin Ilya | in progress | |
