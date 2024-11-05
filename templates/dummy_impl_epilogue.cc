@@ -32,7 +32,7 @@ const %CPP_PREFIX%ArkUIExtendedNodeAPI* %CPP_PREFIX%GetExtendedAPI()
 {
     static const %CPP_PREFIX%ArkUIExtendedNodeAPI extendedNodeAPIImpl = {
         %CPP_PREFIX%ARKUI_EXTENDED_NODE_API_VERSION, // version
-        SetAppendGroupedLog,
+        setAppendGroupedLog,
         %CPP_PREFIX%GetUtilsModifier,
         OHOS::Ace::NG::Bridge::SetCallbackMethod,
         OHOS::Ace::NG::ApiImpl::SetCustomMethodFlag,

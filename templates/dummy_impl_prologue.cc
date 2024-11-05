@@ -23,16 +23,9 @@
 #include "tree.h"
 #include "logging.h"
 
-typedef void (*AppendGroupedLogSignature)(int32_t, const char*);
-
-AppendGroupedLogSignature appendGroupedLogPtr = nullptr;
 
 void appendGroupedLog(int kind, const std::string& str) {
     appendGroupedLog(kind, str.c_str());
-}
-
-void SetAppendGroupedLog(void* logger) {
-    if (logger) appendGroupedLogPtr = reinterpret_cast<AppendGroupedLogSignature>(logger);
 }
 
 void dummyClassFinalizer(KNativePointer* ptr) {

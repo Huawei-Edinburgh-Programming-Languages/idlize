@@ -69,7 +69,7 @@ typedef struct %CPP_PREFIX%ArkUIBasicNodeAPI {
 typedef struct %CPP_PREFIX%ArkUIExtendedNodeAPI {
     Ark_Int32 version;
 
-    void (*setAppendGroupedLog)(void* pFunc);
+    void (*setAppendGroupedLog)(void (*logger)(int, const char*));
 
     const %CPP_PREFIX%Ark_UtilsModifier* (*getUtilsModifier)();
 
