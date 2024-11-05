@@ -344,7 +344,7 @@
 |`onDec`| Function | Erokhin Ilya | done |  |
 |`enableDec`| Function | Erokhin Ilya | done |  |
 |`enableInc`| Function | Erokhin Ilya | done |  |
-|*CustomDialogController*| *Class* | Erokhin Ilya | blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IAOKLD |
+|*CustomDialogController*| *Class* | Erokhin Ilya | blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`open`| Function | Erokhin Ilya | blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`close`| Function | Erokhin Ilya | blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*DataPanel*| *Component* | Morozov Sergey |blocked Arkoala |  |
@@ -597,7 +597,7 @@
 |`mode`| Function |Kovalev Sergey | done |  |
 |`backButtonIcon`| Function |Kovalev Sergey | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`menus`| Function |Kovalev Sergey | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|`onReady`| Function |Kovalev Sergey | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAOKLD |
+|`onReady`| Function |Kovalev Sergey | in progress | |
 |`onWillAppear`| Function |Kovalev Sergey | done | |
 |`onWillDisappear`| Function |Kovalev Sergey | done | |
 |`onWillShow`| Function |Kovalev Sergey | done | |
@@ -982,7 +982,7 @@
 |`onAnimationEnd`| Function | Skroba Gleb | done |  |
 |`onGestureSwipe`| Function | Skroba Gleb | done |  |
 |`nestedScroll`| Function | Skroba Gleb| blocked UT |  |
-|`customContentTransition`| Function | Skroba Gleb |blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAOKLD |
+|`customContentTransition`| Function | Skroba Gleb | in progress | |
 |`onContentDidScroll`| Function | Skroba Gleb| blocked UT |  |
 |`indicatorInteractive`| Function | Skroba Gleb| done |  |
 |*IndicatorComponent*| *Component* | Andrey Khudenkikh | in progress |  |
@@ -1244,7 +1244,7 @@
 |`showNext`| Function | Skroba Gleb | done |  |
 |`showPrevious`| Function | Skroba Gleb | done |  |
 |`changeIndex`| Function | Skroba Gleb | done |  |
-|`finishAnimation`| Function | Skroba Gleb |blocked| https://gitee.com/nikolay-igotti/idlize/issues/IAOKLD |
+|`finishAnimation`| Function | Skroba Gleb | in progress |  |
 |*SwiperContentTransitionProxy*| *Class* | Skroba Gleb | in progress | |
 |`finishTransition`| Function | Skroba Gleb | in progress | |
 |`getSelectedIndex`| Function | Skroba Gleb | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
@@ -1294,7 +1294,7 @@
 |`barOverlap`| Function | Tuzhilkin Ivan | done |  |
 |`barBackgroundColor`| Function | Tuzhilkin Ivan | done |  |
 |`barGridAlign`| Function | Tuzhilkin Ivan | done |  |
-|`customContentTransition`| Function | Tuzhilkin Ivan | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAOKLD |
+|`customContentTransition`| Function | Tuzhilkin Ivan | in progress |  |
 |`barBackgroundBlurStyle`| Function | Tuzhilkin Ivan | done |  |
 |`onContentWillChange`| Function | Tuzhilkin Ivan | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
 |*TabContent*| *Component* | Evstigneev Roman |in progress |  |
