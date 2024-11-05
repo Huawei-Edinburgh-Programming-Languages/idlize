@@ -493,7 +493,7 @@
 |`startPoint`|Function|Dudkin Sergey|blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IAXCBA |
 |`endPoint`|Function|Dudkin Sergey|blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IAXCBA |
 |*List*|*Component*|Morozov Sergey| blocked Arkoala |  |
-|`setListOptions`|Function|Morozov Sergey| in progress | can be handled |
+|`setListOptions`|Function|Morozov Sergey| devdone |  |
 |`lanes`|Function|Morozov Sergey|done|  |
 |`alignListItem`|Function|Morozov Sergey|done|  |
 |`listDirection`|Function|Morozov Sergey|done|  |
@@ -1409,11 +1409,11 @@
 |`invalidate`| Function |Vadim Voronov| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*ImageAnalyzerController*| *Class* |Vadim Voronov|  blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IB270B?from=project-issue |
 |`getImageAnalyzerSupportTypes`| Function |Vadim Voronov|  blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IB270B?from=project-issue |
-|*ListScroller*| *Class* |Morozov Sergey |in progress |  |
-|`getItemRectInGroup`| Function |Morozov Sergey |in progress |  |
-|`scrollToItemInGroup`| Function |Morozov Sergey |in progress |  |
-|`closeAllSwipeActions`| Function |Morozov Sergey |in progress |  |
-|`getVisibleListContentInfo`| Function |Morozov Sergey |in progress |  |
+|*ListScroller*| *Class* |Morozov Sergey | blocked Arkoala |  |
+|`getItemRectInGroup`| Function |Morozov Sergey | blocked Arkoala |  |
+|`scrollToItemInGroup`| Function |Morozov Sergey | devdone |  |
+|`closeAllSwipeActions`| Function |Morozov Sergey | blocked Arkoala |  |
+|`getVisibleListContentInfo`| Function |Morozov Sergey | blocked Arkoala |  |
 |*RichEditorController*| *Class* |Dudkin Sergey| blocked|  |
 |`addTextSpan`| Function |Dudkin Sergey| done|  |
 |`addImageSpan`| Function |Dudkin Sergey| blocked| Ark_CustomObject :: implement setting pixel map aka inValue into options |
