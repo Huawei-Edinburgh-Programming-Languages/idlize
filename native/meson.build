@@ -8,8 +8,7 @@ source_set = get_option('source_set')
 else
 source_set = 'ts_peers'
 endif
-use_libace = false
-use_dummy_libace = true
+use_libace = true
 if get_option('arkts')
 is_arkts = true
 else
@@ -22,6 +21,8 @@ is_node = true
 is_arkts = true
 is_cj = (source_set == 'cangjie-subset')
 is_jni = java_home != 'undefined'
+
+use_dummy_libace = is_node
 
 compile_events_test = get_option('events_test')
 compile_callbacks_test = get_option('callbacks_test')
@@ -48,7 +49,6 @@ include_dirs = [
 ]
 
 sources = [
-    arkoala_dir / 'arkoala.cc',
     arkoala_dir / 'all_events.cc',
     arkoala_dir / 'bridge_custom.cc',
     arkoala_dir / 'bridge_generated.cc',
@@ -95,31 +95,14 @@ jni_os = jni_oses.get(jni_os, jni_os)
 is_ohos = os == 'ohos'
 
 if is_ohos
-use_dummy_libace = false
 is_arkts = false
 use_libace = true
 endif
 
 if use_libace
-libace_sources = []
 libace_name = 'ace_compatible_mock'
-
-if use_dummy_libace
-libace_sources += [
+libace_sources = [
     arkoala_dir + '/dummy_impl.cc',
-]
-else
-libace_sources += [
-    libace_dir + '/generated/interface/all_modifiers.cpp',
-]
-getModifierImplFiles = run_command('node', 'getModifierImplFiles.mjs', libace_dir + '/implementation')
-modifier_impl_sources = getModifierImplFiles.stdout().strip().split(',')
-libace_sources += modifier_impl_sources
-endif
-cflags += ['-DKOALA_USE_LIBACE=1']
-else
-sources += [
-    arkoala_dir / 'dummy_impl.cc',
 ]
 endif
 
@@ -195,7 +178,7 @@ cj_sources = [
 ]
 
 if is_jni
-    jni_cflags = ['-DKOALA_USE_JAVA_VM', '-DKOALA_JNI']
+    jni_cflags = ['-DKOALA_USE_JAVA_VM', '-DKOALA_JNI', '-DINTEROP_LIBRARY_NAME=' + jni_library_name ]
     jni_include_dirs = [
         java_home / 'include',
         java_home / 'include' / jni_os,
@@ -258,12 +241,10 @@ shared_library(libace_name,
         'b_lundef=false',
     ],
     install: true,
-    name_prefix: node_module_prefix,
-    name_suffix: 'dll',
-    include_directories: include_dirs + node_include_dirs,
+    include_directories: include_dirs,
     install_dir: meson.current_source_dir(),
-    cpp_args: cflags + node_cflags,
-    link_args: ldflags + node_ldflags,
+    cpp_args: cflags,
+    link_args: ldflags,
     dependencies: []
 )
 endif

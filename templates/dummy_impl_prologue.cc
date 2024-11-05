@@ -19,7 +19,6 @@
 #include "arkoala_api_generated.h"
 #include "Serializers.h"
 #include "arkoala-logging.h"
-#include "common-interop.h"
 #include "arkoala-macros.h"
 #include "tree.h"
 #include "logging.h"
@@ -40,7 +39,6 @@ void dummyClassFinalizer(KNativePointer* ptr) {
     out.append(")");
     appendGroupedLog(1, out);
 }
-
 
 namespace TreeNodeDelays {
 

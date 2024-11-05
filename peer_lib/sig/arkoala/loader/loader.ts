@@ -13,6 +13,7 @@
 * limitations under the License.
 */
 
+import { env } from "node:process"
 import { Worker, isMainThread, parentPort } from "node:worker_threads"
 
 type int32 = number
@@ -133,7 +134,8 @@ export function initWorker() {
 export function checkLoader(variant: string): int32 {
     let vm = -1
     let classPath = ""
-    let nativePath = __dirname + "/../native"
+    let nativePath = __dirname + "/../native/"
+    env.ACE_LIBRARY_PATH = nativePath
 
     switch (variant) {
         case 'java': {
