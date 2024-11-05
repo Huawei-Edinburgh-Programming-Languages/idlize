@@ -844,12 +844,12 @@
 |`fontFamily`| Function |Samarin Sergey| blocked UT |  |
 |`fontColor`| Function |Samarin Sergey| done |  |
 |`iconColor`| Function |Samarin Sergey| done |  |
-|`backgroundColor`| Function |Samarin Sergey| done |  |
-|`borderStyle`| Function |Samarin Sergey| done |  |
-|`borderWidth`| Function |Samarin Sergey| done |  |
-|`borderColor`| Function |Samarin Sergey| done |  |
-|`borderRadius`| Function |Samarin Sergey| done |  |
-|`padding`| Function |Samarin Sergey| done |  |
+|`backgroundColor`| Function |Samarin Sergey| done | https://gitee.com/openharmony/arkui_ace_engine/issues/IB17WJ |
+|`borderStyle`| Function |Samarin Sergey| done | https://gitee.com/openharmony/arkui_ace_engine/issues/IB17WJ |
+|`borderWidth`| Function |Samarin Sergey| done | https://gitee.com/openharmony/arkui_ace_engine/issues/IB17WJ |
+|`borderColor`| Function |Samarin Sergey| done | https://gitee.com/openharmony/arkui_ace_engine/issues/IB17WJ |
+|`borderRadius`| Function |Samarin Sergey| done | https://gitee.com/openharmony/arkui_ace_engine/issues/IB17WJ |
+|`padding`| Function |Samarin Sergey| done | https://gitee.com/openharmony/arkui_ace_engine/issues/IB17WJ |
 |`textIconSpace`| Function |Samarin Sergey| done |  |
 |`key`| Function |Samarin Sergey| done |  |
 |`width`| Function |Samarin Sergey| done |  |
@@ -1023,10 +1023,10 @@
 |`maxLines`| Function | |Samarin Sergey |in progress |  |
 |`decoration`| Function |Samarin Sergey |in progress |  |
 |`letterSpacing`| Function |Samarin Sergey |in progress |  |
-|`textCase`| Function |Samarin Sergey |in progress |  |
+|`textCase`| Function |Samarin Sergey | devdone |  |
 |`baselineOffset`| Function |Samarin Sergey |in progress |  |
 |`copyOption`| Function |Samarin Sergey |in progress |  |
-|`draggable`| Function |Samarin Sergey |in progress |  |
+|`draggable`| Function |Samarin Sergey | devdone |  |
 |`textShadow`| Function |Samarin Sergey |in progress |  |
 |`heightAdaptivePolicy`| Function |Samarin Sergey |in progress |  |
 |`textIndent`| Function |Samarin Sergey |in progress |  |
@@ -1036,15 +1036,15 @@
 |`caretColor`| Function |Samarin Sergey |in progress |  |
 |`selectedBackgroundColor`| Function |Samarin Sergey |in progress |  |
 |`ellipsisMode`| Function |Samarin Sergey |in progress |  |
-|`EnableDataDetector`| Function | Kirill Kirichenko | in progress |  |
+|`EnableDataDetector`| Function | Kirill Kirichenko | devdone |  |
 |`DataDetectorConfig`| Function | Kirill Kirichenko | in progress |  |
 |`onTextSelectionChange`| Function |Samarin Sergey |in progress |  |
 |`fontFeature`| Function |Samarin Sergey |in progress |  |
-|`privacySensitive`| Function |Samarin Sergey |in progress |  |
-|`textSelectable`| Function |Samarin Sergey |in progress |  |
+|`privacySensitive`| Function |Samarin Sergey | devdone |  |
+|`textSelectable`| Function |Samarin Sergey | devdone |  |
 |`EditMenuOptions`| Function | Kirill Kirichenko | in progress |  |
-|`halfLeading`| Function |Samarin Sergey |in progress |  |
-|`enableHapticFeedback`| Function |Samarin Sergey |in progress |  |
+|`halfLeading`| Function |Samarin Sergey | devdone |  |
+|`enableHapticFeedback`| Function |Samarin Sergey | devdone |  |
 |`selection`| Function |Samarin Sergey |in progress |  |
 |`BindSelectionMenu`| Function | Kirill Kirichenko | in progress |  |
 |*TextArea*|*Component*|Tuzhilkin Ivan|in progress|  |
