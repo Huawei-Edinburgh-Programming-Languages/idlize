@@ -148,9 +148,15 @@ export class SerializerBase {
     }
     // TODO implement callback and check do we need this for a custom OHOS library
     // private heldResources: ResourceId[] = []
-    writeCallbackResource(resource: object) {
-        // const resourceId = ResourceManager.registerAndHold(resource)
+    holdAndWriteCallback(callback: object, kind: CallbackKind) {
+        // const resourceId = ResourceManager.registerAndHold(callback)
         // this.heldResources.push(resourceId)
+        // this.writeInt32(resourceId)
+        // this.writePointer(0)
+        // this.writePointer(0)
+        // this.writePointer(0)
+    }
+    writeCallbackResource(resource: object) {
         // this.writeInt32(resourceId)
         // this.writePointer(nativeModule()._GetManagedResourceHolder())
         // this.writePointer(nativeModule()._GetManagedResourceReleaser())

@@ -49,6 +49,7 @@ class OHOSVisitor {
 
     peerWriter: LanguageWriter
     nativeWriter: LanguageWriter
+    nativeMethodsWriter: LanguageWriter
     nativeFunctionsWriter: LanguageWriter
 
     libraryName: string = ""
@@ -62,6 +63,7 @@ class OHOSVisitor {
     constructor(protected library: IdlPeerLibrary) {
         this.peerWriter = createLanguageWriter(this.library.language, this.library)
         this.nativeWriter = createLanguageWriter(this.library.language, this.library)
+        this.nativeMethodsWriter = createLanguageWriter(this.library.language, this.library)
         this.nativeFunctionsWriter = createLanguageWriter(this.library.language, this.library)
     }
 
@@ -328,11 +330,11 @@ class OHOSVisitor {
         const lang = peerLibrary.language
         const visitor = (lang == Language.CJ) ? new CJNativeModuleVisitor(peerLibrary) : new NativeModuleVisitor(peerLibrary)
         visitor.print()
-
-        this.nativeWriter.concat(visitor.nativeModule)
+        this.nativeMethodsWriter.concat(visitor.nativeModule)
         if (visitor.nativeFunctions) {
             this.nativeFunctionsWriter.concat(visitor.nativeFunctions)
         }
+        printCallbacksKinds(this.library, this.nativeWriter)
     }
 
     private printPeer() {
@@ -536,7 +538,8 @@ class OHOSVisitor {
         const nativeModuleText = nativeModuleTemaplte
             .replaceAll('%NATIVE_MODULE_NAME%', this.libraryName)
             .replaceAll('%PACKAGE_NAME%', fileNamePrefix)
-            .replaceAll('%NATIVE_MODULE_METHODS%', this.nativeWriter.getOutput().join('\n'))
+            .replaceAll('%NATIVE_MODULE_CONTENT%', this.nativeWriter.getOutput().join('\n'))
+            .replaceAll('%NATIVE_MODULE_METHODS%', this.nativeMethodsWriter.getOutput().join('\n'))
             .replaceAll('%NATIVE_MODULE_NATIVE_FUNCTIONS%', this.nativeFunctionsWriter.getOutput().join('\n'))
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Native${ext}`), nativeModuleText, 'utf-8')
 

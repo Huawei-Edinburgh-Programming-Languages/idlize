@@ -1,5 +1,7 @@
 import { pointer, int32, EventType, KPointer, KStringPtr } from "./types"
 
+%NATIVE_MODULE_CONTENT%
+
 export interface %NATIVE_MODULE_NAME%NativeModule {
 %NATIVE_MODULE_METHODS%
 }

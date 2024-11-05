@@ -17,6 +17,7 @@ package %PACKAGE_NAME%
 
 import std.collection.*
 
+%NATIVE_MODULE_CONTENT%
 
 foreign {
     func StringData(ptr: KPointer, data: CPointer<UInt8>, arg2: Int32): Unit
