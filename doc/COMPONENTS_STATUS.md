@@ -1020,7 +1020,7 @@
 |`lineHeight`| Function |Samarin Sergey |in progress |  |
 |`textOverflow`| Function |Samarin Sergey |in progress |  |
 |`fontFamily`| Function |Samarin Sergey |in progress |  |
-|`maxLines`| Function | |Samarin Sergey |in progress |  |
+|`maxLines`| Function |Samarin Sergey |in progress |  |
 |`decoration`| Function |Samarin Sergey |in progress |  |
 |`letterSpacing`| Function |Samarin Sergey |in progress |  |
 |`textCase`| Function |Samarin Sergey | devdone |  |
