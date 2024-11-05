@@ -12,6 +12,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+#include <string>
+#include <sstream>
+#include <algorithm>
+#include <chrono>
+#include <iomanip>
+#include <unordered_map>
+
 #include "library.h"
 #include "common-interop.h"
 #include "arkoala_api_generated.h"
@@ -84,3 +92,134 @@ Ark_Int32 impl_LayoutNode(KVMContext vmContext, Ark_NativePointer nodePtr, KFloa
     return GetArkUIExtendedNodeAPI()->layoutNode((Ark_VMContext)vmContext, (Ark_NodeHandle)nodePtr, (Ark_Float32(*)[2])data);
 }
 KOALA_INTEROP_CTX_2(LayoutNode, Ark_Int32, Ark_NativePointer, KFloatArray)
+
+struct PerfInfo {
+    int64_t start;
+    int64_t end;
+    int64_t cost;
+    std::string perf_name;
+    void Print(std::stringstream& result, float counterSelf = 0.0) {
+        result << "Perf trace_name(" << perf_name <<  ") cost " << (cost / 1000.0 - counterSelf) << " us.";
+    }
+};
+
+class Performace {
+  public:
+    void PrintAvgs(std::stringstream& result) {
+        for (const auto& [name, perfs] : perfs_) {
+            if (name == "perf_counter_self_cost") continue;
+            float totalCost = 0;
+            for (const auto& perf : perfs) {
+                totalCost += perf.cost / 1000.0 - self_cost_;
+            }
+            auto avg = totalCost / perfs.size();
+            result << "Perf trace_name(" << name << ") " << perfs.size() << " call avg cost " << avg << " us.";
+        }
+    }
+    void PrintTotals(std::stringstream& result) {
+        for (const auto& [name, perfs] : perfs_) {
+            float totalCost = 0;
+            for (const auto& perf : perfs) {
+                totalCost += perf.cost / 1000.0 - self_cost_;
+            }
+            result << "Perf trace_name(" << name << ") " << perfs.size() << " call total cost " << totalCost << " us.";
+        }
+    }
+    void PrintPeak(std::stringstream& result) {
+        for(auto &kv : perfs_) {
+            std::sort(kv.second.begin(), kv.second.end(), [](const PerfInfo &perf1, const PerfInfo &perf2) {
+                return perf1.cost > perf2.cost;
+            });
+            auto maxCost = kv.second.front().cost / 1000.0 - self_cost_;
+            auto minCost = kv.second.back().cost / 1000.0 - self_cost_;
+            result << "Perf trace_name(" << kv.first << ") " << " maxCost = " << maxCost << " us, ";
+            result << "minCost = " << minCost << " us.";
+        }
+    }
+    void PrintDetails(std::stringstream& result) {
+        for (const auto& [name, perfs] : perfs_) {
+            for (auto perf : perfs) {
+                perf.Print(result);
+            }
+        }
+    }
+    void FinishOne() {
+        perfs_[current_.perf_name].emplace_back(current_);
+    }
+    void CalcSelfCost() {
+        float totalCost = 0.0;
+        auto it = perfs_.find("perf_counter_self_cost");
+        if (it == perfs_.end()) {
+            self_cost_ = totalCost;
+            return;
+        }
+        for (const auto& perf : it->second) {
+            totalCost += perf.cost / 1000.0;
+        }
+        self_cost_ = totalCost / it->second.size();
+    }
+    void Clean() {
+        perfs_.clear();
+    }
+    const PerfInfo& GetCurrent() { return current_; }
+    static Performace* GetInstance() {
+        static Performace perf;
+        return &perf;
+    }
+private:
+    std::unordered_map<std::string, std::vector<PerfInfo>> perfs_;
+    PerfInfo current_;
+    float self_cost_;
+};
+
+void impl_StartPerf(const KStringPtr& traceName) {
+    PerfInfo& perf = Performace::GetInstance()->GetCurrent();
+    perf.perf_name = traceName.c_str();
+    auto now = std::chrono::high_resolution_clock::now();
+    perf.start = std::chrono::time_point_cast<std::chrono::nanoseconds>(now).time_since_epoch().count();
+}
+KOALA_INTEROP_V1(StartPerf, KStringPtr)
+
+void impl_EndPerf(const KStringPtr& traceName) {
+    auto now = std::chrono::high_resolution_clock::now();
+    PerfInfo& perf = Performace::GetInstance()->GetCurrent();
+    perf.end = std::chrono::time_point_cast<std::chrono::nanoseconds>(now).time_since_epoch().count();
+    perf.cost = perf.end - perf.start;
+    Performace::GetInstance()->FinishOne();
+}
+KOALA_INTEROP_V1(EndPerf, KStringPtr)
+
+enum DumpOptions {
+    TOTAL = 0,
+    AVERAGE = 1,
+    PEAK = 2,
+    DETAILS = 3,
+    CLEAR = 4
+};
+
+KNativePointer impl_DumpPerf(KInt options) {
+    std::stringstream result;
+    result << std::fixed << std::setprecision(3);
+    Performace::GetInstance()->CalcSelfCost();
+    switch (options) {
+        case TOTAL:
+            Performace::GetInstance()->PrintTotals(result);
+            break;
+        case AVERAGE:
+            Performace::GetInstance()->PrintAvgs(result);
+            break;
+        case PEAK:
+            Performace::GetInstance()->PrintPeak(result);
+            break;
+        case DETAILS:
+            Performace::GetInstance()->PrintDetails(result);
+            break;
+        case CLEAR:
+            Performace::GetInstance()->Clean();
+            break;
+        default:
+            break;
+    }
+    return new std::string(result.str());
+}
+KOALA_INTEROP_1(DumpPerf, KNativePointer, KInt)
