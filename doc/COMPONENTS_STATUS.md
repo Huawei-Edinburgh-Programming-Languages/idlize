@@ -928,18 +928,18 @@
 |*BaseSpan*| *Component* |Politov Mikhail | in progress |  |
 |`textBackgroundStyle`| Function | Politov Mikhail | in progress |  |
 |`baselineOffset`| Function | Politov Mikhail | in progress |  |
-|*Span*| *Component* | Politov Mikhail | in progress |  |
-|`setSpanOptions`| Function |Politov Mikhail | in progress |  |
-|`font`| Function | Politov Mikhail | devdone |  |
-|`fontColor`| Function |Politov Mikhail | devdone |  |
-|`fontSize`| Function |Politov Mikhail | devdone |  |
-|`fontStyle`| Function |Politov Mikhail | devdone |  |
-|`fontWeight`| Function |Politov Mikhail | devdone |  |
-|`fontFamily`| Function |Politov Mikhail | devdone |  |
-|`decoration`| Function | Politov Mikhail | devdone |  |
-|`letterSpacing`| Function |Politov Mikhail | devdone |  |
-|`textCase`| Function | Politov Mikhail | devdone |  |
-|`lineHeight`| Function | Politov Mikhail | devdone |  |
+|*Span*| *Component* | Politov Mikhail | done |  |
+|`setSpanOptions`| Function |Politov Mikhail | done  |  |
+|`font`| Function | Politov Mikhail | done |  |
+|`fontColor`| Function |Politov Mikhail | done |  |
+|`fontSize`| Function |Politov Mikhail | done |  |
+|`fontStyle`| Function |Politov Mikhail | done |  |
+|`fontWeight`| Function |Politov Mikhail | done |  |
+|`fontFamily`| Function |Politov Mikhail | done |  |
+|`decoration`| Function | Politov Mikhail | done |  |
+|`letterSpacing`| Function |Politov Mikhail | done |  |
+|`textCase`| Function | Politov Mikhail | done |  |
+|`lineHeight`| Function | Politov Mikhail | done |  |
 |`textShadow`| Function | Politov Mikhail | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1K3Z |
 |*Stack*| *Component* | Korobeinikov Evgeny | in progress |  |
 |`setStackOptions` | Function | Korobeinikov Evgeny | done |  |
