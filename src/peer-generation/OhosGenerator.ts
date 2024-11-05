@@ -17,11 +17,11 @@ import * as path from 'path'
 
 import { IndentedPrinter } from "../IndentedPrinter"
 import { IdlPeerLibrary } from './idl/IdlPeerLibrary'
-import { CppLanguageWriter, createLanguageWriter, ExpressionStatement, FieldModifier, LanguageWriter, Method, MethodSignature, NamedMethodSignature } from './LanguageWriters'
-import { createContainerType, createReferenceType, forceAsNamedNode, hasExtAttribute, IDLCallback, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLKind, IDLMethod, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLU8Type, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isInterface, isMethod, isOptionalType, isPrimitiveType, isReferenceType, isUnionType } from '../idl'
+import { CppLanguageWriter, createLanguageWriter, FieldModifier, LanguageWriter, MethodSignature } from './LanguageWriters'
+import { forceAsNamedNode, hasExtAttribute, IDLCallback, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLInterface, IDLMethod, IDLParameter, IDLPointerType, IDLType, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isInterface, isMethod, isOptionalType, isReferenceType, isUnionType } from '../idl'
 import { makeSerializerForOhos, readLangTemplate } from './FileGenerators'
 import { capitalize } from '../util'
-import { isMaterialized } from './idl/IdlPeerGeneratorVisitor'
+import { isMaterialized, makeIdlPeerMethodForMethod } from './idl/IdlPeerGeneratorVisitor'
 import { PrimitiveType } from './ArkPrimitiveType'
 import { Language } from '../Language'
 import { ArgConvertor } from './ArgConvertors'
@@ -30,6 +30,8 @@ import { generateCallbackAPIArguments, StructPrinter } from './idl/StructPrinter
 import { qualifiedName } from './idl/common'
 import { printCallbacksKinds } from './printers/CallbacksPrinter'
 import { CJNativeModuleVisitor, NativeModuleVisitor } from './printers/NativeModulePrinter'
+import { writePeerMethodWithPrefix } from './printers/PeersPrinter'
+import { PrinterContext } from './printers/PrinterContext'
 
 class NameType {
     constructor(public name: string, public type: string) {}
@@ -42,8 +44,6 @@ interface SignatureDescriptor {
 }
 
 class OHOSVisitor {
-
-
     hWriter = new CppLanguageWriter(new IndentedPrinter(), this.library)
     cppWriter = new CppLanguageWriter(new IndentedPrinter(), this.library)
 
@@ -88,18 +88,6 @@ class OHOSVisitor {
 
     makeSignature(returnType: IDLType, parameters: IDLParameter[]): MethodSignature {
         return new MethodSignature(returnType, parameters.map(it => it.type!))
-    }
-
-    private writeData(clazz: IDLInterface) {
-        let name = `${PrimitiveType.Prefix}${this.libraryName}_${clazz.name}`
-        let _ = this.hWriter
-        _.print(`typedef struct ${name} {`)
-        _.pushIndent()
-        clazz.properties.forEach(it => {
-            _.print(`${this.mapType(it.type)} ${it.name};`)
-        })
-        _.popIndent()
-        _.print(`} ${name};`)
     }
 
     private writeCallback(callback: IDLCallback) {
@@ -246,22 +234,7 @@ class OHOSVisitor {
         return capitalize(clazz.name)
     }
 
-    private writeClass(clazz: IDLInterface) {
-        this.cppWriter.writeClass(clazz.name, (writer) => {
-            clazz.constructors.forEach(it => {
-                writer.writeConstructorImplementation(clazz.name,
-                    this.makeSignature(IDLVoidType, it.parameters), (writer) => {
-                })
-            })
-            clazz.methods.forEach(it => {
-                writer.writeMethodImplementation(new Method(it.name,
-                    this.makeSignature(it.returnType, it.parameters)), (writer) => {
-                })
-            })
-        })
-    }
-
-    visitDeclaration(entry: IDLEntry): void {
+    visitDeclaration(): void {
         // if (isClass(entry)) this.writeClass(entry)
     }
 
@@ -285,41 +258,6 @@ class OHOSVisitor {
         entry.scope?.forEach(it => this.requestTypes(it))
     }
 
-    private writeTypes(types: IDLEntry[]) {
-        let _ = this.hWriter
-        let seen = new Set<string>()
-        types.forEach(type => {
-            if (seen.has(type.name!)) return
-            seen.add(type.name!)
-            if (isPrimitiveType(type)) {
-            }
-            if (isUnionType(type)) {
-                _.print(`struct ${this.mapType(type)} {`)
-                _.pushIndent()
-                _.print(`int selector;`)
-                _.print(`union {`)
-                _.pushIndent()
-                type.types.forEach((type, index) => {
-                    _.print(`${this.mapType(type)} value${index};`)
-                })
-                _.popIndent()
-                _.print(`};`)
-                _.popIndent()
-                _.print(`};`)
-            }
-            if (isEnum(type)) {
-                let declaration = this.library.toDeclaration(type) as IDLEnum
-                _.print(`typedef enum {`)
-                _.pushIndent()
-                declaration.elements.forEach(it => {
-                    _.print(`${PrimitiveType.Prefix}${this.libraryName}_${it.name},`)
-                })
-                _.popIndent()
-                _.print(`} ${this.mapType(type)};`)
-            }
-        })
-    }
-
     private printManaged() {
         this.printNative()
         this.printPeer()
@@ -340,6 +278,8 @@ class OHOSVisitor {
     private printPeer() {
         const nativeModuleVar = `${this.libraryName}NativeModule`
         const nativeModuleGetter = `get${nativeModuleVar}`
+        this.peerWriter.nativeModuleAccessor = nativeModuleGetter
+
         if (this.library.language === Language.TS) {
             this.peerWriter.print('import {')
             this.peerWriter.pushIndent()
@@ -363,6 +303,7 @@ class OHOSVisitor {
                 })
             })
         })
+        const printerContext: PrinterContext = { language: this.library.language, imports: undefined, synthesizedTypes: undefined }
         this.interfaces.forEach(int => {
             this.peerWriter.writeClass(`${int.name}`, writer => {
                 writer.writeFieldDeclaration('peer', IDLPointerType, [FieldModifier.PRIVATE], false)
@@ -387,62 +328,9 @@ class OHOSVisitor {
                     })
                 })
                 int.methods.forEach(method => {
-                    const signature = writer.makeNamedSignature(method.returnType, method.parameters)
-                    writer.writeMethodImplementation(new Method(method.name, signature), writer => {
-                        // TODO remove duplicated code from writePeerMethod (PeersPrinter.ts)
-                        const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param))
-                        let scopes = argConvertors.filter(it => it.isScoped)
-                        scopes.forEach(it => {
-                            writer.pushIndent()
-                            writer.print(it.scopeStart?.(it.param, writer.language))
-                        })
-                        let serializerCreated = false
-                        argConvertors.forEach((it, index) => {
-                            if (it.useArray) {
-                                if (!serializerCreated) {
-                                    writer.writeStatement(
-                                        writer.makeAssign(`thisSerializer`, createReferenceType('Serializer'),
-                                            writer.makeMethodCall('SerializerBase', 'hold', [
-                                                writer.makeSerializerCreator()
-                                            ]), true)
-                                    )
-                                    serializerCreated = true
-                                }
-                                it.convertorSerialize(`this`, it.param, writer)
-                            }
-                        })
-                        let serializerPushed = false
-                        let params = [ writer.makeString('this.peer')]
-                        argConvertors.forEach(it => {
-                            if (it.useArray) {
-                                if (!serializerPushed) {
-                                    params.push(writer.makeMethodCall(`thisSerializer`, 'asArray', []))
-                                    params.push(writer.makeMethodCall(`thisSerializer`, 'length', []))
-                                    serializerPushed = true
-                                }
-                            } else {
-                                params.push(writer.makeString(it.convertorArg(it.param, writer)))
-                            }
-                        })
-                        const callExpression = writer.makeMethodCall(
-                            `${nativeModuleGetter}()`,
-                            `_${this.libraryName}_${int.name}_${method.name}`,
-                            params
-                        )
-                        if (method.returnType === IDLVoidType) {
-                            writer.writeStatement(writer.makeStatement(callExpression))
-                        } else {
-                            writer.writeStatement(writer.makeReturn(callExpression))
-                        }
-                        if (serializerPushed) {
-                            writer.writeStatement(new ExpressionStatement(
-                                writer.makeMethodCall('thisSerializer', 'release', [])))
-                            scopes.reverse().forEach(it => {
-                                writer.popIndent()
-                                writer.print(it.scopeEnd!(it.param, writer.language))
-                            })
-                        }
-                    })
+                    const peerMethod = makeIdlPeerMethodForMethod(this.library, method, int.name, [])
+                    const receiverPtr = "this.peer"
+                    writePeerMethodWithPrefix(writer, peerMethod, this.library.libraryPrefix, true, printerContext, false, "", receiverPtr, method.returnType)
                 })
             }, undefined, [`${int.name}Interface`])
         })

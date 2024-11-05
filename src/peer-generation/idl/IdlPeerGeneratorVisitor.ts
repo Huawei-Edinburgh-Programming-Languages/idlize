@@ -1392,3 +1392,18 @@ export function convertTypeToFeature(library: IdlPeerLibrary, type: IDLType): Im
     }
     return undefined
 }
+
+// TODO combine with processMethodOrCallable
+export function makeIdlPeerMethodForMethod(library: IdlPeerLibrary, method: idl.IDLMethod, parentName: string, declarationTargets: IDLEntry[]): IdlPeerMethod {
+    const originalParentName = parentName
+    const methodName = method.name
+    const argConvertors = method.parameters.map(param => generateArgConvertor(library, param))
+    const signature = generateSignature(library, method)
+    return new IdlPeerMethod(
+        originalParentName,
+        declarationTargets,
+        argConvertors,
+        generateRetConvertor(method.returnType),
+        false,
+        new Method(methodName, signature, method.isStatic ? [MethodModifier.STATIC] : []))
+}

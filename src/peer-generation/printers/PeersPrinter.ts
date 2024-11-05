@@ -423,6 +423,13 @@ export function printPeerFinalizer(peerClassBase: PeerClassBase, writer: Languag
 export function writePeerMethod(printer: LanguageWriter, method: PeerMethod | IdlPeerMethod, isIDL: boolean, printerContext: PrinterContext, dumpSerialized: boolean,
     methodPostfix: string, ptr: string, returnType: IDLType = IDLVoidType, generics?: string[]
 ) {
+    return writePeerMethodWithPrefix(printer, method, "", isIDL, printerContext, dumpSerialized, methodPostfix, ptr, returnType, generics)
+}
+
+// TODO extract nativeMethodPrefix somewhere from generation context, or provide a language-specific resolver for native method names
+export function writePeerMethodWithPrefix(printer: LanguageWriter, method: PeerMethod | IdlPeerMethod, nativeMethodPrefix: string, isIDL: boolean, printerContext: PrinterContext, dumpSerialized: boolean,
+    methodPostfix: string, ptr: string, returnType: IDLType = IDLVoidType, generics?: string[]
+) {
     const isTsLike = [Language.ARKTS, Language.TS].includes(printer.language)
     const isJava = printer.language == Language.JAVA
     const isCJ = printerContext.language == Language.CJ
@@ -505,7 +512,7 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod | Id
         })
         let call = writer.makeNativeCall(
             // here we write methods
-            `_${method.originalParentName}_${method.overloadedName}`,
+            `_${nativeMethodPrefix}${method.originalParentName}_${method.overloadedName}`,
             params)
         
         if (returnType != IDLVoidType) {
