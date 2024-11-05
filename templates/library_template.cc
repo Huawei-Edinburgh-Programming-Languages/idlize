@@ -30,8 +30,10 @@ void* FindModule() {
         { "ace_compatible_mock", true},
         { nullptr, false }
     };
-    std::string prefix = getenv("ACE_LIBRARY_PATH");
-    for (auto* candidate = candidates; candidate; candidate++) {
+    char* envValue = getenv("ACE_LIBRARY_PATH");
+    std::string prefix = envValue ? std::string(envValue) : "";
+    LOGE("Search ACE in \"%s\" (ACE_LIBRARY_PATH)", prefix.c_str());
+    for (auto* candidate = candidates; std::get<0>(*candidate); candidate++) {
         std::string name = std::get<0>(*candidate);
         if (std::get<1>(*candidate)) {
             name = libName(name.c_str());
@@ -41,7 +43,7 @@ void* FindModule() {
             LOGE("ACE module at: %s", (prefix + name).c_str());
             return module;
         } else {
-            // LOGE("Cannot find dynamic module: %s", (prefix + name).c_str());
+            LOGE("Cannot find ACE module: %s", (prefix + name).c_str());
         }
     }
     return nullptr;
@@ -106,3 +108,4 @@ const ArkUIAnyAPI* GetAnyImpl(ArkUIAPIVariantKind kind, int version, std::string
     }
     return reinterpret_cast<ArkUIAnyAPI*>(impls[kind]);
 }
+

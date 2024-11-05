@@ -65,9 +65,16 @@ void impl_SetDrawNodeDelay(Ark_Int32 type, Ark_Int64 nanoseconds) {
 }
 KOALA_INTEROP_V2(SetDrawNodeDelay, Ark_Int32, Ark_Int64)
 
+// TODO: Remove all this.
+void disposeNode(KNativePointer* ptr) {
+    GetArkUIBasicNodeAPI()->disposeNode((Ark_NodeHandle)ptr);
+}
+KNativePointer impl_GetNodeFinalizer() {
+    return fnPtr<KNativePointer>(disposeNode);
+}
+KOALA_INTEROP_0(GetNodeFinalizer, KNativePointer)
 
 // custom methods
-
 void impl_ShowCrash(const KStringPtr& messagePtr) {
     GetArkUIExtendedNodeAPI()->showCrash(messagePtr.c_str());
 }
