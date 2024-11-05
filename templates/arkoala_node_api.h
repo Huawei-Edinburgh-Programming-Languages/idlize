@@ -59,18 +59,6 @@ typedef struct %CPP_PREFIX%ArkUIBasicNodeAPI {
                                             Ark_Int32 targetUnit);
 } %CPP_PREFIX%ArkUIBasicNodeAPI;
 
-typedef struct ServiceGroupLogger {
-    void (*startGroupedLog)(int kind);
-    void (*stopGroupedLog)(int kind);
-    void (*appendGroupedLog)(int kind, const char* str);
-    const char* (*getGroupedLog)(int kind);
-    int (*needGroupedLog)(int kind);
-} ServiceGroupLogger;
-
-typedef struct ServiceAPI {
-    Ark_Int32 version;
-    void (*setGroupLogger)(const ServiceGroupLogger* logger);
-} ServiceAPI;
 
 typedef struct %CPP_PREFIX%ArkUIExtendedNodeAPI {
     Ark_Int32 version;

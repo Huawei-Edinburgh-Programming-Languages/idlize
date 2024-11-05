@@ -626,7 +626,7 @@ function checkNativeCallback() {
 
 function main() {
     // Place where mock of ACE is located.
-    env.ACE_LIBRARY_PATH = __dirname + "/../../../native/"
+    env.ACE_LIBRARY_PATH = __dirname + "/../../../native"
 
     checkSerdeBaseLength()
     checkSerdeBaseText()

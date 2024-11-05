@@ -17,7 +17,6 @@
 
 #include "library.h"
 #include "common-interop.h"
-#include "interop-logging.h"
 #include "arkoala_api_generated.h"
 #include "Serializers.h"
 #include "arkoala-logging.h"
