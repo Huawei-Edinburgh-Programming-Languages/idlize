@@ -33,22 +33,22 @@
 |`popupTitleBackground`| Function |Ekaterina Stepanova| done |  |
 |`enableHapticFeedback`| Function |Ekaterina Stepanova| done |  |
 |`alignStyle`| Function |Ekaterina Stepanova| done |  |
-|*Animator*| *Component* | Skroba Gleb | in progress | |
-|`setAnimatorOptions`| Function | Skroba Gleb | in progress | |
-|`state`| Function | Skroba Gleb | in progress | |
-|`duration`| Function | Skroba Gleb | in progress | |
-|`curve`| Function | Skroba Gleb | in progress | |
-|`delay`| Function | Skroba Gleb | in progress | |
-|`fillMode`| Function | Skroba Gleb | in progress | |
-|`iterations`| Function | Skroba Gleb | in progress | |
-|`playMode`| Function | Skroba Gleb | in progress | |
-|`motion`| Function | Skroba Gleb | in progress | |
-|`onStart`| Function | Skroba Gleb | in progress | |
-|`onPause`| Function | Skroba Gleb | in progress | |
-|`onRepeat`| Function | Skroba Gleb | in progress | |
-|`onCancel`| Function | Skroba Gleb | in progress | |
-|`onFinish`| Function | Skroba Gleb | in progress | |
-|`onFrame`| Function | Skroba Gleb | in progress | |
+|*Animator*| *Component* | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`setAnimatorOptions`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`state`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`duration`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`curve`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`delay`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`fillMode`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`iterations`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`playMode`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`motion`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`onStart`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`onPause`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`onRepeat`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`onCancel`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`onFinish`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`onFrame`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
 |*Badge*| *Component* |Vadim Voronov | done |  |
 |`setBadgeOptions`| Function |Vadim Voronov | done |https://gitee.com/openharmony/arkui_ace_engine/issues/IAX28D|
 |*Blank*| *Component* | Skroba Gleb | done |  |
