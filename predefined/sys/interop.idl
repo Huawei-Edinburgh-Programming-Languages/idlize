@@ -25,6 +25,7 @@ interface Interop {
     void StartPerf(String str1);
     void EndPerf(String str1);
     pointer DumpPerf(i32 arg);
+    // TODO: remove!
     i32 CheckArkoalaGeneratedEvents(sequence<u8> result, i32 size);
     void CallCallback(i32 callbackKind, sequence<u8> args, i32 argsSize);
     void CallCallbackResourceHolder(pointer holder, i32 resourceId);

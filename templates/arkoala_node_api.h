@@ -22,13 +22,6 @@ typedef struct %CPP_PREFIX%Ark_APICallbackMethod {
     Ark_Int32 (*CallInt) (Ark_VMContext vmContext, Ark_Int32 methodId, Ark_Int32 numArgs, %CPP_PREFIX%Ark_EventCallbackArg* args);
 } %CPP_PREFIX%Ark_APICallbackMethod;
 
-typedef struct %CPP_PREFIX%Ark_UtilsModifier {
-    Ark_Float32 (*getDensity) (Ark_Int32 deviceId);
-    Ark_Float32 (*getFontScale) (Ark_Int32 deviceId);
-    Ark_Float32 (*getDesignWidthScale) (Ark_Int32 deviceId);
-
-} %CPP_PREFIX%Ark_UtilsModifier;
-
 typedef struct %CPP_PREFIX%ArkUIBasicNodeAPI {
     Ark_Int32 version;
 
@@ -66,12 +59,25 @@ typedef struct %CPP_PREFIX%ArkUIBasicNodeAPI {
                                             Ark_Int32 targetUnit);
 } %CPP_PREFIX%ArkUIBasicNodeAPI;
 
+typedef struct ServiceGroupLogger {
+    void (*startGroupedLog)(int kind);
+    void (*stopGroupedLog)(int kind);
+    void (*appendGroupedLog)(int kind, const char* str);
+    const char* (*getGroupedLog)(int kind);
+    int (*needGroupedLog)(int kind);
+} ServiceGroupLogger;
+
+typedef struct ServiceAPI {
+    Ark_Int32 version;
+    void (*setGroupLogger)(const ServiceGroupLogger* logger);
+} ServiceAPI;
+
 typedef struct %CPP_PREFIX%ArkUIExtendedNodeAPI {
     Ark_Int32 version;
 
-    void (*setAppendGroupedLog)(void (*logger)(int, const char*));
-
-    const %CPP_PREFIX%Ark_UtilsModifier* (*getUtilsModifier)();
+    Ark_Float32 (*getDensity) (Ark_Int32 deviceId);
+    Ark_Float32 (*getFontScale) (Ark_Int32 deviceId);
+    Ark_Float32 (*getDesignWidthScale) (Ark_Int32 deviceId);
 
     void (*setCallbackMethod)(%CPP_PREFIX%Ark_APICallbackMethod* method);
 

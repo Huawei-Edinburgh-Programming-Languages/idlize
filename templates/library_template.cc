@@ -52,7 +52,7 @@ void* FindModule() {
 static %CPP_PREFIX%ArkUIAnyAPI* impls[%CPP_PREFIX%Ark_APIVariantKind::%CPP_PREFIX%COUNT] = { 0 };
 const char* getArkAnyAPIFuncName = "%CPP_PREFIX%GetArkAnyAPI";
 
-const ArkUIAnyAPI* GetAnyImpl(ArkUIAPIVariantKind kind, int version, std::string* result) {
+const ArkUIAnyAPI* GetAnyImpl(int kind, int version, std::string* result) {
     if (!impls[kind]) {
         %CPP_PREFIX%ArkUIAnyAPI* impl = nullptr;
         typedef %CPP_PREFIX%ArkUIAnyAPI* (*GetAPI_t)(int, int);
@@ -83,7 +83,6 @@ const ArkUIAnyAPI* GetAnyImpl(ArkUIAPIVariantKind kind, int version, std::string
                 return nullptr;
             }
         }
-
         impl = (*getAPI)(kind, version);
         if (!impl) {
             if (result)
@@ -92,7 +91,6 @@ const ArkUIAnyAPI* GetAnyImpl(ArkUIAPIVariantKind kind, int version, std::string
                 LOGE("getAPI() returned null")
             return nullptr;
         }
-
         if (impl->version != version) {
             if (result) {
                 char buffer[256];
@@ -108,4 +106,3 @@ const ArkUIAnyAPI* GetAnyImpl(ArkUIAPIVariantKind kind, int version, std::string
     }
     return reinterpret_cast<ArkUIAnyAPI*>(impls[kind]);
 }
-

@@ -103,7 +103,6 @@ endif
 if use_libace
 libace_name = 'ace_compatible_mock'
 libace_sources = [
-    external_interop_dir + '/interop-logging.cc',
     arkoala_dir + '/dummy_impl.cc',
 ]
 endif

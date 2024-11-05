@@ -23,9 +23,22 @@
 #include "tree.h"
 #include "logging.h"
 
-
+// For logging we use operations exposed via interop, GetCurrentLogger() is an external
+// symbol for dummy implementation.
+void startGroupedLog(int kind) {
+    GetCurrentLogger()->startGroupedLog(kind);
+}
+void stopGroupedLog(int kind) {
+    GetCurrentLogger()->stopGroupedLog(kind);
+}
+const char* getGroupedLog(int kind) {
+    return GetCurrentLogger()->getGroupedLog(kind);
+}
+int needGroupedLog(int kind) {
+    return GetCurrentLogger()->needGroupedLog(kind);
+}
 void appendGroupedLog(int kind, const std::string& str) {
-    appendGroupedLog(kind, str.c_str());
+    GetCurrentLogger()->appendGroupedLog(kind, str.c_str());
 }
 
 void dummyClassFinalizer(KNativePointer* ptr) {

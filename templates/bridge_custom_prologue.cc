@@ -22,19 +22,20 @@
 
 #include "library.h"
 #include "common-interop.h"
+#include "interop-logging.h"
+
 #include "arkoala_api_generated.h"
 #include "Serializers.h"
-#include "arkoala-logging.h"
 
 const %CPP_PREFIX%ArkUIBasicNodeAPI* GetArkUIBasicNodeAPI() {
     return reinterpret_cast<const %CPP_PREFIX%ArkUIBasicNodeAPI*>(
-        GetAnyImpl(static_cast<ArkUIAPIVariantKind>(%CPP_PREFIX%Ark_APIVariantKind::%CPP_PREFIX%BASIC),
+        GetAnyImpl(static_cast<int>(%CPP_PREFIX%Ark_APIVariantKind::%CPP_PREFIX%BASIC),
         %CPP_PREFIX%ARKUI_BASIC_NODE_API_VERSION));
 }
 
 const %CPP_PREFIX%ArkUIExtendedNodeAPI* GetArkUIExtendedNodeAPI() {
     return reinterpret_cast<const %CPP_PREFIX%ArkUIExtendedNodeAPI*>(
-        GetAnyImpl(static_cast<ArkUIAPIVariantKind>(%CPP_PREFIX%Ark_APIVariantKind::%CPP_PREFIX%EXTENDED),
+        GetAnyImpl(static_cast<int>(%CPP_PREFIX%Ark_APIVariantKind::%CPP_PREFIX%EXTENDED),
         %CPP_PREFIX%ARKUI_EXTENDED_NODE_API_VERSION));
 }
 
@@ -103,7 +104,7 @@ struct PerfInfo {
     }
 };
 
-class Performace {
+class Performance {
   public:
     void PrintAvgs(std::stringstream& result) {
         for (const auto& [name, perfs] : perfs_) {
@@ -162,8 +163,8 @@ class Performace {
         perfs_.clear();
     }
     PerfInfo* GetCurrent() { return &current_; }
-    static Performace* GetInstance() {
-        static Performace perf;
+    static Performance* GetInstance() {
+        static Performance perf;
         return &perf;
     }
 private:
@@ -173,7 +174,7 @@ private:
 };
 
 void impl_StartPerf(const KStringPtr& traceName) {
-    PerfInfo* perf = Performace::GetInstance()->GetCurrent();
+    PerfInfo* perf = Performance::GetInstance()->GetCurrent();
     perf->perf_name = traceName.c_str();
     auto now = std::chrono::high_resolution_clock::now();
     perf->start = std::chrono::time_point_cast<std::chrono::nanoseconds>(now).time_since_epoch().count();
@@ -182,10 +183,10 @@ KOALA_INTEROP_V1(StartPerf, KStringPtr)
 
 void impl_EndPerf(const KStringPtr& traceName) {
     auto now = std::chrono::high_resolution_clock::now();
-    PerfInfo* perf = Performace::GetInstance()->GetCurrent();
+    PerfInfo* perf = Performance::GetInstance()->GetCurrent();
     perf->end = std::chrono::time_point_cast<std::chrono::nanoseconds>(now).time_since_epoch().count();
     perf->cost = perf->end - perf->start;
-    Performace::GetInstance()->FinishOne();
+    Performance::GetInstance()->FinishOne();
 }
 KOALA_INTEROP_V1(EndPerf, KStringPtr)
 
@@ -200,22 +201,23 @@ enum DumpOptions {
 KNativePointer impl_DumpPerf(KInt options) {
     std::stringstream result;
     result << std::fixed << std::setprecision(3);
-    Performace::GetInstance()->CalcSelfCost();
+    auto perf = Performance::GetInstance();
+    perf->CalcSelfCost();
     switch (options) {
         case TOTAL:
-            Performace::GetInstance()->PrintTotals(result);
+            perf->PrintTotals(result);
             break;
         case AVERAGE:
-            Performace::GetInstance()->PrintAvgs(result);
+            perf->PrintAvgs(result);
             break;
         case PEAK:
-            Performace::GetInstance()->PrintPeak(result);
+            perf->PrintPeak(result);
             break;
         case DETAILS:
-            Performace::GetInstance()->PrintDetails(result);
+            perf->PrintDetails(result);
             break;
         case CLEAR:
-            Performace::GetInstance()->Clean();
+            perf->Clean();
             break;
         default:
             break;
