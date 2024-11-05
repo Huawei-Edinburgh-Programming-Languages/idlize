@@ -991,11 +991,11 @@
 |`changeIndex`| Function |  Andrey Khudenkikh | in progress |  |
 |*SymbolGlyph*| *Component* |Andrey Khudenkikh | in progress |  |
 |`setSymbolGlyphOptions`| Function |Andrey Khudenkikh | in progress |  |
-|`fontSize`| Function |Andrey Khudenkikh | devdone |  |
+|`fontSize`| Function |Andrey Khudenkikh | done |  |
 |`fontColor`| Function |Andrey Khudenkikh | in progress |  |
-|`fontWeight`| Function |Andrey Khudenkikh | devdone |  |
-|`effectStrategy`| Function |Andrey Khudenkikh | devdone |  |
-|`renderingStrategy`| Function |Andrey Khudenkikh | devdone |  |
+|`fontWeight`| Function |Andrey Khudenkikh | done |  |
+|`effectStrategy`| Function |Andrey Khudenkikh | done |  |
+|`renderingStrategy`| Function |Andrey Khudenkikh | done |  |
 |`symbolEffect`| Function | Andrey Khudenkikh | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB1MTL |
 |*SymbolSpan*| *Component* |Dmitry A Smirnov| in progress|  |
 |`setSymbolSpanOptions`| Function |Dmitry A Smirnov| in progress|  |
