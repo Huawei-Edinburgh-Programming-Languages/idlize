@@ -161,7 +161,7 @@ class Performace {
     void Clean() {
         perfs_.clear();
     }
-    const PerfInfo& GetCurrent() { return current_; }
+    PerfInfo* GetCurrent() { return &current_; }
     static Performace* GetInstance() {
         static Performace perf;
         return &perf;
@@ -173,18 +173,18 @@ private:
 };
 
 void impl_StartPerf(const KStringPtr& traceName) {
-    PerfInfo& perf = Performace::GetInstance()->GetCurrent();
-    perf.perf_name = traceName.c_str();
+    PerfInfo* perf = Performace::GetInstance()->GetCurrent();
+    perf->perf_name = traceName.c_str();
     auto now = std::chrono::high_resolution_clock::now();
-    perf.start = std::chrono::time_point_cast<std::chrono::nanoseconds>(now).time_since_epoch().count();
+    perf->start = std::chrono::time_point_cast<std::chrono::nanoseconds>(now).time_since_epoch().count();
 }
 KOALA_INTEROP_V1(StartPerf, KStringPtr)
 
 void impl_EndPerf(const KStringPtr& traceName) {
     auto now = std::chrono::high_resolution_clock::now();
-    PerfInfo& perf = Performace::GetInstance()->GetCurrent();
-    perf.end = std::chrono::time_point_cast<std::chrono::nanoseconds>(now).time_since_epoch().count();
-    perf.cost = perf.end - perf.start;
+    PerfInfo* perf = Performace::GetInstance()->GetCurrent();
+    perf->end = std::chrono::time_point_cast<std::chrono::nanoseconds>(now).time_since_epoch().count();
+    perf->cost = perf->end - perf->start;
     Performace::GetInstance()->FinishOne();
 }
 KOALA_INTEROP_V1(EndPerf, KStringPtr)
