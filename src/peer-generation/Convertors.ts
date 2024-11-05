@@ -18,40 +18,10 @@ import { PrimitiveType } from "./ArkPrimitiveType"
 import * as ts from "typescript"
 import { BlockStatement, BranchStatement, generateTypeCheckerName, LanguageExpression, LanguageStatement, LanguageWriter, makeArrayTypeCheckCall, NamedMethodSignature } from "./LanguageWriters"
 import { mapType, TypeNodeNameConvertor } from "./TypeNodeNameConvertor"
-import { RuntimeType, ArgConvertor, BaseArgConvertor, ProxyConvertor, UndefinedConvertor, UnionRuntimeTypeChecker, ExpressionAssigneer } from "./ArgConvertors"
+import { RuntimeType, ArgConvertor, BaseArgConvertor, ProxyConvertor, UndefinedConvertor, ExpressionAssigneer } from "./ArgConvertors"
 import { Language } from "../Language"
 import { createContainerType, createReferenceType, createUnionType, DebugUtils, getIDLTypeName, IDLI32Type, IDLKind, IDLStringType, IDLType, IDLVoidType, maybeOptional, toIDLType } from "../idl"
-
-
-const builtInInterfaceTypes = new Map<string,
-    (writer: LanguageWriter, value: string) => LanguageExpression>([
-        ["Resource",
-            (writer: LanguageWriter, value: string) => writer.makeCallIsResource(value)],
-        ["Object",
-            (writer: LanguageWriter, value: string) => writer.makeCallIsObject(value)],
-        ["ArrayBuffer",
-            (writer: LanguageWriter, value: string) => writer.makeCallIsArrayBuffer(value)]
-    ],
-)
-
-export function makeInterfaceTypeCheckerCall(
-    valueAccessor: string,
-    interfaceName: string,
-    allFields: string[],
-    duplicates: Set<string>,
-    writer: LanguageWriter,
-): LanguageExpression {
-    if (builtInInterfaceTypes.has(interfaceName)) {
-        return builtInInterfaceTypes.get(interfaceName)!(writer, valueAccessor)
-    }
-    return writer.makeMethodCall(
-        "TypeChecker",
-        generateTypeCheckerName(interfaceName), [writer.makeString(valueAccessor),
-        ...allFields.map(it => {
-            return writer.makeString(duplicates.has(it) ? "true" : "false")
-        })
-    ])
-}
+import { makeInterfaceTypeCheckerCall, UnionRuntimeTypeChecker } from "./runtime-checks";
 
 function castToInt8(value: string, lang: Language): string {
     switch (lang) {

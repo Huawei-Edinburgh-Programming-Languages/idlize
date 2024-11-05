@@ -18,10 +18,12 @@ import { BlockStatement, BranchStatement, LanguageExpression, LanguageStatement,
 import { cleanPrefix, IdlPeerLibrary } from "./IdlPeerLibrary"
 import { PrimitiveType } from "../ArkPrimitiveType"
 import { qualifiedName } from "./common"
-import { RuntimeType, ArgConvertor, BaseArgConvertor, ProxyConvertor, UndefinedConvertor, UnionRuntimeTypeChecker, ExpressionAssigneer } from "../ArgConvertors"
+import { RuntimeType, ArgConvertor, BaseArgConvertor, ProxyConvertor, UndefinedConvertor, ExpressionAssigneer } from "../ArgConvertors"
 import { generateCallbackAPIArguments } from "./StructPrinter"
 import { CppCastExpression } from "../LanguageWriters/writers/CppLanguageWriter"
 import { generateCallbackKindAccess } from "../printers/CallbacksPrinter"
+import { makeInterfaceTypeCheckerCall, UnionRuntimeTypeChecker } from "../runtime-checks";
+import { throwException } from "../../util";
 
 
 export class StringConvertor extends BaseArgConvertor {
@@ -462,8 +464,14 @@ export class InterfaceConvertor extends BaseArgConvertor { //
                 writer.makeString(`isInstanceOf("SymbolGlyphModifier", ${value}.icon)`)])
         }
         // Try to figure out interface by examining field sets
-        const uniqueFields = this.declaration?.properties.filter(it => !duplicates.has(it.name))
-        return this.discriminatorFromFields(value, writer, uniqueFields, it => it.name, it => it.isOptional)
+        if (this.declaration === undefined) throwException(`Expected declaration to be defined`)
+        return makeInterfaceTypeCheckerCall(
+            value,
+            this.declaration.name,
+            this.declaration.properties.map(it => it.name),
+            duplicates,
+            writer
+        )
     }
 }
 
