@@ -462,8 +462,7 @@ typedef struct ${PeerGeneratorConfig.cppPrefix}ArkUIFullNodeAPI {
     const ${PeerGeneratorConfig.cppPrefix}ArkUINodeModifiers* (*getNodeModifiers)();
     const ${PeerGeneratorConfig.cppPrefix}ArkUIAccessors* (*getAccessors)();
     const ${PeerGeneratorConfig.cppPrefix}ArkUIGraphicsAPI* (*getGraphicsAPI)();
-    const ${PeerGeneratorConfig.cppPrefix}ArkUIBasicNodeAPI* (*getEventsAPI)();
-    const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI* (*getBasicAPI)();
+    const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI* (*getEventsAPI)();
     const ${PeerGeneratorConfig.cppPrefix}ArkUIExtendedNodeAPI* (*getExtendedAPI)();
     void (*setArkUIEventsAPI)(const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI* api);
 } ${PeerGeneratorConfig.cppPrefix}ArkUIFullNodeAPI;

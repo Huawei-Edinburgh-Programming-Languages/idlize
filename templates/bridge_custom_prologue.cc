@@ -76,3 +76,68 @@ Ark_Int32 impl_LayoutNode(KVMContext vmContext, Ark_NativePointer nodePtr, KFloa
     return GetArkUIExtendedNodeAPI()->layoutNode((Ark_VMContext)vmContext, (Ark_NodeHandle)nodePtr, (Ark_Float32(*)[2])data);
 }
 KOALA_INTEROP_CTX_2(LayoutNode, Ark_Int32, Ark_NativePointer, KFloatArray)
+
+void impl_EmulateClickEvent(KInt nodeId, KFloat x, KFloat y) {
+    Ark_ClickEvent event;
+    event.target.area.width.type = 0;
+    event.target.area.width.value = 0;
+    event.target.area.width.unit = 1;
+    event.target.area.width.resource = 0;
+    event.target.area.height.type = 0;
+    event.target.area.height.value = 0;
+    event.target.area.height.unit = 1;
+    event.target.area.height.resource = 0;
+    event.target.area.position.x.tag = ARK_TAG_UNDEFINED;
+    event.target.area.position.y.tag = ARK_TAG_UNDEFINED;
+    event.target.area.globalPosition.x.tag = ARK_TAG_UNDEFINED;
+    event.target.area.globalPosition.y.tag = ARK_TAG_UNDEFINED;
+    event.timestamp.tag = ARK_TAG_INT32;
+    event.timestamp.i32 = 100;
+    event.source = ARK_SOURCE_TYPE_MOUSE;
+    event.axisHorizontal.tag = ARK_TAG_UNDEFINED;
+    event.axisVertical.tag = ARK_TAG_UNDEFINED;
+    event.pressure.tag = ARK_TAG_FLOAT32;
+    event.pressure.f32 = 0.0f;
+    event.tiltX.tag = ARK_TAG_FLOAT32;
+    event.tiltX.f32 = 0.0f;
+    event.tiltY.tag = ARK_TAG_FLOAT32;
+    event.tiltY.f32 = 0.0f;
+    event.sourceTool = ARK_SOURCE_TOOL_MOUSE;
+    event.deviceId.value.tag = ARK_TAG_INT32;
+    event.deviceId.value.i32 = 0;
+    event.displayX.tag = ARK_TAG_FLOAT32;
+    event.displayX.f32 = 0.0f;
+    event.displayY.tag = ARK_TAG_FLOAT32;
+    event.displayY.f32 = 0.0f;
+    event.windowX.tag = ARK_TAG_FLOAT32;
+    event.windowX.f32 = 0.0f;
+    event.windowY.tag = ARK_TAG_FLOAT32;
+    event.windowY.f32 = 0.0f;
+    event.screenX.tag = ARK_TAG_FLOAT32;
+    event.screenX.f32 = 0.0f;
+    event.screenY.tag = ARK_TAG_FLOAT32;
+    event.screenY.f32 = 0.0f;
+    event.x.tag = ARK_TAG_FLOAT32;
+    event.x.f32 = x;
+    event.y.tag = ARK_TAG_FLOAT32;
+    event.y.f32 = y;
+    event.preventDefault.resource.resourceId = 0;
+    event.preventDefault.resource.hold = [](KInt id){};
+    event.preventDefault.resource.release = [](KInt id){};
+    event.preventDefault.call = [](KInt id){};
+
+    GetFullImpl()->getEventsAPI()->getLocationButtonEventsReceiver()->onClick(nodeId, event, ARK_LOCATION_BUTTON_ON_CLICK_RESULT_SUCCESS);
+}
+KOALA_INTEROP_V3(EmulateClickEvent, KInt, KFloat, KFloat)
+
+void impl_EmulateTextInputEvent(KInt nodeId, const KStringPtr& text) {
+    std::string value = getString(text);
+    Ark_String str {
+        .chars = value.c_str(),
+        .length = static_cast<Ark_Int32>(value.length())
+    };
+    Opt_PreviewText preview;
+    preview.tag = ARK_TAG_UNDEFINED;
+    GetFullImpl()->getEventsAPI()->getTextInputEventsReceiver()->onChange(nodeId, str, preview);
+}
+KOALA_INTEROP_V2(EmulateTextInputEvent, KInt, KStringPtr)
