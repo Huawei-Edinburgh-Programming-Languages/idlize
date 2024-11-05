@@ -1188,7 +1188,7 @@
 |`editMenuOptions`| Function | Spirin Andrey | in progress |  |
 |`enablePreviewText`| Function | Spirin Andrey | done |  |
 |`enableHapticFeedback`| Function | Spirin Andrey | done |  |
-|`inputFilter`| Function | Spirin Andrey | in progress | devdone |
+|`inputFilter`| Function | Spirin Andrey | devdone |  |
 |`customKeyboard`| Function | Spirin Andrey | blocked |  |
 |`showCounter`| Function | Spirin Andrey | in progress |  |
 |*TextPicker*| *Component* |Ekaterina Stepanova |in progress |  |
