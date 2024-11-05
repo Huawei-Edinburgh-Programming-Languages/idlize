@@ -1,4 +1,3 @@
-#include <vector>
 #include "events.h"
 #include "common-interop.h"
 #include "library.h"
