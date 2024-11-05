@@ -18,14 +18,18 @@
 #include "arkoala_api.h"
 #include "arkoala_api_generated.h"
 #include "Serializers.h"
-#include "arkoala-logging.h"
+#include "interop-logging.h"
 #include "arkoala-macros.h"
 #include "tree.h"
 #include "logging.h"
 
-typedef void (*AppendGroupedLogSignature)(int32_t, const std::string&);
+typedef void (*AppendGroupedLogSignature)(int32_t, const char*);
 
 AppendGroupedLogSignature appendGroupedLogPtr = nullptr;
+
+void appendGroupedLog(int kind, const std::string& str) {
+    appendGroupedLog(kind, str.c_str());
+}
 
 void SetAppendGroupedLog(void* logger) {
     if (logger) appendGroupedLogPtr = reinterpret_cast<AppendGroupedLogSignature>(logger);

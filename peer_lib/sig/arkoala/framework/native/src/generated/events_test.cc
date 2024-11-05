@@ -1,3 +1,4 @@
+#include <vector>
 #include "events.h"
 #include "common-interop.h"
 #include "library.h"
@@ -10,7 +11,7 @@ namespace Generated {
 
 static const GENERATED_ArkUIFullNodeAPI* GetFullImpl() {
     return reinterpret_cast<const GENERATED_ArkUIFullNodeAPI*>(
-        GetAnyImpl(static_cast<ArkUIAPIVariantKind>(GENERATED_Ark_APIVariantKind::GENERATED_FULL), 
+        GetAnyImpl(static_cast<ArkUIAPIVariantKind>(GENERATED_Ark_APIVariantKind::GENERATED_FULL),
         GENERATED_ARKUI_FULL_API_VERSION));
 }
 

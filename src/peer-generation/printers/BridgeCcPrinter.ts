@@ -131,7 +131,7 @@ class BridgeCcVisitor {
         })
         this.generatedApi.print("_num += 1;")
         this.generatedApi.print(`_logData.append(");\\n");`)
-        this.generatedApi.print(`appendGroupedLog(2, _logData);`)
+        this.generatedApi.print(`appendGroupedLog(2, _logData.c_str());`)
         this.generatedApi.popIndent()
         this.generatedApi.print(`}`)
     }

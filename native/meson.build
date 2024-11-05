@@ -57,6 +57,7 @@ sources = [
     arkoala_dir / 'callback_deserialize_call.cc',
     arkoala_dir / 'callback_managed_caller.cc',
     external_interop_dir / 'common-interop.cc',
+    external_interop_dir / 'interop-logging.cc',
     external_framework_dir / 'events.cc',
     external_framework_dir / 'callbacks.cc',
 ]
@@ -102,6 +103,7 @@ endif
 if use_libace
 libace_name = 'ace_compatible_mock'
 libace_sources = [
+    external_interop_dir + '/interop-logging.cc',
     arkoala_dir + '/dummy_impl.cc',
 ]
 endif

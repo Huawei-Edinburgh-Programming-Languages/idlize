@@ -43,7 +43,7 @@ void* FindModule() {
             LOGE("ACE module at: %s", (prefix + name).c_str());
             return module;
         } else {
-            // LOGE("Cannot find ACE module: %s", (prefix + name).c_str());
+            LOGE("Cannot find ACE module: %s %s", (prefix + name).c_str(), libraryError());
         }
     }
     return nullptr;
