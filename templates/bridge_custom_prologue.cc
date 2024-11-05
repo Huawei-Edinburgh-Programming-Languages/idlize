@@ -43,11 +43,12 @@ CustomDeserializer* DeserializerBase::customDeserializers = nullptr;
 
 // set delay API
 
+// TODO: remove or properly implement for dummy case.
 namespace TreeNodeDelays {
-    void SetCreateNodeDelay(GENERATED_Ark_NodeType type, Ark_Int64 nanoseconds);
-    void SetMeasureNodeDelay(GENERATED_Ark_NodeType type, Ark_Int64 nanoseconds);
-    void SetLayoutNodeDelay(GENERATED_Ark_NodeType type, Ark_Int64 nanoseconds);
-    void SetDrawNodeDelay(GENERATED_Ark_NodeType type, Ark_Int64 nanoseconds);
+    void SetCreateNodeDelay(GENERATED_Ark_NodeType type, Ark_Int64 nanoseconds) {}
+    void SetMeasureNodeDelay(GENERATED_Ark_NodeType type, Ark_Int64 nanoseconds) {}
+    void SetLayoutNodeDelay(GENERATED_Ark_NodeType type, Ark_Int64 nanoseconds) {}
+    void SetDrawNodeDelay(GENERATED_Ark_NodeType type, Ark_Int64 nanoseconds) {}
 }
 
 void impl_SetCreateNodeDelay(Ark_Int32 type, Ark_Int64 nanoseconds) {
@@ -75,6 +76,23 @@ void impl_SetDrawNodeDelay(Ark_Int32 type, Ark_Int64 nanoseconds) {
 KOALA_INTEROP_V2(SetDrawNodeDelay, Ark_Int32, Ark_Int64)
 
 // TODO: Remove all this.
+KInt impl_TestPerfNumber(KInt value) {
+    return value + 1;
+}
+KOALA_INTEROP_1(TestPerfNumber, KInt, KInt)
+
+void impl_TestPerfNumberWithArray(KByte* data, KInt length) {
+    if (GetCurrentLogger()->needGroupedLog(1)) {
+        string out("TestPerfNumberWithArray(");
+        out.append(std::to_string(data[0]));
+        out.append(", ");
+        out.append(std::to_string(length));
+        out.append(")");
+        GetCurrentLogger()->appendGroupedLog(1, out.c_str());
+    }
+}
+KOALA_INTEROP_V2(TestPerfNumberWithArray, KByte*, KInt)
+
 void disposeNode(KNativePointer* ptr) {
     GetArkUIBasicNodeAPI()->disposeNode((Ark_NodeHandle)ptr);
 }

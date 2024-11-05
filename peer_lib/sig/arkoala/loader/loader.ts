@@ -133,7 +133,7 @@ export function initWorker() {
 export function checkLoader(variant: string): int32 {
     let vm = -1
     let classPath = ""
-    let nativePath = __dirname + "/../native/"
+    let nativePath = __dirname + "/../native"
     env.ACE_LIBRARY_PATH = nativePath
 
     switch (variant) {

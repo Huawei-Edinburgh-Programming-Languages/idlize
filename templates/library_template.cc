@@ -23,7 +23,8 @@
 #include "arkoala-logging.h"
 #include "arkoala_api_generated.h"
 
-void* FindModule() {
+// TODO: rework for generic OHOS case.
+void* FindModule(int kind) {
     std::tuple<const char*, bool> candidates[] = {
         { "ace_compatible", true},
         { "ace", true },
@@ -32,18 +33,19 @@ void* FindModule() {
     };
     char* envValue = getenv("ACE_LIBRARY_PATH");
     std::string prefix = envValue ? std::string(envValue) : "";
-    LOGE("Search ACE in \"%s\" (ACE_LIBRARY_PATH)", prefix.c_str());
+    LOGE("Search ACE in \"%s\" (ACE_LIBRARY_PATH) for API %d", prefix.c_str(), kind);
     for (auto* candidate = candidates; std::get<0>(*candidate); candidate++) {
         std::string name = std::get<0>(*candidate);
         if (std::get<1>(*candidate)) {
             name = libName(name.c_str());
         }
-        void* module = loadLibrary(prefix + name);
+        std::string libraryName = prefix + "/" + name;
+        void* module = loadLibrary(libraryName);
         if (module) {
-            LOGE("ACE module at: %s", (prefix + name).c_str());
+            LOGE("ACE module at: %s", libraryName.c_str());
             return module;
         } else {
-            LOGE("Cannot find ACE module: %s %s", (prefix + name).c_str(), libraryError());
+            // LOGE("Cannot find ACE module: %s %s", libraryName.c_str(), libraryError());
         }
     }
     return nullptr;
@@ -56,7 +58,7 @@ const ArkUIAnyAPI* GetAnyImpl(int kind, int version, std::string* result) {
     if (!impls[kind]) {
         %CPP_PREFIX%ArkUIAnyAPI* impl = nullptr;
         typedef %CPP_PREFIX%ArkUIAnyAPI* (*GetAPI_t)(int, int);
-        GetAPI_t getAPI = nullptr;
+        static GetAPI_t getAPI = nullptr;
 
         char* envValue = getenv("__LIBACE_ENTRY_POINT");
         if (envValue) {
@@ -66,7 +68,7 @@ const ArkUIAnyAPI* GetAnyImpl(int kind, int version, std::string* result) {
             }
         }
         if (getAPI == nullptr) {
-            void* module = FindModule();
+            void* module = FindModule(kind);
             if (!module) {
                 if (result)
                     *result = "Cannot find dynamic module";

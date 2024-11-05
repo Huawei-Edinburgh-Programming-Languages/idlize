@@ -24,7 +24,7 @@
 #include "logging.h"
 
 // For logging we use operations exposed via interop, GetCurrentLogger() is an external
-// symbol for dummy implementation.
+// symbol for dummy implementation, exposed by interop bridge.
 void startGroupedLog(int kind) {
     GetCurrentLogger()->startGroupedLog(kind);
 }
