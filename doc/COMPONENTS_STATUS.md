@@ -617,7 +617,7 @@
 |`backButtonIcon`| Function | Erokhin Ilya | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`hideNavBar`|Function| Erokhin Ilya | done |  |
 |`subTitle`|Function| Erokhin Ilya | done |  |
-|`hideTitleBar`|Function| Erokhin Ilya | Skroba Gleb | in progress | |
+|`hideTitleBar`|Function| Skroba Gleb | in progress | |
 |`onTitleModeChange`| Function | Skroba Gleb | in progress | |
 |`hideBackButton`|Function| Erokhin Ilya | done |  |
 |`titleMode`|Function| Erokhin Ilya | done |  |
