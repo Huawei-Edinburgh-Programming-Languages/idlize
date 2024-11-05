@@ -33,7 +33,7 @@ void* FindModule(int kind) {
     };
     char* envValue = getenv("ACE_LIBRARY_PATH");
     std::string prefix = envValue ? std::string(envValue) : "";
-    LOGE("Search ACE in \"%s\" (ACE_LIBRARY_PATH) for API %d", prefix.c_str(), kind);
+    LOGE("Search ACE in \"%s\" (env ACE_LIBRARY_PATH) for API %d", prefix.c_str(), kind);
     for (auto* candidate = candidates; std::get<0>(*candidate); candidate++) {
         std::string name = std::get<0>(*candidate);
         if (std::get<1>(*candidate)) {
