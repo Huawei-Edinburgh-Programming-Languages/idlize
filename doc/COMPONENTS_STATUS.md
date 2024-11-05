@@ -1407,8 +1407,8 @@
 |`getWidth`| Function |Vadim Voronov| done | |
 |*DrawingRenderingContext*| *Class* |Vadim Voronov| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`invalidate`| Function |Vadim Voronov| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|*ImageAnalyzerController*| *Class* |Vadim Voronov| in progress| |
-|`getImageAnalyzerSupportTypes`| Function |Vadim Voronov| in progress| |
+|*ImageAnalyzerController*| *Class* |Vadim Voronov|  blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IB270B?from=project-issue |
+|`getImageAnalyzerSupportTypes`| Function |Vadim Voronov|  blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IB270B?from=project-issue |
 |*ListScroller*| *Class* |Morozov Sergey |in progress |  |
 |`getItemRectInGroup`| Function |Morozov Sergey |in progress |  |
 |`scrollToItemInGroup`| Function |Morozov Sergey |in progress |  |
