@@ -335,9 +335,9 @@
 |`renderWidth`| Function |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
 |`renderHeight`| Function |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
 |`customRender`| Function |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
-|*ContainerSpan*| *Component* | Tuzhilkin Ivan|in progress|  |
+|*ContainerSpan*| *Component* | Tuzhilkin Ivan|done|  |
 |`setContainerSpanOptions`| Function |Tuzhilkin Ivan|done|  |
-|`textBackgroundStyle`| Function |Tuzhilkin Ivan|devdone|  |
+|`textBackgroundStyle`| Function |Tuzhilkin Ivan|done|  |
 |*Counter*| *Component* | Erokhin Ilya | done |  |
 |`setCounterOptions`| Function | Erokhin Ilya | done |  |
 |`onInc`| Function | Erokhin Ilya | done |  |
