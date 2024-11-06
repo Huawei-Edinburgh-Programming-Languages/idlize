@@ -1422,6 +1422,31 @@
 |`scrollToItemInGroup`| Function |Morozov Sergey | done |  |
 |`closeAllSwipeActions`| Function |Morozov Sergey | blocked Arkoala |  |
 |`getVisibleListContentInfo`| Function |Morozov Sergey | blocked Arkoala |  |
+|*NavPathStack*| *Class* | Morozov Sergey |in progress |  |
+|`pushPath`| Function | Morozov Sergey |in progress |  |
+|`pushDestination`| Function | Morozov Sergey |in progress |  |
+|`pushPathByName`| Function | Morozov Sergey |in progress |  |
+|`pushDestinationByName`| Function | Morozov Sergey |in progress |  |
+|`replacePath`| Function | Morozov Sergey |in progress |  |
+|`replaceDestination`| Function | Morozov Sergey |in progress |  |
+|`replacePathByName`| Function | Morozov Sergey |in progress |  |
+|`removeByIndexes`| Function | Morozov Sergey |in progress |  |
+|`removeByName`| Function | Morozov Sergey |in progress |  |
+|`removeByNavDestinationId`| Function | Morozov Sergey |in progress |  |
+|`pop`| Function | Morozov Sergey |in progress |  |
+|`popToName`| Function | Morozov Sergey |in progress |  |
+|`popToIndex`| Function | Morozov Sergey |in progress |  |
+|`moveToTop`| Function | Morozov Sergey |in progress |  |
+|`moveIndexToTop`| Function | Morozov Sergey |in progress |  |
+|`clear`| Function | Morozov Sergey |in progress |  |
+|`getAllPathName`| Function | Morozov Sergey |in progress |  |
+|`getParamByIndex`| Function | Morozov Sergey |in progress |  |
+|`getParamByName`| Function | Morozov Sergey |in progress |  |
+|`getIndexByName`| Function | Morozov Sergey |in progress |  |
+|`getParent`| Function | Morozov Sergey |in progress |  |
+|`size`| Function | Morozov Sergey |in progress |  |
+|`disableAnimation`| Function | Morozov Sergey |in progress |  |
+|`setInterception`| Function | Morozov Sergey |in progress |  |
 |*RichEditorBaseController*| *Class*|Dudkin Sergey| in progress| |
 |`getCaretOffset`| Function|Dudkin Sergey| in progress| |
 |`setCaretOffset`| Function|Dudkin Sergey| in progress| |
