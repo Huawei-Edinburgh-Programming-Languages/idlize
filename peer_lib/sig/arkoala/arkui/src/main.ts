@@ -413,27 +413,6 @@ function checkCanvasRenderingContext2D() {
     stopNativeTest(CALL_GROUP_LOG)
 }
 
-function checkPerf1(count: number) {
-    let module = nativeModule()
-    let start = performance.now()
-    for (let i = 0; i < count; i++) {
-        module._TestPerfNumber(i)
-    }
-    let passed = performance.now() - start
-    console.log(`NUMBER: ${passed}ms for ${count} iteration, ${Math.round(passed / count * 1000000)}ms per 1M iterations`)
-
-    start = performance.now()
-    for (let i = 0; i < count; i++) {
-        let serializer = SerializerBase.hold(createSerializer)
-        serializer.writeNumber(0)
-        let data = serializer.asArray()
-        module._TestPerfNumberWithArray(data, data.length)
-        serializer.release()
-    }
-    passed = performance.now() - start
-    console.log(`ARRAY: ${passed}ms for ${Math.round(count)} iteration, ${Math.round(passed / count * 1000000)}ms per 1M iterations`)
-}
-
 function checkPerf2(count: number) {
     let peer = ArkButtonPeer.create(ArkUINodeType.Button)
     let start = performance.now()

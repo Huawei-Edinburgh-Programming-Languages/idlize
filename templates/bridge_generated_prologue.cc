@@ -16,7 +16,6 @@
 #include "common-interop.h"
 #include "arkoala_api_generated.h"
 #include "Serializers.h"
-#include "arkoala-logging.h"
 
 static const %CPP_PREFIX%ArkUIFullNodeAPI* GetFullImpl() {
     return reinterpret_cast<const %CPP_PREFIX%ArkUIFullNodeAPI*>(

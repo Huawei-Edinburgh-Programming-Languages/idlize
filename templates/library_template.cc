@@ -119,6 +119,10 @@ const ArkUIAnyAPI* GetAnyImpl(ArkUIAPIVariantKind kind, int version, std::string
                     LOGE("Cannot find %s", getArkAnyAPIFuncName);
                 return nullptr;
             }
+            // Provide custom logger to loaded libs.
+            typedef void (*SetLogger_t)(const GroupLogger* logger);
+            SetLogger_t setLogger = reinterpret_cast<SetLogger_t>(findSymbol(module, "SetLoggerSymbol"));
+            if (setLogger && logger) setLogger(logger);
         }
 
         impl = (*getAPI)(kind, version);
