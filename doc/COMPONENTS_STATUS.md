@@ -501,7 +501,7 @@
 |`startPoint`|Function|Dudkin Sergey|blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IAXCBA |
 |`endPoint`|Function|Dudkin Sergey|blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IAXCBA |
 |*List*|*Component*|Morozov Sergey| blocked Arkoala |  |
-|`setListOptions`|Function|Morozov Sergey| devdone |  |
+|`setListOptions`|Function|Morozov Sergey| done |  |
 |`lanes`|Function|Morozov Sergey|done|  |
 |`alignListItem`|Function|Morozov Sergey|done|  |
 |`listDirection`|Function|Morozov Sergey|done|  |
@@ -1419,7 +1419,7 @@
 |`getImageAnalyzerSupportTypes`| Function |Vadim Voronov|  blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IB270B?from=project-issue |
 |*ListScroller*| *Class* |Morozov Sergey | blocked Arkoala |  |
 |`getItemRectInGroup`| Function |Morozov Sergey | blocked Arkoala |  |
-|`scrollToItemInGroup`| Function |Morozov Sergey | devdone |  |
+|`scrollToItemInGroup`| Function |Morozov Sergey | done |  |
 |`closeAllSwipeActions`| Function |Morozov Sergey | blocked Arkoala |  |
 |`getVisibleListContentInfo`| Function |Morozov Sergey | blocked Arkoala |  |
 |*RichEditorController*| *Class* |Dudkin Sergey| blocked|  |
