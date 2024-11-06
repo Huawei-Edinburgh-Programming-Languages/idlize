@@ -22,23 +22,42 @@
 #include "arkoala-macros.h"
 #include "tree.h"
 #include "logging.h"
+#include "dynamic-loader.h"
+
+#ifdef KOALA_WINDOWS
+inline void* defaultModule() {
+    return GetModuleHandle(nullptr);
+}
+#else
+inline void* defaultModule() {
+    return RTLD_DEFAULT;
+}
+#endif
 
 // For logging we use operations exposed via interop, GetCurrentLogger() is an external
 // symbol for dummy implementation, exposed by interop bridge.
+const GroupLogger* GetCurrentLoggerDynamic() {
+    static const GroupLogger* (*impl)() = nullptr;
+    if (impl == nullptr) {
+        impl = reinterpret_cast<const GroupLogger* (*)()>(findSymbol(defaultModule(), "GetCurrentLogger"));
+    }
+    return impl();
+}
+
 void startGroupedLog(int kind) {
-    GetCurrentLogger()->startGroupedLog(kind);
+    GetCurrentLoggerDynamic()->startGroupedLog(kind);
 }
 void stopGroupedLog(int kind) {
-    GetCurrentLogger()->stopGroupedLog(kind);
+    GetCurrentLoggerDynamic()->stopGroupedLog(kind);
 }
 const char* getGroupedLog(int kind) {
-    return GetCurrentLogger()->getGroupedLog(kind);
+    return GetCurrentLoggerDynamic()->getGroupedLog(kind);
 }
 int needGroupedLog(int kind) {
-    return GetCurrentLogger()->needGroupedLog(kind);
+    return GetCurrentLoggerDynamic()->needGroupedLog(kind);
 }
 void appendGroupedLog(int kind, const std::string& str) {
-    GetCurrentLogger()->appendGroupedLog(kind, str.c_str());
+    GetCurrentLoggerDynamic()->appendGroupedLog(kind, str.c_str());
 }
 
 void dummyClassFinalizer(KNativePointer* ptr) {
