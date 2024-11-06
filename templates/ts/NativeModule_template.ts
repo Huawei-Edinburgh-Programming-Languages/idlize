@@ -24,11 +24,12 @@ export function initInteropModule(nativeModule?: NativeModule) {
     theModule = nativeModule ?? LOAD_NATIVE
     if (!theModule)
         throw new Error("Cannot load native module")
-    let result = theModule._CheckImpl()
-    if (result != undefined) {
-        theModule = undefined
-        throw new Error("Error loading native module: " + result.toString())
-    }
+    // TODO: properly implement (or get rid of?) [NativeModule._CheckImpl()]
+    // let result = theModule._CheckImpl()
+    // if (result != undefined) {
+    //     theModule = undefined
+    //     throw new Error("Error loading native module: " + result.toString())
+    // }
     theModule._SetCallbackDispatcher(callCallback)
 }
 
