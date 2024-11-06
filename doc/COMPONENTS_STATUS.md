@@ -238,8 +238,8 @@
 |`radialGradient`| Function | Erokhin Ilya | done |  |
 |`motionPath`| Function | | | |
 |`shadow`| Function | Roman Sedaikin | in progress | |
-|`clip`| Function | Erokhin Ilya | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
-|`clipShape`| Function | | | |
+|`clip`| Function | Skroba Gleb | in progress | |
+|`clipShape`| Function | Skroba Gleb | blocked  https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
 |`mask`| Function | | | |
 |`maskShape`| Function | | | |
 |`key`| Function | | | |
