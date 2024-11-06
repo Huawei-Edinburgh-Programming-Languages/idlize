@@ -1422,6 +1422,17 @@
 |`scrollToItemInGroup`| Function |Morozov Sergey | done |  |
 |`closeAllSwipeActions`| Function |Morozov Sergey | blocked Arkoala |  |
 |`getVisibleListContentInfo`| Function |Morozov Sergey | blocked Arkoala |  |
+|*RichEditorBaseController*| *Class*|Dudkin Sergey| in progress| |
+|`getCaretOffset`| Function|Dudkin Sergey| in progress| |
+|`setCaretOffset`| Function|Dudkin Sergey| in progress| |
+|`closeSelectionMenu`| Function|Dudkin Sergey| in progress| |
+|`getTypingStyle`| Function|Dudkin Sergey| in progress| |
+|`setTypingStyle`| Function|Dudkin Sergey| in progress| |
+|`setSelection`| Function|Dudkin Sergey| in progress| |
+|`isEditing`| Function|Dudkin Sergey| in progress| |
+|`stopEditing`| Function|Dudkin Sergey| in progress| |
+|`getLayoutManager`| Function|Dudkin Sergey| in progress| |
+|`getPreviewText`| Function|Dudkin Sergey| in progress| |
 |*RichEditorController*| *Class* |Dudkin Sergey| blocked|  |
 |`addTextSpan`| Function |Dudkin Sergey| done|  |
 |`addImageSpan`| Function |Dudkin Sergey| blocked| Ark_CustomObject :: implement setting pixel map aka inValue into options |
