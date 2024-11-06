@@ -1467,30 +1467,30 @@
 |`reset`| Function | Erokhin Ilya | done |  |
 |*Web*| *Component* | Erokhin Ilya | in progress | |
 |`setWebOptions`| Function | Erokhin Ilya | blocked | WebController & https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`javaScriptAccess`| Function | Erokhin Ilya | devdone | |
-|`fileAccess`| Function | Erokhin Ilya | devdone | |
-|`onlineImageAccess`| Function | Erokhin Ilya | devdone | |
-|`domStorageAccess`| Function | Erokhin Ilya | devdone | |
-|`imageAccess`| Function | Erokhin Ilya | devdone | |
-|`mixedMode`| Function | Erokhin Ilya | devdone | |
-|`zoomAccess`| Function | Erokhin Ilya | devdone | |
-|`geolocationAccess`| Function | Erokhin Ilya | devdone | |
+|`javaScriptAccess`| Function | Erokhin Ilya | done | |
+|`fileAccess`| Function | Erokhin Ilya | done | |
+|`onlineImageAccess`| Function | Erokhin Ilya | done | |
+|`domStorageAccess`| Function | Erokhin Ilya | done | |
+|`imageAccess`| Function | Erokhin Ilya | done | |
+|`mixedMode`| Function | Erokhin Ilya | done | |
+|`zoomAccess`| Function | Erokhin Ilya | done | |
+|`geolocationAccess`| Function | Erokhin Ilya | done | |
 |`javaScriptProxy`| Function | Erokhin Ilya | blocked | WebController & https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX & https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV |
 |`password`| Function | Erokhin Ilya | done | |
-|`cacheMode`| Function | Erokhin Ilya | devdone | |
-|`darkMode`| Function | Erokhin Ilya | devdone | |
-|`forceDarkAccess`| Function | Erokhin Ilya | devdone | |
-|`mediaOptions`| Function | Erokhin Ilya | devdone | |
+|`cacheMode`| Function | Erokhin Ilya | done | |
+|`darkMode`| Function | Erokhin Ilya | done | |
+|`forceDarkAccess`| Function | Erokhin Ilya | done | |
+|`mediaOptions`| Function | Erokhin Ilya | done | |
 |`tableData`| Function | Erokhin Ilya | done | |
 |`wideViewModeAccess`| Function | Erokhin Ilya | done | |
-|`overviewModeAccess`| Function | Erokhin Ilya | devdone | |
-|`overScrollMode`| Function | Erokhin Ilya | devdone | |
-|`textZoomAtio`| Function | Erokhin Ilya | devdone | |
-|`textZoomRatio`| Function | Erokhin Ilya | devdone | |
-|`databaseAccess`| Function | Erokhin Ilya | devdone | |
-|`initialScale`| Function | Erokhin Ilya | devdone | |
-|`userAgent`| Function | Erokhin Ilya | devdone | |
-|`metaViewport`| Function | Erokhin Ilya | devdone | |
+|`overviewModeAccess`| Function | Erokhin Ilya | done | |
+|`overScrollMode`| Function | Erokhin Ilya | done | |
+|`textZoomAtio`| Function | Erokhin Ilya | done | |
+|`textZoomRatio`| Function | Erokhin Ilya | done | |
+|`databaseAccess`| Function | Erokhin Ilya | done | |
+|`initialScale`| Function | Erokhin Ilya | done | |
+|`userAgent`| Function | Erokhin Ilya | done | |
+|`metaViewport`| Function | Erokhin Ilya | done | |
 |`onPageEnd`| Function | Erokhin Ilya | in progress | |
 |`onPageBegin`| Function | Erokhin Ilya | in progress | |
 |`onProgressChange`| Function | Erokhin Ilya | in progress | |
@@ -1522,7 +1522,7 @@
 |`onScreenCaptureRequest`| Function | Erokhin Ilya | in progress | |
 |`onContextMenuShow`| Function | Erokhin Ilya | in progress | |
 |`onContextMenuHide`| Function | Erokhin Ilya | in progress | |
-|`mediaPlayGestureAccess`| Function | Erokhin Ilya | devdone | |
+|`mediaPlayGestureAccess`| Function | Erokhin Ilya | done | |
 |`onSearchResultReceive`| Function | Erokhin Ilya | in progress | |
 |`onScroll`| Function | Erokhin Ilya | in progress | |
 |`onSslErrorEventReceive`| Function | Erokhin Ilya | in progress | |
@@ -1530,29 +1530,29 @@
 |`onClientAuthenticationRequest`| Function | Erokhin Ilya | in progress | |
 |`onWindowNew`| Function | Erokhin Ilya | in progress | |
 |`onWindowExit`| Function | Erokhin Ilya | in progress | |
-|`multiWindowAccess`| Function | Erokhin Ilya | devdone | |
+|`multiWindowAccess`| Function | Erokhin Ilya | done | |
 |`onInterceptKeyEvent`| Function | Erokhin Ilya | in progress | |
-|`webStandardFont`| Function | Erokhin Ilya | devdone | |
-|`webSerifFont`| Function | Erokhin Ilya | devdone | |
-|`webSansSerifFont`| Function | Erokhin Ilya | devdone | |
-|`webFixedFont`| Function | Erokhin Ilya | devdone | |
-|`webFantasyFont`| Function | Erokhin Ilya | devdone | |
-|`webCursiveFont`| Function | Erokhin Ilya | devdone | |
-|`defaultFixedFontSize`| Function | Erokhin Ilya | devdone | |
-|`defaultFontSize`| Function | Erokhin Ilya | devdone | |
-|`minFontSize`| Function | Erokhin Ilya | devdone | |
-|`minLogicalFontSize`| Function | Erokhin Ilya | devdone | |
+|`webStandardFont`| Function | Erokhin Ilya | done | |
+|`webSerifFont`| Function | Erokhin Ilya | done | |
+|`webSansSerifFont`| Function | Erokhin Ilya | done | |
+|`webFixedFont`| Function | Erokhin Ilya | done | |
+|`webFantasyFont`| Function | Erokhin Ilya | done | |
+|`webCursiveFont`| Function | Erokhin Ilya | done | |
+|`defaultFixedFontSize`| Function | Erokhin Ilya | done | |
+|`defaultFontSize`| Function | Erokhin Ilya | done | |
+|`minFontSize`| Function | Erokhin Ilya | done | |
+|`minLogicalFontSize`| Function | Erokhin Ilya | done | |
 |`defaultTextEncodingFormat`| Function | Erokhin Ilya | testskipped | |
-|`forceDisplayScrollBar`| Function | Erokhin Ilya | devdone | |
-|`blockNetwork`| Function | Erokhin Ilya | devdone | |
-|`horizontalScrollBarAccess`| Function | Erokhin Ilya | devdone | |
-|`verticalScrollBarAccess`| Function | Erokhin Ilya | devdone | |
+|`forceDisplayScrollBar`| Function | Erokhin Ilya | done | |
+|`blockNetwork`| Function | Erokhin Ilya | done | |
+|`horizontalScrollBarAccess`| Function | Erokhin Ilya | done | |
+|`verticalScrollBarAccess`| Function | Erokhin Ilya | done | |
 |`onTouchIconUrlReceived`| Function | Erokhin Ilya | in progress | |
 |`onFaviconReceived`| Function | Erokhin Ilya | in progress | |
 |`onPageVisible`| Function | Erokhin Ilya | in progress | |
 |`onDataResubmitted`| Function | Erokhin Ilya | in progress | |
-|`pinchSmooth`| Function | Erokhin Ilya | devdone | |
-|`allowWindowOpenMethod`| Function | Erokhin Ilya | devdone | |
+|`pinchSmooth`| Function | Erokhin Ilya | done | |
+|`allowWindowOpenMethod`| Function | Erokhin Ilya | done | |
 |`onAudioStateChanged`| Function | Erokhin Ilya | in progress | |
 |`onFirstContentfulPaint`| Function | Erokhin Ilya | in progress | |
 |`onFirstMeaningfulPaint`| Function | Erokhin Ilya | in progress | |
@@ -1565,27 +1565,27 @@
 |`onIntelligentTrackingPreventionResult`| Function | Erokhin Ilya | in progress | |
 |`javaScriptOnDocumentStart`| Function | Erokhin Ilya | testskipped | |
 |`javaScriptOnDocumentEnd`| Function | Erokhin Ilya | testskipped | |
-|`layoutMode`| Function | Erokhin Ilya | devdone | |
+|`layoutMode`| Function | Erokhin Ilya | done | |
 |`nestedScroll`| Function | Erokhin Ilya | testskipped | |
-|`enableNativeEmbedMode`| Function | Erokhin Ilya | devdone | |
+|`enableNativeEmbedMode`| Function | Erokhin Ilya | done | |
 |`onNativeEmbedLifecycleChange`| Function | Erokhin Ilya | in progress | |
 |`onNativeEmbedVisibilityChange`| Function | Erokhin Ilya | in progress | |
 |`onNativeEmbedGestureEvent`| Function | Erokhin Ilya | in progress | |
-|`copyOptions`| Function | Erokhin Ilya | devdone | |
+|`copyOptions`| Function | Erokhin Ilya | done | |
 |`onOverrideUrlLoading`| Function | Erokhin Ilya | in progress | |
-|`textAutosizing`| Function | Erokhin Ilya | devdone | |
-|`enableNativeMediaPlayer`| Function | Erokhin Ilya | devdone | |
-|`enableSmoothDragResize`| Function | Erokhin Ilya | devdone | |
+|`textAutosizing`| Function | Erokhin Ilya | done | |
+|`enableNativeMediaPlayer`| Function | Erokhin Ilya | done | |
+|`enableSmoothDragResize`| Function | Erokhin Ilya | done | |
 |`onRenderProcessNotResponding`| Function | Erokhin Ilya | in progress | |
 |`onRenderProcessResponding`| Function | Erokhin Ilya | in progress | |
 |`selectionMenuOptions`| Function | Erokhin Ilya | in progress | |
 |`onViewportFitChanged`| Function | Erokhin Ilya | in progress | |
 |`onInterceptKeyboardAttach`| Function | Erokhin Ilya | in progress | |
 |`onAdsBlocked`| Function | Erokhin Ilya | in progress | |
-|`keyboardAvoidMode`| Function | Erokhin Ilya | devdone | |
+|`keyboardAvoidMode`| Function | Erokhin Ilya | done | |
 |`editMenuOptions`| Function | Erokhin Ilya | in progress | |
-|`enableHapticFeedback`| Function | Erokhin Ilya | devdone | |
-|`registerNativeEmbedRule`| Function | Erokhin Ilya | devdone | |
+|`enableHapticFeedback`| Function | Erokhin Ilya | done | |
+|`registerNativeEmbedRule`| Function | Erokhin Ilya | done | |
 |`bindSelectionMenu`| Function |Erokhin Ilya | in progress | |
 |*WebController*| *Class* | Erokhin Ilya | in progress | |
 |`onInactive`| Function | Erokhin Ilya | devdone | |
