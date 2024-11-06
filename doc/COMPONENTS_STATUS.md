@@ -1588,25 +1588,25 @@
 |`registerNativeEmbedRule`| Function | Erokhin Ilya | devdone | |
 |`bindSelectionMenu`| Function |Erokhin Ilya | in progress | |
 |*WebController*| *Class* | Erokhin Ilya | in progress | |
-|`onInactive`| Function | Erokhin Ilya | in progress | |
-|`onActive`| Function | Erokhin Ilya | in progress | |
-|`zoom`| Function | Erokhin Ilya | in progress | |
-|`clearHistory`| Function | Erokhin Ilya | in progress | |
+|`onInactive`| Function | Erokhin Ilya | devdone | |
+|`onActive`| Function | Erokhin Ilya | devdone | |
+|`zoom`| Function | Erokhin Ilya | devdone | |
+|`clearHistory`| Function | Erokhin Ilya | devdone | |
 |`runJavaScript`| Function | Erokhin Ilya | in progress | |
-|`loadData`| Function | Erokhin Ilya | in progress | |
-|`loadUrl`| Function | Erokhin Ilya | in progress | |
-|`refresh`| Function | Erokhin Ilya | in progress | |
-|`stop`| Function | Erokhin Ilya | in progress | |
+|`loadData`| Function | Erokhin Ilya | devdone | |
+|`loadUrl`| Function | Erokhin Ilya | testskipped | |
+|`refresh`| Function | Erokhin Ilya | devdone | |
+|`stop`| Function | Erokhin Ilya | devdone | |
 |`registerJavaScriptProxy`| Function | Erokhin Ilya | in progress | |
 |`deleteJavaScriptRegister`| Function | Erokhin Ilya | in progress | |
 |`getHitTest`| Function | Erokhin Ilya | in progress | |
-|`requestFocus`| Function | Erokhin Ilya | in progress | |
-|`accessBackward`| Function | Erokhin Ilya | in progress | |
-|`accessForward`| Function | Erokhin Ilya | in progress | |
-|`accessStep`| Function | Erokhin Ilya | in progress | |
-|`backward`| Function | Erokhin Ilya | in progress | |
-|`forward`| Function | Erokhin Ilya | in progress | |
-|`getCookieManager`| Function | Erokhin Ilya | in progress | |
-|*WebCookie*| *Class* | Erokhin Ilya | in progress | |
-|`setCookie`| Function | Erokhin Ilya | in progress | |
-|`saveCookie`| Function | Erokhin Ilya | in progress | |
+|`requestFocus`| Function | Erokhin Ilya | devdone | |
+|`accessBackward`| Function | Erokhin Ilya | devdone | |
+|`accessForward`| Function | Erokhin Ilya | devdone | |
+|`accessStep`| Function | Erokhin Ilya | devdone | |
+|`backward`| Function | Erokhin Ilya | devdone | |
+|`forward`| Function | Erokhin Ilya | devdone | |
+|`getCookieManager`| Function | Erokhin Ilya | testskipped | |
+|*WebCookie*| *Class* | Erokhin Ilya | devdone | |
+|`setCookie`| Function | Erokhin Ilya | devdone | |
+|`saveCookie`| Function | Erokhin Ilya | devdone | |
