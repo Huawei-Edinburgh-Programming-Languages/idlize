@@ -16,11 +16,10 @@
 #include <tuple>
 #include <string>
 
-#include "arkoala-logging.h"
 #include "library.h"
 #include "dynamic-loader.h"
 
-#include "arkoala-logging.h"
+#include "interop-logging.h"
 #include "arkoala_api_generated.h"
 
 // TODO: rework for generic OHOS case.
@@ -68,6 +67,7 @@ const ArkUIAnyAPI* GetAnyImpl(int kind, int version, std::string* result) {
             }
         }
         if (getAPI == nullptr) {
+            const GroupLogger* logger = GetDefaultLogger();
             void* module = FindModule(kind);
             if (!module) {
                 if (result)
@@ -84,6 +84,10 @@ const ArkUIAnyAPI* GetAnyImpl(int kind, int version, std::string* result) {
                     LOGE("Cannot find %s", getArkAnyAPIFuncName);
                 return nullptr;
             }
+            // Provide custom logger to loaded libs.
+            typedef void (*SetLogger_t)(const GroupLogger* logger);
+            SetLogger_t setLogger = reinterpret_cast<SetLogger_t>(findSymbol(module, "SetLoggerSymbol"));
+            if (setLogger && logger) setLogger(logger);
         }
         impl = (*getAPI)(kind, version);
         if (!impl) {

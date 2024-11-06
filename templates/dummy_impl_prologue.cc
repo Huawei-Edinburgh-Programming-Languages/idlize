@@ -24,40 +24,32 @@
 #include "logging.h"
 #include "dynamic-loader.h"
 
-#ifdef KOALA_WINDOWS
-inline void* defaultModule() {
-    return GetModuleHandle(nullptr);
-}
-#else
-inline void* defaultModule() {
-    return RTLD_DEFAULT;
-}
-#endif
+// For logging we use operations exposed via interop, SetLoggerSymbol() is called
+// when library is loaded.
+const GroupLogger* loggerInstance = GetDefaultLogger();
 
-// For logging we use operations exposed via interop, GetCurrentLogger() is an external
-// symbol for dummy implementation, exposed by interop bridge.
-const GroupLogger* GetCurrentLoggerDynamic() {
-    static const GroupLogger* (*impl)() = nullptr;
-    if (impl == nullptr) {
-        impl = reinterpret_cast<const GroupLogger* (*)()>(findSymbol(defaultModule(), "GetCurrentLogger"));
-    }
-    return impl();
+const GroupLogger* GetDummyLogger() {
+    return loggerInstance;
+}
+
+extern "C" INTEROP_API_EXPORT void SetLoggerSymbol(const GroupLogger* logger) {
+    loggerInstance = logger;
 }
 
 void startGroupedLog(int kind) {
-    GetCurrentLoggerDynamic()->startGroupedLog(kind);
+    GetDummyLogger()->startGroupedLog(kind);
 }
 void stopGroupedLog(int kind) {
-    GetCurrentLoggerDynamic()->stopGroupedLog(kind);
+    GetDummyLogger()->stopGroupedLog(kind);
 }
 const char* getGroupedLog(int kind) {
-    return GetCurrentLoggerDynamic()->getGroupedLog(kind);
+    return GetDummyLogger()->getGroupedLog(kind);
 }
 int needGroupedLog(int kind) {
-    return GetCurrentLoggerDynamic()->needGroupedLog(kind);
+    return GetDummyLogger()->needGroupedLog(kind);
 }
 void appendGroupedLog(int kind, const std::string& str) {
-    GetCurrentLoggerDynamic()->appendGroupedLog(kind, str.c_str());
+    GetDummyLogger()->appendGroupedLog(kind, str.c_str());
 }
 
 void dummyClassFinalizer(KNativePointer* ptr) {

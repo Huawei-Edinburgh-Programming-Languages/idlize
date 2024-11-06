@@ -102,6 +102,7 @@ if use_libace
 libace_name = 'ace_compatible_mock'
 libace_sources = [
     arkoala_dir + '/dummy_impl.cc',
+    external_interop_dir / 'interop-logging.cc',
 ]
 endif
 
