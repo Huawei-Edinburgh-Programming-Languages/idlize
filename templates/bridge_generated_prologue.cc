@@ -88,10 +88,9 @@ void impl_EmulateClickEvent(KInt nodeId, KFloat x, KFloat y) {
 KOALA_INTEROP_V3(EmulateClickEvent, KInt, KFloat, KFloat)
 
 void impl_EmulateTextInputEvent(KInt nodeId, const KStringPtr& text) {
-    std::string value = getString(text);
     Ark_String str {
-        .chars = value.c_str(),
-        .length = static_cast<Ark_Int32>(value.length())
+        .chars = text.c_str(),
+        .length = static_cast<Ark_Int32>(text.length())
     };
     Opt_PreviewText preview;
     preview.tag = ARK_TAG_UNDEFINED;
