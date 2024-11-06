@@ -1507,7 +1507,7 @@
 |`exitFullscreen`| Function | Erokhin Ilya | done |  |
 |`reset`| Function | Erokhin Ilya | done |  |
 |*Web*| *Component* | Erokhin Ilya | in progress | |
-|`setWebOptions`| Function | Erokhin Ilya | blocked | WebController & https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`setWebOptions`| Function | Erokhin Ilya | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`javaScriptAccess`| Function | Erokhin Ilya | done | |
 |`fileAccess`| Function | Erokhin Ilya | done | |
 |`onlineImageAccess`| Function | Erokhin Ilya | done | |
@@ -1516,7 +1516,7 @@
 |`mixedMode`| Function | Erokhin Ilya | done | |
 |`zoomAccess`| Function | Erokhin Ilya | done | |
 |`geolocationAccess`| Function | Erokhin Ilya | done | |
-|`javaScriptProxy`| Function | Erokhin Ilya | blocked | WebController & https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX & https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV |
+|`javaScriptProxy`| Function | Erokhin Ilya | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX & https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV |
 |`password`| Function | Erokhin Ilya | done | |
 |`cacheMode`| Function | Erokhin Ilya | done | |
 |`darkMode`| Function | Erokhin Ilya | done | |
@@ -1627,7 +1627,6 @@
 |`editMenuOptions`| Function | Erokhin Ilya | in progress | |
 |`enableHapticFeedback`| Function | Erokhin Ilya | done | |
 |`registerNativeEmbedRule`| Function | Erokhin Ilya | done | |
-|`bindSelectionMenu`| Function |Erokhin Ilya | in progress | |
 |*WebController*| *Class* | Erokhin Ilya | in progress | |
 |`onInactive`| Function | Erokhin Ilya | devdone | |
 |`onActive`| Function | Erokhin Ilya | devdone | |
@@ -1638,9 +1637,9 @@
 |`loadUrl`| Function | Erokhin Ilya | testskipped | |
 |`refresh`| Function | Erokhin Ilya | devdone | |
 |`stop`| Function | Erokhin Ilya | devdone | |
-|`registerJavaScriptProxy`| Function | Erokhin Ilya | in progress | |
-|`deleteJavaScriptRegister`| Function | Erokhin Ilya | in progress | |
-|`getHitTest`| Function | Erokhin Ilya | in progress | |
+|`registerJavaScriptProxy`| Function | Erokhin Ilya | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV |
+|`deleteJavaScriptRegister`| Function | Erokhin Ilya | devdone | |
+|`getHitTest`| Function | Erokhin Ilya | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`requestFocus`| Function | Erokhin Ilya | devdone | |
 |`accessBackward`| Function | Erokhin Ilya | devdone | |
 |`accessForward`| Function | Erokhin Ilya | devdone | |
