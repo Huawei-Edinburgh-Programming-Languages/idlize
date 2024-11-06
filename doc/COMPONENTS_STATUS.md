@@ -519,7 +519,7 @@
 |`scrollSnapAlign`|Function|Morozov Sergey|done|  |
 |`nestedScroll`|Function|Morozov Sergey|done|  |
 |`enableScrollInteraction`|Function|Morozov Sergey|done|  |
-|`friction`|Function|Morozov Sergey|blocked Arkoala| can be handled |
+|`friction`|Function|Morozov Sergey|done|  |
 |`childrenMainSize`|Function|Morozov Sergey|blocked Arkoala|  |
 |`maintainVisibleContentPosition`|Function|Morozov Sergey|done|  |
 |`onScroll`|Function|Morozov Sergey|done|  |
