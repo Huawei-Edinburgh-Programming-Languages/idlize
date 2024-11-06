@@ -1316,21 +1316,21 @@
 |`divider`| Function |Dmitry A Smirnov|done|  |
 |`minContentWidth`| Function |Dmitry A Smirnov|done|  |
 |*WaterFlow*| *Component* | Kovalev Sergey | in progress |  |
-|`setWaterFlowOptions`| Function | Kovalev Sergey | in progress |  |
-|`columnsTemplate`| Function | Kovalev Sergey | in progress |  |
-|`itemConstraintSize`| Function | Kovalev Sergey | in progress |  |
-|`rowsTemplate`| Function | Kovalev Sergey | in progress |  |
-|`columnsGap`| Function | Kovalev Sergey | in progress |  |
-|`rowsGap`| Function |Kovalev Sergey | in progress |  |
-|`layoutDirection`| Function |Kovalev Sergey | in progress |  |
-|`nestedScroll`| Function | Kovalev Sergey | in progress |  |
-|`enableScrollInteraction`| Function | Kovalev Sergey | in progress |  |
-|`friction`| Function | Kovalev Sergey | in progress |  |
-|`cachedCount`| Function |Kovalev Sergey | in progress |  |
-|`onReachStart`| Function | Kovalev Sergey | in progress |  |
-|`onReachEnd`| Function | Kovalev Sergey | in progress |  |
-|`onScrollFrameBegin`| Function | Kovalev Sergey | in progress |  |
-|`onScrollIndex`| Function | Kovalev Sergey | in progress |  |
+|`setWaterFlowOptions`| Function | Kovalev Sergey |blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`columnsTemplate`| Function | Kovalev Sergey | done |  |
+|`itemConstraintSize`| Function | Kovalev Sergey | done |  |
+|`rowsTemplate`| Function | Kovalev Sergey | done |  |
+|`columnsGap`| Function | Kovalev Sergey | done |  |
+|`rowsGap`| Function |Kovalev Sergey | done |  |
+|`layoutDirection`| Function |Kovalev Sergey | done |  |
+|`nestedScroll`| Function | Kovalev Sergey | done |  |
+|`enableScrollInteraction`| Function | Kovalev Sergey | done |  |
+|`friction`| Function | Kovalev Sergey | done |  |
+|`cachedCount`| Function |Kovalev Sergey | done |  |
+|`onReachStart`| Function | Kovalev Sergey | blocked | event |
+|`onReachEnd`| Function | Kovalev Sergey | blocked | event |
+|`onScrollFrameBegin`| Function | Kovalev Sergey | blocked | event |
+|`onScrollIndex`| Function | Kovalev Sergey | blocked | event |
 |*CanvasRenderer*| *Class*  | Vadim Voronov | in progress | |
 |`drawImage`| Function  | Vadim Voronov | in progress | |
 |`beginPath`| Function  | Vadim Voronov | in progress | |
