@@ -336,8 +336,8 @@
 |`renderHeight`| Function |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
 |`customRender`| Function |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
 |*ContainerSpan*| *Component* | Tuzhilkin Ivan|in progress|  |
-|`setContainerSpanOptions`| Function |Tuzhilkin Ivan|in progress|  |
-|`textBackgroundStyle`| Function |Tuzhilkin Ivan|in progress|  |
+|`setContainerSpanOptions`| Function |Tuzhilkin Ivan|done|  |
+|`textBackgroundStyle`| Function |Tuzhilkin Ivan|devdone|  |
 |*Counter*| *Component* | Erokhin Ilya | done |  |
 |`setCounterOptions`| Function | Erokhin Ilya | done |  |
 |`onInc`| Function | Erokhin Ilya | done |  |
@@ -1192,7 +1192,7 @@
 |`customKeyboard`| Function | Spirin Andrey | blocked |  |
 |`showCounter`| Function | Spirin Andrey | in progress |  |
 |*TextPicker*| *Component* |Ekaterina Stepanova |in progress |  |
-|`setTextPickerOptions`| Function | Tuzhilkin Ivan| done |  |
+|`setTextPickerOptions`| Function | Tuzhilkin Ivan| done | https://gitee.com/openharmony/arkui_ace_engine/issues/IB2GJB |
 |`defaultPickerItemHeight`| Function |Ekaterina Stepanova | done |  |
 |`canLoop`| Function |Ekaterina Stepanova | done |  |
 |`disappearTextStyle`|Function |Ekaterina Stepanova | done |  |
