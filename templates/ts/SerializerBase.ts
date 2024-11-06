@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 import { float32, int32, pointer } from "./types"
-import { %NATIVE_MODULE_ACCESSOR% as nativeModule } from "%NATIVE_MODULE_PATH%"
+import { %NATIVE_MODULE_ACCESSOR% as nativeModule, CallbackKind } from "%NATIVE_MODULE_PATH%"
 
 /**
  * Value representing possible JS runtime object type.
@@ -135,13 +135,22 @@ export class SerializerBase {
     }
     // TODO implement callback and check do we need this for a custom OHOS library
     // private heldResources: ResourceId[] = []
-    writeCallbackResource(resource: object) {
-        // const resourceId = ResourceManager.registerAndHold(resource)
+
+    holdAndWriteCallback(callback: object, kind: CallbackKind) {
+        // const resourceId = ResourceManager.registerAndHold(callback)
         // this.heldResources.push(resourceId)
         // this.writeInt32(resourceId)
         // this.writePointer(nativeModule()._GetManagedResourceHolder())
         // this.writePointer(nativeModule()._GetManagedResourceReleaser())
+        // this.writePointer(nativeModule()._GetManagerCallbackCaller(kind))
     }
+
+    writeCallbackResource(resource: object /*CallbackResource*/) {
+        // this.writeInt32(resource.resourceId)
+        // this.writePointer(resource.hold)
+        // this.writePointer(resource.release)
+    }
+
     private releaseResources() {
         // for (const resourceId of this.heldResources)
         //     ResourceManager.release(resourceId)
