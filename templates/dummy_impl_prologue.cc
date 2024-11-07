@@ -315,42 +315,41 @@ Ark_Int32 TreeNode::draw(Ark_VMContext vmContext, Ark_Float32* data) {
     return 0;
 }
 
-void TreeNode::setMeasureWidthValue(Ark_Int32 value) {
+void TreeNode::setMeasureWidthValue(float value) {
     if (measureResult != nullptr) measureResult[0] = value;
     _width = value;
 }
 
-Ark_Int32 TreeNode::getMeasureWidthValue() {
+float TreeNode::getMeasureWidthValue() {
     return (measureResult == nullptr) ? 0 : measureResult[0];
 }
 
-void TreeNode::setMeasureHeightValue(Ark_Int32 value) {
+void TreeNode::setMeasureHeightValue(float value) {
     if (measureResult != nullptr) measureResult[1] = value;
     _height = value;
 }
 
-Ark_Int32 TreeNode::getMeasureHeightValue() {
+float TreeNode::getMeasureHeightValue() {
     return (measureResult == nullptr) ? 0 : measureResult[1];
 }
 
-void TreeNode::setXValue(Ark_Float32 value) {
+void TreeNode::setXValue(float value) {
     if (layoutResult != nullptr) layoutResult[0] = value;
     _x = value;
 }
 
-Ark_Float32 TreeNode::getXValue() {
+float TreeNode::getXValue() {
     return (layoutResult == nullptr) ? 0 : layoutResult[0];
 }
 
-void TreeNode::setYValue(Ark_Float32 value) {
+void TreeNode::setYValue(float value) {
     if (layoutResult != nullptr) layoutResult[1] = value;
     _y = value;
 }
 
-Ark_Float32 TreeNode::getYValue() {
+float TreeNode::getYValue() {
     return (layoutResult == nullptr) ? 0 : layoutResult[1];
 }
-
 
 namespace OHOS::Ace::NG {
 
