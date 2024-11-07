@@ -1205,16 +1205,16 @@
 |`divider`| Function |Ekaterina Stepanova | done |  |
 |`gradientHeight`| Function | Ekaterina Stepanova| done |  |
 |*TextTimer*| *Component* |Ekaterina Stepanova|in progress |  |
-|`setTextTimerOptions`| Function |Ekaterina Stepanova|in progress |  |
-|`format`| Function |Ekaterina Stepanova|in progress |  |
+|`setTextTimerOptions`| Function |Ekaterina Stepanova| in progress |  |
+|`format`| Function |Ekaterina Stepanova| devdone |  |
 |`fontColor`| Function |Ekaterina Stepanova| devdone |  |
 |`fontSize`| Function |Ekaterina Stepanova| devdone |  |
 |`fontStyle`| Function | Ekaterina Stepanova| devdone |  |
 |`fontWeight`| Function |Ekaterina Stepanova| devdone |  |
 |`fontFamily`| Function |Ekaterina Stepanova| devdone |  |
-|`onTimer`| Function |Ekaterina Stepanova|in progress |  |
-|`textShadow`| Function |Ekaterina Stepanova|in progress |  |
-|`contentModifier`| Function |Ekaterina Stepanova|in progress |  |
+|`onTimer`| Function |Ekaterina Stepanova| blocked | in progress |
+|`textShadow`| Function |Ekaterina Stepanova| blocked ace_engine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB2SZK |
+|`contentModifier`| Function |Ekaterina Stepanova| blocked arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |*TextTimerController*| *Class* |Ekaterina Stepanova|in progress |  |
 |`start`| Function |Ekaterina Stepanova|in progress |  |
 |`pause`| Function |Ekaterina Stepanova|in progress |  |
