@@ -50,6 +50,22 @@ typedef double ArkUI_Float64;
 typedef char* ArkUI_CommonCharPtr;
 typedef const char* ArkUI_CharPtr;
 typedef unsigned long long ArkUI_Uint64;
+struct _ArkUIVMContext;
+typedef _ArkUIVMContext* ArkUIVMContext;
+struct _ArkUIPipelineContext;
+typedef _ArkUIPipelineContext* ArkUIPipelineContext;
+struct _ArkUIVMObject;
+typedef _ArkUIVMObject* ArkUIVMObject;
+struct _ArkUINode;
+typedef _ArkUINode* ArkUINodeHandle;
+enum ArkUIAPINodeFlags {
+    CUSTOM_NONE = 0,
+    CUSTOM_MEASURE = 1 << 0,
+    CUSTOM_LAYOUT = 1 << 1,
+    CUSTOM_DRAW = 1 << 2,
+    CUSTOM_FOREGROUND_DRAW = 1 << 3,
+    CUSTOM_OVERLAY_DRAW = 1 << 4,
+};
 #endif
 
 typedef enum Ark_Tag
