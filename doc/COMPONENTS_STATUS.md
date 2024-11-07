@@ -729,11 +729,11 @@
 |`onDidIMEInput`| Function | Dudkin Sergey| done|  |
 |`aboutToDelete`| Function | Dudkin Sergey| done|  |
 |`onDeleteComplete`| Function | Dudkin Sergey| done|  |
-|`copyOptions`| Function | Dudkin Sergey| in progress|  |
+|`copyOptions`| Function | Dudkin Sergey| devDone|  |
 |`onPaste`| Function | Dudkin Sergey| done|  |
-|`enableDataDetector`| Function | Dudkin Sergey| in progress|  |
-|`enablePreviewText`| Function | Dudkin Sergey| in progress|  |
-|`dataDetectorConfig`| Function | Dudkin Sergey| in progress|  |
+|`enableDataDetector`| Function | Dudkin Sergey| devDone|  |
+|`enablePreviewText`| Function | Dudkin Sergey| devDone|  |
+|`dataDetectorConfig`| Function | Dudkin Sergey| devDone|  |
 |`caretColor`| Function | Dudkin Sergey| in progress|  |
 |`selectedBackgroundColor`| Function | Dudkin Sergey| in progress|  |
 |`onEditingChange`| Function | Dudkin Sergey| done|  |
@@ -747,9 +747,9 @@
 |`enableKeyboardOnFocus`| Function | Dudkin Sergey| in progress|  |
 |`enableHapticFeedback`| Function | Dudkin Sergey| in progress|  |
 |`barState`| Function | Dudkin Sergey| in progress|  |
-|`bindSelectionMenu`| Function | Dudkin Sergey| in progress|  |
-|`customKeyboard`| Function | Dudkin Sergey| in progress|  |
-|`placeholder`| Function | Dudkin Sergey| in progress|  |
+|`bindSelectionMenu`| Function | Dudkin Sergey| blocked| not implemented yet. Due to Ark_CustomBuilder |
+|`customKeyboard`| Function | Dudkin Sergey| blocked| not implemented yet. Due to Ark_CustomBuilder |
+|`placeholder`| Function | Dudkin Sergey| devDone|  |
 |*RichText*| *Component* | Dudkin Sergey| in progress|  |
 |`setRichTextOptions`| Function | Dudkin Sergey| in progress|  |
 |`onStart`| Function | Dudkin Sergey| in progress|  |
