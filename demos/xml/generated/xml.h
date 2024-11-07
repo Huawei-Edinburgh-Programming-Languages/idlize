@@ -245,16 +245,16 @@ typedef struct OH_XML_XmlSerializerModifier {
 struct OH_XML_ParseInfoHandleOpaque;
 typedef struct OH_XML_ParseInfoHandleOpaque* OH_XML_ParseInfoHandle;
 typedef struct OH_XML_ParseInfoModifier {
-    OH_Number (*getColumnNumber)(OH_NativePointer thisPtr);
-    OH_Number (*getDepth)(OH_NativePointer thisPtr);
-    OH_Number (*getLineNumber)(OH_NativePointer thisPtr);
+    OH_Int32 (*getColumnNumber)(OH_NativePointer thisPtr);
+    OH_Int32 (*getDepth)(OH_NativePointer thisPtr);
+    OH_Int32 (*getLineNumber)(OH_NativePointer thisPtr);
     OH_String (*getName)(OH_NativePointer thisPtr);
     OH_String (*getNamespace)(OH_NativePointer thisPtr);
     OH_String (*getPrefix)(OH_NativePointer thisPtr);
     OH_String (*getText)(OH_NativePointer thisPtr);
     OH_Boolean (*isEmptyElementTag)(OH_NativePointer thisPtr);
     OH_Boolean (*isWhitespace)(OH_NativePointer thisPtr);
-    OH_Number (*getAttributeCount)(OH_NativePointer thisPtr);
+    OH_Int32 (*getAttributeCount)(OH_NativePointer thisPtr);
 } OH_XML_ParseInfoModifier;
 struct OH_XML_XmlPullParserHandleOpaque;
 typedef struct OH_XML_XmlPullParserHandleOpaque* OH_XML_XmlPullParserHandle;
