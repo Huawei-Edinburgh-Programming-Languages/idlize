@@ -1341,11 +1341,11 @@
 |`createPattern`| Function  | Vadim Voronov | in progress | |
 |`createRadialGradient`| Function  | Vadim Voronov | in progress | |
 |`createConicGradient`| Function  | Vadim Voronov | in progress | |
-|`createImageData`| Function  | Vadim Voronov | in progress | |
-|`getImageData`| Function  | Vadim Voronov | in progress | |
-|`getPixelMap`| Function  | Vadim Voronov | in progress | |
-|`putImageData`| Function  | Vadim Voronov | in progress | |
-|`getLineDash`| Function  | Vadim Voronov | in progress | |
+|`createImageData`| Function  | Vadim Voronov | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`getImageData`| Function  | Vadim Voronov | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`getPixelMap`| Function  | Vadim Voronov | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`putImageData`| Function  | Vadim Voronov | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`getLineDash`| Function  | Vadim Voronov |  blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IB2T7X?from=project-issue |
 |`setLineDash`| Function  | Vadim Voronov | in progress | |
 |`clearRect`| Function  | Vadim Voronov | in progress | |
 |`fillRect`| Function  | Vadim Voronov | in progress | |
@@ -1362,18 +1362,18 @@
 |`setTransform`| Function  | Vadim Voronov | in progress | |
 |`transform`| Function  | Vadim Voronov | in progress | |
 |`translate`| Function  | Vadim Voronov | in progress | |
-|`setPixelMap`| Function  | Vadim Voronov | in progress | |
+|`setPixelMap`| Function  | Vadim Voronov | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`transferFromImageBitmap`| Function  | Vadim Voronov | in progress | |
 |`saveLayer`| Function  | Vadim Voronov | in progress | |
 |`restoreLayer`| Function  | Vadim Voronov | in progress | |
 |`reset`| Function  | Vadim Voronov | in progress | |
 |`getGlobalAlpha`| Function  | Vadim Voronov | in progress | |
 |`setGlobalAlpha`| Function  | Vadim Voronov | in progress | |
-|`getGlobalCompositeOperation`| Function  | Vadim Voronov | in progress | |
+|`getGlobalCompositeOperation`| Function  | Vadim Voronov | blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IB2T7X?from=project-issue |
 |`setGlobalCompositeOperation`| Function  | Vadim Voronov | in progress | |
 |`setFillStyle`| Function  | Vadim Voronov | in progress | |
 |`setStrokeStyle`| Function  | Vadim Voronov | in progress | |
-|`getFilter`| Function  | Vadim Voronov | in progress | |
+|`getFilter`| Function  | Vadim Voronov | blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IB2T7X?from=project-issue |
 |`setFilter`| Function  | Vadim Voronov | in progress | |
 |`getImageSmoothingEnabled`| Function  | Vadim Voronov | in progress | |
 |`setImageSmoothingEnabled`| Function  | Vadim Voronov | in progress | |
@@ -1391,7 +1391,7 @@
 |`setMiterLimit`| Function  | Vadim Voronov | in progress | |
 |`getShadowBlur`| Function  | Vadim Voronov | in progress | |
 |`setShadowBlur`| Function  | Vadim Voronov | in progress | |
-|`getShadowColor`| Function  | Vadim Voronov | in progress | |
+|`getShadowColor`| Function  | Vadim Voronov | blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IB2T7X?from=project-issue |
 |`setShadowColor`| Function  | Vadim Voronov | in progress | |
 |`getShadowOffsetX`| Function  | Vadim Voronov | in progress | |
 |`setShadowOffsetX`| Function  | Vadim Voronov | in progress | |
@@ -1399,7 +1399,7 @@
 |`setShadowOffsetY`| Function  | Vadim Voronov | in progress | |
 |`getDirection`| Function  | Vadim Voronov | in progress | |
 |`setDirection`| Function  | Vadim Voronov | in progress | |
-|`getFont`| Function  | Vadim Voronov | in progress | |
+|`getFont`| Function  | Vadim Voronov | blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IB2T7X?from=project-issue |
 |`setFont`| Function  | Vadim Voronov | in progress | |
 |`getTextAlign`| Function  | Vadim Voronov | in progress | |
 |`setTextAlign`| Function  | Vadim Voronov | in progress | |
