@@ -18,7 +18,6 @@
 #include <array>
 #include <chrono>
 
-#include "arkoala_api.h"
 #include "arkoala_api_generated.h"
 #include "Serializers.h"
 #include "interop-logging.h"

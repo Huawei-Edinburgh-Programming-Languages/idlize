@@ -39,6 +39,19 @@
 extern "C" {
 #endif
 
+// TODO: remove this ifdef
+#ifndef FOUNDATION_ACE_FRAMEWORKS_CORE_INTERFACES_ARKOALA_API_H
+typedef int ArkUI_Bool;
+typedef int ArkUI_Int32;
+typedef unsigned int ArkUI_Uint32;
+typedef long long ArkUI_Int64;
+typedef float ArkUI_Float32;
+typedef double ArkUI_Float64;
+typedef char* ArkUI_CommonCharPtr;
+typedef const char* ArkUI_CharPtr;
+typedef unsigned long long ArkUI_Uint64;
+#endif
+
 typedef enum Ark_Tag
 {
   ARK_TAG_UNDEFINED = 101,
