@@ -1129,23 +1129,23 @@
 |`setTextInputOptions`| Function | Spirin Andrey | in progress |  |
 |`type`| Function | Spirin Andrey | done |  |
 |`contentType`| Function | Spirin Andrey | done |  |
-|`placeholderColor`| Function | Spirin Andrey | devdone |  |
+|`placeholderColor`| Function | Spirin Andrey | done |  |
 |`textOverflow`| Function | Spirin Andrey | blocked |https://gitee.com/openharmony/arkui_ace_engine/issues/IAXX0N|
-|`textIndent`| Function | Spirin Andrey | devdone |  |
-|`placeholderFont`| Function | Spirin Andrey | devdone |  |
+|`textIndent`| Function | Spirin Andrey | blocked UT |  |
+|`placeholderFont`| Function | Spirin Andrey | blocked UT |  |
 |`enterKeyType`| Function | Spirin Andrey | done |  |
-|`caretColor`| Function | Spirin Andrey | devdone |  |
+|`caretColor`| Function | Spirin Andrey | blocked UT |  |
 |`onEditChanged`| Function | Spirin Andrey | blocked |  |
 |`onEditChange`| Function | Spirin Andrey | blocked |  |
 |`onSubmit`| Function | Spirin Andrey | blocked |  |
 |`onChange`| Function | Spirin Andrey | blocked |  |
 |`onTextSelectionChange`| Function | Spirin Andrey | blocked |  |
 |`onContentScroll`| Function | Spirin Andrey | blocked |  |
-|`maxLength`| Function | Spirin Andrey | devdone |  |
-|`fontColor`| Function | Spirin Andrey | devdone |  |
-|`fontSize`| Function | Spirin Andrey | devdone |  |
-|`fontStyle`| Function | Spirin Andrey | devdone |  |
-|`fontWeight`| Function | Spirin Andrey | devdone |  |
+|`maxLength`| Function | Spirin Andrey | done |  |
+|`fontColor`| Function | Spirin Andrey | done |  |
+|`fontSize`| Function | Spirin Andrey | blocked UT |  |
+|`fontStyle`| Function | Spirin Andrey | done |  |
+|`fontWeight`| Function | Spirin Andrey | blocked UT |  |
 |`fontFamily`| Function | Spirin Andrey | in progress |  |
 |`onCopy`| Function | Spirin Andrey | blocked |  |
 |`onCut`| Function | Spirin Andrey | blocked |  |
@@ -1153,10 +1153,10 @@
 |`copyOption`| Function | Spirin Andrey | done |  |
 |`showPasswordIcon`| Function | Spirin Andrey | done |  |
 |`textAlign`| Function | Spirin Andrey | done |  |
-|`style`| Function | Spirin Andrey | devdone |  |
-|`caretStyle`| Function | Spirin Andrey | devdone |  |
-|`selectedBackgroundColor`| Function | Spirin Andrey | devdone |  |
-|`caretPosition`| Function | Spirin Andrey | devdone |  |
+|`style`| Function | Spirin Andrey | done |  |
+|`caretStyle`| Function | Spirin Andrey | done |  |
+|`selectedBackgroundColor`| Function | Spirin Andrey | done |  |
+|`caretPosition`| Function | Spirin Andrey | blocked UT |  |
 |`enableKeyboardOnFocus`| Function | Spirin Andrey | done |  |
 |`passwordIcon`| Function | Spirin Andrey | in progress |  |
 |`showError`| Function | Spirin Andrey | in progress |  |
@@ -1165,20 +1165,20 @@
 |`underlineColor`| Function | Spirin Andrey | in progress |  |
 |`selectionMenuHidden`| Function | Spirin Andrey | done |  |
 |`barState`| Function | Spirin Andrey | done |  |
-|`maxLines`| Function | Spirin Andrey | devdone |  |
+|`maxLines`| Function | Spirin Andrey | blocked UT |  |
 |`wordBreak`| Function | Spirin Andrey | done |  |
 |`lineBreakStrategy`| Function | Spirin Andrey | done |  |
 |`cancelButton`| Function | Spirin Andrey | in progress |  |
 |`selectAll`| Function | Spirin Andrey | done |  |
-|`minFontSize`| Function | Spirin Andrey | devdone |  |
-|`maxFontSize`| Function | Spirin Andrey | devdone |  |
+|`minFontSize`| Function | Spirin Andrey | blocked UT |  |
+|`maxFontSize`| Function | Spirin Andrey | blocked UT |  |
 |`heightAdaptivePolicy`| Function | Spirin Andrey | done |  |
 |`enableAutoFill`| Function | Spirin Andrey | done |  |
-|`decoration`| Function | Spirin Andrey | devdone |  |
-|`letterSpacing`| Function | Spirin Andrey | devdone |  |
-|`lineHeight`| Function | Spirin Andrey | devdone |  |
+|`decoration`| Function | Spirin Andrey | blocked UT |  |
+|`letterSpacing`| Function | Spirin Andrey | blocked UT |  |
+|`lineHeight`| Function | Spirin Andrey | blocked UT |  |
 |`passwordRules`| Function | Spirin Andrey | in progress |  |
-|`fontFeature`| Function | Spirin Andrey | devdone |  |
+|`fontFeature`| Function | Spirin Andrey | blocked UT |  |
 |`showPassword`| Function | Spirin Andrey | done |  |
 |`onSecurityStateChange`| Function | Spirin Andrey | blocked |  |
 |`onWillInsert`| Function | Spirin Andrey | blocked |  |
@@ -1188,7 +1188,7 @@
 |`editMenuOptions`| Function | Spirin Andrey | in progress |  |
 |`enablePreviewText`| Function | Spirin Andrey | done |  |
 |`enableHapticFeedback`| Function | Spirin Andrey | done |  |
-|`inputFilter`| Function | Spirin Andrey | devdone |  |
+|`inputFilter`| Function | Spirin Andrey | blocked UT |  |
 |`customKeyboard`| Function | Spirin Andrey | blocked |  |
 |`showCounter`| Function | Spirin Andrey | in progress |  |
 |*TextPicker*| *Component* |Ekaterina Stepanova |in progress |  |
