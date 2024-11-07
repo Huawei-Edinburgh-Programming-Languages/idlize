@@ -75,22 +75,16 @@ typedef int8_t Ark_Boolean;
 typedef const char* Ark_CharPtr;
 typedef void* Ark_NativePointer;
 
-#ifdef FOUNDATION_ACE_FRAMEWORKS_CORE_INTERFACES_ARKOALA_API_H
-typedef struct _ArkUINode* Ark_NodeHandle;
-typedef struct _ArkUIVMContext* Ark_VMContext;
-typedef struct _ArkUIPipelineContext* Ark_PipelineContext;
-#endif
-
 struct _Ark_VMContext;
-typedef _Ark_VMContext* Ark_VMContext;
+typedef struct _Ark_VMContext* Ark_VMContext;
 struct _Ark_PipelineContext;
-typedef _Ark_PipelineContext* Ark_PipelineContext;
+typedef struct _Ark_PipelineContext* Ark_PipelineContext;
 struct _Ark_VMObject;
-typedef _Ark_VMObject* Ark_VMObject;
+typedef strcut _Ark_VMObject* Ark_VMObject;
 struct _Ark_Node;
-typedef _Ark_Node* Ark_NodeHandle;
+typedef struct _Ark_Node* Ark_NodeHandle;
 struct _Ark_Canvas;
-typedef _Ark_Canvas* Ark_CanvasHandle;
+typedef struct _Ark_Canvas* Ark_CanvasHandle;
 
 enum Ark_APINodeFlags {
     CUSTOM_NONE = 0,
