@@ -1105,7 +1105,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
     }
 
     clazzName(method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration): string | undefined {
-        let parent = method.parent.parent//.parent
+        let parent = method.parent
         
         if (parent !== undefined && ts.isClassDeclaration(parent)) {
             return identName(parent.name)!
