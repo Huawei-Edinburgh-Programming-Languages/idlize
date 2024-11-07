@@ -80,7 +80,7 @@ typedef struct _Ark_VMContext* Ark_VMContext;
 struct _Ark_PipelineContext;
 typedef struct _Ark_PipelineContext* Ark_PipelineContext;
 struct _Ark_VMObject;
-typedef strcut _Ark_VMObject* Ark_VMObject;
+typedef struct _Ark_VMObject* Ark_VMObject;
 struct _Ark_Node;
 typedef struct _Ark_Node* Ark_NodeHandle;
 struct _Ark_Canvas;
