@@ -655,11 +655,18 @@ export abstract class LanguageWriter {
             ...exprs
         ])
     }
-    arrayDiscriminatorFromTypeOrExpressions(value: string,
-                                 checkedType: string,
-                                 runtimeType: RuntimeType,
-                                 exprs: LanguageExpression[]): LanguageExpression {
-        return this.discriminatorFromExpressions(value, runtimeType, exprs)
+    makeDiscriminatorConvertor(convertor: EnumConvertorDTS | EnumConvertor, value: string, index: number): LanguageExpression {
+        const ordinal = convertor.isStringEnum
+            ? this.ordinalFromEnum(
+                this.makeString(this.getObjectAccessor(convertor, value)),
+                convertor.enumTypeName(this.language)
+            )
+            : this.makeUnionVariantCast(this.getObjectAccessor(convertor, value), this.convert(idl.IDLI32Type), convertor, index)
+        const {low, high} = convertor.extremumOfOrdinals()
+        return this.discriminatorFromExpressions(value, convertor.runtimeTypes[0], [
+            this.makeNaryOp(">=", [ordinal, this.makeString(low!.toString())]),
+            this.makeNaryOp("<=",  [ordinal, this.makeString(high!.toString())])
+        ])
     }
     makeNot(expr: LanguageExpression): LanguageExpression {
         return this.makeString(`!${expr.asString()}`)

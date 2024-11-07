@@ -128,14 +128,12 @@ export function generateTypeCheckerName(typeName: string): string {
 }
 
 export function makeArrayTypeCheckCall(
-    valueAccessor: string, 
-    typeName: IDLType,
-    writer: LanguageWriter,
-) {
+    valueAccessor: string,
+    typeName: string,
+    writer: LanguageWriter) {
     return writer.makeMethodCall(
         "TypeChecker",
-        generateTypeCheckerName(forceAsNamedNode(typeName).name),
-        // isBrackets ? generateTypeCheckerNameBracketsArray(typeName) : generateTypeCheckerNameArray(typeName), 
+        generateTypeCheckerName(typeName),
         [writer.makeString(valueAccessor)
     ])
 }
@@ -251,11 +249,10 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         // the '==' operator must be used when one of the operands is a reference
         return super.makeNaryOp('==', args);
     }
-    override arrayDiscriminatorFromTypeOrExpressions(value: string,
-                                                     checkedType: string,
-                                                     runtimeType: RuntimeType,
-                                                     exprs: LanguageExpression[]): LanguageExpression {
-        return makeArrayTypeCheckCall(value, toIDLType(checkedType), this)
+    makeDiscriminatorConvertor(convertor: EnumConvertorDTS, value: string, index: number): LanguageExpression {
+        return this.discriminatorFromExpressions(value, RuntimeType.OBJECT, [
+            makeEnumTypeCheckerCall(value, convertor.enumTypeName(this.language), this)
+        ])
     }
     override castToInt(value: string, bitness: 8 | 32): string {
         return `${value} as int32` // FIXME: is there int8 in ARKTS?

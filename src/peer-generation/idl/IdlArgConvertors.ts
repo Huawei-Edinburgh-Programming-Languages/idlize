@@ -20,6 +20,8 @@ import { PrimitiveType } from "../ArkPrimitiveType"
 import { RuntimeType, ArgConvertor, BaseArgConvertor, ProxyConvertor, UndefinedConvertor, UnionRuntimeTypeChecker, ExpressionAssigneer } from "../ArgConvertors"
 import { CppCastExpression } from "../LanguageWriters/writers/CppLanguageWriter"
 import { LibraryInterface } from "../../LibraryInterface"
+import {makeInterfaceTypeCheckerCall} from "../Convertors";
+
 
 export class StringConvertor extends BaseArgConvertor {
     private literalValue?: string
@@ -396,6 +398,13 @@ export class AggregateConvertor extends BaseArgConvertor { //
         return this.members.map(it => it[0])
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
+        //TODO: needs to be reworked
+        if (writer.language === Language.ARKTS) {
+            return makeInterfaceTypeCheckerCall(value,
+                this.aliasName !== undefined ? this.aliasName : writer.convert(this.idlType),
+                this.members.map(it => it[0]), duplicates, writer)
+        }
+
         const uniqueFields = this.members.filter(it => !duplicates.has(it[0]))
         return this.discriminatorFromFields(value, writer, uniqueFields, it => it[0], it => it[1])
     }
@@ -428,6 +437,15 @@ export class InterfaceConvertor extends BaseArgConvertor { //
         return this.declaration?.properties.map(it => it.name) ?? []
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
+        //TODO: needs to be reworked
+        if (writer.language === Language.ARKTS) {
+            return makeInterfaceTypeCheckerCall(value,
+                writer.convert(this.idlType),
+                this.declaration.properties.map(it => it.name),
+                duplicates,
+                writer)
+        }
+
         // First, tricky special cases
         if (this.declaration.name.endsWith("GestureInterface")) {
             const gestureType = this.declaration.name.slice(0, -"GestureInterface".length)
@@ -454,6 +472,17 @@ export class ClassConvertor extends InterfaceConvertor { //
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
         // SubTabBarStyle causes inscrutable "SubTabBarStyle is not defined" error
         if (this.declaration.name === "SubTabBarStyle") return undefined
+        //TODO: needs to be reworked
+        if (writer.language === Language.ARKTS) {
+            return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT,
+                [
+                    writer.makeMethodCall(
+                        "TypeChecker",
+                        generateTypeCheckerName(writer.convert(this.idlType)),
+                        [writer.makeString(value)])
+                ]
+            )
+        }
         return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT,
             [writer.makeString(`${value} instanceof ${writer.stringifyType(this.idlType)}`)])
     }
@@ -617,8 +646,14 @@ export class ArrayConvertor extends BaseArgConvertor { //
         return true
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT,
-            [writer.makeString(`${value} instanceof ${this.targetType(writer)}`)])
+        //TODO: needs to be reworked
+        const exprs: LanguageExpression[] = []
+        if (writer.language === Language.ARKTS) {
+            exprs.push(makeArrayTypeCheckCall(value, this.library.getTypeName(this.idlType), writer))
+        } else {
+            exprs.push(writer.makeString(`${value} instanceof ${this.targetType(writer)}`))
+        }
+        return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT,exprs)
     }
     override getObjectAccessor(language: Language, value: string, args?: Record<string, string>): string {
         const array = language === Language.CPP ? ".array" : ""
@@ -814,7 +849,7 @@ export function generateCallbackAPIArguments(library: LibraryInterface, callback
         return `${constPrefix}${library.getTypeName(type.nativeType())} ${type.param}`
     }))
     if (!idl.isVoidType(callback.returnType)) {
-        const type = library.typeConvertor(`continuation`, 
+        const type = library.typeConvertor(`continuation`,
             library.createContinuationCallbackReference(callback.returnType)!, false)
         args.push(`const ${library.getTypeName(type.nativeType())} ${type.param}`)
     }
