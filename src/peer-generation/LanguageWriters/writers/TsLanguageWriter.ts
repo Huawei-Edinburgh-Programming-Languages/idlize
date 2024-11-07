@@ -15,7 +15,7 @@
 
 import { IndentedPrinter } from "../../../IndentedPrinter"
 import { Language } from "../../../Language"
-import { mapType, TSTypeNodeNameConvertor } from "../../TypeNodeNameConvertor"
+import { TSTypeNodeNameConvertor } from "../../TypeNodeNameConvertor"
 import {
     AssignStatement,
     ExpressionStatement,

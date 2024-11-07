@@ -143,58 +143,56 @@ if (options.dts2idl) {
 if (options.dts2skoala) {
     PrimitiveType.Prefix = ""
 
-    if (options.idl) {
-        const outputDir: string = options.outputDir ?? "./out/skoala"
+    const outputDir: string = options.outputDir ?? "./out/skoala"
 
-        if (!fs.existsSync(outputDir)) {
-            fs.mkdirSync(outputDir, { recursive: true })
-        }
-
-        const generatedIDLMap = new Map<string, IDLEntry[]>()
-        const skoalaLibrary = new IdlSkoalaLibrary()
-
-        generate(
-            options.inputDir.split(','),
-            options.inputFile,
-            outputDir,
-            (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, options, skoalaLibrary),
-            {
-                compilerOptions: {
-                    ...defaultCompilerOptions,
-                    paths: {
-                        "@koalaui/common": ["/home/huawei/idlize/external/incremental/common/src"],
-                        "@koalaui/compat": ["/home/huawei/idlize/external/incremental/compat/src/typescript"],
-                        "@koalaui/interop": ["/home/huawei/idlize/external/interop/src/interop"],
-                        "@koalaui/arkoala": ["/home/huawei/idlize/external/arkoala/framework/src"],
-                    },
-                },
-                onSingleFile: (entries: IDLEntry[], outputDirectory, sourceFile) => {
-                    const fileName = path.basename(sourceFile.fileName, ".d.ts")
-
-                    if (!generatedIDLMap.has(fileName)) {
-                        generatedIDLMap.set(fileName, [])
-                    }
-
-                    generatedIDLMap.get(fileName)?.push(...entries)
-                    skoalaLibrary.files.push(new IldSkoalaFile(sourceFile.fileName, entries))
-                },
-                onEnd: (outDir) => {
-                    const wrapperProcessor = new IdlWrapperProcessor(skoalaLibrary)
-                    wrapperProcessor.process()
-                    generateIdlSkoala(outDir, skoalaLibrary, options)
-
-                    try {
-                        SkoalaDeserializerPrinter.generateDeserializer(outputDir, generatedIDLMap)
-                    } catch (error) {
-                        console.error("Error during deserializer generation:", error)
-                    }
-
-                    console.log("All files processed.")
-                }
-            }
-        )
-        didJob = true
+    if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir, { recursive: true })
     }
+
+    const generatedIDLMap = new Map<string, IDLEntry[]>()
+    const skoalaLibrary = new IdlSkoalaLibrary()
+
+    generate(
+        options.inputDir.split(','),
+        options.inputFile,
+        outputDir,
+        (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, options, skoalaLibrary),
+        {
+            compilerOptions: {
+                ...defaultCompilerOptions,
+                paths: {
+                    "@koalaui/common": ["/home/huawei/idlize/external/incremental/common/src"],
+                    "@koalaui/compat": ["/home/huawei/idlize/external/incremental/compat/src/typescript"],
+                    "@koalaui/interop": ["/home/huawei/idlize/external/interop/src/interop"],
+                    "@koalaui/arkoala": ["/home/huawei/idlize/external/arkoala/framework/src"],
+                },
+            },
+            onSingleFile: (entries: IDLEntry[], outputDirectory, sourceFile) => {
+                const fileName = path.basename(sourceFile.fileName, ".d.ts")
+
+                if (!generatedIDLMap.has(fileName)) {
+                    generatedIDLMap.set(fileName, [])
+                }
+
+                generatedIDLMap.get(fileName)?.push(...entries)
+                skoalaLibrary.files.push(new IldSkoalaFile(sourceFile.fileName, entries))
+            },
+            onEnd: (outDir) => {
+                const wrapperProcessor = new IdlWrapperProcessor(skoalaLibrary)
+                wrapperProcessor.process()
+                generateIdlSkoala(outDir, skoalaLibrary, options)
+
+                try {
+                    SkoalaDeserializerPrinter.generateDeserializer(outputDir, generatedIDLMap)
+                } catch (error) {
+                    console.error("Error during deserializer generation:", error)
+                }
+
+                console.log("All files processed.")
+            }
+        }
+    )
+    didJob = true
 }
 
 if (options.linter) {

@@ -14,7 +14,7 @@
  */
 
 import * as ts from "typescript";
-import { asString, getDeclarationsByNode, heritageDeclarations, identName } from "../util";
+import { asString, heritageDeclarations, identName } from "../util";
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
 
 export enum InheritanceRole {
