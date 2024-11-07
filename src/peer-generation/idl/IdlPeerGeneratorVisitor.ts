@@ -187,6 +187,7 @@ function mapCInteropRetType(type: idl.IDLType): string {
                 // return `KStringPtr`
                 return "void"
             case idl.IDLVoidType:
+            case idl.IDLThisType:
             case idl.IDLUndefinedType:
                 return "void"
         }
@@ -210,6 +211,9 @@ function mapCInteropRetType(type: idl.IDLType): string {
         } else
             return PrimitiveType.NativePointer.getText()
     }
+    console.log("//////////////////////")
+    console.log("type = ", type)
+    console.log("//////////////////////")
     throw `mapCInteropType failed for ${idl.IDLKind[type.kind]} ${idl.getIDLTypeName(type)}`
 }
 
@@ -1337,25 +1341,8 @@ function generateSignature(
     method: idl.IDLCallable | idl.IDLMethod | idl.IDLConstructor,
     className?: string
 ): NamedMethodSignature {
-    let returnType
-
-    if (idl.isUndefinedType(method.returnType!))
-    {
-        returnType = idl.IDLVoidType
-    }
-    else if (
-        idl.isCallable(method) || 
-        idl.isIDLTypeName(method.returnType!, 'T') ||
-        idl.isConstructor(method) ||
-        !method.isStatic && method.returnType && className && idl.isIDLTypeName(method.returnType, className)
-    ) {
-        returnType = idl.IDLThisType
-    } 
-    else {
-        returnType = method.returnType!
-    }
     return new NamedMethodSignature(
-        returnType,
+        method.returnType!,
         method.parameters.map(it => maybeOptional(it.type!, it.isOptional)),
         method.parameters.map(it => it.name)
     )
