@@ -214,15 +214,15 @@ GENERATED_Ark_EventCallbackArg arg(Ark_Int32 i32) {
     return result;
 }
 
-ArkUI_Int32 TreeNode::measure(ArkUIVMContext vmContext, ArkUI_Float32* data) {
+Ark_Int32 TreeNode::measure(Ark_VMContext vmContext, Ark_Float32* data) {
     TreeNodeDelays::busyWait(TreeNodeDelays::measureNodeDelay[_customIntData]);
 
     Ark_Float32 minWidth = data[0];
     Ark_Float32 minHeight = data[1];
     Ark_Float32 maxWidth = data[2];
     Ark_Float32 maxHeight = data[3];
-    if (_flags & ArkUIAPINodeFlags::CUSTOM_MEASURE) {
-        GENERATED_Ark_EventCallbackArg args[] = { arg(ArkUIAPICustomOp::MEASURE), arg(minWidth), arg(minHeight), arg(maxWidth), arg(maxHeight) };
+    if (_flags & Ark_APINodeFlags::CUSTOM_MEASURE) {
+        GENERATED_Ark_EventCallbackArg args[] = { arg(Ark_APICustomOp::MEASURE), arg(minWidth), arg(minHeight), arg(maxWidth), arg(maxHeight) };
         callbacks->CallInt(vmContext, customId(), 5, &args[0]);
         _width = args[1].f32;
         _height = args[2].f32;
@@ -265,16 +265,16 @@ ArkUI_Int32 TreeNode::measure(ArkUIVMContext vmContext, ArkUI_Float32* data) {
     return 0;
 }
 
-ArkUICanvasHandle getCanvas(TreeNode* node) {
+Ark_CanvasHandle getCanvas(TreeNode* node) {
     // TODO: real canvas.
-    return reinterpret_cast<ArkUICanvasHandle>(0x123456789aLL);
+    return reinterpret_cast<Ark_CanvasHandle>(0x123456789aLL);
 }
 
-ArkUI_Int32 TreeNode::layout(ArkUIVMContext vmContext, ArkUI_Float32* data) {
+Ark_Int32 TreeNode::layout(Ark_VMContext vmContext, Ark_Float32* data) {
     TreeNodeDelays::busyWait(TreeNodeDelays::layoutNodeDelay[_customIntData]);
 
-    if (_flags & ArkUIAPINodeFlags::CUSTOM_LAYOUT) {
-        GENERATED_Ark_EventCallbackArg args[] = { arg(ArkUIAPICustomOp::LAYOUT), arg(0.0f), arg(0.0f), arg(0.0f), arg(0.0f) };
+    if (_flags & Ark_APINodeFlags::CUSTOM_LAYOUT) {
+        GENERATED_Ark_EventCallbackArg args[] = { arg(Ark_APICustomOp::LAYOUT), arg(0.0f), arg(0.0f), arg(0.0f), arg(0.0f) };
         callbacks->CallInt(vmContext, customId(), 5, &args[0]);
         return 0;
     }
@@ -294,13 +294,13 @@ ArkUI_Int32 TreeNode::layout(ArkUIVMContext vmContext, ArkUI_Float32* data) {
     return 0;
 }
 
-ArkUI_Int32 TreeNode::draw(ArkUIVMContext vmContext, ArkUI_Float32* data) {
+Ark_Int32 TreeNode::draw(Ark_VMContext vmContext, Ark_Float32* data) {
     TreeNodeDelays::busyWait(TreeNodeDelays::drawNodeDelay[_customIntData]);
 
-    if (_flags & ArkUIAPINodeFlags::CUSTOM_DRAW) {
+    if (_flags & Ark_APINodeFlags::CUSTOM_DRAW) {
         uintptr_t canvas = reinterpret_cast<uintptr_t>(getCanvas(this));
         GENERATED_Ark_EventCallbackArg args[] = {
-            arg(ArkUIAPICustomOp::DRAW),
+            arg(Ark_APICustomOp::DRAW),
             arg((Ark_Int32)(canvas & 0xffffffff)),
             arg((Ark_Int32)((canvas >> 32) & 0xffffffff)),
             arg(data[0]), arg(data[1]), arg(data[2]), arg(data[3])
@@ -315,39 +315,39 @@ ArkUI_Int32 TreeNode::draw(ArkUIVMContext vmContext, ArkUI_Float32* data) {
     return 0;
 }
 
-void TreeNode::setMeasureWidthValue(ArkUI_Int32 value) {
+void TreeNode::setMeasureWidthValue(Ark_Int32 value) {
     if (measureResult != nullptr) measureResult[0] = value;
     _width = value;
 }
 
-ArkUI_Int32 TreeNode::getMeasureWidthValue() {
+Ark_Int32 TreeNode::getMeasureWidthValue() {
     return (measureResult == nullptr) ? 0 : measureResult[0];
 }
 
-void TreeNode::setMeasureHeightValue(ArkUI_Int32 value) {
+void TreeNode::setMeasureHeightValue(Ark_Int32 value) {
     if (measureResult != nullptr) measureResult[1] = value;
     _height = value;
 }
 
-ArkUI_Int32 TreeNode::getMeasureHeightValue() {
+Ark_Int32 TreeNode::getMeasureHeightValue() {
     return (measureResult == nullptr) ? 0 : measureResult[1];
 }
 
-void TreeNode::setXValue(ArkUI_Int32 value) {
+void TreeNode::setXValue(Ark_Float32 value) {
     if (layoutResult != nullptr) layoutResult[0] = value;
     _x = value;
 }
 
-ArkUI_Int32 TreeNode::getXValue() {
+Ark_Float32 TreeNode::getXValue() {
     return (layoutResult == nullptr) ? 0 : layoutResult[0];
 }
 
-void TreeNode::setYValue(ArkUI_Int32 value) {
+void TreeNode::setYValue(Ark_Float32 value) {
     if (layoutResult != nullptr) layoutResult[1] = value;
     _y = value;
 }
 
-ArkUI_Int32 TreeNode::getYValue() {
+Ark_Float32 TreeNode::getYValue() {
     return (layoutResult == nullptr) ? 0 : layoutResult[1];
 }
 

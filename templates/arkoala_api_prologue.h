@@ -39,35 +39,6 @@
 extern "C" {
 #endif
 
-// TODO: remove this ifdef
-#ifndef FOUNDATION_ACE_FRAMEWORKS_CORE_INTERFACES_ARKOALA_API_H
-typedef int ArkUI_Bool;
-typedef int ArkUI_Int32;
-typedef unsigned int ArkUI_Uint32;
-typedef long long ArkUI_Int64;
-typedef float ArkUI_Float32;
-typedef double ArkUI_Float64;
-typedef char* ArkUI_CommonCharPtr;
-typedef const char* ArkUI_CharPtr;
-typedef unsigned long long ArkUI_Uint64;
-struct _ArkUIVMContext;
-typedef _ArkUIVMContext* ArkUIVMContext;
-struct _ArkUIPipelineContext;
-typedef _ArkUIPipelineContext* ArkUIPipelineContext;
-struct _ArkUIVMObject;
-typedef _ArkUIVMObject* ArkUIVMObject;
-struct _ArkUINode;
-typedef _ArkUINode* ArkUINodeHandle;
-enum ArkUIAPINodeFlags {
-    CUSTOM_NONE = 0,
-    CUSTOM_MEASURE = 1 << 0,
-    CUSTOM_LAYOUT = 1 << 1,
-    CUSTOM_DRAW = 1 << 2,
-    CUSTOM_FOREGROUND_DRAW = 1 << 3,
-    CUSTOM_OVERLAY_DRAW = 1 << 4,
-};
-#endif
-
 typedef enum Ark_Tag
 {
   ARK_TAG_UNDEFINED = 101,
@@ -108,17 +79,32 @@ typedef void* Ark_NativePointer;
 typedef struct _ArkUINode* Ark_NodeHandle;
 typedef struct _ArkUIVMContext* Ark_VMContext;
 typedef struct _ArkUIPipelineContext* Ark_PipelineContext;
-#else
-struct Ark_NodeHandleOpaque;
-typedef struct Ark_NodeHandleOpaque* Ark_NodeHandle;
-
-struct Ark_VMContextOpaque;
-typedef struct Ark_VMContextOpaque* Ark_VMContext;
-
-struct Ark_PipelineContextOpaque;
-typedef struct Ark_PipelineContextOpaque* Ark_PipelineContext;
 #endif
 
+struct _Ark_VMContext;
+typedef _Ark_VMContext* Ark_VMContext;
+struct _Ark_PipelineContext;
+typedef _Ark_PipelineContext* Ark_PipelineContext;
+struct _Ark_VMObject;
+typedef _Ark_VMObject* Ark_VMObject;
+struct _Ark_Node;
+typedef _Ark_Node* Ark_NodeHandle;
+struct _Ark_Canvas;
+typedef _Ark_Canvas* Ark_CanvasHandle;
+
+enum Ark_APINodeFlags {
+    CUSTOM_NONE = 0,
+    CUSTOM_MEASURE = 1 << 0,
+    CUSTOM_LAYOUT = 1 << 1,
+    CUSTOM_DRAW = 1 << 2,
+    CUSTOM_FOREGROUND_DRAW = 1 << 3,
+    CUSTOM_OVERLAY_DRAW = 1 << 4,
+};
+enum Ark_APICustomOp {
+    MEASURE = 1,
+    LAYOUT = 2,
+    DRAW = 3
+};
 struct Ark_ObjectHandleOpaque;
 typedef struct Ark_ObjectHandleOpaque* Ark_ObjectHandle;
 
