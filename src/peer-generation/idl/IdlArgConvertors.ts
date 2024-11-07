@@ -382,8 +382,11 @@ export class AggregateConvertor extends BaseArgConvertor { //
                     // prefix initialization for CPP, just easier. Waiting for easy work with nullables
                     return writer.makeAssign(`${bufferName}.${writer.escapeKeyword(prop.name)}`, undefined, expr, false)
                 }
-                const memberType = prop.isOptional 
-                    ? idl.createUnionType([idl.IDLUndefinedType, prop.type!])
+                /**
+                 * todo: check UnionType name creation for union of unnamed nodes (isNamedNode() == false)
+                 */
+                const memberType = prop.isOptional
+                    ? idl.createUnionType([idl.IDLUndefinedType, prop.type!], "$NOT TO BE PRINTED%")
                     : prop.type
                 return writer.makeAssign(`${bufferName}_${prop.name}`, memberType, expr, true, true)
             }, writer))
