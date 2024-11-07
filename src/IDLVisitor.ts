@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 import * as ts from "typescript"
+import * as fs from 'fs'
+
 import * as path from "path"
 import { parse } from 'comment-parser'
 import * as idl from "./idl"
@@ -840,9 +842,9 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         return typeArgs?.map(arg => {
             if (this.isTypeParameterReference(arg)) {
                 const paramName = nameOrNull(arg.typeName)!
-                const substName = this.context.typeParameterMap 
+                const substName = this.context.typeParameterMap
                     ? this.context.typeParameterMap.get(paramName)
-                        ? idl.getIDLTypeName(this.context.typeParameterMap.get(paramName)!) 
+                        ? idl.getIDLTypeName(this.context.typeParameterMap.get(paramName)!)
                         : undefined
                     : undefined
                 return substName ?? paramName
@@ -851,6 +853,33 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         })
     }
 
+    private serializeTypeOrThis(
+        method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration,
+        nameSuggestion?: NameSuggestion
+    ): idl.IDLType {
+        let type = this.serializeType(method.type, nameSuggestion);
+    
+        if (idl.isUndefinedType(type))
+        {
+            return idl.IDLVoidType
+        }
+            else if (
+                idl.isCallable(type) || 
+                idl.isReferenceType(type) || 
+                idl.isIDLTypeName(type, this.clazzName(method)) || 
+                idl.isIDLTypeName(type, 'T') 
+                
+            ) {
+                console.log("method.name == ", method.name)
+                return idl.IDLThisType
+            }
+                else
+                {
+                    return type
+                }
+    }
+    
+    
     private makeQualifiedName(type: ts.TypeReferenceNode): idl.IDLType {
         if (ts.isQualifiedName(type.typeName)) {
             return idl.createReferenceType(`${type.typeName.left.getText()}.${type.typeName.right.getText()}`)
@@ -1073,6 +1102,16 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
 
     propertyName(name: ts.PropertyName): string | undefined {
         return this.deduceFromComputedProperty(name) ?? nameOrNull(name)
+    }
+
+    clazzName(method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration): string | undefined {
+        let parent = method.parent.parent//.parent
+        
+        if (parent !== undefined && ts.isClassDeclaration(parent)) {
+            return identName(parent.name)!
+        }
+
+        return undefined
     }
 
     serializeUnion(
@@ -1307,8 +1346,10 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
                 parameters: methodParameters.map(it => this.serializeParameter(it))
             }
         }
+
+        console.log("nameSuggestion = ", nameSuggestion)
         this.computeClassMemberExtendedAttributes(method as ts.ClassElement, methodName, escapedMethodName, extendedAttributes)
-        const returnType = this.serializeType(method.type, nameSuggestion?.extend('ret'))
+        let returnType = this.serializeTypeOrThis(method, nameSuggestion?.extend('ret'))
         return {
             kind: idl.IDLKind.Method,
             name: escapedMethodName,
