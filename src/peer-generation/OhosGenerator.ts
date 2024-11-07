@@ -454,6 +454,7 @@ class OHOSVisitor {
         )
 
 
+        printCallbacksKinds(this.library, this.cppWriter)
         let toStringsPrinter = createLanguageWriter(Language.CPP, this.library)
         new StructPrinter(this.library).generateStructs(this.hWriter, this.hWriter.printer, toStringsPrinter)
         this.cppWriter.concat(toStringsPrinter)

@@ -18,7 +18,7 @@
 #include <cstring>
 #include <string>
 #include <vector>
-#include "%NATIVE_API_HEADER_PATH%"
+#include "xml.h"
 
 inline const char *tagName(OH_Tag tag)
 {
@@ -386,7 +386,7 @@ public:
 
   OH_String readString()
   {
-    OH_String result = "todo";
+    OH_String result = "TODO";
     // TODO implement string
     // OH_Int32 length = readInt32();
     // check(length);
