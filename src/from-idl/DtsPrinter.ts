@@ -48,13 +48,14 @@ import { IDLCallback, IDLConstructor, IDLEntity, IDLEntry, IDLEnum, IDLInterface
     IDLVersion,
     isUnspecifiedGenericType,} from "../idl"
 import * as webidl2 from "webidl2"
-import { resolveSyntheticType, toIDLNode } from "./deserialize"
+import { toIDLNode } from "./deserialize"
+import { createReferenceResolverBase, ReferenceResolver } from "../peer-generation/ReferenceResolver"
 import { Language } from "../Language"
 import { PeerGeneratorConfig } from "../peer-generation/PeerGeneratorConfig"
 
 export class CustomPrintVisitor {
     output: string[] = []
-    constructor(private resolver: (type: IDLReferenceType) => IDLEntry | undefined, private language: Language) {}
+    constructor(private resolver: ReferenceResolver, private language: Language) {}
 
     currentInterface?: IDLInterface
 
@@ -227,7 +228,7 @@ export class CustomPrintVisitor {
         // Let's skip imported declarations
         if (isTypedef(node) &&
             hasExtAttribute(node, IDLExtendedAttributes.Import)) {
-            let definition = this.resolver(createReferenceType(node.name))
+            let definition = this.resolver.resolveTypeReference(createReferenceType(node.name))
             // TODO: handle namespace case better!
             if (definition && !isTypedef(definition) && !hasExtAttribute(definition, IDLExtendedAttributes.Namespace)) {
                 console.log(`Has better definition for ${node.name}: ${definition.fileName} ${definition.kind}`)
@@ -330,7 +331,7 @@ export class CustomPrintVisitor {
 
     private toTypeName(node: IDLNode): string {
         if (isReferenceType(node)) {
-            const synthDecl = this.resolver(node)
+            const synthDecl = this.resolver.resolveTypeReference(node)
             if (synthDecl && isSyntheticEntry(synthDecl)) {
                 if (isInterface(synthDecl) || isAnonymousInterface(synthDecl) || isTupleInterface(synthDecl)) {
                     const isTuple = getExtAttribute(synthDecl, IDLExtendedAttributes.Entity) === IDLEntity.Tuple
@@ -372,14 +373,13 @@ export class CustomPrintVisitor {
 }
 
 export function idlToString(name: string, content: string): string {
-    let printer = new CustomPrintVisitor(resolveSyntheticType, Language.TS)
-    webidl2.parse(content)
-        .filter(it => !!it.type)
-        .map(it => toIDLNode(name, it))
-        .forEach(it => {
-            transformMethodsAsync2ReturnPromise(it)
-            printer.visit(it)
-        })
+    const entries = webidl2.parse(content).filter(it => !!it.type).map(it => toIDLNode(name, it))
+    const resolver = createReferenceResolverBase(entries)
+    const printer = new CustomPrintVisitor(resolver, Language.TS)
+    entries.forEach(it => {
+        transformMethodsAsync2ReturnPromise(it)
+        printer.visit(it)
+    })
     return printer.output.join("\n")
 }
 

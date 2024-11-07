@@ -39,7 +39,7 @@ import { collectJavaImports } from "./lang/JavaIdlUtils";
 import { printJavaImports } from "./lang/JavaPrinters";
 import { Language } from "../../Language";
 import { createReferenceType, IDLVoidType, isOptionalType } from "../../idl";
-import { createEmptyReferenceResolver, getReferenceResolver } from "../ReferenceResolver";
+import { createReferenceResolverBase, getReferenceResolver } from "../ReferenceResolver";
 import { convertIdlToCallback } from "./EventsPrinter";
 
 export function generateArkComponentName(component: string) {
@@ -57,7 +57,7 @@ interface ComponentFileVisitor {
 
 class TSComponentFileVisitor implements ComponentFileVisitor {
     private readonly language = this.library.language
-    private readonly printer = createLanguageWriter(this.language, this.library instanceof PeerLibrary ? this.library : createEmptyReferenceResolver())
+    private readonly printer = createLanguageWriter(this.language, this.library instanceof PeerLibrary ? this.library : createReferenceResolverBase())
     private readonly overloadsPrinter = new OverloadsPrinter(getReferenceResolver(this.library), this.printer, this.library.language)
 
     constructor(

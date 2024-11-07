@@ -28,7 +28,7 @@ import { writeARKTSTypeCheckers, writeTSTypeCheckers } from "./printers/TypeChec
 import { Language } from "../Language"
 import { printCallbacksKinds, printCallbacksKindsImports, printDeserializeAndCall } from "./printers/CallbacksPrinter"
 import { createReferenceType, IDLVoidType } from "../idl"
-import { createEmptyReferenceResolver, getReferenceResolver, ReferenceResolver } from "./ReferenceResolver"
+import { createReferenceResolverBase, getReferenceResolver, ReferenceResolver } from "./ReferenceResolver"
 import { MethodArgPrintHint } from "./LanguageWriters/LanguageWriter"
 import { SourceFile, TsSourceFile } from "./printers/SourceFile"
 
@@ -143,7 +143,7 @@ export function bridgeCcCustomDeclaration(customApi: string[]): string {
 }
 
 export function appendModifiersCommonPrologue(): LanguageWriter {
-    let result = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
+    let result = createLanguageWriter(Language.CPP, createReferenceResolverBase())
     let body = readTemplate('impl_prologue.cc')
 
     body = body.replaceAll("%CPP_PREFIX%", PeerGeneratorConfig.cppPrefix)
@@ -163,7 +163,7 @@ export function getNodeTypes(library: PeerLibrary): string[] {
 }
 
 export function appendViewModelBridge(library: PeerLibrary): LanguageWriter {
-    let result = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
+    let result = createLanguageWriter(Language.CPP, createReferenceResolverBase())
     let body = readTemplate('view_model_bridge.cc')
 
     const createNodeSwitch = new IndentedPrinter()
@@ -189,7 +189,7 @@ export function appendViewModelBridge(library: PeerLibrary): LanguageWriter {
 }
 
 export function completeModifiersContent(content: PrinterLike, basicVersion: number, fullVersion: number, extendedVersion: number): LanguageWriter {
-    let result = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
+    let result = createLanguageWriter(Language.CPP, createReferenceResolverBase())
     let epilogue = readTemplate('dummy_impl_epilogue.cc')
 
     epilogue = epilogue
@@ -225,7 +225,7 @@ export function dummyImplementations(modifiers: LanguageWriter, accessors: Langu
         .replaceAll(`%ARKUI_FULL_API_VERSION_VALUE%`, fullVersion.toString())
         .replaceAll(`%ARKUI_EXTENDED_NODE_API_VERSION_VALUE%`, extendedVersion.toString())
 
-    let result = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
+    let result = createLanguageWriter(Language.CPP, createReferenceResolverBase())
     result.writeLines(prologue)
     result.print("namespace OHOS::Ace::NG::GeneratedModifier {")
     result.pushIndent()
@@ -238,7 +238,7 @@ export function dummyImplementations(modifiers: LanguageWriter, accessors: Langu
 }
 
 export function modifierStructList(lines: LanguageWriter): LanguageWriter {
-    let result = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
+    let result = createLanguageWriter(Language.CPP, createReferenceResolverBase())
     result.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUINodeModifiers* ${PeerGeneratorConfig.cppPrefix}GetArkUINodeModifiers()`)
     result.print("{")
     result.pushIndent()
@@ -256,7 +256,7 @@ export function modifierStructList(lines: LanguageWriter): LanguageWriter {
 }
 
 export function accessorStructList(lines: LanguageWriter): LanguageWriter {
-    let result = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
+    let result = createLanguageWriter(Language.CPP, createReferenceResolverBase())
     result.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUIAccessors* ${PeerGeneratorConfig.cppPrefix}GetArkUIAccessors()`)
     result.print("{")
     result.pushIndent()
@@ -330,9 +330,9 @@ export function makeSerializerForOhos(library: PeerLibrary, nativeModule: { name
 }
 
 export function makeTypeChecker(library: PeerLibrary): { arkts: string, ts: string } {
-    let arktsPrinter = createLanguageWriter(Language.ARKTS, createEmptyReferenceResolver())
+    let arktsPrinter = createLanguageWriter(Language.ARKTS, createReferenceResolverBase())
     writeARKTSTypeCheckers(library, arktsPrinter)
-    let tsPrinter = createLanguageWriter(Language.TS, createEmptyReferenceResolver())
+    let tsPrinter = createLanguageWriter(Language.TS, createReferenceResolverBase())
     writeTSTypeCheckers(library, tsPrinter)
     return {
         arkts: arktsPrinter.getOutput().join("\n"),

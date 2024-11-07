@@ -27,18 +27,6 @@ import * as idl from "../idl"
 import { isDefined, stringOrNone, warn } from "../util"
 import { generateSyntheticUnionName } from "../IDLVisitor"
 
-const syntheticTypes = new Map<string, idl.IDLEntry>()
-
-export function addSyntheticType(name: string, type: idl.IDLEntry) {
-    if (syntheticTypes.has(name))
-        warn(`duplicate synthetic type name "${name}"`) ///throw?
-    syntheticTypes.set(name, type)
-} // check
-
-export function resolveSyntheticType(type: idl.IDLReferenceType): idl.IDLEntry | undefined {
-    return syntheticTypes.get(type.name)
-}
-
 export function toIDLNode(file: string, node: webidl2.IDLRootType): idl.IDLEntry {
     if (isEnum(node)) {
         return toIDLEnum(file, node)
@@ -141,8 +129,6 @@ function toIDLInterface(file: string, node: webidl2.InterfaceType): idl.IDLInter
     )
     if (result.inheritance.length && idl.isReferenceType(result.inheritance[0]))
         result.inheritance[0].typeArguments = extractTypeArguments(file, node.extAttrs, idl.IDLExtendedAttributes.TypeArguments)
-    if (node.extAttrs.find(it => it.name === "Synthetic"))
-        addSyntheticType(node.name, result)
     return result
 }
 
@@ -300,8 +286,6 @@ function toIDLCallback(file: string, node: webidl2.CallbackType): idl.IDLCallbac
         extendedAttributes: toExtendedAttributes(node.extAttrs),
         documentation: makeDocs(node),
     })
-    if (node.extAttrs.find(it => it.name === "Synthetic"))
-        addSyntheticType(node.name, result)
     return result
 }
 

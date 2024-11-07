@@ -21,15 +21,29 @@ export interface ReferenceResolver {
     toDeclaration(type: idl.IDLNode): idl.IDLNode
 }
 
-export function createEmptyReferenceResolver(): ReferenceResolver {
-    return {
-        resolveTypeReference() {
-            return undefined
-        },
-        toDeclaration(type) {
-            return type
+class EntryBasedReferenceResolver implements ReferenceResolver {
+    readonly entries = new Map<string, idl.IDLEntry>()
+    constructor(entries?: idl.IDLEntry[]) {
+        if (entries) {
+            entries.forEach(it => this.entries.set(it.name, it))
         }
     }
+    resolveTypeReference(type: idl.IDLReferenceType, entries?: idl.IDLEntry[] | undefined): idl.IDLEntry | undefined {
+        return this.entries.get(type.name)
+    }
+    addEntries(entries: idl.IDLEntry[], file: string): void {
+        entries.forEach(it => {
+            if (this.entries.has(it.name))
+                console.log(`WARNING: duplicate synthetic type name "${it.name}"`) ///throw?
+            this.entries.set(it.name, it)
+        })
+    }
+    toDeclaration(type: idl.IDLNode): idl.IDLNode {
+        return type
+    }
+}
+export function createReferenceResolverBase(entries?: idl.IDLEntry[]): ReferenceResolver {
+    return new EntryBasedReferenceResolver(entries)
 }
 
 export function getReferenceResolver(library: PeerLibrary): ReferenceResolver {

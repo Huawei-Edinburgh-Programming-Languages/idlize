@@ -20,7 +20,7 @@ import { hashCodeFromString, warn } from "../util"
 import { PrimitiveType } from "./ArkPrimitiveType"
 import { BlockStatement, BranchStatement, createTypeNameConvertor, generateTypeCheckerName, LanguageExpression, LanguageStatement, LanguageWriter, StringExpression } from "./LanguageWriters"
 import { IDLNodeToStringConvertor } from "./LanguageWriters/convertors/InteropConvertor"
-import { createEmptyReferenceResolver } from "./ReferenceResolver"
+import { createReferenceResolverBase } from "./ReferenceResolver"
 import { UnionRuntimeTypeChecker } from "./unions"
 
 export enum RuntimeType {
@@ -326,7 +326,7 @@ export class NumberConvertor extends BaseArgConvertor {
 }
 
 export class NumericConvertor extends BaseArgConvertor {
-    private readonly interopNameConvertor = new IDLNodeToStringConvertor(createEmptyReferenceResolver())
+    private readonly interopNameConvertor = new IDLNodeToStringConvertor(createReferenceResolverBase())
     constructor(param: string, type: idl.IDLPrimitiveType) {
         // check numericPrimitiveTypes.include(type)
         super(type, [RuntimeType.NUMBER], false, false, param)

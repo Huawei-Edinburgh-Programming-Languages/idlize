@@ -29,7 +29,7 @@ export function printDeclarations(peerLibrary: PeerLibrary): Array<string> {
             if (seenEnums.has(decl.name)) continue
             seenEnums.add(decl.name)
         }
-        const visitor = new DtsPrintVisitor(type => peerLibrary.resolveTypeReference(type), peerLibrary.language)
+        const visitor = new DtsPrintVisitor(peerLibrary, peerLibrary.language)
         visitor.visit(decl)
         const text = visitor.output.join("\n")
         if (text)

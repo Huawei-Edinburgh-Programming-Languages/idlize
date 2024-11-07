@@ -67,7 +67,7 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
     private printer: CustomPrintVisitor
     constructor(protected readonly writer: LanguageWriter,
                 readonly peerLibrary: PeerLibrary) {
-    this.printer = new CustomPrintVisitor(type => peerLibrary.resolveTypeReference(type), writer.language)
+    this.printer = new CustomPrintVisitor(peerLibrary, writer.language)
     }
     convertCallback(node: idl.IDLCallback): void {
     }

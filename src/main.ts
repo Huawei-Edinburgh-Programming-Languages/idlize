@@ -185,7 +185,7 @@ if (options.dts2skoala) {
                 }
 
                 generatedIDLMap.get(fileName)?.push(...entries)
-                skoalaLibrary.files.push(new IldSkoalaFile(sourceFile.fileName, entries))
+                skoalaLibrary.addEntries(entries, sourceFile.fileName)
             },
             onEnd: (outDir) => {
                 const wrapperProcessor = new IdlWrapperProcessor(skoalaLibrary)
@@ -362,8 +362,9 @@ if (options.dts2peer) {
                     transformMethodsAsync2ReturnPromise(it)
                     correctOverloadedProperties(it, idlLibrary)
                 })
-                const file = new PeerFile(sourceFile.fileName, entries, idlLibrary.componentsToGenerate)
-                idlLibrary.files.push(file)
+                //const file = new PeerFile(sourceFile.fileName, entries, idlLibrary.componentsToGenerate)
+                //idlLibrary.files.push(file)
+                idlLibrary.addEntries(entries, sourceFile.fileName)
             },
             onEnd(outDir) {
                 if (options.generatorTarget == "ohos") {

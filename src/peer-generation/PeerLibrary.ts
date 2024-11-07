@@ -40,6 +40,11 @@ export class PeerLibrary implements LibraryInterface {
 
     public readonly factory = new IdlEntryManager()
 
+    addEntries(entries: idl.IDLEntry[], file: string): void {
+        const peerFile = new PeerFile(file, entries, this.componentsToGenerate)
+        this.files.push(peerFile)
+    }
+    
     public readonly files: PeerFile[] = []
     public readonly builderClasses: Map<string, BuilderClass> = new Map()
     public get buildersToGenerate(): BuilderClass[] {

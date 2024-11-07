@@ -34,7 +34,7 @@ import { IDLAnyType, IDLBooleanType, IDLFunctionType, IDLPointerType, IDLStringT
 import { createConstructPeerMethod, PeerClass } from "../PeerClass";
 import { PeerMethod } from "../PeerMethod";
 import { Language } from "../../Language";
-import { createEmptyReferenceResolver, getReferenceResolver } from "../ReferenceResolver";
+import { createReferenceResolverBase, getReferenceResolver } from "../ReferenceResolver";
 import { PeerLibrary } from "../PeerLibrary";
 import { InteropReturnTypeConvertor } from "../LanguageWriters/convertors/InteropConvertor";
 
@@ -326,13 +326,13 @@ class AccessorVisitor extends ModifierVisitor {
 }
 
 class MultiFileModifiersVisitorState {
-    dummy = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
-    real = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
-    accessorList = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
-    accessors = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
-    modifierList = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
-    modifiers = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
-    getterDeclarations = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
+    dummy = createLanguageWriter(Language.CPP, createReferenceResolverBase())
+    real = createLanguageWriter(Language.CPP, createReferenceResolverBase())
+    accessorList = createLanguageWriter(Language.CPP, createReferenceResolverBase())
+    accessors = createLanguageWriter(Language.CPP, createReferenceResolverBase())
+    modifierList = createLanguageWriter(Language.CPP, createReferenceResolverBase())
+    modifiers = createLanguageWriter(Language.CPP, createReferenceResolverBase())
+    getterDeclarations = createLanguageWriter(Language.CPP, createReferenceResolverBase())
     hasModifiers = false
     hasAccessors = false
 }
@@ -450,7 +450,7 @@ export function printRealModifiersAsMultipleFiles(library: PeerLibrary, libace: 
 }
 
 function printModifiersImplFile(filePath: string, state: MultiFileModifiersVisitorState, options: ModifierFileOptions) {
-    const writer = new CppLanguageWriter(new IndentedPrinter(), createEmptyReferenceResolver())
+    const writer = new CppLanguageWriter(new IndentedPrinter(), createReferenceResolverBase())
     writer.writeLines(cStyleCopyright)
 
     writer.writeInclude(`core/components_ng/base/frame_node.h`)
@@ -475,7 +475,7 @@ function printModifiersImplFile(filePath: string, state: MultiFileModifiersVisit
 }
 
 function printModifiersCommonImplFile(filePath: string, content: LanguageWriter, options: ModifierFileOptions) {
-    const writer = new CppLanguageWriter(new IndentedPrinter(), createEmptyReferenceResolver())
+    const writer = new CppLanguageWriter(new IndentedPrinter(), createReferenceResolverBase())
     writer.writeLines(cStyleCopyright)
     writer.writeMultilineCommentBlock(warning)
     writer.print("")

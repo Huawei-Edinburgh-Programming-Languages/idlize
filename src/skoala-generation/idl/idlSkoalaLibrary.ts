@@ -26,7 +26,6 @@ import { Field, FieldModifier, LanguageExpression, LanguageStatement, LanguageWr
 import { ArgConvertor, BaseArgConvertor, BooleanConvertor, ClassConvertor, CustomTypeConvertor, EnumConvertor, ExpressionAssigneer, InterfaceConvertor, NumberConvertor, RuntimeType, StringConvertor, TypeAliasConvertor, UndefinedConvertor, UnionConvertor } from "../../peer-generation/ArgConvertors";
 import { CustomPrintVisitor } from "../../from-idl/DtsPrinter";
 import { Language } from "../../Language";
-import { addSyntheticType, resolveSyntheticType } from "../../from-idl/deserialize";
 import { convertDeclaration, convertType, DeclarationConvertor, IdlNameConvertor, TypeConvertor } from "../../peer-generation/LanguageWriters/nameConvertor";
 import { LibraryInterface } from "../../LibraryInterface";
 import { generateSyntheticFunctionName } from "../../IDLVisitor";
@@ -65,6 +64,9 @@ export class IdlSkoalaLibrary implements LibraryInterface {
     public name: string = ""
 
     public language = Language.TS
+    addEntries(entries: idl.IDLEntry[], file: string): void {
+        this.files.push(new IldSkoalaFile(file, entries))
+    }
 
     public readonly files: IldSkoalaFile[] = []
     findFileByOriginalFilename(filename: string): IldSkoalaFile | undefined {
@@ -361,9 +363,6 @@ export class IdlWrapperProcessor {
     process() {
         let allDeps = this.generateDeclarations()
         for (let decl of allDeps) {
-            if (idl.isSyntheticEntry(decl) && (idl.isCallback(decl) || idl.isInterface(decl) || idl.isTupleInterface(decl))) {
-                addSyntheticType(decl.name ?? "MISSING_TYPE_NAME", decl)
-            }
             const file = this.library.findFileByOriginalFilename(decl.fileName!)!
 
             //  process wrapper
@@ -605,7 +604,7 @@ function mapCInteropRetType(type: idl.IDLType): string {
 export class TSDeclConvertor implements DeclarationConvertor<void> {
     private printer
     constructor(private readonly writer: LanguageWriter, readonly library: IdlSkoalaLibrary) {
-        this.printer = new CustomPrintVisitor(resolveSyntheticType, writer.language)
+        this.printer = new CustomPrintVisitor(library, writer.language)
     }
     convertCallback(node: idl.IDLCallback): void {
         this.printer.output = []
