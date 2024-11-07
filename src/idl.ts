@@ -61,6 +61,7 @@ export enum IDLExtendedAttributes {
     CommonMethod = "CommonMethod",
     Component = "Component",
     ComponentInterface = "ComponentInterface",
+    CPPType = "CPPType",
     Deprecated = "Deprecated",
     Documentation = "Documentation",
     DtsName = "DtsName",
@@ -76,10 +77,10 @@ export enum IDLExtendedAttributes {
     ParentTypeArguments = "ParentTypeArguments",
     Protected = "Protected",
     Synthetic = "Synthetic",
+    TSType = "TSType",
     TypeArguments = "TypeArguments",
     TypeParameters = "TypeParameters",
     VerbatimDts = "VerbatimDts",
-    TSType = "TSType",
 }
 
 export enum IDLAccessorAttribute {

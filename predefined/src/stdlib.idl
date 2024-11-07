@@ -84,5 +84,7 @@ interface Uint8ClampedArray {
     readonly attribute number length;
 };
 
+[TSType=RuntimeType, CPPType=RuntimeType]
 interface RuntimeType {};
+[TSType=Materialized, CPPType=Materialized]
 interface Materialized {};
