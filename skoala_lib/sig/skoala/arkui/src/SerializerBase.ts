@@ -228,15 +228,5 @@ export class SerializerBase {
     }
 }
 
-class OurCustomSerializer extends CustomSerializer {
-    constructor() {
-        super(["PixelMap"])
-    }
-    serialize(serializer: SerializerBase, value: any, kind: string): void {
-        // console.log(`managed serialize() for ${kind}`)
-        serializer.writeString(JSON.stringify(value))
-    }
-}
-
 // TODO, remove me!
 SerializerBase.registerCustomSerializer(new OurCustomSerializer())

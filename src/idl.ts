@@ -1076,8 +1076,8 @@ export const IDLContainerUtils = {
 /** 
  * @returns tuple of qualifier name and real type name
  */
-export function decomposeQualifiedName(type: IDLType): [string | undefined, string] {
-    const typeName = getIDLTypeName(type)
+export function decomposeQualifiedName(type: IDLReferenceType): [string | undefined, string] {
+    const typeName = type.name
     const lastDot = typeName.lastIndexOf(".")
     if (lastDot >= 0) {
         const qualifier = typeName.slice(0, lastDot)

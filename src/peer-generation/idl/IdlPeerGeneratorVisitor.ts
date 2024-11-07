@@ -61,7 +61,6 @@ import { ARK_CUSTOM_OBJECT, javaCustomTypeMapping } from "../printers/lang/Java"
 import { Language } from "../../Language"
 import { createInterfaceDeclName } from "../TypeNodeNameConvertor";
 import { cjCustomTypeMapping } from "../printers/lang/Cangjie"
-import { IdlSkoalaLibrary } from "../../skoala-generation/idl/idlSkoalaLibrary"
 
 /**
  * Theory of operations.

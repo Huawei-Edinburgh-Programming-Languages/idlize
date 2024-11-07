@@ -1,9 +1,23 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import * as idl from "../../idl"
 import { posix as path } from "path"
 import { convert, isImport, isStringEnum } from '../../peer-generation/idl/common';
 import { DeclarationNameConvertor } from "../../peer-generation/idl/IdlNameConvertor"
 import { DeclarationDependenciesCollector, TypeDependenciesCollector } from '../../peer-generation/idl/IdlDependenciesCollector';
-import { LibraryBase, LibraryFile } from "../SkoalaLibrary"
 import { ImportsCollector } from "../../peer-generation/ImportsCollector";
 import { capitalize, isDefined, throwException } from "../../util";
 import { PrimitiveType } from "../../peer-generation/ArkPrimitiveType";
@@ -17,24 +31,45 @@ import { ClassConvertor, EnumConvertor, InterfaceConvertor, RetConvertor, String
 import { Language } from "../../Language";
 import { addSyntheticType, resolveSyntheticType } from "../../from-idl/deserialize";
 import { convertDeclaration, convertType, DeclarationConvertor, IdlTypeNameConvertor, TypeConvertor } from "../../peer-generation/LanguageWriters/typeConvertor";
+import { LibraryInterface } from "../../LibraryInterface";
+import { generateSyntheticFunctionName } from "../../IDLVisitor";
 
-export class IldSkoalaFile extends LibraryFile {
+export class IldSkoalaFile {
+    readonly wrapperClasses: Map<string, [WrapperClass, any|undefined]> = new Map()
+    readonly baseName: string
+    readonly importsCollector: ImportsCollector
     readonly declarations: Set<idl.IDLEntry>
 
     constructor(
-        originalFilename: string,
+        public readonly originalFilename: string,
         declarations?: idl.IDLEntry[]
+
     ) {
-        super(originalFilename)
+        this.baseName = path.basename(this.originalFilename)
+        this.importsCollector = new ImportsCollector()
         this.declarations = declarations ? new Set(declarations) : new Set()
+    }
+
+    addImportFeature(module: string, ...features: string[]) {
+        this.importsCollector.addFeatures(features, module)
     }
 }
 
-export class IdlSkoalaLibrary extends LibraryBase<IldSkoalaFile> {
+export class IdlSkoalaLibrary implements LibraryInterface {
     public readonly serializerDeclarations: Set<idl.IDLInterface> = new Set()
     readonly nameConvertorInstance: IdlTypeNameConvertor = new TSSkoalaTypeNameConvertor(this)
     readonly importTypesStubToSource: Map<string, string> = new Map()
-    readonly typeMap = new Map<idl.IDLType, [idl.IDLEntry, string[], boolean]>()
+    readonly typeMap = new Map<idl.IDLType, [idl.IDLNode, string[], boolean]>()
+    public name: string = ""
+
+    public readonly files: IldSkoalaFile[] = []
+    findFileByOriginalFilename(filename: string): IldSkoalaFile | undefined {
+        return this.files.find(it => it.originalFilename === filename)
+    }
+
+    get libraryPrefix(): string {
+        return this.name
+    }
 
     getCurrentContext(): string | undefined {
         return ""
@@ -58,12 +93,12 @@ export class IdlSkoalaLibrary extends LibraryBase<IldSkoalaFile> {
         }
         const decl = this.toDeclaration(type)
         let name = this.computeTargetName(decl, false)
-        if (idl.isReferenceType(type) && idl.isIDLTypeName(type, "Optional"))
+        if (idl.isReferenceType(type) && type.name == "Optional")
             name = "Opt_" + cleanPrefix(name, PrimitiveType.Prefix)
         this.typeMap.set(type, [decl, [name], useToGenerate])
     }
 
-    toDeclaration(type: idl.IDLType): idl.IDLEntry {
+    toDeclaration(type: idl.IDLType | idl.IDLTypedef | idl.IDLCallback | idl.IDLEnum | idl.IDLInterface): idl.IDLNode {
         switch (type) {
             case idl.IDLAnyType: return CustomObject
             case idl.IDLNullType:
@@ -76,10 +111,10 @@ export class IdlSkoalaLibrary extends LibraryBase<IldSkoalaFile> {
         if (isImport(type))
             return CustomObject
         if (idl.isReferenceType(type)) {
-            if (idl.isIDLTypeName(type, 'Function')) {
+            if (type.name == 'Function') {
                 return Function
             }
-            if (idl.isIDLTypeName(type, 'Optional')) {
+            if (type.name == 'Optional') {
                 const wrappedType = idl.toIDLType(idl.getExtAttribute(type, idl.IDLExtendedAttributes.TypeArguments)!)
                 return this.toDeclaration(wrappedType)
             }
@@ -92,11 +127,11 @@ export class IdlSkoalaLibrary extends LibraryBase<IldSkoalaFile> {
         return type
     }
 
-    computeTargetName(target: idl.IDLEntry, optional: boolean, idlPrefix: string = PrimitiveType.Prefix): string {
+    computeTargetName(target: idl.IDLNode, optional: boolean, idlPrefix: string = PrimitiveType.Prefix): string {
         return this.computeTargetNameImpl(target, optional, idlPrefix)///inline
     }
 
-    private computeTargetNameImpl(target: idl.IDLEntry, optional: boolean, idlPrefix: string): string {
+    private computeTargetNameImpl(target: idl.IDLNode, optional: boolean, idlPrefix: string): string {
         const prefix = optional ? PrimitiveType.OptionalPrefix : ""
         if (idl.isPrimitiveType(target)) {
             let name: string = ""
@@ -105,7 +140,7 @@ export class IdlSkoalaLibrary extends LibraryBase<IldSkoalaFile> {
                 case idl.IDLStringType: name = "String"; break
                 case idl.IDLNullType: name = "Null"; break
                 case idl.IDLVoidType: name = "void"; break
-                default: name = capitalize(idl.getIDLTypeName(target)); break
+                default: name = capitalize(target.name); break
             }
             return (optional ? prefix : idlPrefix) + name
         }
@@ -124,7 +159,7 @@ export class IdlSkoalaLibrary extends LibraryBase<IldSkoalaFile> {
             return prefix + ((optional || idlPrefix == "") ? cleanPrefix(name, PrimitiveType.Prefix) : name)
         }
         if (idl.isUnionType(target)) {
-            return idl.getIDLTypeName(target, idl.DebugUtils.easyGetName)
+            return target.name
         }
         if (idl.isInterface(target) || idl.isClass(target)) {
             return (optional ? prefix : idlPrefix) + target.name
@@ -139,30 +174,29 @@ export class IdlSkoalaLibrary extends LibraryBase<IldSkoalaFile> {
         }
         if (idl.isContainerType(target)) {
             if (idl.IDLContainerUtils.isSequence(target)) {
-                return `Array_${this.computeTargetName(target.elementType[0], false, "")}`
+                return this.makeCArrayName(target.elementType[0])
             }
             if (idl.IDLContainerUtils.isRecord(target)) {
-                return `Map_${this.computeTargetName(target.elementType[0], false, "")}_${this.computeTargetName(target.elementType[1], false, "")}`
+                return this.makeCMapName(target.elementType[0], target.elementType[1])
             }
             if (idl.IDLContainerUtils.isPromise(target)) {
                 return prefix + `Promise_` + this.computeTargetName(target.elementType[0], false, "")
             }
         }
         if (idl.isReferenceType(target)) {
-            if (idl.isIDLTypeName(target, "Optional")) {
-                const typeArg = idl.getExtAttribute(target, idl.IDLExtendedAttributes.TypeArguments)!
-                return this.computeTargetName(idl.toIDLType(typeArg), true, idlPrefix)
-            }
-            const name = idl.getIDLTypeName(target, idl.DebugUtils.easyGetName)
+            const name = target.name
             return (optional ? prefix : idlPrefix) + name
         }
-        if (isImport(target))
+        if (isImport(target)) {
+            if (!idl.isEntry(target))
+                throw "Expected to be an entry"
             return prefix + this.mapImportTypeName(target)
+        }
         if (idl.isEnumMember(target))
             return this.computeTargetName(target.parent, optional, idlPrefix)
         if (idl.isTypedef(target))
             return (optional ? prefix : idlPrefix) + target.name
-        throw new Error(`Cannot compute target name: ${idl.IDLKind[target.kind!]} ${target.name}`)
+        throw new Error(`Cannot compute target name: ${idl.IDLKind[target.kind!]}`)
     }
 
     private mapImportTypeName(type: idl.IDLEntry): string {
@@ -227,15 +261,15 @@ export class IdlSkoalaLibrary extends LibraryBase<IldSkoalaFile> {
             const decl = this.resolveTypeReference(type)
             return this.declarationConvertor(param, type, decl, maybeCallback, processor)
         }
-        return new CustomTypeConvertor(param, idl.getIDLTypeName(type))
-        throw new Error(`Cannot convert: ${idl.getIDLTypeName(type)} ${type.kind}`)
+        return new CustomTypeConvertor(param, this.nameConvertorInstance.convert(type))
+        throw new Error(`Cannot convert: ${this.nameConvertorInstance.convert(type)} ${type.kind}`)
     }
 
     declarationConvertor(param: string, type: idl.IDLReferenceType,
         declaration: idl.IDLEntry | undefined, maybeCallback: boolean = false, processor?: IdlWrapperProcessor): ArgConvertor
     {
         if (!declaration)
-            return new CustomTypeConvertor(param, idl.getIDLTypeName(type), false, idl.getIDLTypeName(type)) // assume some predefined type
+            return new CustomTypeConvertor(param, type.name, false, type.name) // assume some predefined type
 
         const declarationName = declaration.name!
 
@@ -263,15 +297,15 @@ export class IdlSkoalaLibrary extends LibraryBase<IldSkoalaFile> {
             return new TypeAliasConvertor(this, param, declaration)
         }
 
-        console.log('todo: custom converter', idl.getIDLTypeName(type), declaration.name);
-        return new CustomTypeConvertor(param, idl.getIDLTypeName(type), false, idl.getIDLTypeName(type))
+        console.log('todo: custom converter', type.name, declaration.name);
+        return new CustomTypeConvertor(param, type.name, false, type.name)
     }
 
     ///
 
     resolveTypeReference(type: idl.IDLReferenceType, entries?: idl.IDLEntry[]): idl.IDLEntry | undefined {
         // let wrapperClassEntries: idl.IDLEntry[] = this.files.map(it => it.wrapperClasses.get(type.name)?.[1] as idl.IDLEntry).filter(it => !!it)
-        let wrapperClassEntries = this.files.flatMap(f => f.wrapperClasses.get(idl.getIDLTypeName(type))?.[1]).filter(isDefined)
+        let wrapperClassEntries = this.files.flatMap(f => f.wrapperClasses.get(type.name)?.[1]).filter(isDefined)
         entries ??= [...this.files.flatMap(it => [...it.declarations]), ...wrapperClassEntries]
 
         const [qualifier, typeName] = idl.decomposeQualifiedName(type)
@@ -279,16 +313,38 @@ export class IdlSkoalaLibrary extends LibraryBase<IldSkoalaFile> {
             // This is a namespace or enum member. Try enum first
             const parent = entries.find(it => it.name === qualifier)
             if (parent && idl.isEnum(parent))
-                return parent.elements.find(it => it.name === idl.getIDLTypeName(type))
+                return parent.elements.find(it => it.name === type.name)
             // Else try namespaces
             return entries.find(it =>
                 it.name === typeName && idl.getExtAttribute(it, idl.IDLExtendedAttributes.Namespace) === qualifier)
         }
 
-        const candidates = entries.filter(it => idl.isIDLTypeName(type, it.name))
+        const candidates = entries.filter(it => type.name === it.name)
         return candidates.length == 1
             ? candidates[0]
             : candidates.find(it => !idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Import))
+    }
+
+    //
+
+    public makeCMapName(keyType: idl.IDLType, valueType: idl.IDLType): string {
+        return `Map_${this.computeTargetName(keyType, false, "")}_${this.computeTargetName(valueType, false, "")}`
+    }
+
+    public makeCArrayName(elementType: idl.IDLType): string {
+        return `Array_${this.computeTargetName(elementType, false, "")}`
+    }
+
+    createContinuationCallbackReference(continuationType: idl.IDLType): idl.IDLReferenceType {
+        if (idl.isContainerType(continuationType) && idl.IDLContainerUtils.isPromise(continuationType))
+            return this.createContinuationCallbackReference(continuationType.elementType[0])
+        const continuationParameters = idl.isVoidType(continuationType) ? [] : [idl.createParameter('value', continuationType)]
+        const syntheticName = generateSyntheticFunctionName(
+            (type) => cleanPrefix(this.getTypeName(type), PrimitiveType.Prefix),
+            continuationParameters,
+            idl.IDLVoidType,
+        )
+        return idl.createReferenceType(syntheticName)
     }
 }
 
@@ -346,7 +402,7 @@ class ImportsAggregateCollector extends TypeDependenciesCollector {
         super(peerLibrary)
     }
 
-    override convertTypeReference(type: idl.IDLReferenceType): idl.IDLEntry[] {
+    override convertTypeReference(type: idl.IDLReferenceType): idl.IDLNode[] {
         const declarations = super.convertTypeReference(type)
         const syntheticDeclarations = declarations.filter(it => idl.isSyntheticEntry(it))
         const realDeclarations = declarations.filter(it => !idl.isSyntheticEntry(it))
@@ -354,7 +410,7 @@ class ImportsAggregateCollector extends TypeDependenciesCollector {
         const result = [...realDeclarations]
 
         // process synthetic declarations dependencies
-        result.push(...syntheticDeclarations.flatMap(decl => convertDeclaration(this.declarationCollector, decl)))
+        result.push(...syntheticDeclarations.flatMap(decl => convert(decl, this, this.declarationCollector)))
 
         for (const decl of realDeclarations) {
             // expand type aliaces because we have serialization inside peers methods
@@ -376,11 +432,11 @@ export class IdlWrapperProcessor {
         this.declDependenciesCollector = new DeclarationDependenciesCollector(this.typeDependenciesCollector)
     }
 
-    private collectDepsRecursive(decl: idl.IDLEntry, deps: Set<idl.IDLEntry>): void {
+    private collectDepsRecursive(decl: idl.IDLNode, deps: Set<idl.IDLNode>): void {
         const currentDeps = convert(decl, this.typeDependenciesCollector, this.declDependenciesCollector)
         for (const dep of currentDeps) {
             if (deps.has(dep)) continue
-            if (!isSourceDecl(dep)) continue
+            if (idl.isEntry(dep) && !isSourceDecl(dep)) continue
             deps.add(dep)
             this.collectDepsRecursive(dep, deps)
         }
@@ -431,7 +487,7 @@ export class IdlWrapperProcessor {
 
             //  process serializer dependency
             let serDependencies = this.declDependenciesCollector.convert(decl)
-                .filter(it => isSourceDecl(it))
+                .filter(it => idl.isEntry(it) && isSourceDecl(it))
 
             serDependencies.forEach(it => {
                 if (it && (idl.isClass(it) || idl.isInterface(it))) {
@@ -463,9 +519,10 @@ export class IdlWrapperProcessor {
     private findHeritageClasses(declaration: idl.IDLInterface, heritageClasses: string[] = []): string[] | undefined {
         const superClassType = idl.getSuperType(declaration)
         if (superClassType) {
-            heritageClasses.push(idl.getIDLTypeName(superClassType))
+            let superClassName = this.library.nameConvertorInstance.convert(superClassType)
+            heritageClasses.push(superClassName)
 
-            if (Skoala.isBaseClass(idl.getIDLTypeName(superClassType))) {
+            if (Skoala.isBaseClass(superClassName)) {
                 return heritageClasses
             } else {
                 if (idl.isReferenceType(superClassType)) {
@@ -651,9 +708,6 @@ function mapCInteropRetType(type: idl.IDLType): string {
         }
     }
     if (idl.isReferenceType(type)) {
-        /* HACK, fix */
-        if (idl.getIDLTypeName(type).endsWith("Attribute"))
-            return "void"
         return PrimitiveType.NativePointer.getText()
     }
     if (idl.isTypeParameterType(type))
@@ -669,7 +723,7 @@ function mapCInteropRetType(type: idl.IDLType): string {
         } else
             return PrimitiveType.NativePointer.getText()
     }
-    throw `mapCInteropType failed for ${idl.IDLKind[type.kind]} ${idl.getIDLTypeName(type)}`
+    throw `mapCInteropType failed for ${idl.IDLKind[type.kind]}`
 }
 
 export class TSDeclConvertor implements DeclarationConvertor<void> {
@@ -729,7 +783,7 @@ export function convertDeclToFeature(node: idl.IDLEntry) {
 export class TSSkoalaTypeNameConvertor implements IdlTypeNameConvertor, TypeConvertor<string> {
     constructor(private library: IdlSkoalaLibrary) {}
     convertOptional(type: idl.IDLOptionalType): string {
-        return `${this.convert(type.element)} | undefined` 
+        return `${this.convert(type.type)} | undefined` 
     }
     convertUnion(type: idl.IDLUnionType): string {
         return type.types.map(it => this.convert(it)).join(" | ")
@@ -739,7 +793,7 @@ export class TSSkoalaTypeNameConvertor implements IdlTypeNameConvertor, TypeConv
         idl.IDLContainerUtils.isSequence(type) ? "Array"
             : idl.IDLContainerUtils.isRecord(type) ? "Map"
             : idl.IDLContainerUtils.isPromise(type) ? "Promise"
-            : throwException(`Unmapped container type: ${idl.getIDLTypeName(type)}`)
+            : throwException(`Unmapped container type: ${idl.DebugUtils.debugPrintType(type)}`)
         return `${containerName}<${type.elementType.map(it => this.convert(it)).join(",")}>`
     }
     convertImport(type: idl.IDLReferenceType, importClause: string): string {
@@ -763,13 +817,13 @@ export class TSSkoalaTypeNameConvertor implements IdlTypeNameConvertor, TypeConv
             return decl.name ?? "MISSING_TYPE_NAME"
         }
 
-        let typeSpec = idl.getIDLTypeName(type)
+        let typeSpec = type.name
         let typeArgs = idl.getExtAttribute(type, idl.IDLExtendedAttributes.TypeArguments)?.split(",")
         const maybeTypeArguments = !typeArgs?.length ? '' : `<${typeArgs.join(', ')}>`
         return `${typeSpec}${maybeTypeArguments}`
     }
     convertTypeParameter(type: idl.IDLTypeParameterType): string {
-        return idl.getIDLTypeName(type)
+        return type.name
     }
     convertPrimitiveType(type: idl.IDLPrimitiveType): string {
         switch (type) {
@@ -778,7 +832,7 @@ export class TSSkoalaTypeNameConvertor implements IdlTypeNameConvertor, TypeConv
             case idl.IDLVoidType: return "void"
         }
         // todo: add other types
-        return idl.getIDLTypeName(type)
+        return type.name
     }
     convert(type: idl.IDLType | idl.IDLCallback): string {
         return idl.isCallback(type)
