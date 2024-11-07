@@ -211,9 +211,6 @@ function mapCInteropRetType(type: idl.IDLType): string {
         } else
             return PrimitiveType.NativePointer.getText()
     }
-    console.log("//////////////////////")
-    console.log("type = ", type)
-    console.log("//////////////////////")
     throw `mapCInteropType failed for ${idl.IDLKind[type.kind]} ${idl.getIDLTypeName(type)}`
 }
 
