@@ -87,12 +87,12 @@ struct _Ark_Canvas;
 typedef struct _Ark_Canvas* Ark_CanvasHandle;
 
 enum Ark_APINodeFlags {
-    CUSTOM_NONE = 0,
-    CUSTOM_MEASURE = 1 << 0,
-    CUSTOM_LAYOUT = 1 << 1,
-    CUSTOM_DRAW = 1 << 2,
-    CUSTOM_FOREGROUND_DRAW = 1 << 3,
-    CUSTOM_OVERLAY_DRAW = 1 << 4,
+    %CPP_PREFIX%CUSTOM_NONE = 0,
+    %CPP_PREFIX%CUSTOM_MEASURE = 1 << 0,
+    %CPP_PREFIX%CUSTOM_LAYOUT = 1 << 1,
+    %CPP_PREFIX%CUSTOM_DRAW = 1 << 2,
+    %CPP_PREFIX%CUSTOM_FOREGROUND_DRAW = 1 << 3,
+    %CPP_PREFIX%CUSTOM_OVERLAY_DRAW = 1 << 4,
 };
 enum Ark_APICustomOp {
     %CPP_PREFIX%MEASURE = 1,
