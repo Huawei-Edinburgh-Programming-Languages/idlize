@@ -1,5 +1,4 @@
 import * as idl from '../../idl'
-import { IDLBooleanType, toIDLType } from '../../idl'
 import { ImportFeature, ImportsCollector } from "../ImportsCollector";
 import {
     createLanguageWriter,

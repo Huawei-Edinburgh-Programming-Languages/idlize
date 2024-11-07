@@ -249,7 +249,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         // the '==' operator must be used when one of the operands is a reference
         return super.makeNaryOp('==', args);
     }
-    makeDiscriminatorConvertor(convertor: EnumConvertorDTS, value: string, index: number): LanguageExpression {
+    makeDiscriminatorConvertor(convertor: EnumConvertor, value: string, index: number): LanguageExpression {
         return this.discriminatorFromExpressions(value, RuntimeType.OBJECT, [
             makeEnumTypeCheckerCall(value, convertor.enumTypeName(this.language), this)
         ])

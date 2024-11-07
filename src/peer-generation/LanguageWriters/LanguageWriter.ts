@@ -655,7 +655,7 @@ export abstract class LanguageWriter {
             ...exprs
         ])
     }
-    makeDiscriminatorConvertor(convertor: EnumConvertorDTS | EnumConvertor, value: string, index: number): LanguageExpression {
+    makeDiscriminatorConvertor(convertor: EnumConvertor, value: string, index: number): LanguageExpression {
         const ordinal = convertor.isStringEnum
             ? this.ordinalFromEnum(
                 this.makeString(this.getObjectAccessor(convertor, value)),
