@@ -214,7 +214,7 @@ GENERATED_Ark_EventCallbackArg arg(Ark_Int32 i32) {
     return result;
 }
 
-Ark_Int32 TreeNode::measure(Ark_VMContext vmContext, Ark_Float32* data) {
+float TreeNode::measure(Ark_VMContext vmContext, float* data) {
     TreeNodeDelays::busyWait(TreeNodeDelays::measureNodeDelay[_customIntData]);
 
     Ark_Float32 minWidth = data[0];
@@ -270,7 +270,7 @@ Ark_CanvasHandle getCanvas(TreeNode* node) {
     return reinterpret_cast<Ark_CanvasHandle>(0x123456789aLL);
 }
 
-Ark_Int32 TreeNode::layout(Ark_VMContext vmContext, Ark_Float32* data) {
+float TreeNode::layout(Ark_VMContext vmContext, float* data) {
     TreeNodeDelays::busyWait(TreeNodeDelays::layoutNodeDelay[_customIntData]);
 
     if (_flags & Ark_APINodeFlags::CUSTOM_LAYOUT) {
@@ -294,9 +294,8 @@ Ark_Int32 TreeNode::layout(Ark_VMContext vmContext, Ark_Float32* data) {
     return 0;
 }
 
-Ark_Int32 TreeNode::draw(Ark_VMContext vmContext, Ark_Float32* data) {
+float TreeNode::draw(Ark_VMContext vmContext, float* data) {
     TreeNodeDelays::busyWait(TreeNodeDelays::drawNodeDelay[_customIntData]);
-
     if (_flags & Ark_APINodeFlags::CUSTOM_DRAW) {
         uintptr_t canvas = reinterpret_cast<uintptr_t>(getCanvas(this));
         GENERATED_Ark_EventCallbackArg args[] = {
