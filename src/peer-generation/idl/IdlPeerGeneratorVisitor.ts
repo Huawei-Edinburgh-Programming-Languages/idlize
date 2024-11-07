@@ -727,7 +727,6 @@ class PeersGenerator {
     private processMethodOrCallable(method: idl.IDLMethod | idl.IDLCallable, peer: IdlPeerClass, parentName?: string): IdlPeerMethod | undefined {
         if (PeerGeneratorConfig.ignorePeerMethod.includes(method.name!))
             return
-        //const isCallSignature = !idl.isMethod(method)
         // Some method have other parents as part of their names
         // Such as the ones coming from the friend interfaces
         // E.g. ButtonInterface instead of ButtonAttribute
