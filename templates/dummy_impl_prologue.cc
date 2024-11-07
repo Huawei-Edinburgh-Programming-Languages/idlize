@@ -222,7 +222,7 @@ float TreeNode::measure(Ark_VMContext vmContext, float* data) {
     Ark_Float32 maxWidth = data[2];
     Ark_Float32 maxHeight = data[3];
     if (_flags & Ark_APINodeFlags::CUSTOM_MEASURE) {
-        GENERATED_Ark_EventCallbackArg args[] = { arg(Ark_APICustomOp::MEASURE), arg(minWidth), arg(minHeight), arg(maxWidth), arg(maxHeight) };
+        GENERATED_Ark_EventCallbackArg args[] = { arg(Ark_APICustomOp::GENERATED_MEASURE), arg(minWidth), arg(minHeight), arg(maxWidth), arg(maxHeight) };
         callbacks->CallInt(vmContext, customId(), 5, &args[0]);
         _width = args[1].f32;
         _height = args[2].f32;
@@ -274,7 +274,7 @@ float TreeNode::layout(Ark_VMContext vmContext, float* data) {
     TreeNodeDelays::busyWait(TreeNodeDelays::layoutNodeDelay[_customIntData]);
 
     if (_flags & Ark_APINodeFlags::CUSTOM_LAYOUT) {
-        GENERATED_Ark_EventCallbackArg args[] = { arg(Ark_APICustomOp::LAYOUT), arg(0.0f), arg(0.0f), arg(0.0f), arg(0.0f) };
+        GENERATED_Ark_EventCallbackArg args[] = { arg(Ark_APICustomOp::GENERATED_LAYOUT), arg(0.0f), arg(0.0f), arg(0.0f), arg(0.0f) };
         callbacks->CallInt(vmContext, customId(), 5, &args[0]);
         return 0;
     }
@@ -299,7 +299,7 @@ float TreeNode::draw(Ark_VMContext vmContext, float* data) {
     if (_flags & Ark_APINodeFlags::CUSTOM_DRAW) {
         uintptr_t canvas = reinterpret_cast<uintptr_t>(getCanvas(this));
         GENERATED_Ark_EventCallbackArg args[] = {
-            arg(Ark_APICustomOp::DRAW),
+            arg(Ark_APICustomOp::GENERATED_DRAW),
             arg((Ark_Int32)(canvas & 0xffffffff)),
             arg((Ark_Int32)((canvas >> 32) & 0xffffffff)),
             arg(data[0]), arg(data[1]), arg(data[2]), arg(data[3])

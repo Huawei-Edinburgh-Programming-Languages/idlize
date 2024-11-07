@@ -95,9 +95,9 @@ enum Ark_APINodeFlags {
     CUSTOM_OVERLAY_DRAW = 1 << 4,
 };
 enum Ark_APICustomOp {
-    MEASURE = 1,
-    LAYOUT = 2,
-    DRAW = 3
+    %CPP_PREFIX%MEASURE = 1,
+    %CPP_PREFIX%LAYOUT = 2,
+    %CPP_PREFIX%DRAW = 3
 };
 struct Ark_ObjectHandleOpaque;
 typedef struct Ark_ObjectHandleOpaque* Ark_ObjectHandle;
