@@ -174,6 +174,7 @@ function idlCallbacksEquals(a: IdlCallbackInfo | undefined, b: IdlCallbackInfo |
 }
 
 export function collapseIdlEventsOverloads(library: IdlPeerLibrary, peer: IdlPeerClass): void {
+    /*
     const replacements: [IdlPeerMethod[], IdlPeerMethod][] = []
 
     for (const overloads of groupOverloads(peer.methods)) {
@@ -198,6 +199,7 @@ export function collapseIdlEventsOverloads(library: IdlPeerLibrary, peer: IdlPee
         peer.methods[peer.methods.indexOf(replacement[0][0])] = replacement[1]
         peer.methods = peer.methods.filter(it => !replacement[0].includes(it))
     }
+    */
 }
 
 abstract class CEventsVisitorBase {
