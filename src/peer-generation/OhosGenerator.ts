@@ -30,6 +30,7 @@ import { qualifiedName } from './idl/common'
 import { printCallbacksKinds } from './printers/CallbacksPrinter'
 import { StructPrinter } from './idl/StructPrinter'
 import { generateCallbackAPIArguments } from './idl/IdlArgConvertors'
+import { printBridgeCc } from './printers/BridgeCcPrinter'
 
 class NameType {
     constructor(public name: string, public type: string) {}
@@ -88,17 +89,6 @@ class OHOSVisitor {
         return new MethodSignature(returnType, parameters.map(it => it.type!))
     }
 
-    private writeData(clazz: IDLInterface) {
-        let name = `${PrimitiveType.Prefix}${this.libraryName}_${clazz.name}`
-        let _ = this.hWriter
-        _.print(`typedef struct ${name} {`)
-        _.pushIndent()
-        clazz.properties.forEach(it => {
-            _.print(`${this.mapType(it.type)} ${it.name};`)
-        })
-        _.popIndent()
-        _.print(`} ${name};`)
-    }
 
     private writeCallback(callback: IDLCallback) {
         // TODO commonize with StructPrinter.ts
@@ -131,7 +121,7 @@ class OHOSVisitor {
         clazz.constructors.forEach((ctor, index) => {
             let name = `construct${(index > 0) ? index.toString() : ""}`
             let params = ctor.parameters.map(it => new NameType(_h.escapeKeyword(it.name), this.mapType(it.type!)))
-            _h.print(`${handleType} (*${name})(${params.map(it => `${it.type} ${it.name}`).join(", ")});`)
+            _h.print(`${handleType} (*${name})(${params.map(it => `const ${it.type}* ${it.name}`).join(", ")});`) // TODO check
             let implName = `${clazz.name}_${name}Impl`
             _c.print(`&${implName},`)
             this.impls.set(implName, { params, returnType: handleType})
@@ -394,7 +384,7 @@ class OHOSVisitor {
                             writer.print(it.scopeStart?.(it.param, writer.language))
                         })
                         let serializerCreated = false
-                        argConvertors.forEach((it, index) => {
+                        argConvertors.forEach((it) => {
                             if (it.useArray) {
                                 if (!serializerCreated) {
                                     writer.writeStatement(
@@ -466,6 +456,9 @@ class OHOSVisitor {
         this.writeModifiers(writer)
         this.writeImpls()
         this.cppWriter.concat(writer)
+        this.cppWriter.print("// ------------------------------------------------------------------------------")
+        const bridgeCc = printBridgeCc(this.library, false)
+        this.cppWriter.concat(bridgeCc.generated)
 
         this.hWriter.writeLines(
             readLangTemplate('ohos_api_epilogue.h', Language.CPP)
@@ -584,20 +577,11 @@ function generateArgConvertor(library: IdlPeerLibrary, param: IDLParameter): Arg
     return library.typeConvertor(param.name, param.type, param.isOptional)
 }
 
-// TODO join with generateCParameters(BridgeCcPrinter.ts)
+// TODO drop this method
 function generateCParameters(method: IDLMethod, argConvertors: ArgConvertor[], writer: LanguageWriter): string {
     let args = [`${PrimitiveType.NativePointer.getText()} thisPtr`]
-    let ptrCreated = false;
     for (let i = 0; i < argConvertors.length; ++i) {
-        let it = argConvertors[i]
-        if (it.useArray) {
-            if (!ptrCreated) {
-                args.push(`uint8_t* thisArray, int32_t thisLength`)
-                ptrCreated = true
-            }
-        } else {
-            args.push(`${writer.stringifyType(method.parameters[i].type!)} ${writer.escapeKeyword(method.parameters[i].name)}`)
-        }
+        args.push(`const ${writer.stringifyType(method.parameters[i].type!)}* ${writer.escapeKeyword(method.parameters[i].name)}`)
     }
     return args.join(", ")
 }

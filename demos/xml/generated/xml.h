@@ -17,6 +17,8 @@
 
 #include <stdint.h>
 
+#define XML_API_VERSION 1
+
 /* clang-format off */
 
 #ifdef __cplusplus
@@ -227,18 +229,18 @@ typedef struct Opt_String {
 struct OH_XML_XmlSerializerHandleOpaque;
 typedef struct OH_XML_XmlSerializerHandleOpaque* OH_XML_XmlSerializerHandle;
 typedef struct OH_XML_XmlSerializerModifier {
-    OH_XML_XmlSerializerHandle (*construct)(OH_Union_ArrayBuffer_DataView buffer, OH_String encoding);
+    OH_XML_XmlSerializerHandle (*construct)(const OH_Union_ArrayBuffer_DataView* buffer, const OH_String* encoding);
     void (*destruct)(OH_XML_XmlSerializerHandle thiz);
-    OH_Void (*setAttributes)(OH_NativePointer thisPtr, OH_String name, OH_String value);
-    OH_Void (*addEmptyElement)(OH_NativePointer thisPtr, OH_String name);
+    OH_Void (*setAttributes)(OH_NativePointer thisPtr, const OH_String* name, const OH_String* value);
+    OH_Void (*addEmptyElement)(OH_NativePointer thisPtr, const OH_String* name);
     OH_Void (*setDeclaration)(OH_NativePointer thisPtr);
-    OH_Void (*startElement)(OH_NativePointer thisPtr, OH_String name);
+    OH_Void (*startElement)(OH_NativePointer thisPtr, const OH_String* name);
     OH_Void (*endElement)(OH_NativePointer thisPtr);
-    OH_Void (*setNamespace)(OH_NativePointer thisPtr, OH_String prefix, OH_String namespace_);
-    OH_Void (*setComment)(OH_NativePointer thisPtr, OH_String text);
-    OH_Void (*setCDATA)(OH_NativePointer thisPtr, OH_String text);
-    OH_Void (*setText)(OH_NativePointer thisPtr, OH_String text);
-    OH_Void (*setDocType)(OH_NativePointer thisPtr, OH_String text);
+    OH_Void (*setNamespace)(OH_NativePointer thisPtr, const OH_String* prefix, const OH_String* namespace_);
+    OH_Void (*setComment)(OH_NativePointer thisPtr, const OH_String* text);
+    OH_Void (*setCDATA)(OH_NativePointer thisPtr, const OH_String* text);
+    OH_Void (*setText)(OH_NativePointer thisPtr, const OH_String* text);
+    OH_Void (*setDocType)(OH_NativePointer thisPtr, const OH_String* text);
 } OH_XML_XmlSerializerModifier;
 struct OH_XML_ParseInfoHandleOpaque;
 typedef struct OH_XML_ParseInfoHandleOpaque* OH_XML_ParseInfoHandle;
@@ -257,9 +259,9 @@ typedef struct OH_XML_ParseInfoModifier {
 struct OH_XML_XmlPullParserHandleOpaque;
 typedef struct OH_XML_XmlPullParserHandleOpaque* OH_XML_XmlPullParserHandle;
 typedef struct OH_XML_XmlPullParserModifier {
-    OH_XML_XmlPullParserHandle (*construct)(OH_Union_ArrayBuffer_DataView buffer, OH_String encoding);
+    OH_XML_XmlPullParserHandle (*construct)(const OH_Union_ArrayBuffer_DataView* buffer, const OH_String* encoding);
     void (*destruct)(OH_XML_XmlPullParserHandle thiz);
-    OH_Void (*parse)(OH_NativePointer thisPtr, uint8_t* thisArray, int32_t thisLength);
+    OH_Void (*parse)(OH_NativePointer thisPtr, const OH_XML_ParseOptions* option);
 } OH_XML_XmlPullParserModifier;
 typedef struct OH_XML_API {
     OH_Int32 version;
