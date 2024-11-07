@@ -79,6 +79,7 @@ export enum IDLExtendedAttributes {
     TypeArguments = "TypeArguments",
     TypeParameters = "TypeParameters",
     VerbatimDts = "VerbatimDts",
+    TSType = "TSType",
 }
 
 export enum IDLAccessorAttribute {
@@ -639,9 +640,9 @@ export function createProperty(
 }
 
 export function createParameter(
-    name: string, 
-    type: IDLType | undefined, 
-    isOptional: boolean = false, 
+    name: string,
+    type: IDLType | undefined,
+    isOptional: boolean = false,
     isVariadic: boolean = false,
     nodeInitializer: IDLNodeInitializer = {},
 ): IDLParameter {
@@ -1072,7 +1073,7 @@ export const IDLContainerUtils = {
     isPromise: (x:IDLNode) => isContainerType(x) && x.containerKind === 'Promise'
 }
 
-/** 
+/**
  * @returns tuple of qualifier name and real type name
  */
 export function decomposeQualifiedName(type: IDLReferenceType): [string | undefined, string] {
