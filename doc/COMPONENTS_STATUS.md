@@ -572,9 +572,9 @@
 |`fontWeight`| Function | Andrey Khudenkikh| done |  |
 |`fontFamily`| Function | Andrey Khudenkikh| done |  |
 |`marqueeUpdateStrategy`| Function |Andrey Khudenkikh | done |  |
-|`onStart`| Function | Andrey Khudenkikh| blocked |  |
-|`onBounce`| Function |Andrey Khudenkikh | blocked |  |
-|`onFinish`| Function |Andrey Khudenkikh | blocked |  |
+|`onStart`| Function | Andrey Khudenkikh| in progress |  |
+|`onBounce`| Function |Andrey Khudenkikh | in progress |  |
+|`onFinish`| Function |Andrey Khudenkikh | in progress |  |
 |*LoadingProgress*|*Component*| Samarin Sergey | done |  |
 |`setLoadingProgressOptions`|Function| Samarin Sergey | done |  |
 |`color`|Function| Samarin Sergey | done |  |
