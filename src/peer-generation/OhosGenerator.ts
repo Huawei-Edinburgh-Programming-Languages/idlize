@@ -12,13 +12,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import * as fs from 'fs'
 import * as path from 'path'
-
 import { IndentedPrinter } from "../IndentedPrinter"
 import { IdlPeerLibrary } from './idl/IdlPeerLibrary'
 import { CppLanguageWriter, createLanguageWriter, ExpressionStatement, FieldModifier, LanguageWriter, Method, MethodSignature, NamedMethodSignature } from './LanguageWriters'
-import { createContainerType, createReferenceType, getIDLTypeName, hasExtAttribute, IDLCallback, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLKind, IDLMethod, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLU8Type, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isInterface, isMethod, isPrimitiveType, isReferenceType, isUnionType } from '../idl'
+import { createContainerType, createReferenceType, forceAsNamedNode, hasExtAttribute, IDLCallback, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLKind, IDLMethod, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLU8Type, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isInterface, isMethod, isOptionalType, isPrimitiveType, isReferenceType, isType, isUnionType } from '../idl'
 import { makeSerializerForOhos, readLangTemplate } from './FileGenerators'
 import { capitalize } from '../util'
 import { isMaterialized } from './idl/IdlPeerGeneratorVisitor'
@@ -26,9 +26,10 @@ import { PrimitiveType } from './ArkPrimitiveType'
 import { Language } from '../Language'
 import { ArgConvertor } from './ArgConvertors'
 import { writeDeserializer, writeSerializer } from './printers/SerializerPrinter'
-import { generateCallbackAPIArguments, StructPrinter } from './idl/StructPrinter'
 import { qualifiedName } from './idl/common'
 import { printCallbacksKinds } from './printers/CallbacksPrinter'
+import { StructPrinter } from './idl/StructPrinter'
+import { generateCallbackAPIArguments } from './idl/IdlArgConvertors'
 
 class NameType {
     constructor(public name: string, public type: string) {}
@@ -65,20 +66,22 @@ class OHOSVisitor {
     private static knownBasicTypes = new Set(['ArrayBuffer', 'DataView'])
 
     mapType(type: IDLType | IDLEnum): string {
-        this.library.requestType(type, true)
+        if (isType(type)) {
+            this.library.requestType(type, true)
+        }
 
-        const typeName = isEnum(type) 
-            ? type.name 
+        const typeName = isEnum(type)
+            ? type.name
             : isContainerType(type) || isUnionType(type)
                 ? ''
-                : getIDLTypeName(type)
+                : forceAsNamedNode(type).name
         if (OHOSVisitor.knownBasicTypes.has(typeName))
             return `${PrimitiveType.Prefix}${typeName}`
 
         if (isReferenceType(type) || isEnum(type)) {
             return `${PrimitiveType.Prefix}${this.libraryName}_${qualifiedName(type, Language.CPP)}`
         }
-        return this.library.computeTargetName(type, type.optional ?? false)
+        return this.hWriter.stringifyType(type)
     }
 
     makeSignature(returnType: IDLType, parameters: IDLParameter[]): MethodSignature {
@@ -148,8 +151,7 @@ class OHOSVisitor {
             }
             params = params.concat(method.parameters.map(it => new NameType(_h.escapeKeyword(it.name), this.mapType(it.type!))))
             let returnType = this.mapType(method.returnType)
-            const maybeCallback = false
-            const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param, maybeCallback))
+            const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param))
             const args = generateCParameters(method, argConvertors, _h)
             _h.print(`${returnType} (*${method.name})(${args});`)
             let implName = `${clazz.name}_${method.name}Impl`
@@ -242,25 +244,6 @@ class OHOSVisitor {
         return capitalize(clazz.name)
     }
 
-    private writeClass(clazz: IDLInterface) {
-        this.cppWriter.writeClass(clazz.name, (writer) => {
-            clazz.constructors.forEach(it => {
-                writer.writeConstructorImplementation(clazz.name,
-                    this.makeSignature(IDLVoidType, it.parameters), (writer) => {
-                })
-            })
-            clazz.methods.forEach(it => {
-                writer.writeMethodImplementation(new Method(it.name,
-                    this.makeSignature(it.returnType, it.parameters)), (writer) => {
-                })
-            })
-        })
-    }
-
-    visitDeclaration(entry: IDLEntry): void {
-        // if (isClass(entry)) this.writeClass(entry)
-    }
-
     private requestType(type: IDLType | IDLEnum) {
         this.library.requestType(type, true)
     }
@@ -276,44 +259,9 @@ class OHOSVisitor {
             entry.parameters.forEach(it => this.requestType(it.type!))
             this.requestType(entry.returnType)
         } else if (isEnum(entry)) {
-            this.requestType(entry)
+            entry.elements.forEach(it => this.requestType(it.type))
         }
         entry.scope?.forEach(it => this.requestTypes(it))
-    }
-
-    private writeTypes(types: IDLEntry[]) {
-        let _ = this.hWriter
-        let seen = new Set<string>()
-        types.forEach(type => {
-            if (seen.has(type.name!)) return
-            seen.add(type.name!)
-            if (isPrimitiveType(type)) {
-            }
-            if (isUnionType(type)) {
-                _.print(`struct ${this.mapType(type)} {`)
-                _.pushIndent()
-                _.print(`int selector;`)
-                _.print(`union {`)
-                _.pushIndent()
-                type.types.forEach((type, index) => {
-                    _.print(`${this.mapType(type)} value${index};`)
-                })
-                _.popIndent()
-                _.print(`};`)
-                _.popIndent()
-                _.print(`};`)
-            }
-            if (isEnum(type)) {
-                let declaration = this.library.toDeclaration(type) as IDLEnum
-                _.print(`typedef enum {`)
-                _.pushIndent()
-                declaration.elements.forEach(it => {
-                    _.print(`${PrimitiveType.Prefix}${this.libraryName}_${it.name},`)
-                })
-                _.popIndent()
-                _.print(`} ${this.mapType(type)};`)
-            }
-        })
     }
 
     private printManaged() {
@@ -325,8 +273,8 @@ class OHOSVisitor {
         const className = `${this.libraryName}NativeModule`
         this.callbacks.forEach(callback => {
             if (this.library.language === Language.TS) {
-                const params = callback.parameters.map(it => `${it.name}:${this.nativeWriter.convert(it.type!)}`).join(', ')
-                const returnTypeName = this.nativeWriter.convert(callback.returnType)
+                const params = callback.parameters.map(it => `${it.name}:${this.nativeWriter.stringifyType(it.type!)}`).join(', ')
+                const returnTypeName = this.nativeWriter.stringifyType(callback.returnType)
                 this.nativeWriter.print(`export type ${callback.name} = (${params}) => ${returnTypeName}`)
             }
         })
@@ -344,8 +292,7 @@ class OHOSVisitor {
         this.nativeWriter.writeInterface(className, writer => {
             this.interfaces.flatMap(it => it.methods).forEach(method => {
                 // TODO remove duplicated code from NativeModuleVisitor::printPeerMethod (NativeModulePrinter.ts)
-                const maybeCallback = false
-                const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param, maybeCallback))
+                const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param))
                 const args: ({name: string, type: IDLType})[] = [{ name: 'self', type: IDLPointerType }]
                 let serializerArgCreated = false
                 for (let i = 0; i < argConvertors.length; ++i) {
@@ -440,8 +387,7 @@ class OHOSVisitor {
                     const signature = writer.makeNamedSignature(method.returnType, method.parameters)
                     writer.writeMethodImplementation(new Method(method.name, signature), writer => {
                         // TODO remove duplicated code from writePeerMethod (PeersPrinter.ts)
-                        const maybeCallback = false // TODO callbacks
-                        const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param, maybeCallback))
+                        const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param))
                         let scopes = argConvertors.filter(it => it.isScoped)
                         scopes.forEach(it => {
                             writer.pushIndent()
@@ -453,9 +399,7 @@ class OHOSVisitor {
                                 if (!serializerCreated) {
                                     writer.writeStatement(
                                         writer.makeAssign(`thisSerializer`, createReferenceType('Serializer'),
-                                            writer.makeMethodCall('SerializerBase', 'hold', [
-                                                writer.makeSerializerCreator()
-                                            ]), true)
+                                            writer.makeMethodCall('Serializer', 'hold', []), true)
                                     )
                                     serializerCreated = true
                                 }
@@ -516,7 +460,7 @@ class OHOSVisitor {
         const prefix = PrimitiveType.Prefix + this.library.libraryPrefix
         writeSerializer(this.library, this.cppWriter, prefix)
         writeDeserializer(this.library, this.cppWriter, prefix)
-        
+
         let writer = new CppLanguageWriter(new IndentedPrinter(), this.library)
         this.writeModifiers(writer)
         this.writeImpls()
@@ -561,8 +505,8 @@ class OHOSVisitor {
         const callbackInterfaceNames = new Set<string>()
         this.callbacks.forEach(it => {
             it.parameters.forEach(param => {
-                if (this.interfaces.find(x => x.name === getIDLTypeName(param.type!))) {
-                    callbackInterfaceNames.add(getIDLTypeName(param.type!))
+                if (this.interfaces.find(x => x.name === forceAsNamedNode(param.type!).name)) {
+                    callbackInterfaceNames.add(forceAsNamedNode(param.type!).name)
                 }
             })
         })
@@ -596,7 +540,7 @@ class OHOSVisitor {
             .replaceAll('%PEER_CONTENT%', this.peerWriter.getOutput().join('\n'))
             .replaceAll('%SERIALIZER_PATH%', `./${fileNamePrefix}Serializer`)
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}${ext}`), peerText, 'utf-8')
-        
+
         this.hWriter.printTo(path.join(outDir, `${fileNamePrefix}.h`))
         this.cppWriter.printTo(path.join(outDir, `${fileNamePrefix}.cc`))
 
@@ -608,7 +552,7 @@ class OHOSVisitor {
             readLangTemplate(`ohos_DeserializerBase.h`, Language.CPP)
                 .replaceAll("%NATIVE_API_HEADER_PATH%", `${fileNamePrefix}.h`)
         )
-        
+
         const nativeModuleInfo = {
             name: `get${this.libraryName}NativeModule`,
             path: `./${fileNamePrefix}Native`,
@@ -634,9 +578,9 @@ export function generateOhos(outDir: string, peerLibrary: IdlPeerLibrary): void 
     visitor.execute(outDir, managedOutDir)
 }
 
-function generateArgConvertor(library: IdlPeerLibrary, param: IDLParameter, maybeCallback: boolean): ArgConvertor {
+function generateArgConvertor(library: IdlPeerLibrary, param: IDLParameter): ArgConvertor {
     if (!param.type) throw new Error("Type is needed")
-    return library.typeConvertor(param.name, param.type, param.isOptional, maybeCallback)
+    return library.typeConvertor(param.name, param.type, param.isOptional)
 }
 
 // TODO join with generateCParameters(BridgeCcPrinter.ts)
@@ -651,7 +595,7 @@ function generateCParameters(method: IDLMethod, argConvertors: ArgConvertor[], w
                 ptrCreated = true
             }
         } else {
-            args.push(`${writer.convert(method.parameters[i].type!)} ${writer.escapeKeyword(method.parameters[i].name)}`)
+            args.push(`${writer.stringifyType(method.parameters[i].type!)} ${writer.escapeKeyword(method.parameters[i].name)}`)
         }
     }
     return args.join(", ")

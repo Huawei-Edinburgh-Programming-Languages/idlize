@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
+import * as idl from "../../idl"
 import { capitalize, removeExt, renameClassToMaterialized } from "../../util";
-import { PeerLibrary } from "../PeerLibrary";
 import { printPeerFinalizer, writePeerMethod } from "./PeersPrinter"
 import {
     BlockStatement,
@@ -44,7 +44,7 @@ import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
 import { printJavaImports } from "./lang/JavaPrinters";
 import { Language } from "../../Language";
 import { copyMethod } from "../LanguageWriters/LanguageWriter";
-import { createReferenceType, getIDLTypeName, IDLPointerType, IDLThisType, IDLType, IDLVoidType, maybeOptional, toIDLType } from "../../idl";
+import { createReferenceType, forceAsNamedNode, IDLPointerType, IDLThisType, IDLType, IDLVoidType, isOptionalType, maybeOptional, toIDLType } from "../../idl";
 import { getReferenceResolver } from "../ReferenceResolver";
 
 interface MaterializedFileVisitor {
@@ -57,7 +57,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
     protected readonly printer: LanguageWriter = createLanguageWriter(this.printerContext.language, getReferenceResolver(this.library))
 
     constructor(
-        protected readonly library: PeerLibrary | IdlPeerLibrary,
+        protected readonly library: IdlPeerLibrary,
         protected readonly printerContext: PrinterContext,
         protected readonly clazz: MaterializedClass,
     ) {}
@@ -74,10 +74,10 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
 
 class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
 
-    private overloadsPrinter = new OverloadsPrinter(this.printer, this.library.language, false)
+    private overloadsPrinter = new OverloadsPrinter(getReferenceResolver(this.library), this.printer, this.library.language, false)
 
     constructor(
-        protected readonly library: PeerLibrary | IdlPeerLibrary,
+        protected readonly library: IdlPeerLibrary,
         protected readonly printerContext: PrinterContext,
         protected readonly clazz: MaterializedClass,
         protected readonly dumpSerialized: boolean,
@@ -101,7 +101,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
         const printer = this.printer
         printer.print(makeMaterializedPrologue(this.printerContext.language))
 
-        let superClassName = clazz.superClass?.getSyperType()
+        let superClassName = clazz.superClass?.getSuperType()
         let selfInterface = clazz.isInterface ? `${clazz.className}${clazz.generics ? `<${clazz.generics.join(", ")}>` : ``}` : undefined
 
         const interfaces: string[] = []
@@ -165,10 +165,30 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                 }
             })
 
+            // write getPeer() method
+            const getPeerSig = new MethodSignature(idl.maybeOptional(idl.createReferenceType("Finalizable"), true),[])
+            writer.writeMethodImplementation(new Method("getPeer", getPeerSig), writer => {
+                writer.writeStatement(writer.makeReturn(writer.makeString("this.peer")))
+            })
+
+            // write construct(ptr: number) method
+            const typeArguments = clazz.generics
+            const clazzRefType = idl.createReferenceType(clazz.className, typeArguments)
+            const constructSig = new NamedMethodSignature(clazzRefType, [idl.IDLPointerType], ["ptr"])
+            writer.writeMethodImplementation(new Method("construct", constructSig, [MethodModifier.STATIC], typeArguments), writer => {
+                const objVar = `obj${clazz.className}`
+                writer.writeStatement(writer.makeAssign(objVar, clazzRefType, writer.makeNewObject(clazz.className), true))
+                writer.writeStatement(
+                    writer.makeAssign(`${objVar}.peer`, toIDLType("Finalizable"),
+                        writer.makeString(`new Finalizable(ptr, ${clazz.className}.getFinalizer())`), false),
+                )
+                writer.writeStatement(writer.makeReturn(writer.makeString(objVar)))
+            })
+
             const pointerType = IDLPointerType
             // makePrivate(clazz.ctor.method)
             this.library.setCurrentContext(`${clazz.className}.constructor`)
-            writePeerMethod(writer, clazz.ctor, this.library instanceof IdlPeerLibrary, this.printerContext, this.dumpSerialized, "", "", pointerType)
+            writePeerMethod(writer, clazz.ctor, true, this.printerContext, this.dumpSerialized, "", "", pointerType)
             this.library.setCurrentContext(undefined)
 
             const ctorSig = clazz.ctor.method.signature as NamedMethodSignature
@@ -184,7 +204,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                     writer.writeSuperCall([]);
                 }
 
-                const allOptional = ctorSig.args.every(it => it.optional)
+                const allOptional = ctorSig.args.every(it => isOptionalType(it))
                 const hasStaticMethods = clazz.methods.some(it => it.method.modifiers?.includes(MethodModifier.STATIC))
                 if (hasStaticMethods && allOptional) {
                     if (ctorSig.args.length == 0) {
@@ -195,7 +215,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                     writer.print(`// It means that the static method call invokes ctor method as well`)
                     writer.print(`// when all arguments are undefined.`)
                 }
-                let ctorStatements: LanguageStatement = new BlockStatement([
+                let ctorStatements: LanguageStatement = writer.makeBlock([
                     writer.makeAssign("ctorPtr", IDLPointerType,
                         writer.makeMethodCall(clazz.className, "ctor",
                             ctorSig.args.map((it, index) => writer.makeString(`${ctorSig.argsNames[index]}`))),
@@ -206,7 +226,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                         writer.makeString(`new Finalizable(ctorPtr, ${clazz.className}.getFinalizer())`),
                         false
                     )
-                ], false)
+                ])
                 if (!allOptional) {
                     ctorStatements =
                         writer.makeCondition(
@@ -236,7 +256,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                     })
                 const returnType = privateMethod.tsReturnType()
                 this.library.setCurrentContext(`${privateMethod.originalParentName}.${privateMethod.overloadedName}`)
-                writePeerMethod(writer, privateMethod, this.library instanceof IdlPeerLibrary, this.printerContext, this.dumpSerialized, "_serialize", "this.peer!.ptr", returnType)
+                writePeerMethod(writer, privateMethod, true, this.printerContext, this.dumpSerialized, "_serialize", "this.peer!.ptr", returnType)
                 this.library.setCurrentContext(undefined)
             })
         }, superClassName, interfaces.length === 0 ? undefined : interfaces, generics)
@@ -253,7 +273,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
 
 class JavaMaterializedFileVisitor extends MaterializedFileVisitorBase {
     constructor(
-        protected readonly library: PeerLibrary | IdlPeerLibrary,
+        protected readonly library: IdlPeerLibrary,
         protected readonly printerContext: PrinterContext,
         protected readonly clazz: MaterializedClass,
         protected readonly dumpSerialized: boolean,
@@ -274,7 +294,7 @@ class JavaMaterializedFileVisitor extends MaterializedFileVisitorBase {
 
         const emptyParameterType = toIDLType(ARK_MATERIALIZEDBASE_EMPTY_PARAMETER)
         const finalizableType = toIDLType('Finalizable')
-        const superClassName = clazz.superClass?.getSyperType() ?? ARK_MATERIALIZEDBASE
+        const superClassName = clazz.superClass?.getSuperType() ?? ARK_MATERIALIZEDBASE
 
         this.printer.writeClass(clazz.className, writer => {
             // TODO: getters and setters for fields
@@ -329,7 +349,7 @@ class JavaMaterializedFileVisitor extends MaterializedFileVisitorBase {
             }
 
             writer.writeConstructorImplementation(clazz.className, ctorSig, writer => {
-                writer.writeSuperCall([`(${getIDLTypeName(emptyParameterType)})null`]);
+                writer.writeSuperCall([`(${forceAsNamedNode(emptyParameterType).name})null`]);
 
                 const args = ctorSig.argsNames.map(it => writer.makeString(it))
                 writer.writeStatement(
@@ -359,103 +379,7 @@ class JavaMaterializedFileVisitor extends MaterializedFileVisitorBase {
         }, superClassName, undefined, clazz.generics)
     }
 
-    // TODO: remove after migrating to IDL
-    private printMaterializedClassTS(clazz: MaterializedClass) {
-        this.printPackage()
-
-        const emptyParameterType = toIDLType(ARK_MATERIALIZEDBASE_EMPTY_PARAMETER)
-        const finalizableType = toIDLType('Finalizable')
-        this.printerContext.imports!.printImportsForTypes([finalizableType], this.printer)
-
-        const superClassName = clazz.superClass?.getSyperType() ?? ARK_MATERIALIZEDBASE
-
-        this.printer.writeClass(clazz.className, writer => {
-            // getters and setters for fields
-            clazz.fields.forEach(f => {
-
-                const field = f.field
-
-                // TBD: use deserializer to get complex type from native
-                const isSimpleType = !f.argConvertor.useArray // type needs to be deserialized from the native
-                if (isSimpleType) {
-                    const getSignature = new MethodSignature(field.type, [])
-                    writer.writeGetterImplementation(new Method(field.name, getSignature), writer => {
-                        writer.writeStatement(
-                            writer.makeReturn(
-                                writer.makeMethodCall('this', `get${capitalize(field.name)}`, [])))
-                    });
-                }
-
-                const isReadOnly = field.modifiers.includes(FieldModifier.READONLY)
-                if (!isReadOnly) {
-                    const setSignature = new NamedMethodSignature(IDLVoidType, [field.type], [field.name])
-                    writer.writeSetterImplementation(new Method(field.name, setSignature), writer => {
-                        writer.writeMethodCall('this', `set${capitalize(field.name)}`, [field.name])
-                    });
-                }
-            })
-
-            const pointerType = IDLPointerType
-            this.library.setCurrentContext(`${clazz.className}.constructor`)
-            writePeerMethod(writer, clazz.ctor, false, this.printerContext, this.dumpSerialized, '', '', pointerType)
-            this.library.setCurrentContext(undefined)
-
-            // constructor with a special parameter to use in static methods
-            const emptySignature = new MethodSignature(IDLVoidType, [emptyParameterType])
-            writer.writeConstructorImplementation(clazz.className, emptySignature, writer => {
-                writer.writeSuperCall([emptySignature.argName(0)]);
-            })
-
-            const ctorSig = clazz.ctor.method.signature as NamedMethodSignature
-            const signatureWithJavaTypes = new NamedMethodSignature(
-                ctorSig.returnType,
-                clazz.ctor.declarationTargets.map((declarationTarget, index) => {
-                    return this.printerContext.synthesizedTypes!.getTargetType(declarationTarget, !!ctorSig.args[index].optional)
-                }),
-                ctorSig.argsNames,
-                ctorSig.defaults)
-
-            // generate a constructor with zero parameters for static methods
-            // in case there is no alredy defined one
-            if (signatureWithJavaTypes.args.length > 0) {
-                writer.writeConstructorImplementation(clazz.className, new MethodSignature(IDLVoidType, []), writer => {
-                    writer.writeSuperCall([`(${ARK_MATERIALIZEDBASE_EMPTY_PARAMETER})null`]);
-                })
-            }
-
-            writer.writeConstructorImplementation(clazz.className, signatureWithJavaTypes, writer => {
-                writer.writeSuperCall([`(${getIDLTypeName(emptyParameterType)})null`]);
-
-                const args = ctorSig.argsNames.map(it => writer.makeString(it))
-                writer.writeStatement(
-                    writer.makeAssign('ctorPtr', IDLPointerType,
-                        writer.makeMethodCall(clazz.className, 'ctor', args),
-                        true))
-
-                writer.writeStatement(writer.makeAssign(
-                    'this.peer',
-                    finalizableType,
-                    writer.makeString(`new Finalizable(ctorPtr, ${clazz.className}.getFinalizer())`),
-                    false
-                ))
-            })
-
-            printPeerFinalizer(clazz, writer)
-
-            clazz.methods.forEach(method => {
-                this.library.setCurrentContext(`${method.originalParentName}.${method.overloadedName}`)
-                writePeerMethod(writer, method, false, this.printerContext, this.dumpSerialized, '', 'this.peer.ptr', method.method.signature.returnType)
-                this.library.setCurrentContext(undefined)
-            })
-        }, superClassName, undefined, clazz.generics)
-    }
-
     visit(): void {
-        if (this.library instanceof PeerLibrary) {
-            // TODO: remove after migrating to IDL
-            this.printMaterializedClassTS(this.clazz)
-            return
-        }
         this.printMaterializedClass(this.clazz)
     }
 
@@ -477,7 +401,7 @@ class ArkTSMaterializedFileVisitor extends TSMaterializedFileVisitor {
 
 class CJMaterializedFileVisitor extends MaterializedFileVisitorBase {
     constructor(
-        protected readonly library: PeerLibrary | IdlPeerLibrary,
+        protected readonly library: IdlPeerLibrary,
         protected readonly printerContext: PrinterContext,
         protected readonly clazz: MaterializedClass,
         protected readonly dumpSerialized: boolean,
@@ -494,7 +418,7 @@ class CJMaterializedFileVisitor extends MaterializedFileVisitorBase {
 
         const emptyParameterType = createReferenceType(ARK_MATERIALIZEDBASE_EMPTY_PARAMETER)
         const finalizableType = createReferenceType('Finalizable')
-        const superClassName = clazz.superClass?.getSyperType() ?? ARK_MATERIALIZEDBASE
+        const superClassName = clazz.superClass?.getSuperType() ?? ARK_MATERIALIZEDBASE
 
         this.printer.writeClass(clazz.className, writer => {
             const pointerType = IDLPointerType
@@ -563,7 +487,7 @@ class MaterializedVisitor {
     readonly materialized: Map<TargetFile, string[]> = new Map()
 
     constructor(
-        private readonly library: PeerLibrary | IdlPeerLibrary,
+        private readonly library: IdlPeerLibrary,
         private readonly printerContext: PrinterContext,
         private readonly dumpSerialized: boolean,
     ) {}
@@ -594,7 +518,7 @@ class MaterializedVisitor {
     }
 }
 
-export function printMaterialized(peerLibrary: PeerLibrary | IdlPeerLibrary, printerContext: PrinterContext, dumpSerialized: boolean): Map<TargetFile, string> {
+export function printMaterialized(peerLibrary: IdlPeerLibrary, printerContext: PrinterContext, dumpSerialized: boolean): Map<TargetFile, string> {
     const visitor = new MaterializedVisitor(peerLibrary, printerContext, dumpSerialized)
     visitor.printMaterialized()
     const result = new Map<TargetFile, string>()

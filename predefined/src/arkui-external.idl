@@ -1,0 +1,143 @@
+package "org.openharmony.arkui";
+
+
+/**
+ * Defines the controller of node container.Provides lifecycle callbacks for the associated NodeContainer
+ * and methods to control the child node of the NodeContainer.
+ */
+[Entity=Class]
+interface NodeController {};
+
+
+/**
+ * PixelMap instance.
+ */
+interface PixelMap {
+    /**
+     * Whether the image pixel map can be edited.
+     */
+    readonly attribute boolean isEditable;
+
+    /**
+     * Is it stride Alignment
+     */
+    readonly attribute boolean isStrideAlignment;
+};
+
+
+/**
+ * Want is the basic communication component of the system.
+ */
+[Entity=Class]
+interface Want {
+    /**
+     * bundle name
+     */
+    [Optional]
+    attribute String bundleName;
+
+    /**
+     * ability name
+     */
+    [Optional]
+    attribute String abilityName;
+
+    /**
+     * device id
+     */
+    [Optional]
+    attribute String deviceId;
+
+    /**
+     * The description of a URI in a Want.
+     */
+    [Optional]
+    attribute String uri;
+
+    /**
+     * The description of the type in this Want.
+     */
+    [Optional]
+    attribute String type;
+
+    /**
+     * The options of the flags in this Want.
+     */
+    [Optional]
+    attribute number flags;
+
+    /**
+     * The description of an action in an want.
+     */
+    [Optional]
+    attribute String action;
+
+    /**
+     * The description of the WantParams object in an Want
+     */
+    [Optional]
+    attribute record<String, Object> parameters;
+
+    /**
+     * The description of a entities in a Want.
+     */
+    [Optional]
+    attribute sequence<String> entities;
+
+    /**
+     * The description of an module name in an want.
+     */
+    [Optional]
+    attribute String moduleName;
+};
+
+
+/**
+ * Defines the Length Unit.
+ */
+dictionary LengthUnit {
+  /**
+   * Logical pixel used in Ace1.0. It's based on frontend design width.
+   * For example, when a frontend with 750px design width running on a
+   * device with 1080 pixels width, 1px represents 1.44 pixels.
+   */
+  number PX = 0;
+
+  /**
+   * Density independent pixels, one vp is one pixel on a 160 dpi screen.
+   */
+  number VP = 1;
+
+  /**
+   * Scale independent pixels. This is like VP but will be scaled by
+   * user's font size preference.
+   */
+  number FP = 2;
+
+  /**
+   * The percentage of either a value from the element's parent or from
+   * another property of the element itself.
+   */
+  number PERCENT = 3;
+
+  /**
+   * Logic pixels used in ACE2.0 instead of PX, and PX is the physical pixels in ACE2.0.
+   */
+  number LPX = 4;
+};
+
+
+/**
+ * Defines the Length Metrics.
+ */
+interface LengthMetrics {
+  /**
+   * The unit of the LengthMetrics. The default value is LengthUnit::VP.
+   */
+  attribute LengthUnit unit;
+
+  /**
+   * The value of the LengthMetrics.
+   */
+  attribute number value;
+};

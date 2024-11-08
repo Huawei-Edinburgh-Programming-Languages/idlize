@@ -14,17 +14,23 @@
  */
 
 import * as idl from "../../idl"
-import { Method, MethodSignature, LanguageWriter, MethodModifier, ExpressionStatement, StringExpression, NamedMethodSignature } from "../LanguageWriters";
-import { PeerClass, PeerClassBase } from "../PeerClass";
-import { PeerMethod } from "../PeerMethod";
+import {
+    ExpressionStatement,
+    LanguageWriter,
+    Method,
+    MethodModifier,
+    NamedMethodSignature,
+    StringExpression
+} from "../LanguageWriters";
+import { PeerClassBase } from "../PeerClass";
 import { isDefined } from "../../util";
-import { callbackIdByInfo, canProcessCallback, convertToCallback } from "./EventsPrinter";
+import { callbackIdByInfo, canProcessCallback, convertIdlToCallback } from "./EventsPrinter";
 import { IdlPeerMethod } from "../idl/IdlPeerMethod";
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
 import { typeOrUnion } from "../idl/common";
-// import { ArgConvertor as IdlArgConvertor } from "../idl/IdlArgConvertors"
 import { ArgConvertor, UndefinedConvertor, UnionRuntimeTypeChecker } from '../ArgConvertors';
 import { Language } from "../../Language";
+import { ReferenceResolver } from "../ReferenceResolver";
 
 export function collapseSameNamedMethods(methods: Method[], selectMaxMethodArgs?: number[]): Method {
     if (methods.some(it => it.signature.defaults?.length))
@@ -37,13 +43,13 @@ export function collapseSameNamedMethods(methods: Method[], selectMaxMethodArgs?
         const types = methods.map(it => it.signature.args[argIndex]).filter(isDefined)
         const optional = methods.some(it => {
             if (argIndex < it.signature.args.length) {
-                return it.signature.args[argIndex].optional ?? false
+                return idl.isOptionalType(it.signature.args[argIndex]) ?? false
             } else {
                 return true
             }
         })
         if (types.length > 1) {
-            return idl.maybeOptional(idl.createUnionType(types), optional)
+            return idl.maybeOptional(idl.createUnionType(types, "%PROXY_BEFORE_PEER%"), optional)
         }
         return idl.maybeOptional(types[0], optional)
     })
@@ -61,15 +67,15 @@ export function collapseSameNamedMethods(methods: Method[], selectMaxMethodArgs?
 
 export function collapseIdlPeerMethods(library: IdlPeerLibrary, overloads: IdlPeerMethod[], selectMaxMethodArgs?: number[]): IdlPeerMethod {
     const method = collapseSameNamedMethods(overloads.map(it => it.method), selectMaxMethodArgs)
-    const maxArgsLength = Math.max(...overloads.map(it => it.declarationTargets.length))
-    const maxMethod = overloads.find(it => it.declarationTargets.length === maxArgsLength)!
+    const maxArgsLength = Math.max(...overloads.map(it => it.method.signature.args.length))
+    const maxMethod = overloads.find(it => it.method.signature.args.length === maxArgsLength)!
     const targets: idl.IDLType[] = Array.from({length: maxArgsLength}, (_, argIndex) => {
         if (selectMaxMethodArgs?.includes(argIndex))
-            return idl.entityToType(maxMethod.declarationTargets[argIndex])
+            return idl.entityToType(maxMethod.method.signature.args[argIndex])
         return typeOrUnion(overloads.flatMap(overload => {
-            if (overload.declarationTargets.length <= argIndex)
+            if (overload.method.signature.args.length <= argIndex)
                 return []
-            const target = idl.entityToType(overload.declarationTargets[argIndex])
+            const target = idl.entityToType(overload.method.signature.args[argIndex])
             if (idl.isUnionType(target))
                 return target.types
             return [target]
@@ -84,13 +90,11 @@ export function collapseIdlPeerMethods(library: IdlPeerLibrary, overloads: IdlPe
         return library.typeConvertor(
             method.signature.argName(index), 
             target, 
-            method.signature.args[index].optional, 
-            true
+            idl.isOptionalType(method.signature.args[index])
         )
     })
     return new IdlPeerMethod(
         overloads[0].originalParentName,
-        targets,
         typeConvertors,
         overloads[0].retConvertor,
         overloads[0].isCallSignature,
@@ -98,7 +102,7 @@ export function collapseIdlPeerMethods(library: IdlPeerLibrary, overloads: IdlPe
     )
 }
 
-export function groupOverloads<T extends PeerMethod | IdlPeerMethod>(peerMethods: T[]): T[][] {
+export function groupOverloads<T extends IdlPeerMethod>(peerMethods: T[]): T[][] {
     const seenNames = new Set<string>()
     const groups: T[][] = []
     for (const method of peerMethods) {
@@ -113,14 +117,14 @@ export function groupOverloads<T extends PeerMethod | IdlPeerMethod>(peerMethods
 export class OverloadsPrinter {
     private static undefinedConvertor: UndefinedConvertor | undefined
 
-    constructor(private printer: LanguageWriter, private language: Language, private isComponent: boolean = true) {
+    constructor(private resolver: ReferenceResolver, private printer: LanguageWriter, private language: Language, private isComponent: boolean = true) {
         // TODO: UndefinedConvertor is not known during static initialization because of cyclic dependencies
         if (!OverloadsPrinter.undefinedConvertor) {
             OverloadsPrinter.undefinedConvertor = new UndefinedConvertor("OverloadsPrinter")
         }
     }
 
-    printGroupedComponentOverloads(peer: PeerClassBase, peerMethods: (PeerMethod | IdlPeerMethod)[]) {
+    printGroupedComponentOverloads(peer: PeerClassBase, peerMethods: (IdlPeerMethod)[]) {
         const orderedMethods = Array.from(peerMethods)
             .sort((a, b) => b.argConvertors.length - a.argConvertors.length)
         const collapsedMethod = collapseSameNamedMethods(orderedMethods.map(it => it.method))
@@ -153,7 +157,7 @@ export class OverloadsPrinter {
         })
     }
 
-    printComponentOverloadSelector(peer: PeerClassBase, collapsedMethod: Method, peerMethod: PeerMethod | IdlPeerMethod, methodIndex: number, runtimeTypeCheckers: UnionRuntimeTypeChecker[]) {
+    printComponentOverloadSelector(peer: PeerClassBase, collapsedMethod: Method, peerMethod: IdlPeerMethod, methodIndex: number, runtimeTypeCheckers: UnionRuntimeTypeChecker[]) {
         const argsConditions = collapsedMethod.signature.args.map((_, argIndex) =>
             runtimeTypeCheckers[argIndex].makeDiscriminator(collapsedMethod.signature.argName(argIndex), methodIndex, this.printer))
         this.printer.print(`if (${this.printer.makeNaryOp("&&", argsConditions).asString()}) {`)
@@ -163,13 +167,13 @@ export class OverloadsPrinter {
         this.printer.print('}')
     }
 
-    private printPeerCallAndReturn(peer: PeerClassBase, collapsedMethod: Method, peerMethod: PeerMethod | IdlPeerMethod) {
+    private printPeerCallAndReturn(peer: PeerClassBase, collapsedMethod: Method, peerMethod: IdlPeerMethod) {
         const argsNames = peerMethod.argConvertors.map((conv, index) => {
             const argName = collapsedMethod.signature.argName(index)
             const castedArgName = `${argName}_casted`
             const castedType = peerMethod.method.signature.args[index]
             if (this.language == Language.ARKTS
-                && collapsedMethod.signature.args[index].optional) {
+                && idl.isOptionalType(collapsedMethod.signature.args[index])) {
                 this.printer.writeStatement(
                     this.printer.makeCondition(this.printer.makeNaryOp("==",
                             [this.printer.makeString(argName), this.printer.makeString("undefined")]),
@@ -177,7 +181,7 @@ export class OverloadsPrinter {
                     )
                 )
             }
-            this.printer.print(`const ${castedArgName} = ${argName} as (${this.printer.convert(castedType)})`)
+            this.printer.print(`const ${castedArgName} = ${argName} as (${this.printer.stringifyType(castedType)})`)
             return castedArgName
         })
         const isStatic = collapsedMethod.modifiers?.includes(MethodModifier.STATIC)
@@ -188,9 +192,9 @@ export class OverloadsPrinter {
         const methodName = `${peerMethod.overloadedName}${postfix}`
 
         if ([Language.TS].includes(this.language))
-            peerMethod.declarationTargets.map((target, index) => {
+            peerMethod.method.signature.args.forEach((target, index) => {
                 if (this.isComponent) { // TBD: Check for materialized classes
-                    const callback = convertToCallback(peer, peerMethod, target)
+                    const callback = convertIdlToCallback(this.resolver, peer, peerMethod, target)
                     if (!callback || !canProcessCallback(callback))
                         return
                     const argName = argsNames[index]

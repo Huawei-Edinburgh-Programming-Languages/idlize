@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { pointer } from "@koalaui/interop"
+import { pointer, nullptr } from "@koalaui/interop"
 
 export class Finalizable {
     public ptr: pointer
@@ -22,5 +22,11 @@ export class Finalizable {
     constructor(ptr: pointer, finalizerPtr: pointer) {
         this.ptr = ptr
         this.finalizerPtr = finalizerPtr
+    }
+
+    release(): pointer {
+        let result = this.ptr
+        this.ptr = nullptr
+        return result
     }
 }

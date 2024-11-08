@@ -14,32 +14,26 @@
  */
 
 import { capitalize, dropSuffix, isDefined } from "../../util";
-import { EnumConvertor} from "../Convertors";
 import { ArgConvertor } from "../ArgConvertors";
 import { PrimitiveType } from "../ArkPrimitiveType"
 import { bridgeCcCustomDeclaration, bridgeCcGeneratedDeclaration } from "../FileGenerators";
-import { createLanguageWriter, Method, NamedMethodSignature } from "../LanguageWriters";
-import { PeerLibrary } from "../PeerLibrary";
-import { PeerMethod } from "../PeerMethod";
-import { CUSTOM_API, CustomAPI } from "../CustomAPI"
+import { createLanguageWriter, createTypeNameConvertor, ExpressionStatement, Method, NamedMethodSignature } from "../LanguageWriters";
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
 import { IdlPeerMethod } from "../idl/IdlPeerMethod";
 import { Language } from "../../Language";
-import { getIDLTypeName, IDLBooleanType, IDLNumberType, IDLVoidType } from "../../idl";
-import { createEmptyReferenceResolver } from "../ReferenceResolver";
-
-//const VM_CONTEXT_TYPE = new Type(`${PeerGeneratorConfig.cppPrefix}Ark_VMContext`)
+import { forceAsNamedNode, IDLBooleanType, IDLNumberType, IDLVoidType } from "../../idl";
+import { getReferenceResolver } from "../ReferenceResolver";
 
 class BridgeCcVisitor {
-    readonly generatedApi = createLanguageWriter(Language.CPP, this.library instanceof IdlPeerLibrary ? this.library : createEmptyReferenceResolver())
-    readonly customApi = createLanguageWriter(Language.CPP, this.library instanceof IdlPeerLibrary ? this.library : createEmptyReferenceResolver())
+    readonly generatedApi = createLanguageWriter(Language.CPP, this.library)
+    readonly customApi = createLanguageWriter(Language.CPP, this.library)
 
     constructor(
-        private readonly library: PeerLibrary | IdlPeerLibrary,
+        private readonly library: IdlPeerLibrary,
         private readonly callLog: boolean,
     ) {}
 
-    private generateApiCall(method: PeerMethod | IdlPeerMethod, modifierName?: string): string {
+    private generateApiCall(method: IdlPeerMethod, modifierName?: string): string {
         // TODO: may be need some translation tables?
         let clazz = modifierName ?? dropSuffix(dropSuffix(dropSuffix(method.originalParentName, "Method"), "Attribute"), "Interface")
         return `get${capitalize(clazz)}${method.apiKind}()`
@@ -47,14 +41,15 @@ class BridgeCcVisitor {
 
     // TODO: may be this is another method of ArgConvertor?
     private generateApiArgument(argConvertor: ArgConvertor): string {
-        const prefix = argConvertor.isPointerType() ? `(const ${argConvertor.nativeType(false)}*)&`: "    "
+        const nameConverter = createTypeNameConvertor(Language.CPP, getReferenceResolver(this.library))
+        const prefix = argConvertor.isPointerType() ? `(const ${nameConverter.convertType(argConvertor.nativeType())}*)&`: "    "
         if (argConvertor.useArray)
             return `${prefix}${argConvertor.param}_value`
         else
             return `${argConvertor.convertorArg(argConvertor.param, this.generatedApi)}`
     }
 
-    private printAPICall(method: PeerMethod | IdlPeerMethod, modifierName?: string) {
+    private printAPICall(method: IdlPeerMethod, modifierName?: string) {
         const hasReceiver = method.hasReceiver()
         const argConvertors = method.argConvertors
         const isVoid = method.retConvertor.isVoid
@@ -69,7 +64,7 @@ class BridgeCcVisitor {
         this.generatedApi.print(call)
     }
 
-    private printNativeBody(method: PeerMethod | IdlPeerMethod, modifierName?: string) {
+    private printNativeBody(method: IdlPeerMethod, modifierName?: string) {
         this.generatedApi.pushIndent()
         if (method.hasReceiver()) {
             this.generatedApi.print(`${method.receiverType} self = reinterpret_cast<${method.receiverType}>(thisPtr);`)
@@ -82,8 +77,11 @@ class BridgeCcVisitor {
                     deserializerCreated = true
                 }
                 let result = `${it.param}_value`
-                this.generatedApi.print(`${it.nativeType(false)} ${result};`)
-                this.generatedApi.writeStatement(it.convertorDeserialize(`this`, result, this.generatedApi))
+                this.generatedApi.writeStatement(it.convertorDeserialize(`${result}_buf`, `thisDeserializer`, (expr) => {
+                    return new ExpressionStatement(this.generatedApi.makeString(
+                        `${this.generatedApi.stringifyType(it.nativeType())} ${result} = ${expr.asString()};`
+                    ))
+                }, this.generatedApi))
             }
         })
         this.printAPICall(method, modifierName)
@@ -92,7 +90,7 @@ class BridgeCcVisitor {
 
     private static varCnt : number = 0;
 
-    private printCallLog(method: PeerMethod | IdlPeerMethod, api: string, modifier: string) {
+    private printCallLog(method: IdlPeerMethod, api: string, modifier: string) {
         this.generatedApi.print(`if (needGroupedLog(2)) {`)
         this.generatedApi.pushIndent()
         this.generatedApi.print('std::string _logData;')
@@ -104,7 +102,7 @@ class BridgeCcVisitor {
             let name = this.generateApiArgument(it) // it.param + '_value'
             this.generatedApi.print(`_tmp = "", WriteToString(&_tmp, ${name});`)
             varNames.push(`var${BridgeCcVisitor.varCnt}`)
-            let ptrType = it instanceof EnumConvertor ? `const ${it.nativeType(false).replace("enum ", "")}` : `const ${it.nativeType(false)}`
+            let ptrType = `const ${forceAsNamedNode(it.nativeType()).name}`
             this.generatedApi.print(`_logData.append("  ${ptrType} ${varNames[i]}_" + std::to_string(_num) + " = " + _tmp + ";\\n");`)
             BridgeCcVisitor.varCnt += 1
         }
@@ -117,7 +115,8 @@ class BridgeCcVisitor {
                 this.generatedApi.print(`_logData.append(", ");`)
         }
         method.argConvertors.forEach((it, index) => {
-            if (it.nativeType(false) != "Ark_Number"
+            const type = it.nativeType()
+            if ('name' in type && type.name === "Number"
                 && (it.idlType === IDLNumberType || it.idlType === IDLBooleanType)) {
                 this.generatedApi.print(`_logData.append("${varNames[index]}_" + std::to_string(_num));`)
             } else {
@@ -150,7 +149,7 @@ class BridgeCcVisitor {
         return receiver
     }
 
-    private generateCMacroSuffix(method: PeerMethod | IdlPeerMethod): string {
+    private generateCMacroSuffix(method: IdlPeerMethod): string {
         let counter = method.hasReceiver() ? 1 : 0
         let arrayAdded = false
         method.argConvertors.forEach(it => {
@@ -166,7 +165,7 @@ class BridgeCcVisitor {
         return `${method.retConvertor.macroSuffixPart()}${counter}`
     }
 
-    private generateCParameters(method: PeerMethod | IdlPeerMethod, argConvertors: ArgConvertor[]): string[] {
+    private generateCParameters(method: IdlPeerMethod, argConvertors: ArgConvertor[]): string[] {
         let maybeReceiver = method.hasReceiver() ? [`${PrimitiveType.NativePointer.getText()} thisPtr`] : []
         let ptrCreated = false;
         for (let i = 0; i < argConvertors.length; ++i) {
@@ -192,18 +191,21 @@ class BridgeCcVisitor {
         return maybeReceiver
     }
 
-    private printMethod(method: PeerMethod | IdlPeerMethod, modifierName?: string) {
+    private printMethod(method: IdlPeerMethod, modifierName?: string) {
         const retConvertor = method.retConvertor
         const argConvertors = method.argConvertors
 
         let cName = `${method.originalParentName}_${method.overloadedName}`
-        let rv = retConvertor.nativeType()
-        this.generatedApi.print(`${retConvertor.nativeType()} impl_${cName}(${this.generateCParameters(method, argConvertors).join(", ")}) {`)
+        let retValue: string | undefined = retConvertor.interopType
+            ? retConvertor.interopType()
+            : retConvertor.nativeType()
+        this.generatedApi.print(`${retValue} impl_${cName}(${this.generateCParameters(method, argConvertors).join(", ")}) {`)
         this.generatedApi.pushIndent()
         this.printNativeBody(method, modifierName)
         this.generatedApi.popIndent()
         this.generatedApi.print(`}`)
-        let macroArgs = [cName, method.maybeCRetType(retConvertor)].concat(this.generateCParameterTypes(argConvertors, method.hasReceiver()))
+        retValue = retConvertor.isVoid ? undefined : retValue
+        let macroArgs = [cName, retValue].concat(this.generateCParameterTypes(argConvertors, method.hasReceiver()))
             .filter(isDefined)
             .join(", ")
         const suffix = this.generateCMacroSuffix(method)
@@ -211,6 +213,7 @@ class BridgeCcVisitor {
         this.generatedApi.print(` `)
     }
 
+    /* 
     printCustomApiMethod(c: CustomAPI, m: Method) {
         const sig = m.signature as NamedMethodSignature
         const capitalizedName = capitalize(m.name)
@@ -225,10 +228,10 @@ class BridgeCcVisitor {
                 const type = c.getCastType(it)
                 const name = sig.argsNames[index];
                 let castName = name
-                if (getIDLTypeName(c.getArgType(it)) !== getIDLTypeName(type)) {
+                if (forceAsNamedNode(c.getArgType(it)).name !== forceAsNamedNode(type).name) {
                     castName = `${name}Cast`
-                    const cast = getIDLTypeName(it).endsWith("Enum") ? `${getIDLTypeName(type)}(${name})` : `(${getIDLTypeName(type)}) ${name}`
-                    this.customApi.print(`${getIDLTypeName(type)} ${castName} = ${cast};`)
+                    const cast = forceAsNamedNode(it).name.endsWith("Enum") ? `${forceAsNamedNode(type).name}(${name})` : `(${forceAsNamedNode(type).name}) ${name}`
+                    this.customApi.print(`${forceAsNamedNode(type).name} ${castName} = ${cast};`)
                 }
                 castNames = castNames.concat(castName)
             })
@@ -241,8 +244,9 @@ class BridgeCcVisitor {
         args = sig.returnType === IDLVoidType ? args : [retType, ...args]
         const comma = args.length > 0 ? ", " : ""
         const CTX = c.withContext ? "_CTX" : ""
-        this.customApi.print(`KOALA_INTEROP${CTX}_${v}${size}(${capitalizedName}${comma}${args.map(it => getIDLTypeName(it)).join(", ")})\n`)
+        this.customApi.print(`KOALA_INTEROP${CTX}_${v}${size}(${capitalizedName}${comma}${args.map(it => forceAsNamedNode(it).name).join(", ")})\n`)
     }
+    */
 
     print(): void {
         for (const file of this.library.files) {
@@ -260,22 +264,24 @@ class BridgeCcVisitor {
             }
         }
 
+        /* 
         this.customApi.print("\n// custom API methods\n")
         for(const customApi of CUSTOM_API) {
             for(const method of customApi.methods) {
                 this.printCustomApiMethod(customApi, method)
             }
         }
+        */
     }
 }
 
-export function printBridgeCcGenerated(peerLibrary: PeerLibrary | IdlPeerLibrary, callLog: boolean): string {
+export function printBridgeCcGenerated(peerLibrary: IdlPeerLibrary, callLog: boolean): string {
     const visitor = new BridgeCcVisitor(peerLibrary, callLog)
     visitor.print()
     return bridgeCcGeneratedDeclaration(visitor.generatedApi.getOutput())
 }
 
-export function printBridgeCcCustom(peerLibrary: PeerLibrary | IdlPeerLibrary, callLog: boolean): string {
+export function printBridgeCcCustom(peerLibrary: IdlPeerLibrary, callLog: boolean): string {
     const visitor = new BridgeCcVisitor(peerLibrary, callLog)
     visitor.print()
     return bridgeCcCustomDeclaration(visitor.customApi.getOutput())

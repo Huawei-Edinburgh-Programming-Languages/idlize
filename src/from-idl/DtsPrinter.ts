@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 import { indentedBy, stringOrNone, zip } from "../util"
-import { IDLCallback, IDLConstructor, IDLEntity, IDLEntry, IDLEnum, IDLInterface, IDLKind, IDLMethod, IDLModuleType, IDLParameter, IDLProperty, IDLType, IDLTypedef, getExtAttribute,
+import { IDLCallback, IDLConstructor, IDLEntity, IDLEntry, IDLEnum, IDLInterface, IDLKind, IDLMethod, IDLModule, IDLParameter, IDLProperty, IDLType, IDLTypedef, getExtAttribute,
     getVerbatimDts,
     hasExtAttribute,
     isCallback,
@@ -35,22 +35,27 @@ import { IDLCallback, IDLConstructor, IDLEntity, IDLEntry, IDLEnum, IDLInterface
     IDLCallable,
     IDLSignature,
     IDLAnyType,
-    getIDLTypeName,
-    isIDLTypeName,
     IDLContainerUtils,
     IDLContainerType,
     DebugUtils,
-    isType,
-    createReferenceType,} from "../idl"
+    IDLConstant,
+    createReferenceType,
+    transformMethodsAsync2ReturnPromise,
+    forceAsNamedNode,
+    isNamedNode,
+    IDLNode,
+    IDLThisType,} from "../idl"
 import * as webidl2 from "webidl2"
 import { resolveSyntheticType, toIDLNode } from "./deserialize"
+import { Language } from "../Language"
 
 export class CustomPrintVisitor {
-    constructor(private resolver: (type: IDLReferenceType) => IDLEntry | undefined) {}
+    constructor(private resolver: (type: IDLReferenceType) => IDLEntry | undefined, private language: Language) {}
     output: string[] = []
     currentInterface?: IDLInterface
 
     visit(node: IDLEntry) {
+        if (hasExtAttribute(node, IDLExtendedAttributes.TSType) && this.language == Language.TS) return
         if (isSyntheticEntry(node)) {
             return
         } else if (isInterface(node) || isAnonymousInterface(node) || isTupleInterface(node) || isClass(node)) {
@@ -90,6 +95,10 @@ export class CustomPrintVisitor {
             this.print(exports)
     }
 
+    printConstant(node: IDLConstant) {
+        this.print(`export declare const ${node.name} : ${isPrimitiveType(node.type) ? "" : "typeof"} ${this.printTypeForTS(node.type)} = ${node.value}`)
+    }
+
     printInterface(node: IDLInterface) {
         const namespace = getExtAttribute(node, IDLExtendedAttributes.Namespace)?.split(",").reverse()
         this.openNamespace(namespace)
@@ -110,6 +119,7 @@ export class CustomPrintVisitor {
             // restore globalScope
             if (hasExtAttribute(node,IDLExtendedAttributes.GlobalScope)) {
                 node.methods.map(it => this.printMethod(it, true))
+                node.constants.map(it => this.printConstant(it))
                 return
             }
             let interfaces = node.inheritance
@@ -126,12 +136,12 @@ export class CustomPrintVisitor {
                 keyword = "implements"
             }
             if (interfaces.length > 0) {
+            // todo: check node.inheritance[0] != IDLTopType
                 const interfaceList = zip(interfaces, parentTypeArgs ?? new Array(interfaces.length))
-                    .map(([iface, typeArg]) => getIDLTypeName(iface) + (typeArg ? `<${typeArg}>` : ""))
+                    .map(([iface, typeArg]) => forceAsNamedNode(iface).name + (typeArg ? `<${typeArg}>` : ""))
                     .join(", ")
                 typeSpec += ` ${keyword} ${interfaceList}`
             }
-            let isExport = hasExtAttribute(node, IDLExtendedAttributes.Export)
             this.print(`${namespace ? "" : "declare "}${entity!.toLowerCase()} ${typeSpec} {`)
             this.currentInterface = node
             this.pushIndent()
@@ -164,11 +174,10 @@ export class CustomPrintVisitor {
         const typeParams = typeParamsAttr ? `<${typeParamsAttr}>` : ""
         let preamble = ""
         if (!isCallable(node)) {
-            const isExport = hasExtAttribute(node, IDLExtendedAttributes.Export)
             const isStatic = isMethod(node) && node.isStatic
             const isProtected = hasExtAttribute(node, IDLExtendedAttributes.Protected)
             const isOptional = isMethod(node) && node.isOptional
-            preamble = `${isGlobal ? `${isExport ? "export ": ""}${namespace ? "" : "declare "}function `: ""}${isProtected ? "protected " : ""}${isStatic ? "static " : ""}${name}${isOptional ?"?":""}`
+            preamble = `${isGlobal ? `${namespace ? "" : "declare "}function `: ""}${isProtected ? "protected " : ""}${isStatic ? "static " : ""}${name}${isOptional ?"?":""}`
         }
         this.print(`${preamble}${typeParams}(${mixMethodParametersAndTags(node).map(p => this.paramText(p)).join(", ")})${returnType};`)
         this.closeNamespace(namespace)
@@ -201,8 +210,7 @@ export class CustomPrintVisitor {
     printEnum(node: IDLEnum) {
         const namespace = getExtAttribute(node, IDLExtendedAttributes.Namespace)?.split(",").reverse()
         this.openNamespace(namespace)
-        let isExport = hasExtAttribute(node, IDLExtendedAttributes.Export)
-        this.print(`${isExport ? "export ": ""}${namespace ? "" : "declare "}enum ${node.name} {`)
+        this.print(`declare enum ${node.name} {`)
         this.pushIndent()
         node.elements.forEach(it => {
             const initializer = it.initializer
@@ -226,15 +234,14 @@ export class CustomPrintVisitor {
             }
         }
         const text = isCallback(node) ? this.callback(node)
-            : hasExtAttribute(node, IDLExtendedAttributes.Import) ? getIDLTypeName(IDLAnyType)
+            : hasExtAttribute(node, IDLExtendedAttributes.Import) ? IDLAnyType.name
             : this.printTypeForTS(node.type)
-        let isExport = hasExtAttribute(node, IDLExtendedAttributes.Export)
         const typeParamsAttr = getExtAttribute(node, IDLExtendedAttributes.TypeParameters)
         const typeParams = typeParamsAttr ? `<${typeParamsAttr}>` : ""
-        this.print(`${isExport ? "export ": ""}declare type ${getName(node)}${typeParams} = ${text};`)
+        this.print(`declare type ${getName(node)}${typeParams} = ${text};`)
     }
 
-    printModuleType(node: IDLModuleType) {
+    printModuleType(node: IDLModule) {
         let text = getVerbatimDts(node) ?? ""
         this.print(`${text}`)
     }
@@ -298,10 +305,11 @@ export class CustomPrintVisitor {
         if (!type) throw new Error("Missing type")
         if (type === IDLUndefinedType && undefinedToVoid) return "void"
         if (type === IDLStringType) return "string"
-        if (isCommonMethod && isIDLTypeName(type, "this")) return "T"
+        // if (isCommonMethod && forceAsNamedNode(type).name == "this") return "T"
+        if (type === IDLThisType) return "T"
         if (type === IDLNullType) return "null"
         if (type === IDLVoidType) return "void"
-        if (isPrimitiveType(type)) return getIDLTypeName(type)
+        if (isPrimitiveType(type)) return type.name
         if (isContainerType(type)) {
             if (!sequenceToArrayInterface && IDLContainerUtils.isSequence(type))
                 return `${type.elementType.map(it => this.printTypeForTS(it)).join(",")}[]`
@@ -309,11 +317,11 @@ export class CustomPrintVisitor {
         }
         if (isReferenceType(type)) return this.toTypeName(type, IDLExtendedAttributes.TypeArguments)
         if (isUnionType(type)) return `(${type.types.map(it => this.printTypeForTS(it)).join("|")})`
-        if (isTypeParameterType(type)) return getIDLTypeName(type)
+        if (isTypeParameterType(type)) return type.name
         throw new Error(`Cannot map type: ${IDLKind[type.kind]}`)
     }
 
-    private toTypeName(node: IDLEntry, typeAttribute: IDLExtendedAttributes): string {
+    private toTypeName(node: IDLNode, typeAttribute: IDLExtendedAttributes): string {
         if (isReferenceType(node)) {
             const synthDecl = this.resolver(node)
             if (synthDecl && isSyntheticEntry(synthDecl)) {
@@ -327,9 +335,9 @@ export class CustomPrintVisitor {
             }
         }
         if (hasExtAttribute(node, IDLExtendedAttributes.Import)) {
-            return getIDLTypeName(IDLAnyType)
+            return IDLAnyType.name
         }
-        let typeSpec = (isType(node) ? getIDLTypeName(node) : node.name) ?? "MISSING_TYPE_NAME"
+        let typeSpec = isNamedNode(node) ? node.name : "MISSING_TYPE_NAME"
         const typeParams = getExtAttribute(node, typeAttribute)
         if (typeParams) {
             typeSpec = `${typeSpec}<${typeParams}>`
@@ -357,10 +365,13 @@ export class CustomPrintVisitor {
 }
 
 export function idlToString(name: string, content: string): string {
-    let printer = new CustomPrintVisitor(resolveSyntheticType)
+    let printer = new CustomPrintVisitor(resolveSyntheticType, Language.TS)
     webidl2.parse(content)
         .map(it => toIDLNode(name, it))
-        .map(it => printer.visit(it))
+        .forEach(it => {
+            transformMethodsAsync2ReturnPromise(it)
+            printer.visit(it)
+        })
     return printer.output.join("\n")
 }
 

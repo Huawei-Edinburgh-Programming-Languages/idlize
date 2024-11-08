@@ -13,9 +13,10 @@
  * limitations under the License.
  */
 import { float32, float64, int32, int8 } from "@koalaui/common"
-import { pointer, KUint8ArrayPtr, KBuffer, ResourceId, ResourceManager } from "@koalaui/interop"
+import { pointer, KUint8ArrayPtr, KBuffer, ResourceId, ResourceHolder } from "@koalaui/interop"
 import { CallbackKind } from "./CallbackKind"
-import { Length, Resource } from "../ArkUnitsInterfaces"
+import { Length } from "../ArkUnitsInterfaces"
+import { Resource } from "../ArkResourceInterfaces"
 import { NativeModule } from "#components"
 
 /**
@@ -73,11 +74,6 @@ function registerMaterialized(value: Object): int32 {
     return 42
 }
 
-export function isPixelMap(value: Object|undefined): boolean {
-    // TODO: fix me!
-    return false
-}
-
 export function isResource(value: Object|undefined): boolean {
     // TODO: fix me!
     return false
@@ -106,9 +102,7 @@ export abstract class CustomSerializer {
 }
 
 export class SerializerBase {
-    private static cache: SerializerBase | undefined = undefined
-
-    private isHolding: boolean = false
+    protected isHolding: boolean = false
     private position = 0
     private buffer: KBuffer
 
@@ -128,15 +122,6 @@ export class SerializerBase {
 
     constructor() {
         this.buffer = new KBuffer(96)
-    }
-    static hold<T extends SerializerBase>(factory: () => T): T {
-        if (SerializerBase.cache === undefined)
-            SerializerBase.cache = factory()
-        const serializer = SerializerBase.cache!
-        if (serializer.isHolding)
-            throw new Error("Serializer is already being held. Check if you had released is before")
-        serializer.isHolding = true
-        return serializer as T
     }
     public release() {
         this.isHolding = false
@@ -167,7 +152,7 @@ export class SerializerBase {
     }
     private heldResources: Array<ResourceId> = new Array<ResourceId>()
     holdAndWriteCallback(callback: object, kind: CallbackKind) {
-        const resourceId = ResourceManager.registerAndHold(callback)
+        const resourceId = ResourceHolder.instance().registerAndHold(callback)
         this.heldResources.push(resourceId)
         this.writeInt32(resourceId)
         this.writePointer(0)
@@ -180,13 +165,13 @@ export class SerializerBase {
         this.writePointer(resource.release)
     }
     writeResource(resource: object) {
-        const resourceId = ResourceManager.registerAndHold(resource)
+        const resourceId = ResourceHolder.instance().registerAndHold(resource)
         this.heldResources.push(resourceId)
         this.writeInt32(resourceId)
     }
     private releaseResources() {
         for (const resourceId of this.heldResources)
-            ResourceManager.release(resourceId)
+            ResourceHolder.instance().release(resourceId)
         // todo think about effective array clearing/pushing
         this.heldResources = new Array<ResourceId>()
     }

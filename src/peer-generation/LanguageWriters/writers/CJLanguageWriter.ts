@@ -13,25 +13,34 @@
  * limitations under the License.
  */
 
-import { DebugUtils, getIDLTypeName, IDLBooleanType, IDLCallback, IDLContainerType, IDLContainerUtils, IDLF32Type, IDLF64Type, IDLI16Type, IDLI32Type, IDLI64Type, IDLI8Type, IDLNumberType, IDLParameter, IDLPointerType, IDLPrimitiveType, IDLReferenceType, IDLStringType, IDLType, IDLU16Type, IDLU32Type, IDLU64Type, IDLU8Type, IDLVoidType, isContainerType, isPrimitiveType, toIDLType } from "../../../idl"
+import * as idl from "../../../idl"
+import { IDLNumberType, IDLType, toIDLType } from "../../../idl"
 import { IndentedPrinter } from "../../../IndentedPrinter"
 import { Language } from "../../../Language"
 import { CJKeywords } from "../../../languageSpecificKeywords"
 import { isDefined } from "../../../util"
 import { ArgConvertor, BaseArgConvertor, RuntimeType } from "../../ArgConvertors"
-import { EnumConvertor as EnumConvertorDTS, MapConvertor } from "../../Convertors"
-import { FieldRecord } from "../../DeclarationTable"
-import * as idl from '../../../idl'
 import { EnumConvertor } from "../../idl/IdlArgConvertors"
 import { EnumEntity } from "../../PeerFile"
 import { ReferenceResolver } from "../../ReferenceResolver"
-import { mapType } from "../../TypeNodeNameConvertor"
-import { AssignStatement, ExpressionStatement, FieldModifier, LambdaExpression, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, ObjectArgs, ReturnStatement } from "../LanguageWriter"
-import { TSCastExpression, TsObjectAssignStatement, TsObjectDeclareStatement, TsTupleAllocStatement } from "./TsLanguageWriter"
-import { cjCustomTypeMapping, convertCJOptional } from "../../printers/lang/Cangjie"
-import { ARK_CUSTOM_OBJECT } from "../../printers/lang/Java"
-import { IdlTypeNameConvertor } from "../typeConvertor"
-import { CJIDLTypeToForeignStringConvertor, CJIDLTypeToStringConvertor } from "../convertors/CJConvertors"
+import {
+    AssignStatement,
+    ExpressionStatement,
+    FieldModifier,
+    LambdaExpression,
+    LanguageExpression,
+    LanguageStatement,
+    LanguageWriter,
+    MakeCastOptions,
+    Method,
+    MethodModifier,
+    MethodSignature,
+    ObjectArgs,
+    ReturnStatement
+} from "../LanguageWriter"
+import { TSCastExpression, TsTupleAllocStatement } from "./TsLanguageWriter"
+import { IdlNameConvertor } from "../nameConvertor"
+import { CJIDLTypeToForeignStringConvertor, CJIDLNodeToStringConvertor } from "../convertors/CJConvertors"
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -49,7 +58,7 @@ class CJLambdaExpression extends LambdaExpression {
         return true
     }
     asString(): string {
-        const params = this.signature.args.map((it, i) => `${this.writer.convert(it)} ${this.signature.argName(i)}`)
+        const params = this.signature.args.map((it, i) => `${this.writer.stringifyType(it)} ${this.signature.argName(i)}`)
         return `(${params.join(", ")}) -> { ${this.bodyAsString()} }`
     }
 }
@@ -76,7 +85,7 @@ export class CJAssignStatement extends AssignStatement {
 
         write(writer: LanguageWriter): void {
             if (this.isDeclared) {
-                const typeSpec = this.type ? ': ' + writer.convert(this.type) : ''
+                const typeSpec = this.type ? ': ' + writer.stringifyType(this.type) : ''
                 writer.print(`${this.isConst ? "let" : "var"} ${this.variableName}${typeSpec} = ${this.expression.asString()}`)
             } else {
                 writer.print(`${this.variableName} = ${this.expression.asString()}`)
@@ -126,24 +135,32 @@ export class CJEnumEntityStatement implements LanguageStatement {
     }
 }
 
+class CJThrowErrorStatement implements LanguageStatement {
+    constructor(public message: string) { }
+    write(writer: LanguageWriter): void {
+        writer.print(`throw Exception("${this.message}")`)
+    }
+}
+
+
 ////////////////////////////////////////////////////////////////
 //                           WRITER                           //
 ////////////////////////////////////////////////////////////////
 
 export class CJLanguageWriter extends LanguageWriter {
-    protected typeConvertor: IdlTypeNameConvertor
-    protected typeForeignConvertor: IdlTypeNameConvertor
+    protected typeConvertor: IdlNameConvertor
+    protected typeForeignConvertor: IdlNameConvertor
     constructor(printer: IndentedPrinter, resolver:ReferenceResolver, language: Language = Language.CJ) {
         super(printer, resolver, language)
-        this.typeConvertor = new CJIDLTypeToStringConvertor(this.resolver)
+        this.typeConvertor = new CJIDLNodeToStringConvertor(this.resolver)
         this.typeForeignConvertor = new CJIDLTypeToForeignStringConvertor(this.resolver)
     }
     fork(): LanguageWriter {
         return new CJLanguageWriter(new IndentedPrinter(), this.resolver)
     }
 
-    convert(type: idl.IDLType | idl.IDLCallback): string {
-        return this.typeConvertor.convert(type)
+    stringifyType(type: idl.IDLType): string {
+        return this.typeConvertor.convertType(type)
     }
 
     writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string, interfaces?: string[], generics?: string[]): void {
@@ -196,13 +213,13 @@ export class CJLanguageWriter extends LanguageWriter {
         const init = initExpr != undefined ? ` = ${initExpr.asString()}` : ``
         name = this.escapeKeyword(name)
         let prefix = this.makeFieldModifiersList(modifiers)
-        this.printer.print(`${prefix} var ${name}: ${optional ? '?' : ''}${this.convert(type)}${init}`)
+        this.printer.print(`${prefix} var ${name}: ${optional ? '?' : ''}${this.stringifyType(type)}${init}`)
     }
     writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void {
         this.writeDeclaration(name, signature, modifiers)
     }
     writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method, modifiers?: MethodModifier[]) {
-        this.printer.print(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') + ' ' : ''}${className}(${signature.args.map((it, index) => `${signature.argName(index)}: ${it.optional ? '?' : ''}${this.convert(it)}`).join(", ")}) {`)
+        this.printer.print(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') + ' ' : ''}${className}(${signature.args.map((it, index) => `${signature.argName(index)}: ${idl.isOptionalType(it) ? '?' : ''}${this.stringifyType(it)}`).join(", ")}) {`)
         this.pushIndent()
         if (superCall) {
             this.print(`super(${superCall.signature.args.map((_, i) => superCall?.signature.argName(i)).join(", ")});`)
@@ -212,7 +229,7 @@ export class CJLanguageWriter extends LanguageWriter {
         this.printer.print(`}`)
     }
     writeProperty(propName: string, propType: idl.IDLType, mutable?: boolean, getterLambda?: (writer: LanguageWriter) => void, setterLambda?: (writer: LanguageWriter) => void) {
-        this.print(`${mutable ? "mut " : ""}prop ${propName}: ${propType.optional ? '?' : ''}${this.convert(propType)} {`)
+        this.print(`${mutable ? "mut " : ""}prop ${propName}: ${idl.isOptionalType(propType) ? '?' : ''}${this.stringifyType(propType)} {`)
         this.pushIndent()
         this.print(`get() {`)
         this.pushIndent()
@@ -243,17 +260,14 @@ export class CJLanguageWriter extends LanguageWriter {
             ?.filter(it => this.supportedModifiers.includes(it))
             .map(it => this.mapMethodModifier(it)).join(" ")
         prefix = prefix ? prefix + " " : ""
-        this.print(`${prefix}func ${name}(${signature.args.map((it, index) => `${signature.argName(index)}: ${it.optional ? '?' : ''}${this.convert(it)}`).join(", ")}): ${this.convert(signature.returnType)}${postfix ?? ""}`)
+        this.print(`${prefix}func ${name}(${signature.args.map((it, index) => `${signature.argName(index)}: ${idl.isOptionalType(it) ? '?' : ''}${this.stringifyType(it)}`).join(", ")}): ${this.stringifyType(signature.returnType)}${postfix ?? ""}`)
     }
     nativeReceiver(): string { return 'NativeModule' }
     writeNativeFunctionCall(printer: LanguageWriter, name: string, signature: MethodSignature) {
         printer.print(`return unsafe { ${name}(${signature.args.map((it, index) => `${signature.argName(index)}`).join(", ")}) }`)
     }
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
-        this.print(`func ${name}(${signature.args.map((it, index) => `${this.escapeKeyword(signature.argName(index))}: ${it.optional ? '?' : ''}${this.typeForeignConvertor.convert(it)}`).join(", ")}): ${this.typeForeignConvertor.convert(signature.returnType)}`)
-    }
-    override makeCastEnumToInt(convertor: EnumConvertorDTS, enumName: string, _unsafe?: boolean): string {
-        return `${enumName}.getIntValue()`
+        this.print(`func ${name}(${signature.args.map((it, index) => `${this.escapeKeyword(signature.argName(index))}: ${idl.isOptionalType(it) ? '?' : ''}${this.typeForeignConvertor.convertType(it)}`).join(", ")}): ${this.typeForeignConvertor.convertType(signature.returnType)}`)
     }
     override makeEnumCast(enumName: string, _unsafe: boolean, _convertor: EnumConvertor | undefined): string {
         // TODO: remove after switching to IDL
@@ -261,6 +275,15 @@ export class CJLanguageWriter extends LanguageWriter {
     }
     makeAssign(variableName: string, type: IDLType | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
         return new CJAssignStatement(variableName, type, expr, isDeclared, isConst)
+    }
+    makeClassInit(type: idl.IDLType, paramenters: LanguageExpression[]): LanguageExpression {
+        throw new Error(`TBD`)
+    }
+    makeArrayInit(type: idl.IDLContainerType): LanguageExpression {
+        throw new Error(`TBD`)
+    }
+    makeMapInit(type: idl.IDLType): LanguageExpression {
+        throw new Error(`TBD`)
     }
     makeArrayLength(array: string, length?: string): LanguageExpression {
         return this.makeString(`${array}.size`)
@@ -273,10 +296,13 @@ export class CJLanguageWriter extends LanguageWriter {
         return new CJLambdaExpression(this, signature, this.resolver, body)
     }
     makeThrowError(message: string): LanguageStatement {
-        throw new Error(`TBD`)
+        return new CJThrowErrorStatement(message)
     }
     makeReturn(expr: LanguageExpression): LanguageStatement {
         return new ReturnStatement(expr)
+    }
+    makeCheckOptional(optional: LanguageExpression, doStatement: LanguageStatement): LanguageStatement {
+        throw new Error(`TBD`)
     }
     makeStatement(expr: LanguageExpression): LanguageStatement {
         return new ExpressionStatement(expr)
@@ -290,8 +316,8 @@ export class CJLanguageWriter extends LanguageWriter {
     writePrintLog(message: string): void {
         this.print(`println("${message}")`)
     }
-    makeCast(value: LanguageExpression, type: IDLType, unsafe = false): LanguageExpression {
-        return new TSCastExpression(value, this.convert(type), unsafe)
+    makeCast(value: LanguageExpression, type: IDLType, options?:MakeCastOptions): LanguageExpression {
+        return new TSCastExpression(value, this.stringifyType(type), options?.unsafe ?? false)
     }
     getObjectAccessor(convertor: BaseArgConvertor, value: string, args?: ObjectArgs): string {
         return `${value}`
@@ -312,35 +338,9 @@ export class CJLanguageWriter extends LanguageWriter {
     makeTupleAlloc(option: string): LanguageStatement {
         return new TsTupleAllocStatement(option)
     }
-    makeObjectAlloc(object: string, fields: readonly FieldRecord[]): LanguageStatement {
-        if (fields.length > 0) {
-            return this.makeAssign(object, undefined,
-                this.makeCast(this.makeString("{}"),
-                   toIDLType(`{${fields.map(it=>`${it.name}: ${mapType(it.type)}`).join(",")}}`)),
-                false)
-        }
-        return new TsObjectAssignStatement(object, undefined, false)
-    }
-    makeMapResize(mapType: string, keyType: IDLType, valueType: IDLType, map: string, size: string, deserializer: string): LanguageStatement {
-        return this.makeAssign(
-            map, 
-            undefined, 
-            this.makeString(`new Map<${this.convert(keyType)}, ${this.convert(valueType)}>()`), 
-            false
-        )
-    }
-    makeMapKeyTypeName(c: MapConvertor): IDLType {
-        return c.keyConvertor.idlType;
-    }
-    makeMapValueTypeName(c: MapConvertor): IDLType {
-        return c.valueConvertor.idlType;
-    }
     makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement {
         // keyAccessor and valueAccessor are equal in TS
         return this.makeStatement(this.makeMethodCall(keyAccessor, "set", [this.makeString(key), this.makeString(value)]))
-    }
-    makeObjectDeclare(name: string, type: IDLType, fields: readonly FieldRecord[]): LanguageStatement {
-        return new TsObjectDeclareStatement(name, type, fields)
     }
     getTagType(): IDLType {
         return toIDLType("Tags");
@@ -370,10 +370,10 @@ export class CJLanguageWriter extends LanguageWriter {
     makeTupleAccess(value: string, index: number): LanguageExpression {
         return this.makeString(`${value}.value${index}`)
     }
-    enumFromOrdinal(value: LanguageExpression, enumType: string): LanguageExpression {
+    enumFromOrdinal(value: LanguageExpression, _: idl.IDLEnum): LanguageExpression {
         throw new Error('Not yet implemented')
     }
-    ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression {
+    ordinalFromEnum(value: LanguageExpression, _: idl.IDLEnum): LanguageExpression {
         throw new Error('Not yet implemented')
     }
     makeEnumEntity(enumEntity: EnumEntity, isExport: boolean): LanguageStatement {
@@ -382,9 +382,6 @@ export class CJLanguageWriter extends LanguageWriter {
     runtimeType(param: ArgConvertor, valueType: string, value: string) {
         this.writeStatement(this.makeAssign(valueType, undefined,
             this.makeRuntimeTypeGetterCall(value), false))
-    }
-    makeSerializerCreator() {
-        return this.makeString('createSerializer');
     }
     escapeKeyword(word: string): string {
         return CJKeywords.has(word) ? word + "_" : word

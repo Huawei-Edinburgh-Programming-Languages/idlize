@@ -16,20 +16,21 @@
 import * as idl from "../../idl"
 import { Language } from "../../Language"
 import { PrimitiveType } from "../ArkPrimitiveType"
-import { convertDeclaration, convertType, DeclarationConvertor, TypeConvertor } from "../LanguageWriters/typeConvertor"
+import { convertDeclaration, convertType, DeclarationConvertor, TypeConvertor } from "../LanguageWriters/nameConvertor"
+import { IdlPeerLibrary } from "./IdlPeerLibrary"
 
-export function isDeclaration(node: idl.IDLEntry): boolean {
-    return idl.isClass(node) || idl.isInterface(node) || idl.isAnonymousInterface(node) || idl.isTupleInterface(node)
-        || idl.isEnum(node) || idl.isEnumMember(node) || idl.isCallback(node) || idl.isTypedef(node)
-}
+// export function isDeclaration(node: idl.IDLNode): boolean {
+//     return idl.isClass(node) || idl.isInterface(node) || idl.isAnonymousInterface(node) || idl.isTupleInterface(node)
+//         || idl.isEnum(node) || idl.isEnumMember(node) || idl.isCallback(node) || idl.isTypedef(node)
+// }
 
-export function convert<T>(node: idl.IDLEntry, typeConvertor: TypeConvertor<T>, declConvertor: DeclarationConvertor<T>): T {
-    return isDeclaration(node)
+export function convert<T>(node: idl.IDLNode, typeConvertor: TypeConvertor<T>, declConvertor: DeclarationConvertor<T>): T {
+    return idl.isEntry(node)
         ? convertDeclaration(declConvertor, node)
         : convertType(typeConvertor, node as idl.IDLType)
 }
 
-export function isImport(decl: idl.IDLEntry): boolean {
+export function isImport(decl: idl.IDLNode): boolean {
     return idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.Import)
 }
 
@@ -37,12 +38,12 @@ export function isStringEnum(decl: idl.IDLEnum): boolean {
     return decl.elements.some(e => e.type === idl.IDLStringType)
 }
 
-export function qualifiedName(decl: idl.IDLEntry, language: Language): string {
+export function qualifiedName(decl: idl.IDLNode, language: Language): string {
     const namespace = idl.getExtAttribute(decl, idl.IDLExtendedAttributes.Namespace)
     const prefix = namespace
         ? namespace + (language === Language.CPP ? '_' : '.')
         : ""
-    return prefix + decl.name
+    return prefix + idl.forceAsNamedNode(decl).name
 }
 
 export function typeOrUnion(types: idl.IDLType[], name?: string): idl.IDLType {

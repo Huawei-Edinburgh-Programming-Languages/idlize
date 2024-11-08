@@ -13,19 +13,19 @@
  * limitations under the License.
  */
 
-
+import * as idl from "../../idl"
 import { capitalize, isDefined } from "../../util"
 import { ArgConvertor, RetConvertor } from "../ArgConvertors"
 import { Method, MethodModifier } from "../LanguageWriters"
 import { PrimitiveType } from "../ArkPrimitiveType"
 import { IDLCallback, IDLEntry, IDLType } from "../../idl"
 import { mangleMethodName } from "../LanguageWriters/LanguageWriter"
+import { IdlNameConvertor } from "../LanguageWriters/nameConvertor"
 
 export class IdlPeerMethod {
     private overloadIndex?: number
     constructor(
         public originalParentName: string,
-        public declarationTargets: IDLEntry[],
         public argConvertors: ArgConvertor[],
         public retConvertor: RetConvertor,
         public isCallSignature: boolean,
@@ -80,10 +80,10 @@ export class IdlPeerMethod {
         return retConvertor.nativeType()
     }
 
-    generateAPIParameters(): string[] {
+    generateAPIParameters(converter:IdlNameConvertor): string[] {
         const args = this.argConvertors.map(it => {
             let isPointer = it.isPointerType()
-            return `${isPointer ? "const ": ""}${it.nativeType(false)}${isPointer ? "*": ""} ${it.param}`
+            return `${isPointer ? "const ": ""}${converter.convertType(it.nativeType())}${isPointer ? "*": ""} ${it.param}`
         })
         const receiver = this.generateReceiver()
         if (receiver) return [`${receiver.argType} ${receiver.argName}`, ...args]
@@ -108,5 +108,9 @@ export class IdlPeerMethod {
             groupedMethods = groupedMethods.concat(sameNamedMethods)
         }
         return groupedMethods
+    }
+
+    setSameOverloadIndex(copyFrom: IdlPeerMethod) {
+        this.overloadIndex = copyFrom.overloadIndex
     }
 }

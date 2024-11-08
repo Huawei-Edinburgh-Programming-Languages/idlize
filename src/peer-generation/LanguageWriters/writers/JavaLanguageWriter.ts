@@ -15,15 +15,32 @@
 
 import { IndentedPrinter } from "../../../IndentedPrinter"
 import { Language } from "../../../Language"
-import { EnumConvertor as EnumConvertorDTS, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "../../Convertors"
-import { AssignStatement, LambdaExpression, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, ObjectArgs, ReturnStatement } from "../LanguageWriter"
-import { CLikeExpressionStatement, CLikeLanguageWriter, CLikeLoopStatement, CLikeReturnStatement } from "./CLikeLanguageWriter"
+import {
+    AssignStatement,
+    CheckOptionalStatement,
+    FieldModifier,
+    LambdaExpression,
+    LanguageExpression,
+    LanguageStatement,
+    LanguageWriter,
+    MakeCastOptions,
+    Method,
+    MethodModifier,
+    MethodSignature,
+    ObjectArgs
+} from "../LanguageWriter"
+import {
+    CLikeExpressionStatement,
+    CLikeLanguageWriter,
+    CLikeLoopStatement,
+    CLikeReturnStatement
+} from "./CLikeLanguageWriter"
 import * as idl from '../../../idl'
 import { ArgConvertor, BaseArgConvertor, RuntimeType } from "../../ArgConvertors"
 import { EnumConvertor } from "../../idl/IdlArgConvertors"
 import { ReferenceResolver } from "../../ReferenceResolver"
-import { IdlTypeNameConvertor } from "../typeConvertor"
-import { JavaIDLTypeToStringConvertor } from "../convertors/JavaConvertors"
+import { convertType, IdlNameConvertor, TypeConvertor } from "../nameConvertor"
+import { JavaIDLNodeToStringConvertor } from "../convertors/JavaConvertors"
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -41,7 +58,7 @@ class JavaLambdaExpression extends LambdaExpression {
         return true
     }
     asString(): string {
-        const params = this.signature.args.map((it, i) => `${idl.getIDLTypeName(it)} ${this.signature.argName(i)}`)
+        const params = this.signature.args.map((it, i) => `${idl.forceAsNamedNode(it).name} ${this.signature.argName(i)}`)
         return `(${params.join(", ")}) -> { ${this.bodyAsString()} }`
     }
 }
@@ -74,7 +91,7 @@ export class JavaAssignStatement extends AssignStatement {
      }
      write(writer: LanguageWriter): void{
         if (this.isDeclared) {
-            const typeSpec = this.type ? writer.convert(this.type) : "var"
+            const typeSpec = this.type ? writer.stringifyType(this.type) : "var"
             writer.print(`${typeSpec} ${this.variableName} = ${this.expression.asString()};`)
         } else {
             writer.print(`${this.variableName} = ${this.expression.asString()};`)
@@ -101,14 +118,14 @@ class JavaMapForEachStatement implements LanguageStatement {
 ////////////////////////////////////////////////////////////////
 
 export class JavaLanguageWriter extends CLikeLanguageWriter {
-    protected typeConvertor: IdlTypeNameConvertor
+    protected typeConvertor: IdlNameConvertor
     constructor(printer: IndentedPrinter, resolver:ReferenceResolver) {
         super(printer, resolver, Language.JAVA)
-        this.typeConvertor = new JavaIDLTypeToStringConvertor(this.resolver)
+        this.typeConvertor = new JavaIDLNodeToStringConvertor(this.resolver)
     }
 
-    convert(type: idl.IDLType | idl.IDLCallback): string {
-        return this.typeConvertor.convert(type)
+    stringifyType(type: idl.IDLType): string {
+        return this.typeConvertor.convertType(type)
     }
 
     fork(): LanguageWriter {
@@ -142,13 +159,13 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     }
     writeFieldDeclaration(name: string, type: idl.IDLType, modifiers: FieldModifier[] | undefined, optional: boolean, initExpr?: LanguageExpression): void {
         let prefix = this.makeFieldModifiersList(modifiers)
-        this.printer.print(`${prefix} ${(this.convert(type))} ${name}${initExpr ? ` = ${initExpr.asString()}` : ""};`)
+        this.printer.print(`${prefix} ${(this.stringifyType(type))} ${name}${initExpr ? ` = ${initExpr.asString()}` : ""};`)
     }
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
         this.writeMethodDeclaration(name, signature, [MethodModifier.STATIC, MethodModifier.NATIVE])
     }
     writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method, modifiers?: MethodModifier[]) {
-        this.printer.print(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') : ''} ${className}(${signature.args.map((it, index) => `${this.convert(it)} ${signature.argName(index)}`).join(", ")}) {`)
+        this.printer.print(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') : ''} ${className}(${signature.args.map((it, index) => `${this.stringifyType(it)} ${signature.argName(index)}`).join(", ")}) {`)
         this.pushIndent()
         if (superCall) {
             this.print(`super(${superCall.signature.args.map((_, i) => superCall?.signature.argName(i)).join(", ")});`)
@@ -169,6 +186,9 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     makeReturn(expr: LanguageExpression): LanguageStatement {
         return new CLikeReturnStatement(expr)
     }
+    makeCheckOptional(optional: LanguageExpression, doStatement: LanguageStatement): LanguageStatement {
+        return new CheckOptionalStatement("null", optional, doStatement)
+    }
     makeDefinedCheck(value: string): LanguageExpression {
         return new JavaCheckDefinedExpression(value)
     }
@@ -181,8 +201,8 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     makeMapSize(map: string): LanguageExpression {
         return this.makeString(`${map}.size()`)
     }
-    makeCast(value: LanguageExpression, type: idl.IDLType, unsafe = false): LanguageExpression {
-        return new JavaCastExpression(value, this.convert(type), unsafe)
+    makeCast(value: LanguageExpression, type: idl.IDLType, options?: MakeCastOptions): LanguageExpression {
+        return new JavaCastExpression(value, this.stringifyType(type), options?.unsafe ?? false)
     }
     makeStatement(expr: LanguageExpression): LanguageStatement {
         return new CLikeExpressionStatement(expr)
@@ -207,8 +227,8 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         this.print(`System.out.println("${message}")`)
     }
     mapIDLContainerType(type: idl.IDLContainerType): string {
-        switch (idl.getIDLTypeName(type)) {
-            case "sequence": return `${this.convert(type.elementType[0])}[]`
+        switch (type.containerKind) {
+            case "sequence": return `${this.stringifyType(type.elementType[0])}[]`
         }
         throw new Error(`Unmapped container type ${idl.DebugUtils.debugPrintType(type)}`)
     }
@@ -217,15 +237,6 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         throw new Error("Method not implemented.")
     }
     getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string {
-        if (convertor instanceof OptionConvertor) {
-            return `${value}`
-        }
-        if (convertor instanceof TupleConvertor && args?.index) {
-            return `${value}.value${args.index}`
-        }
-        if (convertor instanceof UnionConvertor && args?.index) {
-            return `${value}.getValue${args.index}()`
-        }
         return value
     }
     makeUndefined(): LanguageExpression {
@@ -236,12 +247,6 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     }
     makeRuntimeTypeGetterCall(value: string): LanguageExpression {
         return this.makeMethodCall("Ark_Object", "getRuntimeType", [this.makeString(value)])
-    }
-    makeMapKeyTypeName(c: MapConvertor): idl.IDLType {
-        throw new Error("Method not implemented.")
-    }
-    makeMapValueTypeName(c: MapConvertor): idl.IDLType {
-        throw new Error("Method not implemented.")
     }
     makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement {
         throw new Error("Method not implemented.")
@@ -261,13 +266,22 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     get supportedFieldModifiers(): FieldModifier[] {
         return [FieldModifier.PUBLIC, FieldModifier.PRIVATE, FieldModifier.PROTECTED, FieldModifier.STATIC, FieldModifier.FINAL]
     }
+    makeArrayInit(type: idl.IDLContainerType): LanguageExpression {
+        throw new Error("Method not implemented.")
+    }
+    makeClassInit(type: idl.IDLType, paramenters: LanguageExpression[]): LanguageExpression {
+        throw new Error("Method not implemented.")
+    }
+    makeMapInit(type: idl.IDLType): LanguageExpression {
+        throw new Error("Method not implemented.")
+    }
     makeTupleAccess(value: string, index: number): LanguageExpression {
         return this.makeString(`${value}.value${index}`)
     }
-    enumFromOrdinal(value: LanguageExpression, enumType: string): LanguageExpression {
+    enumFromOrdinal(value: LanguageExpression, _: idl.IDLEnum): LanguageExpression {
         throw new Error("Method not implemented.")
     }
-    ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression {
+    ordinalFromEnum(value: LanguageExpression, _: idl.IDLEnum): LanguageExpression {
         throw new Error("Method not implemented.")
     }
     makeValueFromOption(value: string): LanguageExpression {
@@ -276,13 +290,6 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     runtimeType(param: ArgConvertor, valueType: string, value: string) {
         this.writeStatement(this.makeAssign(valueType, undefined,
             this.makeRuntimeTypeGetterCall(value), false))
-    }
-    makeSerializerCreator() {
-        return this.makeString('Serializer::createSerializer');
-    }
-    override makeCastEnumToInt(convertor: EnumConvertorDTS, enumName: string, _unsafe?: boolean): string {
-        // TODO: remove after switching to IDL
-        return `${enumName}.getIntValue()`
     }
     override makeEnumCast(enumName: string, _unsafe: boolean, _convertor: EnumConvertor | undefined): string {
         return `${enumName}.getIntValue()`

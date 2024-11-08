@@ -126,7 +126,7 @@ export function getExportedDeclarationNameByNode(typechecker: ts.TypeChecker, no
     return getExportedDeclarationNameByDecl(declarations[0])
 }
 
-function hasModifier(modifierLikes: ts.NodeArray<ts.ModifierLike> | undefined, modifier: ts.SyntaxKind): boolean {
+function hasModifier(modifierLikes: ts.NodeArray<ts.ModifierLike> | readonly ts.Modifier[] | undefined, modifier: ts.SyntaxKind): boolean {
     return modifierLikes?.find(it => it.kind === modifier) != undefined
 }
 
@@ -144,6 +144,10 @@ export function isAbstract(modifierLikes: ts.NodeArray<ts.ModifierLike> | undefi
 
 export function isStatic(modifierLikes: ts.NodeArray<ts.ModifierLike> | undefined): boolean {
     return hasModifier(modifierLikes, ts.SyntaxKind.StaticKeyword)
+}
+
+export function isAsync(modifierLikes: ts.NodeArray<ts.ModifierLike> | readonly ts.Modifier[] | undefined): boolean {
+    return hasModifier(modifierLikes, ts.SyntaxKind.AsyncKeyword)
 }
 
 export function isPrivate(modifierLikes: ts.NodeArray<ts.ModifierLike> | undefined) {
@@ -577,21 +581,4 @@ export function groupBy<K, V>(values: V[], selector: (value: V) => K): Map<K, V[
 
 export function removeExt(filename: string) {
     return filename.replaceAll(path.extname(filename), '')
-}
-
-export function flip<A, B, R>(f:(a:A, b:B) => R) {
-    return (b:B, a:A) => f(a, b)
-}
-
-export function carry<A, B, R>(f:(a:A, b:B) => R) {
-    return (a:A) => (b:B) => f(a, b)
-}
-
-function trace<A>(msg:string|((x:A) => string), x:A): A {
-    if (typeof msg === 'function') {
-        console.error(msg(x))
-    } else {
-        console.error(msg)
-    }    
-    return x
 }

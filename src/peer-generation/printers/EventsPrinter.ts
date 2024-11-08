@@ -16,33 +16,31 @@
 import * as ts from "typescript"
 import * as idl from "../../idl"
 import { IndentedPrinter } from "../../IndentedPrinter"
-import { DeclarationTarget } from "../DeclarationTable"
-import { PrimitiveType } from "../ArkPrimitiveType"
-import { BlockStatement, ExpressionStatement, FieldModifier, LanguageWriter, Method, NamedMethodSignature, StringExpression } from "../LanguageWriters"
+import {
+    BlockStatement,
+    CppLanguageWriter,
+    ExpressionStatement,
+    FieldModifier,
+    LanguageWriter,
+    printMethodDeclaration,
+    StringExpression,
+    TSLanguageWriter
+} from "../LanguageWriters"
 import { PeerClassBase } from "../PeerClass"
-import { PeerLibrary } from "../PeerLibrary"
-import { PeerMethod } from "../PeerMethod"
 import { makeCEventsArkoalaImpl, makeCEventsLibaceImpl } from "../FileGenerators"
-import { generateEventReceiverName, generateEventSignature } from "./HeaderPrinter"
-import { asString, identName } from "../../util"
-import { mapType } from "../TypeNodeNameConvertor"
+import { generateEventReceiverName } from "./HeaderPrinter"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig"
 import { IdlPeerMethod } from "../idl/IdlPeerMethod"
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary"
-// import { ArgConvertor } from "../Convertors"
-// import { ArgConvertor as IdlArgConvertor } from "../idl/IdlArgConvertors"
 import { ArgConvertor } from "../ArgConvertors"
-import { createTypeNodeConvertor } from "../PeerGeneratorVisitor";
 import { IdlPeerClass } from "../idl/IdlPeerClass"
 import { collapseIdlPeerMethods, groupOverloads } from "./OverloadsPrinter"
 import { Language } from "../../Language"
-import { CppLanguageWriter } from "../LanguageWriters/writers/CppLanguageWriter"
-import { TSLanguageWriter } from "../LanguageWriters/writers/TsLanguageWriter"
 import { ImportsCollector } from "../ImportsCollector";
-import { printMethodDeclaration } from "../LanguageWriters/LanguageWriter"
-import { createEmptyReferenceResolver, getReferenceResolver } from "../ReferenceResolver"
+import { getReferenceResolver, ReferenceResolver } from "../ReferenceResolver"
 import { isImport } from "../idl/common"
 import { ETSLanguageWriter } from "../LanguageWriters/writers/ETSLanguageWriter";
+import { collectMaterializedImports } from "../Materialized"
 
 export const PeerEventsProperties = "PeerEventsProperties"
 export const PeerEventKind = "PeerEventKind"
@@ -53,19 +51,19 @@ export interface CallbackInfoBase {
 }
 
 export interface CallbackInfo extends CallbackInfoBase {
-    args: {name: string, type: ts.TypeNode, nullable: boolean}[],
+    args: { name: string, type: ts.TypeNode, nullable: boolean }[],
     returnType: ts.TypeNode,
     originTarget: ts.TypeNode
 }
 
 export interface IdlCallbackInfo extends CallbackInfoBase {
-    args: {name: string, type: idl.IDLType, nullable: boolean}[],
+    args: { name: string, type: idl.IDLType, nullable: boolean }[],
     returnType: idl.IDLType,
     originTarget: idl.IDLCallback | idl.IDLReferenceType
 }
 
-export function groupCallbacks(callbacks: (CallbackInfo | IdlCallbackInfo)[]): Map<string, (CallbackInfo | IdlCallbackInfo)[]> {
-    const receiverToCallbacks = new Map<string, (CallbackInfo | IdlCallbackInfo)[]>()
+export function groupCallbacks(callbacks: IdlCallbackInfo[]): Map<string, IdlCallbackInfo[]> {
+    const receiverToCallbacks = new Map<string, IdlCallbackInfo[]>()
     for (const callback of callbacks) {
         if (!receiverToCallbacks.has(callback.componentName))
             receiverToCallbacks.set(callback.componentName, [callback])
@@ -75,14 +73,14 @@ export function groupCallbacks(callbacks: (CallbackInfo | IdlCallbackInfo)[]): M
     return receiverToCallbacks
 }
 
-export function collectCallbacks(library: PeerLibrary | IdlPeerLibrary): (CallbackInfo | IdlCallbackInfo)[] {
+export function collectCallbacks(library: IdlPeerLibrary): IdlCallbackInfo[] {
     const callbacks = []
     for (const file of library.files) {
         for (const peer of file.peers.values()) {
             for (const method of peer.methods) {
                 let callbackFound = false
-                for (const target of method.declarationTargets) {
-                    const info = convertToCallback(peer, method, target)
+                for (const target of method.method.signature.args) {
+                    const info = convertIdlToCallback(getReferenceResolver(library), peer, method, target)
                     if (info && canProcessCallback(info)) {
                         if (callbackFound)
                             throw new Error("Only one callback per method is acceptable")
@@ -102,64 +100,28 @@ export function canProcessCallback(callback: CallbackInfoBase): boolean {
     return true
 }
 
-type CallbackInfoType<T> = T extends PeerMethod ? CallbackInfo : T extends IdlPeerMethod ? IdlCallbackInfo : never
-type ParameterInfoType<T> = T extends PeerMethod ? DeclarationTarget : T extends IdlPeerMethod ? (idl.IDLEntry) : never
-
-export function convertToCallback<T extends PeerMethod | IdlPeerMethod>(peer: PeerClassBase, method: T, target: ParameterInfoType<T>): CallbackInfoType<T> | undefined
-export function convertToCallback(peer: PeerClassBase, method: PeerMethod | IdlPeerMethod, target: DeclarationTarget | idl.IDLEntry): CallbackInfoType<PeerMethod> | CallbackInfoType<IdlPeerMethod> | undefined {
-    if (method instanceof PeerMethod)
-        return convertTargetToCallback(peer, method, target as ParameterInfoType<PeerMethod>) as CallbackInfoType<PeerMethod>
-    else if (method instanceof IdlPeerMethod)
-        return convertIdlToCallback(peer, method, target as ParameterInfoType<IdlPeerMethod>) as CallbackInfoType<IdlPeerMethod>
-}
-
-function convertTargetToCallback(peer: PeerClassBase, method: PeerMethod, target: DeclarationTarget): CallbackInfo | undefined {
-    if (target instanceof PrimitiveType)
-        return undefined
-    if (ts.isFunctionTypeNode(target))
-        return {
-            componentName: peer.getComponentName(),
-            methodName: method.overloadedName,
-            args: target.parameters.map(it => {return {
-                name: asString(it.name),
-                type: it.type!,
-                nullable: !!it.questionToken
-            }}),
-            returnType: target.type,
-            originTarget: target,
-        }
-    if (ts.isTypeReferenceNode(target) && identName(target.typeName) === "Callback") {
-        const data = target.typeArguments![0]
-        const hasData = data.kind !== ts.SyntaxKind.VoidKeyword
-        return {
-            componentName: peer.getComponentName(),
-            methodName: method.overloadedName,
-            args: hasData ? [{name: 'data', type: data, nullable: false}] : [],
-            returnType: target.typeArguments![1] ?? ts.factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword),
-            originTarget: target,
-        }
-    }
-}
-
-function convertIdlToCallback(peer: PeerClassBase, method: IdlPeerMethod, argType: idl.IDLEntry): IdlCallbackInfo | undefined {
-    if (idl.isCallback(argType)) {
-        return {
-            componentName: peer.getComponentName(),
-            methodName: method.overloadedName,
-            args: argType.parameters.map(it => ({
-                name: it.name,
-                type: it.type!,
-                nullable: it.isOptional
-            })),
-            returnType: argType.returnType,
-            originTarget: argType,
-        }
-    }
+export function convertIdlToCallback(resolver: ReferenceResolver, peer: PeerClassBase, method: IdlPeerMethod, argType: idl.IDLNode): IdlCallbackInfo | undefined {
     if (idl.isReferenceType(argType)) {
         if (isImport(argType)) {
             return undefined
         }
-        if (idl.isIDLTypeName(argType, 'Callback') && idl.hasExtAttribute(argType, idl.IDLExtendedAttributes.TypeArguments)) {
+
+        const argDecl = resolver.resolveTypeReference(argType)
+        if (argDecl && idl.isCallback(argDecl)) {
+            return {
+                componentName: peer.getComponentName(),
+                methodName: method.overloadedName,
+                args: argDecl.parameters.map(it => ({
+                    name: it.name,
+                    type: it.type!,
+                    nullable: it.isOptional
+                })),
+                returnType: argDecl.returnType,
+                originTarget: argDecl,
+            }
+        }
+
+        if (argType.name === 'Callback' && idl.hasExtAttribute(argType, idl.IDLExtendedAttributes.TypeArguments)) {
             const typeArgs = idl.getExtAttribute(argType, idl.IDLExtendedAttributes.TypeArguments)!.split(",").map(it => it.trim())
             const inputType = idl.toIDLType(typeArgs[0])
             const hasData = !idl.isVoidType(inputType)
@@ -185,7 +147,7 @@ export function callbackEventNameByInfo(info: CallbackInfoBase): string {
 
 function idlTypesEquals(a: idl.IDLType, b: idl.IDLType): boolean {
     if (a.kind !== b.kind ||
-        !idl.isIDLTypeSameName(a, b))
+        idl.isNamedNode(a) && idl.isNamedNode(b) && a.name === b.name)
         return false
     if (idl.isUnionType(a) && idl.isUnionType(b)) {
         return a.types.every(it => b.types.some(other => idlTypesEquals(it, other))) &&
@@ -216,14 +178,14 @@ export function collapseIdlEventsOverloads(library: IdlPeerLibrary, peer: IdlPee
 
     for (const overloads of groupOverloads(peer.methods)) {
         if (overloads.length <= 1) continue
-        const callbacks = overloads[0].declarationTargets.map(it => convertToCallback(peer, overloads[0], it))
+        const callbacks = overloads[0].method.signature.args.map(it => convertIdlToCallback(library, peer, overloads[0], it))
         const callbackIndex = callbacks.findIndex(it => it)
         if (callbackIndex === -1) continue
 
         const sampleCallback = callbacks[callbackIndex]
         let canCollapseCallbacks = true
         for (const overload of overloads) {
-            const overloadCallback = convertToCallback(peer, overload, overload.declarationTargets[callbackIndex])
+            const overloadCallback = convertIdlToCallback(library, peer, overload, overload.method.signature.args[callbackIndex])
             if (!idlCallbacksEquals(sampleCallback, overloadCallback))
                 canCollapseCallbacks = false
         }
@@ -239,15 +201,17 @@ export function collapseIdlEventsOverloads(library: IdlPeerLibrary, peer: IdlPee
 }
 
 abstract class CEventsVisitorBase {
-    readonly impl: CppLanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library instanceof IdlPeerLibrary ? this.library : createEmptyReferenceResolver())
-    readonly receiversList: LanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library instanceof IdlPeerLibrary ? this.library : createEmptyReferenceResolver())
+    readonly impl: CppLanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library)
+    readonly receiversList: LanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library)
 
     constructor(
-        protected readonly library: PeerLibrary | IdlPeerLibrary,
+        protected readonly library: IdlPeerLibrary,
         protected readonly isEmptyImplementation: boolean,
-    ) {}
+    ) {
+    }
 
     protected abstract printEventMethodDeclaration(event: CallbackInfo | IdlCallbackInfo): void
+
     protected abstract printSerializers(event: CallbackInfo | IdlCallbackInfo): void
 
     private printEventsKinds(callbacks: CallbackInfoBase[]) {
@@ -331,30 +295,6 @@ abstract class CEventsVisitorBase {
     }
 }
 
-class CEventsVisitor extends CEventsVisitorBase {
-    constructor(
-        protected readonly library: PeerLibrary,
-        isEmptyImplementation: boolean
-    ) {
-        super(library, isEmptyImplementation)
-    }
-
-    protected override printEventMethodDeclaration(event: CallbackInfo) {
-        const signature = generateEventSignature(this.library.declarationTable, event)
-        const args = signature.args.map((type, index) => {
-            return `${idl.getIDLTypeName(type)} ${signature.argName(index)}`
-        })
-        printMethodDeclaration(this.impl.printer, idl.getIDLTypeName(signature.returnType), `${event.methodName}Impl`, args)
-    }
-
-    protected override printSerializers(event: CallbackInfo) {
-        for (const arg of event.args) {
-            const convertor = this.library.declarationTable.typeConvertor(arg.name, arg.type, arg.nullable)
-            convertor.convertorSerialize(`_eventBuffer`, arg.name, this.impl)
-        }
-    }
-}
-
 class IdlCEventsVisitor extends CEventsVisitorBase {
     constructor(
         protected readonly library: IdlPeerLibrary,
@@ -366,7 +306,7 @@ class IdlCEventsVisitor extends CEventsVisitorBase {
     protected override printEventMethodDeclaration(event: IdlCallbackInfo) {
         const args = ["Ark_Int32 nodeId",
             ...event.args.map(it =>
-                `const ${this.library.typeConvertor(it.name, it.type, it.nullable).nativeType(false)} ${it.name}`)]
+                `const ${this.impl.stringifyType(idl.maybeOptional(this.library.typeConvertor(it.name, it.type, it.nullable).nativeType(), it.nullable))} ${it.name}`)]
         printMethodDeclaration(this.impl.printer, "void", `${event.methodName}Impl`, args)
     }
 
@@ -382,17 +322,19 @@ abstract class TSEventsVisitorBase {
     readonly printer: LanguageWriter = new TSLanguageWriter(new IndentedPrinter(), getReferenceResolver(this.library))
 
     constructor(
-        protected readonly library: PeerLibrary | IdlPeerLibrary,
-    ) {}
+        protected readonly library: IdlPeerLibrary,
+    ) {
+    }
 
     protected abstract typeConvertor(param: string, type: ts.TypeNode | idl.IDLType, isOptional: boolean): ArgConvertor
-    protected abstract mapType(type: ts.TypeNode | idl.IDLType | idl.IDLCallback): idl.IDLType
+    protected abstract mapType(type: ts.TypeNode | idl.IDLType | idl.IDLCallback): idl.IDLType | idl.IDLCallback
 
     private printImports() {
         const imports = new ImportsCollector()
         imports.addFeature("RuntimeType", "./peers/SerializerBase")
         imports.addFeature("int32", "@koalaui/common")
         imports.addFeature("KStringPtr", "@koalaui/interop")
+        imports.addFeature("KPointer", "@koalaui/interop")
         if ([Language.TS].includes(this.library.language))
             imports.addFeature("Deserializer", "./peers/Deserializer")
 
@@ -407,10 +349,11 @@ abstract class TSEventsVisitorBase {
                 }
             })
         }
+        collectMaterializedImports(imports, this.library)
         imports.print(this.printer, '')
     }
 
-    private printEventsClasses(infos: (CallbackInfo | IdlCallbackInfo)[]) {
+    private printEventsClasses(infos: IdlCallbackInfo[]) {
         this.printer.print(`
 interface PeerEvent {
     readonly kind: ${PeerEventKind}
@@ -430,9 +373,13 @@ interface PeerEvent {
                     false,
                 )
                 info.args.forEach(arg => {
+                    const mapped = this.mapType(arg.type)
+                    const ref = idl.isType(mapped)
+                        ? mapped
+                        : idl.createReferenceType(mapped.name)
                     writer.writeFieldDeclaration(
                         arg.name,
-                        idl.maybeOptional(this.mapType(arg.type), arg.nullable),
+                        idl.maybeOptional(ref, arg.nullable),
                         [FieldModifier.READONLY],
                         arg.nullable,
                     )
@@ -468,7 +415,7 @@ interface PeerEvent {
         this.printer.print('}')
     }
 
-    protected printParseFunction(infos: (CallbackInfo | IdlCallbackInfo)[]) {
+    protected printParseFunction(infos: IdlCallbackInfo[]) {
         this.printer.print(`export function deserializePeerEvent(eventDeserializer: Deserializer): PeerEvent {`)
         this.printer.pushIndent()
         this.printer.writeStatement(this.printer.makeAssign(
@@ -511,7 +458,9 @@ interface PeerEvent {
                         this.printer.makeAssign(`event.nodeId`, undefined, new StringExpression(`nodeId`), false),
                         ...info.args.map(arg => {
                             const convertor = this.typeConvertor(arg.name, arg.type, arg.nullable)
-                            return convertor.convertorDeserialize('event', `event.${arg.name}`, this.printer)
+                            return convertor.convertorDeserialize(`${arg.name}_buf`, `eventDeserializer`, (expr) => {
+                                return this.printer.makeAssign(`event.${arg.name}`, undefined, expr, false)
+                            }, this.printer)
                         }),
                         this.printer.makeReturn(this.printer.makeCast(
                             new StringExpression(`event`),
@@ -529,11 +478,15 @@ interface PeerEvent {
         this.printer.print('}')
     }
 
-    private printProperties(infos: (CallbackInfo | IdlCallbackInfo)[]) {
+    private printProperties(infos: IdlCallbackInfo[]) {
         const contentOp = (writer: LanguageWriter) => {
             for (const info of infos) {
+                const mapped = this.mapType( info.originTarget)
+                const ref = idl.isType(mapped)
+                    ? mapped
+                    : idl.createReferenceType(mapped.name)
                 writer.writeFieldDeclaration(callbackIdByInfo(info),
-                    this.mapType( info.originTarget),
+                    ref,
                     undefined,
                     true
                 )
@@ -550,7 +503,7 @@ interface PeerEvent {
         this.printer.print(`case ${PeerEventKind}.${callbackIdByInfo(callbackInfo)}: properties.${callbackIdByInfo(callbackInfo)}?.(${infoFields}); break`)
     }
 
-    private printEventsDeliverer(infos: (CallbackInfo | IdlCallbackInfo)[]) {
+    private printEventsDeliverer(infos: IdlCallbackInfo[]) {
         this.printer.print(`export function deliverGeneratedPeerEvent(event: PeerEvent, properties: ${PeerEventsProperties}): void {`)
         this.printer.pushIndent()
         this.printer.print(`switch (event.kind) {`)
@@ -576,46 +529,6 @@ interface PeerEvent {
     }
 }
 
-class ArkTSEventsVisitor extends TSEventsVisitorBase {
-    private readonly  typeNodeConvertor = createTypeNodeConvertor(this.library)
-    constructor(protected readonly library: PeerLibrary) {
-        super(library)
-    }
-    protected printCallbackInfo(callbackInfo: CallbackInfo | IdlCallbackInfo) {
-        //TODO: causes compile error
-        const isSupport = !this.typeNodeConvertor.convert(callbackInfo.originTarget as ts.TypeNode).startsWith("Callback")
-        if (isSupport) {
-            super.printCallbackInfo(callbackInfo);
-        }
-    }
-
-    protected typeConvertor(param: string, type: ts.TypeNode, isOptional: boolean): ArgConvertor {
-        return this.library.declarationTable.typeConvertor(param, type, isOptional)
-    }
-
-    protected printParseFunction(infos: CallbackInfo[]) {
-        //TODO: Not implemented yet
-    }
-
-    protected mapType(type: ts.TypeNode): idl.IDLType {
-        const text = this.typeNodeConvertor.convert(type)
-        return idl.toIDLType(text)
-    }
-}
-
-class TSEventsVisitor extends TSEventsVisitorBase {
-    constructor(protected readonly library: PeerLibrary) {
-        super(library)
-    }
-
-    protected typeConvertor(param: string, type: ts.TypeNode, isOptional: boolean): ArgConvertor {
-        return this.library.declarationTable.typeConvertor(param, type, isOptional)
-    }
-
-    protected mapType(type: ts.TypeNode): idl.IDLType {
-        return idl.toIDLType(mapType(type))
-    }
-}
 
 class IdlTSEventsVisitor extends TSEventsVisitorBase {
     constructor(protected readonly library: IdlPeerLibrary) {
@@ -634,20 +547,20 @@ class IdlTSEventsVisitor extends TSEventsVisitorBase {
 class IdlArkTSEventVisitor extends IdlTSEventsVisitor {
     readonly printer: LanguageWriter = new ETSLanguageWriter(new IndentedPrinter(), getReferenceResolver(this.library))
 
-    protected printParseFunction(infos: (CallbackInfo | IdlCallbackInfo)[]) {
+    protected printParseFunction(infos: IdlCallbackInfo[]) {
         // Disable event functions printing until deserializer is ready
         // super.printParseFunction(infos);
     }
 }
 
-export function printEvents(library: PeerLibrary | IdlPeerLibrary): string {
+export function printEvents(library: IdlPeerLibrary): string {
     let visitor
     switch (library.language) {
         case Language.ARKTS:
-            visitor = library instanceof PeerLibrary ? new ArkTSEventsVisitor(library) : new IdlArkTSEventVisitor(library)
+            visitor = new IdlArkTSEventVisitor(library)
             break
         case Language.TS:
-            visitor = library instanceof PeerLibrary ? new TSEventsVisitor(library) : new IdlTSEventsVisitor(library)
+            visitor = new IdlTSEventsVisitor(library)
             break
         default:
             throw new Error("Not implemented yet")
@@ -656,23 +569,23 @@ export function printEvents(library: PeerLibrary | IdlPeerLibrary): string {
     return visitor.printer.getOutput().join("\n")
 }
 
-export function printEventsCArkoalaImpl(library: PeerLibrary | IdlPeerLibrary): string {
-    const visitor = library instanceof PeerLibrary
-        ? new CEventsVisitor(library, false) : new IdlCEventsVisitor(library, false)
+export function printEventsCArkoalaImpl(library: IdlPeerLibrary): string {
+    const visitor = new IdlCEventsVisitor(library, false)
     visitor.print()
     return makeCEventsArkoalaImpl(
+        getReferenceResolver(library),
         visitor.impl,
         visitor.receiversList,
     )
 }
 
-export function printEventsCLibaceImpl(library: PeerLibrary | IdlPeerLibrary, options: { namespace: string}): string {
-    const visitor = library instanceof PeerLibrary
-        ? new CEventsVisitor(library, true) : new IdlCEventsVisitor(library, true)
+export function printEventsCLibaceImpl(library: IdlPeerLibrary, options: { namespace: string }): string {
+    const visitor = new IdlCEventsVisitor(library, true)
     visitor.print()
     return makeCEventsLibaceImpl(
         visitor.impl,
         visitor.receiversList,
         options.namespace,
+        getReferenceResolver(library)
     )
 }

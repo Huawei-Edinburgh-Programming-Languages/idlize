@@ -26,4 +26,8 @@ public class Ark_MaterializedBase extends Ark_ObjectBase {
     // internal interface to call constructors that only create materialized class wrappers at Java side
     protected interface EmptyParameter {}
     protected Ark_MaterializedBase(EmptyParameter p) {}
+
+    public Finalizable getPeer() {
+        return peer;
+    }
 }

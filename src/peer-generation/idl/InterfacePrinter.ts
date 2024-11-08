@@ -38,10 +38,8 @@ import { IdlPeerFile } from './IdlPeerFile'
 import { IndentedPrinter } from "../../IndentedPrinter"
 import { TargetFile } from '../printers/TargetFile'
 import { PrinterContext } from '../printers/PrinterContext'
-import { convertDeclaration, DeclarationConvertor } from "../LanguageWriters/typeConvertor";
-import {
-    makeSyntheticDeclarationsFiles
-} from './IdlSyntheticDeclarations'
+import { convertDeclaration, DeclarationConvertor } from "../LanguageWriters/nameConvertor";
+import { makeSyntheticDeclarationsFiles } from './IdlSyntheticDeclarations'
 import { tsCopyrightAndWarning } from '../FileGenerators'
 import { EnumEntity } from '../PeerFile'
 import { ARK_OBJECTBASE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH, INT_VALUE_GETTER } from '../printers/lang/Java'
@@ -74,7 +72,7 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
         throw "Enums are processed separately"
     }
     convertTypedef(node: idl.IDLTypedef): void {
-        this.writer.print(`export declare type ${node.name} = ${this.writer.convert(node.type)};`)
+        this.writer.print(`export declare type ${node.name} = ${this.writer.stringifyType(node.type)};`)
     }
     protected replaceImportTypeNodes(text: string): string {///operate on stringOrNone[]
         for (const [stub, src] of [...this.peerLibrary.importTypesStubToSource.entries()].reverse()) {
@@ -195,7 +193,7 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
     convertTypedef(node: idl.IDLTypedef): void {
         this.convertTypedefTarget(node.name, node.type)
     }
-    private convertTypedefTarget(name: string, type: idl.IDLEntry) {
+    private convertTypedefTarget(name: string, type: idl.IDLNode) {
         if (idl.isUnionType(type)) {
             this.onNewDeclaration(this.makeUnion(name, type))
             return
@@ -213,7 +211,7 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
             return
         }
         if (idl.isReferenceType(type)) {
-            const target = this.peerLibrary.resolveTypeReference(type, undefined, true)
+            const target = this.peerLibrary.resolveTypeReference(type, undefined)
             this.convertTypedefTarget(name, target!)
             return
         }
@@ -392,12 +390,24 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
             : type.properties.map(it => {
                 return {name: it.name, type: idl.maybeOptional(it.type, it.isOptional), modifiers: [FieldModifier.PUBLIC]}
             })
+
+        let superName = undefined as string | undefined
         const superType = idl.getSuperType(type)
+            if (superType) {
+            if (idl.isReferenceType(superType)) {
+                const superDecl = this.peerLibrary.resolveTypeReference(superType)
+                if (superDecl) {
+                    superName = superDecl.name
+                }
+            } else {
+                superName = idl.forceAsNamedNode(superType).name
+            }
+        }
         writer.writeClass(alias, () => {
             members.forEach(it => {
                 writer.writeFieldDeclaration(it.name, it.type, it.modifiers, false)
             })
-        }, (superType ? idl.getIDLTypeName(superType) : undefined) ?? ARK_OBJECTBASE)
+        }, superName ?? ARK_OBJECTBASE)
 
         return new JavaDeclaration(alias, writer)
     }
@@ -435,7 +445,7 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
                     idl.createProperty("params", idl.createReferenceType("Array<object>"), false, false, true),
                     idl.createProperty("id", idl.createReferenceType("number")),
                     idl.createProperty("type", idl.createReferenceType("number"), false, false, true),
-                ], [], [], []))
+                ], [], []))
         } else {
             this.writer.print(`export declare type ${node.name}${typeParams} = ${type};`)
         }
@@ -519,7 +529,7 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
         return [idlInterface.name,
             this.printTypeParameters(idlInterface.extendedAttributes),
             idl.hasSuperType(idlInterface)
-                ? ` extends ${idl.getIDLTypeName(inheritanceType)}${this.printTypeParameters(inheritanceType.extendedAttributes)}`
+                ? ` extends ${idl.forceAsNamedNode(inheritanceType).name}${this.printTypeParameters(inheritanceType.extendedAttributes)}`
                 : ""
         ].join("")
     }
@@ -588,7 +598,7 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
     }
 
     private convertType(idlType: idl.IDLType): string {
-        return this.typeNameConvertor.convert(idlType)
+        return this.typeNameConvertor.stringifyType(idlType)
     }
 
     private printCallback(name: string,
@@ -660,7 +670,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
     convertTypedef(node: idl.IDLTypedef): void {
         this.convertTypedefTarget(node.name, node.type)
     }
-    private convertTypedefTarget(name: string, type: idl.IDLEntry) {
+    private convertTypedefTarget(name: string, type: idl.IDLNode) {
         if (idl.isUnionType(type)) {
             this.onNewDeclaration(this.makeUnion(name, type))
             return
@@ -678,7 +688,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
             return
         }
         if (idl.isReferenceType(type)) {
-            const target = this.peerLibrary.resolveTypeReference(type, undefined, true)
+            const target = this.peerLibrary.resolveTypeReference(type, undefined)
             this.convertTypedefTarget(name, target!)
             return
         }
@@ -726,7 +736,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
             const param = 'param'
             for (const [index, memberType] of members.entries()) {
                 const memberName = `value${index}`
-                writer.writeFieldDeclaration(memberName, memberType, [FieldModifier.PRIVATE], true, writer.makeString(`None<${writer.convert(memberType)}>`))
+                writer.writeFieldDeclaration(memberName, memberType, [FieldModifier.PRIVATE], true, writer.makeString(`None<${writer.stringifyType(memberType)}>`))
 
                 writer.writeConstructorImplementation(
                     'init',
@@ -860,7 +870,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
             members.forEach(it => {
                 writer.writeProperty(it.name, it.type, true)
             })
-        }, writer.convert(idl.getSuperType(type) ?? idl.createReferenceType(ARK_OBJECTBASE)))
+        }, writer.stringifyType(idl.getSuperType(type) ?? idl.createReferenceType(ARK_OBJECTBASE)))
 
         return new CJDeclaration(alias, writer)
     }

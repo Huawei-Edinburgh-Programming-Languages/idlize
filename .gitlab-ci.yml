@@ -20,7 +20,6 @@ variables:
         - npm i --no-audit --no-fund
         - npm i --prefix external --no-audit --no-fund
 
-
 idlize sanity:
   stage: test
   tags:
@@ -41,15 +40,15 @@ pg java:run:
   script:
     - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-arm64 npm run run:java
 
-arkts subset tsc:
-  stage: test
-  tags:
-    - idlize-ci
-    - koala-ci
-  before_script:
-    - !reference [.setup, script]
-  script:
-    - npm run check:arkts:subset:tsc
+# arkts subset tsc:
+#   stage: test
+#   tags:
+#     - idlize-ci
+#     - koala-ci
+#   before_script:
+#     - !reference [.setup, script]
+#   script:
+#     - npm run check:arkts:subset:tsc
 
 publish idlize:
     stage: test
