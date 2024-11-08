@@ -275,7 +275,7 @@ export class CJLanguageWriter extends LanguageWriter {
         throw new Error(`TBD`)
     }
     makeMapInit(type: idl.IDLType): LanguageExpression {
-        throw new Error(`TBD`)   
+        throw new Error(`TBD`)
     }
     makeArrayLength(array: string, length?: string): LanguageExpression {
         return this.makeString(`${array}.size`)
@@ -371,9 +371,6 @@ export class CJLanguageWriter extends LanguageWriter {
     runtimeType(param: ArgConvertor, valueType: string, value: string) {
         this.writeStatement(this.makeAssign(valueType, undefined,
             this.makeRuntimeTypeGetterCall(value), false))
-    }
-    makeSerializerCreator() {
-        return this.makeString('createSerializer');
     }
     escapeKeyword(word: string): string {
         return CJKeywords.has(word) ? word + "_" : word

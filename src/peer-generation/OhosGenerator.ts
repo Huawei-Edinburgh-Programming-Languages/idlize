@@ -399,9 +399,7 @@ class OHOSVisitor {
                                 if (!serializerCreated) {
                                     writer.writeStatement(
                                         writer.makeAssign(`thisSerializer`, createReferenceType('Serializer'),
-                                            writer.makeMethodCall('Serializer', 'hold', [
-                                                writer.makeSerializerCreator()
-                                            ]), true)
+                                            writer.makeMethodCall('Serializer', 'hold', []), true)
                                     )
                                     serializerCreated = true
                                 }

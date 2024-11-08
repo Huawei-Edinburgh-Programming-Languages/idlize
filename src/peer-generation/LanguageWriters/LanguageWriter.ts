@@ -615,9 +615,6 @@ export abstract class LanguageWriter {
         return this.makeString(`(${this.makeNaryOp("||",
             accessors.map(it => this.makeString(`${value}!.hasOwnProperty("${it}")`))).asString()})`)
     }
-    makeSerializerCreator() {
-        return this.makeString('createSerializer');
-    }
     makeCallIsResource(value: string): LanguageExpression {
         return this.makeString(`isResource(${value})`)
     }
