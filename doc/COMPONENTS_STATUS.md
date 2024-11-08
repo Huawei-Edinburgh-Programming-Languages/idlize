@@ -1126,7 +1126,7 @@
 |`start`| Function |Pavelyev Ivan|in progress|  |
 |`stop`| Function |Pavelyev Ivan|in progress|  |
 |*TextInput*| *Component* | Spirin Andrey | in progress |  |
-|`setTextInputOptions`| Function | Spirin Andrey | in progress |  |
+|`setTextInputOptions`| Function | Spirin Andrey | devdone |  |
 |`type`| Function | Spirin Andrey | done |  |
 |`contentType`| Function | Spirin Andrey | done |  |
 |`placeholderColor`| Function | Spirin Andrey | done |  |
@@ -1159,8 +1159,8 @@
 |`caretPosition`| Function | Spirin Andrey | blocked UT |  |
 |`enableKeyboardOnFocus`| Function | Spirin Andrey | done |  |
 |`passwordIcon`| Function | Spirin Andrey | in progress |  |
-|`showError`| Function | Spirin Andrey | in progress |  |
-|`showUnit`| Function | Spirin Andrey | in progress |  |
+|`showError`| Function | Spirin Andrey | devdone |  |
+|`showUnit`| Function | Spirin Andrey | blocked |  |
 |`showUnderline`| Function | Spirin Andrey | done |  |
 |`underlineColor`| Function | Spirin Andrey | in progress |  |
 |`selectionMenuHidden`| Function | Spirin Andrey | done |  |
