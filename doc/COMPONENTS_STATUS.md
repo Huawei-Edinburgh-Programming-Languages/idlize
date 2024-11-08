@@ -1510,6 +1510,11 @@
 |`handleCancel`| Function | Erokhin Ilya | in progress |  |
 |`handleConfirm`| Function | Erokhin Ilya | in progress |  |
 |`handlePromptConfirm`| Function | Erokhin Ilya | in progress |  |
+|*ConsoleMessage*| *Class* | Erokhin Ilya | in progress |  |
+|`getMessage`| Function | Erokhin Ilya | in progress |  |
+|`getSourceId`| Function | Erokhin Ilya | in progress |  |
+|`getLineNumber`| Function | Erokhin Ilya | in progress |  |
+|`getMessageLevel`| Function | Erokhin Ilya | in progress |  |
 |*Web*| *Component* | Erokhin Ilya | in progress | |
 |`setWebOptions`| Function | Erokhin Ilya | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`javaScriptAccess`| Function | Erokhin Ilya | done | |
@@ -1651,6 +1656,32 @@
 |`backward`| Function | Erokhin Ilya | done | |
 |`forward`| Function | Erokhin Ilya | done | |
 |`getCookieManager`| Function | Erokhin Ilya | testskipped | |
+|*WebResourceRequest*| *Class* | Erokhin Ilya | in progress |  |
+|`getRequestHeader`| Function | Erokhin Ilya | in progress |  |
+|`getRequestUrl`| Function | Erokhin Ilya | in progress |  |
+|`isRequestGesture`| Function | Erokhin Ilya | in progress |  |
+|`isMainFrame`| Function | Erokhin Ilya | in progress |  |
+|`isRedirect`| Function | Erokhin Ilya | in progress |  |
+|`getRequestMethod`| Function | Erokhin Ilya | in progress |  |
+|*WebResourceResponse*| *Class* | Erokhin Ilya | in progress |  |
+|`getResponseData`| Function | Erokhin Ilya | in progress |  |
+|`getResponseDataEx`| Function | Erokhin Ilya | in progress |  |
+|`getResponseEncoding`| Function | Erokhin Ilya | in progress |  |
+|`getResponseMimeType`| Function | Erokhin Ilya | in progress |  |
+|`getReasonMessage`| Function | Erokhin Ilya | in progress |  |
+|`getResponseHeader`| Function | Erokhin Ilya | in progress |  |
+|`getResponseCode`| Function | Erokhin Ilya | in progress |  |
+|`setResponseData`| Function | Erokhin Ilya | in progress |  |
+|`setResponseEncoding`| Function | Erokhin Ilya | in progress |  |
+|`setResponseMimeType`| Function | Erokhin Ilya | in progress |  |
+|`setReasonMessage`| Function | Erokhin Ilya | in progress |  |
+|`setResponseHeader`| Function | Erokhin Ilya | in progress |  |
+|`setResponseCode`| Function | Erokhin Ilya | in progress |  |
+|`setResponseIsReady`| Function | Erokhin Ilya | in progress |  |
+|`getResponseIsReady`| Function | Erokhin Ilya | in progress |  |
+|*WebResourceError*| *Class* | Erokhin Ilya | in progress |  |
+|`getErrorInfo`| Function | Erokhin Ilya | in progress |  |
+|`getErrorCode`| Function | Erokhin Ilya | in progress |  |
 |*JsGeolocation*| *Class* | Erokhin Ilya | in progress |  |
 |`invoke`| Function | Erokhin Ilya | in progress |  |
 |*WebCookie*| *Class* | Erokhin Ilya | done | |
