@@ -868,16 +868,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         const isMethodStatic = method.modifiers?.some(mod => mod.kind === ts.SyntaxKind.StaticKeyword)
     
         const typeExists = this.isTypeDefined(returnTypeName)
-    
-        if(className?.includes("XComponentAttribute"))
-        {
-            console.log("!!!!!")
-        }
-        if(nameSuggestion?.name?.includes("XComponentAttribute"))
-        {
-            console.log("!!!!!")
-        }
-    
+        
         if (idl.isUndefinedType(type)) {
             return idl.IDLVoidType
         } else if (
