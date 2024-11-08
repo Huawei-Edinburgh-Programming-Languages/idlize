@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 
-#include <__config>
 #include <string>
 #include <sstream>
 #include <algorithm>
