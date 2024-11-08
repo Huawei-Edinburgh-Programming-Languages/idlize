@@ -1506,6 +1506,10 @@
 |`requestFullscreen`| Function | Erokhin Ilya | done |  |
 |`exitFullscreen`| Function | Erokhin Ilya | done |  |
 |`reset`| Function | Erokhin Ilya | done |  |
+|*JsResult*| *Class* | Erokhin Ilya | in progress |  |
+|`handleCancel`| Function | Erokhin Ilya | in progress |  |
+|`handleConfirm`| Function | Erokhin Ilya | in progress |  |
+|`handlePromptConfirm`| Function | Erokhin Ilya | in progress |  |
 |*Web*| *Component* | Erokhin Ilya | in progress | |
 |`setWebOptions`| Function | Erokhin Ilya | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`javaScriptAccess`| Function | Erokhin Ilya | done | |
@@ -1647,6 +1651,8 @@
 |`backward`| Function | Erokhin Ilya | devdone | |
 |`forward`| Function | Erokhin Ilya | devdone | |
 |`getCookieManager`| Function | Erokhin Ilya | testskipped | |
+|*JsGeolocation*| *Class* | Erokhin Ilya | in progress |  |
+|`invoke`| Function | Erokhin Ilya | in progress |  |
 |*WebCookie*| *Class* | Erokhin Ilya | devdone | |
 |`setCookie`| Function | Erokhin Ilya | devdone | |
 |`saveCookie`| Function | Erokhin Ilya | devdone | |
