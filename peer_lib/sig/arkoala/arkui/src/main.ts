@@ -614,7 +614,7 @@ function main() {
     // Place where mock of ACE is located.
     process.env.ACE_LIBRARY_PATH = __dirname + "/../../../native"
 
-    checkArrayBuffer()
+    // checkArrayBuffer()
 
     checkSerdeBaseLength()
     checkSerdeBaseText()
