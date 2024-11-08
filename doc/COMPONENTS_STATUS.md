@@ -1212,7 +1212,7 @@
 |`fontStyle`| Function | Ekaterina Stepanova| devdone |  |
 |`fontWeight`| Function |Ekaterina Stepanova| devdone |  |
 |`fontFamily`| Function |Ekaterina Stepanova| devdone |  |
-|`onTimer`| Function |Ekaterina Stepanova| blocked | in progress |
+|`onTimer`| Function |Ekaterina Stepanova| in progress | |
 |`textShadow`| Function |Ekaterina Stepanova| blocked ace_engine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB2SZK |
 |`contentModifier`| Function |Ekaterina Stepanova| blocked arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |*TextTimerController*| *Class* |Ekaterina Stepanova|in progress |  |
