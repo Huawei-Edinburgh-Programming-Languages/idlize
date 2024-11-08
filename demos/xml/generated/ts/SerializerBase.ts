@@ -138,6 +138,10 @@ export class SerializerBase {
     // private heldResources: ResourceId[] = []
 
     holdAndWriteCallback(callback: object, kind: CallbackKind) {
+        this.writeInt32(42)
+        this.writePointer(0n)
+        this.writePointer(0n)
+        this.writePointer(0n)
         // const resourceId = ResourceManager.registerAndHold(callback)
         // this.heldResources.push(resourceId)
         // this.writeInt32(resourceId)
@@ -147,6 +151,9 @@ export class SerializerBase {
     }
 
     writeCallbackResource(resource: object /*CallbackResource*/) {
+        this.writeInt32(42)
+        this.writePointer(0n)
+        this.writePointer(0n)
         // this.writeInt32(resource.resourceId)
         // this.writePointer(resource.hold)
         // this.writePointer(resource.release)
