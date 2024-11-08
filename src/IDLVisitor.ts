@@ -860,7 +860,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration | ts.CallSignatureDeclaration | ts.ConstructorDeclaration | ts.ConstructSignatureDeclaration | ts.IndexSignatureDeclaration,
         nameSuggestion?: NameSuggestion
     ): idl.IDLType {
-        let type = this.serializeType(method.type, nameSuggestion, true)
+        let type = this.serializeType(method.type, nameSuggestion)
     
         let returnTypeName = idl.getIDLTypeName(type)
         let className = this.clazzName(method)
@@ -900,7 +900,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         }
     }
 
-    serializeType(type: ts.TypeNode | undefined, nameSuggestion?: NameSuggestion, flag?: boolean): idl.IDLType {
+    serializeType(type: ts.TypeNode | undefined, nameSuggestion?: NameSuggestion): idl.IDLType {
         if (type == undefined) return idl.IDLUndefinedType // TODO: can we have implicit types in d.ts?
 
         if (type.kind == ts.SyntaxKind.UndefinedKeyword) {
