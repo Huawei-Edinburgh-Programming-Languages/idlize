@@ -203,6 +203,7 @@ function mapCInteropRetType(type: idl.IDLType): string {
                 // return `KStringPtr`
                 return "void"
             case idl.IDLVoidType:
+            case idl.IDLThisType:
             case idl.IDLUndefinedType:
                 return "void"
         }
@@ -722,23 +723,23 @@ class PeersGenerator {
     private processMethodOrCallable(method: idl.IDLMethod | idl.IDLCallable, peer: IdlPeerClass, parentName?: string): IdlPeerMethod | undefined {
         if (PeerGeneratorConfig.ignorePeerMethod.includes(method.name!))
             return
-        const isCallSignature = !idl.isMethod(method)
         // Some method have other parents as part of their names
         // Such as the ones coming from the friend interfaces
         // E.g. ButtonInterface instead of ButtonAttribute
-        const originalParentName = parentName ?? peer.originalClassName!
         const methodName = isCallSignature ? `set${peer.componentName}Options` : method.name
+        const isCallSignature = idl.isCallable(method)
+        const originalParentName = parentName ?? peer.originalClassName!
         const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param))
         method.parameters.forEach(param => {
             this.library.requestType(param.type!, this.library.shouldGenerateComponent(peer.componentName))
         })
-        const signature = generateSignature(this.library, method)
+        const signature = generateSignature(method)
         return new IdlPeerMethod(
             originalParentName,
             argConvertors,
             generateRetConvertor(method.returnType),
             isCallSignature,
-            new Method(methodName, signature, method.isStatic ? [MethodModifier.STATIC] : []))
+            new Method(methodName!, signature, method.isStatic ? [MethodModifier.STATIC] : []))
     }
 
     private createComponentAttributesDeclaration(clazz: idl.IDLInterface, peer: IdlPeerClass) {
@@ -906,7 +907,7 @@ export class IdlPeerProcessor {
             return new Method("constructor", new NamedMethodSignature(idl.IDLVoidType))
         const methodName = idl.isConstructor(method) ? "constructor" : method.name
         // const generics = method.typeParameters?.map(it => it.getText())
-        const signature = generateSignature(this.library, method, className)
+        const signature = generateSignature(method)
         const modifiers = idl.isConstructor(method) || method.isStatic ? [MethodModifier.STATIC] : []
         return new Method(methodName, signature, modifiers/*, generics*/)
     }
@@ -1040,7 +1041,7 @@ export class IdlPeerProcessor {
         const generics = undefined // method.typeParameters?.map(it => it.getText())
         method.parameters.forEach(it => this.library.requestType(it.type!, true))
         const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param))
-        const signature = generateSignature(this.library, method, decl.name)
+        const signature = generateSignature(method)
         const modifiers = idl.isConstructor(method) || method.isStatic ? [MethodModifier.STATIC] : []
         return new MaterializedMethod(decl.name, argConvertors, retConvertor, false,
             new Method(methodName, signature, modifiers, generics)
@@ -1352,11 +1353,11 @@ function getMethodReturnType(language: Language,
     return returnType
 }
 
-function generateSignature(library: IdlPeerLibrary,
-                           method: idl.IDLCallable | idl.IDLMethod | idl.IDLConstructor,
-                           className?: string): NamedMethodSignature {
-    const returnType = getMethodReturnType(library.language, method, className)
-    return new NamedMethodSignature(returnType,
+function generateSignature(
+    method: idl.IDLCallable | idl.IDLMethod | idl.IDLConstructor,
+): NamedMethodSignature {
+    return new NamedMethodSignature(
+        method.returnType!,
         method.parameters.map(it => maybeOptional(it.type!, it.isOptional)),
         method.parameters.map(it => it.name)
     )
