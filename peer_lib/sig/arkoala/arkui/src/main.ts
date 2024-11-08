@@ -15,6 +15,7 @@
 import { pointer, nullptr, wrapCallback, callCallback } from "@koalaui/interop"
 import { Serializer } from "@arkoala/arkui/peers/Serializer"
 import { DeserializerBase } from "@arkoala/arkui/peers/DeserializerBase"
+import { createSerializer, Serializer } from "@arkoala/arkui/peers/Serializer"
 import { Deserializer } from "@arkoala/arkui/peers/Deserializer"
 import { ArkButtonPeer } from "@arkoala/arkui/peers/ArkButtonPeer"
 import { ArkCommonPeer } from "@arkoala/arkui/peers/ArkCommonPeer"
