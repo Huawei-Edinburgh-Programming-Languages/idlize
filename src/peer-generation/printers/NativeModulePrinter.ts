@@ -211,9 +211,8 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
                     serializerArgCreated = true
                 }
             } else {
-                let _type = idl.toIDLType(it.interopType(nativeModule.language))
-                // _type.optional = false
-                args.push({ name: `${it.param}`, type: _type})
+                // TODO: use language as argument of interop type.
+                args.push({ name: `${it.param}`, type: idl.toIDLType(it.interopType(nativeModule.language)) })
             }
         }
         let maybeReceiver = method.hasReceiver() ? [{ name: 'ptr', type: idl.toIDLType('KPointer') }] : []
