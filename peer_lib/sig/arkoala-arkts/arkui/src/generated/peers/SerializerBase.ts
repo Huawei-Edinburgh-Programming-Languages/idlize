@@ -102,8 +102,6 @@ export abstract class CustomSerializer {
 }
 
 export class SerializerBase {
-    private static cache: SerializerBase | undefined = undefined
-
     protected isHolding: boolean = false
     private position = 0
     private buffer: KBuffer

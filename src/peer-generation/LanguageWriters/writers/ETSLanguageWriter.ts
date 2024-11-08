@@ -240,8 +240,6 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     makeUnionVariantCondition(convertor: ArgConvertor, valueName: string, valueType: string, type: string, index?: number): LanguageExpression {
         if (convertor instanceof EnumConvertor) {
             return this.makeString(`${valueName} instanceof ${this.typeConvertor.convertEntry(convertor.enumEntry)}`)
-        } else if (convertor instanceof StringConvertor) {
-            return this.makeString(`${valueName} instanceof ${this.stringifyType(convertor.idlType)}`)
         }
         return super.makeUnionVariantCondition(convertor, valueName, valueType, type, index);
     }
