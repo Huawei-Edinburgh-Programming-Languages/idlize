@@ -190,7 +190,7 @@ function checkNodeAPI() {
     let length = 0.0
     checkResult("BasicNodeAPI convertLengthMetricsUnit",
         () => length = nativeModule()._ConvertLengthMetricsUnit(1.23, 10, 0),
-        `convertLengthMetricsUnit(1.23 10, 0)`
+        `convertLengthMetricsUnit(1.23, 10, 0)`
     )
     assertTrue("BasicNodeAPI convertLengthMetricsUnit result", Math.abs(12.3 - length) < 0.00001)
 
