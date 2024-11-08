@@ -32,17 +32,6 @@
 struct _ArkUICanvas;
 typedef _ArkUICanvas* ArkUICanvasHandle;
 
-enum Ark_APINodeFlags {
-    CUSTOM_NONE = 0,
-    CUSTOM_MEASURE = 1 << 0,
-    CUSTOM_LAYOUT = 1 << 1,
-    CUSTOM_DRAW = 1 << 2,
-    CUSTOM_FOREGROUND_DRAW = 1 << 3,
-    CUSTOM_OVERLAY_DRAW = 1 << 4,
-};
-
-enum Ark_APICustomOp { MEASURE = 1, LAYOUT = 2, DRAW = 3 };
-
 // For logging we use operations exposed via interop, SetLoggerSymbol() is called
 // when library is loaded.
 const GroupLogger* loggerInstance = GetDefaultLogger();

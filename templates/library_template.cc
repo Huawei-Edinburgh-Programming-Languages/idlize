@@ -110,10 +110,6 @@ const %CPP_PREFIX%ArkUIAnyAPI* GetAnyImpl(int kind, int version, std::string* re
             }
             return nullptr;
         }
-        if (static_cast<int>(kind) == static_cast<int>(%CPP_PREFIX%Ark_APIVariantKind::GENERATED_FULL)) {
-            ((%CPP_PREFIX%ArkUIFullNodeAPI*)impl)->setArkUIEventsAPI(GetArkUiEventsAPI());
-            setCallbackCaller(deserializeAndCallCallback);
-        }
         impls[kind] = impl;
     }
     return impls[kind];

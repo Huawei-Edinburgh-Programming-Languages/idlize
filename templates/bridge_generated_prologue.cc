@@ -14,6 +14,7 @@
  */
 #include <vector>
 #include <string>
+#include "library.h"
 
 #include "common-interop.h"
 #include "arkoala_api_generated.h"
