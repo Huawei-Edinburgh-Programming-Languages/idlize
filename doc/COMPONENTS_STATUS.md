@@ -310,12 +310,12 @@
 |`antiAlias`| Function | Evstigneev Roman | done |  |
 |`strokeDashArray`| Function | Evstigneev Roman | blocked Arkoala |https://gitee.com/openharmony/interface_sdk-js/issues/IAX8ZZ|
 |*ScrollableCommonMethod*| *Component* | Samarin Sergey |in progress |  |
-|`scrollBar`| Function | Samarin Sergey |in progress |  |
-|`scrollBarColor`| Function | Samarin Sergey |in progress |  |
-|`scrollBarWidth`| Function | Samarin Sergey |in progress |  |
-|`nestedScroll`| Function | Samarin Sergey |in progress |  |
+|`scrollBar`| Function | Samarin Sergey | devdone |  |
+|`scrollBarColor`| Function | Samarin Sergey | devdone |  |
+|`scrollBarWidth`| Function | Samarin Sergey | devdone |  |
+|`nestedScroll`| Function | Samarin Sergey | devdone |  |
 |`enableScrollInteraction`| Function | Samarin Sergey |in progress |  |
-|`friction`| Function | Samarin Sergey |in progress |  |
+|`friction`| Function | Samarin Sergey | devdone |  |
 |`onScroll`| Function | Samarin Sergey | blocked |  |
 |`onWillScroll`| Function | Samarin Sergey | blocked |  |
 |`onDidScroll`| Function | Samarin Sergey | blocked |  |
@@ -323,7 +323,7 @@
 |`onReachEnd`| Function | Samarin Sergey | blocked |  |
 |`onScrollStart`| Function | Samarin Sergey | blocked |  |
 |`onScrollStop`| Function | Samarin Sergey | blocked |  |
-|`flingSpeedLimit`| Function | Samarin Sergey |in progress |  |
+|`flingSpeedLimit`| Function | Samarin Sergey | devdone |  |
 |`edgeEffect`| Function | Samarin Sergey |in progress |  |
 |`fadingEdge`| Function | Samarin Sergey | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*Component3D*| *Component* |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
