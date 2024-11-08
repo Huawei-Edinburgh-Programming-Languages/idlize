@@ -36,7 +36,8 @@ import {
     MethodModifier,
     MethodSignature,
     ObjectArgs,
-    ReturnStatement
+    ReturnStatement,
+    StringExpression
 } from "../LanguageWriter"
 import { TSCastExpression, TsTupleAllocStatement } from "./TsLanguageWriter"
 import { IdlNameConvertor } from "../nameConvertor"
@@ -360,6 +361,9 @@ export class CJLanguageWriter extends LanguageWriter {
     makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement {
         // keyAccessor and valueAccessor are equal in TS
         return this.makeStatement(this.makeMethodCall(keyAccessor, "set", [this.makeString(key), this.makeString(value)]))
+    }
+    makeNull(value?: string): LanguageExpression {
+        return new StringExpression(`None<${value}>`)
     }
     getTagType(): IDLType {
         return toIDLType("Tags");

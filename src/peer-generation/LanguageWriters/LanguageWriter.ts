@@ -484,7 +484,7 @@ export abstract class LanguageWriter {
     makeThis(): LanguageExpression {
         return new StringExpression("this")
     }
-    makeNull(): LanguageExpression {
+    makeNull(value?: string): LanguageExpression {
         return new StringExpression("null")
     }
     makeVoid(): LanguageExpression {
