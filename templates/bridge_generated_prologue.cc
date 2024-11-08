@@ -22,7 +22,7 @@
 static const %CPP_PREFIX%ArkUIFullNodeAPI* GetFullImpl() {
     return reinterpret_cast<const %CPP_PREFIX%ArkUIFullNodeAPI*>(
         GetAnyImpl(static_cast<int>(%CPP_PREFIX%Ark_APIVariantKind::%CPP_PREFIX%FULL),
-        %CPP_PREFIX%ARKUI_FULL_API_VERSION));
+        %CPP_PREFIX%ARKUI_FULL_API_VERSION, nullptr));
 }
 
 static const %CPP_PREFIX%ArkUINodeModifiers* GetNodeModifiers() {
@@ -35,6 +35,7 @@ static const %CPP_PREFIX%ArkUIAccessors* GetAccessors() {
 
 void impl_EmulateClickEvent(KInt nodeId, KFloat x, KFloat y) {
     // TODO: proper fill all by default values for Ark_ClickEvent
+    /*
     Ark_ClickEvent event;
     event.target.area.width.type = 0;
     event.target.area.width.value = 0;
@@ -84,10 +85,12 @@ void impl_EmulateClickEvent(KInt nodeId, KFloat x, KFloat y) {
     event.preventDefault.call = [](KInt id){};
 
     GetFullImpl()->getEventsAPI()->getCommonMethodEventsReceiver()->onClick0(nodeId, event);
+    */
 }
 KOALA_INTEROP_V3(EmulateClickEvent, KInt, KFloat, KFloat)
 
 void impl_EmulateTextInputEvent(KInt nodeId, const KStringPtr& text) {
+    /*
     Ark_String str {
         .chars = text.c_str(),
         .length = static_cast<Ark_Int32>(text.length())
@@ -95,5 +98,6 @@ void impl_EmulateTextInputEvent(KInt nodeId, const KStringPtr& text) {
     Opt_PreviewText preview;
     preview.tag = ARK_TAG_UNDEFINED;
     GetFullImpl()->getEventsAPI()->getTextInputEventsReceiver()->onChange(nodeId, str, preview);
+    */
 }
 KOALA_INTEROP_V2(EmulateTextInputEvent, KInt, KStringPtr)

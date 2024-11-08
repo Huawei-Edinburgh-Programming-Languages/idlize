@@ -29,7 +29,8 @@ import {
     makeTypeChecker,
     mesonBuildFile,
     tsCopyrightAndWarning,
-    makeDeserializeAndCall
+    makeDeserializeAndCall,
+    libraryHDeclaration
 } from "./FileGenerators"
 import { makeCJNodeTypes, makeCJSerializer } from "./printers/lang/CJPrinters"
 import { makeJavaArkComponents, makeJavaNodeTypes, makeJavaSerializer } from "./printers/lang/JavaPrinters"
@@ -445,6 +446,7 @@ export function generateArkoalaFromIdl(config: {
         arkoala.native(new TargetFile('bridge_custom.cc')),
         printBridgeCcCustom(peerLibrary, config.callLog ?? false), {
             onlyIntegrated: config.onlyIntegrated,
+            integrated: true
         })
 
     const { api, serializers } = printSerializers(config.apiVersion, peerLibrary)
@@ -464,6 +466,7 @@ export function generateArkoalaFromIdl(config: {
         dummyImplementations(modifiers.dummy, accessors.dummy, 1, config.apiVersion , 6).getOutput().join('\n'),
         {
             onlyIntegrated: config.onlyIntegrated,
+            integrated: true
         }
     )
     writeFile(
@@ -482,7 +485,13 @@ export function generateArkoalaFromIdl(config: {
     writeFile(arkoala.native(new TargetFile('library.cc')), libraryCcDeclaration(),
         {
             onlyIntegrated: config.onlyIntegrated,
+            integrated: true
         })
+    writeFile(arkoala.native(new TargetFile('library.h')), libraryHDeclaration(),
+    {
+        onlyIntegrated: config.onlyIntegrated,
+        integrated: true
+    })
 
     writeFile(arkoala.native(new TargetFile('callback_kind.h')), makeCallbacksKinds(peerLibrary, Language.CPP),
         {
