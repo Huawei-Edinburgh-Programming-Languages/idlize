@@ -1559,8 +1559,8 @@
 |`onFileSelectorShow`| Function | Erokhin Ilya | done | deprecated |
 |`onResourceLoad`| Function | Erokhin Ilya | testskipped | |
 |`onFullScreenExit`| Function | Erokhin Ilya | testskipped | |
-|`onFullScreenEnter`| Function | Erokhin Ilya | in progress | |
-|`onScaleChange`| Function | Erokhin Ilya | in progress | |
+|`onFullScreenEnter`| Function | Erokhin Ilya | in progress | dependency on Ark_FullScreenExitHandler |
+|`onScaleChange`| Function | Erokhin Ilya | testskipped | |
 |`onHttpAuthRequest`| Function | Erokhin Ilya | in progress | |
 |`onInterceptRequest`| Function | Erokhin Ilya | in progress | |
 |`onPermissionRequest`| Function | Erokhin Ilya | in progress | |
