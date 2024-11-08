@@ -1111,15 +1111,15 @@
 |`EnableHapticFeedback`|Function|Tuzhilkin Ivan|in progress|  |
 |*TextClock*| *Component* |Pavelyev Ivan|in progress|  |
 |`setTextClockOptions`| Function |Pavelyev Ivan|in progress|  |
-|`format`| Function |Pavelyev Ivan|in progress|  |
+|`format`| Function |Pavelyev Ivan|done|  |
 |`onDateChange`| Function |Pavelyev Ivan|in progress|  |
-|`fontColor`| Function |Pavelyev Ivan|in progress|  |
+|`fontColor`| Function |Pavelyev Ivan|done|  |
 |`fontSize`| Function |Pavelyev Ivan| blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1J5L |
-|`fontStyle`| Function |Pavelyev Ivan|in progress|  |
-|`fontWeight`| Function |Pavelyev Ivan|in progress|  |
+|`fontStyle`| Function |Pavelyev Ivan|done|  |
+|`fontWeight`| Function |Pavelyev Ivan|done|  |
 |`fontFamily`| Function |Pavelyev Ivan| blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1JRR |
 |`textShadow`| Function |Pavelyev Ivan| blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1K3Z |
-|`fontFeature`| Function |Pavelyev Ivan|in progress|  |
+|`fontFeature`| Function |Pavelyev Ivan|done|  |
 |`contentModifier`| Function |Pavelyev Ivan|blocked Arkoala| https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`dateTimeOptions`| Function |Pavelyev Ivan|in progress|  |
 |*TextClockController*| *Class* |Pavelyev Ivan|in progress|  |
