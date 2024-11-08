@@ -322,7 +322,7 @@ class OHOSVisitor {
         this.data.forEach(data => {
             this.peerWriter.writeInterface(data.name, writer => {
                 data.properties.forEach(prop => {
-                    writer.writeFieldDeclaration(prop.name, prop.type, [], false)
+                    writer.writeFieldDeclaration(prop.name, prop.type, [], prop.isOptional)
                 })
             })
         })

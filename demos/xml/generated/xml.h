@@ -259,7 +259,7 @@ typedef struct OH_XML_ParseInfoModifier {
 struct OH_XML_XmlPullParserHandleOpaque;
 typedef struct OH_XML_XmlPullParserHandleOpaque* OH_XML_XmlPullParserHandle;
 typedef struct OH_XML_XmlPullParserModifier {
-    OH_XML_XmlPullParserHandle (*construct)(const OH_Union_ArrayBuffer_DataView* buffer, const OH_String* encoding);
+    OH_XML_XmlPullParserHandle (*construct)(const OH_String* buffer, const OH_String* encoding);
     void (*destruct)(OH_XML_XmlPullParserHandle thiz);
     OH_Void (*parse)(OH_NativePointer thisPtr, const OH_XML_ParseOptions* option);
 } OH_XML_XmlPullParserModifier;

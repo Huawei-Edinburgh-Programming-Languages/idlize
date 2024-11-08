@@ -648,7 +648,7 @@ OH_Boolean ParseInfo_isWhitespaceImpl(OH_NativePointer thisPtr) {
 OH_Int32 ParseInfo_getAttributeCountImpl(OH_NativePointer thisPtr) {
     return {};
 }
-OH_XML_XmlPullParserHandle XmlPullParser_constructImpl(const OH_Union_ArrayBuffer_DataView* buffer, const OH_String* encoding) {
+OH_XML_XmlPullParserHandle XmlPullParser_constructImpl(const OH_String* buffer, const OH_String* encoding) {
     return {};
 }
 void XmlPullParser_destructImpl(OH_XML_XmlPullParserHandle thiz) {
@@ -893,20 +893,8 @@ OH_Int32 impl_ParseInfo_getAttributeCount(OH_NativePointer thisPtr) {
 }
 KOALA_INTEROP_1(ParseInfo_getAttributeCount, OH_Int32, OH_NativePointer)
  
-OH_NativePointer impl_XmlPullParser_ctor(uint8_t* thisArray, int32_t thisLength) {
+OH_NativePointer impl_XmlPullParser_ctor(const KStringPtr& buffer, uint8_t* thisArray, int32_t thisLength) {
         Deserializer thisDeserializer(thisArray, thisLength);
-        const OH_Int32 buffer_value_buf_selector = thisDeserializer.readInt8();
-        OH_Union_ArrayBuffer_DataView buffer_value_buf = {};
-        buffer_value_buf.selector = buffer_value_buf_selector;
-        if (buffer_value_buf_selector == 0) {
-            buffer_value_buf.selector = 0;
-            buffer_value_buf.value0 = thisDeserializer.readArrayBuffer();
-        }
-        else if (buffer_value_buf_selector == 1) {
-            buffer_value_buf.selector = 1;
-            buffer_value_buf.value1 = static_cast<OH_CustomObject>(thisDeserializer.readCustomObject("DataView"));
-        }
-        OH_Union_ArrayBuffer_DataView buffer_value = static_cast<OH_Union_ArrayBuffer_DataView>(buffer_value_buf);;
         const auto encoding_value_buf_runtimeType = static_cast<OH_RuntimeType>(thisDeserializer.readInt8());
         Opt_String encoding_value_buf = {};
         encoding_value_buf.tag = encoding_value_buf_runtimeType == OH_RUNTIME_UNDEFINED ? OH_TAG_UNDEFINED : OH_TAG_OBJECT;
@@ -916,9 +904,9 @@ OH_NativePointer impl_XmlPullParser_ctor(uint8_t* thisArray, int32_t thisLength)
             }
         }
         Opt_String encoding_value = encoding_value_buf;;
-        return GetXMLAPIImpl(XML_API_VERSION)->XmlPullParser()->construct((const OH_Union_ArrayBuffer_DataView*)&buffer_value, /* TODO Opt_String*/ (const OH_String*)&encoding_value);
+        return GetXMLAPIImpl(XML_API_VERSION)->XmlPullParser()->construct((const OH_String*)&buffer, (const OH_String*)&encoding_value);
 }
-KOALA_INTEROP_2(XmlPullParser_ctor, OH_NativePointer, uint8_t*, int32_t)
+KOALA_INTEROP_3(XmlPullParser_ctor, OH_NativePointer, KStringPtr, uint8_t*, int32_t)
  
 OH_NativePointer impl_XmlPullParser_getFinalizer() {
         return (OH_NativePointer) GetXMLAPIImpl(XML_API_VERSION)->XmlPullParser()->destruct;

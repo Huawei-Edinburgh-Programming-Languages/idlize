@@ -7,11 +7,11 @@ import {
     getXMLNativeModule,
 } from './xmlNative'
 export interface ParseOptions {
-     supportDoctype: boolean
-     ignoreNameSpace: boolean
-     tagValueCallbackFunction: ((name: string, value: string) => boolean)
-     attributeValueCallbackFunction: ((name: string, value: string) => boolean)
-     tokenValueCallbackFunction: ((eventType: EventType, value: ParseInfo) => boolean)
+    supportDoctype?: boolean
+    ignoreNameSpace?: boolean
+    tagValueCallbackFunction?: ((name: string, value: string) => boolean)
+    attributeValueCallbackFunction?: ((name: string, value: string) => boolean)
+    tokenValueCallbackFunction?: ((eventType: EventType, value: ParseInfo) => boolean)
 }
 export interface XmlSerializerInterface {
     setAttributes(name: string, value: string): void 
@@ -145,20 +145,8 @@ export class ParseInfo implements ParseInfoInterface {
 }
 export class XmlPullParser implements XmlPullParserInterface {
     private peer: KPointer
-     constructor(buffer: ArrayBuffer | DataView, encoding?: string | undefined) {
+     constructor(buffer: string, encoding?: string | undefined) {
         const thisSerializer: Serializer = SerializerBase.hold(createSerializer)
-        let buffer_type: int32 = RuntimeType.UNDEFINED
-        buffer_type = runtimeType(buffer)
-        if (((RuntimeType.OBJECT) == (buffer_type)) && (((buffer!.hasOwnProperty("byteLength"))))) {
-            thisSerializer.writeInt8(0)
-            const buffer_0 = unsafeCast<ArrayBuffer>(buffer)
-            thisSerializer.writeArrayBuffer(buffer_0)
-        }
-        else if (((RuntimeType.OBJECT == buffer_type))) {
-            thisSerializer.writeInt8(1)
-            const buffer_1 = unsafeCast<DataView>(buffer)
-            thisSerializer.writeCustomObject("DataView", buffer_1)
-        }
         let encoding_type: int32 = RuntimeType.UNDEFINED
         encoding_type = runtimeType(encoding)
         thisSerializer.writeInt8(encoding_type)
@@ -166,7 +154,7 @@ export class XmlPullParser implements XmlPullParserInterface {
             const encoding_value = encoding!
             thisSerializer.writeString(encoding_value)
         }
-        this.peer = getXMLNativeModule()._XmlPullParser_ctor(thisSerializer.asArray(), thisSerializer.length())
+        this.peer = getXMLNativeModule()._XmlPullParser_ctor(buffer, thisSerializer.asArray(), thisSerializer.length())
         thisSerializer.release();
     }
     parse(option: ParseOptions): void {
