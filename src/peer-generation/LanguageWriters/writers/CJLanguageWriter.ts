@@ -74,12 +74,6 @@ export class CJCheckDefinedExpression implements LanguageExpression {
 ////////////////////////////////////////////////////////////////
 //                         STATEMENTS                         //
 ////////////////////////////////////////////////////////////////
-class CJThrowErrorStatement implements LanguageStatement {
-    constructor(public message: string) { }
-    write(writer: LanguageWriter): void {
-        writer.print(`throw Exception("${this.message}")`)
-    }
-}
 
 export class CJAssignStatement extends AssignStatement {
     constructor(public variableName: string,
