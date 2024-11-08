@@ -323,7 +323,7 @@ export class OptionConvertor extends BaseArgConvertor { //
 
 export class AggregateConvertor extends BaseArgConvertor { //
     protected memberConvertors: ArgConvertor[]
-    private members: [string, boolean][] = []
+    public members: [string, boolean][] = []
     public readonly aliasName: string | undefined
 
     constructor(protected library: LibraryInterface, param: string, type: idl.IDLType, protected decl: idl.IDLInterface) {
@@ -398,20 +398,18 @@ export class AggregateConvertor extends BaseArgConvertor { //
         return this.members.map(it => it[0])
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        //TODO: needs to be reworked
-        if (writer.language === Language.ARKTS) {
-            return makeInterfaceTypeCheckerCall(value,
-                this.aliasName !== undefined ? this.aliasName : writer.convert(this.idlType),
-                this.members.map(it => it[0]), duplicates, writer)
-        }
-
         const uniqueFields = this.members.filter(it => !duplicates.has(it[0]))
-        return this.discriminatorFromFields(value, writer, uniqueFields, it => it[0], it => it[1])
+        return this.discriminatorFromFields(value,
+            writer,
+            uniqueFields,
+                it => it[0],
+                it => it[1],
+            duplicates)
     }
 }
 
 export class InterfaceConvertor extends BaseArgConvertor { //
-    constructor(private library: LibraryInterface, name: string /* change to IDLReferenceType */, param: string, protected declaration: idl.IDLInterface) {
+    constructor(private library: LibraryInterface, name: string /* change to IDLReferenceType */, param: string, public declaration: idl.IDLInterface) {
         super(idl.createReferenceType(name), [RuntimeType.OBJECT], false, true, param)
     }
 
@@ -437,15 +435,6 @@ export class InterfaceConvertor extends BaseArgConvertor { //
         return this.declaration?.properties.map(it => it.name) ?? []
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        //TODO: needs to be reworked
-        if (writer.language === Language.ARKTS) {
-            return makeInterfaceTypeCheckerCall(value,
-                writer.convert(this.idlType),
-                this.declaration.properties.map(it => it.name),
-                duplicates,
-                writer)
-        }
-
         // First, tricky special cases
         if (this.declaration.name.endsWith("GestureInterface")) {
             const gestureType = this.declaration.name.slice(0, -"GestureInterface".length)
@@ -461,7 +450,7 @@ export class InterfaceConvertor extends BaseArgConvertor { //
         }
         // Try to figure out interface by examining field sets
         const uniqueFields = this.declaration?.properties.filter(it => !duplicates.has(it.name))
-        return this.discriminatorFromFields(value, writer, uniqueFields, it => it.name, it => it.isOptional)
+        return this.discriminatorFromFields(value, writer, uniqueFields, it => it.name, it => it.isOptional, duplicates)
     }
 }
 
@@ -469,22 +458,14 @@ export class ClassConvertor extends InterfaceConvertor { //
     constructor(library: LibraryInterface, name: string, param: string, declaration: idl.IDLInterface) {
         super(library, name, param, declaration)
     }
-    override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
+    override unionDiscriminator(value: string,
+                                index: number,
+                                writer: LanguageWriter,
+                                duplicateMembers: Set<string>): LanguageExpression | undefined {
         // SubTabBarStyle causes inscrutable "SubTabBarStyle is not defined" error
         if (this.declaration.name === "SubTabBarStyle") return undefined
-        //TODO: needs to be reworked
-        if (writer.language === Language.ARKTS) {
-            return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT,
-                [
-                    writer.makeMethodCall(
-                        "TypeChecker",
-                        generateTypeCheckerName(writer.convert(this.idlType)),
-                        [writer.makeString(value)])
-                ]
-            )
-        }
         return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT,
-            [writer.makeString(`${value} instanceof ${writer.stringifyType(this.idlType)}`)])
+            [writer.instanceOf(this, value, duplicateMembers)])
     }
 }
 
@@ -646,14 +627,8 @@ export class ArrayConvertor extends BaseArgConvertor { //
         return true
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        //TODO: needs to be reworked
-        const exprs: LanguageExpression[] = []
-        if (writer.language === Language.ARKTS) {
-            exprs.push(makeArrayTypeCheckCall(value, this.library.getTypeName(this.idlType), writer))
-        } else {
-            exprs.push(writer.makeString(`${value} instanceof ${this.targetType(writer)}`))
-        }
-        return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT,exprs)
+        return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT,
+            [writer.instanceOf(this, value, duplicates)])
     }
     override getObjectAccessor(language: Language, value: string, args?: Record<string, string>): string {
         const array = language === Language.CPP ? ".array" : ""
@@ -803,7 +778,7 @@ export class MaterializedClassConvertor extends BaseArgConvertor { //
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
         return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT,
-            [writer.makeString(`${value} instanceof ${writer.stringifyType(this.idlType)}`)])
+            [writer.instanceOf(this, value, duplicates)])
     }
 }
 

@@ -29,7 +29,7 @@ import {
 import { TSLambdaExpression, TSLanguageWriter } from "./TsLanguageWriter"
 import { forceAsNamedNode, IDLEnum, IDLI32Type, IDLThisType, IDLType, IDLVoidType, toIDLType } from '../../../idl'
 import { EnumEntity } from "../../PeerFile"
-import { ArgConvertor, CustomTypeConvertor, RuntimeType } from "../../ArgConvertors"
+import {ArgConvertor, BaseArgConvertor, CustomTypeConvertor, RuntimeType} from "../../ArgConvertors"
 import { Language } from "../../../Language"
 import { ReferenceResolver } from "../../ReferenceResolver"
 import { EtsIDLNodeToStringConvertor } from "../convertors/ETSConvertors"
@@ -190,9 +190,15 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     ordinalFromEnum(value: LanguageExpression, _: IDLEnum): LanguageExpression {
         return value;
     }
-    makeDiscriminatorFromFields(convertor: {targetType: (writer: LanguageWriter) => string}, value: string, accessors: string[]): LanguageExpression {
+    makeDiscriminatorFromFields(convertor: {targetType: (writer: LanguageWriter) => string},
+                                value: string,
+                                accessors: string[],
+                                duplicates: Set<string>): LanguageExpression {
         if (convertor instanceof CustomTypeConvertor) {
             return this.makeString(`${value} instanceof ${convertor.customTypeName}`)
+        }
+        if (convertor instanceof AggregateConvertor || convertor instanceof InterfaceConvertor) {
+            return this.instanceOf(convertor, value, duplicates)
         }
         return this.makeString(`${value} instanceof ${convertor.targetType(this)}`)
     }
@@ -258,4 +264,24 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         return `${value} as int32` // FIXME: is there int8 in ARKTS?
     }
     override castToBoolean(value: string): string { return `${value} ? 1 : 0` }
+
+    override instanceOf(convertor: BaseArgConvertor, value: string, duplicateMembers: Set<string>): LanguageExpression {
+        if (convertor instanceof InterfaceConvertor && convertor.declaration.properties.length > 0) {
+            return makeInterfaceTypeCheckerCall(value,
+                this.convert(convertor.idlType),
+                convertor.declaration.properties.map(it => it.name),
+                duplicateMembers,
+                this)
+        }
+        if (convertor instanceof AggregateConvertor) {
+            return makeInterfaceTypeCheckerCall(value,
+                convertor.aliasName !== undefined ? convertor.aliasName : this.convert(convertor.idlType),
+                convertor.members.map(it => it[0]), duplicateMembers, this)
+        }
+        if (convertor instanceof ArrayConvertor) {
+            return makeArrayTypeCheckCall(value,
+                (this.resolver as IdlPeerLibrary).getTypeName(convertor.idlType), this)
+        }
+        return super.instanceOf(convertor, value, duplicateMembers)
+    }
 }

@@ -16,7 +16,7 @@
 import * as idl from "../../idl"
 import { IndentedPrinter } from "../../IndentedPrinter"
 import { stringOrNone } from "../../util"
-import { ArgConvertor, RuntimeType } from "../ArgConvertors"
+import {ArgConvertor, BaseArgConvertor, RuntimeType} from "../ArgConvertors"
 import { EnumEntity } from "../PeerFile"
 import * as fs from "fs"
 import { Language } from "../../Language"
@@ -611,7 +611,7 @@ export abstract class LanguageWriter {
         this.writeStatement(this.makeAssign(valueType, idl.IDLI32Type,
             this.makeFunctionCall("runtimeType", [this.makeString(value)]), false))
     }
-    makeDiscriminatorFromFields(convertor: {targetType: (writer: LanguageWriter) => string}, value: string, accessors: string[]): LanguageExpression {
+    makeDiscriminatorFromFields(convertor: {targetType: (writer: LanguageWriter) => string}, value: string, accessors: string[], duplicates: Set<string>): LanguageExpression {
         return this.makeString(`(${this.makeNaryOp("||",
             accessors.map(it => this.makeString(`${value}!.hasOwnProperty("${it}")`))).asString()})`)
     }
@@ -681,6 +681,9 @@ export abstract class LanguageWriter {
     }
     makeCallIsArrayBuffer(value: string): LanguageExpression {
         return this.makeString(`${value} instanceof ArrayBuffer`)
+    }
+    instanceOf(convertor: BaseArgConvertor, value: string, _duplicateMembers: Set<string>): LanguageExpression {
+        return this.makeString(`${value} instanceof ${this.convert(convertor.idlType)}`)
     }
 }
 
