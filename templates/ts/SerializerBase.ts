@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { float32, int32, pointer } from "./types"
+import { float32, int32, pointer, Finalizable } from "./types"
 import { %NATIVE_MODULE_ACCESSOR% as nativeModule, CallbackKind } from "%NATIVE_MODULE_PATH%"
 
 /**
@@ -109,6 +109,7 @@ export class SerializerBase {
     public release() {
         this.releaseResources()
         this.position = 0
+        this.isHolding = false
     }
     asArray(): Uint8Array {
         return new Uint8Array(this.buffer)

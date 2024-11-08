@@ -16,13 +16,33 @@
 import { SerializerBase, Tags, RuntimeType, runtimeType, isInstanceOf } from "./SerializerBase"
 import { int32 } from "./types"
 import { getXMLNativeModule, CallbackKind } from "./xmlNative"
-import { ParseOptions } from "./xml"
+import { ParseInfo, ParseOptions } from "./xml"
 
 export class Serializer extends SerializerBase {
+    private static cache: Serializer | undefined = undefined
+    static hold(): Serializer {
+        let serializer = Serializer.cache
+        if ((serializer) == (undefined))
+            {
+                serializer = new Serializer()
+                Serializer.cache = serializer
+            }
+        if (serializer.isHolding)
+            throw new Error("Serializer is already being held. Check if you had released is before")
+        serializer.isHolding = true
+        return serializer
+    }
     writeArrayBuffer(value: ArrayBuffer): void {
         let valueSerializer: Serializer = this
         const value_byteLength = value.byteLength
         valueSerializer.writeNumber(value_byteLength)
+    }
+    writeParseInfo(value: ParseInfo): void {
+        let valueSerializer: Serializer = this
+        const peer = value.getPeer()
+        if (peer != undefined) {
+            valueSerializer.writePointer(peer.ptr);
+        }
     }
     writeParseOptions(value: ParseOptions): void {
         let valueSerializer: Serializer = this
@@ -68,5 +88,3 @@ export class Serializer extends SerializerBase {
         }
     }
 }
-
-export function createSerializer(): Serializer { return new Serializer() }

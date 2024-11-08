@@ -9,7 +9,7 @@ external_interop_dir = '../../external/interop/src/cpp'
 
 cxx = meson.get_compiler('cpp')
 
-cflags = []
+cflags = ['-g', '-O0']
 ldflags = []
 
 include_dirs = [

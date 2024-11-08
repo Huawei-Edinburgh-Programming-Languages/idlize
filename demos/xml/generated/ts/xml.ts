@@ -1,17 +1,17 @@
-import { pointer, int32, EventType, KPointer } from "./types"
-import { SerializerBase, Tags, RuntimeType, runtimeType, isInstanceOf, unsafeCast } from "./SerializerBase"
-import { Serializer, createSerializer } from "./xmlSerializer"
+import { pointer, int32, EventType, KPointer, Finalizable } from "./types"
+import { Tags, RuntimeType, runtimeType, isInstanceOf, unsafeCast } from "./SerializerBase"
+import { Serializer } from "./xmlSerializer"
 
 import {
     XMLNativeModule,
     getXMLNativeModule,
 } from './xmlNative'
 export interface ParseOptions {
-    supportDoctype?: boolean
-    ignoreNameSpace?: boolean
-    tagValueCallbackFunction?: ((name: string, value: string) => boolean)
-    attributeValueCallbackFunction?: ((name: string, value: string) => boolean)
-    tokenValueCallbackFunction?: ((eventType: EventType, value: ParseInfo) => boolean)
+     supportDoctype?: boolean
+     ignoreNameSpace?: boolean
+     tagValueCallbackFunction?: ((name: string, value: string) => boolean)
+     attributeValueCallbackFunction?: ((name: string, value: string) => boolean)
+     tokenValueCallbackFunction?: ((eventType: EventType, value: ParseInfo) => boolean)
 }
 export interface XmlSerializerInterface {
     setAttributes(name: string, value: string): void 
@@ -43,7 +43,7 @@ export interface XmlPullParserInterface {
 export class XmlSerializer implements XmlSerializerInterface {
     private peer: KPointer
      constructor(buffer: ArrayBuffer | DataView, encoding?: string | undefined) {
-        const thisSerializer: Serializer = SerializerBase.hold(createSerializer)
+        const thisSerializer: Serializer = Serializer.hold()
         let buffer_type: int32 = RuntimeType.UNDEFINED
         buffer_type = runtimeType(buffer)
         if (((RuntimeType.OBJECT) == (buffer_type)) && (((buffer!.hasOwnProperty("byteLength"))))) {
@@ -65,6 +65,9 @@ export class XmlSerializer implements XmlSerializerInterface {
         }
         this.peer = getXMLNativeModule()._XmlSerializer_ctor(thisSerializer.asArray(), thisSerializer.length())
         thisSerializer.release();
+    }
+    getPeer(): Finalizable | undefined {
+        return { ptr: this.peer }
     }
     setAttributes(name: string, value: string): void {
         getXMLNativeModule()._XmlSerializer_setAttributes(this.peer, name, value);
@@ -101,6 +104,9 @@ export class ParseInfo implements ParseInfoInterface {
     private peer: KPointer
      constructor() {
         this.peer = getXMLNativeModule()._ParseInfo_ctor()
+    }
+    getPeer(): Finalizable | undefined {
+        return { ptr: this.peer }
     }
     getColumnNumber(): number {
         const result = getXMLNativeModule()._ParseInfo_getColumnNumber(this.peer)
@@ -146,7 +152,7 @@ export class ParseInfo implements ParseInfoInterface {
 export class XmlPullParser implements XmlPullParserInterface {
     private peer: KPointer
      constructor(buffer: string, encoding?: string | undefined) {
-        const thisSerializer: Serializer = SerializerBase.hold(createSerializer)
+        const thisSerializer: Serializer = Serializer.hold()
         let encoding_type: int32 = RuntimeType.UNDEFINED
         encoding_type = runtimeType(encoding)
         thisSerializer.writeInt8(encoding_type)
@@ -157,8 +163,11 @@ export class XmlPullParser implements XmlPullParserInterface {
         this.peer = getXMLNativeModule()._XmlPullParser_ctor(buffer, thisSerializer.asArray(), thisSerializer.length())
         thisSerializer.release();
     }
+    getPeer(): Finalizable | undefined {
+        return { ptr: this.peer }
+    }
     parse(option: ParseOptions): void {
-        const thisSerializer: Serializer = SerializerBase.hold(createSerializer)
+        const thisSerializer: Serializer = Serializer.hold()
         thisSerializer.writeParseOptions(option)
         getXMLNativeModule()._XmlPullParser_parse(this.peer, thisSerializer.asArray(), thisSerializer.length());
         thisSerializer.release();
