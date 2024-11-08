@@ -35,6 +35,10 @@ export class PeerGeneratorConfig {
         "ContentSlot",
     ]
 
+    private static ignoreSerialized = [
+            "IMonitor"
+    ]
+
     private static knownParametrized = [
         "Indicator", "AttributeModifier", "AnimationRange", "ContentModifier", "SizeT", "PositionT", "Record"
     ]
@@ -176,6 +180,10 @@ export class PeerGeneratorConfig {
         return originalName
     }
 
+    static isIgnoredSerialized(name: string | undefined) : boolean {
+        return name != undefined && PeerGeneratorConfig.ignoreSerialized.includes(name)
+    }
+    
     static isKnownParametrized(name: string | undefined) : boolean {
         return name != undefined && PeerGeneratorConfig.knownParametrized.includes(name)
     }
