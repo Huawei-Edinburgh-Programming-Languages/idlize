@@ -1536,13 +1536,13 @@
 |`initialScale`| Function | Erokhin Ilya | done | |
 |`userAgent`| Function | Erokhin Ilya | done | |
 |`metaViewport`| Function | Erokhin Ilya | done | |
-|`onPageEnd`| Function | Erokhin Ilya | in progress | |
-|`onPageBegin`| Function | Erokhin Ilya | in progress | |
-|`onProgressChange`| Function | Erokhin Ilya | in progress | |
-|`onTitleReceive`| Function | Erokhin Ilya | in progress | |
-|`onGeolocationHide`| Function | Erokhin Ilya | in progress | |
+|`onPageEnd`| Function | Erokhin Ilya | testskipped | |
+|`onPageBegin`| Function | Erokhin Ilya | testskipped | |
+|`onProgressChange`| Function | Erokhin Ilya | testskipped | |
+|`onTitleReceive`| Function | Erokhin Ilya | testskipped | |
+|`onGeolocationHide`| Function | Erokhin Ilya | testskipped | |
 |`onGeolocationShow`| Function | Erokhin Ilya | in progress | |
-|`onRequestSelected`| Function | Erokhin Ilya | in progress | |
+|`onRequestSelected`| Function | Erokhin Ilya | testskipped | |
 |`onAlert`| Function | Erokhin Ilya | in progress | |
 |`onBeforeUnload`| Function | Erokhin Ilya | in progress | |
 |`onConfirm`| Function | Erokhin Ilya | in progress | |
@@ -1632,27 +1632,27 @@
 |`enableHapticFeedback`| Function | Erokhin Ilya | done | |
 |`registerNativeEmbedRule`| Function | Erokhin Ilya | done | |
 |*WebController*| *Class* | Erokhin Ilya | in progress | |
-|`onInactive`| Function | Erokhin Ilya | devdone | |
-|`onActive`| Function | Erokhin Ilya | devdone | |
-|`zoom`| Function | Erokhin Ilya | devdone | |
-|`clearHistory`| Function | Erokhin Ilya | devdone | |
+|`onInactive`| Function | Erokhin Ilya | done | |
+|`onActive`| Function | Erokhin Ilya | done | |
+|`zoom`| Function | Erokhin Ilya | done | |
+|`clearHistory`| Function | Erokhin Ilya | done | |
 |`runJavaScript`| Function | Erokhin Ilya | in progress | |
-|`loadData`| Function | Erokhin Ilya | devdone | |
+|`loadData`| Function | Erokhin Ilya | done | |
 |`loadUrl`| Function | Erokhin Ilya | testskipped | |
-|`refresh`| Function | Erokhin Ilya | devdone | |
-|`stop`| Function | Erokhin Ilya | devdone | |
+|`refresh`| Function | Erokhin Ilya | done | |
+|`stop`| Function | Erokhin Ilya | done | |
 |`registerJavaScriptProxy`| Function | Erokhin Ilya | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV |
-|`deleteJavaScriptRegister`| Function | Erokhin Ilya | devdone | |
+|`deleteJavaScriptRegister`| Function | Erokhin Ilya | done | |
 |`getHitTest`| Function | Erokhin Ilya | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`requestFocus`| Function | Erokhin Ilya | devdone | |
-|`accessBackward`| Function | Erokhin Ilya | devdone | |
-|`accessForward`| Function | Erokhin Ilya | devdone | |
-|`accessStep`| Function | Erokhin Ilya | devdone | |
-|`backward`| Function | Erokhin Ilya | devdone | |
-|`forward`| Function | Erokhin Ilya | devdone | |
+|`requestFocus`| Function | Erokhin Ilya | done | |
+|`accessBackward`| Function | Erokhin Ilya | done | |
+|`accessForward`| Function | Erokhin Ilya | done | |
+|`accessStep`| Function | Erokhin Ilya | done | |
+|`backward`| Function | Erokhin Ilya | done | |
+|`forward`| Function | Erokhin Ilya | done | |
 |`getCookieManager`| Function | Erokhin Ilya | testskipped | |
 |*JsGeolocation*| *Class* | Erokhin Ilya | in progress |  |
 |`invoke`| Function | Erokhin Ilya | in progress |  |
-|*WebCookie*| *Class* | Erokhin Ilya | devdone | |
-|`setCookie`| Function | Erokhin Ilya | devdone | |
-|`saveCookie`| Function | Erokhin Ilya | devdone | |
+|*WebCookie*| *Class* | Erokhin Ilya | done | |
+|`setCookie`| Function | Erokhin Ilya | done | |
+|`saveCookie`| Function | Erokhin Ilya | done | |
