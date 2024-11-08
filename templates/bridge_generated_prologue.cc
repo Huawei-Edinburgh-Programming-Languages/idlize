@@ -14,11 +14,12 @@
  */
 #include <vector>
 #include <string>
-#include "library.h"
 
 #include "common-interop.h"
 #include "arkoala_api_generated.h"
 #include "Serializers.h"
+
+const %CPP_PREFIX%ArkUIAnyAPI* GetAnyImpl(int kind, int version, std::string* result = nullptr);
 
 static const %CPP_PREFIX%ArkUIFullNodeAPI* GetFullImpl() {
     return reinterpret_cast<const %CPP_PREFIX%ArkUIFullNodeAPI*>(

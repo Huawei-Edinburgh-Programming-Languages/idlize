@@ -125,11 +125,6 @@ export function libraryCcDeclaration(): string {
         .replaceAll(`%CPP_PREFIX%`, PeerGeneratorConfig.cppPrefix)
 }
 
-export function libraryHDeclaration(): string {
-    return readTemplate('library_template.h')
-        .replaceAll(`%CPP_PREFIX%`, PeerGeneratorConfig.cppPrefix)
-}
-
 export function bridgeCcGeneratedDeclaration(generatedApi: string[]): string {
     let prologue = readTemplate('bridge_generated_prologue.cc')
         .replaceAll(`%CPP_PREFIX%`, PeerGeneratorConfig.cppPrefix)

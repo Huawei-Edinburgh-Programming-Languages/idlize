@@ -30,7 +30,6 @@ import {
     mesonBuildFile,
     tsCopyrightAndWarning,
     makeDeserializeAndCall,
-    libraryHDeclaration
 } from "./FileGenerators"
 import { makeCJNodeTypes, makeCJSerializer } from "./printers/lang/CJPrinters"
 import { makeJavaArkComponents, makeJavaNodeTypes, makeJavaSerializer } from "./printers/lang/JavaPrinters"
@@ -487,11 +486,6 @@ export function generateArkoalaFromIdl(config: {
             onlyIntegrated: config.onlyIntegrated,
             integrated: true
         })
-    writeFile(arkoala.native(new TargetFile('library.h')), libraryHDeclaration(),
-    {
-        onlyIntegrated: config.onlyIntegrated,
-        integrated: true
-    })
 
     writeFile(arkoala.native(new TargetFile('callback_kind.h')), makeCallbacksKinds(peerLibrary, Language.CPP),
         {

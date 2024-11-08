@@ -28,10 +28,6 @@
 
 #undef max
 
-// TODO: remove when it will to add arkoala-generated-api
-struct _ArkUICanvas;
-typedef _ArkUICanvas* ArkUICanvasHandle;
-
 // For logging we use operations exposed via interop, SetLoggerSymbol() is called
 // when library is loaded.
 const GroupLogger* loggerInstance = GetDefaultLogger();
