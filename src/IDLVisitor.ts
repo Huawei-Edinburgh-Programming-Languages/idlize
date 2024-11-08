@@ -27,7 +27,6 @@ import { IDLKeywords } from "./languageSpecificKeywords"
 import { isCommonMethodOrSubclass } from "./peer-generation/inheritance"
 import { ReferenceResolver } from "./peer-generation/ReferenceResolver"
 
-
 const typeContainerMapper: Record<string, idl.IDLContainerKind> = {
     'Array': 'sequence',
     'Map': 'record',
@@ -1421,7 +1420,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
     }
 
     private guessTypeAndValue(declaration: ts.VariableDeclaration):  [idl.IDLType, string] {
-        if (declaration.type) return [ this.serializeType(declaration.type), declaration.initializer!.getText()]
+        if (declaration.type) return [this.serializeType(declaration.type), declaration.initializer!.getText()]
         if (declaration.initializer) {
             let value = declaration.initializer.getText()
             if (value.startsWith('"') || value.startsWith("'")) {
