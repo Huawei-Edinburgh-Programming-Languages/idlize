@@ -1541,24 +1541,24 @@
 |`onProgressChange`| Function | Erokhin Ilya | testskipped | |
 |`onTitleReceive`| Function | Erokhin Ilya | testskipped | |
 |`onGeolocationHide`| Function | Erokhin Ilya | testskipped | |
-|`onGeolocationShow`| Function | Erokhin Ilya | in progress | |
+|`onGeolocationShow`| Function | Erokhin Ilya | in progress | dependency on Ark_JsGeolocation |
 |`onRequestSelected`| Function | Erokhin Ilya | testskipped | |
-|`onAlert`| Function | Erokhin Ilya | in progress | |
-|`onBeforeUnload`| Function | Erokhin Ilya | in progress | |
-|`onConfirm`| Function | Erokhin Ilya | in progress | |
-|`onPrompt`| Function | Erokhin Ilya | in progress | |
-|`onConsole`| Function | Erokhin Ilya | in progress | |
-|`onErrorReceive`| Function | Erokhin Ilya | in progress | |
-|`onHttpErrorReceive`| Function | Erokhin Ilya | in progress | |
-|`onDownloadStart`| Function | Erokhin Ilya | in progress | |
-|`onRefreshAccessedHistory`| Function | Erokhin Ilya | in progress | |
-|`onUrlLoadIntercept`| Function | Erokhin Ilya | in progress | |
-|`onSslErrorReceive`| Function | Erokhin Ilya | in progress | |
-|`onRenderExited`| Function | Erokhin Ilya | in progress | |
-|`onShowFileSelector`| Function | Erokhin Ilya | in progress | |
-|`onFileSelectorShow`| Function | Erokhin Ilya | in progress | |
-|`onResourceLoad`| Function | Erokhin Ilya | in progress | |
-|`onFullScreenExit`| Function | Erokhin Ilya | in progress | |
+|`onAlert`| Function | Erokhin Ilya | blocked | dependency on Ark_JsResult & https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onBeforeUnload`| Function | Erokhin Ilya | blocked | dependency on Ark_JsResult & https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onConfirm`| Function | Erokhin Ilya | blocked | dependency on Ark_JsResult & https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onPrompt`| Function | Erokhin Ilya | blocked | dependency on Ark_JsResult & https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onConsole`| Function | Erokhin Ilya | blocked | dependency on Ark_ConsoleMessage & https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onErrorReceive`| Function | Erokhin Ilya | in progress | dependency on Ark_WebResourceRequest & Ark_WebResourceError |
+|`onHttpErrorReceive`| Function | Erokhin Ilya | in progress | dependency on Ark_WebResourceRequest & Ark_WebResourceResponse |
+|`onDownloadStart`| Function | Erokhin Ilya | testskipped | |
+|`onRefreshAccessedHistory`| Function | Erokhin Ilya | testskipped | |
+|`onUrlLoadIntercept`| Function | Erokhin Ilya | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onSslErrorReceive`| Function | Erokhin Ilya | done | deprecated |
+|`onRenderExited`| Function | Erokhin Ilya | testskipped | |
+|`onShowFileSelector`| Function | Erokhin Ilya | blocked | dependency on Ark_FileSelectorResult & Ark_FileSelectorParam & https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onFileSelectorShow`| Function | Erokhin Ilya | done | deprecated |
+|`onResourceLoad`| Function | Erokhin Ilya | testskipped | |
+|`onFullScreenExit`| Function | Erokhin Ilya | testskipped | |
 |`onFullScreenEnter`| Function | Erokhin Ilya | in progress | |
 |`onScaleChange`| Function | Erokhin Ilya | in progress | |
 |`onHttpAuthRequest`| Function | Erokhin Ilya | in progress | |
