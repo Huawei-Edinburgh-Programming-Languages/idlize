@@ -104,7 +104,6 @@ export class PeerGeneratorConfig {
 
         // common
         "AppStorage",
-        "CustomComponent",  // pulls in Layoutable, LayoutChild
         "DataAddOperation",
         "DataChangeListener",  // causes discrimination code failure
         "DataChangeOperation",
