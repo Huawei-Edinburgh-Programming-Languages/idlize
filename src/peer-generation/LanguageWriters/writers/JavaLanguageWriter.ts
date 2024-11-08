@@ -36,7 +36,7 @@ import {
     CLikeReturnStatement
 } from "./CLikeLanguageWriter"
 import * as idl from '../../../idl'
-import { ArgConvertor, BaseArgConvertor, RuntimeType } from "../../ArgConvertors"
+import { ArgConvertor, BaseArgConvertor, RuntimeType } from "../../idl/IdlArgConvertors"
 import { EnumConvertor } from "../../idl/IdlArgConvertors"
 import { ReferenceResolver } from "../../ReferenceResolver"
 import { convertType, IdlNameConvertor, TypeConvertor } from "../nameConvertor"

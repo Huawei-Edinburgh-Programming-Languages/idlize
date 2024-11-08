@@ -16,7 +16,7 @@
 import * as idl from "../../idl"
 import { IndentedPrinter } from "../../IndentedPrinter"
 import { stringOrNone } from "../../util"
-import {ArgConvertor, BaseArgConvertor, RuntimeType} from "../ArgConvertors"
+import {ArgConvertor, BaseArgConvertor, RuntimeType} from "../idl/IdlArgConvertors"
 import { EnumEntity } from "../PeerFile"
 import * as fs from "fs"
 import { Language } from "../../Language"

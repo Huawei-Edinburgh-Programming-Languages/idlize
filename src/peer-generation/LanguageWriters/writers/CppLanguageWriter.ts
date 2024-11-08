@@ -17,7 +17,7 @@ import { createReferenceType, DebugUtils, forceAsNamedNode, IDLAnyType, IDLBoole
 import { IndentedPrinter } from "../../../IndentedPrinter"
 import { cppKeywords } from "../../../languageSpecificKeywords"
 import { Language } from "../../../Language"
-import { ArgConvertor, BaseArgConvertor, RuntimeType } from "../../ArgConvertors"
+import { ArgConvertor, BaseArgConvertor, RuntimeType } from "../../idl/IdlArgConvertors"
 import { PrimitiveType } from "../../ArkPrimitiveType"
 import {
     AssignStatement,

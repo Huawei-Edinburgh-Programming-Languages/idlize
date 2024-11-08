@@ -1,5 +1,5 @@
 import * as idl from "./idl";
-import { ArgConvertor } from "./peer-generation/ArgConvertors";
+import { ArgConvertor } from "./peer-generation/idl/IdlArgConvertors";
 import { ReferenceResolver } from "./peer-generation/ReferenceResolver";
 
 // todo: TypeProcessor? LibraryBase? 

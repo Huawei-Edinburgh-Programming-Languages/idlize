@@ -37,7 +37,7 @@ import {
 } from "../LanguageWriter"
 import * as idl from '../../../idl'
 import * as ts from 'typescript'
-import { ArgConvertor, RuntimeType } from "../../ArgConvertors"
+import { ArgConvertor, RuntimeType } from "../../idl/IdlArgConvertors"
 import { EnumConvertor } from "../../idl/IdlArgConvertors"
 import { ReferenceResolver } from "../../ReferenceResolver"
 import { convertType, IdlNameConvertor, TypeConvertor } from "../nameConvertor"

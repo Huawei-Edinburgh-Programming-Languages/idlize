@@ -26,7 +26,7 @@ import {
     throwException
 } from "../../util"
 import { GenericVisitor } from "../../options"
-import { ArgConvertor, RetConvertor } from "../ArgConvertors"
+import { ArgConvertor, RetConvertor } from "../idl/IdlArgConvertors"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { IdlPeerClass } from "./IdlPeerClass"
 import { IdlPeerMethod } from "./IdlPeerMethod"

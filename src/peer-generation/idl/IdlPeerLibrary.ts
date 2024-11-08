@@ -27,7 +27,7 @@ import { createLanguageWriter, createTypeNameConvertor, LanguageWriter, MethodSi
 import { isImport, isStringEnum } from './common';
 import { StructPrinter } from './StructPrinter';
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig';
-import { ArgConvertor, BooleanConvertor, CustomTypeConvertor, LengthConvertor, NullConvertor, NumberConvertor, UndefinedConvertor, VoidConvertor } from '../ArgConvertors';
+import { ArgConvertor, BooleanConvertor, CustomTypeConvertor, LengthConvertor, NullConvertor, NumberConvertor, UndefinedConvertor, VoidConvertor } from './IdlArgConvertors';
 import { Language } from '../../Language';
 import { generateSyntheticFunctionName } from '../../IDLVisitor';
 import { collectUniqueCallbacks } from '../printers/CallbacksPrinter';

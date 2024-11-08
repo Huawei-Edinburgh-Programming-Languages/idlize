@@ -15,7 +15,7 @@
 
 import * as idl from "../../idl"
 import { capitalize, isDefined } from "../../util"
-import { ArgConvertor, RetConvertor } from "../ArgConvertors"
+import { ArgConvertor, RetConvertor } from "../idl/IdlArgConvertors"
 import { Method, MethodModifier } from "../LanguageWriters"
 import { PrimitiveType } from "../ArkPrimitiveType"
 import { IDLCallback, IDLEntry, IDLType } from "../../idl"

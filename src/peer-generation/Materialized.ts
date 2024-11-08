@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { ArgConvertor, RetConvertor } from "./ArgConvertors"
+import { ArgConvertor, RetConvertor } from "./idl/IdlArgConvertors"
 import { Field, Method, MethodModifier } from "./LanguageWriters"
 import { capitalize } from "../util"
 import { ImportFeature, ImportsCollector } from "./ImportsCollector"

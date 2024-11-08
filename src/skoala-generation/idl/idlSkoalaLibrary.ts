@@ -25,7 +25,7 @@ import { cleanPrefix } from "../../peer-generation/idl/IdlPeerLibrary";
 import { WrapperClass, WrapperField, WrapperMethod } from "../WrapperClass";
 import { Skoala } from "../utils";
 import { Field, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, NamedMethodSignature } from "../../peer-generation/LanguageWriters";
-import { ArgConvertor, BaseArgConvertor, BooleanConvertor, CustomTypeConvertor, ExpressionAssigneer, NullConvertor, NumberConvertor, RuntimeType, UndefinedConvertor } from "../../peer-generation/ArgConvertors";
+import { ArgConvertor, BaseArgConvertor, BooleanConvertor, CustomTypeConvertor, ExpressionAssigneer, NullConvertor, NumberConvertor, RuntimeType, UndefinedConvertor } from "../../peer-generation/idl/IdlArgConvertors";
 import { CustomPrintVisitor } from "../../from-idl/DtsPrinter";
 import { ClassConvertor, EnumConvertor, InterfaceConvertor, RetConvertor, StringConvertor, TypeAliasConvertor, UnionConvertor } from "../../peer-generation/idl/IdlArgConvertors";
 import { Language } from "../../Language";

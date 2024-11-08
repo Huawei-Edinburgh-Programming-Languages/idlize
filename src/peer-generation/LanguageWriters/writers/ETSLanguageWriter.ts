@@ -29,7 +29,7 @@ import {
 import { TSLambdaExpression, TSLanguageWriter } from "./TsLanguageWriter"
 import { forceAsNamedNode, IDLEnum, IDLI32Type, IDLThisType, IDLType, IDLVoidType, toIDLType } from '../../../idl'
 import { EnumEntity } from "../../PeerFile"
-import {ArgConvertor, BaseArgConvertor, CustomTypeConvertor, RuntimeType} from "../../ArgConvertors"
+import { ArgConvertor, BaseArgConvertor, CustomTypeConvertor, makeInterfaceTypeCheckerCall, RuntimeType } from "../../idl/IdlArgConvertors"
 import { Language } from "../../../Language"
 import { ReferenceResolver } from "../../ReferenceResolver"
 import { EtsIDLNodeToStringConvertor } from "../convertors/ETSConvertors"
@@ -40,7 +40,6 @@ import {
     InterfaceConvertor,
     StringConvertor
 } from "../../idl/IdlArgConvertors"
-import {makeInterfaceTypeCheckerCall} from "../../Convertors";
 import {IdlPeerLibrary} from "../../idl/IdlPeerLibrary";
 import {makeEnumTypeCheckerCall} from "../../printers/TypeCheckPrinter";
 

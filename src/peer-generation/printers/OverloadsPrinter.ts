@@ -28,7 +28,7 @@ import { callbackIdByInfo, canProcessCallback, convertIdlToCallback } from "./Ev
 import { IdlPeerMethod } from "../idl/IdlPeerMethod";
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
 import { typeOrUnion } from "../idl/common";
-import { ArgConvertor, UndefinedConvertor, UnionRuntimeTypeChecker } from '../ArgConvertors';
+import { ArgConvertor, UndefinedConvertor, UnionRuntimeTypeChecker } from '../idl/IdlArgConvertors';
 import { Language } from "../../Language";
 import { ReferenceResolver } from "../ReferenceResolver";
 

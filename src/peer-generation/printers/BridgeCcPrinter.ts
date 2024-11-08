@@ -14,7 +14,7 @@
  */
 
 import { capitalize, dropSuffix, isDefined } from "../../util";
-import { ArgConvertor } from "../ArgConvertors";
+import { ArgConvertor } from "../idl/IdlArgConvertors";
 import { PrimitiveType } from "../ArkPrimitiveType"
 import { bridgeCcCustomDeclaration, bridgeCcGeneratedDeclaration } from "../FileGenerators";
 import { createLanguageWriter, createTypeNameConvertor, ExpressionStatement, LanguageWriter } from "../LanguageWriters";
