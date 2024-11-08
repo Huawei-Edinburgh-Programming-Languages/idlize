@@ -812,8 +812,8 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             className && (
                 idl.isCallable(type) ||
                 idl.isReferenceType(type) ||
-                idl.isIDLTypeName(type, className) ||
-                idl.isIDLTypeName(type, 'T')
+                idl.forceAsNamedNode(type).name === className ||
+                idl.forceAsNamedNode(type).name ===  'T'
             )
         ) {
             return idl.IDLThisType
@@ -1265,7 +1265,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             })
         }
         this.computeClassMemberExtendedAttributes(method as ts.ClassElement, methodName, escapedMethodName, extendedAttributes)
-        const returnType = this.serializeType(method.type, nameSuggestion?.extend('ret'))
+        let returnType = this.serializeTypeOrThis(method, nameSuggestion?.extend('ret'))
         return idl.createMethod(
             escapedMethodName,
             methodParameters.map(it => this.serializeParameter(it, nameSuggestion)),
