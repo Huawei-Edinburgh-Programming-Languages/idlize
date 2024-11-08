@@ -854,7 +854,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
     }
 
     private serializeTypeOrThis(
-        method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration,
+        method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration | ts.CallSignatureDeclaration,
         nameSuggestion?: NameSuggestion
     ): idl.IDLType {
         let type = this.serializeType(method.type, nameSuggestion);
@@ -1104,7 +1104,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         return this.deduceFromComputedProperty(name) ?? nameOrNull(name)
     }
 
-    clazzName(method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration): string | undefined {
+    clazzName(method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration | ts.CallSignatureDeclaration): string | undefined {
         let parent = method.parent
         
         if (parent !== undefined && ts.isClassDeclaration(parent)) {
@@ -1347,7 +1347,6 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             }
         }
 
-        console.log("nameSuggestion = ", nameSuggestion)
         this.computeClassMemberExtendedAttributes(method as ts.ClassElement, methodName, escapedMethodName, extendedAttributes)
         let returnType = this.serializeTypeOrThis(method, nameSuggestion?.extend('ret'))
         return {
@@ -1363,7 +1362,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
     }
 
     serializeCallable(method: ts.CallSignatureDeclaration, nameSuggestion: NameSuggestion): idl.IDLCallable {
-        const returnType = this.serializeType(method.type)
+        let returnType = this.serializeTypeOrThis(method, nameSuggestion?.extend('ret'));
         let extendedAttributes = this.computeDeprecatedExtendAttributes(method)
         extendedAttributes.push({ name: idl.IDLExtendedAttributes.CallSignature })
         return {
