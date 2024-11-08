@@ -1031,10 +1031,10 @@
 |`maxLines`| Function |Samarin Sergey |in progress |  |
 |`decoration`| Function |Samarin Sergey |in progress |  |
 |`letterSpacing`| Function |Samarin Sergey |in progress |  |
-|`textCase`| Function |Samarin Sergey | devdone |  |
+|`textCase`| Function |Samarin Sergey | done |  |
 |`baselineOffset`| Function |Samarin Sergey |in progress |  |
 |`copyOption`| Function |Samarin Sergey |in progress |  |
-|`draggable`| Function |Samarin Sergey | devdone |  |
+|`draggable`| Function |Samarin Sergey | done |  |
 |`textShadow`| Function |Samarin Sergey |in progress |  |
 |`heightAdaptivePolicy`| Function |Samarin Sergey |in progress |  |
 |`textIndent`| Function |Samarin Sergey |in progress |  |
@@ -1044,15 +1044,15 @@
 |`caretColor`| Function |Samarin Sergey |in progress |  |
 |`selectedBackgroundColor`| Function |Samarin Sergey |in progress |  |
 |`ellipsisMode`| Function |Samarin Sergey |in progress |  |
-|`EnableDataDetector`| Function | Kirill Kirichenko | devdone |  |
+|`EnableDataDetector`| Function | Kirill Kirichenko | done |  |
 |`DataDetectorConfig`| Function | Kirill Kirichenko | in progress |  |
 |`onTextSelectionChange`| Function |Samarin Sergey |in progress |  |
 |`fontFeature`| Function |Samarin Sergey |in progress |  |
-|`privacySensitive`| Function |Samarin Sergey | devdone |  |
-|`textSelectable`| Function |Samarin Sergey | devdone |  |
+|`privacySensitive`| Function |Samarin Sergey | done |  |
+|`textSelectable`| Function |Samarin Sergey | done |  |
 |`EditMenuOptions`| Function | Kirill Kirichenko | in progress |  |
-|`halfLeading`| Function |Samarin Sergey | devdone |  |
-|`enableHapticFeedback`| Function |Samarin Sergey | devdone |  |
+|`halfLeading`| Function |Samarin Sergey | done |  |
+|`enableHapticFeedback`| Function |Samarin Sergey | done |  |
 |`selection`| Function |Samarin Sergey |in progress |  |
 |`BindSelectionMenu`| Function | Kirill Kirichenko | in progress |  |
 |*TextArea*|*Component*|Tuzhilkin Ivan|in progress|  |
