@@ -659,9 +659,9 @@ export abstract class LanguageWriter {
         const ordinal = convertor.isStringEnum
             ? this.ordinalFromEnum(
                 this.makeString(this.getObjectAccessor(convertor, value)),
-                convertor.enumTypeName(this.language)
+                convertor.enumEntry
             )
-            : this.makeUnionVariantCast(this.getObjectAccessor(convertor, value), this.convert(idl.IDLI32Type), convertor, index)
+            : this.makeUnionVariantCast(this.getObjectAccessor(convertor, value), this.stringifyType(idl.IDLI32Type), convertor, index)
         const {low, high} = convertor.extremumOfOrdinals()
         return this.discriminatorFromExpressions(value, convertor.runtimeTypes[0], [
             this.makeNaryOp(">=", [ordinal, this.makeString(low!.toString())]),
@@ -683,7 +683,7 @@ export abstract class LanguageWriter {
         return this.makeString(`${value} instanceof ArrayBuffer`)
     }
     instanceOf(convertor: BaseArgConvertor, value: string, _duplicateMembers: Set<string>): LanguageExpression {
-        return this.makeString(`${value} instanceof ${this.convert(convertor.idlType)}`)
+        return this.makeString(`${value} instanceof ${this.stringifyType(convertor.idlType)}`)
     }
 }
 

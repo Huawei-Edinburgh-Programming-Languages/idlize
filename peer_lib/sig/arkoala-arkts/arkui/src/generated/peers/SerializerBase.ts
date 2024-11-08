@@ -125,15 +125,6 @@ export class SerializerBase {
     constructor() {
         this.buffer = new KBuffer(96)
     }
-    static hold<T extends SerializerBase>(factory: () => T): T {
-        if (SerializerBase.cache === undefined)
-            SerializerBase.cache = factory()
-        const serializer = SerializerBase.cache!
-        if (serializer.isHolding)
-            throw new Error("Serializer is already being held. Check if you had released is before")
-        serializer.isHolding = true
-        return serializer as T
-    }
     public release() {
         this.isHolding = false
         this.releaseResources()

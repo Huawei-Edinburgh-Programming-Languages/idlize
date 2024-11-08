@@ -23,6 +23,7 @@ import { Language } from "../../Language";
 import {IDLBooleanType, toIDLType} from "../../idl";
 import { getReferenceResolver } from '../ReferenceResolver';
 import { convertDeclaration } from '../LanguageWriters/nameConvertor';
+import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 
 const builtInInterfaceTypes = new Map<string,
     (writer: LanguageWriter, value: string) => LanguageExpression>([

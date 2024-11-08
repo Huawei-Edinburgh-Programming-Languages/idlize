@@ -33,7 +33,16 @@ import {ArgConvertor, BaseArgConvertor, CustomTypeConvertor, RuntimeType} from "
 import { Language } from "../../../Language"
 import { ReferenceResolver } from "../../ReferenceResolver"
 import { EtsIDLNodeToStringConvertor } from "../convertors/ETSConvertors"
-import { EnumConvertor, StringConvertor } from "../../idl/IdlArgConvertors"
+import {
+    AggregateConvertor,
+    ArrayConvertor,
+    EnumConvertor,
+    InterfaceConvertor,
+    StringConvertor
+} from "../../idl/IdlArgConvertors"
+import {makeInterfaceTypeCheckerCall} from "../../Convertors";
+import {IdlPeerLibrary} from "../../idl/IdlPeerLibrary";
+import {makeEnumTypeCheckerCall} from "../../printers/TypeCheckPrinter";
 
 ////////////////////////////////////////////////////////////////
 //                         STATEMENTS                         //
@@ -257,7 +266,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     }
     makeDiscriminatorConvertor(convertor: EnumConvertor, value: string, index: number): LanguageExpression {
         return this.discriminatorFromExpressions(value, RuntimeType.OBJECT, [
-            makeEnumTypeCheckerCall(value, convertor.enumTypeName(this.language), this)
+            makeEnumTypeCheckerCall(value, this.stringifyType(convertor.idlType), this)
         ])
     }
     override castToInt(value: string, bitness: 8 | 32): string {
@@ -268,14 +277,14 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     override instanceOf(convertor: BaseArgConvertor, value: string, duplicateMembers: Set<string>): LanguageExpression {
         if (convertor instanceof InterfaceConvertor && convertor.declaration.properties.length > 0) {
             return makeInterfaceTypeCheckerCall(value,
-                this.convert(convertor.idlType),
+                this.stringifyType(convertor.idlType),
                 convertor.declaration.properties.map(it => it.name),
                 duplicateMembers,
                 this)
         }
         if (convertor instanceof AggregateConvertor) {
             return makeInterfaceTypeCheckerCall(value,
-                convertor.aliasName !== undefined ? convertor.aliasName : this.convert(convertor.idlType),
+                convertor.aliasName !== undefined ? convertor.aliasName : this.stringifyType(convertor.idlType),
                 convertor.members.map(it => it[0]), duplicateMembers, this)
         }
         if (convertor instanceof ArrayConvertor) {
