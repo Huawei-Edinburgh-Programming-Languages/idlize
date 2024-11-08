@@ -225,3 +225,7 @@ export class SerializerBase {
         // this.position += encodedLength + 4
     }
 }
+
+export function unsafeCast<T>(value: unknown) {
+    return value as T
+}

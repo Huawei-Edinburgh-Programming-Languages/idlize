@@ -28,9 +28,9 @@ export interface XMLNativeModule {
     _XML_isWhitespace(self: KPointer): boolean 
     _XML_getAttributeCount(self: KPointer): number 
     _XML_parse(self: KPointer, thisArray: Uint8Array, thisLength: int32): void 
-    _XmlSerializer_ctor(buffer: ArrayBuffer | DataView, encoding: string): KPointer 
+    _XmlSerializer_ctor(thisArray: Uint8Array, thisLength: int32): KPointer 
     _ParseInfo_ctor(): KPointer 
-    _XmlPullParser_ctor(buffer: ArrayBuffer | DataView, encoding: string): KPointer 
+    _XmlPullParser_ctor(thisArray: Uint8Array, thisLength: int32): KPointer 
     _GetManagerCallbackCaller(kind: CallbackKind): KPointer 
 }
 
@@ -46,4 +46,3 @@ export function getXMLNativeModule(): NativeModuleType {
         throw new Error("Cannot load native module")
     return theModule
 }
-
