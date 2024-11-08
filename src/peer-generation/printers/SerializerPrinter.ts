@@ -163,7 +163,7 @@ class IdlSerializerPrinter {
                         writer.makeAssign("serializer.isHolding", undefined, writer.makeString("true"), false),
                         writer.makeReturn(writer.makeString("serializer"))
                     ]), 
-                    writer.makeBlock([writer.makeThrowError("")])
+                    writer.makeBlock([writer.makeThrowError("Even after creating Serializer cache it is still undefined")])
                     ))
                 })
             }
