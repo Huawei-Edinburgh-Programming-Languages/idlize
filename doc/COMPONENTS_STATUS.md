@@ -1508,10 +1508,17 @@
 |`reset`| Function | Erokhin Ilya | done |  |
 |*FullScreenExitHandler*| *Class* | Erokhin Ilya | in progress |  |
 |`exitFullScreen`| Function | Erokhin Ilya | in progress |  |
+|*FileSelectorParam*| *Class* | Erokhin Ilya | in progress |  |
+|`getTitle`| Function | Erokhin Ilya | in progress |  |
+|`getMode`| Function | Erokhin Ilya | in progress |  |
+|`getAcceptType`| Function | Erokhin Ilya | in progress |  |
+|`isCapture`| Function | Erokhin Ilya | in progress |  |
 |*JsResult*| *Class* | Erokhin Ilya | in progress |  |
 |`handleCancel`| Function | Erokhin Ilya | in progress |  |
 |`handleConfirm`| Function | Erokhin Ilya | in progress |  |
 |`handlePromptConfirm`| Function | Erokhin Ilya | in progress |  |
+|*FileSelectorResult*| *Class* | Erokhin Ilya | in progress |  |
+|`handleFileList`| Function | Erokhin Ilya | in progress |  |
 |*ConsoleMessage*| *Class* | Erokhin Ilya | in progress |  |
 |`getMessage`| Function | Erokhin Ilya | in progress |  |
 |`getSourceId`| Function | Erokhin Ilya | in progress |  |
