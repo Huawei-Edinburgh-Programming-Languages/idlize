@@ -20,6 +20,7 @@ import { parse } from 'comment-parser'
 import * as idl from "./idl"
 import {
     asString, capitalize, getComment, getDeclarationsByNode, getExportedDeclarationNameByDecl, getExportedDeclarationNameByNode, identName, isDefined, isExport, isNodePublic, isPrivate, isProtected, isReadonly, isStatic, nameEnumValues, nameOrNull, identString, getNameWithoutQualifiersLeft, getNameWithoutQualifiersRight, stringOrNone,
+    typeName,
 } from "./util"
 import { GenericVisitor } from "./options"
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig"
@@ -28,6 +29,8 @@ import { typeOrUnion } from "./peer-generation/idl/common"
 import { IDLKeywords } from "./languageSpecificKeywords"
 import { isCommonMethodOrSubclass } from "./peer-generation/inheritance"
 import { ReferenceResolver } from "./peer-generation/ReferenceResolver"
+import { exit } from "process"
+
 
 const typeContainerMapper: Record<string, idl.IDLContainerKind> = {
     'Array': 'sequence',
@@ -854,31 +857,49 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
     }
 
     private serializeTypeOrThis(
-        method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration | ts.CallSignatureDeclaration,
+        method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration | ts.CallSignatureDeclaration | ts.ConstructorDeclaration | ts.ConstructSignatureDeclaration | ts.IndexSignatureDeclaration,
         nameSuggestion?: NameSuggestion
     ): idl.IDLType {
-        let type = this.serializeType(method.type, nameSuggestion);
+        let type = this.serializeType(method.type, nameSuggestion, true)
     
-        if (idl.isUndefinedType(type))
+        let returnTypeName = idl.getIDLTypeName(type)
+        let className = this.clazzName(method)
+    
+        const isMethodStatic = method.modifiers?.some(mod => mod.kind === ts.SyntaxKind.StaticKeyword)
+    
+        const typeExists = this.isTypeDefined(returnTypeName)
+    
+        if(className?.includes("XComponentAttribute"))
         {
-            return idl.IDLVoidType
+            console.log("!!!!!")
         }
-            else if (
-                idl.isCallable(type) || 
-                idl.isReferenceType(type) || 
-                idl.isIDLTypeName(type, this.clazzName(method)) || 
-                idl.isIDLTypeName(type, 'T') 
-                
-            ) {
-                console.log("method.name == ", method.name)
-                return idl.IDLThisType
-            }
-                else
-                {
-                    return type
-                }
+        if(nameSuggestion?.name?.includes("XComponentAttribute"))
+        {
+            console.log("!!!!!")
+        }
+    
+        if (idl.isUndefinedType(type)) {
+            return idl.IDLVoidType
+        } else if (
+            !isMethodStatic &&
+            className && (
+                idl.isCallable(type) ||
+                idl.isReferenceType(type) ||
+                idl.isIDLTypeName(type, className) ||
+                idl.isIDLTypeName(type, 'T')
+            )
+        ) {
+            return idl.IDLThisType
+        } else {
+            return type
+        }
     }
     
+    private isTypeDefined(typeName: string): boolean {
+        const typeReference = idl.createReferenceType(typeName)
+        const isPredefined = this.predefinedTypeResolver?.resolveTypeReference(typeReference) !== undefined
+        return this.seenNames.has(typeName) || isPredefined
+    }
     
     private makeQualifiedName(type: ts.TypeReferenceNode): idl.IDLType {
         if (ts.isQualifiedName(type.typeName)) {
@@ -888,7 +909,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         }
     }
 
-    serializeType(type: ts.TypeNode | undefined, nameSuggestion?: NameSuggestion): idl.IDLType {
+    serializeType(type: ts.TypeNode | undefined, nameSuggestion?: NameSuggestion, flag?: boolean): idl.IDLType {
         if (type == undefined) return idl.IDLUndefinedType // TODO: can we have implicit types in d.ts?
 
         if (type.kind == ts.SyntaxKind.UndefinedKeyword) {
@@ -976,7 +997,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             if (isEnum) {
                 return idl.createReferenceType(transformedType)
             }
-            return idl.createReferenceType(transformedType, this.mapTypeArgs(type.typeArguments, transformedType));
+            return idl.createReferenceType(transformedType, this.mapTypeArgs(type.typeArguments, transformedType))
         }
         if (ts.isThisTypeNode(type)) {
             return idl.createReferenceType("this")
@@ -1104,13 +1125,13 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         return this.deduceFromComputedProperty(name) ?? nameOrNull(name)
     }
 
-    clazzName(method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration | ts.CallSignatureDeclaration): string | undefined {
-        let parent = method.parent
-        
+    private clazzName(method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration | ts.CallSignatureDeclaration | ts.ConstructorDeclaration | ts.ConstructSignatureDeclaration | ts.IndexSignatureDeclaration): string | undefined {
+        let parent = method.parent//.parent
+    
         if (parent !== undefined && ts.isClassDeclaration(parent)) {
             return identName(parent.name)!
         }
-
+    
         return undefined
     }
 
@@ -1339,7 +1360,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
                 kind: idl.IDLKind.Method,
                 name: "indexSignature",
                 documentation: getDocumentation(this.sourceFile, method, this.options.docs),
-                returnType: this.serializeType(method.type, nameSuggestion),
+                returnType: this.serializeTypeOrThis(method, nameSuggestion?.extend('ret')), //this.serializeType(method.type, nameSuggestion),
                 extendedAttributes: extendedAttributes,
                 isStatic: false,
                 isOptional: false,
@@ -1349,6 +1370,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
 
         this.computeClassMemberExtendedAttributes(method as ts.ClassElement, methodName, escapedMethodName, extendedAttributes)
         let returnType = this.serializeTypeOrThis(method, nameSuggestion?.extend('ret'))
+        
         return {
             kind: idl.IDLKind.Method,
             name: escapedMethodName,
@@ -1373,7 +1395,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             parameters: method.parameters.map(it => this.serializeParameter(it, nameSuggestion)),
             returnType: returnType,
             isStatic: false
-        };
+        }
     }
 
     serializeConstructor(constr: ts.ConstructorDeclaration | ts.ConstructSignatureDeclaration, nameSuggestion: NameSuggestion): idl.IDLConstructor {
@@ -1386,7 +1408,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             // documentation: getDocumentation(this.sourceFile, constr, this.options.docs),
             extendedAttributes: this.computeDeprecatedExtendAttributes(constr),
             parameters: constr.parameters.map(it => this.serializeParameter(it, nameSuggestion)),
-            returnType: this.serializeType(constr.type),
+            returnType: this.serializeTypeOrThis(constr, nameSuggestion?.extend('ret')) //this.serializeType(constr.type),
         };
     }
 
@@ -1408,7 +1430,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
     }
 
     private guessTypeAndValue(declaration: ts.VariableDeclaration):  [idl.IDLType, string] {
-        if (declaration.type) return [this.serializeType(declaration.type), declaration.initializer!.getText()]
+        if (declaration.type) return [ this.serializeType(declaration.type), declaration.initializer!.getText()]
         if (declaration.initializer) {
             let value = declaration.initializer.getText()
             if (value.startsWith('"') || value.startsWith("'")) {
