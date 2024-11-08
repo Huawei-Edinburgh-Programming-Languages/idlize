@@ -5,11 +5,17 @@
 #include <iostream>
 #include <ostream>
 #include <string>
+
 class ExpatParser {
 public:
     ExpatParser(const char* buffer) : m_buffer(buffer) {
+        XML_SetUserData(m_parser, this);
         XML_SetStartElementHandler(m_parser, StartElementHandler);
     }
+    ExpatParser(const ExpatParser&) = delete;
+    ExpatParser& operator=(const ExpatParser&) = delete;
+    ExpatParser(const ExpatParser&&) = delete;
+    ExpatParser& operator=(const ExpatParser&&) = delete;
 
     virtual ~ExpatParser() {
         XML_ParserFree(m_parser);
@@ -19,9 +25,6 @@ public:
         std::cerr << "parse called on buffer: " << m_buffer << std::endl;
         XML_Parse(m_parser, m_buffer.data(), m_buffer.length(), true);
     }
-
-    ExpatParser(const ExpatParser&) = delete;
-    ExpatParser& operator=(const ExpatParser&) = delete;
 private:
     static XMLCALL void StartElementHandler(void *userData, const XML_Char *name, const XML_Char **atts) {
         ((ExpatParser*) userData) -> onStartElement(name, atts);
