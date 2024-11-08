@@ -812,8 +812,8 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             className && (
                 idl.isCallable(type) ||
                 idl.isReferenceType(type) ||
-                idl.forceAsNamedNode(type).name === className ||
-                idl.forceAsNamedNode(type).name ===  'T'
+                idl.isNamedNode(type) && idl.forceAsNamedNode(type).name === className ||
+                idl.isNamedNode(type) && idl.forceAsNamedNode(type).name ===  'T'
             )
         ) {
             return idl.IDLThisType
