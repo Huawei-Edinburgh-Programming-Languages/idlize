@@ -926,8 +926,8 @@
 |`slideRange`| Function | Morozov Sergey |done |  |
 |`showTips`| Function |Morozov Sergey |done |  |
 |*BaseSpan*| *Component* |Politov Mikhail | in progress |  |
-|`textBackgroundStyle`| Function | Politov Mikhail | in progress |  |
-|`baselineOffset`| Function | Politov Mikhail | in progress |  |
+|`textBackgroundStyle`| Function | Politov Mikhail | devdone |  |
+|`baselineOffset`| Function | Politov Mikhail | blocked |  |
 |*Span*| *Component* | Politov Mikhail | done |  |
 |`setSpanOptions`| Function |Politov Mikhail | done  |  |
 |`font`| Function | Politov Mikhail | done |  |
