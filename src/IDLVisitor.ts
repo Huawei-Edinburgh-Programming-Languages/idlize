@@ -209,7 +209,9 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         if (ts.isClassDeclaration(node)) {
             this.output.push(this.serializeClass(node))
         } else if (ts.isInterfaceDeclaration(node)) {
-            this.output.push(this.serializeInterface(node))
+            if (!PeerGeneratorConfig.isIgnoredSerialized(identName(node.name))){
+                this.output.push(this.serializeInterface(node))
+            }
         } else if (ts.isModuleDeclaration(node)) {
             if (this.isKnownAmbientModuleDeclaration(node)) {
                 this.output.push(this.serializeAmbientModuleDeclaration(node))
@@ -793,6 +795,33 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         }
     }
 
+    private serializeTypeOrThis(
+        method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration | ts.CallSignatureDeclaration | ts.ConstructorDeclaration | ts.ConstructSignatureDeclaration | ts.IndexSignatureDeclaration,
+        nameSuggestion?: NameSuggestion
+    ): idl.IDLType {
+        let type = this.serializeType(method.type, nameSuggestion)
+    
+        let className = this.clazzName(method)
+    
+        const isMethodStatic = method.modifiers?.some(mod => mod.kind === ts.SyntaxKind.StaticKeyword)
+
+        if (idl.isUndefinedType(type)) {
+            return idl.IDLVoidType
+        } else if (
+            !isMethodStatic &&
+            className && (
+                idl.isCallable(type) ||
+                idl.isReferenceType(type) ||
+                idl.isIDLTypeName(type, className) ||
+                idl.isIDLTypeName(type, 'T')
+            )
+        ) {
+            return idl.IDLThisType
+        } else {
+            return type
+        }
+    }
+
     serializeType(type: ts.TypeNode | undefined, nameSuggestion?: NameSuggestion): idl.IDLType {
         if (type == undefined) return idl.IDLUndefinedType // TODO: can we have implicit types in d.ts?
 
@@ -1091,6 +1120,20 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         })
     }
 
+    private clazzName(method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration | ts.CallSignatureDeclaration | ts.ConstructorDeclaration | ts.ConstructSignatureDeclaration | ts.IndexSignatureDeclaration): string | undefined {
+        let parent = method.parent//.parent
+    
+        if (parent !== undefined && ts.isClassDeclaration(parent)) {
+            return identName(parent.name)!
+        }
+        else if (parent !== undefined && ts.isInterfaceDeclaration(parent))
+        {
+            return identName(parent.name)!
+        }
+
+        return undefined
+    }
+
     serializeParameter(parameter: ts.ParameterDeclaration, nameSuggestion?: NameSuggestion): idl.IDLParameter {
         if (ts.isObjectBindingPattern(parameter.name)) {
             console.log(`WARNING: Object hack for binding pattern: ${parameter.name.getText()}`)
@@ -1237,7 +1280,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
     }
 
     serializeCallable(method: ts.CallSignatureDeclaration, nameSuggestion: NameSuggestion): idl.IDLCallable {
-        const returnType = this.serializeType(method.type)
+        let returnType = this.serializeTypeOrThis(method, nameSuggestion?.extend('ret'))
         let extendedAttributes = this.computeDeprecatedExtendAttributes(method)
         extendedAttributes.push({ name: idl.IDLExtendedAttributes.CallSignature })
         return idl.createCallable(
