@@ -1333,7 +1333,7 @@
 |`onScrollIndex`| Function | Kovalev Sergey | blocked | event |
 |*CanvasRenderer*| *Class*  | Vadim Voronov | in progress | |
 |`drawImage`| Function  | Vadim Voronov | in progress | |
-|`beginPath`| Function  | Vadim Voronov | in progress | |
+|`beginPath`| Function  | Vadim Voronov | done | |
 |`clip`| Function  | Vadim Voronov | in progress | |
 |`fill`| Function  | Vadim Voronov | in progress | |
 |`stroke`| Function  | Vadim Voronov | in progress | |
@@ -1350,13 +1350,13 @@
 |`clearRect`| Function  | Vadim Voronov | in progress | |
 |`fillRect`| Function  | Vadim Voronov | in progress | |
 |`strokeRect`| Function  | Vadim Voronov | in progress | |
-|`restore`| Function  | Vadim Voronov | in progress | |
-|`save`| Function  | Vadim Voronov | in progress | |
+|`restore`| Function  | Vadim Voronov | done | |
+|`save`| Function  | Vadim Voronov | done | |
 |`fillText`| Function  | Vadim Voronov | in progress | |
 |`measureText`| Function  | Vadim Voronov | in progress | |
 |`strokeText`| Function  | Vadim Voronov | in progress | |
 |`getTransform`| Function  | Vadim Voronov | in progress | |
-|`resetTransform`| Function  | Vadim Voronov | in progress | |
+|`resetTransform`| Function  | Vadim Voronov | done | |
 |`rotate`| Function  | Vadim Voronov | in progress | |
 |`scale`| Function  | Vadim Voronov | in progress | |
 |`setTransform`| Function  | Vadim Voronov | in progress | |
@@ -1364,9 +1364,9 @@
 |`translate`| Function  | Vadim Voronov | in progress | |
 |`setPixelMap`| Function  | Vadim Voronov | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`transferFromImageBitmap`| Function  | Vadim Voronov | in progress | |
-|`saveLayer`| Function  | Vadim Voronov | in progress | |
-|`restoreLayer`| Function  | Vadim Voronov | in progress | |
-|`reset`| Function  | Vadim Voronov | in progress | |
+|`saveLayer`| Function  | Vadim Voronov | done | |
+|`restoreLayer`| Function  | Vadim Voronov | done | |
+|`reset`| Function  | Vadim Voronov | done | |
 |`getGlobalAlpha`| Function  | Vadim Voronov | in progress | |
 |`setGlobalAlpha`| Function  | Vadim Voronov | in progress | |
 |`getGlobalCompositeOperation`| Function  | Vadim Voronov | blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IB2T7X?from=project-issue |
