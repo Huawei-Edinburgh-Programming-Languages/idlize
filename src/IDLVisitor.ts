@@ -868,7 +868,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         const isMethodStatic = method.modifiers?.some(mod => mod.kind === ts.SyntaxKind.StaticKeyword)
     
         const typeExists = this.isTypeDefined(returnTypeName)
-        
+
         if (idl.isUndefinedType(type)) {
             return idl.IDLVoidType
         } else if (
@@ -1355,7 +1355,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
                 kind: idl.IDLKind.Method,
                 name: "indexSignature",
                 documentation: getDocumentation(this.sourceFile, method, this.options.docs),
-                returnType: this.serializeTypeOrThis(method, nameSuggestion?.extend('ret')), //this.serializeType(method.type, nameSuggestion),
+                returnType: this.serializeType(method.type, nameSuggestion),
                 extendedAttributes: extendedAttributes,
                 isStatic: false,
                 isOptional: false,
@@ -1403,8 +1403,8 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             // documentation: getDocumentation(this.sourceFile, constr, this.options.docs),
             extendedAttributes: this.computeDeprecatedExtendAttributes(constr),
             parameters: constr.parameters.map(it => this.serializeParameter(it, nameSuggestion)),
-            returnType: this.serializeTypeOrThis(constr, nameSuggestion?.extend('ret')) //this.serializeType(constr.type),
-        };
+            returnType: this.serializeType(constr.type)
+        }
     }
 
     // TODO here we only handle initialized constants. Do we care for uninitialized const declarations?
