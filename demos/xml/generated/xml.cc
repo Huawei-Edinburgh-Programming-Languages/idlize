@@ -17,6 +17,7 @@
 #include "DeserializerBase.h"
 #include "xml.h"
 #include "common-interop.h"
+#include <iostream>
 
 CustomDeserializer * DeserializerBase::customDeserializers = nullptr;
 
@@ -649,11 +650,13 @@ OH_Int32 ParseInfo_getAttributeCountImpl(OH_NativePointer thisPtr) {
     return {};
 }
 OH_XML_XmlPullParserHandle XmlPullParser_constructImpl(const OH_String* buffer, const OH_String* encoding) {
+    std::cerr << "XmlPullParser_constructImpl, source='" << *buffer << "'" << std::endl;
     return {};
 }
 void XmlPullParser_destructImpl(OH_XML_XmlPullParserHandle thiz) {
 }
 OH_Void XmlPullParser_parseImpl(OH_NativePointer thisPtr, const OH_XML_ParseOptions* option) {
+    std::cerr << "XmlPullParser_parseImpl"<< std::endl;
     return {};
 }
 const OH_XML_XmlSerializerModifier* OH_XML_XmlSerializerModifierImpl() {

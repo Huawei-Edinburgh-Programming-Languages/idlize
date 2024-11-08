@@ -439,8 +439,12 @@ public:
 
   OH_CallbackResource readCallbackResource()
   {
+    // TODO implement holdManagedCallbackResource
+    void* holdManagedCallbackResource = nullptr;
     OH_CallbackResource result = {};
-    // TODO implement CallbackResource
+    result.resourceId = readInt32();
+    result.hold = reinterpret_cast<void(*)(OH_Int32)>(readPointerOrDefault(reinterpret_cast<void*>(holdManagedCallbackResource)));
+    result.release = reinterpret_cast<void(*)(OH_Int32)>(readPointerOrDefault(reinterpret_cast<void*>(holdManagedCallbackResource))); 
     return result;
   }
 };
