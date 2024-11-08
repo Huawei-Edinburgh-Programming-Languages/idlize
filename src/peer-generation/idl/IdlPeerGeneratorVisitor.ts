@@ -726,8 +726,8 @@ class PeersGenerator {
         // Some method have other parents as part of their names
         // Such as the ones coming from the friend interfaces
         // E.g. ButtonInterface instead of ButtonAttribute
-        const methodName = isCallSignature ? `set${peer.componentName}Options` : method.name
         const isCallSignature = idl.isCallable(method)
+        const methodName = isCallSignature ? `set${peer.componentName}Options` : method.name
         const originalParentName = parentName ?? peer.originalClassName!
         const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param))
         method.parameters.forEach(param => {
