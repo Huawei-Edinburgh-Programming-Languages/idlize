@@ -135,6 +135,14 @@ export class CJEnumEntityStatement implements LanguageStatement {
     }
 }
 
+class CJThrowErrorStatement implements LanguageStatement {
+    constructor(public message: string) { }
+    write(writer: LanguageWriter): void {
+        writer.print(`throw Exception("${this.message}")`)
+    }
+}
+
+
 ////////////////////////////////////////////////////////////////
 //                           WRITER                           //
 ////////////////////////////////////////////////////////////////
@@ -288,7 +296,7 @@ export class CJLanguageWriter extends LanguageWriter {
         return new CJLambdaExpression(this, signature, this.resolver, body)
     }
     makeThrowError(message: string): LanguageStatement {
-        throw new Error(`TBD`)
+        return new CJThrowErrorStatement(message)
     }
     makeReturn(expr: LanguageExpression): LanguageStatement {
         return new ReturnStatement(expr)
