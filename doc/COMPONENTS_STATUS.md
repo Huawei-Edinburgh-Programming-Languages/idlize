@@ -1506,6 +1506,8 @@
 |`requestFullscreen`| Function | Erokhin Ilya | done |  |
 |`exitFullscreen`| Function | Erokhin Ilya | done |  |
 |`reset`| Function | Erokhin Ilya | done |  |
+|*FullScreenExitHandler*| *Class* | Erokhin Ilya | in progress |  |
+|`exitFullScreen`| Function | Erokhin Ilya | in progress |  |
 |*JsResult*| *Class* | Erokhin Ilya | in progress |  |
 |`handleCancel`| Function | Erokhin Ilya | in progress |  |
 |`handleConfirm`| Function | Erokhin Ilya | in progress |  |
