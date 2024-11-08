@@ -682,7 +682,7 @@ export abstract class LanguageWriter {
     makeCallIsArrayBuffer(value: string): LanguageExpression {
         return this.makeString(`${value} instanceof ArrayBuffer`)
     }
-    instanceOf(convertor: BaseArgConvertor, value: string, _duplicateMembers: Set<string>): LanguageExpression {
+    instanceOf(convertor: BaseArgConvertor, value: string, _duplicateMembers?: Set<string>): LanguageExpression {
         return this.makeString(`${value} instanceof ${this.stringifyType(convertor.idlType)}`)
     }
 }

@@ -239,7 +239,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     }
     makeUnionVariantCondition(convertor: ArgConvertor, valueName: string, valueType: string, type: string, index?: number): LanguageExpression {
         if (convertor instanceof EnumConvertor) {
-            return this.makeString(`${valueName} instanceof ${this.typeConvertor.convertEntry(convertor.enumEntry)}`)
+            return this.instanceOf(convertor, valueName);
         }
         return super.makeUnionVariantCondition(convertor, valueName, valueType, type, index);
     }
@@ -272,22 +272,25 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     }
     override castToBoolean(value: string): string { return `${value} ? 1 : 0` }
 
-    override instanceOf(convertor: BaseArgConvertor, value: string, duplicateMembers: Set<string>): LanguageExpression {
+    override instanceOf(convertor: BaseArgConvertor, value: string, duplicateMembers?: Set<string>): LanguageExpression {
         if (convertor instanceof InterfaceConvertor && convertor.declaration.properties.length > 0) {
             return makeInterfaceTypeCheckerCall(value,
                 this.stringifyType(convertor.idlType),
                 convertor.declaration.properties.map(it => it.name),
-                duplicateMembers,
+                duplicateMembers!,
                 this)
         }
         if (convertor instanceof AggregateConvertor) {
             return makeInterfaceTypeCheckerCall(value,
                 convertor.aliasName !== undefined ? convertor.aliasName : this.stringifyType(convertor.idlType),
-                convertor.members.map(it => it[0]), duplicateMembers, this)
+                convertor.members.map(it => it[0]), duplicateMembers!, this)
         }
         if (convertor instanceof ArrayConvertor) {
             return makeArrayTypeCheckCall(value,
                 (this.resolver as IdlPeerLibrary).getTypeName(convertor.idlType), this)
+        }
+        if (convertor instanceof EnumConvertor) {
+            return this.makeString(`${value} instanceof ${this.typeConvertor.convert(convertor.enumEntry)}`)
         }
         return super.instanceOf(convertor, value, duplicateMembers)
     }
