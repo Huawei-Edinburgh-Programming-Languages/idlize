@@ -1005,13 +1005,13 @@
 |`effectStrategy`| Function |Andrey Khudenkikh | done |  |
 |`renderingStrategy`| Function |Andrey Khudenkikh | done |  |
 |`symbolEffect`| Function | Andrey Khudenkikh | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB1MTL |
-|*SymbolSpan*| *Component* |Dmitry A Smirnov| in progress|  |
-|`setSymbolSpanOptions`| Function |Dmitry A Smirnov| in progress|  |
-|`fontSize`| Function |Dmitry A Smirnov| in progress|  |
-|`fontColor`| Function |Dmitry A Smirnov| in progress|  |
-|`fontWeight`| Function |Dmitry A Smirnov| in progress|  |
-|`effectStrategy`| Function |Dmitry A Smirnov| in progress|  |
-|`renderingStrategy`| Function |Dmitry A Smirnov| in progress|  |
+|*SymbolSpan*| *Component* |Dmitry A Smirnov| devdone|  |
+|`setSymbolSpanOptions`| Function |Dmitry A Smirnov| devdone|  |
+|`fontSize`| Function |Dmitry A Smirnov| devdone|  |
+|`fontColor`| Function |Dmitry A Smirnov| devdone|  |
+|`fontWeight`| Function |Dmitry A Smirnov| devdone|  |
+|`effectStrategy`| Function |Dmitry A Smirnov| devdone|  |
+|`renderingStrategy`| Function |Dmitry A Smirnov| devdone|  |
 |*Text*| *Component* | Kirill Kirichenko | in progress | |
 |`setTextOptions`| Function | Kirill Kirichenko | in progress |  |
 |`font`| Function |Samarin Sergey |in progress |  |
