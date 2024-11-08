@@ -105,3 +105,9 @@ KInt impl_TestCallIntMemory(KVMContext vmContext, KInt methodId, KInt n) {
     return res;
 }
 KOALA_INTEROP_CTX_2(TestCallIntMemory, KInt, KInt, KInt)
+
+
+void impl_TestWithBuffer(KInteropBuffer buffer) {
+    fprintf(stderr, "TEST WITH BUFFER %p %d\n", buffer.data, buffer.length);
+}
+KOALA_INTEROP_V1(TestWithBuffer, KInteropBuffer)

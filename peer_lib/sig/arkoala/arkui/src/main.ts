@@ -604,6 +604,9 @@ function main() {
     // Place where mock of ACE is located.
     process.env.ACE_LIBRARY_PATH = __dirname + "/../../../native"
 
+    let buffer = new ArrayBuffer(256)
+    nativeModule()._TestWithBuffer(buffer)
+
     checkSerdeBaseLength()
     checkSerdeBaseText()
     checkSerdeBasePrimitive()
