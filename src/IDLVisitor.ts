@@ -1122,7 +1122,11 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         if (parent !== undefined && ts.isClassDeclaration(parent)) {
             return identName(parent.name)!
         }
-    
+        else if (parent !== undefined && ts.isInterfaceDeclaration(parent))
+        {
+            return identName(method.name)!
+        }
+
         return undefined
     }
 
