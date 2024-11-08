@@ -7,27 +7,27 @@ export enum CallbackKind {
     Kind_Callback_Void = 3
 }
 export interface XMLNativeModule {
-    _XML_setAttributes(self: KPointer, name: string, value: string): void 
-    _XML_addEmptyElement(self: KPointer, name: string): void 
-    _XML_setDeclaration(self: KPointer): void 
-    _XML_startElement(self: KPointer, name: string): void 
-    _XML_endElement(self: KPointer): void 
-    _XML_setNamespace(self: KPointer, prefix: string, namespace: string): void 
-    _XML_setComment(self: KPointer, text: string): void 
-    _XML_setCDATA(self: KPointer, text: string): void 
-    _XML_setText(self: KPointer, text: string): void 
-    _XML_setDocType(self: KPointer, text: string): void 
-    _XML_getColumnNumber(self: KPointer): number 
-    _XML_getDepth(self: KPointer): number 
-    _XML_getLineNumber(self: KPointer): number 
-    _XML_getName(self: KPointer): string 
-    _XML_getNamespace(self: KPointer): string 
-    _XML_getPrefix(self: KPointer): string 
-    _XML_getText(self: KPointer): string 
-    _XML_isEmptyElementTag(self: KPointer): boolean 
-    _XML_isWhitespace(self: KPointer): boolean 
-    _XML_getAttributeCount(self: KPointer): number 
-    _XML_parse(self: KPointer, thisArray: Uint8Array, thisLength: int32): void 
+    _XmlSerializer_setAttributes(self: KPointer, name: string, value: string): void 
+    _XmlSerializer_addEmptyElement(self: KPointer, name: string): void 
+    _XmlSerializer_setDeclaration(self: KPointer): void 
+    _XmlSerializer_startElement(self: KPointer, name: string): void 
+    _XmlSerializer_endElement(self: KPointer): void 
+    _XmlSerializer_setNamespace(self: KPointer, prefix: string, namespace: string): void 
+    _XmlSerializer_setComment(self: KPointer, text: string): void 
+    _XmlSerializer_setCDATA(self: KPointer, text: string): void 
+    _XmlSerializer_setText(self: KPointer, text: string): void 
+    _XmlSerializer_setDocType(self: KPointer, text: string): void 
+    _ParseInfo_getColumnNumber(self: KPointer): number 
+    _ParseInfo_getDepth(self: KPointer): number 
+    _ParseInfo_getLineNumber(self: KPointer): number 
+    _ParseInfo_getName(self: KPointer): string 
+    _ParseInfo_getNamespace(self: KPointer): string 
+    _ParseInfo_getPrefix(self: KPointer): string 
+    _ParseInfo_getText(self: KPointer): string 
+    _ParseInfo_isEmptyElementTag(self: KPointer): boolean 
+    _ParseInfo_isWhitespace(self: KPointer): boolean 
+    _ParseInfo_getAttributeCount(self: KPointer): number 
+    _XmlPullParser_parse(self: KPointer, thisArray: Uint8Array, thisLength: int32): void 
     _XmlSerializer_ctor(thisArray: Uint8Array, thisLength: int32): KPointer 
     _ParseInfo_ctor(): KPointer 
     _XmlPullParser_ctor(thisArray: Uint8Array, thisLength: int32): KPointer 
@@ -46,3 +46,4 @@ export function getXMLNativeModule(): NativeModuleType {
         throw new Error("Cannot load native module")
     return theModule
 }
+

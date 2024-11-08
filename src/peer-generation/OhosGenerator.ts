@@ -280,9 +280,11 @@ class OHOSVisitor {
         })
         printCallbacksKinds(this.library, this.nativeWriter)
         this.nativeWriter.writeInterface(className, writer => {
-            this.interfaces.flatMap(it => it.methods).forEach(method => {
-                const signature = makePeerCallSignature(this.library, method.parameters, method.returnType, "self")
-                writer.writeNativeMethodDeclaration(`_${this.libraryName}_${method.name}`, signature)
+            this.interfaces.forEach(it => {
+                it.methods.forEach(method => {
+                    const signature = makePeerCallSignature(this.library, method.parameters, method.returnType, "self")
+                    writer.writeNativeMethodDeclaration(`_${it.name}_${method.name}`, signature)  // TODO temporarily removed _${this.libraryName} prefix
+                })
             })
             this.interfaces.forEach(it => {
                 const ctors = it.constructors.map(it => ({ parameters: it.parameters, returnType: it.returnType }))
@@ -432,7 +434,7 @@ class OHOSVisitor {
                         })
                         const callExpression = writer.makeMethodCall(
                             `${nativeModuleGetter}()`,
-                            `_${this.libraryName}_${method.name}`,
+                            `_${int.name}_${method.name}`, // TODO temporarily removed _${this.libraryName} prefix
                             params
                         )
                         if (method.returnType === IDLVoidType) {

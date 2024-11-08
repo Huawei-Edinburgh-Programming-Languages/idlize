@@ -16,7 +16,7 @@ enum EventType {
 
 const sampleXml = String.raw`<foo value="xx">Hello</foo>`
 const sampleXmlBytes = new TextEncoder().encode(sampleXml)
-const parser = new XmlPullParser(sampleXmlBytes.buffer, "utf-8")
+const parser = new XmlPullParser(sampleXmlBytes.buffer)
 parser.parse({
     ignoreNameSpace: true,
     supportDoctype: false,

@@ -42,7 +42,7 @@ export interface XmlPullParserInterface {
 }
 export class XmlSerializer implements XmlSerializerInterface {
     private peer: KPointer
-     constructor(buffer: ArrayBuffer | DataView, encoding: string) {
+     constructor(buffer: ArrayBuffer | DataView, encoding?: string | undefined) {
         const thisSerializer: Serializer = SerializerBase.hold(createSerializer)
         let buffer_type: int32 = RuntimeType.UNDEFINED
         buffer_type = runtimeType(buffer)
@@ -67,34 +67,34 @@ export class XmlSerializer implements XmlSerializerInterface {
         thisSerializer.release();
     }
     setAttributes(name: string, value: string): void {
-        getXMLNativeModule()._XML_setAttributes(this.peer, name, value);
+        getXMLNativeModule()._XmlSerializer_setAttributes(this.peer, name, value);
     }
     addEmptyElement(name: string): void {
-        getXMLNativeModule()._XML_addEmptyElement(this.peer, name);
+        getXMLNativeModule()._XmlSerializer_addEmptyElement(this.peer, name);
     }
     setDeclaration(): void {
-        getXMLNativeModule()._XML_setDeclaration(this.peer);
+        getXMLNativeModule()._XmlSerializer_setDeclaration(this.peer);
     }
     startElement(name: string): void {
-        getXMLNativeModule()._XML_startElement(this.peer, name);
+        getXMLNativeModule()._XmlSerializer_startElement(this.peer, name);
     }
     endElement(): void {
-        getXMLNativeModule()._XML_endElement(this.peer);
+        getXMLNativeModule()._XmlSerializer_endElement(this.peer);
     }
     setNamespace(prefix: string, namespace: string): void {
-        getXMLNativeModule()._XML_setNamespace(this.peer, prefix, namespace);
+        getXMLNativeModule()._XmlSerializer_setNamespace(this.peer, prefix, namespace);
     }
     setComment(text: string): void {
-        getXMLNativeModule()._XML_setComment(this.peer, text);
+        getXMLNativeModule()._XmlSerializer_setComment(this.peer, text);
     }
     setCDATA(text: string): void {
-        getXMLNativeModule()._XML_setCDATA(this.peer, text);
+        getXMLNativeModule()._XmlSerializer_setCDATA(this.peer, text);
     }
     setText(text: string): void {
-        getXMLNativeModule()._XML_setText(this.peer, text);
+        getXMLNativeModule()._XmlSerializer_setText(this.peer, text);
     }
     setDocType(text: string): void {
-        getXMLNativeModule()._XML_setDocType(this.peer, text);
+        getXMLNativeModule()._XmlSerializer_setDocType(this.peer, text);
     }
 }
 export class ParseInfo implements ParseInfoInterface {
@@ -103,49 +103,49 @@ export class ParseInfo implements ParseInfoInterface {
         this.peer = getXMLNativeModule()._ParseInfo_ctor()
     }
     getColumnNumber(): number {
-        const result = getXMLNativeModule()._XML_getColumnNumber(this.peer)
+        const result = getXMLNativeModule()._ParseInfo_getColumnNumber(this.peer)
         return result
     }
     getDepth(): number {
-        const result = getXMLNativeModule()._XML_getDepth(this.peer)
+        const result = getXMLNativeModule()._ParseInfo_getDepth(this.peer)
         return result
     }
     getLineNumber(): number {
-        const result = getXMLNativeModule()._XML_getLineNumber(this.peer)
+        const result = getXMLNativeModule()._ParseInfo_getLineNumber(this.peer)
         return result
     }
     getName(): string {
-        const result = getXMLNativeModule()._XML_getName(this.peer)
+        const result = getXMLNativeModule()._ParseInfo_getName(this.peer)
         return result
     }
     getNamespace(): string {
-        const result = getXMLNativeModule()._XML_getNamespace(this.peer)
+        const result = getXMLNativeModule()._ParseInfo_getNamespace(this.peer)
         return result
     }
     getPrefix(): string {
-        const result = getXMLNativeModule()._XML_getPrefix(this.peer)
+        const result = getXMLNativeModule()._ParseInfo_getPrefix(this.peer)
         return result
     }
     getText(): string {
-        const result = getXMLNativeModule()._XML_getText(this.peer)
+        const result = getXMLNativeModule()._ParseInfo_getText(this.peer)
         return result
     }
     isEmptyElementTag(): boolean {
-        const result = getXMLNativeModule()._XML_isEmptyElementTag(this.peer)
+        const result = getXMLNativeModule()._ParseInfo_isEmptyElementTag(this.peer)
         return result
     }
     isWhitespace(): boolean {
-        const result = getXMLNativeModule()._XML_isWhitespace(this.peer)
+        const result = getXMLNativeModule()._ParseInfo_isWhitespace(this.peer)
         return result
     }
     getAttributeCount(): number {
-        const result = getXMLNativeModule()._XML_getAttributeCount(this.peer)
+        const result = getXMLNativeModule()._ParseInfo_getAttributeCount(this.peer)
         return result
     }
 }
 export class XmlPullParser implements XmlPullParserInterface {
     private peer: KPointer
-     constructor(buffer: ArrayBuffer | DataView, encoding: string) {
+     constructor(buffer: ArrayBuffer | DataView, encoding?: string | undefined) {
         const thisSerializer: Serializer = SerializerBase.hold(createSerializer)
         let buffer_type: int32 = RuntimeType.UNDEFINED
         buffer_type = runtimeType(buffer)
@@ -172,7 +172,7 @@ export class XmlPullParser implements XmlPullParserInterface {
     parse(option: ParseOptions): void {
         const thisSerializer: Serializer = SerializerBase.hold(createSerializer)
         thisSerializer.writeParseOptions(option)
-        getXMLNativeModule()._XML_parse(this.peer, thisSerializer.asArray(), thisSerializer.length());
+        getXMLNativeModule()._XmlPullParser_parse(this.peer, thisSerializer.asArray(), thisSerializer.length());
         thisSerializer.release();
     }
 }
