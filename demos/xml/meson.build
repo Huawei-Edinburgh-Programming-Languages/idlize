@@ -14,6 +14,7 @@ ldflags = []
 
 include_dirs = [
    'generated',
+   'src/cpp',
    external_interop_dir,
    external_interop_dir / 'types',
 ]
@@ -102,5 +103,7 @@ shared_library(node_library_name,
     install_dir: meson.current_source_dir() / 'build/node',
     cpp_args: cflags + node_cflags,
     link_args: ldflags + node_ldflags,
-    dependencies: []
+    dependencies: [
+        dependency('expat')
+    ]
 )
