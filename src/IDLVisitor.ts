@@ -1047,8 +1047,10 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
 
         if (ts.isPropertyDeclaration(property) || ts.isPropertySignature(property)) {
             let type = this.serializeType(property.type, nameSuggestion)
-            if (escapedName == "params" && this.maybeClassName(property.parent) == "Resource") {
+            if (escapedName == "params" && this.maybeClassName(property.parent) == "Resource" &&
+                idl.isContainerType(type) && type.elementType[0] == idl.IDLAnyType) {
                 // Ugly hack: Resource.params is any[] in the SDK, but it should be string[].
+                // TODO: remove, once SDK is fixed.
                 console.log(`WARNING: applying Resource.params workaround, type was ${this.computeTypeName(type)}`)
                 type = idl.createContainerType('sequence', [idl.IDLStringType])
             }
