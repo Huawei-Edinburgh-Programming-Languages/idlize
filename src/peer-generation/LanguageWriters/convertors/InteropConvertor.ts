@@ -76,7 +76,7 @@ export class InteropConverter implements TypeConvertor<ConvertResult> {
             return this.make(target.name)
         }
         if (idl.isCallback(target)) {
-            return this.make(PrimitiveType.LibraryPrefix + target.name, false)
+            return this.make(PrimitiveType.LibraryPrefix + target.name, true)
         }
         if (idl.isTupleInterface(target)) {
             return target.name
