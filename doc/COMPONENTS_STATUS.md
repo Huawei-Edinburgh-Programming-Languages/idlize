@@ -608,31 +608,31 @@
 |`title`| Function |Kovalev Sergey | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`ignoreLayoutSafeArea`| Function |Kovalev Sergey | done |  |
 |*Navigation*| *Component* | Erokhin Ilya | in progress |  |
-|`setNavigationOptions`| Function | Skroba Gleb | in progress | |
-|`navBarWidth`|Function|  Skroba Gleb | in progress | |
-|`navBarPosition`|Function| Erokhin Ilya | done |  |
-|`navBarWidthRange`|Function|  Skroba Gleb | in progress | |
-|`minContentWidth`|Function|  Skroba Gleb | in progress | |
+|`setNavigationOptions`| Function | Skroba Gleb | blocked | depend on NavPathStack |
+|`navBarWidth`|Function| Skroba Gleb | devdone | |
+|`navBarPosition`|Function| Erokhin Ilya | done | |
+|`navBarWidthRange`|Function| Skroba Gleb | devdone | |
+|`minContentWidth`|Function| Skroba Gleb | devdone | |
 |`mode`|Function| Erokhin Ilya | done |  |
-|`backButtonIcon`| Function | Erokhin Ilya | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
+|`backButtonIcon`| Function | Erokhin Ilya | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR, implemented for string and resource arg|
 |`hideNavBar`|Function| Erokhin Ilya | done |  |
 |`subTitle`|Function| Erokhin Ilya | done |  |
-|`hideTitleBar`|Function| Skroba Gleb | in progress | |
-|`onTitleModeChange`| Function | Skroba Gleb | in progress | |
+|`hideTitleBar`|Function| Skroba Gleb | blocked | main part done, no ace_engine implementation for second |
+|`onTitleModeChange`| Function | Skroba Gleb | blocked | no callbacks Arkoala support |
 |`hideBackButton`|Function| Erokhin Ilya | done |  |
 |`titleMode`|Function| Erokhin Ilya | done |  |
-|`menus`| Function | Skroba Gleb | in progress | |
-|`toolBar`| Function | Skroba Gleb | in progress | |
-|`hideToolBar`|Function| Skroba Gleb | in progress | |
+|`menus`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q, implemented for text |
+|`toolBar`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`hideToolBar`|Function| Skroba Gleb | blocked | main part done, no ace_engine implementation for second |
 |`onNavBarStateChange`|Function| Erokhin Ilya | done |  |
 |`onNavigationModeChange`|Function| Erokhin Ilya | done |  |
-|`navDestination`| Function | Skroba Gleb | in progress | |
-|`customNavContentTransition`| Function | Skroba Gleb | in progress | |
-|`systemBarStyle`| Function | Skroba Gleb | in progress | |
+|`navDestination`| Function | Skroba Gleb | blocked | no callbacks Arkoala support |
+|`customNavContentTransition`| Function | Skroba Gleb | blocked | no callbacks Arkoala support |
+|`systemBarStyle`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`recoverable`|Function| Erokhin Ilya | done |  |
 |`title`| Function | Erokhin Ilya | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|`toolbarConfiguration`| Function | Skroba Gleb | in progress | |
-|`ignoreLayoutSafeArea`| Function | Skroba Gleb | in progress | |
+|`toolbarConfiguration`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q|
+|`ignoreLayoutSafeArea`| Function | Skroba Gleb | blocked UT | no JSON data |
 |*NavRouter*| *Component* |Evstigneev Roman | done |  |
 |`setNavRouterOptions`| Function |Evstigneev Roman| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF |
 |`onStateChange`| Function |Evstigneev Roman | done|  |
