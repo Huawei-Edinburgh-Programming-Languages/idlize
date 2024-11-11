@@ -1120,14 +1120,10 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         })
     }
 
-    private clazzName(method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration | ts.CallSignatureDeclaration | ts.ConstructorDeclaration | ts.ConstructSignatureDeclaration | ts.IndexSignatureDeclaration): string | undefined {
-        let parent = method.parent//.parent
+    private clazzName(method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration | ts.CallSignatureDeclaration,): string | undefined {
+        let parent = method.parent
     
-        if (parent !== undefined && ts.isClassDeclaration(parent)) {
-            return identName(parent.name)!
-        }
-        else if (parent !== undefined && ts.isInterfaceDeclaration(parent))
-        {
+        if (parent !== undefined && ts.isClassDeclaration(parent) || ts.isInterfaceDeclaration(parent)) {
             return identName(parent.name)!
         }
 
