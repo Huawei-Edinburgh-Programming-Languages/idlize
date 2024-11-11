@@ -40,6 +40,8 @@ const %CPP_PREFIX%ArkUIExtendedNodeAPI* GetArkUIExtendedNodeAPI() {
         %CPP_PREFIX%ARKUI_EXTENDED_NODE_API_VERSION, nullptr));
 }
 
+CustomDeserializer* DeserializerBase::customDeserializers = nullptr;
+
 // TODO: Remove all this.
 void disposeNode(KNativePointer* ptr) {
     GetArkUIBasicNodeAPI()->disposeNode((Ark_NodeHandle)ptr);
