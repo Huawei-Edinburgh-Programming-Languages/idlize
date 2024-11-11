@@ -6,7 +6,6 @@
 #include <iostream>
 #include <ostream>
 #include <string>
-#include <string_view>
 #include <vector>
 #include <functional>
 
@@ -32,12 +31,20 @@ public:
     }
 
     void parse() {
-        std::cerr << "parse called on buffer: " << m_buffer << std::endl;
         XML_Parse(m_parser, m_buffer.data(), m_buffer.length(), true);
     }
 
     void setTagValueCallback(std::function<void(const char*, const char*)>&& callback) {
-        this->m_callback = callback;
+        this->m_tagValueCallback = callback;
+    }
+
+    void setAttributeValueCallback(std::function<void(const char*, const char*)>&& callback) {
+        this->m_attributeValueCallback = callback;
+    }
+
+    void reset() {
+        this->m_tagValueCallback = nullptr;
+        this->m_attributeValueCallback = nullptr;
     }
 
 private:
@@ -56,17 +63,16 @@ private:
         ParserState ps = { name };
         m_stack.emplace_back(std::move(ps));
 
-        std::cerr << "onStartElement name=" << name << ", attrs=[";
         // Attrs is NULL-terminated array of consecutive attrubute keys and values
         // e.g. for `<tag attr1="val1" attr2="val2">` it will be like ["attr1", "val1", "attr2", "val2", NULL]
         const char** attr = attrs;
         while (*attr) {
             const char* key = *(attr++);
             const char* value = *(attr++);
-            // TODO call attributeValueCallbackFunction(key, value) ?
-            std::cerr << key << "=" << value;
+            if (m_attributeValueCallback) {
+                m_attributeValueCallback(key, value);
+            }
         }
-        std::cerr << "]" << std::endl;
     }
 
     void onEndElement(const char* name) {
@@ -74,9 +80,10 @@ private:
     }
 
     void onText(const char* data, size_t len) {
-        // TODO call tagValueCallbackFunction(m_currentTag, data) ?
-        std::cerr << "TEXT(" << currentTag() << "): " << std::string_view(data, len) << std::endl;
-        m_callback(currentTag(), data); // TODO std::string
+        if (m_tagValueCallback) {
+            std::string value(data, len);
+            m_tagValueCallback(currentTag(), value.c_str());
+        }
     }
 
     const char* currentTag() const {
@@ -88,5 +95,7 @@ private:
     XML_Parser m_parser = XML_ParserCreate("UTF-8");
     std::string m_buffer;
     std::vector<ParserState> m_stack;
-    std::function<void(const char*, const char*)> m_callback;
+    std::function<void(const char*, const char*)> m_tagValueCallback;
+    std::function<void(const char*, const char*)> m_attributeValueCallback;
+    // std::function<void(const char*, const char*)> m_tokenValueCallback; // TODO implement!
 };

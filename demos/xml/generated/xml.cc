@@ -665,43 +665,52 @@ OH_Int32 ParseInfo_getAttributeCountImpl(OH_NativePointer thisPtr) {
     return {};
 }
 OH_XML_XmlPullParserHandle XmlPullParser_constructImpl(const OH_String* buffer, const OH_String* encoding) {
-    std::cerr << "XmlPullParser_constructImpl, source='" << *buffer << "'" << std::endl;
     const ExpatParser* parser = new ExpatParser(*buffer);
     return (OH_XML_XmlPullParserHandle) parser;
 }
 void XmlPullParser_destructImpl(OH_XML_XmlPullParserHandle thiz) {
-    std::cerr << "XmlPullParser_destructImpl"<< std::endl;
     const ExpatParser* parser = (ExpatParser*) thiz;
     delete parser;
 }
 
-void temp_hold(int resId) {
-    // printf("HELD\n");
-}
-void temp_release(int resId) {
-    // printf("RELEASED\n");
-}
-void temp_call(const OH_Int32 resourceId, const OH_Boolean value) {
-    // printf("CALLED");
-}
+void temp_hold(int resId) {}
+void temp_release(int resId) {}
+void temp_call(const OH_Int32 resourceId, const OH_Boolean value) {}
 
 OH_Void XmlPullParser_parseImpl(OH_NativePointer thisPtr, const OH_XML_ParseOptions* option) {
-    std::cerr << "XmlPullParser_parseImpl"<< std::endl;
     ExpatParser* parser = (ExpatParser*) thisPtr;
-    parser->setTagValueCallback([&](const char* name, const char* value) {
-        auto callback = &(option->tagValueCallbackFunction.value);
-        callback->call(callback->resource.resourceId, name, value, {
-            {
-                1,
-                temp_hold,
-                temp_release,
-            },
-            temp_call,
+    if (option->tagValueCallbackFunction.tag != OH_TAG_UNDEFINED) {
+        parser->setTagValueCallback([&](const char* name, const char* value) {
+            auto callback = &(option->tagValueCallbackFunction.value);
+            callback->call(callback->resource.resourceId, name, value, {
+                {
+                    1,
+                    temp_hold,
+                    temp_release,
+                },
+                temp_call,
+            });
         });
-    });
+    }
+    if (option->attributeValueCallbackFunction.tag != OH_TAG_UNDEFINED) {
+        parser->setAttributeValueCallback([&](const char* name, const char* value) {
+            auto callback = &(option->attributeValueCallbackFunction.value);
+            callback->call(callback->resource.resourceId, name, value, {
+                {
+                    1,
+                    temp_hold,
+                    temp_release,
+                },
+                temp_call,
+            });
+        });
+    }
+    // TODO handle other properties from ParseOptions
     parser->parse();
+    parser->reset();
     return {};
 }
+
 const OH_XML_XmlSerializerModifier* OH_XML_XmlSerializerModifierImpl() {
     const static OH_XML_XmlSerializerModifier instance = {
         &XmlSerializer_constructImpl,
