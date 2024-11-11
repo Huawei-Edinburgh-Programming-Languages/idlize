@@ -1716,3 +1716,7 @@
 |*WebCookie*| *Class* | Erokhin Ilya | done | |
 |`setCookie`| Function | Erokhin Ilya | done | |
 |`saveCookie`| Function | Erokhin Ilya | done | |
+|*CustomSpan*| *Class* | Politov Mikhail | in progress |  |
+|`onMeasure`| Function | Politov Mikhail | in progress |  |
+|`onDraw`| Function | Politov Mikhail | in progress |  |
+|`invalidate`| Function | Politov Mikhail | in progress |  |
