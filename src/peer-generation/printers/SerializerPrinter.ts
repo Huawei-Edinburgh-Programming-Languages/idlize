@@ -38,6 +38,7 @@ import { IDLEntry } from "../../idl";
 import { convertDeclaration } from '../LanguageWriters/nameConvertor';
 import { collectMaterializedImports } from '../Materialized';
 import { generateCallbackKindAccess } from '../ArgConvertors';
+import { ModifierFlags } from 'typescript';
 
 class IdlSerializerPrinter {
     constructor(
@@ -162,6 +163,10 @@ class IdlSerializerPrinter {
             this.writer.print("import java.util.function.Supplier;")
         }
         this.writer.writeClass(className, writer => {
+            if (writer.language == Language.JAVA)
+                writer.writeFieldDeclaration('nullptr', idl.IDLPointerType, [FieldModifier.STATIC, FieldModifier.PRIVATE], false, writer.makeString('0'))
+
+
             // No need for hold() in C++.
             if (writer.language != Language.CPP) {
                 writer.writeFieldDeclaration("cache", idl.createOptionalType(idl.createReferenceType("Serializer")), [FieldModifier.PRIVATE, FieldModifier.STATIC], true, writer.makeNull("Serializer"))
