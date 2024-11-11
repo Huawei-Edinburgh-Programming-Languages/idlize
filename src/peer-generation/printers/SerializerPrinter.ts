@@ -16,7 +16,7 @@
 import * as idl from '../../idl'
 import { Language } from "../../Language";
 import { PrimitiveType } from "../ArkPrimitiveType"
-import { createLanguageWriter, createTypeNameConvertor, ExpressionStatement, LanguageStatement, LanguageWriter, Method, MethodSignature, NamedMethodSignature } from "../LanguageWriters";
+import { ExpressionStatement, LanguageStatement, LanguageWriter, Method, MethodSignature, NamedMethodSignature } from "../LanguageWriters";
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig';
 import { ImportsCollector } from '../ImportsCollector';
 import { IdlPeerLibrary } from '../idl/IdlPeerLibrary';
@@ -106,7 +106,7 @@ class IdlSerializerPrinter {
             writer.makeAssign(
                 `ptr`,
                 idl.IDLPointerType,
-                writer.makeString(`0`),
+                writer.makeString(`nullptr`),
                 true,
                 false
             ))
