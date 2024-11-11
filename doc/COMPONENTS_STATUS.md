@@ -1006,7 +1006,7 @@
 |`renderingStrategy`| Function |Andrey Khudenkikh | done |  |
 |`symbolEffect`| Function | Andrey Khudenkikh | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB1MTL |
 |*SymbolSpan*| *Component* |Dmitry A Smirnov| devdone|  |
-|`setSymbolSpanOptions`| Function |Dmitry A Smirnov| devdone|  |
+|`setSymbolSpanOptions`| Function |Dmitry A Smirnov| blocked_ut| json has no value content https://gitee.com/openharmony/arkui_ace_engine/issues/IB3IX8 |
 |`fontSize`| Function |Dmitry A Smirnov| devdone|  |
 |`fontColor`| Function |Dmitry A Smirnov| devdone|  |
 |`fontWeight`| Function |Dmitry A Smirnov| devdone|  |
