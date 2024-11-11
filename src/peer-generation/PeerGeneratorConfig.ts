@@ -132,6 +132,7 @@ export class PeerGeneratorConfig {
     ])
 
     private static ignoredEntriesJava = new Set([
+        "CustomComponent",  // pulls in Layoutable, LayoutChild
         "AnimationRange",
         "EventTargetInfo",
         "GestureRecognizer",
