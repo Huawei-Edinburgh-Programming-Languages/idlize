@@ -796,7 +796,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
     }
 
     private serializeTypeOrThis(
-        method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration | ts.CallSignatureDeclaration | ts.ConstructorDeclaration | ts.ConstructSignatureDeclaration | ts.IndexSignatureDeclaration,
+        method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration | ts.CallSignatureDeclaration,
         nameSuggestion?: NameSuggestion
     ): idl.IDLType {
         let type = this.serializeType(method.type, nameSuggestion)
