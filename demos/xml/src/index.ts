@@ -14,7 +14,7 @@ enum EventType {
     WHITESPACE
 }
 
-const sampleXml = String.raw`<foo value="xx">Hello</foo>`
+const sampleXml = String.raw`<foo valOfFoo="xx">Hello<bar>124</bar>World</foo>`
 const parser = new XmlPullParser(sampleXml)
 parser.parse({
     ignoreNameSpace: true,
