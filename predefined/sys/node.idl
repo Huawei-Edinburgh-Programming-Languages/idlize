@@ -5,10 +5,6 @@ interface Node {
     pointer GetNodeByViewStack();
     void DisposeNode(pointer ptr0);
     void DumpTreeNode(pointer ptr0);
-    void SetCreateNodeDelay(i32 arg0, i64 arg1);
-    void SetMeasureNodeDelay(i32 arg0, i64 arg1);
-    void SetLayoutNodeDelay(i32 arg0, i64 arg1);
-    void SetDrawNodeDelay(i32 arg0, i64 arg1);
     i32 AddChild(pointer ptr1, pointer ptr2);
     void RemoveChild(pointer ptr0, pointer ptr2);
     i32 InsertChildAfter(pointer ptr0, pointer ptr1, pointer ptr2);
