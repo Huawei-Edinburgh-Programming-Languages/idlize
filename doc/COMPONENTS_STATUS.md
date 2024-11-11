@@ -250,8 +250,8 @@
 |`radialGradient`| Function | Erokhin Ilya | done |  |
 |`motionPath`| Function | | | |
 |`shadow`| Function | Roman Sedaikin | in progress | |
-|`clip`| Function | Skroba Gleb |  blocked  https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
-|`clipShape`| Function | Skroba Gleb | blocked  https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
+|`clip`| Function | Skroba Gleb |  blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
+|`clipShape`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
 |`mask`| Function | | | |
 |`maskShape`| Function | | | |
 |`key`| Function | | | |
