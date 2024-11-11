@@ -63,6 +63,7 @@ private:
     std::vector<OH_CallbackResource> heldResources;
 public:
     void holdCallbackResource(const OH_CallbackResource* resource) {
+        resource->hold(resource->resourceId);
         this->heldResources.push_back(*resource);
     }
     void release() {
@@ -110,9 +111,10 @@ public:
 
     void writeString(OH_String value) {
         // TODO implement string
-        // writeInt32(value.length + 1);
-        // strcpy((char*)(data + position), value.chars);
-        // position += value.length + 1;
+        auto length = std::strlen(value);
+        writeInt32(length + 1);
+        strcpy((char*)(data + position), value);
+        position += length + 1;
     }
 
     void writeBoolean(OH_Boolean value) {

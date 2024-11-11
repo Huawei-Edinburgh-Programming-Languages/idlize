@@ -8,6 +8,7 @@
 #include <string>
 #include <string_view>
 #include <vector>
+#include <functional>
 
 struct ParserState {
     std::string tag;
@@ -34,6 +35,11 @@ public:
         std::cerr << "parse called on buffer: " << m_buffer << std::endl;
         XML_Parse(m_parser, m_buffer.data(), m_buffer.length(), true);
     }
+
+    void setTagValueCallback(std::function<void(const char*, const char*)>&& callback) {
+        this->m_callback = callback;
+    }
+
 private:
     static XMLCALL void StartElementHandler(void *userData, const XML_Char *name, const XML_Char **atts) {
         ((ExpatParser*) userData)->onStartElement(name, atts);
@@ -70,16 +76,17 @@ private:
     void onText(const char* data, size_t len) {
         // TODO call tagValueCallbackFunction(m_currentTag, data) ?
         std::cerr << "TEXT(" << currentTag() << "): " << std::string_view(data, len) << std::endl;
+        m_callback(currentTag(), data); // TODO std::string
     }
 
-    std::string_view currentTag() const {
+    const char* currentTag() const {
         if (m_stack.empty()) return "";
 
-        return m_stack.back().tag;
+        return m_stack.back().tag.c_str();
     }
-
 private:
     XML_Parser m_parser = XML_ParserCreate("UTF-8");
     std::string m_buffer;
     std::vector<ParserState> m_stack;
+    std::function<void(const char*, const char*)> m_callback;
 };
