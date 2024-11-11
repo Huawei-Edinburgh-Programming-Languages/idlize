@@ -61,9 +61,9 @@
 |`buttonStyle`| Function |Evstigneev Roman | done |  |
 |`controlSize`| Function |Evstigneev Roman | done |  |
 |`role`| Function | Evstigneev Roman | done |  |
-|`fontColor`| Function | Evstigneev Roman | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IAUX6D |
-|`fontSize`| Function | Evstigneev Roman | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IAUX6D |
-|`fontWeight`| Function |Evstigneev Roman | blocked UT |https://gitee.com/openharmony/arkui_ace_engine/issues/IAUX6D |
+|`fontColor`| Function | Evstigneev Roman | in progress | https://gitee.com/openharmony/arkui_ace_engine/issues/IAUX6D |
+|`fontSize`| Function | Evstigneev Roman | in progress | https://gitee.com/openharmony/arkui_ace_engine/issues/IAUX6D |
+|`fontWeight`| Function |Evstigneev Roman | in progress |https://gitee.com/openharmony/arkui_ace_engine/issues/IAUX6D |
 |`fontStyle`| Function |Evstigneev Roman | done |  |
 |`fontFamily`| Function |Evstigneev Roman | done |  |
 |`contentModifier`| Function |Evstigneev Roman | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
