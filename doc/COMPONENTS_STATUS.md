@@ -732,7 +732,7 @@
 |`guideLine`| Function | Dmitry A Smirnov | done |  |
 |`barrier`| Function | Dmitry A Smirnov | done |  |
 |*RichEditor*| *Component* | Dudkin Sergey| in progress|  |
-|`setRichEditorOptions`| Function | Dudkin Sergey| devDone|  |
+|`setRichEditorOptions`| Function | Dudkin Sergey| done|  |
 |`onReady`| Function | Dudkin Sergey| done|  |
 |`onSelect`| Function | Dudkin Sergey| done|  |
 |`onSelectionChange`| Function | Dudkin Sergey| done|  |
@@ -741,11 +741,11 @@
 |`onDidIMEInput`| Function | Dudkin Sergey| done|  |
 |`aboutToDelete`| Function | Dudkin Sergey| done|  |
 |`onDeleteComplete`| Function | Dudkin Sergey| done|  |
-|`copyOptions`| Function | Dudkin Sergey| devDone|  |
+|`copyOptions`| Function | Dudkin Sergey| done|  |
 |`onPaste`| Function | Dudkin Sergey| done|  |
-|`enableDataDetector`| Function | Dudkin Sergey| devDone|  |
-|`enablePreviewText`| Function | Dudkin Sergey| devDone|  |
-|`dataDetectorConfig`| Function | Dudkin Sergey| devDone|  |
+|`enableDataDetector`| Function | Dudkin Sergey| done|  |
+|`enablePreviewText`| Function | Dudkin Sergey| done|  |
+|`dataDetectorConfig`| Function | Dudkin Sergey| done|  |
 |`caretColor`| Function | Dudkin Sergey| in progress|  |
 |`selectedBackgroundColor`| Function | Dudkin Sergey| in progress|  |
 |`onEditingChange`| Function | Dudkin Sergey| done|  |
@@ -761,7 +761,7 @@
 |`barState`| Function | Dudkin Sergey| in progress|  |
 |`bindSelectionMenu`| Function | Dudkin Sergey| blocked| not implemented yet. Due to Ark_CustomBuilder |
 |`customKeyboard`| Function | Dudkin Sergey| blocked| not implemented yet. Due to Ark_CustomBuilder |
-|`placeholder`| Function | Dudkin Sergey| devDone|  |
+|`placeholder`| Function | Dudkin Sergey| done|  |
 |*RichText*| *Component* | Dudkin Sergey| in progress|  |
 |`setRichTextOptions`| Function | Dudkin Sergey| in progress|  |
 |`onStart`| Function | Dudkin Sergey| in progress|  |
