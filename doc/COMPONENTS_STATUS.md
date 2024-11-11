@@ -336,7 +336,7 @@
 |`onScrollStart`| Function | Samarin Sergey | in progress|  |
 |`onScrollStop`| Function | Samarin Sergey | in progress|  |
 |`flingSpeedLimit`| Function | Samarin Sergey | devdone |  |
-|`edgeEffect`| Function | Samarin Sergey |in progress Arkoala|  |
+|`edgeEffect`| Function | Samarin Sergey |in progress | Arkoala|  |
 |`fadingEdge`| Function | Samarin Sergey | blocked Arkoala| https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*Component3D*| *Component* |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
 |`setComponent3DOptions`| Function |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
