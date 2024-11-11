@@ -337,7 +337,7 @@
 |`onScrollStop`| Function | Samarin Sergey | in progress|  |
 |`flingSpeedLimit`| Function | Samarin Sergey | devdone |  |
 |`edgeEffect`| Function | Samarin Sergey |in progress Arkoala|  |
-|`fadingEdge`| Function | Samarin Sergey | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`fadingEdge`| Function | Samarin Sergey | blocked Arkoala| https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*Component3D*| *Component* |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
 |`setComponent3DOptions`| Function |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
 |`environment`| Function |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
@@ -357,9 +357,9 @@
 |`enableDec`| Function | Erokhin Ilya | done |  |
 |`enableInc`| Function | Erokhin Ilya | done |  |
 |*CustomDialogController*| *Class* | Erokhin Ilya | blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|`open`| Function | Erokhin Ilya | blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|`close`| Function | Erokhin Ilya | blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|*DataPanel*| *Component* | Morozov Sergey |blocked Arkoala |  |
+|`open`| Function | Erokhin Ilya | blocked Arkoala | https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`close`| Function | Erokhin Ilya | blocked Arkoala| https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|*DataPanel*| *Component* | Morozov Sergey |blocked|  |
 |`setDataPanelOptions`| Function | Morozov Sergey |done |  |
 |`closeEffect`| Function | Morozov Sergey |done |  |
 |`valueColors`| Function |Morozov Sergey |blocked Arkoala |https://gitee.com/nikolay-igotti/idlize/issues/IAW4DU|
@@ -405,7 +405,7 @@
 |`onLoad`| Function | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAUYQM|
 |*FormLink*| *Component* | Dmitry A Smirnov| done |  |
 |`setFormLinkOptions`| Function | Dmitry A Smirnov| done |  |
-|*Gauge*| *Component* | Maksimov Nikita | blocked ArKoala |  |
+|*Gauge*| *Component* | Maksimov Nikita | blocked |  |
 |`setGaugeOptions`| Function | Maksimov Nikita | done | |
 |`value`| Function | Maksimov Nikita | done | |
 |`startAngle`| Function | Maksimov Nikita | done | |
@@ -483,7 +483,7 @@
 |`objectRepeat`| Function | Evstigneev Roman | in progress | |
 |`autoResize`| Function | Evstigneev Roman | in progress | https://gitee.com/openharmony/arkui_ace_engine/issues/IAW529 |
 |`renderMode`| Function | Evstigneev Roman | in progress | |
-|`dynamicRangeMode`| Function | Evstigneev Roman | blocked UT |  |
+|`dynamicRangeMode`| Function | Evstigneev Roman | testskipped |  |
 |`interpolation`| Function | Evstigneev Roman | in progress | |
 |`sourceSize`| Function | Evstigneev Roman | in progress | |
 |`syncLoad`| Function | Evstigneev Roman | in progress | |
@@ -510,9 +510,9 @@
 |`alt`| Function | Politov Mikhail | in progress|  |
 |*Line*|*Component*|Dudkin Sergey| blocked |  |
 |`setLineOptions`|Function|Dudkin Sergey| done |  |
-|`startPoint`|Function|Dudkin Sergey|blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IAXCBA |
-|`endPoint`|Function|Dudkin Sergey|blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IAXCBA |
-|*List*|*Component*|Morozov Sergey| blocked Arkoala |  |
+|`startPoint`|Function|Dudkin Sergey|blocked AceEngine | https://gitee.com/openharmony/interface_sdk-js/issues/IAXCBA |
+|`endPoint`|Function|Dudkin Sergey|blocked AceEngine | https://gitee.com/openharmony/interface_sdk-js/issues/IAXCBA |
+|*List*|*Component*|Morozov Sergey| blocked|  |
 |`setListOptions`|Function|Morozov Sergey| done |  |
 |`lanes`|Function|Morozov Sergey|done|  |
 |`alignListItem`|Function|Morozov Sergey|done|  |
@@ -532,7 +532,7 @@
 |`nestedScroll`|Function|Morozov Sergey|done|  |
 |`enableScrollInteraction`|Function|Morozov Sergey|done|  |
 |`friction`|Function|Morozov Sergey|done|  |
-|`childrenMainSize`|Function|Morozov Sergey|blocked Arkoala|  |
+|`childrenMainSize`|Function|Morozov Sergey|blocked Arkoala| DMZ |
 |`maintainVisibleContentPosition`|Function|Morozov Sergey|done|  |
 |`onScroll`|Function|Morozov Sergey|done|  |
 |`onScrollIndex`|Function|Morozov Sergey|done|  |
@@ -541,14 +541,14 @@
 |`onReachEnd`|Function|Morozov Sergey|done|  |
 |`onScrollStart`|Function|Morozov Sergey|done|  |
 |`onScrollStop`|Function|Morozov Sergey|done|  |
-|`onItemDelete`|Function|Morozov Sergey|blocked Arkoala|  |
-|`onItemMove`|Function|Morozov Sergey|blocked Arkoala|  |
-|`onItemDragStart`|Function|Morozov Sergey|blocked Arkoala|  |
+|`onItemDelete`|Function|Morozov Sergey|in progress|  |
+|`onItemMove`|Function|Morozov Sergey|blocked Arkoala| DMZ |
+|`onItemDragStart`|Function|Morozov Sergey|blocked Arkoala|DMZ |
 |`onItemDragEnter`|Function|Morozov Sergey|done|  |
 |`onItemDragMove`|Function|Morozov Sergey|done|  |
 |`onItemDragLeave`|Function|Morozov Sergey|done|  |
 |`onItemDrop`|Function|Morozov Sergey|done|  |
-|`onScrollFrameBegin`|Function|Morozov Sergey|blocked Arkoala| https://gitee.com/nikolay-igotti/idlize/issues/IAOKLD |
+|`onScrollFrameBegin`|Function|Morozov Sergey|in progress| https://gitee.com/nikolay-igotti/idlize/issues/IAOKLD |
 |*ListItem*|*Component*|Morozov Sergey|blocked Arkoala|  |
 |`setListItemOptions`|Function|Morozov Sergey|blocked Arkoala| https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`sticky`|Function|Morozov Sergey|done|  |
@@ -557,15 +557,15 @@
 |`selected`|Function|Morozov Sergey|done|  |
 |`swipeAction`|Function|Morozov Sergey|blocked Arkoala| https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`onSelect`|Function|Morozov Sergey|done|  |
-|*ListItemGroup*|*Component*|Morozov Sergey|blocked Arkoala|  |
+|*ListItemGroup*|*Component*|Morozov Sergey|blocked|  |
 |`setListItemGroupOptions`|Function|Morozov Sergey|blocked Arkoala| https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`divider`|Function|Morozov Sergey|done|  |
-|`childrenMainSize`|Function|Morozov Sergey|blocked Arkoala|  |
+|`childrenMainSize`|Function|Morozov Sergey|blocked Arkoala| DMZ |
 |*LocationButton*| *Component* |Samarin Sergey| done |  |
 |`setLocationButtonOptions`| Function |Samarin Sergey| done |  |
 |`onClick`| Function |Samarin Sergey| done |  |
 |*Marquee*| *Component* | Andrey Khudenkikh| blocked |  |
-|`setMarqueeOptions`| Function | Andrey Khudenkikh| blocked | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3KLW |
+|`setMarqueeOptions`| Function | Andrey Khudenkikh| blocked ace_engine| https://gitee.com/openharmony/arkui_ace_engine/issues/IB3KLW |
 |`fontColor`| Function |Andrey Khudenkikh | done |  |
 |`fontSize`| Function |Andrey Khudenkikh | done |  |
 |`allowScale`| Function |Andrey Khudenkikh | done |  |
@@ -580,7 +580,7 @@
 |`color`|Function| Samarin Sergey | done |  |
 |`enableLoading`|Function| Samarin Sergey | done |  |
 |`contentModifier`|Function| Samarin Sergey|blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
-|*Menu*|*Component*|Morozov Sergey|blocked Arkoala |  |
+|*Menu*|*Component*|Morozov Sergey|blocked |  |
 |`setMenuOptions`| Function |Morozov Sergey| done |  |
 |`fontSize`|Function|Morozov Sergey| done |  |
 |`fontColor`|Function|Morozov Sergey| done |  |
@@ -589,7 +589,7 @@
 |`menuItemDivider`|Function|Morozov Sergey| blocked Arkoala |https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`menuItemGroupDivider`|Function|Morozov Sergey| blocked Arkoala |https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`subMenuExpandingMode`|Function|Morozov Sergey| done |  |
-|*MenuItem*| *Component* |Morozov Sergey|blocked Arkoala|  |
+|*MenuItem*| *Component* |Morozov Sergey|blocked|  |
 |`setMenuItemOptions`| Function |Morozov Sergey|blocked Arkoala| https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`selected`| Function |Morozov Sergey|done|  |
 |`selectIcon`| Function |Morozov Sergey|blocked Arkoala| https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
@@ -598,10 +598,10 @@
 |`contentFontColor`| Function |Morozov Sergey|done|  |
 |`labelFont`| Function |Morozov Sergey|done|  |
 |`labelFontColor`| Function |Morozov Sergey|done|  |
-|*MenuItemGroup*| *Component* |Morozov Sergey |blocked Arkoala |  |
+|*MenuItemGroup*| *Component* |Morozov Sergey |blocked |  |
 |`setMenuItemGroupOptions`| Function | Morozov Sergey |blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*NavDestination*| *Component* |Kovalev Sergey | in progress |  |
-|`setNavDestinationOptions`| Function |Kovalev Sergey | blocked | No need to implement this method |
+|`setNavDestinationOptions`| Function |Kovalev Sergey | in progress | No need to implement this method DMZ|
 |`hideTitleBar`| Function |Kovalev Sergey | done |  |
 |`onShown`| Function |Kovalev Sergey | done |  |
 |`onHidden`| Function |Kovalev Sergey | done |  |
@@ -617,34 +617,34 @@
 |`systemBarStyle`| Function |Kovalev Sergey | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`recoverable`| Function |Kovalev Sergey | done |  |
 |`systemTransition`| Function |Kovalev Sergey | blocked AceEngine | No handlers for Ark_NavigationSystemTransitionType |
-|`title`| Function |Kovalev Sergey | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`title`| Function |Kovalev Sergey | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`ignoreLayoutSafeArea`| Function |Kovalev Sergey | done |  |
 |*Navigation*| *Component* | Erokhin Ilya | in progress |  |
-|`setNavigationOptions`| Function | Skroba Gleb | blocked | depend on NavPathStack |
+|`setNavigationOptions`| Function | Skroba Gleb | in progress| depend on NavPathStack |
 |`navBarWidth`|Function| Skroba Gleb | devdone | |
 |`navBarPosition`|Function| Erokhin Ilya | done | |
 |`navBarWidthRange`|Function| Skroba Gleb | devdone | |
 |`minContentWidth`|Function| Skroba Gleb | devdone | |
 |`mode`|Function| Erokhin Ilya | done |  |
-|`backButtonIcon`| Function | Erokhin Ilya | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR, implemented for string and resource arg|
+|`backButtonIcon`| Function | Erokhin Ilya | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR, implemented for string and resource arg|
 |`hideNavBar`|Function| Erokhin Ilya | done |  |
 |`subTitle`|Function| Erokhin Ilya | done |  |
-|`hideTitleBar`|Function| Skroba Gleb | blocked | main part done, no ace_engine implementation for second |
-|`onTitleModeChange`| Function | Skroba Gleb | blocked | no callbacks Arkoala support |
+|`hideTitleBar`|Function| Skroba Gleb | blocked | main part done, no ace_engine implementation for second DMZ|
+|`onTitleModeChange`| Function | Skroba Gleb | in progress| no callbacks Arkoala support |
 |`hideBackButton`|Function| Erokhin Ilya | done |  |
 |`titleMode`|Function| Erokhin Ilya | done |  |
-|`menus`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q, implemented for text |
-|`toolBar`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|`hideToolBar`|Function| Skroba Gleb | blocked | main part done, no ace_engine implementation for second |
+|`menus`| Function | Skroba Gleb | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`toolBar`| Function | Skroba Gleb | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`hideToolBar`|Function| Skroba Gleb | blocked | main part done, no ace_engine implementation for second DMZ |
 |`onNavBarStateChange`|Function| Erokhin Ilya | done |  |
 |`onNavigationModeChange`|Function| Erokhin Ilya | done |  |
-|`navDestination`| Function | Skroba Gleb | blocked | no callbacks Arkoala support |
-|`customNavContentTransition`| Function | Skroba Gleb | blocked | no callbacks Arkoala support |
-|`systemBarStyle`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
+|`navDestination`| Function | Skroba Gleb | in progress| no callbacks Arkoala support |
+|`customNavContentTransition`| Function | Skroba Gleb | in progress| no callbacks Arkoala support |
+|`systemBarStyle`| Function | Skroba Gleb | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`recoverable`|Function| Erokhin Ilya | done |  |
-|`title`| Function | Erokhin Ilya | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|`toolbarConfiguration`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q|
-|`ignoreLayoutSafeArea`| Function | Skroba Gleb | blocked UT | no JSON data |
+|`title`| Function | Erokhin Ilya | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`toolbarConfiguration`| Function | Skroba Gleb | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q|
+|`ignoreLayoutSafeArea`| Function | Skroba Gleb | blocked AceEngine | no JSON data DMZ |
 |*NavRouter*| *Component* |Evstigneev Roman | done |  |
 |`setNavRouterOptions`| Function |Evstigneev Roman| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF |
 |`onStateChange`| Function |Evstigneev Roman | done|  |
@@ -654,7 +654,7 @@
 |`active`| Function | Skroba Gleb | done |  |
 |`type`| Function | Skroba Gleb | done |  |
 |`target`| Function | Skroba Gleb | done |  |
-|`params`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`params`| Function | Skroba Gleb | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*Panel*| *Component* | Pavelyev Ivan| done |  |
 |`setPanelOptions`| Function | Pavelyev Ivan| done |  |
 |`mode`| Function |Pavelyev Ivan| done |  |
@@ -685,10 +685,10 @@
 |`activeColor`| Function | Dmitry A Smirnov| done|  |
 |`pathColor`| Function | Dmitry A Smirnov| done|  |
 |`pathStrokeWidth`| Function | Dmitry A Smirnov| done|  |
-|`onPatternComplete`| Function | Dmitry A Smirnov| blocked| waiting for new way implement method with callback |
+|`onPatternComplete`| Function | Dmitry A Smirnov| in progress|  |
 |`autoReset`| Function | Dmitry A Smirnov| done|  |
-|`onDotConnect`| Function | Dmitry A Smirnov| blocked| waiting for new way implement method with callback |
-|`activateCircleStyle`| Function | Dmitry A Smirnov| blocked| radius is CustomObject. need activateCircleStyle attribute https://gitee.com/openharmony/arkui_ace_engine/issues/IAYWON |
+|`onDotConnect`| Function | Dmitry A Smirnov| in progress|  |
+|`activateCircleStyle`| Function | Dmitry A Smirnov| blocked ace_engine| https://gitee.com/openharmony/arkui_ace_engine/issues/IAYWON |
 |*Progress*| *Component* | Erokhin Ilya | | |
 |`setProgressOptions`| Function | Erokhin Ilya | in progress | |
 |`value`| Function | Erokhin Ilya | in progress | |
