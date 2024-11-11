@@ -926,8 +926,8 @@
 |`slideRange`| Function | Morozov Sergey |done |  |
 |`showTips`| Function |Morozov Sergey |done |  |
 |*BaseSpan*| *Component* |Politov Mikhail | in progress |  |
-|`textBackgroundStyle`| Function | Politov Mikhail | devdone |  |
-|`baselineOffset`| Function | Politov Mikhail | blocked |  |
+|`textBackgroundStyle`| Function | Politov Mikhail | done |  |
+|`baselineOffset`| Function | Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*Span*| *Component* | Politov Mikhail | done |  |
 |`setSpanOptions`| Function |Politov Mikhail | done  |  |
 |`font`| Function | Politov Mikhail | done |  |
