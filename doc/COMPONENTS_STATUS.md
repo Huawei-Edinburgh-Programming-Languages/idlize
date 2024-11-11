@@ -565,7 +565,7 @@
 |`setLocationButtonOptions`| Function |Samarin Sergey| done |  |
 |`onClick`| Function |Samarin Sergey| done |  |
 |*Marquee*| *Component* | Andrey Khudenkikh| blocked |  |
-|`setMarqueeOptions`| Function | Andrey Khudenkikh| blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB1MMI |
+|`setMarqueeOptions`| Function | Andrey Khudenkikh| blocked | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3KLW |
 |`fontColor`| Function |Andrey Khudenkikh | done |  |
 |`fontSize`| Function |Andrey Khudenkikh | done |  |
 |`allowScale`| Function |Andrey Khudenkikh | done |  |
@@ -997,14 +997,14 @@
 |`customContentTransition`| Function | Skroba Gleb | in progress | |
 |`onContentDidScroll`| Function | Skroba Gleb| blocked UT |  |
 |`indicatorInteractive`| Function | Skroba Gleb| done |  |
-|*IndicatorComponent*| *Component* | Andrey Khudenkikh | in progress |  |
-|`setIndicatorComponentOptions`| Function | Andrey Khudenkikh | in progress |  |
-|`initialIndex`| Function | Andrey Khudenkikh | in progress |  |
-|`count`| Function | Andrey Khudenkikh | in progress |  |
-|`style`| Function |  Andrey Khudenkikh | in progress |  |
-|`loop`| Function |  Andrey Khudenkikh | in progress |  |
-|`vertical`| Function | Andrey Khudenkikh | in progress |  |
-|`onChange`| Function | Andrey Khudenkikh | in progress |  |
+|*IndicatorComponent*| *Component* | Andrey Khudenkikh | done |  |
+|`setIndicatorComponentOptions`| Function | Andrey Khudenkikh | done |  |
+|`initialIndex`| Function | Andrey Khudenkikh | done |  |
+|`count`| Function | Andrey Khudenkikh | done |  |
+|`style`| Function |  Andrey Khudenkikh | done |  |
+|`loop`| Function |  Andrey Khudenkikh | done |  |
+|`vertical`| Function | Andrey Khudenkikh | done |  |
+|`onChange`| Function | Andrey Khudenkikh | done |  |
 |*IndicatorComponentController*| *Class* | Andrey Khudenkikh | in progress |  |
 |`showNext`| Function | Andrey Khudenkikh | in progress |  |
 |`showPrevious`| Function |  Andrey Khudenkikh | in progress |  |
@@ -1016,7 +1016,7 @@
 |`fontWeight`| Function |Andrey Khudenkikh | done |  |
 |`effectStrategy`| Function |Andrey Khudenkikh | done |  |
 |`renderingStrategy`| Function |Andrey Khudenkikh | done |  |
-|`symbolEffect`| Function | Andrey Khudenkikh | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB1MTL |
+|`symbolEffect`| Function | Andrey Khudenkikh | blocked | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3KMB |
 |*SymbolSpan*| *Component* |Dmitry A Smirnov| devdone|  |
 |`setSymbolSpanOptions`| Function |Dmitry A Smirnov| blocked UT| json has no value content https://gitee.com/openharmony/arkui_ace_engine/issues/IB3IX8 |
 |`fontSize`| Function |Dmitry A Smirnov| devdone|  |
