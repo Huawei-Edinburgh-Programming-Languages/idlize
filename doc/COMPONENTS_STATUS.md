@@ -1331,6 +1331,16 @@
 |`onReachEnd`| Function | Kovalev Sergey | in progress | |
 |`onScrollFrameBegin`| Function | Kovalev Sergey | in progress | |
 |`onScrollIndex`| Function | Kovalev Sergey | in progress | |
+|*LinearIndicatorController*| *Class* | Kovalev Sergey | in progress |  |
+|`setProgress`| Function | Kovalev Sergey | in progress |  |
+|`start`| Function | Kovalev Sergey | in progress |  |
+|`pause`| Function | Kovalev Sergey | in progress |  |
+|`stop`| Function | Kovalev Sergey | in progress |  |
+|*LinearIndicator*| *Component* | Kovalev Sergey | in progress |  |
+|`setLinearIndicatorOptions`| Function | Kovalev Sergey | in progress |  |
+|`indicatorStyle`| Function | Kovalev Sergey | in progress |  |
+|`indicatorLoop`| Function | Kovalev Sergey | in progress |  |
+|`onChange`| Function | Kovalev Sergey | in progress |  |
 |*CanvasRenderer*| *Class*  | Vadim Voronov | in progress | |
 |`drawImage`| Function  | Vadim Voronov | in progress | |
 |`beginPath`| Function  | Vadim Voronov | done | |
