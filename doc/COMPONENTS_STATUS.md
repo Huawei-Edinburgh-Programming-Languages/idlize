@@ -91,6 +91,16 @@
 |*CalendarController*| *Class* |Maksimov Nikita | in progress|  |
 |`backToToday`| Function |Maksimov Nikita | in progress|  |
 |`goTo`| Function |Maksimov Nikita | in progress|  |
+|*CanvasPath*| *Class* | Lobah Mikhail | in progress |  |
+|`arc`| Function | Lobah Mikhail | in progress |  |
+|`arcTo`| Function | Lobah Mikhail | in progress |  |
+|`bezierCurveTo`| Function | Lobah Mikhail | in progress |  |
+|`closePath`| Function | Lobah Mikhail | in progress |  |
+|`ellipse`| Function | Lobah Mikhail | in progress |  |
+|`lineTo`| Function | Lobah Mikhail | in progress |  |
+|`moveTo`| Function | Lobah Mikhail | in progress |  |
+|`quadraticCurveTo`| Function | Lobah Mikhail | in progress |  |
+|`rect`| Function | Lobah Mikhail | in progress |  |
 |*Canvas*| *Component* |Vadim Voronov | blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`setCanvasOptions`| Function |Vadim Voronov | blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`onReady`| Function |Vadim Voronov | done |  |
