@@ -86,11 +86,7 @@ export class MaterializedMethod extends IdlPeerMethod {
     }
 
     tsReturnType(): IDLType | undefined {
-        const returnType = this.method.signature.returnType
-
-        return this.hasReceiver() && isNamedNode(returnType) && returnType.name === this.originalParentName
-        ? IDLThisType
-        : maybeOptional(returnType, isOptionalType(returnType))
+        return this.method.signature.returnType
     }
 }
 
