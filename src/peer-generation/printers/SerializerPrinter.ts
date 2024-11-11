@@ -157,7 +157,12 @@ class IdlSerializerPrinter {
                         writer.makeAssign("Serializer.cache", undefined, writer.makeString(`${writer.language == Language.CJ ? "" : "new "}Serializer()`), false)
                     ])))
                     if (writer.language != Language.CJ) {
-                        writer.writeStatement(writer.makeAssign("serializer", undefined, writer.makeString("Serializer.cache"), true, false))
+                        writer.writeStatement(writer.makeAssign("serializer", undefined,
+                            writer.makeCast(
+                                writer.makeString("Serializer.cache"),
+                                idl.createReferenceType("Serializer")
+                            ),
+                            true, false))
                     } else {
                         writer.print("var serializer = match (Serializer.cache) {")
                         writer.pushIndent()
