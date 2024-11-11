@@ -101,6 +101,8 @@
 |`moveTo`| Function | Lobah Mikhail | in progress |  |
 |`quadraticCurveTo`| Function | Lobah Mikhail | in progress |  |
 |`rect`| Function | Lobah Mikhail | in progress |  |
+|*CanvasPattern*| *Class* | Vadim Voronov | in progress |  |
+|`setTransform`| Function | Vadim Voronov | in progress |  |
 |*Canvas*| *Component* |Vadim Voronov | blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`setCanvasOptions`| Function |Vadim Voronov | blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`onReady`| Function |Vadim Voronov | done |  |
