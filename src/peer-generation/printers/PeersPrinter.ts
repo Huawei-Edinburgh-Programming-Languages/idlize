@@ -501,8 +501,7 @@ export function writePeerMethod(printer: LanguageWriter, method: IdlPeerMethod, 
 }
 
 function returnsThis(method: IdlPeerMethod, returnType: IDLType) {
-    return method.hasReceiver() && (returnType === IDLThisType ||
-        isNamedNode(returnType) && returnType.name === method.originalParentName)
+    return method.hasReceiver() && returnType === IDLThisType
 }
 
 function constructMaterializedObject(writer: LanguageWriter, signature: MethodSignature,
