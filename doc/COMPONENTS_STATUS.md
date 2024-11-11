@@ -1327,10 +1327,10 @@
 |`enableScrollInteraction`| Function | Kovalev Sergey | done |  |
 |`friction`| Function | Kovalev Sergey | done |  |
 |`cachedCount`| Function |Kovalev Sergey | done |  |
-|`onReachStart`| Function | Kovalev Sergey | blocked | event |
-|`onReachEnd`| Function | Kovalev Sergey | blocked | event |
-|`onScrollFrameBegin`| Function | Kovalev Sergey | blocked | event |
-|`onScrollIndex`| Function | Kovalev Sergey | blocked | event |
+|`onReachStart`| Function | Kovalev Sergey | in progress | |
+|`onReachEnd`| Function | Kovalev Sergey | in progress | |
+|`onScrollFrameBegin`| Function | Kovalev Sergey | in progress | |
+|`onScrollIndex`| Function | Kovalev Sergey | in progress | |
 |*CanvasRenderer*| *Class*  | Vadim Voronov | in progress | |
 |`drawImage`| Function  | Vadim Voronov | in progress | |
 |`beginPath`| Function  | Vadim Voronov | done | |
