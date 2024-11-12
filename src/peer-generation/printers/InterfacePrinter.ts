@@ -443,7 +443,7 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
         // TODO: needs to be implemented correctly on the idl side
         if (node.name === "Resource") {
             this.convertInterface(idl.createInterface(node.name,
-                IDLKind.Interface,
+                idl.IDLKind.Interface,
                 [], [], [], [
                     idl.createProperty("bundleName", idl.createReferenceType("KStringPtr")),
                     idl.createProperty("moduleName", idl.createReferenceType("KStringPtr")),
@@ -487,6 +487,16 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
         }
     }
 
+    private needPrintProperty(inheritType: idl.IDLType | undefined, prop: idl.IDLProperty): boolean {
+        if (inheritType !== undefined) {
+            const inheritDecl = this.peerLibrary.toDeclaration(inheritType)
+            if (idl.isClass(inheritDecl) || idl.isInterface(inheritDecl)) {
+                return inheritDecl.properties.find(it => it.name === prop.name) === undefined
+            }
+        }
+        return true
+    }
+
     private printInterface(idlInterface: idl.IDLInterface): stringOrNone[] {
         idlInterface.methods.map((it: idl.IDLMethod) => {
             let result = it.scope
@@ -504,6 +514,7 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
             .concat(idlInterface.constants
                 .map(it => this.iDLTypedEntryPrinter(it, it => this.printConstant(it), seenFields)).flat())
             .concat(idlInterface.properties
+                .filter(prop => this.needPrintProperty(idlInterface.inheritance[0], prop))
                 .map(it => this.iDLTypedEntryPrinter(it, it => this.printProperty(it), seenFields) ).flat())
             .concat(idlInterface.methods
                 .map(it => this.iDLTypedEntryPrinter(it, it => this.printMethod(it), seenFields) ).flat())
