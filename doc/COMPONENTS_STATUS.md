@@ -629,16 +629,16 @@
 |`backButtonIcon`| Function | Erokhin Ilya | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR, implemented for string and resource arg |
 |`hideNavBar`|Function| Erokhin Ilya | done |  |
 |`subTitle`|Function| Erokhin Ilya | done |  |
-|`hideTitleBar`|Function| Skroba Gleb | in progress | |
+|`hideTitleBar`|Function| Skroba Gleb | in progress | main part done, no ace_engine implementation for second |
 |`onTitleModeChange`| Function | Skroba Gleb | in progress| no callbacks Arkoala support |
 |`hideBackButton`|Function| Erokhin Ilya | done |  |
 |`titleMode`|Function| Erokhin Ilya | done |  |
 |`menus`| Function | Skroba Gleb | blocked Arkoala, blocked UT | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q ,  https://gitee.com/openharmony/arkui_ace_engine/issues/IB3U6S|
 |`toolBar`| Function | Skroba Gleb | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|`hideToolBar`|Function| Skroba Gleb | blocked | main part done, no ace_engine implementation for second DMZ |
+|`hideToolBar`|Function| Skroba Gleb | in progress | main part done, no ace_engine implementation for second |
 |`onNavBarStateChange`|Function| Erokhin Ilya | done |  |
 |`onNavigationModeChange`|Function| Erokhin Ilya | done |  |
-|`navDestination`| Function | Skroba Gleb | in progress| no callbacks Arkoala support |
+|`navDestination`| Function | Skroba Gleb | in progress | no callbacks Arkoala support |
 |`customNavContentTransition`| Function | Skroba Gleb | in progress| no callbacks Arkoala support |
 |`systemBarStyle`| Function | Skroba Gleb | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`recoverable`|Function| Erokhin Ilya | done |  |
