@@ -406,6 +406,29 @@ export function createDeserializer(args: Uint8Array, length: int32): Deserialize
 `
 }
 
+export function makeArkTSDeserializer(library: IdlPeerLibrary): string {
+    const printer = createLanguageWriter(Language.ARKTS, library)
+    printer.writeLines(cStyleCopyright)
+
+    const imports = new ImportsCollector()
+    imports.addFeatures(["runtimeType", "Tags", "RuntimeType", "CallbackResource"], "./SerializerBase")
+    imports.addFeature("DeserializerBase", "./DeserializerBase")
+    imports.addFeature("int32", "@koalaui/common")
+
+    imports.addFeature("Serializer", "./Serializer")
+    imports.addFeatures(["SerializerBase", "Tags", "RuntimeType", "runtimeType", "isResource", "isInstanceOf"], "./SerializerBase")
+    imports.addFeatures(["NativeModule"], "#components")
+    imports.addFeatures(["CallbackKind"], "CallbackKind")
+    imports.addFeatures(['KStringPtr', 'KInt', 'KPointer'], '@koalaui/interop')
+
+    imports.print(printer, '')
+
+    writeDeserializer(library, printer)
+    return `
+${printer.getOutput().join("\n")}
+`
+}
+
 export function makeApiModifiers(modifiers: string[], accessors: string[], events: string[], nodeTypes: string[]): string {
     let node_api = readTemplate('arkoala_node_api.h')
         .replaceAll(`%CPP_PREFIX%`, PeerGeneratorConfig.cppPrefix)
