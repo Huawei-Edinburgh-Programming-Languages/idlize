@@ -13,11 +13,8 @@
  * limitations under the License.
  */
 
-import { Type } from '../LanguageWriters'
 import { TargetFile } from './TargetFile'
-import { DeclarationTarget } from '../DeclarationTable'
 
 export interface SynthesizedTypesRegistry {
     getDefinitions(): Map<TargetFile, string>
-    getTargetType(target: DeclarationTarget, optional: boolean): Type
 }

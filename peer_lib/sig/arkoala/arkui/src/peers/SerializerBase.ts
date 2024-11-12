@@ -12,10 +12,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { float32, int32 } from "@koalaui/common"
-import { pointer, wrapCallback, ResourceId, ResourceManager } from "@koalaui/interop"
+import { float32, int32, int64 } from "@koalaui/common"
+import { pointer, wrapCallback, ResourceId, ResourceHolder, KPointer } from "@koalaui/interop"
+import { CallbackKind } from "./CallbackKind"
 import { nativeModule } from "@koalaui/arkoala"
-import { FinalizableBase } from "../Finalizable"
+import { Finalizable, FinalizableBase } from "../Finalizable"
 
 // imports required intarfaces (now generation is disabled)
 // import { Resource, Length, PixelMap } from "@arkoala/arkui"
@@ -62,11 +63,6 @@ export function runtimeType(value: any): int32 {
     if (type == "symbol") return RuntimeType.SYMBOL
 
     throw new Error(`bug: ${value} is ${type}`)
-}
-
-export function isPixelMap(value: Object): value is PixelMap {
-    // Object.hasOwn need es2022
-    return value.hasOwnProperty('isEditable') && value.hasOwnProperty('isStrideAlignment')
 }
 
 export function isResource(value: Object): value is Resource {
@@ -138,6 +134,12 @@ export function registerMaterialized(value: object|undefined): number {
     return 42
 }
 
+export interface CallbackResource {
+    resourceId: int32
+    hold: pointer
+    release: pointer
+}
+
 /* Serialization extension point */
 export abstract class CustomSerializer {
     constructor(protected supported: Array<string>) {}
@@ -147,9 +149,7 @@ export abstract class CustomSerializer {
 }
 
 export class SerializerBase {
-    private static cache: SerializerBase | undefined
-
-    private isHolding: boolean = false
+    protected isHolding: boolean = false
     private position = 0
     private buffer: ArrayBuffer
     private view: DataView
@@ -167,16 +167,6 @@ export class SerializerBase {
     constructor() {
         this.buffer = new ArrayBuffer(96)
         this.view = new DataView(this.buffer)
-    }
-
-    static hold<T extends SerializerBase>(factory: () => T): T {
-        if (!this.cache)
-            this.cache = factory()
-        const serializer = SerializerBase.cache!
-        if (serializer.isHolding)
-            throw new Error("Serializer is already being held. Check if you had released is before")
-        serializer.isHolding = true
-        return serializer as T
     }
     public release() {
         this.isHolding = false
@@ -207,16 +197,23 @@ export class SerializerBase {
         }
     }
     private heldResources: ResourceId[] = []
-    writeCallbackResource(resource: object) {
-        const resourceId = ResourceManager.registerAndHold(resource)
+    holdAndWriteCallback(callback: object, hold: KPointer = 0, release: KPointer = 0, call: KPointer = 0): ResourceId {
+        const resourceId = ResourceHolder.instance().registerAndHold(callback)
         this.heldResources.push(resourceId)
         this.writeInt32(resourceId)
-        this.writePointer(nativeModule()._GetManagedResourceHolder())
-        this.writePointer(nativeModule()._GetManagedResourceReleaser())
+        this.writePointer(hold)
+        this.writePointer(release)
+        this.writePointer(call)
+        return resourceId
+    }
+    writeCallbackResource(resource: CallbackResource) {
+        this.writeInt32(resource.resourceId)
+        this.writePointer(resource.hold)
+        this.writePointer(resource.release)
     }
     private releaseResources() {
         for (const resourceId of this.heldResources)
-            ResourceManager.release(resourceId)
+            nativeModule()._ReleaseArkoalaResource(resourceId)
         // todo think about effective array clearing/pushing
         this.heldResources = []
     }
@@ -259,6 +256,11 @@ export class SerializerBase {
         this.view.setInt32(this.position, value, true)
         this.position += 4
     }
+    writeInt64(value: int64) {
+        this.checkCapacity(8)
+        this.view.setBigInt64(this.position, BigInt(value), true)
+        this.position += 8
+    }
     writePointer(value: pointer) {
         this.checkCapacity(8)
         this.view.setBigInt64(this.position, BigInt(value ?? 0), true)
@@ -276,9 +278,6 @@ export class SerializerBase {
     }
     writeFunction(value: object | undefined) {
         this.writeInt32(registerCallback(value))
-    }
-    writeMaterialized(value: object | undefined) {
-        this.writePointer(value ? (value as FinalizableBase).ptr : 0)
     }
     writeString(value: string) {
         this.checkCapacity(4 + value.length * 4) // length, data
@@ -301,16 +300,3 @@ export class SerializerBase {
         }
     }
 }
-
-class OurCustomSerializer extends CustomSerializer {
-    constructor() {
-        super(["PixelMap"])
-    }
-    serialize(serializer: SerializerBase, value: any, kind: string): void {
-        // console.log(`managed serialize() for ${kind}`)
-        serializer.writeString(JSON.stringify(value))
-    }
-}
-
-// TODO, remove me!
-SerializerBase.registerCustomSerializer(new OurCustomSerializer())

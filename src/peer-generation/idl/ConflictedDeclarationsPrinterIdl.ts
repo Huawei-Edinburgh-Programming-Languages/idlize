@@ -15,13 +15,20 @@
 
 import { createLanguageWriter, LanguageWriter } from "../LanguageWriters";
 import { IdlPeerLibrary } from "./IdlPeerLibrary";
-import { DeclarationNameConvertor } from "./IdlNameConvertor";
-import { convertDeclaration } from "./IdlTypeConvertor";
+import { convertDeclaration } from "../LanguageWriters/nameConvertor";
 import * as idl from "../../idl";
 import { Language } from "../../Language";
+import { ArkTSDeclConvertor, getCommonImports } from "./InterfacePrinter";
+import {
+    convertDeclToFeature,
+    createDeclDependenciesCollector,
+    createTypeDependenciesCollector,
+} from "./IdlPeerGeneratorVisitor";
+import { ImportsCollector } from "../ImportsCollector";
+import { DeclarationNameConvertor } from "./IdlNameConvertor";
 
 class ConflictedDeclarationsVisitorIdl {
-    readonly writer = createLanguageWriter(this.library.language)
+    readonly writer = createLanguageWriter(this.library.language, this.library)
 
     constructor(
         protected readonly library: IdlPeerLibrary
@@ -41,10 +48,7 @@ class ConflictedDeclarationsVisitorIdl {
     protected convertDeclaration(name: string, decl: idl.IDLEntry, writer: LanguageWriter) {
         let maybeGenerics = ''
         if (idl.isClass(decl) || idl.isInterface(decl)) {
-            const typeParameters = decl.extendedAttributes
-                ?.filter(it => it.name === idl.IDLExtendedAttributes.TypeParameters)
-                .map(it => it.value) ?? []
-
+            const typeParameters = decl.typeParameters ?? []
             if (typeParameters.length) {
                 maybeGenerics = `<${typeParameters.map((_, i) => `T${i}=undefined`).join(',')}>`
             }
@@ -55,13 +59,24 @@ class ConflictedDeclarationsVisitorIdl {
 
 class ArkTSConflictedDeclarationsVisitorIdl extends ConflictedDeclarationsVisitorIdl {
     protected convertDeclaration(name: string, decl: idl.IDLEntry, writer: LanguageWriter) {
-        const typeParameters = decl.extendedAttributes
-            ?.filter(it => it.name === idl.IDLExtendedAttributes.TypeParameters)
-            .map((_, i) => `T${i}=Object`)
-        writer.writeClass(name, _ => {}, undefined, undefined, typeParameters)
+        const declConvertor = new ArkTSDeclConvertor(writer, this.library)
+        convertDeclaration(declConvertor, decl)
     }
 
     print() {
+        const typeDependenciesCollector = createTypeDependenciesCollector(this.library)
+        const declDependenciesCollector = createDeclDependenciesCollector(this.library, typeDependenciesCollector)
+        const importsCollector = new ImportsCollector()
+        getCommonImports(this.library.language).forEach(it => importsCollector.addFeature(it.feature, it.module))
+        this.library.conflictedDeclarations.forEach(it => {
+            declDependenciesCollector.convert(it).forEach(it => {
+                const dep = convertDeclToFeature(this.library, it)
+                importsCollector.addFeature(dep.feature, dep.module)
+            })
+        })
+        importsCollector.print(this.writer, '')
+        this.writer.print('')
+
         const printedNames = new Set<string>()
         for (const decl of this.library.conflictedDeclarations) {
             const name = convertDeclaration(DeclarationNameConvertor.I, decl)
@@ -78,7 +93,7 @@ export function printConflictedDeclarationsIdl(library: IdlPeerLibrary): string 
     let visitor
     visitor = library.language == Language.ARKTS
         ? new ArkTSConflictedDeclarationsVisitorIdl(library)
-        : new ArkTSConflictedDeclarationsVisitorIdl(library)
+        : new ConflictedDeclarationsVisitorIdl(library)
     visitor.print()
     return visitor.writer.getOutput().join('\n')
 }

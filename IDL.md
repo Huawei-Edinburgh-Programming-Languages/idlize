@@ -20,9 +20,9 @@ We use WebIDL language with several custom extension attributes documented below
    * `Deprecated` - if node is part of deprecated api
    * `Documentation` - documentation for given entity in value
    * `DtsName` - original name in case it is not allowed in IDL, e.g. is an IDL keyword
+   * `DtsTag` - function/method tag-parameter as a string-triplet "index|name|value" or as just a single "value" if index is zero and name is `type`
    * `Entity = Class | Interface | Literal | NamedTuple | Tuple` - what to produce from and IDL interface declaration
-   * `Export` - if given node has `export` modifier
-   * `GlobalScope`
+   * `GlobalScope` - mark pseudo-interface with global functions
    * `Import` - complete TS import expression for inline imports
    * `IndexSignature` - marker for index signature methods
    * `Interfaces` - name of implemented interface
@@ -31,6 +31,7 @@ We use WebIDL language with several custom extension attributes documented below
    * `Optional` - if given attribute is optional
    * `ParentTypeArguments` - concrete types used as values for extended class type parameters
    * `Protected` - if given attribute is protected
+   * `TSType` - name of standard TypeScript type for given IDL type
    * `TypeParameters` - type parameters for a parameterized type
    * `TypeArguments` - concrete types used as values for type parameters
    * `VerbatimDts` - code to add "as-is" to produced .d.ts, for language-specific features, avoid when possible

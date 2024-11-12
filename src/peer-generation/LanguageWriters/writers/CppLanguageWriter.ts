@@ -13,35 +13,73 @@
  * limitations under the License.
  */
 
-import { IDLType, isContainerType, isUnionType } from "../../../idl"
+import { createContainerType, createReferenceType, DebugUtils, forceAsNamedNode, IDLAnyType, IDLBooleanType, IDLCallback, IDLContainerType, IDLContainerUtils, IDLEnum, IDLI16Type, IDLI32Type, IDLI64Type, IDLI8Type, IDLNumberType, IDLOptionalType, IDLPointerType, IDLPrimitiveType, IDLReferenceType, IDLStringType, IDLType, IDLTypeParameterType, IDLU16Type, IDLU32Type, IDLU64Type, IDLU8Type, IDLUnionType, IDLVoidType, isCallback, isContainerType, isOptionalType, isPrimitiveType, isReferenceType, isType, isUnionType, toIDLType } from "../../../idl"
 import { IndentedPrinter } from "../../../IndentedPrinter"
 import { cppKeywords } from "../../../languageSpecificKeywords"
 import { Language } from "../../../Language"
-import { ArgConvertor, BaseArgConvertor, RuntimeType } from "../../ArgConvertors"
+import { ArgConvertor, BaseArgConvertor, EnumConvertor, RuntimeType } from "../../ArgConvertors"
 import { PrimitiveType } from "../../ArkPrimitiveType"
-import { ArrayConvertor, EnumConvertor as EnumConvertorDTS, MapConvertor, OptionConvertor, TupleConvertor, UnionConvertor } from "../../Convertors"
-import { AssignStatement, BlockStatement, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, ObjectArgs, StringExpression, Type } from "../LanguageWriter"
-import { CDefinedExpression, CLikeExpressionStatement, CLikeLanguageWriter, CLikeLoopStatement, CLikeReturnStatement } from "./CLikeLanguageWriter"
-import { EnumConvertor } from "../../idl/IdlArgConvertors"
+import {
+    AssignStatement,
+    BlockStatement,
+    FieldModifier,
+    LanguageExpression,
+    LanguageStatement,
+    LanguageWriter,
+    MakeAssignOptions,
+    MakeCastOptions,
+    MakeRefOptions,
+    Method,
+    MethodArgPrintHint,
+    MethodModifier,
+    MethodSignature,
+    NamedMethodSignature,
+    ObjectArgs,
+    StringExpression
+} from "../LanguageWriter"
+import {
+    CDefinedExpression,
+    CLikeExpressionStatement,
+    CLikeLanguageWriter,
+    CLikeLoopStatement,
+    CLikeReturnStatement
+} from "./CLikeLanguageWriter"
+import { ReferenceResolver } from "../../ReferenceResolver"
+import { IdlNameConvertor, TypeConvertor } from "../nameConvertor"
 import { EnumEntity } from "../../PeerFile"
 import { throwException } from "../../../util";
+import { CppIDLNodeToStringConvertor } from "../convertors/CppConvertors"
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
 ////////////////////////////////////////////////////////////////
 
 export class CppCastExpression implements LanguageExpression {
-    constructor(public value: LanguageExpression, public type: Type, private unsafe = false) {}
+    constructor(public convertor:IdlNameConvertor, public value: LanguageExpression, public type: IDLType, private options?:MakeCastOptions) {}
     asString(): string {
-        if (this.type.name === PrimitiveType.Tag.getText()) {
+        if (forceAsNamedNode(this.type).name === "Tag") {
             return `${this.value.asString()} == ${PrimitiveType.UndefinedRuntime} ? ${PrimitiveType.UndefinedTag} : ${PrimitiveType.ObjectTag}`
         }
-        return this.unsafe
-            ? `reinterpret_cast<${this.type.name}>(${this.value.asString()})`
-            : `static_cast<${this.type.name}>(${this.value.asString()})`
+        let resultName = ''
+        if (this.options?.overrideTypeName) {
+            resultName = this.options.overrideTypeName
+        } else {
+            const pureName = this.mapTypeWithReceiver(this.type, this.options?.receiver)
+            const qualifiedName = this.options?.toRef ? `${pureName}&` : pureName
+            resultName = qualifiedName
+        }
+        return this.options?.unsafe
+            ? `reinterpret_cast<${resultName}>(${this.value.asString()})`
+            : `static_cast<${resultName}>(${this.value.asString()})`
+    }
+    private mapTypeWithReceiver(type: IDLType, receiver?: string): string {
+        // make deducing type from receiver
+        if (receiver !== undefined) {
+            return `std::decay<decltype(${receiver})>::type`
+        }
+        return this.convertor.convertType(type)
     }
 }
-
 
 ////////////////////////////////////////////////////////////////
 //                         STATEMENTS                         //
@@ -49,15 +87,18 @@ export class CppCastExpression implements LanguageExpression {
 
 export class CppAssignStatement extends AssignStatement {
     constructor(public variableName: string,
-                public type: Type | undefined,
+                public type: IDLType | undefined,
                 public expression: LanguageExpression | undefined,
                 public isDeclared: boolean = true,
-                public isConst: boolean = true) {
-        super(variableName, type, expression, isDeclared, isConst)
+                public isConst: boolean = true,
+                protected options?:MakeAssignOptions
+            ) {
+        super(variableName, type, expression, isDeclared, isConst, options)
      }
-     write(writer: LanguageWriter): void{
+     write(writer: CppLanguageWriter): void{
         if (this.isDeclared) {
-            const typeSpec = this.type ? writer.mapType(this.type) : "auto"
+            const typeName = this.type ? writer.stringifyTypeWithReceiver(this.type, this.options?.receiver) : "auto"
+            const typeSpec = this.options?.assignRef ? `${typeName}&` : typeName
             const initValue = this.expression ? this.expression.asString() : "{}"
             const constSpec = this.isConst ? "const " : ""
             writer.print(`${constSpec}${typeSpec} ${this.variableName} = ${initValue};`)
@@ -76,9 +117,9 @@ class CppArrayResizeStatement implements LanguageStatement {
 }
 
 class CppMapResizeStatement implements LanguageStatement {
-    constructor(private mapTypeName: string, private keyType: string, private valueType: string, private map: string, private size: string, private deserializer: string) {}
+    constructor(private mapTypeName: string, private keyType: IDLType, private valueType: IDLType, private map: string, private size: string, private deserializer: string) {}
     write(writer: LanguageWriter): void {
-        writer.print(`${this.deserializer}.resizeMap<${this.mapTypeName}, ${this.keyType}, ${this.valueType}>(&${this.map}, ${this.size});`)
+        writer.print(`${this.deserializer}.resizeMap<${this.mapTypeName}, ${writer.stringifyType(this.keyType)}, ${writer.stringifyType(this.valueType)}>(&${this.map}, ${this.size});`)
     }
 }
 
@@ -114,8 +155,16 @@ class CppEnumEntityStatement implements LanguageStatement {
 ////////////////////////////////////////////////////////////////
 
 export class CppLanguageWriter extends CLikeLanguageWriter {
-    constructor(printer: IndentedPrinter) {
-        super(printer, Language.CPP)
+    protected typeConvertor: IdlNameConvertor
+    constructor(printer: IndentedPrinter, resolver:ReferenceResolver) {
+        super(printer, resolver, Language.CPP)
+        this.typeConvertor = new CppIDLNodeToStringConvertor(this.resolver)
+    }
+    stringifyType(type: IDLType): string {
+        return this.typeConvertor.convertType(type)
+    }
+    fork(): LanguageWriter {
+        return new CppLanguageWriter(new IndentedPrinter(), this.resolver)
     }
     writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string, interfaces?: string[]): void {
         const superClasses = (superClass ? [superClass] : []).concat(interfaces ?? [])
@@ -136,27 +185,33 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
             super.writeMethodCall(receiver, method, params, nullable)
         }
     }
-    writeFieldDeclaration(name: string, type: Type, modifiers: FieldModifier[] | undefined, optional: boolean, initExpr?: LanguageExpression): void {
+    writeFieldDeclaration(name: string, type: IDLType, modifiers: FieldModifier[] | undefined, optional: boolean, initExpr?: LanguageExpression): void {
         let filter = function(modifier_name : FieldModifier) {
             return modifier_name !== FieldModifier.STATIC
         }
         let prefix = this.makeFieldModifiersList(modifiers, filter)
         this.printer.print(`${prefix}:`)
         this.printer.pushIndent()
-        this.printer.print(`${type.name} ${name};`)
+        this.printer.print(`${forceAsNamedNode(type).name} ${name};`)
         this.printer.popIndent()
     }
     writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method, modifiers?: MethodModifier[]) {
         const superInvocation = superCall
             ? ` : ${superCall.name}(${superCall.signature.args.map((_, i) => superCall?.signature.argName(i)).join(", ")})`
             : ""
-        const argList = signature.args.map((it, index) => `${this.mapType(it)} ${signature.argName(index)}`).join(", ");
+        const argList = signature.args.map((it, index) => {
+            const maybeDefault = signature.defaults?.[index] ? ` = ${signature.defaults![index]}` : ""
+            return `${this.stringifyMethodArgType(it, signature.argHint(index))} ${signature.argName(index)}${maybeDefault}`
+        }).join(", ");
         this.print("public:")
         this.print(`${className}(${argList})${superInvocation} {`)
         this.pushIndent()
         op(this)
         this.popIndent()
         this.print(`}`)
+    }
+    writeProperty(propName: string, propType: IDLType, mutable: boolean = true) {
+        throw new Error("writeProperty for c++ is not implemented yet.")
     }
 
     /**
@@ -204,8 +259,11 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     override makeTag(tag: string): string {
         return PrimitiveType.Prefix.toLocaleUpperCase() + "TAG_" + tag
     }
-    override makeRef(varName: string): string {
-        return `${varName}&`
+    override makeRef(type: IDLType | string, options?:MakeRefOptions): IDLType {
+        if (typeof type === 'string') {
+            return createReferenceType(`${type}&`)
+        }
+        return createReferenceType(`${this.stringifyTypeWithReceiver(type, options?.receiver)}&`)
     }
     override makeThis(): LanguageExpression {
         return new StringExpression("*this")
@@ -216,14 +274,17 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     override makeValueFromOption(value: string): LanguageExpression {
         return this.makeString(`${value}.value`)
     }
-    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression | undefined, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
-        return new CppAssignStatement(variableName, type, expr, isDeclared, isConst)
+    makeAssign(variableName: string, type: IDLType | undefined, expr: LanguageExpression | undefined, isDeclared: boolean = true, isConst: boolean = true, options?:MakeAssignOptions): LanguageStatement {
+        return new CppAssignStatement(variableName, type, expr, isDeclared, isConst, options)
     }
     makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression {
         throw new Error(`TBD`)
     }
     makeReturn(expr: LanguageExpression): LanguageStatement {
         return new CLikeReturnStatement(expr)
+    }
+    makeCheckOptional(optional: LanguageExpression, doStatement: LanguageStatement): LanguageStatement {
+        throw new Error(`TBD`)
     }
     makeStatement(expr: LanguageExpression): LanguageStatement {
         return new CLikeExpressionStatement(expr)
@@ -240,7 +301,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     override makeUnionVariantCondition(_convertor: ArgConvertor, _valueName: string, valueType: string, type: string, index: number) {
         return this.makeString(`${valueType} == ${index}`)
     }
-    override makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index: number) {
+    override makeUnionVariantCast(value: string, type: string, convertor: ArgConvertor, index: number) {
         return this.makeString(`${value}.value${index}`)
     }
     makeLoop(counter: string, limit: string, statement?: LanguageStatement): LanguageStatement {
@@ -249,59 +310,29 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement {
         return new CppMapForEachStatement(map, key, value, op)
     }
-    makeArrayResize(array: string, typeName: string, length: string, deserializer: string): LanguageStatement {
+    makeArrayInit(type: IDLContainerType): LanguageExpression {
+        return this.makeString(`{}`)
+    }
+    makeClassInit(type: IDLType, paramenters: LanguageExpression[]): LanguageExpression {
+        return this.makeString(`${this.stringifyType(type)}(${paramenters.map(it => it.asString()).join(", ")})`)
+    }
+    makeMapInit(type: IDLType): LanguageExpression {
+        return this.makeString(`{}`)        
+    }
+    makeArrayResize(array: string, length: string, deserializer: string): LanguageStatement {
         return new CppArrayResizeStatement(array, length, deserializer)
     }
-    makeMapResize(mapTypeName: string, keyType: string, valueType: string, map: string, size: string, deserializer: string): LanguageStatement {
+    makeMapResize(mapTypeName: string, keyType: IDLType, valueType: IDLType, map: string, size: string, deserializer: string): LanguageStatement {
         return new CppMapResizeStatement(mapTypeName, keyType, valueType, map, size, deserializer)
     }
-    makeCast(expr: LanguageExpression, type: Type, unsafe = false): LanguageExpression {
-        return new CppCastExpression(expr, type, unsafe)
+    makeCast(expr: LanguageExpression, type: IDLType, options?:MakeCastOptions): LanguageExpression {
+        return new CppCastExpression(this.typeConvertor, expr, type, options)
     }
     writePrintLog(message: string): void {
         this.print(`printf("${message}\n")`)
     }
     makeDefinedCheck(value: string): LanguageExpression {
         return new CDefinedExpression(value);
-    }
-    // TODO: remove this!
-    mapType(type: Type): string {
-        switch (type.name) {
-            case 'KPointer': return 'void*'
-            case 'Uint8Array': return 'byte[]'
-            case 'int32':
-            case 'KInt': return `${PrimitiveType.Prefix}Int32`
-            case 'string':
-            case 'KStringPtr': return `${PrimitiveType.Prefix}String`
-            case 'number': return `${PrimitiveType.Prefix}Number`
-            case 'boolean': return `${PrimitiveType.Prefix}Boolean`
-            case 'Function': return `${PrimitiveType.Prefix}Function`
-            case 'Length': return `${PrimitiveType.Prefix}Length`
-            // TODO: oh no
-            case 'Array<string[]>' : return `Array_Array_${PrimitiveType.String.getText()}`
-        }
-        if (type.name.startsWith("Array<")) {
-            const typeSpec = type.name.match(/<(.*)>/)!
-            const elementType = this.mapType(new Type(typeSpec[1]))
-            return `Array_${elementType}`
-        }
-        if (!type.name.includes("std::decay<") && type.name.includes("<")) {
-            return type.name.replace(/<(.*)>/, "")
-        }
-        return super.mapType(type)
-    }
-    mapIDLType(type: IDLType): string {
-        if (isUnionType(type)) {
-            return `Union_${type.types.map(it => this.mapIDLType(it)).join("_")}`
-        }
-        /*
-        if (isContainerType(type) && type.name == "Promise") {
-            return `Promise_${this.mapIDLType(type.elementType[0])}`
-        }
-        if (isContainerType(type) && type.name == "sequence") {
-            return `Array_${this.mapIDLType(type.elementType[0])}`
-        } */
-        return super.mapIDLType(type)
     }
     makeSetUnionSelector(value: string, index: string): LanguageStatement {
         return this.makeAssign(`${value}.selector`, undefined, this.makeString(index), false)
@@ -310,18 +341,6 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         return this.makeAssign(`${value}.tag`, undefined, tag, false)
     }
     getObjectAccessor(convertor: BaseArgConvertor, value: string, args?: ObjectArgs): string {
-        if (convertor instanceof OptionConvertor) {
-            return `${value}.value`
-        }
-        if (convertor instanceof ArrayConvertor && args?.index) {
-            return `${value}.array${args.index}`
-        }
-        if ((convertor instanceof UnionConvertor || convertor instanceof TupleConvertor) && args?.index) {
-            return `${value}.value${args.index}`
-        }
-        if (convertor instanceof MapConvertor && args?.index && args?.field) {
-            return `${value}.${args.field}[${args.index}]`
-        }
         return value
     }
     makeUndefined(): LanguageExpression {
@@ -333,12 +352,6 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     makeRuntimeType(rt: RuntimeType): LanguageExpression {
         return this.makeString(`${PrimitiveType.Prefix.toUpperCase()}RUNTIME_${RuntimeType[rt]}`)
     }
-    makeMapKeyTypeName(c: MapConvertor): string {
-        return c.table.computeTargetName(c.table.toTarget(c.keyType), false)
-    }
-    makeMapValueTypeName(c: MapConvertor): string {
-        return c.table.computeTargetName(c.table.toTarget(c.valueType), false)
-    }
     makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement {
         // TODO: maybe use std::move?
         return new BlockStatement([
@@ -346,18 +359,11 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
             this.makeAssign(valueAccessor, undefined, this.makeString(value), false)
         ], false)
     }
-    getTagType(): Type {
-        return new Type(PrimitiveType.Tag.getText())
+    getTagType(): IDLType {
+        return createReferenceType('Tag')
     }
-    getRuntimeType(): Type {
-        return new Type(PrimitiveType.RuntimeType.getText())
-    }
-    makeType(typeName: string, nullable: boolean, receiver?: string): Type {
-        // make deducing type from receiver
-        if (receiver != undefined) {
-            return new Type(`std::decay<decltype(${receiver})>::type`)
-        }
-        return new Type(typeName)
+    getRuntimeType(): IDLType {
+        return createReferenceType(`RuntimeType`)
     }
     makeTupleAssign(receiver: string, tupleFields: string[]): LanguageStatement {
         const statements =
@@ -373,29 +379,90 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     get supportedFieldModifiers(): FieldModifier[] {
         return []
     }
-    enumFromOrdinal(value: LanguageExpression, enumType: string): LanguageExpression {
+    enumFromOrdinal(value: LanguageExpression, _: IDLEnum): LanguageExpression {
         return value;
     }
-    ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression {
+    ordinalFromEnum(value: LanguageExpression, _: IDLEnum): LanguageExpression {
         return value;
     }
     makeUnsafeCast(convertor: ArgConvertor, param: string): string {
         return param
     }
-    override makeCastEnumToInt(convertor: EnumConvertorDTS, value: string, _unsafe?: boolean): string {
-        // TODO: remove after switching to IDL
-        return `static_cast<${convertor.enumTypeName(this.language)}>(${value})`
-    }
     override makeEnumCast(value: string, _unsafe: boolean, convertor: EnumConvertor | undefined): string {
-        if (convertor == undefined) {
+        if (convertor === undefined) {
             throwException("Need pass EnumConvertor")
         }
-        return `static_cast<${convertor!.enumTypeName(this.language)}>(${value})`
+        return `static_cast<${this.typeConvertor.convertEntry(convertor.enumEntry)}>(${value})`
     }
     override escapeKeyword(name: string): string {
         return cppKeywords.has(name) ? name + "_" : name
     }
     makeEnumEntity(enumEntity: EnumEntity, isExport: boolean): LanguageStatement {
         return new CppEnumEntityStatement(enumEntity)
+    }
+    private decayTypeName(typeName: string) {
+        if (typeName.endsWith('*') || typeName.endsWith('&')) {
+            typeName = typeName.substring(0, typeName.length - 1)
+        }
+        if (typeName.startsWith('const ')) {
+            typeName = typeName.substring(6)
+        }
+
+        return typeName
+    }
+    override stringifyMethodReturnType(type:IDLType, hint?: MethodArgPrintHint): string {
+        const name = this.stringifyType(type)
+        let postfix = ''
+        if (hint === MethodArgPrintHint.AsPointer || hint === MethodArgPrintHint.AsConstPointer) {
+            postfix = '*'
+        }
+        let constModifier = ''
+        if (hint === MethodArgPrintHint.AsConstPointer) {
+            constModifier = 'const '
+        }
+        return `${constModifier}${name}${postfix}`
+    }
+    override stringifyMethodArgType(type:IDLType, hint?: MethodArgPrintHint): string {
+        // we should decide pass by value or by reference here
+        const name = this.stringifyType(type)
+        let constModifier = ''
+        let postfix = ''
+        switch (hint) {
+            case undefined:
+            case MethodArgPrintHint.AsValue:
+                break;
+            case MethodArgPrintHint.AsPointer:
+                postfix = '*'
+                break;
+            case MethodArgPrintHint.AsConstPointer:
+                constModifier = 'const ';
+                postfix = '*'
+                break;
+            case MethodArgPrintHint.AsConstReference:
+                constModifier = 'const '
+                postfix = '&'
+                break;
+            default:
+                throw new Error(`Unknown hint ${hint}`)
+        }
+        return `${constModifier}${name}${postfix}`
+    }
+    stringifyTypeWithReceiver(type: IDLType, receiver?: string): string {
+        // make deducing type from receiver
+        if (receiver !== undefined) {
+            return `std::decay<decltype(${receiver})>::type`
+        }
+        return this.stringifyType(type)
+    }
+    override makeSerializerConstructorSignature(): NamedMethodSignature | undefined {
+        return new NamedMethodSignature(
+            IDLVoidType, [
+                createContainerType('sequence', [IDLU8Type]) /*idl.createReferenceType("uint8_t*")*/ ,
+                createReferenceType("CallbackResourceHolder" /* ast */)
+            ],
+            ["data", "resourceHolder"],
+            [undefined, `nullptr`],
+            [undefined, undefined, MethodArgPrintHint.AsPointer]
+        )
     }
 }

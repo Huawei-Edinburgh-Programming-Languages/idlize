@@ -88,9 +88,8 @@ export class PeerGeneratorConfig {
         // constant values need to be generated
         // "equals(id: TextMenuItemId): boolean" method leads to the "cycle detected" message
         "TextMenuItemId",
+        "AnimatableArithmetic", // Unused generic class
     ]
-
-    public static ArkTsIgnoredMethods = ["testTupleNumberStringEnum", "testTupleOptional", "testTupleUnion"]
 
     public static ignoreReturnTypes = new Set<string>([
         "Promise"
@@ -104,7 +103,6 @@ export class PeerGeneratorConfig {
 
         // common
         "AppStorage",
-        "CustomComponent",  // pulls in Layoutable, LayoutChild
         "DataAddOperation",
         "DataChangeListener",  // causes discrimination code failure
         "DataChangeOperation",
@@ -129,11 +127,11 @@ export class PeerGeneratorConfig {
         "SubscribedAbstractProperty",
         "SyncedPropertyOneWay",
         "SyncedPropertyTwoWay",
-        "UIExtensionProxy",
         "IMonitorValue",
     ])
 
     private static ignoredEntriesJava = new Set([
+        "CustomComponent",  // pulls in Layoutable, LayoutChild
         "AnimationRange",
         "EventTargetInfo",
         "GestureRecognizer",
@@ -146,17 +144,21 @@ export class PeerGeneratorConfig {
     ])
 
     public static ignoredCallbacks = new Set([
-        // can not support type parameters and varargs
-        "Callback_Args_Void",
-        "Callback_WrappedBuilder_Void",
-        "Callback_AnimatableArithmetic_Void",
-        "Callback_Union_IMonitorValue_Undefined_Void",
-        "Callback_DirectionalEdgesT_Void",
+        "MonitorDecorator" //vararg
     ])
 
     static ignoreEntry(name: string, language: Language) {
+        // TODO: Needs to be fixed properly
+        if (language === Language.ARKTS && name === "CustomComponent") {
+            return true
+        }
         return PeerGeneratorConfig.ignoredEntriesCommon.has(name) ||
             language === Language.JAVA && PeerGeneratorConfig.ignoredEntriesJava.has(name)
+    }
+
+    static ignoreMethod(name: string, language: Language) {
+        return language === Language.ARKTS &&
+            ["testTupleNumberStringEnum", "testTupleOptional", "testTupleUnion"].includes(name)
     }
 
     public static isMaterializedIgnored(name: string) {

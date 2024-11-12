@@ -12,24 +12,48 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#define _HAS_STD_BYTE 0
+
+#include <algorithm>
 #include <array>
 #include <chrono>
 
-#include "arkoala_api.h"
 #include "arkoala_api_generated.h"
 #include "Serializers.h"
-#include "arkoala-logging.h"
-#include "common-interop.h"
+#include "interop-logging.h"
 #include "arkoala-macros.h"
 #include "tree.h"
 #include "logging.h"
+#include "dynamic-loader.h"
 
-typedef void (*AppendGroupedLogSignature)(int32_t, const std::string&);
+#undef max
 
-AppendGroupedLogSignature appendGroupedLogPtr = nullptr;
+// For logging we use operations exposed via interop, SetLoggerSymbol() is called
+// when library is loaded.
+const GroupLogger* loggerInstance = GetDefaultLogger();
 
-void SetAppendGroupedLog(void* logger) {
-    if (logger) appendGroupedLogPtr = reinterpret_cast<AppendGroupedLogSignature>(logger);
+const GroupLogger* GetDummyLogger() {
+    return loggerInstance;
+}
+
+void SetDummyLogger(const GroupLogger* logger) {
+    loggerInstance = logger;
+}
+
+void startGroupedLog(int kind) {
+    GetDummyLogger()->startGroupedLog(kind);
+}
+void stopGroupedLog(int kind) {
+    GetDummyLogger()->stopGroupedLog(kind);
+}
+const char* getGroupedLog(int kind) {
+    return GetDummyLogger()->getGroupedLog(kind);
+}
+int needGroupedLog(int kind) {
+    return GetDummyLogger()->needGroupedLog(kind);
+}
+void appendGroupedLog(int kind, const std::string& str) {
+    GetDummyLogger()->appendGroupedLog(kind, str.c_str());
 }
 
 void dummyClassFinalizer(KNativePointer* ptr) {
@@ -40,7 +64,6 @@ void dummyClassFinalizer(KNativePointer* ptr) {
     out.append(")");
     appendGroupedLog(1, out);
 }
-
 
 namespace TreeNodeDelays {
 
@@ -191,15 +214,15 @@ GENERATED_Ark_EventCallbackArg arg(Ark_Int32 i32) {
     return result;
 }
 
-ArkUI_Int32 TreeNode::measure(ArkUIVMContext vmContext, ArkUI_Float32* data) {
+float TreeNode::measure(Ark_VMContext vmContext, float* data) {
     TreeNodeDelays::busyWait(TreeNodeDelays::measureNodeDelay[_customIntData]);
 
     Ark_Float32 minWidth = data[0];
     Ark_Float32 minHeight = data[1];
     Ark_Float32 maxWidth = data[2];
     Ark_Float32 maxHeight = data[3];
-    if (_flags & ArkUIAPINodeFlags::CUSTOM_MEASURE) {
-        GENERATED_Ark_EventCallbackArg args[] = { arg(ArkUIAPICustomOp::MEASURE), arg(minWidth), arg(minHeight), arg(maxWidth), arg(maxHeight) };
+    if (_flags & Ark_APINodeFlags::GENERATED_CUSTOM_MEASURE) {
+        GENERATED_Ark_EventCallbackArg args[] = { arg(Ark_APICustomOp::GENERATED_MEASURE), arg(minWidth), arg(minHeight), arg(maxWidth), arg(maxHeight) };
         callbacks->CallInt(vmContext, customId(), 5, &args[0]);
         _width = args[1].f32;
         _height = args[2].f32;
@@ -242,16 +265,16 @@ ArkUI_Int32 TreeNode::measure(ArkUIVMContext vmContext, ArkUI_Float32* data) {
     return 0;
 }
 
-ArkUICanvasHandle getCanvas(TreeNode* node) {
+Ark_CanvasHandle getCanvas(TreeNode* node) {
     // TODO: real canvas.
-    return reinterpret_cast<ArkUICanvasHandle>(0x123456789aLL);
+    return reinterpret_cast<Ark_CanvasHandle>(0x123456789aLL);
 }
 
-ArkUI_Int32 TreeNode::layout(ArkUIVMContext vmContext, ArkUI_Float32* data) {
+float TreeNode::layout(Ark_VMContext vmContext, float* data) {
     TreeNodeDelays::busyWait(TreeNodeDelays::layoutNodeDelay[_customIntData]);
 
-    if (_flags & ArkUIAPINodeFlags::CUSTOM_LAYOUT) {
-        GENERATED_Ark_EventCallbackArg args[] = { arg(ArkUIAPICustomOp::LAYOUT), arg(0.0f), arg(0.0f), arg(0.0f), arg(0.0f) };
+    if (_flags & Ark_APINodeFlags::GENERATED_CUSTOM_LAYOUT) {
+        GENERATED_Ark_EventCallbackArg args[] = { arg(Ark_APICustomOp::GENERATED_LAYOUT), arg(0.0f), arg(0.0f), arg(0.0f), arg(0.0f) };
         callbacks->CallInt(vmContext, customId(), 5, &args[0]);
         return 0;
     }
@@ -271,13 +294,12 @@ ArkUI_Int32 TreeNode::layout(ArkUIVMContext vmContext, ArkUI_Float32* data) {
     return 0;
 }
 
-ArkUI_Int32 TreeNode::draw(ArkUIVMContext vmContext, ArkUI_Float32* data) {
+float TreeNode::draw(Ark_VMContext vmContext, float* data) {
     TreeNodeDelays::busyWait(TreeNodeDelays::drawNodeDelay[_customIntData]);
-
-    if (_flags & ArkUIAPINodeFlags::CUSTOM_DRAW) {
+    if (_flags & Ark_APINodeFlags::GENERATED_CUSTOM_DRAW) {
         uintptr_t canvas = reinterpret_cast<uintptr_t>(getCanvas(this));
         GENERATED_Ark_EventCallbackArg args[] = {
-            arg(ArkUIAPICustomOp::DRAW),
+            arg(Ark_APICustomOp::GENERATED_DRAW),
             arg((Ark_Int32)(canvas & 0xffffffff)),
             arg((Ark_Int32)((canvas >> 32) & 0xffffffff)),
             arg(data[0]), arg(data[1]), arg(data[2]), arg(data[3])
@@ -292,42 +314,41 @@ ArkUI_Int32 TreeNode::draw(ArkUIVMContext vmContext, ArkUI_Float32* data) {
     return 0;
 }
 
-void TreeNode::setMeasureWidthValue(ArkUI_Int32 value) {
+void TreeNode::setMeasureWidthValue(float value) {
     if (measureResult != nullptr) measureResult[0] = value;
     _width = value;
 }
 
-ArkUI_Int32 TreeNode::getMeasureWidthValue() {
+float TreeNode::getMeasureWidthValue() {
     return (measureResult == nullptr) ? 0 : measureResult[0];
 }
 
-void TreeNode::setMeasureHeightValue(ArkUI_Int32 value) {
+void TreeNode::setMeasureHeightValue(float value) {
     if (measureResult != nullptr) measureResult[1] = value;
     _height = value;
 }
 
-ArkUI_Int32 TreeNode::getMeasureHeightValue() {
+float TreeNode::getMeasureHeightValue() {
     return (measureResult == nullptr) ? 0 : measureResult[1];
 }
 
-void TreeNode::setXValue(ArkUI_Int32 value) {
+void TreeNode::setXValue(float value) {
     if (layoutResult != nullptr) layoutResult[0] = value;
     _x = value;
 }
 
-ArkUI_Int32 TreeNode::getXValue() {
+float TreeNode::getXValue() {
     return (layoutResult == nullptr) ? 0 : layoutResult[0];
 }
 
-void TreeNode::setYValue(ArkUI_Int32 value) {
+void TreeNode::setYValue(float value) {
     if (layoutResult != nullptr) layoutResult[1] = value;
     _y = value;
 }
 
-ArkUI_Int32 TreeNode::getYValue() {
+float TreeNode::getYValue() {
     return (layoutResult == nullptr) ? 0 : layoutResult[1];
 }
-
 
 namespace OHOS::Ace::NG {
 

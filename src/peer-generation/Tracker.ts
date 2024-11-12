@@ -12,12 +12,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import * as fs from 'fs'
 import * as path from 'path'
 
-import { PeerLibrary } from "./PeerLibrary";
 import { IndentedPrinter } from "../IndentedPrinter";
-import { PeerClass } from "./PeerClass";
 import { MaterializedClass } from "./Materialized";
 import { EnumEntity } from './PeerFile';
 import { IdlPeerLibrary } from './idl/IdlPeerLibrary';
@@ -29,7 +28,7 @@ class TrackerVisitor {
     out = new IndentedPrinter()
 
     constructor(
-        protected library: PeerLibrary | IdlPeerLibrary,
+        protected library: IdlPeerLibrary,
         protected track: Map<string, StatusRecord>
     ) { }
 
@@ -41,7 +40,7 @@ class TrackerVisitor {
         return '| |'
     }
 
-    printPeerClass(clazz: PeerClass | IdlPeerClass): void {
+    printPeerClass(clazz: IdlPeerClass): void {
         let seen = new Set<string>()
         this.out.print(`|*${clazz.componentName}*| *Component* | ${this.tracking(clazz.componentName, "Component")}`)
         clazz.methods.forEach(method => {
@@ -71,23 +70,24 @@ class TrackerVisitor {
         let allComponents = Array(STATUSES.length).fill(0)
         let allMaterialized = Array(STATUSES.length).fill(0)
         let allFunctions = Array(STATUSES.length).fill(0)
+        const tracked = new Set<string>()
 
         this.library.files.forEach(file => {
             file.peers.forEach(component => {
                 const compKey = key(component.componentName, "Component")
-                this.incAllStatus(compKey, allComponents)
+                this.incAllStatus(compKey, allComponents, tracked)
                 component.methods.forEach(method => {
                     const funcKey = key(component.componentName, method.method.name)
-                    this.incAllStatus(funcKey, allFunctions)
+                    this.incAllStatus(funcKey, allFunctions, tracked)
                 })
             })
         })
         this.library.materializedClasses.forEach(clazz => {
             const classKey = key(clazz.className, "Class")
-            this.incAllStatus(classKey, allMaterialized)
+            this.incAllStatus(classKey, allMaterialized, tracked)
             clazz.methods.forEach(method => {
                 const funcKey = key(clazz.className, method.method.name)
-                this.incAllStatus(funcKey, allFunctions)
+                this.incAllStatus(funcKey, allFunctions, tracked)
             })
         })
 
@@ -98,7 +98,12 @@ class TrackerVisitor {
         })
     }
 
-    incAllStatus(key: string, counter: number[]) {
+    incAllStatus(key: string, counter: number[], tracked: Set<string>) {
+        // check overloaded methods
+        if (tracked.has(key)) {
+            return
+        }
+        tracked.add(key)
         counter[0]++
         const statusRecord = this.track.get(key)
         if (!statusRecord) return
@@ -157,7 +162,7 @@ function optionsFunction(component: string) {
     return `set${component}Options`
 }
 
-export function generateTracker(outDir: string, peerLibrary: PeerLibrary | IdlPeerLibrary, trackerStatus: string, verbose: boolean = false): void {
+export function generateTracker(outDir: string, peerLibrary: IdlPeerLibrary, trackerStatus: string, verbose: boolean = false): void {
     if (!fs.existsSync(outDir)) fs.mkdirSync(outDir)
     let track = new Map<string, StatusRecord>()
     if (fs.existsSync(trackerStatus)) {

@@ -12,8 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { float32, int32, pointer } from "./types"
-import { %NATIVE_MODULE_ACCESSOR% as nativeModule } from "%NATIVE_MODULE_PATH%"
+import { float32, int32, pointer, Finalizable } from "./types"
+import { %NATIVE_MODULE_ACCESSOR% as nativeModule, CallbackKind } from "%NATIVE_MODULE_PATH%"
 
 /**
  * Value representing possible JS runtime object type.
@@ -87,12 +87,10 @@ export abstract class CustomSerializer {
 }
 
 export class SerializerBase {
-    private static cache: SerializerBase | undefined
-
-    private isHolding: boolean = false
     private position = 0
     private buffer: ArrayBuffer
     private view: DataView
+    protected isHolding: boolean = false
 
     private static customSerializers: CustomSerializer | undefined = undefined
     static registerCustomSerializer(serializer: CustomSerializer) {
@@ -108,20 +106,10 @@ export class SerializerBase {
         this.buffer = new ArrayBuffer(96)
         this.view = new DataView(this.buffer)
     }
-
-    static hold<T extends SerializerBase>(factory: () => T): T {
-        if (!this.cache)
-            this.cache = factory()
-        const serializer = SerializerBase.cache!
-        if (serializer.isHolding)
-            throw new Error("Serializer is already being held. Check if you had released is before")
-        serializer.isHolding = true
-        return serializer as T
-    }
     public release() {
-        this.isHolding = false
         this.releaseResources()
         this.position = 0
+        this.isHolding = false
     }
     asArray(): Uint8Array {
         return new Uint8Array(this.buffer)
@@ -148,13 +136,29 @@ export class SerializerBase {
     }
     // TODO implement callback and check do we need this for a custom OHOS library
     // private heldResources: ResourceId[] = []
-    writeCallbackResource(resource: object) {
-        // const resourceId = ResourceManager.registerAndHold(resource)
+
+    holdAndWriteCallback(callback: object, kind: CallbackKind) {
+        this.writeInt32(42)
+        this.writePointer(0n)
+        this.writePointer(0n)
+        this.writePointer(0n)
+        // const resourceId = ResourceManager.registerAndHold(callback)
         // this.heldResources.push(resourceId)
         // this.writeInt32(resourceId)
         // this.writePointer(nativeModule()._GetManagedResourceHolder())
         // this.writePointer(nativeModule()._GetManagedResourceReleaser())
+        // this.writePointer(nativeModule()._GetManagerCallbackCaller(kind))
     }
+
+    writeCallbackResource(resource: object /*CallbackResource*/) {
+        this.writeInt32(42)
+        this.writePointer(0n)
+        this.writePointer(0n)
+        // this.writeInt32(resource.resourceId)
+        // this.writePointer(resource.hold)
+        // this.writePointer(resource.release)
+    }
+
     private releaseResources() {
         // for (const resourceId of this.heldResources)
         //     ResourceManager.release(resourceId)
@@ -228,4 +232,8 @@ export class SerializerBase {
         // this.view.setInt32(this.position, encodedLength, true)
         // this.position += encodedLength + 4
     }
+}
+
+export function unsafeCast<T>(value: unknown) {
+    return value as T
 }

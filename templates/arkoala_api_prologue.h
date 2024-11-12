@@ -26,9 +26,11 @@
 #define %CPP_PREFIX%ARKUI_NODE_API_VERSION %CPP_PREFIX%ARKUI_FULL_API_VERSION
 
 #define %CPP_PREFIX%ARKUI_BASIC_NODE_API_VERSION 1
-#define %CPP_PREFIX%ARKUI_EXTENDED_NODE_API_VERSION 6
+#define %CPP_PREFIX%ARKUI_EXTENDED_NODE_API_VERSION 7
 #define %CPP_PREFIX%ARKUI_NODE_GRAPHICS_API_VERSION 5
 #define %CPP_PREFIX%ARKUI_NODE_MODIFIERS_API_VERSION 6
+#define GENERIC_SERVICE_API_VERSION 1
+
 #define %CPP_PREFIX%ARKUI_AUTO_GENERATE_NODE_ID (-2)
 
 /* clang-format off */
@@ -68,25 +70,35 @@ typedef int32_t Ark_Int32;
 typedef unsigned int Ark_UInt32; // TODO: update unsigned int
 typedef int64_t Ark_Int64;
 typedef int8_t Ark_Int8;
+typedef int64_t Ark_Date;
 typedef int8_t Ark_Boolean;
 typedef const char* Ark_CharPtr;
 typedef void* Ark_NativePointer;
 
-#ifdef FOUNDATION_ACE_FRAMEWORKS_CORE_INTERFACES_ARKOALA_API_H
-typedef struct _ArkUINode* Ark_NodeHandle;
-typedef struct _ArkUIVMContext* Ark_VMContext;
-typedef struct _ArkUIPipelineContext* Ark_PipelineContext;
-#else
-struct Ark_NodeHandleOpaque;
-typedef struct Ark_NodeHandleOpaque* Ark_NodeHandle;
+struct _Ark_VMContext;
+typedef struct _Ark_VMContext* Ark_VMContext;
+struct _Ark_PipelineContext;
+typedef struct _Ark_PipelineContext* Ark_PipelineContext;
+struct _Ark_VMObject;
+typedef struct _Ark_VMObject* Ark_VMObject;
+struct _Ark_Node;
+typedef struct _Ark_Node* Ark_NodeHandle;
+struct _Ark_Canvas;
+typedef struct _Ark_Canvas* Ark_CanvasHandle;
 
-struct Ark_VMContextOpaque;
-typedef struct Ark_VMContextOpaque* Ark_VMContext;
-
-struct Ark_PipelineContextOpaque;
-typedef struct Ark_PipelineContextOpaque* Ark_PipelineContext;
-#endif
-
+enum Ark_APINodeFlags {
+    %CPP_PREFIX%CUSTOM_NONE = 0,
+    %CPP_PREFIX%CUSTOM_MEASURE = 1 << 0,
+    %CPP_PREFIX%CUSTOM_LAYOUT = 1 << 1,
+    %CPP_PREFIX%CUSTOM_DRAW = 1 << 2,
+    %CPP_PREFIX%CUSTOM_FOREGROUND_DRAW = 1 << 3,
+    %CPP_PREFIX%CUSTOM_OVERLAY_DRAW = 1 << 4,
+};
+enum Ark_APICustomOp {
+    %CPP_PREFIX%MEASURE = 1,
+    %CPP_PREFIX%LAYOUT = 2,
+    %CPP_PREFIX%DRAW = 3
+};
 struct Ark_ObjectHandleOpaque;
 typedef struct Ark_ObjectHandleOpaque* Ark_ObjectHandle;
 
@@ -158,7 +170,8 @@ enum %CPP_PREFIX%Ark_APIVariantKind {
     %CPP_PREFIX%FULL = 11,
     %CPP_PREFIX%GRAPHICS = 12,
     %CPP_PREFIX%EXTENDED = 13,
-    %CPP_PREFIX%COUNT = %CPP_PREFIX%EXTENDED + 1
+    GENERIC_SERVICE = 14,
+    %CPP_PREFIX%COUNT = GENERIC_SERVICE + 1
 };
 
 typedef struct Ark_CallbackResource {

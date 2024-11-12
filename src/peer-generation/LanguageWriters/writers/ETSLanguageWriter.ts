@@ -15,16 +15,26 @@
 
 import { IndentedPrinter } from "../../../IndentedPrinter"
 import { capitalize } from "../../../util"
-import { AggregateConvertor, ArrayConvertor, EnumConvertor as EnumConvertorDTS, OptionConvertor, StringConvertor } from "../../Convertors"
-import { FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, ObjectArgs, Type } from "../LanguageWriter"
+import {
+    FieldModifier,
+    LanguageExpression,
+    LanguageStatement,
+    LanguageWriter,
+    Method,
+    MethodModifier,
+    MethodSignature,
+    NamedMethodSignature,
+    ObjectArgs
+} from "../LanguageWriter"
 import { TSLambdaExpression, TSLanguageWriter } from "./TsLanguageWriter"
-import { IDLBooleanType, IDLContainerType, IDLF32Type, IDLF64Type, IDLI16Type, IDLI32Type, IDLI64Type, IDLI8Type, IDLNumberType, IDLPointerType, IDLPrimitiveType, IDLStringType, IDLType, IDLU16Type, IDLU32Type, IDLU64Type, IDLU8Type, IDLVoidType  } from '../../../idl'
+import { IDLEnum, IDLI32Type, IDLThisType, IDLType, IDLVoidType, toIDLType } from '../../../idl'
 import { EnumEntity } from "../../PeerFile"
-import { createLiteralDeclName } from "../../TypeNodeNameConvertor"
-import { ArgConvertor, CustomTypeConvertor, RuntimeType } from "../../ArgConvertors"
-import { makeArrayTypeCheckCall } from "../../printers/TypeCheckPrinter"
+import {AggregateConvertor, ArgConvertor, ArrayConvertor, BaseArgConvertor, CustomTypeConvertor, EnumConvertor, InterfaceConvertor, makeInterfaceTypeCheckerCall, RuntimeType} from "../../ArgConvertors"
 import { Language } from "../../../Language"
-import { EnumConvertor } from "../../idl/IdlArgConvertors"
+import { ReferenceResolver } from "../../ReferenceResolver"
+import { EtsIDLNodeToStringConvertor } from "../convertors/ETSConvertors"
+import {IdlPeerLibrary} from "../../idl/IdlPeerLibrary";
+import {makeEnumTypeCheckerCall} from "../../printers/TypeCheckPrinter";
 
 ////////////////////////////////////////////////////////////////
 //                         STATEMENTS                         //
@@ -32,7 +42,7 @@ import { EnumConvertor } from "../../idl/IdlArgConvertors"
 
 export class EtsAssignStatement implements LanguageStatement {
     constructor(public variableName: string,
-                public type: Type | undefined,
+                public type: IDLType | undefined,
                 public expression: LanguageExpression,
                 public isDeclared: boolean = true,
                 protected isConst: boolean = true) { }
@@ -70,30 +80,30 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
                     isTypeString ? index : undefined
                 ].filter(it => it !== undefined)
                 writer.writeFieldDeclaration(member.name,
-                    new Type(this.enumEntity.name),
+                    toIDLType(this.enumEntity.name),
                     [FieldModifier.STATIC, FieldModifier.READONLY],
                     false,
                     writer.makeString(`new ${this.enumEntity.name}(${ctorArgs.join(",")})`))
             })
             const typeName = isTypeString ? "string" : "KInt"
-            let argTypes = [new Type(typeName)]
+            let argTypes = [toIDLType(typeName)]
             let argNames = ["value"]
             if (isTypeString) {
-                argTypes.push(new Type("KInt"))
+                argTypes.push(toIDLType("KInt"))
                 argNames.push("ordinal")
             }
             writer.writeConstructorImplementation(this.enumEntity.name,
-                new NamedMethodSignature(Type.Void, argTypes, argNames), (writer) => {
+                new NamedMethodSignature(IDLVoidType, argTypes, argNames), (writer) => {
                     writer.writeStatement(writer.makeAssign("this.value", undefined, writer.makeString("value"), false))
                     if (isTypeString) {
                         writer.writeStatement(writer.makeAssign("this.ordinal", undefined, writer.makeString("ordinal"), false))
                     }
             })
-            writer.writeFieldDeclaration("value", new Type(typeName), [FieldModifier.PUBLIC, FieldModifier.READONLY], false)
+            writer.writeFieldDeclaration("value", toIDLType(typeName), [FieldModifier.PUBLIC, FieldModifier.READONLY], false)
             if (isTypeString) {
-                writer.writeFieldDeclaration("ordinal", new Type("KInt"), [FieldModifier.PUBLIC, FieldModifier.READONLY], false)
+                writer.writeFieldDeclaration("ordinal", IDLI32Type, [FieldModifier.PUBLIC, FieldModifier.READONLY], false)
             }
-            writer.writeMethodImplementation(new Method("of", new MethodSignature(new Type(this.enumEntity.name), [argTypes[0]]), [MethodModifier.PUBLIC, MethodModifier.STATIC]),
+            writer.writeMethodImplementation(new Method("of", new MethodSignature(toIDLType(this.enumEntity.name), [argTypes[0]]), [MethodModifier.PUBLIC, MethodModifier.STATIC]),
                 (writer)=> {
                     this.enumEntity.members.forEach((member) => {
                         const memberName = `${this.enumEntity.name}.${member.name}`
@@ -110,21 +120,48 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
 }
 
 ////////////////////////////////////////////////////////////////
+//                           UTILS                            //
+////////////////////////////////////////////////////////////////
+
+export function generateTypeCheckerName(typeName: string): string {
+    typeName = typeName.replaceAll('[]', 'BracketsArray')
+    return `is${typeName.replaceAll('[]', 'Brackets')}`
+}
+
+export function makeArrayTypeCheckCall(
+    valueAccessor: string,
+    typeName: string,
+    writer: LanguageWriter) {
+    return writer.makeMethodCall(
+        "TypeChecker",
+        generateTypeCheckerName(typeName),
+        [writer.makeString(valueAccessor)
+    ])
+}
+
+////////////////////////////////////////////////////////////////
 //                           WRITER                           //
 ////////////////////////////////////////////////////////////////
 
 export class ETSLanguageWriter extends TSLanguageWriter {
-    constructor(printer: IndentedPrinter) {
-        super(printer, Language.ARKTS)
+    constructor(printer: IndentedPrinter, resolver:ReferenceResolver) {
+        super(printer, resolver, Language.ARKTS)
+        this.typeConvertor = new EtsIDLNodeToStringConvertor(this.resolver)
+    }
+    fork(): LanguageWriter {
+        return new ETSLanguageWriter(new IndentedPrinter(), this.resolver)
     }
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
+        if (signature.returnType === IDLThisType) {
+            throw new Error('static method can not return this!')
+        }
         this.writeMethodDeclaration(name, signature, [MethodModifier.STATIC, MethodModifier.NATIVE])
     }
-    makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
+    makeAssign(variableName: string, type: IDLType | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
         return new EtsAssignStatement(variableName, type, expr, isDeclared, isConst)
     }
     makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression {
-        return new TSLambdaExpression(signature, body)
+        return new TSLambdaExpression(this, this.typeConvertor, signature, this.resolver, body)
     }
     makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement {
         return new ArkTSMapForEachStatement(map, key, value, op)
@@ -132,96 +169,42 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     makeMapSize(map: string): LanguageExpression {
         return this.makeString(`${super.makeMapSize(map).asString()} as int32`) // TODO: cast really needed?
     }
-    mapIDLContainerType(type: IDLContainerType, args: string[]): string {
-        switch (type.name) {
-            case 'sequence': {
-                switch (type.elementType[0].name) {
-                    case IDLU8Type.name: return 'KUint8ArrayPtr'
-                    case IDLI32Type.name: return 'KInt32ArrayPtr'
-                    case IDLF32Type.name: return 'KFloat32ArrayPtr'
-                }
-            }
-        }
-        return super.mapIDLContainerType(type, args)
-    }
-    mapType(type: Type, convertor?: ArgConvertor): string {
-        if (convertor instanceof EnumConvertorDTS || convertor instanceof EnumConvertor) {
-            return convertor.enumTypeName(this.language)
-        }
-        if (convertor instanceof AggregateConvertor && convertor.aliasName !== undefined) {
-            return convertor.aliasName
-        }
-        if (convertor instanceof ArrayConvertor) {
-            return convertor.isArrayType
-                ? `${convertor.elementTypeName()}[]`
-                : `Array<${convertor.elementTypeName()}>`
-        }
-        switch (type.name) {
-            case 'Uint8Array': return 'KUint8ArrayPtr'
-        }
-        return super.mapType(type)
-    }
-    mapIDLPrimitiveType(type: IDLPrimitiveType): string {
-        switch (type) {
-            case IDLPointerType: return 'KPointer'
-            case IDLVoidType: return 'void'
-            case IDLBooleanType: return 'KBoolean'
-
-            case IDLI8Type:
-            case IDLU8Type:
-            case IDLI16Type:
-            case IDLU16Type:
-            case IDLI32Type:
-            case IDLU32Type:
-                return 'KInt'
-
-            case IDLI64Type:
-            case IDLU64Type:
-                return 'KLong'
-
-            case IDLF32Type:
-                return 'KFloat'
-
-            case IDLF64Type:
-            case IDLNumberType:
-                return 'number'
-
-            case IDLStringType: return 'KStringPtr'
-        }
-        return super.mapIDLPrimitiveType(type)
-    }
     get supportedModifiers(): MethodModifier[] {
         return [MethodModifier.PUBLIC, MethodModifier.PRIVATE, MethodModifier.NATIVE, MethodModifier.STATIC]
     }
     nativeReceiver(): string { return 'NativeModule' }
     makeUnsafeCast(convertor: ArgConvertor, param: string): string {
-        if ((convertor instanceof EnumConvertorDTS || convertor instanceof EnumConvertor) && !param.endsWith(".value")) {
-            return `(${param} as ${convertor.enumTypeName(this.language)}).${convertor.isStringEnum ? 'ordinal' : 'value'}`
+        if ((convertor instanceof EnumConvertor) && !param.endsWith(".value")) {
+            return `(${param} as ${this.typeConvertor.convertEntry(convertor.enumEntry)}).${convertor.isStringEnum ? 'ordinal' : 'value'}`
         }
         return super.makeUnsafeCast(convertor, param)
     }
     runtimeType(param: ArgConvertor, valueType: string, value: string) {
-        if (param instanceof OptionConvertor) {
-            this.writeStatement(this.makeCondition(this.makeString(`${value} != undefined`), this.makeAssign(valueType, undefined,
-                this.makeRuntimeType(RuntimeType.OBJECT), false)))
-        } else {
-            super.runtimeType(param, valueType, value);
+        super.runtimeType(param, valueType, value);
+    }
+    makeUnionVariantCast(value: string, type: string, convertor: ArgConvertor, index?: number): LanguageExpression {
+        if (convertor instanceof EnumConvertor) {
+            return this.makeString(value)
         }
+        return this.makeString(`${value} as ${type}`)
     }
-    makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index?: number): LanguageExpression {
-        return this.makeString(`${value} as ${type.name}`)
-    }
-    ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression {
+    ordinalFromEnum(value: LanguageExpression, _: IDLEnum): LanguageExpression {
         return value;
     }
-    makeDiscriminatorFromFields(convertor: {targetType: (writer: LanguageWriter) => Type}, value: string, accessors: string[]): LanguageExpression {
+    makeDiscriminatorFromFields(convertor: {targetType: (writer: LanguageWriter) => string},
+                                value: string,
+                                accessors: string[],
+                                duplicates: Set<string>): LanguageExpression {
         if (convertor instanceof CustomTypeConvertor) {
             return this.makeString(`${value} instanceof ${convertor.customTypeName}`)
         }
-        return this.makeString(`${value} instanceof ${convertor.targetType(this).name}`)
+        if (convertor instanceof AggregateConvertor || convertor instanceof InterfaceConvertor) {
+            return this.instanceOf(convertor, value, duplicates)
+        }
+        return this.makeString(`${value} instanceof ${convertor.targetType(this)}`)
     }
     makeValueFromOption(value: string, destinationConvertor: ArgConvertor): LanguageExpression {
-        if (destinationConvertor instanceof EnumConvertorDTS || destinationConvertor instanceof EnumConvertor) {
+        if (destinationConvertor instanceof EnumConvertor) {
             return this.makeString(`${value}!`)
         }
         return super.makeValueFromOption(value, destinationConvertor)
@@ -233,38 +216,28 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         return new ArkTSEnumEntityStatement(enumEntity, isExport);
     }
     getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string {
-        if (convertor instanceof StringConvertor && convertor.isLiteral()) {
-            return `${value}.toString()`
-        }
         return super.getObjectAccessor(convertor, value, args);
     }
     writeMethodCall(receiver: string, method: string, params: string[], nullable: boolean = false) {
         // ArkTS does not support - 'this.?'
         super.writeMethodCall(receiver, method, params, nullable && receiver !== "this");
     }
-    compareLiteral(expr: LanguageExpression, literal: string): LanguageExpression {
-        return super.makeNaryOp('instanceof', [expr, this.makeString(createLiteralDeclName(capitalize(literal)))]);
-    }
-    override makeCastEnumToInt(convertor: EnumConvertorDTS, value: string, _unsafe?: boolean): string {
-        // TODO: remove after switching to IDL
-        return this.makeCast(this.makeString(`${value}.${convertor.isStringEnum ? "ordinal" : "value"}`),
-            new Type('int32')).asString();
+    writeProperty(propName: string, propType: IDLType) {
+        throw new Error("writeProperty for ArkTS is not implemented yet.")
     }
     override makeEnumCast(value: string, _unsafe: boolean, convertor: EnumConvertor | undefined): string {
-        return this.makeCast(this.makeString(`${value}.${convertor?.isStringEnum ? "ordinal" : "value" ?? "value"}`),
-            new Type('int32')).asString();
+        return this.makeCast(this.makeString(`${value}.${convertor?.isStringEnum ? "ordinal" : "value"}`),
+            IDLI32Type).asString();
     }
     makeUnionVariantCondition(convertor: ArgConvertor, valueName: string, valueType: string, type: string, index?: number): LanguageExpression {
-        if (convertor instanceof EnumConvertorDTS || convertor instanceof EnumConvertor) {
-            return this.makeString(`${valueName} instanceof ${convertor.enumTypeName(this.language)}`)
-        } else if (convertor instanceof StringConvertor && convertor.isLiteral()) {
-            return this.makeString(`${valueName} instanceof ${convertor.tsTypeName}`)
+        if (convertor instanceof EnumConvertor) {
+            return this.instanceOf(convertor, valueName);
         }
         return super.makeUnionVariantCondition(convertor, valueName, valueType, type, index);
     }
     makeCastCustomObject(customName: string, isGenericType: boolean): LanguageExpression {
         if (isGenericType) {
-            return this.makeCast(this.makeString(customName), new Type("Object"))
+            return this.makeCast(this.makeString(customName), toIDLType("Object"))
         }
         return super.makeCastCustomObject(customName, isGenericType);
     }
@@ -281,19 +254,39 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         // the '==' operator must be used when one of the operands is a reference
         return super.makeNaryOp('==', args);
     }
-    override arrayDiscriminatorFromTypeOrExpressions(value: string,
-                                                     checkedType: string,
-                                                     runtimeType: RuntimeType,
-                                                     exprs: LanguageExpression[]): LanguageExpression {
-        return makeArrayTypeCheckCall(value, checkedType, this)
-    }
-    makeDiscriminatorConvertor(convertor: EnumConvertorDTS, value: string, index: number): LanguageExpression {
+    makeDiscriminatorConvertor(convertor: EnumConvertor, value: string, index: number): LanguageExpression {
         return this.discriminatorFromExpressions(value, RuntimeType.OBJECT, [
-            this.makeString(`${value} instanceof ${convertor.enumTypeName(this.language)}`)
+            makeEnumTypeCheckerCall(value, this.stringifyType(convertor.idlType), this)
         ])
     }
     override castToInt(value: string, bitness: 8 | 32): string {
         return `${value} as int32` // FIXME: is there int8 in ARKTS?
     }
     override castToBoolean(value: string): string { return `${value} ? 1 : 0` }
+
+    override instanceOf(convertor: BaseArgConvertor, value: string, duplicateMembers?: Set<string>): LanguageExpression {
+        if (convertor instanceof InterfaceConvertor && convertor.declaration.properties.length > 0) {
+            return makeInterfaceTypeCheckerCall(value,
+                this.stringifyType(convertor.idlType),
+                convertor.declaration.properties.map(it => it.name),
+                duplicateMembers!,
+                this)
+        }
+        if (convertor instanceof AggregateConvertor) {
+            return makeInterfaceTypeCheckerCall(value,
+                convertor.aliasName !== undefined ? convertor.aliasName : this.stringifyType(convertor.idlType),
+                convertor.members.map(it => it[0]), duplicateMembers!, this)
+        }
+        if (convertor instanceof ArrayConvertor) {
+            return makeArrayTypeCheckCall(value,
+                (this.resolver as IdlPeerLibrary).getTypeName(convertor.idlType), this)
+        }
+        if (convertor instanceof EnumConvertor) {
+            return this.makeString(`${value} instanceof ${this.typeConvertor.convert(convertor.enumEntry)}`)
+        }
+        return super.instanceOf(convertor, value, duplicateMembers)
+    }
+    override makeSerializerConstructorSignature(): NamedMethodSignature | undefined {
+        return new NamedMethodSignature(IDLVoidType, [], [])
+    }
 }

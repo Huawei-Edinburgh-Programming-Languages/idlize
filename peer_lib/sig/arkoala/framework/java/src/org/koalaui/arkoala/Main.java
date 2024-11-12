@@ -19,6 +19,7 @@
 package org.koalaui.arkoala;
 
 import java.time.Duration;
+import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -35,32 +36,9 @@ public class Main {
 
     static void perfTests() {
         System.out.println("\nJava performance tests");
-        checkPerf(10*1000*1000);
         checkPerf2(5*1000*1000);
         checkPerf3(5*1000*1000);
         System.out.println();
-    }
-
-    static void checkPerf(int count) {
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < count; i++) {
-            NativeModule._TestPerfNumber(i);
-        }
-        long passed = System.currentTimeMillis() - start;
-        System.out.println("NUMBER: " + String.valueOf(passed) + "ms for " + count + " iteration, " + Math.round((double)passed / count * 1000000) + "ms per 1M iterations");
-
-        start = System.currentTimeMillis();
-        for (int i = 0; i < count; i++) {
-            byte[] data = new byte[5];
-            data[0] = 1;
-            data[1] = (byte)(i >> 24);
-            data[2] = (byte)(i >> 16);
-            data[3] = (byte)(i >> 8);
-            data[4] = (byte)(i >> 0);
-            NativeModule._TestPerfNumberWithArray(data, data.length);
-        }
-        passed = System.currentTimeMillis() - start;
-        System.out.println("ARRAY: " + String.valueOf(passed) + "ms for " + count + " iteration, " + Math.round((double)passed / count * 1000000) + "ms per 1M iterations");
     }
 
     static void checkPerf2(int count) {
@@ -135,13 +113,13 @@ public class Main {
         var tuple1 = new Tuple_double_String_EnumDTS(5.5, "test", EnumDTS.ELEM_1);
         TestUtils.checkResult("[Tuple + Enum] TestPeer.testTupleNumberStringEnum",
             () -> { peer.testTupleNumberStringEnumAttribute(tuple1); },
-            "testTupleNumberStringEnum({.value0={.tag=103, .f32=5.50}, .value1={.chars=\"test\", .length=4}, .value2=Ark_EnumDTS(1)})");
+            "testTupleNumberStringEnum({.value0={.tag=103, .f32=5.5}, .value1={.chars=\"test\", .length=4}, .value2=Ark_EnumDTS(1)})");
 
         // optional
         var listPeer = ArkListPeer.create(ArkUINodeType.List, null, 0);
         TestUtils.checkResult("[Optional] ListPeer.someOptional",
-            () -> { listPeer.someOptionalAttribute(new Opt_Boolean(false)); },
-            "someOptional({.tag=ARK_TAG_OBJECT, .value=false})");
+            () -> { listPeer.someOptionalAttribute(new Union_boolean_Ark_Undefined(false)); },
+            "someOptional({.selector=0, .value0=false})");
 
         // enum
         TestUtils.checkResult("[Enum] ButtonPeer.type", () -> { buttonPeer.typeAttribute(ButtonType.CAPSULE); }, "type(Ark_ButtonType(0))");
@@ -191,10 +169,12 @@ public class Main {
         // materialized classes
         TestUtils.checkResult("[Materialized] ctor",
             () -> { new ClassWithConstructorAndAllOptionalParamsDTS(new Opt_Number(10), null); },
-            "new ClassWithConstructorAndAllOptionalParamsDTS({.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=10}}, {.tag=ARK_TAG_UNDEFINED, .value={}})[return (void*) 100]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]");
+            "new ClassWithConstructorAndAllOptionalParamsDTS({.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=10}}, {.tag=ARK_TAG_UNDEFINED, .value={}})[return (ClassWithConstructorAndAllOptionalParamsDTSPeer*) 100]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]"
+            );
         TestUtils.checkResult("[Materialized] of",
             () -> { ClassWithConstructorAndAllOptionalParamsDTS.of(null, "test"); },
-            "of({.tag=ARK_TAG_UNDEFINED, .value={}}, {.tag=ARK_TAG_OBJECT, .value={.chars=\"test\", .length=4}})[return (void*) 300]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]");
+            "of({.tag=ARK_TAG_UNDEFINED, .value={}}, {.tag=ARK_TAG_OBJECT, .value={.chars=\"test\", .length=4}})[return (void*) 300]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]"
+            );
         var classCtor = new ClassWithConstructorAndAllOptionalParamsDTS(new Opt_Number(10), null);
         var classOf = ClassWithConstructorAndAllOptionalParamsDTS.of(null, "test");
         TestUtils.checkResult("[Materialized] method",
@@ -207,13 +187,14 @@ public class Main {
             () -> { peer.testClassWithConstructorAndAllOptionalParamsAttribute(classOf); },
             "testClassWithConstructorAndAllOptionalParams(\"Materialized 0x12c\")");
 
-        // custom object stub
+        var startDate = new Date();
+        var endDate = new Date();
         var datePickerOptions = new DatePickerOptionsTest();
-        datePickerOptions.start = new Ark_CustomObject();
-        datePickerOptions.end = new Ark_CustomObject();
-        TestUtils.checkResult("[CustomObject] TestPeer.testDateCustomObject",
+        datePickerOptions.start = startDate;
+        datePickerOptions.end = endDate;
+        TestUtils.checkResult("[Date] TestPeer.testDateCustomObject",
             () -> { peer.testDateCustomObjectAttribute(datePickerOptions); },
-            "testDateCustomObject({.start={.tag=ARK_TAG_OBJECT, .value={.kind=\"Date\", .id=0}}, .end={.tag=ARK_TAG_OBJECT, .value={.kind=\"Date\", .id=0}}})");
+            String.format("testDateCustomObject({.start={.tag=ARK_TAG_OBJECT, .value=%d}, .end={.tag=ARK_TAG_OBJECT, .value=%d}})", startDate.getTime(), endDate.getTime()));
 
         // builder classes
         var len = new Ark_Length("10lpx");
@@ -221,7 +202,7 @@ public class Main {
         var swiperPeer = ArkSwiperPeer.create(ArkUINodeType.Swiper, null, 0);
         TestUtils.checkResult("[Builder] SwiperPeer.indicator",
             () -> { swiperPeer.indicatorAttribute(indicator); },
-            "indicator({._left={.tag=ARK_TAG_OBJECT, .value={.type=2, .value=10.000000, .unit=4, .resource=0}}, ._top={.tag=ARK_TAG_UNDEFINED, .value={}}, ._right={.tag=ARK_TAG_OBJECT, .value={.type=2, .value=10.000000, .unit=4, .resource=0}}, ._bottom={.tag=ARK_TAG_UNDEFINED, .value={}}, ._start={.tag=ARK_TAG_UNDEFINED, .value={}}, ._end={.tag=ARK_TAG_UNDEFINED, .value={}}, ._itemWidth={.tag=ARK_TAG_OBJECT, .value={.type=2, .value=10.000000, .unit=4, .resource=0}}, ._itemHeight={.tag=ARK_TAG_UNDEFINED, .value={}}})");
+            "indicator({._left={.tag=ARK_TAG_OBJECT, .value={.type=2, .value=10, .unit=4, .resource=0}}, ._top={.tag=ARK_TAG_UNDEFINED, .value={}}, ._right={.tag=ARK_TAG_OBJECT, .value={.type=2, .value=10, .unit=4, .resource=0}}, ._bottom={.tag=ARK_TAG_UNDEFINED, .value={}}, ._start={.tag=ARK_TAG_UNDEFINED, .value={}}, ._end={.tag=ARK_TAG_UNDEFINED, .value={}}, ._itemWidth={.tag=ARK_TAG_OBJECT, .value={.type=2, .value=10, .unit=4, .resource=0}}, ._itemHeight={.tag=ARK_TAG_UNDEFINED, .value={}}})");
 
         System.out.println();
     }
@@ -248,11 +229,6 @@ public class Main {
 
     static void checkNodeAPI() {
         System.out.println("Java TreeNode tests");
-
-        NativePeerNode.setCreateNodeDelay(ArkUINodeType.Column, Duration.ofNanos(500000));
-        NativePeerNode.setMeasureNodeDelay(ArkUINodeType.Button, Duration.ofNanos(400000));
-        NativePeerNode.setLayoutNodeDelay(ArkUINodeType.List, Duration.ofNanos(600000));
-        NativePeerNode.setDrawNodeDelay(ArkUINodeType.Web, Duration.ofNanos(700000));
 
         var root = ArkColumnPeer.create(ArkUINodeType.Column, null, 0);
         var child1 = ArkButtonPeer.create(ArkUINodeType.Button, null, 0);
@@ -297,7 +273,7 @@ public class Main {
         component.setPeer(peer);
         TestUtils.checkResult("ArkSideBarContainerComponent method overloads",
             () -> component.minSideBarWidth(10.0).minSideBarWidth(new Ark_Length("10lpx")),
-            "minSideBarWidth({.tag=102, .i32=10})minSideBarWidth({.type=2, .value=10.000000, .unit=4, .resource=0})");
+            "minSideBarWidth({.tag=102, .i32=10})minSideBarWidth({.type=2, .value=10, .unit=4, .resource=0})");
 
         System.out.println();
     }

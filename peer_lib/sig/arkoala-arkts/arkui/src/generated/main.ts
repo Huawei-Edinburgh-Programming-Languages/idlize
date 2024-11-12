@@ -72,28 +72,6 @@ widthAttributeString: 502ms for 5000000 iteration, 100ms per 1M iterations
 
 let hasTestErrors = false
 
-function checkPerf(count: number) {
-    let start = Date.now()
-    for (let i = 0; i < count; i++) {
-        NativeModule._TestPerfNumber(i)
-    }
-    let passed = Date.now() - start
-    console.log(`NUMBER: ${passed}ms for ${count} iteration, ${Math.round(passed / count * 1000000)}ms per 1M iterations`)
-
-    start = Date.now()
-    for (let i = 0; i < count; i++) {
-        let data = new byte[5]
-        data[0] = 1
-        data[1] = (i >> 24) as byte
-        data[2] = (i >> 16) as byte
-        data[3] = (i >> 8) as byte
-        data[4] = (i >> 0) as byte
-        NativeModule._TestPerfNumberWithArray(data, data.length)
-    }
-    passed = Date.now() - start
-    console.log(`ARRAY: ${passed}ms for ${count} iteration, ${Math.round(passed / count * 1000000)}ms per 1M iterations`)
-}
-
 export function getNativeLog(): string {
     let ptr = NativeModule._GetGroupedLog(1)
     let length = NativeModule._StringLength(ptr)
@@ -482,14 +460,9 @@ function checkPerf3(count: number) {
 }
 
 function checkButton() {
-    let data = new byte[5]
-    data[0] = 42
-    checkResult("TestPerfNumberWithArray",
-        () => NativeModule._TestPerfNumberWithArray(data, data.length),
-        "TestPerfNumberWithArray(42, 5)")
     let peer = ArkButtonPeer.create(ArkUINodeType.Button)
     checkResult("width", () => peer.widthAttribute("42%"),
-        "width({.type=2, .value=42.000000, .unit=3, .resource=0})")
+        "width({.type=2, .value=42, .unit=3, .resource=0})")
     checkResult("type", () => peer.typeAttribute(ButtonType.of(1)), "type(Ark_ButtonType(1))")
     checkResult("labelStyle", () => peer.labelStyleAttribute(new LabelStyleImpl(3)),
          "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=3}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})")
@@ -501,12 +474,13 @@ function checkButton() {
         moduleName: "MyApp"
     }
     checkResult("height", () => peer.heightAttribute(resource),
-        "height({.type=3, .value=0.000000, .unit=1, .resource=43})")
+        "height({.type=3, .value=0, .unit=1, .resource=43})")
     checkResult("height", () => peer.heightAttribute(44),
-        "height({.type=1, .value=44.000000, .unit=1, .resource=0})")
-    checkResult("bindSheet", () =>
-        peer.bindSheetAttribute(false, (): Object => {}, new SheetOptionsImpl(new SheetTitleOptionsImpl("My App"))),
-        "bindSheet({.tag=ARK_TAG_OBJECT, .value=false}, {.selector=0, .value0={.id=42}}, {.tag=ARK_TAG_OBJECT, .value={.backgroundColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .onAppear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onDisappear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillAppear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillDisappear={.tag=ARK_TAG_UNDEFINED, .value={}}, .height={.tag=ARK_TAG_UNDEFINED, .value={}}, .dragBar={.tag=ARK_TAG_UNDEFINED, .value={}}, .maskColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .detents={.tag=ARK_TAG_UNDEFINED, .value={}}, .blurStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, .showClose={.tag=ARK_TAG_UNDEFINED, .value={}}, .preferType={.tag=ARK_TAG_UNDEFINED, .value={}}, .title={.tag=ARK_TAG_OBJECT, .value={.selector=0, .value0={.title={.selector=0, .value0={.chars=\"My App\", .length=6}}, .subtitle={.tag=ARK_TAG_UNDEFINED, .value={}}}}}, .shouldDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillSpringBackWhenDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .enableOutsideInteractive={.tag=ARK_TAG_UNDEFINED, .value={}}, .width={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderWidth={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, .shadow={.tag=ARK_TAG_UNDEFINED, .value={}}, .onHeightDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .mode={.tag=ARK_TAG_UNDEFINED, .value={}}, .scrollSizeMode={.tag=ARK_TAG_UNDEFINED, .value={}}, .onDetentsDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWidthDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .onTypeDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .uiContext={.tag=ARK_TAG_UNDEFINED, .value={}}, .keyboardAvoidMode={.tag=ARK_TAG_UNDEFINED, .value={}}}})"
+        "height({.type=1, .value=44, .unit=1, .resource=0})")
+    checkResult("bindSheet", () => {
+            peer.bindSheetAttribute(false, (): Object => {}, new SheetOptionsImpl(new SheetTitleOptionsImpl("My App")))
+        },
+        "bindSheet({.selector=0, .value0=false}, {.resource={.resourceId=100, .hold=0, .release=0}, .call=0}, {.tag=ARK_TAG_OBJECT, .value={.backgroundColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .onAppear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onDisappear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillAppear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillDisappear={.tag=ARK_TAG_UNDEFINED, .value={}}, .height={.tag=ARK_TAG_UNDEFINED, .value={}}, .dragBar={.tag=ARK_TAG_UNDEFINED, .value={}}, .maskColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .detents={.tag=ARK_TAG_UNDEFINED, .value={}}, .blurStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, .showClose={.tag=ARK_TAG_UNDEFINED, .value={}}, .preferType={.tag=ARK_TAG_UNDEFINED, .value={}}, .title={.tag=ARK_TAG_OBJECT, .value={.selector=0, .value0={.title={.selector=0, .value0={.chars=\"My App\", .length=6}}, .subtitle={.tag=ARK_TAG_UNDEFINED, .value={}}}}}, .shouldDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillSpringBackWhenDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .enableOutsideInteractive={.tag=ARK_TAG_UNDEFINED, .value={}}, .width={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderWidth={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, .shadow={.tag=ARK_TAG_UNDEFINED, .value={}}, .onHeightDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .mode={.tag=ARK_TAG_UNDEFINED, .value={}}, .scrollSizeMode={.tag=ARK_TAG_UNDEFINED, .value={}}, .onDetentsDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWidthDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .onTypeDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .uiContext={.tag=ARK_TAG_UNDEFINED, .value={}}, .keyboardAvoidMode={.tag=ARK_TAG_UNDEFINED, .value={}}}})"
     )
 }
 
@@ -649,7 +623,6 @@ function checkNodeAPI() {
 }
 
 export function main(): void {
-    checkPerf(5 * 1000 * 1000)
     checkPerf2(5 * 1000 * 1000)
     checkPerf3(5 * 1000 * 1000)
 

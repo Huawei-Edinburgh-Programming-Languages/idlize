@@ -13,8 +13,10 @@
  * limitations under the License.
  */
 import { float32, float64, int32, int8 } from "@koalaui/common"
-import { pointer, KUint8ArrayPtr, KBuffer, ResourceId, ResourceManager } from "@koalaui/interop"
-import { Length, Resource } from "../ArkUnitsInterfaces"
+import { pointer, KUint8ArrayPtr, KBuffer, ResourceId, ResourceHolder } from "@koalaui/interop"
+import { CallbackKind } from "./CallbackKind"
+import { Length } from "../ArkUnitsInterfaces"
+import { Resource } from "../ArkResourceInterfaces"
 import { NativeModule } from "#components"
 
 /**
@@ -72,11 +74,6 @@ function registerMaterialized(value: Object): int32 {
     return 42
 }
 
-export function isPixelMap(value: Object|undefined): boolean {
-    // TODO: fix me!
-    return false
-}
-
 export function isResource(value: Object|undefined): boolean {
     // TODO: fix me!
     return false
@@ -85,6 +82,12 @@ export function isResource(value: Object|undefined): boolean {
 export function isInstanceOf(className: string, value: Object): boolean {
     // TODO: fix me!
     return false
+}
+
+export interface CallbackResource {
+    resourceId: int32
+    hold: pointer
+    release: pointer
 }
 
 /* Serialization extension point */
@@ -99,9 +102,7 @@ export abstract class CustomSerializer {
 }
 
 export class SerializerBase {
-    private static cache: SerializerBase | undefined = undefined
-
-    private isHolding: boolean = false
+    protected isHolding: boolean = false
     private position = 0
     private buffer: KBuffer
 
@@ -121,15 +122,6 @@ export class SerializerBase {
 
     constructor() {
         this.buffer = new KBuffer(96)
-    }
-    static hold<T extends SerializerBase>(factory: () => T): T {
-        if (SerializerBase.cache === undefined)
-            SerializerBase.cache = factory()
-        const serializer = SerializerBase.cache!
-        if (serializer.isHolding)
-            throw new Error("Serializer is already being held. Check if you had released is before")
-        serializer.isHolding = true
-        return serializer as T
     }
     public release() {
         this.isHolding = false
@@ -159,21 +151,28 @@ export class SerializerBase {
         }
     }
     private heldResources: Array<ResourceId> = new Array<ResourceId>()
-    writeResource(resource: object) {
-        const resourceId = ResourceManager.registerAndHold(resource)
+    holdAndWriteCallback(callback: object, hold: pointer = 0, release: pointer = 0, call: pointer = 0): ResourceId {
+        const resourceId = ResourceHolder.instance().registerAndHold(callback)
         this.heldResources.push(resourceId)
         this.writeInt32(resourceId)
+        this.writePointer(hold)
+        this.writePointer(release)
+        this.writePointer(call)
+        return resourceId
     }
-    writeCallbackResource(resource: object) {
-        const resourceId = ResourceManager.registerAndHold(resource)
+    writeCallbackResource(resource: CallbackResource) {
+        this.writeInt32(resource.resourceId)
+        this.writePointer(resource.hold)
+        this.writePointer(resource.release)
+    }
+    writeResource(resource: object) {
+        const resourceId = ResourceHolder.instance().registerAndHold(resource)
         this.heldResources.push(resourceId)
         this.writeInt32(resourceId)
-        this.writePointer(NativeModule._GetManagedResourceHolder())
-        this.writePointer(NativeModule._GetManagedResourceReleaser())
     }
     private releaseResources() {
         for (const resourceId of this.heldResources)
-            ResourceManager.release(resourceId)
+            NativeModule._ReleaseArkoalaResource(resourceId)
         // todo think about effective array clearing/pushing
         this.heldResources = new Array<ResourceId>()
     }
@@ -282,5 +281,12 @@ export class SerializerBase {
         } else if (valueType == RuntimeType.OBJECT) {
            this.writeInt32((value as Resource).id as int32)
         }
+    }
+    //TODO: Needs to be implemented
+    writeArrayBuffer(value: ArrayBuffer) {
+    }
+    writeUint8ClampedArray(value: Uint8ClampedArray) {
+    }
+    writeUint8Array(value: Uint8Array) {
     }
 }

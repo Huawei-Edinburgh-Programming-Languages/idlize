@@ -28,7 +28,7 @@ export function makeSyntheticDeclCompletely(srcDecl: idl.IDLEntry,
     const synthDecl = makeSyntheticDeclaration(targetFilename, srcDecl.name!, () => newDecl);
     // Collect dependencies types
     declConvertor.convert(srcDecl).forEach(it => {
-        if (isSourceDecl(it)) {
+        if (idl.isEntry(it) && isSourceDecl(it)) {
             addSyntheticDeclarationDependency(synthDecl, convertDeclToFeature(library, it))
         }
     })
@@ -53,12 +53,13 @@ export function addSyntheticDeclarationDependency(node: idl.IDLEntry, dependency
     throw "Declaration is not synthetic"
 }
 
-export function makeSyntheticTypeAliasDeclaration(targetFilename: string, declName: string, type: idl.IDLType): idl.IDLTypedef {
+export function makeSyntheticTypeAliasDeclaration(targetFilename: string, declName: string, type: idl.IDLType | idl.IDLEnum | idl.IDLInterface): idl.IDLTypedef {
     const decl = makeSyntheticDeclaration(targetFilename, declName, () => {
-        return idl.createTypedef(declName, type)
+        const ref = idl.isType(type) ? type : idl.createReferenceType(type.name)
+        return idl.createTypedef(declName, ref)
     })
     if (!idl.isTypedef(decl))
-        throw "Expected declaration to be a TypeAlias"
+        throw new Error("Expected declaration to be a TypeAlias")
     return decl
 }
 

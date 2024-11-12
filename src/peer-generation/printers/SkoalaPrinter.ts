@@ -4,6 +4,7 @@ import * as idl from '../../idl'
 import { IDLEntry, IDLMethod, IDLInterface, isInterface, isClass, printType } from "../../idl"
 import { IndentedPrinter } from "../../IndentedPrinter"
 import { capitalize, toCamelCase } from "../../util"
+
 export class SkoalaCCodeGenerator {
     private entries: IDLEntry[]
     private outputDir: string
@@ -87,7 +88,7 @@ export class SkoalaCCodeGenerator {
     }
 
     private convertType(idlType: idl.IDLType): string {
-        switch (idlType.name) {
+        switch (idl.forceAsNamedNode(idlType).name) {
             case "float32": return "float"
             case "int32": return "int"
             case "uint32": return "unsigned int"

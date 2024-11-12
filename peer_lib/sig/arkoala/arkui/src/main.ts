@@ -13,10 +13,10 @@
 * limitations under the License.
 */
 import { pointer, nullptr, wrapCallback, callCallback } from "@koalaui/interop"
-import { SerializerBase } from "@arkoala/arkui/peers/SerializerBase"
+import { Serializer } from "@arkoala/arkui/peers/Serializer"
 import { DeserializerBase } from "@arkoala/arkui/peers/DeserializerBase"
-import { Serializer, createSerializer } from "@arkoala/arkui/peers/Serializer"
 import { Deserializer } from "@arkoala/arkui/peers/Deserializer"
+import { checkArkoalaCallbacks } from "@arkoala/arkui/peers/CallbacksChecker"
 import { ArkButtonPeer } from "@arkoala/arkui/peers/ArkButtonPeer"
 import { ArkCommonPeer } from "@arkoala/arkui/peers/ArkCommonPeer"
 import { ArkCalendarPickerPeer } from "@arkoala/arkui/peers/ArkCalendarPickerPeer"
@@ -50,12 +50,13 @@ import {
     stopNativeLog,
     assertEquals,
     assertTrue,
-    assertThrows,
     startNativeTest,
     stopNativeTest,
 } from "./test_utils"
 import { nativeModule } from "@koalaui/arkoala"
 import { mkdirSync, writeFileSync } from "fs"
+import { CallbackKind } from "@arkoala/arkui/peers/CallbackKind"
+import { ResourceId } from "@koalaui/interop"
 
 if (!reportTestFailures) {
     console.log("WARNING: ignore test result")
@@ -72,7 +73,7 @@ function checkSerdeResult(name: string, value: any, expected: any) {
 }
 
 function checkSerdeBaseLength() {
-    const ser = SerializerBase.hold(createSerializer)
+    const ser = Serializer.hold()
     ser.writeLength("10px")
     ser.writeLength("11vp")
     ser.writeLength("12%")
@@ -88,7 +89,7 @@ function checkSerdeBaseLength() {
 }
 
 function checkSerdeBaseText() {
-    const ser = SerializerBase.hold(createSerializer)
+    const ser = Serializer.hold()
     const text = "test text serialization/deserialization"
     ser.writeString(text)
     const des = new DeserializerBase(ser.asArray().buffer, ser.length())
@@ -97,7 +98,7 @@ function checkSerdeBaseText() {
 }
 
 function checkSerdeBasePrimitive() {
-    const ser = SerializerBase.hold(createSerializer)
+    const ser = Serializer.hold()
     ser.writeNumber(10)
     ser.writeNumber(10.5)
     ser.writeNumber(undefined)
@@ -109,7 +110,7 @@ function checkSerdeBasePrimitive() {
 }
 
 function checkSerdeBaseCustomObject() {
-    const ser = SerializerBase.hold(createSerializer)
+    const ser = Serializer.hold()
     const pixelMap: PixelMap = {
         isEditable: true,
         isStrideAlignment: true,
@@ -192,7 +193,7 @@ function checkNodeAPI() {
     let length = 0.0
     checkResult("BasicNodeAPI convertLengthMetricsUnit",
         () => length = nativeModule()._ConvertLengthMetricsUnit(1.23, 10, 0),
-        `convertLengthMetricsUnit(1.230000, 10, 0)`
+        `convertLengthMetricsUnit(1.23, 10, 0)`
     )
     assertTrue("BasicNodeAPI convertLengthMetricsUnit result", Math.abs(12.3 - length) < 0.00001)
 
@@ -206,7 +207,7 @@ function checkCallback() {
     assertTrue("Register callback 2", id2 != -1)
     assertTrue("Callback ids are different", id1 != id2)
 
-    const serializer = SerializerBase.hold(createSerializer)
+    const serializer = Serializer.hold()
     assertEquals("Call callback 1", 1001, callCallback(id1, serializer.asArray(), serializer.length()))
     assertEquals("Call callback 2", 1002, callCallback(id2, serializer.asArray(), serializer.length()))
 // TODO: Fix the tests according to the latest callback changes
@@ -215,13 +216,79 @@ function checkCallback() {
     serializer.release()
 }
 
+function createDefaultWriteCallback(kind: CallbackKind, callback: object) {
+    return (serializer: Serializer) => {
+        return serializer.holdAndWriteCallback(callback,
+            nativeModule()._TestGetManagedHolder(),
+            nativeModule()._TestGetManagedReleaser(),
+            nativeModule()._TestGetManagedCaller(kind),
+        )
+    }
+}
+
+function enqueueCallback(
+    writeCallback: (serializer: Serializer) => ResourceId,
+    readAndCallCallback: (deserializer: Deserializer) => void,
+) {
+    const serializer = Serializer.hold()
+    const resourceId = writeCallback(serializer)
+    /* imitate libace holding resource */
+    nativeModule()._HoldArkoalaResource(resourceId)
+    /* libace stored resource somewhere */
+    const buffer = new Uint8Array(serializer.asArray().buffer.byteLength)
+    const bufferLength = serializer.length()
+    buffer.set(serializer.asArray())
+    serializer.release()
+
+    /* libace calls stored callback */
+    const deserializer = new Deserializer(buffer.buffer, bufferLength)
+    readAndCallCallback(deserializer)
+    /* libace released resource */
+    nativeModule()._ReleaseArkoalaResource(resourceId)
+}
+
+function checkTwoSidesCallback() {
+    nativeModule()._TestSetArkoalaCallbackCaller()
+
+    let callResult1 = "NOT_CALLED"
+    let callResult2 = 0
+    const call2Count = 100
+
+    enqueueCallback(
+        createDefaultWriteCallback(CallbackKind.Kind_Callback_Number_Void, (value: number): void => {
+            callResult1 = `CALLED, value=${value}`
+        }),
+        (deserializer) => {
+            const callback = deserializer.readCallback_Number_Void()
+            callback(194)
+        },
+    )
+    for (let i = 0; i < call2Count; i++) {
+        enqueueCallback(
+            createDefaultWriteCallback(CallbackKind.Kind_Callback_Void, (): void => {
+                callResult2++
+            }),
+            (deserializer) => {
+                const callback = deserializer.readCallback_Void()
+                callback()
+            },
+        )
+    }
+
+    assertEquals("Callback 1 enqueued", "NOT_CALLED", callResult1)
+    assertEquals(`Callback 2 enqueued ${call2Count} times`, callResult2, 0)
+    checkArkoalaCallbacks()
+    assertEquals("Callback 1 read&called", "CALLED, value=194", callResult1)
+    assertEquals(`Callback 2 read&called ${call2Count} times`, callResult2, call2Count)
+}
+
 function checkWriteFunction() {
-    const s = SerializerBase.hold(createSerializer)
+    const s = Serializer.hold()
     s.writeFunction((value: number, flag: boolean) => flag ? value + 10 : value - 10)
     // TBD: id is small number
     const id = s.asArray()[0]
     s.release()
-    const args = SerializerBase.hold(createSerializer)
+    const args = Serializer.hold()
     args.writeNumber(20)
     args.writeBoolean(true)
     // TBD: callCallback() result should be 30
@@ -235,21 +302,18 @@ function checkButton() {
     let peer = ArkButtonPeer.create(ArkUINodeType.Button)
 
     checkResult("width", () => peer.widthAttribute("42%"),
-        "width({.type=1, .value=42.000000, .unit=3, .resource=0})")
+        "width({.type=1, .value=42, .unit=3, .resource=0})")
     checkResult("height", () => peer.heightAttribute({ id: 43, bundleName: "MyApp", moduleName: "MyApp" }),
-        "height({.type=2, .value=0.000000, .unit=1, .resource=43})")
+        "height({.type=2, .value=0, .unit=1, .resource=43})")
 
-    //Temporary disable the test as error id in {.kind="ErrorAny", .id=28942} is different from each invocation
-    /*
     checkResult("bindSheet", () =>
         peer.bindSheetAttribute(false, () => { }, {
             title: {
                 title: { id: 43, type: 2000, bundleName: "MyApp", moduleName: "MyApp", params: ["param1", "param2"] }
             }
         }),
-        `bindSheet({.tag=ARK_TAG_OBJECT, .value=false}, {.resource={.resourceId=0, .hold=0, .release=0}, .call=0}, {.tag=ARK_TAG_OBJECT, .value={.backgroundColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .onAppear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onDisappear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillAppear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillDisappear={.tag=ARK_TAG_UNDEFINED, .value={}}, .height={.tag=ARK_TAG_UNDEFINED, .value={}}, .dragBar={.tag=ARK_TAG_UNDEFINED, .value={}}, .maskColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .detents={.tag=ARK_TAG_UNDEFINED, .value={}}, .blurStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, .showClose={.tag=ARK_TAG_UNDEFINED, .value={}}, .preferType={.tag=ARK_TAG_UNDEFINED, .value={}}, .title={.tag=ARK_TAG_OBJECT, .value={.selector=0, .value0={.title={.selector=1, .value1={.bundleName={.chars="MyApp", .length=5}, .moduleName={.chars="MyApp", .length=5}, .id={.tag=102, .i32=43}, .params={.tag=ARK_TAG_OBJECT, .value={.array=allocArray<Ark_CustomObject, 2>({{{.kind="ErrorAny", .id=28942}, {.kind="ErrorAny", .id=28942}}}), .length=2}}, .type={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=2000}}}}, .subtitle={.tag=ARK_TAG_UNDEFINED, .value={}}}}}, .shouldDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillSpringBackWhenDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .enableOutsideInteractive={.tag=ARK_TAG_UNDEFINED, .value={}}, .width={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderWidth={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, .shadow={.tag=ARK_TAG_UNDEFINED, .value={}}, .onHeightDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .mode={.tag=ARK_TAG_UNDEFINED, .value={}}, .scrollSizeMode={.tag=ARK_TAG_UNDEFINED, .value={}}, .onDetentsDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWidthDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .onTypeDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .expandSafeAreaInEmbeddedMode={.tag=ARK_TAG_UNDEFINED, .value={}}, .uiContext={.tag=ARK_TAG_UNDEFINED, .value={}}, .keyboardAvoidMode={.tag=ARK_TAG_UNDEFINED, .value={}}}})`
+        `bindSheet({.selector=0, .value0=false}, {.resource={.resourceId=201, .hold=0, .release=0}, .call=0}, {.tag=ARK_TAG_OBJECT, .value={.backgroundColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .onAppear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onDisappear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillAppear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillDisappear={.tag=ARK_TAG_UNDEFINED, .value={}}, .height={.tag=ARK_TAG_UNDEFINED, .value={}}, .dragBar={.tag=ARK_TAG_UNDEFINED, .value={}}, .maskColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .detents={.tag=ARK_TAG_UNDEFINED, .value={}}, .blurStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, .showClose={.tag=ARK_TAG_UNDEFINED, .value={}}, .preferType={.tag=ARK_TAG_UNDEFINED, .value={}}, .title={.tag=ARK_TAG_OBJECT, .value={.selector=0, .value0={.title={.selector=1, .value1={.bundleName={.chars="MyApp", .length=5}, .moduleName={.chars="MyApp", .length=5}, .id={.tag=102, .i32=43}, .params={.tag=ARK_TAG_OBJECT, .value={.array=allocArray<Ark_String, 2>({{{.chars="param1", .length=6}, {.chars="param2", .length=6}}}), .length=2}}, .type={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=2000}}}}, .subtitle={.tag=ARK_TAG_UNDEFINED, .value={}}}}}, .shouldDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillSpringBackWhenDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .enableOutsideInteractive={.tag=ARK_TAG_UNDEFINED, .value={}}, .width={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderWidth={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, .shadow={.tag=ARK_TAG_UNDEFINED, .value={}}, .onHeightDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .mode={.tag=ARK_TAG_UNDEFINED, .value={}}, .scrollSizeMode={.tag=ARK_TAG_UNDEFINED, .value={}}, .onDetentsDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWidthDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .onTypeDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .uiContext={.tag=ARK_TAG_UNDEFINED, .value={}}, .keyboardAvoidMode={.tag=ARK_TAG_UNDEFINED, .value={}}, .enableHoverMode={.tag=ARK_TAG_UNDEFINED, .value={}}, .hoverModeArea={.tag=ARK_TAG_UNDEFINED, .value={}}}})`
     )
-    */
     checkResult("type", () => peer.typeAttribute(1), "type(Ark_ButtonType(1))")
     checkResult("labelStyle", () => peer.labelStyleAttribute({ maxLines: 3 }),
         "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=3}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})")
@@ -265,8 +329,13 @@ function checkCalendar() {
     startNativeTest(checkCalendar.name, CALL_GROUP_LOG)
 
     let peer = ArkCalendarPickerPeer.create(ArkUINodeType.CalendarPicker)
+    checkResult("setCalendarOptions: hintRadius", () => peer.setCalendarPickerOptionsAttribute({ hintRadius: 79 }),
+        `setCalendarPickerOptions({.tag=ARK_TAG_OBJECT, .value={.hintRadius={.tag=ARK_TAG_OBJECT, .value={.selector=0, .value0={.tag=102, .i32=79}}}, .selected={.tag=ARK_TAG_UNDEFINED, .value={}}}})`)
+    const date = new Date()
+    checkResult("setCalendarOptions: selected", () => peer.setCalendarPickerOptionsAttribute({ selected: date }),
+        `setCalendarPickerOptions({.tag=ARK_TAG_OBJECT, .value={.hintRadius={.tag=ARK_TAG_UNDEFINED, .value={}}, .selected={.tag=ARK_TAG_OBJECT, .value=${date.getTime()}}}})`)
     checkResult("edgeAlign1", () => peer.edgeAlignAttribute(2, { dx: 5, dy: 6 }),
-        `edgeAlign(Ark_CalendarAlign(2), {.tag=ARK_TAG_OBJECT, .value={.dx={.type=1, .value=5.000000, .unit=1, .resource=0}, .dy={.type=1, .value=6.000000, .unit=1, .resource=0}}})`)
+        `edgeAlign(Ark_CalendarAlign(2), {.tag=ARK_TAG_OBJECT, .value={.dx={.type=1, .value=5, .unit=1, .resource=0}, .dy={.type=1, .value=6, .unit=1, .resource=0}}})`)
     checkResult("edgeAlign2", () => peer.edgeAlignAttribute(2),
         `edgeAlign(Ark_CalendarAlign(2), {.tag=ARK_TAG_UNDEFINED, .value={}})`)
 
@@ -280,7 +349,7 @@ function checkFormComponent() {
     checkResult("size int", () => peer.sizeAttribute({ width: 5, height: 6 }),
         `size({.width={.tag=102, .i32=5}, .height={.tag=102, .i32=6}})`)
     checkResult("size float", () => peer.sizeAttribute({ width: 5.5, height: 6.789 }),
-        `size({.width={.tag=103, .f32=5.50}, .height={.tag=103, .f32=6.78}})`)
+        `size({.width={.tag=103, .f32=5.5}, .height={.tag=103, .f32=6.789}})`)
     checkResult("size zero", () => peer.sizeAttribute({ width: 0.0, height: 0.0 }),
         `size({.width={.tag=102, .i32=0}, .height={.tag=102, .i32=0}})`)
 
@@ -340,7 +409,7 @@ function checkOverloads() {
     )
     checkResult("Test string implementation for SideBarContainer.minSideBarWidth",
         () => component.minSideBarWidth("42%"),
-        `minSideBarWidth({.type=1, .value=42.000000, .unit=3, .resource=0})`
+        `minSideBarWidth({.type=1, .value=42, .unit=3, .resource=0})`
     )
 
     stopNativeTest(CALL_GROUP_LOG)
@@ -375,9 +444,10 @@ function checkTabContent() {
     assertEquals("BottomTabBarStyle id", "bottomId", bottomTabBarStyle._id)
     assertEquals("BottomTabBarStyle padding", 10, bottomTabBarStyle._padding)
 
-    checkResult("new SubTabBarStyle()",
+    checkResult("new BottomTabBarStyle()",
         () => peer.tabBar1Attribute(bottomTabBarStyle),
-        `tabBar({.selector=0, .value0={._content={.tag=ARK_TAG_UNDEFINED, .value={}}, ._indicator={.tag=ARK_TAG_UNDEFINED, .value={}}, ._selectedMode={.tag=ARK_TAG_UNDEFINED, .value={}}, ._board={.tag=ARK_TAG_UNDEFINED, .value={}}, ._labelStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, ._padding={.tag=ARK_TAG_OBJECT, .value={.top={.tag=ARK_TAG_UNDEFINED, .value={}}, .end={.tag=ARK_TAG_UNDEFINED, .value={}}, .bottom={.tag=ARK_TAG_UNDEFINED, .value={}}, .start={.tag=ARK_TAG_UNDEFINED, .value={}}}}, ._id={.tag=ARK_TAG_OBJECT, .value={.chars="bottomId", .length=8}}}})`)
+        `tabBar({.selector=0, .value0={._content={.tag=ARK_TAG_UNDEFINED, .value={}}, ._indicator={.tag=ARK_TAG_UNDEFINED, .value={}}, ._selectedMode={.tag=ARK_TAG_UNDEFINED, .value={}}, ._board={.tag=ARK_TAG_UNDEFINED, .value={}}, ._labelStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, ._padding={.tag=ARK_TAG_OBJECT, .value={.selector=0, .value0={.selector=1, .value1={.type=1, .value=10, .unit=1, .resource=0}}}}, ._id={.tag=ARK_TAG_OBJECT, .value={.chars="bottomId", .length=8}}}})`
+    )
 
     stopNativeTest(CALL_GROUP_LOG)
 }
@@ -389,9 +459,8 @@ function checkCanvasRenderingContext2D() {
 
     checkResult("new CanvasRenderingContext2D()",
         () => canvasRenderingContext2D = new CanvasRenderingContext2D(),
-        "new CanvasPath()[return (void*) 100]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]" +
-        "new CanvasRenderer()[return (void*) 100]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]" +
-        "new CanvasRenderingContext2D({.tag=ARK_TAG_UNDEFINED, .value={}})[return (void*) 100]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]")
+        `new CanvasPath()[return (CanvasPathPeer*) 100]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]new CanvasRenderer()[return (CanvasRendererPeer*) 100]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]new CanvasRenderingContext2D({.tag=ARK_TAG_UNDEFINED, .value={}})[return (CanvasRenderingContext2DPeer*) 100]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]`
+    )
 
     checkResult("CanvasRenderingContext2D width",
         () => canvasRenderingContext2D!.width,
@@ -408,28 +477,13 @@ function checkCanvasRenderingContext2D() {
         () => canvasRenderingContext2D!.peer!.close(),
         `dummyClassFinalizer(0x64)`)
 
+    const ctorPtr = BigInt(123)
+    const serializer = new Serializer()
+    serializer.writeCanvasRenderingContext2D(CanvasRenderingContext2D.construct(ctorPtr))
+    const deserializer = new Deserializer(serializer.asArray().buffer, serializer.length())
+    assertEquals("Deserializer readCanvasRenderingContext2D()", ctorPtr, deserializer.readCanvasRenderingContext2D().getPeer()!.ptr)
+
     stopNativeTest(CALL_GROUP_LOG)
-}
-
-function checkPerf1(count: number) {
-    let module = nativeModule()
-    let start = performance.now()
-    for (let i = 0; i < count; i++) {
-        module._TestPerfNumber(i)
-    }
-    let passed = performance.now() - start
-    console.log(`NUMBER: ${passed}ms for ${count} iteration, ${Math.round(passed / count * 1000000)}ms per 1M iterations`)
-
-    start = performance.now()
-    for (let i = 0; i < count; i++) {
-        let serializer = SerializerBase.hold(createSerializer)
-        serializer.writeNumber(0)
-        let data = serializer.asArray()
-        module._TestPerfNumberWithArray(data, data.length)
-        serializer.release()
-    }
-    passed = performance.now() - start
-    console.log(`ARRAY: ${passed}ms for ${Math.round(count)} iteration, ${Math.round(passed / count * 1000000)}ms per 1M iterations`)
 }
 
 function checkPerf2(count: number) {
@@ -458,7 +512,7 @@ function setEventsAPI() {
 
 function checkEvent_Primitive() {
     const BufferSize = 60 * 4
-    const serializer = SerializerBase.hold(createSerializer)
+    const serializer = Serializer.hold()
     serializer.writeInt32(1) //nodeId
     serializer.writeString("testString") //arg1
     serializer.writeNumber(22) //arg2
@@ -483,7 +537,7 @@ function checkEvent_Primitive() {
 
 function checkEvent_Interface_Optional() {
     const bufferSize = 60 * 4
-    const serializer = SerializerBase.hold(createSerializer)
+    const serializer = Serializer.hold()
     const eventStart = { index: 11, itemIndexInGroup: 1 }
     const eventEnd = { index: 22 }
     serializer.writeInt32(1) //nodeId
@@ -512,7 +566,7 @@ function checkEvent_Interface_Optional() {
 
 function checkEvent_Array_Class() {
     const bufferSize = 60 * 4
-    const serializer = SerializerBase.hold(createSerializer)
+    const serializer = Serializer.hold()
     const eventParam: TouchTestInfo[] = [
         {
             windowX: 10, windowY: 11, parentX: 12, parentY: 13, x: 14, y: 15, id: "one",
@@ -621,7 +675,22 @@ function checkNativeCallback() {
     stopNativeTest(CALL_GROUP_LOG)
 }
 
+function checkArrayBuffer() {
+    checkResult("ArrayBuffer", () => {
+        let buffer = new ArrayBuffer(256)
+        let view = new DataView(buffer)
+        view.setInt8(0, 42)
+        view.setInt8(100, 37)
+        nativeModule()._TestWithBuffer(buffer)
+    }, "42 37")
+}
+
 function main() {
+    // Place where mock of ACE is located.
+    process.env.ACE_LIBRARY_PATH = __dirname + "/../../../native"
+
+    // checkArrayBuffer()
+
     checkSerdeBaseLength()
     checkSerdeBaseText()
     checkSerdeBasePrimitive()
@@ -636,6 +705,7 @@ function main() {
 
     checkNodeAPI()
     checkCallback()
+    checkTwoSidesCallback()
     checkWriteFunction()
     checkButton()
     checkCalendar()

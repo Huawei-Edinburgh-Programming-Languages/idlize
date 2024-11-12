@@ -13,36 +13,27 @@
  * limitations under the License.
  */
 
-import { CustomPrintVisitor as DtsPrintVisitor} from "../../from-idl/DtsPrinter"
 import * as idl from "../../idl"
-import { tsCopyrightAndWarning } from "../FileGenerators"
+import { CustomPrintVisitor as DtsPrintVisitor} from "../../from-idl/DtsPrinter"
+import { isMaterialized } from "../idl/IdlPeerGeneratorVisitor"
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary"
-import { TargetFile } from "./TargetFile"
+import { IndentedPrinter } from "../../IndentedPrinter"
 
-export function printDeclarations(peerLibrary: IdlPeerLibrary): Map<TargetFile, string> {
-    const seen = new Set<string>()
-    const result = new Map<TargetFile, string>()
-    const extension = peerLibrary.language.extension
+export function printDeclarations(peerLibrary: IdlPeerLibrary): Array<string> {
+    const result = []
     for (const decl of peerLibrary.declarations) {
-        const filename = targetFile(decl, extension)
-        if (seen.has(filename)) continue
-        seen.add(filename)
-
-        const visitor = new DtsPrintVisitor(ref => resolveSyntheticType(ref, peerLibrary))
+        const visitor = new DtsPrintVisitor(type => peerLibrary.resolveTypeReference(type), peerLibrary.language)
+        if ((idl.isInterface(decl) || idl.isClass(decl)) && isMaterialized(decl)) continue
         visitor.visit(decl)
         const text = visitor.output.join("\n")
         if (text)
-            result.set(new TargetFile(filename), text)
+            result.push(text)
+    }
+    for (const decl of peerLibrary.componentsDeclarations) {
+        const iface = decl.interfaceDeclaration
+        if (iface) {
+            result.push(`declare const ${decl.name}: ${iface.name}`)
+        }
     }
     return result
-}
-
-function resolveSyntheticType(typeRef: idl.IDLReferenceType, peerLibrary: IdlPeerLibrary) {
-    const decl = peerLibrary.resolveTypeReference(typeRef)
-    return decl && idl.isSyntheticEntry(decl) ? decl : undefined
-}
-
-function targetFile(decl: idl.IDLEntry, extension: string): string {
-    const namespace = idl.getExtAttribute(decl, idl.IDLExtendedAttributes.Namespace)
-    return (namespace ? `${namespace}.` : "") + decl.name + extension
 }

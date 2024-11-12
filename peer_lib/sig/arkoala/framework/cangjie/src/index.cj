@@ -25,7 +25,7 @@ public func getNativeString(ptr: Int64): String {
     var data = ArrayList<UInt8>(Array<UInt8>(Int64(length), item: 0))
     data = NativeModule._StringData(ptr, data, length)
     var result = StringBuilder()
-    for (i in 0..length) { 
+    for (i in 0..length) {
         result.append(Rune(data[Int64(i)]))
     }
     return result.toString()
@@ -44,29 +44,6 @@ public func checkResult(name: String, test: () -> Unit, expected: String) {
     }
 }
 
-
-func checkPerf(count: Int64) {
-    var start = DateTime.now().nanosecond
-    for (i in 0..count) {
-        NativeModule._TestPerfNumber(Int32(i))
-    }
-    var passed = DateTime.now().nanosecond - start
-    println("NUMBER: ${Float64(passed) / 1000000.0}ms for ${count} iteration, ${round(Float64(passed) / Float64(count))}ms per 1M iterations")
-
-    start = DateTime.now().nanosecond
-    for (i in 0..count) {
-        var data = ArrayList<UInt8>()
-        data.append(1)
-        data.append(UInt8((i >> 0 ) & (0xff)))
-        data.append(UInt8((i >> 8 ) & (0xff)))
-        data.append(UInt8((i >> 16 ) & (0xff)))
-        data.append(UInt8((i >> 24 ) & (0xff)))
-        NativeModule._TestPerfNumberWithArray(data, Int32(data.size))
-    }
-    passed = DateTime.now().nanosecond - start
-    println("ARRAY: ${Float64(passed) / 1000000.0}ms for ${count} iteration, ${Int32(round(Float64(passed) / Float64(count)))}ms per 1M iterations")
-}
-
 func checkPerf2(count: Int64) {
     var peer = ArkBlankPeer.create(ArkUINodeType.Button, None<ComponentBase>, 0)
     var start = DateTime.now().nanosecond
@@ -75,8 +52,7 @@ func checkPerf2(count: Int64) {
             peer.backdropBlurAttribute(Float64(i), Option.None)
         }
         else {
-            let options: BlurOptions = BlurOptions()
-            options.grayscale = Tuple_Float64_Float64(1.0, 2.0)                
+            let options: BlurOptions = BlurOptions(Tuple_Float64_Float64(1.0, 2.0))
             peer.backdropBlurAttribute(Float64(i), options);
         }
     }
@@ -99,8 +75,7 @@ func peersTest(): Unit {
     println("CJ peer tests")
     // interface
     let buttonPeer = ArkButtonPeer.create(ArkUINodeType.Button, Option.None, 0)
-    let labelStyle = LabelStyle()
-    labelStyle.maxLines = 5.0
+    let labelStyle = LabelStyle(None<TextOverflow>, 5.0, None<Union_Float64_ResourceStr>, None<Union_Float64_ResourceStr>, None<TextHeightAdaptivePolicy>, None<Font>)
     checkResult("[Interface + Optional] ButtonPeer.labelStyle",
         { => buttonPeer.labelStyleAttribute(labelStyle) },
         "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=5}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})")
@@ -108,7 +83,6 @@ func peersTest(): Unit {
 
 
 main(): Unit {
-    checkPerf(5 * 1000 * 1000)
     checkPerf2(100)
     checkPerf3(100)
     peersTest()

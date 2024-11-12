@@ -14,17 +14,26 @@
  */
 
 import { IndentedPrinter } from "../../IndentedPrinter";
-import { LanguageWriter, Method, MethodModifier, MethodSignature } from "./LanguageWriter";
+import { LanguageWriter } from "./LanguageWriter";
 import { TSLanguageWriter } from "./writers/TsLanguageWriter";
 import { ETSLanguageWriter } from "./writers/ETSLanguageWriter";
 import { JavaLanguageWriter } from "./writers/JavaLanguageWriter";
 import { CppLanguageWriter } from "./writers/CppLanguageWriter";
 import { CJLanguageWriter } from "./writers/CJLanguageWriter";
 import { Language } from "../../Language";
+import { ReferenceResolver } from "../ReferenceResolver";
+
+import { CJIDLNodeToStringConvertor } from "./convertors/CJConvertors";
+import { TsIDLNodeToStringConverter } from "./convertors/TSConvertors";
+import { JavaIDLNodeToStringConvertor } from "./convertors/JavaConvertors";
+import { EtsIDLNodeToStringConvertor } from "./convertors/ETSConvertors";
+import { CppIDLNodeToStringConvertor } from "./convertors/CppConvertors";
+import { IdlNameConvertor } from "./nameConvertor";
 
 //////////////////////////////////////////////////////////////////
 // REEXPORTS
 
+export { generateTypeCheckerName, makeArrayTypeCheckCall } from './writers/ETSLanguageWriter'
 export {
     Field,
     FieldModifier,
@@ -32,25 +41,58 @@ export {
     MethodModifier,
     MethodSignature,
     ExpressionStatement,
-    NamedMethodSignature,
-    Type, BlockStatement,
-    BranchStatement,
-    LanguageExpression,
+    NamedMethodSignature, 
+    BlockStatement, 
+    BranchStatement, 
+    LanguageExpression, 
     FunctionCallExpression,
     LanguageStatement,
     LanguageWriter,
     StringExpression,
-    PrinterLike
+    PrinterLike,
+    printMethodDeclaration
 } from './LanguageWriter'
 export { CppLanguageWriter, TSLanguageWriter }
 
-export function createLanguageWriter(language: Language): LanguageWriter {
+export function createLanguageWriter(language: Language, resolver:ReferenceResolver): LanguageWriter {
     switch (language) {
-        case Language.TS: return new TSLanguageWriter(new IndentedPrinter())
-        case Language.ARKTS: return new ETSLanguageWriter(new IndentedPrinter())
-        case Language.JAVA: return new JavaLanguageWriter(new IndentedPrinter())
-        case Language.CPP: return new CppLanguageWriter(new IndentedPrinter())
-        case Language.CJ: return new CJLanguageWriter(new IndentedPrinter())
+        case Language.TS: return new TSLanguageWriter(new IndentedPrinter(), resolver, Language.TS)
+        case Language.ARKTS: return new ETSLanguageWriter(new IndentedPrinter(), resolver)
+        case Language.JAVA: return new JavaLanguageWriter(new IndentedPrinter(), resolver)
+        case Language.CPP: return new CppLanguageWriter(new IndentedPrinter(), resolver)
+        case Language.CJ: return new CJLanguageWriter(new IndentedPrinter(), resolver)
         default: throw new Error(`Language ${language.toString()} is not supported`)
     }
+}
+
+export const languageWritersUtils = {
+    isCppWriter(writer: LanguageWriter): writer is CppLanguageWriter {
+        return writer.language === Language.CPP
+    },
+    isJavaWriter(writer: LanguageWriter): writer is JavaLanguageWriter {
+        return writer.language === Language.JAVA
+    },
+    isCJWriter(writer: LanguageWriter): writer is CJLanguageWriter {
+        return writer.language === Language.CJ
+    },
+    isTsWriter(writer: LanguageWriter): writer is TSLanguageWriter {
+        return writer.language === Language.TS
+    },
+    isArkTsWriter(writer: LanguageWriter): writer is ETSLanguageWriter {
+        return writer.language === Language.ARKTS
+    }
+}
+
+export function createTypeNameConvertor(language: Language , library: ReferenceResolver): IdlNameConvertor {
+    if (language === Language.TS)
+        return new TsIDLNodeToStringConverter(library)
+    if (language === Language.JAVA)
+        return new JavaIDLNodeToStringConvertor(library)
+    if (language === Language.ARKTS)
+        return new EtsIDLNodeToStringConvertor(library)
+    if (language === Language.CJ)
+        return new CJIDLNodeToStringConvertor(library)
+    if (language === Language.CPP) 
+        return new CppIDLNodeToStringConvertor(library)
+    throw new Error(`Convertor from IDL to ${language} not implemented`)
 }

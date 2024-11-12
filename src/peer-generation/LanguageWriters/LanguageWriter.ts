@@ -13,58 +13,15 @@
  * limitations under the License.
  */
 
-import { IDLBooleanType, IDLContainerType, IDLNumberType, IDLParameter, IDLPrimitiveType, IDLStringType, IDLType, IDLUndefinedType, IDLUnionType, IDLVoidType, isContainerType, isPrimitiveType, isUnionType } from "../../idl"
+import * as idl from "../../idl"
 import { IndentedPrinter } from "../../IndentedPrinter"
 import { stringOrNone } from "../../util"
-import { EnumConvertor as EnumConvertorDTS, MapConvertor } from "../Convertors"
-import { ArgConvertor, RuntimeType } from "../ArgConvertors"
-import { FieldRecord } from "../DeclarationTable"
+import {ArgConvertor, BaseArgConvertor, RuntimeType} from "../ArgConvertors"
 import { EnumEntity } from "../PeerFile"
 import * as fs from "fs"
 import { Language } from "../../Language"
-import { EnumConvertor } from "../idl/IdlArgConvertors"
-
-////////////////////////////////////////////////////////////////
-//                           TYPE                             //
-////////////////////////////////////////////////////////////////
-
-export class Type {
-    constructor(public name: string, public nullable = false) {}
-    static Int32 = new Type('int32')
-    static Boolean = new Type('boolean')
-    static Number = new Type('number')
-    static Pointer = new Type('KPointer')
-    static This = new Type('this')
-    static Void = new Type('void')
-    static String = new Type('string')
-
-    private static PRIMITIVE_TYPES = new Set(
-        [Type.Boolean, Type.Int32, Type.Number, Type.Pointer, Type.Void, Type.String]
-            .map(it => it.name)
-    )
-
-    static fromName(name: string): Type {
-        if (this.PRIMITIVE_TYPES.has(name)) {
-            switch (name) {
-                case Type.Int32.name: return Type.Int32
-                case Type.Boolean.name: return Type.Boolean
-                case Type.Number.name: return Type.Number
-                case Type.Pointer.name: return Type.Pointer
-                case Type.Void.name: return Type.Void
-                case Type.String.name: return Type.String
-            }
-        }
-        return new Type(name)
-    }
-
-    toString(): string {
-        return `${this.name}${this.nullable ? "?" : ""}`
-    }
-
-    isPrimitive(): boolean {
-        return Type.PRIMITIVE_TYPES.has(this.name)
-    }
-}
+import { EnumConvertor } from "../ArgConvertors"
+import { ReferenceResolver } from "../ReferenceResolver"
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -132,7 +89,7 @@ export class MethodCallExpression extends FunctionCallExpression {
 export class CheckDefinedExpression implements LanguageExpression {
     constructor(private value: string) { }
     asString(): string {
-        return `${this.value} != "undefined"`
+        return `${this.value} != undefined`
     }
 }
 
@@ -154,13 +111,19 @@ export class ProxyStatement implements LanguageStatement {
 
 export class AssignStatement implements LanguageStatement {
     constructor(public variableName: string,
-                public type: Type | undefined,
+                public type: idl.IDLType | undefined,
                 public expression: LanguageExpression | undefined,
                 public isDeclared: boolean = true,
-                protected isConst: boolean = true) { }
+                protected isConst: boolean = true,
+                protected options?: MakeAssignOptions) {}
     write(writer: LanguageWriter): void {
         if (this.isDeclared) {
-            const typeSpec = this.type ? `: ${writer.mapType(this.type)}${this.type.nullable ? "|undefined" : ""}` : ""
+            const typeSpec =
+                this.options?.overrideTypeName
+                    ? `: ${this.options.overrideTypeName}`
+                    : this.type
+                        ? `: ${writer.stringifyType(this.type)}${/*SHOULD BE REMOVED*/idl.isOptionalType(this.type) ? "|undefined" : ""}`
+                        : ""
             const initValue = this.expression ? `= ${this.expression.asString()}` : ""
             const constSpec = this.isConst ? "const" : "let"
             writer.print(`${constSpec} ${this.variableName}${typeSpec} ${initValue}`)
@@ -176,20 +139,6 @@ export class ExpressionStatement implements LanguageStatement {
         const text = this.expression.asString()
         if (text.length > 0) {
             writer.print(`${this.expression.asString()};`)
-        }
-    }
-}
-
-export class DeclareStatement implements LanguageStatement {
-    constructor(public variableName: string,
-                public type: Type,
-                public expression: LanguageExpression | undefined = undefined) { }
-    write(writer: LanguageWriter): void {
-        const type = this.type ? `: ${this.type.name}` : ""
-        if (this.expression) {
-            writer.print(`const ${this.variableName}${type} = ${this.expression.asString()}`)
-        } else {
-            writer.print(`let ${this.variableName}${type}`)
         }
     }
 }
@@ -217,22 +166,18 @@ export class IfStatement implements LanguageStatement {
         public insideElseOp: (() => void) | undefined
     ) { }
     write(writer: LanguageWriter): void {
-        writer.print(`if (${this.condition.asString()}) {`)
+        writer.print(`if (${this.condition.asString()})`)
         writer.pushIndent()
         this.thenStatement.write(writer)
         if (this.insideIfOp) { this.insideIfOp!() }
         writer.popIndent()
         if (this.elseStatement !== undefined) {
-            writer.print("} else {")
+            writer.print("else")
             writer.pushIndent()
             this.elseStatement.write(writer)
             if (this.insideElseOp) { this.insideElseOp!() }
             writer.popIndent()
-            writer.print("}")
-        } else {
-            writer.print("}")
         }
-
     }
 }
 
@@ -265,6 +210,20 @@ export class MultiBranchIfStatement implements LanguageStatement {
     }
 }
 
+export class CheckOptionalStatement implements LanguageStatement {
+    constructor(
+        public undefinedValue: string,
+        public optionalExpression: LanguageExpression,
+        public doStatement: LanguageStatement
+    ) { }
+    write(writer: LanguageWriter): void {
+        writer.print(`if (${this.optionalExpression.asString()} != ${this.undefinedValue})`)
+        writer.pushIndent()
+        this.doStatement.write(writer)
+        writer.popIndent()
+    }
+}
+
 // maybe rename or move of fix
 export class TsEnumEntityStatement implements LanguageStatement {
     constructor(private readonly enumEntity: EnumEntity, private readonly isExport: boolean) {}
@@ -290,6 +249,33 @@ export class ReturnStatement implements LanguageStatement {
         writer.print(this.expression ? `return ${this.expression.asString()}` : "return")
     }
 }
+
+export abstract class LambdaExpression implements LanguageExpression {
+    constructor(
+        private originalWriter: LanguageWriter,
+        protected signature: MethodSignature,
+        private resolver: ReferenceResolver,
+        private body?: LanguageStatement[]) { }
+
+    protected abstract get statementHasSemicolon(): boolean
+    abstract asString(): string
+
+    bodyAsString(): string {
+        const writer = this.originalWriter.fork()
+        if (this.body) {
+            for (const stmt of this.body) {
+                stmt.write(writer)
+            }
+        }
+
+        return writer.printer.getOutput()
+            .map(line => line.trim())
+            .filter(line => line !== "")
+            .map(line => line === "{" || line === "}" || this.statementHasSemicolon ? line : `${line};`)
+            .join(" ")
+    }
+}
+
 
 ////////////////////////////////////////////////////////////////
 //                         SIGNATURES                         //
@@ -320,7 +306,7 @@ export enum MethodModifier {
 export class Field {
     constructor(
         public name: string,
-        public type: Type,
+        public type: idl.IDLType,
         public modifiers: FieldModifier[] = []
     ) {}
 }
@@ -334,8 +320,26 @@ export class Method {
     ) {}
 }
 
+export class MethodArgPrintHint {
+    private constructor(
+        public hint: string
+    ) {}
+
+    static AsPointer = new MethodArgPrintHint('AsPointer')
+    static AsConstPointer = new MethodArgPrintHint('AsConstPointer')
+    static AsValue = new MethodArgPrintHint('AsValue')
+    static AsConstReference = new MethodArgPrintHint('AsConstReference')
+}
+
+type MethodArgPrintHintOrNone = MethodArgPrintHint | undefined
+
 export class MethodSignature {
-    constructor(public returnType: Type, public args: Type[], public defaults: stringOrNone[]|undefined = undefined) {}
+    constructor(
+        public returnType: idl.IDLType,
+        public args: idl.IDLType[],
+        public defaults: stringOrNone[]|undefined = undefined,
+        public printHints?: MethodArgPrintHintOrNone[]
+    ) {}
 
     argName(index: number): string {
         return `arg${index}`
@@ -343,19 +347,31 @@ export class MethodSignature {
     argDefault(index: number): string|undefined {
         return this.defaults?.[index]
     }
+    retHint(): MethodArgPrintHint | undefined {
+        return this.printHints?.[0]
+    }
+    argHint(index: number): MethodArgPrintHint | undefined {
+        return this.printHints?.[index + 1]
+    }
 
     toString(): string {
-        return `${this.args.map(it => it.name)} => ${this.returnType}`
+        return `${this.args.map(it => idl.forceAsNamedNode(it).name)} => ${this.returnType}`
     }
 }
 
 export class NamedMethodSignature extends MethodSignature {
-    constructor(returnType: Type, args: Type[] = [], public argsNames: string[] = [], defaults: stringOrNone[]|undefined = undefined) {
-        super(returnType, args, defaults)
+    constructor(
+        returnType: idl.IDLType,
+        args: idl.IDLType[] = [],
+        public argsNames: string[] = [],
+        defaults: stringOrNone[]|undefined = undefined,
+        printHints?: MethodArgPrintHintOrNone[]
+    ) {
+        super(returnType, args, defaults, printHints)
     }
 
-    static make(returnType: string, args: {name: string, type: string}[]): NamedMethodSignature {
-        return new NamedMethodSignature(new Type(returnType), args.map(it => new Type(it.type)), args.map(it => it.name))
+    static make(returnType: idl.IDLType, args: {name: string, type: idl.IDLType}[]): NamedMethodSignature {
+        return new NamedMethodSignature(returnType, args.map(it => it.type), args.map(it => it.name))
     }
 
     argName(index: number): string {
@@ -376,7 +392,11 @@ export interface PrinterLike {
 ////////////////////////////////////////////////////////////////
 
 export abstract class LanguageWriter {
-    constructor(public printer: IndentedPrinter, public language: Language) {}
+    constructor(
+        public printer: IndentedPrinter,
+        protected resolver: ReferenceResolver,
+        public language: Language,
+    ) {}
 
     nativeModuleAccessor = 'nativeModule'
 
@@ -387,35 +407,44 @@ export abstract class LanguageWriter {
     abstract writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string, interfaces?: string[], generics?: string[], isDeclared?: boolean): void
     abstract writeEnum(name: string, members: { name: string, stringId: string | undefined, numberId: number }[], op: (writer: LanguageWriter) => void): void
     abstract writeInterface(name: string, op: (writer: LanguageWriter) => void, superInterfaces?: string[], isDeclared?: boolean): void
-    abstract writeFieldDeclaration(name: string, type: Type, modifiers: FieldModifier[]|undefined, optional: boolean, initExpr?: LanguageExpression): void
+    abstract writeFieldDeclaration(name: string, type: idl.IDLType, modifiers: FieldModifier[]|undefined, optional: boolean, initExpr?: LanguageExpression): void
+    abstract writeFunctionDeclaration(name: string, signature: MethodSignature): void
+    abstract writeFunctionImplementation(name: string, signature: MethodSignature, op: (writer: LanguageWriter) => void): void
     abstract writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void
     abstract writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method, modifiers?: MethodModifier[]): void
     abstract writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void): void
-    abstract makeAssign(variableName: string, type: Type | undefined, expr: LanguageExpression | undefined, isDeclared: boolean, isConst?: boolean): LanguageStatement;
+    abstract writeProperty(propName: string, propType: idl.IDLType, mutable?: boolean, getterLambda?: (writer: LanguageWriter) => void, setterLambda?: (writer: LanguageWriter) => void): void
+    abstract makeAssign(variableName: string, type: idl.IDLType | undefined, expr: LanguageExpression | undefined, isDeclared: boolean, isConst?: boolean, options?:MakeAssignOptions): LanguageStatement;
     abstract makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression;
     abstract makeThrowError(message: string): LanguageStatement;
     abstract makeReturn(expr?: LanguageExpression): LanguageStatement;
+    abstract makeCheckOptional(optional: LanguageExpression, doStatement: LanguageStatement): LanguageStatement;
     abstract makeRuntimeType(rt: RuntimeType): LanguageExpression
     abstract getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string
-    abstract makeCast(value: LanguageExpression, type: Type): LanguageExpression
-    abstract makeCast(value: LanguageExpression, type: Type, unsafe: boolean): LanguageExpression
+    abstract makeCast(value: LanguageExpression, type: idl.IDLType, options?:MakeCastOptions): LanguageExpression
     abstract writePrintLog(message: string): void
     abstract makeUndefined(): LanguageExpression
-    abstract makeMapKeyTypeName(c: MapConvertor): string
-    abstract makeMapValueTypeName(c: MapConvertor): string
+    makeUnwrapOptional(expression: LanguageExpression): LanguageExpression {
+        return expression
+    }
+    abstract makeArrayInit(type: idl.IDLContainerType): LanguageExpression
+    abstract makeClassInit(type: idl.IDLType, paramenters: LanguageExpression[]): LanguageExpression
+    abstract makeMapInit(type: idl.IDLType): LanguageExpression
     abstract makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement
     abstract makeLoop(counter: string, limit: string): LanguageStatement
     abstract makeLoop(counter: string, limit: string, statement: LanguageStatement): LanguageStatement
     abstract makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement
-    abstract getTagType(): Type
-    abstract getRuntimeType(): Type
+    // No need for these two.
+    abstract getTagType(): idl.IDLType
+    abstract getRuntimeType(): idl.IDLType
     abstract makeTupleAssign(receiver: string, tupleFields: string[]): LanguageStatement
     abstract get supportedModifiers(): MethodModifier[]
     abstract get supportedFieldModifiers(): FieldModifier[]
-    abstract enumFromOrdinal(value: LanguageExpression, enumType: string): LanguageExpression
-    abstract ordinalFromEnum(value: LanguageExpression, enumType: string): LanguageExpression
-    abstract makeCastEnumToInt(convertor: EnumConvertorDTS, enumName: string, unsafe?: boolean): string // TODO: remove after switching to IDL
+    abstract enumFromOrdinal(value: LanguageExpression, enumEntry: idl.IDLEnum): LanguageExpression
+    abstract ordinalFromEnum(value: LanguageExpression, enumEntry: idl.IDLEnum): LanguageExpression
     abstract makeEnumCast(enumName: string, unsafe: boolean, convertor: EnumConvertor | undefined): string
+    abstract stringifyType(type: idl.IDLType | idl.IDLCallback): string
+    abstract fork(): LanguageWriter
 
     concat(other: PrinterLike): this {
         other.getOutput().forEach(it => this.print(it))
@@ -443,16 +472,22 @@ export abstract class LanguageWriter {
         //this.printer.print(stmt.asString())
         stmt.write(this)
     }
+    writeExpressionStatement(smth: LanguageExpression) {
+        this.writeStatement(new ExpressionStatement(smth))
+    }
     makeTag(tag: string): string {
         return "Tag." + tag
     }
-    makeRef(varName: string): string {
-        return varName
+    makeRef(type: idl.IDLType | string, _options?:MakeRefOptions): idl.IDLType {
+        if (typeof type === 'string') {
+            return idl.createReferenceType(type)
+        }
+        return type
     }
     makeThis(): LanguageExpression {
         return new StringExpression("this")
     }
-    makeNull(): LanguageExpression {
+    makeNull(value?: string): LanguageExpression {
         return new StringExpression("null")
     }
     makeVoid(): LanguageExpression {
@@ -513,8 +548,8 @@ export abstract class LanguageWriter {
     makeUnionVariantCondition(_convertor: ArgConvertor, _valueName: string, valueType: string, type: string, index?: number): LanguageExpression {
         return this.makeString(`RuntimeType.${type.toUpperCase()} == ${valueType}`)
     }
-    makeUnionVariantCast(value: string, type: Type, convertor: ArgConvertor, index?: number): LanguageExpression {
-        return this.makeString(`unsafeCast<${type.name}>(${value})`)
+    makeUnionVariantCast(value: string, type: string, convertor: ArgConvertor, index?: number): LanguageExpression {
+        return this.makeString(`unsafeCast<${type}>(${value})`)
     }
     makeUnionTypeDefaultInitializer() {
         return this.makeRuntimeType(RuntimeType.UNDEFINED)
@@ -522,19 +557,16 @@ export abstract class LanguageWriter {
     makeRuntimeTypeGetterCall(value: string): LanguageExpression {
         return this.makeFunctionCall("runtimeType", [ this.makeString(value) ])
     }
-    makeArrayResize(array: string, typeName: string, length: string, deserializer: string): LanguageStatement {
-        return new ExpressionStatement(this.makeString(`${array} = [] as ${typeName}`))
+    makeArrayResize(array: string, length: string, deserializer: string): LanguageStatement {
+        return new ExpressionStatement(new StringExpression(""))
     }
-    makeMapResize(mapTypeName: string, keyType: string, valueType: string, map: string, size: string, deserializer: string): LanguageStatement {
+    makeMapResize(mapTypeName: string, keyType: idl.IDLType, valueType: idl.IDLType, map: string, size: string, deserializer: string): LanguageStatement {
         return new ExpressionStatement(new StringExpression("// TODO: TS map resize"))
     }
     makeMapSize(map: string): LanguageExpression {
         return this.makeString(`${map}.size`)
     }
     makeTupleAlloc(option: string): LanguageStatement {
-        return new ExpressionStatement(new StringExpression(""))
-    }
-    makeObjectAlloc(object: string, fields: readonly FieldRecord[]): LanguageStatement {
         return new ExpressionStatement(new StringExpression(""))
     }
     makeSetUnionSelector(value: string, index: string): LanguageStatement {
@@ -572,52 +604,24 @@ export abstract class LanguageWriter {
     getOutput(): string[] {
         return this.printer.getOutput()
     }
-    // TODO: remove it!
-    mapType(type: Type, convertor?: ArgConvertor): string {
-        return type.name
+    makeSignature(returnType: idl.IDLType, parameters: idl.IDLParameter[]): MethodSignature {
+        return new MethodSignature(returnType,
+            parameters.map(it => it.type!))
     }
-    mapIDLPrimitiveType(type: IDLPrimitiveType): string {
-        switch (type) {
-            case IDLNumberType: return this.mapType(Type.Int32)
-            case IDLBooleanType: return this.mapType(Type.Boolean)
-            case IDLVoidType: return this.mapType(Type.Void)
-            case IDLStringType: return this.mapType(Type.String)
-            case IDLUndefinedType: return this.mapType(Type.Void)
-            default: throw new Error(`Unmapped IDL type: ${type.name}`)
-        }
-    }
-    mapIDLContainerType(type:IDLContainerType, args:string[]): string {
-        return `${type.name}_${args.join('_')}`
-    }
-    mapIDLUnionType(_:IDLUnionType, args:string[]): string {
-        return `${args.join(' | ')}`
-    }
-    mapIDLType(type: IDLType): string {
-        if (isPrimitiveType(type)) {
-            return this.mapIDLPrimitiveType(type)
-        }
-        if (isContainerType(type)) {
-            const args = type.elementType.map(it => this.mapIDLType(it))
-            return this.mapIDLContainerType(type, args)
-        }
-        if (isUnionType(type)) {
-            const args = type.types.map(it => this.mapIDLType(it))
-            return this.mapIDLUnionType(type, args)
-        }
-        return this.mapType(new Type(type.name))
-    }
-    makeSignature(returnType: IDLType, parameters: IDLParameter[]): MethodSignature {
-        return new MethodSignature(Type.fromName(this.mapIDLType(returnType)),
-            parameters.map(it => Type.fromName(this.mapIDLType(it.type!))))
-    }
-    makeNamedSignature(returnType: IDLType, parameters: IDLParameter[]): NamedMethodSignature {
+    makeNamedSignature(returnType: idl.IDLType, parameters: idl.IDLParameter[]): NamedMethodSignature {
         return NamedMethodSignature.make(
-            this.mapIDLType(returnType),
-            parameters.map(it => ({ name: it.name, type: this.mapIDLType(it.type!) }))
+            returnType,
+            parameters.map(it => ({
+                name: it.name,
+                type:  it.isOptional ? idl.createOptionalType(it.type!) : it.type!
+            }))
         )
     }
-    makeNativeMethodNamedSignature(returnType: IDLType, parameters: IDLParameter[]): NamedMethodSignature {
+    makeNativeMethodNamedSignature(returnType: idl.IDLType, parameters: idl.IDLParameter[]): NamedMethodSignature {
         return this.makeNamedSignature(returnType, parameters)
+    }
+    makeSerializerConstructorSignature(): NamedMethodSignature | undefined {
+        return undefined
     }
     mapFieldModifier(modifier: FieldModifier): string {
         return `${FieldModifier[modifier].toLowerCase()}`
@@ -625,25 +629,16 @@ export abstract class LanguageWriter {
     mapMethodModifier(modifier: MethodModifier): string {
         return `${MethodModifier[modifier].toLowerCase()}`
     }
-    makeObjectDeclare(name: string, type: Type | undefined, fields: readonly FieldRecord[]): LanguageStatement {
-        return this.makeAssign(name, type, this.makeString("{}"), true, false)
-    }
-    makeType(typeName: string, nullable: boolean, receiver?: string): Type {
-        return new Type(typeName, nullable)
-    }
-    makeUnsafeCast(_convertor: ArgConvertor | undefined, param: string): string {
+    makeUnsafeCast(convertor: ArgConvertor, param: string): string {
         return `unsafeCast<int32>(${param})`
     }
     runtimeType(param: ArgConvertor, valueType: string, value: string) {
-        this.writeStatement(this.makeAssign(valueType, Type.Int32,
+        this.writeStatement(this.makeAssign(valueType, idl.IDLI32Type,
             this.makeFunctionCall("runtimeType", [this.makeString(value)]), false))
     }
-    makeDiscriminatorFromFields(convertor: {targetType: (writer: LanguageWriter) => Type}, value: string, accessors: string[]): LanguageExpression {
+    makeDiscriminatorFromFields(convertor: {targetType: (writer: LanguageWriter) => string}, value: string, accessors: string[], duplicates: Set<string>): LanguageExpression {
         return this.makeString(`(${this.makeNaryOp("||",
             accessors.map(it => this.makeString(`${value}!.hasOwnProperty("${it}")`))).asString()})`)
-    }
-    makeSerializerCreator() {
-        return this.makeString('createSerializer');
     }
     makeCallIsResource(value: string): LanguageExpression {
         return this.makeString(`isResource(${value})`)
@@ -663,9 +658,6 @@ export abstract class LanguageWriter {
     }
     escapeKeyword(keyword: string): string {
         return keyword
-    }
-    compareLiteral(expr: LanguageExpression, literal: string): LanguageExpression {
-        return this.makeEquals([expr, this.makeString(`"${literal}"`)])
     }
     makeCastCustomObject(customName: string, _isGenericType: boolean): LanguageExpression {
         return this.makeString(customName)
@@ -688,19 +680,13 @@ export abstract class LanguageWriter {
             ...exprs
         ])
     }
-    arrayDiscriminatorFromTypeOrExpressions(value: string,
-                                 checkedType: string,
-                                 runtimeType: RuntimeType,
-                                 exprs: LanguageExpression[]): LanguageExpression {
-        return this.discriminatorFromExpressions(value, runtimeType, exprs)
-    }
-    makeDiscriminatorConvertor(convertor: EnumConvertorDTS | EnumConvertor, value: string, index: number): LanguageExpression {
+    makeDiscriminatorConvertor(convertor: EnumConvertor, value: string, index: number): LanguageExpression {
         const ordinal = convertor.isStringEnum
             ? this.ordinalFromEnum(
                 this.makeString(this.getObjectAccessor(convertor, value)),
-                convertor.enumTypeName(this.language)
+                convertor.enumEntry
             )
-            : this.makeUnionVariantCast(this.getObjectAccessor(convertor, value), Type.Number, convertor, index)
+            : this.makeUnionVariantCast(this.getObjectAccessor(convertor, value), this.stringifyType(idl.IDLI32Type), convertor, index)
         const {low, high} = convertor.extremumOfOrdinals()
         return this.discriminatorFromExpressions(value, convertor.runtimeTypes[0], [
             this.makeNaryOp(">=", [ordinal, this.makeString(low!.toString())]),
@@ -708,7 +694,7 @@ export abstract class LanguageWriter {
         ])
     }
     makeNot(expr: LanguageExpression): LanguageExpression {
-        return this.makeString(`!${expr.asString()}`)
+        return this.makeString(`!(${expr.asString()})`)
     }
     makeEquals(args: LanguageExpression[]): LanguageExpression {
         return this.makeNaryOp("===", args)
@@ -720,6 +706,9 @@ export abstract class LanguageWriter {
     }
     makeCallIsArrayBuffer(value: string): LanguageExpression {
         return this.makeString(`${value} instanceof ArrayBuffer`)
+    }
+    instanceOf(convertor: BaseArgConvertor, value: string, _duplicateMembers?: Set<string>): LanguageExpression {
+        return this.makeString(`${value} instanceof ${this.stringifyType(convertor.idlType)}`)
     }
 }
 
@@ -746,7 +735,7 @@ export function copyMethod(method: Method, overrides: {
     signature?: MethodSignature,
     modifiers?: MethodModifier[],
     generics?: string[],
- }) {
+}) {
     return new Method(
         overrides.name ?? method.name,
         overrides.signature ?? method.signature,
@@ -754,3 +743,23 @@ export function copyMethod(method: Method, overrides: {
         overrides.generics ?? method.generics,
     )
 }
+
+export type MakeCastOptions = {
+    unsafe?: boolean
+    optional?: boolean
+    receiver?: string
+    toRef?: boolean
+    overrideTypeName?: string
+}
+
+export type MakeRefOptions = {
+    receiver?: string
+}
+
+export type MakeAssignOptions = {
+    receiver?: string,
+    assignRef?: boolean
+    overrideTypeName?: string
+}
+
+/////////////////////////////////////////////////////////////////////////////////

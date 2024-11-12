@@ -1,0 +1,21 @@
+package "org.openharmony.idlize.predefined";
+
+interface Interop {
+    pointer GetGroupedLog(i32 index);
+    void StartGroupedLog(i32 index);
+    void StopGroupedLog(i32 index);
+    void AppendGroupedLog(i32 index, String message);
+    pointer GetStringFinalizer();
+    void InvokeFinalizer(pointer ptr1, pointer ptr2);
+    pointer GetPtrVectorElement(pointer ptr1, i32 arg);
+    pointer GetNodeFinalizer();
+    i32 StringLength(pointer ptr1);
+    void StringData(pointer ptr1, sequence<u8> arr, i32 i);
+    pointer StringMake(String str1);
+    i32 GetPtrVectorSize(pointer ptr1);
+    i32 ManagedStringWrite(String str1, sequence<u8> arr, i32 arg);
+    void NativeLog(String str1);
+    void StartPerf(String str1);
+    void EndPerf(String str1);
+    pointer DumpPerf(i32 arg);
+};

@@ -1,13 +1,29 @@
-import * as idl from "../../idl"
+import * as idl from '../../idl'
 import { ImportFeature, ImportsCollector } from "../ImportsCollector";
-import { createLanguageWriter, LanguageExpression, LanguageWriter, Method, MethodModifier, NamedMethodSignature, StringExpression, Type } from "../LanguageWriters";
+import {
+    createLanguageWriter,
+    generateTypeCheckerName,
+    LanguageExpression,
+    LanguageWriter,
+    Method,
+    MethodModifier,
+    NamedMethodSignature
+} from "../LanguageWriters";
 import { throwException } from "../../util";
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
-import { convertDeclToFeature } from "../idl/IdlPeerGeneratorVisitor";
+import {
+    convertDeclToFeature, createDeclDependenciesCollector,
+    createTypeDependenciesCollector,
+    isBuilderClass,
+    isMaterialized,
+} from "../idl/IdlPeerGeneratorVisitor";
 import { getSyntheticDeclarationList } from "../idl/IdlSyntheticDeclarations";
-import { convertDeclaration } from "../idl/IdlTypeConvertor";
 import { DeclarationNameConvertor } from "../idl/IdlNameConvertor";
 import { Language } from "../../Language";
+import {IDLBooleanType, toIDLType} from "../../idl";
+import { getReferenceResolver } from '../ReferenceResolver';
+import { convertDeclaration } from '../LanguageWriters/nameConvertor';
+import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 
 const builtInInterfaceTypes = new Map<string,
     (writer: LanguageWriter, value: string) => LanguageExpression>([
@@ -31,43 +47,6 @@ export function makeEnumTypeCheckerCall(valueAccessor: string, enumName: string,
     )
 }
 
-export function makeInterfaceTypeCheckerCall(
-    valueAccessor: string,
-    interfaceName: string,
-    allFields: string[],
-    duplicates: Set<string>,
-    writer: LanguageWriter,
-): LanguageExpression {
-    if (builtInInterfaceTypes.has(interfaceName)) {
-        return builtInInterfaceTypes.get(interfaceName)!(writer, valueAccessor)
-    }
-    return writer.makeMethodCall(
-        "TypeChecker",
-        generateTypeCheckerName(interfaceName), [writer.makeString(valueAccessor),
-        ...allFields.map(it => {
-            return writer.makeString(duplicates.has(it) ? "true" : "false")
-        })
-    ])
-}
-
-export function makeArrayTypeCheckCall(
-    valueAccessor: string,
-    checkedType: string,
-    writer: LanguageWriter,
-) {
-    return writer.makeMethodCall(
-        "TypeChecker",
-        generateTypeCheckerName(checkedType),
-        // isBrackets ? generateTypeCheckerNameBracketsArray(typeName) : generateTypeCheckerNameArray(typeName),
-        [writer.makeString(valueAccessor)
-    ])
-}
-
-function generateTypeCheckerName(typeName: string): string {
-    typeName = typeName.replaceAll('[]', 'BracketsArray')
-    return `is${typeName.replaceAll('[]', 'Brackets')}`
-}
-
 class FieldRecord {
     constructor(public type: idl.IDLType, public name: string, public optional: boolean = false) { }
 }
@@ -89,7 +68,7 @@ class StructDescriptor {
 function collectFields(library: IdlPeerLibrary, target: idl.IDLInterface, struct: StructDescriptor): void {
     const superType = idl.getSuperType(target)
     if (superType && idl.isReferenceType(superType)) {
-        const decl = library.resolveTypeReference(superType) ?? throwException(`Wrong type reference ${superType.name}`)
+        const decl = library.resolveTypeReference(superType) ?? throwException(`Wrong type reference ${idl.IDLKind[superType.kind]}`)
         if ((idl.isInterface(decl) || idl.isClass(decl) || idl.isAnonymousInterface(decl))) {
             collectFields(library, decl, struct)
         }
@@ -100,9 +79,14 @@ function collectFields(library: IdlPeerLibrary, target: idl.IDLInterface, struct
     })
 }
 
-function makeStructDescriptor(library: IdlPeerLibrary, target: idl.IDLInterface): StructDescriptor {
+function makeStructDescriptor(library: IdlPeerLibrary, target: idl.IDLEntry): StructDescriptor {
     const result = new StructDescriptor()
-    collectFields(library, target, result)
+    if (idl.isInterface(target)
+        || idl.isAnonymousInterface(target)
+        || idl.isSyntheticEntry(target)
+        || idl.isClass(target)) {
+        collectFields(library, target as idl.IDLInterface, result)
+    }
     return result
 }
 
@@ -114,6 +98,8 @@ abstract class TypeCheckerPrinter {
 
     protected writeImports(features: ImportFeature[]): void {
         const imports = new ImportsCollector()
+        imports.addFeature('KBoolean', '@koalaui/interop')
+        imports.addFeature('KStringPtr', '@koalaui/interop')
         for (const feature of features) {
             imports.addFeature(feature.feature, feature.module)
         }
@@ -128,11 +114,30 @@ abstract class TypeCheckerPrinter {
     print() {
         const importFeatures: ImportFeature[] = []
         const interfaces: { name: string, descriptor: StructDescriptor }[] = []
+        const seenNames = new Set<string>()
+        const declDependenciesCollector
+            = createDeclDependenciesCollector(this.library, createTypeDependenciesCollector(this.library))
 
         for (const file of this.library.files) {
-            for (const decl of file.declarations) {
-                if (idl.isInterface(decl) || idl.isAnonymousInterface(decl)) {
-                    importFeatures.push(convertDeclToFeature(this.library, decl))
+            const declarations: idl.IDLEntry[] = [...Array.from(file.declarations), ...file.enums]
+            // Collects materialized and builder classes
+            for (const decl of file.entries) {
+                if ((idl.isClass(decl) || idl.isInterface(decl)) && (isMaterialized(decl) || isBuilderClass(decl))) {
+                    declarations.push(decl,
+                        ...declDependenciesCollector.convert(decl)
+                        .filter((it): it is idl.IDLEntry => idl.isEntry(it))
+                        .map(it => it)
+                    )
+                }
+            }
+            for (const decl of declarations
+                .filter(it => !PeerGeneratorConfig.ignoreEntry(it.name, this.writer.language))) {
+                if ((idl.isInterface(decl) || idl.isAnonymousInterface(decl) || idl.isEnum(decl) || idl.isClass(decl))
+                    && !seenNames.has(decl.name)) {
+                    seenNames.add(decl.name)
+                    if (!builtInInterfaceTypes.has(decl.name)) {
+                        importFeatures.push(convertDeclToFeature(this.library, decl))
+                    }
                     interfaces.push({
                         name: convertDeclaration(DeclarationNameConvertor.I, decl),
                         descriptor: makeStructDescriptor(this.library, decl)
@@ -161,7 +166,8 @@ abstract class TypeCheckerPrinter {
             for (const struct of interfaces)
                 this.writeInterfaceChecker(struct.name, struct.descriptor)
 
-            const arrayTypes = Array.from(this.library.seenArrayTypes).sort((a, b) => a[0].localeCompare(b[0]))
+            const arrayTypes = Array.from(this.library.seenArrayTypes)
+                .sort((a, b) => a[0].localeCompare(b[0]))
             const processed: Set<string> = new Set()
             for (const [alias, type] of arrayTypes) {
                 if (processed.has(alias)) {
@@ -178,15 +184,15 @@ class ARKTSTypeCheckerPrinter extends TypeCheckerPrinter {
     constructor(
         library: IdlPeerLibrary
     ) {
-        super(library, createLanguageWriter(Language.ARKTS))
+        super(library, createLanguageWriter(Language.ARKTS, getReferenceResolver(library)))
     }
 
     private writeInstanceofChecker(typeName: string, checkerName: string, fieldsCount: number) {
         const argsNames = Array.from({length: fieldsCount}, (_, index) => `arg${index}`)
         this.writer.writeMethodImplementation(new Method(
             checkerName,
-            new NamedMethodSignature(Type.Boolean,
-                [new Type('object|string|number|undefined|null'), ...argsNames.map(_ => Type.Boolean)],
+            new NamedMethodSignature(IDLBooleanType, 
+                [toIDLType('object|string|number|undefined|null'), ...argsNames.map(_ => IDLBooleanType)], 
                 ['value', ...argsNames]),
             [MethodModifier.STATIC],
         ), writer => {
@@ -210,17 +216,18 @@ class TSTypeCheckerPrinter extends TypeCheckerPrinter {
     constructor(
         library: IdlPeerLibrary
     ) {
-        super(library, createLanguageWriter(Language.TS))
+        super(library, createLanguageWriter(Language.TS, getReferenceResolver(library)))
     }
 
     protected writeInterfaceChecker(name: string, descriptor: StructDescriptor): void {
-        if (descriptor.getFields().length === 0)
+        if (descriptor.getFields().length === 0) {
             return
+        }
         const argsNames = descriptor.getFields().map(it => `duplicated_${it.name}`)
         this.writer.writeMethodImplementation(new Method(
             generateTypeCheckerName(name),
-            new NamedMethodSignature(Type.Boolean,
-                [new Type('object|string|number|undefined|null'), ...argsNames.map(_ => Type.Boolean)],
+            new NamedMethodSignature(IDLBooleanType, 
+                [toIDLType('object|string|number|undefined|null'), ...argsNames.map(_ => IDLBooleanType)], 
                 ['value', ...argsNames]),
             [MethodModifier.STATIC],
         ), writer => {
@@ -246,7 +253,7 @@ class TSTypeCheckerPrinter extends TypeCheckerPrinter {
         const checkerName = generateTypeCheckerName(typeName)
         this.writer.writeMethodImplementation(new Method(
             checkerName,
-            new NamedMethodSignature(Type.Boolean, [new Type('object|string|number|undefined|null')], ['value']),
+            new NamedMethodSignature(IDLBooleanType, [toIDLType('object|string|number|undefined|null')], ['value']),
             [MethodModifier.STATIC],
         ), writer => {
             writer.writeStatement(writer.makeReturn(writer.makeString(`Array.isArray(value)`)))

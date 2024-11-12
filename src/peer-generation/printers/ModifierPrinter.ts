@@ -14,155 +14,42 @@
  */
 
 import { IndentedPrinter } from "../../IndentedPrinter";
-import { DeclarationTable, DeclarationTarget, FieldRecord } from "../DeclarationTable";
 import { PrimitiveType } from "../ArkPrimitiveType"
-import { accessorStructList,
-         cStyleCopyright,
-         completeModifiersContent,
-         appendModifiersCommonPrologue,
-         appendViewModelBridge,
-         makeFileNameFromClassName,
-         modifierStructList,
-         warning } from "../FileGenerators";
-import { PeerClass } from "../PeerClass";
-import { PeerLibrary } from "../PeerLibrary";
-import { PeerMethod } from "../PeerMethod";
-import { DelegateSignatureBuilder } from "./DelegatePrinter";
+import {
+    accessorStructList,
+    appendModifiersCommonPrologue,
+    appendViewModelBridge,
+    completeModifiersContent,
+    cStyleCopyright,
+    makeFileNameFromClassName,
+    modifierStructList,
+    warning
+} from "../FileGenerators";
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { MaterializedClass, MaterializedMethod } from "../Materialized";
-import { groupBy } from "../../util";
-import { CppLanguageWriter, createLanguageWriter, LanguageWriter } from "../LanguageWriters";
+import { groupBy, throwException } from "../../util";
+import { CppLanguageWriter, createLanguageWriter, createTypeNameConvertor, LanguageWriter, printMethodDeclaration } from "../LanguageWriters";
 import { LibaceInstall } from "../../Install";
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
 import { IdlPeerClass } from "../idl/IdlPeerClass";
 import { IdlPeerMethod } from "../idl/IdlPeerMethod";
 import { Language } from "../../Language";
-import { MethodSeparatorVisitor } from "../MethodSeparator";
-import { printMethodDeclaration } from "../LanguageWriters/LanguageWriter";
-
-class MethodSeparatorPrinter extends MethodSeparatorVisitor {
-    public readonly printer = new IndentedPrinter()
-    constructor(
-        declarationTable: DeclarationTable,
-        method: PeerMethod,
-    ) {
-        super(declarationTable, method)
-        this.delegateSignatureBuilder = new DelegateSignatureBuilder(declarationTable, method)
-        this.accessChain = method.argConvertors.map((convertor, index) => [{
-            name: convertor.param,
-            type: method.declarationTargets[index],
-            isPointerType: convertor.isPointerType(),
-        }])
-    }
-
-    private readonly delegateSignatureBuilder: DelegateSignatureBuilder
-    private readonly accessChain: {name: string, type: DeclarationTarget, isPointerType: boolean}[][]
-    private generateAccessTo(argIndex: number, fieldName?: string) {
-        const argAccessChain = this.accessChain[argIndex]
-        if (argAccessChain[argAccessChain.length - 1].type === PrimitiveType.Undefined) {
-            return `{}`
-        }
-        let resultAccess = argAccessChain[0].name
-        for (let i = 1; i < argAccessChain.length; i++) {
-            const fieldAccess = argAccessChain[i-1].isPointerType ? '->' : '.'
-            resultAccess += `${fieldAccess}${argAccessChain[i].name}`
-        }
-
-        if (fieldName) {
-            const fieldAccess = argAccessChain[argAccessChain.length-1].isPointerType ? '->' : '.'
-            resultAccess += `${fieldAccess}${fieldName}`
-        }
-        return resultAccess
-    }
-
-    protected override onPushUnionScope(argIndex: number, field: FieldRecord, selectorValue: number): void {
-        super.onPushUnionScope(argIndex, field, selectorValue)
-        this.printer.print(`if (${this.generateAccessTo(argIndex, 'selector')} == ${selectorValue}) {`)
-        this.printer.pushIndent()
-        this.accessChain[argIndex].push({
-            name: field.name,
-            type: field.declaration,
-            isPointerType: false
-        })
-        this.delegateSignatureBuilder.pushUnionScope(argIndex, field)
-    }
-
-    protected override onPopUnionScope(argIndex: number): void {
-        super.onPopUnionScope(argIndex)
-        this.accessChain[argIndex].pop()
-        this.printer.popIndent()
-        this.printer.print('}')
-        this.delegateSignatureBuilder.popScope(argIndex)
-    }
-
-    protected override onPushOptionScope(argIndex: number, target: DeclarationTarget, exists: boolean): void {
-        super.onPushOptionScope(argIndex, target, exists)
-        if (exists) {
-            this.printer.print(`if (${this.generateAccessTo(argIndex, 'tag')} != ${PrimitiveType.UndefinedTag}) {`)
-            this.accessChain[argIndex].push({
-                name: "value",
-                type: target,
-                isPointerType: false,
-            })
-        } else {
-            this.printer.print(`if (${this.generateAccessTo(argIndex, 'tag')} == ${PrimitiveType.UndefinedTag}) {`)
-            this.accessChain[argIndex].push({
-                name: "UNDEFINED",
-                type: PrimitiveType.Undefined,
-                isPointerType: false,
-            })
-        }
-        this.printer.pushIndent()
-        this.delegateSignatureBuilder.pushOptionScope(argIndex, target, exists)
-    }
-
-    protected override onPopOptionScope(argIndex: number): void {
-        super.onPopUnionScope(argIndex)
-        this.accessChain[argIndex].pop()
-        this.printer.popIndent()
-        this.printer.print('}')
-        this.delegateSignatureBuilder.popScope(argIndex)
-    }
-
-    protected generateInseparableFieldName(argIndex: number) {
-        return `arg${argIndex}_inseparable_value`
-    }
-
-    onVisitInseparableArg(argIndex: number): void {
-        super.onVisitInseparableArg(argIndex)
-        const argChain = this.accessChain[argIndex]
-        const arg = argChain[argChain.length - 1]
-        const type = this.declarationTable.computeTargetName(arg.type, false)
-        const maybePointer = arg.isPointerType
-            ? '*'
-            : arg.type !== PrimitiveType.Undefined ? '&' : ''
-        this.printer.print(`const ${type} ${maybePointer}${this.generateInseparableFieldName(argIndex)} = ${this.generateAccessTo(argIndex)};`)
-    }
-
-    onVisitInseparable(): void {
-        super.onVisitInseparable()
-        const delegateIdentifier = this.delegateSignatureBuilder.buildIdentifier()
-        let delegateArgs = Array.from({length: this.method.argConvertors.length}, (_, argIndex) => {
-            return this.generateInseparableFieldName(argIndex)
-        })
-        if (this.method.hasReceiver())
-            delegateArgs = [this.method.generateReceiver()!.argName, ...delegateArgs]
-        this.printer.print(`${delegateIdentifier}(${delegateArgs.join(', ')});`)
-    }
-}
+import { createEmptyReferenceResolver, getReferenceResolver } from "../ReferenceResolver";
+import { IDLBooleanType, IDLFunctionType, IDLStringType, isOptionalType } from "../../idl";
 
 export class ModifierVisitor {
-    dummy = createLanguageWriter(Language.CPP)
-    real = createLanguageWriter(Language.CPP)
-    modifiers = createLanguageWriter(Language.CPP)
-    getterDeclarations = createLanguageWriter(Language.CPP)
-    modifierList = createLanguageWriter(Language.CPP)
+    dummy = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
+    real = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
+    modifiers = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
+    getterDeclarations = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
+    modifierList = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
 
     constructor(
-        protected library: PeerLibrary | IdlPeerLibrary,
+        protected library: IdlPeerLibrary,
+        private isDummy: boolean = false
     ) { }
 
-    printDummyImplFunctionBody(method: PeerMethod | IdlPeerMethod) {
+    printDummyImplFunctionBody(method: IdlPeerMethod) {
         let _ = this.dummy
         _.writeStatement(
             _.makeCondition(
@@ -183,41 +70,39 @@ export class ModifierVisitor {
         this.printReturnStatement(this.dummy, method, retVal)
     }
 
-    printModifierImplFunctionBody(method: PeerMethod | IdlPeerMethod, clazz: PeerClass | IdlPeerClass | undefined = undefined) {
-        if (this.library instanceof PeerLibrary) {
-            const visitor = new MethodSeparatorPrinter(
-                this.library.declarationTable,
-                method as PeerMethod
-            )
-            visitor.visit()
-        }
-        this.printBodyImplementation(this.real, method, clazz)
+    printModifierImplFunctionBody(method: IdlPeerMethod, clazz: IdlPeerClass | undefined = undefined) {
+        if (!this.isDummy) {
+            this.printBodyImplementation(this.real, method, clazz)
+        }       
         this.printReturnStatement(this.real, method)
     }
 
-    private printReturnStatement(printer: LanguageWriter, method: PeerMethod | IdlPeerMethod, returnValue: string | undefined = undefined) {
+    private printReturnStatement(printer: LanguageWriter, method: IdlPeerMethod, returnValue: string | undefined = undefined) {
         if (!method.retConvertor.isVoid) {
             printer.print(`return ${returnValue ?? "0"};`)
         }
     }
 
-    private printBodyImplementation(printer: LanguageWriter, method: PeerMethod | IdlPeerMethod,
-        clazz: PeerClass | IdlPeerClass | undefined = undefined) {
-        const apiParameters = method.generateAPIParameters()
+    private printBodyImplementation(printer: LanguageWriter, method: IdlPeerMethod,
+        clazz: IdlPeerClass | undefined = undefined) {
+        const apiParameters = method.generateAPIParameters(
+            createTypeNameConvertor(Language.CPP, getReferenceResolver(this.library))
+        )
         if (apiParameters.at(0)?.includes(PrimitiveType.NativePointer.getText())) {
             this.real.print(`auto frameNode = reinterpret_cast<FrameNode *>(node);`)
             this.real.print(`CHECK_NULL_VOID(frameNode);`)
-            if (method.argConvertors.length === 1 && method.argConvertors.at(0)?.nativeType(false)
-                .includes(PrimitiveType.String.getText())) {
+            if (method.argConvertors.length === 1 
+                && method.argConvertors.at(0)?.nativeType() === IDLStringType
+            ) {
                 this.real.print(`CHECK_NULL_VOID(${
                     method.argConvertors.at(0)?.param
                 });`)
-                this.real.print(`[[maybe_unused]]`)
                 this.real.print(`auto convValue = Converter::Convert<std::string>(*${
                     method.argConvertors.at(0)?.param
                 });`)
-            } else if (method.argConvertors.length === 1 && method.argConvertors.at(0)?.nativeType(false)
-                .includes(PrimitiveType.OptionalPrefix) && method.argConvertors.at(0)?.isPointerType()) {
+            } else if (method.argConvertors.length === 1 
+                && isOptionalType(method.argConvertors[0].nativeType())
+                && method.argConvertors.at(0)?.isPointerType()) {
                 this.real.print(`//auto convValue = ${method.argConvertors.at(0)?.param} ? ` +
                     `Converter::OptConvert<type>(*${method.argConvertors.at(0)?.param}) : std::nullopt;`)
             } else if (method.argConvertors.length === 1 && method.argConvertors.at(0)?.isPointerType()) {
@@ -227,14 +112,13 @@ export class ModifierVisitor {
                 this.real.print(`//auto convValue = Converter::OptConvert<type_name>(*${
                     method.argConvertors.at(0)?.param
                 });`)
-            } else if (method.argConvertors.length === 1 && method.argConvertors.at(0)?.nativeType(false)
-                .includes(PrimitiveType.Boolean.getText())) {
-                this.real.print(`[[maybe_unused]]`)
+            } else if (method.argConvertors.length === 1 && 
+                method.argConvertors.at(0)?.nativeType() === IDLBooleanType) {
                 this.real.print(`auto convValue = Converter::Convert<bool>(${
                     method.argConvertors.at(0)?.param
                 });`)
-            } else if (method.argConvertors.length === 1 && method.argConvertors.at(0)?.nativeType(false)
-                .includes(PrimitiveType.Function.getText())) {
+            } else if (method.argConvertors.length === 1 
+                && method.argConvertors.at(0)?.nativeType() === IDLFunctionType) {
                 this.real.print(`//auto convValue = [frameNode](input values) { code }`)
             } else {
                 this.real.print(`//auto convValue = Converter::Convert<type>(${
@@ -248,8 +132,10 @@ export class ModifierVisitor {
         }
     }
 
-    printMethodProlog(printer: LanguageWriter, method: PeerMethod | IdlPeerMethod) {
-        const apiParameters = method.generateAPIParameters()
+    printMethodProlog(printer: LanguageWriter, method: IdlPeerMethod) {
+        const apiParameters = method.generateAPIParameters(
+            createTypeNameConvertor(Language.CPP, getReferenceResolver(this.library))
+        )
         printMethodDeclaration(printer.printer, method.retType, method.implName, apiParameters)
         printer.print("{")
         printer.pushIndent()
@@ -260,7 +146,7 @@ export class ModifierVisitor {
         printer.print(`}`)
     }
 
-    printRealAndDummyModifier(method: PeerMethod | IdlPeerMethod, clazz: PeerClass | IdlPeerClass) {
+    printRealAndDummyModifier(method: IdlPeerMethod, clazz: IdlPeerClass) {
         this.printMethodProlog(this.dummy, method)
         this.printMethodProlog(this.real, method)
         this.printDummyImplFunctionBody(method)
@@ -271,7 +157,7 @@ export class ModifierVisitor {
         this.modifiers.print(`${method.implNamespaceName}::${method.implName},`)
     }
 
-    printClassProlog(clazz: PeerClass | IdlPeerClass) {
+    printClassProlog(clazz: IdlPeerClass) {
         const component = clazz.componentName
         const modifierStructImpl = `ArkUI${component}ModifierImpl`
 
@@ -284,7 +170,7 @@ export class ModifierVisitor {
         this.modifierList.print(`Get${component}Modifier,`)
     }
 
-    printClassEpilog(clazz: PeerClass | IdlPeerClass) {
+    printClassEpilog(clazz: IdlPeerClass) {
         const name = clazz.componentName
         const modifierStructImpl = `ArkUI${name}ModifierImpl`
 
@@ -315,12 +201,10 @@ export class ModifierVisitor {
         this.dummy.print(`} // ${namespaceName}`)
     }
 
-    printPeerClassModifiers(clazz: PeerClass | IdlPeerClass) {
+    printPeerClassModifiers(clazz: IdlPeerClass) {
         this.printClassProlog(clazz)
         // TODO: move to Object.groupBy when move to nodejs 21
-        const namespaces: Map<string, PeerMethod[] | IdlPeerMethod[]> = clazz instanceof PeerClass
-            ? groupBy(clazz.methods, it => it.implNamespaceName)
-            : groupBy(clazz.methods, it => it.implNamespaceName)
+        const namespaces: Map<string, IdlPeerMethod[]> = groupBy(clazz.methods, it => it.implNamespaceName)
         Array.from(namespaces.keys()).forEach (namespaceName => {
             this.pushNamespace(namespaceName, false)
             namespaces.get(namespaceName)?.forEach(
@@ -340,10 +224,10 @@ export class ModifierVisitor {
 }
 
 class AccessorVisitor extends ModifierVisitor {
-    accessors = createLanguageWriter(Language.CPP)
-    accessorList = createLanguageWriter(Language.CPP)
+    accessors = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
+    accessorList = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
 
-    constructor(library: PeerLibrary | IdlPeerLibrary) {
+    constructor(library: IdlPeerLibrary) {
         super(library)
     }
 
@@ -395,13 +279,13 @@ class AccessorVisitor extends ModifierVisitor {
 }
 
 class MultiFileModifiersVisitorState {
-    dummy = createLanguageWriter(Language.CPP)
-    real = createLanguageWriter(Language.CPP)
-    accessorList = createLanguageWriter(Language.CPP)
-    accessors = createLanguageWriter(Language.CPP)
-    modifierList = createLanguageWriter(Language.CPP)
-    modifiers = createLanguageWriter(Language.CPP)
-    getterDeclarations = createLanguageWriter(Language.CPP)
+    dummy = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
+    real = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
+    accessorList = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
+    accessors = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
+    modifierList = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
+    modifiers = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
+    getterDeclarations = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
     hasModifiers = false
     hasAccessors = false
 }
@@ -411,7 +295,7 @@ class MultiFileModifiersVisitor extends AccessorVisitor {
     private hasModifiers = false
     private hasAccessors = false
 
-    printPeerClassModifiers(clazz: PeerClass): void {
+    printPeerClassModifiers(clazz: IdlPeerClass): void {
         this.onFileStart(clazz.componentName)
         this.hasModifiers = true
         super.printPeerClassModifiers(clazz)
@@ -450,10 +334,10 @@ class MultiFileModifiersVisitor extends AccessorVisitor {
         this.onFileEnd(clazz.className)
     }
 
-    emitRealSync(library: PeerLibrary | IdlPeerLibrary, libace: LibaceInstall, options: ModifierFileOptions): void {
-        const modifierList = createLanguageWriter(Language.CPP)
-        const accessorList = createLanguageWriter(Language.CPP)
-        const getterDeclarations = createLanguageWriter(Language.CPP)
+    emitRealSync(library: IdlPeerLibrary, libace: LibaceInstall, options: ModifierFileOptions): void {
+        const modifierList = createLanguageWriter(Language.CPP, getReferenceResolver(library))
+        const accessorList = createLanguageWriter(Language.CPP, getReferenceResolver(library))
+        const getterDeclarations = createLanguageWriter(Language.CPP, getReferenceResolver(library))
 
         for (const [slug, state] of this.stateByFile) {
             if (state.hasModifiers)
@@ -475,8 +359,8 @@ class MultiFileModifiersVisitor extends AccessorVisitor {
     }
 }
 
-export function printRealAndDummyModifiers(peerLibrary: PeerLibrary | IdlPeerLibrary): {dummy: LanguageWriter, real: LanguageWriter} {
-    const visitor = new ModifierVisitor(peerLibrary)
+export function printRealAndDummyModifiers(peerLibrary: IdlPeerLibrary, isDummy: boolean = false): {dummy: LanguageWriter, real: LanguageWriter} {
+    const visitor = new ModifierVisitor(peerLibrary, isDummy)
     visitor.printRealAndDummyModifiers()
     const dummy =
         visitor.dummy.concat(visitor.modifiers).concat(modifierStructList(visitor.modifierList))
@@ -485,7 +369,7 @@ export function printRealAndDummyModifiers(peerLibrary: PeerLibrary | IdlPeerLib
     return {dummy, real}
 }
 
-export function printRealAndDummyAccessors(peerLibrary: PeerLibrary | IdlPeerLibrary): {dummy: LanguageWriter, real: LanguageWriter} {
+export function printRealAndDummyAccessors(peerLibrary: IdlPeerLibrary): {dummy: LanguageWriter, real: LanguageWriter} {
     const visitor = new AccessorVisitor(peerLibrary)
     peerLibrary.materializedClasses.forEach(c => visitor.printRealAndDummyAccessor(c))
 
@@ -510,14 +394,14 @@ export interface ModifierFileOptions {
     namespaces?: Namespaces
 }
 
-export function printRealModifiersAsMultipleFiles(library: PeerLibrary | IdlPeerLibrary, libace: LibaceInstall, options: ModifierFileOptions) {
+export function printRealModifiersAsMultipleFiles(library: IdlPeerLibrary, libace: LibaceInstall, options: ModifierFileOptions) {
     const visitor = new MultiFileModifiersVisitor(library)
     visitor.printRealAndDummyModifiers()
     visitor.emitRealSync(library, libace, options)
 }
 
 function printModifiersImplFile(filePath: string, state: MultiFileModifiersVisitorState, options: ModifierFileOptions) {
-    const writer = new CppLanguageWriter(new IndentedPrinter())
+    const writer = new CppLanguageWriter(new IndentedPrinter(), createEmptyReferenceResolver())
     writer.writeLines(cStyleCopyright)
 
     writer.writeInclude(`core/components_ng/base/frame_node.h`)
@@ -542,7 +426,7 @@ function printModifiersImplFile(filePath: string, state: MultiFileModifiersVisit
 }
 
 function printModifiersCommonImplFile(filePath: string, content: LanguageWriter, options: ModifierFileOptions) {
-    const writer = new CppLanguageWriter(new IndentedPrinter())
+    const writer = new CppLanguageWriter(new IndentedPrinter(), createEmptyReferenceResolver())
     writer.writeLines(cStyleCopyright)
     writer.writeMultilineCommentBlock(warning)
     writer.print("")
@@ -577,8 +461,8 @@ function printModifiersCommonImplFile(filePath: string, content: LanguageWriter,
     writer.printTo(filePath)
 }
 
-function printApiImplFile(library: PeerLibrary | IdlPeerLibrary, filePath: string, options: ModifierFileOptions) {
-    const writer = new CppLanguageWriter(new IndentedPrinter())
+function printApiImplFile(library: IdlPeerLibrary, filePath: string, options: ModifierFileOptions) {
+    const writer = new CppLanguageWriter(new IndentedPrinter(), getReferenceResolver(library))
     writer.writeLines(cStyleCopyright)
     writer.writeMultilineCommentBlock(warning)
     writer.print("")

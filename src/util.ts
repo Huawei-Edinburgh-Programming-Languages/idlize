@@ -126,7 +126,7 @@ export function getExportedDeclarationNameByNode(typechecker: ts.TypeChecker, no
     return getExportedDeclarationNameByDecl(declarations[0])
 }
 
-function hasModifier(modifierLikes: ts.NodeArray<ts.ModifierLike> | undefined, modifier: ts.SyntaxKind): boolean {
+function hasModifier(modifierLikes: ts.NodeArray<ts.ModifierLike> | readonly ts.Modifier[] | undefined, modifier: ts.SyntaxKind): boolean {
     return modifierLikes?.find(it => it.kind === modifier) != undefined
 }
 
@@ -144,6 +144,10 @@ export function isAbstract(modifierLikes: ts.NodeArray<ts.ModifierLike> | undefi
 
 export function isStatic(modifierLikes: ts.NodeArray<ts.ModifierLike> | undefined): boolean {
     return hasModifier(modifierLikes, ts.SyntaxKind.StaticKeyword)
+}
+
+export function isAsync(modifierLikes: ts.NodeArray<ts.ModifierLike> | readonly ts.Modifier[] | undefined): boolean {
+    return hasModifier(modifierLikes, ts.SyntaxKind.AsyncKeyword)
 }
 
 export function isPrivate(modifierLikes: ts.NodeArray<ts.ModifierLike> | undefined) {
@@ -362,7 +366,7 @@ export function identName(node: ts.Node | undefined): string | undefined {
     throw new Error(`Unknown: ${ts.SyntaxKind[node.kind]}`)
 }
 
-function identString(node: ts.Identifier | ts.PrivateIdentifier | ts.StringLiteral | ts.QualifiedName |  ts.NumericLiteral | ts.ComputedPropertyName  | undefined): string | undefined {
+export function identString(node: ts.Identifier | ts.PrivateIdentifier | ts.StringLiteral | ts.QualifiedName |  ts.NumericLiteral | ts.ComputedPropertyName  | undefined): string | undefined {
     if (!node) return undefined
     if (ts.isStringLiteral(node)) return node.text
     if (ts.isNumericLiteral(node)) return node.text
