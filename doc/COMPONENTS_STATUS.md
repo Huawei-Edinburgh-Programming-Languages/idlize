@@ -1216,21 +1216,21 @@
 |`selectedIndex`| Function |Ekaterina Stepanova | done |  |
 |`divider`| Function |Ekaterina Stepanova | done |  |
 |`gradientHeight`| Function | Ekaterina Stepanova| done |  |
-|*TextTimer*| *Component* |Ekaterina Stepanova|in progress |  |
-|`setTextTimerOptions`| Function |Ekaterina Stepanova| in progress |  |
-|`format`| Function |Ekaterina Stepanova| devdone |  |
-|`fontColor`| Function |Ekaterina Stepanova| devdone |  |
-|`fontSize`| Function |Ekaterina Stepanova| devdone |  |
-|`fontStyle`| Function | Ekaterina Stepanova| devdone |  |
-|`fontWeight`| Function |Ekaterina Stepanova| devdone |  |
-|`fontFamily`| Function |Ekaterina Stepanova| devdone |  |
-|`onTimer`| Function |Ekaterina Stepanova| in progress | |
+|*TextTimer*| *Component* |Ekaterina Stepanova| blocked |  |
+|`setTextTimerOptions`| Function |Ekaterina Stepanova| devdone |  |
+|`format`| Function |Ekaterina Stepanova| done |  |
+|`fontColor`| Function |Ekaterina Stepanova| done |  |
+|`fontSize`| Function |Ekaterina Stepanova| done |  |
+|`fontStyle`| Function | Ekaterina Stepanova| done |  |
+|`fontWeight`| Function |Ekaterina Stepanova| done |  |
+|`fontFamily`| Function |Ekaterina Stepanova| done |  |
+|`onTimer`| Function |Ekaterina Stepanova| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB3V0H |
 |`textShadow`| Function |Ekaterina Stepanova| blocked AceEngine| https://gitee.com/openharmony/arkui_ace_engine/issues/IB2SZK |
 |`contentModifier`| Function |Ekaterina Stepanova| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
-|*TextTimerController*| *Class* |Ekaterina Stepanova|in progress |  |
-|`start`| Function |Ekaterina Stepanova|in progress |  |
-|`pause`| Function |Ekaterina Stepanova|in progress |  |
-|`reset`| Function |Ekaterina Stepanova|in progress |  |
+|*TextTimerController*| *Class* |Ekaterina Stepanova| devdone |  |
+|`start`| Function |Ekaterina Stepanova| devdone |  |
+|`pause`| Function |Ekaterina Stepanova| devdone |  |
+|`reset`| Function |Ekaterina Stepanova| devdone |  |
 |*TimePicker*| *Component* | Ekaterina Stepanova| blocked |  |
 |`setTimePickerOptions`| Function |Ekaterina Stepanova| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`useMilitaryTime`| Function |Ekaterina Stepanova| done |  |
