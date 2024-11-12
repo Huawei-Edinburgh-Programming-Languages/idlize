@@ -737,7 +737,7 @@
 |`onSelect`| Function | Dudkin Sergey| done|  |
 |`onSelectionChange`| Function | Dudkin Sergey| done|  |
 |`aboutToIMEInput`| Function | Dudkin Sergey| done|  |
-|`onIMEInputComplete`| Function | Dudkin Sergey| in progress| I don't know how to convert FONT_FEATURES_LIST into Ark_String DMZ|
+|`onIMEInputComplete`| Function | Dudkin Sergey| devDone| |
 |`onDidIMEInput`| Function | Dudkin Sergey| done|  |
 |`aboutToDelete`| Function | Dudkin Sergey| done|  |
 |`onDeleteComplete`| Function | Dudkin Sergey| done|  |
@@ -746,21 +746,21 @@
 |`enableDataDetector`| Function | Dudkin Sergey| done|  |
 |`enablePreviewText`| Function | Dudkin Sergey| done|  |
 |`dataDetectorConfig`| Function | Dudkin Sergey| done|  |
-|`caretColor`| Function | Dudkin Sergey| in progress|  |
-|`selectedBackgroundColor`| Function | Dudkin Sergey| in progress|  |
+|`caretColor`| Function | Dudkin Sergey| devDone|  |
+|`selectedBackgroundColor`| Function | Dudkin Sergey| devDone|  |
 |`onEditingChange`| Function | Dudkin Sergey| done|  |
-|`enterKeyType`| Function | Dudkin Sergey| in progress|  |
+|`enterKeyType`| Function | Dudkin Sergey| devDone|  |
 |`onSubmit`| Function | Dudkin Sergey| done|  |
 |`onWillChange`| Function | Dudkin Sergey| done|  |
 |`onDidChange`| Function | Dudkin Sergey| done|  |
-|`onCut`| Function | Dudkin Sergey| in progress| Ark_CutEvent param is always empty now DMZ|
-|`onCopy`| Function | Dudkin Sergey| in progress| Ark_CopyEvent param is always empty now DMZ|
-|`editMenuOptions`| Function | Dudkin Sergey| in progress|  |
-|`enableKeyboardOnFocus`| Function | Dudkin Sergey| in progress|  |
-|`enableHapticFeedback`| Function | Dudkin Sergey| in progress|  |
-|`barState`| Function | Dudkin Sergey| in progress|  |
-|`bindSelectionMenu`| Function | Dudkin Sergey| blocked Arkoala | not implemented yet. Due to Ark_CustomBuilder DMZ|
-|`customKeyboard`| Function | Dudkin Sergey| blocked Arkoala | not implemented yet. Due to Ark_CustomBuilder DMZ|
+|`onCut`| Function | Dudkin Sergey| blocked | Ark_CutEvent param is always empty now DMZ|
+|`onCopy`| Function | Dudkin Sergey| blocked | Ark_CopyEvent param is always empty now DMZ|
+|`editMenuOptions`| Function | Dudkin Sergey| blocked| RichEditor modifier :: EditMenuOptionsImpl() needs onCreateMenuCallback, onMenuItemClick input, https://gitee.com/nikolay-igotti/idlize/issues/IB3UKQ |
+|`enableKeyboardOnFocus`| Function | Dudkin Sergey| devDone|  |
+|`enableHapticFeedback`| Function | Dudkin Sergey| devDone|  |
+|`barState`| Function | Dudkin Sergey| devDone|  |
+|`bindSelectionMenu`| Function | Dudkin Sergey| blocked Arkoala | not implemented yet. Due to Ark_CustomBuilder DMZ, https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q|
+|`customKeyboard`| Function | Dudkin Sergey| blocked Arkoala | not implemented yet. Due to Ark_CustomBuilder DMZ, https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q|
 |`placeholder`| Function | Dudkin Sergey| done|  |
 |*RichText*| *Component* | Dudkin Sergey| in progress|  |
 |`setRichTextOptions`| Function | Dudkin Sergey| in progress|  |
