@@ -728,6 +728,7 @@ class PeersGenerator {
         // E.g. ButtonInterface instead of ButtonAttribute
         const isCallSignature = idl.isCallable(method)
         const methodName = isCallSignature ? `set${peer.componentName}Options` : method.name
+        if (isCallSignature) method.returnType = idl.IDLVoidType
         const originalParentName = parentName ?? peer.originalClassName!
         const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param))
         method.parameters.forEach(param => {
@@ -893,7 +894,7 @@ export class IdlPeerProcessor {
                 .filter(idl.isReferenceType)
                 .filter(it => {
                     if (!this.library.resolveTypeReference(it))
-                        console.log("AAA")
+                        console.log(`Cannot resolve ${it.name}`)
                     return true
                 })
                 .map(it => this.library.resolveTypeReference(it)!)
@@ -906,8 +907,13 @@ export class IdlPeerProcessor {
         if (!method)
             return new Method("constructor", new NamedMethodSignature(idl.IDLVoidType))
         const methodName = idl.isConstructor(method) ? "constructor" : method.name
+        const isStatic = idl.isConstructor(method) || (idl.isMethod(method) && method.isStatic)
         // const generics = method.typeParameters?.map(it => it.getText())
-        const signature = generateSignature(method)
+        const signature = new NamedMethodSignature(
+            isStatic ? method.returnType! : idl.IDLThisType,
+            method.parameters.map(it => maybeOptional(it.type!, it.isOptional)),
+            method.parameters.map(it => it.name)
+        )
         const modifiers = idl.isConstructor(method) || method.isStatic ? [MethodModifier.STATIC] : []
         return new Method(methodName, signature, modifiers/*, generics*/)
     }

@@ -479,9 +479,14 @@ export function writePeerMethod(printer: LanguageWriter, method: IdlPeerMethod, 
             if (returnsThis(method, returnType)) {
                 result = [writer.makeReturn(writer.makeString("this"))]
             } else if (method instanceof MaterializedMethod && method.peerMethodName !== "ctor") {
-                // const isStatic = method.method.modifiers?.includes(MethodModifier.STATIC)
                 if (isNamedNode(returnType) && returnType.name === method.originalParentName) {
-                    if (!method.hasReceiver()) {
+                    if (method.hasReceiver()) {
+                        // TODO: interesting question if we shall reassign ptr to value returned by native op.
+                        result = [
+                            writer.makeAssign(`this.peer!.ptr`, undefined, writer.makeString(returnValName), false),
+                            writer.makeReturn(writer.makeString("this"))
+                        ]
+                    } else {
                         result = [
                             ...constructMaterializedObject(writer, signature, "obj", returnValName),
                             writer.makeReturn(writer.makeString("obj"))

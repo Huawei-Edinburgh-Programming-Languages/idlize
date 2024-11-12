@@ -26,6 +26,7 @@ import { typeOrUnion } from "./peer-generation/idl/common"
 import { IDLKeywords } from "./languageSpecificKeywords"
 import { isCommonMethodOrSubclass } from "./peer-generation/inheritance"
 import { ReferenceResolver } from "./peer-generation/ReferenceResolver"
+import { isBuilderClass } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
 
 function escapeIdl(name: string): string {
     if (IDLKeywords.has(name))
@@ -283,7 +284,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             return idl.createTypedef(
                 nameSuggestion.name,
                 type, undefined, {
-                extendedAttributes: extendedAttributes, 
+                extendedAttributes: extendedAttributes,
                 fileName: node.getSourceFile().fileName
             })
         }
@@ -793,31 +794,38 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         }
     }
 
+
+    // Check if particular place is suitable for conversion of return type to `this` type.
+    private isSuitableForThisConversion(owner: ts.ClassDeclaration | ts.ObjectTypeDeclaration | ts.InterfaceDeclaration | ts.Node) {
+        let result = false
+        if (ts.isClassDeclaration(owner))
+            result ||= isCommonMethodOrSubclass(this.typeChecker, owner)
+        if (ts.isInterfaceDeclaration(owner) || ts.isClassDeclaration(owner))
+            result ||= PeerGeneratorConfig.builderClasses.includes(identName(owner.name)!)
+        return result
+    }
+
     private serializeTypeOrThis(
         method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration | ts.CallSignatureDeclaration | ts.ConstructorDeclaration | ts.ConstructSignatureDeclaration | ts.IndexSignatureDeclaration,
         nameSuggestion?: NameSuggestion
     ): idl.IDLType {
         let type = this.serializeType(method.type, nameSuggestion)
-    
+
+        if (!this.isSuitableForThisConversion(method.parent)) return type
+
         let className = this.clazzName(method)
-    
+        // We use `this` IDL type when converting builder methods of UI nodes or similar types.
+
+        /// let className = this.clazzName(method)
+        let retTypeName = idl.isNamedNode(type) ? idl.forceAsNamedNode(type).name : undefined
         const isMethodStatic = method.modifiers?.some(mod => mod.kind === ts.SyntaxKind.StaticKeyword)
 
-        if (idl.isUndefinedType(type)) {
-            return idl.IDLVoidType
-        } else if (
-            !isMethodStatic &&
-            className && (
-                idl.isCallable(type) ||
-                idl.isReferenceType(type) ||
-                idl.isNamedNode(type) && idl.forceAsNamedNode(type).name === className ||
-                idl.isNamedNode(type) && idl.forceAsNamedNode(type).name ===  'T'
-            )
-        ) {
+        console.log(`TRYING ON ${className} ${retTypeName}`)
+
+        if (!isMethodStatic && ((retTypeName == className) || retTypeName === 'T'))
             return idl.IDLThisType
-        } else {
+        else
             return type
-        }
     }
 
     serializeType(type: ts.TypeNode | undefined, nameSuggestion?: NameSuggestion): idl.IDLType {
@@ -1120,7 +1128,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
 
     private clazzName(method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration | ts.CallSignatureDeclaration | ts.ConstructorDeclaration | ts.ConstructSignatureDeclaration | ts.IndexSignatureDeclaration): string | undefined {
         let parent = method.parent//.parent
-    
+
         if (parent !== undefined && ts.isClassDeclaration(parent)) {
             return identName(parent.name)!
         }
@@ -1278,7 +1286,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
     }
 
     serializeCallable(method: ts.CallSignatureDeclaration, nameSuggestion: NameSuggestion): idl.IDLCallable {
-        let returnType = this.serializeTypeOrThis(method, nameSuggestion?.extend('ret'))
+        let returnType = this.serializeType(method.type, nameSuggestion?.extend('ret'))
         let extendedAttributes = this.computeDeprecatedExtendAttributes(method)
         extendedAttributes.push({ name: idl.IDLExtendedAttributes.CallSignature })
         return idl.createCallable(
