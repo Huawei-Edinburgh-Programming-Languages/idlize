@@ -633,7 +633,7 @@
 |`onTitleModeChange`| Function | Skroba Gleb | in progress| no callbacks Arkoala support |
 |`hideBackButton`|Function| Erokhin Ilya | done |  |
 |`titleMode`|Function| Erokhin Ilya | done |  |
-|`menus`| Function | Skroba Gleb | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`menus`| Function | Skroba Gleb | blocked Arkoala, blocked UT | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q ,  https://gitee.com/openharmony/arkui_ace_engine/issues/IB3U6S|
 |`toolBar`| Function | Skroba Gleb | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`hideToolBar`|Function| Skroba Gleb | blocked | main part done, no ace_engine implementation for second DMZ |
 |`onNavBarStateChange`|Function| Erokhin Ilya | done |  |
@@ -644,7 +644,7 @@
 |`recoverable`|Function| Erokhin Ilya | done |  |
 |`title`| Function | Erokhin Ilya | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`toolbarConfiguration`| Function | Skroba Gleb | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q|
-|`ignoreLayoutSafeArea`| Function | Skroba Gleb | blocked AceEngine | no JSON data DMZ |
+|`ignoreLayoutSafeArea`| Function | Skroba Gleb | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TXB |
 |*NavRouter*| *Component* |Evstigneev Roman | done |  |
 |`setNavRouterOptions`| Function |Evstigneev Roman| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF |
 |`onStateChange`| Function |Evstigneev Roman | done|  |
