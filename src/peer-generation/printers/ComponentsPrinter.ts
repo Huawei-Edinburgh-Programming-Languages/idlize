@@ -14,7 +14,7 @@
  */
 
 import * as path from "path"
-import { removeExt, renameDtsToComponent } from "../../util";
+import { removeExt, renameDtsToComponent, arktsFunctionTypes } from "../../util";
 import { convertPeerFilenameToModule, ImportsCollector } from "../ImportsCollector";
 import { isCommonMethod } from "../inheritance";
 import { componentToPeerClass } from "./PeersPrinter";
@@ -187,6 +187,7 @@ export function ${componentFunctionName}(
 class ArkTsComponentFileVisitor extends TSComponentFileVisitor {
     protected populateImports(imports: ImportsCollector) {
         imports.addFeature('TypeChecker', '#components')
+        imports.addFeatures(arktsFunctionTypes, './shared/generated-utils')
     }
 
     protected printComponentFunction(componentClassName: string,

@@ -108,6 +108,6 @@ export class EtsIDLNodeToStringConvertor extends TsIDLNodeToStringConverter {
         const types = decl.parameters.map(it => {
             return `${this.convertType(it.isOptional ? idl.createUnionType([it.type!, idl.IDLUndefinedType]) : it.type!)}`
         })
-        return `Function${types.length}<${types.join(",")}${types.length > 0 ? "," : ""}${this.convertType(decl.returnType)}>`
+        return `FunctionType${types.length}<${types.join(",")}${types.length > 0 ? "," : ""}${this.convertType(decl.returnType)}>`
     }
 }

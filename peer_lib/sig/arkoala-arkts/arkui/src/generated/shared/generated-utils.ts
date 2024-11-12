@@ -19,3 +19,9 @@ export class GestureComponent<T> {
     public value?: T
     public hasEvent?: Int32Array
 }
+
+export type FunctionType0<R> = () => R
+export type FunctionType1<T1, R> = (arg1: T1) => R
+export type FunctionType2<T1, T2, R> = (arg1: T1, arg2: T2) => R
+export type FunctionType3<T1, T2, T3, R> = (arg1: T1, arg2: T2, arg3: T3) => R
+export type FunctionType4<T1, T2, T3, T4, R> = (arg1: T1, arg2: T2, arg3: T3, arg4: T4) => R

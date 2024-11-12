@@ -26,6 +26,7 @@ import {
     NamedMethodSignature,
 } from '../LanguageWriters'
 import {
+    arktsFunctionTypes,
     indentedBy,
     isDefined,
     removeExt,
@@ -952,6 +953,7 @@ export function getCommonImports(language: Language) {
         imports.push({feature: "wrapCallback", module: "@koalaui/interop"})
         imports.push({feature: "NodeAttach", module: "@koalaui/runtime"})
         imports.push({feature: "remember", module: "@koalaui/runtime"})
+        arktsFunctionTypes.forEach(it => imports.push({feature: it, module: "./shared/generated-utils"}))
     }
     return imports
 }

@@ -36,7 +36,6 @@ export function nameOrNull(name: ts.EntityName | ts.DeclarationName | undefined)
     return undefined
 }
 
-
 export function isNamedDeclaration(node: ts.Node): node is ts.NamedDeclaration {
     return ("name" in node)
 }
@@ -582,3 +581,10 @@ export function groupBy<K, V>(values: V[], selector: (value: V) => K): Map<K, V[
 export function removeExt(filename: string) {
     return filename.replaceAll(path.extname(filename), '')
 }
+
+export const arktsFunctionTypes = [
+    'FunctionType0',
+    'FunctionType1',
+    'FunctionType2',
+    'FunctionType3',
+]

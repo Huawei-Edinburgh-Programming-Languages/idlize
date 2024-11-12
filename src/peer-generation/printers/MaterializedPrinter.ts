@@ -14,7 +14,7 @@
  */
 
 import * as idl from "../../idl"
-import { capitalize, removeExt, renameClassToMaterialized } from "../../util";
+import { capitalize, removeExt, renameClassToMaterialized, arktsFunctionTypes } from "../../util";
 import { printPeerFinalizer, writePeerMethod } from "./PeersPrinter"
 import {
     BlockStatement,
@@ -87,6 +87,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
 
     protected collectImports(imports: ImportsCollector) {
         this.clazz.importFeatures.forEach(it => imports.addFeature(it.feature, it.module))
+        arktsFunctionTypes.forEach(it => imports.addFeature(it, './shared/generated-utils'))
     }
 
     private printImports() {

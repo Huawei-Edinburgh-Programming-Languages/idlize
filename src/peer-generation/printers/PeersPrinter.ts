@@ -14,7 +14,7 @@
  */
 
 import * as path from "path"
-import { renameDtsToPeer, throwException } from "../../util";
+import { renameDtsToPeer, throwException, arktsFunctionTypes } from "../../util";
 import { convertPeerFilenameToModule, ImportsCollector } from "../ImportsCollector";
 import { PeerClassBase } from "../PeerClass";
 import { InheritanceRole, determineParentRole, isHeir, isRoot } from "../inheritance";
@@ -42,7 +42,20 @@ import { IdlPeerMethod } from "../idl/IdlPeerMethod";
 import { collectJavaImports } from "./lang/JavaIdlUtils";
 import { printJavaImports } from "./lang/JavaPrinters";
 import { Language } from "../../Language";
-import { forceAsNamedNode, IDLI32Type, IDLPointerType, IDLStringType, IDLThisType, IDLType, IDLVoidType, isNamedNode, isOptionalType, isPrimitiveType, maybeOptional, toIDLType } from "../../idl";
+import {
+    forceAsNamedNode,
+    IDLI32Type,
+    IDLPointerType,
+    IDLStringType,
+    IDLThisType,
+    IDLType,
+    IDLVoidType,
+    isNamedNode,
+    isOptionalType,
+    isPrimitiveType,
+    maybeOptional,
+    toIDLType
+} from "../../idl";
 import { getReferenceResolver } from "../ReferenceResolver";
 
 export function componentToPeerClass(component: string) {
@@ -109,6 +122,7 @@ class PeerFileVisitor {
                 })
             imports.addFeature('GestureName', './shared/generated-utils')
             imports.addFeature('GestureComponent', './shared/generated-utils')
+            arktsFunctionTypes.forEach(it => imports.addFeature(it, './shared/generated-utils'))
             imports.addFeature('CallbackKind', './peers/CallbackKind')
         }
         if (printer.language == Language.TS) {
