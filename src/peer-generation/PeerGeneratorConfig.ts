@@ -81,7 +81,7 @@ export class PeerGeneratorConfig {
 
     private static ignoreMaterialized = [
         // TBD
-        "IMonitor",
+        "IMonitor", // IMonitor class processing will fixed in !920
         "Event",
         "Configuration",
         "UIGestureEvent",
