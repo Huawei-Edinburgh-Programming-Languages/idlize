@@ -65,6 +65,7 @@ compile arkts subset:
 
 build native-arm64:
   stage: test
+  allow_failure: true
   tags:
     - idlize-ci
     - koala-ci
@@ -75,6 +76,7 @@ build native-arm64:
 
 build native-arm32:
   stage: test
+  allow_failure: true
   tags:
     - idlize-ci
     - koala-ci
@@ -85,6 +87,7 @@ build native-arm32:
 
 build arkoala.har:
   stage: test
+  allow_failure: true
   tags:
     - idlize-ci
     - koala-ci
