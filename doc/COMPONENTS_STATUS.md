@@ -1438,7 +1438,7 @@
 |*DrawingRenderingContext*| *Class* |Vadim Voronov| blocked |  |
 |`invalidate`| Function |Vadim Voronov| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*ImageAnalyzerController*| *Class* |Vadim Voronov|  blocked |  |
-|`getImageAnalyzerSupportTypes`| Function |Vadim Voronov|  blocked Arkoala | https://gitee.com/openharmony/arkui_ace_engine/issues/IB270B |
+|`getImageAnalyzerSupportTypes`| Function |Vadim Voronov|  blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
 |*ListScroller*| *Class* |Morozov Sergey | blocked |  |
 |`getItemRectInGroup`| Function |Morozov Sergey | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`scrollToItemInGroup`| Function |Morozov Sergey | done |  |
