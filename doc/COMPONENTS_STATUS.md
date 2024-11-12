@@ -1017,13 +1017,13 @@
 |`effectStrategy`| Function |Andrey Khudenkikh | done |  |
 |`renderingStrategy`| Function |Andrey Khudenkikh | done |  |
 |`symbolEffect`| Function | Andrey Khudenkikh | blocked AceEngine| https://gitee.com/openharmony/arkui_ace_engine/issues/IB3KMB |
-|*SymbolSpan*| *Component* |Dmitry A Smirnov| devdone|  |
-|`setSymbolSpanOptions`| Function |Dmitry A Smirnov| devdone| https://gitee.com/openharmony/arkui_ace_engine/issues/IB3IX8 |
-|`fontSize`| Function |Dmitry A Smirnov| devdone|  |
-|`fontColor`| Function |Dmitry A Smirnov| devdone|  |
-|`fontWeight`| Function |Dmitry A Smirnov| devdone|  |
-|`effectStrategy`| Function |Dmitry A Smirnov| devdone|  |
-|`renderingStrategy`| Function |Dmitry A Smirnov| devdone|  |
+|*SymbolSpan*| *Component* |Dmitry A Smirnov| done|  |
+|`setSymbolSpanOptions`| Function |Dmitry A Smirnov| done| https://gitee.com/openharmony/arkui_ace_engine/issues/IB3IX8 |
+|`fontSize`| Function |Dmitry A Smirnov| done|  |
+|`fontColor`| Function |Dmitry A Smirnov| done|  |
+|`fontWeight`| Function |Dmitry A Smirnov| done|  |
+|`effectStrategy`| Function |Dmitry A Smirnov| done|  |
+|`renderingStrategy`| Function |Dmitry A Smirnov| done|  |
 |*Text*| *Component* | Kirill Kirichenko | in progress | |
 |`setTextOptions`| Function | Kirill Kirichenko | in progress |  |
 |`font`| Function |Samarin Sergey |in progress |  |
