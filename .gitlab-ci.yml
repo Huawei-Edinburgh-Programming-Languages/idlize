@@ -94,7 +94,7 @@ build arkoala.har:
   before_script:
     - !reference [.setup, script]
   script:
-    - KOALA_BZ=1 OPENLAB_USERNAME=koala-ci OPENLAB_PASSWORD=w1llUgu3ss npm run arkoala:har-arm32
+    - KOALA_BZ=1 OPENLAB_USERNAME=koala-ci OPENLAB_PASSWORD=w1llUgu3ss npm run har-arm32
     - cp $CI_PROJECT_DIR/external/arkoala/har/app/arkoala/build/default/outputs/default/arkoala.har $CI_PROJECT_DIR/
   artifacts:
       expire_in: 1 week
