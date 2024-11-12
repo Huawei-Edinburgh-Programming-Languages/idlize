@@ -42,24 +42,18 @@ import {
     makeSyntheticTypeAliasDeclaration,
     syntheticDeclarationFilename
 } from "./IdlSyntheticDeclarations";
-import {
-    BuilderClass,
-    BuilderField,
-    BuilderMethod,
-    initCustomBuilderClasses,
-    isCustomBuilderClass
-} from "../BuilderClass";
+import { BuilderClass, initCustomBuilderClasses, isCustomBuilderClass } from "../BuilderClass";
 import { isRoot } from "../inheritance";
 import { ImportFeature } from "../ImportsCollector";
 import { DeclarationNameConvertor } from "./IdlNameConvertor";
 import { PrimitiveType } from "../ArkPrimitiveType"
 import { collapseIdlEventsOverloads } from "../printers/EventsPrinter"
 import { convert } from "./common"
-import { collectJavaImportsForDeclaration } from "../printers/lang/JavaIdlUtils"
 import { collectCJImportsForDeclaration } from "../printers/lang/CJIdlUtils"
 import { ARK_CUSTOM_OBJECT, javaCustomTypeMapping } from "../printers/lang/Java"
 import { Language } from "../../Language"
 import { createInterfaceDeclName } from "../TypeNodeNameConvertor";
+import { cjCustomTypeMapping } from "../printers/lang/Cangjie"
 
 /**
  * Theory of operations.
@@ -209,7 +203,6 @@ function mapCInteropRetType(type: idl.IDLType): string {
                 // return `KStringPtr`
                 return "void"
             case idl.IDLVoidType:
-            case idl.IDLThisType:
             case idl.IDLUndefinedType:
                 return "void"
         }
@@ -729,23 +722,23 @@ class PeersGenerator {
     private processMethodOrCallable(method: idl.IDLMethod | idl.IDLCallable, peer: IdlPeerClass, parentName?: string): IdlPeerMethod | undefined {
         if (PeerGeneratorConfig.ignorePeerMethod.includes(method.name!))
             return
+        const isCallSignature = !idl.isMethod(method)
         // Some method have other parents as part of their names
         // Such as the ones coming from the friend interfaces
         // E.g. ButtonInterface instead of ButtonAttribute
-        const isCallSignature = idl.isCallable(method)
-        const methodName = isCallSignature ? `set${peer.componentName}Options` : method.name
         const originalParentName = parentName ?? peer.originalClassName!
+        const methodName = isCallSignature ? `set${peer.componentName}Options` : method.name
         const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param))
         method.parameters.forEach(param => {
             this.library.requestType(param.type!, this.library.shouldGenerateComponent(peer.componentName))
         })
-        const signature = generateSignature(method)
+        const signature = generateSignature(this.library, method)
         return new IdlPeerMethod(
             originalParentName,
             argConvertors,
             generateRetConvertor(method.returnType),
             isCallSignature,
-            new Method(methodName!, signature, method.isStatic ? [MethodModifier.STATIC] : []))
+            new Method(methodName, signature, method.isStatic ? [MethodModifier.STATIC] : []))
     }
 
     private createComponentAttributesDeclaration(clazz: idl.IDLInterface, peer: IdlPeerClass) {
@@ -880,7 +873,7 @@ export class IdlPeerProcessor {
         if (this.library.language === Language.ARKTS) {
             // this is necessary because getBuilderMethods embeds supertype types
             importFeatures.push(
-                ...methods.flatMap(it => [...it.method.signature.args, it.method.signature.returnType])
+                ...methods.flatMap(it => [...it.signature.args, it.signature.returnType])
                     .map(it => convertTypeToFeature(this.library, it))
                     .filter((it) : it is ImportFeature => it !== undefined)
             )
@@ -888,14 +881,12 @@ export class IdlPeerProcessor {
         return new BuilderClass(name, undefined, isIface, undefined, fields, constructors, methods, importFeatures)
     }
 
-    private toBuilderField(prop: idl.IDLProperty): BuilderField {
+    private toBuilderField(prop: idl.IDLProperty): Field {
         const modifiers = prop.isReadonly ? [FieldModifier.READONLY] : []
-        return new BuilderField(
-            new Field(prop.name, idl.maybeOptional(prop.type, prop.isOptional), modifiers),
-        )
+        return new Field(prop.name, idl.maybeOptional(prop.type, prop.isOptional), modifiers)
     }
 
-    private getBuilderMethods(target: idl.IDLInterface, className?: string): BuilderMethod[] {
+    private getBuilderMethods(target: idl.IDLInterface, className?: string): Method[] {
         return [
             ...target.inheritance
                 .filter(idl.isReferenceType)
@@ -910,23 +901,20 @@ export class IdlPeerProcessor {
             ...target.methods.map(it => this.toBuilderMethod(it, className))]
     }
 
-    private toBuilderMethod(method: idl.IDLConstructor | idl.IDLMethod | undefined,className?: string): BuilderMethod {
+    private toBuilderMethod(method: idl.IDLConstructor | idl.IDLMethod | undefined, className?: string): Method {
         if (!method)
-            return new BuilderMethod(new Method("constructor", new NamedMethodSignature(idl.IDLVoidType)))
+            return new Method("constructor", new NamedMethodSignature(idl.IDLVoidType))
         const methodName = idl.isConstructor(method) ? "constructor" : method.name
         // const generics = method.typeParameters?.map(it => it.getText())
-        const signature = generateSignature(method)
+        const signature = generateSignature(this.library, method, className)
         const modifiers = idl.isConstructor(method) || method.isStatic ? [MethodModifier.STATIC] : []
-        return new BuilderMethod(new Method(methodName, signature, modifiers/*, generics*/))
+        return new Method(methodName, signature, modifiers/*, generics*/)
     }
     private collectDeclDependencies(decl: idl.IDLEntry): ImportFeature[] {
         let importFeatures: ImportFeature[]
-        if (this.library.language == Language.JAVA) {
-            // TODO: collect imports for Java via serializeDepsCollector
-            importFeatures = collectJavaImportsForDeclaration(decl)
-        } else if (this.library.language == Language.CJ) {
+        if (this.library.language === Language.CJ) {
             importFeatures = collectCJImportsForDeclaration(decl)
-        } else if (this.library.language == Language.TS || this.library.language == Language.ARKTS) {
+        } else {
             importFeatures = this.serializeDepsCollector.convert(decl)
                 .filter(it => !idl.isEntry(it) || isSourceDecl(it))
                 .filter(it => {
@@ -956,8 +944,6 @@ export class IdlPeerProcessor {
                         'SyntheticDeclarations'
                     )))
             }
-        } else {
-            throwException(`Unsupported language: ${this.library.language}`)
         }
         return importFeatures
     }
@@ -1060,7 +1046,7 @@ export class IdlPeerProcessor {
             )
         )
     }
-    
+
     private makeMaterializedField(prop: idl.IDLProperty): MaterializedField {
         const argConvertor = this.library.typeConvertor(prop.name, prop.type!)
         const retConvertor = generateRetConvertor(prop.type!)
@@ -1091,7 +1077,7 @@ export class IdlPeerProcessor {
         const generics = undefined // method.typeParameters?.map(it => it.getText())
         method.parameters.forEach(it => this.library.requestType(it.type!, true))
         const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param))
-        const signature = generateSignature(method)
+        const signature = generateSignature(this.library, method, decl.name)
         const modifiers = idl.isConstructor(method) || method.isStatic ? [MethodModifier.STATIC] : []
         return new MaterializedMethod(decl.name, argConvertors, retConvertor, false,
             new Method(methodName, signature, modifiers, generics)
@@ -1403,11 +1389,11 @@ function getMethodReturnType(language: Language,
     return returnType
 }
 
-function generateSignature(
-    method: idl.IDLCallable | idl.IDLMethod | idl.IDLConstructor,
-): NamedMethodSignature {
-    return new NamedMethodSignature(
-        method.returnType!,
+function generateSignature(library: IdlPeerLibrary,
+                           method: idl.IDLCallable | idl.IDLMethod | idl.IDLConstructor,
+                           className?: string): NamedMethodSignature {
+    const returnType = getMethodReturnType(library.language, method, className)
+    return new NamedMethodSignature(returnType,
         method.parameters.map(it => maybeOptional(it.type!, it.isOptional)),
         method.parameters.map(it => it.name)
     )
