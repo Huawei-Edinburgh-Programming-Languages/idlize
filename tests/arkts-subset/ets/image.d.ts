@@ -29,4 +29,38 @@ declare class ImageAttribute extends CommonMethod<ImageAttribute> {
   fillColor(value: ResourceColor): ImageAttribute;
 }
 
+declare type DrawingLattice  = import('../api/@ohos.graphics.drawing').default.Lattice;
+
 declare const Image: ImageInterface
+
+declare interface ResizableOptions {
+    /**
+     * Image slice widths.
+     *
+     * @type { ?EdgeWidths }
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @crossplatform
+     * @since 11
+     */
+    /**
+     * Image slice widths.
+     *
+     * @type { ?EdgeWidths }
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @crossplatform
+     * @atomicservice
+     * @since 12
+     */
+    slice?: EdgeWidths;
+
+    /**
+     * Image lattice.
+     *
+     * @type { ?DrawingLattice }
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @crossplatform
+     * @atomicservice
+     * @since 12
+     */
+    lattice?: DrawingLattice;
+}

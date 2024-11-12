@@ -586,7 +586,7 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
     }
 
     private printTypeParameters(typeParameters: string[] | undefined): string {
-        return typeParameters?.length ? `<${typeParameters.join(",")}>` : ""
+        return typeParameters?.length ? `<${typeParameters.join(",").replace("[]", "")}>` : ""
     }
 
     private convertType(idlType: idl.IDLType): string {

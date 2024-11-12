@@ -1205,7 +1205,7 @@ export function isConflictingDeclaration(decl: idl.IDLEntry): boolean {/// stole
     // just has ugly dependency WrappedBuilder - there is conflict in generic types
     if (idl.isInterface(decl) && decl.name === 'ContentModifier') return true
     // complicated type arguments
-    if (idl.isClass(decl) && decl.name === 'TransitionEffect') return true
+    // if (idl.isClass(decl) && decl.name === 'TransitionEffect') return true
     // inside namespace
     // if (idl.isEnum(decl) && decl.name === 'GestureType') return true
     // no return type in some methods

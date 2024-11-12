@@ -120,16 +120,6 @@ abstract class TypeCheckerPrinter {
 
         for (const file of this.library.files) {
             const declarations: idl.IDLEntry[] = [...Array.from(file.declarations), ...file.enums]
-            // Collects materialized and builder classes
-            for (const decl of file.entries) {
-                if ((idl.isClass(decl) || idl.isInterface(decl)) && (isMaterialized(decl) || isBuilderClass(decl))) {
-                    declarations.push(decl,
-                        ...declDependenciesCollector.convert(decl)
-                        .filter((it): it is idl.IDLEntry => idl.isEntry(it))
-                        .map(it => it)
-                    )
-                }
-            }
             for (const decl of declarations
                 .filter(it => !PeerGeneratorConfig.ignoreEntry(it.name, this.writer.language))) {
                 if ((idl.isInterface(decl) || idl.isAnonymousInterface(decl) || idl.isEnum(decl) || idl.isClass(decl))
