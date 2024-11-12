@@ -766,12 +766,12 @@
 |`setRichTextOptions`| Function | Dudkin Sergey| in progress|  |
 |`onStart`| Function | Dudkin Sergey| in progress|  |
 |`onComplete`| Function | Dudkin Sergey| in progress|  |
-|*Row*| *Component* | Andrey Khudenkikh | blocked |  |
+|*Row*| *Component* | Andrey Khudenkikh | in progress |  |
 |`setRowOptions`| Function | Andrey Khudenkikh | done |  |
 |`alignItems`| Function | Andrey Khudenkikh | done |  |
 |`justifyContent`| Function | Andrey Khudenkikh | done |  |
 |`pointLight`| Function | Evstigneev Roman | in progress |  |
-|`reverse`| Function | Andrey Khudenkikh | blocked | DMZ |
+|`reverse`| Function | Andrey Khudenkikh | in progress | DMZ |
 |*RowSplit*| *Component* | Dmitry A Smirnov| done|https://gitee.com/openharmony/arkui_ace_engine/issues/IAX2ZN|
 |`setRowSplitOptions`| Function | Dmitry A Smirnov| done|  |
 |`resizeable`| Function | Dmitry A Smirnov| done|  |
@@ -1010,9 +1010,9 @@
 |`showPrevious`| Function |  Andrey Khudenkikh | in progress |  |
 |`changeIndex`| Function |  Andrey Khudenkikh | in progress |  |
 |*SymbolGlyph*| *Component* |Andrey Khudenkikh | in progress |  |
-|`setSymbolGlyphOptions`| Function |Andrey Khudenkikh | in progress |  |
+|`setSymbolGlyphOptions`| Function |Andrey Khudenkikh | devdone |  |
 |`fontSize`| Function |Andrey Khudenkikh | done |  |
-|`fontColor`| Function |Andrey Khudenkikh | in progress |  |
+|`fontColor`| Function |Andrey Khudenkikh | devdone |  |
 |`fontWeight`| Function |Andrey Khudenkikh | done |  |
 |`effectStrategy`| Function |Andrey Khudenkikh | done |  |
 |`renderingStrategy`| Function |Andrey Khudenkikh | done |  |
