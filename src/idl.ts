@@ -1129,7 +1129,7 @@ export function toIDLType(typeName: string): IDLType {
         case "pointer": return IDLPointerType
         case "this": return IDLThisType
         case "Uint8Array": return createContainerType('buffer', [IDLU8Type])
-        case "ArrayBuffer": return createContainerType('buffer', [IDLTopType])
+        case "ArrayBuffer": return createContainerType('buffer', [])
         default: return createReferenceType(typeName)
     }
 }
