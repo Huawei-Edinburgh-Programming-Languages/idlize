@@ -126,7 +126,7 @@ export class TsIDLNodeToStringConverter extends IdlNameConvertorBase implements 
         if (typeSpec === `AttributeModifier`)
             typeArgs = [`object`]
         if (typeSpec === `ContentModifier` || typeSpec === `WrappedBuilder`)
-            typeArgs = [this.convertType(idl.IDLAnyType)] //this.convert(ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword))]
+            typeArgs = [this.convertType(idl.IDLAnyType)]
         if (typeSpec === `Optional`)
             return `${typeArgs} | undefined`
         const maybeTypeArguments = !typeArgs?.length ? '' : `<${typeArgs.join(', ')}>`
