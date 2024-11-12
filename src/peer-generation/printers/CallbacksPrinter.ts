@@ -259,11 +259,11 @@ class ManagedCallCallbackVisitor {
     }
 
     private writeImports() {
-        this.dest.includes.add("arkoala_api_generated.h")
-        this.dest.includes.add("callback_kind.h")
-        this.dest.includes.add("Serializers.h")
-        this.dest.includes.add("common-interop.h")
-        this.dest.includes.add("callbacks.h")
+        this.dest.addInclude("arkoala_api_generated.h")
+        this.dest.addInclude("callback_kind.h")
+        this.dest.addInclude("Serializers.h")
+        this.dest.addInclude("common-interop.h")
+        this.dest.addInclude("callbacks.h")
     }
 
     private writeCallbackCaller(callback: idl.IDLCallback): void {
