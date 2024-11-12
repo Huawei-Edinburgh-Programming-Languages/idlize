@@ -74,20 +74,20 @@
 |`onChange`| Function |Politov Mikhail | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`edgeAlign`| Function |Politov Mikhail | done |  |
 |*Calendar*| *Component* | Maksimov Nikita | in progress|  |
-|`setCalendarOptions`| Function | Maksimov Nikita | in progress|  |
-|`showLunar`| Function | Maksimov Nikita | in progress|  |
-|`showHoliday`| Function | Maksimov Nikita | in progress|  |
-|`needSlide`| Function | Maksimov Nikita | in progress|  |
-|`startOfWeek`| Function | Maksimov Nikita | in progress|  |
-|`offDays`| Function | Maksimov Nikita | in progress|  |
-|`direction`| Function | Maksimov Nikita | in progress|  |
-|`currentDayStyle`| Function | Maksimov Nikita | in progress|  |
-|`nonCurrentDayStyle`| Function | Maksimov Nikita | in progress|  |
-|`todayStyle`| Function | Maksimov Nikita | in progress|  |
-|`weekStyle`| Function | Maksimov Nikita | in progress|  |
-|`workStateStyle`| Function | Maksimov Nikita | in progress|  |
-|`onSelectChange`| Function | Maksimov Nikita | in progress|  |
-|`onRequestData`| Function | Maksimov Nikita | in progress|  |
+|`setCalendarOptions`| Function | Maksimov Nikita | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
+|`showLunar`| Function | Maksimov Nikita | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
+|`showHoliday`| Function | Maksimov Nikita | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
+|`needSlide`| Function | Maksimov Nikita | done |  |
+|`startOfWeek`| Function | Maksimov Nikita | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
+|`offDays`| Function | Maksimov Nikita | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
+|`direction`| Function | Maksimov Nikita | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1N99 |
+|`currentDayStyle`| Function | Maksimov Nikita | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
+|`nonCurrentDayStyle`| Function | Maksimov Nikita | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
+|`todayStyle`| Function | Maksimov Nikita | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
+|`weekStyle`| Function | Maksimov Nikita | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
+|`workStateStyle`| Function | Maksimov Nikita | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
+|`onSelectChange`| Function | Maksimov Nikita | Blocked Arkoala | events |
+|`onRequestData`| Function | Maksimov Nikita | Blocked Arkoala | events |
 |*CalendarController*| *Class* |Maksimov Nikita | in progress|  |
 |`backToToday`| Function |Maksimov Nikita | in progress|  |
 |`goTo`| Function |Maksimov Nikita | in progress|  |
