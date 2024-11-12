@@ -86,8 +86,8 @@
 |`todayStyle`| Function | Maksimov Nikita | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
 |`weekStyle`| Function | Maksimov Nikita | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
 |`workStateStyle`| Function | Maksimov Nikita | blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
-|`onSelectChange`| Function | Maksimov Nikita | Blocked Arkoala | events |
-|`onRequestData`| Function | Maksimov Nikita | Blocked Arkoala | events |
+|`onSelectChange`| Function | Maksimov Nikita | in progress | |
+|`onRequestData`| Function | Maksimov Nikita | in progress | |
 |*CalendarController*| *Class* |Maksimov Nikita | in progress|  |
 |`backToToday`| Function |Maksimov Nikita | in progress|  |
 |`goTo`| Function |Maksimov Nikita | in progress|  |
