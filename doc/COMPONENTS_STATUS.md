@@ -753,14 +753,14 @@
 |`onSubmit`| Function | Dudkin Sergey| done|  |
 |`onWillChange`| Function | Dudkin Sergey| done|  |
 |`onDidChange`| Function | Dudkin Sergey| done|  |
-|`onCut`| Function | Dudkin Sergey| blocked | Ark_CutEvent param is always empty now DMZ|
-|`onCopy`| Function | Dudkin Sergey| blocked | Ark_CopyEvent param is always empty now DMZ|
-|`editMenuOptions`| Function | Dudkin Sergey| blocked| RichEditor modifier :: EditMenuOptionsImpl() needs onCreateMenuCallback, onMenuItemClick input, https://gitee.com/nikolay-igotti/idlize/issues/IB3UKQ |
+|`onCut`| Function | Dudkin Sergey| in progress| Ark_CutEvent param is always empty now DMZ|
+|`onCopy`| Function | Dudkin Sergey| in progress| Ark_CopyEvent param is always empty now DMZ|
+|`editMenuOptions`| Function | Dudkin Sergey| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB3UKQ |
 |`enableKeyboardOnFocus`| Function | Dudkin Sergey| devDone|  |
 |`enableHapticFeedback`| Function | Dudkin Sergey| devDone|  |
 |`barState`| Function | Dudkin Sergey| devDone|  |
-|`bindSelectionMenu`| Function | Dudkin Sergey| blocked Arkoala | not implemented yet. Due to Ark_CustomBuilder DMZ, https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q|
-|`customKeyboard`| Function | Dudkin Sergey| blocked Arkoala | not implemented yet. Due to Ark_CustomBuilder DMZ, https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q|
+|`bindSelectionMenu`| Function | Dudkin Sergey| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q|
+|`customKeyboard`| Function | Dudkin Sergey| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q|
 |`placeholder`| Function | Dudkin Sergey| done|  |
 |*RichText*| *Component* | Dudkin Sergey| in progress|  |
 |`setRichTextOptions`| Function | Dudkin Sergey| in progress|  |
