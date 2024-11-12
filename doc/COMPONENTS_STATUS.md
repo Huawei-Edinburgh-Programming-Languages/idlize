@@ -1113,8 +1113,8 @@
 |`fontStyle`|Function|Tuzhilkin Ivan|in progress|  |
 |`fontWeight`|Function|Tuzhilkin Ivan|in progress|  |
 |`fontFamily`|Function|Tuzhilkin Ivan|in progress|  |
-|`textOverflow`|Function|Tuzhilkin Ivan|in progress|  |
-|`showCounter`|Function|Tuzhilkin Ivan|in progress|  |
+|`textOverflow`|Function|Tuzhilkin Ivan|blocked AceEngine|https://gitee.com/openharmony/arkui_ace_engine/issues/IAXX0N|
+|`showCounter`|Function|Tuzhilkin Ivan|blocked AceEngin| https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
 |`style`|Function|Tuzhilkin Ivan|in progress|  |
 |`barState`|Function|Tuzhilkin Ivan|in progress|  |
 |`heightAdaptivePolicy`|Function|Tuzhilkin Ivan|in progress|  |
@@ -1202,7 +1202,7 @@
 |`enableHapticFeedback`| Function | Spirin Andrey | done |  |
 |`inputFilter`| Function | Spirin Andrey | testskipped  |  |
 |`customKeyboard`| Function | Spirin Andrey | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|`showCounter`| Function | Spirin Andrey | in progress |  |
+|`showCounter`| Function | Spirin Andrey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
 |*TextPicker*| *Component* |Ekaterina Stepanova |in progress |  |
 |`setTextPickerOptions`| Function | Tuzhilkin Ivan| done | https://gitee.com/openharmony/arkui_ace_engine/issues/IB2GJB |
 |`defaultPickerItemHeight`| Function |Ekaterina Stepanova | done |  |
