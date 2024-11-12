@@ -1358,7 +1358,7 @@
 |`indicatorLoop`| Function | Kovalev Sergey | in progress |  |
 |`onChange`| Function | Kovalev Sergey | in progress |  |
 |*CanvasRenderer*| *Class*  | Vadim Voronov | in progress | |
-|`drawImage`| Function  | Vadim Voronov | in progress | |
+|`drawImage`| Function  | Vadim Voronov | Arkoala blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`beginPath`| Function  | Vadim Voronov | done | |
 |`clip`| Function  | Vadim Voronov | in progress | |
 |`fill`| Function  | Vadim Voronov | in progress | |
@@ -1367,40 +1367,40 @@
 |`createPattern`| Function  | Vadim Voronov | in progress | |
 |`createRadialGradient`| Function  | Vadim Voronov | in progress | |
 |`createConicGradient`| Function  | Vadim Voronov | in progress | |
-|`createImageData`| Function  | Vadim Voronov | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`getImageData`| Function  | Vadim Voronov | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`getPixelMap`| Function  | Vadim Voronov | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`createImageData`| Function  | Vadim Voronov | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX & https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getImageData`| Function  | Vadim Voronov | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getPixelMap`| Function  | Vadim Voronov | in progress | |
 |`putImageData`| Function  | Vadim Voronov | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`getLineDash`| Function  | Vadim Voronov |  blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
-|`setLineDash`| Function  | Vadim Voronov | in progress | |
-|`clearRect`| Function  | Vadim Voronov | in progress | |
-|`fillRect`| Function  | Vadim Voronov | in progress | |
-|`strokeRect`| Function  | Vadim Voronov | in progress | |
+|`setLineDash`| Function  | Vadim Voronov | done | |
+|`clearRect`| Function  | Vadim Voronov | done | |
+|`fillRect`| Function  | Vadim Voronov | done | |
+|`strokeRect`| Function  | Vadim Voronov | done | |
 |`restore`| Function  | Vadim Voronov | done | |
 |`save`| Function  | Vadim Voronov | done | |
-|`fillText`| Function  | Vadim Voronov | in progress | |
+|`fillText`| Function  | Vadim Voronov | done | |
 |`measureText`| Function  | Vadim Voronov | in progress | |
-|`strokeText`| Function  | Vadim Voronov | in progress | |
+|`strokeText`| Function  | Vadim Voronov | done | |
 |`getTransform`| Function  | Vadim Voronov | in progress | |
 |`resetTransform`| Function  | Vadim Voronov | done | |
-|`rotate`| Function  | Vadim Voronov | in progress | |
-|`scale`| Function  | Vadim Voronov | in progress | |
-|`setTransform`| Function  | Vadim Voronov | in progress | |
-|`transform`| Function  | Vadim Voronov | in progress | |
-|`translate`| Function  | Vadim Voronov | in progress | |
+|`rotate`| Function  | Vadim Voronov | done | |
+|`scale`| Function  | Vadim Voronov | done | |
+|`setTransform`| Function  | Vadim Voronov | done | |
+|`transform`| Function  | Vadim Voronov | done | |
+|`translate`| Function  | Vadim Voronov | done | |
 |`setPixelMap`| Function  | Vadim Voronov | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`transferFromImageBitmap`| Function  | Vadim Voronov | in progress | |
 |`saveLayer`| Function  | Vadim Voronov | done | |
 |`restoreLayer`| Function  | Vadim Voronov | done | |
 |`reset`| Function  | Vadim Voronov | done | |
 |`getGlobalAlpha`| Function  | Vadim Voronov | in progress | |
-|`setGlobalAlpha`| Function  | Vadim Voronov | in progress | |
+|`setGlobalAlpha`| Function  | Vadim Voronov | done | |
 |`getGlobalCompositeOperation`| Function  | Vadim Voronov | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
-|`setGlobalCompositeOperation`| Function  | Vadim Voronov | in progress | |
+|`setGlobalCompositeOperation`| Function  | Vadim Voronov | done | |
 |`setFillStyle`| Function  | Vadim Voronov | in progress | |
 |`setStrokeStyle`| Function  | Vadim Voronov | in progress | |
 |`getFilter`| Function  | Vadim Voronov | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
-|`setFilter`| Function  | Vadim Voronov | in progress | |
+|`setFilter`| Function  | Vadim Voronov | done | |
 |`getImageSmoothingEnabled`| Function  | Vadim Voronov | in progress | |
 |`setImageSmoothingEnabled`| Function  | Vadim Voronov | in progress | |
 |`getImageSmoothingQuality`| Function  | Vadim Voronov | in progress | |
