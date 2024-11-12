@@ -601,7 +601,7 @@
 |*MenuItemGroup*| *Component* |Morozov Sergey |blocked |  |
 |`setMenuItemGroupOptions`| Function | Morozov Sergey |blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*NavDestination*| *Component* |Kovalev Sergey | in progress |  |
-|`setNavDestinationOptions`| Function |Kovalev Sergey | in progress | No need to implement this method DMZ|
+|`setNavDestinationOptions`| Function |Kovalev Sergey | done |  |
 |`hideTitleBar`| Function |Kovalev Sergey | done |  |
 |`onShown`| Function |Kovalev Sergey | done |  |
 |`onHidden`| Function |Kovalev Sergey | done |  |
