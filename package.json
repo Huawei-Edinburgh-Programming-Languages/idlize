@@ -142,6 +142,10 @@
     "run:cj": "npm run compile && node . --api-version 99 --dts2peer --need-interfaces --input-dir ./tests/cangjie-subset/ --output-dir ./out/cangjie-subset/generated --language cangjie && npm run compile:cj:native && LD_LIBRARY_PATH=./native/build-cangjie-native-dummy:$LD_LIBRARY_PATH && ACE_LIBRARY_PATH=./native/build-cangjie-native-dummy cjpm run",
     "run:peers:call_log": "npm run check:peers:run && cd ./peer_lib/call_log && meson setup build && cd ./build && meson compile && ./run_call_log",
     "cj": "npm run compile:cj:native &&  LD_LIBRARY_PATH=./native/build-cangjie-native-dummy:$LD_LIBRARY_PATH && ACE_LIBRARY_PATH=./native/build-cangjie-native-dummy cjpm run",
-    "generate": "npm run compile && node . --dts2peer --input-dir ./interface_sdk-js/api/@internal/component/ets/,./interface_sdk-js/api/global --arkoala-destination ./external --api-version 103 --generator-target arkoala --only-integrated"
+    "generate": "npm run compile && node . --dts2peer --input-dir ./interface_sdk-js/api/@internal/component/ets/,./interface_sdk-js/api/global --arkoala-destination ./external --api-version 103 --generator-target arkoala --only-integrated",
+    "native:ts:arm32": "cd external && npm run native:ts:arm32",
+    "native:ts:arm64": "cd external && npm run native:ts:arm64",
+    "har": "npm run generate && cd external && npm run arkoala:har",
+    "har-arm32": "npm run generate && cd external && npm run arkoala:har-arm32"
   }
 }
