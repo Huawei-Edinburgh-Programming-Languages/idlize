@@ -57,7 +57,6 @@ const char* getArkAnyAPIFuncName = "%CPP_PREFIX%GetArkAnyAPI";
 const %CPP_PREFIX%ArkUIAnyAPI* GetAnyImpl(int kind, int version, std::string* result) {
     if (!impls[kind]) {
         static const GroupLogger* logger = GetDefaultLogger();
-
         %CPP_PREFIX%ArkUIAnyAPI* impl = nullptr;
         typedef %CPP_PREFIX%ArkUIAnyAPI* (*GetAPI_t)(int, int);
         static GetAPI_t getAPI = nullptr;

@@ -22,6 +22,7 @@
 
 #include "common-interop.h"
 #include "interop-logging.h"
+#include "crashdump.h"
 
 #include "arkoala_api_generated.h"
 #include "Serializers.h"
@@ -52,6 +53,11 @@ KNativePointer impl_GetNodeFinalizer() {
 KOALA_INTEROP_0(GetNodeFinalizer, KNativePointer)
 
 // custom methods
+void impl_InitCrashHandlers() {
+    installCrashHandlers();
+}
+KOALA_INTEROP_V0(InitCrashHandlers)
+
 void impl_ShowCrash(const KStringPtr& messagePtr) {
     GetArkUIExtendedNodeAPI()->showCrash(messagePtr.c_str());
 }
