@@ -287,17 +287,17 @@
 |`backgroundImage`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`backgroundBlurStyle`| Function | Skroba Gleb | done |  |
 |`foregroundBlurStyle`| Function | Roman Sedaikin | in progress | |
-|`focusScopeId`| Function | | | |
-|`focusScopePriority`| Function | | | |
+|`focusScopeId`| Function | Berezin Kirill | in progress | |
+|`focusScopePriority`| Function | Berezin Kirill | in progress | |
 |`gesture`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IARW2A |
 |`priorityGesture`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IARW2A |
 |`parallelGesture`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IARW2A |
 |`blur`| Function | Roman Sedaikin | in progress | |
 |`linearGradientBlur`| Function | Lobah Mikhail | in progress | |
 |`systemBarEffect`| Function | Lobah Mikhail | in progress | |
-|`backdropBlur`| Function | | | |
+|`backdropBlur`| Function | Berezin Kirill | done | |
 |`sharedTransition`|Function|Skroba Gleb | done |  |
-|`chainMode`| Function | | | |
+|`chainMode`| Function | Berezin Kirill | in progress | |
 |`dragPreviewOptions`| Function | | | |
 |`overlay`| Function | Roman Sedaikin | in progress | |
 |`blendMode`| Function | Lobah Mikhail | in progress | |
@@ -479,7 +479,7 @@
 |`matchTextDirection`| Function | Evstigneev Roman | in progress | |
 |`fitOriginalSize`| Function | Evstigneev Roman | in progress | |
 |`fillColor`| Function | Evstigneev Roman | done | |
-|`objectFit`| Function |Kirill Berezin| in progress | |
+|`objectFit`| Function |Kirill Berezin| done | |
 |`objectRepeat`| Function | Evstigneev Roman | in progress | |
 |`autoResize`| Function | Evstigneev Roman | in progress | https://gitee.com/openharmony/arkui_ace_engine/issues/IAW529 |
 |`renderMode`| Function | Evstigneev Roman | in progress | |
@@ -532,7 +532,7 @@
 |`nestedScroll`|Function|Morozov Sergey|done|  |
 |`enableScrollInteraction`|Function|Morozov Sergey|done|  |
 |`friction`|Function|Morozov Sergey|done|  |
-|`childrenMainSize`|Function|Morozov Sergey|blocked Arkoala| DMZ |
+|`childrenMainSize`|Function|Morozov Sergey|in progress|  |
 |`maintainVisibleContentPosition`|Function|Morozov Sergey|done|  |
 |`onScroll`|Function|Morozov Sergey|done|  |
 |`onScrollIndex`|Function|Morozov Sergey|done|  |
@@ -542,8 +542,8 @@
 |`onScrollStart`|Function|Morozov Sergey|done|  |
 |`onScrollStop`|Function|Morozov Sergey|done|  |
 |`onItemDelete`|Function|Morozov Sergey|in progress|  |
-|`onItemMove`|Function|Morozov Sergey|blocked Arkoala| DMZ |
-|`onItemDragStart`|Function|Morozov Sergey|blocked Arkoala|DMZ |
+|`onItemMove`|Function|Morozov Sergey|in progress|  |
+|`onItemDragStart`|Function|Morozov Sergey|in progress| |
 |`onItemDragEnter`|Function|Morozov Sergey|done|  |
 |`onItemDragMove`|Function|Morozov Sergey|done|  |
 |`onItemDragLeave`|Function|Morozov Sergey|done|  |
@@ -560,7 +560,7 @@
 |*ListItemGroup*|*Component*|Morozov Sergey|blocked|  |
 |`setListItemGroupOptions`|Function|Morozov Sergey|blocked Arkoala| https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`divider`|Function|Morozov Sergey|done|  |
-|`childrenMainSize`|Function|Morozov Sergey|blocked Arkoala| DMZ |
+|`childrenMainSize`|Function|Morozov Sergey|in progress|  |
 |*LocationButton*| *Component* |Samarin Sergey| done |  |
 |`setLocationButtonOptions`| Function |Samarin Sergey| done |  |
 |`onClick`| Function |Samarin Sergey| done |  |
