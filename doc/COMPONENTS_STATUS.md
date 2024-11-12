@@ -1172,7 +1172,7 @@
 |`enableKeyboardOnFocus`| Function | Spirin Andrey | done |  |
 |`passwordIcon`| Function | Spirin Andrey | in progress |  |
 |`showError`| Function | Spirin Andrey | done |  |
-|`showUnit`| Function | Spirin Andrey | blocked | Arkoala https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`showUnit`| Function | Spirin Andrey | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`showUnderline`| Function | Spirin Andrey | done |  |
 |`underlineColor`| Function | Spirin Andrey | in progress |  |
 |`selectionMenuHidden`| Function | Spirin Andrey | done |  |
@@ -1201,7 +1201,7 @@
 |`enablePreviewText`| Function | Spirin Andrey | done |  |
 |`enableHapticFeedback`| Function | Spirin Andrey | done |  |
 |`inputFilter`| Function | Spirin Andrey | testskipped  |  |
-|`customKeyboard`| Function | Spirin Andrey | blocked | Arkoala https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`customKeyboard`| Function | Spirin Andrey | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`showCounter`| Function | Spirin Andrey | in progress |  |
 |*TextPicker*| *Component* |Ekaterina Stepanova |in progress |  |
 |`setTextPickerOptions`| Function | Tuzhilkin Ivan| done | https://gitee.com/openharmony/arkui_ace_engine/issues/IB2GJB |
