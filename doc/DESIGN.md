@@ -2,21 +2,28 @@
 
 ## Purpose and goals
 
-Large APIs needs special treatment to provide multiple languages and execution environment bindings.
-We believe that universal mechanism to support such mapping is needed, and not yet exists in industry.
+Large APIs needs special treatment to provide multiple languages APIs and execution environment bindings.
+We believe that universal tool to support such mapping is needed, and not yet exists in the industry.
 Thus we've created toolchain and accompanying runtime interop mechanisms to solve cross-language API
 mapping problem both in compile and execution phases of application lifecycle.
 
 ## Approach
 
-  To provide ability to support multiple target languages and interop scenarios we take an approach similar to what LLVM
-does to compiler development. We implement general purpose compiler toolchain with IDL-like IR and flexible backend system
-build around notions of LanguageWriter and TypeConvertor. LanguageWriter implements language agnostic emitter interface,
-which can be implemented for particular target language to emit particular programming language constructions when needed.
-TypeConvertor defines the policy of conversion for abstract IDL-based type system for a particular programming language.
+  To provide approach to support multiple target languages and interop scenarios we follow the road similar to what LLVM
+does to the general compiler development. We implement the general purpose compiler toolchain with IDL-like IR and flexible
+backend system build around notions of LanguageWriter and TypeConvertor.
 
- Per-project generator is provided by a framework developer to produce specific integration code emit library-bridging code.
-Additionally, build system integration code is frequently emitted.
+ LanguageWriter implements language agnostic emitter interface, which can be implemented for a particular target language to
+emit that programming language constructions when needed.
+
+TypeConvertor defines the policy of conversion for an abstract IDL-based type system for the particular target programming language.
+
+Toolchain provides basic utility functions to support important primitives, such as callbacks, FFI bridging and
+serialization/deserialization.
+
+ Per-project generator is expected to be provided by a framework developer to produce specific integration code
+emitting library-bridging code.
+Additionally, build system integration code is emitted.
 
  Initially interfaces can be either described in the IDL language, or be converted by a language-specific frontend from
 some other interface definition language, for example .d.ts TypeScript interface definitions or .h C header file.
