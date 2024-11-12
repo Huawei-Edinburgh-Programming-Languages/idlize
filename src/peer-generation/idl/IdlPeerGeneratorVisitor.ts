@@ -971,8 +971,8 @@ export class IdlPeerProcessor {
 
         const destroyPeerReturnType: RetConvertor = {
             isVoid: true,
-            nativeType: () => "void",
-            interopType: () => "void",
+            nativeType: () => PrimitiveType.Void.getText(),
+            interopType: () => PrimitiveType.Void.getText(),
             macroSuffixPart: () => "V"
         }
 
