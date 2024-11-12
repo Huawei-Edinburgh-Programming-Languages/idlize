@@ -175,7 +175,7 @@ export class PeerGeneratorConfig {
             return originalName.substring(0, originalName.length - 9)
         return originalName
     }
-    
+
     static isKnownParametrized(name: string | undefined) : boolean {
         return name != undefined && PeerGeneratorConfig.knownParametrized.includes(name)
     }
