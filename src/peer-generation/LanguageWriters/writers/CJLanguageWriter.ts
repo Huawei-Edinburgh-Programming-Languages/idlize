@@ -77,6 +77,20 @@ export class CJCastExpression implements LanguageExpression {
     }
 }
 
+export class CJMatchExpression implements LanguageExpression {
+    constructor(public matchValue: LanguageExpression, public matchCases: LanguageExpression[], public caseBlocks: LanguageExpression[]) {}
+    asString(): string {
+        let output: string[] = []
+        output.push(`match (${this.matchValue.asString()}) {`)
+        for (let index in this.matchCases) {
+            output.push(`case ${this.matchCases[index].asString()} => { ${this.caseBlocks[index].asString()} }`)
+        }
+        output.push(`case _ => { throw Exception(\"Unmatched pattern\" ${this.matchValue.asString()}) }`)
+        output.push(`}`)
+        return output.join('\n')
+    }
+}
+
 ////////////////////////////////////////////////////////////////
 //                         STATEMENTS                         //
 ////////////////////////////////////////////////////////////////
@@ -341,6 +355,9 @@ export class CJLanguageWriter extends LanguageWriter {
     }
     makeUndefined(): LanguageExpression {
         return this.makeString("Option.None")
+    }
+    override makeUnwrapOptional(expression: LambdaExpression): LanguageExpression {
+        return new CJMatchExpression(expression, [this.makeString('Some(serializer)')], [this.makeString('serializer')])
     }
     makeValueFromOption(value: string, destinationConvertor: ArgConvertor): LanguageExpression {
         return this.makeString(`${value}`)
