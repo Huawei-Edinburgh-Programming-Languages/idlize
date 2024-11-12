@@ -241,6 +241,7 @@ export function generateArkoalaFromIdl(config: {
         const declarations = printDeclarations(peerLibrary)
         const index = new IndentedPrinter()
         index.print(tsCopyrightAndWarning(""))
+        index.print("/// <reference path=\"./index-common.d.ts\"/>")
         for (const data of declarations) {
             index.print(data)
         }
