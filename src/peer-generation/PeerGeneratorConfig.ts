@@ -81,6 +81,7 @@ export class PeerGeneratorConfig {
 
     private static ignoreMaterialized = [
         // TBD
+        "IMonitor",
         "Event",
         "Configuration",
         "UIGestureEvent",
@@ -175,7 +176,7 @@ export class PeerGeneratorConfig {
             return originalName.substring(0, originalName.length - 9)
         return originalName
     }
-
+    
     static isKnownParametrized(name: string | undefined) : boolean {
         return name != undefined && PeerGeneratorConfig.knownParametrized.includes(name)
     }
