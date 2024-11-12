@@ -36,3 +36,101 @@ declare class ListAttribute extends ScrollableCommonMethod<ListAttribute> {
 }
 
 declare const List: ListInterface
+
+declare enum ScrollState {
+    /**
+     * Not activated.
+     *
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @since 7
+     */
+    /**
+     * Not activated.
+     *
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @form
+     * @since 9
+     */
+    /**
+     * Not activated.
+     *
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @crossplatform
+     * @form
+     * @since 10
+     */
+    /**
+     * Not activated.
+     *
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @crossplatform
+     * @form
+     * @atomicservice
+     * @since 11
+     */
+    Idle,
+
+    /**
+     * Scrolling status.
+     *
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @since 7
+     */
+    /**
+     * Scrolling status.
+     *
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @form
+     * @since 9
+     */
+    /**
+     * Scrolling status.
+     *
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @crossplatform
+     * @form
+     * @since 10
+     */
+    /**
+     * Scrolling status.
+     *
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @crossplatform
+     * @form
+     * @atomicservice
+     * @since 11
+     */
+    Scroll,
+
+    /**
+     * Drag status.
+     *
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @since 7
+     */
+    /**
+     * Drag status.
+     *
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @form
+     * @since 9
+     */
+    /**
+     * Drag status.
+     *
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @crossplatform
+     * @form
+     * @since 10
+     */
+    /**
+     * Drag status.
+     *
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @crossplatform
+     * @form
+     * @atomicservice
+     * @since 11
+     */
+    Fling,
+}

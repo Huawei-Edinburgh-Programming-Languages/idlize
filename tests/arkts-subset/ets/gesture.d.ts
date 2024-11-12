@@ -123,3 +123,62 @@ declare class GestureRecognizer {
 
   getEventTargetInfo(): EventTargetInfo;
 }
+
+declare interface GestureInfo {
+  /**
+   * The tag of gesture.
+   *
+   * @type { ?string }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @since 11
+   */
+  /**
+   * The tag of gesture.
+   *
+   * @type { ?string }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 12
+   */
+  tag?: string;
+
+  /**
+   * The type of gesture.
+   *
+   * @type { GestureControl.GestureType }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @since 11
+   */
+  /**
+   * The type of gesture.
+   *
+   * @type { GestureControl.GestureType }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 12
+   */
+  type: GestureControl.GestureType;
+
+  /**
+   * The flag whether it is a system gesture.
+   *
+   * @type { boolean }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @since 11
+   */
+  /**
+   * The flag whether it is a system gesture.
+   *
+   * @type { boolean }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 12
+   */
+  isSystemGesture: boolean;
+}
