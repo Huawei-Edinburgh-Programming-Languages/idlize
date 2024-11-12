@@ -1441,6 +1441,10 @@
 |`getWidth`| Function |Vadim Voronov| done | |
 |*DrawingRenderingContext*| *Class* |Vadim Voronov| blocked |  |
 |`invalidate`| Function |Vadim Voronov| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|*ChildrenMainSize*| *Class* | Morozov Sergey | in progress |  |
+|`splice`| Function | Morozov Sergey | in progress |  |
+|`update`| Function | Morozov Sergey | in progress |  |
+|`getChildDefaultSize`| Function | Morozov Sergey | in progress |  |
 |*ImageAnalyzerController*| *Class* |Vadim Voronov|  blocked |  |
 |`getImageAnalyzerSupportTypes`| Function |Vadim Voronov|  blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
 |*ListScroller*| *Class* |Morozov Sergey | blocked |  |
