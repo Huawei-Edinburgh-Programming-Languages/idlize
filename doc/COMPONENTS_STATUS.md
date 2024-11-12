@@ -633,7 +633,7 @@
 |`onTitleModeChange`| Function | Skroba Gleb | in progress| no callbacks Arkoala support |
 |`hideBackButton`|Function| Erokhin Ilya | done |  |
 |`titleMode`|Function| Erokhin Ilya | done |  |
-|`menus`| Function | Skroba Gleb | blocked Arkoala, blocked UT | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q ,  https://gitee.com/openharmony/arkui_ace_engine/issues/IB3U6S|
+|`menus`| Function | Skroba Gleb | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q ,  https://gitee.com/openharmony/arkui_ace_engine/issues/IB3U6S|
 |`toolBar`| Function | Skroba Gleb | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`hideToolBar`|Function| Skroba Gleb | in progress | main part done, no ace_engine implementation for second |
 |`onNavBarStateChange`|Function| Erokhin Ilya | done |  |
@@ -1358,7 +1358,7 @@
 |`indicatorLoop`| Function | Kovalev Sergey | in progress |  |
 |`onChange`| Function | Kovalev Sergey | in progress |  |
 |*CanvasRenderer*| *Class*  | Vadim Voronov | in progress | |
-|`drawImage`| Function  | Vadim Voronov | Arkoala blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`drawImage`| Function  | Vadim Voronov | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`beginPath`| Function  | Vadim Voronov | done | |
 |`clip`| Function  | Vadim Voronov | in progress | |
 |`fill`| Function  | Vadim Voronov | in progress | |
