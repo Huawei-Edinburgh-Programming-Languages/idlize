@@ -60,7 +60,6 @@ import { collectCJImportsForDeclaration } from "../printers/lang/CJIdlUtils"
 import { ARK_CUSTOM_OBJECT, javaCustomTypeMapping } from "../printers/lang/Java"
 import { Language } from "../../Language"
 import { createInterfaceDeclName } from "../TypeNodeNameConvertor";
-import { cjCustomTypeMapping } from "../printers/lang/Cangjie"
 
 /**
  * Theory of operations.
@@ -1045,22 +1044,6 @@ export class IdlPeerProcessor {
                 mMethods.push(setAccessor)
             }
         })
-    
-        this.library.materializedClasses.set(
-            name,
-            new MaterializedClass(
-                name,
-                isDeclInterface,
-                superClass,
-                generics,
-                mFields,
-                mConstructor,
-                mDestroyPeer,
-                importFeatures,
-                mMethods
-            )
-        )
-    }
     
         this.library.materializedClasses.set(
             name,
