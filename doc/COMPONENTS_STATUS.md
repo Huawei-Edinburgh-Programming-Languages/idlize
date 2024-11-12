@@ -993,7 +993,7 @@
 |`onAnimationStart`| Function | Skroba Gleb| done |  |
 |`onAnimationEnd`| Function | Skroba Gleb | done |  |
 |`onGestureSwipe`| Function | Skroba Gleb | done |  |
-|`nestedScroll`| Function | Skroba Gleb| blocked UT | DMZ |
+|`nestedScroll`| Function | Skroba Gleb| blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3ULZ |
 |`customContentTransition`| Function | Skroba Gleb | in progress | |
 |`onContentDidScroll`| Function | Skroba Gleb| testskipped | |
 |`indicatorInteractive`| Function | Skroba Gleb| done |  |
