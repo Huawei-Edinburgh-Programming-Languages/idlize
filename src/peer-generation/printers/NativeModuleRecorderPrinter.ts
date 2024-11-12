@@ -130,7 +130,7 @@ class NativeModuleRecorderVisitor {
     }
 
     printOtherMethods() {
-        this.nativeModuleRecorder.writeMethodImplementation(new Method("_ManagedStringWrite", new NamedMethodSignature(toIDLType("KInt"),[toIDLType("KStringPtr"), createContainerType('buffer', [IDLU8Type]), toIDLType("KInt")], ['value', 'buffer', 'offset'])), w => {
+        this.nativeModuleRecorder.writeMethodImplementation(new Method("_ManagedStringWrite", new NamedMethodSignature(toIDLType("KInt"),[toIDLType("KStringPtr"), createContainerType('sequence', [IDLU8Type]), toIDLType("KInt")], ['value', 'buffer', 'offset'])), w => {
             w.writeLines(`if (typeof value === 'number' || value === null)`)
             w.pushIndent()
             w.writeLines(`throw "Not implemented"`)
@@ -178,7 +178,7 @@ class NativeModuleRecorderVisitor {
             w.writeLines(`return this.ptr2object<string>(ptr).length`)
         })
         
-        this.nativeModuleRecorder.writeMethodImplementation(new Method("_StringData", new NamedMethodSignature(IDLVoidType, [toIDLType("KPointer"), createContainerType('buffer', [IDLU8Type]), toIDLType("number")], ["ptr", "buffer", "length"])), w => {
+        this.nativeModuleRecorder.writeMethodImplementation(new Method("_StringData", new NamedMethodSignature(IDLVoidType, [toIDLType("KPointer"), createContainerType('sequence', [IDLU8Type]), toIDLType("number")], ["ptr", "buffer", "length"])), w => {
             w.writeLines(`let value = this.ptr2object<string>(ptr);`)
             w.writeLines(`(buffer as Uint8Array).set(encodeToData(value))`)
         })
