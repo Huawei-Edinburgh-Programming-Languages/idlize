@@ -411,7 +411,6 @@ export function writePeerMethod(printer: LanguageWriter, method: IdlPeerMethod, 
         new NamedMethodSignature(returnType, signature.args, signature.argsNames),
         method.method.modifiers, method.method.generics
     )
-
     printer.writeMethodImplementation(peerMethod, (writer) => {
         let scopes = method.argConvertors.filter(it => it.isScoped)
         scopes.forEach(it => {
@@ -481,9 +480,9 @@ export function writePeerMethod(printer: LanguageWriter, method: IdlPeerMethod, 
             } else if (method instanceof MaterializedMethod && method.peerMethodName !== "ctor") {
                 if (isNamedNode(returnType) && returnType.name === method.originalParentName) {
                     if (method.hasReceiver()) {
-                        // TODO: interesting question if we shall reassign ptr to value returned by native op.
+                        // TODO: interesting question if we shall reassign ptr to the value returned by the native op.
                         result = [
-                            writer.makeAssign(`this.peer!.ptr`, undefined, writer.makeString(returnValName), false),
+                            // writer.makeAssign(`this.peer!.ptr`, undefined, writer.makeString(returnValName), false),
                             writer.makeReturn(writer.makeString("this"))
                         ]
                     } else {
