@@ -42,13 +42,20 @@ import {
     makeSyntheticTypeAliasDeclaration,
     syntheticDeclarationFilename
 } from "./IdlSyntheticDeclarations";
-import { BuilderClass, initCustomBuilderClasses, isCustomBuilderClass } from "../BuilderClass";
+import {
+    BuilderClass,
+    BuilderField,
+    BuilderMethod,
+    initCustomBuilderClasses,
+    isCustomBuilderClass
+} from "../BuilderClass";
 import { isRoot } from "../inheritance";
 import { ImportFeature } from "../ImportsCollector";
 import { DeclarationNameConvertor } from "./IdlNameConvertor";
 import { PrimitiveType } from "../ArkPrimitiveType"
 import { collapseIdlEventsOverloads } from "../printers/EventsPrinter"
 import { convert } from "./common"
+import { collectJavaImportsForDeclaration } from "../printers/lang/JavaIdlUtils"
 import { collectCJImportsForDeclaration } from "../printers/lang/CJIdlUtils"
 import { ARK_CUSTOM_OBJECT, javaCustomTypeMapping } from "../printers/lang/Java"
 import { Language } from "../../Language"
@@ -203,6 +210,7 @@ function mapCInteropRetType(type: idl.IDLType): string {
                 // return `KStringPtr`
                 return "void"
             case idl.IDLVoidType:
+            case idl.IDLThisType:
             case idl.IDLUndefinedType:
                 return "void"
         }
@@ -1037,6 +1045,22 @@ export class IdlPeerProcessor {
                 mMethods.push(setAccessor)
             }
         })
+    
+        this.library.materializedClasses.set(
+            name,
+            new MaterializedClass(
+                name,
+                isDeclInterface,
+                superClass,
+                generics,
+                mFields,
+                mConstructor,
+                mDestroyPeer,
+                importFeatures,
+                mMethods
+            )
+        )
+    }
     
         this.library.materializedClasses.set(
             name,
