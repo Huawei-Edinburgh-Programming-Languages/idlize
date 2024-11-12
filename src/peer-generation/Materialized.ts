@@ -17,7 +17,7 @@ import { ArgConvertor, RetConvertor } from "./ArgConvertors"
 import { Field, Method, MethodModifier } from "./LanguageWriters"
 import { capitalize } from "../util"
 import { ImportFeature, ImportsCollector } from "./ImportsCollector"
-import { isOptionalType, isNamedNode, IDLThisType, IDLType, maybeOptional, IDLNode, isIDLTypeName } from "../idl"
+import { IDLType } from "../idl"
 import { IdlPeerMethod } from "./idl/IdlPeerMethod";
 import { PeerClassBase } from "./PeerClass";
 import { IdlPeerLibrary } from "./idl/IdlPeerLibrary"

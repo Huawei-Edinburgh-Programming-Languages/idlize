@@ -26,7 +26,6 @@ import { typeOrUnion } from "./peer-generation/idl/common"
 import { IDLKeywords } from "./languageSpecificKeywords"
 import { isCommonMethodOrSubclass } from "./peer-generation/inheritance"
 import { ReferenceResolver } from "./peer-generation/ReferenceResolver"
-import { isBuilderClass } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
 
 function escapeIdl(name: string): string {
     if (IDLKeywords.has(name))
@@ -813,10 +812,8 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
 
         if (!this.isSuitableForThisConversion(method.parent)) return type
 
-        let className = this.clazzName(method)
+        let className = this.ownerName(method)
         // We use `this` IDL type when converting builder methods of UI nodes or similar types.
-
-        /// let className = this.clazzName(method)
         let retTypeName = idl.isNamedNode(type) ? idl.forceAsNamedNode(type).name : undefined
         const isMethodStatic = method.modifiers?.some(mod => mod.kind === ts.SyntaxKind.StaticKeyword)
 
@@ -1124,16 +1121,10 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         })
     }
 
-    private clazzName(method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration | ts.CallSignatureDeclaration | ts.ConstructorDeclaration | ts.ConstructSignatureDeclaration | ts.IndexSignatureDeclaration): string | undefined {
-        let parent = method.parent//.parent
-
-        if (parent !== undefined && ts.isClassDeclaration(parent)) {
-            return identName(parent.name)!
-        }
-        else if (parent !== undefined && ts.isInterfaceDeclaration(parent))
-        {
-            return identName(parent.name)!
-        }
+    private ownerName(method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration | ts.CallSignatureDeclaration | ts.ConstructorDeclaration | ts.ConstructSignatureDeclaration | ts.IndexSignatureDeclaration): string | undefined {
+        let parent = method.parent
+        if (ts.isClassDeclaration(parent) || ts.isInterfaceDeclaration(parent))
+            return identName(parent.name)
 
         return undefined
     }
