@@ -1532,6 +1532,12 @@
 |`requestFullscreen`| Function | Erokhin Ilya | done |  |
 |`exitFullscreen`| Function | Erokhin Ilya | done |  |
 |`reset`| Function | Erokhin Ilya | done |  |
+|*WebKeyboardController*| *Class* | Erokhin Ilya | in progress |  |
+|`insertText`| Function | Erokhin Ilya | in progress |  |
+|`deleteForward`| Function | Erokhin Ilya | in progress |  |
+|`deleteBackward`| Function | Erokhin Ilya | in progress |  |
+|`sendFunctionKey`| Function | Erokhin Ilya | in progress |  |
+|`close`| Function | Erokhin Ilya | in progress |  |
 |*FullScreenExitHandler*| *Class* | Erokhin Ilya | in progress |  |
 |`exitFullScreen`| Function | Erokhin Ilya | in progress |  |
 |*FileSelectorParam*| *Class* | Erokhin Ilya | in progress |  |
