@@ -174,7 +174,7 @@ export class OverloadsPrinter {
                 this.printer.writeStatement(
                     this.printer.makeCondition(this.printer.makeNaryOp("==",
                             [this.printer.makeString(argName), this.printer.makeString("undefined")]),
-                        this.printer.makeThrowError(`throw new Error(\"Arg '${argName}' is null\")`)
+                        this.printer.makeThrowError(`Arg '${argName}' is null`)
                     )
                 )
             }

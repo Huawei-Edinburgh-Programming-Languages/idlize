@@ -942,7 +942,7 @@ export class IdlPeerProcessor {
                             methods: decl.methods.map(method => {
                                 return {
                                     ...method,
-                                    returnType: getMethodReturnType(this.library.language, method, decl.name),
+                                    returnType: method.returnType!,
                                 } as idl.IDLMethod
                             }),
                         } as idl.IDLInterface,
@@ -1338,25 +1338,6 @@ export function isSourceDecl(node: idl.IDLEntry): boolean {
     // if (!ts.isSourceFile(node.parent))
     //     throw 'Expected declaration to be at file root'
     return !node.fileName?.endsWith('stdlib.d.ts')
-}
-
-function getMethodReturnType(language: Language,
-                             method: idl.IDLCallable | idl.IDLMethod | idl.IDLConstructor,
-                             className?: string): idl.IDLType {
-    let returnType: idl.IDLType
-    // TODO: Needs to be implemented properly
-    // Correct printing of return type name
-    if (language === Language.ARKTS) {
-        const isRetTypeParam = idl.isTypeParameterType(method.returnType!)
-        const isSelfRetType = className !== undefined && idl.isNamedNode(method.returnType!) ? className == method.returnType.name : true
-        returnType = idl.isVoidType(method.returnType!) // check
-            ? idl.IDLVoidType
-            : idl.isConstructor(method) || (!method.isStatic && isSelfRetType || isRetTypeParam) ? idl.IDLThisType : method.returnType!
-    } else {
-        returnType = (method.returnType && idl.isVoidType(method.returnType)) ? idl.IDLVoidType
-            : idl.isConstructor(method) || !method.isStatic ? idl.IDLThisType : method.returnType!
-    }
-    return returnType
 }
 
 function generateSignature(
