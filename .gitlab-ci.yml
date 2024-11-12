@@ -63,31 +63,40 @@ compile arkts subset:
 #   script:
 #     - npm run check:arkts:subset:tsc
 
-build native-arm64:
+build arkoala-ts:
   stage: test
-  allow_failure: true
   tags:
     - idlize-ci
     - koala-ci
   before_script:
     - !reference [.setup, script]
   script:
-    - KOALA_BZ=1 OPENLAB_USERNAME=koala-ci OPENLAB_PASSWORD=w1llUgu3ss npm run native:ts:arm64
+    - KOALA_BZ=1 OPENLAB_USERNAME=koala-ci OPENLAB_PASSWORD=w1llUgu3ss npm run arkoala:ts
 
-build native-arm32:
-  stage: test
-  allow_failure: true
-  tags:
-    - idlize-ci
-    - koala-ci
-  before_script:
-    - !reference [.setup, script]
-  script:
-    - KOALA_BZ=1 OPENLAB_USERNAME=koala-ci OPENLAB_PASSWORD=w1llUgu3ss npm run native:ts:arm32
+#build arkoala-ts-native-arm64:
+#  stage: test
+#  allow_failure: true
+#  tags:
+#    - idlize-ci
+#    - koala-ci
+#  before_script:
+#    - !reference [.setup, script]
+#  script:
+#    - KOALA_BZ=1 OPENLAB_USERNAME=koala-ci OPENLAB_PASSWORD=w1llUgu3ss npm run arkoala:ts:native:arm64
+#
+#build arkoala-ts-native-arm32:
+#  stage: test
+#  allow_failure: true
+#  tags:
+#    - idlize-ci
+#    - koala-ci
+#  before_script:
+#    - !reference [.setup, script]
+#  script:
+#    - KOALA_BZ=1 OPENLAB_USERNAME=koala-ci OPENLAB_PASSWORD=w1llUgu3ss npm run arkoala:ts:native:arm32
 
 build arkoala.har:
   stage: test
-  allow_failure: true
   tags:
     - idlize-ci
     - koala-ci
