@@ -1272,6 +1272,10 @@
 |`preloadItems`| Function | Skroba Gleb | done | |
 |`setTabBarTranslate`| Function | | | |
 |`setTabBarOpacity`| Function | | | |
+|*TextAreaController*| *Class* | Tuzhilkin Ivan | in progress |  |
+|`caretPosition`| Function | Tuzhilkin Ivan | in progress |  |
+|`setTextSelection`| Function | Tuzhilkin Ivan | in progress |  |
+|`stopEditing`| Function | Tuzhilkin Ivan | in progress |  |
 |*TabContentTransitionProxy*| *Class* | | |  |
 |`finishTransition`| Function | | |  |
 |`getFrom`| Function | | |  |
