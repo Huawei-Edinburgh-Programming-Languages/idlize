@@ -209,9 +209,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         if (ts.isClassDeclaration(node)) {
             this.output.push(this.serializeClass(node))
         } else if (ts.isInterfaceDeclaration(node)) {
-            if (!PeerGeneratorConfig.isIgnoredSerialized(identName(node.name))){
-                this.output.push(this.serializeInterface(node))
-            }
+            this.output.push(this.serializeInterface(node))
         } else if (ts.isModuleDeclaration(node)) {
             if (this.isKnownAmbientModuleDeclaration(node)) {
                 this.output.push(this.serializeAmbientModuleDeclaration(node))
@@ -796,7 +794,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
     }
 
     private serializeTypeOrThis(
-        method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration | ts.CallSignatureDeclaration,
+        method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration | ts.CallSignatureDeclaration | ts.ConstructorDeclaration | ts.ConstructSignatureDeclaration | ts.IndexSignatureDeclaration,
         nameSuggestion?: NameSuggestion
     ): idl.IDLType {
         let type = this.serializeType(method.type, nameSuggestion)
@@ -1120,10 +1118,14 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         })
     }
 
-    private clazzName(method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration | ts.CallSignatureDeclaration,): string | undefined {
-        let parent = method.parent
+    private clazzName(method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration | ts.CallSignatureDeclaration | ts.ConstructorDeclaration | ts.ConstructSignatureDeclaration | ts.IndexSignatureDeclaration): string | undefined {
+        let parent = method.parent//.parent
     
-        if (parent !== undefined && ts.isClassDeclaration(parent) || ts.isInterfaceDeclaration(parent)) {
+        if (parent !== undefined && ts.isClassDeclaration(parent)) {
+            return identName(parent.name)!
+        }
+        else if (parent !== undefined && ts.isInterfaceDeclaration(parent))
+        {
             return identName(parent.name)!
         }
 
