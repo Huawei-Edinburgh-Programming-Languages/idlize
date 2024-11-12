@@ -22,8 +22,7 @@ import {
     renameClassToBuilderClass,
     renameClassToMaterialized,
     renameDtsToInterfaces,
-    serializerBaseMethods,
-    throwException
+    serializerBaseMethods
 } from "../../util"
 import { GenericVisitor } from "../../options"
 import { ArgConvertor, RetConvertor } from "../ArgConvertors"
@@ -199,9 +198,6 @@ function mapCInteropRetType(type: idl.IDLType): string {
             case idl.IDLNumberType: return PrimitiveType.Int32.getText()
             case idl.IDLStringType:
             case idl.IDLAnyType:
-                /* HACK, fix */
-                // return `KStringPtr`
-                return "void"
             case idl.IDLVoidType:
             case idl.IDLThisType:
             case idl.IDLUndefinedType:

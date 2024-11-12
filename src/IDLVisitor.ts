@@ -820,8 +820,6 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         let retTypeName = idl.isNamedNode(type) ? idl.forceAsNamedNode(type).name : undefined
         const isMethodStatic = method.modifiers?.some(mod => mod.kind === ts.SyntaxKind.StaticKeyword)
 
-        console.log(`TRYING ON ${className} ${retTypeName}`)
-
         if (!isMethodStatic && ((retTypeName == className) || retTypeName === 'T'))
             return idl.IDLThisType
         else
