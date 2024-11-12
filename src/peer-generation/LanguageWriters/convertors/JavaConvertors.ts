@@ -162,7 +162,7 @@ export class JavaIDLNodeToStringConvertor extends IdlNameConvertorBase implement
             case idl.IDLPointerType: return JavaTypeAlias.fromTypeName('long', false)
             case idl.IDLVoidType: return JavaTypeAlias.fromTypeName('void', false)
             case idl.IDLDate: return JavaTypeAlias.fromTypeName('Date', false)
-            case idl.IDLBufferType: throw new Error('TBD')
+            case idl.IDLBufferType: return JavaTypeAlias.fromTypeName('byte[]', false)
         }
         throw new Error(`Unsupported IDL primitive ${idl.DebugUtils.debugPrintType(type)}`)
     }
