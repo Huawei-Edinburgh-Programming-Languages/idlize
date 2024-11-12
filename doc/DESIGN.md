@@ -48,4 +48,29 @@ and created automated serializers and deserializers for data transfer. This way 
 ## Implementation
 
  Current implementation is written in TypeScript and uses universal IDL IR as input for language-specific emitters and type mappers.
+We design system by providing the following components:
+   * IDL IR
+   * IDL library abstraction
+   * TS frontend
+   * Language emitters: TS, C++, Java, CangJie, ArkTS NEXT
+   * Native interop library
+   * Generated code templates
+   * Library-specific generators
+
+## Language
+
+We base on WebIDL language and extend it with features relevant for modern interfaces, with both syntax extensions and extended
+attributes. See [IDL.md](../IDL.md) for full list of language extensions.
+
+### Language extensions
+
+  * standard WebIDL `Promise<Foo> foo(Bar bar)` syntax is replaced with `async` keyword to denote asynchronous operation, so that it reads as `async Foo foo(Bar bar)`
+  * Added `package` keyword to mark interfaces as belonging to a package
+  * Added `import` keyword to mark mutual dependencies between IDL files
+  * Allowed `foo.Bar` identifiers to allow FQ names
+
+### Extended attributes
+
+  We use extended attributes to provide language-specific information to the toolchain, such as type mapping, TypeScript and other
+languages specific extensions etc. See IDL.md for full list of extended attributes.
 
