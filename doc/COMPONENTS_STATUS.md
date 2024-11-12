@@ -626,10 +626,10 @@
 |`navBarWidthRange`|Function| Skroba Gleb | devdone | |
 |`minContentWidth`|Function| Skroba Gleb | devdone | |
 |`mode`|Function| Erokhin Ilya | done |  |
-|`backButtonIcon`| Function | Erokhin Ilya | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR, implemented for string and resource arg|
+|`backButtonIcon`| Function | Erokhin Ilya | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR, implemented for string and resource arg |
 |`hideNavBar`|Function| Erokhin Ilya | done |  |
 |`subTitle`|Function| Erokhin Ilya | done |  |
-|`hideTitleBar`|Function| Skroba Gleb | blocked | main part done, no ace_engine implementation for second DMZ|
+|`hideTitleBar`|Function| Skroba Gleb | in progress | |
 |`onTitleModeChange`| Function | Skroba Gleb | in progress| no callbacks Arkoala support |
 |`hideBackButton`|Function| Erokhin Ilya | done |  |
 |`titleMode`|Function| Erokhin Ilya | done |  |
@@ -995,7 +995,7 @@
 |`onGestureSwipe`| Function | Skroba Gleb | done |  |
 |`nestedScroll`| Function | Skroba Gleb| blocked UT | DMZ |
 |`customContentTransition`| Function | Skroba Gleb | in progress | |
-|`onContentDidScroll`| Function | Skroba Gleb| blocked UT | DMZ |
+|`onContentDidScroll`| Function | Skroba Gleb| testskipped | |
 |`indicatorInteractive`| Function | Skroba Gleb| done |  |
 |*IndicatorComponent*| *Component* | Andrey Khudenkikh | done |  |
 |`setIndicatorComponentOptions`| Function | Andrey Khudenkikh | done |  |
