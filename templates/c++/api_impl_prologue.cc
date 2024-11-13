@@ -13,10 +13,12 @@
  * limitations under the License.
  */
 
+#include "%API_HEADER_PATH%"
+
 #include "common-interop.h"
 #include "SerializerBase.h"
 #include "DeserializerBase.h"
-#include "%API_HEADER_PATH%"
+#include <deque>
 
 CustomDeserializer * DeserializerBase::customDeserializers = nullptr;
 

@@ -102,5 +102,5 @@ typedef struct OH_AnyAPI {
 } OH_AnyAPI;
 
 typedef enum OH_APIKind {
-    OH_XML_API_KIND = 1
+    OH_%LIBRARY_NAME%_API_KIND = 1
 } OH_APIKind;

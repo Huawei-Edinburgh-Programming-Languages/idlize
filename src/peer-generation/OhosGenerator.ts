@@ -474,6 +474,7 @@ class OHOSVisitor {
             readLangTemplate('api_impl_prologue.cc', Language.CPP)
                 .replaceAll("%API_HEADER_PATH%", `${this.libraryName.toLowerCase()}.h`)
                 .replaceAll("%CALLBACK_KINDS%", callbackKindsPrinter.getOutput().join("\n"))
+                .replaceAll("%LIBRARY_NAME%", this.libraryName.toUpperCase())
         )
         this.hWriter.writeLines(
             readLangTemplate('ohos_api_prologue.h', Language.CPP)
@@ -499,8 +500,12 @@ class OHOSVisitor {
         this.hWriter.writeLines(
             readLangTemplate('ohos_api_epilogue.h', Language.CPP)
                 .replaceAll("%INCLUDE_GUARD_DEFINE%", `OH_${this.libraryName.toUpperCase()}_H`)
+                .replaceAll("%LIBRARY_NAME%", this.libraryName.toUpperCase())
         )
-        this.cppWriter.writeLines(readLangTemplate('api_impl_epilogue.cc', Language.CPP))
+        this.cppWriter.writeLines(
+            readLangTemplate('api_impl_epilogue.cc', Language.CPP)
+                .replaceAll("%LIBRARY_NAME%", this.libraryName.toUpperCase())
+        )
     }
 
     execute(outDir: string, managedOutDir: string) {
