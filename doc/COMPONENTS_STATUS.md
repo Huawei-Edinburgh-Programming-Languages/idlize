@@ -689,13 +689,13 @@
 |`autoReset`| Function | Dmitry A Smirnov| done|  |
 |`onDotConnect`| Function | Dmitry A Smirnov| in progress|  |
 |`activateCircleStyle`| Function | Dmitry A Smirnov| blocked AceEngine| https://gitee.com/openharmony/arkui_ace_engine/issues/IAYWON |
-|*Progress*| *Component* | Erokhin Ilya | | |
-|`setProgressOptions`| Function | Erokhin Ilya | in progress | |
-|`value`| Function | Erokhin Ilya | in progress | |
-|`color`| Function | Erokhin Ilya | in progress | |
-|`style`| Function | Erokhin Ilya | in progress | |
-|`privacySensitive`| Function | Erokhin Ilya | in progress | |
-|`contentModifier`| Function | Erokhin Ilya | in progress | |
+|*Progress*| *Component* | Erokhin Ilya | blocked | |
+|`setProgressOptions`| Function | Erokhin Ilya | devdone | |
+|`value`| Function | Erokhin Ilya | devdone | |
+|`color`| Function | Erokhin Ilya | testskipped | |
+|`style`| Function | Erokhin Ilya | testskipped | |
+|`privacySensitive`| Function | Erokhin Ilya | testskipped | |
+|`contentModifier`| Function | Erokhin Ilya | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |*QRCode*| *Component* | Evstigneev Roman |in progress|  |
 |`setQRCodeOptions`| Function |Evstigneev Roman | done |  |
 |`color`| Function |Evstigneev Roman |blocked UT | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZVOQ |
