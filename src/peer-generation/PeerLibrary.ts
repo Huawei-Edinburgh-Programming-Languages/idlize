@@ -216,7 +216,7 @@ export class PeerLibrary implements LibraryInterface {
         }
         if (idl.isTypeParameterType(type)) {
             // TODO: unlikely correct.
-            return new CustomTypeConvertor(param, this.targetNameConvertorInstance.convert(type))
+            return new CustomTypeConvertor(param, this.targetNameConvertorInstance.convert(type), true)
         }
         throw new Error(`Cannot convert: ${type.kind}`)
     }
