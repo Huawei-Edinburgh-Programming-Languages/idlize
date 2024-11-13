@@ -972,12 +972,22 @@ export class IdlPeerProcessor {
         const constructor = idl.isClass(decl) ? decl.constructors[0] : undefined
         const mConstructor = this.makeMaterializedMethod(decl, constructor)
 
+        const finalizerReturnType = {
+            isVoid: false,
+            nativeType: () => PrimitiveType.NativePointer.getText(),
+            interopType: () => PrimitiveType.NativePointer.getText(),
+            macroSuffixPart: () => ""
+        }
+
         const destroyPeerReturnType: RetConvertor = {
             isVoid: true,
             nativeType: () => PrimitiveType.Void.getText(),
             interopType: () => PrimitiveType.Void.getText(),
             macroSuffixPart: () => "V"
         }
+
+        const mFinalizer = new MaterializedMethod(name, [], finalizerReturnType, false,
+            new Method("getFinalizer", new NamedMethodSignature(idl.IDLPointerType, [], [], []), [MethodModifier.STATIC]))
 
         const mDestroyPeer = new MaterializedMethod(
             name,
@@ -1045,9 +1055,9 @@ export class IdlPeerProcessor {
                 generics,
                 mFields,
                 mConstructor,
-                mGetFinalizer,
+                mFinalizer,
                 importFeatures,
-                mMethods
+                [...mMethods, mDestroyPeer] 
             )
         )
     }
