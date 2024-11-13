@@ -82,9 +82,29 @@ func peersTest(): Unit {
     labelStyle.maxLines = None<Float64>
     labelStyle.font = Font(None<Ark_Length>, Union_FontWeight_Float64_String("param"), None<Union_String_Resource>, None<FontStyle>)
     checkResult("[Union] ButtonPeer.labelStyle",
-        { => buttonPeer.labelStyleAttribute(labelStyle)},
+        { => buttonPeer.labelStyleAttribute(labelStyle) },
         "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_UNDEFINED, .value={}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_OBJECT, .value={.size={.tag=ARK_TAG_UNDEFINED, .value={}}, .weight={.tag=ARK_TAG_OBJECT, .value={.selector=2, .value2={.chars=\"param\", .length=5}}}, .family={.tag=ARK_TAG_UNDEFINED, .value={}}, .style={.tag=ARK_TAG_UNDEFINED, .value={}}}}})");
-        
+    labelStyle.font = Font(None<Ark_Length>, Union_FontWeight_Float64_String(FontWeight.BOLD), None<Union_String_Resource>, None<FontStyle>)
+    checkResult("[Union + Enum] ButtonPeer.labelStyle",
+        { => buttonPeer.labelStyleAttribute(labelStyle) },
+        "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_UNDEFINED, .value={}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_OBJECT, .value={.size={.tag=ARK_TAG_UNDEFINED, .value={}}, .weight={.tag=ARK_TAG_OBJECT, .value={.selector=0, .value0=Ark_FontWeight(4)}}, .family={.tag=ARK_TAG_UNDEFINED, .value={}}, .style={.tag=ARK_TAG_UNDEFINED, .value={}}}}})");
+    let resource = Resource("bundle_name", "module_name", 10.0, None, 2000.0)   
+    labelStyle.font = Font(None<Ark_Length>, None<Union_FontWeight_Float64_String>, Union_String_Resource(resource), None<FontStyle>)
+    checkResult("[Union + Resource] ButtonPeer.labelStyle",
+        { => buttonPeer.labelStyleAttribute(labelStyle) },
+        "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_UNDEFINED, .value={}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_OBJECT, .value={.size={.tag=ARK_TAG_UNDEFINED, .value={}}, .weight={.tag=ARK_TAG_UNDEFINED, .value={}}, .family={.tag=ARK_TAG_OBJECT, .value={.selector=1, .value1={.bundleName={.chars=\"bundle_name\", .length=11}, .moduleName={.chars=\"module_name\", .length=11}, .id={.tag=102, .i32=10}, .params={.tag=ARK_TAG_UNDEFINED, .value={}}, .type_={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=2000}}}}}, .style={.tag=ARK_TAG_UNDEFINED, .value={}}}}})"
+        )
+    // tuple
+    // let peer = ArkTestPeer.create(ArkUINodeType.Test, null, 0)
+    // var options = new BlurOptions()
+    // options.grayscale = new Tuple_double_double(1.0, 2.0)
+    // TestUtils.checkResult("[Tuple] TestPeer.backdropBlur",
+    //     () -> { peer.backdropBlurAttribute(42, options); },
+    //     "backdropBlur({.tag=102, .i32=42}, {.tag=ARK_TAG_OBJECT, .value={.grayscale={.value0={.tag=102, .i32=1}, .value1={.tag=102, .i32=2}}}})");
+    // var tuple1 = new Tuple_double_String_EnumDTS(5.5, "test", EnumDTS.ELEM_1)
+    // TestUtils.checkResult("[Tuple + Enum] TestPeer.testTupleNumberStringEnum",
+    //     () -> { peer.testTupleNumberStringEnumAttribute(tuple1); },
+    //     "testTupleNumberStringEnum({.value0={.tag=103, .f32=5.5}, .value1={.chars=\"test\", .length=4}, .value2=Ark_EnumDTS(1)})")
 }
 
 

@@ -163,6 +163,22 @@ class CJThrowErrorStatement implements LanguageStatement {
     }
 }
 
+class CJCheckOptionalStatement implements LanguageStatement {
+    constructor(
+        public undefinedValue: string,
+        public optionalExpression: LanguageExpression,
+        public doStatement: LanguageStatement
+    ) { }
+    write(writer: LanguageWriter): void {
+        writer.print(`if (let Some(${this.optionalExpression.asString()}) <- ${this.optionalExpression.asString()}) {`)
+        writer.pushIndent()
+        this.doStatement.write(writer)
+        writer.popIndent()
+        writer.print('}')
+    }
+}
+
+
 
 ////////////////////////////////////////////////////////////////
 //                           WRITER                           //
@@ -305,10 +321,10 @@ export class CJLanguageWriter extends LanguageWriter {
         return new CJAssignStatement(variableName, type, expr, isDeclared, isConst)
     }
     makeClassInit(type: idl.IDLType, paramenters: LanguageExpression[]): LanguageExpression {
-        throw new Error(`TBD`)
+        throw new Error(`makeClassInit`)
     }
     makeArrayInit(type: idl.IDLContainerType): LanguageExpression {
-        throw new Error(`TBD`)
+        throw new Error(`makeArrayInit`)
     }
     makeMapInit(type: idl.IDLType): LanguageExpression {
         throw new Error(`TBD`)
@@ -330,7 +346,7 @@ export class CJLanguageWriter extends LanguageWriter {
         return new ReturnStatement(expr)
     }
     makeCheckOptional(optional: LanguageExpression, doStatement: LanguageStatement): LanguageStatement {
-        throw new Error(`TBD`)
+        return new CJCheckOptionalStatement("undefined", optional, doStatement)
     }
     makeStatement(expr: LanguageExpression): LanguageStatement {
         return new ExpressionStatement(expr)

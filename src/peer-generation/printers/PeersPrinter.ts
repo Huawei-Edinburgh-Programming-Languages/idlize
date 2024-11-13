@@ -338,11 +338,11 @@ class CJPeerFileVisitor extends PeerFileVisitor {
 
             this.printPackage(printer)
 
-            if (isIDL) {
-                const idlPeer = peer as IdlPeerClass
-                const imports = collectJavaImports(idlPeer.methods.flatMap(method => method.method.signature.args))
-                printJavaImports(printer, imports)
-            }
+            printer.print("import std.collection.*")
+
+            const idlPeer = peer as IdlPeerClass
+            const imports = collectJavaImports(idlPeer.methods.flatMap(method => method.method.signature.args))
+            printJavaImports(printer, imports)
             this.printPeer(peer, printer)
         })
     }
