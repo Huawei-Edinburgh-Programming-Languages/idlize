@@ -1701,30 +1701,30 @@
 |`onFirstContentfulPaint`| Function | Erokhin Ilya | testskipped | |
 |`onFirstMeaningfulPaint`| Function | Erokhin Ilya | testskipped | |
 |`onLargestContentfulPaint`| Function | Erokhin Ilya | testskipped | |
-|`onLoadIntercept`| Function | Erokhin Ilya | blocked Arkoala| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ  |
+|`onLoadIntercept`| Function | Erokhin Ilya | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ  |
 |`onControllerAttached`| Function | Erokhin Ilya | testskipped | |
 |`onOverScroll`| Function | Erokhin Ilya | testskipped | |
 |`onSafeBrowsingCheckResult`| Function | Erokhin Ilya | testskipped | |
 |`onNavigationEntryCommitted`| Function | Erokhin Ilya | testskipped | |
-|`onIntelligentTrackingPreventionResult`| Function | Erokhin Ilya | in progress | |
+|`onIntelligentTrackingPreventionResult`| Function | Erokhin Ilya | testskipped | |
 |`javaScriptOnDocumentStart`| Function | Erokhin Ilya | testskipped | |
 |`javaScriptOnDocumentEnd`| Function | Erokhin Ilya | testskipped | |
 |`layoutMode`| Function | Erokhin Ilya | done | |
 |`nestedScroll`| Function | Erokhin Ilya | testskipped | |
 |`enableNativeEmbedMode`| Function | Erokhin Ilya | done | |
-|`onNativeEmbedLifecycleChange`| Function | Erokhin Ilya | in progress | |
-|`onNativeEmbedVisibilityChange`| Function | Erokhin Ilya | in progress | |
-|`onNativeEmbedGestureEvent`| Function | Erokhin Ilya | in progress | |
+|`onNativeEmbedLifecycleChange`| Function | Erokhin Ilya | testskipped | |
+|`onNativeEmbedVisibilityChange`| Function | Erokhin Ilya | testskipped | |
+|`onNativeEmbedGestureEvent`| Function | Erokhin Ilya | in progress | dependency on Ark_EventResult & Ark_Function |
 |`copyOptions`| Function | Erokhin Ilya | done | |
-|`onOverrideUrlLoading`| Function | Erokhin Ilya | in progress | |
+|`onOverrideUrlLoading`| Function | Erokhin Ilya | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`textAutosizing`| Function | Erokhin Ilya | done | |
 |`enableNativeMediaPlayer`| Function | Erokhin Ilya | done | |
 |`enableSmoothDragResize`| Function | Erokhin Ilya | done | |
-|`onRenderProcessNotResponding`| Function | Erokhin Ilya | in progress | |
-|`onRenderProcessResponding`| Function | Erokhin Ilya | in progress | |
+|`onRenderProcessNotResponding`| Function | Erokhin Ilya | testskipped | |
+|`onRenderProcessResponding`| Function | Erokhin Ilya | testskipped | |
 |`selectionMenuOptions`| Function | Erokhin Ilya | in progress | |
-|`onViewportFitChanged`| Function | Erokhin Ilya | in progress | |
-|`onInterceptKeyboardAttach`| Function | Erokhin Ilya | in progress | |
+|`onViewportFitChanged`| Function | Erokhin Ilya | testskipped | |
+|`onInterceptKeyboardAttach`| Function | Erokhin Ilya | blocked | dependency on Ark_CustomObject & Ark_WebKeyboardController |
 |`onAdsBlocked`| Function | Erokhin Ilya | in progress | |
 |`keyboardAvoidMode`| Function | Erokhin Ilya | done | |
 |`editMenuOptions`| Function | Erokhin Ilya | in progress | |
