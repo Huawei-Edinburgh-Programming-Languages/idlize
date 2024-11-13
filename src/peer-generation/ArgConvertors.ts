@@ -1191,9 +1191,11 @@ export class DateConvertor extends BaseArgConvertor { //
     convertorSerialize(param: string, value: string, writer: LanguageWriter): void {
         if (writer.language === Language.CPP) {
             writer.writeMethodCall(`${param}Serializer`, "writeInt64", [value])
-            return
+        } else if (writer.language === Language.ARKTS) {
+            writer.writeMethodCall(`${param}Serializer`, "writeNumber", [`${value}.getTime() as float64`])
+        } else {
+            writer.writeMethodCall(`${param}Serializer`, "writeInt64", [`${value}.getTime()`])
         }
-        writer.writeMethodCall(`${param}Serializer`, "writeInt64", [`${value}.getTime()`])
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
         const deserializeTime = writer.makeMethodCall(`${deserializerName}`, "readInt64", [])
