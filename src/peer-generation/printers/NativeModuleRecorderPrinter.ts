@@ -215,7 +215,7 @@ class NativeModuleRecorderVisitor {
             w.writeLines(`if (node?.elementId) this.nodeById.delete(node.elementId)`)
         })
 
-        this.nativeModuleRecorder.writeMethodImplementation(new Method("_AddChild", new NamedMethodSignature(IDLNumberType, [createUnionType([IDLNumberType, IDLBigintType]), createUnionType([IDLNumberType, IDLBigintType])], ["ptr1", "ptr2"])), w => {
+        this.nativeModuleRecorder.writeMethodImplementation(new Method("_AddChild", new NamedMethodSignature(IDLNumberType, [IDLPointerType, IDLPointerType], ["ptr1", "ptr2"])), w => {
             w.writeLines(`let parent = this.ptr2object<UIElement|null>(ptr1)`)
             w.writeLines(`let child = this.ptr2object<UIElement|null>(ptr2)`)
             w.writeLines(`parent?.children?.push(child!)`)
@@ -236,7 +236,7 @@ class NativeModuleRecorderVisitor {
             w.writeLines(`})`)
         })
 
-        this.nativeModuleRecorder.writeMethodImplementation(new Method("_InsertChildAfter", new NamedMethodSignature(IDLNumberType, [createUnionType([IDLNumberType, IDLBigintType]), createUnionType([IDLNumberType, IDLBigintType]), createUnionType([IDLNumberType, IDLBigintType])], ["ptr0", "ptr1", "ptr2"])), w => {
+        this.nativeModuleRecorder.writeMethodImplementation(new Method("_InsertChildAfter", new NamedMethodSignature(IDLNumberType, [IDLPointerType, IDLPointerType, IDLPointerType], ["ptr0", "ptr1", "ptr2"])), w => {
             w.writeLines(`let parent = this.ptr2object<UIElement|null>(ptr0)`)
             w.writeLines(`let child = this.ptr2object<UIElement|null>(ptr1)`)
             w.writeLines(`let sibling = this.ptr2object<UIElement|null>(ptr2)`)
@@ -263,7 +263,7 @@ class NativeModuleRecorderVisitor {
             w.writeLines(`return 0`)
         })
 
-        this.nativeModuleRecorder.writeMethodImplementation(new Method("_InsertChildBefore", new NamedMethodSignature(IDLNumberType, [createUnionType([IDLNumberType, IDLBigintType]), createUnionType([IDLNumberType, IDLBigintType]), createUnionType([IDLNumberType, IDLBigintType])], ["ptr0", "ptr1", "ptr2"])), w => {
+        this.nativeModuleRecorder.writeMethodImplementation(new Method("_InsertChildBefore", new NamedMethodSignature(IDLNumberType, [IDLPointerType, IDLPointerType, IDLPointerType], ["ptr0", "ptr1", "ptr2"])), w => {
             w.writeLines(`let parent = this.ptr2object<UIElement|null>(ptr0)`)
             w.writeLines(`let child = this.ptr2object<UIElement|null>(ptr1)`)
             w.writeLines(`let sibling = this.ptr2object<UIElement|null>(ptr2)`)
@@ -290,7 +290,7 @@ class NativeModuleRecorderVisitor {
             w.writeLines(`return 0`)
         })
 
-        this.nativeModuleRecorder.writeMethodImplementation(new Method("_InsertChildAt", new NamedMethodSignature(IDLNumberType, [createUnionType([IDLNumberType, IDLBigintType]), createUnionType([IDLNumberType, IDLBigintType]), IDLNumberType], ["ptr0", "ptr1", "arg"])), w => {
+        this.nativeModuleRecorder.writeMethodImplementation(new Method("_InsertChildAt", new NamedMethodSignature(IDLNumberType, [IDLPointerType, IDLPointerType, IDLNumberType], ["ptr0", "ptr1", "arg"])), w => {
             w.writeLines(`let parent = this.ptr2object<UIElement|null>(ptr0)`)
             w.writeLines(`let child = this.ptr2object<UIElement|null>(ptr1)`)
             w.writeLines(`let inserted = false`)
