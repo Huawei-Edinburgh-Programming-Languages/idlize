@@ -1025,7 +1025,7 @@
 |`effectStrategy`| Function |Dmitry A Smirnov| done|  |
 |`renderingStrategy`| Function |Dmitry A Smirnov| done|  |
 |*Text*| *Component* | Kirill Kirichenko | in progress | |
-|`setTextOptions`| Function | Kirill Kirichenko | in progress |  |
+|`setTextOptions`| Function | Kirill Kirichenko | done |  |
 |`font`| Function |Samarin Sergey |in progress |  |
 |`fontColor`| Function |Samarin Sergey |in progress |  |
 |`fontSize`| Function |Samarin Sergey |in progress |  |
@@ -1057,16 +1057,16 @@
 |`selectedBackgroundColor`| Function |Samarin Sergey |in progress |  |
 |`ellipsisMode`| Function |Samarin Sergey |in progress |  |
 |`EnableDataDetector`| Function | Kirill Kirichenko | done |  |
-|`DataDetectorConfig`| Function | Kirill Kirichenko | in progress |  |
+|`DataDetectorConfig`| Function | N/A | in progress |  |
 |`onTextSelectionChange`| Function |Samarin Sergey |in progress |  |
 |`fontFeature`| Function |Samarin Sergey |in progress |  |
 |`privacySensitive`| Function |Samarin Sergey | done |  |
 |`textSelectable`| Function |Samarin Sergey | done |  |
-|`EditMenuOptions`| Function | Kirill Kirichenko | in progress |  |
+|`EditMenuOptions`| Function | N/A | in progress |  |
 |`halfLeading`| Function |Samarin Sergey | done |  |
 |`enableHapticFeedback`| Function |Samarin Sergey | done |  |
 |`selection`| Function |Samarin Sergey |in progress |  |
-|`BindSelectionMenu`| Function | Kirill Kirichenko | in progress |  |
+|`BindSelectionMenu`| Function | N/A | in progress |  |
 |*TextArea*|*Component*|Tuzhilkin Ivan|in progress|  |
 |`placeholderColor`|Function|Tuzhilkin Ivan|done|  |
 |`placeholderFont`|Function|Tuzhilkin Ivan|done|  |
