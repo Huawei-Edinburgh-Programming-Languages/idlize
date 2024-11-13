@@ -472,6 +472,8 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
             result = this.printCallback(node,
                 node.callables[0].parameters,
                 node.callables[0].returnType)
+        } else if (idl.isTupleInterface(node)) {
+            result = this.printTuple(node).join("\n")
         } else {
             result = this.printInterface(node).join("\n")
         }
@@ -607,6 +609,29 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
             node.properties,
             node.methods]
             .reduce((sum, value) => value.length + sum, 0) === 0
+    }
+
+    private printTuple(tuple: idl.IDLInterface) {
+        const seenFields = new Set<string>()
+        return ([`declare type ${this.printInterfaceName(tuple)} = [`] as stringOrNone[])
+            .concat(tuple.properties
+                .map(it => this.iDLTypedEntryPrinter(it, it => {
+                    //TODO: use ETSConvertor.processTupleType
+                    if (it.isOptional) {
+                        it.isOptional = false
+                        let types: IDLType[] = []
+                        if (idl.isUnionType(it.type)) {
+                            types = it.type.types
+                        } else if (idl.isPrimitiveType(it.type)) {
+                            types = [it.type]
+                        } else {
+                            throwException(`Unprocessed type: ${idl.forceAsNamedNode(it.type)}`)
+                        }
+                        it.type = idl.createUnionType([...types, idl.IDLUndefinedType])
+                    }
+                    return [indentedBy(`${this.printPropNameWithType(it)},`, 1)]
+                }, seenFields) ).flat())
+            .concat(["]"])
     }
 }
 
