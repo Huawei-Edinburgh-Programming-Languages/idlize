@@ -53,15 +53,15 @@ compile arkts subset:
     - npm run compile:all:arkts:idl
 
 
-# arkts subset tsc:
-#   stage: test
-#   tags:
-#     - idlize-ci
-#     - koala-ci
-#   before_script:
-#     - !reference [.setup, script]
-#   script:
-#     - npm run check:arkts:subset:tsc
+arkts subset tsc:
+   stage: test
+   tags:
+     - idlize-ci
+     - koala-ci
+   before_script:
+     - !reference [.setup, script]
+   script:
+     - npm run check:arkts:subset:tsc
 
 build arkoala-ts:
   stage: test
