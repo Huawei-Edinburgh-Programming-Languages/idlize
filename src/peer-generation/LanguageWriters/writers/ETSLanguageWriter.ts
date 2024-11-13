@@ -33,6 +33,7 @@ import { ReferenceResolver } from "../../ReferenceResolver"
 import { EtsIDLNodeToStringConvertor } from "../convertors/ETSConvertors"
 import {PeerLibrary} from "../../PeerLibrary";
 import {makeEnumTypeCheckerCall} from "../../printers/TypeCheckPrinter";
+import * as idl from "../../../idl"
 
 ////////////////////////////////////////////////////////////////
 //                         STATEMENTS                         //
@@ -78,10 +79,10 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
                     isTypeString ? index : undefined
                 ].filter(it => it !== undefined)
                 writer.writeFieldDeclaration(member.name,
-                    toIDLType(this.enumEntity.name),
+                    toIDLType(this.enumEntry.name),
                     [FieldModifier.STATIC, FieldModifier.READONLY],
                     false,
-                    writer.makeString(`new ${this.enumEntity.name}(${ctorArgs.join(",")})`))
+                    writer.makeString(`new ${this.enumEntry.name}(${ctorArgs.join(",")})`))
             })
             const typeName = isTypeString ? "string" : "KInt"
             let argTypes = [toIDLType(typeName)]
@@ -90,7 +91,7 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
                 argTypes.push(toIDLType("KInt"))
                 argNames.push("ordinal")
             }
-            writer.writeConstructorImplementation(this.enumEntity.name,
+            writer.writeConstructorImplementation(this.enumEntry.name,
                 new NamedMethodSignature(IDLVoidType, argTypes, argNames), (writer) => {
                     writer.writeStatement(writer.makeAssign("this.value", undefined, writer.makeString("value"), false))
                     if (isTypeString) {
@@ -101,7 +102,7 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
             if (isTypeString) {
                 writer.writeFieldDeclaration("ordinal", IDLI32Type, [FieldModifier.PUBLIC, FieldModifier.READONLY], false)
             }
-            writer.writeMethodImplementation(new Method("of", new MethodSignature(toIDLType(this.enumEntity.name), [argTypes[0]]), [MethodModifier.PUBLIC, MethodModifier.STATIC]),
+            writer.writeMethodImplementation(new Method("of", new MethodSignature(toIDLType(this.enumEntry.name), [argTypes[0]]), [MethodModifier.PUBLIC, MethodModifier.STATIC]),
                 (writer)=> {
                     this.enumEntity.elements.forEach(member => {
                         const memberName = `${this.enumEntity.name}.${member.name}`

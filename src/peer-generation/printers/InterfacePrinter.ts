@@ -149,20 +149,15 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
         }
     }
 
-    protected toEnumEntity(enumDecl: idl.IDLEnum): idl.IDLEnum {
-        const namespace = idl.getExtAttribute(enumDecl, idl.IDLExtendedAttributes.Namespace) ?? ""
-        return idl.createEnum(`${namespace}${enumDecl.name}`, enumDecl.elements, {
-            documentation: enumDecl.documentation
-        })
-    }
-
     printInterfaces() {
         for (const file of this.peerLibrary.files.values()) {
             const writer = createLanguageWriter(this.peerLibrary.language, this.peerLibrary)
             this.printImports(writer, file)
             const typeConvertor = this.createDeclarationConvertor(writer)
             file.declarations.forEach(it => convertDeclaration(typeConvertor, it))
-            file.enums.forEach(it => writer.writeStatement(writer.makeEnumEntity(this.toEnumEntity(it), true)))
+            file.enums.forEach(it => {
+                writer.writeStatement(writer.makeEnumEntity(it, true))
+        })
             this.printAssignEnumsToGlobalScope(writer, file)
             this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), writer)
         }

@@ -135,6 +135,7 @@ class CppMapForEachStatement implements LanguageStatement {
     }
 }
 
+// todo:
 class CppEnumEntityStatement implements LanguageStatement {
     constructor(private _enum: IDLEnum) {}
     write(writer: LanguageWriter): void {
@@ -143,7 +144,7 @@ class CppEnumEntityStatement implements LanguageStatement {
         this._enum.elements.forEach((member, index) =>
             writer.print(`${member.name} = ${member.initializer ?? index},`))
         writer.popIndent()
-        writer.print(`} ${this._enum.name};`)
+        writer.print(`} ${this.enumEntry.name};`)
     }
 }
 

@@ -105,11 +105,14 @@ export function printCallbacksKindsImports(language: Language, writer: LanguageW
     }
 }
 
-export function printCallbacksKinds(library: PeerLibrary, writer: LanguageWriter): void {
-    const kindsEnum = idl.createEnum(CallbackKind, [], {})
-    kindsEnum.elements = collectUniqueCallbacks(library).map((it, index) =>
-        idl.createEnumMember(generateCallbackKindName(it), kindsEnum, idl.IDLNumberType, index))
-    writer.writeStatement(writer.makeEnumEntity(kindsEnum, true))
+export function printCallbacksKinds(library: IdlPeerLibrary, writer: LanguageWriter): void {
+    let callbacksKindsEnum = idl.createEnum(
+        CallbackKind, [], {}
+    )
+    callbacksKindsEnum.elements = collectUniqueCallbacks(library).map((it, index) => 
+        idl.createEnumMember(generateCallbackKindName(it), callbacksKindsEnum, idl.IDLStringType, index.toString())
+    )
+    writer.writeStatement(writer.makeEnumEntity(callbacksKindsEnum, true))
 }
 
 class DeserializeCallbacksVisitor {
