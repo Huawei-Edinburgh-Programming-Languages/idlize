@@ -14,7 +14,13 @@
  */
 
 import * as idl from "../../idl"
-import { IDLReferenceType, IDLType, maybeOptional} from "../../idl"
+import {
+    getExtAttribute,
+    IDLExtendedAttributes,
+    IDLReferenceType,
+    IDLType,
+    maybeOptional
+} from "../../idl"
 import { posix as path } from "path"
 import {
     capitalize,
@@ -1002,13 +1008,16 @@ export class IdlPeerProcessor {
             return new MaterializedMethod(decl.name, [], retConvertor, false, ctor)
         }
 
-        const generics = undefined // method.typeParameters?.map(it => it.getText())
+        const methodTypeParams = getExtAttribute(method, IDLExtendedAttributes.TypeParameters)
         method.parameters.forEach(it => this.library.requestType(it.type!, true))
         const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param))
         const signature = generateSignature(method)
         const modifiers = idl.isConstructor(method) || method.isStatic ? [MethodModifier.STATIC] : []
         return new MaterializedMethod(decl.name, argConvertors, retConvertor, false,
-            new Method(methodName, signature, modifiers, generics)
+            new Method(methodName,
+                signature,
+                modifiers,
+                methodTypeParams !== undefined ? [methodTypeParams] : undefined)
         )
     }
 
