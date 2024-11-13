@@ -50,6 +50,7 @@ run arkts subset:
     - !reference [.setup, script]
     - PANDA_SDK_VERSION=1.5.0-dev.7123 npm run panda:sdk:install
   script:
+    - npm run compile:all:arkts:idl
     - ls ./external/incremental/compat/build/abc/arkts/index.abc
     - ls out/abc-subset/sig/arkoala-arkts/arkui/src/generated/ArkArkui-external.idlInterfaces.abc
     - ls out/abc-subset/sig/arkoala-arkts/arkui/src/generated/ArkBlank.abc
