@@ -1358,9 +1358,9 @@
 |`indicatorLoop`| Function | Kovalev Sergey | in progress |  |
 |`onChange`| Function | Kovalev Sergey | in progress |  |
 |*ImageBitmap*| *Class* | Ivan Pavelyev | in progress | |
-|`close`| Function | in progress | |
-|`getHeight`| Function | in progress | |
-|`getWidth`| Function | in progress | |
+|`close`| Function | Ivan Pavelyev | in progress |  |
+|`getHeight`| Function | Ivan Pavelyev | in progress |  |
+|`getWidth`| Function | Ivan Pavelyev | in progress |  |
 |*CanvasRenderer*| *Class*  | Vadim Voronov | in progress | |
 |`drawImage`| Function  | Vadim Voronov | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`beginPath`| Function  | Vadim Voronov | done | |
