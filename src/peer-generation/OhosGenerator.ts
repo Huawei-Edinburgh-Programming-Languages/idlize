@@ -468,17 +468,19 @@ class OHOSVisitor {
     }
 
     private printC() {
+        let callbackKindsPrinter = createLanguageWriter(Language.CPP, this.library);
+        printCallbacksKinds(this.library, callbackKindsPrinter)
+
         this.cppWriter.writeLines(
             readLangTemplate('api_impl_prologue.cc', Language.CPP)
                 .replaceAll("%API_HEADER_PATH%", `${this.libraryName.toLowerCase()}.h`)
+                .replaceAll("%CALLBACK_KINDS%", callbackKindsPrinter.getOutput().join("\n"))
         )
         this.hWriter.writeLines(
             readLangTemplate('ohos_api_prologue.h', Language.CPP)
                 .replaceAll("%INCLUDE_GUARD_DEFINE%", `OH_${this.libraryName.toUpperCase()}_H`)
         )
 
-
-        printCallbacksKinds(this.library, this.cppWriter)
         let toStringsPrinter = createLanguageWriter(Language.CPP, this.library)
         new StructPrinter(this.library).generateStructs(this.hWriter, this.hWriter.printer, toStringsPrinter)
         this.cppWriter.concat(toStringsPrinter)
