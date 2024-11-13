@@ -14,7 +14,8 @@
  */
 
 import { capitalize, isDefined } from "../util"
-import { ArgConvertor, RetConvertor } from "./ArgConvertors"
+import { ArgConvertor } from "./ArgConvertors"
+import { RetConvertor } from "./RetConvertors"
 import { Method, MethodModifier } from "./LanguageWriters"
 import { PrimitiveType } from "./ArkPrimitiveType"
 import { mangleMethodName } from "./LanguageWriters/LanguageWriter"
@@ -57,7 +58,7 @@ export class PeerMethod {
         return undefined
     }
     get retType(): string {
-        return this.maybeCRetType(this.retConvertor) ?? "void"
+        return this.retConvertor.nativeType
     }
     get receiverType(): string {
         return "Ark_NodeHandle"
@@ -71,11 +72,6 @@ export class PeerMethod {
 
     hasReceiver(): boolean {
         return !this.method.modifiers?.includes(MethodModifier.STATIC)
-    }
-
-    maybeCRetType(retConvertor: RetConvertor): string | undefined {
-        if (retConvertor.isVoid) return undefined
-        return retConvertor.nativeType()
     }
 
     generateAPIParameters(converter:IdlNameConvertor): string[] {

@@ -14,7 +14,7 @@
  */
 
 import { capitalize, dropSuffix, isDefined } from "../../util";
-import { ArgConvertor, RetConvertor } from "../ArgConvertors";
+import { ArgConvertor } from "../ArgConvertors";
 import { PrimitiveType } from "../ArkPrimitiveType"
 import { bridgeCcCustomDeclaration, bridgeCcGeneratedDeclaration } from "../FileGenerators";
 import { createLanguageWriter, createTypeNameConvertor, ExpressionStatement, LanguageWriter } from "../LanguageWriters";
@@ -190,7 +190,7 @@ class BridgeCcVisitor {
                 counter += 1
             }
         })
-        return `${method.retConvertor.macroSuffixPart()}${counter}`
+        return `${method.retConvertor.isVoid ? 'V' : ''}${counter}`
     }
 
     private generateCParameters(method: PeerMethod, argConvertors: ArgConvertor[]): string[] {
@@ -224,7 +224,7 @@ class BridgeCcVisitor {
         const argConvertors = method.argConvertors
 
         let cName = `${method.originalParentName}_${method.overloadedName}`
-        let retValue: string | undefined = this.getRetValue(method, retConvertor)
+        let retValue: string | undefined = retConvertor.interopType
         this.generatedApi.print(`${retValue} impl_${cName}(${this.generateCParameters(method, argConvertors).join(", ")}) {`)
         this.generatedApi.pushIndent()
         this.printNativeBody(method, modifierName)
@@ -237,12 +237,6 @@ class BridgeCcVisitor {
         const suffix = this.generateCMacroSuffix(method)
         this.generatedApi.print(`KOALA_INTEROP_${suffix}(${macroArgs})`)
         this.generatedApi.print(` `)
-    }
-
-    protected getRetValue(method: PeerMethod, retConvertor: RetConvertor): string | undefined {
-        return retConvertor.interopType
-            ? retConvertor.interopType()
-            : retConvertor.nativeType();
     }
 
     /* 

@@ -33,7 +33,8 @@ import {
     throwException
 } from "../../util"
 import { GenericVisitor } from "../../options"
-import { ArgConvertor, RetConvertor } from "../ArgConvertors"
+import { ArgConvertor } from "../ArgConvertors"
+import { createRegularRetConvertor, createVoidRetConvertor, createRetConvertor } from "../RetConvertors"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { PeerClass } from "../PeerClass"
 import { PeerMethod } from "../PeerMethod"
@@ -188,16 +189,6 @@ function generateArgConvertor(library: PeerLibrary, param: idl.IDLParameter): Ar
     return library.typeConvertor(param.name, param.type, param.isOptional)
 }
 
-function generateRetConvertor(type?: idl.IDLType): RetConvertor {
-    let nativeType = type ? mapCInteropRetType(type) : "void"
-    let isVoid = nativeType == "void"
-    return {
-        isVoid: isVoid,
-        nativeType: () => nativeType,
-        macroSuffixPart: () => isVoid ? "V" : ""
-    }
-}
-
 // TODO convert to convertor ;)
 function mapCInteropRetType(type: idl.IDLType): string {
     // probably wrong
@@ -238,7 +229,6 @@ function mapCInteropRetType(type: idl.IDLType): string {
     }
     throw new Error(`mapCInteropType failed for ${idl.IDLKind[type.kind]}`)
 }
-
 
 class ImportsAggregateCollector extends DependenciesCollector {
     constructor(
@@ -711,7 +701,7 @@ class PeersGenerator {
         return new PeerMethod(
             originalParentName,
             [argConvertor],
-            generateRetConvertor(idl.IDLVoidType),
+            createVoidRetConvertor(),
             false,
             new Method(prop.name, signature, []))
     }
@@ -735,7 +725,7 @@ class PeersGenerator {
         return new PeerMethod(
             originalParentName,
             argConvertors,
-            generateRetConvertor(isThisRet ? idl.IDLVoidType : retType),
+            createRetConvertor(isThisRet ? idl.IDLVoidType : retType, mapCInteropRetType),
             isCallSignature,
             new Method(methodName!, signature, method.isStatic ? [MethodModifier.STATIC] : []))
     }
@@ -974,12 +964,7 @@ export class IdlPeerProcessor {
 
         const constructor = idl.isClass(decl) ? decl.constructors[0] : undefined
         const mConstructor = this.makeMaterializedMethod(decl, constructor)
-        const finalizerReturnType = {
-            isVoid: false,
-            nativeType: () => PrimitiveType.NativePointer.getText(),
-            interopType: () => PrimitiveType.NativePointer.getText(),
-            macroSuffixPart: () => ""
-        }
+        const finalizerReturnType = createRegularRetConvertor(PrimitiveType.NativePointer.getText(), PrimitiveType.NativePointer.getText())
         const mFinalizer = new MaterializedMethod(name, [], finalizerReturnType, false,
             new Method("getFinalizer", new NamedMethodSignature(idl.IDLPointerType, [], [], []), [MethodModifier.STATIC]))
         const mFields = decl.properties
@@ -1006,7 +991,7 @@ export class IdlPeerProcessor {
             const isReadOnly = field.modifiers.includes(FieldModifier.READONLY)
             if (!isReadOnly) {
                 const setSignature = new NamedMethodSignature(idl.IDLVoidType, [idlType], [field.name])
-                const retConvertor = { isVoid: true, nativeType: () => idl.IDLVoidType.name, macroSuffixPart: () => "V" }
+                const retConvertor = createVoidRetConvertor()
                 const setAccessor = new MaterializedMethod(
                     name, [f.argConvertor], retConvertor, false,
                     new Method(`set${capitalize(field.name)}`, setSignature, [MethodModifier.PRIVATE]))
@@ -1020,7 +1005,7 @@ export class IdlPeerProcessor {
 
     private makeMaterializedField(prop: idl.IDLProperty): MaterializedField {
         const argConvertor = this.library.typeConvertor(prop.name, prop.type!)
-        const retConvertor = generateRetConvertor(prop.type!)
+        const retConvertor = createRetConvertor(prop.type, mapCInteropRetType)
         const modifiers = prop.isReadonly ? [FieldModifier.READONLY] : []
         return new MaterializedField(
             new Field(prop.name, prop.type, modifiers),
@@ -1030,14 +1015,8 @@ export class IdlPeerProcessor {
     private makeMaterializedMethod(decl: idl.IDLInterface, method: idl.IDLConstructor | idl.IDLMethod | undefined) {
         const methodName = method === undefined || idl.isConstructor(method) ? "ctor" : method.name
         const retConvertor = method === undefined || idl.isConstructor(method)
-            ? {
-                isVoid: false,
-                isStruct: false,
-                nativeType: () => `${decl.name}Peer*`,
-                interopType: () => PrimitiveType.NativePointer.getText(),
-                macroSuffixPart: () => ""
-            }
-            : generateRetConvertor(method.returnType)
+            ? createRegularRetConvertor(`${decl.name}Peer*`, PrimitiveType.NativePointer.getText())
+            : createRetConvertor(method.returnType, mapCInteropRetType)
 
         if (method === undefined) {
             // interface or class without constructors

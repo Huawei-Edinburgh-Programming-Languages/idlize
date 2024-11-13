@@ -32,13 +32,6 @@ export enum RuntimeType {
     MATERIALIZED = 9,
 }
 
-export interface RetConvertor {
-    isVoid: boolean
-    nativeType: () => string
-    interopType?: () => string
-    macroSuffixPart: () => string
-}
-
 export type ExpressionAssigneer = (expression: LanguageExpression) => LanguageStatement
 
 export interface ArgConvertor { // todo:
@@ -1260,12 +1253,6 @@ export class TypeAliasConvertor extends ProxyConvertor { //
 
 export function cppEscape(name: string) {
     return name === "template" ? "template_" : name
-}
-
-export interface RetConvertor {
-    isVoid: boolean
-    nativeType: () => string
-    macroSuffixPart: () => string
 }
 
 ////////////////////////////////////////////////////////////////////////////////
