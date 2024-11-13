@@ -128,7 +128,7 @@ export class IdlPeerLibrary implements LibraryInterface {
 
     findComponentByType(type: idl.IDLType): IdlComponentDeclaration | undefined {
         return this.componentsDeclarations.find(it =>
-            idl.forceAsNamedNode(type).name === it.interfaceDeclaration?.name || 
+            idl.forceAsNamedNode(type).name === it.interfaceDeclaration?.name ||
             idl.forceAsNamedNode(type).name === it.attributeDeclaration.name)
     }
 
@@ -283,8 +283,7 @@ export class IdlPeerLibrary implements LibraryInterface {
             case `Record`:
                 return new CustomTypeConvertor(param, "Record", false, "Record<string, string>")
             case `Optional`:
-                const wrappedType = idl.getExtAttribute(type, idl.IDLExtendedAttributes.TypeArguments)!
-                return new OptionConvertor(this, param, idl.toIDLType(wrappedType))
+                return new OptionConvertor(this, param, type.typeArguments![0])
         }
         return undefined
     }
@@ -296,7 +295,7 @@ export class IdlPeerLibrary implements LibraryInterface {
     }
     /** @deprecated
      * Should be removed ASAP
-     * Do not use this function if possible, instead use 
+     * Do not use this function if possible, instead use
      * `LanguageWriter.stringifyType()`
      *   or `IdlNameConvertor.convertType`
      */
@@ -306,7 +305,7 @@ export class IdlPeerLibrary implements LibraryInterface {
 
     /** @deprecated
      * Should be removed ASAP
-     * Do not use this function if possible, instead use 
+     * Do not use this function if possible, instead use
      * `IdlNameConvertor.convertEntry`
      */
     getEntryName(entry: idl.IDLEntry): string {
@@ -315,7 +314,7 @@ export class IdlPeerLibrary implements LibraryInterface {
 
     /** @deprecated
      * Should be removed ASAP
-     * Do not use this function if possible, instead use 
+     * Do not use this function if possible, instead use
      * `IdlNameConvertor.convert`
      */
     getNodeName(node:idl.IDLNode): string {
@@ -354,8 +353,7 @@ export class IdlPeerLibrary implements LibraryInterface {
                 return ArkFunction
             }
             if (type.name === 'Optional') {
-                const wrappedType = idl.toIDLType(idl.getExtAttribute(type, idl.IDLExtendedAttributes.TypeArguments)!)
-                return this.toDeclaration(wrappedType)
+                return this.toDeclaration((type as idl.IDLReferenceType).typeArguments![0])
             }
             const decl = this.resolveTypeReference(type)
             if (!decl) {

@@ -38,9 +38,9 @@ export class TsIDLNodeToStringConverter extends IdlNameConvertorBase implements 
     }
 
     /***** TypeConvertor<string> *****************************************/
-    
+
     convertOptional(type: idl.IDLOptionalType): string {
-        return `${this.convertType(type.type)} | undefined` 
+        return `${this.convertType(type.type)} | undefined`
     }
     convertUnion(type: idl.IDLUnionType): string {
         return type.types.
@@ -55,11 +55,26 @@ export class TsIDLNodeToStringConverter extends IdlNameConvertorBase implements 
     convertContainer(type: idl.IDLContainerType): string {
         if (idl.IDLContainerUtils.isSequence(type)) {
             switch (type.elementType[0]) {
-                case idl.IDLU8Type: return 'Uint8Array'
-                case idl.IDLI32Type: return 'Int32Array'
-                case idl.IDLF32Type: return 'Float32Array'
+                case idl.IDLU8Type: return 'Uint8Array' // should be changed to Array
+                case idl.IDLI32Type: return 'Int32Array' // should be changed to Array
+                case idl.IDLF32Type: return 'Float32Array' // should be changed to Array
                 default: return `Array<${this.convertType(type.elementType[0])}>`
             }
+        }
+        if (idl.IDLContainerUtils.isBuffer(type)) {
+            if (type.elementType.length > 0) {
+                switch (type.elementType[0]) {
+                    case idl.IDLU8Type: return 'Uint8Array'
+                    case idl.IDLI8Type: return 'Int8Array'
+                    case idl.IDLU8Type: return 'Uint16Array'
+                    case idl.IDLI16Type: return 'Int16Array'
+                    case idl.IDLU32Type: return 'Uint32Array'
+                    case idl.IDLI32Type: return 'Int32Array'
+                    case idl.IDLF32Type: return 'Float32Array'
+                    default: return `ArrayBuffer`
+                }
+            }
+            return `ArrayBuffer`
         }
         if (idl.IDLContainerUtils.isRecord(type)) {
             return `Map<${this.convertType(type.elementType[0])}, ${this.convertType(type.elementType[1])}>`
@@ -107,14 +122,13 @@ export class TsIDLNodeToStringConverter extends IdlNameConvertorBase implements 
         }
 
         let typeSpec = type.name
-        let typeArgs = idl.getExtAttribute(type, idl.IDLExtendedAttributes.TypeArguments)?.split(",")
+        let typeArgs = type.typeArguments?.map(it => idl.printType(it))
         if (typeSpec === `AttributeModifier`)
             typeArgs = [`object`]
-        if (typeSpec === `ContentModifier`)
-            typeArgs = [this.convertType(idl.IDLAnyType)] //this.convert(ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword))]
-        if (typeSpec === `Optional`) {
+        if (typeSpec === `ContentModifier` || typeSpec === `WrappedBuilder`)
+            typeArgs = [this.convertType(idl.IDLAnyType)]
+        if (typeSpec === `Optional`)
             return `${typeArgs} | undefined`
-        }
         const maybeTypeArguments = !typeArgs?.length ? '' : `<${typeArgs.join(', ')}>`
         // FIXME:
         if (namespacePrefix !== '' && typeSpec.startsWith(namespacePrefix)) {
@@ -184,7 +198,7 @@ export class TsIDLNodeToStringConverter extends IdlNameConvertorBase implements 
             } ${
                 isTuple ? "]" : "}"
             }`
-        
+
         return name
     }
 

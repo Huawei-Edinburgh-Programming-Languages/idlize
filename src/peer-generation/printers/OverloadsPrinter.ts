@@ -48,10 +48,7 @@ export function collapseSameNamedMethods(methods: Method[], selectMaxMethodArgs?
                 return true
             }
         })
-        if (types.length > 1) {
-            return idl.maybeOptional(idl.createUnionType(types, "%PROXY_BEFORE_PEER%"), optional)
-        }
-        return idl.maybeOptional(types[0], optional)
+        return idl.maybeOptional(typeOrUnion(types, "%PROXY_BEFORE_PEER%"), optional)
     })
     return new Method(
         methods[0].name,
@@ -88,8 +85,8 @@ export function collapseIdlPeerMethods(library: IdlPeerLibrary, overloads: IdlPe
             return convertor
         }
         return library.typeConvertor(
-            method.signature.argName(index), 
-            target, 
+            method.signature.argName(index),
+            target,
             idl.isOptionalType(method.signature.args[index])
         )
     })
@@ -152,7 +149,7 @@ export class OverloadsPrinter {
             if (this.isComponent) {
                 this.printer.popIndent()
                 this.printer.print(`}`)
-                this.printer.print("return this")
+                this.printer.writeStatement(this.printer.makeReturn(collapsedMethod.signature.returnType == idl.IDLThisType ? this.printer.makeThis() : undefined))
             }
         })
     }
@@ -177,7 +174,7 @@ export class OverloadsPrinter {
                 this.printer.writeStatement(
                     this.printer.makeCondition(this.printer.makeNaryOp("==",
                             [this.printer.makeString(argName), this.printer.makeString("undefined")]),
-                        this.printer.makeStatement(this.printer.makeString(`throw new Error(\"Arg '${argName}' is null\")`))
+                        this.printer.makeThrowError(`Arg '${argName}' is null`)
                     )
                 )
             }
@@ -194,7 +191,7 @@ export class OverloadsPrinter {
         if (returnType === idl.IDLThisType || returnType === idl.IDLVoidType) {
             this.printer.writeMethodCall(receiver, methodName, argsNames, !isStatic)
             if (returnType === idl.IDLThisType) {
-                this.printer.print(`return this`)
+                this.printer.writeStatement(this.printer.makeReturn(this.printer.makeThis()))
             }
         } else {
             this.printer.writeStatement(

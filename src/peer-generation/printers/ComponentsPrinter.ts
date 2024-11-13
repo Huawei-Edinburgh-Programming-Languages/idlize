@@ -120,7 +120,7 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
     }
 
     private printComponent(peer: IdlPeerClass) {
-        const callableMethods = (peer.methods as any[]).filter(it => it.isCallSignature).map(it => it.method)
+        const callableMethods = peer.methods.filter(it => it.isCallSignature).map(it => it.method)
         const callableMethod = callableMethods.length ? collapseSameNamedMethods(callableMethods) : undefined
         const mappedCallableParams = callableMethod?.signature.args.map((it, index) => `${callableMethod.signature.argName(index)}${isOptionalType(it) ? "?" : ""}: ${this.printer.stringifyType(it)}`)
         const mappedCallableParamsValues = callableMethod?.signature.args.map((_, index) => callableMethod.signature.argName(index))
@@ -242,15 +242,16 @@ class JavaComponentFileVisitor implements ComponentFileVisitor {
                 const signature = new NamedMethodSignature(componentType, originalSignature.args, originalSignature.argsNames, originalSignature.defaults)
                 const method = new Method(peerMethod.method.name, signature, [MethodModifier.PUBLIC])
                 writer.writeMethodImplementation(method, writer => {
-                    const thiz = writer.makeString('this')
+                    const thiz = writer.makeThis()
                     writer.writeStatement(writer.makeCondition(
                         writer.makeString(`checkPriority("${method.name}")`),
                         writer.makeBlock([
                             writer.makeStatement(writer.makeMethodCall(`((${peerClassName})peer)`, `${peerMethod.overloadedName}Attribute`, signature.argsNames.map(it => writer.makeString(it)))),
                             writer.makeReturn(thiz),
                         ])))
-                    writer.writeStatement(writer.makeReturn(thiz))
-                })
+                        writer.writeStatement(writer.makeReturn(thiz))
+                    }
+                )
             })
 
             const attributesSignature = new MethodSignature(IDLVoidType, [])
