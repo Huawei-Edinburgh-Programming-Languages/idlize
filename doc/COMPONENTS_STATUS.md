@@ -1217,7 +1217,7 @@
 |`divider`| Function |Ekaterina Stepanova | done |  |
 |`gradientHeight`| Function | Ekaterina Stepanova| done |  |
 |*TextTimer*| *Component* |Ekaterina Stepanova| blocked |  |
-|`setTextTimerOptions`| Function |Ekaterina Stepanova| devdone |  |
+|`setTextTimerOptions`| Function |Ekaterina Stepanova| done |  |
 |`format`| Function |Ekaterina Stepanova| done |  |
 |`fontColor`| Function |Ekaterina Stepanova| done |  |
 |`fontSize`| Function |Ekaterina Stepanova| done |  |
@@ -1227,10 +1227,10 @@
 |`onTimer`| Function |Ekaterina Stepanova| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB3V0H |
 |`textShadow`| Function |Ekaterina Stepanova| blocked AceEngine| https://gitee.com/openharmony/arkui_ace_engine/issues/IB2SZK |
 |`contentModifier`| Function |Ekaterina Stepanova| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
-|*TextTimerController*| *Class* |Ekaterina Stepanova| devdone |  |
-|`start`| Function |Ekaterina Stepanova| devdone |  |
-|`pause`| Function |Ekaterina Stepanova| devdone |  |
-|`reset`| Function |Ekaterina Stepanova| devdone |  |
+|*TextTimerController*| *Class* |Ekaterina Stepanova| done |  |
+|`start`| Function |Ekaterina Stepanova| done |  |
+|`pause`| Function |Ekaterina Stepanova| done |  |
+|`reset`| Function |Ekaterina Stepanova| done |  |
 |*TimePicker*| *Component* | Ekaterina Stepanova| blocked |  |
 |`setTimePickerOptions`| Function |Ekaterina Stepanova| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`useMilitaryTime`| Function |Ekaterina Stepanova| done |  |
