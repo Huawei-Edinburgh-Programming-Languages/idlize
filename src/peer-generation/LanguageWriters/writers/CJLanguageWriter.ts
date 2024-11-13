@@ -83,9 +83,9 @@ export class CJMatchExpression implements LanguageExpression {
         let output: string[] = []
         output.push(`match (${this.matchValue.asString()}) {`)
         for (let index in this.matchCases) {
-            output.push(`case ${this.matchCases[index].asString()} => { ${this.caseBlocks[index].asString()} }`)
+            output.push(`case ${this.matchCases[index].asString()} => ${this.caseBlocks[index].asString()} `)
         }
-        output.push(`case _ => { throw Exception(\"Unmatched pattern\" ${this.matchValue.asString()}) }`)
+        output.push(`case _ => throw Exception(\"Unmatched pattern ${this.matchValue.asString()}\")`)
         output.push(`}`)
         return output.join('\n')
     }
