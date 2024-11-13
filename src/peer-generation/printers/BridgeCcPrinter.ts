@@ -14,7 +14,7 @@
  */
 
 import { capitalize, dropSuffix, isDefined } from "../../util";
-import { ArgConvertor } from "../ArgConvertors";
+import { ArgConvertor, RetConvertor } from "../ArgConvertors";
 import { PrimitiveType } from "../ArkPrimitiveType"
 import { bridgeCcCustomDeclaration, bridgeCcGeneratedDeclaration } from "../FileGenerators";
 import { createLanguageWriter, createTypeNameConvertor, ExpressionStatement, LanguageWriter } from "../LanguageWriters";
@@ -39,14 +39,18 @@ class BridgeCcVisitor {
         return `get${capitalize(clazz)}${method.apiKind}()`
     }
 
+    protected escapeKeyword(kw: string): string {
+        return this.generatedApi.escapeKeyword(kw)
+    }
+
     // TODO: may be this is another method of ArgConvertor?
     private generateApiArgument(argConvertor: ArgConvertor): string {
         const nameConverter = createTypeNameConvertor(Language.CPP, getReferenceResolver(this.library))
         const prefix = argConvertor.isPointerType() ? `(const ${nameConverter.convertType(argConvertor.nativeType())}*)&`: "    "
         if (argConvertor.useArray)
-            return `${prefix}${argConvertor.param}_value`
+            return `${prefix}${this.escapeKeyword(argConvertor.param)}_value`
         else
-            return `${argConvertor.convertorArg(argConvertor.param, this.generatedApi)}`
+            return `${argConvertor.convertorArg(this.escapeKeyword(argConvertor.param), this.generatedApi)}`
     }
 
     protected getApiCall(method: IdlPeerMethod): string {
@@ -64,9 +68,14 @@ class BridgeCcVisitor {
         // Do they always match in TS and in C one to one?
         const args = receiver.concat(argConvertors.map(it => this.generateApiArgument(it))).join(", ")
         const apiCall = this.getApiCall(method)
-        const call = `${isVoid ? "" : "return "}${apiCall}->${modifier}->${peerMethod}(${args});`
+        const field = this.getApiCallResultField(method)
+        const call = `${isVoid ? "" : "return "}${apiCall}->${modifier}->${peerMethod}(${args})${field};`
         if (this.callLog) this.printCallLog(method, apiCall, modifier)
         this.generatedApi.print(call)
+    }
+
+    protected getApiCallResultField(method: IdlPeerMethod): string {
+        return ""
     }
 
     protected getReceiverArgName(): string {
@@ -204,7 +213,7 @@ class BridgeCcVisitor {
                         type = `const KLength&`
                         break
                 }
-                maybeReceiver.push(`${type} ${it.param}`)
+                maybeReceiver.push(`${type} ${this.escapeKeyword(it.param)}`)
             }
         }
         return maybeReceiver
@@ -215,9 +224,7 @@ class BridgeCcVisitor {
         const argConvertors = method.argConvertors
 
         let cName = `${method.originalParentName}_${method.overloadedName}`
-        let retValue: string | undefined = retConvertor.interopType
-            ? retConvertor.interopType()
-            : retConvertor.nativeType()
+        let retValue: string | undefined = this.getRetValue(method, retConvertor)
         this.generatedApi.print(`${retValue} impl_${cName}(${this.generateCParameters(method, argConvertors).join(", ")}) {`)
         this.generatedApi.pushIndent()
         this.printNativeBody(method, modifierName)
@@ -230,6 +237,12 @@ class BridgeCcVisitor {
         const suffix = this.generateCMacroSuffix(method)
         this.generatedApi.print(`KOALA_INTEROP_${suffix}(${macroArgs})`)
         this.generatedApi.print(` `)
+    }
+
+    protected getRetValue(method: IdlPeerMethod, retConvertor: RetConvertor): string | undefined {
+        return retConvertor.interopType
+            ? retConvertor.interopType()
+            : retConvertor.nativeType();
     }
 
     /* 
@@ -334,6 +347,16 @@ class OhosBridgeCcVisitor extends BridgeCcVisitor {
         } else {
             super.printAPICall(method, modifierName)
         }
+    }
+
+    protected getApiCallResultField(method: IdlPeerMethod): string {
+        // TODO Remove this workaround for case when number is replaced with int32
+        if (method.method.signature.returnType === IDLNumberType) {
+            return ".i32"
+        } else {
+            return super.getApiCallResultField(method)
+        }
+        
     }
 }
 
