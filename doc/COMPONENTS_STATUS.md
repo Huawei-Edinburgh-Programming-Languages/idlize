@@ -501,13 +501,13 @@
 |`privacySensitive`| Function | Evstigneev Roman | in progress | |
 |`enhancedImageQuality`| Function | Evstigneev Roman | in progress | |
 |*ImageSpan*| *Component* | Politov Mikhail | in progress|  |
-|`setImageSpanOptions`| Function | Politov Mikhail |  blocked |  |
+|`setImageSpanOptions`| Function | Politov Mikhail |  in progress|  |
 |`verticalAlign`| Function | Politov Mikhail | devdone |  |
-|`colorFilter`| Function | Politov Mikhail | blocked |  |
+|`colorFilter`| Function | Politov Mikhail | in progress|  |
 |`objectFit`| Function | Politov Mikhail | devdone |  |
-|`onComplete`| Function | Politov Mikhail | blocked |  |
-|`onError`| Function | Politov Mikhail | blocked |  |
-|`alt`| Function | Politov Mikhail | blocked |  |
+|`onComplete`| Function | Politov Mikhail | in progress |  |
+|`onError`| Function | Politov Mikhail | in progress|  |
+|`alt`| Function | Politov Mikhail | in progress|  |
 |*Line*|*Component*|Dudkin Sergey| blocked |  |
 |`setLineOptions`|Function|Dudkin Sergey| done |  |
 |`startPoint`|Function|Dudkin Sergey|blocked AceEngine | https://gitee.com/openharmony/interface_sdk-js/issues/IAXCBA |
