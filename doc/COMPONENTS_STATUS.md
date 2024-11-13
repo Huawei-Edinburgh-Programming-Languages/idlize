@@ -149,9 +149,9 @@
 |`hitTestBehavior`| Function | Roman Sedaikin | in progress | |
 |`onChildTouchTest`| Function | | | |
 |`layoutWeight`| Function | Roman Sedaikin | in progress | |
-|`padding`| Function | Skroba Gleb | in progress | |
+|`padding`| Function | Skroba Gleb | devdone | |
 |`safeAreaPadding`| Function | | | |
-|`margin`| Function | Skroba Gleb | in progress | |
+|`margin`| Function | Skroba Gleb | devdone | |
 |`backgroundColor`|Function| Skroba Gleb| done |  |
 |`pixelRound`| Function | Skroba Gleb | done |  |
 |`backgroundImageSize`| Function | Erokhin Ilya | done |  |
@@ -229,7 +229,7 @@
 |`align`| Function | Roman Sedaikin | in progress | |
 |`position`| Function | Roman Sedaikin | in progress | |
 |`markAnchor`| Function | | | |
-|`offset`| Function | Skroba Gleb | in progress | |
+|`offset`| Function | Skroba Gleb | devdone | |
 |`enabled`| Function | Roman Sedaikin | in progress | |
 |`useSizeType`| Function | | | |
 |`alignRules`| Function | | | |
