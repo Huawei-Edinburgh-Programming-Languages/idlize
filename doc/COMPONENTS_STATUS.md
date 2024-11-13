@@ -753,14 +753,14 @@
 |`onSubmit`| Function | Dudkin Sergey| done|  |
 |`onWillChange`| Function | Dudkin Sergey| done|  |
 |`onDidChange`| Function | Dudkin Sergey| done|  |
-|`onCut`| Function | Dudkin Sergey| in progress| Ark_CutEvent param is always empty now DMZ|
-|`onCopy`| Function | Dudkin Sergey| in progress| Ark_CopyEvent param is always empty now DMZ|
+|`onCut`| Function | Dudkin Sergey| in progress| |
+|`onCopy`| Function | Dudkin Sergey| in progress| |
 |`editMenuOptions`| Function | Dudkin Sergey| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB3UKQ |
 |`enableKeyboardOnFocus`| Function | Dudkin Sergey| devDone|  |
 |`enableHapticFeedback`| Function | Dudkin Sergey| devDone|  |
 |`barState`| Function | Dudkin Sergey| devDone|  |
-|`bindSelectionMenu`| Function | Dudkin Sergey| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q|
-|`customKeyboard`| Function | Dudkin Sergey| blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q|
+|`bindSelectionMenu`| Function | Dudkin Sergey| in progress| |
+|`customKeyboard`| Function | Dudkin Sergey| in progress | |
 |`placeholder`| Function | Dudkin Sergey| done|  |
 |*RichText*| *Component* | Dudkin Sergey| in progress|  |
 |`setRichTextOptions`| Function | Dudkin Sergey| in progress|  |
