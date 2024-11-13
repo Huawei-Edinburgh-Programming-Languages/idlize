@@ -25,6 +25,7 @@ import { CallbackKind, generateCallbackAPIArguments, generateCallbackKindAccess,
 import { MethodArgPrintHint } from "../LanguageWriters/LanguageWriter";
 import { collectMaterializedImports } from "../Materialized";
 import { CppSourceFile, SourceFile, TsSourceFile } from "./SourceFile";
+import { PrimitiveType } from "../ArkPrimitiveType";
 
 function collectEntryCallbacks(library: IdlPeerLibrary, entry: idl.IDLEntry): idl.IDLCallback[] {
     let res: idl.IDLCallback[] = []
@@ -304,7 +305,7 @@ class ManagedCallCallbackVisitor {
             writer.print(`switch (kind) {`)
             writer.pushIndent()
             for (const callback of callbacks) {
-                writer.print(`case ${generateCallbackKindName(callback)}: return reinterpret_cast<Ark_NativePointer>(callManaged${callback.name});`)
+                writer.print(`case ${generateCallbackKindName(callback)}: return reinterpret_cast<${PrimitiveType.NativePointer}>(callManaged${callback.name});`)
             }
             writer.popIndent()
             writer.print(`}`)
