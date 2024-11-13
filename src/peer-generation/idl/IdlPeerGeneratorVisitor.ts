@@ -967,7 +967,6 @@ export class IdlPeerProcessor {
 
         const importFeatures = this.collectDeclDependencies(decl)
         const isDeclInterface = idl.isInterface(decl)
-        const generics = idl.getExtAttribute(decl, idl.IDLExtendedAttributes.TypeParameters)?.split(",")
 
         const constructor = idl.isClass(decl) ? decl.constructors[0] : undefined
         const mConstructor = this.makeMaterializedMethod(decl, constructor)
@@ -985,10 +984,16 @@ export class IdlPeerProcessor {
             interopType: () => PrimitiveType.Void.getText(),
             macroSuffixPart: () => "V"
         }
-
+        
         const mFinalizer = new MaterializedMethod(name, [], finalizerReturnType, false,
             new Method("getFinalizer", new NamedMethodSignature(idl.IDLPointerType, [], [], []), [MethodModifier.STATIC]))
+        
 
+        const mFields = decl.properties
+        // TODO what to do with setter accessors? Do we need FieldModifier.WRITEONLY? For now, just skip them
+            .filter(it => idl.getExtAttribute(it, idl.IDLExtendedAttributes.Accessor) !== idl.IDLAccessorAttribute.Setter)
+            .map(it => this.makeMaterializedField(it))
+    
         const mDestroyPeer = new MaterializedMethod(
             name,
             [],
@@ -1004,11 +1009,6 @@ export class IdlPeerProcessor {
             )
         )
 
-        const mFields = decl.properties
-        // TODO what to do with setter accessors? Do we need FieldModifier.WRITEONLY? For now, just skip them
-            .filter(it => idl.getExtAttribute(it, idl.IDLExtendedAttributes.Accessor) !== idl.IDLAccessorAttribute.Setter)
-            .map(it => this.makeMaterializedField(it))
-    
         const mMethods = decl.methods
         // TODO: Properly handle methods with return Promise<T> type
             .map(method => this.makeMaterializedMethod(decl, method))
@@ -1052,7 +1052,7 @@ export class IdlPeerProcessor {
                 name,
                 isDeclInterface,
                 superClass,
-                generics,
+                decl.typeParameters,
                 mFields,
                 mConstructor,
                 mFinalizer,
