@@ -15,22 +15,21 @@
 
 import * as fs from 'fs'
 import * as path from 'path'
-import { IndentedPrinter } from "../IndentedPrinter"
-import { IdlPeerLibrary } from './idl/IdlPeerLibrary'
-import { CppLanguageWriter, createLanguageWriter, ExpressionStatement, FieldModifier, LanguageExpression, LanguageWriter, Method, MethodSignature, NamedMethodSignature } from './LanguageWriters'
 import { createContainerType, createReferenceType, forceAsNamedNode, hasExtAttribute, IDLCallback, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLMethod, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLU8Type, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isInterface, isMethod, isReferenceType, isType, isUnionType, maybeOptional } from '../idl'
-import { makeDeserializeAndCall, makeSerializerForOhos, readLangTemplate } from './FileGenerators'
-import { capitalize } from '../util'
-import { isMaterialized } from './idl/IdlPeerGeneratorVisitor'
-import { PrimitiveType } from './ArkPrimitiveType'
+import { IndentedPrinter } from "../IndentedPrinter"
 import { Language } from '../Language'
-import { ArgConvertor } from './ArgConvertors'
-import { writeDeserializer, writeSerializer } from './printers/SerializerPrinter'
+import { capitalize } from '../util'
+import { ArgConvertor, generateCallbackAPIArguments } from './ArgConvertors'
+import { PrimitiveType } from './ArkPrimitiveType'
+import { makeDeserializeAndCall, makeSerializerForOhos, readLangTemplate } from './FileGenerators'
 import { qualifiedName } from './idl/common'
-import { printCallbacksKinds, printManagedCaller } from './printers/CallbacksPrinter'
+import { isMaterialized } from './idl/IdlPeerGeneratorVisitor'
+import { IdlPeerLibrary } from './idl/IdlPeerLibrary'
 import { StructPrinter } from './idl/StructPrinter'
-import { generateCallbackAPIArguments } from './ArgConvertors'
-import { printBridgeCc } from './printers/BridgeCcPrinter'
+import { CppLanguageWriter, createLanguageWriter, ExpressionStatement, FieldModifier, LanguageExpression, LanguageWriter, Method, MethodSignature, NamedMethodSignature } from './LanguageWriters'
+import { printBridgeCcForOHOS } from './printers/BridgeCcPrinter'
+import { printCallbacksKinds, printManagedCaller } from './printers/CallbacksPrinter'
+import { writeDeserializer, writeSerializer } from './printers/SerializerPrinter'
 
 class NameType {
     constructor(public name: string, public type: string) {}
@@ -479,6 +478,7 @@ class OHOSVisitor {
         this.hWriter.writeLines(
             readLangTemplate('ohos_api_prologue.h', Language.CPP)
                 .replaceAll("%INCLUDE_GUARD_DEFINE%", `OH_${this.libraryName.toUpperCase()}_H`)
+                .replaceAll("%LIBRARY_NAME%", this.libraryName.toUpperCase())
         )
 
         let toStringsPrinter = createLanguageWriter(Language.CPP, this.library)
@@ -492,7 +492,7 @@ class OHOSVisitor {
         this.writeModifiers(writer)
         this.writeImpls()
         this.cppWriter.concat(writer)
-        this.cppWriter.concat(printBridgeCc(this.library, false).generated)
+        this.cppWriter.concat(printBridgeCcForOHOS(this.library).generated)
         this.cppWriter.concat(makeDeserializeAndCall(this.library, Language.CPP, 'serializer.cc').content)
         this.cppWriter.concat(printManagedCaller(this.library).content)
 

@@ -124,8 +124,6 @@ class DeserializeCallbacksVisitor {
     }
 
     private writeImports() {
-        this.writer.writeLines(cStyleCopyright)
-        
         if (this.writer.language === Language.CPP) {
             const cppFile = this.destFile as CppSourceFile
             cppFile.addInclude("arkoala_api_generated.h")

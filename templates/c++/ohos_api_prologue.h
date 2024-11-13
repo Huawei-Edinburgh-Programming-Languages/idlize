@@ -15,7 +15,7 @@
 #ifndef %INCLUDE_GUARD_DEFINE%
 #define %INCLUDE_GUARD_DEFINE%
 
-#define XML_API_VERSION 1
+#define %LIBRARY_NAME%_API_VERSION 1
 
 #include <stdint.h>
 

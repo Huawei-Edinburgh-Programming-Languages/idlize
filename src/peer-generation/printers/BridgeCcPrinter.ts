@@ -29,11 +29,11 @@ class BridgeCcVisitor {
     readonly customApi = createLanguageWriter(Language.CPP, this.library)
 
     constructor(
-        private readonly library: IdlPeerLibrary,
-        private readonly callLog: boolean,
+        protected readonly library: IdlPeerLibrary,
+        protected readonly callLog: boolean,
     ) {}
 
-    private generateApiCall(method: IdlPeerMethod, modifierName?: string): string {
+    protected generateApiCall(method: IdlPeerMethod, modifierName?: string): string {
         // TODO: may be need some translation tables?
         let clazz = modifierName ?? dropSuffix(dropSuffix(dropSuffix(method.originalParentName, "Method"), "Attribute"), "Interface")
         return `get${capitalize(clazz)}${method.apiKind}()`
@@ -49,25 +49,44 @@ class BridgeCcVisitor {
             return `${argConvertor.convertorArg(argConvertor.param, this.generatedApi)}`
     }
 
-    private printAPICall(method: IdlPeerMethod, modifierName?: string) {
+    protected getApiCall(method: IdlPeerMethod): string {
+        return method.apiCall
+    }
+
+    protected printAPICall(method: IdlPeerMethod, modifierName?: string) {
         const hasReceiver = method.hasReceiver()
         const argConvertors = method.argConvertors
         const isVoid = method.retConvertor.isVoid
         const modifier = this.generateApiCall(method, modifierName)
-        const peerMethod = method.peerMethodName
-        const receiver = hasReceiver ? ['self'] : []
+        const peerMethod = this.getPeerMethodName(method)
+        const receiver = hasReceiver ? [this.getReceiverArgName()] : []
         // TODO: how do we know the real amount of arguments of the API functions?
         // Do they always match in TS and in C one to one?
         const args = receiver.concat(argConvertors.map(it => this.generateApiArgument(it))).join(", ")
-        const call = `${isVoid ? "" : "return "}${method.apiCall}->${modifier}->${peerMethod}(${args});`
-        if (this.callLog) this.printCallLog(method, method.apiCall, modifier)
+        const apiCall = this.getApiCall(method)
+        const call = `${isVoid ? "" : "return "}${apiCall}->${modifier}->${peerMethod}(${args});`
+        if (this.callLog) this.printCallLog(method, apiCall, modifier)
         this.generatedApi.print(call)
+    }
+
+    protected getReceiverArgName(): string {
+        return "self"
+    }
+
+    protected getPeerMethodName(method: IdlPeerMethod): string {
+        return method.peerMethodName
+    }
+
+    protected printReceiverCastCall(method: IdlPeerMethod) {
+        const receiverType = method.receiverType;
+        const self = this.getReceiverArgName();
+        this.generatedApi.print(`${receiverType} ${self} = reinterpret_cast<${receiverType}>(thisPtr);`)
     }
 
     private printNativeBody(method: IdlPeerMethod, modifierName?: string) {
         this.generatedApi.pushIndent()
         if (method.hasReceiver()) {
-            this.generatedApi.print(`${method.receiverType} self = reinterpret_cast<${method.receiverType}>(thisPtr);`)
+            this.printReceiverCastCall(method)
         }
         let deserializerCreated = false
         method.argConvertors.forEach(it => {
@@ -107,7 +126,7 @@ class BridgeCcVisitor {
             BridgeCcVisitor.varCnt += 1
         }
 
-        this.generatedApi.print(`_logData.append("  ${api}->${modifier}->${method.peerMethodName}(");`)
+        this.generatedApi.print(`_logData.append("  ${api}->${modifier}->${this.getPeerMethodName(method)}(");`)
         if (method.hasReceiver()) {
             this.generatedApi.print(`_logData.append("(Ark_NativePointer)");`)
             this.generatedApi.print(`_logData.append("peer" + std::to_string((uintptr_t)thisPtr));`);
@@ -275,10 +294,59 @@ class BridgeCcVisitor {
     }
 }
 
+// TODO commonize this piece of code
+class OhosBridgeCcVisitor extends BridgeCcVisitor {
+    protected generateApiCall(method: IdlPeerMethod, modifierName?: string): string {
+        // TODO: may be need some translation tables?
+        let clazz = modifierName ?? dropSuffix(dropSuffix(dropSuffix(method.originalParentName, "Method"), "Attribute"), "Interface")
+        return capitalize(clazz) + "()"
+    }
+
+    protected getApiCall(method: IdlPeerMethod): string {
+        const libName = this.library.name;
+        return `Get${libName}APIImpl(${libName}_API_VERSION)`
+    }
+
+
+    protected getReceiverArgName(): string {
+        return "thisPtr"
+    }
+
+    protected printReceiverCastCall(method: IdlPeerMethod) {
+        // OHOS API does not need to cast native pointer at this moment
+    }
+
+    protected getPeerMethodName(method: IdlPeerMethod): string {
+        switch (method.peerMethodName) {
+            case "ctor": return "construct"
+            case "getFinalizer": return "destruct"
+            default: return method.peerMethodName
+        }
+    }
+
+    protected printAPICall(method: IdlPeerMethod, modifierName?: string) {
+        if (method.peerMethodName == "getFinalizer") {
+            const modifier = this.generateApiCall(method, modifierName)
+            const peerMethod = this.getPeerMethodName(method)
+            const apiCall = this.getApiCall(method)
+            const call = `return (${PrimitiveType.NativePointer}) &${apiCall}->${modifier}->${peerMethod};`
+            this.generatedApi.print(call)
+        } else {
+            super.printAPICall(method, modifierName)
+        }
+    }
+}
+
 type BridgeCcApi = {
     generated: LanguageWriter;
     custom: LanguageWriter;
 };
+
+export function printBridgeCcForOHOS(peerLibrary: IdlPeerLibrary): BridgeCcApi {
+    const visitor = new OhosBridgeCcVisitor(peerLibrary, false)
+    visitor.print()
+    return { generated: visitor.generatedApi, custom: visitor.customApi }
+}
 
 export function printBridgeCc(peerLibrary: IdlPeerLibrary, callLog: boolean): BridgeCcApi {
     const visitor = new BridgeCcVisitor(peerLibrary, callLog)
