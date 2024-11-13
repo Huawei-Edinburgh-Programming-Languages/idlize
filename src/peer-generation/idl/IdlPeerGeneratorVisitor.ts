@@ -1054,7 +1054,7 @@ export class IdlPeerProcessor {
                 generics,
                 mFields,
                 mConstructor,
-                mDestroyPeer,
+                mGetFinalizer,
                 importFeatures,
                 [...mMethods, mGetFinalizer] 
             )
