@@ -19,7 +19,7 @@ import * as path from "path"
 import { fromIDL } from "./from-idl/common"
 import { idlToString } from "./from-idl/DtsPrinter"
 import { generate } from "./idlize"
-import { forEachChild, IDLEntry, toIDLString, transformMethodsAsync2ReturnPromise } from "./idl"
+import { forEachChild, IDLEntry, isClass, isInterface, toIDLString, transformMethodsAsync2ReturnPromise } from "./idl"
 import { LinterVisitor, toLinterString } from "./linter"
 import { LinterMessage } from "./LinterMessage"
 import { IDLVisitor } from "./IDLVisitor"
@@ -334,7 +334,10 @@ if (options.dts2peer) {
         {
             compilerOptions: defaultCompilerOptions,
             onSingleFile(entries: IDLEntry[], outputDir, sourceFile) {
-                entries.forEach(transformMethodsAsync2ReturnPromise)
+                entries.forEach(it => {
+                    transformMethodsAsync2ReturnPromise(it)
+                    correctOverloadedProperties(it, idlLibrary)
+                })
                 const file = new PeerFile(sourceFile.fileName, entries, idlLibrary.componentsToGenerate)
                 idlLibrary.files.push(file)
             },
@@ -402,4 +405,27 @@ if (options.dts2peer) {
 
 if (!didJob) {
     program.help()
+}
+
+function correctOverloadedProperties(entry: IDLEntry, idlLibrary: IdlPeerLibrary) {
+    if (idlLibrary.language !== Language.ARKTS) {
+        return;
+    }
+    if (!isInterface(entry) && !isClass(entry)) {
+        return;
+    }
+    if (entry.inheritance.length !== 1) {
+        return;
+    }
+    const firstParent = idlLibrary.toDeclaration(entry.inheritance[0])
+    if (!isInterface(firstParent) && !isClass(firstParent)) {
+        return;
+    }
+    entry.properties.forEach(prop => {
+        const overloadedProp =
+            firstParent.properties.find(it => it.name === prop.name)
+        if (overloadedProp !== undefined) {
+            prop.type = overloadedProp.type
+        }
+    })
 }
