@@ -26,7 +26,7 @@ import {
     ObjectArgs
 } from "../LanguageWriter"
 import { TSLambdaExpression, TSLanguageWriter } from "./TsLanguageWriter"
-import { IDLEnum, IDLI32Type, IDLThisType, IDLType, IDLVoidType, toIDLType } from '../../../idl'
+import { getExtAttribute, IDLEnum, IDLI32Type, IDLThisType, IDLType, IDLVoidType, toIDLType } from '../../../idl'
 import {AggregateConvertor, ArgConvertor, ArrayConvertor, BaseArgConvertor, CustomTypeConvertor, EnumConvertor, InterfaceConvertor, makeInterfaceTypeCheckerCall, RuntimeType} from "../../ArgConvertors"
 import { Language } from "../../../Language"
 import { ReferenceResolver } from "../../ReferenceResolver"
@@ -83,6 +83,14 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
                     [FieldModifier.STATIC, FieldModifier.READONLY],
                     false,
                     writer.makeString(`new ${this.enumEntry.name}(${ctorArgs.join(",")})`))
+                let originalName = getExtAttribute(member, idl.IDLExtendedAttributes.OriginamEnumMemberName)
+                if (originalName) {
+                    writer.writeFieldDeclaration(originalName,
+                        toIDLType(this.enumEntry.name),
+                        [FieldModifier.STATIC, FieldModifier.READONLY],
+                        false,
+                        writer.makeString(`${this.enumEntry.name}.${member.name}`))
+                }
             })
             const typeName = isTypeString ? "string" : "KInt"
             let argTypes = [toIDLType(typeName)]
