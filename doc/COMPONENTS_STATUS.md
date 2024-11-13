@@ -149,10 +149,10 @@
 |`hitTestBehavior`| Function | Roman Sedaikin | in progress | |
 |`onChildTouchTest`| Function | | | |
 |`layoutWeight`| Function | Roman Sedaikin | in progress | |
-|`padding`| Function | Erokhin Ilya | blocked ArKoala |https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
+|`padding`| Function | Skroba Gleb | in progress | |
 |`safeAreaPadding`| Function | | | |
-|`margin`| Function | Erokhin Ilya | blocked ArKoala |https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
-|`backgroundColor`|Function|Skroba Gleb| done |  |
+|`margin`| Function | Skroba Gleb | in progress | |
+|`backgroundColor`|Function| Skroba Gleb| done |  |
 |`pixelRound`| Function | Skroba Gleb | done |  |
 |`backgroundImageSize`| Function | Erokhin Ilya | done |  |
 |`backgroundImagePosition`| Function | Erokhin Ilya | done |  |
@@ -229,7 +229,7 @@
 |`align`| Function | Roman Sedaikin | in progress | |
 |`position`| Function | Roman Sedaikin | in progress | |
 |`markAnchor`| Function | | | |
-|`offset`| Function | Erokhin Ilya | blocked ArKoala |https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
+|`offset`| Function | Skroba Gleb | in progress | |
 |`enabled`| Function | Roman Sedaikin | in progress | |
 |`useSizeType`| Function | | | |
 |`alignRules`| Function | | | |
