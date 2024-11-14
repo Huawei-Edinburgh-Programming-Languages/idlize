@@ -97,7 +97,7 @@
     "make:arkts": "npm run compile && node . --api-version 99 --dts2peer --need-interfaces --input-dir ./tests/arkts-subset/ets,./tests/arkts-subset/resource --output-dir ./out/arkts-subset/generated --language arkts",
     "make:arkts:subset:tsc": "npm run compile && node . --api-version 99 --dts2peer --need-interfaces --only-integrated --input-dir ./tests/arkts-subset/ets/,./tests/arkts-subset/resource --arkoala-destination ./out/arkts-subset-tsc/generated --generator-target arkoala --language=arkts",
     "make:arkts:peers": "npm run compile && node . --api-version 99 --dts2peer --need-interfaces --input-dir ./interface_sdk-js/api/@internal/component/ets/,./interface_sdk-js/api/global --output-dir ./out/arkts-peers/generated --language arkts",
-    "compile:arkts": "bash ./external/incremental/tools/panda/arkts/arktsc --arktsconfig ./arktsconfig-subset.json --ets-module --extension sts --list-files --suppress-warnings true",
+    "compile:arkts": "bash ./external/incremental/tools/panda/arkts/arktsc --arktsconfig ./arktsconfig-subset.json --ets-module --extension sts --list-files",
     "compile:arkts:compat": "cd ./external/incremental/compat/ && npm run compile:arkts",
     "compile:arkts:common": "cd ./external/incremental/common/ && npm run compile:arkts",
     "compile:arkts:runtime": "cd ./external/incremental/runtime/ && npm run compile:arkts && echo ATTENTION: the runtime is compiled without unmemoization here!",
