@@ -48,6 +48,7 @@ import { Language } from '../../Language'
 import { escapeKeyword, IDLKind } from "../../idl";
 import { ETSLanguageWriter } from '../LanguageWriters/writers/ETSLanguageWriter'
 import { collectProperties } from './StructPrinter'
+import { CustomPrintVisitor } from "../../from-idl/DtsPrinter"
 
 interface InterfacesVisitor {
     getInterfaces(): Map<TargetFile, LanguageWriter>
@@ -63,8 +64,10 @@ abstract class DefaultInterfacesVisitor implements InterfacesVisitor {
 }
 
 export class TSDeclConvertor implements DeclarationConvertor<void> {
+    private printer: CustomPrintVisitor
     constructor(protected readonly writer: LanguageWriter,
                 readonly peerLibrary: PeerLibrary) {
+    this.printer = new CustomPrintVisitor(type => peerLibrary.resolveTypeReference(type), writer.language)
     }
     convertCallback(node: idl.IDLCallback): void {
     }
@@ -97,7 +100,9 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
 
     convertInterface(node: idl.IDLInterface): void {
         if (!this.peerLibrary.isComponentDeclaration((node))) {
-            this.writer.print('export ' + this.replaceImportTypeNodes(idl.printInterface(node).join("\n")))
+            this.printer.output = []
+            this.printer.printInterface(node)
+            this.writer.print('export ' + this.replaceImportTypeNodes(this.printer.output.join("\n")))
             return
         }
         let printer = new IndentedPrinter()
