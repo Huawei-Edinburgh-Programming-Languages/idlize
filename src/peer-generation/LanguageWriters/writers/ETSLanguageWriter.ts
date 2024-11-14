@@ -68,7 +68,9 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
 
     write(writer: LanguageWriter) {
         // writer.print(this.enumEntity.comment)
-        writer.writeClass(this.enumEntity.name, (writer) => {
+        const namespace = getExtAttribute(this.enumEntity, idl.IDLExtendedAttributes.Namespace)
+        const className = namespace ? `${namespace}_${this.enumEntity.name}` : this.enumEntry.name
+        writer.writeClass(className, (writer) => {
             let isTypeString = true
             this.enumEntity.elements.forEach((member, index) => {
                 // writer.print(member.comment)
@@ -82,14 +84,14 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
                     toIDLType(this.enumEntry.name),
                     [FieldModifier.STATIC, FieldModifier.READONLY],
                     false,
-                    writer.makeString(`new ${this.enumEntry.name}(${ctorArgs.join(",")})`))
+                    writer.makeString(`new ${className}(${ctorArgs.join(",")})`))
                 let originalName = getExtAttribute(member, idl.IDLExtendedAttributes.OriginalEnumMemberName)
                 if (originalName) {
                     writer.writeFieldDeclaration(originalName,
                         toIDLType(this.enumEntry.name),
                         [FieldModifier.STATIC, FieldModifier.READONLY],
                         false,
-                        writer.makeString(`${this.enumEntry.name}.${member.name}`))
+                        writer.makeString(`${className}.${member.name}`))
                 }
             })
             const typeName = isTypeString ? "string" : "KInt"
@@ -99,7 +101,7 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
                 argTypes.push(toIDLType("KInt"))
                 argNames.push("ordinal")
             }
-            writer.writeConstructorImplementation(this.enumEntry.name,
+            writer.writeConstructorImplementation(className,
                 new NamedMethodSignature(IDLVoidType, argTypes, argNames), (writer) => {
                     writer.writeStatement(writer.makeAssign("this.value", undefined, writer.makeString("value"), false))
                     if (isTypeString) {
@@ -112,8 +114,8 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
             }
             writer.writeMethodImplementation(new Method("of", new MethodSignature(toIDLType(this.enumEntry.name), [argTypes[0]]), [MethodModifier.PUBLIC, MethodModifier.STATIC]),
                 (writer)=> {
-                    this.enumEntity.elements.forEach(member => {
-                        const memberName = `${this.enumEntity.name}.${member.name}`
+                    this.enumEntity.elements.forEach((member) => {
+                        const memberName = `${className}.${member.name}`
                         writer.writeStatement(
                             writer.makeCondition(
                                 writer.makeEquals([writer.makeString('arg0'), writer.makeString(`${memberName}.value`)]),
@@ -132,6 +134,7 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
 
 export function generateTypeCheckerName(typeName: string): string {
     typeName = typeName.replaceAll('[]', 'BracketsArray')
+    .replaceAll('.', '') // Todo: hack for namespaces
     return `is${typeName.replaceAll('[]', 'Brackets')}`
 }
 

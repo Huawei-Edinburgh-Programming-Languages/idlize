@@ -142,7 +142,8 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
             writer.print(`Object.assign(globalThis, {`)
             writer.pushIndent()
             for (const e of peerFile.enums) {
-                writer.print(`${e.name}: ${e.name},`)
+                const usageTypeName = this.peerLibrary.mapType(idl.createReferenceType(e.name))
+                writer.print(`${e.name}: ${usageTypeName},`)
             }
             writer.popIndent()
             writer.print(`})`)
@@ -603,10 +604,10 @@ class ArkTSInterfacesVisitor extends TSInterfacesVisitor {
         // Not supported
     }
 
-    override enumName(enumEntry: idl.IDLEnum): string {
-        const namespace = idl.getExtAttribute(enumEntry, IDLExtendedAttributes.Namespace) ?? ""
-        return `${namespace}${enumEntry.name}`
-    }
+    // override enumName(enumEntry: idl.IDLEnum): string {
+    //     const namespace = idl.getExtAttribute(enumEntry, IDLExtendedAttributes.Namespace) ?? ""
+    //     return `${namespace}${enumEntry.name}`
+    // }
 
     protected createDeclarationConvertor(writer: LanguageWriter): DeclarationConvertor<void> {
         return new ArkTSDeclConvertor(writer, this.peerLibrary)

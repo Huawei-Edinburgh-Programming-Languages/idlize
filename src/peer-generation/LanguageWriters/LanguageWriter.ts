@@ -228,7 +228,10 @@ export class TsEnumEntityStatement implements LanguageStatement {
     constructor(private readonly enumEntity: idl.IDLEnum, private readonly isExport: boolean) {}
     write(writer: LanguageWriter): void {
         // writer.print(this.enumEntity.comment)
-        writer.print(`${this.isExport ? "export " : ""}enum ${this.enumEntity.name} {`)
+        const namespace = idl.getExtAttribute(this.enumEntity, idl.IDLExtendedAttributes.Namespace)
+        if (namespace) writer.pushNamespace(namespace)
+            
+        writer.print(`${this.isExport ? "export " : ""}enum ${this.enumEntry.name} {`)
         writer.pushIndent()
         this.enumEntity.elements.forEach((member, index) => {
             // writer.print(member.comment)
@@ -244,6 +247,8 @@ export class TsEnumEntityStatement implements LanguageStatement {
         })
         writer.popIndent()
         writer.print(`}`)
+
+        if (namespace) writer.popNamespace()
     }
 
     private maybeQuoted(value: string|number): string {
@@ -725,6 +730,22 @@ export abstract class LanguageWriter {
     stringifyTypeOrEmpty(type: idl.IDLType | idl.IDLCallback | undefined): string {
         if (type === undefined) return ""
         return this.stringifyType(type)
+    }
+    /**
+     * Writes `namespace <namespace> {` and adds extra indent
+     * @param namespace Namespace to begin
+     */
+    pushNamespace(namespace: string, ident: boolean = true) {
+        this.print(`namespace ${namespace} {`)
+        if (ident) this.pushIndent()
+    }
+
+    /**
+     * Writes closing brace of namespace block and removes one level of indent
+     */
+    popNamespace(ident: boolean = true) {
+        if (ident) this.popIndent()
+        this.print(`}`)
     }
 }
 

@@ -237,22 +237,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         this.print(`#include <${path}>`)
     }
 
-    /**
-     * Writes `namespace <namespace> {` and adds extra indent
-     * @param namespace Namespace to begin
-     */
-    pushNamespace(namespace: string, ident: boolean = true) {
-        this.print(`namespace ${namespace} {`)
-        if (ident) this.pushIndent()
-    }
 
-    /**
-     * Writes closing brace of namespace block and removes one level of indent
-     */
-    popNamespace(ident: boolean = true) {
-        if (ident) this.popIndent()
-        this.print(`}`)
-    }
 
     override makeTag(tag: string): string {
         return PrimitiveType.Prefix.toLocaleUpperCase() + "TAG_" + tag
