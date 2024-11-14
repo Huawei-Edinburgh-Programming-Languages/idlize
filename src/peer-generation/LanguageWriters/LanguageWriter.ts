@@ -231,7 +231,7 @@ export class TsEnumEntityStatement implements LanguageStatement {
         writer.print(`${this.isExport ? "export " : ""}enum ${this.enumEntity.name} {`)
         writer.pushIndent()
         this.enumEntity.elements.forEach((member, index) => {
-            writer.print(member.comment)
+            // writer.print(member.comment)
             const initValue = member.initializer
                 ? ` = ${this.maybeQuoted(member.initializer)}` : ``
             writer.print(`${member.name}${initValue},`)
