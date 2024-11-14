@@ -2061,9 +2061,9 @@
 |`replaceStyledString`| Function | | | |
 |`insertStyledString`| Function | | | |
 |`appendStyledString`| Function | | | |
-|*CustomSpan*| *Class* | Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
-|`onMeasure`| Function | Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
-|`onDraw`| Function | Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
+|*CustomSpan*| *Class* | Politov Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
+|`onMeasure`| Function | Politov Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
+|`onDraw`| Function | Politov Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`invalidate`| Function | Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |*LinearIndicatorController*| *Class* | Kovalev Sergey | in progress |  |
 |`setProgress`| Function | Kovalev Sergey | in progress |  |
