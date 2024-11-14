@@ -1009,10 +1009,10 @@
 |`showNext`| Function | Andrey Khudenkikh | in progress |  |
 |`showPrevious`| Function |  Andrey Khudenkikh | in progress |  |
 |`changeIndex`| Function |  Andrey Khudenkikh | in progress |  |
-|*SymbolGlyph*| *Component* |Andrey Khudenkikh | in progress |  |
-|`setSymbolGlyphOptions`| Function |Andrey Khudenkikh | devdone |  |
+|*SymbolGlyph*| *Component* |Andrey Khudenkikh | blocked |  |
+|`setSymbolGlyphOptions`| Function |Andrey Khudenkikh | done |  |
 |`fontSize`| Function |Andrey Khudenkikh | done |  |
-|`fontColor`| Function |Andrey Khudenkikh | devdone |  |
+|`fontColor`| Function |Andrey Khudenkikh | done |  |
 |`fontWeight`| Function |Andrey Khudenkikh | done |  |
 |`effectStrategy`| Function |Andrey Khudenkikh | done |  |
 |`renderingStrategy`| Function |Andrey Khudenkikh | done |  |
