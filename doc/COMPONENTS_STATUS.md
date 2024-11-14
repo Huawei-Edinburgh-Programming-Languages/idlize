@@ -326,7 +326,7 @@
 |`scrollBarColor`| Function | Samarin Sergey | devdone |  |
 |`scrollBarWidth`| Function | Samarin Sergey | devdone |  |
 |`nestedScroll`| Function | Samarin Sergey | devdone |  |
-|`enableScrollInteraction`| Function | Samarin Sergey |in progress |  |
+|`enableScrollInteraction`| Function | Samarin Sergey | devdone |  |
 |`friction`| Function | Samarin Sergey | devdone |  |
 |`onScroll`| Function | Samarin Sergey | in progress|  |
 |`onWillScroll`| Function | Samarin Sergey | in progress|  |
@@ -336,8 +336,8 @@
 |`onScrollStart`| Function | Samarin Sergey | in progress|  |
 |`onScrollStop`| Function | Samarin Sergey | in progress|  |
 |`flingSpeedLimit`| Function | Samarin Sergey | devdone |  |
-|`edgeEffect`| Function | Samarin Sergey |in progress | Arkoala|  |
-|`fadingEdge`| Function | Samarin Sergey | blocked Arkoala| https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`edgeEffect`| Function | Samarin Sergey | devdone | |  |
+|`fadingEdge`| Function | Samarin Sergey | in progress | |
 |*Component3D*| *Component* |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
 |`setComponent3DOptions`| Function |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
 |`environment`| Function |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
