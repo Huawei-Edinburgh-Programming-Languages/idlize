@@ -236,17 +236,18 @@ class AccessorVisitor extends ModifierVisitor {
         this.library.materializedClasses.forEach(c => this.printRealAndDummyAccessor(c))
     }
 
-    printRealAndDummyAccessor(clazz: MaterializedClass) {
+    printRealAndDummyAccessor(clazz: MaterializedClass): void {
         this.printMaterializedClassProlog(clazz)
-        // Materialized class methods share the same namespace
-        // so take the first one.
         const namespaceName = clazz.methods[0].implNamespaceName
         this.pushNamespace(namespaceName, false);
+    
         [clazz.ctor, clazz.finalizer].concat(clazz.methods).forEach(method => {
             this.printMaterializedMethod(this.dummy, method, m => this.printDummyImplFunctionBody(m))
             this.printMaterializedMethod(this.real, method, m => this.printModifierImplFunctionBody(m))
+            this.real.print(`void destroyPeer() {}`)
             this.accessors.print(`${method.implNamespaceName}::${method.implName},`)
         })
+    
         this.popNamespace(namespaceName, false)
         this.printMaterializedClassEpilog(clazz)
     }
