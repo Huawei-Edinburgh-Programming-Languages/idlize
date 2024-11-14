@@ -238,6 +238,8 @@ class AccessorVisitor extends ModifierVisitor {
 
     printRealAndDummyAccessor(clazz: MaterializedClass): void {
         this.printMaterializedClassProlog(clazz)
+        // Materialized class methods share the same namespace
+        // so take the first one.
         const namespaceName = clazz.methods[0].implNamespaceName
         this.pushNamespace(namespaceName, false);
     
