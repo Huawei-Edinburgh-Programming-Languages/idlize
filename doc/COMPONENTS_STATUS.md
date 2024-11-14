@@ -1197,7 +1197,7 @@
 |`textIndent`| Function | Spirin Andrey | testskipped |  |
 |`placeholderFont`| Function | Spirin Andrey | testskipped |  |
 |`enterKeyType`| Function | Spirin Andrey | done |  |
-|`caretColor`| Function | Spirin Andrey | testskipped |  |
+|`caretColor`| Function | Spirin Andrey | done |  |
 |`onEditChanged`| Function | Spirin Andrey | in progress|  |
 |`onEditChange`| Function | Spirin Andrey | in progress|  |
 |`onSubmit`| Function | Spirin Andrey | in progress|  |
@@ -1208,8 +1208,8 @@
 |`fontColor`| Function | Spirin Andrey | done |  |
 |`fontSize`| Function | Spirin Andrey | testskipped |  |
 |`fontStyle`| Function | Spirin Andrey | done |  |
-|`fontWeight`| Function | Spirin Andrey | testskipped  |  |
-|`fontFamily`| Function | Spirin Andrey | in progress |  |
+|`fontWeight`| Function | Spirin Andrey | testskipped |  |
+|`fontFamily`| Function | Spirin Andrey | testskipped |  |
 |`onCopy`| Function | Spirin Andrey | in progress |  |
 |`onCut`| Function | Spirin Andrey | in progress|  |
 |`onPaste`| Function | Spirin Andrey | in progress|  |
@@ -1219,9 +1219,9 @@
 |`style`| Function | Spirin Andrey | done |  |
 |`caretStyle`| Function | Spirin Andrey | done |  |
 |`selectedBackgroundColor`| Function | Spirin Andrey | done |  |
-|`caretPosition`| Function | Spirin Andrey | testskipped |  |
+|`caretPosition`| Function | Spirin Andrey | done |  |
 |`enableKeyboardOnFocus`| Function | Spirin Andrey | done |  |
-|`passwordIcon`| Function | Spirin Andrey | in progress |  |
+|`passwordIcon`| Function | Spirin Andrey | devdone |  |
 |`showError`| Function | Spirin Andrey | done |  |
 |`showUnit`| Function | Spirin Andrey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`showUnderline`| Function | Spirin Andrey | done |  |
@@ -1231,7 +1231,7 @@
 |`maxLines`| Function | Spirin Andrey | testskipped  |  |
 |`wordBreak`| Function | Spirin Andrey | done |  |
 |`lineBreakStrategy`| Function | Spirin Andrey | done |  |
-|`cancelButton`| Function | Spirin Andrey | in progress |  |
+|`cancelButton`| Function | Spirin Andrey | devdone |  |
 |`selectAll`| Function | Spirin Andrey | done |  |
 |`minFontSize`| Function | Spirin Andrey | testskipped  |  |
 |`maxFontSize`| Function | Spirin Andrey | testskipped  |  |
