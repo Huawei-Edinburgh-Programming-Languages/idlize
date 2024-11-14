@@ -15,11 +15,11 @@
 
 import * as fs from 'fs'
 import * as path from 'path'
-import { createContainerType, createReferenceType, forceAsNamedNode, hasExtAttribute, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLMethod, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLU8Type, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isInterface, isMethod, isReferenceType, isType, isUnionType, maybeOptional } from '../idl'
+import { createContainerType, createReferenceType, forceAsNamedNode, getExtAttribute, hasExtAttribute, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLMethod, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLU8Type, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isInterface, isMethod, isReferenceType, isType, isUnionType, maybeOptional } from '../idl'
 import { IndentedPrinter } from "../IndentedPrinter"
 import { PeerLibrary } from './PeerLibrary'
 import { Language } from '../Language'
-import { capitalize } from '../util'
+import { capitalize, getOrPut } from '../util'
 import { ArgConvertor, generateCallbackAPIArguments } from './ArgConvertors'
 import { PrimitiveType } from './ArkPrimitiveType'
 import { makeDeserializeAndCall, makeSerializerForOhos, readLangTemplate } from './FileGenerators'
@@ -327,6 +327,27 @@ class OHOSVisitor {
                 })
             })
         })
+        const enumsByNS: Map<string, Set<IDLEnum>> = new Map();
+        this.enums.forEach(e => {
+            const ns = getExtAttribute(e, IDLExtendedAttributes.Namespace) ?? ""
+            const enums = getOrPut(enumsByNS, ns, () => new Set())
+            enums.add(e)
+        })
+        for (const [ns, enums] of enumsByNS) {
+            let hasNs = this.peerWriter.language === Language.TS && !!ns
+            if (hasNs) {
+                this.peerWriter.print(`export namespace ${ns} {`)
+                this.peerWriter.pushIndent()
+            }
+            for (const e of enums) {
+                let members = e.elements.map((m, i) => ({ name: m.name, numberId: i, stringId: undefined  }))
+                this.peerWriter.writeEnum(e.name, members, (writer) => {})
+            }
+            if (hasNs) {
+                this.peerWriter.print(`}`)
+                this.peerWriter.popIndent()
+            }
+        }
         this.interfaces.forEach(int => {
             this.peerWriter.writeInterface(`${int.name}Interface`, writer => {
                 int.methods.forEach(method => {
@@ -526,11 +547,11 @@ class OHOSVisitor {
                 if (isInterface(entry) || isClass(entry)) {
                     if (isMaterialized(entry)) {
                         this.interfaces.push(entry)
-                    } else if (isEnum(entry)) {
-                        this.enums.push(entry)
                     } else {
                         this.data.push(entry)
                     }
+                } else if (isEnum(entry)) {
+                    this.enums.push(entry)
                 }
                 entry.scope?.forEach(it => {
                     if (isCallback(it))
