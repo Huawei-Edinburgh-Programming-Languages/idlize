@@ -12,13 +12,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <stdint.h>
+#include "xml.h"
 
+#include <cstdint>
 #include <cassert>
 #include <cstring>
 #include <string>
 #include <vector>
-#include "xml.h"
+
 
 // callbacks.h
 

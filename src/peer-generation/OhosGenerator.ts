@@ -15,7 +15,7 @@
 
 import * as fs from 'fs'
 import * as path from 'path'
-import { createContainerType, createReferenceType, forceAsNamedNode, hasExtAttribute, IDLCallback, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLMethod, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLU8Type, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isInterface, isMethod, isReferenceType, isType, isUnionType, maybeOptional } from '../idl'
+import { createContainerType, createReferenceType, forceAsNamedNode, hasExtAttribute, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLMethod, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLU8Type, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isInterface, isMethod, isReferenceType, isType, isUnionType, maybeOptional } from '../idl'
 import { IndentedPrinter } from "../IndentedPrinter"
 import { Language } from '../Language'
 import { capitalize } from '../util'
@@ -120,10 +120,12 @@ class OHOSVisitor {
         clazz.constructors.forEach((ctor, index) => {
             let name = `construct${(index > 0) ? index.toString() : ""}`
             let params = ctor.parameters.map(it => new NameType(_h.escapeKeyword(it.name), this.mapType(it.type!)))
-            _h.print(`${handleType} (*${name})(${params.map(it => `const ${it.type}* ${it.name}`).join(", ")});`) // TODO check
+            let argConvertors = ctor.parameters.map(param => generateArgConvertor(this.library, param))
+            let cppArgs = generateCParameters(ctor, argConvertors, _h)
+            _h.print(`${handleType} (*${name})(${cppArgs});`) // TODO check
             let implName = `${clazz.name}_${name}Impl`
             _c.print(`&${implName},`)
-            this.impls.set(implName, { params, returnType: handleType})
+            this.impls.set(implName, { params, returnType: handleType, paramsCString: cppArgs})
         })
         if (clazz.constructors.length > 0) {
             let destructName = `${clazz.name}_destructImpl`
@@ -619,10 +621,12 @@ function generateArgConvertor(library: IdlPeerLibrary, param: IDLParameter): Arg
 }
 
 // TODO drop this method
-function generateCParameters(method: IDLMethod, argConvertors: ArgConvertor[], writer: LanguageWriter): string {
-    let args = [`${PrimitiveType.NativePointer.getText()} thisPtr`]
+function generateCParameters(method: IDLMethod | IDLConstructor, argConvertors: ArgConvertor[], writer: LanguageWriter): string {
+    let args = isConstructor(method) ? [] : [`${PrimitiveType.NativePointer} thisPtr`]
     for (let i = 0; i < argConvertors.length; ++i) {
-        args.push(`const ${writer.stringifyType(method.parameters[i].type!)}* ${writer.escapeKeyword(method.parameters[i].name)}`)
+        const typeName = writer.stringifyType(argConvertors[i].nativeType())
+        const argName = writer.escapeKeyword(method.parameters[i].name)
+        args.push(`const ${typeName}* ${argName}`)
     }
     return args.join(", ")
 }
