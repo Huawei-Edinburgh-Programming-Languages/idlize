@@ -417,6 +417,15 @@
 |`indicator`| Function | Maksimov Nikita | done |  |
 |`privacySensitive`| Function | Maksimov Nikita | done ||
 |`contentModifier`| Function | Maksimov Nikita | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
+|*GestureRecognizer*| *Class* | Kovalev Sergey | in progress |
+|`getTag`| Function | Kovalev Sergey | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
+|`getType`| Function | Kovalev Sergey | in progress |
+|`isBuiltIn`| Function | Kovalev Sergey | in progress |
+|`setEnabled`| Function | Kovalev Sergey | in progress |
+|`isEnabled`| Function | Kovalev Sergey | in progress |
+|`getState`| Function | Kovalev Sergey | in progress |
+|`getEventTargetInfo`| Function | Kovalev Sergey | in progress |
+|`isValid`| Function | Kovalev Sergey | in progress |
 |*Grid*|*Component*| Erokhin Ilya | blocked |  |
 |`setGridOptions`|Function| Erokhin Ilya | blocked ArKoala |https://gitee.com/nikolay-igotti/idlize/issues/IAQIXM|
 |`columnsTemplate`|Function| Erokhin Ilya | done |  |
