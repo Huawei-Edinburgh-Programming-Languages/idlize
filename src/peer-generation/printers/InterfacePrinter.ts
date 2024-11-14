@@ -617,8 +617,8 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
             .concat(tuple.properties
                 .map(it => this.iDLTypedEntryPrinter(it, it => {
                     //TODO: use ETSConvertor.processTupleType
-                    if (it.isOptional) {
-                        it.isOptional = false
+                    let property = it;
+                    if (property.isOptional) {
                         let types: IDLType[] = []
                         if (idl.isUnionType(it.type)) {
                             types = it.type.types
@@ -627,9 +627,13 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
                         } else {
                             throwException(`Unprocessed type: ${idl.forceAsNamedNode(it.type)}`)
                         }
-                        it.type = idl.createUnionType([...types, idl.IDLUndefinedType])
+                        property = idl.createProperty(it.name,
+                            idl.createUnionType([...types, idl.IDLUndefinedType]),
+                            it.isReadonly,
+                            it.isStatic,
+                            false)
                     }
-                    return [indentedBy(`${this.printPropNameWithType(it)},`, 1)]
+                    return [indentedBy(`${this.printPropNameWithType(property)},`, 1)]
                 }, seenFields) ).flat())
             .concat(["]"])
     }
