@@ -173,6 +173,7 @@ export function checkLoader(variant: string): int32 {
             return runEs2PandaMain(nativePath)
         }
     }
+    
     let result = nativeModule()._LoadVirtualMachine(vm, classPath, nativePath)
 
     if (result == 0) {
