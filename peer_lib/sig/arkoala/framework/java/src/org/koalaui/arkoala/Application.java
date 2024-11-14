@@ -20,7 +20,7 @@ public class Application {
 
     public static void main(String[] args) {
         var app = Application.createApplication();
-        var root = app.start();
+        var root = app.start("init", "");
         try {
             for (int i = 0; i < 10; i++) {
                 app.loopIteration(i, 0);
@@ -60,7 +60,8 @@ public class Application {
         System.out.println("JAVA: render");
     }
 
-    public long start() {
+    public long start(String app, String params) {
+        System.out.println("JAVA: start " + app + " , params=" + params);
         return 42;
     }
 }
