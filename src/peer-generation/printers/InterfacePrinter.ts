@@ -150,7 +150,6 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
     }
 
     printInterfaces() {
-        const seenNames = new Set()
         for (const file of this.peerLibrary.files.values()) {
             const writer = createLanguageWriter(this.peerLibrary.language, this.peerLibrary)
             this.printImports(writer, file)
