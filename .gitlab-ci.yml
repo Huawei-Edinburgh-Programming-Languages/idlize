@@ -71,45 +71,45 @@ build arkoala-ts:
   before_script:
     - !reference [.setup, script]
   script:
-    - KOALA_BZ=1 OPENLAB_USERNAME=koala-ci OPENLAB_PASSWORD=w1llUgu3ss npm run arkoala:ts
+    - KOALA_BZ=1 OPENLAB_USERNAME=$OPENLAB_USERNAME OPENLAB_PASSWORD=$OPENLAB_PASSWORD npm run arkoala:ts
 
-#build arkoala-ts-native-arm64:
-#  stage: test
-#  allow_failure: true
-#  tags:
-#    - idlize-ci
-#    - koala-ci
-#  before_script:
-#    - !reference [.setup, script]
-#  script:
-#    - KOALA_BZ=1 OPENLAB_USERNAME=koala-ci OPENLAB_PASSWORD=w1llUgu3ss npm run arkoala:ts:native:arm64
-#
-#build arkoala-ts-native-arm32:
-#  stage: test
-#  allow_failure: true
-#  tags:
-#    - idlize-ci
-#    - koala-ci
-#  before_script:
-#    - !reference [.setup, script]
-#  script:
-#    - KOALA_BZ=1 OPENLAB_USERNAME=koala-ci OPENLAB_PASSWORD=w1llUgu3ss npm run arkoala:ts:native:arm32
+build arkoala-ts-native-arm64:
+ stage: test
+ allow_failure: true
+ tags:
+   - idlize-ci
+   - koala-ci
+ before_script:
+   - !reference [.setup, script]
+ script:
+   - KOALA_BZ=1 OPENLAB_USERNAME=$OPENLAB_USERNAME OPENLAB_PASSWORD=$OPENLAB_PASSWORD npm run arkoala:ts:native:arm64
 
-# todo: enable when meson is configured on CI
-#build arkoala.har:
-#  stage: test
-#  tags:
-#    - idlize-ci
-#    - koala-ci
-#  before_script:
-#    - !reference [.setup, script]
-#  script:
-#    - KOALA_BZ=1 OPENLAB_USERNAME=koala-ci OPENLAB_PASSWORD=w1llUgu3ss npm run arkoala:har-arm32
-#    - cp $CI_PROJECT_DIR/external/arkoala/har/app/arkoala/build/default/outputs/default/arkoala.har $CI_PROJECT_DIR/
-#  artifacts:
-#      expire_in: 1 week
-#      paths:
-#          - arkoala.har
+build arkoala-ts-native-arm32:
+ stage: test
+ allow_failure: true
+ tags:
+   - idlize-ci
+   - koala-ci
+ before_script:
+   - !reference [.setup, script]
+ script:
+   - KOALA_BZ=1 OPENLAB_USERNAME=$OPENLAB_USERNAME OPENLAB_PASSWORD=$OPENLAB_PASSWORD npm run arkoala:ts:native:arm32
+
+todo: enable when meson is configured on CI
+build arkoala.har:
+ stage: test
+ tags:
+   - idlize-ci
+   - koala-ci
+ before_script:
+   - !reference [.setup, script]
+ script:
+   - KOALA_BZ=1 OPENLAB_USERNAME=$OPENLAB_USERNAME OPENLAB_PASSWORD=$OPENLAB_PASSWORD npm run arkoala:har-arm32
+   - cp $CI_PROJECT_DIR/external/arkoala/har/app/arkoala/build/default/outputs/default/arkoala.har $CI_PROJECT_DIR/
+ artifacts:
+     expire_in: 1 week
+     paths:
+         - arkoala.har
 
 publish idlize:
     stage: test
