@@ -156,11 +156,16 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
             const typeConvertor = this.createDeclarationConvertor(writer)
             file.declarations.forEach(it => convertDeclaration(typeConvertor, it))
             file.enums.forEach(it => {
+                it.name = this.enumName(it)
                 writer.writeStatement(writer.makeEnumEntity(it, true))
         })
             this.printAssignEnumsToGlobalScope(writer, file)
             this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), writer)
         }
+    }
+
+    protected enumName(enumEntry: idl.IDLEnum): string {
+        return enumEntry.name
     }
 
     protected createDeclarationConvertor(writer: LanguageWriter): DeclarationConvertor<void> {
@@ -596,6 +601,11 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
 class ArkTSInterfacesVisitor extends TSInterfacesVisitor {
     protected printAssignEnumsToGlobalScope(writer_: LanguageWriter, peerFile_: PeerFile) {
         // Not supported
+    }
+
+    override enumName(enumEntry: idl.IDLEnum): string {
+        const namespace = idl.getExtAttribute(enumEntry, IDLExtendedAttributes.Namespace) ?? ""
+        return `${namespace}${enumEntry.name}`
     }
 
     protected createDeclarationConvertor(writer: LanguageWriter): DeclarationConvertor<void> {
