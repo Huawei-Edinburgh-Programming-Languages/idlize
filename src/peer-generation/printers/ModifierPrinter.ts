@@ -247,9 +247,9 @@ class AccessorVisitor extends ModifierVisitor {
             interopType: () => "void",
             macroSuffixPart: () => "V"
         }
-        // Создаем mDestroyPeer и mGetFinalizer как MaterializedMethod
+        
         const mDestroyPeer = new MaterializedMethod(
-            'destroyPeer', //clazz.className,
+            'destroyPeer', 
             [],
             destroyPeerReturnType,
             false,
@@ -264,7 +264,7 @@ class AccessorVisitor extends ModifierVisitor {
         )
     
         const mGetFinalizer = new MaterializedMethod(
-            'getFinalizer', //clazz.className,//'getFinalizer',
+            'getFinalizer', 
             [],
             destroyPeerReturnType, 
             false,
