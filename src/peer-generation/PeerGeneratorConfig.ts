@@ -18,7 +18,6 @@ import { Language } from '../Language'
 
 export class PeerGeneratorConfig {
     public static commonMethod = ["CommonMethod"]
-    public static customComponent = ["CustomComponent"]
     public static customNodeTypes = ["Root", "ComponentRoot", "CustomNode"]
 
     public static ignoreSerialization = [
@@ -81,6 +80,11 @@ export class PeerGeneratorConfig {
 
     private static ignoreMaterialized = [
         // TBD
+        "CustomComponent",
+        "Layoutable",
+        "LayoutChild",
+        "Measurable",
+        "IMonitor", // IMonitor class processing will fixed in !920
         "Event",
         "Configuration",
         "UIGestureEvent",
@@ -131,7 +135,7 @@ export class PeerGeneratorConfig {
     ])
 
     private static ignoredEntriesJava = new Set([
-        "CustomComponent",  // pulls in Layoutable, LayoutChild
+        "CustomComponent",
         "AnimationRange",
         "EventTargetInfo",
         "GestureRecognizer",
@@ -148,10 +152,6 @@ export class PeerGeneratorConfig {
     ])
 
     static ignoreEntry(name: string, language: Language) {
-        // TODO: Needs to be fixed properly
-        if (language === Language.ARKTS && name === "CustomComponent") {
-            return true
-        }
         return PeerGeneratorConfig.ignoredEntriesCommon.has(name) ||
             language === Language.JAVA && PeerGeneratorConfig.ignoredEntriesJava.has(name)
     }

@@ -271,7 +271,7 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
         )
         if (this.writer.language === Language.CPP) {
             this.writer.writeStatement(
-                this.writer.makeReturn(this.writer.makeString(`{ .ptr = ptr }`))
+                this.writer.makeReturn(this.writer.makeString(`{ ptr }`))
             )
             return
         }
@@ -372,7 +372,7 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
         const superName = `${className}Base`
         let ctorSignature: NamedMethodSignature | undefined = undefined
         if (this.writer.language == Language.CPP) {
-            ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [/*idl.createReferenceType("uint8_t*")*/ idl.createContainerType('buffer', [idl.IDLU8Type]), idl.IDLI32Type], ["data", "length"])
+            ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [idl.IDLUint8ArrayType, idl.IDLI32Type], ["data", "length"])
             prefix = prefix === "" ? PrimitiveType.Prefix : prefix
         }
         const serializerDeclarations = getSerializers(this.library,
@@ -445,6 +445,7 @@ function printIdlImports(library: IdlPeerLibrary, serializerDeclarations: Serial
     }
     else if (writer.language === Language.ARKTS) {
         collector.addFeature("TypeChecker", "#components")
+        collector.addFeature(`KPointer`, `@koalaui/interop`)
 
         library.files.forEach(peer => peer.serializeImportFeatures
             .forEach(importFeature => collector.addFeature(importFeature.feature, importFeature.module)))

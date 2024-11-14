@@ -85,8 +85,8 @@ export function collapseIdlPeerMethods(library: IdlPeerLibrary, overloads: IdlPe
             return convertor
         }
         return library.typeConvertor(
-            method.signature.argName(index), 
-            target, 
+            method.signature.argName(index),
+            target,
             idl.isOptionalType(method.signature.args[index])
         )
     })
@@ -149,7 +149,7 @@ export class OverloadsPrinter {
             if (this.isComponent) {
                 this.printer.popIndent()
                 this.printer.print(`}`)
-                this.printer.print("return this")
+                this.printer.writeStatement(this.printer.makeReturn(collapsedMethod.signature.returnType == idl.IDLThisType ? this.printer.makeThis() : undefined))
             }
         })
     }
@@ -174,7 +174,7 @@ export class OverloadsPrinter {
                 this.printer.writeStatement(
                     this.printer.makeCondition(this.printer.makeNaryOp("==",
                             [this.printer.makeString(argName), this.printer.makeString("undefined")]),
-                        this.printer.makeStatement(this.printer.makeString(`throw new Error(\"Arg '${argName}' is null\")`))
+                        this.printer.makeThrowError(`Arg '${argName}' is null`)
                     )
                 )
             }
@@ -187,11 +187,23 @@ export class OverloadsPrinter {
             : this.isComponent ? `this.peer` : `this`
         const postfix = this.isComponent ? "Attribute" : "_serialize"
         const methodName = `${peerMethod.overloadedName}${postfix}`
+        if ([Language.TS].includes(this.language))
+            peerMethod.method.signature.args.forEach((target, index) => {
+                if (this.isComponent) { // TBD: Check for materialized classes
+                    const callback = convertIdlToCallback(this.resolver, peer, peerMethod, target)
+                    if (!callback || !canProcessCallback(callback))
+                        return
+                    const argName = argsNames[index]
+                    this.printer.writeStatement(new ExpressionStatement(this.printer.makeFunctionCall(`UseEventsProperties`,[
+                        new StringExpression(`{${callbackIdByInfo(callback)}: ${argName}}`)
+                    ])))
+                }
+            })
         const returnType = collapsedMethod.signature.returnType
         if (returnType === idl.IDLThisType || returnType === idl.IDLVoidType) {
             this.printer.writeMethodCall(receiver, methodName, argsNames, !isStatic)
             if (returnType === idl.IDLThisType) {
-                this.printer.print(`return this`)
+                this.printer.writeStatement(this.printer.makeReturn(this.printer.makeThis()))
             }
         } else {
             this.printer.writeStatement(

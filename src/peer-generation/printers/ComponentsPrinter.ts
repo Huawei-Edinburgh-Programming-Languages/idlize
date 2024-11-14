@@ -107,6 +107,12 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
             peer.attributesTypes.forEach((attrType) =>
                 imports.addFeature(attrType.typeName, peerModule)
             )
+
+            for (const method of peer.methods) {
+                for (const argType of method.method.signature.args)
+                    if (convertIdlToCallback(getReferenceResolver(this.library), peer, method, argType))
+                        imports.addFeature("UseEventsProperties", './use_properties')
+            }
         })
 
         collectMaterializedImports(imports, this.library)
@@ -242,15 +248,16 @@ class JavaComponentFileVisitor implements ComponentFileVisitor {
                 const signature = new NamedMethodSignature(componentType, originalSignature.args, originalSignature.argsNames, originalSignature.defaults)
                 const method = new Method(peerMethod.method.name, signature, [MethodModifier.PUBLIC])
                 writer.writeMethodImplementation(method, writer => {
-                    const thiz = writer.makeString('this')
+                    const thiz = writer.makeThis()
                     writer.writeStatement(writer.makeCondition(
                         writer.makeString(`checkPriority("${method.name}")`),
                         writer.makeBlock([
                             writer.makeStatement(writer.makeMethodCall(`((${peerClassName})peer)`, `${peerMethod.overloadedName}Attribute`, signature.argsNames.map(it => writer.makeString(it)))),
                             writer.makeReturn(thiz),
                         ])))
-                    writer.writeStatement(writer.makeReturn(thiz))
-                })
+                        writer.writeStatement(writer.makeReturn(thiz))
+                    }
+                )
             })
 
             const attributesSignature = new MethodSignature(IDLVoidType, [])
