@@ -423,11 +423,13 @@ function printIdlImports(library: PeerLibrary, serializerDeclarations: Serializa
             declarations.forEach(it => collector.addFeature(it.name!, module))
         }
 
-        for (let builder of library.builderClasses.keys()) {
-            collector.addFeature(builder, `Ark${builder}Builder`)
+        if (!declarationPath) {
+            for (let builder of library.builderClasses.keys()) {
+                collector.addFeature(builder, `Ark${builder}Builder`)
+            }
+            collector.addFeature(`Finalizable`, `Finalizable`)
+            collectMaterializedImports(collector, library)
         }
-        collector.addFeature(`Finalizable`, `Finalizable`)
-        collectMaterializedImports(collector, library)
 
         if (declarationPath) { // This is used for OHOS library generation only
             // TODO Check for compatibility!
