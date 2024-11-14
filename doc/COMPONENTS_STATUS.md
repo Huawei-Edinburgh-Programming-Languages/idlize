@@ -1796,7 +1796,7 @@
 |*WebCookie*| *Class* | Erokhin Ilya | done | |
 |`setCookie`| Function | Erokhin Ilya | done | |
 |`saveCookie`| Function | Erokhin Ilya | done | |
-|*CustomSpan*| *Class* | Politov Mikhail | in progress |  |
-|`onMeasure`| Function | Politov Mikhail | in progress |  |
-|`onDraw`| Function | Politov Mikhail | in progress |  |
-|`invalidate`| Function | Politov Mikhail | in progress |  |
+|*CustomSpan*| *Class* | Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
+|`onMeasure`| Function | Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
+|`onDraw`| Function | Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
+|`invalidate`| Function | Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
