@@ -67,7 +67,16 @@ declare interface NavDestinationCommonTitle {
    * @atomicservice
    * @since 11
    */
-  main: string;
+  /**
+   * Sets the main title.
+   *
+   * @type { string | Resource }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 13
+   */
+  main: string | Resource;
 
   /**
    * Sets the sub title.
@@ -93,7 +102,16 @@ declare interface NavDestinationCommonTitle {
    * @atomicservice
    * @since 11
    */
-  sub: string;
+  /**
+   * Sets the sub title.
+   *
+   * @type { string | Resource }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 13
+   */
+  sub: string | Resource;
 }
 
 /**
@@ -172,6 +190,54 @@ declare interface NavDestinationCustomTitle {
    * @since 11
    */
   height: TitleHeight | Length;
+}
+
+/**
+ * Types of system Transition.
+ *
+ * @enum { number }
+ * @syscap SystemCapability.ArkUI.ArkUI.Full
+ * @crossplatform
+ * @atomicservice
+ * @since 14
+ */
+declare enum NavigationSystemTransitionType {
+  /**
+   * Default system transition.
+   *
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 14
+   */
+  DEFAULT = 0,
+  /**
+   * None system transition.
+   *
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 14
+   */
+  NONE = 1,
+  /**
+   * Configure only titlebar transition.
+   *
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 14
+   */
+  TITLE = 2,
+  /**
+   * Configure only content transition.
+   *
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 14
+   */
+  CONTENT = 3,
 }
 
 /**
@@ -442,7 +508,19 @@ declare class NavDestinationAttribute extends CommonMethod<NavDestinationAttribu
    * @atomicservice
    * @since 12
    */
-  title(value: string | CustomBuilder | NavDestinationCommonTitle | NavDestinationCustomTitle, options?: NavigationTitleOptions): NavDestinationAttribute;
+  /**
+   * NavDestination title bar
+   *
+   * @param { string | CustomBuilder | NavDestinationCommonTitle | NavDestinationCustomTitle | Resource } value
+   * @param { NavigationTitleOptions } [options] - Indicates the options of titlebar.
+   * @returns { NavDestinationAttribute }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 13
+   */
+  title(value: string | CustomBuilder | NavDestinationCommonTitle | NavDestinationCustomTitle | Resource,
+        options?: NavigationTitleOptions): NavDestinationAttribute;
 
   /**
    * Hide navigation title bar
@@ -472,6 +550,19 @@ declare class NavDestinationAttribute extends CommonMethod<NavDestinationAttribu
    * @since 11
    */
   hideTitleBar(value: boolean): NavDestinationAttribute;
+
+  /**
+   * Hide navigation title bar
+   *
+   * @param { boolean } hide
+   * @param { boolean } animated
+   * @returns { NavDestinationAttribute }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 13
+   */
+  hideTitleBar(hide: boolean, animated: boolean): NavDestinationAttribute;
 
   /**
    * Invoked when the navDestination page is displayed.
@@ -577,7 +668,7 @@ declare class NavDestinationAttribute extends CommonMethod<NavDestinationAttribu
    * @since 12
    */
   backButtonIcon(value: ResourceStr | PixelMap | SymbolGlyphModifier): NavDestinationAttribute;
-
+  
   /**
    * NavDestination title bar's menus
    *
@@ -589,6 +680,32 @@ declare class NavDestinationAttribute extends CommonMethod<NavDestinationAttribu
    * @since 12
    */
   menus(value: Array<NavigationMenuItem> | CustomBuilder): NavDestinationAttribute;
+
+  /**
+    * Configure toolbar with default style parameter or custom parameter.
+    *
+    * @param { Array<ToolbarItem> | CustomBuilder } toolbarParam - Toolbar configuration parameters.
+    * @param { NavigationToolbarOptions } [options] - Indicates the options of toolbar.
+    * @returns { NavDestinationAttribute }
+    * @syscap SystemCapability.ArkUI.ArkUI.Full
+    * @crossplatform
+    * @atomicservice
+    * @since 13
+    */
+  toolbarConfiguration(toolbarParam: Array<ToolbarItem> | CustomBuilder, options?: NavigationToolbarOptions): NavDestinationAttribute;
+
+  /**
+   * Hide tool bar
+   *
+   * @param { boolean } hide
+   * @param { boolean } [animated]
+   * @returns { NavDestinationAttribute }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 13
+   */
+  hideToolBar(hide: boolean, animated?: boolean): NavDestinationAttribute;
 
   /**
    * Invoked before sub-components of NavDestination are created.
@@ -674,6 +791,29 @@ declare class NavDestinationAttribute extends CommonMethod<NavDestinationAttribu
    * @since 12
    */
   systemBarStyle(style: Optional<SystemBarStyle>): NavDestinationAttribute;
+
+  /**
+   * Set the NavDestination can be restored after the application is terminated.
+   * To enable this attribute, recoverable and id of Navigation must be set.
+   *
+   * @param { boolean } recoverable - set navdestination can be recovered.
+   * @returns { NavDestinationAttribute }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @since 14
+   */
+  recoverable(recoverable: Optional<boolean>): NavDestinationAttribute;
+
+  /**
+   * Configuration of system transition
+   *
+   * @param { NavigationSystemTransitionType } type - Types of system Transition
+   * @returns { NavDestinationAttribute }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 14
+   */
+  systemTransition(type: NavigationSystemTransitionType): NavDestinationAttribute;
 }
 
 /**
