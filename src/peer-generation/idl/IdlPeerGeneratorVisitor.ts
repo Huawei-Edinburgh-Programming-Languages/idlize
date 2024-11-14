@@ -958,11 +958,10 @@ export class IdlPeerProcessor {
         }
 
         const superClassType = idl.getSuperType(decl)
-        const superClass = superClassType
-            ? new SuperElement(
-                  idl.forceAsNamedNode(superClassType).name,
-                  (superClassType as idl.IDLReferenceType).typeArguments?.map(it => idl.printType(it))
-              )
+        const superClass = superClassType ?
+            new SuperElement(
+                idl.forceAsNamedNode(superClassType).name,
+                (superClassType as idl.IDLReferenceType).typeArguments?.map(it => idl.printType(it)))
             : undefined
 
         const importFeatures = this.collectDeclDependencies(decl)
@@ -970,88 +969,48 @@ export class IdlPeerProcessor {
 
         const constructor = idl.isClass(decl) ? decl.constructors[0] : undefined
         const mConstructor = this.makeMaterializedMethod(decl, constructor)
-
         const finalizerReturnType = {
             isVoid: false,
             nativeType: () => PrimitiveType.NativePointer.getText(),
             interopType: () => PrimitiveType.NativePointer.getText(),
             macroSuffixPart: () => ""
         }
-
-        const destroyPeerReturnType: RetConvertor = {
-            isVoid: true,
-            nativeType: () => PrimitiveType.Void.getText(),
-            interopType: () => PrimitiveType.Void.getText(),
-            macroSuffixPart: () => "V"
-        }
-
         const mFinalizer = new MaterializedMethod(name, [], finalizerReturnType, false,
             new Method("getFinalizer", new NamedMethodSignature(idl.IDLPointerType, [], [], []), [MethodModifier.STATIC]))
-        
-
         const mFields = decl.properties
             // TODO what to do with setter accessors? Do we need FieldModifier.WRITEONLY? For now, just skip them
             .filter(it => idl.getExtAttribute(it, idl.IDLExtendedAttributes.Accessor) !== idl.IDLAccessorAttribute.Setter)
             .map(it => this.makeMaterializedField(it))
-    
-        const mDestroyPeer = new MaterializedMethod(
-            name,
-            [],
-            destroyPeerReturnType,
-            false,
-            new Method(
-                "destroyPeer",
-                new NamedMethodSignature(
-                    idl.IDLVoidType,           
-                    [idl.IDLPointerType],       
-                    ["peer"]                   
-                )
-            )
-        )
-
         const mMethods = decl.methods
             // TODO: Properly handle methods with return Promise<T> type
             .map(method => this.makeMaterializedMethod(decl, method))
             .filter(it => !idl.isNamedNode(it.method.signature.returnType) || !PeerGeneratorConfig.ignoreReturnTypes.has(it.method.signature.returnType.name))
 
-
-            mFields.forEach(f => {
-                const field = f.field
-                const idlType = field.type
-                // TBD: use deserializer to get complex type from native
-                const isSimpleType = !f.argConvertor.useArray // type needs to be deserialized from the native
-                if (isSimpleType) {
-                    const getSignature = new NamedMethodSignature(idlType, [], [])
-                    const getAccessor = new MaterializedMethod(
-                        name, [], f.retConvertor, false,
-                        new Method(`get${capitalize(field.name)}`, getSignature, [MethodModifier.PRIVATE]))
-                    mMethods.push(getAccessor)
-                }
-                const isReadOnly = field.modifiers.includes(FieldModifier.READONLY)
-                if (!isReadOnly) {
-                    const setSignature = new NamedMethodSignature(idl.IDLVoidType, [idlType], [field.name])
-                    const retConvertor = { isVoid: true, nativeType: () => idl.IDLVoidType.name, macroSuffixPart: () => "V" }
-                    const setAccessor = new MaterializedMethod(
-                        name, [f.argConvertor], retConvertor, false,
-                        new Method(`set${capitalize(field.name)}`, setSignature, [MethodModifier.PRIVATE]))
-                    mMethods.push(setAccessor)
-                }
-            })
-    
-        this.library.materializedClasses.set(
-            name,
-            new MaterializedClass(
-                name,
-                isDeclInterface,
-                superClass,
-                decl.typeParameters,
-                mFields,
-                mConstructor,
-                mFinalizer,
-                importFeatures,
-                [...mMethods, mDestroyPeer] 
-            )
-        )
+        mFields.forEach(f => {
+            const field = f.field
+            const idlType = field.type
+            // TBD: use deserializer to get complex type from native
+            const isSimpleType = !f.argConvertor.useArray // type needs to be deserialized from the native
+            if (isSimpleType) {
+                const getSignature = new NamedMethodSignature(idlType, [], [])
+                const getAccessor = new MaterializedMethod(
+                    name, [], f.retConvertor, false,
+                    new Method(`get${capitalize(field.name)}`, getSignature, [MethodModifier.PRIVATE]))
+                mMethods.push(getAccessor)
+            }
+            const isReadOnly = field.modifiers.includes(FieldModifier.READONLY)
+            if (!isReadOnly) {
+                const setSignature = new NamedMethodSignature(idl.IDLVoidType, [idlType], [field.name])
+                const retConvertor = { isVoid: true, nativeType: () => idl.IDLVoidType.name, macroSuffixPart: () => "V" }
+                const setAccessor = new MaterializedMethod(
+                    name, [f.argConvertor], retConvertor, false,
+                    new Method(`set${capitalize(field.name)}`, setSignature, [MethodModifier.PRIVATE]))
+                mMethods.push(setAccessor)
+            }
+        })
+        this.library.materializedClasses.set(name,
+            new MaterializedClass(name, isDeclInterface, superClass, decl.typeParameters,
+                mFields, mConstructor, mFinalizer, importFeatures, mMethods))
     }
 
     private makeMaterializedField(prop: idl.IDLProperty): MaterializedField {
