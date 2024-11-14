@@ -686,7 +686,7 @@ function checkArrayBuffer() {
 }
 
 function main() {
-    nativeModule()._InitCrashHandlers()
+    nativeModule()._InstallCrashHandlers()
 
     // Place where mock of ACE is located.
     process.env.ACE_LIBRARY_PATH = __dirname + "/../../../native"
