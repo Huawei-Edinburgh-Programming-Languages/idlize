@@ -1174,7 +1174,7 @@
 |`showError`| Function | Spirin Andrey | done |  |
 |`showUnit`| Function | Spirin Andrey | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`showUnderline`| Function | Spirin Andrey | done |  |
-|`underlineColor`| Function | Spirin Andrey | in progress |  |
+|`underlineColor`| Function | Spirin Andrey | done |  |
 |`selectionMenuHidden`| Function | Spirin Andrey | done |  |
 |`barState`| Function | Spirin Andrey | done |  |
 |`maxLines`| Function | Spirin Andrey | testskipped  |  |
@@ -1189,7 +1189,7 @@
 |`decoration`| Function | Spirin Andrey | testskipped  |  |
 |`letterSpacing`| Function | Spirin Andrey | testskipped  |  |
 |`lineHeight`| Function | Spirin Andrey | testskipped  |  |
-|`passwordRules`| Function | Spirin Andrey | in progress |  |
+|`passwordRules`| Function | Spirin Andrey | done |  |
 |`fontFeature`| Function | Spirin Andrey | testskipped  |  |
 |`showPassword`| Function | Spirin Andrey | done |  |
 |`onSecurityStateChange`| Function | Spirin Andrey | in progress|  |
