@@ -38,7 +38,6 @@ import { Language } from "../../Language";
 import { createEmptyReferenceResolver, getReferenceResolver } from "../ReferenceResolver";
 import { RetConvertor } from "../ArgConvertors";
 import { createDestroyPeerMethod } from "./HeaderPrinter";
-// import { createDestroyPeerMethod } 
 
 export class ModifierVisitor {
     dummy = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
