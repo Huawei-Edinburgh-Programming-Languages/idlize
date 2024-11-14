@@ -760,7 +760,7 @@
 |`onEditingChange`| Function | Dudkin Sergey| done|  |
 |`enterKeyType`| Function | Dudkin Sergey| devDone|  |
 |`onSubmit`| Function | Dudkin Sergey| done|  |
-|`onWillChange`| Function | Dudkin Sergey| done|  |
+|`onWillChange`| Function | Dudkin Sergey| blocked| https://gitee.com/nikolay-igotti/idlize/issues/IB4G70 |
 |`onDidChange`| Function | Dudkin Sergey| done|  |
 |`onCut`| Function | Dudkin Sergey| in progress| |
 |`onCopy`| Function | Dudkin Sergey| in progress| |
