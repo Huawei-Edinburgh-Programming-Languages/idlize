@@ -15,7 +15,7 @@
 
 import * as fs from 'fs'
 import * as path from 'path'
-import { createContainerType, createReferenceType, forceAsNamedNode, getExtAttribute, hasExtAttribute, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLMethod, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLU8Type, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isInterface, isMethod, isReferenceType, isType, isUnionType, maybeOptional } from '../idl'
+import { createContainerType, createReferenceType, forceAsNamedNode, getExtAttribute, hasExtAttribute, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLMethod, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLU8Type, IDLUint8ArrayType, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isInterface, isMethod, isReferenceType, isType, isUnionType, maybeOptional } from '../idl'
 import { IndentedPrinter } from "../IndentedPrinter"
 import { PeerLibrary } from './PeerLibrary'
 import { Language } from '../Language'
@@ -300,11 +300,40 @@ class OHOSVisitor {
                     writer.writeNativeMethodDeclaration(`_${it.name}_ctor`, signature)
                 })
             })
-            writer.writeNativeMethodDeclaration("_GetManagerCallbackCaller",
-                NamedMethodSignature.make(
-                    IDLPointerType,
-                    [{ name: "kind", type: createReferenceType("CallbackKind") }]
-                )
+            writer.writeNativeMethodDeclaration("_CallCallback",
+                NamedMethodSignature.make(IDLVoidType, [
+                    { name: "callbackKind", type: IDLI32Type },
+                    { name: "args", type: IDLUint8ArrayType },
+                    { name: "argsSize", type: IDLI32Type },
+                ])
+            )
+            writer.writeNativeMethodDeclaration("_CallCallbackResourceHolder",
+                NamedMethodSignature.make(IDLVoidType, [
+                    { name: "holder", type: IDLPointerType },
+                    { name: "resourceId", type: IDLI32Type },
+                ])
+            )
+            writer.writeNativeMethodDeclaration("_CallCallbackResourceReleaser",
+                NamedMethodSignature.make(IDLVoidType, [
+                    { name: "releaser", type: IDLPointerType },
+                    { name: "resourceId", type: IDLI32Type },
+                ])
+            )
+            writer.writeNativeMethodDeclaration("_CheckArkoalaCallbackEvent",
+                NamedMethodSignature.make(IDLI32Type, [
+                    { name: "buffer", type: IDLUint8ArrayType },
+                    { name: "bufferLength", type: IDLI32Type },
+                ])
+            )
+            writer.writeNativeMethodDeclaration("_HoldArkoalaResource",
+                NamedMethodSignature.make(IDLVoidType, [
+                    { name: "resourceId", type: IDLI32Type }
+                ])
+            )
+            writer.writeNativeMethodDeclaration("_ReleaseArkoalaResource",
+                NamedMethodSignature.make(IDLVoidType, [
+                    { name: "resourceId", type: IDLI32Type }
+                ])
             )
         })
     }
@@ -611,18 +640,39 @@ class OHOSVisitor {
                 .replaceAll("%NATIVE_API_HEADER_PATH%", `${fileNamePrefix}.h`)
         )
 
-        const nativeModuleInfo = {
+        const managedCodeModuleInfo = {
             name: `get${this.libraryName}NativeModule`,
             path: `./${fileNamePrefix}Native`,
+            serializerPath: `./${fileNamePrefix}Serializer`
         }
-        const serializerText = makeSerializerForOhos(this.library, nativeModuleInfo, fileNamePrefix).getOutput().join("\n")
+
+        const serializerText = makeSerializerForOhos(this.library, managedCodeModuleInfo, fileNamePrefix).getOutput().join("\n")
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}${ext}`), peerText, 'utf-8')
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Serializer${ext}`), serializerText, 'utf-8')
         fs.writeFileSync(path.join(managedOutDir, `types${ext}`), readLangTemplate(`types${ext}`, this.library.language))
         fs.writeFileSync(path.join(managedOutDir, `SerializerBase${ext}`),
             readLangTemplate(`SerializerBase${ext}`, this.library.language)
-                .replaceAll("%NATIVE_MODULE_ACCESSOR%", nativeModuleInfo.name)
-                .replaceAll("%NATIVE_MODULE_PATH%", nativeModuleInfo.path)
+                .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
+                .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
+        )
+        fs.writeFileSync(path.join(managedOutDir, `DeserializerBase${ext}`),
+            readLangTemplate(`DeserializerBase${ext}`, this.library.language)
+                .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
+                .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
+        )
+        fs.writeFileSync(path.join(managedOutDir, `CallbacksChecker${ext}`),
+            readLangTemplate(`CallbacksChecker${ext}`, this.library.language)
+                .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
+                .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
+                .replaceAll("%SERIALIZER_PATH%", managedCodeModuleInfo.serializerPath)
+        )
+        fs.writeFileSync(path.join(managedOutDir, `DeserializerBase${ext}`),
+            readLangTemplate(`DeserializerBase${ext}`, this.library.language)
+                .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
+                .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
+        )
+        fs.writeFileSync(path.join(managedOutDir, `ResourceManager${ext}`),
+            readLangTemplate(`ResourceManager${ext}`, this.library.language)
         )
     }
 }
