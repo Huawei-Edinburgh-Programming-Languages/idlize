@@ -63,7 +63,7 @@ import { printDeclarations, printEnumsImpl } from "./printers/DeclarationPrinter
 import { printConflictedDeclarations } from "./printers/ConflictedDeclarationsPrinter";
 import { printNativeModuleRecorder } from "./printers/NativeModuleRecorderPrinter"
 import { IndentedPrinter } from "../IndentedPrinter"
-import { createLanguageWriter, LanguageWriter } from "./LanguageWriters"
+import { LanguageWriter } from "./LanguageWriters"
 import { printManagedCaller } from "./printers/CallbacksPrinter"
 
 export function generateLibaceFromIdl(config: {
@@ -235,12 +235,6 @@ export function generateArkoalaFromIdl(config: {
             })
         if (config.verbose) console.log(data)
         arkuiComponentsFiles.push(outComponentFile)
-    }
-
-    if (peerLibrary.language == Language.TS || peerLibrary.language == Language.ARKTS) {
-        let enumImpls = createLanguageWriter(peerLibrary.language, peerLibrary)
-        printEnumsImpl(peerLibrary, enumImpls)
-        enumImpls.printTo(arkoala.tsArkoalaLib(new TargetFile('EnumsImpl')),)
     }
 
     if (peerLibrary.language == Language.TS) {

@@ -150,6 +150,7 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
     }
 
     printInterfaces() {
+        const seenNames = new Set()
         for (const file of this.peerLibrary.files.values()) {
             const writer = createLanguageWriter(this.peerLibrary.language, this.peerLibrary)
             this.printImports(writer, file)
@@ -157,6 +158,9 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
             file.declarations.forEach(it => convertDeclaration(typeConvertor, it))
             file.enums.forEach(it => {
                 it.name = this.enumName(it)
+                  // An ugly hack to avoid double definition of ContentType enum.
+                if (seenNames.has(it.name) && it.name == "ContentType") return
+                    seenNames.add(it.name)
                 writer.writeStatement(writer.makeEnumEntity(it, true))
         })
             this.printAssignEnumsToGlobalScope(writer, file)
@@ -628,7 +632,7 @@ class CJInterfacesVisitor extends DefaultInterfacesVisitor {
         const declarationConverter = new CJDeclarationConvertor(this.peerLibrary, (declaration: CJDeclaration) => {
             this.interfaces.set(declaration.targetFile, declaration.writer)
         })
-        
+
         for (const file of this.peerLibrary.files.values()) {
             file.declarations.forEach(it => convertDeclaration(declarationConverter, it))
         }
@@ -860,9 +864,9 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
                 writer.writeProperty(it.name, it.type, true)
             })
             writer.writeConstructorImplementation(alias,
-                new NamedMethodSignature(idl.IDLVoidType, 
+                new NamedMethodSignature(idl.IDLVoidType,
                     constructorMembers.map(it =>
-                        idl.maybeOptional(it.type, it.isOptional) 
+                        idl.maybeOptional(it.type, it.isOptional)
                     ),
                     constructorMembers.map(it =>
                         writer.escapeKeyword(it.name)

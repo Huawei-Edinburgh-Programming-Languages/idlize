@@ -37,15 +37,3 @@ export function printDeclarations(peerLibrary: PeerLibrary): Array<string> {
     }
     return result
 }
-
-export function printEnumsImpl(peerLibrary: PeerLibrary, writer: LanguageWriter) {
-    const seenNames = new Set()
-    for (const decl of peerLibrary.declarations) {
-        if (idl.isEnum(decl)) {
-            // An ugly hack to avoid double definition of ContentType enum.
-            if (seenNames.has(decl.name) && decl.name == "ContentType") continue
-            seenNames.add(decl.name)
-            writer.writeStatement(writer.makeEnumEntity(decl, true))
-        }
-    }
-}
