@@ -236,7 +236,7 @@ class AccessorVisitor extends ModifierVisitor {
         this.library.materializedClasses.forEach(c => this.printRealAndDummyAccessor(c))
     }
 
-    printRealAndDummyAccessor(clazz: MaterializedClass): void {
+    printRealAndDummyAccessor(clazz: MaterializedClass) {
         this.printMaterializedClassProlog(clazz)
         // Materialized class methods share the same namespace
         // so take the first one.
