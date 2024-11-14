@@ -240,7 +240,7 @@ export class TsEnumEntityStatement implements LanguageStatement {
                 : ``
             writer.print(`${member.name}${initValue},`)
 
-            let originalName = idl.getExtAttribute(member, idl.IDLExtendedAttributes.OriginamEnumMemberName)
+            let originalName = idl.getExtAttribute(member, idl.IDLExtendedAttributes.OriginalEnumMemberName)
             if (originalName) {
                 const initValue = ` = ${member.name}`
                 writer.print(`${originalName}${initValue},`)

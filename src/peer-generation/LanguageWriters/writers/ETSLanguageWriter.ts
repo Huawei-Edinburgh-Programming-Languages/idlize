@@ -83,7 +83,7 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
                     [FieldModifier.STATIC, FieldModifier.READONLY],
                     false,
                     writer.makeString(`new ${this.enumEntry.name}(${ctorArgs.join(",")})`))
-                let originalName = getExtAttribute(member, idl.IDLExtendedAttributes.OriginamEnumMemberName)
+                let originalName = getExtAttribute(member, idl.IDLExtendedAttributes.OriginalEnumMemberName)
                 if (originalName) {
                     writer.writeFieldDeclaration(originalName,
                         toIDLType(this.enumEntry.name),

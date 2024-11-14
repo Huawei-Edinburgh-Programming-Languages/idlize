@@ -610,7 +610,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         const initializer = this.typeChecker.getConstantValue(node)
         let extendedAttributes = this.computeDeprecatedExtendAttributes(node)
         if (originalName != name) {
-            extendedAttributes.push({ name: idl.IDLExtendedAttributes.OriginamEnumMemberName, value: originalName })
+            extendedAttributes.push({ name: idl.IDLExtendedAttributes.OriginalEnumMemberName, value: originalName })
         }
         return idl.createEnumMember(
             name,
