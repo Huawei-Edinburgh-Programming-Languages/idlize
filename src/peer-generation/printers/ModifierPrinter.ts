@@ -242,14 +242,7 @@ class AccessorVisitor extends ModifierVisitor {
         this.printMaterializedClassProlog(clazz)
         const namespaceName = clazz.methods[0].implNamespaceName
         this.pushNamespace(namespaceName, false)
-    
-        const destroyPeerReturnType: RetConvertor = {
-            isVoid: true,
-            nativeType: () => "void",
-            interopType: () => "void",
-            macroSuffixPart: () => "V"
-        }
-        
+
         const mDestroyPeer = createDestroyPeerMethod(clazz);
         
         [clazz.ctor, clazz.finalizer, mDestroyPeer].concat(clazz.methods).forEach(method => {
