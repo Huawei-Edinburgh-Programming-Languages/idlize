@@ -249,7 +249,7 @@ class AccessorVisitor extends ModifierVisitor {
         }
         // Создаем mDestroyPeer и mGetFinalizer как MaterializedMethod
         const mDestroyPeer = new MaterializedMethod(
-            clazz.className,
+            'destroyPeer',
             [],
             destroyPeerReturnType,
             false,
