@@ -236,22 +236,58 @@ class AccessorVisitor extends ModifierVisitor {
         this.library.materializedClasses.forEach(c => this.printRealAndDummyAccessor(c))
     }
 
-    printRealAndDummyAccessor(clazz: MaterializedClass) {
-        this.printMaterializedClassProlog(clazz)
-        // Materialized class methods share the same namespace
-        // so take the first one.
-        const namespaceName = clazz.methods[0].implNamespaceName
+    printRealAndDummyAccessor(clazz: MaterializedClass): void {
+        this.printMaterializedClassProlog(clazz);
+        const namespaceName = clazz.methods[0].implNamespaceName;
         this.pushNamespace(namespaceName, false);
     
-        [clazz.ctor, clazz.finalizer].concat(clazz.methods).forEach(method => {
+        const destroyPeerReturnType: RetConvertor = {
+            isVoid: true,
+            nativeType: () => "void",
+            interopType: () => "void",
+            macroSuffixPart: () => "V"
+        }
+        // Создаем mDestroyPeer и mGetFinalizer как MaterializedMethod
+        const mDestroyPeer = new MaterializedMethod(
+            'destroyPeer', //clazz.className,
+            [],
+            destroyPeerReturnType,
+            false,
+            new Method(
+                'destroyPeer',
+                new NamedMethodSignature(
+                    IDLVoidType,
+                    [IDLPointerType],
+                    ['peer']
+                )
+            )
+        )
+    
+        const mGetFinalizer = new MaterializedMethod(
+            'getFinalizer', //clazz.className,//'getFinalizer',
+            [],
+            destroyPeerReturnType, 
+            false,
+            new Method(
+                'getFinalizer',
+                new NamedMethodSignature(
+                    IDLVoidType,
+                    [IDLPointerType],
+                    ["peer"]
+                )
+            )
+        );
+    
+        [clazz.ctor, clazz.finalizer, mDestroyPeer, mGetFinalizer].concat(clazz.methods).forEach(method => {
             this.printMaterializedMethod(this.dummy, method, m => this.printDummyImplFunctionBody(m))
             this.printMaterializedMethod(this.real, method, m => this.printModifierImplFunctionBody(m))
             this.real.print(`void destroyPeer() {}`)
             this.accessors.print(`${method.implNamespaceName}::${method.implName},`)
         })
+
     
-        this.popNamespace(namespaceName, false)
-        this.printMaterializedClassEpilog(clazz)
+        this.popNamespace(namespaceName, false);
+        this.printMaterializedClassEpilog(clazz);
     }
 
     printMaterializedClassProlog(clazz: MaterializedClass) {
