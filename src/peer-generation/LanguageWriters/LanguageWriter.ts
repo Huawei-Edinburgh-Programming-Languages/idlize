@@ -233,9 +233,18 @@ export class TsEnumEntityStatement implements LanguageStatement {
         writer.pushIndent()
         this.enumEntity.elements.forEach((member, index) => {
             writer.print(member.comment)
-            const commaOp = index < this.enumEntity.elements.length - 1 ? ',' : ''
-            const initValue = member.initializer ? ` = ${member.initializer}` : ``
-            writer.print(`${member.name}${initValue}${commaOp}`)
+            const initValue = member.initializer
+                ? typeof member.initializer == 'string'
+                    ? ` = '${member.initializer}'`
+                    : ` = ${member.initializer}`
+                : ``
+            writer.print(`${member.name}${initValue},`)
+
+            let originalName = idl.getExtAttribute(member, idl.IDLExtendedAttributes.OriginamEnumMemberName)
+            if (originalName) {
+                const initValue = ` = ${member.name}`
+                writer.print(`${originalName}${initValue},`)
+            }
         })
         writer.popIndent()
         writer.print(`}`)
