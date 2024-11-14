@@ -238,9 +238,9 @@ class AccessorVisitor extends ModifierVisitor {
     }
 
     printRealAndDummyAccessor(clazz: MaterializedClass) {
-        this.printMaterializedClassProlog(clazz);
-        const namespaceName = clazz.methods[0].implNamespaceName;
-        this.pushNamespace(namespaceName, false);
+        this.printMaterializedClassProlog(clazz)
+        const namespaceName = clazz.methods[0].implNamespaceName
+        this.pushNamespace(namespaceName, false)
     
         const destroyPeerReturnType: RetConvertor = {
             isVoid: true,
@@ -250,7 +250,7 @@ class AccessorVisitor extends ModifierVisitor {
         }
         
         const mDestroyPeer = new MaterializedMethod(
-            'destroyPeer',
+            clazz.className,
             [],
             destroyPeerReturnType,
             false,
@@ -270,8 +270,8 @@ class AccessorVisitor extends ModifierVisitor {
             this.accessors.print(`${method.implNamespaceName}::${method.implName},`)
         })
 
-        this.popNamespace(namespaceName, false);
-        this.printMaterializedClassEpilog(clazz);
+        this.popNamespace(namespaceName, false)
+        this.printMaterializedClassEpilog(clazz)
     }
 
     printMaterializedClassProlog(clazz: MaterializedClass) {
