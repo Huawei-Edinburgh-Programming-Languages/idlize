@@ -158,11 +158,8 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
             file.declarations.forEach(it => convertDeclaration(typeConvertor, it))
             file.enums.forEach(it => {
                 it.name = this.enumName(it)
-                  // An ugly hack to avoid double definition of ContentType enum.
-                if (seenNames.has(it.name) && it.name == "ContentType") return
-                    seenNames.add(it.name)
                 writer.writeStatement(writer.makeEnumEntity(it, true))
-        })
+            })
             this.printAssignEnumsToGlobalScope(writer, file)
             this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), writer)
         }
