@@ -27,7 +27,7 @@ import {
 } from "../FileGenerators";
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { MaterializedClass, MaterializedMethod } from "../Materialized";
-import { groupBy, throwException } from "../../util";
+import { className, groupBy, throwException } from "../../util";
 import { CppLanguageWriter, createLanguageWriter, createTypeNameConvertor, LanguageWriter, Method, NamedMethodSignature, printMethodDeclaration } from "../LanguageWriters";
 import { LibaceInstall } from "../../Install";
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
@@ -37,6 +37,8 @@ import { IDLVoidType, IDLBooleanType, IDLFunctionType, IDLStringType, isOptional
 import { Language } from "../../Language";
 import { createEmptyReferenceResolver, getReferenceResolver } from "../ReferenceResolver";
 import { RetConvertor } from "../ArgConvertors";
+import { createDestroyPeerMethod } from "./HeaderPrinter";
+// import { createDestroyPeerMethod } 
 
 export class ModifierVisitor {
     dummy = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
@@ -249,21 +251,8 @@ class AccessorVisitor extends ModifierVisitor {
             macroSuffixPart: () => "V"
         }
         
-        const mDestroyPeer = new MaterializedMethod(
-            clazz.className,
-            [],
-            destroyPeerReturnType,
-            false,
-            new Method(
-                'destroyPeer',
-                new NamedMethodSignature(
-                    IDLVoidType,
-                    [createReferenceType(clazz.className)],
-                    ['peer']
-                )
-            )
-        );
-    
+        const mDestroyPeer = createDestroyPeerMethod(clazz);
+        
         [clazz.ctor, clazz.finalizer, mDestroyPeer].concat(clazz.methods).forEach(method => {
             this.printMaterializedMethod(this.dummy, method, m => this.printDummyImplFunctionBody(m))
             this.printMaterializedMethod(this.real, method, m => this.printModifierImplFunctionBody(m))
