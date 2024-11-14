@@ -1436,9 +1436,9 @@
 |`enableHapticFeedback`| Function | Erokhin Ilya | done | |
 |`registerNativeEmbedRule`| Function | Erokhin Ilya | done | |
 |`bindSelectionMenu`| Function | Erokhin Ilya | in progress | |
-|*WindowScene*| *Component* | | | |
-|`setWindowSceneOptions`| Function | | | |
-|`attractionEffect`| Function | | | |
+|*WindowScene*| *Component* | Spirin Andrey | in progress | |
+|`setWindowSceneOptions`| Function | Spirin Andrey | in progress | |
+|`attractionEffect`| Function | Spirin Andrey | in progress | |
 |*XComponent*| *Component* | | | |
 |`setXComponentOptions`| Function | | | |
 |`onLoad`| Function | | | |
@@ -1458,8 +1458,8 @@
 |`sideBarPosition`| Function |Dmitry A Smirnov|done|  |
 |`divider`| Function |Dmitry A Smirnov|done|  |
 |`minContentWidth`| Function |Dmitry A Smirnov|done|  |
-|*RemoteWindow*| *Component* | | | |
-|`setRemoteWindowOptions`| Function | | | |
+|*RemoteWindow*| *Component* | Spirin Andrey | in progress | |
+|`setRemoteWindowOptions`| Function | Spirin Andrey | in progress | |
 |*WaterFlow*| *Component* | Kovalev Sergey | in progress |  |
 |`setWaterFlowOptions`| Function | Kovalev Sergey |blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`columnsTemplate`| Function | Kovalev Sergey | done |  |
