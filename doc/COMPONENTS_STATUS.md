@@ -760,7 +760,7 @@
 |`onEditingChange`| Function | Dudkin Sergey| done|  |
 |`enterKeyType`| Function | Dudkin Sergey| devDone|  |
 |`onSubmit`| Function | Dudkin Sergey| done|  |
-|`onWillChange`| Function | Dudkin Sergey| blocked| https://gitee.com/nikolay-igotti/idlize/issues/IB4G70 |
+|`onWillChange`| Function | Dudkin Sergey| blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4G70 |
 |`onDidChange`| Function | Dudkin Sergey| done|  |
 |`onCut`| Function | Dudkin Sergey| in progress| |
 |`onCopy`| Function | Dudkin Sergey| in progress| |
@@ -1004,7 +1004,7 @@
 |`onGestureSwipe`| Function | Skroba Gleb | done |  |
 |`nestedScroll`| Function | Skroba Gleb| testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3ULZ |
 |`customContentTransition`| Function | Skroba Gleb | in progress | |
-|`onContentDidScroll`| Function | Skroba Gleb| done | |
+|`onContentDidScroll`| Function | Skroba Gleb| testskipped | |
 |`indicatorInteractive`| Function | Skroba Gleb| done |  |
 |*IndicatorComponent*| *Component* | Andrey Khudenkikh | done |  |
 |`setIndicatorComponentOptions`| Function | Andrey Khudenkikh | done |  |
@@ -1729,7 +1729,7 @@
 |`onNativeEmbedVisibilityChange`| Function | Erokhin Ilya | testskipped | |
 |`onNativeEmbedGestureEvent`| Function | Erokhin Ilya | in progress | dependency on Ark_EventResult & Ark_Function |
 |`copyOptions`| Function | Erokhin Ilya | done | |
-|`onOverrideUrlLoading`| Function | Erokhin Ilya | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onOverrideUrlLoading`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`textAutosizing`| Function | Erokhin Ilya | done | |
 |`enableNativeMediaPlayer`| Function | Erokhin Ilya | done | |
 |`enableSmoothDragResize`| Function | Erokhin Ilya | done | |
@@ -1737,7 +1737,7 @@
 |`onRenderProcessResponding`| Function | Erokhin Ilya | testskipped | |
 |`selectionMenuOptions`| Function | Erokhin Ilya | in progress | |
 |`onViewportFitChanged`| Function | Erokhin Ilya | testskipped | |
-|`onInterceptKeyboardAttach`| Function | Erokhin Ilya | blocked | dependency on Ark_CustomObject & Ark_WebKeyboardController |
+|`onInterceptKeyboardAttach`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
 |`onAdsBlocked`| Function | Erokhin Ilya | in progress | |
 |`keyboardAvoidMode`| Function | Erokhin Ilya | done | |
 |`editMenuOptions`| Function | Erokhin Ilya | in progress | |
