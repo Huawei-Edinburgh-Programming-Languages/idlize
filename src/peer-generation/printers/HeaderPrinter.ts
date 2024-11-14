@@ -17,14 +17,16 @@ import { IndentedPrinter } from "../../IndentedPrinter";
 import { getNodeTypes, makeAPI, makeConverterHeader, makeCSerializers } from "../FileGenerators";
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { collectCallbacks, groupCallbacks, IdlCallbackInfo } from "./EventsPrinter";
-import { CppLanguageWriter, createTypeNameConvertor, printMethodDeclaration } from "../LanguageWriters";
+import { CppLanguageWriter, createTypeNameConvertor, Method, NamedMethodSignature, printMethodDeclaration } from "../LanguageWriters";
 import { camelCaseToUpperSnakeCase } from "../../util";
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
 import { IdlPeerClass } from "../idl/IdlPeerClass";
 import { IdlPeerMethod } from "../idl/IdlPeerMethod";
-import { forceAsNamedNode, IDLVoidType, maybeOptional, toIDLType } from "../../idl";
+import { createReferenceType, forceAsNamedNode, IDLVoidType, maybeOptional, toIDLType } from "../../idl";
 import { getReferenceResolver } from "../ReferenceResolver";
 import { Language } from "../../Language";
+import { MaterializedClass, MaterializedMethod } from "../Materialized";
+import { RetConvertor } from "../ArgConvertors";
 
 export function generateEventReceiverName(componentName: string) {
     return `${PeerGeneratorConfig.cppPrefix}ArkUI${componentName}EventsReceiver`
@@ -77,14 +79,27 @@ class HeaderVisitor {
 
     private printAccessor(name: string) {
         const clazz = this.library.materializedClasses.get(name)
+
+        const destroyPeerReturnType: RetConvertor = {
+            isVoid: true,
+            nativeType: () => "void",
+            interopType: () => "void",
+            macroSuffixPart: () => "V"
+        }
+        
         if (clazz) {
             let peerName = `${name}Peer`
             let accessorName = `${PeerGeneratorConfig.cppPrefix}ArkUI${name}Accessor`
+
             this.api.print(`typedef struct ${peerName} ${peerName};`)
             this.api.print(`typedef struct ${accessorName} {`)
-            this.api.pushIndent();
-            [clazz.ctor, clazz.finalizer].concat(clazz.methods)
-                .forEach(method => this.printMethod(method))
+            this.api.pushIndent()
+            
+            const mDestroyPeer = createDestroyPeerMethod(clazz)
+
+            const methods = [clazz.ctor, clazz.finalizer, mDestroyPeer].concat(clazz.methods)
+            methods.forEach(method => this.printMethod(method))
+
             this.api.popIndent()
             this.api.print(`} ${accessorName};\n`)
         }
@@ -148,6 +163,30 @@ class HeaderVisitor {
         this.printEvents()
         this.printNodeTypes()
     }
+}
+
+export function createDestroyPeerMethod(clazz: MaterializedClass): MaterializedMethod {
+    const destroyPeerReturnType: RetConvertor = {
+        isVoid: true,
+        nativeType: () => "void",
+        interopType: () => "void",
+        macroSuffixPart: () => "V"
+    }
+
+    return new MaterializedMethod(
+            clazz.className,
+            [],
+            destroyPeerReturnType,
+            false,
+            new Method(
+                'destroyPeer',
+                new NamedMethodSignature(
+                    IDLVoidType,
+                    [createReferenceType(clazz.className)],
+                    ['peer']
+                )
+            )
+        )
 }
 
 export function printUserConverter(headerPath: string, namespace: string, apiVersion: number, peerLibrary: IdlPeerLibrary) :
