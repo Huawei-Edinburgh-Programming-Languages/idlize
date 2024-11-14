@@ -1991,7 +1991,6 @@
 |*WebCookie*| *Class* | Erokhin Ilya | done | |
 |`setCookie`| Function | Erokhin Ilya | done | |
 |`saveCookie`| Function | Erokhin Ilya | done | |
-<<<<<<< HEAD
 |*EventResult*| *Class* | Erokhin Ilya | in progress |  |
 |`setGestureEventResult`| Function | Erokhin Ilya | in progress |  |
 |*WebController*| *Class* | Erokhin Ilya | in progress | |
@@ -2071,9 +2070,3 @@
 |`start`| Function | Kovalev Sergey | in progress |  |
 |`pause`| Function | Kovalev Sergey | in progress |  |
 |`stop`| Function | Kovalev Sergey | in progress |  |
-=======
-|*CustomSpan*| *Class* | Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
-|`onMeasure`| Function | Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
-|`onDraw`| Function | Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
-|`invalidate`| Function | Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
->>>>>>> origin/master
