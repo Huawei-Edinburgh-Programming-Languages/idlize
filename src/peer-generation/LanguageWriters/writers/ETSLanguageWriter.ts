@@ -67,11 +67,11 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
     constructor(private readonly enumEntity: IDLEnum, private readonly isExport: boolean) {}
 
     write(writer: LanguageWriter) {
-        writer.print(this.enumEntity.comment)
+        // writer.print(this.enumEntity.comment)
         writer.writeClass(this.enumEntity.name, (writer) => {
             let isTypeString = true
             this.enumEntity.elements.forEach((member, index) => {
-                writer.print(member.comment)
+                // writer.print(member.comment)
                 const initText = member.initializer ?? index
                 isTypeString &&= (typeof initText !== "number")
                 const ctorArgs = [

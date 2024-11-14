@@ -226,18 +226,14 @@ export class CheckOptionalStatement implements LanguageStatement {
 // maybe rename or move of fix
 export class TsEnumEntityStatement implements LanguageStatement {
     constructor(private readonly enumEntity: idl.IDLEnum, private readonly isExport: boolean) {}
-
-    write(writer: LanguageWriter) {
-        writer.print(this.enumEntity.comment)
+    write(writer: LanguageWriter): void {
+        // writer.print(this.enumEntity.comment)
         writer.print(`${this.isExport ? "export " : ""}enum ${this.enumEntity.name} {`)
         writer.pushIndent()
         this.enumEntity.elements.forEach((member, index) => {
             writer.print(member.comment)
             const initValue = member.initializer
-                ? typeof member.initializer == 'string'
-                    ? ` = '${member.initializer}'`
-                    : ` = ${member.initializer}`
-                : ``
+                ? this.maybeQuoted(member.initializer) : ``
             writer.print(`${member.name}${initValue},`)
 
             let originalName = idl.getExtAttribute(member, idl.IDLExtendedAttributes.OriginalEnumMemberName)
@@ -249,7 +245,14 @@ export class TsEnumEntityStatement implements LanguageStatement {
         writer.popIndent()
         writer.print(`}`)
     }
-}
+
+    private maybeQuoted(value: string|number): string {
+        if (typeof value == "string")
+            return `"${value}"`
+        else
+            return `${value}`
+    }
+ }
 
 export class ReturnStatement implements LanguageStatement {
     constructor(public expression?: LanguageExpression) { }

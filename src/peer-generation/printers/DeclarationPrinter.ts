@@ -17,6 +17,7 @@ import * as idl from "../../idl"
 import { CustomPrintVisitor as DtsPrintVisitor} from "../../from-idl/DtsPrinter"
 import { isMaterialized } from "../idl/IdlPeerGeneratorVisitor"
 import { PeerLibrary } from "../PeerLibrary"
+import { LanguageWriter } from "../LanguageWriters"
 
 export function printDeclarations(peerLibrary: PeerLibrary): Array<string> {
     const result = []
@@ -35,4 +36,12 @@ export function printDeclarations(peerLibrary: PeerLibrary): Array<string> {
         }
     }
     return result
+}
+
+export function printEnumsImpl(peerLibrary: PeerLibrary, writer: LanguageWriter) {
+    for (const decl of peerLibrary.declarations) {
+        if (idl.isEnum(decl)) {
+            writer.writeStatement(writer.makeEnumEntity(decl, true))
+        }
+    }
 }
