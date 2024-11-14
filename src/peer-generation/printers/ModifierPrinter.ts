@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+
 import { IndentedPrinter } from "../../IndentedPrinter";
 import { PrimitiveType } from "../ArkPrimitiveType"
 import {
@@ -28,14 +29,16 @@ import {
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { MaterializedClass, MaterializedMethod } from "../Materialized";
 import { groupBy, throwException } from "../../util";
-import { CppLanguageWriter, createLanguageWriter, createTypeNameConvertor, LanguageWriter, printMethodDeclaration } from "../LanguageWriters";
+import { CppLanguageWriter, createLanguageWriter, createTypeNameConvertor, LanguageWriter, Method, NamedMethodSignature, printMethodDeclaration } from "../LanguageWriters";
 import { LibaceInstall } from "../../Install";
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
 import { IdlPeerClass } from "../idl/IdlPeerClass";
 import { IdlPeerMethod } from "../idl/IdlPeerMethod";
+import { IDLPointerType, IDLVoidType} from "../../idl"
 import { Language } from "../../Language";
 import { createEmptyReferenceResolver, getReferenceResolver } from "../ReferenceResolver";
 import { IDLBooleanType, IDLFunctionType, IDLStringType, isOptionalType } from "../../idl";
+import { RetConvertor } from "../ArgConvertors";
 
 export class ModifierVisitor {
     dummy = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
