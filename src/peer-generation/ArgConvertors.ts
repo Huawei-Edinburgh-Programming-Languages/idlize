@@ -555,10 +555,8 @@ export class EnumConvertor extends BaseArgConvertor { //
         return writer.makeEnumCast(param, false, this)
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
-        if (this.isStringEnum) {
-            value = printer.ordinalFromEnum(printer.makeString(value), idl.createReferenceType(this.enumEntry.name)).asString()
-        }
-        printer.writeMethodCall(`${param}Serializer`, "writeInt32", [printer.makeEnumCast(value, false, this)])
+        value = printer.ordinalFromEnum(printer.makeString(value), idl.createReferenceType(this.enumEntry.name)).asString()
+        printer.writeMethodCall(`${param}Serializer`, "writeInt32", [value])
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
         const readExpr = writer.makeMethodCall(`${deserializerName}`, "readInt32", [])
@@ -800,9 +798,13 @@ export class AggregateConvertor extends BaseArgConvertor { //
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         this.memberConvertors.forEach((it, index) => {
             let memberName = this.members[index][0]
+            let memberAccess = `${value}.${memberName}`
+            if (printer.language === Language.ARKTS && stubIsTypeCallback(this.library, this.decl.properties[index].type)) {
+                memberAccess = `${memberAccess}!`
+            }
             printer.writeStatement(
                 printer.makeAssign(`${value}_${memberName}`, undefined,
-                    printer.makeString(`${value}.${memberName}`), true))
+                    printer.makeString(memberAccess), true))
             it.convertorSerialize(param, `${value}_${memberName}`, printer)
         })
     }

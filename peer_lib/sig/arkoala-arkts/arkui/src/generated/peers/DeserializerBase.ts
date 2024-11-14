@@ -16,11 +16,8 @@
 import {CustomTextDecoder, float32, int32} from "@koalaui/common"
 import {pointer} from "@koalaui/interop"
 import {RuntimeType, Tags, CallbackResource} from "./SerializerBase";
-import { Length, Resource } from "../ArkUnitsInterfaces"
-
-export class Ptr {
-    ptr: pointer
-}
+import { Length } from "../ArkUnitsInterfaces"
+import { Resource } from "../ArkResourceInterfaces"
 
 export class DeserializerBase {
     private position = 0

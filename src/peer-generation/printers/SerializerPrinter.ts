@@ -88,8 +88,14 @@ class IdlSerializerPrinter {
         }
         properties.forEach(it => {
             let field = `value_${it.name}`
-            writer.writeStatement(writer.makeAssign(field, undefined, writer.makeString(`value.${writer.escapeKeyword(it.name)}`), true))
             let typeConvertor = this.library.typeConvertor(`value`, it.type!, it.isOptional)
+
+            let memberAccess = writer.makeString(`value.${writer.escapeKeyword(it.name)}`)
+            if (writer.language === Language.ARKTS && stubIsTypeCallback(this.library, it.type)) {
+                memberAccess = writer.makeCast(memberAccess, idl.maybeOptional(it.type, it.isOptional))
+            }
+
+            writer.writeStatement(writer.makeAssign(field, undefined, memberAccess, true))
             typeConvertor.convertorSerialize(`value`, field, writer)
         })
     }
@@ -234,12 +240,9 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
         const properties = collectProperties(target, this.library)
         // using list initialization to prevent uninitialized value errors
         const valueType = type // not used, if language === TS
-        const options: MakeAssignOptions | undefined = this.library.language === Language.TS
-            ? { overrideTypeName: `{${properties.map(it => `${it.name}?: ${this.writer.stringifyType(it.type)}`).join(", ")}}` }
-            : undefined
 
         if (this.writer.language === Language.CPP)
-            this.writer.writeStatement(this.writer.makeAssign("value", valueType, this.writer.makeString(`{}`), true, false, options))
+            this.writer.writeStatement(this.writer.makeAssign("value", valueType, this.writer.makeString(`{}`), true, false))
         if (idl.isInterface(target) || idl.isClass(target)) {
             if (properties.length > 0) {
                 this.declareDeserializer()
@@ -260,7 +263,7 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
                     }
                     return `${it.name}: ${it.name}_result`
                 })
-                this.writer.writeStatement(this.writer.makeAssign("value", valueType, this.writer.makeCast(this.writer.makeString(`{${propsAssignees.join(',')}}`), type), true, false, options))
+                this.writer.writeStatement(this.writer.makeAssign("value", valueType, this.writer.makeCast(this.writer.makeString(`{${propsAssignees.join(',')}}`), type), true, false))
             }
         } else {
             if (this.writer.language === Language.CPP) {
@@ -482,7 +485,6 @@ function printIdlImports(library: PeerLibrary, serializerDeclarations: Serializa
     else if (destFile.language === Language.ARKTS) {
         const collector = new ImportsCollector()
         collector.addFeature("TypeChecker", "#components")
-        collector.addFeature(`KPointer`, `@koalaui/interop`)
 
         library.files.forEach(peer => peer.serializeImportFeatures
             .forEach(importFeature => collector.addFeature(importFeature.feature, importFeature.module)))

@@ -122,7 +122,7 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
             writer.writeMethodImplementation(new Method("ofOrdinal", new MethodSignature(toIDLType(this.enumEntity.name), [idl.IDLI32Type]), [MethodModifier.PUBLIC, MethodModifier.STATIC]),
                 (writer)=> {
                     this.enumEntity.elements.forEach((member) => {
-                        const memberName = `${this.enumEntity.name}.${member.name}`
+                        const memberName = `${className}.${member.name}`
                         writer.writeStatement(
                             writer.makeCondition(
                                 writer.makeEquals([writer.makeString('arg0'), writer.makeString(`${memberName}.ordinal`)]),

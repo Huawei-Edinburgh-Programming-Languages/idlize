@@ -292,7 +292,7 @@ export function makeTSSerializer(library: PeerLibrary): LanguageWriter {
     if (printer.language == Language.ARKTS) {
         imports.addFeatures(["NativeModule"], "#components")
         imports.addFeatures(["CallbackKind"], "CallbackKind")
-        imports.addFeatures(['KStringPtr', 'nullptr', 'KInt'], '@koalaui/interop')
+        imports.addFeatures(['KStringPtr', 'nullptr', 'KInt', 'KPointer'], '@koalaui/interop')
     }
     imports.print(printer, '')
     writeSerializer(library, printer, "")
@@ -406,7 +406,7 @@ export function createDeserializer(args: Uint8Array, length: int32): Deserialize
 `
 }
 
-export function makeArkTSDeserializer(library: IdlPeerLibrary): string {
+export function makeArkTSDeserializer(library: PeerLibrary): string {
     const printer = createLanguageWriter(Language.ARKTS, library)
     printer.writeLines(cStyleCopyright)
 
@@ -423,7 +423,7 @@ export function makeArkTSDeserializer(library: IdlPeerLibrary): string {
 
     imports.print(printer, '')
 
-    writeDeserializer(library, printer)
+    writeDeserializer(library, printer, "")
     return `
 ${printer.getOutput().join("\n")}
 `

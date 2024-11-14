@@ -371,14 +371,15 @@ export function generateArkoalaFromIdl(config: {
                 integrated: true,
             }
         )
-        writeFile(arkoala.peer(new TargetFile('Deserializer')),
-            makeArkTSDeserializer(peerLibrary),
-            {
-                onlyIntegrated: config.onlyIntegrated,
-                integrated: true,
-                message: "producing [idl]"
-            }
-        )
+        // waiting for es2panda to fix 20642 issue
+        // writeFile(arkoala.peer(new TargetFile('Deserializer')),
+        //     makeArkTSDeserializer(peerLibrary),
+        //     {
+        //         onlyIntegrated: config.onlyIntegrated,
+        //         integrated: true,
+        //         message: "producing [idl]"
+        //     }
+        // )
         writeFile(arkoala.arktsLib(new TargetFile('type_check', 'arkts')),
             makeTypeChecker(peerLibrary).arkts,
             {
