@@ -233,7 +233,7 @@ export class TsEnumEntityStatement implements LanguageStatement {
         this.enumEntity.elements.forEach((member, index) => {
             writer.print(member.comment)
             const initValue = member.initializer
-                ? this.maybeQuoted(member.initializer) : ``
+                ? ` = ${this.maybeQuoted(member.initializer)}` : ``
             writer.print(`${member.name}${initValue},`)
 
             let originalName = idl.getExtAttribute(member, idl.IDLExtendedAttributes.OriginalEnumMemberName)
