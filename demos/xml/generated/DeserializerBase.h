@@ -194,18 +194,6 @@ inline void WriteToString(std::string *result, const OH_Undefined *value)
 }
 
 template <>
-inline void WriteToString(std::string *result, OH_Void value)
-{
-  result->append("{}");
-}
-
-template <>
-inline void WriteToString(std::string *result, const OH_Void *value)
-{
-  result->append("{}");
-}
-
-template <>
 inline void WriteToString(std::string *result, const OH_CustomObject *value)
 {
   if (strcmp(value->kind, "NativeErrorFunction") == 0)

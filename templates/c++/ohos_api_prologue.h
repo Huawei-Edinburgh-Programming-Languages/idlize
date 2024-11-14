@@ -90,10 +90,6 @@ typedef struct OH_Undefined {
   OH_Int32 dummy; // Empty structs are forbidden in C.
 } OH_Undefined;
 
-typedef struct OH_Void {
-  OH_Int32 dummy; // Empty structs are forbidden in C.
-} OH_Void;
-
 // TODO: wrong, provide real definitions.
 typedef void* OH_DataView;
 
