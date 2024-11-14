@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 
-
 import { IndentedPrinter } from "../../IndentedPrinter";
 import { PrimitiveType } from "../ArkPrimitiveType"
 import {
@@ -34,10 +33,9 @@ import { LibaceInstall } from "../../Install";
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
 import { IdlPeerClass } from "../idl/IdlPeerClass";
 import { IdlPeerMethod } from "../idl/IdlPeerMethod";
-import { IDLPointerType, IDLVoidType} from "../../idl"
+import { IDLVoidType, IDLBooleanType, IDLFunctionType, IDLStringType, isOptionalType, createReferenceType} from "../../idl"
 import { Language } from "../../Language";
 import { createEmptyReferenceResolver, getReferenceResolver } from "../ReferenceResolver";
-import { IDLBooleanType, IDLFunctionType, IDLStringType, isOptionalType } from "../../idl";
 import { RetConvertor } from "../ArgConvertors";
 
 export class ModifierVisitor {
@@ -250,7 +248,7 @@ class AccessorVisitor extends ModifierVisitor {
             interopType: () => "void",
             macroSuffixPart: () => "V"
         }
-        // Создаем mDestroyPeer и mGetFinalizer как MaterializedMethod
+        
         const mDestroyPeer = new MaterializedMethod(
             'destroyPeer',
             [],
@@ -260,7 +258,7 @@ class AccessorVisitor extends ModifierVisitor {
                 'destroyPeer',
                 new NamedMethodSignature(
                     IDLVoidType,
-                    [IDLPointerType],
+                    [createReferenceType(clazz.className)],
                     ['peer']
                 )
             )
@@ -272,7 +270,6 @@ class AccessorVisitor extends ModifierVisitor {
             this.accessors.print(`${method.implNamespaceName}::${method.implName},`)
         })
 
-    
         this.popNamespace(namespaceName, false);
         this.printMaterializedClassEpilog(clazz);
     }
