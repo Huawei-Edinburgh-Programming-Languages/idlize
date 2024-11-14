@@ -123,9 +123,6 @@ abstract class TypeCheckerPrinter {
             const declarations: idl.IDLEntry[] = [...Array.from(file.declarations), ...file.enums]
             for (const decl of declarations
                 .filter(it => !PeerGeneratorConfig.ignoreEntry(it.name, this.writer.language))) {
-                if (decl.name === "PathAttribute") {
-                    console.log("")
-                }
                 if ((idl.isInterface(decl) || idl.isAnonymousInterface(decl) || idl.isEnum(decl) || idl.isClass(decl))
                     && !seenNames.has(decl.name)) {
                     seenNames.add(decl.name)
