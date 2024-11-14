@@ -19,10 +19,12 @@
 package org.koalaui.arkoala;
 
 public class Application {
+    private boolean exitApp = false;
     Application() {}
 
     public static void main(String[] args) {
-        var app = Application.startApplication();
+        var app = Application.createApplication();
+        app.start();
         try {
             for (int i = 0; i < 10; i++) {
                 app.loopIteration(i, 0);
@@ -33,13 +35,14 @@ public class Application {
         }
     }
 
-    public static Application startApplication() {
-        NativeModule._NativeLog("NativeModule.startApplication");
-        return new Application().start();
+    public static Application createApplication() {
+        NativeModule._NativeLog("NativeModule.createApplication");
+        return new Application();
     }
 
-    public void enter(int arg0, int arg1) {
+    public boolean enter(int arg0, int arg1) {
         loopIteration(arg0, arg1);
+        return exitApp;
     }
 
     public void loopIteration(int arg0, int arg1) {
@@ -61,7 +64,7 @@ public class Application {
         System.out.println("JAVA: render");
     }
 
-    public Application start() {
-        return this;
+    public long start() {
+        return 1L;
     }
 }

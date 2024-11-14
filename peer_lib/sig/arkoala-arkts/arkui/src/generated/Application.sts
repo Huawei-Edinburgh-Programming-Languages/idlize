@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { ComputableState, IncrementalNode, GlobalStateManager, StateManager, StateContext, MutableState, State, contextLocal, contextLocalScope, createAnimationTimer, memoRoot } from "@koalaui/runtime"
+import { callScheduledCallbacks, ComputableState, IncrementalNode, GlobalStateManager, StateManager, StateContext, MutableState, State, contextLocal, contextLocalScope, createAnimationTimer, memoRoot } from "@koalaui/runtime"
 import { nativeModule } from "#components"
 import { ArkoalaHost, ArkoalaControl, WaitFramesEvent, UIElement } from "./Declarations"
 import { ArkoalaControlImpl } from "./ArkoalaControl"
@@ -24,7 +24,8 @@ import { ArkUINodeType } from "./peers/ArkUINodeType"
 import { KPointer, pointer } from "@koalaui/interop"
 import { checkEvents } from "./Events"
 
-const CURRENT_CONTROL = "ohos.arkoala.control"
+let rootPointer: long | undefined
+
 export interface ApplicationEmulatedEvent {
     nodeId: int
     x: number
@@ -68,9 +69,10 @@ export function currentPartialUpdateContext<T>(): T | undefined {
     return _currentPartialUpdateContext as (T | undefined)
 }
 
-function createMemoRoot(manager: StateManager): ComputableState<IncrementalNode> {
+function createMemoRoot(manager: StateManager): ComputableState<PeerNode> {
     const peer = new PeerNode(ArkUINodeType.Root, 0, "Root")
-    const node = manager.updatableNode<IncrementalNode>(peer, (context: StateContext) => {
+    rootPointer = peer.peer.ptr
+    const node = manager.updatableNode<PeerNode>(peer, (context: StateContext) => {
         const frozen = manager.frozen
         manager.frozen = true
         // call memoEntry
@@ -80,7 +82,7 @@ function createMemoRoot(manager: StateManager): ComputableState<IncrementalNode>
     return node
 }
 
-function updateStates(manager: StateManager, root: State<IncrementalNode>) {
+function updateStates(manager: StateManager, root: ComputableState<PeerNode>) {
     // Ensure all current state updates took effect.
     manager.updateSnapshot()
     root.value
@@ -146,20 +148,24 @@ function drawCurrentCrash(crash: Object) {
 
 export class Application {
     private manager: StateManager | undefined = undefined
-    private root: ComputableState<IncrementalNode> | undefined = undefined
+    private root: ComputableState<PeerNode> | undefined = undefined
+    private timer: MutableState<long> | undefined = undefined
     private currentCrash: Object | undefined = undefined
     private enableDumpTree = false
+    private exitApp: boolean = false
 
     constructor() {
     }
 
-    private start(): Application {
+    private start(): long {
         this.manager = GlobalStateManager.instance
+        this.timer = createAnimationTimer(this.manager!)
         this.root = createMemoRoot(this.manager!)
-        return this
+        return rootPointer!
     }
 
     private checkEvents(what: int) {
+        console.log("ARKTS: checkEvents")
         checkEvents()
     }
 
@@ -168,12 +174,12 @@ export class Application {
         updateStates(this.manager!, this.root!)
         // Here we request to draw a frame and call custom components JS callbacks.
         measureLayoutAndDraw(this.root!.value as PeerNode)
+        // Call callbacks and sync
+        callScheduledCallbacks()
     }
 
     private render() {
         console.log("ARKTS: render2")
-        // Call callbacks.
-        this.manager?.callCallbacks()
     }
 
     enter(arg0: int, arg1: int) {
@@ -187,15 +193,17 @@ export class Application {
                 this.currentCrash = error as Object
             }
         }
+        return this.exitApp
     }
 
     loopIteration(arg0: int, arg1: int) {
+        console.log("ARKTS: loopIteration")
         this.checkEvents(arg0)
         this.updateState()
         this.render()
     }
 
-    static startApplication(): Application {
-        return new Application().start()
+    static createApplication(): Application {
+        return new Application()
     }
 }
