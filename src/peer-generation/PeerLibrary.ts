@@ -317,7 +317,7 @@ export class PeerLibrary implements LibraryInterface {
             if (type.name === 'Date') {
                 return ArkDate
             }
-            if (type.name === 'AnimationRange' || type.name === 'ContentModifier') {
+            if (type.name === 'AnimationRange' || type.name === 'ContentModifier' || type.name === 'LinearGradient') {
                 return ArkCustomObject
             }
             if (type.name === 'Function') {
