@@ -95,7 +95,6 @@ build arkoala-ts-native-arm32:
  script:
    - KOALA_BZ=1 OPENLAB_USERNAME=$OPENLAB_USERNAME OPENLAB_PASSWORD=$OPENLAB_PASSWORD npm run arkoala:ts:native:arm32
 
-todo: enable when meson is configured on CI
 build arkoala.har:
  stage: test
  tags:
