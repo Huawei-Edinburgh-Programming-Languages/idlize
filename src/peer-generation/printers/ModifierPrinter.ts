@@ -26,7 +26,7 @@ import {
     warning
 } from "../FileGenerators";
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
-import { MaterializedClass, MaterializedMethod } from "../Materialized";
+import { createDestroyPeerMethod, MaterializedClass, MaterializedMethod } from "../Materialized";
 import { groupBy } from "../../util";
 import { CppLanguageWriter, createLanguageWriter, createTypeNameConvertor, LanguageWriter, printMethodDeclaration } from "../LanguageWriters";
 import { LibaceInstall } from "../../Install";
@@ -36,7 +36,6 @@ import { PeerClass } from "../PeerClass";
 import { PeerMethod } from "../PeerMethod";
 import { Language } from "../../Language";
 import { createEmptyReferenceResolver, getReferenceResolver } from "../ReferenceResolver";
-import { createDestroyPeerMethod } from "./HeaderPrinter";
 
 export class ModifierVisitor {
     dummy = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
