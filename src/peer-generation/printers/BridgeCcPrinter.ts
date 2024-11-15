@@ -14,12 +14,12 @@
  */
 
 import { capitalize, dropSuffix, isDefined } from "../../util";
-import { ArgConvertor } from "../ArgConvertors";
+import { ArgConvertor, RetConvertor } from "../ArgConvertors";
 import { PrimitiveType } from "../ArkPrimitiveType"
 import { bridgeCcCustomDeclaration, bridgeCcGeneratedDeclaration } from "../FileGenerators";
 import { createLanguageWriter, createTypeNameConvertor, ExpressionStatement, LanguageWriter } from "../LanguageWriters";
-import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
-import { IdlPeerMethod } from "../idl/IdlPeerMethod";
+import { PeerLibrary } from "../PeerLibrary";
+import { PeerMethod } from "../PeerMethod";
 import { Language } from "../../Language";
 import { forceAsNamedNode, IDLBooleanType, IDLNumberType } from "../../idl";
 import { getReferenceResolver } from "../ReferenceResolver";
@@ -29,14 +29,18 @@ class BridgeCcVisitor {
     readonly customApi = createLanguageWriter(Language.CPP, this.library)
 
     constructor(
-        private readonly library: IdlPeerLibrary,
-        private readonly callLog: boolean,
+        protected readonly library: PeerLibrary,
+        protected readonly callLog: boolean,
     ) {}
 
-    private generateApiCall(method: IdlPeerMethod, modifierName?: string): string {
+    protected generateApiCall(method: PeerMethod, modifierName?: string): string {
         // TODO: may be need some translation tables?
         let clazz = modifierName ?? dropSuffix(dropSuffix(dropSuffix(method.originalParentName, "Method"), "Attribute"), "Interface")
         return `get${capitalize(clazz)}${method.apiKind}()`
+    }
+
+    protected escapeKeyword(kw: string): string {
+        return this.generatedApi.escapeKeyword(kw)
     }
 
     // TODO: may be this is another method of ArgConvertor?
@@ -44,30 +48,54 @@ class BridgeCcVisitor {
         const nameConverter = createTypeNameConvertor(Language.CPP, getReferenceResolver(this.library))
         const prefix = argConvertor.isPointerType() ? `(const ${nameConverter.convertType(argConvertor.nativeType())}*)&`: "    "
         if (argConvertor.useArray)
-            return `${prefix}${argConvertor.param}_value`
+            return `${prefix}${this.escapeKeyword(argConvertor.param)}_value`
         else
-            return `${argConvertor.convertorArg(argConvertor.param, this.generatedApi)}`
+            return `${argConvertor.convertorArg(this.escapeKeyword(argConvertor.param), this.generatedApi)}`
     }
 
-    private printAPICall(method: IdlPeerMethod, modifierName?: string) {
+    protected getApiCall(method: PeerMethod): string {
+        return method.apiCall
+    }
+
+    protected printAPICall(method: PeerMethod, modifierName?: string) {
         const hasReceiver = method.hasReceiver()
         const argConvertors = method.argConvertors
         const isVoid = method.retConvertor.isVoid
         const modifier = this.generateApiCall(method, modifierName)
-        const peerMethod = method.peerMethodName
-        const receiver = hasReceiver ? ['self'] : []
+        const peerMethod = this.getPeerMethodName(method)
+        const receiver = hasReceiver ? [this.getReceiverArgName()] : []
         // TODO: how do we know the real amount of arguments of the API functions?
         // Do they always match in TS and in C one to one?
         const args = receiver.concat(argConvertors.map(it => this.generateApiArgument(it))).join(", ")
-        const call = `${isVoid ? "" : "return "}${method.apiCall}->${modifier}->${peerMethod}(${args});`
-        if (this.callLog) this.printCallLog(method, method.apiCall, modifier)
+        const apiCall = this.getApiCall(method)
+        const field = this.getApiCallResultField(method)
+        const call = `${isVoid ? "" : "return "}${apiCall}->${modifier}->${peerMethod}(${args})${field};`
+        if (this.callLog) this.printCallLog(method, apiCall, modifier)
         this.generatedApi.print(call)
     }
 
-    private printNativeBody(method: IdlPeerMethod, modifierName?: string) {
+    protected getApiCallResultField(method: PeerMethod): string {
+        return ""
+    }
+
+    protected getReceiverArgName(): string {
+        return "self"
+    }
+
+    protected getPeerMethodName(method: PeerMethod): string {
+        return method.peerMethodName
+    }
+
+    protected printReceiverCastCall(method: PeerMethod) {
+        const receiverType = method.receiverType;
+        const self = this.getReceiverArgName();
+        this.generatedApi.print(`${receiverType} ${self} = reinterpret_cast<${receiverType}>(thisPtr);`)
+    }
+
+    private printNativeBody(method: PeerMethod, modifierName?: string) {
         this.generatedApi.pushIndent()
         if (method.hasReceiver()) {
-            this.generatedApi.print(`${method.receiverType} self = reinterpret_cast<${method.receiverType}>(thisPtr);`)
+            this.printReceiverCastCall(method)
         }
         let deserializerCreated = false
         method.argConvertors.forEach(it => {
@@ -90,7 +118,7 @@ class BridgeCcVisitor {
 
     private static varCnt : number = 0;
 
-    private printCallLog(method: IdlPeerMethod, api: string, modifier: string) {
+    private printCallLog(method: PeerMethod, api: string, modifier: string) {
         this.generatedApi.print(`if (needGroupedLog(2)) {`)
         this.generatedApi.pushIndent()
         this.generatedApi.print('std::string _logData;')
@@ -107,9 +135,9 @@ class BridgeCcVisitor {
             BridgeCcVisitor.varCnt += 1
         }
 
-        this.generatedApi.print(`_logData.append("  ${api}->${modifier}->${method.peerMethodName}(");`)
+        this.generatedApi.print(`_logData.append("  ${api}->${modifier}->${this.getPeerMethodName(method)}(");`)
         if (method.hasReceiver()) {
-            this.generatedApi.print(`_logData.append("(Ark_NativePointer)");`)
+            this.generatedApi.print(`_logData.append("(${PrimitiveType.NativePointer})");`)
             this.generatedApi.print(`_logData.append("peer" + std::to_string((uintptr_t)thisPtr));`);
             if (method.argConvertors.length > 0)
                 this.generatedApi.print(`_logData.append(", ");`)
@@ -149,7 +177,7 @@ class BridgeCcVisitor {
         return receiver
     }
 
-    private generateCMacroSuffix(method: IdlPeerMethod): string {
+    private generateCMacroSuffix(method: PeerMethod): string {
         let counter = method.hasReceiver() ? 1 : 0
         let arrayAdded = false
         method.argConvertors.forEach(it => {
@@ -165,7 +193,7 @@ class BridgeCcVisitor {
         return `${method.retConvertor.macroSuffixPart()}${counter}`
     }
 
-    private generateCParameters(method: IdlPeerMethod, argConvertors: ArgConvertor[]): string[] {
+    private generateCParameters(method: PeerMethod, argConvertors: ArgConvertor[]): string[] {
         let maybeReceiver = method.hasReceiver() ? [`${PrimitiveType.NativePointer.getText()} thisPtr`] : []
         let ptrCreated = false;
         for (let i = 0; i < argConvertors.length; ++i) {
@@ -185,20 +213,18 @@ class BridgeCcVisitor {
                         type = `const KLength&`
                         break
                 }
-                maybeReceiver.push(`${type} ${it.param}`)
+                maybeReceiver.push(`${type} ${this.escapeKeyword(it.param)}`)
             }
         }
         return maybeReceiver
     }
 
-    private printMethod(method: IdlPeerMethod, modifierName?: string) {
+    private printMethod(method: PeerMethod, modifierName?: string) {
         const retConvertor = method.retConvertor
         const argConvertors = method.argConvertors
 
         let cName = `${method.originalParentName}_${method.overloadedName}`
-        let retValue: string | undefined = retConvertor.interopType
-            ? retConvertor.interopType()
-            : retConvertor.nativeType()
+        let retValue: string | undefined = this.getRetValue(method, retConvertor)
         this.generatedApi.print(`${retValue} impl_${cName}(${this.generateCParameters(method, argConvertors).join(", ")}) {`)
         this.generatedApi.pushIndent()
         this.printNativeBody(method, modifierName)
@@ -211,6 +237,12 @@ class BridgeCcVisitor {
         const suffix = this.generateCMacroSuffix(method)
         this.generatedApi.print(`KOALA_INTEROP_${suffix}(${macroArgs})`)
         this.generatedApi.print(` `)
+    }
+
+    protected getRetValue(method: PeerMethod, retConvertor: RetConvertor): string | undefined {
+        return retConvertor.interopType
+            ? retConvertor.interopType()
+            : retConvertor.nativeType();
     }
 
     /* 
@@ -275,23 +307,82 @@ class BridgeCcVisitor {
     }
 }
 
+// TODO commonize this piece of code
+class OhosBridgeCcVisitor extends BridgeCcVisitor {
+    protected generateApiCall(method: PeerMethod, modifierName?: string): string {
+        // TODO: may be need some translation tables?
+        let clazz = modifierName ?? dropSuffix(dropSuffix(dropSuffix(method.originalParentName, "Method"), "Attribute"), "Interface")
+        return capitalize(clazz) + "()"
+    }
+
+    protected getApiCall(method: PeerMethod): string {
+        const libName = this.library.name;
+        return `Get${libName}APIImpl(${libName}_API_VERSION)`
+    }
+
+
+    protected getReceiverArgName(): string {
+        return "thisPtr"
+    }
+
+    protected printReceiverCastCall(method: PeerMethod) {
+        // OHOS API does not need to cast native pointer at this moment
+    }
+
+    protected getPeerMethodName(method: PeerMethod): string {
+        switch (method.peerMethodName) {
+            case "ctor": return "construct"
+            case "getFinalizer": return "destruct"
+            default: return method.peerMethodName
+        }
+    }
+
+    protected printAPICall(method: PeerMethod, modifierName?: string) {
+        if (method.peerMethodName == "getFinalizer") {
+            const modifier = this.generateApiCall(method, modifierName)
+            const peerMethod = this.getPeerMethodName(method)
+            const apiCall = this.getApiCall(method)
+            const call = `return (${PrimitiveType.NativePointer}) &${apiCall}->${modifier}->${peerMethod};`
+            this.generatedApi.print(call)
+        } else {
+            super.printAPICall(method, modifierName)
+        }
+    }
+
+    protected getApiCallResultField(method: PeerMethod): string {
+        // TODO Remove this workaround for case when number is replaced with int32
+        if (method.method.signature.returnType === IDLNumberType) {
+            return ".i32"
+        } else {
+            return super.getApiCallResultField(method)
+        }
+        
+    }
+}
+
 type BridgeCcApi = {
     generated: LanguageWriter;
     custom: LanguageWriter;
 };
 
-export function printBridgeCc(peerLibrary: IdlPeerLibrary, callLog: boolean): BridgeCcApi {
+export function printBridgeCcForOHOS(peerLibrary: PeerLibrary): BridgeCcApi {
+    const visitor = new OhosBridgeCcVisitor(peerLibrary, false)
+    visitor.print()
+    return { generated: visitor.generatedApi, custom: visitor.customApi }
+}
+
+export function printBridgeCc(peerLibrary: PeerLibrary, callLog: boolean): BridgeCcApi {
     const visitor = new BridgeCcVisitor(peerLibrary, callLog)
     visitor.print()
     return { generated: visitor.generatedApi, custom: visitor.customApi }
 }
 
-export function printBridgeCcGenerated(peerLibrary: IdlPeerLibrary, callLog: boolean): string {
+export function printBridgeCcGenerated(peerLibrary: PeerLibrary, callLog: boolean): string {
     const { generated } = printBridgeCc(peerLibrary, callLog)
     return bridgeCcGeneratedDeclaration(generated.getOutput())
 }
 
-export function printBridgeCcCustom(peerLibrary: IdlPeerLibrary, callLog: boolean): string {
+export function printBridgeCcCustom(peerLibrary: PeerLibrary, callLog: boolean): string {
     const { custom } = printBridgeCc(peerLibrary, callLog)
     return bridgeCcCustomDeclaration(custom.getOutput())
 }

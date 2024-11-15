@@ -19,10 +19,10 @@ import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { collectCallbacks, groupCallbacks, IdlCallbackInfo } from "./EventsPrinter";
 import { CppLanguageWriter, createTypeNameConvertor, Method, NamedMethodSignature, printMethodDeclaration } from "../LanguageWriters";
 import { camelCaseToUpperSnakeCase } from "../../util";
-import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
-import { IdlPeerClass } from "../idl/IdlPeerClass";
-import { IdlPeerMethod } from "../idl/IdlPeerMethod";
 import { createReferenceType, IDLVoidType, maybeOptional } from "../../idl";
+import { PeerLibrary } from "../PeerLibrary";
+import { PeerClass } from "../PeerClass";
+import { PeerMethod } from "../PeerMethod";
 import { getReferenceResolver } from "../ReferenceResolver";
 import { Language } from "../../Language";
 import { MaterializedClass, MaterializedMethod } from "../Materialized";
@@ -35,7 +35,7 @@ export function generateEventReceiverName(componentName: string) {
 
 class HeaderVisitor {
     constructor(
-        private library: IdlPeerLibrary,
+        private library: PeerLibrary,
         private api: IndentedPrinter,
         private modifiersList: IndentedPrinter,
         private accessorsList: IndentedPrinter,
@@ -43,23 +43,23 @@ class HeaderVisitor {
         private nodeTypesList: IndentedPrinter,
     ) {}
 
-    private apiModifierHeader(clazz: IdlPeerClass) {
+    private apiModifierHeader(clazz: PeerClass) {
         return `typedef struct ${PeerGeneratorConfig.cppPrefix}ArkUI${clazz.componentName}Modifier {`
     }
 
-    private printClassProlog(clazz: IdlPeerClass) {
+    private printClassProlog(clazz: PeerClass) {
         this.api.print(this.apiModifierHeader(clazz))
         this.api.pushIndent()
         this.modifiersList.pushIndent()
         this.modifiersList.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUI${clazz.componentName}Modifier* (*get${clazz.componentName}Modifier)();`)
     }
 
-    private printMethod(method: IdlPeerMethod) {
+    private printMethod(method: PeerMethod) {
         const apiParameters = method.generateAPIParameters(createTypeNameConvertor(Language.CPP, getReferenceResolver(this.library)))
         printMethodDeclaration(this.api, method.retType, `(*${method.fullMethodName})`, apiParameters, `;`)
     }
 
-    private printClassEpilog(clazz: IdlPeerClass) {
+    private printClassEpilog(clazz: PeerClass) {
         if (clazz.methods.length == 0) {
             this.api.print("int dummy;")
         }
@@ -110,7 +110,7 @@ class HeaderVisitor {
         return this.printEventsReceiverIdl(componentName, callbacks as IdlCallbackInfo[], this.library)
     }
 
-    private printEventsReceiverIdl(componentName: string, callbacks: IdlCallbackInfo[], library: IdlPeerLibrary) {
+    private printEventsReceiverIdl(componentName: string, callbacks: IdlCallbackInfo[], library: PeerLibrary) {
         const receiver = generateEventReceiverName(componentName)
         this.api.print(`typedef struct ${receiver} {`)
         this.api.pushIndent()
@@ -190,7 +190,8 @@ export function createDestroyPeerMethod(clazz: MaterializedClass): MaterializedM
         )
 }
 
-export function printUserConverter(headerPath: string, namespace: string, apiVersion: number, peerLibrary: IdlPeerLibrary) :
+
+export function printUserConverter(headerPath: string, namespace: string, apiVersion: number, peerLibrary: PeerLibrary) :
         {api: string, converterHeader: string}
 {
     const apiHeader = new IndentedPrinter()
@@ -211,7 +212,7 @@ export function printUserConverter(headerPath: string, namespace: string, apiVer
     return {api, converterHeader}
 }
 
-export function printSerializers(apiVersion: number, peerLibrary: IdlPeerLibrary): {api: string, serializers: string} {
+export function printSerializers(apiVersion: number, peerLibrary: PeerLibrary): {api: string, serializers: string} {
     const apiHeader = new IndentedPrinter()
     const modifierList = new IndentedPrinter()
     const accessorList = new IndentedPrinter()
