@@ -725,7 +725,7 @@
 |`value`| Function | Erokhin Ilya | devdone | |
 |`color`| Function | Erokhin Ilya | devdone | |
 |`style`| Function | Erokhin Ilya | blocked | linearStyle.strokeRadius https://gitee.com/nikolay-igotti/idlize/issues/IB4G8D |
-|`privacySensitive`| Function | Erokhin Ilya | testskipped | |
+|`privacySensitive`| Function | Erokhin Ilya | devdone | |
 |`contentModifier`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |*QRCode*| *Component* | Evstigneev Roman |in progress|  |
 |`setQRCodeOptions`| Function |Evstigneev Roman | done |  |
