@@ -15,7 +15,7 @@
 
 import * as fs from 'fs'
 import * as path from 'path'
-import { createContainerType, createReferenceType, forceAsNamedNode, hasExtAttribute, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLMethod, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLU8Type, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isInterface, isMethod, isReferenceType, isType, isUnionType, maybeOptional } from '../idl'
+import { createContainerType, createParameter, createReferenceType, forceAsNamedNode, hasExtAttribute, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLMethod, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLU8Type, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isInterface, isMethod, isReferenceType, isType, isUnionType, maybeOptional } from '../idl'
 import { IndentedPrinter } from "../IndentedPrinter"
 import { PeerLibrary } from './PeerLibrary'
 import { Language } from '../Language'
@@ -26,7 +26,7 @@ import { makeDeserializeAndCall, makeSerializerForOhos, readLangTemplate } from 
 import { qualifiedName } from './idl/common'
 import { isMaterialized } from './idl/IdlPeerGeneratorVisitor'
 import { StructPrinter } from './printers/StructPrinter'
-import { CppLanguageWriter, createLanguageWriter, ExpressionStatement, FieldModifier, LanguageExpression, LanguageWriter, Method, MethodSignature, NamedMethodSignature } from './LanguageWriters'
+import { CppLanguageWriter, createLanguageWriter, ExpressionStatement, FieldModifier, LanguageExpression, LanguageWriter, Method, MethodSignature } from './LanguageWriters'
 import { printBridgeCcForOHOS } from './printers/BridgeCcPrinter'
 import { printCallbacksKinds, printManagedCaller } from './printers/CallbacksPrinter'
 import { writeDeserializer, writeSerializer } from './printers/SerializerPrinter'
@@ -85,7 +85,7 @@ class OHOSVisitor {
     }
 
     makeSignature(returnType: IDLType, parameters: IDLParameter[]): MethodSignature {
-        return new MethodSignature(returnType, parameters.map(it => it.type!))
+        return MethodSignature.create.fromParameters(returnType, parameters)
     }
 
 
@@ -274,7 +274,7 @@ class OHOSVisitor {
                 int.methods.forEach(method => {
                     writer.writeMethodDeclaration(
                         method.name,
-                        writer.makeNamedSignature(method.returnType, method.parameters)
+                        MethodSignature.create.fromParameters(method.returnType, method.parameters)
                     )
                 })
             })
@@ -301,9 +301,9 @@ class OHOSVisitor {
                 })
             })
             writer.writeNativeMethodDeclaration("_GetManagerCallbackCaller",
-                NamedMethodSignature.make(
+                MethodSignature.create.fromParameters(
                     IDLPointerType,
-                    [{ name: "kind", type: createReferenceType("CallbackKind") }]
+                    [createParameter('kind', createReferenceType("CallbackKind"))]
                 )
             )
         })
@@ -330,7 +330,7 @@ class OHOSVisitor {
         this.interfaces.forEach(int => {
             this.peerWriter.writeInterface(`${int.name}Interface`, writer => {
                 int.methods.forEach(method => {
-                    const signature = writer.makeNamedSignature(method.returnType, method.parameters)
+                    const signature = MethodSignature.create.fromParameters(method.returnType, method.parameters)
                     writer.writeMethodDeclaration(method.name, signature)
                 })
             })
@@ -346,7 +346,7 @@ class OHOSVisitor {
                     })
                 }
                 ctors.forEach(ctor => {
-                    const signature = writer.makeNamedSignature(ctor.returnType ?? IDLVoidType, ctor.parameters)
+                    const signature = MethodSignature.create.fromParameters(ctor.returnType ?? IDLVoidType, ctor.parameters)
                     // TODO remove duplicated code from writePeerMethod (PeersPrinter.ts)
                     const argConvertors = ctor.parameters.map(param => generateArgConvertor(this.library, param))
                     let scopes = argConvertors.filter(it => it.isScoped)
@@ -399,14 +399,14 @@ class OHOSVisitor {
                 })
 
                 // write getPeer() method
-                const getPeerSig = new MethodSignature(maybeOptional(createReferenceType("Finalizable"), true),[])
+                const getPeerSig = MethodSignature.create.fromParameters(maybeOptional(createReferenceType("Finalizable"), true),[])
                 writer.writeMethodImplementation(new Method("getPeer", getPeerSig), writer => {
                     // TODO add better (platform-agnostic) way to return Finalizable
                     writer.writeStatement(writer.makeReturn(writer.makeString("{ ptr: this.peer }")))
                 })
 
                 int.methods.forEach(method => {
-                    const signature = writer.makeNamedSignature(method.returnType, method.parameters)
+                    const signature = MethodSignature.create.fromParameters(method.returnType, method.parameters)
                     writer.writeMethodImplementation(new Method(method.name, signature), writer => {
                         // TODO remove duplicated code from writePeerMethod (PeersPrinter.ts)
                         const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param))
@@ -634,21 +634,21 @@ function generateCParameters(method: IDLMethod | IDLConstructor, argConvertors: 
 function makePeerCallSignature(library: PeerLibrary, parameters: IDLParameter[], returnType: IDLType, thisArg?: string) {
     // TODO remove duplicated code from NativeModuleVisitor::printPeerMethod (NativeModulePrinter.ts)
     const argConvertors = parameters.map(param => generateArgConvertor(library, param))
-    const args: ({name: string, type: IDLType})[] = thisArg ? [{ name: thisArg, type: IDLPointerType }] : []
+    const args: IDLParameter[] = thisArg ? [createParameter(thisArg, IDLPointerType )] : []
     let serializerArgCreated = false
     for (let i = 0; i < argConvertors.length; ++i) {
         let it = argConvertors[i]
         if (it.useArray) {
             if (!serializerArgCreated) {
                 args.push(
-                    { name: 'thisArray', type: createContainerType(/* 'buffer' */ 'sequence', [IDLU8Type]) },
-                    { name: 'thisLength', type: IDLI32Type },
+                    createParameter('thisArray', createContainerType(/* 'buffer' */ 'sequence', [IDLU8Type])),
+                    createParameter('thisLength', IDLI32Type)
                 )
                 serializerArgCreated = true
             }
         } else {
-            args.push({ name: `${it.param}`, type: parameters[i].type! })
+            args.push(createParameter(it.param, parameters[i].type!))
         }
     }
-    return NamedMethodSignature.make(returnType, args)
+    return MethodSignature.create.fromParameters(returnType, args)
 }

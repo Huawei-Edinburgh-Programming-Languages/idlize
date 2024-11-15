@@ -20,13 +20,13 @@ import { Language } from "../../Language"
 import { camelCaseToUpperSnakeCase } from "../../util"
 import { RuntimeType } from "../ArgConvertors"
 import { PrimitiveType } from "../ArkPrimitiveType"
-import { createLanguageWriter, LanguageExpression, LanguageWriter, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters"
+import { createLanguageWriter, LanguageExpression, LanguageWriter, Method, MethodModifier } from "../LanguageWriters"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig"
 import { isImport, isStringEnum } from "../idl/common"
 import { generateCallbackAPIArguments } from "../ArgConvertors"
 import { isBuilderClass, isMaterialized } from "../idl/IdlPeerGeneratorVisitor"
 import { cleanPrefix, PeerLibrary } from "../PeerLibrary"
-import { MethodArgPrintHint } from "../LanguageWriters/LanguageWriter"
+import { MethodArgPrintHint, MethodSignature } from "../LanguageWriters/LanguageWriter"
 
 export class StructPrinter {
     constructor(private library: PeerLibrary) {}
@@ -203,7 +203,11 @@ export class StructPrinter {
             writer.print("template <>")
             writer.writeMethodImplementation(
                 new Method("runtimeType",
-                    new NamedMethodSignature(resultType, [idl.maybeOptional(targetType, isOptional)], ["value"], undefined, [undefined, MethodArgPrintHint.AsConstReference]),
+                    MethodSignature.create.fromDecorated(
+                        { type: resultType }, [
+                            { parameter: idl.createParameter('value', idl.maybeOptional(targetType, isOptional)), hint: MethodArgPrintHint.AsConstReference }
+                        ]
+                    ),
                     [MethodModifier.INLINE]),
                 op)
         }

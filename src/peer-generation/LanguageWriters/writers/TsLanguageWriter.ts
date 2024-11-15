@@ -30,7 +30,6 @@ import {
     Method,
     MethodModifier,
     MethodSignature,
-    NamedMethodSignature,
     ObjectArgs,
     ReturnStatement,
     StringExpression
@@ -59,12 +58,12 @@ export class TSLambdaExpression extends LambdaExpression {
         return false
     }
     asString(): string {
-        const params = this.signature.args.map((it, i) => {
-            const maybeOptional = idl.isOptionalType(it) ? "?" : ""
-            return `${this.signature.argName(i)}${maybeOptional}: ${this.convertor.convertType(it)}`
+        const params = this.signature.parameters.map(it => {
+            const maybeOptional = it.parameter.isOptional ? "?" : ""
+            return `${it.parameter.name}${maybeOptional}: ${this.convertor.convertType(it.parameter.type!)}`
         })
 
-        return `(${params.join(", ")}): ${this.convertor.convertType(this.signature.returnType)} => { ${this.bodyAsString()} }`
+        return `(${params.join(", ")}): ${this.convertor.convertType(this.signature.signature.returnType!)} => { ${this.bodyAsString()} }`
     }
 }
 
@@ -222,7 +221,7 @@ export class TSLanguageWriter extends LanguageWriter {
         this.printer.print('}')
     }
     private generateFunctionDeclaration(name: string, signature: MethodSignature): string {
-        const args = signature.args.map((it, index) => `${signature.argName(index)}: ${this.stringifyType(it)}`)
+        const args = signature.parameters.map(it => `${it.parameter.name}: ${this.stringifyType(it.parameter.type!)}`)
         return `export function ${name}(${args.join(", ")})`
     }
     writeEnum(name: string, members: { name: string, stringId: string | undefined, numberId: number }[], op: (writer: LanguageWriter) => void): void {
@@ -240,7 +239,7 @@ export class TSLanguageWriter extends LanguageWriter {
         this.writeDeclaration(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') : ''} constructor`, signature, false, true)
         this.pushIndent()
         if (superCall) {
-            this.print(`super(${superCall.signature.args.map((_, i) => superCall?.signature.argName(i)).join(", ")})`)
+            this.print(`super(${superCall.signature.parameters.map(it => it.parameter.name).join(", ")})`)
         }
         op(this)
         this.popIndent()
@@ -271,7 +270,7 @@ export class TSLanguageWriter extends LanguageWriter {
         const typeParams = generics?.length ? `<${generics.join(", ")}>` : ""
         // FIXME:
         const isSetter = modifiers?.includes(MethodModifier.SETTER)
-        this.printer.print(`${prefix}${name}${typeParams}(${signature.args.map((it, index) => `${signature.argName(index)}${idl.isOptionalType(it) && !isSetter ? "?" : ""}: ${this.stringifyType(it)}${signature.argDefault(index) ? ' = ' + signature.argDefault(index) : ""}`).join(", ")})${needReturn ? ": " + this.stringifyType(signature.returnType) : ""} ${needBracket ? "{" : ""}`)
+        this.printer.print(`${prefix}${name}${typeParams}(${signature.parameters.map(it => `${it.parameter.name}${it.parameter.isOptional && !isSetter ? "?" : ""}: ${this.stringifyType(it.parameter.type!)}${it.default ? ' = ' + it.default : ""}`).join(", ")})${needReturn ? ": " + this.stringifyType(signature.returnType) : ""} ${needBracket ? "{" : ""}`)
     }
     makeNull(): LanguageExpression {
         return new StringExpression("undefined")

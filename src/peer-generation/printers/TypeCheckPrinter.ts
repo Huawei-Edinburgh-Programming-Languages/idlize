@@ -7,9 +7,9 @@ import {
     LanguageWriter,
     Method,
     MethodModifier,
-    NamedMethodSignature
+    MethodSignature
 } from "../LanguageWriters";
-import { throwException } from "../../util";
+import { throwException, zipWith } from "../../util";
 import { PeerLibrary } from "../PeerLibrary";
 import {
     convertDeclToFeature, createDeclDependenciesCollector,
@@ -191,9 +191,10 @@ class ARKTSTypeCheckerPrinter extends TypeCheckerPrinter {
         const argsNames = Array.from({length: fieldsCount}, (_, index) => `arg${index}`)
         this.writer.writeMethodImplementation(new Method(
             checkerName,
-            new NamedMethodSignature(IDLBooleanType, 
-                [toIDLType('object|string|number|undefined|null'), ...argsNames.map(_ => IDLBooleanType)], 
-                ['value', ...argsNames]),
+            MethodSignature.create.fromParameters(
+                IDLBooleanType,
+                zipWith(idl.createParameter, ['value', ...argsNames], [toIDLType('object|string|number|undefined|null'), ...argsNames.map(_ => IDLBooleanType)]) 
+            ),
             [MethodModifier.STATIC],
         ), writer => {
             //TODO: hack for now
@@ -226,9 +227,9 @@ class TSTypeCheckerPrinter extends TypeCheckerPrinter {
         const argsNames = descriptor.getFields().map(it => `duplicated_${it.name}`)
         this.writer.writeMethodImplementation(new Method(
             generateTypeCheckerName(name),
-            new NamedMethodSignature(IDLBooleanType, 
-                [toIDLType('object|string|number|undefined|null'), ...argsNames.map(_ => IDLBooleanType)], 
-                ['value', ...argsNames]),
+            MethodSignature.create.fromParameters(IDLBooleanType,
+                zipWith(idl.createParameter, ['value', ...argsNames], [toIDLType('object|string|number|undefined|null'), ...argsNames.map(_ => IDLBooleanType)])
+            ),
             [MethodModifier.STATIC],
         ), writer => {
             const orderedFields = Array.from(descriptor.getFields()).sort((a, b) => {
@@ -253,7 +254,9 @@ class TSTypeCheckerPrinter extends TypeCheckerPrinter {
         const checkerName = generateTypeCheckerName(typeName)
         this.writer.writeMethodImplementation(new Method(
             checkerName,
-            new NamedMethodSignature(IDLBooleanType, [toIDLType('object|string|number|undefined|null')], ['value']),
+            MethodSignature.create.fromParameters(IDLBooleanType, [
+                idl.createParameter('value', toIDLType('object|string|number|undefined|null'))
+            ]),
             [MethodModifier.STATIC],
         ), writer => {
             writer.writeStatement(writer.makeReturn(writer.makeString(`Array.isArray(value)`)))

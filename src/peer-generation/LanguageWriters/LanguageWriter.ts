@@ -331,18 +331,70 @@ export class MethodArgPrintHint {
 }
 
 type MethodArgPrintHintOrNone = MethodArgPrintHint | undefined
-
+interface MethodSignatureOptions {
+    defaults?: stringOrNone[]
+    printHints?: MethodArgPrintHintOrNone[]
+}
+interface DecoratedReturnType {
+    type: idl.IDLType
+    hint?: MethodArgPrintHint
+}
+interface DecoratedParameter {
+    parameter: idl.IDLParameter
+    default?: string
+    hint?: MethodArgPrintHint
+}
 export class MethodSignature {
-    constructor(
-        public returnType: idl.IDLType,
-        public args: idl.IDLType[],
+    private constructor(
+        public signature: idl.IDLSignature,
         public defaults: stringOrNone[]|undefined = undefined,
         public printHints?: MethodArgPrintHintOrNone[]
     ) {}
 
-    argName(index: number): string {
-        return `arg${index}`
+    ////////////////////////////////////////////////////////
+
+    static wrap(signature: idl.IDLSignature, options:MethodSignatureOptions = {}): MethodSignature {
+        return new MethodSignature(signature, options.defaults, options.printHints)
     }
+
+    static create = {
+        fromParameters(returnType: idl.IDLType, parameters: idl.IDLParameter[], options:MethodSignatureOptions = {}): MethodSignature {
+            return new MethodSignature(idl.createSignature(returnType, parameters), options.defaults, options.printHints)
+        },
+        fromTypes(returnType: idl.IDLType, parameters: idl.IDLType[], options:MethodSignatureOptions = {}): MethodSignature {
+            return new MethodSignature(
+                idl.createSignature(
+                    returnType, 
+                    parameters.map((it, i) => idl.createParameter(`arg${i}`, it))
+                ),
+                options.defaults,
+                options.printHints
+            )
+        },
+        fromDecorated(decoReturnType: DecoratedReturnType, decoParameters:DecoratedParameter[]): MethodSignature {
+            const returnType = decoReturnType.type
+            const parameters: idl.IDLParameter[] = []
+            const paramDefaults: stringOrNone[] = []
+            const paramHints: MethodArgPrintHintOrNone[] = []
+            for (const param of decoParameters) {
+                parameters.push(param.parameter)
+                paramDefaults.push(param.default)
+                paramHints.push(param.hint)
+            }
+
+            return new MethodSignature(
+                idl.createSignature(
+                    returnType,
+                    parameters
+                ),
+                paramDefaults,
+                [decoReturnType.hint].concat(paramHints)
+            )
+        }
+    }
+
+    ////////////////////////////////////////////////////////
+
     argDefault(index: number): string|undefined {
         return this.defaults?.[index]
     }
@@ -353,28 +405,16 @@ export class MethodSignature {
         return this.printHints?.[index + 1]
     }
 
-    toString(): string {
-        return `${this.args.map(it => idl.forceAsNamedNode(it).name)} => ${this.returnType}`
-    }
-}
-
-export class NamedMethodSignature extends MethodSignature {
-    constructor(
-        returnType: idl.IDLType,
-        args: idl.IDLType[] = [],
-        public argsNames: string[] = [],
-        defaults: stringOrNone[]|undefined = undefined,
-        printHints?: MethodArgPrintHintOrNone[]
-    ) {
-        super(returnType, args, defaults, printHints)
+    get parameters(): { parameter: idl.IDLParameter, default?: string, hint?:MethodArgPrintHint }[] {
+        return this.signature.parameters.map((it, i) => ({
+            parameter: it,
+            default: this.defaults?.[i],
+            hint: this.printHints?.[i + 1]
+        }))
     }
 
-    static make(returnType: idl.IDLType, args: {name: string, type: idl.IDLType}[]): NamedMethodSignature {
-        return new NamedMethodSignature(returnType, args.map(it => it.type), args.map(it => it.name))
-    }
-
-    argName(index: number): string {
-        return this.argsNames[index]
+    get returnType(): idl.IDLType {
+        return this.signature.returnType ?? idl.IDLVoidType
     }
 }
 
@@ -603,23 +643,7 @@ export abstract class LanguageWriter {
     getOutput(): string[] {
         return this.printer.getOutput()
     }
-    makeSignature(returnType: idl.IDLType, parameters: idl.IDLParameter[]): MethodSignature {
-        return new MethodSignature(returnType,
-            parameters.map(it => it.type!))
-    }
-    makeNamedSignature(returnType: idl.IDLType, parameters: idl.IDLParameter[]): NamedMethodSignature {
-        return NamedMethodSignature.make(
-            returnType,
-            parameters.map(it => ({
-                name: it.name,
-                type:  it.isOptional ? idl.createOptionalType(it.type!) : it.type!
-            }))
-        )
-    }
-    makeNativeMethodNamedSignature(returnType: idl.IDLType, parameters: idl.IDLParameter[]): NamedMethodSignature {
-        return this.makeNamedSignature(returnType, parameters)
-    }
-    makeSerializerConstructorSignature(): NamedMethodSignature | undefined {
+    makeSerializerConstructorSignature(): MethodSignature | undefined {
         return undefined
     }
     mapFieldModifier(modifier: FieldModifier): string {

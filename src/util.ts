@@ -577,3 +577,11 @@ export function groupBy<K, V>(values: V[], selector: (value: V) => K): Map<K, V[
 export function removeExt(filename: string) {
     return filename.replaceAll(path.extname(filename), '')
 }
+
+export function zipWith<A, B, R>(f:(a:A, b:B) => R, xs:A[], ys:B[]): R[] {
+    const result: R[] = []
+    for (let i = 0; i < xs.length && i < ys.length; ++i) {
+        result.push(f(xs[i], ys[i]))
+    }
+    return result
+}

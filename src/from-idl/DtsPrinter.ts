@@ -44,7 +44,8 @@ import { IDLCallback, IDLConstructor, IDLEntity, IDLEntry, IDLEnum, IDLInterface
     forceAsNamedNode,
     isNamedNode,
     IDLNode,
-    IDLThisType,} from "../idl"
+    IDLThisType,
+    IDLFunction,} from "../idl"
 import * as webidl2 from "webidl2"
 import { resolveSyntheticType, toIDLNode } from "./deserialize"
 import { Language } from "../Language"
@@ -383,7 +384,7 @@ function getName(node: IDLEntry): stringOrNone {
 
 interface SignatureTag {index: number, name: string, value: string}
 
-function fetchSignatureTags(node: IDLSignature): SignatureTag[] {
+function fetchSignatureTags(node: IDLNode): SignatureTag[] {
     if (!node.extendedAttributes)
         return []
     return node.extendedAttributes
@@ -410,7 +411,7 @@ function fetchSignatureTags(node: IDLSignature): SignatureTag[] {
         .sort((a, b) => a.index - b.index)
 }
 
-function mixMethodParametersAndTags(node: IDLSignature) : (IDLParameter | SignatureTag)[] {
+function mixMethodParametersAndTags(node: IDLConstructor | IDLFunction) : (IDLParameter | SignatureTag)[] {
     let mix: (IDLParameter | SignatureTag)[] = node.parameters.slice(0)
     for (const tag of fetchSignatureTags(node))
         mix.splice(tag.index, 0, tag)

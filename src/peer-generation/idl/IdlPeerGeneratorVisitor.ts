@@ -32,7 +32,7 @@ import { PeerMethod } from "../PeerMethod"
 import { PeerFile } from "../PeerFile"
 import { PeerLibrary } from "../PeerLibrary"
 import { MaterializedClass, MaterializedField, MaterializedMethod, SuperElement } from "../Materialized"
-import { Field, FieldModifier, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters";
+import { Field, FieldModifier, Method, MethodModifier, MethodSignature } from "../LanguageWriters";
 import { convertDeclaration } from "../LanguageWriters/nameConvertor";
 import { DeclarationDependenciesCollector, TypeDependenciesCollector } from "./IdlDependenciesCollector";
 import {
@@ -707,7 +707,10 @@ class PeersGenerator {
         this.library.requestType(prop.type, this.library.shouldGenerateComponent(peer.componentName))
         const originalParentName = parentName ?? peer.originalClassName!
         const argConvertor = this.library.typeConvertor("value", prop.type, prop.isOptional)
-        const signature = new NamedMethodSignature(idl.IDLThisType, [maybeOptional(prop.type, prop.isOptional)], ["value"])
+        const signature = MethodSignature.create.fromParameters(
+            idl.IDLThisType, 
+            [idl.createParameter('value', prop.type, prop.isOptional)]
+        )
         return new PeerMethod(
             originalParentName,
             [argConvertor],
@@ -758,31 +761,6 @@ class PeersGenerator {
         seenAttributes.add(propName)
         // const type = this.fixTypeLiteral(propName, property.type, peer)
         peer.attributesFields.push(property)
-    }
-
-    /**
-     * Arkts needs a named type as its argument method, not an anonymous type
-     * at which producing 'SyntaxError: Invalid Type' error
-     */
-    private fixTypeLiteral(name: string, type: idl.IDLType, peer: PeerClass): string {
-        if (idl.isReferenceType(type)) {
-            const decl = this.library.resolveTypeReference(type)
-            if (decl && idl.isAnonymousInterface(decl)) {
-                const fixedTypeName = capitalize(name) + "ValuesType"
-                const attributeDeclarations = decl.properties
-                    .map(it => `  ${it.name}${it.isOptional ? "?" : ""}: ${this.library.mapType(it.type)}`)
-                    .join('\n')
-                peer.attributesTypes.push({
-                    typeName: fixedTypeName,
-                    content: `export interface ${fixedTypeName} {\n${attributeDeclarations}\n}`})
-                const peerMethod = peer.methods.find((method) => method.overloadedName == name)
-                if (peerMethod !== undefined) {
-                    peerMethod.method.signature.args = [idl.toIDLType(fixedTypeName)]
-                }
-                return fixedTypeName
-            }
-        }
-        return this.library.mapType(type)
     }
 
     private fillInterface(peer: PeerClass, iface: idl.IDLInterface) {
@@ -868,7 +846,7 @@ export class IdlPeerProcessor {
         if (this.library.language === Language.ARKTS) {
             // this is necessary because getBuilderMethods embeds supertype types
             importFeatures.push(
-                ...methods.flatMap(it => [...it.signature.args, it.signature.returnType])
+                ...methods.flatMap(it => [...it.signature.signature.parameters.map(it => it.type), it.signature.returnType])
                     .map(it => convertTypeToFeature(this.library, it))
                     .filter((it) : it is ImportFeature => it !== undefined)
             )
@@ -898,14 +876,13 @@ export class IdlPeerProcessor {
 
     private toBuilderMethod(method: idl.IDLConstructor | idl.IDLMethod | undefined, className?: string): Method {
         if (!method)
-            return new Method("constructor", new NamedMethodSignature(idl.IDLVoidType))
+            return new Method("constructor", MethodSignature.create.fromParameters(idl.IDLVoidType, []))
         const methodName = idl.isConstructor(method) ? "constructor" : method.name
         const isStatic = idl.isConstructor(method) || (idl.isMethod(method) && method.isStatic)
         // const generics = method.typeParameters?.map(it => it.getText())
-        const signature = new NamedMethodSignature(
+        const signature = MethodSignature.create.fromParameters(
             isStatic ? method.returnType! : idl.IDLThisType,
-            method.parameters.map(it => maybeOptional(it.type!, it.isOptional)),
-            method.parameters.map(it => it.name)
+            method.parameters
         )
         const modifiers = idl.isConstructor(method) || method.isStatic ? [MethodModifier.STATIC] : []
         return new Method(methodName, signature, modifiers/*, generics*/)
@@ -973,7 +950,7 @@ export class IdlPeerProcessor {
             macroSuffixPart: () => ""
         }
         const mFinalizer = new MaterializedMethod(name, [], finalizerReturnType, false,
-            new Method("getFinalizer", new NamedMethodSignature(idl.IDLPointerType, [], [], []), [MethodModifier.STATIC]))
+            new Method("getFinalizer", MethodSignature.create.fromParameters(idl.IDLPointerType, []), [MethodModifier.STATIC]))
         const mFields = decl.properties
             // TODO what to do with setter accessors? Do we need FieldModifier.WRITEONLY? For now, just skip them
             .filter(it => idl.getExtAttribute(it, idl.IDLExtendedAttributes.Accessor) !== idl.IDLAccessorAttribute.Setter)
@@ -989,7 +966,7 @@ export class IdlPeerProcessor {
             // TBD: use deserializer to get complex type from native
             const isSimpleType = !f.argConvertor.useArray // type needs to be deserialized from the native
             if (isSimpleType) {
-                const getSignature = new NamedMethodSignature(idlType, [], [])
+                const getSignature = MethodSignature.create.fromParameters(idlType, [])
                 const getAccessor = new MaterializedMethod(
                     name, [], f.retConvertor, false,
                     new Method(`get${capitalize(field.name)}`, getSignature, [MethodModifier.PRIVATE]))
@@ -997,7 +974,7 @@ export class IdlPeerProcessor {
             }
             const isReadOnly = field.modifiers.includes(FieldModifier.READONLY)
             if (!isReadOnly) {
-                const setSignature = new NamedMethodSignature(idl.IDLVoidType, [idlType], [field.name])
+                const setSignature = MethodSignature.create.fromParameters(idl.IDLVoidType, [idl.createParameter(field.name, idlType)])
                 const retConvertor = { isVoid: true, nativeType: () => idl.IDLVoidType.name, macroSuffixPart: () => "V" }
                 const setAccessor = new MaterializedMethod(
                     name, [f.argConvertor], retConvertor, false,
@@ -1033,7 +1010,7 @@ export class IdlPeerProcessor {
 
         if (method === undefined) {
             // interface or class without constructors
-            const ctor = new Method("ctor", new NamedMethodSignature(idl.IDLVoidType, [], []), [MethodModifier.STATIC])
+            const ctor = new Method("ctor", MethodSignature.create.fromParameters(idl.IDLVoidType, []), [MethodModifier.STATIC])
             return new MaterializedMethod(decl.name, [], retConvertor, false, ctor)
         }
 
@@ -1335,24 +1312,11 @@ export function isSourceDecl(node: idl.IDLEntry): boolean {
 
 function generateSignature(
     method: idl.IDLCallable | idl.IDLMethod | idl.IDLConstructor,
-): NamedMethodSignature {
-    return new NamedMethodSignature(
-        method.returnType!,
-        method.parameters.map(it => maybeOptional(it.type!, it.isOptional)),
-        method.parameters.map(it => it.name)
+): MethodSignature {
+    return MethodSignature.create.fromParameters(
+        method.returnType ?? idl.IDLVoidType,
+        method.parameters.map(it => idl.createParameter(it.name, maybeOptional(it.type, it.isOptional), it.isOptional, it.isVariadic)) 
     )
-}
-
-function getMethodIndex(clazz: idl.IDLInterface, method: idl.IDLSignature | undefined): number {
-    if (!method || !method.name) {
-        return 0
-    }
-    if (idl.isCallable(method))
-        return clazz.callables.findIndex(it => it === method)
-    else
-        return clazz.methods
-            .filter(it => it.name === method.name)
-            .findIndex(it => method === it)
 }
 
 export function isMaterialized(declaration: idl.IDLInterface): boolean {

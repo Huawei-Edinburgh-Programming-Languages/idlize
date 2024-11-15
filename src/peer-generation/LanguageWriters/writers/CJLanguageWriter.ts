@@ -57,7 +57,7 @@ class CJLambdaExpression extends LambdaExpression {
         return true
     }
     asString(): string {
-        const params = this.signature.args.map((it, i) => `${this.writer.stringifyType(it)} ${this.signature.argName(i)}`)
+        const params = this.signature.parameters.map(it => `${this.writer.stringifyType(it.parameter.type!)} ${it.parameter.name}`)
         return `(${params.join(", ")}) -> { ${this.bodyAsString()} }`
     }
 }
@@ -225,10 +225,10 @@ export class CJLanguageWriter extends LanguageWriter {
         this.writeDeclaration(name, signature, modifiers)
     }
     writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method, modifiers?: MethodModifier[]) {
-        this.printer.print(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') + ' ' : ''}${className}(${signature.args.map((it, index) => `${signature.argName(index)}: ${idl.isOptionalType(it) ? '?' : ''}${this.stringifyType(it)}`).join(", ")}) {`)
+        this.printer.print(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') + ' ' : ''}${className}(${signature.parameters.map(it => `${it.parameter.name}: ${it.parameter.isOptional ? '?' : ''}${this.stringifyType(it.parameter.type!)}`).join(", ")}) {`)
         this.pushIndent()
         if (superCall) {
-            this.print(`super(${superCall.signature.args.map((_, i) => superCall?.signature.argName(i)).join(", ")});`)
+            this.print(`super(${superCall.signature.parameters.map(it => it.parameter.name).join(", ")});`)
         }
         op(this)
         this.popIndent()
@@ -273,14 +273,14 @@ export class CJLanguageWriter extends LanguageWriter {
             ?.filter(it => this.supportedModifiers.includes(it))
             .map(it => this.mapMethodModifier(it)).join(" ")
         prefix = prefix ? prefix + " " : ""
-        this.print(`${prefix}func ${name}(${signature.args.map((it, index) => `${signature.argName(index)}: ${idl.isOptionalType(it) ? '?' : ''}${this.stringifyType(it)}`).join(", ")}): ${this.stringifyType(signature.returnType)}${postfix ?? ""}`)
+        this.print(`${prefix}func ${name}(${signature.parameters.map(it => `${it.parameter.name}: ${it.parameter.isOptional ? '?' : ''}${this.stringifyType(it.parameter.type!)}`).join(", ")}): ${this.stringifyType(signature.returnType)}${postfix ?? ""}`)
     }
     nativeReceiver(): string { return 'NativeModule' }
     writeNativeFunctionCall(printer: LanguageWriter, name: string, signature: MethodSignature) {
-        printer.print(`return unsafe { ${name}(${signature.args.map((it, index) => `${signature.argName(index)}`).join(", ")}) }`)
+        printer.print(`return unsafe { ${name}(${signature.parameters.map(it => `${it.parameter.name}`).join(", ")}) }`)
     }
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
-        this.print(`func ${name}(${signature.args.map((it, index) => `${this.escapeKeyword(signature.argName(index))}: ${this.typeForeignConvertor.convert(it)}`).join(", ")}): ${this.typeForeignConvertor.convert(signature.returnType)}`)
+        this.print(`func ${name}(${signature.parameters.map(it => `${this.escapeKeyword(it.parameter.name)}: ${this.typeForeignConvertor.convert(it.parameter.type!)}`).join(", ")}): ${this.typeForeignConvertor.convert(signature.returnType)}`)
     }
     override makeEnumCast(enumName: string, _unsafe: boolean, _convertor: EnumConvertor | undefined): string {
         // TODO: remove after switching to IDL

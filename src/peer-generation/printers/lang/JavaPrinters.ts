@@ -13,11 +13,11 @@
  * limitations under the License.
  */
 
-import { IDLI32Type, IDLType, IDLVoidType, toIDLType } from "../../../idl"
+import { createParameter, IDLI32Type, IDLParameter, IDLType, IDLVoidType, toIDLType } from "../../../idl"
 import { PeerLibrary } from "../../PeerLibrary"
 import { PeerMethod } from "../../PeerMethod"
 import { ImportFeature } from "../../ImportsCollector"
-import { LanguageWriter, createLanguageWriter, NamedMethodSignature, Method, MethodModifier, MethodSignature, FieldModifier } from "../../LanguageWriters"
+import { LanguageWriter, createLanguageWriter, Method, MethodModifier, MethodSignature, FieldModifier } from "../../LanguageWriters"
 import { getReferenceResolver } from "../../ReferenceResolver"
 import { generateArkComponentName } from "../ComponentsPrinter"
 import { componentToPeerClass } from "../PeersPrinter"
@@ -77,8 +77,10 @@ export function makeJavaArkComponents(library: PeerLibrary, printerContext: Prin
                 const arkPeer = componentToPeerClass(peer.componentName)
                 const arkPeerType = toIDLType(`${arkPeer}`)
 
-                const paramTypes = [toIDLType(`Consumer<${arkComponent}>`), toIDLType('Runnable')]
-                const paramNames = ['style', 'content']
+                const parameters: IDLParameter[] = [
+                    createParameter('style', toIDLType(`Consumer<${arkComponent}>`)),
+                    createParameter('content', toIDLType('Runnable'))
+                ]
                 const callableMethods = peer.methods.filter(it => it.isCallSignature)
                 let callableMethod: PeerMethod | undefined
                 if (callableMethods.length > 1) {
@@ -86,37 +88,36 @@ export function makeJavaArkComponents(library: PeerLibrary, printerContext: Prin
                 }
                 else if (callableMethods.length == 1) {
                     callableMethod = callableMethods[0]
-                    imports.push(...collectJavaImports(callableMethod.method.signature.args))
+                    imports.push(...collectJavaImports(callableMethod.method.signature.signature.parameters.map(it => it.type)))
                     const callableSignature = callableMethod.method.signature
-                    callableSignature.args.forEach((it, index) => {
-                        paramTypes.push(it)
-                        paramNames.push(callableSignature.argName(index))
+                    callableSignature.signature.parameters.forEach(it => {
+                        parameters.push(it)
                     })
                 }
 
-                const signature = new NamedMethodSignature(IDLVoidType, paramTypes, paramNames)
+                const signature = MethodSignature.create.fromParameters(IDLVoidType, parameters)
                 const method = new Method(`Ark${peer.componentName}`, signature, [MethodModifier.PUBLIC, MethodModifier.STATIC])
                 writer.writeMethodImplementation(method, writer => {
                     writer.writeStatement(
                         writer.makeAssign(receiver, undefined, writer.makeFunctionCall('remember', [
-                            writer.makeLambda(new MethodSignature(toIDLType(arkComponent), []), [
+                            writer.makeLambda(MethodSignature.create.fromParameters(toIDLType(arkComponent), []), [
                                 writer.makeReturn(writer.makeString(`new ${arkComponent}()`))
                             ])
                         ]), true))
                     writer.writeStatement(
                         writer.makeAssign(create, toIDLType(`Supplier<${arkPeer}>`),
-                            writer.makeLambda(new MethodSignature(arkPeerType, []), [
+                            writer.makeLambda(MethodSignature.create.fromParameters(arkPeerType, []), [
                                 writer.makeReturn(writer.makeString(`${arkPeer}.create(${ARK_UI_NODE_TYPE}.${peer.componentName}, ${receiver}, 0)`))
                             ]), true))
                     writer.writeStatement(
                         writer.makeAssign(update, toIDLType(`Consumer<${arkPeer}>`),
-                            writer.makeLambda(new NamedMethodSignature(IDLVoidType, [arkPeerType], ['peer']), (callableMethod ?
+                            writer.makeLambda(MethodSignature.create.fromParameters(IDLVoidType, [createParameter('peer', arkPeerType)]), (callableMethod ?
                                 [writer.makeStatement(writer.makeMethodCall(receiver, callableMethod.method.name,
-                                    signature.argsNames.slice(2).map(it => writer.makeString(it))))] : []).concat(
-                                        writer.makeCondition(writer.makeDefinedCheck(signature.argName(0)),
-                                            writer.makeStatement(writer.makeMethodCall(signature.argName(0), 'accept', [writer.makeString(receiver)]))),
-                                        writer.makeCondition(writer.makeDefinedCheck(signature.argName(1)),
-                                            writer.makeStatement(writer.makeMethodCall(signature.argName(1), 'run', []))),
+                                    signature.parameters.slice(2).map(it => writer.makeString(it.parameter.name))))] : []).concat(
+                                        writer.makeCondition(writer.makeDefinedCheck(signature.signature.parameters[0].name),
+                                            writer.makeStatement(writer.makeMethodCall(signature.signature.parameters[0].name, 'accept', [writer.makeString(receiver)]))),
+                                        writer.makeCondition(writer.makeDefinedCheck(signature.signature.parameters[1].name),
+                                            writer.makeStatement(writer.makeMethodCall(signature.signature.parameters[1].name, 'run', []))),
                                         writer.makeStatement(writer.makeMethodCall(receiver, 'applyAttributesFinish', []))
                                     )), true)
                     )
@@ -181,14 +182,14 @@ export class JavaEnum extends IdlSyntheticTypeBase {
             const intType = IDLI32Type
             writer.writeFieldDeclaration(value, intType, [FieldModifier.PUBLIC, FieldModifier.FINAL], false)
     
-            const signature = new MethodSignature(IDLVoidType, [intType])
+            const signature = MethodSignature.create.fromTypes(IDLVoidType, [intType])
             writer.writeConstructorImplementation(this.name, signature, () => {
                 writer.writeStatement(
-                    writer.makeAssign(value, undefined, writer.makeString(signature.argName(0)), false)
+                    writer.makeAssign(value, undefined, writer.makeString(signature.signature.parameters[0].name), false)
                 )
             })
     
-            const getIntValue = new Method('getIntValue', new MethodSignature(intType, []), [MethodModifier.PUBLIC])
+            const getIntValue = new Method('getIntValue', MethodSignature.create.fromParameters(intType, []), [MethodModifier.PUBLIC])
             writer.writeMethodImplementation(getIntValue, () => {
                 writer.writeStatement(
                     writer.makeReturn(writer.makeString(value))

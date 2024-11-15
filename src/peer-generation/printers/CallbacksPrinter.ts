@@ -15,15 +15,16 @@
 
 import * as idl from "../../idl"
 import { PeerLibrary } from "../PeerLibrary";
-import { CppLanguageWriter, LanguageWriter, NamedMethodSignature } from "../LanguageWriters";
+import { CppLanguageWriter, LanguageWriter } from "../LanguageWriters";
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { ImportsCollector } from "../ImportsCollector";
 import { Language } from "../../Language";
 import { CallbackKind, generateCallbackAPIArguments, generateCallbackKindAccess, generateCallbackKindName } from "../ArgConvertors";
-import { MethodArgPrintHint } from "../LanguageWriters/LanguageWriter";
+import { MethodArgPrintHint, MethodSignature } from "../LanguageWriters/LanguageWriter";
 import { collectMaterializedImports } from "../Materialized";
 import { CppSourceFile, SourceFile, TsSourceFile } from "./SourceFile";
 import { PrimitiveType } from "../ArkPrimitiveType";
+import { zipWith } from "../../util";
 
 function collectEntryCallbacks(library: PeerLibrary, entry: idl.IDLEntry): idl.IDLCallback[] {
     let res: idl.IDLCallback[] = []
@@ -141,11 +142,20 @@ class DeserializeCallbacksVisitor {
     }
 
     private writeCallbackDeserializeAndCall(callback: idl.IDLCallback): void {
-        let signature: NamedMethodSignature
+        let signature: MethodSignature
         if (this.writer.language === Language.CPP) {
-            signature = new NamedMethodSignature(idl.IDLVoidType, [idl.IDLUint8ArrayType, idl.IDLI32Type], [`thisArray`, `thisLength`])
+            signature = MethodSignature.create.fromParameters(
+                idl.IDLVoidType, [
+                    idl.createParameter('thisArray', idl.IDLUint8ArrayType), 
+                    idl.createParameter('thisLength', idl.IDLI32Type)
+                ]
+            )
         } else {
-            signature = new NamedMethodSignature(idl.IDLVoidType, [idl.createReferenceType(`Deserializer`)], [`thisDeserializer`])
+            signature = MethodSignature.create.fromParameters(
+                idl.IDLVoidType, [
+                    idl.createParameter('thisDeserializer', idl.createReferenceType(`Deserializer`))
+                ]
+            )
         }
         this.writer.writeFunctionImplementation(`deserializeAndCall${callback.name}`, signature, writer => {
             const resourceIdName = `_resourceId`
@@ -205,16 +215,20 @@ class DeserializeCallbacksVisitor {
     }
 
     private writeInteropImplementation(callbacks: idl.IDLCallback[]): void {
-        let signature: NamedMethodSignature
+        let signature: MethodSignature
         if (this.writer.language === Language.CPP) {
-            signature = new NamedMethodSignature(idl.IDLVoidType,
-                [idl.IDLI32Type, idl.IDLUint8ArrayType, idl.IDLI32Type],
-                [`kind`, `thisArray`, `thisLength`],
+            signature = MethodSignature.create.fromParameters(
+                idl.IDLVoidType, [
+                    idl.createParameter('kind', idl.IDLI32Type), 
+                    idl.createParameter('thisArray', idl.IDLUint8ArrayType), 
+                    idl.createParameter('thisLength', idl.IDLI32Type)
+                ]
             )
         } else {
-            signature = new NamedMethodSignature(idl.IDLVoidType,
-                [idl.createReferenceType(`Deserializer`)],
-                [`thisDeserializer`],
+            signature = MethodSignature.create.fromParameters(
+                idl.IDLVoidType, [
+                    idl.createParameter('thisDeserializer', idl.createReferenceType(`Deserializer`))
+                ]
             )
         }
         this.writer.writeFunctionImplementation(`deserializeAndCallCallback`, signature, writer => {
@@ -267,9 +281,9 @@ class ManagedCallCallbackVisitor {
             args.push(this.library.createContinuationCallbackReference(callback.returnType))
             argsNames.push(`continuation`)
         }
-        const signature = new NamedMethodSignature(idl.IDLVoidType, 
-            [idl.IDLI32Type, ...args],
-            ["resourceId", ...argsNames],
+        const signature = MethodSignature.create.fromParameters(
+            idl.IDLVoidType, 
+            zipWith(idl.createParameter, ["resourceId", ...argsNames], [idl.IDLI32Type, ...args])
         )
         this.writer.writeFunctionImplementation(`callManaged${callback.name}`, signature, writer => {
             writer.writeStatement(writer.makeAssign(`__buffer`, idl.createReferenceType(`CallbackBuffer`), 
@@ -290,11 +304,13 @@ class ManagedCallCallbackVisitor {
     }
 
     private writeInteropImplementation(callbacks: idl.IDLCallback[]): void {
-        const signature = new NamedMethodSignature(idl.IDLPointerType,
-            [idl.createReferenceType(`CallbackKind`)],
-            [`kind`],
-            undefined,
-            [undefined, MethodArgPrintHint.AsValue]
+        const signature = MethodSignature.create.fromDecorated(
+            { type:  idl.IDLPointerType }, [
+                { 
+                    parameter: idl.createParameter('kind', idl.createReferenceType(`CallbackKind`)),
+                    hint: MethodArgPrintHint.AsValue
+                }
+            ]
         )
         this.writer.writeFunctionImplementation(`getManagedCallbackCaller`, signature, writer => {
             writer.print(`switch (kind) {`)

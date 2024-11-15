@@ -79,8 +79,8 @@ export function collectCallbacks(library: PeerLibrary): IdlCallbackInfo[] {
         for (const peer of file.peers.values()) {
             for (const method of peer.methods) {
                 let callbackFound = false
-                for (const target of method.method.signature.args) {
-                    const info = convertIdlToCallback(getReferenceResolver(library), peer, method, target)
+                for (const target of method.method.signature.parameters) {
+                    const info = convertIdlToCallback(getReferenceResolver(library), peer, method, target.parameter.type)
                     if (info && canProcessCallback(info)) {
                         if (callbackFound)
                             throw new Error("Only one callback per method is acceptable")
@@ -178,14 +178,14 @@ export function collapseIdlEventsOverloads(library: PeerLibrary, peer: PeerClass
 
     for (const overloads of groupOverloads(peer.methods)) {
         if (overloads.length <= 1) continue
-        const callbacks = overloads[0].method.signature.args.map(it => convertIdlToCallback(library, peer, overloads[0], it))
+        const callbacks = overloads[0].method.signature.parameters.map(it => convertIdlToCallback(library, peer, overloads[0], it.parameter.type))
         const callbackIndex = callbacks.findIndex(it => it)
         if (callbackIndex === -1) continue
 
         const sampleCallback = callbacks[callbackIndex]
         let canCollapseCallbacks = true
         for (const overload of overloads) {
-            const overloadCallback = convertIdlToCallback(library, peer, overload, overload.method.signature.args[callbackIndex])
+            const overloadCallback = convertIdlToCallback(library, peer, overload, overload.method.signature.signature.parameters[callbackIndex].type)
             if (!idlCallbacksEquals(sampleCallback, overloadCallback))
                 canCollapseCallbacks = false
         }

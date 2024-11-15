@@ -27,7 +27,6 @@ import {
     Method,
     MethodModifier,
     MethodSignature,
-    NamedMethodSignature,
     ObjectArgs
 } from "../LanguageWriter"
 import {
@@ -58,7 +57,7 @@ class JavaLambdaExpression extends LambdaExpression {
         return true
     }
     asString(): string {
-        const params = this.signature.args.map((it, i) => `${idl.forceAsNamedNode(it).name} ${this.signature.argName(i)}`)
+        const params = this.signature.parameters.map(it => `${idl.forceAsNamedNode(it.parameter.type!).name} ${it.parameter.name}`)
         return `(${params.join(", ")}) -> { ${this.bodyAsString()} }`
     }
 }
@@ -165,10 +164,10 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         this.writeMethodDeclaration(name, signature, [MethodModifier.STATIC, MethodModifier.NATIVE])
     }
     writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method, modifiers?: MethodModifier[]) {
-        this.printer.print(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') : ''} ${className}(${signature.args.map((it, index) => `${this.stringifyType(it)} ${signature.argName(index)}`).join(", ")}) {`)
+        this.printer.print(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') : ''} ${className}(${signature.parameters.map(it => `${this.stringifyType(it.parameter.type!)} ${it.parameter.name}`).join(", ")}) {`)
         this.pushIndent()
         if (superCall) {
-            this.print(`super(${superCall.signature.args.map((_, i) => superCall?.signature.argName(i)).join(", ")});`)
+            this.print(`super(${superCall.signature.parameters.map(it => it.parameter.name).join(", ")});`)
         }
         op(this)
         this.popIndent()
@@ -295,7 +294,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         return `${enumName}.getIntValue()`
     }
     override castToBoolean(value: string): string { return `${value} ? 1 : 0` }
-    override makeSerializerConstructorSignature(): NamedMethodSignature | undefined {
-        return new NamedMethodSignature(idl.IDLVoidType, [], [])
+    override makeSerializerConstructorSignature(): MethodSignature | undefined {
+        return MethodSignature.create.fromTypes(idl.IDLVoidType, [])
     }
 }

@@ -26,7 +26,6 @@ import {
     Method,
     MethodModifier,
     MethodSignature,
-    NamedMethodSignature
 } from "../LanguageWriters";
 import { tsCopyrightAndWarning } from "../FileGenerators";
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
@@ -109,8 +108,8 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
             )
 
             for (const method of peer.methods) {
-                for (const argType of method.method.signature.args)
-                    if (convertIdlToCallback(getReferenceResolver(this.library), peer, method, argType))
+                for (const argType of method.method.signature.parameters)
+                    if (convertIdlToCallback(getReferenceResolver(this.library), peer, method, argType.parameter.type))
                         imports.addFeature("UseEventsProperties", './use_properties')
             }
         })
@@ -128,8 +127,8 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
     private printComponent(peer: PeerClass) {
         const callableMethods = peer.methods.filter(it => it.isCallSignature).map(it => it.method)
         const callableMethod = callableMethods.length ? collapseSameNamedMethods(callableMethods) : undefined
-        const mappedCallableParams = callableMethod?.signature.args.map((it, index) => `${callableMethod.signature.argName(index)}${isOptionalType(it) ? "?" : ""}: ${this.printer.stringifyType(it)}`)
-        const mappedCallableParamsValues = callableMethod?.signature.args.map((_, index) => callableMethod.signature.argName(index))
+        const mappedCallableParams = callableMethod?.signature.parameters.map(it => `${it.parameter.name}${it.parameter.isOptional ? "?" : ""}: ${this.printer.stringifyType(it.parameter.type)}`)
+        const mappedCallableParamsValues = callableMethod?.signature.parameters.map(it => it.parameter.name)
         const componentClassName = generateArkComponentName(peer.componentName)
         const parentComponentClassName = peer.parentComponentName ? generateArkComponentName(peer.parentComponentName!) : `ComponentBase`
         const componentFunctionName = `Ark${peer.componentName}`
@@ -145,7 +144,7 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
             // todo stub until we can process AttributeModifier
             if (isCommonMethod(peer.originalClassName!) || peer.originalClassName == "ContainerSpanAttribute")
                 writer.print(`attributeModifier(modifier: AttributeModifier<object>): this { throw new Error("not implemented") }`)
-            const attributesSignature = new MethodSignature(IDLVoidType, [])
+            const attributesSignature = MethodSignature.create.fromParameters(IDLVoidType, [])
             writer.writeMethodImplementation(new Method('applyAttributesFinish', attributesSignature, [MethodModifier.PUBLIC]), (writer) => {
                 writer.print('// we calls this function outside of class, so need to make it public')
                 writer.writeMethodCall('super', 'applyAttributesFinish', [])
@@ -239,20 +238,20 @@ class JavaComponentFileVisitor implements ComponentFileVisitor {
 
         const result = createLanguageWriter(Language.JAVA, this.library)
         result.print(`package ${ARKOALA_PACKAGE};\n`)
-        const imports = collectJavaImports(peer.methods.flatMap(method => method.method.signature.args))
+        const imports = collectJavaImports(peer.methods.flatMap(method => method.method.signature.signature.parameters.map(it => it.type)))
         printJavaImports(result, imports)
 
         result.writeClass(componentClassName, (writer) => {
             peer.methods.forEach(peerMethod => {
-                const originalSignature = peerMethod.method.signature as NamedMethodSignature
-                const signature = new NamedMethodSignature(componentType, originalSignature.args, originalSignature.argsNames, originalSignature.defaults)
+                const originalSignature = peerMethod.method.signature
+                const signature = MethodSignature.create.fromParameters(componentType, originalSignature.signature.parameters, { defaults: originalSignature.defaults })
                 const method = new Method(peerMethod.method.name, signature, [MethodModifier.PUBLIC])
                 writer.writeMethodImplementation(method, writer => {
                     const thiz = writer.makeThis()
                     writer.writeStatement(writer.makeCondition(
                         writer.makeString(`checkPriority("${method.name}")`),
                         writer.makeBlock([
-                            writer.makeStatement(writer.makeMethodCall(`((${peerClassName})peer)`, `${peerMethod.overloadedName}Attribute`, signature.argsNames.map(it => writer.makeString(it)))),
+                            writer.makeStatement(writer.makeMethodCall(`((${peerClassName})peer)`, `${peerMethod.overloadedName}Attribute`, signature.parameters.map(it => writer.makeString(it.parameter.name)))),
                             writer.makeReturn(thiz),
                         ])))
                         writer.writeStatement(writer.makeReturn(thiz))
@@ -260,7 +259,7 @@ class JavaComponentFileVisitor implements ComponentFileVisitor {
                 )
             })
 
-            const attributesSignature = new MethodSignature(IDLVoidType, [])
+            const attributesSignature = MethodSignature.create.fromParameters(IDLVoidType, [])
             const applyAttributesFinish = 'applyAttributesFinish'
             writer.writeMethodImplementation(new Method(applyAttributesFinish, attributesSignature, [MethodModifier.PUBLIC]), (writer) => {
                 writer.writeMethodCall('super', applyAttributesFinish, [])

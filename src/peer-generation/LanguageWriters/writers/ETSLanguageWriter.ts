@@ -22,11 +22,10 @@ import {
     Method,
     MethodModifier,
     MethodSignature,
-    NamedMethodSignature,
     ObjectArgs
 } from "../LanguageWriter"
 import { TSLambdaExpression, TSLanguageWriter } from "./TsLanguageWriter"
-import { IDLEnum, IDLI32Type, IDLThisType, IDLType, IDLVoidType, toIDLType } from '../../../idl'
+import { createParameter, IDLEnum, IDLI32Type, IDLThisType, IDLType, IDLVoidType, toIDLType } from '../../../idl'
 import {AggregateConvertor, ArgConvertor, ArrayConvertor, BaseArgConvertor, CustomTypeConvertor, EnumConvertor, InterfaceConvertor, makeInterfaceTypeCheckerCall, RuntimeType} from "../../ArgConvertors"
 import { Language } from "../../../Language"
 import { ReferenceResolver } from "../../ReferenceResolver"
@@ -84,14 +83,14 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
                     writer.makeString(`new ${this.enumEntity.name}(${ctorArgs.join(",")})`))
             })
             const typeName = isTypeString ? "string" : "KInt"
-            let argTypes = [toIDLType(typeName)]
-            let argNames = ["value"]
+            const argParameters = [createParameter("value", toIDLType(typeName))]
             if (isTypeString) {
-                argTypes.push(toIDLType("KInt"))
-                argNames.push("ordinal")
+                argParameters.push(
+                    createParameter("ordinal", toIDLType("KInt"))
+                )
             }
             writer.writeConstructorImplementation(this.enumEntity.name,
-                new NamedMethodSignature(IDLVoidType, argTypes, argNames), (writer) => {
+                MethodSignature.create.fromParameters(IDLVoidType, argParameters), (writer) => {
                     writer.writeStatement(writer.makeAssign("this.value", undefined, writer.makeString("value"), false))
                     if (isTypeString) {
                         writer.writeStatement(writer.makeAssign("this.ordinal", undefined, writer.makeString("ordinal"), false))
@@ -101,7 +100,7 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
             if (isTypeString) {
                 writer.writeFieldDeclaration("ordinal", IDLI32Type, [FieldModifier.PUBLIC, FieldModifier.READONLY], false)
             }
-            writer.writeMethodImplementation(new Method("of", new MethodSignature(toIDLType(this.enumEntity.name), [argTypes[0]]), [MethodModifier.PUBLIC, MethodModifier.STATIC]),
+            writer.writeMethodImplementation(new Method("of", MethodSignature.create.fromTypes(toIDLType(this.enumEntity.name), [argParameters[0].type!]), [MethodModifier.PUBLIC, MethodModifier.STATIC]),
                 (writer)=> {
                     this.enumEntity.elements.forEach(member => {
                         const memberName = `${this.enumEntity.name}.${member.name}`
@@ -284,7 +283,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         }
         return super.instanceOf(convertor, value, duplicateMembers)
     }
-    override makeSerializerConstructorSignature(): NamedMethodSignature | undefined {
-        return new NamedMethodSignature(IDLVoidType, [], [])
+    override makeSerializerConstructorSignature(): MethodSignature | undefined {
+        return MethodSignature.create.fromTypes(IDLVoidType, [])
     }
 }

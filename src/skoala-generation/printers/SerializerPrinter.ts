@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { createLanguageWriter, LanguageWriter, Method, NamedMethodSignature } from "../../peer-generation/LanguageWriters"
+import { createLanguageWriter, LanguageWriter, Method, MethodSignature } from "../../peer-generation/LanguageWriters"
 import { Language } from "../../Language"
 import * as idl from '../../idl'
 import { IdlSkoalaLibrary } from "../idl/idlSkoalaLibrary"
@@ -37,7 +37,9 @@ class IdlSerializerPrinter {
         const methodName = target.name
         this.writer.writeMethodImplementation(
             new Method(`write${methodName}`,
-                new NamedMethodSignature(idl.IDLVoidType, [idl.createReferenceType(target.name)], ["value"])),
+                MethodSignature.create.fromParameters(idl.IDLVoidType, [
+                    idl.createParameter('value', idl.createReferenceType(target.name))
+                ])),
             writer => {
                 const properties = collectProperties(target, this.library)
                 if (properties.length > 0) {
@@ -72,16 +74,18 @@ class IdlSerializerPrinter {
 
         const className = "Serializer"
         const superName = `${className}Base`
-        let ctorSignature: NamedMethodSignature | undefined = undefined
+        let ctorSignature: MethodSignature | undefined = undefined
         switch (this.writer.language) {
             case Language.ARKTS:
-                ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [], [])
+                ctorSignature = MethodSignature.create.fromParameters(idl.IDLVoidType, [])
                 break;
             case Language.CPP:
-                ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [idl.toIDLType("uint8_t*")], ["data"])
+                ctorSignature = MethodSignature.create.fromParameters(idl.IDLVoidType, [
+                    idl.createParameter('data', idl.IDLUint8ArrayType)
+                ])
                 break;
             case Language.JAVA:
-                ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [], [])
+                ctorSignature = MethodSignature.create.fromParameters(idl.IDLVoidType, [])
                 break;
         }
         const serializerDeclarations = this.library.serializerDeclarations

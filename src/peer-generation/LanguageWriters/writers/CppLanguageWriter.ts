@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { createContainerType, createReferenceType, DebugUtils, forceAsNamedNode, IDLAnyType, IDLBooleanType, IDLCallback, IDLContainerType, IDLContainerUtils, IDLEnum, IDLI16Type, IDLI32Type, IDLI64Type, IDLI8Type, IDLNumberType, IDLOptionalType, IDLPointerType, IDLPrimitiveType, IDLReferenceType, IDLStringType, IDLType, IDLTypeParameterType, IDLU16Type, IDLU32Type, IDLU64Type, IDLU8Type, IDLUint8ArrayType, IDLUnionType, IDLVoidType, isCallback, isContainerType, isOptionalType, isPrimitiveType, isReferenceType, isType, isUnionType, toIDLType } from "../../../idl"
+import { createContainerType, createParameter, createReferenceType, DebugUtils, forceAsNamedNode, IDLAnyType, IDLBooleanType, IDLCallback, IDLContainerType, IDLContainerUtils, IDLEnum, IDLI16Type, IDLI32Type, IDLI64Type, IDLI8Type, IDLNumberType, IDLOptionalType, IDLPointerType, IDLPrimitiveType, IDLReferenceType, IDLStringType, IDLType, IDLTypeParameterType, IDLU16Type, IDLU32Type, IDLU64Type, IDLU8Type, IDLUint8ArrayType, IDLUnionType, IDLVoidType, isCallback, isContainerType, isOptionalType, isPrimitiveType, isReferenceType, isType, isUnionType, toIDLType } from "../../../idl"
 import { IndentedPrinter } from "../../../IndentedPrinter"
 import { cppKeywords } from "../../../languageSpecificKeywords"
 import { Language } from "../../../Language"
@@ -33,7 +33,6 @@ import {
     MethodArgPrintHint,
     MethodModifier,
     MethodSignature,
-    NamedMethodSignature,
     ObjectArgs,
     StringExpression
 } from "../LanguageWriter"
@@ -194,11 +193,11 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     }
     writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method, modifiers?: MethodModifier[]) {
         const superInvocation = superCall
-            ? ` : ${superCall.name}(${superCall.signature.args.map((_, i) => superCall?.signature.argName(i)).join(", ")})`
+            ? ` : ${superCall.name}(${superCall.signature.parameters.map(it => it.parameter.name).join(", ")})`
             : ""
-        const argList = signature.args.map((it, index) => {
-            const maybeDefault = signature.defaults?.[index] ? ` = ${signature.defaults![index]}` : ""
-            return `${this.stringifyMethodArgType(it, signature.argHint(index))} ${signature.argName(index)}${maybeDefault}`
+        const argList = signature.parameters.map(it => {
+            const maybeDefault = it.default ? ` = ${it.default}` : ""
+            return `${this.stringifyMethodArgType(it.parameter.type!, it.hint)} ${it.parameter.name}${maybeDefault}`
         }).join(", ");
         this.print("public:")
         this.print(`${className}(${argList})${superInvocation} {`)
@@ -451,15 +450,16 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         }
         return this.stringifyType(type)
     }
-    override makeSerializerConstructorSignature(): NamedMethodSignature | undefined {
-        return new NamedMethodSignature(
-            IDLVoidType, [
-                IDLUint8ArrayType /*idl.createReferenceType("uint8_t*")*/ ,
-                createReferenceType("CallbackResourceHolder" /* ast */)
-            ],
-            ["data", "resourceHolder"],
-            [undefined, `nullptr`],
-            [undefined, undefined, MethodArgPrintHint.AsPointer]
+    override makeSerializerConstructorSignature(): MethodSignature | undefined {
+        return MethodSignature.create.fromDecorated(
+            { type: IDLVoidType }, [
+                { parameter: createParameter('data', IDLUint8ArrayType) },
+                { 
+                    parameter: createParameter('resourceHolder', createReferenceType('CallbackResourceHolder')),
+                    default: 'nullptr',
+                    hint: MethodArgPrintHint.AsPointer
+                }
+            ]
         )
     }
 }

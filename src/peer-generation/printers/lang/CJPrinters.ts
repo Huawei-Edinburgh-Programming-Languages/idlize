@@ -60,11 +60,11 @@ export class CJTuple extends IdlSyntheticTypeBase {
                 writer.writeFieldDeclaration(memberNames[i], this.members[i], [FieldModifier.PUBLIC], false)
             }
 
-            const signature = new MethodSignature(IDLVoidType, this.members)
+            const signature = MethodSignature.create.fromTypes(IDLVoidType, this.members)
             writer.writeConstructorImplementation(this.name, signature, () => {
                 for (let i = 0; i < memberNames.length; i++) {
                     writer.writeStatement(
-                        writer.makeAssign(memberNames[i], this.members[i], writer.makeString(signature.argName(i)), false)
+                        writer.makeAssign(memberNames[i], this.members[i], writer.makeString(signature.signature.parameters[i].name), false)
                     )
                 }
             })

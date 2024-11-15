@@ -24,7 +24,7 @@ import { PrimitiveType } from "../../peer-generation/ArkPrimitiveType";
 import { cleanPrefix } from "../../peer-generation/PeerLibrary";
 import { WrapperClass, WrapperField, WrapperMethod } from "../WrapperClass";
 import { Skoala } from "../utils";
-import { Field, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, NamedMethodSignature } from "../../peer-generation/LanguageWriters";
+import { Field, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature } from "../../peer-generation/LanguageWriters";
 import { ArgConvertor, BaseArgConvertor, BooleanConvertor, ClassConvertor, CustomTypeConvertor, EnumConvertor, ExpressionAssigneer, InterfaceConvertor, NullConvertor, NumberConvertor, RetConvertor, RuntimeType, StringConvertor, TypeAliasConvertor, UndefinedConvertor, UnionConvertor } from "../../peer-generation/ArgConvertors";
 import { CustomPrintVisitor } from "../../from-idl/DtsPrinter";
 import { Language } from "../../Language";
@@ -461,7 +461,7 @@ export class IdlWrapperProcessor {
             // TBD: use deserializer to get complex type from native
             const isSimpleType = !f.argConvertor.useArray // type needs to be deserialized from the native
             if (isSimpleType) {
-                const getSignature = new NamedMethodSignature(field.type, [], [])
+                const getSignature = MethodSignature.create.fromParameters(field.type, [])
                 const getAccessor = new WrapperMethod(
                     name,
                     new Method(`get${capitalize(field.name)}`, getSignature, [MethodModifier.PRIVATE]),
@@ -471,7 +471,7 @@ export class IdlWrapperProcessor {
             }
             const isReadOnly = field.modifiers.includes(FieldModifier.READONLY)
             if (!isReadOnly) {
-                const setSignature = new NamedMethodSignature(idl.IDLVoidType, [field.type], [field.name])
+                const setSignature = MethodSignature.create.fromParameters(idl.IDLVoidType, [idl.createParameter(field.name, field.type)])
                 const retConvertor = { isVoid: true, nativeType: () => "void", macroSuffixPart: () => "V" }
                 const setAccessor = new WrapperMethod(
                     name,
@@ -525,12 +525,8 @@ export class IdlWrapperProcessor {
             retConvertor = generateRetConvertor(idlMethod.returnType)
         }
 
-        let args: idl.IDLType[] = []
-        let argsNames: string[] = []
         let argConvertors = idlMethod.parameters.map(param => {
             if (!param.type) throw new Error("Type is needed")
-            args.push(idl.maybeOptional(param.type, param.isOptional))
-            argsNames.push(param.name)
             return this.library.typeConvertor(param.name, param.type, param.isOptional, undefined, this)
         })
 
@@ -538,9 +534,9 @@ export class IdlWrapperProcessor {
 
         let method: Method
         if (idl.isConstructor(idlMethod)) {
-            method = new Method("constructor", new NamedMethodSignature(idl.IDLThisType, args, argsNames), modifiers)
+            method = new Method("constructor", MethodSignature.create.fromParameters(idl.IDLThisType, idlMethod.parameters), modifiers)
         } else {
-            method = new Method(idlMethod.name, new NamedMethodSignature(idlMethod.returnType, args, argsNames), modifiers)
+            method = new Method(idlMethod.name, MethodSignature.wrap(idlMethod), modifiers)
         }
 
         return new WrapperMethod(decl.name, method, argConvertors, retConvertor)

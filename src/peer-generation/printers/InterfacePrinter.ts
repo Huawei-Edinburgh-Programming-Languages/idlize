@@ -23,7 +23,6 @@ import {
     Method,
     MethodModifier,
     MethodSignature,
-    NamedMethodSignature,
 } from '../LanguageWriters'
 import {
     indentedBy,
@@ -244,7 +243,7 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
         writer.writeClass(alias, () => {
             const selector = 'selector'
             writer.writeFieldDeclaration(selector, idl.IDLI32Type, [FieldModifier.PRIVATE], false)
-            writer.writeMethodImplementation(new Method('getSelector', new MethodSignature(idl.IDLI32Type, []), [MethodModifier.PUBLIC]), () => {
+            writer.writeMethodImplementation(new Method('getSelector', MethodSignature.create.fromParameters(idl.IDLI32Type, []), [MethodModifier.PUBLIC]), () => {
                 writer.writeStatement(
                     writer.makeReturn(
                         writer.makeString(selector)
@@ -259,7 +258,10 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
 
                 writer.writeConstructorImplementation(
                     alias,
-                    new NamedMethodSignature(idl.IDLVoidType, [memberType], [param]),
+                    MethodSignature.create.fromParameters(
+                        idl.IDLVoidType, [
+                            idl.createParameter(param, memberType)
+                        ]),
                     () => {
                         writer.writeStatement(
                             writer.makeAssign(memberName, undefined, writer.makeString(param), false)
@@ -271,7 +273,7 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
                 )
 
                 writer.writeMethodImplementation(
-                    new Method(`getValue${index}`, new MethodSignature(memberType, []), [MethodModifier.PUBLIC]),
+                    new Method(`getValue${index}`, MethodSignature.create.fromParameters(memberType, []), [MethodModifier.PUBLIC]),
                     () => {
                         writer.writeStatement(
                             writer.makeReturn(
@@ -293,18 +295,18 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
         const imports = collectJavaImports(type.properties.map(it => it.type))
         printJavaImports(writer, imports)
 
-        const members = type.properties.map(it => idl.maybeOptional(it.type, it.isOptional))
+        const members = type.properties.map(it => idl.createParameter(it.name, it.type, it.isOptional))
         const memberNames: string[] = members.map((_, index) => `value${index}`)
         writer.writeClass(alias, () => {
             for (let i = 0; i < memberNames.length; i++) {
-                writer.writeFieldDeclaration(memberNames[i], members[i], [FieldModifier.PUBLIC], false)
+                writer.writeFieldDeclaration(memberNames[i], members[i].type, [FieldModifier.PUBLIC], false)
             }
 
-            const signature = new MethodSignature(idl.IDLVoidType, members)
+            const signature = MethodSignature.create.fromParameters(idl.IDLVoidType, members)
             writer.writeConstructorImplementation(alias, signature, () => {
                 for (let i = 0; i < memberNames.length; i++) {
                     writer.writeStatement(
-                        writer.makeAssign(memberNames[i], members[i], writer.makeString(signature.argName(i)), false)
+                        writer.makeAssign(memberNames[i], members[i].type, writer.makeString(signature.signature.parameters[i].name), false)
                     )
                 }
             })
@@ -359,14 +361,14 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
             const intType = idl.toIDLType('int')
             writer.writeFieldDeclaration(value, idl.IDLI32Type, [FieldModifier.PUBLIC, FieldModifier.FINAL], false)
 
-            const signature = new MethodSignature(idl.IDLVoidType, [idl.IDLI32Type])
+            const signature = MethodSignature.create.fromTypes(idl.IDLVoidType, [idl.IDLI32Type])
             writer.writeConstructorImplementation(alias, signature, () => {
                 writer.writeStatement(
-                    writer.makeAssign(value, undefined, writer.makeString(signature.argName(0)), false)
+                    writer.makeAssign(value, undefined, writer.makeString(signature.signature.parameters[0].name), false)
                 )
             })
 
-            const getIntValue = new Method('getIntValue', new MethodSignature(idl.IDLI32Type, []), [MethodModifier.PUBLIC])
+            const getIntValue = new Method('getIntValue', MethodSignature.create.fromParameters(idl.IDLI32Type, []), [MethodModifier.PUBLIC])
             writer.writeMethodImplementation(getIntValue, () => {
                 writer.writeStatement(
                     writer.makeReturn(writer.makeString(value))
@@ -694,7 +696,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
             const intType = idl.IDLI32Type
             const selector = 'selector'
             writer.writeFieldDeclaration(selector, intType, [FieldModifier.PRIVATE], false)
-            writer.writeMethodImplementation(new Method('getSelector', new MethodSignature(intType, []), [MethodModifier.PUBLIC]), () => {
+            writer.writeMethodImplementation(new Method('getSelector', MethodSignature.create.fromParameters(intType, []), [MethodModifier.PUBLIC]), () => {
                 writer.writeStatement(
                     writer.makeReturn(
                         writer.makeString(selector)
@@ -709,7 +711,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
 
                 writer.writeConstructorImplementation(
                     'init',
-                    new NamedMethodSignature(idl.IDLVoidType, [memberType], [param]),
+                    MethodSignature.create.fromParameters(idl.IDLVoidType, [idl.createParameter(param, memberType)]),
                     () => {
                         writer.writeStatement(
                             writer.makeAssign(memberName, undefined, writer.makeString(param), false)
@@ -721,7 +723,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
                 )
 
                 writer.writeMethodImplementation(
-                    new Method(`getValue${index}`, new MethodSignature(memberType, []), [MethodModifier.PUBLIC]),
+                    new Method(`getValue${index}`, MethodSignature.create.fromParameters(memberType, []), [MethodModifier.PUBLIC]),
                     () => {
                         writer.print(`if (let Some(${memberName}) <- ${memberName}) {`)
                         writer.pushIndent()
@@ -744,18 +746,18 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
         const writer = createLanguageWriter(Language.CJ, this.peerLibrary)
         this.printPackage(writer)
 
-        const members = type.properties.map(it => idl.maybeOptional(it.type, it.isOptional))
+        const members = type.properties.map(it => idl.createParameter(it.name, it.type, it.isOptional))
         const memberNames: string[] = members.map((_, index) => `value${index}`)
         writer.writeClass(alias, () => {
             for (let i = 0; i < memberNames.length; i++) {
-                writer.writeFieldDeclaration(memberNames[i], members[i], [FieldModifier.PUBLIC], idl.isOptionalType(members[i]) ?? false)
+                writer.writeFieldDeclaration(memberNames[i], members[i].type, [FieldModifier.PUBLIC], members[i].isOptional)
             }
 
-            const signature = new MethodSignature(idl.IDLVoidType, members)
+            const signature = MethodSignature.create.fromParameters(idl.IDLVoidType, members)
             writer.writeConstructorImplementation(alias, signature, () => {
                 for (let i = 0; i < memberNames.length; i++) {
                     writer.writeStatement(
-                        writer.makeAssign(memberNames[i], members[i], writer.makeString(signature.argName(i)), false)
+                        writer.makeAssign(memberNames[i], members[i].type, writer.makeString(signature.signature.parameters[i].name), false)
                     )
                 }
             })
@@ -807,14 +809,14 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
             const intType = idl.IDLI32Type
             writer.writeFieldDeclaration(value, intType, [FieldModifier.PUBLIC, FieldModifier.FINAL], false)
 
-            const signature = new MethodSignature(idl.IDLVoidType, [intType])
+            const signature = MethodSignature.create.fromTypes(idl.IDLVoidType, [intType])
             writer.writeConstructorImplementation(alias, signature, () => {
                 writer.writeStatement(
-                    writer.makeAssign(value, undefined, writer.makeString(signature.argName(0)), false)
+                    writer.makeAssign(value, undefined, writer.makeString(signature.signature.parameters[0].name), false)
                 )
             })
 
-            const getIntValue = new Method('getIntValue', new MethodSignature(intType, []), [MethodModifier.PUBLIC])
+            const getIntValue = new Method('getIntValue', MethodSignature.create.fromParameters(intType, []), [MethodModifier.PUBLIC])
             writer.writeMethodImplementation(getIntValue, () => {
                 writer.writeStatement(
                     writer.makeReturn(writer.makeString(value))
@@ -855,12 +857,9 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
                 writer.writeProperty(it.name, it.type, true)
             })
             writer.writeConstructorImplementation(alias,
-                new NamedMethodSignature(idl.IDLVoidType, 
+                MethodSignature.create.fromParameters(idl.IDLVoidType, 
                     constructorMembers.map(it =>
-                        idl.maybeOptional(it.type, it.isOptional) 
-                    ),
-                    constructorMembers.map(it =>
-                        writer.escapeKeyword(it.name)
+                        idl.createParameter(writer.escapeKeyword(it.name), it.type, it.isOptional) 
                     )), () => {
                         const superType = idl.getSuperType(type)
                         const superDecl = superType ? this.peerLibrary.resolveTypeReference(superType as idl.IDLReferenceType) : undefined

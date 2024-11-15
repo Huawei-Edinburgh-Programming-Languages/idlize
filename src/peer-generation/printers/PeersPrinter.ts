@@ -26,7 +26,6 @@ import {
     Method,
     MethodModifier,
     MethodSignature,
-    NamedMethodSignature,
     createLanguageWriter
 } from "../LanguageWriters";
 import { collectMaterializedImports, MaterializedMethod } from "../Materialized";
@@ -42,7 +41,7 @@ import { PeerMethod } from "../PeerMethod";
 import { collectJavaImports } from "./lang/JavaIdlUtils";
 import { printJavaImports } from "./lang/JavaPrinters";
 import { Language } from "../../Language";
-import { forceAsNamedNode, IDLI32Type, IDLPointerType, IDLStringType, IDLThisType, IDLType, IDLVoidType, isNamedNode, isOptionalType, isPrimitiveType, maybeOptional, toIDLType } from "../../idl";
+import { createOptionalType, createParameter, forceAsNamedNode, IDLI32Type, IDLPointerType, IDLStringType, IDLThisType, IDLType, IDLVoidType, isNamedNode, isOptionalType, isPrimitiveType, maybeOptional, toIDLType } from "../../idl";
 import { getReferenceResolver } from "../ReferenceResolver";
 
 export function componentToPeerClass(component: string) {
@@ -152,11 +151,18 @@ class PeerFileVisitor {
         // TODO: fully switch to writer!
         const parentRole = determineParentRole(peer.originalClassName, peer.originalParentName)
         const isNode = parentRole !== InheritanceRole.Finalizable
-        const signature = new NamedMethodSignature(
-            IDLVoidType,
-            [maybeOptional(toIDLType('ArkUINodeType'), !isNode), IDLI32Type, IDLStringType],
-            ['nodeType', 'flags', 'name'],
-            [undefined, '0', '""'])
+        const signature = MethodSignature.create.fromDecorated(
+            { type: IDLVoidType },
+            [{
+                parameter: createParameter('nodeType', maybeOptional(toIDLType('ArkUINodeType'), !isNode)),
+            }, {
+                parameter: createParameter('flags', IDLI32Type),
+                default: '0'
+            }, {
+                parameter: createParameter('name', IDLStringType),
+                default: '""'
+            }]
+        )
 
         printer.writeConstructorImplementation(componentToPeerClass(peer.componentName), signature, (writer) => {
             if (parentRole === InheritanceRole.PeerNode || parentRole === InheritanceRole.Heir || parentRole === InheritanceRole.Root) {
@@ -169,17 +175,19 @@ class PeerFileVisitor {
 
     protected printCreateMethod(peer: PeerClass, writer: LanguageWriter): void {
         const peerClass = componentToPeerClass(peer.componentName)
-        const signature = new NamedMethodSignature(
-            toIDLType(peerClass),
-            [toIDLType('ArkUINodeType'), maybeOptional(toIDLType('ComponentBase'), true), IDLI32Type],
-            ['nodeType', 'component', 'flags'],
-            [undefined, undefined, '0'])
+        const signature = MethodSignature.create.fromDecorated(
+            { type: toIDLType(peerClass)}, [
+                { parameter: createParameter('nodeType', toIDLType('ArkUINodeType')) },
+                { parameter: createParameter('component', createOptionalType(toIDLType('ComponentBase'))) },
+                { parameter: createParameter('flags', IDLI32Type), default: '0' },
+            ]
+        )
 
         writer.writeMethodImplementation(new Method('create', signature, [MethodModifier.STATIC, MethodModifier.PUBLIC]), (writer) => {
             const _peer = '_peer'
             writer.writeStatement(writer.makeAssign(_peer, undefined, writer.makeString(
-                `${writer.language == Language.CJ ? ' ' : 'new '}${peerClass}(${signature.argName(0)}, ${signature.argName(2)}, "${peer.componentName}")`), true))
-            writer.writeMethodCall(signature.argName(1), 'setPeer', [_peer], true)
+                `${writer.language == Language.CJ ? ' ' : 'new '}${peerClass}(${signature.signature.parameters[0].name}, ${signature.signature.parameters[2].name}, "${peer.componentName}")`), true))
+            writer.writeMethodCall(signature.signature.parameters[1].name, 'setPeer', [_peer], true)
             writer.writeStatement(writer.makeReturn(writer.makeString(_peer)))
         })
     }
@@ -293,7 +301,7 @@ class JavaPeerFileVisitor extends PeerFileVisitor {
             this.printPackage(printer)
 
             const idlPeer = peer as PeerClass
-            const imports = collectJavaImports(idlPeer.methods.flatMap(method => method.method.signature.args))
+            const imports = collectJavaImports(idlPeer.methods.flatMap(method => method.method.signature.signature.parameters.map(x => x.type)))
             printJavaImports(printer, imports)
 
 
@@ -340,7 +348,7 @@ class CJPeerFileVisitor extends PeerFileVisitor {
 
             if (isIDL) {
                 const idlPeer = peer as PeerClass
-                const imports = collectJavaImports(idlPeer.methods.flatMap(method => method.method.signature.args))
+                const imports = collectJavaImports(idlPeer.methods.flatMap(method => method.method.signature.signature.parameters.map(it => it.type)))
                 printJavaImports(printer, imports)
             }
             this.printPeer(peer, printer)
@@ -392,7 +400,7 @@ export function printPeerFinalizer(peerClassBase: PeerClassBase, writer: Languag
     const className = peerClassBase.getComponentName()
     const finalizer = new Method(
         "getFinalizer",
-        new MethodSignature(IDLPointerType, []),
+        MethodSignature.create.fromParameters(IDLPointerType, []),
         // TODO: private static getFinalizer() method conflicts with its implementation in the parent class
         [MethodModifier.STATIC])
     writer.writeMethodImplementation(finalizer, writer => {
@@ -405,10 +413,10 @@ export function printPeerFinalizer(peerClassBase: PeerClassBase, writer: Languag
 export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isIDL: boolean, printerContext: PrinterContext, dumpSerialized: boolean,
     methodPostfix: string, ptr: string, returnType: IDLType = IDLVoidType, generics?: string[]
 ) {
-    const signature = method.method.signature as NamedMethodSignature
+    const signature = method.method.signature
     let peerMethod = new Method(
         `${method.overloadedName}${methodPostfix}`,
-        new NamedMethodSignature(returnType, signature.args, signature.argsNames),
+        MethodSignature.create.fromParameters(returnType, signature.signature.parameters, { defaults: signature.defaults, printHints: signature.printHints }),
         method.method.modifiers, method.method.generics
     )
     printer.writeMethodImplementation(peerMethod, (writer) => {

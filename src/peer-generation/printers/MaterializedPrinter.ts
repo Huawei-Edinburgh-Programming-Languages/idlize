@@ -25,7 +25,6 @@ import {
     Method,
     MethodModifier,
     MethodSignature,
-    NamedMethodSignature
 } from "../LanguageWriters";
 import { copyMaterializedMethod, MaterializedClass, MaterializedField, MaterializedMethod } from "../Materialized"
 import { makeMaterializedPrologue, tsCopyrightAndWarning } from "../FileGenerators";
@@ -139,7 +138,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                 // TBD: use deserializer to get complex type from native
                 const isSimpleType = !field.argConvertor.useArray // type needs to be deserialized from the native
                 writer.writeGetterImplementation(new Method(mField.name,
-                    new MethodSignature(this.convertToPropertyType(field), [])), writer => {
+                    MethodSignature.create.fromParameters(this.convertToPropertyType(field), [])), writer => {
                     writer.writeStatement(
                         isSimpleType
                             ? writer.makeReturn(writer.makeMethodCall("this", `get${capitalize(mField.name)}`, []))
@@ -149,8 +148,8 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
 
                 const isReadOnly = mField.modifiers.includes(FieldModifier.READONLY)
                 if (!isReadOnly) {
-                    const setSignature = new NamedMethodSignature(IDLVoidType,
-                        [this.convertToPropertyType(field)], [mField.name])
+                    const setSignature = MethodSignature.create.fromParameters(IDLVoidType,
+                        [idl.createParameter(mField.name, this.convertToPropertyType(field))])
                     writer.writeSetterImplementation(new Method(mField.name, setSignature), writer => {
                         let castedNonNullArg
                         if (field.isNullableOriginalTypeField) {
@@ -168,7 +167,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
             })
 
             // write getPeer() method
-            const getPeerSig = new MethodSignature(idl.maybeOptional(idl.createReferenceType("Finalizable"), true),[])
+            const getPeerSig = MethodSignature.create.fromParameters(idl.maybeOptional(idl.createReferenceType("Finalizable"), true),[])
             writer.writeMethodImplementation(new Method("getPeer", getPeerSig), writer => {
                 writer.writeStatement(writer.makeReturn(writer.makeString("this.peer")))
             })
@@ -177,7 +176,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
             const typeArguments = clazz.generics
             const clazzRefType = idl.createReferenceType(clazz.className,
                 typeArguments?.map(idl.createTypeParameterReference))
-            const constructSig = new NamedMethodSignature(clazzRefType, [idl.IDLPointerType], ["ptr"])
+            const constructSig = MethodSignature.create.fromParameters(clazzRefType, [idl.createParameter("ptr", idl.IDLPointerType)])
             writer.writeMethodImplementation(new Method("construct", constructSig, [MethodModifier.STATIC], typeArguments), writer => {
                 const objVar = `obj${clazz.className}`
                 writer.writeStatement(writer.makeAssign(objVar, clazzRefType, writer.makeNewObject(clazz.className), true))
@@ -194,12 +193,13 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
             writePeerMethod(writer, clazz.ctor, true, this.printerContext, this.dumpSerialized, "", "", pointerType)
             this.library.setCurrentContext(undefined)
 
-            const ctorSig = clazz.ctor.method.signature as NamedMethodSignature
-            const sigWithPointer = new NamedMethodSignature(
+            const ctorSig = clazz.ctor.method.signature
+            const sigWithPointer = MethodSignature.create.fromParameters(
                 ctorSig.returnType,
-                ctorSig.args.map(it => maybeOptional(it, true)),
-                ctorSig.argsNames,
-                ctorSig.defaults)
+                ctorSig.signature.parameters.map(it => idl.createParameter(it.name, idl.createOptionalType(it.type), it.isOptional, it.isVariadic)),
+                {
+                    defaults: ctorSig.defaults 
+                })
 
             writer.writeConstructorImplementation(clazz.className, sigWithPointer, writer => {
 
@@ -207,10 +207,10 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                     writer.writeSuperCall([]);
                 }
 
-                const allOptional = ctorSig.args.every(it => isOptionalType(it))
+                const allOptional = ctorSig.signature.parameters.every(it => it.isOptional || isOptionalType(it.type))
                 const hasStaticMethods = clazz.methods.some(it => it.method.modifiers?.includes(MethodModifier.STATIC))
                 if (hasStaticMethods && allOptional) {
-                    if (ctorSig.args.length == 0) {
+                    if (ctorSig.signature.parameters.length == 0) {
                         writer.print(`// Constructor does not have parameters.`)
                     } else {
                         writer.print(`// All constructor parameters are optional.`)
@@ -221,7 +221,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                 let ctorStatements: LanguageStatement = writer.makeBlock([
                     writer.makeAssign("ctorPtr", IDLPointerType,
                         writer.makeMethodCall(clazz.className, "ctor",
-                            ctorSig.args.map((it, index) => writer.makeString(`${ctorSig.argsNames[index]}`))),
+                            ctorSig.parameters.map(it => writer.makeString(`${it.parameter.name}`))),
                         true),
                     writer.makeAssign(
                         "this.peer",
@@ -233,9 +233,9 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                 if (!allOptional) {
                     ctorStatements =
                         writer.makeCondition(
-                            ctorSig.args.length === 0 ? writer.makeString("true") :
-                                writer.makeNaryOp('&&', ctorSig.argsNames.map(it =>
-                                    writer.makeNaryOp('!==', [writer.makeString(it), writer.makeUndefined()]))
+                            ctorSig.signature.parameters.length === 0 ? writer.makeString("true") :
+                                writer.makeNaryOp('&&', ctorSig.parameters.map(it =>
+                                    writer.makeNaryOp('!==', [writer.makeString(it.parameter.name), writer.makeUndefined()]))
                                 ),
                             ctorStatements
                         )
@@ -336,17 +336,17 @@ class JavaMaterializedFileVisitor extends MaterializedFileVisitorBase {
             this.library.setCurrentContext(undefined)
 
             // constructor with a special parameter to use in static methods
-            const emptySignature = new MethodSignature(IDLVoidType, [emptyParameterType])
+            const emptySignature = MethodSignature.create.fromTypes(IDLVoidType, [emptyParameterType])
             writer.writeConstructorImplementation(clazz.className, emptySignature, writer => {
-                writer.writeSuperCall([emptySignature.argName(0)]);
+                writer.writeSuperCall([emptySignature.signature.parameters[0].name]);
             })
 
-            const ctorSig = clazz.ctor.method.signature as NamedMethodSignature
+            const ctorSig = clazz.ctor.method.signature
 
             // generate a constructor with zero parameters for static methods
             // in case there is no alredy defined one
-            if (ctorSig.args.length > 0) {
-                writer.writeConstructorImplementation(clazz.className, new MethodSignature(IDLVoidType, []), writer => {
+            if (ctorSig.signature.parameters.length > 0) {
+                writer.writeConstructorImplementation(clazz.className, MethodSignature.create.fromParameters(IDLVoidType, []), writer => {
                     writer.writeSuperCall([`(${ARK_MATERIALIZEDBASE_EMPTY_PARAMETER})null`]);
                 })
             }
@@ -354,7 +354,7 @@ class JavaMaterializedFileVisitor extends MaterializedFileVisitorBase {
             writer.writeConstructorImplementation(clazz.className, ctorSig, writer => {
                 writer.writeSuperCall([`(${forceAsNamedNode(emptyParameterType).name})null`]);
 
-                const args = ctorSig.argsNames.map(it => writer.makeString(it))
+                const args = ctorSig.parameters.map(it => writer.makeString(it.parameter.name))
                 writer.writeStatement(
                     writer.makeAssign('ctorPtr', IDLPointerType,
                         writer.makeMethodCall(clazz.className, 'ctor', args),

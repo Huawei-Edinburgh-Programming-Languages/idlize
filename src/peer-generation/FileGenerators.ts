@@ -17,7 +17,7 @@ import * as path from "path"
 import { IndentedPrinter } from "../IndentedPrinter"
 import { PrimitiveType } from "./ArkPrimitiveType"
 import { camelCaseToUpperSnakeCase } from "../util"
-import { CppLanguageWriter, createLanguageWriter, LanguageWriter, Method, MethodSignature, NamedMethodSignature, PrinterLike } from "./LanguageWriters"
+import { CppLanguageWriter, createLanguageWriter, LanguageWriter, Method, MethodSignature, PrinterLike } from "./LanguageWriters"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
 import { writeDeserializer, writeSerializer } from "./printers/SerializerPrinter"
 import { SELECTOR_ID_PREFIX, writeConvertors } from "./printers/ConvertorsPrinter"
@@ -27,7 +27,7 @@ import { PeerLibrary } from "./PeerLibrary"
 import { writeARKTSTypeCheckers, writeTSTypeCheckers } from "./printers/TypeCheckPrinter"
 import { Language } from "../Language"
 import { printCallbacksKinds, printCallbacksKindsImports, printDeserializeAndCall } from "./printers/CallbacksPrinter"
-import { createReferenceType, IDLVoidType, toIDLType } from "../idl"
+import { createParameter, createReferenceType, IDLVoidType, toIDLType } from "../idl"
 import { createEmptyReferenceResolver, getReferenceResolver, ReferenceResolver } from "./ReferenceResolver"
 import { MethodArgPrintHint } from "./LanguageWriters/LanguageWriter"
 import { SourceFile } from "./printers/SourceFile"
@@ -569,7 +569,12 @@ export function makeCEventsArkoalaImpl(resolver: ReferenceResolver, implData: La
     writer.concat(implData)
     writer.writeMethodImplementation(new Method(
         `GetArkUiEventsAPI`,
-        new MethodSignature(createReferenceType(`${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI`), [], undefined, [MethodArgPrintHint.AsConstPointer]),
+        MethodSignature.create.fromDecorated(
+            { 
+                type: createReferenceType(`${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI`),
+                hint: MethodArgPrintHint.AsConstPointer
+            }, []
+        ),
     ), (writer) => {
         writer.print(`static const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI eventsImpl = {`)
         writer.pushIndent()
@@ -595,17 +600,22 @@ export function makeCEventsLibaceImpl(implData: PrinterLike, receiversList: Prin
     writer.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI* g_OverriddenEventsImpl = nullptr;`)
     writer.writeMethodImplementation(new Method(
         `${PeerGeneratorConfig.cppPrefix}SetArkUiEventsAPI`,
-        new NamedMethodSignature(IDLVoidType, [
-            createReferenceType(`${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI`)], 
-            [`api`], undefined, 
-            [undefined, MethodArgPrintHint.AsConstPointer]),
+        MethodSignature.create.fromDecorated(
+            { type: IDLVoidType }, [{
+                parameter: createParameter('api', createReferenceType(`${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI`)),
+                hint: MethodArgPrintHint.AsConstPointer
+            }]
+        ),
     ), (writer) => {
         writer.writeStatement(writer.makeAssign(`g_OverriddenEventsImpl`, undefined, writer.makeString(`api`), false))
     })
 
     writer.writeMethodImplementation(new Method(
         `${PeerGeneratorConfig.cppPrefix}GetArkUiEventsAPI`,
-        new MethodSignature(createReferenceType(`${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI`), [], undefined, [MethodArgPrintHint.AsConstPointer]),
+        MethodSignature.create.fromDecorated({
+            type: createReferenceType(`${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI`),
+            hint: MethodArgPrintHint.AsConstPointer
+        }, []),
     ), (writer) => {
         writer.print(`static const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI eventsImpl = {`)
         writer.pushIndent()

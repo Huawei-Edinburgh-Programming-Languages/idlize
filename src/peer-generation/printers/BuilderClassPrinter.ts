@@ -14,7 +14,7 @@
  */
 
 import { removeExt, renameClassToBuilderClass } from "../../util"
-import { LanguageWriter, MethodModifier, Method, createLanguageWriter, Field, NamedMethodSignature } from "../LanguageWriters";
+import { LanguageWriter, MethodModifier, Method, createLanguageWriter, Field, MethodSignature } from "../LanguageWriters";
 import { BuilderClass, methodsGroupOverloads, CUSTOM_BUILDER_CLASSES } from "../BuilderClass";
 import { collapseSameNamedMethods } from "./OverloadsPrinter";
 import { TargetFile } from "./TargetFile";
@@ -23,7 +23,7 @@ import { ImportsCollector } from "../ImportsCollector";
 import { ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from "./lang/Java";
 import { PeerLibrary } from "../PeerLibrary";
 import { Language } from "../../Language";
-import { forceAsNamedNode, IDLType, IDLVoidType, isOptionalType, maybeOptional, toIDLType } from "../../idl";
+import { createParameter, forceAsNamedNode, IDLType, IDLVoidType, isOptionalType, maybeOptional, toIDLType } from "../../idl";
 
 interface BuilderClassFileVisitor {
     printFile(): void
@@ -66,9 +66,9 @@ class TSBuilderClassFileVisitor implements BuilderClassFileVisitor {
                         if (superType) {
                             writer.writeSuperCall([])
                         }
-                        ctor.signature.args
-                            .forEach((it, i) => {
-                                const argName = ctor.signature.argName(i)
+                        ctor.signature.parameters
+                            .forEach(it => {
+                                const argName = it.parameter.name
                                 const fieldName = syntheticName(argName)
                                 writer.writeStatement(writer.makeAssign(`this.${fieldName}`, undefined, writer.makeString(`${argName}`), false))
                             })
@@ -80,7 +80,7 @@ class TSBuilderClassFileVisitor implements BuilderClassFileVisitor {
                 .forEach(staticMethod => {
                     writer.writeMethodImplementation(staticMethod, writer => {
                         const sig = staticMethod.signature
-                        const args = sig.args.map((_, i) => sig.argName(i)).join(", ")
+                        const args = sig.parameters.map(it => it.parameter.name).join(", ")
                         const obj = forceAsNamedNode(sig.returnType).name
                         // TBD: Use writer.makeObjectAlloc()
                         writer.writeStatement(writer.makeReturn(writer.makeString(`new ${obj}(${args})`)))
@@ -91,7 +91,7 @@ class TSBuilderClassFileVisitor implements BuilderClassFileVisitor {
                 .filter(method => !method.modifiers?.includes(MethodModifier.STATIC))
                 .forEach(method => {
                     writer.writeMethodImplementation(method, writer => {
-                        const argName = method.signature.argName(0)
+                        const argName = method.signature.signature.parameters[0].name
                         const fieldName = syntheticName(method.name)
                         writer.writeStatement(writer.makeAssign(`this.${fieldName}`, undefined, writer.makeString(`${argName}`), false))
                         writer.writeStatement(writer.makeReturn(writer.makeString("this")))
@@ -211,12 +211,19 @@ class JavaBuilderClassFileVisitor implements BuilderClassFileVisitor {
     // }
 
     private synthesizeField(method: Method): Field {
-        return new Field(syntheticName(method.name), method.signature.args[0])
+        return new Field(syntheticName(method.name), method.signature.signature.parameters[0].type)
     }
 
     private convertBuilderMethod(method: Method, returnType: IDLType, newMethodName?: string): Method {
-        const oldSignature = method.signature as NamedMethodSignature
-        const signature = new NamedMethodSignature(returnType, oldSignature.args, oldSignature.argsNames, oldSignature.defaults);
+        const oldSignature = method.signature
+        const signature = MethodSignature.create.fromParameters(
+            returnType, 
+            oldSignature.signature.parameters, 
+            {
+                defaults: oldSignature.defaults,
+                printHints: oldSignature.printHints
+            }
+        );
         return new Method(
             newMethodName ?? method.name,
             signature,
@@ -268,7 +275,7 @@ class JavaBuilderClassFileVisitor implements BuilderClassFileVisitor {
                 .forEach(staticMethod => {
                     writer.writeMethodImplementation(staticMethod, writer => {
                         const sig = staticMethod.signature
-                        const args = sig.args.map((_, i) => sig.argName(i)).join(", ")
+                        const args = sig.parameters.map(it => it.parameter.name).join(", ")
                         writer.writeStatement(writer.makeReturn(writer.makeString(`new ${clazz.name}(${args})`)))
                     })
                 })
@@ -277,7 +284,7 @@ class JavaBuilderClassFileVisitor implements BuilderClassFileVisitor {
                 .filter(method => !method.modifiers?.includes(MethodModifier.STATIC))
                 .forEach(method => {
                     writer.writeMethodImplementation(method, writer => {
-                        const argName = method.signature.argName(0)
+                        const argName = method.signature.signature.parameters[0].name
                         const fieldName = syntheticName(method.name)
                         writer.writeStatement(writer.makeAssign(`this.${fieldName}`, undefined, writer.makeString(`${argName}`), false))
                         writer.writeStatement(writer.makeReturn(writer.makeString("this")))
@@ -360,7 +367,7 @@ function syntheticName(name: string): string {
 }
 
 function toSyntheticField(method: Method): Field {
-    const type = method.signature.args[0]
+    const type = method.signature.signature.parameters[0].type
     return new Field(syntheticName(method.name), maybeOptional(type, true))
 }
 
@@ -380,15 +387,15 @@ function processTSBuilderClass(clazz: BuilderClass): BuilderClass {
 
         if (staticMethods.length > 0) {
             const staticSig = staticMethods[0].signature
-            const args = staticSig.args
-            const ctorSig = new NamedMethodSignature(IDLVoidType, args, args.map((_, i) => staticSig.argName(i)))
+            const args = staticSig.signature.parameters
+            const ctorSig = MethodSignature.create.fromParameters(IDLVoidType, args.map((it, i) => ({ ...it, name: staticSig.signature.parameters[i].name })))
             constructors = [new Method("constructor", ctorSig)]
         }
     }
 
     const ctorFields = constructors.flatMap(cons => {
         const ctorSig = cons.signature
-        return ctorSig.args.map((type, index) => new Field(syntheticName(ctorSig.argName(index)), maybeOptional(type, true)))
+        return ctorSig.parameters.map(it => new Field(syntheticName(it.parameter.name), maybeOptional(it.parameter.type, true)))
     })
 
     const syntheticFields = methods

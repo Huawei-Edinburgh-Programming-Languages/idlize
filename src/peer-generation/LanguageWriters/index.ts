@@ -41,7 +41,6 @@ export {
     MethodModifier,
     MethodSignature,
     ExpressionStatement,
-    NamedMethodSignature, 
     BlockStatement, 
     BranchStatement, 
     LanguageExpression, 

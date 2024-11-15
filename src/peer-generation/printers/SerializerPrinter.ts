@@ -16,7 +16,7 @@
 import * as idl from '../../idl'
 import { Language } from "../../Language";
 import { PrimitiveType } from "../ArkPrimitiveType"
-import { ExpressionStatement, LanguageStatement, LanguageWriter, Method, MethodSignature, NamedMethodSignature } from "../LanguageWriters";
+import { ExpressionStatement, LanguageStatement, LanguageWriter, Method, MethodSignature } from "../LanguageWriters";
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig';
 import { ImportsCollector } from '../ImportsCollector';
 import { PeerLibrary } from '../PeerLibrary';
@@ -51,7 +51,7 @@ class IdlSerializerPrinter {
         this.library.setCurrentContext(`write${methodName}()`)
         this.writer.writeMethodImplementation(
             new Method(`write${methodName}`,
-                new NamedMethodSignature(idl.IDLVoidType, [idl.createReferenceType(target.name)], ["value"])),
+                MethodSignature.create.fromParameters(idl.IDLVoidType, [idl.createParameter("value", idl.createReferenceType(target.name))])),
             writer => {
                 if (isMaterialized(target)) {
                     this.generateMaterializedBodySerializer(target, writer)
@@ -153,7 +153,7 @@ class IdlSerializerPrinter {
             if (writer.language != Language.CPP) {
                 writer.writeFieldDeclaration("cache", idl.createOptionalType(idl.createReferenceType("Serializer")), [FieldModifier.PRIVATE, FieldModifier.STATIC], true, writer.makeNull("Serializer"))
 
-                writer.writeMethodImplementation(new Method("hold", new MethodSignature(idl.createReferenceType("Serializer"), []), [MethodModifier.STATIC]),
+                writer.writeMethodImplementation(new Method("hold", MethodSignature.create.fromParameters(idl.createReferenceType("Serializer"), []), [MethodModifier.STATIC]),
                 writer => {
                     writer.writeStatement(writer.makeCondition(writer.makeNot(writer.makeDefinedCheck('Serializer.cache')), writer.makeBlock([
                         writer.makeAssign("Serializer.cache", undefined, writer.makeString(`${writer.language == Language.CJ ? "" : "new "}Serializer()`), false)
@@ -201,7 +201,7 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
     private generateInterfaceDeserializer(target: idl.IDLInterface, prefix: string = "") {
         const methodName = this.library.getInteropName(target)
         const type = idl.createReferenceType(target.name)
-        this.writer.writeMethodImplementation(new Method(`read${methodName}`, new NamedMethodSignature(type, [], [])), writer => {
+        this.writer.writeMethodImplementation(new Method(`read${methodName}`, MethodSignature.create.fromParameters(type, [])), writer => {
             if (isMaterialized(target)) {
                 this.generateMaterializedBodyDeserializer(target)
             } else {
@@ -293,7 +293,7 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
             return
         const methodName = this.library.getEntryName(target)
         const type = idl.createReferenceType(target.name)
-        this.writer.writeMethodImplementation(new Method(`read${methodName}`, new NamedMethodSignature(type, [], [])), writer => {
+        this.writer.writeMethodImplementation(new Method(`read${methodName}`, MethodSignature.create.fromParameters(type, [])), writer => {
             const resourceName = "_resource"
             const callName = "_call"
             const argsSerializer = "_args"
@@ -311,11 +311,7 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
                 writer.makeMethodCall(`this`, `readPointer`, []),
                 true,
             ))
-            const callbackSignature = new NamedMethodSignature(
-                target.returnType,
-                target.parameters.map(it => idl.maybeOptional(it.type!, it.isOptional)),
-                target.parameters.map(it => it.name),
-            )
+            const callbackSignature = MethodSignature.wrap(target)
             const hasContinuation = !idl.isVoidType(target.returnType)
             let continuation: LanguageStatement[] = []
             if (hasContinuation) {
@@ -328,7 +324,7 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
                     writer.makeAssign(
                         continuationCallbackName,
                         continuationReference,
-                        writer.makeLambda(new NamedMethodSignature(idl.IDLVoidType, [returnType], [`value`]), [
+                        writer.makeLambda(MethodSignature.create.fromParameters(idl.IDLVoidType, [idl.createParameter(`value`, returnType)]), [
                             writer.makeAssign(continuationValueName, undefined, writer.makeString(`value`), false)
                         ]),
                         true,
@@ -370,9 +366,9 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
     print(prefix: string, declarationPath?: string) {///converge w/ Ts printers
         const className = "Deserializer"
         const superName = `${className}Base`
-        let ctorSignature: NamedMethodSignature | undefined = undefined
+        let ctorSignature: MethodSignature | undefined = undefined
         if (this.writer.language == Language.CPP) {
-            ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [idl.IDLUint8ArrayType, idl.IDLI32Type], ["data", "length"])
+            ctorSignature = MethodSignature.create.fromParameters(idl.IDLVoidType, [idl.createParameter('data', idl.IDLUint8ArrayType), idl.createParameter('length', idl.IDLI32Type)])
             prefix = prefix === "" ? PrimitiveType.Prefix : prefix
         }
         const serializerDeclarations = getSerializers(this.library,

@@ -199,17 +199,18 @@ export interface IDLProperty extends IDLTypedEntry, IDLNamedNode {
 
 export interface IDLParameter extends IDLTypedEntry, IDLNamedNode {
     kind: IDLKind.Parameter
+    type: IDLType
     isVariadic: boolean
     isOptional: boolean
 }
 
-export interface IDLSignature extends IDLEntry {
+export interface IDLSignature{
     typeParameters?: string[]
     parameters: IDLParameter[]
     returnType?: IDLType
 }
 
-export interface IDLFunction extends IDLSignature {
+export interface IDLFunction extends IDLSignature, IDLEntry {
     isAsync: boolean
 }
 
@@ -225,7 +226,7 @@ export interface IDLCallable extends IDLFunction {
     isStatic: boolean
 }
 
-export interface IDLConstructor extends IDLSignature {
+export interface IDLConstructor extends IDLSignature, IDLEntry {
     kind: IDLKind.Constructor
 }
 
@@ -276,7 +277,7 @@ export function forEachChild(node: IDLNode, cb: (entry: IDLNode) => void): void 
         case IDLKind.Callable:
         case IDLKind.Callback:
         case IDLKind.Constructor: {
-            let param = node as IDLSignature
+            let param = node as IDLConstructor
             param.parameters?.forEach((value) => forEachChild(value, cb))
             if (param.returnType) forEachChild(param.returnType, cb)
             break
@@ -641,7 +642,7 @@ export function createProperty(
 
 export function createParameter(
     name: string,
-    type: IDLType | undefined,
+    type: IDLType,
     isOptional: boolean = false,
     isVariadic: boolean = false,
     nodeInitializer: IDLNodeInitializer = {},
@@ -683,6 +684,18 @@ export function createMethod(
         _idlNodeBrand: innerIdlSymbol,
         _idlEntryBrand: innerIdlSymbol,
         _idlNamedNodeBrand: innerIdlSymbol,
+    }
+}
+
+export function createSignature(
+    returnType: IDLType,
+    parameters: IDLParameter[],
+    typeParameters: string[] = [],
+): IDLSignature {
+    return {
+        returnType,
+        parameters,
+        typeParameters,
     }
 }
 
@@ -873,7 +886,7 @@ function printExtendedAttributes(idl: IDLNode, indentLevel: number): stringOrNon
     case IDLKind.Method:
     case IDLKind.Callable:
     case IDLKind.Constructor:
-        typeParameters = (idl as IDLSignature).typeParameters
+        typeParameters = (idl as IDLConstructor).typeParameters
         break
     case IDLKind.Typedef:
         typeParameters = (idl as IDLTypedef).typeParameters
@@ -1218,7 +1231,7 @@ function forEachFunction(node: IDLNode, cb: (node: IDLFunction) => void): void {
         }
         case IDLKind.Callback:
         case IDLKind.Constructor: {
-            const concrete = node as IDLSignature
+            const concrete = node as IDLConstructor
             concrete.parameters.forEach((value) => forEachFunction(value, cb))
             if (concrete.returnType) forEachFunction(concrete.returnType, cb)
             break

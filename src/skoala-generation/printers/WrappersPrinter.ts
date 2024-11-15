@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import { IDLVoidType, toIDLType } from "../../idl"
-import { FieldModifier, LanguageExpression, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature } from "../../peer-generation/LanguageWriters"
+import { createParameter, IDLVoidType, toIDLType } from "../../idl"
+import { FieldModifier, LanguageExpression, LanguageWriter, Method, MethodModifier, MethodSignature } from "../../peer-generation/LanguageWriters"
 import { capitalize, removeExt, snakeCaseToCamelCase } from "../../util"
 import { WrapperClass, WrapperField, WrapperMethod } from "../WrapperClass"
 import { IldSkoalaFile } from "../idl/idlSkoalaLibrary"
@@ -50,7 +50,7 @@ export class TSWrappersVisitor {
 
     private printCtor(clazz: WrapperClass, writer: LanguageWriter) {
         if (!clazz.ctor) return
-        let argsNames = (clazz.ctor?.method.signature as NamedMethodSignature).argsNames
+        let argsNames = clazz.ctor?.method.signature.signature.parameters.map(it => it.name)
         writer.writeConstructorImplementation(clazz.className, clazz.ctor.method.signature, writer => {
             if (clazz.superClassName == Skoala.BaseClasses.Finalizable) {
                 if (argsNames.length) {
@@ -127,7 +127,7 @@ export class TSWrappersVisitor {
     private printField(className: string, field: WrapperField, writer: LanguageWriter) {
         const isSimpleType = !field.argConvertor.useArray // type needs to be deserialized from the native
         writer.writeGetterImplementation(new Method(field.field.name,
-            new MethodSignature(field.field.type, [])), writer => {
+            MethodSignature.create.fromParameters(field.field.type, [])), writer => {
                 writer.writeStatement(
                     isSimpleType
                         ? writer.makeReturn(writer.makeMethodCall("this", `get${capitalize(field.field.name)}`, []))
@@ -137,7 +137,9 @@ export class TSWrappersVisitor {
 
         const isReadOnly = field.field.modifiers.includes(FieldModifier.READONLY)
         if (!isReadOnly) {
-            const setSignature = new NamedMethodSignature(IDLVoidType, [field.field.type], [field.field.name])
+            const setSignature =  MethodSignature.create.fromParameters(IDLVoidType, [
+                createParameter(field.field.name, field.field.type)
+            ])
             writer.writeSetterImplementation(new Method(field.field.name, setSignature), writer => {
                 writer.writeMethodCall("this", `set${capitalize(field.field.name)}`, [field.field.name])
             });

@@ -14,7 +14,7 @@
  */
 
 import { nativeModuleDeclaration, nativeModuleEmptyDeclaration } from "../FileGenerators";
-import { FunctionCallExpression, LanguageWriter, Method, MethodModifier, NamedMethodSignature, StringExpression, createLanguageWriter } from "../LanguageWriters";
+import { FunctionCallExpression, LanguageWriter, Method, MethodModifier, MethodSignature, StringExpression, createLanguageWriter } from "../LanguageWriters";
 import { PeerClassBase } from "../PeerClass";
 import { PeerClass } from "../PeerClass";
 import { PeerLibrary } from "../PeerLibrary";
@@ -70,27 +70,33 @@ class NativeModuleVisitor {
         const component = clazz.generatedName(method.isCallSignature)
         clazz.setGenerationContext(`${method.isCallSignature ? "" : method.overloadedName}()`)
         let serializerArgCreated = false
-        let args: ({name: string, type: idl.IDLType})[] = []
+        let args: idl.IDLParameter[] = []
         for (let i = 0; i < method.argConvertors.length; ++i) {
             let it = method.argConvertors[i]
             if (it.useArray) {
                 if (!serializerArgCreated) {
                     const array = `thisSerializer`
-                    args.push({ name: `thisArray`, type: idl.createContainerType(/* buffer */ 'sequence', [idl.IDLU8Type]) }, { name: `thisLength`, type: idl.IDLI32Type })
+                    args.push(
+                        idl.createParameter(`thisArray`, idl.createContainerType(/* buffer */ 'sequence', [idl.IDLU8Type])), 
+                        idl.createParameter(`thisLength`, idl.IDLI32Type)
+                    )
                     serializerArgCreated = true
                 }
             } else {
                 // TODO: use language as argument of interop type.
-                args.push({ name: `${it.param}`, type: idl.toIDLType(it.interopType(nativeModule.language)) })
+                args.push(idl.createParameter(
+                    it.param,
+                    idl.toIDLType(it.interopType(nativeModule.language))
+                ))
             }
         }
-        let maybeReceiver = method.hasReceiver() ? [{ name: 'ptr', type: idl.toIDLType('KPointer') }] : []
-        const parameters = NamedMethodSignature.make(returnType ?? idl.IDLVoidType, maybeReceiver.concat(args))
+        let maybeReceiver = method.hasReceiver() ? [idl.createParameter('ptr', idl.toIDLType('KPointer'))] : []
+        const parameters = MethodSignature.create.fromParameters(returnType ?? idl.IDLVoidType, maybeReceiver.concat(args))
         let name = `_${component}_${method.overloadedName}`
 
         if (this.library.language === Language.ARKTS) {
-            if (parameters.returnType === idl.IDLThisType) {
-                parameters.returnType = idl.IDLPointerType
+            if (parameters.signature.returnType === idl.IDLThisType) {
+                parameters.signature.returnType = idl.IDLPointerType
             }
         }
 
@@ -114,20 +120,23 @@ class NativeModuleVisitor {
     }
 
     makeMethodFromIdl(inputMethod:idl.IDLMethod, printer: LanguageWriter): Method {
-        let signature = printer.makeNamedSignature(
+        let signature = MethodSignature.create.fromParameters(
             inputMethod.returnType,
             inputMethod.parameters
         )
         if (this.library.language === Language.TS) {
+            function patchParam(param:idl.IDLParameter): idl.IDLParameter {
+                return idl.createParameter(param.name, patchType(param.type), param.isOptional, param.isVariadic)
+            }
             function patchType(type:idl.IDLType): idl.IDLType {
                 if (type === idl.IDLBooleanType) {
                     return idl.IDLNumberType
                 }
                 return type
             }
-            const patchedSignatureArgs = signature.args.map(patchType)
+            const patchedSignatureArgs = signature.signature.parameters.map(patchParam)
             const patchedReturnType = patchType(signature.returnType)
-            signature = new NamedMethodSignature(patchedReturnType, patchedSignatureArgs, signature.argsNames, signature.defaults)
+            signature = MethodSignature.create.fromParameters(patchedReturnType, patchedSignatureArgs, { defaults: signature.defaults })
         }
         return new Method('_' + inputMethod.name, signature)
     }
@@ -201,38 +210,43 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
         const component = clazz.generatedName(method.isCallSignature)
         clazz.setGenerationContext(`${method.isCallSignature ? "" : method.overloadedName}()`)
         let serializerArgCreated = false
-        let args: ({name: string, type: idl.IDLType})[] = []
+        const args: idl.IDLParameter[] = []
         for (let i = 0; i < method.argConvertors.length; ++i) {
             let it = method.argConvertors[i]
             if (it.useArray) {
                 if (!serializerArgCreated) {
                     const array = `thisSerializer`
-                    args.push({ name: `thisArray`, type: idl.IDLUint8ArrayType }, { name: `thisLength`, type: idl.IDLI32Type })
+                    args.push(
+                        idl.createParameter('thisArray', idl.IDLUint8ArrayType),
+                        idl.createParameter('thisLength', idl.IDLI32Type)
+                    )
                     serializerArgCreated = true
                 }
             } else {
                 // TODO: use language as argument of interop type.
-                args.push({ name: `${it.param}`, type: idl.toIDLType(it.interopType(nativeModule.language)) })
+                args.push(idl.createParameter(it.param, idl.toIDLType(it.interopType(nativeModule.language))))
             }
         }
-        let maybeReceiver = method.hasReceiver() ? [{ name: 'ptr', type: idl.toIDLType('KPointer') }] : []
-        const parameters = NamedMethodSignature.make(returnType ?? idl.IDLVoidType, maybeReceiver.concat(args))
+        let maybeReceiver = method.hasReceiver() ? [idl.createParameter('ptr', idl.toIDLType('KPointer'))] : []
+        const parameters = MethodSignature.create.fromParameters(returnType ?? idl.IDLVoidType, maybeReceiver.concat(args))
         let name = `_${component}_${method.overloadedName}`
         let nativeName = name.substring(1)
         nativeModule.writeMethodImplementation(new Method(name, parameters, [MethodModifier.PUBLIC, MethodModifier.STATIC]), (printer) => {
             let functionCallArgs: Array<string> = []
             printer.print('unsafe {')
             printer.pushIndent()
-            for(let param of parameters.args) {
-                let ordinal = parameters.args.indexOf(param)
+            for(let param of parameters.signature.parameters) {
+                const ordinal = parameters.signature.parameters.indexOf(param)
+                const paramName = parameters.signature.parameters[ordinal].name
+
                 if (this.arrayLikeTypes.has(idl.forceAsNamedNode(param).name)) {
                     functionCallArgs.push(`handle_${ordinal}.pointer`)
-                    printer.print(`let handle_${ordinal} = acquireArrayRawData(${parameters.argsNames[ordinal]}.toArray())`)
+                    printer.print(`let handle_${ordinal} = acquireArrayRawData(${paramName}.toArray())`)
                 } else if (this.stringLikeTypes.has(idl.forceAsNamedNode(param).name)) {
-                    printer.print(`let ${parameters.argsNames[ordinal]} =  LibC.mallocCString(${parameters.argsNames[ordinal]})`)
-                    functionCallArgs.push(parameters.argsNames[ordinal])
+                    printer.print(`let ${paramName} =  LibC.mallocCString(${paramName})`)
+                    functionCallArgs.push(paramName)
                 } else {
-                    functionCallArgs.push(parameters.argsNames[ordinal])
+                    functionCallArgs.push(paramName)
                 }
             }
             const resultVarName = 'result'
@@ -250,12 +264,13 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
                 )
                 shouldReturn = true
             }
-            for(let param of parameters.args) {
-                let ordinal = parameters.args.indexOf(param)
+            for(let param of parameters.signature.parameters) {
+                const ordinal = parameters.signature.parameters.indexOf(param)
+                const paramName = parameters.signature.parameters[ordinal].name
                 if (this.arrayLikeTypes.has(idl.forceAsNamedNode(param).name)) {
                     printer.print(`releaseArrayRawData(handle_${ordinal})`)
                 } else if (this.stringLikeTypes.has(idl.forceAsNamedNode(param).name)) {
-                    printer.print(`LibC.free(${parameters.argsNames[ordinal]})`)
+                    printer.print(`LibC.free(${paramName})`)
                 }
             }
 
@@ -309,7 +324,7 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
         method.modifiers = [MethodModifier.PUBLIC, MethodModifier.STATIC]
 
         const foreightMethodName = method.name.substring(1)
-        const func = printer.makeNativeMethodNamedSignature(inputMethod.returnType, inputMethod.parameters)
+        const func = MethodSignature.create.fromParameters(inputMethod.returnType, inputMethod.parameters)
 
         this.nativeFunctions!.writeNativeMethodDeclaration(foreightMethodName, func)
         printer.writeMethodImplementation(method, printer => {
@@ -317,8 +332,8 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
             printer.pushIndent()
             const callParameters: string[] = []
             const cleanUpStmnts: string[] = []
-            method.signature.args.forEach((arg, ordinal) => {
-                const paramName = method.signature.argName(ordinal)
+            method.signature.signature.parameters.forEach((arg, ordinal) => {
+                const paramName = arg.name
                 if (idl.IDLContainerUtils.isSequence(arg) || this.arrayLikeTypes.has(idl.forceAsNamedNode(arg).name) || idl.forceAsNamedNode(arg).name.startsWith('ArrayList<')) {
                     const varName = `handle_${ordinal}`
                     callParameters.push(`${varName}.pointer`)
