@@ -317,7 +317,7 @@ export class PeerLibrary implements LibraryInterface {
             if (type.name === 'Date') {
                 return ArkDate
             }
-            if (type.name === 'AnimationRange' || type.name === 'ContentModifier' || type.name === 'LinearGradient') {
+            if (type.name === 'AnimationRange' || type.name === 'ContentModifier') {
                 return ArkCustomObject
             }
             if (type.name === 'Function') {
@@ -329,6 +329,8 @@ export class PeerLibrary implements LibraryInterface {
             const decl = this.resolveTypeReference(type)
             if (!decl) {
                 console.log(`WARNING: undeclared type ${idl.DebugUtils.debugPrintType(type)}`)
+            } else if (isConflictingDeclaration(decl)) {
+                return ArkCustomObject
             }
             return !decl ? ArkCustomObject  // assume some builtin type
                 : idl.isTypedef(decl) ? this.toDeclaration(decl.type)
