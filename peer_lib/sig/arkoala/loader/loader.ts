@@ -67,10 +67,17 @@ function waitVSync(pipelineContext: KPointer): Promise<void> {
     })
 }
 
+function delay(ms: int32): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+const useDelayAsVsync = true
+
 export async function runEventLoop() {
     const pipelineContext = getNativePipelineContext()
+    let vsync = useDelayAsVsync ? () => waitVSync(pipelineContext) : () => delay(2000)
     while (!nativeModule()._RunApplication(0, 0)) {
-        await waitVSync(pipelineContext!)
+        await vsync()
     }
 }
 
