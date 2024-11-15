@@ -172,7 +172,7 @@ export function checkLoader(variant: string): int32 {
         }
         case 'panda': {
             vm = 2
-            classPath = __dirname + "/../external/arkoala-arkts/framework/build/abc/trivial"
+            classPath = __dirname + "/../external/arkoala-arkts/framework/build/abc/src"
             break
         }
         case 'es2panda': {
