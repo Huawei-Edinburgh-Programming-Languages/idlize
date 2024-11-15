@@ -71,7 +71,7 @@ public open class SerializerBase {
     }
 
     init() {
-        this.buffer = ArrayList<UInt8>(Array<UInt8>(96, item: 0))
+        this.buffer = ArrayList<UInt8>(Array<UInt8>(96, repeat: UInt8(0)))
     }
     public func release() {
         this.isHolding = false
@@ -110,7 +110,7 @@ public open class SerializerBase {
         // TODO
     }
     private func setBytes<V, T>(position: Int64, value: T): Unit where T <: LittleEndianOrder<V>{
-        var arr = Array<Byte>(100, item: 0)
+        var arr = Array<Byte>(100, repeat: 0)
         let n = value.writeLittleEndian(arr)
         this.checkCapacity(n)
         for (i in 0..n) {

@@ -22,7 +22,7 @@ import std.collection.*
 
 public open class DateCustomSerializer <: CustomSerializer {
     public DateCustomSerializer() {
-        super(Array<String>(["Date"]))
+        super(["Date"])
     }
     public func serialize(serializer: SerializerBase, value: Ark_CustomObject, kind: String): Unit {
         serializer.writeString("{}")

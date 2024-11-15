@@ -22,7 +22,7 @@ import std.collection.*
 
 public func getNativeString(ptr: Int64): String {
     let length = NativeModule._StringLength(ptr)
-    var data = ArrayList<UInt8>(Array<UInt8>(Int64(length), item: 0))
+    var data = ArrayList<UInt8>(Array<UInt8>(Int64(length), repeat: UInt8(0)))
     data = NativeModule._StringData(ptr, data, length)
     var result = StringBuilder()
     for (i in 0..length) {
