@@ -49,7 +49,8 @@ import { Dimension,
     LengthMetrics,
     ResourceColor,
     ResourceStr,
-    Font } from "@arkoala/arkui/ArkUnitsInterfaces"
+    Font,
+    Position } from "@arkoala/arkui/ArkUnitsInterfaces"
 
 import { Resource } from "./ArkResourceInterfaces"
 
@@ -212,6 +213,7 @@ class SheetOptionsImpl implements SheetOptions {
     _onDisappear: (() => void)|undefined;
     _onWillAppear: (() => void)|undefined;
     _onWillDisappear: (() => void)|undefined;
+    _offset?: Position;
 
     constructor(title?: SheetTitleOptions) {
         this._title = title
@@ -439,6 +441,13 @@ class SheetOptionsImpl implements SheetOptions {
     }
     set keyboardAvoidMode(arg: SheetKeyboardAvoidMode | undefined) {
         this._keyboardAvoidMode = arg
+    }
+
+    get offset(): Position | undefined {
+        return this._offset
+    }
+    set offset(arg: Position | undefined) {
+        this._offset = arg
     }
 }
 
