@@ -1176,7 +1176,7 @@
 |`lineBreakStrategy`|Function|Tuzhilkin Ivan|devdone|  |
 |`EnableHapticFeedback`|Function|Tuzhilkin Ivan|in progress|  |
 |*TextClock*| *Component* |Pavelyev Ivan|in progress|  |
-|`setTextClockOptions`| Function |Pavelyev Ivan|in progress|  |
+|`setTextClockOptions`| Function |Pavelyev Ivan|done|  |
 |`format`| Function |Pavelyev Ivan|done|  |
 |`onDateChange`| Function |Pavelyev Ivan|in progress|  |
 |`fontColor`| Function |Pavelyev Ivan|done|  |
@@ -1846,8 +1846,8 @@
 |`setTextSelection`| Function | Tuzhilkin Ivan | devdone |  |
 |`stopEditing`| Function | Tuzhilkin Ivan | devdone |  |
 |*TextClockController*| *Class* |Pavelyev Ivan|in progress|  |
-|`start`| Function |Pavelyev Ivan|in progress|  |
-|`stop`| Function |Pavelyev Ivan|in progress|  |
+|`start`| Function |Pavelyev Ivan|done|  |
+|`stop`| Function |Pavelyev Ivan|done|  |
 |*TextBaseController*| *Class* | | | |
 |`setSelection`| Function | | | |
 |`closeSelectionMenu`| Function | | | |
