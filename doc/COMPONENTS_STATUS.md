@@ -797,8 +797,8 @@
 |`setRichTextOptions`| Function | Dudkin Sergey| in progress|  |
 |`onStart`| Function | Dudkin Sergey| in progress|  |
 |`onComplete`| Function | Dudkin Sergey| in progress|  |
-|*RootScene*| *Component* | | | |
-|`setRootSceneOptions`| Function | | | |
+|*RootScene*| *Component* | Maksimov Nikita | in progress | |
+|`setRootSceneOptions`| Function | Maksimov Nikita | in progress | |
 |*Row*| *Component* | Andrey Khudenkikh | in progress |  |
 |`setRowOptions`| Function | Andrey Khudenkikh | done |  |
 |`alignItems`| Function | Andrey Khudenkikh | done |  |
@@ -811,8 +811,8 @@
 |*SaveButton*| *Component* | Samarin Sergey| done |  |
 |`setSaveButtonOptions`| Function | Samarin Sergey| done |  |
 |`onClick`| Function | Samarin Sergey| done |  |
-|*Screen*| *Component* | | | |
-|`setScreenOptions`| Function | | | |
+|*Screen*| *Component* | Maksimov Nikita | in progress | |
+|`setScreenOptions`| Function | Maksimov Nikita | in progress | |
 |*Scroll*| *Component* | Kirill Berezin | in progress |  |
 |`setScrollOptions`| Function | Kirill Berezin | in progress |  |
 |`scrollable`| Function | Kirill Berezin | In progress |  |
@@ -834,9 +834,9 @@
 |`scrollSnap`| Function | Kirill Berezin | in progress |  |
 |`enablePaging`| Function | Kirill Berezin | done |  |
 |`initialOffset`| Function | Kirill Berezin | done |  |
-|*ScrollBar*| *Component* | | | |
-|`setScrollBarOptions`| Function | | | |
-|`enableNestedScroll`| Function | | | |
+|*ScrollBar*| *Component* | Maksimov Nikita | in progress | |
+|`setScrollBarOptions`| Function | Maksimov Nikita | in progress | |
+|`enableNestedScroll`| Function | Maksimov Nikita | in progress | |
 |*Search*|*Component*| Evstigneev Roman |In Progress|  |
 |`setSearchOptions`|Function| Evstigneev Roman | in progress | https://gitee.com/openharmony/arkui_ace_engine/issues/IAXCOP |
 |`searchButton`|Function| Evstigneev Roman | done |  |
@@ -1493,9 +1493,9 @@
 |`show`| Function | | |
 |*AlertDialog*| *Class* | | |
 |`show`| Function | | |
-|*CalendarController*| *Class* |Maksimov Nikita | in progress|  |
-|`backToToday`| Function |Maksimov Nikita | in progress|  |
-|`goTo`| Function |Maksimov Nikita | in progress|  |
+|*CalendarController*| *Class* |Maksimov Nikita | devdone |  |
+|`backToToday`| Function |Maksimov Nikita | devdone |  |
+|`goTo`| Function |Maksimov Nikita | devdone |  |
 |*CalendarPickerDialog*| *Class* | | | |
 |`show`| Function | | | |
 |*CanvasGradient*| *Class* | | | |
