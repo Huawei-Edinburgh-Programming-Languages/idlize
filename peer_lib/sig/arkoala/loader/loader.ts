@@ -75,7 +75,7 @@ const useDelayAsVsync = true
 
 export async function runEventLoop() {
     const pipelineContext = getNativePipelineContext()
-    let vsync = useDelayAsVsync ? () => waitVSync(pipelineContext) : () => delay(2000)
+    let vsync = useDelayAsVsync ? () => delay(500) : () => waitVSync(pipelineContext)
     while (!nativeModule()._RunApplication(0, 0)) {
         await vsync()
     }

@@ -25,7 +25,7 @@ public class ViewLoaderApp extends UserView {
         System.out.println("User view: " + root);
     }
 
-    Consumer<PeerNode> getView() {
+    Consumer<PeerNode> getBuilder() {
         return ViewLoaderApp::view;
     }
 }
