@@ -186,7 +186,7 @@ function toIDLType(file: string, type: webidl2.IDLTypeDescription | string, extA
             case idl.IDLF32Type.name: return idl.IDLF32Type
             case idl.IDLF64Type.name: return idl.IDLF64Type
             case idl.IDLPointerType.name: return idl.IDLPointerType
-
+            case idl.IDLBufferType.name: return idl.IDLBufferType
         }
         const combinedExtAttrs = (type.extAttrs ?? []).concat(extAttrs ?? [])
         const idlRefType = idl.createReferenceType(type.idlType)
