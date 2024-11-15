@@ -441,19 +441,19 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
         const type = this.typeNameConvertor.getNodeName(node.type)
         const typeParams = this.printTypeParameters(node.typeParameters)
         // TODO: needs to be implemented correctly on the idl side
-        if (node.name === "Resource") {
-            this.convertInterface(idl.createInterface(node.name,
-                idl.IDLKind.Interface,
-                [], [], [], [
-                    idl.createProperty("bundleName", idl.createReferenceType("KStringPtr")),
-                    idl.createProperty("moduleName", idl.createReferenceType("KStringPtr")),
-                    idl.createProperty("params", idl.createReferenceType("Array<object>"), false, false, true),
-                    idl.createProperty("id", idl.createReferenceType("number")),
-                    idl.createProperty("type", idl.createReferenceType("number"), false, false, true),
-                ], [], []))
-        } else {
-            this.writer.print(`export declare type ${node.name}${typeParams} = ${type};`)
-        }
+        // if (node.name === "Resource") {
+        //     this.convertInterface(idl.createInterface(node.name,
+        //         idl.IDLKind.Interface,
+        //         [], [], [], [
+        //             idl.createProperty("bundleName", idl.createReferenceType("KStringPtr")),
+        //             idl.createProperty("moduleName", idl.createReferenceType("KStringPtr")),
+        //             idl.createProperty("params", idl.createReferenceType("Array<object>"), false, false, true),
+        //             idl.createProperty("id", idl.createReferenceType("number")),
+        //             idl.createProperty("type", idl.createReferenceType("number"), false, false, true),
+        //         ], [], []))
+        // } else {
+        // }
+        this.writer.print(`export declare type ${node.name}${typeParams} = ${type};`)
     }
 
     convertCallback(node: idl.IDLCallback) {

@@ -20,36 +20,38 @@ import { ArkColumnPeer } from "@arkoala/arkui/peers/ArkColumnPeer"
 import { ArkUINodeType } from "@arkoala/arkui/peers/ArkUINodeType"
 import { ButtonType, LabelStyle } from '@arkoala/arkui/ArkButtonInterfaces'
 import { BlurOptions,
-         SheetSize,
-         BlurStyle,
-         SheetType,
-         SheetDismiss,
-         DismissSheetAction,
-         SpringBackAction,
-         EdgeWidths,
-         LocalizedEdgeWidths,
-         EdgeColors,
-         LocalizedEdgeColors,
-         BorderStyle,
-         ShadowOptions,
-         ShadowStyle,
-         SheetMode,
-         Callback,
-         SheetTitleOptions,
-         SheetOptions,
-         CustomBuilder,
-         EdgeStyles,
-         UIContext,
-         ScrollSizeMode,
-         Position,
-         SheetKeyboardAvoidMode } from "@arkoala/arkui/ArkCommonInterfaces"
+    SheetSize,
+    BlurStyle,
+    SheetType,
+    SheetDismiss,
+    DismissSheetAction,
+    SpringBackAction,
+    EdgeWidths,
+    LocalizedEdgeWidths,
+    EdgeColors,
+    LocalizedEdgeColors,
+    BorderStyle,
+    ShadowOptions,
+    ShadowStyle,
+    SheetMode,
+    Callback,
+    SheetTitleOptions,
+    SheetOptions,
+    CustomBuilder,
+    EdgeStyles,
+    UIContext,
+    ScrollSizeMode,
+    Position,
+         SheetKeyboardAvoidMode,
+    HoverModeAreaType } from "@arkoala/arkui/ArkCommonInterfaces"
 import { Dimension,
-         Length,
-         LengthMetrics,
-         Resource,
-         ResourceColor,
-         ResourceStr,
-         Font } from "@arkoala/arkui/ArkUnitsInterfaces"
+    Length,
+    LengthMetrics,
+    ResourceColor,
+    ResourceStr,
+    Font } from "@arkoala/arkui/ArkUnitsInterfaces"
+
+import { Resource } from "./ArkResourceInterfaces"
 
 import { TextOverflow, TextHeightAdaptivePolicy } from "@arkoala/arkui/ArkEnumsInterfaces"
 
@@ -177,253 +179,268 @@ class SheetTitleOptionsImpl implements SheetTitleOptions {
         this._subtitle = arg
     }
 }
-// TODO: disable until proper SheetTitleOptionsImpl is implemented
-// class SheetOptionsImpl implements SheetOptions {
-//     _title: SheetTitleOptions | CustomBuilder| undefined
-//     _detents: [(SheetSize | Length), (SheetSize | Length) | undefined, (SheetSize | Length) | undefined] | undefined
-//     _height: SheetSize | Length| undefined
-//     _dragBar: boolean| undefined
-//     _maskColor: ResourceColor| undefined
-//     _blurStyle: BlurStyle| undefined
-//     _showClose: boolean | Resource| undefined
-//     _preferType: SheetType| undefined
-//     _shouldDismiss: ((sheetDismiss: SheetDismiss) => void) | undefined
-//     _onWillDismiss: Callback<DismissSheetAction, void>| undefined
-//     _onWillSpringBackWhenDismiss: Callback<SpringBackAction, void>| undefined
-//     _enableOutsideInteractive: boolean| undefined
-//     _width: Dimension| undefined
-//     _borderWidth: Dimension | EdgeWidths | LocalizedEdgeWidths| undefined
-//     _borderColor: ResourceColor | EdgeColors | LocalizedEdgeColors| undefined
-//     _borderStyle: BorderStyle | EdgeStyles| undefined
-//     _shadow: ShadowOptions | ShadowStyle| undefined
-//     _onHeightDidChange: Callback<number, void>| undefined
-//     _mode: SheetMode| undefined
-//     _scrollSizeMode?: ScrollSizeMode | undefined
-//     _onDetentsDidChange: Callback<number, void>| undefined
-//     _onWidthDidChange: Callback<number, void>| undefined
-//     _onTypeDidChange: Callback<SheetType, void>| undefined
-//     _uiContext: UIContext| undefined
-//     _backgroundColor: ResourceColor | undefined
-//     _onAppear: (() => void) | undefined
-//     _onDisappear: (() => void) | undefined
-//     _onWillAppear: (() => void) | undefined
-//     _onWillDisappear: (() => void) | undefined
-//     _keyboardAvoidMode: SheetKeyboardAvoidMode | undefined
-//
-//     constructor(title?: SheetTitleOptions) {
-//         this._title = title
-//     }
-//
-//     get title(): SheetTitleOptions | CustomBuilder| undefined {
-//         return this._title
-//     }
-//     set title(arg: SheetTitleOptions | CustomBuilder| undefined) {
-//         this._title = arg
-//     }
-//
-//     get onWillDismiss(): Callback<DismissSheetAction, void>| undefined {
-//         return this._onWillDismiss
-//     }
-//     set onWillDismiss(arg: Callback<DismissSheetAction, void>| undefined) {
-//         this._onWillDismiss = arg
-//     }
-//
-//     get detents(): [(SheetSize | Length), (SheetSize | Length) | undefined, (SheetSize | Length) | undefined] | undefined {
-//         return this._detents
-//     }
-//     set detents(arg: [(SheetSize | Length), (SheetSize | Length) | undefined, (SheetSize | Length) | undefined] | undefined) {
-//         this._detents = arg
-//     }
-//
-//     get height(): SheetSize | Length| undefined {
-//         return this._height
-//     }
-//     set height(arg: SheetSize | Length| undefined) {
-//         this._height = arg
-//     }
-//
-//     get dragBar(): boolean| undefined {
-//         return this._dragBar
-//     }
-//     set dragBar(arg: boolean| undefined) {
-//         this._dragBar = arg
-//     }
-//
-//     get maskColor(): ResourceColor| undefined {
-//         return this._maskColor
-//     }
-//     set maskColor(arg: ResourceColor| undefined) {
-//         this._maskColor = arg
-//     }
-//
-//     get blurStyle(): BlurStyle| undefined {
-//         return this._blurStyle
-//     }
-//     set blurStyle(arg: BlurStyle| undefined) {
-//         this._blurStyle = arg
-//     }
-//
-//     get showClose(): boolean | Resource| undefined {
-//         return this._showClose
-//     }
-//     set showClose(arg: boolean | Resource| undefined) {
-//         this._showClose = arg
-//     }
-//
-//     get preferType(): SheetType| undefined {
-//         return this._preferType
-//     }
-//     set preferType(arg: SheetType| undefined) {
-//         this._preferType = arg
-//     }
-//
-//     get shouldDismiss(): ((sheetDismiss: SheetDismiss) => void) | undefined {
-//         return this._shouldDismiss
-//     }
-//     set shouldDismiss(arg: ((sheetDismiss: SheetDismiss) => void) | undefined) {
-//         this._shouldDismiss = arg
-//     }
-//
-//     get onWillSpringBackWhenDismiss(): Callback<SpringBackAction, void>| undefined {
-//         return this._onWillSpringBackWhenDismiss
-//     }
-//     set onWillSpringBackWhenDismiss(arg: Callback<SpringBackAction, void>| undefined) {
-//         this._onWillSpringBackWhenDismiss = arg
-//     }
-//
-//     get enableOutsideInteractive(): boolean| undefined {
-//         return this._enableOutsideInteractive
-//     }
-//     set enableOutsideInteractive(arg: boolean| undefined) {
-//         this._enableOutsideInteractive = arg
-//     }
-//
-//     get width(): Dimension| undefined {
-//         return this._width
-//     }
-//     set width(arg: Dimension| undefined) {
-//         this._width = arg
-//     }
-//
-//     get borderWidth(): Dimension | EdgeWidths | LocalizedEdgeWidths| undefined {
-//         return this._borderWidth
-//     }
-//     set borderWidth(arg: Dimension | EdgeWidths | LocalizedEdgeWidths| undefined) {
-//         this._borderWidth = arg
-//     }
-//
-//     get borderColor(): ResourceColor | EdgeColors | LocalizedEdgeColors| undefined {
-//         return this._borderColor
-//     }
-//     set borderColor(arg: ResourceColor | EdgeColors | LocalizedEdgeColors| undefined) {
-//         this._borderColor = arg
-//     }
-//
-//     get borderStyle(): BorderStyle | EdgeStyles| undefined {
-//         return this._borderStyle
-//     }
-//     set borderStyle(arg: BorderStyle | EdgeStyles| undefined) {
-//         this._borderStyle = arg
-//     }
-//
-//     get shadow(): ShadowOptions | ShadowStyle| undefined {
-//         return this._shadow
-//     }
-//     set shadow(arg: ShadowOptions | ShadowStyle| undefined) {
-//         this._shadow = arg
-//     }
-//
-//     get onHeightDidChange(): Callback<number, void>| undefined {
-//         return this._onHeightDidChange
-//     }
-//     set onHeightDidChange(arg: Callback<number, void>| undefined) {
-//         this._onHeightDidChange = arg
-//     }
-//
-//     get mode(): SheetMode| undefined {
-//         return this._mode
-//     }
-//     set mode(arg: SheetMode| undefined) {
-//         this._mode = arg
-//     }
-//
-//     get scrollSizeMode(): ScrollSizeMode| undefined {
-//         return this._scrollSizeMode
-//     }
-//     set scrollSizeMode(arg: ScrollSizeMode| undefined) {
-//         this._scrollSizeMode = arg
-//     }
-//
-//     get onDetentsDidChange(): Callback<number, void>| undefined {
-//         return this._onDetentsDidChange
-//     }
-//     set onDetentsDidChange(arg: Callback<number, void>| undefined) {
-//         this._onDetentsDidChange = arg
-//     }
-//
-//     get onWidthDidChange(): Callback<number, void>| undefined {
-//         return this._onWidthDidChange
-//     }
-//     set onWidthDidChange(arg: Callback<number, void>| undefined) {
-//         this._onWidthDidChange = arg
-//     }
-//
-//     get onTypeDidChange(): Callback<SheetType, void>| undefined {
-//         return this._onTypeDidChange
-//     }
-//     set onTypeDidChange(arg: Callback<SheetType, void>| undefined) {
-//         this._onTypeDidChange = arg
-//     }
-//
-//     get uiContext(): UIContext| undefined {
-//         return this._uiContext
-//     }
-//     set uiContext(arg: UIContext| undefined) {
-//         this._uiContext = arg
-//     }
-//
-//     get backgroundColor(): ResourceColor | undefined {
-//         return this._backgroundColor
-//     }
-//     set backgroundColor(arg: ResourceColor | undefined) {
-//         this._backgroundColor = arg
-//     }
-//
-//     get onAppear(): (() => void) | undefined {
-//         return this._onAppear
-//     }
-//     set onAppear(arg: (() => void) | undefined) {
-//         this._onAppear = arg
-//     }
-//
-//     get onDisappear(): (() => void) | undefined {
-//         return this._onDisappear
-//     }
-//     set onDisappear(arg: (() => void) | undefined) {
-//         this._onDisappear = arg
-//     }
-//
-//     get onWillAppear(): (() => void) | undefined {
-//         return this._onWillAppear
-//     }
-//     set onWillAppear(arg: (() => void) | undefined) {
-//         this._onWillAppear = arg
-//     }
-//
-//     get onWillDisappear(): (() => void) | undefined {
-//         return this._onWillDisappear
-//     }
-//     set onWillDisappear(arg: (() => void) | undefined) {
-//         this._onWillDisappear = arg
-//     }
-//
-//     get keyboardAvoidMode(): SheetKeyboardAvoidMode | undefined {
-//         return this._keyboardAvoidMode
-//     }
-//     set keyboardAvoidMode(arg: SheetKeyboardAvoidMode | undefined) {
-//         this._keyboardAvoidMode = arg
-//     }
-// }
+class SheetOptionsImpl implements SheetOptions {
+    _height: SheetSize | Length|undefined;
+    _dragBar: boolean|undefined;
+    _maskColor: ResourceColor|undefined;
+    _detents: [ SheetSize | Length, SheetSize | Length | undefined, SheetSize | Length | undefined ]|undefined;
+    _blurStyle: BlurStyle|undefined;
+    _showClose: boolean | Resource|undefined;
+    _preferType: SheetType|undefined;
+    _title: SheetTitleOptions | CustomBuilder|undefined;
+    _shouldDismiss: Callback<SheetDismiss,void>|undefined;
+    _onWillDismiss: Callback<DismissSheetAction,void>|undefined;
+    _onWillSpringBackWhenDismiss: Callback<SpringBackAction,void>|undefined;
+    _enableOutsideInteractive: boolean|undefined;
+    _width: Dimension|undefined;
+    _borderWidth: Dimension | EdgeWidths | LocalizedEdgeWidths|undefined;
+    _borderColor: ResourceColor | EdgeColors | LocalizedEdgeColors|undefined;
+    _borderStyle: BorderStyle | EdgeStyles|undefined;
+    _shadow: ShadowOptions | ShadowStyle|undefined;
+    _onHeightDidChange: Callback<number,void>|undefined;
+    _mode: SheetMode|undefined;
+    _scrollSizeMode: ScrollSizeMode|undefined;
+    _onDetentsDidChange: Callback<number,void>|undefined;
+    _onWidthDidChange: Callback<number,void>|undefined;
+    _onTypeDidChange: Callback<SheetType,void>|undefined;
+    _uiContext: UIContext|undefined;
+    _keyboardAvoidMode: SheetKeyboardAvoidMode|undefined;
+    _enableHoverMode: boolean|undefined;
+    _hoverModeArea: HoverModeAreaType|undefined;
+    _backgroundColor: ResourceColor|undefined;
+    _onAppear: (() => void)|undefined;
+    _onDisappear: (() => void)|undefined;
+    _onWillAppear: (() => void)|undefined;
+    _onWillDisappear: (() => void)|undefined;
+
+    constructor(title?: SheetTitleOptions) {
+        this._title = title
+    }
+
+    get title(): SheetTitleOptions | CustomBuilder| undefined {
+        return this._title
+    }
+    set title(arg: SheetTitleOptions | CustomBuilder| undefined) {
+        this._title = arg
+    }
+
+    get onWillDismiss(): Callback<DismissSheetAction, void>| undefined {
+        return this._onWillDismiss
+    }
+    set onWillDismiss(arg: Callback<DismissSheetAction, void>| undefined) {
+        this._onWillDismiss = arg
+    }
+
+    get detents(): [(SheetSize | Length), (SheetSize | Length) | undefined, (SheetSize | Length) | undefined] | undefined {
+        return this._detents
+    }
+    set detents(arg: [(SheetSize | Length), (SheetSize | Length) | undefined, (SheetSize | Length) | undefined] | undefined) {
+        this._detents = arg
+    }
+
+    get height(): SheetSize | Length| undefined {
+        return this._height
+    }
+    set height(arg: SheetSize | Length| undefined) {
+        this._height = arg
+    }
+
+    get dragBar(): boolean| undefined {
+        return this._dragBar
+    }
+    set dragBar(arg: boolean| undefined) {
+        this._dragBar = arg
+    }
+
+    get maskColor(): ResourceColor| undefined {
+        return this._maskColor
+    }
+    set maskColor(arg: ResourceColor| undefined) {
+        this._maskColor = arg
+    }
+
+    get blurStyle(): BlurStyle| undefined {
+        return this._blurStyle
+    }
+    set blurStyle(arg: BlurStyle| undefined) {
+        this._blurStyle = arg
+    }
+
+    get showClose(): boolean | Resource| undefined {
+        return this._showClose
+    }
+    set showClose(arg: boolean | Resource| undefined) {
+        this._showClose = arg
+    }
+
+    get preferType(): SheetType| undefined {
+        return this._preferType
+    }
+    set preferType(arg: SheetType| undefined) {
+        this._preferType = arg
+    }
+
+    get shouldDismiss(): ((sheetDismiss: SheetDismiss) => void) | undefined {
+        return this._shouldDismiss
+    }
+    set shouldDismiss(arg: ((sheetDismiss: SheetDismiss) => void) | undefined) {
+        this._shouldDismiss = arg
+    }
+
+    get onWillSpringBackWhenDismiss(): Callback<SpringBackAction, void>| undefined {
+        return this._onWillSpringBackWhenDismiss
+    }
+    set onWillSpringBackWhenDismiss(arg: Callback<SpringBackAction, void>| undefined) {
+        this._onWillSpringBackWhenDismiss = arg
+    }
+
+    get enableOutsideInteractive(): boolean| undefined {
+        return this._enableOutsideInteractive
+    }
+    set enableOutsideInteractive(arg: boolean| undefined) {
+        this._enableOutsideInteractive = arg
+    }
+
+    get width(): Dimension| undefined {
+        return this._width
+    }
+    set width(arg: Dimension| undefined) {
+        this._width = arg
+    }
+
+    get borderWidth(): Dimension | EdgeWidths | LocalizedEdgeWidths| undefined {
+        return this._borderWidth
+    }
+    set borderWidth(arg: Dimension | EdgeWidths | LocalizedEdgeWidths| undefined) {
+        this._borderWidth = arg
+    }
+
+    get borderColor(): ResourceColor | EdgeColors | LocalizedEdgeColors| undefined {
+        return this._borderColor
+    }
+    set borderColor(arg: ResourceColor | EdgeColors | LocalizedEdgeColors| undefined) {
+        this._borderColor = arg
+    }
+
+    get borderStyle(): BorderStyle | EdgeStyles| undefined {
+        return this._borderStyle
+    }
+    set borderStyle(arg: BorderStyle | EdgeStyles| undefined) {
+        this._borderStyle = arg
+    }
+
+    get shadow(): ShadowOptions | ShadowStyle| undefined {
+        return this._shadow
+    }
+    set shadow(arg: ShadowOptions | ShadowStyle| undefined) {
+        this._shadow = arg
+    }
+
+    get onHeightDidChange(): Callback<number, void>| undefined {
+        return this._onHeightDidChange
+    }
+    set onHeightDidChange(arg: Callback<number, void>| undefined) {
+        this._onHeightDidChange = arg
+    }
+
+    get mode(): SheetMode| undefined {
+        return this._mode
+    }
+    set mode(arg: SheetMode| undefined) {
+        this._mode = arg
+    }
+
+    get scrollSizeMode(): ScrollSizeMode| undefined {
+        return this._scrollSizeMode
+    }
+    set scrollSizeMode(arg: ScrollSizeMode| undefined) {
+        this._scrollSizeMode = arg
+    }
+
+    get onDetentsDidChange(): Callback<number, void>| undefined {
+        return this._onDetentsDidChange
+    }
+    set onDetentsDidChange(arg: Callback<number, void>| undefined) {
+        this._onDetentsDidChange = arg
+    }
+
+    get onWidthDidChange(): Callback<number, void>| undefined {
+        return this._onWidthDidChange
+    }
+    set onWidthDidChange(arg: Callback<number, void>| undefined) {
+        this._onWidthDidChange = arg
+    }
+
+    get onTypeDidChange(): Callback<SheetType, void>| undefined {
+        return this._onTypeDidChange
+    }
+    set onTypeDidChange(arg: Callback<SheetType, void>| undefined) {
+        this._onTypeDidChange = arg
+    }
+
+    get uiContext(): UIContext| undefined {
+        return this._uiContext
+    }
+    set uiContext(arg: UIContext| undefined) {
+        this._uiContext = arg
+    }
+
+    get enableHoverMode(): boolean | undefined {
+        return this._enableHoverMode
+    }
+    set enableHoverMode(arg: boolean | undefined) {
+        this._enableHoverMode = arg
+    }
+
+    get hoverModeArea(): HoverModeAreaType | undefined {
+        return this._hoverModeArea
+    }
+    set hoverModeArea(arg: HoverModeAreaType | undefined) {
+        this._hoverModeArea = arg
+    }
+
+    get backgroundColor(): ResourceColor | undefined {
+        return this._backgroundColor
+    }
+    set backgroundColor(arg: ResourceColor | undefined) {
+        this._backgroundColor = arg
+    }
+
+    get onAppear(): (() => void) | undefined {
+        return this._onAppear
+    }
+    set onAppear(arg: (() => void) | undefined) {
+        this._onAppear = arg
+    }
+
+    get onDisappear(): (() => void) | undefined {
+        return this._onDisappear
+    }
+    set onDisappear(arg: (() => void) | undefined) {
+        this._onDisappear = arg
+    }
+
+    get onWillAppear(): (() => void) | undefined {
+        return this._onWillAppear
+    }
+    set onWillAppear(arg: (() => void) | undefined) {
+        this._onWillAppear = arg
+    }
+
+    get onWillDisappear(): (() => void) | undefined {
+        return this._onWillDisappear
+    }
+    set onWillDisappear(arg: (() => void) | undefined) {
+        this._onWillDisappear = arg
+    }
+
+    get keyboardAvoidMode(): SheetKeyboardAvoidMode | undefined {
+        return this._keyboardAvoidMode
+    }
+    set keyboardAvoidMode(arg: SheetKeyboardAvoidMode | undefined) {
+        this._keyboardAvoidMode = arg
+    }
+}
 
 class BlurOptionsImpl implements BlurOptions {
     _grayscale: [number, number]
@@ -478,12 +495,11 @@ function checkButton() {
         "height({.type=3, .value=0, .unit=1, .resource=43})")
     checkResult("height", () => peer.heightAttribute(44),
         "height({.type=1, .value=44, .unit=1, .resource=0})")
-    //TODO: : disable for now
-    // checkResult("bindSheet", () => {
-    //         peer.bindSheetAttribute(false, (): Object => {}, new SheetOptionsImpl(new SheetTitleOptionsImpl("My App")))
-    //     },
-    //     "bindSheet({.selector=0, .value0=false}, {.resource={.resourceId=100, .hold=0, .release=0}, .call=0}, {.tag=ARK_TAG_OBJECT, .value={.backgroundColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .onAppear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onDisappear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillAppear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillDisappear={.tag=ARK_TAG_UNDEFINED, .value={}}, .height={.tag=ARK_TAG_UNDEFINED, .value={}}, .dragBar={.tag=ARK_TAG_UNDEFINED, .value={}}, .maskColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .detents={.tag=ARK_TAG_UNDEFINED, .value={}}, .blurStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, .showClose={.tag=ARK_TAG_UNDEFINED, .value={}}, .preferType={.tag=ARK_TAG_UNDEFINED, .value={}}, .title={.tag=ARK_TAG_OBJECT, .value={.selector=0, .value0={.title={.selector=0, .value0={.chars=\"My App\", .length=6}}, .subtitle={.tag=ARK_TAG_UNDEFINED, .value={}}}}}, .shouldDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillSpringBackWhenDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .enableOutsideInteractive={.tag=ARK_TAG_UNDEFINED, .value={}}, .width={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderWidth={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, .shadow={.tag=ARK_TAG_UNDEFINED, .value={}}, .onHeightDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .mode={.tag=ARK_TAG_UNDEFINED, .value={}}, .scrollSizeMode={.tag=ARK_TAG_UNDEFINED, .value={}}, .onDetentsDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWidthDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .onTypeDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .uiContext={.tag=ARK_TAG_UNDEFINED, .value={}}, .keyboardAvoidMode={.tag=ARK_TAG_UNDEFINED, .value={}}}})"
-    // )
+    checkResult("bindSheet", () => {
+            peer.bindSheetAttribute(false, (): Object => {}, new SheetOptionsImpl(new SheetTitleOptionsImpl("My App")))
+        },
+        "bindSheet({.selector=0, .value0=false}, {.resource={.resourceId=100, .hold=0, .release=0}, .call=0}, {.tag=ARK_TAG_OBJECT, .value={.backgroundColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .onAppear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onDisappear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillAppear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillDisappear={.tag=ARK_TAG_UNDEFINED, .value={}}, .height={.tag=ARK_TAG_UNDEFINED, .value={}}, .dragBar={.tag=ARK_TAG_UNDEFINED, .value={}}, .maskColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .detents={.tag=ARK_TAG_UNDEFINED, .value={}}, .blurStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, .showClose={.tag=ARK_TAG_UNDEFINED, .value={}}, .preferType={.tag=ARK_TAG_UNDEFINED, .value={}}, .title={.tag=ARK_TAG_OBJECT, .value={.selector=0, .value0={.title={.selector=0, .value0={.chars=\"My App\", .length=6}}, .subtitle={.tag=ARK_TAG_UNDEFINED, .value={}}}}}, .shouldDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillSpringBackWhenDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .enableOutsideInteractive={.tag=ARK_TAG_UNDEFINED, .value={}}, .width={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderWidth={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, .shadow={.tag=ARK_TAG_UNDEFINED, .value={}}, .onHeightDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .mode={.tag=ARK_TAG_UNDEFINED, .value={}}, .scrollSizeMode={.tag=ARK_TAG_UNDEFINED, .value={}}, .onDetentsDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWidthDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .onTypeDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .uiContext={.tag=ARK_TAG_UNDEFINED, .value={}}, .keyboardAvoidMode={.tag=ARK_TAG_UNDEFINED, .value={}}}})"
+    )
 }
 
 function checkCallback() {
