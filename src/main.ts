@@ -407,7 +407,7 @@ if (!didJob) {
     program.help()
 }
 
-function correctOverloadedProperties(entry: IDLEntry, idlLibrary: IdlPeerLibrary) {
+function correctOverloadedProperties(entry: IDLEntry, idlLibrary: PeerLibrary) {
     if (idlLibrary.language !== Language.ARKTS) {
         return;
     }
