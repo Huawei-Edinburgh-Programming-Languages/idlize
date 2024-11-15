@@ -80,20 +80,15 @@ class HeaderVisitor {
 
     private printAccessor(name: string) {
         const clazz = this.library.materializedClasses.get(name)
-        
         if (clazz) {
             let peerName = `${name}Peer`
             let accessorName = `${PeerGeneratorConfig.cppPrefix}ArkUI${name}Accessor`
-
             this.api.print(`typedef struct ${peerName} ${peerName};`)
             this.api.print(`typedef struct ${accessorName} {`)
             this.api.pushIndent()
-            
             const mDestroyPeer = createDestroyPeerMethod(clazz)
-
             const methods = [clazz.ctor, clazz.finalizer, mDestroyPeer].concat(clazz.methods)
             methods.forEach(method => this.printMethod(method))
-
             this.api.popIndent()
             this.api.print(`} ${accessorName};\n`)
         }
