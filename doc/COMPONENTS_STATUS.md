@@ -1602,7 +1602,7 @@
 |`offOnDetach`| Function | Vadim Voronov | in progress |  |
 |`getHeight`| Function |Vadim Voronov| done | |
 |`getWidth`| Function |Vadim Voronov| done | |
-|*DrawingRenderingContext*| *Class* |Vadim Voronov| blocked |  |
+|*DrawingRenderingContext*| *Class* |Vadim Voronov| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`invalidate`| Function |Vadim Voronov| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*ICurve*| *Class* | | | |
 |`interpolate`| Function | | | |
