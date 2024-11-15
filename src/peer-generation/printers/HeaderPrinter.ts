@@ -80,13 +80,6 @@ class HeaderVisitor {
 
     private printAccessor(name: string) {
         const clazz = this.library.materializedClasses.get(name)
-
-        const destroyPeerReturnType: RetConvertor = {
-            isVoid: true,
-            nativeType: () => PrimitiveType.Void.getText(),
-            interopType: () => PrimitiveType.Void.getText(),
-            macroSuffixPart: () => "V"
-        }
         
         if (clazz) {
             let peerName = `${name}Peer`
