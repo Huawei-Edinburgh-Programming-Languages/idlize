@@ -34,6 +34,8 @@ import { EtsIDLNodeToStringConvertor } from "../convertors/ETSConvertors"
 import {PeerLibrary} from "../../PeerLibrary";
 import {makeEnumTypeCheckerCall} from "../../printers/TypeCheckPrinter";
 import * as idl from "../../../idl"
+import { convertDeclaration } from "../nameConvertor"
+import { createDeclarationNameConvertor } from "../../idl/IdlNameConvertor"
 
 ////////////////////////////////////////////////////////////////
 //                         STATEMENTS                         //
@@ -68,8 +70,7 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
 
     write(writer: LanguageWriter) {
         // writer.print(this.enumEntity.comment)
-        const namespace = getExtAttribute(this.enumEntity, idl.IDLExtendedAttributes.Namespace)
-        const className = namespace ? `${namespace}_${this.enumEntity.name}` : this.enumEntity.name
+        const className = convertDeclaration(createDeclarationNameConvertor(Language.ARKTS), this.enumEntity)
         writer.writeClass(className, (writer) => {
             let isTypeString = true
             this.enumEntity.elements.forEach((member, index) => {

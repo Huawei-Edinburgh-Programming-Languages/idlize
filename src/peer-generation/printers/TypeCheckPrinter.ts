@@ -18,7 +18,7 @@ import {
     isMaterialized,
 } from "../idl/IdlPeerGeneratorVisitor";
 import { getSyntheticDeclarationList } from "../idl/IdlSyntheticDeclarations";
-import { DeclarationNameConvertor } from "../idl/IdlNameConvertor";
+import { createDeclarationNameConvertor, DeclarationNameConvertor } from "../idl/IdlNameConvertor";
 import { Language } from "../../Language";
 import {IDLBooleanType, toIDLType} from "../../idl";
 import { getReferenceResolver } from '../ReferenceResolver';
@@ -117,6 +117,7 @@ abstract class TypeCheckerPrinter {
         const seenNames = new Set<string>()
         const declDependenciesCollector
             = createDeclDependenciesCollector(this.library, createTypeDependenciesCollector(this.library))
+        const declNameConvertor = createDeclarationNameConvertor(this.library.language)
 
         for (const file of this.library.files) {
             const declarations: idl.IDLEntry[] = [...Array.from(file.declarations), ...file.enums]
@@ -139,7 +140,7 @@ abstract class TypeCheckerPrinter {
                         importFeatures.push(convertDeclToFeature(this.library, decl))
                     }
                     interfaces.push({
-                        name: convertDeclaration(DeclarationNameConvertor.I, decl),
+                        name: convertDeclaration(declNameConvertor, decl),
                         type: idl.createReferenceType(decl.name),
                         descriptor: makeStructDescriptor(this.library, decl)
                     })
@@ -153,7 +154,7 @@ abstract class TypeCheckerPrinter {
             .forEach(it => {
                 importFeatures.push(convertDeclToFeature(this.library, it))
                 interfaces.push({
-                    name: convertDeclaration(DeclarationNameConvertor.I, it),
+                    name: convertDeclaration(declNameConvertor, it),
                     descriptor: makeStructDescriptor(this.library, it)
                 })
         })
