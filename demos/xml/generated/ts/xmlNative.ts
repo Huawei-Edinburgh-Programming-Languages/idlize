@@ -4,7 +4,7 @@ export enum CallbackKind {
     Kind_Callback_Boolean_void,
     Kind_Callback_EventType_ParseInfo_Boolean = 1,
     Kind_Callback_String_String_Boolean = 2,
-    Kind_Callback_void = 3
+    Kind_Callback_void = 3,
 }
 export interface XMLNativeModule {
     _XmlSerializer_setAttributes(self: KPointer, name: string, value: string): void 
