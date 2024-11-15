@@ -178,7 +178,6 @@ export function createDestroyPeerMethod(clazz: MaterializedClass): MaterializedM
         )
 }
 
-
 export function printUserConverter(headerPath: string, namespace: string, apiVersion: number, peerLibrary: PeerLibrary) :
         {api: string, converterHeader: string}
 {
