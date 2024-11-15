@@ -373,8 +373,8 @@ class OHOSVisitor {
                 this.peerWriter.writeEnum(e.name, members, (writer) => {})
             }
             if (hasNs) {
-                this.peerWriter.print(`}`)
                 this.peerWriter.popIndent()
+                this.peerWriter.print(`}`)
             }
         }
         this.interfaces.forEach(int => {
