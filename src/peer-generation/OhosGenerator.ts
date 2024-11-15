@@ -30,6 +30,7 @@ import { CppLanguageWriter, createLanguageWriter, ExpressionStatement, FieldModi
 import { printBridgeCcForOHOS } from './printers/BridgeCcPrinter'
 import { printCallbacksKinds, printManagedCaller } from './printers/CallbacksPrinter'
 import { writeDeserializer, writeSerializer } from './printers/SerializerPrinter'
+import { CppSourceFile, SourceFile } from './printers/SourceFile'
 
 class NameType {
     constructor(public name: string, public type: string) {}
@@ -42,7 +43,7 @@ interface SignatureDescriptor {
 }
 
 class OHOSVisitor {
-
+    implementationStubsFile: CppSourceFile
 
     hWriter = new CppLanguageWriter(new IndentedPrinter(), this.library)
     cppWriter = new CppLanguageWriter(new IndentedPrinter(), this.library)
@@ -59,8 +60,18 @@ class OHOSVisitor {
     callbackInterfaces = new Array<IDLInterface>()
 
     constructor(protected library: PeerLibrary) {
-        this.peerWriter = createLanguageWriter(this.library.language, this.library)
-        this.nativeWriter = createLanguageWriter(this.library.language, this.library)
+        if (this.library.files.length == 0)
+            throw new Error("No files in library")
+
+        this.libraryName = this.library.files.filter(f => !f.isPredefined)[0].packageName().toUpperCase()
+        this.library.name = this.libraryName
+
+        this.peerWriter = createLanguageWriter(library.language, library)
+        this.nativeWriter = createLanguageWriter(library.language, library)
+
+        const fileNamePrefix = this.libraryName.toLowerCase()
+        this.implementationStubsFile = new CppSourceFile(`${fileNamePrefix}Impl_template${Language.CPP.extension}`, library)
+        this.implementationStubsFile.addInclude(`${fileNamePrefix}.h`)
     }
 
     private static knownBasicTypes = new Set(['ArrayBuffer', 'DataView'])
@@ -188,13 +199,17 @@ class OHOSVisitor {
 
     private writeImpls() {
         let _ = this.cppWriter
+        let _stubs = this.implementationStubsFile.content
         this.impls.forEach((signature, name) => {
-            _.print(`${signature.returnType} ${name}(${signature.paramsCString ?? signature.params.map(it => `${it.type} ${it.name}`).join(", ")}) {`)
-            _.pushIndent()
-            if (signature.returnType != "void")
-                _.print('return {};')
-            _.popIndent()
-            _.print(`}`)
+            const declaration = `${signature.returnType} ${name}(${signature.paramsCString ?? signature.params.map(it => `${it.type} ${it.name}`).join(", ")})`
+            _.print(`${declaration};`)
+            _stubs.print(`${declaration} {`)
+            _stubs.pushIndent()
+            if (signature.returnType != "void") {
+                _stubs.print('return {};')
+            }
+            _stubs.popIndent()
+            _stubs.print(`}`)
         })
     }
 
@@ -572,12 +587,6 @@ class OHOSVisitor {
     }
 
     execute(outDir: string, managedOutDir: string) {
-        if (this.library.files.length == 0)
-            throw new Error("No files in library")
-
-        this.libraryName = this.library.files.filter(f => !f.isPredefined)[0].packageName().toUpperCase()
-        this.library.name = this.libraryName
-
         console.log(`GENERATE OHOS API for ${this.libraryName}`)
 
         this.library.files.forEach(file => {
@@ -642,6 +651,9 @@ class OHOSVisitor {
         this.hWriter.printTo(path.join(outDir, `${fileNamePrefix}.h`))
         this.cppWriter.printTo(path.join(outDir, `${fileNamePrefix}.cc`))
 
+        fs.writeFileSync(path.join(outDir, this.implementationStubsFile.name),
+            this.implementationStubsFile.printToString()
+        )
         fs.writeFileSync(path.join(outDir, `SerializerBase.h`),
             readLangTemplate(`ohos_SerializerBase.h`, Language.CPP)
                 .replaceAll("%NATIVE_API_HEADER_PATH%", `${fileNamePrefix}.h`)
