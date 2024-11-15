@@ -569,7 +569,7 @@ declare enum GestureJudgeResult {
 /**
  * Creating an Object
  *
- * @namespace GestureControl
+ * @namespace GestureControl 
  * @syscap SystemCapability.ArkUI.ArkUI.Full
  * @crossplatform
  * @since 11
@@ -577,7 +577,7 @@ declare enum GestureJudgeResult {
 /**
  * Creating an Object
  *
- * @namespace GestureControl
+ * @namespace GestureControl 
  * @syscap SystemCapability.ArkUI.ArkUI.Full
  * @crossplatform
  * @atomicservice
@@ -1019,13 +1019,13 @@ interface FingerInfo {
  * @since 11
  */
 declare type GestureType =
-    TapGestureInterface
-    | LongPressGestureInterface
-    | PanGestureInterface
-    | PinchGestureInterface
-    | SwipeGestureInterface
-    | RotationGestureInterface
-    | GestureGroupInterface;
+  TapGestureInterface
+  | LongPressGestureInterface
+  | PanGestureInterface
+  | PinchGestureInterface
+  | SwipeGestureInterface
+  | RotationGestureInterface
+  | GestureGroupInterface;
 
 /**
  * Defines the gesture base event.
@@ -3848,7 +3848,7 @@ declare enum GestureRecognizerState {
 declare class ScrollableTargetInfo extends EventTargetInfo {
   /**
    * Returns whether the scrollable component is at begin.
-   *
+   * 
    * @returns { boolean } - true is at begin, false is not at begin
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @crossplatform
@@ -3858,7 +3858,7 @@ declare class ScrollableTargetInfo extends EventTargetInfo {
   isBegin(): boolean;
   /**
    * Returns whether the scrollable component is at end.
-   *
+   * 
    * @returns { boolean } - true is at end, false is not at end
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @crossplatform
@@ -3879,7 +3879,7 @@ declare class ScrollableTargetInfo extends EventTargetInfo {
 declare class EventTargetInfo {
   /**
    * Returns the component's inspector id.
-   *
+   * 
    * @returns { string } - the inspector id of the component
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @crossplatform
@@ -3900,7 +3900,7 @@ declare class EventTargetInfo {
 declare class GestureRecognizer {
   /**
    * Returns the gesture's tag.
-   *
+   * 
    * @returns { string } - the gesture's tag
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @crossplatform
@@ -3910,7 +3910,7 @@ declare class GestureRecognizer {
   getTag(): string;
   /**
    * Returns the gesture's type.
-   *
+   * 
    * @returns { GestureControl.GestureType } - the gesture's type
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @crossplatform
@@ -3920,7 +3920,7 @@ declare class GestureRecognizer {
   getType(): GestureControl.GestureType;
   /**
    * Returns whether the gesture recognizer is built in recognizer.
-   *
+   * 
    * @returns { boolean } - true is built in recognizer, false is not built in recognizer
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @crossplatform
@@ -3940,7 +3940,7 @@ declare class GestureRecognizer {
   setEnabled(isEnabled: boolean): void;
   /**
    * Returns whether the gesture recognizer is enabled.
-   *
+   * 
    * @returns { boolean } - true is enabled, false is not enabled
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @crossplatform
@@ -3950,7 +3950,7 @@ declare class GestureRecognizer {
   isEnabled(): boolean;
   /**
    * Returns the gesture recognizer's state.
-   *
+   * 
    * @returns { GestureRecognizerState } - the gesture recognizer's state
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @crossplatform
@@ -3960,7 +3960,7 @@ declare class GestureRecognizer {
   getState(): GestureRecognizerState;
   /**
    * Returns the event target information of the component.
-   *
+   * 
    * @returns { EventTargetInfo } - the event target information of the component.
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @crossplatform
@@ -3970,7 +3970,7 @@ declare class GestureRecognizer {
   getEventTargetInfo(): EventTargetInfo;
   /**
    * Returns whether the gesture recognizer is valid.
-   *
+   * 
    * @returns { boolean } - true is valid, false is invalid
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @crossplatform
@@ -3991,7 +3991,7 @@ declare class GestureRecognizer {
 declare class PanRecognizer extends GestureRecognizer {
   /**
    * Returns the the pan gesture options of the recognizer.
-   *
+   * 
    * @returns { PanGestureOptions } - Pan gesture options
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @crossplatform

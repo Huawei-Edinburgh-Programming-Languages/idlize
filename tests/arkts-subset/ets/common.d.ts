@@ -11804,6 +11804,16 @@ declare interface SheetOptions extends BindOptions {
    * @since 14
    */
   hoverModeArea?: HoverModeAreaType;
+
+  /**
+   * Sets the position offset of the bindSheet.
+   *
+   * @type { ?Position }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @systemapi
+   * @since 14
+   */
+    offset?: Position
 }
 
 /**
@@ -16799,6 +16809,18 @@ declare class CommonMethod<T> {
   focusable(value: boolean): T;
 
   /**
+   * Set TabStop on component focus
+   *
+   * @param { boolean } isTabStop
+   * @returns { T }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 14
+   */
+  tabStop(isTabStop: boolean): T;
+
+  /**
    * Trigger a event when got focus.
    *
    * @param { function } event
@@ -20626,7 +20648,7 @@ declare class CommonMethod<T> {
    */
   onGestureRecognizerJudgeBegin(callback: GestureRecognizerJudgeBeginCallback): T;
 
-    /**
+  /**
    * When a gesture bound to this component will be accepted, a user-defined callback is triggered to get the result
    *
    * @param { GestureRecognizerJudgeBeginCallback } callback - A callback instance used when a gesture bound to this component will be accepted.
@@ -20636,9 +20658,9 @@ declare class CommonMethod<T> {
    * @crossplatform
    * @atomicservice
    *
-   * @since 14
+   * @since 13
    */
-    onGestureRecognizerJudgeBegin(callback: GestureRecognizerJudgeBeginCallback, exposeInnerGesture: boolean): T;
+  onGestureRecognizerJudgeBegin(callback: GestureRecognizerJudgeBeginCallback, exposeInnerGesture: boolean): T;
 
   /**
    * In the touch test phase, the recognizer is selected to form a parallel relationship with other recognizers on the response chain.

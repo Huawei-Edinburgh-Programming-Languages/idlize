@@ -34,48 +34,48 @@
  * @since 11
  */
 declare enum CalendarAlign {
-    /**
-     * The value of calendar align type start.
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @since 10
-     */
-    /**
-     * The value of calendar align type start.
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 11
-     */
-    START = 0,
-    /**
-     * The value of calendar align type center.
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @since 10
-     */
-    /**
-     * The value of calendar align type center.
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 11
-     */
-    CENTER = 1,
-    /**
-     * The value of calendar align type end.
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @since 10
-     */
-    /**
-     * The value of calendar align type end.
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 11
-     */
-    END = 2
+  /**
+   * The value of calendar align type start.
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @since 10
+   */
+  /**
+   * The value of calendar align type start.
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 11
+   */
+  START = 0,
+  /**
+   * The value of calendar align type center.
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @since 10
+   */
+  /**
+   * The value of calendar align type center.
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 11
+   */
+  CENTER = 1,
+  /**
+   * The value of calendar align type end.
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @since 10
+   */
+  /**
+   * The value of calendar align type end.
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 11
+   */
+  END = 2
 }
 
 /**
@@ -94,39 +94,39 @@ declare enum CalendarAlign {
  * @since 11
  */
 declare interface CalendarOptions {
-    /**
-     * Specifies the radius of the background of the day in calendar.
-     * @type { ?(number | Resource) }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @since 10
-     */
-    /**
-     * Specifies the radius of the background of the day in calendar.
-     * @type { ?(number | Resource) }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 11
-     */
-    hintRadius?: number | Resource;
+  /**
+   * Specifies the radius of the background of the day in calendar.
+   * @type { ?(number | Resource) }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @since 10
+   */
+  /**
+   * Specifies the radius of the background of the day in calendar.
+   * @type { ?(number | Resource) }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 11
+   */
+  hintRadius?: number | Resource;
 
-    /**
-     * Specifies the date selector check date.
-     * @type { ?Date }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @since 10
-     */
-    /**
-     * Specifies the date selector check date.
-     * @type { ?Date }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 11
-     */
-    selected?: Date;
+  /**
+   * Specifies the date selector check date.
+   * @type { ?Date }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @since 10
+   */
+  /**
+   * Specifies the date selector check date.
+   * @type { ?Date }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 11
+   */
+  selected?: Date;
 }
 
 /**
@@ -145,24 +145,24 @@ declare interface CalendarOptions {
  * @since 11
  */
 interface CalendarPickerInterface {
-    /**
-     * Defines the CalendarPicker constructor.
-     * @param { CalendarOptions } options - the option of th calendarPicker.
-     * @returns { CalendarPickerAttribute } the attribute of the CalendarPicker.
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @since 10
-     */
-    /**
-     * Defines the CalendarPicker constructor.
-     * @param { CalendarOptions } options - the option of th calendarPicker.
-     * @returns { CalendarPickerAttribute } the attribute of the CalendarPicker.
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 11
-     */
-    (options?: CalendarOptions): CalendarPickerAttribute;
+  /**
+   * Defines the CalendarPicker constructor.
+   * @param { CalendarOptions } options - the option of th calendarPicker.
+   * @returns { CalendarPickerAttribute } the attribute of the CalendarPicker.
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @since 10
+   */
+  /**
+   * Defines the CalendarPicker constructor.
+   * @param { CalendarOptions } options - the option of th calendarPicker.
+   * @returns { CalendarPickerAttribute } the attribute of the CalendarPicker.
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 11
+   */
+  (options?: CalendarOptions): CalendarPickerAttribute;
 }
 
 /**
@@ -181,73 +181,73 @@ interface CalendarPickerInterface {
  * @since 11
  */
 declare class CalendarPickerAttribute extends CommonMethod<CalendarPickerAttribute> {
-    /**
-     * Set the alignment between entry and calendar dialog.
-     * @param { CalendarAlign } alignType - The type of alignment between entry and calendar dialog.
-     * @param { Offset } offset - The offset between entry and calendar dialog.
-     * @returns { CalendarPickerAttribute } the attribute of the CalendarPicker.
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @since 10
-     */
-    /**
-     * Set the alignment between entry and calendar dialog.
-     * @param { CalendarAlign } alignType - The type of alignment between entry and calendar dialog.
-     * @param { Offset } offset - The offset between entry and calendar dialog.
-     * @returns { CalendarPickerAttribute } the attribute of the CalendarPicker.
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 11
-     */
-    edgeAlign(alignType: CalendarAlign, offset?: Offset): CalendarPickerAttribute;
+  /**
+   * Set the alignment between entry and calendar dialog.
+   * @param { CalendarAlign } alignType - The type of alignment between entry and calendar dialog.
+   * @param { Offset } offset - The offset between entry and calendar dialog.
+   * @returns { CalendarPickerAttribute } the attribute of the CalendarPicker.
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @since 10
+   */
+  /**
+   * Set the alignment between entry and calendar dialog.
+   * @param { CalendarAlign } alignType - The type of alignment between entry and calendar dialog.
+   * @param { Offset } offset - The offset between entry and calendar dialog.
+   * @returns { CalendarPickerAttribute } the attribute of the CalendarPicker.
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 11
+   */
+  edgeAlign(alignType: CalendarAlign, offset?: Offset): CalendarPickerAttribute;
 
-    /**
-     * Sets the text style of entry
-     * @param { PickerTextStyle } value - indicates the text style of entry.
-     * @returns { CalendarPickerAttribute } the attribute of the CalendarPicker.
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @since 10
-     */
-    /**
-     * Sets the text style of entry
-     * @param { PickerTextStyle } value - indicates the text style of entry.
-     * @returns { CalendarPickerAttribute } the attribute of the CalendarPicker.
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 11
-     */
-    textStyle(value: PickerTextStyle): CalendarPickerAttribute;
+  /**
+   * Sets the text style of entry
+   * @param { PickerTextStyle } value - indicates the text style of entry.
+   * @returns { CalendarPickerAttribute } the attribute of the CalendarPicker.
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @since 10
+   */
+  /**
+   * Sets the text style of entry
+   * @param { PickerTextStyle } value - indicates the text style of entry.
+   * @returns { CalendarPickerAttribute } the attribute of the CalendarPicker.
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 11
+   */
+  textStyle(value: PickerTextStyle): CalendarPickerAttribute;
 
-    /**
-     * Callback for selected date changed.
-     * @param { function } callback - Callback for selected date changed.
-     * @returns { CalendarPickerAttribute } the attribute of the CalendarPicker.
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @since 10
-     */
-    /**
-     * Callback for selected date changed.
-     * @param { function } callback - Callback for selected date changed.
-     * @returns { CalendarPickerAttribute } the attribute of the CalendarPicker.
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 11
-     */
-    /**
-     * Callback for selected date changed.
-     * @param { Callback<Date> } callback - callback for selected date changed.
-     * @returns { CalendarPickerAttribute } the attribute of the CalendarPicker.
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 13
-     */
-    onChange(callback: Callback<Date>): CalendarPickerAttribute;
+  /**
+   * Callback for selected date changed.
+   * @param { function } callback - Callback for selected date changed.
+   * @returns { CalendarPickerAttribute } the attribute of the CalendarPicker.
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @since 10
+   */
+  /**
+   * Callback for selected date changed.
+   * @param { function } callback - Callback for selected date changed.
+   * @returns { CalendarPickerAttribute } the attribute of the CalendarPicker.
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 11
+   */
+  /**
+   * Callback for selected date changed.
+   * @param { Callback<Date> } callback - callback for selected date changed.
+   * @returns { CalendarPickerAttribute } the attribute of the CalendarPicker.
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 13
+   */
+  onChange(callback: Callback<Date>): CalendarPickerAttribute;
 }
 
 /**
@@ -266,259 +266,259 @@ declare class CalendarPickerAttribute extends CommonMethod<CalendarPickerAttribu
  * @since 11
  */
 declare interface CalendarDialogOptions extends CalendarOptions {
-    /**
-     * Called when the OK button in the dialog is clicked.
-     * @type { ?function }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @since 10
-     */
-    /**
-     * Called when the OK button in the dialog is clicked.
-     * @type { ?function }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 11
-     */
-    /**
-     * Called when the OK button in the dialog is clicked.
-     * @type { ?Callback<Date> }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 13
-     */
-    onAccept?: Callback<Date>;
+  /**
+   * Called when the OK button in the dialog is clicked.
+   * @type { ?function }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @since 10
+   */
+  /**
+   * Called when the OK button in the dialog is clicked.
+   * @type { ?function }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 11
+   */
+  /**
+   * Called when the OK button in the dialog is clicked.
+   * @type { ?Callback<Date> }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 13
+   */
+  onAccept?: Callback<Date>;
 
-    /**
-     * Called when the Cancel button in the dialog is clicked.
-     * @type { ?function }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @since 10
-     */
-    /**
-     * Called when the Cancel button in the dialog is clicked.
-     * @type { ?function }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 11
-     */
-    /**
-     * Called when the Cancel button in the dialog is clicked.
-     * @type { ?VoidCallback }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 13
-     */
-    onCancel?: VoidCallback;
+  /**
+   * Called when the Cancel button in the dialog is clicked.
+   * @type { ?function }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @since 10
+   */
+  /**
+   * Called when the Cancel button in the dialog is clicked.
+   * @type { ?function }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 11
+   */
+  /**
+   * Called when the Cancel button in the dialog is clicked.
+   * @type { ?VoidCallback }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 13
+   */
+  onCancel?: VoidCallback;
 
-    /**
-     * This event is triggered when a date is selected in dialog.
-     * @type { ?function }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @since 10
-     */
-    /**
-     * This event is triggered when a date is selected in dialog.
-     * @type { ?function }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 11
-     */
-    /**
-     * This event is triggered when a date is selected in dialog.
-     * @type { ?Callback<Date> }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 13
-     */
-    onChange?: Callback<Date>;
+  /**
+   * This event is triggered when a date is selected in dialog.
+   * @type { ?function }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @since 10
+   */
+  /**
+   * This event is triggered when a date is selected in dialog.
+   * @type { ?function }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 11
+   */
+  /**
+   * This event is triggered when a date is selected in dialog.
+   * @type { ?Callback<Date> }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 13
+   */
+  onChange?: Callback<Date>;
 
-    /**
-     * Defines the calendarPickerDialog's background color
-     *
-     * @type { ?ResourceColor }
-     * @default Color.Transparent
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @since 11
-     */
-    /**
-     * Defines the calendarPickerDialog's background color
-     *
-     * @type { ?ResourceColor }
-     * @default Color.Transparent
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 12
-     */
-    backgroundColor?: ResourceColor;
+  /**
+   * Defines the calendarPickerDialog's background color
+   *
+   * @type { ?ResourceColor }
+   * @default Color.Transparent
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @since 11
+   */
+  /**
+   * Defines the calendarPickerDialog's background color
+   *
+   * @type { ?ResourceColor }
+   * @default Color.Transparent
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 12
+   */
+  backgroundColor?: ResourceColor;
 
-    /**
-     * Defines the calendarPickerDialog's background blur Style
-     *
-     * @type { ?BlurStyle }
-     * @default BlurStyle.COMPONENT_ULTRA_THICK
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @since 11
-     */
-    /**
-     * Defines the calendarPickerDialog's background blur Style
-     *
-     * @type { ?BlurStyle }
-     * @default BlurStyle.COMPONENT_ULTRA_THICK
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 12
-     */
-    backgroundBlurStyle?: BlurStyle;
+  /**
+   * Defines the calendarPickerDialog's background blur Style
+   *
+   * @type { ?BlurStyle }
+   * @default BlurStyle.COMPONENT_ULTRA_THICK
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @since 11
+   */
+  /**
+   * Defines the calendarPickerDialog's background blur Style
+   *
+   * @type { ?BlurStyle }
+   * @default BlurStyle.COMPONENT_ULTRA_THICK
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 12
+   */
+  backgroundBlurStyle?: BlurStyle;
 
-    /**
-     * Style of accept button.
-     *
-     * @type { ?PickerDialogButtonStyle }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 12
-     */
-    acceptButtonStyle?: PickerDialogButtonStyle;
+  /**
+   * Style of accept button.
+   *
+   * @type { ?PickerDialogButtonStyle }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 12
+   */
+  acceptButtonStyle?: PickerDialogButtonStyle;
 
-    /**
-     * Style of cancel button.
-     *
-     * @type { ?PickerDialogButtonStyle }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 12
-     */
-    cancelButtonStyle?: PickerDialogButtonStyle;
+  /**
+   * Style of cancel button.
+   *
+   * @type { ?PickerDialogButtonStyle }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 12
+   */
+  cancelButtonStyle?: PickerDialogButtonStyle;
 
-    /**
-     * Callback function when the dialog appears.
-     *
-     * @type { ?function }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 12
-     */
-    /**
-     * Callback function when the dialog appears.
-     *
-     * @type { ?VoidCallback }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 13
-     */
-    onDidAppear?: VoidCallback;
+  /**
+   * Callback function when the dialog appears.
+   *
+   * @type { ?function }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 12
+   */
+  /**
+   * Callback function when the dialog appears.
+   *
+   * @type { ?VoidCallback }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 13
+   */
+  onDidAppear?: VoidCallback;
 
-    /**
-     * Callback function when the dialog disappears.
-     *
-     * @type { ?function }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 12
-     */
-    /**
-     * Callback function when the dialog disappears.
-     *
-     * @type { ?VoidCallback }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 13
-     */
-    onDidDisappear?: VoidCallback;
+  /**
+   * Callback function when the dialog disappears.
+   *
+   * @type { ?function }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 12
+   */
+  /**
+   * Callback function when the dialog disappears.
+   *
+   * @type { ?VoidCallback }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 13
+   */
+  onDidDisappear?: VoidCallback;
 
-    /**
-     * Callback function before the dialog openAnimation starts.
-     *
-     * @type { ?function }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 12
-     */
-    /**
-     * Callback function before the dialog openAnimation starts.
-     *
-     * @type { ?VoidCallback }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 13
-     */
-    onWillAppear?: VoidCallback;
+  /**
+   * Callback function before the dialog openAnimation starts.
+   *
+   * @type { ?function }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 12
+   */
+  /**
+   * Callback function before the dialog openAnimation starts.
+   *
+   * @type { ?VoidCallback }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 13
+   */
+  onWillAppear?: VoidCallback;
 
-    /**
-     * Callback function before the dialog closeAnimation starts.
-     *
-     * @type { ?function }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 12
-     */
-    /**
-     * Callback function before the dialog closeAnimation starts.
-     *
-     * @type { ?VoidCallback }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 13
-     */
-    onWillDisappear?: VoidCallback;
+  /**
+   * Callback function before the dialog closeAnimation starts.
+   *
+   * @type { ?function }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 12
+   */
+  /**
+   * Callback function before the dialog closeAnimation starts.
+   *
+   * @type { ?VoidCallback }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 13
+   */
+  onWillDisappear?: VoidCallback;
 
-    /**
-     * Defines the dialog's shadow.
-     *
-     * @type { ?(ShadowOptions | ShadowStyle) }
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 12
-     */
-    shadow?: ShadowOptions | ShadowStyle;
+  /**
+   * Defines the dialog's shadow.
+   *
+   * @type { ?(ShadowOptions | ShadowStyle) }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 12
+   */
+  shadow?: ShadowOptions | ShadowStyle;
 
-    /**
-     * Defines whether to respond to the hover mode.
-     *
-     * @type { ?boolean }
-     * @default false
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 14
-     */
-    enableHoverMode?: boolean;
+  /**
+   * Defines whether to respond to the hover mode.
+   *
+   * @type { ?boolean }
+   * @default false
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 14
+   */
+  enableHoverMode?: boolean;
 
-    /**
-     * Defines the dialog's display area in hover mode.
-     *
-     * @type { ?HoverModeAreaType }
-     * @default HoverModeAreaType.BOTTOM_SCREEN
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 14
-     */
-    hoverModeArea?: HoverModeAreaType;
+  /**
+   * Defines the dialog's display area in hover mode.
+   *
+   * @type { ?HoverModeAreaType }
+   * @default HoverModeAreaType.BOTTOM_SCREEN
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 14
+   */
+  hoverModeArea?: HoverModeAreaType;
 }
 
 /**
@@ -535,22 +535,22 @@ declare interface CalendarDialogOptions extends CalendarOptions {
  * @since 11
  */
 declare class CalendarPickerDialog {
-    /**
-     * Invoking method display.
-     * @param { CalendarDialogOptions } options - the option of th calendarPicker.
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @since 10
-     */
-    /**
-     * Invoking method display.
-     * @param { CalendarDialogOptions } options - the option of th calendarPicker.
-     * @syscap SystemCapability.ArkUI.ArkUI.Full
-     * @crossplatform
-     * @atomicservice
-     * @since 11
-     */
-    static show(options?: CalendarDialogOptions): void;
+  /**
+   * Invoking method display.
+   * @param { CalendarDialogOptions } options - the option of th calendarPicker.
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @since 10
+   */
+  /**
+   * Invoking method display.
+   * @param { CalendarDialogOptions } options - the option of th calendarPicker.
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 11
+   */
+  static show(options?: CalendarDialogOptions): void;
 }
 
 /**

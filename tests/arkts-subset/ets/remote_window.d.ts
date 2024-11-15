@@ -79,6 +79,7 @@ interface RRect {
 interface WindowAnimationTarget {
   /**
    * @type { string }
+   * @readonly
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @systemapi
    * @since 9
@@ -87,6 +88,7 @@ interface WindowAnimationTarget {
 
   /**
    * @type { string }
+   * @readonly
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @systemapi
    * @since 9
@@ -95,6 +97,7 @@ interface WindowAnimationTarget {
 
   /**
    * @type { RRect }
+   * @readonly
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @systemapi
    * @since 9
@@ -103,6 +106,7 @@ interface WindowAnimationTarget {
 
   /**
    * @type { number }
+   * @readonly
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @systemapi
    * @since 9

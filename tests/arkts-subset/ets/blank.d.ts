@@ -30,8 +30,8 @@
  *
  * @interface BlankInterface
  * @syscap SystemCapability.ArkUI.ArkUI.Full
+ * @form
  * @since 9
- * @form
  */
 /**
  * Create Blank.
@@ -39,8 +39,8 @@
  * @interface BlankInterface
  * @syscap SystemCapability.ArkUI.ArkUI.Full
  * @crossplatform
+ * @form
  * @since 10
- * @form
  */
 /**
  * Create Blank.
@@ -48,9 +48,9 @@
  * @interface BlankInterface
  * @syscap SystemCapability.ArkUI.ArkUI.Full
  * @crossplatform
+ * @form
  * @atomicservice
  * @since 11
- * @form
  */
 interface BlankInterface {
   /**
@@ -67,8 +67,8 @@ interface BlankInterface {
    * @param { number | string } min
    * @returns { BlankAttribute }
    * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @form
    * @since 9
-   * @form
    */
   /**
    * The minimum size of the blank fill assembly on the container spindle.
@@ -77,8 +77,8 @@ interface BlankInterface {
    * @returns { BlankAttribute }
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @crossplatform
+   * @form
    * @since 10
-   * @form
    */
   /**
    * The minimum size of the blank fill assembly on the container spindle.
@@ -87,9 +87,9 @@ interface BlankInterface {
    * @returns { BlankAttribute }
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @crossplatform
+   * @form
    * @atomicservice
    * @since 11
-   * @form
    */
   (min?: number | string): BlankAttribute;
 }
@@ -106,8 +106,8 @@ interface BlankInterface {
  *
  * @extends CommonMethod<BlankAttribute>
  * @syscap SystemCapability.ArkUI.ArkUI.Full
+ * @form
  * @since 9
- * @form
  */
 /**
  * Inheritance CommonMethod Set Styles
@@ -115,8 +115,8 @@ interface BlankInterface {
  * @extends CommonMethod<BlankAttribute>
  * @syscap SystemCapability.ArkUI.ArkUI.Full
  * @crossplatform
+ * @form
  * @since 10
- * @form
  */
 /**
  * Inheritance CommonMethod Set Styles
@@ -124,9 +124,9 @@ interface BlankInterface {
  * @extends CommonMethod<BlankAttribute>
  * @syscap SystemCapability.ArkUI.ArkUI.Full
  * @crossplatform
+ * @form
  * @atomicservice
  * @since 11
- * @form
  */
 declare class BlankAttribute extends CommonMethod<BlankAttribute> {
   /**
@@ -143,8 +143,8 @@ declare class BlankAttribute extends CommonMethod<BlankAttribute> {
    * @param { ResourceColor } value
    * @returns { BlankAttribute }
    * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @form
    * @since 9
-   * @form
    */
   /**
    * color: set color.
@@ -153,8 +153,8 @@ declare class BlankAttribute extends CommonMethod<BlankAttribute> {
    * @returns { BlankAttribute }
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @crossplatform
+   * @form
    * @since 10
-   * @form
    */
   /**
    * color: set color.
@@ -163,9 +163,9 @@ declare class BlankAttribute extends CommonMethod<BlankAttribute> {
    * @returns { BlankAttribute }
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @crossplatform
+   * @form
    * @atomicservice
    * @since 11
-   * @form
    */
   color(value: ResourceColor): BlankAttribute;
 }
@@ -180,25 +180,25 @@ declare class BlankAttribute extends CommonMethod<BlankAttribute> {
  * Defines Blank Component.
  *
  * @syscap SystemCapability.ArkUI.ArkUI.Full
+ * @form
  * @since 9
- * @form
  */
 /**
  * Defines Blank Component.
  *
  * @syscap SystemCapability.ArkUI.ArkUI.Full
  * @crossplatform
+ * @form
  * @since 10
- * @form
  */
 /**
  * Defines Blank Component.
  *
  * @syscap SystemCapability.ArkUI.ArkUI.Full
  * @crossplatform
+ * @form
  * @atomicservice
  * @since 11
- * @form
  */
 declare const Blank: BlankInterface;
 
@@ -212,24 +212,24 @@ declare const Blank: BlankInterface;
  * Defines Blank Component instance.
  *
  * @syscap SystemCapability.ArkUI.ArkUI.Full
+ * @form
  * @since 9
- * @form
  */
 /**
  * Defines Blank Component instance.
  *
  * @syscap SystemCapability.ArkUI.ArkUI.Full
  * @crossplatform
+ * @form
  * @since 10
- * @form
  */
 /**
  * Defines Blank Component instance.
  *
  * @syscap SystemCapability.ArkUI.ArkUI.Full
  * @crossplatform
+ * @form
  * @atomicservice
  * @since 11
- * @form
  */
 declare const BlankInstance: BlankAttribute;
