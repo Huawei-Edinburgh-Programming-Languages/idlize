@@ -29,7 +29,6 @@ export interface XMLNativeModule {
     _ParseInfo_getAttributeCount(self: KPointer): number 
     _XmlPullParser_parse(self: KPointer, thisArray: Uint8Array, thisLength: int32): void 
     _XmlSerializer_ctor(thisArray: Uint8Array, thisLength: int32): KPointer 
-    _ParseInfo_ctor(): KPointer 
     _XmlPullParser_ctor(buffer: string, thisArray: Uint8Array, thisLength: int32): KPointer 
     _CallCallback(callbackKind: int32, args: Uint8Array, argsSize: int32): void 
     _CallCallbackResourceHolder(holder: KPointer, resourceId: int32): void 

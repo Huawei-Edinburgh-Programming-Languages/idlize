@@ -527,7 +527,7 @@ class Deserializer : public DeserializerBase {
     {
         Deserializer& valueDeserializer = *this;
         void* ptr = valueDeserializer.readPointer();
-        return { .ptr = ptr };
+        return { ptr };
     }
     OH_ParseOptions readParseOptions()
     {
@@ -600,6 +600,11 @@ void XmlSerializer_setCDATAImpl(OH_NativePointer thisPtr, const OH_String* text)
 void XmlSerializer_setTextImpl(OH_NativePointer thisPtr, const OH_String* text) {
 }
 void XmlSerializer_setDocTypeImpl(OH_NativePointer thisPtr, const OH_String* text) {
+}
+OH_XML_ParseInfoHandle ParseInfo_constructImpl() {
+    return {};
+}
+void ParseInfo_destructImpl(OH_XML_ParseInfoHandle thiz) {
 }
 OH_Number ParseInfo_getColumnNumberImpl(OH_NativePointer thisPtr) {
     return {};
@@ -696,6 +701,8 @@ const OH_XML_XmlSerializerModifier* OH_XML_XmlSerializerModifierImpl() {
 }
 const OH_XML_ParseInfoModifier* OH_XML_ParseInfoModifierImpl() {
     const static OH_XML_ParseInfoModifier instance = {
+        &ParseInfo_constructImpl,
+        &ParseInfo_destructImpl,
         &ParseInfo_getColumnNumberImpl,
         &ParseInfo_getDepthImpl,
         &ParseInfo_getLineNumberImpl,
@@ -811,15 +818,15 @@ void impl_XmlSerializer_setDocType(OH_NativePointer thisPtr, const KStringPtr& t
 }
 KOALA_INTEROP_V2(XmlSerializer_setDocType, OH_NativePointer, KStringPtr)
  
-// OH_NativePointer impl_ParseInfo_ctor() {
-//         return GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->construct();
-// }
-// KOALA_INTEROP_0(ParseInfo_ctor, OH_NativePointer)
+OH_NativePointer impl_ParseInfo_ctor() {
+        return GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->construct();
+}
+KOALA_INTEROP_0(ParseInfo_ctor, OH_NativePointer)
  
-// OH_NativePointer impl_ParseInfo_getFinalizer() {
-//         return (OH_NativePointer) &GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->destruct;
-// }
-// KOALA_INTEROP_0(ParseInfo_getFinalizer, OH_NativePointer)
+OH_NativePointer impl_ParseInfo_getFinalizer() {
+        return (OH_NativePointer) &GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->destruct;
+}
+KOALA_INTEROP_0(ParseInfo_getFinalizer, OH_NativePointer)
  
 OH_Int32 impl_ParseInfo_getColumnNumber(OH_NativePointer thisPtr) {
         return GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->getColumnNumber(thisPtr).i32;

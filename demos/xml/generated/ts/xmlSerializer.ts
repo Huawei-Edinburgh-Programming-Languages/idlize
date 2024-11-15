@@ -120,11 +120,11 @@ export class Deserializer extends DeserializerBase {
         const _call: KPointer = this.readPointer()
         return (value: boolean): void => { const _argsSerializer: Serializer = Serializer.hold(); _argsSerializer.writeInt32(_resource.resourceId);; _argsSerializer.writePointer(_call);; _argsSerializer.writeBoolean(value); getXMLNativeModule()._CallCallback(CallbackKind.Kind_Callback_Boolean_void, _argsSerializer.asArray(), _argsSerializer.length());; _argsSerializer.release();; return; }
     }
-    // readParseInfo(): ParseInfo {
-    //     let valueDeserializer: Deserializer = this
-    //     let ptr: KPointer = valueDeserializer.readPointer()
-    //     return ParseInfo.construct(ptr)
-    // }
+    readParseInfo(): ParseInfo {
+        let valueDeserializer: Deserializer = this
+        let ptr: KPointer = valueDeserializer.readPointer()
+        return ParseInfo.construct(ptr)
+    }
     readParseOptions(): ParseOptions {
         let valueDeserializer: Deserializer = this
         const supportDoctype_buf_runtimeType = (valueDeserializer.readInt8() as int32)
@@ -173,12 +173,12 @@ export function deserializeAndCallCallback_Boolean_void(thisDeserializer: Deseri
     _call(value);
 }
 export function deserializeAndCallCallback_EventType_ParseInfo_Boolean(thisDeserializer: Deserializer) {
-    // const _resourceId: int32 = thisDeserializer.readInt32()
-    // const _call = (ResourceHolder.instance().get(_resourceId) as ((eventType: xml.EventType, value: ParseInfo) => boolean))
-    // let eventType: xml.EventType = (thisDeserializer.readInt32() as xml.EventType)
-    // let value: ParseInfo = (thisDeserializer.readParseInfo() as ParseInfo)
-    // let _continuation: ((value: boolean) => void) = thisDeserializer.readCallback_Boolean_void()
-    // _continuation(_call(eventType, value));
+    const _resourceId: int32 = thisDeserializer.readInt32()
+    const _call = (ResourceHolder.instance().get(_resourceId) as ((eventType: xml.EventType, value: ParseInfo) => boolean))
+    let eventType: xml.EventType = (thisDeserializer.readInt32() as xml.EventType)
+    let value: ParseInfo = (thisDeserializer.readParseInfo() as ParseInfo)
+    let _continuation: ((value: boolean) => void) = thisDeserializer.readCallback_Boolean_void()
+    _continuation(_call(eventType, value));
 }
 export function deserializeAndCallCallback_String_String_Boolean(thisDeserializer: Deserializer) {
     const _resourceId: int32 = thisDeserializer.readInt32()

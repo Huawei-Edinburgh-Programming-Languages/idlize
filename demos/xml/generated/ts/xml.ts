@@ -27,7 +27,7 @@ export namespace xml {
         ENTITY_REFERENCE = 9,
         WHITESPACE = 10,
     }
-    }
+}
 export interface XmlSerializerInterface {
     setAttributes(name: string, value: string): void 
     addEmptyElement(name: string): void 
@@ -117,11 +117,13 @@ export class XmlSerializer implements XmlSerializerInterface {
 }
 export class ParseInfo implements ParseInfoInterface {
     private peer: KPointer
-     constructor() {
-        this.peer = getXMLNativeModule()._ParseInfo_ctor()
-    }
     getPeer(): Finalizable | undefined {
         return { ptr: this.peer }
+    }
+    static construct(ptr: KPointer): ParseInfo {
+        const objParseInfo: ParseInfo = new ParseInfo()
+        objParseInfo.peer = ptr
+        return objParseInfo
     }
     getColumnNumber(): number {
         const result = getXMLNativeModule()._ParseInfo_getColumnNumber(this.peer)

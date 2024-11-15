@@ -15,7 +15,7 @@
 
 import * as fs from 'fs'
 import * as path from 'path'
-import { createContainerType, createReferenceType, forceAsNamedNode, getExtAttribute, hasExtAttribute, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLMethod, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLU8Type, IDLUint8ArrayType, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isInterface, isMethod, isReferenceType, isType, isUnionType, maybeOptional } from '../idl'
+import { createConstructor, createContainerType, createReferenceType, createTypeParameterReference, forceAsNamedNode, getExtAttribute, hasExtAttribute, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLMethod, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLU8Type, IDLUint8ArrayType, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isInterface, isMethod, isReferenceType, isType, isUnionType, maybeOptional } from '../idl'
 import { IndentedPrinter } from "../IndentedPrinter"
 import { PeerLibrary } from './PeerLibrary'
 import { Language } from '../Language'
@@ -26,7 +26,7 @@ import { makeDeserializeAndCall, makeSerializerForOhos, readLangTemplate } from 
 import { qualifiedName } from './idl/common'
 import { isMaterialized } from './idl/IdlPeerGeneratorVisitor'
 import { StructPrinter } from './printers/StructPrinter'
-import { CppLanguageWriter, createLanguageWriter, ExpressionStatement, FieldModifier, LanguageExpression, LanguageWriter, Method, MethodSignature, NamedMethodSignature } from './LanguageWriters'
+import { CppLanguageWriter, createLanguageWriter, ExpressionStatement, FieldModifier, LanguageExpression, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature } from './LanguageWriters'
 import { printBridgeCcForOHOS } from './printers/BridgeCcPrinter'
 import { printCallbacksKinds, printManagedCaller } from './printers/CallbacksPrinter'
 import { writeDeserializer, writeSerializer } from './printers/SerializerPrinter'
@@ -117,7 +117,11 @@ class OHOSVisitor {
         _c.print(`const static ${name} instance = {`)
         _c.pushIndent()
         _h.pushIndent()
-        clazz.constructors.forEach((ctor, index) => {
+        let ctors = [...clazz.constructors]
+        if (ctors.length == 0) {
+            ctors.push(createConstructor([], undefined)) // Add empty fake constructor
+        }
+        ctors.forEach((ctor, index) => {
             let name = `construct${(index > 0) ? index.toString() : ""}`
             let params = ctor.parameters.map(it => new NameType(_h.escapeKeyword(it.name), this.mapType(it.type!)))
             let argConvertors = ctor.parameters.map(param => generateArgConvertor(this.library, param))
@@ -127,7 +131,7 @@ class OHOSVisitor {
             _c.print(`&${implName},`)
             this.impls.set(implName, { params, returnType: handleType, paramsCString: cppArgs})
         })
-        if (clazz.constructors.length > 0) {
+        {
             let destructName = `${clazz.name}_destructImpl`
             let params = [new NameType("thiz", handleType)]
             _h.print(`void (*destruct)(${params.map(it => `${it.type} ${it.name}`).join(", ")});`)
@@ -287,14 +291,9 @@ class OHOSVisitor {
                     writer.writeNativeMethodDeclaration(`_${it.name}_${method.name}`, signature)  // TODO temporarily removed _${this.libraryName} prefix
                 })
             })
+            // TODO TBD do we need to provide declaration for "fake" constructor for interfaces?
             this.interfaces.forEach(it => {
                 const ctors = it.constructors.map(it => ({ parameters: it.parameters, returnType: it.returnType }))
-                if (ctors.length === 0) {
-                    ctors.push({
-                        returnType: IDLNumberType /* unused? */,
-                        parameters: []
-                    })
-                }
                 ctors.forEach(ctor => {
                     const signature = makePeerCallSignature(this.library, ctor.parameters, IDLPointerType)
                     writer.writeNativeMethodDeclaration(`_${it.name}_ctor`, signature)
@@ -389,12 +388,6 @@ class OHOSVisitor {
             this.peerWriter.writeClass(`${int.name}`, writer => {
                 writer.writeFieldDeclaration('peer', IDLPointerType, [FieldModifier.PRIVATE], false)
                 const ctors = int.constructors.map(it => ({ parameters: it.parameters, returnType: it.returnType }))
-                if (ctors.length === 0) {
-                    ctors.push({
-                        parameters: [],
-                        returnType: IDLVoidType
-                    })
-                }
                 ctors.forEach(ctor => {
                     const signature = writer.makeNamedSignature(ctor.returnType ?? IDLVoidType, ctor.parameters)
                     // TODO remove duplicated code from writePeerMethod (PeersPrinter.ts)
@@ -448,12 +441,30 @@ class OHOSVisitor {
                     })
                 })
 
+                // extra memebers from MaterializerPrinter.ts
+                // TODO refactor MaterializedPrinter to generate OHOS peers
+
                 // write getPeer() method
                 const getPeerSig = new MethodSignature(maybeOptional(createReferenceType("Finalizable"), true),[])
                 writer.writeMethodImplementation(new Method("getPeer", getPeerSig), writer => {
                     // TODO add better (platform-agnostic) way to return Finalizable
                     writer.writeStatement(writer.makeReturn(writer.makeString("{ ptr: this.peer }")))
                 })
+                
+                // write construct(ptr: number) method
+                if (ctors.length === 0) {
+                    const typeArguments = int.typeParameters
+                    const clazzRefType = createReferenceType(int.name, typeArguments?.map(createTypeParameterReference))
+                    const constructSig = new NamedMethodSignature(clazzRefType, [IDLPointerType], ["ptr"])
+                    writer.writeMethodImplementation(new Method("construct", constructSig, [MethodModifier.STATIC], typeArguments), writer => {
+                        const objVar = `obj${int.name}`
+                        writer.writeStatement(writer.makeAssign(objVar, clazzRefType, writer.makeNewObject(int.name), true))
+                        writer.writeStatement(
+                            writer.makeAssign(`${objVar}.peer`, undefined, writer.makeString(`ptr`), false)
+                        )
+                        writer.writeStatement(writer.makeReturn(writer.makeString(objVar)))
+                    })
+                }
 
                 int.methods.forEach(method => {
                     const signature = writer.makeNamedSignature(method.returnType, method.parameters)
