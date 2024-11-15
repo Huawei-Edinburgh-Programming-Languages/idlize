@@ -144,7 +144,7 @@ class CppEnumEntityStatement implements LanguageStatement {
         this._enum.elements.forEach((member, index) =>
             writer.print(`${member.name} = ${member.initializer ?? index},`))
         writer.popIndent()
-        writer.print(`} ${this.enumEntry.name};`)
+        writer.print(`} ${this._enum.name};`)
     }
 }
 

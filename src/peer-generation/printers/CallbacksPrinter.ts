@@ -105,7 +105,7 @@ export function printCallbacksKindsImports(language: Language, writer: LanguageW
     }
 }
 
-export function printCallbacksKinds(library: IdlPeerLibrary, writer: LanguageWriter): void {
+export function printCallbacksKinds(library: PeerLibrary, writer: LanguageWriter): void {
     let callbacksKindsEnum = idl.createEnum(
         CallbackKind, [], {}
     )

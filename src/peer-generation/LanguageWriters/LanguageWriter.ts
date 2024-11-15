@@ -231,7 +231,7 @@ export class TsEnumEntityStatement implements LanguageStatement {
         const namespace = idl.getExtAttribute(this.enumEntity, idl.IDLExtendedAttributes.Namespace)
         if (namespace) writer.pushNamespace(namespace)
             
-        writer.print(`${this.isExport ? "export " : ""}enum ${this.enumEntry.name} {`)
+        writer.print(`${this.isExport ? "export " : ""}enum ${this.enumEntity.name} {`)
         writer.pushIndent()
         this.enumEntity.elements.forEach((member, index) => {
             // writer.print(member.comment)
