@@ -22,11 +22,12 @@ import { camelCaseToUpperSnakeCase } from "../../util";
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
 import { IdlPeerClass } from "../idl/IdlPeerClass";
 import { IdlPeerMethod } from "../idl/IdlPeerMethod";
-import { createReferenceType, forceAsNamedNode, IDLVoidType, maybeOptional, toIDLType } from "../../idl";
+import { createReferenceType, IDLVoidType, maybeOptional } from "../../idl";
 import { getReferenceResolver } from "../ReferenceResolver";
 import { Language } from "../../Language";
 import { MaterializedClass, MaterializedMethod } from "../Materialized";
 import { RetConvertor } from "../ArgConvertors";
+import { PrimitiveType } from "../ArkPrimitiveType";
 
 export function generateEventReceiverName(componentName: string) {
     return `${PeerGeneratorConfig.cppPrefix}ArkUI${componentName}EventsReceiver`
@@ -82,8 +83,8 @@ class HeaderVisitor {
 
         const destroyPeerReturnType: RetConvertor = {
             isVoid: true,
-            nativeType: () => "void",
-            interopType: () => "void",
+            nativeType: () => PrimitiveType.Void.getText(),
+            interopType: () => PrimitiveType.Void.getText(),
             macroSuffixPart: () => "V"
         }
         
@@ -120,7 +121,7 @@ class HeaderVisitor {
             const args = ["Ark_Int32 nodeId",///same code in EventsPrinter
                 ...callback.args.map(it =>
                     `const ${nameConvertor.convertType(maybeOptional(library.typeConvertor(it.name, it.type, it.nullable).nativeType(), it.nullable))} ${it.name}`)]
-            printMethodDeclaration(this.api, "void", `(*${callback.methodName})`, args, `;`)
+            printMethodDeclaration(this.api, PrimitiveType.Void.getText(), `(*${callback.methodName})`, args, `;`)
         }
         this.api.popIndent()
         this.api.print(`} ${receiver};\n`)
@@ -168,8 +169,8 @@ class HeaderVisitor {
 export function createDestroyPeerMethod(clazz: MaterializedClass): MaterializedMethod {
     const destroyPeerReturnType: RetConvertor = {
         isVoid: true,
-        nativeType: () => "void",
-        interopType: () => "void",
+        nativeType: () => PrimitiveType.Void.getText(),
+        interopType: () => PrimitiveType.Void.getText(),
         macroSuffixPart: () => "V"
     }
 
