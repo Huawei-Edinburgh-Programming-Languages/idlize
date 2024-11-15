@@ -237,7 +237,7 @@
 |`motionPath`| Function | | | |
 |`shadow`| Function | Roman Sedaikin | done | |
 |`clip`| Function | Skroba Gleb |  blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
-|`clipShape`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
+|`clipShape`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
 |`mask`| Function | Dmitry A Smirnov| in progress | |
 |`maskShape`| Function | Dmitry A Smirnov| in progress | |
 |`key`| Function | | | |
@@ -273,8 +273,8 @@
 |`backgroundImage`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`backgroundBlurStyle`| Function | Skroba Gleb | done |  |
 |`foregroundBlurStyle`| Function | Roman Sedaikin | done | |
-|`focusScopeId`| Function | Berezin Kirill | in progress | |
-|`focusScopePriority`| Function | Berezin Kirill | in progress | |
+|`focusScopeId`| Function | Dmitry A Smirnov| in progress | |
+|`focusScopePriority`| Function | Dmitry A Smirnov| in progress | |
 |`gesture`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARW2A |
 |`priorityGesture`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARW2A |
 |`parallelGesture`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARW2A |
