@@ -723,8 +723,8 @@
 |*Progress*| *Component* | Erokhin Ilya |   | |
 |`setProgressOptions`| Function | Erokhin Ilya | devdone | |
 |`value`| Function | Erokhin Ilya | devdone | |
-|`color`| Function | Erokhin Ilya | testskipped | |
-|`style`| Function | Erokhin Ilya | testskipped | |
+|`color`| Function | Erokhin Ilya | devdone | |
+|`style`| Function | Erokhin Ilya | blocked | linearStyle.strokeRadius https://gitee.com/nikolay-igotti/idlize/issues/IB4G8D |
 |`privacySensitive`| Function | Erokhin Ilya | testskipped | |
 |`contentModifier`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |*QRCode*| *Component* | Evstigneev Roman |in progress|  |
