@@ -173,14 +173,14 @@
 |`focusable`| Function | Roman Sedaikin | done | |
 |`onFocus`| Function | Roman Sedaikin | done | |
 |`onBlur`| Function | Roman Sedaikin | done | |
-|`tabIndex`| Function | | | |
-|`defaultFocus`| Function | | | |
-|`groupDefaultFocus`| Function | | | |
-|`focusOnTouch`| Function | | | |
-|`focusBox`| Function | | | |
+|`tabIndex`| Function | Dmitry A Smirnov| in progress | |
+|`defaultFocus`| Function | Dmitry A Smirnov| in progress | |
+|`groupDefaultFocus`| Function | Dmitry A Smirnov| in progress | |
+|`focusOnTouch`| Function | Dmitry A Smirnov| in progress | |
+|`focusBox`| Function | Dmitry A Smirnov| in progress | |
 |`animation`| Function | Erokhin Ilya | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAXHJP|
-|`transition`| Function | | | |
-|`motionBlur`| Function | | | |
+|`transition`| Function | Dmitry A Smirnov| in progress | |
+|`motionBlur`| Function | Dmitry A Smirnov| in progress | |
 |`brightness`| Function | Lobah Mikhail | in progress | |
 |`contrast`| Function | Lobah Mikhail | in progress | |
 |`grayscale`| Function | Lobah Mikhail | in progress | |
@@ -195,9 +195,9 @@
 |`freeze`| Function | Lobah Mikhail | in progress | |
 |`translate`| Function | Erokhin Ilya | done |  |
 |`scale`| Function | Erokhin Ilya | done |  |
-|`gridSpan`| Function | | | |
-|`gridOffset`| Function | | | |
-|`rotate`| Function | | | |
+|`gridSpan`| Function | Dmitry A Smirnov| in progress | |
+|`gridOffset`| Function | Dmitry A Smirnov| in progress | |
+|`rotate`| Function | Dmitry A Smirnov| in progress | |
 |`transform`| Function | | | |
 |`onAppear`| Function | Roman Sedaikin | done | |
 |`onDisAppear`| Function | Roman Sedaikin | done | |
@@ -205,20 +205,20 @@
 |`onDetach`| Function | | | |
 |`onAreaChange`| Function | Roman Sedaikin | done | |
 |`visibility`| Function | Roman Sedaikin | done | |
-|`flexGrow`| Function | | | |
-|`flexShrink`| Function | | | |
-|`flexBasis`| Function | | | |
+|`flexGrow`| Function | Dmitry A Smirnov| in progress | |
+|`flexShrink`| Function | Dmitry A Smirnov| in progress | |
+|`flexBasis`| Function | Dmitry A Smirnov| in progress | |
 |`alignSelf`| Function | Roman Sedaikin | done | |
 |`displayPriority`| Function | Roman Sedaikin | done | |
 |`zIndex`| Function | Roman Sedaikin | done | |
 |`direction`| Function | Roman Sedaikin | done | |
 |`align`| Function | Roman Sedaikin | done | |
 |`position`| Function | Roman Sedaikin | done | |
-|`markAnchor`| Function | | | |
+|`markAnchor`| Function | Dmitry A Smirnov| in progress | |
 |`offset`| Function | Skroba Gleb | devdone | |
 |`enabled`| Function | Roman Sedaikin | done | |
-|`useSizeType`| Function | | | |
-|`alignRules`| Function | | | |
+|`useSizeType`| Function | Dmitry A Smirnov| in progress | |
+|`alignRules`| Function | Dmitry A Smirnov| in progress | |
 |`aspectRatio`| Function | Roman Sedaikin | done | |
 |`clickEffect`| Function | | | |
 |`onDragStart`| Function | | | |
@@ -238,8 +238,8 @@
 |`shadow`| Function | Roman Sedaikin | done | |
 |`clip`| Function | Skroba Gleb |  blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
 |`clipShape`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
-|`mask`| Function | | | |
-|`maskShape`| Function | | | |
+|`mask`| Function | Dmitry A Smirnov| in progress | |
+|`maskShape`| Function | Dmitry A Smirnov| in progress | |
 |`key`| Function | | | |
 |`id`| Function | Erokhin Ilya | done |  |
 |`geometryTransition`| Function | | | |
@@ -723,8 +723,8 @@
 |*Progress*| *Component* | Erokhin Ilya |   | |
 |`setProgressOptions`| Function | Erokhin Ilya | devdone | |
 |`value`| Function | Erokhin Ilya | devdone | |
-|`color`| Function | Erokhin Ilya | devdone | |
-|`style`| Function | Erokhin Ilya | blocked | linearStyle.strokeRadius https://gitee.com/nikolay-igotti/idlize/issues/IB4G8D |
+|`color`| Function | Erokhin Ilya | testskipped | |
+|`style`| Function | Erokhin Ilya | testskipped | |
 |`privacySensitive`| Function | Erokhin Ilya | testskipped | |
 |`contentModifier`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |*QRCode*| *Component* | Evstigneev Roman |in progress|  |
