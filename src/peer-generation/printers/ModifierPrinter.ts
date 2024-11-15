@@ -243,9 +243,7 @@ class AccessorVisitor extends ModifierVisitor {
         // so take the first one.
         const namespaceName = clazz.methods[0].implNamespaceName
         this.pushNamespace(namespaceName, false)
-
         const mDestroyPeer = createDestroyPeerMethod(clazz);
-        
         [clazz.ctor, clazz.finalizer, mDestroyPeer].concat(clazz.methods).forEach(method => {
             this.printMaterializedMethod(this.dummy, method, m => this.printDummyImplFunctionBody(m))
             this.printMaterializedMethod(this.real, method, m => this.printModifierImplFunctionBody(m))
