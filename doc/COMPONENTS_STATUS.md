@@ -1081,18 +1081,18 @@
 |*Text*| *Component* | Kirill Kirichenko | in progress | |
 |`setTextOptions`| Function | Kirill Kirichenko | in progress |  |
 |`font`| Function |Samarin Sergey |in progress |  |
-|`fontColor`| Function |Samarin Sergey |in progress |  |
-|`fontSize`| Function |Samarin Sergey |in progress |  |
+|`fontColor`| Function |Samarin Sergey | devdone |  |
+|`fontSize`| Function |Samarin Sergey | devdone |  |
 |`minFontSize`| Function |Samarin Sergey |in progress |  |
 |`maxFontSize`| Function |Samarin Sergey |in progress |  |
 |`minFontScale`| Function |Samarin Sergey |in progress |  |
 |`maxFontScale`| Function |Samarin Sergey |in progress |  |
-|`fontStyle`| Function |Samarin Sergey |in progress |  |
+|`fontStyle`| Function |Samarin Sergey | devdone |  |
 |`fontWeight`| Function |Samarin Sergey |in progress |  |
 |`lineSpacing`| Function |Samarin Sergey |in progress |  |
 |`textAlign`| Function |Samarin Sergey |in progress |  |
 |`lineHeight`| Function |Samarin Sergey |in progress |  |
-|`textOverflow`| Function |Samarin Sergey |in progress |  |
+|`textOverflow`| Function |Samarin Sergey | devdone |  |
 |`fontFamily`| Function |Samarin Sergey |in progress |  |
 |`maxLines`| Function |Samarin Sergey |in progress |  |
 |`decoration`| Function |Samarin Sergey |in progress |  |
@@ -1102,14 +1102,14 @@
 |`copyOption`| Function |Samarin Sergey |in progress |  |
 |`draggable`| Function |Samarin Sergey | done |  |
 |`textShadow`| Function |Samarin Sergey |in progress |  |
-|`heightAdaptivePolicy`| Function |Samarin Sergey |in progress |  |
+|`heightAdaptivePolicy`| Function |Samarin Sergey | devdone |  |
 |`textIndent`| Function |Samarin Sergey |in progress |  |
-|`wordBreak`| Function | Samarin Sergey |in progress |  |
+|`wordBreak`| Function | Samarin Sergey | devdone |  |
 |`lineBreakStrategy`| Function |Samarin Sergey |in progress |  |
 |`onCopy`| Function | Samarin Sergey |in progress |  |
 |`caretColor`| Function |Samarin Sergey |in progress |  |
 |`selectedBackgroundColor`| Function |Samarin Sergey |in progress |  |
-|`ellipsisMode`| Function |Samarin Sergey |in progress |  |
+|`ellipsisMode`| Function |Samarin Sergey | devdone |  |
 |`EnableDataDetector`| Function | Kirill Kirichenko | done |  |
 |`DataDetectorConfig`| Function | Kirill Kirichenko | in progress |  |
 |`onTextSelectionChange`| Function |Samarin Sergey |in progress |  |
