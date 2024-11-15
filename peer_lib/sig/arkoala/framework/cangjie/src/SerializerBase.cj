@@ -69,7 +69,6 @@ public open class SerializerBase {
     static func registerCustomSerializer(serializer: CustomSerializer) {
         //TODO
     }
-    func resetCurrentPosition(): Unit { this.position = 0 }
 
     init() {
         this.buffer = ArrayList<UInt8>(Array<UInt8>(96, item: 0))
@@ -203,10 +202,11 @@ public open class SerializerBase {
     }
     func writeString(value: String): Unit {
         this.checkCapacity(4 + value.size * 4 + 1) // length, data
-        this.writeInt32(Int32(value.size))
+        this.writeInt32(Int32(value.size + 1))
         for (i in 0..value.size) {
             this.setBytes(this.position, value[i])
         }
+        this.writeInt8(Int8(0))
     }
     // Length is an important common case.
     func writeLength(value: Ark_Length) {
