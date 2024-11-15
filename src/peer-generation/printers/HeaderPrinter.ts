@@ -17,17 +17,15 @@ import { IndentedPrinter } from "../../IndentedPrinter";
 import { getNodeTypes, makeAPI, makeConverterHeader, makeCSerializers } from "../FileGenerators";
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { collectCallbacks, groupCallbacks, IdlCallbackInfo } from "./EventsPrinter";
-import { CppLanguageWriter, createTypeNameConvertor, Method, NamedMethodSignature, printMethodDeclaration } from "../LanguageWriters";
+import { CppLanguageWriter, createTypeNameConvertor, printMethodDeclaration } from "../LanguageWriters";
 import { camelCaseToUpperSnakeCase } from "../../util";
-import { createReferenceType, IDLVoidType, maybeOptional } from "../../idl";
+import { maybeOptional } from "../../idl";
 import { PeerLibrary } from "../PeerLibrary";
 import { PeerClass } from "../PeerClass";
 import { PeerMethod } from "../PeerMethod";
 import { getReferenceResolver } from "../ReferenceResolver";
 import { Language } from "../../Language";
-import { MaterializedClass, MaterializedMethod } from "../Materialized";
-import { RetConvertor } from "../ArgConvertors";
-import { PrimitiveType } from "../ArkPrimitiveType";
+import { createDestroyPeerMethod } from "../Materialized";
 
 export function generateEventReceiverName(componentName: string) {
     return `${PeerGeneratorConfig.cppPrefix}ArkUI${componentName}EventsReceiver`
@@ -152,30 +150,6 @@ class HeaderVisitor {
         this.printEvents()
         this.printNodeTypes()
     }
-}
-
-export function createDestroyPeerMethod(clazz: MaterializedClass): MaterializedMethod {
-    const destroyPeerReturnType: RetConvertor = {
-        isVoid: true,
-        nativeType: () => PrimitiveType.Void.getText(),
-        interopType: () => PrimitiveType.Void.getText(),
-        macroSuffixPart: () => "V"
-    }
-
-    return new MaterializedMethod(
-            clazz.className,
-            [],
-            destroyPeerReturnType,
-            false,
-            new Method(
-                'destroyPeer',
-                new NamedMethodSignature(
-                    IDLVoidType,
-                    [createReferenceType(clazz.className)],
-                    ['peer']
-                )
-            )
-        )
 }
 
 export function printUserConverter(headerPath: string, namespace: string, apiVersion: number, peerLibrary: PeerLibrary) :
