@@ -1686,13 +1686,13 @@
 |`getId`| Function | | | |
 |*GestureRecognizer*| *Class* | Kovalev Sergey | in progress |
 |`getTag`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
-|`getType`| Function | Kovalev Sergey | in progress |
-|`isBuiltIn`| Function | Kovalev Sergey | in progress |
-|`setEnabled`| Function | Kovalev Sergey | in progress |
-|`isEnabled`| Function | Kovalev Sergey | in progress |
-|`getState`| Function | Kovalev Sergey | in progress |
-|`getEventTargetInfo`| Function | Kovalev Sergey | in progress |
-|`isValid`| Function | Kovalev Sergey | in progress |
+|`getType`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`isBuiltIn`| Function | Kovalev Sergey | dev done |
+|`setEnabled`| Function | Kovalev Sergey | dev done |
+|`isEnabled`| Function | Kovalev Sergey | dev done |
+|`getState`| Function | Kovalev Sergey | dev done |
+|`getEventTargetInfo`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`isValid`| Function | Kovalev Sergey | dev done |
 |*PanRecognizer*| *Class* | | | |
 |`getPanGestureOptions`| Function | | | |
 |*ImageAnalyzerController*| *Class* |Vadim Voronov|  blocked |  |
