@@ -27,16 +27,15 @@ import {
 } from "../FileGenerators";
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { MaterializedClass, MaterializedMethod } from "../Materialized";
-import { className, groupBy, throwException } from "../../util";
-import { CppLanguageWriter, createLanguageWriter, createTypeNameConvertor, LanguageWriter, Method, NamedMethodSignature, printMethodDeclaration } from "../LanguageWriters";
+import { groupBy } from "../../util";
+import { CppLanguageWriter, createLanguageWriter, createTypeNameConvertor, LanguageWriter, printMethodDeclaration } from "../LanguageWriters";
 import { LibaceInstall } from "../../Install";
 import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
 import { IdlPeerClass } from "../idl/IdlPeerClass";
 import { IdlPeerMethod } from "../idl/IdlPeerMethod";
-import { IDLVoidType, IDLBooleanType, IDLFunctionType, IDLStringType, isOptionalType, createReferenceType} from "../../idl"
+import { IDLBooleanType, IDLFunctionType, IDLStringType, isOptionalType } from "../../idl"
 import { Language } from "../../Language";
 import { createEmptyReferenceResolver, getReferenceResolver } from "../ReferenceResolver";
-import { RetConvertor } from "../ArgConvertors";
 import { createDestroyPeerMethod } from "./HeaderPrinter";
 
 export class ModifierVisitor {
@@ -252,7 +251,6 @@ class AccessorVisitor extends ModifierVisitor {
             this.printMaterializedMethod(this.real, method, m => this.printModifierImplFunctionBody(m))
             this.accessors.print(`${method.implNamespaceName}::${method.implName},`)
         })
-
         this.popNamespace(namespaceName, false)
         this.printMaterializedClassEpilog(clazz)
     }
