@@ -15,8 +15,6 @@
 
 import { int32 } from "./types"
 
-// todo maybe move this class to @koalaui/interop ?
-
 export type ResourceId = int32
 
 interface ResourceInfo {

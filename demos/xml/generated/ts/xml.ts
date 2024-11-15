@@ -1,4 +1,4 @@
-import { pointer, int32, EventType, KPointer, Finalizable } from "./types"
+import { pointer, int32, KPointer, Finalizable } from "./types"
 import { Tags, RuntimeType, runtimeType, isInstanceOf, unsafeCast } from "./SerializerBase"
 import { Serializer } from "./xmlSerializer"
 
@@ -11,8 +11,23 @@ export interface ParseOptions {
      ignoreNameSpace?: boolean
      tagValueCallbackFunction?: ((name: string, value: string) => boolean)
      attributeValueCallbackFunction?: ((name: string, value: string) => boolean)
-     tokenValueCallbackFunction?: ((eventType: EventType, value: ParseInfo) => boolean)
+     tokenValueCallbackFunction?: ((eventType: xml.EventType, value: ParseInfo) => boolean)
 }
+export namespace xml {
+    export enum EventType {
+        START_DOCUMENT = 0,
+        END_DOCUMENT = 1,
+        START_TAG = 2,
+        END_TAG = 3,
+        TEXT = 4,
+        CDSECT = 5,
+        COMMENT = 6,
+        DOCDECL = 7,
+        INSTRUCTION = 8,
+        ENTITY_REFERENCE = 9,
+        WHITESPACE = 10,
+    }
+    }
 export interface XmlSerializerInterface {
     setAttributes(name: string, value: string): void 
     addEmptyElement(name: string): void 

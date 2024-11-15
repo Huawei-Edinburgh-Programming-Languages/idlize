@@ -1,6 +1,6 @@
-import { Deserializer } from "./xmlSerializer";
-import { deserializeAndCallCallback } from "./xmlSerializer"
+import { float32, int32, pointer, Finalizable } from "./types"
 import { ResourceHolder } from "./ResourceManager"
+import { Deserializer, deserializeAndCallCallback } from "./xmlSerializer"
 import { getXMLNativeModule } from "./xmlNative"
 
 enum CallbackEventKind {
