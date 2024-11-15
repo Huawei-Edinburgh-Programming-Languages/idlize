@@ -1126,12 +1126,12 @@
 |`placeholderFont`|Function|Tuzhilkin Ivan|testskipped|  |
 |`enterKeyType`|Function|Tuzhilkin Ivan|done|  |
 |`textAlign`|Function|Tuzhilkin Ivan|done|  |
-|`caretColor`|Function|Tuzhilkin Ivan|testskipped|  |
-|`fontColor`|Function|Tuzhilkin Ivan|testskipped|  |
-|`textIndent`|Function|Tuzhilkin Ivan|testskipped|  |
+|`caretColor`|Function|Tuzhilkin Ivan|devdone|  |
+|`fontColor`|Function|Tuzhilkin Ivan|devdone|  |
+|`textIndent`|Function|Tuzhilkin Ivan|devdone|  |
 |`inputFilter`|Function|Tuzhilkin Ivan|done|  |
-|`caretStyle`|Function|Tuzhilkin Ivan|in progress|  |
-|`selectedBackgroundColor`|Function|Tuzhilkin Ivan|testskipped|  |
+|`caretStyle`|Function|Tuzhilkin Ivan|devdone|  |
+|`selectedBackgroundColor`|Function|Tuzhilkin Ivan|devdone|  |
 |`onSubmit`|Function|Tuzhilkin Ivan|done|  |
 |`onChange`|Function|Tuzhilkin Ivan|done|  |
 |`onTextSelectionChange`|Function|Tuzhilkin Ivan|done|  |
@@ -1144,13 +1144,13 @@
 |`enableKeyboardOnFocus`|Function|Tuzhilkin Ivan|done|  |
 |`maxLength`|Function|Tuzhilkin Ivan|done|  |
 |`selectionMenuHidden`|Function|Tuzhilkin Ivan|done|  |
-|`minFontSize`|Function|Tuzhilkin Ivan|testskipped|  |
-|`maxFontSize`|Function|Tuzhilkin Ivan|testskipped|  |
+|`minFontSize`|Function|Tuzhilkin Ivan|devdone|  |
+|`maxFontSize`|Function|Tuzhilkin Ivan|devdone|  |
 |`maxLines`|Function|Tuzhilkin Ivan|done|  |
 |`customKeyboard`|Function|Tuzhilkin Ivan|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|`decoration`|Function|Tuzhilkin Ivan|testskipped|  |
-|`letterSpacing`|Function|Tuzhilkin Ivan|testskipped|  |
-|`lineSpacing`|Function|Tuzhilkin Ivan|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`decoration`|Function|Tuzhilkin Ivan|devdone|  |
+|`letterSpacing`|Function|Tuzhilkin Ivan|devdone|  |
+|`lineSpacing`|Function|Tuzhilkin Ivan|in progress| |
 |`lineHeight`|Function|Tuzhilkin Ivan|testskipped|  |
 |`type`|Function|Tuzhilkin Ivan|done|  |
 |`enableAutoFill`|Function|Tuzhilkin Ivan|done|  |
@@ -1162,18 +1162,18 @@
 |`onDidDelete`|Function|Tuzhilkin Ivan|done |  |
 |`editMenuOptions`|Function|Tuzhilkin Ivan|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`enablePreviewText`|Function|Tuzhilkin Ivan|done|  |
-|`setTextAreaOptions`|Function|Tuzhilkin Ivan|in progress|  |
-|`fontSize`|Function|Tuzhilkin Ivan|in progress|  |
-|`fontStyle`|Function|Tuzhilkin Ivan|in progress|  |
-|`fontWeight`|Function|Tuzhilkin Ivan|in progress|  |
-|`fontFamily`|Function|Tuzhilkin Ivan|in progress|  |
-|`textOverflow`|Function|Tuzhilkin Ivan|blocked AceEngine|https://gitee.com/openharmony/arkui_ace_engine/issues/IAXX0N|
-|`showCounter`|Function|Tuzhilkin Ivan|blocked AceEngine| https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
-|`style`|Function|Tuzhilkin Ivan|in progress|  |
-|`barState`|Function|Tuzhilkin Ivan|in progress|  |
-|`heightAdaptivePolicy`|Function|Tuzhilkin Ivan|in progress|  |
-|`wordBreak`|Function|Tuzhilkin Ivan|in progress|  |
-|`lineBreakStrategy`|Function|Tuzhilkin Ivan|in progress|  |
+|`setTextAreaOptions`|Function|Tuzhilkin Ivan|devdone|  |
+|`fontSize`|Function|Tuzhilkin Ivan|devdone|  |
+|`fontStyle`|Function|Tuzhilkin Ivan|devdone|  |
+|`fontWeight`|Function|Tuzhilkin Ivan|devdone|  |
+|`fontFamily`|Function|Tuzhilkin Ivan|devdone|  |
+|`textOverflow`|Function|Tuzhilkin Ivan|devdone| https://gitee.com/openharmony/arkui_ace_engine/issues/IAXX0N |
+|`showCounter`|Function|Tuzhilkin Ivan|devdone| https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
+|`style`|Function|Tuzhilkin Ivan|devdone|  |
+|`barState`|Function|Tuzhilkin Ivan|devdone|  |
+|`heightAdaptivePolicy`|Function|Tuzhilkin Ivan|devdone|  |
+|`wordBreak`|Function|Tuzhilkin Ivan|devdone|  |
+|`lineBreakStrategy`|Function|Tuzhilkin Ivan|devdone|  |
 |`EnableHapticFeedback`|Function|Tuzhilkin Ivan|in progress|  |
 |*TextClock*| *Component* |Pavelyev Ivan|in progress|  |
 |`setTextClockOptions`| Function |Pavelyev Ivan|in progress|  |
@@ -1841,10 +1841,10 @@
 |`closeSelectionMenu`| Function | | | |
 |`setStyledString`| Function | | | |
 |`getLayoutManager`| Function | | | |
-|*TextAreaController*| *Class* | Tuzhilkin Ivan | in progress |  |
-|`caretPosition`| Function | Tuzhilkin Ivan | in progress |  |
-|`setTextSelection`| Function | Tuzhilkin Ivan | in progress |  |
-|`stopEditing`| Function | Tuzhilkin Ivan | in progress |  |
+|*TextAreaController*| *Class* | Tuzhilkin Ivan | devdone |  |
+|`caretPosition`| Function | Tuzhilkin Ivan | devdone |  |
+|`setTextSelection`| Function | Tuzhilkin Ivan | devdone |  |
+|`stopEditing`| Function | Tuzhilkin Ivan | devdone |  |
 |*TextClockController*| *Class* |Pavelyev Ivan|in progress|  |
 |`start`| Function |Pavelyev Ivan|in progress|  |
 |`stop`| Function |Pavelyev Ivan|in progress|  |
