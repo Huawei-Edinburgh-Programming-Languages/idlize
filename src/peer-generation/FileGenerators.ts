@@ -306,7 +306,7 @@ export function makeSerializerForOhos(library: PeerLibrary, nativeModule: { name
         destFile.content.nativeModuleAccessor = nativeModule.name
         destFile.imports.addFeatures(["SerializerBase", "RuntimeType", "runtimeType", "CallbackResource"], "./SerializerBase")
         destFile.imports.addFeatures(["DeserializerBase" ], "./DeserializerBase")
-        destFile.imports.addFeatures(["int32", "KPointer"], "./types")
+        destFile.imports.addFeatures(["int32", "KPointer", "nullptr"], "./types")
         destFile.imports.addFeatures([nativeModule.name, "CallbackKind"], nativeModule.path)
         writeSerializerFile(library, destFile, "", declarationPath)
         writeDeserializerFile(library, destFile, "", declarationPath)
