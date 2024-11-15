@@ -1022,7 +1022,7 @@
 |`onGestureSwipe`| Function | Skroba Gleb | done |  |
 |`nestedScroll`| Function | Skroba Gleb| testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3ULZ |
 |`customContentTransition`| Function | Skroba Gleb | devdone | |
-|`onContentDidScroll`| Function | Skroba Gleb| testskipped | |
+|`onContentDidScroll`| Function | Skroba Gleb| devdone | |
 |`indicatorInteractive`| Function | Skroba Gleb| done |  |
 |*IndicatorComponent*| *Component* | Andrey Khudenkikh | done |  |
 |`setIndicatorComponentOptions`| Function | Andrey Khudenkikh | done |  |
@@ -1811,7 +1811,7 @@
 |`showNext`| Function | Skroba Gleb | done |  |
 |`showPrevious`| Function | Skroba Gleb | done |  |
 |`changeIndex`| Function | Skroba Gleb | done |  |
-|`finishAnimation`| Function | Skroba Gleb | in progress |  |
+|`finishAnimation`| Function | Skroba Gleb | devdone |  |
 |*SwiperContentTransitionProxy*| *Class* | Skroba Gleb | devdone | |
 |`finishTransition`| Function | Skroba Gleb | devdone | |
 |`getSelectedIndex`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
