@@ -19,7 +19,7 @@ import { PrimitiveType } from "./ArkPrimitiveType"
 import { camelCaseToUpperSnakeCase } from "../util"
 import { CppLanguageWriter, createLanguageWriter, LanguageWriter, Method, MethodSignature, NamedMethodSignature, PrinterLike } from "./LanguageWriters"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
-import { writeDeserializer, writeSerializer } from "./printers/SerializerPrinter"
+import { writeDeserializer, writeDeserializerFile, writeSerializer, writeSerializerFile } from "./printers/SerializerPrinter"
 import { SELECTOR_ID_PREFIX, writeConvertors } from "./printers/ConvertorsPrinter"
 import { ArkoalaInstall, LibaceInstall } from "../Install"
 import { ImportsCollector } from "./ImportsCollector"
@@ -308,8 +308,8 @@ export function makeSerializerForOhos(library: PeerLibrary, nativeModule: { name
         destFile.imports.addFeatures(["DeserializerBase" ], "./DeserializerBase")
         destFile.imports.addFeatures(["int32", "KPointer"], "./types")
         destFile.imports.addFeatures([nativeModule.name, "CallbackKind"], nativeModule.path)
-        writeSerializer(library, destFile, "", declarationPath)
-        writeDeserializer(library, destFile, "", declarationPath)
+        writeSerializerFile(library, destFile, "", declarationPath)
+        writeDeserializerFile(library, destFile, "", declarationPath)
         const deserializeCallImpls = makeDeserializeAndCall(library, Language.TS, nativeModule.path) as TsSourceFile
         deserializeCallImpls.imports.clear() // TODO fix dependencies
         deserializeCallImpls.imports.addFeatures(["ResourceHolder"], "./ResourceManager")
@@ -388,7 +388,7 @@ ${serializers.getOutput().join("\n")}
 
 export function makeTSDeserializer(library: PeerLibrary): string {
     const deserializer = createLanguageWriter(Language.TS, library)
-    writeDeserializer(library, deserializer)
+    writeDeserializer(library, deserializer, "")
     return `${cStyleCopyright}
 import { runtimeType, Tags, RuntimeType, SerializerBase, CallbackResource } from "./SerializerBase"
 import { MaterializedBase } from "./../MaterializedBase"

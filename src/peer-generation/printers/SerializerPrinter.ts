@@ -404,27 +404,27 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
     }
 }
 
-function isSourceFile(dest: SourceFile | LanguageWriter): dest is SourceFile {
-    return "content" in dest
+export function writeSerializer(library: PeerLibrary, writer: LanguageWriter, prefix: string) {
+    const destFile = SourceFile.make("peers/Serializer" + writer.language.extension, writer.language, library)
+    writeSerializerFile(library, destFile, prefix)
+    destFile.printImports(writer)
+    writer.concat(destFile.content)
 }
 
-export function writeSerializer(library: PeerLibrary, writer: LanguageWriter | SourceFile, prefix: string, declarationPath?: string) {
-    const destFile = isSourceFile(writer) ? writer : SourceFile.make("Serializer" + writer.language.extension, writer.language, library)
+export function writeSerializerFile(library: PeerLibrary, destFile: SourceFile, prefix: string, declarationPath?: string) {
     new IdlSerializerPrinter(library, destFile).print(prefix, declarationPath)
-    if (!isSourceFile(writer)) {
-        destFile.printImports(writer)
-        writer.concat(destFile.content)
-    }
 }
 
-export function writeDeserializer(library: PeerLibrary, writer: LanguageWriter | SourceFile, prefix = "", declarationPath?: string) {
-    const destFile = isSourceFile(writer) ? writer : SourceFile.make("Deserializer" + writer.language.extension, writer.language, library)
+export function writeDeserializer(library: PeerLibrary, writer: LanguageWriter, prefix: string) {
+    const destFile = SourceFile.make("peers/Deserializer" + writer.language.extension, writer.language, library)
+    writeDeserializerFile(library, destFile, prefix)
+    destFile.printImports(writer)
+    writer.concat(destFile.content)
+}
+
+export function writeDeserializerFile(library: PeerLibrary, destFile: SourceFile, prefix: string, declarationPath?: string) {
     const printer = new IdlDeserializerPrinter(library, destFile)
     printer.print(prefix, declarationPath)
-    if (!isSourceFile(writer)) {
-        destFile.printImports(writer)
-        writer.concat(destFile.content)
-    }
 }
 
 function getSerializers(library: PeerLibrary, dependencyFilter: DependencyFilter): SerializableTarget[] {
