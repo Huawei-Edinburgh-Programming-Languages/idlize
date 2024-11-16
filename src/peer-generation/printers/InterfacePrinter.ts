@@ -49,6 +49,7 @@ import { ETSLanguageWriter } from '../LanguageWriters/writers/ETSLanguageWriter'
 import { collectProperties } from './StructPrinter'
 import { CustomPrintVisitor } from "../../from-idl/DtsPrinter"
 import { stubIsTypeCallback } from '../ArgConvertors'
+import { escapeKeyword, IDLType } from "../../idl";
 
 interface InterfacesVisitor {
     getInterfaces(): Map<TargetFile, LanguageWriter>
@@ -542,8 +543,8 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
     }
 
     private printMethod(idl: idl.IDLMethod): stringOrNone[] {
-        // TODO dirty stub. We are not processing interfaces methods as a 
-        // callbacks for now, so interfaces with methods can not be 
+        // TODO dirty stub. We are not processing interfaces methods as a
+        // callbacks for now, so interfaces with methods can not be
         // deserialized in ArkTS
         return []
         // return [
