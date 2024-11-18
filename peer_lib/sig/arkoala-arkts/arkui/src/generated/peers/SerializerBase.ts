@@ -252,7 +252,7 @@ export class SerializerBase {
         if (typeof value === "bigint")
             // todo where it is possible to be called from?
             throw new Error("Not implemented")
-        this.writeInt64(pointer)
+        this.writeInt64(value)
     }
     writeBoolean(value: boolean|undefined) {
         this.checkCapacity(1)
