@@ -769,8 +769,37 @@ void SetLazyItemIndexer(Ark_VMContext vmContext, Ark_NodeHandle nodePtr, Ark_Int
 Ark_PipelineContext GetPipelineContext(Ark_NodeHandle node) {
     return nullptr;
 }
-void SetVsyncCallback(Ark_VMContext vmContext, Ark_PipelineContext pipelineContext, Ark_Int32 callbackId) {}
-void UnblockVsyncWait(Ark_VMContext vmContext, Ark_PipelineContext pipelineContext) {}
+
+#ifdef KOALA_NAPI
+class VsyncCallbackJob : public KoalaAsyncCallback {
+    private static VsyncCallbackJob* vsyncJob = nullptr;
+    public:
+        void Execute() override {
+            fprintf(stderr, "Sleeping to emulate vsync\n");
+            std::this_thread::sleep_for(std::chrono::milliseconds(300));
+            vsyncJob = nullptr;
+        }
+    }
+};
+#endif
+
+void SetVsyncCallback(Ark_VMContext vmContext, Ark_PipelineContext pipelineContext, KInt callbackId) {
+#ifdef KOALA_NAPI
+    assert(vsyncJob == nullptr);
+    vsyncJob = new VsyncCallbackJob((napi_env)vmContext, callbackId);
+    vsyncJob->Queue();
+#endif
+}
+void UnblockVsyncWait(Ark_VMContext vmContext, Ark_PipelineContext pipelineContext) {
+#ifdef KOALA_NAPI
+    int32_t vsyncJob = vsyncJob ? vsyncJob->callbackId() : 0;
+    if (vsyncJob != 0) {
+        fprintf(stderr, "Unblock vsync %d\n", callbackId);
+        vsyncJob->cancel();
+        vsyncJob = nullptr;
+    }
+#endif
+}
 void SetChildTotalCount(Ark_NodeHandle node, Ark_Int32 totalCount) {}
 void ShowCrash(Ark_CharPtr message) {}
 }
