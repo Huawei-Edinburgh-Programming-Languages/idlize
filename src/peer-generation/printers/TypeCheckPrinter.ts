@@ -9,13 +9,10 @@ import {
     MethodModifier,
     NamedMethodSignature
 } from "../LanguageWriters";
-import { throwException } from "../../util";
 import { PeerLibrary } from "../PeerLibrary";
 import {
     convertDeclToFeature,
-    createDependenciesCollector,
     isBuilderClass,
-    isMaterialized,
 } from "../idl/IdlPeerGeneratorVisitor";
 import { getSyntheticDeclarationList } from "../idl/IdlSyntheticDeclarations";
 import { createDeclarationNameConvertor, DeclarationNameConvertor } from "../idl/IdlNameConvertor";
@@ -66,6 +63,11 @@ class StructDescriptor {
 }
 
 function collectFields(library: PeerLibrary, target: idl.IDLInterface, struct: StructDescriptor): void {
+    //TODO: is it need to collect conflicting declarations properties?
+    if (library.conflictedDeclarations.has(target)) {
+        return
+    }
+
     //TODO: is recursive property collection necessary?
     // const superType = idl.getSuperType(target)
     // if (superType && idl.isReferenceType(superType)) {
@@ -116,13 +118,17 @@ abstract class TypeCheckerPrinter {
         const importFeatures: ImportFeature[] = []
         const interfaces: { name: string, type?: idl.IDLType, descriptor: StructDescriptor }[] = []
         const seenNames = new Set<string>()
-        const declDependenciesCollector = createDependenciesCollector(this.library)
         const declNameConvertor = createDeclarationNameConvertor(this.library.language)
 
         for (const file of this.library.files) {
-            const declarations: idl.IDLEntry[] = [...Array.from(file.declarations), ...file.enums]
-            for (const decl of declarations
-                .filter(it => !PeerGeneratorConfig.ignoreEntry(it.name, this.writer.language))) {
+            const builders = file.entries.filter(it => idl.isClass(it) && isBuilderClass(it))
+            const declarations = [
+                ...Array.from(file.declarations),
+                ...file.enums,
+                ...builders,
+                ...this.library.conflictedDeclarations
+            ].filter(it => !PeerGeneratorConfig.ignoreEntry(it.name, this.writer.language))
+            for (const decl of declarations) {
                 if ((idl.isInterface(decl) || idl.isAnonymousInterface(decl) || idl.isEnum(decl) || idl.isClass(decl))
                     && !seenNames.has(decl.name)) {
                     seenNames.add(decl.name)
@@ -184,7 +190,7 @@ class ARKTSTypeCheckerPrinter extends TypeCheckerPrinter {
         this.writer.writeMethodImplementation(new Method(
             checkerName,
             new NamedMethodSignature(IDLBooleanType, 
-                [toIDLType('object|string|number|undefined|null'), ...argsNames.map(_ => IDLBooleanType)], 
+                [toIDLType('object|string|number|undefined|null'), ...argsNames.map(_ => IDLBooleanType)],
                 ['value', ...argsNames]),
             [MethodModifier.STATIC],
         ), writer => {
@@ -213,14 +219,11 @@ class TSTypeCheckerPrinter extends TypeCheckerPrinter {
 
     protected writeInterfaceChecker(name: string, descriptor: StructDescriptor, type: idl.IDLType): void {
         const typeName = this.library.mapType(type)
-        if (descriptor.getFields().length === 0) {
-            return
-        }
         const argsNames = descriptor.getFields().map(it => `duplicated_${it.name}`)
         this.writer.writeMethodImplementation(new Method(
             generateTypeCheckerName(name),
             new NamedMethodSignature(IDLBooleanType, 
-                [toIDLType('object|string|number|undefined|null'), ...argsNames.map(_ => IDLBooleanType)], 
+                [toIDLType('object|string|number|undefined|null|boolean'), ...argsNames.map(_ => IDLBooleanType)],
                 ['value', ...argsNames]),
             [MethodModifier.STATIC],
         ), writer => {
@@ -229,16 +232,21 @@ class TSTypeCheckerPrinter extends TypeCheckerPrinter {
                 const bWeight = b.optional ? 1 : 0
                 return aWeight - bWeight
             })
-            const statement = writer.makeMultiBranchCondition(orderedFields.map(it => {
-                return {
-                    expr: writer.makeNaryOp("&&", [
-                        writer.makeString(`!duplicated_${it.name}`),
-                        writer.makeString(`value?.hasOwnProperty("${it.name}")`)
-                    ]),
-                    stmt: writer.makeReturn(writer.makeString('true'))
-                }
-            }), writer.makeThrowError(`Can not discriminate value typeof ${typeName}`))
-            writer.writeStatement(statement)
+
+            const throwErrorStatement = writer.makeThrowError(`Can not discriminate value typeof ${typeName}`)
+            let checkStatement = throwErrorStatement
+            if (orderedFields.length > 0) {
+                 checkStatement = writer.makeMultiBranchCondition(orderedFields.map(it => {
+                    return {
+                        expr: writer.makeNaryOp("&&", [
+                            writer.makeString(`!duplicated_${it.name}`),
+                            writer.makeString(`value?.hasOwnProperty("${it.name}")`)
+                        ]),
+                        stmt: writer.makeReturn(writer.makeString('true'))
+                    }
+                }), throwErrorStatement)
+            }
+            writer.writeStatement(checkStatement)
         })
     }
 

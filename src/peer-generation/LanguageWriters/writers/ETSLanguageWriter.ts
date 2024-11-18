@@ -219,10 +219,9 @@ export class ETSLanguageWriter extends TSLanguageWriter {
                                 value: string,
                                 accessors: string[],
                                 duplicates: Set<string>): LanguageExpression {
-        if (convertor instanceof CustomTypeConvertor) {
-            return this.makeString(`${value} instanceof ${convertor.customTypeName}`)
-        }
-        if (convertor instanceof AggregateConvertor || convertor instanceof InterfaceConvertor) {
+        if (convertor instanceof AggregateConvertor
+            || convertor instanceof InterfaceConvertor
+            || convertor instanceof CustomTypeConvertor) {
             return this.instanceOf(convertor, value, duplicates)
         }
         return this.makeString(`${value} instanceof ${convertor.targetType(this)}`)
@@ -289,7 +288,14 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     override castToBoolean(value: string): string { return `${value} ? 1 : 0` }
 
     override instanceOf(convertor: BaseArgConvertor, value: string, duplicateMembers?: Set<string>): LanguageExpression {
-        if (convertor instanceof InterfaceConvertor && convertor.declaration.properties.length > 0) {
+        if (convertor instanceof CustomTypeConvertor) {
+            return makeInterfaceTypeCheckerCall(value,
+                this.stringifyType(convertor.idlType),
+                [],
+                duplicateMembers!,
+                this)
+        }
+        if (convertor instanceof InterfaceConvertor && convertor.declaration.properties.length >= 0) {
             return makeInterfaceTypeCheckerCall(value,
                 this.getNodeName(convertor.idlType),
                 convertor.declaration.properties.map(it => it.name),
