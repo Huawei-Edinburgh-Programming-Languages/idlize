@@ -190,7 +190,7 @@
 |`invert`| Function | Lobah Mikhail | in progress | |
 |`hueRotate`| Function | Lobah Mikhail | in progress | |
 |`useShadowBatching`| Function | Lobah Mikhail | in progress | |
-|`useEffect`| Function | | | |
+|`useEffect`| Function | Lobah Mikhail | in progress | |
 |`renderGroup`| Function | Lobah Mikhail | in progress | |
 |`freeze`| Function | Lobah Mikhail | in progress | |
 |`translate`| Function | Erokhin Ilya | done |  |
