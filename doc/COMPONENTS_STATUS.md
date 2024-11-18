@@ -1511,7 +1511,7 @@
 |`quadraticCurveTo`| Function | Lobah Mikhail | in progress |  |
 |`rect`| Function | Lobah Mikhail | in progress |  |
 |*Path2D*| *Class* | Vadim Voronov | in progress | |
-|`addPath`| Function | | | |
+|`addPath`| Function | Vadim Voronov | in progress | |
 |*CanvasPattern*| *Class* | Vadim Voronov | in progress |  |
 |`setTransform`| Function | Vadim Voronov | in progress |  |
 |*ImageBitmap*| *Class* | Pavelyev Ivan | in progress | |
