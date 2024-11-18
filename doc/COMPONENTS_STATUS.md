@@ -1263,7 +1263,7 @@
 |`selectedTextStyle`| Function | Ekaterina Stepanova| done |  |
 |`onAccept`| Function |Ekaterina Stepanova | done |  |
 |`onCancel`| Function |Ekaterina Stepanova | done |  |
-|`onChange`| Function | Tuzhilkin Ivan| testskipped |  |
+|`onChange`| Function | Tuzhilkin Ivan| in progress |  |
 |`selectedIndex`| Function |Ekaterina Stepanova | done |  |
 |`divider`| Function |Ekaterina Stepanova | done |  |
 |`gradientHeight`| Function | Ekaterina Stepanova| done |  |
