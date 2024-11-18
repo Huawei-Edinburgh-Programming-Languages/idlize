@@ -52,14 +52,14 @@ declare class StyledString {
     readonly length: number;
 
     /**
-    * Get the literal content of the StyledString.
-    *
-    * @returns { string } - the literal content of the StyledString
-    * @syscap SystemCapability.ArkUI.ArkUI.Full
-    * @crossplatform
-    * @atomicservice
-    * @since 12
-    */
+     * Get the literal content of the StyledString.
+     *
+     * @returns { string } - the literal content of the StyledString
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @crossplatform
+     * @atomicservice
+     * @since 12
+     */
     getString(): string;
 
     /**
@@ -69,7 +69,7 @@ declare class StyledString {
      * @param { number } length - the length of the subStyledString's characters.
      * @param { StyledStringKey } [styledKey] - the specified type.
      * @returns { Array<SpanStyle> }
-     * @throws { BusinessError } 401 - Parameter error. Possible causes: 
+     * @throws { BusinessError } 401 - Parameter error. Possible causes:
      * <br> 1. Mandatory parameters are left unspecified.
      * <br> 2. Incorrect parameters types.
      * <br> 3. Parameter verification failed.
@@ -98,7 +98,7 @@ declare class StyledString {
      * @param { number } start - the start position of the subStyledString.
      * @param { number } [length] - the length of the subStyledString's characters.
      * @returns { StyledString }
-     * @throws { BusinessError } 401 - Parameter error. Possible causes: 
+     * @throws { BusinessError } 401 - Parameter error. Possible causes:
      * <br> 1. Mandatory parameters are left unspecified.
      * <br> 2. Incorrect parameters types.
      * <br> 3. Parameter verification failed.
@@ -114,7 +114,7 @@ declare class StyledString {
      *
      * @param { string } html - the html text will be converted to a StyledString.
      * @returns { Promise<StyledString> }
-     * @throws { BusinessError } 401 - Parameter error. Possible causes: 
+     * @throws { BusinessError } 401 - Parameter error. Possible causes:
      * <br> 1. Mandatory parameters are left unspecified.
      * <br> 2. Incorrect parameters types.
      * <br> 3. Parameter verification failed.
@@ -129,7 +129,7 @@ declare class StyledString {
      *
      * @param { StyledString } styledString - the StyledString will be converted to a HTML string.
      * @returns { string }
-     * @throws { BusinessError } 401 - Parameter error. Possible causes: 
+     * @throws { BusinessError } 401 - Parameter error. Possible causes:
      * <br> 1. Mandatory parameters are left unspecified.
      * <br> 2. Incorrect parameters types.
      * <br> 3. Parameter verification failed.
@@ -156,7 +156,7 @@ declare class StyledString {
      *
      * @param { ArrayBuffer } buffer - The buffer will be deserialized to a StyledString.
      * @returns { Promise<StyledString> }
-     * @throws { BusinessError } 401 - Parameter error. Possible causes: 
+     * @throws { BusinessError } 401 - Parameter error. Possible causes:
      * <br> 1. Mandatory parameters are left unspecified.
      * <br> 2. Incorrect parameters types.
      * <br> 3. Parameter verification failed.
@@ -277,6 +277,89 @@ declare interface SpanStyle {
     styledValue: StyledStringValue;
 }
 
+// SyntaxError: Variable 'TextStyle' is already defined. [ArkStyledStringInterfaces.ts:1:27]
+// /**
+//  * Defines TextStyle.
+//  *
+//  * @syscap SystemCapability.ArkUI.ArkUI.Full
+//  * @crossplatform
+//  * @atomicservice
+//  * @since 12
+//  */
+// declare class TextStyle {
+//
+//     /**
+//      * constructor.
+//      *
+//      * @param { TextStyleInterface } [value] - font property object.
+//      * @syscap SystemCapability.ArkUI.ArkUI.Full
+//      * @crossplatform
+//      * @atomicservice
+//      * @since 12
+//      */
+//     constructor(value?: TextStyleInterface);
+//
+//     /**
+//      * Get the fontColor of the StyledString.
+//      *
+//      * @type { ?ResourceColor } - the set fontColor of the StyledString or undefined
+//      * @readonly
+//      * @syscap SystemCapability.ArkUI.ArkUI.Full
+//      * @crossplatform
+//      * @atomicservice
+//      * @since 12
+//      */
+//     readonly fontColor?: ResourceColor;
+//
+//     /**
+//      * Get the fontFamily of the StyledString.
+//      *
+//      * @type { ?string } - the fontFamily of the StyledString or undefined
+//      * @readonly
+//      * @syscap SystemCapability.ArkUI.ArkUI.Full
+//      * @crossplatform
+//      * @atomicservice
+//      * @since 12
+//      */
+//     readonly fontFamily?: string;
+//
+//     /**
+//      * Get the fontSize of the StyledString.
+//      * If not undefined, the unit is vp.
+//      *
+//      * @type { ?number } - the fontSize of the StyledString or undefined
+//      * @readonly
+//      * @syscap SystemCapability.ArkUI.ArkUI.Full
+//      * @crossplatform
+//      * @atomicservice
+//      * @since 12
+//      */
+//     readonly fontSize?: number;
+//
+//     /**
+//      * Get the fontWeight of the StyledString.
+//      *
+//      * @type { ?number } - the fontWeight of the StyledString or undefined
+//      * @readonly
+//      * @syscap SystemCapability.ArkUI.ArkUI.Full
+//      * @crossplatform
+//      * @atomicservice
+//      * @since 12
+//      */
+//     readonly fontWeight?: number;
+//
+//     /**
+//      * Get the fontStyle of the StyledString.
+//      *
+//      * @type { ?FontStyle  } - the fontStyle of the StyledString or undefined
+//      * @readonly
+//      * @syscap SystemCapability.ArkUI.ArkUI.Full
+//      * @crossplatform
+//      * @atomicservice
+//      * @since 12
+//      */
+//     readonly fontStyle?: FontStyle;
+// }
 
 /**
  * TextStyleInterface
@@ -455,7 +538,7 @@ declare interface DecorationStyleInterface {
  * @since 12
  */
 declare class BaselineOffsetStyle {
-    
+
     /**
      * constructor.
      *
@@ -490,7 +573,7 @@ declare class BaselineOffsetStyle {
  * @since 12
  */
 declare class LetterSpacingStyle {
-   
+
     /**
      * constructor.
      *
@@ -505,7 +588,7 @@ declare class LetterSpacingStyle {
     /**
      * Get the letterSpacing value of the StyledString.
      * The unit is vp.
-     * 
+     *
      * @type { number } - the letterSpacing value of the StyledString
      * @readonly
      * @syscap SystemCapability.ArkUI.ArkUI.Full
@@ -525,7 +608,7 @@ declare class LetterSpacingStyle {
  * @since 12
  */
 declare class TextShadowStyle {
-   
+
     /**
      * constructor.
      *
@@ -820,7 +903,7 @@ declare interface ParagraphStyleInterface {
  * @since 12
  */
 declare class LineHeightStyle {
-   
+
     /**
      * constructor.
      *
@@ -835,7 +918,7 @@ declare class LineHeightStyle {
     /**
      * Get the lineHeight value of the StyledString.
      * The unit is vp.
-     * 
+     *
      * @type { number } - the lineHeight value of the StyledString
      * @readonly
      * @syscap SystemCapability.ArkUI.ArkUI.Full
@@ -905,8 +988,8 @@ declare class UrlStyle {
  * @since 14
  */
 declare type StyledStringValue = TextStyle | DecorationStyle | BaselineOffsetStyle | LetterSpacingStyle |
-TextShadowStyle | GestureStyle | ImageAttachment | ParagraphStyle | LineHeightStyle | UrlStyle | CustomSpan |
-UserDataSpan | BackgroundColorStyle;
+    TextShadowStyle | GestureStyle | ImageAttachment | ParagraphStyle | LineHeightStyle | UrlStyle | CustomSpan |
+    UserDataSpan | BackgroundColorStyle;
 
 /**
  * MutableStyledString
@@ -924,7 +1007,7 @@ declare class MutableStyledString extends StyledString {
      * @param { number } start - the start position of the replacedString.
      * @param { number } length - the length of the replacedString's characters.
      * @param { string } other - must be unicode string.
-     * @throws { BusinessError } 401 - Parameter error. Possible causes: 
+     * @throws { BusinessError } 401 - Parameter error. Possible causes:
      * <br> 1. Mandatory parameters are left unspecified.
      * <br> 2. Incorrect parameters types.
      * <br> 3. Parameter verification failed.
@@ -936,42 +1019,42 @@ declare class MutableStyledString extends StyledString {
     replaceString(start: number, length: number, other: string): void;
 
     /**
-    * Insert the string at the specified location.
-    *
-    * @param { number } start - the start position of the insertedString.
-    * @param { string } other - must be unicode string.
-    * @throws { BusinessError } 401 - Parameter error. Possible causes: 
-    * <br> 1. Mandatory parameters are left unspecified.
-    * <br> 2. Incorrect parameters types.
-    * <br> 3. Parameter verification failed.
-    * @syscap SystemCapability.ArkUI.ArkUI.Full
-    * @crossplatform
-    * @atomicservice
-    * @since 12
-    */
+     * Insert the string at the specified location.
+     *
+     * @param { number } start - the start position of the insertedString.
+     * @param { string } other - must be unicode string.
+     * @throws { BusinessError } 401 - Parameter error. Possible causes:
+     * <br> 1. Mandatory parameters are left unspecified.
+     * <br> 2. Incorrect parameters types.
+     * <br> 3. Parameter verification failed.
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @crossplatform
+     * @atomicservice
+     * @since 12
+     */
     insertString(start: number, other: string): void;
 
     /**
-    * Remove the string of the specified range.
-    *
-    * @param { number } start - the start position of the removedString.
-    * @param { number } length - the length of the removedString's characters.
-    * @throws { BusinessError } 401 - Parameter error. Possible causes: 
-    * <br> 1. Mandatory parameters are left unspecified.
-    * <br> 2. Incorrect parameters types.
-    * <br> 3. Parameter verification failed.
-    * @syscap SystemCapability.ArkUI.ArkUI.Full
-    * @crossplatform
-    * @atomicservice
-    * @since 12
-    */
+     * Remove the string of the specified range.
+     *
+     * @param { number } start - the start position of the removedString.
+     * @param { number } length - the length of the removedString's characters.
+     * @throws { BusinessError } 401 - Parameter error. Possible causes:
+     * <br> 1. Mandatory parameters are left unspecified.
+     * <br> 2. Incorrect parameters types.
+     * <br> 3. Parameter verification failed.
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @crossplatform
+     * @atomicservice
+     * @since 12
+     */
     removeString(start: number, length: number): void;
 
     /**
      * Replace the specified range string attribute.
      *
      * @param { SpanStyle } spanStyle - the SpanStyle Object.
-     * @throws { BusinessError } 401 - Parameter error. Possible causes: 
+     * @throws { BusinessError } 401 - Parameter error. Possible causes:
      * <br> 1. Mandatory parameters are left unspecified.
      * <br> 2. Incorrect parameters types.
      * <br> 3. Parameter verification failed.
@@ -1000,7 +1083,7 @@ declare class MutableStyledString extends StyledString {
      * @param { number } start - the start position of the removedAttributeStyledString.
      * @param { number } length - the length of the removedAttributeStyledString's characters.
      * @param { StyledStringKey } styledKey - the specified attribute type's key.
-     * @throws { BusinessError } 401 - Parameter error. Possible causes: 
+     * @throws { BusinessError } 401 - Parameter error. Possible causes:
      * <br> 1. Mandatory parameters are left unspecified.
      * <br> 2. Incorrect parameters types.
      * <br> 3. Parameter verification failed.
@@ -1016,7 +1099,7 @@ declare class MutableStyledString extends StyledString {
      *
      * @param { number } start - the start position of the attributeRemovedStyledString's characters.
      * @param { number } length - the length of the attributeRemovedStyledString's characters.
-     * @throws { BusinessError } 401 - Parameter error. Possible causes: 
+     * @throws { BusinessError } 401 - Parameter error. Possible causes:
      * <br> 1. Mandatory parameters are left unspecified.
      * <br> 2. Incorrect parameters types.
      * <br> 3. Parameter verification failed.
@@ -1043,7 +1126,7 @@ declare class MutableStyledString extends StyledString {
      * @param { number } start - the start position of the replacedStyledString.
      * @param { number } length - the length of the replacedStyledString's characters.
      * @param { StyledString } other - new StyledString.
-     * @throws { BusinessError } 401 - Parameter error. Possible causes: 
+     * @throws { BusinessError } 401 - Parameter error. Possible causes:
      * <br> 1. Mandatory parameters are left unspecified.
      * <br> 2. Incorrect parameters types.
      * <br> 3. Parameter verification failed.
@@ -1059,7 +1142,7 @@ declare class MutableStyledString extends StyledString {
      *
      * @param { number } start - the start position of the insertedStyledString.
      * @param { StyledString } other - new StyledString.
-     * @throws { BusinessError } 401 - Parameter error. Possible causes: 
+     * @throws { BusinessError } 401 - Parameter error. Possible causes:
      * <br> 1. Mandatory parameters are left unspecified.
      * <br> 2. Incorrect parameters types.
      * <br> 3. Parameter verification failed.
@@ -1111,67 +1194,67 @@ declare enum StyledStringKey {
      * @atomicservice
      * @since 12
      */
-     DECORATION = 1,
+    DECORATION = 1,
 
-     /**
-      * The key of BaselineOffsetStyle.
-      *
-      * @syscap SystemCapability.ArkUI.ArkUI.Full
-      * @crossplatform
-      * @atomicservice
-      * @since 12
-      */
-     BASELINE_OFFSET = 2,
- 
-     /**
-      * The key of LetterSpacingStyle.
-      *
-      * @syscap SystemCapability.ArkUI.ArkUI.Full
-      * @crossplatform
-      * @atomicservice
-      * @since 12
-      */
-     LETTER_SPACING = 3,
- 
-     /**
-      * The key of TextShadowStyle.
-      *
-      * @syscap SystemCapability.ArkUI.ArkUI.Full
-      * @crossplatform
-      * @atomicservice
-      * @since 12
-      */
-     TEXT_SHADOW = 4,
+    /**
+     * The key of BaselineOffsetStyle.
+     *
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @crossplatform
+     * @atomicservice
+     * @since 12
+     */
+    BASELINE_OFFSET = 2,
 
-     /**
-      * The key of LineHeightStyle.
-      *
-      * @syscap SystemCapability.ArkUI.ArkUI.Full
-      * @crossplatform
-      * @atomicservice
-      * @since 12
-      */
-     LINE_HEIGHT = 5,
+    /**
+     * The key of LetterSpacingStyle.
+     *
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @crossplatform
+     * @atomicservice
+     * @since 12
+     */
+    LETTER_SPACING = 3,
 
-     /**
-      * The key of BackgroundColorStyle.
-      *
-      * @syscap SystemCapability.ArkUI.ArkUI.Full
-      * @crossplatform
-      * @atomicservice
-      * @since 14
-      */
-     BACKGROUND_COLOR = 6,
+    /**
+     * The key of TextShadowStyle.
+     *
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @crossplatform
+     * @atomicservice
+     * @since 12
+     */
+    TEXT_SHADOW = 4,
 
-     /**
-      * The key of UrlStyle.
-      *
-      * @syscap SystemCapability.ArkUI.ArkUI.Full
-      * @crossplatform
-      * @atomicservice
-      * @since 14
-      */
-     URL = 7,
+    /**
+     * The key of LineHeightStyle.
+     *
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @crossplatform
+     * @atomicservice
+     * @since 12
+     */
+    LINE_HEIGHT = 5,
+
+    /**
+     * The key of BackgroundColorStyle.
+     *
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @crossplatform
+     * @atomicservice
+     * @since 14
+     */
+    BACKGROUND_COLOR = 6,
+
+    /**
+     * The key of UrlStyle.
+     *
+     * @syscap SystemCapability.ArkUI.ArkUI.Full
+     * @crossplatform
+     * @atomicservice
+     * @since 14
+     */
+    URL = 7,
 
     /**
      * The key of GestureStyle.
@@ -1465,7 +1548,7 @@ declare interface CustomSpanDrawInfo {
     /**
      * CustomSpan's offset relative to the parent component.
      * The unit is px.
-     * 
+     *
      * @type { number }
      * @syscap SystemCapability.ArkUI.ArkUI.Full
      * @crossplatform
@@ -1477,7 +1560,7 @@ declare interface CustomSpanDrawInfo {
     /**
      * The top position of the line where customSpan is located.
      * The unit is px.
-     * 
+     *
      * @type { number }
      * @syscap SystemCapability.ArkUI.ArkUI.Full
      * @crossplatform
@@ -1489,7 +1572,7 @@ declare interface CustomSpanDrawInfo {
     /**
      * The bottom position of the line where customSpan is located.
      * The unit is px.
-     * 
+     *
      * @type { number }
      * @syscap SystemCapability.ArkUI.ArkUI.Full
      * @crossplatform
@@ -1501,7 +1584,7 @@ declare interface CustomSpanDrawInfo {
     /**
      * The baseline offset of the line where customSpan is located.
      * The unit is px.
-     * 
+     *
      * @type { number }
      * @syscap SystemCapability.ArkUI.ArkUI.Full
      * @crossplatform
@@ -1524,7 +1607,7 @@ declare interface CustomSpanMeasureInfo {
     /**
      * Current component's fontSize value.
      * The unit is fp.
-     * 
+     *
      * @type { number }
      * @syscap SystemCapability.ArkUI.ArkUI.Full
      * @crossplatform
