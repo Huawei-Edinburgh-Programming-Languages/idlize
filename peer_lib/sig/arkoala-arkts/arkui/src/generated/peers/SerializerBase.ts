@@ -286,10 +286,17 @@ export class SerializerBase {
         }
     }
     //TODO: Needs to be implemented
+    writeBuffer(value: ArrayBuffer) {
+        this.writePointer(42)
+        this.writeInt64(value.byteLength as int64)
+    }
     writeArrayBuffer(value: ArrayBuffer) {
+        throw new Error("deprecated")
     }
     writeUint8ClampedArray(value: Uint8ClampedArray) {
+        throw new Error("deprecated")
     }
     writeUint8Array(value: Uint8Array) {
+        throw new Error("deprecated")
     }
 }
