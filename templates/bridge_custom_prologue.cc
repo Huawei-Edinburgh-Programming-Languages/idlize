@@ -449,7 +449,6 @@ void impl_SetChildTotalCount(Ark_NativePointer nodePtr, Ark_Int32 totalCount)
 }
 KOALA_INTEROP_V2(SetChildTotalCount, Ark_NativePointer, Ark_Int32)
 
-
 KVMObjectHandle impl_LoadUserView(KVMContext vm, const KStringPtr& viewClass, const KStringPtr& viewParams) {
 #ifdef KOALA_USE_JAVA_VM
     JNIEnv* env = reinterpret_cast<JNIEnv*>(vm);
@@ -486,6 +485,8 @@ KVMObjectHandle impl_LoadUserView(KVMContext vm, const KStringPtr& viewClass, co
 #elif KOALA_USE_PANDA_VM
     EtsEnv* env = reinterpret_cast<EtsEnv*>(vm);
     std:: string className(viewClass.c_str());
+    // TODO: hack, fix it!
+    if (className == "ViewArkTSLoaderApp") className = "Page.App";
     std::replace(className.begin(), className.end(), '.', '/');
     ets_class viewClassClass = env->FindClass(className.c_str());
     if (!viewClassClass) {
@@ -496,7 +497,7 @@ KVMObjectHandle impl_LoadUserView(KVMContext vm, const KStringPtr& viewClass, co
         }
         return nullptr;
     }
-    ets_method viewClassCtor = env->Getp_method(viewClassClass, "<init>", "Lstd/core/String;:V");
+    ets_method viewClassCtor = env->Getp_method(viewClassClass, "<ctor>", "Lstd/core/String;:V");
     if (!viewClassCtor) {
         fprintf(stderr, "Cannot find user class ctor\n");
         if (env->ErrorCheck()) {
