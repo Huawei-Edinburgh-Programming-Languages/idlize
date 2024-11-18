@@ -112,3 +112,10 @@ declare enum IlluminatedType {
   BLOOM_BORDER = 4,
   BLOOM_BORDER_CONTENT = 5
 }
+
+declare enum TextAlign {
+  Center,
+  Start,
+  End,
+  JUSTIFY,
+}
