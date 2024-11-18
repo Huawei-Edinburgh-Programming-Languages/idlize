@@ -143,3 +143,10 @@ declare enum BarState {
   Auto,
   On,
 }
+
+declare enum ImageRepeat {
+  NoRepeat,
+  X,
+  Y,
+  XY,
+}
