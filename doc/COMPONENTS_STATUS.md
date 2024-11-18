@@ -1498,8 +1498,8 @@
 |`goTo`| Function |Maksimov Nikita | devdone |  |
 |*CalendarPickerDialog*| *Class* | | | |
 |`show`| Function | | | |
-|*CanvasGradient*| *Class* | | | |
-|`addColorStop`| Function | | | |
+|*CanvasGradient*| *Class* | Vadim Voronov | in progress | |
+|`addColorStop`| Function | Vadim Voronov | in progress | |
 |*CanvasPath*| *Class* | Lobah Mikhail | in progress |  |
 |`arc`| Function | Lobah Mikhail | in progress |  |
 |`arcTo`| Function | Lobah Mikhail | in progress |  |
@@ -1510,7 +1510,7 @@
 |`moveTo`| Function | Lobah Mikhail | in progress |  |
 |`quadraticCurveTo`| Function | Lobah Mikhail | in progress |  |
 |`rect`| Function | Lobah Mikhail | in progress |  |
-|*Path2D*| *Class* | | | |
+|*Path2D*| *Class* | Vadim Voronov | in progress | |
 |`addPath`| Function | | | |
 |*CanvasPattern*| *Class* | Vadim Voronov | in progress |  |
 |`setTransform`| Function | Vadim Voronov | in progress |  |
@@ -1702,25 +1702,25 @@
 |`scrollToItemInGroup`| Function |Morozov Sergey | done |  |
 |`closeAllSwipeActions`| Function |Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getVisibleListContentInfo`| Function |Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|*Matrix2D*| *Class* | | | |
-|`identity`| Function | | | |
-|`invert`| Function | | | |
-|`multiply`| Function | | | |
-|`rotate`| Function | | | |
-|`translate`| Function | | | |
-|`scale`| Function | | | |
-|`getScaleX`| Function | | | |
-|`setScaleX`| Function | | | |
-|`getRotateY`| Function | | | |
-|`setRotateY`| Function | | | |
-|`getRotateX`| Function | | | |
-|`setRotateX`| Function | | | |
-|`getScaleY`| Function | | | |
-|`setScaleY`| Function | | | |
-|`getTranslateX`| Function | | | |
-|`setTranslateX`| Function | | | |
-|`getTranslateY`| Function | | | |
-|`setTranslateY`| Function | | | |
+|*Matrix2D*| *Class* | Vadim Voronov | in progress | |
+|`identity`| Function | Vadim Voronov | in progress | |
+|`invert`| Function | Vadim Voronov | in progress | |
+|`multiply`| Function | Vadim Voronov | in progress | |
+|`rotate`| Function | Vadim Voronov | in progress | |
+|`translate`| Function | Vadim Voronov | in progress | |
+|`scale`| Function | Vadim Voronov | in progress | |
+|`getScaleX`| Function | Vadim Voronov | in progress | |
+|`setScaleX`| Function | Vadim Voronov | in progress | |
+|`getRotateY`| Function | Vadim Voronov | in progress | |
+|`setRotateY`| Function | Vadim Voronov | in progress | |
+|`getRotateX`| Function | Vadim Voronov | in progress | |
+|`setRotateX`| Function | Vadim Voronov | in progress | |
+|`getScaleY`| Function | Vadim Voronov | in progress | |
+|`setScaleY`| Function | Vadim Voronov | in progress | |
+|`getTranslateX`| Function | Vadim Voronov | in progress | |
+|`setTranslateX`| Function | Vadim Voronov | in progress | |
+|`getTranslateY`| Function | Vadim Voronov | in progress | |
+|`setTranslateY`| Function | Vadim Voronov | in progress | |
 |*NavDestinationContext*| *Class* | | | |
 |`getConfigInRouteMap`| Function | | | |
 |`setPathInfo`| Function | | | |
