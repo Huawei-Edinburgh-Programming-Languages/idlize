@@ -137,3 +137,9 @@ declare enum ImageFit {
   BOTTOM = 14,
   BOTTOM_END = 15,
 }
+
+declare enum BarState {
+  Off,
+  Auto,
+  On,
+}
