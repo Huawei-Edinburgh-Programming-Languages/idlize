@@ -367,19 +367,19 @@
 |`color`| Function | Tuzhilkin Ivan | done |  |
 |`strokeWidth`| Function | Tuzhilkin Ivan | done |  |
 |`lineCap`| Function | Tuzhilkin Ivan | done |  |
-|*EffectComponent*| *Component* | | | |
-|`setEffectComponentOptions`| Function | | | |
-|*Ellipse*| *Component* | | | |
-|`setEllipseOptions`| Function | | | |
-|*EmbeddedComponent*| *Component* | | | |
-|`setEmbeddedComponentOptions`| Function | | | |
-|`onTerminated`| Function | | | |
-|`onError`| Function | | | |
+|*EffectComponent*| *Component* | Ekaterina Stepanova | in progress | |
+|`setEffectComponentOptions`| Function | Ekaterina Stepanova | in progress | |
+|*Ellipse*| *Component* | Ekaterina Stepanova | in progress | |
+|`setEllipseOptions`| Function | Ekaterina Stepanova | in progress | |
+|*EmbeddedComponent*| *Component* | Ekaterina Stepanova | in progress | |
+|`setEmbeddedComponentOptions`| Function | Ekaterina Stepanova | in progress | |
+|`onTerminated`| Function | Ekaterina Stepanova | in progress | |
+|`onError`| Function | Ekaterina Stepanova | in progress | |
 |*Flex*| *Component* | Kovalev Sergey | in progress |  |
 |`setFlexOptions`| Function | Kovalev Sergey | done |  |
 |`pointLight`| Function | Evstigneev Roman | In Progress |  |
-|*FlowItem*| *Component* | | | |
-|`setFlowItemOptions`| Function | | | |
+|*FlowItem*| *Component* | Ekaterina Stepanova | in progress | |
+|`setFlowItemOptions`| Function | Ekaterina Stepanova | in progress | |
 |*FolderStack*| *Component* | Politov Mikhail | done |  |
 |`setFolderStackOptions`| Function | Politov Mikhail | done |  |
 |`alignContent`| Function | Politov Mikhail | done |  |
@@ -1261,8 +1261,8 @@
 |`disappearTextStyle`|Function |Ekaterina Stepanova | done |  |
 |`textStyle`| Function |Ekaterina Stepanova | done |  |
 |`selectedTextStyle`| Function | Ekaterina Stepanova| done |  |
-|`onAccept`| Function |Ekaterina Stepanova | in progress |  |
-|`onCancel`| Function |Ekaterina Stepanova | in progress |  |
+|`onAccept`| Function |Ekaterina Stepanova | done |  |
+|`onCancel`| Function |Ekaterina Stepanova | done |  |
 |`onChange`| Function | Tuzhilkin Ivan| in progress |  |
 |`selectedIndex`| Function |Ekaterina Stepanova | done |  |
 |`divider`| Function |Ekaterina Stepanova | done |  |
@@ -1873,14 +1873,14 @@
 |`caretPosition`| Function | Spirin Andrey | in progress |  |
 |`setTextSelection`| Function | Spirin Andrey | in progress |  |
 |`stopEditing`| Function |  Spirin Andrey | in progress |  |
-|*TextPickerDialog*| *Class* | | | |
-|`show`| Function | | | |
+|*TextPickerDialog*| *Class* | Ekaterina Stepanova | in progress | |
+|`show`| Function | Ekaterina Stepanova | in progress | |
 |*TextTimerController*| *Class* |Ekaterina Stepanova| done |  |
 |`start`| Function |Ekaterina Stepanova| done |  |
 |`pause`| Function |Ekaterina Stepanova| done |  |
 |`reset`| Function |Ekaterina Stepanova| done |  |
-|*TimePickerDialog*| *Class* | | | |
-|`show`| Function | | | |
+|*TimePickerDialog*| *Class* | Ekaterina Stepanova | in progress | |
+|`show`| Function | Ekaterina Stepanova | in progress | |
 |*VideoController*| *Class* | Erokhin Ilya | done |  |
 |`start`| Function | Erokhin Ilya | done |  |
 |`pause`| Function | Erokhin Ilya | done |  |
