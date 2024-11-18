@@ -1193,7 +1193,7 @@
 |`type`| Function | Spirin Andrey | done |  |
 |`contentType`| Function | Spirin Andrey | done |  |
 |`placeholderColor`| Function | Spirin Andrey | done |  |
-|`textOverflow`| Function | Spirin Andrey | blocked AceEngine|https://gitee.com/openharmony/arkui_ace_engine/issues/IAXX0N|
+|`textOverflow`| Function | Spirin Andrey | blocked AceEngine|https://gitee.com/openharmony/arkui_ace_engine/issues/IB57XU|
 |`textIndent`| Function | Spirin Andrey | testskipped |  |
 |`placeholderFont`| Function | Spirin Andrey | testskipped |  |
 |`enterKeyType`| Function | Spirin Andrey | done |  |
@@ -1263,7 +1263,7 @@
 |`selectedTextStyle`| Function | Ekaterina Stepanova| done |  |
 |`onAccept`| Function |Ekaterina Stepanova | done |  |
 |`onCancel`| Function |Ekaterina Stepanova | done |  |
-|`onChange`| Function | Tuzhilkin Ivan| in progress |  |
+|`onChange`| Function | Tuzhilkin Ivan| testskipped |  |
 |`selectedIndex`| Function |Ekaterina Stepanova | done |  |
 |`divider`| Function |Ekaterina Stepanova | done |  |
 |`gradientHeight`| Function | Ekaterina Stepanova| done |  |
