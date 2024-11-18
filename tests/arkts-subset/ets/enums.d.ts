@@ -119,3 +119,21 @@ declare enum TextAlign {
   End,
   JUSTIFY,
 }
+
+declare enum ImageFit {
+  Contain,
+  Cover,
+  Auto,
+  Fill,
+  ScaleDown,
+  None,
+  TOP_START = 7,
+  TOP = 8,
+  TOP_END = 9,
+  START = 10,
+  CENTER = 11,
+  END = 12,
+  BOTTOM_START = 13,
+  BOTTOM = 14,
+  BOTTOM_END = 15,
+}
