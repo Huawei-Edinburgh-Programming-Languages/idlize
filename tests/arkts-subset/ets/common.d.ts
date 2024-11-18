@@ -437,6 +437,8 @@ declare class CommonMethod<T> {
 
     aspectRatio(value: number): T;
 
+    visibility(value: Visibility): T;
+
 }
 
 declare interface Rectangle {

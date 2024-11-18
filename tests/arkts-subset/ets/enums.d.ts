@@ -150,3 +150,9 @@ declare enum ImageRepeat {
   Y,
   XY,
 }
+
+declare enum Visibility {
+  Visible,
+  Hidden,
+  None,
+}

@@ -29,6 +29,8 @@ declare class ListAttribute extends ScrollableCommonMethod<ListAttribute> {
     someOptional(param: Optional<boolean>): ListAttribute
 
     onScrollVisibleContentChange(handler: OnScrollVisibleContentChangeCallback): ListAttribute;
+
+    listDirection(value: Axis): ListAttribute;
 }
 
 declare const List: ListInterface
