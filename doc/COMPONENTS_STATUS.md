@@ -1167,7 +1167,7 @@
 |`fontStyle`|Function|Tuzhilkin Ivan|devdone|  |
 |`fontWeight`|Function|Tuzhilkin Ivan|devdone|  |
 |`fontFamily`|Function|Tuzhilkin Ivan|devdone|  |
-|`textOverflow`|Function|Tuzhilkin Ivan|devdone| https://gitee.com/openharmony/arkui_ace_engine/issues/IAXX0N |
+|`textOverflow`|Function|Tuzhilkin Ivan|devdone| https://gitee.com/openharmony/arkui_ace_engine/issues/IB57XU |
 |`showCounter`|Function|Tuzhilkin Ivan|devdone| https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
 |`style`|Function|Tuzhilkin Ivan|devdone|  |
 |`barState`|Function|Tuzhilkin Ivan|devdone|  |
