@@ -1687,12 +1687,12 @@
 |*GestureRecognizer*| *Class* | Kovalev Sergey | in progress |
 |`getTag`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
 |`getType`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`isBuiltIn`| Function | Kovalev Sergey | devdone |
-|`setEnabled`| Function | Kovalev Sergey | devdone |
-|`isEnabled`| Function | Kovalev Sergey | devdone |
-|`getState`| Function | Kovalev Sergey | devdone |
+|`isBuiltIn`| Function | Kovalev Sergey | done |
+|`setEnabled`| Function | Kovalev Sergey | done |
+|`isEnabled`| Function | Kovalev Sergey | done |
+|`getState`| Function | Kovalev Sergey | done |
 |`getEventTargetInfo`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`isValid`| Function | Kovalev Sergey | devdone |
+|`isValid`| Function | Kovalev Sergey | done |
 |*PanRecognizer*| *Class* | | | |
 |`getPanGestureOptions`| Function | | | |
 |*ImageAnalyzerController*| *Class* |Vadim Voronov|  blocked |  |
