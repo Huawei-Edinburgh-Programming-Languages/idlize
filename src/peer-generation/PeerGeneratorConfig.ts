@@ -80,10 +80,7 @@ export class PeerGeneratorConfig {
 
     private static ignoreMaterialized = [
         // TBD
-        "UIExtensionProxy",
         "CustomComponent",
-        "UIExtensionProxy",
-        "UIExtensionComponent",
         "Layoutable",
         "LayoutChild",
         "Measurable",
@@ -135,8 +132,6 @@ export class PeerGeneratorConfig {
         "SyncedPropertyOneWay",
         "SyncedPropertyTwoWay",
         "IMonitorValue",
-        "UIExtensionComponent",
-        "UIExtensionProxy"
     ])
 
     private static ignoredEntriesJava = new Set([
