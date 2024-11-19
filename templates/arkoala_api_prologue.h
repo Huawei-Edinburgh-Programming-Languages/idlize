@@ -29,7 +29,7 @@
 #define %CPP_PREFIX%ARKUI_EXTENDED_NODE_API_VERSION 7
 #define %CPP_PREFIX%ARKUI_NODE_GRAPHICS_API_VERSION 5
 #define %CPP_PREFIX%ARKUI_NODE_MODIFIERS_API_VERSION 6
-#define GENERIC_SERVICE_API_VERSION 2
+#define GENERIC_SERVICE_API_VERSION 1
 
 #define %CPP_PREFIX%ARKUI_AUTO_GENERATE_NODE_ID (-2)
 
@@ -88,6 +88,8 @@ typedef struct _Ark_Canvas* Ark_CanvasHandle;
 typedef struct Ark_Deferred {
     void* handler;
     void* context;
+    void (*resolve)(struct Ark_Deferred* thiz, uint8_t* data, int32_t length);
+    void (*reject)(struct Ark_Deferred* thiz, const char* message);
     void (*release)(struct Ark_Deferred* thiz);
 } Ark_Deferred;
 

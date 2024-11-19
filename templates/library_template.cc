@@ -57,8 +57,6 @@ const char* getArkAnyAPIFuncName = "%CPP_PREFIX%GetArkAnyAPI";
 const %CPP_PREFIX%ArkUIAnyAPI* GetAnyImpl(int kind, int version, std::string* result) {
     if (!impls[kind]) {
         static const GroupLogger* logger = GetDefaultLogger();
-        static const CallbackCaller* caller = GetDefaultCaller();
-
 
         %CPP_PREFIX%ArkUIAnyAPI* impl = nullptr;
         typedef %CPP_PREFIX%ArkUIAnyAPI* (*GetAPI_t)(int, int);
@@ -93,7 +91,6 @@ const %CPP_PREFIX%ArkUIAnyAPI* GetAnyImpl(int kind, int version, std::string* re
         auto service = (const GenericServiceAPI*)(*getAPI)(GENERIC_SERVICE, GENERIC_SERVICE_API_VERSION);
         if (service) {
             if (logger) service->setLogger(reinterpret_cast<const ServiceLogger*>(logger));
-            if (caller) service->setCaller(reinterpret_cast<const ServiceCallbackCaller*>(caller));
         }
 
         impl = (*getAPI)(kind, version);

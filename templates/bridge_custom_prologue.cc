@@ -344,53 +344,12 @@ void impl_SetLazyItemIndexer(KVMContext vmContext, Ark_NativePointer nodePtr, Ar
 KOALA_INTEROP_CTX_V2(SetLazyItemIndexer, Ark_NativePointer, Ark_Int32)
 
 
-#ifdef KOALA_NAPI
-void resolveDeferred(napi_env env, napi_value js_callback, Ark_Deferred* deferred, void* data) {
-    napi_status status;
-    napi_value undefined;
-    status = napi_get_undefined(env, &undefined);
-    napi_resolve_deferred(env, (napi_deferred)deferred->context, undefined);
-    napi_release_threadsafe_function((napi_threadsafe_function)deferred->handler, napi_tsfn_abort);
-    deferred->release(deferred);
-}
-#endif
-
-static void releaseDeferred(Ark_Deferred* deferred) {
-    delete deferred;
-}
-
 KVMObjectHandle impl_VSyncAwait(KVMContext vmContext, Ark_NativePointer pipelineContext)
 {
-    Ark_VMContext vmContextCast = (Ark_VMContext) vmContext;
     Ark_PipelineContext pipelineContextCast = (Ark_PipelineContext) pipelineContext;
-    Ark_Deferred* deferred = new Ark_Deferred();
-    deferred->release = releaseDeferred;
     KVMObjectHandle result = nullptr;
-#ifdef KOALA_NAPI
-    // TODO: move to interop!
-    napi_env env = (napi_env)vmContextCast;
-    napi_deferred deferredContext;
-    napi_value promise;
-    napi_value resourceName;
-    napi_create_string_utf8(env, "Async", 5, &resourceName);
-    auto status = napi_create_promise(env, (napi_deferred*)&deferred->context, &promise);
-    if (status != napi_ok) fprintf(stderr, "cannot make a promise; %d\n", status);
-    status = napi_create_threadsafe_function(env,
-        nullptr,
-        nullptr,
-        resourceName,
-        0,
-        1,
-        nullptr,
-        nullptr,    
-        deferred,
-        (napi_threadsafe_function_call_js)resolveDeferred, 
-        (napi_threadsafe_function*)&deferred->handler);
-    if (status != napi_ok) fprintf(stderr, "cannot make threadsafe function; %d\n", status);
-    napi_acquire_threadsafe_function((napi_threadsafe_function)deferred->handler);
-    result = (KVMObjectHandle)promise;
-#endif
-    GetArkUIExtendedNodeAPI()->setVsyncCallback(vmContextCast, pipelineContextCast, deferred);
+    KVMDeferred* deferred = CreateDeferred(vmContext, &result);
+    GetArkUIExtendedNodeAPI()->setVsyncCallback(pipelineContextCast, (Ark_Deferred*)deferred);
     return result;
 }
 KOALA_INTEROP_CTX_1(VSyncAwait, KVMObjectHandle, Ark_NativePointer)

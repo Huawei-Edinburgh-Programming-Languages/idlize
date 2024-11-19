@@ -68,17 +68,9 @@ typedef struct ServiceLogger {
     int (*needGroupedLog)(int kind);
 } ServiceLogger;
 
-typedef struct ServiceCallbackCaller {
-    // Calls back to embedder. 
-    int32_t (*CallInt) (void* context, int32_t methodId, uint8_t* argsData, int32_t argsLength);
-    void (*ResolveDeferred)(void* deferred, uint8_t* argsData, int32_t argsLength);
-    void (*RejectDeferred)(void* deferred, uint8_t* argsData, int32_t argsLength);
-} ServiceCallbackCaller;
-
 typedef struct GenericServiceAPI {
     int32_t version;
     void (*setLogger)(const ServiceLogger* logger);
-    void (*setCaller)(const ServiceCallbackCaller* caller);
 } GenericServiceAPI;
 
 typedef struct %CPP_PREFIX%ArkUIExtendedNodeAPI {
@@ -144,18 +136,16 @@ typedef struct %CPP_PREFIX%ArkUIExtendedNodeAPI {
 
     /// Vsync support
     Ark_PipelineContext (*getPipelineContext)(Ark_NodeHandle node);
-    void (*setVsyncCallback)(Ark_VMContext  vmContext,
-                             Ark_PipelineContext pipelineContext,
+    void (*setVsyncCallback)(Ark_PipelineContext pipelineContext,
                              Ark_Deferred* deferred);
     void (*unblockVsyncWait)(Ark_VMContext  vmContext,
                              Ark_PipelineContext pipelineContext);
 
-  void (*setChildTotalCount)(Ark_NodeHandle node,
-                             Ark_Int32 totalCount);
+    void (*setChildTotalCount)(Ark_NodeHandle node,
+                               Ark_Int32 totalCount);
 
-  /// Error reporting.
-  void (*showCrash)(Ark_CharPtr message);
-
+    /// Error reporting.
+    void (*showCrash)(Ark_CharPtr message);
 } %CPP_PREFIX%ArkUIExtendedNodeAPI;
 
 /**

@@ -77,16 +77,12 @@ void setLogger(const ServiceLogger* logger) {
     SetDummyLogger(reinterpret_cast<const GroupLogger*>(logger));
 }
 
-void setCallbackCaller(const ServiceCallbackCaller* caller) {
-    callbackCallerInstance = caller;
-}
 
 const GenericServiceAPI* GetServiceAPI()
 {
     static const GenericServiceAPI serviceAPIImpl = {
         GENERIC_SERVICE_API_VERSION, // version
-        setLogger,
-        setCallbackCaller
+        setLogger
     };
     return &serviceAPIImpl;
 }

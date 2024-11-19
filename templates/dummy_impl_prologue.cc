@@ -23,7 +23,6 @@
 #include "arkoala_api_generated.h"
 #include "Serializers.h"
 #include "interop-logging.h"
-#include "interop-callbacks.h"
 #include "arkoala-macros.h"
 #include "tree.h"
 #include "logging.h"
@@ -34,8 +33,6 @@
 // For logging we use operations exposed via interop, SetLoggerSymbol() is called
 // when library is loaded.
 const GroupLogger* loggerInstance = GetDefaultLogger();
-
-const ServiceCallbackCaller* callbackCallerInstance = nullptr;
 
 const GroupLogger* GetDummyLogger() {
     return loggerInstance;
@@ -776,19 +773,19 @@ Ark_PipelineContext GetPipelineContext(Ark_NodeHandle node) {
     return nullptr;
 }
 
-void* currentVsyncWait = nullptr;
-void SetVsyncCallback(Ark_VMContext vmContext, Ark_PipelineContext pipelineContext, Ark_Deferred* deferred) {
-    auto delayed_call = std::async(std::launch::async, [vmContext, deferred] {
+Ark_Deferred* currentVsyncWait = nullptr;
+void SetVsyncCallback(Ark_PipelineContext pipelineContext, Ark_Deferred* deferred) {
+    auto delayed_call = std::async(std::launch::async, [deferred] {
         currentVsyncWait = deferred;
         std::this_thread::sleep_for(1000ms);
         if (currentVsyncWait)
-            callbackCallerInstance->ResolveDeferred(deferred, nullptr, 0);
+            deferred->resolve(currentVsyncWait, nullptr, 0);
         currentVsyncWait = nullptr;
     });
 }
 void UnblockVsyncWait(Ark_VMContext vmContext, Ark_PipelineContext pipelineContext) {
     if (currentVsyncWait) {
-        callbackCallerInstance->RejectDeferred(currentVsyncWait, nullptr, 0);
+        currentVsyncWait->reject(currentVsyncWait, "Reject vsync");
         currentVsyncWait = nullptr;
     }
 }
