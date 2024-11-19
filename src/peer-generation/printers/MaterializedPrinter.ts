@@ -46,15 +46,21 @@ import { Language } from "../../Language";
 import { copyMethod } from "../LanguageWriters/LanguageWriter";
 import { createReferenceType, forceAsNamedNode, IDLPointerType, IDLThisType, IDLType, IDLVoidType, isOptionalType, maybeOptional, toIDLType } from "../../idl";
 import { getReferenceResolver } from "../ReferenceResolver";
+import { SourceFile, TsSourceFile } from "./SourceFile";
 
 interface MaterializedFileVisitor {
     visit(): void
     getTargetFile(): TargetFile
-    getOutput(): string[]
+    getOutput(): SourceFile
 }
 
 abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
-    protected readonly printer: LanguageWriter = createLanguageWriter(this.printerContext.language, getReferenceResolver(this.library))
+    protected readonly destinationFile: SourceFile = SourceFile.make(
+        this.clazz.className + this.printerContext.language.extension,
+        this.printerContext.language,
+        getReferenceResolver(this.library)
+    )
+    protected readonly printer: LanguageWriter = this.destinationFile.content
 
     constructor(
         protected readonly library: PeerLibrary,
@@ -67,8 +73,8 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
     convertToPropertyType(field: MaterializedField): IDLType {
         return field.field.type
     }
-    getOutput(): string[] {
-        return this.printer.getOutput()
+    getOutput(): SourceFile {
+        return this.destinationFile
     }
 }
 
@@ -90,16 +96,13 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
     }
 
     private printImports() {
-        const imports = new ImportsCollector()
+        const imports = (this.destinationFile as TsSourceFile).imports
         this.collectImports(imports)
-        const currentModule = removeExt(renameClassToMaterialized(this.clazz.className, this.library.language))
-        imports.print(this.printer, currentModule)
     }
 
     private printMaterializedClass(clazz: MaterializedClass) {
         this.printImports()
         const printer = this.printer
-        printer.print(makeMaterializedPrologue(this.printerContext.language))
 
         let superClassName = clazz.superClass?.getSuperType()
         let selfInterface = clazz.isInterface
@@ -494,8 +497,8 @@ class CJMaterializedFileVisitor extends MaterializedFileVisitorBase {
 }
 
 
-class MaterializedVisitor {
-    readonly materialized: Map<TargetFile, string[]> = new Map()
+export class MaterializedVisitor {
+    readonly materialized: Map<TargetFile, SourceFile> = new Map()
 
     constructor(
         private readonly library: PeerLibrary,
@@ -534,8 +537,12 @@ export function printMaterialized(peerLibrary: PeerLibrary, printerContext: Prin
     visitor.printMaterialized()
     const result = new Map<TargetFile, string>()
     for (const [file, content] of visitor.materialized) {
-        if (content.length === 0) continue
-        const text = tsCopyrightAndWarning(content.join('\n'))
+        const lw = createLanguageWriter(content.language, getReferenceResolver(peerLibrary))
+        lw.print(makeMaterializedPrologue(printerContext.language))
+        content.printImports(lw)
+        lw.print("")
+        lw.concat(content.content)
+        const text = tsCopyrightAndWarning(lw.getOutput().join('\n'))
         result.set(file, text)
     }
     return result

@@ -23,11 +23,13 @@ import { ReferenceResolver } from "../ReferenceResolver"
 export abstract class SourceFile {
     public readonly content: LanguageWriter
 
-    public static make(name: string, language: Language, resolver: ReferenceResolver) {
+    public static make(name: string, language: Language, resolver: ReferenceResolver): SourceFile {
         if (language === Language.CPP) {
             return new CppSourceFile(name, resolver)
         } else if (language === Language.TS) {
-            return new TsSourceFile(name, resolver)
+            return new TsSourceFile(name, resolver) 
+        } else if (language === Language.ARKTS) {
+            return new ArkTSSourceFile(name, resolver)
         } else {
             return new GenericSourceFile(name, language, resolver)
         }
@@ -146,6 +148,10 @@ export class TsSourceFile extends SourceFile {
         if (!(writer instanceof TSLanguageWriter)) throw new TypeError("illegal language writer")
         this.imports.print(writer, this.moduleName)
     }
+}
+
+export class ArkTSSourceFile extends TsSourceFile { // TODO better implementation
+
 }
 
 /** @deprecated Each destination language should have its own SourceFile implementation */
