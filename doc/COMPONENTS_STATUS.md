@@ -1991,8 +1991,8 @@
 |*WebCookie*| *Class* | Erokhin Ilya | done | |
 |`setCookie`| Function | Erokhin Ilya | done | |
 |`saveCookie`| Function | Erokhin Ilya | done | |
-|*EventResult*| *Class* | Erokhin Ilya | in progress |  |
-|`setGestureEventResult`| Function | Erokhin Ilya | in progress |  |
+|*EventResult*| *Class* | Erokhin Ilya | devdone |  |
+|`setGestureEventResult`| Function | Erokhin Ilya | devdone |  |
 |*WebController*| *Class* | Erokhin Ilya | in progress | |
 |`onInactive`| Function | Erokhin Ilya | done | |
 |`onActive`| Function | Erokhin Ilya | done | |
