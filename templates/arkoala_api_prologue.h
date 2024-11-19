@@ -85,6 +85,11 @@ struct _Ark_Node;
 typedef struct _Ark_Node* Ark_NodeHandle;
 struct _Ark_Canvas;
 typedef struct _Ark_Canvas* Ark_CanvasHandle;
+typedef struct Ark_Deferred {
+    void* handler;
+    void* context;
+    void (*release)(struct Ark_Deferred* thiz);
+} Ark_Deferred;
 
 enum Ark_APINodeFlags {
     %CPP_PREFIX%CUSTOM_NONE = 0,

@@ -71,8 +71,8 @@ typedef struct ServiceLogger {
 typedef struct ServiceCallbackCaller {
     // Calls back to embedder. 
     int32_t (*CallInt) (void* context, int32_t methodId, uint8_t* argsData, int32_t argsLength);
-    // Calls back to embedder, potentially from another thread.
-    int32_t (*CallIntAsync)(void* context, int32_t methodId, uint8_t* argsData, int32_t argsLength);
+    void (*ResolveDeferred)(void* deferred, uint8_t* argsData, int32_t argsLength);
+    void (*RejectDeferred)(void* deferred, uint8_t* argsData, int32_t argsLength);
 } ServiceCallbackCaller;
 
 typedef struct GenericServiceAPI {
@@ -146,7 +146,7 @@ typedef struct %CPP_PREFIX%ArkUIExtendedNodeAPI {
     Ark_PipelineContext (*getPipelineContext)(Ark_NodeHandle node);
     void (*setVsyncCallback)(Ark_VMContext  vmContext,
                              Ark_PipelineContext pipelineContext,
-                             Ark_Int32 callbackId);
+                             Ark_Deferred* deferred);
     void (*unblockVsyncWait)(Ark_VMContext  vmContext,
                              Ark_PipelineContext pipelineContext);
 
