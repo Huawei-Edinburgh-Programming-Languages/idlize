@@ -17,10 +17,13 @@
 #include <algorithm>
 #include <array>
 #include <chrono>
+#include <future>
+#include <thread>
 
 #include "arkoala_api_generated.h"
 #include "Serializers.h"
 #include "interop-logging.h"
+#include "interop-callbacks.h"
 #include "arkoala-macros.h"
 #include "tree.h"
 #include "logging.h"
@@ -31,6 +34,8 @@
 // For logging we use operations exposed via interop, SetLoggerSymbol() is called
 // when library is loaded.
 const GroupLogger* loggerInstance = GetDefaultLogger();
+
+const CallbackCaller* callbackCallerInstance = nullptr;
 
 const GroupLogger* GetDummyLogger() {
     return loggerInstance;
@@ -136,6 +141,7 @@ void DumpTree(TreeNode *node, Ark_Int32 indent) {
     }
 }
 
+// TODO: remove in favour of callbackCallerInstance!
 GENERATED_Ark_APICallbackMethod *callbacks = nullptr;
 
 int TreeNode::_globalId = 1;
@@ -770,35 +776,16 @@ Ark_PipelineContext GetPipelineContext(Ark_NodeHandle node) {
     return nullptr;
 }
 
-#ifdef KOALA_NAPI
-class VsyncCallbackJob : public KoalaAsyncCallback {
-    private static VsyncCallbackJob* vsyncJob = nullptr;
-    public:
-        void Execute() override {
-            fprintf(stderr, "Sleeping to emulate vsync\n");
-            std::this_thread::sleep_for(std::chrono::milliseconds(300));
-            vsyncJob = nullptr;
-        }
-    }
-};
-#endif
-
 void SetVsyncCallback(Ark_VMContext vmContext, Ark_PipelineContext pipelineContext, KInt callbackId) {
-#ifdef KOALA_NAPI
-    assert(vsyncJob == nullptr);
-    vsyncJob = new VsyncCallbackJob((napi_env)vmContext, callbackId);
-    vsyncJob->Queue();
-#endif
+    auto delayed_call = std::async(std::launch::async, [vmContext, callbackId] {
+        while (true) {
+            std::this_thread::sleep_for(2000ms);
+            fprintf(stderr, "would call %d with %p\n", callbackId, callbackCallerInstance);
+            callbackCallerInstance->CallInt(vmContext, callbackId, 0, nullptr);
+        }
+    });
 }
 void UnblockVsyncWait(Ark_VMContext vmContext, Ark_PipelineContext pipelineContext) {
-#ifdef KOALA_NAPI
-    int32_t vsyncJob = vsyncJob ? vsyncJob->callbackId() : 0;
-    if (vsyncJob != 0) {
-        fprintf(stderr, "Unblock vsync %d\n", callbackId);
-        vsyncJob->cancel();
-        vsyncJob = nullptr;
-    }
-#endif
 }
 void SetChildTotalCount(Ark_NodeHandle node, Ark_Int32 totalCount) {}
 void ShowCrash(Ark_CharPtr message) {}

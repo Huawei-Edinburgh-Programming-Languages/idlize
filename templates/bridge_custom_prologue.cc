@@ -495,7 +495,7 @@ KVMObjectHandle impl_LoadUserView(KVMContext vm, const KStringPtr& viewClass, co
     EtsEnv* env = reinterpret_cast<EtsEnv*>(vm);
     std:: string className(viewClass.c_str());
     // TODO: hack, fix it!
-    if (className == "ViewArkTSLoaderApp") className = "Page.App";
+    if (className == "ViewLoaderApp") className = "Page.App";
     std::replace(className.begin(), className.end(), '.', '/');
     ets_class viewClassClass = env->FindClass(className.c_str());
     if (!viewClassClass) {

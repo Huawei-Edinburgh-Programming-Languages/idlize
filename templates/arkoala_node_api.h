@@ -68,9 +68,17 @@ typedef struct ServiceLogger {
     int (*needGroupedLog)(int kind);
 } ServiceLogger;
 
+typedef struct ServiceCallbackCaller {
+    // Calls back to embedder. 
+    int32_t (*CallInt) (void* context, int32_t methodId, uint8_t* argsData, int32_t argsLength);
+    // Calls back to embedder, potentially from another thread.
+    int32_t (*CallIntAsync)(void* context, int32_t methodId, uint8_t* argsData, int32_t argsLength);
+} ServiceCallbackCaller;
+
 typedef struct GenericServiceAPI {
-    Ark_Int32 version;
+    int32_t version;
     void (*setLogger)(const ServiceLogger* logger);
+    void (*setCaller)(const ServiceCallbackCaller* caller);
 } GenericServiceAPI;
 
 typedef struct %CPP_PREFIX%ArkUIExtendedNodeAPI {
