@@ -47,12 +47,11 @@ interface SignatureDescriptor {
 
 class OHOSVisitor {
     implementationStubsFile: CppSourceFile
+    nativeFile: SourceFile
     peerFile: SourceFile
 
     hWriter = new CppLanguageWriter(new IndentedPrinter(), this.library)
     cppWriter = new CppLanguageWriter(new IndentedPrinter(), this.library)
-
-    nativeWriter: LanguageWriter
 
     libraryName: string = ""
 
@@ -73,9 +72,8 @@ class OHOSVisitor {
         const resolver = getReferenceResolver(library)
         const fileNamePrefix = this.libraryName.toLowerCase()
 
-        this.nativeWriter = createLanguageWriter(language, resolver)
-
         this.peerFile = SourceFile.make(`${fileNamePrefix}${language.extension}`, language, resolver)
+        this.nativeFile = SourceFile.make(`${fileNamePrefix}Native${language.extension}`, language, resolver)
         this.implementationStubsFile = new CppSourceFile(`${fileNamePrefix}Impl_template${Language.CPP.extension}`, resolver)
         this.implementationStubsFile.addInclude(`${fileNamePrefix}.h`)
     }
@@ -286,16 +284,28 @@ class OHOSVisitor {
     }
 
     private printNative() {
+        const nativeWriter = this.nativeFile.content
+        const language = this.nativeFile.language
+        const nativeModuleTemplate = readLangTemplate(`OHOSNativeModule_template${language.extension}`, language)
+        const nativeModulePrelude = nativeModuleTemplate.replaceAll('%NATIVE_MODULE_NAME%', this.libraryName)
+        nativeWriter.print(nativeModulePrelude)
+
+        if (language === Language.TS) {
+            const imports = (this.nativeFile as TsSourceFile).imports
+            imports.addFeatures(["int32"], "@koalaui/common")
+            imports.addFeatures(["pointer", "KPointer"], "@koalaui/interop")
+        }
+
         const className = `${this.libraryName}NativeModule`
         this.callbacks.forEach(callback => {
             if (this.library.language === Language.TS) {
-                const params = callback.parameters.map(it => `${it.name}:${this.nativeWriter.getNodeName(it.type!)}`).join(', ')
-                const returnTypeName = this.nativeWriter.getNodeName(callback.returnType)
-                this.nativeWriter.print(`export type ${callback.name} = (${params}) => ${returnTypeName}`)
+                const params = callback.parameters.map(it => `${it.name}:${nativeWriter.getNodeName(it.type!)}`).join(', ')
+                const returnTypeName = nativeWriter.getNodeName(callback.returnType)
+                nativeWriter.print(`export type ${callback.name} = (${params}) => ${returnTypeName}`)
             }
         })
         this.callbackInterfaces.forEach(int => {
-            this.nativeWriter.writeInterface(int.name, writer => {
+            nativeWriter.writeInterface(int.name, writer => {
                 int.methods.forEach(method => {
                     writer.writeMethodDeclaration(
                         method.name,
@@ -304,8 +314,8 @@ class OHOSVisitor {
                 })
             })
         })
-        printCallbacksKinds(this.library, this.nativeWriter)
-        this.nativeWriter.writeInterface(className, writer => {
+        printCallbacksKinds(this.library, nativeWriter)
+        nativeWriter.writeInterface(className, writer => {
             this.interfaces.forEach(it => {
                 it.methods.forEach(method => {
                     const signature = makePeerCallSignature(this.library, method.parameters, method.returnType, "self")
@@ -505,21 +515,18 @@ class OHOSVisitor {
 
         const fileNamePrefix = this.libraryName.toLowerCase()
         const ext = this.library.language.extension
-        const nativeModuleTemaplte = readLangTemplate(`OHOSNativeModule_template${ext}`, this.library.language)
-        const nativeModuleText = nativeModuleTemaplte
-            .replaceAll('%NATIVE_MODULE_NAME%', this.libraryName)
-            .replaceAll('%NATIVE_MODULE_CONTENT%', this.nativeWriter.getOutput().join('\n'))
-        fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Native${ext}`), nativeModuleText, 'utf-8')
 
-        const peerText = this.peerFile.printToString()
-        fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}${ext}`), peerText, 'utf-8')
+        const emitFile = (file: SourceFile) => {
+            fs.writeFileSync(path.join(managedOutDir, file.name), file.printToString(), 'utf-8')
+        } 
+        
+        emitFile(this.peerFile)
+        emitFile(this.nativeFile)
+        emitFile(this.implementationStubsFile)
 
         this.hWriter.printTo(path.join(outDir, `${fileNamePrefix}.h`))
         this.cppWriter.printTo(path.join(outDir, `${fileNamePrefix}.cc`))
 
-        fs.writeFileSync(path.join(outDir, this.implementationStubsFile.name),
-            this.implementationStubsFile.printToString()
-        )
         fs.writeFileSync(path.join(outDir, `SerializerBase.h`),
             readLangTemplate(`ohos_SerializerBase.h`, Language.CPP)
                 .replaceAll("%NATIVE_API_HEADER_PATH%", `${fileNamePrefix}.h`)
@@ -536,7 +543,6 @@ class OHOSVisitor {
         }
 
         const serializerText = makeSerializerForOhos(this.library, managedCodeModuleInfo, fileNamePrefix).printToString()
-        fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}${ext}`), peerText, 'utf-8')
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Serializer${ext}`), serializerText, 'utf-8')
         fs.writeFileSync(path.join(managedOutDir, `SerializerBase${ext}`),
             readLangTemplate(`SerializerBase${ext}`, this.library.language)

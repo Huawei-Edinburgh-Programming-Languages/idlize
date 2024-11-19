@@ -1,8 +1,3 @@
-import { int32 } from "@koalaui/common"
-import { pointer, KPointer } from "@koalaui/interop"
-
-%NATIVE_MODULE_CONTENT%
-
 type NativeModuleType = %NATIVE_MODULE_NAME%NativeModule
 let theModule: NativeModuleType | undefined = undefined
 
