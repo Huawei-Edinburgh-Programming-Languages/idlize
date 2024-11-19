@@ -121,7 +121,7 @@ declare class SwiperController {
    * Controlling Swiper to change to the specified subcomponent.
    *
    * @param { number } index - the index of item to be redirected.
-   * @param { boolean } useAnimation - If true, swipe to index item with animation. If false, swipe to index item without animation.
+   * @param { boolean } useAnimation - If true, swipe to index item with animation. If false, swipe to index item without animation. 
    *      The default value is false.
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @crossplatform
@@ -279,7 +279,7 @@ declare class Indicator<T> {
    * @since 11
    */
   bottom(value: Length): T;
-
+  
   /**
    * Set the indicator to the left in LTR
    * Set the indicator to the right in RTL
@@ -295,7 +295,7 @@ declare class Indicator<T> {
   start(value: LengthMetrics): T;
 
   /**
-   * Set the indicator to the left in RTL
+   * Set the indicator to the left in RTL 
    * Set the indicator to the right in LTR
    *
    * @param { LengthMetrics } value - the indicator to the left in RTL, Set the indicator to the right in LTR
@@ -306,7 +306,7 @@ declare class Indicator<T> {
    * @atomicservice
    * @since 12
    */
-  end(value: LengthMetrics): T;
+  end(value: LengthMetrics): T;   
 
   /**
    * DotIndicator class object.
@@ -1430,7 +1430,7 @@ declare class SwiperAttribute extends CommonMethod<SwiperAttribute> {
    * @since 11
    */
   indicator(value: DotIndicator | DigitIndicator | boolean): SwiperAttribute;
-
+  
   /**
    * Use indicator component controller.
    *
@@ -1890,7 +1890,7 @@ declare class SwiperAttribute extends CommonMethod<SwiperAttribute> {
    * @since 11
    */
   /**
-   * The next margin which can be used to expose a small portion of the latter item.
+   * The next margin which can be used to expose a small portion of the latter item. 
    * When the next item is empty, do not display blank space.
    *
    * @param { Length } value - The length of next margin.
@@ -2187,7 +2187,7 @@ declare interface SwiperContentTransitionProxy {
 
 /**
  * The callback of onContentDidScroll.
- *
+ * 
  * @typedef { Function } ContentDidScrollCallback
  * @param { number } selectedIndex - the index value of the swiper content selected before animation start.
  * @param { number } index - the index value of the swiper content.

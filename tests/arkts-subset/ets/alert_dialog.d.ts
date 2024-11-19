@@ -275,22 +275,22 @@ declare enum DialogAlignment {
 }
 
 /**
- * The arrangement of buttons in dialog.
- *
- * @enum { number }
- * @syscap SystemCapability.ArkUI.ArkUI.Full
- * @crossplatform
- * @since 10
- */
+* The arrangement of buttons in dialog.
+*
+* @enum { number }
+* @syscap SystemCapability.ArkUI.ArkUI.Full
+* @crossplatform
+* @since 10
+*/
 /**
- * The arrangement of buttons in dialog.
- *
- * @enum { number }
- * @syscap SystemCapability.ArkUI.ArkUI.Full
- * @crossplatform
- * @atomicservice
- * @since 11
- */
+* The arrangement of buttons in dialog.
+*
+* @enum { number }
+* @syscap SystemCapability.ArkUI.ArkUI.Full
+* @crossplatform
+* @atomicservice
+* @since 11
+*/
 declare enum DialogButtonDirection {
   /**
    * Two or fewer buttons are arranged horizontally,
@@ -614,7 +614,7 @@ declare interface AlertDialogParam {
    * @since 11
    */
   title?: ResourceStr;
-
+  
   /**
    * Subtitle Properties
    * @type { ?ResourceStr }
@@ -815,10 +815,10 @@ declare interface AlertDialogParam {
    * @since 11
    */
   maskRect?: Rectangle;
-
+  
   /**
    * Whether to display in the sub window.
-   *
+   * 
    * @type { ?boolean }
    * @default false
    * @syscap SystemCapability.ArkUI.ArkUI.Full
@@ -827,7 +827,7 @@ declare interface AlertDialogParam {
    */
   /**
    * Whether to display in the sub window.
-   *
+   * 
    * @type { ?boolean }
    * @default false
    * @syscap SystemCapability.ArkUI.ArkUI.Full
@@ -898,7 +898,7 @@ declare interface AlertDialogParam {
    */
   backgroundBlurStyle?: BlurStyle;
 
-  /**
+    /**
    * Callback function when the dialog interactive dismiss
    *
    * @type { ?Callback<DismissDialogAction> }
@@ -1114,7 +1114,7 @@ declare interface DismissDialogAction {
    * @since 12
    */
   dismiss: Callback<void>;
-
+  
   /**
    * Dismiss reason type.
    *
