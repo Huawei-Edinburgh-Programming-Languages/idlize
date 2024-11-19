@@ -56,7 +56,7 @@ interface MaterializedFileVisitor {
 
 abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
     protected readonly destinationFile: SourceFile = SourceFile.make(
-        this.clazz.className + this.printerContext.language.extension,
+        renameClassToMaterialized(this.clazz.className, this.library.language),
         this.printerContext.language,
         getReferenceResolver(this.library)
     )
