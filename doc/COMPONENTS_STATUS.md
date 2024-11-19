@@ -177,7 +177,7 @@
 |`defaultFocus`| Function | Dmitry A Smirnov| in progress | |
 |`groupDefaultFocus`| Function | Dmitry A Smirnov| in progress | |
 |`focusOnTouch`| Function | Dmitry A Smirnov| in progress | |
-|`focusBox`| Function | Dmitry A Smirnov| in progress | |
+|`focusBox`| Function | Dmitry A Smirnov| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`animation`| Function | Erokhin Ilya | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAXHJP|
 |`transition`| Function | Dmitry A Smirnov| in progress | |
 |`motionBlur`| Function | Dmitry A Smirnov| in progress | |
