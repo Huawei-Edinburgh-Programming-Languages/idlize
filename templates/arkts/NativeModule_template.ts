@@ -42,7 +42,7 @@ export function nativeModule(): NativeModule {
 export class NativeModule {
   static {
     loadLibrary("ArkoalaNative_ark")
-    NativeModule.init();
+    NativeModule.init()
   }
 
   static native init(): void;
