@@ -445,6 +445,7 @@ declare class CommonMethod<T> {
 
     offset(value: Position | Edges | LocalizedEdges): T;
 
+    enabled(value: boolean): T;
 }
 
 declare interface Rectangle {
