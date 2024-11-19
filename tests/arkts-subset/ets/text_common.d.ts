@@ -651,9 +651,9 @@ declare interface LayoutManager {
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @crossplatform
    * @atomicservice
-   * @since 13
+   * @since 14
    */
-  //getRectsForRange(range: TextRange, widthStyle: RectWidthStyle, heightStyle: RectHeightStyle): Array<TextBox>;
+  getRectsForRange(range: TextRange, widthStyle: RectWidthStyle, heightStyle: RectHeightStyle): Array<TextBox>;
 }
 
 /**
@@ -718,7 +718,7 @@ declare type LineMetrics = import('../api/@ohos.graphics.text').default.LineMetr
  * @syscap SystemCapability.ArkUI.ArkUI.Full
  * @crossplatform
  * @atomicservice
- * @since 13
+ * @since 14
  */
 declare type RectWidthStyle = import('../api/@ohos.graphics.text').default.RectWidthStyle;
 
@@ -729,7 +729,7 @@ declare type RectWidthStyle = import('../api/@ohos.graphics.text').default.RectW
  * @syscap SystemCapability.ArkUI.ArkUI.Full
  * @crossplatform
  * @atomicservice
- * @since 13
+ * @since 14
  */
 declare type RectHeightStyle = import('../api/@ohos.graphics.text').default.RectHeightStyle;
 
@@ -740,7 +740,7 @@ declare type RectHeightStyle = import('../api/@ohos.graphics.text').default.Rect
  * @syscap SystemCapability.ArkUI.ArkUI.Full
  * @crossplatform
  * @atomicservice
- * @since 13
+ * @since 14
  */
 declare type TextBox = import('../api/@ohos.graphics.text').default.TextBox;
 
@@ -834,6 +834,90 @@ declare class TextMenuItemId {
    * @since 12
    */
   equals(id: TextMenuItemId): boolean;
+
+  /**
+   * Indicates the TextMenuItemId to copy and delete the currently selected text.
+   *
+   * @type { TextMenuItemId }
+   * @readonly
+   * @static
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @atomicservice
+   * @since 12
+   */
+  static readonly CUT: TextMenuItemId;
+
+  /**
+   * Indicates the TextMenuItemId to copy the currently selected text to the clipboard.
+   *
+   * @type { TextMenuItemId }
+   * @readonly
+   * @static
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @atomicservice
+   * @since 12
+   */
+  static readonly COPY: TextMenuItemId;
+
+  /**
+   * Indicates the TextMenuItemId to copy the current contents of the clipboard into the text view.
+   *
+   * @type { TextMenuItemId }
+   * @readonly
+   * @static
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @atomicservice
+   * @since 12
+   */
+  static readonly PASTE: TextMenuItemId;
+
+  /**
+   * Indicates the TextMenuItemId to select all text in a text view.
+   * 
+   * @type { TextMenuItemId }
+   * @readonly
+   * @static
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @atomicservice
+   * @since 12
+   */
+  static readonly SELECT_ALL: TextMenuItemId;
+
+  /**
+   * Indicates the TextMenuItemId for collaboration service menu items.
+   *
+   * @type { TextMenuItemId }
+   * @readonly
+   * @static
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @atomicservice
+   * @since 12
+   */
+  static readonly COLLABORATION_SERVICE: TextMenuItemId;
+
+  /**
+   * Indicates the TextMenuItemId to recognize the text in the picture and input it into the text view.
+   *
+   * @type { TextMenuItemId }
+   * @readonly
+   * @static
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @atomicservice
+   * @since 12
+   */
+  static readonly CAMERA_INPUT: TextMenuItemId;
+
+  /**
+   * Indicates the TextMenuItemId to help with text creation by invoking large models.
+   *
+   * @type { TextMenuItemId }
+   * @readonly
+   * @static
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @atomicservice
+   * @since 13
+   */
+  static readonly AI_WRITER: TextMenuItemId;
 }
 
 /**
