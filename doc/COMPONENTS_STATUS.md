@@ -1180,11 +1180,11 @@
 |`format`| Function |Pavelyev Ivan|done|  |
 |`onDateChange`| Function |Pavelyev Ivan|in progress|  |
 |`fontColor`| Function |Pavelyev Ivan|done|  |
-|`fontSize`| Function |Pavelyev Ivan| blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1J5L |
+|`fontSize`| Function |Pavelyev Ivan| testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1J5L |
 |`fontStyle`| Function |Pavelyev Ivan|done|  |
 |`fontWeight`| Function |Pavelyev Ivan|done|  |
-|`fontFamily`| Function |Pavelyev Ivan| blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1JRR |
-|`textShadow`| Function |Pavelyev Ivan| blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1K3Z |
+|`fontFamily`| Function |Pavelyev Ivan| testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1JRR |
+|`textShadow`| Function |Pavelyev Ivan| testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1K3Z |
 |`fontFeature`| Function |Pavelyev Ivan|done|  |
 |`contentModifier`| Function |Pavelyev Ivan|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`dateTimeOptions`| Function |Pavelyev Ivan|in progress|  |
