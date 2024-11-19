@@ -290,7 +290,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     override instanceOf(convertor: BaseArgConvertor, value: string, duplicateMembers?: Set<string>): LanguageExpression {
         if (convertor instanceof CustomTypeConvertor) {
             return makeInterfaceTypeCheckerCall(value,
-                this.stringifyType(convertor.idlType),
+                this.getNodeName(convertor.idlType),
                 [],
                 duplicateMembers!,
                 this)

@@ -186,7 +186,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                 writer.writeStatement(writer.makeAssign(objVar,
                     clazzRefType,
                     //TODO: Need to pass IDLType instead of string to makeNewObject
-                    writer.makeNewObject(writer.stringifyType(clazzRefType)),
+                    writer.makeNewObject(writer.getNodeName(clazzRefType)),
                     true)
                 )
                 writer.writeStatement(
