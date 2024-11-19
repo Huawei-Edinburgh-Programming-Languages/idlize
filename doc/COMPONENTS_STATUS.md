@@ -1906,8 +1906,8 @@
 |`handleCancel`| Function | Erokhin Ilya | devdone |  |
 |`handleConfirm`| Function | Erokhin Ilya | devdone |  |
 |`handlePromptConfirm`| Function | Erokhin Ilya | devdone |  |
-|*FileSelectorResult*| *Class* | Erokhin Ilya | in progress |  |
-|`handleFileList`| Function | Erokhin Ilya | in progress |  |
+|*FileSelectorResult*| *Class* | Erokhin Ilya | devdone |  |
+|`handleFileList`| Function | Erokhin Ilya | devdone |  |
 |*HttpAuthHandler*| *Class* | Erokhin Ilya | in progress |  |
 |`confirm`| Function | Erokhin Ilya | in progress |  |
 |`cancel`| Function | Erokhin Ilya | in progress |  |
