@@ -443,6 +443,8 @@ declare class CommonMethod<T> {
   
     backgroundImageSize(value: SizeOptions | ImageSize): T;
 
+    offset(value: Position | Edges | LocalizedEdges): T;
+
 }
 
 declare interface Rectangle {

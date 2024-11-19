@@ -31,6 +31,8 @@ declare class ListAttribute extends ScrollableCommonMethod<ListAttribute> {
     onScrollVisibleContentChange(handler: OnScrollVisibleContentChangeCallback): ListAttribute;
 
     listDirection(value: Axis): ListAttribute;
+
+    onScrollIndex(event: (start: number, end: number, center: number) => void): ListAttribute;
 }
 
 declare const List: ListInterface
