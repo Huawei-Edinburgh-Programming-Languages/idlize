@@ -720,12 +720,12 @@
 |*Polyline*| *Component* | | | |
 |`setPolylineOptions`| Function | | | |
 |`points`| Function | | | |
-|*Progress*| *Component* | Erokhin Ilya |   | |
-|`setProgressOptions`| Function | Erokhin Ilya | devdone | |
-|`value`| Function | Erokhin Ilya | devdone | |
-|`color`| Function | Erokhin Ilya | devdone | |
+|*Progress*| *Component* | Erokhin Ilya | blocked | |
+|`setProgressOptions`| Function | Erokhin Ilya | done | |
+|`value`| Function | Erokhin Ilya | done | |
+|`color`| Function | Erokhin Ilya | done | |
 |`style`| Function | Erokhin Ilya | blocked | linearStyle.strokeRadius https://gitee.com/nikolay-igotti/idlize/issues/IB4G8D |
-|`privacySensitive`| Function | Erokhin Ilya | devdone | |
+|`privacySensitive`| Function | Erokhin Ilya | done | |
 |`contentModifier`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |*QRCode*| *Component* | Evstigneev Roman |in progress|  |
 |`setQRCodeOptions`| Function |Evstigneev Roman | done |  |
@@ -1897,11 +1897,11 @@
 |`close`| Function | Erokhin Ilya | devdone |  |
 |*FullScreenExitHandler*| *Class* | Erokhin Ilya | devdone |  |
 |`exitFullScreen`| Function | Erokhin Ilya | devdone |  |
-|*FileSelectorParam*| *Class* | Erokhin Ilya | in progress |  |
-|`getTitle`| Function | Erokhin Ilya | in progress |  |
-|`getMode`| Function | Erokhin Ilya | in progress |  |
-|`getAcceptType`| Function | Erokhin Ilya | in progress |  |
-|`isCapture`| Function | Erokhin Ilya | in progress |  |
+|*FileSelectorParam*| *Class* | Erokhin Ilya | blocked |  |
+|`getTitle`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0  |
+|`getMode`| Function | Erokhin Ilya | iblocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0  |
+|`getAcceptType`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0  |
+|`isCapture`| Function | Erokhin Ilya | devdone |  |
 |*JsResult*| *Class* | Erokhin Ilya | devdone |  |
 |`handleCancel`| Function | Erokhin Ilya | devdone |  |
 |`handleConfirm`| Function | Erokhin Ilya | devdone |  |
