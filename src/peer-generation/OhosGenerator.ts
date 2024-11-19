@@ -15,7 +15,7 @@
 
 import * as fs from 'fs'
 import * as path from 'path'
-import { createConstructor, createContainerType, createReferenceType, createTypeParameterReference, forceAsNamedNode, getExtAttribute, hasExtAttribute, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLMethod, IDLNumberType, IDLParameter, IDLPointerType, IDLType, IDLU8Type, IDLUint8ArrayType, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isInterface, isMethod, isReferenceType, isType, isUnionType, maybeOptional } from '../idl'
+import { createConstructor, createContainerType, forceAsNamedNode, getExtAttribute, hasExtAttribute, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLMethod, IDLParameter, IDLPointerType, IDLType, IDLU8Type, IDLUint8ArrayType, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isInterface, isMethod, isReferenceType, isType, isUnionType } from '../idl'
 import { IndentedPrinter } from "../IndentedPrinter"
 import { PeerLibrary } from './PeerLibrary'
 import { Language } from '../Language'
@@ -26,11 +26,11 @@ import { makeDeserializeAndCall, makeSerializerForOhos, readLangTemplate } from 
 import { qualifiedName } from './idl/common'
 import { isMaterialized } from './idl/IdlPeerGeneratorVisitor'
 import { StructPrinter } from './printers/StructPrinter'
-import { CppLanguageWriter, createLanguageWriter, ExpressionStatement, FieldModifier, LanguageExpression, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature } from './LanguageWriters'
+import { CppLanguageWriter, createLanguageWriter, LanguageWriter, MethodSignature, NamedMethodSignature } from './LanguageWriters'
 import { printBridgeCcForOHOS } from './printers/BridgeCcPrinter'
 import { printCallbacksKinds, printManagedCaller } from './printers/CallbacksPrinter'
 import { writeDeserializer, writeSerializer } from './printers/SerializerPrinter'
-import { CppSourceFile, SourceFile } from './printers/SourceFile'
+import { CppSourceFile, SourceFile, TsSourceFile } from './printers/SourceFile'
 import { MaterializedVisitor } from './printers/MaterializedPrinter'
 import { PrinterContext } from './printers/PrinterContext'
 import { getReferenceResolver } from './ReferenceResolver'
@@ -47,11 +47,11 @@ interface SignatureDescriptor {
 
 class OHOSVisitor {
     implementationStubsFile: CppSourceFile
+    peerFile: SourceFile
 
     hWriter = new CppLanguageWriter(new IndentedPrinter(), this.library)
     cppWriter = new CppLanguageWriter(new IndentedPrinter(), this.library)
 
-    peerWriter: LanguageWriter
     nativeWriter: LanguageWriter
 
     libraryName: string = ""
@@ -69,11 +69,14 @@ class OHOSVisitor {
         this.libraryName = this.library.files.filter(f => !f.isPredefined)[0].packageName().toUpperCase()
         this.library.name = this.libraryName
 
-        this.peerWriter = createLanguageWriter(library.language, library)
-        this.nativeWriter = createLanguageWriter(library.language, library)
-
+        const language = library.language
+        const resolver = getReferenceResolver(library)
         const fileNamePrefix = this.libraryName.toLowerCase()
-        this.implementationStubsFile = new CppSourceFile(`${fileNamePrefix}Impl_template${Language.CPP.extension}`, library)
+
+        this.nativeWriter = createLanguageWriter(language, resolver)
+
+        this.peerFile = SourceFile.make(`${fileNamePrefix}${language.extension}`, language, resolver)
+        this.implementationStubsFile = new CppSourceFile(`${fileNamePrefix}Impl_template${Language.CPP.extension}`, resolver)
         this.implementationStubsFile.addInclude(`${fileNamePrefix}.h`)
     }
 
@@ -357,25 +360,23 @@ class OHOSVisitor {
 
     private printPeer() {
         const pc = { language: this.library.language } as PrinterContext
-        const peerFile = SourceFile.make("xml.ts", pc.language, getReferenceResolver(this.library))
         const mv = new MaterializedVisitor(this.library, pc, false);
         mv.printMaterialized()
         for (const [_target, resultFile] of mv.materialized) {
-            peerFile.merge(resultFile)
+            this.peerFile.merge(resultFile)
         }
-        this.peerWriter.print(peerFile.printToString())
+        const peerWriter = this.peerFile.content
         const nativeModuleVar = `${this.libraryName}NativeModule`
         const nativeModuleGetter = `get${nativeModuleVar}`
         if (this.library.language === Language.TS) {
-            this.peerWriter.print('import {')
-            this.peerWriter.pushIndent()
-            this.peerWriter.print(`${nativeModuleVar},`)
-            this.peerWriter.print(`${nativeModuleGetter},`)
-            this.peerWriter.popIndent()
-            this.peerWriter.print(`} from './${this.libraryName.toLocaleLowerCase()}Native'`)
+            const imports = (this.peerFile as TsSourceFile).imports
+            imports.addFeatures(["int32"], "@koalaui/common")
+            imports.addFeatures(["KPointer", "pointer"], "@koalaui/interop")
+            imports.addFeatures(["RuntimeType", "runtimeType", "unsafeCast"], "./SerializerBase")
+            imports.addFeatures([nativeModuleVar, nativeModuleGetter], `./${this.libraryName.toLowerCase()}Native`)
         }
         this.data.forEach(data => {
-            this.peerWriter.writeInterface(data.name, writer => {
+            peerWriter.writeInterface(data.name, writer => {
                 data.properties.forEach(prop => {
                     writer.writeFieldDeclaration(prop.name, prop.type, [], prop.isOptional)
                 })
@@ -388,22 +389,22 @@ class OHOSVisitor {
             enums.add(e)
         })
         for (const [ns, enums] of enumsByNS) {
-            let hasNs = this.peerWriter.language === Language.TS && !!ns
+            let hasNs = peerWriter.language === Language.TS && !!ns
             if (hasNs) {
-                this.peerWriter.print(`export namespace ${ns} {`)
-                this.peerWriter.pushIndent()
+                peerWriter.print(`export namespace ${ns} {`)
+                peerWriter.pushIndent()
             }
             for (const e of enums) {
                 let members = e.elements.map((m, i) => ({ name: m.name, numberId: i, stringId: undefined  }))
-                this.peerWriter.writeEnum(e.name, members, (writer) => {})
+                peerWriter.writeEnum(e.name, members, (writer) => {})
             }
             if (hasNs) {
-                this.peerWriter.popIndent()
-                this.peerWriter.print(`}`)
+                peerWriter.popIndent()
+                peerWriter.print(`}`)
             }
         }
         this.interfaces.forEach(int => {
-            this.peerWriter.writeInterface(`${int.name}Interface`, writer => {
+            peerWriter.writeInterface(`${int.name}Interface`, writer => {
                 int.methods.forEach(method => {
                     const signature = writer.makeNamedSignature(method.returnType, method.parameters)
                     writer.writeMethodDeclaration(method.name, signature)
@@ -510,10 +511,7 @@ class OHOSVisitor {
             .replaceAll('%NATIVE_MODULE_CONTENT%', this.nativeWriter.getOutput().join('\n'))
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Native${ext}`), nativeModuleText, 'utf-8')
 
-        const peerTemplate = readLangTemplate(`OHOSPeer_template${ext}`, this.library.language)
-        const peerText = peerTemplate
-            .replaceAll('%PEER_CONTENT%', this.peerWriter.getOutput().join('\n'))
-            .replaceAll('%SERIALIZER_PATH%', `./${fileNamePrefix}Serializer`)
+        const peerText = this.peerFile.printToString()
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}${ext}`), peerText, 'utf-8')
 
         this.hWriter.printTo(path.join(outDir, `${fileNamePrefix}.h`))
