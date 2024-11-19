@@ -28,7 +28,7 @@ import {
   KFloat32ArrayPtr,
 } from "@koalaui/interop"
 
-
+import { Length } from "../ArkUnitsInterfaces"
 
 let theModule: NativeModule
 
