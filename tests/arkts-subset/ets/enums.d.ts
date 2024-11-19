@@ -163,3 +163,15 @@ declare enum ImageSize {
   Contain,
   FILL = 3,
 }
+
+declare enum Alignment {
+  TopStart,
+  Top,
+  TopEnd,
+  Start,
+  Center,
+  End,
+  BottomStart,
+  Bottom,
+  BottomEnd,
+}
