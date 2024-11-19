@@ -175,3 +175,9 @@ declare enum Alignment {
   Bottom,
   BottomEnd,
 }
+
+declare enum LineCapStyle {
+  Butt,
+  Round,
+  Square,
+}
