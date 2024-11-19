@@ -1955,11 +1955,11 @@
 |`paste`| Function | Erokhin Ilya | in progress |  |
 |`cut`| Function | Erokhin Ilya | in progress |  |
 |`selectAll`| Function | Erokhin Ilya | in progress |  |
-|*ConsoleMessage*| *Class* | Erokhin Ilya | in progress |  |
-|`getMessage`| Function | Erokhin Ilya | in progress |  |
-|`getSourceId`| Function | Erokhin Ilya | in progress |  |
+|*ConsoleMessage*| *Class* | Erokhin Ilya | blocked |  |
+|`getMessage`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getSourceId`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getLineNumber`| Function | Erokhin Ilya | in progress |  |
-|`getMessageLevel`| Function | Erokhin Ilya | in progress |  |
+|`getMessageLevel`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*WebResourceRequest*| *Class* | Erokhin Ilya | blocked |  |
 |`getRequestHeader`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getRequestUrl`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
