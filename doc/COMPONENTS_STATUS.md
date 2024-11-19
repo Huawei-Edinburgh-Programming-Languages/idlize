@@ -1895,8 +1895,8 @@
 |`deleteBackward`| Function | Erokhin Ilya | devdone |  |
 |`sendFunctionKey`| Function | Erokhin Ilya | devdone |  |
 |`close`| Function | Erokhin Ilya | devdone |  |
-|*FullScreenExitHandler*| *Class* | Erokhin Ilya | in progress |  |
-|`exitFullScreen`| Function | Erokhin Ilya | in progress |  |
+|*FullScreenExitHandler*| *Class* | Erokhin Ilya | devdone |  |
+|`exitFullScreen`| Function | Erokhin Ilya | devdone |  |
 |*FileSelectorParam*| *Class* | Erokhin Ilya | in progress |  |
 |`getTitle`| Function | Erokhin Ilya | in progress |  |
 |`getMode`| Function | Erokhin Ilya | in progress |  |
