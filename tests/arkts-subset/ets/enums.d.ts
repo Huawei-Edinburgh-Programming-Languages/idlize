@@ -156,3 +156,10 @@ declare enum Visibility {
   Hidden,
   None,
 }
+
+declare enum ImageSize {
+  Auto,
+  Cover,
+  Contain,
+  FILL = 3,
+}

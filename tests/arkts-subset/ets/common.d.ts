@@ -439,6 +439,10 @@ declare class CommonMethod<T> {
 
     visibility(value: Visibility): T;
 
+    backgroundImage(src: ResourceStr | PixelMap, repeat?: ImageRepeat): T;
+  
+    backgroundImageSize(value: SizeOptions | ImageSize): T;
+
 }
 
 declare interface Rectangle {

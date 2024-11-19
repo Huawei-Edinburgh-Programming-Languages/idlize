@@ -81,3 +81,8 @@ declare type Margin = Padding;
 declare type LocalizedMargin = LocalizedPadding;
 
 declare type VoidCallback  = () => void;
+
+declare interface SizeOptions {
+  width?: Length;
+  height?: Length;
+}
