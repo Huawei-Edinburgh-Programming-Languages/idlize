@@ -546,7 +546,7 @@
 |`nestedScroll`|Function|Morozov Sergey|done|  |
 |`enableScrollInteraction`|Function|Morozov Sergey|done|  |
 |`friction`|Function|Morozov Sergey|done|  |
-|`childrenMainSize`|Function|Morozov Sergey|devdone|  |
+|`childrenMainSize`|Function|Morozov Sergey|done|  |
 |`maintainVisibleContentPosition`|Function|Morozov Sergey|done|  |
 |`onScroll`|Function|Morozov Sergey|done|  |
 |`onScrollIndex`|Function|Morozov Sergey|done|  |
@@ -574,7 +574,7 @@
 |*ListItemGroup*|*Component*|Morozov Sergey|blocked|  |
 |`setListItemGroupOptions`|Function|Morozov Sergey|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`divider`|Function|Morozov Sergey|done|  |
-|`childrenMainSize`|Function|Morozov Sergey|devdone|  |
+|`childrenMainSize`|Function|Morozov Sergey|done|  |
 |*LoadingProgress*|*Component*| Samarin Sergey | done |  |
 |`setLoadingProgressOptions`|Function| Samarin Sergey | done |  |
 |`color`|Function| Samarin Sergey | done |  |
@@ -1648,8 +1648,8 @@
 |*DynamicNode*| *Class* | | | |
 |`onMove`| Function | | | |
 |*ChildrenMainSize*| *Class* | Morozov Sergey | blocked Arkoala |  |
-|`splice`| Function | Morozov Sergey | devdone |  |
-|`update`| Function | Morozov Sergey | devdone |  |
+|`splice`| Function | Morozov Sergey | done |  |
+|`update`| Function | Morozov Sergey | done |  |
 |`getChildDefaultSize`| Function | Morozov Sergey | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB4QKQ |
 |*GestureModifier*| *Class* | | | |
 |`applyGesture`| Function | | | |
