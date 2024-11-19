@@ -106,9 +106,12 @@ abstract class TypeCheckerPrinter {
         for (const feature of features) {
             imports.addFeature(feature.feature, feature.module)
         }
-        for (const file of this.library.files)
-            for (const feature of file.serializeImportFeatures)
+        //TODO: needs to collect imports via DeclarationDependenciesCollector, this increases compilation time
+        for (const file of this.library.files) {
+            for (const feature of [...file.serializeImportFeatures, ...file.importFeatures]) {
                 imports.addFeature(feature.feature, feature.module)
+            }
+        }
         imports.print(this.writer, 'arkts/type_check')
     }
     protected abstract writeInterfaceChecker(name: string, descriptor: StructDescriptor, type?: idl.IDLType): void
