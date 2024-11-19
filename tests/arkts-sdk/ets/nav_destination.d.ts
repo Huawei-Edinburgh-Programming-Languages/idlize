@@ -446,6 +446,39 @@ declare interface NavDestinationContext {
 }
 
 /**
+ * Indicates the nested scrollable container components.
+ *
+ * @interface NestedScrollInfo
+ * @syscap SystemCapability.ArkUI.ArkUI.Full
+ * @crossplatform
+ * @atomicservice
+ * @since 14
+ */
+declare interface NestedScrollInfo {
+  /**
+   * The controller of parent scrollable container component.
+   *
+   * @type { Scroller }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 14
+   */
+  parent: Scroller;
+
+  /**
+   * The controller of child scrollable container component.
+   *
+   * @type { Scroller }
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 14
+   */
+  child: Scroller;
+}
+
+/**
  * The attribute function of NavDestination
  *
  * @extends CommonMethod<NavDestinationAttribute>
@@ -814,6 +847,30 @@ declare class NavDestinationAttribute extends CommonMethod<NavDestinationAttribu
    * @since 14
    */
   systemTransition(type: NavigationSystemTransitionType): NavDestinationAttribute;
+
+  /**
+   * Bind NavDestination to scrollable container components to automatically hide titlebar and toolbar.
+   * 
+   * @param { Array<Scroller> } scrollers - The controllers of the scrollable container components.
+   * @returns { NavDestinationAttribute } Returns the instance of the NavDestinationAttribute.
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 14
+   */
+  bindToScrollable(scrollers: Array<Scroller>): NavDestinationAttribute;
+
+  /**
+   * Bind NavDestination to nested scrollable container components to automatically hide titlebar and toolbar.
+   * 
+   * @param { Array<NestedScrollInfo> } scrollInfos - The controllers of the nested scrollable container components.
+   * @returns { NavDestinationAttribute } Returns the instance of the NavDestinationAttribute.
+   * @syscap SystemCapability.ArkUI.ArkUI.Full
+   * @crossplatform
+   * @atomicservice
+   * @since 14
+   */
+  bindToNestedScrollable(scrollInfos: Array<NestedScrollInfo>): NavDestinationAttribute;
 }
 
 /**

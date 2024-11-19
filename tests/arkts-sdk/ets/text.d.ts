@@ -141,7 +141,7 @@ interface TextInterface {
    * @since 11
    */
   (content?: string | Resource, value?: TextOptions): TextAttribute;
-}
+  }
 
 /**
  * @extends CommonMethod<TextAttribute>
@@ -1148,7 +1148,7 @@ declare class TextAttribute extends CommonMethod<TextAttribute> {
    * @since 12
    */
   bindSelectionMenu(spanType: TextSpanType, content: CustomBuilder, responseType: TextResponseType,
-                    options?: SelectionMenuOptions): TextAttribute;
+    options?: SelectionMenuOptions): TextAttribute;
 
   /**
    * Called when the text selection changes.
@@ -1175,7 +1175,7 @@ declare class TextAttribute extends CommonMethod<TextAttribute> {
    * Set font feature.
    *
    * @param { string } value - The fontFeature.
-   * normal | <feature-tag-value>,
+   * normal | <feature-tag-value>, 
    * where <feature-tag-value> = <string> [ <integer> | on | off ], like: "ss01" 0
    * the values of <feature-tag-value> reference to doc of text component
    * number of <feature-tag-value> can be single or multiple, and separated by comma ','.
