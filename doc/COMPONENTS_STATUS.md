@@ -1899,7 +1899,7 @@
 |`exitFullScreen`| Function | Erokhin Ilya | devdone |  |
 |*FileSelectorParam*| *Class* | Erokhin Ilya | blocked |  |
 |`getTitle`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0  |
-|`getMode`| Function | Erokhin Ilya | iblocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0  |
+|`getMode`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0  |
 |`getAcceptType`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0  |
 |`isCapture`| Function | Erokhin Ilya | devdone |  |
 |*JsResult*| *Class* | Erokhin Ilya | devdone |  |
