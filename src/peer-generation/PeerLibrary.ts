@@ -251,10 +251,10 @@ export class PeerLibrary implements LibraryInterface {
             return new InterfaceConvertor(this, declarationName, param, declaration)
         }
         if (idl.isClass(declaration)) {
-            // if (idl.isClass(declaration)) {
-                // if (isMaterialized(declaration)) {
-                //     return new MaterializedClassConvertor(this, declarationName, param, declaration)
-                // }
+            if (idl.isClass(declaration)) {
+                if (isMaterialized(declaration)) {
+                    return new MaterializedClassConvertor(this, declarationName, param, declaration)
+                }
                 return new ClassConvertor(this, declarationName, param, declaration)
             }
         }
