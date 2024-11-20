@@ -74,7 +74,7 @@ declare interface NavDestinationCommonTitle {
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @crossplatform
    * @atomicservice
-   * @since 13
+   * @since 14
    */
   main: string | Resource;
 
@@ -109,7 +109,7 @@ declare interface NavDestinationCommonTitle {
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @crossplatform
    * @atomicservice
-   * @since 13
+   * @since 14
    */
   sub: string | Resource;
 }
@@ -550,7 +550,7 @@ declare class NavDestinationAttribute extends CommonMethod<NavDestinationAttribu
    * @syscap SystemCapability.ArkUI.ArkUI.Full
    * @crossplatform
    * @atomicservice
-   * @since 13
+   * @since 14
    */
   title(value: string | CustomBuilder | NavDestinationCommonTitle | NavDestinationCustomTitle | Resource,
         options?: NavigationTitleOptions): NavDestinationAttribute;
