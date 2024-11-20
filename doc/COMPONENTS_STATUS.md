@@ -1933,21 +1933,21 @@
 |`cancel`| Function | Erokhin Ilya | in progress |  |
 |*ControllerHandler*| *Class* | Erokhin Ilya | in progress |  |
 |`setWebController`| Function | Erokhin Ilya | in progress |  |
-|*WebContextMenuParam*| *Class* | Erokhin Ilya | in progress |  |
-|`x`| Function | Erokhin Ilya | in progress |  |
-|`y`| Function | Erokhin Ilya | in progress |  |
-|`getLinkUrl`| Function | Erokhin Ilya | in progress |  |
-|`getUnfilteredLinkUrl`| Function | Erokhin Ilya | in progress |  |
-|`getSourceUrl`| Function | Erokhin Ilya | in progress |  |
-|`existsImageContents`| Function | Erokhin Ilya | in progress |  |
-|`getMediaType`| Function | Erokhin Ilya | in progress |  |
-|`getSelectionText`| Function | Erokhin Ilya | in progress |  |
-|`getSourceType`| Function | Erokhin Ilya | in progress |  |
-|`getInputFieldType`| Function | Erokhin Ilya | in progress |  |
-|`isEditable`| Function | Erokhin Ilya | in progress |  |
-|`getEditStateFlags`| Function | Erokhin Ilya | in progress |  |
-|`getPreviewWidth`| Function | Erokhin Ilya | in progress |  |
-|`getPreviewHeight`| Function | Erokhin Ilya | in progress |  |
+|*WebContextMenuParam*| *Class* | Erokhin Ilya | blocked |  |
+|`x`| Function | Erokhin Ilya | devdone |  |
+|`y`| Function | Erokhin Ilya | devdone |  |
+|`getLinkUrl`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getUnfilteredLinkUrl`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getSourceUrl`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`existsImageContents`| Function | Erokhin Ilya | devdone |  |
+|`getMediaType`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getSelectionText`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getSourceType`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getInputFieldType`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`isEditable`| Function | Erokhin Ilya | devdone |  |
+|`getEditStateFlags`| Function | Erokhin Ilya | devdone |  |
+|`getPreviewWidth`| Function | Erokhin Ilya | in progress | wait for up merge |
+|`getPreviewHeight`| Function | Erokhin Ilya | in progress | wait for up merge |
 |*WebContextMenuResult*| *Class* | Erokhin Ilya | devdone |  |
 |`closeContextMenu`| Function | Erokhin Ilya | devdone |  |
 |`copyImage`| Function | Erokhin Ilya | devdone |  |
