@@ -774,7 +774,7 @@ Ark_PipelineContext GetPipelineContext(Ark_NodeHandle node) {
 }
 
 void SetVsyncCallback(Ark_PipelineContext pipelineContext, Ark_VsyncCallback callback) {
-    std::async(std::launch::async, [callback] {
+    auto delayed_call = std::async(std::launch::async, [pipelineContext, callback] {
         while (true) {
             std::this_thread::sleep_for(1000ms);
             callback(pipelineContext);
