@@ -391,10 +391,13 @@ class OHOSVisitor {
             this.peerFile.merge(resultFile)
         }
 
-        for (const [f, content] of printInterfaces(this.library, pc)) {
-            peerWriter.print(`// ${f.name}`)
-            peerWriter.print(content)
-        }
+
+        // We can steal enum generation from here
+        // for (const [f, content] of printInterfaces(this.library, pc)) {
+        //     peerWriter.print(`// ${f.name}`)
+        //     peerWriter.print(content)
+        // }
+
         // this.data.forEach(data => {
         //     peerWriter.writeInterface(data.name, writer => {
         //         data.properties.forEach(prop => {
