@@ -341,8 +341,8 @@ endif
 # TODO: fix on Windows as well
 if os != 'windows'
 executable('test_arkoala_api',
-    arkoala_dir / 'api_test.c',
-    c_args: cflags,
+    arkoala_dir / 'api_test.cc',
+    cpp_args: cflags,
     include_directories: include_dirs
 )
 executable('test_arkoala_compat',

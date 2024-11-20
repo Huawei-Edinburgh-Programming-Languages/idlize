@@ -586,6 +586,7 @@ export function makeDeserializeAndCall(library: PeerLibrary, language: Language,
 export function makeCEventsArkoalaImpl(resolver: ReferenceResolver, implData: LanguageWriter, receiversList: LanguageWriter): string {
     const writer = new CppLanguageWriter(new IndentedPrinter(), resolver)
     writer.print(cStyleCopyright)
+    writer.writeInclude("koala-types.h")
     writer.writeInclude("arkoala_api_generated.h")
     writer.writeInclude("events.h")
     writer.writeInclude("Serializers.h")

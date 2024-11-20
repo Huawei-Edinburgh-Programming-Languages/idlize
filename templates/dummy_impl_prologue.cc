@@ -20,6 +20,7 @@
 #include <future>
 #include <thread>
 
+#include "koala-types.h"
 #include "arkoala_api_generated.h"
 #include "Serializers.h"
 #include "interop-logging.h"

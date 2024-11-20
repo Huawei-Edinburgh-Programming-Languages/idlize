@@ -55,9 +55,16 @@ class NativeModuleVisitor {
             this.printPeerMethod(clazz, clazz.ctor, nativeModule, nativeModuleEmpty, idl.IDLPointerType)
             this.printPeerMethod(clazz, clazz.finalizer, nativeModule, nativeModuleEmpty, idl.IDLPointerType)
             clazz.methods.forEach(method => {
-                const returnType = method.tsReturnType()
-                this.printPeerMethod(clazz, method, nativeModule, nativeModuleEmpty,
-                    returnType && idl.isPrimitiveType(returnType) ? returnType : idl.IDLPointerType)
+                let returnType = method.tsReturnType()
+                if (returnType) {
+                    if (idl.isPrimitiveType(returnType)) {
+                        //keep
+                    } else if(idl.isContainerType(returnType) && idl.IDLContainerUtils.isPromise(returnType)) {
+                        //keep
+                    } else
+                        returnType = idl.IDLPointerType
+                }
+                this.printPeerMethod(clazz, method, nativeModule, nativeModuleEmpty, returnType)
             })
         })
     }
@@ -140,7 +147,7 @@ class NativeModuleVisitor {
         printer.writeNativeMethodDeclaration(method.name, method.signature)
         this.nativeModuleEmpty.writeMethodImplementation(method, (printer) => {
             printer.writePrintLog(method.name)
-            if (method.signature.returnType !== undefined && idl.forceAsNamedNode(method.signature.returnType).name !== 'void') {
+            if (method.signature.returnType !== undefined && !idl.isVoidType(method.signature.returnType)) {
                 printer.writeStatement(printer.makeReturn(printer.makeString(getReturnValue(method.signature.returnType))))
             }
         })
@@ -439,6 +446,9 @@ function getReturnValue(type: idl.IDLType): string {
         case idl.IDLAnyType: return `""`
         case idl.IDLObjectType: return "new Object()"
     }
+
+    if (idl.isContainerType(type) && idl.IDLContainerUtils.isPromise(type))
+        return "Promise.reject('stub')"
 
     throw new Error(`Unknown return type: ${idl.IDLKind[type.kind]} ${idl.forceAsNamedNode(type).name}`)
 }

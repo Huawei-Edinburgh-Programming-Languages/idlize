@@ -125,10 +125,10 @@ class DeserializeCallbacksVisitor {
     private writeImports() {
         if (this.writer.language === Language.CPP) {
             const cppFile = this.destFile as CppSourceFile
+            cppFile.addInclude("common-interop.h")
             cppFile.addInclude("arkoala_api_generated.h")
             cppFile.addInclude("callback_kind.h")
             cppFile.addInclude("Serializers.h")
-            cppFile.addInclude("common-interop.h")
         }
 
         if (this.writer.language === Language.TS) {
@@ -256,10 +256,10 @@ class ManagedCallCallbackVisitor {
     }
 
     private writeImports() {
+        this.dest.addInclude("common-interop.h")
         this.dest.addInclude("arkoala_api_generated.h")
         this.dest.addInclude("callback_kind.h")
         this.dest.addInclude("Serializers.h")
-        this.dest.addInclude("common-interop.h")
         this.dest.addInclude("callbacks.h")
     }
 

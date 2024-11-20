@@ -42,7 +42,7 @@ import { PeerMethod } from "../PeerMethod";
 import { collectJavaImports } from "./lang/JavaIdlUtils";
 import { printJavaImports } from "./lang/JavaPrinters";
 import { Language } from "../../Language";
-import { createOptionalType, forceAsNamedNode, IDLI32Type, IDLPointerType, IDLStringType, IDLThisType, IDLType, IDLVoidType, isNamedNode, isOptionalType, isPrimitiveType, maybeOptional, toIDLType } from "../../idl";
+import { createOptionalType, forceAsNamedNode, IDLI32Type, IDLPointerType, IDLStringType, IDLThisType, IDLType, IDLVoidType, isNamedNode, isOptionalType, isPrimitiveType, maybeOptional, toIDLType, isContainerType, IDLContainerUtils } from "../../idl";
 import { getReferenceResolver } from "../ReferenceResolver";
 
 export function componentToPeerClass(component: string) {
@@ -486,6 +486,8 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
                             writer.makeReturn(writer.makeString("obj"))
                         ]
                     }
+                } else if (isContainerType(returnType) && IDLContainerUtils.isPromise(returnType)) {
+                    // keep result
                 } else if (!isPrimitiveType(returnType)) {
                     result = [
                         writer.makeThrowError("Object deserialization is not implemented.")

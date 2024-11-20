@@ -604,7 +604,9 @@ function mapCInteropRetType(type: idl.IDLType): string {
             /* HACK, fix */
             // return array by some way
             return "void"
-        } else
+        } else if (idl.IDLContainerUtils.isPromise(type))
+            return "KVMObjectHandle"
+        else
             return PrimitiveType.NativePointer.getText()
     }
     throw `mapCInteropType failed for ${idl.IDLKind[type.kind]}`
