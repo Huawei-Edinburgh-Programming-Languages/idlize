@@ -1983,9 +1983,9 @@
 |`setResponseCode`| Function | Erokhin Ilya | in progress |  |
 |`setResponseIsReady`| Function | Erokhin Ilya | in progress |  |
 |`getResponseIsReady`| Function | Erokhin Ilya | in progress |  |
-|*WebResourceError*| *Class* | Erokhin Ilya | in progress |  |
-|`getErrorInfo`| Function | Erokhin Ilya | in progress |  |
-|`getErrorCode`| Function | Erokhin Ilya | in progress |  |
+|*WebResourceError*| *Class* | Erokhin Ilya | blocked |  |
+|`getErrorInfo`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getErrorCode`| Function | Erokhin Ilya | devdone |  |
 |*JsGeolocation*| *Class* | Erokhin Ilya | devdone |  |
 |`invoke`| Function | Erokhin Ilya | devdone |  |
 |*WebCookie*| *Class* | Erokhin Ilya | done | |
