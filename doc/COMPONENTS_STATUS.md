@@ -1870,9 +1870,9 @@
 |`onCreateMenu`| Function |Erokhin Ilya | in progress |  |
 |`onMenuItemClick`| Function |Erokhin Ilya | in progress |  |
 |*TextInputController*| *Class* | Spirin Andrey | in progress |  |
-|`caretPosition`| Function | Spirin Andrey | in progress |  |
-|`setTextSelection`| Function | Spirin Andrey | in progress |  |
-|`stopEditing`| Function |  Spirin Andrey | in progress |  |
+|`caretPosition`| Function | Spirin Andrey | devdone |  |
+|`setTextSelection`| Function | Spirin Andrey | devdone |  |
+|`stopEditing`| Function |  Spirin Andrey | devdone |  |
 |*TextPickerDialog*| *Class* | Ekaterina Stepanova | in progress | |
 |`show`| Function | Ekaterina Stepanova | in progress | |
 |*TextTimerController*| *Class* |Ekaterina Stepanova| done |  |
