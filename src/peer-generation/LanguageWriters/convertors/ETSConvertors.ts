@@ -38,7 +38,12 @@ export class EtsIDLNodeToStringConvertor extends TsIDLNodeToStringConverter {
                 return convertDeclaration(createDeclarationNameConvertor(Language.ARKTS), decl)
             }
         }
-        return super.convertTypeReference(type);
+        const typeName = super.convertTypeReference(type)
+        // TODO: Fix for 'TypeError: Type 'Function<R>' is generic but type argument were not provided.'
+        if (typeName === "Function") {
+            return "Function<void>"
+        }
+        return typeName;
     }
 
     override convertContainer(type: idl.IDLContainerType): string {
