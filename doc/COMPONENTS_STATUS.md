@@ -1948,13 +1948,13 @@
 |`getEditStateFlags`| Function | Erokhin Ilya | in progress |  |
 |`getPreviewWidth`| Function | Erokhin Ilya | in progress |  |
 |`getPreviewHeight`| Function | Erokhin Ilya | in progress |  |
-|*WebContextMenuResult*| *Class* | Erokhin Ilya | in progress |  |
-|`closeContextMenu`| Function | Erokhin Ilya | in progress |  |
-|`copyImage`| Function | Erokhin Ilya | in progress |  |
-|`copy`| Function | Erokhin Ilya | in progress |  |
-|`paste`| Function | Erokhin Ilya | in progress |  |
-|`cut`| Function | Erokhin Ilya | in progress |  |
-|`selectAll`| Function | Erokhin Ilya | in progress |  |
+|*WebContextMenuResult*| *Class* | Erokhin Ilya | devdone |  |
+|`closeContextMenu`| Function | Erokhin Ilya | devdone |  |
+|`copyImage`| Function | Erokhin Ilya | devdone |  |
+|`copy`| Function | Erokhin Ilya | devdone |  |
+|`paste`| Function | Erokhin Ilya | devdone |  |
+|`cut`| Function | Erokhin Ilya | devdone |  |
+|`selectAll`| Function | Erokhin Ilya | devdone |  |
 |*ConsoleMessage*| *Class* | Erokhin Ilya | blocked |  |
 |`getMessage`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getSourceId`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
