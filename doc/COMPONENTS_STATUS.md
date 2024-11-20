@@ -1908,10 +1908,10 @@
 |`handlePromptConfirm`| Function | Erokhin Ilya | devdone |  |
 |*FileSelectorResult*| *Class* | Erokhin Ilya | devdone |  |
 |`handleFileList`| Function | Erokhin Ilya | devdone |  |
-|*HttpAuthHandler*| *Class* | Erokhin Ilya | in progress |  |
-|`confirm`| Function | Erokhin Ilya | in progress |  |
-|`cancel`| Function | Erokhin Ilya | in progress |  |
-|`isHttpAuthInfoSaved`| Function | Erokhin Ilya | in progress |  |
+|*HttpAuthHandler*| *Class* | Erokhin Ilya | devdone |  |
+|`confirm`| Function | Erokhin Ilya | devdone |  |
+|`cancel`| Function | Erokhin Ilya | devdone |  |
+|`isHttpAuthInfoSaved`| Function | Erokhin Ilya | devdone |  |
 |*SslErrorHandler*| *Class* | Erokhin Ilya | in progress |  |
 |`handleConfirm`| Function | Erokhin Ilya | in progress |  |
 |`handleCancel`| Function | Erokhin Ilya | in progress |  |
