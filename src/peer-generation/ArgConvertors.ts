@@ -908,8 +908,9 @@ export class InterfaceConvertor extends BaseArgConvertor { //
                 writer.makeString(`${castExpr.asString()}.type`),
                 writer.makeString(`GestureName.${gestureType}`)])
         }
-        if (this.declaration.name === "CancelButtonSymbolOptions") {
-            //TODO: for correct work it is necessary to import GlyphModifier
+        //TODO: Need to check this in TypeChecker
+        if (this.declaration.name === "CancelButtonSymbolOptions"
+            && writer.language !== Language.ARKTS) {
             return writer.makeHasOwnProperty(value, "CancelButtonSymbolOptions",
                 "icon", "SymbolGlyphModifier")
         }
