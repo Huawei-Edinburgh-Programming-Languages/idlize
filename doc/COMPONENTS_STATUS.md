@@ -1898,9 +1898,9 @@
 |*FullScreenExitHandler*| *Class* | Erokhin Ilya | devdone |  |
 |`exitFullScreen`| Function | Erokhin Ilya | devdone |  |
 |*FileSelectorParam*| *Class* | Erokhin Ilya | blocked |  |
-|`getTitle`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0  |
-|`getMode`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0  |
-|`getAcceptType`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0  |
+|`getTitle`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getMode`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getAcceptType`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`isCapture`| Function | Erokhin Ilya | devdone |  |
 |*JsResult*| *Class* | Erokhin Ilya | devdone |  |
 |`handleCancel`| Function | Erokhin Ilya | devdone |  |
@@ -1919,11 +1919,11 @@
 |`confirm`| Function | Erokhin Ilya | in progress |  |
 |`cancel`| Function | Erokhin Ilya | in progress |  |
 |`ignore`| Function | Erokhin Ilya | in progress |  |
-|*PermissionRequest*| *Class* | Erokhin Ilya | in progress |  |
-|`deny`| Function | Erokhin Ilya | in progress |  |
-|`getOrigin`| Function | Erokhin Ilya | in progress |  |
-|`getAccessibleResource`| Function | Erokhin Ilya | in progress |  |
-|`grant`| Function | Erokhin Ilya | in progress |  |
+|*PermissionRequest*| *Class* | Erokhin Ilya | blocked |  |
+|`deny`| Function | Erokhin Ilya | devdone |  |
+|`getOrigin`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getAccessibleResource`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`grant`| Function | Erokhin Ilya | devdone |  |
 |*ScreenCaptureHandler*| *Class* | Erokhin Ilya | in progress |  |
 |`getOrigin`| Function | Erokhin Ilya | in progress |  |
 |`grant`| Function | Erokhin Ilya | in progress |  |
