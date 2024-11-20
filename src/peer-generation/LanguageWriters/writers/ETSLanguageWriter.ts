@@ -270,7 +270,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
                        propertyTypeName: string): LanguageExpression {
         return this.makeNaryOp("&&", [
             this.makeString(`${value} instanceof ${valueTypeName}`),
-            this.makeString(`${value}.${property} instanceof ${propertyTypeName}`)])
+            this.makeString(`isInstanceOf("${propertyTypeName}", ${value}.${property})`)])
     }
     makeEquals(args: LanguageExpression[]): LanguageExpression {
         // TODO: Error elimination: 'TypeError: Both operands have to be reference types'

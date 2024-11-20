@@ -79,7 +79,7 @@ export function isResource(value: Object|undefined): boolean {
     return false
 }
 
-export function isInstanceOf(className: string, value: Object): boolean {
+export function isInstanceOf(className: string, value: Object|undefined): boolean {
     // TODO: fix me!
     return false
 }
