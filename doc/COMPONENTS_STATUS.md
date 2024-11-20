@@ -884,7 +884,7 @@
 |`layoutDirection`| Function |Samarin Sergey|done |  |
 |`position`| Function |Samarin Sergey| done |  |
 |`markAnchor`| Function |Samarin Sergey| done |  |
-|`offset`| Function |Samarin Sergey| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`offset`| Function |Samarin Sergey| devdone |  |
 |`fontSize`| Function |Samarin Sergey| done |  |
 |`fontStyle`| Function |Samarin Sergey| done |  |
 |`fontWeight`| Function |Samarin Sergey| done |  |
