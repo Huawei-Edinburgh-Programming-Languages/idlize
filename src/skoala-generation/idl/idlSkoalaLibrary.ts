@@ -65,6 +65,7 @@ export class IdlSkoalaLibrary implements LibraryInterface {
     public name: string = ""
 
     public language = Language.TS
+    public readonly nativeModuleAccessor: string = "nativeModule"
 
     public readonly files: IldSkoalaFile[] = []
     findFileByOriginalFilename(filename: string): IldSkoalaFile | undefined {

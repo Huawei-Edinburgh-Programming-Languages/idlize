@@ -43,20 +43,22 @@ export class PeerLibrary implements LibraryInterface {
     public get buildersToGenerate(): BuilderClass[] {
         return Array.from(this.builderClasses.values()).filter(it => it.needBeGenerated)
     }
-
+    
     public readonly materializedClasses: Map<string, MaterializedClass> = new Map()
     public get materializedToGenerate(): MaterializedClass[] {
         return Array.from(this.materializedClasses.values()).filter(it => it.needBeGenerated)
     }
-
+    
     public readonly predefinedDeclarations: idl.IDLInterface[] = []
-
+    
     constructor(
         public language: Language,
         public componentsToGenerate: Set<string>,
     ) {}
-
+    
     public name: string = ""
+    // TODO this is not a library property, but should be received from the generation context
+    public nativeModuleAccessor: string = "nativeModule";
 
     readonly customComponentMethods: string[] = []
     // todo really dirty - we use it until we can generate interfaces

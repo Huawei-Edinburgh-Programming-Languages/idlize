@@ -244,13 +244,15 @@ export class TSLanguageWriter extends LanguageWriter {
     writeFieldDeclaration(name: string, type: idl.IDLType, modifiers: FieldModifier[]|undefined, optional: boolean, initExpr?: LanguageExpression): void {
         const init = initExpr != undefined ? ` = ${initExpr.asString()}` : ``
         let prefix = this.makeFieldModifiersList(modifiers)
-        this.printer.print(`${prefix} ${name}${optional ? "?"  : ""}: ${this.getNodeName(type)}${init}`)
+        if (prefix) prefix += " "
+        this.printer.print(`${prefix}${name}${optional ? "?"  : ""}: ${this.getNodeName(type)}${init}`)
     }
     writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void {
         this.writeDeclaration(name, signature, true, false, modifiers)
     }
     writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method, modifiers?: MethodModifier[]) {
-        this.writeDeclaration(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') : ''} constructor`, signature, false, true)
+        const modifiersPrefix = modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') + " " : ''
+        this.writeDeclaration(`${modifiersPrefix}constructor`, signature, false, true)
         this.pushIndent()
         if (superCall) {
             this.print(`super(${superCall.signature.args.map((_, i) => superCall?.signature.argName(i)).join(", ")})`)

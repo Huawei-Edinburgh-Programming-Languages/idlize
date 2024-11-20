@@ -19,6 +19,9 @@ import { PeerLibrary } from "./PeerLibrary";
 export interface ReferenceResolver {
     resolveTypeReference(type: idl.IDLReferenceType, entries?: idl.IDLEntry[]): idl.IDLEntry | undefined
     toDeclaration(type: idl.IDLNode): idl.IDLNode
+
+    // todo remove this declaration
+    readonly nativeModuleAccessor: string
 }
 
 export function createEmptyReferenceResolver(): ReferenceResolver {
@@ -28,7 +31,8 @@ export function createEmptyReferenceResolver(): ReferenceResolver {
         },
         toDeclaration(type) {
             return type
-        }
+        },
+        nativeModuleAccessor: "nativeModule"
     }
 }
 

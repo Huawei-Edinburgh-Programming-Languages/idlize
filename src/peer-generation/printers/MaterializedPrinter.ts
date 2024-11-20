@@ -56,11 +56,10 @@ interface MaterializedFileVisitor {
 
 abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
     protected readonly destinationFile: SourceFile = SourceFile.make(
-        renameClassToMaterialized(this.clazz.className, this.library.language),
+        this.getTargetFile().name,
         this.printerContext.language,
         getReferenceResolver(this.library)
     )
-    protected readonly printer: LanguageWriter = this.destinationFile.content
 
     constructor(
         protected readonly library: PeerLibrary,
@@ -70,6 +69,11 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
 
     abstract visit(): void
     abstract getTargetFile(): TargetFile
+
+    protected get printer(): LanguageWriter {
+        return this.destinationFile.content
+    }
+
     convertToPropertyType(field: MaterializedField): IDLType {
         return field.field.type
     }

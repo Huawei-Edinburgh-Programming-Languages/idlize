@@ -303,7 +303,6 @@ export function makeSerializerForOhos(library: PeerLibrary, nativeModule: { name
     // TODO Add Java and migrate arkoala code
     if (library.language == Language.TS || library.language == Language.ARKTS) {
         const destFile = new TsSourceFile("Serializer" + library.language.extension, getReferenceResolver(library))
-        destFile.content.nativeModuleAccessor = nativeModule.name
         destFile.imports.addFeatures(["SerializerBase", "RuntimeType", "runtimeType", "CallbackResource"], "./SerializerBase")
         destFile.imports.addFeatures(["DeserializerBase" ], "./DeserializerBase")
         destFile.imports.addFeatures(["int32"], "@koalaui/common")

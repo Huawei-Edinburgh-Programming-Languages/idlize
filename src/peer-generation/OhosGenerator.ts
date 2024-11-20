@@ -34,6 +34,7 @@ import { CppSourceFile, SourceFile, TsSourceFile } from './printers/SourceFile'
 import { MaterializedVisitor } from './printers/MaterializedPrinter'
 import { PrinterContext } from './printers/PrinterContext'
 import { getReferenceResolver } from './ReferenceResolver'
+import { printInterfaces } from './printers/InterfacePrinter'
 
 class NameType {
     constructor(public name: string, public type: string) {}
@@ -370,14 +371,9 @@ class OHOSVisitor {
 
     private printPeer() {
         const pc = { language: this.library.language } as PrinterContext
-        const mv = new MaterializedVisitor(this.library, pc, false);
-        mv.printMaterialized()
-        for (const [_target, resultFile] of mv.materialized) {
-            this.peerFile.merge(resultFile)
-        }
-        const peerWriter = this.peerFile.content
         const nativeModuleVar = `${this.libraryName}NativeModule`
         const nativeModuleGetter = `get${nativeModuleVar}`
+        
         if (this.library.language === Language.TS) {
             const imports = (this.peerFile as TsSourceFile).imports
             imports.addFeatures(["int32"], "@koalaui/common")
@@ -385,42 +381,56 @@ class OHOSVisitor {
             imports.addFeatures(["RuntimeType", "runtimeType", "unsafeCast"], "./SerializerBase")
             imports.addFeatures([nativeModuleVar, nativeModuleGetter], `./${this.libraryName.toLowerCase()}Native`)
         }
-        this.data.forEach(data => {
-            peerWriter.writeInterface(data.name, writer => {
-                data.properties.forEach(prop => {
-                    writer.writeFieldDeclaration(prop.name, prop.type, [], prop.isOptional)
-                })
-            })
-        })
-        const enumsByNS: Map<string, Set<IDLEnum>> = new Map();
-        this.enums.forEach(e => {
-            const ns = getExtAttribute(e, IDLExtendedAttributes.Namespace) ?? ""
-            const enums = getOrPut(enumsByNS, ns, () => new Set())
-            enums.add(e)
-        })
-        for (const [ns, enums] of enumsByNS) {
-            let hasNs = peerWriter.language === Language.TS && !!ns
-            if (hasNs) {
-                peerWriter.print(`export namespace ${ns} {`)
-                peerWriter.pushIndent()
-            }
-            for (const e of enums) {
-                let members = e.elements.map((m, i) => ({ name: m.name, numberId: i, stringId: undefined  }))
-                peerWriter.writeEnum(e.name, members, (writer) => {})
-            }
-            if (hasNs) {
-                peerWriter.popIndent()
-                peerWriter.print(`}`)
-            }
+
+        const peerWriter = this.peerFile.content
+        this.library.nativeModuleAccessor = nativeModuleGetter
+
+        const mv = new MaterializedVisitor(this.library, pc, false);
+        mv.printMaterialized()
+        for (const [_target, resultFile] of mv.materialized) {
+            this.peerFile.merge(resultFile)
         }
-        this.interfaces.forEach(int => {
-            peerWriter.writeInterface(`${int.name}Interface`, writer => {
-                int.methods.forEach(method => {
-                    const signature = writer.makeNamedSignature(method.returnType, method.parameters)
-                    writer.writeMethodDeclaration(method.name, signature)
-                })
-            })
-        })
+
+        for (const [f, content] of printInterfaces(this.library, pc)) {
+            peerWriter.print(`// ${f.name}`)
+            peerWriter.print(content)
+        }
+        // this.data.forEach(data => {
+        //     peerWriter.writeInterface(data.name, writer => {
+        //         data.properties.forEach(prop => {
+        //             writer.writeFieldDeclaration(prop.name, prop.type, [], prop.isOptional)
+        //         })
+        //     })
+        // })
+        // const enumsByNS: Map<string, Set<IDLEnum>> = new Map();
+        // this.enums.forEach(e => {
+        //     const ns = getExtAttribute(e, IDLExtendedAttributes.Namespace) ?? ""
+        //     const enums = getOrPut(enumsByNS, ns, () => new Set())
+        //     enums.add(e)
+        // })
+        // for (const [ns, enums] of enumsByNS) {
+        //     let hasNs = peerWriter.language === Language.TS && !!ns
+        //     if (hasNs) {
+        //         peerWriter.print(`export namespace ${ns} {`)
+        //         peerWriter.pushIndent()
+        //     }
+        //     for (const e of enums) {
+        //         let members = e.elements.map((m, i) => ({ name: m.name, numberId: i, stringId: undefined  }))
+        //         peerWriter.writeEnum(e.name, members, (writer) => {})
+        //     }
+        //     if (hasNs) {
+        //         peerWriter.popIndent()
+        //         peerWriter.print(`}`)
+        //     }
+        // }
+        // this.interfaces.forEach(int => {
+        //     peerWriter.writeInterface(`${int.name}Interface`, writer => {
+        //         int.methods.forEach(method => {
+        //             const signature = writer.makeNamedSignature(method.returnType, method.parameters)
+        //             writer.writeMethodDeclaration(method.name, signature)
+        //         })
+        //     })
+        // })
     }
 
     private printC() {

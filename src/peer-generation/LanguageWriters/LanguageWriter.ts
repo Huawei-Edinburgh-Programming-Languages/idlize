@@ -414,8 +414,6 @@ export abstract class LanguageWriter {
         public language: Language,
     ) {}
 
-    nativeModuleAccessor = 'nativeModule'
-
     indentDepth(): number {
         return this.printer.indentDepth()
     }
@@ -532,7 +530,7 @@ export abstract class LanguageWriter {
         return new BlockStatement(statements, inScope)
     }
     nativeReceiver(): string {
-        return this.nativeModuleAccessor + "()"
+        return this.resolver.nativeModuleAccessor + "()"
     }
     makeDefinedCheck(value: string): LanguageExpression {
         return new CheckDefinedExpression(value)
