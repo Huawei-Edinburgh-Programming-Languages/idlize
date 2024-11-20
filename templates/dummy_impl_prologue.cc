@@ -773,21 +773,13 @@ Ark_PipelineContext GetPipelineContext(Ark_NodeHandle node) {
     return nullptr;
 }
 
-Ark_Deferred* currentVsyncWait = nullptr;
-void SetVsyncCallback(Ark_PipelineContext pipelineContext, Ark_Deferred* deferred) {
-    auto delayed_call = std::async(std::launch::async, [deferred] {
-        currentVsyncWait = deferred;
-        std::this_thread::sleep_for(1000ms);
-        if (currentVsyncWait)
-            deferred->resolve(currentVsyncWait, nullptr, 0);
-        currentVsyncWait = nullptr;
+void SetVsyncCallback(Ark_PipelineContext pipelineContext, Ark_VsyncCallback callback) {
+    std::async(std::launch::async, [callback] {
+        while (true) {
+            std::this_thread::sleep_for(1000ms);
+            callback(pipelineContext);
+        }
     });
-}
-void UnblockVsyncWait(Ark_VMContext vmContext, Ark_PipelineContext pipelineContext) {
-    if (currentVsyncWait) {
-        currentVsyncWait->reject(currentVsyncWait, "Reject vsync");
-        currentVsyncWait = nullptr;
-    }
 }
 void SetChildTotalCount(Ark_NodeHandle node, Ark_Int32 totalCount) {}
 void ShowCrash(Ark_CharPtr message) {}
