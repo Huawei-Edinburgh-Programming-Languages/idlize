@@ -135,9 +135,9 @@
 |`onChildTouchTest`| Function | | | |
 |`layoutWeight`| Function | Roman Sedaikin | done | |
 |`chainWeight`| Function | | | |
-|`padding`| Function | Skroba Gleb | devdone | |
+|`padding`| Function | Skroba Gleb | done | |
 |`safeAreaPadding`| Function | | | |
-|`margin`| Function | Skroba Gleb | devdone | |
+|`margin`| Function | Skroba Gleb | done | |
 |`backgroundColor`|Function| Skroba Gleb| done |  |
 |`pixelRound`| Function | Skroba Gleb | done |  |
 |`backgroundImageSize`| Function | Erokhin Ilya | done |  |
@@ -215,7 +215,7 @@
 |`align`| Function | Roman Sedaikin | done | |
 |`position`| Function | Roman Sedaikin | done | |
 |`markAnchor`| Function | Dmitry A Smirnov| in progress | |
-|`offset`| Function | Skroba Gleb | devdone | |
+|`offset`| Function | Skroba Gleb | done | |
 |`enabled`| Function | Roman Sedaikin | done | |
 |`useSizeType`| Function | Dmitry A Smirnov| in progress | |
 |`alignRules`| Function | Dmitry A Smirnov| in progress | |
@@ -661,7 +661,7 @@
 |`onNavBarStateChange`|Function| Erokhin Ilya | done |  |
 |`onNavigationModeChange`|Function| Erokhin Ilya | done |  |
 |`navDestination`| Function | Skroba Gleb | in progress | no callbacks IDL support |
-|`customNavContentTransition`| Function | Skroba Gleb | in progress| no callbacks IDL support |
+|`customNavContentTransition`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
 |`systemBarStyle`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`recoverable`|Function| Erokhin Ilya | done |  |
 |`enableDragBar`| Function | | | |
@@ -1728,7 +1728,7 @@
 |`getNavDestinationId`| Function | | | |
 |`setNavDestinationId`| Function | | | |
 |*NavPathStack*| *Class* | Morozov Sergey |in progress |  |
-|`pushPath`| Function | Morozov Sergey |in progress |  |
+|`pushPath`| Function | Morozov Sergey, Skroba Gleb |in progress |  |
 |`pushDestination`| Function | Morozov Sergey |in progress |  |
 |`pushPathByName`| Function | Morozov Sergey |in progress |  |
 |`pushDestinationByName`| Function | Morozov Sergey |in progress |  |
@@ -1738,7 +1738,7 @@
 |`removeByIndexes`| Function | Morozov Sergey |in progress |  |
 |`removeByName`| Function | Morozov Sergey |in progress |  |
 |`removeByNavDestinationId`| Function | Morozov Sergey |in progress |  |
-|`pop`| Function | Morozov Sergey |in progress |  |
+|`pop`| Function | Morozov Sergey, Skroba Gleb |in progress |  |
 |`popToName`| Function | Morozov Sergey |in progress |  |
 |`popToIndex`| Function | Morozov Sergey |in progress |  |
 |`moveToTop`| Function | Morozov Sergey |in progress |  |
@@ -1746,7 +1746,7 @@
 |`clear`| Function | Morozov Sergey |in progress |  |
 |`getAllPathName`| Function | Morozov Sergey |in progress |  |
 |`getParamByIndex`| Function | Morozov Sergey |in progress |  |
-|`getParamByName`| Function | Morozov Sergey |in progress |  |
+|`getParamByName`| Function | Morozov Sergey, Skroba Gleb |in progress |  |
 |`getIndexByName`| Function | Morozov Sergey |in progress |  |
 |`getParent`| Function | Morozov Sergey |in progress |  |
 |`size`| Function | Morozov Sergey |in progress |  |
