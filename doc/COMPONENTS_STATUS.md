@@ -239,7 +239,7 @@
 |`clip`| Function | Skroba Gleb |  blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
 |`clipShape`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
 |`mask`| Function | Dmitry A Smirnov| in progress | |
-|`maskShape`| Function | Dmitry A Smirnov| in progress | |
+|`maskShape`| Function | Dmitry A Smirnov| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`key`| Function | | | |
 |`id`| Function | Erokhin Ilya | done |  |
 |`geometryTransition`| Function | | | |
