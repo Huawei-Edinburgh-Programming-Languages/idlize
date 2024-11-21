@@ -499,21 +499,21 @@
 |`resizable`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0Y7V |
 |`privacySensitive`| Function | Evstigneev Roman | in progress | |
 |`enhancedImageQuality`| Function | Evstigneev Roman | in progress | |
-|*ImageAnimator*| *Component* | | | |
-|`setImageAnimatorOptions`| Function | | | |
-|`images`| Function | | | |
-|`state`| Function | | | |
-|`duration`| Function | | | |
-|`reverse`| Function | | | |
-|`fixedSize`| Function | | | |
-|`preDecode`| Function | | | |
-|`fillMode`| Function | | | |
-|`iterations`| Function | | | |
-|`onStart`| Function | | | |
-|`onPause`| Function | | | |
-|`onRepeat`| Function | | | |
-|`onCancel`| Function | | | |
-|`onFinish`| Function | | | |
+|*ImageAnimator*| *Component* | Ivan Pavelyev | in progress | |
+|`setImageAnimatorOptions`| Function | Ivan Pavelyev | in progress | |
+|`images`| Function | Ivan Pavelyev | in progress | |
+|`state`| Function | Ivan Pavelyev | in progress | |
+|`duration`| Function | Ivan Pavelyev | in progress | |
+|`reverse`| Function | Ivan Pavelyev | in progress | |
+|`fixedSize`| Function | Ivan Pavelyev | in progress | |
+|`preDecode`| Function | Ivan Pavelyev | in progress | |
+|`fillMode`| Function | Ivan Pavelyev | in progress | |
+|`iterations`| Function | Ivan Pavelyev | in progress | |
+|`onStart`| Function | Ivan Pavelyev | in progress | |
+|`onPause`| Function | Ivan Pavelyev | in progress | |
+|`onRepeat`| Function | Ivan Pavelyev | in progress | |
+|`onCancel`| Function | Ivan Pavelyev | in progress | |
+|`onFinish`| Function | Ivan Pavelyev | in progress | |
 |*ImageSpan*| *Component* | Politov Mikhail | in progress|  |
 |`setImageSpanOptions`| Function | Politov Mikhail |  in progress|  |
 |`verticalAlign`| Function | Politov Mikhail | devdone |  |
