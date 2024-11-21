@@ -163,3 +163,2575 @@ interface LengthMetrics {
    */
   attribute number value;
 };
+
+
+[Entity=Interface]
+interface PathShapeOptions {
+    [Optional]
+    attribute String commands;
+};
+[Entity=Class]
+interface PathShape: [TypeArguments="PathShape"] CommonShapeMethod {
+    constructor(optional PathShapeOptions options);
+    PathShape commands(String commands);
+};
+
+[Entity=Interface]
+interface RectShapeOptions: ShapeSize {
+    [Optional]
+    attribute ((number or String) or sequence <(number or String)>) radius;
+};
+
+[Entity=Interface]
+interface RoundRectShapeOptions: ShapeSize {
+    [Optional]
+    attribute (number or String) radiusWidth;
+    [Optional]
+    attribute (number or String) radiusHeight;
+};
+[Entity=Class, TypeParameters="T"]
+interface BaseShape: [TypeArguments="T"] CommonShapeMethod {
+    T width(Length width);
+    T height(Length height);
+    T size(SizeOptions size);
+};
+[Entity=Class]
+interface RectShape: [TypeArguments="RectShape"] BaseShape {
+    constructor(optional (RectShapeOptions or RoundRectShapeOptions) options);
+    RectShape radiusWidth((number or String) rWidth);
+    RectShape radiusHeight((number or String) rHeight);
+    RectShape radius((number or String or sequence <(number or String)>) radius);
+};
+[Entity=Class]
+interface CircleShape: [TypeArguments="CircleShape"] BaseShape {
+    constructor(optional ShapeSize options);
+};
+[Entity=Class]
+interface EllipseShape: [TypeArguments="EllipseShape"] BaseShape {
+    constructor(optional ShapeSize options);
+};
+
+[Entity=Class]
+interface ColorMetrics {
+    [Accessor=Getter]
+    readonly attribute String color;
+    [Accessor=Getter]
+    readonly attribute number red;
+    [Accessor=Getter]
+    readonly attribute number green;
+    [Accessor=Getter]
+    readonly attribute number blue;
+    [Accessor=Getter]
+    readonly attribute number alpha;
+    static ColorMetrics numeric(number value);
+    static ColorMetrics rgba(number red, number green, number blue, optional number alpha);
+    static ColorMetrics resourceColor(ResourceColor color);
+    ColorMetrics blendColor(ColorMetrics overlayColor);
+};
+
+[Entity=Class]
+interface Content {
+};
+[Entity=Class, TypeParameters="T extends Object"]
+interface ComponentContent: Content {
+    constructor(UIContext uiContext, [TypeArguments="Tuple_"] WrappedBuilder builder);
+    constructor(UIContext uiContext, [TypeArguments="Tuple_T"] WrappedBuilder builder, T args);
+    constructor(UIContext uiContext, [TypeArguments="Tuple_T"] WrappedBuilder builder, T args, BuildOptions options);
+    void update(T args);
+    void reuse(optional Object param);
+    void recycle();
+    void dispose();
+    void updateConfiguration();
+};
+
+[Entity=Interface]
+interface Colors {
+    attribute ResourceColor brand;
+    attribute ResourceColor warning;
+    attribute ResourceColor alert;
+    attribute ResourceColor confirm;
+    attribute ResourceColor fontPrimary;
+    attribute ResourceColor fontSecondary;
+    attribute ResourceColor fontTertiary;
+    attribute ResourceColor fontFourth;
+    attribute ResourceColor fontEmphasize;
+    attribute ResourceColor fontOnPrimary;
+    attribute ResourceColor fontOnSecondary;
+    attribute ResourceColor fontOnTertiary;
+    attribute ResourceColor fontOnFourth;
+    attribute ResourceColor iconPrimary;
+    attribute ResourceColor iconSecondary;
+    attribute ResourceColor iconTertiary;
+    attribute ResourceColor iconFourth;
+    attribute ResourceColor iconEmphasize;
+    attribute ResourceColor iconSubEmphasize;
+    attribute ResourceColor iconOnPrimary;
+    attribute ResourceColor iconOnSecondary;
+    attribute ResourceColor iconOnTertiary;
+    attribute ResourceColor iconOnFourth;
+    attribute ResourceColor backgroundPrimary;
+    attribute ResourceColor backgroundSecondary;
+    attribute ResourceColor backgroundTertiary;
+    attribute ResourceColor backgroundFourth;
+    attribute ResourceColor backgroundEmphasize;
+    attribute ResourceColor compForegroundPrimary;
+    attribute ResourceColor compBackgroundPrimary;
+    attribute ResourceColor compBackgroundPrimaryTran;
+    attribute ResourceColor compBackgroundPrimaryContrary;
+    attribute ResourceColor compBackgroundGray;
+    attribute ResourceColor compBackgroundSecondary;
+    attribute ResourceColor compBackgroundTertiary;
+    attribute ResourceColor compBackgroundEmphasize;
+    attribute ResourceColor compBackgroundNeutral;
+    attribute ResourceColor compEmphasizeSecondary;
+    attribute ResourceColor compEmphasizeTertiary;
+    attribute ResourceColor compDivider;
+    attribute ResourceColor compCommonContrary;
+    attribute ResourceColor compBackgroundFocus;
+    attribute ResourceColor compFocusedPrimary;
+    attribute ResourceColor compFocusedSecondary;
+    attribute ResourceColor compFocusedTertiary;
+    attribute ResourceColor interactiveHover;
+    attribute ResourceColor interactivePressed;
+    attribute ResourceColor interactiveFocus;
+    attribute ResourceColor interactiveActive;
+    attribute ResourceColor interactiveSelect;
+    attribute ResourceColor interactiveClick;
+};
+[Entity=Interface]
+interface Theme {
+    attribute Colors colors;
+};
+
+typedef [TypeArguments="Colors"] Partial CustomColors;
+
+[Entity=Interface]
+interface CustomTheme {
+    [Optional]
+    attribute CustomColors colors;
+};
+
+// [Namespace=intl, Entity=Interface]
+[Entity=Interface]
+interface DateTimeOptions {
+    [Optional]
+    attribute String locale;
+    [Optional]
+    attribute String dateStyle;
+    [Optional]
+    attribute String timeStyle;
+    [Optional]
+    attribute String hourCycle;
+    [Optional]
+    attribute String timeZone;
+    [Optional]
+    attribute String numberingSystem;
+    [Optional]
+    attribute boolean hour12;
+    [Optional]
+    attribute String weekday;
+    [Optional]
+    attribute String era;
+    [Optional]
+    attribute String year;
+    [Optional]
+    attribute String month;
+    [Optional]
+    attribute String day;
+    [Optional]
+    attribute String hour;
+    [Optional]
+    attribute String minute;
+    [Optional]
+    attribute String second;
+    [Optional]
+    attribute String timeZoneName;
+    [Optional]
+    attribute String dayPeriod;
+    [Optional]
+    attribute String localeMatcher;
+    [Optional]
+    attribute String formatMatcher;
+};
+
+[Entity=Class]
+interface DrawableDescriptor {
+    constructor();
+    PixelMap getPixelMap();
+};
+
+[Entity=Interface]
+interface Size {
+    attribute number width;
+    attribute number height;
+};
+[Entity=Class]
+interface DrawContext {
+    [Accessor=Getter]
+    readonly attribute Size size;
+    [Accessor=Getter]
+    readonly attribute Size sizeInPixel;
+    [Accessor=Getter]
+    readonly attribute Canvas canvas;
+};
+
+interface Filter {
+    Filter blur(number radius);
+    Filter brightness(number bright);
+    Filter grayscale();
+    Filter invert();
+    Filter setColorMatrix(sequence<number> colorMatrix);
+    [Deprecated]
+    PixelMap getPixelMap();
+    async PixelMap getEffectPixelMap();
+};
+
+dictionary IntentionCode {
+    number INTENTION_UNKNOWN = -1;
+    number INTENTION_UP = 1;
+    number INTENTION_DOWN = 2;
+    number INTENTION_LEFT = 3;
+    number INTENTION_RIGHT = 4;
+    number INTENTION_SELECT = 5;
+    number INTENTION_ESCAPE = 6;
+    number INTENTION_BACK = 7;
+    number INTENTION_FORWARD = 8;
+    number INTENTION_MENU = 9;
+    number INTENTION_PAGE_UP = 11;
+    number INTENTION_PAGE_DOWN = 12;
+    number INTENTION_ZOOM_OUT = 13;
+    number INTENTION_ZOOM_IN = 14;
+};
+
+
+dictionary LengthMetricsUnit {
+    number DEFAULT = 0;
+    number PX = 1;
+};
+
+// [Namespace=image]
+dictionary ResolutionQuality {
+    number LOW = 1;
+    number MEDIUM = 2;
+    number HIGH = 3;
+};
+
+
+[Entity=Interface]
+interface WorkerOptions {
+    [Optional]
+    attribute String type;
+    [Optional]
+    attribute String name;
+    [Optional]
+    attribute boolean shared;
+};
+[Entity=Interface]
+interface Event {
+    readonly attribute String type;
+    readonly attribute number timeStamp;
+};
+[Entity=Interface]
+interface ErrorEvent: Event {
+    readonly attribute String message;
+    readonly attribute String filename;
+    readonly attribute number lineno;
+    readonly attribute number colno;
+    readonly attribute Object error;
+};
+[Entity=Interface]
+interface MessageEvents: Event {
+    readonly attribute undefined data;
+};
+[Entity=Interface]
+interface PostMessageOptions {
+    [Optional]
+    attribute sequence<Object> transfer;
+};
+[Entity=Interface, Deprecated]
+interface EventListener {
+    [Deprecated, CallSignature]
+    async void invoke(Event evt);
+};
+[Entity=Interface]
+interface WorkerEventListener {
+    [CallSignature]
+    async void invoke(Event event);
+};
+[Synthetic]
+callback Callback_ErrorEvent_Void = void (ErrorEvent ev);
+[Synthetic]
+callback Callback_Number_Void = void (number code);
+[Synthetic]
+callback Callback_MessageEvents_Void = void (MessageEvents event);
+[Synthetic]
+callback Callback_Args_Void = void (Args... args);
+[Entity=Class, TypeParameters="Args extends Object[]"]
+interface WrappedBuilder {
+    constructor(Callback_Args_Void builder);
+    attribute Callback_Args_Void builder;
+};
+// [Namespace=worker, Entity=Class]
+[Entity=Class]
+interface ThreadWorker {
+    constructor(String scriptURL, optional WorkerOptions options);
+    [Optional]
+    attribute Callback_Number_Void onexit;
+    [Optional]
+    attribute Callback_ErrorEvent_Void onerror;
+    [Optional]
+    attribute Callback_MessageEvents_Void onmessage;
+    [Optional]
+    attribute Callback_MessageEvents_Void onmessageerror;
+    void postMessage(Object message, sequence<ArrayBuffer> transfer);
+    void postMessage(Object message, optional PostMessageOptions options);
+    void postMessageWithSharedSendable(Object message, optional sequence<ArrayBuffer> transfer);
+    void on(String type, WorkerEventListener listener);
+    void once(String type, WorkerEventListener listener);
+    void off(String type, optional WorkerEventListener listener);
+    void terminate();
+    void addEventListener(String type, WorkerEventListener listener);
+    boolean dispatchEvent(Event event);
+    void removeEventListener(String type, optional WorkerEventListener callback_);
+    void removeAllListener();
+    void registerGlobalCallObject(String instanceName, Object globalCallObject);
+    void unregisterGlobalCallObject(optional String instanceName);
+};
+// [Namespace=worker, Entity=Class]
+[Entity=Class]
+interface RestrictedWorker: ThreadWorker {
+    constructor(String scriptURL, optional WorkerOptions options);
+};
+
+
+[Entity=Interface]
+interface SceneResourceParameters {
+    attribute String name;
+    [Optional]
+    attribute Resource uri;
+};
+[Entity=Interface]
+interface SceneNodeParameters {
+    attribute String name;
+    [Optional]
+    attribute String path;
+};
+[Entity=Interface]
+interface SceneResourceFactory {
+    async Camera createCamera(SceneNodeParameters params);
+    async Light createLight(SceneNodeParameters params, LightType lightType);
+    async Node createNode(SceneNodeParameters params);
+    async Material createMaterial(SceneResourceParameters params, MaterialType materialType);
+    async Shader createShader(SceneResourceParameters params);
+    async Image createImage(SceneResourceParameters params);
+    async Environment createEnvironment(SceneResourceParameters params);
+};
+[Entity=Class]
+interface Scene {
+    attribute Environment environment;
+    readonly attribute sequence<Animation> animations;
+    readonly attribute (Node or undefined) root;
+    static async Scene load(optional Resource uri);
+    (Node or undefined) getNodeByPath(String path, optional NodeType type);
+    SceneResourceFactory getResourceFactory();
+    void destroy();
+};
+
+[Entity=Class, Component="SymbolGlyph"]
+interface SymbolGlyphAttribute: [TypeArguments="SymbolGlyphAttribute"] CommonMethod {
+    [CommonMethod]
+    attribute (number or String or Resource) fontSize;
+    [CommonMethod]
+    attribute sequence<ResourceColor> fontColor;
+    [CommonMethod]
+    attribute (number or FontWeight or String) fontWeight;
+    [CommonMethod]
+    attribute SymbolEffectStrategy effectStrategy;
+    [CommonMethod]
+    attribute SymbolRenderingStrategy renderingStrategy;
+    SymbolGlyphAttribute symbolEffect(SymbolEffect symbolEffect, optional boolean isActive);
+    SymbolGlyphAttribute symbolEffect(SymbolEffect symbolEffect, optional number triggerValue);
+};
+[Entity=Class, Component="SymbolGlyphModifier"]
+interface SymbolGlyphModifier: SymbolGlyphAttribute {
+    constructor(optional Resource src);
+    [Optional]
+    void applyNormalAttribute(SymbolGlyphAttribute instance);
+};
+
+
+
+// [Namespace=window, Entity=Interface]
+[Entity=Interface]
+interface SystemBarStyle {
+    [Optional]
+    attribute String statusBarContentColor;
+};
+
+
+// [Namespace=uniformTypeDescriptor]
+dictionary UniformDataType {
+    String ENTITY = "general.entity";
+    String OBJECT = "general.object";
+    String COMPOSITE_OBJECT = "general.composite-object";
+    String TEXT = "general.text";
+    String PLAIN_TEXT = "general.plain-text";
+    String HTML = "general.html";
+    String HYPERLINK = "general.hyperlink";
+    String XML = "general.xml";
+    String XHTML = "general.xhtml";
+    String RSS = "general.rss";
+    String SMIL = "com.real.smil";
+    String SOURCE_CODE = "general.source-code";
+    String SCRIPT = "general.script";
+    String SHELL_SCRIPT = "general.shell-script";
+    String CSH_SCRIPT = "general.csh-script";
+    String PERL_SCRIPT = "general.perl-script";
+    String PHP_SCRIPT = "general.php-script";
+    String PYTHON_SCRIPT = "general.python-script";
+    String RUBY_SCRIPT = "general.ruby-script";
+    String TYPE_SCRIPT = "general.type-script";
+    String JAVA_SCRIPT = "general.java-script";
+    String CSS = "general.css";
+    String C_HEADER = "general.c-header";
+    String C_SOURCE = "general.c-source";
+    String C_PLUS_PLUS_HEADER = "general.c-plus-plus-header";
+    String C_PLUS_PLUS_SOURCE = "general.c-plus-plus-source";
+    String JAVA_SOURCE = "general.java-source";
+    String TEX = "general.tex";
+    String MARKDOWN = "general.markdown";
+    String ASC_TEXT = "general.asc-text";
+    String RICH_TEXT = "general.rich-text";
+    String DELIMITED_VALUES_TEXT = "general.delimited-values-text";
+    String COMMA_SEPARATED_VALUES_TEXT = "general.comma-separated-values-text";
+    String TAB_SEPARATED_VALUES_TEXT = "general.tab-separated-values-text";
+    String EBOOK = "general.ebook";
+    String EPUB = "general.epub";
+    String AZW = "com.amazon.azw";
+    String AZW3 = "com.amazon.azw3";
+    String KFX = "com.amazon.kfx";
+    String MOBI = "com.amazon.mobi";
+    String MEDIA = "general.media";
+    String IMAGE = "general.image";
+    String JPEG = "general.jpeg";
+    String PNG = "general.png";
+    String RAW_IMAGE = "general.raw-image";
+    String TIFF = "general.tiff";
+    String BMP = "com.microsoft.bmp";
+    String ICO = "com.microsoft.ico";
+    String PHOTOSHOP_IMAGE = "com.adobe.photoshop-image";
+    String AI_IMAGE = "com.adobe.illustrator.ai-image";
+    String FAX = "general.fax";
+    String JFX_FAX = "com.j2.jfx-fax";
+    String EFX_FAX = "com.js.efx-fax";
+    String XBITMAP_IMAGE = "general.xbitmap-image";
+    String GIF = "general.gif";
+    String TGA_IMAGE = "com.truevision.tga-image";
+    String SGI_IMAGE = "com.sgi.sgi-image";
+    String OPENEXR_IMAGE = "com.ilm.openexr-image";
+    String FLASHPIX_IMAGE = "com.kodak.flashpix.image";
+    String WORD_DOC = "com.microsoft.word.doc";
+    String EXCEL = "com.microsoft.excel.xls";
+    String PPT = "com.microsoft.powerpoint.ppt";
+    String WORD_DOT = "com.microsoft.word.dot";
+    String POWERPOINT_PPS = "com.microsoft.powerpoint.pps";
+    String POWERPOINT_POT = "com.microsoft.powerpoint.pot";
+    String EXCEL_XLT = "com.microsoft.excel.xlt";
+    String VISIO_VSD = "com.microsoft.visio.vsd";
+    String PDF = "com.adobe.pdf";
+    String POSTSCRIPT = "com.adobe.postscript";
+    String ENCAPSULATED_POSTSCRIPT = "com.adobe.encapsulated-postscript";
+    String VIDEO = "general.video";
+    String AVI = "general.avi";
+    String MPEG = "general.mpeg";
+    String MPEG4 = "general.mpeg-4";
+    String VIDEO_3GPP = "general.3gpp";
+    String VIDEO_3GPP2 = "general.3gpp2";
+    String TS = "general.ts";
+    String MPEGURL_VIDEO = "general.mpegurl-video";
+    String WINDOWS_MEDIA_WM = "com.microsoft.windows-media-wm";
+    String WINDOWS_MEDIA_WMV = "com.microsoft.windows-media-wmv";
+    String WINDOWS_MEDIA_WMP = "com.microsoft.windows-media-wmp";
+    String WINDOWS_MEDIA_WVX = "com.microsoft.windows-media-wvx";
+    String WINDOWS_MEDIA_WMX = "com.microsoft.windows-media-wmx";
+    String REALMEDIA = "com.real.realmedia";
+    String MATROSKA_VIDEO = "org.matroska.mkv";
+    String FLASH = "com.adobe.flash";
+    String AUDIO = "general.audio";
+    String AAC = "general.aac";
+    String AIFF = "general.aiff";
+    String ALAC = "general.alac";
+    String FLAC = "general.flac";
+    String MP3 = "general.mp3";
+    String OGG = "general.ogg";
+    String PCM = "general.pcm";
+    String WINDOWS_MEDIA_WMA = "com.microsoft.windows-media-wma";
+    String WAVEFORM_AUDIO = "com.microsoft.waveform-audio";
+    String WINDOWS_MEDIA_WAX = "com.microsoft.windows-media-wax";
+    String AU_AUDIO = "general.au-audio";
+    String AIFC_AUDIO = "general.aifc-audio";
+    String MPEGURL_AUDIO = "general.mpegurl-audio";
+    String MPEG_4_AUDIO = "general.mpeg-4-audio";
+    String MP2 = "general.mp2";
+    String MPEG_AUDIO = "general.mpeg-audio";
+    String ULAW_AUDIO = "general.ulaw-audio";
+    String SD2_AUDIO = "com.digidesign.sd2-audio";
+    String REALAUDIO = "com.real.realaudio";
+    String MATROSKA_AUDIO = "org.matroska.mka";
+    String FILE = "general.file";
+    String DIRECTORY = "general.directory";
+    String FOLDER = "general.folder";
+    String SYMLINK = "general.symlink";
+    String ARCHIVE = "general.archive";
+    String BZ2_ARCHIVE = "general.bz2-archive";
+    String OPG = "general.opg";
+    String TAZ_ARCHIVE = "general.taz-archive";
+    String WEB_ARCHIVE = "general.web-archive";
+    String DISK_IMAGE = "general.disk-image";
+    String ISO = "general.iso";
+    String TAR_ARCHIVE = "general.tar-archive";
+    String ZIP_ARCHIVE = "general.zip-archive";
+    String JAVA_ARCHIVE = "com.sun.java-archive";
+    String GNU_TAR_ARCHIVE = "org.gnu.gnu-tar-archive";
+    String GNU_ZIP_ARCHIVE = "org.gnu.gnu-zip-archive";
+    String GNU_ZIP_TAR_ARCHIVE = "org.gnu.gnu-zip-tar-archive";
+    String OPENXML = "org.openxmlformats.openxml";
+    String WORDPROCESSINGML_DOCUMENT = "org.openxmlformats.wordprocessingml.document";
+    String SPREADSHEETML_SHEET = "org.openxmlformats.spreadsheetml.sheet";
+    String PRESENTATIONML_PRESENTATION = "org.openxmlformats.presentationml.presentation";
+    String DRAWINGML_VISIO = "org.openxmlformats.drawingml.visio";
+    String DRAWINGML_TEMPLATE = "org.openxmlformats.drawingml.template";
+    String WORDPROCESSINGML_TEMPLATE = "org.openxmlformats.wordprocessingml.template";
+    String PRESENTATIONML_TEMPLATE = "org.openxmlformats.presentationml.template";
+    String PRESENTATIONML_SLIDESHOW = "org.openxmlformats.presentationml.slideshow";
+    String SPREADSHEETML_TEMPLATE = "org.openxmlformats.spreadsheetml.template";
+    String OPENDOCUMENT = "org.oasis.opendocument";
+    String OPENDOCUMENT_TEXT = "org.oasis.opendocument.text";
+    String OPENDOCUMENT_SPREADSHEET = "org.oasis.opendocument.spreadsheet";
+    String OPENDOCUMENT_PRESENTATION = "org.oasis.opendocument.presentation";
+    String OPENDOCUMENT_GRAPHICS = "org.oasis.opendocument.graphics";
+    String OPENDOCUMENT_FORMULA = "org.oasis.opendocument.formula";
+    String STUFFIT_ARCHIVE = "com.allume.stuffit-archive";
+    String RAR_ARCHIVE = "com.rarlab.rar-archive";
+    String SEVEN_ZIP_ARCHIVE = "org.7-zip.7-zip-archive";
+    String CALENDAR = "general.calendar";
+    String VCS = "general.vcs";
+    String ICS = "general.ics";
+    String CONTACT = "general.contact";
+    String DATABASE = "general.database";
+    String MESSAGE = "general.message";
+    String EXECUTABLE = "general.executable";
+    String PORTABLE_EXECUTABLE = "com.microsoft.portable-executable";
+    String SUN_JAVA_CLASS = "com.sun.java-class";
+    String VCARD = "general.vcard";
+    String NAVIGATION = "general.navigation";
+    String LOCATION = "general.location";
+    String FONT = "general.font";
+    String TRUETYPE_FONT = "general.truetype-font";
+    String TRUETYPE_COLLECTION_FONT = "general.truetype-collection-font";
+    String OPENTYPE_FONT = "general.opentype-font";
+    String POSTSCRIPT_FONT = "com.adobe.postscript-font";
+    String POSTSCRIPT_PFB_FONT = "com.adobe.postscript-pfb-font";
+    String POSTSCRIPT_PFA_FONT = "com.adobe.postscript-pfa-font";
+    String OPENHARMONY_FORM = "openharmony.form";
+    String OPENHARMONY_APP_ITEM = "openharmony.app-item";
+    String OPENHARMONY_PIXEL_MAP = "openharmony.pixel-map";
+    String OPENHARMONY_ATOMIC_SERVICE = "openharmony.atomic-service";
+    String OPENHARMONY_PACKAGE = "openharmony.package";
+    String OPENHARMONY_HAP = "openharmony.hap";
+    String OPENHARMONY_HDOC = "openharmony.hdoc";
+    String OPENHARMONY_HINOTE = "openharmony.hinote";
+    String OPENHARMONY_STYLED_STRING = "openharmony.styled-string";
+    String OPENHARMONY_WANT = "openharmony.want";
+    String OFD = "general.ofd";
+    String CAD = "general.cad";
+    String OCTET_STREAM = "general.octet-stream";
+};
+
+// [Namespace=uiEffect, Entity=Interface]
+[Entity=Interface]
+interface BrightnessBlender {
+    attribute number cubicRate;
+    attribute number quadraticRate;
+    attribute number linearRate;
+    attribute number degree;
+    attribute number saturation;
+    attribute Tuple_Number_Number_Number positiveCoefficient;
+    attribute Tuple_Number_Number_Number negativeCoefficient;
+    attribute number fraction;
+};
+[Entity=Interface]
+interface BrightnessBlenderParam {
+    attribute number cubicRate;
+    attribute number quadraticRate;
+    attribute number linearRate;
+    attribute number degree;
+    attribute number saturation;
+    attribute Tuple_Number_Number_Number positiveCoefficient;
+    attribute Tuple_Number_Number_Number negativeCoefficient;
+    attribute number fraction;
+};
+// [Namespace=uiEffect, Entity=Interface]
+[Entity=Interface]
+interface VisualEffect {
+    VisualEffect backgroundColorBlender(BrightnessBlender blender);
+};
+//[Namespace=uiEffect, Entity=Tuple, Synthetic]
+[Entity=Tuple, Synthetic]
+interface Tuple_Number_Number_Number {
+    attribute number value0;
+    attribute number value1;
+    attribute number value2;
+};
+
+// [Namespace=webview, Entity=Interface]
+[Entity=Interface]
+interface WebHeader {
+    attribute String headerKey;
+    attribute String headerValue;
+};
+// [Namespace=webview]
+dictionary WebHitTestType {
+    [OriginalEnumMemberName=EditText]
+    number EDIT_TEXT;
+    [OriginalEnumMemberName=Email]
+    number EMAIL;
+    [OriginalEnumMemberName=HttpAnchor]
+    number HTTP_ANCHOR;
+    [OriginalEnumMemberName=HttpAnchorImg]
+    number HTTP_ANCHOR_IMG;
+    [OriginalEnumMemberName=Img]
+    number IMG;
+    [OriginalEnumMemberName=Map]
+    number MAP;
+    [OriginalEnumMemberName=Phone]
+    number PHONE;
+    [OriginalEnumMemberName=Unknown]
+    number UNKNOWN;
+};
+// [Namespace=webview]
+dictionary SecureDnsMode {
+    number OFF = 0;
+    number AUTO = 1;
+    number SECURE_ONLY = 2;
+};
+// [Namespace=webview]
+dictionary SecurityLevel {
+    number NONE = 0;
+    number SECURE = 1;
+    number WARNING = 2;
+    number DANGEROUS = 3;
+};
+// [Namespace=webview]
+dictionary MediaPlaybackState {
+    number NONE = 0;
+    number PLAYING = 1;
+    number PAUSED = 2;
+    number STOPPED = 3;
+};
+// [Namespace=webview]
+dictionary PressureLevel {
+    number MEMORY_PRESSURE_LEVEL_MODERATE = 1;
+    number MEMORY_PRESSURE_LEVEL_CRITICAL = 2;
+};
+// [Namespace=webview, Entity=Interface]
+[Entity=Interface]
+interface HitTestValue {
+    attribute WebHitTestType type;
+    attribute String extra;
+};
+// [Namespace=webview, Entity=Interface]
+[Entity=Interface]
+interface WebCustomScheme {
+    attribute String schemeName;
+    attribute boolean isSupportCORS;
+    attribute boolean isSupportFetch;
+    [Optional]
+    attribute boolean isStandard;
+    [Optional]
+    attribute boolean isLocal;
+    [Optional]
+    attribute boolean isDisplayIsolated;
+    [Optional]
+    attribute boolean isSecure;
+    [Optional]
+    attribute boolean isCspBypassing;
+    [Optional]
+    attribute boolean isCodeCacheSupported;
+};
+// [Namespace=webview, Entity=Interface]
+[Entity=Interface]
+interface WebStorageOrigin {
+    attribute String origin;
+    attribute number usage;
+    attribute number quota;
+};
+// [Namespace=webview, Entity=Interface]
+[Entity=Interface]
+interface RequestInfo {
+    attribute String url;
+    attribute String method;
+    attribute String formData;
+};
+// [Namespace=webview, Entity=Interface]
+[Entity=Interface]
+interface ScrollOffset {
+    attribute number horizontal;
+    attribute number vertical;
+};
+[Synthetic]
+callback Callback_Void = void ();
+[Async, Synthetic]
+callback AsyncCallback_Array_WebStorageOrigin_Void = void (sequence<WebStorageOrigin> result);
+[Async, Synthetic]
+callback AsyncCallback_Number_Void = void (number result);
+// [Namespace=webview, Entity=Class]
+[Entity=Class]
+interface WebStorage {
+    static void deleteAllData(optional boolean incognito);
+    static void deleteOrigin(String origin);
+    static async sequence<WebStorageOrigin> getOrigins();
+    static void getOrigins(AsyncCallback_Array_WebStorageOrigin_Void callback_);
+    static async number getOriginQuota(String origin);
+    static void getOriginQuota(String origin, AsyncCallback_Number_Void callback_);
+    static async number getOriginUsage(String origin);
+    static void getOriginUsage(String origin, AsyncCallback_Number_Void callback_);
+};
+// [Namespace=webview, Entity=Class]
+[Entity=Class]
+interface WebDataBase {
+    static boolean existHttpAuthCredentials();
+    static void deleteHttpAuthCredentials();
+    static sequence<String> getHttpAuthCredentials(String host, String realm);
+    static void saveHttpAuthCredentials(String host, String realm, String username, String password);
+};
+[Async, Synthetic]
+callback AsyncCallback_Boolean_Void = void (boolean result);
+[Async, Synthetic]
+callback AsyncCallback_Array_String_Void = void (sequence<String> result);
+// [Namespace=webview, Entity=Class]
+[Entity=Class]
+interface GeolocationPermissions {
+    static void allowGeolocation(String origin, optional boolean incognito);
+    static void deleteGeolocation(String origin, optional boolean incognito);
+    static void deleteAllGeolocation(optional boolean incognito);
+    static async boolean getAccessibleGeolocation(String origin, optional boolean incognito);
+    static void getAccessibleGeolocation(String origin, AsyncCallback_Boolean_Void callback_, optional boolean incognito);
+    static async sequence<String> getStoredGeolocation(optional boolean incognito);
+    static void getStoredGeolocation(AsyncCallback_Array_String_Void callback_, optional boolean incognito);
+};
+[Async, Synthetic]
+callback AsyncCallback_String_Void = void (String result);
+[Async, Synthetic]
+callback AsyncCallback_Void = void ();
+// [Namespace=webview, Entity=Class]
+[Entity=Class]
+interface WebCookieManager {
+    [Deprecated]
+    static String getCookie(String url);
+    static String fetchCookieSync(String url, optional boolean incognito);
+    static async String fetchCookie(String url);
+    static void fetchCookie(String url, AsyncCallback_String_Void callback_);
+    [Deprecated]
+    static void setCookie(String url, String value);
+    static void configCookieSync(String url, String value, optional boolean incognito);
+    static async void configCookie(String url, String value);
+    static void configCookie(String url, String value, AsyncCallback_Void callback_);
+    static async void saveCookieAsync();
+    static void saveCookieAsync(AsyncCallback_Void callback_);
+    static boolean isCookieAllowed();
+    static void putAcceptCookieEnabled(boolean accept);
+    static boolean isThirdPartyCookieAllowed();
+    static void putAcceptThirdPartyCookieEnabled(boolean accept);
+    static boolean existCookie(optional boolean incognito);
+    [Deprecated]
+    static void deleteEntireCookie();
+    static void clearAllCookiesSync(optional boolean incognito);
+    static async void clearAllCookies();
+    static void clearAllCookies(AsyncCallback_Void callback_);
+    [Deprecated]
+    static void deleteSessionCookie();
+    static void clearSessionCookieSync();
+    static async void clearSessionCookie();
+    static void clearSessionCookie(AsyncCallback_Void callback_);
+};
+// [Namespace=webview]
+dictionary WebMessageType {
+    number NOT_SUPPORT;
+    number STRING;
+    number NUMBER;
+    number BOOLEAN;
+    number ARRAY_BUFFER;
+    number ARRAY;
+    number ERROR;
+};
+// [Namespace=webview, Entity=Class]
+[Entity=Class]
+interface WebMessageExt {
+    WebMessageType getType();
+    String getString();
+    number getNumber();
+    boolean getBoolean();
+    ArrayBuffer getArrayBuffer();
+    sequence<(String or number or boolean)> getArray();
+    Error getError();
+    void setType(WebMessageType type);
+    void setString(String message);
+    void setNumber(number message);
+    void setBoolean(boolean message);
+    void setArrayBuffer(ArrayBuffer message);
+    void setArray(sequence<(String or number or boolean)> message);
+    void setError(Error message);
+};
+typedef (ArrayBuffer or String) WebMessage;
+[Synthetic]
+callback Callback_WebMessage_Void = void (WebMessage result);
+[Synthetic]
+callback Callback_WebMessageExt_Void = void (WebMessageExt result);
+// [Namespace=webview, Entity=Interface]
+[Entity=Interface]
+interface WebMessagePort {
+    [Optional]
+    attribute boolean isExtentionType;
+    void close();
+    void postMessageEvent(WebMessage message);
+    void onMessageEvent(Callback_WebMessage_Void callback_);
+    void postMessageEventExt(WebMessageExt message);
+    void onMessageEventExt(Callback_WebMessageExt_Void callback_);
+};
+// [Namespace=webview, Entity=Interface]
+[Entity=Interface]
+interface HistoryItem {
+    attribute PixelMap icon;
+    attribute String historyUrl;
+    attribute String historyRawUrl;
+    attribute String title;
+};
+// [Namespace=webview, Entity=Interface]
+[Entity=Interface]
+interface BackForwardList {
+    attribute number currentIndex;
+    attribute number size;
+    HistoryItem getItemAtIndex(number index);
+};
+// [Namespace=webview, Entity=Interface]
+[Entity=Interface]
+interface SnapshotInfo {
+    [Optional]
+    attribute String id;
+    [Optional]
+    attribute SizeOptions size;
+};
+// [Namespace=webview, Entity=Interface]
+[Entity=Interface]
+interface SnapshotResult {
+    [Optional]
+    attribute String id;
+    [Optional]
+    attribute boolean status;
+    [Optional]
+    attribute SizeOptions size;
+    [Optional]
+    attribute PixelMap imagePixelMap;
+};
+// [Namespace=webview]
+dictionary JsMessageType {
+    number NOT_SUPPORT;
+    number STRING;
+    number NUMBER;
+    number BOOLEAN;
+    number ARRAY_BUFFER;
+    number ARRAY;
+};
+// [Namespace=webview, Entity=Class]
+[Entity=Class]
+interface JsMessageExt {
+    JsMessageType getType();
+    String getString();
+    number getNumber();
+    boolean getBoolean();
+    ArrayBuffer getArrayBuffer();
+    sequence<(String or number or boolean)> getArray();
+};
+// [Namespace=webview]
+dictionary RenderProcessMode {
+    number SINGLE = 0;
+    number MULTIPLE;
+};
+// [Namespace=webview, Entity=Interface]
+[Entity=Interface]
+interface CacheOptions {
+    attribute sequence<WebHeader> responseHeaders;
+};
+// [Namespace=webview]
+dictionary OfflineResourceType {
+    number IMAGE;
+    number CSS;
+    number CLASSIC_JS;
+    number MODULE_JS;
+};
+// [Namespace=webview, Entity=Interface]
+[Entity=Interface]
+interface OfflineResourceMap {
+    attribute sequence<String> urlList;
+    attribute Uint8Array resource;
+    attribute sequence<WebHeader> responseHeaders;
+    attribute OfflineResourceType type;
+};
+[Async, Synthetic]
+callback AsyncCallback_JsMessageExt_Void = void (JsMessageExt result);
+[Async, Synthetic]
+callback AsyncCallback_Array_cert_X509Cert_Void = void (sequence</*cert.*/X509Cert> result);
+[Async, Synthetic]
+callback AsyncCallback_SnapshotResult_Void = void (SnapshotResult result);
+// [Namespace=webview, Entity=Class]
+[Entity=Class]
+interface WebviewController {
+    constructor(optional String webTag);
+    static void initializeWebEngine();
+    static void setHttpDns(SecureDnsMode secureDnsMode, String secureDnsConfig);
+    static void setWebDebuggingAccess(boolean webDebuggingAccess);
+    void enableSafeBrowsing(boolean enable);
+    boolean isSafeBrowsingEnabled();
+    boolean accessForward();
+    boolean accessBackward();
+    boolean accessStep(number step);
+    void forward();
+    void backward();
+    void clearHistory();
+    void onActive();
+    void onInactive();
+    void refresh();
+    void loadData(String data, String mimeType, String encoding, optional String baseUrl, optional String historyUrl);
+    void loadUrl((String or Resource) url, optional sequence<WebHeader> headers);
+    WebHitTestType getHitTest();
+    async String storeWebArchive(String baseName, boolean autoName);
+    void storeWebArchive(String baseName, boolean autoName, AsyncCallback_String_Void callback_);
+    void zoom(number factor);
+    void zoomIn();
+    void zoomOut();
+    HitTestValue getHitTestValue();
+    number getWebId();
+    String getUserAgent();
+    String getTitle();
+    number getPageHeight();
+    void backOrForward(number step);
+    void requestFocus();
+    sequence<WebMessagePort> createWebMessagePorts(optional boolean isExtentionType);
+    void postMessage(String name, sequence<WebMessagePort> ports, String uri);
+    void stop();
+    void registerJavaScriptProxy(Object object_, String name, sequence<String> methodList, optional sequence<String> asyncMethodList, optional String permission);
+    void deleteJavaScriptRegister(String name);
+    void searchAllAsync(String searchString);
+    void clearMatches();
+    void searchNext(boolean forward);
+    void clearSslCache();
+    void clearClientAuthenticationCache();
+    async String runJavaScript(String script);
+    void runJavaScript(String script, AsyncCallback_String_Void callback_);
+    async JsMessageExt runJavaScriptExt((String or ArrayBuffer) script);
+    void runJavaScriptExt((String or ArrayBuffer) script, AsyncCallback_JsMessageExt_Void callback_);
+    String getUrl();
+    void pageUp(boolean top);
+    void pageDown(boolean bottom);
+    String getOriginalUrl();
+    PixelMap getFavicon();
+    void setNetworkAvailable(boolean enable);
+    async boolean hasImage();
+    void hasImage(AsyncCallback_Boolean_Void callback_);
+    BackForwardList getBackForwardEntries();
+    void removeCache(boolean clearRom);
+    void scrollTo(number x, number y, optional number duration);
+    void scrollBy(number deltaX, number deltaY, optional number duration);
+    void slideScroll(number vx, number vy);
+    Uint8Array serializeWebState();
+    void restoreWebState(Uint8Array state);
+    static void customizeSchemes(sequence<WebCustomScheme> schemes);
+    async sequence</*cert.*/X509Cert> getCertificate();
+    void getCertificate(AsyncCallback_Array_cert_X509Cert_Void callback_);
+    void setAudioMuted(boolean mute);
+    void prefetchPage(String url, optional sequence<WebHeader> additionalHeaders);
+    static void prepareForPageLoad(String url, boolean preconnectable, number numSockets);
+    void setCustomUserAgent(String userAgent);
+    String getCustomUserAgent();
+    static void setConnectionTimeout(number timeout);
+    void setDownloadDelegate(WebDownloadDelegate delegate);
+    void startDownload(String url);
+    void postUrl(String url, ArrayBuffer postData);
+    print.PrintDocumentAdapter createWebPrintDocumentAdapter(String jobName);
+    SecurityLevel getSecurityLevel();
+    boolean isIncognitoMode();
+    void setScrollable(boolean enable);
+    boolean getScrollable();
+    void setPrintBackground(boolean enable);
+    boolean getPrintBackground();
+    String getLastJavascriptProxyCallingFrameUrl();
+    void startCamera();
+    void stopCamera();
+    void closeCamera();
+    static void pauseAllTimers();
+    static void resumeAllTimers();
+    void stopAllMedia();
+    void resumeAllMedia();
+    void pauseAllMedia();
+    void closeAllMediaPresentations();
+    MediaPlaybackState getMediaPlaybackState();
+    void setWebSchemeHandler(String scheme, WebSchemeHandler handler);
+    void clearWebSchemeHandler();
+    static void setServiceWorkerWebSchemeHandler(String scheme, WebSchemeHandler handler);
+    static void clearServiceWorkerWebSchemeHandler();
+    void enableIntelligentTrackingPrevention(boolean enable);
+    boolean isIntelligentTrackingPreventionEnabled();
+    static void addIntelligentTrackingPreventionBypassingList(sequence<String> hostList);
+    static void removeIntelligentTrackingPreventionBypassingList(sequence<String> hostList);
+    static void clearIntelligentTrackingPreventionBypassingList();
+    void onCreateNativeMediaPlayer(CreateNativeMediaPlayerCallback callback_);
+    static void enableWholeWebPageDrawing();
+    void webPageSnapshot(SnapshotInfo info, AsyncCallback_SnapshotResult_Void callback_);
+    static void prefetchResource(RequestInfo request, optional sequence<WebHeader> additionalHeaders, optional String cacheKey, optional number cacheValidTime);
+    static void clearPrefetchedResource(sequence<String> cacheKeyList);
+    static void setRenderProcessMode(RenderProcessMode mode);
+    static RenderProcessMode getRenderProcessMode();
+    boolean terminateRenderProcess();
+    async number precompileJavaScript(String url, (String or Uint8Array) script, CacheOptions cacheOptions);
+    static void setHostIP(String hostName, String address, number aliveTime);
+    static void clearHostIP(String hostName);
+    static void warmupServiceWorker(String url);
+    void injectOfflineResources(sequence<OfflineResourceMap> resourceMaps);
+    void enableAdsBlock(boolean enable);
+    boolean isAdsBlockEnabled();
+    boolean isAdsBlockEnabledForCurPage();
+    String getSurfaceId();
+    void setUrlTrustList(String urlTrustList);
+    void setPathAllowingUniversalAccess(sequence<String> pathList);
+    static void trimMemoryByPressureLevel(PressureLevel level);
+    static void enableBackForwardCache(BackForwardCacheSupportedFeatures features);
+    void setBackForwardCacheOptions(BackForwardCacheOptions options);
+    ScrollOffset getScrollOffset();
+};
+// [Namespace=webview]
+dictionary WebDownloadState {
+    number IN_PROGRESS = 0;
+    number COMPLETED;
+    number CANCELED;
+    number INTERRUPTED;
+    number PENDING;
+    number PAUSED;
+    number UNKNOWN;
+};
+// [Namespace=webview]
+dictionary WebDownloadErrorCode {
+    number ERROR_UNKNOWN = 0;
+    number FILE_FAILED = 1;
+    number FILE_ACCESS_DENIED = 2;
+    number FILE_NO_SPACE = 3;
+    number FILE_NAME_TOO_LONG = 5;
+    number FILE_TOO_LARGE = 6;
+    number FILE_TRANSIENT_ERROR = 10;
+    number FILE_BLOCKED = 11;
+    number FILE_TOO_SHORT = 13;
+    number FILE_HASH_MISMATCH = 14;
+    number FILE_SAME_AS_SOURCE = 15;
+    number NETWORK_FAILED = 20;
+    number NETWORK_TIMEOUT = 21;
+    number NETWORK_DISCONNECTED = 22;
+    number NETWORK_SERVER_DOWN = 23;
+    number NETWORK_INVALID_REQUEST = 24;
+    number SERVER_FAILED = 30;
+    number SERVER_NO_RANGE = 31;
+    number SERVER_BAD_CONTENT = 33;
+    number SERVER_UNAUTHORIZED = 34;
+    number SERVER_CERT_PROBLEM = 35;
+    number SERVER_FORBIDDEN = 36;
+    number SERVER_UNREACHABLE = 37;
+    number SERVER_CONTENT_LENGTH_MISMATCH = 38;
+    number SERVER_CROSS_ORIGIN_REDIRECT = 39;
+    number USER_CANCELED = 40;
+    number USER_SHUTDOWN = 41;
+    number CRASH = 50;
+};
+// [Namespace=webview, Entity=Class]
+[Entity=Class]
+interface WebDownloadItem {
+    String getGuid();
+    number getCurrentSpeed();
+    number getPercentComplete();
+    number getTotalBytes();
+    WebDownloadState getState();
+    WebDownloadErrorCode getLastErrorCode();
+    String getMethod();
+    String getMimeType();
+    String getUrl();
+    String getSuggestedFileName();
+    void start(String downloadPath);
+    void cancel();
+    void pause();
+    void resume();
+    number getReceivedBytes();
+    String getFullPath();
+    Uint8Array serialize();
+    static WebDownloadItem deserialize(Uint8Array serializedData);
+};
+[Synthetic]
+callback Callback_WebDownloadItem_Void = void (WebDownloadItem parameter);
+// [Namespace=webview, Entity=Class]
+[Entity=Class]
+interface WebDownloadDelegate {
+    void onBeforeDownload(Callback_WebDownloadItem_Void callback_);
+    void onDownloadUpdated(Callback_WebDownloadItem_Void callback_);
+    void onDownloadFinish(Callback_WebDownloadItem_Void callback_);
+    void onDownloadFailed(Callback_WebDownloadItem_Void callback_);
+};
+// [Namespace=webview, Entity=Class]
+[Entity=Class]
+interface WebDownloadManager {
+    static void setDownloadDelegate(WebDownloadDelegate delegate);
+    static void resumeDownload(WebDownloadItem webDownloadItem);
+};
+// [Namespace=webview, Entity=Class]
+[Entity=Class]
+interface WebHttpBodyStream {
+    async void initialize();
+    async ArrayBuffer read(number size);
+    number getSize();
+    number getPosition();
+    boolean isChunked();
+    boolean isEof();
+    boolean isInMemory();
+};
+// [Namespace=webview]
+dictionary WebResourceType {
+    number MAIN_FRAME = 0;
+    number SUB_FRAME = 1;
+    number STYLE_SHEET = 2;
+    number SCRIPT = 3;
+    number IMAGE = 4;
+    number FONT_RESOURCE = 5;
+    number SUB_RESOURCE = 6;
+    number OBJECT = 7;
+    number MEDIA = 8;
+    number WORKER = 9;
+    number SHARED_WORKER = 10;
+    number PREFETCH = 11;
+    number FAVICON = 12;
+    number XHR = 13;
+    number PING = 14;
+    number SERVICE_WORKER = 15;
+    number CSP_REPORT = 16;
+    number PLUGIN_RESOURCE = 17;
+    number NAVIGATION_PRELOAD_MAIN_FRAME = 19;
+    number NAVIGATION_PRELOAD_SUB_FRAME = 20;
+};
+// [Namespace=webview, Entity=Class]
+[Entity=Class]
+interface WebSchemeHandlerRequest {
+    sequence<WebHeader> getHeader();
+    String getRequestUrl();
+    String getRequestMethod();
+    String getReferrer();
+    boolean isMainFrame();
+    boolean hasGesture();
+    (WebHttpBodyStream or undefined) getHttpBodyStream();
+    WebResourceType getRequestResourceType();
+    String getFrameUrl();
+};
+// [Namespace=webview, Entity=Class]
+[Entity=Class]
+interface WebSchemeHandlerResponse {
+    constructor();
+    void setUrl(String url);
+    String getUrl();
+    void setNetErrorCode(WebNetErrorList code);
+    WebNetErrorList getNetErrorCode();
+    void setStatus(number code);
+    number getStatus();
+    void setStatusText(String text);
+    String getStatusText();
+    void setMimeType(String type);
+    String getMimeType();
+    void setEncoding(String encoding);
+    String getEncoding();
+    void setHeaderByName(String name, String value, boolean overwrite);
+    String getHeaderByName(String name);
+};
+// [Namespace=webview, Entity=Class]
+[Entity=Class]
+interface WebResourceHandler {
+    void didReceiveResponse(WebSchemeHandlerResponse response);
+    void didReceiveResponseBody(ArrayBuffer data);
+    void didFinish();
+    void didFail(WebNetErrorList code);
+};
+[Synthetic]
+callback Callback_WebSchemeHandlerRequest_WebResourceHandler_Boolean = boolean (WebSchemeHandlerRequest request, WebResourceHandler handler);
+[Synthetic]
+callback Callback_WebSchemeHandlerRequest_Void = void (WebSchemeHandlerRequest parameter);
+// [Namespace=webview, Entity=Class]
+[Entity=Class]
+interface WebSchemeHandler {
+    void onRequestStart(Callback_WebSchemeHandlerRequest_WebResourceHandler_Boolean callback_);
+    void onRequestStop(Callback_WebSchemeHandlerRequest_Void callback_);
+};
+// [Namespace=webview]
+dictionary PlaybackStatus {
+    number PAUSED = 0;
+    number PLAYING;
+};
+// [Namespace=webview]
+dictionary NetworkState {
+    number EMPTY = 0;
+    number IDLE;
+    number LOADING;
+    number NETWORK_ERROR;
+};
+// [Namespace=webview]
+dictionary ReadyState {
+    number HAVE_NOTHING = 0;
+    number HAVE_METADATA;
+    number HAVE_CURRENT_DATA;
+    number HAVE_FUTURE_DATA;
+    number HAVE_ENOUGH_DATA;
+};
+// [Namespace=webview]
+dictionary MediaError {
+    number NETWORK_ERROR = 1;
+    number FORMAT_ERROR;
+    number DECODE_ERROR;
+};
+// [Namespace=webview, Entity=Interface]
+[Entity=Interface]
+interface NativeMediaPlayerHandler {
+    void handleStatusChanged(PlaybackStatus status);
+    void handleVolumeChanged(number volume);
+    void handleMutedChanged(boolean muted);
+    void handlePlaybackRateChanged(number playbackRate);
+    void handleDurationChanged(number duration);
+    void handleTimeUpdate(number currentPlayTime);
+    void handleBufferedEndTimeChanged(number bufferedEndTime);
+    void handleEnded();
+    void handleNetworkStateChanged(NetworkState state);
+    void handleReadyStateChanged(ReadyState state);
+    void handleFullscreenChanged(boolean fullscreen);
+    void handleSeeking();
+    void handleSeekFinished();
+    void handleError(MediaError error, String errorMessage);
+    void handleVideoSizeChanged(number width, number height);
+};
+// [Namespace=webview]
+dictionary SuspendType {
+    number ENTER_BACK_FORWARD_CACHE = 0;
+    number ENTER_BACKGROUND;
+    number AUTO_CLEANUP;
+};
+// [Namespace=webview, Entity=Interface]
+[Entity=Interface]
+interface NativeMediaPlayerBridge {
+    void updateRect(number x, number y, number width, number height);
+    void play();
+    void pause();
+    void seek(number targetTime);
+    void setVolume(number volume);
+    void setMuted(boolean muted);
+    void setPlaybackRate(number playbackRate);
+    void release();
+    void enterFullscreen();
+    void exitFullscreen();
+    [Optional]
+    void resumePlayer();
+    [Optional]
+    void suspendPlayer(SuspendType type);
+};
+// [Namespace=webview]
+dictionary MediaType {
+    number VIDEO = 0;
+    number AUDIO;
+};
+// [Namespace=webview]
+dictionary SourceType {
+    number URL = 0;
+    number MSE;
+};
+// [Namespace=webview, Entity=Class]
+[Entity=Class]
+interface MediaSourceInfo {
+    attribute SourceType type;
+    attribute String source;
+    attribute String format;
+};
+// [Namespace=webview, Entity=Class]
+[Entity=Class]
+interface RectEvent {
+    attribute number x;
+    attribute number y;
+    attribute number width;
+    attribute number height;
+};
+// [Namespace=webview, Entity=Class]
+[Entity=Class]
+interface NativeMediaPlayerSurfaceInfo {
+    attribute String id;
+    attribute RectEvent rect;
+};
+// [Namespace=webview]
+dictionary Preload {
+    number NONE = 0;
+    number METADATA;
+    number AUTO;
+};
+// [Namespace=webview, Entity=Class]
+[Entity=Class]
+interface MediaInfo {
+    attribute String embedID;
+    attribute MediaType mediaType;
+    attribute sequence<MediaSourceInfo> mediaSrcList;
+    attribute NativeMediaPlayerSurfaceInfo surfaceInfo;
+    attribute boolean controlsShown;
+    attribute sequence<String> controlList;
+    attribute boolean muted;
+    attribute String posterUrl;
+    attribute Preload preload;
+    attribute record<String, String> headers;
+    attribute record<String, String> attributes;
+};
+callback CreateNativeMediaPlayerCallback = NativeMediaPlayerBridge (NativeMediaPlayerHandler handler, MediaInfo mediaInfo);
+// [Namespace=webview, Entity=Class]
+[Entity=Class]
+interface AdsBlockManager {
+    static void setAdsBlockRules(String rulesFile, boolean replace);
+    static void addAdsBlockDisallowedList(sequence<String> domainSuffixes);
+    static void addAdsBlockAllowedList(sequence<String> domainSuffixes);
+    static void removeAdsBlockDisallowedList(sequence<String> domainSuffixes);
+    static void removeAdsBlockAllowedList(sequence<String> domainSuffixes);
+    static void clearAdsBlockDisallowedList();
+    static void clearAdsBlockAllowedList();
+};
+// [Namespace=webview, Entity=Class]
+[Entity=Class]
+interface BackForwardCacheSupportedFeatures {
+    constructor();
+    attribute boolean nativeEmbed;
+    attribute boolean mediaTakeOver;
+};
+// [Namespace=webview, Entity=Class]
+[Entity=Class]
+interface BackForwardCacheOptions {
+    constructor();
+    attribute number size;
+    attribute number timeToLive;
+};
+[GlobalScope]
+interface GlobalScope_ohos_web_webview {
+    // [Namespace=webview]
+    void once(String type, Callback_Void callback_);
+};
+
+
+// [Namespace=window]
+dictionary WindowStatusType {
+    number UNDEFINED = 0;
+    number FULL_SCREEN;
+    number MAXIMIZE;
+    number MINIMIZE;
+    number FLOATING;
+    number SPLIT_SCREEN;
+};
+
+
+[Entity=NamedTuple, TypeParameters="T"]
+interface AnimationRange {
+    attribute T from;
+    attribute T to;
+};
+
+[Entity=Interface, TypeParameters="T"]
+interface ContentModifier {
+    ([TypeArguments="Tuple_T"] WrappedBuilder) applyContent();
+};
+
+dictionary LightType {
+    number DIRECTIONAL = 1;
+    number SPOT = 2;
+};
+
+dictionary SceneResourceType {
+    number UNKNOWN = 0;
+    number NODE = 1;
+    number ENVIRONMENT = 2;
+    number MATERIAL = 3;
+    number MESH = 4;
+    number ANIMATION = 5;
+    number SHADER = 6;
+    number IMAGE = 7;
+};
+[Entity=Interface]
+interface SceneResource {
+    attribute String name;
+    readonly attribute SceneResourceType resourceType;
+    [Optional]
+    readonly attribute Resource uri;
+    void destroy();
+};
+[Entity=Interface]
+interface LayerMask {
+    boolean getEnabled(number index);
+    void setEnabled(number index, boolean enabled);
+};
+dictionary NodeType {
+    number NODE = 1;
+    number GEOMETRY = 2;
+    number CAMERA = 3;
+    number LIGHT = 4;
+};
+[Entity=Interface, TypeParameters="T"]
+interface Container {
+    void append(T item);
+    void insertAfter(T item, (T or undefined) sibling);
+    void remove(T item);
+    (T or undefined) get(number index);
+    void clear();
+    number count();
+};
+/*
+[Entity=Interface]
+interface Node: SceneResource {
+    attribute Position3 position;
+    attribute Quaternion rotation;
+    attribute Scale3 scale;
+    attribute boolean visible;
+    readonly attribute NodeType nodeType;
+    readonly attribute LayerMask layerMask;
+    readonly attribute String path;
+    readonly attribute (Node or undefined) parent; // THIS ROW LEADS TO CRASH OF GENERATOR !!!!
+    readonly attribute [TypeArguments="Node"] Container children;
+    (Node or undefined) getNodeByPath(String path);
+};
+*/
+dictionary MaterialType {
+    number SHADER = 1;
+};
+[Entity=Interface]
+interface Material: SceneResource {
+    readonly attribute MaterialType materialType;
+};
+[Entity=Interface]
+interface Mesh: SceneResource {
+    readonly attribute sequence<SubMesh> subMeshes;
+    readonly attribute Aabb aabb;
+    [Optional]
+    attribute Material materialOverride;
+};
+[Synthetic]
+callback Callback_Void = void ();
+[Entity=Interface]
+interface Animation: SceneResource {
+    attribute boolean enabled;
+    readonly attribute number duration;
+    readonly attribute boolean running;
+    readonly attribute number progress;
+    void onFinished(Callback_Void callback_);
+    void onStarted(Callback_Void callback_);
+    void pause();
+    void restart();
+    void seek(number position);
+    void start();
+    void stop();
+    void finish();
+};
+
+
+// [Namespace=cryptoFramework]
+dictionary AsyKeySpecItem {
+    number DSA_P_BN = 101;
+    number DSA_Q_BN = 102;
+    number DSA_G_BN = 103;
+    number DSA_SK_BN = 104;
+    number DSA_PK_BN = 105;
+    number ECC_FP_P_BN = 201;
+    number ECC_A_BN = 202;
+    number ECC_B_BN = 203;
+    number ECC_G_X_BN = 204;
+    number ECC_G_Y_BN = 205;
+    number ECC_N_BN = 206;
+    number ECC_H_NUM = 207;
+    number ECC_SK_BN = 208;
+    number ECC_PK_X_BN = 209;
+    number ECC_PK_Y_BN = 210;
+    number ECC_FIELD_TYPE_STR = 211;
+    number ECC_FIELD_SIZE_NUM = 212;
+    number ECC_CURVE_NAME_STR = 213;
+    number RSA_N_BN = 301;
+    number RSA_SK_BN = 302;
+    number RSA_PK_BN = 303;
+    number DH_P_BN = 401;
+    number DH_G_BN = 402;
+    number DH_L_NUM = 403;
+    number DH_SK_BN = 404;
+    number DH_PK_BN = 405;
+    number ED25519_SK_BN = 501;
+    number ED25519_PK_BN = 502;
+    number X25519_SK_BN = 601;
+    number X25519_PK_BN = 602;
+};
+// [Namespace=cryptoFramework, Entity=Interface]
+[Entity=Interface]
+interface PubKey: Key {
+    (bigint or String or number) getAsyKeySpec(AsyKeySpecItem itemType);
+    DataBlob getEncodedDer(String format);
+    String getEncodedPem(String format);
+};
+
+// [Namespace=cert]
+dictionary GeneralNameType {
+    number GENERAL_NAME_TYPE_OTHER_NAME = 0;
+    number GENERAL_NAME_TYPE_RFC822_NAME = 1;
+    number GENERAL_NAME_TYPE_DNS_NAME = 2;
+    number GENERAL_NAME_TYPE_X400_ADDRESS = 3;
+    number GENERAL_NAME_TYPE_DIRECTORY_NAME = 4;
+    number GENERAL_NAME_TYPE_EDI_PARTY_NAME = 5;
+    number GENERAL_NAME_TYPE_UNIFORM_RESOURCE_ID = 6;
+    number GENERAL_NAME_TYPE_IP_ADDRESS = 7;
+    number GENERAL_NAME_TYPE_REGISTERED_ID = 8;
+};
+// [Namespace=cert, Entity=Interface]
+[Entity=Interface]
+interface GeneralName {
+    attribute GeneralNameType type;
+    [Optional]
+    attribute Uint8Array name;
+};
+// [Namespace=cert, Entity=Interface]
+[Entity=Interface]
+interface X509CertMatchParameters {
+    [Optional]
+    attribute sequence<GeneralName> subjectAlternativeNames;
+    [Optional]
+    attribute boolean matchAllSubjectAltNames;
+    [Optional]
+    attribute Uint8Array authorityKeyIdentifier;
+    [Optional]
+    attribute number minPathLenConstraint;
+    [Optional]
+    attribute X509Cert x509Cert;
+    [Optional]
+    attribute String validDate;
+    [Optional]
+    attribute Uint8Array issuer;
+    [Optional]
+    attribute sequence<String> extendedKeyUsage;
+    [Optional]
+    attribute Uint8Array nameConstraints;
+    [Optional]
+    attribute sequence<String> certPolicy;
+    [Optional]
+    attribute String privateKeyValid;
+    [Optional]
+    attribute sequence<boolean> keyUsage;
+    [Optional]
+    attribute bigint serialNumber;
+    [Optional]
+    attribute Uint8Array subject;
+    [Optional]
+    attribute Uint8Array subjectKeyIdentifier;
+    [Optional]
+    attribute DataBlob publicKey;
+    [Optional]
+    attribute String publicKeyAlgID;
+};
+
+// [Namespace=cert]
+dictionary CertResult {
+    number INVALID_PARAMS = 401;
+    number NOT_SUPPORT = 801;
+    number ERR_OUT_OF_MEMORY = 19020001;
+    number ERR_RUNTIME_ERROR = 19020002;
+    number ERR_CRYPTO_OPERATION = 19030001;
+    number ERR_CERT_SIGNATURE_FAILURE = 19030002;
+    number ERR_CERT_NOT_YET_VALID = 19030003;
+    number ERR_CERT_HAS_EXPIRED = 19030004;
+    number ERR_UNABLE_TO_GET_ISSUER_CERT_LOCALLY = 19030005;
+    number ERR_KEYUSAGE_NO_CERTSIGN = 19030006;
+    number ERR_KEYUSAGE_NO_DIGITAL_SIGNATURE = 19030007;
+};
+// [Namespace=cert, Entity=Interface]
+[Entity=Interface]
+interface DataBlob {
+    attribute Uint8Array data;
+};
+// [Namespace=cert, Entity=Interface]
+[Entity=Interface]
+interface DataArray {
+    attribute sequence<Uint8Array> data;
+};
+// [Namespace=cert]
+dictionary EncodingFormat {
+    number FORMAT_DER = 0;
+    number FORMAT_PEM = 1;
+    number FORMAT_PKCS7 = 2;
+};
+// [Namespace=cert]
+dictionary CertItemType {
+    number CERT_ITEM_TYPE_TBS = 0;
+    number CERT_ITEM_TYPE_PUBLIC_KEY = 1;
+    number CERT_ITEM_TYPE_ISSUER_UNIQUE_ID = 2;
+    number CERT_ITEM_TYPE_SUBJECT_UNIQUE_ID = 3;
+    number CERT_ITEM_TYPE_EXTENSIONS = 4;
+};
+// [Namespace=cert]
+dictionary ExtensionOidType {
+    number EXTENSION_OID_TYPE_ALL = 0;
+    number EXTENSION_OID_TYPE_CRITICAL = 1;
+    number EXTENSION_OID_TYPE_UNCRITICAL = 2;
+};
+// [Namespace=cert]
+dictionary ExtensionEntryType {
+    number EXTENSION_ENTRY_TYPE_ENTRY = 0;
+    number EXTENSION_ENTRY_TYPE_ENTRY_CRITICAL = 1;
+    number EXTENSION_ENTRY_TYPE_ENTRY_VALUE = 2;
+};
+// [Namespace=cert, Entity=Interface]
+[Entity=Interface]
+interface EncodingBlob {
+    attribute Uint8Array data;
+    attribute EncodingFormat encodingFormat;
+};
+// [Namespace=cert, Entity=Interface]
+[Entity=Interface]
+interface CertChainData {
+    attribute Uint8Array data;
+    attribute number count;
+    attribute EncodingFormat encodingFormat;
+};
+// [Namespace=cert]
+dictionary EncodingType {
+    number ENCODING_UTF8 = 0;
+};
+[Async, Synthetic]
+callback AsyncCallback_Void = void ();
+[Async, Synthetic]
+callback AsyncCallback_EncodingBlob_Void = void (EncodingBlob result);
+
+// [Namespace=cert, Entity=Interface]
+[Entity=Interface]
+interface X509Cert {
+    void verify(PubKey key, AsyncCallback_Void callback_);
+    async void verify(PubKey key);
+    void getEncoded(AsyncCallback_EncodingBlob_Void callback_);
+    async EncodingBlob getEncoded();
+    PubKey getPublicKey();
+    void checkValidityWithDate(String date);
+    number getVersion();
+    [Deprecated]
+    number getSerialNumber();
+    bigint getCertSerialNumber();
+    DataBlob getIssuerName();
+    DataBlob getSubjectName(optional EncodingType encodingType);
+    String getNotBeforeTime();
+    String getNotAfterTime();
+    DataBlob getSignature();
+    String getSignatureAlgName();
+    String getSignatureAlgOid();
+    DataBlob getSignatureAlgParams();
+    DataBlob getKeyUsage();
+    DataArray getExtKeyUsage();
+    number getBasicConstraints();
+    DataArray getSubjectAltNames();
+    DataArray getIssuerAltNames();
+    DataBlob getItem(CertItemType itemType);
+    boolean match(X509CertMatchParameters param);
+    DataArray getCRLDistributionPoint();
+    X500DistinguishedName getIssuerX500DistinguishedName();
+    X500DistinguishedName getSubjectX500DistinguishedName();
+    [DtsName="toString"]
+    String toString_();
+    Uint8Array hashCode();
+    CertExtension getExtensionsObject();
+};
+// [Namespace=cert, Entity=Interface]
+[Entity=Interface]
+interface CertExtension {
+    EncodingBlob getEncoded();
+    DataArray getOidList(ExtensionOidType valueType);
+    DataBlob getEntry(ExtensionEntryType valueType, DataBlob oid);
+    number checkCA();
+    boolean hasUnsupportedCriticalExtension();
+};
+
+interface Vec2 {
+    attribute number x;
+    attribute number y;
+};
+[Entity=Interface]
+interface Vec3 {
+    attribute number x;
+    attribute number y;
+    attribute number z;
+};
+[Entity=Interface]
+interface Quaternion {
+    attribute number x;
+    attribute number y;
+    attribute number z;
+    attribute number w;
+};
+typedef Vec3 Position3;
+typedef Vec3 Rotation3;
+typedef Vec3 Scale3;
+
+//[Namespace=common2D, Entity=Interface]
+[Entity=Interface]
+interface Rect {
+    attribute number left;
+    attribute number top;
+    attribute number right;
+    attribute number bottom;
+};
+//[Namespace=common2D, Entity=Interface]
+[Entity=Interface]
+interface Point {
+    attribute number x;
+    attribute number y;
+};
+//[Namespace=common2D, Entity=Interface]
+[Entity=Interface]
+interface Point3d: Point {
+    attribute number z;
+};
+
+// [Namespace=drawing]
+dictionary BlendMode {
+    number CLEAR = 0;
+    number SRC = 1;
+    number DST = 2;
+    number SRC_OVER = 3;
+    number DST_OVER = 4;
+    number SRC_IN = 5;
+    number DST_IN = 6;
+    number SRC_OUT = 7;
+    number DST_OUT = 8;
+    number SRC_ATOP = 9;
+    number DST_ATOP = 10;
+    number XOR = 11;
+    number PLUS = 12;
+    number MODULATE = 13;
+    number SCREEN = 14;
+    number OVERLAY = 15;
+    number DARKEN = 16;
+    number LIGHTEN = 17;
+    number COLOR_DODGE = 18;
+    number COLOR_BURN = 19;
+    number HARD_LIGHT = 20;
+    number SOFT_LIGHT = 21;
+    number DIFFERENCE = 22;
+    number EXCLUSION = 23;
+    number MULTIPLY = 24;
+    number HUE = 25;
+    number SATURATION = 26;
+    number COLOR = 27;
+    number LUMINOSITY = 28;
+};
+// [Namespace=drawing]
+dictionary PathDirection {
+    number CLOCKWISE = 0;
+    number COUNTER_CLOCKWISE = 1;
+};
+// [Namespace=drawing]
+dictionary PathFillType {
+    number WINDING = 0;
+    number EVEN_ODD = 1;
+    number INVERSE_WINDING = 2;
+    number INVERSE_EVEN_ODD = 3;
+};
+// [Namespace=drawing]
+dictionary PathMeasureMatrixFlags {
+    number GET_POSITION_MATRIX = 0;
+    number GET_TANGENT_MATRIX = 1;
+    number GET_POSITION_AND_TANGENT_MATRIX = 2;
+};
+// [Namespace=drawing, Entity=Class]
+[Entity=Class]
+interface RoundRect {
+    constructor(Rect rect, number xRadii, number yRadii);
+    void setCorner(CornerPos pos, number x, number y);
+    Point getCorner(CornerPos pos);
+    void offset(number dx, number dy);
+};
+// [Namespace=drawing]
+dictionary PathOp {
+    number DIFFERENCE = 0;
+    number INTERSECT = 1;
+    number UNION = 2;
+    number XOR = 3;
+    number REVERSE_DIFFERENCE = 4;
+};
+// [Namespace=drawing, Entity=Class]
+[Entity=Class]
+interface Path {
+    constructor();
+    constructor(Path path);
+    void moveTo(number x, number y);
+    void lineTo(number x, number y);
+    void arcTo(number x1, number y1, number x2, number y2, number startDeg, number sweepDeg);
+    void quadTo(number ctrlX, number ctrlY, number endX, number endY);
+    void conicTo(number ctrlX, number ctrlY, number endX, number endY, number weight);
+    void cubicTo(number ctrlX1, number ctrlY1, number ctrlX2, number ctrlY2, number endX, number endY);
+    void rMoveTo(number dx, number dy);
+    void rLineTo(number dx, number dy);
+    void rQuadTo(number dx1, number dy1, number dx2, number dy2);
+    void rConicTo(number ctrlX, number ctrlY, number endX, number endY, number weight);
+    void rCubicTo(number ctrlX1, number ctrlY1, number ctrlX2, number ctrlY2, number endX, number endY);
+    void addPolygon(sequence<Point> points, boolean close);
+    boolean op(Path path, PathOp pathOp);
+    void addArc(Rect rect, number startAngle, number sweepAngle);
+    void addCircle(number x, number y, number radius, optional PathDirection pathDirection);
+    void addOval(Rect rect, number start, optional PathDirection pathDirection);
+    void addRect(Rect rect, optional PathDirection pathDirection);
+    void addRoundRect(RoundRect roundRect, optional PathDirection pathDirection);
+    void addPath(Path path, optional (Matrix or undefined) matrix);
+    void transform(Matrix matrix);
+    boolean contains(number x, number y);
+    void setFillType(PathFillType pathFillType);
+    Rect getBounds();
+    void close();
+    Path offset(number dx, number dy);
+    void reset();
+    number getLength(boolean forceClosed);
+    boolean getPositionAndTangent(boolean forceClosed, number distance, Point position, Point tangent);
+    boolean isClosed();
+    boolean getMatrix(boolean forceClosed, number distance, Matrix matrix, PathMeasureMatrixFlags flags);
+    boolean buildFromSvgString(String str);
+};
+// [Namespace=drawing]
+dictionary PointMode {
+    number POINTS = 0;
+    number LINES = 1;
+    number POLYGON = 2;
+};
+// [Namespace=drawing]
+dictionary FilterMode {
+    number FILTER_MODE_NEAREST = 0;
+    number FILTER_MODE_LINEAR = 1;
+};
+// [Namespace=drawing]
+dictionary ShadowFlag {
+    number NONE = 0;
+    number TRANSPARENT_OCCLUDER = 1;
+    number GEOMETRIC_ONLY = 2;
+    number ALL = 3;
+};
+// [Namespace=drawing, Entity=Class]
+[Entity=Class]
+interface SamplingOptions {
+    constructor();
+    constructor(FilterMode filterMode);
+};
+// [Namespace=drawing, Entity=Class]
+[Entity=Class]
+interface Canvas {
+    constructor(PixelMap pixelmap);
+    void drawRect(Rect rect);
+    void drawRect(number left, number top, number right, number bottom);
+    void drawRoundRect(RoundRect roundRect);
+    void drawNestedRoundRect(RoundRect outer, RoundRect inner);
+    void drawBackground(Brush brush);
+    void drawShadow(Path path, Point3d planeParams, Point3d devLightPos, number lightRadius, Color ambientColor, Color spotColor, ShadowFlag flag);
+    void drawCircle(number x, number y, number radius);
+    void drawImage(PixelMap pixelmap, number left, number top, optional SamplingOptions samplingOptions);
+    void drawImageRect(PixelMap pixelmap, Rect dstRect, optional SamplingOptions samplingOptions);
+    void drawImageRectWithSrc(PixelMap pixelmap, Rect srcRect, Rect dstRect, optional SamplingOptions samplingOptions, optional SrcRectConstraint constraint);
+    void drawColor(Color color, optional BlendMode blendMode);
+    void drawColor(number color, optional BlendMode blendMode);
+    void drawColor(number alpha, number red, number green, number blue, optional BlendMode blendMode);
+    void drawOval(Rect oval);
+    void drawArc(Rect arc, number startAngle, number sweepAngle);
+    void drawPoint(number x, number y);
+    void drawPoints(sequence<Point> points, optional PointMode mode);
+    void drawPath(Path path);
+    void drawLine(number x0, number y0, number x1, number y1);
+    void drawSingleCharacter(String text, Font font, number x, number y);
+    void drawTextBlob(TextBlob blob, number x, number y);
+    void drawPixelMapMesh(PixelMap pixelmap, number meshWidth, number meshHeight, sequence<number> vertices, number vertOffset, sequence<number> colors, number colorOffset);
+    void drawRegion(Region region);
+    void attachPen(Pen pen);
+    void attachBrush(Brush brush);
+    void detachPen();
+    void detachBrush();
+    number save();
+    number saveLayer(optional (Rect or undefined) rect, optional (Brush or undefined) brush);
+    void clear(Color color);
+    void restore();
+    void restoreToCount(number count);
+    number getSaveCount();
+    number getWidth();
+    number getHeight();
+    Rect getLocalClipBounds();
+    Matrix getTotalMatrix();
+    void scale(number sx, number sy);
+    void skew(number sx, number sy);
+    void rotate(number degrees, number sx, number sy);
+    void translate(number dx, number dy);
+    void clipPath(Path path, optional ClipOp clipOp, optional boolean doAntiAlias);
+    void clipRect(Rect rect, optional ClipOp clipOp, optional boolean doAntiAlias);
+    void concatMatrix(Matrix matrix);
+    void clipRegion(Region region, optional ClipOp clipOp);
+    void clipRoundRect(RoundRect roundRect, optional ClipOp clipOp, optional boolean doAntiAlias);
+    boolean isClipEmpty();
+    void setMatrix(Matrix matrix);
+    void resetMatrix();
+};
+// [Namespace=drawing]
+dictionary ClipOp {
+    number DIFFERENCE = 0;
+    number INTERSECT = 1;
+};
+// [Namespace=drawing, Entity=Class]
+[Entity=Class]
+interface TextBlobRunBuffer {
+    attribute number glyph;
+    attribute number positionX;
+    attribute number positionY;
+};
+// [Namespace=drawing]
+dictionary TextEncoding {
+    number TEXT_ENCODING_UTF8 = 0;
+    number TEXT_ENCODING_UTF16 = 1;
+    number TEXT_ENCODING_UTF32 = 2;
+    number TEXT_ENCODING_GLYPH_ID = 3;
+};
+// [Namespace=drawing, Entity=Class]
+[Entity=Class]
+interface TextBlob {
+    static TextBlob makeFromString(String text, Font font, optional TextEncoding encoding);
+    static TextBlob makeFromPosText(String text, number len, sequence<Point> points, Font font);
+    static TextBlob makeFromRunBuffer(sequence<TextBlobRunBuffer> pos, Font font, optional Rect bounds);
+    Rect bounds();
+    number uniqueID();
+};
+// [Namespace=drawing, Entity=Class]
+[Entity=Class]
+interface Typeface {
+    String getFamilyName();
+    static Typeface makeFromFile(String filePath);
+};
+// [Namespace=drawing]
+dictionary FontEdging {
+    number ALIAS = 0;
+    number ANTI_ALIAS = 1;
+    number SUBPIXEL_ANTI_ALIAS = 2;
+};
+// [Namespace=drawing]
+dictionary FontHinting {
+    number NONE = 0;
+    number SLIGHT = 1;
+    number NORMAL = 2;
+    number FULL = 3;
+};
+// [Namespace=drawing, Entity=Class]
+[Entity=Class]
+interface Font {
+    void enableSubpixel(boolean isSubpixel);
+    void enableEmbolden(boolean isEmbolden);
+    void enableLinearMetrics(boolean isLinearMetrics);
+    void setSize(number textSize);
+    number getSize();
+    void setTypeface(Typeface typeface);
+    Typeface getTypeface();
+    FontMetrics getMetrics();
+    number measureSingleCharacter(String text);
+    number measureText(String text, TextEncoding encoding);
+    void setScaleX(number scaleX);
+    void setSkewX(number skewX);
+    void setEdging(FontEdging edging);
+    void setHinting(FontHinting hinting);
+    number countText(String text);
+    void setBaselineSnap(boolean isBaselineSnap);
+    boolean isBaselineSnap();
+    void setEmbeddedBitmaps(boolean isEmbeddedBitmaps);
+    boolean isEmbeddedBitmaps();
+    void setForceAutoHinting(boolean isForceAutoHinting);
+    boolean isForceAutoHinting();
+    sequence<number> getWidths(sequence<number> glyphs);
+    sequence<number> textToGlyphs(String text, optional number glyphCount);
+    boolean isSubpixel();
+    boolean isLinearMetrics();
+    number getSkewX();
+    boolean isEmbolden();
+    number getScaleX();
+    FontHinting getHinting();
+    FontEdging getEdging();
+};
+// [Namespace=drawing]
+dictionary FontMetricsFlags {
+    number UNDERLINE_THICKNESS_VALID = 1;
+    number UNDERLINE_POSITION_VALID = 2;
+    number STRIKETHROUGH_THICKNESS_VALID = 4;
+    number STRIKETHROUGH_POSITION_VALID = 8;
+    number BOUNDS_INVALID = 16;
+};
+// [Namespace=drawing, Entity=Class]
+[Entity=Class]
+interface FontMetrics {
+    [Optional]
+    attribute FontMetricsFlags flags;
+    attribute number top;
+    attribute number ascent;
+    attribute number descent;
+    attribute number bottom;
+    attribute number leading;
+    [Optional]
+    attribute number avgCharWidth;
+    [Optional]
+    attribute number maxCharWidth;
+    [Optional]
+    attribute number xMin;
+    [Optional]
+    attribute number xMax;
+    [Optional]
+    attribute number xHeight;
+    [Optional]
+    attribute number capHeight;
+    [Optional]
+    attribute number underlineThickness;
+    [Optional]
+    attribute number underlinePosition;
+    [Optional]
+    attribute number strikethroughThickness;
+    [Optional]
+    attribute number strikethroughPosition;
+};
+// [Namespace=drawing, Entity=Class]
+[Entity=Class]
+interface Lattice {
+    static Lattice createImageLattice(sequence<number> xDivs, sequence<number> yDivs, number fXCount, number fYCount, optional (Rect or undefined) fBounds, optional (sequence<RectType> or undefined) fRectTypes, optional (sequence<Color> or undefined) fColors);
+};
+// [Namespace=drawing]
+dictionary RectType {
+    number DEFAULT = 0;
+    number TRANSPARENT = 1;
+    number FIXEDCOLOR = 2;
+};
+// [Namespace=drawing, Entity=Class]
+[Entity=Class]
+interface MaskFilter {
+    static MaskFilter createBlurMaskFilter(BlurType blurType, number sigma);
+};
+// [Namespace=drawing, Entity=Class]
+[Entity=Class]
+interface PathEffect {
+    static PathEffect createDashPathEffect(sequence<number> intervals, number phase);
+    static PathEffect createCornerPathEffect(number radius);
+};
+// [Namespace=drawing, Entity=Class]
+[Entity=Class]
+interface ShaderEffect {
+    static ShaderEffect createColorShader(number color);
+    static ShaderEffect createLinearGradient(Point startPt, Point endPt, sequence<number> colors, TileMode mode, optional (sequence<number> or undefined) pos, optional (Matrix or undefined) matrix);
+    static ShaderEffect createRadialGradient(Point centerPt, number radius, sequence<number> colors, TileMode mode, optional (sequence<number> or undefined) pos, optional (Matrix or undefined) matrix);
+    static ShaderEffect createSweepGradient(Point centerPt, sequence<number> colors, TileMode mode, number startAngle, number endAngle, optional (sequence<number> or undefined) pos, optional (Matrix or undefined) matrix);
+    static ShaderEffect createConicalGradient(Point startPt, number startRadius, Point endPt, number endRadius, sequence<number> colors, TileMode mode, optional (sequence<number> or undefined) pos, optional (Matrix or undefined) matrix);
+};
+// [Namespace=drawing]
+dictionary TileMode {
+    number CLAMP = 0;
+    number REPEAT = 1;
+    number MIRROR = 2;
+    number DECAL = 3;
+};
+// [Namespace=drawing, Entity=Class]
+[Entity=Class]
+interface ShadowLayer {
+    static ShadowLayer create(number blurRadius, number x, number y, Color color);
+    static ShadowLayer create(number blurRadius, number x, number y, number color);
+};
+// [Namespace=drawing, Entity=Class]
+[Entity=Class]
+interface ColorFilter {
+    static ColorFilter createBlendModeColorFilter(Color color, BlendMode mode);
+    static ColorFilter createBlendModeColorFilter(number color, BlendMode mode);
+    static ColorFilter createComposeColorFilter(ColorFilter outer, ColorFilter inner);
+    static ColorFilter createLinearToSRGBGamma();
+    static ColorFilter createSRGBGammaToLinear();
+    static ColorFilter createLumaColorFilter();
+    /* the original code
+    static ColorFilter createMatrixColorFilter(sequence<Number> matrix);
+    */
+    static ColorFilter createMatrixColorFilter(sequence<number> matrix);
+};
+// [Namespace=drawing, Entity=Class]
+[Entity=Class]
+interface ImageFilter {
+    static ImageFilter createBlurImageFilter(number sigmaX, number sigmaY, TileMode tileMode, optional ImageFilter imageFilter);
+    static ImageFilter createFromColorFilter(ColorFilter colorFilter, optional ImageFilter imageFilter);
+};
+// [Namespace=drawing]
+dictionary JoinStyle {
+    number MITER_JOIN = 0;
+    number ROUND_JOIN = 1;
+    number BEVEL_JOIN = 2;
+};
+// [Namespace=drawing]
+dictionary CapStyle {
+    number FLAT_CAP = 0;
+    number SQUARE_CAP = 1;
+    number ROUND_CAP = 2;
+};
+// [Namespace=drawing]
+dictionary BlurType {
+    number NORMAL = 0;
+    number SOLID = 1;
+    number OUTER = 2;
+    number INNER = 3;
+};
+// [Namespace=drawing, Entity=Class]
+[Entity=Class]
+interface Pen {
+    constructor();
+    constructor(Pen pen);
+    void setMiterLimit(number miter);
+    number getMiterLimit();
+    void setShaderEffect(ShaderEffect shaderEffect);
+    void setColor(Color color);
+    void setColor(number color);
+    void setColor(number alpha, number red, number green, number blue);
+    Color getColor();
+    void setStrokeWidth(number width);
+    number getWidth();
+    void setAntiAlias(boolean aa);
+    boolean isAntiAlias();
+    void setAlpha(number alpha);
+    number getAlpha();
+    void setColorFilter(ColorFilter filter);
+    ColorFilter getColorFilter();
+    void setImageFilter((ImageFilter or undefined) filter);
+    void setMaskFilter(MaskFilter filter);
+    void setPathEffect(PathEffect effect);
+    void setShadowLayer(ShadowLayer shadowLayer);
+    void setBlendMode(BlendMode mode);
+    void setDither(boolean dither);
+    void setJoinStyle(JoinStyle style);
+    JoinStyle getJoinStyle();
+    void setCapStyle(CapStyle style);
+    CapStyle getCapStyle();
+    void reset();
+    boolean getFillPath(Path src, Path dst);
+};
+// [Namespace=drawing, Entity=Class]
+[Entity=Class]
+interface Brush {
+    constructor();
+    constructor(Brush brush);
+    void setColor(Color color);
+    void setColor(number color);
+    void setColor(number alpha, number red, number green, number blue);
+    Color getColor();
+    void setAntiAlias(boolean aa);
+    boolean isAntiAlias();
+    void setAlpha(number alpha);
+    number getAlpha();
+    void setColorFilter(ColorFilter filter);
+    ColorFilter getColorFilter();
+    void setImageFilter((ImageFilter or undefined) filter);
+    void setMaskFilter(MaskFilter filter);
+    void setShadowLayer(ShadowLayer shadowLayer);
+    void setShaderEffect(ShaderEffect shaderEffect);
+    void setBlendMode(BlendMode mode);
+    void reset();
+};
+// [Namespace=drawing, Entity=Class]
+[Entity=Class]
+interface Matrix {
+    constructor();
+    void setRotation(number degree, number px, number py);
+    void setScale(number sx, number sy, number px, number py);
+    void setTranslation(number dx, number dy);
+    void setMatrix(sequence<number> values);
+    void preConcat(Matrix matrix);
+    boolean isEqual(Matrix matrix);
+    boolean invert(Matrix matrix);
+    boolean isIdentity();
+    number getValue(number index);
+    void postRotate(number degree, number px, number py);
+    void postScale(number sx, number sy, number px, number py);
+    void postTranslate(number dx, number dy);
+    void preRotate(number degree, number px, number py);
+    void preScale(number sx, number sy, number px, number py);
+    void preTranslate(number dx, number dy);
+    void reset();
+    sequence<Point> mapPoints(sequence<Point> src);
+    sequence<number> getAll();
+    boolean mapRect(Rect dst, Rect src);
+    boolean setRectToRect(Rect src, Rect dst, ScaleToFit scaleToFit);
+    boolean setPolyToPoly(sequence<Point> src, sequence<Point> dst, number count);
+};
+// [Namespace=drawing]
+dictionary ScaleToFit {
+    number FILL_SCALE_TO_FIT = 0;
+    number START_SCALE_TO_FIT = 1;
+    number CENTER_SCALE_TO_FIT = 2;
+    number END_SCALE_TO_FIT = 3;
+};
+// [Namespace=drawing, Entity=Class]
+[Entity=Class]
+interface Region {
+    boolean isPointContained(number x, number y);
+    boolean isRegionContained(Region other);
+    boolean op(Region region, RegionOp regionOp);
+    boolean quickReject(number left, number top, number right, number bottom);
+    boolean setPath(Path path, Region clip);
+    boolean setRect(number left, number top, number right, number bottom);
+};
+// [Namespace=drawing]
+dictionary RegionOp {
+    number DIFFERENCE = 0;
+    number INTERSECT = 1;
+    number UNION = 2;
+    number XOR = 3;
+    number REVERSE_DIFFERENCE = 4;
+    number REPLACE = 5;
+};
+// [Namespace=drawing]
+dictionary CornerPos {
+    number TOP_LEFT_POS = 0;
+    number TOP_RIGHT_POS = 1;
+    number BOTTOM_RIGHT_POS = 2;
+    number BOTTOM_LEFT_POS = 3;
+};
+// [Namespace=drawing]
+dictionary SrcRectConstraint {
+    number STRICT = 0;
+    number FAST = 1;
+};
+
+[Entity=Class]
+interface DrawingCanvas : Canvas {
+};
+[Entity=Class]
+interface DrawingColorFilter : ColorFilter {
+};
+[Entity=Class]
+interface DrawingLattice : Lattice {
+};
+
+
+[Entity=Class, Component="ImageModifier"]
+interface ImageModifier: ImageAttribute {
+    [Optional]
+    void applyNormalAttribute(ImageAttribute instance);
+};
+[Entity=Class, Component="Image"]
+interface ImageAttribute: [TypeArguments="ImageAttribute"] CommonMethod {
+    [CommonMethod]
+    attribute (String or Resource or PixelMap) alt;
+    [CommonMethod]
+    attribute boolean matchTextDirection;
+    [CommonMethod]
+    attribute boolean fitOriginalSize;
+    [CommonMethod]
+    attribute ResourceColor fillColor;
+    [CommonMethod]
+    attribute ImageFit objectFit;
+    [CommonMethod]
+    attribute ImageRepeat objectRepeat;
+    [CommonMethod]
+    attribute boolean autoResize;
+    [CommonMethod]
+    attribute ImageRenderMode renderMode;
+    [CommonMethod]
+    attribute DynamicRangeMode dynamicRangeMode;
+    [CommonMethod]
+    attribute ImageInterpolation interpolation;
+    [CommonMethod]
+    attribute Literal_Number_height_width sourceSize;
+    [CommonMethod]
+    attribute boolean syncLoad;
+    [CommonMethod]
+    attribute (ColorFilter or DrawingColorFilter) colorFilter;
+    [CommonMethod]
+    attribute CopyOptions copyOption;
+    [CommonMethod]
+    attribute boolean draggable;
+    [CommonMethod]
+    attribute PointLightStyle pointLight;
+    [CommonMethod]
+    attribute number edgeAntialiasing;
+    [CommonMethod]
+    attribute Callback_Type_ImageAttribute_onComplete_callback_event_Void onComplete;
+    [CommonMethod]
+    attribute ImageErrorCallback onError;
+    [CommonMethod]
+    attribute Callback_Void onFinish;
+    [CommonMethod]
+    attribute boolean enableAnalyzer;
+    [CommonMethod]
+    attribute ImageAnalyzerConfig analyzerConfig;
+    [CommonMethod]
+    attribute ResizableOptions resizable;
+    [CommonMethod]
+    attribute boolean privacySensitive;
+    [CommonMethod]
+    attribute ResolutionQuality enhancedImageQuality;
+};
+
+dictionary WebNetErrorList {
+    number NET_OK = 0;
+    number ERR_IO_PENDING = -1;
+    number ERR_FAILED = -2;
+    number ERR_ABORTED = -3;
+    number ERR_INVALID_ARGUMENT = -4;
+    number ERR_INVALID_HANDLE = -5;
+    number ERR_FILE_NOT_FOUND = -6;
+    number ERR_TIMED_OUT = -7;
+    number ERR_FILE_TOO_LARGE = -8;
+    number ERR_UNEXPECTED = -9;
+    number ERR_ACCESS_DENIED = -10;
+    number ERR_NOT_IMPLEMENTED = -11;
+    number ERR_INSUFFICIENT_RESOURCES = -12;
+    number ERR_OUT_OF_MEMORY = -13;
+    number ERR_UPLOAD_FILE_CHANGED = -14;
+    number ERR_SOCKET_NOT_CONNECTED = -15;
+    number ERR_FILE_EXISTS = -16;
+    number ERR_FILE_PATH_TOO_LONG = -17;
+    number ERR_FILE_NO_SPACE = -18;
+    number ERR_FILE_VIRUS_INFECTED = -19;
+    number ERR_BLOCKED_BY_CLIENT = -20;
+    number ERR_NETWORK_CHANGED = -21;
+    number ERR_BLOCKED_BY_ADMINISTRATOR = -22;
+    number ERR_SOCKET_CONNECTED = -23;
+    number ERR_UPLOAD_STREAM_REWIND_NOT_SUPPORTED = -25;
+    number ERR_CONTEXT_SHUT_DOWN = -26;
+    number ERR_BLOCKED_BY_RESPONSE = -27;
+    number ERR_CLEARTEXT_NOT_PERMITTED = -29;
+    number ERR_BLOCKED_BY_CSP = -30;
+    number ERR_H2_OR_QUIC_REQUIRED = -31;
+    number ERR_BLOCKED_BY_ORB = -32;
+    number ERR_CONNECTION_CLOSED = -100;
+    number ERR_CONNECTION_RESET = -101;
+    number ERR_CONNECTION_REFUSED = -102;
+    number ERR_CONNECTION_ABORTED = -103;
+    number ERR_CONNECTION_FAILED = -104;
+    number ERR_NAME_NOT_RESOLVED = -105;
+    number ERR_INTERNET_DISCONNECTED = -106;
+    number ERR_SSL_PROTOCOL_ERROR = -107;
+    number ERR_ADDRESS_INVALID = -108;
+    number ERR_ADDRESS_UNREACHABLE = -109;
+    number ERR_SSL_CLIENT_AUTH_CERT_NEEDED = -110;
+    number ERR_TUNNEL_CONNECTION_FAILED = -111;
+    number ERR_NO_SSL_VERSIONS_ENABLED = -112;
+    number ERR_SSL_VERSION_OR_CIPHER_MISMATCH = -113;
+    number ERR_SSL_RENEGOTIATION_REQUESTED = -114;
+    number ERR_PROXY_AUTH_UNSUPPORTED = -115;
+    number ERR_BAD_SSL_CLIENT_AUTH_CERT = -117;
+    number ERR_CONNECTION_TIMED_OUT = -118;
+    number ERR_HOST_RESOLVER_QUEUE_TOO_LARGE = -119;
+    number ERR_SOCKS_CONNECTION_FAILED = -120;
+    number ERR_SOCKS_CONNECTION_HOST_UNREACHABLE = -121;
+    number ERR_ALPN_NEGOTIATION_FAILED = -122;
+    number ERR_SSL_NO_RENEGOTIATION = -123;
+    number ERR_WINSOCK_UNEXPECTED_WRITTEN_BYTES = -124;
+    number ERR_SSL_DECOMPRESSION_FAILURE_ALERT = -125;
+    number ERR_SSL_BAD_RECORD_MAC_ALERT = -126;
+    number ERR_PROXY_AUTH_REQUESTED = -127;
+    number ERR_PROXY_CONNECTION_FAILED = -130;
+    number ERR_MANDATORY_PROXY_CONFIGURATION_FAILED = -131;
+    number ERR_PRECONNECT_MAX_SOCKET_LIMIT = -133;
+    number ERR_SSL_CLIENT_AUTH_PRIVATE_KEY_ACCESS_DENIED = -134;
+    number ERR_SSL_CLIENT_AUTH_CERT_NO_PRIVATE_KEY = -135;
+    number ERR_PROXY_CERTIFICATE_INVALID = -136;
+    number ERR_NAME_RESOLUTION_FAILED = -137;
+    number ERR_NETWORK_ACCESS_DENIED = -138;
+    number ERR_TEMPORARILY_THROTTLED = -139;
+    number ERR_HTTPS_PROXY_TUNNEL_RESPONSE_REDIRECT = -140;
+    number ERR_SSL_CLIENT_AUTH_SIGNATURE_FAILED = -141;
+    number ERR_MSG_TOO_BIG = -142;
+    number ERR_WS_PROTOCOL_ERROR = -145;
+    number ERR_ADDRESS_IN_USE = -147;
+    number ERR_SSL_HANDSHAKE_NOT_COMPLETED = -148;
+    number ERR_SSL_BAD_PEER_PUBLIC_KEY = -149;
+    number ERR_SSL_PINNED_KEY_NOT_IN_CERT_CHAIN = -150;
+    number ERR_CLIENT_AUTH_CERT_TYPE_UNSUPPORTED = -151;
+    number ERR_SSL_DECRYPT_ERROR_ALERT = -153;
+    number ERR_WS_THROTTLE_QUEUE_TOO_LARGE = -154;
+    number ERR_SSL_SERVER_CERT_CHANGED = -156;
+    number ERR_SSL_UNRECOGNIZED_NAME_ALERT = -159;
+    number ERR_SOCKET_SET_RECEIVE_BUFFER_SIZE_ERROR = -160;
+    number ERR_SOCKET_SET_SEND_BUFFER_SIZE_ERROR = -161;
+    number ERR_SOCKET_RECEIVE_BUFFER_SIZE_UNCHANGEABLE = -162;
+    number ERR_SOCKET_SEND_BUFFER_SIZE_UNCHANGEABLE = -163;
+    number ERR_SSL_CLIENT_AUTH_CERT_BAD_FORMAT = -164;
+    number ERR_ICANN_NAME_COLLISION = -166;
+    number ERR_SSL_SERVER_CERT_BAD_FORMAT = -167;
+    number ERR_CT_STH_PARSING_FAILED = -168;
+    number ERR_CT_STH_INCOMPLETE = -169;
+    number ERR_UNABLE_TO_REUSE_CONNECTION_FOR_PROXY_AUTH = -170;
+    number ERR_CT_CONSISTENCY_PROOF_PARSING_FAILED = -171;
+    number ERR_SSL_OBSOLETE_CIPHER = -172;
+    number ERR_WS_UPGRADE = -173;
+    number ERR_READ_IF_READY_NOT_IMPLEMENTED = -174;
+    number ERR_NO_BUFFER_SPACE = -176;
+    number ERR_SSL_CLIENT_AUTH_NO_COMMON_ALGORITHMS = -177;
+    number ERR_EARLY_DATA_REJECTED = -178;
+    number ERR_WRONG_VERSION_ON_EARLY_DATA = -179;
+    number ERR_TLS13_DOWNGRADE_DETECTED = -180;
+    number ERR_SSL_KEY_USAGE_INCOMPATIBLE = -181;
+    number ERR_INVALID_ECH_CONFIG_LIST = -182;
+    number ERR_ECH_NOT_NEGOTIATED = -183;
+    number ERR_ECH_FALLBACK_CERTIFICATE_INVALID = -184;
+    number ERR_CERT_COMMON_NAME_INVALID = -200;
+    number ERR_CERT_DATE_INVALID = -201;
+    number ERR_CERT_AUTHORITY_INVALID = -202;
+    number ERR_CERT_CONTAINS_ERRORS = -203;
+    number ERR_CERT_NO_REVOCATION_MECHANISM = -204;
+    number ERR_CERT_UNABLE_TO_CHECK_REVOCATION = -205;
+    number ERR_CERT_REVOKED = -206;
+    number ERR_CERT_INVALID = -207;
+    number ERR_CERT_WEAK_SIGNATURE_ALGORITHM = -208;
+    number ERR_CERT_NON_UNIQUE_NAME = -210;
+    number ERR_CERT_WEAK_KEY = -211;
+    number ERR_CERT_NAME_CONSTRAINT_VIOLATION = -212;
+    number ERR_CERT_VALIDITY_TOO_LONG = -213;
+    number ERR_CERTIFICATE_TRANSPARENCY_REQUIRED = -214;
+    number ERR_CERT_SYMANTEC_LEGACY = -215;
+    number ERR_CERT_KNOWN_INTERCEPTION_BLOCKED = -217;
+    number ERR_SSL_OBSOLETE_VERSION_OR_CIPHER = -218;
+    number ERR_CERT_END = -219;
+    number ERR_INVALID_URL = -300;
+    number ERR_DISALLOWED_URL_SCHEME = -301;
+    number ERR_UNKNOWN_URL_SCHEME = -302;
+    number ERR_INVALID_REDIRECT = -303;
+    number ERR_TOO_MANY_REDIRECTS = -310;
+    number ERR_UNSAFE_REDIRECT = -311;
+    number ERR_UNSAFE_PORT = -312;
+    number ERR_INVALID_RESPONSE = -320;
+    number ERR_INVALID_CHUNKED_ENCODING = -321;
+    number ERR_METHOD_UNSUPPORTED = -322;
+    number ERR_UNEXPECTED_PROXY_AUTH = -323;
+    number ERR_EMPTY_RESPONSE = -324;
+    number ERR_RESPONSE_HEADERS_TOO_BIG = -325;
+    number ERR_PAC_SCRIPT_FAILED = -327;
+    number ERR_REQUEST_RANGE_NOT_SATISFIABLE = -328;
+    number ERR_MALFORMED_IDENTITY = -329;
+    number ERR_CONTENT_DECODING_FAILED = -330;
+    number ERR_NETWORK_IO_SUSPENDED = -331;
+    number ERR_SYN_REPLY_NOT_RECEIVED = -332;
+    number ERR_ENCODING_CONVERSION_FAILED = -333;
+    number ERR_UNRECOGNIZED_FTP_DIRECTORY_LISTING_FORMAT = -334;
+    number ERR_NO_SUPPORTED_PROXIES = -336;
+    number ERR_HTTP2_PROTOCOL_ERROR = -337;
+    number ERR_INVALID_AUTH_CREDENTIALS = -338;
+    number ERR_UNSUPPORTED_AUTH_SCHEME = -339;
+    number ERR_ENCODING_DETECTION_FAILED = -340;
+    number ERR_MISSING_AUTH_CREDENTIALS = -341;
+    number ERR_UNEXPECTED_SECURITY_LIBRARY_STATUS = -342;
+    number ERR_MISCONFIGURED_AUTH_ENVIRONMENT = -343;
+    number ERR_UNDOCUMENTED_SECURITY_LIBRARY_STATUS = -344;
+    number ERR_RESPONSE_BODY_TOO_BIG_TO_DRAIN = -345;
+    number ERR_RESPONSE_HEADERS_MULTIPLE_CONTENT_LENGTH = -346;
+    number ERR_INCOMPLETE_HTTP2_HEADERS = -347;
+    number ERR_PAC_NOT_IN_DHCP = -348;
+    number ERR_RESPONSE_HEADERS_MULTIPLE_CONTENT_DISPOSITION = -349;
+    number ERR_RESPONSE_HEADERS_MULTIPLE_LOCATION = -350;
+    number ERR_HTTP2_SERVER_REFUSED_STREAM = -351;
+    number ERR_HTTP2_PING_FAILED = -352;
+    number ERR_CONTENT_LENGTH_MISMATCH = -354;
+    number ERR_INCOMPLETE_CHUNKED_ENCODING = -355;
+    number ERR_QUIC_PROTOCOL_ERROR = -356;
+    number ERR_RESPONSE_HEADERS_TRUNCATED = -357;
+    number ERR_QUIC_HANDSHAKE_FAILED = -358;
+    number ERR_HTTP2_INADEQUATE_TRANSPORT_SECURITY = -360;
+    number ERR_HTTP2_FLOW_CONTROL_ERROR = -361;
+    number ERR_HTTP2_FRAME_SIZE_ERROR = -362;
+    number ERR_HTTP2_COMPRESSION_ERROR = -363;
+    number ERR_PROXY_AUTH_REQUESTED_WITH_NO_CONNECTION = -364;
+    number ERR_HTTP_1_1_REQUIRED = -365;
+    number ERR_PROXY_HTTP_1_1_REQUIRED = -366;
+    number ERR_PAC_SCRIPT_TERMINATED = -367;
+    number ERR_INVALID_HTTP_RESPONSE = -370;
+    number ERR_CONTENT_DECODING_INIT_FAILED = -371;
+    number ERR_HTTP2_RST_STREAM_NO_ERROR_RECEIVED = -372;
+    number ERR_HTTP2_PUSHED_STREAM_NOT_AVAILABLE = -373;
+    number ERR_HTTP2_CLAIMED_PUSHED_STREAM_RESET_BY_SERVER = -374;
+    number ERR_TOO_MANY_RETRIES = -375;
+    number ERR_HTTP2_STREAM_CLOSED = -376;
+    number ERR_HTTP2_CLIENT_REFUSED_STREAM = -377;
+    number ERR_HTTP2_PUSHED_RESPONSE_DOES_NOT_MATCH = -378;
+    number ERR_HTTP_RESPONSE_CODE_FAILURE = -379;
+    number ERR_QUIC_UNKNOWN_CERT_ROOT = -380;
+    number ERR_QUIC_GOAWAY_REQUEST_CAN_BE_RETRIED = -381;
+    number ERR_TOO_MANY_ACCEPT_CH_RESTARTS = -382;
+    number ERR_INCONSISTENT_IP_ADDRESS_SPACE = -383;
+    number ERR_CACHED_IP_ADDRESS_SPACE_BLOCKED_BY_LOCAL_NETWORK_ACCESS_POLICY = -384;
+    number ERR_CACHE_MISS = -400;
+    number ERR_CACHE_READ_FAILURE = -401;
+    number ERR_CACHE_WRITE_FAILURE = -402;
+    number ERR_CACHE_OPERATION_UNSUPPORTED = -403;
+    number ERR_CACHE_OPEN_FAILURE = -404;
+    number ERR_CACHE_CREATE_FAILURE = -405;
+    number ERR_CACHE_RACE = -406;
+    number ERR_CACHE_CHECKSUM_READ_FAILURE = -407;
+    number ERR_CACHE_CHECKSUM_MISMATCH = -408;
+    number ERR_CACHE_LOCK_TIMEOUT = -409;
+    number ERR_CACHE_AUTH_FAILURE_AFTER_READ = -410;
+    number ERR_CACHE_ENTRY_NOT_SUITABLE = -411;
+    number ERR_CACHE_DOOM_FAILURE = -412;
+    number ERR_CACHE_OPEN_OR_CREATE_FAILURE = -413;
+    number ERR_INSECURE_RESPONSE = -501;
+    number ERR_NO_PRIVATE_KEY_FOR_CERT = -502;
+    number ERR_ADD_USER_CERT_FAILED = -503;
+    number ERR_INVALID_SIGNED_EXCHANGE = -504;
+    number ERR_INVALID_WEB_BUNDLE = -505;
+    number ERR_TRUST_TOKEN_OPERATION_FAILED = -506;
+    number ERR_TRUST_TOKEN_OPERATION_SUCCESS_WITHOUT_SENDING_REQUEST = -507;
+    number ERR_FTP_FAILED = -601;
+    number ERR_FTP_SERVICE_UNAVAILABLE = -602;
+    number ERR_FTP_TRANSFER_ABORTED = -603;
+    number ERR_FTP_FILE_BUSY = -604;
+    number ERR_FTP_SYNTAX_ERROR = -605;
+    number ERR_FTP_COMMAND_UNSUPPORTED = -606;
+    number ERR_FTP_BAD_COMMAND_SEQUENCE = -607;
+    number ERR_PKCS12_IMPORT_BAD_PASSWORD = -701;
+    number ERR_PKCS12_IMPORT_FAILED = -702;
+    number ERR_IMPORT_CA_CERT_NOT_CA = -703;
+    number ERR_IMPORT_CERT_ALREADY_EXISTS = -704;
+    number ERR_IMPORT_CA_CERT_FAILED = -705;
+    number ERR_IMPORT_SERVER_CERT_FAILED = -706;
+    number ERR_PKCS12_IMPORT_INVALID_MAC = -707;
+    number ERR_PKCS12_IMPORT_INVALID_FILE = -708;
+    number ERR_PKCS12_IMPORT_UNSUPPORTED = -709;
+    number ERR_KEY_GENERATION_FAILED = -710;
+    number ERR_PRIVATE_KEY_EXPORT_FAILED = -712;
+    number ERR_SELF_SIGNED_CERT_GENERATION_FAILED = -713;
+    number ERR_CERT_DATABASE_CHANGED = -714;
+    number ERR_CERT_VERIFIER_CHANGED = -716;
+    number ERR_DNS_MALFORMED_RESPONSE = -800;
+    number ERR_DNS_SERVER_REQUIRES_TCP = -801;
+    number ERR_DNS_SERVER_FAILED = -802;
+    number ERR_DNS_TIMED_OUT = -803;
+    number ERR_DNS_CACHE_MISS = -804;
+    number ERR_DNS_SEARCH_EMPTY = -805;
+    number ERR_DNS_SORT_ERROR = -806;
+    number ERR_DNS_SECURE_RESOLVER_HOSTNAME_RESOLUTION_FAILED = -808;
+    number ERR_DNS_NAME_HTTPS_ONLY = -809;
+    number ERR_DNS_REQUEST_CANCELED = -810;
+    number ERR_DNS_NO_MATCHING_SUPPORTED_ALPN = -811;
+};
+
+[Entity=Interface, TypeParameters="T"]
+interface Callback {
+    [CallSignature]
+    void invoke(T data);
+};
+[Entity=Interface, TypeParameters="T extends Error = BusinessError"]
+interface ErrorCallback {
+    [CallSignature]
+    void invoke(T err);
+};
+[Entity=Interface, TypeParameters="T,E = void"]
+interface AsyncCallback {
+    [CallSignature]
+    void invoke([TypeArguments="E"] BusinessError err, T data);
+};
+[Entity=Interface, TypeParameters="T = void"]
+interface BusinessError: Error {
+    attribute number code;
+    [Optional]
+    attribute T data;
+};
