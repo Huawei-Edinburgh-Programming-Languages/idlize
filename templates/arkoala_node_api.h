@@ -73,7 +73,7 @@ typedef struct GenericServiceAPI {
     void (*setLogger)(const ServiceLogger* logger);
 } GenericServiceAPI;
 
-typedef void (*Ark_VsyncCallback)(Ark_PipelineContext);
+typedef void (*Ark_VsyncCallback)();
 
 typedef struct %CPP_PREFIX%ArkUIExtendedNodeAPI {
     Ark_Int32 version;
