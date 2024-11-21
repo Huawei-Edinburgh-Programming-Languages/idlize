@@ -562,8 +562,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
 
     serializeTupleType(node: ts.TupleTypeNode, nameSuggestion?: NameSuggestion, typeParameters?: ts.NodeArray<ts.Node>, withOperator: boolean = false): idl.IDLInterface {
         const properties = node.elements.map((it, index) => this.serializeTupleProperty(it, index, withOperator))
-        const file_basename = path.basename(this.sourceFile.fileName, ".d.ts")
-        const syntheticName = `Tuple_${properties.map(it => this.computeTypeName(it.type)).join("_")}_${file_basename}`
+        const syntheticName = `Tuple_${properties.map(it => this.computeTypeName(it.type)).join("_")}`
         const selectedName = selectName(nameSuggestion, syntheticName)
         return idl.createInterface(
             selectedName,
