@@ -1194,24 +1194,24 @@
 |`contentType`| Function | Spirin Andrey | done |  |
 |`placeholderColor`| Function | Spirin Andrey | done |  |
 |`textOverflow`| Function | Spirin Andrey | blocked AceEngine|https://gitee.com/openharmony/arkui_ace_engine/issues/IB57XU|
-|`textIndent`| Function | Spirin Andrey | testskipped |  |
+|`textIndent`| Function | Spirin Andrey | done |  |
 |`placeholderFont`| Function | Spirin Andrey | testskipped |  |
 |`enterKeyType`| Function | Spirin Andrey | done |  |
 |`caretColor`| Function | Spirin Andrey | done |  |
-|`onEditChanged`| Function | Spirin Andrey | in progress|  |
-|`onEditChange`| Function | Spirin Andrey | in progress|  |
-|`onSubmit`| Function | Spirin Andrey | in progress|  |
+|`onEditChanged`| Function | Spirin Andrey | devdone |  |
+|`onEditChange`| Function | Spirin Andrey | devdone |  |
+|`onSubmit`| Function | Spirin Andrey | devdone |  |
 |`onChange`| Function | Spirin Andrey | in progress|  |
-|`onTextSelectionChange`| Function | Spirin Andrey | in progress|  |
-|`onContentScroll`| Function | Spirin Andrey | in progress|  |
+|`onTextSelectionChange`| Function | Spirin Andrey | devdone |  |
+|`onContentScroll`| Function | Spirin Andrey | devdone |  |
 |`maxLength`| Function | Spirin Andrey | done |  |
 |`fontColor`| Function | Spirin Andrey | done |  |
-|`fontSize`| Function | Spirin Andrey | testskipped |  |
+|`fontSize`| Function | Spirin Andrey | done |  |
 |`fontStyle`| Function | Spirin Andrey | done |  |
-|`fontWeight`| Function | Spirin Andrey | testskipped |  |
-|`fontFamily`| Function | Spirin Andrey | testskipped |  |
-|`onCopy`| Function | Spirin Andrey | in progress |  |
-|`onCut`| Function | Spirin Andrey | in progress|  |
+|`fontWeight`| Function | Spirin Andrey | done |  |
+|`fontFamily`| Function | Spirin Andrey | done |  |
+|`onCopy`| Function | Spirin Andrey | devdone |  |
+|`onCut`| Function | Spirin Andrey | devdone|  |
 |`onPaste`| Function | Spirin Andrey | in progress|  |
 |`copyOption`| Function | Spirin Andrey | done |  |
 |`showPasswordIcon`| Function | Spirin Andrey | done |  |
@@ -1221,7 +1221,7 @@
 |`selectedBackgroundColor`| Function | Spirin Andrey | done |  |
 |`caretPosition`| Function | Spirin Andrey | done |  |
 |`enableKeyboardOnFocus`| Function | Spirin Andrey | done |  |
-|`passwordIcon`| Function | Spirin Andrey | devdone |  |
+|`passwordIcon`| Function | Spirin Andrey | done |  |
 |`showError`| Function | Spirin Andrey | done |  |
 |`showUnit`| Function | Spirin Andrey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`showUnderline`| Function | Spirin Andrey | done |  |
@@ -1233,8 +1233,8 @@
 |`lineBreakStrategy`| Function | Spirin Andrey | done |  |
 |`cancelButton`| Function | Spirin Andrey | devdone |  |
 |`selectAll`| Function | Spirin Andrey | done |  |
-|`minFontSize`| Function | Spirin Andrey | testskipped  |  |
-|`maxFontSize`| Function | Spirin Andrey | testskipped  |  |
+|`minFontSize`| Function | Spirin Andrey | done  |  |
+|`maxFontSize`| Function | Spirin Andrey | done  |  |
 |`heightAdaptivePolicy`| Function | Spirin Andrey | done |  |
 |`enableAutoFill`| Function | Spirin Andrey | done |  |
 |`decoration`| Function | Spirin Andrey | testskipped  |  |
@@ -1243,11 +1243,11 @@
 |`passwordRules`| Function | Spirin Andrey | done |  |
 |`fontFeature`| Function | Spirin Andrey | testskipped  |  |
 |`showPassword`| Function | Spirin Andrey | done |  |
-|`onSecurityStateChange`| Function | Spirin Andrey | in progress|  |
+|`onSecurityStateChange`| Function | Spirin Andrey | devdone |  |
 |`onWillInsert`| Function | Spirin Andrey | in progress|  |
-|`onDidInsert`| Function | Spirin Andrey | in progress|  |
+|`onDidInsert`| Function | Spirin Andrey | devdone |  |
 |`onWillDelete`| Function | Spirin Andrey | in progress|  |
-|`onDidDelete`| Function | Spirin Andrey | in progress|  |
+|`onDidDelete`| Function | Spirin Andrey | devdone |  |
 |`editMenuOptions`| Function | Spirin Andrey | in progress |  |
 |`enablePreviewText`| Function | Spirin Andrey | done |  |
 |`enableHapticFeedback`| Function | Spirin Andrey | done |  |
@@ -1870,9 +1870,9 @@
 |`onCreateMenu`| Function |Erokhin Ilya | in progress |  |
 |`onMenuItemClick`| Function |Erokhin Ilya | in progress |  |
 |*TextInputController*| *Class* | Spirin Andrey | in progress |  |
-|`caretPosition`| Function | Spirin Andrey | devdone |  |
-|`setTextSelection`| Function | Spirin Andrey | devdone |  |
-|`stopEditing`| Function |  Spirin Andrey | devdone |  |
+|`caretPosition`| Function | Spirin Andrey | testskipped |  |
+|`setTextSelection`| Function | Spirin Andrey | testskipped |  |
+|`stopEditing`| Function |  Spirin Andrey | testskipped |  |
 |*TextPickerDialog*| *Class* | Ekaterina Stepanova | in progress | |
 |`show`| Function | Ekaterina Stepanova | in progress | |
 |*TextTimerController*| *Class* |Ekaterina Stepanova| done |  |
