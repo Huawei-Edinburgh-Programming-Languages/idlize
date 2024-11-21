@@ -1088,13 +1088,13 @@
 |`minFontScale`| Function |Samarin Sergey |in progress |  |
 |`maxFontScale`| Function |Samarin Sergey |in progress |  |
 |`fontStyle`| Function |Samarin Sergey | done |  |
-|`fontWeight`| Function |Samarin Sergey |in progress |  |
+|`fontWeight`| Function |Samarin Sergey | devdone |  |
 |`lineSpacing`| Function |Samarin Sergey |in progress |  |
-|`textAlign`| Function |Samarin Sergey |in progress |  |
-|`lineHeight`| Function |Samarin Sergey |in progress |  |
+|`textAlign`| Function |Samarin Sergey | devdone |  |
+|`lineHeight`| Function |Samarin Sergey | devdone |  |
 |`textOverflow`| Function |Samarin Sergey | done |  |
 |`fontFamily`| Function |Samarin Sergey |in progress |  |
-|`maxLines`| Function |Samarin Sergey |in progress |  |
+|`maxLines`| Function |Samarin Sergey | devdone |  |
 |`decoration`| Function |Samarin Sergey |in progress |  |
 |`letterSpacing`| Function |Samarin Sergey |in progress |  |
 |`textCase`| Function |Samarin Sergey | done |  |
