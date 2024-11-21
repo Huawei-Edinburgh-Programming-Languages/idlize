@@ -392,6 +392,10 @@ declare class CommonMethod<T> {
 
     gestureModifier(modifier: GestureModifier): T;
 
+    onClick(event: (event: ClickEvent) => void): T;
+
+    onClick(event: Callback<ClickEvent>, distanceThreshold: number): T;
+
     //~onGestureRecognizerJudgeBegin(callback: GestureRecognizerJudgeBeginCallback): T;
 }
 

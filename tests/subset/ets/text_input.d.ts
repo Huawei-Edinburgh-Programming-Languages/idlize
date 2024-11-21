@@ -30,7 +30,7 @@ declare type EditableTextOnChangeCallback = (value: string, previewText?: Previe
 declare interface PreviewText {
     offset: number;
     value: string;
-  }
+}
 
 declare interface TextInputOptions {
 
