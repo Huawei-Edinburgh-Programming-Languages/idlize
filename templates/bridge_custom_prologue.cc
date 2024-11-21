@@ -346,7 +346,7 @@ KOALA_INTEROP_CTX_V2(SetLazyItemIndexer, Ark_NativePointer, Ark_Int32)
 // TODO: map if multiple pipeline contexts.
 static KVMDeferred* currentVsyncDeferred = nullptr;
 
-void vsyncCallback() {
+void vsyncCallback(Ark_PipelineContext context) {
     if (currentVsyncDeferred) {
         currentVsyncDeferred->resolve(currentVsyncDeferred, nullptr, 0);
         currentVsyncDeferred = nullptr;
@@ -374,14 +374,14 @@ KVMObjectHandle impl_VSyncAwait(KVMContext vmContext, Ark_NativePointer pipeline
 }
 KOALA_INTEROP_CTX_1(VSyncAwait, KVMObjectHandle, Ark_NativePointer)
 
-void impl_UnblockVsyncWait()
+void impl_UnblockVsyncWait(Ark_NativePointer pipelineContext)
 {
     if (currentVsyncDeferred) {
         currentVsyncDeferred->resolve(currentVsyncDeferred, nullptr, 0);
         currentVsyncDeferred = nullptr;
     }
 }
-KOALA_INTEROP_V0(UnblockVsyncWait)
+KOALA_INTEROP_V1(UnblockVsyncWait, Ark_NativePointer)
 
 void impl_SetCustomCallback(KVMContext vmContext, Ark_NativePointer nodePtr, Ark_Int32 updaterId)
 {
