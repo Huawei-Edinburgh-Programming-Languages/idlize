@@ -1928,9 +1928,9 @@
 |`getOrigin`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`grant`| Function | Erokhin Ilya | devdone |  |
 |`deny`| Function | Erokhin Ilya | devdone |  |
-|*DataResubmissionHandler*| *Class* | Erokhin Ilya | in progress |  |
-|`resend`| Function | Erokhin Ilya | in progress |  |
-|`cancel`| Function | Erokhin Ilya | in progress |  |
+|*DataResubmissionHandler*| *Class* | Erokhin Ilya | devdone |  |
+|`resend`| Function | Erokhin Ilya | devdone |  |
+|`cancel`| Function | Erokhin Ilya | devdone |  |
 |*ControllerHandler*| *Class* | Erokhin Ilya | in progress |  |
 |`setWebController`| Function | Erokhin Ilya | in progress |  |
 |*WebContextMenuParam*| *Class* | Erokhin Ilya | blocked |  |
