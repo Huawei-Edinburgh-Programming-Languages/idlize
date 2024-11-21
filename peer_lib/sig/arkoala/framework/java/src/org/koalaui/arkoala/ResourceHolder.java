@@ -37,15 +37,17 @@ public class ResourceHolder {
     }
 
     public void hold(int resourceId) {
-        if (this.resources.get(resourceId) == null)
+        ResourceInfo info = this.resources.get(resourceId);
+        if (info == null)
             throw new Error("Resource " + resourceId + " does not exists, can not hold");
-        this.resources.get(resourceId).holdersCount++;
+        else
+            info.holdersCount++;
     }
 
     public void release(int resourceId) {
-        if (this.resources.get(resourceId) == null)
-            throw new Error("Resource " + resourceId + " does not exists, can not release");
         ResourceInfo resource = this.resources.get(resourceId);
+        if (resource == null)
+            throw new Error("Resource " + resourceId + " does not exists, can not release");
         resource.holdersCount--;
         if (resource.holdersCount <= 0)
             this.resources.remove(resourceId);
