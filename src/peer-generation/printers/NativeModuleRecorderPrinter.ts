@@ -15,21 +15,20 @@
 
 import { createLanguageWriter, LanguageWriter, Method, NamedMethodSignature } from "../LanguageWriters";
 import { PeerClassBase } from "../PeerClass";
-import { IdlPeerClass } from "../idl/IdlPeerClass";
-import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
-import { IdlPeerMethod } from "../idl/IdlPeerMethod";
+import { PeerClass } from "../PeerClass";
+import { PeerLibrary } from "../PeerLibrary";
+import { PeerMethod } from "../PeerMethod";
 import { ImportsCollector } from "../ImportsCollector";
 import { makeSyntheticDeclarationsFiles } from "../idl/IdlSyntheticDeclarations";
 import { Language } from "../../Language";
-import { createCallback, createContainerType, createParameter, createReferenceType, createUnionType, IDLBigintType, IDLI32Type, IDLNullType, IDLNumberType, IDLObjectType, IDLPointerType, IDLStringType, IDLType, IDLU8Type, IDLUint8ArrayType, IDLVoidType, toIDLType } from "../../idl";
-import { generateSyntheticFunctionName } from "../../IDLVisitor";
+import { createParameter, createReferenceType, createUnionType, IDLI32Type, IDLNullType, IDLNumberType, IDLObjectType, IDLPointerType, IDLStringType, IDLType, IDLUint8ArrayType, IDLVoidType, toIDLType } from "../../idl";
 import { collectMaterializedImports } from "../Materialized";
 
 class NativeModuleRecorderVisitor {
     readonly nativeModuleRecorder: LanguageWriter
 
     constructor(
-        protected readonly library: IdlPeerLibrary,
+        protected readonly library: PeerLibrary,
     ) {
         this.nativeModuleRecorder = createLanguageWriter(library.language, this.library)
     }
@@ -58,21 +57,21 @@ class NativeModuleRecorderVisitor {
         })
     }
 
-    private printPeerMethods(peer: IdlPeerClass) {
+    private printPeerMethods(peer: PeerClass) {
         peer.methods.forEach(it => this.printPeerMethod(peer, it, this.nativeModuleRecorder, undefined))
     }
 
-    private printInterface(clazz: IdlPeerClass) {
+    private printInterface(clazz: PeerClass) {
         this.nativeModuleRecorder.writeInterface(`${clazz.componentName}Interface`, w => {
             for (const method of clazz.methods) {
                 for (const arg of method.argConvertors) {
-                    w.print(`${method.overloadedName}_${arg.param}?: ${w.stringifyType(arg.idlType)}`)
+                    w.print(`${method.overloadedName}_${arg.param}?: ${w.getNodeName(arg.idlType)}`)
                 }
             }
         }, clazz.parentComponentName ? [`${clazz.parentComponentName}Interface`, `UIElement`] : undefined)
     }
 
-    private printPeerMethod(clazz: PeerClassBase, method: IdlPeerMethod, nativeModuleRecorder: LanguageWriter, returnType?: IDLType) {
+    private printPeerMethod(clazz: PeerClassBase, method: PeerMethod, nativeModuleRecorder: LanguageWriter, returnType?: IDLType) {
         const component = clazz.generatedName(method.isCallSignature)
         const interfaceName = clazz.getComponentName()
         clazz.setGenerationContext(`${method.isCallSignature ? "" : method.overloadedName}()`)
@@ -319,7 +318,7 @@ class NativeModuleRecorderVisitor {
 
     printConstructor(writer: LanguageWriter) {
         const [paramType] = this.library.factory.generateCallback(
-            (type) => writer.stringifyType(type),
+            (type) => writer.getNodeName(type),
             [createParameter('type', IDLI32Type)],
             IDLStringType
         )
@@ -360,7 +359,7 @@ class NativeModuleRecorderVisitor {
     }
 }
 
-export function printNativeModuleRecorder(library: IdlPeerLibrary): string {
+export function printNativeModuleRecorder(library: PeerLibrary): string {
     let visitor
     switch (library.language) {
         case Language.TS:

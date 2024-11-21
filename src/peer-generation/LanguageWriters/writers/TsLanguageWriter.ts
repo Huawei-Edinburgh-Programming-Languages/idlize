@@ -41,6 +41,7 @@ import { ArgConvertor, EnumConvertor, RuntimeType } from "../../ArgConvertors"
 import { ReferenceResolver } from "../../ReferenceResolver"
 import { convertType, IdlNameConvertor, TypeConvertor } from "../nameConvertor"
 import { TsIDLNodeToStringConverter } from "../convertors/TSConvertors"
+import { isStringEnum } from "../../idl/common"
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -61,10 +62,10 @@ export class TSLambdaExpression extends LambdaExpression {
     asString(): string {
         const params = this.signature.args.map((it, i) => {
             const maybeOptional = idl.isOptionalType(it) ? "?" : ""
-            return `${this.signature.argName(i)}${maybeOptional}: ${this.convertor.convertType(it)}`
+            return `${this.signature.argName(i)}${maybeOptional}: ${this.convertor.convert(it)}`
         })
 
-        return `(${params.join(", ")}): ${this.convertor.convertType(this.signature.returnType)} => { ${this.bodyAsString()} }`
+        return `(${params.join(", ")}): ${this.convertor.convert(this.signature.returnType)} => { ${this.bodyAsString()} }`
     }
 }
 
@@ -185,12 +186,17 @@ export class TSLanguageWriter extends LanguageWriter {
         this.typeConvertor = new TsIDLNodeToStringConverter(this.resolver)
     }
 
+    pushNamespace(namespace: string, ident: boolean = true): void {
+        this.print(`export namespace ${namespace} {`)
+        if (ident) this.pushIndent()
+    }
+
     fork(): LanguageWriter {
         return new TSLanguageWriter(new IndentedPrinter(), this.resolver, this.language)
     }
 
-    stringifyType(type: idl.IDLType): string {
-        return this.typeConvertor.convertType(type)
+    getNodeName(type: idl.IDLNode): string {
+        return this.typeConvertor.convert(type)
     }
 
     writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string, interfaces?: string[], generics?: string[], isDeclared?: boolean): void {
@@ -222,16 +228,23 @@ export class TSLanguageWriter extends LanguageWriter {
         this.printer.print('}')
     }
     private generateFunctionDeclaration(name: string, signature: MethodSignature): string {
-        const args = signature.args.map((it, index) => `${signature.argName(index)}: ${this.stringifyType(it)}`)
+        const args = signature.args.map((it, index) => `${signature.argName(index)}: ${this.getNodeName(it)}`)
         return `export function ${name}(${args.join(", ")})`
     }
     writeEnum(name: string, members: { name: string, stringId: string | undefined, numberId: number }[], op: (writer: LanguageWriter) => void): void {
-        throw new Error("WriteEnum for TS is not implemented")
+        this.printer.print(`export enum ${name} {`)
+        this.printer.pushIndent()
+        for (const { name, numberId } of members) {
+            // TODO handle string enums
+            this.printer.print(`${name} = ${numberId},`)
+        }
+        this.printer.popIndent()
+        this.printer.print("}")
     }
     writeFieldDeclaration(name: string, type: idl.IDLType, modifiers: FieldModifier[]|undefined, optional: boolean, initExpr?: LanguageExpression): void {
         const init = initExpr != undefined ? ` = ${initExpr.asString()}` : ``
         let prefix = this.makeFieldModifiersList(modifiers)
-        this.printer.print(`${prefix} ${name}${optional ? "?"  : ""}: ${this.stringifyType(type)}${init}`)
+        this.printer.print(`${prefix} ${name}${optional ? "?"  : ""}: ${this.getNodeName(type)}${init}`)
     }
     writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void {
         this.writeDeclaration(name, signature, true, false, modifiers)
@@ -271,7 +284,20 @@ export class TSLanguageWriter extends LanguageWriter {
         const typeParams = generics?.length ? `<${generics.join(", ")}>` : ""
         // FIXME:
         const isSetter = modifiers?.includes(MethodModifier.SETTER)
-        this.printer.print(`${prefix}${name}${typeParams}(${signature.args.map((it, index) => `${signature.argName(index)}${idl.isOptionalType(it) && !isSetter ? "?" : ""}: ${this.stringifyType(it)}${signature.argDefault(index) ? ' = ' + signature.argDefault(index) : ""}`).join(", ")})${needReturn ? ": " + this.stringifyType(signature.returnType) : ""} ${needBracket ? "{" : ""}`)
+        const canBeOptional: boolean[] =  []
+        for (let i = signature.args.length - 1; i >= 0; --i) {
+            const prevCanBeOptional = canBeOptional.at(-1) ?? true
+            const curr = signature.args[i]
+            
+            const result = prevCanBeOptional && (idl.isOptionalType(curr) || signature.argDefault(i) !== undefined)
+            canBeOptional.push(result)
+        }
+        canBeOptional.reverse()
+        const isOptional = signature.args.map((it, i) => idl.isOptionalType(it) && canBeOptional[i] && !isSetter)
+        const normalizedArgs = signature.args.map((it, i) => 
+            idl.isOptionalType(it) && isOptional[i] ? idl.maybeUnwrapOptionalType(it) : it
+        )
+        this.printer.print(`${prefix}${name}${typeParams}(${normalizedArgs.map((it, index) => `${signature.argName(index)}${isOptional[index] ? "?" : ""}: ${this.getNodeName(it)}${signature.argDefault(index) ? ' = ' + signature.argDefault(index) : ""}`).join(", ")})${needReturn ? ": " + this.getNodeName(signature.returnType) : ""} ${needBracket ? "{" : ""}`)
     }
     makeNull(): LanguageExpression {
         return new StringExpression("undefined")
@@ -304,7 +330,7 @@ export class TSLanguageWriter extends LanguageWriter {
         this.print(`console.log("${message}")`)
     }
     makeCast(value: LanguageExpression, type: idl.IDLType, options?: MakeCastOptions): LanguageExpression {
-        return new TSCastExpression(value, this.stringifyType(/* FIXME: */ idl.maybeOptional(type, false)), options?.unsafe ?? false)
+        return new TSCastExpression(value, this.getNodeName(/* FIXME: */ idl.maybeUnwrapOptionalType(type)), options?.unsafe ?? false)
     }
     getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string {
         if (convertor.useArray && args?.index != undefined) {
@@ -322,13 +348,13 @@ export class TSLanguageWriter extends LanguageWriter {
         return new TsTupleAllocStatement(option)
     }
     makeArrayInit(type: idl.IDLContainerType): LanguageExpression {
-        return this.makeString(`new Array<${this.stringifyType(type.elementType[0])}>()`)
+        return this.makeString(`new Array<${this.getNodeName(type.elementType[0])}>()`)
     }
     makeClassInit(type: idl.IDLType, paramenters: LanguageExpression[]): LanguageExpression {
-        return this.makeString(`new ${this.stringifyType(type)}(${paramenters.map(it => it.asString()).join(", ")})`)
+        return this.makeString(`new ${this.getNodeName(type)}(${paramenters.map(it => it.asString()).join(", ")})`)
     }
     makeMapInit(type: idl.IDLType): LanguageExpression {
-        return this.makeString(`new ${this.stringifyType(type)}()`)
+        return this.makeString(`new ${this.getNodeName(type)}()`)
     }
     makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement {
         // keyAccessor and valueAccessor are equal in TS
@@ -357,8 +383,13 @@ export class TSLanguageWriter extends LanguageWriter {
     enumFromOrdinal(value: LanguageExpression, enumEntry: idl.IDLEnum): LanguageExpression {
         return this.makeString(`Object.values(${enumEntry.name})[${value.asString()}]`);
     }
-    ordinalFromEnum(value: LanguageExpression, enumEntry: idl.IDLEnum): LanguageExpression {
-        return this.makeString(`Object.keys(${enumEntry.name}).indexOf(${this.makeCast(value, idl.IDLStringType).asString()})`);
+    ordinalFromEnum(value: LanguageExpression, enumEntry: idl.IDLType): LanguageExpression {
+        const enumName = idl.forceAsNamedNode(enumEntry).name
+        const decl = idl.isReferenceType(enumEntry) ? this.resolver.resolveTypeReference(enumEntry) : undefined
+        if (decl && idl.isEnum(decl) && isStringEnum(decl)) {
+            return this.makeString(`Object.values(${enumName}).indexOf(${value.asString()})`);
+        }
+        return value;
     }
     override makeEnumCast(enumName: string, unsafe: boolean, convertor: EnumConvertor): string {
         if (unsafe) {

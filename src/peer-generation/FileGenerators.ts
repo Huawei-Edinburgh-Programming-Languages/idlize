@@ -19,18 +19,18 @@ import { PrimitiveType } from "./ArkPrimitiveType"
 import { camelCaseToUpperSnakeCase } from "../util"
 import { CppLanguageWriter, createLanguageWriter, LanguageWriter, Method, MethodSignature, NamedMethodSignature, PrinterLike } from "./LanguageWriters"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
-import { writeDeserializer, writeSerializer } from "./printers/SerializerPrinter"
+import { writeDeserializer, writeDeserializerFile, writeSerializer, writeSerializerFile } from "./printers/SerializerPrinter"
 import { SELECTOR_ID_PREFIX, writeConvertors } from "./printers/ConvertorsPrinter"
 import { ArkoalaInstall, LibaceInstall } from "../Install"
 import { ImportsCollector } from "./ImportsCollector"
-import { IdlPeerLibrary } from "./idl/IdlPeerLibrary"
+import { PeerLibrary } from "./PeerLibrary"
 import { writeARKTSTypeCheckers, writeTSTypeCheckers } from "./printers/TypeCheckPrinter"
 import { Language } from "../Language"
 import { printCallbacksKinds, printCallbacksKindsImports, printDeserializeAndCall } from "./printers/CallbacksPrinter"
 import { createReferenceType, IDLVoidType, toIDLType } from "../idl"
 import { createEmptyReferenceResolver, getReferenceResolver, ReferenceResolver } from "./ReferenceResolver"
 import { MethodArgPrintHint } from "./LanguageWriters/LanguageWriter"
-import { SourceFile } from "./printers/SourceFile"
+import { SourceFile, TsSourceFile } from "./printers/SourceFile"
 
 export const warning = "WARNING! THIS FILE IS AUTO-GENERATED, DO NOT MAKE CHANGES, THEY WILL BE LOST ON NEXT GENERATION!"
 
@@ -152,7 +152,7 @@ export function appendModifiersCommonPrologue(): LanguageWriter {
     return result
 }
 
-export function getNodeTypes(library: IdlPeerLibrary): string[] {
+export function getNodeTypes(library: PeerLibrary): string[] {
     const components: string[] = []
     for (const file of library.files) {
         for (const peer of file.peers.values()) {
@@ -162,7 +162,7 @@ export function getNodeTypes(library: IdlPeerLibrary): string[] {
     return [...PeerGeneratorConfig.customNodeTypes, ...components.sort()]
 }
 
-export function appendViewModelBridge(library: IdlPeerLibrary): LanguageWriter {
+export function appendViewModelBridge(library: PeerLibrary): LanguageWriter {
     let result = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
     let body = readTemplate('view_model_bridge.cc')
 
@@ -275,7 +275,7 @@ export function accessorStructList(lines: LanguageWriter): LanguageWriter {
     return result
 }
 
-export function makeTSSerializer(library: IdlPeerLibrary): LanguageWriter {
+export function makeTSSerializer(library: PeerLibrary): LanguageWriter {
     let printer = createLanguageWriter(library.language, getReferenceResolver(library))
     printer.writeLines(cStyleCopyright)
     const imports = new ImportsCollector()
@@ -290,36 +290,39 @@ export function makeTSSerializer(library: IdlPeerLibrary): LanguageWriter {
         imports.addFeature('KPointer', '@koalaui/interop')
     }
     if (printer.language == Language.ARKTS) {
+        imports.addFeatures(["MaterializedBase"], "../MaterializedBase")
         imports.addFeatures(["NativeModule"], "#components")
         imports.addFeatures(["CallbackKind"], "CallbackKind")
-        imports.addFeatures(['KStringPtr', 'nullptr', 'KInt'], '@koalaui/interop')
+        imports.addFeatures(['KStringPtr', 'nullptr', 'KInt', 'KPointer', 'KLong'], '@koalaui/interop')
     }
     imports.print(printer, '')
     writeSerializer(library, printer, "")
     return printer
 }
 
-export function makeSerializerForOhos(library: IdlPeerLibrary, nativeModule: { name: string, path: string }, declarationPath?: string): LanguageWriter {
+export function makeSerializerForOhos(library: PeerLibrary, nativeModule: { name: string, path: string }, declarationPath?: string): SourceFile {
     // TODO Add Java and migrate arkoala code
     if (library.language == Language.TS || library.language == Language.ARKTS) {
-        let printer = createLanguageWriter(library.language, getReferenceResolver(library))
-        printer.nativeModuleAccessor = nativeModule.name
-        printer.writeLines(cStyleCopyright)
-        const imports = new ImportsCollector()
-        imports.addFeatures(["SerializerBase", "Tags", "RuntimeType", "runtimeType", "isInstanceOf"], "./SerializerBase")
-        imports.addFeatures(["int32"], "./types")
-        imports.addFeatures([nativeModule.name, "CallbackKind"], nativeModule.path)
-        imports.print(printer, '')
-        writeSerializer(library, printer, "", declarationPath)
-        writeDeserializer(library, printer, "", declarationPath)
-        printer.concat(makeDeserializeAndCall(library, Language.TS, nativeModule.path).content)
-        return printer
+        const destFile = new TsSourceFile("Serializer" + library.language.extension, getReferenceResolver(library))
+        destFile.content.nativeModuleAccessor = nativeModule.name
+        destFile.imports.addFeatures(["SerializerBase", "RuntimeType", "runtimeType", "CallbackResource"], "./SerializerBase")
+        destFile.imports.addFeatures(["DeserializerBase" ], "./DeserializerBase")
+        destFile.imports.addFeatures(["int32"], "@koalaui/common")
+        destFile.imports.addFeatures(["KPointer", "nullptr"], "@koalaui/interop")
+        destFile.imports.addFeatures([nativeModule.name, "CallbackKind"], nativeModule.path)
+        writeSerializerFile(library, destFile, "", declarationPath)
+        writeDeserializerFile(library, destFile, "", declarationPath)
+        const deserializeCallImpls = makeDeserializeAndCall(library, Language.TS, nativeModule.path) as TsSourceFile
+        deserializeCallImpls.imports.clear() // TODO fix dependencies
+        deserializeCallImpls.imports.addFeatures(["ResourceHolder"], "@koalaui/interop")
+        destFile.merge(deserializeCallImpls)
+        return destFile
     } else {
         throw new Error(`unsupported language ${library.language}`)
     }
 }
 
-export function makeTypeChecker(library: IdlPeerLibrary): { arkts: string, ts: string } {
+export function makeTypeChecker(library: PeerLibrary): { arkts: string, ts: string } {
     let arktsPrinter = createLanguageWriter(Language.ARKTS, createEmptyReferenceResolver())
     writeARKTSTypeCheckers(library, arktsPrinter)
     let tsPrinter = createLanguageWriter(Language.TS, createEmptyReferenceResolver())
@@ -330,7 +333,7 @@ export function makeTypeChecker(library: IdlPeerLibrary): { arkts: string, ts: s
     }
 }
 
-export function makeConverterHeader(path: string, namespace: string, library: IdlPeerLibrary): LanguageWriter {
+export function makeConverterHeader(path: string, namespace: string, library: PeerLibrary): LanguageWriter {
     const converter = new CppLanguageWriter(new IndentedPrinter(), library)
     converter.writeLines(cStyleCopyright)
     converter.writeLines(`/*
@@ -363,7 +366,7 @@ export function makeConverterHeader(path: string, namespace: string, library: Id
     return converter
 }
 
-export function makeCSerializers(library: IdlPeerLibrary, structs: LanguageWriter, typedefs: IndentedPrinter): string {
+export function makeCSerializers(library: PeerLibrary, structs: LanguageWriter, typedefs: IndentedPrinter): string {
 
     const serializers = createLanguageWriter(Language.CPP, library)
     const writeToString = createLanguageWriter(Language.CPP, library)
@@ -385,9 +388,9 @@ ${serializers.getOutput().join("\n")}
 `
 }
 
-export function makeTSDeserializer(library: IdlPeerLibrary): string {
+export function makeTSDeserializer(library: PeerLibrary): string {
     const deserializer = createLanguageWriter(Language.TS, library)
-    writeDeserializer(library, deserializer)
+    writeDeserializer(library, deserializer, "")
     return `${cStyleCopyright}
 import { runtimeType, Tags, RuntimeType, SerializerBase, CallbackResource } from "./SerializerBase"
 import { MaterializedBase } from "./../MaterializedBase"
@@ -402,6 +405,29 @@ import { KPointer } from "@koalaui/interop"
 ${deserializer.getOutput().join("\n")}
 
 export function createDeserializer(args: Uint8Array, length: int32): Deserializer { return new Deserializer(args, length) }
+`
+}
+
+export function makeArkTSDeserializer(library: PeerLibrary): string {
+    const printer = createLanguageWriter(Language.ARKTS, library)
+    printer.writeLines(cStyleCopyright)
+
+    const imports = new ImportsCollector()
+    imports.addFeatures(["runtimeType", "Tags", "RuntimeType", "CallbackResource"], "./SerializerBase")
+    imports.addFeature("DeserializerBase", "./DeserializerBase")
+    imports.addFeature("int32", "@koalaui/common")
+
+    imports.addFeature("Serializer", "./Serializer")
+    imports.addFeatures(["SerializerBase", "Tags", "RuntimeType", "runtimeType", "isResource", "isInstanceOf"], "./SerializerBase")
+    imports.addFeatures(["NativeModule"], "#components")
+    imports.addFeatures(["CallbackKind"], "CallbackKind")
+    imports.addFeatures(['KStringPtr', 'KInt', 'KPointer'], '@koalaui/interop')
+
+    imports.print(printer, '')
+
+    writeDeserializer(library, printer, "")
+    return `
+${printer.getOutput().join("\n")}
 `
 }
 
@@ -551,7 +577,7 @@ ${content}
 `
 }
 
-export function makeDeserializeAndCall(library: IdlPeerLibrary, language: Language, fileName: string): SourceFile {
+export function makeDeserializeAndCall(library: PeerLibrary, language: Language, fileName: string): SourceFile {
     const writer = SourceFile.make(fileName, language, library)
     printDeserializeAndCall(library, writer)
     return writer
@@ -623,7 +649,7 @@ export function makeCEventsLibaceImpl(implData: PrinterLike, receiversList: Prin
     return writer.getOutput().join('\n')
 }
 
-export function makeCallbacksKinds(library: IdlPeerLibrary, language: Language): string {
+export function makeCallbacksKinds(library: PeerLibrary, language: Language): string {
     const writer = createLanguageWriter(language, library)
     printCallbacksKindsImports(language, writer)
     printCallbacksKinds(library, writer)

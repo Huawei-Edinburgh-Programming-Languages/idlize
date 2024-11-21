@@ -41,17 +41,19 @@ import { IDLCallback, IDLConstructor, IDLEntity, IDLEntry, IDLEnum, IDLInterface
     IDLConstant,
     createReferenceType,
     transformMethodsAsync2ReturnPromise,
-    forceAsNamedNode,
     isNamedNode,
     IDLNode,
-    IDLThisType,} from "../idl"
+    IDLThisType,
+    isOptionalType,} from "../idl"
 import * as webidl2 from "webidl2"
 import { resolveSyntheticType, toIDLNode } from "./deserialize"
 import { Language } from "../Language"
+import { IndentedPrinter } from "../IndentedPrinter"
 
 export class CustomPrintVisitor {
-    constructor(private resolver: (type: IDLReferenceType) => IDLEntry | undefined, private language: Language) {}
     output: string[] = []
+    constructor(private resolver: (type: IDLReferenceType) => IDLEntry | undefined, private language: Language) {}
+
     currentInterface?: IDLInterface
 
     visit(node: IDLEntry) {
@@ -183,7 +185,8 @@ export class CustomPrintVisitor {
         const isCommonMethod = hasExtAttribute(node, IDLExtendedAttributes.CommonMethod)
         let isProtected = hasExtAttribute(node, IDLExtendedAttributes.Protected)
         if (isCommonMethod) {
-            const returnType = this.currentInterface?.typeParameters ? this.currentInterface.typeParameters[0] : this.currentInterface!.name
+            const typeParams = this.currentInterface?.typeParameters
+            const returnType = typeParams && typeParams.length > 0 ? typeParams[0] : this.currentInterface!.name
             this.print(`${getName(node)}(value: ${this.printTypeForTS(node.type, undefined, undefined, isCommonMethod)}): ${returnType};`)
         } else if (hasExtAttribute(node, IDLExtendedAttributes.Accessor)) {
             const accessorName = getExtAttribute(node, IDLExtendedAttributes.Accessor)
@@ -200,7 +203,7 @@ export class CustomPrintVisitor {
     printEnum(node: IDLEnum) {
         const namespace = getExtAttribute(node, IDLExtendedAttributes.Namespace)?.split(",").reverse()
         this.openNamespace(namespace)
-        this.print(`declare enum ${node.name} {`)
+        this.print(`${namespace ? "" : "declare "}enum ${node.name} {`)
         this.pushIndent()
         node.elements.forEach(it => {
             const initializer = (it.initializer !== undefined)
@@ -226,7 +229,7 @@ export class CustomPrintVisitor {
         const text = isCallback(node) ? this.callback(node)
             : hasExtAttribute(node, IDLExtendedAttributes.Import) ? IDLAnyType.name
             : this.printTypeForTS(node.type)
-        const typeParams = node.typeParameters ? `<${node.typeParameters.join(",")}>` : ""
+        const typeParams = node.typeParameters && node.typeParameters.length > 0 ? `<${node.typeParameters.join(",")}>` : ""
         this.print(`declare type ${getName(node)}${typeParams} = ${text};`)
     }
 
@@ -292,6 +295,7 @@ export class CustomPrintVisitor {
 
     private printTypeForTS(type: IDLType | undefined, undefinedToVoid?: boolean, sequenceToArrayInterface: boolean = false, isCommonMethod = false): string {
         if (!type) throw new Error("Missing type")
+        if (isOptionalType(type)) return `${this.printTypeForTS(type.type, undefinedToVoid, sequenceToArrayInterface)} | undefined`
         if (type === IDLUndefinedType && undefinedToVoid) return "void"
         if (type === IDLStringType) return "string"
         // if (isCommonMethod && forceAsNamedNode(type).name == "this") return "T"

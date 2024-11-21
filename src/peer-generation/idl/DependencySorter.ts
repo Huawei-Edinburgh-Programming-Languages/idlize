@@ -14,13 +14,12 @@
  */
 
 import * as idl from "../../idl";
-import { convert } from "./common";
-import { DeclarationDependenciesCollector, TypeDependenciesCollector } from "./IdlDependenciesCollector";
-import { IdlPeerLibrary } from "./IdlPeerLibrary";
-import { collectProperties } from "./StructPrinter";
+import { PeerLibrary } from "../PeerLibrary";
+import { collectProperties } from "../printers/StructPrinter";
+import { DependenciesCollector } from "./IdlDependenciesCollector";
 
-class TypeDependencies extends TypeDependenciesCollector {
-    constructor(library: IdlPeerLibrary) {
+class SorterDependenciesCollector extends DependenciesCollector {
+    constructor(library: PeerLibrary) {
         super(library)
     }
     convertUnion(type: idl.IDLUnionType): idl.IDLNode[] {
@@ -44,12 +43,6 @@ class TypeDependencies extends TypeDependenciesCollector {
     convertPrimitiveType(type: idl.IDLPrimitiveType): idl.IDLNode[] {
         return []
     }
-}
-
-class DeclDependencies extends DeclarationDependenciesCollector {
-    constructor (private library: IdlPeerLibrary, private typeDependencies: TypeDependencies) {
-        super(typeDependencies)
-    }
     convertInterface(node: idl.IDLInterface): idl.IDLNode[] {
         return collectProperties(node, this.library).map(it => this.library.toDeclaration(it.type))
     }
@@ -65,14 +58,12 @@ class DeclDependencies extends DeclarationDependenciesCollector {
 }
 
 export class DependencySorter {
-    typeConvertor: TypeDependenciesCollector
-    declConvertor: DeclarationDependenciesCollector
+    dependenciesCollector: SorterDependenciesCollector
     dependencies = new Set<idl.IDLNode>()
     adjMap = new Map<idl.IDLNode, idl.IDLNode[]>()
 
-    constructor(private library: IdlPeerLibrary) {
-        this.typeConvertor = new TypeDependencies(library);
-        this.declConvertor = new DeclDependencies(library, this.typeConvertor)
+    constructor(private library: PeerLibrary) {
+        this.dependenciesCollector = new SorterDependenciesCollector(library);
     }
 
     private fillDependencies(target: idl.IDLNode, seen: Set<idl.IDLNode>) {
@@ -80,13 +71,16 @@ export class DependencySorter {
         seen.add(target)
         // Need to request that declaration.
         this.dependencies.add(target)
-        let deps = convert(target, this.typeConvertor, this.declConvertor)
+        let deps = this.dependenciesCollector.convert(target)
         deps.forEach(it => this.fillDependencies(it, seen))
 
         // Require structs but do not make dependencies to them from `target`
         if (idl.isContainerType(target)) {
             for (const type of target.elementType)
                 this.addDep(this.library.toDeclaration(type))
+        }
+        if (idl.isOptionalType(target)) {
+            this.addDep(this.library.toDeclaration(target.type))
         }
         if (idl.isCallback(target)) {
             for (const parameter of target.parameters)

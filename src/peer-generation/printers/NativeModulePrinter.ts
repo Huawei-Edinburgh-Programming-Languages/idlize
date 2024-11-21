@@ -12,13 +12,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import { nativeModuleDeclaration, nativeModuleEmptyDeclaration } from "../FileGenerators";
 import { FunctionCallExpression, LanguageWriter, Method, MethodModifier, NamedMethodSignature, StringExpression, createLanguageWriter } from "../LanguageWriters";
 import { PeerClassBase } from "../PeerClass";
-import { IdlPeerClass } from "../idl/IdlPeerClass";
-import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
-import { IdlPeerMethod } from "../idl/IdlPeerMethod";
+import { PeerClass } from "../PeerClass";
+import { PeerLibrary } from "../PeerLibrary";
+import { PeerMethod } from "../PeerMethod";
 import { Language } from "../../Language";
 import * as idl from '../../idl'
 import { getReferenceResolver } from "../ReferenceResolver";
@@ -40,14 +39,14 @@ class NativeModuleVisitor {
     ])
 
     constructor(
-        protected readonly library: IdlPeerLibrary,
+        protected readonly library: PeerLibrary,
     ) {
         this.nativeModule = createLanguageWriter(library.language, getReferenceResolver(library))
         this.nativeModuleEmpty = createLanguageWriter(library.language, getReferenceResolver(library))
         this.nativeModulePredefined = new Map()
     }
 
-    protected printPeerMethods(peer: IdlPeerClass) {
+    protected printPeerMethods(peer: PeerClass) {
         peer.methods.forEach(it => this.printPeerMethod(peer, it, this.nativeModule, this.nativeModuleEmpty, undefined, this.nativeFunctions))
     }
 
@@ -63,7 +62,7 @@ class NativeModuleVisitor {
         })
     }
 
-    printPeerMethod(clazz: PeerClassBase, method: IdlPeerMethod, nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter,
+    printPeerMethod(clazz: PeerClassBase, method: PeerMethod, nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter,
         returnType?: idl.IDLType,
         nativeFunctions?: LanguageWriter
     ) {
@@ -188,13 +187,13 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
     private stringLikeTypes = new Set(['String', 'KString', 'KStringPtr', 'string'])
 
     constructor(
-        protected readonly library: IdlPeerLibrary,
+        protected readonly library: PeerLibrary,
     ) {
         super(library)
         this.nativeFunctions = createLanguageWriter(library.language, getReferenceResolver(library))
     }
 
-    override printPeerMethod(clazz: PeerClassBase, method: IdlPeerMethod, nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter,
+    override printPeerMethod(clazz: PeerClassBase, method: PeerMethod, nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter,
         returnType?: idl.IDLType,
         nativeFunctions?: LanguageWriter
     ) {
@@ -225,7 +224,7 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
             printer.pushIndent()
             for(let param of parameters.args) {
                 let ordinal = parameters.args.indexOf(param)
-                if (this.arrayLikeTypes.has(idl.forceAsNamedNode(param).name)) {
+                if (idl.isContainerType(param) || this.arrayLikeTypes.has(idl.forceAsNamedNode(param).name)) {
                     functionCallArgs.push(`handle_${ordinal}.pointer`)
                     printer.print(`let handle_${ordinal} = acquireArrayRawData(${parameters.argsNames[ordinal]}.toArray())`)
                 } else if (this.stringLikeTypes.has(idl.forceAsNamedNode(param).name)) {
@@ -252,7 +251,7 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
             }
             for(let param of parameters.args) {
                 let ordinal = parameters.args.indexOf(param)
-                if (this.arrayLikeTypes.has(idl.forceAsNamedNode(param).name)) {
+                if (idl.isContainerType(param) || this.arrayLikeTypes.has(idl.forceAsNamedNode(param).name)) {
                     printer.print(`releaseArrayRawData(handle_${ordinal})`)
                 } else if (this.stringLikeTypes.has(idl.forceAsNamedNode(param).name)) {
                     printer.print(`LibC.free(${parameters.argsNames[ordinal]})`)
@@ -384,14 +383,14 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
 }
 
 
-export function printNativeModule(peerLibrary: IdlPeerLibrary, nativeBridgePath: string): string {
+export function printNativeModule(peerLibrary: PeerLibrary, nativeBridgePath: string): string {
     const lang = peerLibrary.language
     const visitor = (lang == Language.CJ) ? new CJNativeModuleVisitor(peerLibrary) : new NativeModuleVisitor(peerLibrary)
     visitor.print()
     return nativeModuleDeclaration(visitor.nativeModule, visitor.nativeModulePredefined, nativeBridgePath, false, lang, visitor.nativeFunctions)
 }
 
-export function printNativeModuleEmpty(peerLibrary: IdlPeerLibrary): string {
+export function printNativeModuleEmpty(peerLibrary: PeerLibrary): string {
     const visitor = new NativeModuleVisitor(peerLibrary)
     visitor.print()
     return nativeModuleEmptyDeclaration(visitor.nativeModuleEmpty.getOutput())
@@ -438,6 +437,7 @@ function getReturnValue(type: idl.IDLType): string {
         case idl.IDLPointerType: return "0"
         case idl.IDLStringType: return `"some string"`
         case idl.IDLAnyType: return `""`
+        case idl.IDLObjectType: return "new Object()"
     }
 
     throw new Error(`Unknown return type: ${idl.IDLKind[type.kind]} ${idl.forceAsNamedNode(type).name}`)

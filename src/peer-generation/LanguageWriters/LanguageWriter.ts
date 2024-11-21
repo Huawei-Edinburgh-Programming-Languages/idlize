@@ -17,7 +17,6 @@ import * as idl from "../../idl"
 import { IndentedPrinter } from "../../IndentedPrinter"
 import { stringOrNone } from "../../util"
 import {ArgConvertor, BaseArgConvertor, RuntimeType} from "../ArgConvertors"
-import { EnumEntity } from "../PeerFile"
 import * as fs from "fs"
 import { Language } from "../../Language"
 import { EnumConvertor } from "../ArgConvertors"
@@ -122,7 +121,7 @@ export class AssignStatement implements LanguageStatement {
                 this.options?.overrideTypeName
                     ? `: ${this.options.overrideTypeName}`
                     : this.type
-                        ? `: ${writer.stringifyType(this.type)}${/*SHOULD BE REMOVED*/idl.isOptionalType(this.type) ? "|undefined" : ""}`
+                        ? `: ${writer.getNodeName(this.type)}${/*SHOULD BE REMOVED*/idl.isOptionalType(this.type) ? "|undefined" : ""}`
                         : ""
             const initValue = this.expression ? `= ${this.expression.asString()}` : ""
             const constSpec = this.isConst ? "const" : "let"
@@ -200,7 +199,7 @@ export class MultiBranchIfStatement implements LanguageStatement {
             writer.print("}")
         })
 
-        if (this.elseStatement !== undefined) {
+        if (this.statements.length > 0 && this.elseStatement !== undefined) {
             writer.print(" else {")
             writer.pushIndent()
             this.elseStatement.write(writer)
@@ -226,22 +225,39 @@ export class CheckOptionalStatement implements LanguageStatement {
 
 // maybe rename or move of fix
 export class TsEnumEntityStatement implements LanguageStatement {
-    constructor(private readonly enumEntity: EnumEntity, private readonly isExport: boolean) {}
-
-    write(writer: LanguageWriter) {
-        writer.print(this.enumEntity.comment.length > 0 ? this.enumEntity.comment : undefined)
+    constructor(private readonly enumEntity: idl.IDLEnum, private readonly isExport: boolean) {}
+    write(writer: LanguageWriter): void {
+        // writer.print(this.enumEntity.comment)
+        const namespace = idl.getExtAttribute(this.enumEntity, idl.IDLExtendedAttributes.Namespace)
+        if (namespace) writer.pushNamespace(namespace)
+            
         writer.print(`${this.isExport ? "export " : ""}enum ${this.enumEntity.name} {`)
         writer.pushIndent()
-        this.enumEntity.members.forEach((member, index) => {
-            writer.print(member.comment.length > 0 ? member.comment : undefined)
-            const commaOp = index < this.enumEntity.members.length - 1 ? ',' : ''
-            const initValue = member.initializerText ? ` = ${member.initializerText}` : ``
-            writer.print(`${member.name}${initValue}${commaOp}`)
+        this.enumEntity.elements.forEach((member, index) => {
+            // writer.print(member.comment)
+            const initValue = member.initializer
+                ? ` = ${this.maybeQuoted(member.initializer)}` : ``
+            writer.print(`${member.name}${initValue},`)
+
+            let originalName = idl.getExtAttribute(member, idl.IDLExtendedAttributes.OriginalEnumMemberName)
+            if (originalName) {
+                const initValue = ` = ${member.name}`
+                writer.print(`${originalName}${initValue},`)
+            }
         })
         writer.popIndent()
         writer.print(`}`)
+
+        if (namespace) writer.popNamespace()
     }
-}
+
+    private maybeQuoted(value: string|number): string {
+        if (typeof value == "string")
+            return `"${value}"`
+        else
+            return `${value}`
+    }
+ }
 
 export class ReturnStatement implements LanguageStatement {
     constructor(public expression?: LanguageExpression) { }
@@ -441,9 +457,9 @@ export abstract class LanguageWriter {
     abstract get supportedModifiers(): MethodModifier[]
     abstract get supportedFieldModifiers(): FieldModifier[]
     abstract enumFromOrdinal(value: LanguageExpression, enumEntry: idl.IDLEnum): LanguageExpression
-    abstract ordinalFromEnum(value: LanguageExpression, enumEntry: idl.IDLEnum): LanguageExpression
+    abstract ordinalFromEnum(value: LanguageExpression, enumReference: idl.IDLType): LanguageExpression
     abstract makeEnumCast(enumName: string, unsafe: boolean, convertor: EnumConvertor | undefined): string
-    abstract stringifyType(type: idl.IDLType | idl.IDLCallback): string
+    abstract getNodeName(type: idl.IDLNode): string
     abstract fork(): LanguageWriter
 
     concat(other: PrinterLike): this {
@@ -643,7 +659,7 @@ export abstract class LanguageWriter {
     makeCallIsResource(value: string): LanguageExpression {
         return this.makeString(`isResource(${value})`)
     }
-    makeEnumEntity(enumEntity: EnumEntity, isExport: boolean): LanguageStatement {
+    makeEnumEntity(enumEntity: idl.IDLEnum, isExport: boolean): LanguageStatement {
         return new TsEnumEntityStatement(enumEntity, isExport)
     }
     makeFieldModifiersList(modifiers: FieldModifier[] | undefined, customFieldFilter?: (field :FieldModifier) => boolean) : string {
@@ -684,9 +700,9 @@ export abstract class LanguageWriter {
         const ordinal = convertor.isStringEnum
             ? this.ordinalFromEnum(
                 this.makeString(this.getObjectAccessor(convertor, value)),
-                convertor.enumEntry
+                idl.createReferenceType(convertor.enumEntry.name)
             )
-            : this.makeUnionVariantCast(this.getObjectAccessor(convertor, value), this.stringifyType(idl.IDLI32Type), convertor, index)
+            : this.makeUnionVariantCast(this.getObjectAccessor(convertor, value), this.getNodeName(idl.IDLI32Type), convertor, index)
         const {low, high} = convertor.extremumOfOrdinals()
         return this.discriminatorFromExpressions(value, convertor.runtimeTypes[0], [
             this.makeNaryOp(">=", [ordinal, this.makeString(low!.toString())]),
@@ -708,12 +724,28 @@ export abstract class LanguageWriter {
         return this.makeString(`${value} instanceof ArrayBuffer`)
     }
     instanceOf(convertor: BaseArgConvertor, value: string, _duplicateMembers?: Set<string>): LanguageExpression {
-        return this.makeString(`${value} instanceof ${this.stringifyType(convertor.idlType)}`)
+        return this.makeString(`${value} instanceof ${this.getNodeName(convertor.idlType)}`)
     }
 
-    stringifyTypeOrEmpty(type: idl.IDLType | idl.IDLCallback | undefined): string {
+    stringifyTypeOrEmpty(type: idl.IDLType | undefined): string {
         if (type === undefined) return ""
-        return this.stringifyType(type)
+        return this.getNodeName(type)
+    }
+    /**
+     * Writes `namespace <namespace> {` and adds extra indent
+     * @param namespace Namespace to begin
+     */
+    pushNamespace(namespace: string, ident: boolean = true) {
+        this.print(`namespace ${namespace} {`)
+        if (ident) this.pushIndent()
+    }
+
+    /**
+     * Writes closing brace of namespace block and removes one level of indent
+     */
+    popNamespace(ident: boolean = true) {
+        if (ident) this.popIndent()
+        this.print(`}`)
     }
 }
 

@@ -25,6 +25,7 @@ import {
     makeArkuiModule,
     makeCallbacksKinds,
     makeTSDeserializer,
+    makeArkTSDeserializer,
     makeTSSerializer,
     makeTypeChecker,
     mesonBuildFile,
@@ -51,26 +52,26 @@ import { printMesonBuild } from "./printers/MesonPrinter"
 import {
     printFakeDeclarations as printIdlFakeDeclarations,
     printInterfaces as printIdlInterfaces
-} from "./idl/InterfacePrinter"
+} from "./printers/InterfacePrinter"
 import { printBuilderClasses } from "./printers/BuilderClassPrinter"
 import { ARKOALA_PACKAGE_PATH, INTEROP_PACKAGE_PATH } from "./printers/lang/Java"
 import { TargetFile } from "./printers/TargetFile"
 import { printBridgeCcCustom, printBridgeCcGenerated } from "./printers/BridgeCcPrinter"
 import { Language } from "../Language"
-import { IdlPeerLibrary } from "./idl/IdlPeerLibrary"
+import { PeerLibrary } from "./PeerLibrary"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
-import { printDeclarations } from "./printers/DeclarationPrinter"
-import { printConflictedDeclarationsIdl } from "./idl/ConflictedDeclarationsPrinterIdl";
+import { printDeclarations, printEnumsImpl } from "./printers/DeclarationPrinter"
+import { printConflictedDeclarations } from "./printers/ConflictedDeclarationsPrinter";
 import { printNativeModuleRecorder } from "./printers/NativeModuleRecorderPrinter"
 import { IndentedPrinter } from "../IndentedPrinter"
-import { LanguageWriter } from "./LanguageWriters"
+import { createLanguageWriter, LanguageWriter } from "./LanguageWriters"
 import { printManagedCaller } from "./printers/CallbacksPrinter"
 
 export function generateLibaceFromIdl(config: {
     libaceDestination: string|undefined,
     apiVersion: number,
     outDir: string
-}, peerLibrary: IdlPeerLibrary) {
+}, peerLibrary: PeerLibrary) {
     const libace = config.libaceDestination ?
         new LibaceInstall(config.libaceDestination, false) :
         new LibaceInstall(config.outDir, true)
@@ -141,8 +142,10 @@ function copyArkoalaFiles(config: {
         'sig/arkoala-arkts/arkui/src/generated/NativePeerNode.ts',
         'sig/arkoala-arkts/arkui/src/generated/arkts/index.ts',
         'sig/arkoala-arkts/arkui/src/generated/ts/index.ts',
+        'sig/arkoala-arkts/arkui/src/generated/ts/arkts-stdlib.ts',
         'sig/arkoala-arkts/arkui/src/generated/ts/NativeModule.ts',
         'sig/arkoala-arkts/arkui/src/generated/peers/SerializerBase.ts',
+        'sig/arkoala-arkts/arkui/src/generated/peers/DeserializerBase.ts',
         'sig/arkoala-arkts/arkui/src/generated/shared/ArkResource.ts',
         'sig/arkoala-arkts/arkui/src/generated/shared/dts-exports.ts',
         'sig/arkoala-arkts/arkui/src/generated/shared/generated-utils.ts',
@@ -160,7 +163,7 @@ export function generateArkoalaFromIdl(config: {
             callLog: boolean,
             verbose: boolean
         },
-        peerLibrary: IdlPeerLibrary) {
+        peerLibrary: PeerLibrary) {
     const arkoala = config.arkoalaDestination ?
         new ArkoalaInstall(config.arkoalaDestination, config.lang, false) :
         new ArkoalaInstall(config.outDir, config.lang, true)
@@ -235,6 +238,12 @@ export function generateArkoalaFromIdl(config: {
             })
         if (config.verbose) console.log(data)
         arkuiComponentsFiles.push(outComponentFile)
+    }
+
+    if (peerLibrary.language == Language.TS || peerLibrary.language == Language.ARKTS) {
+        let enumImpls = createLanguageWriter(peerLibrary.language, peerLibrary)
+        printEnumsImpl(peerLibrary, enumImpls)
+        enumImpls.printTo(arkoala.tsArkoalaLib(new TargetFile('EnumsImpl')),)
     }
 
     if (peerLibrary.language == Language.TS) {
@@ -334,7 +343,7 @@ export function generateArkoalaFromIdl(config: {
         )
         writeFile(
             arkoala.arktsLib(new TargetFile('ConflictedDeclarations')),
-            printConflictedDeclarationsIdl(peerLibrary),
+            printConflictedDeclarations(peerLibrary),
             {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true
@@ -362,6 +371,15 @@ export function generateArkoalaFromIdl(config: {
                 integrated: true,
             }
         )
+        // waiting for es2panda to fix 20642 issue
+        // writeFile(arkoala.peer(new TargetFile('Deserializer')),
+        //     makeArkTSDeserializer(peerLibrary),
+        //     {
+        //         onlyIntegrated: config.onlyIntegrated,
+        //         integrated: true,
+        //         message: "producing [idl]"
+        //     }
+        // )
         writeFile(arkoala.arktsLib(new TargetFile('type_check', 'arkts')),
             makeTypeChecker(peerLibrary).arkts,
             {

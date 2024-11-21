@@ -39,7 +39,14 @@ dictionary RectWidthStyle {
     number MAX;
 };
 ```
-
 - copy the `RectWidthStyle` idl declaration to [predefined/src/arkui-external.idl](../predefined/src/arkui-external.idl) file
+- comment out the namespace if it exists
+```
+/*[Namespace=text]*/
+dictionary RectWidthStyle {
+    number TIGHT;
+    number MAX;
+};
+```
 - push the changes with the idl declaration to the separate branch to check that it passes CI.
 - push the branch

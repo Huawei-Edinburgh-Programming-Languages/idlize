@@ -227,6 +227,7 @@ void impl_RemoveChild(Ark_NativePointer parent, Ark_NativePointer child)
     Ark_NodeHandle parentCast = (Ark_NodeHandle) parent;
     Ark_NodeHandle childCast = (Ark_NodeHandle) child;
     GetArkUIBasicNodeAPI()->removeChild(parentCast, childCast);
+    GetArkUIBasicNodeAPI()->markDirty(parentCast, GENERATED_ARKUI_DIRTY_FLAG_MEASURE_BY_CHILD_REQUEST);
 }
 KOALA_INTEROP_V2(RemoveChild, Ark_NativePointer, Ark_NativePointer)
 
@@ -235,7 +236,9 @@ Ark_Int32 impl_InsertChildAfter(Ark_NativePointer parent, Ark_NativePointer chil
     Ark_NodeHandle parentCast = (Ark_NodeHandle) parent;
     Ark_NodeHandle childCast = (Ark_NodeHandle) child;
     Ark_NodeHandle siblingCast = (Ark_NodeHandle) sibling;
-    return GetArkUIBasicNodeAPI()->insertChildAfter(parentCast, childCast, siblingCast);
+    auto result = GetArkUIBasicNodeAPI()->insertChildAfter(parentCast, childCast, siblingCast);
+    GetArkUIBasicNodeAPI()->markDirty(parentCast, GENERATED_ARKUI_DIRTY_FLAG_MEASURE_BY_CHILD_REQUEST);
+    return result;
 }
 KOALA_INTEROP_3(InsertChildAfter, Ark_Int32, Ark_NativePointer, Ark_NativePointer, Ark_NativePointer)
 
@@ -243,7 +246,9 @@ Ark_Int32 impl_AddChild(Ark_NativePointer parent, Ark_NativePointer child)
 {
     Ark_NodeHandle parentCast = (Ark_NodeHandle) parent;
     Ark_NodeHandle childCast = (Ark_NodeHandle) child;
-    return GetArkUIBasicNodeAPI()->addChild(parentCast, childCast);
+    auto result = GetArkUIBasicNodeAPI()->addChild(parentCast, childCast);
+    GetArkUIBasicNodeAPI()->markDirty(parentCast, GENERATED_ARKUI_DIRTY_FLAG_MEASURE_BY_CHILD_REQUEST);
+    return result;
 }
 KOALA_INTEROP_2(AddChild, Ark_Int32, Ark_NativePointer, Ark_NativePointer)
 
@@ -252,7 +257,9 @@ Ark_Int32 impl_InsertChildBefore(Ark_NativePointer parent, Ark_NativePointer chi
     Ark_NodeHandle parentCast = (Ark_NodeHandle) parent;
     Ark_NodeHandle childCast = (Ark_NodeHandle) child;
     Ark_NodeHandle siblingCast = (Ark_NodeHandle) sibling;
-    return GetArkUIBasicNodeAPI()->insertChildBefore(parentCast, childCast, siblingCast);
+    auto result = GetArkUIBasicNodeAPI()->insertChildBefore(parentCast, childCast, siblingCast);
+    GetArkUIBasicNodeAPI()->markDirty(parentCast, GENERATED_ARKUI_DIRTY_FLAG_MEASURE_BY_CHILD_REQUEST);
+    return result;
 }
 KOALA_INTEROP_3(InsertChildBefore, Ark_Int32, Ark_NativePointer, Ark_NativePointer, Ark_NativePointer)
 
@@ -260,7 +267,9 @@ Ark_Int32 impl_InsertChildAt(Ark_NativePointer parent, Ark_NativePointer child, 
 {
     Ark_NodeHandle parentCast = (Ark_NodeHandle) parent;
     Ark_NodeHandle childCast = (Ark_NodeHandle) child;
-    return GetArkUIBasicNodeAPI()->insertChildAt(parentCast, childCast, position);
+    auto result = GetArkUIBasicNodeAPI()->insertChildAt(parentCast, childCast, position);
+    GetArkUIBasicNodeAPI()->markDirty(parentCast, GENERATED_ARKUI_DIRTY_FLAG_MEASURE_BY_CHILD_REQUEST);
+    return result;
 }
 KOALA_INTEROP_3(InsertChildAt, Ark_Int32, Ark_NativePointer, Ark_NativePointer, Ark_Int32)
 
@@ -334,21 +343,45 @@ void impl_SetLazyItemIndexer(KVMContext vmContext, Ark_NativePointer nodePtr, Ar
 }
 KOALA_INTEROP_CTX_V2(SetLazyItemIndexer, Ark_NativePointer, Ark_Int32)
 
-void impl_SetVsyncCallback(KVMContext vmContext, Ark_NativePointer pipelineContext, Ark_Int32 callbackId)
-{
-    Ark_VMContext vmContextCast = (Ark_VMContext) vmContext;
-    Ark_PipelineContext pipelineContextCast = (Ark_PipelineContext) pipelineContext;
-    GetArkUIExtendedNodeAPI()->setVsyncCallback(vmContextCast, pipelineContextCast, callbackId);
-}
-KOALA_INTEROP_CTX_V2(SetVsyncCallback, Ark_NativePointer, Ark_Int32)
+// TODO: map if multiple pipeline contexts.
+static KVMDeferred* currentVsyncDeferred = nullptr;
 
-void impl_UnblockVsyncWait(KVMContext vmContext, Ark_NativePointer pipelineContext)
-{
-    Ark_VMContext vmContextCast = (Ark_VMContext) vmContext;
-    Ark_PipelineContext pipelineContextCast = (Ark_PipelineContext) pipelineContext;
-    GetArkUIExtendedNodeAPI()->unblockVsyncWait(vmContextCast, pipelineContextCast);
+void vsyncCallback(Ark_PipelineContext context) {
+    if (currentVsyncDeferred) {
+        currentVsyncDeferred->resolve(currentVsyncDeferred, nullptr, 0);
+        currentVsyncDeferred = nullptr;
+    }
 }
-KOALA_INTEROP_CTX_V1(UnblockVsyncWait, Ark_NativePointer)
+
+void impl_SetVsyncCallback(Ark_NativePointer pipelineContext)
+{
+    Ark_PipelineContext pipelineContextCast = (Ark_PipelineContext) pipelineContext;
+    GetArkUIExtendedNodeAPI()->setVsyncCallback(pipelineContextCast, vsyncCallback);
+}
+KOALA_INTEROP_V1(SetVsyncCallback, Ark_NativePointer)
+
+KVMObjectHandle impl_VSyncAwait(KVMContext vmContext, Ark_NativePointer pipelineContext)
+{
+    Ark_PipelineContext pipelineContextCast = (Ark_PipelineContext)pipelineContext;
+    KVMObjectHandle result = nullptr;
+    KVMDeferred* deferred = CreateDeferred(vmContext, &result);
+    if (currentVsyncDeferred) {
+        LOGE("%s", "Multiple unresolved vsync deferred");
+        currentVsyncDeferred->reject(currentVsyncDeferred, "Wrong");
+    }
+    currentVsyncDeferred = deferred;
+    return result;
+}
+KOALA_INTEROP_CTX_1(VSyncAwait, KVMObjectHandle, Ark_NativePointer)
+
+void impl_UnblockVsyncWait(Ark_NativePointer pipelineContext)
+{
+    if (currentVsyncDeferred) {
+        currentVsyncDeferred->resolve(currentVsyncDeferred, nullptr, 0);
+        currentVsyncDeferred = nullptr;
+    }
+}
+KOALA_INTEROP_V1(UnblockVsyncWait, Ark_NativePointer)
 
 void impl_SetCustomCallback(KVMContext vmContext, Ark_NativePointer nodePtr, Ark_Int32 updaterId)
 {
@@ -448,3 +481,77 @@ void impl_SetChildTotalCount(Ark_NativePointer nodePtr, Ark_Int32 totalCount)
     GetArkUIExtendedNodeAPI()->setChildTotalCount(nodePtrCast, totalCount);
 }
 KOALA_INTEROP_V2(SetChildTotalCount, Ark_NativePointer, Ark_Int32)
+
+KVMObjectHandle impl_LoadUserView(KVMContext vm, const KStringPtr& viewClass, const KStringPtr& viewParams) {
+#ifdef KOALA_USE_JAVA_VM
+    JNIEnv* env = reinterpret_cast<JNIEnv*>(vm);
+    std:: string className(viewClass.c_str());
+    std::replace(className.begin(), className.end(), '.', '/');
+    jclass viewClassClass = env->FindClass(className.c_str());
+    if (!viewClassClass) {
+        fprintf(stderr, "Cannot find user class %s\n", viewClass.c_str());
+        if (env->ExceptionCheck()) {
+            env->ExceptionDescribe();
+            env->ExceptionClear();
+        }
+        return nullptr;
+    }
+    jmethodID viewClassCtor = env->GetMethodID(viewClassClass, "<init>", "(Ljava/lang/String;)V");
+    if (!viewClassCtor) {
+        fprintf(stderr, "Cannot find user class ctor\n");
+        if (env->ExceptionCheck()) {
+            env->ExceptionDescribe();
+            env->ExceptionClear();
+        }
+        return nullptr;
+    }
+    jobject result = env->NewObject(viewClassClass, viewClassCtor, env->NewStringUTF(viewParams.c_str()));
+    if (!result) {
+        fprintf(stderr, "Cannot instantiate user class\n");
+        if (env->ExceptionCheck()) {
+            env->ExceptionDescribe();
+            env->ExceptionClear();
+        }
+        return nullptr;
+    }
+    return (KVMObjectHandle)result;
+#elif KOALA_USE_PANDA_VM
+    EtsEnv* env = reinterpret_cast<EtsEnv*>(vm);
+    std:: string className(viewClass.c_str());
+    // TODO: hack, fix it!
+    if (className == "ViewLoaderApp") className = "Page.App";
+    std::replace(className.begin(), className.end(), '.', '/');
+    ets_class viewClassClass = env->FindClass(className.c_str());
+    if (!viewClassClass) {
+        fprintf(stderr, "Cannot find user class %s\n", viewClass.c_str());
+        if (env->ErrorCheck()) {
+            env->ErrorDescribe();
+            env->ErrorClear();
+        }
+        return nullptr;
+    }
+    ets_method viewClassCtor = env->Getp_method(viewClassClass, "<ctor>", "Lstd/core/String;:V");
+    if (!viewClassCtor) {
+        fprintf(stderr, "Cannot find user class ctor\n");
+        if (env->ErrorCheck()) {
+            env->ErrorDescribe();
+            env->ErrorClear();
+        }
+        return nullptr;
+    }
+    ets_object result = env->NewObject(viewClassClass, viewClassCtor, env->NewStringUTF(viewParams.c_str()));
+    if (!result) {
+        fprintf(stderr, "Cannot instantiate user class\n");
+        if (env->ErrorCheck()) {
+            env->ErrorDescribe();
+            env->ErrorClear();
+        }
+        return nullptr;
+    }
+    return (KVMObjectHandle)result;
+#else
+    fprintf(stderr, "LoadUserView() is not implemented yet\n");
+    return nullptr;
+#endif
+}
+KOALA_INTEROP_CTX_2(LoadUserView, KVMObjectHandle, KStringPtr, KStringPtr)

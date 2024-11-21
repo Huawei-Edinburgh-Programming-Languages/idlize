@@ -15,19 +15,27 @@
 
 import * as idl from "../../../idl";
 import { TsIDLNodeToStringConverter } from "./TSConvertors";
-import {createReferenceType, IDLReferenceType, IDLType} from "../../../idl";
-import { DeclarationNameConvertor } from "../../idl/IdlNameConvertor";
+import { createReferenceType, IDLEntry, IDLReferenceType } from "../../../idl";
+import { createDeclarationNameConvertor, DeclarationNameConvertor } from "../../idl/IdlNameConvertor";
 import { convertDeclaration } from "../nameConvertor";
+import { Language } from "../../../Language";
+import { stringOrNone } from "../../../util";
 
 export class EtsIDLNodeToStringConvertor extends TsIDLNodeToStringConverter {
     convertTypeReference(type: IDLReferenceType): string {
-        //TODO: Needs to be implemented properly
+        // Only to deal with namespaces. TODO: remove later
+        const decl = this.resolver.resolveTypeReference(type)
+        if (decl && idl.isEnum(decl)) {
+            return convertDeclaration(createDeclarationNameConvertor(Language.ARKTS), decl)
+        }
+
+        // TODO: Needs to be implemented properly
         const types = type.name.split(".")
         if (types.length > 1) {
             // Takes only name without the namespace prefix
             const decl = this.resolver.resolveTypeReference(createReferenceType(types.slice(-1).join()))
             if (decl !== undefined) {
-                return convertDeclaration(DeclarationNameConvertor.I, decl)
+                return convertDeclaration(createDeclarationNameConvertor(Language.ARKTS), decl)
             }
         }
         return super.convertTypeReference(type);
@@ -40,7 +48,7 @@ export class EtsIDLNodeToStringConvertor extends TsIDLNodeToStringConverter {
                 case idl.IDLI32Type: return 'KInt32ArrayPtr'
                 case idl.IDLF32Type: return 'KFloat32ArrayPtr'
             }
-            return `Array<${this.convertType(type.elementType[0])}>`
+            return `Array<${this.convert(type.elementType[0])}>`
         }
         return super.convertContainer(type)
     }
@@ -96,8 +104,12 @@ export class EtsIDLNodeToStringConvertor extends TsIDLNodeToStringConverter {
 
     protected mapCallback(decl: idl.IDLCallback): string {
         const types = decl.parameters.map(it => {
-            return `${this.convertType(it.isOptional ? idl.createUnionType([it.type!, idl.IDLUndefinedType]) : it.type!)}`
+            return `${this.convert(it.isOptional ? idl.createUnionType([it.type!, idl.IDLUndefinedType]) : it.type!)}`
         })
-        return `Function${types.length}<${types.join(",")}${types.length > 0 ? "," : ""}${this.convertType(decl.returnType)}>`
+        return `Function${types.length}<${types.join(",")}${types.length > 0 ? "," : ""}${this.convert(decl.returnType)}>`
+    }
+
+    protected getNamespacePrefix(decl: IDLEntry): stringOrNone {
+        return idl.getExtAttribute(decl, idl.IDLExtendedAttributes.Namespace);
     }
 }

@@ -1,6 +1,9 @@
-import { pointer, int32, EventType, KPointer, Finalizable } from "./types"
-import { Tags, RuntimeType, runtimeType, isInstanceOf, unsafeCast } from "./SerializerBase"
+import { int32 } from "@koalaui/common"
+import { KPointer, pointer } from "@koalaui/interop"
+import { RuntimeType, runtimeType, unsafeCast } from "./SerializerBase"
 import { Serializer } from "./xmlSerializer"
+
+type Finalizable = { ptr: pointer }
 
 import {
     XMLNativeModule,
@@ -11,7 +14,22 @@ export interface ParseOptions {
      ignoreNameSpace?: boolean
      tagValueCallbackFunction?: ((name: string, value: string) => boolean)
      attributeValueCallbackFunction?: ((name: string, value: string) => boolean)
-     tokenValueCallbackFunction?: ((eventType: EventType, value: ParseInfo) => boolean)
+     tokenValueCallbackFunction?: ((eventType: xml.EventType, value: ParseInfo) => boolean)
+}
+export namespace xml {
+    export enum EventType {
+        START_DOCUMENT = 0,
+        END_DOCUMENT = 1,
+        START_TAG = 2,
+        END_TAG = 3,
+        TEXT = 4,
+        CDSECT = 5,
+        COMMENT = 6,
+        DOCDECL = 7,
+        INSTRUCTION = 8,
+        ENTITY_REFERENCE = 9,
+        WHITESPACE = 10,
+    }
 }
 export interface XmlSerializerInterface {
     setAttributes(name: string, value: string): void 
@@ -102,11 +120,13 @@ export class XmlSerializer implements XmlSerializerInterface {
 }
 export class ParseInfo implements ParseInfoInterface {
     private peer: KPointer
-     constructor() {
-        this.peer = getXMLNativeModule()._ParseInfo_ctor()
-    }
     getPeer(): Finalizable | undefined {
         return { ptr: this.peer }
+    }
+    static construct(ptr: KPointer): ParseInfo {
+        const objParseInfo: ParseInfo = new ParseInfo()
+        objParseInfo.peer = ptr
+        return objParseInfo
     }
     getColumnNumber(): number {
         const result = getXMLNativeModule()._ParseInfo_getColumnNumber(this.peer)

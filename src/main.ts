@@ -19,7 +19,16 @@ import * as path from "path"
 import { fromIDL } from "./from-idl/common"
 import { idlToString } from "./from-idl/DtsPrinter"
 import { generate } from "./idlize"
-import { forEachChild, IDLEntry, toIDLString, transformMethodsAsync2ReturnPromise } from "./idl"
+import {
+    forEachChild,
+    IDLEntry,
+    isClass,
+    isEnum,
+    isInterface,
+    isSyntheticEntry,
+    toIDLString,
+    transformMethodsAsync2ReturnPromise
+} from "./idl"
 import { LinterVisitor, toLinterString } from "./linter"
 import { LinterMessage } from "./LinterMessage"
 import { IDLVisitor } from "./IDLVisitor"
@@ -28,8 +37,8 @@ import { defaultCompilerOptions, toSet } from "./util"
 import { initRNG } from "./rand_utils"
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig"
 import { generateTracker } from "./peer-generation/Tracker"
-import { IdlPeerLibrary } from "./peer-generation/idl/IdlPeerLibrary"
-import { IdlPeerFile } from "./peer-generation/idl/IdlPeerFile"
+import { PeerLibrary } from "./peer-generation/PeerLibrary"
+import { PeerFile } from "./peer-generation/PeerFile"
 import {
     IdlPeerGeneratorVisitor,
     IdlPeerProcessor,
@@ -293,7 +302,7 @@ if (options.dts2peer) {
     const generatedPeersDir = options.outputDir ?? "./out/ts-peers/generated"
     const lang = Language.fromString(options.language ?? "ts")
 
-    function scanPredefinedDirectory(dir: string, ...subdirs: string[]): IdlPeerFile[] {
+    function scanPredefinedDirectory(dir: string, ...subdirs: string[]): PeerFile[] {
         dir = path.join(dir, ...subdirs)
         return fs.readdirSync(dir)
             .filter(it => it.endsWith(".idl"))
@@ -301,14 +310,14 @@ if (options.dts2peer) {
                 const idlFile = path.resolve(path.join(dir, it))
                 const content = fs.readFileSync(path.resolve(path.join(dir, it))).toString()
                 const nodes = webidl2.parse(content).map(it => toIDLNode(idlFile, it))
-                return new IdlPeerFile(idlFile, nodes, new Set(), true)
+                return new PeerFile(idlFile, nodes, new Set(), true)
             })
     }
 
     const PREDEFINED_PATH = path.join(__dirname, "..", "predefined")
 
     options.docs = "all"
-    const idlLibrary = new IdlPeerLibrary(lang, toSet(options.generateInterface))
+    const idlLibrary = new PeerLibrary(lang, toSet(options.generateInterface))
     // collect predefined files
     scanPredefinedDirectory(PREDEFINED_PATH, "sys").forEach(file => {
         IdlPredefinedGeneratorVisitor.create({
@@ -334,8 +343,25 @@ if (options.dts2peer) {
         {
             compilerOptions: defaultCompilerOptions,
             onSingleFile(entries: IDLEntry[], outputDir, sourceFile) {
-                entries.forEach(transformMethodsAsync2ReturnPromise)
-                const file = new IdlPeerFile(sourceFile.fileName, entries, idlLibrary.componentsToGenerate)
+                // Search for duplicate declarations
+                entries = entries.filter(newEntry =>
+                    !idlLibrary.files.find(peerFile => peerFile.entries.find(entry => {
+                        if (([newEntry, entry].every(isInterface)
+                            || [newEntry, entry].every(isClass)
+                            || [newEntry, entry].every(isEnum)
+                            || [newEntry, entry].every(isSyntheticEntry))) {
+                            if (newEntry.name === entry.name) {
+                                console.warn(`WARNING: Skip entry:'${newEntry.name}'(${sourceFile.fileName}) already exists in ${peerFile.originalFilename}`)
+                                return true
+                            }
+                        }
+                    }))
+                )
+                entries.forEach(it => {
+                    transformMethodsAsync2ReturnPromise(it)
+                    correctOverloadedProperties(it, idlLibrary)
+                })
+                const file = new PeerFile(sourceFile.fileName, entries, idlLibrary.componentsToGenerate)
                 idlLibrary.files.push(file)
             },
             onEnd(outDir) {
@@ -402,4 +428,27 @@ if (options.dts2peer) {
 
 if (!didJob) {
     program.help()
+}
+
+function correctOverloadedProperties(entry: IDLEntry, idlLibrary: PeerLibrary) {
+    if (idlLibrary.language !== Language.ARKTS) {
+        return;
+    }
+    if (!isInterface(entry) && !isClass(entry)) {
+        return;
+    }
+    if (entry.inheritance.length !== 1) {
+        return;
+    }
+    const firstParent = idlLibrary.toDeclaration(entry.inheritance[0])
+    if (!isInterface(firstParent) && !isClass(firstParent)) {
+        return;
+    }
+    entry.properties.forEach(prop => {
+        const overloadedProp =
+            firstParent.properties.find(it => it.name === prop.name)
+        if (overloadedProp !== undefined) {
+            prop.type = overloadedProp.type
+        }
+    })
 }

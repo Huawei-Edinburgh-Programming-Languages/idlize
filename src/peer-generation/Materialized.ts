@@ -14,13 +14,14 @@
  */
 
 import { ArgConvertor, RetConvertor } from "./ArgConvertors"
-import { Field, Method, MethodModifier } from "./LanguageWriters"
+import { Field, Method, MethodModifier, NamedMethodSignature } from "./LanguageWriters"
 import { capitalize } from "../util"
 import { ImportFeature, ImportsCollector } from "./ImportsCollector"
-import { IDLType } from "../idl"
-import { IdlPeerMethod } from "./idl/IdlPeerMethod";
+import { createReferenceType, IDLType, IDLVoidType } from "../idl"
+import { PeerMethod } from "./PeerMethod";
 import { PeerClassBase } from "./PeerClass";
-import { IdlPeerLibrary } from "./idl/IdlPeerLibrary"
+import { PeerLibrary } from "./PeerLibrary"
+import { PrimitiveType } from "./ArkPrimitiveType"
 
 export class MaterializedField {
     constructor(
@@ -31,7 +32,7 @@ export class MaterializedField {
     ) { }
 }
 
-export class MaterializedMethod extends IdlPeerMethod {
+export class MaterializedMethod extends PeerMethod {
     constructor(
         originalParentName: string,
         argConvertors: ArgConvertor[],
@@ -129,7 +130,7 @@ export class MaterializedClass implements PeerClassBase {
         public readonly methods: MaterializedMethod[],
         public readonly needBeGenerated: boolean = true,
     ) {
-        IdlPeerMethod.markAndGroupOverloads(methods)
+        PeerMethod.markAndGroupOverloads(methods)
     }
 
     getComponentName(): string {
@@ -145,7 +146,31 @@ export class MaterializedClass implements PeerClassBase {
     }
 }
 
-export function collectMaterializedImports(imports: ImportsCollector, library: IdlPeerLibrary, level: string = "") {
+export function createDestroyPeerMethod(clazz: MaterializedClass): MaterializedMethod {
+    const destroyPeerReturnType: RetConvertor = {
+        isVoid: true,
+        nativeType: () => PrimitiveType.Void.getText(),
+        interopType: () => PrimitiveType.Void.getText(),
+        macroSuffixPart: () => "V"
+    }
+
+    return new MaterializedMethod(
+            clazz.className,
+            [],
+            destroyPeerReturnType,
+            false,
+            new Method(
+                'destroyPeer',
+                new NamedMethodSignature(
+                    IDLVoidType,
+                    [createReferenceType(clazz.className)],
+                    ['peer']
+                )
+            )
+        )
+}
+
+export function collectMaterializedImports(imports: ImportsCollector, library: PeerLibrary, level: string = "") {
     for (const materialized of library.materializedClasses.keys()) {
         imports.addFeature(materialized, `${level}Ark${materialized}Materialized`)
     }

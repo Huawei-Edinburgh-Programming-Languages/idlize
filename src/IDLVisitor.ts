@@ -560,7 +560,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         })
     }
 
-    serializeTupleType(node: ts.TupleTypeNode, nameSuggestion?: NameSuggestion, typeParameters?: ts.NodeArray<ts.TypeParameterDeclaration>, withOperator: boolean = false): idl.IDLInterface {
+    serializeTupleType(node: ts.TupleTypeNode, nameSuggestion?: NameSuggestion, typeParameters?: ts.NodeArray<ts.Node>, withOperator: boolean = false): idl.IDLInterface {
         const properties = node.elements.map((it, index) => this.serializeTupleProperty(it, index, withOperator))
         const syntheticName = `Tuple_${properties.map(it => this.computeTypeName(it.type)).join("_")}`
         const selectedName = selectName(nameSuggestion, syntheticName)
@@ -602,12 +602,16 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         })
         result.elements = node.members
             .filter(ts.isEnumMember)
-            .map((it, index) => this.serializeEnumMember(it, result, names[index]))
+            .map((it, index) => this.serializeEnumMember(it, result, names[index], identName(it.name)!))
         return result
     }
 
-    serializeEnumMember(node: ts.EnumMember, parent: idl.IDLEnum, name: string): idl.IDLEnumMember {
+    serializeEnumMember(node: ts.EnumMember, parent: idl.IDLEnum, name: string, originalName: string): idl.IDLEnumMember {
         const initializer = this.typeChecker.getConstantValue(node)
+        let extendedAttributes = this.computeDeprecatedExtendAttributes(node)
+        if (originalName != name) {
+            extendedAttributes.push({ name: idl.IDLExtendedAttributes.OriginalEnumMemberName, value: originalName })
+        }
         return idl.createEnumMember(
             name,
             parent,
@@ -615,7 +619,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             initializer, {
             fileName: node.getSourceFile().fileName,
             documentation: getDocumentation(this.sourceFile, node, this.options.docs),
-            extendedAttributes: this.computeDeprecatedExtendAttributes(node),
+            extendedAttributes: extendedAttributes
         })
     }
 
@@ -748,6 +752,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
     }
 
     private computeTypeName(type: idl.IDLType): string {
+        if (idl.isOptionalType(type)) return "Opt_" + this.computeTypeName(type.type)
         if (idl.isPrimitiveType(type)) return capitalize(type.name)
         if (idl.isContainerType(type)) {
             const typeArgs = type.elementType.map(it => this.computeTypeName(it)).join("_")
@@ -760,7 +765,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         }
         if (idl.isNamedNode(type))
             return type.name
-        throw `Can not compute type name of ${idl.IDLKind[type.kind]}`
+        throw new Error(`Can not compute type name of ${idl.IDLKind[type.kind]}`)
     }
 
     /**
@@ -781,7 +786,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
                 }
                 return idl.createTypeParameterReference(paramName)
             }
-            return this.serializeType(arg)
+            return this.serializeType(arg, undefined, typeArgs)
         })
     }
 
@@ -793,37 +798,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         }
     }
 
-
-    // Check if particular place is suitable for conversion of return type to `this` type.
-    private isSuitableForThisConversion(owner: ts.ClassDeclaration | ts.ObjectTypeDeclaration | ts.InterfaceDeclaration | ts.Node) {
-        let result = false
-        if (ts.isClassDeclaration(owner))
-            result ||= isCommonMethodOrSubclass(this.typeChecker, owner)
-        if (ts.isInterfaceDeclaration(owner) || ts.isClassDeclaration(owner))
-            result ||= PeerGeneratorConfig.builderClasses.includes(identName(owner.name)!)
-        return result
-    }
-
-    private serializeTypeOrThis(
-        method: ts.MethodDeclaration | ts.MethodSignature | ts.FunctionDeclaration | ts.CallSignatureDeclaration | ts.ConstructorDeclaration | ts.ConstructSignatureDeclaration | ts.IndexSignatureDeclaration,
-        nameSuggestion?: NameSuggestion
-    ): idl.IDLType {
-        let type = this.serializeType(method.type, nameSuggestion)
-
-        if (!this.isSuitableForThisConversion(method.parent)) return type
-
-        let className = this.ownerName(method)
-        // We use `this` IDL type when converting builder methods of UI nodes or similar types.
-        let retTypeName = idl.isNamedNode(type) ? idl.forceAsNamedNode(type).name : undefined
-        const isMethodStatic = method.modifiers?.some(mod => mod.kind === ts.SyntaxKind.StaticKeyword)
-
-        if (!isMethodStatic && ((retTypeName == className) || retTypeName === 'T'))
-            return idl.IDLThisType
-        else
-            return type
-    }
-
-    serializeType(type: ts.TypeNode | undefined, nameSuggestion?: NameSuggestion): idl.IDLType {
+    serializeType(type: ts.TypeNode | undefined, nameSuggestion?: NameSuggestion, typeArgs?: ts.NodeArray<ts.TypeNode>): idl.IDLType {
         if (type == undefined) return idl.IDLUndefinedType // TODO: can we have implicit types in d.ts?
 
         if (type.kind == ts.SyntaxKind.UndefinedKeyword) {
@@ -899,7 +874,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             return idl.createContainerType("sequence", [this.serializeType(type.elementType, nameSuggestion)])
         }
         if (ts.isTupleTypeNode(type)) {
-            const tupleType = this.serializeTupleType(type, nameSuggestion)
+            const tupleType = this.serializeTupleType(type, nameSuggestion, typeArgs)
             this.addSyntheticType(tupleType)
             return idl.createReferenceType(tupleType.name)
         }
@@ -1046,6 +1021,11 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             console.log(`WARNING: ${sourceText} is union with 'void', which is not supported, remove 'void' variant`)
             types = types.filter(it => it !== idl.IDLVoidType)
         }
+        if (types.find(it => it === idl.IDLUndefinedType)) {
+            return idl.createOptionalType(
+                typeOrUnion(types.filter(it => it !== idl.IDLUndefinedType))
+            )
+        }
         return typeOrUnion(types, selectedUnionName)
     }
 
@@ -1056,10 +1036,24 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         this.computeDeprecatedExtendAttributes(property, extendedAttributes)
         if (ts.isMethodDeclaration(property) || ts.isMethodSignature(property)) {
             if (!this.isCommonMethodUsedAsProperty(property)) throw new Error("Wrong")
+            let type = this.serializeType(property.parameters[0].type, nameSuggestion?.extend(nameOrNull(property.parameters[0].name)!))
+            if  ((escapedName == "onWillScroll" || escapedName == "onDidScroll") && ts.isClassDeclaration(property.parent)) {
+                let parentName = identName(property.parent.name)
+                if (parentName == "ScrollableCommonMethod" || parentName == "ScrollAttribute") {
+                    /**
+                     * ScrollableCommonMethod has a method `onWillScroll(handler: Optional<OnWillScrollCallback>): T;`
+                     * ScrollAttribute extends ScrollableCommonMethod and overrides this method as
+                     * `onWillScroll(handler: ScrollOnWillScrollCallback): ScrollAttribute;`. So that override is not
+                     * valid and cannot be correctly processed so we force ScrollOnWillScrollCallback as parameter type.
+                     */
+                    type = idl.createOptionalType(idl.createReferenceType("ScrollOnWillScrollCallback"))
+                    console.log(`WARNING: forcing type of ${parentName}.${escapedName} to ScrollOnWillScrollCallback|undefined`)
+                }
+            }
             extendedAttributes.push({ name: idl.IDLExtendedAttributes.CommonMethod })
             return idl.createProperty(
                 escapedName,
-                this.serializeType(property.parameters[0].type, nameSuggestion?.extend(nameOrNull(property.parameters[0].name)!)),
+                type,
                 false,
                 false,
                 isDefined(property.parameters[0].questionToken), {
@@ -1175,7 +1169,6 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         this.computeDeprecatedExtendAttributes(method, extendedAttributes)
         this.computeExportAttribute(method, extendedAttributes)
         let [methodName, escapedMethodName] = escapeName(nameOrNull(method.name) ?? "_unknown")
-
         let dtsNameAttributeAccounted: boolean = !!extendedAttributes.find(ea => ea.name == idl.IDLExtendedAttributes.DtsName)
         const methodParameters = method.parameters.filter((param, paramIndex) : boolean => {
             const paramName = nameOrNull(param.name)
@@ -1260,7 +1253,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             })
         }
         this.computeClassMemberExtendedAttributes(method as ts.ClassElement, methodName, escapedMethodName, extendedAttributes)
-        let returnType = this.serializeTypeOrThis(method, nameSuggestion?.extend('ret'))
+        const returnType = this.serializeType(method.type, nameSuggestion?.extend('ret'))
         return idl.createMethod(
             escapedMethodName,
             methodParameters.map(it => this.serializeParameter(it, nameSuggestion)),
@@ -1342,8 +1335,13 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         throw new Error(`Cannot infer type of ${declaration.getText()}`)
     }
 
-    private collectTypeParameters(typeParameters: ts.NodeArray<ts.TypeParameterDeclaration> | undefined): string[] | undefined {
-        return this.context.typeParameterMap ? undefined : typeParameters?.map(it => it.getText())
+    private collectTypeParameters(typeParameters: ts.NodeArray<ts.Node> | undefined): string[] | undefined {
+        return this.context.typeParameterMap ? undefined : typeParameters?.flatMap(it => {
+            if (ts.isTupleTypeNode(it)) {
+                return it.elements.map(it => it.getText())
+            }
+            return it.getText()
+        })
     }
 }
 
