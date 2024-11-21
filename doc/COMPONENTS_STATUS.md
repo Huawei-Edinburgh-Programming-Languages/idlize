@@ -1106,13 +1106,13 @@
 |`textIndent`| Function |Samarin Sergey |in progress |  |
 |`wordBreak`| Function | Samarin Sergey | done |  |
 |`lineBreakStrategy`| Function |Samarin Sergey |in progress |  |
-|`onCopy`| Function | Samarin Sergey |in progress |  |
+|`onCopy`| Function | Kirill Kirichenko | done |  |
 |`caretColor`| Function |Samarin Sergey |in progress |  |
 |`selectedBackgroundColor`| Function |Samarin Sergey |in progress |  |
 |`ellipsisMode`| Function |Samarin Sergey | done |  |
 |`EnableDataDetector`| Function | Kirill Kirichenko | done |  |
 |`DataDetectorConfig`| Function | Kirill Kirichenko | in progress |  |
-|`onTextSelectionChange`| Function |Samarin Sergey |in progress |  |
+|`onTextSelectionChange`| Function | Kirill Kirichenko | done |  |
 |`fontFeature`| Function |Samarin Sergey |in progress |  |
 |`privacySensitive`| Function |Samarin Sergey | done |  |
 |`textSelectable`| Function |Samarin Sergey | done |  |
