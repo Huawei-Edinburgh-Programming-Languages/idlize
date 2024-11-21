@@ -1070,9 +1070,9 @@
 |`barGridAlign`| Function | Tuzhilkin Ivan | done |  |
 |`customContentTransition`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
 |`barBackgroundBlurStyle`| Function | Tuzhilkin Ivan | done |  |
-|`barBackgroundEffect`| Function | | | |
+|`barBackgroundEffect`| Function | Tuzhilkin Ivan | in progress | |
 |`onContentWillChange`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
-|`barModeBarMode_SCROLLABLE`| Function | | | |
+|`barModeBarMode_SCROLLABLE`| Function | Tuzhilkin Ivan | in progress | |
 |*TabContent*| *Component* | Evstigneev Roman |in progress |  |
 |`setTabContentOptions`| Function | Evstigneev Roman | done |  |
 |`tabBar`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
@@ -1651,8 +1651,8 @@
 |`splice`| Function | Morozov Sergey | done |  |
 |`update`| Function | Morozov Sergey | done |  |
 |`getChildDefaultSize`| Function | Morozov Sergey | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB4QKQ |
-|*GestureModifier*| *Class* | | | |
-|`applyGesture`| Function | | | |
+|*GestureModifier*| *Class* | Tuzhilkin Ivan | | |
+|`applyGesture`| Function | Tuzhilkin Ivan | in progress | |
 |*AbstractProperty*| *Class* | | | |
 |`get`| Function | | | |
 |`set`| Function | | | |
