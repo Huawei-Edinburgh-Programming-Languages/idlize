@@ -9,16 +9,13 @@ import {
     MethodModifier,
     NamedMethodSignature
 } from "../LanguageWriters";
-import { throwException } from "../../util";
-import { IdlPeerLibrary } from "../idl/IdlPeerLibrary";
+import { PeerLibrary } from "../PeerLibrary";
 import {
-    convertDeclToFeature, createDeclDependenciesCollector,
-    createTypeDependenciesCollector,
+    convertDeclToFeature,
     isBuilderClass,
-    isMaterialized,
 } from "../idl/IdlPeerGeneratorVisitor";
 import { getSyntheticDeclarationList } from "../idl/IdlSyntheticDeclarations";
-import { DeclarationNameConvertor } from "../idl/IdlNameConvertor";
+import { createDeclarationNameConvertor, DeclarationNameConvertor } from "../idl/IdlNameConvertor";
 import { Language } from "../../Language";
 import {IDLBooleanType, toIDLType} from "../../idl";
 import { getReferenceResolver } from '../ReferenceResolver';
@@ -35,7 +32,7 @@ const builtInInterfaceTypes = new Map<string,
             (writer: LanguageWriter, value: string) => writer.makeCallIsResource(value)],
     ])
 
-export function importTypeChecker(library: IdlPeerLibrary, imports: ImportsCollector): void {
+export function importTypeChecker(library: PeerLibrary, imports: ImportsCollector): void {
     imports.addFeature("TypeChecker", "#components")
 }
 
@@ -65,21 +62,27 @@ class StructDescriptor {
     }
 }
 
-function collectFields(library: IdlPeerLibrary, target: idl.IDLInterface, struct: StructDescriptor): void {
-    const superType = idl.getSuperType(target)
-    if (superType && idl.isReferenceType(superType)) {
-        const decl = library.resolveTypeReference(superType) ?? throwException(`Wrong type reference ${idl.IDLKind[superType.kind]}`)
-        if ((idl.isInterface(decl) || idl.isClass(decl) || idl.isAnonymousInterface(decl))) {
-            collectFields(library, decl, struct)
-        }
+function collectFields(library: PeerLibrary, target: idl.IDLInterface, struct: StructDescriptor): void {
+    //TODO: is it need to collect conflicting declarations properties?
+    if (library.conflictedDeclarations.has(target)) {
+        return
     }
+
+    //TODO: is recursive property collection necessary?
+    // const superType = idl.getSuperType(target)
+    // if (superType && idl.isReferenceType(superType)) {
+    //     const decl = library.resolveTypeReference(superType) ?? throwException(`Wrong type reference ${idl.IDLKind[superType.kind]}`)
+    //     if ((idl.isInterface(decl) || idl.isClass(decl) || idl.isAnonymousInterface(decl))) {
+    //         collectFields(library, decl, struct)
+    //     }
+    // }
 
     target.properties?.filter(it => !it.isStatic).forEach(it => {
         struct.addField(new FieldRecord(it.type, it.name, it.isOptional))
     })
 }
 
-function makeStructDescriptor(library: IdlPeerLibrary, target: idl.IDLEntry): StructDescriptor {
+function makeStructDescriptor(library: PeerLibrary, target: idl.IDLEntry): StructDescriptor {
     const result = new StructDescriptor()
     if (idl.isInterface(target)
         || idl.isAnonymousInterface(target)
@@ -92,7 +95,7 @@ function makeStructDescriptor(library: IdlPeerLibrary, target: idl.IDLEntry): St
 
 abstract class TypeCheckerPrinter {
     constructor(
-        protected readonly library: IdlPeerLibrary,
+        protected readonly library: PeerLibrary,
         public readonly writer: LanguageWriter,
     ) {}
 
@@ -103,35 +106,32 @@ abstract class TypeCheckerPrinter {
         for (const feature of features) {
             imports.addFeature(feature.feature, feature.module)
         }
-        for (const file of this.library.files)
-            for (const feature of file.serializeImportFeatures)
+        //TODO: needs to collect imports via DeclarationDependenciesCollector, this increases compilation time
+        for (const file of this.library.files) {
+            for (const feature of [...file.serializeImportFeatures, ...file.importFeatures]) {
                 imports.addFeature(feature.feature, feature.module)
+            }
+        }
         imports.print(this.writer, 'arkts/type_check')
     }
-    protected abstract writeInterfaceChecker(name: string, descriptor: StructDescriptor): void
+    protected abstract writeInterfaceChecker(name: string, descriptor: StructDescriptor, type?: idl.IDLType): void
     protected abstract writeArrayChecker(typeName: string, type: idl.IDLType): void
 
     print() {
         const importFeatures: ImportFeature[] = []
-        const interfaces: { name: string, descriptor: StructDescriptor }[] = []
+        const interfaces: { name: string, type?: idl.IDLType, descriptor: StructDescriptor }[] = []
         const seenNames = new Set<string>()
-        const declDependenciesCollector
-            = createDeclDependenciesCollector(this.library, createTypeDependenciesCollector(this.library))
+        const declNameConvertor = createDeclarationNameConvertor(this.library.language)
 
         for (const file of this.library.files) {
-            const declarations: idl.IDLEntry[] = [...Array.from(file.declarations), ...file.enums]
-            // Collects materialized and builder classes
-            for (const decl of file.entries) {
-                if ((idl.isClass(decl) || idl.isInterface(decl)) && (isMaterialized(decl) || isBuilderClass(decl))) {
-                    declarations.push(decl,
-                        ...declDependenciesCollector.convert(decl)
-                        .filter((it): it is idl.IDLEntry => idl.isEntry(it))
-                        .map(it => it)
-                    )
-                }
-            }
-            for (const decl of declarations
-                .filter(it => !PeerGeneratorConfig.ignoreEntry(it.name, this.writer.language))) {
+            const builders = file.entries.filter(it => idl.isClass(it) && isBuilderClass(it))
+            const declarations = [
+                ...Array.from(file.declarations),
+                ...file.enums,
+                ...builders,
+                ...this.library.conflictedDeclarations
+            ].filter(it => !PeerGeneratorConfig.ignoreEntry(it.name, this.writer.language))
+            for (const decl of declarations) {
                 if ((idl.isInterface(decl) || idl.isAnonymousInterface(decl) || idl.isEnum(decl) || idl.isClass(decl))
                     && !seenNames.has(decl.name)) {
                     seenNames.add(decl.name)
@@ -139,7 +139,8 @@ abstract class TypeCheckerPrinter {
                         importFeatures.push(convertDeclToFeature(this.library, decl))
                     }
                     interfaces.push({
-                        name: convertDeclaration(DeclarationNameConvertor.I, decl),
+                        name: convertDeclaration(declNameConvertor, decl),
+                        type: idl.createReferenceType(decl.name),
                         descriptor: makeStructDescriptor(this.library, decl)
                     })
                 }
@@ -152,7 +153,7 @@ abstract class TypeCheckerPrinter {
             .forEach(it => {
                 importFeatures.push(convertDeclToFeature(this.library, it))
                 interfaces.push({
-                    name: convertDeclaration(DeclarationNameConvertor.I, it),
+                    name: convertDeclaration(declNameConvertor, it),
                     descriptor: makeStructDescriptor(this.library, it)
                 })
         })
@@ -164,7 +165,7 @@ abstract class TypeCheckerPrinter {
         this.writeImports(importFeatures)
         this.writer.writeClass("TypeChecker", writer => {
             for (const struct of interfaces)
-                this.writeInterfaceChecker(struct.name, struct.descriptor)
+                this.writeInterfaceChecker(struct.name, struct.descriptor, struct.type)
 
             const arrayTypes = Array.from(this.library.seenArrayTypes)
                 .sort((a, b) => a[0].localeCompare(b[0]))
@@ -182,7 +183,7 @@ abstract class TypeCheckerPrinter {
 
 class ARKTSTypeCheckerPrinter extends TypeCheckerPrinter {
     constructor(
-        library: IdlPeerLibrary
+        library: PeerLibrary
     ) {
         super(library, createLanguageWriter(Language.ARKTS, getReferenceResolver(library)))
     }
@@ -192,7 +193,7 @@ class ARKTSTypeCheckerPrinter extends TypeCheckerPrinter {
         this.writer.writeMethodImplementation(new Method(
             checkerName,
             new NamedMethodSignature(IDLBooleanType, 
-                [toIDLType('object|string|number|undefined|null'), ...argsNames.map(_ => IDLBooleanType)], 
+                [toIDLType('object|string|number|undefined|null'), ...argsNames.map(_ => IDLBooleanType)],
                 ['value', ...argsNames]),
             [MethodModifier.STATIC],
         ), writer => {
@@ -208,26 +209,24 @@ class ARKTSTypeCheckerPrinter extends TypeCheckerPrinter {
     }
 
     protected writeArrayChecker(typeName: string, type: idl.IDLType): void {
-        this.writeInstanceofChecker(this.library.mapType(type), generateTypeCheckerName(typeName), 0)
+        this.writeInstanceofChecker(this.writer.getNodeName(type), generateTypeCheckerName(typeName), 0)
     }
 }
 
 class TSTypeCheckerPrinter extends TypeCheckerPrinter {
     constructor(
-        library: IdlPeerLibrary
+        library: PeerLibrary
     ) {
         super(library, createLanguageWriter(Language.TS, getReferenceResolver(library)))
     }
 
-    protected writeInterfaceChecker(name: string, descriptor: StructDescriptor): void {
-        if (descriptor.getFields().length === 0) {
-            return
-        }
+    protected writeInterfaceChecker(name: string, descriptor: StructDescriptor, type: idl.IDLType): void {
+        const typeName = this.library.mapType(type)
         const argsNames = descriptor.getFields().map(it => `duplicated_${it.name}`)
         this.writer.writeMethodImplementation(new Method(
             generateTypeCheckerName(name),
             new NamedMethodSignature(IDLBooleanType, 
-                [toIDLType('object|string|number|undefined|null'), ...argsNames.map(_ => IDLBooleanType)], 
+                [toIDLType('object|string|number|undefined|null|boolean'), ...argsNames.map(_ => IDLBooleanType)],
                 ['value', ...argsNames]),
             [MethodModifier.STATIC],
         ), writer => {
@@ -236,16 +235,21 @@ class TSTypeCheckerPrinter extends TypeCheckerPrinter {
                 const bWeight = b.optional ? 1 : 0
                 return aWeight - bWeight
             })
-            const statement = writer.makeMultiBranchCondition(orderedFields.map(it => {
-                return {
-                    expr: writer.makeNaryOp("&&", [
-                        writer.makeString(`!duplicated_${it.name}`),
-                        writer.makeString(`value?.hasOwnProperty("${it.name}")`)
-                    ]),
-                    stmt: writer.makeReturn(writer.makeString('true'))
-                }
-            }), writer.makeThrowError(`Can not discriminate value typeof ${name}`))
-            writer.writeStatement(statement)
+
+            const throwErrorStatement = writer.makeThrowError(`Can not discriminate value typeof ${typeName}`)
+            let checkStatement = throwErrorStatement
+            if (orderedFields.length > 0) {
+                 checkStatement = writer.makeMultiBranchCondition(orderedFields.map(it => {
+                    return {
+                        expr: writer.makeNaryOp("&&", [
+                            writer.makeString(`!duplicated_${it.name}`),
+                            writer.makeString(`value?.hasOwnProperty("${it.name}")`)
+                        ]),
+                        stmt: writer.makeReturn(writer.makeString('true'))
+                    }
+                }), throwErrorStatement)
+            }
+            writer.writeStatement(checkStatement)
         })
     }
 
@@ -261,13 +265,13 @@ class TSTypeCheckerPrinter extends TypeCheckerPrinter {
     }
 }
 
-export function writeARKTSTypeCheckers(library: IdlPeerLibrary, printer: LanguageWriter) {
+export function writeARKTSTypeCheckers(library: PeerLibrary, printer: LanguageWriter) {
     const checker = new ARKTSTypeCheckerPrinter(library)
     checker.print()
     printer.concat(checker.writer)
 }
 
-export function writeTSTypeCheckers(library: IdlPeerLibrary, printer: LanguageWriter) {
+export function writeTSTypeCheckers(library: PeerLibrary, printer: LanguageWriter) {
     const checker = new TSTypeCheckerPrinter(library)
     checker.print()
     printer.concat(checker.writer)

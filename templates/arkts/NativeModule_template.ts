@@ -15,20 +15,20 @@
 
 import { callCallback } from "../CallbackRegistry"
 import { int32 } from "@koalaui/common"
-import { 
+import {
   KBoolean,
   KUInt,
-  KInt, 
+  KInt,
   KLong,
   KFloat,
-  KPointer, 
-  KStringPtr, 
+  KPointer,
+  KStringPtr,
   KUint8ArrayPtr,
   KInt32ArrayPtr,
   KFloat32ArrayPtr,
 } from "@koalaui/interop"
 
-
+import { Length } from "../ArkUnitsInterfaces"
 
 let theModule: NativeModule
 
@@ -41,8 +41,8 @@ export function nativeModule(): NativeModule {
 
 export class NativeModule {
   static {
-    loadLibrary("NativeBridgeArk")
-    NativeModule.init();
+    loadLibrary("ArkoalaNative_ark")
+    NativeModule.init()
   }
 
   static native init(): void;

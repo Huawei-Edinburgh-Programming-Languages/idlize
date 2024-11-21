@@ -13,16 +13,24 @@
  * limitations under the License.
  */
 
-
-// WARNING! THIS FILE IS AUTO-GENERATED, DO NOT MAKE CHANGES, THEY WILL BE LOST ON NEXT GENERATION!
-
 package org.koalaui.arkoala;
 
+import java.util.function.Consumer;
+
 public class Application {
-    Application() {}
+    UserView view;
+    Consumer<PeerNode> builderFunction;
+    PeerNode rootNode;
+
+    Application(UserView view) {
+        this.view = view;
+        builderFunction = view.getBuilder();
+        rootNode = ArkColumnPeer.create(ArkUINodeType.Column, null, 0);
+    }
 
     public static void main(String[] args) {
-        var app = Application.startApplication();
+        var app = Application.createApplication("init", "");
+        var root = app.start();
         try {
             for (int i = 0; i < 10; i++) {
                 app.loopIteration(i, 0);
@@ -33,24 +41,31 @@ public class Application {
         }
     }
 
-    public static Application startApplication() {
-        NativeModule._NativeLog("NativeModule.startApplication");
-        return new Application().start();
+    public static Application createApplication(String app, String params) {
+        NativeModule._NativeLog("NativeModule.createApplication " +  app + " , params=" + params);
+        UserView view = (UserView)NativeModule._LoadUserView("org.koalaui.arkoala.View" + app, params);
+        if (view == null) throw new Error("Cannot load user view");
+        return new Application(view);
     }
 
-    public void enter(int arg0, int arg1) {
-        loopIteration(arg0, arg1);
+    public boolean enter(int arg0, int arg1) {
+        return loopIteration(arg0, arg1);
     }
 
-    public void loopIteration(int arg0, int arg1) {
+    public boolean loopIteration(int arg0, int arg1) {
         checkEvents(arg0);
         updateState();
         render();
+        return false;
     }
+
+    byte[] eventBuffer = new byte[4 * 60];
 
     void checkEvents(int what) {
         System.out.println("JAVA: checkEvents " + what);
-        NativeModule._CreateNode(0, 0, 0);
+        while (NativeModule._CheckArkoalaGeneratedEvents(eventBuffer, eventBuffer.length) != 0) {
+            System.out.println("JAVA: checkEvents: got an event: " + (int)eventBuffer[0]);
+        }
     }
 
     void updateState() {
@@ -59,9 +74,11 @@ public class Application {
 
     void render() {
         System.out.println("JAVA: render");
+        builderFunction.accept(rootNode);
     }
 
-    public Application start() {
-        return this;
+    public long start() {
+        System.out.println("JAVA: start");
+        return 42;
     }
 }

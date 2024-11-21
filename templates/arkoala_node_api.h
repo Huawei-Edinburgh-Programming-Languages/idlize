@@ -69,9 +69,11 @@ typedef struct ServiceLogger {
 } ServiceLogger;
 
 typedef struct GenericServiceAPI {
-    Ark_Int32 version;
+    int32_t version;
     void (*setLogger)(const ServiceLogger* logger);
 } GenericServiceAPI;
+
+typedef void (*Ark_VsyncCallback)(Ark_PipelineContext);
 
 typedef struct %CPP_PREFIX%ArkUIExtendedNodeAPI {
     Ark_Int32 version;
@@ -80,6 +82,7 @@ typedef struct %CPP_PREFIX%ArkUIExtendedNodeAPI {
     Ark_Float32 (*getFontScale) (Ark_Int32 deviceId);
     Ark_Float32 (*getDesignWidthScale) (Ark_Int32 deviceId);
 
+    // TODO: remove!
     void (*setCallbackMethod)(%CPP_PREFIX%Ark_APICallbackMethod* method);
 
     // the custom node is not set in create.
@@ -136,18 +139,13 @@ typedef struct %CPP_PREFIX%ArkUIExtendedNodeAPI {
 
     /// Vsync support
     Ark_PipelineContext (*getPipelineContext)(Ark_NodeHandle node);
-    void (*setVsyncCallback)(Ark_VMContext  vmContext,
-                             Ark_PipelineContext pipelineContext,
-                             Ark_Int32 callbackId);
-    void (*unblockVsyncWait)(Ark_VMContext  vmContext,
-                             Ark_PipelineContext pipelineContext);
+    void (*setVsyncCallback)(Ark_PipelineContext pipelineContext,
+                             Ark_VsyncCallback callback);
+    void (*setChildTotalCount)(Ark_NodeHandle node,
+                               Ark_Int32 totalCount);
 
-  void (*setChildTotalCount)(Ark_NodeHandle node,
-                             Ark_Int32 totalCount);
-
-  /// Error reporting.
-  void (*showCrash)(Ark_CharPtr message);
-
+    /// Error reporting.
+    void (*showCrash)(Ark_CharPtr message);
 } %CPP_PREFIX%ArkUIExtendedNodeAPI;
 
 /**

@@ -17,6 +17,8 @@
 #include <algorithm>
 #include <array>
 #include <chrono>
+#include <future>
+#include <thread>
 
 #include "arkoala_api_generated.h"
 #include "Serializers.h"
@@ -136,6 +138,7 @@ void DumpTree(TreeNode *node, Ark_Int32 indent) {
     }
 }
 
+// TODO: remove in favour of callbackCallerInstance!
 GENERATED_Ark_APICallbackMethod *callbacks = nullptr;
 
 int TreeNode::_globalId = 1;
@@ -767,10 +770,17 @@ Ark_Int32 IndexerChecker(Ark_VMContext vmContext, Ark_NodeHandle nodePtr) {
 void SetRangeUpdater(Ark_NodeHandle nodePtr, Ark_Int32 updaterId) {}
 void SetLazyItemIndexer(Ark_VMContext vmContext, Ark_NodeHandle nodePtr, Ark_Int32 indexerId) {}
 Ark_PipelineContext GetPipelineContext(Ark_NodeHandle node) {
-    return nullptr;
+    return (Ark_PipelineContext)42;
 }
-void SetVsyncCallback(Ark_VMContext vmContext, Ark_PipelineContext pipelineContext, Ark_Int32 callbackId) {}
-void UnblockVsyncWait(Ark_VMContext vmContext, Ark_PipelineContext pipelineContext) {}
+void SetVsyncCallback(Ark_PipelineContext pipelineContext, Ark_VsyncCallback callback) {
+    auto producer = std::thread([pipelineContext, callback] {
+        while (true) {
+            std::this_thread::sleep_for(1000ms);
+            callback(pipelineContext);
+        }
+    });
+    producer.detach();
+}
 void SetChildTotalCount(Ark_NodeHandle node, Ark_Int32 totalCount) {}
 void ShowCrash(Ark_CharPtr message) {}
 }

@@ -91,7 +91,7 @@ export class JavaAssignStatement extends AssignStatement {
      }
      write(writer: LanguageWriter): void{
         if (this.isDeclared) {
-            const typeSpec = this.type ? writer.stringifyType(this.type) : "var"
+            const typeSpec = this.type ? writer.getNodeName(this.type) : "var"
             writer.print(`${typeSpec} ${this.variableName} = ${this.expression.asString()};`)
         } else {
             writer.print(`${this.variableName} = ${this.expression.asString()};`)
@@ -124,8 +124,8 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         this.typeConvertor = new JavaIDLNodeToStringConvertor(this.resolver)
     }
 
-    stringifyType(type: idl.IDLType): string {
-        return this.typeConvertor.convertType(type)
+    getNodeName(type: idl.IDLNode): string {
+        return this.typeConvertor.convert(type)
     }
 
     fork(): LanguageWriter {
@@ -159,13 +159,13 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     }
     writeFieldDeclaration(name: string, type: idl.IDLType, modifiers: FieldModifier[] | undefined, optional: boolean, initExpr?: LanguageExpression): void {
         let prefix = this.makeFieldModifiersList(modifiers)
-        this.printer.print(`${prefix} ${(this.stringifyType(type))} ${name}${initExpr ? ` = ${initExpr.asString()}` : ""};`)
+        this.printer.print(`${prefix} ${(this.getNodeName(type))} ${name}${initExpr ? ` = ${initExpr.asString()}` : ""};`)
     }
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
         this.writeMethodDeclaration(name, signature, [MethodModifier.STATIC, MethodModifier.NATIVE])
     }
     writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method, modifiers?: MethodModifier[]) {
-        this.printer.print(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') : ''} ${className}(${signature.args.map((it, index) => `${this.stringifyType(it)} ${signature.argName(index)}`).join(", ")}) {`)
+        this.printer.print(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') : ''} ${className}(${signature.args.map((it, index) => `${this.getNodeName(it)} ${signature.argName(index)}`).join(", ")}) {`)
         this.pushIndent()
         if (superCall) {
             this.print(`super(${superCall.signature.args.map((_, i) => superCall?.signature.argName(i)).join(", ")});`)
@@ -202,7 +202,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         return this.makeString(`${map}.size()`)
     }
     makeCast(value: LanguageExpression, type: idl.IDLType, options?: MakeCastOptions): LanguageExpression {
-        return new JavaCastExpression(value, this.stringifyType(type), options?.unsafe ?? false)
+        return new JavaCastExpression(value, this.getNodeName(type), options?.unsafe ?? false)
     }
     makeStatement(expr: LanguageExpression): LanguageStatement {
         return new CLikeExpressionStatement(expr)
@@ -228,7 +228,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     }
     mapIDLContainerType(type: idl.IDLContainerType): string {
         switch (type.containerKind) {
-            case "sequence": return `${this.stringifyType(type.elementType[0])}[]`
+            case "sequence": return `${this.getNodeName(type.elementType[0])}[]`
         }
         throw new Error(`Unmapped container type ${idl.DebugUtils.debugPrintType(type)}`)
     }
@@ -281,8 +281,8 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     enumFromOrdinal(value: LanguageExpression, _: idl.IDLEnum): LanguageExpression {
         throw new Error("Method not implemented.")
     }
-    ordinalFromEnum(value: LanguageExpression, _: idl.IDLEnum): LanguageExpression {
-        throw new Error("Method not implemented.")
+    ordinalFromEnum(value: LanguageExpression, _: idl.IDLType): LanguageExpression {
+        return this.makeString(`${value.asString()}.value`)
     }
     makeValueFromOption(value: string): LanguageExpression {
         return this.makeString(`${value}`)

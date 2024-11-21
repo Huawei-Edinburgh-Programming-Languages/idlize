@@ -14,11 +14,11 @@
  */
 
 import * as idl from "../idl";
-import { IdlPeerLibrary } from "./idl/IdlPeerLibrary";
+import { PeerLibrary } from "./PeerLibrary";
 
 export interface ReferenceResolver {
     resolveTypeReference(type: idl.IDLReferenceType, entries?: idl.IDLEntry[]): idl.IDLEntry | undefined
-    toDeclaration(type: idl.IDLType | idl.IDLCallback): idl.IDLNode
+    toDeclaration(type: idl.IDLNode): idl.IDLNode
 }
 
 export function createEmptyReferenceResolver(): ReferenceResolver {
@@ -32,6 +32,6 @@ export function createEmptyReferenceResolver(): ReferenceResolver {
     }
 }
 
-export function getReferenceResolver(library: IdlPeerLibrary): ReferenceResolver {
+export function getReferenceResolver(library: PeerLibrary): ReferenceResolver {
     return library
 }

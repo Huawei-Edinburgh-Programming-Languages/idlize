@@ -16,12 +16,18 @@
 import * as idl from "../../idl"
 import { CustomPrintVisitor as DtsPrintVisitor} from "../../from-idl/DtsPrinter"
 import { isMaterialized } from "../idl/IdlPeerGeneratorVisitor"
-import { IdlPeerLibrary } from "../idl/IdlPeerLibrary"
-import { IndentedPrinter } from "../../IndentedPrinter"
+import { PeerLibrary } from "../PeerLibrary"
+import { LanguageWriter } from "../LanguageWriters"
 
-export function printDeclarations(peerLibrary: IdlPeerLibrary): Array<string> {
+export function printDeclarations(peerLibrary: PeerLibrary): Array<string> {
     const result = []
+    const seenEnums = new Set<string>()
     for (const decl of peerLibrary.declarations) {
+        if (idl.isEnum(decl)) {
+            // One more hack to avoid double definition of ContentType enum.
+            if (seenEnums.has(decl.name)) continue
+            seenEnums.add(decl.name)
+        }
         const visitor = new DtsPrintVisitor(type => peerLibrary.resolveTypeReference(type), peerLibrary.language)
         if ((idl.isInterface(decl) || idl.isClass(decl)) && isMaterialized(decl)) continue
         visitor.visit(decl)
@@ -36,4 +42,16 @@ export function printDeclarations(peerLibrary: IdlPeerLibrary): Array<string> {
         }
     }
     return result
+}
+
+export function printEnumsImpl(peerLibrary: PeerLibrary, writer: LanguageWriter) {
+    const seenNames = new Set()
+    for (const decl of peerLibrary.declarations) {
+        if (idl.isEnum(decl)) {
+            // An ugly hack to avoid double definition of ContentType enum.
+            if (seenNames.has(decl.name) && decl.name == "ContentType") continue
+            seenNames.add(decl.name)
+            writer.writeStatement(writer.makeEnumEntity(decl, true))
+        }
+    }
 }

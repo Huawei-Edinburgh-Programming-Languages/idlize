@@ -91,7 +91,7 @@ export class PeerGeneratorConfig {
         "GestureHandler",           // class with generics
         // constant values need to be generated
         // "equals(id: TextMenuItemId): boolean" method leads to the "cycle detected" message
-        "TextMenuItemId",
+        // "TextMenuItemId", // SyntaxError: Unexpected token, expected 'private' or identifier [ArkTextCommonInterfaces.ts:52:24]
         "AnimatableArithmetic", // Unused generic class
     ]
 
@@ -182,8 +182,6 @@ export class PeerGeneratorConfig {
 
     static isConflictedDeclaration(node: ts.Declaration): boolean {
         if (!this.needInterfaces) return false
-        // duplicate type declarations with different signatures
-        if (ts.isTypeAliasDeclaration(node) && node.name.text === 'OnWillScrollCallback') return true
         // has same named class and interface
         if ((ts.isInterfaceDeclaration(node) || ts.isClassDeclaration(node)) && node.name?.text === 'LinearGradient') return true
         // just has ugly dependency WrappedBuilder - there is conflict in generic types

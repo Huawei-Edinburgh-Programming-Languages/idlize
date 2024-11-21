@@ -142,30 +142,30 @@ function checkNodeAPI() {
 
     checkResult("BasicNodeAPI addChild",
         () => nativeModule()._AddChild(ptr, childPtr1),
-        `addChild(0x${ptr}, 0x${childPtr1})`
+        `addChild(0x${ptr}, 0x${childPtr1})markDirty(0x${ptr}, 32)`
     )
 
     nativeModule()._AddChild(ptr, childPtr2)
     checkResult("BasicNodeAPI removeChild",
         () => nativeModule()._RemoveChild(ptr, childPtr2),
-        `removeChild(0x${ptr}, 0x${childPtr2})`
+        `removeChild(0x${ptr}, 0x${childPtr2})markDirty(0x${ptr}, 32)`
     )
 
     checkResult("BasicNodeAPI insertChildAfter",
         () => nativeModule()._InsertChildAfter(ptr, childPtr2, childPtr1),
-        `insertChildAfter(0x${ptr}, 0x${childPtr2}, 0x${childPtr1})`
+        `insertChildAfter(0x${ptr}, 0x${childPtr2}, 0x${childPtr1})markDirty(0x${ptr}, 32)`
     )
     nativeModule()._RemoveChild(ptr, childPtr2)
 
     checkResult("BasicNodeAPI insertChildBefore",
         () => nativeModule()._InsertChildBefore(ptr, childPtr2, childPtr1),
-        `insertChildBefore(0x${ptr}, 0x${childPtr2}, 0x${childPtr1})`
+        `insertChildBefore(0x${ptr}, 0x${childPtr2}, 0x${childPtr1})markDirty(0x${ptr}, 32)`
     )
     nativeModule()._RemoveChild(ptr, childPtr2)
 
     checkResult("BasicNodeAPI insertChildAt",
         () => nativeModule()._InsertChildAt(ptr, childPtr2, 0),
-        `insertChildAt(0x${ptr}, 0x${childPtr2}, 0)`
+        `insertChildAt(0x${ptr}, 0x${childPtr2}, 0)markDirty(0x${ptr}, 32)`
     )
     nativeModule()._RemoveChild(ptr, childPtr2)
 
@@ -276,10 +276,10 @@ function checkTwoSidesCallback() {
     }
 
     assertEquals("Callback 1 enqueued", "NOT_CALLED", callResult1)
-    assertEquals(`Callback 2 enqueued ${call2Count} times`, callResult2, 0)
+    assertEquals(`Callback 2 enqueued ${call2Count} times`, 0, callResult2)
     checkArkoalaCallbacks()
     assertEquals("Callback 1 read&called", "CALLED, value=194", callResult1)
-    assertEquals(`Callback 2 read&called ${call2Count} times`, callResult2, call2Count)
+    assertEquals(`Callback 2 read&called ${call2Count} times`, call2Count, callResult2)
 }
 
 function checkWriteFunction() {
@@ -305,15 +305,8 @@ function checkButton() {
         "width({.type=1, .value=42, .unit=3, .resource=0})")
     checkResult("height", () => peer.heightAttribute({ id: 43, bundleName: "MyApp", moduleName: "MyApp" }),
         "height({.type=2, .value=0, .unit=1, .resource=43})")
-
-    checkResult("bindSheet", () =>
-        peer.bindSheetAttribute(false, () => { }, {
-            title: {
-                title: { id: 43, type: 2000, bundleName: "MyApp", moduleName: "MyApp", params: ["param1", "param2"] }
-            }
-        }),
-        `bindSheet({.selector=0, .value0=false}, {.resource={.resourceId=201, .hold=0, .release=0}, .call=0}, {.tag=ARK_TAG_OBJECT, .value={.backgroundColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .onAppear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onDisappear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillAppear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillDisappear={.tag=ARK_TAG_UNDEFINED, .value={}}, .height={.tag=ARK_TAG_UNDEFINED, .value={}}, .dragBar={.tag=ARK_TAG_UNDEFINED, .value={}}, .maskColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .detents={.tag=ARK_TAG_UNDEFINED, .value={}}, .blurStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, .showClose={.tag=ARK_TAG_UNDEFINED, .value={}}, .preferType={.tag=ARK_TAG_UNDEFINED, .value={}}, .title={.tag=ARK_TAG_OBJECT, .value={.selector=0, .value0={.title={.selector=1, .value1={.bundleName={.chars="MyApp", .length=5}, .moduleName={.chars="MyApp", .length=5}, .id={.tag=102, .i32=43}, .params={.tag=ARK_TAG_OBJECT, .value={.array=allocArray<Ark_String, 2>({{{.chars="param1", .length=6}, {.chars="param2", .length=6}}}), .length=2}}, .type={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=2000}}}}, .subtitle={.tag=ARK_TAG_UNDEFINED, .value={}}}}}, .shouldDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillSpringBackWhenDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .enableOutsideInteractive={.tag=ARK_TAG_UNDEFINED, .value={}}, .width={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderWidth={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, .shadow={.tag=ARK_TAG_UNDEFINED, .value={}}, .onHeightDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .mode={.tag=ARK_TAG_UNDEFINED, .value={}}, .scrollSizeMode={.tag=ARK_TAG_UNDEFINED, .value={}}, .onDetentsDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWidthDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .onTypeDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .uiContext={.tag=ARK_TAG_UNDEFINED, .value={}}, .keyboardAvoidMode={.tag=ARK_TAG_UNDEFINED, .value={}}, .enableHoverMode={.tag=ARK_TAG_UNDEFINED, .value={}}, .hoverModeArea={.tag=ARK_TAG_UNDEFINED, .value={}}}})`
-    )
+    checkResult("background", () => peer.backgroundAttribute(() => {}, {align: 4}),
+        "background({.resource={.resourceId=201, .hold=0, .release=0}, .call=0}, {.tag=ARK_TAG_OBJECT, .value={.align={.tag=ARK_TAG_OBJECT, .value=Ark_Alignment(4)}}})")
     checkResult("type", () => peer.typeAttribute(1), "type(Ark_ButtonType(1))")
     checkResult("labelStyle", () => peer.labelStyleAttribute({ maxLines: 3 }),
         "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=3}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})")
