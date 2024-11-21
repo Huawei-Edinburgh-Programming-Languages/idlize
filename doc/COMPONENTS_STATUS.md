@@ -661,7 +661,7 @@
 |`onNavBarStateChange`|Function| Erokhin Ilya | done |  |
 |`onNavigationModeChange`|Function| Erokhin Ilya | done |  |
 |`navDestination`| Function | Skroba Gleb | in progress | no callbacks IDL support |
-|`customNavContentTransition`| Function | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
+|`customNavContentTransition`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
 |`systemBarStyle`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`recoverable`|Function| Erokhin Ilya | done |  |
 |`enableDragBar`| Function | | | |
@@ -724,7 +724,7 @@
 |`setProgressOptions`| Function | Erokhin Ilya | done | |
 |`value`| Function | Erokhin Ilya | done | |
 |`color`| Function | Erokhin Ilya | done | |
-|`style`| Function | Erokhin Ilya | blocked | linearStyle.strokeRadius https://gitee.com/nikolay-igotti/idlize/issues/IB4G8D |
+|`style`| Function | Erokhin Ilya | blocked IDL | linearStyle.strokeRadius https://gitee.com/nikolay-igotti/idlize/issues/IB4G8D |
 |`privacySensitive`| Function | Erokhin Ilya | done | |
 |`contentModifier`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |*QRCode*| *Component* | Evstigneev Roman |in progress|  |
@@ -1647,10 +1647,10 @@
 |`getTextContentLineCount`| Function | | | |
 |*DynamicNode*| *Class* | | | |
 |`onMove`| Function | | | |
-|*ChildrenMainSize*| *Class* | Morozov Sergey | blocked Arkoala |  |
+|*ChildrenMainSize*| *Class* | Morozov Sergey | blocked IDL |  |
 |`splice`| Function | Morozov Sergey | done |  |
 |`update`| Function | Morozov Sergey | done |  |
-|`getChildDefaultSize`| Function | Morozov Sergey | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB4QKQ |
+|`getChildDefaultSize`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4QKQ |
 |*GestureModifier*| *Class* | Tuzhilkin Ivan | | |
 |`applyGesture`| Function | Tuzhilkin Ivan | in progress | |
 |*AbstractProperty*| *Class* | | | |
@@ -1898,9 +1898,9 @@
 |*FullScreenExitHandler*| *Class* | Erokhin Ilya | devdone |  |
 |`exitFullScreen`| Function | Erokhin Ilya | devdone |  |
 |*FileSelectorParam*| *Class* | Erokhin Ilya | blocked |  |
-|`getTitle`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getMode`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getAcceptType`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getTitle`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getMode`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getAcceptType`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`isCapture`| Function | Erokhin Ilya | devdone |  |
 |*JsResult*| *Class* | Erokhin Ilya | done |  |
 |`handleCancel`| Function | Erokhin Ilya | done |  |
@@ -1921,11 +1921,11 @@
 |`ignore`| Function | Erokhin Ilya | in progress |  |
 |*PermissionRequest*| *Class* | Erokhin Ilya | blocked |  |
 |`deny`| Function | Erokhin Ilya | devdone |  |
-|`getOrigin`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getAccessibleResource`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getOrigin`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getAccessibleResource`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`grant`| Function | Erokhin Ilya | devdone |  |
 |*ScreenCaptureHandler*| *Class* | Erokhin Ilya | blocked |  |
-|`getOrigin`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getOrigin`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`grant`| Function | Erokhin Ilya | devdone |  |
 |`deny`| Function | Erokhin Ilya | devdone |  |
 |*DataResubmissionHandler*| *Class* | Erokhin Ilya | devdone |  |
@@ -1936,14 +1936,14 @@
 |*WebContextMenuParam*| *Class* | Erokhin Ilya | blocked |  |
 |`x`| Function | Erokhin Ilya | devdone |  |
 |`y`| Function | Erokhin Ilya | devdone |  |
-|`getLinkUrl`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getUnfilteredLinkUrl`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getSourceUrl`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getLinkUrl`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getUnfilteredLinkUrl`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getSourceUrl`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`existsImageContents`| Function | Erokhin Ilya | devdone |  |
-|`getMediaType`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getSelectionText`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getSourceType`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getInputFieldType`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getMediaType`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getSelectionText`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getSourceType`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getInputFieldType`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`isEditable`| Function | Erokhin Ilya | devdone |  |
 |`getEditStateFlags`| Function | Erokhin Ilya | devdone |  |
 |`getPreviewWidth`| Function | Erokhin Ilya | in progress | wait for up merge |
@@ -1956,17 +1956,17 @@
 |`cut`| Function | Erokhin Ilya | devdone |  |
 |`selectAll`| Function | Erokhin Ilya | devdone |  |
 |*ConsoleMessage*| *Class* | Erokhin Ilya | blocked |  |
-|`getMessage`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getSourceId`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getMessage`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getSourceId`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getLineNumber`| Function | Erokhin Ilya | done |  |
-|`getMessageLevel`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getMessageLevel`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*WebResourceRequest*| *Class* | Erokhin Ilya | blocked |  |
-|`getRequestHeader`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getRequestUrl`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getRequestHeader`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getRequestUrl`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`isRequestGesture`| Function | Erokhin Ilya | done |  |
 |`isMainFrame`| Function | Erokhin Ilya | done |  |
 |`isRedirect`| Function | Erokhin Ilya | done |  |
-|`getRequestMethod`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getRequestMethod`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*WebResourceResponse*| *Class* | Erokhin Ilya | in progress |  |
 |`getResponseData`| Function | Erokhin Ilya | in progress |  |
 |`getResponseDataEx`| Function | Erokhin Ilya | in progress |  |
@@ -1984,7 +1984,7 @@
 |`setResponseIsReady`| Function | Erokhin Ilya | in progress |  |
 |`getResponseIsReady`| Function | Erokhin Ilya | in progress |  |
 |*WebResourceError*| *Class* | Erokhin Ilya | blocked |  |
-|`getErrorInfo`| Function | Erokhin Ilya | blocked ArKoala | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getErrorInfo`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getErrorCode`| Function | Erokhin Ilya | devdone |  |
 |*JsGeolocation*| *Class* | Erokhin Ilya | done |  |
 |`invoke`| Function | Erokhin Ilya | done |  |
