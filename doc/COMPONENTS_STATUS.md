@@ -984,13 +984,13 @@
 |`setStackOptions` | Function | Korobeinikov Evgeny | done |  |
 |`alignContent` | Function | Korobeinikov Evgeny | done |  |
 |`pointLight` | Function | Evstigneev Roman | in progress |  |
-|*Stepper*| *Component* | Morozov Sergey | blocked |  |
-|`setStepperOptions`| Function | Morozov Sergey | devdone |  |
-|`onFinish`| Function | Morozov Sergey | in progress |  |
-|`onSkip`| Function | Morozov Sergey | in progress |  |
-|`onChange`| Function | Morozov Sergey | in progress |  |
-|`onNext`| Function | Morozov Sergey | in progress |  |
-|`onPrevious`| Function | Morozov Sergey | in progress |  |
+|*Stepper*| *Component* | Morozov Sergey | done |  |
+|`setStepperOptions`| Function | Morozov Sergey | done |  |
+|`onFinish`| Function | Morozov Sergey | done |  |
+|`onSkip`| Function | Morozov Sergey | done |  |
+|`onChange`| Function | Morozov Sergey | done |  |
+|`onNext`| Function | Morozov Sergey | done |  |
+|`onPrevious`| Function | Morozov Sergey | done |  |
 |*StepperItem*| *Component* | Morozov Sergey | done | |
 |`setStepperItemOptions`| Function | Morozov Sergey | done | |
 |`prevLabel`| Function | Morozov Sergey | done | |
