@@ -768,7 +768,7 @@
 |`onSelect`| Function | Dudkin Sergey| done|  |
 |`onSelectionChange`| Function | Dudkin Sergey| done|  |
 |`aboutToIMEInput`| Function | Dudkin Sergey| done|  |
-|`onIMEInputComplete`| Function | Dudkin Sergey| devDone| |
+|`onIMEInputComplete`| Function | Dudkin Sergey| done| |
 |`onDidIMEInput`| Function | Dudkin Sergey| done|  |
 |`aboutToDelete`| Function | Dudkin Sergey| done|  |
 |`onDeleteComplete`| Function | Dudkin Sergey| done|  |
@@ -777,21 +777,21 @@
 |`enableDataDetector`| Function | Dudkin Sergey| done|  |
 |`enablePreviewText`| Function | Dudkin Sergey| done|  |
 |`dataDetectorConfig`| Function | Dudkin Sergey| done|  |
-|`caretColor`| Function | Dudkin Sergey| devDone|  |
-|`selectedBackgroundColor`| Function | Dudkin Sergey| devDone|  |
+|`caretColor`| Function | Dudkin Sergey| done|  |
+|`selectedBackgroundColor`| Function | Dudkin Sergey| done|  |
 |`onEditingChange`| Function | Dudkin Sergey| done|  |
-|`enterKeyType`| Function | Dudkin Sergey| devDone|  |
+|`enterKeyType`| Function | Dudkin Sergey| done|  |
 |`onSubmit`| Function | Dudkin Sergey| done|  |
 |`onWillChange`| Function | Dudkin Sergey| blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4G70 |
 |`onDidChange`| Function | Dudkin Sergey| done|  |
-|`onCut`| Function | Dudkin Sergey| in progress| |
-|`onCopy`| Function | Dudkin Sergey| in progress| |
+|`onCut`| Function | Dudkin Sergey| done| |
+|`onCopy`| Function | Dudkin Sergey| done | |
 |`editMenuOptions`| Function | Dudkin Sergey| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB3UKQ |
-|`enableKeyboardOnFocus`| Function | Dudkin Sergey| devDone|  |
-|`enableHapticFeedback`| Function | Dudkin Sergey| devDone|  |
-|`barState`| Function | Dudkin Sergey| devDone|  |
-|`bindSelectionMenu`| Function | Dudkin Sergey| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q|
-|`customKeyboard`| Function | Dudkin Sergey| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q|
+|`enableKeyboardOnFocus`| Function | Dudkin Sergey| done|  |
+|`enableHapticFeedback`| Function | Dudkin Sergey| done|  |
+|`barState`| Function | Dudkin Sergey| done|  |
+|`bindSelectionMenu`| Function | Dudkin Sergey| in progress | |
+|`customKeyboard`| Function | Dudkin Sergey| in progress | |
 |`placeholder`| Function | Dudkin Sergey| done|  |
 |*RichText*| *Component* | Dudkin Sergey| in progress|  |
 |`setRichTextOptions`| Function | Dudkin Sergey| in progress|  |
