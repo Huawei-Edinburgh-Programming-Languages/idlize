@@ -224,33 +224,6 @@ export class BooleanConvertor extends BaseArgConvertor {
     }
 }
 
-export class NumericConvertor extends BaseArgConvertor {
-    constructor(param: string, type: idl.IDLPrimitiveType) {
-        super(idl.IDLNumberType, [RuntimeType.NUMBER], false, false, param)
-    }
-    convertorArg(param: string, writer: LanguageWriter): string {
-        return writer.language == Language.CPP ?  `(const ${PrimitiveType.Number.getText()}*)&${param}` : param
-    }
-    convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
-        printer.writeMethodCall(`${param}Serializer`, "writeNumber", [value])
-    }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
-        return assigneer(writer.makeCast(
-            writer.makeString(`${deserializerName}.readNumber()`),
-            this.idlType, { optional: false })
-        )
-    }
-    nativeType(): idl.IDLType {
-        return idl.IDLNumberType
-    }
-    interopType(language: Language): string {
-        return language == Language.CPP ?  "KInteropNumber" : "number"
-    }
-    isPointerType(): boolean {
-        return true
-    }
-}
-
 export class UndefinedConvertor extends BaseArgConvertor {
     constructor(param: string) {
         super(idl.IDLUndefinedType, [RuntimeType.UNDEFINED], false, false, param)

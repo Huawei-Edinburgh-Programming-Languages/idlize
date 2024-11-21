@@ -208,7 +208,8 @@ export class DeserializerBase {
 
     readBuffer(): ArrayBuffer {
         this.readPointer()
-        return new ArrayBuffer(this.readInt64())
+        const length = this.readInt64()
+        return new ArrayBuffer(length)
     }
 
     readUint8ClampedArray(): Uint8ClampedArray {
