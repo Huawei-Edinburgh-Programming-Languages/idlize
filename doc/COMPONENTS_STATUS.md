@@ -181,15 +181,15 @@
 |`animation`| Function | Erokhin Ilya | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAXHJP|
 |`transition`| Function | Dmitry A Smirnov| in progress | |
 |`motionBlur`| Function | Dmitry A Smirnov| in progress | |
-|`brightness`| Function | Lobah Mikhail | in progress | done |
-|`contrast`| Function | Lobah Mikhail | in progress | done |
-|`grayscale`| Function | Lobah Mikhail | in progress | done |
+|`brightness`| Function | Lobah Mikhail | done |  |
+|`contrast`| Function | Lobah Mikhail | done | |
+|`grayscale`| Function | Lobah Mikhail | done | |
 |`colorBlend`| Function | Lobah Mikhail | in progress | |
-|`saturate`| Function | Lobah Mikhail | in progress | done |
-|`sepia`| Function | Lobah Mikhail | in progress | done |
+|`saturate`| Function | Lobah Mikhail | done | |
+|`sepia`| Function | Lobah Mikhail | done | |
 |`invert`| Function | Lobah Mikhail | in progress | |
 |`hueRotate`| Function | Lobah Mikhail | in progress | |
-|`useShadowBatching`| Function | Lobah Mikhail | in progress | done |
+|`useShadowBatching`| Function | Lobah Mikhail | done | |
 |`useEffect`| Function | Lobah Mikhail | in progress | |
 |`renderGroup`| Function | Lobah Mikhail | in progress | |
 |`freeze`| Function | Lobah Mikhail | in progress | |
