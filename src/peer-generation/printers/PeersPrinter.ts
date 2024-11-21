@@ -487,7 +487,9 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
                         ]
                     }
                 } else if (isContainerType(returnType) && IDLContainerUtils.isPromise(returnType)) {
-                    // keep result
+                    result = [
+                        writer.makeReturn(writer.makeCast(writer.makeString(returnValName), returnType))
+                    ]
                 } else if (!isPrimitiveType(returnType)) {
                     result = [
                         writer.makeThrowError("Object deserialization is not implemented.")

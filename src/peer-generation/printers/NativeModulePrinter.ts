@@ -60,7 +60,7 @@ class NativeModuleVisitor {
                     if (idl.isPrimitiveType(returnType)) {
                         //keep
                     } else if(idl.isContainerType(returnType) && idl.IDLContainerUtils.isPromise(returnType)) {
-                        //keep
+                        returnType = idl.IDLObjectType
                     } else
                         returnType = idl.IDLPointerType
                 }

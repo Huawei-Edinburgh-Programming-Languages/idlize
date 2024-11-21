@@ -18,7 +18,7 @@ import { RetConvertor, createVoidRetConvertor } from "./RetConvertors"
 import { Field, Method, MethodModifier, NamedMethodSignature } from "./LanguageWriters"
 import { capitalize } from "../util"
 import { ImportFeature, ImportsCollector } from "./ImportsCollector"
-import { createReferenceType, IDLType, IDLVoidType } from "../idl"
+import { createReferenceType, IDLType, IDLVoidType, isContainerType, IDLContainerUtils } from "../idl"
 import { PeerMethod } from "./PeerMethod";
 import { PeerClassBase } from "./PeerClass";
 import { PeerLibrary } from "./PeerLibrary"
@@ -63,7 +63,11 @@ export class MaterializedMethod extends PeerMethod {
     override get dummyReturnValue(): string | undefined {
         if (this.method.name === "ctor") return `(${this.originalParentName}Peer*) 100`
         if (this.method.name === "getFinalizer") return `fnPtr<KNativePointer>(dummyClassFinalizer)`
-        if (this.method.modifiers?.includes(MethodModifier.STATIC)) return `(void*) 300`
+        if (this.method.modifiers?.includes(MethodModifier.STATIC)) {
+            if (isContainerType(this.method.signature.returnType) && IDLContainerUtils.isPromise(this.method.signature.returnType))
+                return "nullptr"
+            return "(void*) 300"
+        }
         return undefined;
     }
 
