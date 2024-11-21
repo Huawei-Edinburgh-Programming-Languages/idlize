@@ -91,6 +91,9 @@ export class JavaIDLNodeToStringConvertor implements NodeConvertor<JavaTypeAlias
             const javaTypeAliases = type.elementType.slice(0, 2).map(it => convertType(this, it)).map(this.maybeConvertPrimitiveType, this)
             return new JavaTypeAlias(`Map<${javaTypeAliases[0].type.text}, ${javaTypeAliases[1].type.text}>`, `Map_${javaTypeAliases[0].alias}_${javaTypeAliases[1].alias}`)
         }
+        if (idl.IDLContainerUtils.isPromise(type)) {
+            return convertType(this, idl.IDLObjectType)
+        }
         throw new Error(`IDL type ${idl.DebugUtils.debugPrintType(type)} not supported`)
     }
     convertCallback(type: idl.IDLCallback): JavaTypeAlias {

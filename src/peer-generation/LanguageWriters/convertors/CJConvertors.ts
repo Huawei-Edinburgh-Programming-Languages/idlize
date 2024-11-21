@@ -81,6 +81,9 @@ export class CJIDLNodeToStringConvertor implements NodeConvertor<CJTypeAlias>, I
             const CJTypeAliases = type.elementType.slice(0, 2).map(it => convertType(this, it)).map(this.maybeConvertPrimitiveType, this)
             return new CJTypeAlias(`Map<${CJTypeAliases[0].type.text}, ${CJTypeAliases[1].type.text}>`, `Map_${CJTypeAliases[0].alias}_${CJTypeAliases[1].alias}`)
         }
+        if (idl.IDLContainerUtils.isPromise(type)) {
+            return convertType(this, idl.IDLObjectType)
+        }
         throw new Error(`IDL type ${idl.DebugUtils.debugPrintType(type)} not supported`)
     }
     convertInterface(node: idl.IDLInterface): CJTypeAlias {
