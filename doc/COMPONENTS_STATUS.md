@@ -562,7 +562,7 @@
 |`onItemDragMove`|Function|Morozov Sergey|done|  |
 |`onItemDragLeave`|Function|Morozov Sergey|done|  |
 |`onItemDrop`|Function|Morozov Sergey|done|  |
-|`onScrollFrameBegin`|Function|Morozov Sergey|in progress| https://gitee.com/nikolay-igotti/idlize/issues/IAOKLD |
+|`onScrollFrameBegin`|Function|Morozov Sergey|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |*ListItem*|*Component*|Morozov Sergey|blocked IDL|  |
 |`setListItemOptions`|Function|Morozov Sergey|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`sticky`|Function|Morozov Sergey|done|  |
@@ -827,7 +827,7 @@
 |`scrollBarColor`| Function | Berezin Kirill | in progress |  |
 |`scrollBarWidth`| Function | Berezin Kirill | in progress |  |
 |`edgeEffect`| Function | Berezin Kirill | in progress |  |
-|`onScrollFrameBegin`| Function | Berezin Kirill |blocked |  |
+|`onScrollFrameBegin`| Function | Berezin Kirill |blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`nestedScroll`| Function | Berezin Kirill | in progress |  |
 |`enableScrollInteraction`| Function | Berezin Kirill | In progress |  |
 |`friction`| Function | Berezin Kirill | In progress |  |
@@ -1474,7 +1474,7 @@
 |`cachedCount`| Function |Kovalev Sergey | done |  |
 |`onReachStart`| Function | Kovalev Sergey | devdone | |
 |`onReachEnd`| Function | Kovalev Sergey | devdone | |
-|`onScrollFrameBegin`| Function | Kovalev Sergey | in progress callback with return value | |
+|`onScrollFrameBegin`| Function | Kovalev Sergey | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onScrollIndex`| Function | Kovalev Sergey | devdone | |
 |*UIExtensionComponent*| *Component* | | |
 |`setUIExtensionComponentOptions`| Function | | | |
