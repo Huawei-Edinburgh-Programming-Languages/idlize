@@ -12,16 +12,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { float32, int32 } from "@koalaui/common"
+
+import { CustomTextDecoder, float32, int32 } from "@koalaui/common"
 import { pointer } from "@koalaui/interop"
-import { Tags, CallbackResource } from "./SerializerBase";
+import { RuntimeType, Tags, CallbackResource } from "./SerializerBase";
 
 export class DeserializerBase {
     private position = 0
     private readonly buffer: ArrayBuffer
     private readonly length: int32
     private view: DataView
-    private static textDecoder = new TextDecoder()
+    private static textDecoder: CustomTextDecoder = new CustomTextDecoder()
     private static customDeserializers: CustomDeserializer | undefined = undefined
 
     static registerCustomDeserializer(deserializer: CustomDeserializer) {
@@ -29,10 +30,10 @@ export class DeserializerBase {
         if (current == undefined) {
             DeserializerBase.customDeserializers = deserializer
         } else {
-            while (current.next != undefined) {
-                current = current.next
+            while (current!.next != undefined) {
+                current = current!.next
             }
-            current.next = deserializer
+            current!.next = deserializer
         }
     }
 
@@ -82,13 +83,6 @@ export class DeserializerBase {
         return value
     }
 
-    // readInt64(): int64 {
-    //     this.checkCapacity(8)
-    //     const value = this.view.getBigInt64(this.position, true)
-    //     this.position += 8
-    //     return Number(value)
-    // }
-
     readPointer(): pointer {
         this.checkCapacity(8)
         const value = this.view.getBigInt64(this.position, true)
@@ -110,15 +104,18 @@ export class DeserializerBase {
         return value == 1
     }
 
-    readFunction(): any {
+    readFunction(): int32 {
         // TODO: not exactly correct.
         const id = this.readInt32()
         return id
     }
 
-    readMaterialized(): object {
-        const ptr = this.readPointer()
-        return { ptr: ptr }
+    readCallbackResource(): CallbackResource {
+        return ({
+            resourceId: this.readInt32(),
+            hold: this.readPointer(),
+            release: this.readPointer(),
+        } as CallbackResource)
     }
 
     readString(): string {
@@ -130,103 +127,58 @@ export class DeserializerBase {
         return value
     }
 
-    readCustomObject(kind: string): any {
+    readCustomObject(kind: string): object {
         let current = DeserializerBase.customDeserializers
         while (current) {
-            if (current.supports(kind)) {
-                return current.deserialize(this, kind)
+            if (current!.supports(kind)) {
+                return current!.deserialize(this, kind)
             }
-            current = current.next
+            current = current!.next
         }
         // consume tag
         const tag = this.readInt8()
-        return undefined
+        throw Error(`${kind} is not supported`)
     }
 
     readNumber(): number | undefined {
         const tag = this.readInt8()
-        switch (tag) {
-            case Tags.UNDEFINED:
-                return undefined;
-            case Tags.INT32:
-                return this.readInt32()
-            case Tags.FLOAT32:
-                return this.readFloat32()
-            default:
-                throw new Error(`Unknown number tag: ${tag}`)
-                break
+        if (tag == Tags.UNDEFINED) {
+            return undefined
+        } else if (tag == Tags.INT32) {
+            return this.readInt32()
+        } else if (tag == Tags.FLOAT32) {
+            return this.readFloat32()
+        } else {
+            throw new Error(`Unknown number tag: ${tag}`)
         }
     }
 
-    // readLength(): Length | undefined {
-    //     this.checkCapacity(1)
-    //     const valueType = this.readInt8()
-    //     switch (valueType) {
-    //         case RuntimeType.OBJECT:
-    //             return {
-    //                 id: this.readInt32(),
-    //                 bundleName: "",
-    //                 moduleName: ""
-    //             }
-    //         case RuntimeType.STRING:
-    //             return this.readString()
-    //         case RuntimeType.NUMBER:
-    //             return this.readFloat32()
-    //     }
-    //     return undefined
-    // }
-
-    readCallbackResource(): CallbackResource {
-        return {
-            resourceId: this.readInt32(),
-            hold: this.readPointer(),
-            release: this.readPointer(),
-        }
-    }
-
-    static lengthUnitFromInt(unit: int32): string {
-        let suffix: string
-        switch (unit) {
-            case 0:
-                suffix = "px"
-                break
-            case 1:
-                suffix = "vp"
-                break
-            case 3:
-                suffix = "%"
-                break
-            case 4:
-                suffix = "lpx"
-                break
-            default:
-                suffix = "<unknown>"
-        }
-        return suffix
+    readUint8ClampedArray(): Uint8ClampedArray {
+        throw new Error("Not implemented")
     }
 }
 
 export abstract class CustomDeserializer {
-    protected supported: Array<string>
-    protected constructor(supported: Array<string>) {
-        this.supported = supported
+    protected supported: string
+    protected constructor(supported_: string) {
+        this.supported = supported_
     }
 
     supports(kind: string): boolean {
         return this.supported.includes(kind)
     }
 
-    abstract deserialize(serializer: DeserializerBase, kind: string): any
+    abstract deserialize(serializer: DeserializerBase, kind: string): object
 
     next: CustomDeserializer | undefined = undefined
 }
 
 class DateDeserializer extends CustomDeserializer {
     constructor() {
-        super(["Date"]);
+        super("Date")
     }
 
-    deserialize(serializer: DeserializerBase, kind: string): any {
+    deserialize(serializer: DeserializerBase, kind: string): Date {
         return new Date(serializer.readString())
     }
 }
