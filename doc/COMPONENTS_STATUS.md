@@ -1822,10 +1822,10 @@
 |`setPosition`| Function | Skroba Gleb | done | |
 |`getMainAxisLength`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
 |`setMainAxisLength`| Function | Skroba Gleb | done | |
-|*IndicatorComponentController*| *Class* | Andrey Khudenkikh | in progress |  |
-|`showNext`| Function | Andrey Khudenkikh | in progress |  |
-|`showPrevious`| Function |  Andrey Khudenkikh | in progress |  |
-|`changeIndex`| Function |  Andrey Khudenkikh | in progress |  |
+|*IndicatorComponentController*| *Class* | Andrey Khudenkikh | done |  |
+|`showNext`| Function | Andrey Khudenkikh | done |  |
+|`showPrevious`| Function |  Andrey Khudenkikh | done |  |
+|`changeIndex`| Function |  Andrey Khudenkikh | done |  |
 |*TabsController*| *Class* | Skroba Gleb | in progress |
 |`changeIndex`| Function | Skroba Gleb | done | |
 |`preloadItems`| Function | Skroba Gleb | done | |
