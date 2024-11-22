@@ -1651,8 +1651,8 @@
 |`splice`| Function | Morozov Sergey | done |  |
 |`update`| Function | Morozov Sergey | done |  |
 |`getChildDefaultSize`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4QKQ |
-|*GestureModifier*| *Class* | Tuzhilkin Ivan | blocked | |
-|`applyGesture`| Function | Tuzhilkin Ivan | blocked | |
+|*GestureModifier*| *Class* | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
+|`applyGesture`| Function | Tuzhilkin Ivan | blocked IDL |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG|
 |*AbstractProperty*| *Class* | | | |
 |`get`| Function | | | |
 |`set`| Function | | | |
