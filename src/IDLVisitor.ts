@@ -871,6 +871,9 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
                 ? typeMapper(type, nameSuggestion)
                 : idl.createReferenceType(typeName, this.mapTypeArgs(type.typeArguments, typeName));
         }
+        if (ts.isOptionalTypeNode(type)) {
+            return this.serializeType(type.type)
+        }
         if (ts.isThisTypeNode(type)) {
             return idl.createReferenceType("this")
         }
@@ -1024,6 +1027,9 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         if (types.find(it => it === idl.IDLVoidType)) {
             console.log(`WARNING: ${sourceText} is union with 'void', which is not supported, remove 'void' variant`)
             types = types.filter(it => it !== idl.IDLVoidType)
+        }
+        if (types.find(it => idl.isOptionalType(it))) {
+            console.log(`WARNING: optional type is not supported in union`)
         }
         if (types.find(it => it === idl.IDLUndefinedType)) {
             return idl.createOptionalType(
