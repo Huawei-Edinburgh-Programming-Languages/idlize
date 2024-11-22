@@ -632,7 +632,7 @@
 |`onWillHide`| Function | Kovalev Sergey | done | |
 |`systemBarStyle`| Function |Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`recoverable`| Function |Kovalev Sergey | done |  |
-|`systemTransition`| Function |Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4BII |
+|`systemTransition`| Function |Kovalev Sergey | in progress |  |
 |`title`| Function |Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`toolbarConfiguration`| Function |Kovalev Sergey | in progress |  |
 |`hideToolBar`| Function | Kovalev Sergey | in progress |  |
