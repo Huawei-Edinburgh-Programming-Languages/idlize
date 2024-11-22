@@ -817,7 +817,7 @@
 |`setScrollOptions`| Function | Berezin Kirill | in progress |  |
 |`scrollable`| Function | Berezin Kirill | In progress |  |
 |`onScroll`| Function | Berezin Kirill | done |  |
-|`onWillScroll`| Function | Berezin Kirill |blocked |  |
+|`onWillScroll`| Function | Berezin Kirill |blocked IDL |  |
 |`onDidScroll`| Function | Berezin Kirill | in progress |  |
 |`onScrollEdge`| Function | Berezin Kirill | in progress |  |
 |`onScrollStart`| Function | Berezin Kirill | done |  |
