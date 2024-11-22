@@ -542,6 +542,7 @@ export function printSerializerImports(library: PeerLibrary, destFile: SourceFil
         for (let builder of library.builderClasses.keys()) {
             collector.addFeature(builder, `Ark${builder}Builder`)
         }
+        collectMaterializedImports(collector, library)
         // TODO Refactor to remove dependency on hardcoded paths
         collector.print(destFile.content, (declarationPath ? "." : "./peers/") + `Serializer.${destFile.language.extension}`)
     }
