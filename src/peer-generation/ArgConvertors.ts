@@ -1265,7 +1265,7 @@ export class MaterializedClassConvertor extends BaseArgConvertor { //
         return assigneer(readStatement)
     }
     nativeType(): idl.IDLType {
-        return idl.createReferenceType(this.type.name)
+        return idl.createReferenceType(`${this.type.name}Peer`)
     }
     interopType(language: Language): string {
         throw new Error("Must never be used")
