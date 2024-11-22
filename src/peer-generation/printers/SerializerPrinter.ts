@@ -111,7 +111,7 @@ class IdlSerializerPrinter {
             writer.makeAssign(
                 `base`,
                 baseType,
-                writer.makeCast(writer.makeString(`value`), baseType),
+                writer.makeCast(writer.makeString(`value`), baseType, {unsafe: true}),
                 true,
                 true
             ))
