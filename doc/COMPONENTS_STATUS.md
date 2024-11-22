@@ -469,9 +469,9 @@
 |`setGridRowOptions`| Function |Lobah Mikhail| in progress|  |
 |`onBreakpointChange`| Function |Lobah Mikhail| in progress|  |
 |`alignItems`| Function |Lobah Mikhail| in progress|  |
-|*Hyperlink*| *Component* | | |
-|`setHyperlinkOptions`| Function | | |
-|`color`| Function | | |
+|*Hyperlink*| *Component* | Morozov Sergey | devdone |
+|`setHyperlinkOptions`| Function | devdone | |
+|`color`| Function | devdone | |
 |*Image*| *Component* | Korobeinikov Evgeny | in progress |  |
 |`setImageOptions`| Function | Berezin Kirill | in progress | |
 |`alt`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
