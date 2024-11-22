@@ -382,7 +382,6 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
     }
 }
 
-
 export function printNativeModule(peerLibrary: PeerLibrary, nativeBridgePath: string): string {
     const lang = peerLibrary.language
     const visitor = (lang == Language.CJ) ? new CJNativeModuleVisitor(peerLibrary) : new NativeModuleVisitor(peerLibrary)
