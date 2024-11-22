@@ -322,9 +322,6 @@ export class PeerLibrary implements LibraryInterface {
             if (type.name === 'Function') {
                 return ArkFunction
             }
-            if (type.name === 'Optional') {
-                return this.toDeclaration((type as idl.IDLReferenceType).typeArguments![0])
-            }
             const decl = this.resolveTypeReference(type)
             if (!decl) {
                 console.log(`WARNING: undeclared type ${idl.DebugUtils.debugPrintType(type)}`)

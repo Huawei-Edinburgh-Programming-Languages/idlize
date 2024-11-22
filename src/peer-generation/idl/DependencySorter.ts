@@ -32,9 +32,6 @@ class SorterDependenciesCollector extends DependenciesCollector {
         return []
     }
     convertTypeReference(type: idl.IDLReferenceType): idl.IDLNode[] {
-        if (type.name === "Optional") {
-            return type.typeArguments!
-        }
         return [this.library.toDeclaration(type)]
     }
     convertTypeParameter(type: idl.IDLTypeParameterType): idl.IDLNode[] {

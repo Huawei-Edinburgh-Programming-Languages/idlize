@@ -116,8 +116,6 @@ export class InteropConverter implements NodeConvertor<ConvertResult> {
             return this.convertNode(decl)
         }
         let res = this.convertNode(decl as idl.IDLEntry)
-        if (type.name === "Optional")
-            res = this.make("Opt_" + res.text, true)
         return res
     }
     convertTypeParameter(type: idl.IDLTypeParameterType): ConvertResult {

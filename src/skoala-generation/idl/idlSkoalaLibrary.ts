@@ -113,10 +113,6 @@ export class IdlSkoalaLibrary implements LibraryInterface {
             if (type.name == 'Function') {
                 return Function
             }
-            if (type.name == 'Optional') {
-                const wrappedType = idl.toIDLType(idl.getExtAttribute(type, idl.IDLExtendedAttributes.TypeArguments)!)
-                return this.toDeclaration(wrappedType)
-            }
             const decl = this.resolveTypeReference(type)
             return !decl ? CustomObject  // assume some builtin type
                 : idl.isCallback(decl) ? Function
