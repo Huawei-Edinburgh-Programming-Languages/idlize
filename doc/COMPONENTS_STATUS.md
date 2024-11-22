@@ -506,7 +506,7 @@
 |`duration`| Function | Pavelyev Ivan | in progress | |
 |`reverse`| Function | Pavelyev Ivan | in progress | |
 |`fixedSize`| Function | Pavelyev Ivan | in progress | |
-|`preDecode`| Function | Pavelyev Ivan | in progress | |
+|`preDecode`| Function | Pavelyev Ivan | in progress | deprecated |
 |`fillMode`| Function | Pavelyev Ivan | in progress | |
 |`iterations`| Function | Pavelyev Ivan | in progress | |
 |`onStart`| Function | Pavelyev Ivan | in progress | |
