@@ -123,9 +123,10 @@ export class EtsIDLNodeToStringConvertor extends TsIDLNodeToStringConverter {
     protected mapFunctionType(typeArgs: string[]): string {
         // Fix for "TypeError: Type 'Function<R>' is generic but type argument were not provided."
         // Replace "Function" to "Function<void>"
+        // Use "FunctionN" for ts compatibility
         if (typeArgs.length === 0) {
             typeArgs = [this.convert(idl.IDLVoidType)]
         }
-        return super.mapFunctionType(typeArgs);
+        return `Function${typeArgs.length - 1}<${typeArgs.join(",")}>`
     }
 }
