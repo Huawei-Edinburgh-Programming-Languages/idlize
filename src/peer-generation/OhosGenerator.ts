@@ -378,27 +378,10 @@ class OHOSVisitor {
                 })
             })
         })
-        const enumsByNS: Map<string, Set<IDLEnum>> = new Map();
         this.enums.forEach(e => {
-            const ns = getExtAttribute(e, IDLExtendedAttributes.Namespace) ?? ""
-            const enums = getOrPut(enumsByNS, ns, () => new Set())
-            enums.add(e)
+            const writer = this.peerWriter
+            writer.writeStatement(writer.makeEnumEntity(e, true))
         })
-        for (const [ns, enums] of enumsByNS) {
-            let hasNs = this.peerWriter.language === Language.TS && !!ns
-            if (hasNs) {
-                this.peerWriter.print(`export namespace ${ns} {`)
-                this.peerWriter.pushIndent()
-            }
-            for (const e of enums) {
-                let members = e.elements.map((m, i) => ({ name: m.name, numberId: i, stringId: undefined  }))
-                this.peerWriter.writeEnum(e.name, members, (writer) => {})
-            }
-            if (hasNs) {
-                this.peerWriter.popIndent()
-                this.peerWriter.print(`}`)
-            }
-        }
         this.interfaces.forEach(int => {
             this.peerWriter.writeInterface(`${int.name}Interface`, writer => {
                 int.methods.forEach(method => {
@@ -720,11 +703,6 @@ class OHOSVisitor {
                 .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
                 .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
                 .replaceAll("%SERIALIZER_PATH%", managedCodeModuleInfo.serializerPath)
-        )
-        fs.writeFileSync(path.join(managedOutDir, `DeserializerBase${ext}`),
-            readLangTemplate(`DeserializerBase${ext}`, this.library.language)
-                .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
-                .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
         )
     }
 }
