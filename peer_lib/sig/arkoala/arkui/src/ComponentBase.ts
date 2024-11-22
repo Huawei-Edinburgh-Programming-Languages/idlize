@@ -18,7 +18,7 @@ import { PeerNode } from './PeerNode'
 export class ComponentBase {
     protected _peer?: PeerNode
     setPeer(peer: PeerNode) {
-        this.peer = peer
+        this._peer = peer
     }
 
     /** @memo:intrinsic */
