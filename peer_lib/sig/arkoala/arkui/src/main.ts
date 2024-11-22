@@ -16,6 +16,7 @@ import { pointer, nullptr, wrapCallback, callCallback } from "@koalaui/interop"
 import { Serializer } from "@arkoala/arkui/peers/Serializer"
 import { DeserializerBase } from "@arkoala/arkui/peers/DeserializerBase"
 import { Deserializer } from "@arkoala/arkui/peers/Deserializer"
+import { MaterializedBase } from "@arkoala/arkui/MaterializedBase"
 import { checkArkoalaCallbacks } from "@arkoala/arkui/peers/CallbacksChecker"
 import { ArkButtonPeer } from "@arkoala/arkui/peers/ArkButtonPeer"
 import { ArkCommonPeer } from "@arkoala/arkui/peers/ArkCommonPeer"
@@ -27,7 +28,7 @@ import { ArkSideBarContainerComponent } from "@arkoala/arkui/ArkSidebar"
 import { ArkTabContentPeer } from "@arkoala/arkui/peers/ArkTabContentPeer"
 import { SubTabBarStyle } from "@arkoala/arkui/ArkSubTabBarStyleBuilder"
 import { BottomTabBarStyle } from "@arkoala/arkui/ArkBottomTabBarStyleBuilder"
-import { CanvasRenderingContext2D } from "@arkoala/arkui/ArkCanvasRenderingContext2DMaterialized"
+import { CanvasRenderingContext2DStatic } from "@arkoala/arkui/ArkCanvasRenderingContext2DMaterialized"
 import { ArkUINodeType } from "@arkoala/arkui/peers/ArkUINodeType"
 import { startPerformanceTest } from "@arkoala/arkui/test_performance"
 import { testLength_10_lpx } from "@arkoala/arkui/test_data"
@@ -467,14 +468,15 @@ function checkCanvasRenderingContext2D() {
     assertEquals("CanvasRenderingContext2D height", 0, canvasRenderingContext2D!.height)
 
     checkResult("CanvasRenderingContext2D peer close()",
-        () => canvasRenderingContext2D!.peer!.close(),
+        () => (canvasRenderingContext2D as unknown as MaterializedBase).getPeer()!.close(),
         `dummyClassFinalizer(0x64)`)
 
     const ctorPtr = BigInt(123)
     const serializer = new Serializer()
-    serializer.writeCanvasRenderingContext2D(CanvasRenderingContext2D.construct(ctorPtr))
+    serializer.writeCanvasRenderingContext2D(CanvasRenderingContext2DStatic.fromPtr(ctorPtr) as unknown as CanvasRenderingContext2D)
     const deserializer = new Deserializer(serializer.asArray().buffer, serializer.length())
-    assertEquals("Deserializer readCanvasRenderingContext2D()", ctorPtr, deserializer.readCanvasRenderingContext2D().getPeer()!.ptr)
+    const materializedBase = deserializer.readCanvasRenderingContext2D() as unknown as MaterializedBase
+    assertEquals("Deserializer readCanvasRenderingContext2D()", ctorPtr, materializedBase.getPeer()!.ptr)
 
     stopNativeTest(CALL_GROUP_LOG)
 }
