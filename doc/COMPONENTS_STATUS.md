@@ -369,8 +369,8 @@
 |`lineCap`| Function | Tuzhilkin Ivan | done |  |
 |*EffectComponent*| *Component* | Ekaterina Stepanova | in progress | |
 |`setEffectComponentOptions`| Function | Ekaterina Stepanova | in progress | |
-|*Ellipse*| *Component* | Ekaterina Stepanova | in progress | |
-|`setEllipseOptions`| Function | Ekaterina Stepanova | in progress | |
+|*Ellipse*| *Component* | Ekaterina Stepanova | devdone | |
+|`setEllipseOptions`| Function | Ekaterina Stepanova | devdone | |
 |*EmbeddedComponent*| *Component* | Ekaterina Stepanova | in progress | |
 |`setEmbeddedComponentOptions`| Function | Ekaterina Stepanova | in progress | |
 |`onTerminated`| Function | Ekaterina Stepanova | in progress | |
