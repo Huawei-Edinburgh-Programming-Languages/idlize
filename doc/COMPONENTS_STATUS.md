@@ -1472,10 +1472,10 @@
 |`enableScrollInteraction`| Function | Kovalev Sergey | done |  |
 |`friction`| Function | Kovalev Sergey | done |  |
 |`cachedCount`| Function |Kovalev Sergey | done |  |
-|`onReachStart`| Function | Kovalev Sergey | in progress | |
-|`onReachEnd`| Function | Kovalev Sergey | in progress | |
-|`onScrollFrameBegin`| Function | Kovalev Sergey | in progress | |
-|`onScrollIndex`| Function | Kovalev Sergey | in progress | |
+|`onReachStart`| Function | Kovalev Sergey | devdone | |
+|`onReachEnd`| Function | Kovalev Sergey | devdone | |
+|`onScrollFrameBegin`| Function | Kovalev Sergey | in progress callback with return value | |
+|`onScrollIndex`| Function | Kovalev Sergey | devdone | |
 |*UIExtensionComponent*| *Component* | | |
 |`setUIExtensionComponentOptions`| Function | | | |
 |`onRemoteReady`| Function | | | |
