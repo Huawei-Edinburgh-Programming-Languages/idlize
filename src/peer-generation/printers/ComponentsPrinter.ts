@@ -140,7 +140,7 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
                 writer => writer.writeStatement(
                     writer.makeReturn(
                         writer.makeCast(
-                            writer.makeFieldAccess("this", "_peer"),
+                            writer.makeFieldAccess("this", "peer"),
                             toIDLType(peerClassName),
                             {optional: true}
                         )
