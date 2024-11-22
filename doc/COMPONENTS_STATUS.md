@@ -1,9 +1,9 @@
 | Component | Function | Owner | Status (done=merged **with** UT, devdone=implemented and pushed, testskipped=merged **without** UT, blocked=blocked by IDL)|issue/comment|
 | --------- | -------- | ----- | ------ |------|
-|*AbilityComponent*| *Component* | Tuzhilkin Ivan | in progress|  |
+|*AbilityComponent*| *Component* | Tuzhilkin Ivan | in progress| deprecated |
 |`setAbilityComponentOptions`| Function | Tuzhilkin Ivan | in progress| https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`onConnect`| Function | Tuzhilkin Ivan | in progress|  |
-|`onDisconnect`| Function | Tuzhilkin Ivan | in progress|  |
+|`onConnect`| Function | Tuzhilkin Ivan | in progress| deprecated |
+|`onDisconnect`| Function | Tuzhilkin Ivan | in progress| deprecated |
 |*AlphabetIndexer*| *Component* |Ekaterina Stepanova| blocked |  |
 |`setAlphabetIndexerOptions`| Function |Ekaterina Stepanova| done |  |
 |`onSelected`| Function |Ekaterina Stepanova| done |  |
@@ -1651,8 +1651,8 @@
 |`splice`| Function | Morozov Sergey | done |  |
 |`update`| Function | Morozov Sergey | done |  |
 |`getChildDefaultSize`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4QKQ |
-|*GestureModifier*| *Class* | Tuzhilkin Ivan | | |
-|`applyGesture`| Function | Tuzhilkin Ivan | in progress | |
+|*GestureModifier*| *Class* | Tuzhilkin Ivan | blocked | |
+|`applyGesture`| Function | Tuzhilkin Ivan | blocked | |
 |*AbstractProperty*| *Class* | | | |
 |`get`| Function | | | |
 |`set`| Function | | | |
