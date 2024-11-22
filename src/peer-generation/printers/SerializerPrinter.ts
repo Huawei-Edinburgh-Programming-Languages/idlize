@@ -310,7 +310,7 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
         this.writer.writeStatement(
             this.writer.makeReturn(
                 this.writer.makeMethodCall(
-                    target.name, "construct", [this.writer.makeString(`ptr`)]
+                    `${target.name}Static`, "fromPtr", [this.writer.makeString(`ptr`)]
                 )
             )
         )
