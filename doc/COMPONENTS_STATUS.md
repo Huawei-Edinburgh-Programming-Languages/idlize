@@ -354,13 +354,13 @@
 |`trackShadow`| Function |Morozov Sergey |blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAW4DU|
 |`contentModifier`| Function | Morozov Sergey |blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |*DatePicker*| *Component* | Vadim Voronov | done |  |
-|`setDatePickerOptions`| Function | Vadim Voronov| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`setDatePickerOptions`| Function | Vadim Voronov| devdone | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`lunar`| Function |Vadim Voronov | done |  |
 |`disappearTextStyle`| Function | Vadim Voronov| done |  |
 |`textStyle`| Function |Vadim Voronov | done |  |
 |`selectedTextStyle`| Function |Vadim Voronov | done |  |
 |`onChange`| Function | Vadim Voronov| done |  |
-|`onDateChange`| Function |Vadim Voronov | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`onDateChange`| Function |Vadim Voronov | devdone | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*Divider*| *Component* | Tuzhilkin Ivan | done |  |
 |`setDividerOptions`| Function | Tuzhilkin Ivan| done |  |
 |`vertical`| Function | Tuzhilkin Ivan | done |  |
