@@ -47,25 +47,22 @@ class NativeModuleVisitor {
     }
 
     protected printPeerMethods(peer: PeerClass) {
-        [createConstructPeerMethod(peer)].concat(peer.methods).forEach(it => this.printPeerMethod(peer, it, this.nativeModule, this.nativeModuleEmpty, undefined, this.nativeFunctions))
+        [createConstructPeerMethod(peer)].concat(peer.methods).forEach(it => this.printPeerMethod(peer, it, this.nativeModule, this.nativeModuleEmpty))
     }
 
     protected printMaterializedMethods(nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter, nativeFunctions?: LanguageWriter) {
         this.library.materializedToGenerate.forEach(clazz => {
-            this.printPeerMethod(clazz, clazz.ctor, nativeModule, nativeModuleEmpty, idl.IDLPointerType)
-            this.printPeerMethod(clazz, clazz.finalizer, nativeModule, nativeModuleEmpty, idl.IDLPointerType)
+            this.printPeerMethod(clazz, clazz.ctor, nativeModule, nativeModuleEmpty)
+            this.printPeerMethod(clazz, clazz.finalizer, nativeModule, nativeModuleEmpty)
             clazz.methods.forEach(method => {
                 const returnType = method.tsReturnType()
-                this.printPeerMethod(clazz, method, nativeModule, nativeModuleEmpty,
-                    returnType && idl.isPrimitiveType(returnType) ? returnType : idl.IDLPointerType)
+                this.printPeerMethod(clazz, method, nativeModule, nativeModuleEmpty)
             })
         })
     }
 
-    printPeerMethod(clazz: PeerClassBase, method: PeerMethod, nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter,
-        returnType?: idl.IDLType,
-        nativeFunctions?: LanguageWriter
-    ) {
+    printPeerMethod(clazz: PeerClassBase, method: PeerMethod, nativeModule: LanguageWriter, nativeModuleEmpty: LanguageWriter) {
+        let returnType = method.method.signature.returnType
         const component = clazz.generatedName(method.isCallSignature)
         clazz.setGenerationContext(`${method.isCallSignature ? "" : method.overloadedName}()`)
         let serializerArgCreated = false
@@ -84,21 +81,19 @@ class NativeModuleVisitor {
             }
         }
         let maybeReceiver = method.hasReceiver() ? [{ name: 'ptr', type: idl.toIDLType('KPointer') }] : []
-        const parameters = NamedMethodSignature.make(returnType ?? idl.IDLVoidType, maybeReceiver.concat(args))
+        const parameters = NamedMethodSignature.make(returnType, maybeReceiver.concat(args))
         let name = `_${component}_${method.overloadedName}`
-
-        if (this.library.language === Language.ARKTS) {
-            if (parameters.returnType === idl.IDLThisType) {
-                parameters.returnType = idl.IDLPointerType
-            }
-        }
 
         nativeModule.writeNativeMethodDeclaration(name, parameters)
 
         nativeModuleEmpty.writeMethodImplementation(new Method(name, parameters), (printer) => {
             printer.writePrintLog(name)
             if (returnType !== undefined && returnType !== idl.IDLVoidType) {
-                printer.writeStatement(printer.makeReturn(printer.makeString(getReturnValue(returnType))))
+                let rv = getReturnValue(returnType)
+                if (rv)
+                    printer.writeStatement(printer.makeReturn(printer.makeString(rv)))
+                else
+                    printer.writeStatement(printer.makeThrowError("Unimplemented"))
             }
         })
         clazz.setGenerationContext(undefined)
@@ -140,8 +135,12 @@ class NativeModuleVisitor {
         printer.writeNativeMethodDeclaration(method.name, method.signature)
         this.nativeModuleEmpty.writeMethodImplementation(method, (printer) => {
             printer.writePrintLog(method.name)
-            if (method.signature.returnType !== undefined && idl.forceAsNamedNode(method.signature.returnType).name !== 'void') {
-                printer.writeStatement(printer.makeReturn(printer.makeString(getReturnValue(method.signature.returnType))))
+            if (method.signature.returnType !== undefined && method.signature.returnType != idl.IDLVoidType) {
+                let rv = getReturnValue(method.signature.returnType)
+                if (rv)
+                    printer.writeStatement(printer.makeReturn(printer.makeString(rv)))
+                else
+                    printer.writeStatement(printer.makeThrowError("Unimplemented"))
             }
         })
     }
@@ -273,10 +272,12 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
         nativeModuleEmpty.writeMethodImplementation(new Method(name, parameters), (printer) => {
             printer.writePrintLog(name)
             if (returnType !== undefined
-                && idl.forceAsNamedNode(returnType).name !== idl.IDLVoidType.name
-                && idl.forceAsNamedNode(returnType).name !== 'Void'
-            ) {
-                printer.writeStatement(printer.makeReturn(printer.makeString(getReturnValue(returnType))))
+                && returnType !== idl.IDLVoidType) {
+                let rv = getReturnValue(returnType)
+                if (rv)
+                    printer.writeStatement(printer.makeReturn(printer.makeString(rv)))
+                else
+                    printer.writeStatement(printer.makeThrowError("Unimplemented"))
             }
         })
         clazz.setGenerationContext(undefined)
@@ -373,10 +374,12 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
         this.nativeModuleEmpty.writeMethodImplementation(method, (printer) => {
             printer.writePrintLog(method.name)
             if (inputMethod.returnType !== undefined
-                && idl.forceAsNamedNode(inputMethod.returnType).name !== idl.IDLVoidType.name
-                && idl.forceAsNamedNode(inputMethod.returnType).name !== 'Void'
-            ) {
-                printer.writeStatement(printer.makeReturn(printer.makeString(getReturnValue(inputMethod.returnType))))
+                && inputMethod.returnType !== idl.IDLVoidType) {
+                    let rv = getReturnValue(inputMethod.returnType)
+                    if (rv)
+                        printer.writeStatement(printer.makeReturn(printer.makeString(rv)))
+                    else
+                        printer.writeStatement(printer.makeThrowError("Unimplemented"))
             }
         })
     }
@@ -395,8 +398,7 @@ export function printNativeModuleEmpty(peerLibrary: PeerLibrary): string {
     return nativeModuleEmptyDeclaration(visitor.nativeModuleEmpty.getOutput())
 }
 
-function getReturnValue(type: idl.IDLType): string {
-
+function getReturnValue(type: idl.IDLType): string | undefined {
     const pointers = new Set<idl.IDLType>([idl.IDLPointerType])
     const integrals = new Set<idl.IDLType>([
         idl.IDLI8Type,
@@ -440,5 +442,5 @@ function getReturnValue(type: idl.IDLType): string {
         case idl.IDLBufferType: return "new ArrayBuffer(8)"
     }
 
-    throw new Error(`Unknown return type: ${idl.IDLKind[type.kind]} ${idl.forceAsNamedNode(type).name}`)
+    return undefined
 }
