@@ -115,7 +115,7 @@
 |`setColumnOptions`| Function | Politov Mikhail | done |  |
 |`alignItems`| Function | Politov Mikhail | done |  |
 |`justifyContent`| Function | Politov Mikhail | done |  |
-|`pointLight`| Function | Evstigneev Roman |in progress |  |
+|`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done |  |
 |`reverse`| Function | Politov Mikhail | done |  |
 |*ColumnSplit*| *Component* | Dmitry A Smirnov| done|https://gitee.com/openharmony/arkui_ace_engine/issues/IAX2ZN|
 |`setColumnSplitOptions`| Function | Dmitry A Smirnov| done|  |
@@ -377,7 +377,7 @@
 |`onError`| Function | Ekaterina Stepanova | in progress | |
 |*Flex*| *Component* | Kovalev Sergey | in progress |  |
 |`setFlexOptions`| Function | Kovalev Sergey | done |  |
-|`pointLight`| Function | Evstigneev Roman | In Progress |  |
+|`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done |  |
 |*FlowItem*| *Component* | Ekaterina Stepanova | in progress | |
 |`setFlowItemOptions`| Function | Ekaterina Stepanova | in progress | |
 |*FolderStack*| *Component* | Politov Mikhail | done |  |
@@ -489,7 +489,7 @@
 |`colorFilter`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH and https://gitee.com/nikolay-igotti/idlize/issues/IB0Y72 |
 |`copyOption`| Function | Evstigneev Roman | in progress | |
 |`draggable`| Function | Evstigneev Roman | in progress | |
-|`pointLight`| Function | Evstigneev Roman | in progress | |
+|`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done | |
 |`edgeAntialiasing`| Function | Evstigneev Roman | in progress | |
 |`onComplete`| Function | Evstigneev Roman | in progress | |
 |`onError`| Function | Evstigneev Roman | done | |
@@ -799,12 +799,12 @@
 |`onComplete`| Function | Dudkin Sergey| in progress|  |
 |*RootScene*| *Component* | Maksimov Nikita | in progress | |
 |`setRootSceneOptions`| Function | Maksimov Nikita | in progress | |
-|*Row*| *Component* | Andrey Khudenkikh | in progress |  |
+|*Row*| *Component* | Andrey Khudenkikh | done |  |
 |`setRowOptions`| Function | Andrey Khudenkikh | done |  |
 |`alignItems`| Function | Andrey Khudenkikh | done |  |
 |`justifyContent`| Function | Andrey Khudenkikh | done |  |
-|`pointLight`| Function | Evstigneev Roman | in progress |  |
-|`reverse`| Function | Andrey Khudenkikh | in progress |  |
+|`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done |  |
+|`reverse`| Function | Andrey Khudenkikh | done |  |
 |*RowSplit*| *Component* | Dmitry A Smirnov| done|https://gitee.com/openharmony/arkui_ace_engine/issues/IAX2ZN|
 |`setRowSplitOptions`| Function | Dmitry A Smirnov| done|  |
 |`resizeable`| Function | Dmitry A Smirnov| done|  |
@@ -983,7 +983,7 @@
 |*Stack*| *Component* | Korobeinikov Evgeny | in progress |  |
 |`setStackOptions` | Function | Korobeinikov Evgeny | done |  |
 |`alignContent` | Function | Korobeinikov Evgeny | done |  |
-|`pointLight` | Function | Evstigneev Roman | in progress |  |
+|`pointLight` | Function | Evstigneev Roman, Andrey Khudenkikh | done |  |
 |*Stepper*| *Component* | Morozov Sergey | done |  |
 |`setStepperOptions`| Function | Morozov Sergey | done |  |
 |`onFinish`| Function | Morozov Sergey | done |  |
