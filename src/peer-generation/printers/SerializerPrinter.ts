@@ -107,11 +107,12 @@ class IdlSerializerPrinter {
             return
         }
         const baseType = idl.createReferenceType("MaterializedBase")
+        const unsafe = writer.language === Language.TS
         writer.writeStatement(
             writer.makeAssign(
                 `base`,
                 baseType,
-                writer.makeCast(writer.makeString(`value`), baseType, {unsafe: true}),
+                writer.makeCast(writer.makeString(`value`), baseType, { unsafe: unsafe }),
                 true,
                 true
             ))
@@ -313,6 +314,7 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
         // for UIExtensionProxy "Types of property 'off' are incompatible."
         if (["CanvasRenderingContext2D", "UIExtensionProxy"].includes(target.name)) {
             this.writer.print(`// TBD: remove explicit for ${target.name} class`)
+            const unsafe = this.writer.language === Language.TS
             this.writer.writeStatement(
                 this.writer.makeReturn(
                     this.writer.makeCast(
@@ -320,7 +322,7 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
                             `${target.name}Static`, "fromPtr", [this.writer.makeString(`ptr`)]
                         ),
                         idl.createReferenceType(target.name),
-                        { unsafe: true }
+                        { unsafe: unsafe }
                     )
                 )
             )
