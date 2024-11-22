@@ -16,6 +16,7 @@
 import { program } from "commander"
 import * as fs from "fs"
 import * as path from "path"
+import * as os from "os";
 import { fromIDL } from "./from-idl/common"
 import { idlToString } from "./from-idl/DtsPrinter"
 import { generate } from "./idlize"
@@ -111,9 +112,20 @@ function findVersion() {
     }
 }
 
+function printSystemInfo() {
+    console.log(`CPU model: ${os.cpus()[0].model}`);
+    const cpus = os.cpus()
+    for (let i = 0; i < cpus.length; ++i) {
+        console.log(`CPU${i} current frequency: ${cpus[i].speed} MHz`);
+    }
+    console.log(`RAM free/total: ${Math.floor(os.freemem()/1024/1024)} Mb / ${Math.floor(os.totalmem()/1024/1024)} Mb`);
+}
+
 if (process.env.npm_package_version) {
     console.log(`IDLize version ${findVersion()}`)
 }
+
+printSystemInfo()
 
 let didJob = false
 
