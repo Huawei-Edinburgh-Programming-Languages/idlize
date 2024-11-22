@@ -3165,7 +3165,7 @@ declare class RichEditorController extends RichEditorBaseController {
    * @atomicservice
    * @since 12
    */
-  //fromStyledString(value: StyledString): Array<RichEditorSpan>;
+  fromStyledString(value: StyledString): Array<RichEditorSpan>;
 
   /**
    * Convert spans to StyledString in rich editor.

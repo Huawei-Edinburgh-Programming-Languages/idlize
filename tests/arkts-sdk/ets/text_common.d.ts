@@ -429,7 +429,7 @@ declare interface TextBaseController {
  * @atomicservice
  * @since 12
  */
-declare interface TextEditControllerEx {
+declare interface TextEditControllerEx extends TextBaseController{
   /**
    * Judge whether is in editing state
    * 
