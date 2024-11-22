@@ -964,9 +964,9 @@
 |`contentModifier`| Function |Morozov Sergey |blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`slideRange`| Function | Morozov Sergey |done |  |
 |`showTips`| Function |Morozov Sergey |done |  |
-|*BaseSpan*| *Component* |Politov Mikhail | in progress |  |
+|*BaseSpan*| *Component* |Politov Mikhail | done |  |
 |`textBackgroundStyle`| Function | Politov Mikhail | done |  |
-|`baselineOffset`| Function | Politov Mikhail | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`baselineOffset`| Function | Politov Mikhail | done |  |
 |*Span*| *Component* | Politov Mikhail | done |  |
 |`setSpanOptions`| Function |Politov Mikhail | done  |  |
 |`font`| Function | Politov Mikhail | done |  |
