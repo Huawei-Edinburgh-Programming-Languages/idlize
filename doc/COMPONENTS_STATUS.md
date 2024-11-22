@@ -1150,7 +1150,7 @@
 |`customKeyboard`|Function|Tuzhilkin Ivan|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`decoration`|Function|Tuzhilkin Ivan|done|  |
 |`letterSpacing`|Function|Tuzhilkin Ivan|done|  |
-|`lineSpacing`|Function|Tuzhilkin Ivan|in progress| |
+|`lineSpacing`|Function|Tuzhilkin Ivan|devdone| |
 |`lineHeight`|Function|Tuzhilkin Ivan|testskipped|  |
 |`type`|Function|Tuzhilkin Ivan|done|  |
 |`enableAutoFill`|Function|Tuzhilkin Ivan|done|  |
@@ -1174,7 +1174,7 @@
 |`heightAdaptivePolicy`|Function|Tuzhilkin Ivan|done|  |
 |`wordBreak`|Function|Tuzhilkin Ivan|done|  |
 |`lineBreakStrategy`|Function|Tuzhilkin Ivan|done|  |
-|`EnableHapticFeedback`|Function|Tuzhilkin Ivan|in progress|  |
+|`EnableHapticFeedback`|Function|Tuzhilkin Ivan|devdone|  |
 |*TextClock*| *Component* |Pavelyev Ivan|in progress|  |
 |`setTextClockOptions`| Function |Pavelyev Ivan|done|  |
 |`format`| Function |Pavelyev Ivan|done|  |
