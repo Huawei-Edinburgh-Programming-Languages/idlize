@@ -884,7 +884,7 @@
 |`layoutDirection`| Function |Samarin Sergey|done |  |
 |`position`| Function |Samarin Sergey| done |  |
 |`markAnchor`| Function |Samarin Sergey| done |  |
-|`offset`| Function |Samarin Sergey| devdone |  |
+|`offset`| Function |Samarin Sergey| done |  |
 |`fontSize`| Function |Samarin Sergey| done |  |
 |`fontStyle`| Function |Samarin Sergey| done |  |
 |`fontWeight`| Function |Samarin Sergey| done |  |
@@ -1088,13 +1088,13 @@
 |`minFontScale`| Function |Samarin Sergey |in progress |  |
 |`maxFontScale`| Function |Samarin Sergey |in progress |  |
 |`fontStyle`| Function |Samarin Sergey | done |  |
-|`fontWeight`| Function |Samarin Sergey | devdone |  |
+|`fontWeight`| Function |Samarin Sergey | done |  |
 |`lineSpacing`| Function |Samarin Sergey |in progress |  |
-|`textAlign`| Function |Samarin Sergey | devdone |  |
-|`lineHeight`| Function |Samarin Sergey | devdone |  |
+|`textAlign`| Function |Samarin Sergey | done |  |
+|`lineHeight`| Function |Samarin Sergey | done |  |
 |`textOverflow`| Function |Samarin Sergey | done |  |
 |`fontFamily`| Function |Samarin Sergey |in progress |  |
-|`maxLines`| Function |Samarin Sergey | devdone |  |
+|`maxLines`| Function |Samarin Sergey | done |  |
 |`decoration`| Function |Samarin Sergey | devdone |  |
 |`letterSpacing`| Function |Samarin Sergey | devdone |  |
 |`textCase`| Function |Samarin Sergey | done |  |
