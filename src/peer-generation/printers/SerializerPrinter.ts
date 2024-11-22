@@ -307,6 +307,25 @@ class IdlDeserializerPrinter {///converge w/ IdlSerP?
             )
             return
         }
+        // TBD: Use explicit cast for CanvasRenderingContext2D and UIExtensionProxy classes
+        // to avoid errors
+        // for CanvasRenderingContext2D "Types of property 'clip' are incompatible."
+        // for UIExtensionProxy "Types of property 'off' are incompatible."
+        if (["CanvasRenderingContext2D", "UIExtensionProxy"].includes(target.name)) {
+            this.writer.print(`// TBD: remove explicit for ${target.name} class`)
+            this.writer.writeStatement(
+                this.writer.makeReturn(
+                    this.writer.makeCast(
+                        this.writer.makeMethodCall(
+                            `${target.name}Static`, "fromPtr", [this.writer.makeString(`ptr`)]
+                        ),
+                        idl.createReferenceType(target.name),
+                        { unsafe: true }
+                    )
+                )
+            )
+            return
+        }
         this.writer.writeStatement(
             this.writer.makeReturn(
                 this.writer.makeMethodCall(
