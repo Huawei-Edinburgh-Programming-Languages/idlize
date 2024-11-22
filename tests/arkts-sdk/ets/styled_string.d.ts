@@ -285,8 +285,7 @@ declare interface SpanStyle {
  * @atomicservice
  * @since 12
  */
-//TODO: Already exists as interface
-declare class TextStyle_styled_string {
+declare class TextStyle {
 
     /**
      * constructor.
@@ -987,7 +986,7 @@ declare class UrlStyle {
  * @atomicservice
  * @since 14
  */
-declare type StyledStringValue = TextStyle_styled_string | DecorationStyle | BaselineOffsetStyle | LetterSpacingStyle |
+declare type StyledStringValue = TextStyle | DecorationStyle | BaselineOffsetStyle | LetterSpacingStyle |
 TextShadowStyle | GestureStyle | ImageAttachment | ParagraphStyle | LineHeightStyle | UrlStyle | CustomSpan |
 UserDataSpan | BackgroundColorStyle;
 
