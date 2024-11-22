@@ -113,8 +113,8 @@ function findVersion() {
 }
 
 function printSystemInfo() {
-    console.log(`CPU model: ${os.cpus()[0].model}`);
     const cpus = os.cpus()
+    console.log(`CPU model: ${cpus[0].model}`);
     for (let i = 0; i < cpus.length; ++i) {
         console.log(`CPU${i} current frequency: ${cpus[i].speed} MHz`);
     }
