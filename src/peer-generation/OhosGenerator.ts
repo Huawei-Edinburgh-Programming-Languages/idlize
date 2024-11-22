@@ -373,6 +373,14 @@ class OHOSVisitor {
             this.peerWriter.print(`${nativeModuleGetter},`)
             this.peerWriter.popIndent()
             this.peerWriter.print(`} from './${this.libraryName.toLocaleLowerCase()}Native'`)
+            this.peerWriter.nativeModuleAccessor = nativeModuleGetter
+        } else if (this.library.language === Language.ARKTS) {
+            this.peerWriter.print('import {')
+            this.peerWriter.pushIndent()
+            this.peerWriter.print(`${nativeModuleVar},`)
+            this.peerWriter.popIndent()
+            this.peerWriter.print(`} from './${this.libraryName.toLocaleLowerCase()}Native'`)
+            this.peerWriter.nativeModuleAccessor = nativeModuleVar
         }
         this.data.forEach(data => {
             this.peerWriter.writeInterface(data.name, writer => {
@@ -435,7 +443,7 @@ class OHOSVisitor {
                         })
                         
                         const createPeerExpression = writer.makeNewObject("Finalizable", [
-                            writer.makeMethodCall(`${nativeModuleGetter}()`, `_${int.name}_ctor`, params),
+                            writer.makeNativeCall(`_${int.name}_ctor`, params),
                             writer.makeString(`${int.name}.getFinalizer()`)
                         ])
                         writer.writeStatement(
@@ -459,8 +467,7 @@ class OHOSVisitor {
                 // write getFinalizer() method
                 const getFinalizerSig = new MethodSignature(IDLPointerType, [])
                 writer.writeMethodImplementation(new Method("getFinalizer", getFinalizerSig, [MethodModifier.STATIC]), writer => {
-                    const callExpression = writer.makeMethodCall(
-                        `${nativeModuleGetter}()`,
+                    const callExpression = writer.makeNativeCall(
                         `_${int.name}_getFinalizer`, // TODO temporarily removed _${this.libraryName} prefix
                         []
                     );
@@ -526,8 +533,7 @@ class OHOSVisitor {
                                 params.push(writer.makeString(writer.escapeKeyword(it.convertorArg(it.param, writer))))
                             }
                         })
-                        const callExpression = writer.makeMethodCall(
-                            `${nativeModuleGetter}()`,
+                        const callExpression = writer.makeNativeCall(
                             `_${int.name}_${method.name}`, // TODO temporarily removed _${this.libraryName} prefix
                             params
                         )
@@ -653,6 +659,9 @@ class OHOSVisitor {
             finalizablePath: `./${fileNamePrefix}Finalizable`,
         }
 
+        if (this.library.language === Language.ARKTS) {
+            managedCodeModuleInfo.name = `${this.libraryName}NativeModule`
+        }
 
         const nativeModuleTemplate = readLangTemplate(`OHOSNativeModule_template${ext}`, this.library.language)
         const nativeModuleText = nativeModuleTemplate
