@@ -17,7 +17,6 @@ import * as idl from "../../idl"
 import {
     getExtAttribute,
     IDLExtendedAttributes,
-    IDLNode,
     IDLReferenceType,
     IDLType,
     maybeOptional
@@ -45,7 +44,6 @@ import { MaterializedClass, MaterializedField, MaterializedMethod } from "../Mat
 import { createTypeNameConvertor, Field, FieldModifier, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters";
 import { convertDeclaration, IdlNameConvertor } from "../LanguageWriters/nameConvertor";
 import {
-    addSyntheticDeclarationDependency,
     isSyntheticDeclaration,
     makeSyntheticDeclCompletely,
     makeSyntheticTypeAliasDeclaration,
@@ -301,26 +299,6 @@ class TSDependenciesCollector extends ImportsAggregateCollector {
 class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
     constructor(peerLibrary: PeerLibrary) {
         super(peerLibrary, true)
-    }
-
-    override convertImport(type: IDLReferenceType, importClause: string): IDLNode[] {
-        const generatedName = this.peerLibrary.mapType(type)
-        const ref = idl.createReferenceType(idl.forceAsNamedNode(type).name)
-        const resolvedType = this.peerLibrary.resolveTypeReference(ref)
-        if (resolvedType !== undefined && !idl.isTypedef(resolvedType)) {
-            const syntheticDeclaration = makeSyntheticTypeAliasDeclaration(
-                'SyntheticDeclarations', generatedName, ref)
-            if (!this.peerLibrary.importTypesStubToSource.has(generatedName)) {
-                this.peerLibrary.importTypesStubToSource.set(generatedName, type.name)
-            }
-            addSyntheticDeclarationDependency(syntheticDeclaration,
-                convertDeclToFeature(this.peerLibrary, resolvedType))
-            return [
-                ...super.convertImport(type, importClause),
-                syntheticDeclaration
-            ]
-        }
-        return super.convertImport(type, importClause);
     }
 
     override convertContainer(type: idl.IDLContainerType): idl.IDLNode[] {
