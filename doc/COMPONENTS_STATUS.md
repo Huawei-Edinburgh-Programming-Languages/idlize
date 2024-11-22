@@ -469,9 +469,9 @@
 |`setGridRowOptions`| Function |Lobah Mikhail| in progress|  |
 |`onBreakpointChange`| Function |Lobah Mikhail| in progress|  |
 |`alignItems`| Function |Lobah Mikhail| in progress|  |
-|*Hyperlink*| *Component* | | |
-|`setHyperlinkOptions`| Function | | |
-|`color`| Function | | |
+|*Hyperlink*| *Component* | Morozov Sergey | devdone |
+|`setHyperlinkOptions`| Function | Morozov Sergey | devdone |
+|`color`| Function | Morozov Sergey | devdone |
 |*Image*| *Component* | Korobeinikov Evgeny | in progress |  |
 |`setImageOptions`| Function | Berezin Kirill | in progress | |
 |`alt`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
@@ -632,7 +632,7 @@
 |`onWillHide`| Function | Kovalev Sergey | done | |
 |`systemBarStyle`| Function |Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`recoverable`| Function |Kovalev Sergey | done |  |
-|`systemTransition`| Function |Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4BII |
+|`systemTransition`| Function |Kovalev Sergey | in progress |  |
 |`title`| Function |Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`toolbarConfiguration`| Function |Kovalev Sergey | in progress |  |
 |`hideToolBar`| Function | Kovalev Sergey | in progress |  |
@@ -1072,7 +1072,7 @@
 |`barBackgroundBlurStyle`| Function | Tuzhilkin Ivan | done |  |
 |`barBackgroundEffect`| Function | Tuzhilkin Ivan | in progress | |
 |`onContentWillChange`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
-|`barModeBarMode_SCROLLABLE`| Function | Tuzhilkin Ivan | devdone | |
+|`barModeBarMode_SCROLLABLE`| Function | Tuzhilkin Ivan | done | |
 |*TabContent*| *Component* | Evstigneev Roman |in progress |  |
 |`setTabContentOptions`| Function | Evstigneev Roman | done |  |
 |`tabBar`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
@@ -1159,7 +1159,7 @@
 |`lineBreakStrategy`|Function|Tuzhilkin Ivan|done|  |
 |`decoration`|Function|Tuzhilkin Ivan|done|  |
 |`letterSpacing`|Function|Tuzhilkin Ivan|done|  |
-|`lineSpacing`|Function|Tuzhilkin Ivan|in progress| |
+|`lineSpacing`|Function|Tuzhilkin Ivan|devdone| |
 |`lineHeight`|Function|Tuzhilkin Ivan|testskipped|  |
 |`type`|Function|Tuzhilkin Ivan|done|  |
 |`enableAutoFill`|Function|Tuzhilkin Ivan|done|  |
@@ -1171,7 +1171,7 @@
 |`onDidDelete`|Function|Tuzhilkin Ivan|done |  |
 |`editMenuOptions`|Function|Tuzhilkin Ivan|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`enablePreviewText`|Function|Tuzhilkin Ivan|done|  |
-|`enableHapticFeedback`|Function|Tuzhilkin Ivan|in progress|  |
+|`enableHapticFeedback`|Function|Tuzhilkin Ivan|devdone|  |
 |`inputFilter`|Function|Tuzhilkin Ivan|done|  |
 |`showCounter`|Function|Tuzhilkin Ivan|done| https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
 |`customKeyboard`|Function|Tuzhilkin Ivan|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
