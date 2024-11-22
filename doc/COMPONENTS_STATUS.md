@@ -1083,8 +1083,8 @@
 |`font`| Function |Samarin Sergey |in progress |  |
 |`fontColor`| Function |Samarin Sergey | done |  |
 |`fontSize`| Function |Samarin Sergey | done |  |
-|`minFontSize`| Function |Samarin Sergey |in progress |  |
-|`maxFontSize`| Function |Samarin Sergey |in progress |  |
+|`minFontSize`| Function |Samarin Sergey | devdone |  |
+|`maxFontSize`| Function |Samarin Sergey | devdone |  |
 |`minFontScale`| Function |Samarin Sergey |in progress |  |
 |`maxFontScale`| Function |Samarin Sergey |in progress |  |
 |`fontStyle`| Function |Samarin Sergey | done |  |
@@ -1095,17 +1095,17 @@
 |`textOverflow`| Function |Samarin Sergey | done |  |
 |`fontFamily`| Function |Samarin Sergey |in progress |  |
 |`maxLines`| Function |Samarin Sergey | devdone |  |
-|`decoration`| Function |Samarin Sergey |in progress |  |
-|`letterSpacing`| Function |Samarin Sergey |in progress |  |
+|`decoration`| Function |Samarin Sergey | devdone |  |
+|`letterSpacing`| Function |Samarin Sergey | devdone |  |
 |`textCase`| Function |Samarin Sergey | done |  |
-|`baselineOffset`| Function |Samarin Sergey |in progress |  |
+|`baselineOffset`| Function |Samarin Sergey | devdone |  |
 |`copyOption`| Function |Samarin Sergey |in progress |  |
 |`draggable`| Function |Samarin Sergey | done |  |
 |`textShadow`| Function |Samarin Sergey |in progress |  |
 |`heightAdaptivePolicy`| Function |Samarin Sergey | done |  |
 |`textIndent`| Function |Samarin Sergey |in progress |  |
 |`wordBreak`| Function | Samarin Sergey | done |  |
-|`lineBreakStrategy`| Function |Samarin Sergey |in progress |  |
+|`lineBreakStrategy`| Function |Samarin Sergey | devdone |  |
 |`onCopy`| Function | Kirill Kirichenko | done |  |
 |`caretColor`| Function |Samarin Sergey |in progress |  |
 |`selectedBackgroundColor`| Function |Samarin Sergey |in progress |  |
