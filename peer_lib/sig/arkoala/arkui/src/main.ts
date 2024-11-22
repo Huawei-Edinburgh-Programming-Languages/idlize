@@ -28,7 +28,8 @@ import { ArkSideBarContainerComponent } from "@arkoala/arkui/ArkSidebar"
 import { ArkTabContentPeer } from "@arkoala/arkui/peers/ArkTabContentPeer"
 import { SubTabBarStyle } from "@arkoala/arkui/ArkSubTabBarStyleBuilder"
 import { BottomTabBarStyle } from "@arkoala/arkui/ArkBottomTabBarStyleBuilder"
-import { CanvasRenderingContext2DStatic } from "@arkoala/arkui/ArkCanvasRenderingContext2DMaterialized"
+// TBD: It needs to be possible to use CanvasRenderingContext2D without import
+import { CanvasRenderingContext2D as CanvasRenderingContext2DImpl, CanvasRenderingContext2DStatic } from "@arkoala/arkui/ArkCanvasRenderingContext2DMaterialized"
 import { ArkUINodeType } from "@arkoala/arkui/peers/ArkUINodeType"
 import { startPerformanceTest } from "@arkoala/arkui/test_performance"
 import { testLength_10_lpx } from "@arkoala/arkui/test_data"
@@ -446,13 +447,19 @@ function checkTabContent() {
     stopNativeTest(CALL_GROUP_LOG)
 }
 
+// Remove it when it is possible to use CanvasRenderingContext2D
+// without explicitly importing it
+export function unsafeCast<T>(value: unknown): T {
+    return value as unknown as T
+}
+
 function checkCanvasRenderingContext2D() {
     startNativeTest(checkCanvasRenderingContext2D.name, CALL_GROUP_LOG)
 
     let canvasRenderingContext2D: CanvasRenderingContext2D | undefined = undefined
 
     checkResult("new CanvasRenderingContext2D()",
-        () => canvasRenderingContext2D = new CanvasRenderingContext2D(),
+        () => canvasRenderingContext2D = unsafeCast<CanvasRenderingContext2D>(new CanvasRenderingContext2DImpl()),
         `new CanvasPath()[return (CanvasPathPeer*) 100]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]new CanvasRenderer()[return (CanvasRendererPeer*) 100]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]new CanvasRenderingContext2D({.tag=ARK_TAG_UNDEFINED, .value={}})[return (CanvasRenderingContext2DPeer*) 100]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]`
     )
 
@@ -468,12 +475,12 @@ function checkCanvasRenderingContext2D() {
     assertEquals("CanvasRenderingContext2D height", 0, canvasRenderingContext2D!.height)
 
     checkResult("CanvasRenderingContext2D peer close()",
-        () => (canvasRenderingContext2D as unknown as MaterializedBase).getPeer()!.close(),
+        () => (unsafeCast<MaterializedBase>(canvasRenderingContext2D)).getPeer()!.close(),
         `dummyClassFinalizer(0x64)`)
 
     const ctorPtr = BigInt(123)
     const serializer = new Serializer()
-    serializer.writeCanvasRenderingContext2D(CanvasRenderingContext2DStatic.fromPtr(ctorPtr) as unknown as CanvasRenderingContext2D)
+    serializer.writeCanvasRenderingContext2D(unsafeCast<CanvasRenderingContext2D>(CanvasRenderingContext2DStatic.fromPtr(ctorPtr)))
     const deserializer = new Deserializer(serializer.asArray().buffer, serializer.length())
     const materializedBase = deserializer.readCanvasRenderingContext2D() as unknown as MaterializedBase
     assertEquals("Deserializer readCanvasRenderingContext2D()", ctorPtr, materializedBase.getPeer()!.ptr)
