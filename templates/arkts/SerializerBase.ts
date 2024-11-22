@@ -259,10 +259,12 @@ export class SerializerBase {
         this.writePointer(registerMaterialized(value))
     }
     writeString(value: string) {
-        this.checkCapacity((4 + value.length * 4 + 1) as int32) // length, data
-        let encodedLength = NativeModule._ManagedStringWrite(value, this.asArray(), this.position + 4)
-        this.setInt32(this.position, encodedLength)
-        this.position += encodedLength + 4
+        // TODO implement _ManagedStringWrite
+        throw new Error("unimplemented")
+        // this.checkCapacity((4 + value.length * 4 + 1) as int32) // length, data
+        // let encodedLength = NativeModule._ManagedStringWrite(value, this.asArray(), this.position + 4)
+        // this.setInt32(this.position, encodedLength)
+        // this.position += encodedLength + 4
     }
     //TODO: Needs to be implemented
     writeArrayBuffer(value: ArrayBuffer) {
