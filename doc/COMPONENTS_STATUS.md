@@ -68,7 +68,7 @@
 |`fontFamily`| Function |Evstigneev Roman | done |  |
 |`contentModifier`| Function |Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`labelStyle`| Function |Evstigneev Roman | done |  |
-|*Calendar*| *Component* | Maksimov Nikita | in progress|  |
+|*Calendar*| *Component* | Maksimov Nikita | done |  |
 |`setCalendarOptions`| Function | Maksimov Nikita | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
 |`showLunar`| Function | Maksimov Nikita | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
 |`showHoliday`| Function | Maksimov Nikita | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
@@ -81,8 +81,8 @@
 |`todayStyle`| Function | Maksimov Nikita | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
 |`weekStyle`| Function | Maksimov Nikita | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
 |`workStateStyle`| Function | Maksimov Nikita | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
-|`onSelectChange`| Function | Maksimov Nikita | in progress | |
-|`onRequestData`| Function | Maksimov Nikita | in progress | |
+|`onSelectChange`| Function | Maksimov Nikita | done | |
+|`onRequestData`| Function | Maksimov Nikita | done | |
 |*CalendarPicker*| *Component* |Politov Mikhail | in progress |  |
 |`setCalendarPickerOptions`| Function |Politov Mikhail | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`textStyle`| Function |Politov Mikhail | done |  |
@@ -1493,9 +1493,9 @@
 |`show`| Function | | |
 |*AlertDialog*| *Class* | | |
 |`show`| Function | | |
-|*CalendarController*| *Class* |Maksimov Nikita | devdone |  |
-|`backToToday`| Function |Maksimov Nikita | devdone |  |
-|`goTo`| Function |Maksimov Nikita | devdone |  |
+|*CalendarController*| *Class* |Maksimov Nikita | done |  |
+|`backToToday`| Function |Maksimov Nikita | done |  |
+|`goTo`| Function |Maksimov Nikita | done |  |
 |*CalendarPickerDialog*| *Class* | | | |
 |`show`| Function | | | |
 |*CanvasGradient*| *Class* | Vadim Voronov | in progress | |
