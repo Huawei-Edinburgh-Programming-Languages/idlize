@@ -50,6 +50,7 @@ class OHOSVisitor {
 
     peerWriter: LanguageWriter
     nativeWriter: LanguageWriter
+    nativeFunctionsWriter: LanguageWriter
 
     libraryName: string = ""
 
@@ -68,6 +69,7 @@ class OHOSVisitor {
 
         this.peerWriter = createLanguageWriter(library.language, library)
         this.nativeWriter = createLanguageWriter(library.language, library)
+        this.nativeFunctionsWriter = createLanguageWriter(library.language, library)
 
         const fileNamePrefix = this.libraryName.toLowerCase()
         this.implementationStubsFile = new CppSourceFile(`${fileNamePrefix}Impl_template${Language.CPP.extension}`, library)
@@ -299,7 +301,8 @@ class OHOSVisitor {
             })
         })
         printCallbacksKinds(this.library, this.nativeWriter)
-        this.nativeWriter.writeInterface(className, writer => {
+        this.nativeFunctionsWriter.printer.pushIndent(this.nativeWriter.indentDepth() + 1)
+        ;((writer: LanguageWriter) => {
             this.interfaces.forEach(it => {
                 // TODO TBD do we need to provide declaration for "fake" constructor for interfaces?
                 const ctors = it.constructors.map(it => ({ parameters: it.parameters, returnType: it.returnType }))
@@ -357,7 +360,7 @@ class OHOSVisitor {
                     { name: "resourceId", type: IDLI32Type }
                 ])
             )
-        })
+        })(this.nativeFunctionsWriter)
     }
 
     private printPeer() {
@@ -655,6 +658,7 @@ class OHOSVisitor {
         const nativeModuleText = nativeModuleTemplate
             .replaceAll('%NATIVE_MODULE_NAME%', this.libraryName)
             .replaceAll('%NATIVE_MODULE_CONTENT%', this.nativeWriter.getOutput().join('\n'))
+            .replaceAll('%NATIVE_FUNCTIONS%', this.nativeFunctionsWriter.getOutput().join('\n'))
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Native${ext}`), nativeModuleText, 'utf-8')
 
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Finalizable${ext}`),

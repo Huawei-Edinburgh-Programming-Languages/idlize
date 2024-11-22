@@ -3,16 +3,24 @@ import { pointer, KPointer, KInt, KStringPtr, } from "@koalaui/interop"
 
 %NATIVE_MODULE_CONTENT%
 
-type NativeModuleType = %NATIVE_MODULE_NAME%NativeModule
-let theModule: NativeModuleType | undefined = undefined
+export class %NATIVE_MODULE_NAME%NativeModule {
+    static {
+        loadLibrary("%NATIVE_MODULE_NAME%_NativeBridgeArk")
+        %NATIVE_MODULE_NAME%NativeModule.init()
+    }
 
-declare const LOAD_NATIVE: NativeModuleType
+    static native init(): void;
 
-export function get%NATIVE_MODULE_NAME%NativeModule(): NativeModuleType {
+    // TODO callCallbackfromNative
+
+%NATIVE_FUNCTIONS%
+}
+
+let theModule: %NATIVE_MODULE_NAME%NativeModule
+
+export function get%NATIVE_MODULE_NAME%NativeModule(): %NATIVE_MODULE_NAME%NativeModule {
     if (theModule) return theModule
-    theModule = LOAD_NATIVE as NativeModuleType
-    if (!theModule)
-        throw new Error("Cannot load native module")
+    theModule = new %NATIVE_MODULE_NAME%NativeModule()
     return theModule
 }
 
