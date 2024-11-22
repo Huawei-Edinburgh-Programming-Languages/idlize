@@ -10,10 +10,10 @@ enum CallbackEventKind {
 
 const bufferSize = 1024
 const buffer = new Uint8Array(bufferSize)
-const deserializer = new Deserializer(buffer.buffer, bufferSize)
+const deserializer = new Deserializer(buffer.buffer as ArrayBuffer, bufferSize)
 export function checkArkoalaCallbacks() {
     while (true) {
-        let result = %NATIVE_MODULE_ACCESSOR%()._CheckArkoalaCallbackEvent(buffer, bufferSize)
+        let result = %NATIVE_MODULE_ACCESSOR%._CheckArkoalaCallbackEvent(buffer, bufferSize)
         if (result == 0) break
 
         deserializer.resetCurrentPosition()
