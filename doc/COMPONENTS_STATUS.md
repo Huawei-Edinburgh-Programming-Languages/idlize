@@ -1472,10 +1472,10 @@
 |`enableScrollInteraction`| Function | Kovalev Sergey | done |  |
 |`friction`| Function | Kovalev Sergey | done |  |
 |`cachedCount`| Function |Kovalev Sergey | done |  |
-|`onReachStart`| Function | Kovalev Sergey | devdone | |
-|`onReachEnd`| Function | Kovalev Sergey | devdone | |
+|`onReachStart`| Function | Kovalev Sergey | done | |
+|`onReachEnd`| Function | Kovalev Sergey | done | |
 |`onScrollFrameBegin`| Function | Kovalev Sergey | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onScrollIndex`| Function | Kovalev Sergey | devdone | |
+|`onScrollIndex`| Function | Kovalev Sergey | done | |
 |*UIExtensionComponent*| *Component* | | |
 |`setUIExtensionComponentOptions`| Function | | | |
 |`onRemoteReady`| Function | | | |
