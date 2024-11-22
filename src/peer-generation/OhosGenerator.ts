@@ -520,7 +520,7 @@ class OHOSVisitor {
                                     serializerPushed = true
                                 }
                             } else {
-                                params.push(writer.makeString(it.convertorArg(it.param, writer)))
+                                params.push(writer.makeString(writer.escapeKeyword(it.convertorArg(it.param, writer))))
                             }
                         })
                         const callExpression = writer.makeMethodCall(

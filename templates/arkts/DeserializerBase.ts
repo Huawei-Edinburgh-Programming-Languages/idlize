@@ -207,7 +207,9 @@ export class DeserializerBase {
 }
 
 export abstract class CustomDeserializer {
-    protected constructor(protected supported: Array<string>) {
+    protected supported: Array<string>
+    protected constructor(supported: Array<string>) {
+        this.supported = supported
     }
 
     supports(kind: string): boolean {

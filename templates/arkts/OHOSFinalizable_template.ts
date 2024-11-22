@@ -24,7 +24,7 @@ export class Finalizable extends FinalizableBase {
     createHandle(): string | undefined {
         return undefined
     }
-    constructor(public ptr: pointer, finalizer: pointer, managed: boolean = true) {
+    constructor(ptr: pointer, finalizer: pointer, managed: boolean = true) {
         super(ptr, finalizer, managed)
     }
 

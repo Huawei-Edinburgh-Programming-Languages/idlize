@@ -61,11 +61,6 @@ export function runtimeType(value: any): int32 {
     throw new Error(`bug: ${value} is ${type}`)
 }
 
-// Poor man's instanceof, fails on subclasses
-export function isInstanceOf(className: string, value: Object): boolean {
-    return value.constructor.name === className
-}
-
 // TODO implement callbacks
 // export function registerCallback(value: object|undefined): int32 {
 //     return wrapCallback((args: Uint8Array, length: int32) => {
@@ -81,7 +76,10 @@ export function isInstanceOf(className: string, value: Object): boolean {
 
 /* Serialization extension point */
 export abstract class CustomSerializer {
-    constructor(protected supported: Array<string>) {}
+    protected supported: Array<string>
+    constructor(supported: Array<string>) {
+        this.supported = supported
+    }
     supports(kind: string): boolean { return this.supported.includes(kind) }
     abstract serialize(serializer: SerializerBase, value: any, kind: string): void
     next: CustomSerializer | undefined = undefined
