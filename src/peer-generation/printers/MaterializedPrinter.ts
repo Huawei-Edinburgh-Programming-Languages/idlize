@@ -126,17 +126,17 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
             : undefined
 
         const interfaces: string[] = ["MaterializedBase"]
-        if (clazz.isInterface) {
-            // self-interface is not supported ArkTS
-            if (this.library.language == Language.ARKTS) {
-                selfInterface = createInterfaceDeclName(selfInterface!)
-            }
-            if (selfInterface) interfaces.push(selfInterface)
-            if (superClassName && !this.library.materializedClasses.has(superClassName)) {
-                interfaces.push(superClassName)
-                superClassName = undefined
-            }
-        }
+        // if (clazz.isInterface) {
+        //     // self-interface is not supported ArkTS
+        //     if (this.library.language == Language.ARKTS) {
+        //         selfInterface = createInterfaceDeclName(selfInterface!)
+        //     }
+        //     if (selfInterface) interfaces.push(selfInterface)
+        //     if (superClassName && !this.library.materializedClasses.has(superClassName)) {
+        //         interfaces.push(superClassName)
+        //         superClassName = undefined
+        //     }
+        // }
 
         // TODO: workarond for ContentModifier<T> which returns WrappedBuilder<[T]>
         //       and the WrappedBuilder is defined as "class WrappedBuilder<Args extends Object[]>""
