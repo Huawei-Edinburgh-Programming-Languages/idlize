@@ -446,8 +446,8 @@ export class CJLanguageWriter extends LanguageWriter {
     makeTupleAccess(value: string, index: number): LanguageExpression {
         return this.makeString(`${value}.value${index}`)
     }
-    enumFromOrdinal(value: LanguageExpression, enam: idl.IDLEnum): LanguageExpression {
-        return this.makeString(`${this.getNodeName(enam)}(${value.asString()})`)
+    enumFromOrdinal(value: LanguageExpression, enumEntry: idl.IDLType): LanguageExpression {
+        return this.makeString(`${this.getNodeName(enumEntry)}(${value.asString()})`)
     }
     ordinalFromEnum(value: LanguageExpression, _: idl.IDLType): LanguageExpression {
         return this.makeString(`Int32(${value.asString()}.value)`)
