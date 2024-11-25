@@ -469,9 +469,9 @@
 |`setGridRowOptions`| Function |Lobah Mikhail| in progress|  |
 |`onBreakpointChange`| Function |Lobah Mikhail| in progress|  |
 |`alignItems`| Function |Lobah Mikhail| in progress|  |
-|*Hyperlink*| *Component* | Morozov Sergey | devdone |
-|`setHyperlinkOptions`| Function | Morozov Sergey | devdone |
-|`color`| Function | Morozov Sergey | devdone |
+|*Hyperlink*| *Component* | Morozov Sergey | done | https://gitee.com/openharmony/arkui_ace_engine/issues/IB6W7E |
+|`setHyperlinkOptions`| Function | Morozov Sergey | done |
+|`color`| Function | Morozov Sergey | done |
 |*Image*| *Component* | Korobeinikov Evgeny | in progress |  |
 |`setImageOptions`| Function | Berezin Kirill | in progress | |
 |`alt`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
