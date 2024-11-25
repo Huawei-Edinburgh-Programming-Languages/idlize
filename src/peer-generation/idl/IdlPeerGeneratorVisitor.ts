@@ -1221,7 +1221,7 @@ export function isConflictingDeclaration(decl: idl.IDLEntry): boolean {/// stole
     // duplicate type declarations with different signatures
     if (idl.isTypedef(decl) && decl.name === 'OnWillScrollCallback') return true
     // has same named class and interface
-    if ((idl.isInterface(decl)) && decl.name === 'LinearGradient') return true
+    if ((idl.isInterface(decl) || idl.isClass(decl)) && decl.name === 'LinearGradient') return true
     // just has ugly dependency WrappedBuilder - there is conflict in generic types
     if (idl.isInterface(decl) && decl.name === 'ContentModifier') return true
     // complicated type arguments
