@@ -10,13 +10,17 @@ enum CallbackEventKind {
 }
 
 const bufferSize = 1024
-const buffer = new ArrayBuffer(bufferSize)
-const deserializer = new Deserializer(buffer, bufferSize)
+const byteBuffer = new byte[bufferSize]
+const buffer = new Uint8Array(bufferSize)
+const deserializer = new Deserializer(buffer.buffer as ArrayBuffer, bufferSize)
 export function checkArkoalaCallbacks() {
     while (true) {
         deserializer.resetCurrentPosition()
-        let result = nativeModule()._CheckArkoalaCallbackEvent(buffer as KUint8ArrayPtr, bufferSize)
+        let result = nativeModule()._CheckArkoalaCallbackEvent(byteBuffer, bufferSize)
         if (result == 0) break
+
+        for (let i = 0; i < bufferSize; i++)
+            buffer[i] = byteBuffer[i]
 
         const eventKind = deserializer.readInt32() as CallbackEventKind
         switch (eventKind) {
