@@ -1178,7 +1178,7 @@
 |*TextClock*| *Component* |Pavelyev Ivan|in progress|  |
 |`setTextClockOptions`| Function |Pavelyev Ivan|done|  |
 |`format`| Function |Pavelyev Ivan|done|  |
-|`onDateChange`| Function |Pavelyev Ivan|in progress|  |
+|`onDateChange`| Function |Pavelyev Ivan|done|  |
 |`fontColor`| Function |Pavelyev Ivan|done|  |
 |`fontSize`| Function |Pavelyev Ivan| testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1J5L |
 |`fontStyle`| Function |Pavelyev Ivan|done|  |
