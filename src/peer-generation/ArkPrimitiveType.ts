@@ -28,7 +28,6 @@ export class PrimitiveType {
 
     static String = new PrimitiveType(`String`, true)
     static Number = new PrimitiveType(`Number`, true)
-    static Int8 = new PrimitiveType(`Int8`) // i'm sorry :(
     static Int32 = new PrimitiveType(`Int32`)
     static Int64 = new PrimitiveType(`Int64`)
     static Date = new PrimitiveType(`Date`) 
