@@ -198,7 +198,7 @@
 |`gridSpan`| Function | Lobah Mikhail | in progress | |
 |`gridOffset`| Function | Lobah Mikhail | in progress | |
 |`rotate`| Function | Dmitry A Smirnov| in progress | |
-|`transform`| Function | | | |
+|`transform`| Function | Lobah Mikhail | | |
 |`onAppear`| Function | Roman Sedaikin | done | |
 |`onDisAppear`| Function | Roman Sedaikin | done | |
 |`onAttach`| Function | | | |
@@ -220,42 +220,42 @@
 |`useSizeType`| Function | Dmitry A Smirnov| in progress | |
 |`alignRules`| Function | Dmitry A Smirnov| in progress | |
 |`aspectRatio`| Function | Roman Sedaikin | done | |
-|`clickEffect`| Function | | | |
+|`clickEffect`| Function | Lobah Mikhail | | |
 |`onDragStart`| Function | | | |
 |`onDragEnter`| Function | | | |
 |`onDragMove`| Function | | | |
 |`onDragLeave`| Function | | | |
 |`onDrop`| Function | | | |
 |`onDragEnd`| Function | | | |
-|`allowDrop`| Function | | | |
-|`draggable`| Function | | | |
-|`dragPreview`| Function | | | |
+|`allowDrop`| Function | Lobah Mikhail | | |
+|`draggable`| Function | Lobah Mikhail | | |
+|`dragPreview`| Function | Lobah Mikhail | | |
 |`onPreDrag`| Function | | | |
 |`linearGradient`| Function | Roman Sedaikin | done | |
 |`sweepGradient`| Function | Roman Sedaikin | done | |
 |`radialGradient`| Function | Erokhin Ilya | done |  |
-|`motionPath`| Function | | | |
+|`motionPath`| Function | Lobah Mikhail | | |
 |`shadow`| Function | Roman Sedaikin | done | |
 |`clip`| Function | Skroba Gleb |  blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
 |`clipShape`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
 |`mask`| Function | Dmitry A Smirnov| in progress | |
 |`maskShape`| Function | Dmitry A Smirnov| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
-|`key`| Function | | | |
+|`key`| Function | Lobah Mikhail | | |
 |`id`| Function | Erokhin Ilya | done |  |
-|`geometryTransition`| Function | | | |
-|`stateStyles`| Function | | | |
-|`restoreId`| Function | | | |
+|`geometryTransition`| Function | Lobah Mikhail | | |
+|`stateStyles`| Function | Lobah Mikhail | | |
+|`restoreId`| Function | Lobah Mikhail | | |
 |`sphericalEffect`| Function | Lobah Mikhail | in progress | |
 |`lightUpEffect`| Function | Lobah Mikhail | in progress | |
 |`pixelStretchEffect`| Function | Lobah Mikhail | in progress | |
-|`accessibilityGroup`| Function | | | |
-|`accessibilityText`| Function | | | |
-|`accessibilityTextHint`| Function | | | |
-|`accessibilityDescription`| Function | | | |
-|`accessibilityLevel`| Function | | | |
-|`accessibilityVirtualNode`| Function | | | |
-|`accessibilityChecked`| Function | | | |
-|`accessibilitySelected`| Function | | | |
+|`accessibilityGroup`| Function | Lobah Mikhail | | |
+|`accessibilityText`| Function | Lobah Mikhail | | |
+|`accessibilityTextHint`| Function | Lobah Mikhail | | |
+|`accessibilityDescription`| Function | Lobah Mikhail | | |
+|`accessibilityLevel`| Function | Lobah Mikhail | | |
+|`accessibilityVirtualNode`| Function | Lobah Mikhail | | |
+|`accessibilityChecked`| Function | Lobah Mikhail | | |
+|`accessibilitySelected`| Function | Lobah Mikhail | | |
 |`obscured`| Function | | | |
 |`reuseId`| Function | | | |
 |`renderFit`| Function | | | |
