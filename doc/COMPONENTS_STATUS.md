@@ -1159,7 +1159,7 @@
 |`lineBreakStrategy`|Function|Tuzhilkin Ivan|done|  |
 |`decoration`|Function|Tuzhilkin Ivan|done|  |
 |`letterSpacing`|Function|Tuzhilkin Ivan|done|  |
-|`lineSpacing`|Function|Tuzhilkin Ivan|devdone| |
+|`lineSpacing`|Function|Tuzhilkin Ivan|done| |
 |`lineHeight`|Function|Tuzhilkin Ivan|testskipped|  |
 |`type`|Function|Tuzhilkin Ivan|done|  |
 |`enableAutoFill`|Function|Tuzhilkin Ivan|done|  |
@@ -1171,7 +1171,7 @@
 |`onDidDelete`|Function|Tuzhilkin Ivan|done |  |
 |`editMenuOptions`|Function|Tuzhilkin Ivan|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`enablePreviewText`|Function|Tuzhilkin Ivan|done|  |
-|`enableHapticFeedback`|Function|Tuzhilkin Ivan|devdone|  |
+|`enableHapticFeedback`|Function|Tuzhilkin Ivan|done|  |
 |`inputFilter`|Function|Tuzhilkin Ivan|done|  |
 |`showCounter`|Function|Tuzhilkin Ivan|done| https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
 |`customKeyboard`|Function|Tuzhilkin Ivan|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
