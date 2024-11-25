@@ -34,10 +34,7 @@ export class CJIDLNodeToStringConvertor implements NodeConvertor<string>, IdlNam
         return `Option<${this.convert(type.type)}>`
     }
     convertUnion(type: idl.IDLUnionType): string {
-        const aliases = type.types.map(it => convertType(this, it))
-        console.log(type.name, '-------------------------------')
         return type.name
-        return `Union_${aliases.join('_')}`.replace(/[<>]/g, '') == 'Union_Color_Float64_String_Resource' ? 'ResourceColor' : `Union_${aliases.join('_')}`.replace(/[<>]/g, '')
     }
     convertContainer(type: idl.IDLContainerType): string {
         if (idl.IDLContainerUtils.isSequence(type)) {

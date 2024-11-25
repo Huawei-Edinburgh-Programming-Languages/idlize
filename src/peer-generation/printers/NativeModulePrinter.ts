@@ -197,7 +197,7 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
         returnType?: idl.IDLType,
         nativeFunctions?: LanguageWriter
     ) {
-        const component = clazz.generatedName(method.isCallSignature)
+        const component = method.originalParentName // clazz.generatedName(method.isCallSignature)
         clazz.setGenerationContext(`${method.isCallSignature ? "" : method.overloadedName}()`)
         let serializerArgCreated = false
         let args: ({name: string, type: idl.IDLType})[] = []
