@@ -1489,15 +1489,15 @@
 |`indicatorStyle`| Function | Kovalev Sergey | in progress |  |
 |`indicatorLoop`| Function | Kovalev Sergey | in progress |  |
 |`onChange`| Function | Kovalev Sergey | in progress |  |
-|*ActionSheet*| *Class* | | |
-|`show`| Function | | |
-|*AlertDialog*| *Class* | | |
-|`show`| Function | | |
+|*ActionSheet*| *Class* | Ekaterina Stepanova | in progress |
+|`show`| Function | Ekaterina Stepanova | in progress |
+|*AlertDialog*| *Class* | Ekaterina Stepanova | in progress |
+|`show`| Function | Ekaterina Stepanova | in progress |
 |*CalendarController*| *Class* |Maksimov Nikita | done |  |
 |`backToToday`| Function |Maksimov Nikita | done |  |
 |`goTo`| Function |Maksimov Nikita | done |  |
-|*CalendarPickerDialog*| *Class* | | | |
-|`show`| Function | | | |
+|*CalendarPickerDialog*| *Class* | Ekaterina Stepanova | in progress |
+|`show`| Function | Ekaterina Stepanova | in progress |
 |*CanvasGradient*| *Class* | Vadim Voronov | in progress | |
 |`addColorStop`| Function | Vadim Voronov | in progress | |
 |*CanvasPath*| *Class* | Lobah Mikhail | in progress | deprecated |
@@ -1667,8 +1667,8 @@
 |*CustomDialogController*| *Class* | Erokhin Ilya | blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`open`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`close`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|*DatePickerDialog*| *Class* | | | |
-|`show`| Function | | | |
+|*DatePickerDialog*| *Class* | Ekaterina Stepanova | in progress |
+|`show`| Function | Ekaterina Stepanova | in progress |
 |*PanGestureOptions*| *Class* | | | |
 |`setDirection`| Function | | | |
 |`setDistance`| Function | | | |
