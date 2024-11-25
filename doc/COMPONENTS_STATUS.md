@@ -1514,10 +1514,10 @@
 |`addPath`| Function | Vadim Voronov | in progress | |
 |*CanvasPattern*| *Class* | Vadim Voronov | in progress |  |
 |`setTransform`| Function | Vadim Voronov | in progress |  |
-|*ImageBitmap*| *Class* | Pavelyev Ivan | in progress | |
-|`close`| Function | Pavelyev Ivan | in progress |  |
-|`getHeight`| Function | Pavelyev Ivan | in progress |  |
-|`getWidth`| Function | Pavelyev Ivan | in progress |  |
+|*ImageBitmap*| *Class* | Pavelyev Ivan | done | |
+|`close`| Function | Pavelyev Ivan | done |  |
+|`getHeight`| Function | Pavelyev Ivan | done |  |
+|`getWidth`| Function | Pavelyev Ivan | done |  |
 |*CanvasRenderer*| *Class*  | Vadim Voronov | in progress | |
 |`drawImage`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA |
 |`beginPath`| Function  | Vadim Voronov | done | |
