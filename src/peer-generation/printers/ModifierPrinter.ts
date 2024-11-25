@@ -78,7 +78,10 @@ export class ModifierVisitor {
     }
 
     private printReturnStatement(printer: LanguageWriter, method: PeerMethod, returnValue: string | undefined = undefined) {
-        if (!method.retConvertor.isVoid) {
+        if (method.retConvertor.interopType?.name === PrimitiveType.NativePointer.getText()) {
+            printer.print(`return nullptr;`)
+        }
+        else if (!method.retConvertor.isVoid) {
             printer.print(`return ${returnValue ?? "0"};`)
         }
     }
