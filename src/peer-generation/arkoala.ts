@@ -32,7 +32,7 @@ import {
     tsCopyrightAndWarning,
     makeDeserializeAndCall,
 } from "./FileGenerators"
-import { makeCJNodeTypes, makeCJSerializer } from "./printers/lang/CJPrinters"
+import { makeCJDeserializer, makeCJNodeTypes, makeCJSerializer } from "./printers/lang/CJPrinters"
 import { makeJavaArkComponents, makeJavaNodeTypes, makeJavaSerializer } from "./printers/lang/JavaPrinters"
 import {
     printRealAndDummyAccessors,
@@ -454,7 +454,6 @@ export function generateArkoalaFromIdl(config: {
                 message: "producing [idl]"
             }
         )
-
         const nodeTypes = makeCJNodeTypes(peerLibrary)
         nodeTypes.writer.printTo(arkoala.cjLib(nodeTypes.targetFile))
 
@@ -463,6 +462,8 @@ export function generateArkoalaFromIdl(config: {
 
         const serializer = makeCJSerializer(peerLibrary)
         serializer.writer.printTo(arkoala.cjLib(serializer.targetFile))
+        const deserializer = makeCJDeserializer(peerLibrary)
+        deserializer.writer.printTo(arkoala.cjLib(deserializer.targetFile))
     }
 
     // native code

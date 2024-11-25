@@ -284,7 +284,11 @@ class IdlDeserializerPrinter {
                     }
                     return `${it.name}: ${it.name}_result`
                 })
-                this.writer.writeStatement(this.writer.makeAssign("value", valueType, this.writer.makeCast(this.writer.makeString(`{${propsAssignees.join(',')}}`), type), true, false))
+                if (this.writer.language == Language.CJ) {
+                    this.writer.writeStatement(this.writer.makeAssign("value", valueType, this.writer.makeString(`${this.writer.getNodeName(valueType)}(${properties.map(it => it.name.concat('_result')).join(', ')})`), true, false))
+                } else {
+                    this.writer.writeStatement(this.writer.makeAssign("value", valueType, this.writer.makeCast(this.writer.makeString(`{${propsAssignees.join(',')}}`), type), true, false))
+                }
             }
         } else {
             if (this.writer.language === Language.CPP) {
@@ -296,7 +300,7 @@ class IdlDeserializerPrinter {
             }
         }
         this.writer.writeStatement(this.writer.makeReturn(
-            this.writer.makeCast(this.writer.makeString("value"), type)))
+            this.writer.makeString("value")))
     }
 
     private generateMaterializedBodyDeserializer(target: idl.IDLInterface) {
