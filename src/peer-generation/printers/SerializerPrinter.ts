@@ -324,7 +324,7 @@ class IdlDeserializerPrinter {
         // to avoid errors
         // for CanvasRenderingContext2D "Types of property 'clip' are incompatible."
         // for UIExtensionProxy "Types of property 'off' are incompatible."
-        if (["CanvasRenderingContext2D", "UIExtensionProxy", "PixelMap", "RichEditorController"].includes(target.name)) {
+        if (["CanvasRenderingContext2D", "UIExtensionProxy"].includes(target.name)) {
             this.writer.print(`// TBD: remove explicit for ${target.name} class`)
             const unsafe = this.writer.language === Language.TS
             this.writer.writeStatement(

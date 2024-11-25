@@ -116,8 +116,8 @@ callback AsyncCallback_ImageInfo_Void = void (ImageInfo result);
 
 [/*Namespace=image,*/ Entity=Interface]
 interface PixelMap {
-    // (stub until issue 20764 is fixed) readonly attribute /*boolean (fix after retConverter fixed)*/ i32 isEditable;
-    // (stub until issue 20764 is fixed) readonly attribute /*boolean (fix after retConverter fixed)*/ i32 isStrideAlignment;
+    /*readonly (TODO stub until issue 20764 is fixed)*/ attribute /*boolean (fix after retConverter fixed)*/ i32 isEditable;
+    /*readonly (TODO stub until issue 20764 is fixed)*/ attribute /*boolean (fix after retConverter fixed)*/ i32 isStrideAlignment;
     async void readPixelsToBuffer(buffer dst);
     void readPixelsToBuffer(buffer dst, AsyncCallback_Void callback_);
     void readPixelsToBufferSync(buffer dst);
