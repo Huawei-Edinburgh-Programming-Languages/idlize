@@ -403,7 +403,11 @@ class OHOSVisitor {
         })
         this.interfaces.forEach(int => {
             this.peerWriter.writeClass(`${int.name}`, writer => {
-                writer.writeFieldDeclaration('peer', createReferenceType("Finalizable"), [FieldModifier.PRIVATE], false)
+                let peerInitExpr: LanguageExpression | undefined = undefined
+                if (this.library.language === Language.ARKTS && int.constructors.length === 0) {
+                    peerInitExpr = writer.makeString("Finalizable.Empty")
+                }
+                writer.writeFieldDeclaration('peer', createReferenceType("Finalizable"), [FieldModifier.PRIVATE], false, peerInitExpr)
                 const ctors = int.constructors.map(it => ({ parameters: it.parameters, returnType: it.returnType }))
                 ctors.forEach(ctor => {
                     const signature = writer.makeNamedSignature(ctor.returnType ?? IDLVoidType, ctor.parameters)

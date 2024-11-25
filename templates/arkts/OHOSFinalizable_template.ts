@@ -23,6 +23,8 @@ export class Finalizable {
     public ptr: pointer
     public finalizerPtr: pointer
 
+    public static Empty: Finalizable = new Finalizable(nullptr, nullptr)
+
     constructor(ptr: pointer, finalizerPtr: pointer) {
         this.ptr = ptr
         this.finalizerPtr = finalizerPtr
