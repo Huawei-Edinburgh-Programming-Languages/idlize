@@ -111,7 +111,7 @@
 |`checkboxShape`| Function | Dudkin Sergey | done |  |
 |*Circle*|*Component*| Erokhin Ilya | done |  |
 |`setCircleOptions`|Function| Erokhin Ilya | done |  |
-|*Column*| *Component* | Politov Mikhail | in progress |  |
+|*Column*| *Component* | Politov Mikhail | done |  |
 |`setColumnOptions`| Function | Politov Mikhail | done |  |
 |`alignItems`| Function | Politov Mikhail | done |  |
 |`justifyContent`| Function | Politov Mikhail | done |  |
