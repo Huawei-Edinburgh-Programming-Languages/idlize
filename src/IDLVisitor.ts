@@ -627,12 +627,26 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         })
         result.elements = node.members
             .filter(ts.isEnumMember)
-            .map((it, index) => this.serializeEnumMember(it, result, names[index], identName(it.name)!))
+            .map((it, index) => this.serializeEnumMember(node, it, result, names[index], identName(it.name)!))
         return result
     }
 
-    serializeEnumMember(node: ts.EnumMember, parent: idl.IDLEnum, name: string, originalName: string): idl.IDLEnumMember {
-        const initializer = this.typeChecker.getConstantValue(node)
+    private computeEnumOrdinal(parent: ts.EnumDeclaration, node: ts.EnumMember): number {
+        let index = 0
+        for (let it of parent.members) {
+            if (it == node) break
+            if ((it.initializer == undefined) || (this.typeChecker.getConstantValue(it) == index)) {
+                index++
+            }
+        }
+        return index
+    }
+
+    serializeEnumMember(parentNode: ts.EnumDeclaration, node: ts.EnumMember, parent: idl.IDLEnum, name: string, originalName: string): idl.IDLEnumMember {
+        let initializer = this.typeChecker.getConstantValue(node)
+        if (initializer == undefined) {
+            initializer = this.computeEnumOrdinal(parentNode, node)
+        }
         let extendedAttributes = this.computeDeprecatedExtendAttributes(node)
         if (originalName != name) {
             extendedAttributes.push({ name: idl.IDLExtendedAttributes.OriginalEnumMemberName, value: originalName })
