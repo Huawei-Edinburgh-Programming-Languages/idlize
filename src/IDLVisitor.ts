@@ -631,13 +631,14 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         return result
     }
 
-    private computeEnumOrdinal(parent: ts.EnumDeclaration, node: ts.EnumMember): number {
+    private computeEnumValue(parent: ts.EnumDeclaration, node: ts.EnumMember): number {
         let index = 0
         for (let it of parent.members) {
+            let value = this.typeChecker.getConstantValue(it)
+            if (value != undefined && typeof value == 'number')
+                index = value
             if (it == node) break
-            if ((it.initializer == undefined) || (this.typeChecker.getConstantValue(it) == index)) {
-                index++
-            }
+            index++
         }
         return index
     }
@@ -645,7 +646,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
     serializeEnumMember(parentNode: ts.EnumDeclaration, node: ts.EnumMember, parent: idl.IDLEnum, name: string, originalName: string): idl.IDLEnumMember {
         let initializer = this.typeChecker.getConstantValue(node)
         if (initializer == undefined) {
-            initializer = this.computeEnumOrdinal(parentNode, node)
+            initializer = this.computeEnumValue(parentNode, node)
         }
         let extendedAttributes = this.computeDeprecatedExtendAttributes(node)
         if (originalName != name) {
