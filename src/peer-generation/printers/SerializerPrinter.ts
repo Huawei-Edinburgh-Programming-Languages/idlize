@@ -436,6 +436,8 @@ class IdlDeserializerPrinter {
             prefix = prefix === "" ? PrimitiveType.Prefix : prefix
         } else if (this.writer.language === Language.ARKTS) {
             ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [idl.IDLBufferType, idl.IDLI32Type], ["data", "length"])
+        } else if (this.writer.language === Language.CJ) {
+            ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [idl.IDLBufferType, idl.IDLI64Type], ["data", "length"])
         }
         const serializerDeclarations = getSerializerDeclarations(this.library,
             createSerializerDependencyFilter(this.writer.language))

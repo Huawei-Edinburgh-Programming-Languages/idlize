@@ -554,11 +554,18 @@ export class EnumConvertor extends BaseArgConvertor { //
         value = printer.ordinalFromEnum(printer.makeString(value), idl.createReferenceType(this.enumEntry.name)).asString()
         printer.writeMethodCall(`${param}Serializer`, "writeInt32", [value])
     }
+    // convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    //     const readExpr = writer.makeMethodCall(`${deserializerName}`, "readInt32", [])
+    //     const enumExpr = writer.language === Language.ARKTS || this.isStringEnum && writer.language !== Language.CPP
+    //         ? writer.enumFromOrdinal(readExpr, this.enumEntry)
+    //         : writer.language == Language.CJ ? writer.enumFromOrdinal(readExpr, this.enumEntry) : writer.makeCast(readExpr, idl.createReferenceType(this.enumEntry.name))
+    //     return assigneer(enumExpr)
+    // }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
         const readExpr = writer.makeMethodCall(`${deserializerName}`, "readInt32", [])
         const enumExpr = writer.language === Language.ARKTS || this.isStringEnum && writer.language !== Language.CPP
-            ? writer.enumFromOrdinal(readExpr, this.enumEntry)
-            : writer.language == Language.CJ ? writer.enumFromOrdinal(readExpr, this.enumEntry) : writer.makeCast(readExpr, idl.createReferenceType(this.enumEntry.name))
+            ? writer.enumFromOrdinal(readExpr, idl.createReferenceType(this.enumEntry.name))
+            : writer.makeCast(readExpr, idl.createReferenceType(this.enumEntry.name))
         return assigneer(enumExpr)
     }
     nativeType(): idl.IDLType {
@@ -642,11 +649,11 @@ export class UnionConvertor extends BaseArgConvertor { //
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
         const statements: LanguageStatement[] = []
         let selectorBuffer = `${bufferName}_selector`
-        const maybeOptionalUnion = writer.language === Language.CPP
+        const maybeOptionalUnion = writer.language === Language.CPP || writer.language == Language.CJ
             ? this.type
             : idl.createOptionalType(this.type)
         statements.push(writer.makeAssign(selectorBuffer, idl.IDLI32Type,
-            writer.makeString(`${deserializerName}.readInt8()`), true))
+            writer.makeString(writer.castToInt(`${deserializerName}.readInt8()`, 32)), true))
         statements.push(writer.makeAssign(bufferName, maybeOptionalUnion, undefined, true, false))
         if (writer.language === Language.CPP)
             statements.push(writer.makeAssign(`${bufferName}.selector`, undefined, writer.makeString(selectorBuffer), false))
@@ -665,7 +672,7 @@ export class UnionConvertor extends BaseArgConvertor { //
             ], false)
             return { expr, stmt }
         })
-        statements.push(writer.makeMultiBranchCondition(branches))
+        statements.push(writer.makeMultiBranchCondition(branches, writer.makeThrowError(`One of the branches for ${bufferName} has to be chosen through deserialisation.`)))
         if (writer.language != Language.CJ) {
             statements.push(assigneer(writer.makeCast(writer.makeString(bufferName), this.type)))
         } else {
@@ -769,7 +776,11 @@ export class OptionConvertor extends BaseArgConvertor { //
         statements.push(writer.makeAssign(runtimeBufferName, undefined,
             writer.makeCast(writer.makeString(`${deserializerName}.readInt8()`), writer.getRuntimeType()), true))
         const bufferType = this.nativeType()
-        statements.push(writer.makeAssign(bufferName, bufferType, undefined, true, false))
+        if (writer.language == Language.CJ) {
+            statements.push(writer.makeAssign(bufferName, bufferType, idl.isOptionalType(bufferType) ? writer.makeString('Option.None') : undefined, true, false))
+        } else {
+            statements.push(writer.makeAssign(bufferName, bufferType, undefined, true, false))
+        }
 
         const thenStatement = new BlockStatement([
             this.typeConvertor.convertorDeserialize(`${bufferName}_`, deserializerName, (expr) => {

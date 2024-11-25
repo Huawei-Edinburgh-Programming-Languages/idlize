@@ -24,6 +24,7 @@ import { EnumConvertor } from "../../ArgConvertors"
 import { ReferenceResolver } from "../../ReferenceResolver"
 import {
     AssignStatement,
+    BranchStatement,
     ExpressionStatement,
     FieldModifier,
     LambdaExpression,
@@ -81,7 +82,7 @@ export class CJCheckDefinedExpression implements LanguageExpression {
 export class CJCastExpression implements LanguageExpression {
     constructor(public value: LanguageExpression, public type: string, private unsafe = false) {}
     asString(): string {
-        return `match (${this.value.asString()} as ${this.type}) { case Some(x) => x; case None => throw Exception("Cast is not succedede")}`
+        return `match (${this.value.asString()} as ${this.type}) { case Some(x) => x; case None => throw Exception("Cast is not succeeded")}`
     }
 }
 
