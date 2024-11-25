@@ -480,7 +480,7 @@
 |`fillColor`| Function | Evstigneev Roman | done | |
 |`objectFit`| Function |Berezin Kirill| done | |
 |`objectRepeat`| Function | Evstigneev Roman | in progress | |
-|`autoResize`| Function | Evstigneev Roman | in progress | https://gitee.com/openharmony/arkui_ace_engine/issues/IAW529 |
+|`autoResize`| Function | Evstigneev Roman | done | https://gitee.com/openharmony/arkui_ace_engine/issues/IAW529 |
 |`renderMode`| Function | Evstigneev Roman | in progress | |
 |`dynamicRangeMode`| Function | Evstigneev Roman | testskipped |  |
 |`interpolation`| Function | Evstigneev Roman | in progress | |
@@ -1887,25 +1887,25 @@
 |`requestFullscreen`| Function | Erokhin Ilya | done |  |
 |`exitFullscreen`| Function | Erokhin Ilya | done |  |
 |`reset`| Function | Erokhin Ilya | done |  |
-|*WebKeyboardController*| *Class* | Erokhin Ilya | devdone |  |
-|`insertText`| Function | Erokhin Ilya | devdone |  |
-|`deleteForward`| Function | Erokhin Ilya | devdone |  |
-|`deleteBackward`| Function | Erokhin Ilya | devdone |  |
-|`sendFunctionKey`| Function | Erokhin Ilya | devdone |  |
-|`close`| Function | Erokhin Ilya | devdone |  |
-|*FullScreenExitHandler*| *Class* | Erokhin Ilya | devdone |  |
-|`exitFullScreen`| Function | Erokhin Ilya | devdone |  |
+|*WebKeyboardController*| *Class* | Erokhin Ilya | done |  |
+|`insertText`| Function | Erokhin Ilya | done |  |
+|`deleteForward`| Function | Erokhin Ilya | done |  |
+|`deleteBackward`| Function | Erokhin Ilya | done |  |
+|`sendFunctionKey`| Function | Erokhin Ilya | done |  |
+|`close`| Function | Erokhin Ilya | done |  |
+|*FullScreenExitHandler*| *Class* | Erokhin Ilya | done |  |
+|`exitFullScreen`| Function | Erokhin Ilya | done |  |
 |*FileSelectorParam*| *Class* | Erokhin Ilya | blocked |  |
 |`getTitle`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getMode`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getAcceptType`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`isCapture`| Function | Erokhin Ilya | devdone |  |
+|`isCapture`| Function | Erokhin Ilya | done |  |
 |*JsResult*| *Class* | Erokhin Ilya | done |  |
 |`handleCancel`| Function | Erokhin Ilya | done |  |
 |`handleConfirm`| Function | Erokhin Ilya | done |  |
 |`handlePromptConfirm`| Function | Erokhin Ilya | done |  |
-|*FileSelectorResult*| *Class* | Erokhin Ilya | devdone |  |
-|`handleFileList`| Function | Erokhin Ilya | devdone |  |
+|*FileSelectorResult*| *Class* | Erokhin Ilya | done |  |
+|`handleFileList`| Function | Erokhin Ilya | done |  |
 |*HttpAuthHandler*| *Class* | Erokhin Ilya | devdone |  |
 |`confirm`| Function | Erokhin Ilya | devdone |  |
 |`cancel`| Function | Erokhin Ilya | devdone |  |
@@ -1989,8 +1989,8 @@
 |*WebCookie*| *Class* | Erokhin Ilya | done | |
 |`setCookie`| Function | Erokhin Ilya | done | |
 |`saveCookie`| Function | Erokhin Ilya | done | |
-|*EventResult*| *Class* | Erokhin Ilya | devdone |  |
-|`setGestureEventResult`| Function | Erokhin Ilya | devdone |  |
+|*EventResult*| *Class* | Erokhin Ilya | done |  |
+|`setGestureEventResult`| Function | Erokhin Ilya | done |  |
 |*WebController*| *Class* | Erokhin Ilya | in progress | |
 |`onInactive`| Function | Erokhin Ilya | done | |
 |`onActive`| Function | Erokhin Ilya | done | |
