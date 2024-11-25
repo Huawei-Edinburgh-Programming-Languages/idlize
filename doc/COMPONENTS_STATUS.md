@@ -375,7 +375,7 @@
 |`setEmbeddedComponentOptions`| Function | Ekaterina Stepanova | in progress | |
 |`onTerminated`| Function | Ekaterina Stepanova | in progress | |
 |`onError`| Function | Ekaterina Stepanova | in progress | |
-|*Flex*| *Component* | Kovalev Sergey | in progress |  |
+|*Flex*| *Component* | Kovalev Sergey | done |  |
 |`setFlexOptions`| Function | Kovalev Sergey | done |  |
 |`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done |  |
 |*FlowItem*| *Component* | Ekaterina Stepanova | in progress | |
