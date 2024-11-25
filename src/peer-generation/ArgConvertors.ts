@@ -560,8 +560,8 @@ export class EnumConvertor extends BaseArgConvertor { //
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
         const readExpr = writer.makeMethodCall(`${deserializerName}`, "readInt32", [])
         const enumExpr = writer.language === Language.ARKTS || this.isStringEnum && writer.language !== Language.CPP
-            ? writer.enumFromOrdinal(readExpr, idl.createReferenceType(this.enumEntry.name))
-            : writer.makeCast(readExpr, idl.createReferenceType(this.enumEntry.name))
+            ? writer.enumFromOrdinal(readExpr, this.enumEntry)
+            : writer.language == Language.CJ ? writer.enumFromOrdinal(readExpr, this.enumEntry) : writer.makeCast(readExpr, idl.createReferenceType(this.enumEntry.name))
         return assigneer(enumExpr)
     }
     nativeType(): idl.IDLType {
@@ -659,13 +659,21 @@ export class UnionConvertor extends BaseArgConvertor { //
             const stmt = new BlockStatement([
                 writer.makeSetUnionSelector(bufferName, `${index}`),
                 it.convertorDeserialize(`${bufferName}_u`, deserializerName, (expr) => {
-                    return writer.makeAssign(receiver, undefined, expr, false)
+                    if (writer.language == Language.CJ) {
+                        return writer.makeAssign(receiver, undefined, writer.makeFunctionCall(writer.getNodeName(this.type), [expr]), false)
+                    } else { 
+                        return writer.makeAssign(receiver, undefined, expr, false)
+                    }
                 }, writer),
             ], false)
             return { expr, stmt }
         })
         statements.push(writer.makeMultiBranchCondition(branches))
-        statements.push(assigneer(writer.makeCast(writer.makeString(bufferName), this.type)))
+        if (writer.language != Language.CJ) {
+            statements.push(assigneer(writer.makeCast(writer.makeString(bufferName), this.type)))
+        } else {
+            statements.push(assigneer(writer.makeString(`${bufferName}`)))
+        }
         return new BlockStatement(statements, false)
     }
     nativeType(): idl.IDLType {
@@ -850,6 +858,9 @@ export class AggregateConvertor extends BaseArgConvertor { //
         }
         if (writer.language === Language.CPP) {
             statements.push(assigneer(writer.makeString(bufferName)))
+        } else if (writer.language == Language.CJ) {
+            const resultExpression = writer.makeString(`${writer.getNodeName(this.idlType)}(${this.decl.properties.map(prop => `${bufferName}_${prop.name}`).join(", ")})`)
+            statements.push(assigneer(resultExpression))
         } else {
             const resultExpression = this.makeAssigneeExpression(this.decl.properties.map(prop => {
                 return [prop.name, writer.makeString(`${bufferName}_${prop.name}`)]
@@ -1087,11 +1098,14 @@ export class ArrayConvertor extends BaseArgConvertor { //
         statements.push(writer.makeAssign(lengthBuffer, idl.IDLI32Type, writer.makeString(`${deserializerName}.readInt32()`), true))
         statements.push(writer.makeAssign(bufferName, arrayType, writer.makeArrayInit(this.type), true, false))
         statements.push(writer.makeArrayResize(bufferName, lengthBuffer, deserializerName))
-        statements.push(writer.makeLoop(counterBuffer, lengthBuffer, writer.makeBlock([
+        statements.push(writer.makeLoop(counterBuffer, lengthBuffer,
             this.elementConvertor.convertorDeserialize(`${bufferName}_buf`, deserializerName, (expr) => {
-                return writer.makeAssign(writer.makeArrayAccess(bufferName, counterBuffer).asString(), undefined, expr, false)
-            }, writer)
-        ])))
+                if(writer.language != Language.CJ) {
+                    return writer.makeAssign(writer.makeArrayAccess(bufferName, counterBuffer).asString(), undefined, expr, false)
+                } else {
+                    return writer.makeStatement(writer.makeMethodCall(bufferName, 'append', [expr]))
+                }
+            }, writer)))
         statements.push(assigneer(writer.makeString(bufferName)))
         return new BlockStatement(statements, false)
     }
