@@ -980,7 +980,7 @@
 |`textCase`| Function | Politov Mikhail | done |  |
 |`lineHeight`| Function | Politov Mikhail | done |  |
 |`textShadow`| Function | Politov Mikhail | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1K3Z |
-|*Stack*| *Component* | Korobeinikov Evgeny | in progress |  |
+|*Stack*| *Component* | Korobeinikov Evgeny | done |  |
 |`setStackOptions` | Function | Korobeinikov Evgeny | done |  |
 |`alignContent` | Function | Korobeinikov Evgeny | done |  |
 |`pointLight` | Function | Evstigneev Roman, Andrey Khudenkikh | done |  |
