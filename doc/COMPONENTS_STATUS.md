@@ -1055,7 +1055,7 @@
 |`barMode`| Function | Tuzhilkin Ivan | done |  |
 |`barWidth`| Function | Tuzhilkin Ivan | done |  |
 |`barHeight`| Function | Tuzhilkin Ivan | done  |  |
-|`animationDuration`| Function | Tuzhilkin Ivan | in progress | https://gitee.com/openharmony/arkui_ace_engine/issues/IATEBX |
+|`animationDuration`| Function | Tuzhilkin Ivan | devdone | |
 |`animationMode`| Function | Tuzhilkin Ivan | done |  |
 |`edgeEffect`| Function | Tuzhilkin Ivan | done |  |
 |`onChange`| Function | Tuzhilkin Ivan | done |  |
@@ -1439,12 +1439,12 @@
 |*WindowScene*| *Component* | Spirin Andrey | in progress | |
 |`setWindowSceneOptions`| Function | Spirin Andrey | in progress | |
 |`attractionEffect`| Function | Spirin Andrey | in progress | |
-|*XComponent*| *Component* | | | |
-|`setXComponentOptions`| Function | | | |
-|`onLoad`| Function | | | |
-|`onDestroy`| Function | | | |
-|`enableAnalyzer`| Function | | | |
-|`enableSecure`| Function | | | |
+|*XComponent*| *Component* | Tuzhilkin Ivan | in progress | |
+|`setXComponentOptions`| Function | Tuzhilkin Ivan | in progress | |
+|`onLoad`| Function | Tuzhilkin Ivan | in progress | |
+|`onDestroy`| Function | Tuzhilkin Ivan | in progress | |
+|`enableAnalyzer`| Function | Tuzhilkin Ivan | in progress | |
+|`enableSecure`| Function | Tuzhilkin Ivan | in progress | |
 |*SideBarContainer*| *Component* |Dmitry A Smirnov|blocked|  |
 |`setSideBarContainerOptions`| Function |Dmitry A Smirnov|done|  |
 |`showSideBar`| Function |Dmitry A Smirnov|done|  |
@@ -1476,14 +1476,14 @@
 |`onReachEnd`| Function | Kovalev Sergey | done | |
 |`onScrollFrameBegin`| Function | Kovalev Sergey | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onScrollIndex`| Function | Kovalev Sergey | done | |
-|*UIExtensionComponent*| *Component* | | |
-|`setUIExtensionComponentOptions`| Function | | | |
-|`onRemoteReady`| Function | | | |
-|`onReceive`| Function | | | |
-|`onResult`| Function | | | |
-|`onRelease`| Function | | | |
-|`onError`| Function | | | |
-|`onTerminated`| Function | | | |
+|*UIExtensionComponent*| *Component* | Tuzhilkin Ivan | in progress |
+|`setUIExtensionComponentOptions`| Function | Tuzhilkin Ivan | | |
+|`onRemoteReady`| Function | Tuzhilkin Ivan | in progress | |
+|`onReceive`| Function | Tuzhilkin Ivan | in progress | |
+|`onResult`| Function | Tuzhilkin Ivan | in progress | |
+|`onRelease`| Function | Tuzhilkin Ivan | in progress | |
+|`onError`| Function | Tuzhilkin Ivan | in progress | |
+|`onTerminated`| Function | Tuzhilkin Ivan | in progress | |
 |*LinearIndicator*| *Component* | Kovalev Sergey | in progress |  |
 |`setLinearIndicatorOptions`| Function | Kovalev Sergey | in progress |  |
 |`indicatorStyle`| Function | Kovalev Sergey | in progress |  |
