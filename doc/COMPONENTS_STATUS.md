@@ -1611,15 +1611,15 @@
 |`drawContent`| Function | | | |
 |`drawFront`| Function | | | |
 |`invalidate`| Function | | | |
-|*TransitionEffect*| *Class* | | | |
-|`translate`| Function | | | |
-|`rotate`| Function | | | |
-|`scale`| Function | | | |
-|`opacity`| Function | | | |
-|`move`| Function | | | |
-|`asymmetric`| Function | | | |
-|`animation`| Function | | | |
-|`combine`| Function | | | |
+|*TransitionEffect*| *Class* | Andrey Khudenkikh | in progress | |
+|`translate`| Function | Andrey Khudenkikh | in progress | |
+|`rotate`| Function | Andrey Khudenkikh | in progress | |
+|`scale`| Function | Andrey Khudenkikh | in progress | |
+|`opacity`| Function | Andrey Khudenkikh | in progress | |
+|`move`| Function | Andrey Khudenkikh | in progress | |
+|`asymmetric`| Function | Andrey Khudenkikh | in progress | |
+|`animation`| Function | Andrey Khudenkikh | in progress | |
+|`combine`| Function | Andrey Khudenkikh | in progress | |
 |*PixelMapMock*| *Class* | | | |
 |`release`| Function | | | |
 |*ProgressMask*| *Class* | | | |
@@ -1879,15 +1879,6 @@
 |`reset`| Function |Ekaterina Stepanova| done |  |
 |*TimePickerDialog*| *Class* | Ekaterina Stepanova | in progress | |
 |`show`| Function | Ekaterina Stepanova | in progress | |
-|*TransitionEffect*| *Class* | Andrey Khudenkikh | in progress | |
-|`translate`| Function | Andrey Khudenkikh | in progress | |
-|`rotate`| Function | Andrey Khudenkikh | in progress | |
-|`scale`| Function | Andrey Khudenkikh | in progress | |
-|`opacity`| Function | Andrey Khudenkikh | in progress | |
-|`move`| Function | Andrey Khudenkikh | in progress | |
-|`asymmetric`| Function | Andrey Khudenkikh | in progress | |
-|`animation`| Function | Andrey Khudenkikh | in progress | |
-|`combine`| Function | Andrey Khudenkikh | in progress | |
 |*VideoController*| *Class* | Erokhin Ilya | done |  |
 |`start`| Function | Erokhin Ilya | done |  |
 |`pause`| Function | Erokhin Ilya | done |  |
