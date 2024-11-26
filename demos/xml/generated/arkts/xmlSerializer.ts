@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { ParseInfo, xml_EventType, ParseOptions } from "./xml"
+import { ParseInfo, ParseInfoInternal, xml_EventType, ParseOptions } from "./xml"
 import { SerializerBase, RuntimeType, runtimeType, CallbackResource } from "./SerializerBase"
 import { DeserializerBase } from "./DeserializerBase"
 import { int32 } from "@koalaui/common"
