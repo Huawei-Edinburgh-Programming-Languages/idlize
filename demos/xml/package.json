@@ -12,5 +12,11 @@
         "compile:native:node": "meson setup build/native && meson install -C build/native",
         "compile:node": "npm run compile:native:node && npm run compile:ts:node",
         "start": "node build/node/index.js"
+    },
+    "dependencies": {
+        "@koalaui/common": "file:../../external/incremental/common",
+        "@koalaui/compat": "file:../../external/incremental/compat",
+        "@koalaui/interop": "file:../../external/interop",
+        "@koalaui/runtime": "file:../../external/incremental/runtime"
     }
 }
