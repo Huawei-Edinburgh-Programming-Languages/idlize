@@ -548,15 +548,14 @@ function enqueueCallback(
     /* imitate libace holding resource */
     nativeModule()._HoldArkoalaResource(resourceId)
     /* libace stored resource somewhere */
-    const buffer = new Uint8Array(serializer.asArray().length)
-    const bufferLength = serializer.length()
-    for (let i = 0; i < bufferLength; i++) {
+    const buffer = new byte[serializer.length()]
+    for (let i = 0; i < buffer.length; i++) {
         buffer[i] = serializer.asArray()[i]
     }
     serializer.release()
 
     /* libace calls stored callback */
-    const deserializer = new Deserializer(buffer.buffer as ArrayBuffer, bufferLength)
+    const deserializer = new Deserializer(buffer, buffer.length)
     readAndCallCallback(deserializer)
     /* libace released resource */
     nativeModule()._ReleaseArkoalaResource(resourceId)

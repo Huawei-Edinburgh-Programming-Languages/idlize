@@ -1,3 +1,4 @@
+import { KBuffer } from "@koalaui/interop"
 import { Deserializer } from "./Deserializer";
 import { deserializeAndCallCallback } from "./CallbackDeserializeCall"
 import { ResourceHolder, KUint8ArrayPtr } from "@koalaui/interop"
@@ -10,17 +11,13 @@ enum CallbackEventKind {
 }
 
 const bufferSize = 1024
-const byteBuffer = new byte[bufferSize]
-const buffer = new Uint8Array(bufferSize)
-const deserializer = new Deserializer(buffer.buffer as ArrayBuffer, bufferSize)
+const buffer = new KBuffer(bufferSize)
+const deserializer = new Deserializer(buffer.buffer, bufferSize)
 export function checkArkoalaCallbacks() {
     while (true) {
         deserializer.resetCurrentPosition()
-        let result = nativeModule()._CheckArkoalaCallbackEvent(byteBuffer, bufferSize)
+        let result = nativeModule()._CheckArkoalaCallbackEvent(buffer.buffer, bufferSize)
         if (result == 0) break
-
-        for (let i = 0; i < bufferSize; i++)
-            buffer[i] = byteBuffer[i]
 
         const eventKind = deserializer.readInt32() as CallbackEventKind
         switch (eventKind) {

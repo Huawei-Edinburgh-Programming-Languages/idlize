@@ -419,7 +419,7 @@ class IdlDeserializerPrinter {
             ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [idl.IDLUint8ArrayType, idl.IDLI32Type], ["data", "length"])
             prefix = prefix === "" ? PrimitiveType.Prefix : prefix
         } else if (this.writer.language === Language.ARKTS) {
-            ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [idl.IDLBufferType, idl.IDLI32Type], ["data", "length"])
+            ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [idl.createContainerType("sequence", [idl.IDLU8Type]), idl.IDLI32Type], ["data", "length"])
         }
         const serializerDeclarations = getSerializerDeclarations(this.library,
             createSerializerDependencyFilter(this.writer.language))
@@ -499,6 +499,7 @@ export function printSerializerImports(library: PeerLibrary, destFile: SourceFil
         const collector = (destFile as ArkTSSourceFile).imports
         if (!declarationPath) {
             collector.addFeature("TypeChecker", "#components")
+            collector.addFeature("KUint8ArrayPtr", "@koalaui/interop")
             for (const callback of collectUniqueCallbacks(library)) {
                 if (idl.isSyntheticEntry(callback))
                     continue
