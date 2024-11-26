@@ -15,7 +15,9 @@
 
 import { CustomTextDecoder, float32, int32 } from "@koalaui/common"
 import { pointer } from "@koalaui/interop"
-import { RuntimeType, Tags, CallbackResource } from "./SerializerBase";
+import { Tags, CallbackResource } from "./SerializerBase"
+import { NativeModule } from "./NativeModule"
+
 
 export class DeserializerBase {
     private position = 0
@@ -122,7 +124,7 @@ export class DeserializerBase {
         const length = this.readInt32()
         this.checkCapacity(length)
         // read without null-terminated byte
-        const value = DeserializerBase.textDecoder.decode(this.asArray(this.position, length - 1));
+        const value = NativeModule.Utf8ToString(this.asArray(), this.position, length - 1);
         this.position += length
         return value
     }

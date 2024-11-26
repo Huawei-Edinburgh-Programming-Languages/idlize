@@ -6,6 +6,7 @@ interface Interop {
     void StopGroupedLog(i32 index);
     void AppendGroupedLog(i32 index, String message);
     pointer GetStringFinalizer();
+    String Utf8ToString(buffer buffer, i32 offset, i32 length);
     void InvokeFinalizer(pointer ptr1, pointer ptr2);
     pointer GetPtrVectorElement(pointer ptr1, i32 arg);
     pointer GetNodeFinalizer();
