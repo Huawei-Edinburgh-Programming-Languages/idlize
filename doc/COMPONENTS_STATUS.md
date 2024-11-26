@@ -1083,29 +1083,29 @@
 |`font`| Function |Samarin Sergey |in progress |  |
 |`fontColor`| Function |Samarin Sergey | done |  |
 |`fontSize`| Function |Samarin Sergey | done |  |
-|`minFontSize`| Function |Samarin Sergey | devdone |  |
-|`maxFontSize`| Function |Samarin Sergey | devdone |  |
-|`minFontScale`| Function |Samarin Sergey | devdone |  |
-|`maxFontScale`| Function |Samarin Sergey | devdone |  |
+|`minFontSize`| Function |Samarin Sergey | done |  |
+|`maxFontSize`| Function |Samarin Sergey | done |  |
+|`minFontScale`| Function |Samarin Sergey | done |  |
+|`maxFontScale`| Function |Samarin Sergey | done |  |
 |`fontStyle`| Function |Samarin Sergey | done |  |
 |`fontWeight`| Function |Samarin Sergey | done |  |
 |`lineSpacing`| Function |Samarin Sergey |in progress |  |
 |`textAlign`| Function |Samarin Sergey | done |  |
 |`lineHeight`| Function |Samarin Sergey | done |  |
 |`textOverflow`| Function |Samarin Sergey | done |  |
-|`fontFamily`| Function |Samarin Sergey | devdone |  |
+|`fontFamily`| Function |Samarin Sergey | done |  |
 |`maxLines`| Function |Samarin Sergey | done |  |
-|`decoration`| Function |Samarin Sergey | devdone |  |
-|`letterSpacing`| Function |Samarin Sergey | devdone |  |
+|`decoration`| Function |Samarin Sergey | done |  |
+|`letterSpacing`| Function |Samarin Sergey | done |  |
 |`textCase`| Function |Samarin Sergey | done |  |
-|`baselineOffset`| Function |Samarin Sergey | devdone |  |
+|`baselineOffset`| Function |Samarin Sergey | done |  |
 |`copyOption`| Function |Samarin Sergey |in progress |  |
 |`draggable`| Function |Samarin Sergey | done |  |
 |`textShadow`| Function |Samarin Sergey |in progress |  |
 |`heightAdaptivePolicy`| Function |Samarin Sergey | done |  |
-|`textIndent`| Function |Samarin Sergey | devdone |  |
+|`textIndent`| Function |Samarin Sergey | done |  |
 |`wordBreak`| Function | Samarin Sergey | done |  |
-|`lineBreakStrategy`| Function |Samarin Sergey | devdone |  |
+|`lineBreakStrategy`| Function |Samarin Sergey | done |  |
 |`onCopy`| Function | Kirill Kirichenko | done |  |
 |`caretColor`| Function |Samarin Sergey |in progress | method is not generated yet |
 |`selectedBackgroundColor`| Function |Samarin Sergey |in progress | method is not generated yet |
