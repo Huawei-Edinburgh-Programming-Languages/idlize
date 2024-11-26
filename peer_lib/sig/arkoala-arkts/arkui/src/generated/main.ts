@@ -51,7 +51,7 @@ import { Dimension,
     Font,
     Position } from "@arkoala/arkui/ArkUnitsInterfaces"
 
-import { Resource } from "./ArkArkui-externalInterfaces"
+import { Resource } from "./ArkResourceInterfaces"
 
 import { TextOverflow, TextHeightAdaptivePolicy } from "@arkoala/arkui/ArkEnumsInterfaces"
 

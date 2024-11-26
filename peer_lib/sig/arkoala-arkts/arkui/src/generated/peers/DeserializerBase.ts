@@ -17,7 +17,7 @@ import { float32, int32, int64, float32FromBits } from "@koalaui/common"
 import {pointer, KUint8ArrayPtr, KBuffer} from "@koalaui/interop"
 import {RuntimeType, Tags, CallbackResource} from "./SerializerBase";
 import { Length } from "../ArkUnitsInterfaces"
-import { Resource } from "../ArkArkui-externalInterfaces"
+import { Resource } from "../ArkResourceInterfaces"
 import { NativeModule } from "#components"
 
 export class DeserializerBase {

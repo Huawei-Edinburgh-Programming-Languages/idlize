@@ -163,16 +163,3 @@ interface LengthMetrics {
    */
   attribute number value;
 };
-
-/**
- * Defines the Resource.
- */
-interface Resource {
-  attribute String bundleName;
-  attribute String moduleName;
-  attribute number id;
-  [Optional]
-  attribute sequence<String> params;
-  [Optional]
-  attribute number type;
-};
