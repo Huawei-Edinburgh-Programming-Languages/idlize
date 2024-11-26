@@ -1,3 +1,6 @@
+
+type buffer = byte[];
+
 declare const console: {
     assert(value: any, message?: string, ...optionalParams: any[]): void;
 

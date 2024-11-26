@@ -1,3 +1,6 @@
+
+type buffer = ArrayBuffer;
+
 declare const console: {
     assert(value: any, message?: string, ...optionalParams: any[]): void;
 
