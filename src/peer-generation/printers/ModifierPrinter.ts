@@ -78,7 +78,7 @@ export class ModifierVisitor {
     }
 
     private printReturnStatement(printer: LanguageWriter, method: PeerMethod, returnValue: string | undefined = undefined) {
-        if (this.isSpecialReturnType(method.method.signature.returnType)) {
+        if (this.isSpecialReturnType(method.method.signature.returnType) && method.implName && !method.retConvertor.isVoid) {
             printer.print(`return nullptr;`)
         }
         else if (!method.retConvertor.isVoid) {
@@ -87,10 +87,10 @@ export class ModifierVisitor {
     }
 
     private isSpecialReturnType(returnType: IDLType): boolean {
-        return isReferenceType(returnType) ||
-               returnType === IDLThisType ||
-               returnType === IDLPointerType ||
-               returnType === IDLAnyType
+        return isReferenceType(returnType)  ||
+                returnType === IDLThisType ||
+                returnType === IDLPointerType ||
+                returnType === IDLAnyType
     }
 
     private printBodyImplementation(printer: LanguageWriter, method: PeerMethod,
