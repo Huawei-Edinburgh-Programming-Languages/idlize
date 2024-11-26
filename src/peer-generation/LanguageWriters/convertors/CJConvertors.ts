@@ -34,6 +34,7 @@ export class CJIDLNodeToStringConvertor implements NodeConvertor<string>, IdlNam
         return `Option<${this.convert(type.type)}>`
     }
     convertUnion(type: idl.IDLUnionType): string {
+        console.log(type.name)
         return type.name
     }
     convertContainer(type: idl.IDLContainerType): string {

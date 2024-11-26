@@ -64,7 +64,7 @@ public open class DeserializerBase {
         }
     }
 
-    func readInt8(): Int32 {
+    func readInt8(): Int8 {
         this.checkCapacity(1)
         // let value = this.view.getInt8(this.position)
         this.position += 1
