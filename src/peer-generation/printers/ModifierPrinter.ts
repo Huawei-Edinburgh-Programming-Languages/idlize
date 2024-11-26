@@ -77,13 +77,19 @@ export class ModifierVisitor {
         this.printReturnStatement(this.real, method)
     }
 
-    private printReturnStatement(printer: LanguageWriter, method: PeerMethod, returnValue: string | undefined = undefined) {
-        if (method.retConvertor.interopType?.name === PrimitiveType.NativePointer.getText()) {
+        if (this.isSpecialReturnType(method.method.signature.returnType)) {
             printer.print(`return nullptr;`)
         }
         else if (!method.retConvertor.isVoid) {
             printer.print(`return ${returnValue ?? "0"};`)
         }
+    }
+
+    private isSpecialReturnType(returnType: IDLType): boolean {
+        return isReferenceType(returnType) ||
+               returnType === IDLThisType ||
+               returnType === IDLPointerType ||
+               returnType === IDLAnyType
     }
 
     private printBodyImplementation(printer: LanguageWriter, method: PeerMethod,
