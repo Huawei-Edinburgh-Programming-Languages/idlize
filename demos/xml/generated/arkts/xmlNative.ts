@@ -44,7 +44,10 @@ export class XMLNativeModule {
 
     static native init(): void;
 
-    // TODO callCallbackfromNative
+    static callCallbackFromNative(id: KInt, args: KUint8ArrayPtr, length: KInt): KInt {
+        // TODO implement callCallbackFromNative
+        return 0
+    }    
 
     native static _XmlSerializer_ctor(thisArray: KUint8ArrayPtr, thisLength: KInt): KPointer 
     native static _XmlSerializer_getFinalizer(): KPointer 
