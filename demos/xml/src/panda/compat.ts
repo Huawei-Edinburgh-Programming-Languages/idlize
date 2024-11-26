@@ -1,5 +1,8 @@
 import { checkArkoalaCallbacks } from "../../generated/arkts/CallbacksChecker";
-import { xml_EventType, ParseInfo, XmlPullParser } from "../../generated/arkts/xml";
+import { xml_EventType } from "../../generated/arkts/xml";
+
+export { ParseInfo, XmlPullParser } from "../../generated/arkts/xml"
+export type EventType = xml_EventType
 
 let finished = false
 
@@ -39,5 +42,3 @@ export function eventTypeStr(eventType: xml_EventType) {
         return "WHITESPACE"
     return `UNKNOWN(${eventType.ordinal})`
 }
-
-export { ParseInfo, XmlPullParser, xml_EventType as EventType }

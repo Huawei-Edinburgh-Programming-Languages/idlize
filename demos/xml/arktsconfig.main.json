@@ -1,7 +1,8 @@
 {
     "compilerOptions": {
         "baseUrl": ".",
-        "outDir": "build/panda",
+        "outDir": "build/panda/out",
+        "rootDir": "src/panda",
         "paths": {
             "#compat": ["./src/panda/compat"],
             "@koalaui/interop": ["../../external/interop/src/arkts"],
