@@ -1,4 +1,4 @@
-import { EventType, eventTypeStr, ParseInfo, XmlPullParser } from "./node/compat"
+import { EventType, eventTypeStr, ParseInfo, XmlPullParser } from "#compat"
 
 export function run() {
     const sampleXml = `<foo valOfFoo="xx">Hello<bar>124</bar>World</foo>`
