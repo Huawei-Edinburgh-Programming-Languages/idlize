@@ -78,7 +78,10 @@ export class ModifierVisitor {
     }
 
     private printReturnStatement(printer: LanguageWriter, method: PeerMethod, returnValue: string | undefined = undefined) {
-        if (this.isSpecialReturnType(method.method.signature.returnType) && method.implName && !method.retConvertor.isVoid) {
+        if (method.method.name == 'ctor' || method.method.name == 'getFinalizer'){
+            printer.print(`return ${returnValue ?? "0"};`)
+        }
+        else if (this.isSpecialReturnType(method.method.signature.returnType) && method.implName && !method.retConvertor.isVoid) {
             printer.print(`return nullptr;`)
         }
         else if (!method.retConvertor.isVoid) {
