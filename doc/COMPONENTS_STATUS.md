@@ -1107,8 +1107,8 @@
 |`wordBreak`| Function | Samarin Sergey | done |  |
 |`lineBreakStrategy`| Function |Samarin Sergey | devdone |  |
 |`onCopy`| Function | Kirill Kirichenko | done |  |
-|`caretColor`| Function |Samarin Sergey |in progress |  |
-|`selectedBackgroundColor`| Function |Samarin Sergey |in progress |  |
+|`caretColor`| Function |Samarin Sergey |in progress | method is not generated yet |
+|`selectedBackgroundColor`| Function |Samarin Sergey |in progress | method is not generated yet |
 |`ellipsisMode`| Function |Samarin Sergey | done |  |
 |`enableDataDetector`| Function | Kirill Kirichenko | done |  |
 |`dataDetectorConfig`| Function | Kirill Kirichenko | in progress |  |
@@ -1120,7 +1120,7 @@
 |`halfLeading`| Function |Samarin Sergey | done |  |
 |`enableHapticFeedback`| Function |Samarin Sergey | done |  |
 |`selection`| Function |Samarin Sergey | testskipped |  |
-|`bindSelectionMenu`| Function | Kirill Kirichenko | in progress |  |
+|`bindSelectionMenu`| Function | Kirill Kirichenko | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*TextArea*|*Component*|Tuzhilkin Ivan|in progress|  |
 |`setTextAreaOptions`|Function|Tuzhilkin Ivan|testskipped|  |
 |`placeholderColor`|Function|Tuzhilkin Ivan|testskipped|  |
