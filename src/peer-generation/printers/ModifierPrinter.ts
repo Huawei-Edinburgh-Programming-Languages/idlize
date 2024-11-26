@@ -30,7 +30,7 @@ import { createDestroyPeerMethod, MaterializedClass, MaterializedMethod } from "
 import { groupBy } from "../../util";
 import { CppLanguageWriter, createLanguageWriter, createTypeNameConvertor, LanguageWriter, printMethodDeclaration } from "../LanguageWriters";
 import { LibaceInstall } from "../../Install";
-import { IDLBooleanType, IDLFunctionType, IDLStringType, isOptionalType } from "../../idl"
+import { IDLAnyType, IDLBooleanType, IDLFunctionType, IDLPointerType, IDLStringType, IDLThisType, IDLType, isOptionalType, isReferenceType } from "../../idl"
 import { PeerLibrary } from "../PeerLibrary";
 import { createConstructPeerMethod, PeerClass } from "../PeerClass";
 import { PeerMethod } from "../PeerMethod";
@@ -77,6 +77,7 @@ export class ModifierVisitor {
         this.printReturnStatement(this.real, method)
     }
 
+    private printReturnStatement(printer: LanguageWriter, method: PeerMethod, returnValue: string | undefined = undefined) {
         if (this.isSpecialReturnType(method.method.signature.returnType)) {
             printer.print(`return nullptr;`)
         }
