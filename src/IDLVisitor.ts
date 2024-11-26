@@ -815,7 +815,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             return idl.IDLUndefinedType
         }
         if (type.kind == ts.SyntaxKind.NullKeyword) {
-            return idl.IDLNullType
+            return idl.IDLUndefinedType
         }
         if (type.kind == ts.SyntaxKind.VoidKeyword) {
             return idl.IDLVoidType
@@ -917,7 +917,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
                 return idl.IDLNumberType
             }
             if (literal.kind == ts.SyntaxKind.NullKeyword) {
-                return idl.IDLNullType
+                return idl.IDLUndefinedType
             }
             if (literal.kind == ts.SyntaxKind.FalseKeyword || literal.kind == ts.SyntaxKind.TrueKeyword) {
                 return idl.IDLBooleanType

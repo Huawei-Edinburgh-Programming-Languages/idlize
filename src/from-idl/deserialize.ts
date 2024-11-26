@@ -161,7 +161,7 @@ function toIDLType(file: string, type: webidl2.IDLTypeDescription | string, extA
     }
     if (type.nullable) {
         return idl.createOptionalType(
-            toIDLType(file, { ...type, nullable: false }, extAttrs)            
+            toIDLType(file, { ...type, nullable: false }, extAttrs)
         )
     }
     if (isUnionTypeDescription(type)) {
@@ -177,7 +177,7 @@ function toIDLType(file: string, type: webidl2.IDLTypeDescription | string, extA
             case idl.IDLObjectType.name: return idl.IDLObjectType
             case idl.IDLAnyType.name: return idl.IDLAnyType
             case idl.IDLBooleanType.name: return idl.IDLBooleanType
-            case idl.IDLNullType.name: return idl.IDLNullType
+            case idl.IDLNullType.name: return idl.IDLUndefinedType
             case idl.IDLNumberType.name: return idl.IDLNumberType
             case idl.IDLStringType.name: return idl.IDLStringType
             case idl.IDLUndefinedType.name: return idl.IDLUndefinedType

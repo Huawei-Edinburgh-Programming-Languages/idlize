@@ -1153,7 +1153,7 @@ export function toIDLType(typeName: string): IDLType {
 
     switch (typeName) {
         case "boolean": return IDLBooleanType
-        case "null": return IDLNullType
+        case "null": return IDLUndefinedType
         case "number": return IDLNumberType
         case "string": return IDLStringType
         case "String": return IDLStringType
