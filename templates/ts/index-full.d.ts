@@ -163,3 +163,65 @@ declare class LocalStorage {
   clear(): boolean;
 }
 
+interface IPropertySubscriber {
+
+  id(): number;
+  aboutToBeDeleted(owningView?: IPropertySubscriber): void;
+}
+
+interface ISinglePropertyChangeSubscriber<T> extends IPropertySubscriber {
+  hasChanged(newValue: T): void;
+}
+
+
+declare class SyncedPropertyOneWay<T>
+  extends SubscribedAbstractProperty<T>
+  implements ISinglePropertyChangeSubscriber<T>
+{
+  private wrappedValue_;
+  private source_;
+  constructor(source: SubscribedAbstractProperty<T>, subscribeMe?: IPropertySubscriber, info?: string);
+  aboutToBeDeleted(unsubscribeMe?: IPropertySubscriber): void;
+  hasChanged(newValue: T): void;
+  get(): T;
+  set(newValue: T): void;
+}
+
+declare class SyncedPropertyTwoWay<T>
+  extends SubscribedAbstractProperty<T>
+  implements ISinglePropertyChangeSubscriber<T>
+{
+
+  private source_;
+  constructor(source: SubscribedAbstractProperty<T>, subscribeMe?: IPropertySubscriber, info?: string);
+
+  aboutToBeDeleted(unsubscribeMe?: IPropertySubscriber): void;
+  hasChanged(newValue: T): void;
+  get(): T;
+  set(newValue: T): void;
+}
+
+declare abstract class SubscribedAbstractProperty<T> {
+
+  protected subscribers_: Set<number>;
+  private id_;
+  private info_?;
+
+  constructor(
+    subscribeMe?: IPropertySubscriber,
+    info?: string,
+  );
+
+    id(): number;
+
+    info(): string;
+    abstract get(): T;
+    abstract set(newValue: T): void;
+    createTwoWaySync(subscribeMe?: IPropertySubscriber, info?: string): SyncedPropertyTwoWay<T>;
+    createOneWaySync(subscribeMe?: IPropertySubscriber, info?: string): SyncedPropertyOneWay<T>;
+    unlinkSuscriber(subscriberId: number): void;
+    protected notifyHasChanged(newValue: T): void;
+    protected notifyPropertyRead(): void;
+    numberOfSubscrbers(): number;
+    abstract aboutToBeDeleted(): void;
+}
