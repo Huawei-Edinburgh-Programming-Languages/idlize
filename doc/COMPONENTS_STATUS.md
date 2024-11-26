@@ -354,13 +354,13 @@
 |`trackShadow`| Function |Morozov Sergey |blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAW4DU|
 |`contentModifier`| Function | Morozov Sergey |blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |*DatePicker*| *Component* | Vadim Voronov | done |  |
-|`setDatePickerOptions`| Function | Vadim Voronov| devdone | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`setDatePickerOptions`| Function | Vadim Voronov| done | |
 |`lunar`| Function |Vadim Voronov | done |  |
 |`disappearTextStyle`| Function | Vadim Voronov| done |  |
 |`textStyle`| Function |Vadim Voronov | done |  |
 |`selectedTextStyle`| Function |Vadim Voronov | done |  |
 |`onChange`| Function | Vadim Voronov| done |  |
-|`onDateChange`| Function |Vadim Voronov | devdone | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`onDateChange`| Function |Vadim Voronov | done | |
 |*Divider*| *Component* | Tuzhilkin Ivan | done |  |
 |`setDividerOptions`| Function | Tuzhilkin Ivan| done |  |
 |`vertical`| Function | Tuzhilkin Ivan | done |  |
@@ -387,18 +387,18 @@
 |`onHoverStatusChange`| Function | Politov Mikhail | done |  |
 |`enableAnimation`| Function | Politov Mikhail | done |  |
 |`autoHalfFold`| Function | Politov Mikhail | done |  |
-|*FormComponent*| *Component* | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAUYQM|
-|`setFormComponentOptions`| Function | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAUYQM|
-|`size`| Function | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAUYQM|
-|`moduleName`| Function | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAUYQM|
-|`dimension`| Function | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAUYQM|
-|`allowUpdate`| Function | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAUYQM|
-|`visibility`| Function | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAUYQM|
-|`onAcquired`| Function | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAUYQM|
-|`onError`| Function | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAUYQM|
-|`onRouter`| Function | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAUYQM|
-|`onUninstall`| Function | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAUYQM|
-|`onLoad`| Function | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAUYQM|
+|*FormComponent*| *Component* | Vadim Voronov | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
+|`setFormComponentOptions`| Function | Vadim Voronov | blocked Arkoala | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
+|`size`| Function | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
+|`moduleName`| Function | Vadim Voronov | in progress | |
+|`dimension`| Function | Vadim Voronov | in progress | |
+|`allowUpdate`| Function | Vadim Voronov | in progress | |
+|`visibility`| Function | Vadim Voronov | in progress | |
+|`onAcquired`| Function | Vadim Voronov | in progress | |
+|`onError`| Function | Vadim Voronov | in progress | |
+|`onRouter`| Function | Vadim Voronov | in progress | |
+|`onUninstall`| Function | Vadim Voronov | in progress | |
+|`onLoad`| Function | Vadim Voronov | in progress | |
 |*FormLink*| *Component* | Dmitry A Smirnov| done |  |
 |`setFormLinkOptions`| Function | Dmitry A Smirnov| done |  |
 |*Gauge*| *Component* | Maksimov Nikita | blocked |  |
@@ -1550,7 +1550,7 @@
 |`transform`| Function  | Vadim Voronov | done | |
 |`translate`| Function  | Vadim Voronov | done | |
 |`setPixelMap`| Function  | Vadim Voronov | in progress | |
-|`transferFromImageBitmap`| Function  | Vadim Voronov | devdone | |
+|`transferFromImageBitmap`| Function  | Vadim Voronov | in progress | |
 |`saveLayer`| Function  | Vadim Voronov | done | |
 |`restoreLayer`| Function  | Vadim Voronov | done | |
 |`reset`| Function  | Vadim Voronov | done | |
