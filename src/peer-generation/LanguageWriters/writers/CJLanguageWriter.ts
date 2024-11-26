@@ -200,6 +200,13 @@ class CJCheckOptionalStatement implements LanguageStatement {
 }
 
 
+class CJArrayResizeStatement implements LanguageStatement {
+    constructor(private array: string, private arrayType: string, private length: string, private deserializer: string) {}
+    write(writer: LanguageWriter) {
+        writer.print(`${this.array} = ${this.arrayType}(Int64(${this.length}))`)
+    }
+}
+
 
 ////////////////////////////////////////////////////////////////
 //                           WRITER                           //
@@ -351,6 +358,9 @@ export class CJLanguageWriter extends LanguageWriter {
     }
     makeArrayLength(array: string, length?: string): LanguageExpression {
         return this.makeString(`${array}.size`)
+    }
+    makeArrayResize(array: string, arrayType: string, length: string, deserializer: string): LanguageStatement {
+        return new CJArrayResizeStatement(array, arrayType, length, deserializer)
     }
     override makeArrayAccess(value: string, indexVar: string) {
         return this.makeString(`${value}[Int64(${indexVar})]`)

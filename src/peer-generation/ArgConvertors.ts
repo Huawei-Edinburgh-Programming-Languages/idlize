@@ -557,13 +557,6 @@ export class EnumConvertor extends BaseArgConvertor { //
         value = printer.ordinalFromEnum(printer.makeString(value), idl.createReferenceType(this.enumEntry.name)).asString()
         printer.writeMethodCall(`${param}Serializer`, "writeInt32", [value])
     }
-    // convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
-    //     const readExpr = writer.makeMethodCall(`${deserializerName}`, "readInt32", [])
-    //     const enumExpr = writer.language === Language.ARKTS || this.isStringEnum && writer.language !== Language.CPP
-    //         ? writer.enumFromOrdinal(readExpr, this.enumEntry)
-    //         : writer.language == Language.CJ ? writer.enumFromOrdinal(readExpr, this.enumEntry) : writer.makeCast(readExpr, idl.createReferenceType(this.enumEntry.name))
-    //     return assigneer(enumExpr)
-    // }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
         const readExpr = writer.makeMethodCall(`${deserializerName}`, "readInt32", [])
         const enumExpr = writer.language === Language.ARKTS || this.isStringEnum && writer.language !== Language.CPP
@@ -655,8 +648,8 @@ export class UnionConvertor extends BaseArgConvertor { //
         const maybeOptionalUnion = writer.language === Language.CPP || writer.language == Language.CJ
             ? this.type
             : idl.createOptionalType(this.type)
-        statements.push(writer.makeAssign(selectorBuffer, idl.IDLI32Type,
-            writer.makeString(writer.castToInt(`${deserializerName}.readInt8()`, 32)), true))
+        statements.push(writer.makeAssign(selectorBuffer, idl.IDLI8Type,
+            writer.makeString(`${deserializerName}.readInt8()`), true))
         statements.push(writer.makeAssign(bufferName, maybeOptionalUnion, undefined, true, false))
         if (writer.language === Language.CPP)
             statements.push(writer.makeAssign(`${bufferName}.selector`, undefined, writer.makeString(selectorBuffer), false))
@@ -676,11 +669,7 @@ export class UnionConvertor extends BaseArgConvertor { //
             return { expr, stmt }
         })
         statements.push(writer.makeMultiBranchCondition(branches, writer.makeThrowError(`One of the branches for ${bufferName} has to be chosen through deserialisation.`)))
-        if (writer.language != Language.CJ) {
-            statements.push(assigneer(writer.makeCast(writer.makeString(bufferName), this.type)))
-        } else {
-            statements.push(assigneer(writer.makeString(`${bufferName}`)))
-        }
+        statements.push(assigneer(writer.makeCast(writer.makeString(bufferName), this.type)))
         return new BlockStatement(statements, false)
     }
     nativeType(): idl.IDLType {
@@ -1108,14 +1097,10 @@ export class ArrayConvertor extends BaseArgConvertor { //
         const arrayType = this.idlType
         statements.push(writer.makeAssign(lengthBuffer, idl.IDLI32Type, writer.makeString(`${deserializerName}.readInt32()`), true))
         statements.push(writer.makeAssign(bufferName, arrayType, writer.makeArrayInit(this.type), true, false))
-        statements.push(writer.makeArrayResize(bufferName, lengthBuffer, deserializerName))
+        statements.push(writer.makeArrayResize(bufferName, writer.getNodeName(arrayType), lengthBuffer, deserializerName))
         statements.push(writer.makeLoop(counterBuffer, lengthBuffer,
             this.elementConvertor.convertorDeserialize(`${bufferName}_buf`, deserializerName, (expr) => {
-                if(writer.language != Language.CJ) {
                     return writer.makeAssign(writer.makeArrayAccess(bufferName, counterBuffer).asString(), undefined, expr, false)
-                } else {
-                    return writer.makeStatement(writer.makeMethodCall(bufferName, 'append', [expr]))
-                }
             }, writer)))
         statements.push(assigneer(writer.makeString(bufferName)))
         return new BlockStatement(statements, false)
