@@ -390,9 +390,9 @@
 |*FormComponent*| *Component* | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
 |`setFormComponentOptions`| Function | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
 |`size`| Function | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
-|`moduleName`| Function | Vadim Voronov | in progress | |
+|`moduleName`| Function | Vadim Voronov | done | |
 |`dimension`| Function | Vadim Voronov | in progress | |
-|`allowUpdate`| Function | Vadim Voronov | in progress | |
+|`allowUpdate`| Function | Vadim Voronov | done | |
 |`visibility`| Function | Vadim Voronov | in progress | |
 |`onAcquired`| Function | Vadim Voronov | in progress | |
 |`onError`| Function | Vadim Voronov | in progress | |
