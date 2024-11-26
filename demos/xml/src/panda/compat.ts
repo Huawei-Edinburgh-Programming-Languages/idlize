@@ -4,17 +4,8 @@ import { xml_EventType } from "../../generated/arkts/xml";
 export { ParseInfo, XmlPullParser } from "../../generated/arkts/xml"
 export type EventType = xml_EventType
 
-let finished = false
-
-function pullEvents() {
+export function pullEvents() {
     checkArkoalaCallbacks()
-    if (!finished)
-        setTimeout(pullEvents, 0)
-};
-
-export function runEventLoop() {
-    setTimeout(pullEvents, 0);
-    setTimeout(() => { finished = true }, 2000);
 }
 
 export function eventTypeStr(eventType: xml_EventType) {
