@@ -24,7 +24,7 @@ import { cleanPrefix } from "../../peer-generation/PeerLibrary";
 import { WrapperClass, WrapperField, WrapperMethod } from "../WrapperClass";
 import { Skoala } from "../utils";
 import { Field, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, NamedMethodSignature } from "../../peer-generation/LanguageWriters";
-import { ArgConvertor, BaseArgConvertor, BooleanConvertor, ClassConvertor, CustomTypeConvertor, EnumConvertor, ExpressionAssigneer, InterfaceConvertor, NullConvertor, NumberConvertor, RuntimeType, StringConvertor, TypeAliasConvertor, UndefinedConvertor, UnionConvertor } from "../../peer-generation/ArgConvertors";
+import { ArgConvertor, BaseArgConvertor, BooleanConvertor, ClassConvertor, CustomTypeConvertor, EnumConvertor, ExpressionAssigneer, InterfaceConvertor, NumberConvertor, RuntimeType, StringConvertor, TypeAliasConvertor, UndefinedConvertor, UnionConvertor } from "../../peer-generation/ArgConvertors";
 import { createRegularRetConvertor, createVoidRetConvertor, createRetConvertor } from "../../peer-generation/RetConvertors";
 import { CustomPrintVisitor } from "../../from-idl/DtsPrinter";
 import { Language } from "../../Language";
@@ -101,9 +101,7 @@ export class IdlSkoalaLibrary implements LibraryInterface {
     toDeclaration(type: idl.IDLType | idl.IDLTypedef | idl.IDLCallback | idl.IDLEnum | idl.IDLInterface): idl.IDLNode {
         switch (type) {
             case idl.IDLAnyType: return CustomObject
-            case idl.IDLNullType:
             case idl.IDLVoidType: return idl.IDLUndefinedType
-            case idl.IDLVoidType: return idl.IDLVoidType
             case idl.IDLUndefinedType: return idl.IDLUndefinedType
             case idl.IDLUnknownType: return CustomObject
             case idl.IDLObjectType: return CustomObject
@@ -150,7 +148,6 @@ export class IdlSkoalaLibrary implements LibraryInterface {
                 case idl.IDLAnyType: return new CustomTypeConvertor(param, "Any")
                 case idl.IDLBooleanType: return new BooleanConvertor(param)
                 case idl.IDLStringType: return new StringConvertor(param)
-                case idl.IDLNullType: return new NullConvertor(param)
                 case idl.IDLBigintType:
                 case idl.IDLNumberType: return new NumberConvertor(param)
                 case idl.IDLUndefinedType:
@@ -713,7 +710,6 @@ export class TSSkoalaTypeNameConvertor implements IdlNameConvertor, TypeConverto
     convertPrimitiveType(type: idl.IDLPrimitiveType): string {
         switch (type) {
             case idl.IDLStringType: return "string"
-            case idl.IDLNullType: return "null"
             case idl.IDLVoidType: return "void"
         }
         // todo: add other types

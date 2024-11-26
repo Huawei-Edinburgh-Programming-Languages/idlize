@@ -144,7 +144,6 @@ export class TsIDLNodeToStringConverter implements NodeConvertor<string>, IdlNam
             case idl.IDLThisType: return 'this'
             case idl.IDLAnyType: return 'any'
             case idl.IDLUndefinedType: return 'undefined'
-            case idl.IDLNullType: return 'null'
             case idl.IDLPointerType: return 'KPointer'
             case idl.IDLVoidType: return 'void'
             case idl.IDLBooleanType: return 'boolean'

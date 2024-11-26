@@ -68,7 +68,7 @@ export class InteropConverter implements NodeConvertor<ConvertResult> {
         return this.make(PrimitiveType.LibraryPrefix + node.name, true)
     }
     // convertImport
-    // 
+    //
     // if (idl.isImport(target))
     //     return this.make(this.mapImportTypeName(target), true)
 
@@ -141,7 +141,6 @@ export class InteropConverter implements NodeConvertor<ConvertResult> {
             case idl.IDLUnknownType:
             case idl.IDLCustomObjectType:
             case idl.IDLAnyType: return this.make(`CustomObject`)
-            case idl.IDLNullType: return this.make(`Null`)
             case idl.IDLUndefinedType: return this.make(`Undefined`)
             case idl.IDLLengthType: return this.make(`Length`)
             case idl.IDLFunctionType: return this.make(`Function`)
