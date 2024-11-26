@@ -142,3 +142,24 @@ interface LazyForEachInterface {
 
 declare const LazyForEach: LazyForEachInterface;
 
+declare class LocalStorage {
+
+  constructor(initializingProperties?: Object);
+  static GetShared(): LocalStorage;
+  static getShared(): LocalStorage;
+  public ref<T>(propName: string): AbstractProperty<T> | undefined;
+  public setAndRef<T>(propName: string, defaultValue: T): AbstractProperty<T>;
+  has(propName: string): boolean;
+  keys(): IterableIterator<string>;
+  size(): number;
+  get<T>(propName: string): T | undefined;
+  set<T>(propName: string, newValue: T): boolean;
+  setOrCreate<T>(propName: string, newValue: T): boolean;
+  link<T>(propName: string): SubscribedAbstractProperty<T>;
+  setAndLink<T>(propName: string, defaultValue: T): SubscribedAbstractProperty<T>;
+  prop<S>(propName: string): SubscribedAbstractProperty<S>;
+  setAndProp<S>(propName: string, defaultValue: S): SubscribedAbstractProperty<S>;
+  delete(propName: string): boolean;
+  clear(): boolean;
+}
+
