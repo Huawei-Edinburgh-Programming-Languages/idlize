@@ -1075,7 +1075,7 @@
 |`barModeBarMode_SCROLLABLE`| Function | Tuzhilkin Ivan | done | |
 |*TabContent*| *Component* | Evstigneev Roman |in progress |  |
 |`setTabContentOptions`| Function | Evstigneev Roman | done |  |
-|`tabBar`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`tabBar`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IB74L4 & https://gitee.com/nikolay-igotti/idlize/issues/IB764R|
 |`onWillShow`| Function |Evstigneev Roman | in progress |  |
 |`onWillHide`| Function |Evstigneev Roman | in progress |  |
 |*Text*| *Component* | Kirill Kirichenko | in progress | |
@@ -1906,10 +1906,10 @@
 |`handlePromptConfirm`| Function | Erokhin Ilya | done |  |
 |*FileSelectorResult*| *Class* | Erokhin Ilya | done |  |
 |`handleFileList`| Function | Erokhin Ilya | done |  |
-|*HttpAuthHandler*| *Class* | Erokhin Ilya | devdone |  |
-|`confirm`| Function | Erokhin Ilya | devdone |  |
-|`cancel`| Function | Erokhin Ilya | devdone |  |
-|`isHttpAuthInfoSaved`| Function | Erokhin Ilya | devdone |  |
+|*HttpAuthHandler*| *Class* | Erokhin Ilya | done |  |
+|`confirm`| Function | Erokhin Ilya | done |  |
+|`cancel`| Function | Erokhin Ilya | done |  |
+|`isHttpAuthInfoSaved`| Function | Erokhin Ilya | done |  |
 |*SslErrorHandler*| *Class* | Erokhin Ilya | devdone |  |
 |`handleConfirm`| Function | Erokhin Ilya | devdone |  |
 |`handleCancel`| Function | Erokhin Ilya | devdone |  |
@@ -1918,41 +1918,41 @@
 |`cancel`| Function | Erokhin Ilya | devdone |  |
 |`ignore`| Function | Erokhin Ilya | devdone |  |
 |*PermissionRequest*| *Class* | Erokhin Ilya | blocked |  |
-|`deny`| Function | Erokhin Ilya | devdone |  |
+|`deny`| Function | Erokhin Ilya | done |  |
 |`getOrigin`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getAccessibleResource`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`grant`| Function | Erokhin Ilya | devdone |  |
+|`grant`| Function | Erokhin Ilya | done |  |
 |*ScreenCaptureHandler*| *Class* | Erokhin Ilya | blocked |  |
 |`getOrigin`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`grant`| Function | Erokhin Ilya | devdone |  |
-|`deny`| Function | Erokhin Ilya | devdone |  |
+|`grant`| Function | Erokhin Ilya | done |  |
+|`deny`| Function | Erokhin Ilya | done |  |
 |*DataResubmissionHandler*| *Class* | Erokhin Ilya | devdone |  |
 |`resend`| Function | Erokhin Ilya | devdone |  |
 |`cancel`| Function | Erokhin Ilya | devdone |  |
 |*ControllerHandler*| *Class* | Erokhin Ilya | in progress |  |
 |`setWebController`| Function | Erokhin Ilya | in progress | Ark_CustomObject |
 |*WebContextMenuParam*| *Class* | Erokhin Ilya | blocked |  |
-|`x`| Function | Erokhin Ilya | devdone |  |
-|`y`| Function | Erokhin Ilya | devdone |  |
+|`x`| Function | Erokhin Ilya | done |  |
+|`y`| Function | Erokhin Ilya | done |  |
 |`getLinkUrl`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getUnfilteredLinkUrl`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getSourceUrl`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`existsImageContents`| Function | Erokhin Ilya | devdone |  |
+|`existsImageContents`| Function | Erokhin Ilya | done |  |
 |`getMediaType`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getSelectionText`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getSourceType`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getInputFieldType`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`isEditable`| Function | Erokhin Ilya | devdone |  |
-|`getEditStateFlags`| Function | Erokhin Ilya | devdone |  |
-|`getPreviewWidth`| Function | Erokhin Ilya | in progress | wait for up merge |
-|`getPreviewHeight`| Function | Erokhin Ilya | in progress | wait for up merge |
-|*WebContextMenuResult*| *Class* | Erokhin Ilya | devdone |  |
-|`closeContextMenu`| Function | Erokhin Ilya | devdone |  |
-|`copyImage`| Function | Erokhin Ilya | devdone |  |
-|`copy`| Function | Erokhin Ilya | devdone |  |
-|`paste`| Function | Erokhin Ilya | devdone |  |
-|`cut`| Function | Erokhin Ilya | devdone |  |
-|`selectAll`| Function | Erokhin Ilya | devdone |  |
+|`isEditable`| Function | Erokhin Ilya | done |  |
+|`getEditStateFlags`| Function | Erokhin Ilya | done |  |
+|`getPreviewWidth`| Function | Erokhin Ilya | in progress | wait for regeneration |
+|`getPreviewHeight`| Function | Erokhin Ilya | in progress | wait for regeneration |
+|*WebContextMenuResult*| *Class* | Erokhin Ilya | done |  |
+|`closeContextMenu`| Function | Erokhin Ilya | done |  |
+|`copyImage`| Function | Erokhin Ilya | done |  |
+|`copy`| Function | Erokhin Ilya | done |  |
+|`paste`| Function | Erokhin Ilya | done |  |
+|`cut`| Function | Erokhin Ilya | done |  |
+|`selectAll`| Function | Erokhin Ilya | done |  |
 |*ConsoleMessage*| *Class* | Erokhin Ilya | blocked |  |
 |`getMessage`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getSourceId`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
@@ -1983,7 +1983,7 @@
 |`getResponseIsReady`| Function | Erokhin Ilya | devdone |  |
 |*WebResourceError*| *Class* | Erokhin Ilya | blocked |  |
 |`getErrorInfo`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getErrorCode`| Function | Erokhin Ilya | devdone |  |
+|`getErrorCode`| Function | Erokhin Ilya | done |  |
 |*JsGeolocation*| *Class* | Erokhin Ilya | done |  |
 |`invoke`| Function | Erokhin Ilya | done |  |
 |*WebCookie*| *Class* | Erokhin Ilya | done | |
