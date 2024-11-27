@@ -1484,11 +1484,11 @@
 |`onRelease`| Function | Tuzhilkin Ivan | in progress | |
 |`onError`| Function | Tuzhilkin Ivan | in progress | |
 |`onTerminated`| Function | Tuzhilkin Ivan | in progress | |
-|*LinearIndicator*| *Component* | Kovalev Sergey | in progress |  |
-|`setLinearIndicatorOptions`| Function | Kovalev Sergey | in progress |  |
-|`indicatorStyle`| Function | Kovalev Sergey | in progress |  |
-|`indicatorLoop`| Function | Kovalev Sergey | in progress |  |
-|`onChange`| Function | Kovalev Sergey | in progress |  |
+|*LinearIndicator*| *Component* | Kovalev Sergey | done | depricated |
+|`setLinearIndicatorOptions`| Function | Kovalev Sergey | done | depricated |
+|`indicatorStyle`| Function | Kovalev Sergey | done | depricated |
+|`indicatorLoop`| Function | Kovalev Sergey | done | depricated |
+|`onChange`| Function | Kovalev Sergey | done | depricated |
 |*ActionSheet*| *Class* | Ekaterina Stepanova | in progress |
 |`show`| Function | Ekaterina Stepanova | in progress |
 |*AlertDialog*| *Class* | Ekaterina Stepanova | in progress |
@@ -2063,8 +2063,8 @@
 |`onMeasure`| Function | Politov Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onDraw`| Function | Politov Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`invalidate`| Function | Politov Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
-|*LinearIndicatorController*| *Class* | Kovalev Sergey | in progress |  |
-|`setProgress`| Function | Kovalev Sergey | in progress |  |
-|`start`| Function | Kovalev Sergey | in progress |  |
-|`pause`| Function | Kovalev Sergey | in progress |  |
-|`stop`| Function | Kovalev Sergey | in progress |  |
+|*LinearIndicatorController*| *Class* | Kovalev Sergey | done | depricated |
+|`setProgress`| Function | Kovalev Sergey | done | depricated |
+|`start`| Function | Kovalev Sergey | done | depricated |
+|`pause`| Function | Kovalev Sergey | done | depricated |
+|`stop`| Function | Kovalev Sergey | done | depricated |
