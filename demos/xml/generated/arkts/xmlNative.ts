@@ -82,6 +82,7 @@ export class XMLNativeModule {
     native static _CheckArkoalaCallbackEvent(buffer: KUint8ArrayPtr, bufferLength: KInt): KInt 
     native static _HoldArkoalaResource(resourceId: KInt): void 
     native static _ReleaseArkoalaResource(resourceId: KInt): void 
+    native static _Utf8ToString(buffer: KUint8ArrayPtr, position: KInt, length: KInt): KStringPtr 
 }
 
 let theModule: XMLNativeModule

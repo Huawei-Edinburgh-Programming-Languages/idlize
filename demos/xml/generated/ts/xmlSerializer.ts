@@ -17,7 +17,7 @@ import { xml, ParseInfo, ParseInfoInternal, ParseOptions } from "./xml"
 import { SerializerBase, RuntimeType, runtimeType, CallbackResource, unsafeCast } from "./SerializerBase"
 import { DeserializerBase } from "./DeserializerBase"
 import { int32 } from "@koalaui/common"
-import { KPointer, KInt, KStringPtr, nullptr, ResourceHolder } from "@koalaui/interop"
+import { KPointer, KInt, KStringPtr, KUint8ArrayPtr, nullptr, ResourceHolder } from "@koalaui/interop"
 import { getXMLNativeModule, CallbackKind } from "./xmlNative"
 import { Finalizable, MaterializedBase } from "./xmlFinalizable"
 

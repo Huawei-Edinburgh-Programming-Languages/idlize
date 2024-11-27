@@ -42,6 +42,7 @@ export interface XMLNativeModule {
     _CheckArkoalaCallbackEvent(buffer: Uint8Array, bufferLength: int32): int32 
     _HoldArkoalaResource(resourceId: int32): void 
     _ReleaseArkoalaResource(resourceId: int32): void 
+    _Utf8ToString(buffer: Uint8Array, position: int32, length: int32): string 
 }
 
 type NativeModuleType = XMLNativeModule
