@@ -43,6 +43,7 @@ endif
 is_msvc = meson.get_compiler('cpp').get_id() == 'msvc'
 is_clang = meson.get_compiler('cpp').get_id() == 'clang'
 is_gcc = meson.get_compiler('cpp').get_id() == 'gcc'
+
 if is_clang
     # TODO: remove all -Wno-* when generation is fixed.
     cflags += [
@@ -67,6 +68,7 @@ if is_node
 
     node_addon_api = run_command('node', '-p', 'require.resolve("node-addon-api/package.json").slice(0, -12)', check: true).stdout().strip()
     node_api_headers = run_command('node', '-p', 'require.resolve("node-api-headers/package.json").slice(0, -12)', check: true).stdout().strip()
+
     cflags += ['-DKOALA_USE_NODE_VM', '-DKOALA_NAPI', '-DINTEROP_LIBRARY_NAME=' + library_name ]
     include_dirs += [
         node_api_headers / 'include',
