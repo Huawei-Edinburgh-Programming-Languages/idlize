@@ -62,7 +62,7 @@ name_suffix = [] # default value
 
 if is_node
     name_prefix = ''
-    name_module_suffix = 'node'
+    name_suffix = 'node'
     library_name = 'Xml_NativeBridgeNapi'
     platform_build_dir = 'build/node'
 
