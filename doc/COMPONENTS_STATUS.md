@@ -2011,19 +2011,19 @@
 |`backward`| Function | Erokhin Ilya | done | |
 |`forward`| Function | Erokhin Ilya | done | |
 |`getCookieManager`| Function | Erokhin Ilya | testskipped | |
-|*XComponentController*| *Class* | | | |
-|`getXComponentSurfaceId`| Function | | | |
-|`getXComponentContext`| Function | | | |
-|`setXComponentSurfaceSize`| Function | | | |
-|`setXComponentSurfaceRect`| Function | | | |
-|`getXComponentSurfaceRect`| Function | | | |
-|`setXComponentSurfaceRotation`| Function | | | |
-|`getXComponentSurfaceRotation`| Function | | | |
-|`onSurfaceCreated`| Function | | | |
-|`onSurfaceChanged`| Function | | | |
-|`onSurfaceDestroyed`| Function | | | |
-|`startImageAnalyzer`| Function | | | |
-|`stopImageAnalyzer`| Function | | | |
+|*XComponentController*| *Class* | Tuzhilkin Ivan | in progress | |
+|`getXComponentSurfaceId`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getXComponentContext`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF |
+|`setXComponentSurfaceSize`| Function | Tuzhilkin Ivan | devdone | |
+|`setXComponentSurfaceRect`| Function | Tuzhilkin Ivan | devdone | |
+|`getXComponentSurfaceRect`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`setXComponentSurfaceRotation`| Function | Tuzhilkin Ivan | devdone | |
+|`getXComponentSurfaceRotation`| Function | Tuzhilkin Ivan | | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`onSurfaceCreated`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV |
+|`onSurfaceChanged`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV |
+|`onSurfaceDestroyed`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV |
+|`startImageAnalyzer`| Function | Tuzhilkin Ivan | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IB3J8N , https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
+|`stopImageAnalyzer`| Function | Tuzhilkin Ivan | devdone | |
 |*WaterFlowSections*| *Class* | | | |
 |`splice`| Function | | | |
 |`push`| Function | | | |
