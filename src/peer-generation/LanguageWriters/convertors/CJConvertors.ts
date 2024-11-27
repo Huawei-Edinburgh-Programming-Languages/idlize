@@ -42,7 +42,7 @@ export class CJIDLNodeToStringConvertor implements NodeConvertor<string>, IdlNam
             return `ArrayList<${convertType(this, type.elementType[0])}>`
         }
         if (idl.IDLContainerUtils.isRecord(type)) {
-            const stringes = type.elementType.slice(0, 2).map(it => convertType(this, it)).map(this.maybeConvertPrimitiveType, this)
+            const stringes = type.elementType.slice(0, 2).map(it => convertType(this, it))
             return `Map<${stringes[0]}, ${stringes[1]}>`
         }
         throw new Error(`IDL type ${idl.DebugUtils.debugPrintType(type)} not supported`)
@@ -57,7 +57,9 @@ export class CJIDLNodeToStringConvertor implements NodeConvertor<string>, IdlNam
         throw new Error('Method not implemented.')
     }
     convertCallback(type: idl.IDLCallback): string {
-        return `\{ => ${this.convert(type)}\}`
+        const params = type.parameters.map(it =>
+            `${it.name}: ${it.isOptional ? "?" : ""}${this.convert(it.type!)}`)
+        return `\{(${params.join(", ")}) => ${this.convert(type.returnType)}\}`
     }
     convertImport(type: idl.IDLReferenceType, importClause: string): string {
         return type.name
@@ -121,15 +123,10 @@ export class CJIDLNodeToStringConvertor implements NodeConvertor<string>, IdlNam
         ['boolean', 'Boolean'],
         ['char', 'Character'],
     ])
-    private maybeConvertPrimitiveType(CJType: string): string {
-        // if (this.CJPrimitiveToReferenceTypeMap.has(CJType.type.text)) {
-        //     return this.CJPrimitiveToReferenceTypeMap.get(CJType.type.text)!
-        // }
-        return CJType
-    }
-
     private callbackType(decl: idl.IDLCallback): string {
-        return `() -> ${this.convert(decl.returnType)}`
+        const params = decl.parameters.map(it =>
+            `${it.name}: ${it.isOptional ? "?" : ""}${this.convert(it.type!)}`)
+        return `((${params.join(", ")}) -> ${this.convert(decl.returnType)})`
     }
 
     // Tuple + ??? AnonymousClass
