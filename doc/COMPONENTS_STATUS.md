@@ -1747,14 +1747,14 @@
 |`size`| Function | Morozov Sergey |in progress |  |
 |`disableAnimation`| Function | Morozov Sergey |in progress |  |
 |`setInterception`| Function | Morozov Sergey |in progress |  |
-|*NavigationTransitionProxy*| *Class* | | | |
-|`finishTransition`| Function | | | |
-|`cancelTransition`| Function | | | |
-|`updateTransition`| Function | | | |
-|`setFrom`| Function | | | |
-|`setTo`| Function | | | |
-|`getIsInteractive`| Function | | | |
-|`setIsInteractive`| Function | | | |
+|*NavigationTransitionProxy*| *Class* | Morozov Sergey | in progress | |
+|`finishTransition`| Function | Morozov Sergey | in progress | |
+|`cancelTransition`| Function | Morozov Sergey | in progress | |
+|`updateTransition`| Function | Morozov Sergey | in progress | |
+|`setFrom`| Function | Morozov Sergey | in progress | |
+|`setTo`| Function | Morozov Sergey | in progress | |
+|`getIsInteractive`| Function | Morozov Sergey | in progress | |
+|`setIsInteractive`| Function | Morozov Sergey | in progress | |
 |*PatternLockController*| *Class* |Dmitry A Smirnov| done|  |
 |`reset`| Function |Dmitry A Smirnov| done|  |
 |`setChallengeResult`| Function |Dmitry A Smirnov| done|  |
