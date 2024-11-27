@@ -15,6 +15,7 @@
 
 import * as webidl2 from "webidl2"
 import { indentedBy, isDefined, stringOrNone } from "./util";
+import { generateSyntheticIdlNodeName } from "./peer-generation/idl/common";
 
 export enum IDLKind {
     Interface,
@@ -118,8 +119,6 @@ export interface IDLType extends IDLNode {
     _idlTypeBrand: any
 }
 
-export const IDLTopType: IDLType = createPrimitiveType("__TOP__")
-
 export interface IDLTypedef extends IDLEntry {
     kind: IDLKind.Typedef
     type: IDLType
@@ -181,6 +180,7 @@ export interface IDLEnumMember extends IDLEntry {
     kind: IDLKind.EnumMember
     parent: IDLEnum
     type: IDLPrimitiveType
+    // TODO: remove undefined case
     initializer: number | string | undefined
 }
 
@@ -233,7 +233,7 @@ export interface IDLConstructor extends IDLSignature {
 export interface IDLInterface extends IDLEntry {
     kind: IDLKind.Interface | IDLKind.Class | IDLKind.AnonymousInterface | IDLKind.TupleInterface
     typeParameters?: string[]
-    inheritance: IDLType[]
+    inheritance: IDLReferenceType[]
     constructors: IDLConstructor[]
     constants: IDLConstant[]
     properties: IDLProperty[]
@@ -430,6 +430,16 @@ export function createOptionalType(element:IDLType): IDLOptionalType {
     }
 }
 
+/**
+ * This placeholder is used when a class has no superclass.
+ * Examples:
+ *  class definition:               inheritance:
+ * `C extends T`                  :  [T]
+ * `C implements T`               :  [Top, T]
+ * `C extends T implements I, J`  :  [T, I, J]
+ */
+export const IDLTopType: IDLReferenceType = createReferenceType("__TOP__")
+
 export const IDLPointerType = createPrimitiveType('pointer')
 export const IDLVoidType = createPrimitiveType('void')
 export const IDLBooleanType = createPrimitiveType('boolean')
@@ -441,6 +451,7 @@ export const IDLI32Type = createPrimitiveType('i32')
 export const IDLU32Type = createPrimitiveType('u32')
 export const IDLI64Type = createPrimitiveType('i64')
 export const IDLU64Type = createPrimitiveType('u64')
+export const IDLF16Type = createPrimitiveType('f16')
 export const IDLF32Type = createPrimitiveType('f32')
 export const IDLF64Type = createPrimitiveType('f64')
 export const IDLBigintType = createPrimitiveType("bigint")
@@ -523,7 +534,7 @@ export function createUnionType(types: IDLType[], name?: string): IDLUnionType {
         throw new Error("IDLUnionType should contain at least 2 types")
     return {
         kind: IDLKind.UnionType,
-        name: name ?? "Union_" + types.map(it => forceAsNamedNode(it).name).join("_"),
+        name: name ?? "Union_" + types.map(it => generateSyntheticIdlNodeName(it)).join("_"),
         types: types,
         _idlNodeBrand: innerIdlSymbol,
         _idlTypeBrand: innerIdlSymbol,
@@ -592,7 +603,7 @@ export type IDLInterfaceKind = IDLKind.Interface | IDLKind.Class | IDLKind.Anony
 export function createInterface(
     name: string,
     kind: IDLInterfaceKind,
-    inheritance: IDLType[] = [],
+    inheritance: IDLReferenceType[] = [],
     constructors: IDLConstructor[] = [],
     constants: IDLConstant[] = [],
     properties: IDLProperty[] = [],
@@ -1003,7 +1014,7 @@ export function printInterface(idl: IDLInterface): stringOrNone[] {
         .concat(["};"])
 }
 
-export function getSuperType(idl: IDLInterface): IDLType | undefined {
+export function getSuperType(idl: IDLInterface): IDLReferenceType | undefined {
     const parent = idl.inheritance[0]
     return parent && parent !== IDLTopType ? parent : undefined
 }
@@ -1190,7 +1201,7 @@ export const DebugUtils = {
     },
 }
 
-function forEachFunction(node: IDLNode, cb: (node: IDLFunction) => void): void {
+export function forEachFunction(node: IDLNode, cb: (node: IDLFunction) => void): void {
     switch (node.kind) {
         case IDLKind.Interface:
             if (isType(node)) return // TODO remove this check after IDLType stops mimic IDLInterface
@@ -1262,7 +1273,7 @@ function forEachFunction(node: IDLNode, cb: (node: IDLFunction) => void): void {
     }
 }
 
-function asPromise(type?: IDLType): IDLContainerType | undefined {
+export function asPromise(type?: IDLType): IDLContainerType | undefined {
     if (!type) return
     if (!isContainerType(type)) return
     const container = type as IDLContainerType
@@ -1288,4 +1299,40 @@ export function transformMethodsReturnPromise2Async(entry : IDLEntry) {
             function_.isAsync = true
         }
     })
+}
+
+export interface SignatureTag {index: number, name: string, value: string}
+
+export function fetchSignatureTags(node: IDLSignature): SignatureTag[] {
+    if (!node.extendedAttributes)
+        return []
+    return node.extendedAttributes
+        .filter((ea) => ea.name === IDLExtendedAttributes.DtsTag)
+        .map((ea):SignatureTag => {
+            if (!ea.value)
+                throw new Error('Empty DtsTag is not allowed')
+            let indexNameValue = ea.value.split('|')
+            if (indexNameValue.length === 1) {
+                return {
+                    index: 0, // zero is from the idl.DtsTag specification
+                    name: 'type', // 'type' is from the idl.DtsTag specification
+                    value: indexNameValue[0],
+                }
+            }
+            if (indexNameValue.length !== 3)
+                throw new Error(`Malformed DtsTag: "${ea.value}"`)
+            return {
+                index: Number(indexNameValue[0]),
+                name: indexNameValue[1],
+                value: indexNameValue[2],
+            }
+        })
+        .sort((a, b) => a.index - b.index)
+}
+
+export function mixMethodParametersAndTags(node: IDLSignature) : (IDLParameter | SignatureTag)[] {
+    let mix: (IDLParameter | SignatureTag)[] = node.parameters.slice(0)
+    for (const tag of fetchSignatureTags(node))
+        mix.splice(tag.index, 0, tag)
+    return mix
 }

@@ -22,7 +22,6 @@ import { ImportsCollector } from "../ImportsCollector";
 import { makeSyntheticDeclarationsFiles } from "../idl/IdlSyntheticDeclarations";
 import { Language } from "../../Language";
 import { createParameter, createReferenceType, createUnionType, IDLI32Type, IDLNullType, IDLNumberType, IDLObjectType, IDLPointerType, IDLStringType, IDLType, IDLUint8ArrayType, IDLVoidType, toIDLType } from "../../idl";
-import { collectMaterializedImports } from "../Materialized";
 
 class NativeModuleRecorderVisitor {
     readonly nativeModuleRecorder: LanguageWriter
@@ -44,7 +43,6 @@ class NativeModuleRecorderVisitor {
         for (let [module, {dependencies, declarations}] of makeSyntheticDeclarationsFiles()) {
             declarations.forEach(it => imports.addFeature(it.name!, module))
         }
-        collectMaterializedImports(imports, this.library)
         imports.print(this.nativeModuleRecorder, '')
     }
 
@@ -64,7 +62,7 @@ class NativeModuleRecorderVisitor {
     private printInterface(clazz: PeerClass) {
         this.nativeModuleRecorder.writeInterface(`${clazz.componentName}Interface`, w => {
             for (const method of clazz.methods) {
-                for (const arg of method.argConvertors) {
+                for (const arg of method.argAndOutConvertors) {
                     w.print(`${method.overloadedName}_${arg.param}?: ${w.getNodeName(arg.idlType)}`)
                 }
             }
@@ -77,8 +75,8 @@ class NativeModuleRecorderVisitor {
         clazz.setGenerationContext(`${method.isCallSignature ? "" : method.overloadedName}()`)
         let serializerArgCreated = false
         let args: ({name: string, type: IDLType})[] = []
-        for (let i = 0; i < method.argConvertors.length; ++i) {
-            let it = method.argConvertors[i]
+        for (let i = 0; i < method.argAndOutConvertors.length; ++i) {
+            let it = method.argAndOutConvertors[i]
             if (it.useArray) {
                 if (!serializerArgCreated) {
                     const array = `thisSerializer`
@@ -97,21 +95,21 @@ class NativeModuleRecorderVisitor {
         nativeModuleRecorder.writeMethodImplementation(new Method(name, parameters), (printer) => {
             this.nativeModuleRecorder.writeLines(`let node = this.ptr2object<${interfaceName}Interface>(${parameters.argsNames[0]})`)
             var deserializerCreated = false
-            for (let i = 0; i < method.argConvertors.length; i++) {
-                if (method.argConvertors[i].useArray) {
+            for (let i = 0; i < method.argAndOutConvertors.length; i++) {
+                if (method.argAndOutConvertors[i].useArray) {
                     if (!deserializerCreated) {
                         this.nativeModuleRecorder.writeLines(`const thisDeserializer = new Deserializer(thisArray.buffer, thisLength)`)
                         deserializerCreated = true
                     }
 
-                    const fieldName = `${method.overloadedName}_${method.argConvertors[i].param}`
+                    const fieldName = `${method.overloadedName}_${method.argAndOutConvertors[i].param}`
                     printer.writeStatement(
-                        method.argConvertors[i].convertorDeserialize(`${fieldName}_buf`, `thisDeserializer`, (expr) => {
+                        method.argAndOutConvertors[i].convertorDeserialize(`${fieldName}_buf`, `thisDeserializer`, (expr) => {
                             return printer.makeAssign(`node.${fieldName}`, undefined, expr, false)
                         }, printer)
                     )
                 } else {             
-                    this.nativeModuleRecorder.writeLines(`node.${method.overloadedName}_${method.argConvertors[i].param} = ${parameters.argsNames[i + 1]}`)               
+                    this.nativeModuleRecorder.writeLines(`node.${method.overloadedName}_${method.argAndOutConvertors[i].param} = ${parameters.argsNames[i + 1]}`)               
                 }
             }
         })
@@ -318,7 +316,6 @@ class NativeModuleRecorderVisitor {
 
     printConstructor(writer: LanguageWriter) {
         const [paramType] = this.library.factory.generateCallback(
-            (type) => writer.getNodeName(type),
             [createParameter('type', IDLI32Type)],
             IDLStringType
         )

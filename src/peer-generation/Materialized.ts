@@ -13,7 +13,9 @@
  * limitations under the License.
  */
 
-import { ArgConvertor, RetConvertor } from "./ArgConvertors"
+import * as idl from "../idl"
+import { ArgConvertor } from "./ArgConvertors"
+import { RetConvertor, createVoidRetConvertor } from "./RetConvertors"
 import { Field, Method, MethodModifier, NamedMethodSignature } from "./LanguageWriters"
 import { capitalize } from "../util"
 import { ImportFeature, ImportsCollector } from "./ImportsCollector"
@@ -106,22 +108,11 @@ export function copyMaterializedMethod(method: MaterializedMethod, overrides: {
     return copied
 }
 
-export class SuperElement {
-    constructor(
-        public readonly name: string,
-        public readonly generics?: string[]
-    ) { }
-
-    getSuperType(): string {
-        return `${this.name}${this.generics?.length ? `<${this.generics.join(", ")}>` : ``}`
-    }
-}
-
 export class MaterializedClass implements PeerClassBase {
     constructor(
         public readonly className: string,
         public readonly isInterface: boolean,
-        public readonly superClass: SuperElement | undefined,
+        public readonly superClass: idl.IDLReferenceType | undefined,
         public readonly generics: string[] | undefined,
         public readonly fields: MaterializedField[],
         public readonly ctor: MaterializedMethod,
@@ -129,6 +120,7 @@ export class MaterializedClass implements PeerClassBase {
         public readonly importFeatures: ImportFeature[],
         public readonly methods: MaterializedMethod[],
         public readonly needBeGenerated: boolean = true,
+        public readonly taggedMethods: idl.IDLMethod[] = [],
     ) {
         PeerMethod.markAndGroupOverloads(methods)
     }
@@ -137,6 +129,9 @@ export class MaterializedClass implements PeerClassBase {
         return this.className
     }
 
+    getInternalName(): string {
+        return getInternalClassName(this.className)
+    }
     setGenerationContext(context: string| undefined): void {
        // TODO: set generation context!
     }
@@ -147,17 +142,10 @@ export class MaterializedClass implements PeerClassBase {
 }
 
 export function createDestroyPeerMethod(clazz: MaterializedClass): MaterializedMethod {
-    const destroyPeerReturnType: RetConvertor = {
-        isVoid: true,
-        nativeType: () => PrimitiveType.Void.getText(),
-        interopType: () => PrimitiveType.Void.getText(),
-        macroSuffixPart: () => "V"
-    }
-
     return new MaterializedMethod(
             clazz.className,
             [],
-            destroyPeerReturnType,
+            createVoidRetConvertor(),
             false,
             new Method(
                 'destroyPeer',
@@ -170,8 +158,12 @@ export function createDestroyPeerMethod(clazz: MaterializedClass): MaterializedM
         )
 }
 
-export function collectMaterializedImports(imports: ImportsCollector, library: PeerLibrary, level: string = "") {
-    for (const materialized of library.materializedClasses.keys()) {
-        imports.addFeature(materialized, `${level}Ark${materialized}Materialized`)
+export function getInternalClassName(name: string): string {
+    return `${name}Internal`
+}
+
+export function collectMaterializedImports(imports: ImportsCollector, library: PeerLibrary) {
+    for (const materialized of library.materializedClasses.values()) {
+        imports.addFeature(materialized.getInternalName(), `./Ark${materialized.className}Materialized`)
     }
 }

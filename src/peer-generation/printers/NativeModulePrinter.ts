@@ -14,7 +14,7 @@
  */
 import { nativeModuleDeclaration, nativeModuleEmptyDeclaration } from "../FileGenerators";
 import { FunctionCallExpression, LanguageWriter, Method, MethodModifier, NamedMethodSignature, StringExpression, createLanguageWriter } from "../LanguageWriters";
-import { PeerClassBase } from "../PeerClass";
+import { createConstructPeerMethod, PeerClassBase } from "../PeerClass";
 import { PeerClass } from "../PeerClass";
 import { PeerLibrary } from "../PeerLibrary";
 import { PeerMethod } from "../PeerMethod";
@@ -47,6 +47,8 @@ class NativeModuleVisitor {
     }
 
     protected printPeerMethods(peer: PeerClass) {
+        const constructMethod = createConstructPeerMethod(peer)
+        this.printPeerMethod(peer, constructMethod, this.nativeModule, this.nativeModuleEmpty, constructMethod.method.signature.returnType, this.nativeFunctions)
         peer.methods.forEach(it => this.printPeerMethod(peer, it, this.nativeModule, this.nativeModuleEmpty, undefined, this.nativeFunctions))
     }
 
@@ -66,12 +68,12 @@ class NativeModuleVisitor {
         returnType?: idl.IDLType,
         nativeFunctions?: LanguageWriter
     ) {
-        const component = clazz.generatedName(method.isCallSignature)
+        const component = method.originalParentName // clazz.generatedName(method.isCallSignature)
         clazz.setGenerationContext(`${method.isCallSignature ? "" : method.overloadedName}()`)
         let serializerArgCreated = false
         let args: ({name: string, type: idl.IDLType})[] = []
-        for (let i = 0; i < method.argConvertors.length; ++i) {
-            let it = method.argConvertors[i]
+        for (let i = 0; i < method.argAndOutConvertors.length; ++i) {
+            let it = method.argAndOutConvertors[i]
             if (it.useArray) {
                 if (!serializerArgCreated) {
                     const array = `thisSerializer`
@@ -87,10 +89,8 @@ class NativeModuleVisitor {
         const parameters = NamedMethodSignature.make(returnType ?? idl.IDLVoidType, maybeReceiver.concat(args))
         let name = `_${component}_${method.overloadedName}`
 
-        if (this.library.language === Language.ARKTS) {
-            if (parameters.returnType === idl.IDLThisType) {
-                parameters.returnType = idl.IDLPointerType
-            }
+        if (parameters.returnType === idl.IDLThisType) {
+            parameters.returnType = idl.IDLPointerType
         }
 
         nativeModule.writeNativeMethodDeclaration(name, parameters)
@@ -201,8 +201,8 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
         clazz.setGenerationContext(`${method.isCallSignature ? "" : method.overloadedName}()`)
         let serializerArgCreated = false
         let args: ({name: string, type: idl.IDLType})[] = []
-        for (let i = 0; i < method.argConvertors.length; ++i) {
-            let it = method.argConvertors[i]
+        for (let i = 0; i < method.argAndOutConvertors.length; ++i) {
+            let it = method.argAndOutConvertors[i]
             if (it.useArray) {
                 if (!serializerArgCreated) {
                     const array = `thisSerializer`
@@ -382,7 +382,6 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
     }
 }
 
-
 export function printNativeModule(peerLibrary: PeerLibrary, nativeBridgePath: string): string {
     const lang = peerLibrary.language
     const visitor = (lang == Language.CJ) ? new CJNativeModuleVisitor(peerLibrary) : new NativeModuleVisitor(peerLibrary)
@@ -438,6 +437,7 @@ function getReturnValue(type: idl.IDLType): string {
         case idl.IDLStringType: return `"some string"`
         case idl.IDLAnyType: return `""`
         case idl.IDLObjectType: return "new Object()"
+        case idl.IDLBufferType: return "new ArrayBuffer(8)"
     }
 
     throw new Error(`Unknown return type: ${idl.IDLKind[type.kind]} ${idl.forceAsNamedNode(type).name}`)

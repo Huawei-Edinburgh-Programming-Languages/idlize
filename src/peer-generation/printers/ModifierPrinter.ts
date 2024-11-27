@@ -32,7 +32,7 @@ import { CppLanguageWriter, createLanguageWriter, createTypeNameConvertor, Langu
 import { LibaceInstall } from "../../Install";
 import { IDLBooleanType, IDLFunctionType, IDLStringType, isOptionalType } from "../../idl"
 import { PeerLibrary } from "../PeerLibrary";
-import { PeerClass } from "../PeerClass";
+import { createConstructPeerMethod, PeerClass } from "../PeerClass";
 import { PeerMethod } from "../PeerMethod";
 import { Language } from "../../Language";
 import { createEmptyReferenceResolver, getReferenceResolver } from "../ReferenceResolver";
@@ -57,7 +57,7 @@ export class ModifierVisitor {
                 _.makeReturn(
                     method.retConvertor.isVoid ? undefined : _.makeString(method.dummyReturnValue ?? "0"))))
         _.print(`string out("${method.toStringName}(");`)
-        method.argConvertors.forEach((argConvertor, index) => {
+        method.argAndOutConvertors.forEach((argConvertor, index) => {
             if (index > 0) this.dummy.print(`out.append(", ");`)
             _.print(`WriteToString(&out, ${argConvertor.param});`)
         })
@@ -73,7 +73,7 @@ export class ModifierVisitor {
     printModifierImplFunctionBody(method: PeerMethod, clazz: PeerClass | undefined = undefined) {
         if (!this.isDummy) {
             this.printBodyImplementation(this.real, method, clazz)
-        }       
+        }
         this.printReturnStatement(this.real, method)
     }
 
@@ -91,41 +91,41 @@ export class ModifierVisitor {
         if (apiParameters.at(0)?.includes(PrimitiveType.NativePointer.getText())) {
             this.real.print(`auto frameNode = reinterpret_cast<FrameNode *>(node);`)
             this.real.print(`CHECK_NULL_VOID(frameNode);`)
-            if (method.argConvertors.length === 1 
-                && method.argConvertors.at(0)?.nativeType() === IDLStringType
+            if (method.argAndOutConvertors.length === 1
+                && method.argAndOutConvertors.at(0)?.nativeType() === IDLStringType
             ) {
                 this.real.print(`CHECK_NULL_VOID(${
-                    method.argConvertors.at(0)?.param
+                    method.argAndOutConvertors.at(0)?.param
                 });`)
                 this.real.print(`auto convValue = Converter::Convert<std::string>(*${
-                    method.argConvertors.at(0)?.param
+                    method.argAndOutConvertors.at(0)?.param
                 });`)
-            } else if (method.argConvertors.length === 1 
-                && isOptionalType(method.argConvertors[0].nativeType())
-                && method.argConvertors.at(0)?.isPointerType()) {
-                this.real.print(`//auto convValue = ${method.argConvertors.at(0)?.param} ? ` +
-                    `Converter::OptConvert<type>(*${method.argConvertors.at(0)?.param}) : std::nullopt;`)
-            } else if (method.argConvertors.length === 1 && method.argConvertors.at(0)?.isPointerType()) {
+            } else if (method.argAndOutConvertors.length === 1
+                && isOptionalType(method.argAndOutConvertors[0].nativeType())
+                && method.argAndOutConvertors.at(0)?.isPointerType()) {
+                this.real.print(`//auto convValue = ${method.argAndOutConvertors.at(0)?.param} ? ` +
+                    `Converter::OptConvert<type>(*${method.argAndOutConvertors.at(0)?.param}) : std::nullopt;`)
+            } else if (method.argAndOutConvertors.length === 1 && method.argAndOutConvertors.at(0)?.isPointerType()) {
                 this.real.print(`CHECK_NULL_VOID(${
-                    method.argConvertors.at(0)?.param
+                    method.argAndOutConvertors.at(0)?.param
                 });`)
                 this.real.print(`//auto convValue = Converter::OptConvert<type_name>(*${
-                    method.argConvertors.at(0)?.param
+                    method.argAndOutConvertors.at(0)?.param
                 });`)
-            } else if (method.argConvertors.length === 1 && 
-                method.argConvertors.at(0)?.nativeType() === IDLBooleanType) {
+            } else if (method.argAndOutConvertors.length === 1 &&
+                method.argAndOutConvertors.at(0)?.nativeType() === IDLBooleanType) {
                 this.real.print(`auto convValue = Converter::Convert<bool>(${
-                    method.argConvertors.at(0)?.param
+                    method.argAndOutConvertors.at(0)?.param
                 });`)
-            } else if (method.argConvertors.length === 1 
-                && method.argConvertors.at(0)?.nativeType() === IDLFunctionType) {
+            } else if (method.argAndOutConvertors.length === 1
+                && method.argAndOutConvertors.at(0)?.nativeType() === IDLFunctionType) {
                 this.real.print(`//auto convValue = [frameNode](input values) { code }`)
             } else {
                 this.real.print(`//auto convValue = Converter::Convert<type>(${
-                    method.argConvertors.at(0)?.param
+                    method.argAndOutConvertors.at(0)?.param
                 });`)
                 this.real.print(`//auto convValue = Converter::OptConvert<type>(${
-                    method.argConvertors.at(0)?.param
+                    method.argAndOutConvertors.at(0)?.param
                 }); // for enums`)
             }
             this.real.print(`//${clazz?.componentName}ModelNG::Set${method.implName.replace("Impl", "")}(frameNode, convValue);`)
@@ -204,7 +204,8 @@ export class ModifierVisitor {
     printPeerClassModifiers(clazz: PeerClass) {
         this.printClassProlog(clazz)
         // TODO: move to Object.groupBy when move to nodejs 21
-        const namespaces: Map<string, PeerMethod[]> = groupBy(clazz.methods, it => it.implNamespaceName)
+        const namespaces: Map<string, PeerMethod[]> =
+            groupBy([createConstructPeerMethod(clazz)].concat(clazz.methods), it => it.implNamespaceName)
         Array.from(namespaces.keys()).forEach (namespaceName => {
             this.pushNamespace(namespaceName, false)
             namespaces.get(namespaceName)?.forEach(

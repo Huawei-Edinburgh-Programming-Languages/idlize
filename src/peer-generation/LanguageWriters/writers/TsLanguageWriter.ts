@@ -244,7 +244,8 @@ export class TSLanguageWriter extends LanguageWriter {
     writeFieldDeclaration(name: string, type: idl.IDLType, modifiers: FieldModifier[]|undefined, optional: boolean, initExpr?: LanguageExpression): void {
         const init = initExpr != undefined ? ` = ${initExpr.asString()}` : ``
         let prefix = this.makeFieldModifiersList(modifiers)
-        this.printer.print(`${prefix} ${name}${optional ? "?"  : ""}: ${this.getNodeName(type)}${init}`)
+        if (prefix) prefix += " "
+        this.printer.print(`${prefix}${name}${optional ? "?"  : ""}: ${this.getNodeName(type)}${init}`)
     }
     writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void {
         this.writeDeclaration(name, signature, true, false, modifiers)
@@ -297,7 +298,7 @@ export class TSLanguageWriter extends LanguageWriter {
         const normalizedArgs = signature.args.map((it, i) => 
             idl.isOptionalType(it) && isOptional[i] ? idl.maybeUnwrapOptionalType(it) : it
         )
-        this.printer.print(`${prefix}${name}${typeParams}(${normalizedArgs.map((it, index) => `${signature.argName(index)}${isOptional[index] ? "?" : ""}: ${this.getNodeName(it)}${signature.argDefault(index) ? ' = ' + signature.argDefault(index) : ""}`).join(", ")})${needReturn ? ": " + this.getNodeName(signature.returnType) : ""} ${needBracket ? "{" : ""}`)
+        this.printer.print(`${prefix}${name}${typeParams}(${normalizedArgs.map((it, index) => `${this.escapeKeyword(signature.argName(index))}${isOptional[index] ? "?" : ""}: ${this.getNodeName(it)}${signature.argDefault(index) ? ' = ' + signature.argDefault(index) : ""}`).join(", ")})${needReturn ? ": " + this.getNodeName(signature.returnType) : ""} ${needBracket ? "{" : ""}`)
     }
     makeNull(): LanguageExpression {
         return new StringExpression("undefined")
@@ -380,8 +381,8 @@ export class TSLanguageWriter extends LanguageWriter {
     get supportedFieldModifiers(): FieldModifier[] {
         return [FieldModifier.PUBLIC, FieldModifier.PRIVATE, FieldModifier.PROTECTED, FieldModifier.READONLY, FieldModifier.STATIC]
     }
-    enumFromOrdinal(value: LanguageExpression, enumEntry: idl.IDLEnum): LanguageExpression {
-        return this.makeString(`Object.values(${enumEntry.name})[${value.asString()}]`);
+    enumFromOrdinal(value: LanguageExpression, enumEntry: idl.IDLType): LanguageExpression {
+        return this.makeString(`Object.values(${idl.forceAsNamedNode(enumEntry).name})[${value.asString()}]`);
     }
     ordinalFromEnum(value: LanguageExpression, enumEntry: idl.IDLType): LanguageExpression {
         const enumName = idl.forceAsNamedNode(enumEntry).name
@@ -401,4 +402,12 @@ export class TSLanguageWriter extends LanguageWriter {
     override makeCallIsObject(value: string): LanguageExpression {
         return this.makeString(`${value} instanceof Object`)
     }
+
+    override escapeKeyword(keyword: string): string {
+        return TSKeywords.has(keyword) ? keyword + "_" : keyword
+    }
 }
+
+const TSKeywords = new Set([
+    "namespace"
+])

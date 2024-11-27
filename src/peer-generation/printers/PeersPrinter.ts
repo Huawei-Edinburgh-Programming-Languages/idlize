@@ -29,7 +29,7 @@ import {
     NamedMethodSignature,
     createLanguageWriter
 } from "../LanguageWriters";
-import { collectMaterializedImports, MaterializedMethod } from "../Materialized";
+import { MaterializedMethod } from "../Materialized";
 import { tsCopyrightAndWarning } from "../FileGenerators";
 import { ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from "./lang/Java";
 import { TargetFile } from "./TargetFile";
@@ -124,7 +124,7 @@ class PeerFileVisitor {
             imports.addFeature("createDeserializer", "./peers/Deserializer")
         }
         imports.addFeature("MaterializedBase", "./MaterializedBase")
-        collectMaterializedImports(imports, this.library)
+        // collectMaterializedImports(imports, this.library)
         Array.from(this.library.builderClasses.keys())
             .filter(it => this.library.builderClasses.get(it)?.needBeGenerated)
             .forEach((className) => imports.addFeature(className, `./Ark${className}Builder`))
@@ -407,13 +407,14 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
         method.method.modifiers, method.method.generics
     )
     printer.writeMethodImplementation(peerMethod, (writer) => {
-        let scopes = method.argConvertors.filter(it => it.isScoped)
+        let scopes = method.argAndOutConvertors.filter(it => it.isScoped)
         scopes.forEach(it => {
             writer.pushIndent()
             writer.print(it.scopeStart?.(it.param, printer.language))
         })
         let serializerCreated = false
-        method.argConvertors.forEach((it, index) => {
+        let returnValueFilledThroughOutArg = false
+        method.argAndOutConvertors.forEach((it, index) => {
             if (it.useArray) {
                 if (!serializerCreated) {
                     writer.writeStatement(
@@ -422,13 +423,17 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
                     )
                     serializerCreated = true
                 }
-                it.convertorSerialize(`this`, it.param, writer)
+                if (it.isOut) {
+                    returnValueFilledThroughOutArg = true
+                    it.convertorSerialize(`this`, returnValName, writer)
+                } else
+                    it.convertorSerialize(`this`, it.param, writer)
             }
         })
         // Enable to see serialized data.
         if (dumpSerialized) {
             let arrayNum = 0
-            method.argConvertors.forEach((it, index) => {
+            method.argAndOutConvertors.forEach((it, index) => {
                 if (it.useArray) {
                     writer.writePrintLog(`"${it.param}:", thisSerializer.asArray(), thisSerializer.length())`)
                 }
@@ -439,7 +444,7 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
             params.push(writer.makeString(ptr))
         }
         let serializerPushed = false
-        method.argConvertors.forEach(it => {
+        method.argAndOutConvertors.forEach(it => {
             if (it.useArray) {
                 if (!serializerPushed) {
                     params.push(writer.makeMethodCall(`thisSerializer`, 'asArray', []))
@@ -455,7 +460,7 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
             `_${method.originalParentName}_${method.overloadedName}`,
             params)
 
-        if (returnType != IDLVoidType) {
+        if (!returnValueFilledThroughOutArg && returnType != IDLVoidType) {
             writer.writeStatement(writer.makeAssign(returnValName, undefined, call, true))
         } else {
             writer.writeStatement(writer.makeStatement(call))
@@ -470,7 +475,9 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
         // TODO: refactor
         if (returnType != IDLVoidType) {
             let result: LanguageStatement[] = [writer.makeReturn(writer.makeString(returnValName))]
-            if (returnsThis(method, returnType)) {
+            if (returnValueFilledThroughOutArg) {
+                // keep result
+            } else if (returnsThis(method, returnType)) {
                 result = [writer.makeReturn(writer.makeString("this"))]
             } else if (method instanceof MaterializedMethod && method.peerMethodName !== "ctor") {
                 if (isNamedNode(returnType) && returnType.name === method.originalParentName) {

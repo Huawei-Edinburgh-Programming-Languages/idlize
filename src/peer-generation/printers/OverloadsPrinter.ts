@@ -28,9 +28,10 @@ import { callbackIdByInfo, canProcessCallback, convertIdlToCallback } from "./Ev
 import { PeerMethod } from "../PeerMethod";
 import { PeerLibrary } from "../PeerLibrary";
 import { typeOrUnion } from "../idl/common";
-import { ArgConvertor, UndefinedConvertor, UnionRuntimeTypeChecker } from '../ArgConvertors';
+import { ArgConvertor, UndefinedConvertor } from '../ArgConvertors';
 import { Language } from "../../Language";
 import { ReferenceResolver } from "../ReferenceResolver";
+import { UnionRuntimeTypeChecker } from "../unions";
 
 export function collapseSameNamedMethods(methods: Method[], selectMaxMethodArgs?: number[]): Method {
     if (methods.some(it => it.signature.defaults?.length))
@@ -169,22 +170,13 @@ export class OverloadsPrinter {
             const argName = collapsedMethod.signature.argName(index)
             const castedArgName = `${argName}_casted`
             const castedType = peerMethod.method.signature.args[index]
-            if (this.language == Language.ARKTS
-                && idl.isOptionalType(collapsedMethod.signature.args[index])) {
-                this.printer.writeStatement(
-                    this.printer.makeCondition(this.printer.makeNaryOp("==",
-                            [this.printer.makeString(argName), this.printer.makeString("undefined")]),
-                        this.printer.makeThrowError(`Arg '${argName}' is null`)
-                    )
-                )
-            }
             this.printer.print(`const ${castedArgName} = ${argName} as (${this.printer.getNodeName(castedType)})`)
             return castedArgName
         })
         const isStatic = collapsedMethod.modifiers?.includes(MethodModifier.STATIC)
         const receiver = isStatic
             ? peerMethod.originalParentName
-            : this.isComponent ? `this.peer` : `this`
+            : this.isComponent ? `this.getPeer()` : `this`
         const postfix = this.isComponent ? "Attribute" : "_serialize"
         const methodName = `${peerMethod.overloadedName}${postfix}`
         if ([Language.TS].includes(this.language))

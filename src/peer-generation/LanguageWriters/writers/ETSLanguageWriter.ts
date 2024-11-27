@@ -19,13 +19,14 @@ import {
     LanguageExpression,
     LanguageStatement,
     LanguageWriter,
+    MakeCastOptions,
     Method, MethodCallExpression,
     MethodModifier,
     MethodSignature,
     NamedMethodSignature,
     ObjectArgs
 } from "../LanguageWriter"
-import { TSLambdaExpression, TSLanguageWriter } from "./TsLanguageWriter"
+import { TSCastExpression, TSLambdaExpression, TSLanguageWriter } from "./TsLanguageWriter"
 import { getExtAttribute, IDLEnum, IDLI32Type, IDLThisType, IDLType, IDLVoidType, toIDLType } from '../../../idl'
 import {AggregateConvertor, ArgConvertor, ArrayConvertor, BaseArgConvertor, CustomTypeConvertor, EnumConvertor, InterfaceConvertor, makeInterfaceTypeCheckerCall, RuntimeType} from "../../ArgConvertors"
 import { Language } from "../../../Language"
@@ -51,8 +52,9 @@ export class EtsAssignStatement implements LanguageStatement {
     write(writer: LanguageWriter): void {
         if (this.isDeclared) {
             const typeClause = this.type !== undefined ? `: ${writer.getNodeName(this.type)}` : ''
-            const initValue = this.expression !== undefined ? this.expression : writer.makeUndefined()
-            writer.print(`${this.isConst ? "const" : "let"} ${this.variableName} ${typeClause} = ${initValue.asString()}`)
+            const maybeAssign = this.expression !== undefined ? " = " : ""
+            const initValue = this.expression !== undefined ? this.expression : writer.makeString("")
+            writer.print(`${this.isConst ? "const" : "let"} ${this.variableName} ${typeClause}${maybeAssign}${initValue.asString()}`)
         } else {
             writer.print(`${this.variableName} = ${this.expression.asString()}`)
         }
@@ -162,6 +164,8 @@ export function makeArrayTypeCheckCall(
 ////////////////////////////////////////////////////////////////
 
 export class ETSLanguageWriter extends TSLanguageWriter {
+    override nativeModuleAccessor = "NativeModule"
+
     constructor(printer: IndentedPrinter, resolver:ReferenceResolver) {
         super(printer, resolver, Language.ARKTS)
         this.typeConvertor = new EtsIDLNodeToStringConvertor(this.resolver)
@@ -190,7 +194,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     get supportedModifiers(): MethodModifier[] {
         return [MethodModifier.PUBLIC, MethodModifier.PRIVATE, MethodModifier.NATIVE, MethodModifier.STATIC]
     }
-    nativeReceiver(): string { return 'NativeModule' }
+    nativeReceiver(): string { return this.nativeModuleAccessor }
     makeUnsafeCast(convertor: ArgConvertor, param: string): string {
         if ((convertor instanceof EnumConvertor) && !param.endsWith(".value")) {
             return `(${param} as ${this.typeConvertor.convert(convertor.enumEntry)}).${convertor.isStringEnum ? 'ordinal' : 'value'}`
@@ -206,11 +210,12 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         }
         return this.makeString(`${value} as ${type}`)
     }
-    enumFromOrdinal(value: LanguageExpression, enumEntry: idl.IDLEnum): LanguageExpression {
+    enumFromOrdinal(value: LanguageExpression, enumEntry: idl.IDLType): LanguageExpression {
+        const enumName = this.getNodeName(enumEntry)
         if (value instanceof MethodCallExpression) {
-            return this.makeString(`${enumEntry.name}.ofOrdinal(${value.asString()})`)
+            return this.makeString(`${enumName}.ofOrdinal(${value.asString()})`)
         }
-        return this.makeString(`Object.values(${enumEntry.name})[${value.asString()}]`);
+        return this.makeString(`Object.values(${enumName})[${value.asString()}]`);
     }
     ordinalFromEnum(value: LanguageExpression, _: idl.IDLType): LanguageExpression {
         return this.makeString(`${value.asString()}.ordinal`);
@@ -319,5 +324,8 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     }
     override makeSerializerConstructorSignature(): NamedMethodSignature | undefined {
         return new NamedMethodSignature(IDLVoidType, [], [])
+    }
+    makeCast(value: LanguageExpression, type: idl.IDLType, options?: MakeCastOptions): LanguageExpression {
+        return new TSCastExpression(value, `${this.getNodeName(type)}`, options?.unsafe ?? false)
     }
 }

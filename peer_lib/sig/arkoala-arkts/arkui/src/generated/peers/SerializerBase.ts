@@ -14,7 +14,6 @@
  */
 import { float32, float64, int8, int32, int64 } from "@koalaui/common"
 import { pointer, KUint8ArrayPtr, KBuffer, ResourceId, ResourceHolder } from "@koalaui/interop"
-import { CallbackKind } from "./CallbackKind"
 import { Length } from "../ArkUnitsInterfaces"
 import { Resource } from "../ArkResourceInterfaces"
 import { NativeModule } from "#components"
@@ -160,6 +159,32 @@ export class SerializerBase {
         this.writePointer(call)
         return resourceId
     }
+    holdAndWriteCallbackForPromiseVoid(hold: pointer = 0, release: pointer = 0, call: pointer = 0): [Promise<void>, ResourceId] {
+        let resourceId: ResourceId
+        const promise = new Promise<void>((resolve: (value: PromiseLike<void>) => void, reject: (err: Object|null|undefined) => void) => {
+            const callback = (err: string[]|undefined) => {
+                if (err !== undefined)
+                    reject(err!)
+                else
+                    resolve(Promise.resolve())
+            }
+            resourceId = this.holdAndWriteCallback(callback, hold, release, call)
+        })
+        return [promise, resourceId]
+    }
+    holdAndWriteCallbackForPromise<T>(hold: pointer = 0, release: pointer = 0, call: pointer = 0): [Promise<T>, ResourceId] {
+        let resourceId: ResourceId
+        const promise = new Promise<T>((resolve: (value: T|PromiseLike<T>) => void, reject: (err: Object|null|undefined) => void) => {
+            const callback = (value: T|undefined, err: string[]|undefined) => {
+                if (err !== undefined)
+                    reject(err!)
+                else
+                    resolve(value!)
+            }
+            resourceId = this.holdAndWriteCallback(callback, hold, release, call)
+        })
+        return [promise, resourceId]
+    }
     writeCallbackResource(resource: CallbackResource) {
         this.writeInt32(resource.resourceId)
         this.writePointer(resource.hold)
@@ -286,10 +311,8 @@ export class SerializerBase {
         }
     }
     //TODO: Needs to be implemented
-    writeArrayBuffer(value: ArrayBuffer) {
-    }
-    writeUint8ClampedArray(value: Uint8ClampedArray) {
-    }
-    writeUint8Array(value: Uint8Array) {
+    writeBuffer(value: ArrayBuffer) {
+        this.writePointer(42)
+        this.writeInt64(value.byteLength as int64)
     }
 }

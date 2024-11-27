@@ -48,7 +48,6 @@ import { Language } from '../../Language'
 import { ETSLanguageWriter } from '../LanguageWriters/writers/ETSLanguageWriter'
 import { collectProperties } from './StructPrinter'
 import { CustomPrintVisitor } from "../../from-idl/DtsPrinter"
-import { stubIsTypeCallback } from '../ArgConvertors'
 import { escapeKeyword, IDLType } from "../../idl";
 
 interface InterfacesVisitor {
@@ -163,16 +162,11 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
             const typeConvertor = this.createDeclarationConvertor(writer)
             file.declarations.forEach(it => convertDeclaration(typeConvertor, it))
             file.enums.forEach(it => {
-                it.name = this.enumName(it)
                 writer.writeStatement(writer.makeEnumEntity(it, true))
             })
             this.printAssignEnumsToGlobalScope(writer, file)
             this.interfaces.set(new TargetFile(this.generateFileBasename(file.originalFilename)), writer)
         }
-    }
-
-    protected enumName(enumEntry: idl.IDLEnum): string {
-        return enumEntry.name
     }
 
     protected createDeclarationConvertor(writer: LanguageWriter): DeclarationConvertor<void> {
@@ -440,20 +434,7 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
     convertTypedef(node: idl.IDLTypedef) {
         const type = this.typeNameConvertor.getNodeName(node.type)
         const typeParams = this.printTypeParameters(node.typeParameters)
-        // TODO: needs to be implemented correctly on the idl side
-        // if (node.name === "Resource") {
-        //     this.convertInterface(idl.createInterface(node.name,
-        //         idl.IDLKind.Interface,
-        //         [], [], [], [
-        //             idl.createProperty("bundleName", idl.createReferenceType("KStringPtr")),
-        //             idl.createProperty("moduleName", idl.createReferenceType("KStringPtr")),
-        //             idl.createProperty("params", idl.createReferenceType("Array<object>"), false, false, true),
-        //             idl.createProperty("id", idl.createReferenceType("number")),
-        //             idl.createProperty("type", idl.createReferenceType("number"), false, false, true),
-        //         ], [], []))
-        // } else {
-        // }
-        this.writer.print(`export declare type ${node.name}${typeParams} = ${type};`)
+        this.writer.print(`export type ${node.name}${typeParams} = ${type};`)
     }
 
     convertCallback(node: idl.IDLCallback) {
@@ -535,7 +516,9 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
 
     private printProperty(prop: idl.IDLProperty): stringOrNone[] {
         const staticMod = prop.isStatic ? "static " : ""
-        const readonlyMod = prop.isReadonly ? "readonly " : ""
+        // TODO stub until issue 20764 is fixed
+        // const readonlyMod = prop.isReadonly ? "readonly " : ""
+        const readonlyMod = ""
         return [
             ...this.printExtendedAttributes(prop),
             indentedBy(`${staticMod}${readonlyMod}${this.printPropNameWithType(prop)};`, 1)
@@ -568,7 +551,7 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
     }
 
     private printPropNameWithType(prop: idl.IDLProperty): string {
-        const isOptional = prop.isOptional || stubIsTypeCallback(this.peerLibrary, prop.type)
+        const isOptional = prop.isOptional
         return `${prop.name}${isOptional ? "?" : ""}: ${this.convertType(prop.type)}`
     }
 
@@ -600,7 +583,7 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
                           returnType: idl.IDLType | undefined): string {
         const paramsType = this.printParameters(parameters)
         const retType = this.convertType(returnType !== undefined ? returnType : idl.IDLVoidType)
-        return `declare type ${node.name}${this.printTypeParameters(node.typeParameters)} = (${paramsType}) => ${retType};`
+        return `type ${node.name}${this.printTypeParameters(node.typeParameters)} = (${paramsType}) => ${retType};`
     }
 
     private isCallback(node: idl.IDLInterface) {
@@ -613,7 +596,7 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
 
     private printTuple(tuple: idl.IDLInterface) {
         const seenFields = new Set<string>()
-        return ([`declare type ${this.printInterfaceName(tuple)} = [`] as stringOrNone[])
+        return ([`type ${this.printInterfaceName(tuple)} = [`] as stringOrNone[])
             .concat(tuple.properties
                 .map(it => this.iDLTypedEntryPrinter(it, it => {
                     //TODO: use ETSConvertor.processTupleType
@@ -643,11 +626,6 @@ class ArkTSInterfacesVisitor extends TSInterfacesVisitor {
     protected printAssignEnumsToGlobalScope(writer_: LanguageWriter, peerFile_: PeerFile) {
         // Not supported
     }
-
-    // override enumName(enumEntry: idl.IDLEnum): string {
-    //     const namespace = idl.getExtAttribute(enumEntry, IDLExtendedAttributes.Namespace) ?? ""
-    //     return `${namespace}${enumEntry.name}`
-    // }
 
     protected createDeclarationConvertor(writer: LanguageWriter): DeclarationConvertor<void> {
         return new ArkTSDeclConvertor(writer, this.peerLibrary)

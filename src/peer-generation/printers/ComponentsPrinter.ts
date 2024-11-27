@@ -21,12 +21,11 @@ import { componentToPeerClass } from "./PeersPrinter";
 import { collapseSameNamedMethods, groupOverloads, OverloadsPrinter } from "./OverloadsPrinter";
 import {
     createLanguageWriter,
-    FieldModifier,
     LanguageWriter,
     Method,
     MethodModifier,
     MethodSignature,
-    NamedMethodSignature
+    NamedMethodSignature,
 } from "../LanguageWriters";
 import { tsCopyrightAndWarning } from "../FileGenerators";
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
@@ -42,7 +41,6 @@ import { Language } from "../../Language";
 import { IDLVoidType, isOptionalType, toIDLType } from "../../idl";
 import { createEmptyReferenceResolver, getReferenceResolver } from "../ReferenceResolver";
 import { convertIdlToCallback } from "./EventsPrinter";
-import { collectMaterializedImports } from "../Materialized";
 
 export function generateArkComponentName(component: string) {
     return `Ark${component}Component`
@@ -115,8 +113,6 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
             }
         })
 
-        collectMaterializedImports(imports, this.library)
-
         this.file.importFeatures.forEach(it => imports.addFeature(it.feature, it.module))
         imports.print(this.printer, removeExt(this.targetBasename))
     }
@@ -137,7 +133,20 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
 
         this.printer.print(`/** @memo:stable */`)
         this.printer.writeClass(componentClassName, (writer) => {
-            writer.writeFieldDeclaration('peer', toIDLType(peerClassName), [FieldModifier.PROTECTED], true)
+            writer.writeMethodImplementation(
+                new Method('getPeer',
+                    new MethodSignature(toIDLType(peerClassName), []
+                ), [MethodModifier.PROTECTED], []),
+                writer => writer.writeStatement(
+                    writer.makeReturn(
+                        writer.makeCast(
+                            writer.makeFieldAccess("this", "peer"),
+                            toIDLType(peerClassName),
+                            {optional: true}
+                        )
+                    )
+                )
+            )
             const filteredMethods = (peer.methods as any[]).filter(it =>
                 !PeerGeneratorConfig.ignoreMethod(it.overloadedName, this.language))
             for (const grouped of groupOverloads(filteredMethods))

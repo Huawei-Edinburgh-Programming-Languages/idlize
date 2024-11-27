@@ -23,14 +23,14 @@ import {
 } from "./webidl2-utils"
 import { toString } from "./toString"
 import * as idl from "../idl"
-import { isDefined, stringOrNone, typeName } from "../util"
-import { createInterface } from "readline"
+import { isDefined, stringOrNone, warn } from "../util"
+import { generateSyntheticUnionName } from "../IDLVisitor"
 
 const syntheticTypes = new Map<string, idl.IDLEntry>()
 
 export function addSyntheticType(name: string, type: idl.IDLEntry) {
     if (syntheticTypes.has(name))
-        console.log(`WARNING: duplicate synthetic type name "${name}"`) ///throw?
+        warn(`duplicate synthetic type name "${name}"`) ///throw?
     syntheticTypes.set(name, type)
 } // check
 
@@ -165,9 +165,11 @@ function toIDLType(file: string, type: webidl2.IDLTypeDescription | string, extA
         )
     }
     if (isUnionTypeDescription(type)) {
-        return idl.createUnionType(type.idlType
+        const types = type.idlType
             .map(it => toIDLType(file, it))
-            .filter(isDefined))
+            .filter(isDefined)
+        const name = generateSyntheticUnionName(types)
+        return idl.createUnionType(types, name)
     }
     if (isSingleTypeDescription(type)) {
         switch (type.idlType) {
@@ -191,6 +193,7 @@ function toIDLType(file: string, type: webidl2.IDLTypeDescription | string, extA
             case idl.IDLF32Type.name: return idl.IDLF32Type
             case idl.IDLF64Type.name: return idl.IDLF64Type
             case idl.IDLPointerType.name: return idl.IDLPointerType
+            case idl.IDLBufferType.name: return idl.IDLBufferType
 
         }
         const combinedExtAttrs = (type.extAttrs ?? []).concat(extAttrs ?? [])

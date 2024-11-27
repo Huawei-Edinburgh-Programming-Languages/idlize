@@ -17,20 +17,27 @@ import { Language } from "../../Language"
 import { cStyleCopyright, makeIncludeGuardDefine } from "../FileGenerators"
 import { ImportsCollector } from "../ImportsCollector"
 import { CppLanguageWriter, createLanguageWriter, LanguageWriter, TSLanguageWriter } from "../LanguageWriters"
+import { ETSLanguageWriter } from "../LanguageWriters/writers/ETSLanguageWriter"
 import { ReferenceResolver } from "../ReferenceResolver"
 
 
 export abstract class SourceFile {
     public readonly content: LanguageWriter
 
-    public static make(name: string, language: Language, resolver: ReferenceResolver) {
+    public static make(name: string, language: Language, resolver: ReferenceResolver): SourceFile {
         if (language === Language.CPP) {
             return new CppSourceFile(name, resolver)
         } else if (language === Language.TS) {
             return new TsSourceFile(name, resolver)
+        } else if (language === Language.ARKTS) {
+            return new ArkTSSourceFile(name, resolver)
         } else {
             return new GenericSourceFile(name, language, resolver)
         }
+    }
+
+    public static makeSameAs<T extends SourceFile>(file: T): T {
+        return SourceFile.make(file.name, file.language, file.resolver) as T
     }
 
     constructor (
@@ -115,14 +122,10 @@ export class CppSourceFile extends SourceFile {
     }
 }
 
-export class TsSourceFile extends SourceFile {
+abstract class TsLikeSourceFile extends SourceFile {
     declare public readonly content: TSLanguageWriter
 
     public readonly imports: ImportsCollector = new ImportsCollector()
-
-    constructor(name: string, resolver: ReferenceResolver) {
-        super(name, Language.TS, resolver)
-    }
 
     protected onMerge(file: this): void {
         this.imports.merge(file.imports)
@@ -134,7 +137,7 @@ export class TsSourceFile extends SourceFile {
     }
 
     public printToString(): string {
-        let fileWriter = createLanguageWriter(Language.TS, this.resolver) as TSLanguageWriter
+        let fileWriter = createLanguageWriter(this.language, this.resolver) as TSLanguageWriter
         fileWriter.print(cStyleCopyright)
         this.printImports(fileWriter)
         fileWriter.print("")
@@ -143,8 +146,34 @@ export class TsSourceFile extends SourceFile {
     }
     
     public printImports(writer: LanguageWriter): void {
-        if (!(writer instanceof TSLanguageWriter)) throw new TypeError("illegal language writer")
+        if (!this.supportsWriter(writer)) throw new TypeError("illegal language writer")
         this.imports.print(writer, this.moduleName)
+    }
+
+    protected abstract supportsWriter(writer: LanguageWriter): boolean
+}
+
+export class TsSourceFile extends TsLikeSourceFile {
+    declare public readonly content: TSLanguageWriter
+
+    constructor(name: string, resolver: ReferenceResolver) {
+        super(name, Language.TS, resolver)
+    }
+
+    protected override supportsWriter(writer: LanguageWriter) {
+        return writer instanceof TSLanguageWriter
+    }
+}
+
+export class ArkTSSourceFile extends TsLikeSourceFile {
+    declare public readonly content: ETSLanguageWriter
+
+    constructor(name: string, resolver: ReferenceResolver) {
+        super(name, Language.ARKTS, resolver)
+    }
+
+    protected override supportsWriter(writer: LanguageWriter) {
+        return writer instanceof ETSLanguageWriter
     }
 }
 

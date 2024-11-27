@@ -95,8 +95,8 @@ export class InteropConverter implements NodeConvertor<ConvertResult> {
         }
         throw new Error(`Unmapped container type ${idl.DebugUtils.debugPrintType(type)}`)
     }
-    convertImport(_type: idl.IDLReferenceType, _: string): ConvertResult {
-        throw new Error("Method not implemented.")
+    convertImport(type: idl.IDLReferenceType, _: string): ConvertResult {
+        return this.make(idl.IDLCustomObjectType.name)
     }
     convertTypeReference(type: idl.IDLReferenceType): ConvertResult {
         const refName = type.name
@@ -141,11 +141,12 @@ export class InteropConverter implements NodeConvertor<ConvertResult> {
             case idl.IDLUnknownType:
             case idl.IDLCustomObjectType:
             case idl.IDLAnyType: return this.make(`CustomObject`)
+            case idl.IDLNullType: return this.make(`Null`)
             case idl.IDLUndefinedType: return this.make(`Undefined`)
             case idl.IDLLengthType: return this.make(`Length`)
             case idl.IDLFunctionType: return this.make(`Function`)
             case idl.IDLDate: return this.make(`Date`)
-            case idl.IDLBufferType: this.make('void*', true)
+            case idl.IDLBufferType: return this.make('Buffer')
         }
         throw new Error(`Unmapped primitive type ${idl.DebugUtils.debugPrintType(type)}`)
     }

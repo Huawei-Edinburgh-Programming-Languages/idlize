@@ -14,7 +14,7 @@
  */
 
 import { capitalize, dropSuffix, isDefined } from "../../util";
-import { ArgConvertor, RetConvertor } from "../ArgConvertors";
+import { ArgConvertor } from "../ArgConvertors";
 import { PrimitiveType } from "../ArkPrimitiveType"
 import { bridgeCcCustomDeclaration, bridgeCcGeneratedDeclaration } from "../FileGenerators";
 import { createLanguageWriter, createTypeNameConvertor, ExpressionStatement, LanguageWriter } from "../LanguageWriters";
@@ -23,6 +23,7 @@ import { PeerMethod } from "../PeerMethod";
 import { Language } from "../../Language";
 import { forceAsNamedNode, IDLBooleanType, IDLNumberType } from "../../idl";
 import { getReferenceResolver } from "../ReferenceResolver";
+import { createConstructPeerMethod } from "../PeerClass";
 
 class BridgeCcVisitor {
     readonly generatedApi = createLanguageWriter(Language.CPP, this.library)
@@ -59,14 +60,14 @@ class BridgeCcVisitor {
 
     protected printAPICall(method: PeerMethod, modifierName?: string) {
         const hasReceiver = method.hasReceiver()
-        const argConvertors = method.argConvertors
+        const argAndOutConvertors = method.argAndOutConvertors
         const isVoid = method.retConvertor.isVoid
         const modifier = this.generateApiCall(method, modifierName)
         const peerMethod = this.getPeerMethodName(method)
         const receiver = hasReceiver ? [this.getReceiverArgName()] : []
         // TODO: how do we know the real amount of arguments of the API functions?
         // Do they always match in TS and in C one to one?
-        const args = receiver.concat(argConvertors.map(it => this.generateApiArgument(it))).join(", ")
+        const args = receiver.concat(argAndOutConvertors.map(it => this.generateApiArgument(it))).join(", ")
         const apiCall = this.getApiCall(method)
         const field = this.getApiCallResultField(method)
         const call = `${isVoid ? "" : "return "}${apiCall}->${modifier}->${peerMethod}(${args})${field};`
@@ -98,7 +99,7 @@ class BridgeCcVisitor {
             this.printReceiverCastCall(method)
         }
         let deserializerCreated = false
-        method.argConvertors.forEach(it => {
+        method.argAndOutConvertors.forEach(it => {
             if (it.useArray) {
                 if (!deserializerCreated) {
                     this.generatedApi.print(`Deserializer thisDeserializer(thisArray, thisLength);`)
@@ -125,8 +126,8 @@ class BridgeCcVisitor {
         this.generatedApi.print('std::string _tmp;')
         this.generatedApi.print('static int _num = 0;')
         let varNames : string[] = new Array<string>()
-        for (let i = 0; i < method.argConvertors.length; ++i) {
-            let it = method.argConvertors[i]
+        for (let i = 0; i < method.argAndOutConvertors.length; ++i) {
+            let it = method.argAndOutConvertors[i]
             let name = this.generateApiArgument(it) // it.param + '_value'
             this.generatedApi.print(`_tmp = "", WriteToString(&_tmp, ${name});`)
             varNames.push(`var${BridgeCcVisitor.varCnt}`)
@@ -139,10 +140,10 @@ class BridgeCcVisitor {
         if (method.hasReceiver()) {
             this.generatedApi.print(`_logData.append("(${PrimitiveType.NativePointer})");`)
             this.generatedApi.print(`_logData.append("peer" + std::to_string((uintptr_t)thisPtr));`);
-            if (method.argConvertors.length > 0)
+            if (method.argAndOutConvertors.length > 0)
                 this.generatedApi.print(`_logData.append(", ");`)
         }
-        method.argConvertors.forEach((it, index) => {
+        method.argAndOutConvertors.forEach((it, index) => {
             const type = it.nativeType()
             if ('name' in type && type.name === "Number"
                 && (it.idlType === IDLNumberType || it.idlType === IDLBooleanType)) {
@@ -150,7 +151,7 @@ class BridgeCcVisitor {
             } else {
                 this.generatedApi.print(`_logData.append("&${varNames[index]}_" + std::to_string(_num));`)
             }
-            if (index < method.argConvertors.length - 1)
+            if (index < method.argAndOutConvertors.length - 1)
                 this.generatedApi.print(`_logData.append(", ");`)
         })
         this.generatedApi.print("_num += 1;")
@@ -160,11 +161,11 @@ class BridgeCcVisitor {
         this.generatedApi.print(`}`)
     }
 
-    private generateCParameterTypes(argConvertors: ArgConvertor[], hasReceiver: boolean): string[] {
+    private generateCParameterTypes(argAndOutConvertors: ArgConvertor[], hasReceiver: boolean): string[] {
         const receiver = hasReceiver ? [PrimitiveType.NativePointer.getText()] : []
         let ptrCreated = false;
-        for (let i = 0; i < argConvertors.length; ++i) {
-            let it = argConvertors[i]
+        for (let i = 0; i < argAndOutConvertors.length; ++i) {
+            let it = argAndOutConvertors[i]
             if (it.useArray) {
                 if (!ptrCreated) {
                     receiver.push(`uint8_t*, int32_t`)
@@ -180,7 +181,7 @@ class BridgeCcVisitor {
     private generateCMacroSuffix(method: PeerMethod): string {
         let counter = method.hasReceiver() ? 1 : 0
         let arrayAdded = false
-        method.argConvertors.forEach(it => {
+        method.argAndOutConvertors.forEach(it => {
             if (it.useArray) {
                 if (!arrayAdded) {
                     counter += 2
@@ -190,14 +191,14 @@ class BridgeCcVisitor {
                 counter += 1
             }
         })
-        return `${method.retConvertor.macroSuffixPart()}${counter}`
+        return `${method.retConvertor.isVoid ? 'V' : ''}${counter}`
     }
 
-    private generateCParameters(method: PeerMethod, argConvertors: ArgConvertor[]): string[] {
+    private generateCParameters(method: PeerMethod, argAndOutConvertors: ArgConvertor[]): string[] {
         let maybeReceiver = method.hasReceiver() ? [`${PrimitiveType.NativePointer.getText()} thisPtr`] : []
         let ptrCreated = false;
-        for (let i = 0; i < argConvertors.length; ++i) {
-            let it = argConvertors[i]
+        for (let i = 0; i < argAndOutConvertors.length; ++i) {
+            let it = argAndOutConvertors[i]
             if (it.useArray) {
                 if (!ptrCreated) {
                     maybeReceiver.push(`uint8_t* thisArray, int32_t thisLength`)
@@ -221,17 +222,17 @@ class BridgeCcVisitor {
 
     private printMethod(method: PeerMethod, modifierName?: string) {
         const retConvertor = method.retConvertor
-        const argConvertors = method.argConvertors
+        const argAndOutConvertors = method.argAndOutConvertors
 
         let cName = `${method.originalParentName}_${method.overloadedName}`
-        let retValue: string | undefined = this.getRetValue(method, retConvertor)
-        this.generatedApi.print(`${retValue} impl_${cName}(${this.generateCParameters(method, argConvertors).join(", ")}) {`)
+        let retValue: string | undefined = retConvertor.interopType
+        this.generatedApi.print(`${retValue} impl_${cName}(${this.generateCParameters(method, argAndOutConvertors).join(", ")}) {`)
         this.generatedApi.pushIndent()
         this.printNativeBody(method, modifierName)
         this.generatedApi.popIndent()
         this.generatedApi.print(`}`)
         retValue = retConvertor.isVoid ? undefined : retValue
-        let macroArgs = [cName, retValue].concat(this.generateCParameterTypes(argConvertors, method.hasReceiver()))
+        let macroArgs = [cName, retValue].concat(this.generateCParameterTypes(argAndOutConvertors, method.hasReceiver()))
             .filter(isDefined)
             .join(", ")
         const suffix = this.generateCMacroSuffix(method)
@@ -239,13 +240,7 @@ class BridgeCcVisitor {
         this.generatedApi.print(` `)
     }
 
-    protected getRetValue(method: PeerMethod, retConvertor: RetConvertor): string | undefined {
-        return retConvertor.interopType
-            ? retConvertor.interopType()
-            : retConvertor.nativeType();
-    }
-
-    /* 
+    /*
     printCustomApiMethod(c: CustomAPI, m: Method) {
         const sig = m.signature as NamedMethodSignature
         const capitalizedName = capitalize(m.name)
@@ -283,7 +278,7 @@ class BridgeCcVisitor {
     print(): void {
         for (const file of this.library.files) {
             for (const peer of file.peersToGenerate.values()) {
-                for (const method of peer.methods) {
+                for (const method of [createConstructPeerMethod(peer)].concat(peer.methods)) {
                     this.printMethod(method, peer.componentName)
                 }
             }
@@ -296,7 +291,7 @@ class BridgeCcVisitor {
             }
         }
 
-        /* 
+        /*
         this.customApi.print("\n// custom API methods\n")
         for(const customApi of CUSTOM_API) {
             for(const method of customApi.methods) {
@@ -342,7 +337,7 @@ class OhosBridgeCcVisitor extends BridgeCcVisitor {
             const modifier = this.generateApiCall(method, modifierName)
             const peerMethod = this.getPeerMethodName(method)
             const apiCall = this.getApiCall(method)
-            const call = `return (${PrimitiveType.NativePointer}) &${apiCall}->${modifier}->${peerMethod};`
+            const call = `return (${PrimitiveType.NativePointer}) ${apiCall}->${modifier}->${peerMethod};`
             this.generatedApi.print(call)
         } else {
             super.printAPICall(method, modifierName)
@@ -356,7 +351,7 @@ class OhosBridgeCcVisitor extends BridgeCcVisitor {
         } else {
             return super.getApiCallResultField(method)
         }
-        
+
     }
 }
 

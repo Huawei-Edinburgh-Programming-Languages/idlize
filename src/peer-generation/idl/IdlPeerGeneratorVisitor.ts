@@ -17,7 +17,6 @@ import * as idl from "../../idl"
 import {
     getExtAttribute,
     IDLExtendedAttributes,
-    IDLNode,
     IDLReferenceType,
     IDLType,
     maybeOptional
@@ -30,20 +29,21 @@ import {
     renameClassToMaterialized,
     renameDtsToInterfaces,
     serializerBaseMethods,
-    throwException
+    throwException,
+    warn,
 } from "../../util"
 import { GenericVisitor } from "../../options"
-import { ArgConvertor, RetConvertor } from "../ArgConvertors"
+import { ArgConvertor } from "../ArgConvertors"
+import { createRegularRetConvertor, createVoidRetConvertor, createRetConvertor } from "../RetConvertors"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { PeerClass } from "../PeerClass"
 import { PeerMethod } from "../PeerMethod"
 import { PeerFile } from "../PeerFile"
 import { PeerLibrary } from "../PeerLibrary"
-import { MaterializedClass, MaterializedField, MaterializedMethod, SuperElement } from "../Materialized"
+import { MaterializedClass, MaterializedField, MaterializedMethod } from "../Materialized"
 import { createTypeNameConvertor, Field, FieldModifier, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters";
 import { convertDeclaration, IdlNameConvertor } from "../LanguageWriters/nameConvertor";
 import {
-    addSyntheticDeclarationDependency,
     isSyntheticDeclaration,
     makeSyntheticDeclCompletely,
     makeSyntheticTypeAliasDeclaration,
@@ -188,16 +188,6 @@ function generateArgConvertor(library: PeerLibrary, param: idl.IDLParameter): Ar
     return library.typeConvertor(param.name, param.type, param.isOptional)
 }
 
-function generateRetConvertor(type?: idl.IDLType): RetConvertor {
-    let nativeType = type ? mapCInteropRetType(type) : "void"
-    let isVoid = nativeType == "void"
-    return {
-        isVoid: isVoid,
-        nativeType: () => nativeType,
-        macroSuffixPart: () => isVoid ? "V" : ""
-    }
-}
-
 // TODO convert to convertor ;)
 function mapCInteropRetType(type: idl.IDLType): string {
     // probably wrong
@@ -206,6 +196,17 @@ function mapCInteropRetType(type: idl.IDLType): string {
     }
     if (idl.isPrimitiveType(type)) {
         switch (type) {
+            case idl.IDLI8Type: return PrimitiveType.Int32.getText()
+            case idl.IDLU8Type: return PrimitiveType.Int32.getText()
+            case idl.IDLI16Type: return PrimitiveType.Int32.getText()
+            case idl.IDLU16Type: return PrimitiveType.Int32.getText()
+            case idl.IDLI32Type: return PrimitiveType.Int32.getText()
+            case idl.IDLU32Type: return PrimitiveType.Int32.getText()
+            case idl.IDLI64Type: return PrimitiveType.Int32.getText()
+            case idl.IDLU64Type: return PrimitiveType.Int32.getText()
+            case idl.IDLF16Type: return PrimitiveType.Int32.getText()
+            case idl.IDLF32Type: return PrimitiveType.Int32.getText()
+            case idl.IDLF64Type: return PrimitiveType.Int32.getText()
             case idl.IDLBooleanType: return PrimitiveType.Boolean.getText()
             case idl.IDLNumberType: return PrimitiveType.Int32.getText()
             case idl.IDLStringType:
@@ -214,6 +215,7 @@ function mapCInteropRetType(type: idl.IDLType): string {
             case idl.IDLThisType:
             case idl.IDLUndefinedType:
             case idl.IDLUnknownType:
+            case idl.IDLBufferType:
                 return "void"
         }
     }
@@ -238,7 +240,6 @@ function mapCInteropRetType(type: idl.IDLType): string {
     }
     throw new Error(`mapCInteropType failed for ${idl.IDLKind[type.kind]}`)
 }
-
 
 class ImportsAggregateCollector extends DependenciesCollector {
     constructor(
@@ -298,26 +299,6 @@ class TSDependenciesCollector extends ImportsAggregateCollector {
 class ArkTSImportsAggregateCollector extends ImportsAggregateCollector {
     constructor(peerLibrary: PeerLibrary) {
         super(peerLibrary, true)
-    }
-
-    override convertImport(type: IDLReferenceType, importClause: string): IDLNode[] {
-        const generatedName = this.peerLibrary.mapType(type)
-        const ref = idl.createReferenceType(idl.forceAsNamedNode(type).name)
-        const resolvedType = this.peerLibrary.resolveTypeReference(ref)
-        if (resolvedType !== undefined && !idl.isTypedef(resolvedType)) {
-            const syntheticDeclaration = makeSyntheticTypeAliasDeclaration(
-                'SyntheticDeclarations', generatedName, ref)
-            if (!this.peerLibrary.importTypesStubToSource.has(generatedName)) {
-                this.peerLibrary.importTypesStubToSource.set(generatedName, type.name)
-            }
-            addSyntheticDeclarationDependency(syntheticDeclaration,
-                convertDeclToFeature(this.peerLibrary, resolvedType))
-            return [
-                ...super.convertImport(type, importClause),
-                syntheticDeclaration
-            ]
-        }
-        return super.convertImport(type, importClause);
     }
 
     override convertContainer(type: idl.IDLContainerType): idl.IDLNode[] {
@@ -711,7 +692,7 @@ class PeersGenerator {
         return new PeerMethod(
             originalParentName,
             [argConvertor],
-            generateRetConvertor(idl.IDLVoidType),
+            createVoidRetConvertor(),
             false,
             new Method(prop.name, signature, []))
     }
@@ -735,7 +716,7 @@ class PeersGenerator {
         return new PeerMethod(
             originalParentName,
             argConvertors,
-            generateRetConvertor(isThisRet ? idl.IDLVoidType : retType),
+            createRetConvertor(this.library, isThisRet ? idl.IDLVoidType : retType, mapCInteropRetType, argConvertors.map(it => it.param)),
             isCallSignature,
             new Method(methodName!, signature, method.isStatic ? [MethodModifier.STATIC] : []))
     }
@@ -753,7 +734,7 @@ class PeersGenerator {
     private processOptionAttribute(seenAttributes: Set<string>, property: idl.IDLProperty, peer: PeerClass) {
         const propName = property.name
         if (seenAttributes.has(propName)) {
-            console.log(`WARNING: ignore seen property: ${propName}`)
+            warn(`ignore seen property: ${propName}`)
             return
         }
         seenAttributes.add(propName)
@@ -883,7 +864,7 @@ export class IdlPeerProcessor {
     private getBuilderMethods(target: idl.IDLInterface, className?: string): Method[] {
         return [
             ...target.inheritance
-                .filter(idl.isReferenceType)
+                .filter(it => it !== idl.IDLTopType)
                 .filter(it => {
                     if (!this.library.resolveTypeReference(it))
                         console.log(`Cannot resolve ${it.name}`)
@@ -962,24 +943,12 @@ export class IdlPeerProcessor {
             return
         }
 
-        const superClassType = idl.getSuperType(decl)
-        const superClass = superClassType ?
-            new SuperElement(
-                idl.forceAsNamedNode(superClassType).name,
-                (superClassType as idl.IDLReferenceType).typeArguments?.map(it => idl.printType(it)))
-            : undefined
-
         const importFeatures = this.collectDeclDependencies(decl)
         const isDeclInterface = idl.isInterface(decl)
 
         const constructor = idl.isClass(decl) ? decl.constructors[0] : undefined
         const mConstructor = this.makeMaterializedMethod(decl, constructor)
-        const finalizerReturnType = {
-            isVoid: false,
-            nativeType: () => PrimitiveType.NativePointer.getText(),
-            interopType: () => PrimitiveType.NativePointer.getText(),
-            macroSuffixPart: () => ""
-        }
+        const finalizerReturnType = createRegularRetConvertor(PrimitiveType.NativePointer.getText(), PrimitiveType.NativePointer.getText())
         const mFinalizer = new MaterializedMethod(name, [], finalizerReturnType, false,
             new Method("getFinalizer", new NamedMethodSignature(idl.IDLPointerType, [], [], []), [MethodModifier.STATIC]))
         const mFields = decl.properties
@@ -990,6 +959,8 @@ export class IdlPeerProcessor {
             // TODO: Properly handle methods with return Promise<T> type
             .map(method => this.makeMaterializedMethod(decl, method))
             .filter(it => !idl.isNamedNode(it.method.signature.returnType) || !PeerGeneratorConfig.ignoreReturnTypes.has(it.method.signature.returnType.name))
+
+        const taggedMethods = decl.methods.filter(m => m.extendedAttributes?.find(it => it.name === IDLExtendedAttributes.DtsTag))
 
         mFields.forEach(f => {
             const field = f.field
@@ -1006,7 +977,7 @@ export class IdlPeerProcessor {
             const isReadOnly = field.modifiers.includes(FieldModifier.READONLY)
             if (!isReadOnly) {
                 const setSignature = new NamedMethodSignature(idl.IDLVoidType, [idlType], [field.name])
-                const retConvertor = { isVoid: true, nativeType: () => idl.IDLVoidType.name, macroSuffixPart: () => "V" }
+                const retConvertor = createVoidRetConvertor()
                 const setAccessor = new MaterializedMethod(
                     name, [f.argConvertor], retConvertor, false,
                     new Method(`set${capitalize(field.name)}`, setSignature, [MethodModifier.PRIVATE]))
@@ -1014,13 +985,13 @@ export class IdlPeerProcessor {
             }
         })
         this.library.materializedClasses.set(name,
-            new MaterializedClass(name, isDeclInterface, superClass, decl.typeParameters,
-                mFields, mConstructor, mFinalizer, importFeatures, mMethods))
+            new MaterializedClass(name, isDeclInterface, idl.getSuperType(decl), decl.typeParameters,
+                mFields, mConstructor, mFinalizer, importFeatures, mMethods, true, taggedMethods))
     }
 
     private makeMaterializedField(prop: idl.IDLProperty): MaterializedField {
         const argConvertor = this.library.typeConvertor(prop.name, prop.type!)
-        const retConvertor = generateRetConvertor(prop.type!)
+        const retConvertor = createRetConvertor(this.library, prop.type, mapCInteropRetType, [prop.name])
         const modifiers = prop.isReadonly ? [FieldModifier.READONLY] : []
         return new MaterializedField(
             new Field(prop.name, prop.type, modifiers),
@@ -1030,14 +1001,8 @@ export class IdlPeerProcessor {
     private makeMaterializedMethod(decl: idl.IDLInterface, method: idl.IDLConstructor | idl.IDLMethod | undefined) {
         const methodName = method === undefined || idl.isConstructor(method) ? "ctor" : method.name
         const retConvertor = method === undefined || idl.isConstructor(method)
-            ? {
-                isVoid: false,
-                isStruct: false,
-                nativeType: () => `${decl.name}Peer*`,
-                interopType: () => PrimitiveType.NativePointer.getText(),
-                macroSuffixPart: () => ""
-            }
-            : generateRetConvertor(method.returnType)
+            ? createRegularRetConvertor(`${decl.name}Peer*`, PrimitiveType.NativePointer.getText())
+            : createRetConvertor(this.library, method.returnType, mapCInteropRetType, method.parameters.map(it => it.name))
 
         if (method === undefined) {
             // interface or class without constructors
@@ -1244,10 +1209,8 @@ export function createDependencyFilter(library: PeerLibrary): DependencyFilter {
 
 export function isConflictingDeclaration(decl: idl.IDLEntry): boolean {/// stolen from PGConfig
     if (!PeerGeneratorConfig.needInterfaces) return false
-    // duplicate type declarations with different signatures
-    if (idl.isTypedef(decl) && decl.name === 'OnWillScrollCallback') return true
     // has same named class and interface
-    if ((idl.isInterface(decl)) && decl.name === 'LinearGradient') return true
+    if ((idl.isInterface(decl) || idl.isClass(decl)) && decl.name === 'LinearGradient') return true
     // just has ugly dependency WrappedBuilder - there is conflict in generic types
     if (idl.isInterface(decl) && decl.name === 'ContentModifier') return true
     // complicated type arguments

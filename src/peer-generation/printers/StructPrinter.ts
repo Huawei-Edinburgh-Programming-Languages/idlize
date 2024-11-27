@@ -123,9 +123,8 @@ export class StructPrinter {
                         concreteDeclarations.print(`void *handle;`) // avoid empty structs
                     }
                     properties.forEach(it => {
-                        // TODO Change to
-                        // concreteDeclarations.print(`${this.library.computeTargetName(it.type, it.isOptional)} ${concreteDeclarations.escapeKeyword(it.name)};`)
-                        concreteDeclarations.print(`${structs.getNodeName(idl.maybeOptional(it.type, it.isOptional))} ${concreteDeclarations.escapeKeyword(it.name)};`)
+                        const type = this.library.flattenType(it.type)
+                        concreteDeclarations.print(`${structs.getNodeName(idl.maybeOptional(type, it.isOptional))} ${concreteDeclarations.escapeKeyword(it.name)};`)
                     })
                 } else if (idl.isContainerType(target)) {
                     let fieldNames: string[] = []
@@ -197,7 +196,15 @@ export class StructPrinter {
         }
     }
 
+    private alreadyHasInt8Method = false
     private writeRuntimeType(target: idl.IDLNode, targetType: IDLType, isOptional: boolean, writer: LanguageWriter) {
+        const typeBooleanOrUint8 = (targetType === idl.IDLBooleanType || target === idl.IDLI8Type) && !isOptional
+        if (typeBooleanOrUint8 && this.alreadyHasInt8Method) {
+            return
+        }
+        if (typeBooleanOrUint8) {
+            this.alreadyHasInt8Method = true
+        }
         const resultType = idl.toIDLType("RuntimeType")
         const op = this.writeRuntimeTypeOp(target, targetType, resultType, isOptional, writer)
         if (op) {

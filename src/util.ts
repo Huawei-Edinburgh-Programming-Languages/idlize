@@ -333,6 +333,9 @@ export function identName(node: ts.Node | undefined): string | undefined {
     if (ts.isClassDeclaration(node)) {
         return identString(node.name)
     }
+    if (ts.isMethodDeclaration(node)) {
+        return identString(node.name)
+    }
     if (ts.isEnumDeclaration(node)){
         return identString(node.name)
     }
@@ -578,4 +581,8 @@ export function groupBy<K, V>(values: V[], selector: (value: V) => K): Map<K, V[
 
 export function removeExt(filename: string) {
     return filename.replaceAll(path.extname(filename), '')
+}
+
+export function warn(message: string) {
+    console.log(`WARNING: ${message}`)
 }

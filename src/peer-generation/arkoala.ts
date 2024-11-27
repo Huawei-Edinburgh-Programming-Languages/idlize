@@ -31,6 +31,7 @@ import {
     mesonBuildFile,
     tsCopyrightAndWarning,
     makeDeserializeAndCall,
+    readLangTemplate,
 } from "./FileGenerators"
 import { makeCJNodeTypes, makeCJSerializer } from "./printers/lang/CJPrinters"
 import { makeJavaArkComponents, makeJavaNodeTypes, makeJavaSerializer } from "./printers/lang/JavaPrinters"
@@ -146,6 +147,7 @@ function copyArkoalaFiles(config: {
         'sig/arkoala-arkts/arkui/src/generated/ts/NativeModule.ts',
         'sig/arkoala-arkts/arkui/src/generated/peers/SerializerBase.ts',
         'sig/arkoala-arkts/arkui/src/generated/peers/DeserializerBase.ts',
+        'sig/arkoala-arkts/arkui/src/generated/peers/CallbacksChecker.ts',
         'sig/arkoala-arkts/arkui/src/generated/shared/ArkResource.ts',
         'sig/arkoala-arkts/arkui/src/generated/shared/dts-exports.ts',
         'sig/arkoala-arkts/arkui/src/generated/shared/generated-utils.ts',
@@ -246,14 +248,19 @@ export function generateArkoalaFromIdl(config: {
         enumImpls.printTo(arkoala.tsArkoalaLib(new TargetFile('EnumsImpl')),)
     }
 
-    if (peerLibrary.language == Language.TS) {
+    if (peerLibrary.language == Language.TS || peerLibrary.language == Language.ARKTS) {
         const declarations = printDeclarations(peerLibrary)
         const index = new IndentedPrinter()
-        index.print(tsCopyrightAndWarning(""))
+        // index-full.d.ts for ArkTS is a temporary solution for ets pre-processing.
+        // So reuse the TS version for now.
+        index.print(tsCopyrightAndWarning(readLangTemplate("index-full.d.ts", Language.TS)))
+        index.print(readLangTemplate("platform.d.ts", peerLibrary.language))
         for (const data of declarations) {
             index.print(data)
         }
         index.printTo(path.join(arkoala.indexDir(), "index-full.d.ts"))
+    }
+    if (peerLibrary.language == Language.TS) {
         writeFile(
             arkoala.tsArkoalaLib(new TargetFile('NativeModuleEmpty')),
             printNativeModuleEmpty(peerLibrary),
@@ -326,7 +333,7 @@ export function generateArkoalaFromIdl(config: {
                 integrated: true
             }
         )
-        writeFile(arkoala.peer(new TargetFile('CallbackDeserializeCall')), makeDeserializeAndCall(peerLibrary, Language.TS, "CallbackDeserializeCall.ts").printToString(),
+        writeFile(arkoala.peer(new TargetFile('CallbackDeserializeCall')), makeDeserializeAndCall(peerLibrary, Language.TS, "./peers/CallbackDeserializeCall.ts").printToString(),
             {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true
@@ -372,14 +379,27 @@ export function generateArkoalaFromIdl(config: {
             }
         )
         // waiting for es2panda to fix 20642 issue
-        // writeFile(arkoala.peer(new TargetFile('Deserializer')),
-        //     makeArkTSDeserializer(peerLibrary),
-        //     {
-        //         onlyIntegrated: config.onlyIntegrated,
-        //         integrated: true,
-        //         message: "producing [idl]"
-        //     }
-        // )
+        writeFile(arkoala.peer(new TargetFile('Deserializer')),
+            makeArkTSDeserializer(peerLibrary),
+            {
+                onlyIntegrated: config.onlyIntegrated,
+                integrated: true,
+                message: "producing [idl]"
+            }
+        )
+        writeFile(arkoala.peer(new TargetFile('CallbackKind')),
+            makeCallbacksKinds(peerLibrary, peerLibrary.language),
+            {
+                onlyIntegrated: config.onlyIntegrated,
+                integrated: true
+            }
+        )
+        writeFile(arkoala.peer(new TargetFile('CallbackDeserializeCall')), makeDeserializeAndCall(peerLibrary, Language.ARKTS, "./peers/CallbackDeserializeCall.ts").printToString(),
+            {
+                onlyIntegrated: config.onlyIntegrated,
+                integrated: true
+            }
+        )
         writeFile(arkoala.arktsLib(new TargetFile('type_check', 'arkts')),
             makeTypeChecker(peerLibrary).arkts,
             {

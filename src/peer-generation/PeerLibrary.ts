@@ -18,21 +18,23 @@ import { BuilderClass } from './BuilderClass';
 import { MaterializedClass } from "./Materialized";
 import { IdlComponentDeclaration, isConflictingDeclaration, isMaterialized } from './idl/IdlPeerGeneratorVisitor';
 import { PeerFile } from "./PeerFile";
-import { AggregateConvertor, ArrayConvertor, CallbackConvertor, ClassConvertor, DateConvertor, EnumConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, MapConvertor, MaterializedClassConvertor, OptionConvertor,  StringConvertor, TupleConvertor, TypeAliasConvertor, UnionConvertor } from './ArgConvertors';
+import { AggregateConvertor, ArrayConvertor, BufferConvertor, CallbackConvertor, ClassConvertor, DateConvertor, EnumConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, MapConvertor, MaterializedClassConvertor, NumericConvertor, OptionConvertor,  StringConvertor, TupleConvertor, TypeAliasConvertor, UnionConvertor } from './ArgConvertors';
 import { PrimitiveType } from "./ArkPrimitiveType"
 import { DependencySorter } from './idl/DependencySorter';
 import { IndentedPrinter } from '../IndentedPrinter';
 import { createTypeNameConvertor, LanguageWriter } from './LanguageWriters';
-import { isImport, isStringEnum } from './idl/common';
+import { isImport, isStringEnum, typeOrUnion } from './idl/common';
 import { StructPrinter } from './printers/StructPrinter';
 import { ArgConvertor, BooleanConvertor, CustomTypeConvertor, LengthConvertor, NullConvertor, NumberConvertor, UndefinedConvertor, VoidConvertor } from './ArgConvertors';
 import { Language } from '../Language';
 import { generateSyntheticFunctionName } from '../IDLVisitor';
 import { collectUniqueCallbacks } from './printers/CallbacksPrinter';
-import { IdlNameConvertor } from './LanguageWriters/nameConvertor';
+import { convertType, IdlNameConvertor } from './LanguageWriters/nameConvertor';
 import { LibraryInterface } from '../LibraryInterface';
 import { IdlEntryManager } from './idl/IdlEntryManager';
 import { IDLNodeToStringConvertor } from './LanguageWriters/convertors/InteropConvertor';
+import { UnionFlattener } from './unions';
+import { warn } from '../util';
 
 export class PeerLibrary implements LibraryInterface {
 
@@ -65,11 +67,12 @@ export class PeerLibrary implements LibraryInterface {
     readonly declarations: idl.IDLEntry[] = []
     readonly componentsDeclarations: IdlComponentDeclaration[] = []
     readonly conflictedDeclarations: Set<idl.IDLEntry> = new Set()
-    readonly seenArrayTypes: Map<string, idl.IDLType> = new Map()
+    readonly seenArrayTypes: Map<string, idl.IDLContainerType> = new Map()
 
     private readonly targetNameConvertorInstance: IdlNameConvertor = createTypeNameConvertor(this.language, this)
     private readonly nativeNameConvertorInstance: IdlNameConvertor = createTypeNameConvertor(Language.CPP, this)
     private readonly interopNameConvertorInstance: IdlNameConvertor = new IDLNodeToStringConvertor(this)
+    private readonly unionFlattener = new UnionFlattener(this)
 
     readonly continuationCallbacks: idl.IDLCallback[] = []
 
@@ -79,28 +82,40 @@ export class PeerLibrary implements LibraryInterface {
 
     private createContinuationCallbacks(): void {
         const callbacks = collectUniqueCallbacks(this)
-        for (const callback of callbacks) {
-            this.createContinuationCallbackIfNeeded(callback.returnType)
-            this.requestType(this.createContinuationCallbackReference(callback.returnType), true)
-        }
+        for (const callback of callbacks)
+            this.requestType(this.createContinuationCallbackIfNeeded(callback.returnType), true)
     }
-    private createContinuationCallbackIfNeeded(continuationType: idl.IDLType): void {
-        if (idl.isContainerType(continuationType) && idl.IDLContainerUtils.isPromise(continuationType))
-            return this.createContinuationCallbackIfNeeded(continuationType.elementType[0])
-        const continuationParameters = idl.isVoidType(continuationType) ? [] : [idl.createParameter('value', continuationType)]
-        const continuationReference = this.createContinuationCallbackReference(continuationType)
-        const maybeResolved = this.resolveTypeReference(continuationReference)
-        if (maybeResolved)
-            return
-        const callback = idl.createCallback(continuationReference.name, continuationParameters, idl.IDLVoidType, { extendedAttributes: [{ name: idl.IDLExtendedAttributes.Synthetic }] })
-        this.continuationCallbacks.push(callback)
+    private createContinuationParameters(continuationType: idl.IDLType): idl.IDLParameter[] {
+        const continuationParameters: idl.IDLParameter[] = []
+        if (idl.isContainerType(continuationType) && idl.IDLContainerUtils.isPromise(continuationType)) {
+            const errorType = idl.createOptionalType(idl.createContainerType("sequence", [idl.IDLStringType]))
+            continuationParameters.push(idl.createParameter("error", errorType, true))
+            const promise = continuationType as idl.IDLContainerType
+            if (!idl.isVoidType(promise.elementType[0])) {
+                const valueType = idl.createOptionalType(promise.elementType[0])
+                continuationParameters.unshift(idl.createParameter("value", valueType, true))
+            }
+        } else if (!idl.isVoidType(continuationType))
+            continuationParameters.push(idl.createParameter('value', continuationType))
+        return continuationParameters
+    }
+    private createContinuationCallbackIfNeeded(continuationType: idl.IDLType): idl.IDLReferenceType {
+        const continuationParameters = this.createContinuationParameters(continuationType)
+        const syntheticName = generateSyntheticFunctionName(
+            continuationParameters,
+            idl.IDLVoidType,
+        )
+        const continuationReference = idl.createReferenceType(syntheticName)
+
+        if (!this.resolveTypeReference(continuationReference)) {
+            const callback = idl.createCallback(continuationReference.name, continuationParameters, idl.IDLVoidType, { extendedAttributes: [{ name: idl.IDLExtendedAttributes.Synthetic }] })
+            this.continuationCallbacks.push(callback)
+        }
+        return continuationReference
     }
     createContinuationCallbackReference(continuationType: idl.IDLType): idl.IDLReferenceType {
-        if (idl.isContainerType(continuationType) && idl.IDLContainerUtils.isPromise(continuationType))
-            return this.createContinuationCallbackReference(continuationType.elementType[0])
-        const continuationParameters = idl.isVoidType(continuationType) ? [] : [idl.createParameter('value', continuationType)]
+        const continuationParameters = this.createContinuationParameters(continuationType)
         const syntheticName = generateSyntheticFunctionName(
-            (type) => cleanPrefix(this.nativeNameConvertorInstance.convert(type), PrimitiveType.Prefix),
             continuationParameters,
             idl.IDLVoidType,
         )
@@ -181,6 +196,19 @@ export class PeerLibrary implements LibraryInterface {
         }
         if (idl.isPrimitiveType(type)) {
             switch (type) {
+                case idl.IDLI8Type: return new NumericConvertor(param, type)
+                case idl.IDLU8Type: return new NumericConvertor(param, type)
+                case idl.IDLI16Type: return new NumericConvertor(param, type)
+                case idl.IDLU16Type: return new NumericConvertor(param, type)
+                case idl.IDLI32Type: return new NumericConvertor(param, type)
+                case idl.IDLU32Type: return new NumericConvertor(param, type)
+                case idl.IDLI64Type: return new NumericConvertor(param, type)
+                case idl.IDLU64Type: return new NumericConvertor(param, type)
+                case idl.IDLF16Type: return new NumericConvertor(param, type)
+                case idl.IDLF32Type: return new NumericConvertor(param, type)
+                case idl.IDLF64Type: return new NumericConvertor(param, type)
+                
+                case idl.IDLBufferType: return new BufferConvertor(param)
                 case idl.IDLBooleanType: return new BooleanConvertor(param)
                 case idl.IDLStringType: return new StringConvertor(param)
                 case idl.IDLNullType: return new NullConvertor(param)
@@ -328,7 +356,7 @@ export class PeerLibrary implements LibraryInterface {
             }
             const decl = this.resolveTypeReference(type)
             if (!decl) {
-                console.log(`WARNING: undeclared type ${idl.DebugUtils.debugPrintType(type)}`)
+                warn(`undeclared type ${idl.DebugUtils.debugPrintType(type)}`)
             } else if (isConflictingDeclaration(decl)) {
                 return ArkCustomObject
             }
@@ -358,6 +386,16 @@ export class PeerLibrary implements LibraryInterface {
         return this._orderedDependenciesToGenerate
     }
     private _orderedDependenciesToGenerate: idl.IDLNode[] = []
+
+    generateSynteticsRequired() {
+        for (const file of this.files)
+            for (const entry of file.entries)
+                idl.forEachFunction(entry, function_ => {
+                    const promise = idl.asPromise(function_.returnType)
+                    if (promise)
+                        this.requestType(this.createContinuationCallbackIfNeeded(promise), true)
+                })
+    }
 
     analyze() {///stolen from DeclTable
         this.createContinuationCallbacks()
@@ -418,6 +456,17 @@ export class PeerLibrary implements LibraryInterface {
                 : PrimitiveType.OptionalPrefix + cleanPrefix(this.nativeNameConvertorInstance.convert(it), PrimitiveType.Prefix)
             )
         return new Set(data)
+    }
+
+    flattenType(type: idl.IDLType, name?: string): idl.IDLType {
+        if (idl.isUnionType(type)) {
+            const allTypes = type.types.flatMap(it => convertType(this.unionFlattener, it))
+            const uniqueTypes = new Set(allTypes)
+            return typeOrUnion(
+                uniqueTypes.size === allTypes.length ? type.types : Array.from(uniqueTypes),
+                name)
+        }
+        return type
     }
 }
 

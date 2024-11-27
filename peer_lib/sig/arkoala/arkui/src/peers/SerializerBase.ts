@@ -206,6 +206,32 @@ export class SerializerBase {
         this.writePointer(call)
         return resourceId
     }
+    holdAndWriteCallbackForPromiseVoid(hold: KPointer = 0, release: KPointer = 0, call: KPointer = 0): [Promise<void>, ResourceId] {
+        let resourceId: ResourceId
+        const promise = new Promise<void>((resolve, reject) => {
+            const callback = (err: string[]|undefined) => {
+                if (err !== undefined)
+                    reject(err)
+                else
+                    resolve()
+            }
+            resourceId = this.holdAndWriteCallback(callback, hold, release, call)
+        })
+        return [promise, resourceId]
+    }
+    holdAndWriteCallbackForPromise<T>(hold: KPointer = 0, release: KPointer = 0, call: KPointer = 0): [Promise<T>, ResourceId] {
+        let resourceId: ResourceId
+        const promise = new Promise<T>((resolve, reject) => {
+            const callback = (value: T|undefined, err: string[]|undefined) => {
+                if (err !== undefined)
+                    reject(err)
+                else
+                    resolve(value!)
+            }
+            resourceId = this.holdAndWriteCallback(callback, hold, release, call)
+        })
+        return [promise, resourceId]
+    }
     writeCallbackResource(resource: CallbackResource) {
         this.writeInt32(resource.resourceId)
         this.writePointer(resource.hold)
@@ -298,5 +324,9 @@ export class SerializerBase {
         } else if (valueType == RuntimeType.OBJECT) {
             this.writeInt32((value as Resource).id)
         }
+    }
+    writeBuffer(buffer: ArrayBuffer) {
+        this.writePointer(64)
+        this.writeInt64(buffer.byteLength)
     }
 }

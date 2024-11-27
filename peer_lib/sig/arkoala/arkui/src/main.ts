@@ -16,6 +16,7 @@ import { pointer, nullptr, wrapCallback, callCallback } from "@koalaui/interop"
 import { Serializer } from "@arkoala/arkui/peers/Serializer"
 import { DeserializerBase } from "@arkoala/arkui/peers/DeserializerBase"
 import { Deserializer } from "@arkoala/arkui/peers/Deserializer"
+import { MaterializedBase } from "@arkoala/arkui/MaterializedBase"
 import { checkArkoalaCallbacks } from "@arkoala/arkui/peers/CallbacksChecker"
 import { ArkButtonPeer } from "@arkoala/arkui/peers/ArkButtonPeer"
 import { ArkCommonPeer } from "@arkoala/arkui/peers/ArkCommonPeer"
@@ -27,7 +28,8 @@ import { ArkSideBarContainerComponent } from "@arkoala/arkui/ArkSidebar"
 import { ArkTabContentPeer } from "@arkoala/arkui/peers/ArkTabContentPeer"
 import { SubTabBarStyle } from "@arkoala/arkui/ArkSubTabBarStyleBuilder"
 import { BottomTabBarStyle } from "@arkoala/arkui/ArkBottomTabBarStyleBuilder"
-import { CanvasRenderingContext2D } from "@arkoala/arkui/ArkCanvasRenderingContext2DMaterialized"
+// TBD: It needs to be possible to use CanvasRenderingContext2D without import
+import { CanvasRenderingContext2D as CanvasRenderingContext2DImpl, CanvasRenderingContext2DInternal } from "@arkoala/arkui/ArkCanvasRenderingContext2DMaterialized"
 import { ArkUINodeType } from "@arkoala/arkui/peers/ArkUINodeType"
 import { startPerformanceTest } from "@arkoala/arkui/test_performance"
 import { testLength_10_lpx } from "@arkoala/arkui/test_data"
@@ -56,7 +58,7 @@ import {
 import { nativeModule } from "@koalaui/arkoala"
 import { mkdirSync, writeFileSync } from "fs"
 import { CallbackKind } from "@arkoala/arkui/peers/CallbackKind"
-import { ResourceId } from "@koalaui/interop"
+import { ResourceId, ResourceHolder } from "@koalaui/interop"
 
 if (!reportTestFailures) {
     console.log("WARNING: ignore test result")
@@ -226,6 +228,18 @@ function createDefaultWriteCallback(kind: CallbackKind, callback: object) {
     }
 }
 
+function createDefaultWritePromiseVoid(kind: CallbackKind, then_: () => void, catch_: (err: string[])=>void) {
+    return (serializer: Serializer) => {
+        const promiseSerialized = serializer.holdAndWriteCallbackForPromiseVoid(
+            nativeModule()._TestGetManagedHolder(),
+            nativeModule()._TestGetManagedReleaser(),
+            nativeModule()._TestGetManagedCaller(kind),
+        )
+        promiseSerialized[0].then(then_).catch(catch_)
+        return promiseSerialized[1]
+    }
+}
+
 function enqueueCallback(
     writeCallback: (serializer: Serializer) => ResourceId,
     readAndCallCallback: (deserializer: Deserializer) => void,
@@ -282,6 +296,45 @@ function checkTwoSidesCallback() {
     assertEquals(`Callback 2 read&called ${call2Count} times`, call2Count, callResult2)
 }
 
+function checkTwoSidesPromise() {
+    nativeModule()._TestSetArkoalaCallbackCaller()
+
+    let result1 = "PENDING"
+    let result2 = "PENDING"
+
+    enqueueCallback(
+        createDefaultWritePromiseVoid(CallbackKind.Kind_Callback_Opt_Array_String_Void, (): void => {
+            result1 = "FULFILLED"
+        }, (err: string[]): void => {
+            result1 = `REJECTED: ${err.join(', ')}`
+        }),
+        (deserializer) => {
+            const callback = deserializer.readCallback_Opt_Array_String_Void()
+            callback(undefined)
+        },
+    )
+
+    enqueueCallback(
+        createDefaultWritePromiseVoid(CallbackKind.Kind_Callback_Opt_Array_String_Void, (): void => {
+            result2 = "FULFILLED"
+        }, (err: string[]): void => {
+            result2 = `REJECTED: ${err.join(', ')}`
+        }),
+        (deserializer) => {
+            const callback = deserializer.readCallback_Opt_Array_String_Void()
+            callback(["err line 1", "err line 2"])
+        },
+    )
+
+    assertEquals("Promise 1 enqueued", "PENDING", result1)
+    assertEquals("Promise 2 enqueued", "PENDING", result2)
+    checkArkoalaCallbacks()
+    setTimeout(() => {// Promise-continuations are activated through an event-loop, so, we also need to defer our checks
+        assertEquals("Promise 1 pumped", "FULFILLED", result1)
+        assertEquals("Promise 2 pumped", "REJECTED: err line 1, err line 2", result2)
+    }, 0)
+}
+
 function checkWriteFunction() {
     const s = Serializer.hold()
     s.writeFunction((value: number, flag: boolean) => flag ? value + 10 : value - 10)
@@ -301,12 +354,15 @@ function checkButton() {
 
     let peer = ArkButtonPeer.create(ArkUINodeType.Button)
 
+    const lastResourceId = ResourceHolder.instance().registerAndHold({})
+    ResourceHolder.instance().release(lastResourceId)
+
     checkResult("width", () => peer.widthAttribute("42%"),
         "width({.type=1, .value=42, .unit=3, .resource=0})")
     checkResult("height", () => peer.heightAttribute({ id: 43, bundleName: "MyApp", moduleName: "MyApp" }),
         "height({.type=2, .value=0, .unit=1, .resource=43})")
     checkResult("background", () => peer.backgroundAttribute(() => {}, {align: 4}),
-        "background({.resource={.resourceId=201, .hold=0, .release=0}, .call=0}, {.tag=ARK_TAG_OBJECT, .value={.align={.tag=ARK_TAG_OBJECT, .value=Ark_Alignment(4)}}})")
+        `background({.resource={.resourceId=${lastResourceId+1}, .hold=0, .release=0}, .call=0}, {.tag=ARK_TAG_OBJECT, .value={.align={.tag=ARK_TAG_OBJECT, .value=Ark_Alignment(4)}}})`)
     checkResult("type", () => peer.typeAttribute(1), "type(Ark_ButtonType(1))")
     checkResult("labelStyle", () => peer.labelStyleAttribute({ maxLines: 3 }),
         "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=3}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})")
@@ -386,7 +442,7 @@ function checkOverloads() {
     class ArkSideBarContainerComponentTest extends ArkSideBarContainerComponent {
         constructor(peer: ArkSideBarContainerPeer) {
             super()
-            this.peer = peer
+            this.setPeer(peer)
         }
 
         override checkPriority(name: string) {
@@ -426,10 +482,10 @@ function checkTabContent() {
 
     checkResult("new SubTabBarStyle()",
         () => peer.tabBar1Attribute(subTabBarStyle),
-        `tabBar({.selector=0, .value0={._content={.tag=ARK_TAG_OBJECT, .value={.selector=0, .value0={.selector=0, .value0={.chars="ContentResource", .length=15}}}}, ._indicator={.tag=ARK_TAG_UNDEFINED, .value={}}, ._selectedMode={.tag=ARK_TAG_UNDEFINED, .value={}}, ._board={.tag=ARK_TAG_UNDEFINED, .value={}}, ._labelStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, ._padding={.tag=ARK_TAG_UNDEFINED, .value={}}, ._id={.tag=ARK_TAG_OBJECT, .value={.chars="subId", .length=5}}}})`)
+        `tabBar({.selector=0, .value0={._content={.tag=ARK_TAG_OBJECT, .value={.selector=0, .value0={.chars="ContentResource", .length=15}}}, ._indicator={.tag=ARK_TAG_UNDEFINED, .value={}}, ._selectedMode={.tag=ARK_TAG_UNDEFINED, .value={}}, ._board={.tag=ARK_TAG_UNDEFINED, .value={}}, ._labelStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, ._padding={.tag=ARK_TAG_UNDEFINED, .value={}}, ._id={.tag=ARK_TAG_OBJECT, .value={.chars="subId", .length=5}}}})`)
     checkResult("SubTabBarStyle.of()",
         () => peer.tabBar1Attribute(SubTabBarStyle.of("content2")),
-        `tabBar({.selector=0, .value0={._content={.tag=ARK_TAG_OBJECT, .value={.selector=0, .value0={.selector=0, .value0={.chars="content2", .length=8}}}}, ._indicator={.tag=ARK_TAG_UNDEFINED, .value={}}, ._selectedMode={.tag=ARK_TAG_UNDEFINED, .value={}}, ._board={.tag=ARK_TAG_UNDEFINED, .value={}}, ._labelStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, ._padding={.tag=ARK_TAG_UNDEFINED, .value={}}, ._id={.tag=ARK_TAG_UNDEFINED, .value={}}}})`)
+        `tabBar({.selector=0, .value0={._content={.tag=ARK_TAG_OBJECT, .value={.selector=0, .value0={.chars="content2", .length=8}}}, ._indicator={.tag=ARK_TAG_UNDEFINED, .value={}}, ._selectedMode={.tag=ARK_TAG_UNDEFINED, .value={}}, ._board={.tag=ARK_TAG_UNDEFINED, .value={}}, ._labelStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, ._padding={.tag=ARK_TAG_UNDEFINED, .value={}}, ._id={.tag=ARK_TAG_UNDEFINED, .value={}}}})`)
 
     const bottomTabBarStyle: BottomTabBarStyle = new BottomTabBarStyle("Icon", "Text").padding(10).id("bottomId")
     assertEquals("BottomTabBarStyle icon", "Icon", bottomTabBarStyle._icon)
@@ -445,13 +501,19 @@ function checkTabContent() {
     stopNativeTest(CALL_GROUP_LOG)
 }
 
+// Remove it when it is possible to use CanvasRenderingContext2D
+// without explicitly importing it
+export function unsafeCast<T>(value: unknown): T {
+    return value as unknown as T
+}
+
 function checkCanvasRenderingContext2D() {
     startNativeTest(checkCanvasRenderingContext2D.name, CALL_GROUP_LOG)
 
     let canvasRenderingContext2D: CanvasRenderingContext2D | undefined = undefined
 
     checkResult("new CanvasRenderingContext2D()",
-        () => canvasRenderingContext2D = new CanvasRenderingContext2D(),
+        () => canvasRenderingContext2D = unsafeCast<CanvasRenderingContext2D>(new CanvasRenderingContext2DImpl()),
         `new CanvasPath()[return (CanvasPathPeer*) 100]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]new CanvasRenderer()[return (CanvasRendererPeer*) 100]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]new CanvasRenderingContext2D({.tag=ARK_TAG_UNDEFINED, .value={}})[return (CanvasRenderingContext2DPeer*) 100]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]`
     )
 
@@ -467,14 +529,15 @@ function checkCanvasRenderingContext2D() {
     assertEquals("CanvasRenderingContext2D height", 0, canvasRenderingContext2D!.height)
 
     checkResult("CanvasRenderingContext2D peer close()",
-        () => canvasRenderingContext2D!.peer!.close(),
+        () => (unsafeCast<MaterializedBase>(canvasRenderingContext2D)).getPeer()!.close(),
         `dummyClassFinalizer(0x64)`)
 
     const ctorPtr = BigInt(123)
     const serializer = new Serializer()
-    serializer.writeCanvasRenderingContext2D(CanvasRenderingContext2D.construct(ctorPtr))
+    serializer.writeCanvasRenderingContext2D(unsafeCast<CanvasRenderingContext2D>(CanvasRenderingContext2DInternal.fromPtr(ctorPtr)))
     const deserializer = new Deserializer(serializer.asArray().buffer, serializer.length())
-    assertEquals("Deserializer readCanvasRenderingContext2D()", ctorPtr, deserializer.readCanvasRenderingContext2D().getPeer()!.ptr)
+    const materializedBase = deserializer.readCanvasRenderingContext2D() as unknown as MaterializedBase
+    assertEquals("Deserializer readCanvasRenderingContext2D()", ctorPtr, materializedBase.getPeer()!.ptr)
 
     stopNativeTest(CALL_GROUP_LOG)
 }
@@ -699,6 +762,7 @@ function main() {
     checkNodeAPI()
     checkCallback()
     checkTwoSidesCallback()
+    checkTwoSidesPromise()
     checkWriteFunction()
     checkButton()
     checkCalendar()
@@ -791,7 +855,8 @@ ${callGroupLog}
     }
 
     // Report in error code.
-    checkTestFailures()
+    // Activate on the next event-loop iteration, which is required for Promises continuations activation
+    setTimeout(checkTestFailures, 0)
 }
 
 main()

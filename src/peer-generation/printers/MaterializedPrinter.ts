@@ -14,7 +14,7 @@
  */
 
 import * as idl from "../../idl"
-import { capitalize, removeExt, renameClassToMaterialized } from "../../util";
+import { capitalize, removeExt, renameClassToMaterialized, stringOrNone } from "../../util";
 import { printPeerFinalizer, writePeerMethod } from "./PeersPrinter"
 import {
     BlockStatement,
@@ -46,6 +46,7 @@ import { Language } from "../../Language";
 import { copyMethod } from "../LanguageWriters/LanguageWriter";
 import { createReferenceType, forceAsNamedNode, IDLPointerType, IDLThisType, IDLType, IDLVoidType, isOptionalType, maybeOptional, toIDLType } from "../../idl";
 import { getReferenceResolver } from "../ReferenceResolver";
+import { generifiedTypeName } from "../idl/common";
 
 interface MaterializedFileVisitor {
     visit(): void
@@ -101,7 +102,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
         const printer = this.printer
         printer.print(makeMaterializedPrologue(this.printerContext.language))
 
-        let superClassName = clazz.superClass?.getSuperType()
+        let superClassName = generifiedTypeName(clazz.superClass)
         let selfInterface = clazz.isInterface
             ? `${clazz.className}${clazz.generics?.length ? `<${clazz.generics.join(", ")}>` : ``}`
             : undefined
@@ -257,6 +258,30 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                 this.overloadsPrinter.printGroupedComponentOverloads(clazz, grouped)
             }
 
+            // TBD: Refactor tagged methods staff
+            const seenTaggedMethods = new Set<string>()
+            clazz.taggedMethods
+                .map(it => methodFromTagged(it))
+                .filter(it => {
+                    if (seenTaggedMethods.has(it.name)) return false
+                    seenTaggedMethods.add(it.name)
+                    return true
+                })
+                .forEach(method => {
+                    // const method = methodFromTagged(taggedMethod)
+                    const signature = new NamedMethodSignature(
+                        method.returnType,
+                        method.parameters.map(it => it.type!),
+                        method.parameters.map(it => it.name)
+                    )
+                    // TBD: Add tagged methods implementation
+                    writer.writeMethodImplementation(new Method(getTaggedName(method)!, signature), writer => {
+                        writer.writeStatement(
+                            writer.makeThrowError("TBD")
+                        )
+                    })
+                })
+
             clazz.methods.forEach(method => {
                 let privateMethod = method
                 if (!privateMethod.method.modifiers?.includes(MethodModifier.PRIVATE))
@@ -271,6 +296,30 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                 this.library.setCurrentContext(undefined)
             })
         }, superClassName, interfaces.length === 0 ? undefined : interfaces, classTypeParameters)
+
+
+        // Write MaterializedClass static
+        printer.writeClass(clazz.getInternalName(), writer => {
+
+            // write fromPtr(ptr: number):MaterializedClass method
+            const clazzRefType = idl.createReferenceType(clazz.className,
+                clazz.generics?.map(idl.createTypeParameterReference))
+            const fromPtrSig = new NamedMethodSignature(clazzRefType, [idl.IDLPointerType], ["ptr"])
+            writer.writeMethodImplementation(new Method("fromPtr", fromPtrSig, [MethodModifier.PUBLIC, MethodModifier.STATIC], classTypeParameters), writer => {
+                const objVar = `obj`
+                writer.writeStatement(writer.makeAssign(objVar,
+                    clazzRefType,
+                    //TODO: Need to pass IDLType instead of string to makeNewObject
+                    writer.makeNewObject(writer.getNodeName(clazzRefType)),
+                    true)
+                )
+                writer.writeStatement(
+                    writer.makeAssign(`${objVar}.peer`, toIDLType("Finalizable"),
+                        writer.makeString(`new Finalizable(ptr, ${clazz.className}.getFinalizer())`), false),
+                )
+                writer.writeStatement(writer.makeReturn(writer.makeString(objVar)))
+            })
+        })
     }
 
     visit(): void {
@@ -305,7 +354,7 @@ class JavaMaterializedFileVisitor extends MaterializedFileVisitorBase {
 
         const emptyParameterType = toIDLType(ARK_MATERIALIZEDBASE_EMPTY_PARAMETER)
         const finalizableType = toIDLType('Finalizable')
-        const superClassName = clazz.superClass?.getSuperType() ?? ARK_MATERIALIZEDBASE
+        const superClassName = generifiedTypeName(clazz.superClass) ?? ARK_MATERIALIZEDBASE
 
         const interfaces:string[] = ["MaterializedBase"]
 
@@ -437,7 +486,7 @@ class CJMaterializedFileVisitor extends MaterializedFileVisitorBase {
 
         const emptyParameterType = createReferenceType(ARK_MATERIALIZEDBASE_EMPTY_PARAMETER)
         const finalizableType = createReferenceType('Finalizable')
-        const superClassName = clazz.superClass?.getSuperType() ?? ARK_MATERIALIZEDBASE
+        const superClassName = generifiedTypeName(clazz.superClass) ?? ARK_MATERIALIZEDBASE
 
         this.printer.writeClass(clazz.className, writer => {
             const pointerType = IDLPointerType
@@ -547,4 +596,37 @@ export function printMaterialized(peerLibrary: PeerLibrary, printerContext: Prin
         result.set(file, text)
     }
     return result
+}
+
+// TBD: Refactor tagged method staff
+function getTaggedName(node: idl.IDLEntry): stringOrNone {
+    return idl.getExtAttribute(node, idl.IDLExtendedAttributes.DtsName) ?? node.name
+}
+
+function paramFromTagged(paramOrTag: idl.IDLParameter | idl.SignatureTag): idl.IDLParameter {
+    const param = paramOrTag as idl.IDLParameter
+    if (param.kind === idl.IDLKind.Parameter) return param
+    const tag = paramOrTag as idl.SignatureTag
+    return idl.createParameter(tag.name, idl.IDLStringType)
+}
+
+function paramsFromTagged(node: idl.IDLSignature): idl.IDLParameter[] {
+    let mix: (idl.IDLParameter | idl.SignatureTag)[] = node.parameters.slice(0)
+    for (const tag of idl.fetchSignatureTags(node))
+        mix.splice(tag.index, 0, tag)
+
+    return mix.map(it => paramFromTagged(it))
+}
+
+function methodFromTagged(method: idl.IDLMethod): idl.IDLMethod {
+    return idl.createMethod(
+        getTaggedName(method)!,
+        paramsFromTagged(method),
+        method.returnType,
+        {
+            isStatic: false,
+            isOptional: false,
+            isAsync: false,
+        }, {}
+    )
 }
