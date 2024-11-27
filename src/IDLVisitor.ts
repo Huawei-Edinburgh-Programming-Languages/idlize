@@ -80,6 +80,7 @@ export function generateSyntheticUnionName(types: idl.IDLType[]) {
 
 const conflictingDeclarationNames = [
     "TextStyle",
+    "LinearGradient",
 ]
 
 function mangleConflictingName(name: string, sourceFile: ts.SourceFile): string {
