@@ -790,13 +790,13 @@
 |`enableKeyboardOnFocus`| Function | Dudkin Sergey| done|  |
 |`enableHapticFeedback`| Function | Dudkin Sergey| done|  |
 |`barState`| Function | Dudkin Sergey| done|  |
-|`bindSelectionMenu`| Function | Dudkin Sergey| in progress | |
-|`customKeyboard`| Function | Dudkin Sergey| in progress | |
+|`bindSelectionMenu`| Function | Dudkin Sergey| devDone | |
+|`customKeyboard`| Function | Dudkin Sergey| devDone | |
 |`placeholder`| Function | Dudkin Sergey| done|  |
-|*RichText*| *Component* | Dudkin Sergey| in progress|  |
-|`setRichTextOptions`| Function | Dudkin Sergey| in progress|  |
-|`onStart`| Function | Dudkin Sergey| in progress|  |
-|`onComplete`| Function | Dudkin Sergey| in progress|  |
+|*RichText*| *Component* | Dudkin Sergey| devDone|  |
+|`setRichTextOptions`| Function | Dudkin Sergey| devDone|  |
+|`onStart`| Function | Dudkin Sergey| devDone|  |
+|`onComplete`| Function | Dudkin Sergey| devDone|  |
 |*RootScene*| *Component* | Maksimov Nikita | in progress | |
 |`setRootSceneOptions`| Function | Maksimov Nikita | in progress | |
 |*Row*| *Component* | Andrey Khudenkikh | done |  |
