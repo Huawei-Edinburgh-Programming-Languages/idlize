@@ -86,6 +86,10 @@ elif is_panda
     platform_build_dir = 'build/panda'
 
     cflags += ['-DKOALA_USE_PANDA_VM', '-DKOALA_ETS_NAPI']
+    cflags += [
+        '-DETS_NATIVE_MODULE_CLASS_NAME=XMLNativeModule',
+        '-DETS_NATIVE_MODULE_FILE_NAME=xmlNative',
+    ]
     include_dirs += [
         external_interop_dir / 'ets',
     ]
