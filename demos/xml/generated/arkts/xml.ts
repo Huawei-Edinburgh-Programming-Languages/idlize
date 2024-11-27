@@ -116,7 +116,7 @@ export class XmlSerializer implements XmlSerializerInterface {
         const thisSerializer : Serializer = Serializer.hold()
         let buffer_type : KInt = RuntimeType.UNDEFINED
         buffer_type = runtimeType(buffer)
-        if (((RuntimeType.OBJECT == buffer_type))) {
+        if (buffer instanceof ArrayBuffer) {
             thisSerializer.writeInt8(0 as int32)
             const buffer_0  = buffer as ArrayBuffer
             thisSerializer.writeBuffer(buffer_0)

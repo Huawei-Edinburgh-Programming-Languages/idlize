@@ -66,7 +66,7 @@ export class Serializer extends SerializerBase {
             const value_ignoreNameSpace_value  = value_ignoreNameSpace!
             valueSerializer.writeBoolean(value_ignoreNameSpace_value)
         }
-        const value_tagValueCallbackFunction  = (value.tagValueCallbackFunction as Function2<KStringPtr,KStringPtr,boolean>)
+        const value_tagValueCallbackFunction  = value.tagValueCallbackFunction
         let value_tagValueCallbackFunction_type : KInt = RuntimeType.UNDEFINED
         value_tagValueCallbackFunction_type = runtimeType(value_tagValueCallbackFunction)
         valueSerializer.writeInt8(value_tagValueCallbackFunction_type as int32)
@@ -74,7 +74,7 @@ export class Serializer extends SerializerBase {
             const value_tagValueCallbackFunction_value  = value_tagValueCallbackFunction!
             valueSerializer.holdAndWriteCallback(value_tagValueCallbackFunction_value)
         }
-        const value_attributeValueCallbackFunction  = (value.attributeValueCallbackFunction as Function2<KStringPtr,KStringPtr,boolean>)
+        const value_attributeValueCallbackFunction  = value.attributeValueCallbackFunction
         let value_attributeValueCallbackFunction_type : KInt = RuntimeType.UNDEFINED
         value_attributeValueCallbackFunction_type = runtimeType(value_attributeValueCallbackFunction)
         valueSerializer.writeInt8(value_attributeValueCallbackFunction_type as int32)
@@ -82,7 +82,7 @@ export class Serializer extends SerializerBase {
             const value_attributeValueCallbackFunction_value  = value_attributeValueCallbackFunction!
             valueSerializer.holdAndWriteCallback(value_attributeValueCallbackFunction_value)
         }
-        const value_tokenValueCallbackFunction  = (value.tokenValueCallbackFunction as Function2<xml_EventType,ParseInfo,boolean>)
+        const value_tokenValueCallbackFunction  = value.tokenValueCallbackFunction
         let value_tokenValueCallbackFunction_type : KInt = RuntimeType.UNDEFINED
         value_tokenValueCallbackFunction_type = runtimeType(value_tokenValueCallbackFunction)
         valueSerializer.writeInt8(value_tokenValueCallbackFunction_type as int32)
@@ -94,7 +94,7 @@ export class Serializer extends SerializerBase {
 }
 
 export class Deserializer extends DeserializerBase {
-     constructor(data: ArrayBuffer, length: KInt) {
+     constructor(data: KUint8ArrayPtr, length: KInt) {
         super(data, length)
     }
     readCallback_EventType_ParseInfo_Boolean(): Function2<xml_EventType,ParseInfo,boolean> {
@@ -159,7 +159,7 @@ export class Deserializer extends DeserializerBase {
                 tokenValueCallbackFunction_buf = valueDeserializer.readCallback_EventType_ParseInfo_Boolean()
             }
         const tokenValueCallbackFunction_result : Function2<xml_EventType,ParseInfo,boolean> | undefined = tokenValueCallbackFunction_buf
-        let value : ParseOptions = ({supportDoctype: supportDoctype_result,ignoreNameSpace: ignoreNameSpace_result,tagValueCallbackFunction: undefined,attributeValueCallbackFunction: undefined,tokenValueCallbackFunction: undefined} as ParseOptions)
+        let value : ParseOptions = ({supportDoctype: supportDoctype_result,ignoreNameSpace: ignoreNameSpace_result,tagValueCallbackFunction: tagValueCallbackFunction_result,attributeValueCallbackFunction: attributeValueCallbackFunction_result,tokenValueCallbackFunction: tokenValueCallbackFunction_result} as ParseOptions)
         return (value as ParseOptions)
     }
 }

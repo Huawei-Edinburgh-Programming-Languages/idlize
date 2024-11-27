@@ -1,4 +1,4 @@
-import { ResourceHolder } from "@koalaui/interop"
+import { ResourceHolder, KBuffer } from "@koalaui/interop"
 import { Deserializer, deserializeAndCallCallback } from "./xmlSerializer"
 import { XMLNativeModule } from "./xmlNative"
 
@@ -9,14 +9,14 @@ enum CallbackEventKind {
 }
 
 const bufferSize = 1024
-const buffer = new Uint8Array(bufferSize)
-const deserializer = new Deserializer(buffer.buffer as ArrayBuffer, bufferSize)
+const buffer = new KBuffer(bufferSize)
+const deserializer = new Deserializer(buffer.buffer, bufferSize)
 export function checkArkoalaCallbacks() {
     while (true) {
-        let result = XMLNativeModule._CheckArkoalaCallbackEvent(buffer.buffer as byte[], bufferSize)
+        deserializer.resetCurrentPosition()
+        let result = XMLNativeModule._CheckArkoalaCallbackEvent(buffer.buffer, bufferSize)
         if (result == 0) break
 
-        deserializer.resetCurrentPosition()
         const eventKind = deserializer.readInt32() as CallbackEventKind
         switch (eventKind) {
             case CallbackEventKind.Event_CallCallback: {
