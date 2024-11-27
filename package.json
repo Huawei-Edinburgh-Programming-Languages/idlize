@@ -159,7 +159,7 @@
     "sig:arkts:subset:copy": "npm run make:arkts && cp -r ./out/arkts-subset/generated/sig/arkoala-arkts/arkui/src/generated/ ./external/arkoala-arkts/arkui/src/",
     "sig:arkts:subset:compile": "cd external/arkoala-arkts/arkui && npm run build:arkui-no-common",
     "sig:arkts:subset:all": "npm run sig:arkts:subset:clean && npm run sig:arkts:subset:copy && npm run sig:arkts:subset:compile",
-    "check:index-full:ts": "tsc --target esnext --noEmit out/ts-subset/generated/sig/arkoala/arkui/types/index-full.d.ts",
-    "check:index-full:arkts": "tsc --target esnext --noEmit out/arkts-subset/generated/sig/arkoala-arkts/arkui/types/index-full.d.ts"
+    "check:index-full:ts": "tsc --target esnext --lib esnext --noEmit out/ts-subset/generated/sig/arkoala/arkui/types/index-full.d.ts",
+    "check:index-full:arkts": "tsc --target esnext --lib esnext --noEmit out/arkts-subset/generated/sig/arkoala-arkts/arkui/types/index-full.d.ts"
   }
 }
