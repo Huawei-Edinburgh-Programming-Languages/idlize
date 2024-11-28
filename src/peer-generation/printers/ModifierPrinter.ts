@@ -30,8 +30,7 @@ import { createDestroyPeerMethod, MaterializedClass, MaterializedMethod } from "
 import { groupBy } from "../../util";
 import { CppLanguageWriter, createLanguageWriter, createTypeNameConvertor, LanguageWriter, printMethodDeclaration } from "../LanguageWriters";
 import { LibaceInstall } from "../../Install";
-import { IDLBooleanType, IDLFunctionType, IDLStringType, isOptionalType } from "../../idl";
-import { PeerLibrary } from "../PeerLibrary";
+import { IDLAnyType, IDLBooleanType, IDLFunctionType, IDLPointerType, IDLStringType, IDLThisType, IDLType, isOptionalType, isReferenceType } from "../../idl";
 import { createConstructPeerMethod, PeerClass } from "../PeerClass";
 import { PeerMethod } from "../PeerMethod";
 import { Language } from "../../Language";
