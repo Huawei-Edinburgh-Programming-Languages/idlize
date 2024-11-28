@@ -391,9 +391,9 @@
 |`setFormComponentOptions`| Function | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
 |`size`| Function | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
 |`moduleName`| Function | Vadim Voronov | done | |
-|`dimension`| Function | Vadim Voronov | in progress | |
+|`dimension`| Function | Vadim Voronov | devdone | |
 |`allowUpdate`| Function | Vadim Voronov | done | |
-|`visibility`| Function | Vadim Voronov | in progress | |
+|`visibility`| Function | Vadim Voronov | devdone | |
 |`onAcquired`| Function | Vadim Voronov | in progress | |
 |`onError`| Function | Vadim Voronov | in progress | |
 |`onRouter`| Function | Vadim Voronov | in progress | |
@@ -1546,7 +1546,7 @@
 |`resetTransform`| Function  | Vadim Voronov | done | |
 |`rotate`| Function  | Vadim Voronov | done | |
 |`scale`| Function  | Vadim Voronov | done | |
-|`setTransform`| Function  | Vadim Voronov | devdone | |
+|`setTransform`| Function  | Vadim Voronov | done | |
 |`transform`| Function  | Vadim Voronov | done | |
 |`translate`| Function  | Vadim Voronov | done | |
 |`setPixelMap`| Function  | Vadim Voronov | in progress | |
@@ -1558,8 +1558,8 @@
 |`setGlobalAlpha`| Function  | Vadim Voronov | done | |
 |`getGlobalCompositeOperation`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR & https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
 |`setGlobalCompositeOperation`| Function  | Vadim Voronov | done | |
-|`setFillStyle`| Function  | Vadim Voronov | devdone | |
-|`setStrokeStyle`| Function  | Vadim Voronov | devdone | |
+|`setFillStyle`| Function  | Vadim Voronov | done | |
+|`setStrokeStyle`| Function  | Vadim Voronov | done | |
 |`getFilter`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
 |`setFilter`| Function  | Vadim Voronov | done | |
 |`getImageSmoothingEnabled`| Function  | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
@@ -1587,7 +1587,7 @@
 |`getDirection`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO & https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 & https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
 |`setDirection`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
 |`getFont`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR & https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
-|`setFont`| Function  | Vadim Voronov | devdone | |
+|`setFont`| Function  | Vadim Voronov | done | |
 |`getTextAlign`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO & https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 & https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
 |`setTextAlign`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
 |`getTextBaseline`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO & https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 & https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
@@ -1700,8 +1700,8 @@
 |*Matrix2D*| *Class* | Vadim Voronov | in progress | |
 |`identity`| Function | Vadim Voronov | in progress | |
 |`invert`| Function | Vadim Voronov | in progress | |
-|`multiply`| Function | Vadim Voronov | in progress | |
-|`rotate`| Function | Vadim Voronov | in progress | |
+|`multiply`| Function | Vadim Voronov | in progress | deprecated |
+|`rotate`| Function | Vadim Voronov | in progress | deprecated |
 |`translate`| Function | Vadim Voronov | in progress | |
 |`scale`| Function | Vadim Voronov | in progress | |
 |`getScaleX`| Function | Vadim Voronov | in progress | |
