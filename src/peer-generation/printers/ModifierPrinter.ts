@@ -91,8 +91,18 @@ export class ModifierVisitor {
             printer.print(`return new ${method.originalParentName}Peer();`)
         }
         else if (!method.retConvertor.isVoid) {
+            if (this.isSpecialReturnType(method.method.signature.returnType)) {
+                printer.print(`return nullptr;`)
+            }
             printer.print(`return 0;`)
         }
+    }
+     
+     private isSpecialReturnType(returnType: IDLType): boolean {
+        return isReferenceType(returnType)  ||
+                returnType === IDLThisType ||
+                returnType === IDLPointerType ||
+                returnType === IDLAnyType
     }
 
     private printBodyImplementation(printer: LanguageWriter, method: PeerMethod,
