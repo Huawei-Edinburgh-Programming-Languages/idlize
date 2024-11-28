@@ -91,7 +91,7 @@ export class ModifierVisitor {
             printer.print(`return new ${method.originalParentName}Peer();`)
         }
         else if (!method.retConvertor.isVoid) {
-            if (this.isSpecialReturnType(method.method.signature.returnType)) {
+            if (this.isPointerReturnType(method.method.signature.returnType)) {
                 printer.print(`return nullptr;`)
             }
             else{
@@ -100,7 +100,7 @@ export class ModifierVisitor {
         }
     }
      
-     private isSpecialReturnType(returnType: IDLType): boolean {
+     private isPointerReturnType(returnType: IDLType): boolean {
         return isReferenceType(returnType)  ||
                 returnType === IDLThisType ||
                 returnType === IDLPointerType ||
