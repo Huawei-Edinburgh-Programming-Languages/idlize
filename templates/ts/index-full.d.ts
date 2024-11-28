@@ -72,6 +72,8 @@ declare const AnimatableExtend: MethodDecorator & ((value: Object) => MethodDeco
 
 declare const Monitor: MonitorDecorator;
 
+declare type MonitorDecorator = (value: string, ...args: string[]) => MethodDecorator;
+
 declare const Concurrent: MethodDecorator;
 
 declare const Sendable: ClassDecorator;
