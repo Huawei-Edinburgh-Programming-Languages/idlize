@@ -84,9 +84,9 @@
 |`onSelectChange`| Function | Maksimov Nikita | done | |
 |`onRequestData`| Function | Maksimov Nikita | done | |
 |*CalendarPicker*| *Component* |Politov Mikhail | in progress |  |
-|`setCalendarPickerOptions`| Function |Politov Mikhail | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`setCalendarPickerOptions`| Function |Politov Mikhail | testskipped |  |
 |`textStyle`| Function |Politov Mikhail | done |  |
-|`onChange`| Function |Politov Mikhail | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`onChange`| Function |Politov Mikhail | devdone |  |
 |`edgeAlign`| Function |Politov Mikhail | done |  |
 |*Canvas*| *Component* |Vadim Voronov | blocked IDL | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`setCanvasOptions`| Function |Vadim Voronov | blocked IDL | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
