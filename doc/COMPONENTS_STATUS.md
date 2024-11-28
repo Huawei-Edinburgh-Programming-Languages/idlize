@@ -84,7 +84,7 @@
 |`onSelectChange`| Function | Maksimov Nikita | done | |
 |`onRequestData`| Function | Maksimov Nikita | done | |
 |*CalendarPicker*| *Component* |Politov Mikhail | in progress |  |
-|`setCalendarPickerOptions`| Function |Politov Mikhail | testskipped |  |
+|`setCalendarPickerOptions`| Function |Politov Mikhail | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB7RNZ |
 |`textStyle`| Function |Politov Mikhail | done |  |
 |`onChange`| Function |Politov Mikhail | devdone |  |
 |`edgeAlign`| Function |Politov Mikhail | done |  |
