@@ -1080,7 +1080,7 @@
 |`onWillHide`| Function |Evstigneev Roman | in progress |  |
 |*Text*| *Component* | Kirill Kirichenko | in progress | |
 |`setTextOptions`| Function | Kirill Kirichenko | in progress |  |
-|`font`| Function |Samarin Sergey |in progress |  |
+|`font`| Function |Samarin Sergey | devdone |  |
 |`fontColor`| Function |Samarin Sergey | done |  |
 |`fontSize`| Function |Samarin Sergey | done |  |
 |`minFontSize`| Function |Samarin Sergey | done |  |
@@ -1089,7 +1089,7 @@
 |`maxFontScale`| Function |Samarin Sergey | done |  |
 |`fontStyle`| Function |Samarin Sergey | done |  |
 |`fontWeight`| Function |Samarin Sergey | done |  |
-|`lineSpacing`| Function |Samarin Sergey |in progress |  |
+|`lineSpacing`| Function |Samarin Sergey | devdone |  |
 |`textAlign`| Function |Samarin Sergey | done |  |
 |`lineHeight`| Function |Samarin Sergey | done |  |
 |`textOverflow`| Function |Samarin Sergey | done |  |
@@ -1099,9 +1099,9 @@
 |`letterSpacing`| Function |Samarin Sergey | done |  |
 |`textCase`| Function |Samarin Sergey | done |  |
 |`baselineOffset`| Function |Samarin Sergey | done |  |
-|`copyOption`| Function |Samarin Sergey |in progress |  |
+|`copyOption`| Function |Samarin Sergey | devdone |  |
 |`draggable`| Function |Samarin Sergey | done |  |
-|`textShadow`| Function |Samarin Sergey |in progress |  |
+|`textShadow`| Function |Samarin Sergey | devdone |  |
 |`heightAdaptivePolicy`| Function |Samarin Sergey | done |  |
 |`textIndent`| Function |Samarin Sergey | done |  |
 |`wordBreak`| Function | Samarin Sergey | done |  |
@@ -1113,7 +1113,7 @@
 |`enableDataDetector`| Function | Kirill Kirichenko | done |  |
 |`dataDetectorConfig`| Function | Kirill Kirichenko | in progress |  |
 |`onTextSelectionChange`| Function | Kirill Kirichenko | done |  |
-|`fontFeature`| Function |Samarin Sergey |in progress |  |
+|`fontFeature`| Function |Samarin Sergey | devdone |  |
 |`privacySensitive`| Function |Samarin Sergey | done |  |
 |`textSelectable`| Function |Samarin Sergey | done |  |
 |`editMenuOptions`| Function | Kirill Kirichenko | in progress |  |
