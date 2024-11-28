@@ -91,7 +91,7 @@ export class ModifierVisitor {
             printer.print(`return new ${method.originalParentName}Peer();`)
         }
         else if (!method.retConvertor.isVoid) {
-            printer.print(`return ${returnValue ?? "0"};`)
+            printer.print(`return 0;`)
         }
     }
 
