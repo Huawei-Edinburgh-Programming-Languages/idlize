@@ -94,7 +94,9 @@ export class ModifierVisitor {
             if (this.isSpecialReturnType(method.method.signature.returnType)) {
                 printer.print(`return nullptr;`)
             }
-            printer.print(`return 0;`)
+            else{
+                printer.print(`return 0;`)
+            }
         }
     }
      
