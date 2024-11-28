@@ -35,6 +35,7 @@ import { createConstructPeerMethod, PeerClass } from "../PeerClass";
 import { PeerMethod } from "../PeerMethod";
 import { Language } from "../../Language";
 import { createEmptyReferenceResolver, getReferenceResolver } from "../ReferenceResolver";
+import { PeerLibrary } from "../PeerLibrary";
 
 export class ModifierVisitor {
     dummy = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
