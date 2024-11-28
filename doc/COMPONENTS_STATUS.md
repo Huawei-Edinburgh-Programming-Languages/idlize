@@ -1055,7 +1055,7 @@
 |`barMode`| Function | Tuzhilkin Ivan | done |  |
 |`barWidth`| Function | Tuzhilkin Ivan | done |  |
 |`barHeight`| Function | Tuzhilkin Ivan | done  |  |
-|`animationDuration`| Function | Tuzhilkin Ivan | devdone | |
+|`animationDuration`| Function | Tuzhilkin Ivan | done | |
 |`animationMode`| Function | Tuzhilkin Ivan | done |  |
 |`edgeEffect`| Function | Tuzhilkin Ivan | done |  |
 |`onChange`| Function | Tuzhilkin Ivan | done |  |
