@@ -501,14 +501,14 @@
 |`enhancedImageQuality`| Function | Evstigneev Roman | in progress | |
 |*ImageAnimator*| *Component* | Pavelyev Ivan | in progress | |
 |`setImageAnimatorOptions`| Function | Pavelyev Ivan | in progress | |
-|`images`| Function | Pavelyev Ivan | in progress | |
-|`state`| Function | Pavelyev Ivan | in progress | |
-|`duration`| Function | Pavelyev Ivan | in progress | |
-|`reverse`| Function | Pavelyev Ivan | in progress | |
-|`fixedSize`| Function | Pavelyev Ivan | in progress | |
-|`preDecode`| Function | Pavelyev Ivan | in progress | deprecated |
-|`fillMode`| Function | Pavelyev Ivan | in progress | |
-|`iterations`| Function | Pavelyev Ivan | in progress | |
+|`images`| Function | Pavelyev Ivan | in progress | Need PixelMap for complete it |
+|`state`| Function | Pavelyev Ivan | done | |
+|`duration`| Function | Pavelyev Ivan | done | |
+|`reverse`| Function | Pavelyev Ivan | done | |
+|`fixedSize`| Function | Pavelyev Ivan | done | |
+|`preDecode`| Function | Pavelyev Ivan | done | deprecated |
+|`fillMode`| Function | Pavelyev Ivan | done | |
+|`iterations`| Function | Pavelyev Ivan | done | |
 |`onStart`| Function | Pavelyev Ivan | in progress | |
 |`onPause`| Function | Pavelyev Ivan | in progress | |
 |`onRepeat`| Function | Pavelyev Ivan | in progress | |
