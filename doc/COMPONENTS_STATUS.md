@@ -660,7 +660,7 @@
 |`hideToolBar`|Function| Skroba Gleb | in progress | main part done, no ace_engine implementation for second |
 |`onNavBarStateChange`|Function| Erokhin Ilya | done |  |
 |`onNavigationModeChange`|Function| Erokhin Ilya | done |  |
-|`navDestination`| Function | Skroba Gleb | in progress | blocked by NavPathStack.*, setNavigationOptions |
+|`navDestination`| Function | Skroba Gleb | in progress | blocked by NavPathStack.*, setNavigationOptions https://gitee.com/nikolay-igotti/idlize/issues/IB7RSS |
 |`customNavContentTransition`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
 |`systemBarStyle`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`recoverable`|Function| Erokhin Ilya | done |  |
