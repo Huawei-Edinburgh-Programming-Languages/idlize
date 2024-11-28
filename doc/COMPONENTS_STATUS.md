@@ -173,14 +173,14 @@
 |`focusable`| Function | Roman Sedaikin | done | |
 |`onFocus`| Function | Roman Sedaikin | done | |
 |`onBlur`| Function | Roman Sedaikin | done | |
-|`tabIndex`| Function | Dmitry A Smirnov| in progress | |
-|`defaultFocus`| Function | Dmitry A Smirnov| in progress | |
-|`groupDefaultFocus`| Function | Dmitry A Smirnov| in progress | |
-|`focusOnTouch`| Function | Dmitry A Smirnov| in progress | |
+|`tabIndex`| Function | Dmitry A Smirnov| devdone | |
+|`defaultFocus`| Function | Dmitry A Smirnov| devdone | |
+|`groupDefaultFocus`| Function | Dmitry A Smirnov| devdone | |
+|`focusOnTouch`| Function | Dmitry A Smirnov| devdone | |
 |`focusBox`| Function | Dmitry A Smirnov| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`animation`| Function | Erokhin Ilya | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAXHJP|
-|`transition`| Function | Dmitry A Smirnov| in progress | |
-|`motionBlur`| Function | Dmitry A Smirnov| in progress | |
+|`transition`| Function | Dmitry A Smirnov| skipTest | |
+|`motionBlur`| Function | Dmitry A Smirnov| skipTest | |
 |`brightness`| Function | Lobah Mikhail | done |  |
 |`contrast`| Function | Lobah Mikhail | done | |
 |`grayscale`| Function | Lobah Mikhail | done | |
@@ -197,7 +197,7 @@
 |`scale`| Function | Erokhin Ilya | done |  |
 |`gridSpan`| Function | Lobah Mikhail | in progress | |
 |`gridOffset`| Function | Lobah Mikhail | in progress | |
-|`rotate`| Function | Dmitry A Smirnov| in progress | |
+|`rotate`| Function | Dmitry A Smirnov| skipTest | |
 |`transform`| Function | Lobah Mikhail | | |
 |`onAppear`| Function | Roman Sedaikin | done | |
 |`onDisAppear`| Function | Roman Sedaikin | done | |
@@ -205,20 +205,20 @@
 |`onDetach`| Function | | | |
 |`onAreaChange`| Function | Roman Sedaikin | done | |
 |`visibility`| Function | Roman Sedaikin | done | |
-|`flexGrow`| Function | Dmitry A Smirnov| in progress | |
-|`flexShrink`| Function | Dmitry A Smirnov| in progress | |
-|`flexBasis`| Function | Dmitry A Smirnov| in progress | |
+|`flexGrow`| Function | Dmitry A Smirnov| devdone | |
+|`flexShrink`| Function | Dmitry A Smirnov| devdone | |
+|`flexBasis`| Function | Dmitry A Smirnov| devdone | |
 |`alignSelf`| Function | Roman Sedaikin | done | |
 |`displayPriority`| Function | Roman Sedaikin | done | |
 |`zIndex`| Function | Roman Sedaikin | done | |
 |`direction`| Function | Roman Sedaikin | done | |
 |`align`| Function | Roman Sedaikin | done | |
 |`position`| Function | Roman Sedaikin | done | |
-|`markAnchor`| Function | Dmitry A Smirnov| in progress | |
+|`markAnchor`| Function | Dmitry A Smirnov| devdone | |
 |`offset`| Function | Skroba Gleb | done | |
 |`enabled`| Function | Roman Sedaikin | done | |
-|`useSizeType`| Function | Dmitry A Smirnov| in progress | |
-|`alignRules`| Function | Dmitry A Smirnov| in progress | |
+|`useSizeType`| Function | Dmitry A Smirnov| skipTest | |
+|`alignRules`| Function | Dmitry A Smirnov| devdone | |
 |`aspectRatio`| Function | Roman Sedaikin | done | |
 |`clickEffect`| Function | Lobah Mikhail | | |
 |`onDragStart`| Function | | | |
@@ -273,8 +273,8 @@
 |`backgroundImage`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`backgroundBlurStyle`| Function | Skroba Gleb | done |  |
 |`foregroundBlurStyle`| Function | Roman Sedaikin | done | |
-|`focusScopeId`| Function | Dmitry A Smirnov| in progress | |
-|`focusScopePriority`| Function | Dmitry A Smirnov| in progress | |
+|`focusScopeId`| Function | Dmitry A Smirnov| devdone | |
+|`focusScopePriority`| Function | Dmitry A Smirnov| devdone | |
 |`gesture`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARW2A |
 |`priorityGesture`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARW2A |
 |`parallelGesture`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARW2A |
