@@ -179,8 +179,8 @@
 |`focusOnTouch`| Function | Dmitry A Smirnov| devdone | |
 |`focusBox`| Function | Dmitry A Smirnov| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`animation`| Function | Erokhin Ilya | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAXHJP|
-|`transition`| Function | Dmitry A Smirnov| skipTest | |
-|`motionBlur`| Function | Dmitry A Smirnov| skipTest | |
+|`transition`| Function | Dmitry A Smirnov| testskipped | |
+|`motionBlur`| Function | Dmitry A Smirnov| testskipped | |
 |`brightness`| Function | Lobah Mikhail | done |  |
 |`contrast`| Function | Lobah Mikhail | done | |
 |`grayscale`| Function | Lobah Mikhail | done | |
@@ -197,7 +197,7 @@
 |`scale`| Function | Erokhin Ilya | done |  |
 |`gridSpan`| Function | Lobah Mikhail | devdone | |
 |`gridOffset`| Function | Lobah Mikhail | devdone | |
-|`rotate`| Function | Dmitry A Smirnov| skipTest | |
+|`rotate`| Function | Dmitry A Smirnov| testskipped | |
 |`transform`| Function | Lobah Mikhail | | |
 |`onAppear`| Function | Roman Sedaikin | done | |
 |`onDisAppear`| Function | Roman Sedaikin | done | |
@@ -217,7 +217,7 @@
 |`markAnchor`| Function | Dmitry A Smirnov| devdone | |
 |`offset`| Function | Skroba Gleb | done | |
 |`enabled`| Function | Roman Sedaikin | done | |
-|`useSizeType`| Function | Dmitry A Smirnov| skipTest | |
+|`useSizeType`| Function | Dmitry A Smirnov| testskipped | |
 |`alignRules`| Function | Dmitry A Smirnov| devdone | |
 |`aspectRatio`| Function | Roman Sedaikin | done | |
 |`clickEffect`| Function | Lobah Mikhail | | |
