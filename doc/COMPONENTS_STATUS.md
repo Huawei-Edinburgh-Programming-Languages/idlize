@@ -369,8 +369,8 @@
 |`lineCap`| Function | Tuzhilkin Ivan | done |  |
 |*EffectComponent*| *Component* | Ekaterina Stepanova | in progress | |
 |`setEffectComponentOptions`| Function | Ekaterina Stepanova | in progress | |
-|*Ellipse*| *Component* | Ekaterina Stepanova | devdone | |
-|`setEllipseOptions`| Function | Ekaterina Stepanova | devdone | |
+|*Ellipse*| *Component* | Ekaterina Stepanova | done | |
+|`setEllipseOptions`| Function | Ekaterina Stepanova | done | |
 |*EmbeddedComponent*| *Component* | Ekaterina Stepanova | in progress | |
 |`setEmbeddedComponentOptions`| Function | Ekaterina Stepanova | in progress | |
 |`onTerminated`| Function | Ekaterina Stepanova | in progress | |
@@ -1871,14 +1871,14 @@
 |`caretPosition`| Function | Spirin Andrey | testskipped |  |
 |`setTextSelection`| Function | Spirin Andrey | testskipped |  |
 |`stopEditing`| Function |  Spirin Andrey | testskipped |  |
-|*TextPickerDialog*| *Class* | Ekaterina Stepanova | in progress | |
-|`show`| Function | Ekaterina Stepanova | in progress | |
+|*TextPickerDialog*| *Class* | Ekaterina Stepanova | devdone | |
+|`show`| Function | Ekaterina Stepanova | devdone | |
 |*TextTimerController*| *Class* |Ekaterina Stepanova| done |  |
 |`start`| Function |Ekaterina Stepanova| done |  |
 |`pause`| Function |Ekaterina Stepanova| done |  |
 |`reset`| Function |Ekaterina Stepanova| done |  |
-|*TimePickerDialog*| *Class* | Ekaterina Stepanova | in progress | |
-|`show`| Function | Ekaterina Stepanova | in progress | |
+|*TimePickerDialog*| *Class* | Ekaterina Stepanova | blocked IDL | |
+|`show`| Function | Ekaterina Stepanova | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
 |*VideoController*| *Class* | Erokhin Ilya | done |  |
 |`start`| Function | Erokhin Ilya | done |  |
 |`pause`| Function | Erokhin Ilya | done |  |
