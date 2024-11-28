@@ -643,10 +643,10 @@
 |`mode`| Function |Evstigneev Roman | done |  |
 |*Navigation*| *Component* | Erokhin Ilya | in progress |  |
 |`setNavigationOptions`| Function | Skroba Gleb | in progress| depend on NavPathStack |
-|`navBarWidth`|Function| Skroba Gleb | devdone | |
+|`navBarWidth`|Function| Skroba Gleb | done | |
 |`navBarPosition`|Function| Erokhin Ilya | done | |
-|`navBarWidthRange`|Function| Skroba Gleb | devdone | |
-|`minContentWidth`|Function| Skroba Gleb | devdone | |
+|`navBarWidthRange`|Function| Skroba Gleb | done | |
+|`minContentWidth`|Function| Skroba Gleb | done | |
 |`mode`|Function| Erokhin Ilya | done |  |
 |`backButtonIcon`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR, implemented for string and resource arg |
 |`hideNavBar`|Function| Erokhin Ilya | done |  |
@@ -655,18 +655,18 @@
 |`hideBackButton`|Function| Erokhin Ilya | done |  |
 |`titleMode`|Function| Erokhin Ilya | done |  |
 |`menus`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q ,  https://gitee.com/openharmony/arkui_ace_engine/issues/IB3U6S|
-|`onTitleModeChange`| Function | Skroba Gleb | in progress | |
+|`onTitleModeChange`| Function | Skroba Gleb | done | |
 |`toolBar`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`hideToolBar`|Function| Skroba Gleb | in progress | main part done, no ace_engine implementation for second |
 |`onNavBarStateChange`|Function| Erokhin Ilya | done |  |
 |`onNavigationModeChange`|Function| Erokhin Ilya | done |  |
-|`navDestination`| Function | Skroba Gleb | in progress | blocked by NavPathStack.*, setNavigationOptions https://gitee.com/nikolay-igotti/idlize/issues/IB7RSS |
+|`navDestination`| Function | Skroba Gleb | in progress | blocked by NavPathStack.*, setNavigationOptions, https://gitee.com/nikolay-igotti/idlize/issues/IB7RSS |
 |`customNavContentTransition`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
 |`systemBarStyle`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`recoverable`|Function| Erokhin Ilya | done |  |
 |`enableDragBar`| Function | | | |
 |`title`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|`toolbarConfiguration`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q|
+|`toolbarConfiguration`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`ignoreLayoutSafeArea`| Function | Skroba Gleb | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TXB |
 |*Navigator*| *Component* | Skroba Gleb| blocked |  |
 |`setNavigatorOptions`| Function | Skroba Gleb | done |  |
