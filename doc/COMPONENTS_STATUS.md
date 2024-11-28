@@ -184,19 +184,19 @@
 |`brightness`| Function | Lobah Mikhail | done |  |
 |`contrast`| Function | Lobah Mikhail | done | |
 |`grayscale`| Function | Lobah Mikhail | done | |
-|`colorBlend`| Function | Lobah Mikhail | in progress | |
+|`colorBlend`| Function | Lobah Mikhail | devdone |
 |`saturate`| Function | Lobah Mikhail | done | |
 |`sepia`| Function | Lobah Mikhail | done | |
-|`invert`| Function | Lobah Mikhail | in progress | |
-|`hueRotate`| Function | Lobah Mikhail | in progress | |
-|`useShadowBatching`| Function | Lobah Mikhail | done | |
-|`useEffect`| Function | Lobah Mikhail | in progress | |
-|`renderGroup`| Function | Lobah Mikhail | in progress | |
-|`freeze`| Function | Lobah Mikhail | in progress | |
+|`invert`| Function | Lobah Mikhail |  devdone | |
+|`hueRotate`| Function | Lobah Mikhail |  devdone | |
+|`useShadowBatching`| Function | Lobah Mikhail | in progress | |
+|`useEffect`| Function | Lobah Mikhail | devdone | |
+|`renderGroup`| Function | Lobah Mikhail | devdone  | |
+|`freeze`| Function | Lobah Mikhail | devdone  | |
 |`translate`| Function | Erokhin Ilya | done |  |
 |`scale`| Function | Erokhin Ilya | done |  |
-|`gridSpan`| Function | Lobah Mikhail | in progress | |
-|`gridOffset`| Function | Lobah Mikhail | in progress | |
+|`gridSpan`| Function | Lobah Mikhail | devdone | |
+|`gridOffset`| Function | Lobah Mikhail | devdone | |
 |`rotate`| Function | Dmitry A Smirnov| skipTest | |
 |`transform`| Function | Lobah Mikhail | | |
 |`onAppear`| Function | Roman Sedaikin | done | |
@@ -245,9 +245,9 @@
 |`geometryTransition`| Function | Lobah Mikhail | | |
 |`stateStyles`| Function | Lobah Mikhail | | |
 |`restoreId`| Function | Lobah Mikhail | | |
-|`sphericalEffect`| Function | Lobah Mikhail | in progress | |
-|`lightUpEffect`| Function | Lobah Mikhail | in progress | |
-|`pixelStretchEffect`| Function | Lobah Mikhail | in progress | |
+|`sphericalEffect`| Function | Lobah Mikhail | devdone | |
+|`lightUpEffect`| Function | Lobah Mikhail | devdone | |
+|`pixelStretchEffect`| Function | Lobah Mikhail | devdone | |
 |`accessibilityGroup`| Function | Lobah Mikhail | | |
 |`accessibilityText`| Function | Lobah Mikhail | | |
 |`accessibilityTextHint`| Function | Lobah Mikhail | | |
