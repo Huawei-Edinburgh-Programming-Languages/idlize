@@ -790,8 +790,8 @@
 |`enableKeyboardOnFocus`| Function | Dudkin Sergey| done|  |
 |`enableHapticFeedback`| Function | Dudkin Sergey| done|  |
 |`barState`| Function | Dudkin Sergey| done|  |
-|`bindSelectionMenu`| Function | Dudkin Sergey| devDone | |
-|`customKeyboard`| Function | Dudkin Sergey| devDone | |
+|`bindSelectionMenu`| Function | Dudkin Sergey| done | |
+|`customKeyboard`| Function | Dudkin Sergey| done | |
 |`placeholder`| Function | Dudkin Sergey| done|  |
 |*RichText*| *Component* | Dudkin Sergey| devDone|  |
 |`setRichTextOptions`| Function | Dudkin Sergey| devDone|  |
