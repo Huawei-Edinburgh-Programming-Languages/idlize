@@ -48,7 +48,6 @@ run arkts subset:
   before_script:
     - !reference [.setup, script]
     - PANDA_SDK_VERSION=1.5.0-dev.9440 npm run panda:sdk:install
-    - npm run fast-arktsc:install
   script:
     - npm run run:panda:subset
 
@@ -61,7 +60,6 @@ compile arkts peers:
   before_script:
     - !reference [.setup, script]
     - PANDA_SDK_VERSION=1.5.0-dev.9440 npm run panda:sdk:install
-    - npm run fast-arktsc:install
   script:
     - npm run make:compile:arkts:peers
 
@@ -83,7 +81,6 @@ arkts subset sig integration:
   before_script:
     - !reference [.setup, script]
     - PANDA_SDK_VERSION=1.5.0-dev.9440 npm run panda:sdk:install
-    - npm run fast-arktsc:install
   script:
     - npm run sig:arkts:subset:all
 
