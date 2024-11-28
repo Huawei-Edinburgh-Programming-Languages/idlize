@@ -514,14 +514,14 @@
 |`onRepeat`| Function | Pavelyev Ivan | in progress | |
 |`onCancel`| Function | Pavelyev Ivan | in progress | |
 |`onFinish`| Function | Pavelyev Ivan | in progress | |
-|*ImageSpan*| *Component* | Politov Mikhail | in progress|  |
-|`setImageSpanOptions`| Function | Politov Mikhail |  in progress|  |
+|*ImageSpan*| *Component* | Politov Mikhail | blocked |  |
+|`setImageSpanOptions`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`verticalAlign`| Function | Politov Mikhail | devdone |  |
-|`colorFilter`| Function | Politov Mikhail | in progress|  |
+|`colorFilter`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`objectFit`| Function | Politov Mikhail | devdone |  |
-|`onComplete`| Function | Politov Mikhail | in progress |  |
-|`onError`| Function | Politov Mikhail | in progress|  |
-|`alt`| Function | Politov Mikhail | in progress|  |
+|`onComplete`| Function | Politov Mikhail | devdone |  |
+|`onError`| Function | Politov Mikhail | devdone |  |
+|`alt`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |*Line*|*Component*|Dudkin Sergey| blocked |  |
 |`setLineOptions`|Function|Dudkin Sergey| done |  |
 |`startPoint`|Function|Dudkin Sergey|blocked AceEngine | https://gitee.com/openharmony/interface_sdk-js/issues/IAXCBA |
