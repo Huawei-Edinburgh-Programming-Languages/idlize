@@ -28,11 +28,6 @@ export class CJIDLNodeToStringConvertor implements NodeConvertor<string>, IdlNam
     convert(node: idl.IDLNode): string {
         return convertNode(this, node)
     }
-    // convert(node: idl.IDLNode): string {
-    //     const typeAlias = convertNode(this, node)
-    //     const rawType = typeAlias.type.optional ? convertCJOptional(typeAlias.type.text) : typeAlias.type.text 
-    //     return this.mapTypeName(rawType)
-    // }
 
     /***** TypeConvertor<string> **********************************/
     convertOptional(type: idl.IDLOptionalType): string {
@@ -40,7 +35,9 @@ export class CJIDLNodeToStringConvertor implements NodeConvertor<string>, IdlNam
     }
     convertUnion(type: idl.IDLUnionType): string {
         const aliases = type.types.map(it => convertType(this, it))
-        return `Union_${aliases.join('_')}`.replace(/[<>]/g, '') == 'Union_Color_Float64_String_Resource' ? 'ResourceStr' : `Union_${aliases.join('_')}`.replace(/[<>]/g, '')
+        console.log(type.name, '-------------------------------')
+        return type.name
+        return `Union_${aliases.join('_')}`.replace(/[<>]/g, '') == 'Union_Color_Float64_String_Resource' ? 'ResourceColor' : `Union_${aliases.join('_')}`.replace(/[<>]/g, '')
     }
     convertContainer(type: idl.IDLContainerType): string {
         if (idl.IDLContainerUtils.isSequence(type)) {
@@ -142,28 +139,6 @@ export class CJIDLNodeToStringConvertor implements NodeConvertor<string>, IdlNam
         // // TODO: other types
         if (!isTuple) throw new Error('Only tuples supported from IDL synthetic types for now')
         return `Tuple_${decl.properties.map(it => convertType(this, it.type)).join('_')}`
-    }
-
-    private mapTypeName(name: string): string {
-        // stub, should be fixed soon
-        switch (name) {
-            case 'Length': return 'String'
-            case 'KPointer': return 'Int64'
-            case 'KBoolean': return 'Bool'
-            case 'KUInt': return 'UInt32'
-            case 'int32': case 'KInt': return 'Int32'
-            case 'int64': case 'KLong': return 'Int64'
-            case 'float32': case 'KFloat': return 'Float32'
-            case 'Uint8Array': return 'ArrayList<UInt8>'
-            case 'KUint8ArrayPtr': return 'Int64'
-            case 'KInt32ArrayPtr': return 'Int64'
-            case 'KFloat32ArrayPtr': return 'Int64'
-            case 'KStringPtr': return 'String'
-            case 'string': return 'String'
-            case 'ArrayBuffer': return 'ArrayList<UInt8>'
-            case 'Object': return 'Int64'
-        }
-        return name
     }
     /**********************************************************************/
 }

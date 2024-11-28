@@ -118,36 +118,23 @@ public open class DeserializerBase {
     // }
 
     func readString(): String {
-        const length = this.readInt32()
-        this.checkCapacity(length)
-        // read without null-terminated byte
-        const value = ""
-        this.position += length
-        return value
+        // TODO
+        return "value"
     }
 
-    // readCustomObject(kind: string): any {
-    //     let current = DeserializerBase.customDeserializers
-    //     while (current) {
-    //         if (current.supports(kind)) {
-    //             return current.deserialize(this, kind)
-    //         }
-    //         current = current.next
-    //     }
-    //     // consume tag
-    //     const tag = this.readInt8()
-    //     return undefined
-    // }
+    func readCustomObject<T>(kind: String): Option<T> where T <: Ark_CustomObject{
+        throw Exception("readCustomObject")
+    }
 
     func readNumber(): Float64 {
-        const tag = this.readInt8()
+        let tag = this.readInt8()
         match (tag) {
-            case Tags.UNDEFINED =>
-                return Option.None
-            case Tags.INT32 =>
-                return this.readInt32()
-            case Tags.FLOAT32 =>
-                return this.readFloat32()
+            // case Tags.UNDEFINED.ordinal =>
+            //     return Option.None
+            // case Tag.INT32.ordinal =>
+            //     return Float64(this.readInt32())
+            // case Tag.FLOAT32.ordinal =>
+            //     return Float64(this.readFloat32())
             case _ =>
                 throw Exception("Unknown number tag: ${tag}")
         }
@@ -155,17 +142,17 @@ public open class DeserializerBase {
 
     func readLength(): ?Ark_Length {
         this.checkCapacity(1)
-        const valueType = this.readInt8()
-        match (valueType) {
-            case RuntimeType.OBJECT =>
-                return Ark_Length("")
-            case RuntimeType.STRING =>
-                return this.readString()
-            case RuntimeType.NUMBER =>
-                return this.readFloat32()
-            case _ => 
+        let valueType = this.readInt8()
+        // match (valueType) {
+        //     case RuntimeType.OBJECT =>
+        //         return Ark_Length("")
+        //     case RuntimeType.STRING =>
+        //         return this.readString()
+        //     case RuntimeType.NUMBER =>
+        //         return this.readFloat32()
+        //     case _ => 
                 return Option.None
-        }
+        // }
     }
 
     // readCallbackResource(): CallbackResource {

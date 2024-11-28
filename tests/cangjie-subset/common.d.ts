@@ -17,10 +17,10 @@ declare interface BlurOptions {
     grayscale: [number, number];
 }
 
-declare interface StateStyles {
+// declare interface StateStyles {
 
-    normal?: any;
-}
+//     normal?: any;
+// }
 
 declare class AttributeModifier<T> {}
 
@@ -56,7 +56,7 @@ declare class CommonMethod<T> {
 
     constructor();
 
-    stateStyles(value: StateStyles): T;
+    // stateStyles(value: StateStyles): T;
 
     backdropBlur(value: number, options?: BlurOptions): T;
 
