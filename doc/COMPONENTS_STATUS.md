@@ -2014,16 +2014,16 @@
 |*XComponentController*| *Class* | Tuzhilkin Ivan | in progress | |
 |`getXComponentSurfaceId`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getXComponentContext`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF |
-|`setXComponentSurfaceSize`| Function | Tuzhilkin Ivan | devdone | |
-|`setXComponentSurfaceRect`| Function | Tuzhilkin Ivan | devdone | |
+|`setXComponentSurfaceSize`| Function | Tuzhilkin Ivan | testskipped | |
+|`setXComponentSurfaceRect`| Function | Tuzhilkin Ivan | testskipped | |
 |`getXComponentSurfaceRect`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setXComponentSurfaceRotation`| Function | Tuzhilkin Ivan | devdone | |
+|`setXComponentSurfaceRotation`| Function | Tuzhilkin Ivan | testskipped | |
 |`getXComponentSurfaceRotation`| Function | Tuzhilkin Ivan | | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`onSurfaceCreated`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV |
 |`onSurfaceChanged`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV |
 |`onSurfaceDestroyed`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV |
 |`startImageAnalyzer`| Function | Tuzhilkin Ivan | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IB3J8N , https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
-|`stopImageAnalyzer`| Function | Tuzhilkin Ivan | devdone | |
+|`stopImageAnalyzer`| Function | Tuzhilkin Ivan | testskipped | |
 |*WaterFlowSections*| *Class* | | | |
 |`splice`| Function | | | |
 |`push`| Function | | | |
