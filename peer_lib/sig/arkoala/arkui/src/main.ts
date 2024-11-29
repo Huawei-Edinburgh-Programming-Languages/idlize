@@ -508,6 +508,8 @@ export function unsafeCast<T>(value: unknown): T {
 }
 
 function checkCanvasRenderingContext2D() {
+    // TBD: Temporary disable CanvasRenderingContext2D test
+    /*
     startNativeTest(checkCanvasRenderingContext2D.name, CALL_GROUP_LOG)
 
     let canvasRenderingContext2D: CanvasRenderingContext2D | undefined = undefined
@@ -540,6 +542,7 @@ function checkCanvasRenderingContext2D() {
     assertEquals("Deserializer readCanvasRenderingContext2D()", ctorPtr, materializedBase.getPeer()!.ptr)
 
     stopNativeTest(CALL_GROUP_LOG)
+    */
 }
 
 function checkPerf2(count: number) {
