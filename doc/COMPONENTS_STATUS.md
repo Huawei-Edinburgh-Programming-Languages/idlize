@@ -2059,7 +2059,7 @@
 |`insertString`| Function | Pavelyev Ivan | in progress | |
 |`removeString`| Function | Pavelyev Ivan | in progress | |
 |`replaceStyle`| Function | Pavelyev Ivan | in progress | |
-|`setStyle`| Function | | | Pavelyev Ivan | in progress
+|`setStyle`| Function | Pavelyev Ivan | in progress | |
 |`removeStyle`| Function | Pavelyev Ivan | in progress | |
 |`removeStyles`| Function | Pavelyev Ivan | in progress | |
 |`clearStyles`| Function | Pavelyev Ivan | in progress | |
