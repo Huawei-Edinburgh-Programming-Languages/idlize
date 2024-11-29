@@ -500,7 +500,7 @@
 |`privacySensitive`| Function | Evstigneev Roman | in progress | |
 |`enhancedImageQuality`| Function | Evstigneev Roman | in progress | |
 |*ImageAnimator*| *Component* | Pavelyev Ivan | in progress | |
-|`setImageAnimatorOptions`| Function | Pavelyev Ivan | in progress | |
+|`setImageAnimatorOptions`| Function | Pavelyev Ivan | done | |
 |`images`| Function | Pavelyev Ivan | in progress | Need PixelMap for complete it |
 |`state`| Function | Pavelyev Ivan | done | |
 |`duration`| Function | Pavelyev Ivan | done | |
@@ -509,11 +509,11 @@
 |`preDecode`| Function | Pavelyev Ivan | done | deprecated |
 |`fillMode`| Function | Pavelyev Ivan | done | |
 |`iterations`| Function | Pavelyev Ivan | done | |
-|`onStart`| Function | Pavelyev Ivan | in progress | |
-|`onPause`| Function | Pavelyev Ivan | in progress | |
-|`onRepeat`| Function | Pavelyev Ivan | in progress | |
-|`onCancel`| Function | Pavelyev Ivan | in progress | |
-|`onFinish`| Function | Pavelyev Ivan | in progress | |
+|`onStart`| Function | Pavelyev Ivan | done | |
+|`onPause`| Function | Pavelyev Ivan | done | |
+|`onRepeat`| Function | Pavelyev Ivan | done | |
+|`onCancel`| Function | Pavelyev Ivan | done | |
+|`onFinish`| Function | Pavelyev Ivan | done | |
 |*ImageSpan*| *Component* | Politov Mikhail | blocked |  |
 |`setImageSpanOptions`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`verticalAlign`| Function | Politov Mikhail | devdone |  |
