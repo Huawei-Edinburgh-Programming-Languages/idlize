@@ -793,10 +793,10 @@
 |`bindSelectionMenu`| Function | Dudkin Sergey| done | |
 |`customKeyboard`| Function | Dudkin Sergey| done | |
 |`placeholder`| Function | Dudkin Sergey| done|  |
-|*RichText*| *Component* | Dudkin Sergey| devDone|  |
-|`setRichTextOptions`| Function | Dudkin Sergey| devDone|  |
-|`onStart`| Function | Dudkin Sergey| devDone|  |
-|`onComplete`| Function | Dudkin Sergey| devDone|  |
+|*RichText*| *Component* | Dudkin Sergey| done|  |
+|`setRichTextOptions`| Function | Dudkin Sergey| done|  |
+|`onStart`| Function | Dudkin Sergey| done|  |
+|`onComplete`| Function | Dudkin Sergey| done|  |
 |*RootScene*| *Component* | Spirin Andrey | in progress | |
 |`setRootSceneOptions`| Function | Spirin Andrey | in progress | |
 |*Row*| *Component* | Andrey Khudenkikh | done |  |
