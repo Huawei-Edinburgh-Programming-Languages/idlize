@@ -1615,8 +1615,8 @@
 |`translate`| Function | Andrey Khudenkikh | in progress | |
 |`rotate`| Function | Andrey Khudenkikh | in progress | |
 |`scale`| Function | Andrey Khudenkikh | in progress | |
-|`opacity`| Function | Andrey Khudenkikh | in progress | |
-|`move`| Function | Andrey Khudenkikh | in progress | |
+|`opacity`| Function | Andrey Khudenkikh | devdone | |
+|`move`| Function | Andrey Khudenkikh | devdone | |
 |`asymmetric`| Function | Andrey Khudenkikh | in progress | |
 |`animation`| Function | Andrey Khudenkikh | in progress | |
 |`combine`| Function | Andrey Khudenkikh | in progress | |
