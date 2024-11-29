@@ -67,7 +67,7 @@ export class ModifierVisitor {
             _.print(`out.append("[return ${retVal}]");`)
         }
         _.print(`appendGroupedLog(1, out);`)
-        this.printReturnStatement(this.dummy, method, retVal)
+        this.printReturnStatement(this.dummy, method, true, retVal)
     }
 
     printModifierImplFunctionBody(method: PeerMethod, clazz: PeerClass | undefined = undefined) {
@@ -77,11 +77,13 @@ export class ModifierVisitor {
         this.printReturnStatement(this.real, method)
     }
 
-    private printReturnStatement(printer: LanguageWriter, method: PeerMethod, returnValue: string | undefined = undefined) {
-        if (returnValue) {
-            if (method.retConvertor.isVoid)
+    private printReturnStatement(printer: LanguageWriter, method: PeerMethod, isDummy? : boolean, returnValue: string | undefined = undefined) {
+        if (isDummy) {
+            if (method.retConvertor.isVoid) return
+            if (returnValue) {
+                printer.print(`return ${returnValue};`)
                 return
-            printer.print(`return ${returnValue};`) 
+            }
         }
         else if(method.method.name == 'getFinalizer')
         {
