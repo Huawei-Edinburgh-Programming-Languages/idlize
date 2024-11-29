@@ -391,9 +391,9 @@
 |`setFormComponentOptions`| Function | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
 |`size`| Function | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
 |`moduleName`| Function | Vadim Voronov | done | |
-|`dimension`| Function | Vadim Voronov | devdone | |
+|`dimension`| Function | Vadim Voronov | done | |
 |`allowUpdate`| Function | Vadim Voronov | done | |
-|`visibility`| Function | Vadim Voronov | devdone | |
+|`visibility`| Function | Vadim Voronov | done | |
 |`onAcquired`| Function | Vadim Voronov | in progress | |
 |`onError`| Function | Vadim Voronov | in progress | |
 |`onRouter`| Function | Vadim Voronov | in progress | |
