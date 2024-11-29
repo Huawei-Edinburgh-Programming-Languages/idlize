@@ -2044,28 +2044,28 @@
 |`onSyncReceiverRegister`| Function | | | |
 |`offAsyncReceiverRegister`| Function | | | |
 |`offSyncReceiverRegister`| Function | | | |
-|*StyledString*| *Class* | | | |
-|`getString`| Function | | | |
-|`getStyles`| Function | | | |
-|`equals`| Function | | | |
-|`subStyledString`| Function | | | |
-|`fromHtml`| Function | | | |
-|`toHtml`| Function | | | |
-|`marshalling`| Function | | | |
-|`unmarshalling`| Function | | | |
-|`getLength`| Function | | | |
-|*MutableStyledString*| *Class* | | | |
-|`replaceString`| Function | | | |
-|`insertString`| Function | | | |
-|`removeString`| Function | | | |
-|`replaceStyle`| Function | | | |
-|`setStyle`| Function | | | |
-|`removeStyle`| Function | | | |
-|`removeStyles`| Function | | | |
-|`clearStyles`| Function | | | |
-|`replaceStyledString`| Function | | | |
-|`insertStyledString`| Function | | | |
-|`appendStyledString`| Function | | | |
+|*StyledString*| *Class* | Pavelyev Ivan | in progress | |
+|`getString`| Function | Pavelyev Ivan | in progress | |
+|`getStyles`| Function | Pavelyev Ivan | in progress | |
+|`equals`| Function | Pavelyev Ivan | in progress | |
+|`subStyledString`| Function | Pavelyev Ivan | in progress | |
+|`fromHtml`| Function | Pavelyev Ivan | in progress | |
+|`toHtml`| Function | Pavelyev Ivan | in progress | |
+|`marshalling`| Function | Pavelyev Ivan | in progress | |
+|`unmarshalling`| Function | Pavelyev Ivan | in progress | |
+|`getLength`| Function | Pavelyev Ivan | in progress | |
+|*MutableStyledString*| *Class* | Pavelyev Ivan | in progress | |
+|`replaceString`| Function | Pavelyev Ivan | in progress | |
+|`insertString`| Function | Pavelyev Ivan | in progress | |
+|`removeString`| Function | Pavelyev Ivan | in progress | |
+|`replaceStyle`| Function | Pavelyev Ivan | in progress | |
+|`setStyle`| Function | | | Pavelyev Ivan | in progress
+|`removeStyle`| Function | Pavelyev Ivan | in progress | |
+|`removeStyles`| Function | Pavelyev Ivan | in progress | |
+|`clearStyles`| Function | Pavelyev Ivan | in progress | |
+|`replaceStyledString`| Function | Pavelyev Ivan | in progress | |
+|`insertStyledString`| Function | Pavelyev Ivan | in progress | |
+|`appendStyledString`| Function | Pavelyev Ivan | in progress | |
 |*CustomSpan*| *Class* | Politov Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onMeasure`| Function | Politov Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onDraw`| Function | Politov Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
