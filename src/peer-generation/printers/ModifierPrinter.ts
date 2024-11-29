@@ -90,6 +90,10 @@ export class ModifierVisitor {
         else if (method.method.name == 'ctor'){
             printer.print(`return new ${method.originalParentName}Peer();`)
         }
+        else if(method.method.name == 'destroyPeer')
+        {
+            printer.print(`delete peer;`)
+        } 
         else if (!method.retConvertor.isVoid) {
             printer.print(`return 0;`)
         }
