@@ -278,9 +278,9 @@ export function makeTSSerializer(library: PeerLibrary): LanguageWriter {
     let printer = createLanguageWriter(library.language, getReferenceResolver(library))
     printer.writeLines(cStyleCopyright)
     const imports = new ImportsCollector()
-    imports.addFeatures(["SerializerBase", "Tags", "RuntimeType", "runtimeType", "isResource", "isInstanceOf"], "./SerializerBase")
     imports.addFeatures(["int32"], "@koalaui/common")
     if (printer.language == Language.TS) {
+        imports.addFeatures(["SerializerBase", "Tags", "RuntimeType", "runtimeType", "isResource", "isInstanceOf"], "./SerializerBase")
         imports.addFeatures(["MaterializedBase"], "../MaterializedBase")
         imports.addFeatures(["unsafeCast"], "../shared/generated-utils")
         imports.addFeatures(["nativeModule"], "@koalaui/arkoala")
@@ -289,6 +289,7 @@ export function makeTSSerializer(library: PeerLibrary): LanguageWriter {
         imports.addFeature('KPointer', '@koalaui/interop')
     }
     if (printer.language == Language.ARKTS) {
+        imports.addFeatures(["SerializerBase", "Tags", "RuntimeType", "runtimeType", "isResource", "isInstanceOf"], "@koalaui/arkts-framework")
         imports.addFeatures(["MaterializedBase"], "../MaterializedBase")
         imports.addFeatures(["NativeModule"], "#components")
         imports.addFeatures(["CallbackKind"], "CallbackKind")
@@ -314,9 +315,14 @@ export function makeSerializerForOhos(library: PeerLibrary, nativeModule: { name
         destFile.imports.addFeatures(["int32"], "@koalaui/common")
         destFile.imports.addFeatures(["KPointer", "KInt", "KStringPtr", "KUint8ArrayPtr", "nullptr"], "@koalaui/interop")
         destFile.imports.addFeatures([nativeModule.name, "CallbackKind"], nativeModule.path)
-        destFile.imports.addFeatures(["Finalizable", "MaterializedBase"], nativeModule.finalizablePath)
+        destFile.imports.addFeatures(["MaterializedBase"], nativeModule.finalizablePath)
         if (lang === Language.TS) {
+            destFile.imports.addFeatures(["Finalizable"], nativeModule.finalizablePath)
             destFile.imports.addFeature("unsafeCast", "./SerializerBase")
+        }
+        // TODO: fix it, Finalizable belongs to interop.
+        if (lang == Language.ARKTS) {
+            destFile.imports.addFeatures(["Finalizable"], "@koalaui/arkts-framework")
         }
 
         const deserializeCallImpls = SourceFile.makeSameAs(destFile)
@@ -412,7 +418,6 @@ import { KPointer } from "@koalaui/interop"
 
 ${deserializer.getOutput().join("\n")}
 
-export function createDeserializer(args: Uint8Array, length: int32): Deserializer { return new Deserializer(args, length) }
 `
 }
 
@@ -546,8 +551,9 @@ function copyDir(from: string, to: string, recursive: boolean, filters?: string[
     })
 }
 function copyFile(from: string, to: string, filters?: string[]) {
-    if (filters && !filters.includes(from))
+    if (filters && !filters.some(it => from.indexOf(it) != -1))
         return
+    if (from.indexOf("DeserializerBase.ts") != -1) throw new Error(`${from} => ${to} ${filters?.join(", ")}`)
     fs.copyFileSync(from, to)
 }
 export function makeNodeTypes(types: string[]): string {

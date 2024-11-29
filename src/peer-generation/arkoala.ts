@@ -128,25 +128,19 @@ function copyArkoalaFiles(config: {
         onlyIntegrated: boolean| undefined
     }, arkoala: ArkoalaInstall) {
     copyToArkoala(path.join(__dirname, '..', 'peer_lib'), arkoala, !config.onlyIntegrated ? undefined : [
+        // Note that this list is exclude, not include list!
         'sig/arkoala/framework/native/src/generated/SerializerBase.h',
         'sig/arkoala/framework/native/src/generated/DeserializerBase.h',
         'sig/arkoala/framework/native/src/generated/Interop.h',
         'sig/arkoala/framework/native/src/generated/arkoala-macros.h',
-        'sig/arkoala/arkui/src/peers/SerializerBase.ts',
-        'sig/arkoala/arkui/src/peers/DeserializerBase.ts',
         'sig/arkoala-arkts/arkui/src/generated/use_properties.ts',
-        'sig/arkoala-arkts/arkui/src/generated/Finalizable.ts',
         'sig/arkoala-arkts/arkui/src/generated/CallbackRegistry.ts',
         'sig/arkoala-arkts/arkui/src/generated/ComponentBase.ts',
         'sig/arkoala-arkts/arkui/src/generated/MaterializedBase.ts',
-        'sig/arkoala-arkts/arkui/src/generated/PeerNode.ts',
-        'sig/arkoala-arkts/arkui/src/generated/NativePeerNode.ts',
         'sig/arkoala-arkts/arkui/src/generated/arkts/index.ts',
         'sig/arkoala-arkts/arkui/src/generated/ts/index.ts',
         'sig/arkoala-arkts/arkui/src/generated/ts/arkts-stdlib.ts',
         'sig/arkoala-arkts/arkui/src/generated/ts/NativeModule.ts',
-        'sig/arkoala-arkts/arkui/src/generated/peers/SerializerBase.ts',
-        'sig/arkoala-arkts/arkui/src/generated/peers/DeserializerBase.ts',
         'sig/arkoala-arkts/arkui/src/generated/peers/CallbacksChecker.ts',
         'sig/arkoala-arkts/arkui/src/generated/shared/ArkResource.ts',
         'sig/arkoala-arkts/arkui/src/generated/shared/dts-exports.ts',

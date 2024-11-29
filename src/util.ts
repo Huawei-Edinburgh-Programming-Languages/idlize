@@ -382,28 +382,6 @@ export const defaultCompilerOptions: ts.CompilerOptions = {
     types: []
 }
 
-export function serializerBaseMethods(): string[] {
-    const program = ts.createProgram([
-        "./utils/ts/SerializerBase.ts",
-        "./utils/ts/types.ts",
-    ], defaultCompilerOptions)
-
-    const serializerDecl = program.getSourceFiles()
-        .find(it => it.fileName.includes("SerializerBase"))
-    // TODO: pack classes with npm package
-    if (serializerDecl === undefined) return []
-
-    const methods: string[] = []
-    visit(serializerDecl)
-    return methods
-
-    function visit(node: ts.Node) {
-        if (ts.isSourceFile(node)) node.statements.forEach(visit)
-        if (ts.isClassDeclaration(node)) node.members.filter(ts.isMethodDeclaration).forEach(visit)
-        if (ts.isMethodDeclaration(node)) methods.push(node.name.getText(serializerDecl))
-    }
-}
-
 export function getNameWithoutQualifiersRight(node: ts.EntityName | undefined) : string|undefined {
     if (!node) return undefined
     if (ts.isQualifiedName(node)) {

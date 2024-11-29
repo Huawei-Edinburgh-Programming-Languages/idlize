@@ -162,7 +162,25 @@ class IdlSerializerPrinter {
         if (this.writer.language == Language.JAVA) {
             this.writer.print("import java.util.function.Supplier;")
         }
+
         this.writer.writeClass(className, writer => {
+            // TODO: ugly hack, fix!
+            if (writer.language == Language.ARKTS)
+                this.writer.writeLines(`
+            writeLength(value: Length|undefined) {
+                this.checkCapacity(1)
+                let valueType = runtimeType(value)
+                this.writeInt8(valueType as int32)
+                // TODO: without explicitly checking value for undefined, leads to segmentation fault
+                if (valueType == RuntimeType.NUMBER && value !== undefined) {
+                    this.writeFloat32(value as float32)
+                } else if (valueType == RuntimeType.STRING) {
+                    this.writeString(value as string)
+                } else if (valueType == RuntimeType.OBJECT) {
+                   this.writeInt32((value as Resource).id as int32)
+                }
+            }`)
+
             if (writer.language == Language.JAVA)
                 writer.writeFieldDeclaration('nullptr', idl.IDLPointerType, [FieldModifier.STATIC, FieldModifier.PRIVATE], false, writer.makeString('0'))
 
@@ -424,7 +442,49 @@ class IdlDeserializerPrinter {
             createSerializerDependencyFilter(this.writer.language))
         printSerializerImports(this.library, this.destFile, declarationPath)
         this.writer.print("")
+
         this.writer.writeClass(className, writer => {
+            // TODO: hack, remove
+            if (this.library.language == Language.ARKTS)
+                writer.writeLines(`
+    readLength(): Length | undefined {
+        this.checkCapacity(1)
+        const valueType = this.readInt8()
+        if (valueType == RuntimeType.OBJECT) {
+            return ({
+                id: this.readInt32(),
+                bundleName: "",
+                moduleName: ""
+            }) as Resource
+        } else if (valueType == RuntimeType.STRING) {
+            return this.readString()
+        } else if (valueType == RuntimeType.NUMBER) {
+            return (this.readFloat32() as number)
+        } else {
+            return undefined
+        }
+    }
+
+    static lengthUnitFromInt(unit: int32): string {
+        let suffix: string
+        switch (unit) {
+            case 0:
+                suffix = "px"
+                break
+            case 1:
+                suffix = "vp"
+                break
+            case 3:
+                suffix = "%"
+                break
+            case 4:
+                suffix = "lpx"
+                break
+            default:
+                suffix = "<unknown>"
+        }
+        return suffix
+    }`)
             if (ctorSignature) {
                 const ctorMethod = new Method(`${className}Base`, ctorSignature)
                 writer.writeConstructorImplementation(className, ctorSignature, writer => {}, ctorMethod)

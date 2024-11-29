@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { PeerNode } from './PeerNode'
+import { PeerNode } from '@koalaui/arkts-framework'
 import { NativeModule } from "#components"
 
 export class ComponentBase {

@@ -16,6 +16,8 @@ import { float32, int32 } from "@koalaui/common"
 import { pointer } from "@koalaui/interop"
 import { Tags, CallbackResource } from "./SerializerBase";
 
+/* AA */
+
 export class DeserializerBase {
     private position = 0
     private readonly buffer: ArrayBuffer

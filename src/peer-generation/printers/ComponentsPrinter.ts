@@ -89,10 +89,8 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
             imports.addFeature("NodeAttach", "@koalaui/runtime")
             imports.addFeature("remember", "@koalaui/runtime")
             imports.addFeature("ArkUINodeType", "./peers/ArkUINodeType")
-            imports.addFeature("runtimeType", "./peers/SerializerBase")
-            imports.addFeature("RuntimeType", "./peers/SerializerBase")
-            imports.addFeature("isResource", "./peers/SerializerBase")
-            imports.addFeature("isInstanceOf", "./peers/SerializerBase")
+            imports.addFeatures(["runtimeType", "RuntimeType", "isResource", "isInstanceOf"],
+                this.language == Language.ARKTS ? "@koalaui/arkts-framework" : "./peers/SerializerBase")
             imports.addFeature('ComponentBase', './ComponentBase')
             this.populateImports(imports)
 

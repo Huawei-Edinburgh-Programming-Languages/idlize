@@ -1,7 +1,6 @@
-import { Finalizable } from "./Finalizable"
 import { MaterializedBase } from "./MaterializedBase"
 import { Serializer } from "./peers/Serializer"
-import { isResource, isInstanceOf, runtimeType, RuntimeType, SerializerBase, registerCallback } from "./peers/SerializerBase"
+import { isResource, isInstanceOf, runtimeType, RuntimeType, SerializerBase, registerCallback } from "@koalaui/arkts-framework"
 import { NativeModule } from "#components"
 import { wrapCallback } from "@koalaui/interop"
 import { CallbackKind } from "./peers/CallbackKind"

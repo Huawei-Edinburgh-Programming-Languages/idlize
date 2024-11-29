@@ -113,15 +113,15 @@ class PeerFileVisitor {
         }
         if (printer.language == Language.TS) {
             imports.addFeature("unsafeCast", "./shared/generated-utils")
+            imports.addFeature("registerCallback", "./peers/SerializerBase")
         }
         if (printer.language == Language.ARKTS) {
             imports.addFeature("TypeChecker", "#components")
+            imports.addFeature("registerCallback", "@koalaui/arkts-framework")
         }
-        imports.addFeature("registerCallback", "./peers/SerializerBase")
         imports.addFeature("wrapCallback", "@koalaui/interop")
         if (this.library.language !== Language.ARKTS) {
             imports.addFeature("Deserializer", "./peers/Deserializer")
-            imports.addFeature("createDeserializer", "./peers/Deserializer")
         }
         imports.addFeature("MaterializedBase", "./MaterializedBase")
         // collectMaterializedImports(imports, this.library)
@@ -231,7 +231,6 @@ class PeerFileVisitor {
         const defaultPeerImports =  [
             `import { int32 } from "@koalaui/common"`,
             `import { nullptr, KPointer, KInt, KBoolean, KStringPtr } from "@koalaui/interop"`,
-            `import { isResource, isInstanceOf, runtimeType, RuntimeType } from "./SerializerBase"`,
             `import { Serializer } from "./Serializer"`,
             `import { ArkUINodeType } from "./ArkUINodeType"`,
             `import { ComponentBase } from "../ComponentBase"`,
@@ -239,11 +238,15 @@ class PeerFileVisitor {
         switch(lang) {
             case Language.TS: {
                 return [...defaultPeerImports,
-                    `import { nativeModule } from "@koalaui/arkoala"`,]
+                    `import { nativeModule } from "@koalaui/arkoala"`,
+                    `import { isResource, isInstanceOf, runtimeType, RuntimeType } from "./SerializerBase"`,
+                ]
             }
             case Language.ARKTS: {
                 return [...defaultPeerImports,
-                    `import { NativeModule } from "#components"`,]
+                    `import { NativeModule } from "#components"`,
+                    `import { isResource, isInstanceOf, runtimeType, RuntimeType } from "@koalaui/arkts-framework"`,
+                ]
             }
             default: {
                 return []

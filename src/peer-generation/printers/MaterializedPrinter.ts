@@ -459,6 +459,7 @@ class JavaMaterializedFileVisitor extends MaterializedFileVisitorBase {
 class ArkTSMaterializedFileVisitor extends TSMaterializedFileVisitor {
     protected collectImports(imports: ImportsCollector): void {
         super.collectImports(imports)
+        imports.addFeature("Finalizable", "@koalaui/arkts-framework")
         imports.addFeature("TypeChecker", "#components")
     }
 

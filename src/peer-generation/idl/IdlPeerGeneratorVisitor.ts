@@ -28,7 +28,6 @@ import {
     renameClassToBuilderClass,
     renameClassToMaterialized,
     renameDtsToInterfaces,
-    serializerBaseMethods,
     throwException,
     warn,
 } from "../../util"
@@ -89,8 +88,6 @@ const PREDEFINED_PACKAGE_TYPES = `${PREDEFINED_PACKAGE}.types`
 
 export class IdlPeerGeneratorVisitor implements GenericVisitor<void> {
     private readonly sourceFile: string
-
-    static readonly serializerBaseMethods = serializerBaseMethods()
 
     readonly peerLibrary: PeerLibrary
     readonly peerFile: PeerFile
