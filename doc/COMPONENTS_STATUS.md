@@ -1500,16 +1500,16 @@
 |`show`| Function | Ekaterina Stepanova | in progress |
 |*CanvasGradient*| *Class* | Vadim Voronov | in progress | |
 |`addColorStop`| Function | Vadim Voronov | in progress | |
-|*CanvasPath*| *Class* | Lobah Mikhail | in progress | deprecated |
-|`arc`| Function | Lobah Mikhail | in progress | deprecated |
-|`arcTo`| Function | Lobah Mikhail | in progress | deprecated |
-|`bezierCurveTo`| Function | Lobah Mikhail | in progress | deprecated |
-|`closePath`| Function | Lobah Mikhail | in progress | deprecated |
-|`ellipse`| Function | Lobah Mikhail | in progress | deprecated |
-|`lineTo`| Function | Lobah Mikhail | in progress | deprecated |
-|`moveTo`| Function | Lobah Mikhail | in progress | deprecated |
-|`quadraticCurveTo`| Function | Lobah Mikhail | in progress | deprecated |
-|`rect`| Function | Lobah Mikhail | in progress | deprecated |
+|*CanvasPath*| *Class* | Lobah Mikhail | in progress |  |
+|`arc`| Function | Lobah Mikhail | in progress |  |
+|`arcTo`| Function | Lobah Mikhail | in progress |  |
+|`bezierCurveTo`| Function | Lobah Mikhail | in progress |  |
+|`closePath`| Function | Lobah Mikhail | in progress |  |
+|`ellipse`| Function | Lobah Mikhail | in progress |  |
+|`lineTo`| Function | Lobah Mikhail | in progress |  |
+|`moveTo`| Function | Lobah Mikhail | in progress |  |
+|`quadraticCurveTo`| Function | Lobah Mikhail | in progress |  |
+|`rect`| Function | Lobah Mikhail | in progress |  |
 |*Path2D*| *Class* | Vadim Voronov | in progress | |
 |`addPath`| Function | Vadim Voronov | in progress | |
 |*CanvasPattern*| *Class* | Vadim Voronov | in progress |  |
