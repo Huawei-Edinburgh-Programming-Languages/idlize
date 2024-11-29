@@ -1748,13 +1748,13 @@
 |`disableAnimation`| Function | Morozov Sergey |in progress |  |
 |`setInterception`| Function | Morozov Sergey |in progress |  |
 |*NavigationTransitionProxy*| *Class* | Morozov Sergey | in progress | |
-|`finishTransition`| Function | Morozov Sergey | in progress | |
-|`cancelTransition`| Function | Morozov Sergey | in progress | |
-|`updateTransition`| Function | Morozov Sergey | in progress | |
+|`finishTransition`| Function | Morozov Sergey | devdone | |
+|`cancelTransition`| Function | Morozov Sergey | devdone | |
+|`updateTransition`| Function | Morozov Sergey | devdone | |
 |`setFrom`| Function | Morozov Sergey | in progress | |
 |`setTo`| Function | Morozov Sergey | in progress | |
-|`getIsInteractive`| Function | Morozov Sergey | in progress | |
-|`setIsInteractive`| Function | Morozov Sergey | in progress | |
+|`getIsInteractive`| Function | Morozov Sergey | devdone | |
+|`setIsInteractive`| Function | Morozov Sergey | devdone | |
 |*PatternLockController*| *Class* |Dmitry A Smirnov| done|  |
 |`reset`| Function |Dmitry A Smirnov| done|  |
 |`setChallengeResult`| Function |Dmitry A Smirnov| done|  |
