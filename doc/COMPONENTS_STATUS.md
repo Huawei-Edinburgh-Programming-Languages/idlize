@@ -1716,12 +1716,12 @@
 |`setTranslateX`| Function | Vadim Voronov | in progress | |
 |`getTranslateY`| Function | Vadim Voronov | in progress | |
 |`setTranslateY`| Function | Vadim Voronov | in progress | |
-|*NavDestinationContext*| *Class* | | | |
-|`getConfigInRouteMap`| Function | | | |
-|`setPathInfo`| Function | | | |
-|`setPathStack`| Function | | | |
-|`getNavDestinationId`| Function | | | |
-|`setNavDestinationId`| Function | | | |
+|*NavDestinationContext*| *Class* | Sergey Morozov | in progress | |
+|`getConfigInRouteMap`| Function | Sergey Morozov | in progress | |
+|`setPathInfo`| Function | Sergey Morozov | in progress | |
+|`setPathStack`| Function | Sergey Morozov | in progress | |
+|`getNavDestinationId`| Function | Sergey Morozov | in progress | |
+|`setNavDestinationId`| Function | Sergey Morozov | in progress | |
 |*NavPathStack*| *Class* | Morozov Sergey |in progress |  |
 |`pushPath`| Function | Morozov Sergey, Skroba Gleb | devdone |  |
 |`pushDestination`| Function | Morozov Sergey | blocked IDL | can be implemented without return val - https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
