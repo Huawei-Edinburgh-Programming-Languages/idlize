@@ -32,7 +32,7 @@
     "node-api-headers": "^1.1.0",
     "typescript": "^4.9.5",
     "webidl2": "file:webidl2.js",
-    "@koalaui/fast-arktsc": "1.1.0"
+    "@koalaui/fast-arktsc": "1.2.0"
   },
   "devDependencies": {
     "@koalaui/fast-arktsc": "next",
