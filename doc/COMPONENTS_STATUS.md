@@ -387,7 +387,7 @@
 |`onHoverStatusChange`| Function | Politov Mikhail | done |  |
 |`enableAnimation`| Function | Politov Mikhail | done |  |
 |`autoHalfFold`| Function | Politov Mikhail | done |  |
-|*FormComponent*| *Component* | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
+|*FormComponent*| *Component* | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
 |`setFormComponentOptions`| Function | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
 |`size`| Function | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
 |`moduleName`| Function | Vadim Voronov | done | |
