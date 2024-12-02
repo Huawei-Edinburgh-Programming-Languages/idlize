@@ -148,7 +148,6 @@ dictionary LengthUnit {
   number LPX = 4;
 };
 
-
 /**
  * Defines the Length Metrics.
  */
@@ -162,9 +161,4 @@ interface LengthMetrics {
    * The value of the LengthMetrics.
    */
   attribute number value;
-};
-
-dictionary LengthMetricsUnit {
-    number DEFAULT = 0;
-    number PX = 1;
 };
