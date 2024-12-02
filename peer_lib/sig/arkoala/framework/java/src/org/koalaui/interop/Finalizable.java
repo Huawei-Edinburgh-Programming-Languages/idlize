@@ -1,6 +1,6 @@
 package org.koalaui.interop;
-import org.koalaui.arkoala.NativeModule;
 
+import org.koalaui.arkoala.NativeModule;
 import java.lang.ref.Cleaner;
 
 public class Finalizable {
@@ -33,6 +33,9 @@ public class Finalizable {
     public long finalizer;
 
     public Finalizable(long ptr, long finalizer) {
+        this.ptr = ptr;
+        this.finalizer = finalizer;
+
         cleaner.register(this, Finalizer.create(ptr, finalizer));
     }
 }
