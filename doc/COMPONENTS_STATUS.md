@@ -394,10 +394,10 @@
 |`dimension`| Function | Vadim Voronov | done | |
 |`allowUpdate`| Function | Vadim Voronov | done | |
 |`visibility`| Function | Vadim Voronov | done | |
-|`onAcquired`| Function | Vadim Voronov | in progress | |
-|`onError`| Function | Vadim Voronov | in progress | |
-|`onRouter`| Function | Vadim Voronov | in progress | |
-|`onUninstall`| Function | Vadim Voronov | in progress | |
+|`onAcquired`| Function | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
+|`onError`| Function | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
+|`onRouter`| Function | Vadim Voronov | in progress | deprecated |
+|`onUninstall`| Function | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
 |`onLoad`| Function | Vadim Voronov | in progress | |
 |*FormLink*| *Component* | Dmitry A Smirnov| done |  |
 |`setFormLinkOptions`| Function | Dmitry A Smirnov| done |  |
