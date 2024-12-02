@@ -26,10 +26,6 @@ public class NativeModule {
 
 %GENERATED_METHODS%
 
-// interop
-%GENERATED_PREDEFINED_Interop%
-// loader
-%GENERATED_PREDEFINED_Loader%
 // node
 %GENERATED_PREDEFINED_Node%
 // test

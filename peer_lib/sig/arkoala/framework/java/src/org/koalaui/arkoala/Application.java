@@ -62,7 +62,7 @@ public class Application {
         SerializerBase ser = new SerializerBase();
         ser.writeString("Hello world!");
         System.out.println("Ser is " + ser.length() + " is " + printBytes(ser.asArray(), ser.length()));
-        NativeModule._NativeLog("NativeModule.createApplication " +  app + " , params=" + params);
+        InteropNativeModule._NativeLog("NativeModule.createApplication " +  app + " , params=" + params);
         UserView view = (UserView)NativeModule._LoadUserView("org.koalaui.arkoala.View" + app, params);
         if (view == null) throw new Error("Cannot load user view");
         return new Application(view);
