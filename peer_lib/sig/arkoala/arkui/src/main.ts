@@ -354,8 +354,14 @@ function checkButton() {
 
     checkResult("width", () => peer.widthAttribute("42%"),
         "width({.type=1, .value=42, .unit=3, .resource=0})")
-    checkResult("height", () => peer.heightAttribute({ id: 43, bundleName: "MyApp", moduleName: "MyApp" }),
+    checkResult("height-resource", () => peer.heightAttribute({ id: 43, bundleName: "MyApp", moduleName: "MyApp" }),
         "height({.type=2, .value=0, .unit=1, .resource=43})")
+    checkResult("height-int", () => peer.heightAttribute(42),
+        "height({.type=0, .value=42, .unit=1, .resource=0})")
+    checkResult("height-float", () => peer.heightAttribute(42.1),
+        "height({.type=0, .value=42.1, .unit=1, .resource=0})")
+    checkResult("height-string", () => peer.heightAttribute("42%"),
+        "height({.type=1, .value=42, .unit=3, .resource=0})")
     checkResult("background", () => peer.backgroundAttribute(() => {}, {align: 4}),
         `background({.resource={.resourceId=${lastResourceId+1}, .hold=0, .release=0}, .call=0}, {.tag=ARK_TAG_OBJECT, .value={.align={.tag=ARK_TAG_OBJECT, .value=Ark_Alignment(4)}}})`)
     checkResult("type", () => peer.typeAttribute(1), "type(Ark_ButtonType(1))")
