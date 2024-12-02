@@ -1440,11 +1440,11 @@
 |`setWindowSceneOptions`| Function | Spirin Andrey | in progress | |
 |`attractionEffect`| Function | Spirin Andrey | in progress | |
 |*XComponent*| *Component* | Tuzhilkin Ivan | in progress | |
-|`setXComponentOptions`| Function | Tuzhilkin Ivan | in progress | |
-|`onLoad`| Function | Tuzhilkin Ivan | in progress | |
-|`onDestroy`| Function | Tuzhilkin Ivan | in progress | |
-|`enableAnalyzer`| Function | Tuzhilkin Ivan | in progress | |
-|`enableSecure`| Function | Tuzhilkin Ivan | in progress | |
+|`setXComponentOptions`| Function | Tuzhilkin Ivan | devdone | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
+|`onLoad`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB7RSS |
+|`onDestroy`| Function | Tuzhilkin Ivan | devdone | |
+|`enableAnalyzer`| Function | Tuzhilkin Ivan | devdone | |
+|`enableSecure`| Function | Tuzhilkin Ivan | devdone | |
 |*SideBarContainer*| *Component* |Dmitry A Smirnov|blocked|  |
 |`setSideBarContainerOptions`| Function |Dmitry A Smirnov|done|  |
 |`showSideBar`| Function |Dmitry A Smirnov|done|  |
