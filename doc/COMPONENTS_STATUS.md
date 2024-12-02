@@ -1669,11 +1669,11 @@
 |`close`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*DatePickerDialog*| *Class* | Ekaterina Stepanova | in progress |
 |`show`| Function | Ekaterina Stepanova | in progress |
-|*PanGestureOptions*| *Class* | | | |
-|`setDirection`| Function | | | |
-|`setDistance`| Function | | | |
-|`setFingers`| Function | | | |
-|`getDirection`| Function | | | |
+|*PanGestureOptions*| *Class* | Politov Mikhail | in progress | |
+|`setDirection`| Function | Politov Mikhail | in progress | |
+|`setDistance`| Function | Politov Mikhail | in progress | |
+|`setFingers`| Function | Politov Mikhail | in progress | |
+|`getDirection`| Function | Politov Mikhail | in progress | |
 |*ScrollableTargetInfo*| *Class* | | | |
 |`isBegin`| Function | | | |
 |`isEnd`| Function | | | |
