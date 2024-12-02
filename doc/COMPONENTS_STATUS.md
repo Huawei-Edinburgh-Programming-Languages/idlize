@@ -1910,13 +1910,13 @@
 |`confirm`| Function | Erokhin Ilya | done |  |
 |`cancel`| Function | Erokhin Ilya | done |  |
 |`isHttpAuthInfoSaved`| Function | Erokhin Ilya | done |  |
-|*SslErrorHandler*| *Class* | Erokhin Ilya | devdone |  |
-|`handleConfirm`| Function | Erokhin Ilya | devdone |  |
-|`handleCancel`| Function | Erokhin Ilya | devdone |  |
-|*ClientAuthenticationHandler*| *Class* | Erokhin Ilya | devdone |  |
-|`confirm`| Function | Erokhin Ilya | devdone |  |
-|`cancel`| Function | Erokhin Ilya | devdone |  |
-|`ignore`| Function | Erokhin Ilya | devdone |  |
+|*SslErrorHandler*| *Class* | Erokhin Ilya | done |  |
+|`handleConfirm`| Function | Erokhin Ilya | done |  |
+|`handleCancel`| Function | Erokhin Ilya | done |  |
+|*ClientAuthenticationHandler*| *Class* | Erokhin Ilya | done |  |
+|`confirm`| Function | Erokhin Ilya | done |  |
+|`cancel`| Function | Erokhin Ilya | done |  |
+|`ignore`| Function | Erokhin Ilya | done |  |
 |*PermissionRequest*| *Class* | Erokhin Ilya | blocked |  |
 |`deny`| Function | Erokhin Ilya | done |  |
 |`getOrigin`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
@@ -1926,9 +1926,9 @@
 |`getOrigin`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`grant`| Function | Erokhin Ilya | done |  |
 |`deny`| Function | Erokhin Ilya | done |  |
-|*DataResubmissionHandler*| *Class* | Erokhin Ilya | devdone |  |
-|`resend`| Function | Erokhin Ilya | devdone |  |
-|`cancel`| Function | Erokhin Ilya | devdone |  |
+|*DataResubmissionHandler*| *Class* | Erokhin Ilya | done |  |
+|`resend`| Function | Erokhin Ilya | done |  |
+|`cancel`| Function | Erokhin Ilya | done |  |
 |*ControllerHandler*| *Class* | Erokhin Ilya | in progress |  |
 |`setWebController`| Function | Erokhin Ilya | in progress | Ark_CustomObject |
 |*WebContextMenuParam*| *Class* | Erokhin Ilya | blocked |  |
@@ -1972,15 +1972,15 @@
 |`getResponseMimeType`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getReasonMessage`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getResponseHeader`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getResponseCode`| Function | Erokhin Ilya | devdone |  |
+|`getResponseCode`| Function | Erokhin Ilya | done |  |
 |`setResponseData`| Function | Erokhin Ilya | in progress | dependency on Ark_ArrayBuffer |
-|`setResponseEncoding`| Function | Erokhin Ilya | devdone |  |
-|`setResponseMimeType`| Function | Erokhin Ilya | devdone |  |
-|`setReasonMessage`| Function | Erokhin Ilya | devdone |  |
-|`setResponseHeader`| Function | Erokhin Ilya | devdone |  |
-|`setResponseCode`| Function | Erokhin Ilya | devdone |  |
-|`setResponseIsReady`| Function | Erokhin Ilya | devdone |  |
-|`getResponseIsReady`| Function | Erokhin Ilya | devdone |  |
+|`setResponseEncoding`| Function | Erokhin Ilya | done |  |
+|`setResponseMimeType`| Function | Erokhin Ilya | done |  |
+|`setReasonMessage`| Function | Erokhin Ilya | done |  |
+|`setResponseHeader`| Function | Erokhin Ilya | done |  |
+|`setResponseCode`| Function | Erokhin Ilya | done |  |
+|`setResponseIsReady`| Function | Erokhin Ilya | done |  |
+|`getResponseIsReady`| Function | Erokhin Ilya | done |  |
 |*WebResourceError*| *Class* | Erokhin Ilya | blocked |  |
 |`getErrorInfo`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getErrorCode`| Function | Erokhin Ilya | done |  |
