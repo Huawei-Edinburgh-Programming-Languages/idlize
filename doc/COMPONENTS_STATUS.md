@@ -1704,17 +1704,17 @@
 |`rotate`| Function | Vadim Voronov | in progress | deprecated |
 |`translate`| Function | Vadim Voronov | in progress | |
 |`scale`| Function | Vadim Voronov | in progress | |
-|`getScaleX`| Function | Vadim Voronov | in progress | |
+|`getScaleX`| Function | Vadim Voronov | blocked IDL | implemented without return val,https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setScaleX`| Function | Vadim Voronov | in progress | |
-|`getRotateY`| Function | Vadim Voronov | in progress | |
+|`getRotateY`| Function | Vadim Voronov | blocked IDL | implemented without return val,https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setRotateY`| Function | Vadim Voronov | in progress | |
-|`getRotateX`| Function | Vadim Voronov | in progress | |
+|`getRotateX`| Function | Vadim Voronov | blocked IDL | implemented without return val,https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setRotateX`| Function | Vadim Voronov | in progress | |
-|`getScaleY`| Function | Vadim Voronov | in progress | |
+|`getScaleY`| Function | Vadim Voronov | blocked IDL | implemented without return val,https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setScaleY`| Function | Vadim Voronov | in progress | |
-|`getTranslateX`| Function | Vadim Voronov | in progress | |
+|`getTranslateX`| Function | Vadim Voronov | blocked IDL | implemented without return val,https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setTranslateX`| Function | Vadim Voronov | in progress | |
-|`getTranslateY`| Function | Vadim Voronov | in progress | |
+|`getTranslateY`| Function | Vadim Voronov | blocked IDL | implemented without return val,https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setTranslateY`| Function | Vadim Voronov | in progress | |
 |*NavDestinationContext*| *Class* | Morozov Sergey | in progress | |
 |`getConfigInRouteMap`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
