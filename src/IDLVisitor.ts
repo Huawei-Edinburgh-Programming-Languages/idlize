@@ -84,7 +84,7 @@ const conflictingDeclarationNames = [
 
 function mangleConflictingName(name: string, sourceFile: ts.SourceFile): string {
     const fileName = path.basename(sourceFile.fileName).replaceAll(".d.ts", "").replaceAll(".", "")
-    if (conflictingDeclarationNames.includes(name)) return `${name}_${fileName}`
+    if (conflictingDeclarationNames.includes(name)) return `${name}_${fileName.replaceAll("@", "")}`
     return name
 }
 
