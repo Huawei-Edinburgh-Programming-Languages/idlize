@@ -115,8 +115,12 @@ export class IdlPeerGeneratorVisitor implements GenericVisitor<void> {
             idl.createReferenceType(`${componentName}Interface`),
             this.peerFile.entries)
         if (compInterface && idl.isInterface(compInterface)) {
-            this.peerLibrary.componentsDeclarations.push(
-                new IdlComponentDeclaration(componentName, compInterface, component))
+            if (idl.hasExtAttribute(compInterface, IDLExtendedAttributes.HandWrittenImplementation))
+                this.peerLibrary.handwritten.push(
+                    new IdlComponentDeclaration(componentName, compInterface, component))
+            else
+                this.peerLibrary.componentsDeclarations.push(
+                    new IdlComponentDeclaration(componentName, compInterface, component))
         }
     }
 }
