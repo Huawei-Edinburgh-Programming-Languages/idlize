@@ -27,7 +27,7 @@ export class PeerGeneratorConfig {
 
     public static handWrittenComponents = [
         "Navigation",
-     //   "CustomComponent"
+        "CustomComponent"
     ]
 
     public static ignorePeerMethod = ["attributeModifier"]
