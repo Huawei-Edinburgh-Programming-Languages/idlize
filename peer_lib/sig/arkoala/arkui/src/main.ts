@@ -718,21 +718,21 @@ function checkNativeCallback() {
     stopNativeTest(CALL_GROUP_LOG)
 }
 
-function checkArrayBuffer() {
-    checkResult("ArrayBuffer", () => {
-        let buffer = new ArrayBuffer(256)
-        let view = new DataView(buffer)
-        view.setInt8(0, 42)
-        view.setInt8(100, 37)
-        nativeModule()._TestWithBuffer(buffer)
-    }, "42 37")
+function checkInteropBufferTransfer() {
+    const serializer = new Serializer()    
+    serializer.writePointer(0)
+    serializer.writeInt64(0)
+    serializer.writePointer(0)
+
+    const deserializer = new Deserializer(serializer.asArray().buffer, serializer.length())
+    const buff = deserializer.readBuffer()
 }
 
 function main() {
     // Place where mock of ACE is located.
     process.env.ACE_LIBRARY_PATH = __dirname + "/../../../native"
 
-    // checkArrayBuffer()
+    checkInteropBufferTransfer()
 
     checkSerdeLength()
     checkSerdeText()

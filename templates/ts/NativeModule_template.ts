@@ -69,6 +69,7 @@ providePlatformDefinedData({
 export interface InteropOps {
     _SetCallbackDispatcher(dispatcher: (id: int32, args: Uint8Array, length: int32) => int32): void
     _CleanCallbackDispatcher(): void
+    _MaterializeBuffer(data: { pointer: KPointer, length: number }): ArrayBuffer
 
 %GENERATED_PREDEFINED_Interop%
 }

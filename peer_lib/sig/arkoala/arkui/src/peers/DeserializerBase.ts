@@ -15,6 +15,7 @@
 import { CustomTextDecoder, float32, int32, int64 } from "@koalaui/common"
 import { pointer } from "@koalaui/interop"
 import { Tags, CallbackResource } from "./SerializerBase";
+import { InteropBuffer } from '../InteropBuffer'
 
 export class DeserializerBase {
     private position = 0
@@ -186,10 +187,11 @@ export class DeserializerBase {
         }
         return suffix
     }
-    readBuffer(): ArrayBuffer {
-        this.readPointer()
-        const length = this.readInt64()
-        return new ArrayBuffer(Number(length))
+    readBuffer(): InteropBuffer {
+        const ptr = this.readPointer()
+        const len = this.readInt64()
+        const fin = this.readPointer()
+        return InteropBuffer.create(ptr, len, fin)
     }
 }
 

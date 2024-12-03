@@ -8,6 +8,9 @@ export class NativeModuleEmptyIntegrated implements NativeModuleIntegrated {
     _CleanCallbackDispatcher(): void {
         throw new Error("_CleanCallbackDispatcher")
     }
+    _MaterializeBuffer(buffer: { pointer: KPointer, length: number }): ArrayBuffer {
+        throw new Error("_MaterializeBuffer")
+    }
 }
 
 export class NativeModuleEmpty extends NativeModuleEmptyIntegrated implements NativeModule {}

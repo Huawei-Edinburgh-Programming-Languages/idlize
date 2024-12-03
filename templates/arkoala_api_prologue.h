@@ -68,6 +68,7 @@ typedef struct Ark_Buffer
 {
   void* data;
   int64_t length;
+  void (*cleanup)(void*);
 } Ark_Buffer;
 
 typedef float Ark_Float32;
