@@ -184,21 +184,21 @@
 |`brightness`| Function | Lobah Mikhail | done |  |
 |`contrast`| Function | Lobah Mikhail | done | |
 |`grayscale`| Function | Lobah Mikhail | done | |
-|`colorBlend`| Function | Lobah Mikhail | devdone |
+|`colorBlend`| Function | Lobah Mikhail | done |
 |`saturate`| Function | Lobah Mikhail | done | |
 |`sepia`| Function | Lobah Mikhail | done | |
-|`invert`| Function | Lobah Mikhail |  devdone | |
-|`hueRotate`| Function | Lobah Mikhail |  devdone | |
-|`useShadowBatching`| Function | Lobah Mikhail | in progress | |
-|`useEffect`| Function | Lobah Mikhail | devdone | |
-|`renderGroup`| Function | Lobah Mikhail | devdone  | |
-|`freeze`| Function | Lobah Mikhail | devdone  | |
+|`invert`| Function | Lobah Mikhail |  done | |
+|`hueRotate`| Function | Lobah Mikhail |  done | |
+|`useShadowBatching`| Function | Lobah Mikhail | devdone | |
+|`useEffect`| Function | Lobah Mikhail | done | |
+|`renderGroup`| Function | Lobah Mikhail | done  | |
+|`freeze`| Function | Lobah Mikhail | done | |
 |`translate`| Function | Erokhin Ilya | done |  |
 |`scale`| Function | Erokhin Ilya | done |  |
-|`gridSpan`| Function | Lobah Mikhail | devdone | |
-|`gridOffset`| Function | Lobah Mikhail | devdone | |
+|`gridSpan`| Function | Lobah Mikhail | done | |
+|`gridOffset`| Function | Lobah Mikhail | done | |
 |`rotate`| Function | Dmitry A Smirnov| testskipped | |
-|`transform`| Function | Lobah Mikhail | | |
+|`transform`| Function | Lobah Mikhail | devdone | |
 |`onAppear`| Function | Roman Sedaikin | done | |
 |`onDisAppear`| Function | Roman Sedaikin | done | |
 |`onAttach`| Function | | | |
@@ -220,17 +220,17 @@
 |`useSizeType`| Function | Dmitry A Smirnov| testskipped | |
 |`alignRules`| Function | Dmitry A Smirnov| devdone | |
 |`aspectRatio`| Function | Roman Sedaikin | done | |
-|`clickEffect`| Function | Lobah Mikhail | | |
+|`clickEffect`| Function | Lobah Mikhail | devdone | |
 |`onDragStart`| Function | | | |
 |`onDragEnter`| Function | | | |
 |`onDragMove`| Function | | | |
 |`onDragLeave`| Function | | | |
 |`onDrop`| Function | | | |
 |`onDragEnd`| Function | | | |
-|`allowDrop`| Function | Lobah Mikhail | | |
-|`draggable`| Function | Lobah Mikhail | | |
-|`dragPreview`| Function | Lobah Mikhail | | |
-|`onPreDrag`| Function | | | |
+|`allowDrop`| Function | Lobah Mikhail | devdone | |
+|`draggable`| Function | Lobah Mikhail | devdone | |
+|`dragPreview`| Function | Lobah Mikhail | devdone | |
+|`onPreDrag`| Function | Lobah Mikhail | in progress | |
 |`linearGradient`| Function | Roman Sedaikin | done | |
 |`sweepGradient`| Function | Roman Sedaikin | done | |
 |`radialGradient`| Function | Erokhin Ilya | done |  |
@@ -245,9 +245,9 @@
 |`geometryTransition`| Function | Lobah Mikhail | | |
 |`stateStyles`| Function | Lobah Mikhail | | |
 |`restoreId`| Function | Lobah Mikhail | | |
-|`sphericalEffect`| Function | Lobah Mikhail | devdone | |
-|`lightUpEffect`| Function | Lobah Mikhail | devdone | |
-|`pixelStretchEffect`| Function | Lobah Mikhail | devdone | |
+|`sphericalEffect`| Function | Lobah Mikhail | done | |
+|`lightUpEffect`| Function | Lobah Mikhail | done | |
+|`pixelStretchEffect`| Function | Lobah Mikhail | done | |
 |`accessibilityGroup`| Function | Lobah Mikhail | | |
 |`accessibilityText`| Function | Lobah Mikhail | | |
 |`accessibilityTextHint`| Function | Lobah Mikhail | | |
