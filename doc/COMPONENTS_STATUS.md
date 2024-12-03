@@ -501,7 +501,7 @@
 |`enhancedImageQuality`| Function | Evstigneev Roman | in progress | |
 |*ImageAnimator*| *Component* | Pavelyev Ivan | in progress | |
 |`setImageAnimatorOptions`| Function | Pavelyev Ivan | done | |
-|`images`| Function | Pavelyev Ivan | in progress | Need PixelMap for complete it |
+|`images`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`state`| Function | Pavelyev Ivan | done | |
 |`duration`| Function | Pavelyev Ivan | done | |
 |`reverse`| Function | Pavelyev Ivan | done | |
