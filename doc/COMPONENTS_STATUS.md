@@ -1717,10 +1717,10 @@
 |`getTranslateY`| Function | Vadim Voronov | in progress | |
 |`setTranslateY`| Function | Vadim Voronov | in progress | |
 |*NavDestinationContext*| *Class* | Sergey Morozov | in progress | |
-|`getConfigInRouteMap`| Function | Sergey Morozov | in progress | |
-|`setPathInfo`| Function | Sergey Morozov | in progress | |
-|`setPathStack`| Function | Sergey Morozov | in progress | |
-|`getNavDestinationId`| Function | Sergey Morozov | in progress | |
+|`getConfigInRouteMap`| Function | Sergey Morozov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`setPathInfo`| Function | Sergey Morozov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
+|`setPathStack`| Function | Sergey Morozov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
+|`getNavDestinationId`| Function | Sergey Morozov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setNavDestinationId`| Function | Sergey Morozov | in progress | |
 |*NavPathStack*| *Class* | Morozov Sergey |in progress |  |
 |`pushPath`| Function | Morozov Sergey, Skroba Gleb | devdone |  |
