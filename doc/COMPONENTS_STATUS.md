@@ -1080,7 +1080,7 @@
 |`onWillHide`| Function |Evstigneev Roman | in progress |  |
 |*Text*| *Component* | Kirill Kirichenko | in progress | |
 |`setTextOptions`| Function | Kirill Kirichenko | in progress |  |
-|`font`| Function |Samarin Sergey | devdone |  |
+|`font`| Function |Samarin Sergey | done |  |
 |`fontColor`| Function |Samarin Sergey | done |  |
 |`fontSize`| Function |Samarin Sergey | done |  |
 |`minFontSize`| Function |Samarin Sergey | done |  |
@@ -1089,7 +1089,7 @@
 |`maxFontScale`| Function |Samarin Sergey | done |  |
 |`fontStyle`| Function |Samarin Sergey | done |  |
 |`fontWeight`| Function |Samarin Sergey | done |  |
-|`lineSpacing`| Function |Samarin Sergey | devdone |  |
+|`lineSpacing`| Function |Samarin Sergey | done |  |
 |`textAlign`| Function |Samarin Sergey | done |  |
 |`lineHeight`| Function |Samarin Sergey | done |  |
 |`textOverflow`| Function |Samarin Sergey | done |  |
@@ -1099,9 +1099,9 @@
 |`letterSpacing`| Function |Samarin Sergey | done |  |
 |`textCase`| Function |Samarin Sergey | done |  |
 |`baselineOffset`| Function |Samarin Sergey | done |  |
-|`copyOption`| Function |Samarin Sergey | devdone |  |
+|`copyOption`| Function |Samarin Sergey | done |  |
 |`draggable`| Function |Samarin Sergey | done |  |
-|`textShadow`| Function |Samarin Sergey | devdone |  |
+|`textShadow`| Function |Samarin Sergey | done |  |
 |`heightAdaptivePolicy`| Function |Samarin Sergey | done |  |
 |`textIndent`| Function |Samarin Sergey | done |  |
 |`wordBreak`| Function | Samarin Sergey | done |  |
@@ -1113,7 +1113,7 @@
 |`enableDataDetector`| Function | Kirill Kirichenko | done |  |
 |`dataDetectorConfig`| Function | Kirill Kirichenko | in progress |  |
 |`onTextSelectionChange`| Function | Kirill Kirichenko | done |  |
-|`fontFeature`| Function |Samarin Sergey | devdone |  |
+|`fontFeature`| Function |Samarin Sergey | done |  |
 |`privacySensitive`| Function |Samarin Sergey | done |  |
 |`textSelectable`| Function |Samarin Sergey | done |  |
 |`editMenuOptions`| Function | Kirill Kirichenko | in progress |  |
