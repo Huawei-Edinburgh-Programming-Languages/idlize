@@ -834,9 +834,9 @@
 |`enablePaging`| Function | Berezin Kirill | done |  |
 |`initialOffset`| Function | Berezin Kirill | done |  |
 |`edgeEffect`| Function | Berezin Kirill | done |  |
-|*ScrollBar*| *Component* | Maksimov Nikita | in progress | |
-|`setScrollBarOptions`| Function | Maksimov Nikita | in progress | |
-|`enableNestedScroll`| Function | Maksimov Nikita | in progress | |
+|*ScrollBar*| *Component* | Maksimov Nikita | devdone | |
+|`setScrollBarOptions`| Function | Maksimov Nikita | devdone | |
+|`enableNestedScroll`| Function | Maksimov Nikita | devdone | |
 |*Search*|*Component*| Evstigneev Roman |In Progress|  |
 |`setSearchOptions`|Function| Evstigneev Roman | in progress | https://gitee.com/openharmony/arkui_ace_engine/issues/IAXCOP |
 |`fontColor`|Function| Evstigneev Roman | done |  |
@@ -1864,9 +1864,9 @@
 |*TextMenuItemId*| *Class* | | | |
 |`of`| Function | | | |
 |`equals`| Function | | | |
-|*EditMenuOptions*| *Class* | Erokhin Ilya | in progress |  |
-|`onCreateMenu`| Function |Erokhin Ilya | in progress |  |
-|`onMenuItemClick`| Function |Erokhin Ilya | in progress |  |
+|*EditMenuOptions*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onCreateMenu`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onMenuItemClick`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |*TextInputController*| *Class* | Spirin Andrey | in progress |  |
 |`caretPosition`| Function | Spirin Andrey | testskipped |  |
 |`setTextSelection`| Function | Spirin Andrey | testskipped |  |
