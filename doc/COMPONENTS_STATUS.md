@@ -1340,13 +1340,13 @@
 |`initialScale`| Function | Erokhin Ilya | done | |
 |`userAgent`| Function | Erokhin Ilya | done | |
 |`metaViewport`| Function | Erokhin Ilya | done | |
-|`onPageEnd`| Function | Erokhin Ilya | testskipped | |
-|`onPageBegin`| Function | Erokhin Ilya | testskipped | |
-|`onProgressChange`| Function | Erokhin Ilya | testskipped | |
-|`onTitleReceive`| Function | Erokhin Ilya | testskipped | |
-|`onGeolocationHide`| Function | Erokhin Ilya | testskipped | |
-|`onGeolocationShow`| Function | Erokhin Ilya | testskipped | dependency on Ark_JsGeolocation |
-|`onRequestSelected`| Function | Erokhin Ilya | testskipped | |
+|`onPageEnd`| Function | Erokhin Ilya | devdone | |
+|`onPageBegin`| Function | Erokhin Ilya | devdone | |
+|`onProgressChange`| Function | Erokhin Ilya | devdone | |
+|`onTitleReceive`| Function | Erokhin Ilya | devdone | |
+|`onGeolocationHide`| Function | Erokhin Ilya | devdone | |
+|`onGeolocationShow`| Function | Erokhin Ilya | devdone | |
+|`onRequestSelected`| Function | Erokhin Ilya | testskipped | Async Event |
 |`onAlert`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onBeforeUnload`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onConfirm`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
