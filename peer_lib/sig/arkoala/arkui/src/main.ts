@@ -735,14 +735,6 @@ function checkInteropBufferTransfer() {
     })
     nativeModule()._TestRunTestBufferCb(thisSerializer.asArray(), thisSerializer.length())
     thisSerializer.release()
-
-    const serializer = new Serializer()    
-    serializer.writePointer(0)
-    serializer.writeInt64(0)
-    serializer.writePointer(0)
-
-    const deserializer = new Deserializer(serializer.asArray().buffer, serializer.length())
-    const buff = deserializer.readBuffer()
 }
 
 function main() {
