@@ -83,10 +83,10 @@
 |`workStateStyle`| Function | Maksimov Nikita | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
 |`onSelectChange`| Function | Maksimov Nikita | done | |
 |`onRequestData`| Function | Maksimov Nikita | done | |
-|*CalendarPicker*| *Component* |Politov Mikhail | in progress |  |
+|*CalendarPicker*| *Component* |Politov Mikhail | done |  |
 |`setCalendarPickerOptions`| Function |Politov Mikhail | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB7RNZ |
 |`textStyle`| Function |Politov Mikhail | done |  |
-|`onChange`| Function |Politov Mikhail | devdone |  |
+|`onChange`| Function |Politov Mikhail | done |  |
 |`edgeAlign`| Function |Politov Mikhail | done |  |
 |*Canvas*| *Component* |Vadim Voronov | blocked IDL | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`setCanvasOptions`| Function |Vadim Voronov | blocked IDL | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
@@ -516,11 +516,11 @@
 |`onFinish`| Function | Pavelyev Ivan | done | |
 |*ImageSpan*| *Component* | Politov Mikhail | blocked |  |
 |`setImageSpanOptions`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
-|`verticalAlign`| Function | Politov Mikhail | devdone |  |
+|`verticalAlign`| Function | Politov Mikhail | done |  |
 |`colorFilter`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
-|`objectFit`| Function | Politov Mikhail | devdone |  |
-|`onComplete`| Function | Politov Mikhail | devdone |  |
-|`onError`| Function | Politov Mikhail | devdone |  |
+|`objectFit`| Function | Politov Mikhail | done |  |
+|`onComplete`| Function | Politov Mikhail | done |  |
+|`onError`| Function | Politov Mikhail | done |  |
 |`alt`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |*Line*|*Component*|Dudkin Sergey| blocked |  |
 |`setLineOptions`|Function|Dudkin Sergey| done |  |
