@@ -66,7 +66,7 @@ export class PeerLibrary implements LibraryInterface {
     readonly importTypesStubToSource: Map<string, string> = new Map()
     readonly declarations: idl.IDLEntry[] = []
     readonly componentsDeclarations: IdlComponentDeclaration[] = []
-    readonly handwritten: IdlComponentDeclaration[] = []
+    readonly handwritten: idl.IDLInterface[] = []
     readonly conflictedDeclarations: Set<idl.IDLEntry> = new Set()
     readonly seenArrayTypes: Map<string, idl.IDLContainerType> = new Map()
 
