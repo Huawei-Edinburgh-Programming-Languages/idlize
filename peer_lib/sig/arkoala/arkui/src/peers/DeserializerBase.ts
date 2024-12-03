@@ -187,10 +187,13 @@ export class DeserializerBase {
         }
         return suffix
     }
-    readBuffer(): InteropBuffer {
+    readBuffer(): ArrayBuffer {
         const ptr = this.readPointer()
         const len = this.readInt64()
         const fin = this.readPointer()
+        if (ptr === BigInt(0)) {
+            return new ArrayBuffer(0)
+        }
         return InteropBuffer.create(ptr, len, fin)
     }
 }

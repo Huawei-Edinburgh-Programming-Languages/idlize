@@ -15,6 +15,8 @@
 #include <cstdint>
 #include "common-interop.h"
 #include "interop-logging.h"
+#include "arkoala_api_generated.h"
+#include "Serializers.h"
 
 void CallVoid(KVMContext vmContext, KInt methodId, KInt length, void* args) {
 #if KOALA_USE_NODE_VM || KOALA_USE_HZ_VM || KOALA_USE_PANDA_VM || KOALA_USE_JAVA_VM || KOALA_CJ
@@ -118,3 +120,16 @@ void impl_TestWithBuffer(KInteropBuffer buffer) {
     GetDefaultLogger()->appendGroupedLog(1, result.c_str());
 }
 //KOALA_INTEROP_V1(TestWithBuffer, KInteropBuffer)
+
+void impl_TestRunTestBufferCb(uint8_t* thisArray, int32_t thisLength) {
+        Deserializer thisDeserializer(thisArray, thisLength);
+        TestBufferCb cb_value = {thisDeserializer.readCallbackResource(), reinterpret_cast<void(*)(const Ark_Int32 resourceId, const Ark_Buffer buf)>(thisDeserializer.readPointerOrDefault(reinterpret_cast<void*>(getManagedCallbackCaller(Kind_TestBufferCb))))};
+        size_t size = 8;
+        char* mem = (char*)malloc(size);
+        for (size_t i = 0; i < size; ++i) {
+            mem[i] = i + 1;
+        }
+        Ark_Buffer testBuffer = { mem, size, free };
+        cb_value.call(cb_value.resource.resourceId, testBuffer);
+}
+KOALA_INTEROP_V2(TestRunTestBufferCb, uint8_t*, int32_t)

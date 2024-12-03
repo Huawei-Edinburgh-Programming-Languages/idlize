@@ -57,6 +57,7 @@ import { nativeModule } from "@koalaui/arkoala"
 import { mkdirSync, writeFileSync } from "fs"
 import { CallbackKind } from "@arkoala/arkui/peers/CallbackKind"
 import { ResourceId, ResourceHolder } from "@koalaui/interop"
+import { InteropBuffer } from './InteropBuffer'
 
 if (!reportTestFailures) {
     console.log("WARNING: ignore test result")
@@ -719,6 +720,22 @@ function checkNativeCallback() {
 }
 
 function checkInteropBufferTransfer() {
+
+    const thisSerializer: Serializer = Serializer.hold()
+    thisSerializer.holdAndWriteCallback((buffer: ArrayBuffer) => {
+        const array = new Int8Array(buffer)
+        let result = array.length === 8
+        if (result) {
+            for (let i = 0; i < array.length; ++i) {
+                result &&= array[i] === i + 1
+            }
+        }
+
+        assertTrue("Check interop buffer transfer", result)
+    })
+    nativeModule()._TestRunTestBufferCb(thisSerializer.asArray(), thisSerializer.length())
+    thisSerializer.release()
+
     const serializer = new Serializer()    
     serializer.writePointer(0)
     serializer.writeInt64(0)
