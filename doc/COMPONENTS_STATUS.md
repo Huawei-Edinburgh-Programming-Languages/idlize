@@ -1612,14 +1612,14 @@
 |`drawFront`| Function | | | |
 |`invalidate`| Function | | | |
 |*TransitionEffect*| *Class* | Andrey Khudenkikh | in progress | |
-|`translate`| Function | Andrey Khudenkikh | in progress | |
-|`rotate`| Function | Andrey Khudenkikh | in progress | |
-|`scale`| Function | Andrey Khudenkikh | in progress | |
+|`translate`| Function | Andrey Khudenkikh | devdone | |
+|`rotate`| Function | Andrey Khudenkikh | devdone | |
+|`scale`| Function | Andrey Khudenkikh | devdone | |
 |`opacity`| Function | Andrey Khudenkikh | devdone | |
 |`move`| Function | Andrey Khudenkikh | devdone | |
-|`asymmetric`| Function | Andrey Khudenkikh | in progress | |
-|`animation`| Function | Andrey Khudenkikh | in progress | |
-|`combine`| Function | Andrey Khudenkikh | in progress | |
+|`asymmetric`| Function | Andrey Khudenkikh | blocked | TDB |
+|`animation`| Function | Andrey Khudenkikh | blocked | TBD |
+|`combine`| Function | Andrey Khudenkikh | blocked | TBD |
 |*PixelMapMock*| *Class* | | | |
 |`release`| Function | | | |
 |*ProgressMask*| *Class* | | | |
