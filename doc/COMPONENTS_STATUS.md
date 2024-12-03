@@ -184,12 +184,12 @@
 |`brightness`| Function | Lobah Mikhail | done |  |
 |`contrast`| Function | Lobah Mikhail | done | |
 |`grayscale`| Function | Lobah Mikhail | done | |
-|`colorBlend`| Function | Lobah Mikhail | done |
+|`colorBlend`| Function | Lobah Mikhail | done | |
 |`saturate`| Function | Lobah Mikhail | done | |
 |`sepia`| Function | Lobah Mikhail | done | |
 |`invert`| Function | Lobah Mikhail |  done | |
 |`hueRotate`| Function | Lobah Mikhail |  done | |
-|`useShadowBatching`| Function | Lobah Mikhail | devdone | |
+|`useShadowBatching`| Function | Lobah Mikhail | done | |
 |`useEffect`| Function | Lobah Mikhail | done | |
 |`renderGroup`| Function | Lobah Mikhail | done  | |
 |`freeze`| Function | Lobah Mikhail | done | |
@@ -279,14 +279,14 @@
 |`priorityGesture`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARW2A |
 |`parallelGesture`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARW2A |
 |`blur`| Function | Roman Sedaikin | done | |
-|`linearGradientBlur`| Function | Lobah Mikhail | in progress | |
-|`systemBarEffect`| Function | Lobah Mikhail | in progress | |
+|`linearGradientBlur`| Function | Lobah Mikhail | devdone | |
+|`systemBarEffect`| Function | Lobah Mikhail | devdone | |
 |`backdropBlur`| Function | Berezin Kirill | done | |
 |`sharedTransition`|Function|Skroba Gleb | done |  |
 |`chainMode`| Function | Berezin Kirill | in progress | |
 |`dragPreviewOptions`| Function | | | |
 |`overlay`| Function | Roman Sedaikin | done | |
-|`blendMode`| Function | Lobah Mikhail | in progress | |
+|`blendMode`| Function | Lobah Mikhail | devdone | |
 |`advancedBlendMode`| Function | | | |
 |`bindPopup`| Function | | | |
 |`bindMenu`| Function | | | |
