@@ -1346,24 +1346,24 @@
 |`onTitleReceive`| Function | Erokhin Ilya | devdone | |
 |`onGeolocationHide`| Function | Erokhin Ilya | devdone | |
 |`onGeolocationShow`| Function | Erokhin Ilya | devdone | |
-|`onRequestSelected`| Function | Erokhin Ilya | testskipped | Async Event |
+|`onRequestSelected`| Function | Erokhin Ilya | devdone | |
 |`onAlert`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onBeforeUnload`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onConfirm`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onPrompt`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onConsole`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onErrorReceive`| Function | Erokhin Ilya | testskipped | dependency on Ark_WebResourceRequest & Ark_WebResourceError |
-|`onHttpErrorReceive`| Function | Erokhin Ilya | testskipped | dependency on Ark_WebResourceRequest & Ark_WebResourceResponse |
-|`onDownloadStart`| Function | Erokhin Ilya | testskipped | |
-|`onRefreshAccessedHistory`| Function | Erokhin Ilya | testskipped | |
+|`onErrorReceive`| Function | Erokhin Ilya | devdone | |
+|`onHttpErrorReceive`| Function | Erokhin Ilya | devdone | |
+|`onDownloadStart`| Function | Erokhin Ilya | devdone | |
+|`onRefreshAccessedHistory`| Function | Erokhin Ilya | devdone | |
 |`onUrlLoadIntercept`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onSslErrorReceive`| Function | Erokhin Ilya | done | deprecated |
-|`onRenderExited`| Function | Erokhin Ilya | testskipped | |
+|`onRenderExited`| Function | Erokhin Ilya | devdone | |
 |`onShowFileSelector`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onFileSelectorShow`| Function | Erokhin Ilya | done | deprecated |
-|`onResourceLoad`| Function | Erokhin Ilya | testskipped | |
-|`onFullScreenExit`| Function | Erokhin Ilya | testskipped | |
-|`onFullScreenEnter`| Function | Erokhin Ilya | testskipped | dependency on Ark_FullScreenExitHandler |
+|`onResourceLoad`| Function | Erokhin Ilya | devdone | |
+|`onFullScreenExit`| Function | Erokhin Ilya | devdone | |
+|`onFullScreenEnter`| Function | Erokhin Ilya | devdone | |
 |`onScaleChange`| Function | Erokhin Ilya | testskipped | |
 |`onHttpAuthRequest`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onInterceptRequest`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
