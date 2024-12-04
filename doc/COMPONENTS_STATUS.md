@@ -642,7 +642,7 @@
 |`onStateChange`| Function |Evstigneev Roman | done|  |
 |`mode`| Function |Evstigneev Roman | done |  |
 |*Navigation*| *Component* | Erokhin Ilya | in progress |  |
-|`setNavigationOptions`| Function | Skroba Gleb | devdone | |
+|`setNavigationOptions`| Function | Skroba Gleb | done | |
 |`navBarWidth`|Function| Skroba Gleb | done | |
 |`navBarPosition`|Function| Erokhin Ilya | done | |
 |`navBarWidthRange`|Function| Skroba Gleb | done | |
@@ -651,16 +651,16 @@
 |`backButtonIcon`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR, implemented for string and resource arg |
 |`hideNavBar`|Function| Erokhin Ilya | done |  |
 |`subTitle`|Function| Erokhin Ilya | done |  |
-|`hideTitleBar`|Function| Skroba Gleb | in progress | main part done, no ace_engine implementation for second |
+|`hideTitleBar`|Function| Erokhin Ilya | done |  |
 |`hideBackButton`|Function| Erokhin Ilya | done |  |
 |`titleMode`|Function| Erokhin Ilya | done |  |
 |`menus`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q ,  https://gitee.com/openharmony/arkui_ace_engine/issues/IB3U6S|
 |`onTitleModeChange`| Function | Skroba Gleb | done | |
 |`toolBar`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|`hideToolBar`|Function| Skroba Gleb | in progress | main part done, no ace_engine implementation for second |
+|`hideToolBar`|Function| Erokhin Ilya | done |  |
 |`onNavBarStateChange`|Function| Erokhin Ilya | done |  |
 |`onNavigationModeChange`|Function| Erokhin Ilya | done |  |
-|`navDestination`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IB7RSS |
+|`navDestination`| Function | Skroba Gleb | done |  |
 |`customNavContentTransition`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
 |`systemBarStyle`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`recoverable`|Function| Erokhin Ilya | done |  |
@@ -1723,9 +1723,9 @@
 |`getNavDestinationId`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setNavDestinationId`| Function | Morozov Sergey | in progress | |
 |*NavPathStack*| *Class* | Morozov Sergey |in progress |  |
-|`pushPath`| Function | Morozov Sergey, Skroba Gleb | devdone |  |
+|`pushPath`| Function | Skroba Gleb | done |  |
 |`pushDestination`| Function | Morozov Sergey | blocked IDL | can be implemented without return val - https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`pushPathByName`| Function | Morozov Sergey |in progress |  |
+|`pushPathByName`| Function | Morozov Sergey | in progress |  |
 |`pushDestinationByName`| Function | Morozov Sergey | blocked IDL | can be implemented without return val - https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 
 |`replacePath`| Function | Morozov Sergey |in progress |  |
 |`replaceDestination`| Function | Morozov Sergey |in progress |  |
@@ -1733,7 +1733,7 @@
 |`removeByIndexes`| Function | Morozov Sergey |in progress |  |
 |`removeByName`| Function | Morozov Sergey |in progress |  |
 |`removeByNavDestinationId`| Function | Morozov Sergey |in progress |  |
-|`pop`| Function | Morozov Sergey, Skroba Gleb | blocked IDL | implemented without return val - https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 
+|`pop`| Function | Skroba Gleb | blocked IDL | implemented without return val - https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 
 |`popToName`| Function | Morozov Sergey | in progress |  |
 |`popToIndex`| Function | Morozov Sergey |in progress |  |
 |`moveToTop`| Function | Morozov Sergey |in progress |  |
@@ -1744,7 +1744,7 @@
 |`getParamByName`| Function | Morozov Sergey, Skroba Gleb | blocked IDL | can be implemented without return val - https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 
 |`getIndexByName`| Function | Morozov Sergey | blocked IDL | can be implemented without return val - https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 
 |`getParent`| Function | Morozov Sergey |in progress |  |
-|`size`| Function | Morozov Sergey, Skroba Gleb | devdone |  |
+|`size`| Function | Skroba Gleb | done |  |
 |`disableAnimation`| Function | Morozov Sergey |in progress |  |
 |`setInterception`| Function | Morozov Sergey |in progress |  |
 |*NavigationTransitionProxy*| *Class* | Morozov Sergey | blocked IDL | |
