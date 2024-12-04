@@ -2031,7 +2031,7 @@
 |`values`| Function | | | |
 |`length`| Function | | | |
 |`stopImageAnalyzer`| Function | Tuzhilkin Ivan | devdone | |
-|*WaterFlowSections*| *Class* | in progress | | |
+|*WaterFlowSections*| *Class* | Kovalev Sergey | in progress |one converter is not fully implemented |
 |`splice`| Function | Kovalev Sergey | devdone | |
 |`push`| Function | Kovalev Sergey | devdone | |
 |`update`| Function | Kovalev Sergey | devdone | |
