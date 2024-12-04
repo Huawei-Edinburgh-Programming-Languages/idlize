@@ -786,7 +786,7 @@
 |`onDidChange`| Function | Dudkin Sergey| done|  |
 |`onCut`| Function | Dudkin Sergey| done| |
 |`onCopy`| Function | Dudkin Sergey| done | |
-|`editMenuOptions`| Function | Maksimov Nikita | in progress | |
+|`editMenuOptions`| Function | Maksimov Nikita | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`enableKeyboardOnFocus`| Function | Dudkin Sergey| done|  |
 |`enableHapticFeedback`| Function | Dudkin Sergey| done|  |
 |`barState`| Function | Dudkin Sergey| done|  |
@@ -873,7 +873,7 @@
 |`onDidInsert`|Function| Evstigneev Roman |done|  |
 |`onWillDelete`|Function| Evstigneev Roman |blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
 |`onDidDelete`|Function| Evstigneev Roman |done|  |
-|`editMenuOptions`|Function| Maksimov Nikita | in progress | |
+|`editMenuOptions`|Function| Maksimov Nikita | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`enablePreviewText`|Function| Evstigneev Roman |done|  |
 |`enableHapticFeedback`|Function|Evstigneev Roman| done |  |
 |`searchButton`|Function| Evstigneev Roman | done |  |
@@ -1116,7 +1116,7 @@
 |`fontFeature`| Function |Samarin Sergey | done |  |
 |`privacySensitive`| Function |Samarin Sergey | done |  |
 |`textSelectable`| Function |Samarin Sergey | done |  |
-|`editMenuOptions`| Function | Maksimov Nikita | in progress | |
+|`editMenuOptions`| Function | Maksimov Nikita | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`halfLeading`| Function |Samarin Sergey | done |  |
 |`enableHapticFeedback`| Function |Samarin Sergey | done |  |
 |`selection`| Function |Samarin Sergey | testskipped |  |
@@ -1169,7 +1169,7 @@
 |`onDidInsert`|Function|Tuzhilkin Ivan|done |  |
 |`onWillDelete`|Function|Tuzhilkin Ivan|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onDidDelete`|Function|Tuzhilkin Ivan|done |  |
-|`editMenuOptions`|Function| Maksimov Nikita | in progress | |
+|`editMenuOptions`|Function| Maksimov Nikita | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`enablePreviewText`|Function|Tuzhilkin Ivan|done|  |
 |`enableHapticFeedback`|Function|Tuzhilkin Ivan|done|  |
 |`inputFilter`|Function|Tuzhilkin Ivan|done|  |
@@ -1248,7 +1248,7 @@
 |`onDidInsert`| Function | Spirin Andrey | devdone |  |
 |`onWillDelete`| Function | Spirin Andrey | in progress|  |
 |`onDidDelete`| Function | Spirin Andrey | devdone |  |
-|`editMenuOptions`| Function | Maksimov Nikita | in progress | |
+|`editMenuOptions`| Function | Maksimov Nikita | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`enablePreviewText`| Function | Spirin Andrey | done |  |
 |`enableHapticFeedback`| Function | Spirin Andrey | done |  |
 |`inputFilter`| Function | Spirin Andrey | testskipped  |  |
@@ -1432,7 +1432,7 @@
 |`onInterceptKeyboardAttach`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
 |`onAdsBlocked`| Function | Erokhin Ilya | in progress | |
 |`keyboardAvoidMode`| Function | Erokhin Ilya | done | |
-|`editMenuOptions`| Function | Maksimov Nikita | in progress | |
+|`editMenuOptions`| Function | Maksimov Nikita | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`enableHapticFeedback`| Function | Erokhin Ilya | done | |
 |`registerNativeEmbedRule`| Function | Erokhin Ilya | done | |
 |`bindSelectionMenu`| Function | Erokhin Ilya | in progress | |
@@ -1864,7 +1864,7 @@
 |*TextMenuItemId*| *Class* | | | |
 |`of`| Function | | | |
 |`equals`| Function | | | |
-|*EditMenuOptions*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|*EditMenuOptions*| *Class* | Maksimov Nikita | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onCreateMenu`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onMenuItemClick`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |*TextInputController*| *Class* | Spirin Andrey | in progress |  |
