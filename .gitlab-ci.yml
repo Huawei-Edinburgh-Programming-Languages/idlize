@@ -19,6 +19,9 @@ variables:
         - npm config set //nexus.bz-openlab.ru:10443/repository/koala-npm/:_auth $NEXUS_NPM_PASS
         - npm i --no-audit --no-fund
         - npm i --prefix external --no-audit --no-fund
+    clean-generation:
+        - ls -d $PWD/external/arkoala/arkui/src/peers/* | grep -e '.*Ark.*Peer\.ts' -e '.*ArkIndicatorComponentPeer.ts' -e '.*ArkNavigationPeer.ts' | xargs rm
+        - ls -d $PWD/external/arkoala/arkui/src/* | grep -e '.*Ark.*Materialized\.ts' -e '.*ArkIndicatorcomponent.ts' -e '.*ArkNavigation.ts' | xargs rm
 
 idlize sanity:
   stage: test
@@ -91,6 +94,7 @@ build arkoala-ts:
     - koala-ci
   before_script:
     - !reference [.setup, script]
+    - !reference [.setup, clean-generation]
   script:
     - KOALA_BZ=1 OPENLAB_USERNAME=koala-ci OPENLAB_PASSWORD=w1llUgu3ss npm run arkoala:ts
 
