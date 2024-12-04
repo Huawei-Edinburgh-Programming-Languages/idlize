@@ -75,6 +75,10 @@ public class Application {
         }
     }
 
+    void emitEvent(int p0, int p1, int p2, int p3) {
+        System.out.println("JAVA: emitEvent");
+    }
+
     void updateState() {
         System.out.println("JAVA: updateState");
     }
