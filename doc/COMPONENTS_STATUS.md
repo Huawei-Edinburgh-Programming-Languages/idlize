@@ -714,12 +714,12 @@
 |`setPluginComponentOptions`| Function | | | |
 |`onComplete`| Function | | | |
 |`onError`| Function | | | |
-|*Polygon*| *Component* | | | |
-|`setPolygonOptions`| Function | | | |
-|`points`| Function | | | |
-|*Polyline*| *Component* | | | |
-|`setPolylineOptions`| Function | | | |
-|`points`| Function | | | |
+|*Polygon*| *Component* |Politov Mikhail | in progress | |
+|`setPolygonOptions`| Function | Politov Mikhail | in progress | |
+|`points`| Function | Politov Mikhail | in progress |  |
+|*Polyline*| *Component* | Politov Mikhail | in progress |  |
+|`setPolylineOptions`| Function | Politov Mikhail | in progress |  |
+|`points`| Function | Politov Mikhail | in progress |  |
 |*Progress*| *Component* | Erokhin Ilya | blocked | |
 |`setProgressOptions`| Function | Erokhin Ilya | done | |
 |`value`| Function | Erokhin Ilya | done | |
