@@ -583,8 +583,9 @@ export function groupBy<K, V>(values: V[], selector: (value: V) => K): Map<K, V[
     return map
 }
 
-export function removeExt(filename: string) {
-    return filename.replaceAll(path.extname(filename), '')
+export function removeExt(filename: string, hint?: string) {
+    const ext = hint !== undefined ? hint : path.extname(filename)
+    return filename.replaceAll(ext, '')
 }
 
 export function warn(message: string) {

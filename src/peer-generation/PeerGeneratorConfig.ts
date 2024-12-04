@@ -152,6 +152,12 @@ export class PeerGeneratorConfig {
         "TextPickerDialog",
     ])
 
+    // List of conflicting declarations of both class and interface
+    public static conflictingDeclarationEntries = new Set([
+        "TextStyle",
+        "LinearGradient",
+    ])
+
     public static ignoredCallbacks = new Set<string>([
         // Empty for now
     ])
