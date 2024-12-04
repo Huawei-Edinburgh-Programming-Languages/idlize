@@ -460,15 +460,15 @@
 |`onSelect`|Function| Erokhin Ilya | done |  |
 |*GridCol*| *Component* | Lobah Mikhail| done|  |
 |`setGridColOptions`| Function |Lobah Mikhail| done|  |
-|`span`| Function |Lobah Mikhail| in progress|  |
+|`span`| Function |Lobah Mikhail| done |  |
 |`gridColOffset`| Function |Lobah Mikhail| done|  |
 |`order`| Function |Lobah Mikhail| done|  |
-|*GridContainer*| *Component* |Lobah Mikhail| in progress|  |
-|`setGridContainerOptions`| Function |Lobah Mikhail| in progress|  |
-|*GridRow*| *Component* |Lobah Mikhail| in progress|  |
-|`setGridRowOptions`| Function |Lobah Mikhail| in progress|  |
-|`onBreakpointChange`| Function |Lobah Mikhail| in progress|  |
-|`alignItems`| Function |Lobah Mikhail| in progress|  |
+|*GridContainer*| *Component* |Lobah Mikhail| in progress | deprecated |
+|`setGridContainerOptions`| Function |Lobah Mikhail| in progress| deprecated |
+|*GridRow*| *Component* |Lobah Mikhail| done|  |
+|`setGridRowOptions`| Function |Lobah Mikhail| done|  |
+|`onBreakpointChange`| Function |Lobah Mikhail| done |  |
+|`alignItems`| Function |Lobah Mikhail| done |  |
 |*Hyperlink*| *Component* | Morozov Sergey | done | https://gitee.com/openharmony/arkui_ace_engine/issues/IB6W7E |
 |`setHyperlinkOptions`| Function | Morozov Sergey | done |
 |`color`| Function | Morozov Sergey | done |
