@@ -2032,11 +2032,11 @@
 |`length`| Function | | | |
 |`stopImageAnalyzer`| Function | Tuzhilkin Ivan | devdone | |
 |*WaterFlowSections*| *Class* | in progress | | |
-|`splice`| Function | Kovalev Sergey | in progress | |
-|`push`| Function | Kovalev Sergey | in progress | |
-|`update`| Function | Kovalev Sergey | in progress | |
+|`splice`| Function | Kovalev Sergey | devdone | |
+|`push`| Function | Kovalev Sergey | devdone | |
+|`update`| Function | Kovalev Sergey | devdone | |
 |`values`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`length`| Function | Kovalev Sergey | in progress | |
+|`length`| Function | Kovalev Sergey | devdone | |
 |*UIExtensionProxy*| *Class* | | | |
 |`send`| Function | | | |
 |`sendSync`| Function | | | |
