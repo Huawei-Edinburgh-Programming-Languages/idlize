@@ -1782,11 +1782,11 @@
 |`getSelection`| Function |Dudkin Sergey| done|  |
 |`fromStyledString`| Function | Dudkin Sergey| done|  |
 |`toStyledString`| Function | Dudkin Sergey| done|  |
-|*RichEditorStyledStringController*| *Class* |Dudkin Sergey| blocked| |
+|*RichEditorStyledStringController*| *Class* |Dudkin Sergey| blocked IDL| |
 |`setStyledString`| Function |Dudkin Sergey| devdone| |
 |`getStyledString`| Function | Dudkin Sergey| devdone| |
 |`getSelection`| Function |Dudkin Sergey| devdone| |
-|`onContentChanged`| Function | Dudkin Sergey| blocked| https://gitee.com/nikolay-igotti/idlize/issues/IB944G |
+|`onContentChanged`| Function | Dudkin Sergey| blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB944G |
 |*Scroller*| *Class* | Erokhin Ilya | blocked |  |
 |`scrollTo`| Function | Erokhin Ilya | done |  |
 |`scrollEdge`| Function | Erokhin Ilya | done |  |
