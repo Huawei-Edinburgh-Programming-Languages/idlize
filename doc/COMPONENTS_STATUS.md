@@ -786,7 +786,7 @@
 |`onDidChange`| Function | Dudkin Sergey| done|  |
 |`onCut`| Function | Dudkin Sergey| done| |
 |`onCopy`| Function | Dudkin Sergey| done | |
-|`editMenuOptions`| Function | Dudkin Sergey| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB3UKQ |
+|`editMenuOptions`| Function | Maksimov Nikita | in progress | |
 |`enableKeyboardOnFocus`| Function | Dudkin Sergey| done|  |
 |`enableHapticFeedback`| Function | Dudkin Sergey| done|  |
 |`barState`| Function | Dudkin Sergey| done|  |
@@ -834,9 +834,9 @@
 |`enablePaging`| Function | Berezin Kirill | done |  |
 |`initialOffset`| Function | Berezin Kirill | done |  |
 |`edgeEffect`| Function | Berezin Kirill | done |  |
-|*ScrollBar*| *Component* | Maksimov Nikita | devdone | |
-|`setScrollBarOptions`| Function | Maksimov Nikita | devdone | |
-|`enableNestedScroll`| Function | Maksimov Nikita | devdone | |
+|*ScrollBar*| *Component* | Maksimov Nikita | done | |
+|`setScrollBarOptions`| Function | Maksimov Nikita | done | |
+|`enableNestedScroll`| Function | Maksimov Nikita | done | |
 |*Search*|*Component*| Evstigneev Roman |In Progress|  |
 |`setSearchOptions`|Function| Evstigneev Roman | in progress | https://gitee.com/openharmony/arkui_ace_engine/issues/IAXCOP |
 |`fontColor`|Function| Evstigneev Roman | done |  |
@@ -873,7 +873,7 @@
 |`onDidInsert`|Function| Evstigneev Roman |done|  |
 |`onWillDelete`|Function| Evstigneev Roman |blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
 |`onDidDelete`|Function| Evstigneev Roman |done|  |
-|`editMenuOptions`|Function| Evstigneev Roman |in progress| Ark_Materialized possibly can be implemented  |
+|`editMenuOptions`|Function| Maksimov Nikita | in progress | |
 |`enablePreviewText`|Function| Evstigneev Roman |done|  |
 |`enableHapticFeedback`|Function|Evstigneev Roman| done |  |
 |`searchButton`|Function| Evstigneev Roman | done |  |
@@ -1116,7 +1116,7 @@
 |`fontFeature`| Function |Samarin Sergey | done |  |
 |`privacySensitive`| Function |Samarin Sergey | done |  |
 |`textSelectable`| Function |Samarin Sergey | done |  |
-|`editMenuOptions`| Function | Kirill Kirichenko | in progress |  |
+|`editMenuOptions`| Function | Maksimov Nikita | in progress | |
 |`halfLeading`| Function |Samarin Sergey | done |  |
 |`enableHapticFeedback`| Function |Samarin Sergey | done |  |
 |`selection`| Function |Samarin Sergey | testskipped |  |
@@ -1169,7 +1169,7 @@
 |`onDidInsert`|Function|Tuzhilkin Ivan|done |  |
 |`onWillDelete`|Function|Tuzhilkin Ivan|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onDidDelete`|Function|Tuzhilkin Ivan|done |  |
-|`editMenuOptions`|Function|Tuzhilkin Ivan|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`editMenuOptions`|Function| Maksimov Nikita | in progress | |
 |`enablePreviewText`|Function|Tuzhilkin Ivan|done|  |
 |`enableHapticFeedback`|Function|Tuzhilkin Ivan|done|  |
 |`inputFilter`|Function|Tuzhilkin Ivan|done|  |
@@ -1248,7 +1248,7 @@
 |`onDidInsert`| Function | Spirin Andrey | devdone |  |
 |`onWillDelete`| Function | Spirin Andrey | in progress|  |
 |`onDidDelete`| Function | Spirin Andrey | devdone |  |
-|`editMenuOptions`| Function | Spirin Andrey | in progress |  |
+|`editMenuOptions`| Function | Maksimov Nikita | in progress | |
 |`enablePreviewText`| Function | Spirin Andrey | done |  |
 |`enableHapticFeedback`| Function | Spirin Andrey | done |  |
 |`inputFilter`| Function | Spirin Andrey | testskipped  |  |
@@ -1432,7 +1432,7 @@
 |`onInterceptKeyboardAttach`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
 |`onAdsBlocked`| Function | Erokhin Ilya | in progress | |
 |`keyboardAvoidMode`| Function | Erokhin Ilya | done | |
-|`editMenuOptions`| Function | Erokhin Ilya | in progress | |
+|`editMenuOptions`| Function | Maksimov Nikita | in progress | |
 |`enableHapticFeedback`| Function | Erokhin Ilya | done | |
 |`registerNativeEmbedRule`| Function | Erokhin Ilya | done | |
 |`bindSelectionMenu`| Function | Erokhin Ilya | in progress | |
@@ -1620,20 +1620,20 @@
 |`asymmetric`| Function | Andrey Khudenkikh | blocked | TDB |
 |`animation`| Function | Andrey Khudenkikh | blocked | TBD |
 |`combine`| Function | Andrey Khudenkikh | blocked | TBD |
-|*PixelMapMock*| *Class* | | | |
-|`release`| Function | | | |
-|*ProgressMask*| *Class* | | | |
-|`updateProgress`| Function | | | |
-|`updateColor`| Function | | | |
-|`enableBreathingAnimation`| Function | | | |
-|*AttributeModifier*| *Class* | | | |
-|`applyNormalAttribute`| Function | | | |
-|`applyPressedAttribute`| Function | | | |
-|`applyFocusedAttribute`| Function | | | |
-|`applyDisabledAttribute`| Function | | | |
-|`applySelectedAttribute`| Function | | | |
-|*ContentModifier*| *Class* | | | |
-|`applyContent`| Function | | | |
+|*PixelMapMock*| *Class* | Maksimov Nikita | in progress | |
+|`release`| Function | Maksimov Nikita | in progress | |
+|*ProgressMask*| *Class* | Maksimov Nikita | in progress | |
+|`updateProgress`| Function | Maksimov Nikita | in progress | |
+|`updateColor`| Function | Maksimov Nikita | in progress | |
+|`enableBreathingAnimation`| Function | Maksimov Nikita | in progress | |
+|*AttributeModifier*| *Class* | Maksimov Nikita | in progress | |
+|`applyNormalAttribute`| Function | Maksimov Nikita | in progress | |
+|`applyPressedAttribute`| Function | Maksimov Nikita | in progress | |
+|`applyFocusedAttribute`| Function | Maksimov Nikita | in progress | |
+|`applyDisabledAttribute`| Function | Maksimov Nikita | in progress | |
+|`applySelectedAttribute`| Function | Maksimov Nikita | in progress | |
+|*ContentModifier*| *Class* | Maksimov Nikita | in progress | |
+|`applyContent`| Function | Maksimov Nikita | in progress | |
 |*View*| *Class* | | | |
 |`create`| Function | | | |
 |*TextContentControllerBase*| *Class* | | | |
