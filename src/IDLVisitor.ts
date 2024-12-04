@@ -587,7 +587,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             [],
             this.pickProperties(allMembers, childNameSuggestion),
             this.pickMethods(allMembers, childNameSuggestion),
-            this.pickCallables(node.members, childNameSuggestion),
+            this.pickCallables(node.members, NameSuggestion.make(`${nameSuggestion.name}Options`, true)),
             this.collectTypeParameters(node.typeParameters), {
             fileName: node.getSourceFile().fileName,
             extendedAttributes: this.computeComponentExtendedAttributes(node),
@@ -715,7 +715,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
     }
 
     serializeFunctionType(signature: ts.SignatureDeclarationBase, nameSuggestion?: NameSuggestion, extendedAttributes?: idl.IDLExtendedAttribute[]): idl.IDLCallback {
-        const parameters = signature.parameters.map(it => this.serializeParameter(it, nameSuggestion))
+        const parameters = signature.parameters.map(it => this.serializeParameter(it, signature.parameters.length == 1, nameSuggestion))
         const returnType = this.serializeType(signature.type, nameSuggestion?.extend('ret'))
         const syntheticName = generateSyntheticFunctionName(parameters, returnType)
         const selectedName = selectName(nameSuggestion, syntheticName)
@@ -731,7 +731,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
     }
 
     serializeSyntheticFunctionType(fileName: string, parameters: ts.ParameterDeclaration[], returnType: ts.TypeNode, nameSuggestion?: NameSuggestion, extendedAttributes?: idl.IDLExtendedAttribute[]): idl.IDLCallback {
-        const parametersIdl = parameters.map(it => this.serializeParameter(it, nameSuggestion))
+        const parametersIdl = parameters.map(it => this.serializeParameter(it, parameters.length == 1, nameSuggestion))
         const returnIdlType = this.serializeType(returnType, nameSuggestion?.extend('ret'))
         const syntheticName = generateSyntheticFunctionName(parametersIdl, returnIdlType)
         const selectedName = selectName(nameSuggestion, syntheticName)
@@ -1183,7 +1183,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         return undefined
     }
 
-    serializeParameter(parameter: ts.ParameterDeclaration, nameSuggestion?: NameSuggestion): idl.IDLParameter {
+    serializeParameter(parameter: ts.ParameterDeclaration, isOnly: boolean, nameSuggestion?: NameSuggestion): idl.IDLParameter {
         if (ts.isObjectBindingPattern(parameter.name)) {
             warn(`Object hack for binding pattern: ${parameter.name.getText()}`)
             return idl.createParameter(
@@ -1197,7 +1197,8 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             throw new Error("Not supported array binding pattern")
         }
         const parameterName = nameOrNull(parameter.name)!
-        nameSuggestion = nameSuggestion?.extend(parameterName)
+        if (!isOnly)
+            nameSuggestion = nameSuggestion?.extend(parameterName, nameSuggestion?.forced ?? false)
         return idl.createParameter(
             escapeIdl(parameterName),
             this.serializeType(parameter.type, nameSuggestion),
@@ -1302,7 +1303,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             extendedAttributes.push({ name: idl.IDLExtendedAttributes.IndexSignature })
             return idl.createMethod(
                 "indexSignature",
-                methodParameters.map(it => this.serializeParameter(it)), // check nameSuggestion
+                methodParameters.map(it => this.serializeParameter(it, methodParameters.length == 1, )), // check nameSuggestion
                 this.serializeType(method.type, nameSuggestion), {
                     isStatic: false,
                     isOptional: false,
@@ -1316,7 +1317,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         const returnType = this.serializeType(method.type, nameSuggestion?.extend('ret'))
         return idl.createMethod(
             escapedMethodName,
-            methodParameters.map(it => this.serializeParameter(it, nameSuggestion)),
+            methodParameters.map(it => this.serializeParameter(it, methodParameters.length == 1, nameSuggestion)),
             returnType, {
             isStatic: isStatic(method.modifiers),
             isOptional: !!method.questionToken,
@@ -1333,7 +1334,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         extendedAttributes.push({ name: idl.IDLExtendedAttributes.CallSignature })
         return idl.createCallable(
             "invoke",
-            method.parameters.map(it => this.serializeParameter(it, nameSuggestion)),
+            method.parameters.map(it => this.serializeParameter(it,  method.parameters.length == 1, nameSuggestion)),
             returnType, {
             isStatic: false,
             isAsync: (ts.canHaveModifiers(method) && isAsync(ts.getModifiers(method))),
@@ -1349,7 +1350,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         })
 
         return idl.createConstructor(
-            constr.parameters.map(it => this.serializeParameter(it, nameSuggestion)),
+            constr.parameters.map(it => this.serializeParameter(it,  constr.parameters.length == 1, nameSuggestion)),
             this.serializeType(constr.type), {
             extendedAttributes: this.computeDeprecatedExtendAttributes(constr),
         }) // check
