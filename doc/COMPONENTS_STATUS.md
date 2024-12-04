@@ -1716,12 +1716,12 @@
 |`setTranslateX`| Function | Vadim Voronov | in progress | |
 |`getTranslateY`| Function | Vadim Voronov | in progress | |
 |`setTranslateY`| Function | Vadim Voronov | in progress | |
-|*NavDestinationContext*| *Class* | Sergey Morozov | in progress | |
-|`getConfigInRouteMap`| Function | Sergey Morozov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setPathInfo`| Function | Sergey Morozov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
-|`setPathStack`| Function | Sergey Morozov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
-|`getNavDestinationId`| Function | Sergey Morozov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setNavDestinationId`| Function | Sergey Morozov | in progress | |
+|*NavDestinationContext*| *Class* | Morozov Sergey | in progress | |
+|`getConfigInRouteMap`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`setPathInfo`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
+|`setPathStack`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
+|`getNavDestinationId`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`setNavDestinationId`| Function | Morozov Sergey | in progress | |
 |*NavPathStack*| *Class* | Morozov Sergey |in progress |  |
 |`pushPath`| Function | Morozov Sergey, Skroba Gleb | devdone |  |
 |`pushDestination`| Function | Morozov Sergey | blocked IDL | can be implemented without return val - https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
