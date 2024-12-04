@@ -1166,15 +1166,15 @@ export function createDependencyFilter(library: PeerLibrary): DependencyFilter {
 export function isConflictingDeclaration(decl: idl.IDLEntry): boolean {/// stolen from PGConfig
     if (!PeerGeneratorConfig.needInterfaces) return false
     // has same named class and interface
-    if ((idl.isInterface(decl) || idl.isClass(decl)) && decl.name === 'LinearGradient') return true
+    // if ((idl.isInterface(decl) || idl.isClass(decl)) && decl.name === 'LinearGradient') return true
     // just has ugly dependency WrappedBuilder - there is conflict in generic types
-    if (idl.isInterface(decl) && decl.name === 'ContentModifier') return true
+    // if (idl.isInterface(decl) && decl.name === 'ContentModifier') return true
     // complicated type arguments
     // if (idl.isClass(decl) && decl.name === 'TransitionEffect') return true
     // inside namespace
     // if (idl.isEnum(decl) && decl.name === 'GestureType') return true
     // no return type in some methods
-    if (idl.isInterface(decl) && decl.name === 'LayoutChild') return true
+    // if (idl.isInterface(decl) && decl.name === 'LayoutChild') return true
     return false
 }
 
