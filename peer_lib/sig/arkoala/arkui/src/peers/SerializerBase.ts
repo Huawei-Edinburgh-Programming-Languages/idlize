@@ -50,7 +50,7 @@ export enum Tags {
 }
 
 export function runtimeType(value: any): int32 {
-    let type = typeof value
+    const type = typeof value
     if (type == "number") return RuntimeType.NUMBER
     if (type == "string") return RuntimeType.STRING
     if (type == "undefined") return RuntimeType.UNDEFINED
@@ -90,6 +90,57 @@ export interface CallbackResource {
     release: pointer
 }
 
+export function withLength(
+    valueLength: Length | undefined,
+    body: (type: int32, value: float32, unit: int32, resource: int32) => void
+): void {
+    const type = runtimeType(valueLength)
+    let value = 0
+    let unit = 1 // vp
+    let resource = 0
+    switch (type) {
+        case RuntimeType.UNDEFINED:
+            value = 0
+            unit = 0
+            break
+        case RuntimeType.NUMBER:
+            value = valueLength as float32
+            break
+        case RuntimeType.STRING:
+            const valueStr = valueLength as string
+            // TODO: faster parse.
+            if (valueStr.endsWith("vp")) {
+                unit = 1 // vp
+                value = Number(valueStr.substring(0, valueStr.length - 2))
+            } else if (valueStr.endsWith("%")) {
+                unit = 3 // percent
+                value = Number(valueStr.substring(0, valueStr.length - 1))
+            } else if (valueStr.endsWith("lpx")) {
+                unit = 4 // lpx
+                value = Number(valueStr.substring(0, valueStr.length - 3))
+            } else if (valueStr.endsWith("px")) {
+                unit = 0 // px
+                value = Number(valueStr.substring(0, valueStr.length - 2))
+            }
+            break
+        case RuntimeType.OBJECT:
+            resource = (valueLength as Resource).id
+            break
+    }
+    body(type, value, unit, resource)
+}
+
+export function withLengthArray(valueLength: Length | undefined, body: (valuePtr: Int32Array) => void): void {
+    withLength(valueLength, (type: int32, value, unit, resource) => {
+        const array = new Int32Array(4)
+        array[0] = type
+        array[1] = value
+        array[2] = unit
+        array[3] = resource
+        body(array)
+    })
+}
+
 /* Serialization extension point */
 export abstract class CustomSerializer {
     constructor(protected supported: Array<string>) {}
@@ -105,7 +156,7 @@ export class SerializerBase {
     private view: DataView
 
     private static customSerializers: CustomSerializer | undefined = undefined
-    static registerCustomSerializer(serializer: CustomSerializer) {
+    static registerCustomSerializer(serializer: CustomSerializer): void {
         if (SerializerBase.customSerializers == undefined) {
             SerializerBase.customSerializers = serializer
         } else {
@@ -118,24 +169,25 @@ export class SerializerBase {
         this.buffer = new ArrayBuffer(96)
         this.view = new DataView(this.buffer)
     }
-    public release() {
+    public release(): void {
         this.isHolding = false
         this.releaseResources()
         this.position = 0
     }
-    asArray(): Uint8Array {
+    public asArray(): Uint8Array {
         return new Uint8Array(this.buffer)
     }
-    length(): int32 {
+    public length(): int32 {
         return this.position
     }
-    currentPosition(): int32 { return this.position }
-
-    private checkCapacity(value: int32) {
+    public currentPosition(): int32 {
+        return this.position
+    }
+    private checkCapacity(value: int32): void {
         if (value < 1) {
             throw new Error(`${value} is less than 1`)
         }
-        let buffSize = this.buffer.byteLength
+        const buffSize = this.buffer.byteLength
         if (this.position > buffSize - value) {
             const minSize = this.position + value
             const resizedSize = Math.max(minSize, Math.round(3 * buffSize / 2))
@@ -147,7 +199,7 @@ export class SerializerBase {
         }
     }
     private heldResources: ResourceId[] = []
-    holdAndWriteCallback(callback: object, hold: KPointer = 0, release: KPointer = 0, call: KPointer = 0): ResourceId {
+    public holdAndWriteCallback(callback: object, hold: KPointer = 0, release: KPointer = 0, call: KPointer = 0): ResourceId {
         const resourceId = ResourceHolder.instance().registerAndHold(callback)
         this.heldResources.push(resourceId)
         this.writeInt32(resourceId)
@@ -156,7 +208,7 @@ export class SerializerBase {
         this.writePointer(call)
         return resourceId
     }
-    holdAndWriteCallbackForPromiseVoid(hold: KPointer = 0, release: KPointer = 0, call: KPointer = 0): [Promise<void>, ResourceId] {
+    public holdAndWriteCallbackForPromiseVoid(hold: KPointer = 0, release: KPointer = 0, call: KPointer = 0): [Promise<void>, ResourceId] {
         let resourceId: ResourceId
         const promise = new Promise<void>((resolve, reject) => {
             const callback = (err: string[]|undefined) => {
@@ -169,7 +221,7 @@ export class SerializerBase {
         })
         return [promise, resourceId]
     }
-    holdAndWriteCallbackForPromise<T>(hold: KPointer = 0, release: KPointer = 0, call: KPointer = 0): [Promise<T>, ResourceId] {
+    public holdAndWriteCallbackForPromise<T>(hold: KPointer = 0, release: KPointer = 0, call: KPointer = 0): [Promise<T>, ResourceId] {
         let resourceId: ResourceId
         const promise = new Promise<T>((resolve, reject) => {
             const callback = (value: T|undefined, err: string[]|undefined) => {
@@ -182,18 +234,18 @@ export class SerializerBase {
         })
         return [promise, resourceId]
     }
-    writeCallbackResource(resource: CallbackResource) {
+    public writeCallbackResource(resource: CallbackResource): void {
         this.writeInt32(resource.resourceId)
         this.writePointer(resource.hold)
         this.writePointer(resource.release)
     }
-    private releaseResources() {
+    private releaseResources(): void {
         for (const resourceId of this.heldResources)
             nativeModule()._ReleaseArkoalaResource(resourceId)
         // todo think about effective array clearing/pushing
         this.heldResources = []
     }
-    writeCustomObject(kind: string, value: any) {
+    public writeCustomObject(kind: string, value: any): void {
         let current = SerializerBase.customSerializers
         while (current) {
             if (current.supports(kind)) {
@@ -205,7 +257,7 @@ export class SerializerBase {
         console.log(`Unsupported custom serialization for ${kind}, write undefined`)
         this.writeInt8(Tags.UNDEFINED)
     }
-    writeNumber(value: number|undefined) {
+    public writeNumber(value: number|undefined): void {
         this.checkCapacity(5)
         if (value == undefined) {
             this.view.setInt8(this.position, Tags.UNDEFINED)
@@ -222,47 +274,47 @@ export class SerializerBase {
         this.view.setFloat32(this.position + 1, value, true)
         this.position += 5
     }
-    writeInt8(value: int32) {
+    public writeInt8(value: int32): void {
         this.checkCapacity(1)
         this.view.setInt8(this.position, value)
         this.position += 1
     }
-    writeInt32(value: int32) {
+    public writeInt32(value: int32): void {
         this.checkCapacity(4)
         this.view.setInt32(this.position, value, true)
         this.position += 4
     }
-    writeInt64(value: int64) {
+    public writeInt64(value: int64): void {
         this.checkCapacity(8)
         this.view.setBigInt64(this.position, BigInt(value), true)
         this.position += 8
     }
-    writePointer(value: pointer) {
+    public writePointer(value: pointer): void {
         this.checkCapacity(8)
         this.view.setBigInt64(this.position, BigInt(value ?? 0), true)
         this.position += 8
     }
-    writeFloat32(value: float32) {
+    public writeFloat32(value: float32): void {
         this.checkCapacity(4)
         this.view.setFloat32(this.position, value, true)
         this.position += 4
     }
-    writeBoolean(value: boolean|undefined) {
+    public writeBoolean(value: boolean|undefined): void {
         this.checkCapacity(1)
         this.view.setInt8(this.position, value == undefined ? RuntimeType.UNDEFINED : +value)
         this.position++
     }
-    writeFunction(value: object | undefined) {
+    public writeFunction(value: object | undefined): void {
         this.writeInt32(registerCallback(value))
     }
-    writeString(value: string) {
+    public writeString(value: string): void {
         this.checkCapacity(4 + value.length * 4) // length, data
-        let encodedLength =
+        const encodedLength =
             nativeModule()._ManagedStringWrite(value, new Uint8Array(this.view.buffer, 0), this.position + 4)
         this.view.setInt32(this.position, encodedLength, true)
         this.position += encodedLength + 4
     }
-    writeBuffer(buffer: ArrayBuffer) {
+    public writeBuffer(buffer: ArrayBuffer): void {
         this.writePointer(64)
         this.writeInt64(buffer.byteLength)
     }
@@ -272,8 +324,7 @@ class DateSerializer extends CustomSerializer {
     constructor() {
         super(["Date"])
     }
-
-    serialize(serializer: SerializerBase, value: object, kind: string): void {
+    public serialize(serializer: SerializerBase, value: object, kind: string): void {
         serializer.writeString((value as Date).toISOString())
     }
 }
