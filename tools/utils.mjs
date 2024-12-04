@@ -82,7 +82,6 @@ export function writeToPackageJson(key, value) {
 
 }
 
-const prebuiltPath = path.join(__dirname, ".packages")
 
 const keyIdlizeRegistry = "@azanat:registry"
 const keyKoalaRegistry = "@koalaui:registry"
@@ -97,38 +96,25 @@ function getRegistry(key) {
     execSync(`npm config --location project get ${key}`)
 }
 
-function pack() {
-    if (fs.existsSync(prebuiltPath))
-        fs.rmSync(prebuiltPath, { recursive: true })
-    fs.mkdirSync(prebuiltPath)
-    execSync(`npm pack --pack-destination ${prebuiltPath}`)
-}
-
 export function publishToOpenlab(tag, dryRun = false) {
-    pack()
     setRegistry(keyIdlizeRegistry, idlizeRegistry)
     setRegistry("strict-ssl", false)
 
-    let packageName = fs.readdirSync(prebuiltPath)[0]
-    console.log(chalk.green(`> Publishing ${packageName}...`))
     if (dryRun) {
-        execSync(`npm publish ${path.join(prebuiltPath, packageName)} --dry-run --tag ${tag}`)
+        execSync(`npm publish --dry-run --tag ${tag}`)
     } else {
-        execSync(`npm publish ${path.join(prebuiltPath, packageName)} --tag ${tag}`)
+        execSync(`npm publish --tag ${tag}`)
     }
 }
 
 export function publishToGitlab(tag, dryRun = false) {
-    pack()
     setRegistry(keyIdlizeRegistry, koalaRegistry)
     setRegistry("strict-ssl", false)
 
-    let packageName = fs.readdirSync(prebuiltPath)[0]
-    console.log(chalk.green(`> Publishing ${packageName}...`))
     if (dryRun) {
-        execSync(`npm publish ${path.join(prebuiltPath, packageName)} --dry-run --tag ${tag}`)
+        execSync(`npm publish --dry-run --tag ${tag}`)
     } else {
-        execSync(`npm publish ${path.join(prebuiltPath, packageName)} --tag ${tag}`)
+        execSync(`npm publish --tag ${tag}`)
     }
     setRegistry(keyIdlizeRegistry, idlizeRegistry)
 }
