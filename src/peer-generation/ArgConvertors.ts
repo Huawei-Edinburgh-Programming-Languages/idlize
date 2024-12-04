@@ -881,6 +881,7 @@ export class CallbackConvertor extends BaseArgConvertor {
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
         if (writer.language == Language.CPP) {
             const callerInvocation = writer.makeString(`getManagedCallbackCaller(${generateCallbackKindAccess(this.decl, writer.language)})`)
+            const callerSyncInvocation = writer.makeString(`getManagedCallbackCallerSync(${generateCallbackKindAccess(this.decl, writer.language)})`)
             const resourceReadExpr = writer.makeMethodCall(`${deserializerName}`, `readCallbackResource`, [])
             const callReadExpr = writer.makeCast(
                 writer.makeMethodCall(`${deserializerName}`, `readPointerOrDefault`,
@@ -891,7 +892,16 @@ export class CallbackConvertor extends BaseArgConvertor {
                         overrideTypeName: `void(*)(${generateCallbackAPIArguments(this.library, this.decl).join(", ")})`
                     }
             )
-            return assigneer(writer.makeString(`{${resourceReadExpr.asString()}, ${callReadExpr.asString()}}`))
+            const callSyncReadExpr = writer.makeCast(
+                writer.makeMethodCall(`${deserializerName}`, `readPointerOrDefault`,
+                    [writer.makeCast(callerSyncInvocation, idl.IDLPointerType, { unsafe: true })]),
+                    idl.IDLUndefinedType /* not used */,
+                    {
+                        unsafe: true,
+                        overrideTypeName: `void(*)(${["KVMContext vmContext"].concat(generateCallbackAPIArguments(this.library, this.decl)).join(", ")})`
+                    }
+            )
+            return assigneer(writer.makeString(`{${resourceReadExpr.asString()}, ${callReadExpr.asString()}, ${callSyncReadExpr.asString()}}`))
         }
         return assigneer(writer.makeString(
             `${deserializerName}.read${this.library.getInteropName(this.decl)}()`))

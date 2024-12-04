@@ -336,11 +336,25 @@ function checkTwoSidesPromise() {
     }, 0)
 }
 
+function checkSyncCallback() {
+    const s = Serializer.hold()
+
+    let value: number | undefined = undefined
+    s.holdAndWriteCallback((x:number) => {
+        value = x
+    })
+    nativeModule()._TestCallbackSyncCall(s.asArray(), s.length())
+    s.release()
+    
+    assertTrue("Sync callback 1", value !== undefined)
+    assertEquals("Sync callback 2", 42, value)
+}
+
 function checkWriteFunction() {
     const s = Serializer.hold()
     s.writeFunction((value: number, flag: boolean) => flag ? value + 10 : value - 10)
     // TBD: id is small number
-    const id = s.asArray()[0]
+    const id = new Int32Array(s.asArray().buffer)[0]
     s.release()
     const args = Serializer.hold()
     args.writeNumber(20)
@@ -739,6 +753,7 @@ function main() {
     process.env.ACE_LIBRARY_PATH = __dirname + "/../../../native"
 
     // checkArrayBuffer()
+    checkSyncCallback()
 
     checkSerdeLength()
     checkSerdeText()

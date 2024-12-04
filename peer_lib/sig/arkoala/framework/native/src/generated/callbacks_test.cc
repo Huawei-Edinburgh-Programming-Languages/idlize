@@ -15,6 +15,8 @@
 #include <cstdint>
 #include "common-interop.h"
 #include "interop-logging.h"
+#include "arkoala_api_generated.h"
+#include "Serializers.h"
 
 void CallVoid(KVMContext vmContext, KInt methodId, KInt length, void* args) {
 #if KOALA_USE_NODE_VM || KOALA_USE_HZ_VM || KOALA_USE_PANDA_VM || KOALA_USE_JAVA_VM || KOALA_CJ
@@ -118,3 +120,14 @@ void impl_TestWithBuffer(KInteropBuffer buffer) {
     GetDefaultLogger()->appendGroupedLog(1, result.c_str());
 }
 //KOALA_INTEROP_V1(TestWithBuffer, KInteropBuffer)
+
+void impl_TestCallbackSyncCall(KVMContext vmContext, KByte* thisArray, KInt thisLength) {
+    Deserializer thisDeserializer(thisArray, thisLength);
+    TestSyncCb cb_value = {
+        thisDeserializer.readCallbackResource(), 
+        reinterpret_cast<void(*)(const Ark_Int32 resourceId, const Ark_Int32 num)>(thisDeserializer.readPointerOrDefault(reinterpret_cast<void*>(getManagedCallbackCaller(Kind_TestSyncCb)))),
+        reinterpret_cast<void(*)(KVMContext vmContext, const Ark_Int32 resourceId, const Ark_Int32 num)>(thisDeserializer.readPointerOrDefault(reinterpret_cast<void*>(getManagedCallbackCallerSync(Kind_TestSyncCb))))
+    };
+    cb_value.callSync(vmContext, cb_value.resource.resourceId, 42);
+}
+KOALA_INTEROP_CTX_V2(TestCallbackSyncCall, KByte*, KInt)

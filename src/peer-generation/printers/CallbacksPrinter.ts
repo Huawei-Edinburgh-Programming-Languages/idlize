@@ -150,7 +150,7 @@ class DeserializeCallbacksVisitor {
             imports.addFeature("CallbackKind", "./peers/CallbackKind")
             imports.addFeature("Deserializer", "./peers/Deserializer")
             imports.addFeature("int32", "@koalaui/common")
-            imports.addFeatures(["ResourceHolder", "KInt", "KStringPtr"], "@koalaui/interop")
+            imports.addFeatures(["ResourceHolder", "KInt", "KStringPtr", "wrapSystemCallback"], "@koalaui/interop")
             imports.addFeature("RuntimeType", "./peers/SerializerBase")
 
             if (this.writer.language === Language.ARKTS) {
@@ -244,7 +244,6 @@ class DeserializeCallbacksVisitor {
             )
         }
         this.writer.writeFunctionImplementation(`deserializeAndCallCallback`, signature, writer => {
-            const kindReference = idl.createReferenceType(`CallbackKind`)
             if (writer.language !== Language.CPP) {
                 writer.writeStatement(writer.makeAssign(`kind`, idl.IDLI32Type,
                     writer.makeMethodCall(`thisDeserializer`, `readInt32`, []),
@@ -264,6 +263,9 @@ class DeserializeCallbacksVisitor {
             writer.print(`}`)
             writer.writeStatement(writer.makeThrowError("Unknown callback kind"))
         })
+        if (this.writer.language === Language.TS) {
+            this.writer.print('wrapSystemCallback(1, (buff:Uint8Array, len:int32) => { deserializeAndCallCallback(new Deserializer(buff.buffer, len)); return 0 })')
+        }
     }
 
     visit(): void {
@@ -320,6 +322,33 @@ class ManagedCallCallbackVisitor {
         })
     }
 
+    private writeCallbackCallerSync(callback: idl.IDLCallback): void {
+        const args = callback.parameters.map(it => idl.maybeOptional(it.type!, it.isOptional))
+        const argsNames = callback.parameters.map(it => it.name)
+        if (!idl.isVoidType(callback.returnType)) {
+            args.push(this.library.createContinuationCallbackReference(callback.returnType))
+            argsNames.push(`continuation`)
+        }
+        const signature = new NamedMethodSignature(idl.IDLVoidType, 
+            [idl.createReferenceType('VMContext'), idl.IDLI32Type, ...args],
+            ["vmContext", "resourceId", ...argsNames],
+        )
+        this.writer.writeFunctionImplementation(`callManaged${callback.name}Sync`, signature, writer => {
+            writer.writeStatement(writer.makeAssign(`__buffer`, idl.createReferenceType(`CallbackBuffer`), 
+                writer.makeString(`{{}, {}}`), true, false))
+            writer.writeStatement(writer.makeAssign(`argsSerializer`, idl.createReferenceType(`Serializer`), 
+                writer.makeString(`Serializer(__buffer.buffer, &(__buffer.resourceHolder))`), true, false))
+            writer.writeExpressionStatement(writer.makeMethodCall(`argsSerializer`, `writeInt32`, [writer.makeString(generateCallbackKindName(callback))]))
+            writer.writeExpressionStatement(writer.makeMethodCall(`argsSerializer`, `writeInt32`, [writer.makeString(`resourceId`)]))
+            for (let i = 0; i < args.length; i++) {
+                const convertor = this.library.typeConvertor(argsNames[i], args[i], callback.parameters[i]?.isOptional)
+                convertor.convertorSerialize(`args`, argsNames[i], writer)
+            }
+            writer.print(`KOALA_INTEROP_CALL_VOID(vmContext, 1, sizeof(CallbackBuffer::buffer), __buffer.buffer);`)
+            writer.print('__buffer.resourceHolder.release();')
+        })
+    }
+
     private writeInteropImplementation(callbacks: idl.IDLCallback[]): void {
         const signature = new NamedMethodSignature(idl.IDLPointerType,
             [idl.createReferenceType(`CallbackKind`)],
@@ -337,6 +366,16 @@ class ManagedCallCallbackVisitor {
             writer.print(`}`)
             writer.writeStatement(writer.makeReturn(writer.makeString(`nullptr`)))
         })
+        this.writer.writeFunctionImplementation(`getManagedCallbackCallerSync`, signature, writer => {
+            writer.print(`switch (kind) {`)
+            writer.pushIndent()
+            for (const callback of callbacks) {
+                writer.print(`case ${generateCallbackKindName(callback)}: return reinterpret_cast<${PrimitiveType.NativePointer}>(callManaged${callback.name}Sync);`)
+            }
+            writer.popIndent()
+            writer.print(`}`)
+            writer.writeStatement(writer.makeReturn(writer.makeString(`nullptr`)))
+        })
     }
 
     visit(): void {
@@ -344,6 +383,7 @@ class ManagedCallCallbackVisitor {
         const uniqCallbacks = collectUniqueCallbacks(this.library)
         for (const callback of uniqCallbacks) {
             this.writeCallbackCaller(callback)
+            this.writeCallbackCallerSync(callback)
         }
         this.writeInteropImplementation(uniqCallbacks)
     }

@@ -147,16 +147,17 @@ export class SerializerBase {
         }
     }
     private heldResources: ResourceId[] = []
-    holdAndWriteCallback(callback: object, hold: KPointer = 0, release: KPointer = 0, call: KPointer = 0): ResourceId {
+    holdAndWriteCallback(callback: object, hold: KPointer = 0, release: KPointer = 0, call: KPointer = 0, callSync: KPointer = 0): ResourceId {
         const resourceId = ResourceHolder.instance().registerAndHold(callback)
         this.heldResources.push(resourceId)
         this.writeInt32(resourceId)
         this.writePointer(hold)
         this.writePointer(release)
         this.writePointer(call)
+        this.writePointer(callSync)
         return resourceId
     }
-    holdAndWriteCallbackForPromiseVoid(hold: KPointer = 0, release: KPointer = 0, call: KPointer = 0): [Promise<void>, ResourceId] {
+    holdAndWriteCallbackForPromiseVoid(hold: KPointer = 0, release: KPointer = 0, call: KPointer = 0, callSync = 0): [Promise<void>, ResourceId] {
         let resourceId: ResourceId
         const promise = new Promise<void>((resolve, reject) => {
             const callback = (err: string[]|undefined) => {
@@ -165,7 +166,7 @@ export class SerializerBase {
                 else
                     resolve()
             }
-            resourceId = this.holdAndWriteCallback(callback, hold, release, call)
+            resourceId = this.holdAndWriteCallback(callback, hold, release, call, callSync)
         })
         return [promise, resourceId]
     }
