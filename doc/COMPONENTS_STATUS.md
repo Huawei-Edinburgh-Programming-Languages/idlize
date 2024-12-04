@@ -1617,9 +1617,9 @@
 |`scale`| Function | Andrey Khudenkikh | devdone | |
 |`opacity`| Function | Andrey Khudenkikh | devdone | |
 |`move`| Function | Andrey Khudenkikh | devdone | |
-|`asymmetric`| Function | Andrey Khudenkikh | blocked | TDB |
-|`animation`| Function | Andrey Khudenkikh | blocked | TBD |
-|`combine`| Function | Andrey Khudenkikh | blocked | TBD |
+|`asymmetric`| Function | Andrey Khudenkikh | devdone | |
+|`animation`| Function | Andrey Khudenkikh | blocked IDL | |
+|`combine`| Function | Andrey Khudenkikh | blocked IDL | |
 |*PixelMapMock*| *Class* | Maksimov Nikita | in progress | |
 |`release`| Function | Maksimov Nikita | in progress | |
 |*ProgressMask*| *Class* | Maksimov Nikita | in progress | |
