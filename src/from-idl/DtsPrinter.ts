@@ -311,7 +311,6 @@ export class CustomPrintVisitor {
         if (isOptionalType(type)) return `${this.printTypeForTS(type.type, undefinedToVoid, sequenceToArrayInterface)} | undefined`
         if (type === IDLUndefinedType && undefinedToVoid) return "void"
         if (type === IDLStringType) return "string"
-        // if (isCommonMethod && forceAsNamedNode(type).name == "this") return "T"
         if (type === IDLThisType) return "T"
         if (type === IDLVoidType) return "void"
         if (isPrimitiveType(type)) return type.name
@@ -334,7 +333,8 @@ export class CustomPrintVisitor {
             if (synthDecl && isSyntheticEntry(synthDecl)) {
                 if (isInterface(synthDecl) || isAnonymousInterface(synthDecl) || isTupleInterface(synthDecl)) {
                     const isTuple = getExtAttribute(synthDecl, IDLExtendedAttributes.Entity) === IDLEntity.Tuple
-                    return this.literal(synthDecl, isTuple, !isTuple)
+                    const useSynthName = true
+                    return useSynthName ? synthDecl.name : this.literal(synthDecl, isTuple, !isTuple)
                 }
                 if (isCallback(synthDecl)) {
                     return this.callback(synthDecl)
