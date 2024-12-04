@@ -418,13 +418,6 @@ void impl_SetRangeUpdater(Ark_NativePointer nodePtr, Ark_Int32 updaterId)
 }
 KOALA_INTEROP_V2(SetRangeUpdater, Ark_NativePointer, Ark_Int32)
 
-Ark_NativePointer impl_GetPipelineContext(Ark_NativePointer nodePtr)
-{
-    Ark_NodeHandle nodePtrCast = (Ark_NodeHandle) nodePtr;
-    return GetArkUIExtendedNodeAPI()->getPipelineContext(nodePtrCast);
-}
-KOALA_INTEROP_1(GetPipelineContext, Ark_NativePointer, Ark_NativePointer)
-
 void impl_SetChildTotalCount(Ark_NativePointer nodePtr, Ark_Int32 totalCount)
 {
     Ark_NodeHandle nodePtrCast = (Ark_NodeHandle) nodePtr;
