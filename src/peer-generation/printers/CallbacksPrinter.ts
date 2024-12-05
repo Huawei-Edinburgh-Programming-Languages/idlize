@@ -150,7 +150,10 @@ class DeserializeCallbacksVisitor {
             imports.addFeature("CallbackKind", "./peers/CallbackKind")
             imports.addFeature("Deserializer", "./peers/Deserializer")
             imports.addFeature("int32", "@koalaui/common")
-            imports.addFeatures(["ResourceHolder", "KInt", "KStringPtr", "wrapSystemCallback"], "@koalaui/interop")
+            imports.addFeatures(["ResourceHolder", "KInt", "KStringPtr"], "@koalaui/interop")
+            if (this.writer.language === Language.TS) {
+                imports.addFeature("wrapSystemCallback", "@koalaui/interop")
+            }
             imports.addFeature("RuntimeType", "./peers/SerializerBase")
 
             if (this.writer.language === Language.ARKTS) {
