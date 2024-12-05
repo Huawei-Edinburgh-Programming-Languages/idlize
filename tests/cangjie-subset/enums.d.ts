@@ -22,6 +22,11 @@ declare enum Curve {
   Linear,
   Ease,
 }
+declare enum CheckBoxShape {
+  CIRCLE = 0,
+  ROUNDED_SQUARE = 1,
+}
+
 
 declare enum TextHeightAdaptivePolicy {
   MAX_LINES_FIRST,

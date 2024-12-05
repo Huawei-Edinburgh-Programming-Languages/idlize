@@ -99,9 +99,9 @@ export class CJMatchExpression implements LanguageExpression {
         let output: string[] = []
         output.push(`match (${this.matchValue.asString()}) {`)
         for (let index in this.matchCases) {
-            output.push(`case ${this.matchCases[index].asString()} => ${this.caseBlocks[index].asString()} `)
+            output.push(`   case ${this.matchCases[index].asString()} => ${this.caseBlocks[index].asString()} `)
         }
-        output.push(`case _ => throw Exception(\"Unmatched pattern ${this.matchValue.asString()}\")`)
+        output.push(`   case _ => throw Exception(\"Unmatched pattern ${this.matchValue.asString()}\")`)
         output.push(`}`)
         return output.join('\n')
     }
@@ -174,6 +174,59 @@ export class CJEnumEntityStatement implements LanguageStatement {
         })
         writer.popIndent()
         writer.print(`}`)
+    }
+}
+
+export class CJEnumWithGetter implements LanguageStatement {
+    constructor(private readonly enumEntity: idl.IDLEnum, private readonly isExport: boolean) {}
+
+    write(writer: LanguageWriter) {
+        const initializers = this.enumEntity.elements.map(it => {
+            return {name: it.name, id: it.initializer}
+        })
+
+        const isStringEnum = initializers.every(it => typeof it.id == 'string')
+
+        let memberValue = 0
+        const members: {
+            name: string,
+            stringId: string | undefined,
+            numberId: number,
+        }[] = []
+        for (const initializer of initializers) {
+            if (typeof initializer.id == 'string') {
+                members.push({name: initializer.name, stringId: initializer.id, numberId: memberValue})
+            }
+            else if (typeof initializer.id == 'number') {
+                memberValue = initializer.id
+                members.push({name: initializer.name, stringId: undefined, numberId: memberValue})
+            }
+            else {
+                members.push({name: initializer.name, stringId: undefined, numberId: memberValue})
+            }
+            memberValue += 1
+        }
+
+        let enumName = this.enumEntity.name
+        writer.writeClass(enumName, () => {
+            const enumType = idl.createReferenceType(enumName)
+            members.forEach(it => {
+                writer.writeFieldDeclaration(it.name, enumType, [FieldModifier.PUBLIC, FieldModifier.STATIC, FieldModifier.FINAL], false,
+                    writer.makeString(`${enumName}(${it.numberId})`)
+                )
+            })
+
+            const value = 'value'
+            const intType = idl.IDLI32Type
+            writer.writeFieldDeclaration(value, intType, [FieldModifier.PUBLIC, FieldModifier.FINAL], false)
+
+            const signature = new MethodSignature(idl.IDLVoidType, [intType])
+            writer.writeConstructorImplementation(enumName, signature, () => {
+                writer.writeStatement(
+                    writer.makeAssign(value, undefined, writer.makeString(signature.argName(0)), false)
+                )
+            })
+        })
     }
 }
 
@@ -259,10 +312,18 @@ export class CJLanguageWriter extends LanguageWriter {
         this.printer.print(`}`)
     }
     writeFunctionDeclaration(name: string, signature: MethodSignature): void {
-        throw "Not implemented"
+        this.printer.print(this.generateFunctionDeclaration(name, signature))
+    }
+    generateFunctionDeclaration(name: string, signature: MethodSignature): string {
+        const args = signature.args.map((it, index) => `${signature.argName(index)}: ${this.getNodeName(it)}`)
+        return `func ${name}(${args.join(", ")})`
     }
     writeFunctionImplementation(name: string, signature: MethodSignature, op: (writer: LanguageWriter) => void): void {
-        throw "Not implemented"
+        this.printer.print(`${this.generateFunctionDeclaration(name, signature)} {`)
+        this.printer.pushIndent()
+        op(this)
+        this.printer.popIndent()
+        this.printer.print('}')
     }
     writeMethodCall(receiver: string, method: string, params: string[], nullable = false): void {
         receiver = this.escapeKeyword(receiver)
@@ -464,7 +525,7 @@ export class CJLanguageWriter extends LanguageWriter {
         return this.makeString(`Int32(${value.asString()}.value)`)
     }
     makeEnumEntity(enumEntity: idl.IDLEnum, isExport: boolean): LanguageStatement {
-        return new CJEnumEntityStatement(enumEntity, isExport)
+        return new CJEnumWithGetter(enumEntity, isExport)
     }
     runtimeType(param: ArgConvertor, valueType: string, value: string) {
         this.writeStatement(this.makeAssign(valueType, undefined,

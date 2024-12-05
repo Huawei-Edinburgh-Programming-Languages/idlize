@@ -30,15 +30,13 @@ import { IdlSyntheticTypeBase } from "./CommonUtils"
 
 export function makeCJSerializer(library: PeerLibrary): { targetFile: TargetFile, writer: LanguageWriter } {
     let writer = createLanguageWriter(library.language, getReferenceResolver(library))
-    writer.print(`package idlize\n`)
     writeSerializer(library, writer, "")
     return { targetFile: new TargetFile('Serializer', ARKOALA_PACKAGE_PATH), writer: writer }
 }
 
 export function makeCJDeserializer(library: PeerLibrary): { targetFile: TargetFile, writer: LanguageWriter } {
     let writer = createLanguageWriter(library.language, getReferenceResolver(library))
-    writer.print(`package idlize\n`)
-    writer.print(`import std.collection.*\n`)
+    
     writeDeserializer(library, writer, "")
     return { targetFile: new TargetFile('Deserializer', ARKOALA_PACKAGE_PATH), writer: writer }
 }

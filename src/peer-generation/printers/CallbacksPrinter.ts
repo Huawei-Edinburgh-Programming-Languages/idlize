@@ -21,11 +21,12 @@ import { ImportsCollector } from "../ImportsCollector";
 import { Language } from "../../Language";
 import { CallbackKind, EnumConvertor, generateCallbackAPIArguments, generateCallbackKindAccess, generateCallbackKindName } from "../ArgConvertors";
 import { MethodArgPrintHint } from "../LanguageWriters/LanguageWriter";
-import { CppSourceFile, SourceFile, TsSourceFile } from "./SourceFile";
+import { CJSourceFile, CppSourceFile, SourceFile, TsSourceFile } from "./SourceFile";
 import { PrimitiveType } from "../ArkPrimitiveType";
 import { createSerializerDependencyFilter, getSerializerDeclarations, printSerializerImports } from "./SerializerPrinter";
 import { convertDeclToFeature, createDependencyFilter } from "../idl/IdlPeerGeneratorVisitor";
 import { isSyntheticDeclaration } from "../idl/IdlSyntheticDeclarations";
+import { CJMatchExpression } from "../LanguageWriters/writers/CJLanguageWriter";
 
 function collectEntryCallbacks(library: PeerLibrary, entry: idl.IDLEntry): idl.IDLCallback[] {
     let res: idl.IDLCallback[] = []
@@ -105,6 +106,9 @@ export function printCallbacksKindsImports(language: Language, writer: LanguageW
         imports.addFeatures(['int32'], '@koalaui/common')
         imports.print(writer, '')
     }
+    if (language === Language.CJ) {
+        writer.print('package idlize')
+    }
 }
 
 export function printCallbacksKinds(library: PeerLibrary, writer: LanguageWriter): void {
@@ -161,6 +165,11 @@ class DeserializeCallbacksVisitor {
                     imports.addFeature(builder, `Ark${builder}Builder`)
                 }
             }
+        }
+
+        if (this.writer.language === Language.CJ) {
+            const cjFile = this.destFile as CJSourceFile
+            cjFile.printImports(this.writer)
         }
     }
 
@@ -249,18 +258,24 @@ class DeserializeCallbacksVisitor {
                     true
                 ))
             }
-            writer.print(`switch (kind) {`)
-            writer.pushIndent()
-            for (const callback of callbacks) {
-                const args = writer.language === Language.CPP
-                    ? [`thisArray`, `thisLength`]
-                    : [`thisDeserializer`]
-                const callbackKindValue = generateCallbackKindAccess(callback, this.writer.language)
-                writer.print(`case ${callbacks.indexOf(callback)}/*${callbackKindValue}*/: return deserializeAndCall${callback.name}(${args.join(', ')});`)
+            const args = writer.language === Language.CPP
+                ? [`thisArray`, `thisLength`]
+                : [`thisDeserializer`]
+
+            if(writer.language == Language.CJ) {
+                writer.print(new CJMatchExpression(writer.makeString('kind'), callbacks.map(cb => writer.makeString(cb.name)),
+                                                    callbacks.map(cb => writer.makeString(`return deserializeAndCall${cb.name}(${args.join(', ')})`))).asString())
+            } else {
+                writer.print(`switch (kind) {`)
+                writer.pushIndent()
+                for (const callback of callbacks) {
+                    const callbackKindValue = generateCallbackKindAccess(callback, this.writer.language)
+                    writer.print(`case ${callbacks.indexOf(callback)}/*${callbackKindValue}*/: return deserializeAndCall${callback.name}(${args.join(', ')});`)
+                }
+                writer.popIndent()
+                writer.print(`}`)
+                writer.writeStatement(writer.makeThrowError("Unknown callback kind"))
             }
-            writer.popIndent()
-            writer.print(`}`)
-            writer.writeStatement(writer.makeThrowError("Unknown callback kind"))
         })
     }
 

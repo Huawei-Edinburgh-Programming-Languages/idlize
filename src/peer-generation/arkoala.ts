@@ -464,6 +464,20 @@ export function generateArkoalaFromIdl(config: {
         const nodeTypes = makeCJNodeTypes(peerLibrary)
         nodeTypes.writer.printTo(arkoala.cjLib(nodeTypes.targetFile))
 
+        writeFile(arkoala.peer(new TargetFile('CallbackKind')),
+            makeCallbacksKinds(peerLibrary, peerLibrary.language),
+            {
+                onlyIntegrated: config.onlyIntegrated,
+                integrated: true
+            }
+        )
+        writeFile(arkoala.peer(new TargetFile('CallbackDeserializeCall')), makeDeserializeAndCall(peerLibrary, Language.CJ, "./CallbackDeserializeCall.cj").printToString(),
+            {
+                onlyIntegrated: config.onlyIntegrated,
+                integrated: true
+            }
+        )
+
         // const arkComponents = makeJavaArkComponents(peerLibrary, context)
         // arkComponents.writer.printTo(arkoala.javaLib(arkComponents.targetFile))
 

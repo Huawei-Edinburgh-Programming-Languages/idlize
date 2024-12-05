@@ -55,7 +55,7 @@ public class ResourceHolder {
         }
     }
 
-    public func registerAndHold(resource: Object): ResourceId {
+    public func registerAndHold(resource: Any): ResourceId {
         let resourceId = ResourceHolder.nextResourceId + 1
         // this.resources.set(resourceId, {
         //     resource: resource,

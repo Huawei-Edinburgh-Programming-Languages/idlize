@@ -188,15 +188,14 @@ export class CJSourceFile extends SourceFile {
     }
 
     public printToString(): string {
-        let fileWriter = createLanguageWriter(this.language, this.resolver) as TSLanguageWriter
+        let fileWriter = createLanguageWriter(this.language, this.resolver) as CJLanguageWriter
         fileWriter.print(cStyleCopyright)
-        this.printImports(fileWriter)
-        fileWriter.print("")
         fileWriter.concat(this.content)
         return fileWriter.getOutput().join("\n")
     }
     public printImports(writer: LanguageWriter): void {
-
+        writer.print('package idlize\n')
+        writer.print('import std.collection.*')
     }
     protected onMerge(file: this): void {
 

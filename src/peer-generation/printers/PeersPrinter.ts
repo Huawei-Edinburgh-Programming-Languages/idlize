@@ -320,12 +320,6 @@ class CJPeerFileVisitor extends PeerFileVisitor {
         super(library, file, printerContext, dumpSerialized)
     }
 
-    private printPackage(printer: LanguageWriter): void {
-        if (this.library.language == Language.CJ) {
-            printer.print(`package idlize\n`)
-        }
-    }
-
     protected printApplyMethod(peer: PeerClass, printer: LanguageWriter) {
     }
 
@@ -334,7 +328,7 @@ class CJPeerFileVisitor extends PeerFileVisitor {
         const targetBasename = renameDtsToPeer(path.basename(this.file.originalFilename), this.library.language, false)
         this.printers.set(new TargetFile(targetBasename), printer)
 
-        this.printPackage(printer)
+        printer.print(`package idlize\n`)
 
         printer.print("import std.collection.*")
         this.file.peersToGenerate.forEach(peer => {

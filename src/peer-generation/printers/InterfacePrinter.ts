@@ -789,7 +789,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
     }
 
     private makeEnum(alias: string, enumDecl: idl.IDLEnum): CJDeclaration {
-      const writer = createLanguageWriter(Language.CJ, this.peerLibrary)
+        const writer = createLanguageWriter(Language.CJ, this.peerLibrary)
         this.printPackage(writer)
 
         writer.print('import std.collection.*\n')

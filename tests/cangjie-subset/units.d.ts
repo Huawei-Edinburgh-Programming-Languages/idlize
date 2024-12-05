@@ -65,11 +65,17 @@ declare interface LocalizedPadding {
   bottom?: LengthMetrics;
 
   start?: LengthMetrics;
-};
+}
 
 declare interface Font {
   size?: Length;
   weight?: FontWeight | number | string;
   family?: string | Resource;
   style?: FontStyle;
+}
+
+declare interface MarkStyle {
+  strokeColor?: ResourceColor;
+  size?: Length;
+  strokeWidth?: Length;
 }

@@ -16,6 +16,10 @@ package idlize
 
 import std.collection.*
 
+public class CallbackResource {
+    init(resourceId: Int32, hold: pointer, release: pointer) {}
+}
+
 public open class DeserializerBase {
     private var position = 0
     private var length = 96
@@ -155,13 +159,9 @@ public open class DeserializerBase {
         // }
     }
 
-    // readCallbackResource(): CallbackResource {
-    //     return {
-    //         resourceId: this.readInt32(),
-    //         hold: this.readPointer(),
-    //         release: this.readPointer(),
-    //     }
-    // }
+    func readCallbackResource(): CallbackResource {
+        return CallbackResource(this.readInt32(), this.readPointer(), this.readPointer())
+    }
 
     // static lengthUnitFromInt(unit: int32): string {
     //     let suffix: string
