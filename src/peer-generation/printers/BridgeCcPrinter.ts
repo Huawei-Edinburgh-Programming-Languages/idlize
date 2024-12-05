@@ -31,6 +31,7 @@ class BridgeCcVisitor {
     readonly generatedApi = createLanguageWriter(Language.CPP, this.library)
     readonly customApi = createLanguageWriter(Language.CPP, this.library)
     private readonly returnTypeConvertor = new InteropReturnTypeConvertor()
+    private readonly nameConverter = createTypeNameConvertor(Language.CPP, getReferenceResolver(this.library))
 
     constructor(
         protected readonly library: PeerLibrary,
@@ -49,12 +50,7 @@ class BridgeCcVisitor {
 
     // TODO: may be this is another method of ArgConvertor?
     private generateApiArgument(argConvertor: ArgConvertor): string {
-        const nameConverter = createTypeNameConvertor(Language.CPP, getReferenceResolver(this.library))
-        const prefix = argConvertor.isPointerType() ? `(const ${nameConverter.convert(argConvertor.nativeType())}*)&`: "    "
-        if (argConvertor.useArray)
-            return `${prefix}${this.escapeKeyword(argConvertor.param)}_value`
-        else
-            return `${argConvertor.convertorArg(this.escapeKeyword(argConvertor.param), this.generatedApi)}`
+        return argConvertor.convertorCArg(argConvertor.param, this.generatedApi, this.nameConverter)
     }
 
     protected getApiCall(method: PeerMethod): string {

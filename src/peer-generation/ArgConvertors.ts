@@ -21,6 +21,7 @@ import { PrimitiveType } from "./ArkPrimitiveType"
 import { BlockStatement, BranchStatement, createTypeNameConvertor, generateTypeCheckerName, LanguageExpression, LanguageStatement, LanguageWriter, StringExpression } from "./LanguageWriters"
 import { CppIDLNodeToStringConvertor } from "./LanguageWriters/convertors/CppConvertors"
 import { IDLNodeToStringConvertor } from "./LanguageWriters/convertors/InteropConvertor"
+import { IdlNameConvertor } from "./LanguageWriters/nameConvertor"
 import { createEmptyReferenceResolver } from "./ReferenceResolver"
 import { UnionRuntimeTypeChecker } from "./unions"
 
@@ -49,6 +50,7 @@ export interface ArgConvertor { // todo:
     scopeStart?(param: string, language: Language): string
     scopeEnd?(param: string, language: Language): string
     convertorArg(param: string, writer: LanguageWriter): string
+    convertorCArg(param: string, writer: LanguageWriter, nameConverter?: IdlNameConvertor): string
     convertorSerialize(param: string, value: string, writer: LanguageWriter): void
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement
     interopType(): idl.IDLType
@@ -61,13 +63,16 @@ export interface ArgConvertor { // todo:
 }
 
 export abstract class BaseArgConvertor implements ArgConvertor {
+    nameConverter: IdlNameConvertor
     constructor(
         public idlType: idl.IDLType,
         public runtimeTypes: RuntimeType[],
         public isScoped: boolean,
         public useArray: boolean,
         public param: string
-    ) { }
+    ) { 
+        this.nameConverter = createTypeNameConvertor(Language.CPP, createEmptyReferenceResolver())
+    }
 
     nativeType(): idl.IDLType {
         throw new Error("Define")
@@ -84,6 +89,15 @@ export abstract class BaseArgConvertor implements ArgConvertor {
     scopeStart?(param: string, language: Language): string
     scopeEnd?(param: string, language: Language): string
     abstract convertorArg(param: string, writer: LanguageWriter): string
+    convertorCArg(param: string, writer: LanguageWriter, nameConverter?: IdlNameConvertor): string {
+        const prefix = this.isPointerType()
+            ? `(const ${(nameConverter ?? this.nameConverter).convert(this.nativeType())}*)&`
+            : "    "
+        if (this.useArray)
+            return `${prefix}${writer.escapeKeyword(param)}_value`
+        else
+            return `${this.convertorArg(writer.escapeKeyword(param), writer)}`
+    }
     abstract convertorSerialize(param: string, value: string, writer: LanguageWriter): void
     abstract convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement
     unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression|undefined {
@@ -636,9 +650,6 @@ export class OptionConvertor extends BaseArgConvertor { //
         this.typeConvertor.convertorSerialize(param, this.typeConvertor.getObjectAccessor(printer.language, `${value}_value`), printer)
         printer.popIndent()
         printer.print(`}`)
-    }
-    convertorCArg(param: string): string {
-        throw new Error("Must never be used")
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
         const runtimeBufferName = `${bufferName}_runtimeType`
