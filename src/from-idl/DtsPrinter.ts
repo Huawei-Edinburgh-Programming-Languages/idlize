@@ -85,13 +85,6 @@ export class CustomPrintVisitor {
         }
     }
 
-    printSynthetic() {
-        this.synthTypesUsed.forEach(it => {
-            const isTuple = getExtAttribute(it, IDLExtendedAttributes.Entity) === IDLEntity.Tuple
-            this.print(`declare type ${it.name} = ${this.literal(it, isTuple, !isTuple)}`)
-        })
-    }
-
     printMetadata(node: IDLEnum) {
         const imports = node.elements
             .find(it => it.name === "imports")
@@ -316,6 +309,7 @@ export class CustomPrintVisitor {
         if (isOptionalType(type)) return `${this.printTypeForTS(type.type, undefinedToVoid, sequenceToArrayInterface)} | undefined`
         if (type === IDLUndefinedType && undefinedToVoid) return "void"
         if (type === IDLStringType) return "string"
+        // if (isCommonMethod && forceAsNamedNode(type).name == "this") return "T"
         if (type === IDLThisType) return "T"
         if (type === IDLVoidType) return "void"
         if (isPrimitiveType(type)) return type.name
@@ -332,21 +326,13 @@ export class CustomPrintVisitor {
         throw new Error(`Cannot map type: ${IDLKind[type.kind]}`)
     }
 
-    private synthTypesUsed = new Set<IDLInterface>()
-    private useSynthName = true
-
     private toTypeName(node: IDLNode): string {
         if (isReferenceType(node)) {
             const synthDecl = this.resolver(node)
             if (synthDecl && isSyntheticEntry(synthDecl)) {
                 if (isInterface(synthDecl) || isAnonymousInterface(synthDecl) || isTupleInterface(synthDecl)) {
                     const isTuple = getExtAttribute(synthDecl, IDLExtendedAttributes.Entity) === IDLEntity.Tuple
-                    if (this.useSynthName) {
-                        this.synthTypesUsed.add(synthDecl)
-                        return synthDecl.name
-                    } else {
-                        return this.literal(synthDecl, isTuple, !isTuple)
-                    }
+                    return this.literal(synthDecl, isTuple, !isTuple)
                 }
                 if (isCallback(synthDecl)) {
                     return this.callback(synthDecl)
