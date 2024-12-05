@@ -46,6 +46,7 @@ function printDeclarationIfNeeded(library: PeerLibrary, entry: idl.IDLEntry, see
         return ""
     const visitor = new DtsPrintVisitor(type => library.resolveTypeReference(type), library.language)
     visitor.visit(entry)
+    visitor.printSynthetic()
     const text = visitor.output.join("\n")
     if (text)
         seenNames.add(scopedName)
