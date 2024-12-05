@@ -90,57 +90,6 @@ export interface CallbackResource {
     release: pointer
 }
 
-export function withLength(
-    valueLength: Length | undefined,
-    body: (type: int32, value: float32, unit: int32, resource: int32) => void
-): void {
-    const type = runtimeType(valueLength)
-    let value = 0
-    let unit = 1 // vp
-    let resource = 0
-    switch (type) {
-        case RuntimeType.UNDEFINED:
-            value = 0
-            unit = 0
-            break
-        case RuntimeType.NUMBER:
-            value = valueLength as float32
-            break
-        case RuntimeType.STRING:
-            const valueStr = valueLength as string
-            // TODO: faster parse.
-            if (valueStr.endsWith("vp")) {
-                unit = 1 // vp
-                value = Number(valueStr.substring(0, valueStr.length - 2))
-            } else if (valueStr.endsWith("%")) {
-                unit = 3 // percent
-                value = Number(valueStr.substring(0, valueStr.length - 1))
-            } else if (valueStr.endsWith("lpx")) {
-                unit = 4 // lpx
-                value = Number(valueStr.substring(0, valueStr.length - 3))
-            } else if (valueStr.endsWith("px")) {
-                unit = 0 // px
-                value = Number(valueStr.substring(0, valueStr.length - 2))
-            }
-            break
-        case RuntimeType.OBJECT:
-            resource = (valueLength as Resource).id
-            break
-    }
-    body(type, value, unit, resource)
-}
-
-export function withLengthArray(valueLength: Length | undefined, body: (valuePtr: Int32Array) => void): void {
-    withLength(valueLength, (type: int32, value, unit, resource) => {
-        const array = new Int32Array(4)
-        array[0] = type
-        array[1] = value
-        array[2] = unit
-        array[3] = resource
-        body(array)
-    })
-}
-
 /* Serialization extension point */
 export abstract class CustomSerializer {
     constructor(protected supported: Array<string>) {}
