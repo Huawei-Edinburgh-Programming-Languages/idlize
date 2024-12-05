@@ -238,7 +238,7 @@
 |`shadow`| Function | Roman Sedaikin | done | |
 |`clip`| Function | Skroba Gleb |  blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
 |`clipShape`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
-|`mask`| Function | Dmitry A Smirnov| in progress | |
+|`mask`| Function | Maksimov Nikita | in progress | |
 |`maskShape`| Function | Dmitry A Smirnov| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`key`| Function | Lobah Mikhail | | |
 |`id`| Function | Erokhin Ilya | done |  |
@@ -1620,8 +1620,8 @@
 |`asymmetric`| Function | Andrey Khudenkikh | devdone | |
 |`animation`| Function | Andrey Khudenkikh | blocked IDL | |
 |`combine`| Function | Andrey Khudenkikh | blocked IDL | |
-|*PixelMapMock*| *Class* | Maksimov Nikita | in progress | |
-|`release`| Function | Maksimov Nikita | in progress | |
+|*PixelMapMock*| *Class* | Maksimov Nikita | done | |
+|`release`| Function | Maksimov Nikita | done | |
 |*ProgressMask*| *Class* | Maksimov Nikita | in progress | |
 |`updateProgress`| Function | Maksimov Nikita | in progress | |
 |`updateColor`| Function | Maksimov Nikita | in progress | |
