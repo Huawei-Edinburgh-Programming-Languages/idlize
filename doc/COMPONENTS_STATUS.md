@@ -1832,10 +1832,10 @@
 |`setFrom`| Function | | |  |
 |`getTo`| Function | | |  |
 |`setTo`| Function | | |  |
-|*TextController*| *Class* | | | |
-|`closeSelectionMenu`| Function | | | |
-|`setStyledString`| Function | | | |
-|`getLayoutManager`| Function | | | |
+|*TextController*| *Class* | Samarin Sergey | in progress | |
+|`closeSelectionMenu`| Function | Samarin Sergey | in progress | |
+|`setStyledString`| Function | Samarin Sergey | in progress | |
+|`getLayoutManager`| Function | Samarin Sergey | in progress | |
 |*TextAreaController*| *Class* | Tuzhilkin Ivan | testskipped |  |
 |`caretPosition`| Function | Tuzhilkin Ivan | testskipped |  |
 |`setTextSelection`| Function | Tuzhilkin Ivan | testskipped |  |
