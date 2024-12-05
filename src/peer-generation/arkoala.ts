@@ -77,7 +77,7 @@ export function generateLibaceFromIdl(config: {
         new LibaceInstall(config.outDir, true)
 
     const gniSources = printGniSources(peerLibrary)
-    fs.writeFileSync(libace.gniComponents, gniFile(gniSources))
+    writeFile(libace.gniComponents, gniFile(gniSources))
 
     // printDelegatesAsMultipleFiles(peerLibrary, libace, { namespace: "OHOS::Ace::NG::GeneratedModifier" })
     printRealModifiersAsMultipleFiles(peerLibrary, libace, {
@@ -93,32 +93,34 @@ export function generateLibaceFromIdl(config: {
 
     const converterNamespace = "OHOS::Ace::NG::Converter"
     const { api, converterHeader } = printUserConverter(libace.userConverterHeader, converterNamespace, config.apiVersion, peerLibrary)
-    fs.writeFileSync(libace.generatedArkoalaApi, api)
-    fs.writeFileSync(libace.userConverterHeader, converterHeader)
+    writeFile(libace.generatedArkoalaApi, api)
+    writeFile(libace.generatedArkoalaApi, api)
     const events = printEventsCLibaceImpl(peerLibrary, {namespace: "OHOS::Ace::NG::GeneratedEvents"})
-    fs.writeFileSync(libace.allEvents, events)
+    writeFile(libace.allEvents, events)
 
     if (!config.libaceDestination) {
         const mesonBuild = printMesonBuild(peerLibrary)
-        fs.writeFileSync(libace.mesonBuild, mesonBuildFile(mesonBuild))
+        writeFile(libace.mesonBuild, mesonBuildFile(mesonBuild))
     }
 
     copyToLibace(path.join(__dirname, '..', 'peer_lib'), libace)
 }
 
-function writeFile(filename: string, content: string | LanguageWriter, config: { // TODO make content a string or a writer only
+function writeFile(filename: string, content: string | LanguageWriter, config?: { // TODO make content a string or a writer only
         onlyIntegrated: boolean,
         integrated?: boolean,
         message?: string
     }): boolean {
-    if (config.integrated || !config.onlyIntegrated) {
-        if (config.message)
+    if (config === undefined || config?.integrated || !config?.onlyIntegrated) {
+        if (config?.message)
             console.log(config.message, filename)
         fs.mkdirSync(path.dirname(filename), { recursive: true })
         if (typeof content !== "string") {
             content = content.getOutput().join("\n")
         }
-        fs.writeFileSync(filename, content)
+        if (!fs.existsSync(filename) || fs.readFileSync(filename, {encoding: 'utf-8'}) !== content) {
+            fs.writeFileSync(filename, content)
+        }
         return true
     }
     return false
