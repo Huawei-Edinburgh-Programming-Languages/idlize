@@ -27,7 +27,7 @@ import {
     isMaterialized,
 } from '../idl/IdlPeerGeneratorVisitor';
 import { collectProperties } from '../printers/StructPrinter'
-import { FieldModifier, MethodModifier, ProxyStatement } from '../LanguageWriters/LanguageWriter'
+import { FieldModifier, MethodModifier, ProxyStatement, TernaryExpression } from '../LanguageWriters/LanguageWriter'
 import { createDeclarationNameConvertor } from '../idl/IdlNameConvertor';
 import { throwException } from "../../util"
 import { IDLEntry } from "../../idl"
@@ -358,9 +358,10 @@ class IdlDeserializerPrinter {
             return
         const methodName = this.library.getInteropName(target)
         const type = idl.createReferenceType(target.name)
-        this.writer.writeMethodImplementation(new Method(`read${methodName}`, new NamedMethodSignature(type, [], [])), writer => {
+        this.writer.writeMethodImplementation(new Method(`read${methodName}`, new NamedMethodSignature(type, [idl.IDLBooleanType], ['isSync'], ['false'])), writer => {
             const resourceName = "_resource"
             const callName = "_call"
+            const callSyncName = '_callSync'
             const argsSerializer = "_args"
             const continuationValueName = "_continuationValue"
             const continuationCallbackName = "_continuationCallback"
@@ -372,6 +373,12 @@ class IdlDeserializerPrinter {
             ))
             writer.writeStatement(writer.makeAssign(
                 callName,
+                idl.IDLPointerType,
+                writer.makeMethodCall(`this`, `readPointer`, []),
+                true,
+            ))
+            writer.writeStatement(writer.makeAssign(
+                callSyncName,
                 idl.IDLPointerType,
                 writer.makeMethodCall(`this`, `readPointer`, []),
                 true,
@@ -409,6 +416,8 @@ class IdlDeserializerPrinter {
                     [writer.makeString(`${resourceName}.resourceId`)])),
                 new ExpressionStatement(writer.makeMethodCall(`${argsSerializer}Serializer`, `writePointer`,
                     [writer.makeString(callName)])),
+                new ExpressionStatement(writer.makeMethodCall(`${argsSerializer}Serializer`, `writePointer`,
+                    [writer.makeString(callSyncName)])),
                 ...target.parameters.map(it => {
                     const convertor = this.library.typeConvertor(it.name, it.type!, it.isOptional)
                     return new ProxyStatement((writer: LanguageWriter) => {
@@ -416,11 +425,21 @@ class IdlDeserializerPrinter {
                     })
                 }),
                 ...continuation,
-                new ExpressionStatement(writer.makeNativeCall(`_CallCallback`, [
-                    writer.makeString(generateCallbackKindValue(target).toString()),
-                    writer.makeString(`${argsSerializer}Serializer.asArray()`),
-                    writer.makeString(`${argsSerializer}Serializer.length()`),
-                ])),
+                new ExpressionStatement(
+                    new TernaryExpression(
+                        writer.makeString('isSync'),
+                        writer.makeNativeCall(`_CallCallbackSync`, [
+                            writer.makeString(generateCallbackKindValue(target).toString()),
+                            writer.makeString(`${argsSerializer}Serializer.asArray()`),
+                            writer.makeString(`${argsSerializer}Serializer.length()`),
+                        ]),
+                        writer.makeNativeCall(`_CallCallback`, [
+                            writer.makeString(generateCallbackKindValue(target).toString()),
+                            writer.makeString(`${argsSerializer}Serializer.asArray()`),
+                            writer.makeString(`${argsSerializer}Serializer.length()`),
+                        ])
+                    )
+                ),
                 new ExpressionStatement(writer.makeMethodCall(`${argsSerializer}Serializer`, `release`, [])),
                 writer.makeReturn(hasContinuation
                     ? writer.makeCast(

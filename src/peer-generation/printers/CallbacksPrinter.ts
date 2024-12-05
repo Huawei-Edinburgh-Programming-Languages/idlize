@@ -150,10 +150,7 @@ class DeserializeCallbacksVisitor {
             imports.addFeature("CallbackKind", "./peers/CallbackKind")
             imports.addFeature("Deserializer", "./peers/Deserializer")
             imports.addFeature("int32", "@koalaui/common")
-            imports.addFeatures(["ResourceHolder", "KInt", "KStringPtr"], "@koalaui/interop")
-            if (this.writer.language === Language.TS) {
-                imports.addFeature("wrapSystemCallback", "@koalaui/interop")
-            }
+            imports.addFeatures(["ResourceHolder", "KInt", "KStringPtr", "wrapSystemCallback"], "@koalaui/interop")
             imports.addFeature("RuntimeType", "./peers/SerializerBase")
 
             if (this.writer.language === Language.ARKTS) {
@@ -170,11 +167,17 @@ class DeserializeCallbacksVisitor {
     }
 
     private writeCallbackDeserializeAndCall(callback: idl.IDLCallback): void {
+        
+        const vmContext = 'vmContext'
+
         let signature: NamedMethodSignature
+        let signatureSync:  NamedMethodSignature
         if (this.writer.language === Language.CPP) {
             signature = new NamedMethodSignature(idl.IDLVoidType, [idl.IDLUint8ArrayType, idl.IDLI32Type], [`thisArray`, `thisLength`])
+            signatureSync = new NamedMethodSignature(idl.IDLVoidType, [idl.createReferenceType('KVMContext'), idl.IDLUint8ArrayType, idl.IDLI32Type], [vmContext, `thisArray`, `thisLength`])
         } else {
             signature = new NamedMethodSignature(idl.IDLVoidType, [idl.createReferenceType(`Deserializer`)], [`thisDeserializer`])
+            signatureSync = new NamedMethodSignature(idl.IDLVoidType, [idl.createReferenceType(`Deserializer`)], [`thisDeserializer`])
         }
         this.writer.writeFunctionImplementation(`deserializeAndCall${callback.name}`, signature, writer => {
             const resourceIdName = `_resourceId`
@@ -193,6 +196,7 @@ class DeserializeCallbacksVisitor {
                     { unsafe: true, overrideTypeName: `void(*)(${generateCallbackAPIArguments(this.library, callback).join(", ")})` }
                 )
                 writer.writeStatement(writer.makeAssign(callName, undefined, callReadExpr, true))
+                writer.writeStatement(writer.makeStatement(writer.makeMethodCall(`thisDeserializer`, `readPointer`, [])))
             } else {
                 writer.writeStatement(writer.makeAssign(callName, undefined, writer.makeCast(
                     writer.makeMethodCall(`ResourceHolder.instance()`, `get`, [writer.makeString(resourceIdName)]),
@@ -231,17 +235,86 @@ class DeserializeCallbacksVisitor {
                 writer.writeExpressionStatement(callExpression)
             }
         })
+        if (this.writer.language === Language.CPP) {
+            this.writer.writeFunctionImplementation(`deserializeAndCallSync${callback.name}`, signatureSync, writer => {
+                const resourceIdName = `_resourceId`
+                const callName = `_callSync`
+                const notInterestingPointer = `_uselessPointer`
+                if (writer.language === Language.CPP) {
+                    writer.writeStatement(writer.makeAssign(`thisDeserializer`, idl.createReferenceType(`Deserializer`), 
+                        writer.makeClassInit(idl.createReferenceType('Deserializer'), [writer.makeString('thisArray'), writer.makeString('thisLength')]), 
+                        true, false))
+                }
+                writer.writeStatement(writer.makeAssign(resourceIdName, idl.IDLI32Type, writer.makeMethodCall(`thisDeserializer`, `readInt32`, []), true))
+                if (writer.language === Language.CPP) {
+                    // there is some assymmetrics - we do not read `call` pointer when processing in managed, but always do in native
+                    const callReadExpr = writer.makeCast(
+                        writer.makeMethodCall(`thisDeserializer`, `readPointer`, []),
+                        idl.IDLUndefinedType,
+                        { unsafe: true, overrideTypeName: `void(*)(${["KVMContext vmContext"].concat(generateCallbackAPIArguments(this.library, callback)).join(", ")})` }
+                    )
+                    writer.writeStatement(writer.makeStatement(writer.makeMethodCall(`thisDeserializer`, `readPointer`, [])))
+                    writer.writeStatement(writer.makeAssign(callName, undefined, callReadExpr, true))
+                } else {
+                    writer.writeStatement(writer.makeAssign(callName, undefined, writer.makeCast(
+                        writer.makeMethodCall(`ResourceHolder.instance()`, `get`, [writer.makeString(resourceIdName)]),
+                        idl.createReferenceType(callback.name),
+                    ), true))
+                }
+                const argsNames = []
+                for (const param of callback.parameters) {
+                    const convertor = this.library.typeConvertor(param.name, param.type!, param.isOptional)
+                    writer.writeStatement(convertor.convertorDeserialize(`${param.name}_buf`, `thisDeserializer`, (expr) => {
+                        const maybeOptionalType = idl.maybeOptional(param.type!, param.isOptional)
+                        return writer.makeAssign(param.name, maybeOptionalType, expr, true, false)
+                    }, writer))
+                    argsNames.push(param.name)
+                }
+                const hasContinuation = !idl.isVoidType(callback.returnType)
+                if (hasContinuation) {
+                    const continuationReference = this.library.createContinuationCallbackReference(callback.returnType)
+                    const convertor = this.library.typeConvertor(`continuation`, continuationReference)
+                    writer.writeStatement(convertor.convertorDeserialize(`_continuation_buf`, `thisDeserializer`, (expr) => {
+                        return writer.makeAssign(`_continuation`, continuationReference, expr, true, false)
+                    }, writer))
+                }
+                if (writer.language === Language.CPP) {
+                    const cppArgsNames = [
+                        vmContext,
+                        resourceIdName,
+                        ...argsNames,
+                    ]
+                    if (hasContinuation)
+                        cppArgsNames.push(`_continuation`)
+                    writer.writeExpressionStatement(writer.makeFunctionCall(callName, cppArgsNames.map(it => writer.makeString(it))))
+                } else {
+                    let callExpression = writer.makeFunctionCall(callName, argsNames.map(it => writer.makeString(it)))
+                    if (hasContinuation)
+                        callExpression = writer.makeFunctionCall(`_continuation`, [callExpression])
+                    writer.writeExpressionStatement(callExpression)
+                }
+            })
+        }
     }
 
     private writeInteropImplementation(callbacks: idl.IDLCallback[]): void {
         let signature: NamedMethodSignature
+        let signatureSync: NamedMethodSignature
         if (this.writer.language === Language.CPP) {
             signature = new NamedMethodSignature(idl.IDLVoidType,
                 [idl.IDLI32Type, idl.IDLUint8ArrayType, idl.IDLI32Type],
                 [`kind`, `thisArray`, `thisLength`],
             )
+            signatureSync = new NamedMethodSignature(idl.IDLVoidType,
+                [idl.createReferenceType('KVMContext'), idl.IDLI32Type, idl.IDLUint8ArrayType, idl.IDLI32Type],
+                [`vmContext`, `kind`, `thisArray`, `thisLength`],
+            )
         } else {
             signature = new NamedMethodSignature(idl.IDLVoidType,
+                [idl.createReferenceType(`Deserializer`)],
+                [`thisDeserializer`],
+            )
+            signatureSync = new NamedMethodSignature(idl.IDLVoidType,
                 [idl.createReferenceType(`Deserializer`)],
                 [`thisDeserializer`],
             )
@@ -268,6 +341,32 @@ class DeserializeCallbacksVisitor {
         })
         if (this.writer.language === Language.TS) {
             this.writer.print('wrapSystemCallback(1, (buff:Uint8Array, len:int32) => { deserializeAndCallCallback(new Deserializer(buff.buffer, len)); return 0 })')
+        }
+        if (this.writer.language === Language.ARKTS) {
+            this.writer.print('wrapSystemCallback(1, (buff:byte[], len:int32) => { deserializeAndCallCallback(new Deserializer(buff, len)); return 0 })')
+        }
+
+        if (this.writer.language === Language.CPP) {
+            this.writer.writeFunctionImplementation(`deserializeAndCallCallbackSync`, signatureSync, writer => {
+                if (writer.language !== Language.CPP) {
+                    writer.writeStatement(writer.makeAssign(`kind`, idl.IDLI32Type,
+                        writer.makeMethodCall(`thisDeserializer`, `readInt32`, []),
+                        true
+                    ))
+                }
+                writer.print(`switch (kind) {`)
+                writer.pushIndent()
+                for (const callback of callbacks) {
+                    const args = writer.language === Language.CPP
+                        ? [`vmContext`, `thisArray`, `thisLength`]
+                        : [`thisDeserializer`]
+                    const callbackKindValue = generateCallbackKindAccess(callback, this.writer.language)
+                    writer.print(`case ${generateCallbackKindValue(callback)}/*${callbackKindValue}*/: return deserializeAndCallSync${callback.name}(${args.join(', ')});`)
+                }
+                writer.popIndent()
+                writer.print(`}`)
+                writer.writeStatement(writer.makeThrowError("Unknown callback kind"))
+            })
         }
     }
 

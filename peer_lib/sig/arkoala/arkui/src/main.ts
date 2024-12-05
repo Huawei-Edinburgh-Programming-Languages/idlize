@@ -225,6 +225,7 @@ function createDefaultWriteCallback(kind: CallbackKind, callback: object) {
             nativeModule()._TestGetManagedHolder(),
             nativeModule()._TestGetManagedReleaser(),
             nativeModule()._TestGetManagedCaller(kind),
+            nativeModule()._TestGetManagedCallerSync(kind)
         )
     }
 }
@@ -260,6 +261,54 @@ function enqueueCallback(
     readAndCallCallback(deserializer)
     /* libace released resource */
     nativeModule()._ReleaseArkoalaResource(resourceId)
+}
+
+function checkTwoSidesCallbackSync() {
+    nativeModule()._TestSetArkoalaCallbackCallerSync()
+
+    let callResult1 = "NOT_CALLED"
+    enqueueCallback(
+        createDefaultWriteCallback(CallbackKind.Kind_Callback_Number_Void, (value: number): void => {
+            callResult1 = `CALLED, value=${value}`
+        }),
+        (deserializer) => {
+            const callback = deserializer.readCallback_Number_Void(true)
+            callback(194)
+        },
+    )
+
+    let callResult2 = ""
+    let callResultExpected2 = ""
+    const call2Count = 100
+
+    const func = (value:number) => {
+        if (value > 50) {
+            callResult2 += "more then 50!"
+        } else {
+            callResult2 += "less them 50!"
+        }
+    }
+
+    function doTest(f: (x:number) => void) {
+        for (let i = 0; i < call2Count; ++i) {
+            f(i)
+        }
+    }
+
+    doTest(func)
+    callResultExpected2 = callResult2
+    callResult2 = ""
+
+    enqueueCallback(
+        createDefaultWriteCallback(CallbackKind.Kind_Callback_Number_Void, func),
+        (deserializer) => {
+            const enumerateCallback = deserializer.readCallback_Number_Void(true)
+            doTest(enumerateCallback)
+        },
+    )
+
+    assertEquals("Sync Callback 1 read&called immediately", "CALLED, value=194", callResult1)
+    assertEquals("Sync Callback 2 read&called immediately", callResultExpected2, callResult2)
 }
 
 function checkTwoSidesCallback() {
@@ -754,6 +803,7 @@ function main() {
 
     // checkArrayBuffer()
     checkSyncCallback()
+    checkTwoSidesCallbackSync()
 
     checkSerdeLength()
     checkSerdeText()
