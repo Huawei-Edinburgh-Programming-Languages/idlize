@@ -1856,11 +1856,11 @@
 |*StyledStringController*| *Class* | | | |
 |`setStyledString`| Function | | | |
 |`getStyledString`| Function | | | |
-|*LayoutManager*| *Class* | | | |
-|`getLineCount`| Function | | | |
-|`getGlyphPositionAtCoordinate`| Function | | | |
-|`getLineMetrics`| Function | | | |
-|`getRectsForRange`| Function | | | |
+|*LayoutManager*| *Class* | Andrey Khudenkikh | in progress | |
+|`getLineCount`| Function | Andrey Khudenkikh | in progress | |
+|`getGlyphPositionAtCoordinate`| Function | Andrey Khudenkikh | in progress | |
+|`getLineMetrics`| Function | Andrey Khudenkikh | in progress | |
+|`getRectsForRange`| Function | Andrey Khudenkikh | in progress | |
 |*TextMenuItemId*| *Class* | | | |
 |`of`| Function | | | |
 |`equals`| Function | | | |
