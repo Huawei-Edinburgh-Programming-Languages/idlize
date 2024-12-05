@@ -394,10 +394,10 @@
 |`dimension`| Function | Vadim Voronov | done | |
 |`allowUpdate`| Function | Vadim Voronov | done | |
 |`visibility`| Function | Vadim Voronov | done | |
-|`onAcquired`| Function | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
-|`onError`| Function | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
+|`onAcquired`| Function | Vadim Voronov | blocked IDL | implemented with narrow range of ID, https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
+|`onError`| Function | Vadim Voronov | blocked IDL | implemented with narrow range of erroCode,https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
 |`onRouter`| Function | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50, deprecated |
-|`onUninstall`| Function | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
+|`onUninstall`| Function | Vadim Voronov | blocked IDL | implemented with narrow range of ID, https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
 |`onLoad`| Function | Vadim Voronov | in progress | |
 |*FormLink*| *Component* | Dmitry A Smirnov| done |  |
 |`setFormLinkOptions`| Function | Dmitry A Smirnov| done |  |
@@ -1550,7 +1550,7 @@
 |`transform`| Function  | Vadim Voronov | done | |
 |`translate`| Function  | Vadim Voronov | done | |
 |`setPixelMap`| Function  | Vadim Voronov | in progress | |
-|`transferFromImageBitmap`| Function  | Vadim Voronov | in progress | |
+|`transferFromImageBitmap`| Function  | Vadim Voronov | done | |
 |`saveLayer`| Function  | Vadim Voronov | done | |
 |`restoreLayer`| Function  | Vadim Voronov | done | |
 |`reset`| Function  | Vadim Voronov | done | |
@@ -1698,14 +1698,14 @@
 |`closeAllSwipeActions`| Function |Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getVisibleListContentInfo`| Function |Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*Matrix2D*| *Class* | Vadim Voronov | in progress | |
-|`identity`| Function | Vadim Voronov | in progress | |
-|`invert`| Function | Vadim Voronov | in progress | |
+|`identity`| Function | Vadim Voronov | devdone | |
+|`invert`| Function | Vadim Voronov | devdone | |
 |`multiply`| Function | Vadim Voronov | in progress | deprecated |
 |`rotate`| Function | Vadim Voronov | in progress | deprecated |
-|`translate`| Function | Vadim Voronov | in progress | |
-|`scale`| Function | Vadim Voronov | in progress | |
+|`translate`| Function | Vadim Voronov | devdone | |
+|`scale`| Function | Vadim Voronov | devdone | |
 |`getScaleX`| Function | Vadim Voronov | blocked IDL | implemented without return val,https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setScaleX`| Function | Vadim Voronov | in progress | |
+|`setScaleX`| Function | Vadim Voronov | devdone | |
 |`getRotateY`| Function | Vadim Voronov | blocked IDL | implemented without return val,https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setRotateY`| Function | Vadim Voronov | in progress | |
 |`getRotateX`| Function | Vadim Voronov | blocked IDL | implemented without return val,https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
