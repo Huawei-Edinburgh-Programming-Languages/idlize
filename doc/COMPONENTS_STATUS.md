@@ -1367,16 +1367,16 @@
 |`onScaleChange`| Function | Erokhin Ilya | devdone | |
 |`onHttpAuthRequest`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onInterceptRequest`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onPermissionRequest`| Function | Erokhin Ilya | testskipped | dependency Ark_PermissionRequest |
-|`onScreenCaptureRequest`| Function | Erokhin Ilya | testskipped | dependency on Ark_ScreenCaptureHandler |
+|`onPermissionRequest`| Function | Erokhin Ilya | devdone | |
+|`onScreenCaptureRequest`| Function | Erokhin Ilya | devdone | |
 |`onContextMenuShow`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onContextMenuHide`| Function | Erokhin Ilya | devdone | |
 |`mediaPlayGestureAccess`| Function | Erokhin Ilya | done | |
 |`onSearchResultReceive`| Function | Erokhin Ilya | devdone | |
 |`onScroll`| Function | Erokhin Ilya | devdone | |
-|`onSslErrorEventReceive`| Function | Erokhin Ilya | testskipped | dependency on Ark_SslErrorHandler |
-|`onSslErrorEvent`| Function | Erokhin Ilya | testskipped | dependency on Ark_SslErrorHandler |
-|`onClientAuthenticationRequest`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onSslErrorEventReceive`| Function | Erokhin Ilya | devdone | |
+|`onSslErrorEvent`| Function | Erokhin Ilya | devdone | |
+|`onClientAuthenticationRequest`| Function | Erokhin Ilya | blocked IDL| need test https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onWindowNew`| Function | Erokhin Ilya | testskipped | dependency on Ark_ControllerHandler |
 |`onWindowExit`| Function | Erokhin Ilya | devdone | |
 |`multiWindowAccess`| Function | Erokhin Ilya | done | |
@@ -1398,8 +1398,8 @@
 |`verticalScrollBarAccess`| Function | Erokhin Ilya | done | |
 |`onTouchIconUrlReceived`| Function | Erokhin Ilya | devdone | |
 |`onFaviconReceived`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
-|`onPageVisible`| Function | Erokhin Ilya | testskipped | |
-|`onDataResubmitted`| Function | Erokhin Ilya | testskipped | dependency on Ark_DataResubmissionHandler |
+|`onPageVisible`| Function | Erokhin Ilya | devdone | |
+|`onDataResubmitted`| Function | Erokhin Ilya | devdone | |
 |`pinchSmooth`| Function | Erokhin Ilya | done | |
 |`allowWindowOpenMethod`| Function | Erokhin Ilya | done | |
 |`onAudioStateChanged`| Function | Erokhin Ilya | devdone | |
@@ -1409,7 +1409,7 @@
 |`onLoadIntercept`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ  |
 |`onControllerAttached`| Function | Erokhin Ilya | devdone | |
 |`onOverScroll`| Function | Erokhin Ilya | devdone | |
-|`onSafeBrowsingCheckResult`| Function | Erokhin Ilya | testskipped | |
+|`onSafeBrowsingCheckResult`| Function | Erokhin Ilya | devdone | |
 |`onNavigationEntryCommitted`| Function | Erokhin Ilya | testskipped | |
 |`onIntelligentTrackingPreventionResult`| Function | Erokhin Ilya | testskipped | |
 |`javaScriptOnDocumentStart`| Function | Erokhin Ilya | testskipped | |
