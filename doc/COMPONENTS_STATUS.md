@@ -1670,10 +1670,10 @@
 |*DatePickerDialog*| *Class* | Ekaterina Stepanova | in progress |
 |`show`| Function | Ekaterina Stepanova | in progress |
 |*PanGestureOptions*| *Class* | Politov Mikhail | in progress | |
-|`setDirection`| Function | Politov Mikhail | in progress | |
-|`setDistance`| Function | Politov Mikhail | in progress | |
-|`setFingers`| Function | Politov Mikhail | in progress | |
-|`getDirection`| Function | Politov Mikhail | in progress | |
+|`setDirection`| Function | Politov Mikhail | devdone | |
+|`setDistance`| Function | Politov Mikhail | devdone | |
+|`setFingers`| Function | Politov Mikhail | devdone | |
+|`getDirection`| Function | Politov Mikhail | blocked IDL | |
 |*ScrollableTargetInfo*| *Class* | | | |
 |`isBegin`| Function | | | |
 |`isEnd`| Function | | | |
