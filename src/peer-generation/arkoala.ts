@@ -94,7 +94,7 @@ export function generateLibaceFromIdl(config: {
     const converterNamespace = "OHOS::Ace::NG::Converter"
     const { api, converterHeader } = printUserConverter(libace.userConverterHeader, converterNamespace, config.apiVersion, peerLibrary)
     writeFile(libace.generatedArkoalaApi, api)
-    writeFile(libace.generatedArkoalaApi, api)
+    writeFile(libace.userConverterHeader, converterHeader)
     const events = printEventsCLibaceImpl(peerLibrary, {namespace: "OHOS::Ace::NG::GeneratedEvents"})
     writeFile(libace.allEvents, events)
 
