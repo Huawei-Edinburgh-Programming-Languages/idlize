@@ -21,7 +21,7 @@ variables:
         - npm i --prefix external --no-audit --no-fund
     clean-generation:
         - ls -d $PWD/external/arkoala/arkui/src/peers/* | grep -e '.*Ark.*Peer\.ts' -e '.*ArkIndicatorComponentPeer.ts' -e '.*ArkNavigationPeer.ts' | xargs rm
-        - ls -d $PWD/external/arkoala/arkui/src/* | grep -e '.*Ark.*Materialized\.ts' -e '.*ArkIndicatorcomponent.ts' -e '.*ArkNavigation.ts' | xargs rm
+        - ls -d $PWD/external/arkoala/arkui/src/* | grep -e '.*Ark.*Materialized\.ts' -e '.*ArkIndicatorcomponent.ts' -e '.*ArkNavigation.ts' -e 'ContentModifier.ts' -e 'Optional.ts' | xargs rm
 
 idlize sanity:
   stage: test
