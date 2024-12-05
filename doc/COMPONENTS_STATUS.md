@@ -1612,12 +1612,12 @@
 |`drawFront`| Function | | | |
 |`invalidate`| Function | | | |
 |*TransitionEffect*| *Class* | Andrey Khudenkikh | in progress | |
-|`translate`| Function | Andrey Khudenkikh | devdone | |
-|`rotate`| Function | Andrey Khudenkikh | devdone | |
-|`scale`| Function | Andrey Khudenkikh | devdone | |
-|`opacity`| Function | Andrey Khudenkikh | devdone | |
-|`move`| Function | Andrey Khudenkikh | devdone | |
-|`asymmetric`| Function | Andrey Khudenkikh | devdone | |
+|`translate`| Function | Andrey Khudenkikh | done | |
+|`rotate`| Function | Andrey Khudenkikh | done | |
+|`scale`| Function | Andrey Khudenkikh | done | |
+|`opacity`| Function | Andrey Khudenkikh | done | |
+|`move`| Function | Andrey Khudenkikh | done | |
+|`asymmetric`| Function | Andrey Khudenkikh | in progress | |
 |`animation`| Function | Andrey Khudenkikh | blocked IDL | |
 |`combine`| Function | Andrey Khudenkikh | blocked IDL | |
 |*PixelMapMock*| *Class* | Maksimov Nikita | done | |
