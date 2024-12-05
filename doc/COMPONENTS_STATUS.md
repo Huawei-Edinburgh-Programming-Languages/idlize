@@ -1673,7 +1673,7 @@
 |`setDirection`| Function | Politov Mikhail | devdone | |
 |`setDistance`| Function | Politov Mikhail | devdone | |
 |`setFingers`| Function | Politov Mikhail | devdone | |
-|`getDirection`| Function | Politov Mikhail | blocked IDL | |
+|`getDirection`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*ScrollableTargetInfo*| *Class* | | | |
 |`isBegin`| Function | | | |
 |`isEnd`| Function | | | |
