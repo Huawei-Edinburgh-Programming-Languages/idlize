@@ -289,7 +289,11 @@ class IdlDeserializerPrinter {
                 const propsAssignees = properties.map(it => {
                     return `${it.name}: ${it.name}_result`
                 })
-                this.writer.writeStatement(this.writer.makeAssign("value", valueType, this.writer.makeCast(this.writer.makeString(`{${propsAssignees.join(',')}}`), type), true, false))
+                if (this.writer.language == Language.CJ) {
+                    this.writer.writeStatement(this.writer.makeAssign("value", valueType, this.writer.makeString(`${this.writer.getNodeName(valueType)}(${properties.map(it => it.name.concat('_result')).join(', ')})`), true, false))
+                } else {
+                    this.writer.writeStatement(this.writer.makeAssign("value", valueType, this.writer.makeCast(this.writer.makeString(`{${propsAssignees.join(',')}}`), type), true, false))
+                }
             }
         } else {
             if (this.writer.language === Language.CPP) {
@@ -301,7 +305,7 @@ class IdlDeserializerPrinter {
             }
         }
         this.writer.writeStatement(this.writer.makeReturn(
-            this.writer.makeCast(this.writer.makeString("value"), type)))
+            this.writer.makeString("value")))
     }
 
     private generateMaterializedBodyDeserializer(target: idl.IDLInterface) {
@@ -454,7 +458,9 @@ class IdlDeserializerPrinter {
             ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [idl.IDLUint8ArrayType, idl.IDLI32Type], ["data", "length"])
             prefix = prefix === "" ? PrimitiveType.Prefix : prefix
         } else if (this.writer.language === Language.ARKTS) {
-            ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [idl.createContainerType("sequence", [idl.IDLU8Type]), idl.IDLI32Type], ["data", "length"])
+            ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [idl.IDLBufferType, idl.IDLI32Type], ["data", "length"])
+        } else if (this.writer.language === Language.CJ) {
+            ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [idl.IDLBufferType, idl.IDLI64Type], ["data", "length"])
         }
         const serializerDeclarations = getSerializerDeclarations(this.library,
             createSerializerDependencyFilter(this.writer.language))
