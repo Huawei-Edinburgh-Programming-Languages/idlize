@@ -34,7 +34,6 @@ export class CJIDLNodeToStringConvertor implements NodeConvertor<string>, IdlNam
         return `Option<${this.convert(type.type)}>`
     }
     convertUnion(type: idl.IDLUnionType): string {
-        console.log(type.name)
         return type.name
     }
     convertContainer(type: idl.IDLContainerType): string {
@@ -109,6 +108,7 @@ export class CJIDLNodeToStringConvertor implements NodeConvertor<string>, IdlNam
             case idl.IDLPointerType: return 'Int64'
             case idl.IDLVoidType: return 'Unit'
             case idl.IDLBufferType: return 'ArrayList<UInt8>'
+            case idl.IDLLengthType: return 'Ark_Length'
         }
         throw new Error(`Unsupported IDL primitive ${idl.DebugUtils.debugPrintType(type)}`)
     }
