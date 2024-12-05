@@ -587,6 +587,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             [],
             this.pickProperties(allMembers, childNameSuggestion),
             this.pickMethods(allMembers, childNameSuggestion),
+            // We set invoke signature's parameter as interface's options name.
             this.pickCallables(node.members, NameSuggestion.make(`${nameSuggestion.name}Options`, true)),
             this.collectTypeParameters(node.typeParameters), {
             fileName: node.getSourceFile().fileName,
