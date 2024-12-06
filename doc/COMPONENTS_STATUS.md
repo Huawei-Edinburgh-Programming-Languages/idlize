@@ -475,30 +475,30 @@
 |*Image*| *Component* | Korobeinikov Evgeny | in progress |  |
 |`setImageOptions`| Function | Berezin Kirill | in progress | |
 |`alt`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
-|`matchTextDirection`| Function | Evstigneev Roman | in progress | |
-|`fitOriginalSize`| Function | Evstigneev Roman | in progress | |
+|`matchTextDirection`| Function | Evstigneev Roman | done | |
+|`fitOriginalSize`| Function | Evstigneev Roman | done | |
 |`fillColor`| Function | Evstigneev Roman | done | |
 |`objectFit`| Function |Berezin Kirill| done | |
-|`objectRepeat`| Function | Evstigneev Roman | in progress | |
+|`objectRepeat`| Function | Evstigneev Roman | done | |
 |`autoResize`| Function | Evstigneev Roman | done | https://gitee.com/openharmony/arkui_ace_engine/issues/IAW529 |
-|`renderMode`| Function | Evstigneev Roman | in progress | |
-|`dynamicRangeMode`| Function | Evstigneev Roman | testskipped |  |
-|`interpolation`| Function | Evstigneev Roman | in progress | |
-|`sourceSize`| Function | Evstigneev Roman | in progress | |
-|`syncLoad`| Function | Evstigneev Roman | in progress | |
+|`renderMode`| Function | Evstigneev Roman | done | |
+|`dynamicRangeMode`| Function | Evstigneev Roman | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1IEY |
+|`interpolation`| Function | Evstigneev Roman | done | |
+|`sourceSize`| Function | Evstigneev Roman | testskipped | |
+|`syncLoad`| Function | Evstigneev Roman | done | |
 |`colorFilter`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH and https://gitee.com/nikolay-igotti/idlize/issues/IB0Y72 |
-|`copyOption`| Function | Evstigneev Roman | in progress | |
-|`draggable`| Function | Evstigneev Roman | in progress | |
+|`copyOption`| Function | Evstigneev Roman | testskipped | |
+|`draggable`| Function | Evstigneev Roman | testskipped | |
 |`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done | |
-|`edgeAntialiasing`| Function | Evstigneev Roman | in progress | |
-|`onComplete`| Function | Evstigneev Roman | in progress | |
+|`edgeAntialiasing`| Function | Evstigneev Roman | done | |
+|`onComplete`| Function | Evstigneev Roman | testskipped | |
 |`onError`| Function | Evstigneev Roman | done | |
 |`onFinish`| Function | Evstigneev Roman | done | |
-|`enableAnalyzer`| Function | Evstigneev Roman | in progress | |
+|`enableAnalyzer`| Function | Evstigneev Roman | done | |
 |`analyzerConfig`| Function | Evstigneev Roman | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB0Y51 |
 |`resizable`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0Y7V |
-|`privacySensitive`| Function | Evstigneev Roman | in progress | |
-|`enhancedImageQuality`| Function | Evstigneev Roman | in progress | |
+|`privacySensitive`| Function | Evstigneev Roman | done | |
+|`enhancedImageQuality`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB1ISB |
 |*ImageAnimator*| *Component* | Pavelyev Ivan | in progress | |
 |`setImageAnimatorOptions`| Function | Pavelyev Ivan | done | |
 |`images`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
