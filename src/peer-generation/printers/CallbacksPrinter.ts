@@ -19,7 +19,7 @@ import { CppLanguageWriter, LanguageWriter, NamedMethodSignature } from "../Lang
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { ImportsCollector } from "../ImportsCollector";
 import { Language } from "../../Language";
-import { CallbackKind, generateCallbackAPIArguments, generateCallbackKindAccess, generateCallbackKindName, generateCallbackKindValue } from "../ArgConvertors";
+import { CallbackConvertor, CallbackKind, generateCallbackAPIArguments, generateCallbackKindAccess, generateCallbackKindName, generateCallbackKindValue } from "../ArgConvertors";
 import { MethodArgPrintHint } from "../LanguageWriters/LanguageWriter";
 import { CppSourceFile, SourceFile, TsSourceFile } from "./SourceFile";
 import { PrimitiveType } from "../ArkPrimitiveType";
@@ -213,9 +213,11 @@ class DeserializeCallbacksVisitor {
             if (hasContinuation) {
                 const continuationReference = this.library.createContinuationCallbackReference(callback.returnType)
                 const convertor = this.library.typeConvertor(`continuation`, continuationReference)
-                writer.writeStatement(convertor.convertorDeserialize(`_continuation_buf`, `thisDeserializer`, (expr) => {
-                    return writer.makeAssign(`_continuation`, continuationReference, expr, true, false)
-                }, writer))
+                if (convertor instanceof CallbackConvertor) {
+                    writer.writeStatement(convertor.convertorDeserialize(`_continuation_buf`, `thisDeserializer`, (expr) => {
+                        return writer.makeAssign(`_continuation`, continuationReference, expr, true, false)
+                    }, writer, true))
+                }
             }
             if (writer.language === Language.CPP) {
                 const cppArgsNames = [

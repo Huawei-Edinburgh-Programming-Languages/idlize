@@ -874,11 +874,13 @@ export class CallbackConvertor extends BaseArgConvertor {
             writer.writeMethodCall(`${param}Serializer`, "writeCallbackResource", [`${value}.resource`])
             writer.writeMethodCall(`${param}Serializer`, "writePointer", [writer.makeCast(
                 new StringExpression(`${value}.call`), idl.IDLPointerType, { unsafe: true }).asString()])
+            writer.writeMethodCall(`${param}Serializer`, "writePointer", [writer.makeCast(
+                new StringExpression(`${value}.callSync`), idl.IDLPointerType, { unsafe: true }).asString()])
             return
         }
         writer.writeMethodCall(`${param}Serializer`, `holdAndWriteCallback`, [`${value}`])
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter, useSyncVersion: boolean = false): LanguageStatement {
         if (writer.language == Language.CPP) {
             const callerInvocation = writer.makeString(`getManagedCallbackCaller(${generateCallbackKindAccess(this.decl, writer.language)})`)
             const callerSyncInvocation = writer.makeString(`getManagedCallbackCallerSync(${generateCallbackKindAccess(this.decl, writer.language)})`)
@@ -904,7 +906,7 @@ export class CallbackConvertor extends BaseArgConvertor {
             return assigneer(writer.makeString(`{${resourceReadExpr.asString()}, ${callReadExpr.asString()}, ${callSyncReadExpr.asString()}}`))
         }
         return assigneer(writer.makeString(
-            `${deserializerName}.read${this.library.getInteropName(this.decl)}()`))
+            `${deserializerName}.read${this.library.getInteropName(this.decl)}(${useSyncVersion ? 'true' : ''})`))
     }
     nativeType(): idl.IDLType {
         return idl.createReferenceType(this.decl.name)

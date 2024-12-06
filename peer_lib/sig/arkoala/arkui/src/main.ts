@@ -263,6 +263,25 @@ function enqueueCallback(
     nativeModule()._ReleaseArkoalaResource(resourceId)
 }
 
+// function checkCallbackWithReturn() {
+//     nativeModule()._TestSetArkoalaCallbackCallerSync()
+// 
+//     let callResult1 = "NOT_CALLED"
+// 
+//     enqueueCallback(
+//         createDefaultWriteCallback(CallbackKind.Kind_Callback_Literal_Object_detail_Boolean, (_event: { detail: object }): boolean => {
+//             return true
+//         }),
+//         (deserializer) => {
+//             const callback = deserializer.readCallback_Literal_Object_detail_Boolean(true)
+//             const result1 = callback({ detail: [] })
+//             callResult1 = `CALLED, value=${result1}`
+//         },
+//     )
+// 
+//     assertEquals("Sync Callback 1 with return type read&called immediately", "CALLED, value=true", callResult1)
+// }
+
 function checkTwoSidesCallbackSync() {
     nativeModule()._TestSetArkoalaCallbackCallerSync()
 
@@ -272,7 +291,7 @@ function checkTwoSidesCallbackSync() {
             callResult1 = `CALLED, value=${value}`
         }),
         (deserializer) => {
-            const callback = deserializer.readCallback_Number_Void(true)
+            const callback = deserializer.readCallback_Number_Void(/* isSync */ true)
             callback(194)
         },
     )
@@ -302,7 +321,7 @@ function checkTwoSidesCallbackSync() {
     enqueueCallback(
         createDefaultWriteCallback(CallbackKind.Kind_Callback_Number_Void, func),
         (deserializer) => {
-            const enumerateCallback = deserializer.readCallback_Number_Void(true)
+            const enumerateCallback = deserializer.readCallback_Number_Void(/* isSync */ true)
             doTest(enumerateCallback)
         },
     )
@@ -383,6 +402,10 @@ function checkTwoSidesPromise() {
         assertEquals("Promise 1 pumped", "FULFILLED", result1)
         assertEquals("Promise 2 pumped", "REJECTED: err line 1, err line 2", result2)
     }, 0)
+}
+
+function checkCallBackWithContinuation() {
+
 }
 
 /*
@@ -803,6 +826,7 @@ function main() {
     // Place where mock of ACE is located.
     process.env.ACE_LIBRARY_PATH = __dirname + "/../../../native"
 
+    // checkCallbackWithReturn()
     checkTwoSidesCallbackSync()
 
     checkSerdeLength()
