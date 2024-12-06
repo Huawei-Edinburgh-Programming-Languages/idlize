@@ -710,10 +710,10 @@
 |`autoReset`| Function | Dmitry A Smirnov| done|  |
 |`onDotConnect`| Function | Dmitry A Smirnov| in progress|  |
 |`activateCircleStyle`| Function | Dmitry A Smirnov| blocked AceEngine| https://gitee.com/openharmony/arkui_ace_engine/issues/IAYWON |
-|*PluginComponent*| *Component* | | | |
-|`setPluginComponentOptions`| Function | | | |
-|`onComplete`| Function | | | |
-|`onError`| Function | | | |
+|*PluginComponent*| *Component* | Evstigneev Roman | in progress | |
+|`setPluginComponentOptions`| Function | Evstigneev Roman | in progress | |
+|`onComplete`| Function | Evstigneev Roman | in progress | |
+|`onError`| Function | Evstigneev Roman | in progress | |
 |*Polygon*| *Component* |Politov Mikhail | in progress | |
 |`setPolygonOptions`| Function | Politov Mikhail | in progress | |
 |`points`| Function | Politov Mikhail | in progress |  |
