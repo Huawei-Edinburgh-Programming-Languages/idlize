@@ -1824,8 +1824,8 @@
 |*TabsController*| *Class* | Skroba Gleb | in progress |
 |`changeIndex`| Function | Skroba Gleb | done | |
 |`preloadItems`| Function | Skroba Gleb | done | |
-|`setTabBarTranslate`| Function | Skroba Gleb | in progress | |
-|`setTabBarOpacity`| Function | Skroba Gleb | in progress | |
+|`setTabBarTranslate`| Function | Skroba Gleb | devdone | |
+|`setTabBarOpacity`| Function | Skroba Gleb | devdone | |
 |*TabContentTransitionProxy*| *Class* | | |  |
 |`finishTransition`| Function | | |  |
 |`getFrom`| Function | | |  |
