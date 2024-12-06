@@ -8,7 +8,7 @@ export enum CallbackKind {
 }
 
 export interface XMLNativeModule {
-    _XmlSerializer_ctor(thisArray: Uint8Array, thisLength: int32): KPointer 
+    _XmlSerializer_ctor(buffer: string, thisArray: Uint8Array, thisLength: int32): KPointer 
     _XmlSerializer_getFinalizer(): KPointer 
     _XmlSerializer_setAttributes(self: KPointer, name: string, value: string): void 
     _XmlSerializer_addEmptyElement(self: KPointer, name: string): void 

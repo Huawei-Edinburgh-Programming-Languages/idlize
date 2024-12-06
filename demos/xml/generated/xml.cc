@@ -150,47 +150,6 @@ inline OH_RuntimeType runtimeType(const Opt_Boolean& value)
     return (value.tag != OH_TAG_UNDEFINED) ? (OH_RUNTIME_OBJECT) : (OH_RUNTIME_UNDEFINED);
 }
 template <>
-inline void WriteToString(std::string* result, const Opt_CustomObject* value) {
-    result->append("{.tag=");
-    result->append(tagNameExact((OH_Tag)(value->tag)));
-    result->append(", .value=");
-    if (value->tag != OH_TAG_UNDEFINED) {
-        WriteToString(result, &value->value);
-    } else {
-        OH_Undefined undefined = { 0 };
-        WriteToString(result, undefined);
-    }
-    result->append("}");
-}
-template <>
-inline OH_RuntimeType runtimeType(const Opt_CustomObject& value)
-{
-    return (value.tag != OH_TAG_UNDEFINED) ? (OH_RUNTIME_OBJECT) : (OH_RUNTIME_UNDEFINED);
-}
-template <>
-inline OH_RuntimeType runtimeType(const OH_Buffer& value)
-{
-    return OH_RUNTIME_OBJECT;
-}
-template <>
-inline void WriteToString(std::string* result, const Opt_Buffer* value) {
-    result->append("{.tag=");
-    result->append(tagNameExact((OH_Tag)(value->tag)));
-    result->append(", .value=");
-    if (value->tag != OH_TAG_UNDEFINED) {
-        WriteToString(result, value->value);
-    } else {
-        OH_Undefined undefined = { 0 };
-        WriteToString(result, undefined);
-    }
-    result->append("}");
-}
-template <>
-inline OH_RuntimeType runtimeType(const Opt_Buffer& value)
-{
-    return (value.tag != OH_TAG_UNDEFINED) ? (OH_RUNTIME_OBJECT) : (OH_RUNTIME_UNDEFINED);
-}
-template <>
 inline OH_RuntimeType runtimeType(const Callback_Boolean_Void& value)
 {
     return OH_RUNTIME_OBJECT;
@@ -361,51 +320,6 @@ inline OH_RuntimeType runtimeType(const Opt_String& value)
 {
     return (value.tag != OH_TAG_UNDEFINED) ? (OH_RUNTIME_OBJECT) : (OH_RUNTIME_UNDEFINED);
 }
-template <>
-inline OH_RuntimeType runtimeType(const OH_Union_Buffer_DataView& value)
-{
-    switch (value.selector) {
-        case 0: return runtimeType(value.value0);
-        case 1: return runtimeType(value.value1);
-        default: throw "Bad selector in OH_Union_Buffer_DataView: " + std::to_string(value.selector);
-    }
-}
-template <>
-inline void WriteToString(std::string* result, const OH_Union_Buffer_DataView* value) {
-    result->append("{");
-    result->append(".selector=");
-    result->append(std::to_string(value->selector));
-    result->append(", ");
-    // OH_Buffer
-    if (value->selector == 0) {
-        result->append(".value0=");
-        WriteToString(result, value->value0);
-    }
-    // OH_CustomObject
-    if (value->selector == 1) {
-        result->append(".value1=");
-        WriteToString(result, &value->value1);
-    }
-    result->append("}");
-}
-template <>
-inline void WriteToString(std::string* result, const Opt_Union_Buffer_DataView* value) {
-    result->append("{.tag=");
-    result->append(tagNameExact((OH_Tag)(value->tag)));
-    result->append(", .value=");
-    if (value->tag != OH_TAG_UNDEFINED) {
-        WriteToString(result, &value->value);
-    } else {
-        OH_Undefined undefined = { 0 };
-        WriteToString(result, undefined);
-    }
-    result->append("}");
-}
-template <>
-inline OH_RuntimeType runtimeType(const Opt_Union_Buffer_DataView& value)
-{
-    return (value.tag != OH_TAG_UNDEFINED) ? (OH_RUNTIME_OBJECT) : (OH_RUNTIME_UNDEFINED);
-}
 class Serializer : public SerializerBase {
     public:
     Serializer(uint8_t* data, CallbackResourceHolder* resourceHolder = nullptr) : SerializerBase(data, resourceHolder) {
@@ -521,7 +435,7 @@ class Deserializer : public DeserializerBase {
         return value;
     }
 };
-OH_XML_XmlSerializerHandle XmlSerializer_constructImpl(const OH_Union_Buffer_DataView* buffer, const Opt_String* encoding);
+OH_XML_XmlSerializerHandle XmlSerializer_constructImpl(const OH_String* buffer, const Opt_String* encoding);
 void XmlSerializer_destructImpl(OH_XML_XmlSerializerHandle thiz);
 void XmlSerializer_setAttributesImpl(OH_NativePointer thisPtr, const OH_String* name, const OH_String* value);
 void XmlSerializer_addEmptyElementImpl(OH_NativePointer thisPtr, const OH_String* name);
@@ -603,23 +517,8 @@ const OH_XML_API* GetXMLAPIImpl(int version) {
 
 // Accessors
 
-OH_NativePointer impl_XmlSerializer_ctor(uint8_t* thisArray, int32_t thisLength) {
+OH_NativePointer impl_XmlSerializer_ctor(const KStringPtr& buffer, uint8_t* thisArray, int32_t thisLength) {
         Deserializer thisDeserializer(thisArray, thisLength);
-        const OH_Int8 buffer_value_buf_selector = thisDeserializer.readInt8();
-        OH_Union_Buffer_DataView buffer_value_buf = {};
-        buffer_value_buf.selector = buffer_value_buf_selector;
-        if (buffer_value_buf_selector == 0) {
-            buffer_value_buf.selector = 0;
-            buffer_value_buf.value0 = static_cast<OH_Buffer>(thisDeserializer.readBuffer());
-        }
-        else if (buffer_value_buf_selector == 1) {
-            buffer_value_buf.selector = 1;
-            buffer_value_buf.value1 = static_cast<OH_CustomObject>(thisDeserializer.readCustomObject("DataView"));
-        }
-         else {
-            throw new Error("One of the branches for buffer_value_buf has to be chosen through deserialisation.");
-        }
-        OH_Union_Buffer_DataView buffer_value = static_cast<OH_Union_Buffer_DataView>(buffer_value_buf);;
         const auto encoding_value_buf_runtimeType = static_cast<OH_RuntimeType>(thisDeserializer.readInt8());
         Opt_String encoding_value_buf = {};
         encoding_value_buf.tag = encoding_value_buf_runtimeType == OH_RUNTIME_UNDEFINED ? OH_TAG_UNDEFINED : OH_TAG_OBJECT;
@@ -628,9 +527,9 @@ OH_NativePointer impl_XmlSerializer_ctor(uint8_t* thisArray, int32_t thisLength)
                 encoding_value_buf.value = static_cast<OH_String>(thisDeserializer.readString());
             }
         Opt_String encoding_value = encoding_value_buf;;
-        return GetXMLAPIImpl(XML_API_VERSION)->XmlSerializer()->construct((const OH_Union_Buffer_DataView*)&buffer_value, (const Opt_String*)&encoding_value);
+        return GetXMLAPIImpl(XML_API_VERSION)->XmlSerializer()->construct((const OH_String*)&buffer, (const Opt_String*)&encoding_value);
 }
-KOALA_INTEROP_2(XmlSerializer_ctor, OH_NativePointer, uint8_t*, int32_t)
+KOALA_INTEROP_3(XmlSerializer_ctor, OH_NativePointer, KStringPtr, uint8_t*, int32_t)
  
 OH_NativePointer impl_XmlSerializer_getFinalizer() {
         return (OH_NativePointer) GetXMLAPIImpl(XML_API_VERSION)->XmlSerializer()->destruct;

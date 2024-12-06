@@ -44,7 +44,7 @@ export class XMLNativeModule {
         return 0
     }    
 
-    native static _XmlSerializer_ctor(thisArray: KUint8ArrayPtr, thisLength: int32): KPointer 
+    native static _XmlSerializer_ctor(buffer: string, thisArray: KUint8ArrayPtr, thisLength: int32): KPointer 
     native static _XmlSerializer_getFinalizer(): KPointer 
     native static _XmlSerializer_setAttributes(self: KPointer, name: string, value: string): void 
     native static _XmlSerializer_addEmptyElement(self: KPointer, name: string): void 

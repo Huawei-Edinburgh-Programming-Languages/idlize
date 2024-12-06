@@ -112,20 +112,8 @@ export interface XmlPullParserInterface {
 }
 export class XmlSerializer implements XmlSerializerInterface {
     peer: Finalizable
-     constructor(buffer: ArrayBuffer | DataView, encoding?: string) {
+     constructor(buffer: string, encoding?: string) {
         const thisSerializer : Serializer = Serializer.hold()
-        let buffer_type : int32 = RuntimeType.UNDEFINED
-        buffer_type = runtimeType(buffer)
-        if (buffer instanceof ArrayBuffer) {
-            thisSerializer.writeInt8(0 as int32)
-            const buffer_0  = buffer as ArrayBuffer
-            thisSerializer.writeBuffer(buffer_0)
-        }
-        else if (((RuntimeType.OBJECT == buffer_type))) {
-            thisSerializer.writeInt8(1 as int32)
-            const buffer_1  = buffer as DataView
-            thisSerializer.writeCustomObject("DataView", buffer_1)
-        }
         let encoding_type : int32 = RuntimeType.UNDEFINED
         encoding_type = runtimeType(encoding)
         thisSerializer.writeInt8(encoding_type as int32)
@@ -133,7 +121,7 @@ export class XmlSerializer implements XmlSerializerInterface {
             const encoding_value  = encoding!
             thisSerializer.writeString(encoding_value)
         }
-        this.peer = new Finalizable(XMLNativeModule._XmlSerializer_ctor(thisSerializer.asArray(), thisSerializer.length()), XmlSerializer.getFinalizer())
+        this.peer = new Finalizable(XMLNativeModule._XmlSerializer_ctor(buffer, thisSerializer.asArray(), thisSerializer.length()), XmlSerializer.getFinalizer())
         thisSerializer.release()
     }
     static getFinalizer(): KPointer {
