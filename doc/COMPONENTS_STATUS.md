@@ -797,8 +797,8 @@
 |`setRichTextOptions`| Function | Dudkin Sergey| done|  |
 |`onStart`| Function | Dudkin Sergey| done|  |
 |`onComplete`| Function | Dudkin Sergey| done|  |
-|*RootScene*| *Component* | Spirin Andrey | in progress | |
-|`setRootSceneOptions`| Function | Spirin Andrey | in progress | |
+|*RootScene*| *Component* | Spirin Andrey | devdone | |
+|`setRootSceneOptions`| Function | Spirin Andrey | devdone | |
 |*Row*| *Component* | Andrey Khudenkikh | done |  |
 |`setRowOptions`| Function | Andrey Khudenkikh | done |  |
 |`alignItems`| Function | Andrey Khudenkikh | done |  |
@@ -811,8 +811,8 @@
 |*SaveButton*| *Component* | Samarin Sergey| done |  |
 |`setSaveButtonOptions`| Function | Samarin Sergey| done |  |
 |`onClick`| Function | Samarin Sergey| done |  |
-|*Screen*| *Component* | Spirin Andrey | in progress | |
-|`setScreenOptions`| Function | Spirin Andrey | in progress | |
+|*Screen*| *Component* | Spirin Andrey | devdone | |
+|`setScreenOptions`| Function | Spirin Andrey | devdone | |
 |*Scroll*| *Component* | Berezin Kirill | in progress |  |
 |`setScrollOptions`| Function | Berezin Kirill | done |  |
 |`scrollable`| Function | Berezin Kirill | done |  |
