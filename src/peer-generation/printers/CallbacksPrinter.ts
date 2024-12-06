@@ -342,9 +342,6 @@ class DeserializeCallbacksVisitor {
         if (this.writer.language === Language.TS) {
             this.writer.print('wrapSystemCallback(1, (buff:Uint8Array, len:int32) => { deserializeAndCallCallback(new Deserializer(buff.buffer, len)); return 0 })')
         }
-        if (this.writer.language === Language.ARKTS) {
-            this.writer.print('wrapSystemCallback(1, (buff:byte[], len:int32) => { deserializeAndCallCallback(new Deserializer(buff, len)); return 0 })')
-        }
 
         if (this.writer.language === Language.CPP) {
             this.writer.writeFunctionImplementation(`deserializeAndCallCallbackSync`, signatureSync, writer => {
