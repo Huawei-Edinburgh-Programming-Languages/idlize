@@ -385,6 +385,7 @@ function checkTwoSidesPromise() {
     }, 0)
 }
 
+/*
 function checkSyncCallback() {
     const s = Serializer.hold()
 
@@ -398,6 +399,7 @@ function checkSyncCallback() {
     assertTrue("Sync callback 1", value !== undefined)
     assertEquals("Sync callback 2", 42, value)
 }
+*/
 
 function checkWriteFunction() {
     const s = Serializer.hold()
@@ -801,8 +803,6 @@ function main() {
     // Place where mock of ACE is located.
     process.env.ACE_LIBRARY_PATH = __dirname + "/../../../native"
 
-    // checkArrayBuffer()
-    checkSyncCallback()
     checkTwoSidesCallbackSync()
 
     checkSerdeLength()

@@ -1,1 +1,0 @@
-callback TestSyncCb = void (i32 num);

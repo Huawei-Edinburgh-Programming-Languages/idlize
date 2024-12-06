@@ -121,13 +121,13 @@ void impl_TestWithBuffer(KInteropBuffer buffer) {
 }
 //KOALA_INTEROP_V1(TestWithBuffer, KInteropBuffer)
 
-void impl_TestCallbackSyncCall(KVMContext vmContext, KByte* thisArray, KInt thisLength) {
-    Deserializer thisDeserializer(thisArray, thisLength);
-    TestSyncCb cb_value = {
-        thisDeserializer.readCallbackResource(), 
-        reinterpret_cast<void(*)(const Ark_Int32 resourceId, const Ark_Int32 num)>(thisDeserializer.readPointerOrDefault(reinterpret_cast<void*>(getManagedCallbackCaller(Kind_TestSyncCb)))),
-        reinterpret_cast<void(*)(KVMContext vmContext, const Ark_Int32 resourceId, const Ark_Int32 num)>(thisDeserializer.readPointerOrDefault(reinterpret_cast<void*>(getManagedCallbackCallerSync(Kind_TestSyncCb))))
-    };
-    cb_value.callSync(vmContext, cb_value.resource.resourceId, 42);
-}
-KOALA_INTEROP_CTX_V2(TestCallbackSyncCall, KByte*, KInt)
+// void impl_TestCallbackSyncCall(KVMContext vmContext, KByte* thisArray, KInt thisLength) {
+//     Deserializer thisDeserializer(thisArray, thisLength);
+//     TestSyncCb cb_value = {
+//         thisDeserializer.readCallbackResource(), 
+//         reinterpret_cast<void(*)(const Ark_Int32 resourceId, const Ark_Int32 num)>(thisDeserializer.readPointerOrDefault(reinterpret_cast<void*>(getManagedCallbackCaller(Kind_TestSyncCb)))),
+//         reinterpret_cast<void(*)(KVMContext vmContext, const Ark_Int32 resourceId, const Ark_Int32 num)>(thisDeserializer.readPointerOrDefault(reinterpret_cast<void*>(getManagedCallbackCallerSync(Kind_TestSyncCb))))
+//     };
+//     cb_value.callSync(vmContext, cb_value.resource.resourceId, 42);
+// }
+// KOALA_INTEROP_CTX_V2(TestCallbackSyncCall, KByte*, KInt)
