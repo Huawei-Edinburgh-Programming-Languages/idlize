@@ -326,7 +326,7 @@
 |`flingSpeedLimit`| Function | Samarin Sergey | devdone |  |
 |`clipContent`| Function | | | |
 |`edgeEffect`| Function | Samarin Sergey | devdone | |
-|`fadingEdge`| Function | Samarin Sergey | in progress| https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`fadingEdge`| Function | Samarin Sergey | devdone | |
 |*Component3D*| *Component* |Kovalev Sergey | in progress | |
 |`setComponent3DOptions`| Function |Kovalev Sergey | in progress |  |
 |`environment`| Function |Kovalev Sergey | in progress |  |
@@ -1079,7 +1079,7 @@
 |`onWillShow`| Function |Evstigneev Roman | in progress |  |
 |`onWillHide`| Function |Evstigneev Roman | in progress |  |
 |*Text*| *Component* | Kirill Kirichenko | in progress | |
-|`setTextOptions`| Function | Kirill Kirichenko | in progress |  |
+|`setTextOptions`| Function | Kirill Kirichenko | devdone |  |
 |`font`| Function |Samarin Sergey | done |  |
 |`fontColor`| Function |Samarin Sergey | done |  |
 |`fontSize`| Function |Samarin Sergey | done |  |
@@ -1107,8 +1107,8 @@
 |`wordBreak`| Function | Samarin Sergey | done |  |
 |`lineBreakStrategy`| Function |Samarin Sergey | done |  |
 |`onCopy`| Function | Kirill Kirichenko | done |  |
-|`caretColor`| Function |Samarin Sergey |in progress | method is not generated yet |
-|`selectedBackgroundColor`| Function |Samarin Sergey |in progress | method is not generated yet |
+|`caretColor`| Function |Samarin Sergey |in progress | devdone |
+|`selectedBackgroundColor`| Function |Samarin Sergey |in progress | devdone |
 |`ellipsisMode`| Function |Samarin Sergey | done |  |
 |`enableDataDetector`| Function | Kirill Kirichenko | done |  |
 |`dataDetectorConfig`| Function | Kirill Kirichenko | in progress |  |
@@ -1833,7 +1833,7 @@
 |`getTo`| Function | | |  |
 |`setTo`| Function | | |  |
 |*TextController*| *Class* | Samarin Sergey | in progress | |
-|`closeSelectionMenu`| Function | Samarin Sergey | in progress | |
+|`closeSelectionMenu`| Function | Samarin Sergey | devdone | |
 |`setStyledString`| Function | Samarin Sergey | in progress | |
 |`getLayoutManager`| Function | Samarin Sergey | in progress | |
 |*TextAreaController*| *Class* | Tuzhilkin Ivan | testskipped |  |
