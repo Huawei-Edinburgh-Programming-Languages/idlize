@@ -602,8 +602,8 @@
 |`font`|Function|Morozov Sergey| done |  |
 |`fontColor`|Function|Morozov Sergey| done |  |
 |`radius`|Function|Morozov Sergey| done |  |
-|`menuItemDivider`|Function|Morozov Sergey| devdone |https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
-|`menuItemGroupDivider`|Function|Morozov Sergey| devdone |https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
+|`menuItemDivider`|Function|Morozov Sergey| done |https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
+|`menuItemGroupDivider`|Function|Morozov Sergey| done |https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`subMenuExpandingMode`|Function|Morozov Sergey| done |  |
 |*MenuItem*| *Component* |Morozov Sergey|blocked|  |
 |`setMenuItemOptions`| Function |Morozov Sergey|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
@@ -1721,7 +1721,7 @@
 |`setPathInfo`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
 |`setPathStack`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
 |`getNavDestinationId`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setNavDestinationId`| Function | Morozov Sergey | devdone | |
+|`setNavDestinationId`| Function | Morozov Sergey | done | |
 |*NavPathStack*| *Class* | Morozov Sergey |in progress |  |
 |`pushPath`| Function | Skroba Gleb | done |  |
 |`pushDestination`| Function | Morozov Sergey | blocked IDL | can be implemented without return val - https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
