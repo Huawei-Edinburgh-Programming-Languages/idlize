@@ -79,6 +79,6 @@ void impl_TestSetArkoalaCallbackCaller() {
 KOALA_INTEROP_V0(TestSetArkoalaCallbackCaller)
 
 void impl_TestSetArkoalaCallbackCallerSync() {
-    setCallbackCallerSync(deserializeAndCallCallbackSync);
+    setCallbackCallerSync((Callback_Caller_Sync_t)deserializeAndCallCallbackSync);
 }
 KOALA_INTEROP_V0(TestSetArkoalaCallbackCallerSync)

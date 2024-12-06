@@ -171,13 +171,10 @@ class DeserializeCallbacksVisitor {
         const vmContext = 'vmContext'
 
         let signature: NamedMethodSignature
-        let signatureSync:  NamedMethodSignature
         if (this.writer.language === Language.CPP) {
             signature = new NamedMethodSignature(idl.IDLVoidType, [idl.IDLUint8ArrayType, idl.IDLI32Type], [`thisArray`, `thisLength`])
-            signatureSync = new NamedMethodSignature(idl.IDLVoidType, [idl.createReferenceType('KVMContext'), idl.IDLUint8ArrayType, idl.IDLI32Type], [vmContext, `thisArray`, `thisLength`])
         } else {
             signature = new NamedMethodSignature(idl.IDLVoidType, [idl.createReferenceType(`Deserializer`)], [`thisDeserializer`])
-            signatureSync = new NamedMethodSignature(idl.IDLVoidType, [idl.createReferenceType(`Deserializer`)], [`thisDeserializer`])
         }
         this.writer.writeFunctionImplementation(`deserializeAndCall${callback.name}`, signature, writer => {
             const resourceIdName = `_resourceId`
@@ -236,31 +233,21 @@ class DeserializeCallbacksVisitor {
             }
         })
         if (this.writer.language === Language.CPP) {
+            let signatureSync = new NamedMethodSignature(idl.IDLVoidType, [idl.createReferenceType('VMContext'), idl.IDLUint8ArrayType, idl.IDLI32Type], [vmContext, `thisArray`, `thisLength`])
             this.writer.writeFunctionImplementation(`deserializeAndCallSync${callback.name}`, signatureSync, writer => {
                 const resourceIdName = `_resourceId`
                 const callName = `_callSync`
-                const notInterestingPointer = `_uselessPointer`
-                if (writer.language === Language.CPP) {
-                    writer.writeStatement(writer.makeAssign(`thisDeserializer`, idl.createReferenceType(`Deserializer`), 
+                writer.writeStatement(writer.makeAssign(`thisDeserializer`, idl.createReferenceType(`Deserializer`), 
                         writer.makeClassInit(idl.createReferenceType('Deserializer'), [writer.makeString('thisArray'), writer.makeString('thisLength')]), 
                         true, false))
-                }
                 writer.writeStatement(writer.makeAssign(resourceIdName, idl.IDLI32Type, writer.makeMethodCall(`thisDeserializer`, `readInt32`, []), true))
-                if (writer.language === Language.CPP) {
-                    // there is some assymmetrics - we do not read `call` pointer when processing in managed, but always do in native
-                    const callReadExpr = writer.makeCast(
-                        writer.makeMethodCall(`thisDeserializer`, `readPointer`, []),
-                        idl.IDLUndefinedType,
-                        { unsafe: true, overrideTypeName: `void(*)(${["KVMContext vmContext"].concat(generateCallbackAPIArguments(this.library, callback)).join(", ")})` }
-                    )
-                    writer.writeStatement(writer.makeStatement(writer.makeMethodCall(`thisDeserializer`, `readPointer`, [])))
-                    writer.writeStatement(writer.makeAssign(callName, undefined, callReadExpr, true))
-                } else {
-                    writer.writeStatement(writer.makeAssign(callName, undefined, writer.makeCast(
-                        writer.makeMethodCall(`ResourceHolder.instance()`, `get`, [writer.makeString(resourceIdName)]),
-                        idl.createReferenceType(callback.name),
-                    ), true))
-                }
+                const callReadExpr = writer.makeCast(
+                    writer.makeMethodCall(`thisDeserializer`, `readPointer`, []),
+                    idl.IDLUndefinedType,
+                    { unsafe: true, overrideTypeName: `void(*)(${["Ark_VMContext vmContext"].concat(generateCallbackAPIArguments(this.library, callback)).join(", ")})` }
+                )
+                writer.writeStatement(writer.makeStatement(writer.makeMethodCall(`thisDeserializer`, `readPointer`, [])))
+                writer.writeStatement(writer.makeAssign(callName, undefined, callReadExpr, true))
                 const argsNames = []
                 for (const param of callback.parameters) {
                     const convertor = this.library.typeConvertor(param.name, param.type!, param.isOptional)
@@ -278,21 +265,14 @@ class DeserializeCallbacksVisitor {
                         return writer.makeAssign(`_continuation`, continuationReference, expr, true, false)
                     }, writer))
                 }
-                if (writer.language === Language.CPP) {
-                    const cppArgsNames = [
-                        vmContext,
-                        resourceIdName,
-                        ...argsNames,
-                    ]
-                    if (hasContinuation)
-                        cppArgsNames.push(`_continuation`)
-                    writer.writeExpressionStatement(writer.makeFunctionCall(callName, cppArgsNames.map(it => writer.makeString(it))))
-                } else {
-                    let callExpression = writer.makeFunctionCall(callName, argsNames.map(it => writer.makeString(it)))
-                    if (hasContinuation)
-                        callExpression = writer.makeFunctionCall(`_continuation`, [callExpression])
-                    writer.writeExpressionStatement(callExpression)
-                }
+                const cppArgsNames = [
+                    vmContext,
+                    resourceIdName,
+                    ...argsNames,
+                ]
+                if (hasContinuation)
+                    cppArgsNames.push(`_continuation`)
+                writer.writeExpressionStatement(writer.makeFunctionCall(callName, cppArgsNames.map(it => writer.makeString(it))))
             })
         }
     }
@@ -306,7 +286,7 @@ class DeserializeCallbacksVisitor {
                 [`kind`, `thisArray`, `thisLength`],
             )
             signatureSync = new NamedMethodSignature(idl.IDLVoidType,
-                [idl.createReferenceType('KVMContext'), idl.IDLI32Type, idl.IDLUint8ArrayType, idl.IDLI32Type],
+                [idl.createReferenceType('VMContext'), idl.IDLI32Type, idl.IDLUint8ArrayType, idl.IDLI32Type],
                 [`vmContext`, `kind`, `thisArray`, `thisLength`],
             )
         } else {

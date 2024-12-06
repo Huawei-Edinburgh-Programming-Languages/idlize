@@ -84,8 +84,6 @@ typedef void* Ark_NativePointer;
 
 struct _Ark_VMContext;
 typedef struct _Ark_VMContext* Ark_VMContext;
-struct _KVMContext;
-typedef struct _KVMContext* KVMContext;
 struct _Ark_PipelineContext;
 typedef struct _Ark_PipelineContext* Ark_PipelineContext;
 struct _Ark_VMObject;
