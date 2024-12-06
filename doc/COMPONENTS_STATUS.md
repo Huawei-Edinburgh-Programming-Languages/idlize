@@ -327,15 +327,15 @@
 |`clipContent`| Function | | | |
 |`edgeEffect`| Function | Samarin Sergey | devdone | |
 |`fadingEdge`| Function | Samarin Sergey | in progress| https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|*Component3D*| *Component* |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
-|`setComponent3DOptions`| Function |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
-|`environment`| Function |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
-|`shader`| Function |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
-|`shaderImageTexture`| Function |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
-|`shaderInputBuffer`| Function |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
-|`renderWidth`| Function |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
-|`renderHeight`| Function |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
-|`customRender`| Function |Kovalev Sergey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZC20 |
+|*Component3D*| *Component* |Kovalev Sergey | in progress | |
+|`setComponent3DOptions`| Function |Kovalev Sergey | in progress |  |
+|`environment`| Function |Kovalev Sergey | in progress |  |
+|`shader`| Function |Kovalev Sergey | in progress |  |
+|`shaderImageTexture`| Function |Kovalev Sergey | in progress |  |
+|`shaderInputBuffer`| Function |Kovalev Sergey | in progress |  |
+|`renderWidth`| Function |Kovalev Sergey | in progress |  |
+|`renderHeight`| Function |Kovalev Sergey | in progress |  |
+|`customRender`| Function |Kovalev Sergey | in progress |  |
 |*ContainerSpan*| *Component* | Tuzhilkin Ivan|done|  |
 |`setContainerSpanOptions`| Function |Tuzhilkin Ivan|done|  |
 |`textBackgroundStyle`| Function |Tuzhilkin Ivan|done|  |
