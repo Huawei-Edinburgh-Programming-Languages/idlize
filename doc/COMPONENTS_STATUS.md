@@ -279,14 +279,14 @@
 |`priorityGesture`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARW2A |
 |`parallelGesture`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARW2A |
 |`blur`| Function | Roman Sedaikin | done | |
-|`linearGradientBlur`| Function | Lobah Mikhail | devdone | |
-|`systemBarEffect`| Function | Lobah Mikhail | devdone | |
+|`linearGradientBlur`| Function | Lobah Mikhail | done | |
+|`systemBarEffect`| Function | Lobah Mikhail | done | |
 |`backdropBlur`| Function | Berezin Kirill | done | |
 |`sharedTransition`|Function|Skroba Gleb | done |  |
 |`chainMode`| Function | Berezin Kirill | in progress | |
 |`dragPreviewOptions`| Function | | | |
 |`overlay`| Function | Roman Sedaikin | done | |
-|`blendMode`| Function | Lobah Mikhail | devdone | |
+|`blendMode`| Function | Lobah Mikhail | done | |
 |`advancedBlendMode`| Function | | | |
 |`bindPopup`| Function | | | |
 |`bindMenu`| Function | | | |
