@@ -162,3 +162,23 @@ check index-full:
         - npm run check:index-full:ts
         - npm run make:arkts
         - npm run check:index-full:arkts
+
+check generated XML demo:
+    stage: test
+    tags:
+      - idlize-ci
+      - koala-ci
+    before_script:
+      - !reference [.setup, script]
+      - npm run panda:sdk:install
+      - chmod +x external/incremental/tools/panda/arkts/ark{,tsc,link,disasm}
+    script:
+      - npm run run:xml
+      - npm run run:xml:arkts
+      - cd demos/xml
+      - rm -rf generated
+      - cp -r ../../out/xml generated
+      - npm run compile:node
+      - npm start
+      - npm run compile:panda
+      - npm start:panda

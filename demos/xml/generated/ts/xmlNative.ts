@@ -2,10 +2,9 @@ import { int32 } from "@koalaui/common"
 import { pointer, KPointer } from "@koalaui/interop"
 
 export enum CallbackKind {
-    Kind_Callback_Boolean_Void,
-    Kind_Callback_EventType_ParseInfo_Boolean = 1,
-    Kind_Callback_String_String_Boolean = 2,
-    Kind_Callback_Void = 3,
+    Kind_Callback_Boolean_Void = 313269291,
+    Kind_Callback_EventType_ParseInfo_Boolean = 240036623,
+    Kind_Callback_String_String_Boolean = 923368928,
 }
 
 export interface XMLNativeModule {

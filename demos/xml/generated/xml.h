@@ -109,8 +109,6 @@ typedef struct Callback_EventType_ParseInfo_Boolean Callback_EventType_ParseInfo
 typedef struct Opt_Callback_EventType_ParseInfo_Boolean Opt_Callback_EventType_ParseInfo_Boolean;
 typedef struct Callback_String_String_Boolean Callback_String_String_Boolean;
 typedef struct Opt_Callback_String_String_Boolean Opt_Callback_String_String_Boolean;
-typedef struct Callback_Void Callback_Void;
-typedef struct Opt_Callback_Void Opt_Callback_Void;
 typedef struct Callback_Boolean_Void Callback_Boolean_Void;
 typedef struct Opt_Callback_Boolean_Void Opt_Callback_Boolean_Void;
 typedef OH_Materialized OH_ParseInfo;
@@ -168,18 +166,6 @@ typedef struct Opt_Buffer {
     OH_Tag tag;
     OH_Buffer value;
 } Opt_Buffer;
-typedef struct Callback_Void {
-    OH_CallbackResource resource;
-    void (*call)(const OH_Int32 resourceId);
-} Callback_Void;
-typedef struct Opt_Callback_Void {
-    OH_Tag tag;
-    Callback_Void value;
-} Opt_Callback_Void;
-typedef struct Opt_Number {
-    OH_Tag tag;
-    OH_Number value;
-} Opt_Number;
 typedef struct Callback_Boolean_Void {
     OH_CallbackResource resource;
     void (*call)(const OH_Int32 resourceId, const OH_Boolean value);
@@ -188,6 +174,10 @@ typedef struct Opt_Callback_Boolean_Void {
     OH_Tag tag;
     Callback_Boolean_Void value;
 } Opt_Callback_Boolean_Void;
+typedef struct Opt_Number {
+    OH_Tag tag;
+    OH_Number value;
+} Opt_Number;
 typedef struct Opt_ParseInfo {
     OH_Tag tag;
     OH_ParseInfo value;
