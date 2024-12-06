@@ -1784,8 +1784,8 @@
 |`toStyledString`| Function | Dudkin Sergey| done|  |
 |*RichEditorStyledStringController*| *Class* |Dudkin Sergey| blocked IDL| |
 |`setStyledString`| Function |Dudkin Sergey| devdone| |
-|`getStyledString`| Function | Dudkin Sergey| devdone| |
-|`getSelection`| Function |Dudkin Sergey| devdone| |
+|`getStyledString`| Function | Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getSelection`| Function |Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`onContentChanged`| Function | Dudkin Sergey| blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB944G |
 |*Scroller*| *Class* | Erokhin Ilya | blocked |  |
 |`scrollTo`| Function | Erokhin Ilya | done |  |
