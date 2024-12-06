@@ -190,4 +190,4 @@ check generated XML demo:
       - npm run compile:node
       - npm start
       - npm run compile:panda
-      - npm start:panda
+      - npm run start:panda
