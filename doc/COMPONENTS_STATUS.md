@@ -1479,10 +1479,10 @@
 |*UIExtensionComponent*| *Component* | Tuzhilkin Ivan | in progress |
 |`setUIExtensionComponentOptions`| Function | Tuzhilkin Ivan | devdone | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`onRemoteReady`| Function | Tuzhilkin Ivan | devdone | |
-|`onReceive`| Function | Tuzhilkin Ivan | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX | |
+|`onReceive`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`onResult`| Function | Tuzhilkin Ivan | devdone | |
 |`onRelease`| Function | Tuzhilkin Ivan | devdone | |
-|`onError`| Function | Tuzhilkin Ivan | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX | |
+|`onError`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`onTerminated`| Function | Tuzhilkin Ivan | devdone | |
 |*LinearIndicator*| *Component* | Kovalev Sergey | done | depricated |
 |`setLinearIndicatorOptions`| Function | Kovalev Sergey | done | depricated |
