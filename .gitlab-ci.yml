@@ -170,8 +170,14 @@ check generated XML demo:
       - koala-ci
     before_script:
       - !reference [.setup, script]
-      - npm run panda:sdk:install
+      - PANDA_SDK_VERSION=1.5.0-dev.9440 npm run panda:sdk:install
       - chmod +x external/incremental/tools/panda/arkts/ark{,tsc,link,disasm}
+      - npm run compile --prefix external/interop
+      - npm run compile --prefix external/incremental/common
+      - npm run compile --prefix external/incremental/compat
+      - npm run compile --prefix external/incremental/runtime
+      - npm run build:interop:inc --prefix external/interop
+      - npm run build:incremental:inc --prefix external/incremental
     script:
       - npm run run:xml
       - npm run run:xml:arkts
