@@ -1477,13 +1477,13 @@
 |`onScrollFrameBegin`| Function | Kovalev Sergey | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onScrollIndex`| Function | Kovalev Sergey | done | |
 |*UIExtensionComponent*| *Component* | Tuzhilkin Ivan | in progress |
-|`setUIExtensionComponentOptions`| Function | Tuzhilkin Ivan | | |
-|`onRemoteReady`| Function | Tuzhilkin Ivan | in progress | |
-|`onReceive`| Function | Tuzhilkin Ivan | in progress | |
-|`onResult`| Function | Tuzhilkin Ivan | in progress | |
-|`onRelease`| Function | Tuzhilkin Ivan | in progress | |
-|`onError`| Function | Tuzhilkin Ivan | in progress | |
-|`onTerminated`| Function | Tuzhilkin Ivan | in progress | |
+|`setUIExtensionComponentOptions`| Function | Tuzhilkin Ivan | devdone | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`onRemoteReady`| Function | Tuzhilkin Ivan | devdone | |
+|`onReceive`| Function | Tuzhilkin Ivan | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX | |
+|`onResult`| Function | Tuzhilkin Ivan | devdone | |
+|`onRelease`| Function | Tuzhilkin Ivan | devdone | |
+|`onError`| Function | Tuzhilkin Ivan | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX | |
+|`onTerminated`| Function | Tuzhilkin Ivan | devdone | |
 |*LinearIndicator*| *Component* | Kovalev Sergey | done | depricated |
 |`setLinearIndicatorOptions`| Function | Kovalev Sergey | done | depricated |
 |`indicatorStyle`| Function | Kovalev Sergey | done | depricated |
