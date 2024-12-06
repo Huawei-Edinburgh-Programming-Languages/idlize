@@ -1783,7 +1783,7 @@
 |`fromStyledString`| Function | Dudkin Sergey| done|  |
 |`toStyledString`| Function | Dudkin Sergey| done|  |
 |*RichEditorStyledStringController*| *Class* |Dudkin Sergey| blocked IDL| |
-|`setStyledString`| Function |Dudkin Sergey| devdone| |
+|`setStyledString`| Function |Dudkin Sergey| done| |
 |`getStyledString`| Function | Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getSelection`| Function |Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`onContentChanged`| Function | Dudkin Sergey| blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB944G |
