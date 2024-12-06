@@ -122,3 +122,5 @@ void XmlPullParser_parseImpl(OH_NativePointer thisPtr, const OH_ParseOptions* op
     parser->parse();
     parser->reset();
 }
+void XmlPullParser_parseXmlImpl(OH_NativePointer thisPtr, const OH_ParseOptions* option) {
+}

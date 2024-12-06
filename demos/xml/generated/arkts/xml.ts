@@ -109,6 +109,7 @@ export interface ParseInfoInterface {
 }
 export interface XmlPullParserInterface {
     parse(option: ParseOptions): void 
+    parseXml(option: ParseOptions): void 
 }
 export class XmlSerializer implements XmlSerializerInterface {
     peer: Finalizable
@@ -246,6 +247,12 @@ export class XmlPullParser implements XmlPullParserInterface {
         const thisSerializer : Serializer = Serializer.hold()
         thisSerializer.writeParseOptions(option)
         XMLNativeModule._XmlPullParser_parse(this.peer.ptr, thisSerializer.asArray(), thisSerializer.length())
+        thisSerializer.release()
+    }
+    parseXml(option: ParseOptions): void {
+        const thisSerializer : Serializer = Serializer.hold()
+        thisSerializer.writeParseOptions(option)
+        XMLNativeModule._XmlPullParser_parseXml(this.peer.ptr, thisSerializer.asArray(), thisSerializer.length())
         thisSerializer.release()
     }
 }

@@ -70,6 +70,7 @@ export class XMLNativeModule {
     native static _XmlPullParser_ctor(buffer: string, thisArray: KUint8ArrayPtr, thisLength: int32): KPointer 
     native static _XmlPullParser_getFinalizer(): KPointer 
     native static _XmlPullParser_parse(self: KPointer, thisArray: KUint8ArrayPtr, thisLength: int32): void 
+    native static _XmlPullParser_parseXml(self: KPointer, thisArray: KUint8ArrayPtr, thisLength: int32): void 
     native static _InvokeFinalizer(ptr: KPointer, finalizer: KPointer): void 
     native static _CallCallback(callbackKind: int32, args: KUint8ArrayPtr, argsSize: int32): void 
     native static _CallCallbackResourceHolder(holder: KPointer, resourceId: int32): void 

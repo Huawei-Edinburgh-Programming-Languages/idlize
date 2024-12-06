@@ -225,6 +225,7 @@ typedef struct OH_XML_XmlPullParserModifier {
     OH_XML_XmlPullParserHandle (*construct)(const OH_String* buffer, const Opt_String* encoding);
     void (*destruct)(OH_XML_XmlPullParserHandle thiz);
     void (*parse)(OH_NativePointer thisPtr, const OH_ParseOptions* option);
+    void (*parseXml)(OH_NativePointer thisPtr, const OH_ParseOptions* option);
 } OH_XML_XmlPullParserModifier;
 typedef struct OH_XML_API {
     OH_Int32 version;

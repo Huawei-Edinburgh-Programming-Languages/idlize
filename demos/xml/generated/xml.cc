@@ -462,6 +462,7 @@ OH_Number ParseInfo_getAttributeCountImpl(OH_NativePointer thisPtr);
 OH_XML_XmlPullParserHandle XmlPullParser_constructImpl(const OH_String* buffer, const Opt_String* encoding);
 void XmlPullParser_destructImpl(OH_XML_XmlPullParserHandle thiz);
 void XmlPullParser_parseImpl(OH_NativePointer thisPtr, const OH_ParseOptions* option);
+void XmlPullParser_parseXmlImpl(OH_NativePointer thisPtr, const OH_ParseOptions* option);
 const OH_XML_XmlSerializerModifier* OH_XML_XmlSerializerModifierImpl() {
     const static OH_XML_XmlSerializerModifier instance = {
         &XmlSerializer_constructImpl,
@@ -501,6 +502,7 @@ const OH_XML_XmlPullParserModifier* OH_XML_XmlPullParserModifierImpl() {
         &XmlPullParser_constructImpl,
         &XmlPullParser_destructImpl,
         &XmlPullParser_parseImpl,
+        &XmlPullParser_parseXmlImpl,
     };
     return &instance;
 }
@@ -671,6 +673,13 @@ void impl_XmlPullParser_parse(OH_NativePointer thisPtr, uint8_t* thisArray, int3
         GetXMLAPIImpl(XML_API_VERSION)->XmlPullParser()->parse(thisPtr, (const OH_ParseOptions*)&option_value);
 }
 KOALA_INTEROP_V3(XmlPullParser_parse, OH_NativePointer, uint8_t*, int32_t)
+ 
+void impl_XmlPullParser_parseXml(OH_NativePointer thisPtr, uint8_t* thisArray, int32_t thisLength) {
+        Deserializer thisDeserializer(thisArray, thisLength);
+        OH_ParseOptions option_value = thisDeserializer.readParseOptions();;
+        GetXMLAPIImpl(XML_API_VERSION)->XmlPullParser()->parseXml(thisPtr, (const OH_ParseOptions*)&option_value);
+}
+KOALA_INTEROP_V3(XmlPullParser_parseXml, OH_NativePointer, uint8_t*, int32_t)
  
 void deserializeAndCallCallback_Boolean_Void(uint8_t* thisArray, OH_Int32 thisLength)
 {

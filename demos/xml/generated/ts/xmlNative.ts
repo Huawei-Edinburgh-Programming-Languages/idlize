@@ -34,6 +34,7 @@ export interface XMLNativeModule {
     _XmlPullParser_ctor(buffer: string, thisArray: Uint8Array, thisLength: int32): KPointer 
     _XmlPullParser_getFinalizer(): KPointer 
     _XmlPullParser_parse(self: KPointer, thisArray: Uint8Array, thisLength: int32): void 
+    _XmlPullParser_parseXml(self: KPointer, thisArray: Uint8Array, thisLength: int32): void 
     _InvokeFinalizer(ptr: KPointer, finalizer: KPointer): void 
     _CallCallback(callbackKind: int32, args: Uint8Array, argsSize: int32): void 
     _CallCallbackResourceHolder(holder: KPointer, resourceId: int32): void 
