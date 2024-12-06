@@ -1410,27 +1410,27 @@
 |`onControllerAttached`| Function | Erokhin Ilya | devdone | |
 |`onOverScroll`| Function | Erokhin Ilya | devdone | |
 |`onSafeBrowsingCheckResult`| Function | Erokhin Ilya | devdone | |
-|`onNavigationEntryCommitted`| Function | Erokhin Ilya | testskipped | |
-|`onIntelligentTrackingPreventionResult`| Function | Erokhin Ilya | testskipped | |
+|`onNavigationEntryCommitted`| Function | Erokhin Ilya | devdone | |
+|`onIntelligentTrackingPreventionResult`| Function | Erokhin Ilya | devdone | |
 |`javaScriptOnDocumentStart`| Function | Erokhin Ilya | testskipped | |
 |`javaScriptOnDocumentEnd`| Function | Erokhin Ilya | testskipped | |
 |`layoutMode`| Function | Erokhin Ilya | done | |
 |`nestedScroll`| Function | Erokhin Ilya | testskipped | |
 |`enableNativeEmbedMode`| Function | Erokhin Ilya | done | |
 |`onNativeEmbedLifecycleChange`| Function | Erokhin Ilya | testskipped | |
-|`onNativeEmbedVisibilityChange`| Function | Erokhin Ilya | testskipped | |
+|`onNativeEmbedVisibilityChange`| Function | Erokhin Ilya | devdone | |
 |`onNativeEmbedGestureEvent`| Function | Erokhin Ilya | in progress | dependency on Ark_EventResult & Ark_Function |
 |`copyOptions`| Function | Erokhin Ilya | done | |
 |`onOverrideUrlLoading`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`textAutosizing`| Function | Erokhin Ilya | done | |
 |`enableNativeMediaPlayer`| Function | Erokhin Ilya | done | |
 |`enableSmoothDragResize`| Function | Erokhin Ilya | done | |
-|`onRenderProcessNotResponding`| Function | Erokhin Ilya | testskipped | |
-|`onRenderProcessResponding`| Function | Erokhin Ilya | testskipped | |
+|`onRenderProcessNotResponding`| Function | Erokhin Ilya | devdone | |
+|`onRenderProcessResponding`| Function | Erokhin Ilya | devdone | |
 |`selectionMenuOptions`| Function | Erokhin Ilya | in progress | |
-|`onViewportFitChanged`| Function | Erokhin Ilya | testskipped | |
+|`onViewportFitChanged`| Function | Erokhin Ilya | devdone | |
 |`onInterceptKeyboardAttach`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
-|`onAdsBlocked`| Function | Erokhin Ilya | in progress | |
+|`onAdsBlocked`| Function | Erokhin Ilya | devdone | |
 |`keyboardAvoidMode`| Function | Erokhin Ilya | done | |
 |`editMenuOptions`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`enableHapticFeedback`| Function | Erokhin Ilya | done | |
