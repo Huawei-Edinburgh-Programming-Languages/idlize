@@ -1698,14 +1698,14 @@
 |`closeAllSwipeActions`| Function |Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getVisibleListContentInfo`| Function |Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*Matrix2D*| *Class* | Vadim Voronov | in progress | |
-|`identity`| Function | Vadim Voronov | devdone | |
-|`invert`| Function | Vadim Voronov | devdone | |
+|`identity`| Function | Vadim Voronov | done | |
+|`invert`| Function | Vadim Voronov | done | |
 |`multiply`| Function | Vadim Voronov | in progress | deprecated |
 |`rotate`| Function | Vadim Voronov | in progress | deprecated |
-|`translate`| Function | Vadim Voronov | devdone | |
-|`scale`| Function | Vadim Voronov | devdone | |
+|`translate`| Function | Vadim Voronov | done | |
+|`scale`| Function | Vadim Voronov | done | |
 |`getScaleX`| Function | Vadim Voronov | blocked IDL | implemented without return val,https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setScaleX`| Function | Vadim Voronov | devdone | |
+|`setScaleX`| Function | Vadim Voronov | done | |
 |`getRotateY`| Function | Vadim Voronov | blocked IDL | implemented without return val,https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setRotateY`| Function | Vadim Voronov | in progress | |
 |`getRotateX`| Function | Vadim Voronov | blocked IDL | implemented without return val,https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
