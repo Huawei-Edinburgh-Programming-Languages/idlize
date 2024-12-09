@@ -1829,9 +1829,9 @@
 |`setCaretOffset`| Function | | | |
 |`getCaretOffset`| Function | | | |
 |`getPreviewText`| Function | | | |
-|*StyledStringController*| *Class* | | | |
-|`setStyledString`| Function | | | |
-|`getStyledString`| Function | | | |
+|*StyledStringController*| *Class* | Pavelyev Ivan | in progress | |
+|`setStyledString`| Function | Pavelyev Ivan | in progress | |
+|`getStyledString`| Function | Pavelyev Ivan | in progress | |
 |*LayoutManager*| *Class* | Andrey Khudenkikh | in progress | |
 |`getLineCount`| Function | Andrey Khudenkikh | in progress | |
 |`getGlyphPositionAtCoordinate`| Function | Andrey Khudenkikh | in progress | |
