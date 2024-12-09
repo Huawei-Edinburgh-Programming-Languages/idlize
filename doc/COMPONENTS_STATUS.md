@@ -1636,10 +1636,10 @@
 |`applyContent`| Function | Maksimov Nikita | in progress | |
 |*View*| *Class* | | | |
 |`create`| Function | | | |
-|*TextContentControllerBase*| *Class* | | | |
-|`getCaretOffset`| Function | | | |
-|`getTextContentRect`| Function | | | |
-|`getTextContentLineCount`| Function | | | |
+|*TextContentControllerBase*| *Class* | Morozov Sergey | in progress | |
+|`getCaretOffset`| Function | Morozov Sergey | in progress | |
+|`getTextContentRect`| Function | Morozov Sergey | in progress | |
+|`getTextContentLineCount`| Function | Morozov Sergey | in progress | |
 |*DynamicNode*| *Class* | | | |
 |`onMove`| Function | | | |
 |*ChildrenMainSize*| *Class* | Morozov Sergey | blocked IDL |  |
