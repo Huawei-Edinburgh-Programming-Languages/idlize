@@ -263,24 +263,25 @@ function enqueueCallback(
     nativeModule()._ReleaseArkoalaResource(resourceId)
 }
 
-// function checkCallbackWithReturn() {
-//     nativeModule()._TestSetArkoalaCallbackCallerSync()
-// 
-//     let callResult1 = "NOT_CALLED"
-// 
-//     enqueueCallback(
-//         createDefaultWriteCallback(CallbackKind.Kind_Callback_Literal_Object_detail_Boolean, (_event: { detail: object }): boolean => {
-//             return true
-//         }),
-//         (deserializer) => {
-//             const callback = deserializer.readCallback_Literal_Object_detail_Boolean(true)
-//             const result1 = callback({ detail: [] })
-//             callResult1 = `CALLED, value=${result1}`
-//         },
-//     )
-// 
-//     assertEquals("Sync Callback 1 with return type read&called immediately", "CALLED, value=true", callResult1)
-// }
+function checkCallbackWithReturn() {
+    nativeModule()._TestSetArkoalaCallbackCallerSync()
+
+    let callResult1 = "NOT_CALLED"
+
+    enqueueCallback(
+        createDefaultWriteCallback(CallbackKind.Kind_Callback_Number_Boolean, (x:number): boolean => {
+            return x > 10
+        }),
+        (deserializer) => {
+            const callback = deserializer.readCallback_Number_Boolean(true)
+            const result1 = callback(42)
+            const result2 = callback(0)
+            callResult1 = `CALLED, value1=${result1} value2=${result2}`
+        },
+    )
+
+    assertEquals("Sync Callback 1 with return type read&called immediately", "CALLED, value1=true value2=false", callResult1)
+}
 
 function checkTwoSidesCallbackSync() {
     nativeModule()._TestSetArkoalaCallbackCallerSync()
@@ -403,26 +404,6 @@ function checkTwoSidesPromise() {
         assertEquals("Promise 2 pumped", "REJECTED: err line 1, err line 2", result2)
     }, 0)
 }
-
-function checkCallBackWithContinuation() {
-
-}
-
-/*
-function checkSyncCallback() {
-    const s = Serializer.hold()
-
-    let value: number | undefined = undefined
-    s.holdAndWriteCallback((x:number) => {
-        value = x
-    })
-    nativeModule()._TestCallbackSyncCall(s.asArray(), s.length())
-    s.release()
-    
-    assertTrue("Sync callback 1", value !== undefined)
-    assertEquals("Sync callback 2", 42, value)
-}
-*/
 
 function checkWriteFunction() {
     const s = Serializer.hold()
@@ -826,7 +807,7 @@ function main() {
     // Place where mock of ACE is located.
     process.env.ACE_LIBRARY_PATH = __dirname + "/../../../native"
 
-    // checkCallbackWithReturn()
+    checkCallbackWithReturn()
     checkTwoSidesCallbackSync()
 
     checkSerdeLength()
