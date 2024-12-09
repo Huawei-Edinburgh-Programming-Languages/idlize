@@ -649,11 +649,11 @@
 |`params`| Function | Skroba Gleb |in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*NodeContainer*| *Component* | | | |
 |`setNodeContainerOptions`| Function | | | |
-|*CommonTransition*| *Component* | | | |
-|`slide`| Function | | | |
-|`translate`| Function | | | |
-|`scale`| Function | | | |
-|`opacity`| Function | | | |
+|*CommonTransition*| *Component* | Erokhin Ilya | in progress | |
+|`slide`| Function | Erokhin Ilya | in progress | |
+|`translate`| Function | Erokhin Ilya | in progress | |
+|`scale`| Function | Erokhin Ilya | in progress | |
+|`opacity`| Function | Erokhin Ilya | in progress | |
 |*Panel*| *Component* | Pavelyev Ivan| done |  |
 |`setPanelOptions`| Function | Pavelyev Ivan| done |  |
 |`mode`| Function |Pavelyev Ivan| done |  |
@@ -1292,8 +1292,8 @@
 |`onStop`| Function | Erokhin Ilya | done |  |
 |`enableAnalyzer`| Function | Erokhin Ilya | done |  |
 |`analyzerConfig`| Function | Erokhin Ilya | blocked AceEngine| https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
-|*Web*| *Component* | Erokhin Ilya | in progress | |
-|`setWebOptions`| Function | Erokhin Ilya | in progress| https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|*Web*| *Component* | Erokhin Ilya | blocked | |
+|`setWebOptions`| Function | Erokhin Ilya | blocked IDL | Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`javaScriptAccess`| Function | Erokhin Ilya | done | |
 |`fileAccess`| Function | Erokhin Ilya | done | |
 |`onlineImageAccess`| Function | Erokhin Ilya | done | |
@@ -1354,11 +1354,11 @@
 |`onScroll`| Function | Erokhin Ilya | devdone | |
 |`onSslErrorEventReceive`| Function | Erokhin Ilya | devdone | |
 |`onSslErrorEvent`| Function | Erokhin Ilya | devdone | |
-|`onClientAuthenticationRequest`| Function | Erokhin Ilya | blocked IDL| need test https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onWindowNew`| Function | Erokhin Ilya | testskipped | dependency on Ark_ControllerHandler |
+|`onClientAuthenticationRequest`| Function | Erokhin Ilya | devdone | |
+|`onWindowNew`| Function | Erokhin Ilya | devdone | |
 |`onWindowExit`| Function | Erokhin Ilya | devdone | |
 |`multiWindowAccess`| Function | Erokhin Ilya | done | |
-|`onInterceptKeyEvent`| Function | Erokhin Ilya | testskipped | dependency on IntentionCode & Ark_Function |
+|`onInterceptKeyEvent`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX & https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`webStandardFont`| Function | Erokhin Ilya | done | |
 |`webSerifFont`| Function | Erokhin Ilya | done | |
 |`webSansSerifFont`| Function | Erokhin Ilya | done | |
@@ -1375,15 +1375,15 @@
 |`horizontalScrollBarAccess`| Function | Erokhin Ilya | done | |
 |`verticalScrollBarAccess`| Function | Erokhin Ilya | done | |
 |`onTouchIconUrlReceived`| Function | Erokhin Ilya | devdone | |
-|`onFaviconReceived`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
+|`onFaviconReceived`| Function | Erokhin Ilya | blocked IDL| PixelMap https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`onPageVisible`| Function | Erokhin Ilya | devdone | |
 |`onDataResubmitted`| Function | Erokhin Ilya | devdone | |
 |`pinchSmooth`| Function | Erokhin Ilya | done | |
 |`allowWindowOpenMethod`| Function | Erokhin Ilya | done | |
 |`onAudioStateChanged`| Function | Erokhin Ilya | devdone | |
 |`onFirstContentfulPaint`| Function | Erokhin Ilya | devdone | |
-|`onFirstMeaningfulPaint`| Function | Erokhin Ilya | testskipped | |
-|`onLargestContentfulPaint`| Function | Erokhin Ilya | testskipped | |
+|`onFirstMeaningfulPaint`| Function | Erokhin Ilya | devdone | |
+|`onLargestContentfulPaint`| Function | Erokhin Ilya | devdone | |
 |`onLoadIntercept`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ  |
 |`onControllerAttached`| Function | Erokhin Ilya | devdone | |
 |`onOverScroll`| Function | Erokhin Ilya | devdone | |
@@ -1582,13 +1582,13 @@
 |`getWidth`| Function |Vadim Voronov| done | |
 |*DrawingRenderingContext*| *Class* |Vadim Voronov| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`invalidate`| Function |Vadim Voronov| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|*ICurve*| *Class* | | | |
-|`interpolate`| Function | | | |
-|*DrawModifier*| *Class* | | | |
-|`drawBehind`| Function | | | |
-|`drawContent`| Function | | | |
-|`drawFront`| Function | | | |
-|`invalidate`| Function | | | |
+|*ICurve*| *Class* | Erokhin Ilya | in progress | |
+|`interpolate`| Function | Erokhin Ilya | in progress | |
+|*DrawModifier*| *Class* | Erokhin Ilya | in progress | |
+|`drawBehind`| Function | Erokhin Ilya | in progress | |
+|`drawContent`| Function | Erokhin Ilya | in progress | |
+|`drawFront`| Function | Erokhin Ilya | in progress | |
+|`invalidate`| Function | Erokhin Ilya | in progress | |
 |*TransitionEffect*| *Class* | Andrey Khudenkikh | in progress | |
 |`translate`| Function | Andrey Khudenkikh | done | |
 |`rotate`| Function | Andrey Khudenkikh | done | |
@@ -1905,8 +1905,8 @@
 |*DataResubmissionHandler*| *Class* | Erokhin Ilya | done |  |
 |`resend`| Function | Erokhin Ilya | done |  |
 |`cancel`| Function | Erokhin Ilya | done |  |
-|*ControllerHandler*| *Class* | Erokhin Ilya | in progress |  |
-|`setWebController`| Function | Erokhin Ilya | in progress | Ark_CustomObject |
+|*ControllerHandler*| *Class* | Erokhin Ilya | blocked |  |
+|`setWebController`| Function | Erokhin Ilya | blocked | Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*WebContextMenuParam*| *Class* | Erokhin Ilya | blocked |  |
 |`x`| Function | Erokhin Ilya | done |  |
 |`y`| Function | Erokhin Ilya | done |  |
