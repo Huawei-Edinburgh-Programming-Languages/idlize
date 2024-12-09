@@ -34,4 +34,9 @@ export class IDLVisitorConfig {
         "Layoutable",
         "GestureGroupGestureHandlerOptions",
     )
+
+    static readonly ConflictingDeclarationNames = [
+        "TextStyle",
+        "LinearGradient"
+    ]
 }

@@ -80,13 +80,8 @@ export function generateSyntheticUnionName(types: idl.IDLType[]) {
     return `Union_${types.map(it => generateSyntheticIdlNodeName(it)).join("_")}`
 }
 
-const conflictingDeclarationNames = [
-    "TextStyle",
-    "LinearGradient"
-]
-
 function mangleConflictingName(name: string, sourceFile: ts.SourceFile | undefined): string {
-    if (conflictingDeclarationNames.includes(name) && sourceFile) {
+    if (IDLVisitorConfig.ConflictingDeclarationNames.includes(name) && sourceFile) {
         const fileName = path.basename(sourceFile.fileName).replaceAll(".d.ts", "").replaceAll(".", "")
         return `${name}_${fileName.replaceAll("@", "")}`
     }
@@ -255,7 +250,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
                     [],
                     undefined,
                     undefined,
-                    [idl.createProperty(`__stub`, idl.IDLStringType)],
+                    [idl.createProperty(`stub`, idl.IDLStringType)],
                     undefined,
                     undefined,
                     this.collectTypeParameters(node.typeParameters),
