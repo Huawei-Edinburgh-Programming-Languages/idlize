@@ -1669,10 +1669,10 @@
 |`close`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*DatePickerDialog*| *Class* | Ekaterina Stepanova | in progress |
 |`show`| Function | Ekaterina Stepanova | in progress |
-|*PanGestureOptions*| *Class* | Politov Mikhail | in progress | |
-|`setDirection`| Function | Politov Mikhail | devdone | |
-|`setDistance`| Function | Politov Mikhail | devdone | |
-|`setFingers`| Function | Politov Mikhail | devdone | |
+|*PanGestureOptions*| *Class* | Politov Mikhail | blocked | |
+|`setDirection`| Function | Politov Mikhail | done | |
+|`setDistance`| Function | Politov Mikhail | done | |
+|`setFingers`| Function | Politov Mikhail | done | |
 |`getDirection`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*ScrollableTargetInfo*| *Class* | | | |
 |`isBegin`| Function | | | |
@@ -1688,8 +1688,8 @@
 |`getState`| Function | Kovalev Sergey | done |
 |`getEventTargetInfo`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`isValid`| Function | Kovalev Sergey | done |
-|*PanRecognizer*| *Class* | | | |
-|`getPanGestureOptions`| Function | | | |
+|*PanRecognizer*| *Class* | Politov Mikhail | | |
+|`getPanGestureOptions`| Function | Politov Mikhail | | |
 |*ImageAnalyzerController*| *Class* |Vadim Voronov|  blocked |  |
 |`getImageAnalyzerSupportTypes`| Function |Vadim Voronov|  blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
 |*ListScroller*| *Class* |Morozov Sergey | blocked |  |
