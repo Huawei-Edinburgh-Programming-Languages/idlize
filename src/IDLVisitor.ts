@@ -911,9 +911,16 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         }
         if (ts.isTypeReferenceNode(type)) {
             const declarations = getDeclarationsByNode(this.typeChecker, type.typeName)
-            const typeName = mangleConflictingName(type.typeName.getText(type.typeName.getSourceFile()), declarations[0]?.getSourceFile())
+            let sourceFile: ts.SourceFile|undefined = undefined
             if (declarations.length == 0)
-                warn(`Do not know type ${typeName}`)
+                warn(`Do not know type ${type.typeName.getText()}`)
+            else if (declarations.length > 1)
+                // If there are multiple declaration select one from the same file, if possible.
+                sourceFile = declarations.find(it => it.getSourceFile() == type.getSourceFile())?.getSourceFile() ?? declarations[0].getSourceFile()
+            else
+                sourceFile = declarations[0].getSourceFile()
+            const typeName = mangleConflictingName(type.typeName.getText(), sourceFile)
+
             // Treat enum member type 'value: EnumName.MemberName`
             // as enum type 'value: EnumName`.
             if (ts.isQualifiedName(type.typeName)) {
