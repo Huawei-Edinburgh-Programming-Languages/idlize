@@ -27,7 +27,6 @@ export class IDLVisitorConfig {
 
     static readonly StubbedDeclarations = new Array<string>(
         "OnWillScrollCallback",
-        "LinearGradient",
         "ContentModifier",
         "LayoutChild",
         "EmitterProperty",

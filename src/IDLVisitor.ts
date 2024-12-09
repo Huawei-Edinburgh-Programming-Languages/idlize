@@ -82,11 +82,14 @@ export function generateSyntheticUnionName(types: idl.IDLType[]) {
 
 const conflictingDeclarationNames = [
     "TextStyle",
+    "LinearGradient"
 ]
 
-function mangleConflictingName(name: string, sourceFile: ts.SourceFile): string {
-    const fileName = path.basename(sourceFile.fileName).replaceAll(".d.ts", "").replaceAll(".", "")
-    if (conflictingDeclarationNames.includes(name)) return `${name}_${fileName.replaceAll("@", "")}`
+function mangleConflictingName(name: string, sourceFile: ts.SourceFile | undefined): string {
+    if (conflictingDeclarationNames.includes(name) && sourceFile) {
+        const fileName = path.basename(sourceFile.fileName).replaceAll(".d.ts", "").replaceAll(".", "")
+        return `${name}_${fileName.replaceAll("@", "")}`
+    }
     return name
 }
 
@@ -908,7 +911,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         }
         if (ts.isTypeReferenceNode(type)) {
             const declarations = getDeclarationsByNode(this.typeChecker, type.typeName)
-            const typeName = mangleConflictingName(type.typeName.getText(type.typeName.getSourceFile()), type.typeName.getSourceFile())
+            const typeName = mangleConflictingName(type.typeName.getText(type.typeName.getSourceFile()), declarations[0]?.getSourceFile())
             if (declarations.length == 0)
                 warn(`Do not know type ${typeName}`)
             // Treat enum member type 'value: EnumName.MemberName`
