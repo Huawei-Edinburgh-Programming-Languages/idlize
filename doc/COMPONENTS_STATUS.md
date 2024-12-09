@@ -1994,7 +1994,7 @@
 |`setXComponentSurfaceRect`| Function | Tuzhilkin Ivan | testskipped | |
 |`getXComponentSurfaceRect`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setXComponentSurfaceRotation`| Function | Tuzhilkin Ivan | testskipped | |
-|`getXComponentSurfaceRotation`| Function | Tuzhilkin Ivan | | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getXComponentSurfaceRotation`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`onSurfaceCreated`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV |
 |`onSurfaceChanged`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV |
 |`onSurfaceDestroyed`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV |
