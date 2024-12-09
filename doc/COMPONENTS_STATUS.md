@@ -596,7 +596,7 @@
 |`onFinish`| Function |Andrey Khudenkikh | in progress |  |
 |*MediaCachedImage*| *Component* | | |
 |`setMediaCachedImageOptions`| Function | | |
-|*Menu*|*Component*|Morozov Sergey|blocked |  |
+|*Menu*|*Component*|Morozov Sergey| done |  |
 |`setMenuOptions`| Function |Morozov Sergey| done |  |
 |`fontSize`|Function|Morozov Sergey| done |  |
 |`font`|Function|Morozov Sergey| done |  |
@@ -1695,7 +1695,7 @@
 |*ListScroller*| *Class* |Morozov Sergey | blocked |  |
 |`getItemRectInGroup`| Function |Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`scrollToItemInGroup`| Function |Morozov Sergey | done |  |
-|`closeAllSwipeActions`| Function |Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`closeAllSwipeActions`| Function |Morozov Sergey | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getVisibleListContentInfo`| Function |Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*Matrix2D*| *Class* | Vadim Voronov | in progress | |
 |`identity`| Function | Vadim Voronov | done | |
