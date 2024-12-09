@@ -1,4 +1,4 @@
-| Component | Function | Owner | Status |issue/comment|
+| Component | Function | Owner | Status (done=merged **with** UT, devdone=implemented and pushed, testskipped=merged **without** UT, blocked=blocked by IDL)|issue/comment|
 | --------- | -------- | ----- | ------ |------|
 |*AbilityComponent*| *Component* | Tuzhilkin Ivan | in progress| deprecated |
 |`setAbilityComponentOptions`| Function | Tuzhilkin Ivan | in progress| https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
