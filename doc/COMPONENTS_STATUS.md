@@ -295,7 +295,7 @@
 |`bindSheet`| Function | | | |
 |`onVisibleAreaChange`| Function | Erokhin Ilya | done | |
 |`keyboardShortcut`| Function | | | |
-|*CommonShapeMethod*|*Component*|Skroba Gleb| in progress|  |
+|*CommonShapeMethod*|*Component*|Skroba Gleb| blocked AceEngine |  |
 |`stroke`|Function| Skroba Gleb | done |  |
 |`fill`|Function| Skroba Gleb | done |  |
 |`strokeDashOffset`| Function | Evstigneev Roman | done |  |
@@ -1797,11 +1797,11 @@
 |`showNext`| Function | Andrey Khudenkikh | done |  |
 |`showPrevious`| Function |  Andrey Khudenkikh | done |  |
 |`changeIndex`| Function |  Andrey Khudenkikh | done |  |
-|*TabsController*| *Class* | Skroba Gleb | in progress | |
+|*TabsController*| *Class* | Skroba Gleb | done | |
 |`changeIndex`| Function | Skroba Gleb | done | |
 |`preloadItems`| Function | Skroba Gleb | done | |
-|`setTabBarTranslate`| Function | Skroba Gleb | devdone | |
-|`setTabBarOpacity`| Function | Skroba Gleb | devdone | |
+|`setTabBarTranslate`| Function | Skroba Gleb | done | |
+|`setTabBarOpacity`| Function | Skroba Gleb | done | |
 |*TabContentTransitionProxy*| *Class* | | |  |
 |`finishTransition`| Function | | |  |
 |`getFrom`| Function | | |  |
