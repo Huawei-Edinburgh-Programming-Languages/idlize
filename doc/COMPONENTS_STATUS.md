@@ -221,12 +221,12 @@
 |`alignRules`| Function | Dmitry A Smirnov| done | |
 |`aspectRatio`| Function | Roman Sedaikin | done | |
 |`clickEffect`| Function | Lobah Mikhail | devdone | |
-|`onDragStart`| Function | | | |
-|`onDragEnter`| Function | | | |
-|`onDragMove`| Function | | | |
-|`onDragLeave`| Function | | | |
-|`onDrop`| Function | | | |
-|`onDragEnd`| Function | | | |
+|`onDragStart`| Function | Lobah Mikhail | in progress | |
+|`onDragEnter`| Function | Lobah Mikhail | in progress | |
+|`onDragMove`| Function | Lobah Mikhail | in progress | |
+|`onDragLeave`| Function | Lobah Mikhail| in progress | |
+|`onDrop`| Function | Lobah Mikhail | in progress | |
+|`onDragEnd`| Function | Lobah Mikhail | in progress | |
 |`allowDrop`| Function | Lobah Mikhail | devdone | |
 |`draggable`| Function | Lobah Mikhail | devdone | |
 |`dragPreview`| Function | Lobah Mikhail | devdone | |
