@@ -99,7 +99,6 @@ export abstract class CustomSerializer {
 }
 
 export class SerializerBase {
-    protected isHolding: boolean = false
     private position = 0
     private buffer: ArrayBuffer
     private view: DataView
@@ -119,7 +118,6 @@ export class SerializerBase {
         this.view = new DataView(this.buffer)
     }
     public release() {
-        this.isHolding = false
         this.releaseResources()
         this.position = 0
     }

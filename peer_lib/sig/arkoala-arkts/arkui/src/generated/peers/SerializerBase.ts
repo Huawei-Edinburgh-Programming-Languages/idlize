@@ -99,7 +99,6 @@ export abstract class CustomSerializer {
 }
 
 export class SerializerBase {
-    protected isHolding: boolean = false
     private position = 0
     private buffer: KBuffer
 
@@ -122,7 +121,6 @@ export class SerializerBase {
         this.buffer = new KBuffer(96)
     }
     public release() {
-        this.isHolding = false
         this.releaseResources()
         this.position = 0
     }
