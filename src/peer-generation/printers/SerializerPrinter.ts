@@ -33,7 +33,7 @@ import { throwException } from "../../util"
 import { IDLEntry } from "../../idl"
 import { convertDeclaration } from '../LanguageWriters/nameConvertor'
 import { collectMaterializedImports, getInternalClassName } from '../Materialized'
-import { generateCallbackKindValue } from '../ArgConvertors'
+import { generateCallbackKindValue, maybeTransformManagedCallback } from '../ArgConvertors'
 import { ArkTSSourceFile, SourceFile, TsSourceFile } from './SourceFile'
 import { collectUniqueCallbacks } from './CallbacksPrinter'
 import { collectDeclItself, collectDeclDependencies, convertDeclToFeature } from '../ImportsCollectorUtils'
@@ -403,6 +403,7 @@ class IdlDeserializerPrinter {
             return
         if (PeerGeneratorConfig.ignoredCallbacks.has(target.name))
             return
+        target = maybeTransformManagedCallback(target) ?? target
         const methodName = this.library.getInteropName(target)
         const type = idl.createReferenceType(target.name)
         this.writer.writeMethodImplementation(new Method(`read${methodName}`, new NamedMethodSignature(type, [idl.IDLBooleanType], ['isSync'], ['false'])), writer => {
@@ -594,6 +595,7 @@ export function printSerializerImports(library: PeerLibrary, destFile: SourceFil
                 collector.addFeature(builder, `Ark${builder}Builder`)
             }
             collector.addFeature(`Finalizable`, `Finalizable`)
+            collector.addFeature("CallbackTransformer", "./peers/CallbackTransformer")
             collectMaterializedImports(collector, library)
         }
 
@@ -605,6 +607,7 @@ export function printSerializerImports(library: PeerLibrary, destFile: SourceFil
         if (!declarationPath) {
             collector.addFeature("TypeChecker", "#components")
             collector.addFeature("KUint8ArrayPtr", "@koalaui/interop")
+            collector.addFeature("CallbackTransformer", "./peers/CallbackTransformer")
             for (const callback of collectUniqueCallbacks(library)) {
                 if (idl.isSyntheticEntry(callback))
                     continue
@@ -614,10 +617,12 @@ export function printSerializerImports(library: PeerLibrary, destFile: SourceFil
             for (const decl of serializerDeclarations) {
                 collectDeclItself(library, decl, collector, {
                     includeMaterializedInternals: true,
+                    includeTransformedCallbacks: true,
                 })
                 collectDeclDependencies(library, decl, collector, {
                     expandTypedefs: true,
                     includeMaterializedInternals: true,
+                    includeTransformedCallbacks: true,
                 })
             }
         } else { // This is used for OHOS library generation only
