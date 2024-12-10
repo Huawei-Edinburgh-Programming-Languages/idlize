@@ -307,8 +307,8 @@
 |`strokeWidth`| Function | Evstigneev Roman | done |  |
 |`antiAlias`| Function | Evstigneev Roman | done |  |
 |`strokeDashArray`| Function | Evstigneev Roman | blocked AceEngine|https://gitee.com/openharmony/interface_sdk-js/issues/IAX8ZZ|
-|*Common*| *Component* | | | |
-|`setCommonOptions`| Function | | | |
+|*Common*| *Component* | Maksimov Nikita | in progress | |
+|`setCommonOptions`| Function | Maksimov Nikita | in progress | |
 |*ScrollableCommonMethod*| *Component* | Samarin Sergey |in progress |  |
 |`scrollBar`| Function | Samarin Sergey | devdone |  |
 |`scrollBarColor`| Function | Samarin Sergey | devdone |  |
