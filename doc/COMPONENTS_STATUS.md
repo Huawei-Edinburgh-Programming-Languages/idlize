@@ -256,9 +256,9 @@
 |`accessibilityVirtualNode`| Function | Lobah Mikhail | in progress| |
 |`accessibilityChecked`| Function | Lobah Mikhail | in progress| |
 |`accessibilitySelected`| Function | Lobah Mikhail | in progress| |
-|`obscured`| Function |Dmitry A Smirnov | | |
-|`reuseId`| Function |Dmitry A Smirnov | | |
-|`renderFit`| Function | Dmitry A Smirnov| | |
+|`obscured`| Function |Dmitry A Smirnov |in progress | |
+|`reuseId`| Function |Dmitry A Smirnov |in progress | |
+|`renderFit`| Function | Dmitry A Smirnov|in progress | |
 |`gestureModifier`| Function | | | |
 |`backgroundBrightness`| Function | Skroba Gleb | done | |
 |`onGestureJudgeBegin`| Function | | | |
@@ -266,9 +266,9 @@
 |`shouldBuiltInRecognizerParallelWith`| Function | | | |
 |`monopolizeEvents`| Function | | | |
 |`onTouchIntercept`| Function | | | |
-|`onSizeChange`| Function | Dmitry A Smirnov| | |
-|`customProperty`| Function | Dmitry A Smirnov| | |
-|`expandSafeArea`| Function | Dmitry A Smirnov| | |
+|`onSizeChange`| Function | Dmitry A Smirnov|in progress | |
+|`customProperty`| Function | Dmitry A Smirnov|in progress | |
+|`expandSafeArea`| Function | Dmitry A Smirnov|in progress | |
 |`background`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`backgroundImage`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`backgroundBlurStyle`| Function | Skroba Gleb | done |  |
