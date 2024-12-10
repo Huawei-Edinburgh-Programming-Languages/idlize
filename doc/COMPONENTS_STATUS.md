@@ -240,7 +240,7 @@
 |`clipShape`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
 |`mask`| Function | Maksimov Nikita | devdone | |
 |`maskShape`| Function | Dmitry A Smirnov| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
-|`key`| Function | Lobah Mikhail | | |
+|`key`| Function | Lobah Mikhail | devdone | |
 |`id`| Function | Erokhin Ilya | done |  |
 |`geometryTransition`| Function | Lobah Mikhail | | |
 |`stateStyles`| Function | Lobah Mikhail | | |
