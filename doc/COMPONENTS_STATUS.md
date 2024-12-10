@@ -238,7 +238,7 @@
 |`shadow`| Function | Roman Sedaikin | done | |
 |`clip`| Function | Skroba Gleb |  blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
 |`clipShape`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
-|`mask`| Function | Maksimov Nikita | in progress | |
+|`mask`| Function | Maksimov Nikita | devdone | |
 |`maskShape`| Function | Dmitry A Smirnov| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`key`| Function | Lobah Mikhail | | |
 |`id`| Function | Erokhin Ilya | done |  |
@@ -1600,16 +1600,16 @@
 |`combine`| Function | Andrey Khudenkikh | blocked IDL | |
 |*PixelMapMock*| *Class* | Maksimov Nikita | done | |
 |`release`| Function | Maksimov Nikita | done | |
-|*ProgressMask*| *Class* | Maksimov Nikita | in progress | |
-|`updateProgress`| Function | Maksimov Nikita | in progress | |
-|`updateColor`| Function | Maksimov Nikita | in progress | |
-|`enableBreathingAnimation`| Function | Maksimov Nikita | in progress | |
-|*AttributeModifier*| *Class* | Maksimov Nikita | in progress | |
-|`applyNormalAttribute`| Function | Maksimov Nikita | in progress | |
-|`applyPressedAttribute`| Function | Maksimov Nikita | in progress | |
-|`applyFocusedAttribute`| Function | Maksimov Nikita | in progress | |
-|`applyDisabledAttribute`| Function | Maksimov Nikita | in progress | |
-|`applySelectedAttribute`| Function | Maksimov Nikita | in progress | |
+|*ProgressMask*| *Class* | Maksimov Nikita | devdone | |
+|`updateProgress`| Function | Maksimov Nikita | devdone | |
+|`updateColor`| Function | Maksimov Nikita | devdone | |
+|`enableBreathingAnimation`| Function | Maksimov Nikita | devdone | |
+|*AttributeModifier*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
+|`applyNormalAttribute`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
+|`applyPressedAttribute`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
+|`applyFocusedAttribute`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
+|`applyDisabledAttribute`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
+|`applySelectedAttribute`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |*View*| *Class* | | | |
 |`create`| Function | | | |
 |*TextContentControllerBase*| *Class* | Morozov Sergey | in progress | |
