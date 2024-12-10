@@ -70,43 +70,6 @@ export class IdlComponentDeclaration {
 const PREDEFINED_PACKAGE = 'org.openharmony.idlize.predefined'
 const PREDEFINED_PACKAGE_TYPES = `${PREDEFINED_PACKAGE}.types`
 
-export class IdlPeerGeneratorVisitor implements GenericVisitor<void> {
-    private readonly sourceFile: string
-
-    static readonly serializerBaseMethods = serializerBaseMethods()
-
-    readonly peerLibrary: PeerLibrary
-    readonly peerFile: PeerFile
-
-    constructor(options: IdlPeerGeneratorVisitorOptions) {
-        this.sourceFile = options.sourceFile
-        this.peerLibrary = options.peerLibrary
-        this.peerFile = options.peerFile
-    }
-
-    visitWholeFile(): void {
-        this.peerFile.entries
-            .filter(it => idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Component))
-            .forEach(it => this.visitComponent(it as idl.IDLInterface))
-    }
-
-    visitComponent(component: idl.IDLInterface) {
-        const componentName = component.name.replace("Attribute", "")
-        if (PeerGeneratorConfig.ignoreComponents.includes(componentName))
-            return
-        if (idl.hasExtAttribute(component, IDLExtendedAttributes.HandWrittenImplementation)) {
-            return
-        }
-        const compInterface = this.peerLibrary.resolveTypeReference(
-            idl.createReferenceType(`${componentName}Interface`),
-            this.peerFile.entries)
-        if (!compInterface || idl.isInterface(compInterface)) {
-            this.peerLibrary.componentsDeclarations.push(
-                new IdlComponentDeclaration(componentName, compInterface, component))
-        }
-    }
-}
-
 export class IdlPredefinedGeneratorVisitor implements GenericVisitor<void> {
     readonly peerLibrary: PeerLibrary
     readonly peerFile: PeerFile
@@ -174,6 +137,27 @@ export class IdlPredefinedGeneratorVisitor implements GenericVisitor<void> {
 
     private isPredefinedTypesPackage(file:PeerFile): boolean {
         return this.packageName === PREDEFINED_PACKAGE_TYPES
+    }
+}
+
+export function fillComponents(library: PeerLibrary) {
+    for (const file of library.files) {
+        for (const entry of file.entries) {
+            if (!idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.Component))
+                continue
+            const componentName = entry.name.replace("Attribute", "")
+            if (PeerGeneratorConfig.ignoreComponents.includes(componentName))
+                continue
+            if (idl.hasExtAttribute(entry, IDLExtendedAttributes.HandWrittenImplementation)) {
+                continue
+            }
+            const compInterface = library.resolveTypeReference(
+                idl.createReferenceType(`${componentName}Interface`))
+            if (!compInterface || idl.isInterface(compInterface)) {
+                library.componentsDeclarations.push(
+                    new IdlComponentDeclaration(componentName, compInterface, entry as idl.IDLInterface))
+            }
+        }
     }
 }
 

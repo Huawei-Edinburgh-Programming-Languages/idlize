@@ -40,7 +40,7 @@ import { generateTracker } from "./peer-generation/Tracker"
 import { PeerLibrary } from "./peer-generation/PeerLibrary"
 import { PeerFile } from "./peer-generation/PeerFile"
 import {
-    IdlPeerGeneratorVisitor,
+    fillComponents,
     IdlPeerProcessor,
     IdlPredefinedGeneratorVisitor
 } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
@@ -372,15 +372,7 @@ if (options.dts2peer) {
                     // TODO find better place for setup?
                     PrimitiveType.Prefix = "OH_"
                 }
-                // Visit IDL peer files
-                idlLibrary.files.forEach(file => {
-                    const visitor = new IdlPeerGeneratorVisitor({
-                        sourceFile: file.originalFilename,
-                        peerLibrary: idlLibrary,
-                        peerFile: file,
-                    })
-                    visitor.visitWholeFile()
-                })
+                fillComponents(idlLibrary)
                 fillSyntheticDeclarations(idlLibrary)
                 const peerProcessor = new IdlPeerProcessor(idlLibrary)
                 peerProcessor.process()
