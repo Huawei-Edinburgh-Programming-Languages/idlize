@@ -125,7 +125,7 @@
 |`animateTo`| Function | Erokhin Ilya | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAUUE7|
 |`width`| Function | Roman Sedaikin | done | |
 |`height`| Function | Roman Sedaikin | done | |
-|`drawModifier`| Function | | | |
+|`drawModifier`| Function | Erokhin Ilya | devdone | |
 |`responseRegion`| Function | Skroba Gleb | done | |
 |`mouseResponseRegion`| Function | Skroba Gleb | done | |
 |`size`| Function | Roman Sedaikin | done | |
@@ -1588,7 +1588,7 @@
 |`drawBehind`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
 |`drawContent`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
 |`drawFront`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
-|`invalidate`| Function | Erokhin Ilya | in progress | |
+|`invalidate`| Function | Erokhin Ilya | testskipped | |
 |*TransitionEffect*| *Class* | Andrey Khudenkikh | in progress | |
 |`translate`| Function | Andrey Khudenkikh | done | |
 |`rotate`| Function | Andrey Khudenkikh | done | |
