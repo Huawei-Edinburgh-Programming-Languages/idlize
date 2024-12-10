@@ -234,7 +234,7 @@
 |`linearGradient`| Function | Roman Sedaikin | done | |
 |`sweepGradient`| Function | Roman Sedaikin | done | |
 |`radialGradient`| Function | Erokhin Ilya | done |  |
-|`motionPath`| Function | Lobah Mikhail | | |
+|`motionPath`| Function | Lobah Mikhail | in progress | |
 |`shadow`| Function | Roman Sedaikin | done | |
 |`clip`| Function | Skroba Gleb |  blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
 |`clipShape`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
@@ -242,20 +242,20 @@
 |`maskShape`| Function | Dmitry A Smirnov| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`key`| Function | Lobah Mikhail | devdone | |
 |`id`| Function | Erokhin Ilya | done |  |
-|`geometryTransition`| Function | Lobah Mikhail | | |
-|`stateStyles`| Function | Lobah Mikhail | | |
-|`restoreId`| Function | Lobah Mikhail | | |
+|`geometryTransition`| Function | Lobah Mikhail | in progress| |
+|`stateStyles`| Function | Lobah Mikhail | in progress| |
+|`restoreId`| Function | Lobah Mikhail |in progress | |
 |`sphericalEffect`| Function | Lobah Mikhail | done | |
 |`lightUpEffect`| Function | Lobah Mikhail | done | |
 |`pixelStretchEffect`| Function | Lobah Mikhail | done | |
-|`accessibilityGroup`| Function | Lobah Mikhail | | |
-|`accessibilityText`| Function | Lobah Mikhail | | |
-|`accessibilityTextHint`| Function | Lobah Mikhail | | |
-|`accessibilityDescription`| Function | Lobah Mikhail | | |
-|`accessibilityLevel`| Function | Lobah Mikhail | | |
-|`accessibilityVirtualNode`| Function | Lobah Mikhail | | |
-|`accessibilityChecked`| Function | Lobah Mikhail | | |
-|`accessibilitySelected`| Function | Lobah Mikhail | | |
+|`accessibilityGroup`| Function | Lobah Mikhail | in progress| |
+|`accessibilityText`| Function | Lobah Mikhail | in progress| |
+|`accessibilityTextHint`| Function | Lobah Mikhail | in progress| |
+|`accessibilityDescription`| Function | Lobah Mikhail | in progress| |
+|`accessibilityLevel`| Function | Lobah Mikhail | in progress| |
+|`accessibilityVirtualNode`| Function | Lobah Mikhail | in progress| |
+|`accessibilityChecked`| Function | Lobah Mikhail | in progress| |
+|`accessibilitySelected`| Function | Lobah Mikhail | in progress| |
 |`obscured`| Function | | | |
 |`reuseId`| Function | | | |
 |`renderFit`| Function | | | |
@@ -1478,16 +1478,16 @@
 |`show`| Function | Ekaterina Stepanova | in progress | |
 |*CanvasGradient*| *Class* | Vadim Voronov | in progress | |
 |`addColorStop`| Function | Vadim Voronov | in progress | |
-|*CanvasPath*| *Class* | Lobah Mikhail | in progress |  |
-|`arc`| Function | Lobah Mikhail | in progress |  |
-|`arcTo`| Function | Lobah Mikhail | in progress |  |
-|`bezierCurveTo`| Function | Lobah Mikhail | in progress |  |
-|`closePath`| Function | Lobah Mikhail | in progress |  |
-|`ellipse`| Function | Lobah Mikhail | in progress |  |
-|`lineTo`| Function | Lobah Mikhail | in progress |  |
-|`moveTo`| Function | Lobah Mikhail | in progress |  |
-|`quadraticCurveTo`| Function | Lobah Mikhail | in progress |  |
-|`rect`| Function | Lobah Mikhail | in progress |  |
+|*CanvasPath*| *Class* | Vadim Voronov | |  |
+|`arc`| Function | Vadim Voronov | |  |
+|`arcTo`| Function | Vadim Voronov | |  |
+|`bezierCurveTo`| Function | Vadim Voronov |  |  |
+|`closePath`| Function | Vadim Voronov |  |  |
+|`ellipse`| Function | Vadim Voronov |  |  |
+|`lineTo`| Function | Vadim Voronov |  |  |
+|`moveTo`| Function | Vadim Voronov |  |  |
+|`quadraticCurveTo`| Function | Vadim Voronov |  |  |
+|`rect`| Function | Vadim Voronov |  |  |
 |*Path2D*| *Class* | Vadim Voronov | in progress | |
 |`addPath`| Function | Vadim Voronov | in progress | |
 |*CanvasPattern*| *Class* | Vadim Voronov | in progress |  |
