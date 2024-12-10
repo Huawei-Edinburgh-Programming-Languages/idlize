@@ -1584,10 +1584,10 @@
 |`invalidate`| Function |Vadim Voronov| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*ICurve*| *Class* | Erokhin Ilya | blocked | |
 |`interpolate`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|*DrawModifier*| *Class* | Erokhin Ilya | in progress | |
-|`drawBehind`| Function | Erokhin Ilya | in progress | |
-|`drawContent`| Function | Erokhin Ilya | in progress | |
-|`drawFront`| Function | Erokhin Ilya | in progress | |
+|*DrawModifier*| *Class* | Erokhin Ilya | blocked | |
+|`drawBehind`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
+|`drawContent`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
+|`drawFront`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
 |`invalidate`| Function | Erokhin Ilya | in progress | |
 |*TransitionEffect*| *Class* | Andrey Khudenkikh | in progress | |
 |`translate`| Function | Andrey Khudenkikh | done | |
