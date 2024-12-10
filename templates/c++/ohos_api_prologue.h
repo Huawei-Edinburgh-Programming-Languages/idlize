@@ -107,4 +107,4 @@ typedef enum OH_APIKind {
 } OH_APIKind;
 
 struct _OH_VMContext;
-typedef _OH_VMContext* OH_VMContext;
+typedef struct _OH_VMContext* OH_VMContext;
