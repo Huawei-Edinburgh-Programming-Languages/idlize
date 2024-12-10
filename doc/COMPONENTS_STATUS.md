@@ -1837,9 +1837,9 @@
 |`getGlyphPositionAtCoordinate`| Function | Andrey Khudenkikh | in progress | |
 |`getLineMetrics`| Function | Andrey Khudenkikh | in progress | |
 |`getRectsForRange`| Function | Andrey Khudenkikh | in progress | |
-|*TextMenuItemId*| *Class* | | | |
-|`of`| Function | | | |
-|`equals`| Function | | | |
+|*TextMenuItemId*| *Class* | Maksimov Nikita | in progress | |
+|`of`| Function | Maksimov Nikita | in progress | |
+|`equals`| Function | Maksimov Nikita | in progress | |
 |*EditMenuOptions*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onCreateMenu`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onMenuItemClick`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
