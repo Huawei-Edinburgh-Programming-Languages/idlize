@@ -75,7 +75,8 @@ const PREDEFINED_PACKAGE = 'org.openharmony.idlize.predefined'
 const PREDEFINED_PACKAGE_TYPES = `${PREDEFINED_PACKAGE}.types`
 
 const PREDEFINED_PACKAGE_BY_TARGET = new Map([
-    [ "arkoala", "org.openharmony.arkui" ]
+    [ "arkoala", "org.openharmony.arkui" ],
+    [ "libace", "org.openharmony.arkui" ],
 ])
 
 export class IdlPeerGeneratorVisitor implements GenericVisitor<void> {
