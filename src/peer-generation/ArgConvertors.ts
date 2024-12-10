@@ -900,7 +900,7 @@ export class CallbackConvertor extends BaseArgConvertor {
                     idl.IDLUndefinedType /* not used */,
                     {
                         unsafe: true,
-                        overrideTypeName: `void(*)(${["Ark_VMContext vmContext"].concat(generateCallbackAPIArguments(this.library, this.decl)).join(", ")})`
+                        overrideTypeName: `void(*)(${[`${PrimitiveType.Prefix}VMContext vmContext`].concat(generateCallbackAPIArguments(this.library, this.decl)).join(", ")})`
                     }
             )
             return assigneer(writer.makeString(`{${resourceReadExpr.asString()}, ${callReadExpr.asString()}, ${callSyncReadExpr.asString()}}`))

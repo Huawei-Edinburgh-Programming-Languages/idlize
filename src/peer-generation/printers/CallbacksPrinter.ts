@@ -246,7 +246,7 @@ class DeserializeCallbacksVisitor {
                 const callReadExpr = writer.makeCast(
                     writer.makeMethodCall(`thisDeserializer`, `readPointer`, []),
                     idl.IDLUndefinedType,
-                    { unsafe: true, overrideTypeName: `void(*)(${["Ark_VMContext vmContext"].concat(generateCallbackAPIArguments(this.library, callback)).join(", ")})` }
+                    { unsafe: true, overrideTypeName: `void(*)(${[`${PrimitiveType.Prefix}VMContext vmContext`].concat(generateCallbackAPIArguments(this.library, callback)).join(", ")})` }
                 )
                 writer.writeStatement(writer.makeStatement(writer.makeMethodCall(`thisDeserializer`, `readPointer`, [])))
                 writer.writeStatement(writer.makeAssign(callName, undefined, callReadExpr, true))
