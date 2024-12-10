@@ -594,8 +594,8 @@
 |`onStart`| Function | Andrey Khudenkikh| in progress |  |
 |`onBounce`| Function |Andrey Khudenkikh | in progress |  |
 |`onFinish`| Function |Andrey Khudenkikh | in progress |  |
-|*MediaCachedImage*| *Component* | | | |
-|`setMediaCachedImageOptions`| Function | | | |
+|*MediaCachedImage*| *Component* | Skroba Gleb | in progress | |
+|`setMediaCachedImageOptions`| Function | Skroba Gleb | in progress | |
 |*Menu*|*Component*|Morozov Sergey| done |  |
 |`setMenuOptions`| Function |Morozov Sergey| done |  |
 |`fontSize`|Function|Morozov Sergey| done |  |
@@ -647,8 +647,8 @@
 |`type`| Function | Skroba Gleb | done |  |
 |`target`| Function | Skroba Gleb | done |  |
 |`params`| Function | Skroba Gleb |in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|*NodeContainer*| *Component* | | | |
-|`setNodeContainerOptions`| Function | | | |
+|*NodeContainer*| *Component* | Skroba Gleb | in progress | |
+|`setNodeContainerOptions`| Function | Skroba Gleb | in progress | |
 |*CommonTransition*| *Component* | Erokhin Ilya | in progress | |
 |`slide`| Function | Erokhin Ilya | in progress | |
 |`translate`| Function | Erokhin Ilya | in progress | |
@@ -1610,14 +1610,14 @@
 |`applyFocusedAttribute`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`applyDisabledAttribute`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`applySelectedAttribute`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
-|*View*| *Class* | | | |
-|`create`| Function | | | |
+|*View*| *Class* | Skroba Gleb | in progress | |
+|`create`| Function | Skroba Gleb | in progress | |
 |*TextContentControllerBase*| *Class* | Morozov Sergey | in progress | |
 |`getCaretOffset`| Function | Morozov Sergey | in progress | |
 |`getTextContentRect`| Function | Morozov Sergey | in progress | |
 |`getTextContentLineCount`| Function | Morozov Sergey | in progress | |
-|*DynamicNode*| *Class* | | | |
-|`onMove`| Function | | | |
+|*DynamicNode*| *Class* | Skroba Gleb | in progress | |
+|`onMove`| Function | Skroba Gleb | in progress | |
 |*ChildrenMainSize*| *Class* | Morozov Sergey | blocked IDL |  |
 |`splice`| Function | Morozov Sergey | done |  |
 |`update`| Function | Morozov Sergey | done |  |
