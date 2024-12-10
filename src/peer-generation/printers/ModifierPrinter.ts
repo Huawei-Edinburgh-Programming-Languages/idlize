@@ -338,11 +338,13 @@ class AccessorVisitor extends ModifierVisitor {
     }
 
     printStruct(clazz: MaterializedClass): void {
-        const structName = `${clazz.className}Peer`; 
+        const structName = `${clazz.className}Peer`
 
-        this.accessors.print(`struct ${structName} {`);
-        this.accessors.print(`    virtual ~${structName}() = default;`);
-        this.accessors.print(`};`);
+        this.accessors.print(`struct ${structName} {`)
+        this.accessors.pushIndent()
+        this.accessors.print(`virtual ~${structName}() = default;`)
+        this.accessors.popIndent()
+        this.accessors.print(`};`)
     }
 }
 
