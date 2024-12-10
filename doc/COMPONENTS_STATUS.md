@@ -1318,22 +1318,22 @@
 |`initialScale`| Function | Erokhin Ilya | done | |
 |`userAgent`| Function | Erokhin Ilya | done | |
 |`metaViewport`| Function | Erokhin Ilya | done | |
-|`onPageEnd`| Function | Erokhin Ilya | devdone | |
-|`onPageBegin`| Function | Erokhin Ilya | devdone | |
-|`onProgressChange`| Function | Erokhin Ilya | devdone | |
-|`onTitleReceive`| Function | Erokhin Ilya | devdone | |
-|`onGeolocationHide`| Function | Erokhin Ilya | devdone | |
-|`onGeolocationShow`| Function | Erokhin Ilya | devdone | |
-|`onRequestSelected`| Function | Erokhin Ilya | devdone | |
+|`onPageEnd`| Function | Erokhin Ilya | done | |
+|`onPageBegin`| Function | Erokhin Ilya | done | |
+|`onProgressChange`| Function | Erokhin Ilya | done | |
+|`onTitleReceive`| Function | Erokhin Ilya | done | |
+|`onGeolocationHide`| Function | Erokhin Ilya | done | |
+|`onGeolocationShow`| Function | Erokhin Ilya | done | |
+|`onRequestSelected`| Function | Erokhin Ilya | done | |
 |`onAlert`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onBeforeUnload`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onConfirm`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onPrompt`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onConsole`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onErrorReceive`| Function | Erokhin Ilya | devdone | |
-|`onHttpErrorReceive`| Function | Erokhin Ilya | devdone | |
-|`onDownloadStart`| Function | Erokhin Ilya | devdone | |
-|`onRefreshAccessedHistory`| Function | Erokhin Ilya | devdone | |
+|`onErrorReceive`| Function | Erokhin Ilya | done | |
+|`onHttpErrorReceive`| Function | Erokhin Ilya | done | |
+|`onDownloadStart`| Function | Erokhin Ilya | done | |
+|`onRefreshAccessedHistory`| Function | Erokhin Ilya | done | |
 |`onUrlLoadIntercept`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onSslErrorReceive`| Function | Erokhin Ilya | done | deprecated |
 |`onRenderExited`| Function | Erokhin Ilya | devdone | |
@@ -1582,8 +1582,8 @@
 |`getWidth`| Function |Vadim Voronov| done | |
 |*DrawingRenderingContext*| *Class* |Vadim Voronov| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`invalidate`| Function |Vadim Voronov| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|*ICurve*| *Class* | Erokhin Ilya | in progress | |
-|`interpolate`| Function | Erokhin Ilya | in progress | |
+|*ICurve*| *Class* | Erokhin Ilya | blocked | |
+|`interpolate`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*DrawModifier*| *Class* | Erokhin Ilya | in progress | |
 |`drawBehind`| Function | Erokhin Ilya | in progress | |
 |`drawContent`| Function | Erokhin Ilya | in progress | |
