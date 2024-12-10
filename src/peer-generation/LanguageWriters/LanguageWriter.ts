@@ -104,6 +104,13 @@ export class CheckDefinedExpression implements LanguageExpression {
     }
 }
 
+export class PlainExpression implements LanguageExpression {
+    constructor(private gen: () => string) {}
+    asString(): string {
+        return this.gen()
+    }
+}
+
 ////////////////////////////////////////////////////////////////
 //                         STATEMENTS                         //
 ////////////////////////////////////////////////////////////////
@@ -457,7 +464,7 @@ export abstract class LanguageWriter {
     makeUnwrapOptional(expression: LanguageExpression): LanguageExpression {
         return expression
     }
-    abstract makeArrayInit(type: idl.IDLContainerType): LanguageExpression
+    abstract makeArrayInit(type: idl.IDLContainerType, size?:number): LanguageExpression
     abstract makeClassInit(type: idl.IDLType, paramenters: LanguageExpression[]): LanguageExpression
     abstract makeMapInit(type: idl.IDLType): LanguageExpression
     abstract makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement
