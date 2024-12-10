@@ -1054,8 +1054,8 @@
 |*TabContent*| *Component* | Evstigneev Roman |in progress |  |
 |`setTabContentOptions`| Function | Evstigneev Roman | done |  |
 |`tabBar`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IB74L4 & https://gitee.com/nikolay-igotti/idlize/issues/IB764R|
-|`onWillShow`| Function |Evstigneev Roman | in progress |  |
-|`onWillHide`| Function |Evstigneev Roman | in progress |  |
+|`onWillShow`| Function |Evstigneev Roman | done |  |
+|`onWillHide`| Function |Evstigneev Roman | done |  |
 |*Text*| *Component* | Kirill Kirichenko | in progress | |
 |`setTextOptions`| Function | Kirill Kirichenko | devdone |  |
 |`font`| Function |Samarin Sergey | done |  |
