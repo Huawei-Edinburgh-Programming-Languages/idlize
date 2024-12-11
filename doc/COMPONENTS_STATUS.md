@@ -222,11 +222,11 @@
 |`aspectRatio`| Function | Roman Sedaikin | done | |
 |`clickEffect`| Function | Lobah Mikhail | devdone | |
 |`onDragStart`| Function | Lobah Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IARLIB, https://gitee.com/openharmony/arkui_ace_engine/issues/IAHA4D |
-|`onDragEnter`| Function | Lobah Mikhail | in progress | |
-|`onDragMove`| Function | Lobah Mikhail | in progress | |
-|`onDragLeave`| Function | Lobah Mikhail| in progress | |
-|`onDrop`| Function | Lobah Mikhail | in progress | |
-|`onDragEnd`| Function | Lobah Mikhail | in progress | |
+|`onDragEnter`| Function | Lobah Mikhail | devdone | |
+|`onDragMove`| Function | Lobah Mikhail | devdone | |
+|`onDragLeave`| Function | Lobah Mikhail| devdone | |
+|`onDrop`| Function | Lobah Mikhail | devdone | |
+|`onDragEnd`| Function | Lobah Mikhail | devdone | |
 |`allowDrop`| Function | Lobah Mikhail | devdone | |
 |`draggable`| Function | Lobah Mikhail | devdone | |
 |`dragPreview`| Function | Lobah Mikhail | devdone | |
