@@ -104,13 +104,6 @@ export class CheckDefinedExpression implements LanguageExpression {
     }
 }
 
-export class PlainExpression implements LanguageExpression {
-    constructor(private gen: () => string) {}
-    asString(): string {
-        return this.gen()
-    }
-}
-
 ////////////////////////////////////////////////////////////////
 //                         STATEMENTS                         //
 ////////////////////////////////////////////////////////////////

@@ -30,7 +30,6 @@ import {
     MethodSignature,
     NamedMethodSignature,
     ObjectArgs,
-    PlainExpression
 } from "../LanguageWriter"
 import {
     CLikeExpressionStatement,
@@ -269,7 +268,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         return [FieldModifier.PUBLIC, FieldModifier.PRIVATE, FieldModifier.PROTECTED, FieldModifier.STATIC, FieldModifier.FINAL]
     }
     makeArrayInit(type: idl.IDLContainerType, size?:number): LanguageExpression {
-        return new PlainExpression(() => `new ${this.getNodeName(type.elementType[0])}[${size ?? 0}]`)
+        return this.makeString(`new ${this.getNodeName(type.elementType[0])}[${size ?? 0}]`)
     }
     makeClassInit(type: idl.IDLType, paramenters: LanguageExpression[]): LanguageExpression {
         throw new Error("Method not implemented.")
