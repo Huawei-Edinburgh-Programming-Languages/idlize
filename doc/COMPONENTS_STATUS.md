@@ -1823,12 +1823,12 @@
 |`setSelection`| Function | | | |
 |`closeSelectionMenu`| Function | | | |
 |`getLayoutManager`| Function | | | |
-|*TextEditControllerEx*| *Class* | | | |
-|`isEditing`| Function | | | |
-|`stopEditing`| Function | | | |
-|`setCaretOffset`| Function | | | |
-|`getCaretOffset`| Function | | | |
-|`getPreviewText`| Function | | | |
+|*TextEditControllerEx*| *Class* | Morozov Sergey | in progress | |
+|`isEditing`| Function | Morozov Sergey | in progress | |
+|`stopEditing`| Function | Morozov Sergey | in progress | |
+|`setCaretOffset`| Function | Morozov Sergey | in progress | |
+|`getCaretOffset`| Function | Morozov Sergey | in progress | |
+|`getPreviewText`| Function | Morozov Sergey | in progress | |
 |*StyledStringController*| *Class* | Pavelyev Ivan | in progress | |
 |`setStyledString`| Function | Pavelyev Ivan | in progress | |
 |`getStyledString`| Function | Pavelyev Ivan | in progress | |
