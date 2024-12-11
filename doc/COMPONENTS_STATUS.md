@@ -125,7 +125,7 @@
 |`animateTo`| Function | Erokhin Ilya | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAUUE7|
 |`width`| Function | Roman Sedaikin | done | |
 |`height`| Function | Roman Sedaikin | done | |
-|`drawModifier`| Function | Erokhin Ilya | devdone | |
+|`drawModifier`| Function | Erokhin Ilya | done | |
 |`responseRegion`| Function | Skroba Gleb | done | |
 |`mouseResponseRegion`| Function | Skroba Gleb | done | |
 |`size`| Function | Roman Sedaikin | done | |
@@ -649,11 +649,11 @@
 |`params`| Function | Skroba Gleb |in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*NodeContainer*| *Component* | Skroba Gleb | in progress | |
 |`setNodeContainerOptions`| Function | Skroba Gleb | in progress | |
-|*CommonTransition*| *Component* | Erokhin Ilya | in progress | |
-|`slide`| Function | Erokhin Ilya | in progress | |
-|`translate`| Function | Erokhin Ilya | in progress | |
-|`scale`| Function | Erokhin Ilya | in progress | |
-|`opacity`| Function | Erokhin Ilya | in progress | |
+|*CommonTransition*| *Component* | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBANN3 |
+|`slide`| Function | Erokhin Ilya | testskipped | |
+|`translate`| Function | Erokhin Ilya | testskipped | |
+|`scale`| Function | Erokhin Ilya | testskipped | |
+|`opacity`| Function | Erokhin Ilya | testskipped | |
 |*Panel*| *Component* | Pavelyev Ivan| done |  |
 |`setPanelOptions`| Function | Pavelyev Ivan| done |  |
 |`mode`| Function |Pavelyev Ivan| done |  |
@@ -1336,16 +1336,16 @@
 |`onRefreshAccessedHistory`| Function | Erokhin Ilya | done | |
 |`onUrlLoadIntercept`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onSslErrorReceive`| Function | Erokhin Ilya | done | deprecated |
-|`onRenderExited`| Function | Erokhin Ilya | devdone | |
+|`onRenderExited`| Function | Erokhin Ilya | done | |
 |`onShowFileSelector`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onFileSelectorShow`| Function | Erokhin Ilya | done | deprecated |
-|`onResourceLoad`| Function | Erokhin Ilya | devdone | |
-|`onFullScreenExit`| Function | Erokhin Ilya | devdone | |
-|`onFullScreenEnter`| Function | Erokhin Ilya | devdone | |
-|`onScaleChange`| Function | Erokhin Ilya | devdone | |
+|`onResourceLoad`| Function | Erokhin Ilya | done | |
+|`onFullScreenExit`| Function | Erokhin Ilya | done | |
+|`onFullScreenEnter`| Function | Erokhin Ilya | done | |
+|`onScaleChange`| Function | Erokhin Ilya | done | |
 |`onHttpAuthRequest`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onInterceptRequest`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onPermissionRequest`| Function | Erokhin Ilya | devdone | |
+|`onPermissionRequest`| Function | Erokhin Ilya | done | |
 |`onScreenCaptureRequest`| Function | Erokhin Ilya | devdone | |
 |`onContextMenuShow`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onContextMenuHide`| Function | Erokhin Ilya | devdone | |
@@ -1405,7 +1405,7 @@
 |`enableSmoothDragResize`| Function | Erokhin Ilya | done | |
 |`onRenderProcessNotResponding`| Function | Erokhin Ilya | devdone | |
 |`onRenderProcessResponding`| Function | Erokhin Ilya | devdone | |
-|`selectionMenuOptions`| Function | Erokhin Ilya | in progress | |
+|`selectionMenuOptions`| Function | Erokhin Ilya | testskipped | |
 |`onViewportFitChanged`| Function | Erokhin Ilya | devdone | |
 |`onInterceptKeyboardAttach`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
 |`onAdsBlocked`| Function | Erokhin Ilya | devdone | |
@@ -1413,7 +1413,7 @@
 |`editMenuOptions`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`enableHapticFeedback`| Function | Erokhin Ilya | done | |
 |`registerNativeEmbedRule`| Function | Erokhin Ilya | done | |
-|`bindSelectionMenu`| Function | Erokhin Ilya | in progress | |
+|`bindSelectionMenu`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*WindowScene*| *Component* | Spirin Andrey | in progress | |
 |`setWindowSceneOptions`| Function | Spirin Andrey | in progress | |
 |`attractionEffect`| Function | Spirin Andrey | in progress | |
