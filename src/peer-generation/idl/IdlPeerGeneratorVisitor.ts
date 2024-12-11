@@ -39,8 +39,6 @@ import { Field, FieldModifier, Method, MethodModifier, NamedMethodSignature } fr
 import { BuilderClass, initCustomBuilderClasses, isCustomBuilderClass } from "../BuilderClass";
 import { isRoot } from "../inheritance";
 import { ImportFeature } from "../ImportsCollector";
-import { DeclarationNameConvertor } from "./IdlNameConvertor";
-import { PrimitiveType } from "../ArkPrimitiveType"
 import { collapseIdlEventsOverloads } from "../printers/EventsPrinter"
 import { Language } from "../../Language"
 import { convertDeclToFeature } from "../ImportsCollectorUtils"
