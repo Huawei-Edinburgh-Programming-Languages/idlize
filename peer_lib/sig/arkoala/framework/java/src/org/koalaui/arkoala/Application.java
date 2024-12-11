@@ -15,7 +15,6 @@
 
 package org.koalaui.arkoala;
 
-import java.util.Arrays;
 import java.util.function.Consumer;
 
 class EventType {
