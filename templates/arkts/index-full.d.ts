@@ -146,29 +146,29 @@ interface LazyForEachInterface {
 
 declare const LazyForEach: LazyForEachInterface;
 
-declare class LocalStorage {
-/*
-  // Uncomment for full sdk
+// declare class LocalStorage {
+// /*
+//   // Uncomment for full sdk
 
-  constructor(initializingProperties?: Object);
-  static GetShared(): LocalStorage;
-  static getShared(): LocalStorage;
-  public ref<T>(propName: string): AbstractProperty<T> | undefined;
-  public setAndRef<T>(propName: string, defaultValue: T): AbstractProperty<T>;
-  has(propName: string): boolean;
-  keys(): IterableIterator<string>;
-  size(): number;
-  get<T>(propName: string): T | undefined;
-  set<T>(propName: string, newValue: T): boolean;
-  setOrCreate<T>(propName: string, newValue: T): boolean;
-  link<T>(propName: string): SubscribedAbstractProperty<T>;
-  setAndLink<T>(propName: string, defaultValue: T): SubscribedAbstractProperty<T>;
-  prop<S>(propName: string): SubscribedAbstractProperty<S>;
-  setAndProp<S>(propName: string, defaultValue: S): SubscribedAbstractProperty<S>;
-  delete(propName: string): boolean;
-  clear(): boolean;
-*/
-}
+//   constructor(initializingProperties?: Object);
+//   static GetShared(): LocalStorage;
+//   static getShared(): LocalStorage;
+//   public ref<T>(propName: string): AbstractProperty<T> | undefined;
+//   public setAndRef<T>(propName: string, defaultValue: T): AbstractProperty<T>;
+//   has(propName: string): boolean;
+//   keys(): IterableIterator<string>;
+//   size(): number;
+//   get<T>(propName: string): T | undefined;
+//   set<T>(propName: string, newValue: T): boolean;
+//   setOrCreate<T>(propName: string, newValue: T): boolean;
+//   link<T>(propName: string): SubscribedAbstractProperty<T>;
+//   setAndLink<T>(propName: string, defaultValue: T): SubscribedAbstractProperty<T>;
+//   prop<S>(propName: string): SubscribedAbstractProperty<S>;
+//   setAndProp<S>(propName: string, defaultValue: S): SubscribedAbstractProperty<S>;
+//   delete(propName: string): boolean;
+//   clear(): boolean;
+// */
+// }
 
 interface IPropertySubscriber {
 
@@ -180,58 +180,62 @@ interface ISinglePropertyChangeSubscriber<T> extends IPropertySubscriber {
   hasChanged(newValue: T): void;
 }
 
+// interface AbstractProperty<T> {
+// //!!!????
+// }
 
-declare class SyncedPropertyOneWay<T>
-  extends SubscribedAbstractProperty<T>
-  implements ISinglePropertyChangeSubscriber<T>
-{
-  private wrappedValue_;
-  private source_;
-  constructor(source: SubscribedAbstractProperty<T>, subscribeMe?: IPropertySubscriber, info?: string);
-  aboutToBeDeleted(unsubscribeMe?: IPropertySubscriber): void;
-  hasChanged(newValue: T): void;
-  get(): T;
-  set(newValue: T): void;
-}
 
-declare class SyncedPropertyTwoWay<T>
-  extends SubscribedAbstractProperty<T>
-  implements ISinglePropertyChangeSubscriber<T>
-{
+// declare class SyncedPropertyOneWay<T>
+//   extends SubscribedAbstractProperty<T>
+//   implements ISinglePropertyChangeSubscriber<T>
+// {
+//   private wrappedValue_;
+//   private source_;
+//   constructor(source: SubscribedAbstractProperty<T>, subscribeMe?: IPropertySubscriber, info?: string);
+//   aboutToBeDeleted(unsubscribeMe?: IPropertySubscriber): void;
+//   hasChanged(newValue: T): void;
+//   get(): T;
+//   set(newValue: T): void;
+// }
 
-  private source_;
-  constructor(source: SubscribedAbstractProperty<T>, subscribeMe?: IPropertySubscriber, info?: string);
+// declare class SyncedPropertyTwoWay<T>
+//   extends SubscribedAbstractProperty<T>
+//   implements ISinglePropertyChangeSubscriber<T>
+// {
 
-  aboutToBeDeleted(unsubscribeMe?: IPropertySubscriber): void;
-  hasChanged(newValue: T): void;
-  get(): T;
-  set(newValue: T): void;
-}
+//   private source_;
+//   constructor(source: SubscribedAbstractProperty<T>, subscribeMe?: IPropertySubscriber, info?: string);
 
-declare abstract class SubscribedAbstractProperty<T> {
+//   aboutToBeDeleted(unsubscribeMe?: IPropertySubscriber): void;
+//   hasChanged(newValue: T): void;
+//   get(): T;
+//   set(newValue: T): void;
+// }
 
-  protected subscribers_: Set<number>;
-  private id_;
-  private info_?;
+// declare abstract class SubscribedAbstractProperty<T> {
 
-  constructor(
-    subscribeMe?: IPropertySubscriber,
-    info?: string,
-  );
+//   protected subscribers_: Set<number>;
+//   private id_;
+//   private info_?;
 
-    id(): number;
+//   constructor(
+//     subscribeMe?: IPropertySubscriber,
+//     info?: string,
+//   );
 
-    info(): string;
-    abstract get(): T;
-    abstract set(newValue: T): void;
-    createTwoWaySync(subscribeMe?: IPropertySubscriber, info?: string): SyncedPropertyTwoWay<T>;
-    createOneWaySync(subscribeMe?: IPropertySubscriber, info?: string): SyncedPropertyOneWay<T>;
-    unlinkSuscriber(subscriberId: number): void;
-    protected notifyHasChanged(newValue: T): void;
-    protected notifyPropertyRead(): void;
-    numberOfSubscrbers(): number;
-    abstract aboutToBeDeleted(): void;
-}
+//     id(): number;
+
+//     info(): string;
+//     abstract get(): T;
+//     abstract set(newValue: T): void;
+//     createTwoWaySync(subscribeMe?: IPropertySubscriber, info?: string): SyncedPropertyTwoWay<T>;
+//     createOneWaySync(subscribeMe?: IPropertySubscriber, info?: string): SyncedPropertyOneWay<T>;
+//     unlinkSuscriber(subscriberId: number): void;
+//     protected notifyHasChanged(newValue: T): void;
+//     protected notifyPropertyRead(): void;
+//     numberOfSubscrbers(): number;
+//     abstract aboutToBeDeleted(): void;
+// }
 
 // Until we have full sdk
 declare interface LayoutChild {}
