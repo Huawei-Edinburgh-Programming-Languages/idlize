@@ -18,9 +18,8 @@ import { ArgConvertor } from "./ArgConvertors"
 import { Method, MethodModifier } from "./LanguageWriters"
 import { PrimitiveType } from "./ArkPrimitiveType"
 import { mangleMethodName } from "./LanguageWriters/LanguageWriter"
-import { convertType, IdlNameConvertor } from "./LanguageWriters/nameConvertor"
-import { IDLAnyType, IDLBooleanType, IDLBufferType, IDLContainerUtils, IDLF16Type, IDLF32Type, IDLF64Type, IDLI16Type, IDLI32Type, IDLI64Type, IDLI8Type, IDLKind, IDLNumberType, IDLPointerType, IDLStringType, IDLThisType, IDLType, IDLU16Type, IDLU32Type, IDLU64Type, IDLU8Type, IDLUndefinedType, IDLUnknownType, IDLVoidType, isContainerType, isOptionalType, isPrimitiveType, isReferenceType, isTypeParameterType, isUnionType } from "../idl"
-import { InteropReturnTypeConvertor } from "./LanguageWriters/convertors/InteropConvertor"
+import { IdlNameConvertor } from "./LanguageWriters/nameConvertor"
+import { IDLType, } from "../idl"
 
 export class PeerMethod {
     private overloadIndex?: number
