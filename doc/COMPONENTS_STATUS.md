@@ -2014,8 +2014,8 @@
 |`offAsyncReceiverRegister`| Function | | | |
 |`offSyncReceiverRegister`| Function | | | |
 |*StyledString*| *Class* | Pavelyev Ivan | in progress | |
-|`getString`| Function | Pavelyev Ivan | in progress | |
-|`getStyles`| Function | Pavelyev Ivan | in progress | |
+|`getString`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getStyles`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`equals`| Function | Pavelyev Ivan | in progress | |
 |`subStyledString`| Function | Pavelyev Ivan | in progress | |
 |`fromHtml`| Function | Pavelyev Ivan | in progress | |
