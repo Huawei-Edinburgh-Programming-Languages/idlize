@@ -1047,7 +1047,7 @@
 |`barBackgroundColor`| Function | Tuzhilkin Ivan | done |  |
 |`barGridAlign`| Function | Tuzhilkin Ivan | done |  |
 |`customContentTransition`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
-|`barBackgroundBlurStyle`| Function | Tuzhilkin Ivan | done |  |
+|`barBackgroundBlurStyle`| Function | Tuzhilkin Ivan | in progress |  |
 |`barBackgroundEffect`| Function | Tuzhilkin Ivan | in progress | |
 |`onContentWillChange`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
 |`barModeBarMode_SCROLLABLE`| Function | Tuzhilkin Ivan | done | |
@@ -1455,13 +1455,13 @@
 |`onScrollFrameBegin`| Function | Kovalev Sergey | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onScrollIndex`| Function | Kovalev Sergey | done | |
 |*UIExtensionComponent*| *Component* | Tuzhilkin Ivan | in progress | |
-|`setUIExtensionComponentOptions`| Function | Tuzhilkin Ivan | devdone | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`onRemoteReady`| Function | Tuzhilkin Ivan | devdone | |
+|`setUIExtensionComponentOptions`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`onRemoteReady`| Function | Tuzhilkin Ivan | testskipped | |
 |`onReceive`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
-|`onResult`| Function | Tuzhilkin Ivan | devdone | |
-|`onRelease`| Function | Tuzhilkin Ivan | devdone | |
+|`onResult`| Function | Tuzhilkin Ivan | testskipped | |
+|`onRelease`| Function | Tuzhilkin Ivan | testskipped | |
 |`onError`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`onTerminated`| Function | Tuzhilkin Ivan | devdone | |
+|`onTerminated`| Function | Tuzhilkin Ivan | testskipped | |
 |*LinearIndicator*| *Component* | Kovalev Sergey | done | depricated |
 |`setLinearIndicatorOptions`| Function | Kovalev Sergey | done | depricated |
 |`indicatorStyle`| Function | Kovalev Sergey | done | depricated |
