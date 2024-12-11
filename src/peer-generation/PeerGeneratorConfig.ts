@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 
-import * as ts from 'typescript'
 import { Language } from '../Language'
 
 export class PeerGeneratorConfig {
