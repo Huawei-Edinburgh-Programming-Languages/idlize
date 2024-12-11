@@ -307,8 +307,8 @@
 |`strokeWidth`| Function | Evstigneev Roman | done |  |
 |`antiAlias`| Function | Evstigneev Roman | done |  |
 |`strokeDashArray`| Function | Evstigneev Roman | blocked AceEngine|https://gitee.com/openharmony/interface_sdk-js/issues/IAX8ZZ|
-|*Common*| *Component* | Maksimov Nikita | in progress | |
-|`setCommonOptions`| Function | Maksimov Nikita | in progress | |
+|*Common*| *Component* | Maksimov Nikita | done | |
+|`setCommonOptions`| Function | Maksimov Nikita | done | |
 |*ScrollableCommonMethod*| *Component* | Samarin Sergey |in progress |  |
 |`scrollBar`| Function | Samarin Sergey | devdone |  |
 |`scrollBarColor`| Function | Samarin Sergey | devdone |  |
@@ -1650,11 +1650,11 @@
 |`setDistance`| Function | Politov Mikhail | done | |
 |`setFingers`| Function | Politov Mikhail | done | |
 |`getDirection`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|*ScrollableTargetInfo*| *Class* | | | |
-|`isBegin`| Function | | | |
-|`isEnd`| Function | | | |
-|*EventTargetInfo*| *Class* | | | |
-|`getId`| Function | | | |
+|*ScrollableTargetInfo*| *Class* | Maksimov Nikita | in progress | |
+|`isBegin`| Function | Maksimov Nikita | in progress | |
+|`isEnd`| Function | Maksimov Nikita | in progress | |
+|*EventTargetInfo*| *Class* | Maksimov Nikita | in progress | |
+|`getId`| Function | Maksimov Nikita | in progress | |
 |*GestureRecognizer*| *Class* | Kovalev Sergey | in progress | |
 |`getTag`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
 |`getType`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
@@ -1837,9 +1837,9 @@
 |`getGlyphPositionAtCoordinate`| Function | Andrey Khudenkikh | blocked IDL | |
 |`getLineMetrics`| Function | Andrey Khudenkikh | blocked IDL | |
 |`getRectsForRange`| Function | Andrey Khudenkikh | blocked IDL | |
-|*TextMenuItemId*| *Class* | Maksimov Nikita | in progress | |
-|`of`| Function | Maksimov Nikita | in progress | |
-|`equals`| Function | Maksimov Nikita | in progress | |
+|*TextMenuItemId*| *Class* | Maksimov Nikita | devdone | |
+|`of`| Function | Maksimov Nikita | devdone | |
+|`equals`| Function | Maksimov Nikita | devdone | |
 |*EditMenuOptions*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onCreateMenu`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onMenuItemClick`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
