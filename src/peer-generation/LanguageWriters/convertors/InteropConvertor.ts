@@ -26,7 +26,7 @@ export interface ConvertResult {
     noPrefix: boolean
 }
 
-export class InteropConverter implements NodeConvertor<ConvertResult> {
+export class InteropConvertor implements NodeConvertor<ConvertResult> {
 
     private make(text: string, noPrefix = false): ConvertResult {
         return { text, noPrefix }
@@ -182,11 +182,11 @@ export class InteropConverter implements NodeConvertor<ConvertResult> {
 }
 
 export class IDLNodeToStringConvertor implements IdlNameConvertor {
-    private readonly interopConverter: InteropConverter
+    private readonly interopConverter: InteropConvertor
     constructor(
         protected resolver: ReferenceResolver
     ) {
-        this.interopConverter = new InteropConverter(resolver)
+        this.interopConverter = new InteropConvertor(resolver)
     }
     convert(node: idl.IDLNode): string {
         return this.interopConverter.convertNode(node).text
