@@ -1612,10 +1612,10 @@
 |`applySelectedAttribute`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |*View*| *Class* | Skroba Gleb | in progress | |
 |`create`| Function | Skroba Gleb | in progress | |
-|*TextContentControllerBase*| *Class* | Morozov Sergey | in progress | |
-|`getCaretOffset`| Function | Morozov Sergey | in progress | |
-|`getTextContentRect`| Function | Morozov Sergey | in progress | |
-|`getTextContentLineCount`| Function | Morozov Sergey | in progress | |
+|*TextContentControllerBase*| *Class* | Morozov Sergey | blocked IDL | |
+|`getCaretOffset`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getTextContentRect`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getTextContentLineCount`| Function | Morozov Sergey | devdone | |
 |*DynamicNode*| *Class* | Skroba Gleb | in progress | |
 |`onMove`| Function | Skroba Gleb | in progress | |
 |*ChildrenMainSize*| *Class* | Morozov Sergey | blocked IDL |  |
