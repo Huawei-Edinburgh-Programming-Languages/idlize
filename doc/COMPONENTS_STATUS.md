@@ -1832,11 +1832,11 @@
 |*StyledStringController*| *Class* | Pavelyev Ivan | in progress | |
 |`setStyledString`| Function | Pavelyev Ivan | in progress | |
 |`getStyledString`| Function | Pavelyev Ivan | in progress | |
-|*LayoutManager*| *Class* | Andrey Khudenkikh | in progress | |
-|`getLineCount`| Function | Andrey Khudenkikh | in progress | |
-|`getGlyphPositionAtCoordinate`| Function | Andrey Khudenkikh | in progress | |
-|`getLineMetrics`| Function | Andrey Khudenkikh | in progress | |
-|`getRectsForRange`| Function | Andrey Khudenkikh | in progress | |
+|*LayoutManager*| *Class* | Andrey Khudenkikh | blocked IDL | |
+|`getLineCount`| Function | Andrey Khudenkikh | devdone | |
+|`getGlyphPositionAtCoordinate`| Function | Andrey Khudenkikh | blocked IDL | |
+|`getLineMetrics`| Function | Andrey Khudenkikh | blocked IDL | |
+|`getRectsForRange`| Function | Andrey Khudenkikh | blocked IDL | |
 |*TextMenuItemId*| *Class* | Maksimov Nikita | in progress | |
 |`of`| Function | Maksimov Nikita | in progress | |
 |`equals`| Function | Maksimov Nikita | in progress | |
