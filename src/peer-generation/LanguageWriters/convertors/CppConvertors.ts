@@ -16,10 +16,10 @@
 import * as idl from '../../../idl'
 import { PrimitiveType } from '../../ArkPrimitiveType';
 import { IdlNameConvertor } from "../nameConvertor";
-import { ConvertResult, InteropArgConvertor, InteropConvertor } from './InteropConvertor';
+import { ConvertorResult, InteropArgConvertor, InteropConvertor } from './InteropConvertor';
 
 export class CppIDLNodeToStringConvertor extends InteropConvertor implements IdlNameConvertor {
-    private unwrap(type: idl.IDLNode, result:ConvertResult): string {
+    private unwrap(type: idl.IDLNode, result:ConvertorResult): string {
         if (idl.isType(type) && idl.isOptionalType(type)) {
             return `Opt_${result.text}`
         }

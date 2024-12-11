@@ -21,14 +21,14 @@ import { PeerMethod } from '../../PeerMethod'
 import { ReferenceResolver } from '../../ReferenceResolver'
 import { convertNode, convertType, IdlNameConvertor, NodeConvertor, TypeConvertor } from '../nameConvertor'
 
-export interface ConvertResult {
+export interface ConvertorResult {
     text: string,
     noPrefix: boolean
 }
 
-export class InteropConvertor implements NodeConvertor<ConvertResult> {
+export class InteropConvertor implements NodeConvertor<ConvertorResult> {
 
-    private make(text: string, noPrefix = false): ConvertResult {
+    private make(text: string, noPrefix = false): ConvertorResult {
         return { text, noPrefix }
     }
 
@@ -36,11 +36,11 @@ export class InteropConvertor implements NodeConvertor<ConvertResult> {
         protected resolver: ReferenceResolver
     ) {}
 
-    convertNode(node: idl.IDLNode): ConvertResult {
-        return convertNode<ConvertResult>(this, node)
+    convertNode(node: idl.IDLNode): ConvertorResult {
+        return convertNode<ConvertorResult>(this, node)
     }
 
-    convertInterface(node: idl.IDLInterface): ConvertResult {
+    convertInterface(node: idl.IDLInterface): ConvertorResult {
         if (idl.isAnonymousInterface(node) && 1==1) {
             return node.name
                 ? this.make(node.name)
@@ -59,13 +59,13 @@ export class InteropConvertor implements NodeConvertor<ConvertResult> {
         }
         throw new Error("Unknown interface type")
     }
-    convertEnum(node: idl.IDLEnum): ConvertResult {
+    convertEnum(node: idl.IDLEnum): ConvertorResult {
         return this.make(this.enumName(node))
     }
-    convertTypedef(node: idl.IDLTypedef): ConvertResult {
+    convertTypedef(node: idl.IDLTypedef): ConvertorResult {
         return this.make(node.name)
     }
-    convertCallback(node: idl.IDLCallback): ConvertResult {
+    convertCallback(node: idl.IDLCallback): ConvertorResult {
         return this.make(PrimitiveType.LibraryPrefix + node.name, true)
     }
     // convertImport
@@ -75,13 +75,13 @@ export class InteropConvertor implements NodeConvertor<ConvertResult> {
 
     /////////////////////////////////////////////////////////////////////////////////////////
 
-    convertOptional(type: idl.IDLOptionalType): ConvertResult {
+    convertOptional(type: idl.IDLOptionalType): ConvertorResult {
         return this.convertNode(type.type)
     }
-    convertUnion(type: idl.IDLUnionType): ConvertResult {
+    convertUnion(type: idl.IDLUnionType): ConvertorResult {
         return this.make(type.name, false)
     }
-    convertContainer(type: idl.IDLContainerType): ConvertResult {
+    convertContainer(type: idl.IDLContainerType): ConvertorResult {
         if (idl.IDLContainerUtils.isPromise(type)) {
             return this.make(`Promise_${this.convertNode(type.elementType[0]).text}`)
         }
@@ -96,10 +96,10 @@ export class InteropConvertor implements NodeConvertor<ConvertResult> {
         }
         throw new Error(`Unmapped container type ${idl.DebugUtils.debugPrintType(type)}`)
     }
-    convertImport(type: idl.IDLReferenceType, _: string): ConvertResult {
+    convertImport(type: idl.IDLReferenceType, _: string): ConvertorResult {
         return this.make(idl.IDLCustomObjectType.name)
     }
-    convertTypeReference(type: idl.IDLReferenceType): ConvertResult {
+    convertTypeReference(type: idl.IDLReferenceType): ConvertorResult {
         const refName = type.name
         switch (refName) {
             case "object":
@@ -121,10 +121,10 @@ export class InteropConvertor implements NodeConvertor<ConvertResult> {
             res = this.make("Opt_" + res.text, true)
         return res
     }
-    convertTypeParameter(type: idl.IDLTypeParameterType): ConvertResult {
+    convertTypeParameter(type: idl.IDLTypeParameterType): ConvertorResult {
         return this.make('CustomObject')
     }
-    convertPrimitiveType(type: idl.IDLPrimitiveType): ConvertResult {
+    convertPrimitiveType(type: idl.IDLPrimitiveType): ConvertorResult {
         switch (type) {
             case idl.IDLVoidType: return this.make('void', true)
             case idl.IDLI8Type: return this.make(`Int8`)
