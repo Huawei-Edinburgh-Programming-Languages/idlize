@@ -256,9 +256,9 @@
 |`accessibilityVirtualNode`| Function | Lobah Mikhail | in progress| |
 |`accessibilityChecked`| Function | Lobah Mikhail | in progress| |
 |`accessibilitySelected`| Function | Lobah Mikhail | in progress| |
-|`obscured`| Function |Dmitry A Smirnov |devdone | |
+|`obscured`| Function |Dmitry A Smirnov |done | |
 |`reuseId`| Function |Dmitry A Smirnov |blocked AceEngine | not implemented in ace_engine|
-|`renderFit`| Function | Dmitry A Smirnov|devdone | |
+|`renderFit`| Function | Dmitry A Smirnov|done | |
 |`gestureModifier`| Function | | | |
 |`backgroundBrightness`| Function | Skroba Gleb | done | |
 |`onGestureJudgeBegin`| Function | | | |
