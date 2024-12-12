@@ -476,30 +476,22 @@ export class IdlPeerProcessor {
         return new Method(methodName, signature, modifiers/*, generics*/)
     }
 
-    private processMaterialized(decl: idl.IDLInterface) {
-        const name = decl.name
+    private processMaterialized(idlInterface: idl.IDLInterface) {
+        const name = idlInterface.name
         if (this.library.materializedClasses.has(name)) {
             return
         }
 
-        const isDeclInterface = idl.isInterface(decl)
-
-        const constructor = idl.isClass(decl) ? decl.constructors[0] : undefined
-        const mConstructor = this.makeMaterializedMethod(decl, constructor)
-        const mFinalizer = new MaterializedMethod(name, [], idl.IDLPointerType, false,
-            new Method("getFinalizer", new NamedMethodSignature(idl.IDLPointerType, [], [], []), [MethodModifier.STATIC]))
-        const mFields = decl.properties
+        const materializedFields = idlInterface.properties
             // TODO what to do with setter accessors? Do we need FieldModifier.WRITEONLY? For now, just skip them
             .filter(it => idl.getExtendedAttribute(it, idl.IDLExtendedAttributes.Accessor) !== idl.IDLAccessorAttribute.Setter)
             .map(it => this.makeMaterializedField(it))
-        const mMethods = decl.methods
+        const mMethods = idlInterface.methods
             // TODO: Properly handle methods with return Promise<T> type
-            .map(method => this.makeMaterializedMethod(decl, method))
+            .map(method => this.makeMaterializedMethod(idlInterface, method))
             .filter(it => !idl.isNamedNode(it.method.signature.returnType) || !PeerGeneratorConfig.ignoreReturnTypes.has(it.method.signature.returnType.name))
 
-        const taggedMethods = decl.methods.filter(m => m.extendedAttributes?.find(it => it.name === IDLExtendedAttributes.DtsTag))
-
-        mFields.forEach(f => {
+        materializedFields.forEach(f => {
             const field = f.field
             const idlType = field.type
             // TBD: use deserializer to get complex type from native
@@ -521,9 +513,15 @@ export class IdlPeerProcessor {
                 mMethods.push(setAccessor)
             }
         })
+        const isDeclInterface = idl.isInterface(idlInterface)
+        const constructor = idl.isClass(idlInterface) ? idlInterface.constructors[0] : undefined
+        const mConstructor = this.makeMaterializedMethod(idlInterface, constructor)
+        const mFinalizer = new MaterializedMethod(name, [], idl.IDLPointerType, false,
+            new Method("getFinalizer", new NamedMethodSignature(idl.IDLPointerType, [], [], []), [MethodModifier.STATIC]))
+        const taggedMethods = idlInterface.methods.filter(m => m.extendedAttributes?.find(it => it.name === IDLExtendedAttributes.DtsTag))
         this.library.materializedClasses.set(name,
-            new MaterializedClass(name, isDeclInterface, idl.getSuperType(decl), decl.typeParameters,
-                mFields, mConstructor, mFinalizer, mMethods, true, taggedMethods))
+            new MaterializedClass(name, isDeclInterface, idl.getSuperType(idlInterface), idlInterface.typeParameters,
+                materializedFields, mConstructor, mFinalizer, mMethods, true, taggedMethods))
     }
 
     private makeMaterializedField(prop: idl.IDLProperty): MaterializedField {
