@@ -125,14 +125,14 @@ export class IDLPredefinesVisitor implements GenericVisitor<void> {
     readonly peerLibrary: PeerLibrary
     readonly peerFile: PeerFile
 
-    private packageName?: string
+    private readonly packageName?: string
 
     constructor(options: IdlPeerGeneratorVisitorOptions) {
         this.peerLibrary = options.peerLibrary
         this.peerFile = options.peerFile
-        const packageDeclarations = this.peerFile.entries.filter(entry => idl.isPackage(entry))
-        if (packageDeclarations.length === 1) {
-            const [ pkg ] = packageDeclarations
+        const packageEntries = this.peerFile.entries.filter(entry => idl.isPackage(entry))
+        if (packageEntries.length === 1) {
+            const pkg = packageEntries[0]
             let pkgName = pkg.name ?? ''
             if (pkgName.startsWith('"')) {
                 pkgName = pkgName.substring(1, pkgName.length - 1)
