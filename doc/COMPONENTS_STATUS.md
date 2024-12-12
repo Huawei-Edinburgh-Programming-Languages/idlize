@@ -689,7 +689,7 @@
 |`onDotConnect`| Function | Dmitry A Smirnov| in progress|  |
 |`activateCircleStyle`| Function | Dmitry A Smirnov| blocked AceEngine| https://gitee.com/openharmony/arkui_ace_engine/issues/IAYWON |
 |*PluginComponent*| *Component* | Evstigneev Roman | in progress | |
-|`setPluginComponentOptions`| Function | Evstigneev Roman | in progress | |
+|`setPluginComponentOptions`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
 |`onComplete`| Function | Evstigneev Roman | in progress | |
 |`onError`| Function | Evstigneev Roman | in progress | |
 |*Polygon*| *Component* |Politov Mikhail | blocked | |
