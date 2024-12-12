@@ -145,10 +145,10 @@
 |`backgroundEffect`| Function | Skroba Gleb | done |  |
 |`backgroundImageResizable`| Function | Skroba Gleb | done | |
 |`foregroundEffect`| Function | Skroba Gleb | done |  |
-|`visualEffect`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`backgroundFilter`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`foregroundFilter`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`compositingFilter`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`visualEffect`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`backgroundFilter`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`foregroundFilter`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`compositingFilter`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`opacity`| Function | Roman Sedaikin | done | |
 |`border`| Function | Roman Sedaikin | done | |
 |`borderStyle`| Function | Roman Sedaikin | done | |
@@ -594,8 +594,8 @@
 |`onStart`| Function | Andrey Khudenkikh| in progress |  |
 |`onBounce`| Function |Andrey Khudenkikh | in progress |  |
 |`onFinish`| Function |Andrey Khudenkikh | in progress |  |
-|*MediaCachedImage*| *Component* | Skroba Gleb | in progress | |
-|`setMediaCachedImageOptions`| Function | Skroba Gleb | in progress | |
+|*MediaCachedImage*| *Component* | Skroba Gleb | blocked IDL | |
+|`setMediaCachedImageOptions`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX, https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |*Menu*|*Component*|Morozov Sergey| done |  |
 |`setMenuOptions`| Function |Morozov Sergey| done |  |
 |`fontSize`|Function|Morozov Sergey| done |  |
@@ -647,8 +647,8 @@
 |`type`| Function | Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`target`| Function | Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`params`| Function | Skroba Gleb | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y, https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|*NodeContainer*| *Component* | Skroba Gleb | in progress | |
-|`setNodeContainerOptions`| Function | Skroba Gleb | in progress | |
+|*NodeContainer*| *Component* | Skroba Gleb | blocked IDL | |
+|`setNodeContainerOptions`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAYDN |
 |*CommonTransition*| *Component* | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBANN3 |
 |`slide`| Function | Erokhin Ilya | testskipped | |
 |`translate`| Function | Erokhin Ilya | testskipped | |
@@ -1610,8 +1610,8 @@
 |`applyFocusedAttribute`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`applyDisabledAttribute`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`applySelectedAttribute`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
-|*View*| *Class* | Skroba Gleb | in progress | |
-|`create`| Function | Skroba Gleb | in progress | |
+|*View*| *Class* | Skroba Gleb | blocked IDL | |
+|`create`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*TextContentControllerBase*| *Class* | Morozov Sergey | blocked IDL | |
 |`getCaretOffset`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getTextContentRect`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
