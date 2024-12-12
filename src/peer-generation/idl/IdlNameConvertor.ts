@@ -22,7 +22,7 @@ export class DeclarationNameConvertor implements DeclarationConvertor<string> {
         return decl.name
     }
     convertEnum(decl: idl.IDLEnum): string {
-        return `${idl.getExtAttribute(decl, idl.IDLExtendedAttributes.Namespace) ?? ""}${decl.name}`
+        return `${idl.getExtendedAttribute(decl, idl.IDLExtendedAttributes.Namespace) ?? ""}${decl.name}`
     }
     convertTypedef(decl: idl.IDLTypedef): string {
         return decl.name
@@ -36,14 +36,14 @@ export class DeclarationNameConvertor implements DeclarationConvertor<string> {
 
 export class TSFeatureNameConvertor extends DeclarationNameConvertor {
     override convertEnum(decl: idl.IDLEnum): string {
-        return `${idl.getExtAttribute(decl, idl.IDLExtendedAttributes.Namespace) ?? decl.name}`
+        return `${idl.getExtendedAttribute(decl, idl.IDLExtendedAttributes.Namespace) ?? decl.name}`
     }
     static readonly I = new TSFeatureNameConvertor()
 }
 
 export class ETSDeclarationNameConvertor extends DeclarationNameConvertor {
     override convertEnum(decl: idl.IDLEnum): string {
-        const namespace = idl.getExtAttribute(decl, idl.IDLExtendedAttributes.Namespace)
+        const namespace = idl.getExtendedAttribute(decl, idl.IDLExtendedAttributes.Namespace)
         return `${namespace ? `${namespace}_` : ``}${decl.name}`
     }
     static readonly I = new ETSDeclarationNameConvertor()
@@ -51,7 +51,7 @@ export class ETSDeclarationNameConvertor extends DeclarationNameConvertor {
 
 export class ETSFeatureNameConvertor extends DeclarationNameConvertor {
     override convertEnum(decl: idl.IDLEnum): string {
-        const namespace = idl.getExtAttribute(decl, idl.IDLExtendedAttributes.Namespace)
+        const namespace = idl.getExtendedAttribute(decl, idl.IDLExtendedAttributes.Namespace)
         return `${namespace ? `${namespace}_` : ``}${decl.name}`
     }
     static readonly I = new ETSFeatureNameConvertor()

@@ -15,7 +15,7 @@
 
 import * as idl from "../../idl"
 import {
-    getExtAttribute,
+    getExtendedAttribute,
     IDLExtendedAttributes,
     IDLType,
     maybeOptional
@@ -84,7 +84,7 @@ export class IdlPeerGeneratorVisitor implements GenericVisitor<void> {
 
     visitWholeFile(): void {
         this.peerFile.entries
-            .filter(it => idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Component))
+            .filter(it => idl.hasExtendedAttribute(it, idl.IDLExtendedAttributes.Component))
             .forEach(it => this.visitComponent(it as idl.IDLInterface))
     }
 
@@ -92,7 +92,7 @@ export class IdlPeerGeneratorVisitor implements GenericVisitor<void> {
         const componentName = component.name.replace("Attribute", "")
         if (PeerGeneratorConfig.ignoreComponents.includes(componentName))
             return
-        if (idl.hasExtAttribute(component, IDLExtendedAttributes.HandWrittenImplementation)) {
+        if (idl.hasExtendedAttribute(component, IDLExtendedAttributes.HandWrittenImplementation)) {
             return
         }
         const compInterface = this.peerLibrary.resolveTypeReference(
@@ -171,7 +171,7 @@ export class IDLPredefinesVisitor implements GenericVisitor<void> {
 }
 
 export function isPredefined(entry: idl.IDLEntry) {
-    const maybeNamespace = idl.getExtAttribute(entry, idl.IDLExtendedAttributes.Namespace)
+    const maybeNamespace = idl.getExtendedAttribute(entry, idl.IDLExtendedAttributes.Namespace)
     return maybeNamespace === 'predefined'
 }
 
@@ -490,7 +490,7 @@ export class IdlPeerProcessor {
             new Method("getFinalizer", new NamedMethodSignature(idl.IDLPointerType, [], [], []), [MethodModifier.STATIC]))
         const mFields = decl.properties
             // TODO what to do with setter accessors? Do we need FieldModifier.WRITEONLY? For now, just skip them
-            .filter(it => idl.getExtAttribute(it, idl.IDLExtendedAttributes.Accessor) !== idl.IDLAccessorAttribute.Setter)
+            .filter(it => idl.getExtendedAttribute(it, idl.IDLExtendedAttributes.Accessor) !== idl.IDLAccessorAttribute.Setter)
             .map(it => this.makeMaterializedField(it))
         const mMethods = decl.methods
             // TODO: Properly handle methods with return Promise<T> type
@@ -551,7 +551,7 @@ export class IdlPeerProcessor {
             return new MaterializedMethod(decl.name, [], returnType, false, ctor, outArgConvertor)
         }
 
-        const methodTypeParams = getExtAttribute(method, IDLExtendedAttributes.TypeParameters)
+        const methodTypeParams = getExtendedAttribute(method, IDLExtendedAttributes.TypeParameters)
         method.parameters.forEach(it => this.library.requestType(it.type!, true))
         const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param))
         const signature = generateSignature(method)
@@ -565,11 +565,11 @@ export class IdlPeerProcessor {
         )
     }
 
-    private ignoreDeclaration(decl: idl.IDLEntry, language: Language): boolean {
-        return idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.GlobalScope) ||
-            idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.TSType) ||
-            idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.CPPType) ||
-            PeerGeneratorConfig.ignoreEntry(decl.name!, language)
+    private ignoreDeclaration(declaration: idl.IDLEntry, language: Language): boolean {
+        return idl.hasExtendedAttribute(declaration, idl.IDLExtendedAttributes.GlobalScope) ||
+            idl.hasExtendedAttribute(declaration, idl.IDLExtendedAttributes.TSType) ||
+            idl.hasExtendedAttribute(declaration, idl.IDLExtendedAttributes.CPPType) ||
+            PeerGeneratorConfig.ignoreEntry(declaration.name!, language)
     }
 
     process(): void {
@@ -578,17 +578,17 @@ export class IdlPeerProcessor {
         const peerGenerator = new PeersGenerator(this.library)
         for (const component of this.library.componentsDeclarations)
             peerGenerator.generatePeer(component)
-        const allDeclarations = this.library.files.flatMap(file => file.entries)
-        for (const dep of allDeclarations) {
-            if (PeerGeneratorConfig.ignoreEntry(dep.name, this.library.language) || this.ignoreDeclaration(dep, this.library.language))
+        const allEntries = this.library.files.flatMap(file => file.entries)
+        for (const entry of allEntries) {
+            if (PeerGeneratorConfig.ignoreEntry(entry.name, this.library.language) || this.ignoreDeclaration(entry, this.library.language))
                 continue
-            const isPeerDecl = (idl.isInterface(dep) || idl.isClass(dep)) && this.library.isComponentDeclaration(dep)
-            if (!isPeerDecl && (idl.isClass(dep) || idl.isInterface(dep))) {
-                if (isBuilderClass(dep)) {
-                    this.processBuilder(dep)
+            const isPeerDecl = (idl.isInterface(entry) || idl.isClass(entry)) && this.library.isComponentDeclaration(entry)
+            if (!isPeerDecl && (idl.isClass(entry) || idl.isInterface(entry))) {
+                if (isBuilderClass(entry)) {
+                    this.processBuilder(entry)
                     continue
-                } else if (isMaterialized(dep)) {
-                    this.processMaterialized(dep)
+                } else if (isMaterialized(entry)) {
+                    this.processMaterialized(entry)
                     continue
                 }
             }

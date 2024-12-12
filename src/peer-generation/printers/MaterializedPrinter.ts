@@ -17,7 +17,6 @@ import * as idl from "../../idl"
 import { capitalize, removeExt, renameClassToMaterialized, stringOrNone } from "../../util";
 import { printPeerFinalizer, writePeerMethod } from "./PeersPrinter"
 import {
-    BlockStatement,
     createLanguageWriter,
     FieldModifier,
     LanguageStatement,
@@ -27,7 +26,7 @@ import {
     MethodSignature,
     NamedMethodSignature
 } from "../LanguageWriters";
-import { copyMaterializedMethod, MaterializedClass, MaterializedField, MaterializedMethod } from "../Materialized"
+import { copyMaterializedMethod, MaterializedClass, MaterializedField } from "../Materialized"
 import { makeMaterializedPrologue, tsCopyrightAndWarning } from "../FileGenerators";
 import { groupOverloads, OverloadsPrinter } from "./OverloadsPrinter";
 import { ImportsCollector } from "../ImportsCollector";
@@ -47,9 +46,8 @@ import { copyMethod } from "../LanguageWriters/LanguageWriter";
 import { createReferenceType, forceAsNamedNode, IDLPointerType, IDLThisType, IDLType, IDLVoidType, isOptionalType, maybeOptional } from "../../idl";
 import { getReferenceResolver } from "../ReferenceResolver";
 import { generifiedTypeName } from "../idl/common";
-import { collectDeclItself, collectDeclDependencies, convertDeclToFeature, SyntheticModule } from "../ImportsCollectorUtils";
+import { collectDeclItself, collectDeclDependencies, SyntheticModule } from "../ImportsCollectorUtils";
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
-import { createDependenciesCollector } from "../idl/IdlDependenciesCollector";
 import { isMaterialized } from "../idl/IdlPeerGeneratorVisitor";
 
 interface MaterializedFileVisitor {
@@ -615,7 +613,7 @@ export function printMaterialized(peerLibrary: PeerLibrary, printerContext: Prin
 
 // TBD: Refactor tagged method staff
 function getTaggedName(node: idl.IDLEntry): stringOrNone {
-    return idl.getExtAttribute(node, idl.IDLExtendedAttributes.DtsName) ?? node.name
+    return idl.getExtendedAttribute(node, idl.IDLExtendedAttributes.DtsName) ?? node.name
 }
 
 function paramFromTagged(paramOrTag: idl.IDLParameter | idl.SignatureTag): idl.IDLParameter {

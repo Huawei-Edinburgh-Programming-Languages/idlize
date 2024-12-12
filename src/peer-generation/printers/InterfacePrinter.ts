@@ -37,13 +37,12 @@ import {
 import { ImportFeature, ImportsCollector } from '../ImportsCollector'
 import { PeerFile } from '../PeerFile'
 import { IndentedPrinter } from "../../IndentedPrinter"
-import { TargetFile } from '../printers/TargetFile'
-import { PrinterContext } from '../printers/PrinterContext'
+import { TargetFile } from './TargetFile'
+import { PrinterContext } from './PrinterContext'
 import { convertDeclaration, DeclarationConvertor } from "../LanguageWriters/nameConvertor";
-import { tsCopyrightAndWarning } from '../FileGenerators'
-import { ARK_CUSTOM_OBJECT, ARK_OBJECTBASE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH, INT_VALUE_GETTER } from '../printers/lang/Java'
-import { printJavaImports } from '../printers/lang/JavaPrinters'
-import { collectJavaImports } from '../printers/lang/JavaIdlUtils'
+import { ARK_CUSTOM_OBJECT, ARK_OBJECTBASE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH, INT_VALUE_GETTER } from './lang/Java'
+import { printJavaImports } from './lang/JavaPrinters'
+import { collectJavaImports } from './lang/JavaIdlUtils'
 import { Language } from '../../Language'
 import { ETSLanguageWriter } from '../LanguageWriters/writers/ETSLanguageWriter'
 import { collectProperties } from './StructPrinter'
@@ -252,7 +251,7 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
             return
         }
         // ignore imports since they are replaced with synthetic declarations
-        const importAttr = idl.getExtAttribute(type, idl.IDLExtendedAttributes.Import)
+        const importAttr = idl.getExtendedAttribute(type, idl.IDLExtendedAttributes.Import)
         if (importAttr) {
             return
         }
@@ -484,7 +483,7 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
     private seenInterfaceNames = new Set<string>()
 
     convertTypedef(node: idl.IDLTypedef) {
-        if (idl.hasExtAttribute(node, idl.IDLExtendedAttributes.Import))
+        if (idl.hasExtendedAttribute(node, idl.IDLExtendedAttributes.Import))
             return
         const type = this.typeNameConvertor.getNodeName(node.type)
         const typeParams = this.printTypeParameters(node.typeParameters)
@@ -780,7 +779,7 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
                 if (idl.isModuleType(entry) ||
                     idl.isPackage(entry) ||
                     isPredefined(entry) ||
-                    idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.GlobalScope) ||
+                    idl.hasExtendedAttribute(entry, idl.IDLExtendedAttributes.GlobalScope) ||
                     PeerGeneratorConfig.ignoreEntry(entry.name, this.peerLibrary.language))
                     continue
                 syntheticGenerator.convert(entry)
@@ -833,7 +832,7 @@ class CJInterfacesVisitor extends DefaultInterfacesVisitor {
             for (const entry of file.entries) {
                 if (idl.isModuleType(entry) ||
                     idl.isPackage(entry) ||
-                    idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.GlobalScope) ||
+                    idl.hasExtendedAttribute(entry, idl.IDLExtendedAttributes.GlobalScope) ||
                     isPredefined(entry))
                     continue
                 if (PeerGeneratorConfig.ignoreEntry(entry.name, this.peerLibrary.language))
@@ -905,7 +904,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
             return
         }
         // ignore imports since they are replaced with synthetic declarations
-        const importAttr = idl.getExtAttribute(type, idl.IDLExtendedAttributes.Import)
+        const importAttr = idl.getExtendedAttribute(type, idl.IDLExtendedAttributes.Import)
         if (importAttr) {
             return
         }

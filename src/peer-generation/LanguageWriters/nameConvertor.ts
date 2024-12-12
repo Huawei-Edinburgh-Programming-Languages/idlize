@@ -34,7 +34,7 @@ export function convertType<T>(convertor: TypeConvertor<T>, type: idl.IDLType): 
     if (idl.isUnionType(type)) return convertor.convertUnion(type)
     if (idl.isContainerType(type)) return convertor.convertContainer(type)
     if (idl.isReferenceType(type)) {
-        const importAttr = idl.getExtAttribute(type, idl.IDLExtendedAttributes.Import)
+        const importAttr = idl.getExtendedAttribute(type, idl.IDLExtendedAttributes.Import)
         return importAttr
             ? convertor.convertImport(type, importAttr)
             : convertor.convertTypeReference(type)

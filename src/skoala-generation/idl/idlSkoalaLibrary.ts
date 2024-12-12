@@ -220,13 +220,13 @@ export class IdlSkoalaLibrary implements LibraryInterface {
                 return parent.elements.find(it => it.name === type.name)
             // Else try namespaces
             return entries.find(it =>
-                it.name === typeName && idl.getExtAttribute(it, idl.IDLExtendedAttributes.Namespace) === qualifier)
+                it.name === typeName && idl.getExtendedAttribute(it, idl.IDLExtendedAttributes.Namespace) === qualifier)
         }
 
         const candidates = entries.filter(it => type.name === it.name)
         return candidates.length == 1
             ? candidates[0]
-            : candidates.find(it => !idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Import))
+            : candidates.find(it => !idl.hasExtendedAttribute(it, idl.IDLExtendedAttributes.Import))
     }
 
     createContinuationCallbackReference(continuationType: idl.IDLType): idl.IDLReferenceType {
@@ -368,7 +368,7 @@ export class IdlWrapperProcessor {
                     file.wrapperClasses.set(wrapperClass.className, [wrapperClass, decl])
                     this.collectImports(file.importsCollector, wrapperClass.methods)
                     continue
-                } else if (!idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.GlobalScope)) {
+                } else if (!idl.hasExtendedAttribute(decl, idl.IDLExtendedAttributes.GlobalScope)) {
                     this.library.serializerDeclarations.add(decl)
                 }
             }
@@ -445,7 +445,7 @@ export class IdlWrapperProcessor {
         const finalizer = decl.methods.find(it => it.name == Skoala.getFinalizer)
         const wFinalizer = finalizer ? this.makeWrapperMethod(decl, finalizer) : undefined
         const wFields = decl.properties
-            .filter(it => idl.getExtAttribute(it, idl.IDLExtendedAttributes.Accessor) !== idl.IDLAccessorAttribute.Setter)
+            .filter(it => idl.getExtendedAttribute(it, idl.IDLExtendedAttributes.Accessor) !== idl.IDLAccessorAttribute.Setter)
             .map(it => this.makeWrapperField(it))
         const wMethods = decl.methods
             .filter(it => it.name != Skoala.getFinalizer)
@@ -681,7 +681,7 @@ export class TSSkoalaTypeNameConvertor implements IdlNameConvertor, TypeConverto
         }
 
         let typeSpec = type.name
-        let typeArgs = idl.getExtAttribute(type, idl.IDLExtendedAttributes.TypeArguments)?.split(",")
+        let typeArgs = idl.getExtendedAttribute(type, idl.IDLExtendedAttributes.TypeArguments)?.split(",")
         const maybeTypeArguments = !typeArgs?.length ? '' : `<${typeArgs.join(', ')}>`
         return `${typeSpec}${maybeTypeArguments}`
     }

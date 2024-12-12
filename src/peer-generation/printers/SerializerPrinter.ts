@@ -25,8 +25,8 @@ import {
     DependencyFilter,
     isBuilderClass,
     isMaterialized,
-} from '../idl/IdlPeerGeneratorVisitor';
-import { collectProperties } from '../printers/StructPrinter'
+} from '../idl/IdlPeerGeneratorVisitor'
+import { collectProperties } from './StructPrinter'
 import { FieldModifier, MethodModifier, ProxyStatement, TernaryExpression } from '../LanguageWriters/LanguageWriter'
 import { createDeclarationNameConvertor } from '../idl/IdlNameConvertor';
 import { throwException } from "../../util"
@@ -627,22 +627,22 @@ export function printSerializerImports(library: PeerLibrary, destFile: SourceFil
 
     function collectOhosImports(collector: ImportsCollector, supportsNs: boolean) {
         // TODO Check for compatibility!
-        const nameCovertor = createDeclarationNameConvertor(destFile.language)
+        const nameConvertor = createDeclarationNameConvertor(destFile.language)
         const makeFeature = (node: idl.IDLEntry) => {
             let features = []
             // Enums of OHOS are accessed through namespaces, not directly
-            let ns = idl.getExtAttribute(node, idl.IDLExtendedAttributes.Namespace)
+            let ns = idl.getExtendedAttribute(node, idl.IDLExtendedAttributes.Namespace)
             if (supportsNs && ns) {
                 features.push({ feature: ns, module: `./${declarationPath}` }) // TODO resolve
             }
             features.push({
-                feature: convertDeclaration(nameCovertor, node),
+                feature: convertDeclaration(nameConvertor, node),
                 module: `./${declarationPath}` // TODO resolve
             })
             // Add <class>Internal support class for materialized classes with no constructor
             if (idl.isInterface(node) && isMaterialized(node) && node.constructors.length === 0) {
                 features.push({
-                    feature: getInternalClassName(convertDeclaration(nameCovertor, node)), // TODO check/refactor name generation
+                    feature: getInternalClassName(convertDeclaration(nameConvertor, node)), // TODO check/refactor name generation
                     module: `./${declarationPath}` // TODO resolve
                 })
             }
@@ -673,7 +673,7 @@ class DefaultSerializerDependencyFilter implements DependencyFilter {
             && this.canSerializeDependency(node)
     }
     isParameterized(node: idl.IDLEntry) {
-        return idl.hasExtAttribute(node, idl.IDLExtendedAttributes.TypeParameters)
+        return idl.hasExtendedAttribute(node, idl.IDLExtendedAttributes.TypeParameters)
             || ["Record", "Required"].includes(node.name!)
     }
 

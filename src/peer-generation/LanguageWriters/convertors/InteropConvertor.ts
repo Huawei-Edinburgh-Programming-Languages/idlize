@@ -164,7 +164,7 @@ export class InteropConvertor implements NodeConvertor<ConvertorResult> {
     }
 
     private enumName(target: idl.IDLEnum): string {
-        const namespace = idl.getExtAttribute(target, idl.IDLExtendedAttributes.Namespace)
+        const namespace = idl.getExtendedAttribute(target, idl.IDLExtendedAttributes.Namespace)
         return `${namespace ? namespace + "_" : ""}${target.name}`
     }
 

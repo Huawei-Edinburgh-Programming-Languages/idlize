@@ -14,8 +14,7 @@
  */
 
 import * as idl from '../../../idl'
-import { throwException } from '../../../util'
-import { ARK_CUSTOM_OBJECT, cjCustomTypeMapping, convertCJOptional } from '../../printers/lang/Cangjie'
+import { ARK_CUSTOM_OBJECT, cjCustomTypeMapping } from '../../printers/lang/Cangjie'
 import { ReferenceResolver } from '../../ReferenceResolver'
 import { convertNode, convertType, IdlNameConvertor, NodeConvertor } from "../nameConvertor"
 
@@ -41,8 +40,8 @@ export class CJIDLNodeToStringConvertor implements NodeConvertor<string>, IdlNam
             return `ArrayList<${convertType(this, type.elementType[0])}>`
         }
         if (idl.IDLContainerUtils.isRecord(type)) {
-            const stringes = type.elementType.slice(0, 2).map(it => convertType(this, it)).map(this.maybeConvertPrimitiveType, this)
-            return `Map<${stringes[0]}, ${stringes[1]}>`
+            const strings = type.elementType.slice(0, 2).map(it => convertType(this, it)).map(this.maybeConvertPrimitiveType, this)
+            return `Map<${strings[0]}, ${strings[1]}>`
         }
         throw new Error(`IDL type ${idl.DebugUtils.debugPrintType(type)} not supported`)
     }
@@ -62,7 +61,7 @@ export class CJIDLNodeToStringConvertor implements NodeConvertor<string>, IdlNam
         return type.name
     }
     convertTypeReference(type: idl.IDLReferenceType): string {
-        const importAttr = idl.getExtAttribute(type, idl.IDLExtendedAttributes.Import)
+        const importAttr = idl.getExtendedAttribute(type, idl.IDLExtendedAttributes.Import)
         if (importAttr) {
             return this.convertImport(type, importAttr)
         }
@@ -72,7 +71,7 @@ export class CJIDLNodeToStringConvertor implements NodeConvertor<string>, IdlNam
             if (idl.isCallback(decl)) {
                 return this.callbackType(decl)
             }
-            const entity = idl.getExtAttribute(decl, idl.IDLExtendedAttributes.Entity)
+            const entity = idl.getExtendedAttribute(decl, idl.IDLExtendedAttributes.Entity)
             if (entity) {
                 const isTuple = entity === idl.IDLEntity.Tuple
                 return this.productType(decl as idl.IDLInterface, isTuple, !isTuple)

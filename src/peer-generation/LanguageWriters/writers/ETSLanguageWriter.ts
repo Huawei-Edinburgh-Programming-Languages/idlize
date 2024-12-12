@@ -27,7 +27,7 @@ import {
     ObjectArgs
 } from "../LanguageWriter"
 import { TSCastExpression, TSLambdaExpression, TSLanguageWriter } from "./TsLanguageWriter"
-import { getExtAttribute, IDLEnum, IDLI32Type, IDLThisType, IDLType, IDLVoidType } from '../../../idl'
+import { getExtendedAttribute, IDLEnum, IDLI32Type, IDLThisType, IDLType, IDLVoidType } from '../../../idl'
 import {AggregateConvertor, ArgConvertor, ArrayConvertor, BaseArgConvertor, CustomTypeConvertor, EnumConvertor, InterfaceConvertor, makeInterfaceTypeCheckerCall, RuntimeType} from "../../ArgConvertors"
 import { Language } from "../../../Language"
 import { ReferenceResolver } from "../../ReferenceResolver"
@@ -88,7 +88,7 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
                     [FieldModifier.STATIC, FieldModifier.READONLY],
                     false,
                     writer.makeString(`new ${className}(${ctorArgs.join(",")})`))
-                let originalName = getExtAttribute(member, idl.IDLExtendedAttributes.OriginalEnumMemberName)
+                let originalName = getExtendedAttribute(member, idl.IDLExtendedAttributes.OriginalEnumMemberName)
                 if (originalName) {
                     writer.writeFieldDeclaration(originalName,
                         idl.createReferenceType(this.enumEntity.name),

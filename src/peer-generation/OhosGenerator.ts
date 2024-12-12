@@ -15,16 +15,16 @@
 
 import * as fs from 'fs'
 import * as path from 'path'
-import { createConstructor, createContainerType, createOptionalType, createReferenceType, createTypeParameterReference, forceAsNamedNode, getExtAttribute, hasExtAttribute, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLMethod, IDLParameter, IDLPointerType, IDLStringType, IDLType, IDLU8Type, IDLUint8ArrayType, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isInterface, isMethod, isReferenceType, isType, isUnionType } from '../idl'
+import { createConstructor, createContainerType, createOptionalType, createReferenceType, createTypeParameterReference, forceAsNamedNode, hasExtendedAttribute, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLMethod, IDLParameter, IDLPointerType, IDLStringType, IDLType, IDLU8Type, IDLUint8ArrayType, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isInterface, isMethod, isReferenceType, isType, isUnionType } from '../idl'
 import { IndentedPrinter } from "../IndentedPrinter"
 import { Language } from '../Language'
-import { capitalize, getOrPut } from '../util'
+import { capitalize } from '../util'
 import { ArgConvertor, generateCallbackAPIArguments } from './ArgConvertors'
 import { PrimitiveType } from './ArkPrimitiveType'
 import { makeDeserializeAndCall, makeSerializerForOhos, readLangTemplate } from './FileGenerators'
 import { qualifiedName } from './idl/common'
 import { isMaterialized } from './idl/IdlPeerGeneratorVisitor'
-import { CppLanguageWriter, createLanguageWriter, ExpressionStatement, FieldModifier, LanguageExpression, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature } from './LanguageWriters'
+import { CppLanguageWriter, createLanguageWriter, ExpressionStatement, LanguageExpression, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature } from './LanguageWriters'
 import { PeerLibrary } from './PeerLibrary'
 import { printBridgeCcForOHOS } from './printers/BridgeCcPrinter'
 import { printCallbacksKinds, printManagedCaller } from './printers/CallbacksPrinter'
@@ -151,7 +151,7 @@ class OHOSVisitor {
             _c.print(`&${destructName},`)
             this.impls.set(destructName, { params, returnType: 'void'})
         }
-        let isGlobalScope = hasExtAttribute(clazz, IDLExtendedAttributes.GlobalScope)
+        let isGlobalScope = hasExtendedAttribute(clazz, IDLExtendedAttributes.GlobalScope)
         clazz.methods.forEach(method => {
             let params = new Array<NameType>()
             if (!method.isStatic && !isGlobalScope) {
@@ -190,7 +190,7 @@ class OHOSVisitor {
     }
 
     private modifierName(clazz: IDLInterface): string {
-        if (hasExtAttribute(clazz, IDLExtendedAttributes.GlobalScope)) {
+        if (hasExtendedAttribute(clazz, IDLExtendedAttributes.GlobalScope)) {
             return `${PrimitiveType.Prefix}${this.libraryName}_Modifier`
         }
         return `${PrimitiveType.Prefix}${this.libraryName}_${clazz.name}Modifier`
@@ -252,7 +252,7 @@ class OHOSVisitor {
     }
 
     private apiName(clazz: IDLInterface): string {
-        if (hasExtAttribute(clazz, IDLExtendedAttributes.GlobalScope)) return capitalize(this.libraryName)
+        if (hasExtendedAttribute(clazz, IDLExtendedAttributes.GlobalScope)) return capitalize(this.libraryName)
         return capitalize(clazz.name)
     }
 

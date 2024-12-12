@@ -77,7 +77,7 @@ export class TsIDLNodeToStringConverter implements NodeConvertor<string>, IdlNam
     }
 
     protected getNamespacePrefix(decl: idl.IDLEntry): stringOrNone {
-        let namespace = idl.getExtAttribute(decl, idl.IDLExtendedAttributes.Namespace)
+        let namespace = idl.getExtendedAttribute(decl, idl.IDLExtendedAttributes.Namespace)
         if (namespace !== undefined) {
             namespace += "."
         }
@@ -92,7 +92,7 @@ export class TsIDLNodeToStringConverter implements NodeConvertor<string>, IdlNam
                 if (idl.isCallback(decl)) {
                     return namespacePrefix + this.mapCallback(decl)
                 }
-                const entity = idl.getExtAttribute(decl, idl.IDLExtendedAttributes.Entity)
+                const entity = idl.getExtendedAttribute(decl, idl.IDLExtendedAttributes.Entity)
                 if (entity) {
                     const isTuple = entity === idl.IDLEntity.Tuple
                     return this.productType(decl as idl.IDLInterface, isTuple, !isTuple)

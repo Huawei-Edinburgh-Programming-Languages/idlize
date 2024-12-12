@@ -16,7 +16,7 @@
 import * as idl from "../../../idl";
 import { TsIDLNodeToStringConverter } from "./TSConvertors";
 import { createReferenceType, IDLEntry, IDLReferenceType } from "../../../idl";
-import { createDeclarationNameConvertor, DeclarationNameConvertor } from "../../idl/IdlNameConvertor";
+import { createDeclarationNameConvertor } from "../../idl/IdlNameConvertor";
 import { convertDeclaration } from "../nameConvertor";
 import { Language } from "../../../Language";
 import { stringOrNone } from "../../../util";
@@ -125,7 +125,7 @@ export class EtsIDLNodeToStringConvertor extends TsIDLNodeToStringConverter {
     }
 
     protected getNamespacePrefix(decl: IDLEntry): stringOrNone {
-        return idl.getExtAttribute(decl, idl.IDLExtendedAttributes.Namespace);
+        return idl.getExtendedAttribute(decl, idl.IDLExtendedAttributes.Namespace);
     }
 
     protected mapFunctionType(typeArgs: string[]): string {

@@ -14,7 +14,6 @@
  */
 
 import * as idl from '../../../idl'
-import { throwException } from '../../../util';
 import { ARK_CUSTOM_OBJECT, convertJavaOptional, javaCustomTypeMapping } from '../../printers/lang/Java';
 import { ReferenceResolver } from '../../ReferenceResolver';
 import { convertNode, convertType, IdlNameConvertor, NodeConvertor } from "../nameConvertor";
@@ -108,7 +107,7 @@ export class JavaIDLNodeToStringConvertor implements NodeConvertor<JavaTypeAlias
         return JavaTypeAlias.fromTypeName(type.name, false)
     }
     convertTypeReference(type: idl.IDLReferenceType): JavaTypeAlias {
-        const importAttr = idl.getExtAttribute(type, idl.IDLExtendedAttributes.Import)
+        const importAttr = idl.getExtendedAttribute(type, idl.IDLExtendedAttributes.Import)
         if (importAttr) {
             return this.convertImport(type, importAttr)
         }

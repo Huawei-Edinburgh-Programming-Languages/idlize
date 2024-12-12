@@ -104,5 +104,5 @@ export function collectProperties(decl: idl.IDLInterface, library: IdlSkoalaLibr
     return [
         ...(superDecl ? collectProperties(superDecl as idl.IDLInterface, library) : []),
         ...decl.properties,
-    ].filter(it => !it.isStatic && !idl.hasExtAttribute(it, idl.IDLExtendedAttributes.CommonMethod))
+    ].filter(it => !it.isStatic && !idl.hasExtendedAttribute(it, idl.IDLExtendedAttributes.CommonMethod))
 }

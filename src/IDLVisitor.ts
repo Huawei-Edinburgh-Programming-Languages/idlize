@@ -266,11 +266,11 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         }
         if (ts.isClassDeclaration(node)) {
             const entry = this.serializeClass(node)
-            if (!PeerGeneratorConfig.ignoreComponents.includes(idl.getExtAttribute(entry, idl.IDLExtendedAttributes.Component) ?? ""))
+            if (!PeerGeneratorConfig.ignoreComponents.includes(idl.getExtendedAttribute(entry, idl.IDLExtendedAttributes.Component) ?? ""))
                 this.output.push(entry)
         } else if (ts.isInterfaceDeclaration(node)) {
             const entry = this.serializeInterface(node)
-            if (!PeerGeneratorConfig.ignoreComponents.includes(idl.getExtAttribute(entry, idl.IDLExtendedAttributes.Component) ?? ""))
+            if (!PeerGeneratorConfig.ignoreComponents.includes(idl.getExtendedAttribute(entry, idl.IDLExtendedAttributes.Component) ?? ""))
                 this.output.push(entry)
         } else if (ts.isModuleDeclaration(node)) {
             if (this.isKnownAmbientModuleDeclaration(node)) {
@@ -316,8 +316,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         if (node.importClause?.namedBindings && ts.isNamedImports(node.importClause.namedBindings)) {
             importClause = node.importClause.namedBindings.elements.map(it => it.getText())
         }
-        const result = idl.createImport(name, importClause)
-        return result
+        return idl.createImport(name, importClause)
     }
 
     serializeAmbientModuleDeclaration(node: ts.ModuleDeclaration): idl.IDLModule {

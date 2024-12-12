@@ -111,9 +111,9 @@ export class PeerLibrary implements LibraryInterface {
         return this.files.find(it => it.originalFilename === filename)
     }
 
-    findComponentByDeclaration(iface: idl.IDLInterface): IdlComponentDeclaration | undefined {
+    findComponentByInterface(idlInterface: idl.IDLInterface): IdlComponentDeclaration | undefined {
         return this.componentsDeclarations.find(it =>
-            it.interfaceDeclaration === iface || it.attributeDeclaration === iface)
+            it.interfaceDeclaration === idlInterface || it.attributeDeclaration === idlInterface)
     }
 
     findComponentByType(type: idl.IDLType): IdlComponentDeclaration | undefined {
@@ -122,8 +122,8 @@ export class PeerLibrary implements LibraryInterface {
             idl.forceAsNamedNode(type).name === it.attributeDeclaration.name)
     }
 
-    isComponentDeclaration(iface: idl.IDLInterface): boolean {
-        return this.findComponentByDeclaration(iface) !== undefined
+    isComponentDeclaration(idlInterface: idl.IDLInterface): boolean {
+        return this.findComponentByInterface(idlInterface) !== undefined
     }
 
     shouldGenerateComponent(name: string): boolean {
@@ -154,7 +154,7 @@ export class PeerLibrary implements LibraryInterface {
                 return parent.elements.find(it => it.name === type.name)
             // Else try namespaces
             return entries.find(it =>
-                it.name === typeName && idl.getExtAttribute(it, idl.IDLExtendedAttributes.Namespace) === qualifier)
+                it.name === typeName && idl.getExtendedAttribute(it, idl.IDLExtendedAttributes.Namespace) === qualifier)
         }
 
         const candidates = entries.filter(it => type.name === it.name)
@@ -166,7 +166,7 @@ export class PeerLibrary implements LibraryInterface {
         return candidates.length == 1
             ? candidates[0]
             : candidates.find(it => {
-                return !idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Import)
+                return !idl.hasExtendedAttribute(it, idl.IDLExtendedAttributes.Import)
             })
     }
 

@@ -1154,16 +1154,16 @@ function printScopes(entries: IDLEntry[]) {
         .flatMap((it: IDLEntry[]) => it.map(printScoped))
 }
 
-export function hasExtAttribute(node: IDLNode, attribute: IDLExtendedAttributes): boolean {
+export function hasExtendedAttribute(node: IDLNode, attribute: IDLExtendedAttributes): boolean {
     return node.extendedAttributes?.find((it) => it.name == attribute) != undefined
 }
 
-export function getExtAttribute(node: IDLNode, name: IDLExtendedAttributes): stringOrNone {
+export function getExtendedAttribute(node: IDLNode, name: IDLExtendedAttributes): stringOrNone {
     return node.extendedAttributes?.find(it => it.name === name)?.value
 }
 
 export function getVerbatimDts(node: IDLEntry): stringOrNone {
-    let value = getExtAttribute(node, IDLExtendedAttributes.VerbatimDts)
+    let value = getExtendedAttribute(node, IDLExtendedAttributes.VerbatimDts)
     return value ? value.substring(1, value.length - 1) : undefined
 }
 

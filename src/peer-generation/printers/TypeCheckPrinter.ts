@@ -2,7 +2,6 @@ import * as idl from '../../idl'
 import { ImportFeature, ImportsCollector } from "../ImportsCollector";
 import {
     createLanguageWriter,
-    createTypeNameConvertor,
     generateTypeCheckerName,
     LanguageExpression,
     LanguageWriter,
@@ -11,7 +10,7 @@ import {
     NamedMethodSignature
 } from "../LanguageWriters";
 import { PeerLibrary } from "../PeerLibrary";
-import { createDeclarationNameConvertor, DeclarationNameConvertor } from "../idl/IdlNameConvertor";
+import { createDeclarationNameConvertor } from "../idl/IdlNameConvertor";
 import { Language } from "../../Language";
 import { IDLBooleanType, isReferenceType } from "../../idl";
 import { getReferenceResolver } from '../ReferenceResolver';
@@ -127,7 +126,7 @@ function collectTypeCheckDeclarations(library: PeerLibrary): (idl.IDLInterface |
         for (const decl of file.entries) {
             if (idl.isModuleType(decl) ||
                 idl.isPackage(decl) ||
-                idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.GlobalScope) ||
+                idl.hasExtendedAttribute(decl, idl.IDLExtendedAttributes.GlobalScope) ||
                 isPredefined(decl))
                 continue
             if (PeerGeneratorConfig.ignoreEntry(decl.name, library.language))

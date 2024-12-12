@@ -15,7 +15,7 @@
 
 import * as idl from "../../idl"
 import { CustomPrintVisitor as DtsPrintVisitor} from "../../from-idl/DtsPrinter"
-import { isMaterialized, isPredefined } from "../idl/IdlPeerGeneratorVisitor"
+import { isPredefined } from "../idl/IdlPeerGeneratorVisitor"
 import { PeerLibrary } from "../PeerLibrary"
 import { LanguageWriter } from "../LanguageWriters"
 import { DependenciesCollector } from "../idl/IdlDependenciesCollector"
@@ -31,15 +31,15 @@ class GeneratorSyntheticPrinter extends DependenciesCollector {
 
     convertImport(type: idl.IDLReferenceType, importClause: string): idl.IDLNode[] {
         const decl = this.library.resolveTypeReference(type)
-        if (decl && !idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.Import))
+        if (decl && !idl.hasExtendedAttribute(decl, idl.IDLExtendedAttributes.Import))
             this.onGeneratorSyntheticDependency(decl)
         return super.convertImport(type, importClause)
     }
 }
 
 function printDeclarationIfNeeded(library: PeerLibrary, entry: idl.IDLEntry, seenNames: Set<String>): string {
-    const maybeNamespace = idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.Namespace)
-        ? `${idl.getExtAttribute(entry, idl.IDLExtendedAttributes.Namespace)}.`
+    const maybeNamespace = idl.hasExtendedAttribute(entry, idl.IDLExtendedAttributes.Namespace)
+        ? `${idl.getExtendedAttribute(entry, idl.IDLExtendedAttributes.Namespace)}.`
         : ``
     const scopedName = `${maybeNamespace}${entry.name}`
     if (seenNames.has(scopedName))

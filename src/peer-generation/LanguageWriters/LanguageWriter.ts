@@ -249,7 +249,7 @@ export class TsEnumEntityStatement implements LanguageStatement {
     constructor(private readonly enumEntity: idl.IDLEnum, private readonly isExport: boolean) {}
     write(writer: LanguageWriter): void {
         // writer.print(this.enumEntity.comment)
-        const namespace = idl.getExtAttribute(this.enumEntity, idl.IDLExtendedAttributes.Namespace)
+        const namespace = idl.getExtendedAttribute(this.enumEntity, idl.IDLExtendedAttributes.Namespace)
         if (namespace) writer.pushNamespace(namespace)
 
         writer.print(`${this.isExport ? "export " : ""}enum ${this.enumEntity.name} {`)
@@ -260,7 +260,7 @@ export class TsEnumEntityStatement implements LanguageStatement {
                 ? ` = ${this.maybeQuoted(member.initializer)}` : ``
             writer.print(`${member.name}${initValue},`)
 
-            let originalName = idl.getExtAttribute(member, idl.IDLExtendedAttributes.OriginalEnumMemberName)
+            let originalName = idl.getExtendedAttribute(member, idl.IDLExtendedAttributes.OriginalEnumMemberName)
             if (originalName) {
                 const initValue = ` = ${member.name}`
                 writer.print(`${originalName}${initValue},`)

@@ -18,7 +18,7 @@ import { Language } from "../../Language"
 import { capitalize } from "../../util"
 
 export function isImport(decl: idl.IDLNode): boolean {
-    return idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.Import)
+    return idl.hasExtendedAttribute(decl, idl.IDLExtendedAttributes.Import)
 }
 
 export function isStringEnum(decl: idl.IDLEnum): boolean {
@@ -26,7 +26,7 @@ export function isStringEnum(decl: idl.IDLEnum): boolean {
 }
 
 export function qualifiedName(decl: idl.IDLNode, language: Language): string {
-    const namespace = idl.getExtAttribute(decl, idl.IDLExtendedAttributes.Namespace)
+    const namespace = idl.getExtendedAttribute(decl, idl.IDLExtendedAttributes.Namespace)
     const prefix = namespace
         ? namespace + (language === Language.CPP ? '_' : '.')
         : ""

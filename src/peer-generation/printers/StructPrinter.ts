@@ -480,7 +480,7 @@ export function collectProperties(decl: idl.IDLInterface, library: LibraryInterf
         ...(superDecl ? collectProperties(superDecl as idl.IDLInterface, library) : []),
         ...decl.properties,
         ...collectBuilderProperties(decl, library)
-    ].filter(it => !it.isStatic && !idl.hasExtAttribute(it, idl.IDLExtendedAttributes.CommonMethod))
+    ].filter(it => !it.isStatic && !idl.hasExtendedAttribute(it, idl.IDLExtendedAttributes.CommonMethod))
 }
 
 class NameWithType {
