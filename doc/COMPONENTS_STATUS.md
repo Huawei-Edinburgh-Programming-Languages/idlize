@@ -1662,7 +1662,7 @@
 |`setEnabled`| Function | Kovalev Sergey | done | |
 |`isEnabled`| Function | Kovalev Sergey | done | |
 |`getState`| Function | Kovalev Sergey | done | |
-|`getEventTargetInfo`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getEventTargetInfo`| Function | Maksimov Nikita | in progress | |
 |`isValid`| Function | Kovalev Sergey | done | |
 |*PanRecognizer*| *Class* | Politov Mikhail | in progress | |
 |`getPanGestureOptions`| Function | Politov Mikhail | in progress | |
