@@ -256,9 +256,9 @@
 |`accessibilityVirtualNode`| Function | Lobah Mikhail | in progress| |
 |`accessibilityChecked`| Function | Lobah Mikhail | in progress| |
 |`accessibilitySelected`| Function | Lobah Mikhail | in progress| |
-|`obscured`| Function |Dmitry A Smirnov |in progress | |
-|`reuseId`| Function |Dmitry A Smirnov |in progress | |
-|`renderFit`| Function | Dmitry A Smirnov|in progress | |
+|`obscured`| Function |Dmitry A Smirnov |devdone | |
+|`reuseId`| Function |Dmitry A Smirnov |blocked | not implemented in ace_engine|
+|`renderFit`| Function | Dmitry A Smirnov|devdone | |
 |`gestureModifier`| Function | | | |
 |`backgroundBrightness`| Function | Skroba Gleb | done | |
 |`onGestureJudgeBegin`| Function | | | |
@@ -267,7 +267,7 @@
 |`monopolizeEvents`| Function | | | |
 |`onTouchIntercept`| Function | | | |
 |`onSizeChange`| Function | Dmitry A Smirnov|in progress | |
-|`customProperty`| Function | Dmitry A Smirnov|in progress | |
+|`customProperty`| Function | Dmitry A Smirnov|in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`expandSafeArea`| Function | Dmitry A Smirnov|in progress | |
 |`background`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`backgroundImage`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
