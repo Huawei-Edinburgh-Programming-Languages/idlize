@@ -692,12 +692,12 @@
 |`setPluginComponentOptions`| Function | Evstigneev Roman | in progress | |
 |`onComplete`| Function | Evstigneev Roman | in progress | |
 |`onError`| Function | Evstigneev Roman | in progress | |
-|*Polygon*| *Component* |Politov Mikhail | in progress | |
-|`setPolygonOptions`| Function | Politov Mikhail | in progress | |
-|`points`| Function | Politov Mikhail | in progress |  |
-|*Polyline*| *Component* | Politov Mikhail | in progress |  |
-|`setPolylineOptions`| Function | Politov Mikhail | in progress |  |
-|`points`| Function | Politov Mikhail | in progress |  |
+|*Polygon*| *Component* |Politov Mikhail | blocked | |
+|`setPolygonOptions`| Function | Politov Mikhail | devdone | |
+|`points`| Function | Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IBAGL8 |
+|*Polyline*| *Component* | Politov Mikhail | blocked |  |
+|`setPolylineOptions`| Function | Politov Mikhail | devdone |  |
+|`points`| Function | Politov Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IBAGL8 |
 |*Progress*| *Component* | Erokhin Ilya | blocked | |
 |`setProgressOptions`| Function | Erokhin Ilya | done | |
 |`value`| Function | Erokhin Ilya | done | |
