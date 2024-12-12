@@ -1833,7 +1833,7 @@
 |`setStyledString`| Function | Pavelyev Ivan | in progress | |
 |`getStyledString`| Function | Pavelyev Ivan | in progress | |
 |*LayoutManager*| *Class* | Andrey Khudenkikh | blocked IDL | |
-|`getLineCount`| Function | Andrey Khudenkikh | devdone | |
+|`getLineCount`| Function | Andrey Khudenkikh | done | |
 |`getGlyphPositionAtCoordinate`| Function | Andrey Khudenkikh | blocked IDL | |
 |`getLineMetrics`| Function | Andrey Khudenkikh | blocked IDL | |
 |`getRectsForRange`| Function | Andrey Khudenkikh | blocked IDL | |
