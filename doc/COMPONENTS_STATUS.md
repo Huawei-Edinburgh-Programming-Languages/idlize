@@ -1439,7 +1439,7 @@
 |*RemoteWindow*| *Component* | Spirin Andrey | in progress | |
 |`setRemoteWindowOptions`| Function | Spirin Andrey | in progress | |
 |*WaterFlow*| *Component* | Kovalev Sergey | in progress |  |
-|`setWaterFlowOptions`| Function | Kovalev Sergey |in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`setWaterFlowOptions`| Function | Kovalev Sergey |blocked IDL| Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`columnsTemplate`| Function | Kovalev Sergey | done |  |
 |`itemConstraintSize`| Function | Kovalev Sergey | done |  |
 |`rowsTemplate`| Function | Kovalev Sergey | done |  |
