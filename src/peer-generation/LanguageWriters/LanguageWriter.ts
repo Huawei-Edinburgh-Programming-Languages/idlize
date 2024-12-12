@@ -221,7 +221,7 @@ export class MultiBranchIfStatement implements LanguageStatement {
         })
 
         if (this.statements.length > 0 && this.elseStatement !== undefined) {
-            writer.print(" else {")
+            writer.print("else {")
             writer.pushIndent()
             this.elseStatement.write(writer)
             writer.popIndent()
@@ -308,7 +308,7 @@ export abstract class LambdaExpression implements LanguageExpression {
         return writer.printer.getOutput()
             .map(line => line.trim())
             .filter(line => line !== "")
-            .map(line => line === "{" || line === "}" || this.statementHasSemicolon ? line : `${line};`)
+            .map(line => line === "{" || line === "}" || this.statementHasSemicolon ? `${line};` : `${line};`)
             .join(" ")
     }
 }
