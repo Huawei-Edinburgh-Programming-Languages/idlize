@@ -1452,7 +1452,7 @@
 |`cachedCount`| Function |Kovalev Sergey | done |  |
 |`onReachStart`| Function | Kovalev Sergey | done | |
 |`onReachEnd`| Function | Kovalev Sergey | done | |
-|`onScrollFrameBegin`| Function | Kovalev Sergey | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onScrollFrameBegin`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onScrollIndex`| Function | Kovalev Sergey | done | |
 |*UIExtensionComponent*| *Component* | Tuzhilkin Ivan | blocked IDL | |
 |`setUIExtensionComponentOptions`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
