@@ -1828,7 +1828,7 @@
 |`stopEditing`| Function | Morozov Sergey | in progress | |
 |`setCaretOffset`| Function | Morozov Sergey | in progress | |
 |`getCaretOffset`| Function | Morozov Sergey | in progress | |
-|`getPreviewText`| Function | Morozov Sergey | in progress | |
+|`getPreviewText`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*StyledStringController*| *Class* | Pavelyev Ivan | in progress | |
 |`setStyledString`| Function | Pavelyev Ivan | in progress | |
 |`getStyledString`| Function | Pavelyev Ivan | in progress | |
