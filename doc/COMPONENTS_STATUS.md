@@ -1843,7 +1843,7 @@
 |*EditMenuOptions*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onCreateMenu`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onMenuItemClick`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|*TextInputController*| *Class* | Spirin Andrey | in progress |  |
+|*TextInputController*| *Class* | Spirin Andrey | testskipped |  |
 |`caretPosition`| Function | Spirin Andrey | testskipped |  |
 |`setTextSelection`| Function | Spirin Andrey | testskipped |  |
 |`stopEditing`| Function |  Spirin Andrey | testskipped |  |
