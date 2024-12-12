@@ -20,7 +20,7 @@ public open class PeerNode {
     private static var PEER_NODE_TYPE = 11
     public var peer: NativePeerNode
     
-    static func getId() {
+    static func nextId() {
         currentId += 1
         return currentId
     }
