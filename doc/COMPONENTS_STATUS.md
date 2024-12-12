@@ -328,7 +328,7 @@
 |`edgeEffect`| Function | Samarin Sergey | devdone | |
 |`fadingEdge`| Function | Samarin Sergey | devdone | |
 |*Component3D*| *Component* |Kovalev Sergey | in progress | |
-|`setComponent3DOptions`| Function |Kovalev Sergey | in progress |  |
+|`setComponent3DOptions`| Function |Kovalev Sergey | blocked IDL| Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`environment`| Function |Kovalev Sergey | devdone |  |
 |`shader`| Function |Kovalev Sergey | devdone |  |
 |`shaderImageTexture`| Function |Kovalev Sergey | devdone |  |
