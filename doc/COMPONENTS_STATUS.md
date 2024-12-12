@@ -1025,7 +1025,7 @@
 |`fontWeight`| Function |Dmitry A Smirnov| done|  |
 |`effectStrategy`| Function |Dmitry A Smirnov| done|  |
 |`renderingStrategy`| Function |Dmitry A Smirnov| done|  |
-|*Tabs*| *Component* | Tuzhilkin Ivan | in progress |  |
+|*Tabs*| *Component* | Tuzhilkin Ivan | blocked IDL |  |
 |`setTabsOptions`| Function | Skroba Gleb | done |  |
 |`vertical`| Function | Tuzhilkin Ivan | done |  |
 |`barPosition`| Function | Tuzhilkin Ivan | done |  |
@@ -1099,7 +1099,7 @@
 |`enableHapticFeedback`| Function |Samarin Sergey | done |  |
 |`selection`| Function |Samarin Sergey | testskipped |  |
 |`bindSelectionMenu`| Function | Kirill Kirichenko | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|*TextArea*|*Component*|Tuzhilkin Ivan|in progress|  |
+|*TextArea*|*Component*|Tuzhilkin Ivan|blocked IDL|  |
 |`setTextAreaOptions`|Function|Tuzhilkin Ivan|testskipped|  |
 |`placeholderColor`|Function|Tuzhilkin Ivan|testskipped|  |
 |`placeholderFont`|Function|Tuzhilkin Ivan|testskipped|  |
@@ -1417,12 +1417,12 @@
 |*WindowScene*| *Component* | Spirin Andrey | in progress | |
 |`setWindowSceneOptions`| Function | Spirin Andrey | in progress | |
 |`attractionEffect`| Function | Spirin Andrey | in progress | |
-|*XComponent*| *Component* | Tuzhilkin Ivan | in progress | |
-|`setXComponentOptions`| Function | Tuzhilkin Ivan | devdone | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
+|*XComponent*| *Component* | Tuzhilkin Ivan | blocked IDL | |
+|`setXComponentOptions`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`onLoad`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB7RSS |
-|`onDestroy`| Function | Tuzhilkin Ivan | devdone | |
-|`enableAnalyzer`| Function | Tuzhilkin Ivan | devdone | |
-|`enableSecure`| Function | Tuzhilkin Ivan | devdone | |
+|`onDestroy`| Function | Tuzhilkin Ivan | testskipped | |
+|`enableAnalyzer`| Function | Tuzhilkin Ivan | testskipped | |
+|`enableSecure`| Function | Tuzhilkin Ivan | testskipped | |
 |*SideBarContainer*| *Component* |Dmitry A Smirnov|blocked|  |
 |`setSideBarContainerOptions`| Function |Dmitry A Smirnov|done|  |
 |`showSideBar`| Function |Dmitry A Smirnov|done|  |
@@ -1454,7 +1454,7 @@
 |`onReachEnd`| Function | Kovalev Sergey | done | |
 |`onScrollFrameBegin`| Function | Kovalev Sergey | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onScrollIndex`| Function | Kovalev Sergey | done | |
-|*UIExtensionComponent*| *Component* | Tuzhilkin Ivan | in progress | |
+|*UIExtensionComponent*| *Component* | Tuzhilkin Ivan | blocked IDL | |
 |`setUIExtensionComponentOptions`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`onRemoteReady`| Function | Tuzhilkin Ivan | testskipped | |
 |`onReceive`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
@@ -1987,7 +1987,7 @@
 |`backward`| Function | Erokhin Ilya | done | |
 |`forward`| Function | Erokhin Ilya | done | |
 |`getCookieManager`| Function | Erokhin Ilya | testskipped | |
-|*XComponentController*| *Class* | Tuzhilkin Ivan | in progress | |
+|*XComponentController*| *Class* | Tuzhilkin Ivan | blocked IDL | |
 |`getXComponentSurfaceId`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getXComponentContext`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF |
 |`setXComponentSurfaceSize`| Function | Tuzhilkin Ivan | testskipped | |
@@ -2006,13 +2006,13 @@
 |`update`| Function | Kovalev Sergey | devdone | |
 |`values`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`length`| Function | Kovalev Sergey | devdone | |
-|*UIExtensionProxy*| *Class* | | | |
-|`send`| Function | | | |
-|`sendSync`| Function | | | |
-|`onAsyncReceiverRegister`| Function | | | |
-|`onSyncReceiverRegister`| Function | | | |
-|`offAsyncReceiverRegister`| Function | | | |
-|`offSyncReceiverRegister`| Function | | | |
+|*UIExtensionProxy*| *Class* | Tuzhilkin Ivan | in progress | |
+|`send`| Function | Tuzhilkin Ivan | in progress | |
+|`sendSync`| Function | Tuzhilkin Ivan | in progress | |
+|`onAsyncReceiverRegister`| Function | Tuzhilkin Ivan | in progress | |
+|`onSyncReceiverRegister`| Function | Tuzhilkin Ivan | in progress | |
+|`offAsyncReceiverRegister`| Function | Tuzhilkin Ivan | in progress | |
+|`offSyncReceiverRegister`| Function | Tuzhilkin Ivan | in progress | |
 |*StyledString*| *Class* | Pavelyev Ivan | in progress | |
 |`getString`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getStyles`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
