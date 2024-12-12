@@ -1047,8 +1047,8 @@
 |`barBackgroundColor`| Function | Tuzhilkin Ivan | done |  |
 |`barGridAlign`| Function | Tuzhilkin Ivan | done |  |
 |`customContentTransition`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
-|`barBackgroundBlurStyle`| Function | Tuzhilkin Ivan | in progress |  |
-|`barBackgroundEffect`| Function | Tuzhilkin Ivan | in progress | |
+|`barBackgroundBlurStyle`| Function | Tuzhilkin Ivan | devdone |  |
+|`barBackgroundEffect`| Function | Tuzhilkin Ivan | devdone | |
 |`onContentWillChange`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
 |`barModeScrollable`| Function | Tuzhilkin Ivan | done | |
 |*TabContent*| *Component* | Evstigneev Roman |in progress |  |
