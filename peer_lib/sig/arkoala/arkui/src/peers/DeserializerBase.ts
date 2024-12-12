@@ -15,6 +15,10 @@
 import { CustomTextDecoder, float32, int32, int64 } from "@koalaui/common"
 import { pointer } from "@koalaui/interop"
 import { Tags, CallbackResource } from "./SerializerBase";
+import { nativeModule } from "@koalaui/arkoala"
+import { finalizerRegister } from "../Finalization"
+import { NativeThunkImpl } from "../Finalizable"
+import { ResourceHolder } from "@koalaui/interop"
 
 export class DeserializerBase {
     private position = 0
@@ -187,9 +191,14 @@ export class DeserializerBase {
         return suffix
     }
     readBuffer(): ArrayBuffer {
-        this.readPointer()
+        const resource = this.readCallbackResource()
+        const data = this.readPointer()
         const length = this.readInt64()
-        return new ArrayBuffer(Number(length))
+
+        const buffer = nativeModule()._MaterializeBuffer(data, length, resource.hold)
+        ResourceHolder.instance().saveMetaInfo(buffer, { ptr: data, ...resource })
+        finalizerRegister(buffer, new NativeThunkImpl(resource.resourceId, resource.release))
+        return buffer
     }
 }
 

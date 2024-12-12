@@ -110,7 +110,7 @@ export abstract class NativeThunk implements Thunk {
     abstract destroyNative(ptr: pointer, finalizer: pointer) : void
 }
 
-class NativeThunkImpl extends NativeThunk {
+export class NativeThunkImpl extends NativeThunk {
     constructor(ptr: pointer, finalizer: pointer, name?: string) {
         super(ptr, finalizer, name)
     }

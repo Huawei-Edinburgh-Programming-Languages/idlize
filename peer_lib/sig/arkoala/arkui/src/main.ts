@@ -54,6 +54,7 @@ import {
     startNativeTest,
     stopNativeTest,
 } from "./test_utils"
+import { PixelMap } from "@arkoala/arkui/ArkPixelMapMaterialized"
 import { nativeModule } from "@koalaui/arkoala"
 import { mkdirSync, writeFileSync } from "fs"
 import { CallbackKind } from "@arkoala/arkui/peers/CallbackKind"
@@ -802,9 +803,19 @@ function checkArrayBuffer() {
     }, "42 37")
 }
 
+function checkPassToNativeBuffer() {
+    checkResult("ArrayBuffer", () => {
+        const buffer = new ArrayBuffer(256)
+        const pm = new PixelMap()
+        pm.readPixelsToBufferSync(buffer)
+    }, "new PixelMap()[return (PixelMapPeer*) 100]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]readPixelsToBufferSync({.data=nullptr, .length=256})")
+}
+
 function main() {
     // Place where mock of ACE is located.
     process.env.ACE_LIBRARY_PATH = __dirname + "/../../../native"
+
+    checkPassToNativeBuffer()
 
     checkCallbackWithReturn()
     checkTwoSidesCallbackSync()
