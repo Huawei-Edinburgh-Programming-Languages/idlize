@@ -56,7 +56,7 @@ class CJLambdaExpression extends LambdaExpression {
         super(writer, signature, resolver, body)
     }
     protected get statementHasSemicolon(): boolean {
-        return true
+        return false
     }
     asString(): string {
         const params = this.signature.args.map((it, i) => `${this.signature.argName(i)}: ${this.writer.getNodeName(it)}`)

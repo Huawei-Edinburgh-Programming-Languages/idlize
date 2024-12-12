@@ -308,7 +308,7 @@ export abstract class LambdaExpression implements LanguageExpression {
         return writer.printer.getOutput()
             .map(line => line.trim())
             .filter(line => line !== "")
-            .map(line => line === "{" || line === "}" || this.statementHasSemicolon ? `${line};` : `${line};`)
+            .map(line => line === "{" || line === "}" || this.statementHasSemicolon ? line : `${line};`)
             .join(" ")
     }
 }
