@@ -1769,7 +1769,7 @@
 |`fling`| Function | Erokhin Ilya | done |  |
 |`scrollPage`| Function | Erokhin Ilya | done |  |
 |`currentOffset`| Function | Erokhin Ilya | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0|
-|`scrollToIndex`| Function | Erokhin Ilya | in progress |https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
+|`scrollToIndex`| Function | Erokhin Ilya | testskipped | |
 |`scrollBy`| Function | Erokhin Ilya | done |  |
 |`isAtEnd`| Function | Erokhin Ilya | done |  |
 |`getItemRect`| Function | Erokhin Ilya | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0|
@@ -1920,8 +1920,8 @@
 |`getInputFieldType`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`isEditable`| Function | Erokhin Ilya | done |  |
 |`getEditStateFlags`| Function | Erokhin Ilya | done |  |
-|`getPreviewWidth`| Function | Erokhin Ilya | in progress | wait for regeneration |
-|`getPreviewHeight`| Function | Erokhin Ilya | in progress | wait for regeneration |
+|`getPreviewWidth`| Function | Erokhin Ilya | testskipped | |
+|`getPreviewHeight`| Function | Erokhin Ilya | testskipped | |
 |*WebContextMenuResult*| *Class* | Erokhin Ilya | done |  |
 |`closeContextMenu`| Function | Erokhin Ilya | done |  |
 |`copyImage`| Function | Erokhin Ilya | done |  |
@@ -1949,7 +1949,7 @@
 |`getReasonMessage`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getResponseHeader`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getResponseCode`| Function | Erokhin Ilya | done |  |
-|`setResponseData`| Function | Erokhin Ilya | in progress | dependency on Ark_ArrayBuffer |
+|`setResponseData`| Function | Erokhin Ilya | testskipped |  |
 |`setResponseEncoding`| Function | Erokhin Ilya | done |  |
 |`setResponseMimeType`| Function | Erokhin Ilya | done |  |
 |`setReasonMessage`| Function | Erokhin Ilya | done |  |
@@ -1967,12 +1967,12 @@
 |`saveCookie`| Function | Erokhin Ilya | done | |
 |*EventResult*| *Class* | Erokhin Ilya | done |  |
 |`setGestureEventResult`| Function | Erokhin Ilya | done |  |
-|*WebController*| *Class* | Erokhin Ilya | in progress | |
+|*WebController*| *Class* | Erokhin Ilya | blocked | |
 |`onInactive`| Function | Erokhin Ilya | done | |
 |`onActive`| Function | Erokhin Ilya | done | |
 |`zoom`| Function | Erokhin Ilya | done | |
 |`clearHistory`| Function | Erokhin Ilya | done | |
-|`runJavaScript`| Function | Erokhin Ilya | in progress | |
+|`runJavaScript`| Function | Erokhin Ilya | testskipped | |
 |`loadData`| Function | Erokhin Ilya | done | |
 |`loadUrl`| Function | Erokhin Ilya | testskipped | |
 |`refresh`| Function | Erokhin Ilya | done | |
