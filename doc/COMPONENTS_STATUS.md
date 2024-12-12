@@ -257,7 +257,7 @@
 |`accessibilityChecked`| Function | Lobah Mikhail | in progress| |
 |`accessibilitySelected`| Function | Lobah Mikhail | in progress| |
 |`obscured`| Function |Dmitry A Smirnov |devdone | |
-|`reuseId`| Function |Dmitry A Smirnov |blocked | not implemented in ace_engine|
+|`reuseId`| Function |Dmitry A Smirnov |blocked AceEngine | not implemented in ace_engine|
 |`renderFit`| Function | Dmitry A Smirnov|devdone | |
 |`gestureModifier`| Function | | | |
 |`backgroundBrightness`| Function | Skroba Gleb | done | |
@@ -1906,7 +1906,7 @@
 |`resend`| Function | Erokhin Ilya | done |  |
 |`cancel`| Function | Erokhin Ilya | done |  |
 |*ControllerHandler*| *Class* | Erokhin Ilya | blocked |  |
-|`setWebController`| Function | Erokhin Ilya | blocked | Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`setWebController`| Function | Erokhin Ilya | blocked IDL | Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*WebContextMenuParam*| *Class* | Erokhin Ilya | blocked |  |
 |`x`| Function | Erokhin Ilya | done |  |
 |`y`| Function | Erokhin Ilya | done |  |
