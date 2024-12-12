@@ -1734,17 +1734,17 @@
 |*PatternLockController*| *Class* |Dmitry A Smirnov| done|  |
 |`reset`| Function |Dmitry A Smirnov| done|  |
 |`setChallengeResult`| Function |Dmitry A Smirnov| done|  |
-|*RichEditorBaseController*| *Class*|Dudkin Sergey| in progress| |
-|`getCaretOffset`| Function|Dudkin Sergey| in progress| |
-|`setCaretOffset`| Function|Dudkin Sergey| in progress| |
-|`closeSelectionMenu`| Function|Dudkin Sergey| in progress| |
-|`getTypingStyle`| Function|Dudkin Sergey| in progress| |
-|`setTypingStyle`| Function|Dudkin Sergey| in progress| |
-|`setSelection`| Function|Dudkin Sergey| in progress| |
-|`isEditing`| Function|Dudkin Sergey| in progress| |
-|`stopEditing`| Function|Dudkin Sergey| in progress| |
-|`getLayoutManager`| Function|Dudkin Sergey| in progress| |
-|`getPreviewText`| Function|Dudkin Sergey| in progress| |
+|*RichEditorBaseController*| *Class*|Dudkin Sergey| blocked | |
+|`getCaretOffset`| Function|Dudkin Sergey| devdone | |
+|`setCaretOffset`| Function|Dudkin Sergey| devdone | |
+|`closeSelectionMenu`| Function|Dudkin Sergey| devdone| |
+|`getTypingStyle`| Function|Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IBAXVH |
+|`setTypingStyle`| Function|Dudkin Sergey| devdone| |
+|`setSelection`| Function|Dudkin Sergey| devdone| |
+|`isEditing`| Function|Dudkin Sergey| devdone| |
+|`stopEditing`| Function|Dudkin Sergey| devdone| |
+|`getLayoutManager`| Function|Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IBAXVH |
+|`getPreviewText`| Function|Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IBAXVH |
 |*RichEditorController*| *Class* |Dudkin Sergey| blocked|  |
 |`addTextSpan`| Function |Dudkin Sergey| done|  |
 |`addImageSpan`| Function |Dudkin Sergey| blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
