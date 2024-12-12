@@ -198,7 +198,7 @@
 |`gridSpan`| Function | Lobah Mikhail | done | |
 |`gridOffset`| Function | Lobah Mikhail | done | |
 |`rotate`| Function | Dmitry A Smirnov| testskipped | |
-|`transform`| Function | Lobah Mikhail | devdone | |
+|`transform`| Function | Lobah Mikhail | done | |
 |`onAppear`| Function | Roman Sedaikin | done | |
 |`onDisAppear`| Function | Roman Sedaikin | done | |
 |`onAttach`| Function | | | |
@@ -220,27 +220,27 @@
 |`useSizeType`| Function | Dmitry A Smirnov| testskipped | |
 |`alignRules`| Function | Dmitry A Smirnov| done | |
 |`aspectRatio`| Function | Roman Sedaikin | done | |
-|`clickEffect`| Function | Lobah Mikhail | devdone | |
+|`clickEffect`| Function | Lobah Mikhail | done | |
 |`onDragStart`| Function | Lobah Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IARLIB, https://gitee.com/openharmony/arkui_ace_engine/issues/IAHA4D |
 |`onDragEnter`| Function | Lobah Mikhail | devdone | |
 |`onDragMove`| Function | Lobah Mikhail | devdone | |
 |`onDragLeave`| Function | Lobah Mikhail| devdone | |
 |`onDrop`| Function | Lobah Mikhail | devdone | |
 |`onDragEnd`| Function | Lobah Mikhail | devdone | |
-|`allowDrop`| Function | Lobah Mikhail | devdone | |
-|`draggable`| Function | Lobah Mikhail | devdone | |
-|`dragPreview`| Function | Lobah Mikhail | devdone | |
+|`allowDrop`| Function | Lobah Mikhail | done | |
+|`draggable`| Function | Lobah Mikhail | done | |
+|`dragPreview`| Function | Lobah Mikhail | done | |
 |`onPreDrag`| Function | Lobah Mikhail | devdone | |
 |`linearGradient`| Function | Roman Sedaikin | done | |
 |`sweepGradient`| Function | Roman Sedaikin | done | |
 |`radialGradient`| Function | Erokhin Ilya | done |  |
-|`motionPath`| Function | Lobah Mikhail | in progress | |
+|`motionPath`| Function | Lobah Mikhail | done | |
 |`shadow`| Function | Roman Sedaikin | done | |
 |`clip`| Function | Skroba Gleb |  blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
 |`clipShape`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
 |`mask`| Function | Maksimov Nikita | devdone | |
 |`maskShape`| Function | Dmitry A Smirnov| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
-|`key`| Function | Lobah Mikhail | devdone | |
+|`key`| Function | Lobah Mikhail | done | |
 |`id`| Function | Erokhin Ilya | done |  |
 |`geometryTransition`| Function | Lobah Mikhail | in progress| |
 |`stateStyles`| Function | Lobah Mikhail | in progress| |
