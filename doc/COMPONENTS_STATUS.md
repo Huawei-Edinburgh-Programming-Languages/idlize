@@ -310,23 +310,23 @@
 |*Common*| *Component* | Maksimov Nikita | done | |
 |`setCommonOptions`| Function | Maksimov Nikita | done | |
 |*ScrollableCommonMethod*| *Component* | Samarin Sergey |in progress |  |
-|`scrollBar`| Function | Samarin Sergey | devdone |  |
-|`scrollBarColor`| Function | Samarin Sergey | devdone |  |
-|`scrollBarWidth`| Function | Samarin Sergey | devdone |  |
-|`nestedScroll`| Function | Samarin Sergey | devdone |  |
-|`enableScrollInteraction`| Function | Samarin Sergey | devdone |  |
-|`friction`| Function | Samarin Sergey | devdone |  |
-|`onScroll`| Function | Samarin Sergey | in progress|  |
-|`onWillScroll`| Function | Samarin Sergey | in progress|  |
-|`onDidScroll`| Function | Samarin Sergey | in progress|  |
+|`scrollBar`| Function | Samarin Sergey | done |  |
+|`scrollBarColor`| Function | Samarin Sergey | done |  |
+|`scrollBarWidth`| Function | Samarin Sergey | done |  |
+|`nestedScroll`| Function | Samarin Sergey | done |  |
+|`enableScrollInteraction`| Function | Samarin Sergey | done |  |
+|`friction`| Function | Samarin Sergey | done |  |
+|`onScroll`| Function | Samarin Sergey | deprecated |  |
+|`onWillScroll`| Function | Samarin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onDidScroll`| Function | Samarin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB6U0 |
 |`onReachStart`| Function | Samarin Sergey | in progress|  |
 |`onReachEnd`| Function | Samarin Sergey | in progress|  |
 |`onScrollStart`| Function | Samarin Sergey | in progress|  |
 |`onScrollStop`| Function | Samarin Sergey | in progress|  |
-|`flingSpeedLimit`| Function | Samarin Sergey | devdone |  |
+|`flingSpeedLimit`| Function | Samarin Sergey | done |  |
 |`clipContent`| Function | Evstigneev Roman | in progress | |
-|`edgeEffect`| Function | Samarin Sergey | devdone | |
-|`fadingEdge`| Function | Samarin Sergey | devdone | |
+|`edgeEffect`| Function | Samarin Sergey | done | |
+|`fadingEdge`| Function | Samarin Sergey | done | |
 |*Component3D*| *Component* |Kovalev Sergey | in progress | |
 |`setComponent3DOptions`| Function |Kovalev Sergey | blocked IDL| Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`environment`| Function |Kovalev Sergey | devdone |  |
@@ -1057,7 +1057,7 @@
 |`onWillShow`| Function |Evstigneev Roman | done |  |
 |`onWillHide`| Function |Evstigneev Roman | done |  |
 |*Text*| *Component* | Kirill Kirichenko | in progress | |
-|`setTextOptions`| Function | Kirill Kirichenko | devdone |  |
+|`setTextOptions`| Function | Kirill Kirichenko | done |  |
 |`font`| Function |Samarin Sergey | done |  |
 |`fontColor`| Function |Samarin Sergey | done |  |
 |`fontSize`| Function |Samarin Sergey | done |  |
@@ -1085,8 +1085,8 @@
 |`wordBreak`| Function | Samarin Sergey | done |  |
 |`lineBreakStrategy`| Function |Samarin Sergey | done |  |
 |`onCopy`| Function | Kirill Kirichenko | done |  |
-|`caretColor`| Function |Samarin Sergey |in progress | devdone |
-|`selectedBackgroundColor`| Function |Samarin Sergey |in progress | devdone |
+|`caretColor`| Function |Samarin Sergey | done | |
+|`selectedBackgroundColor`| Function |Samarin Sergey | done | |
 |`ellipsisMode`| Function |Samarin Sergey | done |  |
 |`enableDataDetector`| Function | Kirill Kirichenko | done |  |
 |`dataDetectorConfig`| Function | Kirill Kirichenko | in progress |  |
