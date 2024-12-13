@@ -113,6 +113,8 @@ jni_library_name = 'NativeBridgeJni'
 cj_library_name = 'NativeBridgeCJ'
 ohos_library_name = 'NativeBridge_ohos'
 
+cflags += ['-DINTEROP_LIBRARY_NAME=' + node_library_name]
+
 if is_clang
 # TODO: remove all -Wno-* when generation is fixed.
 cflags += [
