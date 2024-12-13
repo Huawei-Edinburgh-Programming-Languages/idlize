@@ -28,27 +28,21 @@ public class InteropNativeModule {
     static native long   _GetStringFinalizer();
     static native void   _InvokeFinalizer(long ptr1, long ptr2);
     static native long   _GetPtrVectorElement(long ptr1, int arg);
-    // static native long   _GetNodeFinalizer();
     static native int    _StringLength(long ptr1);
     static native void   _StringData(long ptr1, byte[] arr, int i);
     static native long   _StringMake(String str1);
     static native int    _GetPtrVectorSize(long ptr1);
     static native int    _ManagedStringWrite(String str1, byte[] arr, int arg);
     static native void   _NativeLog(String str1);
-    // static native void   _StartPerf(String str1);
-    // static native void   _EndPerf(String str1);
-    // static native long   _DumpPerf(int arg);
     static native String _Utf8ToString(byte[] data, int offset, int length);
+    static native void   _CallCallback(int callbackKind, byte[] args, int argsSize);
+    static native void   _CallCallbackResourceHolder(long holder, int resourceId);
+    static native void   _CallCallbackResourceReleaser(long releaser, int resourceId);
 
     // loader
     static native int     _LoadVirtualMachine(int arg0, String arg1, String arg2);
     static native boolean _RunApplication(int arg0, int arg1);
     static native long    _StartApplication(String appUrl, String appParams);
     static native void    _EmitEvent(int type, int target, int arg0, int arg1);
-
-    // 
-    static native void _CallCallback(int callbackKind, byte[] args, int argsSize);
-    static native void _CallCallbackResourceHolder(long holder, int resourceId);
-    static native void _CallCallbackResourceReleaser(long releaser, int resourceId);
 }
 

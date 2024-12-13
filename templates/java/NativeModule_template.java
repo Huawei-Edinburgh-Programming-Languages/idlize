@@ -21,9 +21,4 @@ public class NativeModule {
   }
 
 %GENERATED_METHODS%
-
-// node
-%GENERATED_PREDEFINED_Node%
-// test
-%GENERATED_PREDEFINED_Test%
 }
