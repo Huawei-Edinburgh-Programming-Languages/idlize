@@ -12,13 +12,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { indentedBy, stringOrNone, zip } from "../util"
+import { indentedBy, stringOrNone } from "../util"
 import { IDLCallback, IDLConstructor, IDLEntity, IDLEntry, IDLEnum, IDLInterface, IDLKind, IDLMethod, IDLModule, IDLParameter, IDLProperty, IDLType, IDLTypedef, getExtAttribute,
     getVerbatimDts,
     hasExtAttribute,
     isCallback,
     isClass, isConstructor, isContainerType, isEnum, isInterface, isMethod, isModuleType, isPrimitiveType, isProperty, isReferenceType, isSyntheticEntry, isTypeParameterType, isTypedef, isUnionType,
-    isPackage, isImport,
+    isPackage, isImport, isVersion,
     IDLExtendedAttributes,
     IDLAccessorAttribute,
     IDLImport,
@@ -26,14 +26,12 @@ import { IDLCallback, IDLConstructor, IDLEntity, IDLEntry, IDLEnum, IDLInterface
     IDLVoidType,
     IDLStringType,
     IDLUndefinedType,
-    IDLNullType,
     isCallable,
     isAnonymousInterface,
     isTupleInterface,
     getSuperType,
     IDLReferenceType,
     IDLCallable,
-    IDLSignature,
     IDLAnyType,
     IDLContainerUtils,
     IDLContainerType,
@@ -46,11 +44,29 @@ import { IDLCallback, IDLConstructor, IDLEntity, IDLEntry, IDLEnum, IDLInterface
     isNamedNode,
     IDLNode,
     IDLThisType,
-    isOptionalType,} from "../idl"
+    isOptionalType,
+    IDLVersion,
+    IDLI8Type,
+    IDLU8Type,
+    IDLI16Type,
+    IDLU16Type,
+    IDLI32Type,
+    IDLU32Type,
+    IDLI64Type,
+    IDLU64Type,
+    IDLF16Type,
+    IDLF32Type,
+    IDLF64Type,
+    IDLBufferType,
+    isUnspecifiedGenericType,
+    IDLUnknownType,
+    IDLBooleanType,
+    IDLNumberType,
+    IDLPointerType } from "../idl"
 import * as webidl2 from "webidl2"
 import { resolveSyntheticType, toIDLNode } from "./deserialize"
 import { Language } from "../Language"
-import { IndentedPrinter } from "../IndentedPrinter"
+import { PeerGeneratorConfig } from "../peer-generation/PeerGeneratorConfig"
 
 export class CustomPrintVisitor {
     output: string[] = []
@@ -60,9 +76,7 @@ export class CustomPrintVisitor {
 
     visit(node: IDLEntry) {
         if (hasExtAttribute(node, IDLExtendedAttributes.TSType) && this.language == Language.TS) return
-        if (isSyntheticEntry(node)) {
-            return
-        } else if (isInterface(node) || isAnonymousInterface(node) || isTupleInterface(node) || isClass(node)) {
+        if (isInterface(node) || isAnonymousInterface(node) || isTupleInterface(node) || isClass(node)) {
             this.printInterface(node)
         } else if (isMethod(node) || isConstructor(node) || isCallable(node)) {
             this.printMethod(node)
@@ -80,6 +94,8 @@ export class CustomPrintVisitor {
             this.printTypedef(node)
         } else if (isModuleType(node)) {
             this.printModuleType(node)
+        } else if (isVersion(node)) {
+            this.printVersion(node)
         } else {
             throw new Error(`Unexpected node kind: ${IDLKind[node.kind!]}`)
         }
@@ -187,6 +203,8 @@ export class CustomPrintVisitor {
         const isCommonMethod = hasExtAttribute(node, IDLExtendedAttributes.CommonMethod)
         let isProtected = hasExtAttribute(node, IDLExtendedAttributes.Protected)
         if (isCommonMethod) {
+            // TODO: not very clean, but we don't need to print these so far.
+            if (PeerGeneratorConfig.ignorePeerMethod.includes(node.name)) return
             const typeParams = this.currentInterface?.typeParameters
             const returnType = typeParams && typeParams.length > 0 ? typeParams[0] : this.currentInterface!.name
             this.print(`${getName(node)}(value: ${this.printTypeForTS(node.type, undefined, undefined, isCommonMethod)}): ${returnType};`)
@@ -240,6 +258,11 @@ export class CustomPrintVisitor {
     printModuleType(node: IDLModule) {
         let text = getVerbatimDts(node) ?? ""
         this.print(`${text}`)
+    }
+
+    printVersion(node: IDLVersion) {
+        let text = node.value.join(".")
+        this.print(`// version ${text}`)
     }
 
     printImport(node: IDLImport) {
@@ -300,18 +323,34 @@ export class CustomPrintVisitor {
     private printTypeForTS(type: IDLType | undefined, undefinedToVoid?: boolean, sequenceToArrayInterface: boolean = false, isCommonMethod = false): string {
         if (!type) throw new Error("Missing type")
         if (isOptionalType(type)) return `${this.printTypeForTS(type.type, undefinedToVoid, sequenceToArrayInterface)} | undefined`
-        if (type === IDLUndefinedType && undefinedToVoid) return "void"
-        if (type === IDLStringType) return "string"
-        // if (isCommonMethod && forceAsNamedNode(type).name == "this") return "T"
-        if (type === IDLThisType) return "T"
-        if (type === IDLNullType) return "null"
-        if (type === IDLVoidType) return "void"
-        if (isPrimitiveType(type)) return type.name
+        if (isPrimitiveType(type)) {
+            switch (type) {
+                case IDLU8Type: case IDLI8Type:
+                case IDLU16Type: case IDLI16Type:
+                case IDLU32Type: case IDLI32Type:
+                case IDLU64Type: case IDLI64Type:
+                case IDLF16Type: case IDLF32Type: case IDLF64Type:
+                case IDLNumberType: 
+                    return "number"
+                case IDLAnyType: return "any"
+                case IDLUnknownType: return "unknown"
+                case IDLBufferType: return "ArrayBuffer"
+                case IDLBooleanType: return "boolean"
+                case IDLUndefinedType: return undefinedToVoid ? "void" : "undefined"
+                case IDLStringType: return "string"
+                case IDLVoidType: return "void"
+                case IDLThisType: return "T"
+                case IDLPointerType: return "number|bigint"
+                default: throw new Error(`Unknown primitive type ${DebugUtils.debugPrintType(type)}`)
+            }
+        }
         if (isContainerType(type)) {
             if (!sequenceToArrayInterface && IDLContainerUtils.isSequence(type))
                 return `${type.elementType.map(it => this.printTypeForTS(it)).join(",")}[]`
             return `${mapContainerType(type)}<${type.elementType.map(it => this.printTypeForTS(it)).join(",")}>`
         }
+        if (isUnspecifiedGenericType(type))
+            return `${type.name}<${type.typeArguments.map(it => this.printTypeForTS(it)).join(",")}>`
         if (isReferenceType(type)) return this.toTypeName(type)
         if (isUnionType(type)) return `(${type.types.map(it => this.printTypeForTS(it)).join("|")})`
         if (isTypeParameterType(type)) return type.name
@@ -364,6 +403,7 @@ export class CustomPrintVisitor {
 export function idlToString(name: string, content: string): string {
     let printer = new CustomPrintVisitor(resolveSyntheticType, Language.TS)
     webidl2.parse(content)
+        .filter(it => !!it.type)
         .map(it => toIDLNode(name, it))
         .forEach(it => {
             transformMethodsAsync2ReturnPromise(it)

@@ -14,12 +14,10 @@
  */
 import { float32, int32, int64 } from "@koalaui/common"
 import { pointer, wrapCallback, ResourceId, ResourceHolder, KPointer } from "@koalaui/interop"
-import { CallbackKind } from "./CallbackKind"
 import { nativeModule } from "@koalaui/arkoala"
-import { Finalizable, FinalizableBase } from "../Finalizable"
 
-// imports required intarfaces (now generation is disabled)
-// import { Resource, Length, PixelMap } from "@arkoala/arkui"
+// imports required interfaces (now generation is disabled)
+// import { Resource } from "@arkoala/arkui"
 /**
  * Value representing possible JS runtime object type.
  * Must be synced with "enum RuntimeType" in C++.
@@ -70,56 +68,8 @@ export function isResource(value: Object): value is Resource {
 }
 
 // Poor man's instanceof, fails on subclasses
-export function isInstanceOf(className: string, value: Object): boolean {
-    return value.constructor.name === className
-}
-
-export function withLength(valueLength: Length|undefined, body: (type: int32, value: float32, unit: int32, resource: int32) => void) {
-    let type = runtimeType(valueLength)
-    let value = 0
-    let unit = 1 // vp
-    let resource = 0
-    switch (type) {
-        case RuntimeType.UNDEFINED:
-            value = 0
-            unit = 0
-            break
-        case RuntimeType.NUMBER:
-            value = valueLength as float32
-            break
-        case RuntimeType.STRING:
-            let valueStr = valueLength as string
-            // TODO: faster parse.
-            if (valueStr.endsWith("vp")) {
-                unit = 1 // vp
-                value = Number(valueStr.substring(0, valueStr.length - 2))
-            } else if (valueStr.endsWith("%")) {
-                unit = 3 // percent
-                value = Number(valueStr.substring(0, valueStr.length - 1))
-            } else if (valueStr.endsWith("lpx")) {
-                unit = 4 // lpx
-                value = Number(valueStr.substring(0, valueStr.length - 3))
-            } else if (valueStr.endsWith("px")) {
-                unit = 0 // px
-                value = Number(valueStr.substring(0, valueStr.length - 2))
-            }
-            break
-        case RuntimeType.OBJECT:
-            resource = (valueLength as Resource).id
-            break
-    }
-    body(type, value, unit, resource)
-}
-
-export function withLengthArray(valueLength: Length|undefined, body: (valuePtr: Int32Array) => void) {
-    withLength(valueLength, (type: int32, value, unit, resource) => {
-        let array = new Int32Array(4)
-        array[0] = type
-        array[1] = value
-        array[2] = unit
-        array[3] = resource
-        body(array)
-    })
+export function isInstanceOf(className: string, value: Object | undefined): boolean {
+    return value?.constructor.name === className
 }
 
 export function registerCallback(value: object|undefined): int32 {
@@ -149,7 +99,6 @@ export abstract class CustomSerializer {
 }
 
 export class SerializerBase {
-    protected isHolding: boolean = false
     private position = 0
     private buffer: ArrayBuffer
     private view: DataView
@@ -169,7 +118,6 @@ export class SerializerBase {
         this.view = new DataView(this.buffer)
     }
     public release() {
-        this.isHolding = false
         this.releaseResources()
         this.position = 0
     }
@@ -197,16 +145,17 @@ export class SerializerBase {
         }
     }
     private heldResources: ResourceId[] = []
-    holdAndWriteCallback(callback: object, hold: KPointer = 0, release: KPointer = 0, call: KPointer = 0): ResourceId {
+    holdAndWriteCallback(callback: object, hold: KPointer = 0, release: KPointer = 0, call: KPointer = 0, callSync: KPointer = 0): ResourceId {
         const resourceId = ResourceHolder.instance().registerAndHold(callback)
         this.heldResources.push(resourceId)
         this.writeInt32(resourceId)
         this.writePointer(hold)
         this.writePointer(release)
         this.writePointer(call)
+        this.writePointer(callSync)
         return resourceId
     }
-    holdAndWriteCallbackForPromiseVoid(hold: KPointer = 0, release: KPointer = 0, call: KPointer = 0): [Promise<void>, ResourceId] {
+    holdAndWriteCallbackForPromiseVoid(hold: KPointer = 0, release: KPointer = 0, call: KPointer = 0, callSync = 0): [Promise<void>, ResourceId] {
         let resourceId: ResourceId
         const promise = new Promise<void>((resolve, reject) => {
             const callback = (err: string[]|undefined) => {
@@ -215,7 +164,7 @@ export class SerializerBase {
                 else
                     resolve()
             }
-            resourceId = this.holdAndWriteCallback(callback, hold, release, call)
+            resourceId = this.holdAndWriteCallback(callback, hold, release, call, callSync)
         })
         return [promise, resourceId]
     }
@@ -312,21 +261,19 @@ export class SerializerBase {
         this.view.setInt32(this.position, encodedLength, true)
         this.position += encodedLength + 4
     }
-    // Length is an important common case.
-    writeLength(value: Length|undefined) {
-        this.checkCapacity(1)
-        let valueType = runtimeType(value)
-        this.writeInt8(valueType)
-        if (valueType == RuntimeType.NUMBER) {
-            this.writeFloat32(value as number)
-        } else if (valueType == RuntimeType.STRING) {
-            this.writeString(value as string)
-        } else if (valueType == RuntimeType.OBJECT) {
-            this.writeInt32((value as Resource).id)
-        }
-    }
     writeBuffer(buffer: ArrayBuffer) {
         this.writePointer(64)
         this.writeInt64(buffer.byteLength)
     }
 }
+
+class DateSerializer extends CustomSerializer {
+    constructor() {
+        super(["Date"])
+    }
+
+    serialize(serializer: SerializerBase, value: object, kind: string): void {
+        serializer.writeString((value as Date).toISOString())
+    }
+}
+SerializerBase.registerCustomSerializer(new DateSerializer())

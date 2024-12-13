@@ -149,7 +149,7 @@ export class ExpressionStatement implements LanguageStatement {
     write(writer: LanguageWriter): void {
         const text = this.expression.asString()
         if (text.length > 0) {
-            writer.print(`${this.expression.asString()};`)
+            writer.print(`${this.expression.asString()}${writer.maybeSemicolon()}`)
         }
     }
 }
@@ -178,15 +178,24 @@ export class IfStatement implements LanguageStatement {
     ) { }
     write(writer: LanguageWriter): void {
         writer.print(`if (${this.condition.asString()})`)
-        writer.pushIndent()
-        this.thenStatement.write(writer)
-        if (this.insideIfOp) { this.insideIfOp!() }
-        writer.popIndent()
+        this.writeBody(writer, this.thenStatement, () => {
+            if (this.insideIfOp) { this.insideIfOp!() }
+        })
         if (this.elseStatement !== undefined) {
             writer.print("else")
+            this.writeBody(writer, this.elseStatement, () => {
+                if (this.insideElseOp) { this.insideElseOp!() }
+            })
+        }
+    }
+
+    writeBody(writer: LanguageWriter, body:LanguageStatement, op: () => void) {
+        if (!(body instanceof BlockStatement)) {
             writer.pushIndent()
-            this.elseStatement.write(writer)
-            if (this.insideElseOp) { this.insideElseOp!() }
+        }
+        body.write(writer)
+        op()
+        if (!(body instanceof BlockStatement)) {
             writer.popIndent()
         }
     }
@@ -212,7 +221,7 @@ export class MultiBranchIfStatement implements LanguageStatement {
         })
 
         if (this.statements.length > 0 && this.elseStatement !== undefined) {
-            writer.print(" else {")
+            writer.print("else {")
             writer.pushIndent()
             this.elseStatement.write(writer)
             writer.popIndent()
@@ -432,6 +441,8 @@ export abstract class LanguageWriter {
         return this.printer.indentDepth()
     }
 
+    maybeSemicolon() { return ";" }
+
     abstract writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string, interfaces?: string[], generics?: string[], isDeclared?: boolean): void
     abstract writeEnum(name: string, members: { name: string, stringId: string | undefined, numberId: number }[], op: (writer: LanguageWriter) => void): void
     abstract writeInterface(name: string, op: (writer: LanguageWriter) => void, superInterfaces?: string[], isDeclared?: boolean): void
@@ -442,11 +453,11 @@ export abstract class LanguageWriter {
     abstract writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: LanguageWriter) => void, superCall?: Method, modifiers?: MethodModifier[]): void
     abstract writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void): void
     abstract writeProperty(propName: string, propType: idl.IDLType, mutable?: boolean, getterLambda?: (writer: LanguageWriter) => void, setterLambda?: (writer: LanguageWriter) => void): void
-    abstract makeAssign(variableName: string, type: idl.IDLType | undefined, expr: LanguageExpression | undefined, isDeclared: boolean, isConst?: boolean, options?:MakeAssignOptions): LanguageStatement;
-    abstract makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression;
-    abstract makeThrowError(message: string): LanguageStatement;
-    abstract makeReturn(expr?: LanguageExpression): LanguageStatement;
-    abstract makeCheckOptional(optional: LanguageExpression, doStatement: LanguageStatement): LanguageStatement;
+    abstract makeAssign(variableName: string, type: idl.IDLType | undefined, expr: LanguageExpression | undefined, isDeclared: boolean, isConst?: boolean, options?:MakeAssignOptions): LanguageStatement
+    abstract makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression
+    abstract makeThrowError(message: string): LanguageStatement
+    abstract makeReturn(expr?: LanguageExpression): LanguageStatement
+    abstract makeCheckOptional(optional: LanguageExpression, doStatement: LanguageStatement): LanguageStatement
     abstract makeRuntimeType(rt: RuntimeType): LanguageExpression
     abstract getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string
     abstract makeCast(value: LanguageExpression, type: idl.IDLType, options?:MakeCastOptions): LanguageExpression
@@ -455,7 +466,7 @@ export abstract class LanguageWriter {
     makeUnwrapOptional(expression: LanguageExpression): LanguageExpression {
         return expression
     }
-    abstract makeArrayInit(type: idl.IDLContainerType): LanguageExpression
+    abstract makeArrayInit(type: idl.IDLContainerType, size?:number): LanguageExpression
     abstract makeClassInit(type: idl.IDLType, paramenters: LanguageExpression[]): LanguageExpression
     abstract makeMapInit(type: idl.IDLType): LanguageExpression
     abstract makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement
@@ -472,7 +483,7 @@ export abstract class LanguageWriter {
     abstract ordinalFromEnum(value: LanguageExpression, enumReference: idl.IDLType): LanguageExpression
     abstract makeEnumCast(enumName: string, unsafe: boolean, convertor: EnumConvertor | undefined): string
     abstract getNodeName(type: idl.IDLNode): string
-    abstract fork(): LanguageWriter
+    abstract fork(options?: { resolver?: ReferenceResolver }): LanguageWriter
 
     concat(other: PrinterLike): this {
         other.getOutput().forEach(it => this.print(it))
@@ -491,13 +502,12 @@ export abstract class LanguageWriter {
         this.writeMethodImplementation(new Method(method.name, method.signature, [MethodModifier.SETTER].concat(method.modifiers ?? [])), op)
     }
     writeSuperCall(params: string[]): void {
-        this.printer.print(`super(${params.join(", ")});`)
+        this.printer.print(`super(${params.join(", ")})${this.maybeSemicolon()}`)
     }
     writeMethodCall(receiver: string, method: string, params: string[], nullable = false): void {
         this.printer.print(`${receiver}${nullable ? "?" : ""}.${method}(${params.join(", ")})`)
     }
     writeStatement(stmt: LanguageStatement) {
-        //this.printer.print(stmt.asString())
         stmt.write(this)
     }
     writeExpressionStatement(smth: LanguageExpression) {
@@ -588,7 +598,7 @@ export abstract class LanguageWriter {
     makeRuntimeTypeGetterCall(value: string): LanguageExpression {
         return this.makeFunctionCall("runtimeType", [ this.makeString(value) ])
     }
-    makeArrayResize(array: string, length: string, deserializer: string): LanguageStatement {
+    makeArrayResize(array: string, arrayType: string, length: string, deserializer: string): LanguageStatement {
         return new ExpressionStatement(new StringExpression(""))
     }
     makeMapResize(mapTypeName: string, keyType: idl.IDLType, valueType: idl.IDLType, map: string, size: string, deserializer: string): LanguageStatement {
@@ -740,6 +750,59 @@ export abstract class LanguageWriter {
     }
     instanceOf(convertor: BaseArgConvertor, value: string, _duplicateMembers?: Set<string>): LanguageExpression {
         return this.makeString(`${value} instanceof ${this.getNodeName(convertor.idlType)}`)
+    }
+
+    makeLengthSerializer(serializer: string, value: string): LanguageStatement | undefined {
+        const valueType = "valueType"
+
+        return this.makeBlock([
+            this.makeAssign(valueType, undefined, this.makeFunctionCall("runtimeType", [this.makeString(value)]), true),
+            this.makeStatement(this.makeMethodCall(serializer, "writeInt8", [this.makeString(valueType)])),
+
+            this.makeMultiBranchCondition([
+                {
+                    expr: this.makeRuntimeTypeCondition(valueType, true, RuntimeType.NUMBER),
+                    stmt: this.makeStatement(
+                        this.makeMethodCall(serializer, "writeFloat32", [this.makeString(`${value} as float32`)])
+                    )
+                },
+                {
+                    expr: this.makeRuntimeTypeCondition(valueType, true, RuntimeType.STRING),
+                    stmt: this.makeStatement(
+                        this.makeMethodCall(serializer, "writeString", [this.makeString(`${value} as string`)])
+                    )
+                },
+                {
+                    expr: this.makeRuntimeTypeCondition(valueType, true, RuntimeType.OBJECT),
+                    stmt: this.makeStatement(
+                        this.makeMethodCall(serializer, "writeInt32", [this.makeString(`(${value} as Resource).id as int32`)])
+                    )
+                },
+            ]),
+        ], false)
+    }
+    makeLengthDeserializer(deserializer: string): LanguageStatement | undefined {
+        const valueType = "valueType"
+
+        return this.makeBlock([
+            this.makeAssign(valueType, undefined, this.makeMethodCall(deserializer, "readInt8", []), true),
+
+            this.makeMultiBranchCondition(
+                [{
+                    expr: this.makeRuntimeTypeCondition(valueType, true, RuntimeType.NUMBER),
+                    stmt: this.makeReturn(this.makeString(`${deserializer}.readFloat32() as number`))
+                },
+                {
+                    expr: this.makeRuntimeTypeCondition(valueType, true, RuntimeType.STRING),
+                    stmt: this.makeReturn(this.makeMethodCall(deserializer, "readString", []))
+                },
+                {
+                    expr: this.makeRuntimeTypeCondition(valueType, true, RuntimeType.OBJECT),
+                    stmt: this.makeReturn(this.makeString(`({id: ${deserializer}.readInt32(), bundleName: "", moduleName: ""}) as Resource`))
+                }],
+                this.makeReturn(this.makeUndefined())
+            ),
+        ], false)
     }
 
     stringifyTypeOrEmpty(type: idl.IDLType | undefined): string {

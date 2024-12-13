@@ -72,12 +72,8 @@ export class TsIDLNodeToStringConverter implements NodeConvertor<string>, IdlNam
         }
         throw new Error(`Unmapped container type ${idl.DebugUtils.debugPrintType(type)}`)
     }
-    convertImport(_: idl.IDLReferenceType, importClause: string): string {
-        const match = importClause.match(/import *\((['"`])(.+)\1\)\.(.+)/)
-        if (!match)
-            throw new Error(`Cannot parse import clause ${importClause}`)
-        const [where, what] = match.slice(2)
-        return `IMPORT_${what}_FROM_${where}`.match(/[a-zA-Z]+/g)!.join('_')
+    convertImport(type: idl.IDLReferenceType, importClause: string): string {
+        return type.name
     }
 
     protected getNamespacePrefix(decl: idl.IDLEntry): stringOrNone {
@@ -146,7 +142,6 @@ export class TsIDLNodeToStringConverter implements NodeConvertor<string>, IdlNam
             case idl.IDLThisType: return 'this'
             case idl.IDLAnyType: return 'any'
             case idl.IDLUndefinedType: return 'undefined'
-            case idl.IDLNullType: return 'null'
             case idl.IDLPointerType: return 'KPointer'
             case idl.IDLVoidType: return 'void'
             case idl.IDLBooleanType: return 'boolean'
@@ -177,6 +172,9 @@ export class TsIDLNodeToStringConverter implements NodeConvertor<string>, IdlNam
 
             case idl.IDLBufferType:
                 return `ArrayBuffer`
+
+            case idl.IDLLengthType:
+                return 'Length'
         }
         throw new Error(`Unmapped primitive type ${idl.DebugUtils.debugPrintType(type)}`)
     }

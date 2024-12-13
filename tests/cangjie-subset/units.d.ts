@@ -14,7 +14,7 @@
  */
 
 
-// declare type Resource = import('./resource').Resource;
+declare type Resource = import('./resource').Resource;
 
 declare type LengthMetricsUnit = import('../api/arkui/Graphics').LengthMetricsUnit;
 
@@ -72,4 +72,9 @@ declare interface Font {
   weight?: FontWeight | number | string;
   family?: string | Resource;
   style?: FontStyle;
+}
+declare interface MarkStyle {
+  strokeColor?: ResourceColor;
+  size?: Length;
+  strokeWidth?: Length;
 }

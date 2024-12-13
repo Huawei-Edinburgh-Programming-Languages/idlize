@@ -13,10 +13,11 @@
  * limitations under the License.
  */
 
+import * as idl from "../../idl"
 import * as path from "path"
 import { renameDtsToPeer, throwException } from "../../util";
 import { convertPeerFilenameToModule, ImportsCollector } from "../ImportsCollector";
-import { PeerClassBase } from "../PeerClass";
+import { createConstructPeerMethod, PeerClassBase } from "../PeerClass";
 import { InheritanceRole, determineParentRole, isHeir, isRoot } from "../inheritance";
 import {
     ExpressionStatement,
@@ -42,8 +43,9 @@ import { PeerMethod } from "../PeerMethod";
 import { collectJavaImports } from "./lang/JavaIdlUtils";
 import { printJavaImports } from "./lang/JavaPrinters";
 import { Language } from "../../Language";
-import { createOptionalType, forceAsNamedNode, IDLI32Type, IDLPointerType, IDLStringType, IDLThisType, IDLType, IDLVoidType, isNamedNode, isOptionalType, isPrimitiveType, maybeOptional, toIDLType } from "../../idl";
+import { createOptionalType, createReferenceType, forceAsNamedNode, IDLI32Type, IDLPointerType, IDLStringType, IDLThisType, IDLType, IDLVoidType, isNamedNode, isPrimitiveType, maybeOptional } from "../../idl";
 import { getReferenceResolver } from "../ReferenceResolver";
+import { collectDeclDependencies } from "../ImportsCollectorUtils";
 
 export function componentToPeerClass(component: string) {
     return `Ark${component}Peer`
@@ -86,8 +88,6 @@ class PeerFileVisitor {
 
         const imports = new ImportsCollector()
         this.file.peersToGenerate.forEach(peer => {
-            if (determineParentRole(peer.originalClassName, peer.parentComponentName) === InheritanceRole.PeerNode)
-                imports.addFeature('PeerNode', './PeerNode')
             if (peer.originalParentFilename) {
                 const parentModule = convertPeerFilenameToModule(peer.originalParentFilename)
                 imports.addFeature(this.generatePeerParentName(peer), parentModule)
@@ -95,21 +95,19 @@ class PeerFileVisitor {
                 if (parentAttributesClass)
                     imports.addFeature(parentAttributesClass, parentModule)
             }
+            if (PeerGeneratorConfig.needInterfaces) {
+                const component = this.library.findComponentByType(idl.createReferenceType(peer.originalClassName!))!
+                collectDeclDependencies(this.library, component.attributeDeclaration, imports, { expandTypedefs: true })
+                if (component.interfaceDeclaration)
+                    collectDeclDependencies(this.library, component.interfaceDeclaration, imports, { expandTypedefs: true })
+            }
         })
         if (this.library.language === Language.TS
             || this.library.language === Language.ARKTS) {
-            const seenNames = new Set<string>()
-            this.file.importFeatures
-                .concat(this.file.serializeImportFeatures)
-                .forEach(it => {
-                    if (!seenNames.has(it.feature)) {
-                        seenNames.add(it.feature)
-                        imports.addFeature(it.feature, it.module)
-                    }
-                })
             imports.addFeature('GestureName', './shared/generated-utils')
             imports.addFeature('GestureComponent', './shared/generated-utils')
             imports.addFeature('CallbackKind', './peers/CallbackKind')
+            imports.addFeature('CallbackTransformer', './peers/CallbackTransformer')
         }
         if (printer.language == Language.TS) {
             imports.addFeature("unsafeCast", "./shared/generated-utils")
@@ -151,16 +149,15 @@ class PeerFileVisitor {
     protected printPeerConstructor(peer: PeerClass, printer: LanguageWriter): void {
         // TODO: fully switch to writer!
         const parentRole = determineParentRole(peer.originalClassName, peer.originalParentName)
-        const isNode = parentRole !== InheritanceRole.Finalizable
         const signature = new NamedMethodSignature(
             IDLVoidType,
-            [maybeOptional(toIDLType('ArkUINodeType'), !isNode), IDLI32Type, IDLStringType],
-            ['nodeType', 'flags', 'name'],
-            [undefined, '0', '""'])
+            [IDLPointerType, IDLI32Type, IDLStringType, IDLI32Type],
+            ['peerPtr', 'id', 'name', 'flags'],
+            [undefined, undefined, '""', '0'])
 
         printer.writeConstructorImplementation(componentToPeerClass(peer.componentName), signature, (writer) => {
             if (parentRole === InheritanceRole.PeerNode || parentRole === InheritanceRole.Heir || parentRole === InheritanceRole.Root) {
-                writer.writeSuperCall([`nodeType`, 'flags', `name`])
+                writer.writeSuperCall(['peerPtr', 'id', `name`, 'flags'])
             } else {
                 throwException(`Unexpected parent inheritance role: ${parentRole}`)
             }
@@ -170,16 +167,32 @@ class PeerFileVisitor {
     protected printCreateMethod(peer: PeerClass, writer: LanguageWriter): void {
         const peerClass = componentToPeerClass(peer.componentName)
         const signature = new NamedMethodSignature(
-            toIDLType(peerClass),
-            [toIDLType('ArkUINodeType'), createOptionalType(toIDLType('ComponentBase')), IDLI32Type],
-            ['nodeType', 'component', 'flags'],
-            [undefined, undefined, '0'])
-
+            createReferenceType(peerClass),
+            [createOptionalType(createReferenceType('ComponentBase')), IDLI32Type],
+            ['component', 'flags'],
+            [undefined, '0']
+        )
         writer.writeMethodImplementation(new Method('create', signature, [MethodModifier.STATIC, MethodModifier.PUBLIC]), (writer) => {
+            const peerId = 'peerId'
+            writer.writeStatement(
+                writer.makeAssign(peerId, undefined, writer.makeString('PeerNode.nextId()'), true)
+            )
+            const _peerPtr = '_peerPtr'
+            writer.writeStatement(
+                writer.makeAssign(_peerPtr, undefined, writer.makeNativeCall(
+                    `_${peer.componentName}_${createConstructPeerMethod(peer).overloadedName}`,
+                    [writer.makeString(peerId), writer.makeString(signature.argName(1))]
+                ), true)
+            )
+
             const _peer = '_peer'
-            writer.writeStatement(writer.makeAssign(_peer, undefined, writer.makeString(
-                `${writer.language == Language.CJ ? ' ' : 'new '}${peerClass}(${signature.argName(0)}, ${signature.argName(2)}, "${peer.componentName}")`), true))
-            writer.writeMethodCall(signature.argName(1), 'setPeer', [_peer], true)
+            writer.writeStatement(
+                writer.makeAssign(_peer, undefined,
+                    writer.makeString(
+                        `${writer.language == Language.CJ ? ' ' : 'new '}${peerClass}(${_peerPtr}, ${peerId}, "${peer.componentName}", flags)`
+                    ), true)
+            )
+            writer.writeMethodCall(signature.argName(0), 'setPeer', [_peer], true)
             writer.writeStatement(writer.makeReturn(writer.makeString(_peer)))
         })
     }
@@ -228,15 +241,16 @@ class PeerFileVisitor {
     }
 
     protected getDefaultPeerImports(lang: Language) {
-        const defaultPeerImports =  [
+        const defaultPeerImports = [
             `import { int32 } from "@koalaui/common"`,
             `import { nullptr, KPointer, KInt, KBoolean, KStringPtr } from "@koalaui/interop"`,
             `import { isResource, isInstanceOf, runtimeType, RuntimeType } from "./SerializerBase"`,
             `import { Serializer } from "./Serializer"`,
             `import { ArkUINodeType } from "./ArkUINodeType"`,
             `import { ComponentBase } from "../ComponentBase"`,
+            `import { PeerNode } from "../PeerNode"`
         ]
-        switch(lang) {
+        switch (lang) {
             case Language.TS: {
                 return [...defaultPeerImports,
                     `import { nativeModule } from "@koalaui/arkoala"`,]
@@ -418,7 +432,7 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
             if (it.useArray) {
                 if (!serializerCreated) {
                     writer.writeStatement(
-                        writer.makeAssign(`thisSerializer`, toIDLType('Serializer'),
+                        writer.makeAssign(`thisSerializer`, createReferenceType('Serializer'),
                             writer.makeMethodCall('Serializer', 'hold', []), true)
                     )
                     serializerCreated = true
@@ -515,7 +529,7 @@ function constructMaterializedObject(writer: LanguageWriter, signature: MethodSi
     const retType = signature.returnType
     return [
         writer.makeAssign(`${resultName}`, retType, writer.makeNewObject(forceAsNamedNode(retType).name), true),
-        writer.makeAssign(`${resultName}.peer`, toIDLType("Finalizable"),
+        writer.makeAssign(`${resultName}.peer`, createReferenceType("Finalizable"),
             writer.makeString(`new Finalizable(${peerPtrName}, ${forceAsNamedNode(retType).name}.getFinalizer())`), false),
     ]
 }

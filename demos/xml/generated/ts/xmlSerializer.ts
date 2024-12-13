@@ -13,12 +13,13 @@
  * limitations under the License.
  */
 
-import { SerializerBase, RuntimeType, runtimeType, CallbackResource } from "./SerializerBase"
+import { xml, ParseInfo, ParseInfoInternal, ParseOptions } from "./xml"
+import { SerializerBase, RuntimeType, runtimeType, CallbackResource, unsafeCast } from "./SerializerBase"
 import { DeserializerBase } from "./DeserializerBase"
 import { int32 } from "@koalaui/common"
-import { KPointer, nullptr, ResourceHolder } from "@koalaui/interop"
+import { KPointer, KInt, KStringPtr, KUint8ArrayPtr, nullptr, ResourceHolder } from "@koalaui/interop"
 import { getXMLNativeModule, CallbackKind } from "./xmlNative"
-import { xml, ParseInfo, ParseOptions } from "./xml"
+import { Finalizable, MaterializedBase } from "./xmlFinalizable"
 
 export class Serializer extends SerializerBase {
     private static cache?: Serializer | undefined = undefined
@@ -35,18 +36,14 @@ export class Serializer extends SerializerBase {
         serializer.isHolding = true
         return serializer
     }
-    writeArrayBuffer(value: ArrayBuffer): void {
-        let valueSerializer: Serializer = this
-        const value_byteLength = value.byteLength
-        valueSerializer.writeNumber(value_byteLength)
-    }
     writeParseInfo(value: ParseInfo): void {
         let valueSerializer: Serializer = this
-        const peer = value.getPeer()
+        const base: MaterializedBase = unsafeCast<MaterializedBase>(value)
+        const peer = base.getPeer()
         let ptr: KPointer = nullptr
         if (peer != undefined)
             ptr = peer.ptr
-        valueSerializer.writePointer(ptr);
+        valueSerializer.writePointer(ptr)
     }
     writeParseOptions(value: ParseOptions): void {
         let valueSerializer: Serializer = this
@@ -97,33 +94,22 @@ export class Deserializer extends DeserializerBase {
     readCallback_EventType_ParseInfo_Boolean(): ((eventType: xml.EventType, value: ParseInfo) => boolean) {
         const _resource: CallbackResource = this.readCallbackResource()
         const _call: KPointer = this.readPointer()
-        return (eventType: xml.EventType, value: ParseInfo): boolean => { const _argsSerializer: Serializer = Serializer.hold(); _argsSerializer.writeInt32(_resource.resourceId);; _argsSerializer.writePointer(_call);; _argsSerializer.writeInt32(eventType); _argsSerializer.writeParseInfo(value);; let _continuationValue: boolean | undefined|undefined; const _continuationCallback: ((value: boolean) => void) = (value: boolean): void => { _continuationValue = value; }; _argsSerializer.holdAndWriteCallback(_continuationCallback); getXMLNativeModule()._CallCallback(CallbackKind.Kind_Callback_EventType_ParseInfo_Boolean, _argsSerializer.asArray(), _argsSerializer.length());; _argsSerializer.release();; return (_continuationValue as boolean); }
+        return (eventType: xml.EventType, value: ParseInfo): boolean => { const _argsSerializer: Serializer = Serializer.hold(); _argsSerializer.writeInt32(_resource.resourceId); _argsSerializer.writePointer(_call); _argsSerializer.writeInt32(eventType); _argsSerializer.writeParseInfo(value); let _continuationValue: boolean | undefined|undefined; const _continuationCallback: ((value: boolean) => void) = (value: boolean): void => { _continuationValue = value; }; _argsSerializer.holdAndWriteCallback(_continuationCallback); getXMLNativeModule()._CallCallback(240036623, _argsSerializer.asArray(), _argsSerializer.length()); _argsSerializer.release(); return (_continuationValue as boolean); }
     }
     readCallback_String_String_Boolean(): ((name: string, value: string) => boolean) {
         const _resource: CallbackResource = this.readCallbackResource()
         const _call: KPointer = this.readPointer()
-        return (name: string, value: string): boolean => { const _argsSerializer: Serializer = Serializer.hold(); _argsSerializer.writeInt32(_resource.resourceId);; _argsSerializer.writePointer(_call);; _argsSerializer.writeString(name); _argsSerializer.writeString(value); let _continuationValue: boolean | undefined|undefined; const _continuationCallback: ((value: boolean) => void) = (value: boolean): void => { _continuationValue = value; }; _argsSerializer.holdAndWriteCallback(_continuationCallback); getXMLNativeModule()._CallCallback(CallbackKind.Kind_Callback_String_String_Boolean, _argsSerializer.asArray(), _argsSerializer.length());; _argsSerializer.release();; return (_continuationValue as boolean); }
+        return (name: string, value: string): boolean => { const _argsSerializer: Serializer = Serializer.hold(); _argsSerializer.writeInt32(_resource.resourceId); _argsSerializer.writePointer(_call); _argsSerializer.writeString(name); _argsSerializer.writeString(value); let _continuationValue: boolean | undefined|undefined; const _continuationCallback: ((value: boolean) => void) = (value: boolean): void => { _continuationValue = value; }; _argsSerializer.holdAndWriteCallback(_continuationCallback); getXMLNativeModule()._CallCallback(923368928, _argsSerializer.asArray(), _argsSerializer.length()); _argsSerializer.release(); return (_continuationValue as boolean); }
     }
-    readArrayBuffer(): ArrayBuffer {
-        let valueDeserializer: Deserializer = this
-        const byteLength_result: number = (valueDeserializer.readNumber() as number)
-        let value: ArrayBuffer = ({byteLength: byteLength_result} as ArrayBuffer)
-        return (value as ArrayBuffer)
-    }
-    readCallback_void(): (() => void) {
+    readCallback_Boolean_Void(): ((value: boolean) => void) {
         const _resource: CallbackResource = this.readCallbackResource()
         const _call: KPointer = this.readPointer()
-        return (): void => { const _argsSerializer: Serializer = Serializer.hold(); _argsSerializer.writeInt32(_resource.resourceId);; _argsSerializer.writePointer(_call);; getXMLNativeModule()._CallCallback(CallbackKind.Kind_Callback_void, _argsSerializer.asArray(), _argsSerializer.length());; _argsSerializer.release();; return; }
-    }
-    readCallback_Boolean_void(): ((value: boolean) => void) {
-        const _resource: CallbackResource = this.readCallbackResource()
-        const _call: KPointer = this.readPointer()
-        return (value: boolean): void => { const _argsSerializer: Serializer = Serializer.hold(); _argsSerializer.writeInt32(_resource.resourceId);; _argsSerializer.writePointer(_call);; _argsSerializer.writeBoolean(value); getXMLNativeModule()._CallCallback(CallbackKind.Kind_Callback_Boolean_void, _argsSerializer.asArray(), _argsSerializer.length());; _argsSerializer.release();; return; }
+        return (value: boolean): void => { const _argsSerializer: Serializer = Serializer.hold(); _argsSerializer.writeInt32(_resource.resourceId); _argsSerializer.writePointer(_call); _argsSerializer.writeBoolean(value); getXMLNativeModule()._CallCallback(313269291, _argsSerializer.asArray(), _argsSerializer.length()); _argsSerializer.release(); return; }
     }
     readParseInfo(): ParseInfo {
         let valueDeserializer: Deserializer = this
         let ptr: KPointer = valueDeserializer.readPointer()
-        return ParseInfo.construct(ptr)
+        return ParseInfoInternal.fromPtr(ptr)
     }
     readParseOptions(): ParseOptions {
         let valueDeserializer: Deserializer = this
@@ -163,42 +149,37 @@ export class Deserializer extends DeserializerBase {
             }
         const tokenValueCallbackFunction_result: ((eventType: xml.EventType, value: ParseInfo) => boolean) | undefined|undefined = tokenValueCallbackFunction_buf
         let value: ParseOptions = ({supportDoctype: supportDoctype_result,ignoreNameSpace: ignoreNameSpace_result,tagValueCallbackFunction: tagValueCallbackFunction_result,attributeValueCallbackFunction: attributeValueCallbackFunction_result,tokenValueCallbackFunction: tokenValueCallbackFunction_result} as ParseOptions)
-        return (value as ParseOptions)
+        return value
     }
 }
-export function deserializeAndCallCallback_Boolean_void(thisDeserializer: Deserializer) {
+export function deserializeAndCallCallback_Boolean_Void(thisDeserializer: Deserializer) {
     const _resourceId: int32 = thisDeserializer.readInt32()
     const _call = (ResourceHolder.instance().get(_resourceId) as ((value: boolean) => void))
     let value: boolean = thisDeserializer.readBoolean()
-    _call(value);
+    _call(value)
 }
 export function deserializeAndCallCallback_EventType_ParseInfo_Boolean(thisDeserializer: Deserializer) {
     const _resourceId: int32 = thisDeserializer.readInt32()
     const _call = (ResourceHolder.instance().get(_resourceId) as ((eventType: xml.EventType, value: ParseInfo) => boolean))
     let eventType: xml.EventType = (thisDeserializer.readInt32() as xml.EventType)
     let value: ParseInfo = (thisDeserializer.readParseInfo() as ParseInfo)
-    let _continuation: ((value: boolean) => void) = thisDeserializer.readCallback_Boolean_void()
-    _continuation(_call(eventType, value));
+    let _continuation: ((value: boolean) => void) = thisDeserializer.readCallback_Boolean_Void()
+    _continuation(_call(eventType, value))
 }
 export function deserializeAndCallCallback_String_String_Boolean(thisDeserializer: Deserializer) {
     const _resourceId: int32 = thisDeserializer.readInt32()
     const _call = (ResourceHolder.instance().get(_resourceId) as ((name: string, value: string) => boolean))
     let name: string = (thisDeserializer.readString() as string)
     let value: string = (thisDeserializer.readString() as string)
-    let _continuation: ((value: boolean) => void) = thisDeserializer.readCallback_Boolean_void()
-    _continuation(_call(name, value));
-}
-export function deserializeAndCallCallback_void(thisDeserializer: Deserializer) {
-    const _resourceId: int32 = thisDeserializer.readInt32()
-    const _call = (ResourceHolder.instance().get(_resourceId) as (() => void))
-    _call();
+    let _continuation: ((value: boolean) => void) = thisDeserializer.readCallback_Boolean_Void()
+    _continuation(_call(name, value))
 }
 export function deserializeAndCallCallback(thisDeserializer: Deserializer) {
-    const kind: CallbackKind = (thisDeserializer.readInt32() as CallbackKind)
+    const kind: int32 = thisDeserializer.readInt32()
     switch (kind) {
-        case CallbackKind.Kind_Callback_Boolean_void: return deserializeAndCallCallback_Boolean_void(thisDeserializer);
-        case CallbackKind.Kind_Callback_EventType_ParseInfo_Boolean: return deserializeAndCallCallback_EventType_ParseInfo_Boolean(thisDeserializer);
-        case CallbackKind.Kind_Callback_String_String_Boolean: return deserializeAndCallCallback_String_String_Boolean(thisDeserializer);
-        case CallbackKind.Kind_Callback_void: return deserializeAndCallCallback_void(thisDeserializer);
+        case 313269291/*CallbackKind.Kind_Callback_Boolean_Void*/: return deserializeAndCallCallback_Boolean_Void(thisDeserializer);
+        case 240036623/*CallbackKind.Kind_Callback_EventType_ParseInfo_Boolean*/: return deserializeAndCallCallback_EventType_ParseInfo_Boolean(thisDeserializer);
+        case 923368928/*CallbackKind.Kind_Callback_String_String_Boolean*/: return deserializeAndCallCallback_String_String_Boolean(thisDeserializer);
     }
+    throw new Error("Unknown callback kind")
 }

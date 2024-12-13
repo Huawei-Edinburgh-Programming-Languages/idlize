@@ -20,12 +20,10 @@ import { DeclarationNameConvertor } from "../../peer-generation/idl/IdlNameConve
 import { ImportsCollector } from "../../peer-generation/ImportsCollector";
 import { capitalize, isDefined, throwException } from "../../util";
 import { PrimitiveType } from "../../peer-generation/ArkPrimitiveType";
-import { cleanPrefix } from "../../peer-generation/PeerLibrary";
 import { WrapperClass, WrapperField, WrapperMethod } from "../WrapperClass";
 import { Skoala } from "../utils";
 import { Field, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, NamedMethodSignature } from "../../peer-generation/LanguageWriters";
-import { ArgConvertor, BaseArgConvertor, BooleanConvertor, ClassConvertor, CustomTypeConvertor, EnumConvertor, ExpressionAssigneer, InterfaceConvertor, NullConvertor, NumberConvertor, RuntimeType, StringConvertor, TypeAliasConvertor, UndefinedConvertor, UnionConvertor } from "../../peer-generation/ArgConvertors";
-import { createRegularRetConvertor, createVoidRetConvertor, createRetConvertor } from "../../peer-generation/RetConvertors";
+import { ArgConvertor, BaseArgConvertor, BooleanConvertor, ClassConvertor, CustomTypeConvertor, EnumConvertor, ExpressionAssigneer, InterfaceConvertor, NumberConvertor, RuntimeType, StringConvertor, TypeAliasConvertor, UndefinedConvertor, UnionConvertor } from "../../peer-generation/ArgConvertors";
 import { CustomPrintVisitor } from "../../from-idl/DtsPrinter";
 import { Language } from "../../Language";
 import { addSyntheticType, resolveSyntheticType } from "../../from-idl/deserialize";
@@ -33,8 +31,8 @@ import { convertDeclaration, convertType, DeclarationConvertor, IdlNameConvertor
 import { LibraryInterface } from "../../LibraryInterface";
 import { generateSyntheticFunctionName } from "../../IDLVisitor";
 import { IDLNodeToStringConvertor } from "../../peer-generation/LanguageWriters/convertors/InteropConvertor";
-import { IdlEntryManager } from "../../peer-generation/idl/IdlEntryManager";
 import { DependenciesCollector } from "../../peer-generation/idl/IdlDependenciesCollector";
+import { createOutArgConvertor } from "../../peer-generation/PromiseConvertors";
 
 export class IldSkoalaFile {
     readonly wrapperClasses: Map<string, [WrapperClass, any|undefined]> = new Map()
@@ -61,7 +59,6 @@ export class IdlSkoalaLibrary implements LibraryInterface {
     public readonly serializerDeclarations: Set<idl.IDLInterface> = new Set()
     readonly nameConvertorInstance: IdlNameConvertor = new TSSkoalaTypeNameConvertor(this)
     readonly interopNameConvertorInstance: IdlNameConvertor = new IDLNodeToStringConvertor(this)
-    readonly importTypesStubToSource: Map<string, string> = new Map()
     readonly typeMap = new Map<idl.IDLType, [idl.IDLNode, boolean]>()
     public name: string = ""
 
@@ -78,10 +75,6 @@ export class IdlSkoalaLibrary implements LibraryInterface {
 
     getCurrentContext(): string | undefined {
         return ""
-    }
-
-    get factory(): IdlEntryManager {
-        throw new Error("Method not implemented.");
     }
 
     isComponentDeclaration(iface: idl.IDLInterface): boolean {
@@ -101,9 +94,7 @@ export class IdlSkoalaLibrary implements LibraryInterface {
     toDeclaration(type: idl.IDLType | idl.IDLTypedef | idl.IDLCallback | idl.IDLEnum | idl.IDLInterface): idl.IDLNode {
         switch (type) {
             case idl.IDLAnyType: return CustomObject
-            case idl.IDLNullType:
             case idl.IDLVoidType: return idl.IDLUndefinedType
-            case idl.IDLVoidType: return idl.IDLVoidType
             case idl.IDLUndefinedType: return idl.IDLUndefinedType
             case idl.IDLUnknownType: return CustomObject
             case idl.IDLObjectType: return CustomObject
@@ -115,7 +106,7 @@ export class IdlSkoalaLibrary implements LibraryInterface {
                 return Function
             }
             if (type.name == 'Optional') {
-                const wrappedType = idl.toIDLType(idl.getExtAttribute(type, idl.IDLExtendedAttributes.TypeArguments)!)
+                const wrappedType = type.typeArguments![0]
                 return this.toDeclaration(wrappedType)
             }
             const decl = this.resolveTypeReference(type)
@@ -150,7 +141,6 @@ export class IdlSkoalaLibrary implements LibraryInterface {
                 case idl.IDLAnyType: return new CustomTypeConvertor(param, "Any")
                 case idl.IDLBooleanType: return new BooleanConvertor(param)
                 case idl.IDLStringType: return new StringConvertor(param)
-                case idl.IDLNullType: return new NullConvertor(param)
                 case idl.IDLBigintType:
                 case idl.IDLNumberType: return new NumberConvertor(param)
                 case idl.IDLUndefinedType:
@@ -259,7 +249,7 @@ export class IdlWrapperClassConvertor extends BaseArgConvertor {
         protected table: IdlSkoalaLibrary,
         private type: idl.IDLInterface
     ) {
-        super(idl.toIDLType(name), [RuntimeType.OBJECT], false, true, param)
+        super(idl.createReferenceType(name), [RuntimeType.OBJECT], false, true, param)
     }
 
     convertorArg(param: string, writer: LanguageWriter): string {
@@ -272,14 +262,14 @@ export class IdlWrapperClassConvertor extends BaseArgConvertor {
         const prefix = writer.language === Language.CPP ? PrimitiveType.Prefix : ""
         const readStatement = writer.makeCast(
             writer.makeMethodCall(`${deserializerName}`, `readWrapper`, []),
-            idl.toIDLType(`${prefix}${this.type.name}`)
+            idl.createReferenceType(`${prefix}${this.type.name}`)
         )
         return assigneer(readStatement)
     }
     nativeType(): idl.IDLType {
         return idl.createReferenceType('Materialized')
     }
-    interopType(language: Language): string {
+    interopType(): idl.IDLType {
         throw new Error("Must never be used")
     }
     isPointerType(): boolean {
@@ -471,18 +461,17 @@ export class IdlWrapperProcessor {
                 const getAccessor = new WrapperMethod(
                     name,
                     new Method(`get${capitalize(field.name)}`, getSignature, [MethodModifier.PRIVATE]),
-                    [], f.retConvertor
+                    []
                 )
                 wMethods.push(getAccessor)
             }
             const isReadOnly = field.modifiers.includes(FieldModifier.READONLY)
             if (!isReadOnly) {
                 const setSignature = new NamedMethodSignature(idl.IDLVoidType, [field.type], [field.name])
-                const retConvertor = createVoidRetConvertor()
                 const setAccessor = new WrapperMethod(
                     name,
                     new Method(`set${capitalize(field.name)}`, setSignature, [MethodModifier.PRIVATE]),
-                    [f.argConvertor], retConvertor
+                    [f.argConvertor]
                 )
                 wMethods.push(setAccessor)
             }
@@ -507,11 +496,9 @@ export class IdlWrapperProcessor {
         if (property.isStatic) modifiers.push(FieldModifier.STATIC)
         if (property.isReadonly) modifiers.push(FieldModifier.READONLY)
         const argConvertor = this.library.typeConvertor(property.name, property.type!, undefined, undefined, this)
-        const retConvertor = createRetConvertor(this.library, property.type, mapCInteropRetType, [property.name])
         return new WrapperField(
             new Field(property.name, property.type, modifiers),
             argConvertor,
-            retConvertor,
         )
     }
 
@@ -521,11 +508,9 @@ export class IdlWrapperProcessor {
         // TODO: add convertor to convers method.type, method.name, method.parameters[..].type, method.parameters[..].name
         // TODO: add arg and ret convertors
 
-        let retConvertor = createRegularRetConvertor(PrimitiveType.NativePointer.getText())
-        if (!idl.isConstructor(idlMethod)) {
-            retConvertor = createRetConvertor(this.library, idlMethod.returnType, mapCInteropRetType, idlMethod.parameters.map(it => it.name))
-        }
-
+        const outArgConvertor = idl.isConstructor(idlMethod)
+            ? undefined
+            : createOutArgConvertor(this.library, idlMethod.returnType, idlMethod.parameters.map(it => it.name))
         let args: idl.IDLType[] = []
         let argsNames: string[] = []
         let argAndOutConvertors = idlMethod.parameters.map(param => {
@@ -534,8 +519,8 @@ export class IdlWrapperProcessor {
             argsNames.push(param.name)
             return this.library.typeConvertor(param.name, param.type, param.isOptional, undefined, this)
         })
-        if (retConvertor && retConvertor.throughOutArg)
-            argAndOutConvertors.push(retConvertor.outArgConvertor!)
+        if (outArgConvertor)
+            argAndOutConvertors.push(outArgConvertor)
 
         const modifiers = idl.isConstructor(idlMethod) || idlMethod.isStatic ? [MethodModifier.STATIC] : []
 
@@ -546,7 +531,7 @@ export class IdlWrapperProcessor {
             method = new Method(idlMethod.name, new NamedMethodSignature(idlMethod.returnType, args, argsNames), modifiers)
         }
 
-        return new WrapperMethod(decl.name, method, argAndOutConvertors, retConvertor)
+        return new WrapperMethod(decl.name, method, argAndOutConvertors)
     }
 
     private collectImports(importsCollector: ImportsCollector, methods: WrapperMethod[]) {
@@ -631,17 +616,10 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
         this.printer.printTypedef(node)
         this.writer.print(this.printer.output.join("\n"))
     }
-    private replaceImportTypeNodes(text: string): string {///operate on stringOrNone[]
-        for (const [stub, src] of [...this.library.importTypesStubToSource.entries()].reverse()) {
-            text = text.replaceAll(src, stub)
-        }
-        return text
-    }
-
     convertInterface(node: idl.IDLInterface): void {
         this.printer.output = []
         this.printer.printInterface(node)
-        this.writer.print(this.replaceImportTypeNodes(this.printer.output.join("\n")))
+        this.writer.print(this.printer.output.join("\n"))
     }
 }
 
@@ -713,7 +691,6 @@ export class TSSkoalaTypeNameConvertor implements IdlNameConvertor, TypeConverto
     convertPrimitiveType(type: idl.IDLPrimitiveType): string {
         switch (type) {
             case idl.IDLStringType: return "string"
-            case idl.IDLNullType: return "null"
             case idl.IDLVoidType: return "void"
         }
         // todo: add other types

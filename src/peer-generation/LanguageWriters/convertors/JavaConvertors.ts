@@ -18,6 +18,7 @@ import { throwException } from '../../../util';
 import { ARK_CUSTOM_OBJECT, convertJavaOptional, javaCustomTypeMapping } from '../../printers/lang/Java';
 import { ReferenceResolver } from '../../ReferenceResolver';
 import { convertNode, convertType, IdlNameConvertor, NodeConvertor } from "../nameConvertor";
+import { InteropArgConvertor } from './InteropConvertor';
 
 
 class JavaTypeAlias {
@@ -66,13 +67,16 @@ export class JavaIDLNodeToStringConvertor implements NodeConvertor<JavaTypeAlias
     }
 
     convertInterface(node: idl.IDLInterface): JavaTypeAlias {
-        throw new Error('Method not implemented.');
+        if (idl.isTupleInterface(node) && 1==1) {
+            return this.productType(node, true, false)
+        }
+        return JavaTypeAlias.fromTypeName(node.name, false)
     }
     convertEnum(node: idl.IDLEnum): JavaTypeAlias {
-        throw new Error('Method not implemented.');
+        return JavaTypeAlias.fromTypeName(node.name, false)
     }
     convertTypedef(node: idl.IDLTypedef): JavaTypeAlias {
-        throw new Error('Method not implemented.');
+        return JavaTypeAlias.fromTypeName(node.name, false)
     }
 
     convertOptional(type: idl.IDLOptionalType): JavaTypeAlias {
@@ -94,6 +98,9 @@ export class JavaIDLNodeToStringConvertor implements NodeConvertor<JavaTypeAlias
         throw new Error(`IDL type ${idl.DebugUtils.debugPrintType(type)} not supported`)
     }
     convertCallback(type: idl.IDLCallback): JavaTypeAlias {
+        if (idl.isSyntheticEntry(type)) {
+            return this.callbackType(type)
+        }
         // TODO
         return JavaTypeAlias.fromTypeName(`Callback`, false)
     }
@@ -113,24 +120,8 @@ export class JavaIDLNodeToStringConvertor implements NodeConvertor<JavaTypeAlias
 
         const decl = this.resolver.resolveTypeReference(type)!
         if (decl) {
-            // resolve synthetic types
-            if (idl.isSyntheticEntry(decl)) {
-                if (idl.isCallback(decl)) {
-                    return this.callbackType(decl)
-                }
-                const entity = idl.getExtAttribute(decl, idl.IDLExtendedAttributes.Entity)
-                if (entity) {
-                    const isTuple = entity === idl.IDLEntity.Tuple
-                    return this.productType(decl as idl.IDLInterface, isTuple, !isTuple)
-                }
-            }
-
-            if (decl.name) {
-                if (javaCustomTypeMapping.has(decl.name)) {
-                    return JavaTypeAlias.fromTypeName(javaCustomTypeMapping.get(decl.name)!, false)
-                }
-                return JavaTypeAlias.fromTypeName(decl.name, false)
-            }
+            const declName = this.convert(decl)
+            return JavaTypeAlias.fromTypeName(declName, false)
         }
 
         if (typeSpec === `Optional`) {
@@ -163,6 +154,7 @@ export class JavaIDLNodeToStringConvertor implements NodeConvertor<JavaTypeAlias
             case idl.IDLVoidType: return JavaTypeAlias.fromTypeName('void', false)
             case idl.IDLDate: return JavaTypeAlias.fromTypeName('Date', false)
             case idl.IDLBufferType: return JavaTypeAlias.fromTypeName('byte[]', false)
+            case idl.IDLLengthType: return JavaTypeAlias.fromTypeName('Ark_Length', false)
         }
         throw new Error(`Unsupported IDL primitive ${idl.DebugUtils.debugPrintType(type)}`)
     }
@@ -218,4 +210,14 @@ export class JavaIDLNodeToStringConvertor implements NodeConvertor<JavaTypeAlias
     }
 
     /**********************************************************************/
+}
+
+export class JavaInteropArgConvertor extends InteropArgConvertor {
+    convertPrimitiveType(type: idl.IDLPrimitiveType): string {
+        switch (type) {
+            case idl.IDLNumberType: return "double"
+            case idl.IDLLengthType: return "String"
+        }
+        return super.convertPrimitiveType(type)
+    }
 }

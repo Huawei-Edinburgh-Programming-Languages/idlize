@@ -22,7 +22,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class SerializerBase {
 
@@ -127,7 +126,7 @@ public class SerializerBase {
     public void writeBoolean(Opt_Boolean value) {
         this.writeBoolean(value.value);
     }
-    public void writeString(String value) {
+    public void writeString1(String value) {
         var encoded = value.getBytes();
         int length = encoded.length + 1;
         this.checkCapacity(4 + length);
@@ -135,16 +134,12 @@ public class SerializerBase {
         buffer.put(encoded);
         buffer.put((byte) 0);
     }
-    public void writeString1(String value) {
+    public void writeString(String value) {
         this.checkCapacity(4 + value.length() * 4 + 1);
         int encodedLength =
             NativeModule._ManagedStringWrite(value, this.buffer.array(), this.buffer.position() + 4);
         buffer.putInt(encodedLength);
         buffer.position(buffer.position() + encodedLength);
-    }
-    public void writeLength(Ark_Length value) {
-        this.buffer.put(RuntimeType.STRING.value);
-        this.writeString(value.value);
     }
     public void writeBuffer(byte[] value) {
         this.checkCapacity(8);

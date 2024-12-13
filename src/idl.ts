@@ -36,12 +36,14 @@ export enum IDLKind {
     TupleInterface,
     PrimitiveType,
     ContainerType,
+    UnspecifiedGenericType,
     ReferenceType,
     EnumType,
     UnionType,
     TypeParameterType,
     ModuleType,
     OptionalType,
+    Version,
 }
 
 export enum IDLEntity {
@@ -82,6 +84,7 @@ export enum IDLExtendedAttributes {
     TypeArguments = "TypeArguments",
     TypeParameters = "TypeParameters",
     VerbatimDts = "VerbatimDts",
+    HandWrittenImplementation = "HandWrittenImplementation",
 }
 
 export enum IDLAccessorAttribute {
@@ -150,6 +153,11 @@ export interface IDLReferenceType extends IDLType, IDLNamedNode {
     typeArguments?: IDLType[]
 }
 
+export interface IDLUnspecifiedGenericType extends IDLType, IDLNamedNode {
+    kind: IDLKind.UnspecifiedGenericType
+    typeArguments: IDLType[]
+}
+
 export interface IDLUnionType extends IDLType, IDLNamedNode {
     kind: IDLKind.UnionType
     types: IDLType[]
@@ -161,6 +169,11 @@ export interface IDLTypeParameterType extends IDLType, IDLNamedNode {
 
 export interface IDLModule extends IDLEntry {
     kind: IDLKind.ModuleType
+}
+
+export interface IDLVersion extends IDLEntry {
+    kind: IDLKind.Version
+    value: string[]
 }
 
 export interface IDLVariable extends IDLEntry {
@@ -297,7 +310,9 @@ export function forEachChild(node: IDLNode, cb: (entry: IDLNode) => void): void 
         case IDLKind.PrimitiveType:
         case IDLKind.ContainerType:
         case IDLKind.TypeParameterType:
-        case IDLKind.ReferenceType: {
+        case IDLKind.ReferenceType:
+        case IDLKind.Version:
+        case IDLKind.UnspecifiedGenericType: {
             break
         }
         case IDLKind.ModuleType: {
@@ -320,9 +335,6 @@ export function forceAsNamedNode(type: IDLNode): IDLNamedNode {
     return type
 }
 
-export function isNullType(type: IDLNode): type is IDLPrimitiveType {
-    return isPrimitiveType(type) && type.name === IDLNullType.name
-}
 export function isUndefinedType(type: IDLNode): type is IDLPrimitiveType {
     return isPrimitiveType(type) && type.name === IDLUndefinedType.name
 }
@@ -337,6 +349,9 @@ export function isContainerType(type: IDLNode): type is IDLContainerType {
 }
 export function isReferenceType(type: IDLNode): type is IDLReferenceType {
     return type.kind == IDLKind.ReferenceType
+}
+export function isUnspecifiedGenericType(type: IDLNode): type is IDLUnspecifiedGenericType {
+    return type.kind == IDLKind.UnspecifiedGenericType
 }
 export function isEnum(type: IDLNode): type is IDLEnum {
     return type.kind == IDLKind.Enum
@@ -408,6 +423,10 @@ export function isOptionalType(type: IDLNode): type is IDLOptionalType {
     return type.kind === IDLKind.OptionalType
 }
 
+export function isVersion(node: IDLNode): node is IDLVersion {
+    return node.kind === IDLKind.Version
+}
+
 function createPrimitiveType(name: string): IDLPrimitiveType {
     return {
         kind: IDLKind.PrimitiveType,
@@ -458,7 +477,6 @@ export const IDLBigintType = createPrimitiveType("bigint")
 export const IDLNumberType = createPrimitiveType('number')
 export const IDLStringType = createPrimitiveType('String')
 export const IDLAnyType = createPrimitiveType('any')
-export const IDLNullType = createPrimitiveType('null')
 export const IDLUndefinedType = createPrimitiveType('undefined')
 export const IDLUnknownType = createPrimitiveType('unknown')
 export const IDLObjectType = createReferenceType('Object')
@@ -492,9 +510,33 @@ export function createModuleType(name:string, extendedAttributes?: IDLExtendedAt
     }
 }
 
+export function createVersion(value: string[], extendedAttributes?: IDLExtendedAttribute[], fileName?:string): IDLVersion {
+    return {
+        kind: IDLKind.Version,
+        value,
+        name: "version",
+        extendedAttributes,
+        fileName,
+        _idlNodeBrand: innerIdlSymbol,
+        _idlEntryBrand: innerIdlSymbol,
+        _idlNamedNodeBrand: innerIdlSymbol,
+    }
+}
+
 export function createReferenceType(name: string, typeArguments?: IDLType[]): IDLReferenceType {
     return {
         kind: IDLKind.ReferenceType,
+        name,
+        typeArguments,
+        _idlNodeBrand: innerIdlSymbol,
+        _idlTypeBrand: innerIdlSymbol,
+        _idlNamedNodeBrand: innerIdlSymbol,
+    }
+}
+
+export function createUnspecifiedGenericType(name: string, typeArguments: IDLType[]): IDLUnspecifiedGenericType {
+    return {
+        kind: IDLKind.UnspecifiedGenericType,
         name,
         typeArguments,
         _idlNodeBrand: innerIdlSymbol,
@@ -680,8 +722,12 @@ export function createMethod(
     name: string,
     parameters: IDLParameter[],
     returnType: IDLType,
-    methodInitializer: IDLMethodInitializer,
-    nodeInitializer: IDLNodeInitializer,
+    methodInitializer: IDLMethodInitializer = {
+        isAsync: false,
+        isStatic: false,
+        isOptional: false,
+    },
+    nodeInitializer: IDLNodeInitializer = {},
     typeParameters: string[] = []
 ): IDLMethod {
     return {
@@ -744,6 +790,19 @@ export function createConstructor(
 export function createCallback(name: string, parameters: IDLParameter[], returnType: IDLType,
         nodeInitializer: IDLNodeInitializer = {}, typeParameters: string[] = []): IDLCallback
 {
+    if (isNamedNode(returnType) && returnType.name === "this")
+        returnType = IDLAnyType
+    parameters = parameters.map(it => {
+        if (it.type && isNamedNode(it.type) && (it.type.name === "T" || it.type.name === "this"))
+            return createParameter(
+                it.name,
+                IDLAnyType,
+                it.isOptional,
+                it.isVariadic,
+                { fileName: it.fileName },
+            )
+        return it
+    })
     return {
         kind: IDLKind.Callback,
         name, parameters, returnType, typeParameters,
@@ -822,6 +881,7 @@ export function printType(type: IDLType | IDLInterface | undefined, options?:Pri
             return `(${res})`;
         return res;
     }
+    if (isUnspecifiedGenericType(type)) return `${type.name}<${type.typeArguments.map(it => printType(it)).join(", ")}>`
     if (isUnionType(type)) return `(${type.types.map(it => printType(it)).join(" or ")})`
     if (isTypeParameterType(type)) return type.name
     throw new Error(`Cannot map type: ${IDLKind[type.kind]}`)
@@ -892,6 +952,9 @@ function printExtendedAttributes(idl: IDLNode, indentLevel: number): stringOrNon
         break
     case IDLKind.ReferenceType:
         typeArguments = (idl as IDLReferenceType).typeArguments
+        break
+    case IDLKind.UnspecifiedGenericType:
+        typeArguments = (idl as IDLUnspecifiedGenericType).typeArguments
         break
     }
     const attributes: IDLExtendedAttribute[] = Array.from(idl.extendedAttributes || [])
@@ -1137,47 +1200,6 @@ export function decomposeQualifiedName(type: IDLReferenceType): [string | undefi
     return [undefined, typeName]
 }
 
-///don't like this. But type args are stored as strings, not as IDLType as they should
-export function toIDLType(typeName: string): IDLType {
-    if (typeName.includes('import')) {
-        throw new Error(`FAIL ${typeName}`)
-    }
-    if (typeName === 'sequence') {
-        throw new Error('FAIL')
-    }
-    const arrayMatch = typeName.match(/^Array<(.*)>$/)
-    if (arrayMatch) {
-        return createContainerType("sequence", [toIDLType(arrayMatch[1])])
-    }
-    // TODO: mb match /Map<(.*), (.*)>/ and /(.*)\[\]]/
-
-    switch (typeName) {
-        case "boolean": return IDLBooleanType
-        case "null": return IDLNullType
-        case "number": return IDLNumberType
-        case "string": return IDLStringType
-        case "String": return IDLStringType
-        case "undefined": return IDLUndefinedType
-        case "unknown": return IDLUnknownType
-        case "void": return IDLVoidType
-        case "Object": return IDLObjectType
-        case "any": return IDLAnyType
-        case "i8": return IDLI8Type
-        case "u8": return IDLU8Type
-        case "i16": return IDLI16Type
-        case "u16": return IDLU16Type
-        case "i32": return IDLI32Type
-        case "u32": return IDLU32Type
-        case "i64": return IDLI64Type
-        case "u64": return IDLU64Type
-        case "pointer": return IDLPointerType
-        case "this": return IDLThisType
-        case "Uint8Array": return IDLUint8ArrayType
-        case "ArrayBuffer": return IDLBufferType
-        default: return createReferenceType(typeName)
-    }
-}
-
 export function maybeUnwrapOptionalType(type: IDLType): IDLType {
     if (isOptionalType(type)) {
         return type.type
@@ -1263,9 +1285,11 @@ export function forEachFunction(node: IDLNode, cb: (node: IDLFunction) => void):
         case IDLKind.EnumType:
         case IDLKind.PrimitiveType:
         case IDLKind.ReferenceType:
+        case IDLKind.UnspecifiedGenericType:
         case IDLKind.ModuleType:
         case IDLKind.Package:
         case IDLKind.Import:
+        case IDLKind.Version:
             break
         default: {
             throw new Error(`Unhandled ${node.kind}`)

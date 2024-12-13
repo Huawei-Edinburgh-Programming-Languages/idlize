@@ -30,12 +30,13 @@ import { createDestroyPeerMethod, MaterializedClass, MaterializedMethod } from "
 import { groupBy } from "../../util";
 import { CppLanguageWriter, createLanguageWriter, createTypeNameConvertor, LanguageWriter, printMethodDeclaration } from "../LanguageWriters";
 import { LibaceInstall } from "../../Install";
-import { IDLBooleanType, IDLFunctionType, IDLStringType, isOptionalType } from "../../idl"
-import { PeerLibrary } from "../PeerLibrary";
+import { IDLAnyType, IDLBooleanType, IDLFunctionType, IDLPointerType, IDLStringType, IDLThisType, IDLType, isNamedNode, isOptionalType, isReferenceType } from "../../idl";
 import { createConstructPeerMethod, PeerClass } from "../PeerClass";
 import { PeerMethod } from "../PeerMethod";
 import { Language } from "../../Language";
 import { createEmptyReferenceResolver, getReferenceResolver } from "../ReferenceResolver";
+import { PeerLibrary } from "../PeerLibrary";
+import { InteropReturnTypeConvertor } from "../LanguageWriters/convertors/InteropConvertor";
 
 export class ModifierVisitor {
     dummy = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
@@ -43,6 +44,8 @@ export class ModifierVisitor {
     modifiers = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
     getterDeclarations = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
     modifierList = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
+    private readonly returnTypeConvertor = new InteropReturnTypeConvertor()
+    commentedCode = true
 
     constructor(
         protected library: PeerLibrary,
@@ -51,23 +54,32 @@ export class ModifierVisitor {
 
     printDummyImplFunctionBody(method: PeerMethod) {
         let _ = this.dummy
+        if (method.toStringName.includes('construct')) {
+            _.writeLines(`return new TreeNode("${method.originalParentName}", id, flags);`)
+            return
+        }
         _.writeStatement(
             _.makeCondition(
                 _.makeString("!needGroupedLog(1)"),
                 _.makeReturn(
-                    method.retConvertor.isVoid ? undefined : _.makeString(method.dummyReturnValue ?? "0"))))
+                    this.returnTypeConvertor.isVoid(method) ? undefined : _.makeString(method.dummyReturnValue ?? "0"))))
         _.print(`string out("${method.toStringName}(");`)
         method.argAndOutConvertors.forEach((argConvertor, index) => {
             if (index > 0) this.dummy.print(`out.append(", ");`)
             _.print(`WriteToString(&out, ${argConvertor.param});`)
         })
         _.print(`out.append(")");`)
-        const retVal = method.dummyReturnValue
+        const isVoid = this.returnTypeConvertor.isVoid(method)
+        let retVal = isVoid ? undefined : method.dummyReturnValue
         if (retVal  !== undefined) {
             _.print(`out.append("[return ${retVal}]");`)
         }
         _.print(`appendGroupedLog(1, out);`)
-        this.printReturnStatement(this.dummy, method, retVal)
+        const rt = method.method.signature.returnType
+        if (retVal === undefined && !isVoid) {
+            retVal = "0"
+        }
+        this.printReturnStatement(this.dummy, method, true, retVal)
     }
 
     printModifierImplFunctionBody(method: PeerMethod, clazz: PeerClass | undefined = undefined) {
@@ -77,10 +89,50 @@ export class ModifierVisitor {
         this.printReturnStatement(this.real, method)
     }
 
-    private printReturnStatement(printer: LanguageWriter, method: PeerMethod, returnValue: string | undefined = undefined) {
-        if (!method.retConvertor.isVoid) {
-            printer.print(`return ${returnValue ?? "0"};`)
+    private printReturnStatement(printer: LanguageWriter, method: PeerMethod, isDummy? : boolean, returnValue: string | undefined = undefined) {
+        const isVoid = this.returnTypeConvertor.isVoid(method)
+        if (isDummy) {
+            if (returnValue) {
+                printer.print(`return ${returnValue};`)
+            }
         }
+        else if(method.method.name == 'getFinalizer')
+        {
+            printer.print(`return reinterpret_cast<void *>(&DestroyPeerImpl);`)
+        }
+        else if (method.method.name == 'ctor'){
+            const argCount = method.method.signature.args.length
+
+            const paramNames: string[] = []
+            for (let i = 0; i < argCount; i++) {
+                paramNames.push(method.method.signature.argName(i))
+            }
+            const apiParameters = paramNames.join(', ')
+            printer.print(`return new ${method.originalParentName}Peer(${apiParameters});`)
+        }
+        else if(method.method.name == 'destroyPeer')
+        {
+            const implClassName = `${method.originalParentName}PeerImpl`
+            printer.print(`auto peerImpl = reinterpret_cast<${implClassName} *>(peer);`)
+            printer.print(`if (peerImpl) {`)
+            printer.print(`    delete peerImpl;`)
+            printer.print(`}`)
+        }
+        else if (!isVoid) {
+            if (this.isPointerReturnType(method.method.signature.returnType)) {
+                printer.print(`return nullptr;`)
+            }
+            else{
+                printer.print(`return 0;`)
+            }
+        }
+    }
+
+     private isPointerReturnType(returnType: IDLType): boolean {
+        return isReferenceType(returnType)  ||
+                returnType === IDLThisType ||
+                returnType === IDLPointerType ||
+                returnType === IDLAnyType
     }
 
     private printBodyImplementation(printer: LanguageWriter, method: PeerMethod,
@@ -100,7 +152,8 @@ export class ModifierVisitor {
                 this.real.print(`auto convValue = Converter::Convert<std::string>(*${
                     method.argAndOutConvertors.at(0)?.param
                 });`)
-            } else if (method.argAndOutConvertors.length === 1
+            } else if (this.commentedCode
+                && method.argAndOutConvertors.length === 1
                 && isOptionalType(method.argAndOutConvertors[0].nativeType())
                 && method.argAndOutConvertors.at(0)?.isPointerType()) {
                 this.real.print(`//auto convValue = ${method.argAndOutConvertors.at(0)?.param} ? ` +
@@ -109,26 +162,33 @@ export class ModifierVisitor {
                 this.real.print(`CHECK_NULL_VOID(${
                     method.argAndOutConvertors.at(0)?.param
                 });`)
-                this.real.print(`//auto convValue = Converter::OptConvert<type_name>(*${
-                    method.argAndOutConvertors.at(0)?.param
-                });`)
+                if (this.commentedCode) {
+                    this.real.print(`//auto convValue = Converter::OptConvert<type_name>(*${
+                        method.argAndOutConvertors.at(0)?.param
+                    });`)
+                }
             } else if (method.argAndOutConvertors.length === 1 &&
                 method.argAndOutConvertors.at(0)?.nativeType() === IDLBooleanType) {
                 this.real.print(`auto convValue = Converter::Convert<bool>(${
                     method.argAndOutConvertors.at(0)?.param
                 });`)
-            } else if (method.argAndOutConvertors.length === 1
+            } else if (this.commentedCode
+                && method.argAndOutConvertors.length === 1
                 && method.argAndOutConvertors.at(0)?.nativeType() === IDLFunctionType) {
                 this.real.print(`//auto convValue = [frameNode](input values) { code }`)
             } else {
-                this.real.print(`//auto convValue = Converter::Convert<type>(${
-                    method.argAndOutConvertors.at(0)?.param
-                });`)
-                this.real.print(`//auto convValue = Converter::OptConvert<type>(${
-                    method.argAndOutConvertors.at(0)?.param
-                }); // for enums`)
+                if (this.commentedCode) {
+                    this.real.print(`//auto convValue = Converter::Convert<type>(${
+                        method.argAndOutConvertors.at(0)?.param
+                    });`)
+                    this.real.print(`//auto convValue = Converter::OptConvert<type>(${
+                        method.argAndOutConvertors.at(0)?.param
+                    }); // for enums`)
+                }
             }
-            this.real.print(`//${clazz?.componentName}ModelNG::Set${method.implName.replace("Impl", "")}(frameNode, convValue);`)
+            if (this.commentedCode) {
+                this.real.print(`//${clazz?.componentName}ModelNG::Set${method.implName.replace("Impl", "")}(frameNode, convValue);`)
+            }
         }
     }
 
@@ -136,7 +196,7 @@ export class ModifierVisitor {
         const apiParameters = method.generateAPIParameters(
             createTypeNameConvertor(Language.CPP, getReferenceResolver(this.library))
         )
-        printMethodDeclaration(printer.printer, method.retType, method.implName, apiParameters)
+        printMethodDeclaration(printer.printer, this.returnTypeConvertor.convert(method.returnType), method.implName, apiParameters)
         printer.print("{")
         printer.pushIndent()
     }
@@ -244,13 +304,15 @@ class AccessorVisitor extends ModifierVisitor {
         const namespaceName = clazz.methods[0].implNamespaceName
         this.pushNamespace(namespaceName, false)
         const mDestroyPeer = createDestroyPeerMethod(clazz);
-        [clazz.ctor, clazz.finalizer, mDestroyPeer].concat(clazz.methods).forEach(method => {
+        [mDestroyPeer, clazz.ctor, clazz.finalizer].concat(clazz.methods).forEach(method => {
             this.printMaterializedMethod(this.dummy, method, m => this.printDummyImplFunctionBody(m))
             this.printMaterializedMethod(this.real, method, m => this.printModifierImplFunctionBody(m))
             this.accessors.print(`${method.implNamespaceName}::${method.implName},`)
         })
         this.popNamespace(namespaceName, false)
         this.printMaterializedClassEpilog(clazz)
+
+        this.printStruct(clazz)
     }
 
     printMaterializedClassProlog(clazz: MaterializedClass) {
@@ -277,6 +339,16 @@ class AccessorVisitor extends ModifierVisitor {
         this.printMethodProlog(printer, method)
         printBody(method)
         this.printMethodEpilog(printer)
+    }
+
+    printStruct(clazz: MaterializedClass): void {
+        const structName = `${clazz.className}Peer`
+
+        this.accessors.print(`struct ${structName} {`)
+        this.accessors.pushIndent()
+        this.accessors.print(`virtual ~${structName}() = default;`)
+        this.accessors.popIndent()
+        this.accessors.print(`};`)
     }
 }
 
@@ -392,12 +464,14 @@ export interface ModifierFileOptions {
     basicVersion: number;
     fullVersion: number;
     extendedVersion: number;
+    commentedCode: boolean
 
     namespaces?: Namespaces
 }
 
 export function printRealModifiersAsMultipleFiles(library: PeerLibrary, libace: LibaceInstall, options: ModifierFileOptions) {
     const visitor = new MultiFileModifiersVisitor(library)
+    visitor.commentedCode = options.commentedCode
     visitor.printRealAndDummyModifiers()
     visitor.emitRealSync(library, libace, options)
 }
@@ -407,7 +481,7 @@ function printModifiersImplFile(filePath: string, state: MultiFileModifiersVisit
     writer.writeLines(cStyleCopyright)
 
     writer.writeInclude(`core/components_ng/base/frame_node.h`)
-    writer.writeInclude(`core/interfaces/arkoala/utility/converter.h`)
+    writer.writeInclude(`core/interfaces/native/utility/converter.h`)
     writer.writeInclude(`arkoala_api_generated.h`)
     writer.print("")
 
@@ -434,7 +508,7 @@ function printModifiersCommonImplFile(filePath: string, content: LanguageWriter,
     writer.print("")
 
     writer.writeInclude('arkoala-macros.h')
-    writer.writeInclude('core/interfaces/arkoala/arkoala_api.h')
+    writer.writeInclude('arkoala_api_generated.h')
     writer.writeInclude('node_api.h')
     writer.print("")
 
@@ -469,7 +543,6 @@ function printApiImplFile(library: PeerLibrary, filePath: string, options: Modif
     writer.writeMultilineCommentBlock(warning)
     writer.print("")
 
-    writer.writeInclude('core/interfaces/arkoala/arkoala_api.h')
     writer.writeInclude('arkoala_api_generated.h')
     writer.writeInclude('base/utils/utils.h')
     writer.writeInclude('core/pipeline/base/element_register.h')

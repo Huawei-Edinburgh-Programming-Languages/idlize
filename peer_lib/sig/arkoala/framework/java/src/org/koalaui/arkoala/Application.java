@@ -17,15 +17,22 @@ package org.koalaui.arkoala;
 
 import java.util.function.Consumer;
 
+class EventType {
+    public static final int Click = 0;
+    public static final int Text = 1;
+    public static final int ExitApp = 2;
+}
+
 public class Application {
     UserView view;
     Consumer<PeerNode> builderFunction;
     PeerNode rootNode;
+    boolean exitApp;
 
     Application(UserView view) {
         this.view = view;
         builderFunction = view.getBuilder();
-        rootNode = ArkColumnPeer.create(ArkUINodeType.Column, null, 0);
+        rootNode = ArkColumnPeer.create(null, 0);
     }
 
     public static void main(String[] args) {
@@ -41,7 +48,20 @@ public class Application {
         }
     }
 
+    static String printBytes(byte[] bytes, int count) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[ ");
+        for (int i = 0; i < bytes.length && i < count; i++) {
+            sb.append(String.format("0x%02X ", bytes[i]));
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
     public static Application createApplication(String app, String params) {
+        SerializerBase ser = new SerializerBase();
+        ser.writeString("Hello world!");
+        System.out.println("Ser is " + ser.length() + " is " + printBytes(ser.asArray(), ser.length()));
         NativeModule._NativeLog("NativeModule.createApplication " +  app + " , params=" + params);
         UserView view = (UserView)NativeModule._LoadUserView("org.koalaui.arkoala.View" + app, params);
         if (view == null) throw new Error("Cannot load user view");
@@ -56,7 +76,7 @@ public class Application {
         checkEvents(arg0);
         updateState();
         render();
-        return false;
+        return exitApp;
     }
 
     byte[] eventBuffer = new byte[4 * 60];
@@ -75,6 +95,27 @@ public class Application {
     void render() {
         System.out.println("JAVA: render");
         builderFunction.accept(rootNode);
+    }
+
+    // TODO: make [emitEvent] suitable to get string argument
+    public void emitEvent(int type, int target, int arg0, int arg1) {
+        switch (type) {
+            case EventType.Click: {
+                break;
+            }
+            case EventType.Text: {
+                System.out.println("JAVA: [emitEvent] EventType.Text is not implemented." + type);
+                break;
+            }
+            case EventType.ExitApp: {
+                exitApp = true;
+                break;
+            }
+            default: {
+                System.out.println("JAVA: [emitEvent] type = " + type + " is unknown.");
+                break;
+            }
+        }
     }
 
     public long start() {

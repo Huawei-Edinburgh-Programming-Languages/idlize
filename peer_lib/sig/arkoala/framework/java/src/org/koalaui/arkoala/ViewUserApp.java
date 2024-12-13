@@ -12,17 +12,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// Not needed for now
+package org.koalaui.arkoala;
 
-package idlize
+import java.util.function.Consumer;
 
-// public class Opt_Number <: Ark_ObjectBase {
-//     public var value: Float64
-//     public Opt_Number(v: Float64) {
-//         this.value = v;
-//     }
+public class ViewUserApp extends UserView {
+    ViewUserApp(String params) {
+        System.out.println("User ViewUserApp() params=" + params);
+    }
 
-//     override public func runtimeType(): RuntimeType {
-//         return RuntimeType.NUMBER;
-//     }
-// }
+    static void view(PeerNode root) {
+        System.out.println("User view: " + root);
+    }
+
+    Consumer<PeerNode> getBuilder() {
+        return ViewUserApp::view;
+    }
+}

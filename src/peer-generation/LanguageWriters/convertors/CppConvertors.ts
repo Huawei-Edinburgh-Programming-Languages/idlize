@@ -16,7 +16,7 @@
 import * as idl from '../../../idl'
 import { PrimitiveType } from '../../ArkPrimitiveType';
 import { IdlNameConvertor } from "../nameConvertor";
-import { ConvertResult, InteropConverter } from './InteropConvertor';
+import { ConvertResult, InteropArgConvertor, InteropConverter } from './InteropConvertor';
 
 export class CppIDLNodeToStringConvertor extends InteropConverter implements IdlNameConvertor {
     private unwrap(type: idl.IDLNode, result:ConvertResult): string {
@@ -33,9 +33,25 @@ export class CppIDLNodeToStringConvertor extends InteropConverter implements Idl
         return this.unwrap(node, this.convertNode(node))
     }
 
-    override convertPrimitiveType(type: idl.IDLPrimitiveType): ConvertResult {
-        return type === idl.IDLNullType
-            ? { text: "Undefined", noPrefix: false }
-            : super.convertPrimitiveType(type)
+}
+
+export class CppInteropArgConvertor extends InteropArgConvertor {
+    static INSTANCE = new CppInteropArgConvertor()
+
+    convertOptional(type: idl.IDLOptionalType): string {
+        return PrimitiveType.NativePointer.getText()
+    }
+    convertPrimitiveType(type: idl.IDLPrimitiveType): string {
+        switch (type) {
+            case idl.IDLBooleanType: return PrimitiveType.Boolean.getText()
+            case idl.IDLI32Type: return PrimitiveType.Int32.getText()
+            case idl.IDLNumberType: return "KInteropNumber"
+            case idl.IDLBufferType: return "Ark_Buffer"
+            case idl.IDLLengthType: return "KLength"
+            case idl.IDLFunctionType: return PrimitiveType.Int32.getText()
+            case idl.IDLDate: return PrimitiveType.Int64.getText()
+            case idl.IDLPointerType: return PrimitiveType.NativePointer.getText()
+        }
+        return super.convertPrimitiveType(type)
     }
 }

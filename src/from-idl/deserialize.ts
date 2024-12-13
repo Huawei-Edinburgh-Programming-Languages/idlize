@@ -19,7 +19,8 @@ import {
     isPromiseTypeDescription,
     isRecordTypeDescription,
     isSequenceTypeDescription,
-    isSingleTypeDescription, isTypedef, isUnionTypeDescription
+    isSingleTypeDescription, isTypedef, isUnionTypeDescription,
+    isUnspecifiedGenericTypeDescription
 } from "./webidl2-utils"
 import { toString } from "./toString"
 import * as idl from "../idl"
@@ -66,12 +67,19 @@ export function toIDLNode(file: string, node: webidl2.IDLRootType): idl.IDLEntry
     if (isNamespace(node)) {
         return toIDLNamespace(file, node)
     }
+    if (isVersion(node)) {
+        return toIDLVersion(file, node)
+    }
     throw new Error(`unexpected node type: ${toString(node)}`)
 }
 
 
 function isNamespace(node: webidl2.IDLRootType): node is webidl2.NamespaceType {
     return node.type === 'namespace'
+}
+
+function isVersion(node: webidl2.IDLRootType): node is webidl2.NamespaceType {
+    return node.type === 'version'
 }
 
 function isPackage(node: webidl2.IDLRootType): node is webidl2.PackageType {
@@ -161,7 +169,7 @@ function toIDLType(file: string, type: webidl2.IDLTypeDescription | string, extA
     }
     if (type.nullable) {
         return idl.createOptionalType(
-            toIDLType(file, { ...type, nullable: false }, extAttrs)            
+            toIDLType(file, { ...type, nullable: false }, extAttrs)
         )
     }
     if (isUnionTypeDescription(type)) {
@@ -177,7 +185,6 @@ function toIDLType(file: string, type: webidl2.IDLTypeDescription | string, extA
             case idl.IDLObjectType.name: return idl.IDLObjectType
             case idl.IDLAnyType.name: return idl.IDLAnyType
             case idl.IDLBooleanType.name: return idl.IDLBooleanType
-            case idl.IDLNullType.name: return idl.IDLNullType
             case idl.IDLNumberType.name: return idl.IDLNumberType
             case idl.IDLStringType.name: return idl.IDLStringType
             case idl.IDLUndefinedType.name: return idl.IDLUndefinedType
@@ -205,6 +212,13 @@ function toIDLType(file: string, type: webidl2.IDLTypeDescription | string, extA
     }
     if (isSequenceTypeDescription(type) || isPromiseTypeDescription(type) || isRecordTypeDescription(type)) {
         return idl.createContainerType(
+            type.generic,
+            type.idlType.map(it => toIDLType(file, it))
+        )
+    }
+
+    if (isUnspecifiedGenericTypeDescription(type)) {
+        return idl.createUnspecifiedGenericType(
             type.generic,
             type.idlType.map(it => toIDLType(file, it))
         )
@@ -322,6 +336,13 @@ function toIDLNamespace(file: string, node: webidl2.NamespaceType): idl.IDLModul
     )
 }
 
+function toIDLVersion(file: string, node: webidl2.VersionType): idl.IDLVersion {
+    return idl.createVersion(
+        node.value,
+        toExtendedAttributes(node.extAttrs),
+        file
+    )
+}
 function toIDLProperty(file: string, node: webidl2.AttributeMemberType): idl.IDLProperty {
     return idl.createProperty(
         node.name,
@@ -335,10 +356,40 @@ function toIDLProperty(file: string, node: webidl2.AttributeMemberType): idl.IDL
     })
 }
 
+function unescapeString(value: string): string {
+    if (!value.length || value[0] !== '"')
+        return value
+    value = value.slice(1,-1)
+    value = value.replace(/\\((['"\\bfnrtv])|([0-7]{1-3})|x([0-9a-fA-F]{2})|u([0-9a-fA-F]{4}))/g, (_, all, c, oct, h2, u4) => {
+        if (c !== undefined) {
+            switch (c) {
+                case "'": return "'";
+                case '"': return '"';
+                case "\\": return "\\";
+                case "b": return "\b";
+                case "f": return "\f";
+                case "n": return "\n";
+                case "r": return "\r";
+                case "t": return "\t";
+                case "v": return "\v";
+            }
+        } else if (oct !== undefined) {
+            return String.fromCharCode(parseInt(oct, 8));
+        } else if (h2 !== undefined) {
+            return String.fromCharCode(parseInt(h2, 16));
+        } else if (u4 !== undefined) {
+            return String.fromCharCode(parseInt(u4, 16));
+        }
+        throw new Error(`unknown escape sequence: ${_}`);
+    });
+
+    return value;
+}
+
 function toIDLEnumMember(file: string, node: webidl2.DictionaryMemberType, parent: idl.IDLEnum): idl.IDLEnumMember {
     let initializer = undefined
     if (node.default?.type == "string") {
-        initializer = node.default?.value
+        initializer = unescapeString(node.default.value)
     } else if (node.default?.type == "number") {
         initializer = +(node.default?.value)
     } else if (node.default == null) {
@@ -365,10 +416,9 @@ function toExtendedAttributeValue(attr: webidl2.ExtendedAttribute): stringOrNone
     // TODO: be smarter about RHS.
     if (attr.rhs?.value instanceof Array)
         return attr.rhs.value.map(v => v.value).join(",")
-    const value = attr.rhs?.value
-    if (value?.startsWith('"'))
-        return value.slice(1, -1)
-    return value
+    if (typeof(attr.rhs?.value) === 'string')
+        return unescapeString(attr.rhs.value)
+    return
 }
 
 function makeDocs(node: webidl2.AbstractBase): stringOrNone {

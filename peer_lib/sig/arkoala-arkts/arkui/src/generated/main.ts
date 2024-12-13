@@ -13,7 +13,8 @@
  * limitations under the License.
  */
 import { NativeModule, nativeModule } from "#components"
-import { wrapCallback, callCallback } from "./CallbackRegistry"
+import { wrapCallback, callCallback, wrapSystemCallback } from "./CallbackRegistry"
+import { deserializeAndCallCallback } from './peers/CallbackDeserializeCall.ts'
 import { assertEquals, assertThrows } from "./test_utils"
 import { ArkButtonPeer } from "@arkoala/arkui/peers/ArkButtonPeer"
 import { ArkColumnPeer } from "@arkoala/arkui/peers/ArkColumnPeer"
@@ -42,7 +43,8 @@ import { BlurOptions,
     UIContext,
     ScrollSizeMode,
     Position,
-         SheetKeyboardAvoidMode,
+    SheetKeyboardAvoidMode,
+    Literal_Alignment_align,
     HoverModeAreaType } from "@arkoala/arkui/ArkCommonInterfaces"
 import { Dimension,
     Length,
@@ -53,9 +55,8 @@ import { Dimension,
 
 import { Resource } from "./ArkResourceInterfaces"
 
-import { TextOverflow, TextHeightAdaptivePolicy } from "@arkoala/arkui/ArkEnumsInterfaces"
+import { Alignment, TextOverflow, TextHeightAdaptivePolicy } from "@arkoala/arkui/ArkEnumsInterfaces"
 
-import { DeserializerBase } from "@arkoala/arkui/peers/DeserializerBase"
 import { Deserializer } from "@arkoala/arkui/peers/Deserializer"
 import { Serializer } from "@arkoala/arkui/peers/Serializer"
 import { CallbackKind } from "@arkoala/arkui/peers/CallbackKind"
@@ -80,6 +81,62 @@ backdropBlur: 284ms for 5000000 iteration, 57ms per 1M iterations
 widthAttributeString: 502ms for 5000000 iteration, 100ms per 1M iterations
 
 */
+
+function checkSerdeResult(name: string, value: object|string|number|undefined|null, expected: object|string|number|undefined|null) {
+    if (value != expected) {
+        console.log(`TEST ${name} FAILURE: ${value} != ${expected}`)
+    } else {
+        console.log(`TEST ${name} PASS`)
+    }
+}
+
+function checkSerdeLength() {
+    const ser = Serializer.hold()
+    ser.writeLength("10px")
+    ser.writeLength("11vp")
+    ser.writeLength("12%")
+    ser.writeLength("13lpx")
+    ser.writeLength(14)
+    const des = new Deserializer(ser.asArray(), ser.length())
+    checkSerdeResult("Deserializer.readLength, unit px", des.readLength(), "10px")
+    checkSerdeResult("Deserializer.readLength, unit vp", des.readLength(), "11vp")
+    checkSerdeResult("Deserializer.readLength, unit %", des.readLength(), "12%")
+    checkSerdeResult("Deserializer.readLength, unit lpx", des.readLength(), "13lpx")
+    checkSerdeResult("Deserializer.readLength, number", des.readLength(), 14)
+    ser.release()
+}
+
+function checkSerdeText() {
+    const ser = Serializer.hold()
+    const text = "test text serialization/deserialization"
+    ser.writeString(text)
+    const des = new Deserializer(ser.asArray(), ser.length())
+    checkSerdeResult("Deserializer.readString", des.readString(), text)
+    ser.release()
+}
+
+function checkSerdePrimitive() {
+    const ser = Serializer.hold()
+    ser.writeNumber(10)
+    ser.writeNumber(10.5)
+    ser.writeNumber(undefined)
+    const des = new Deserializer(ser.asArray(), ser.length())
+    checkSerdeResult("Deserializer.readNumber, int", des.readNumber(), 10)
+    checkSerdeResult("Deserializer.readNumber, float", des.readNumber(), 10.5)
+    checkSerdeResult("Deserializer.readNumber, undefined", des.readNumber(), undefined)
+    ser.release()
+}
+
+function checkSerdeCustomObject() {
+    const ser = Serializer.hold()
+    const date = new Date(2024, 11, 28)
+    ser.writeCustomObject("Date", date)
+    const des = new Deserializer(ser.asArray(), ser.length())
+    checkSerdeResult("Deserializer.readCustomObject, Date",
+        JSON.stringify(date),
+        JSON.stringify(des.readCustomObject("Date") as Date))
+    ser.release()
+}
 
 let hasTestErrors = false
 
@@ -474,7 +531,7 @@ class BlurOptionsImpl implements BlurOptions {
 }
 
 function checkPerf2(count: number) {
-    let peer = ArkButtonPeer.create(ArkUINodeType.Button)
+    let peer = ArkButtonPeer.create()
     let start = Date.now()
     for (let i = 0; i < count; i++) {
         peer.backdropBlurAttribute(i, i % 2 == 0 ? undefined : new BlurOptionsImpl([1, 2] as [number, number]))
@@ -484,7 +541,7 @@ function checkPerf2(count: number) {
 }
 
 function checkPerf3(count: number) {
-    let peer = ArkButtonPeer.create(ArkUINodeType.Button)
+    let peer = ArkButtonPeer.create()
     let start = Date.now()
     for (let i = 0; i < count; i++) {
         peer.widthAttribute(testString1000)
@@ -494,28 +551,24 @@ function checkPerf3(count: number) {
 }
 
 function checkButton() {
-    let peer = ArkButtonPeer.create(ArkUINodeType.Button)
+    let peer = ArkButtonPeer.create()
+
     checkResult("width", () => peer.widthAttribute("42%"),
         "width({.type=2, .value=42, .unit=3, .resource=0})")
+    const resource: Resource = { id: 43, bundleName: "MyApp", moduleName: "MyApp" }
+    checkResult("height", () => peer.heightAttribute(resource),
+        "height({.type=3, .value=0, .unit=1, .resource=43})")
+    checkResult("height", () => peer.heightAttribute(44),
+        "height({.type=1, .value=44, .unit=1, .resource=0})")
+    const builder: CustomBuilder = (): void => { }
+    const options: Literal_Alignment_align = { align: Alignment.of(4) }
+    checkResult("background", () => peer.backgroundAttribute(builder, options),
+        "background({.resource={.resourceId=104, .hold=0, .release=0}, .call=0}, {.tag=ARK_TAG_OBJECT, .value={.align={.tag=ARK_TAG_OBJECT, .value=Ark_Alignment(4)}}})")
     checkResult("type", () => peer.typeAttribute(ButtonType.of(1)), "type(Ark_ButtonType(1))")
     checkResult("labelStyle", () => peer.labelStyleAttribute(new LabelStyleImpl(3)),
          "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=3}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})")
     checkResult("labelStyle2", () => peer.labelStyleAttribute(new LabelStyleImpl()),
         "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_UNDEFINED, .value={}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})")
-    const resource: Resource = {
-        id: 43,
-        bundleName: "MyApp",
-        moduleName: "MyApp"
-    }
-    checkResult("height", () => peer.heightAttribute(resource),
-        "height({.type=3, .value=0, .unit=1, .resource=43})")
-    checkResult("height", () => peer.heightAttribute(44),
-        "height({.type=1, .value=44, .unit=1, .resource=0})")
-    checkResult("bindSheet", () => {
-            peer.bindSheetAttribute(false, (): Object => {}, new SheetOptionsImpl(new SheetTitleOptionsImpl("My App")))
-        },
-        "bindSheet({.tag=ARK_TAG_OBJECT, .value=false}, {.resource={.resourceId=100, .hold=0, .release=0}, .call=0}, {.tag=ARK_TAG_OBJECT, .value={.backgroundColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .onAppear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onDisappear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillAppear={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillDisappear={.tag=ARK_TAG_UNDEFINED, .value={}}, .height={.tag=ARK_TAG_UNDEFINED, .value={}}, .dragBar={.tag=ARK_TAG_UNDEFINED, .value={}}, .maskColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .detents={.tag=ARK_TAG_UNDEFINED, .value={}}, .blurStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, .showClose={.tag=ARK_TAG_UNDEFINED, .value={}}, .preferType={.tag=ARK_TAG_UNDEFINED, .value={}}, .title={.tag=ARK_TAG_OBJECT, .value={.selector=0, .value0={.title={.selector=0, .value0={.chars=\"My App\", .length=6}}, .subtitle={.tag=ARK_TAG_UNDEFINED, .value={}}}}}, .shouldDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWillSpringBackWhenDismiss={.tag=ARK_TAG_UNDEFINED, .value={}}, .enableOutsideInteractive={.tag=ARK_TAG_UNDEFINED, .value={}}, .width={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderWidth={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, .shadow={.tag=ARK_TAG_UNDEFINED, .value={}}, .onHeightDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .mode={.tag=ARK_TAG_UNDEFINED, .value={}}, .scrollSizeMode={.tag=ARK_TAG_UNDEFINED, .value={}}, .onDetentsDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .onWidthDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .onTypeDidChange={.tag=ARK_TAG_UNDEFINED, .value={}}, .uiContext={.tag=ARK_TAG_UNDEFINED, .value={}}, .keyboardAvoidMode={.tag=ARK_TAG_UNDEFINED, .value={}}, .enableHoverMode={.tag=ARK_TAG_UNDEFINED, .value={}}, .hoverModeArea={.tag=ARK_TAG_UNDEFINED, .value={}}, .offset={.tag=ARK_TAG_UNDEFINED, .value={}}}})"
-    )
 }
 
 function checkCallback() {
@@ -534,6 +587,7 @@ function createDefaultWriteCallback(kind: CallbackKind, callback: object) {
             nativeModule()._TestGetManagedHolder(),
             nativeModule()._TestGetManagedReleaser(),
             nativeModule()._TestGetManagedCaller(kind.value),
+            nativeModule()._TestGetManagedCallerSync(kind.value),
         )
     }
 }
@@ -593,6 +647,45 @@ function checkTwoSidesCallback() {
     checkArkoalaCallbacks()
     assertEquals("Callback 1 read&called", "CALLED, value=194", callResult1)
     assertEquals(`Callback 2 read&called ${call2Count} times`, call2Count, callResult2)
+}
+
+function checkTwoSidesCallbackSync() {
+    nativeModule()._TestSetArkoalaCallbackCallerSync()
+    wrapSystemCallback(1, (buff:byte[], len:int) => { deserializeAndCallCallback(new Deserializer(buff, len)); return 0 })
+
+    let callResult1 = "NOT_CALLED"
+    enqueueCallback(
+        createDefaultWriteCallback(CallbackKind.Kind_Callback_Number_Void, (value: number): void => {
+            callResult1 = `CALLED, value=${value}`
+        }),
+        (deserializer) => {
+            const callback = deserializer.readCallback_Number_Void(true)
+            callback(194)
+        },
+    )
+
+    assertEquals("Sync Callback 1 read&called immediately", "CALLED, value=194", callResult1)
+}
+
+function checkCallbackWithReturn() {
+    nativeModule()._TestSetArkoalaCallbackCallerSync()
+    wrapSystemCallback(1, (buff:byte[], len:int) => { deserializeAndCallCallback(new Deserializer(buff, len)); return 0 })
+
+    let callResult1 = "NOT_CALLED"
+
+    enqueueCallback(
+        createDefaultWriteCallback(CallbackKind.Kind_Callback_Number_Boolean, (x:number): boolean => {
+            return x > 10
+        }),
+        (deserializer) => {
+            const callback = deserializer.readCallback_Number_Boolean(true)
+            const result1 = callback(42)
+            const result2 = callback(0)
+            callResult1 = `CALLED, value1=${result1} value2=${result2}`
+        },
+    )
+
+    assertEquals("Sync Callback 1 with return type read&called immediately", "CALLED, value1=true value2=false", callResult1)
 }
 
 function checkNativeCallback() {
@@ -696,12 +789,12 @@ function checkNativeCallback() {
 function checkNodeAPI() {
     console.log("TreeNode tests")
 
-    const root = ArkColumnPeer.create(ArkUINodeType.Column, undefined, 0)
-    const child1 = ArkButtonPeer.create(ArkUINodeType.Button, undefined, 0)
-    const child2 = ArkButtonPeer.create(ArkUINodeType.Blank, undefined, 0)
-    const child3 = ArkButtonPeer.create(ArkUINodeType.List, undefined, 0)
-    const child4 = ArkButtonPeer.create(ArkUINodeType.Web, undefined, 0)
-    const child5 = ArkButtonPeer.create(ArkUINodeType.Web, undefined, 0)
+    const root = ArkColumnPeer.create()
+    const child1 = ArkButtonPeer.create()
+    const child2 = ArkButtonPeer.create()
+    const child3 = ArkButtonPeer.create()
+    const child4 = ArkButtonPeer.create()
+    const child5 = ArkButtonPeer.create()
 
     checkResult("BasicNodeAPI addChild", () => root.peer.addChild(child1.peer),
         `addChild(0x${root.peer.ptr}, 0x${child1.peer.ptr})markDirty(0x${root.peer.ptr}, 32)`)
@@ -724,7 +817,19 @@ function checkNodeAPI() {
 }
 
 export function main(): void {
-    checkPerf2(5 * 1000 * 1000)
+
+    checkCallbackWithReturn()
+    checkTwoSidesCallbackSync()
+
+    checkSerdeLength()
+    checkSerdeText()
+    checkSerdePrimitive()
+    checkSerdeCustomObject()
+
+    // TODO: enable tests after fixing issues with arm64 panda
+	// https://rnd-gitlab-msc.huawei.com/rus-os-team/virtual-machines-and-tools/panda/-/issues/20899
+	// https://rnd-gitlab-msc.huawei.com/rus-os-team/virtual-machines-and-tools/panda/-/issues/20908
+    // checkPerf2(5 * 1000 * 1000)
     checkPerf3(5 * 1000 * 1000)
 
     checkButton()

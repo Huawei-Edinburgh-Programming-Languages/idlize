@@ -26,12 +26,14 @@ import { PeerMethod } from "../PeerMethod";
 import { getReferenceResolver } from "../ReferenceResolver";
 import { Language } from "../../Language";
 import { createDestroyPeerMethod } from "../Materialized";
+import { InteropReturnTypeConvertor } from "../LanguageWriters/convertors/InteropConvertor";
 
 export function generateEventReceiverName(componentName: string) {
     return `${PeerGeneratorConfig.cppPrefix}ArkUI${componentName}EventsReceiver`
 }
 
 class HeaderVisitor {
+    private readonly returnTypeConvertor = new InteropReturnTypeConvertor()
     constructor(
         private library: PeerLibrary,
         private api: IndentedPrinter,
@@ -54,13 +56,10 @@ class HeaderVisitor {
 
     private printMethod(method: PeerMethod) {
         const apiParameters = method.generateAPIParameters(createTypeNameConvertor(Language.CPP, getReferenceResolver(this.library)))
-        printMethodDeclaration(this.api, method.retType, `(*${method.fullMethodName})`, apiParameters, `;`)
+        printMethodDeclaration(this.api, this.returnTypeConvertor.convert(method.returnType), `(*${method.fullMethodName})`, apiParameters, `;`)
     }
 
     private printClassEpilog(clazz: PeerClass) {
-        if (clazz.methods.length == 0) {
-            this.api.print("int dummy;")
-        }
         this.api.popIndent()
         this.api.print(`} ${PeerGeneratorConfig.cppPrefix}ArkUI${clazz.componentName}Modifier;\n`)
         this.modifiersList.popIndent()
@@ -85,7 +84,7 @@ class HeaderVisitor {
             this.api.print(`typedef struct ${accessorName} {`)
             this.api.pushIndent()
             const mDestroyPeer = createDestroyPeerMethod(clazz)
-            const methods = [clazz.ctor, clazz.finalizer, mDestroyPeer].concat(clazz.methods)
+            const methods = [mDestroyPeer, clazz.ctor, clazz.finalizer].concat(clazz.methods)
             methods.forEach(method => this.printMethod(method))
             this.api.popIndent()
             this.api.print(`} ${accessorName};\n`)

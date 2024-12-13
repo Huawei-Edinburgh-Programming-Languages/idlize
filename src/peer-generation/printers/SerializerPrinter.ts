@@ -14,31 +14,29 @@
  */
 
 import * as idl from '../../idl'
-import { Language } from "../../Language";
+import { Language } from "../../Language"
 import { PrimitiveType } from "../ArkPrimitiveType"
-import { ExpressionStatement, LanguageStatement, LanguageWriter, Method, MethodSignature, NamedMethodSignature } from "../LanguageWriters";
-import { PeerGeneratorConfig } from '../PeerGeneratorConfig';
-import { ImportsCollector } from '../ImportsCollector';
-import { PeerLibrary } from '../PeerLibrary';
+import { ExpressionStatement, LanguageStatement, LanguageWriter, Method, MethodSignature, NamedMethodSignature } from "../LanguageWriters"
+import { PeerGeneratorConfig } from '../PeerGeneratorConfig'
+import { ImportsCollector } from '../ImportsCollector'
+import { PeerLibrary } from '../PeerLibrary'
 import {
     ArkTSBuiltTypesDependencyFilter,
-    convertDeclToFeature,
     DependencyFilter,
     isBuilderClass,
     isMaterialized,
 } from '../idl/IdlPeerGeneratorVisitor';
-import { isSyntheticDeclaration, makeSyntheticDeclarationsFiles } from '../idl/IdlSyntheticDeclarations';
-import { collectProperties } from '../printers/StructPrinter';
-import { FieldModifier, MethodModifier, ProxyStatement } from '../LanguageWriters/LanguageWriter';
+import { collectProperties } from '../printers/StructPrinter'
+import { FieldModifier, MethodModifier, ProxyStatement, TernaryExpression } from '../LanguageWriters/LanguageWriter'
 import { createDeclarationNameConvertor } from '../idl/IdlNameConvertor';
-import { throwException } from "../../util";
-import { IDLEntry } from "../../idl";
-import { convertDeclaration } from '../LanguageWriters/nameConvertor';
-import { collectMaterializedImports, getInternalClassName } from '../Materialized';
-import { CallbackKind, generateCallbackKindAccess } from '../ArgConvertors';
-import { ArkTSSourceFile, SourceFile, TsSourceFile } from './SourceFile';
-import { collectUniqueCallbacks } from './CallbacksPrinter';
-
+import { throwException } from "../../util"
+import { IDLEntry } from "../../idl"
+import { convertDeclaration } from '../LanguageWriters/nameConvertor'
+import { collectMaterializedImports, getInternalClassName } from '../Materialized'
+import { generateCallbackKindValue, maybeTransformManagedCallback } from '../ArgConvertors'
+import { ArkTSSourceFile, SourceFile, TsSourceFile } from './SourceFile'
+import { collectUniqueCallbacks } from './CallbacksPrinter'
+import { collectDeclItself, collectDeclDependencies, convertDeclToFeature } from '../ImportsCollectorUtils'
 
 type SerializableTarget = idl.IDLInterface | idl.IDLCallback
 
@@ -150,6 +148,24 @@ class IdlSerializerPrinter {
             ))
     }
 
+    private generateLengthSerializer() {
+        // generate Length serializer only if there is such a type
+        if (!this.library.orderedDependenciesToGenerate.some(it => it === idl.IDLLengthType)) return
+
+        const methodName = idl.IDLLengthType.name
+        const value = "value"
+
+        const serializerBody = this.writer.makeLengthSerializer("this", value)
+        if (!serializerBody) return
+
+        this.library.setCurrentContext(`write${methodName}()`)
+        this.writer.writeMethodImplementation(
+            new Method(`write${methodName}`,
+                new NamedMethodSignature(idl.IDLVoidType, [idl.IDLLengthType], [value])),
+            writer => writer.writeStatement(serializerBody))
+        this.library.setCurrentContext(undefined)
+    }
+
     print(prefix: string, declarationPath?: string) {
         const className = "Serializer"
         const superName = `${className}Base`
@@ -170,20 +186,63 @@ class IdlSerializerPrinter {
 
             // No need for hold() in C++.
             if (writer.language != Language.CPP) {
-                writer.writeFieldDeclaration("cache", idl.createOptionalType(idl.createReferenceType("Serializer")), [FieldModifier.PRIVATE, FieldModifier.STATIC], true, writer.makeNull("Serializer"))
+                const poolType = idl.createContainerType('sequence', [idl.createReferenceType("Serializer")])
+                
+                writer.writeFieldDeclaration("pool", idl.createOptionalType(poolType), [FieldModifier.PRIVATE, FieldModifier.STATIC], true, writer.makeNull('ArrayList<Serializer>'))
+                writer.writeFieldDeclaration("poolTop", idl.IDLI32Type, [FieldModifier.PRIVATE, FieldModifier.STATIC], false, writer.makeString('-1'))
 
                 writer.writeMethodImplementation(new Method("hold", new MethodSignature(idl.createReferenceType("Serializer"), []), [MethodModifier.STATIC]),
                 writer => {
-                    writer.writeStatement(writer.makeCondition(writer.makeNot(writer.makeDefinedCheck('Serializer.cache')), writer.makeBlock([
-                        writer.makeAssign("Serializer.cache", undefined, writer.makeString(`${writer.language == Language.CJ ? "" : "new "}Serializer()`), false)
-                    ])))
-                    writer.writeStatement(writer.makeAssign("serializer", undefined,
-                            writer.makeUnwrapOptional(writer.makeString("Serializer.cache")), true, false))
-                    writer.writeStatement(writer.makeCondition(writer.makeString("serializer.isHolding"),
-                        writer.makeBlock([writer.makeThrowError(("Serializer is already being held. Check if you had released is before"))])),
+                    writer.writeStatement(writer.makeCondition(writer.makeNot(writer.makeDefinedCheck('Serializer.pool')), writer.makeBlock(
+                        writer.language == Language.CJ ? 
+                        [
+                            new ExpressionStatement(writer.makeString("Serializer.pool = ArrayList<Serializer>(8, {idx => Serializer()})"))
+                        ]:
+                        [
+                            writer.makeAssign("Serializer.pool", undefined, idl.isContainerType(poolType) ? writer.makeArrayInit(poolType, 8) : undefined, false),
+                            writer.makeAssign("pool", poolType, writer.makeUnwrapOptional(writer.makeString("Serializer.pool")), true, true),
+                            writer.makeLoop("idx", "8", writer.makeAssign(
+                                `pool[idx]`, 
+                                undefined, 
+                                writer.makeString(`${writer.language == Language.CJ ? "" : "new "}Serializer()`), 
+                                false
+                            ))
+                        ]
+                    )))
+                    writer.writeStatement(writer.makeAssign("pool", poolType, writer.makeUnwrapOptional(
+                        writer.makeString("Serializer.pool")), true, true))
+                    writer.writeStatement(writer.makeCondition(writer.makeString(`Serializer.poolTop >= ${writer.language == Language.CJ ? "Int32(pool.size)" : "pool.length"} - 1`),
+                        writer.makeBlock([writer.makeThrowError(("Serializer pool is full. Check if you had released serializers before"))])),
                     )
-                    writer.writeStatement(writer.makeAssign("serializer.isHolding", undefined, writer.makeString("true"), false))
+                    writer.writeStatement(writer.makeAssign("Serializer.poolTop", undefined,
+                        writer.makeString("Serializer.poolTop + 1"), false))
+                    writer.writeStatement(writer.makeAssign("serializer", undefined,
+                            writer.makeArrayAccess("pool", "Serializer.poolTop"), true, false))
                     writer.writeStatement(writer.makeReturn(writer.makeString("serializer")))
+                })
+
+                writer.writeMethodImplementation(new Method('release', new MethodSignature(idl.IDLVoidType, []), [MethodModifier.PUBLIC]), writer => {
+                    writer.writeStatement(writer.makeCondition(writer.makeString("Serializer.poolTop == -1"),
+                        writer.makeBlock([writer.makeThrowError(("Serializer pool is empty. Check if you had hold serializers before"))])),
+                    )
+                    writer.writeStatement(writer.makeAssign("pool", poolType, writer.makeUnwrapOptional(
+                        writer.makeString("Serializer.pool")), true, true))
+                    writer.writeStatement(writer.makeCondition(
+                            writer.language == Language.CJ ?
+                            writer.makeString(`refEq(this, pool[Int64(Serializer.poolTop)])`) :
+                            writer.makeEquals([
+                                writer.makeThis(),
+                                writer.makeArrayAccess("pool", "Serializer.poolTop")
+                        ]), 
+                        writer.makeBlock([
+                            writer.makeAssign("Serializer.poolTop", undefined,
+                                writer.makeString("Serializer.poolTop - 1"), false),
+                            writer.makeStatement(writer.makeMethodCall('super', 'release', [])),
+                            writer.makeReturn()
+                        ]
+                    )))
+                    
+                    writer.writeStatement(writer.makeThrowError(("Only last serializer should be released")))
                 })
             }
             if (ctorSignature) {
@@ -198,6 +257,7 @@ class IdlSerializerPrinter {
                     // callbacks goes through writeCallbackResource function
                 }
             }
+            this.generateLengthSerializer()
         }, superName)
     }
 }
@@ -272,7 +332,11 @@ class IdlDeserializerPrinter {
                 const propsAssignees = properties.map(it => {
                     return `${it.name}: ${it.name}_result`
                 })
-                this.writer.writeStatement(this.writer.makeAssign("value", valueType, this.writer.makeCast(this.writer.makeString(`{${propsAssignees.join(',')}}`), type), true, false))
+                if (this.writer.language == Language.CJ) {
+                    this.writer.writeStatement(this.writer.makeAssign("value", valueType, this.writer.makeString(`${this.writer.getNodeName(valueType)}(${properties.map(it => it.name.concat('_result')).join(', ')})`), true, false))
+                } else {
+                    this.writer.writeStatement(this.writer.makeAssign("value", valueType, this.writer.makeCast(this.writer.makeString(`{${propsAssignees.join(',')}}`), type), true, false))
+                }
             }
         } else {
             if (this.writer.language === Language.CPP) {
@@ -284,7 +348,7 @@ class IdlDeserializerPrinter {
             }
         }
         this.writer.writeStatement(this.writer.makeReturn(
-            this.writer.makeCast(this.writer.makeString("value"), type)))
+            this.writer.makeString("value")))
     }
 
     private generateMaterializedBodyDeserializer(target: idl.IDLInterface) {
@@ -335,11 +399,13 @@ class IdlDeserializerPrinter {
             return
         if (PeerGeneratorConfig.ignoredCallbacks.has(target.name))
             return
+        target = maybeTransformManagedCallback(target) ?? target
         const methodName = this.library.getInteropName(target)
         const type = idl.createReferenceType(target.name)
-        this.writer.writeMethodImplementation(new Method(`read${methodName}`, new NamedMethodSignature(type, [], [])), writer => {
+        this.writer.writeMethodImplementation(new Method(`read${methodName}`, new NamedMethodSignature(type, [idl.IDLBooleanType], ['isSync'], ['false'])), writer => {
             const resourceName = "_resource"
             const callName = "_call"
+            const callSyncName = '_callSync'
             const argsSerializer = "_args"
             const continuationValueName = "_continuationValue"
             const continuationCallbackName = "_continuationCallback"
@@ -351,6 +417,12 @@ class IdlDeserializerPrinter {
             ))
             writer.writeStatement(writer.makeAssign(
                 callName,
+                idl.IDLPointerType,
+                writer.makeMethodCall(`this`, `readPointer`, []),
+                true,
+            ))
+            writer.writeStatement(writer.makeAssign(
+                callSyncName,
                 idl.IDLPointerType,
                 writer.makeMethodCall(`this`, `readPointer`, []),
                 true,
@@ -388,6 +460,8 @@ class IdlDeserializerPrinter {
                     [writer.makeString(`${resourceName}.resourceId`)])),
                 new ExpressionStatement(writer.makeMethodCall(`${argsSerializer}Serializer`, `writePointer`,
                     [writer.makeString(callName)])),
+                new ExpressionStatement(writer.makeMethodCall(`${argsSerializer}Serializer`, `writePointer`,
+                    [writer.makeString(callSyncName)])),
                 ...target.parameters.map(it => {
                     const convertor = this.library.typeConvertor(it.name, it.type!, it.isOptional)
                     return new ProxyStatement((writer: LanguageWriter) => {
@@ -395,11 +469,21 @@ class IdlDeserializerPrinter {
                     })
                 }),
                 ...continuation,
-                new ExpressionStatement(writer.makeNativeCall(`_CallCallback`, [
-                    writer.ordinalFromEnum(writer.makeString(`${generateCallbackKindAccess(target, writer.language)}`), idl.createReferenceType(CallbackKind)),
-                    writer.makeString(`${argsSerializer}Serializer.asArray()`),
-                    writer.makeString(`${argsSerializer}Serializer.length()`),
-                ])),
+                new ExpressionStatement(
+                    writer.makeTernary(
+                        writer.makeString('isSync'),
+                        writer.makeNativeCall(`_CallCallbackSync`, [
+                            writer.makeString(generateCallbackKindValue(target).toString()),
+                            writer.makeString(`${argsSerializer}Serializer.asArray()`),
+                            writer.makeString(`${argsSerializer}Serializer.length()`),
+                        ]),
+                        writer.makeNativeCall(`_CallCallback`, [
+                            writer.makeString(generateCallbackKindValue(target).toString()),
+                            writer.makeString(`${argsSerializer}Serializer.asArray()`),
+                            writer.makeString(`${argsSerializer}Serializer.length()`),
+                        ])
+                    )
+                ),
                 new ExpressionStatement(writer.makeMethodCall(`${argsSerializer}Serializer`, `release`, [])),
                 writer.makeReturn(hasContinuation
                     ? writer.makeCast(
@@ -409,6 +493,24 @@ class IdlDeserializerPrinter {
             ])))
 
         })
+    }
+
+    private generateLengthDeserializer() {
+        // generate Length deserializer only if there is such a type
+        if (!this.library.orderedDependenciesToGenerate.some(it => it === idl.IDLLengthType)) return
+
+        const deserializerBody = this.writer.makeLengthDeserializer("this")
+        if (!deserializerBody) return
+
+        const methodName = idl.IDLLengthType.name
+        const value = "value"
+
+        this.library.setCurrentContext(`read${methodName}()`)
+        this.writer.writeMethodImplementation(
+            new Method(`read${methodName}`,
+                new NamedMethodSignature(idl.createOptionalType(idl.IDLLengthType))),
+            writer => writer.writeStatement(deserializerBody))
+        this.library.setCurrentContext(undefined)
     }
 
     print(prefix: string, declarationPath?: string) {
@@ -421,14 +523,24 @@ class IdlDeserializerPrinter {
         } else if (this.writer.language === Language.ARKTS) {
             ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [idl.createContainerType("sequence", [idl.IDLU8Type]), idl.IDLI32Type], ["data", "length"])
         }
+        else if (this.writer.language === Language.CJ) {
+            ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [idl.IDLBufferType, idl.IDLI64Type], ["data", "length"])
+        }
         const serializerDeclarations = getSerializerDeclarations(this.library,
             createSerializerDependencyFilter(this.writer.language))
         printSerializerImports(this.library, this.destFile, declarationPath)
         this.writer.print("")
         this.writer.writeClass(className, writer => {
-            if (ctorSignature) {
+            if (ctorSignature && this.writer.language != Language.CJ) {
                 const ctorMethod = new Method(`${className}Base`, ctorSignature)
                 writer.writeConstructorImplementation(className, ctorSignature, writer => {}, ctorMethod)
+            }
+            if (this.writer.language == Language.CJ) {
+                writer.print("Deserializer(data: Array<UInt8>, length: Int64) {")
+                writer.pushIndent()
+                writer.print("super(data, length)")
+                writer.popIndent()
+                writer.print("}")   
             }
             for (const decl of serializerDeclarations) {
                 if (idl.isInterface(decl) || idl.isClass(decl) || idl.isAnonymousInterface(decl) || idl.isTupleInterface(decl)) {
@@ -437,6 +549,7 @@ class IdlDeserializerPrinter {
                     this.generateCallbackDeserializer(decl)
                 }
             }
+            this.generateLengthDeserializer()
         }, superName)
     }
 }
@@ -480,15 +593,13 @@ export function printSerializerImports(library: PeerLibrary, destFile: SourceFil
         createSerializerDependencyFilter(destFile.language))
     if (destFile.language === Language.TS) {
         const collector = (destFile as TsSourceFile).imports
-        for (let [module, {dependencies, declarations}] of makeSyntheticDeclarationsFiles()) {
-            declarations.forEach(it => collector.addFeature(it.name!, module))
-        }
 
         if (!declarationPath) {
             for (let builder of library.builderClasses.keys()) {
                 collector.addFeature(builder, `Ark${builder}Builder`)
             }
             collector.addFeature(`Finalizable`, `Finalizable`)
+            collector.addFeature("CallbackTransformer", "./peers/CallbackTransformer")
             collectMaterializedImports(collector, library)
         }
 
@@ -500,23 +611,24 @@ export function printSerializerImports(library: PeerLibrary, destFile: SourceFil
         if (!declarationPath) {
             collector.addFeature("TypeChecker", "#components")
             collector.addFeature("KUint8ArrayPtr", "@koalaui/interop")
+            collector.addFeature("CallbackTransformer", "./peers/CallbackTransformer")
             for (const callback of collectUniqueCallbacks(library)) {
                 if (idl.isSyntheticEntry(callback))
                     continue
                 const feature = convertDeclToFeature(library, callback)
                 collector.addFeature(feature.feature, feature.module)
             }
-    
-            library.files.forEach(peer => peer.serializeImportFeatures
-                .forEach(importFeature => collector.addFeature(importFeature.feature, importFeature.module)))
-            serializerDeclarations.filter(it => isSyntheticDeclaration(it) || it.fileName)
-                .filter(it => !idl.isCallback(it))
-                .map(it => convertDeclToFeature(library, it))
-                .forEach(it => collector.addFeature(it.feature, it.module))
-            for (let builder of library.builderClasses.keys()) {
-                collector.addFeature(builder, `Ark${builder}Builder`)
+            for (const decl of serializerDeclarations) {
+                collectDeclItself(library, decl, collector, {
+                    includeMaterializedInternals: true,
+                    includeTransformedCallbacks: true,
+                })
+                collectDeclDependencies(library, decl, collector, {
+                    expandTypedefs: true,
+                    includeMaterializedInternals: true,
+                    includeTransformedCallbacks: true,
+                })
             }
-            collectMaterializedImports(collector, library)
         } else { // This is used for OHOS library generation only
             collectOhosImports(collector, false)
         }
@@ -536,6 +648,13 @@ export function printSerializerImports(library: PeerLibrary, destFile: SourceFil
                 feature: convertDeclaration(nameCovertor, node),
                 module: `./${declarationPath}` // TODO resolve
             })
+            // Add <class>Internal support class for materialized classes with no constructor
+            if (idl.isInterface(node) && isMaterialized(node) && node.constructors.length === 0) {
+                features.push({
+                    feature: getInternalClassName(convertDeclaration(nameCovertor, node)), // TODO check/refactor name generation
+                    module: `./${declarationPath}` // TODO resolve
+                })
+            }
             return features
         }
         serializerDeclarations.filter(it => it.fileName)
@@ -560,7 +679,7 @@ class DefaultSerializerDependencyFilter implements DependencyFilter {
     shouldAdd(node: IDLEntry): boolean {
         return !PeerGeneratorConfig.ignoreSerialization.includes(node.name!)
             && !this.isParameterized(node)
-            && this.canSerializeDependency(node);
+            && this.canSerializeDependency(node)
     }
     isParameterized(node: idl.IDLEntry) {
         return idl.hasExtAttribute(node, idl.IDLExtendedAttributes.TypeParameters)
@@ -580,7 +699,7 @@ class ArkTSSerializerDependencyFilter extends DefaultSerializerDependencyFilter 
     readonly arkTSBuiltTypesFilter = new ArkTSBuiltTypesDependencyFilter()
     override shouldAdd(node: IDLEntry): node is SerializableTarget {
         if (idl.isEnum(node)) {
-            return true;
+            return true
         }
         if (!this.arkTSBuiltTypesFilter.shouldAdd(node)) {
             return false

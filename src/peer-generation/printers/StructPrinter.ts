@@ -145,9 +145,11 @@ export class StructPrinter {
                     concreteDeclarations.print(`${PrimitiveType.Prefix}CallbackResource resource;`)
                     const args = generateCallbackAPIArguments(this.library, target)
                     concreteDeclarations.print(`void (*call)(${args.join(', ')});`)
+                    const syncArgs = [`${PrimitiveType.Prefix}VMContext context`].concat(args)
+                    concreteDeclarations.print(`void (*callSync)(${syncArgs.join(', ')});`)
                 }
                 this.printStructsCTail(nameAssigned, concreteDeclarations)
-                this.writeRuntimeType(target, targetType, false, writeToString)
+                this.writeRuntimeType(target, targetType, idl.isOptionalType(target), writeToString)
                 this.generateWriteToString(nameAssigned, target, writeToString, isPointer)
                 this.printOptionalIfNeeded(forwardDeclarations, concreteDeclarations, writeToString, target, seenNames)
             } else if (isAccessor) {
@@ -156,7 +158,7 @@ export class StructPrinter {
             } else {
                 if (!noBasicDecl && !idl.isPrimitiveType(target))
                     this.generateWriteToString(nameAssigned, target, writeToString, isPointer)
-                this.writeRuntimeType(target, targetType, false, writeToString)
+                this.writeRuntimeType(target, targetType, idl.isOptionalType(target), writeToString)
                 this.printOptionalIfNeeded(undefined, concreteDeclarations, writeToString, target, seenNames)
             }
         }
@@ -196,16 +198,13 @@ export class StructPrinter {
         }
     }
 
-    private alreadyHasInt8Method = false
+    private prologueDefinedRuntimeTypes = [
+        idl.IDLDate.name,
+    ]
     private writeRuntimeType(target: idl.IDLNode, targetType: IDLType, isOptional: boolean, writer: LanguageWriter) {
-        const typeBooleanOrUint8 = (targetType === idl.IDLBooleanType || target === idl.IDLI8Type) && !isOptional
-        if (typeBooleanOrUint8 && this.alreadyHasInt8Method) {
+        if (idl.isNamedNode(target) && this.prologueDefinedRuntimeTypes.includes(target.name) && !isOptional)
             return
-        }
-        if (typeBooleanOrUint8) {
-            this.alreadyHasInt8Method = true
-        }
-        const resultType = idl.toIDLType("RuntimeType")
+        const resultType = idl.createReferenceType("RuntimeType")
         const op = this.writeRuntimeTypeOp(target, targetType, resultType, isOptional, writer)
         if (op) {
             writer.print("template <>")

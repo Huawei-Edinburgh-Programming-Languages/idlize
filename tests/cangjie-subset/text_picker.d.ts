@@ -180,7 +180,7 @@ declare interface TextPickerOptions {
    * @atomicservice
    * @since 11
    */
-  range: string[] /*~| string[][]*/ | Resource | TextPickerRangeContent[] | TextCascadePickerRangeContent[];
+  // range: string[] /*~| string[][]*/ | Resource | TextPickerRangeContent[] | TextCascadePickerRangeContent[];
 
   /**
    * Value of the current selection.
@@ -488,7 +488,7 @@ declare class TextPickerAttribute extends CommonMethod<TextPickerAttribute> {
    * @since 8
    * @deprecated since 10
    */
-  //~onAccept(callback: (value: string, index: number) => void): TextPickerAttribute;
+  onAccept(callback: (value: string, index: number) => void): TextPickerAttribute;
 
   /**
    * Called when the Cancel button in the pop-up window is clicked.

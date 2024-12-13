@@ -129,6 +129,9 @@ inline Ark_NodeHandle AsNodeHandle(TreeNode* node) {
 inline TreeNode* AsNode(Ark_NodeHandle handle) {
     return reinterpret_cast<TreeNode*>(handle);
 }
+inline TreeNode* AsNode(Ark_NativePointer pointer) {
+    return reinterpret_cast<TreeNode*>(pointer);
+}
 
 void DumpTree(TreeNode *node, Ark_Int32 indent) {
     ARKOALA_LOG("%s[%s: %d]\n", string(indent * 2, ' ').c_str(), node->namePtr(), node->id());
@@ -355,7 +358,7 @@ float TreeNode::getYValue() {
 
 namespace OHOS::Ace::NG {
 
-namespace Bridge {
+namespace GeneratedBridge {
 
 Ark_NodeHandle CreateNode(GENERATED_Ark_NodeType type, Ark_Int32 id, Ark_Int32 flags) {
     TreeNodeDelays::CheckType(type);
@@ -384,10 +387,14 @@ Ark_NodeHandle CreateNode(GENERATED_Ark_NodeType type, Ark_Int32 id, Ark_Int32 f
     appendGroupedLog(1, out);
     return result;
 }
+}
+
+namespace GeneratedApiImpl {
+
+static int res_num = 0;
 
 void SetCallbackMethod(%CPP_PREFIX%Ark_APICallbackMethod* method) {
     callbacks = method;
-}
 }
 
 Ark_Float32 GetDensity(Ark_Int32 deviceId) {
@@ -434,10 +441,6 @@ Ark_Float32 GetDesignWidthScale(Ark_Int32 deviceId) {
 
     return result;
 }
-
-namespace ApiImpl {
-
-static int res_num = 0;
 
 Ark_NodeHandle GetNodeByViewStack() {
     Ark_NodeHandle result = (Ark_NodeHandle) 234;
@@ -698,6 +701,11 @@ Ark_Float32 ConvertLengthMetricsUnit(Ark_Float32 value, Ark_Int32 originUnit, Ar
     out.append(")");
     appendGroupedLog(1, out);
     return result;
+}
+
+void EmitOnClick(Ark_NativePointer node, Ark_ClickEvent event) {
+    auto frameNode = AsNode(node);
+    frameNode->callClickEvent(event);
 }
 
 void SetCustomMethodFlag(Ark_NodeHandle node, Ark_Int32 flag) {}

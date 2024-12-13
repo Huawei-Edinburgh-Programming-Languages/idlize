@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import * as idl from "../../idl"
 import * as path from "path"
 import { removeExt, renameDtsToComponent } from "../../util";
 import { convertPeerFilenameToModule, ImportsCollector } from "../ImportsCollector";
@@ -38,16 +39,17 @@ import { PeerClass } from "../PeerClass";
 import { collectJavaImports } from "./lang/JavaIdlUtils";
 import { printJavaImports } from "./lang/JavaPrinters";
 import { Language } from "../../Language";
-import { IDLVoidType, isOptionalType, toIDLType } from "../../idl";
+import { createReferenceType, IDLVoidType, isOptionalType } from "../../idl";
 import { createEmptyReferenceResolver, getReferenceResolver } from "../ReferenceResolver";
 import { convertIdlToCallback } from "./EventsPrinter";
+import { collectDeclDependencies } from "../ImportsCollectorUtils";
 
 export function generateArkComponentName(component: string) {
     return `Ark${component}Component`
 }
 
 class ComponentPrintResult {
-    constructor(public targetFile: TargetFile, public writer: LanguageWriter) {}
+    constructor(public targetFile: TargetFile, public writer: LanguageWriter) { }
 }
 
 interface ComponentFileVisitor {
@@ -88,7 +90,6 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
             imports.addFeature("KBoolean", "@koalaui/interop")
             imports.addFeature("NodeAttach", "@koalaui/runtime")
             imports.addFeature("remember", "@koalaui/runtime")
-            imports.addFeature("ArkUINodeType", "./peers/ArkUINodeType")
             imports.addFeature("runtimeType", "./peers/SerializerBase")
             imports.addFeature("RuntimeType", "./peers/SerializerBase")
             imports.addFeature("isResource", "./peers/SerializerBase")
@@ -111,9 +112,15 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
                     if (convertIdlToCallback(getReferenceResolver(this.library), peer, method, argType))
                         imports.addFeature("UseEventsProperties", './use_properties')
             }
+
+            if (PeerGeneratorConfig.needInterfaces) {
+                const component = this.library.findComponentByType(idl.createReferenceType(peer.originalClassName!))!
+                collectDeclDependencies(this.library, component.attributeDeclaration, imports)
+                if (component.interfaceDeclaration)
+                    collectDeclDependencies(this.library, component.interfaceDeclaration, imports)
+            }
         })
 
-        this.file.importFeatures.forEach(it => imports.addFeature(it.feature, it.module))
         imports.print(this.printer, removeExt(this.targetBasename))
     }
 
@@ -135,13 +142,13 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
         this.printer.writeClass(componentClassName, (writer) => {
             writer.writeMethodImplementation(
                 new Method('getPeer',
-                    new MethodSignature(toIDLType(peerClassName), []
+                    new MethodSignature(createReferenceType(peerClassName), []
                 ), [MethodModifier.PROTECTED], []),
                 writer => writer.writeStatement(
                     writer.makeReturn(
                         writer.makeCast(
                             writer.makeFieldAccess("this", "peer"),
-                            toIDLType(peerClassName),
+                            createReferenceType(peerClassName),
                             {optional: true}
                         )
                     )
@@ -177,6 +184,8 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
         peerClassName: string,
         callableMethodName: string | undefined,
         peerComponentName: string) {
+        if (!this.library.componentsDeclarations.find(it => it.name === peerComponentName)?.interfaceDeclaration)
+            return
         this.printer.print(`
 /** @memo */
 export function ${componentFunctionName}(
@@ -189,7 +198,7 @@ export function ${componentFunctionName}(
     const receiver = remember(() => {
         return new ${componentClassName}()
     })
-    NodeAttach<${peerClassName}>((): ${peerClassName} => ${peerClassName}.create(ArkUINodeType.${peerComponentName}, receiver), (_: ${peerClassName}) => {
+    NodeAttach<${peerClassName}>((): ${peerClassName} => ${peerClassName}.create(receiver), (_: ${peerClassName}) => {
         ${callableMethodName}
         style?.(receiver)
         content_?.()
@@ -205,11 +214,11 @@ class ArkTsComponentFileVisitor extends TSComponentFileVisitor {
     }
 
     protected printComponentFunction(componentClassName: string,
-                                     componentFunctionName: string,
-                                     mappedCallableParams: string,
-                                     peerClassName: string,
-                                     callableMethodName: string | undefined,
-                                     peerComponentName: string) {
+        componentFunctionName: string,
+        mappedCallableParams: string,
+        peerClassName: string,
+        callableMethodName: string | undefined,
+        peerComponentName: string) {
         // Error fix: Class 'ArkTest' is already defined with different type
         // "ArkTest" - already used in ArkTS
         if (componentFunctionName !== "ArkTest") {
@@ -242,7 +251,7 @@ class JavaComponentFileVisitor implements ComponentFileVisitor {
 
     private printComponent(peer: PeerClass) {
         const componentClassName = generateArkComponentName(peer.componentName)
-        const componentType = toIDLType(componentClassName)
+        const componentType = createReferenceType(componentClassName)
         const parentComponentClassName = peer.parentComponentName ? generateArkComponentName(peer.parentComponentName!) : COMPONENT_BASE
         const peerClassName = componentToPeerClass(peer.componentName)
 
@@ -264,8 +273,8 @@ class JavaComponentFileVisitor implements ComponentFileVisitor {
                             writer.makeStatement(writer.makeMethodCall(`((${peerClassName})peer)`, `${peerMethod.overloadedName}Attribute`, signature.argsNames.map(it => writer.makeString(it)))),
                             writer.makeReturn(thiz),
                         ])))
-                        writer.writeStatement(writer.makeReturn(thiz))
-                    }
+                    writer.writeStatement(writer.makeReturn(thiz))
+                }
                 )
             })
 

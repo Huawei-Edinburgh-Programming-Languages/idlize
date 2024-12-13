@@ -65,27 +65,28 @@ export class EtsIDLNodeToStringConvertor extends TsIDLNodeToStringConverter {
             case idl.IDLPointerType: return 'KPointer'
             case idl.IDLVoidType: return 'void'
             case idl.IDLBooleanType: return 'boolean'
-            
+
             case idl.IDLU8Type:
             case idl.IDLI8Type:
             case idl.IDLI16Type:
             case idl.IDLU16Type:
             case idl.IDLI32Type:
             case idl.IDLU32Type:
-                return 'KInt'
+                return 'int32'
 
             case idl.IDLI64Type:
             case idl.IDLU64Type:
-                return 'KLong'
+                return 'int64'
 
             case idl.IDLF32Type:
-                return 'KFloat'
+                return 'float32'
 
             case idl.IDLF64Type:
+                return 'float64'
             case idl.IDLNumberType:
                 return 'number'
 
-            case idl.IDLStringType: return 'KStringPtr'
+            case idl.IDLStringType: return 'string'
             case idl.IDLFunctionType: return 'Object'
 
             case idl.IDLBufferType: return 'ArrayBuffer'
@@ -114,6 +115,13 @@ export class EtsIDLNodeToStringConvertor extends TsIDLNodeToStringConverter {
             return `${this.convert(it.isOptional ? idl.createOptionalType(it.type!) : it.type!)}`
         })
         return `Function${types.length}<${types.join(",")}${types.length > 0 ? "," : ""}${this.convert(decl.returnType)}>`
+    }
+
+    protected mapCallback1(decl: idl.IDLCallback): string {
+        const types = decl.parameters.map(it => {
+            return `${it.name}${it.isOptional ? "?" : ""}: ${this.convert(it.type!)}`
+        })
+        return `((${types.join(", ")}) => ${this.convert(decl.returnType)})`
     }
 
     protected getNamespacePrefix(decl: IDLEntry): stringOrNone {

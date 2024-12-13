@@ -33,7 +33,7 @@ import {
     makeDeserializeAndCall,
     readLangTemplate,
 } from "./FileGenerators"
-import { makeCJNodeTypes, makeCJSerializer } from "./printers/lang/CJPrinters"
+import { makeCJDeserializer, makeCJNodeTypes, makeCJSerializer } from "./printers/lang/CJPrinters"
 import { makeJavaArkComponents, makeJavaNodeTypes, makeJavaSerializer } from "./printers/lang/JavaPrinters"
 import {
     printRealAndDummyAccessors,
@@ -51,7 +51,6 @@ import { printEvents, printEventsCArkoalaImpl, printEventsCLibaceImpl } from "./
 import { printGniSources } from "./printers/GniPrinter"
 import { printMesonBuild } from "./printers/MesonPrinter"
 import {
-    printFakeDeclarations as printIdlFakeDeclarations,
     printInterfaces as printIdlInterfaces
 } from "./printers/InterfacePrinter"
 import { printBuilderClasses } from "./printers/BuilderClassPrinter"
@@ -62,7 +61,6 @@ import { Language } from "../Language"
 import { PeerLibrary } from "./PeerLibrary"
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig"
 import { printDeclarations, printEnumsImpl } from "./printers/DeclarationPrinter"
-import { printConflictedDeclarations } from "./printers/ConflictedDeclarationsPrinter";
 import { printNativeModuleRecorder } from "./printers/NativeModuleRecorderPrinter"
 import { IndentedPrinter } from "../IndentedPrinter"
 import { createLanguageWriter, LanguageWriter } from "./LanguageWriters"
@@ -71,6 +69,7 @@ import { printManagedCaller } from "./printers/CallbacksPrinter"
 export function generateLibaceFromIdl(config: {
     libaceDestination: string|undefined,
     apiVersion: number,
+    commentedCode: boolean,
     outDir: string
 }, peerLibrary: PeerLibrary) {
     const libace = config.libaceDestination ?
@@ -89,6 +88,7 @@ export function generateLibaceFromIdl(config: {
         basicVersion: 1,
         fullVersion: config.apiVersion,
         extendedVersion: 6,
+        commentedCode: config.commentedCode,
     })
 
     const converterNamespace = "OHOS::Ace::NG::Converter"
@@ -134,6 +134,7 @@ function copyArkoalaFiles(config: {
         'sig/arkoala/framework/native/src/generated/arkoala-macros.h',
         'sig/arkoala/arkui/src/peers/SerializerBase.ts',
         'sig/arkoala/arkui/src/peers/DeserializerBase.ts',
+        'sig/arkoala/arkui/src/peers/CallbackTransformer.ts',
         'sig/arkoala-arkts/arkui/src/generated/use_properties.ts',
         'sig/arkoala-arkts/arkui/src/generated/Finalizable.ts',
         'sig/arkoala-arkts/arkui/src/generated/CallbackRegistry.ts',
@@ -148,6 +149,7 @@ function copyArkoalaFiles(config: {
         'sig/arkoala-arkts/arkui/src/generated/peers/SerializerBase.ts',
         'sig/arkoala-arkts/arkui/src/generated/peers/DeserializerBase.ts',
         'sig/arkoala-arkts/arkui/src/generated/peers/CallbacksChecker.ts',
+        'sig/arkoala-arkts/arkui/src/generated/peers/CallbackTransformer.ts',
         'sig/arkoala-arkts/arkui/src/generated/shared/ArkResource.ts',
         'sig/arkoala-arkts/arkui/src/generated/shared/dts-exports.ts',
         'sig/arkoala-arkts/arkui/src/generated/shared/generated-utils.ts',
@@ -216,6 +218,7 @@ export function generateArkoalaFromIdl(config: {
             integrated: true,
             message: "producing [idl]"
         })
+        arkuiComponentsFiles.push(outMaterializedFile)
     }
     if (PeerGeneratorConfig.needInterfaces) {
         const interfaces = printIdlInterfaces(peerLibrary, context)
@@ -229,18 +232,6 @@ export function generateArkoalaFromIdl(config: {
             arkuiComponentsFiles.push(outComponentFile)
         }
     }
-    const fakeDeclarations = printIdlFakeDeclarations(peerLibrary)
-    for (const [targetFile, data] of fakeDeclarations) {
-        const outComponentFile = arkoala.interface(targetFile)
-        writeFile(outComponentFile, data,
-            {
-                onlyIntegrated: config.onlyIntegrated,
-                integrated: true,
-                message: "producing [idl, fake]"
-            })
-        if (config.verbose) console.log(data)
-        arkuiComponentsFiles.push(outComponentFile)
-    }
 
     if (peerLibrary.language == Language.TS || peerLibrary.language == Language.ARKTS) {
         let enumImpls = createLanguageWriter(peerLibrary.language, peerLibrary)
@@ -253,7 +244,7 @@ export function generateArkoalaFromIdl(config: {
         const index = new IndentedPrinter()
         // index-full.d.ts for ArkTS is a temporary solution for ets pre-processing.
         // So reuse the TS version for now.
-        index.print(tsCopyrightAndWarning(readLangTemplate("index-full.d.ts", Language.TS)))
+        index.print(tsCopyrightAndWarning(readLangTemplate("index-full.d.ts", peerLibrary.language)))
         index.print(readLangTemplate("platform.d.ts", peerLibrary.language))
         for (const data of declarations) {
             index.print(data)
@@ -343,14 +334,6 @@ export function generateArkoalaFromIdl(config: {
         writeFile(
             arkoala.peer(new TargetFile('ArkUINodeType')),
             printNodeTypes(peerLibrary),
-            {
-                onlyIntegrated: config.onlyIntegrated,
-                integrated: true
-            }
-        )
-        writeFile(
-            arkoala.arktsLib(new TargetFile('ConflictedDeclarations')),
-            printConflictedDeclarations(peerLibrary),
             {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true
@@ -461,7 +444,20 @@ export function generateArkoalaFromIdl(config: {
                 message: "producing [idl]"
             }
         )
-
+        writeFile(arkoala.peer(new TargetFile('CallbackKind', '')),
+            makeCallbacksKinds(peerLibrary, peerLibrary.language),
+            {
+                onlyIntegrated: config.onlyIntegrated,
+                integrated: true
+            }
+        )
+        writeFile(arkoala.peer(new TargetFile('CallbackDeserializeCall', '')),
+            makeDeserializeAndCall(peerLibrary, Language.CJ, "./CallbackDeserializeCall.cj").printToString(),
+            {
+                onlyIntegrated: config.onlyIntegrated,
+                integrated: true
+            }
+        )
         const nodeTypes = makeCJNodeTypes(peerLibrary)
         nodeTypes.writer.printTo(arkoala.cjLib(nodeTypes.targetFile))
 
@@ -470,6 +466,8 @@ export function generateArkoalaFromIdl(config: {
 
         const serializer = makeCJSerializer(peerLibrary)
         serializer.writer.printTo(arkoala.cjLib(serializer.targetFile))
+        const deserializer = makeCJDeserializer(peerLibrary)
+        deserializer.writer.printTo(arkoala.cjLib(deserializer.targetFile))
     }
 
     // native code

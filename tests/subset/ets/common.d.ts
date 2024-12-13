@@ -49,6 +49,40 @@ declare interface ClickEvent extends BaseEvent {
     preventDefault: () => void;
 }
 
+// Used for decorators
+declare interface ComponentOptions {
+  freezeWhenInactive : boolean,
+}
+
+// Used for decorators
+declare interface PreviewParams {
+    title?: string;
+    width?: number;
+    height?: number;
+    locale?: string;
+    colorMode?: string;
+    deviceType?: string;
+    dpi?: number;
+    orientation?: string;
+    roundScreen?: boolean;
+}
+
+// Used for decorators
+declare type OnMoveHandler = (from: number, to: number) => void;
+
+// Used for decorators
+declare class DynamicNode<T> {
+
+  onMove(handler: Optional<OnMoveHandler>): T;
+}
+
+// Used for decorators
+declare interface AbstractProperty<T> {
+  get(): T;
+  set(newValue: T): void;
+  info(): string;
+}
+
 declare interface CommonConfiguration<T> {
 
   enabled: boolean,
@@ -458,9 +492,10 @@ declare class CommonMethod<T> {
 
     onGestureRecognizerJudgeBegin(callback: GestureRecognizerJudgeBeginCallback): T;
 
-    onClick(event: (event: ClickEvent) => void): T;
-
+    onClick(event: (event?: ClickEvent) => void): T;
     onClick(event: Callback<ClickEvent>, distanceThreshold: number): T;
+
+    backgroundColor(value: ResourceColor): T;
 }
 
 declare interface Rectangle {

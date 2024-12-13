@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { float32, float64, int8, int32, int64 } from "@koalaui/common"
+import { float32, float64, int8, int32, int64, int32BitsFromFloat } from "@koalaui/common"
 import { pointer, KUint8ArrayPtr, KBuffer, ResourceId, ResourceHolder } from "@koalaui/interop"
 import { %NATIVE_MODULE_ACCESSOR% as NativeModule } from "%NATIVE_MODULE_PATH%"
 
@@ -143,13 +143,14 @@ export class SerializerBase {
         }
     }
     private heldResources: Array<ResourceId> = new Array<ResourceId>()
-    holdAndWriteCallback(callback: object, hold: pointer = 0, release: pointer = 0, call: pointer = 0): ResourceId {
+    holdAndWriteCallback(callback: object, hold: pointer = 0, release: pointer = 0, call: pointer = 0, callSync: pointer = 0): ResourceId {
         const resourceId = ResourceHolder.instance().registerAndHold(callback)
         this.heldResources.push(resourceId)
         this.writeInt32(resourceId)
         this.writePointer(hold)
         this.writePointer(release)
         this.writePointer(call)
+        this.writePointer(callSync)
         return resourceId
     }
     writeCallbackResource(resource: CallbackResource) {
@@ -232,12 +233,12 @@ export class SerializerBase {
         this.position += 8
     }
     writeFloat32(value: float32) {
-        // TODO: this is wrong!
+        let bits = int32BitsFromFloat(value)
         this.checkCapacity(4)
-        this.buffer.set(this.position + 0, ((value      ) & 0xff) as int8)
-        this.buffer.set(this.position + 1, ((value >>  8) & 0xff) as int8)
-        this.buffer.set(this.position + 2, ((value >> 16) & 0xff) as int8)
-        this.buffer.set(this.position + 3, ((value >> 24) & 0xff) as int8)
+        this.buffer.set(this.position + 0, ((bits      ) & 0xff) as int8)
+        this.buffer.set(this.position + 1, ((bits >>  8) & 0xff) as int8)
+        this.buffer.set(this.position + 2, ((bits >> 16) & 0xff) as int8)
+        this.buffer.set(this.position + 3, ((bits >> 24) & 0xff) as int8)
         this.position += 4
     }
     writePointer(value: pointer) {

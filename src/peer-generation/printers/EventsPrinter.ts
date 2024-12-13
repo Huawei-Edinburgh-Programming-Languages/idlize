@@ -40,6 +40,7 @@ import { ImportsCollector } from "../ImportsCollector";
 import { getReferenceResolver, ReferenceResolver } from "../ReferenceResolver"
 import { isImport } from "../idl/common"
 import { ETSLanguageWriter } from "../LanguageWriters/writers/ETSLanguageWriter";
+import { collectDeclItself, collectDeclDependencies, convertDeclToFeature } from "../ImportsCollectorUtils"
 
 export const PeerEventsProperties = "PeerEventsProperties"
 export const PeerEventKind = "PeerEventKind"
@@ -337,16 +338,11 @@ abstract class TSEventsVisitorBase {
         if ([Language.TS].includes(this.library.language))
             imports.addFeature("Deserializer", "./peers/Deserializer")
 
-        // Hack: fixes duplicate features from different modules
-        // TODO: Need to collect the only required types
-        const seenFeatures = new Set<string>()
-        for (const file of this.library.files) {
-            file.importFeatures.forEach(it => {
-                if (!seenFeatures.has(it.feature)) {
-                    imports.addFeature(it.feature, it.module)
-                    seenFeatures.add(it.feature)
-                }
-            })
+        if (PeerGeneratorConfig.needInterfaces) {
+            for (const callback of collectCallbacks(this.library)) {
+                collectDeclItself(this.library, callback.originTarget, imports)
+                collectDeclDependencies(this.library, callback.originTarget, imports)
+            }
         }
         imports.print(this.printer, '')
     }
@@ -366,7 +362,7 @@ interface PeerEvent {
                     : `${PeerEventKind}`
                 writer.writeFieldDeclaration(
                     'kind',
-                    idl.toIDLType(kindType),
+                    idl.createReferenceType(kindType),
                     [FieldModifier.READONLY],
                     false,
                 )
@@ -418,7 +414,7 @@ interface PeerEvent {
         this.printer.pushIndent()
         this.printer.writeStatement(this.printer.makeAssign(
             'kind',
-            idl.toIDLType(PeerEventKind),
+            idl.createReferenceType(PeerEventKind),
             new StringExpression(`eventDeserializer.readInt32()`),
             true,
         ))
@@ -439,7 +435,7 @@ interface PeerEvent {
                         return `${arg.name}?: any`
                     }),
                 ]
-                const constructorType = idl.toIDLType(`{ ${constructorTypeArgs.join(', ')} }`)
+                const constructorType = idl.createReferenceType(`{ ${constructorTypeArgs.join(', ')} }`)
 
                 return {
                     expr: this.printer.makeNaryOp('===', [
@@ -463,7 +459,7 @@ interface PeerEvent {
                         }),
                         this.printer.makeReturn(this.printer.makeCast(
                             new StringExpression(`event`),
-                            idl.toIDLType(callbackEventNameByInfo(info)),
+                            idl.createReferenceType(callbackEventNameByInfo(info)),
                         ))
                     ], false),
                 }
@@ -502,7 +498,7 @@ interface PeerEvent {
         this.printer.print(`case ${PeerEventKind}.${callbackIdByInfo(callbackInfo)}: properties.${callbackIdByInfo(callbackInfo)}?.(${infoFields}); break`)
     }
 
-    private printEventsDeliverer(infos: IdlCallbackInfo[]) {
+    protected printEventsDeliverer(infos: IdlCallbackInfo[]) {
         this.printer.print(`export function deliverGeneratedPeerEvent(event: PeerEvent, properties: ${PeerEventsProperties}): void {`)
         this.printer.pushIndent()
         this.printer.print(`switch (event.kind) {`)
@@ -549,6 +545,10 @@ class IdlArkTSEventVisitor extends IdlTSEventsVisitor {
     protected printParseFunction(infos: IdlCallbackInfo[]) {
         // Disable event functions printing until deserializer is ready
         // super.printParseFunction(infos);
+    }
+    protected printEventsDeliverer(infos: IdlCallbackInfo[]) {
+        // Disable event functions printing until deserializer is ready
+        // super.printEventsDeliverer(infos);
     }
 }
 

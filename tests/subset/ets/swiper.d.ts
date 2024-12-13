@@ -13,20 +13,6 @@
  * limitations under the License.
  */
 
-declare class SwiperController {
-
-  constructor();
-
-  showNext();
-
-  showPrevious();
-
-  changeIndex(index: number, useAnimation?: boolean);
-
-  finishAnimation(callback?: () => void);
-}
-
-
 declare class Indicator<T> {
 
   left(value: Length): T;
@@ -43,7 +29,7 @@ declare class Indicator<T> {
 
   static dot(): DotIndicator;
 
-//   static digit(): DigitIndicator;
+  static digit(): DigitIndicator;
 }
 
 declare class DotIndicator extends Indicator<DotIndicator> {
@@ -69,18 +55,18 @@ declare class DotIndicator extends Indicator<DotIndicator> {
 //   maxDisplayCount(maxDisplayCount: number): DotIndicator;
 }
 
-// declare class DigitIndicator extends Indicator<DigitIndicator> {
-//
-//   constructor();
-//
-//   fontColor(value: ResourceColor): DigitIndicator;
-//
-//   selectedFontColor(value: ResourceColor): DigitIndicator;
-//
-//   digitFont(value: Font): DigitIndicator;
-//
-//   selectedDigitFont(value: Font): DigitIndicator;
-// }
+declare class DigitIndicator extends Indicator<DigitIndicator> {
+
+  constructor();
+
+  fontColor(value: ResourceColor): DigitIndicator;
+
+  selectedFontColor(value: ResourceColor): DigitIndicator;
+
+  digitFont(value: Font): DigitIndicator;
+
+  selectedDigitFont(value: Font): DigitIndicator;
+}
 
 declare class SwiperController {
   constructor();

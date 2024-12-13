@@ -22,14 +22,16 @@ import java.util.Map;
 
 public class PeerNode extends IncrementalNode {
     private static final int PEER_NODE_TYPE = 11;
-    private static int currentId = 1000;
-
-    private int id = currentId++;
+    private static final int INITIAL_ID = 999;
+    protected static int currentId = PeerNode.INITIAL_ID;
+    public static int nextId() { return ++PeerNode.currentId; }
+    private int id = 0;
 
     public NativePeerNode peer;
-    public PeerNode(ArkUINodeType type, int flags, String name) {
+    public PeerNode(long peerPtr, int id, String name, int flags) {
         super(PEER_NODE_TYPE);
-        peer = NativePeerNode.create(type, id, flags);
+        this.id = id;
+        peer = NativePeerNode.create(peerPtr);
     }
 
     void applyAttributes(Map<String, Object> attrs) {}

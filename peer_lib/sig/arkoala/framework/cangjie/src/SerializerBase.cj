@@ -49,6 +49,7 @@ public enum RuntimeType {
     }
 }
 
+
 /* Serialization extension point */
 public abstract class CustomSerializer {
     public var supported: Array<String>
@@ -73,7 +74,7 @@ public open class SerializerBase {
     init() {
         this.buffer = ArrayList<UInt8>(Array<UInt8>(96, repeat: UInt8(0)))
     }
-    public func release() {
+    public open func release() {
         this.isHolding = false
         // todo handle release resources
         this.position = 0
@@ -106,7 +107,28 @@ public open class SerializerBase {
         println("Unsupported custom serialization for ${kind}, write undefined")
         this.writeInt8(Tag.UNDEFINED.ordinal)
     }
-    func writeFunction(value: Object): Unit {
+    private var heldResources: ArrayList<ResourceId> = ArrayList<ResourceId>()
+    func holdAndWriteCallback(callback: Any): ResourceId {
+        let resourceId = ResourceHolder.instance().registerAndHold(callback)
+        this.heldResources.append(resourceId)
+        this.writeInt32(resourceId)
+        this.writePointer(0)
+        this.writePointer(0)
+        this.writePointer(0)
+        this.writePointer(0)
+        return resourceId
+    }
+    func holdAndWriteCallback(callback: Any, hold: KPointer, release: KPointer, call: KPointer, callSync: KPointer): ResourceId {
+        let resourceId = ResourceHolder.instance().registerAndHold(callback)
+        this.heldResources.append(resourceId)
+        this.writeInt32(resourceId)
+        this.writePointer(hold)
+        this.writePointer(release)
+        this.writePointer(call)
+        this.writePointer(callSync)
+        return resourceId
+    }
+    func writeFunction(value: Any): Unit {
         // TODO
     }
     private func setBytes<V, T>(position: Int64, value: T): Unit where T <: LittleEndianOrder<V>{
@@ -207,12 +229,6 @@ public open class SerializerBase {
             this.setBytes(this.position, value[i])
         }
         this.writeInt8(Int8(0))
-    }
-    // Length is an important common case.
-    func writeLength(value: Ark_Length) {
-        this.checkCapacity(1)
-        this.writeInt8(RuntimeType.STRING.ordinal)
-        this.writeString(value.value)
     }
     func writeBuffer(value: ArrayList<UInt8>) {
         // TODO

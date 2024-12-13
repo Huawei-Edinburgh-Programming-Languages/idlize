@@ -12,10 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { float32, float64, int8, int32, int64 } from "@koalaui/common"
+import { float32, float64, int8, int32, int64, int32BitsFromFloat } from "@koalaui/common"
 import { pointer, KUint8ArrayPtr, KBuffer, ResourceId, ResourceHolder } from "@koalaui/interop"
-import { Length } from "../ArkUnitsInterfaces"
-import { Resource } from "../ArkResourceInterfaces"
 import { NativeModule } from "#components"
 
 /**
@@ -101,7 +99,6 @@ export abstract class CustomSerializer {
 }
 
 export class SerializerBase {
-    protected isHolding: boolean = false
     private position = 0
     private buffer: KBuffer
 
@@ -117,13 +114,13 @@ export class SerializerBase {
             current!.next = serializer
         }
     }
+
     resetCurrentPosition(): void { this.position = 0 }
 
     constructor() {
         this.buffer = new KBuffer(96)
     }
     public release() {
-        this.isHolding = false
         this.releaseResources()
         this.position = 0
     }
@@ -150,13 +147,14 @@ export class SerializerBase {
         }
     }
     private heldResources: Array<ResourceId> = new Array<ResourceId>()
-    holdAndWriteCallback(callback: object, hold: pointer = 0, release: pointer = 0, call: pointer = 0): ResourceId {
+    holdAndWriteCallback(callback: object, hold: pointer = 0, release: pointer = 0, call: pointer = 0, callSync: pointer = 0): ResourceId {
         const resourceId = ResourceHolder.instance().registerAndHold(callback)
         this.heldResources.push(resourceId)
         this.writeInt32(resourceId)
         this.writePointer(hold)
         this.writePointer(release)
         this.writePointer(call)
+        this.writePointer(callSync)
         return resourceId
     }
     holdAndWriteCallbackForPromiseVoid(hold: pointer = 0, release: pointer = 0, call: pointer = 0): [Promise<void>, ResourceId] {
@@ -265,12 +263,13 @@ export class SerializerBase {
         this.position += 8
     }
     writeFloat32(value: float32) {
+        let bits = int32BitsFromFloat(value)
         // TODO: this is wrong!
         this.checkCapacity(4)
-        this.buffer.set(this.position + 0, ((value      ) & 0xff) as int8)
-        this.buffer.set(this.position + 1, ((value >>  8) & 0xff) as int8)
-        this.buffer.set(this.position + 2, ((value >> 16) & 0xff) as int8)
-        this.buffer.set(this.position + 3, ((value >> 24) & 0xff) as int8)
+        this.buffer.set(this.position + 0, ((bits      ) & 0xff) as int8)
+        this.buffer.set(this.position + 1, ((bits >>  8) & 0xff) as int8)
+        this.buffer.set(this.position + 2, ((bits >> 16) & 0xff) as int8)
+        this.buffer.set(this.position + 3, ((bits >> 24) & 0xff) as int8)
         this.position += 4
     }
     writePointer(value: pointer) {
@@ -297,22 +296,20 @@ export class SerializerBase {
         this.setInt32(this.position, encodedLength)
         this.position += encodedLength + 4
     }
-    // Length is an important common case.
-    writeLength(value: Length|undefined) {
-        this.checkCapacity(1)
-        let valueType = runtimeType(value)
-        this.writeInt8(valueType as int32)
-        if (valueType == RuntimeType.NUMBER) {
-            this.writeFloat32(value as float32)
-        } else if (valueType == RuntimeType.STRING) {
-            this.writeString(value as string)
-        } else if (valueType == RuntimeType.OBJECT) {
-           this.writeInt32((value as Resource).id as int32)
-        }
-    }
     //TODO: Needs to be implemented
     writeBuffer(value: ArrayBuffer) {
         this.writePointer(42)
         this.writeInt64(value.byteLength as int64)
     }
 }
+
+class DateSerializer extends CustomSerializer {
+    constructor() {
+        super(Array.of("Date" as string))
+    }
+
+    serialize(serializer: SerializerBase, value: object, kind: string): void {
+        serializer.writeString((value as Date).toISOString())
+    }
+}
+SerializerBase.registerCustomSerializer(new DateSerializer())

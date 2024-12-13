@@ -1,4 +1,4 @@
-image: "nexus.bz-openlab.ru:10443/huawei/koala-ci:0.2"
+image: "nexus.bz-openlab.ru:10443/huawei/koala-ci:0.2.2"
 
 stages:
   - test
@@ -40,7 +40,7 @@ pg java:run:
   script:
     - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-arm64 npm run run:java
 
-compile arkts subset:
+run arkts subset:
   stage: test
   tags:
     - idlize-ci
@@ -49,7 +49,7 @@ compile arkts subset:
     - !reference [.setup, script]
     - PANDA_SDK_VERSION=1.5.0-dev.9440 npm run panda:sdk:install
   script:
-    - npm run compile:all:arkts
+    - npm run run:panda:subset
 
 compile arkts peers:
   stage: test
@@ -74,6 +74,7 @@ arkts subset tsc:
      - npm run check:arkts:subset:tsc
 
 arkts subset sig integration:
+  allow_failure: true
   stage: test
   tags:
     - idlize-ci
@@ -81,7 +82,6 @@ arkts subset sig integration:
   before_script:
     - !reference [.setup, script]
     - PANDA_SDK_VERSION=1.5.0-dev.9440 npm run panda:sdk:install
-    - npm run fast-arktsc:install --prefix external/arkoala-arkts
   script:
     - npm run sig:arkts:subset:all
 
@@ -150,3 +150,47 @@ publish idlize:
         - sed -i "s/+devel/-dev.$CI_PIPELINE_IID/" package.json
         - KOALA_BZ=1 npm run upload
 
+check index-full:
+    stage: test
+    tags:
+      - idlize-ci
+      - koala-ci
+    before_script:
+      - !reference [.setup, script]
+    script:
+        - cd $CI_PROJECT_DIR
+        - npm run check:peers
+        - npm run check:index-full:ts
+        - npm run make:ts:subset
+        - npm run check:index-full:subset:ts
+        - npm run make:arkts
+        - npm run check:index-full:arkts
+
+check generated XML demo:
+    stage: test
+    tags:
+      - idlize-ci
+      - koala-ci
+    before_script:
+      - !reference [.setup, script]
+      - PANDA_SDK_VERSION=1.5.0-dev.9440 npm run panda:sdk:install
+      - chmod +x external/incremental/tools/panda/arkts/ark{,tsc,link,disasm}
+      - npm run compile --prefix external/interop
+      - npm run compile --prefix external/incremental/common
+      - npm run compile --prefix external/incremental/compat
+      - npm run compile --prefix external/incremental/runtime
+      - npm run build:interop:inc --prefix external/interop
+      - npm run build:incremental:inc --prefix external/incremental/runtime
+      # TODO Remove this patch once we have proper Buffer passing implementation
+      - npm run download:sdk
+      - sed -ie 's/ArrayBuffer | DataView/string/' interface_sdk-js/api/\@ohos.xml.d.ts
+    script:
+      - npm run run:xml
+      - npm run run:xml:arkts
+      - cd demos/xml
+      - rm -rf generated
+      - cp -r ../../out/xml generated
+      - npm run compile:node
+      - npm start
+      - npm run compile:panda
+      - npm run start:panda

@@ -20,6 +20,7 @@ import {
     asString, capitalize, getComment, getDeclarationsByNode, getExportedDeclarationNameByDecl, identName,
     isDefined, isNodePublic, isPrivate, isProtected, isReadonly, isStatic, isAsync,
     nameEnumValues, nameOrNull, identString, getNameWithoutQualifiersLeft, stringOrNone, warn,
+    snakeCaseToCamelCase,
 } from "./util"
 import { GenericVisitor } from "./options"
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig"
@@ -28,6 +29,7 @@ import { generateSyntheticIdlNodeName, typeOrUnion } from "./peer-generation/idl
 import { IDLKeywords } from "./languageSpecificKeywords"
 import { isCommonMethodOrSubclass } from "./peer-generation/inheritance"
 import { ReferenceResolver } from "./peer-generation/ReferenceResolver"
+import { IDLVisitorConfig } from "./IDLVisitorConfig"
 
 function escapeIdl(name: string): string {
     if (IDLKeywords.has(name))
@@ -78,13 +80,11 @@ export function generateSyntheticUnionName(types: idl.IDLType[]) {
     return `Union_${types.map(it => generateSyntheticIdlNodeName(it)).join("_")}`
 }
 
-const conflictingDeclarationNames = [
-    "TextStyle",
-]
-
-function mangleConflictingName(name: string, sourceFile: ts.SourceFile): string {
-    const fileName = path.basename(sourceFile.fileName).replaceAll(".d.ts", "").replaceAll(".", "")
-    if (conflictingDeclarationNames.includes(name)) return `${name}_${fileName}`
+function mangleConflictingName(name: string, sourceFile: ts.SourceFile | undefined): string {
+    if (IDLVisitorConfig.ConflictingDeclarationNames.includes(name) && sourceFile) {
+        const fileName = path.basename(sourceFile.fileName).replaceAll(".d.ts", "").replaceAll(".", "")
+        return `${name}_${fileName.replaceAll("@", "")}`
+    }
     return name
 }
 
@@ -235,10 +235,50 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
 
     /** visit nodes finding exported classes */
     visit(node: ts.Node) {
+        if (ts.isClassDeclaration(node) ||
+            ts.isInterfaceDeclaration(node) ||
+            ts.isTypeAliasDeclaration(node) ||
+            ts.isFunctionDeclaration(node)) {
+            const name = identName(node.name)
+            if (name && IDLVisitorConfig.DeletedDeclarations.includes(name)) {
+                return
+            }
+            if (name && IDLVisitorConfig.StubbedDeclarations.includes(name)) {
+                const decl = idl.createInterface(
+                    name,
+                    idl.IDLKind.Interface,
+                    [],
+                    undefined,
+                    undefined,
+                    [idl.createProperty(`stub`, idl.IDLStringType)],
+                    undefined,
+                    undefined,
+                    this.collectTypeParameters(node.typeParameters),
+                    {
+                        fileName: node.getSourceFile().fileName,
+                        // extendedAttributes: this.computeComponentExtendedAttributes(node),
+                        documentation: getDocumentation(this.sourceFile, node, this.options.docs)
+                    }
+                )
+                this.output.push(decl)
+                return
+            }
+            if (name && IDLVisitorConfig.ReplacedDeclarations.has(name)) {
+                this.output.push({
+                    fileName: node.getSourceFile().fileName,
+                    ...IDLVisitorConfig.ReplacedDeclarations.get(name)!,
+                })
+                return
+            }
+        }
         if (ts.isClassDeclaration(node)) {
-            this.output.push(this.serializeClass(node))
+            const entry = this.serializeClass(node)
+            if (!PeerGeneratorConfig.ignoreComponents.includes(idl.getExtAttribute(entry, idl.IDLExtendedAttributes.Component) ?? ""))
+                this.output.push(entry)
         } else if (ts.isInterfaceDeclaration(node)) {
-            this.output.push(this.serializeInterface(node))
+            const entry = this.serializeInterface(node)
+            if (!PeerGeneratorConfig.ignoreComponents.includes(idl.getExtAttribute(entry, idl.IDLExtendedAttributes.Component) ?? ""))
+                this.output.push(entry)
         } else if (ts.isModuleDeclaration(node)) {
             if (this.isKnownAmbientModuleDeclaration(node)) {
                 this.output.push(this.serializeAmbientModuleDeclaration(node))
@@ -296,6 +336,8 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
     }
 
     serializeTypeAlias(node: ts.TypeAliasDeclaration): idl.IDLTypedef | idl.IDLCallback | idl.IDLInterface | undefined {
+        // Monitor decorator differs from the rest of the decorators as it is a type not a const.
+        if (ts.idText(node.name) == "MonitorDecorator") return undefined
         const nameSuggestion = NameSuggestion.make(nameOrNull(node.name) ?? "UNDEFINED_TYPE_NAME", true)
         let extendedAttributes = this.computeDeprecatedExtendAttributes(node)
         if (ts.isImportTypeNode(node.type)) {
@@ -400,6 +442,9 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         let result: idl.IDLExtendedAttribute[] = this.computeExtendedAttributes(node)
         let name = identName(node.name)
         if (name && ts.isClassDeclaration(node) && isCommonMethodOrSubclass(this.typeChecker, node)) {
+            if (PeerGeneratorConfig.handWrittenComponents.includes(PeerGeneratorConfig.mapComponentName(name))) {
+                result.push({ name: idl.IDLExtendedAttributes.HandWrittenImplementation })
+            }
             result.push({ name: idl.IDLExtendedAttributes.Component, value: `"${PeerGeneratorConfig.mapComponentName(name)}"` })
         }
         this.computeExportAttribute(node, result)
@@ -826,7 +871,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             return idl.IDLUndefinedType
         }
         if (type.kind == ts.SyntaxKind.NullKeyword) {
-            return idl.IDLNullType
+            return idl.IDLUndefinedType
         }
         if (type.kind == ts.SyntaxKind.VoidKeyword) {
             return idl.IDLVoidType
@@ -868,9 +913,16 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         }
         if (ts.isTypeReferenceNode(type)) {
             const declarations = getDeclarationsByNode(this.typeChecker, type.typeName)
-            const typeName = mangleConflictingName(type.typeName.getText(type.typeName.getSourceFile()), type.typeName.getSourceFile())
+            let sourceFile: ts.SourceFile|undefined = undefined
             if (declarations.length == 0)
-                warn(`Do not know type ${typeName}`)
+                warn(`Do not know type ${type.typeName.getText()}`)
+            else if (declarations.length > 1)
+                // If there are multiple declaration select one from the same file, if possible.
+                sourceFile = declarations.find(it => it.getSourceFile() == type.getSourceFile())?.getSourceFile() ?? declarations[0].getSourceFile()
+            else
+                sourceFile = declarations[0].getSourceFile()
+            const typeName = mangleConflictingName(type.typeName.getText(), sourceFile)
+
             // Treat enum member type 'value: EnumName.MemberName`
             // as enum type 'value: EnumName`.
             if (ts.isQualifiedName(type.typeName)) {
@@ -928,7 +980,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
                 return idl.IDLNumberType
             }
             if (literal.kind == ts.SyntaxKind.NullKeyword) {
-                return idl.IDLNullType
+                return idl.IDLUndefinedType
             }
             if (literal.kind == ts.SyntaxKind.FalseKeyword || literal.kind == ts.SyntaxKind.TrueKeyword) {
                 return idl.IDLBooleanType
@@ -1196,6 +1248,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
                 return true
 
             let tag: string | undefined
+            let tagEnumValue: string | undefined
             const tagType = this.typeChecker.getTypeFromTypeNode(param.type)
             if ((tagType.flags & ts.TypeFlags.Literal) && !(tagType.flags & ~ts.TypeFlags.Literal))
                 tag = param.type.getText()
@@ -1219,8 +1272,8 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
                 const tsMemberName = tagType.symbol.name
                 for (let idx=0; idx<enumDeclarationMembers.length; ++idx) {
                     if (identString(enumDeclarationMembers[idx].name) === tsMemberName) {
-                        const idlMemberNames = nameEnumValues(enumDeclaration)
-                        tag = `${getNameWithoutQualifiersLeft(param.type.typeName)}.${idlMemberNames[idx]}`
+                        tagEnumValue = nameEnumValues(enumDeclaration)[idx]
+                        tag = `${getNameWithoutQualifiersLeft(param.type.typeName)}.${tagEnumValue}`
                         break
                     }
                 }
@@ -1247,11 +1300,10 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
 
             extendedAttributes.push({
                 name: idl.IDLExtendedAttributes.DtsTag,
-                value: extendedAttributeValues.map(value => value.replaceAll('|', '\x7c')).join('|')
+                value: extendedAttributeValues.map(value => value.replaceAll('|', '\\x7c')).join('|')
             })
 
-            const tagId = tag.replaceAll('.', '_').replaceAll('"', '').replaceAll("'", '')
-            const [methodNameNext, escapedMethodNameNext] = escapeName(methodName + capitalize(tagId))
+            const [methodNameNext, escapedMethodNameNext] = escapeName(methodName + tagPostfix(tag, tagEnumValue))
             methodName = methodNameNext
             escapedMethodName = escapedMethodNameNext
             return false
@@ -1426,4 +1478,10 @@ function dedupDocumentation(documentation: string): string {
             return false
         })
         .join('\n')
+}
+
+function tagPostfix(tag: string, tagEnumValue?: string) {
+    return tagEnumValue === undefined
+        ? capitalize(tag.replaceAll('"', '').replaceAll("'", ''))
+        : snakeCaseToCamelCase(tagEnumValue, true)
 }

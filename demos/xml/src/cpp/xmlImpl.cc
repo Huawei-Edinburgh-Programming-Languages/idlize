@@ -16,7 +16,7 @@
 #include "xml.h"
 #include "parser_impl.h"
 
-OH_XML_XmlSerializerHandle XmlSerializer_constructImpl(const OH_Union_ArrayBuffer_DataView* buffer, const Opt_String* encoding) {
+OH_XML_XmlSerializerHandle XmlSerializer_constructImpl(const OH_String* buffer, const Opt_String* encoding) {
     return {};
 }
 void XmlSerializer_destructImpl(OH_XML_XmlSerializerHandle thiz) {
@@ -89,6 +89,7 @@ void XmlPullParser_destructImpl(OH_XML_XmlPullParserHandle thiz) {
 void temp_hold(int resId) {}
 void temp_release(int resId) {}
 void temp_call(const OH_Int32 resourceId, const OH_Boolean value) {}
+void temp_call_sync(const OH_VMContext vmContext, const OH_Int32 resourceId, const OH_Boolean value) {}
 
 void XmlPullParser_parseImpl(OH_NativePointer thisPtr, const OH_ParseOptions* option) {
     ExpatParser* parser = (ExpatParser*) thisPtr;
@@ -102,6 +103,7 @@ void XmlPullParser_parseImpl(OH_NativePointer thisPtr, const OH_ParseOptions* op
                     temp_release,
                 },
                 temp_call,
+                temp_call_sync,
             });
         });
     }
@@ -115,10 +117,13 @@ void XmlPullParser_parseImpl(OH_NativePointer thisPtr, const OH_ParseOptions* op
                     temp_release,
                 },
                 temp_call,
+                temp_call_sync,
             });
         });
     }
     // TODO handle other properties from ParseOptions
     parser->parse();
     parser->reset();
+}
+void XmlPullParser_parseXmlImpl(OH_NativePointer thisPtr, const OH_ParseOptions* option) {
 }

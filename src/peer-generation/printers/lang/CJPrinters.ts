@@ -23,16 +23,21 @@ import {
     MethodSignature,
 } from "../../LanguageWriters"
 import { getReferenceResolver } from "../../ReferenceResolver"
-import { writeSerializer } from "../SerializerPrinter"
+import { writeDeserializer, writeSerializer } from "../SerializerPrinter"
 import { TargetFile } from "../TargetFile"
 import { ARK_OBJECTBASE, ARK_UI_NODE_TYPE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from "./Cangjie"
 import { IdlSyntheticTypeBase } from "./CommonUtils"
 
 export function makeCJSerializer(library: PeerLibrary): { targetFile: TargetFile, writer: LanguageWriter } {
     let writer = createLanguageWriter(library.language, getReferenceResolver(library))
-    writer.print(`package idlize\n`)
     writeSerializer(library, writer, "")
     return { targetFile: new TargetFile('Serializer', ARKOALA_PACKAGE_PATH), writer: writer }
+}
+
+export function makeCJDeserializer(library: PeerLibrary): { targetFile: TargetFile, writer: LanguageWriter } {
+    let writer = createLanguageWriter(library.language, getReferenceResolver(library))
+    writeDeserializer(library, writer, "")
+    return { targetFile: new TargetFile('Deserializer', ARKOALA_PACKAGE_PATH), writer: writer }
 }
 
 export function makeCJNodeTypes(library: PeerLibrary): { targetFile: TargetFile, writer: LanguageWriter } {
@@ -42,35 +47,35 @@ export function makeCJNodeTypes(library: PeerLibrary): { targetFile: TargetFile,
     const nodeTypesEnum = new CJEnum(undefined, ARK_UI_NODE_TYPE, componentNames.map((it, index) => { return { name: it, id: index } }))
 
     let writer = createLanguageWriter(library.language, getReferenceResolver(library))
-    writer.print(`package ${ARKOALA_PACKAGE};\n`)
+    writer.print(`package ${ARKOALA_PACKAGE}\n`)
     nodeTypesEnum.print(writer)
 
     return { targetFile: new TargetFile(ARK_UI_NODE_TYPE, ARKOALA_PACKAGE_PATH), writer: writer }
 }
 
-export class CJTuple extends IdlSyntheticTypeBase {
-    constructor(source: Object | undefined, readonly name: string, public readonly members: IDLType[], public readonly imports: ImportFeature[]) {
-        super(source)
-    }
+// export class CJTuple extends IdlSyntheticTypeBase {
+//     constructor(source: Object | undefined, readonly name: string, public readonly members: IDLType[], public readonly imports: ImportFeature[]) {
+//         super(source)
+//     }
 
-    print(writer: LanguageWriter): void {
-        const memberNames: string[] = this.members.map((_, index) => `value${index}`)
-        writer.writeClass(this.name, () => {
-            for (let i = 0; i < memberNames.length; i++) {
-                writer.writeFieldDeclaration(memberNames[i], this.members[i], [FieldModifier.PUBLIC], false)
-            }
+//     print(writer: LanguageWriter): void {
+//         const memberNames: string[] = this.members.map((_, index) => `value${index}`)
+//         writer.writeClass(this.name, () => {
+//             for (let i = 0; i < memberNames.length; i++) {
+//                 writer.writeFieldDeclaration(memberNames[i], this.members[i], [FieldModifier.PUBLIC], false)
+//             }
 
-            const signature = new MethodSignature(IDLVoidType, this.members)
-            writer.writeConstructorImplementation(this.name, signature, () => {
-                for (let i = 0; i < memberNames.length; i++) {
-                    writer.writeStatement(
-                        writer.makeAssign(memberNames[i], this.members[i], writer.makeString(signature.argName(i)), false)
-                    )
-                }
-            })
-        }, ARK_OBJECTBASE)
-    }
-}
+//             const signature = new MethodSignature(IDLVoidType, this.members)
+//             writer.writeConstructorImplementation(this.name, signature, () => {
+//                 for (let i = 0; i < memberNames.length; i++) {
+//                     writer.writeStatement(
+//                         writer.makeAssign(memberNames[i], this.members[i], writer.makeString(signature.argName(i)), false)
+//                     )
+//                 }
+//             })
+//         }, ARK_OBJECTBASE)
+//     }
+// }
 
 export class CJEnum extends IdlSyntheticTypeBase {
     public readonly isStringEnum: boolean

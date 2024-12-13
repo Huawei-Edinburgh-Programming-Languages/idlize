@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { createContainerType, createReferenceType, DebugUtils, forceAsNamedNode, IDLAnyType, IDLBooleanType, IDLCallback, IDLContainerType, IDLContainerUtils, IDLEnum, IDLI16Type, IDLI32Type, IDLI64Type, IDLI8Type, IDLNode, IDLNumberType, IDLOptionalType, IDLPointerType, IDLPrimitiveType, IDLReferenceType, IDLStringType, IDLType, IDLTypeParameterType, IDLU16Type, IDLU32Type, IDLU64Type, IDLU8Type, IDLUint8ArrayType, IDLUnionType, IDLVoidType, isCallback, isContainerType, isOptionalType, isPrimitiveType, isReferenceType, isType, isUnionType, toIDLType } from "../../../idl"
+import { createReferenceType, forceAsNamedNode, IDLContainerType, IDLEnum, IDLNode, IDLType, IDLUint8ArrayType, IDLVoidType } from "../../../idl"
 import { IndentedPrinter } from "../../../IndentedPrinter"
 import { cppKeywords } from "../../../languageSpecificKeywords"
 import { Language } from "../../../Language"
@@ -147,6 +147,13 @@ class CppEnumEntityStatement implements LanguageStatement {
         writer.print(`} ${this._enum.name};`)
     }
 }
+class CPPThrowErrorStatement implements LanguageStatement {
+    constructor(public message: string) { }
+    write(writer: LanguageWriter): void {
+        writer.print(`throw "${this.message}";`)
+    }
+}
+
 
 ////////////////////////////////////////////////////////////////
 //                           WRITER                           //
@@ -161,8 +168,8 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     getNodeName(type: IDLNode): string {
         return this.typeConvertor.convert(type)
     }
-    fork(): LanguageWriter {
-        return new CppLanguageWriter(new IndentedPrinter(), this.resolver)
+    fork(options?: { resolver?: ReferenceResolver }): LanguageWriter {
+        return new CppLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver)
     }
     writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string, interfaces?: string[]): void {
         const superClasses = (superClass ? [superClass] : []).concat(interfaces ?? [])
@@ -183,6 +190,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
             super.writeMethodCall(receiver, method, params, nullable)
         }
     }
+    
     writeFieldDeclaration(name: string, type: IDLType, modifiers: FieldModifier[] | undefined, optional: boolean, initExpr?: LanguageExpression): void {
         let filter = function(modifier_name : FieldModifier) {
             return modifier_name !== FieldModifier.STATIC
@@ -257,6 +265,9 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     override makeValueFromOption(value: string): LanguageExpression {
         return this.makeString(`${value}.value`)
     }
+    override makeThrowError(message: string): LanguageStatement {
+        return new CPPThrowErrorStatement(message)
+    }
     makeAssign(variableName: string, type: IDLType | undefined, expr: LanguageExpression | undefined, isDeclared: boolean = true, isConst: boolean = true, options?:MakeAssignOptions): LanguageStatement {
         return new CppAssignStatement(variableName, type, expr, isDeclared, isConst, options)
     }
@@ -302,7 +313,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     makeMapInit(type: IDLType): LanguageExpression {
         return this.makeString(`{}`)        
     }
-    makeArrayResize(array: string, length: string, deserializer: string): LanguageStatement {
+    makeArrayResize(array: string, arrayType: string, length: string, deserializer: string): LanguageStatement {
         return new CppArrayResizeStatement(array, length, deserializer)
     }
     makeMapResize(mapTypeName: string, keyType: IDLType, valueType: IDLType, map: string, size: string, deserializer: string): LanguageStatement {
@@ -447,5 +458,11 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
             [undefined, `nullptr`],
             [undefined, undefined, MethodArgPrintHint.AsPointer]
         )
+    }
+    override makeLengthSerializer(serializer: string, value: string): LanguageStatement | undefined {
+        return  undefined
+    }
+    override makeLengthDeserializer(deserializer: string): LanguageStatement | undefined {
+        return  undefined
     }
 }

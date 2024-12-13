@@ -170,6 +170,10 @@ export function capitalize(string: string): string {
     return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
+export function capitalizeConstantName(string: string): string {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
+}
+
 export function dropLast(text: string, chars: number): string {
     return text.substring(0, text.length - chars)
 }
@@ -426,10 +430,10 @@ export function getNameWithoutQualifiersLeft(node: ts.EntityName | undefined) : 
     throw new Error("Impossible")
 }
 
-export function snakeCaseToCamelCase(input: string): string {
+export function snakeCaseToCamelCase(input: string, tailToLowerCase: boolean = false): string {
     return input
         .split("_")
-        .map(capitalize)
+        .map(it => capitalize(tailToLowerCase ? it.toLowerCase() : it))
         .join("")
 }
 
@@ -473,6 +477,7 @@ export function renameDtsToPeer(fileName: string, language: Language, withFileEx
     const renamed = "Ark"
         .concat(snakeCaseToCamelCase(fileName))
         .replace(".d.ts", "")
+        .replace(".idl", "")
         .concat("Peer")
     if (withFileExtension) {
         return renamed.concat(language.extension)
@@ -585,4 +590,13 @@ export function removeExt(filename: string) {
 
 export function warn(message: string) {
     console.log(`WARNING: ${message}`)
+}
+
+export function hashCodeFromString(value: string): number {
+    let hash = 5381
+    for(let i = 0; i < value.length; i++) {
+        hash = (hash * 33) ^ value.charCodeAt(i)
+        hash |= 0
+    }
+    return hash
 }

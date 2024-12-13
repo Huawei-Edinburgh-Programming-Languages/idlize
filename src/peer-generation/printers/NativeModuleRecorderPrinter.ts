@@ -13,23 +13,28 @@
  * limitations under the License.
  */
 
-import { createLanguageWriter, LanguageWriter, Method, NamedMethodSignature } from "../LanguageWriters";
-import { PeerClassBase } from "../PeerClass";
+import { createInteropArgConvertor, createLanguageWriter, LanguageWriter, Method, NamedMethodSignature } from "../LanguageWriters";
+import { createConstructPeerMethod, PeerClassBase } from "../PeerClass";
 import { PeerClass } from "../PeerClass";
 import { PeerLibrary } from "../PeerLibrary";
 import { PeerMethod } from "../PeerMethod";
 import { ImportsCollector } from "../ImportsCollector";
-import { makeSyntheticDeclarationsFiles } from "../idl/IdlSyntheticDeclarations";
 import { Language } from "../../Language";
-import { createParameter, createReferenceType, createUnionType, IDLI32Type, IDLNullType, IDLNumberType, IDLObjectType, IDLPointerType, IDLStringType, IDLType, IDLUint8ArrayType, IDLVoidType, toIDLType } from "../../idl";
+import { createCallback, createParameter, createReferenceType, createTypeParameterReference, createUnionType, IDLExtendedAttributes, IDLI32Type, IDLNumberType, IDLObjectType, IDLPointerType, IDLStringType, IDLType, IDLUint8ArrayType, IDLUndefinedType, IDLVoidType } from "../../idl";
+import { makeInteropSignature } from "./NativeModulePrinter";
+import { InteropArgConvertor } from "../LanguageWriters/convertors/InteropConvertor";
+import { generateSyntheticFunctionName } from "../../IDLVisitor";
+import { createAlternativeReferenceResolver } from "../ReferenceResolver";
 
 class NativeModuleRecorderVisitor {
     readonly nativeModuleRecorder: LanguageWriter
+    private readonly interopConvertor: InteropArgConvertor
 
     constructor(
         protected readonly library: PeerLibrary,
     ) {
         this.nativeModuleRecorder = createLanguageWriter(library.language, this.library)
+        this.interopConvertor = createInteropArgConvertor(library.language)
     }
 
     private printImports() {
@@ -40,9 +45,7 @@ class NativeModuleRecorderVisitor {
         imports.addFeatures(["int32", "asFloat64", "CustomTextEncoder"], "@koalaui/common")
         imports.addFeatures(["encodeToData", "KFloat", "KFloat32ArrayPtr", "KInt", "KInt32ArrayPtr", "KPointer", "KStringPtr", "KUint8ArrayPtr", "nullptr", "pointer", "KBoolean"], "@koalaui/interop")
         imports.addFeatures(["NodePointer", "NativeModuleEmpty"], "@koalaui/arkoala")
-        for (let [module, {dependencies, declarations}] of makeSyntheticDeclarationsFiles()) {
-            declarations.forEach(it => imports.addFeature(it.name!, module))
-        }
+        imports.addFeature("CallbackTransformer", "./peers/CallbackTransformer")
         imports.print(this.nativeModuleRecorder, '')
     }
 
@@ -73,23 +76,7 @@ class NativeModuleRecorderVisitor {
         const component = clazz.generatedName(method.isCallSignature)
         const interfaceName = clazz.getComponentName()
         clazz.setGenerationContext(`${method.isCallSignature ? "" : method.overloadedName}()`)
-        let serializerArgCreated = false
-        let args: ({name: string, type: IDLType})[] = []
-        for (let i = 0; i < method.argAndOutConvertors.length; ++i) {
-            let it = method.argAndOutConvertors[i]
-            if (it.useArray) {
-                if (!serializerArgCreated) {
-                    const array = `thisSerializer`
-                    args.push({ name: `thisArray`, type: IDLUint8ArrayType }, { name: `thisLength`, type: IDLI32Type })
-                    serializerArgCreated = true
-                }
-            } else {
-                // TODO: use language as argument of interop type.
-                args.push({ name: `${it.param}`, type: createReferenceType(it.interopType(nativeModuleRecorder.language)) })
-            }
-        }
-        const maybeReceiver:{ name: string, type: IDLType }[] = method.hasReceiver() ? [{ name: 'ptr', type: createReferenceType('KPointer') }] : []
-        const parameters = NamedMethodSignature.make(returnType ?? IDLVoidType, maybeReceiver.concat(args))
+        const parameters = makeInteropSignature(method, returnType, this.interopConvertor)
         let name = `_${component}_${method.overloadedName}`
 
         nativeModuleRecorder.writeMethodImplementation(new Method(name, parameters), (printer) => {
@@ -108,12 +95,32 @@ class NativeModuleRecorderVisitor {
                             return printer.makeAssign(`node.${fieldName}`, undefined, expr, false)
                         }, printer)
                     )
-                } else {             
-                    this.nativeModuleRecorder.writeLines(`node.${method.overloadedName}_${method.argAndOutConvertors[i].param} = ${parameters.argsNames[i + 1]}`)               
+                } else {
+                    this.nativeModuleRecorder.writeLines(`node.${method.overloadedName}_${method.argAndOutConvertors[i].param} = ${parameters.argsNames[i + 1]}`)
                 }
             }
         })
         clazz.setGenerationContext(undefined)
+    }
+
+    private printConstructMethod(clazz: PeerClass, nativeModuleRecorder: LanguageWriter) {
+        const method = createConstructPeerMethod(clazz)
+        const name = `_${method.originalParentName}_${method.overloadedName}`
+        const signature = method.method.signature
+        const args = signature.args.map((arg, idx) => { return { name: signature.argName(idx), type: arg } })
+        const parameters = NamedMethodSignature.make(IDLPointerType, args)
+
+        nativeModuleRecorder.writeMethodImplementation(new Method(name, parameters), (w) => {
+            w.writeLines(`let element: UIElement = {`)
+            w.pushIndent()
+            w.writeLines(`nodeId: 0,`)
+            w.writeLines(`kind: '',`)
+            w.writeLines(`children: [],`)
+            w.writeLines(`elementId: undefined,`)
+            w.popIndent()
+            w.writeLines(`}`)
+            w.writeLines(`return this.object2ptr(element)`)
+        })
     }
 
     printOtherField() {
@@ -150,11 +157,11 @@ class NativeModuleRecorderVisitor {
             w.writeLines(`}))`)
         })
 
-        this.nativeModuleRecorder.writeMethodImplementation(new Method("private ptr2object<T>", new NamedMethodSignature(/* looks like temporary solution: */ toIDLType("T"), [IDLPointerType], ["ptr"])), w => {
+        this.nativeModuleRecorder.writeMethodImplementation(new Method("private ptr2object<T>", new NamedMethodSignature(createTypeParameterReference("T"), [IDLPointerType], ["ptr"])), w => {
             w.writeLines(`return this.pointers[ptr as number] as T`)
         })
 
-        this.nativeModuleRecorder.writeMethodImplementation(new Method("private object2ptr", new NamedMethodSignature(IDLPointerType, [createUnionType([IDLObjectType, IDLNullType])], ["object"])), w => {
+        this.nativeModuleRecorder.writeMethodImplementation(new Method("private object2ptr", new NamedMethodSignature(IDLPointerType, [createUnionType([IDLObjectType, IDLUndefinedType])], ["object"])), w => {
             w.writeLines(`if (object == null) return nullptr`)
             w.writeLines(`for (let i = 1; i < this.pointers.length; i++) {`)
             w.pushIndent()
@@ -174,7 +181,7 @@ class NativeModuleRecorderVisitor {
         this.nativeModuleRecorder.writeMethodImplementation(new Method("_StringLength", new NamedMethodSignature(IDLI32Type, [IDLPointerType], ["ptr"])), w => {
             w.writeLines(`return this.ptr2object<string>(ptr).length`)
         })
-        
+
         this.nativeModuleRecorder.writeMethodImplementation(new Method("_StringData", new NamedMethodSignature(IDLVoidType, [IDLPointerType, IDLUint8ArrayType, IDLNumberType], ["ptr", "buffer", "length"])), w => {
             w.writeLines(`let value = this.ptr2object<string>(ptr);`)
             w.writeLines(`(buffer as Uint8Array).set(encodeToData(value))`)
@@ -304,6 +311,12 @@ class NativeModuleRecorderVisitor {
             w.writeLines(`if (!inserted) throw Error("Cannot find sibling to insert")`)
             w.writeLines(`return 0`)
         })
+
+        for (const file of this.library.files) {
+            for (const peer of file.peersToGenerate.values()) {
+                this.printConstructMethod(peer, this.nativeModuleRecorder)
+            }
+        }
     }
 
     printClassField() {
@@ -315,16 +328,21 @@ class NativeModuleRecorderVisitor {
     }
 
     printConstructor(writer: LanguageWriter) {
-        const [paramType] = this.library.factory.generateCallback(
-            [createParameter('type', IDLI32Type)],
-            IDLStringType
-        )
-        writer.writeConstructorImplementation("NativeModuleRecorder", new NamedMethodSignature(IDLVoidType, [paramType], ["nameByNodeType"]), w => {
+        const callbackParameters = [createParameter('type', IDLI32Type)]
+        const callbackName = generateSyntheticFunctionName(callbackParameters, IDLStringType)
+        const callback = createCallback(callbackName, callbackParameters, IDLStringType,
+            { extendedAttributes: [{name: IDLExtendedAttributes.Synthetic}]})
+        const alternativeResolver = createAlternativeReferenceResolver(this.library, new Map([[
+            callbackName, callback
+        ]]))
+        const alternativeWriter = writer.fork({resolver: alternativeResolver})
+        alternativeWriter.writeConstructorImplementation("NativeModuleRecorder", new NamedMethodSignature(IDLVoidType, [createReferenceType(callbackName)], ["nameByNodeType"]), w => {
             w.writeSuperCall([])
             w.writeLines(`this.nameByNodeType = nameByNodeType`)
             w.writeLines(`this.pointers[NULL_POINTER] = null`)
             w.writeLines(`this.pointers[FINALIZER_POINTER] = (ptr: pointer) => { this.pointers[ptr as number] = null }`)
         })
+        writer.concat(alternativeWriter)
     }
 
     print(): void {
@@ -333,7 +351,7 @@ class NativeModuleRecorderVisitor {
 
         this.printUiElement()
         this.printOtherField()
-    
+
         for (const file of this.library.files) {
             for (const peer of file.peersToGenerate.values()) {
                 this.printInterface(peer)

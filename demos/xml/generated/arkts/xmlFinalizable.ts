@@ -12,17 +12,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// Not needed for now
 
-package idlize
+import { pointer, nullptr } from "@koalaui/interop"
 
-// public class Opt_Boolean <: Ark_ObjectBase {
-//     public var value: Bool
-//     public Opt_Boolean(v: Bool) {
-//         this.value = v;
-//     }
+export interface MaterializedBase {
+    getPeer(): Finalizable
+}
 
-//     override public func runtimeType(): RuntimeType {
-//         return RuntimeType.BOOLEAN;
-//     }
-// }
+export class Finalizable {
+    public ptr: pointer
+    public finalizerPtr: pointer
+
+    public static Empty: Finalizable = new Finalizable(nullptr, nullptr)
+
+    constructor(ptr: pointer, finalizerPtr: pointer) {
+        this.ptr = ptr
+        this.finalizerPtr = finalizerPtr
+    }
+
+    release(): pointer {
+        let result = this.ptr
+        this.ptr = nullptr
+        return result
+    }
+}

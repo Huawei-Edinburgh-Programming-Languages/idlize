@@ -14,15 +14,14 @@
 */
 import { pointer, nullptr, wrapCallback, callCallback } from "@koalaui/interop"
 import { Serializer } from "@arkoala/arkui/peers/Serializer"
-import { DeserializerBase } from "@arkoala/arkui/peers/DeserializerBase"
 import { Deserializer } from "@arkoala/arkui/peers/Deserializer"
+import { CallbackTransformer } from "@arkoala/arkui/peers/CallbackTransformer"
 import { MaterializedBase } from "@arkoala/arkui/MaterializedBase"
 import { checkArkoalaCallbacks } from "@arkoala/arkui/peers/CallbacksChecker"
 import { ArkButtonPeer } from "@arkoala/arkui/peers/ArkButtonPeer"
 import { ArkCommonPeer } from "@arkoala/arkui/peers/ArkCommonPeer"
 import { ArkCalendarPickerPeer } from "@arkoala/arkui/peers/ArkCalendarPickerPeer"
 import { ArkFormComponentPeer } from "@arkoala/arkui/peers/ArkFormComponentPeer"
-import { ArkNavigationPeer } from "@arkoala/arkui/peers/ArkNavigationPeer"
 import { ArkSideBarContainerPeer } from "@arkoala/arkui/peers/ArkSidebarPeer"
 import { ArkSideBarContainerComponent } from "@arkoala/arkui/ArkSidebar"
 import { ArkTabContentPeer } from "@arkoala/arkui/peers/ArkTabContentPeer"
@@ -74,66 +73,63 @@ function checkSerdeResult(name: string, value: any, expected: any) {
     }
 }
 
-function checkSerdeBaseLength() {
+function checkSerdeLength() {
     const ser = Serializer.hold()
     ser.writeLength("10px")
     ser.writeLength("11vp")
     ser.writeLength("12%")
     ser.writeLength("13lpx")
     ser.writeLength(14)
-    const des = new DeserializerBase(ser.asArray().buffer, ser.length())
-    checkSerdeResult("DeserializerBase.readLength, unit px", des.readLength(), "10px")
-    checkSerdeResult("DeserializerBase.readLength, unit vp", des.readLength(), "11vp")
-    checkSerdeResult("DeserializerBase.readLength, unit %", des.readLength(), "12%")
-    checkSerdeResult("DeserializerBase.readLength, unit lpx", des.readLength(), "13lpx")
-    checkSerdeResult("DeserializerBase.readLength, number", des.readLength(), 14)
+    const des = new Deserializer(ser.asArray().buffer, ser.length())
+    checkSerdeResult("Deserializer.readLength, unit px", des.readLength(), "10px")
+    checkSerdeResult("Deserializer.readLength, unit vp", des.readLength(), "11vp")
+    checkSerdeResult("Deserializer.readLength, unit %", des.readLength(), "12%")
+    checkSerdeResult("Deserializer.readLength, unit lpx", des.readLength(), "13lpx")
+    checkSerdeResult("Deserializer.readLength, number", des.readLength(), 14)
     ser.release()
 }
 
-function checkSerdeBaseText() {
+function checkSerdeText() {
     const ser = Serializer.hold()
     const text = "test text serialization/deserialization"
     ser.writeString(text)
-    const des = new DeserializerBase(ser.asArray().buffer, ser.length())
-    checkSerdeResult("DeserializerBase.readString", des.readString(), text)
+    const des = new Deserializer(ser.asArray().buffer, ser.length())
+    checkSerdeResult("Deserializer.readString", des.readString(), text)
     ser.release()
 }
 
-function checkSerdeBasePrimitive() {
+function checkSerdePrimitive() {
     const ser = Serializer.hold()
     ser.writeNumber(10)
     ser.writeNumber(10.5)
     ser.writeNumber(undefined)
-    const des = new DeserializerBase(ser.asArray().buffer, ser.length())
-    checkSerdeResult("DeserializerBase.readNumber, int", des.readNumber(), 10)
-    checkSerdeResult("DeserializerBase.readNumber, float", des.readNumber(), 10.5)
-    checkSerdeResult("DeserializerBase.readNumber, undefined", des.readNumber(), undefined)
+    const des = new Deserializer(ser.asArray().buffer, ser.length())
+    checkSerdeResult("Deserializer.readNumber, int", des.readNumber(), 10)
+    checkSerdeResult("Deserializer.readNumber, float", des.readNumber(), 10.5)
+    checkSerdeResult("Deserializer.readNumber, undefined", des.readNumber(), undefined)
     ser.release()
 }
 
-function checkSerdeBaseCustomObject() {
+function checkSerdeCustomObject() {
     const ser = Serializer.hold()
-    const pixelMap: PixelMap = {
-        isEditable: true,
-        isStrideAlignment: true,
-    }
-    ser.writeCustomObject("PixelMap", pixelMap)
-    const des = new DeserializerBase(ser.asArray().buffer, ser.length())
-    checkSerdeResult("DeserializerBase.readCustomObject, PixelMap",
-        JSON.stringify(pixelMap),
-        JSON.stringify(des.readCustomObject("PixelMap") as PixelMap))
+    const date = new Date(2024, 11, 28)
+    ser.writeCustomObject("Date", date)
+    const des = new Deserializer(ser.asArray().buffer, ser.length())
+    checkSerdeResult("Deserializer.readCustomObject, Date",
+        JSON.stringify(date),
+        JSON.stringify(des.readCustomObject("Date") as Date))
     ser.release()
 }
+
 
 function checkNodeAPI() {
     startNativeTest(checkNodeAPI.name, CALL_GROUP_LOG)
 
-    const ARKUI_TEXT = 1
     const id = 12
     const flags = 7
-    let ptr: pointer = nativeModule()._CreateNode(ARKUI_TEXT, id, flags)
-    let childPtr1: pointer = nativeModule()._CreateNode(ARKUI_TEXT, id + 1, flags)
-    let childPtr2: pointer = nativeModule()._CreateNode(ARKUI_TEXT, id + 2, flags)
+    let ptr: pointer = nativeModule()._ComponentRoot_construct(id, flags)
+    let childPtr1: pointer = nativeModule()._ComponentRoot_construct(id + 1, flags)
+    let childPtr2: pointer = nativeModule()._ComponentRoot_construct(id + 2, flags)
 
     let stackPtr: pointer = 0
     checkResult("BasicNodeAPI getNodeByViewStack",
@@ -224,6 +220,7 @@ function createDefaultWriteCallback(kind: CallbackKind, callback: object) {
             nativeModule()._TestGetManagedHolder(),
             nativeModule()._TestGetManagedReleaser(),
             nativeModule()._TestGetManagedCaller(kind),
+            nativeModule()._TestGetManagedCallerSync(kind)
         )
     }
 }
@@ -259,6 +256,74 @@ function enqueueCallback(
     readAndCallCallback(deserializer)
     /* libace released resource */
     nativeModule()._ReleaseArkoalaResource(resourceId)
+}
+
+function checkCallbackWithReturn() {
+    nativeModule()._TestSetArkoalaCallbackCallerSync()
+
+    let callResult1 = "NOT_CALLED"
+
+    enqueueCallback(
+        createDefaultWriteCallback(CallbackKind.Kind_Callback_Number_Boolean, (x:number): boolean => {
+            return x > 10
+        }),
+        (deserializer) => {
+            const callback = deserializer.readCallback_Number_Boolean(true)
+            const result1 = callback(42)
+            const result2 = callback(0)
+            callResult1 = `CALLED, value1=${result1} value2=${result2}`
+        },
+    )
+
+    assertEquals("Sync Callback 1 with return type read&called immediately", "CALLED, value1=true value2=false", callResult1)
+}
+
+function checkTwoSidesCallbackSync() {
+    nativeModule()._TestSetArkoalaCallbackCallerSync()
+
+    let callResult1 = "NOT_CALLED"
+    enqueueCallback(
+        createDefaultWriteCallback(CallbackKind.Kind_Callback_Number_Void, (value: number): void => {
+            callResult1 = `CALLED, value=${value}`
+        }),
+        (deserializer) => {
+            const callback = deserializer.readCallback_Number_Void(/* isSync */ true)
+            callback(194)
+        },
+    )
+
+    let callResult2 = ""
+    let callResultExpected2 = ""
+    const call2Count = 100
+
+    const func = (value:number) => {
+        if (value > 50) {
+            callResult2 += "more then 50!"
+        } else {
+            callResult2 += "less them 50!"
+        }
+    }
+
+    function doTest(f: (x:number) => void) {
+        for (let i = 0; i < call2Count; ++i) {
+            f(i)
+        }
+    }
+
+    doTest(func)
+    callResultExpected2 = callResult2
+    callResult2 = ""
+
+    enqueueCallback(
+        createDefaultWriteCallback(CallbackKind.Kind_Callback_Number_Void, func),
+        (deserializer) => {
+            const enumerateCallback = deserializer.readCallback_Number_Void(/* isSync */ true)
+            doTest(enumerateCallback)
+        },
+    )
+
+    assertEquals("Sync Callback 1 read&called immediately", "CALLED, value=194", callResult1)
+    assertEquals("Sync Callback 2 read&called immediately", callResultExpected2, callResult2)
 }
 
 function checkTwoSidesCallback() {
@@ -335,11 +400,15 @@ function checkTwoSidesPromise() {
     }, 0)
 }
 
+function checkTransformedCallback() {
+    
+}
+
 function checkWriteFunction() {
     const s = Serializer.hold()
     s.writeFunction((value: number, flag: boolean) => flag ? value + 10 : value - 10)
     // TBD: id is small number
-    const id = s.asArray()[0]
+    const id = new Int32Array(s.asArray().buffer)[0]
     s.release()
     const args = Serializer.hold()
     args.writeNumber(20)
@@ -352,7 +421,7 @@ function checkWriteFunction() {
 function checkButton() {
     startNativeTest(checkButton.name, CALL_GROUP_LOG)
 
-    let peer = ArkButtonPeer.create(ArkUINodeType.Button)
+    let peer = ArkButtonPeer.create()
 
     const lastResourceId = ResourceHolder.instance().registerAndHold({})
     ResourceHolder.instance().release(lastResourceId)
@@ -377,7 +446,7 @@ function checkButton() {
 function checkCalendar() {
     startNativeTest(checkCalendar.name, CALL_GROUP_LOG)
 
-    let peer = ArkCalendarPickerPeer.create(ArkUINodeType.CalendarPicker)
+    let peer = ArkCalendarPickerPeer.create()
     checkResult("setCalendarOptions: hintRadius", () => peer.setCalendarPickerOptionsAttribute({ hintRadius: 79 }),
         `setCalendarPickerOptions({.tag=ARK_TAG_OBJECT, .value={.hintRadius={.tag=ARK_TAG_OBJECT, .value={.selector=0, .value0={.tag=102, .i32=79}}}, .selected={.tag=ARK_TAG_UNDEFINED, .value={}}}})`)
     const date = new Date()
@@ -394,7 +463,7 @@ function checkCalendar() {
 function checkFormComponent() {
     startNativeTest(checkFormComponent.name, CALL_GROUP_LOG)
 
-    let peer = ArkFormComponentPeer.create(ArkUINodeType.FormComponent)
+    let peer = ArkFormComponentPeer.create()
     checkResult("size int", () => peer.sizeAttribute({ width: 5, height: 6 }),
         `size({.width={.tag=102, .i32=5}, .height={.tag=102, .i32=6}})`)
     checkResult("size float", () => peer.sizeAttribute({ width: 5.5, height: 6.789 }),
@@ -408,7 +477,7 @@ function checkFormComponent() {
 function checkCommon() {
     startNativeTest(checkCommon.name, CALL_GROUP_LOG)
 
-    let peer = ArkCommonPeer.create(ArkUINodeType.Common)
+    let peer = ArkCommonPeer.create()
     // check backgroundBlurStyle and check the heritance by the way
     let backgroundBlurStyle: BackgroundBlurStyleOptions = {
         colorMode: 0,
@@ -450,7 +519,7 @@ function checkOverloads() {
         }
     }
 
-    const peer = ArkSideBarContainerPeer.create(ArkUINodeType.SideBarContainer)
+    const peer = ArkSideBarContainerPeer.create()
     const component = new ArkSideBarContainerComponentTest(peer)
     checkResult("Test number implementation for SideBarContainer.minSideBarWidth",
         () => component.minSideBarWidth(11),
@@ -464,18 +533,10 @@ function checkOverloads() {
     stopNativeTest(CALL_GROUP_LOG)
 }
 
-function checkNavigation() {
-    startNativeTest(checkNavigation.name, CALL_GROUP_LOG)
-    let peer = ArkNavigationPeer.create(ArkUINodeType.Navigation)
-    checkResult("backButtonIcon", () => peer.backButtonIconAttribute("attr"),
-        `backButtonIcon({.selector=0, .value0={.chars="attr", .length=4}})`)
-    stopNativeTest(CALL_GROUP_LOG)
-}
-
 function checkTabContent() {
     startNativeTest(checkTabContent.name, CALL_GROUP_LOG)
 
-    let peer = ArkTabContentPeer.create(ArkUINodeType.TabContent)
+    let peer = ArkTabContentPeer.create()
     const subTabBarStyle: SubTabBarStyle = new SubTabBarStyle("ContentResource").id("subId")
     assertEquals("SubTabBarStyle content", "ContentResource", subTabBarStyle._content)
     assertEquals("SubTabBarStyle id", "subId", subTabBarStyle._id)
@@ -543,7 +604,7 @@ function checkCanvasRenderingContext2D() {
 }
 
 function checkPerf2(count: number) {
-    let peer = ArkButtonPeer.create(ArkUINodeType.Button)
+    let peer = ArkButtonPeer.create()
     let start = performance.now()
     for (let i = 0; i < count; i++) {
         peer.backdropBlurAttribute(i, i % 2 == 0 ? undefined : { grayscale: [1, 2] })
@@ -553,7 +614,7 @@ function checkPerf2(count: number) {
 }
 
 function checkPerf3(count: number) {
-    let peer = ArkButtonPeer.create(ArkUINodeType.Button)
+    let peer = ArkButtonPeer.create()
     let start = performance.now()
     for (let i = 0; i < count; i++) {
         peer.widthAttribute(testLength_10_lpx)
@@ -745,12 +806,13 @@ function main() {
     // Place where mock of ACE is located.
     process.env.ACE_LIBRARY_PATH = __dirname + "/../../../native"
 
-    // checkArrayBuffer()
+    checkCallbackWithReturn()
+    checkTwoSidesCallbackSync()
 
-    checkSerdeBaseLength()
-    checkSerdeBaseText()
-    checkSerdeBasePrimitive()
-    checkSerdeBaseCustomObject()
+    checkSerdeLength()
+    checkSerdeText()
+    checkSerdePrimitive()
+    checkSerdeCustomObject()
 
     checkPerf2(5 * 1000 * 1000)
     checkPerf3(5 * 1000 * 1000)
@@ -770,7 +832,6 @@ function main() {
     checkFormComponent()
     checkCommon()
     checkOverloads()
-    checkNavigation()
     setEventsAPI()
     checkEvent_Primitive()
     checkEvent_Interface_Optional()

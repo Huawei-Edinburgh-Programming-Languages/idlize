@@ -18,11 +18,23 @@ import { Language } from '../Language'
 
 export class PeerGeneratorConfig {
     public static commonMethod = ["CommonMethod"]
-    public static customNodeTypes = ["Root", "ComponentRoot", "CustomNode"]
+    public static customNodeTypes = ["CustomNode"]
 
     public static ignoreSerialization = [
         "Array", "Callback", "ErrorCallback", "Length", "AttributeModifier",
         "Number", "String", "Function", "Optional", "RelativeIndexable",
+    ]
+
+    public static handWrittenComponents = [
+        "LocalStorage",
+        "SyncedPropertyOneWay",
+        "SubscribedAbstractProperty",
+        "SyncedPropertyTwoWay",
+        "Navigation",
+        "CustomComponent",
+        "AttributeModifier",
+        "AbstractProperty", 
+        "ISinglePropertyChangeSubscriber"
     ]
 
     public static ignorePeerMethod = ["attributeModifier"]
@@ -43,6 +55,8 @@ export class PeerGeneratorConfig {
     public static invalidEvents: string[] = []
 
     public static rootComponents = [
+        "Root",
+        "ComponentRoot",
         "CommonMethod",
         "SecurityComponentMethod",
         "CommonTransition",
@@ -89,6 +103,8 @@ export class PeerGeneratorConfig {
         "Configuration",
         "UIGestureEvent",
         "GestureHandler",           // class with generics
+        "GestureGroupHandler",
+        "ContentModifier",
         // constant values need to be generated
         // "equals(id: TextMenuItemId): boolean" method leads to the "cycle detected" message
         // "TextMenuItemId", // SyntaxError: Unexpected token, expected 'private' or identifier [ArkTextCommonInterfaces.ts:52:24]
@@ -101,8 +117,6 @@ export class PeerGeneratorConfig {
 
     private static ignoredEntriesCommon = new Set([
         // Predefined types
-        "Dimension",
-        "Length",
         "Optional",
 
         // common
@@ -112,14 +126,10 @@ export class PeerGeneratorConfig {
         "DataChangeOperation",
         "DataReloadOperation",
         "DisturbanceFieldOptions",
-        "EmitterProperty",
         "EntryOptions",
         "Environment",
-        "GestureGroupGestureHandlerOptions",
         "GestureGroupHandler",
         "IDataSource",
-        "Layoutable",
-        "LayoutChild",
         "LazyForEachInterface",  // pulls in DataChangeListener
         "LocalStorage",
         "OffscreenCanvas",
@@ -145,15 +155,23 @@ export class PeerGeneratorConfig {
         "SheetDismiss",
         "SubTabBarStyle",
         "TextPickerDialog",
+        "Dimension",
     ])
 
-    public static ignoredCallbacks = new Set([
-        "MonitorDecorator" //vararg
+    private static ignoredEntriesCJ = new Set([
+        "CallbackResource",
+        "Dimension",
+        "RuntimeType"
+    ])
+
+    public static ignoredCallbacks = new Set<string>([
+        // Empty for now
     ])
 
     static ignoreEntry(name: string, language: Language) {
         return PeerGeneratorConfig.ignoredEntriesCommon.has(name) ||
-            language === Language.JAVA && PeerGeneratorConfig.ignoredEntriesJava.has(name)
+            language === Language.JAVA && PeerGeneratorConfig.ignoredEntriesJava.has(name) ||
+            language === Language.CJ && PeerGeneratorConfig.ignoredEntriesCJ.has(name)
     }
 
     static ignoreMethod(name: string, language: Language) {
@@ -178,21 +196,6 @@ export class PeerGeneratorConfig {
 
     static isKnownParametrized(name: string | undefined) : boolean {
         return name != undefined && PeerGeneratorConfig.knownParametrized.includes(name)
-    }
-
-    static isConflictedDeclaration(node: ts.Declaration): boolean {
-        if (!this.needInterfaces) return false
-        // has same named class and interface
-        if ((ts.isInterfaceDeclaration(node) || ts.isClassDeclaration(node)) && node.name?.text === 'LinearGradient') return true
-        // just has ugly dependency WrappedBuilder - there is conflict in generic types
-        if (ts.isInterfaceDeclaration(node) && node.name.text === 'ContentModifier') return true
-        // complicated type arguments
-        if (ts.isClassDeclaration(node) && node.name?.text === 'TransitionEffect') return true
-        // inside namespace
-        if (ts.isEnumDeclaration(node) && node.name.text === 'GestureType') return true
-        // no return type in some methods
-        if (ts.isInterfaceDeclaration(node) && node.name.text === 'LayoutChild') return true
-        return false
     }
 
     static cppPrefix = "GENERATED_"

@@ -40,9 +40,10 @@ import { generateTracker } from "./peer-generation/Tracker"
 import { PeerLibrary } from "./peer-generation/PeerLibrary"
 import { PeerFile } from "./peer-generation/PeerFile"
 import {
+    IDLInteropPredefinesVisitor,
     IdlPeerGeneratorVisitor,
     IdlPeerProcessor,
-    IdlPredefinedGeneratorVisitor
+    IDLPredefinesVisitor,
 } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
 import { generateOhos } from "./peer-generation/OhosGenerator"
 import * as webidl2 from "webidl2"
@@ -56,6 +57,7 @@ import { PrimitiveType } from "./peer-generation/ArkPrimitiveType"
 import { IdlSkoalaLibrary, IldSkoalaFile } from "./skoala-generation/idl/idlSkoalaLibrary"
 import { generateIdlSkoala } from "./skoala-generation/SkoalaGeneration"
 import { IdlWrapperProcessor } from "./skoala-generation/idl/idlSkoalaLibrary"
+import { fillSyntheticDeclarations } from "./peer-generation/idl/SyntheticDeclarationsFiller"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -95,6 +97,7 @@ const options = program
     .option('--tracker-status <file>', 'Tracker status file)')
     .option('--plugin <file>', 'File with generator\'s plugin')
     .option('--default-idl-package <name>', 'Name of the default package for generated IDL')
+    .option('--no-commented-code', 'Do not generate commented code in modifiers')
     .parse()
     .opts()
 
@@ -309,7 +312,7 @@ if (options.dts2peer) {
             .map(it => {
                 const idlFile = path.resolve(path.join(dir, it))
                 const content = fs.readFileSync(path.resolve(path.join(dir, it))).toString()
-                const nodes = webidl2.parse(content).map(it => toIDLNode(idlFile, it))
+                const nodes = webidl2.parse(content).filter(it => !!it.type).map(it => toIDLNode(idlFile, it))
                 return new PeerFile(idlFile, nodes, new Set(), true)
             })
     }
@@ -320,19 +323,28 @@ if (options.dts2peer) {
     const idlLibrary = new PeerLibrary(lang, toSet(options.generateInterface))
     // collect predefined files
     scanPredefinedDirectory(PREDEFINED_PATH, "sys").forEach(file => {
-        IdlPredefinedGeneratorVisitor.create({
+        new IDLInteropPredefinesVisitor({
             sourceFile: file.originalFilename,
             peerLibrary: idlLibrary,
-            peerFile: file
-        }, 'sys').visitWholeFile()
+            peerFile: file,
+        }).visitWholeFile()
     })
     scanPredefinedDirectory(PREDEFINED_PATH, "src").forEach(file => {
-        IdlPredefinedGeneratorVisitor.create({
+        new IDLPredefinesVisitor({
             sourceFile: file.originalFilename,
             peerLibrary: idlLibrary,
-            peerFile: file
-        }, 'src').visitWholeFile()
+            peerFile: file,
+        }).visitWholeFile()
     })
+    if (["arkoala", "libace", "all", "tracker"].includes(options.generatorTarget)) {
+        scanPredefinedDirectory(PREDEFINED_PATH, "arkoala").forEach(file => {
+            new IDLPredefinesVisitor({
+                sourceFile: file.originalFilename,
+                peerLibrary: idlLibrary,
+                peerFile: file,
+            }).visitWholeFile()
+        })
+    }
 
     // First convert DTS to IDL
     generate(
@@ -379,7 +391,7 @@ if (options.dts2peer) {
                     })
                     visitor.visitWholeFile()
                 })
-                idlLibrary.generateSynteticsRequired()
+                fillSyntheticDeclarations(idlLibrary)
                 const peerProcessor = new IdlPeerProcessor(idlLibrary)
                 peerProcessor.process()
                 idlLibrary.analyze()
@@ -404,6 +416,7 @@ if (options.dts2peer) {
                         outDir: outDir,
                         libaceDestination: options.libaceDestination,
                         apiVersion: apiVersion,
+                        commentedCode: options.commentedCode,
                     }, idlLibrary)
                 }
                 if (options.generatorTarget == "tracker") {
