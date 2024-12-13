@@ -1847,14 +1847,14 @@
 |`caretPosition`| Function | Spirin Andrey | testskipped |  |
 |`setTextSelection`| Function | Spirin Andrey | testskipped |  |
 |`stopEditing`| Function |  Spirin Andrey | testskipped |  |
-|*TextPickerDialog*| *Class* | Ekaterina Stepanova | devdone | |
-|`show`| Function | Ekaterina Stepanova | devdone | |
+|*TextPickerDialog*| *Class* | Ekaterina Stepanova | done | |
+|`show`| Function | Ekaterina Stepanova | done | |
 |*TextTimerController*| *Class* |Ekaterina Stepanova| done |  |
 |`start`| Function |Ekaterina Stepanova| done |  |
 |`pause`| Function |Ekaterina Stepanova| done |  |
 |`reset`| Function |Ekaterina Stepanova| done |  |
-|*TimePickerDialog*| *Class* | Ekaterina Stepanova | blocked IDL | |
-|`show`| Function | Ekaterina Stepanova | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
+|*TimePickerDialog*| *Class* | Ekaterina Stepanova | done | |
+|`show`| Function | Ekaterina Stepanova | done | |
 |*VideoController*| *Class* | Erokhin Ilya | done |  |
 |`start`| Function | Erokhin Ilya | done |  |
 |`pause`| Function | Erokhin Ilya | done |  |
