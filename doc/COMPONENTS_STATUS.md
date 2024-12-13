@@ -1478,16 +1478,16 @@
 |`show`| Function | Ekaterina Stepanova | in progress | |
 |*CanvasGradient*| *Class* | Vadim Voronov | in progress | |
 |`addColorStop`| Function | Vadim Voronov | in progress | |
-|*CanvasPath*| *Class* | Vadim Voronov | |  |
-|`arc`| Function | Vadim Voronov | |  |
-|`arcTo`| Function | Vadim Voronov | |  |
-|`bezierCurveTo`| Function | Vadim Voronov |  |  |
-|`closePath`| Function | Vadim Voronov |  |  |
-|`ellipse`| Function | Vadim Voronov |  |  |
-|`lineTo`| Function | Vadim Voronov |  |  |
-|`moveTo`| Function | Vadim Voronov |  |  |
-|`quadraticCurveTo`| Function | Vadim Voronov |  |  |
-|`rect`| Function | Vadim Voronov |  |  |
+|*CanvasPath*| *Class* | Kovalev Sergey |in progress |  |
+|`arc`| Function | Kovalev Sergey | in progress |  |
+|`arcTo`| Function | Kovalev Sergey | in progress |  |
+|`bezierCurveTo`| Function | Kovalev Sergey | in progress  |  |
+|`closePath`| Function | Kovalev Sergey | in progress |  |
+|`ellipse`| Function | Kovalev Sergey | in progress |  |
+|`lineTo`| Function | Kovalev Sergey | in progress |  |
+|`moveTo`| Function | Kovalev Sergey | in progress |  |
+|`quadraticCurveTo`| Function | Kovalev Sergey | in progress |  |
+|`rect`| Function | Kovalev Sergey | in progress |  |
 |*Path2D*| *Class* | Vadim Voronov | in progress | |
 |`addPath`| Function | Vadim Voronov | in progress | |
 |*CanvasPattern*| *Class* | Vadim Voronov | in progress |  |
