@@ -238,7 +238,7 @@
 |`shadow`| Function | Roman Sedaikin | done | |
 |`clip`| Function | Skroba Gleb |  blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
 |`clipShape`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
-|`mask`| Function | Maksimov Nikita | devdone | |
+|`mask`| Function | Maksimov Nikita | done | |
 |`maskShape`| Function | Dmitry A Smirnov| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`key`| Function | Lobah Mikhail | done | |
 |`id`| Function | Erokhin Ilya | done |  |
@@ -1600,10 +1600,10 @@
 |`combine`| Function | Andrey Khudenkikh | blocked IDL | |
 |*PixelMapMock*| *Class* | Maksimov Nikita | done | |
 |`release`| Function | Maksimov Nikita | done | |
-|*ProgressMask*| *Class* | Maksimov Nikita | devdone | |
-|`updateProgress`| Function | Maksimov Nikita | devdone | |
-|`updateColor`| Function | Maksimov Nikita | devdone | |
-|`enableBreathingAnimation`| Function | Maksimov Nikita | devdone | |
+|*ProgressMask*| *Class* | Maksimov Nikita | done | |
+|`updateProgress`| Function | Maksimov Nikita | done | |
+|`updateColor`| Function | Maksimov Nikita | done | |
+|`enableBreathingAnimation`| Function | Maksimov Nikita | done | |
 |*AttributeModifier*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`applyNormalAttribute`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`applyPressedAttribute`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
@@ -1837,9 +1837,9 @@
 |`getGlyphPositionAtCoordinate`| Function | Andrey Khudenkikh | blocked IDL | |
 |`getLineMetrics`| Function | Andrey Khudenkikh | blocked IDL | |
 |`getRectsForRange`| Function | Andrey Khudenkikh | blocked IDL | |
-|*TextMenuItemId*| *Class* | Maksimov Nikita | devdone | |
-|`of`| Function | Maksimov Nikita | devdone | |
-|`equals`| Function | Maksimov Nikita | devdone | |
+|*TextMenuItemId*| *Class* | Maksimov Nikita | done | |
+|`of`| Function | Maksimov Nikita | done | |
+|`equals`| Function | Maksimov Nikita | done | |
 |*EditMenuOptions*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onCreateMenu`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onMenuItemClick`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
