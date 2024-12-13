@@ -30,7 +30,7 @@ import { createDestroyPeerMethod, MaterializedClass, MaterializedMethod } from "
 import { groupBy } from "../../util";
 import { CppLanguageWriter, createLanguageWriter, createTypeNameConvertor, LanguageWriter, printMethodDeclaration } from "../LanguageWriters";
 import { LibaceInstall } from "../../Install";
-import { IDLAnyType, IDLBooleanType, IDLFunctionType, IDLPointerType, IDLStringType, IDLThisType, IDLType, isNamedNode, isOptionalType, isReferenceType } from "../../idl";
+import { IDLAnyType, IDLBooleanType, IDLFunctionType, IDLPointerType, IDLStringType, IDLThisType, IDLType, isOptionalType, isReferenceType } from "../../idl";
 import { createConstructPeerMethod, PeerClass } from "../PeerClass";
 import { PeerMethod } from "../PeerMethod";
 import { Language } from "../../Language";
@@ -188,7 +188,7 @@ export class ModifierVisitor {
         }
     }
 
-    printMethodProlog(printer: LanguageWriter, method: PeerMethod) {
+    printMethodPrologue(printer: LanguageWriter, method: PeerMethod) {
         const apiParameters = method.generateAPIParameters(
             createTypeNameConvertor(Language.CPP, getReferenceResolver(this.library))
         )
@@ -197,23 +197,23 @@ export class ModifierVisitor {
         printer.pushIndent()
     }
 
-    printMethodEpilog(printer: LanguageWriter) {
+    printMethodEpilogue(printer: LanguageWriter) {
         printer.popIndent()
         printer.print(`}`)
     }
 
     printRealAndDummyModifier(method: PeerMethod, clazz: PeerClass) {
-        this.printMethodProlog(this.dummy, method)
-        this.printMethodProlog(this.real, method)
+        this.printMethodPrologue(this.dummy, method)
+        this.printMethodPrologue(this.real, method)
         this.printDummyImplFunctionBody(method)
         this.printModifierImplFunctionBody(method, clazz)
-        this.printMethodEpilog(this.dummy)
-        this.printMethodEpilog(this.real)
+        this.printMethodEpilogue(this.dummy)
+        this.printMethodEpilogue(this.real)
 
         this.modifiers.print(`${method.implNamespaceName}::${method.implName},`)
     }
 
-    printClassProlog(clazz: PeerClass) {
+    printClassPrologue(clazz: PeerClass) {
         const component = clazz.componentName
         const modifierStructImpl = `ArkUI${component}ModifierImpl`
 
@@ -226,7 +226,7 @@ export class ModifierVisitor {
         this.modifierList.print(`Get${component}Modifier,`)
     }
 
-    printClassEpilog(clazz: PeerClass) {
+    printClassEpilogue(clazz: PeerClass) {
         const name = clazz.componentName
         const modifierStructImpl = `ArkUI${name}ModifierImpl`
 
@@ -258,7 +258,7 @@ export class ModifierVisitor {
     }
 
     printPeerClassModifiers(clazz: PeerClass) {
-        this.printClassProlog(clazz)
+        this.printClassPrologue(clazz)
         // TODO: move to Object.groupBy when move to nodejs 21
         const namespaces: Map<string, PeerMethod[]> =
             groupBy([createConstructPeerMethod(clazz)].concat(clazz.methods), it => it.implNamespaceName)
@@ -269,7 +269,7 @@ export class ModifierVisitor {
             )
             this.popNamespace(namespaceName, false)
         })
-        this.printClassEpilog(clazz)
+        this.printClassEpilogue(clazz)
     }
 
     // TODO: have a proper Peer module visitor
@@ -294,7 +294,7 @@ class AccessorVisitor extends ModifierVisitor {
     }
 
     printRealAndDummyAccessor(clazz: MaterializedClass) {
-        this.printMaterializedClassProlog(clazz)
+        this.printMaterializedClassPrologue(clazz)
         // Materialized class methods share the same namespace
         // so take the first one.
         const namespaceName = clazz.methods[0].implNamespaceName
@@ -306,12 +306,12 @@ class AccessorVisitor extends ModifierVisitor {
             this.accessors.print(`${method.implNamespaceName}::${method.implName},`)
         })
         this.popNamespace(namespaceName, false)
-        this.printMaterializedClassEpilog(clazz)
+        this.printMaterializedClassEpilogue(clazz)
 
         this.printStruct(clazz)
     }
 
-    printMaterializedClassProlog(clazz: MaterializedClass) {
+    printMaterializedClassPrologue(clazz: MaterializedClass) {
         const accessor = `${clazz.className}Accessor`
         this.accessors.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUI${accessor}* Get${accessor}()`)
         this.accessors.print("{")
@@ -321,7 +321,7 @@ class AccessorVisitor extends ModifierVisitor {
         this.accessorList.print(`Get${accessor},`)
     }
 
-    printMaterializedClassEpilog(clazz: MaterializedClass) {
+    printMaterializedClassEpilogue(clazz: MaterializedClass) {
         const accessor = `${clazz.className}Accessor`
         this.accessors.popIndent()
         this.accessors.print(`};`)
@@ -332,9 +332,9 @@ class AccessorVisitor extends ModifierVisitor {
     }
 
     printMaterializedMethod(printer: LanguageWriter, method: MaterializedMethod, printBody: (m: MaterializedMethod) => void) {
-        this.printMethodProlog(printer, method)
+        this.printMethodPrologue(printer, method)
         printBody(method)
-        this.printMethodEpilog(printer)
+        this.printMethodEpilogue(printer)
     }
 
     printStruct(clazz: MaterializedClass): void {
