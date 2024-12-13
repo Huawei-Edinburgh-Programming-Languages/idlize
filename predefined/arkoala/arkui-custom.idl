@@ -1,14 +1,17 @@
 // Context
-[Entity=Class]
-interface BaseContext {
-    attribute boolean stageMode;
-};
+
+// Fails in Java
+// Materialized class Context implements BaseContext
+//[Entity=Class]
+//interface BaseContext {
+//    attribute boolean stageMode;
+//};
 
 // [Async, Synthetic]
 // callback AsyncCallback_String_Void = void (String result);
 
-[Entity=Class]
-interface Context: BaseContext {
+//[Entity=Class]
+//interface Context: BaseContext {
     // attribute resmgr.ResourceManager resourceManager;
     // attribute ApplicationInfo applicationInfo;
     // attribute String cacheDir;
@@ -22,10 +25,10 @@ interface Context: BaseContext {
     // attribute String cloudFileDir;
     // attribute EventHub eventHub;
     // attribute contextConstant.AreaMode area;
-    [Deprecated]
-    Context createBundleContext(String bundleName);
-    [Deprecated]
-    Context createModuleContext(String moduleName);
+//    [Deprecated]
+//    Context createBundleContext(String bundleName);
+//    [Deprecated]
+//    Context createModuleContext(String moduleName);
     // [Deprecated]
     // Context createModuleContext(String bundleName, String moduleName);
     // resmgr.ResourceManager createSystemHspModuleResourceManager(String bundleName, String moduleName);
@@ -33,7 +36,7 @@ interface Context: BaseContext {
     // void getGroupDir(String dataGroupID, AsyncCallback_String_Void callback_);
     // async String getGroupDir(String dataGroupID);
     // resmgr.ResourceManager createModuleResourceManager(String bundleName, String moduleName);
-};
+//};
 
 // Cursor
 dictionary PointerStyle {
