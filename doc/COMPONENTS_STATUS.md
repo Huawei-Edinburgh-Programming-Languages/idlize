@@ -1,9 +1,9 @@
 | Component | Function | Owner | Status (done=merged **with** UT, devdone=implemented and pushed, testskipped=merged **without** UT, blocked=blocked by IDL)|issue/comment|
 | --------- | -------- | ----- | ------ |------|
-|*AbilityComponent*| *Component* | Tuzhilkin Ivan | in progress| deprecated |
-|`setAbilityComponentOptions`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`onConnect`| Function | Tuzhilkin Ivan | in progress| deprecated |
-|`onDisconnect`| Function | Tuzhilkin Ivan | in progress| deprecated |
+|*AbilityComponent*| *Component* | Tuzhilkin Ivan | deprecated | deprecated |
+|`setAbilityComponentOptions`| Function | Tuzhilkin Ivan | deprecated  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`onConnect`| Function | Tuzhilkin Ivan | deprecated | deprecated |
+|`onDisconnect`| Function | Tuzhilkin Ivan | deprecated | deprecated |
 |*AlphabetIndexer*| *Component* |Ekaterina Stepanova| blocked |  |
 |`setAlphabetIndexerOptions`| Function |Ekaterina Stepanova| done |  |
 |`onSelected`| Function |Ekaterina Stepanova| done |  |
@@ -396,7 +396,7 @@
 |`visibility`| Function | Vadim Voronov | done | |
 |`onAcquired`| Function | Vadim Voronov | blocked IDL | implemented with narrow range of ID, https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
 |`onError`| Function | Vadim Voronov | blocked IDL | implemented with narrow range of erroCode,https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
-|`onRouter`| Function | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50, deprecated |
+|`onRouter`| Function | Vadim Voronov | deprecated | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50, deprecated |
 |`onUninstall`| Function | Vadim Voronov | blocked IDL | implemented with narrow range of ID, https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
 |`onLoad`| Function | Vadim Voronov | in progress | |
 |*FormLink*| *Component* | Dmitry A Smirnov| done |  |
@@ -463,8 +463,8 @@
 |`span`| Function |Lobah Mikhail| done |  |
 |`gridColOffset`| Function |Lobah Mikhail| done|  |
 |`order`| Function |Lobah Mikhail| done|  |
-|*GridContainer*| *Component* |Lobah Mikhail| in progress | deprecated |
-|`setGridContainerOptions`| Function |Lobah Mikhail| in progress| deprecated |
+|*GridContainer*| *Component* |Lobah Mikhail| deprecated | deprecated |
+|`setGridContainerOptions`| Function |Lobah Mikhail|deprecated | deprecated |
 |*GridRow*| *Component* |Lobah Mikhail| done|  |
 |`setGridRowOptions`| Function |Lobah Mikhail| done|  |
 |`onBreakpointChange`| Function |Lobah Mikhail| done |  |
@@ -654,7 +654,7 @@
 |`translate`| Function | Erokhin Ilya | testskipped | |
 |`scale`| Function | Erokhin Ilya | testskipped | |
 |`opacity`| Function | Erokhin Ilya | testskipped | |
-|*Panel*| *Component* | Pavelyev Ivan| done |  |
+|*Panel*| *Component* | Pavelyev Ivan| done | deprecated  |
 |`setPanelOptions`| Function | Pavelyev Ivan| done |  |
 |`mode`| Function |Pavelyev Ivan| done |  |
 |`type`| Function | Pavelyev Ivan | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IAY6MM |
@@ -1676,8 +1676,8 @@
 |*Matrix2D*| *Class* | Vadim Voronov | in progress | |
 |`identity`| Function | Vadim Voronov | done | |
 |`invert`| Function | Vadim Voronov | done | |
-|`multiply`| Function | Vadim Voronov | in progress | deprecated |
-|`rotate`| Function | Vadim Voronov | in progress | deprecated |
+|`multiply`| Function | Vadim Voronov | deprecated | deprecated |
+|`rotate`| Function | Vadim Voronov | deprecated | deprecated |
 |`translate`| Function | Vadim Voronov | done | |
 |`scale`| Function | Vadim Voronov | done | |
 |`getScaleX`| Function | Vadim Voronov | blocked IDL | implemented without return val,https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
