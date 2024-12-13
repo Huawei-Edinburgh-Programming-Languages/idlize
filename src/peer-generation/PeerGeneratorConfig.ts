@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 
-import * as ts from 'typescript'
 import { Language } from '../Language'
 
 export class PeerGeneratorConfig {
@@ -25,7 +24,7 @@ export class PeerGeneratorConfig {
         "Number", "String", "Function", "Optional", "RelativeIndexable",
     ]
 
-    public static handWrittenComponents = [
+    public static handWritten = [
         "LocalStorage",
         "SyncedPropertyOneWay",
         "SubscribedAbstractProperty",
@@ -33,8 +32,28 @@ export class PeerGeneratorConfig {
         "Navigation",
         "CustomComponent",
         "AttributeModifier",
-        "AbstractProperty", 
-        "ISinglePropertyChangeSubscriber"
+        "AbstractProperty",
+        "ISinglePropertyChangeSubscriber",
+        "NavigationMenuItem",
+        "NavDestinationContext",
+        "SystemBarStyle",
+        "NavDestinationCommonTitle",
+        "NavDestinationCustomTitle",
+        "NavigationTitleOptions",
+        "ToolbarItem",
+        "NavigationToolbarOptions",
+        "NavigationOptions",
+        "NavPathInfo",
+        "NavPathStack",
+        "NavigationInterception",
+        "NavigationAttribute",
+        "NavContentInfo",
+        "NavigationCommonTitle",
+        "NavigationCustomTitle",
+        "AbstractProperty",
+        "ISinglePropertyChangeSubscriber",
+        "PageTransitionEnterInterface",
+        "PageTransitionExitInterface"
     ]
 
     public static ignorePeerMethod = ["attributeModifier"]
