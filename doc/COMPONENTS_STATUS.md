@@ -1638,8 +1638,8 @@
 |`addOwningProperty`| Function | Tuzhilkin Ivan | in progress | |
 |`removeOwningProperty`| Function | Tuzhilkin Ivan | in progress | |
 |`removeOwningPropertyById`| Function | Tuzhilkin Ivan | in progress | |
-|*ContextMenu*| *Class* | Tuzhilkin Ivan | in progress | |
-|`close`| Function | Tuzhilkin Ivan | in progress | |
+|*ContextMenu*| *Class* | Tuzhilkin Ivan | blocked IDL | |
+|`close`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB84T |
 |*CustomDialogController*| *Class* | Erokhin Ilya | blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`open`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`close`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
