@@ -811,10 +811,30 @@ function checkPassToNativeBuffer() {
     }, "new PixelMap()[return (PixelMapPeer*) 100]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]readPixelsToBufferSync({.data=nullptr, .length=256})")
 }
 
+function checkReadAndMutateBuffer() {
+    const bufferSize = 10
+    const buffer = new ArrayBuffer(bufferSize)
+    const uint8array = new Uint8Array(buffer)
+    for (let i = 0; i < bufferSize; ++i) {
+        uint8array[i] = i + 1
+    }
+    const serializer = Serializer.hold()
+    serializer.writeBuffer(buffer)
+    nativeModule()._TestReadAndMutateManagedBuffer(serializer.asArray(), serializer.length())
+
+    let isSame = true
+    for (let i = 0; i < bufferSize; ++i) {
+        isSame = isSame && (i + 1) * 2 === uint8array[i]
+    }
+    serializer.release()
+    assertTrue("Buffer mutated correctly", isSame)
+}
+
 function main() {
     // Place where mock of ACE is located.
     process.env.ACE_LIBRARY_PATH = __dirname + "/../../../native"
 
+    checkReadAndMutateBuffer()
     checkPassToNativeBuffer()
 
     checkCallbackWithReturn()
