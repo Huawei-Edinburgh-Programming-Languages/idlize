@@ -193,9 +193,8 @@ export class DeserializerBase {
         const data = this.readPointer()
         const length = this.readInt64()
 
-        const found = ResourceHolder.instance().maybeGetManaged(resource.resourceId)
-        if (found) {
-            return found as ArrayBuffer
+        if (resource.hold === 0 && resource.release === 0) {
+            return ResourceHolder.instance().get(resource.resourceId) as ArrayBuffer
         }
 
         const buffer = nativeModule()._MaterializeBuffer(data, length, resource.hold)
