@@ -1624,10 +1624,10 @@
 |`getChildDefaultSize`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4QKQ |
 |*GestureModifier*| *Class* | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`applyGesture`| Function | Tuzhilkin Ivan | blocked IDL |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG|
-|*AbstractProperty*| *Class* | | | |
-|`get`| Function | | | |
-|`set`| Function | | | |
-|`info`| Function | | | |
+|*AbstractProperty*| *Class* | Evstigneev Roman | in progress | |
+|`get`| Function | Evstigneev Roman | in progress | |
+|`set`| Function | Evstigneev Roman | in progress | |
+|`info`| Function | Evstigneev Roman | in progress | |
 |*IPropertySubscriber*| *Class* | | | |
 |`id`| Function | | | |
 |`aboutToBeDeleted`| Function | | | |
