@@ -12,13 +12,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { CustomTextDecoder, float32, int32, int64 } from "@koalaui/common"
-import { pointer } from "@koalaui/interop"
+import { CustomTextDecoder, float32, int32, int64, finalizerRegister } from "@koalaui/common"
 import { Tags, CallbackResource } from "./SerializerBase";
 import { nativeModule } from "@koalaui/arkoala"
-import { finalizerRegister } from "../Finalization"
 import { NativeThunkImpl } from "../Finalizable"
-import { ResourceHolder } from "@koalaui/interop"
+import { ResourceHolder, pointer } from "@koalaui/interop"
 
 export class DeserializerBase {
     private position = 0
