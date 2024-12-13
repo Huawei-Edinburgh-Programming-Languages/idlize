@@ -221,16 +221,16 @@
 |`alignRules`| Function | Dmitry A Smirnov| done | |
 |`aspectRatio`| Function | Roman Sedaikin | done | |
 |`clickEffect`| Function | Lobah Mikhail | done | |
-|`onDragStart`| Function | Lobah Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ, https://gitee.com/openharmony/arkui_ace_engine/issues/IAHA4D |
-|`onDragEnter`| Function | Lobah Mikhail | devdone | |
-|`onDragMove`| Function | Lobah Mikhail | devdone | |
-|`onDragLeave`| Function | Lobah Mikhail| devdone | |
-|`onDrop`| Function | Lobah Mikhail | devdone | |
-|`onDragEnd`| Function | Lobah Mikhail | devdone | |
+|`onDragStart`| Function | Lobah Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IARLIB, https://gitee.com/openharmony/arkui_ace_engine/issues/IAHA4D |
+|`onDragEnter`| Function | Lobah Mikhail | done | |
+|`onDragMove`| Function | Lobah Mikhail | done | |
+|`onDragLeave`| Function | Lobah Mikhail| done | |
+|`onDrop`| Function | Lobah Mikhail | done | |
+|`onDragEnd`| Function | Lobah Mikhail | done | |
 |`allowDrop`| Function | Lobah Mikhail | done | |
 |`draggable`| Function | Lobah Mikhail | done | |
 |`dragPreview`| Function | Lobah Mikhail | done | |
-|`onPreDrag`| Function | Lobah Mikhail | devdone | |
+|`onPreDrag`| Function | Lobah Mikhail | done | |
 |`linearGradient`| Function | Roman Sedaikin | done | |
 |`sweepGradient`| Function | Roman Sedaikin | done | |
 |`radialGradient`| Function | Erokhin Ilya | done |  |
