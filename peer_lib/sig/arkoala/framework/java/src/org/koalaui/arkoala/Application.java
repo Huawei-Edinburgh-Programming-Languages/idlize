@@ -36,6 +36,7 @@ public class Application {
     }
 
     public static void main(String[] args) {
+        Runtime.getRuntime().loadLibrary("NativeBridgeJni"); // TODO library name is user-defined, how to provide it or ensure that library was loaded?
         var app = Application.createApplication("init", "");
         var root = app.start();
         try {

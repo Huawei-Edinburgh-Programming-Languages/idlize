@@ -16,10 +16,6 @@
 package org.koalaui.arkoala;
 
 public class InteropNativeModule {
-    static {
-        Runtime.getRuntime().loadLibrary("NativeBridgeJni"); // TODO library name is user-defined, how to provide it or ensure that library was loaded?
-    }
-
     static int callCallbackFromNative(int id, byte[] args, int length) {
         throw new Error("implement callCallbackFromNative()");
     }
