@@ -35,7 +35,6 @@ export class PeerGeneratorConfig {
         "AttributeModifier",
         "AbstractProperty",
         "ISinglePropertyChangeSubscriber",
-        "SymbolGlyphModifier",
         "NavigationMenuItem",
         "NavDestinationContext",
         "SystemBarStyle",
