@@ -1047,8 +1047,8 @@
 |`barBackgroundColor`| Function | Tuzhilkin Ivan | done |  |
 |`barGridAlign`| Function | Tuzhilkin Ivan | done |  |
 |`customContentTransition`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`barBackgroundBlurStyle`| Function | Tuzhilkin Ivan | devdone |  |
-|`barBackgroundEffect`| Function | Tuzhilkin Ivan | devdone | |
+|`barBackgroundBlurStyle`| Function | Tuzhilkin Ivan | done |  |
+|`barBackgroundEffect`| Function | Tuzhilkin Ivan | done | |
 |`onContentWillChange`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`barModeScrollable`| Function | Tuzhilkin Ivan | done | |
 |*TabContent*| *Component* | Evstigneev Roman |in progress |  |
@@ -1628,18 +1628,18 @@
 |`get`| Function | Evstigneev Roman | in progress | |
 |`set`| Function | Evstigneev Roman | in progress | |
 |`info`| Function | Evstigneev Roman | in progress | |
-|*IPropertySubscriber*| *Class* | | | |
-|`id`| Function | | | |
-|`aboutToBeDeleted`| Function | | | |
-|*ISinglePropertyChangeSubscriber*| *Class* | | | |
-|`hasChanged`| Function | | | |
-|*SubscribaleAbstract*| *Class* | | | |
-|`notifyPropertyHasChanged`| Function | | | |
-|`addOwningProperty`| Function | | | |
-|`removeOwningProperty`| Function | | | |
-|`removeOwningPropertyById`| Function | | | |
-|*ContextMenu*| *Class* | | | |
-|`close`| Function | | | |
+|*IPropertySubscriber*| *Class* | Tuzhilkin Ivan | in progress | |
+|`id`| Function | Tuzhilkin Ivan | in progress | |
+|`aboutToBeDeleted`| Function | Tuzhilkin Ivan | in progress | |
+|*ISinglePropertyChangeSubscriber*| *Class* | Tuzhilkin Ivan | in progress | |
+|`hasChanged`| Function | Tuzhilkin Ivan | in progress | |
+|*SubscribaleAbstract*| *Class* | Tuzhilkin Ivan | in progress| |
+|`notifyPropertyHasChanged`| Function | Tuzhilkin Ivan | in progress | |
+|`addOwningProperty`| Function | Tuzhilkin Ivan | in progress | |
+|`removeOwningProperty`| Function | Tuzhilkin Ivan | in progress | |
+|`removeOwningPropertyById`| Function | Tuzhilkin Ivan | in progress | |
+|*ContextMenu*| *Class* | Tuzhilkin Ivan | in progress | |
+|`close`| Function | Tuzhilkin Ivan | in progress | |
 |*CustomDialogController*| *Class* | Erokhin Ilya | blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`open`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`close`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
