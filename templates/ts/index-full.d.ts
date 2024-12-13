@@ -150,10 +150,6 @@ declare function setInterval(handler: Function | string, delay: number, ...argum
 
 declare function clearInterval(intervalID?: number): void;
 
-declare const PageTransitionEnter: PageTransitionEnterInterface;
-
-declare const PageTransitionExit: PageTransitionExitInterface;
-
 declare class TextEncoder {
     encode(input?: string): Uint8Array;
     encodeInto(input?: string): Uint8Array;
