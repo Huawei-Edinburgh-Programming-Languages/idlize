@@ -1735,14 +1735,14 @@
 |`reset`| Function |Dmitry A Smirnov| done|  |
 |`setChallengeResult`| Function |Dmitry A Smirnov| done|  |
 |*RichEditorBaseController*| *Class*|Dudkin Sergey| blocked | |
-|`getCaretOffset`| Function|Dudkin Sergey| devdone | |
-|`setCaretOffset`| Function|Dudkin Sergey| devdone | |
-|`closeSelectionMenu`| Function|Dudkin Sergey| devdone| |
+|`getCaretOffset`| Function|Dudkin Sergey| done | |
+|`setCaretOffset`| Function|Dudkin Sergey| done | |
+|`closeSelectionMenu`| Function|Dudkin Sergey| done| |
 |`getTypingStyle`| Function|Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IBAXVH |
-|`setTypingStyle`| Function|Dudkin Sergey| devdone| |
-|`setSelection`| Function|Dudkin Sergey| devdone| |
-|`isEditing`| Function|Dudkin Sergey| devdone| |
-|`stopEditing`| Function|Dudkin Sergey| devdone| |
+|`setTypingStyle`| Function|Dudkin Sergey| done| |
+|`setSelection`| Function|Dudkin Sergey| done| |
+|`isEditing`| Function|Dudkin Sergey| done| |
+|`stopEditing`| Function|Dudkin Sergey| done| |
 |`getLayoutManager`| Function|Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IBAXVH |
 |`getPreviewText`| Function|Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IBAXVH |
 |*RichEditorController*| *Class* |Dudkin Sergey| blocked|  |
