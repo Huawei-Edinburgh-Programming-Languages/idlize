@@ -324,7 +324,7 @@
 |`onScrollStart`| Function | Samarin Sergey | in progress|  |
 |`onScrollStop`| Function | Samarin Sergey | in progress|  |
 |`flingSpeedLimit`| Function | Samarin Sergey | devdone |  |
-|`clipContent`| Function | | | |
+|`clipContent`| Function | Evstigneev Roman | in progress | |
 |`edgeEffect`| Function | Samarin Sergey | devdone | |
 |`fadingEdge`| Function | Samarin Sergey | devdone | |
 |*Component3D*| *Component* |Kovalev Sergey | in progress | |
