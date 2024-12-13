@@ -27,7 +27,7 @@ public open class PeerNode {
 
     protected static var currentId: Int32 = 1000
 
-    PeerNode(peerPtr: pointer, name: String, flags: Int32) {
+    PeerNode(peerPtr: pointer, id: Int32, name: String, flags: Int32) {
         this.peer = NativePeerNode.create(peerPtr)
     }
     func applyAttributes(attrs: HashMap<String, Object>): Unit {}
