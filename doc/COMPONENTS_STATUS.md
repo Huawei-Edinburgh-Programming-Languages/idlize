@@ -1654,7 +1654,7 @@
 |`isBegin`| Function | Maksimov Nikita | in progress | |
 |`isEnd`| Function | Maksimov Nikita | in progress | |
 |*EventTargetInfo*| *Class* | Maksimov Nikita | in progress | |
-|`getId`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
+|`getId`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*GestureRecognizer*| *Class* | Kovalev Sergey | in progress | |
 |`getTag`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
 |`getType`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
