@@ -24,6 +24,7 @@ public class InteropNativeModule {
     static native long   _GetGroupedLog(int index);
     static native void   _StartGroupedLog(int index);
     static native void   _StopGroupedLog(int index);
+    static native void   _PrintGroupedLog(int index);
     static native void   _AppendGroupedLog(int index, String message);
     static native long   _GetStringFinalizer();
     static native void   _InvokeFinalizer(long ptr1, long ptr2);
@@ -35,7 +36,9 @@ public class InteropNativeModule {
     static native int    _ManagedStringWrite(String str1, byte[] arr, int arg);
     static native void   _NativeLog(String str1);
     static native String _Utf8ToString(byte[] data, int offset, int length);
+    static native String _StdStringToString(long ptr1);
     static native void   _CallCallback(int callbackKind, byte[] args, int argsSize);
+    static native void   _CallCallbackSync(int callbackKind, byte[] args, int argsSize);
     static native void   _CallCallbackResourceHolder(long holder, int resourceId);
     static native void   _CallCallbackResourceReleaser(long releaser, int resourceId);
 
