@@ -8,12 +8,6 @@ declare interface EntryOptions {
   useSharedStorage? : boolean,
 }
 
-declare interface Literal_String_target_NavigationType_type { target: string, type?: NavigationType }
-
-declare const PageTransitionEnter: PageTransitionEnterInterface
-
-declare const PageTransitionExit: PageTransitionExitInterface
-
 declare const Entry: ClassDecorator & ((options?: LocalStorage | EntryOptions) => ClassDecorator);
 
 declare const Observed: ClassDecorator;
