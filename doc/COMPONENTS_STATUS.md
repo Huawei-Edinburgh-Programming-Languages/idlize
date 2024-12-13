@@ -816,7 +816,7 @@
 |`setScrollBarOptions`| Function | Maksimov Nikita | done | |
 |`enableNestedScroll`| Function | Maksimov Nikita | done | |
 |*Search*|*Component*| Evstigneev Roman |In Progress|  |
-|`setSearchOptions`|Function| Evstigneev Roman | in progress | https://gitee.com/openharmony/arkui_ace_engine/issues/IAXCOP |
+|`setSearchOptions`|Function| Evstigneev Roman | done | https://gitee.com/openharmony/arkui_ace_engine/issues/IAXCOP |
 |`fontColor`|Function| Evstigneev Roman | done |  |
 |`searchIcon`|Function| Evstigneev Roman |blocked AceEngine| https://gitee.com/openharmony/arkui_ace_engine/issues/IAWF91, https://gitee.com/nikolay-igotti/idlize/issues/IAYXQ8 |
 |`cancelButton`|Function| Evstigneev Roman |blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
@@ -835,7 +835,7 @@
 |`onCopy`|Function| Evstigneev Roman |done|  |
 |`onCut`|Function| Evstigneev Roman |done|  |
 |`onPaste`|Function| Evstigneev Roman |blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAOKSL  |
-|`copyOption`|Function| Evstigneev Roman |in progress| https://gitee.com/openharmony/arkui_ace_engine/issues/IAVPM2 |
+|`copyOption`|Function| Evstigneev Roman | done | https://gitee.com/openharmony/arkui_ace_engine/issues/IAVPM2 |
 |`maxLength`|Function| Evstigneev Roman |done|  |
 |`textAlign`|Function| Evstigneev Roman |done|  |
 |`enableKeyboardOnFocus`|Function| Evstigneev Roman |done|  |
