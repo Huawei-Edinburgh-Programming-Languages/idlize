@@ -1819,10 +1819,10 @@
 |*TextClockController*| *Class* |Pavelyev Ivan|in progress|  |
 |`start`| Function |Pavelyev Ivan|done|  |
 |`stop`| Function |Pavelyev Ivan|done|  |
-|*TextBaseController*| *Class* | | | |
-|`setSelection`| Function | | | |
-|`closeSelectionMenu`| Function | | | |
-|`getLayoutManager`| Function | | | |
+|*TextBaseController*| *Class* | Morozov Sergey | in progress | |
+|`setSelection`| Function | Morozov Sergey | in progress | |
+|`closeSelectionMenu`| Function | Morozov Sergey | in progress | |
+|`getLayoutManager`| Function | Morozov Sergey | in progress | |
 |*TextEditControllerEx*| *Class* | Morozov Sergey | in progress | |
 |`isEditing`| Function | Morozov Sergey | in progress | |
 |`stopEditing`| Function | Morozov Sergey | in progress | |
