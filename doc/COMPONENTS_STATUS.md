@@ -1467,6 +1467,16 @@
 |`indicatorStyle`| Function | Kovalev Sergey | done | depricated |
 |`indicatorLoop`| Function | Kovalev Sergey | done | depricated |
 |`onChange`| Function | Kovalev Sergey | done | depricated |
+|*PixelMap*| *Class* | | | |
+|`readPixelsToBufferSync`| Function | | | |
+|`writeBufferToPixels`| Function | | | |
+|`getIsEditable`| Function | | | |
+|`setIsEditable`| Function | | | |
+|`getIsStrideAlignment`| Function | | | |
+|`setIsStrideAlignment`| Function | | | |
+|*EventEmulator*| *Class* | | | |
+|`emitClickEvent`| Function | | | |
+|`emitTextInputEvent`| Function | | | |
 |*ActionSheet*| *Class* | Ekaterina Stepanova | in progress | |
 |`show`| Function | Ekaterina Stepanova | in progress | |
 |*AlertDialog*| *Class* | Ekaterina Stepanova | in progress | |
