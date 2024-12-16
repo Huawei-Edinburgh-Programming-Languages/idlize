@@ -1641,8 +1641,8 @@
 |*IPropertySubscriber*| *Class* | Tuzhilkin Ivan | blocked IDL | |
 |`id`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
 |`aboutToBeDeleted`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
-|*ISinglePropertyChangeSubscriber*| *Class* | Tuzhilkin Ivan | in progress | |
-|`hasChanged`| Function | Tuzhilkin Ivan | in progress | |
+|*ISinglePropertyChangeSubscriber*| *Class* | Tuzhilkin Ivan | blocked IDL | |
+|`hasChanged`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
 |*SubscribaleAbstract*| *Class* | Tuzhilkin Ivan | blocked IDL | |
 |`notifyPropertyHasChanged`| Function | Tuzhilkin Ivan | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
 |`addOwningProperty`| Function | Tuzhilkin Ivan | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS|
