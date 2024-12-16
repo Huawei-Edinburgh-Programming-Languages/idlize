@@ -189,6 +189,6 @@ typedef struct Ark_CallbackResource {
 
 typedef struct Ark_Buffer {
   Ark_CallbackResource resource;
-  void* data;
+  Ark_NativePointer data;
   Ark_Int64 length;
 } Ark_Buffer;
