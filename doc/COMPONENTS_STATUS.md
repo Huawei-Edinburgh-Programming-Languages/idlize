@@ -1829,15 +1829,15 @@
 |*TextClockController*| *Class* |Pavelyev Ivan|in progress|  |
 |`start`| Function |Pavelyev Ivan|done|  |
 |`stop`| Function |Pavelyev Ivan|done|  |
-|*TextBaseController*| *Class* | Morozov Sergey | in progress | |
-|`setSelection`| Function | Morozov Sergey | in progress | |
-|`closeSelectionMenu`| Function | Morozov Sergey | in progress | |
-|`getLayoutManager`| Function | Morozov Sergey | in progress | |
-|*TextEditControllerEx*| *Class* | Morozov Sergey | in progress | |
-|`isEditing`| Function | Morozov Sergey | in progress | |
-|`stopEditing`| Function | Morozov Sergey | in progress | |
-|`setCaretOffset`| Function | Morozov Sergey | in progress | |
-|`getCaretOffset`| Function | Morozov Sergey | in progress | |
+|*TextBaseController*| *Class* | Morozov Sergey | blocked IDL | |
+|`setSelection`| Function | Morozov Sergey | devdone | |
+|`closeSelectionMenu`| Function | Morozov Sergey | devdone | |
+|`getLayoutManager`| Function | Morozov Sergey | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|*TextEditControllerEx*| *Class* | Morozov Sergey | blocked IDL | |
+|`isEditing`| Function | Morozov Sergey | devdone | |
+|`stopEditing`| Function | Morozov Sergey | devdone | |
+|`setCaretOffset`| Function | Morozov Sergey | devdone | |
+|`getCaretOffset`| Function | Morozov Sergey | devdone | |
 |`getPreviewText`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*StyledStringController*| *Class* | Pavelyev Ivan | in progress | |
 |`setStyledString`| Function | Pavelyev Ivan | in progress | |
