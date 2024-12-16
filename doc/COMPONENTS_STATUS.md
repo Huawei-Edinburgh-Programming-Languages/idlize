@@ -89,7 +89,7 @@
 |`onChange`| Function |Politov Mikhail | done |  |
 |`edgeAlign`| Function |Politov Mikhail | done |  |
 |*Canvas*| *Component* |Vadim Voronov | blocked IDL | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
-|`setCanvasOptions`| Function |Vadim Voronov | blocked IDL | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
+|`setCanvasOptions`| Function |Vadim Voronov | in progress | |
 |`onReady`| Function |Vadim Voronov | done |  |
 |`enableAnalyzer`| Function |Vadim Voronov | done |  |
 |*Checkbox*| *Component* | Andrey Khudenkikh | blocked |  |
@@ -389,7 +389,7 @@
 |`autoHalfFold`| Function | Politov Mikhail | done |  |
 |*FormComponent*| *Component* | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
 |`setFormComponentOptions`| Function | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
-|`size`| Function | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
+|`size`| Function | Vadim Voronov | blocked AceEngine | implemented with tests, https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
 |`moduleName`| Function | Vadim Voronov | done | |
 |`dimension`| Function | Vadim Voronov | done | |
 |`allowUpdate`| Function | Vadim Voronov | done | |
@@ -398,7 +398,7 @@
 |`onError`| Function | Vadim Voronov | blocked IDL | implemented with narrow range of erroCode,https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
 |`onRouter`| Function | Vadim Voronov | deprecated | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50, deprecated |
 |`onUninstall`| Function | Vadim Voronov | blocked IDL | implemented with narrow range of ID, https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
-|`onLoad`| Function | Vadim Voronov | in progress | |
+|`onLoad`| Function | Vadim Voronov | done | |
 |*FormLink*| *Component* | Dmitry A Smirnov| done |  |
 |`setFormLinkOptions`| Function | Dmitry A Smirnov| done |  |
 |*Gauge*| *Component* | Maksimov Nikita | blocked IDL |  |
@@ -1500,8 +1500,8 @@
 |`rect`| Function | Kovalev Sergey | in progress |  |
 |*Path2D*| *Class* | Vadim Voronov | in progress | |
 |`addPath`| Function | Vadim Voronov | in progress | |
-|*CanvasPattern*| *Class* | Vadim Voronov | in progress |  |
-|`setTransform`| Function | Vadim Voronov | in progress |  |
+|*CanvasPattern*| *Class* | Andrey Khudenkikh | in progress |  |
+|`setTransform`| Function | Andrey Khudenkikh | in progress |  |
 |*ImageBitmap*| *Class* | Pavelyev Ivan | done | |
 |`close`| Function | Pavelyev Ivan | done |  |
 |`getHeight`| Function | Pavelyev Ivan | done |  |
@@ -1590,8 +1590,8 @@
 |`offOnDetach`| Function | Vadim Voronov | in progress |  |
 |`getHeight`| Function |Vadim Voronov| done | |
 |`getWidth`| Function |Vadim Voronov| done | |
-|*DrawingRenderingContext*| *Class* |Vadim Voronov| blocked |  |
-|`invalidate`| Function |Vadim Voronov| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|*DrawingRenderingContext*| *Class* |Vadim Voronov| in progress | |
+|`invalidate`| Function |Vadim Voronov| in progress | |
 |*ICurve*| *Class* | Erokhin Ilya | blocked | |
 |`interpolate`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*DrawModifier*| *Class* | Erokhin Ilya | blocked | |
