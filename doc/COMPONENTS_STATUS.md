@@ -324,7 +324,7 @@
 |`onScrollStart`| Function | Samarin Sergey | in progress|  |
 |`onScrollStop`| Function | Samarin Sergey | in progress|  |
 |`flingSpeedLimit`| Function | Samarin Sergey | done |  |
-|`clipContent`| Function | Evstigneev Roman | devdone | |
+|`clipContent`| Function | Evstigneev Roman | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IBBLGP |
 |`edgeEffect`| Function | Samarin Sergey | done | |
 |`fadingEdge`| Function | Samarin Sergey | done | |
 |*Component3D*| *Component* |Kovalev Sergey | in progress | |
