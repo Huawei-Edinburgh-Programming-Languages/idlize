@@ -499,3 +499,5 @@ KVMObjectHandle impl_LoadUserView(KVMContext vm, const KStringPtr& viewClass, co
 #endif
 }
 KOALA_INTEROP_CTX_2(LoadUserView, KVMObjectHandle, KStringPtr, KStringPtr)
+
+#define KOALA_INTEROP_MODULE NativeModule

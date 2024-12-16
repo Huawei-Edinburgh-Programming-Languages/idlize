@@ -35,9 +35,7 @@ libace_dir = gen_dir / 'libace'
 
 cxx = meson.get_compiler('cpp')
 
-cflags = [
-    '-DKOALA_INTEROP_MODULE=NativeModule'
-]
+cflags = []
 ldflags = []
 
 include_dirs = [
