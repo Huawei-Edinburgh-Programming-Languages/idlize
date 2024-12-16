@@ -163,13 +163,13 @@
 |`outlineRadius`| Function | Skroba Gleb | done | |
 |`foregroundColor`| Function | Roman Sedaikin | done | |
 |`onClick`| Function | Roman Sedaikin | done | |
-|`onHover`| Function | | | |
-|`onAccessibilityHover`| Function | | | |
+|`onHover`| Function | Erokhin Ilya | in progress | |
+|`onAccessibilityHover`| Function | Erokhin Ilya | in progress | |
 |`hoverEffect`| Function | Roman Sedaikin | done | |
-|`onMouse`| Function | | | |
+|`onMouse`| Function | Erokhin Ilya | in progress | |
 |`onTouch`| Function | Roman Sedaikin | done | |
-|`onKeyEvent`| Function | | | |
-|`onKeyPreIme`| Function | | | |
+|`onKeyEvent`| Function | Erokhin Ilya | in progress | |
+|`onKeyPreIme`| Function | Erokhin Ilya | in progress | |
 |`focusable`| Function | Roman Sedaikin | done | |
 |`onFocus`| Function | Roman Sedaikin | done | |
 |`onBlur`| Function | Roman Sedaikin | done | |
@@ -201,8 +201,8 @@
 |`transform`| Function | Lobah Mikhail | done | |
 |`onAppear`| Function | Roman Sedaikin | done | |
 |`onDisAppear`| Function | Roman Sedaikin | done | |
-|`onAttach`| Function | | | |
-|`onDetach`| Function | | | |
+|`onAttach`| Function | Erokhin Ilya | in progress | |
+|`onDetach`| Function | Erokhin Ilya | in progress | |
 |`onAreaChange`| Function | Roman Sedaikin | done | |
 |`visibility`| Function | Roman Sedaikin | done | |
 |`flexGrow`| Function | Dmitry A Smirnov| done | |
