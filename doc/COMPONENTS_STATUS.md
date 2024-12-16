@@ -1644,10 +1644,10 @@
 |*ISinglePropertyChangeSubscriber*| *Class* | Tuzhilkin Ivan | blocked IDL | |
 |`hasChanged`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
 |*SubscribaleAbstract*| *Class* | Tuzhilkin Ivan | blocked IDL | |
-|`notifyPropertyHasChanged`| Function | Tuzhilkin Ivan | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
-|`addOwningProperty`| Function | Tuzhilkin Ivan | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS|
-|`removeOwningProperty`| Function | Tuzhilkin Ivan | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
-|`removeOwningPropertyById`| Function | Tuzhilkin Ivan | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
+|`notifyPropertyHasChanged`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
+|`addOwningProperty`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS|
+|`removeOwningProperty`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
+|`removeOwningPropertyById`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
 |*ContextMenu*| *Class* | Tuzhilkin Ivan | blocked IDL | |
 |`close`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB84T |
 |*CustomDialogController*| *Class* | Erokhin Ilya | blocked | https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
