@@ -18,6 +18,7 @@ import { NodeConvertor, convertNode, convertType } from "../LanguageWriters/name
 import { LibraryInterface } from '../../LibraryInterface';
 import { PeerLibrary } from '../PeerLibrary';
 import { Language } from '../../Language';
+import { isMaterialized } from './IdlPeerGeneratorVisitor';
 
 export class DependenciesCollector implements NodeConvertor<idl.IDLNode[]> {
     constructor(protected readonly library: LibraryInterface) {}
@@ -90,7 +91,16 @@ export class DependenciesCollector implements NodeConvertor<idl.IDLNode[]> {
     }
 }
 
-class TSDependenciesCollector extends DependenciesCollector {}
+class TSDependenciesCollector extends DependenciesCollector {
+    override convertInterface(decl: idl.IDLInterface): idl.IDLNode[] {
+        console.log(`Dependency interface: ${decl.name}`)
+        if (isMaterialized(decl)) {
+            console.log(`  convert as internal type ref: ${decl.name}`)
+            return super.convertTypeReference(idl.createReferenceType(`${decl.name}Internal`))
+        }
+        return super.convertInterface(decl)
+    }
+}
 
 class ArkTSDependenciesCollector extends DependenciesCollector {
     override convertTypeReference(type: idl.IDLReferenceType): idl.IDLNode[] {
