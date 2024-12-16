@@ -1436,8 +1436,8 @@
 |`sideBarPosition`| Function |Dmitry A Smirnov|done|  |
 |`divider`| Function |Dmitry A Smirnov|done|  |
 |`minContentWidth`| Function |Dmitry A Smirnov|done|  |
-|*RemoteWindow*| *Component* | Spirin Andrey | in progress | |
-|`setRemoteWindowOptions`| Function | Spirin Andrey | in progress | |
+|*RemoteWindow*| *Component* | Spirin Andrey, Evstigneev Roman | in progress | |
+|`setRemoteWindowOptions`| Function | Spirin Andrey, Evstigneev Roman | in progress | |
 |*WaterFlow*| *Component* | Kovalev Sergey | in progress |  |
 |`setWaterFlowOptions`| Function | Kovalev Sergey |blocked IDL| Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`columnsTemplate`| Function | Kovalev Sergey | done |  |
