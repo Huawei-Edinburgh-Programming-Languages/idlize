@@ -553,9 +553,9 @@
 |`onReachEnd`|Function|Morozov Sergey|done|  |
 |`onScrollStart`|Function|Morozov Sergey|done|  |
 |`onScrollStop`|Function|Morozov Sergey|done|  |
-|`onItemDelete`|Function|Morozov Sergey|in progress|  |
-|`onItemMove`|Function|Morozov Sergey|in progress|  |
-|`onItemDragStart`|Function|Morozov Sergey|in progress| |
+|`onItemDelete`|Function|Morozov Sergey|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onItemMove`|Function|Morozov Sergey|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onItemDragStart`|Function|Morozov Sergey|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onItemDragEnter`|Function|Morozov Sergey|done|  |
 |`onItemDragMove`|Function|Morozov Sergey|done|  |
 |`onItemDragLeave`|Function|Morozov Sergey|done|  |
