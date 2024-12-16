@@ -233,12 +233,11 @@ export class TSLanguageWriter extends LanguageWriter {
         const args = signature.args.map((it, index) => `${signature.argName(index)}: ${this.getNodeName(it)}`)
         return `export function ${name}(${args.join(", ")})`
     }
-    writeEnum(name: string, members: { name: string, stringId: string | undefined, numberId: number }[], op: (writer: LanguageWriter) => void): void {
+    writeEnum(name: string, members: { name: string, stringId: string | undefined, numberId: number }[]): void {
         this.printer.print(`export enum ${name} {`)
         this.printer.pushIndent()
-        for (const { name, numberId } of members) {
-            // TODO handle string enums
-            this.printer.print(`${name} = ${numberId},`)
+        for (const { name, stringId, numberId } of members) {
+            this.printer.print(`${name} = ${stringId != undefined ? `"${stringId}"` : `${numberId}`},`)
         }
         this.printer.popIndent()
         this.printer.print("}")
