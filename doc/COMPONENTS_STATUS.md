@@ -324,7 +324,7 @@
 |`onScrollStart`| Function | Samarin Sergey | in progress|  |
 |`onScrollStop`| Function | Samarin Sergey | in progress|  |
 |`flingSpeedLimit`| Function | Samarin Sergey | done |  |
-|`clipContent`| Function | Evstigneev Roman | in progress | |
+|`clipContent`| Function | Evstigneev Roman | devdone | |
 |`edgeEffect`| Function | Samarin Sergey | done | |
 |`fadingEdge`| Function | Samarin Sergey | done | |
 |*Component3D*| *Component* |Kovalev Sergey | in progress | |
@@ -379,7 +379,7 @@
 |`setFlexOptions`| Function | Kovalev Sergey | done |  |
 |`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1N86 |
 |*FlowItem*| *Component* | Ekaterina Stepanova | in progress | |
-|`setFlowItemOptions`| Function | Ekaterina Stepanova | in progress | |
+|`setFlowItemOptions`| Function | Evstigneev Roman | in progress | |
 |*FolderStack*| *Component* | Politov Mikhail | done |  |
 |`setFolderStackOptions`| Function | Politov Mikhail | done |  |
 |`alignContent`| Function | Politov Mikhail | done |  |
@@ -690,8 +690,8 @@
 |`activateCircleStyle`| Function | Dmitry A Smirnov| blocked AceEngine| https://gitee.com/openharmony/arkui_ace_engine/issues/IAYWON |
 |*PluginComponent*| *Component* | Evstigneev Roman | in progress | |
 |`setPluginComponentOptions`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
-|`onComplete`| Function | Evstigneev Roman | in progress | |
-|`onError`| Function | Evstigneev Roman | in progress | |
+|`onComplete`| Function | Evstigneev Roman | devdone | |
+|`onError`| Function | Evstigneev Roman | devdone | |
 |*Polygon*| *Component* |Politov Mikhail | blocked | |
 |`setPolygonOptions`| Function | Politov Mikhail | devdone | |
 |`points`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAGL8 |
