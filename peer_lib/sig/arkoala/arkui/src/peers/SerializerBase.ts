@@ -262,22 +262,15 @@ export class SerializerBase {
         this.position += encodedLength + 4
     }
     writeBuffer(buffer: ArrayBuffer) {
-        const info = ResourceHolder.instance().getMetaInfo(buffer)
-        if (info) {
-            this.writeCallbackResource(info)
-            this.writePointer(info.ptr)
-            this.writeInt64(buffer.byteLength)
-        } else {
-            const resourceId = ResourceHolder.instance().registerAndHold(buffer)
-            this.writeCallbackResource({
-                resourceId, 
-                hold: 0,
-                release: 0
-            })
-            const ptr = nativeModule()._GetNativeBufferPointer(buffer)
-            this.writePointer(ptr)
-            this.writeInt64(buffer.byteLength)
-        }
+        const resourceId = ResourceHolder.instance().registerAndHold(buffer)
+        this.writeCallbackResource({
+            resourceId, 
+            hold: 0,
+            release: 0
+        })
+        const ptr = nativeModule()._GetNativeBufferPointer(buffer)
+        this.writePointer(ptr)
+        this.writeInt64(buffer.byteLength)
     }
 }
 

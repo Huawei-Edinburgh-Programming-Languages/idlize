@@ -205,8 +205,10 @@ export class DeserializerBase {
     }
 
     readBuffer(): ArrayBuffer {
+        /* not implemented */
+        this.readCallbackResource()
         this.readPointer()
-        const length = this.readInt64()
+        this.readInt64()
         return new ArrayBuffer(length)
     }
 

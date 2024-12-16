@@ -193,12 +193,7 @@ export class DeserializerBase {
         const data = this.readPointer()
         const length = this.readInt64()
 
-        if (resource.hold === 0 && resource.release === 0) {
-            return ResourceHolder.instance().get(resource.resourceId) as ArrayBuffer
-        }
-
         const buffer = nativeModule()._MaterializeBuffer(data, length, resource.hold)
-        ResourceHolder.instance().saveMetaInfo(buffer, { ptr: data, ...resource })
         finalizerRegister(buffer, new NativeThunkImpl(resource.resourceId, resource.release))
         return buffer
     }
