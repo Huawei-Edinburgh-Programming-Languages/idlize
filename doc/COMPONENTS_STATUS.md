@@ -134,7 +134,7 @@
 |`hitTestBehavior`| Function | Roman Sedaikin | done | |
 |`onChildTouchTest`| Function | | | |
 |`layoutWeight`| Function | Roman Sedaikin | done | |
-|`chainWeight`| Function | | | |
+|`chainWeight`| Function | Politov Mikhail | in progress | |
 |`padding`| Function | Skroba Gleb | done | |
 |`safeAreaPadding`| Function | | | |
 |`margin`| Function | Skroba Gleb | done | |
@@ -261,8 +261,8 @@
 |`renderFit`| Function | Dmitry A Smirnov|done | |
 |`gestureModifier`| Function | | | |
 |`backgroundBrightness`| Function | Skroba Gleb | done | |
-|`onGestureJudgeBegin`| Function | | | |
-|`onGestureRecognizerJudgeBegin`| Function | | | |
+|`onGestureJudgeBegin`| Function | Politov Mikhail | | |
+|`onGestureRecognizerJudgeBegin`| Function | Politov Mikhail | | |
 |`shouldBuiltInRecognizerParallelWith`| Function | | | |
 |`monopolizeEvents`| Function | | | |
 |`onTouchIntercept`| Function | | | |
