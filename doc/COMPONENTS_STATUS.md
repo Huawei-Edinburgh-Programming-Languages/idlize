@@ -690,8 +690,8 @@
 |`activateCircleStyle`| Function | Dmitry A Smirnov| blocked AceEngine| https://gitee.com/openharmony/arkui_ace_engine/issues/IAYWON |
 |*PluginComponent*| *Component* | Evstigneev Roman | in progress | |
 |`setPluginComponentOptions`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
-|`onComplete`| Function | Evstigneev Roman | devdone | |
-|`onError`| Function | Evstigneev Roman | devdone | |
+|`onComplete`| Function | Evstigneev Roman | done | |
+|`onError`| Function | Evstigneev Roman | done | |
 |*Polygon*| *Component* |Politov Mikhail | blocked | |
 |`setPolygonOptions`| Function | Politov Mikhail | devdone | |
 |`points`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAGL8 |
