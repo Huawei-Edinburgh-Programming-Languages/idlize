@@ -209,7 +209,7 @@ export class DeserializerBase {
         this.readCallbackResource()
         this.readPointer()
         this.readInt64()
-        return new ArrayBuffer(length)
+        return new ArrayBuffer(1)
     }
 
     readUint8ClampedArray(): Uint8ClampedArray {
