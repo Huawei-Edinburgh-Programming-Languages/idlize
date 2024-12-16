@@ -1638,9 +1638,9 @@
 |`get`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
 |`set`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
 |`info`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
-|*IPropertySubscriber*| *Class* | Tuzhilkin Ivan | in progress | |
-|`id`| Function | Tuzhilkin Ivan | in progress | |
-|`aboutToBeDeleted`| Function | Tuzhilkin Ivan | in progress | |
+|*IPropertySubscriber*| *Class* | Tuzhilkin Ivan | blocked IDL | |
+|`id`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
+|`aboutToBeDeleted`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
 |*ISinglePropertyChangeSubscriber*| *Class* | Tuzhilkin Ivan | in progress | |
 |`hasChanged`| Function | Tuzhilkin Ivan | in progress | |
 |*SubscribaleAbstract*| *Class* | Tuzhilkin Ivan | blocked IDL | |
