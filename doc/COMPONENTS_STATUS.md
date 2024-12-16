@@ -1397,7 +1397,7 @@
 |`enableNativeEmbedMode`| Function | Erokhin Ilya | done | |
 |`onNativeEmbedLifecycleChange`| Function | Erokhin Ilya | testskipped | |
 |`onNativeEmbedVisibilityChange`| Function | Erokhin Ilya | devdone | |
-|`onNativeEmbedGestureEvent`| Function | Erokhin Ilya | in progress | dependency on Ark_EventResult & Ark_Function |
+|`onNativeEmbedGestureEvent`| Function | Erokhin Ilya | testskipped | |
 |`copyOptions`| Function | Erokhin Ilya | done | |
 |`onOverrideUrlLoading`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`textAutosizing`| Function | Erokhin Ilya | done | |
