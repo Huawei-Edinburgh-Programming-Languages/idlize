@@ -1660,10 +1660,10 @@
 |`setDistance`| Function | Politov Mikhail | done | |
 |`setFingers`| Function | Politov Mikhail | done | |
 |`getDirection`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|*ScrollableTargetInfo*| *Class* | Maksimov Nikita | in progress | |
-|`isBegin`| Function | Maksimov Nikita | in progress | |
-|`isEnd`| Function | Maksimov Nikita | in progress | |
-|*EventTargetInfo*| *Class* | Maksimov Nikita | in progress | |
+|*ScrollableTargetInfo*| *Class* | Maksimov Nikita | devdone | |
+|`isBegin`| Function | Maksimov Nikita | devdone | |
+|`isEnd`| Function | Maksimov Nikita | devdone | |
+|*EventTargetInfo*| *Class* | Maksimov Nikita | devdone | |
 |`getId`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*GestureRecognizer*| *Class* | Kovalev Sergey | in progress | |
 |`getTag`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
@@ -1672,7 +1672,7 @@
 |`setEnabled`| Function | Kovalev Sergey | done | |
 |`isEnabled`| Function | Kovalev Sergey | done | |
 |`getState`| Function | Kovalev Sergey | done | |
-|`getEventTargetInfo`| Function | Maksimov Nikita | in progress | |
+|`getEventTargetInfo`| Function | Maksimov Nikita | devdone | |
 |`isValid`| Function | Kovalev Sergey | done | |
 |*PanRecognizer*| *Class* | Politov Mikhail | in progress | |
 |`getPanGestureOptions`| Function | Politov Mikhail | in progress | |
