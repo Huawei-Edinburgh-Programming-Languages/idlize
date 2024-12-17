@@ -1137,17 +1137,34 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         if (ts.isMethodDeclaration(property) || ts.isMethodSignature(property)) {
             if (!this.isCommonMethodUsedAsProperty(property)) throw new Error("Wrong")
             let type = this.serializeType(property.parameters[0].type, nameSuggestion?.extend(nameOrNull(property.parameters[0].name)!))
-            if  ((escapedName == "onWillScroll" || escapedName == "onDidScroll") && ts.isClassDeclaration(property.parent)) {
+            if (ts.isClassDeclaration(property.parent)) {
+                /**
+                 * Process methods that have been overrided incorrectly
+                 * TODO: remove all this!
+                 */
                 let parentName = identName(property.parent.name)
                 if (parentName == "ScrollableCommonMethod" || parentName == "ScrollAttribute") {
-                    /**
-                     * ScrollableCommonMethod has a method `onWillScroll(handler: Optional<OnWillScrollCallback>): T;`
-                     * ScrollAttribute extends ScrollableCommonMethod and overrides this method as
-                     * `onWillScroll(handler: ScrollOnWillScrollCallback): ScrollAttribute;`. So that override is not
-                     * valid and cannot be correctly processed so we force ScrollOnWillScrollCallback as parameter type.
-                     */
-                    type = idl.createOptionalType(idl.createReferenceType("ScrollOnWillScrollCallback"))
-                    console.log(`WARNING: forcing type of ${parentName}.${escapedName} to ScrollOnWillScrollCallback|undefined`)
+                    if (escapedName == "onWillScroll" || escapedName == "onDidScroll") {
+                        /**
+                         * ScrollableCommonMethod has a method `onWillScroll(handler: Optional<OnWillScrollCallback>): T;`
+                         * ScrollAttribute extends ScrollableCommonMethod and overrides this method as
+                         * `onWillScroll(handler: ScrollOnWillScrollCallback): ScrollAttribute;`. So that override is not
+                         * valid and cannot be correctly processed so we force ScrollOnWillScrollCallback as parameter type.
+                         */
+                        type = idl.createOptionalType(idl.createReferenceType("ScrollOnWillScrollCallback"))
+                        console.log(`WARNING: forcing type of ${parentName}.${escapedName} to ScrollOnWillScrollCallback|undefined`)
+                    } else if (escapedName == "onScroll") {
+                        type = idl.createReferenceType("Callback_Number_ScrollState_Void")
+                        console.log(`WARNING: forcing type of ${parentName}.${escapedName} to Callback_Number_ScrollState_Void`)
+                    } else if (escapedName == "onScrollStart" || escapedName == "onScrollStop") {
+                        type = idl.createReferenceType("Callback_Void")
+                        console.log(`WARNING: forcing type of ${parentName}.${escapedName} to Callback_Void`)
+                    }
+                } else if (parentName == "CommonMethod" || parentName == "FormComponentAttribute") {
+                    if (escapedName == "size") {
+                        type = idl.createReferenceType("SizeOptions")
+                        console.log(`WARNING: forcing type of ${parentName}.${escapedName} to SizeOptions`)
+                    }
                 }
             }
             extendedAttributes.push({ name: idl.IDLExtendedAttributes.CommonMethod })
