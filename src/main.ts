@@ -432,7 +432,7 @@ if (!didJob) {
 }
 
 function correctOverloadedProperties(entry: IDLEntry, idlLibrary: PeerLibrary) {
-    if (idlLibrary.language !== Language.ARKTS) {
+    if ([Language.CJ, Language.CPP, Language.JAVA].includes(idlLibrary.language)) {
         return;
     }
     if (!isInterface(entry)) {
