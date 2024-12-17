@@ -35,6 +35,7 @@ import {
     Method,
     MethodModifier,
     MethodSignature,
+    NamedMethodSignature,
     ObjectArgs,
     ReturnStatement,
     StringExpression,
@@ -399,8 +400,9 @@ export class CJLanguageWriter extends LanguageWriter {
     writeNativeFunctionCall(printer: LanguageWriter, name: string, signature: MethodSignature) {
         printer.print(`return unsafe { ${name}(${signature.args.map((it, index) => `${signature.argName(index)}`).join(", ")}) }`)
     }
-    writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
-        this.print(`func ${name}(${signature.args.map((it, index) => `${this.escapeKeyword(signature.argName(index))}: ${this.typeForeignConvertor.convert(it)}`).join(", ")}): ${this.typeForeignConvertor.convert(signature.returnType)}`)
+    writeNativeMethodDeclaration(name: string, signature: NamedMethodSignature): void {
+        let signture = `${signature.args.map((it, index) => `${this.escapeKeyword(signature.argName(index))}: ${this.typeForeignConvertor.convert(it)}`).join(", ")}`
+        this.print(`func ${name}(${signture}): ${this.typeForeignConvertor.convert(signature.returnType)}`)
     }
     override makeEnumCast(enumName: string, _unsafe: boolean, _convertor: EnumConvertor | undefined): string {
         return `${enumName}.value`

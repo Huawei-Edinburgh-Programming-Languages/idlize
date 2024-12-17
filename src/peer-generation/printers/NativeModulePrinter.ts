@@ -263,13 +263,14 @@ class CJNativeModuleVisitor extends NativeModuleVisitor {
             const component = clazz.generatedName(false)
             if (nativeFunctions) {
                 nativeFunctions!.pushIndent()
-                nativeFunctions!.writeNativeMethodDeclaration(`${component}_${clazz.ctor.method.name}`, clazz.finalizer.method.signature)
-                nativeFunctions!.writeNativeMethodDeclaration(`${component}_${clazz.finalizer.method.name}`, clazz.finalizer.method.signature)
+                nativeFunctions!.writeNativeMethodDeclaration(`${component}_${clazz.ctor.method.name}`, makeInteropSignature(clazz.ctor, idl.IDLPointerType, this.interopConvertor))
+                nativeFunctions!.writeNativeMethodDeclaration(`${component}_${clazz.finalizer.method.name}`, makeInteropSignature(clazz.finalizer, idl.IDLPointerType, this.interopConvertor))
                 nativeFunctions!.popIndent()
             }
             clazz.methods.forEach(method => {
                 const returnType = method.tsReturnType()
-                this.printPeerMethod(clazz, method, nativeModule, nativeModuleEmpty, idl.IDLPointerType, nativeFunctions)
+                this.printPeerMethod(clazz, method, nativeModule, nativeModuleEmpty,
+                    returnType && idl.isPrimitiveType(returnType) ? returnType : idl.IDLPointerType, nativeFunctions)
             })
         })
     }

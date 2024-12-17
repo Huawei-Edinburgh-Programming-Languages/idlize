@@ -16,9 +16,9 @@
 
 package idlize
 
-public open class Ark_MaterializedBase <: Ark_ObjectBase {
+public open class MaterializedBase <: Ark_ObjectBase {
     public var peer: ?Finalizable = None
 
     // internal interface to call constructors that only create materialized class wrappers at Java side
-    protected Ark_MaterializedBase() {}
+    protected MaterializedBase() {}
 }

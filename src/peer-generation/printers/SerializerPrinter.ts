@@ -230,8 +230,6 @@ class IdlSerializerPrinter {
                     writer.writeStatement(writer.makeAssign("pool", poolType, writer.makeUnwrapOptional(
                         writer.makeString("Serializer.pool")), true, true))
                     writer.writeStatement(writer.makeCondition(
-                            writer.language == Language.CJ ?
-                            writer.makeString(`refEq(this, pool[Int64(Serializer.poolTop)])`) :
                             writer.makeEquals([
                                 writer.makeThis(),
                                 writer.makeArrayAccess("pool", "Serializer.poolTop")

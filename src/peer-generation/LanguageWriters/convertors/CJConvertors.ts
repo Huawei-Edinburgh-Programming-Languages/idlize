@@ -96,7 +96,7 @@ export class CJIDLNodeToStringConvertor implements NodeConvertor<string>, IdlNam
             case idl.IDLStringType: return 'String'
             case idl.IDLBooleanType: return 'Bool'
             case idl.IDLNumberType: return 'Float64'
-            case idl.IDLUndefinedType: return 'Ark_Undefined'
+            case idl.IDLUndefinedType: return 'Unit' // might be wrong
             case idl.IDLI8Type: return 'Int8'
             case idl.IDLU8Type: return 'UInt8'
             case idl.IDLI16Type: return 'Int16'
@@ -149,6 +149,9 @@ export class CJIDLTypeToForeignStringConvertor extends CJIDLNodeToStringConverto
             if (super.convert(type) == 'Object') {
                 return `KPointer`
             }
+        }
+        if (idl.isClass(type) || idl.isInterface(type)) {
+            return 'KPointer'
         }
         return super.convert(type)
     }
