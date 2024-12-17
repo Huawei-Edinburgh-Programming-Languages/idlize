@@ -378,8 +378,8 @@
 |*Flex*| *Component* | Kovalev Sergey | done |  |
 |`setFlexOptions`| Function | Kovalev Sergey | done |  |
 |`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1N86 |
-|*FlowItem*| *Component* | Evstigneev Roman | in progress |  |
-|`setFlowItemOptions`| Function | Evstigneev Roman | in progress | |
+|*FlowItem*| *Component* | Evstigneev Roman | testskipped |  |
+|`setFlowItemOptions`| Function | Evstigneev Roman | testskipped | |
 |*FolderStack*| *Component* | Politov Mikhail | done |  |
 |`setFolderStackOptions`| Function | Politov Mikhail | done |  |
 |`alignContent`| Function | Politov Mikhail | done |  |
@@ -1437,7 +1437,7 @@
 |`divider`| Function |Dmitry A Smirnov|done|  |
 |`minContentWidth`| Function |Dmitry A Smirnov|done|  |
 |*RemoteWindow*| *Component* | Spirin Andrey, Evstigneev Roman | in progress | |
-|`setRemoteWindowOptions`| Function | Spirin Andrey, Evstigneev Roman | in progress | |
+|`setRemoteWindowOptions`| Function | Spirin Andrey, Evstigneev Roman | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IBBYJW |
 |*WaterFlow*| *Component* | Kovalev Sergey | in progress |  |
 |`setWaterFlowOptions`| Function | Kovalev Sergey |blocked IDL| Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`columnsTemplate`| Function | Kovalev Sergey | done |  |
