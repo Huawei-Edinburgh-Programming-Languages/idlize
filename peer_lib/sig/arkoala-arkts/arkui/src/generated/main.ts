@@ -564,7 +564,7 @@ function checkButton() {
     const options: Literal_Alignment_align = { align: 4 as Alignment }
     checkResult("background", () => peer.backgroundAttribute(builder, options),
         "background({.resource={.resourceId=104, .hold=0, .release=0}, .call=0}, {.tag=ARK_TAG_OBJECT, .value={.align={.tag=ARK_TAG_OBJECT, .value=Ark_Alignment(4)}}})")
-    checkResult("type", () => peer.typeAttribute(1 as ButtonType), "type(Ark_ButtonType(1))")
+    checkResult("type", () => peer.typeAttribute(ButtonType.Circle), "type(Ark_ButtonType(1))")
     checkResult("labelStyle", () => peer.labelStyleAttribute(new LabelStyleImpl(3)),
          "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=3}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})")
     checkResult("labelStyle2", () => peer.labelStyleAttribute(new LabelStyleImpl()),
@@ -586,8 +586,8 @@ function createDefaultWriteCallback(kind: CallbackKind, callback: object) {
         return serializer.holdAndWriteCallback(callback,
             nativeModule()._TestGetManagedHolder(),
             nativeModule()._TestGetManagedReleaser(),
-            nativeModule()._TestGetManagedCaller(kind as int),
-            nativeModule()._TestGetManagedCallerSync(kind as int),
+            nativeModule()._TestGetManagedCaller(kind.valueOf()),
+            nativeModule()._TestGetManagedCallerSync(kind.valueOf()),
         )
     }
 }

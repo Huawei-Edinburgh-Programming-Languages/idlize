@@ -75,23 +75,37 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
         const members
             = this.enumEntity.elements
             .flatMap((member, index) => {
-            const initText = member.initializer ?? index
-            const isTypeString = typeof initText !== "number"
-            const originalName = getExtAttribute(member, idl.IDLExtendedAttributes.OriginalEnumMemberName)
-            const res = [{
-                name: member.name,
-                stringId: isTypeString ? initText : undefined,
-                numberId: initText as number
-            }]
-            if (originalName !== undefined) {
-                res.push({
-                    name: originalName,
+                const initText = member.initializer ?? index
+                const isTypeString = typeof initText !== "number"
+                const originalName = getExtAttribute(member, idl.IDLExtendedAttributes.OriginalEnumMemberName)
+                const res: {
+                    name: string,
+                    alias: string | undefined,
+                    stringId: string | undefined,
+                    numberId: number
+                }[] = [{
+                    name: member.name,
+                    alias: undefined,
                     stringId: isTypeString ? initText : undefined,
                     numberId: initText as number
-                })
-            }
-            return res
-        })
+                }]
+                if (originalName !== undefined) {
+                    res.push({
+                        name: originalName,
+                        alias: undefined,
+                        stringId: isTypeString ? initText : undefined,
+                        numberId: initText as number
+                    })
+                    //TODO: enums do not support member aliases
+                    // res.push({
+                    //     name: originalName,
+                    //     alias: member.name,
+                    //     stringId: undefined,
+                    //     numberId: initText as number
+                    // })
+                }
+                return res
+            })
         writer.writeEnum(enumName, members)
     }
 }
@@ -206,7 +220,8 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         throw new Error("writeProperty for ArkTS is not implemented yet.")
     }
     override makeEnumCast(value: string, _unsafe: boolean, convertor: EnumConvertor | undefined): string {
-        return this.makeCast(this.makeString(`${value}`), IDLI32Type).asString()
+        return this.makeCast(this.makeString(`${value}${convertor?.isStringEnum ? "" : ".valueOf()"}`),
+            IDLI32Type).asString()
     }
     makeUnionVariantCondition(convertor: ArgConvertor, valueName: string, valueType: string, type: string, index?: number): LanguageExpression {
         if (convertor instanceof EnumConvertor) {
