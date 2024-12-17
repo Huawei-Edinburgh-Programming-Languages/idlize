@@ -1,3 +1,4 @@
+export { CustomTextEncoder } from '@koalaui/compat'
 import { checkArkoalaCallbacks } from "../../generated/ts/CallbacksChecker";
 import { ParseInfo, XmlPullParser, xml } from "../../generated/ts/xml"
 

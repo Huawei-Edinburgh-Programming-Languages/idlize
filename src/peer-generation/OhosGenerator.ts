@@ -15,7 +15,7 @@
 
 import * as fs from 'fs'
 import * as path from 'path'
-import { createConstructor, createContainerType, createOptionalType, createReferenceType, createTypeParameterReference, forceAsNamedNode, getExtAttribute, hasExtAttribute, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLInterfaceSubkind, IDLMethod, IDLParameter, IDLPointerType, IDLStringType, IDLType, IDLU8Type, IDLUint8ArrayType, IDLVoidType, isCallback, isConstructor, isContainerType, isEnum, isInterface, isMethod, isReferenceType, isType, isUnionType } from '../idl'
+import { createConstructor, createContainerType, createOptionalType, createReferenceType, createTypeParameterReference, forceAsNamedNode, getExtAttribute, hasExtAttribute, IDLBufferType, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLInterfaceSubkind, IDLMethod, IDLParameter, IDLPointerType, IDLStringType, IDLType, IDLU8Type, IDLUint8ArrayType, IDLVoidType, isCallback, isConstructor, isContainerType, isEnum, isInterface, isMethod, isReferenceType, isType, isUnionType } from '../idl'
 import { IndentedPrinter } from "../IndentedPrinter"
 import { Language } from '../Language'
 import { capitalize, getOrPut } from '../util'
@@ -348,6 +348,19 @@ class OHOSVisitor {
                     { name: "buffer", type: IDLUint8ArrayType },
                     { name: "position", type: IDLI32Type },
                     { name: "length", type: IDLI32Type },
+                ])
+            )
+            writer.writeNativeMethodDeclaration("_MaterializeBuffer",
+                NamedMethodSignature.make(IDLBufferType, [
+                    { name: "data", type: IDLPointerType },
+                    { name: "length", type: IDLI32Type },
+                    { name: "resourceId", type: IDLI32Type },
+                    { name: "holderPtr", type: IDLPointerType },
+                ])
+            )
+            writer.writeNativeMethodDeclaration("_GetNativeBufferPointer",
+                NamedMethodSignature.make(IDLPointerType, [
+                    { name: "buffer", type: IDLBufferType },
                 ])
             )
         })(this.nativeFunctionsWriter)

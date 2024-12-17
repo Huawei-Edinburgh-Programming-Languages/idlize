@@ -1,3 +1,4 @@
+export { CustomTextEncoder } from '@koalaui/compat'
 import { checkArkoalaCallbacks } from "../../generated/arkts/CallbacksChecker";
 import { xml_EventType } from "../../generated/arkts/xml";
 

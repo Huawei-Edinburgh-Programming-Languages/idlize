@@ -12,9 +12,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { float32, int32 } from "@koalaui/common"
+import { finalizerRegister, float32, int32 } from "@koalaui/common"
 import { pointer } from "@koalaui/interop"
 import { Tags, CallbackResource } from "./SerializerBase";
+import { getXMLNativeModule as nativeModule } from "./xmlNative"
+import { NativeThunkImpl } from "./xmlFinalizable" /* TODO: import it more generic way? */
 
 export class DeserializerBase {
     private position = 0
@@ -165,9 +167,13 @@ export class DeserializerBase {
         }
     }
     readBuffer(): ArrayBuffer {
-        this.readPointer()
+        const resource = this.readCallbackResource()
+        const data = this.readPointer()
         const length = this.readInt64()
-        return new ArrayBuffer(Number(length))
+
+        const buffer = nativeModule()._MaterializeBuffer(data, length, resource.resourceId, resource.hold)
+        finalizerRegister(buffer, new NativeThunkImpl(resource.resourceId, resource.release))
+        return buffer
     }
 
     readCallbackResource(): CallbackResource {

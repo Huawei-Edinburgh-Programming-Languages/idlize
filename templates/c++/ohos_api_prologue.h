@@ -72,11 +72,6 @@ typedef struct OH_Number {
     OH_Int32 i32;
   };
 } OH_Number;
-typedef struct OH_Buffer
-{
-  void* data;
-  int64_t length;
-} OH_Buffer;
 typedef struct OH_Materialized {
   OH_NativePointer ptr;
 } OH_Materialized;
@@ -105,6 +100,11 @@ typedef struct OH_AnyAPI {
 typedef enum OH_APIKind {
     OH_%LIBRARY_NAME%_API_KIND = 1
 } OH_APIKind;
+typedef struct OH_Buffer {
+  OH_CallbackResource resource;
+  OH_NativePointer data;
+  OH_Int64 length;
+} OH_Buffer;
 
 struct _OH_VMContext;
 typedef struct _OH_VMContext* OH_VMContext;
