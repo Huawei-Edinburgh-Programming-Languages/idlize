@@ -259,13 +259,13 @@
 |`obscured`| Function |Dmitry A Smirnov |done | |
 |`reuseId`| Function |Dmitry A Smirnov |blocked AceEngine | not implemented in ace_engine|
 |`renderFit`| Function | Dmitry A Smirnov|done | |
-|`gestureModifier`| Function | | | |
+|`gestureModifier`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`backgroundBrightness`| Function | Skroba Gleb | done | |
 |`onGestureJudgeBegin`| Function | Politov Mikhail | | |
 |`onGestureRecognizerJudgeBegin`| Function | Politov Mikhail | | |
 |`shouldBuiltInRecognizerParallelWith`| Function | | | |
-|`monopolizeEvents`| Function | | | |
-|`onTouchIntercept`| Function | | | |
+|`monopolizeEvents`| Function | Erokhin Ilya | in progress | |
+|`onTouchIntercept`| Function | Erokhin Ilya | in progress | |
 |`onSizeChange`| Function | Dmitry A Smirnov|in progress | |
 |`customProperty`| Function | Dmitry A Smirnov|blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`expandSafeArea`| Function | Dmitry A Smirnov|in progress | |
@@ -284,17 +284,17 @@
 |`backdropBlur`| Function | Berezin Kirill | done | |
 |`sharedTransition`|Function|Skroba Gleb | done |  |
 |`chainMode`| Function | Berezin Kirill | in progress | |
-|`dragPreviewOptions`| Function | | | |
+|`dragPreviewOptions`| Function | Erokhin Ilya | in progress | |
 |`overlay`| Function | Roman Sedaikin | done | |
 |`blendMode`| Function | Lobah Mikhail | done | |
-|`advancedBlendMode`| Function | | | |
+|`advancedBlendMode`| Function | Erokhin Ilya | in progress | |
 |`bindPopup`| Function | | | |
 |`bindMenu`| Function | | | |
 |`bindContextMenu`| Function | | | |
 |`bindContentCover`| Function | | | |
 |`bindSheet`| Function | | | |
 |`onVisibleAreaChange`| Function | Erokhin Ilya | done | |
-|`keyboardShortcut`| Function | | | |
+|`keyboardShortcut`| Function | Erokhin Ilya | in progress | |
 |*CommonShapeMethod*|*Component*|Skroba Gleb| blocked AceEngine |  |
 |`stroke`|Function| Skroba Gleb | done |  |
 |`fill`|Function| Skroba Gleb | done |  |
