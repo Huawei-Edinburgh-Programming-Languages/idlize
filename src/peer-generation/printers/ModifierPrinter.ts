@@ -54,10 +54,6 @@ export class ModifierVisitor {
 
     printDummyImplFunctionBody(method: PeerMethod) {
         let _ = this.dummy
-        if (method.toStringName.includes('construct')) {
-            _.writeLines(`return new TreeNode("${method.originalParentName}", id, flags);`)
-            return
-        }
         _.writeStatement(
             _.makeCondition(
                 _.makeString("!needGroupedLog(1)"),
@@ -68,18 +64,22 @@ export class ModifierVisitor {
             if (index > 0) this.dummy.print(`out.append(", ");`)
             _.print(`WriteToString(&out, ${argConvertor.param});`)
         })
-        _.print(`out.append(")");`)
+        _.print(`out.append(") \\n");`)
         const isVoid = this.returnTypeConvertor.isVoid(method)
         let retVal = isVoid ? undefined : method.dummyReturnValue
         if (retVal  !== undefined) {
-            _.print(`out.append("[return ${retVal}]");`)
+            _.print(`out.append("[return ${retVal}] \\n");`)
         }
         _.print(`appendGroupedLog(1, out);`)
         const rt = method.method.signature.returnType
         if (retVal === undefined && !isVoid) {
             retVal = "0"
         }
-        this.printReturnStatement(this.dummy, method, true, retVal)
+        if (method.toStringName == "construct") {
+            this.printConstructReturnStatement(this.dummy, method)
+        } else {
+            this.printReturnStatement(this.dummy, method, true, retVal)
+        }
     }
 
     printModifierImplFunctionBody(method: PeerMethod, clazz: PeerClass | undefined = undefined) {
@@ -126,6 +126,10 @@ export class ModifierVisitor {
                 printer.print(`return 0;`)
             }
         }
+    }
+
+    private printConstructReturnStatement(printer: LanguageWriter, method: PeerMethod) {
+        printer.writeLines(`return new TreeNode("${method.originalParentName}", id, flags);`)
     }
 
      private isPointerReturnType(returnType: IDLType): boolean {
