@@ -368,7 +368,7 @@ if (options.dts2peer) {
                 )
                 entries.forEach(it => {
                     transformMethodsAsync2ReturnPromise(it)
-                    correctOverloadedProperties(it, idlLibrary)
+                    // correctOverloadedProperties(it, idlLibrary)
                 })
                 const file = new PeerFile(sourceFile.fileName, entries)
                 idlLibrary.files.push(file)
@@ -431,25 +431,25 @@ if (!didJob) {
     program.help()
 }
 
-function correctOverloadedProperties(entry: IDLEntry, idlLibrary: PeerLibrary) {
-    if ([Language.CJ, Language.CPP, Language.JAVA].includes(idlLibrary.language)) {
-        return;
-    }
-    if (!isInterface(entry)) {
-        return;
-    }
-    if (entry.inheritance.length !== 1) {
-        return;
-    }
-    const firstParent = idlLibrary.toDeclaration(entry.inheritance[0])
-    if (!isInterface(firstParent)) {
-        return;
-    }
-    entry.properties.forEach(prop => {
-        const overloadedProp =
-            firstParent.properties.find(it => it.name === prop.name)
-        if (overloadedProp !== undefined) {
-            prop.type = overloadedProp.type
-        }
-    })
-}
+// function correctOverloadedProperties(entry: IDLEntry, idlLibrary: PeerLibrary) {
+//     if (idlLibrary.language !== Language.ARKTS) {
+//         return;
+//     }
+//     if (!isInterface(entry) && !isClass(entry)) {
+//         return;
+//     }
+//     if (entry.inheritance.length !== 1) {
+//         return;
+//     }
+//     const firstParent = idlLibrary.toDeclaration(entry.inheritance[0])
+//     if (!isInterface(firstParent) && !isClass(firstParent)) {
+//         return;
+//     }
+//     entry.properties.forEach(prop => {
+//         const overloadedProp =
+//             firstParent.properties.find(it => it.name === prop.name)
+//         if (overloadedProp !== undefined) {
+//             prop.type = overloadedProp.type
+//         }
+//     })
+// }
