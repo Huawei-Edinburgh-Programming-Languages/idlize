@@ -329,13 +329,13 @@
 |`fadingEdge`| Function | Samarin Sergey | done | |
 |*Component3D*| *Component* |Kovalev Sergey | in progress | |
 |`setComponent3DOptions`| Function |Kovalev Sergey | in progress| |
-|`environment`| Function |Kovalev Sergey | devdone |  |
-|`shader`| Function |Kovalev Sergey | devdone |  |
-|`shaderImageTexture`| Function |Kovalev Sergey | devdone |  |
-|`shaderInputBuffer`| Function |Kovalev Sergey | devdone |  |
-|`renderWidth`| Function |Kovalev Sergey | devdone |  |
-|`renderHeight`| Function |Kovalev Sergey | devdone |  |
-|`customRender`| Function |Kovalev Sergey | devdone |  |
+|`environment`| Function |Kovalev Sergey | done |  |
+|`shader`| Function |Kovalev Sergey | done |  |
+|`shaderImageTexture`| Function |Kovalev Sergey | done |  |
+|`shaderInputBuffer`| Function |Kovalev Sergey | done |  |
+|`renderWidth`| Function |Kovalev Sergey | done |  |
+|`renderHeight`| Function |Kovalev Sergey | done |  |
+|`customRender`| Function |Kovalev Sergey | done |  |
 |*ContainerSpan*| *Component* | Tuzhilkin Ivan|done|  |
 |`setContainerSpanOptions`| Function |Tuzhilkin Ivan|done|  |
 |`textBackgroundStyle`| Function |Tuzhilkin Ivan|done|  |
