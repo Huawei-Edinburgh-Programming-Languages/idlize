@@ -68,7 +68,7 @@ export class ModifierVisitor {
             if (index > 0) this.dummy.print(`out.append(", ");`)
             _.print(`WriteToString(&out, ${argConvertor.param});`)
         })
-        _.print(`out.append(")");`)
+        _.print(`out.append(")\\n");`)
         const isVoid = this.returnTypeConvertor.isVoid(method)
         let retVal = isVoid ? undefined : method.dummyReturnValue
         if (retVal  !== undefined) {

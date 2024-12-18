@@ -554,21 +554,21 @@ function checkButton() {
     let peer = ArkButtonPeer.create()
 
     checkResult("width", () => peer.widthAttribute("42%"),
-        "width({.type=2, .value=42, .unit=3, .resource=0})")
+        "width({.type=2, .value=42, .unit=3, .resource=0})\n")
     const resource: Resource = { id: 43, bundleName: "MyApp", moduleName: "MyApp" }
     checkResult("height", () => peer.heightAttribute(resource),
-        "height({.type=3, .value=0, .unit=1, .resource=43})")
+        "height({.type=3, .value=0, .unit=1, .resource=43})\n")
     checkResult("height", () => peer.heightAttribute(44),
-        "height({.type=1, .value=44, .unit=1, .resource=0})")
+        "height({.type=1, .value=44, .unit=1, .resource=0})\n")
     const builder: CustomBuilder = (): void => { }
     const options: Literal_Alignment_align = { align: Alignment.of(4) }
     checkResult("background", () => peer.backgroundAttribute(builder, options),
-        "background({.resource={.resourceId=104, .hold=0, .release=0}, .call=0}, {.tag=ARK_TAG_OBJECT, .value={.align={.tag=ARK_TAG_OBJECT, .value=Ark_Alignment(4)}}})")
-    checkResult("type", () => peer.typeAttribute(ButtonType.of(1)), "type(Ark_ButtonType(1))")
+        "background({.resource={.resourceId=104, .hold=0, .release=0}, .call=0}, {.tag=ARK_TAG_OBJECT, .value={.align={.tag=ARK_TAG_OBJECT, .value=Ark_Alignment(4)}}})\n")
+    checkResult("type", () => peer.typeAttribute(ButtonType.of(1)), "type(Ark_ButtonType(1))\n")
     checkResult("labelStyle", () => peer.labelStyleAttribute(new LabelStyleImpl(3)),
-         "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=3}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})")
+         "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=3}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})\n")
     checkResult("labelStyle2", () => peer.labelStyleAttribute(new LabelStyleImpl()),
-        "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_UNDEFINED, .value={}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})")
+        "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_UNDEFINED, .value={}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})\n")
 }
 
 function checkCallback() {
