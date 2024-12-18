@@ -119,3 +119,4 @@ void impl_TestWithBuffer(KInteropBuffer buffer) {
     }
     GetDefaultLogger()->appendGroupedLog(1, result.c_str());
 }
+KOALA_INTEROP_V1(TestWithBuffer, KInteropBuffer)

@@ -190,23 +190,23 @@ func checkTwoSidesCallback() {
             callback(42.0)
         }
     )
-    // for (i in 0..call2Count) {
-    //     enqueueCallback(
-    //         createDefaultWriteCallback(CallbackKind.Kind_Callback_Void, { =>
-    //             callResult.callResult2++
-    //         }),
-    //         { deserializer =>
-    //             let callback = deserializer.readCallback_Void(false)
-    //             callback()
-    //         }
-    //     )
-    // }
+    for (i in 0..call2Count) {
+        enqueueCallback(
+            createDefaultWriteCallback(CallbackKind.Kind_Callback_Void, { =>
+                callResult.callResult2++
+            }),
+            { deserializer =>
+                let callback = deserializer.readCallback_Void(false)
+                callback()
+            }
+        )
+    }
 
     assertEquals("Callback 1 enqueued", "NOT_CALLED", callResult.callResult1.toString())
-    // assertEquals("Callback 2 enqueued ${call2Count} times", 0.toString(), callResult.callResult2.toString())
+    assertEquals("Callback 2 enqueued ${call2Count} times", 0.toString(), callResult.callResult2.toString())
     checkArkoalaCallbacks()
     assertEquals("Callback 1 read&called", "CALLED, value=42.000000", callResult.callResult1.toString())
-    // assertEquals("Callback 2 read&called ${call2Count} times", call2Count.toString(), callResult.callResult2.toString())
+    assertEquals("Callback 2 read&called ${call2Count} times", call2Count.toString(), callResult.callResult2.toString())
 }
 
 main(): Unit {
