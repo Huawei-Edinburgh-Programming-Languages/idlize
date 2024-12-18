@@ -309,7 +309,7 @@
 |`strokeDashArray`| Function | Evstigneev Roman | blocked AceEngine|https://gitee.com/openharmony/interface_sdk-js/issues/IAX8ZZ|
 |*Common*| *Component* | Maksimov Nikita | done | |
 |`setCommonOptions`| Function | Maksimov Nikita | done | |
-|*ScrollableCommonMethod*| *Component* | Samarin Sergey |in progress |  |
+|*ScrollableCommonMethod*| *Component* | Samarin Sergey | blocked |  |
 |`scrollBar`| Function | Samarin Sergey | done |  |
 |`scrollBarColor`| Function | Samarin Sergey | done |  |
 |`scrollBarWidth`| Function | Samarin Sergey | done |  |
@@ -319,10 +319,10 @@
 |`onScroll`| Function | Samarin Sergey | deprecated |  |
 |`onWillScroll`| Function | Samarin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onDidScroll`| Function | Samarin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB6U0 |
-|`onReachStart`| Function | Samarin Sergey | in progress|  |
-|`onReachEnd`| Function | Samarin Sergey | in progress|  |
-|`onScrollStart`| Function | Samarin Sergey | in progress|  |
-|`onScrollStop`| Function | Samarin Sergey | in progress|  |
+|`onReachStart`| Function | Samarin Sergey | testskipped |  |
+|`onReachEnd`| Function | Samarin Sergey | testskipped |  |
+|`onScrollStart`| Function | Samarin Sergey | testskipped |  |
+|`onScrollStop`| Function | Samarin Sergey | testskipped |  |
 |`flingSpeedLimit`| Function | Samarin Sergey | done |  |
 |`clipContent`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBBLGP |
 |`edgeEffect`| Function | Samarin Sergey | done | |
@@ -1089,7 +1089,7 @@
 |`selectedBackgroundColor`| Function |Samarin Sergey | done | |
 |`ellipsisMode`| Function |Samarin Sergey | done |  |
 |`enableDataDetector`| Function | Kirill Kirichenko | done |  |
-|`dataDetectorConfig`| Function | Kirill Kirichenko | in progress |  |
+|`dataDetectorConfig`| Function | Samarin Sergey | in progress |  |
 |`onTextSelectionChange`| Function | Kirill Kirichenko | done |  |
 |`fontFeature`| Function |Samarin Sergey | done |  |
 |`privacySensitive`| Function |Samarin Sergey | done |  |
@@ -1819,7 +1819,7 @@
 |`getTo`| Function | Dudkin Sergey | in progress |  |
 |`setTo`| Function | Dudkin Sergey | in progress |  |
 |*TextController*| *Class* | Samarin Sergey | in progress | |
-|`closeSelectionMenu`| Function | Samarin Sergey | devdone | |
+|`closeSelectionMenu`| Function | Samarin Sergey | done | |
 |`setStyledString`| Function | Samarin Sergey | in progress | |
 |`getLayoutManager`| Function | Samarin Sergey | in progress | |
 |*TextAreaController*| *Class* | Tuzhilkin Ivan | testskipped |  |
