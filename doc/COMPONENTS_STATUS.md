@@ -1486,8 +1486,8 @@
 |`goTo`| Function |Maksimov Nikita | done |  |
 |*CalendarPickerDialog*| *Class* | Ekaterina Stepanova | in progress | |
 |`show`| Function | Ekaterina Stepanova | in progress | |
-|*CanvasGradient*| *Class* | Vadim Voronov | in progress | |
-|`addColorStop`| Function | Vadim Voronov | in progress | |
+|*CanvasGradient*| *Class* | Vadim Voronov | done | |
+|`addColorStop`| Function | Vadim Voronov | done | |
 |*CanvasPath*| *Class* | Kovalev Sergey |in progress |  |
 |`arc`| Function | Kovalev Sergey | in progress |  |
 |`arcTo`| Function | Kovalev Sergey | in progress |  |
@@ -1683,25 +1683,25 @@
 |`scrollToItemInGroup`| Function |Morozov Sergey | done |  |
 |`closeAllSwipeActions`| Function |Morozov Sergey | done | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getVisibleListContentInfo`| Function |Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|*Matrix2D*| *Class* | Vadim Voronov | in progress | |
+|*Matrix2D*| *Class* | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`identity`| Function | Vadim Voronov | done | |
 |`invert`| Function | Vadim Voronov | done | |
 |`multiply`| Function | Vadim Voronov | deprecated | deprecated |
-|`rotate`| Function | Vadim Voronov | deprecated | deprecated |
+|`rotate`| Function | Vadim Voronov | done | rotate0 deprecated, rotate1 done |
 |`translate`| Function | Vadim Voronov | done | |
 |`scale`| Function | Vadim Voronov | done | |
 |`getScaleX`| Function | Vadim Voronov | blocked IDL | implemented without return val,https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setScaleX`| Function | Vadim Voronov | done | |
 |`getRotateY`| Function | Vadim Voronov | blocked IDL | implemented without return val,https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setRotateY`| Function | Vadim Voronov | in progress | |
+|`setRotateY`| Function | Vadim Voronov | done | |
 |`getRotateX`| Function | Vadim Voronov | blocked IDL | implemented without return val,https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setRotateX`| Function | Vadim Voronov | in progress | |
+|`setRotateX`| Function | Vadim Voronov | done | |
 |`getScaleY`| Function | Vadim Voronov | blocked IDL | implemented without return val,https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setScaleY`| Function | Vadim Voronov | in progress | |
+|`setScaleY`| Function | Vadim Voronov | done | |
 |`getTranslateX`| Function | Vadim Voronov | blocked IDL | implemented without return val,https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setTranslateX`| Function | Vadim Voronov | in progress | |
+|`setTranslateX`| Function | Vadim Voronov | done | |
 |`getTranslateY`| Function | Vadim Voronov | blocked IDL | implemented without return val,https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setTranslateY`| Function | Vadim Voronov | in progress | |
+|`setTranslateY`| Function | Vadim Voronov | done | |
 |*NavDestinationContext*| *Class* | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`getConfigInRouteMap`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y, https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setPathInfo`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y, https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
