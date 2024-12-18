@@ -1580,14 +1580,14 @@
 |`setTextAlign`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
 |`getTextBaseline`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO & https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 & https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
 |`setTextBaseline`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
-|*CanvasRenderingContext2D*| *Class* | Vadim Voronov| in progress|  |
+|*CanvasRenderingContext2D*| *Class* | Vadim Voronov, Evstigneev Roman | in progress|  |
 |`toDataURL`| Function |Vadim Voronov| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`startImageAnalyzer`| Function |Vadim Voronov| done | |
 |`stopImageAnalyzer`| Function | Vadim Voronov| done | |
-|`onOnAttach`| Function | Vadim Voronov | in progress |  |
-|`offOnAttach`| Function | Vadim Voronov | in progress |  |
-|`onOnDetach`| Function | Vadim Voronov | in progress |  |
-|`offOnDetach`| Function | Vadim Voronov | in progress |  |
+|`onOnAttach`| Function | Vadim Voronov, Evstigneev Roman | in progress |  |
+|`offOnAttach`| Function | Vadim Voronov, Evstigneev Roman | in progress |  |
+|`onOnDetach`| Function | Vadim Voronov, Evstigneev Roman | in progress |  |
+|`offOnDetach`| Function | Vadim Voronov, Evstigneev Roman | in progress |  |
 |`getHeight`| Function |Vadim Voronov| done | |
 |`getWidth`| Function |Vadim Voronov| done | |
 |*DrawingRenderingContext*| *Class* |Vadim Voronov| in progress | |
