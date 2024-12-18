@@ -591,9 +591,9 @@
 |`fontWeight`| Function | Andrey Khudenkikh| done |  |
 |`fontFamily`| Function | Andrey Khudenkikh| done |  |
 |`marqueeUpdateStrategy`| Function |Andrey Khudenkikh | done |  |
-|`onStart`| Function | Andrey Khudenkikh| devdone |  |
-|`onBounce`| Function |Andrey Khudenkikh | devdone |  |
-|`onFinish`| Function |Andrey Khudenkikh | devdone |  |
+|`onStart`| Function | Andrey Khudenkikh| done |  |
+|`onBounce`| Function |Andrey Khudenkikh | done |  |
+|`onFinish`| Function |Andrey Khudenkikh | done |  |
 |*MediaCachedImage*| *Component* | Skroba Gleb | blocked IDL | |
 |`setMediaCachedImageOptions`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX, https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |*Menu*|*Component*|Morozov Sergey| done |  |
