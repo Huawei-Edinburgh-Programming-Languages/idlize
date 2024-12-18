@@ -88,6 +88,7 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
         this.file.peersToGenerate.forEach(peer => {
             imports.addFeature('int32', '@koalaui/common')
             imports.addFeature("KStringPtr", "@koalaui/interop")
+            imports.addFeature("KUint8ArrayPtr", "@koalaui/interop")
             imports.addFeature("KBoolean", "@koalaui/interop")
             imports.addFeature("NodeAttach", "@koalaui/runtime")
             imports.addFeature("remember", "@koalaui/runtime")

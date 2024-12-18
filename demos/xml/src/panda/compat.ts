@@ -1,12 +1,23 @@
-export { CustomTextEncoder } from '@koalaui/compat'
+import { KUint8ArrayPtr } from '@koalaui/interop'
 import { checkArkoalaCallbacks } from "../../generated/arkts/CallbacksChecker";
 import { xml_EventType } from "../../generated/arkts/xml";
-
+import { getXMLNativeModule as nativeModule } from './../../generated/arkts/xmlNative'
 export { ParseInfo, XmlPullParser } from "../../generated/arkts/xml"
 export type EventType = xml_EventType
+export type OHArrayBuffer = KUint8ArrayPtr
 
 export function pullEvents() {
     checkArkoalaCallbacks()
+}
+
+export function encodeString(text:string): OHArrayBuffer {
+    const buffer = new byte[1024]
+    const length = nativeModule()._ManagedStringWrite(text, buffer, 0)
+    const result = new byte[length]
+    for (let i = 0; i < length; ++i) {
+        result[i] = buffer[i]
+    }
+    return result
 }
 
 export function eventTypeStr(eventType: xml_EventType) {

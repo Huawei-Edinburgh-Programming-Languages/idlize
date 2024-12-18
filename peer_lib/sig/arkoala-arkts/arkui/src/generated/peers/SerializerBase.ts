@@ -297,14 +297,14 @@ export class SerializerBase {
         this.position += encodedLength + 4
     }
     //TODO: Needs to be implemented
-    writeBuffer(value: ArrayBuffer) {
+    writeBuffer(value: KUint8ArrayPtr) {
         this.writeCallbackResource({
             resourceId: -1,
             hold: 0,
             release: 0
         })
         this.writePointer(0)
-        this.writeInt64(value.byteLength as int64)
+        this.writeInt64(value.length as int64)
     }
 }
 

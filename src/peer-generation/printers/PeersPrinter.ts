@@ -244,7 +244,7 @@ class PeerFileVisitor {
     protected getDefaultPeerImports(lang: Language) {
         const defaultPeerImports = [
             `import { int32 } from "@koalaui/common"`,
-            `import { nullptr, KPointer, KInt, KBoolean, KStringPtr } from "@koalaui/interop"`,
+            `import { nullptr, KPointer, KInt, KBoolean, KStringPtr, KUint8ArrayPtr } from "@koalaui/interop"`,
             `import { isResource, isInstanceOf, runtimeType, RuntimeType } from "./SerializerBase"`,
             `import { Serializer } from "./Serializer"`,
             `import { ArkUINodeType } from "./ArkUINodeType"`,

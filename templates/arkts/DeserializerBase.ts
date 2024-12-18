@@ -178,10 +178,12 @@ export class DeserializerBase {
         }
     }
 
-    readBuffer(): ArrayBuffer {
+    readBuffer(): KUint8ArrayPtr {
+        /* not implemented */
+        this.readCallbackResource()
         this.readPointer()
-        const length = this.readInt64()
-        return new ArrayBuffer(length)
+        this.readInt64()
+        return (new KBuffer(1)).buffer
     }
 
     readUint8ClampedArray(): Uint8ClampedArray {

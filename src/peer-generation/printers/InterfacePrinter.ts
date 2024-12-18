@@ -1206,6 +1206,7 @@ export function getCommonImports(language: Language) {
         imports.push({feature: "KPointer", module: "@koalaui/interop"})
         imports.push({feature: "KBoolean", module: "@koalaui/interop"})
         imports.push({feature: "KStringPtr", module: "@koalaui/interop"})
+        imports.push({feature: "KUint8ArrayPtr", module: "@koalaui/interop"})
         imports.push({feature: "wrapCallback", module: "@koalaui/interop"})
         imports.push({feature: "NodeAttach", module: "@koalaui/runtime"})
         imports.push({feature: "remember", module: "@koalaui/runtime"})

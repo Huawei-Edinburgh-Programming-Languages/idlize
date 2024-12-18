@@ -51,6 +51,7 @@ class TSBuilderClassFileVisitor implements BuilderClassFileVisitor {
         const imports = new ImportsCollector()
         imports.addFeature('KBoolean', '@koalaui/interop')
         imports.addFeature('KStringPtr', '@koalaui/interop')
+        imports.addFeature('KUint8ArrayPtr', '@koalaui/interop')
         if (PeerGeneratorConfig.needInterfaces) {
             collectDeclDependencies(this.peerLibrary, clazz.declaration, imports)
             if (clazz.declaration.inheritance.length && clazz.declaration.inheritance[0] !== IDLTopType) {

@@ -1,5 +1,5 @@
 import { int32 } from "@koalaui/common"
-import { KPointer, KInt, KStringPtr, pointer } from "@koalaui/interop"
+import { KPointer, KInt, KStringPtr, pointer, KUint8ArrayPtr } from "@koalaui/interop"
 import { RuntimeType, runtimeType } from "./SerializerBase"
 import { Serializer } from "./xmlSerializer"
 import { Finalizable } from "./xmlFinalizable"
@@ -113,7 +113,7 @@ export interface XmlPullParserInterface {
 }
 export class XmlSerializer implements XmlSerializerInterface {
     peer: Finalizable
-     constructor(buffer: ArrayBuffer, encoding?: string) {
+     constructor(buffer: KUint8ArrayPtr, encoding?: string) {
         const thisSerializer : Serializer = Serializer.hold()
         thisSerializer.writeBuffer(buffer)
         let encoding_type : int32 = RuntimeType.UNDEFINED
@@ -226,7 +226,7 @@ export class ParseInfoInternal {
 }
 export class XmlPullParser implements XmlPullParserInterface {
     peer: Finalizable
-     constructor(buffer: ArrayBuffer, encoding?: string) {
+     constructor(buffer: KUint8ArrayPtr, encoding?: string) {
         const thisSerializer : Serializer = Serializer.hold()
         thisSerializer.writeBuffer(buffer)
         let encoding_type : int32 = RuntimeType.UNDEFINED

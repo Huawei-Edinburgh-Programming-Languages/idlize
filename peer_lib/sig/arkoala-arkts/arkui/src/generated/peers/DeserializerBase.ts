@@ -204,12 +204,12 @@ export class DeserializerBase {
         return suffix
     }
 
-    readBuffer(): ArrayBuffer {
+    readBuffer(): KUint8ArrayPtr {
         /* not implemented */
         this.readCallbackResource()
         this.readPointer()
         this.readInt64()
-        return new ArrayBuffer(1)
+        return (new KBuffer(1)).buffer
     }
 
     readUint8ClampedArray(): Uint8ClampedArray {

@@ -268,8 +268,15 @@ export class SerializerBase {
         // this.position += encodedLength + 4
     }
     //TODO: Needs to be implemented
-    writeBuffer(value: ArrayBuffer) {
-        this.writePointer(42)
-        this.writeInt64(value.byteLength as int64)
+    writeBuffer(value: KUint8ArrayPtr) {
+        const resourceId = ResourceHolder.instance().registerAndHold(value)
+        this.writeCallbackResource({
+            resourceId: resourceId,
+            hold: 0,
+            release: 0
+        })
+        const ptr = NativeModule._GetNativeBufferPointer(value)
+        this.writePointer(ptr)
+        this.writeInt64(value.length as int64)
     }
 }
