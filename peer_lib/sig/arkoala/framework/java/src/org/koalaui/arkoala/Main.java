@@ -78,7 +78,7 @@ public class Main {
         labelStyle.maxLines = new Opt_Number(5);
         TestUtils.checkResult("[Interface + Optional] ButtonPeer.labelStyle",
             () -> { buttonPeer.labelStyleAttribute(labelStyle); },
-            "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=5}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})");
+            "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=5}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})\n");
 
         // union
         labelStyle.maxLines = null;
@@ -86,11 +86,11 @@ public class Main {
         labelStyle.font.weight = new Union_FontWeight_double_String("param");
         TestUtils.checkResult("[Union] ButtonPeer.labelStyle",
             () -> { buttonPeer.labelStyleAttribute(labelStyle); },
-            "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_UNDEFINED, .value={}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_OBJECT, .value={.size={.tag=ARK_TAG_UNDEFINED, .value={}}, .weight={.tag=ARK_TAG_OBJECT, .value={.selector=2, .value2={.chars=\"param\", .length=5}}}, .family={.tag=ARK_TAG_UNDEFINED, .value={}}, .style={.tag=ARK_TAG_UNDEFINED, .value={}}}}})");
+            "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_UNDEFINED, .value={}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_OBJECT, .value={.size={.tag=ARK_TAG_UNDEFINED, .value={}}, .weight={.tag=ARK_TAG_OBJECT, .value={.selector=2, .value2={.chars=\"param\", .length=5}}}, .family={.tag=ARK_TAG_UNDEFINED, .value={}}, .style={.tag=ARK_TAG_UNDEFINED, .value={}}}}})\n");
         labelStyle.font.weight = new Union_FontWeight_double_String(FontWeight.BOLD);
         TestUtils.checkResult("[Union + Enum] ButtonPeer.labelStyle",
             () -> { buttonPeer.labelStyleAttribute(labelStyle); },
-            "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_UNDEFINED, .value={}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_OBJECT, .value={.size={.tag=ARK_TAG_UNDEFINED, .value={}}, .weight={.tag=ARK_TAG_OBJECT, .value={.selector=0, .value0=Ark_FontWeight(4)}}, .family={.tag=ARK_TAG_UNDEFINED, .value={}}, .style={.tag=ARK_TAG_UNDEFINED, .value={}}}}})");
+            "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_UNDEFINED, .value={}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_OBJECT, .value={.size={.tag=ARK_TAG_UNDEFINED, .value={}}, .weight={.tag=ARK_TAG_OBJECT, .value={.selector=0, .value0=Ark_FontWeight(4)}}, .family={.tag=ARK_TAG_UNDEFINED, .value={}}, .style={.tag=ARK_TAG_UNDEFINED, .value={}}}}})\n");
         var resource = new Resource();
         resource.id = 10;
         resource.type = 2000;
@@ -100,7 +100,7 @@ public class Main {
         labelStyle.font.family = new Union_String_Resource(resource);
         TestUtils.checkResult("[Union + Resource] ButtonPeer.labelStyle",
             () -> { buttonPeer.labelStyleAttribute(labelStyle); },
-            "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_UNDEFINED, .value={}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_OBJECT, .value={.size={.tag=ARK_TAG_UNDEFINED, .value={}}, .weight={.tag=ARK_TAG_UNDEFINED, .value={}}, .family={.tag=ARK_TAG_OBJECT, .value={.selector=1, .value1={.bundleName={.chars=\"bundle_name\", .length=11}, .moduleName={.chars=\"module_name\", .length=11}, .id={.tag=102, .i32=10}, .params={.tag=ARK_TAG_UNDEFINED, .value={}}, .type={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=2000}}}}}, .style={.tag=ARK_TAG_UNDEFINED, .value={}}}}})"
+            "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_UNDEFINED, .value={}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_OBJECT, .value={.size={.tag=ARK_TAG_UNDEFINED, .value={}}, .weight={.tag=ARK_TAG_UNDEFINED, .value={}}, .family={.tag=ARK_TAG_OBJECT, .value={.selector=1, .value1={.bundleName={.chars=\"bundle_name\", .length=11}, .moduleName={.chars=\"module_name\", .length=11}, .id={.tag=102, .i32=10}, .params={.tag=ARK_TAG_UNDEFINED, .value={}}, .type={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=2000}}}}}, .style={.tag=ARK_TAG_UNDEFINED, .value={}}}}})\n"
             );
 
         // tuple
@@ -109,35 +109,35 @@ public class Main {
         options.grayscale = new Tuple_double_double(1.0, 2.0);
         TestUtils.checkResult("[Tuple] TestPeer.backdropBlur",
             () -> { peer.backdropBlurAttribute(42, options); },
-            "backdropBlur({.tag=102, .i32=42}, {.tag=ARK_TAG_OBJECT, .value={.grayscale={.value0={.tag=102, .i32=1}, .value1={.tag=102, .i32=2}}}})");
+            "backdropBlur({.tag=102, .i32=42}, {.tag=ARK_TAG_OBJECT, .value={.grayscale={.value0={.tag=102, .i32=1}, .value1={.tag=102, .i32=2}}}})\n");
         var tuple1 = new Tuple_double_String_EnumDTS(5.5, "test", EnumDTS.ELEM_1);
         TestUtils.checkResult("[Tuple + Enum] TestPeer.testTupleNumberStringEnum",
             () -> { peer.testTupleNumberStringEnumAttribute(tuple1); },
-            "testTupleNumberStringEnum({.value0={.tag=103, .f32=5.5}, .value1={.chars=\"test\", .length=4}, .value2=Ark_EnumDTS(1)})");
+            "testTupleNumberStringEnum({.value0={.tag=103, .f32=5.5}, .value1={.chars=\"test\", .length=4}, .value2=Ark_EnumDTS(1)})\n");
 
         // optional
         var listPeer = ArkListPeer.create(null, 0);
         TestUtils.checkResult("[Optional] ListPeer.someOptional",
             () -> { listPeer.someOptionalAttribute(new Opt_Boolean(false)); },
-            "someOptional({.tag=ARK_TAG_OBJECT, .value=false})");
+            "someOptional({.tag=ARK_TAG_OBJECT, .value=false})\n");
 
         // enum
-        TestUtils.checkResult("[Enum] ButtonPeer.type", () -> { buttonPeer.typeAttribute(ButtonType.CAPSULE); }, "type(Ark_ButtonType(0))");
+        TestUtils.checkResult("[Enum] ButtonPeer.type", () -> { buttonPeer.typeAttribute(ButtonType.CAPSULE); }, "type(Ark_ButtonType(0))\n");
         var sheetOptions = new SheetOptions();
         sheetOptions.mode = SheetMode.EMBEDDED;
         TestUtils.checkResult("[Enum + Interface] ButtonPeer.bindSheet",
             () -> { buttonPeer.bindSheetAttribute(false, sheetOptions); },
-            "bindSheet(false, {.tag=ARK_TAG_OBJECT, .value={.backgroundColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .height={.tag=ARK_TAG_UNDEFINED, .value={}}, .dragBar={.tag=ARK_TAG_UNDEFINED, .value={}}, .maskColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .detents={.tag=ARK_TAG_UNDEFINED, .value={}}, .blurStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, .showClose={.tag=ARK_TAG_UNDEFINED, .value={}}, .preferType={.tag=ARK_TAG_UNDEFINED, .value={}}, .title={.tag=ARK_TAG_UNDEFINED, .value={}}, .enableOutsideInteractive={.tag=ARK_TAG_UNDEFINED, .value={}}, .width={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderWidth={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, .shadow={.tag=ARK_TAG_UNDEFINED, .value={}}, .mode={.tag=ARK_TAG_OBJECT, .value=Ark_SheetMode(1)}, .uiContext={.tag=ARK_TAG_UNDEFINED, .value={}}}})");
+            "bindSheet(false, {.tag=ARK_TAG_OBJECT, .value={.backgroundColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .height={.tag=ARK_TAG_UNDEFINED, .value={}}, .dragBar={.tag=ARK_TAG_UNDEFINED, .value={}}, .maskColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .detents={.tag=ARK_TAG_UNDEFINED, .value={}}, .blurStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, .showClose={.tag=ARK_TAG_UNDEFINED, .value={}}, .preferType={.tag=ARK_TAG_UNDEFINED, .value={}}, .title={.tag=ARK_TAG_UNDEFINED, .value={}}, .enableOutsideInteractive={.tag=ARK_TAG_UNDEFINED, .value={}}, .width={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderWidth={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderColor={.tag=ARK_TAG_UNDEFINED, .value={}}, .borderStyle={.tag=ARK_TAG_UNDEFINED, .value={}}, .shadow={.tag=ARK_TAG_UNDEFINED, .value={}}, .mode={.tag=ARK_TAG_OBJECT, .value=Ark_SheetMode(1)}, .uiContext={.tag=ARK_TAG_UNDEFINED, .value={}}}})\n");
 
         // array
         BooleanInterfaceDTS[] booleanInterface = { new BooleanInterfaceDTS(), new BooleanInterfaceDTS() };
         booleanInterface[0].valBool = true;
         TestUtils.checkResult("[Array] TestPeer.testBooleanInterfaceArray",
             () -> { peer.testBooleanInterfaceArrayAttribute(booleanInterface); },
-            "testBooleanInterfaceArray({.array=allocArray<Ark_BooleanInterfaceDTS, 2>({{{.valBool=true}, {.valBool=false}}}), .length=2})");
+            "testBooleanInterfaceArray({.array=allocArray<Ark_BooleanInterfaceDTS, 2>({{{.valBool=true}, {.valBool=false}}}), .length=2})\n");
         TestUtils.checkResult("[Array] TestPeer.testBooleanInterfaceArrayRef",
             () -> { peer.testBooleanInterfaceArrayRefAttribute(booleanInterface); },
-            "testBooleanInterfaceArrayRef({.array=allocArray<Ark_BooleanInterfaceDTS, 2>({{{.valBool=true}, {.valBool=false}}}), .length=2})");
+            "testBooleanInterfaceArrayRef({.array=allocArray<Ark_BooleanInterfaceDTS, 2>({{{.valBool=true}, {.valBool=false}}}), .length=2})\n");
         var dragPreviewOptions = new DragPreviewOptions();
         DragPreviewMode[] modes = { DragPreviewMode.DISABLE_SCALE, DragPreviewMode.ENABLE_DEFAULT_RADIUS };
         dragPreviewOptions.mode = new Union_DragPreviewMode_Array_DragPreviewMode(modes);
@@ -147,7 +147,7 @@ public class Main {
         // this test is expected to fail in case of generation from d.ts
         TestUtils.checkResult("[Array + Interface + Union] ButtonPeer.dragPreviewOptions",
             () -> { buttonPeer.dragPreviewOptionsAttribute(dragPreviewOptions, dragInteractionOptions); },
-            "dragPreviewOptions({.mode={.tag=ARK_TAG_OBJECT, .value={.selector=1, .value1={.array=allocArray<Ark_DragPreviewMode, 2>({{Ark_DragPreviewMode(2), Ark_DragPreviewMode(4)}}), .length=2}}}, .numberBadge={.tag=ARK_TAG_OBJECT, .value={.selector=0, .value0=false}}}, {.tag=ARK_TAG_OBJECT, .value={.isMultiSelectionEnabled={.tag=ARK_TAG_UNDEFINED, .value={}}, .defaultAnimationBeforeLifting={.tag=ARK_TAG_OBJECT, .value=true}}})");
+            "dragPreviewOptions({.mode={.tag=ARK_TAG_OBJECT, .value={.selector=1, .value1={.array=allocArray<Ark_DragPreviewMode, 2>({{Ark_DragPreviewMode(2), Ark_DragPreviewMode(4)}}), .length=2}}}, .numberBadge={.tag=ARK_TAG_OBJECT, .value={.selector=0, .value0=false}}}, {.tag=ARK_TAG_OBJECT, .value={.isMultiSelectionEnabled={.tag=ARK_TAG_UNDEFINED, .value={}}, .defaultAnimationBeforeLifting={.tag=ARK_TAG_OBJECT, .value=true}}})\n");
 
         // map
         var dataInfo = new NativeEmbedDataInfo();
@@ -156,36 +156,36 @@ public class Main {
         var webPeer = ArkWebPeer.create(null, 0);
         TestUtils.checkResult("[Map] WebPeer.testMethod",
             () -> { webPeer.testMethodAttribute(dataInfo); },
-            "testMethod({.info={.tag=ARK_TAG_OBJECT, .value={.params={.tag=ARK_TAG_OBJECT, .value={{.chars=\"k1\", .length=2}: {.chars=\"v1\", .length=2}, {.chars=\"k2\", .length=2}: {.chars=\"v2\", .length=2}}}}}})");
+            "testMethod({.info={.tag=ARK_TAG_OBJECT, .value={.params={.tag=ARK_TAG_OBJECT, .value={{.chars=\"k1\", .length=2}: {.chars=\"v1\", .length=2}, {.chars=\"k2\", .length=2}: {.chars=\"v2\", .length=2}}}}}})\n");
         var doubleStringMap = new TreeMap<Double, String>(Map.of(1.0, "v1", 2.0, "v2"));
         var unionWithMap = new Union_double_Map_Double_String(doubleStringMap);
         TestUtils.checkResult("[Map + Union] TestPeer.testUnionWithMap",
             () -> { peer.testUnionWithMapAttribute(unionWithMap); },
-            "testUnionWithMap({.selector=1, .value1={{.tag=102, .i32=1}: {.chars=\"v1\", .length=2}, {.tag=102, .i32=2}: {.chars=\"v2\", .length=2}}})");
+            "testUnionWithMap({.selector=1, .value1={{.tag=102, .i32=1}: {.chars=\"v1\", .length=2}, {.tag=102, .i32=2}: {.chars=\"v2\", .length=2}}})\n");
         TestUtils.checkResult("[Map] TestPeer.testMap",
             () -> { peer.testMapAttribute(doubleStringMap); },
-            "testMap({{.tag=102, .i32=1}: {.chars=\"v1\", .length=2}, {.tag=102, .i32=2}: {.chars=\"v2\", .length=2}})");
+            "testMap({{.tag=102, .i32=1}: {.chars=\"v1\", .length=2}, {.tag=102, .i32=2}: {.chars=\"v2\", .length=2}})\n");
 
         // materialized classes
         TestUtils.checkResult("[Materialized] ctor",
             () -> { new ClassWithConstructorAndAllOptionalParamsDTS(new Opt_Number(10), null); },
-            "new ClassWithConstructorAndAllOptionalParamsDTS({.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=10}}, {.tag=ARK_TAG_UNDEFINED, .value={}})[return (ClassWithConstructorAndAllOptionalParamsDTSPeer*) 100]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]"
+            "new ClassWithConstructorAndAllOptionalParamsDTS({.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=10}}, {.tag=ARK_TAG_UNDEFINED, .value={}})\n[return (ClassWithConstructorAndAllOptionalParamsDTSPeer*) 100]\ngetFinalizer()\n[return fnPtr<KNativePointer>(dummyClassFinalizer)]\n"
             );
         TestUtils.checkResult("[Materialized] of",
             () -> { ClassWithConstructorAndAllOptionalParamsDTS.of(null, "test"); },
-            "of({.tag=ARK_TAG_UNDEFINED, .value={}}, {.tag=ARK_TAG_OBJECT, .value={.chars=\"test\", .length=4}})[return (void*) 300]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]"
+            "of({.tag=ARK_TAG_UNDEFINED, .value={}}, {.tag=ARK_TAG_OBJECT, .value={.chars=\"test\", .length=4}})\n[return (void*) 300]\ngetFinalizer()\n[return fnPtr<KNativePointer>(dummyClassFinalizer)]\n"
             );
         var classCtor = new ClassWithConstructorAndAllOptionalParamsDTS(new Opt_Number(10), null);
         var classOf = ClassWithConstructorAndAllOptionalParamsDTS.of(null, "test");
         TestUtils.checkResult("[Materialized] method",
             () -> { classOf.method(new Opt_Boolean(false), null); },
-            "method({.tag=ARK_TAG_OBJECT, .value=false}, {.tag=ARK_TAG_UNDEFINED, .value={}})");
+            "method({.tag=ARK_TAG_OBJECT, .value=false}, {.tag=ARK_TAG_UNDEFINED, .value={}})\n");
         TestUtils.checkResult("[Materialized] TestPeer.testClassWithConstructorAndAllOptionalParams(ctor)",
             () -> { peer.testClassWithConstructorAndAllOptionalParamsAttribute(classCtor); },
-            "testClassWithConstructorAndAllOptionalParams(\"Materialized 0x64\")");
+            "testClassWithConstructorAndAllOptionalParams(\"Materialized 0x64\")\n");
         TestUtils.checkResult("[Materialized] TestPeer.testClassWithConstructorAndAllOptionalParams(of)",
             () -> { peer.testClassWithConstructorAndAllOptionalParamsAttribute(classOf); },
-            "testClassWithConstructorAndAllOptionalParams(\"Materialized 0x12c\")");
+            "testClassWithConstructorAndAllOptionalParams(\"Materialized 0x12c\")\n");
 
         var startDate = new Date();
         var endDate = new Date();
@@ -194,7 +194,7 @@ public class Main {
         datePickerOptions.end = endDate;
         TestUtils.checkResult("[Date] TestPeer.testDateCustomObject",
             () -> { peer.testDateCustomObjectAttribute(datePickerOptions); },
-            String.format("testDateCustomObject({.start={.tag=ARK_TAG_OBJECT, .value=%d}, .end={.tag=ARK_TAG_OBJECT, .value=%d}})", startDate.getTime(), endDate.getTime()));
+            String.format("testDateCustomObject({.start={.tag=ARK_TAG_OBJECT, .value=%d}, .end={.tag=ARK_TAG_OBJECT, .value=%d}})\n", startDate.getTime(), endDate.getTime()));
 
         // builder classes
         var len = new Ark_Length("10lpx");
@@ -202,7 +202,7 @@ public class Main {
         var swiperPeer = ArkSwiperPeer.create(null, 0);
         TestUtils.checkResult("[Builder] SwiperPeer.indicator",
             () -> { swiperPeer.indicatorAttribute(indicator); },
-            "indicator({._left={.tag=ARK_TAG_OBJECT, .value={.type=2, .value=10, .unit=4, .resource=0}}, ._top={.tag=ARK_TAG_UNDEFINED, .value={}}, ._right={.tag=ARK_TAG_OBJECT, .value={.type=2, .value=10, .unit=4, .resource=0}}, ._bottom={.tag=ARK_TAG_UNDEFINED, .value={}}, ._start={.tag=ARK_TAG_UNDEFINED, .value={}}, ._end={.tag=ARK_TAG_UNDEFINED, .value={}}, ._itemWidth={.tag=ARK_TAG_OBJECT, .value={.type=2, .value=10, .unit=4, .resource=0}}, ._itemHeight={.tag=ARK_TAG_UNDEFINED, .value={}}})");
+            "indicator({._left={.tag=ARK_TAG_OBJECT, .value={.type=2, .value=10, .unit=4, .resource=0}}, ._top={.tag=ARK_TAG_UNDEFINED, .value={}}, ._right={.tag=ARK_TAG_OBJECT, .value={.type=2, .value=10, .unit=4, .resource=0}}, ._bottom={.tag=ARK_TAG_UNDEFINED, .value={}}, ._start={.tag=ARK_TAG_UNDEFINED, .value={}}, ._end={.tag=ARK_TAG_UNDEFINED, .value={}}, ._itemWidth={.tag=ARK_TAG_OBJECT, .value={.type=2, .value=10, .unit=4, .resource=0}}, ._itemHeight={.tag=ARK_TAG_UNDEFINED, .value={}}})\n");
 
         System.out.println();
     }
@@ -273,7 +273,7 @@ public class Main {
         component.setPeer(peer);
         TestUtils.checkResult("ArkSideBarContainerComponent method overloads",
             () -> component.minSideBarWidth(10.0).minSideBarWidth(new Ark_Length("10lpx")),
-            "minSideBarWidth({.tag=102, .i32=10})minSideBarWidth({.type=2, .value=10, .unit=4, .resource=0})");
+            "minSideBarWidth({.tag=102, .i32=10})\nminSideBarWidth({.type=2, .value=10, .unit=4, .resource=0})\n");
 
         System.out.println();
     }

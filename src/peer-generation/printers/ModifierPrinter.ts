@@ -72,7 +72,7 @@ export class ModifierVisitor {
         const isVoid = this.returnTypeConvertor.isVoid(method)
         let retVal = isVoid ? undefined : method.dummyReturnValue
         if (retVal  !== undefined) {
-            _.print(`out.append("[return ${retVal}]");`)
+            _.print(`out.append("[return ${retVal}]\\n");`)
         }
         _.print(`appendGroupedLog(1, out);`)
         const rt = method.method.signature.returnType
