@@ -2026,13 +2026,13 @@
 |*StyledString*| *Class* | Pavelyev Ivan | in progress | |
 |`getString`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getStyles`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`equals`| Function | Pavelyev Ivan | in progress | |
-|`subStyledString`| Function | Pavelyev Ivan | in progress | |
+|`equals`| Function | Pavelyev Ivan | done | |
+|`subStyledString`| Function | Pavelyev Ivan | done | |
 |`fromHtml`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`toHtml`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`marshalling`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`unmarshalling`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getLength`| Function | Pavelyev Ivan | in progress | |
+|`getLength`| Function | Pavelyev Ivan | done | |
 |*MutableStyledString*| *Class* | Maksimov Nikita | in progress | |
 |`replaceString`| Function | Maksimov Nikita | in progress | |
 |`insertString`| Function | Maksimov Nikita | in progress | |
