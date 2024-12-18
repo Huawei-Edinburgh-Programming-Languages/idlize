@@ -236,14 +236,15 @@ export class TSLanguageWriter extends LanguageWriter {
     writeEnum(name: string, members: { name: string, alias?: string | undefined, stringId: string | undefined, numberId: number }[]): void {
         this.printer.print(`export enum ${name} {`)
         this.printer.pushIndent()
-        for (const { name, alias, stringId, numberId } of members) {
+        for (const [index, member] of members.entries()) {
             let value
-            if (alias !== undefined) {
-                value = alias
+            if (member.alias !== undefined) {
+                value = member.alias
             } else {
-                value = `${stringId != undefined ? `"${stringId}"` : `${numberId}`}`
+                value = `${member.stringId != undefined ? `"${member.stringId}"` : `${member.numberId}`}`
             }
-            this.printer.print(`${name} = ${value},`)
+            const maybeComma = index < members.length - 1 ? "," : ""
+            this.printer.print(`${member.name} = ${value}${maybeComma}`)
         }
         this.printer.popIndent()
         this.printer.print("}")
