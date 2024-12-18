@@ -33,6 +33,7 @@ public class TestNativeModule {
     static native long _TestGetManagedCallerSync(int kind);
     static native long _TestGetManagedHolder();
     static native long _TestGetManagedReleaser();
+    static native void _TestReadAndMutateManagedBuffer(byte[] arr, int len);
     static native void _TestCallbackSyncCall(byte[] arr, int len);
 }
 
