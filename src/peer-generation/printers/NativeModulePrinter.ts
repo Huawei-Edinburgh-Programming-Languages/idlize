@@ -36,6 +36,8 @@ class NativeModuleVisitor {
             "CheckArkoalaCallbackEvent",
             "MaterializeBuffer",
             "GetNativeBufferPointer",
+            "Utf8ToString",
+            "StdStringToString"
         ])],
         [Language.JAVA, new Set(["MaterializeBuffer", "GetNativeBufferPointer"])],
         [Language.CPP, new Set(["MaterializeBuffer", "GetNativeBufferPointer"])],

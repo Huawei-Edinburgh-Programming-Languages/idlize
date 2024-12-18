@@ -150,9 +150,6 @@ export class CJIDLTypeToForeignStringConvertor extends CJIDLNodeToStringConverto
                 return `KPointer`
             }
         }
-        if (idl.isClass(type) || idl.isInterface(type)) {
-            return 'KPointer'
-        }
         return super.convert(type)
     }
     convertPrimitiveType(type: idl.IDLPrimitiveType): string {
