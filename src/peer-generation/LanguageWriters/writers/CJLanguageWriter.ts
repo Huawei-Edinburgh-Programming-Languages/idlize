@@ -328,9 +328,13 @@ export class CJLanguageWriter extends LanguageWriter {
         return `public func ${name}(${args.join(", ")})`
     }
     writeMethodCall(receiver: string, method: string, params: string[], nullable = false): void {
-        receiver = this.escapeKeyword(receiver)
         params = params.map(argName => this.escapeKeyword(argName))
         if (nullable) {
+            if (receiver == 'this') {
+                this.printer.print('let thisObj = this')
+                super.writeMethodCall('thisObj', method, params, false)
+                return
+            }
             this.printer.print(`if (let Some(${receiver}) <- ${receiver}) { ${receiver}.${method}(${params.join(", ")}) }`)
         } else {
             super.writeMethodCall(receiver, method, params, nullable)
@@ -340,7 +344,7 @@ export class CJLanguageWriter extends LanguageWriter {
         const init = initExpr != undefined ? ` = ${initExpr.asString()}` : ``
         name = this.escapeKeyword(name)
         let prefix = this.makeFieldModifiersList(modifiers)
-        this.printer.print(`${prefix} var ${name}: ${this.getNodeName(type)}${init}`)
+        this.printer.print(`${prefix ? prefix.concat(" ") : ""}var ${name}: ${this.getNodeName(type)}${init}`)
     }
     writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void {
         this.writeDeclaration(name, signature, modifiers)

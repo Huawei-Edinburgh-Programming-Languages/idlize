@@ -58,7 +58,7 @@ interface MaterializedFileVisitor {
     getOutput(): string[]
 }
 
-const FinalizableType = createReferenceType("Finalizable")
+const FinalizableType = idl.maybeOptional(createReferenceType("Finalizable"), true)
 
 abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
     protected readonly printer: LanguageWriter = createLanguageWriter(this.printerContext.language, getReferenceResolver(this.library))
@@ -486,6 +486,8 @@ class ArkTSMaterializedFileVisitor extends TSMaterializedFileVisitor {
 }
 
 class CJMaterializedFileVisitor extends MaterializedFileVisitorBase {
+    private overloadsPrinter = new OverloadsPrinter(getReferenceResolver(this.library), this.printer, this.library.language, false)
+
     constructor(
         protected readonly library: PeerLibrary,
         protected readonly printerContext: PrinterContext,
@@ -505,6 +507,9 @@ class CJMaterializedFileVisitor extends MaterializedFileVisitorBase {
         const interfaces: string[] = ["MaterializedBase"]
         let superClassName = generifiedTypeName(clazz.superClass)
         const printer = this.printer
+
+        printer.print("import std.collection.*\n")
+
         // TODO: workarond for ContentModifier<T> which returns WrappedBuilder<[T]>
         //       and the WrappedBuilder is defined as "class WrappedBuilder<Args extends Object[]>""
         let classTypeParameters = clazz.generics
@@ -525,13 +530,111 @@ class CJMaterializedFileVisitor extends MaterializedFileVisitorBase {
                     new MethodSignature(this.convertToPropertyType(field), [])), writer => {
                     writer.writeStatement(
                         isSimpleType
-                            ? writer.makeReturn(writer.makeMethodCall("this", `get${capitalize(mField.name)}`, []))
-                            : writer.makeStatement(writer.makeString("throw new Error(\"Not implemented\")"))
+                            ? writer.makeReturn(writer.makeString(`this.get${capitalize(mField.name)}()`))
+                            : writer.makeStatement(writer.makeString("throw Exception(\"Not implemented\")"))
                     )
                 });
+
+                const isReadOnly = mField.modifiers.includes(FieldModifier.READONLY)
+                if (!isReadOnly) {
+                    const setSignature = new NamedMethodSignature(IDLVoidType,
+                        [this.convertToPropertyType(field)], [mField.name])
+                    writer.writeSetterImplementation(new Method(mField.name, setSignature), writer => {
+                        let castedNonNullArg
+                        if (field.isNullableOriginalTypeField) {
+                            castedNonNullArg = `${mField.name}_NonNull`
+                            this.printer.writeStatement(writer.makeAssign(castedNonNullArg,
+                                undefined,
+                                writer.makeCast(writer.makeString(mField.name), mField.type),
+                                true))
+                        } else {
+                            castedNonNullArg = mField.name
+                        }
+                        writer.makeString(`this.set${capitalize(mField.name)}(${castedNonNullArg})`)
+                    });
+                }
             })
 
+            // write getPeer() method
+            const getPeerSig = new MethodSignature(idl.createOptionalType(idl.createReferenceType("Finalizable")),[])
+            writer.writeMethodImplementation(new Method("getPeer", getPeerSig), writer => {
+                writer.writeStatement(writer.makeReturn(writer.makeString("this.peer")))
+            })
+
+            // write construct(ptr: number) method
+            const clazzRefType = idl.createReferenceType(clazz.className,
+                clazz.generics?.map(idl.createTypeParameterReference))
+            const constructSig = new NamedMethodSignature(clazzRefType, [idl.IDLPointerType], ["ptr"])
+            writer.writeMethodImplementation(new Method("construct", constructSig, [MethodModifier.STATIC], classTypeParameters), writer => {
+                const objVar = `obj${clazz.className}`
+                writer.writeStatement(writer.makeAssign(objVar,
+                    clazzRefType,
+                    writer.makeString(writer.getNodeName(clazzRefType).concat('()')),
+                    true)
+                )
+                writer.writeStatement(
+                    writer.makeAssign(`${objVar}.peer`, FinalizableType,
+                        writer.makeString(`Finalizable(ptr, ${clazz.className}.getFinalizer())`), false),
+                )
+                writer.writeStatement(writer.makeReturn(writer.makeString(objVar)))
+            })
+        
+            const pointerType = IDLPointerType
+            // makePrivate(clazz.ctor.method)
+            this.library.setCurrentContext(`${clazz.className}.constructor`)
+            writePeerMethod(writer, clazz.ctor, true, this.printerContext, this.dumpSerialized, "", "", pointerType)
+            this.library.setCurrentContext(undefined)
+
+            const ctorSig = clazz.ctor.method.signature as NamedMethodSignature
+            const sigWithPointer = new NamedMethodSignature(
+                ctorSig.returnType,
+                ctorSig.args.map(it => idl.createOptionalType(it)),
+                ctorSig.argsNames,
+                ctorSig.defaults)
+
             printPeerFinalizer(clazz, writer)
+
+            for (const grouped of groupOverloads(clazz.methods)) {
+                this.overloadsPrinter.printGroupedComponentOverloads(clazz, grouped)
+            }
+
+            // TBD: Refactor tagged methods staff
+            const seenTaggedMethods = new Set<string>()
+            clazz.taggedMethods
+                .map(it => methodFromTagged(it))
+                .filter(it => {
+                    if (seenTaggedMethods.has(it.name)) return false
+                    seenTaggedMethods.add(it.name)
+                    return true
+                })
+                .forEach(method => {
+                    // const method = methodFromTagged(taggedMethod)
+                    const signature = new NamedMethodSignature(
+                        method.returnType,
+                        method.parameters.map(it => it.type!),
+                        method.parameters.map(it => it.name)
+                    )
+                    // TBD: Add tagged methods implementation
+                    writer.writeMethodImplementation(new Method(getTaggedName(method)!, signature), writer => {
+                        writer.writeStatement(
+                            writer.makeThrowError("TBD")
+                        )
+                    })
+                })
+
+            clazz.methods.forEach(method => {
+                let privateMethod = method
+                if (!privateMethod.method.modifiers?.includes(MethodModifier.PRIVATE))
+                    privateMethod = copyMaterializedMethod(method, {
+                        method: copyMethod(method.method, {
+                            modifiers: (method.method.modifiers ?? []).concat([MethodModifier.PRIVATE])
+                        })
+                    })
+                const returnType = privateMethod.tsReturnType()
+                this.library.setCurrentContext(`${privateMethod.originalParentName}.${privateMethod.overloadedName}`)
+                writePeerMethod(writer, privateMethod, true, this.printerContext, this.dumpSerialized, "_serialize", "this.peer.ptr", returnType)
+                this.library.setCurrentContext(undefined)
+            })
         }, superClassName, interfaces.length === 0 ? undefined : interfaces, classTypeParameters)
 
         // Write MaterializedClass static

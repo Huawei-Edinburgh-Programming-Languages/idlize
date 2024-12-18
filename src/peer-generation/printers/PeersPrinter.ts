@@ -471,7 +471,6 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
             }
         })
         let call = writer.makeNativeCall(
-            // here we write methods
             `_${method.originalParentName}_${method.overloadedName}`,
             params)
 

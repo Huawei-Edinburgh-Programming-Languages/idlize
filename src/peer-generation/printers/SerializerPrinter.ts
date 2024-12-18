@@ -126,7 +126,9 @@ class IdlSerializerPrinter {
             writer.makeAssign(
                 `ptr`,
                 idl.IDLPointerType,
-                writer.makeString(`nullptr`),
+                writer.language != Language.CJ ? 
+                writer.makeString(`nullptr`) :
+                writer.makeString('0'),
                 true,
                 false
             ))
