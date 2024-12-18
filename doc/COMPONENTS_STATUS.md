@@ -264,8 +264,8 @@
 |`onGestureJudgeBegin`| Function | Politov Mikhail | | |
 |`onGestureRecognizerJudgeBegin`| Function | Politov Mikhail | | |
 |`shouldBuiltInRecognizerParallelWith`| Function | | | |
-|`monopolizeEvents`| Function | Erokhin Ilya | in progress | |
-|`onTouchIntercept`| Function | Erokhin Ilya | in progress | |
+|`monopolizeEvents`| Function | Erokhin Ilya | testskipped | |
+|`onTouchIntercept`| Function | Erokhin Ilya | testskipped | |
 |`onSizeChange`| Function | Dmitry A Smirnov|in progress | |
 |`customProperty`| Function | Dmitry A Smirnov|blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`expandSafeArea`| Function | Dmitry A Smirnov|in progress | |
@@ -284,10 +284,10 @@
 |`backdropBlur`| Function | Berezin Kirill | done | |
 |`sharedTransition`|Function|Skroba Gleb | done |  |
 |`chainMode`| Function | Berezin Kirill | in progress | |
-|`dragPreviewOptions`| Function | Erokhin Ilya | in progress | |
+|`dragPreviewOptions`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD |
 |`overlay`| Function | Roman Sedaikin | done | |
 |`blendMode`| Function | Lobah Mikhail | done | |
-|`advancedBlendMode`| Function | Erokhin Ilya | in progress | |
+|`advancedBlendMode`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC80Y |
 |`bindPopup`| Function | | | |
 |`bindMenu`| Function | | | |
 |`bindContextMenu`| Function | | | |
