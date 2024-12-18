@@ -19,5 +19,7 @@ package idlize
 public abstract class MaterializedBase <: Ark_ObjectBase {
     public var peer: ?Finalizable = None
 
-    public func getPeer(): ?Finalizable
+    public func getPeer(): ?Finalizable {
+        return this.peer
+    }
 }

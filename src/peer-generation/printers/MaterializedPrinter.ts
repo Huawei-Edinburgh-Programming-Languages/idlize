@@ -517,7 +517,7 @@ class CJMaterializedFileVisitor extends MaterializedFileVisitorBase {
             it.method.signature.args.find(it => idl.isTypeParameterType(it)) !== undefined
         )
         printer.writeClass(clazz.className, writer => {
-            writer.writeFieldDeclaration("peer", FinalizableType, undefined, true)
+            // writer.writeFieldDeclaration("peer", FinalizableType, undefined, true, this.printer.makeString('Option.None'))
 
             // getters and setters for fields
             clazz.fields.forEach(field => {
@@ -556,10 +556,10 @@ class CJMaterializedFileVisitor extends MaterializedFileVisitorBase {
             })
 
             // write getPeer() method
-            const getPeerSig = new MethodSignature(idl.createOptionalType(idl.createReferenceType("Finalizable")),[])
-            writer.writeMethodImplementation(new Method("getPeer", getPeerSig), writer => {
-                writer.writeStatement(writer.makeReturn(writer.makeString("this.peer")))
-            })
+            // const getPeerSig = new MethodSignature(idl.createOptionalType(idl.createReferenceType("Finalizable")),[])
+            // writer.writeMethodImplementation(new Method("getPeer", getPeerSig), writer => {
+            //     writer.writeStatement(writer.makeReturn(writer.makeString("this.peer")))
+            // })
 
             // write construct(ptr: number) method
             const clazzRefType = idl.createReferenceType(clazz.className,
@@ -632,7 +632,7 @@ class CJMaterializedFileVisitor extends MaterializedFileVisitorBase {
                     })
                 const returnType = privateMethod.tsReturnType()
                 this.library.setCurrentContext(`${privateMethod.originalParentName}.${privateMethod.overloadedName}`)
-                writePeerMethod(writer, privateMethod, true, this.printerContext, this.dumpSerialized, "_serialize", "this.peer.ptr", returnType)
+                writePeerMethod(writer, privateMethod, true, this.printerContext, this.dumpSerialized, "_serialize", "if (let Some(peer) <- this.peer) { peer.ptr } else {throw Exception(\"\")}", returnType)
                 this.library.setCurrentContext(undefined)
             })
         }, superClassName, interfaces.length === 0 ? undefined : interfaces, classTypeParameters)
