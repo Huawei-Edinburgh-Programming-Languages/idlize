@@ -693,10 +693,10 @@
 |`onComplete`| Function | Evstigneev Roman | done | |
 |`onError`| Function | Evstigneev Roman | done | |
 |*Polygon*| *Component* |Politov Mikhail | blocked | |
-|`setPolygonOptions`| Function | Politov Mikhail | devdone | |
+|`setPolygonOptions`| Function | Politov Mikhail | done | |
 |`points`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAGL8 |
 |*Polyline*| *Component* | Politov Mikhail | blocked |  |
-|`setPolylineOptions`| Function | Politov Mikhail | devdone |  |
+|`setPolylineOptions`| Function | Politov Mikhail | done |  |
 |`points`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAGL8 |
 |*Progress*| *Component* | Erokhin Ilya | blocked | |
 |`setProgressOptions`| Function | Erokhin Ilya | done | |
@@ -730,11 +730,11 @@
 |`radius`|Function|Dudkin Sergey| blocked AceEngine|https://gitee.com/openharmony/interface_sdk-js/issues/IAXA7J|
 |*Refresh*| *Component* |Politov Mikhail | blocked |  |
 |`setRefreshOptions`| Function |Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`onStateChange`| Function |Politov Mikhail | testskipped |  |
-|`onRefreshing`| Function |Politov Mikhail | devdone |  |
+|`onStateChange`| Function |Politov Mikhail | done |  |
+|`onRefreshing`| Function |Politov Mikhail | done |  |
 |`refreshOffset`| Function |Politov Mikhail | done |  |
 |`pullToRefresh`| Function |Politov Mikhail | done |  |
-|`onOffsetChange`| Function |Politov Mikhail | devdone | |
+|`onOffsetChange`| Function |Politov Mikhail | done | |
 |`pullDownRatio`| Function |Politov Mikhail | done |  |
 |*RelativeContainer*| *Component* | Dmitry A Smirnov | done |  |
 |`setRelativeContainerOptions`| Function | Dmitry A Smirnov | done |  |
