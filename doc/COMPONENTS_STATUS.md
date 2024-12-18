@@ -88,7 +88,7 @@
 |`textStyle`| Function |Politov Mikhail | done |  |
 |`onChange`| Function |Politov Mikhail | done |  |
 |`edgeAlign`| Function |Politov Mikhail | done |  |
-|*Canvas*| *Component* |Vadim Voronov, Evstigneev Roman | blocked IDL | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
+|*Canvas*| *Component* |Vadim Voronov, Evstigneev Roman | |
 |`setCanvasOptions`| Function |Vadim Voronov, Evstingneev Roman | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`onReady`| Function |Vadim Voronov | done |  |
 |`enableAnalyzer`| Function |Vadim Voronov | done |  |
