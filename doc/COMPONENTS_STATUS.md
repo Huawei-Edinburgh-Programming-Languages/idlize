@@ -2011,11 +2011,11 @@
 |`startImageAnalyzer`| Function | Tuzhilkin Ivan | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IB3J8N , https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`stopImageAnalyzer`| Function | Tuzhilkin Ivan | testskipped | |
 |*WaterFlowSections*| *Class* | Kovalev Sergey | in progress |one converter is not fully implemented |
-|`splice`| Function | Kovalev Sergey | devdone | |
-|`push`| Function | Kovalev Sergey | devdone | |
-|`update`| Function | Kovalev Sergey | devdone | |
+|`splice`| Function | Kovalev Sergey | done | |
+|`push`| Function | Kovalev Sergey | done | |
+|`update`| Function | Kovalev Sergey | done | |
 |`values`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`length`| Function | Kovalev Sergey | devdone | |
+|`length`| Function | Kovalev Sergey | done | |
 |*UIExtensionProxy*| *Class* | Tuzhilkin Ivan | in progress | |
 |`send`| Function | Tuzhilkin Ivan | in progress | |
 |`sendSync`| Function | Tuzhilkin Ivan | in progress | |
