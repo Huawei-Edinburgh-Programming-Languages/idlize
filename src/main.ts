@@ -368,7 +368,6 @@ if (options.dts2peer) {
                 )
                 entries.forEach(it => {
                     transformMethodsAsync2ReturnPromise(it)
-                    // correctOverloadedProperties(it, idlLibrary)
                 })
                 const file = new PeerFile(sourceFile.fileName, entries)
                 idlLibrary.files.push(file)
@@ -430,26 +429,3 @@ if (options.dts2peer) {
 if (!didJob) {
     program.help()
 }
-
-// function correctOverloadedProperties(entry: IDLEntry, idlLibrary: PeerLibrary) {
-//     if (idlLibrary.language !== Language.ARKTS) {
-//         return;
-//     }
-//     if (!isInterface(entry) && !isClass(entry)) {
-//         return;
-//     }
-//     if (entry.inheritance.length !== 1) {
-//         return;
-//     }
-//     const firstParent = idlLibrary.toDeclaration(entry.inheritance[0])
-//     if (!isInterface(firstParent) && !isClass(firstParent)) {
-//         return;
-//     }
-//     entry.properties.forEach(prop => {
-//         const overloadedProp =
-//             firstParent.properties.find(it => it.name === prop.name)
-//         if (overloadedProp !== undefined) {
-//             prop.type = overloadedProp.type
-//         }
-//     })
-// }

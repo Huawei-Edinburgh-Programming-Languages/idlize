@@ -77,6 +77,7 @@ export class IDLVisitorConfig {
                 }
                 break
             }
+            /*
             case "CommonMethod":
             case "FormComponentAttribute": {
                 switch (propertyName) {
@@ -85,6 +86,7 @@ export class IDLVisitorConfig {
                     }
                 }
             }
+             */
         }
     }
 }

@@ -1136,13 +1136,11 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         this.computeDeprecatedExtendAttributes(property, extendedAttributes)
         if (ts.isMethodDeclaration(property) || ts.isMethodSignature(property)) {
             if (!this.isCommonMethodUsedAsProperty(property)) throw new Error("Wrong")
-            let type = this.serializeType(property.parameters[0].type, nameSuggestion?.extend(nameOrNull(property.parameters[0].name)!))
-
-            // CHECK TYPE
-            let replacedPropertyType = IDLVisitorConfig.customSerializePropertyType(property, escapedName)
-            if (replacedPropertyType) { 
-                type = replacedPropertyType
+            let type = IDLVisitorConfig.customSerializePropertyType(property, escapedName)
+            if (!isDefined(type)) {
+                type = this.serializeType(property.parameters[0].type, nameSuggestion?.extend(nameOrNull(property.parameters[0].name)!))
             }
+
             extendedAttributes.push({ name: idl.IDLExtendedAttributes.CommonMethod })
             return idl.createProperty(
                 escapedName,
