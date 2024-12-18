@@ -532,7 +532,7 @@ export class CJLanguageWriter extends LanguageWriter {
         return new CJEnumEntityStatement(enumEntity, isExport)
     }
     makeEquals(args: LanguageExpression[]): LanguageExpression {
-        return this.makeNaryOp('==', args)
+        return this.makeString(`refEq(${args.map(arg => `${arg.asString()}`).join(`, `)})`)
     }
     runtimeType(param: ArgConvertor, valueType: string, value: string) {
         this.writeStatement(this.makeAssign(valueType, undefined,

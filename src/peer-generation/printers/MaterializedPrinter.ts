@@ -512,50 +512,50 @@ class CJMaterializedFileVisitor extends MaterializedFileVisitorBase {
             writePeerMethod(writer, clazz.ctor, true, this.printerContext, this.dumpSerialized, '', '', pointerType)
             this.library.setCurrentContext(undefined)
 
-            // // constructor with a special parameter to use in static methods
-            // const emptySignature = new MethodSignature(Type.Void, [emptyParameterType])
-            // writer.writeConstructorImplementation(clazz.className, emptySignature, writer => {
-            //     writer.writeSuperCall([emptySignature.argName(0)]);
-            // })
+            // constructor with a special parameter to use in static methods
+            const emptySignature = new MethodSignature(Type.Void, [emptyParameterType])
+            writer.writeConstructorImplementation(clazz.className, emptySignature, writer => {
+                writer.writeSuperCall([emptySignature.argName(0)]);
+            })
 
-            // const ctorSig = clazz.ctor.method.signature as NamedMethodSignature
+            const ctorSig = clazz.ctor.method.signature as NamedMethodSignature
 
-            // // generate a constructor with zero parameters for static methods
-            // // in case there is no alredy defined one
-            // if (ctorSig.args.length > 0) {
-            //     writer.writeConstructorImplementation(clazz.className, new MethodSignature(Type.Void, []), writer => {
-            //         writer.writeSuperCall([`(${ARK_MATERIALIZEDBASE_EMPTY_PARAMETER})null`]);
-            //     })
-            // }
+            // generate a constructor with zero parameters for static methods
+            // in case there is no alredy defined one
+            if (ctorSig.args.length > 0) {
+                writer.writeConstructorImplementation(clazz.className, new MethodSignature(Type.Void, []), writer => {
+                    writer.writeSuperCall([`(${ARK_MATERIALIZEDBASE_EMPTY_PARAMETER})null`]);
+                })
+            }
 
-            // writer.writeConstructorImplementation(clazz.className, ctorSig, writer => {
-            //     writer.writeSuperCall([`(${emptyParameterType.name})null`]);
+            writer.writeConstructorImplementation(clazz.className, ctorSig, writer => {
+                writer.writeSuperCall([`(${emptyParameterType.name})null`]);
 
-            //     const args = ctorSig.argsNames.map(it => writer.makeString(it))
-            //     writer.writeStatement(
-            //         writer.makeAssign('ctorPtr', Type.Pointer,
-            //             writer.makeMethodCall(clazz.className, 'ctor', args),
-            //             true))
+                const args = ctorSig.argsNames.map(it => writer.makeString(it))
+                writer.writeStatement(
+                    writer.makeAssign('ctorPtr', Type.Pointer,
+                        writer.makeMethodCall(clazz.className, 'ctor', args),
+                        true))
 
-            //     writer.writeStatement(writer.makeAssign(
-            //         'this.peer',
-            //         finalizableType,
-            //         writer.makeString(`new Finalizable(ctorPtr, ${clazz.className}.getFinalizer())`),
-            //         false
-            //     ))
-            // })
+                writer.writeStatement(writer.makeAssign(
+                    'this.peer',
+                    finalizableType,
+                    writer.makeString(`new Finalizable(ctorPtr, ${clazz.className}.getFinalizer())`),
+                    false
+                ))
+            })
 
             printPeerFinalizer(clazz, writer)
 
-            // clazz.methods.forEach(method => {
-            //     /// Fix 'this' return type. Refac to LW?
-            //     let returnType = method.method.signature.returnType
-            //     if (returnType === Type.This)
-            //         returnType = new Type(method.originalParentName)
-            //     this.library.setCurrentContext(`${method.originalParentName}.${method.overloadedName}`)
-            //     writePeerMethod(writer, method, true, this.printerContext, this.dumpSerialized, '', 'this.peer.ptr', returnType)
-            //     this.library.setCurrentContext(undefined)
-            // })
+            clazz.methods.forEach(method => {
+                /// Fix 'this' return type. Refac to LW?
+                let returnType = method.method.signature.returnType
+                if (returnType === Type.This)
+                    returnType = new Type(method.originalParentName)
+                this.library.setCurrentContext(`${method.originalParentName}.${method.overloadedName}`)
+                writePeerMethod(writer, method, true, this.printerContext, this.dumpSerialized, '', 'this.peer.ptr', returnType)
+                this.library.setCurrentContext(undefined)
+            })
         }, superClassName, undefined, clazz.generics)
     }
 
