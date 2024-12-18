@@ -77,16 +77,15 @@ export class IDLVisitorConfig {
                 }
                 break
             }
-            /*
             case "CommonMethod":
             case "FormComponentAttribute": {
                 switch (propertyName) {
                     case "size": {
                         return idl.createReferenceType("SizeOptions")
                     }
+                    break
                 }
             }
-             */
         }
     }
 }
