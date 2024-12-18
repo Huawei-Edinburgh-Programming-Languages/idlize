@@ -284,7 +284,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
                 cppConvertor.convert(convertor.idlType), this)
         }
         if (convertor instanceof EnumConvertor) {
-            return this.makeString(`${value} instanceof ${this.typeConvertor.convert(convertor.enumEntry)}`)
+            return makeEnumTypeCheckerCall(value, this.getNodeName(convertor.idlType), this)
         }
         return super.instanceOf(convertor, value, duplicateMembers)
     }
