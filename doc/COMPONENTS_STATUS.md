@@ -1753,7 +1753,7 @@
 |`setSelection`| Function|Dudkin Sergey| done| |
 |`isEditing`| Function|Dudkin Sergey| done| |
 |`stopEditing`| Function|Dudkin Sergey| done| |
-|`getLayoutManager`| Function|Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IBAXVH |
+|`getLayoutManager`| Function|Dudkin Sergey| done | |
 |`getPreviewText`| Function|Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IBAXVH |
 |*RichEditorController*| *Class* |Dudkin Sergey| blocked|  |
 |`addTextSpan`| Function |Dudkin Sergey| done|  |
@@ -1829,15 +1829,15 @@
 |*TextClockController*| *Class* |Pavelyev Ivan|in progress|  |
 |`start`| Function |Pavelyev Ivan|done|  |
 |`stop`| Function |Pavelyev Ivan|done|  |
-|*TextBaseController*| *Class* | Morozov Sergey | blocked IDL | |
-|`setSelection`| Function | Morozov Sergey | devdone | |
-|`closeSelectionMenu`| Function | Morozov Sergey | devdone | |
-|`getLayoutManager`| Function | Morozov Sergey | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|*TextBaseController*| *Class* | Morozov Sergey | done | |
+|`setSelection`| Function | Morozov Sergey | done | |
+|`closeSelectionMenu`| Function | Morozov Sergey | done | |
+|`getLayoutManager`| Function | Morozov Sergey | done | |
 |*TextEditControllerEx*| *Class* | Morozov Sergey | blocked IDL | |
-|`isEditing`| Function | Morozov Sergey | devdone | |
-|`stopEditing`| Function | Morozov Sergey | devdone | |
-|`setCaretOffset`| Function | Morozov Sergey | devdone | |
-|`getCaretOffset`| Function | Morozov Sergey | devdone | |
+|`isEditing`| Function | Morozov Sergey | done | |
+|`stopEditing`| Function | Morozov Sergey | done | |
+|`setCaretOffset`| Function | Morozov Sergey | done | |
+|`getCaretOffset`| Function | Morozov Sergey | done | |
 |`getPreviewText`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*StyledStringController*| *Class* | Pavelyev Ivan | in progress | |
 |`setStyledString`| Function | Pavelyev Ivan | in progress | |
