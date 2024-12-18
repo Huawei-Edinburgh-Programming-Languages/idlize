@@ -7,6 +7,8 @@ import {
   withByteArray,
   CallbackRegistry,
   ArrayDecoder,
+  loadLibraries,
+  registerNativeModule,
 } from "@koalaui/interop"
 import { callCallback } from "@koalaui/interop"
 
@@ -17,13 +19,22 @@ export type PipelineContext = pointer
 
 let theModule: NativeModule | undefined = undefined
 
-declare const LOAD_NATIVE: NativeModule
+declare const NATIVE_LIB_PATH: string
 
 export function initInteropModule(nativeModule?: NativeModule) {
     if (theModule) return
-    theModule = nativeModule ?? LOAD_NATIVE
-    if (!theModule)
-        throw new Error("Cannot load native module")
+    if (nativeModule) {
+        theModule = nativeModule
+    } else {
+        theModule = {} as NativeModule
+        registerNativeModule("InteropNativeModule", theModule)
+        registerNativeModule("ArkUINativeModule", theModule)
+        registerNativeModule("TestNativeModule", theModule)
+        registerNativeModule("NativeModule", theModule)
+
+        loadLibraries([NATIVE_LIB_PATH])
+    }
+
     // TODO: properly implement (or get rid of?) [NativeModule._CheckImpl()]
     // let result = theModule._CheckImpl()
     // if (result != undefined) {
