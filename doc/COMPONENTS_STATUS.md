@@ -1590,8 +1590,8 @@
 |`offOnDetach`| Function | Vadim Voronov, Evstigneev Roman | in progress |  |
 |`getHeight`| Function |Vadim Voronov| done | |
 |`getWidth`| Function |Vadim Voronov| done | |
-|*DrawingRenderingContext*| *Class* |Sergey Dudkin| blocked IDL| |
-|`invalidate`| Function |Sergey Dudkin | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC6PG |
+|*DrawingRenderingContext*| *Class* | Dudkin Sergey | blocked IDL| |
+|`invalidate`| Function | Dudkin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC6PG |
 |*ICurve*| *Class* | Erokhin Ilya | blocked | |
 |`interpolate`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*DrawModifier*| *Class* | Erokhin Ilya | blocked | |
