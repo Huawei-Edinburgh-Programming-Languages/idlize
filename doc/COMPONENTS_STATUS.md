@@ -1346,17 +1346,17 @@
 |`onHttpAuthRequest`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onInterceptRequest`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onPermissionRequest`| Function | Erokhin Ilya | done | |
-|`onScreenCaptureRequest`| Function | Erokhin Ilya | devdone | |
+|`onScreenCaptureRequest`| Function | Erokhin Ilya | done | |
 |`onContextMenuShow`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onContextMenuHide`| Function | Erokhin Ilya | devdone | |
+|`onContextMenuHide`| Function | Erokhin Ilya | done | |
 |`mediaPlayGestureAccess`| Function | Erokhin Ilya | done | |
-|`onSearchResultReceive`| Function | Erokhin Ilya | devdone | |
-|`onScroll`| Function | Erokhin Ilya | devdone | |
-|`onSslErrorEventReceive`| Function | Erokhin Ilya | devdone | |
-|`onSslErrorEvent`| Function | Erokhin Ilya | devdone | |
-|`onClientAuthenticationRequest`| Function | Erokhin Ilya | devdone | |
-|`onWindowNew`| Function | Erokhin Ilya | devdone | |
-|`onWindowExit`| Function | Erokhin Ilya | devdone | |
+|`onSearchResultReceive`| Function | Erokhin Ilya | done | |
+|`onScroll`| Function | Erokhin Ilya | done | |
+|`onSslErrorEventReceive`| Function | Erokhin Ilya | done | |
+|`onSslErrorEvent`| Function | Erokhin Ilya | done | |
+|`onClientAuthenticationRequest`| Function | Erokhin Ilya | done | |
+|`onWindowNew`| Function | Erokhin Ilya | done | |
+|`onWindowExit`| Function | Erokhin Ilya | done | |
 |`multiWindowAccess`| Function | Erokhin Ilya | done | |
 |`onInterceptKeyEvent`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX & https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`webStandardFont`| Function | Erokhin Ilya | done | |
@@ -1374,10 +1374,10 @@
 |`blockNetwork`| Function | Erokhin Ilya | done | |
 |`horizontalScrollBarAccess`| Function | Erokhin Ilya | done | |
 |`verticalScrollBarAccess`| Function | Erokhin Ilya | done | |
-|`onTouchIconUrlReceived`| Function | Erokhin Ilya | devdone | |
+|`onTouchIconUrlReceived`| Function | Erokhin Ilya | done | |
 |`onFaviconReceived`| Function | Erokhin Ilya | blocked IDL| PixelMap https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
-|`onPageVisible`| Function | Erokhin Ilya | devdone | |
-|`onDataResubmitted`| Function | Erokhin Ilya | devdone | |
+|`onPageVisible`| Function | Erokhin Ilya | done | |
+|`onDataResubmitted`| Function | Erokhin Ilya | done | |
 |`pinchSmooth`| Function | Erokhin Ilya | done | |
 |`allowWindowOpenMethod`| Function | Erokhin Ilya | done | |
 |`onAudioStateChanged`| Function | Erokhin Ilya | devdone | |
