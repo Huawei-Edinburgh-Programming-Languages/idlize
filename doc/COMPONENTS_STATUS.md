@@ -132,11 +132,11 @@
 |`constraintSize`| Function | Roman Sedaikin | done | |
 |`touchable`| Function | Roman Sedaikin | done | |
 |`hitTestBehavior`| Function | Roman Sedaikin | done | |
-|`onChildTouchTest`| Function | | | |
+|`onChildTouchTest`| Function |Dmitry A Smirnov | | |
 |`layoutWeight`| Function | Roman Sedaikin | done | |
 |`chainWeight`| Function | Politov Mikhail | in progress | |
 |`padding`| Function | Skroba Gleb | done | |
-|`safeAreaPadding`| Function | | | |
+|`safeAreaPadding`| Function |Dmitry A Smirnov | | |
 |`margin`| Function | Skroba Gleb | done | |
 |`backgroundColor`|Function| Skroba Gleb| done |  |
 |`pixelRound`| Function | Skroba Gleb | done |  |
