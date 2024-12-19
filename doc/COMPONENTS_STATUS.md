@@ -1455,7 +1455,7 @@
 |`onScrollFrameBegin`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onScrollIndex`| Function | Kovalev Sergey | done | |
 |*UIExtensionComponent*| *Component* | Tuzhilkin Ivan | blocked IDL | |
-|`setUIExtensionComponentOptions`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`setUIExtensionComponentOptions`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBCGB5 ,  https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF |
 |`onRemoteReady`| Function | Tuzhilkin Ivan | testskipped | |
 |`onReceive`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`onResult`| Function | Tuzhilkin Ivan | testskipped | |
@@ -2016,13 +2016,13 @@
 |`update`| Function | Kovalev Sergey | done | |
 |`values`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`length`| Function | Kovalev Sergey | done | |
-|*UIExtensionProxy*| *Class* | Tuzhilkin Ivan | in progress | |
-|`send`| Function | Tuzhilkin Ivan | in progress | |
-|`sendSync`| Function | Tuzhilkin Ivan | in progress | |
-|`onAsyncReceiverRegister`| Function | Tuzhilkin Ivan | in progress | |
-|`onSyncReceiverRegister`| Function | Tuzhilkin Ivan | in progress | |
-|`offAsyncReceiverRegister`| Function | Tuzhilkin Ivan | in progress | |
-|`offSyncReceiverRegister`| Function | Tuzhilkin Ivan | in progress | |
+|*UIExtensionProxy*| *Class* | Tuzhilkin Ivan | blocked IDL | |
+|`send`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBCGB5 , https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF |
+|`sendSync`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBCGB5 , https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF |
+|`onAsyncReceiverRegister`| Function | Tuzhilkin Ivan | devdone | |
+|`onSyncReceiverRegister`| Function | Tuzhilkin Ivan | devdone | |
+|`offAsyncReceiverRegister`| Function | Tuzhilkin Ivan | devdone | |
+|`offSyncReceiverRegister`| Function | Tuzhilkin Ivan | devdone | |
 |*StyledString*| *Class* | Pavelyev Ivan | in progress | |
 |`getString`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getStyles`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
