@@ -119,5 +119,4 @@ callback Callback_RangeUpdate = void (i32 index, pointer mark);
 interface LazyForEachOps {
     static pointer NeedMoreElements(pointer node, pointer mark, i32 direction);
     static void OnRangeUpdate(pointer node, Callback_RangeUpdate updater);
-    static void SetInsertMark(pointer node, pointer mark, i32 direction);
 };
