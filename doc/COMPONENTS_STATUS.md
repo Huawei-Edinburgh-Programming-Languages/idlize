@@ -1518,7 +1518,7 @@
 |`createConicGradient`| Function  | Vadim Voronov | in progress | |
 |`createImageData`| Function  | Vadim Voronov | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA & https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getImageData`| Function  | Vadim Voronov | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getPixelMap`| Function  | Vadim Voronov | in progress  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getPixelMap`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`putImageData`| Function  | Vadim Voronov | in progress  | https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA |
 |`getLineDash`| Function  | Vadim Voronov |  blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
 |`setLineDash`| Function  | Vadim Voronov | done | |
@@ -1537,7 +1537,7 @@
 |`setTransform`| Function  | Vadim Voronov | done | |
 |`transform`| Function  | Vadim Voronov | done | |
 |`translate`| Function  | Vadim Voronov | done | |
-|`setPixelMap`| Function  | Vadim Voronov | in progress | |
+|`setPixelMap`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`transferFromImageBitmap`| Function  | Vadim Voronov | done | |
 |`saveLayer`| Function  | Vadim Voronov | done | |
 |`restoreLayer`| Function  | Vadim Voronov | done | |
