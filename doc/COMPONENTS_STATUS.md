@@ -1179,7 +1179,7 @@
 |`onEditChanged`| Function | Spirin Andrey | devdone |  |
 |`onEditChange`| Function | Spirin Andrey | devdone |  |
 |`onSubmit`| Function | Spirin Andrey | devdone |  |
-|`onChange`| Function | Spirin Andrey | in progress|  |
+|`onChange`| Function | Lobah Mikhail | in progress|  |
 |`onTextSelectionChange`| Function | Spirin Andrey | devdone |  |
 |`onContentScroll`| Function | Spirin Andrey | devdone |  |
 |`maxLength`| Function | Spirin Andrey | done |  |
@@ -1190,7 +1190,7 @@
 |`fontFamily`| Function | Spirin Andrey | done |  |
 |`onCopy`| Function | Spirin Andrey | devdone |  |
 |`onCut`| Function | Spirin Andrey | devdone|  |
-|`onPaste`| Function | Spirin Andrey | in progress|  |
+|`onPaste`| Function | Lobah Mikhail | in progress|  |
 |`copyOption`| Function | Spirin Andrey | done |  |
 |`showPasswordIcon`| Function | Spirin Andrey | done |  |
 |`textAlign`| Function | Spirin Andrey | done |  |
@@ -1222,9 +1222,9 @@
 |`fontFeature`| Function | Spirin Andrey | testskipped  |  |
 |`showPassword`| Function | Spirin Andrey | done |  |
 |`onSecurityStateChange`| Function | Spirin Andrey | devdone |  |
-|`onWillInsert`| Function | Spirin Andrey | in progress|  |
+|`onWillInsert`| Function | Lobah Mikhail | in progress|  |
 |`onDidInsert`| Function | Spirin Andrey | devdone |  |
-|`onWillDelete`| Function | Spirin Andrey | in progress|  |
+|`onWillDelete`| Function | Lobah Mikhail | in progress|  |
 |`onDidDelete`| Function | Spirin Andrey | devdone |  |
 |`editMenuOptions`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`enablePreviewText`| Function | Spirin Andrey | done |  |
