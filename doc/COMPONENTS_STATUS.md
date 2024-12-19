@@ -243,7 +243,7 @@
 |`key`| Function | Lobah Mikhail | done | |
 |`id`| Function | Erokhin Ilya | done |  |
 |`geometryTransition`| Function | Lobah Mikhail | done| |
-|`stateStyles`| Function | Lobah Mikhail | blocked| |
+|`stateStyles`| Function | Lobah Mikhail | blocked| https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`restoreId`| Function | Lobah Mikhail | done | |
 |`sphericalEffect`| Function | Lobah Mikhail | done | |
 |`lightUpEffect`| Function | Lobah Mikhail | done | |
@@ -253,7 +253,7 @@
 |`accessibilityTextHint`| Function | Lobah Mikhail | testskipped | |
 |`accessibilityDescription`| Function | Lobah Mikhail | testskipped | |
 |`accessibilityLevel`| Function | Lobah Mikhail | testskipped | |
-|`accessibilityVirtualNode`| Function | Lobah Mikhail | blocked | |
+|`accessibilityVirtualNode`| Function | Lobah Mikhail | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`accessibilityChecked`| Function | Lobah Mikhail | testskipped | |
 |`accessibilitySelected`| Function | Lobah Mikhail | testskipped | |
 |`obscured`| Function |Dmitry A Smirnov |done | |
