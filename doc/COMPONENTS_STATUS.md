@@ -242,20 +242,20 @@
 |`maskShape`| Function | Dmitry A Smirnov| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`key`| Function | Lobah Mikhail | done | |
 |`id`| Function | Erokhin Ilya | done |  |
-|`geometryTransition`| Function | Lobah Mikhail | in progress| |
-|`stateStyles`| Function | Lobah Mikhail | in progress| |
-|`restoreId`| Function | Lobah Mikhail |in progress | |
+|`geometryTransition`| Function | Lobah Mikhail | done| |
+|`stateStyles`| Function | Lobah Mikhail | blocked| |
+|`restoreId`| Function | Lobah Mikhail | done | |
 |`sphericalEffect`| Function | Lobah Mikhail | done | |
 |`lightUpEffect`| Function | Lobah Mikhail | done | |
 |`pixelStretchEffect`| Function | Lobah Mikhail | done | |
-|`accessibilityGroup`| Function | Lobah Mikhail | in progress| |
-|`accessibilityText`| Function | Lobah Mikhail | in progress| |
-|`accessibilityTextHint`| Function | Lobah Mikhail | in progress| |
-|`accessibilityDescription`| Function | Lobah Mikhail | in progress| |
-|`accessibilityLevel`| Function | Lobah Mikhail | in progress| |
-|`accessibilityVirtualNode`| Function | Lobah Mikhail | in progress| |
-|`accessibilityChecked`| Function | Lobah Mikhail | in progress| |
-|`accessibilitySelected`| Function | Lobah Mikhail | in progress| |
+|`accessibilityGroup`| Function | Lobah Mikhail | testskipped | |
+|`accessibilityText`| Function | Lobah Mikhail | testskipped | |
+|`accessibilityTextHint`| Function | Lobah Mikhail | testskipped | |
+|`accessibilityDescription`| Function | Lobah Mikhail | testskipped | |
+|`accessibilityLevel`| Function | Lobah Mikhail | testskipped | |
+|`accessibilityVirtualNode`| Function | Lobah Mikhail | blocked | |
+|`accessibilityChecked`| Function | Lobah Mikhail | testskipped | |
+|`accessibilitySelected`| Function | Lobah Mikhail | testskipped | |
 |`obscured`| Function |Dmitry A Smirnov |done | |
 |`reuseId`| Function |Dmitry A Smirnov |blocked AceEngine | not implemented in ace_engine|
 |`renderFit`| Function | Dmitry A Smirnov|done | |
