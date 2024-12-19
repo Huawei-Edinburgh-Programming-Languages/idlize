@@ -204,7 +204,7 @@ class PeerFileVisitor {
     }
 
     protected printApplyMethod(peer: PeerClass, printer: LanguageWriter) {
-        /* Turned off due to ArkTS incompatibility*/
+        /* Turned off due to https://gitee.com/openharmony-sig/arkcompiler_ets_frontend/issues/IBC95C */
         return
 
         const name = peer.originalClassName!
