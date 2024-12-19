@@ -561,7 +561,7 @@ export abstract class LanguageWriter {
     }
     interopReceiver(): string {
         // TODO: replace with "interopNativeModule()"
-        return "nativeModule()"
+        return this.nativeModuleAccessor + "()"
     }
     makeDefinedCheck(value: string): LanguageExpression {
         return new CheckDefinedExpression(value)
