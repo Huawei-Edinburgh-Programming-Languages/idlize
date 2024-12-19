@@ -5,6 +5,8 @@ import { pointer, KPointer } from "@koalaui/interop"
 
 export interface %NATIVE_MODULE_NAME%NativeModule {
 %NATIVE_FUNCTIONS%
+
+%INTEROP_FUNCTIONS%
 }
 
 type NativeModuleType = %NATIVE_MODULE_NAME%NativeModule

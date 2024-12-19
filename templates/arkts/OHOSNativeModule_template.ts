@@ -22,11 +22,11 @@ export class %NATIVE_MODULE_NAME%NativeModule {
 %NATIVE_FUNCTIONS%
 }
 
-let theModule: %NATIVE_MODULE_NAME%NativeModule
+export class InteropNativeModule {
+    static callCallbackFromNative(id: KInt, args: KUint8ArrayPtr, length: KInt): KInt {
+        // TODO implement callCallbackFromNative
+        return 0
+    }    
 
-export function get%NATIVE_MODULE_NAME%NativeModule(): %NATIVE_MODULE_NAME%NativeModule {
-    if (theModule) return theModule
-    theModule = new %NATIVE_MODULE_NAME%NativeModule()
-    return theModule
+%INTEROP_FUNCTIONS%
 }
-

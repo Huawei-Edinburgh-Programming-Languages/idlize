@@ -51,6 +51,7 @@ class OHOSVisitor {
     peerWriter: LanguageWriter
     nativeWriter: LanguageWriter
     nativeFunctionsWriter: LanguageWriter
+    interopFunctionsWriter: LanguageWriter
 
     libraryName: string = ""
 
@@ -70,6 +71,7 @@ class OHOSVisitor {
         this.peerWriter = createLanguageWriter(library.language, library)
         this.nativeWriter = createLanguageWriter(library.language, library)
         this.nativeFunctionsWriter = createLanguageWriter(library.language, library)
+        this.interopFunctionsWriter = createLanguageWriter(library.language, library)
 
         const fileNamePrefix = this.libraryName.toLowerCase()
         this.implementationStubsFile = new CppSourceFile(`${fileNamePrefix}Impl_template${Language.CPP.extension}`, library)
@@ -277,6 +279,7 @@ class OHOSVisitor {
             })
         })
         printCallbacksKinds(this.library, this.nativeWriter)
+
         this.nativeFunctionsWriter.printer.pushIndent(this.nativeWriter.indentDepth() + 1)
         ;((writer: LanguageWriter) => {
             this.interfaces.forEach(it => {
@@ -295,6 +298,10 @@ class OHOSVisitor {
                     writer.writeNativeMethodDeclaration(`_${it.name}_${method.name}`, signature)  // TODO temporarily removed _${this.libraryName} prefix
                 })
             })
+        })(this.nativeFunctionsWriter)
+
+        this.interopFunctionsWriter.printer.pushIndent(this.nativeWriter.indentDepth() + 1)
+        ;((writer: LanguageWriter) => {
             writer.writeNativeMethodDeclaration("_InvokeFinalizer",
                 NamedMethodSignature.make(IDLVoidType, [
                     { name: "ptr", type: IDLPointerType },
@@ -375,7 +382,7 @@ class OHOSVisitor {
                     ])
                 )
             }
-        })(this.nativeFunctionsWriter)
+        })(this.interopFunctionsWriter)
     }
 
     private printPeer() {
@@ -711,6 +718,7 @@ class OHOSVisitor {
             .replaceAll('%NATIVE_MODULE_NAME%', this.libraryName)
             .replaceAll('%NATIVE_MODULE_CONTENT%', this.nativeWriter.getOutput().join('\n'))
             .replaceAll('%NATIVE_FUNCTIONS%', this.nativeFunctionsWriter.getOutput().join('\n'))
+            .replaceAll('%INTEROP_FUNCTIONS%', this.interopFunctionsWriter.getOutput().join('\n'))
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Native${ext}`), nativeModuleText, 'utf-8')
 
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Finalizable${ext}`),
