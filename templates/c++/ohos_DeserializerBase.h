@@ -110,7 +110,7 @@ inline void WriteToString(std::string *result, const T value) = delete;
 template <typename T>
 void WriteToString(std::string *result, const T *const value)
 {
-  result->append("0x" + std::to_string(reinterpret<std::uintptr_t>(value)));
+  result->append("0x" + std::to_string(reinterpret_cast<std::uintptr_t>(value)));
 }
 
 struct Error
