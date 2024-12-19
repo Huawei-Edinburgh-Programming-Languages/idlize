@@ -156,6 +156,7 @@ export class ETSLambdaExpression extends LambdaExpression {
             return `${this.signature.argName(i)}${maybeOptional}: ${this.convertor.convert(it)}`
         })
         // Workaround to fix ArkTS error: SyntaxError: Unexpected token, arrow (=>)
+        // Issue: https://rnd-gitlab-msc.huawei.com/rus-os-team/virtual-machines-and-tools/panda/-/issues/21333
         let isRetTypeCallback = idl.isCallback(this.signature.returnType)
         if (idl.isReferenceType(this.signature.returnType)) {
             const resolved = this.resolver.resolveTypeReference(

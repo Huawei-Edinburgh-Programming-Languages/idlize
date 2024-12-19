@@ -239,6 +239,7 @@ class DeserializeCallbacksVisitor {
                 let callExpression = writer.makeFunctionCall(callName, argsNames.map(it => writer.makeString(it)))
                 if (hasContinuation) {
                     // TODO: Uses temporary variable `callResultRef` to fix ArkTS error: 'TypeError: Member type must be the same for all union objects.'
+                    // Issue: https://rnd-gitlab-msc.huawei.com/rus-os-team/virtual-machines-and-tools/panda/-/issues/21332
                     const callResultRef = `${callName}Result`
                     writer.writeStatement(writer.makeAssign(callResultRef, undefined, callExpression, true, true))
                     callExpression = writer.makeFunctionCall(`_continuation`, [writer.makeString(callResultRef)])
