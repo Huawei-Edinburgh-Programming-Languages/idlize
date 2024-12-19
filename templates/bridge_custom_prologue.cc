@@ -20,6 +20,7 @@
 #include <iomanip>
 #include <unordered_map>
 
+#define KOALA_INTEROP_MODULE ArkUINativeModule
 #include "common-interop.h"
 #include "interop-logging.h"
 
