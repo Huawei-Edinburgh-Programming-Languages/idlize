@@ -266,9 +266,9 @@
 |`shouldBuiltInRecognizerParallelWith`| Function | | | |
 |`monopolizeEvents`| Function | Erokhin Ilya | testskipped | |
 |`onTouchIntercept`| Function | Erokhin Ilya | testskipped | |
-|`onSizeChange`| Function | Dmitry A Smirnov|in progress | |
+|`onSizeChange`| Function | Dmitry A Smirnov|testskipped | |
 |`customProperty`| Function | Dmitry A Smirnov|blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
-|`expandSafeArea`| Function | Dmitry A Smirnov|in progress | |
+|`expandSafeArea`| Function | Dmitry A Smirnov|testskipped | |
 |`background`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`backgroundImage`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`backgroundBlurStyle`| Function | Skroba Gleb | done |  |
@@ -684,10 +684,10 @@
 |`activeColor`| Function | Dmitry A Smirnov| done|  |
 |`pathColor`| Function | Dmitry A Smirnov| done|  |
 |`pathStrokeWidth`| Function | Dmitry A Smirnov| done|  |
-|`onPatternComplete`| Function | Dmitry A Smirnov| in progress|  |
+|`onPatternComplete`| Function | Dmitry A Smirnov| devdone|  |
 |`autoReset`| Function | Dmitry A Smirnov| done|  |
-|`onDotConnect`| Function | Dmitry A Smirnov| in progress|  |
-|`activateCircleStyle`| Function | Dmitry A Smirnov| blocked AceEngine| https://gitee.com/openharmony/arkui_ace_engine/issues/IAYWON |
+|`onDotConnect`| Function | Dmitry A Smirnov| devdone|  |
+|`activateCircleStyle`| Function | Dmitry A Smirnov| devdone| |
 |*PluginComponent*| *Component* | Evstigneev Roman | in progress | |
 |`setPluginComponentOptions`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
 |`onComplete`| Function | Evstigneev Roman | done | |
