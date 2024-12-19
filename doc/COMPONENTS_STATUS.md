@@ -1176,20 +1176,20 @@
 |`placeholderFont`| Function | Spirin Andrey | testskipped |  |
 |`enterKeyType`| Function | Spirin Andrey | done |  |
 |`caretColor`| Function | Spirin Andrey | done |  |
-|`onEditChanged`| Function | Spirin Andrey | devdone |  |
-|`onEditChange`| Function | Spirin Andrey | devdone |  |
+|`onEditChanged`| Function | Spirin Andrey | testskipped |  |
+|`onEditChange`| Function | Spirin Andrey | testskipped |  |
 |`onSubmit`| Function | Spirin Andrey | devdone |  |
 |`onChange`| Function | Lobah Mikhail | in progress|  |
-|`onTextSelectionChange`| Function | Spirin Andrey | devdone |  |
-|`onContentScroll`| Function | Spirin Andrey | devdone |  |
+|`onTextSelectionChange`| Function | Spirin Andrey | testskipped |  |
+|`onContentScroll`| Function | Spirin Andrey | testskipped |  |
 |`maxLength`| Function | Spirin Andrey | done |  |
 |`fontColor`| Function | Spirin Andrey | done |  |
 |`fontSize`| Function | Spirin Andrey | done |  |
 |`fontStyle`| Function | Spirin Andrey | done |  |
 |`fontWeight`| Function | Spirin Andrey | done |  |
 |`fontFamily`| Function | Spirin Andrey | done |  |
-|`onCopy`| Function | Spirin Andrey | devdone |  |
-|`onCut`| Function | Spirin Andrey | devdone|  |
+|`onCopy`| Function | Spirin Andrey | testskipped |  |
+|`onCut`| Function | Spirin Andrey | testskipped|  |
 |`onPaste`| Function | Lobah Mikhail | in progress|  |
 |`copyOption`| Function | Spirin Andrey | done |  |
 |`showPasswordIcon`| Function | Spirin Andrey | done |  |
@@ -1221,11 +1221,11 @@
 |`passwordRules`| Function | Spirin Andrey | done |  |
 |`fontFeature`| Function | Spirin Andrey | testskipped  |  |
 |`showPassword`| Function | Spirin Andrey | done |  |
-|`onSecurityStateChange`| Function | Spirin Andrey | devdone |  |
+|`onSecurityStateChange`| Function | Spirin Andrey | testskipped |  |
 |`onWillInsert`| Function | Lobah Mikhail | in progress|  |
-|`onDidInsert`| Function | Spirin Andrey | devdone |  |
+|`onDidInsert`| Function | Spirin Andrey | testskipped |  |
 |`onWillDelete`| Function | Lobah Mikhail | in progress|  |
-|`onDidDelete`| Function | Spirin Andrey | devdone |  |
+|`onDidDelete`| Function | Spirin Andrey | testskipped |  |
 |`editMenuOptions`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`enablePreviewText`| Function | Spirin Andrey | done |  |
 |`enableHapticFeedback`| Function | Spirin Andrey | done |  |
