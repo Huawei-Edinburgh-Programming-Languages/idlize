@@ -120,3 +120,22 @@ interface LazyForEachOps {
     static pointer NeedMoreElements(pointer node, pointer mark, i32 direction);
     static void OnRangeUpdate(pointer node, Callback_RangeUpdate updater);
 };
+
+[Entity=Class]
+interface InteropDataInner {
+    attribute i32 v1;
+    attribute String v2;
+};
+
+[Entity=Class]
+interface InteropData {
+    attribute String f1;
+    attribute number f2;
+    attribute sequence<InteropDataInner> f3;
+};
+
+[GlobalScope]
+interface InteropExample {
+    void functionJava(i32 tag, InteropData data);
+    void functionTs(InteropData data);
+}

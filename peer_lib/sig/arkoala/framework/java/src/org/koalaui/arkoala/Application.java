@@ -119,6 +119,11 @@ public class Application {
         }
     }
 
+    public int callVM(byte[] data, int inputLength, int maxOutputLength) {
+        System.out.println("Java: callVM called");
+        return 0;
+    }
+
     public long start() {
         System.out.println("JAVA: start");
         return 42;
