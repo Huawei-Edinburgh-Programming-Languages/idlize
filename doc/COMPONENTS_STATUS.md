@@ -1822,10 +1822,10 @@
 |`closeSelectionMenu`| Function | Samarin Sergey | done | |
 |`setStyledString`| Function | Samarin Sergey | in progress | |
 |`getLayoutManager`| Function | Samarin Sergey | in progress | |
-|*TextAreaController*| *Class* | Tuzhilkin Ivan | testskipped |  |
-|`caretPosition`| Function | Tuzhilkin Ivan | testskipped |  |
-|`setTextSelection`| Function | Tuzhilkin Ivan | testskipped |  |
-|`stopEditing`| Function | Tuzhilkin Ivan | testskipped |  |
+|*TextAreaController*| *Class* | Tuzhilkin Ivan | devdone |  |
+|`caretPosition`| Function | Tuzhilkin Ivan | devdone |  |
+|`setTextSelection`| Function | Tuzhilkin Ivan | devdone |  |
+|`stopEditing`| Function | Tuzhilkin Ivan | devdone |  |
 |*TextClockController*| *Class* |Pavelyev Ivan|in progress|  |
 |`start`| Function |Pavelyev Ivan|done|  |
 |`stop`| Function |Pavelyev Ivan|done|  |
@@ -1853,10 +1853,10 @@
 |*EditMenuOptions*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onCreateMenu`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onMenuItemClick`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|*TextInputController*| *Class* | Spirin Andrey | testskipped |  |
-|`caretPosition`| Function | Spirin Andrey | testskipped |  |
-|`setTextSelection`| Function | Spirin Andrey | testskipped |  |
-|`stopEditing`| Function |  Spirin Andrey | testskipped |  |
+|*TextInputController*| *Class* | Spirin Andrey | devdone |  |
+|`caretPosition`| Function | Spirin Andrey | devdone |  |
+|`setTextSelection`| Function | Spirin Andrey | devdone |  |
+|`stopEditing`| Function |  Spirin Andrey | devdone |  |
 |*TextPickerDialog*| *Class* | Ekaterina Stepanova | done | |
 |`show`| Function | Ekaterina Stepanova | done | |
 |*TextTimerController*| *Class* |Ekaterina Stepanova| done |  |
