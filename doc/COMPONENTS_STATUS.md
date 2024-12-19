@@ -294,7 +294,7 @@
 |`bindContentCover`| Function | | | |
 |`bindSheet`| Function | | | |
 |`onVisibleAreaChange`| Function | Erokhin Ilya | done | |
-|`keyboardShortcut`| Function | Erokhin Ilya | in progress | |
+|`keyboardShortcut`| Function | Erokhin Ilya | testskipped | |
 |*CommonShapeMethod*|*Component*|Skroba Gleb| blocked AceEngine |  |
 |`stroke`|Function| Skroba Gleb | done |  |
 |`fill`|Function| Skroba Gleb | done |  |
@@ -1380,35 +1380,35 @@
 |`onDataResubmitted`| Function | Erokhin Ilya | done | |
 |`pinchSmooth`| Function | Erokhin Ilya | done | |
 |`allowWindowOpenMethod`| Function | Erokhin Ilya | done | |
-|`onAudioStateChanged`| Function | Erokhin Ilya | devdone | |
-|`onFirstContentfulPaint`| Function | Erokhin Ilya | devdone | |
-|`onFirstMeaningfulPaint`| Function | Erokhin Ilya | devdone | |
-|`onLargestContentfulPaint`| Function | Erokhin Ilya | devdone | |
+|`onAudioStateChanged`| Function | Erokhin Ilya | done | |
+|`onFirstContentfulPaint`| Function | Erokhin Ilya | done | |
+|`onFirstMeaningfulPaint`| Function | Erokhin Ilya | done | |
+|`onLargestContentfulPaint`| Function | Erokhin Ilya | done | |
 |`onLoadIntercept`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ  |
-|`onControllerAttached`| Function | Erokhin Ilya | devdone | |
-|`onOverScroll`| Function | Erokhin Ilya | devdone | |
-|`onSafeBrowsingCheckResult`| Function | Erokhin Ilya | devdone | |
-|`onNavigationEntryCommitted`| Function | Erokhin Ilya | devdone | |
-|`onIntelligentTrackingPreventionResult`| Function | Erokhin Ilya | devdone | |
+|`onControllerAttached`| Function | Erokhin Ilya | done | |
+|`onOverScroll`| Function | Erokhin Ilya | done | |
+|`onSafeBrowsingCheckResult`| Function | Erokhin Ilya | done | |
+|`onNavigationEntryCommitted`| Function | Erokhin Ilya | done | |
+|`onIntelligentTrackingPreventionResult`| Function | Erokhin Ilya | done | |
 |`javaScriptOnDocumentStart`| Function | Erokhin Ilya | testskipped | |
 |`javaScriptOnDocumentEnd`| Function | Erokhin Ilya | testskipped | |
 |`layoutMode`| Function | Erokhin Ilya | done | |
 |`nestedScroll`| Function | Erokhin Ilya | testskipped | |
 |`enableNativeEmbedMode`| Function | Erokhin Ilya | done | |
 |`onNativeEmbedLifecycleChange`| Function | Erokhin Ilya | testskipped | |
-|`onNativeEmbedVisibilityChange`| Function | Erokhin Ilya | devdone | |
+|`onNativeEmbedVisibilityChange`| Function | Erokhin Ilya | done | |
 |`onNativeEmbedGestureEvent`| Function | Erokhin Ilya | testskipped | |
 |`copyOptions`| Function | Erokhin Ilya | done | |
 |`onOverrideUrlLoading`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`textAutosizing`| Function | Erokhin Ilya | done | |
 |`enableNativeMediaPlayer`| Function | Erokhin Ilya | done | |
 |`enableSmoothDragResize`| Function | Erokhin Ilya | done | |
-|`onRenderProcessNotResponding`| Function | Erokhin Ilya | devdone | |
-|`onRenderProcessResponding`| Function | Erokhin Ilya | devdone | |
+|`onRenderProcessNotResponding`| Function | Erokhin Ilya | done | |
+|`onRenderProcessResponding`| Function | Erokhin Ilya | done | |
 |`selectionMenuOptions`| Function | Erokhin Ilya | testskipped | |
-|`onViewportFitChanged`| Function | Erokhin Ilya | devdone | |
+|`onViewportFitChanged`| Function | Erokhin Ilya | done | |
 |`onInterceptKeyboardAttach`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
-|`onAdsBlocked`| Function | Erokhin Ilya | devdone | |
+|`onAdsBlocked`| Function | Erokhin Ilya | done | |
 |`keyboardAvoidMode`| Function | Erokhin Ilya | done | |
 |`editMenuOptions`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`enableHapticFeedback`| Function | Erokhin Ilya | done | |
