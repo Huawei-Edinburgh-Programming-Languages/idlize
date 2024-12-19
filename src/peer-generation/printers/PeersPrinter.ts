@@ -181,6 +181,7 @@ class PeerFileVisitor {
             const _peerPtr = '_peerPtr'
             writer.writeStatement(
                 writer.makeAssign(_peerPtr, undefined, writer.makeNativeCall(
+                    writer.nativeReceiver(),
                     `_${peer.componentName}_${createConstructPeerMethod(peer).overloadedName}`,
                     [writer.makeString(peerId), writer.makeString(signature.argName(1))]
                 ), true)
@@ -411,7 +412,7 @@ export function printPeerFinalizer(peerClassBase: PeerClassBase, writer: Languag
     writer.writeMethodImplementation(finalizer, writer => {
         writer.writeStatement(
             writer.makeReturn(
-                writer.makeNativeCall(`_${className}_getFinalizer`, [])))
+                writer.makeNativeCall(writer.nativeReceiver(), `_${className}_getFinalizer`, [])))
     })
 }
 
@@ -475,6 +476,7 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
         })
         let call = writer.makeNativeCall(
             // here we write methods
+            writer.nativeReceiver(),
             `_${method.originalParentName}_${method.overloadedName}`,
             params)
 

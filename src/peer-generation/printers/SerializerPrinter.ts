@@ -469,12 +469,12 @@ class IdlDeserializerPrinter {
                 new ExpressionStatement(
                     writer.makeTernary(
                         writer.makeString('isSync'),
-                        writer.makeNativeCall(`_CallCallbackSync`, [
+                        writer.makeNativeCall(this.writer.interopReceiver(), `_CallCallbackSync`, [
                             writer.makeString(generateCallbackKindValue(target).toString()),
                             writer.makeString(`${argsSerializer}Serializer.asArray()`),
                             writer.makeString(`${argsSerializer}Serializer.length()`),
                         ]),
-                        writer.makeNativeCall(`_CallCallback`, [
+                        writer.makeNativeCall(this.writer.interopReceiver(), `_CallCallback`, [
                             writer.makeString(generateCallbackKindValue(target).toString()),
                             writer.makeString(`${argsSerializer}Serializer.asArray()`),
                             writer.makeString(`${argsSerializer}Serializer.length()`),

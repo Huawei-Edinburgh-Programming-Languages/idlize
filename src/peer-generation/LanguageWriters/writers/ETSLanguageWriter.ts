@@ -225,6 +225,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         return [MethodModifier.PUBLIC, MethodModifier.PRIVATE, MethodModifier.NATIVE, MethodModifier.STATIC]
     }
     nativeReceiver(): string { return this.nativeModuleAccessor }
+    override interopReceiver(): string { return "InteropNativeModule" }
     makeUnsafeCast(convertor: ArgConvertor, param: string): string {
         if ((convertor instanceof EnumConvertor) && !param.endsWith(".value")) {
             return `(${param} as ${this.typeConvertor.convert(convertor.enumEntry)}).${convertor.isStringEnum ? 'ordinal' : 'value'}`

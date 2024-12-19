@@ -463,7 +463,7 @@ class OHOSVisitor {
                         })
                         
                         const createPeerExpression = writer.makeNewObject("Finalizable", [
-                            writer.makeNativeCall(`_${int.name}_ctor`, params),
+                            writer.makeNativeCall(writer.nativeReceiver(), `_${int.name}_ctor`, params),
                             writer.makeString(`${int.name}.getFinalizer()`)
                         ])
                         writer.writeStatement(
@@ -488,6 +488,7 @@ class OHOSVisitor {
                 const getFinalizerSig = new MethodSignature(IDLPointerType, [])
                 writer.writeMethodImplementation(new Method("getFinalizer", getFinalizerSig, [MethodModifier.STATIC]), writer => {
                     const callExpression = writer.makeNativeCall(
+                        writer.nativeReceiver(),
                         `_${int.name}_getFinalizer`, // TODO temporarily removed _${this.libraryName} prefix
                         []
                     );
@@ -554,6 +555,7 @@ class OHOSVisitor {
                             }
                         })
                         const callExpression = writer.makeNativeCall(
+                            writer.nativeReceiver(),
                             `_${int.name}_${method.name}`, // TODO temporarily removed _${this.libraryName} prefix
                             params
                         )

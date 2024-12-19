@@ -550,14 +550,18 @@ export abstract class LanguageWriter {
     makeFieldAccess(receiver: string, method: string, nullable?: boolean): LanguageExpression {
         return new FieldAccessExpression(receiver, method, nullable)
     }
-    makeNativeCall(method: string, params: LanguageExpression[], nullable?: boolean): LanguageExpression {
-        return new MethodCallExpression(this.nativeReceiver(), method, params, nullable)
+    makeNativeCall(receiver: string, method: string, params: LanguageExpression[], nullable?: boolean): LanguageExpression {
+        return new MethodCallExpression(receiver, method, params, nullable)
     }
     makeBlock(statements: LanguageStatement[], inScope: boolean = true) {
         return new BlockStatement(statements, inScope)
     }
     nativeReceiver(): string {
         return this.nativeModuleAccessor + "()"
+    }
+    interopReceiver(): string {
+        // TODO: replace with "interopNativeModule()"
+        return "nativeModule()"
     }
     makeDefinedCheck(value: string): LanguageExpression {
         return new CheckDefinedExpression(value)

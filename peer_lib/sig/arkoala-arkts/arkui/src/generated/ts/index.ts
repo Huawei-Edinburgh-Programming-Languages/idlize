@@ -1,2 +1,5 @@
 export * from "./type_check"
+export * from "./ArkUINativeModule"
+export * from "./InteropNativeModule"
+export * from "./TestNativeModule"
 export * from "./NativeModule"

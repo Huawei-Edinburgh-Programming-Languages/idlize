@@ -69,7 +69,9 @@ export class TSWrappersVisitor {
         writer.writeMethodImplementation(clazz.finalizer.method, writer => {
             writer.writeStatement(
                 writer.makeReturn(
-                    writer.makeNativeCall(Skoala.nativeMethod(clazz.className, clazz.finalizer!.toStringName), [])))
+                    writer.makeNativeCall(
+                        writer.nativeReceiver(),
+                        Skoala.nativeMethod(clazz.className, clazz.finalizer!.toStringName), [])))
         })
     }
 
@@ -91,7 +93,8 @@ export class TSWrappersVisitor {
             }
         })
 
-        let call = writer.makeNativeCall(Skoala.nativeMethod(method.originalParentName, method.toStringName), params)
+        let call = writer.makeNativeCall(writer.nativeReceiver(),
+            Skoala.nativeMethod(method.originalParentName, method.toStringName), params)
         let returnType = method.method.signature.returnType
 
         writer.writeMethodImplementation(method.method, writer => {

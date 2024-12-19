@@ -396,6 +396,7 @@ export class CJLanguageWriter extends LanguageWriter {
         this.print(`${prefix}func ${name}(${signature.args.map((it, index) => `${signature.argName(index)}: ${this.getNodeName(it)}`).join(", ")}): ${this.getNodeName(signature.returnType)}${postfix ?? ""}`)
     }
     nativeReceiver(): string { return 'NativeModule' }
+    override interopReceiver(): string { return "InteropNativeModule" }
     writeNativeFunctionCall(printer: LanguageWriter, name: string, signature: MethodSignature) {
         printer.print(`return unsafe { ${name}(${signature.args.map((it, index) => `${signature.argName(index)}`).join(", ")}) }`)
     }

@@ -16,50 +16,28 @@
 import { callCallback } from "../CallbackRegistry"
 import { int32, int64, float32 } from "@koalaui/common"
 import {
-  KBoolean,
-  KUInt,
-  KInt,
-  KLong,
-  KFloat,
-  KPointer,
-  KStringPtr,
-  KUint8ArrayPtr,
-  KInt32ArrayPtr,
-  KFloat32ArrayPtr,
+    KBoolean,
+    KUInt,
+    KInt,
+    KLong,
+    KFloat,
+    KPointer,
+    KStringPtr,
+    KUint8ArrayPtr,
+    KInt32ArrayPtr,
+    KFloat32ArrayPtr,
 } from "@koalaui/interop"
 
 import { Length } from "../ArkUnitsInterfaces"
 import { NativeBuffer } from '@koalaui/interop'
 
-let theModule: NativeModule
-
-export function nativeModule(): NativeModule {
-    if (theModule) return theModule
-    // todo: is this code actually reachable?
-    theModule = new NativeModule()
-    return theModule
-}
-
 export class NativeModule {
-  static {
-    loadLibrary("ArkoalaNative_ark")
-    NativeModule.init()
-  }
+    static native init(): void;
 
-  static native init(): void;
-
-  static callCallbackFromNative(id: KInt, args: KUint8ArrayPtr, length: KInt): KInt {
-    return callCallback(id, args, length)
-  }
+    static callCallbackFromNative(id: KInt, args: KUint8ArrayPtr, length: KInt): KInt {
+        return callCallback(id, args, length)
+    }
 
 %GENERATED_METHODS%
 
- // interop
-%GENERATED_PREDEFINED_Interop%
-// loader
-%GENERATED_PREDEFINED_Loader%
-// node
-%GENERATED_PREDEFINED_Node%
-// test
-%GENERATED_PREDEFINED_Test%
 }

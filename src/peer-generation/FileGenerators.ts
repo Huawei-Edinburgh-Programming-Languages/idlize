@@ -425,7 +425,7 @@ export function makeArkTSDeserializer(library: PeerLibrary): string {
     imports.addFeature("DeserializerBase", "./DeserializerBase")
     imports.addFeatures(["int32", "int64"], "@koalaui/common")
     imports.addFeature("Serializer", "./Serializer")
-    imports.addFeatures(["NativeModule"], "#components")
+    imports.addFeatures(["NativeModule", "InteropNativeModule"], "#components")
     imports.addFeatures(["CallbackKind"], "CallbackKind")
     imports.addFeatures(['KPointer'], '@koalaui/interop')
     imports.print(printer, '')

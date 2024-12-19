@@ -14,7 +14,7 @@
  */
 import { float32, float64, int8, int32, int64, int32BitsFromFloat } from "@koalaui/common"
 import { pointer, KUint8ArrayPtr, KBuffer, ResourceId, ResourceHolder, NativeBuffer } from "@koalaui/interop"
-import { NativeModule } from "#components"
+import { ArkUINativeModule, InteropNativeModule } from "#components"
 
 /**
  * Value representing possible JS runtime object type.
@@ -195,7 +195,7 @@ export class SerializerBase {
     }
     private releaseResources() {
         for (const resourceId of this.heldResources)
-            NativeModule._ReleaseArkoalaResource(resourceId)
+            ArkUINativeModule._ReleaseArkoalaResource(resourceId)
         // todo think about effective array clearing/pushing
         this.heldResources = new Array<ResourceId>()
     }
@@ -292,7 +292,7 @@ export class SerializerBase {
     }
     writeString(value: string) {
         this.checkCapacity((4 + value.length * 4 + 1) as int32) // length, data
-        let encodedLength = NativeModule._ManagedStringWrite(value, this.asArray(), this.position + 4)
+        let encodedLength = InteropNativeModule._ManagedStringWrite(value, this.asArray(), this.position + 4)
         this.setInt32(this.position, encodedLength)
         this.position += encodedLength + 4
     }
