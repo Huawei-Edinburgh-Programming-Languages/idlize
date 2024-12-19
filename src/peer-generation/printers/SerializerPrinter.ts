@@ -611,6 +611,7 @@ export function printSerializerImports(library: PeerLibrary, destFile: SourceFil
             collector.addFeature("TypeChecker", "#components")
             collector.addFeature("KUint8ArrayPtr", "@koalaui/interop")
             collector.addFeature("NativeBuffer", "@koalaui/interop")
+            collector.addFeature("InteropNativeModule", "@koalaui/interop")
             collector.addFeature("CallbackTransformer", "./peers/CallbackTransformer")
             for (const callback of collectUniqueCallbacks(library)) {
                 if (idl.isSyntheticEntry(callback))

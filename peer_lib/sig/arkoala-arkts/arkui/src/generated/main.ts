@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { NativeModule, ArkUINativeModule, InteropNativeModule, TestNativeModule } from "#components"
+import { ArkUINativeModule, TestNativeModule, NativeModuleLoader } from "#components"
 import { wrapCallback, callCallback, wrapSystemCallback } from "./CallbackRegistry"
 import { deserializeAndCallCallback } from './peers/CallbackDeserializeCall.ts'
 import { assertEquals, assertThrows } from "./test_utils"
@@ -60,7 +60,7 @@ import { Alignment, TextOverflow, TextHeightAdaptivePolicy } from "@arkoala/arku
 import { Deserializer } from "@arkoala/arkui/peers/Deserializer"
 import { Serializer } from "@arkoala/arkui/peers/Serializer"
 import { CallbackKind } from "@arkoala/arkui/peers/CallbackKind"
-import { ResourceId } from "@koalaui/interop"
+import { ResourceId, InteropNativeModule, loadLibraries } from "@koalaui/interop"
 import { checkArkoalaCallbacks } from "@arkoala/arkui/peers/CallbacksChecker"
 
 
@@ -818,8 +818,8 @@ function checkNodeAPI() {
 }
 
 export function main(): void {
-    loadLibrary("ArkoalaNative_ark")
-    NativeModule.init()
+    loadLibraries(["ArkoalaNative_ark"])
+    NativeModuleLoader.init()
     
     checkCallbackWithReturn()
     checkTwoSidesCallbackSync()

@@ -359,6 +359,10 @@ export function generateArkoalaFromIdl(config: {
             arkoala.arktsLib(new TargetFile(NativeModuleType.Test.name, 'arkts')),
             printPredefinedNativeModule(peerLibrary, NativeModuleType.Test).printToString(),
         )
+        // writeIntegratedFile(
+        //     arkoala.arktsLib(new TargetFile(NativeModuleType.Interop.name, 'arkts')),
+        //     printPredefinedNativeModule(peerLibrary, NativeModuleType.Interop).printToString(),
+        // )
         writeIntegratedFile(
             arkoala.arktsLib(new TargetFile(NativeModuleType.Generated.name, 'arkts')),
             printArkUIGeneratedNativeModule(peerLibrary, NativeModuleType.Generated).printToString()

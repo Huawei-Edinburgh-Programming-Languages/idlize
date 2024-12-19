@@ -293,6 +293,8 @@ function collectNativeModuleImports(module: NativeModuleType, file: SourceFile) 
         tsFile.imports.addFeatures(["int32", "float32"], "@koalaui/common")
         if (module === NativeModuleType.ArkUI)
             tsFile.imports.addFeature('loadLibraries', '@koalaui/interop')
+        if (module === NativeModuleType.Generated)
+            tsFile.imports.addFeature('Length', '../ArkUnitsInterfaces')
     }
 }
 
@@ -302,9 +304,7 @@ function printNativeModuleRegistration(language: Language, module: NativeModuleT
             const tsFile = file as TsSourceFile
             tsFile.imports.addFeature('registerNativeModule', '@koalaui/interop')
             tsFile.content.print(`registerNativeModule("${module.name}", ${module.name})`)
-            return
-        default:
-            throw new Error("Not implemented")
+            break
     }
 }
 
@@ -312,12 +312,12 @@ export function printArkUILibrariesLoader(file: SourceFile) {
     const template = readLangTemplate(`librariesLoader`, file.language)
     switch (file.language) {
         case Language.TS:
-            const tsFile = file as TsSourceFile | ArkTSSourceFile
+            const tsFile = file as TsSourceFile
             tsFile.imports.addFeatures(['withByteArray', 'Access', 'callCallback', 'nullptr', 'InteropNativeModule', 'loadLibraries', 'providePlatformDefinedData', 'NativeStringBase', 'ArrayDecoder', 'CallbackRegistry'], '@koalaui/interop')
             tsFile.content.writeLines(template)
             break
         case Language.ARKTS:
-            const arktsFile = file as TsSourceFile | ArkTSSourceFile
+            const arktsFile = file as ArkTSSourceFile
             arktsFile.imports.addFeatures(['loadLibraries'], "@koalaui/interop")
             arktsFile.content.writeLines(template)
             break
