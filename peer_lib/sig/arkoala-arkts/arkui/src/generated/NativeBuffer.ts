@@ -18,12 +18,21 @@ import { int32, int64 } from '@koalaui/common'
 
 // stub wrapper for KInteropBuffer
 export class NativeBuffer {
-    public data:pointer
-    public length: int64
-    public resourceId: int32
-    public hold:pointer
-    public release: pointer
+    public data:pointer = 0
+    public length: int64 = 0
+    public resourceId: int32 = 0
+    public hold:pointer = 0
+    public release: pointer = 0
+
+    constructor(data:pointer, length: int64, resourceId: int32, hold:pointer, release: pointer) {
+        this.data = data
+        this.length = length
+        this.resourceId = resourceId
+        this.hold = hold
+        this.release = release
+    }
+
     static wrap(data:pointer, length: int64, resourceId: int32, hold:pointer, release: pointer): NativeBuffer {
-        return new NativeBuffer()
+        return new NativeBuffer(data, length, resourceId, hold, release)
     }
 }
