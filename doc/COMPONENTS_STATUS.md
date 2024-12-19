@@ -132,7 +132,7 @@
 |`constraintSize`| Function | Roman Sedaikin | done | |
 |`touchable`| Function | Roman Sedaikin | done | |
 |`hitTestBehavior`| Function | Roman Sedaikin | done | |
-|`onChildTouchTest`| Function |Dmitry A Smirnov | in progress | |
+|`onChildTouchTest`| Function |Dmitry A Smirnov |  blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
 |`layoutWeight`| Function | Roman Sedaikin | done | |
 |`chainWeight`| Function | Politov Mikhail | in progress | |
 |`padding`| Function | Skroba Gleb | done | |
