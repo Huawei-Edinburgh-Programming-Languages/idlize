@@ -95,3 +95,33 @@ extern "C" const OH_AnyAPI* GetAnyAPI(int kind, int version) {
     }
     return impls[kind];
 }
+
+extern const char _binary_xml_abc_start[];
+extern const char _binary_xml_abc_end[];
+
+extern "C"
+__attribute__((visibility("default"))) void NAPI_xml_GetABCCode(const char** buf, int* buflen)
+{
+    if (buf != nullptr) {
+        *buf = _binary_xml_abc_start;
+    }
+    if (buflen != nullptr) {
+        *buflen = _binary_xml_abc_end - _binary_xml_abc_start;
+    }
+}
+
+static napi_module_with_js xmlModule = {
+    .nm_version = 1,
+    .nm_flags = 0,
+    .nm_filename = nullptr,
+    .nm_register_func = nullptr,
+    .nm_modname = "xml",
+    .nm_priv = nullptr,
+    .nm_get_abc_code = NAPI_xml_GetABCCode,
+    .nm_get_js_code = nullptr,
+};
+
+extern "C" __attribute__((constructor)) void XmlRegisterModule()
+{
+    napi_module_with_js_register(&xmlModule);
+}
