@@ -96,14 +96,10 @@ export class CppSourceFile extends SourceFile {
         let fileWriter = createLanguageWriter(Language.CPP, this.resolver) as CppLanguageWriter
         let includeGuard = ""
 
-        const nativeModuleClassName = "NativeModule" // TODO add to config
-
         fileWriter.writeLines(cStyleCopyright);
         if (this.isHeaderFile) {
             includeGuard = makeIncludeGuardDefine(this.name)
             fileWriter.print(`#ifndef ${includeGuard}\n#define ${includeGuard}\n`)
-        } else {
-            fileWriter.print(`#define KOALA_INTEROP_MODULE ${nativeModuleClassName}\n`)
         }
         
         this.printImports(fileWriter)
