@@ -204,6 +204,9 @@ class PeerFileVisitor {
     }
 
     protected printApplyMethod(peer: PeerClass, printer: LanguageWriter) {
+        /* Turned off due to ArkTS incompatibility*/
+        return
+
         const name = peer.originalClassName!
         const typeParam = componentToAttributesClass(peer.componentName)
         if (isRoot(name)) {
