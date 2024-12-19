@@ -16,7 +16,7 @@
 import { KBuffer } from "@koalaui/interop"
 import { Deserializer } from "./Deserializer";
 import { deserializeAndCallCallback } from "./CallbackDeserializeCall"
-import { ResourceHolder } from "@koalaui/interop"
+import { ResourceHolder, KUint8ArrayPtr } from "@koalaui/interop"
 import { ArkUINativeModule } from "#components"
 
 enum CallbackEventKind {

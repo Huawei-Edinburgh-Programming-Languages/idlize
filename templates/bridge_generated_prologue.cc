@@ -15,7 +15,7 @@
 #include <vector>
 #include <string>
 
-#define KOALA_INTEROP_MODULE NativeModule
+#define KOALA_INTEROP_MODULE ArkUIGeneratedNativeModule
 #include "common-interop.h"
 #include "arkoala_api_generated.h"
 #include "Serializers.h"

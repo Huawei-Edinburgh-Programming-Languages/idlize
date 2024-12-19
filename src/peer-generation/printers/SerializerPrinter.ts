@@ -39,6 +39,7 @@ import { collectUniqueCallbacks } from './CallbacksPrinter'
 import { collectDeclItself, collectDeclDependencies, convertDeclToFeature } from '../ImportsCollectorUtils'
 import { collectDeclarationTargets } from '../DeclarationTargetCollector'
 import { flattenUnionType } from '../unions'
+import { NativeModuleType } from '../NativeModuleType'
 
 type SerializableTarget = idl.IDLInterface | idl.IDLCallback
 
@@ -469,12 +470,12 @@ class IdlDeserializerPrinter {
                 new ExpressionStatement(
                     writer.makeTernary(
                         writer.makeString('isSync'),
-                        writer.makeNativeCall(this.writer.interopReceiver(), `_CallCallbackSync`, [
+                        writer.makeNativeCall(NativeModuleType.Interop, `_CallCallbackSync`, [
                             writer.makeString(generateCallbackKindValue(target).toString()),
                             writer.makeString(`${argsSerializer}Serializer.asArray()`),
                             writer.makeString(`${argsSerializer}Serializer.length()`),
                         ]),
-                        writer.makeNativeCall(this.writer.interopReceiver(), `_CallCallback`, [
+                        writer.makeNativeCall(NativeModuleType.Interop, `_CallCallback`, [
                             writer.makeString(generateCallbackKindValue(target).toString()),
                             writer.makeString(`${argsSerializer}Serializer.asArray()`),
                             writer.makeString(`${argsSerializer}Serializer.length()`),

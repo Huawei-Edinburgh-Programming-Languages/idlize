@@ -79,7 +79,6 @@ export default {
         }),
         commonJs(),
         replace({
-            // 'LOAD_NATIVE': `require('${crossPathRelative(outDir, '../../native/NativeBridgeNapi.node')}')`,
             'NATIVE_LIB_PATH': `'${crossPathRelative('.', 'native/NativeBridgeNapi')}'`,
             preventAssignment: true
         })

@@ -194,8 +194,6 @@ export function makeArrayTypeCheckCall(
 ////////////////////////////////////////////////////////////////
 
 export class ETSLanguageWriter extends TSLanguageWriter {
-    override nativeModuleAccessor = "NativeModule"
-
     constructor(printer: IndentedPrinter, resolver:ReferenceResolver) {
         super(printer, resolver, Language.ARKTS)
         this.typeConvertor = new EtsIDLNodeToStringConvertor(this.resolver)
@@ -224,8 +222,6 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     get supportedModifiers(): MethodModifier[] {
         return [MethodModifier.PUBLIC, MethodModifier.PRIVATE, MethodModifier.NATIVE, MethodModifier.STATIC]
     }
-    nativeReceiver(): string { return this.nativeModuleAccessor }
-    override interopReceiver(): string { return "InteropNativeModule" }
     makeUnsafeCast(convertor: ArgConvertor, param: string): string {
         if ((convertor instanceof EnumConvertor) && !param.endsWith(".value")) {
             return `(${param} as ${this.typeConvertor.convert(convertor.enumEntry)}).${convertor.isStringEnum ? 'ordinal' : 'value'}`

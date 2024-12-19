@@ -31,6 +31,7 @@ import { printCallbacksKinds, printManagedCaller } from './printers/CallbacksPri
 import { writeDeserializer, writeSerializer } from './printers/SerializerPrinter'
 import { CppSourceFile } from './printers/SourceFile'
 import { StructPrinter } from './printers/StructPrinter'
+import { NativeModuleType } from './NativeModuleType'
 
 class NameType {
     constructor(public name: string, public type: string) {}
@@ -395,14 +396,12 @@ class OHOSVisitor {
             this.peerWriter.print(`${nativeModuleGetter},`)
             this.peerWriter.popIndent()
             this.peerWriter.print(`} from './${this.libraryName.toLocaleLowerCase()}Native'`)
-            this.peerWriter.nativeModuleAccessor = nativeModuleGetter
         } else if (this.library.language === Language.ARKTS) {
             this.peerWriter.print('import {')
             this.peerWriter.pushIndent()
             this.peerWriter.print(`${nativeModuleVar},`)
             this.peerWriter.popIndent()
             this.peerWriter.print(`} from './${this.libraryName.toLocaleLowerCase()}Native'`)
-            this.peerWriter.nativeModuleAccessor = nativeModuleVar
         }
         this.data.forEach(data => {
             this.peerWriter.writeInterface(data.name, writer => {
@@ -470,7 +469,7 @@ class OHOSVisitor {
                         })
                         
                         const createPeerExpression = writer.makeNewObject("Finalizable", [
-                            writer.makeNativeCall(writer.nativeReceiver(), `_${int.name}_ctor`, params),
+                            writer.makeNativeCall(NativeModuleType.Generated, `_${int.name}_ctor`, params),
                             writer.makeString(`${int.name}.getFinalizer()`)
                         ])
                         writer.writeStatement(
@@ -495,7 +494,7 @@ class OHOSVisitor {
                 const getFinalizerSig = new MethodSignature(IDLPointerType, [])
                 writer.writeMethodImplementation(new Method("getFinalizer", getFinalizerSig, [MethodModifier.STATIC]), writer => {
                     const callExpression = writer.makeNativeCall(
-                        writer.nativeReceiver(),
+                        NativeModuleType.Generated,
                         `_${int.name}_getFinalizer`, // TODO temporarily removed _${this.libraryName} prefix
                         []
                     );
@@ -562,7 +561,7 @@ class OHOSVisitor {
                             }
                         })
                         const callExpression = writer.makeNativeCall(
-                            writer.nativeReceiver(),
+                            NativeModuleType.Generated,
                             `_${int.name}_${method.name}`, // TODO temporarily removed _${this.libraryName} prefix
                             params
                         )
