@@ -2019,10 +2019,10 @@
 |*UIExtensionProxy*| *Class* | Tuzhilkin Ivan | blocked IDL | |
 |`send`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBCGB5 , https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF |
 |`sendSync`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBCGB5 , https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF |
-|`onAsyncReceiverRegister`| Function | Tuzhilkin Ivan | devdone | |
-|`onSyncReceiverRegister`| Function | Tuzhilkin Ivan | devdone | |
-|`offAsyncReceiverRegister`| Function | Tuzhilkin Ivan | devdone | |
-|`offSyncReceiverRegister`| Function | Tuzhilkin Ivan | devdone | |
+|`onAsyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped | |
+|`onSyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped | |
+|`offAsyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped | |
+|`offSyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped | |
 |*StyledString*| *Class* | Pavelyev Ivan | in progress | |
 |`getString`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getStyles`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
