@@ -107,7 +107,7 @@ export class CppSourceFile extends SourceFile {
         fileWriter.concat(this.content)
 
         if (this.isHeaderFile) {
-            fileWriter.print(`#endif // ${includeGuard}\n`)
+            fileWriter.print(`\n#endif // ${includeGuard}\n`)
         }
 
         return fileWriter.getOutput().join("\n")

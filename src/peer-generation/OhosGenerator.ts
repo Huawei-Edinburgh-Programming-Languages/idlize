@@ -44,6 +44,7 @@ interface SignatureDescriptor {
 
 class OHOSVisitor {
     implementationStubsFile: CppSourceFile
+    implementationDeclarationsFile: CppSourceFile
 
     hWriter = new CppLanguageWriter(new IndentedPrinter(), this.library)
     cppWriter = new CppLanguageWriter(new IndentedPrinter(), this.library)
@@ -72,8 +73,11 @@ class OHOSVisitor {
         this.nativeFunctionsWriter = createLanguageWriter(library.language, library)
 
         const fileNamePrefix = this.libraryName.toLowerCase()
+
+        this.implementationDeclarationsFile = new CppSourceFile(`${fileNamePrefix}_Impl.h`, library)
+        this.implementationDeclarationsFile.addInclude(`${fileNamePrefix}.h`)
         this.implementationStubsFile = new CppSourceFile(`${fileNamePrefix}Impl_template${Language.CPP.extension}`, library)
-        this.implementationStubsFile.addInclude(`${fileNamePrefix}.h`)
+        this.implementationStubsFile.addInclude(this.implementationDeclarationsFile.name)
     }
 
     private static knownBasicTypes = new Set(['ArrayBuffer', 'DataView'])
@@ -196,11 +200,11 @@ class OHOSVisitor {
     }
 
     private writeImpls() {
-        let _ = this.cppWriter
+        let _decls = this.implementationDeclarationsFile.content
         let _stubs = this.implementationStubsFile.content
         this.impls.forEach((signature, name) => {
             const declaration = `${signature.returnType} ${name}(${signature.paramsCString ?? signature.params.map(it => `${it.type} ${it.name}`).join(", ")})`
-            _.print(`${declaration};`)
+            _decls.print(`${declaration};`)
             _stubs.print(`${declaration} {`)
             _stubs.pushIndent()
             if (signature.returnType != "void") {
@@ -585,6 +589,7 @@ class OHOSVisitor {
         this.cppWriter.writeLines(
             readLangTemplate('api_impl_prologue.cc', Language.CPP)
                 .replaceAll("%API_HEADER_PATH%", `${this.libraryName.toLowerCase()}.h`)
+                .replaceAll("%IMPL_HEADER_PATH%", this.implementationDeclarationsFile.name)
                 .replaceAll("%CALLBACK_KINDS%", callbackKindsPrinter.getOutput().join("\n"))
                 .replaceAll("%LIBRARY_NAME%", this.libraryName.toUpperCase())
         )
@@ -704,6 +709,9 @@ class OHOSVisitor {
 
         fs.writeFileSync(path.join(outDir, this.implementationStubsFile.name),
             this.implementationStubsFile.printToString()
+        )
+        fs.writeFileSync(path.join(outDir, this.implementationDeclarationsFile.name),
+            this.implementationDeclarationsFile.printToString()
         )
         fs.writeFileSync(path.join(outDir, `SerializerBase.h`),
             readLangTemplate(`ohos_SerializerBase.h`, Language.CPP)

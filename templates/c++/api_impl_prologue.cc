@@ -16,6 +16,7 @@
 #include "%API_HEADER_PATH%"
 
 #include "common-interop.h"
+#include "%IMPL_HEADER_PATH%"
 #include "SerializerBase.h"
 #include "DeserializerBase.h"
 #include <deque>
