@@ -1467,8 +1467,8 @@
 |*UnifiedData*| *Class* | | | |
 |`hasType`| Function | | | |
 |`getTypes`| Function | | | |
-|*DrawingCanvas*| *Class* | | | |
-|`drawRect`| Function | | | |
+|*DrawingCanvas*| *Class* | Dudkin Sergey | in progress | |
+|`drawRect`| Function | Dudkin Sergey | in progress | |
 |*FrameNode*| *Class* | | | |
 |`isModifiable`| Function | | | |
 |`appendChild`| Function | | | |
