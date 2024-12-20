@@ -500,4 +500,4 @@ KVMObjectHandle impl_LoadUserView(KVMContext vm, const KStringPtr& viewClass, co
 }
 KOALA_INTEROP_CTX_2(LoadUserView, KVMObjectHandle, KStringPtr, KStringPtr)
 
-#define KOALA_INTEROP_MODULE NativeModule
+#define KOALA_INTEROP_MODULE ArkUIGeneratedNativeModule

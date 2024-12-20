@@ -31,6 +31,7 @@ public class InteropNativeModule {
     static native long   _GetPtrVectorElement(long ptr1, int arg);
     static native int    _StringLength(long ptr1);
     static native void   _StringData(long ptr1, byte[] arr, int i);
+    static native byte[] _StringDataBytes(long ptr1);
     static native long   _StringMake(String str1);
     static native int    _GetPtrVectorSize(long ptr1);
     static native int    _ManagedStringWrite(String str1, byte[] arr, int arg);
