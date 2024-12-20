@@ -287,7 +287,7 @@
 |`sharedTransition`|Function|Skroba Gleb | done |  |
 |`chainMode`| Function | Berezin Kirill | done | |
 |`dragPreviewOptions`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD |
-|`overlay`| Function |  | | CustomBuilder |
+|`overlay`| Function | Erokhin Ilya | in progress | CustomBuilder |
 |`blendMode`| Function | Lobah Mikhail | done | |
 |`advancedBlendMode`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC80Y |
 |`bindPopup`| Function | Erokhin Ilya | in progress | CustomBuilder |
@@ -1482,16 +1482,16 @@
 |`getParent`| Function | | | |
 |`getChildrenCount`| Function | | | |
 |`dispose`| Function | | | |
-|*PixelMap*| *Class* | | | |
-|`readPixelsToBufferSync`| Function | | | |
-|`writeBufferToPixels`| Function | | | |
-|`getIsEditable`| Function | | | |
-|`setIsEditable`| Function | | | |
+|*PixelMap*| *Class* | Andrey Khudenkikh | in progress | |
+|`readPixelsToBufferSync`| Function | Andrey Khudenkikh | in progress | |
+|`writeBufferToPixels`| Function | Andrey Khudenkikh | in progress | |
+|`getIsEditable`| Function | Andrey Khudenkikh | in progress | |
+|`setIsEditable`| Function | Andrey Khudenkikh | in progress | |
 |`getIsStrideAlignment`| Function | Andrey Khudenkikh | in progress | |
 |`setIsStrideAlignment`| Function | Andrey Khudenkikh | in progress | |
-|*EventEmulator*| *Class* | Andrey Khudenkikh | in progress | |
-|`emitClickEvent`| Function | Andrey Khudenkikh | in progress | |
-|`emitTextInputEvent`| Function | Andrey Khudenkikh | in progress | |
+|*EventEmulator*| *Class* | Dmitry A Smirnov | in progress | |
+|`emitClickEvent`| Function | Dmitry A Smirnov | in progress | |
+|`emitTextInputEvent`| Function | Dmitry A Smirnov | in progress | |
 |*ActionSheet*| *Class* | Ekaterina Stepanova | in progress | |
 |`show`| Function | Ekaterina Stepanova | in progress | CustomBuilder |
 |*AlertDialog*| *Class* | Ekaterina Stepanova | in progress | |
