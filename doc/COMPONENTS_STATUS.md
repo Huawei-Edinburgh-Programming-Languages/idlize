@@ -1219,9 +1219,9 @@
 |`fontFeature`| Function | Spirin Andrey | testskipped  |  |
 |`showPassword`| Function | Spirin Andrey | done |  |
 |`onSecurityStateChange`| Function | Spirin Andrey | testskipped |  |
-|`onWillInsert`| Function | Lobah Mikhail | in progress|  |
+|`onWillInsert`| Function | Lobah Mikhail | blocked| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onDidInsert`| Function | Spirin Andrey | testskipped |  |
-|`onWillDelete`| Function | Lobah Mikhail | in progress|  |
+|`onWillDelete`| Function | Lobah Mikhail | blocked|  https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
 |`onDidDelete`| Function | Spirin Andrey | testskipped |  |
 |`editMenuOptions`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`enablePreviewText`| Function | Spirin Andrey | done |  |
