@@ -15,7 +15,7 @@
 
 import * as fs from 'fs'
 import * as path from 'path'
-import { createConstructor, createContainerType, createOptionalType, createReferenceType, createTypeParameterReference, DebugUtils, forceAsNamedNode, getExtAttribute, hasExtAttribute, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLInterfaceSubkind, IDLMethod, IDLParameter, IDLPointerType, IDLStringType, IDLType, IDLU8Type, IDLUint8ArrayType, IDLVoidType, isCallback, isConstructor, isContainerType, isEnum, isInterface, isMethod, isNamedNode, isReferenceType, isType, isUnionType } from '../idl'
+import { createConstructor, createContainerType, createOptionalType, createReferenceType, createTypeParameterReference, DebugUtils, forceAsNamedNode, getExtAttribute, hasExtAttribute, IDLBufferType, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLI64Type, IDLInterface, IDLInterfaceSubkind, IDLMethod, IDLParameter, IDLPointerType, IDLStringType, IDLType, IDLU8Type, IDLUint8ArrayType, IDLVoidType, isCallback, isConstructor, isContainerType, isEnum, isInterface, isMethod, isNamedNode, isReferenceType, isType, isUnionType } from '../idl'
 import { IndentedPrinter } from "../IndentedPrinter"
 import { Language } from '../Language'
 import { capitalize, getOrPut } from '../util'
@@ -350,6 +350,31 @@ class OHOSVisitor {
                     { name: "length", type: IDLI32Type },
                 ])
             )
+            if (writer.language === Language.TS) {
+                writer.writeNativeMethodDeclaration("_MaterializeBuffer",
+                    NamedMethodSignature.make(IDLBufferType, [
+                        { name: "data", type: IDLPointerType },
+                        { name: "length", type: IDLI32Type },
+                        { name: "resourceId", type: IDLI32Type },
+                        { name: "holdPtr", type: IDLPointerType },
+                        { name: "releasePtr", type: IDLPointerType },
+                    ])
+                )
+                writer.writeNativeMethodDeclaration("_GetNativeBufferPointer",
+                    NamedMethodSignature.make(IDLPointerType, [
+                        { name: "data", type: IDLBufferType },
+                    ])
+                )
+            }
+            if (writer.language === Language.ARKTS) {
+                writer.writeNativeMethodDeclaration("_ManagedStringWrite", 
+                    NamedMethodSignature.make(IDLI32Type, [
+                        { name: "str", type: IDLStringType },
+                        { name: "arr", type: IDLUint8ArrayType },
+                        { name: "len", type: IDLI32Type },
+                    ])
+                )
+            }
         })(this.nativeFunctionsWriter)
     }
 
@@ -624,7 +649,7 @@ class OHOSVisitor {
         console.log(`GENERATE OHOS API for ${this.libraryName}`)
 
         this.library.files.forEach(file => {
-            // if (file.isPredefined) return
+            if (file.isPredefined) return
             file.entries.forEach(entry => {
                 if (isInterface(entry)) {
                     if (isMaterialized(entry)) {

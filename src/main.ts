@@ -343,15 +343,6 @@ if (options.dts2peer) {
             }).visitWholeFile()
         })
     }
-    if (options.generatorTarget === 'ohos') {
-        scanPredefinedDirectory(PREDEFINED_PATH, "ohos").forEach(file => {
-            new IDLPredefinesVisitor({
-                sourceFile: file.originalFilename,
-                peerLibrary: idlLibrary,
-                peerFile: file,
-            }).visitWholeFile()
-        })
-    }
 
     // First convert DTS to IDL
     generate(
