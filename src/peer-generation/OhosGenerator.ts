@@ -31,6 +31,7 @@ import { printCallbacksKinds, printManagedCaller } from './printers/CallbacksPri
 import { writeDeserializer, writeSerializer } from './printers/SerializerPrinter'
 import { CppSourceFile } from './printers/SourceFile'
 import { StructPrinter } from './printers/StructPrinter'
+import { GniPrinter, GniScope } from "./printers/GniPrinter";
 
 class NameType {
     constructor(public name: string, public type: string) {}
@@ -679,18 +680,22 @@ class OHOSVisitor {
             managedCodeModuleInfo.name = `${this.libraryName}NativeModule`
         }
 
+        const gniInputFiles = []
+
         const nativeModuleTemplate = readLangTemplate(`OHOSNativeModule_template${ext}`, this.library.language)
         const nativeModuleText = nativeModuleTemplate
             .replaceAll('%NATIVE_MODULE_NAME%', this.libraryName)
             .replaceAll('%NATIVE_MODULE_CONTENT%', this.nativeWriter.getOutput().join('\n'))
             .replaceAll('%NATIVE_FUNCTIONS%', this.nativeFunctionsWriter.getOutput().join('\n'))
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Native${ext}`), nativeModuleText, 'utf-8')
+        gniInputFiles.push(`target_out_dir + "/${fileNamePrefix}Native${ext}"`)
 
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Finalizable${ext}`),
             readLangTemplate(`OHOSFinalizable_template${ext}`, this.library.language)
                 .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
                 .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
         )
+        gniInputFiles.push(`target_out_dir + "/${fileNamePrefix}Finalizable${ext}"`)
 
         const peerTemplate = readLangTemplate(`OHOSPeer_template${ext}`, this.library.language)
         const peerText = peerTemplate
@@ -716,23 +721,45 @@ class OHOSVisitor {
 
         const serializerText = makeSerializerForOhos(this.library, managedCodeModuleInfo, fileNamePrefix).printToString()
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}${ext}`), peerText, 'utf-8')
+        gniInputFiles.push(`target_out_dir + "/${fileNamePrefix}${ext}"`)
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Serializer${ext}`), serializerText, 'utf-8')
+        gniInputFiles.push(`target_out_dir + "/${fileNamePrefix}Serializer${ext}"`)
         fs.writeFileSync(path.join(managedOutDir, `SerializerBase${ext}`),
             readLangTemplate(`SerializerBase${ext}`, this.library.language)
                 .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
                 .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
         )
+        gniInputFiles.push(`target_out_dir + "/SerializerBase${ext}"`)
         fs.writeFileSync(path.join(managedOutDir, `DeserializerBase${ext}`),
             readLangTemplate(`DeserializerBase${ext}`, this.library.language)
                 .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
                 .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
         )
+        gniInputFiles.push(`target_out_dir + "/DeserializerBase${ext}"`)
         fs.writeFileSync(path.join(managedOutDir, `CallbacksChecker${ext}`),
             readLangTemplate(`CallbacksChecker${ext}`, this.library.language)
                 .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
                 .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
                 .replaceAll("%SERIALIZER_PATH%", managedCodeModuleInfo.serializerPath)
         )
+        gniInputFiles.push(`target_out_dir + "/CallbacksChecker${ext}"`)
+
+        this.printGniFile(fileNamePrefix, gniInputFiles, outDir)
+    }
+
+    private printGniFile(libraryName: string, inputsFiles: string [], outDir: string) {
+        const gniPrinter = new GniPrinter()
+        gniPrinter.printImports(
+            ["//build/config/components/ets_frontend/es2abc_config.gni",
+                "//build/ohos.gni"])
+        const es2abcGenFunScope: GniScope = new Map()
+        gniPrinter.printList("xml_generate_sources", [`${libraryName}.cc`])
+        es2abcGenFunScope.set("extra_visibility", [`":*"`])
+        es2abcGenFunScope.set("extra_args", [`"--module"`])
+        es2abcGenFunScope.set("inputs", inputsFiles)
+        es2abcGenFunScope.set("outputs", [`target_out_dir + "/${libraryName}.abc"`])
+        gniPrinter.printFunction("es2abc_gen_merge_abc", ["gen_xml_abc"], es2abcGenFunScope)
+        fs.writeFileSync(path.join(outDir, `ohos_${libraryName}.gni`), gniPrinter.getOutput())
     }
 }
 

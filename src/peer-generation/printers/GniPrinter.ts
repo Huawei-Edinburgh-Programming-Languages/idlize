@@ -19,6 +19,45 @@ import { PeerClass } from "../PeerClass"
 import { PeerLibrary } from "../PeerLibrary"
 import { MaterializedClass } from "../Materialized"
 
+export type GniType = string | number | boolean | string[]
+export type GniScope = Map<string, GniType>
+
+export class GniPrinter {
+    private gni = new IndentedPrinter()
+
+    printImports(gniPaths: string[]) {
+        gniPaths.forEach(it => this.gni.print(`import("${it}")`))
+        this.gni.print("")
+    }
+
+    printFunction(name: string, args: GniType[], block?: GniScope) {
+        this.gni.print(`${name}(${args.map(it=>`"${it}"`).join(",")})`)
+        if (block?.size) {
+            this.gni.print("{")
+            this.gni.pushIndent()
+            block.forEach((value: GniType, name: string)=> {
+                let valueText
+                if (Array.isArray(value)) {
+                    valueText = `[ ${value.join(",")} ]`
+                }
+                this.gni.print(`${name} = ${valueText}`)
+            })
+            this.gni.popIndent()
+            this.gni.print("}")
+        }
+        this.gni.print("")
+    }
+
+    printList(name: string, entries: GniType[]) {
+        this.gni.print(`${name} = [ ${entries.map(it => `"${it}"`).join(",")} ]`)
+        this.gni.print("")
+    }
+
+    getOutput(): string {
+        return this.gni.getOutput().join("\n")
+    }
+}
+
 export class GniVisitor {
     gni = new IndentedPrinter()
 
