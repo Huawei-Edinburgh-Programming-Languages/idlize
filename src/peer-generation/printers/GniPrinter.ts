@@ -31,16 +31,14 @@ export class GniPrinter {
     }
 
     printFunction(name: string, args: GniType[], block?: GniScope) {
-        this.gni.print(`${name}(${args.map(it=>`"${it}"`).join(",")})`)
+        this.gni.print(`${name}(${args.map(it => `"${it}"`).join(",")})`)
         if (block?.size) {
             this.gni.print("{")
             this.gni.pushIndent()
-            block.forEach((value: GniType, name: string)=> {
-                let valueText
+            block.forEach((value: GniType, name: string) => {
                 if (Array.isArray(value)) {
-                    valueText = `[ ${value.join(",")} ]`
+                    this.printList(name, value)
                 }
-                this.gni.print(`${name} = ${valueText}`)
             })
             this.gni.popIndent()
             this.gni.print("}")
@@ -49,7 +47,13 @@ export class GniPrinter {
     }
 
     printList(name: string, entries: GniType[]) {
-        this.gni.print(`${name} = [ ${entries.map(it => `"${it}"`).join(",")} ]`)
+        this.gni.print(`${name} = [ `)
+        this.gni.pushIndent()
+        entries.forEach((it, index) => {
+            this.gni.print(`"${it}"${index < entries.length - 1 ? "," : ""}`)
+        })
+        this.gni.popIndent()
+        this.gni.print(`]`)
         this.gni.print("")
     }
 
