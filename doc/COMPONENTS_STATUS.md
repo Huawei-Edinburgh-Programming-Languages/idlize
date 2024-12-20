@@ -1839,9 +1839,9 @@
 |`setCaretOffset`| Function | Morozov Sergey | done | |
 |`getCaretOffset`| Function | Morozov Sergey | done | |
 |`getPreviewText`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|*StyledStringController*| *Class* | Pavelyev Ivan | in progress | |
-|`setStyledString`| Function | Pavelyev Ivan | testskipped | |
-|`getStyledString`| Function | Pavelyev Ivan | testskipped | |
+|*StyledStringController*| *Class* | Pavelyev Ivan | done | |
+|`setStyledString`| Function | Pavelyev Ivan | done | |
+|`getStyledString`| Function | Pavelyev Ivan | done | |
 |*LayoutManager*| *Class* | Andrey Khudenkikh | blocked IDL | |
 |`getLineCount`| Function | Andrey Khudenkikh | done | |
 |`getGlyphPositionAtCoordinate`| Function | Andrey Khudenkikh | blocked IDL | |
