@@ -1198,7 +1198,7 @@
 |`enableKeyboardOnFocus`| Function | Spirin Andrey | done |  |
 |`passwordIcon`| Function | Spirin Andrey | done |  |
 |`showError`| Function | Spirin Andrey | done |  |
-|`showUnit`| Function | Spirin Andrey | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`showUnit`| Function | Erokhin Ilya | devdone | |
 |`showUnderline`| Function | Spirin Andrey | done |  |
 |`underlineColor`| Function | Spirin Andrey | done |  |
 |`selectionMenuHidden`| Function | Spirin Andrey | done |  |
