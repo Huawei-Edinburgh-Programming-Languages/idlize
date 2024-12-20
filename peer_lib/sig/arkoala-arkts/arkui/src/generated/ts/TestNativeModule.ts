@@ -13,7 +13,4 @@
  * limitations under the License.
  */
 
-export function testNativeModule(): any {
-    throw new Error("Not expected to be called, just a stub")
-}
 export const TestNativeModule: any = undefined

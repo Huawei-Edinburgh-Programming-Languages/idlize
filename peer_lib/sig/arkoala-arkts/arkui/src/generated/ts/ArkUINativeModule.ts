@@ -13,7 +13,4 @@
  * limitations under the License.
  */
 
-export function arkUINativeModule(): any {
-    throw new Error("Not expected to be called, just a stub")
-}
 export const ArkUINativeModule: any = undefined

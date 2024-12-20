@@ -13,7 +13,4 @@
  * limitations under the License.
  */
 
-export function interopNativeModule(): any {
-    throw new Error("Not expected to be called, just a stub")
-}
-export const InteropNativeModule: any = undefined
+export const ArkUIGeneratedNativeModule: any = undefined
