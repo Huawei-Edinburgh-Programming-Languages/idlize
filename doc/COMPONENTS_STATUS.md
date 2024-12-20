@@ -136,7 +136,7 @@
 |`layoutWeight`| Function | Roman Sedaikin | done | |
 |`chainWeight`| Function | Politov Mikhail | in progress | |
 |`padding`| Function | Skroba Gleb | done | |
-|`safeAreaPadding`| Function |Dmitry A Smirnov | in progress | |
+|`safeAreaPadding`| Function |Dmitry A Smirnov | devdone | |
 |`margin`| Function | Skroba Gleb | done | |
 |`backgroundColor`|Function| Skroba Gleb| done |  |
 |`pixelRound`| Function | Skroba Gleb | done |  |
@@ -684,10 +684,10 @@
 |`activeColor`| Function | Dmitry A Smirnov| done|  |
 |`pathColor`| Function | Dmitry A Smirnov| done|  |
 |`pathStrokeWidth`| Function | Dmitry A Smirnov| done|  |
-|`onPatternComplete`| Function | Dmitry A Smirnov| devdone|  |
+|`onPatternComplete`| Function | Dmitry A Smirnov| done|  |
 |`autoReset`| Function | Dmitry A Smirnov| done|  |
-|`onDotConnect`| Function | Dmitry A Smirnov| devdone|  |
-|`activateCircleStyle`| Function | Dmitry A Smirnov| devdone| |
+|`onDotConnect`| Function | Dmitry A Smirnov| done|  |
+|`activateCircleStyle`| Function | Dmitry A Smirnov| done| |
 |*PluginComponent*| *Component* | Evstigneev Roman | in progress | |
 |`setPluginComponentOptions`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
 |`onComplete`| Function | Evstigneev Roman | done | |
