@@ -327,18 +327,19 @@ export function printArkUILibrariesLoader(file: SourceFile) {
 }
 
 export function printPredefinedNativeModule(library: PeerLibrary, module: NativeModuleType): SourceFile {
+    const language = library.language
     const entries = collectPredefinedNativeModuleEntries(library, module)
-    const visitor = createPredefinedNativeModuleVisitor(library, library.language, entries)
+    const visitor = createPredefinedNativeModuleVisitor(library, language, entries)
     visitor.visit()
-    const file = SourceFile.make("", library.language, library)
+    const file = SourceFile.make(`${module.name}${language.extension}`, language, library)
     collectNativeModuleImports(module, file)
     file.content.writeClass(module.name, writer => {
         writer.concat(visitor.nativeModule)
-        const maybeTemplate = maybeReadLangTemplate(`${module}_functions`, library.language)
+        const maybeTemplate = maybeReadLangTemplate(`${module}_functions`, language)
         if (maybeTemplate)
             writer.writeLines(maybeTemplate)
     })
-    printNativeModuleRegistration(library.language, module, file)
+    printNativeModuleRegistration(language, module, file)
     return file
 }
 

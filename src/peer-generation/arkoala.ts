@@ -443,15 +443,15 @@ export function generateArkoalaFromIdl(config: {
         )
     } else if (peerLibrary.language == Language.JAVA) {
         writeIntegratedFile(
-            arkoala.javaLib(new TargetFile(NativeModuleType.ArkUI.name)),
+            arkoala.javaLib(new TargetFile(NativeModuleType.ArkUI.name, ARKOALA_PACKAGE_PATH)),
             printPredefinedNativeModule(peerLibrary, NativeModuleType.ArkUI).printToString(),
         )
         writeIntegratedFile(
-            arkoala.javaLib(new TargetFile(NativeModuleType.Test.name)),
+            arkoala.javaLib(new TargetFile(NativeModuleType.Test.name, ARKOALA_PACKAGE_PATH)),
             printPredefinedNativeModule(peerLibrary, NativeModuleType.Test).printToString(),
         )
         writeIntegratedFile(
-            arkoala.javaLib(new TargetFile(NativeModuleType.Generated.name)),
+            arkoala.javaLib(new TargetFile(NativeModuleType.Generated.name, ARKOALA_PACKAGE_PATH)),
             printArkUIGeneratedNativeModule(peerLibrary, NativeModuleType.Generated).printToString()
         )
 
