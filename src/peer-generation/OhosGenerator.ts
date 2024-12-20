@@ -616,6 +616,7 @@ class OHOSVisitor {
 
         this.cppWriter.writeLines(
             readLangTemplate('api_impl_prologue.cc', Language.CPP)
+                .replaceAll("%INTEROP_MODULE_NAME%", `${this.libraryName.toUpperCase()}NativeModule`)
                 .replaceAll("%API_HEADER_PATH%", `${this.libraryName.toLowerCase()}.h`)
                 .replaceAll("%CALLBACK_KINDS%", callbackKindsPrinter.getOutput().join("\n"))
                 .replaceAll("%LIBRARY_NAME%", this.libraryName.toUpperCase())
@@ -701,7 +702,7 @@ class OHOSVisitor {
         const ext = this.library.language.extension
 
         const managedCodeModuleInfo = {
-            name: `get${this.libraryName}NativeModule`,
+            name: `${this.libraryName}NativeModule`,
             path: `./${fileNamePrefix}Native`,
             serializerPath: `./${fileNamePrefix}Serializer`,
             finalizablePath: `./${fileNamePrefix}Finalizable`,
