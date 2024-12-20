@@ -1,0 +1,6 @@
+callback AllocationCallback = void (buffer b);
+
+[Entity=Class]
+interface BufferAllocator {
+  static void allocate(AllocationCallback cb);
+};
