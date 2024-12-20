@@ -1,0 +1,32 @@
+import("//build/config/components/ets_frontend/es2abc_config.gni")
+import("//build/ohos.gni")
+
+xml_generate_sources = [ 
+    "xml.cc"
+]
+
+es2abc_gen_merge_abc("gen_xml_abc")
+{
+    extra_visibility = [ 
+        ":*"
+    ]
+
+    extra_args = [ 
+        "--module"
+    ]
+
+    inputs = [ 
+        "${target_out_dir}/xmlNative.ts",
+        "${target_out_dir}/xmlFinalizable.ts",
+        "${target_out_dir}/xml.ts",
+        "${target_out_dir}/xmlSerializer.ts",
+        "${target_out_dir}/SerializerBase.ts",
+        "${target_out_dir}/DeserializerBase.ts",
+        "${target_out_dir}/CallbacksChecker.ts"
+    ]
+
+    outputs = [ 
+        "${target_out_dir}/xml.abc"
+    ]
+
+}
