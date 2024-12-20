@@ -1514,7 +1514,7 @@
 |`quadraticCurveTo`| Function | Kovalev Sergey | done |  |
 |`rect`| Function | Kovalev Sergey | done |  |
 |*Path2D*| *Class* | Vadim Voronov | in progress | |
-|`addPath`| Function | Vadim Voronov | in progress | |
+|`addPath`| Function | Vadim Voronov | devdone | |
 |*CanvasPattern*| *Class* | Andrey Khudenkikh | done |  |
 |`setTransform`| Function | Andrey Khudenkikh | done |  |
 |*ImageBitmap*| *Class* | Pavelyev Ivan | done | |
@@ -1528,13 +1528,13 @@
 |`fill`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
 |`stroke`| Function  | Vadim Voronov | done | |
 |`createLinearGradient`| Function  | Vadim Voronov | in progress | |
-|`createPattern`| Function  | Vadim Voronov | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`createPattern`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`createRadialGradient`| Function  | Vadim Voronov |in progress | |
 |`createConicGradient`| Function  | Vadim Voronov | in progress | |
-|`createImageData`| Function  | Vadim Voronov | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA & https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getImageData`| Function  | Vadim Voronov | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`createImageData`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA & https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getImageData`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getPixelMap`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
-|`putImageData`| Function  | Vadim Voronov | in progress  | https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA |
+|`putImageData`| Function  | Vadim Voronov | blocked IDL  | https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA |
 |`getLineDash`| Function  | Vadim Voronov |  blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
 |`setLineDash`| Function  | Vadim Voronov | done | |
 |`clearRect`| Function  | Vadim Voronov | done | |
@@ -1543,9 +1543,9 @@
 |`restore`| Function  | Vadim Voronov | done | |
 |`save`| Function  | Vadim Voronov | done | |
 |`fillText`| Function  | Vadim Voronov | done | |
-|`measureText`| Function  | Vadim Voronov | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`measureText`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`strokeText`| Function  | Vadim Voronov | done | |
-|`getTransform`| Function  | Vadim Voronov | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getTransform`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`resetTransform`| Function  | Vadim Voronov | done | |
 |`rotate`| Function  | Vadim Voronov | done | |
 |`scale`| Function  | Vadim Voronov | done | |
