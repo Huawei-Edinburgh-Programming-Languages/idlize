@@ -1500,8 +1500,8 @@
 |`rect`| Function | Kovalev Sergey | done |  |
 |*Path2D*| *Class* | Vadim Voronov | in progress | |
 |`addPath`| Function | Vadim Voronov | in progress | |
-|*CanvasPattern*| *Class* | Andrey Khudenkikh | devdone |  |
-|`setTransform`| Function | Andrey Khudenkikh | devdone |  |
+|*CanvasPattern*| *Class* | Andrey Khudenkikh | done |  |
+|`setTransform`| Function | Andrey Khudenkikh | done |  |
 |*ImageBitmap*| *Class* | Pavelyev Ivan | done | |
 |`close`| Function | Pavelyev Ivan | done |  |
 |`getHeight`| Function | Pavelyev Ivan | done |  |
