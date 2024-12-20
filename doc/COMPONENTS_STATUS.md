@@ -265,7 +265,7 @@
 |`backgroundBrightness`| Function | Skroba Gleb | done | |
 |`onGestureJudgeBegin`| Function | Politov Mikhail | in progress | |
 |`onGestureRecognizerJudgeBegin`| Function | Politov Mikhail | in progress | |
-|`shouldBuiltInRecognizerParallelWith`| Function | | | |
+|`shouldBuiltInRecognizerParallelWith`| Function |Dmitry A Smirnov |in progress | |
 |`monopolizeEvents`| Function | Erokhin Ilya | testskipped | |
 |`onTouchIntercept`| Function | Erokhin Ilya | testskipped | |
 |`onSizeChange`| Function | Dmitry A Smirnov|testskipped | |
