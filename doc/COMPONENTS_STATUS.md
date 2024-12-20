@@ -265,7 +265,7 @@
 |`backgroundBrightness`| Function | Skroba Gleb | done | |
 |`onGestureJudgeBegin`| Function | Politov Mikhail | in progress | |
 |`onGestureRecognizerJudgeBegin`| Function | Politov Mikhail | in progress | |
-|`shouldBuiltInRecognizerParallelWith`| Function |Dmitry A Smirnov |in progress | |
+|`shouldBuiltInRecognizerParallelWith`| Function |Dmitry A Smirnov |in progress |https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
 |`monopolizeEvents`| Function | Erokhin Ilya | testskipped | |
 |`onTouchIntercept`| Function | Erokhin Ilya | testskipped | |
 |`onSizeChange`| Function | Dmitry A Smirnov|testskipped | |
