@@ -119,4 +119,4 @@ export class XMLNativeModule {
     }
 }
 
-registerNativeModule("%XMLNativeModule%", %XMLNativeModule%)
+registerNativeModule("XMLNativeModule", XMLNativeModule)
