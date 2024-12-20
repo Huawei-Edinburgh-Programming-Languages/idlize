@@ -1660,10 +1660,10 @@
 |`setDistance`| Function | Politov Mikhail | done | |
 |`setFingers`| Function | Politov Mikhail | done | |
 |`getDirection`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|*ScrollableTargetInfo*| *Class* | Maksimov Nikita | devdone | |
-|`isBegin`| Function | Maksimov Nikita | devdone | |
-|`isEnd`| Function | Maksimov Nikita | devdone | |
-|*EventTargetInfo*| *Class* | Maksimov Nikita | devdone | |
+|*ScrollableTargetInfo*| *Class* | Maksimov Nikita | testskipped | |
+|`isBegin`| Function | Maksimov Nikita | testskipped | |
+|`isEnd`| Function | Maksimov Nikita | testskipped | |
+|*EventTargetInfo*| *Class* | Maksimov Nikita | testskipped | |
 |`getId`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*GestureRecognizer*| *Class* | Kovalev Sergey | in progress | |
 |`getTag`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
@@ -1672,7 +1672,7 @@
 |`setEnabled`| Function | Kovalev Sergey | done | |
 |`isEnabled`| Function | Kovalev Sergey | done | |
 |`getState`| Function | Kovalev Sergey | done | |
-|`getEventTargetInfo`| Function | Maksimov Nikita | devdone | |
+|`getEventTargetInfo`| Function | Maksimov Nikita | testskipped | |
 |`isValid`| Function | Kovalev Sergey | done | |
 |*PanRecognizer*| *Class* | Politov Mikhail | done | |
 |`getPanGestureOptions`| Function | Politov Mikhail | done | |
@@ -2033,11 +2033,11 @@
 |`marshalling`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`unmarshalling`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getLength`| Function | Pavelyev Ivan | done | |
-|*MutableStyledString*| *Class* | Maksimov Nikita | in progress | |
-|`replaceString`| Function | Maksimov Nikita | in progress | |
-|`insertString`| Function | Maksimov Nikita | in progress | |
-|`removeString`| Function | Maksimov Nikita | in progress | |
-|`replaceStyle`| Function | Maksimov Nikita | in progress | |
+|*MutableStyledString*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBBYJE |
+|`replaceString`| Function | Maksimov Nikita | devdone | |
+|`insertString`| Function | Maksimov Nikita | devdone | |
+|`removeString`| Function | Maksimov Nikita | devdone | |
+|`replaceStyle`| Function | Maksimov Nikita | devdone | |
 |`setStyle`| Function | Maksimov Nikita | in progress | |
 |`removeStyle`| Function | Maksimov Nikita | in progress | |
 |`removeStyles`| Function | Maksimov Nikita | in progress | |
