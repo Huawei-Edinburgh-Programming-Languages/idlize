@@ -261,8 +261,8 @@
 |`renderFit`| Function | Dmitry A Smirnov|done | |
 |`gestureModifier`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`backgroundBrightness`| Function | Skroba Gleb | done | |
-|`onGestureJudgeBegin`| Function | Politov Mikhail | | |
-|`onGestureRecognizerJudgeBegin`| Function | Politov Mikhail | | |
+|`onGestureJudgeBegin`| Function | Politov Mikhail | in progress | |
+|`onGestureRecognizerJudgeBegin`| Function | Politov Mikhail | in progress | |
 |`shouldBuiltInRecognizerParallelWith`| Function | | | |
 |`monopolizeEvents`| Function | Erokhin Ilya | testskipped | |
 |`onTouchIntercept`| Function | Erokhin Ilya | testskipped | |
@@ -1674,8 +1674,8 @@
 |`getState`| Function | Kovalev Sergey | done | |
 |`getEventTargetInfo`| Function | Maksimov Nikita | devdone | |
 |`isValid`| Function | Kovalev Sergey | done | |
-|*PanRecognizer*| *Class* | Politov Mikhail | in progress | |
-|`getPanGestureOptions`| Function | Politov Mikhail | in progress | |
+|*PanRecognizer*| *Class* | Politov Mikhail | done | |
+|`getPanGestureOptions`| Function | Politov Mikhail | done | |
 |*ImageAnalyzerController*| *Class* |Vadim Voronov|  blocked |  |
 |`getImageAnalyzerSupportTypes`| Function |Vadim Voronov|  blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
 |*ListScroller*| *Class* |Morozov Sergey | blocked |  |
