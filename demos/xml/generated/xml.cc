@@ -981,7 +981,7 @@ void releaseBuffer(int resourceId) {
         Counter& record = refCounterMap[resourceId];
         --record.count;
         if (record.count <= 0) {
-            delete record.data;
+            delete[] (char*)record.data;
         }
     }
 }
