@@ -564,7 +564,7 @@
 |`lanes`|Function|Morozov Sergey|done|  |
 |`edgeEffect`|Function|Morozov Sergey|done|  |
 |*ListItem*|*Component*|Morozov Sergey|blocked IDL|  |
-|`setListItemOptions`|Function|Morozov Sergey| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`setListItemOptions`|Function|Morozov Sergey| done | deprecated for SetListItemOptions1Impl |
 |`sticky`|Function|Morozov Sergey|done|  |
 |`editable`|Function|Morozov Sergey|done|  |
 |`selectable`|Function|Morozov Sergey|done|  |
