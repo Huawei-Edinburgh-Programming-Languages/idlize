@@ -102,8 +102,10 @@ export class CppSourceFile extends SourceFile {
         if (this.isHeaderFile) {
             includeGuard = makeIncludeGuardDefine(this.name)
             fileWriter.print(`#ifndef ${includeGuard}\n#define ${includeGuard}\n`)
+        } else {
+            fileWriter.print("#define KOALA_INTEROP_MODULE NotSpecifiedInteropModule")
         }
-        
+
         this.printImports(fileWriter)
         fileWriter.print("")
         fileWriter.concat(this.content)

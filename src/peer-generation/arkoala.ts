@@ -152,6 +152,7 @@ function copyArkoalaFiles(config: {
         'sig/arkoala-arkts/arkui/src/generated/NativePeerNode.ts',
         'sig/arkoala-arkts/arkui/src/generated/Events.ts',
         'sig/arkoala-arkts/arkui/src/generated/arkts/index.ts',
+        'sig/arkoala-arkts/arkui/src/generated/arkts/NativeModuleLoader.ts',
         'sig/arkoala-arkts/arkui/src/generated/ts/index.ts',
         'sig/arkoala-arkts/arkui/src/generated/ts/arkts-stdlib.ts',
         'sig/arkoala-arkts/arkui/src/generated/ts/ArkUINativeModule.ts',
