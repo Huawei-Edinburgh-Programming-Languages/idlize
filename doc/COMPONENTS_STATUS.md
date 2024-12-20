@@ -2050,10 +2050,10 @@
 |`unmarshalling`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getLength`| Function | Pavelyev Ivan | done | |
 |*MutableStyledString*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBBYJE |
-|`replaceString`| Function | Maksimov Nikita | devdone | |
-|`insertString`| Function | Maksimov Nikita | devdone | |
-|`removeString`| Function | Maksimov Nikita | devdone | |
-|`replaceStyle`| Function | Maksimov Nikita | devdone | |
+|`replaceString`| Function | Maksimov Nikita | testskipped | |
+|`insertString`| Function | Maksimov Nikita | testskipped | |
+|`removeString`| Function | Maksimov Nikita | testskipped | |
+|`replaceStyle`| Function | Maksimov Nikita | testskipped | |
 |`setStyle`| Function | Maksimov Nikita | in progress | |
 |`removeStyle`| Function | Maksimov Nikita | in progress | |
 |`removeStyles`| Function | Maksimov Nikita | in progress | |
