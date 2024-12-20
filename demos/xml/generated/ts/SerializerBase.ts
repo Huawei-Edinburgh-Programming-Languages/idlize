@@ -14,7 +14,7 @@
  */
 import { float32, int32 } from "@koalaui/common"
 import { pointer, ResourceHolder, ResourceId } from "@koalaui/interop"
-import { getXMLNativeModule as nativeModule, CallbackKind } from "./xmlNative"
+import { XMLNativeModule, CallbackKind } from "./xmlNative"
 
 /**
  * Value representing possible JS runtime object type.
@@ -158,7 +158,7 @@ export class SerializerBase {
     }
     private releaseResources() {
         for (const resourceId of this.heldResources)
-            nativeModule()._ReleaseArkoalaResource(resourceId)
+            XMLNativeModule._ReleaseArkoalaResource(resourceId)
         // todo think about effective array clearing/pushing
         this.heldResources = []
     }
@@ -230,7 +230,7 @@ export class SerializerBase {
         throw new Error("unimplemented")
         // this.checkCapacity(4 + value.length * 4) // length, data
         // let encodedLength =
-        //     nativeModule()._ManagedStringWrite(value, new Uint8Array(this.view.buffer, 0), this.position + 4)
+        //     XMLNativeModule._ManagedStringWrite(value, new Uint8Array(this.view.buffer, 0), this.position + 4)
         // this.view.setInt32(this.position, encodedLength, true)
         // this.position += encodedLength + 4
     }

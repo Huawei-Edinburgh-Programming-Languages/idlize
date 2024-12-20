@@ -15,6 +15,7 @@
 
 #include "xml.h"
 
+#define KOALA_INTEROP_MODULE XMLNativeModule
 #include "common-interop.h"
 #include "SerializerBase.h"
 #include "DeserializerBase.h"
