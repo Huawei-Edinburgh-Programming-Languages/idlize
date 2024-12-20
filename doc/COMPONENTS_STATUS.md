@@ -1472,11 +1472,11 @@
 |`writeBufferToPixels`| Function | | | |
 |`getIsEditable`| Function | | | |
 |`setIsEditable`| Function | | | |
-|`getIsStrideAlignment`| Function | | | |
-|`setIsStrideAlignment`| Function | | | |
-|*EventEmulator*| *Class* | | | |
-|`emitClickEvent`| Function | | | |
-|`emitTextInputEvent`| Function | | | |
+|`getIsStrideAlignment`| Function | Andrey Khudenkikh | in progress | |
+|`setIsStrideAlignment`| Function | Andrey Khudenkikh | in progress | |
+|*EventEmulator*| *Class* | Andrey Khudenkikh | in progress | |
+|`emitClickEvent`| Function | Andrey Khudenkikh | in progress | |
+|`emitTextInputEvent`| Function | Andrey Khudenkikh | in progress | |
 |*ActionSheet*| *Class* | Ekaterina Stepanova | in progress | |
 |`show`| Function | Ekaterina Stepanova | in progress | CustomBuilder |
 |*AlertDialog*| *Class* | Ekaterina Stepanova | in progress | |
