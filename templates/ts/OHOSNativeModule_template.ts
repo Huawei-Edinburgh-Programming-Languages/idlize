@@ -9,4 +9,4 @@ export class %NATIVE_MODULE_NAME%NativeModule {
 %INTEROP_FUNCTIONS%
 }
 
-registerNativeModule("%%NATIVE_MODULE_NAME%NativeModule%", %%NATIVE_MODULE_NAME%NativeModule%)
+registerNativeModule("%NATIVE_MODULE_NAME%NativeModule", %NATIVE_MODULE_NAME%NativeModule)
