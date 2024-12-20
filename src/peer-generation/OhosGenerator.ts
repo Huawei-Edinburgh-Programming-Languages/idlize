@@ -262,6 +262,7 @@ class OHOSVisitor {
 
     private printNative() {
         const className = `${this.libraryName}NativeModule`
+        NativeModuleType.Generated.name = className
         this.callbacks.forEach(callback => {
             if (this.library.language === Language.TS) {
                 const params = callback.parameters.map(it => `${it.name}:${this.nativeWriter.getNodeName(it.type!)}`).join(', ')
@@ -388,12 +389,10 @@ class OHOSVisitor {
 
     private printPeer() {
         const nativeModuleVar = `${this.libraryName}NativeModule`
-        const nativeModuleGetter = `get${nativeModuleVar}`
         if (this.library.language === Language.TS) {
             this.peerWriter.print('import {')
             this.peerWriter.pushIndent()
             this.peerWriter.print(`${nativeModuleVar},`)
-            this.peerWriter.print(`${nativeModuleGetter},`)
             this.peerWriter.popIndent()
             this.peerWriter.print(`} from './${this.libraryName.toLocaleLowerCase()}Native'`)
         } else if (this.library.language === Language.ARKTS) {
