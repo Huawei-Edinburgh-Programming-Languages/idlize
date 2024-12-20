@@ -179,3 +179,9 @@ typedef struct Ark_CallbackResource {
   void (*hold)(Ark_Int32 resourceId);
   void (*release)(Ark_Int32 resourceId);
 } Ark_CallbackResource;
+
+typedef struct Ark_Buffer {
+  Ark_CallbackResource resource;
+  Ark_NativePointer data;
+  Ark_Int64 length;
+} Ark_Buffer;
