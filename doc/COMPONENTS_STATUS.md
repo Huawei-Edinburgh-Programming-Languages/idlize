@@ -6,7 +6,7 @@
 |`setAbilityComponentOptions`| Function | Tuzhilkin Ivan | deprecated  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`onConnect`| Function | Tuzhilkin Ivan | deprecated | deprecated |
 |`onDisconnect`| Function | Tuzhilkin Ivan | deprecated | deprecated |
-|*AlphabetIndexer*| *Component* |Ekaterina Stepanova| blocked |  |
+|*AlphabetIndexer*| *Component* |Ekaterina Stepanova| done |  |
 |`setAlphabetIndexerOptions`| Function |Ekaterina Stepanova| done |  |
 |`onSelected`| Function |Ekaterina Stepanova| done |  |
 |`color`| Function |Ekaterina Stepanova| done |  |
@@ -24,7 +24,7 @@
 |`itemSize`| Function |Ekaterina Stepanova| done |  |
 |`font`| Function |Ekaterina Stepanova| done |  |
 |`onSelect`| Function |Ekaterina Stepanova| done |  |
-|`onRequestPopupData`| Function |Ekaterina Stepanova| blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onRequestPopupData`| Function |Skroba Gleb| done |  |
 |`onPopupSelect`| Function |Ekaterina Stepanova| done |  |
 |`selected`| Function |Ekaterina Stepanova| done |  |
 |`popupPosition`| Function |Ekaterina Stepanova| done |  |
