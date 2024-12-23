@@ -27,7 +27,7 @@ import {
     MethodSignature,
     NamedMethodSignature
 } from "../LanguageWriters";
-import { copyMaterializedMethod, MaterializedClass, MaterializedField, MaterializedMethod } from "../Materialized"
+import { copyMaterializedMethod, getInternalClassName, MaterializedClass, MaterializedField, MaterializedMethod } from "../Materialized"
 import { makeMaterializedPrologue, tsCopyrightAndWarning } from "../FileGenerators";
 import { groupOverloads, OverloadsPrinter } from "./OverloadsPrinter";
 import { ImportsCollector } from "../ImportsCollector";
@@ -350,7 +350,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
 
         if (!isInterface) {
             // Write internal MaterializedClass with fromPtr(ptr) method
-            printer.writeClass(clazz.getInternalName(), writer => writeFromPtrMethod(clazz, writer, classTypeParameters))
+            printer.writeClass(getInternalClassName(clazz.className), writer => writeFromPtrMethod(clazz, writer, classTypeParameters))
         }
     }
 

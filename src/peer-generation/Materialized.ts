@@ -166,6 +166,6 @@ export function getInternalClassName(name: string): string {
 
 export function collectMaterializedImports(imports: ImportsCollector, library: PeerLibrary) {
     for (const materialized of library.materializedClasses.values()) {
-        imports.addFeature(materialized.getInternalName(), `./Ark${materialized.className}Materialized`)
+        imports.addFeature(getInternalClassName(materialized.className), `./Ark${materialized.className}Materialized`)
     }
 }
