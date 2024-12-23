@@ -172,8 +172,6 @@ public:
         writePointer((void*)buffer.data);
         writeInt64(buffer.length);
     }
-
-
 };
 
 #endif // _SERIALIZER_BASE_H
