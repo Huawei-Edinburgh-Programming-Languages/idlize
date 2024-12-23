@@ -1411,9 +1411,9 @@
 |`enableHapticFeedback`| Function | Erokhin Ilya | done | |
 |`registerNativeEmbedRule`| Function | Erokhin Ilya | done | |
 |`bindSelectionMenu`| Function | Erokhin Ilya | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|*WindowScene*| *Component* | Spirin Andrey | in progress | |
-|`setWindowSceneOptions`| Function | Spirin Andrey | in progress | |
-|`attractionEffect`| Function | Spirin Andrey | in progress | |
+|*WindowScene*| *Component* | Dudkin Sergey | devdone | |
+|`setWindowSceneOptions`| Function | Dudkin Sergey | devdone | |
+|`attractionEffect`| Function | Dudkin Sergey  | devdone | |
 |*XComponent*| *Component* | Tuzhilkin Ivan | blocked IDL | |
 |`setXComponentOptions`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`onLoad`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB7RSS |
