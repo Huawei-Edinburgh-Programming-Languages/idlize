@@ -35,6 +35,7 @@ export class MaterializedField {
 export class MaterializedMethod extends PeerMethod {
     constructor(
         originalParentName: string,
+        public implementationParentName: string,
         argConvertors: ArgConvertor[],
         returnType: IDLType,
         isCallSignature: boolean,
@@ -87,6 +88,10 @@ export class MaterializedMethod extends PeerMethod {
         }
     }
 
+    override getImplementationName(): string {
+        return this.implementationParentName
+    }
+
     tsReturnType(): IDLType | undefined {
         return this.method.signature.returnType
     }
@@ -98,6 +103,7 @@ export function copyMaterializedMethod(method: MaterializedMethod, overrides: {
 }) {
     const copied = new MaterializedMethod(
         method.originalParentName,
+        method.implementationParentName,
         method.argConvertors,
         method.returnType,
         method.isCallSignature,
@@ -128,7 +134,7 @@ export class MaterializedClass implements PeerClassBase {
     }
 
     getInternalName(): string {
-        return getInternalClassName(this.className)
+        return this.isInterface ? getInternalClassName(this.className) : this.className
     }
 
     generatedName(isCallSignature: boolean): string{
@@ -139,6 +145,7 @@ export class MaterializedClass implements PeerClassBase {
 export function createDestroyPeerMethod(clazz: MaterializedClass): MaterializedMethod {
     return new MaterializedMethod(
             clazz.className,
+            clazz.getInternalName(),
             [],
             IDLVoidType,
             false,
