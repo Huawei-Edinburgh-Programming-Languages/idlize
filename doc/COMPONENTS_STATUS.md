@@ -271,7 +271,7 @@
 |`onSizeChange`| Function | Dmitry A Smirnov|testskipped | |
 |`customProperty`| Function | Dmitry A Smirnov|blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`expandSafeArea`| Function | Dmitry A Smirnov|testskipped | |
-|`background`| Function | Skroba Gleb | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`background`| Function | Lobah Mikhail | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`backgroundImage`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`backgroundBlurStyle`| Function | Skroba Gleb | done |  |
 |`foregroundBlurStyle`| Function | Roman Sedaikin | done | |
@@ -287,7 +287,7 @@
 |`sharedTransition`|Function|Skroba Gleb | done |  |
 |`chainMode`| Function | Berezin Kirill | done | |
 |`dragPreviewOptions`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD |
-|`overlay`| Function | Erokhin Ilya | in progress | CustomBuilder |
+|`overlay`| Function | Lobah Mikhail | in progress | CustomBuilder |
 |`blendMode`| Function | Lobah Mikhail | done | |
 |`advancedBlendMode`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC80Y |
 |`bindPopup`| Function | Erokhin Ilya | in progress | CustomBuilder |
@@ -410,7 +410,7 @@
 |`endAngle`| Function | Maksimov Nikita | done | |
 |`colors`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4DU |
 |`strokeWidth`| Function | Maksimov Nikita | done | |
-|`description`| Function | Maksimov Nikita | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`description`| Function | Lobah Mikhail | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`trackShadow`| Function | Maksimov Nikita | done |  |
 |`indicator`| Function | Maksimov Nikita | done |  |
 |`privacySensitive`| Function | Maksimov Nikita | done ||
