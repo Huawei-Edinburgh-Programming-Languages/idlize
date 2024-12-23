@@ -1464,9 +1464,9 @@
 |`indicatorStyle`| Function | Kovalev Sergey | done | depricated |
 |`indicatorLoop`| Function | Kovalev Sergey | done | depricated |
 |`onChange`| Function | Kovalev Sergey | done | depricated |
-|*UnifiedData*| *Class* | | | |
-|`hasType`| Function | | | |
-|`getTypes`| Function | | | |
+|*UnifiedData*| *Class* | Tuzhilkin Ivan | in progress | |
+|`hasType`| Function | Tuzhilkin Ivan | in progress | |
+|`getTypes`| Function | Tuzhilkin Ivan | in progress | |
 |*DrawingCanvas*| *Class* | Dudkin Sergey | in progress | |
 |`drawRect`| Function | Dudkin Sergey | in progress | |
 |*FrameNode*| *Class* | | | |
