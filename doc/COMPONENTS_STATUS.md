@@ -290,7 +290,7 @@
 |`overlay`| Function | Lobah Mikhail | in progress | CustomBuilder |
 |`blendMode`| Function | Lobah Mikhail | done | |
 |`advancedBlendMode`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC80Y |
-|`bindPopup`| Function | Erokhin Ilya | in progress | CustomBuilder |
+|`bindPopup`| Function | Erokhin Ilya | testskipped | CustomBuilder |
 |`bindMenu`| Function | Erokhin Ilya | in progress | CustomBuilder |
 |`bindContextMenu`| Function | Erokhin Ilya | in progress | CustomBuilder |
 |`bindContentCover`| Function | Erokhin Ilya | in progress | CustomBuilder |
@@ -571,7 +571,7 @@
 |`editable`|Function|Morozov Sergey|done|  |
 |`selectable`|Function|Morozov Sergey|done|  |
 |`selected`|Function|Morozov Sergey|done|  |
-|`swipeAction`|Function|Morozov Sergey| in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`swipeAction`|Function|Erokhin Ilya| in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`onSelect`|Function|Morozov Sergey|done|  |
 |*ListItemGroup*|*Component*|Morozov Sergey|blocked|  |
 |`setListItemGroupOptions`|Function|Dmitry A Smirnov| in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
@@ -608,7 +608,7 @@
 |`menuItemGroupDivider`|Function|Morozov Sergey| done |https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`subMenuExpandingMode`|Function|Morozov Sergey| done |  |
 |*MenuItem*| *Component* |Morozov Sergey|blocked|  |
-|`setMenuItemOptions`| Function |Morozov Sergey| in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`setMenuItemOptions`| Function |Erokhin Ilya| in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`selected`| Function |Morozov Sergey|done|  |
 |`selectIcon`| Function |Morozov Sergey|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`onChange`| Function |Morozov Sergey|done|  |
@@ -853,7 +853,7 @@
 |`enableHapticFeedback`|Function|Evstigneev Roman| done |  |
 |`searchButton`|Function| Evstigneev Roman | done |  |
 |`inputFilter`|Function| Evstigneev Roman | done |  |
-|`customKeyboard`|Function| Evstigneev Roman | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`customKeyboard`|Function| Erokhin Ilya | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*SecurityComponentMethod*| *Component* | Samarin Sergey|in progress |  |
 |`iconSize`| Function |Samarin Sergey| done |  |
 |`layoutDirection`| Function |Samarin Sergey|done |  |
@@ -1050,7 +1050,7 @@
 |`barModeScrollable`| Function | Tuzhilkin Ivan | done | |
 |*TabContent*| *Component* | Evstigneev Roman |in progress |  |
 |`setTabContentOptions`| Function | Evstigneev Roman | done |  |
-|`tabBar`| Function | Evstigneev Roman | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IB74L4 & https://gitee.com/nikolay-igotti/idlize/issues/IB764R|
+|`tabBar`| Function | Erokhin Ilya | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IB74L4 & https://gitee.com/nikolay-igotti/idlize/issues/IB764R|
 |`onWillShow`| Function |Evstigneev Roman | done |  |
 |`onWillHide`| Function |Evstigneev Roman | done |  |
 |*Text*| *Component* | Samarin Sergey | in progress | |
@@ -1095,7 +1095,7 @@
 |`halfLeading`| Function |Samarin Sergey | done |  |
 |`enableHapticFeedback`| Function |Samarin Sergey | done |  |
 |`selection`| Function |Samarin Sergey | testskipped |  |
-|`bindSelectionMenu`| Function | Sergey Samarin | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`bindSelectionMenu`| Function | Erokhin Ilya | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*TextArea*|*Component*|Tuzhilkin Ivan|blocked IDL|  |
 |`setTextAreaOptions`|Function|Tuzhilkin Ivan|testskipped|  |
 |`placeholderColor`|Function|Tuzhilkin Ivan|testskipped|  |
@@ -1227,7 +1227,7 @@
 |`enablePreviewText`| Function | Spirin Andrey | done |  |
 |`enableHapticFeedback`| Function | Spirin Andrey | done |  |
 |`inputFilter`| Function | Spirin Andrey | testskipped  |  |
-|`customKeyboard`| Function | Spirin Andrey | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`customKeyboard`| Function | Erokhin Ilya | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`showCounter`| Function | Spirin Andrey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
 |*TextPicker*| *Component* |Ekaterina Stepanova |in progress |  |
 |`setTextPickerOptions`| Function | Tuzhilkin Ivan| done | https://gitee.com/openharmony/arkui_ace_engine/issues/IB2GJB |
@@ -1492,8 +1492,8 @@
 |*EventEmulator*| *Class* | Dmitry A Smirnov | in progress | |
 |`emitClickEvent`| Function | Dmitry A Smirnov | in progress | |
 |`emitTextInputEvent`| Function | Dmitry A Smirnov | in progress | |
-|*ActionSheet*| *Class* | Ekaterina Stepanova | in progress | |
-|`show`| Function | Ekaterina Stepanova | in progress | CustomBuilder |
+|*ActionSheet*| *Class* | Erokhin Ilya | in progress | |
+|`show`| Function | Erokhin Ilya | in progress | CustomBuilder |
 |*AlertDialog*| *Class* | Ekaterina Stepanova | in progress | |
 |`show`| Function | Ekaterina Stepanova | in progress | |
 |*CalendarController*| *Class* |Maksimov Nikita | done |  |
@@ -1774,7 +1774,7 @@
 |*RichEditorController*| *Class* |Dudkin Sergey| blocked|  |
 |`addTextSpan`| Function |Dudkin Sergey| done|  |
 |`addImageSpan`| Function |Dudkin Sergey| blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
-|`addBuilderSpan`| Function | Dudkin Sergey | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`addBuilderSpan`| Function | Erokhin Ilya | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`addSymbolSpan`| Function | Dudkin Sergey| done|  |
 |`updateSpanStyle`| Function | Dudkin Sergey| done|  |
 |`updateParagraphStyle`| Function | Dudkin Sergey| done|  |
