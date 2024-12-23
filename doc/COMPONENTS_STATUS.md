@@ -574,7 +574,7 @@
 |`swipeAction`|Function|Morozov Sergey| in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`onSelect`|Function|Morozov Sergey|done|  |
 |*ListItemGroup*|*Component*|Morozov Sergey|blocked|  |
-|`setListItemGroupOptions`|Function|Morozov Sergey| in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`setListItemGroupOptions`|Function|Dmitry A Smirnov| in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`divider`|Function|Morozov Sergey|done|  |
 |`childrenMainSize`|Function|Morozov Sergey|done|  |
 |*LoadingProgress*|*Component*| Samarin Sergey | done |  |
@@ -617,7 +617,7 @@
 |`labelFont`| Function |Morozov Sergey|done|  |
 |`labelFontColor`| Function |Morozov Sergey|done|  |
 |*MenuItemGroup*| *Component* |Morozov Sergey |blocked |  |
-|`setMenuItemGroupOptions`| Function | Morozov Sergey | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`setMenuItemGroupOptions`| Function | Dmitry A Smirnov | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*NavDestination*| *Component* |Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`setNavDestinationOptions`| Function |Kovalev Sergey | done | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`hideTitleBar`| Function |Kovalev Sergey | done | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
@@ -708,7 +708,7 @@
 |`backgroundColor`| Function |Evstigneev Roman | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZVOQ |
 |`contentOpacity`| Function |Evstigneev Roman | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZVOQ |
 |*Radio*| *Component* | Evstigneev Roman | done |  |
-|`setRadioOptions`| Function | Evstigneev Roman | in progress | CustomBuilder |
+|`setRadioOptions`| Function | Dmitry A Smirnov | in progress | CustomBuilder |
 |`checked`| Function | Evstigneev Roman | done |  |
 |`onChange`| Function | Evstigneev Roman | done |  |
 |`radioStyle`| Function | Evstigneev Roman | done |  |
@@ -765,8 +765,8 @@
 |`enableKeyboardOnFocus`| Function | Dudkin Sergey| done|  |
 |`enableHapticFeedback`| Function | Dudkin Sergey| done|  |
 |`barState`| Function | Dudkin Sergey| done|  |
-|`bindSelectionMenu`| Function | Dudkin Sergey| in progress | CustomBuilder |
-|`customKeyboard`| Function | Dudkin Sergey| in progress | CustomBuilder |
+|`bindSelectionMenu`| Function | Dmitry A Smirnov| in progress | CustomBuilder |
+|`customKeyboard`| Function | Dmitry A Smirnov| in progress | CustomBuilder |
 |`placeholder`| Function | Dudkin Sergey| done|  |
 |*RichText*| *Component* | Dudkin Sergey| done|  |
 |`setRichTextOptions`| Function | Dudkin Sergey| done|  |
