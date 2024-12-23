@@ -844,9 +844,9 @@
 |`lineHeight`|Function| Evstigneev Roman | done |  |
 |`type`|Function| Evstigneev Roman |done|  |
 |`fontFeature`|Function| Evstigneev Roman |done|  |
-|`onWillInsert`|Function| Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onWillInsert`|Function| Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onDidInsert`|Function| Evstigneev Roman |done|  |
-|`onWillDelete`|Function| Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onWillDelete`|Function| Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onDidDelete`|Function| Evstigneev Roman |done|  |
 |`editMenuOptions`|Function| Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`enablePreviewText`|Function| Evstigneev Roman |done|  |
@@ -1140,9 +1140,9 @@
 |`enableAutoFill`|Function|Tuzhilkin Ivan|done|  |
 |`contentType`|Function|Tuzhilkin Ivan|done|  |
 |`fontFeature`|Function|Tuzhilkin Ivan|done|  |
-|`onWillInsert`|Function| Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onWillInsert`|Function| Skroba Gleb | devdone | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onDidInsert`|Function|Tuzhilkin Ivan|done |  |
-|`onWillDelete`|Function| Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onWillDelete`|Function| Skroba Gleb | devdone | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onDidDelete`|Function|Tuzhilkin Ivan|done |  |
 |`editMenuOptions`|Function| Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`enablePreviewText`|Function|Tuzhilkin Ivan|done|  |
@@ -1219,9 +1219,9 @@
 |`fontFeature`| Function | Spirin Andrey | testskipped  |  |
 |`showPassword`| Function | Spirin Andrey | done |  |
 |`onSecurityStateChange`| Function | Spirin Andrey | testskipped |  |
-|`onWillInsert`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onWillInsert`| Function | Skroba Gleb | devdone | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onDidInsert`| Function | Spirin Andrey | testskipped |  |
-|`onWillDelete`| Function | Skroba Gleb | in progress |  https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
+|`onWillDelete`| Function | Skroba Gleb | devdone |  https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
 |`onDidDelete`| Function | Spirin Andrey | testskipped |  |
 |`editMenuOptions`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`enablePreviewText`| Function | Spirin Andrey | done |  |
