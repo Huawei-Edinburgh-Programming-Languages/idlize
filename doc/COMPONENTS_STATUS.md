@@ -134,7 +134,7 @@
 |`constraintSize`| Function | Roman Sedaikin | done | |
 |`touchable`| Function | Roman Sedaikin | done | |
 |`hitTestBehavior`| Function | Roman Sedaikin | done | |
-|`onChildTouchTest`| Function |Dmitry A Smirnov |  blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
+|`onChildTouchTest`| Function | Skroba Gleb | in progress |https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
 |`layoutWeight`| Function | Roman Sedaikin | done | |
 |`chainWeight`| Function | Politov Mikhail | in progress | |
 |`padding`| Function | Skroba Gleb | done | |
@@ -265,7 +265,7 @@
 |`backgroundBrightness`| Function | Skroba Gleb | done | |
 |`onGestureJudgeBegin`| Function | Politov Mikhail | in progress | |
 |`onGestureRecognizerJudgeBegin`| Function | Politov Mikhail | in progress | |
-|`shouldBuiltInRecognizerParallelWith`| Function |Dmitry A Smirnov |in progress |https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
+|`shouldBuiltInRecognizerParallelWith`| Function | Skroba Gleb | in progress |https://gitee.com/nikolay-igotti/idlize/issues/IARLIB |
 |`monopolizeEvents`| Function | Erokhin Ilya | testskipped | |
 |`onTouchIntercept`| Function | Erokhin Ilya | testskipped | |
 |`onSizeChange`| Function | Dmitry A Smirnov|testskipped | |
@@ -319,8 +319,8 @@
 |`enableScrollInteraction`| Function | Samarin Sergey | done |  |
 |`friction`| Function | Samarin Sergey | done |  |
 |`onScroll`| Function | Samarin Sergey | deprecated |  |
-|`onWillScroll`| Function | Samarin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onDidScroll`| Function | Samarin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB6U0 |
+|`onWillScroll`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onDidScroll`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IBB6U0 |
 |`onReachStart`| Function | Samarin Sergey | testskipped |  |
 |`onReachEnd`| Function | Samarin Sergey | testskipped |  |
 |`onScrollStart`| Function | Samarin Sergey | testskipped |  |
@@ -424,7 +424,7 @@
 |`scrollBarWidth`|Function| Erokhin Ilya | done |  |
 |`scrollBarColor`|Function| Erokhin Ilya | done |  |
 |`scrollBar`|Function| Erokhin Ilya | done |  |
-|`onScrollBarUpdate`|Function| Erokhin Ilya | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
+|`onScrollBarUpdate`|Function| Skroba Gleb | in progress |https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
 |`onScrollIndex`|Function| Erokhin Ilya | done |  |
 |`cachedCount`|Function| Erokhin Ilya | done |  |
 |`editMode`|Function| Erokhin Ilya | done |  |
@@ -434,7 +434,7 @@
 |`cellLength`|Function| Erokhin Ilya | done |  |
 |`layoutDirection`|Function| Erokhin Ilya | done |  |
 |`supportAnimation`|Function| Erokhin Ilya | done |  |
-|`onItemDragStart`|Function| Erokhin Ilya | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
+|`onItemDragStart`|Function| Skroba Gleb | in progress |https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
 |`onItemDragEnter`|Function| Erokhin Ilya | done |  |
 |`onItemDragMove`|Function| Erokhin Ilya | done |  |
 |`onItemDragLeave`|Function| Erokhin Ilya | done |  |
@@ -448,7 +448,7 @@
 |`onReachEnd`|Function| Erokhin Ilya | done |  |
 |`onScrollStart`|Function| Erokhin Ilya | done |  |
 |`onScrollStop`|Function| Erokhin Ilya | done |  |
-|`onScrollFrameBegin`|Function| Erokhin Ilya | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
+|`onScrollFrameBegin`|Function| Skroba Gleb | in progress |https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
 |`edgeEffect`|Function| Erokhin Ilya | done |  |
 |*GridItem*|*Component*| Erokhin Ilya | done |  |
 |`setGridItemOptions`|Function| Erokhin Ilya | done |  |
@@ -555,14 +555,14 @@
 |`onReachEnd`|Function|Morozov Sergey|done|  |
 |`onScrollStart`|Function|Morozov Sergey|done|  |
 |`onScrollStop`|Function|Morozov Sergey|done|  |
-|`onItemDelete`|Function|Morozov Sergey|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onItemMove`|Function|Morozov Sergey|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onItemDragStart`|Function|Morozov Sergey|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onItemDelete`|Function| Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onItemMove`|Function| Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onItemDragStart`|Function| Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onItemDragEnter`|Function|Morozov Sergey|done|  |
 |`onItemDragMove`|Function|Morozov Sergey|done|  |
 |`onItemDragLeave`|Function|Morozov Sergey|done|  |
 |`onItemDrop`|Function|Morozov Sergey|done|  |
-|`onScrollFrameBegin`|Function|Morozov Sergey|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onScrollFrameBegin`|Function| Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`lanes`|Function|Morozov Sergey|done|  |
 |`edgeEffect`|Function|Morozov Sergey|done|  |
 |*ListItem*|*Component*|Morozov Sergey|blocked IDL|  |
@@ -801,7 +801,7 @@
 |`scrollBar`| Function | Berezin Kirill | done |  |
 |`scrollBarColor`| Function | Berezin Kirill | done |  |
 |`scrollBarWidth`| Function | Berezin Kirill | done |  |
-|`onScrollFrameBegin`| Function | Berezin Kirill |blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onScrollFrameBegin`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`nestedScroll`| Function | Berezin Kirill | done |  |
 |`enableScrollInteraction`| Function | Berezin Kirill | done |  |
 |`friction`| Function | Berezin Kirill | done |  |
@@ -844,9 +844,9 @@
 |`lineHeight`|Function| Evstigneev Roman | done |  |
 |`type`|Function| Evstigneev Roman |done|  |
 |`fontFeature`|Function| Evstigneev Roman |done|  |
-|`onWillInsert`|Function| Evstigneev Roman |blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onWillInsert`|Function| Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onDidInsert`|Function| Evstigneev Roman |done|  |
-|`onWillDelete`|Function| Evstigneev Roman |blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onWillDelete`|Function| Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onDidDelete`|Function| Evstigneev Roman |done|  |
 |`editMenuOptions`|Function| Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`enablePreviewText`|Function| Evstigneev Roman |done|  |
@@ -1043,10 +1043,10 @@
 |`barOverlap`| Function | Tuzhilkin Ivan | done |  |
 |`barBackgroundColor`| Function | Tuzhilkin Ivan | done |  |
 |`barGridAlign`| Function | Tuzhilkin Ivan | done |  |
-|`customContentTransition`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`customContentTransition`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`barBackgroundBlurStyle`| Function | Tuzhilkin Ivan | done |  |
 |`barBackgroundEffect`| Function | Tuzhilkin Ivan | done | |
-|`onContentWillChange`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onContentWillChange`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`barModeScrollable`| Function | Tuzhilkin Ivan | done | |
 |*TabContent*| *Component* | Evstigneev Roman |in progress |  |
 |`setTabContentOptions`| Function | Evstigneev Roman | done |  |
@@ -1140,9 +1140,9 @@
 |`enableAutoFill`|Function|Tuzhilkin Ivan|done|  |
 |`contentType`|Function|Tuzhilkin Ivan|done|  |
 |`fontFeature`|Function|Tuzhilkin Ivan|done|  |
-|`onWillInsert`|Function|Tuzhilkin Ivan|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onWillInsert`|Function| Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onDidInsert`|Function|Tuzhilkin Ivan|done |  |
-|`onWillDelete`|Function|Tuzhilkin Ivan|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onWillDelete`|Function| Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onDidDelete`|Function|Tuzhilkin Ivan|done |  |
 |`editMenuOptions`|Function| Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`enablePreviewText`|Function|Tuzhilkin Ivan|done|  |
@@ -1219,9 +1219,9 @@
 |`fontFeature`| Function | Spirin Andrey | testskipped  |  |
 |`showPassword`| Function | Spirin Andrey | done |  |
 |`onSecurityStateChange`| Function | Spirin Andrey | testskipped |  |
-|`onWillInsert`| Function | Lobah Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onWillInsert`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onDidInsert`| Function | Spirin Andrey | testskipped |  |
-|`onWillDelete`| Function | Lobah Mikhail | blocked IDL|  https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
+|`onWillDelete`| Function | Skroba Gleb | in progress |  https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
 |`onDidDelete`| Function | Spirin Andrey | testskipped |  |
 |`editMenuOptions`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`enablePreviewText`| Function | Spirin Andrey | done |  |
@@ -1322,29 +1322,29 @@
 |`onGeolocationHide`| Function | Erokhin Ilya | done | |
 |`onGeolocationShow`| Function | Erokhin Ilya | done | |
 |`onRequestSelected`| Function | Erokhin Ilya | done | |
-|`onAlert`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onBeforeUnload`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onConfirm`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onPrompt`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onConsole`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onAlert`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onBeforeUnload`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onConfirm`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onPrompt`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onConsole`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onErrorReceive`| Function | Erokhin Ilya | done | |
 |`onHttpErrorReceive`| Function | Erokhin Ilya | done | |
 |`onDownloadStart`| Function | Erokhin Ilya | done | |
 |`onRefreshAccessedHistory`| Function | Erokhin Ilya | done | |
-|`onUrlLoadIntercept`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onUrlLoadIntercept`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onSslErrorReceive`| Function | Erokhin Ilya | done | deprecated |
 |`onRenderExited`| Function | Erokhin Ilya | done | |
-|`onShowFileSelector`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onShowFileSelector`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onFileSelectorShow`| Function | Erokhin Ilya | done | deprecated |
 |`onResourceLoad`| Function | Erokhin Ilya | done | |
 |`onFullScreenExit`| Function | Erokhin Ilya | done | |
 |`onFullScreenEnter`| Function | Erokhin Ilya | done | |
 |`onScaleChange`| Function | Erokhin Ilya | done | |
-|`onHttpAuthRequest`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onInterceptRequest`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onHttpAuthRequest`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onInterceptRequest`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onPermissionRequest`| Function | Erokhin Ilya | done | |
 |`onScreenCaptureRequest`| Function | Erokhin Ilya | done | |
-|`onContextMenuShow`| Function | Erokhin Ilya | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onContextMenuShow`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onContextMenuHide`| Function | Erokhin Ilya | done | |
 |`mediaPlayGestureAccess`| Function | Erokhin Ilya | done | |
 |`onSearchResultReceive`| Function | Erokhin Ilya | done | |
@@ -1381,7 +1381,7 @@
 |`onFirstContentfulPaint`| Function | Erokhin Ilya | done | |
 |`onFirstMeaningfulPaint`| Function | Erokhin Ilya | done | |
 |`onLargestContentfulPaint`| Function | Erokhin Ilya | done | |
-|`onLoadIntercept`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ  |
+|`onLoadIntercept`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ  |
 |`onControllerAttached`| Function | Erokhin Ilya | done | |
 |`onOverScroll`| Function | Erokhin Ilya | done | |
 |`onSafeBrowsingCheckResult`| Function | Erokhin Ilya | done | |
@@ -1396,7 +1396,7 @@
 |`onNativeEmbedVisibilityChange`| Function | Erokhin Ilya | done | |
 |`onNativeEmbedGestureEvent`| Function | Erokhin Ilya | testskipped | |
 |`copyOptions`| Function | Erokhin Ilya | done | |
-|`onOverrideUrlLoading`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onOverrideUrlLoading`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`textAutosizing`| Function | Erokhin Ilya | done | |
 |`enableNativeMediaPlayer`| Function | Erokhin Ilya | done | |
 |`enableSmoothDragResize`| Function | Erokhin Ilya | done | |
@@ -1404,7 +1404,7 @@
 |`onRenderProcessResponding`| Function | Erokhin Ilya | done | |
 |`selectionMenuOptions`| Function | Erokhin Ilya | testskipped | |
 |`onViewportFitChanged`| Function | Erokhin Ilya | done | |
-|`onInterceptKeyboardAttach`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
+|`onInterceptKeyboardAttach`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
 |`onAdsBlocked`| Function | Erokhin Ilya | done | |
 |`keyboardAvoidMode`| Function | Erokhin Ilya | done | |
 |`editMenuOptions`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
@@ -1449,7 +1449,7 @@
 |`cachedCount`| Function |Kovalev Sergey | done |  |
 |`onReachStart`| Function | Kovalev Sergey | done | |
 |`onReachEnd`| Function | Kovalev Sergey | done | |
-|`onScrollFrameBegin`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onScrollFrameBegin`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onScrollIndex`| Function | Kovalev Sergey | done | |
 |*UIExtensionComponent*| *Component* | Tuzhilkin Ivan | blocked IDL | |
 |`setUIExtensionComponentOptions`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBCGB5 ,  https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF |
@@ -1867,8 +1867,8 @@
 |`of`| Function | Maksimov Nikita | done | |
 |`equals`| Function | Maksimov Nikita | done | |
 |*EditMenuOptions*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
-|`onCreateMenu`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onMenuItemClick`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onCreateMenu`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onMenuItemClick`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |*TextInputController*| *Class* | Spirin Andrey | done |  |
 |`caretPosition`| Function | Spirin Andrey | done |  |
 |`setTextSelection`| Function | Spirin Andrey | done |  |
