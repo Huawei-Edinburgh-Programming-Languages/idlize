@@ -120,6 +120,7 @@ export class PeerGeneratorConfig {
 
     private static ignoreMaterialized = [
         // TBD
+        "NavPathStack",
         "CustomComponent",
         "Layoutable",
         "LayoutChild",
