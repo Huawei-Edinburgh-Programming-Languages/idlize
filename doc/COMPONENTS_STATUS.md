@@ -1469,19 +1469,19 @@
 |`getTypes`| Function | Tuzhilkin Ivan | in progress | |
 |*DrawingCanvas*| *Class* | Dudkin Sergey | in progress | |
 |`drawRect`| Function | Dudkin Sergey | in progress | |
-|*FrameNode*| *Class* | | | |
-|`isModifiable`| Function | | | |
-|`appendChild`| Function | | | |
-|`insertChildAfter`| Function | | | |
-|`removeChild`| Function | | | |
-|`clearChildren`| Function | | | |
-|`getChild`| Function | | | |
-|`getFirstChild`| Function | | | |
-|`getNextSibling`| Function | | | |
-|`getPreviousSibling`| Function | | | |
-|`getParent`| Function | | | |
-|`getChildrenCount`| Function | | | |
-|`dispose`| Function | | | |
+|*FrameNode*| *Class* | Tuzhilkin Ivan | in progress| |
+|`isModifiable`| Function | Tuzhilkin Ivan | in progress | |
+|`appendChild`| Function | Tuzhilkin Ivan | in progress | |
+|`insertChildAfter`| Function | Tuzhilkin Ivan | in progress | |
+|`removeChild`| Function | Tuzhilkin Ivan | in progress | |
+|`clearChildren`| Function | Tuzhilkin Ivan | in progress | |
+|`getChild`| Function | Tuzhilkin Ivan | in progress | |
+|`getFirstChild`| Function | Tuzhilkin Ivan | in progress | |
+|`getNextSibling`| Function | Tuzhilkin Ivan | in progress | |
+|`getPreviousSibling`| Function | Tuzhilkin Ivan | in progress | |
+|`getParent`| Function | Tuzhilkin Ivan | in progress | |
+|`getChildrenCount`| Function | Tuzhilkin Ivan | in progress | |
+|`dispose`| Function | Tuzhilkin Ivan | in progress | |
 |*PixelMap*| *Class* | Andrey Khudenkikh | in progress | |
 |`readPixelsToBufferSync`| Function | Andrey Khudenkikh | in progress | |
 |`writeBufferToPixels`| Function | Andrey Khudenkikh | in progress | |
