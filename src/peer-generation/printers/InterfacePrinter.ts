@@ -726,7 +726,7 @@ class ArkTSSyntheticGenerator extends DependenciesCollector {
     }
 
     convertInterface(decl: idl.IDLInterface): idl.IDLNode[] {
-        if (idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.HandWrittenImplementation))
+        if (idl.isHandwritten(decl))
             return super.convertInterface(decl)
         idl.forEachFunction(decl, function_ => {
             const promise = idl.asPromise(function_.returnType)
@@ -807,7 +807,7 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
                     idl.isPackage(entry) ||
                     isPredefined(entry) ||
                     idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.GlobalScope) ||
-                    idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.HandWrittenImplementation) ||
+                    idl.isHandwritten(entry) ||
                     PeerGeneratorConfig.ignoreEntry(entry.name, this.peerLibrary.language))
                     continue
                 syntheticGenerator.convert(entry)

@@ -24,7 +24,7 @@ export function convertDeclToFeature(library: PeerLibrary, node: idl.IDLNode): I
     }
     if (!idl.isEntry(node))
         throw new Error("Expected to have an entry")
-    if (idl.hasExtAttribute(node, idl.IDLExtendedAttributes.HandWrittenImplementation))
+    if (idl.isHandwritten(node))
         return { feature: node.name, module: HandwrittenModule }
     if (idl.isSyntheticEntry(node))
         return { feature: node.name, module: SyntheticModule }
