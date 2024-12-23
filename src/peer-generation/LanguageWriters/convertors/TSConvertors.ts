@@ -89,14 +89,14 @@ export class TsIDLNodeToStringConverter implements NodeConvertor<string>, IdlNam
         let namespacePrefix = ''
         if (decl) {
             if (idl.isSyntheticEntry(decl)) {
+                if (idl.isCallback(decl)) {
+                    return namespacePrefix + this.mapCallback(decl)
+                }
                 const entity = idl.getExtAttribute(decl, idl.IDLExtendedAttributes.Entity)
                 if (entity) {
                     const isTuple = entity === idl.IDLEntity.Tuple
                     return this.productType(decl as idl.IDLInterface, isTuple, !isTuple)
                 }
-            }
-            if (idl.isCallback(decl)) {
-                return namespacePrefix + this.mapCallback(decl)
             }
             if (idl.isEnum(decl)) {
                 const prefix = this.getNamespacePrefix(decl)
