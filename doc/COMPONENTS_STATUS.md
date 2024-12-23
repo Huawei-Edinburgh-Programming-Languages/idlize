@@ -1599,10 +1599,10 @@
 |`toDataURL`| Function |Vadim Voronov| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`startImageAnalyzer`| Function |Vadim Voronov| done | |
 |`stopImageAnalyzer`| Function | Vadim Voronov| done | |
-|`onOnAttach`| Function | Vadim Voronov, Evstigneev Roman | in progress |  |
-|`offOnAttach`| Function | Vadim Voronov, Evstigneev Roman | in progress |  |
-|`onOnDetach`| Function | Vadim Voronov, Evstigneev Roman | in progress |  |
-|`offOnDetach`| Function | Vadim Voronov, Evstigneev Roman | in progress |  |
+|`onOnAttach`| Function | Vadim Voronov, Evstigneev Roman | testskipped |  |
+|`offOnAttach`| Function | Vadim Voronov, Evstigneev Roman | testskipped |  |
+|`onOnDetach`| Function | Vadim Voronov, Evstigneev Roman | testskipped |  |
+|`offOnDetach`| Function | Vadim Voronov, Evstigneev Roman | testskipped |  |
 |`getHeight`| Function |Vadim Voronov| done | |
 |`getWidth`| Function |Vadim Voronov| done | |
 |*DrawingRenderingContext*| *Class* | Dudkin Sergey | blocked IDL| |
