@@ -294,7 +294,7 @@ function collectNativeModuleImports(module: NativeModuleType, file: SourceFile) 
         if (module === NativeModuleType.ArkUI)
             tsFile.imports.addFeature('loadLibraries', '@koalaui/interop')
         if (file.language === Language.ARKTS) {
-            tsFile.imports.addFeature('NativeBuffer', '../NativeBuffer')
+            tsFile.imports.addFeature('NativeBuffer', '@koalaui/interop')
             if (module === NativeModuleType.Generated)
                 tsFile.imports.addFeature('Length', '../ArkUnitsInterfaces')
         }
