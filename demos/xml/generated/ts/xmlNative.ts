@@ -8,7 +8,7 @@ export enum CallbackKind {
 }
 
 export class XMLNativeModule {
-    static _XmlSerializer_ctor(buffer: string, thisArray: Uint8Array, thisLength: int32): KPointer {
+    static _XmlSerializer_ctor(thisArray: Uint8Array, thisLength: int32): KPointer {
         throw new Error("Not implemented")
     }
     static _XmlSerializer_getFinalizer(): KPointer {
@@ -77,7 +77,7 @@ export class XMLNativeModule {
     static _ParseInfo_getAttributeCount(self: KPointer): number {
         throw new Error("Not implemented")
     }
-    static _XmlPullParser_ctor(buffer: string, thisArray: Uint8Array, thisLength: int32): KPointer {
+    static _XmlPullParser_ctor(thisArray: Uint8Array, thisLength: int32): KPointer {
         throw new Error("Not implemented")
     }
     static _XmlPullParser_getFinalizer(): KPointer {
@@ -97,6 +97,15 @@ export class XMLNativeModule {
         throw new Error("Not implemented")
     }
     static _ReleaseArkoalaResource(resourceId: int32): void {
+        throw new Error("Not implemented")
+    }
+    static _Utf8ToString(buffer: Uint8Array, position: int32, length: int32): string {
+        throw new Error("Not implemented")
+    }
+    static _MaterializeBuffer(data: KPointer, length: int32, resourceId: int32, holdPtr: KPointer, releasePtr: KPointer): ArrayBuffer {
+        throw new Error("Not implemented")
+    }
+    static _GetNativeBufferPointer(data: ArrayBuffer): KPointer {
         throw new Error("Not implemented")
     }
 }

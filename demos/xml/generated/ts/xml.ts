@@ -69,7 +69,7 @@ export class XmlSerializer implements XmlSerializerInterface {
             const encoding_value = encoding!
             thisSerializer.writeString(encoding_value)
         }
-        this.peer = new Finalizable(XMLNativeModule._XmlSerializer_ctor(buffer, thisSerializer.asArray(), thisSerializer.length()), XmlSerializer.getFinalizer())
+        this.peer = new Finalizable(XMLNativeModule._XmlSerializer_ctor(thisSerializer.asArray(), thisSerializer.length()), XmlSerializer.getFinalizer())
         thisSerializer.release()
     }
     static getFinalizer(): KPointer {
@@ -182,7 +182,7 @@ export class XmlPullParser implements XmlPullParserInterface {
             const encoding_value = encoding!
             thisSerializer.writeString(encoding_value)
         }
-        this.peer = new Finalizable(XMLNativeModule._XmlPullParser_ctor(buffer, thisSerializer.asArray(), thisSerializer.length()), XmlPullParser.getFinalizer())
+        this.peer = new Finalizable(XMLNativeModule._XmlPullParser_ctor(thisSerializer.asArray(), thisSerializer.length()), XmlPullParser.getFinalizer())
         thisSerializer.release()
     }
     static getFinalizer(): KPointer {

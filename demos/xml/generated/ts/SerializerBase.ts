@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 import { float32, int32 } from "@koalaui/common"
-import { pointer, ResourceHolder, ResourceId } from "@koalaui/interop"
+import { InteropNativeModule, pointer, ResourceHolder, ResourceId } from "@koalaui/interop"
 import { XMLNativeModule, CallbackKind } from "./xmlNative"
 
 /**
@@ -241,7 +241,7 @@ export class SerializerBase {
             hold: 0,
             release: 0
         })
-        const ptr = nativeModule()._GetNativeBufferPointer(buffer)
+        const ptr = InteropNativeModule._GetNativeBufferPointer(buffer)
         this.writePointer(ptr)
         this.writeInt64(BigInt(buffer.byteLength))
     }

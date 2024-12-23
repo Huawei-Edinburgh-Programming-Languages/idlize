@@ -863,7 +863,6 @@ OH_NativePointer getManagedCallbackCallerSync(CallbackKind kind)
     }
     return nullptr;
 }
-#define KOALA_INTEROP_MODULE ArkUINativeModule
 
 enum CallbackEventKind {
     Event_CallCallback = 0,
