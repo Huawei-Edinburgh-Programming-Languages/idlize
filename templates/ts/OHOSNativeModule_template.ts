@@ -6,7 +6,7 @@ import { pointer, KPointer, registerNativeModule } from "@koalaui/interop"
 export class %NATIVE_MODULE_NAME%NativeModule {
 %NATIVE_FUNCTIONS%
 
-%INTEROP_FUNCTIONS%
+%ARKUI_FUNCTIONS%
 }
 
 registerNativeModule("%NATIVE_MODULE_NAME%NativeModule", %NATIVE_MODULE_NAME%NativeModule)

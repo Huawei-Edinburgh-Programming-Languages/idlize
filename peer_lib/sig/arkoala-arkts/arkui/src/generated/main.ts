@@ -819,7 +819,7 @@ function checkNodeAPI() {
 
 export function main(): void {
     loadLibraries(["ArkoalaNative_ark"])
-    NativeModuleLoader.init()
+    NativeModuleLoader.init([])
     
     checkCallbackWithReturn()
     checkTwoSidesCallbackSync()

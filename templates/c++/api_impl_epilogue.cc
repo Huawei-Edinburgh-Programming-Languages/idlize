@@ -1,3 +1,5 @@
+#define KOALA_INTEROP_MODULE ArkUINativeModule
+
 enum CallbackEventKind {
     Event_CallCallback = 0,
     Event_HoldManagedResource = 1,

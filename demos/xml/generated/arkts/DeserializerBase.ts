@@ -14,9 +14,8 @@
  */
 
 import { float32, int32, int64, float32FromBits } from "@koalaui/common"
-import { KBuffer, KUint8ArrayPtr, pointer } from "@koalaui/interop"
+import { KBuffer, KUint8ArrayPtr, pointer, InteropNativeModule } from "@koalaui/interop"
 import { Tags, CallbackResource, NativeBuffer } from "./SerializerBase"
-import { InteropNativeModule } from "./xmlNative"
 
 export class DeserializerBase {
     private position = 0

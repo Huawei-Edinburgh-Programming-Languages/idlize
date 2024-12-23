@@ -7,5 +7,5 @@ export class NativeModuleLoader {
         return callCallback(id, args, length)
     }
 
-    native static init(): void
+    native static init(modules: string[]): void
 }

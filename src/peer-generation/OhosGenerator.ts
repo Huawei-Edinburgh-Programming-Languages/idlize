@@ -52,7 +52,7 @@ class OHOSVisitor {
     peerWriter: LanguageWriter
     nativeWriter: LanguageWriter
     nativeFunctionsWriter: LanguageWriter
-    interopFunctionsWriter: LanguageWriter
+    arkUIFunctionsWriter: LanguageWriter
 
     libraryName: string = ""
 
@@ -72,7 +72,7 @@ class OHOSVisitor {
         this.peerWriter = createLanguageWriter(library.language, library)
         this.nativeWriter = createLanguageWriter(library.language, library)
         this.nativeFunctionsWriter = createLanguageWriter(library.language, library)
-        this.interopFunctionsWriter = createLanguageWriter(library.language, library)
+        this.arkUIFunctionsWriter = createLanguageWriter(library.language, library)
 
         const fileNamePrefix = this.libraryName.toLowerCase()
         this.implementationStubsFile = new CppSourceFile(`${fileNamePrefix}Impl_template${Language.CPP.extension}`, library)
@@ -302,40 +302,8 @@ class OHOSVisitor {
             })
         })(this.nativeFunctionsWriter)
 
-        this.interopFunctionsWriter.printer.pushIndent(this.nativeWriter.indentDepth() + 1)
+        this.arkUIFunctionsWriter.printer.pushIndent(this.nativeWriter.indentDepth() + 1)
         ;((writer: LanguageWriter) => {
-            writer.writeNativeMethodDeclaration("_InvokeFinalizer",
-                NamedMethodSignature.make(IDLVoidType, [
-                    { name: "ptr", type: IDLPointerType },
-                    { name: "finalizer", type: IDLPointerType },
-                ])
-            )
-            writer.writeNativeMethodDeclaration("_CallCallback",
-                NamedMethodSignature.make(IDLVoidType, [
-                    { name: "callbackKind", type: IDLI32Type },
-                    { name: "args", type: IDLUint8ArrayType },
-                    { name: "argsSize", type: IDLI32Type },
-                ])
-            )
-            writer.writeNativeMethodDeclaration("_CallCallbackSync",
-                NamedMethodSignature.make(IDLVoidType, [
-                    { name: "callbackKind", type: IDLI32Type },
-                    { name: "args", type: IDLUint8ArrayType },
-                    { name: "argsSize", type: IDLI32Type },
-                ])
-            )
-            writer.writeNativeMethodDeclaration("_CallCallbackResourceHolder",
-                NamedMethodSignature.make(IDLVoidType, [
-                    { name: "holder", type: IDLPointerType },
-                    { name: "resourceId", type: IDLI32Type },
-                ])
-            )
-            writer.writeNativeMethodDeclaration("_CallCallbackResourceReleaser",
-                NamedMethodSignature.make(IDLVoidType, [
-                    { name: "releaser", type: IDLPointerType },
-                    { name: "resourceId", type: IDLI32Type },
-                ])
-            )
             writer.writeNativeMethodDeclaration("_CheckArkoalaCallbackEvent",
                 NamedMethodSignature.make(IDLI32Type, [
                     { name: "buffer", type: IDLUint8ArrayType },
@@ -384,7 +352,7 @@ class OHOSVisitor {
                     ])
                 )
             }
-        })(this.interopFunctionsWriter)
+        })(this.arkUIFunctionsWriter)
     }
 
     private printPeer() {
@@ -717,8 +685,9 @@ class OHOSVisitor {
             .replaceAll('%NATIVE_MODULE_NAME%', this.libraryName)
             .replaceAll('%NATIVE_MODULE_CONTENT%', this.nativeWriter.getOutput().join('\n'))
             .replaceAll('%NATIVE_FUNCTIONS%', this.nativeFunctionsWriter.getOutput().join('\n'))
-            .replaceAll('%INTEROP_FUNCTIONS%', this.interopFunctionsWriter.getOutput().join('\n'))
-        fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Native${ext}`), nativeModuleText, 'utf-8')
+            .replaceAll('%ARKUI_FUNCTIONS%', this.arkUIFunctionsWriter.getOutput().join('\n'))
+            .replaceAll('%OUTPUT_FILE%', managedCodeModuleInfo.path.replace('./', ''))
+        fs.writeFileSync(path.join(managedOutDir, `${managedCodeModuleInfo.path}${ext}`), nativeModuleText, 'utf-8')
 
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Finalizable${ext}`),
             readLangTemplate(`OHOSFinalizable_template${ext}`, this.library.language)

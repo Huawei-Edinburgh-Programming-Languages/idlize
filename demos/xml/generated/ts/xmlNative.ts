@@ -90,21 +90,6 @@ export class XMLNativeModule {
         throw new Error("Not implemented")
     }
 
-    static _InvokeFinalizer(ptr: KPointer, finalizer: KPointer): void {
-        throw new Error("Not implemented")
-    }
-    static _CallCallback(callbackKind: int32, args: Uint8Array, argsSize: int32): void {
-        throw new Error("Not implemented")
-    }
-    static _CallCallbackSync(callbackKind: int32, args: Uint8Array, argsSize: int32): void {
-        throw new Error("Not implemented")
-    }
-    static _CallCallbackResourceHolder(holder: KPointer, resourceId: int32): void {
-        throw new Error("Not implemented")
-    }
-    static _CallCallbackResourceReleaser(releaser: KPointer, resourceId: int32): void {
-        throw new Error("Not implemented")
-    }
     static _CheckArkoalaCallbackEvent(buffer: Uint8Array, bufferLength: int32): int32 {
         throw new Error("Not implemented")
     }
@@ -112,9 +97,6 @@ export class XMLNativeModule {
         throw new Error("Not implemented")
     }
     static _ReleaseArkoalaResource(resourceId: int32): void {
-        throw new Error("Not implemented")
-    }
-    static _Utf8ToString(buffer: Uint8Array, position: int32, length: int32): string {
         throw new Error("Not implemented")
     }
 }
