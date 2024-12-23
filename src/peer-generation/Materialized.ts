@@ -133,7 +133,7 @@ export class MaterializedClass implements PeerClassBase {
         return this.className
     }
 
-    getInternalName(): string {
+    getImplementationName(): string {
         return this.isInterface ? getInternalClassName(this.className) : this.className
     }
 
@@ -145,7 +145,7 @@ export class MaterializedClass implements PeerClassBase {
 export function createDestroyPeerMethod(clazz: MaterializedClass): MaterializedMethod {
     return new MaterializedMethod(
             clazz.className,
-            clazz.getInternalName(),
+            clazz.getImplementationName(),
             [],
             IDLVoidType,
             false,

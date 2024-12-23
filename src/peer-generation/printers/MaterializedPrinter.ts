@@ -154,7 +154,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
         }
 
         const isInterface = clazz.isInterface
-        const className = isInterface ? clazz.getInternalName() : clazz.className
+        const className = clazz.getImplementationName()
 
         printer.writeClass(className, writer => {
             writer.writeFieldDeclaration("peer", FinalizableType, undefined, true)
@@ -365,7 +365,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
 
 function writeFromPtrMethod(clazz: MaterializedClass, writer: LanguageWriter, classTypeParameters?: string[]) {
     // write fromPtr(ptr: number):MaterializedClass method
-    const className = clazz.isInterface ? clazz.getInternalName() : clazz.className
+    const className = clazz.getImplementationName()
     const clazzRefType = idl.createReferenceType(className,
         clazz.generics?.map(idl.createTypeParameterReference))
     const fromPtrSig = new NamedMethodSignature(clazzRefType, [idl.IDLPointerType], ["ptr"])
