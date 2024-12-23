@@ -900,7 +900,7 @@ KInt impl_CheckArkoalaCallbackEvent(KByte* result, KInt size) {
     switch (frontEventKind) 
     {
         case Event_CallCallback:
-            serializer.append(callbackCallSubqueue.front().buffer, sizeof(CallbackBuffer::buffer));
+            memcpy(result + serializer.length(), callbackCallSubqueue.front().buffer, sizeof(CallbackBuffer::buffer));
             break;
         case Event_HoldManagedResource:
         case Event_ReleaseManagedResource:
@@ -968,7 +968,7 @@ struct Counter {
 static int bufferResourceId = 0;
 static std::unordered_map<int, Counter> refCounterMap;
 
-int allocate_buffer(int len, void** mem) {
+int allocateBuffer(int len, void** mem) {
     char* data = new char[len];
     (*mem) = data;
     int id = ++bufferResourceId;
@@ -995,14 +995,14 @@ void holdBuffer(int resourceId) {
 
 void impl_AllocateNativeBuffer(KInt len, KByte* ret, KByte* init) {
     void* mem;
-    int resourceId = allocate_buffer(len, &mem);
+    int resourceId = allocateBuffer(len, &mem);
     memcpy((KByte*)mem, init, len);
     SerializerBase ser { ret };
-    ser.writeInt32(resourceId);
-    ser.writePointer((void*)&holdBuffer);
-    ser.writePointer((void*)&releaseBuffer);
-    ser.writePointer(mem);
-    ser.writeInt64(len);
-
+    OH_Buffer buffer {
+        OH_CallbackResource { resourceId, &holdBuffer, &releaseBuffer },
+        mem,
+        len
+    };
+    ser.writeBuffer(buffer);
 }
 KOALA_INTEROP_V3(AllocateNativeBuffer, KInt, KByte*, KByte*);

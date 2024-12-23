@@ -82,6 +82,10 @@ private:
 public:
     SerializerBase(uint8_t* data, CallbackResourceHolder* resourceHolder = nullptr): data(data), position(0), resourceHolder(resourceHolder) {}
 
+    int length() {
+        return position;
+    }
+
     void writeInt8(OH_Int8 value) {
         *((OH_Int8*)(data + position)) = value;
         position += 1;
@@ -163,16 +167,13 @@ public:
         throw "Trying to pass materialized class back from native code -- is that really needed?";
     }
 
-    void append(uint8_t* buffer, int size) {
-        memcpy(data + position, buffer, size);
-        position += size;
-    }
-
     void writeBuffer(OH_Buffer buffer) {
         writeCallbackResource(buffer.resource);
         writePointer((void*)buffer.data);
         writeInt64(buffer.length);
     }
+
+
 };
 
 #endif // _SERIALIZER_BASE_H
