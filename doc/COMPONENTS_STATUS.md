@@ -329,8 +329,8 @@
 |`clipContent`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBBLGP |
 |`edgeEffect`| Function | Samarin Sergey | done | |
 |`fadingEdge`| Function | Samarin Sergey | done | |
-|*Component3D*| *Component* |Kovalev Sergey | in progress | |
-|`setComponent3DOptions`| Function |Kovalev Sergey | in progress| |
+|*Component3D*| *Component* |Kovalev Sergey | blocked | |
+|`setComponent3DOptions`| Function |Kovalev Sergey | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD |
 |`environment`| Function |Kovalev Sergey | done |  |
 |`shader`| Function |Kovalev Sergey | done |  |
 |`shaderImageTexture`| Function |Kovalev Sergey | done |  |
@@ -1436,7 +1436,7 @@
 |*RemoteWindow*| *Component* | Spirin Andrey, Evstigneev Roman | in progress | |
 |`setRemoteWindowOptions`| Function | Spirin Andrey, Evstigneev Roman | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IBBYJW |
 |*WaterFlow*| *Component* | Kovalev Sergey | in progress |  |
-|`setWaterFlowOptions`| Function | Kovalev Sergey |blocked IDL| Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`setWaterFlowOptions`| Function | Kovalev Sergey | in progress |  |
 |`columnsTemplate`| Function | Kovalev Sergey | done |  |
 |`itemConstraintSize`| Function | Kovalev Sergey | done |  |
 |`rowsTemplate`| Function | Kovalev Sergey | done |  |
