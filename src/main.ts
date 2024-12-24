@@ -56,6 +56,7 @@ import { IdlSkoalaLibrary, IldSkoalaFile } from "./skoala-generation/idl/idlSkoa
 import { generateIdlSkoala } from "./skoala-generation/SkoalaGeneration"
 import { IdlWrapperProcessor } from "./skoala-generation/idl/idlSkoalaLibrary"
 import { fillSyntheticDeclarations } from "./peer-generation/idl/SyntheticDeclarationsFiller"
+import { generatePluginApi } from "./plugin-api/generator"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -67,7 +68,6 @@ const options = program
     .option('--input-file <name>', 'Name of file to convert, all files in input-dir if none')
     .option('--idl2dts', 'Convert IDL to .d.ts definitions')
     .option('--idl2peer', 'Convert IDL to peer drafts')
-    .option('--idl2pluginApi', 'Convert IDL to .cc file, containing plugin api callable from ts and .ts file containing corresponding ts functions')
     .option('--dts2skoala', 'Convert DTS to skoala definitions')
     .option('--linter', 'Run linter')
     .option('--linter-suppress-errors <suppress>', 'Error codes to suppress, comma separated, no space')
@@ -430,6 +430,9 @@ function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language)
     }
     if (options.generatorTarget == "ohos") {
         generateOhos(outDir, idlLibrary)
+    }
+    if (options.generatorTarget == "plugin-api") {
+        generatePluginApi(outDir, idlLibrary)
     }
     if (options.plugin) {
         loadPlugin(options.plugin)
