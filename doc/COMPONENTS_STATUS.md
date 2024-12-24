@@ -330,7 +330,7 @@
 |`edgeEffect`| Function | Samarin Sergey | done | |
 |`fadingEdge`| Function | Samarin Sergey | done | |
 |*Component3D*| *Component* |Kovalev Sergey | blocked | |
-|`setComponent3DOptions`| Function |Kovalev Sergey | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD |
+|`setComponent3DOptions`| Function |Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD |
 |`environment`| Function |Kovalev Sergey | done |  |
 |`shader`| Function |Kovalev Sergey | done |  |
 |`shaderImageTexture`| Function |Kovalev Sergey | done |  |
