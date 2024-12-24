@@ -290,8 +290,8 @@
 |`overlay`| Function | Lobah Mikhail | in progress | CustomBuilder |
 |`blendMode`| Function | Lobah Mikhail | done | |
 |`advancedBlendMode`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC80Y |
-|`bindPopup`| Function | Erokhin Ilya | testskipped | CustomBuilder |
-|`bindMenu`| Function | Erokhin Ilya | in progress | CustomBuilder |
+|`bindPopup`| Function | Erokhin Ilya | testskipped | |
+|`bindMenu`| Function | Erokhin Ilya | blocked | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG  |
 |`bindContextMenu`| Function | Erokhin Ilya | in progress | CustomBuilder |
 |`bindContentCover`| Function | Erokhin Ilya | in progress | CustomBuilder |
 |`bindSheet`| Function | Erokhin Ilya | in progress | CustomBuilder |
@@ -1198,7 +1198,7 @@
 |`enableKeyboardOnFocus`| Function | Spirin Andrey | done |  |
 |`passwordIcon`| Function | Spirin Andrey | done |  |
 |`showError`| Function | Spirin Andrey | done |  |
-|`showUnit`| Function | Erokhin Ilya | devdone | |
+|`showUnit`| Function | Erokhin Ilya | done | |
 |`showUnderline`| Function | Spirin Andrey | done |  |
 |`underlineColor`| Function | Spirin Andrey | done |  |
 |`selectionMenuHidden`| Function | Spirin Andrey | done |  |
