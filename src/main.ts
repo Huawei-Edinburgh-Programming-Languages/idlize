@@ -327,24 +327,15 @@ if (options.idl2peer) {
     PeerGeneratorConfig.needInterfaces = options.needInterfaces
     const generatedPeersDir = options.outputDir ?? "./generated/ts-peers/"
     const lang = Language.fromString(options.language ?? "ts")
-    const idlLibrary = new PeerLibrary(lang, toSet(options.generateInterface))
+    const idlLibrary = new PeerLibrary(lang)
 
     scanDirectory(false, options.inputDir).forEach(
         (file: PeerFile) => idlLibrary.files.push(file)
     )
 
     PrimitiveType.Prefix = "OH_"
-    idlLibrary.files.forEach(file => {
-        const visitor = new IdlPeerGeneratorVisitor({
-            sourceFile: file.originalFilename,
-            peerLibrary: idlLibrary,
-            peerFile: file,
-        })
-        visitor.visitWholeFile()
-    })
     const peerProcessor = new IdlPeerProcessor(idlLibrary)
     peerProcessor.process()
-    idlLibrary.analyze()
 
     generateTarget(idlLibrary, generatedPeersDir, lang)
 
@@ -362,21 +353,21 @@ if (options.dts2peer) {
     const idlLibrary = new PeerLibrary(lang)
     // collect predefined files
     scanDirectory(true, PREDEFINED_PATH, "sys").forEach(file => {
-        IdlPredefinedGeneratorVisitor.create({
+        new IDLPredefinesVisitor({
             sourceFile: file.originalFilename,
             peerLibrary: idlLibrary,
             peerFile: file,
         }).visitWholeFile()
     })
     scanDirectory(true, PREDEFINED_PATH, "src").forEach(file => {
-        IdlPredefinedGeneratorVisitor.create({
+        new IDLPredefinesVisitor({
             sourceFile: file.originalFilename,
             peerLibrary: idlLibrary,
             peerFile: file,
         }).visitWholeFile()
     })
     if (["arkoala", "libace", "all", "tracker"].includes(options.generatorTarget)) {
-        scanPredefinedDirectory(PREDEFINED_PATH, "arkoala").forEach(file => {
+        scanDirectory(true, PREDEFINED_PATH, "arkoala").forEach(file => {
             new IDLPredefinesVisitor({
                 sourceFile: file.originalFilename,
                 peerLibrary: idlLibrary,
@@ -434,29 +425,6 @@ if (!didJob) {
     program.help()
 }
 
-function correctOverloadedProperties(entry: IDLEntry, idlLibrary: PeerLibrary) {
-    if (idlLibrary.language !== Language.ARKTS) {
-        return;
-    }
-    if (!isInterface(entry) && !isClass(entry)) {
-        return;
-    }
-    if (entry.inheritance.length !== 1) {
-        return;
-    }
-    const firstParent = idlLibrary.toDeclaration(entry.inheritance[0])
-    if (!isInterface(firstParent) && !isClass(firstParent)) {
-        return;
-    }
-    entry.properties.forEach(prop => {
-        const overloadedProp =
-            firstParent.properties.find(it => it.name === prop.name)
-        if (overloadedProp !== undefined) {
-            prop.type = overloadedProp.type
-        }
-    })
-}
-
 function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language) {
     if (options.generatorTarget == "arkoala" || options.generatorTarget == "all") {
         generateArkoalaFromIdl({
@@ -508,6 +476,6 @@ function scanDirectory(isPredefined: boolean, dir: string, ...subdirs: string[])
             const idlFile = path.resolve(path.join(dir, it))
             const content = fs.readFileSync(path.resolve(path.join(dir, it))).toString()
             const nodes = webidl2.parse(content).filter(it => !!it.type).map(it => toIDLNode(idlFile, it))
-            return new PeerFile(idlFile, nodes, new Set(), isPredefined)
+            return new PeerFile(idlFile, nodes, isPredefined)
         })
 }
