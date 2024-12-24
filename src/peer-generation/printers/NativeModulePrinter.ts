@@ -293,6 +293,7 @@ function collectNativeModuleImports(module: NativeModuleType, file: SourceFile) 
         tsFile.imports.addFeatures(["int32", "float32"], "@koalaui/common")
         if (file.language === Language.ARKTS) {
             tsFile.imports.addFeature('NativeBuffer', '@koalaui/interop')
+            tsFile.imports.addFeature('NativeModuleLoader', './NativeModuleLoader')
             if (module === NativeModuleType.Generated)
                 tsFile.imports.addFeature('Length', '../ArkUnitsInterfaces')
         }
@@ -335,7 +336,7 @@ export function printPredefinedNativeModule(library: PeerLibrary, module: Native
     collectNativeModuleImports(module, file)
     file.content.writeClass(module.name, writer => {
         writer.concat(visitor.nativeModule)
-        const maybeTemplate = maybeReadLangTemplate(`${module}_functions`, language)
+        const maybeTemplate = maybeReadLangTemplate(`${module.name}_functions`, language)
         if (maybeTemplate)
             writer.writeLines(maybeTemplate)
     })
