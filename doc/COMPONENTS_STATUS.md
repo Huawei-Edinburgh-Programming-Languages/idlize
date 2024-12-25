@@ -95,7 +95,7 @@
 |`onReady`| Function |Vadim Voronov | done |  |
 |`enableAnalyzer`| Function |Vadim Voronov | done |  |
 |*Checkbox*| *Component* | Andrey Khudenkikh | blocked |  |
-|`setCheckboxOptions`| Function | Andrey Khudenkikh | done |  |
+|`setCheckboxOptions`| Function | Samarin Sergey | in progress | CustomBuilder  |
 |`select`| Function | Andrey Khudenkikh | done |  |
 |`selectedColor`| Function | Andrey Khudenkikh | done |  |
 |`shape`| Function | Andrey Khudenkikh | done |  |
@@ -726,7 +726,7 @@
 |`radiusHeight`|Function|Dudkin Sergey| done |  |
 |`radius`|Function|Dudkin Sergey| blocked AceEngine|https://gitee.com/openharmony/interface_sdk-js/issues/IAXA7J|
 |*Refresh*| *Component* |Politov Mikhail | blocked |  |
-|`setRefreshOptions`| Function |Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`setRefreshOptions`| Function | Samarin Sergey | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`onStateChange`| Function |Politov Mikhail | done |  |
 |`onRefreshing`| Function |Politov Mikhail | done |  |
 |`refreshOffset`| Function |Politov Mikhail | done |  |
@@ -1492,8 +1492,8 @@
 |*EventEmulator*| *Class* | Dmitry A Smirnov | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 |
 |`emitClickEvent`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 |
 |`emitTextInputEvent`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 |
-|*ActionSheet*| *Class* | Samarin Sergey | in progress | |
-|`show`| Function | Samarin Sergey | in progress | CustomBuilder |
+|*ActionSheet*| *Class* | Ekaterina Stepanova | testskipped | |
+|`show`| Function | Ekaterina Stepanova | testskipped | |
 |*AlertDialog*| *Class* | Ekaterina Stepanova | in progress | |
 |`show`| Function | Ekaterina Stepanova | in progress | |
 |*CalendarController*| *Class* |Maksimov Nikita | done |  |
