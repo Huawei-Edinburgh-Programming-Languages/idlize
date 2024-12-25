@@ -138,7 +138,7 @@
 |`layoutWeight`| Function | Roman Sedaikin | done | |
 |`chainWeight`| Function | Politov Mikhail | in progress | |
 |`padding`| Function | Skroba Gleb | done | |
-|`safeAreaPadding`| Function |Dmitry A Smirnov | devdone | |
+|`safeAreaPadding`| Function |Dmitry A Smirnov | testskipped | |
 |`margin`| Function | Skroba Gleb | done | |
 |`backgroundColor`|Function| Skroba Gleb| done |  |
 |`pixelRound`| Function | Skroba Gleb | done |  |
