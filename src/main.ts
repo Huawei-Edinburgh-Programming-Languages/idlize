@@ -18,8 +18,6 @@ import * as fs from "fs"
 import * as path from "path"
 import { fromIDL } from "./from-idl/common"
 import { idlToDtsString } from "./from-idl/DtsPrinter"
-import { idl2pluginApi } from "./plugin-api/pluginApiPrinter"
-import { idl2nativeModule } from "./plugin-api/nativeModulePrinter"
 import { generate } from "./idlize"
 import {
     forEachChild,
@@ -46,7 +44,6 @@ import {
     IDLPredefinesVisitor,
 } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
 import { generateOhos } from "./peer-generation/OhosGenerator"
-import { generatePluginApi } from "./plugin-api/generator"
 import * as webidl2 from "webidl2"
 import { toIDLNode } from "./from-idl/deserialize"
 import { generateArkoalaFromIdl, generateLibaceFromIdl } from "./peer-generation/arkoala"
@@ -303,26 +300,6 @@ if (options.idl2dts) {
     didJob = true
 }
 
-if (options.idl2pluginApi) {
-    fromIDL(
-        options.inputDir,
-        options.inputFile,
-        options.outputDir ?? "./generated/pluginApi/",
-        ".es2panda_lib.cc",
-        options.verbose ?? false,
-        idl2pluginApi,
-    )
-    fromIDL(
-        options.inputDir,
-        options.inputFile,
-        options.outputDir ?? "./generated/pluginApi/",
-        ".nativeModule.ts",
-        options.verbose ?? false,
-        idl2nativeModule,
-    )
-    didJob = true
-}
-
 if (options.idl2peer) {
     PeerGeneratorConfig.needInterfaces = options.needInterfaces
     const generatedPeersDir = options.outputDir ?? "./generated/ts-peers/"
@@ -453,9 +430,6 @@ function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language)
     }
     if (options.generatorTarget == "ohos") {
         generateOhos(outDir, idlLibrary)
-    }
-    if (options.generatorTarget == "plugin-api") {
-        generatePluginApi(outDir, idlLibrary)
     }
     if (options.plugin) {
         loadPlugin(options.plugin)

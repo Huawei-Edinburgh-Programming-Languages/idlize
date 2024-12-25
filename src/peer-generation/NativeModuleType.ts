@@ -4,6 +4,5 @@ export class NativeModuleType {
     static Interop = new NativeModuleType("InteropNativeModule")
     static ArkUI = new NativeModuleType("ArkUINativeModule")
     static Generated = new NativeModuleType("ArkUIGeneratedNativeModule")
-    static PluginApi = new NativeModuleType("PluginApiNativeModule")
     static Test = new NativeModuleType("TestNativeModule")
 }

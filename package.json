@@ -63,8 +63,6 @@
     "run:all": "npm run compile && node . --dts2peer --input-dir ./interface_sdk-js/api/@internal/component/ets/,./interface_sdk-js/api/arkui,./interface_sdk-js/api/global --verify-idl --common-to-attributes --docs=opt",
     "run:xml": "npm run compile && node . --generator-target ohos --dts2peer --input-dir ./interface_sdk-js/api --input-file @ohos.xml.d.ts --output-dir ./out/xml --verify-idl --common-to-attributes --docs=none",
     "run:xml:arkts": "npm run compile && node . --generator-target ohos --dts2peer --input-dir ./interface_sdk-js/api --input-file @ohos.xml.d.ts --output-dir ./out/xml --verify-idl --common-to-attributes --docs=none --language=arkts",
-    "run:pluginApi": "npm run compile && node . --generator-target plugin-api --idl2peer --input-dir ./idl/ --output-dir ./generated/ts-peers/ --verify-idl --common-to-attributes --docs=none --language=ts --need-interfaces",
-    "idl2pluginApi": "npm run compile && rimraf generated && node . --idl2pluginApi --input-dir ./idl --input-file 'test_lib.idl'",
     "run2dts": "npm run compile && node . --idl2dts --input-dir ./idl",
     "idl2peer": "npm run compile && node . --idl2peer --input-dir ./idl/ --output-dir ./generated/ts-peers/ --need-interfaces",
     "dts2skoala": "npm run compile && node . --dts2skoala --input-dir ./tests/mini_skoala/build/ ",
