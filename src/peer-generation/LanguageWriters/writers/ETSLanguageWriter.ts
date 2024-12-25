@@ -29,7 +29,18 @@ import {
 } from "../LanguageWriter"
 import { TSCastExpression, TSLambdaExpression, TSLanguageWriter } from "./TsLanguageWriter"
 import { getExtAttribute, IDLEnum, IDLI32Type, IDLThisType, IDLType, IDLVoidType } from '../../../idl'
-import {AggregateConvertor, ArgConvertor, ArrayConvertor, BaseArgConvertor, CustomTypeConvertor, EnumConvertor, InterfaceConvertor, makeInterfaceTypeCheckerCall, RuntimeType} from "../../ArgConvertors"
+import {
+    AggregateConvertor,
+    ArgConvertor,
+    ArrayConvertor,
+    BaseArgConvertor,
+    CustomTypeConvertor,
+    EnumConvertor,
+    InterfaceConvertor,
+    makeInterfaceTypeCheckerCall,
+    RuntimeType,
+    UnionConvertor
+} from "../../ArgConvertors"
 import { Language } from "../../../Language"
 import { ReferenceResolver } from "../../ReferenceResolver"
 import { EtsIDLNodeToStringConvertor } from "../convertors/ETSConvertors"
@@ -287,6 +298,14 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     makeUnionVariantCondition(convertor: ArgConvertor, valueName: string, valueType: string, type: string, index?: number): LanguageExpression {
         if (convertor instanceof EnumConvertor) {
             return this.instanceOf(convertor, valueName)
+        }
+        // TODO: in ArkTS SerializerBase.runtimeType returns RuntimeType.OBJECT for enum type and not RuntimeType.NUMBER as in TS
+        if (convertor instanceof UnionConvertor && index !== undefined) {
+            const idlType = (convertor.nativeType() as idl.IDLUnionType).types[index]
+            if (idlType !== undefined && idl.isReferenceType(idlType)) {
+                const resolved = this.resolver.resolveTypeReference(idl.createReferenceType(idlType.name))
+                type = resolved != undefined && idl.isEnum(resolved) ? RuntimeType[RuntimeType.OBJECT] : type
+            }
         }
         return super.makeUnionVariantCondition(convertor, valueName, valueType, type, index)
     }
