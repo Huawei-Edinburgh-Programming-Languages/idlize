@@ -1482,13 +1482,13 @@
 |`getParent`| Function | Tuzhilkin Ivan | in progress | |
 |`getChildrenCount`| Function | Tuzhilkin Ivan | in progress | |
 |`dispose`| Function | Tuzhilkin Ivan | in progress | |
-|*PixelMap*| *Class* | Andrey Khudenkikh | in progress | |
-|`readPixelsToBufferSync`| Function | Andrey Khudenkikh | in progress | |
-|`writeBufferToPixels`| Function | Andrey Khudenkikh | in progress | |
-|`getIsEditable`| Function | Andrey Khudenkikh | in progress | |
-|`setIsEditable`| Function | Andrey Khudenkikh | in progress | |
-|`getIsStrideAlignment`| Function | Andrey Khudenkikh | in progress | |
-|`setIsStrideAlignment`| Function | Andrey Khudenkikh | in progress | |
+|*PixelMap*| *Class* | Andrey Khudenkikh | blocked  | |
+|`readPixelsToBufferSync`| Function | Andrey Khudenkikh | blocked AceEngine | |
+|`writeBufferToPixels`| Function | Andrey Khudenkikh | blocked AceEngine | |
+|`getIsEditable`| Function | Andrey Khudenkikh | blocked AceEngine | |
+|`setIsEditable`| Function | Andrey Khudenkikh | blocked AceEngine | |
+|`getIsStrideAlignment`| Function | Andrey Khudenkikh | blocked AceEngine | |
+|`setIsStrideAlignment`| Function | Andrey Khudenkikh | blocked AceEngine | |
 |*EventEmulator*| *Class* | Dmitry A Smirnov | in progress |blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0
 |`emitClickEvent`| Function | Dmitry A Smirnov | in progress |blocked IDL |
 |`emitTextInputEvent`| Function | Dmitry A Smirnov | in progress | blocked IDL|
