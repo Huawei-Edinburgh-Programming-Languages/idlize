@@ -1467,8 +1467,8 @@
 |*UnifiedData*| *Class* | Tuzhilkin Ivan | in progress | |
 |`hasType`| Function | Tuzhilkin Ivan | in progress | |
 |`getTypes`| Function | Tuzhilkin Ivan | in progress | |
-|*DrawingCanvas*| *Class* | Dudkin Sergey | in progress | |
-|`drawRect`| Function | Dudkin Sergey | in progress | |
+|*DrawingCanvas*| *Class* | Dudkin Sergey | blocked IDL | |
+|`drawRect`| Function | Dudkin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDOCY |
 |*FrameNode*| *Class* | Tuzhilkin Ivan | in progress| |
 |`isModifiable`| Function | Tuzhilkin Ivan | in progress | |
 |`appendChild`| Function | Tuzhilkin Ivan | in progress | |
