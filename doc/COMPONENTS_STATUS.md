@@ -1786,7 +1786,7 @@
 |`toStyledString`| Function | Dudkin Sergey| done|  |
 |*RichEditorStyledStringController*| *Class* |Dudkin Sergey| blocked IDL| |
 |`setStyledString`| Function |Dudkin Sergey| done| |
-|`getStyledString`| Function | Maksimov Nikita| in progress |  |
+|`getStyledString`| Function | Maksimov Nikita | testskipped |  |
 |`getSelection`| Function |Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`onContentChanged`| Function | Dudkin Sergey| blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB944G |
 |*Scroller*| *Class* | Erokhin Ilya | blocked |  |
@@ -2039,7 +2039,7 @@
 |`onSyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped | |
 |`offAsyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped | |
 |`offSyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped | |
-|*StyledString*| *Class* | Pavelyev Ivan | in progress | |
+|*StyledString*| *Class* | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N & https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`getString`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getStyles`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`equals`| Function | Pavelyev Ivan | done | |
@@ -2053,14 +2053,14 @@
 |`replaceString`| Function | Maksimov Nikita | testskipped | |
 |`insertString`| Function | Maksimov Nikita | testskipped | |
 |`removeString`| Function | Maksimov Nikita | testskipped | |
-|`replaceStyle`| Function | Maksimov Nikita | testskipped | |
-|`setStyle`| Function | Maksimov Nikita | in progress | |
-|`removeStyle`| Function | Maksimov Nikita | in progress | |
-|`removeStyles`| Function | Maksimov Nikita | in progress | |
-|`clearStyles`| Function | Maksimov Nikita | in progress | |
-|`replaceStyledString`| Function | Maksimov Nikita | in progress | |
-|`insertStyledString`| Function | Maksimov Nikita | in progress | |
-|`appendStyledString`| Function | Maksimov Nikita | in progress | |
+|`replaceStyle`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N & https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
+|`setStyle`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N & https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
+|`removeStyle`| Function | Maksimov Nikita | testskipped | |
+|`removeStyles`| Function | Maksimov Nikita | testskipped | |
+|`clearStyles`| Function | Maksimov Nikita | testskipped | |
+|`replaceStyledString`| Function | Maksimov Nikita | testskipped | |
+|`insertStyledString`| Function | Maksimov Nikita | testskipped | |
+|`appendStyledString`| Function | Maksimov Nikita | testskipped | |
 |*CustomSpan*| *Class* | Politov Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onMeasure`| Function | Politov Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onDraw`| Function | Politov Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
