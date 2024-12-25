@@ -302,7 +302,7 @@ if (options.idl2dts) {
 
 if (options.idl2peer) {
     PeerGeneratorConfig.needInterfaces = options.needInterfaces
-    const generatedPeersDir = options.outputDir ?? "./generated/ts-peers/"
+    const generatedPeersDir = options.outputDir ?? "./out/peers/generated"
     const lang = Language.fromString(options.language ?? "ts")
     const idlLibrary = new PeerLibrary(lang)
 

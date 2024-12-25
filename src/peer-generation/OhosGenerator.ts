@@ -67,9 +67,7 @@ class OHOSVisitor {
             throw new Error("No files in library")
 
         this.libraryName = this.library.files.filter(f => !f.isPredefined)[0].packageName().toUpperCase()
-        if (this.libraryName.startsWith("\"") && this.libraryName.endsWith("\"")) {
-            this.libraryName = this.libraryName.slice(1, this.libraryName.length - 1)
-        }
+
         this.library.name = this.libraryName
 
         this.peerWriter = createLanguageWriter(library.language, library)
