@@ -1489,9 +1489,9 @@
 |`setIsEditable`| Function | Andrey Khudenkikh | in progress | |
 |`getIsStrideAlignment`| Function | Andrey Khudenkikh | in progress | |
 |`setIsStrideAlignment`| Function | Andrey Khudenkikh | in progress | |
-|*EventEmulator*| *Class* | Dmitry A Smirnov | in progress | |
-|`emitClickEvent`| Function | Dmitry A Smirnov | in progress | |
-|`emitTextInputEvent`| Function | Dmitry A Smirnov | in progress | |
+|*EventEmulator*| *Class* | Dmitry A Smirnov | in progress |blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0
+|`emitClickEvent`| Function | Dmitry A Smirnov | in progress |blocked IDL |
+|`emitTextInputEvent`| Function | Dmitry A Smirnov | in progress | blocked IDL|
 |*ActionSheet*| *Class* | Erokhin Ilya | in progress | |
 |`show`| Function | Erokhin Ilya | in progress | CustomBuilder |
 |*AlertDialog*| *Class* | Ekaterina Stepanova | in progress | |
