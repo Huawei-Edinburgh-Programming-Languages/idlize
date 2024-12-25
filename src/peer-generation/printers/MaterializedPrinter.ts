@@ -240,7 +240,11 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
             writer.writeConstructorImplementation(className, sigWithPointer, writer => {
 
                 if (superClassName) {
-                    writer.writeSuperCall([]);
+                    let params:string[] = []
+                    // workaround for MutableStyledString which does not have a constructor
+                    // the same as in the parent StyledString class
+                    if (superClassName === "StyledString") params = [`""`]
+                    writer.writeSuperCall(params);
                 }
 
                 const allOptional = ctorSig.args.every(it => isOptionalType(it))
