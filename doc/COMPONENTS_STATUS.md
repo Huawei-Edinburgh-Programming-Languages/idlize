@@ -263,8 +263,8 @@
 |`renderFit`| Function | Dmitry A Smirnov|done | |
 |`gestureModifier`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`backgroundBrightness`| Function | Skroba Gleb | done | |
-|`onGestureJudgeBegin`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onGestureRecognizerJudgeBegin`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onGestureJudgeBegin`| Function | Skroba Gleb | devdone | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onGestureRecognizerJudgeBegin`| Function | Skroba Gleb | devdone | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`shouldBuiltInRecognizerParallelWith`| Function | Skroba Gleb | devdone | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`monopolizeEvents`| Function | Erokhin Ilya | testskipped | |
 |`onTouchIntercept`| Function | Erokhin Ilya | testskipped | |
@@ -320,7 +320,7 @@
 |`friction`| Function | Samarin Sergey | done |  |
 |`onScroll`| Function | Samarin Sergey | deprecated |  |
 |`onWillScroll`| Function | Skroba Gleb | devdone | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onDidScroll`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IBB6U0 |
+|`onDidScroll`| Function | Samarin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB6U0 |
 |`onReachStart`| Function | Samarin Sergey | testskipped |  |
 |`onReachEnd`| Function | Samarin Sergey | testskipped |  |
 |`onScrollStart`| Function | Samarin Sergey | testskipped |  |
