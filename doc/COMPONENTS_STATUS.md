@@ -292,8 +292,8 @@
 |`advancedBlendMode`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC80Y |
 |`bindPopup`| Function | Erokhin Ilya | testskipped | |
 |`bindMenu`| Function | Erokhin Ilya | blocked | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG  |
-|`bindContextMenu`| Function | Erokhin Ilya | in progress | CustomBuilder |
-|`bindContentCover`| Function | Erokhin Ilya | in progress | CustomBuilder |
+|`bindContextMenu`| Function | Erokhin Ilya | blocked | Ark_ContextMenuAnimationOptions https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
+|`bindContentCover`| Function | Erokhin Ilya | testskipped | CustomBuilder |
 |`bindSheet`| Function | Erokhin Ilya | in progress | CustomBuilder |
 |`onVisibleAreaChange`| Function | Erokhin Ilya | done | |
 |`keyboardShortcut`| Function | Erokhin Ilya | testskipped | |
@@ -1492,8 +1492,8 @@
 |*EventEmulator*| *Class* | Dmitry A Smirnov | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 |
 |`emitClickEvent`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 |
 |`emitTextInputEvent`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 |
-|*ActionSheet*| *Class* | Erokhin Ilya | in progress | |
-|`show`| Function | Erokhin Ilya | in progress | CustomBuilder |
+|*ActionSheet*| *Class* | Samarin Sergey | in progress | |
+|`show`| Function | Samarin Sergey | in progress | CustomBuilder |
 |*AlertDialog*| *Class* | Ekaterina Stepanova | in progress | |
 |`show`| Function | Ekaterina Stepanova | in progress | |
 |*CalendarController*| *Class* |Maksimov Nikita | done |  |
