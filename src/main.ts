@@ -67,7 +67,6 @@ const options = program
     .option('--input-file <name>', 'Name of file to convert, all files in input-dir if none')
     .option('--idl2dts', 'Convert IDL to .d.ts definitions')
     .option('--idl2peer', 'Convert IDL to peer drafts')
-    .option('--idl2pluginApi', 'Convert IDL to .cc file, containing plugin api callable from ts and .ts file containing corresponding ts functions')
     .option('--dts2skoala', 'Convert DTS to skoala definitions')
     .option('--linter', 'Run linter')
     .option('--linter-suppress-errors <suppress>', 'Error codes to suppress, comma separated, no space')
@@ -302,7 +301,7 @@ if (options.idl2dts) {
 
 if (options.idl2peer) {
     PeerGeneratorConfig.needInterfaces = options.needInterfaces
-    const generatedPeersDir = options.outputDir ?? "./generated/ts-peers/"
+    const generatedPeersDir = options.outputDir ?? "./out/peers/generated"
     const lang = Language.fromString(options.language ?? "ts")
     const idlLibrary = new PeerLibrary(lang)
 
