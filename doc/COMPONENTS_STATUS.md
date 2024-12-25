@@ -1836,8 +1836,8 @@
 |`setTo`| Function | Dudkin Sergey | testskipped |  |
 |*TextController*| *Class* | Samarin Sergey | in progress | |
 |`closeSelectionMenu`| Function | Samarin Sergey | done | |
-|`setStyledString`| Function | Samarin Sergey | in progress | |
-|`getLayoutManager`| Function | Samarin Sergey | in progress | |
+|`setStyledString`| Function | Samarin Sergey | testskipped | |
+|`getLayoutManager`| Function | Samarin Sergey | testskipped | |
 |*TextAreaController*| *Class* | Tuzhilkin Ivan | done |  |
 |`caretPosition`| Function | Tuzhilkin Ivan | done |  |
 |`setTextSelection`| Function | Tuzhilkin Ivan | done |  |
