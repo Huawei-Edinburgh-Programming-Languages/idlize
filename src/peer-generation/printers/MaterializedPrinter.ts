@@ -214,29 +214,6 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                 writer.writeStatement(writer.makeReturn(writer.makeString("this.peer")))
             })
 
-            if (isInterface) {
-                writeFromPtrMethod(clazz, writer, classTypeParameters)
-            }
-
-            // write construct(ptr: number) method
-            const clazzRefType = idl.createReferenceType(implementationClassName,
-                clazz.generics?.map(idl.createTypeParameterReference))
-            const constructSig = new NamedMethodSignature(clazzRefType, [idl.IDLPointerType], ["ptr"])
-            writer.writeMethodImplementation(new Method("construct", constructSig, [MethodModifier.STATIC], classTypeParameters), writer => {
-                const objVar = `obj${clazz.className}`
-                writer.writeStatement(writer.makeAssign(objVar,
-                    clazzRefType,
-                    //TODO: Need to pass IDLType instead of string to makeNewObject
-                    writer.makeNewObject(writer.getNodeName(clazzRefType)),
-                    true)
-                )
-                writer.writeStatement(
-                    writer.makeAssign(`${objVar}.peer`, FinalizableType,
-                        writer.makeString(`new Finalizable(ptr, ${implementationClassName}.getFinalizer())`), false),
-                )
-                writer.writeStatement(writer.makeReturn(writer.makeString(objVar)))
-            })
-
             const pointerType = IDLPointerType
             // makePrivate(clazz.ctor.method)
             this.library.setCurrentContext(`${clazz.className}.constructor`)
@@ -339,6 +316,11 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                 writePeerMethod(writer, privateMethod, true, this.printerContext, this.dumpSerialized, "_serialize", "this.peer!.ptr", returnType)
                 this.library.setCurrentContext(undefined)
             })
+
+            if (isInterface) {
+                writeFromPtrMethod(clazz, writer, classTypeParameters)
+            }
+
         }, superClassName, interfaces.length === 0 ? undefined : interfaces, classTypeParameters)
 
         if (!isInterface) {
