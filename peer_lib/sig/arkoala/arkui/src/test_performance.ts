@@ -68,17 +68,6 @@ export function startPerformanceTest() {
             bottom: testLength_10_percent, left: testLength_10_percent
         })
     })
-    RunPerformanceTest("idlize_backgroundBlurStyleAttribute", TEST_COUNT, CALL_COUNT, () => {
-        peer.backgroundBlurStyle0Attribute(0, {
-            colorMode: 0,
-            adaptiveColor: 0,
-            scale: 1,
-            blurOptions: {
-                grayscale: [1, 1]
-            }
-        })
-    })
-
     RunPerformanceTest("idlize_borderAttribute", TEST_COUNT, CALL_COUNT, () => {
         peer.borderAttribute({
             width: 5,

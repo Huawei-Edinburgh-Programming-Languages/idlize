@@ -595,16 +595,6 @@ function checkCanvasRenderingContext2D() {
     stopNativeTest(CALL_GROUP_LOG)
 }
 
-function checkPerf2(count: number) {
-    let peer = ArkButtonPeer.create()
-    let start = performance.now()
-    for (let i = 0; i < count; i++) {
-        peer.backdropBlur0Attribute(i, i % 2 == 0 ? undefined : { grayscale: [1, 2] })
-    }
-    let passed = performance.now() - start
-    console.log(`backdropBlur: ${Math.round(passed)}ms for ${count} iteration, ${Math.round(passed / count * 1000000)}ms per 1M iterations`)
-}
-
 function checkPerf3(count: number) {
     let peer = ArkButtonPeer.create()
     let start = performance.now()
@@ -836,7 +826,7 @@ function main() {
     checkSerdePrimitive()
     checkSerdeCustomObject()
 
-    checkPerf2(5 * 1000 * 1000)
+    //checkPerf2(5 * 1000 * 1000)
     checkPerf3(5 * 1000 * 1000)
 
     startPerformanceTest()
