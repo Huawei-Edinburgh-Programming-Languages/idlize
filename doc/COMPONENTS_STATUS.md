@@ -1469,19 +1469,19 @@
 |`getTypes`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY , https://gitee.com/nikolay-igotti/idlize/issues/IBDHH7 |
 |*DrawingCanvas*| *Class* | Dudkin Sergey | blocked IDL | |
 |`drawRect`| Function | Dudkin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDOCY |
-|*FrameNode*| *Class* | Tuzhilkin Ivan | in progress| |
-|`isModifiable`| Function | Tuzhilkin Ivan | in progress | |
-|`appendChild`| Function | Tuzhilkin Ivan | in progress | |
-|`insertChildAfter`| Function | Tuzhilkin Ivan | in progress | |
-|`removeChild`| Function | Tuzhilkin Ivan | in progress | |
-|`clearChildren`| Function | Tuzhilkin Ivan | in progress | |
-|`getChild`| Function | Tuzhilkin Ivan | in progress | |
-|`getFirstChild`| Function | Tuzhilkin Ivan | in progress | |
-|`getNextSibling`| Function | Tuzhilkin Ivan | in progress | |
-|`getPreviousSibling`| Function | Tuzhilkin Ivan | in progress | |
-|`getParent`| Function | Tuzhilkin Ivan | in progress | |
-|`getChildrenCount`| Function | Tuzhilkin Ivan | in progress | |
-|`dispose`| Function | Tuzhilkin Ivan | in progress | |
+|*FrameNode*| *Class* | Tuzhilkin Ivan | testskipped| |
+|`isModifiable`| Function | Tuzhilkin Ivan | testskipped | |
+|`appendChild`| Function | Tuzhilkin Ivan | testskipped | |
+|`insertChildAfter`| Function | Tuzhilkin Ivan | testskipped | |
+|`removeChild`| Function | Tuzhilkin Ivan | testskipped | |
+|`clearChildren`| Function | Tuzhilkin Ivan | testskipped | |
+|`getChild`| Function | Tuzhilkin Ivan | testskipped | |
+|`getFirstChild`| Function | Tuzhilkin Ivan | testskipped | |
+|`getNextSibling`| Function | Tuzhilkin Ivan | testskipped | |
+|`getPreviousSibling`| Function | Tuzhilkin Ivan | testskipped | |
+|`getParent`| Function | Tuzhilkin Ivan | testskipped | |
+|`getChildrenCount`| Function | Tuzhilkin Ivan | testskipped | |
+|`dispose`| Function | Tuzhilkin Ivan | testskipped | |
 |*PixelMap*| *Class* | Andrey Khudenkikh | blocked  | |
 |`readPixelsToBufferSync`| Function | Andrey Khudenkikh | blocked AceEngine | |
 |`writeBufferToPixels`| Function | Andrey Khudenkikh | blocked AceEngine | |
