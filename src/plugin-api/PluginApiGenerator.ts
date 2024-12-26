@@ -258,11 +258,6 @@ class OHOSVisitor {
         return capitalize(clazz.name)
     }
 
-    private printManaged() {
-        this.printNative()
-        this.printPeer()
-    }
-
     private printNative() {
         const className = `${this.libraryName}NativeModule`
         NativeModuleType.Generated.name = className
@@ -625,7 +620,7 @@ class OHOSVisitor {
     }
 
     execute(outDir: string, managedOutDir: string) {
-        console.log(`GENERATE OHOS API for ${this.libraryName}`)
+        console.log(`GENERATE PLUGIN API for ${this.libraryName}`)
 
         this.library.files.forEach(file => {
             if (file.isPredefined) return
@@ -666,7 +661,8 @@ class OHOSVisitor {
 
         this.interfaces = interfaces
 
-        this.printManaged()
+        this.printNative()
+        this.printPeer()
         this.printC()
 
         const fileNamePrefix = this.libraryName.toLowerCase()
@@ -679,31 +675,27 @@ class OHOSVisitor {
             finalizablePath: `./${fileNamePrefix}Finalizable`,
         }
 
-        if (this.library.language === Language.ARKTS) {
-            managedCodeModuleInfo.name = `${this.libraryName}NativeModule`
-        }
-
-        const nativeModuleTemplate = readLangTemplate(`OHOSNativeModule_template${ext}`, this.library.language)
+        const nativeModuleTemplate = readLangTemplate(`PluginApiNativeModule_template.ts`, this.library.language)
         const nativeModuleText = nativeModuleTemplate
             .replaceAll('%NATIVE_MODULE_NAME%', this.libraryName)
             .replaceAll('%NATIVE_MODULE_CONTENT%', this.nativeWriter.getOutput().join('\n'))
             .replaceAll('%NATIVE_FUNCTIONS%', this.nativeFunctionsWriter.getOutput().join('\n'))
             .replaceAll('%ARKUI_FUNCTIONS%', this.arkUIFunctionsWriter.getOutput().join('\n'))
             .replaceAll('%OUTPUT_FILE%', managedCodeModuleInfo.path.replace('./', ''))
-        fs.writeFileSync(path.join(managedOutDir, `${managedCodeModuleInfo.path}${ext}`), nativeModuleText, 'utf-8')
+        fs.writeFileSync(path.join(managedOutDir, `${managedCodeModuleInfo.path}.ts`), nativeModuleText, 'utf-8')
 
-        fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Finalizable${ext}`),
-            readLangTemplate(`OHOSFinalizable_template${ext}`, this.library.language)
-                .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
-                .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
-        )
+        // fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Finalizable.ts`),
+        //     readLangTemplate(`OHOSFinalizable_template.ts`, this.library.language)
+        //         .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
+        //         .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
+        // )
 
-        const peerTemplate = readLangTemplate(`OHOSPeer_template${ext}`, this.library.language)
+        const peerTemplate = readLangTemplate(`OHOSPeer_template.ts`, this.library.language)
         const peerText = peerTemplate
             .replaceAll('%PEER_CONTENT%', this.peerWriter.getOutput().join('\n'))
             .replaceAll('%SERIALIZER_PATH%', managedCodeModuleInfo.serializerPath)
-            .replaceAll('%FINALIZABLE_PATH%', managedCodeModuleInfo.finalizablePath)
-        fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}${ext}`), peerText, 'utf-8')
+        //     .replaceAll('%FINALIZABLE_PATH%', managedCodeModuleInfo.finalizablePath)
+        fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}.ts`), peerText, 'utf-8')
 
         this.hWriter.printTo(path.join(outDir, `${fileNamePrefix}.h`))
         this.cppWriter.printTo(path.join(outDir, `${fileNamePrefix}.cc`))
@@ -721,24 +713,24 @@ class OHOSVisitor {
         )
 
         const serializerText = makeSerializerForOhos(this.library, managedCodeModuleInfo, fileNamePrefix).printToString()
-        fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}${ext}`), peerText, 'utf-8')
-        fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Serializer${ext}`), serializerText, 'utf-8')
-        fs.writeFileSync(path.join(managedOutDir, `SerializerBase${ext}`),
-            readLangTemplate(`SerializerBase${ext}`, this.library.language)
+        // fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}.ts`), peerText, 'utf-8')
+        fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Serializer.ts`), serializerText, 'utf-8')
+        fs.writeFileSync(path.join(managedOutDir, `SerializerBase.ts`),
+            readLangTemplate(`SerializerBase.ts`, this.library.language)
                 .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
                 .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
         )
-        fs.writeFileSync(path.join(managedOutDir, `DeserializerBase${ext}`),
-            readLangTemplate(`DeserializerBase${ext}`, this.library.language)
+        fs.writeFileSync(path.join(managedOutDir, `DeserializerBase.ts`),
+            readLangTemplate(`DeserializerBase.ts`, this.library.language)
                 .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
                 .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
         )
-        fs.writeFileSync(path.join(managedOutDir, `CallbacksChecker${ext}`),
-            readLangTemplate(`CallbacksChecker${ext}`, this.library.language)
-                .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
-                .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
-                .replaceAll("%SERIALIZER_PATH%", managedCodeModuleInfo.serializerPath)
-        )
+        // fs.writeFileSync(path.join(managedOutDir, `CallbacksChecker.ts`),
+        //     readLangTemplate(`CallbacksChecker.ts`, this.library.language)
+        //         .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
+        //         .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
+        //         .replaceAll("%SERIALIZER_PATH%", managedCodeModuleInfo.serializerPath)
+        // )
     }
 }
 

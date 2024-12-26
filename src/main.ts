@@ -120,6 +120,7 @@ if (process.env.npm_package_version) {
 
 let didJob = false
 
+
 if (options.dts2idl) {
     generate(
         options.inputDir.split(','),
