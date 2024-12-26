@@ -587,8 +587,11 @@ class OHOSVisitor {
                 .replaceAll("%CALLBACK_KINDS%", callbackKindsPrinter.getOutput().join("\n"))
                 .replaceAll("%LIBRARY_NAME%", this.libraryName.toUpperCase())
         )
+        const interopTypesPath = path.resolve(process.cwd(), 'external', 'interop', 'src', 'cpp', 'interop-types.h')
+        const interopTypesContent = fs.readFileSync(interopTypesPath, 'utf-8')
         this.hWriter.writeLines(
             readLangTemplate('ohos_api_prologue.h', Language.CPP)
+                .replaceAll("%INTEROP_TYPES_HEADER", interopTypesContent)
                 .replaceAll("%INCLUDE_GUARD_DEFINE%", `OH_${this.libraryName.toUpperCase()}_H`)
                 .replaceAll("%LIBRARY_NAME%", this.libraryName.toUpperCase())
         )
@@ -706,6 +709,7 @@ class OHOSVisitor {
         fs.writeFileSync(path.join(outDir, this.implementationStubsFile.name),
             this.implementationStubsFile.printToString()
         )
+        /*
         fs.writeFileSync(path.join(outDir, `SerializerBase.h`),
             readLangTemplate(`ohos_SerializerBase.h`, Language.CPP)
                 .replaceAll("%NATIVE_API_HEADER_PATH%", `${fileNamePrefix}.h`)
@@ -714,6 +718,7 @@ class OHOSVisitor {
             readLangTemplate(`ohos_DeserializerBase.h`, Language.CPP)
                 .replaceAll("%NATIVE_API_HEADER_PATH%", `${fileNamePrefix}.h`)
         )
+        */
 
         const serializerText = makeSerializerForOhos(this.library, managedCodeModuleInfo, fileNamePrefix).printToString()
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}${ext}`), peerText, 'utf-8')
