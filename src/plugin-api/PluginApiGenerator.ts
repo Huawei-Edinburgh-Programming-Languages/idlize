@@ -15,7 +15,7 @@
 
 import * as fs from 'fs'
 import * as path from 'path'
-import { createConstructor, createContainerType, createOptionalType, createReferenceType, createTypeParameterReference, DebugUtils, forceAsNamedNode, getExtAttribute, hasExtAttribute, IDLBufferType, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLI64Type, IDLInterface, IDLInterfaceSubkind, IDLMethod, IDLParameter, IDLPointerType, IDLStringType, IDLType, IDLU8Type, IDLUint8ArrayType, IDLVoidType, isCallback, isConstructor, isContainerType, isEnum, isInterface, isMethod, isNamedNode, isReferenceType, isType, isUnionType } from '../idl'
+import { createConstructor, createContainerType, createOptionalType, createParameter, createReferenceType, createTypeParameterReference, DebugUtils, forceAsNamedNode, getExtAttribute, hasExtAttribute, IDLBufferType, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLI64Type, IDLInterface, IDLInterfaceSubkind, IDLMethod, IDLParameter, IDLPointerType, IDLStringType, IDLType, IDLU8Type, IDLUint8ArrayType, IDLVoidType, isCallback, isConstructor, isContainerType, isEnum, isInterface, isMethod, isNamedNode, isReferenceType, isType, isUnionType } from '../idl'
 import { IndentedPrinter } from "../IndentedPrinter"
 import { Language } from '../Language'
 import { capitalize, getOrPut } from '../util'
@@ -83,6 +83,8 @@ class PluginApiVisitor {
     }
 
     private static knownBasicTypes = new Set(['ArrayBuffer', 'DataView'])
+
+    private static contextParam = createParameter("context", IDLPointerType)
 
     mapType(type: IDLType | IDLEnum): string {
         const typeName = isEnum(type)
@@ -289,7 +291,7 @@ class PluginApiVisitor {
                 })
 
                 it.methods.forEach(method => {
-                    const signature = makePeerCallSignature(this.library, method.parameters, method.returnType, "self")
+                    const signature = makePeerCallSignature(this.library, method.parameters, method.returnType)
                     writer.writeNativeMethodDeclaration(`_${it.name}${method.name}`, signature)  // TODO temporarily removed _${this.libraryName} prefix
                 })
             })
@@ -377,10 +379,14 @@ class PluginApiVisitor {
             this.peerWriter.printer.print(``)
         })
         this.interfaces.forEach(int => {
+            // -- export class Identifier {
             this.peerWriter.writeClass(`${int.name}`, writer => {
+                // -- peer: KPointer
                 writer.writeFieldDeclaration('peer', createReferenceType("KPointer"), [/* FieldModifier.PRIVATE */], false, undefined)
+                // --
                 writer.printer.print(``)
                 const ctors = int.constructors.map(it => ({ parameters: it.parameters, returnType: it.returnType }))
+                // -- <constructors>
                 ctors.forEach(ctor => {
                     const signature = writer.makeNamedSignature(ctor.returnType ?? IDLVoidType, ctor.parameters)
                     // TODO remove duplicated code from writePeerMethod (PeersPrinter.ts)
@@ -391,7 +397,7 @@ class PluginApiVisitor {
                         writer.print(it.scopeStart?.(it.param, writer.language))
                     })
 
-                    let serializerPushed = false
+                    // let serializerPushed = false
                     let params: LanguageExpression[] = []
                     argConvertors.forEach(it => {
                         // if (it.useArray) {
@@ -477,7 +483,7 @@ class PluginApiVisitor {
                             }
                         })
                         let serializerPushed = false
-                        let params = [ writer.makeString('this.peer')]
+                        let params: LanguageExpression[] = []
                         argConvertors.forEach(it => {
                             // if (it.useArray) {
                             //     if (!serializerPushed) {
@@ -582,25 +588,38 @@ class PluginApiVisitor {
             })
         })
 
-        const callbackInterfaceNames = new Set<string>()
-        this.callbacks.forEach(it => {
-            it.parameters.forEach(param => {
-                if (this.interfaces.find(x => x.name === forceAsNamedNode(param.type!).name)) {
-                    callbackInterfaceNames.add(forceAsNamedNode(param.type!).name)
-                }
-            })
-        })
+        // const callbackInterfaceNames = new Set<string>()
+        // this.callbacks.forEach(it => {
+        //     it.parameters.forEach(param => {
+        //         if (this.interfaces.find(x => x.name === forceAsNamedNode(param.type!).name)) {
+        //             callbackInterfaceNames.add(forceAsNamedNode(param.type!).name)
+        //         }
+        //     })
+        // })
 
         const interfaces: IDLInterface[] = []
         this.interfaces.forEach(int => {
-            if (callbackInterfaceNames.has(int.name)) {
-                this.callbackInterfaces.push(int)
-            } else {
+            // if (callbackInterfaceNames.has(int.name)) {
+            //     this.callbackInterfaces.push(int)
+            // } else {
                 interfaces.push(int)
-            }
+            // }
         })
 
         this.interfaces = interfaces
+
+        // adding context param to ctors
+        this.interfaces.forEach(int => {
+            int.constructors.forEach(ctor => {
+                ctor.parameters = [PluginApiVisitor.contextParam, ...ctor.parameters]
+            })
+        })
+        // adding context param to methods
+        this.interfaces.forEach(int => {
+            int.methods.forEach(method => {
+                method.parameters = [PluginApiVisitor.contextParam, ...method.parameters]
+            })
+        })
 
         this.printNative()
         this.printPeer()
