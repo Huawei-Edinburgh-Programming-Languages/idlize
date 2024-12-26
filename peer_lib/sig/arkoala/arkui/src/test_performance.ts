@@ -79,14 +79,6 @@ export function startPerformanceTest() {
         })
     })
 
-    RunPerformanceTest("idlize_linearGradientAttribute", TEST_COUNT, CALL_COUNT, () => {
-        peer.linearGradient0Attribute({
-            angle: 70,
-            repeating: false,
-            direction: 1, //GradientDirection.Top,
-            colors: [[0xff0000, 0.0], [0x0000ff, 0.3], [0xffff00, 0.5]]
-        })
-    })
     RunPerformanceTest("idlize_borderAttribute", TEST_COUNT, CALL_COUNT, () => {
         peer.borderAttribute({
             width: 5,
