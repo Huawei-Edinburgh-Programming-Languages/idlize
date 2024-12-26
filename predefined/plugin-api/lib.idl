@@ -1,0 +1,9 @@
+package "PLUGIN_API";
+
+[Entity=Class] interface Identifier {
+    constructor(String name);
+
+    String Name();
+
+    void SetName(String name);
+};

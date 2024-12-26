@@ -43,7 +43,7 @@ interface SignatureDescriptor {
     paramsCString?: string
 }
 
-class OHOSVisitor {
+class PluginApiVisitor {
     implementationStubsFile: CppSourceFile
 
     hWriter = new CppLanguageWriter(new IndentedPrinter(), this.library)
@@ -52,7 +52,7 @@ class OHOSVisitor {
     peerWriter: LanguageWriter
     nativeWriter: LanguageWriter
     nativeFunctionsWriter: LanguageWriter
-    arkUIFunctionsWriter: LanguageWriter
+    // arkUIFunctionsWriter: LanguageWriter
 
     libraryName: string = ""
 
@@ -75,7 +75,7 @@ class OHOSVisitor {
         this.peerWriter = createLanguageWriter(library.language, library)
         this.nativeWriter = createLanguageWriter(library.language, library)
         this.nativeFunctionsWriter = createLanguageWriter(library.language, library)
-        this.arkUIFunctionsWriter = createLanguageWriter(library.language, library)
+        // this.arkUIFunctionsWriter = createLanguageWriter(library.language, library)
 
         const fileNamePrefix = this.libraryName.toLowerCase()
         this.implementationStubsFile = new CppSourceFile(`${fileNamePrefix}Impl_template${Language.CPP.extension}`, library)
@@ -90,7 +90,7 @@ class OHOSVisitor {
             : isContainerType(type) || isUnionType(type)
                 ? ''
                 : forceAsNamedNode(type).name
-        if (OHOSVisitor.knownBasicTypes.has(typeName))
+        if (PluginApiVisitor.knownBasicTypes.has(typeName))
             return `${PrimitiveType.Prefix}${typeName}`
 
         if (isReferenceType(type) || isEnum(type)) {
@@ -262,11 +262,9 @@ class OHOSVisitor {
         const className = `${this.libraryName}NativeModule`
         NativeModuleType.Generated.name = className
         this.callbacks.forEach(callback => {
-            if (this.library.language === Language.TS) {
-                const params = callback.parameters.map(it => `${it.name}:${this.nativeWriter.getNodeName(it.type!)}`).join(', ')
-                const returnTypeName = this.nativeWriter.getNodeName(callback.returnType)
-                this.nativeWriter.print(`export type ${callback.name} = (${params}) => ${returnTypeName}`)
-            }
+            const params = callback.parameters.map(it => `${it.name}:${this.nativeWriter.getNodeName(it.type!)}`).join(', ')
+            const returnTypeName = this.nativeWriter.getNodeName(callback.returnType)
+            this.nativeWriter.print(`export type ${callback.name} = (${params}) => ${returnTypeName}`)
         })
         this.callbackInterfaces.forEach(int => {
             this.nativeWriter.writeInterface(int.name, writer => {
@@ -290,71 +288,71 @@ class OHOSVisitor {
                     writer.writeNativeMethodDeclaration(`_${it.name}_ctor`, signature)
                 })
 
-                const getFinalizerSig = makePeerCallSignature(this.library, [], IDLPointerType)
-                writer.writeNativeMethodDeclaration(`_${it.name}_getFinalizer`, getFinalizerSig)
+                // const getFinalizerSig = makePeerCallSignature(this.library, [], IDLPointerType)
+                // writer.writeNativeMethodDeclaration(`_${it.name}_getFinalizer`, getFinalizerSig)
 
                 it.methods.forEach(method => {
                     const signature = makePeerCallSignature(this.library, method.parameters, method.returnType, "self")
-                    writer.writeNativeMethodDeclaration(`_${it.name}_${method.name}`, signature)  // TODO temporarily removed _${this.libraryName} prefix
+                    writer.writeNativeMethodDeclaration(`_${it.name}${method.name}`, signature)  // TODO temporarily removed _${this.libraryName} prefix
                 })
             })
         })(this.nativeFunctionsWriter)
 
-        this.arkUIFunctionsWriter.printer.pushIndent(this.nativeWriter.indentDepth() + 1)
-        ;((writer: LanguageWriter) => {
-            writer.writeNativeMethodDeclaration("_CheckArkoalaCallbackEvent",
-                NamedMethodSignature.make(IDLI32Type, [
-                    { name: "buffer", type: IDLUint8ArrayType },
-                    { name: "bufferLength", type: IDLI32Type },
-                ])
-            )
-            writer.writeNativeMethodDeclaration("_HoldArkoalaResource",
-                NamedMethodSignature.make(IDLVoidType, [
-                    { name: "resourceId", type: IDLI32Type }
-                ])
-            )
-            writer.writeNativeMethodDeclaration("_ReleaseArkoalaResource",
-                NamedMethodSignature.make(IDLVoidType, [
-                    { name: "resourceId", type: IDLI32Type }
-                ])
-            )
-            writer.writeNativeMethodDeclaration("_Utf8ToString",
-                NamedMethodSignature.make(IDLStringType, [
-                    { name: "buffer", type: IDLUint8ArrayType },
-                    { name: "position", type: IDLI32Type },
-                    { name: "length", type: IDLI32Type },
-                ])
-            )
-            if (writer.language === Language.TS) {
-                writer.writeNativeMethodDeclaration("_MaterializeBuffer",
-                    NamedMethodSignature.make(IDLBufferType, [
-                        { name: "data", type: IDLPointerType },
-                        { name: "length", type: IDLI32Type },
-                        { name: "resourceId", type: IDLI32Type },
-                        { name: "holdPtr", type: IDLPointerType },
-                        { name: "releasePtr", type: IDLPointerType },
-                    ])
-                )
-                writer.writeNativeMethodDeclaration("_GetNativeBufferPointer",
-                    NamedMethodSignature.make(IDLPointerType, [
-                        { name: "data", type: IDLBufferType },
-                    ])
-                )
-            }
-            if (writer.language === Language.ARKTS) {
-                writer.writeNativeMethodDeclaration("_ManagedStringWrite", 
-                    NamedMethodSignature.make(IDLI32Type, [
-                        { name: "str", type: IDLStringType },
-                        { name: "arr", type: IDLUint8ArrayType },
-                        { name: "len", type: IDLI32Type },
-                    ])
-                )
-            }
-        })(this.arkUIFunctionsWriter)
+        // this.arkUIFunctionsWriter.printer.pushIndent(this.nativeWriter.indentDepth() + 1)
+        // ;((writer: LanguageWriter) => {
+        //     writer.writeNativeMethodDeclaration("_CheckArkoalaCallbackEvent",
+        //         NamedMethodSignature.make(IDLI32Type, [
+        //             { name: "buffer", type: IDLUint8ArrayType },
+        //             { name: "bufferLength", type: IDLI32Type },
+        //         ])
+        //     )
+        //     writer.writeNativeMethodDeclaration("_HoldArkoalaResource",
+        //         NamedMethodSignature.make(IDLVoidType, [
+        //             { name: "resourceId", type: IDLI32Type }
+        //         ])
+        //     )
+        //     writer.writeNativeMethodDeclaration("_ReleaseArkoalaResource",
+        //         NamedMethodSignature.make(IDLVoidType, [
+        //             { name: "resourceId", type: IDLI32Type }
+        //         ])
+        //     )
+        //     writer.writeNativeMethodDeclaration("_Utf8ToString",
+        //         NamedMethodSignature.make(IDLStringType, [
+        //             { name: "buffer", type: IDLUint8ArrayType },
+        //             { name: "position", type: IDLI32Type },
+        //             { name: "length", type: IDLI32Type },
+        //         ])
+        //     )
+        //     if (writer.language === Language.TS) {
+        //         writer.writeNativeMethodDeclaration("_MaterializeBuffer",
+        //             NamedMethodSignature.make(IDLBufferType, [
+        //                 { name: "data", type: IDLPointerType },
+        //                 { name: "length", type: IDLI32Type },
+        //                 { name: "resourceId", type: IDLI32Type },
+        //                 { name: "holdPtr", type: IDLPointerType },
+        //                 { name: "releasePtr", type: IDLPointerType },
+        //             ])
+        //         )
+        //         writer.writeNativeMethodDeclaration("_GetNativeBufferPointer",
+        //             NamedMethodSignature.make(IDLPointerType, [
+        //                 { name: "data", type: IDLBufferType },
+        //             ])
+        //         )
+        //     }
+        //     if (writer.language === Language.ARKTS) {
+        //         writer.writeNativeMethodDeclaration("_ManagedStringWrite", 
+        //             NamedMethodSignature.make(IDLI32Type, [
+        //                 { name: "str", type: IDLStringType },
+        //                 { name: "arr", type: IDLUint8ArrayType },
+        //                 { name: "len", type: IDLI32Type },
+        //             ])
+        //         )
+        //     }
+        // })(this.arkUIFunctionsWriter)
     }
 
     private printPeer() {
-        const nativeModuleVar = `${this.libraryName}NativeModule`
+        const nativeModuleVar = `${this.libraryName}_NativeModule`
         if (this.library.language === Language.TS) {
             this.peerWriter.print('import {')
             this.peerWriter.pushIndent()
@@ -380,7 +378,7 @@ class OHOSVisitor {
             writer.writeStatement(writer.makeEnumEntity(e, true))
         })
         this.interfaces.forEach(int => {
-            this.peerWriter.writeInterface(`${int.name}Interface`, writer => {
+            this.peerWriter.writeInterface(`${int.name}_Interface`, writer => {
                 int.methods.forEach(method => {
                     const signature = writer.makeNamedSignature(method.returnType, method.parameters)
                     writer.writeMethodDeclaration(method.name, signature)
@@ -389,12 +387,7 @@ class OHOSVisitor {
         })
         this.interfaces.forEach(int => {
             this.peerWriter.writeClass(`${int.name}`, writer => {
-                let peerInitExpr: LanguageExpression | undefined = undefined
-                if (this.library.language === Language.ARKTS && int.constructors.length === 0) {
-                    peerInitExpr = writer.makeString("Finalizable.Empty")
-                }
-                // TODO Make peer private again
-                writer.writeFieldDeclaration('peer', createReferenceType("Finalizable"), [/* FieldModifier.PRIVATE */], false, peerInitExpr)
+                writer.writeFieldDeclaration('peer', createReferenceType("KPointer"), [/* FieldModifier.PRIVATE */], false, undefined)
                 const ctors = int.constructors.map(it => ({ parameters: it.parameters, returnType: it.returnType }))
                 ctors.forEach(ctor => {
                     const signature = writer.makeNamedSignature(ctor.returnType ?? IDLVoidType, ctor.parameters)
@@ -690,7 +683,7 @@ class OHOSVisitor {
         //         .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
         // )
 
-        const peerTemplate = readLangTemplate(`OHOSPeer_template.ts`, this.library.language)
+        const peerTemplate = readLangTemplate(`PluginApiPeer_template.ts`, this.library.language)
         const peerText = peerTemplate
             .replaceAll('%PEER_CONTENT%', this.peerWriter.getOutput().join('\n'))
             .replaceAll('%SERIALIZER_PATH%', managedCodeModuleInfo.serializerPath)
@@ -739,7 +732,7 @@ export function generatePluginApi(outDir: string, peerLibrary: PeerLibrary): voi
     if (!fs.existsSync(outDir)) fs.mkdirSync(outDir)
     if (!fs.existsSync(managedOutDir)) fs.mkdirSync(managedOutDir)
 
-    const visitor = new OHOSVisitor(peerLibrary)
+    const visitor = new PluginApiVisitor(peerLibrary)
     visitor.execute(outDir, managedOutDir)
 }
 

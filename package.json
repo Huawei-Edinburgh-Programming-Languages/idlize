@@ -63,7 +63,7 @@
     "run:all": "npm run compile && node . --dts2peer --input-dir ./interface_sdk-js/api/@internal/component/ets/,./interface_sdk-js/api/arkui,./interface_sdk-js/api/global --verify-idl --common-to-attributes --docs=opt",
     "run:xml": "npm run compile && node . --generator-target ohos --dts2peer --input-dir ./interface_sdk-js/api --input-file @ohos.xml.d.ts --output-dir ./out/xml --verify-idl --common-to-attributes --docs=none",
     "run:xml:arkts": "npm run compile && node . --generator-target ohos --dts2peer --input-dir ./interface_sdk-js/api --input-file @ohos.xml.d.ts --output-dir ./out/xml --verify-idl --common-to-attributes --docs=none --language=arkts",
-    "run:pluginApi": "npm run compile && node . --generator-target plugin-api --idl2peer --input-dir ./idl/ --output-dir ./out/plugin-api/ --verify-idl --common-to-attributes --docs=none --language=ts --need-interfaces",
+    "run:pluginApi": "npm run compile && node . --generator-target plugin-api --idl2peer --input-dir ./predefined/plugin-api/ --output-dir ./out/plugin-api/ --verify-idl --common-to-attributes --docs=none --language=ts --need-interfaces",
     "run2dts": "npm run compile && node . --idl2dts --input-dir ./idl",
     "dts2skoala": "npm run compile && node . --dts2skoala --input-dir ./tests/mini_skoala/build/ ",
     "idl2peer:target": "node --stack_trace_limit=200 . --api-version 99 --dts2peer --input-dir ./interface_sdk-js/api/@internal/component/ets/,./interface_sdk-js/api/global --output-dir ./out/ts-peers/generated",
