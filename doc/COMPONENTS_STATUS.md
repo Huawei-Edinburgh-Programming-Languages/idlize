@@ -1436,7 +1436,7 @@
 |*RemoteWindow*| *Component* | Spirin Andrey, Evstigneev Roman | in progress | |
 |`setRemoteWindowOptions`| Function | Spirin Andrey, Evstigneev Roman | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |*WaterFlow*| *Component* | Kovalev Sergey | in progress |  |
-|`setWaterFlowOptions`| Function | Kovalev Sergey | in progress |  |
+|`setWaterFlowOptions`| Function | Kovalev Sergey | done |  |
 |`columnsTemplate`| Function | Kovalev Sergey | done |  |
 |`itemConstraintSize`| Function | Kovalev Sergey | done |  |
 |`rowsTemplate`| Function | Kovalev Sergey | done |  |
