@@ -1464,9 +1464,9 @@
 |`indicatorStyle`| Function | Kovalev Sergey | done | depricated |
 |`indicatorLoop`| Function | Kovalev Sergey | done | depricated |
 |`onChange`| Function | Kovalev Sergey | done | depricated |
-|*UnifiedData*| *Class* | Tuzhilkin Ivan | in progress | |
-|`hasType`| Function | Tuzhilkin Ivan | in progress | |
-|`getTypes`| Function | Tuzhilkin Ivan | in progress | |
+|*UnifiedData*| *Class* | Tuzhilkin Ivan | blocked IDL | |
+|`hasType`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY , https://gitee.com/nikolay-igotti/idlize/issues/IBDHH7 |
+|`getTypes`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY , https://gitee.com/nikolay-igotti/idlize/issues/IBDHH7 |
 |*DrawingCanvas*| *Class* | Dudkin Sergey | blocked IDL | |
 |`drawRect`| Function | Dudkin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDOCY |
 |*FrameNode*| *Class* | Tuzhilkin Ivan | in progress| |
