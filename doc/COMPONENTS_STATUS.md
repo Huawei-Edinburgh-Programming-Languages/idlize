@@ -1533,7 +1533,7 @@
 |`createConicGradient`| Function  | Vadim Voronov | devdone | |
 |`createImageData`| Function  | Vadim Voronov | devdone | https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA & https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getImageData`| Function  | Vadim Voronov | devdone | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getPixelMap`| Function  | Vadim Voronov | devdone | testskipped, https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
+|`getPixelMap`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`putImageData`| Function  | Vadim Voronov | devdone  | https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA |
 |`getLineDash`| Function  | Vadim Voronov |  blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
 |`setLineDash`| Function  | Vadim Voronov | done | |
