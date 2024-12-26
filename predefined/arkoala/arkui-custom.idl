@@ -138,4 +138,4 @@ interface InteropData {
 interface InteropExample {
     void functionJava(i32 tag, InteropData data);
     void functionTs(InteropData data);
-}
+};
