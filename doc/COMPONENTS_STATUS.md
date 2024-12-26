@@ -571,7 +571,7 @@
 |`editable`|Function|Morozov Sergey|done|  |
 |`selectable`|Function|Morozov Sergey|done|  |
 |`selected`|Function|Morozov Sergey|done|  |
-|`swipeAction`|Function|Dmitry A Smirnov| in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`swipeAction`|Function|Kovalev Sergey| in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`onSelect`|Function|Morozov Sergey|done|  |
 |*ListItemGroup*|*Component*|Morozov Sergey|blocked|  |
 |`setListItemGroupOptions`|Function|Dmitry A Smirnov| in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
@@ -608,7 +608,7 @@
 |`menuItemGroupDivider`|Function|Morozov Sergey| done |https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`subMenuExpandingMode`|Function|Morozov Sergey| done |  |
 |*MenuItem*| *Component* |Morozov Sergey|blocked|  |
-|`setMenuItemOptions`| Function |Dmitry A Smirnov| in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`setMenuItemOptions`| Function |Kovalev Sergey| in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`selected`| Function |Morozov Sergey|done|  |
 |`selectIcon`| Function |Morozov Sergey|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`onChange`| Function |Morozov Sergey|done|  |
@@ -1176,7 +1176,7 @@
 |`onEditChanged`| Function | Spirin Andrey | testskipped |  |
 |`onEditChange`| Function | Spirin Andrey | testskipped |  |
 |`onSubmit`| Function | Spirin Andrey | done |  |
-|`onChange`| Function | Lobah Mikhail | in progress|  |
+|`onChange`| Function | Lobah Mikhail | testskipped|  |
 |`onTextSelectionChange`| Function | Spirin Andrey | testskipped |  |
 |`onContentScroll`| Function | Spirin Andrey | testskipped |  |
 |`maxLength`| Function | Spirin Andrey | done |  |
@@ -1187,7 +1187,7 @@
 |`fontFamily`| Function | Spirin Andrey | done |  |
 |`onCopy`| Function | Spirin Andrey | testskipped |  |
 |`onCut`| Function | Spirin Andrey | testskipped|  |
-|`onPaste`| Function | Lobah Mikhail | in progress|  |
+|`onPaste`| Function | Lobah Mikhail | testskipped|  |
 |`copyOption`| Function | Spirin Andrey | done |  |
 |`showPasswordIcon`| Function | Spirin Andrey | done |  |
 |`textAlign`| Function | Spirin Andrey | done |  |
