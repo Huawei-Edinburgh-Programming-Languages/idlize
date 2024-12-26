@@ -41,8 +41,12 @@ export function convertDeclToFeature(library: PeerLibrary, node: idl.IDLNode): I
 
     const basename = path.basename(fileName)
     const basenameNoExt = basename.replaceAll(path.extname(basename), '')
+    let declaration = convertDeclaration(featureNameConvertor, node)
+    if (idl.isInterface(node) && idl.isInterfaceSubkind(node) && isMaterialized(node)) {
+        declaration = getInternalClassName(declaration)
+    }
     return {
-        feature: convertDeclaration(featureNameConvertor, node),
+        feature: declaration,
         module: `./${basenameNoExt}`,
     }
 }

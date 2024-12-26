@@ -100,7 +100,6 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                 includeTransformedCallbacks: true,
             })
             imports.addFeature(
-                // Add InternalName
                 createInterfaceDeclName(this.clazz.className),
                 SyntheticModule,
             )
@@ -109,6 +108,9 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                 if (idl.isInterface(it) && isMaterialized(it))
                     collectDeclItself(this.library, it, imports)
             })
+            if (this.clazz.superClass) {
+                collectDeclItself(this.library, this.clazz.superClass, imports)
+            }
         }
     }
 
@@ -124,23 +126,34 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
         const printer = this.printer
         printer.print(makeMaterializedPrologue(this.printerContext.language))
 
-        let superClassName = generifiedTypeName(clazz.superClass)
-        let selfInterface = clazz.isInterface
-            ? `${clazz.className}${clazz.generics?.length ? `<${clazz.generics.join(", ")}>` : ``}`
-            : undefined
+        let superClassName = generifiedTypeName(clazz.superClass, getSuperName(clazz))
+        // let selfInterface = clazz.isInterface
+        //     ? `${clazz.className}${clazz.generics?.length ? `<${clazz.generics.join(", ")}>` : ``}`
+        //     : undefined
 
         const interfaces: string[] = ["MaterializedBase"]
         if (clazz.isInterface) {
             // self-interface is not supported ArkTS
-            if (this.library.language == Language.ARKTS) {
-                selfInterface = createInterfaceDeclName(selfInterface!)
-            }
-            if (selfInterface) interfaces.push(selfInterface)
-            if (superClassName && !this.library.materializedClasses.has(superClassName)) {
-                interfaces.push(superClassName)
-                superClassName = undefined
-            }
+            // if (this.library.language == Language.ARKTS) {
+            //     selfInterface = createInterfaceDeclName(selfInterface!)
+            // }
+            // if (selfInterface) interfaces.push(selfInterface)
+            // if (superClassName && !this.library.materializedClasses.has(superClassName)) {
+            //     interfaces.push(superClassName)
+            //     superClassName = undefined
+            // }
         }
+        // if (clazz.isInterface) {
+        //     // self-interface is not supported ArkTS
+        //     if (this.library.language == Language.ARKTS) {
+        //         selfInterface = createInterfaceDeclName(selfInterface!)
+        //     }
+        //     if (selfInterface) interfaces.push(selfInterface)
+        //     if (superClassName && !this.library.materializedClasses.has(superClassName)) {
+        //         interfaces.push(superClassName)
+        //         superClassName = undefined
+        //     }
+        // }
 
         // TODO: workarond for ContentModifier<T> which returns WrappedBuilder<[T]>
         //       and the WrappedBuilder is defined as "class WrappedBuilder<Args extends Object[]>""
@@ -653,6 +666,12 @@ export function printMaterialized(peerLibrary: PeerLibrary, printerContext: Prin
         result.set(file, text)
     }
     return result
+}
+
+function getSuperName(clazz: MaterializedClass): string | undefined {
+    const superClass = clazz.superClass
+    if (!superClass) return undefined
+    return clazz.isInterface ? getInternalClassName(superClass.name) : superClass.name
 }
 
 // TBD: Refactor tagged method staff

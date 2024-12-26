@@ -369,7 +369,7 @@ export class IdlPeerProcessor {
             return
         }
 
-        const isDeclInterface = decl.subkind === idl.IDLInterfaceSubkind.Interface
+        const isDeclInterface = idl.isInterfaceSubkind(decl)
         const implemenationParentName = isDeclInterface ? `${name}Internal` : `${name}`
 
         const constructor = decl.subkind === idl.IDLInterfaceSubkind.Class ? decl.constructors[0] : undefined

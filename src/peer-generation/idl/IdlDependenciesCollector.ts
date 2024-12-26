@@ -19,6 +19,7 @@ import { LibraryInterface } from '../../LibraryInterface';
 import { PeerLibrary } from '../PeerLibrary';
 import { Language } from '../../Language';
 import { isMaterialized } from './IdlPeerGeneratorVisitor';
+import { getInternalClassName } from '../Materialized';
 
 export class DependenciesCollector implements NodeConvertor<idl.IDLNode[]> {
     constructor(protected readonly library: LibraryInterface) {}
@@ -93,10 +94,9 @@ export class DependenciesCollector implements NodeConvertor<idl.IDLNode[]> {
 
 class TSDependenciesCollector extends DependenciesCollector {
     override convertInterface(decl: idl.IDLInterface): idl.IDLNode[] {
-        console.log(`Dependency interface: ${decl.name}`)
         if (isMaterialized(decl)) {
-            console.log(`  convert as internal type ref: ${decl.name}`)
-            return super.convertTypeReference(idl.createReferenceType(`${decl.name}Internal`))
+            const name = getInternalClassName(decl.name)
+            return super.convertTypeReference(idl.createReferenceType(name))
         }
         return super.convertInterface(decl)
     }
