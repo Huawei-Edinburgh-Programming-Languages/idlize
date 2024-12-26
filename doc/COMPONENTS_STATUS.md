@@ -136,7 +136,7 @@
 |`hitTestBehavior`| Function | Roman Sedaikin | done | |
 |`onChildTouchTest`| Function | Skroba Gleb | devdone | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`layoutWeight`| Function | Roman Sedaikin | done | |
-|`chainWeight`| Function | Politov Mikhail | in progress | |
+|`chainWeight`| Function | Politov Mikhail | testskipped | |
 |`padding`| Function | Skroba Gleb | done | |
 |`safeAreaPadding`| Function |Dmitry A Smirnov | testskipped | |
 |`margin`| Function | Skroba Gleb | done | |
