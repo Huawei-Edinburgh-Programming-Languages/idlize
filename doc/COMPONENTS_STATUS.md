@@ -1494,13 +1494,13 @@
 |`emitTextInputEvent`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 |
 |*ActionSheet*| *Class* | Ekaterina Stepanova | testskipped | |
 |`show`| Function | Ekaterina Stepanova | testskipped | |
-|*AlertDialog*| *Class* | Ekaterina Stepanova | in progress | |
-|`show`| Function | Ekaterina Stepanova | in progress | |
+|*AlertDialog*| *Class* | Ekaterina Stepanova | testskipped | |
+|`show`| Function | Ekaterina Stepanova | testskipped | |
 |*CalendarController*| *Class* |Maksimov Nikita | done |  |
 |`backToToday`| Function |Maksimov Nikita | done |  |
 |`goTo`| Function |Maksimov Nikita | done |  |
-|*CalendarPickerDialog*| *Class* | Ekaterina Stepanova | in progress | |
-|`show`| Function | Ekaterina Stepanova | in progress | |
+|*CalendarPickerDialog*| *Class* | Ekaterina Stepanova | testskipped | |
+|`show`| Function | Ekaterina Stepanova | testskipped | |
 |*CanvasGradient*| *Class* | Vadim Voronov | done | |
 |`addColorStop`| Function | Vadim Voronov | done | |
 |*CanvasPath*| *Class* | Kovalev Sergey |done |  |
@@ -1669,8 +1669,8 @@
 |*CustomDialogController*| *Class* | Erokhin Ilya | in progress | CustomBuilder https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`open`| Function | Erokhin Ilya | in progress | https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`close`| Function | Erokhin Ilya | in progress | https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|*DatePickerDialog*| *Class* | Ekaterina Stepanova | in progress | |
-|`show`| Function | Ekaterina Stepanova | in progress | |
+|*DatePickerDialog*| *Class* | Ekaterina Stepanova | testskipped | |
+|`show`| Function | Ekaterina Stepanova | testskipped | |
 |*PanGestureOptions*| *Class* | Politov Mikhail | blocked | |
 |`setDirection`| Function | Politov Mikhail | done | |
 |`setDistance`| Function | Politov Mikhail | done | |
