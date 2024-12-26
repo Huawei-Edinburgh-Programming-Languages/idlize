@@ -34,7 +34,7 @@ import { PeerClass } from "../PeerClass"
 import { PeerMethod } from "../PeerMethod"
 import { PeerFile } from "../PeerFile"
 import { PeerLibrary } from "../PeerLibrary"
-import { MaterializedClass, MaterializedField, MaterializedMethod } from "../Materialized"
+import { getInternalClassName, MaterializedClass, MaterializedField, MaterializedMethod } from "../Materialized"
 import { Field, FieldModifier, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters";
 import { BuilderClass, initCustomBuilderClasses, isCustomBuilderClass } from "../BuilderClass";
 import { isRoot } from "../inheritance";
@@ -370,7 +370,7 @@ export class IdlPeerProcessor {
         }
 
         const isDeclInterface = idl.isInterfaceSubkind(decl)
-        const implemenationParentName = isDeclInterface ? `${name}Internal` : `${name}`
+        const implemenationParentName = isDeclInterface ? getInternalClassName(name) : name
 
         const constructor = decl.subkind === idl.IDLInterfaceSubkind.Class ? decl.constructors[0] : undefined
         const mConstructor = this.makeMaterializedMethod(decl, constructor, implemenationParentName)

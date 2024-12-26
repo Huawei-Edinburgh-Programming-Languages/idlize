@@ -167,9 +167,9 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
         }
 
         const isInterface = clazz.isInterface
-        const className = clazz.getImplementationName()
+        const implementationClassName = clazz.getImplementationName()
 
-        printer.writeClass(className, writer => {
+        printer.writeClass(implementationClassName, writer => {
             writer.writeFieldDeclaration("peer", FinalizableType, undefined, true)
 
             // getters and setters for fields
@@ -219,7 +219,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
             }
 
             // write construct(ptr: number) method
-            const clazzRefType = idl.createReferenceType(className,
+            const clazzRefType = idl.createReferenceType(implementationClassName,
                 clazz.generics?.map(idl.createTypeParameterReference))
             const constructSig = new NamedMethodSignature(clazzRefType, [idl.IDLPointerType], ["ptr"])
             writer.writeMethodImplementation(new Method("construct", constructSig, [MethodModifier.STATIC], classTypeParameters), writer => {
@@ -232,7 +232,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                 )
                 writer.writeStatement(
                     writer.makeAssign(`${objVar}.peer`, FinalizableType,
-                        writer.makeString(`new Finalizable(ptr, ${className}.getFinalizer())`), false),
+                        writer.makeString(`new Finalizable(ptr, ${implementationClassName}.getFinalizer())`), false),
                 )
                 writer.writeStatement(writer.makeReturn(writer.makeString(objVar)))
             })
@@ -250,7 +250,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                 ctorSig.argsNames,
                 ctorSig.defaults)
 
-            writer.writeConstructorImplementation(className, sigWithPointer, writer => {
+            writer.writeConstructorImplementation(implementationClassName, sigWithPointer, writer => {
 
                 if (superClassName) {
                     let params:string[] = []
@@ -273,13 +273,13 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                 }
                 let ctorStatements: LanguageStatement = writer.makeBlock([
                     writer.makeAssign("ctorPtr", IDLPointerType,
-                        writer.makeMethodCall(className, "ctor",
+                        writer.makeMethodCall(implementationClassName, "ctor",
                             ctorSig.args.map((it, index) => writer.makeString(`${ctorSig.argsNames[index]}`))),
                         true),
                     writer.makeAssign(
                         "this.peer",
                         FinalizableType,
-                        writer.makeString(`new Finalizable(ctorPtr, ${className}.getFinalizer())`),
+                        writer.makeString(`new Finalizable(ctorPtr, ${implementationClassName}.getFinalizer())`),
                         false
                     )
                 ])
@@ -341,32 +341,8 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
             })
         }, superClassName, interfaces.length === 0 ? undefined : interfaces, classTypeParameters)
 
-
-        // // Write MaterializedClass static
-        // printer.writeClass(clazz.getInternalName(), writer => {
-
-        //     // write fromPtr(ptr: number):MaterializedClass method
-        //     const clazzRefType = idl.createReferenceType(clazz.className,
-        //         clazz.generics?.map(idl.createTypeParameterReference))
-        //     const fromPtrSig = new NamedMethodSignature(clazzRefType, [idl.IDLPointerType], ["ptr"])
-        //     writer.writeMethodImplementation(new Method("fromPtr", fromPtrSig, [MethodModifier.PUBLIC, MethodModifier.STATIC], classTypeParameters), writer => {
-        //         const objVar = `obj`
-        //         writer.writeStatement(writer.makeAssign(objVar,
-        //             clazzRefType,
-        //             //TODO: Need to pass IDLType instead of string to makeNewObject
-        //             writer.makeNewObject(writer.getNodeName(clazzRefType)),
-        //             true)
-        //         )
-        //         writer.writeStatement(
-        //             writer.makeAssign(`${objVar}.peer`, FinalizableType,
-        //                 writer.makeString(`new Finalizable(ptr, ${clazz.className}.getFinalizer())`), false),
-        //         )
-        //         writer.writeStatement(writer.makeReturn(writer.makeString(objVar)))
-        //     })
-        // })
-
         if (!isInterface) {
-            // Write internal MaterializedClass with fromPtr(ptr) method
+            // Write internal Materialized class with fromPtr(ptr) method
             printer.writeClass(getInternalClassName(clazz.className), writer => writeFromPtrMethod(clazz, writer, classTypeParameters))
         }
     }
