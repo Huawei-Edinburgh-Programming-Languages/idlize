@@ -1,5 +1,8 @@
-import { nativeModule } from "../native/nativeModule"
-import { KInt, KPointer } from "../../../external/interop/src/interop"
-import { Serializer, PluginApiNativeModule } from "@?"
+import {
+    KPointer,
+    KInt,
+    KBoolean,
+    KNativePointer
+} from "@koalaui/interop"
 
 %PEER_CONTENT%

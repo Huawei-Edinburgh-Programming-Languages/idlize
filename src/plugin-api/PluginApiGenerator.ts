@@ -259,24 +259,24 @@ class PluginApiVisitor {
     }
 
     private printNative() {
-        const className = `${this.libraryName}NativeModule`
-        NativeModuleType.Generated.name = className
-        this.callbacks.forEach(callback => {
-            const params = callback.parameters.map(it => `${it.name}:${this.nativeWriter.getNodeName(it.type!)}`).join(', ')
-            const returnTypeName = this.nativeWriter.getNodeName(callback.returnType)
-            this.nativeWriter.print(`export type ${callback.name} = (${params}) => ${returnTypeName}`)
-        })
-        this.callbackInterfaces.forEach(int => {
-            this.nativeWriter.writeInterface(int.name, writer => {
-                int.methods.forEach(method => {
-                    writer.writeMethodDeclaration(
-                        method.name,
-                        writer.makeNamedSignature(method.returnType, method.parameters)
-                    )
-                })
-            })
-        })
-        printCallbacksKinds(this.library, this.nativeWriter)
+        const className = `${this.libraryName}_NativeModule`
+        NativeModuleType.PluginApi.name = className
+        // this.callbacks.forEach(callback => {
+        //     const params = callback.parameters.map(it => `${it.name}:${this.nativeWriter.getNodeName(it.type!)}`).join(', ')
+        //     const returnTypeName = this.nativeWriter.getNodeName(callback.returnType)
+        //     this.nativeWriter.print(`export type ${callback.name} = (${params}) => ${returnTypeName}`)
+        // })
+        // this.callbackInterfaces.forEach(int => {
+        //     this.nativeWriter.writeInterface(int.name, writer => {
+        //         int.methods.forEach(method => {
+        //             writer.writeMethodDeclaration(
+        //                 method.name,
+        //                 writer.makeNamedSignature(method.returnType, method.parameters)
+        //             )
+        //         })
+        //     })
+        // })
+        // printCallbacksKinds(this.library, this.nativeWriter)
 
         this.nativeFunctionsWriter.printer.pushIndent(this.nativeWriter.indentDepth() + 1)
         ;((writer: LanguageWriter) => {
@@ -285,11 +285,8 @@ class PluginApiVisitor {
                 const ctors = it.constructors.map(it => ({ parameters: it.parameters, returnType: it.returnType }))
                 ctors.forEach(ctor => {
                     const signature = makePeerCallSignature(this.library, ctor.parameters, IDLPointerType)
-                    writer.writeNativeMethodDeclaration(`_${it.name}_ctor`, signature)
+                    writer.writeNativeMethodDeclaration(`_Create${it.name}`, signature)
                 })
-
-                // const getFinalizerSig = makePeerCallSignature(this.library, [], IDLPointerType)
-                // writer.writeNativeMethodDeclaration(`_${it.name}_getFinalizer`, getFinalizerSig)
 
                 it.methods.forEach(method => {
                     const signature = makePeerCallSignature(this.library, method.parameters, method.returnType, "self")
@@ -352,20 +349,13 @@ class PluginApiVisitor {
     }
 
     private printPeer() {
-        const nativeModuleVar = `${this.libraryName}_NativeModule`
-        if (this.library.language === Language.TS) {
-            this.peerWriter.print('import {')
+        this.peerWriter.print('import {')
             this.peerWriter.pushIndent()
-            this.peerWriter.print(`${nativeModuleVar},`)
+            this.peerWriter.print(`${this.libraryName}_NativeModule,`)
             this.peerWriter.popIndent()
-            this.peerWriter.print(`} from './${this.libraryName.toLocaleLowerCase()}Native'`)
-        } else if (this.library.language === Language.ARKTS) {
-            this.peerWriter.print('import {')
-            this.peerWriter.pushIndent()
-            this.peerWriter.print(`${nativeModuleVar},`)
-            this.peerWriter.popIndent()
-            this.peerWriter.print(`} from './${this.libraryName.toLocaleLowerCase()}Native'`)
-        }
+        this.peerWriter.print(`} from './${this.libraryName.toLocaleLowerCase()}_Native'`)
+        this.peerWriter.print(``)
+
         this.data.forEach(data => {
             this.peerWriter.writeInterface(data.name, writer => {
                 data.properties.forEach(prop => {
@@ -384,10 +374,12 @@ class PluginApiVisitor {
                     writer.writeMethodDeclaration(method.name, signature)
                 })
             })
+            this.peerWriter.printer.print(``)
         })
         this.interfaces.forEach(int => {
             this.peerWriter.writeClass(`${int.name}`, writer => {
                 writer.writeFieldDeclaration('peer', createReferenceType("KPointer"), [/* FieldModifier.PRIVATE */], false, undefined)
+                writer.printer.print(``)
                 const ctors = int.constructors.map(it => ({ parameters: it.parameters, returnType: it.returnType }))
                 ctors.forEach(ctor => {
                     const signature = writer.makeNamedSignature(ctor.returnType ?? IDLVoidType, ctor.parameters)
@@ -402,86 +394,65 @@ class PluginApiVisitor {
                     let serializerPushed = false
                     let params: LanguageExpression[] = []
                     argConvertors.forEach(it => {
-                        if (it.useArray) {
-                            if (!serializerPushed) {
-                                params.push(writer.makeMethodCall(`thisSerializer`, 'asArray', []))
-                                params.push(writer.makeMethodCall(`thisSerializer`, 'length', []))
-                                serializerPushed = true
-                            }
-                        } else {
+                        // if (it.useArray) {
+                        //     if (!serializerPushed) {
+                        //         params.push(writer.makeMethodCall(`thisSerializer`, 'asArray', []))
+                        //         params.push(writer.makeMethodCall(`thisSerializer`, 'length', []))
+                        //         serializerPushed = true
+                        //     }
+                        // } else {
                             params.push(writer.makeString(it.convertorArg(it.param, writer)))
-                        }
+                        // }
                     })
 
                     writer.writeConstructorImplementation(int.name, signature, writer => {
-                        if (serializerPushed) {
-                            writer.writeStatement(
-                                writer.makeAssign(`thisSerializer`, createReferenceType('Serializer'),
-                                    writer.makeMethodCall('Serializer', 'hold', []), true)
-                            )
-                        }
+                        // if (serializerPushed) {
+                        //     writer.writeStatement(
+                        //         writer.makeAssign(`thisSerializer`, createReferenceType('Serializer'),
+                        //             writer.makeMethodCall('Serializer', 'hold', []), true)
+                        //     )
+                        // }
                         argConvertors.forEach((it) => {
                             if (it.useArray) {
                                 it.convertorSerialize(`this`, it.param, writer)
                             }
                         })
                         
-                        const createPeerExpression = writer.makeNewObject("Finalizable", [
-                            writer.makeNativeCall(NativeModuleType.Generated, `_${int.name}_ctor`, params),
-                            writer.makeString(`${int.name}.getFinalizer()`)
-                        ])
                         writer.writeStatement(
-                            writer.makeAssign('this.peer', undefined, createPeerExpression, false)
+                            writer.makeAssign(
+                                'this.peer',
+                                undefined,
+                                writer.makeNativeCall(
+                                    NativeModuleType.PluginApi,
+                                    `_Create${int.name}`,
+                                    params
+                                ),
+                                false
+                            )
                         )
 
-                        if (serializerPushed) {
-                            writer.writeStatement(new ExpressionStatement(
-                                writer.makeMethodCall('thisSerializer', 'release', [])))
-                            scopes.reverse().forEach(it => {
-                                writer.popIndent()
-                                writer.print(it.scopeEnd!(it.param, writer.language))
-                            })
-                        }
+                        // if (serializerPushed) {
+                        //     writer.writeStatement(new ExpressionStatement(
+                        //         writer.makeMethodCall('thisSerializer', 'release', [])))
+                        //     scopes.reverse().forEach(it => {
+                        //         writer.popIndent()
+                        //         writer.print(it.scopeEnd!(it.param, writer.language))
+                        //     })
+                        // }
                     })
+                    writer.printer.print(``)
                 })
 
                 // extra memebers from MaterializerPrinter.ts
                 // TODO refactor MaterializedPrinter to generate OHOS peers
 
-                // write getFinalizer() method
-                const getFinalizerSig = new MethodSignature(IDLPointerType, [])
-                writer.writeMethodImplementation(new Method("getFinalizer", getFinalizerSig, [MethodModifier.STATIC]), writer => {
-                    const callExpression = writer.makeNativeCall(
-                        NativeModuleType.Generated,
-                        `_${int.name}_getFinalizer`, // TODO temporarily removed _${this.libraryName} prefix
-                        []
-                    );
-                    writer.writeStatement(writer.makeReturn(callExpression))
-                })
-
                 // write getPeer() method
-                const getPeerSig = new MethodSignature(createOptionalType(createReferenceType("Finalizable")),[])
+                const getPeerSig = new MethodSignature(createReferenceType("KPointer"),[])
                 writer.writeMethodImplementation(new Method("getPeer", getPeerSig), writer => {
-                    // TODO add better (platform-agnostic) way to return Finalizable
                     writer.writeStatement(writer.makeReturn(writer.makeString("this.peer")))
                 })
+                writer.printer.print(``)
                 
-                // write construct(ptr: number) method
-                if (ctors.length === 0) {
-                    const typeArguments = int.typeParameters
-                    const clazzRefType = createReferenceType(int.name, typeArguments?.map(createTypeParameterReference))
-                    const constructSig = new NamedMethodSignature(clazzRefType, [IDLPointerType], ["ptr"])
-                    writer.writeMethodImplementation(new Method("construct", constructSig, [MethodModifier.STATIC], typeArguments), writer => {
-                        const objVar = `obj${int.name}`
-                        writer.writeStatement(writer.makeAssign(objVar, clazzRefType, writer.makeNewObject(int.name), true))
-                        writer.writeStatement(
-                            writer.makeAssign(`${objVar}.peer`, createReferenceType("Finalizable"),
-                                writer.makeString(`new Finalizable(ptr, ${int.name}.getFinalizer())`), false),
-                        )
-                        writer.writeStatement(writer.makeReturn(writer.makeString(objVar)))
-                    })
-                }
-
                 int.methods.forEach(method => {
                     const signature = writer.makeNamedSignature(method.returnType, method.parameters)
                     writer.writeMethodImplementation(new Method(method.name, signature), writer => {
@@ -506,21 +477,21 @@ class PluginApiVisitor {
                             }
                         })
                         let serializerPushed = false
-                        let params = [ writer.makeString('this.peer.ptr')]
+                        let params = [ writer.makeString('this.peer')]
                         argConvertors.forEach(it => {
-                            if (it.useArray) {
-                                if (!serializerPushed) {
-                                    params.push(writer.makeMethodCall(`thisSerializer`, 'asArray', []))
-                                    params.push(writer.makeMethodCall(`thisSerializer`, 'length', []))
-                                    serializerPushed = true
-                                }
-                            } else {
+                            // if (it.useArray) {
+                            //     if (!serializerPushed) {
+                            //         params.push(writer.makeMethodCall(`thisSerializer`, 'asArray', []))
+                            //         params.push(writer.makeMethodCall(`thisSerializer`, 'length', []))
+                            //         serializerPushed = true
+                            //     }
+                            // } else {
                                 params.push(writer.makeString(writer.escapeKeyword(it.convertorArg(it.param, writer))))
-                            }
+                            // }
                         })
                         const callExpression = writer.makeNativeCall(
-                            NativeModuleType.Generated,
-                            `_${int.name}_${method.name}`, // TODO temporarily removed _${this.libraryName} prefix
+                            NativeModuleType.PluginApi,
+                            `_${int.name}${method.name}`, // TODO temporarily removed _${this.libraryName} prefix
                             params
                         )
                         if (method.returnType === IDLVoidType) {
@@ -540,32 +511,9 @@ class PluginApiVisitor {
                             writer.writeStatement(writer.makeReturn(writer.makeString("result")))
                         }
                     })
+                    writer.printer.print(``)
                 })
-            }, undefined, [`${int.name}Interface`])
-
-            // TODO Migrate to MaterializedPrinter
-            if (int.constructors.length === 0) {
-                // Write MaterializedClass static
-                this.peerWriter.writeClass(`${int.name}Internal`, writer => {
-                    // write fromPtr(ptr: number):MaterializedClass method
-                    const clazzRefType = createReferenceType(int.name, int.typeParameters?.map(createTypeParameterReference))
-                    const fromPtrSig = new NamedMethodSignature(clazzRefType, [IDLPointerType], ["ptr"])
-                    writer.writeMethodImplementation(new Method("fromPtr", fromPtrSig, [MethodModifier.PUBLIC, MethodModifier.STATIC], int.typeParameters), writer => {
-                        const objVar = `obj`
-                        writer.writeStatement(writer.makeAssign(objVar,
-                            clazzRefType,
-                            //TODO: Need to pass IDLType instead of string to makeNewObject
-                            writer.makeNewObject(writer.getNodeName(clazzRefType)),
-                            true)
-                        )
-                        writer.writeStatement(
-                            writer.makeAssign(`${objVar}.peer`, createReferenceType("Finalizable"),
-                                writer.makeString(`new Finalizable(ptr, ${int.name}.getFinalizer())`), false),
-                        )
-                        writer.writeStatement(writer.makeReturn(writer.makeString(objVar)))
-                    })
-                })
-            }
+            }, undefined, [`${int.name}_Interface`])
         })
     }
 
@@ -656,73 +604,55 @@ class PluginApiVisitor {
 
         this.printNative()
         this.printPeer()
-        this.printC()
+        // this.printC()
 
         const fileNamePrefix = this.libraryName.toLowerCase()
-        const ext = this.library.language.extension
 
         const managedCodeModuleInfo = {
-            name: `${this.libraryName}NativeModule`,
-            path: `./${fileNamePrefix}Native`,
-            serializerPath: `./${fileNamePrefix}Serializer`,
-            finalizablePath: `./${fileNamePrefix}Finalizable`,
+            name: `${this.libraryName}_NativeModule`,
+            path: `./${fileNamePrefix}_Native`,
+            serializerPath: `./${fileNamePrefix}_Serializer`,
+            finalizablePath: `./${fileNamePrefix}_Finalizable`,
         }
 
         const nativeModuleTemplate = readLangTemplate(`PluginApiNativeModule_template.ts`, this.library.language)
         const nativeModuleText = nativeModuleTemplate
             .replaceAll('%NATIVE_MODULE_NAME%', this.libraryName)
-            .replaceAll('%NATIVE_MODULE_CONTENT%', this.nativeWriter.getOutput().join('\n'))
             .replaceAll('%NATIVE_FUNCTIONS%', this.nativeFunctionsWriter.getOutput().join('\n'))
-            .replaceAll('%ARKUI_FUNCTIONS%', this.arkUIFunctionsWriter.getOutput().join('\n'))
             .replaceAll('%OUTPUT_FILE%', managedCodeModuleInfo.path.replace('./', ''))
         fs.writeFileSync(path.join(managedOutDir, `${managedCodeModuleInfo.path}.ts`), nativeModuleText, 'utf-8')
-
-        // fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Finalizable.ts`),
-        //     readLangTemplate(`OHOSFinalizable_template.ts`, this.library.language)
-        //         .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
-        //         .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
-        // )
 
         const peerTemplate = readLangTemplate(`PluginApiPeer_template.ts`, this.library.language)
         const peerText = peerTemplate
             .replaceAll('%PEER_CONTENT%', this.peerWriter.getOutput().join('\n'))
             .replaceAll('%SERIALIZER_PATH%', managedCodeModuleInfo.serializerPath)
-        //     .replaceAll('%FINALIZABLE_PATH%', managedCodeModuleInfo.finalizablePath)
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}.ts`), peerText, 'utf-8')
 
-        this.hWriter.printTo(path.join(outDir, `${fileNamePrefix}.h`))
-        this.cppWriter.printTo(path.join(outDir, `${fileNamePrefix}.cc`))
+        // this.hWriter.printTo(path.join(outDir, `${fileNamePrefix}.h`))
+        // this.cppWriter.printTo(path.join(outDir, `${fileNamePrefix}.cc`))
+        // fs.writeFileSync(path.join(outDir, this.implementationStubsFile.name),
+        //     this.implementationStubsFile.printToString()
+        // )
+        // fs.writeFileSync(path.join(outDir, `SerializerBase.h`),
+        //     readLangTemplate(`ohos_SerializerBase.h`, Language.CPP)
+        //         .replaceAll("%NATIVE_API_HEADER_PATH%", `${fileNamePrefix}.h`)
+        // )
+        // fs.writeFileSync(path.join(outDir, `DeserializerBase.h`),
+        //     readLangTemplate(`ohos_DeserializerBase.h`, Language.CPP)
+        //         .replaceAll("%NATIVE_API_HEADER_PATH%", `${fileNamePrefix}.h`)
+        // )
 
-        fs.writeFileSync(path.join(outDir, this.implementationStubsFile.name),
-            this.implementationStubsFile.printToString()
-        )
-        fs.writeFileSync(path.join(outDir, `SerializerBase.h`),
-            readLangTemplate(`ohos_SerializerBase.h`, Language.CPP)
-                .replaceAll("%NATIVE_API_HEADER_PATH%", `${fileNamePrefix}.h`)
-        )
-        fs.writeFileSync(path.join(outDir, `DeserializerBase.h`),
-            readLangTemplate(`ohos_DeserializerBase.h`, Language.CPP)
-                .replaceAll("%NATIVE_API_HEADER_PATH%", `${fileNamePrefix}.h`)
-        )
-
-        const serializerText = makeSerializerForOhos(this.library, managedCodeModuleInfo, fileNamePrefix).printToString()
-        // fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}.ts`), peerText, 'utf-8')
-        fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Serializer.ts`), serializerText, 'utf-8')
-        fs.writeFileSync(path.join(managedOutDir, `SerializerBase.ts`),
-            readLangTemplate(`SerializerBase.ts`, this.library.language)
-                .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
-                .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
-        )
-        fs.writeFileSync(path.join(managedOutDir, `DeserializerBase.ts`),
-            readLangTemplate(`DeserializerBase.ts`, this.library.language)
-                .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
-                .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
-        )
-        // fs.writeFileSync(path.join(managedOutDir, `CallbacksChecker.ts`),
-        //     readLangTemplate(`CallbacksChecker.ts`, this.library.language)
+        // const serializerText = makeSerializerForOhos(this.library, managedCodeModuleInfo, fileNamePrefix).printToString()
+        // fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}_Serializer.ts`), serializerText, 'utf-8')
+        // fs.writeFileSync(path.join(managedOutDir, `SerializerBase.ts`),
+        //     readLangTemplate(`SerializerBase.ts`, this.library.language)
         //         .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
         //         .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
-        //         .replaceAll("%SERIALIZER_PATH%", managedCodeModuleInfo.serializerPath)
+        // )
+        // fs.writeFileSync(path.join(managedOutDir, `DeserializerBase.ts`),
+        //     readLangTemplate(`DeserializerBase.ts`, this.library.language)
+        //         .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
+        //         .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
         // )
     }
 }
