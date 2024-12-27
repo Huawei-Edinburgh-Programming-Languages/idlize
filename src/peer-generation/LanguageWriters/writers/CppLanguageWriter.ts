@@ -22,6 +22,7 @@ import { PrimitiveType } from "../../ArkPrimitiveType"
 import {
     AssignStatement,
     BlockStatement,
+    ExpressionStatement,
     FieldModifier,
     LanguageExpression,
     LanguageStatement,
@@ -373,8 +374,8 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     get supportedFieldModifiers(): FieldModifier[] {
         return []
     }
-    enumFromOrdinal(value: LanguageExpression, _: IDLType): LanguageExpression {
-        return value;
+    enumFromOrdinal(value: LanguageExpression, type: IDLType): LanguageExpression {
+        return this.makeString(`static_cast<${this.typeConvertor.convert(type)}>(` + value.asString() + `)`);
     }
     ordinalFromEnum(value: LanguageExpression, _: IDLType): LanguageExpression {
         return value;
