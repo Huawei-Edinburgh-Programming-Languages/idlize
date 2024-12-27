@@ -1483,12 +1483,12 @@
 |`getChildrenCount`| Function | Tuzhilkin Ivan | testskipped | |
 |`dispose`| Function | Tuzhilkin Ivan | testskipped | |
 |*PixelMap*| *Class* | Andrey Khudenkikh | blocked  | |
-|`readPixelsToBufferSync`| Function | Andrey Khudenkikh | blocked AceEngine | |
-|`writeBufferToPixels`| Function | Andrey Khudenkikh | blocked AceEngine | |
-|`getIsEditable`| Function | Andrey Khudenkikh | blocked AceEngine | |
-|`setIsEditable`| Function | Andrey Khudenkikh | blocked AceEngine | |
-|`getIsStrideAlignment`| Function | Andrey Khudenkikh | blocked AceEngine | |
-|`setIsStrideAlignment`| Function | Andrey Khudenkikh | blocked AceEngine | |
+|`readPixelsToBufferSync`| Function | Andrey Khudenkikh | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
+|`writeBufferToPixels`| Function | Andrey Khudenkikh | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
+|`getIsEditable`| Function | Andrey Khudenkikh | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
+|`setIsEditable`| Function | Andrey Khudenkikh | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
+|`getIsStrideAlignment`| Function | Andrey Khudenkikh | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
+|`setIsStrideAlignment`| Function | Andrey Khudenkikh | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
 |*EventEmulator*| *Class* | Dmitry A Smirnov | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 |
 |`emitClickEvent`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 |
 |`emitTextInputEvent`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 |
