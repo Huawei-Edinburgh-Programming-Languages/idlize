@@ -263,7 +263,9 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         return this.makeCast(this.makeString(`${value}${convertor?.isStringEnum ? "" : ".valueOf()"}`),
             IDLI32Type).asString()
     }
-    makeUnionVariantCondition(convertor: ArgConvertor, valueName: string, valueType: string, type: string, index?: number): LanguageExpression {
+    makeUnionVariantCondition(convertor: ArgConvertor, valueName: string, valueType: string, type: string,
+                              convertorIndex: number,
+                              runtimeTypeIndex: number): LanguageExpression {
         if (convertor instanceof EnumConvertor) {
             return this.instanceOf(convertor, valueName)
         }
@@ -271,14 +273,14 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         if (convertor instanceof UnionConvertor || convertor instanceof OptionConvertor) {
             // Unwrapping of type
             const idlType = convertor instanceof UnionConvertor
-                ? (convertor.nativeType() as idl.IDLUnionType).types[index!]
+                ? (convertor.nativeType() as idl.IDLUnionType).types[runtimeTypeIndex]
                 : idl.maybeUnwrapOptionalType(convertor.nativeType())
             if (idlType !== undefined && idl.isReferenceType(idlType)) {
                 const resolved = this.resolver.resolveTypeReference(idl.createReferenceType(idlType.name))
                 type = resolved != undefined && idl.isEnum(resolved) ? RuntimeType[RuntimeType.OBJECT] : type
             }
         }
-        return super.makeUnionVariantCondition(convertor, valueName, valueType, type, index)
+        return super.makeUnionVariantCondition(convertor, valueName, valueType, type, convertorIndex)
     }
     makeCastCustomObject(customName: string, isGenericType: boolean): LanguageExpression {
         if (isGenericType) {
