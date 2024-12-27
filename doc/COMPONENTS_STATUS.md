@@ -574,7 +574,7 @@
 |`swipeAction`|Function|Kovalev Sergey| in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`onSelect`|Function|Morozov Sergey|done|  |
 |*ListItemGroup*|*Component*|Morozov Sergey|blocked|  |
-|`setListItemGroupOptions`|Function|Dmitry A Smirnov| in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`setListItemGroupOptions`|Function|Dmitry A Smirnov | testskipped | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`divider`|Function|Morozov Sergey|done|  |
 |`childrenMainSize`|Function|Morozov Sergey|done|  |
 |*LoadingProgress*|*Component*| Samarin Sergey | done |  |
@@ -617,7 +617,7 @@
 |`labelFont`| Function |Morozov Sergey|done|  |
 |`labelFontColor`| Function |Morozov Sergey|done|  |
 |*MenuItemGroup*| *Component* |Morozov Sergey |blocked |  |
-|`setMenuItemGroupOptions`| Function | Dmitry A Smirnov | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`setMenuItemGroupOptions`| Function | Dmitry A Smirnov | testskipped | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*NavDestination*| *Component* |Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`setNavDestinationOptions`| Function |Kovalev Sergey | done | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`hideTitleBar`| Function |Kovalev Sergey | done | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
@@ -708,7 +708,7 @@
 |`backgroundColor`| Function |Evstigneev Roman | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZVOQ |
 |`contentOpacity`| Function |Evstigneev Roman | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZVOQ |
 |*Radio*| *Component* | Evstigneev Roman | done |  |
-|`setRadioOptions`| Function | Dmitry A Smirnov | in progress | CustomBuilder |
+|`setRadioOptions`| Function | Dmitry A Smirnov | testskipped | CustomBuilder |
 |`checked`| Function | Evstigneev Roman | done |  |
 |`onChange`| Function | Evstigneev Roman | done |  |
 |`radioStyle`| Function | Evstigneev Roman | done |  |
@@ -1095,7 +1095,7 @@
 |`halfLeading`| Function |Samarin Sergey | done |  |
 |`enableHapticFeedback`| Function |Samarin Sergey | done |  |
 |`selection`| Function |Samarin Sergey | testskipped |  |
-|`bindSelectionMenu`| Function | Dmitry A Smirnov | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`bindSelectionMenu`| Function | Dmitry A Smirnov | testskipped | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*TextArea*|*Component*|Tuzhilkin Ivan|blocked IDL|  |
 |`setTextAreaOptions`|Function|Tuzhilkin Ivan|testskipped|  |
 |`placeholderColor`|Function|Tuzhilkin Ivan|testskipped|  |
