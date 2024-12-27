@@ -14,6 +14,7 @@
  */
 
 import * as path from 'path'
+import * as fs from "fs"
 import * as ts from "typescript"
 import { Language } from './Language';
 
@@ -599,4 +600,26 @@ export function hashCodeFromString(value: string): number {
         hash |= 0
     }
     return hash
+}
+
+export function forceWriteFile(filePath: string, content: string): void {
+    const folders = path.normalize(filePath).split(path.sep).slice(0, -1)
+    forceWriteDirectories(folders)
+    fs.writeFileSync(filePath, content)
+}
+
+function forceWriteDirectories(folders: string[]): void {
+    if (folders.length == 0) {
+        return
+    }
+    folders.reduce(
+        (last, folder) => {
+            const folderPath = path.join(last, folder)
+            if (!fs.existsSync(folderPath)) {
+                fs.mkdirSync(folderPath)
+            }
+            return folderPath
+        },
+        "."
+    )
 }
