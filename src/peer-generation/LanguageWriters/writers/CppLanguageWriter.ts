@@ -190,7 +190,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
             super.writeMethodCall(receiver, method, params, nullable)
         }
     }
-    
+
     writeFieldDeclaration(name: string, type: IDLType, modifiers: FieldModifier[] | undefined, optional: boolean, initExpr?: LanguageExpression): void {
         let filter = function(modifier_name : FieldModifier) {
             return modifier_name !== FieldModifier.STATIC
@@ -311,7 +311,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         return this.makeString(`${this.getNodeName(type)}(${paramenters.map(it => it.asString()).join(", ")})`)
     }
     makeMapInit(type: IDLType): LanguageExpression {
-        return this.makeString(`{}`)        
+        return this.makeString(`{}`)
     }
     makeArrayResize(array: string, arrayType: string, length: string, deserializer: string): LanguageStatement {
         return new CppArrayResizeStatement(array, length, deserializer)
