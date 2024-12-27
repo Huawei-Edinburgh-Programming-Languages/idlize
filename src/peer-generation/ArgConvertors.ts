@@ -455,7 +455,7 @@ export class EnumConvertor extends BaseArgConvertor { //
         value =
             this.isStringEnum
                 ? writer.ordinalFromEnum(writer.makeString(value), idl.createReferenceType(this.enumEntry.name)).asString()
-                : writer.makeEnumCast(this.enumEntry.name, false, this)
+                : writer.makeEnumCast(value, false, this)
         writer.writeMethodCall(`${param}Serializer`, "writeInt32", [value])
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
