@@ -38,6 +38,7 @@ import {
     EnumConvertor,
     InterfaceConvertor,
     makeInterfaceTypeCheckerCall,
+    OptionConvertor,
     RuntimeType,
     UnionConvertor
 } from "../../ArgConvertors"
@@ -267,8 +268,11 @@ export class ETSLanguageWriter extends TSLanguageWriter {
             return this.instanceOf(convertor, valueName)
         }
         // TODO: in ArkTS SerializerBase.runtimeType returns RuntimeType.OBJECT for enum type and not RuntimeType.NUMBER as in TS
-        if (convertor instanceof UnionConvertor && index !== undefined) {
-            const idlType = (convertor.nativeType() as idl.IDLUnionType).types[index]
+        if (convertor instanceof UnionConvertor || convertor instanceof OptionConvertor) {
+            // Unwrapping of type
+            const idlType = convertor instanceof UnionConvertor
+                ? (convertor.nativeType() as idl.IDLUnionType).types[index!]
+                : idl.maybeUnwrapOptionalType(convertor.nativeType())
             if (idlType !== undefined && idl.isReferenceType(idlType)) {
                 const resolved = this.resolver.resolveTypeReference(idl.createReferenceType(idlType.name))
                 type = resolved != undefined && idl.isEnum(resolved) ? RuntimeType[RuntimeType.OBJECT] : type
