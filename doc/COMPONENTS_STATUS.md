@@ -726,7 +726,7 @@
 |`radiusHeight`|Function|Dudkin Sergey| done |  |
 |`radius`|Function|Dudkin Sergey| blocked AceEngine|https://gitee.com/openharmony/interface_sdk-js/issues/IAXA7J|
 |*Refresh*| *Component* |Politov Mikhail | blocked |  |
-|`setRefreshOptions`| Function | Samarin Sergey | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`setRefreshOptions`| Function | Samarin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD ; offset, friction - deprecated |
 |`onStateChange`| Function |Politov Mikhail | done |  |
 |`onRefreshing`| Function |Politov Mikhail | done |  |
 |`refreshOffset`| Function |Politov Mikhail | done |  |
