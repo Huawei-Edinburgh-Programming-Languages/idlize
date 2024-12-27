@@ -12,8 +12,10 @@
         "compile:arkts:panda": "bash scripts/build-panda.sh",
         "compile:native:node": "meson setup build/native/node -Dtarget_vm=node && meson install -C build/native/node",
         "compile:native:panda": "meson setup build/native/panda -Dtarget_vm=panda && meson install -C build/native/panda",
+        "compile:native:cj": "meson setup build/native/panda -Dtarget_vm=cangjie && meson install -C build/native/panda",
         "compile:node": "npm run compile:native:node && npm run compile:ts:node",
         "compile:panda": "npm run compile:native:panda && npm run compile:arkts:panda",
+        "compile:cj": "npm run compile:native:cj && LD_LIBRARY_PATH=./build/cangjie/:$LD_LIBRARY_PATH && cjpm run",
         "start": "node build/node/index.js",
         "start:panda": "bash scripts/run-panda.sh"
     },

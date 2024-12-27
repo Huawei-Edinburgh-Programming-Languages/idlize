@@ -103,7 +103,6 @@ void XmlPullParser_parseImpl(OH_NativePointer thisPtr, const OH_ParseOptions* op
                     temp_release,
                 },
                 temp_call,
-                temp_call_sync,
             });
         });
     }
@@ -117,7 +116,6 @@ void XmlPullParser_parseImpl(OH_NativePointer thisPtr, const OH_ParseOptions* op
                     temp_release,
                 },
                 temp_call,
-                temp_call_sync,
             });
         });
     }

@@ -105,7 +105,13 @@ export class Deserializer extends DeserializerBase {
     readCallback_String_String_Boolean(): Function2<string,string,boolean> {
         const _resource : CallbackResource = this.readCallbackResource()
         const _call : KPointer = this.readPointer()
-        return (name: string, value: string): boolean => { const _argsSerializer : Serializer = Serializer.hold(); _argsSerializer.writeInt32(_resource.resourceId); _argsSerializer.writePointer(_call); _argsSerializer.writeString(name); _argsSerializer.writeString(value); let _continuationValue : boolean | undefined; const _continuationCallback : Function1<boolean,void> = (value: boolean): void => { _continuationValue = value; }; _argsSerializer.holdAndWriteCallback(_continuationCallback); XMLNativeModule._CallCallback(923368928, _argsSerializer.asArray(), _argsSerializer.length()); _argsSerializer.release(); return (_continuationValue as boolean); }
+        return (name: string, value: string): boolean => { const _argsSerializer : Serializer = Serializer.hold();
+            _argsSerializer.writeInt32(_resource.resourceId); _argsSerializer.writePointer(_call); _argsSerializer.writeString(name); _argsSerializer.writeString(value); let _continuationValue : boolean | undefined;
+            const _continuationCallback : Function1<boolean,void> = (value: boolean): void => { _continuationValue = value; };
+            _argsSerializer.holdAndWriteCallback(_continuationCallback);
+            XMLNativeModule._CallCallback(923368928, _argsSerializer.asArray(), _argsSerializer.length());
+            _argsSerializer.release();
+            return (_continuationValue as boolean); }
     }
     readCallback_Boolean_Void(): Function1<boolean,void> {
         const _resource : CallbackResource = this.readCallbackResource()

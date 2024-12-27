@@ -94,11 +94,11 @@ public open class SerializerBase {
         if (this.position > buffSize - value) {
             let minSize = this.position + value
             let resizedSize = max(minSize, Int64(round(3.0 * Float64(buffSize) / 2.0)))
-            var resizedBuffer =  ArrayList<UInt8>(resizedSize)
-            for (i in 0..this.buffer.size) {
-                resizedBuffer.append(this.buffer[i])
+            // var resizedBuffer =  ArrayList<UInt8>(resizedSize, repeat: 0)
+            while(this.buffer.size < resizedSize) {
+                this.buffer.append(0)
             }
-            this.buffer = resizedBuffer
+            // this.buffer = resizedBuffer
         }
     }
     func writeCustomObject(kind: String, value: Object): Unit {
@@ -115,7 +115,7 @@ public open class SerializerBase {
         this.writePointer(0)
         this.writePointer(0)
         this.writePointer(0)
-        this.writePointer(0)
+        // this.writePointer(0)
     }
     func writeFunction(value: Any): Unit {
         // TODO
@@ -195,7 +195,7 @@ public open class SerializerBase {
     func writeFloat32(value: Float32): Unit {
         this.setBytes(this.position, value)
     }
-    func writePointer(ptr: Int64): Unit {
+    func writePointer(ptr: UInt64): Unit {
         this.setBytes(this.position, ptr)
     }
     func writeBoolean(value: ?Bool): Unit {

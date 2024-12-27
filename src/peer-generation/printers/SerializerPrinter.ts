@@ -265,6 +265,7 @@ class IdlSerializerPrinter {
 }
 
 class IdlDeserializerPrinter {
+    private continuationValueHolders = new Set<idl.IDLType>()
     constructor(
         private readonly library: PeerLibrary,
         private readonly destFile: SourceFile,
@@ -390,6 +391,7 @@ class IdlDeserializerPrinter {
     }
 
     private generateCallbackDeserializer(target: idl.IDLCallback): void {
+        this.continuationValueHolders.add(target.returnType)
         if (this.writer.language === Language.CPP)
             // callbacks in native are just CallbackResource while in managed we need to convert them to
             // target language callable
@@ -399,7 +401,7 @@ class IdlDeserializerPrinter {
         target = maybeTransformManagedCallback(target) ?? target
         const methodName = this.library.getInteropName(target)
         const type = idl.createReferenceType(target.name)
-        this.writer.writeMethodImplementation(new Method(`read${methodName}`, new NamedMethodSignature(type, [idl.IDLBooleanType], ['isSync'], ['false'])), writer => {
+        let readCallbackLambda = (writer: LanguageWriter) => {
             const resourceName = "_resource"
             const callName = "_call"
             const callSyncName = '_callSync'
@@ -437,12 +439,12 @@ class IdlDeserializerPrinter {
                 const returnType = target.returnType
                 const optionalReturnType = idl.createOptionalType(target.returnType)
                 continuation = [
-                    writer.makeAssign(continuationValueName, optionalReturnType, undefined, true, false),
+                    writer.makeAssign(continuationValueName, undefined, writer.makeString(`${writer.getNodeName(target.returnType)}Holder(None<${writer.getNodeName(target.returnType)}>)`), true, true),
                     writer.makeAssign(
                         continuationCallbackName,
                         continuationReference,
                         writer.makeLambda(new NamedMethodSignature(idl.IDLVoidType, [returnType], [`value`]), [
-                            writer.makeAssign(continuationValueName, undefined, writer.makeString(`value`), false)
+                            writer.makeAssign(`${continuationValueName}.value`, undefined, writer.makeString(`value`), false)
                         ]),
                         true,
                     ),
@@ -484,12 +486,18 @@ class IdlDeserializerPrinter {
                 new ExpressionStatement(writer.makeMethodCall(`${argsSerializer}Serializer`, `release`, [])),
                 writer.makeReturn(hasContinuation
                     ? writer.makeCast(
-                        writer.makeString(continuationValueName),
+                        writer.makeString(`${continuationValueName}.value`),
                         target.returnType)
                     : undefined),
             ])))
-
-        })
+        }
+        this.writer.writeMethodImplementation(new Method(`read${methodName}`, new NamedMethodSignature(type, [idl.IDLBooleanType], ['isSync'], ['false'])), readCallbackLambda)
+        if (this.writer.language == Language.CJ) {
+            this.writer.writeMethodImplementation(new Method(`read${methodName}`, new NamedMethodSignature(type)), () => {
+                this.writer.print('let isSync = false')
+                readCallbackLambda(this.writer)
+            })
+        }   
     }
 
     private generateLengthDeserializer() {
@@ -548,6 +556,17 @@ class IdlDeserializerPrinter {
             }
             this.generateLengthDeserializer()
         }, superName)
+        if (this.writer.language != Language.CPP) {
+            for (let valueHolder of this.continuationValueHolders) {
+                let className = `${this.writer.getNodeName(valueHolder)}Holder`
+                this.writer.writeClass(className, (writer) => {
+                    writer.makeAssign("value", idl.maybeOptional(valueHolder, true), undefined, true, false).write(writer)
+                    writer.writeConstructorImplementation(className, new MethodSignature(idl.IDLAnyType, [idl.maybeOptional(valueHolder, true)]), () => {
+                        writer.makeAssign("this.value", idl.maybeOptional(valueHolder, true), writer.makeString('arg0'), false, false).write(writer)
+                    })
+                })
+            }
+        }
     }
 }
 

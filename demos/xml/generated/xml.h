@@ -105,6 +105,8 @@ typedef struct OH_AnyAPI {
 typedef enum OH_APIKind {
     OH_XML_API_KIND = 1
 } OH_APIKind;
+struct _OH_VMContext;
+typedef struct _OH_VMContext* OH_VMContext;
 typedef struct Callback_EventType_ParseInfo_Boolean Callback_EventType_ParseInfo_Boolean;
 typedef struct Opt_Callback_EventType_ParseInfo_Boolean Opt_Callback_EventType_ParseInfo_Boolean;
 typedef struct Callback_String_String_Boolean Callback_String_String_Boolean;

@@ -77,7 +77,7 @@ public open class DeserializerBase {
         return res
     }
 
-    func readPointer(): KPointer {
+    func readPointer(): pointer {
         this.checkCapacity(8)
         let res = Int64.readLittleEndian(this.buffer[this.position..this.position+8])
         this.position += 8

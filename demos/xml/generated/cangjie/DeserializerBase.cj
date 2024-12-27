@@ -39,7 +39,7 @@ public open class DeserializerBase {
     }
 
     func asArray(position: Int64, length: Int64): ArrayList<UInt8> {
-        return ArrayList<UInt8>()
+        return ArrayList<UInt8>(this.buffer)
     }
 
     func currentPosition(): Int64 {
@@ -77,9 +77,9 @@ public open class DeserializerBase {
         return res
     }
 
-    func readPointer(): KPointer {
+    func readPointer(): pointer {
         this.checkCapacity(8)
-        let res = Int64.readLittleEndian(this.buffer[this.position..this.position+8])
+        let res = UInt64.readLittleEndian(this.buffer[this.position..this.position+8])
         this.position += 8
         return res
     }

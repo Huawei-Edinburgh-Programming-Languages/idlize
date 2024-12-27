@@ -109,6 +109,15 @@ export class CJTernaryExpression implements LanguageExpression {
     }
 }
 
+export class CJNewObjectExpression implements LanguageExpression {
+    constructor(
+        private objectName: string,
+        private params: LanguageExpression[]) { }
+    asString(): string {
+        return `${this.objectName}(${this.params.map(it => it.asString()).join(", ")})`
+    }
+}
+
 ////////////////////////////////////////////////////////////////
 //                         STATEMENTS                         //
 ////////////////////////////////////////////////////////////////
@@ -387,11 +396,19 @@ export class CJLanguageWriter extends LanguageWriter {
         this.print(`}`)
     }
     writeMethodImplementation(method: Method, op: (writer: LanguageWriter) => void) {
-        this.writeDeclaration(method.name, method.signature, method.modifiers, " {")
-        this.pushIndent()
-        op(this)
-        this.popIndent()
-        this.printer.print(`}`)
+        if (method.signature.defaults) {
+            this.writeDeclaration(method.name, method.signature, method.modifiers, " {")
+            this.pushIndent()
+            op(this)
+            this.popIndent()
+            this.printer.print(`}`)
+        } else {
+            this.writeDeclaration(method.name, method.signature, method.modifiers, " {")
+            this.pushIndent()
+            op(this)
+            this.popIndent()
+            this.printer.print(`}`)
+        }
     }
     private writeDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[], postfix?: string): void {
         let prefix = modifiers
@@ -440,6 +457,9 @@ export class CJLanguageWriter extends LanguageWriter {
             const op = equals ? "==" : "!="
             return this.makeNaryOp(op, [this.makeRuntimeType(type), this.makeString(`Int32(${typeVarName})`)])
         }
+    }
+    makeNewObject(objectName: string, params: LanguageExpression[] = []): LanguageExpression {
+        return new CJNewObjectExpression(objectName, params)
     }
     makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression {
         return new CJLambdaExpression(this, signature, this.resolver, body)
