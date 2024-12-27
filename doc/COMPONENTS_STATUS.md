@@ -1513,8 +1513,8 @@
 |`moveTo`| Function | Kovalev Sergey | done |  |
 |`quadraticCurveTo`| Function | Kovalev Sergey | done |  |
 |`rect`| Function | Kovalev Sergey | done |  |
-|*Path2D*| *Class* | Vadim Voronov | in progress | |
-|`addPath`| Function | Vadim Voronov | devdone | |
+|*Path2D*| *Class* | Vadim Voronov | done | |
+|`addPath`| Function | Vadim Voronov | done | |
 |*CanvasPattern*| *Class* | Andrey Khudenkikh | done |  |
 |`setTransform`| Function | Andrey Khudenkikh | done |  |
 |*ImageBitmap*| *Class* | Pavelyev Ivan | done | |
