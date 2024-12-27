@@ -1322,29 +1322,29 @@
 |`onGeolocationHide`| Function | Erokhin Ilya | done | |
 |`onGeolocationShow`| Function | Erokhin Ilya | done | |
 |`onRequestSelected`| Function | Erokhin Ilya | done | |
-|`onAlert`| Function | Maksimov Nikita | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onBeforeUnload`| Function | Maksimov Nikita | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onConfirm`| Function | Maksimov Nikita | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onPrompt`| Function | Maksimov Nikita | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onConsole`| Function | Maksimov Nikita | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onAlert`| Function | Maksimov Nikita | done | |
+|`onBeforeUnload`| Function | Maksimov Nikita | done | |
+|`onConfirm`| Function | Maksimov Nikita | done | |
+|`onPrompt`| Function | Maksimov Nikita | done | |
+|`onConsole`| Function | Maksimov Nikita | done | |
 |`onErrorReceive`| Function | Erokhin Ilya | done | |
 |`onHttpErrorReceive`| Function | Erokhin Ilya | done | |
 |`onDownloadStart`| Function | Erokhin Ilya | done | |
 |`onRefreshAccessedHistory`| Function | Erokhin Ilya | done | |
-|`onUrlLoadIntercept`| Function | Maksimov Nikita | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onUrlLoadIntercept`| Function | Maksimov Nikita | done | |
 |`onSslErrorReceive`| Function | Erokhin Ilya | done | deprecated |
 |`onRenderExited`| Function | Erokhin Ilya | done | |
-|`onShowFileSelector`| Function | Maksimov Nikita | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onShowFileSelector`| Function | Maksimov Nikita | done | |
 |`onFileSelectorShow`| Function | Erokhin Ilya | done | deprecated |
 |`onResourceLoad`| Function | Erokhin Ilya | done | |
 |`onFullScreenExit`| Function | Erokhin Ilya | done | |
 |`onFullScreenEnter`| Function | Erokhin Ilya | done | |
 |`onScaleChange`| Function | Erokhin Ilya | done | |
-|`onHttpAuthRequest`| Function | Maksimov Nikita | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onInterceptRequest`| Function | Maksimov Nikita | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onHttpAuthRequest`| Function | Maksimov Nikita | done | |
+|`onInterceptRequest`| Function | Maksimov Nikita | done | |
 |`onPermissionRequest`| Function | Erokhin Ilya | done | |
 |`onScreenCaptureRequest`| Function | Erokhin Ilya | done | |
-|`onContextMenuShow`| Function | Maksimov Nikita | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onContextMenuShow`| Function | Maksimov Nikita | done | |
 |`onContextMenuHide`| Function | Erokhin Ilya | done | |
 |`mediaPlayGestureAccess`| Function | Erokhin Ilya | done | |
 |`onSearchResultReceive`| Function | Erokhin Ilya | done | |
@@ -1355,7 +1355,7 @@
 |`onWindowNew`| Function | Erokhin Ilya | done | |
 |`onWindowExit`| Function | Erokhin Ilya | done | |
 |`multiWindowAccess`| Function | Erokhin Ilya | done | |
-|`onInterceptKeyEvent`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX & https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onInterceptKeyEvent`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`webStandardFont`| Function | Erokhin Ilya | done | |
 |`webSerifFont`| Function | Erokhin Ilya | done | |
 |`webSansSerifFont`| Function | Erokhin Ilya | done | |
@@ -1381,7 +1381,7 @@
 |`onFirstContentfulPaint`| Function | Erokhin Ilya | done | |
 |`onFirstMeaningfulPaint`| Function | Erokhin Ilya | done | |
 |`onLargestContentfulPaint`| Function | Erokhin Ilya | done | |
-|`onLoadIntercept`| Function | Maksimov Nikita | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ  |
+|`onLoadIntercept`| Function | Maksimov Nikita | done | |
 |`onControllerAttached`| Function | Erokhin Ilya | done | |
 |`onOverScroll`| Function | Erokhin Ilya | done | |
 |`onSafeBrowsingCheckResult`| Function | Erokhin Ilya | done | |
@@ -1396,7 +1396,7 @@
 |`onNativeEmbedVisibilityChange`| Function | Erokhin Ilya | done | |
 |`onNativeEmbedGestureEvent`| Function | Erokhin Ilya | testskipped | |
 |`copyOptions`| Function | Erokhin Ilya | done | |
-|`onOverrideUrlLoading`| Function | Maksimov Nikita | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onOverrideUrlLoading`| Function | Maksimov Nikita | done | |
 |`textAutosizing`| Function | Erokhin Ilya | done | |
 |`enableNativeMediaPlayer`| Function | Erokhin Ilya | done | |
 |`enableSmoothDragResize`| Function | Erokhin Ilya | done | |
@@ -1404,7 +1404,7 @@
 |`onRenderProcessResponding`| Function | Erokhin Ilya | done | |
 |`selectionMenuOptions`| Function | Erokhin Ilya | testskipped | |
 |`onViewportFitChanged`| Function | Erokhin Ilya | done | |
-|`onInterceptKeyboardAttach`| Function | Maksimov Nikita | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
+|`onInterceptKeyboardAttach`| Function | Maksimov Nikita | done | |
 |`onAdsBlocked`| Function | Erokhin Ilya | done | |
 |`keyboardAvoidMode`| Function | Erokhin Ilya | done | |
 |`editMenuOptions`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
