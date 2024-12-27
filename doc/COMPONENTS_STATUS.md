@@ -801,7 +801,7 @@
 |`scrollBar`| Function | Berezin Kirill | done |  |
 |`scrollBarColor`| Function | Berezin Kirill | done |  |
 |`scrollBarWidth`| Function | Berezin Kirill | done |  |
-|`onScrollFrameBegin`| Function | Dudkin Sergey | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onScrollFrameBegin`| Function | Dudkin Sergey | done | |
 |`nestedScroll`| Function | Berezin Kirill | done |  |
 |`enableScrollInteraction`| Function | Berezin Kirill | done |  |
 |`friction`| Function | Berezin Kirill | done |  |
@@ -1043,10 +1043,10 @@
 |`barOverlap`| Function | Tuzhilkin Ivan | done |  |
 |`barBackgroundColor`| Function | Tuzhilkin Ivan | done |  |
 |`barGridAlign`| Function | Tuzhilkin Ivan | done |  |
-|`customContentTransition`| Function | Dudkin Sergey | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`customContentTransition`| Function | Dudkin Sergey | done |  |
 |`barBackgroundBlurStyle`| Function | Tuzhilkin Ivan | done |  |
 |`barBackgroundEffect`| Function | Tuzhilkin Ivan | done | |
-|`onContentWillChange`| Function | Dudkin Sergey | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onContentWillChange`| Function | Dudkin Sergey | done | |
 |`barModeScrollable`| Function | Tuzhilkin Ivan | done | |
 |*TabContent*| *Component* | Evstigneev Roman |in progress |  |
 |`setTabContentOptions`| Function | Evstigneev Roman | done |  |
@@ -1449,7 +1449,7 @@
 |`cachedCount`| Function |Kovalev Sergey | done |  |
 |`onReachStart`| Function | Kovalev Sergey | done | |
 |`onReachEnd`| Function | Kovalev Sergey | done | |
-|`onScrollFrameBegin`| Function | Dudkin Sergey | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onScrollFrameBegin`| Function | Dudkin Sergey | done | |
 |`onScrollIndex`| Function | Kovalev Sergey | done | |
 |*UIExtensionComponent*| *Component* | Tuzhilkin Ivan | blocked IDL | |
 |`setUIExtensionComponentOptions`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBCGB5 ,  https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF |
