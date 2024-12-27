@@ -45,7 +45,6 @@ typedef InteropNumber OH_Number;
 typedef InteropMaterialized OH_Materialized;
 typedef InteropCustomObject OH_CustomObject;
 typedef InteropUndefined OH_Undefined;
-typedef InteropAnyAPI OH_AnyAPI;
 // typedef InteropAPIKind OH_APIKind;
 typedef InteropVMContext OH_VMContext;
 typedef InteropBuffer OH_Buffer;
@@ -55,3 +54,7 @@ typedef InteropFunction OH_Function;
 typedef enum OH_APIKind {
     OH_XML_API_KIND = 1
 } OH_APIKind;
+
+typedef struct OH_AnyAPI {
+    OH_Int32 version;
+} OH_AnyAPI;

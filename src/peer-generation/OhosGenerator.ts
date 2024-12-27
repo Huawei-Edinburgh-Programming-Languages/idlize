@@ -587,7 +587,7 @@ class OHOSVisitor {
                 .replaceAll("%CALLBACK_KINDS%", callbackKindsPrinter.getOutput().join("\n"))
                 .replaceAll("%LIBRARY_NAME%", this.libraryName.toUpperCase())
         )
-        const interopTypesPath = path.resolve(process.cwd(), 'external', 'interop', 'src', 'cpp', 'interop-types.h')
+        const interopTypesPath = path.resolve(__dirname, '..', 'external', 'interop', 'src', 'cpp', 'interop-types.h')
         const interopTypesContent = fs.readFileSync(interopTypesPath, 'utf-8')
         this.hWriter.writeLines(
             readLangTemplate('ohos_api_prologue.h', Language.CPP)
