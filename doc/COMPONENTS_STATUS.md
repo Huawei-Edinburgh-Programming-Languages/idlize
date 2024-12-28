@@ -1206,7 +1206,7 @@
 |`maxLines`| Function | Spirin Andrey | testskipped  |  |
 |`wordBreak`| Function | Spirin Andrey | done |  |
 |`lineBreakStrategy`| Function | Spirin Andrey | done |  |
-|`cancelButton`| Function | Spirin Andrey | done |  |
+|`cancelButton`| Function | Spirin Andrey, Andrey Khudenkikh | done |  |
 |`selectAll`| Function | Spirin Andrey | done |  |
 |`minFontSize`| Function | Spirin Andrey | done  |  |
 |`maxFontSize`| Function | Spirin Andrey | done  |  |
