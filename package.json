@@ -1,6 +1,6 @@
 {
   "name": "@azanat/idlize",
-  "version": "1.3.18+devel",
+  "version": "1.3.27+devel",
   "description": "",
   "main": "lib/index.js",
   "bin": "lib/index.js",
@@ -100,8 +100,8 @@
     "panda:sdk:install": "npm run panda:sdk:install --prefix external/incremental/tools/panda",
     "make:ts:subset": "npm run compile && node . --api-version 99 --dts2peer --input-dir ./tests/subset/ets/,./tests/subset/resource --output-dir ./out/ts-subset/generated",
     "make:arkts": "npm run compile && node . --api-version 99 --dts2peer --need-interfaces --input-dir ./tests/arkts-subset/ets,./tests/arkts-subset/resource --output-dir ./out/arkts-subset/generated --language arkts",
-    "make:arkts:subset:tsc": "npm run compile && node . --api-version 99 --dts2peer --need-interfaces --only-integrated --input-dir ./tests/arkts-subset/ets/,./tests/arkts-subset/resource --arkoala-destination ./out/arkts-subset-tsc/generated --generator-target arkoala --language=arkts",
-    "make:arkts:peers:tsc": "npm run compile && node . --api-version 99 --dts2peer --need-interfaces --only-integrated --input-dir ./interface_sdk-js/api/@internal/component/ets/,./interface_sdk-js/api/global --arkoala-destination ./out/arkts-peers-tsc/generated --generator-target arkoala --language=arkts",
+    "make:arkts:subset:tsc": "npm run compile && node . --api-version 99 --dts2peer --need-interfaces --input-dir ./tests/arkts-subset/ets/,./tests/arkts-subset/resource --arkoala-destination ./out/arkts-subset-tsc/generated --generator-target arkoala --language=arkts",
+    "make:arkts:peers:tsc": "npm run compile && node . --api-version 99 --dts2peer --need-interfaces --input-dir ./interface_sdk-js/api/@internal/component/ets/,./interface_sdk-js/api/global --arkoala-destination ./out/arkts-peers-tsc/generated --generator-target arkoala --language=arkts",
     "make:arkts:peers": "npm run compile && node . --api-version 99 --dts2peer --need-interfaces --input-dir ./interface_sdk-js/api/@internal/component/ets/,./interface_sdk-js/api/global --output-dir ./out/arkts-peers/generated --language arkts",
     "compile:arkts:runtime": "npm -C external/incremental/runtime run build:incremental",
     "compile:arkts:interop": "cd ./external/interop/ && npm run build:interop && echo ATTENTION: an interop is compiled without unmemoization here!",
@@ -113,8 +113,8 @@
     "make:compile:arkts:peers": "npm run make:arkts:peers && npm run compile:arkts:peers && npm run compile:native-node-host-arkts-full && npm run compile:arkts:libs && npm run compile:arkts:peers:main",
     "run:arkts-link-interfaces": "bash ./external/incremental/tools/panda/arkts/arklink --output ./out/abc-subset/sig/arkoala-arkts/arkui/src/generated/dts_interfaces.abc -- `find ./out/abc-subset/sig/arkoala-arkts/arkui/src/generated/ -name *Interfaces.abc`",
     "compile:all:arkts": "npm run make:arkts && npm run compile:arkts:subset && npm run compile:native-node-host-arkts-subset && npm run compile:arkts:libs && npm run compile:arkts:subset:main",
-    "execute:panda:subset": "ACE_LIBRARY_PATH=./native/build-node-host-arkts-subset LD_LIBRARY_PATH=./native bash ./external/incremental/tools/panda/arkts/ark --ark-entry-point ETSGLOBAL::main --ark-boot-files ./out/abc-subset:./external/interop/build/interop.abc:./external/incremental/runtime/build/incremental.abc:./external/incremental/common/build/common.abc:./out/arkts-subset/generated/sig/arkoala-arkts/arkui/src/generated ./out/abc-subset/sig/arkoala-arkts/arkui/src/generated/main.abc --driver-log info  && echo 'Workaround: make sure compat/src/arkts/index.ts abc goes first until index.ETSGLOBAL issues is resolved'",
-    "execute:panda:peers": "ACE_LIBRARY_PATH=./native/build-node-host-arkts-full LD_LIBRARY_PATH=./native bash ./external/incremental/tools/panda/arkts/ark --ark-entry-point ETSGLOBAL::main --ark-boot-files ./external/interop/build/interop.abc:./external/incremental/runtime/build/incremental.abc:./external/incremental/common/build/common.abc:./out/abc-peers:./out/arkts-peers/generated/sig/arkoala-arkts/arkui/src/generated ./out/abc-peers/sig/arkoala-arkts/arkui/src/generated/main.abc --driver-log info  && echo 'Workaround: make sure compat/src/arkts/index.ts abc goes first until index.ETSGLOBAL issues is resolved'",
+    "execute:panda:subset": "ACE_LIBRARY_PATH=./native/build-node-host-arkts-subset LD_LIBRARY_PATH=./native bash ./external/incremental/tools/panda/arkts/ark --ark-entry-point ETSGLOBAL::main --ark-boot-files ./out/abc-subset:./external/interop/build/interop.abc:./external/incremental/runtime/build/incremental.abc:./external/incremental/common/build/common.abc:./out/arkts-subset/abc/out ./out/abc-subset/sig/arkoala-arkts/arkui/src/generated/main.abc --driver-log info  && echo 'Workaround: make sure compat/src/arkts/index.ts abc goes first until index.ETSGLOBAL issues is resolved'",
+    "execute:panda:peers": "ACE_LIBRARY_PATH=./native/build-node-host-arkts-full LD_LIBRARY_PATH=./native bash ./external/incremental/tools/panda/arkts/ark --ark-entry-point ETSGLOBAL::main --ark-boot-files ./external/interop/build/interop.abc:./external/incremental/runtime/build/incremental.abc:./external/incremental/common/build/common.abc:./out/abc-peers:./out/arkts-peers/abc/out ./out/abc-peers/sig/arkoala-arkts/arkui/src/generated/main.abc --driver-log info  && echo 'Workaround: make sure compat/src/arkts/index.ts abc goes first until index.ETSGLOBAL issues is resolved'",
     "run:panda:subset": "npm run compile:all:arkts && npm run execute:panda:subset",
     "run:panda:peers": "npm run make:compile:arkts:peers && npm run execute:panda:peers",
     "compile:java": "npm run compile && node . --api-version 99 --dts2peer --input-dir ./tests/java-subset/ets/,./tests/java-subset/resource --output-dir ./out/java-subset/generated --language java --need-interfaces && npm run compile:native-node-host-java-subset && bash -c \"find ./out/java-subset/generated/sig/arkoala/framework/java/src/org/koalaui/arkoala/ -name *.java > ./out/java-subset/generated/sig/arkoala/framework/java/src/org/koalaui/arkoala/files.list\" && javac -sourcepath ./out/java-subset/generated/sig/arkoala/framework/java/src -d ./out/java-subset/bin @./out/java-subset/generated/sig/arkoala/framework/java/src/org/koalaui/arkoala/files.list",
@@ -157,8 +157,9 @@
     "sig:arkts:subset:compile": "cd external/arkoala-arkts/arkui && npm run build:arkui-no-common",
     "sig:arkts:subset:all": "npm run sig:arkts:subset:clean && npm run sig:arkts:subset:copy && npm run sig:arkts:subset:compile",
     "--todo": "remove '--types chai' it is used just because tsc cli does not allow specifying empty types array with console flags",
-    "check:index-full:ts": "tsc --target esnext --lib esnext --types chai --noEmit out/ts-peers/generated/sig/arkoala/arkui/types/index-full.d.ts",
-    "check:index-full:subset:ts": "tsc --target esnext --lib esnext --types chai --noEmit out/ts-subset/generated/sig/arkoala/arkui/types/index-full.d.ts",
-    "check:index-full:arkts": "tsc --target esnext --lib esnext --types chai --noEmit out/arkts-subset/generated/sig/arkoala-arkts/arkui/types/index-full.d.ts"
+    "check:index-full:ts": "tsc --target esnext --lib esnext --types chai --noEmit out/ts-peers/generated/sig/arkoala/arkui-types/index-full.d.ts",
+    "check:index-full:subset:ts": "tsc --target esnext --lib esnext --types chai --noEmit out/ts-subset/generated/sig/arkoala/arkui-types/index-full.d.ts",
+    "check:index-full:arkts": "tsc --target esnext --lib esnext --types chai --noEmit out/arkts-peers/generated/sig/arkoala-arkts/arkui/types/index-full.d.ts",
+    "check:index-full:arkts:subset": "tsc --target esnext --lib esnext --types chai --noEmit out/arkts-subset/generated/sig/arkoala-arkts/arkui/types/index-full.d.ts"
   }
 }

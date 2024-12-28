@@ -1,4 +1,6 @@
 import * as idl from './idl'
+import * as ts from "typescript"
+import { identName } from './util'
 
 export class IDLVisitorConfig {
     private constructor() {}
@@ -20,12 +22,13 @@ export class IDLVisitorConfig {
         "AccelerationOptions",
         "EmitterOptions",
         "DataAddOperation",
-        "DataChangeListener",
         "DataChangeOperation",
         "DataReloadOperation",
         "ForEachInterface",
         "ForEachAttribute",
         "LazyForEachAttribute",
+        "LazyForEachInterface",
+        "IDataSource",
         "DisturbanceFieldOptions",
         "RepeatItem",
         "RepeatItemBuilder",
@@ -41,6 +44,9 @@ export class IDLVisitorConfig {
         "DataOperation",
         "Layoutable",
         "GestureGroupGestureHandlerOptions",
+        "LocalizedPadding",
+        "ColumnOptionsV2",
+        "RowOptionsV2",
     )
 
     static readonly ConflictingDeclarationNames = [
@@ -51,4 +57,37 @@ export class IDLVisitorConfig {
     static readonly ReplacedDeclarations = new Map<string, idl.IDLEntry>([
         ["CustomBuilder", idl.createCallback("CustomBuilder", [], idl.IDLVoidType)],
     ])
+
+    static customSerializePropertyType(property: ts.MethodDeclaration | ts.MethodSignature, propertyName: string): idl.IDLType | undefined {
+        if (!ts.isClassDeclaration(property.parent)) return
+        
+        switch (identName(property.parent.name)) {
+            case "ScrollableCommonMethod":
+            case "ScrollAttribute": {
+                switch (propertyName) {
+                    case "onWillScroll":
+                    case "onDidScroll": {
+                        return idl.createOptionalType(idl.createReferenceType("ScrollOnWillScrollCallback"))
+                    }
+                    case "onScroll": {
+                        return idl.createReferenceType("Callback_Number_ScrollState_Void")
+                    }
+                    case "onScrollStart":
+                    case "onScrollStop": {
+                        return idl.createReferenceType("Callback_Void")
+                    }
+                }
+                break
+            }
+            case "CommonMethod":
+            case "FormComponentAttribute": {
+                switch (propertyName) {
+                    case "size": {
+                        return idl.createReferenceType("SizeOptions")
+                    }
+                    break
+                }
+            }
+        }
+    }
 }

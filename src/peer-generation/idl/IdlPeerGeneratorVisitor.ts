@@ -44,6 +44,7 @@ import { PrimitiveType } from "../ArkPrimitiveType"
 import { collapseIdlEventsOverloads } from "../printers/EventsPrinter"
 import { Language } from "../../Language"
 import { convertDeclToFeature } from "../ImportsCollectorUtils"
+import { collectComponents, findComponentByType, IdlComponentDeclaration, isComponentDeclaration } from "../ComponentsCollector"
 
 /**
  * Theory of operations.
@@ -59,53 +60,8 @@ interface IdlPeerGeneratorVisitorOptions {
     peerLibrary: PeerLibrary
 }
 
-export class IdlComponentDeclaration {
-    constructor(
-        public readonly name: string,
-        public readonly interfaceDeclaration: idl.IDLInterface | undefined,
-        public readonly attributeDeclaration: idl.IDLInterface,
-    ) {}
-}
-
 const PREDEFINED_PACKAGE = 'org.openharmony.idlize.predefined'
 const PREDEFINED_PACKAGE_TYPES = `${PREDEFINED_PACKAGE}.types`
-
-export class IdlPeerGeneratorVisitor implements GenericVisitor<void> {
-    private readonly sourceFile: string
-
-    static readonly serializerBaseMethods = serializerBaseMethods()
-
-    readonly peerLibrary: PeerLibrary
-    readonly peerFile: PeerFile
-
-    constructor(options: IdlPeerGeneratorVisitorOptions) {
-        this.sourceFile = options.sourceFile
-        this.peerLibrary = options.peerLibrary
-        this.peerFile = options.peerFile
-    }
-
-    visitWholeFile(): void {
-        this.peerFile.entries
-            .filter(it => idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Component))
-            .forEach(it => this.visitComponent(it as idl.IDLInterface))
-    }
-
-    visitComponent(component: idl.IDLInterface) {
-        const componentName = component.name.replace("Attribute", "")
-        if (PeerGeneratorConfig.ignoreComponents.includes(componentName))
-            return
-        if (idl.hasExtAttribute(component, IDLExtendedAttributes.HandWrittenImplementation)) {
-            return
-        }
-        const compInterface = this.peerLibrary.resolveTypeReference(
-            idl.createReferenceType(`${componentName}Interface`),
-            this.peerFile.entries)
-        if (!compInterface || idl.isInterface(compInterface)) {
-            this.peerLibrary.componentsDeclarations.push(
-                new IdlComponentDeclaration(componentName, compInterface, component))
-        }
-    }
-}
 
 export class IDLInteropPredefinesVisitor implements GenericVisitor<void> {
     readonly peerLibrary: PeerLibrary
@@ -203,9 +159,13 @@ class SyntheticDependencyConfigurableFilter implements DependencyFilter {
     ) {}
     shouldAdd(node: idl.IDLEntry): boolean {
         if (!idl.isSyntheticEntry(node)) return true
-        if (this.config.skipAnonymousInterfaces && node.kind == idl.IDLKind.AnonymousInterface) return false
+        if (idl.isInterface(node)) {
+            if (node.subkind === idl.IDLInterfaceSubkind.AnonymousInterface && this.config.skipAnonymousInterfaces)
+                return false
+            if (node.subkind === idl.IDLInterfaceSubkind.Tuple && this.config.skipTuples)
+                return false
+        }
         if (this.config.skipCallbacks && node.kind == idl.IDLKind.Callback) return false
-        if (this.config.skipTuples && node.kind == idl.IDLKind.TupleInterface) return false
         return true
     }
 }
@@ -230,52 +190,6 @@ class ArkTSSyntheticDependencyConfigurableFilter extends SyntheticDependencyConf
     }
 }
 
-class ComponentsCompleter {
-    constructor(
-        private readonly library: PeerLibrary,
-    ) {}
-
-    public process(): void {
-        for (let i = 0; i < this.library.componentsDeclarations.length; i++) {
-            const attributes = this.library.componentsDeclarations[i].attributeDeclaration
-            const parent = idl.getSuperType(attributes)
-            if (!parent)
-                continue
-            if (!idl.isReferenceType(parent))
-                throw new Error("Expected component parent type to be a reference type")
-            const parentDecl = this.library.resolveTypeReference(parent)
-            if (!parentDecl || !idl.isClass(parentDecl))
-                throw new Error("Expected parent to be a class")
-            if (!this.library.isComponentDeclaration(parentDecl)) {
-                this.library.componentsDeclarations.push(
-                    new IdlComponentDeclaration(parentDecl.name, undefined, parentDecl))
-            }
-        }
-        // topological sort
-        const components = this.library.componentsDeclarations
-        for (let i = 0; i < components.length; i++) {
-            for (let j = i + 1; j < components.length; j++) {
-                if (this.isSubclassComponent(components[i], components[j])) {
-                    components.splice(i, 0, ...components.splice(j, 1))
-                    i--
-                    break
-                }
-            }
-        }
-    }
-
-    private isSubclassComponent(a: IdlComponentDeclaration, b: IdlComponentDeclaration) {
-        return this.isSubclass(a.attributeDeclaration, b.attributeDeclaration)
-    }
-
-    private isSubclass(component: idl.IDLInterface, maybeParent: idl.IDLInterface): boolean {
-        const parentDecl = idl.getSuperType(component)
-        return isDefined(parentDecl) && (
-            idl.forceAsNamedNode(parentDecl).name === maybeParent.name ||
-            idl.isClass(parentDecl) && this.isSubclass(parentDecl, maybeParent))
-    }
-}
-
 class PeersGenerator {
     constructor(
         private readonly library: PeerLibrary,
@@ -284,7 +198,6 @@ class PeersGenerator {
     private processProperty(prop: idl.IDLProperty, peer: PeerClass, parentName?: string): PeerMethod | undefined {
         if (PeerGeneratorConfig.ignorePeerMethod.includes(prop.name))
             return
-        this.library.requestType(prop.type, this.library.shouldGenerateComponent(peer.componentName))
         const originalParentName = parentName ?? peer.originalClassName!
         const argConvertor = this.library.typeConvertor("value", prop.type, prop.isOptional)
         const signature = new NamedMethodSignature(idl.IDLThisType, [maybeOptional(prop.type, prop.isOptional)], ["value"])
@@ -308,9 +221,6 @@ class PeersGenerator {
         const isThisRet = isCallSignature || idl.isNamedNode(retType) && (retType.name === peer.originalClassName || retType.name === "T")
         const originalParentName = parentName ?? peer.originalClassName!
         const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param))
-        method.parameters.forEach(param => {
-            this.library.requestType(param.type!, this.library.shouldGenerateComponent(peer.componentName))
-        })
         const signature = generateSignature(method, isThisRet ? idl.IDLThisType : retType)
         return new PeerMethod(
             originalParentName,
@@ -342,31 +252,6 @@ class PeersGenerator {
         peer.attributesFields.push(property)
     }
 
-    /**
-     * Arkts needs a named type as its argument method, not an anonymous type
-     * at which producing 'SyntaxError: Invalid Type' error
-     */
-    private fixTypeLiteral(name: string, type: idl.IDLType, peer: PeerClass): string {
-        if (idl.isReferenceType(type)) {
-            const decl = this.library.resolveTypeReference(type)
-            if (decl && idl.isAnonymousInterface(decl)) {
-                const fixedTypeName = capitalize(name) + "ValuesType"
-                const attributeDeclarations = decl.properties
-                    .map(it => `  ${it.name}${it.isOptional ? "?" : ""}: ${this.library.mapType(it.type)}`)
-                    .join('\n')
-                peer.attributesTypes.push({
-                    typeName: fixedTypeName,
-                    content: `export interface ${fixedTypeName} {\n${attributeDeclarations}\n}`})
-                const peerMethod = peer.methods.find((method) => method.overloadedName == name)
-                if (peerMethod !== undefined) {
-                    peerMethod.method.signature.args = [idl.createReferenceType(fixedTypeName)]
-                }
-                return fixedTypeName
-            }
-        }
-        return this.library.mapType(type)
-    }
-
     private fillInterface(peer: PeerClass, iface: idl.IDLInterface) {
         peer.originalInterfaceName = iface.name
         const peerMethods = iface.callables
@@ -380,7 +265,7 @@ class PeersGenerator {
         peer.originalClassName = clazz.name
         const parent = idl.getSuperType(clazz)
         if (parent) {
-            const parentComponent = this.library.findComponentByType(parent)!
+            const parentComponent = findComponentByType(this.library, parent)!
             const parentDecl = this.library.resolveTypeReference(parent as idl.IDLReferenceType)
             peer.originalParentName = idl.forceAsNamedNode(parent).name
             peer.originalParentFilename = parentDecl?.fileName
@@ -458,7 +343,7 @@ export class IdlPeerProcessor {
                     return true
                 })
                 .map(it => this.library.resolveTypeReference(it)!)
-                .filter(it => idl.isInterface(it) || idl.isClass(it))
+                .filter(it => idl.isInterface(it))
                 .flatMap(it => this.getBuilderMethods(it as idl.IDLInterface, target.name)),
             ...target.methods.map(it => this.toBuilderMethod(it, className))]
     }
@@ -486,7 +371,7 @@ export class IdlPeerProcessor {
 
         const isDeclInterface = idl.isInterface(decl)
 
-        const constructor = idl.isClass(decl) ? decl.constructors[0] : undefined
+        const constructor = decl.subkind === idl.IDLInterfaceSubkind.Class ? decl.constructors[0] : undefined
         const mConstructor = this.makeMaterializedMethod(decl, constructor)
         const mFinalizer = new MaterializedMethod(name, [], idl.IDLPointerType, false,
             new Method("getFinalizer", new NamedMethodSignature(idl.IDLPointerType, [], [], []), [MethodModifier.STATIC]))
@@ -554,7 +439,6 @@ export class IdlPeerProcessor {
         }
 
         const methodTypeParams = getExtAttribute(method, IDLExtendedAttributes.TypeParameters)
-        method.parameters.forEach(it => this.library.requestType(it.type!, true))
         const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param))
         const signature = generateSignature(method)
         const modifiers = idl.isConstructor(method) || method.isStatic ? [MethodModifier.STATIC] : []
@@ -576,16 +460,15 @@ export class IdlPeerProcessor {
 
     process(): void {
         initCustomBuilderClasses(this.library)
-        new ComponentsCompleter(this.library).process()
         const peerGenerator = new PeersGenerator(this.library)
-        for (const component of this.library.componentsDeclarations)
+        for (const component of collectComponents(this.library))
             peerGenerator.generatePeer(component)
         const allDeclarations = this.library.files.flatMap(file => file.entries)
         for (const dep of allDeclarations) {
-            if (PeerGeneratorConfig.ignoreEntry(dep.name, this.library.language) || this.ignoreDeclaration(dep, this.library.language))
+            if (PeerGeneratorConfig.ignoreEntry(dep.name, this.library.language) || this.ignoreDeclaration(dep, this.library.language) || idl.isHandwritten(dep))
                 continue
-            const isPeerDecl = (idl.isInterface(dep) || idl.isClass(dep)) && this.library.isComponentDeclaration(dep)
-            if (!isPeerDecl && (idl.isClass(dep) || idl.isInterface(dep))) {
+            const isPeerDecl = idl.isInterface(dep) && isComponentDeclaration(this.library, dep)
+            if (!isPeerDecl && idl.isInterface(dep) && [idl.IDLInterfaceSubkind.Class, idl.IDLInterfaceSubkind.Interface].includes(dep.subkind)) {
                 if (isBuilderClass(dep)) {
                     this.processBuilder(dep)
                     continue
@@ -692,9 +575,12 @@ function generateSignature(
 }
 
 export function isMaterialized(declaration: idl.IDLInterface): boolean {
-    if (PeerGeneratorConfig.isMaterializedIgnored(declaration.name))
+    if (PeerGeneratorConfig.isMaterializedIgnored(declaration.name) || idl.isHandwritten(declaration))
         return false;
     if (isBuilderClass(declaration))
+        return false
+    if (declaration.subkind === idl.IDLInterfaceSubkind.AnonymousInterface ||
+        declaration.subkind === idl.IDLInterfaceSubkind.Tuple)
         return false
 
     // TODO: parse Builder classes separatly
@@ -705,7 +591,7 @@ export function isMaterialized(declaration: idl.IDLInterface): boolean {
 }
 
 export function checkTSDeclarationMaterialized(decl: idl.IDLNode): boolean {
-    return (idl.isInterface(decl) || idl.isClass(decl) || idl.isAnonymousInterface(decl) || idl.isTupleInterface(decl))
+    return (idl.isInterface(decl))
             && isMaterialized(decl)
 }
 

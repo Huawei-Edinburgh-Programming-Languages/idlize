@@ -28,17 +28,22 @@ import { CustomPrintVisitor } from "../../from-idl/DtsPrinter";
 import { Language } from "../../Language";
 import { addSyntheticType, resolveSyntheticType } from "../../from-idl/deserialize";
 import { convertDeclaration, convertType, DeclarationConvertor, IdlNameConvertor, TypeConvertor } from "../../peer-generation/LanguageWriters/nameConvertor";
-import { LibraryInterface } from "../../LibraryInterface";
+import { LibraryFileInterface, LibraryInterface } from "../../LibraryInterface";
 import { generateSyntheticFunctionName } from "../../IDLVisitor";
 import { IDLNodeToStringConvertor } from "../../peer-generation/LanguageWriters/convertors/InteropConvertor";
 import { DependenciesCollector } from "../../peer-generation/idl/IdlDependenciesCollector";
 import { createOutArgConvertor } from "../../peer-generation/PromiseConvertors";
 
-export class IldSkoalaFile {
+export class IldSkoalaFile implements LibraryFileInterface {
     readonly wrapperClasses: Map<string, [WrapperClass, any|undefined]> = new Map()
     readonly baseName: string
     readonly importsCollector: ImportsCollector
     readonly declarations: Set<idl.IDLEntry>
+
+    processedDeclarationsList: Array<idl.IDLEntry> | undefined
+    get entries(): idl.IDLEntry[] {
+        return this.processedDeclarationsList!
+    }
 
     constructor(
         public readonly originalFilename: string,
@@ -189,14 +194,14 @@ export class IdlSkoalaLibrary implements LibraryInterface {
             if (processor?.isWrapper(declaration)) {
                 return new IdlWrapperClassConvertor(declarationName, param, this, declaration)
             }
-            return new InterfaceConvertor(this, declarationName, param, declaration)
-        }
-        if (idl.isClass(declaration)) {
-            if (processor?.isWrapper(declaration)) {
-                return new IdlWrapperClassConvertor(declarationName, param, this, declaration)
+            switch (declaration.subkind) {
+                case idl.IDLInterfaceSubkind.Interface:
+                    return new InterfaceConvertor(this, declarationName, param, declaration)
+                case idl.IDLInterfaceSubkind.Class:
+                    return new ClassConvertor(this, declarationName, param, declaration)
             }
-            return new ClassConvertor(this, declarationName, param, declaration)
         }
+
         if (idl.isTypedef(declaration)) {
             return new TypeAliasConvertor(this, param, declaration)
         }
@@ -355,13 +360,13 @@ export class IdlWrapperProcessor {
     process() {
         let allDeps = this.generateDeclarations()
         for (let decl of allDeps) {
-            if (idl.isSyntheticEntry(decl) && (idl.isCallback(decl) || idl.isInterface(decl) || idl.isTupleInterface(decl))) {
+            if (idl.isSyntheticEntry(decl) && (idl.isCallback(decl) || idl.isInterface(decl))) {
                 addSyntheticType(decl.name ?? "MISSING_TYPE_NAME", decl)
             }
             const file = this.library.findFileByOriginalFilename(decl.fileName!)!
 
             //  process wrapper
-            if (idl.isClass(decl) || idl.isInterface(decl)) {
+            if (idl.isInterface(decl)) {
                 let wrapperClass = this.tryProcessWrapper(decl, file)
                 if (wrapperClass) {
                     file.declarations.delete(decl)
@@ -378,7 +383,7 @@ export class IdlWrapperProcessor {
                 .filter(it => idl.isEntry(it) && isSourceDecl(it))
 
             serDependencies.forEach(it => {
-                if (it && (idl.isClass(it) || idl.isInterface(it))) {
+                if (it && (idl.isInterface(it))) {
                     this.library.serializerDeclarations.add(it)
                 }
             })
@@ -401,6 +406,7 @@ export class IdlWrapperProcessor {
                 }
                 file.declarations.delete(importModule)
             })
+            file.processedDeclarationsList = [...file.declarations]
         }
     }
 
@@ -415,7 +421,7 @@ export class IdlWrapperProcessor {
             } else {
                 if (idl.isReferenceType(superClassType)) {
                     let superClassDecl = this.library.resolveTypeReference(superClassType)
-                    if (superClassDecl && (idl.isInterface(superClassDecl) || idl.isClass(superClassDecl))) {
+                    if (superClassDecl && (idl.isInterface(superClassDecl))) {
                         return this.findHeritageClasses(superClassDecl, heritageClasses)
                     }
                 }
@@ -440,7 +446,7 @@ export class IdlWrapperProcessor {
 
         const baseClass = heritageClasses[heritageClasses.length - 1]
 
-        const constructor = idl.isClass(decl) ? decl.constructors[0] : undefined
+        const constructor = decl.subkind === idl.IDLInterfaceSubkind.Class ? decl.constructors[0] : undefined
         const wConstructor = constructor ? this.makeWrapperMethod(decl, constructor) : undefined
         const finalizer = decl.methods.find(it => it.name == Skoala.getFinalizer)
         const wFinalizer = finalizer ? this.makeWrapperMethod(decl, finalizer) : undefined

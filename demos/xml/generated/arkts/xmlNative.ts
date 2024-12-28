@@ -34,17 +34,20 @@ export class CallbackKind {
 export class XMLNativeModule {
     static {
         loadLibrary("XML_NativeBridgeArk")
-        XMLNativeModule.init()
+        XMLNativeModule.init(["xmlNative/XMLNativeModule", "xmlNative/ArkUINativeModule"])
     }
 
-    static native init(): void;
+    static native init(modules: string[]): void
 
     static callCallbackFromNative(id: KInt, args: KUint8ArrayPtr, length: KInt): KInt {
         // TODO implement callCallbackFromNative
         return 0
     }    
 
-    native static _XmlSerializer_ctor(buffer: string, thisArray: KUint8ArrayPtr, thisLength: int32): KPointer 
+    // demo
+    native static _AllocateNativeBuffer(length: KInt, retBuffer: KUint8ArrayPtr, init:KUint8ArrayPtr): void;
+
+    native static _XmlSerializer_ctor(thisArray: KUint8ArrayPtr, thisLength: int32): KPointer 
     native static _XmlSerializer_getFinalizer(): KPointer 
     native static _XmlSerializer_setAttributes(self: KPointer, name: string, value: string): void 
     native static _XmlSerializer_addEmptyElement(self: KPointer, name: string): void 
@@ -56,6 +59,7 @@ export class XMLNativeModule {
     native static _XmlSerializer_setCDATA(self: KPointer, text: string): void 
     native static _XmlSerializer_setText(self: KPointer, text: string): void 
     native static _XmlSerializer_setDocType(self: KPointer, text: string): void 
+    native static _ParseInfo_ctor(): KPointer 
     native static _ParseInfo_getFinalizer(): KPointer 
     native static _ParseInfo_getColumnNumber(self: KPointer): number 
     native static _ParseInfo_getDepth(self: KPointer): number 
@@ -67,25 +71,16 @@ export class XMLNativeModule {
     native static _ParseInfo_isEmptyElementTag(self: KPointer): boolean 
     native static _ParseInfo_isWhitespace(self: KPointer): boolean 
     native static _ParseInfo_getAttributeCount(self: KPointer): number 
-    native static _XmlPullParser_ctor(buffer: string, thisArray: KUint8ArrayPtr, thisLength: int32): KPointer 
+    native static _XmlPullParser_ctor(thisArray: KUint8ArrayPtr, thisLength: int32): KPointer 
     native static _XmlPullParser_getFinalizer(): KPointer 
     native static _XmlPullParser_parse(self: KPointer, thisArray: KUint8ArrayPtr, thisLength: int32): void 
     native static _XmlPullParser_parseXml(self: KPointer, thisArray: KUint8ArrayPtr, thisLength: int32): void 
-    native static _InvokeFinalizer(ptr: KPointer, finalizer: KPointer): void 
-    native static _CallCallback(callbackKind: int32, args: KUint8ArrayPtr, argsSize: int32): void 
-    native static _CallCallbackResourceHolder(holder: KPointer, resourceId: int32): void 
-    native static _CallCallbackResourceReleaser(releaser: KPointer, resourceId: int32): void 
+}
+
+export class ArkUINativeModule {
     native static _CheckArkoalaCallbackEvent(buffer: KUint8ArrayPtr, bufferLength: int32): int32 
     native static _HoldArkoalaResource(resourceId: int32): void 
     native static _ReleaseArkoalaResource(resourceId: int32): void 
     native static _Utf8ToString(buffer: KUint8ArrayPtr, position: int32, length: int32): string 
+    native static _ManagedStringWrite(str: string, arr: KUint8ArrayPtr, len: int32): int32 
 }
-
-let theModule: XMLNativeModule
-
-export function getXMLNativeModule(): XMLNativeModule {
-    if (theModule) return theModule
-    theModule = new XMLNativeModule()
-    return theModule
-}
-

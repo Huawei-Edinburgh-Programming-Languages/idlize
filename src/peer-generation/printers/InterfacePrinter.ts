@@ -55,6 +55,7 @@ import { DependenciesCollector } from '../idl/IdlDependenciesCollector'
 import { createInterfaceDeclName } from '../TypeNodeNameConvertor'
 import { collectDeclDependencies, convertDeclToFeature } from '../ImportsCollectorUtils'
 import { maybeTransformManagedCallback } from '../ArgConvertors'
+import { isComponentDeclaration } from '../ComponentsCollector'
 
 interface InterfacesVisitor {
     getInterfaces(): Map<TargetFile, LanguageWriter>
@@ -99,7 +100,7 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
     }
 
     convertInterface(node: idl.IDLInterface): void {
-        if (!this.peerLibrary.isComponentDeclaration((node))) {
+        if (!isComponentDeclaration(this.peerLibrary, (node))) {
             this.printer.output = []
             this.printer.printInterface(node)
             this.writer.print('export ' + this.printer.output.join("\n"))
@@ -108,8 +109,8 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
         let printer = new IndentedPrinter()
         let extendsClause = this.extendsClause(node)
 
-        let classOrInterface = idl.isClass(node) ? `class` : `interface`
-        if (this.peerLibrary.isComponentDeclaration(node))
+        let classOrInterface = node.subkind === idl.IDLInterfaceSubkind.Class ? `class` : `interface`
+        if (isComponentDeclaration(this.peerLibrary, node))
             // because we write `ArkBlank implements BlankAttributes`
             classOrInterface = `interface`
         printer.print(`export declare ${classOrInterface} ${node.name} ${extendsClause} {`)
@@ -202,7 +203,7 @@ class JavaSyntheticGenerator extends DependenciesCollector {
         const generatedName = this.nameConvertor.getNodeName(type)
         const clazz = idl.createInterface(
             generatedName,
-            idl.IDLKind.Interface,
+            idl.IDLInterfaceSubkind.Interface,
             [idl.createReferenceType(ARK_CUSTOM_OBJECT)]
         )
         this.onSyntheticDeclaration(clazz)
@@ -236,13 +237,16 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
             this.onNewDeclaration(this.makeEnum(name, type))
             return
         }
-        if (idl.isInterface(type) || idl.isAnonymousInterface(type)) {
-            this.onNewDeclaration(this.makeInterface(name, type))
-            return
-        }
-        if (idl.isTupleInterface(type)) {
-            this.onNewDeclaration(this.makeTuple(name, type))
-            return
+        if (idl.isInterface(type)) {
+            switch (type.subkind) {
+                case idl.IDLInterfaceSubkind.Interface:
+                case idl.IDLInterfaceSubkind.AnonymousInterface:
+                    this.onNewDeclaration(this.makeInterface(name, type))
+                    return
+                case idl.IDLInterfaceSubkind.Tuple:
+                    this.onNewDeclaration(this.makeTuple(name, type))
+                    return
+            }
         }
         if (idl.isReferenceType(type)) {
             const target = this.peerLibrary.resolveTypeReference(type, undefined)
@@ -261,7 +265,7 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
     }
     convertInterface(node: idl.IDLInterface): void {
         const name = this.nameConvertor.convert(node)
-        const decl = node.kind == idl.IDLKind.TupleInterface
+        const decl = node.subkind === idl.IDLInterfaceSubkind.Tuple
             ? this.makeTuple(name, node)
             : this.makeInterface(name, node)
         this.onNewDeclaration(decl)
@@ -421,7 +425,7 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
         const imports = collectJavaImports(type.properties.map(it => it.type))
         printJavaImports(writer, imports)
         // TODO: *Attribute classes are empty for now
-        const members = this.peerLibrary.isComponentDeclaration(type) ? []
+        const members = isComponentDeclaration(this.peerLibrary, type) ? []
             : type.properties.map(it => {
                 return {name: it.name, type: idl.maybeOptional(it.type, it.isOptional), modifiers: [FieldModifier.PUBLIC]}
             })
@@ -469,7 +473,7 @@ class JavaInterfacesVisitor extends DefaultInterfacesVisitor {
                 syntheticsGenerator.convert(entry)
                 if (PeerGeneratorConfig.ignoreEntry(entry.name, Language.JAVA))
                     continue
-                if ((idl.isInterface(entry) || idl.isClass(entry)) && (
+                if (idl.isInterface(entry) && (
                     isBuilderClass(entry) ||
                     isMaterialized(entry)))
                     continue
@@ -508,7 +512,7 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
             result = this.printCallback(node,
                 node.callables[0].parameters,
                 node.callables[0].returnType)
-        } else if (idl.isTupleInterface(node)) {
+        } else if (node.subkind === idl.IDLInterfaceSubkind.Tuple) {
             result = this.printTuple(node).join("\n")
         } else {
             result = this.printInterface(node).join("\n")
@@ -542,7 +546,7 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
             .concat(idlInterface.constants
                 .map(it => this.iDLTypedEntryPrinter(it, it => this.printConstant(it), seenFields)).flat())
             .concat(idlInterface.properties
-                .map(it => this.iDLTypedEntryPrinter(it, it => this.printProperty(it), seenFields) ).flat())
+                .map(it => this.iDLTypedEntryPrinter(it, it => this.printProperty(it, isMaterialized(idlInterface)), seenFields) ).flat())
             .concat(idlInterface.methods
                 .map(it => this.iDLTypedEntryPrinter(it, it => this.printMethod(it), seenFields) ).flat())
             .concat(idlInterface.callables
@@ -552,10 +556,24 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
 
     private printInterfaceName(idlInterface: idl.IDLInterface): string {
         let superType = idl.getSuperType(idlInterface)
+
+        // Built-in enums cannot be used as constrained type parameters
+        const typeParameters = idlInterface.typeParameters?.map(it => {
+            const types = it.split("extends").map(it => it.trim())
+            const typeParameter = types[0]
+            const extendable = types[1]
+            if (extendable != undefined) {
+                const type = this.peerLibrary.resolveTypeReference(idl.createReferenceType(extendable))
+                if (type !== undefined && idl.isEnum(type)) {
+                    return typeParameter
+                }
+            }
+            return it
+        })
         const parentTypeArgs = this.printTypeParameters(
             (superType as idl.IDLReferenceType)?.typeArguments?.map(it => idl.printType(it)))
         return [idlInterface.name,
-            this.printTypeParameters(idlInterface.typeParameters),
+            `${this.printTypeParameters(typeParameters)}`,
             superType
                 ? ` extends ${idl.forceAsNamedNode(superType).name}${parentTypeArgs}`
                 : ""
@@ -569,11 +587,10 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
         ]
     }
 
-    private printProperty(prop: idl.IDLProperty): stringOrNone[] {
+    private printProperty(prop: idl.IDLProperty, allowReadonly: boolean): stringOrNone[] {
         const staticMod = prop.isStatic ? "static " : ""
         // TODO stub until issue 20764 is fixed
-        // const readonlyMod = prop.isReadonly ? "readonly " : ""
-        const readonlyMod = ""
+        const readonlyMod = prop.isReadonly && allowReadonly ? "readonly " : ""
         return [
             ...this.printExtendedAttributes(prop),
             indentedBy(`${staticMod}${readonlyMod}${this.printPropNameWithType(prop)};`, 1)
@@ -723,6 +740,8 @@ class ArkTSSyntheticGenerator extends DependenciesCollector {
     }
 
     convertInterface(decl: idl.IDLInterface): idl.IDLNode[] {
+        if (idl.isHandwritten(decl))
+            return super.convertInterface(decl)
         idl.forEachFunction(decl, function_ => {
             const promise = idl.asPromise(function_.returnType)
             if (promise) {
@@ -734,7 +753,7 @@ class ArkTSSyntheticGenerator extends DependenciesCollector {
         if (isMaterialized(decl) && !isBuilderClass(decl)) {
             this.onSyntheticDeclaration(idl.createInterface(
                 createInterfaceDeclName(decl.name),
-                idl.IDLKind.Interface,
+                idl.IDLInterfaceSubkind.Interface,
                 [], // todo decl.inheritance
                 decl.constructors,
                 decl.constants,
@@ -802,10 +821,11 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
                     idl.isPackage(entry) ||
                     isPredefined(entry) ||
                     idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.GlobalScope) ||
+                    idl.isHandwritten(entry) ||
                     PeerGeneratorConfig.ignoreEntry(entry.name, this.peerLibrary.language))
                     continue
                 syntheticGenerator.convert(entry)
-                if ((idl.isClass(entry) || idl.isInterface(entry)) && (isMaterialized(entry) || isBuilderClass(entry)))
+                if (idl.isInterface(entry) && (isMaterialized(entry) || isBuilderClass(entry)))
                     continue
                 registerEntry(entry)
             }
@@ -860,7 +880,7 @@ class CJInterfacesVisitor extends DefaultInterfacesVisitor {
                 if (PeerGeneratorConfig.ignoreEntry(entry.name, this.peerLibrary.language))
                     continue
                 syntheticGenerator.convert(entry)
-                if ((idl.isClass(entry) || idl.isInterface(entry)) && (isMaterialized(entry) || isBuilderClass(entry)))
+                if (idl.isInterface(entry) && (isMaterialized(entry) || isBuilderClass(entry)))
                     continue
                 onEntry(entry)
             }
@@ -909,13 +929,16 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
             this.onNewDeclaration(this.makeEnum(name, type))
             return
         }
-        if (idl.isInterface(type) || idl.isAnonymousInterface(type)) {
-            this.onNewDeclaration(this.makeInterface(name, type))
-            return
-        }
-        if (idl.isTupleInterface(type)) {
-            this.onNewDeclaration(this.makeTuple(name, type))
-            return
+        if (idl.isInterface(type)) {
+            switch (type.subkind) {
+                case idl.IDLInterfaceSubkind.Interface:
+                case idl.IDLInterfaceSubkind.AnonymousInterface:
+                    this.onNewDeclaration(this.makeInterface(name, type))
+                    return
+                case idl.IDLInterfaceSubkind.Tuple:
+                    this.onNewDeclaration(this.makeTuple(name, type))
+                    return
+            }
         }
         if (idl.isReferenceType(type)) {
             const target = this.peerLibrary.resolveTypeReference(type, undefined)
@@ -933,7 +956,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
         throw new Error(`Unsupported typedef: ${name}, kind=${type.kind}`)
     }
     convertInterface(node: idl.IDLInterface): void {
-        const decl = node.kind == idl.IDLKind.TupleInterface
+        const decl = node.subkind == idl.IDLInterfaceSubkind.Tuple
             ? this.makeTuple(node.name, node)
             : this.makeInterface(node.name, node)
         this.onNewDeclaration(decl)
@@ -1091,7 +1114,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
 
         writer.print('import std.collection.*\n')
 
-        const members = this.peerLibrary.isComponentDeclaration(type) ? []
+        const members = isComponentDeclaration(this.peerLibrary, type) ? []
             : type.properties.map(it => {
                 return {name: writer.escapeKeyword(it.name), type: idl.maybeOptional(it.type, it.isOptional), modifiers: [FieldModifier.PUBLIC]}
             })
@@ -1203,6 +1226,9 @@ export function getCommonImports(language: Language) {
         imports.push({feature: "wrapCallback", module: "@koalaui/interop"})
         imports.push({feature: "NodeAttach", module: "@koalaui/runtime"})
         imports.push({feature: "remember", module: "@koalaui/runtime"})
+    }
+    if (language === Language.ARKTS) {
+        imports.push({feature: "NativeBuffer", module: "@koalaui/interop"})
     }
     return imports
 }

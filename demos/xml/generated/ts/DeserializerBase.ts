@@ -13,8 +13,9 @@
  * limitations under the License.
  */
 import { float32, int32 } from "@koalaui/common"
-import { pointer } from "@koalaui/interop"
+import { InteropNativeModule, pointer } from "@koalaui/interop"
 import { Tags, CallbackResource } from "./SerializerBase";
+import { XMLNativeModule as nativeModule, CallbackKind } from "./xmlNative"
 
 export class DeserializerBase {
     private position = 0
@@ -165,9 +166,11 @@ export class DeserializerBase {
         }
     }
     readBuffer(): ArrayBuffer {
-        this.readPointer()
+        const resource = this.readCallbackResource()
+        const data = this.readPointer()
         const length = this.readInt64()
-        return new ArrayBuffer(Number(length))
+
+        return InteropNativeModule._MaterializeBuffer(data, length, resource.resourceId, resource.hold, resource.release)
     }
 
     readCallbackResource(): CallbackResource {

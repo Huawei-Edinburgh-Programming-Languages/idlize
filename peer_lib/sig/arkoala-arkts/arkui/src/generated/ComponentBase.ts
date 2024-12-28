@@ -14,7 +14,7 @@
  */
 
 import { PeerNode } from './PeerNode'
-import { NativeModule } from "#components"
+import { ArkUINativeModule } from "#components"
 
 export class ComponentBase {
     protected peer?: PeerNode
@@ -25,6 +25,6 @@ export class ComponentBase {
         return true
     }
     public applyAttributesFinish(): void {
-        NativeModule._ApplyModifierFinish(this.peer!.peer.ptr)
+        ArkUINativeModule._ApplyModifierFinish(this.peer!.peer.ptr)
     }
 }

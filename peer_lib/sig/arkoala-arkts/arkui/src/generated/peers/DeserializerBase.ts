@@ -14,9 +14,8 @@
  */
 
 import { float32, int32, int64, float32FromBits } from "@koalaui/common"
-import { pointer, KUint8ArrayPtr, KBuffer } from "@koalaui/interop"
+import { pointer, KUint8ArrayPtr, KBuffer, NativeBuffer, InteropNativeModule } from "@koalaui/interop"
 import { Tags, CallbackResource } from "./SerializerBase";
-import { NativeModule } from "#components"
 
 export class DeserializerBase {
     private position = 0
@@ -152,7 +151,7 @@ export class DeserializerBase {
         const length = this.readInt32()
         this.checkCapacity(length)
         // read without null-terminated byte
-        const value = NativeModule._Utf8ToString(this.buffer.buffer, this.position, length)
+        const value = InteropNativeModule._Utf8ToString(this.buffer.buffer, this.position, length)
         this.position += length
         return value
     }
@@ -204,10 +203,12 @@ export class DeserializerBase {
         return suffix
     }
 
-    readBuffer(): ArrayBuffer {
-        this.readPointer()
+    readBuffer(): NativeBuffer {
+        /* not implemented */
+        const resource = this.readCallbackResource()
+        const data = this.readPointer()
         const length = this.readInt64()
-        return new ArrayBuffer(length)
+        return NativeBuffer.wrap(data, length, resource.resourceId, resource.hold, resource.release)
     }
 
     readUint8ClampedArray(): Uint8ClampedArray {

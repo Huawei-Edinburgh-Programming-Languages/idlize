@@ -114,6 +114,32 @@ class Context {
     }
 }
 
+function mergeSetGetProperties(properties: idl.IDLProperty[]): idl.IDLProperty[] {
+    return properties.reduce((members, it) => {
+        const maybeMemberIndex = members.findIndex(member => it.name === member.name &&
+            idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Accessor) &&
+            idl.hasExtAttribute(member, idl.IDLExtendedAttributes.Accessor)
+        )
+        if (maybeMemberIndex >= 0) {
+            const member = members[maybeMemberIndex]
+            members[maybeMemberIndex] = idl.createProperty(
+                member.name,
+                member.type,
+                false,
+                member.isStatic,
+                member.isOptional,
+                {
+                    ...member,
+                    extendedAttributes: member.extendedAttributes?.filter(it => it.name != idl.IDLExtendedAttributes.Accessor),
+                }
+            )
+        } else {
+            members.push(it)
+        }
+        return members
+    }, new Array<idl.IDLProperty>)
+}
+
 export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
     private output: idl.IDLEntry[] = []
     private seenNames = new Set<string>()
@@ -140,7 +166,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         if (this.globalConstants.length > 0 || this.globalFunctions.length > 0) {
             this.output.push(idl.createInterface(
                 `GlobalScope_${path.basename(this.sourceFile.fileName).replace(".d.ts", "").replaceAll("@", "").replaceAll(".", "_")}`,
-                idl.IDLKind.Interface,
+                idl.IDLInterfaceSubkind.Interface,
                 [],
                 [],
                 this.globalConstants,
@@ -179,6 +205,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             ["string", () => idl.IDLStringType],
             ["Boolean", () => idl.IDLBooleanType], // nasty typo in SDK
             ["ArrayBuffer", () => idl.IDLBufferType],
+            ["DataView", () => idl.IDLBufferType],
             ["Int8Array", () => idl.IDLBufferType], // ["Int8Array", () => idl.createContainerType('sequence', [idl.IDLI8Type])],
             ["Uint8Array", () => idl.IDLBufferType], // ["Uint8Array", () => idl.createContainerType('sequence', [idl.IDLU8Type])],
             ["Uint8ClampedArray", () => idl.IDLBufferType], // ["Uint8ClampedArray", () => idl.createContainerType('sequence', [idl.IDLU8Type])],
@@ -246,7 +273,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             if (name && IDLVisitorConfig.StubbedDeclarations.includes(name)) {
                 const decl = idl.createInterface(
                     name,
-                    idl.IDLKind.Interface,
+                    idl.IDLInterfaceSubkind.Interface,
                     [],
                     undefined,
                     undefined,
@@ -441,10 +468,10 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
     computeComponentExtendedAttributes(node: ts.ClassDeclaration | ts.InterfaceDeclaration): idl.IDLExtendedAttribute[] | undefined {
         let result: idl.IDLExtendedAttribute[] = this.computeExtendedAttributes(node)
         let name = identName(node.name)
+        if (name && PeerGeneratorConfig.handWritten.includes(PeerGeneratorConfig.mapComponentName(name))) {
+            result.push({ name: idl.IDLExtendedAttributes.HandWrittenImplementation })
+        }
         if (name && ts.isClassDeclaration(node) && isCommonMethodOrSubclass(this.typeChecker, node)) {
-            if (PeerGeneratorConfig.handWritten.includes(PeerGeneratorConfig.mapComponentName(name))) {
-                result.push({ name: idl.IDLExtendedAttributes.HandWrittenImplementation })
-            }
             result.push({ name: idl.IDLExtendedAttributes.Component, value: `"${PeerGeneratorConfig.mapComponentName(name)}"` })
         }
         this.computeExportAttribute(node, result)
@@ -506,7 +533,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         this.context.enter(nameSuggestion.name)
         return idl.createInterface(
             mangleConflictingName(nameSuggestion.name, node.getSourceFile()),
-            idl.IDLKind.Class,
+            idl.IDLInterfaceSubkind.Class,
             inheritance,
             node.members.filter(ts.isConstructorDeclaration).map(it => this.serializeConstructor(it as ts.ConstructorDeclaration, childNameSuggestion)),
             [],
@@ -525,9 +552,10 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             .map(it => this.serializeConstructor(it as ts.ConstructSignatureDeclaration, nameSuggestion))
     }
     pickProperties(members: ReadonlyArray<ts.TypeElement | ts.ClassElement>, nameSuggestion: NameSuggestion): idl.IDLProperty[] {
-        return members
+        const properties = members
             .filter(it => (ts.isPropertySignature(it) || ts.isPropertyDeclaration(it) || this.isCommonMethodUsedAsProperty(it)) && !isPrivate(it.modifiers))
             .map(it => this.serializeProperty(it, nameSuggestion))
+        return mergeSetGetProperties(properties)
     }
     pickMethods(members: ReadonlyArray<ts.TypeElement | ts.ClassElement>, nameSuggestion: NameSuggestion): idl.IDLMethod[] {
         return members
@@ -539,9 +567,10 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             .map(it => this.serializeCallable(it, nameSuggestion))
     }
     pickAccessors(members: ReadonlyArray<ts.TypeElement | ts.ClassElement>, nameSuggestion: NameSuggestion | undefined): idl.IDLProperty[] {
-        return members
+        const properties = members
             .filter(it => (ts.isGetAccessorDeclaration(it) || ts.isSetAccessorDeclaration(it)))
             .map(it => this.serializeAccessor(it as ts.GetAccessorDeclaration | ts.SetAccessorDeclaration, nameSuggestion))
+        return mergeSetGetProperties(properties)
     }
 
     fakeOverrides(node: ts.InterfaceDeclaration): ts.TypeElement[] {
@@ -586,7 +615,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         this.context.enter(nameSuggestion.name)
         return idl.createInterface(
             mangleConflictingName(nameSuggestion.name, node.getSourceFile()),
-            idl.IDLKind.Interface,
+            idl.IDLInterfaceSubkind.Interface,
             inheritance,
             this.pickConstructors(node.members, childNameSuggestion),
             [],
@@ -622,7 +651,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         const selectedName = selectName(nameSuggestion, syntheticName)
         return idl.createInterface(
             selectedName,
-            idl.IDLKind.AnonymousInterface,
+            idl.IDLInterfaceSubkind.AnonymousInterface,
             [],
             this.pickConstructors(node.members, nameSuggestion),
             [],
@@ -641,7 +670,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         const selectedName = selectName(nameSuggestion, syntheticName)
         return idl.createInterface(
             selectedName,
-            idl.IDLKind.TupleInterface,
+            idl.IDLInterfaceSubkind.Tuple,
             [], [], [], properties, [], [],
             this.collectTypeParameters(typeParameters), {
             fileName: node.getSourceFile().fileName,
@@ -661,7 +690,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         const selectedName = selectName(nameSuggestion, syntheticName)
         return idl.createInterface(
             selectedName,
-            idl.IDLKind.AnonymousInterface,
+            idl.IDLInterfaceSubkind.AnonymousInterface,
             inheritance,
             [], [], [], [], [], [], {
             fileName: node.getSourceFile().fileName,
@@ -1108,20 +1137,11 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         this.computeDeprecatedExtendAttributes(property, extendedAttributes)
         if (ts.isMethodDeclaration(property) || ts.isMethodSignature(property)) {
             if (!this.isCommonMethodUsedAsProperty(property)) throw new Error("Wrong")
-            let type = this.serializeType(property.parameters[0].type, nameSuggestion?.extend(nameOrNull(property.parameters[0].name)!))
-            if  ((escapedName == "onWillScroll" || escapedName == "onDidScroll") && ts.isClassDeclaration(property.parent)) {
-                let parentName = identName(property.parent.name)
-                if (parentName == "ScrollableCommonMethod" || parentName == "ScrollAttribute") {
-                    /**
-                     * ScrollableCommonMethod has a method `onWillScroll(handler: Optional<OnWillScrollCallback>): T;`
-                     * ScrollAttribute extends ScrollableCommonMethod and overrides this method as
-                     * `onWillScroll(handler: ScrollOnWillScrollCallback): ScrollAttribute;`. So that override is not
-                     * valid and cannot be correctly processed so we force ScrollOnWillScrollCallback as parameter type.
-                     */
-                    type = idl.createOptionalType(idl.createReferenceType("ScrollOnWillScrollCallback"))
-                    console.log(`WARNING: forcing type of ${parentName}.${escapedName} to ScrollOnWillScrollCallback|undefined`)
-                }
+            let type = IDLVisitorConfig.customSerializePropertyType(property, escapedName)
+            if (!isDefined(type)) {
+                type = this.serializeType(property.parameters[0].type, nameSuggestion?.extend(nameOrNull(property.parameters[0].name)!))
             }
+
             extendedAttributes.push({ name: idl.IDLExtendedAttributes.CommonMethod })
             return idl.createProperty(
                 escapedName,

@@ -17,8 +17,8 @@ function execOut(command) {
 function installExternal() {
     const externalPackagesToInstall = [
         `incremental/compat`,
-        `incremental/compiler-plugin`,
         `incremental/common`,
+        `incremental/compiler-plugin`,
         `incremental/runtime`,
         `interop`,
     ]
@@ -52,7 +52,10 @@ function main() {
             symlinkSdk()
         },
         arkts_subset_tsc: installExternal,
-        arkts_peers_tsc: installExternal
+        arkts_peers_tsc: () => {
+            installExternal()
+            symlinkSdk()
+        },
     }
 
     fs.rmSync(options.out, { recursive: true, force: true })

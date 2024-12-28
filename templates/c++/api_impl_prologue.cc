@@ -15,10 +15,12 @@
 
 #include "%API_HEADER_PATH%"
 
+#define KOALA_INTEROP_MODULE %INTEROP_MODULE_NAME%
 #include "common-interop.h"
 #include "SerializerBase.h"
 #include "DeserializerBase.h"
 #include <deque>
+#include <unordered_map>
 
 CustomDeserializer * DeserializerBase::customDeserializers = nullptr;
 

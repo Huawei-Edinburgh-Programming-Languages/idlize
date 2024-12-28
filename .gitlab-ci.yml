@@ -47,7 +47,7 @@ run arkts subset:
     - koala-ci
   before_script:
     - !reference [.setup, script]
-    - PANDA_SDK_VERSION=1.5.0-dev.9440 npm run panda:sdk:install
+    - PANDA_SDK_VERSION=1.5.0-dev.12828 npm run panda:sdk:install
   script:
     - npm run run:panda:subset
 
@@ -59,7 +59,7 @@ compile arkts peers:
     - koala-ci
   before_script:
     - !reference [.setup, script]
-    - PANDA_SDK_VERSION=1.5.0-dev.9440 npm run panda:sdk:install
+    - PANDA_SDK_VERSION=1.5.0-dev.12828 npm run panda:sdk:install
   script:
     - npm run make:compile:arkts:peers
 
@@ -81,7 +81,7 @@ arkts subset sig integration:
     - koala-ci
   before_script:
     - !reference [.setup, script]
-    - PANDA_SDK_VERSION=1.5.0-dev.9440 npm run panda:sdk:install
+    - PANDA_SDK_VERSION=1.5.0-dev.12828 npm run panda:sdk:install
   script:
     - npm run sig:arkts:subset:all
 
@@ -164,6 +164,8 @@ check index-full:
         - npm run make:ts:subset
         - npm run check:index-full:subset:ts
         - npm run make:arkts
+        - npm run check:index-full:arkts:subset
+        - npm run make:arkts:peers
         - npm run check:index-full:arkts
 
 check generated XML demo:
@@ -173,7 +175,7 @@ check generated XML demo:
       - koala-ci
     before_script:
       - !reference [.setup, script]
-      - PANDA_SDK_VERSION=1.5.0-dev.9440 npm run panda:sdk:install
+      - PANDA_SDK_VERSION=1.5.0-dev.12828 npm run panda:sdk:install
       - chmod +x external/incremental/tools/panda/arkts/ark{,tsc,link,disasm}
       - npm run compile --prefix external/interop
       - npm run compile --prefix external/incremental/common
@@ -181,9 +183,6 @@ check generated XML demo:
       - npm run compile --prefix external/incremental/runtime
       - npm run build:interop:inc --prefix external/interop
       - npm run build:incremental:inc --prefix external/incremental/runtime
-      # TODO Remove this patch once we have proper Buffer passing implementation
-      - npm run download:sdk
-      - sed -ie 's/ArrayBuffer | DataView/string/' interface_sdk-js/api/\@ohos.xml.d.ts
     script:
       - npm run run:xml
       - npm run run:xml:arkts

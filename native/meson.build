@@ -35,7 +35,7 @@ libace_dir = gen_dir / 'libace'
 
 cxx = meson.get_compiler('cpp')
 
-cflags = []
+cflags = ['-DKOALA_INTEROP_MODULE=NotConfiguredNativeModule']
 ldflags = []
 
 include_dirs = [
@@ -78,6 +78,9 @@ else
         arkoala_dir + '/callbacks_test_dummy.cc',
     ]
 endif
+sources += [
+    arkoala_dir + '/buffer_test.cc',
+]
 
 is_msvc = meson.get_compiler('cpp').get_id() == 'msvc'
 is_clang = meson.get_compiler('cpp').get_id() == 'clang'

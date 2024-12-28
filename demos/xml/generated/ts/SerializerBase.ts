@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 import { float32, int32 } from "@koalaui/common"
-import { pointer, ResourceHolder, ResourceId } from "@koalaui/interop"
-import { getXMLNativeModule as nativeModule, CallbackKind } from "./xmlNative"
+import { InteropNativeModule, pointer, ResourceHolder, ResourceId } from "@koalaui/interop"
+import { XMLNativeModule, CallbackKind } from "./xmlNative"
 
 /**
  * Value representing possible JS runtime object type.
@@ -149,6 +149,7 @@ export class SerializerBase {
         this.writePointer(0n)
         this.writePointer(0n)
         this.writePointer(0n)
+        this.writePointer(0n)
     }
     writeCallbackResource(resource: CallbackResource) {
         this.writeInt32(resource.resourceId)
@@ -157,7 +158,7 @@ export class SerializerBase {
     }
     private releaseResources() {
         for (const resourceId of this.heldResources)
-            nativeModule()._ReleaseArkoalaResource(resourceId)
+            XMLNativeModule._ReleaseArkoalaResource(resourceId)
         // todo think about effective array clearing/pushing
         this.heldResources = []
     }
@@ -229,13 +230,20 @@ export class SerializerBase {
         throw new Error("unimplemented")
         // this.checkCapacity(4 + value.length * 4) // length, data
         // let encodedLength =
-        //     nativeModule()._ManagedStringWrite(value, new Uint8Array(this.view.buffer, 0), this.position + 4)
+        //     XMLNativeModule._ManagedStringWrite(value, new Uint8Array(this.view.buffer, 0), this.position + 4)
         // this.view.setInt32(this.position, encodedLength, true)
         // this.position += encodedLength + 4
     }
     writeBuffer(buffer: ArrayBuffer) {
-        this.writePointer(BigInt(64))
-        this.writeInt64(BigInt(buffer.byteLength)) // writeInt64
+        const resourceId = ResourceHolder.instance().registerAndHold(buffer)
+        this.writeCallbackResource({
+            resourceId, 
+            hold: 0,
+            release: 0
+        })
+        const ptr = InteropNativeModule._GetNativeBufferPointer(buffer)
+        this.writePointer(ptr)
+        this.writeInt64(BigInt(buffer.byteLength))
     }
 }
 

@@ -394,7 +394,7 @@ export class BufferConvertor extends BaseArgConvertor {
         return idl.IDLBufferType
     }
     isPointerType(): boolean {
-        return false
+        return true
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
         return writer.instanceOf(this, value);
@@ -451,13 +451,16 @@ export class EnumConvertor extends BaseArgConvertor { //
     convertorArg(param: string, writer: LanguageWriter): string {
         return writer.makeEnumCast(param, false, this)
     }
-    convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
-        value = printer.ordinalFromEnum(printer.makeString(value), idl.createReferenceType(this.enumEntry.name)).asString()
-        printer.writeMethodCall(`${param}Serializer`, "writeInt32", [value])
+    convertorSerialize(param: string, value: string, writer: LanguageWriter): void {
+        value =
+            this.isStringEnum
+                ? writer.ordinalFromEnum(writer.makeString(value), idl.createReferenceType(this.enumEntry.name)).asString()
+                : writer.makeEnumCast(value, false, this)
+        writer.writeMethodCall(`${param}Serializer`, "writeInt32", [value])
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
         const readExpr = writer.makeMethodCall(`${deserializerName}`, "readInt32", [])
-        const enumExpr = writer.language === Language.ARKTS || this.isStringEnum && writer.language !== Language.CPP
+        const enumExpr = this.isStringEnum
             ? writer.enumFromOrdinal(readExpr, idl.createReferenceType(this.enumEntry.name))
             : writer.makeCast(readExpr, idl.createReferenceType(this.enumEntry.name))
         return assigneer(enumExpr)
@@ -492,8 +495,8 @@ export class EnumConvertor extends BaseArgConvertor { //
         }
     }
     extremumOfOrdinals(): {low: number, high: number} {
-        let low: number = Number.MAX_VALUE
-        let high: number = Number.MIN_VALUE
+        let low: number = 0
+        let high: number = 0
         this.enumEntry.elements.forEach((member, index) => {
             let value = index
             if ((typeof member.initializer === 'number') && !this.isStringEnum) {
@@ -1009,7 +1012,9 @@ export class ArrayConvertor extends BaseArgConvertor { //
         printer.writeStatement(printer.makeLoop(loopCounter, valueLength))
         printer.pushIndent()
         printer.writeStatement(
-            printer.makeAssign(`${value}_element`, undefined, printer.makeArrayAccess(value, loopCounter), true))
+            printer.makeAssign(`${value}_element`,
+                this.elementType,
+                printer.makeArrayAccess(value, loopCounter), true))
         this.elementConvertor.convertorSerialize(param, this.elementConvertor.getObjectAccessor(printer.language, `${value}_element`), printer)
         printer.popIndent()
         printer.print(`}`)
@@ -1195,14 +1200,15 @@ export class MaterializedClassConvertor extends BaseArgConvertor { //
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
         const declaration = this.library.toDeclaration(this.type)
-        if (idl.isClass(declaration)) {
-            return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT,
-                [writer.instanceOf(this, value, duplicates)])
-        }
-
         if (idl.isInterface(declaration)) {
-            const uniqueFields = declaration.properties.filter(it => !duplicates.has(it.name))
-            return this.discriminatorFromFields(value, writer, uniqueFields, it => it.name, it => it.isOptional, duplicates)
+            if (declaration.subkind === idl.IDLInterfaceSubkind.Class) {
+                return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT,
+                    [writer.instanceOf(this, value, duplicates)])
+            }
+            if (declaration.subkind === idl.IDLInterfaceSubkind.Interface) {
+                const uniqueFields = declaration.properties.filter(it => !duplicates.has(it.name))
+                return this.discriminatorFromFields(value, writer, uniqueFields, it => it.name, it => it.isOptional, duplicates)
+            }
         }
     }
 }

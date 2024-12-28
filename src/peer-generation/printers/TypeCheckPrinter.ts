@@ -84,9 +84,7 @@ function collectFields(library: PeerLibrary, target: idl.IDLInterface, struct: S
 function makeStructDescriptor(library: PeerLibrary, target: idl.IDLEntry): StructDescriptor {
     const result = new StructDescriptor()
     if (idl.isInterface(target)
-        || idl.isAnonymousInterface(target)
-        || idl.isSyntheticEntry(target)
-        || idl.isClass(target)) {
+        || idl.isSyntheticEntry(target)) {
         collectFields(library, target as idl.IDLInterface, result)
     }
     return result
@@ -133,7 +131,8 @@ function collectTypeCheckDeclarations(library: PeerLibrary): (idl.IDLInterface |
             if (PeerGeneratorConfig.ignoreEntry(decl.name, library.language))
                 continue
             syntheticCollector.convert(decl)
-            if ((idl.isInterface(decl) || idl.isAnonymousInterface(decl) || idl.isEnum(decl) || idl.isClass(decl))
+            if ((idl.isInterface(decl) && decl.subkind != idl.IDLInterfaceSubkind.Tuple ||
+                idl.isEnum(decl))
                 && !seenNames.has(decl.name)) {
                 seenNames.add(decl.name)
                 res.push(decl)
@@ -153,6 +152,7 @@ abstract class TypeCheckerPrinter {
         const imports = new ImportsCollector()
         imports.addFeature('KBoolean', '@koalaui/interop')
         imports.addFeature('KStringPtr', '@koalaui/interop')
+        imports.addFeature('NativeBuffer', '@koalaui/interop')
         for (const feature of features) {
             imports.addFeature(feature.feature, feature.module)
         }
@@ -275,6 +275,21 @@ class TSTypeCheckerPrinter extends TypeCheckerPrinter {
                         stmt: writer.makeReturn(writer.makeString('true'))
                     }
                 }), throwErrorStatement)
+            } else if (isReferenceType(type)) {
+                const resolved = this.library.resolveTypeReference(type)
+                if (resolved !== undefined && idl.isEnum(resolved)) {
+                    checkStatement = writer.makeMultiBranchCondition(resolved.elements.map(it => {
+                        return {
+                            expr: writer.makeNaryOp("&&", [
+                                writer.makeNaryOp('===', [
+                                    writer.makeString("value"),
+                                    writer.makeString(`${name}.${it.name}`)
+                                ])
+                            ]),
+                            stmt: writer.makeReturn(writer.makeString('true'))
+                        }
+                    }), throwErrorStatement)
+                }
             }
             writer.writeStatement(checkStatement)
         })

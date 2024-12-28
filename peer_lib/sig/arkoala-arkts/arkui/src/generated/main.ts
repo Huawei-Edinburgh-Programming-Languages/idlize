@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { NativeModule, nativeModule } from "#components"
+import { ArkUINativeModule, TestNativeModule } from "#components"
 import { wrapCallback, callCallback, wrapSystemCallback } from "./CallbackRegistry"
 import { deserializeAndCallCallback } from './peers/CallbackDeserializeCall.ts'
 import { assertEquals, assertThrows } from "./test_utils"
@@ -60,7 +60,7 @@ import { Alignment, TextOverflow, TextHeightAdaptivePolicy } from "@arkoala/arku
 import { Deserializer } from "@arkoala/arkui/peers/Deserializer"
 import { Serializer } from "@arkoala/arkui/peers/Serializer"
 import { CallbackKind } from "@arkoala/arkui/peers/CallbackKind"
-import { ResourceId } from "@koalaui/interop"
+import { ResourceId, InteropNativeModule } from "@koalaui/interop"
 import { checkArkoalaCallbacks } from "@arkoala/arkui/peers/CallbacksChecker"
 
 
@@ -141,11 +141,11 @@ function checkSerdeCustomObject() {
 let hasTestErrors = false
 
 export function getNativeLog(): string {
-    let ptr = NativeModule._GetGroupedLog(1)
-    let length = NativeModule._StringLength(ptr)
+    let ptr = InteropNativeModule._GetGroupedLog(1)
+    let length = InteropNativeModule._StringLength(ptr)
     let data = new byte[length]
-    NativeModule._StringData(ptr, data, length)
-    NativeModule._InvokeFinalizer(ptr, NativeModule._GetStringFinalizer())
+    InteropNativeModule._StringData(ptr, data, length)
+    InteropNativeModule._InvokeFinalizer(ptr, InteropNativeModule._GetStringFinalizer())
     // TODO: better string decoding.
     let result = new StringBuilder()
     for (let i = 0; i < length; i++) {
@@ -155,10 +155,11 @@ export function getNativeLog(): string {
 }
 
 export function checkResult(name: string, test: () => void, expected: string) {
-    NativeModule._StartGroupedLog(1)
+    InteropNativeModule._StartGroupedLog(1)
     test()
-    NativeModule._StopGroupedLog(1)
+    InteropNativeModule._StopGroupedLog(1)
     const actual = getNativeLog()
+        .replaceAll(" \n", "")
     if (actual != expected) {
         console.log(`TEST ${name} FAIL:\n  EXPECTED "${expected}"\n  ACTUAL   "${actual}"`)
         hasTestErrors = true
@@ -244,276 +245,6 @@ class SheetTitleOptionsImpl implements SheetTitleOptions {
         this._subtitle = arg
     }
 }
-class SheetOptionsImpl implements SheetOptions {
-    _height: SheetSize | Length|undefined;
-    _dragBar: boolean|undefined;
-    _maskColor: ResourceColor|undefined;
-    _detents: [ SheetSize | Length, SheetSize | Length | undefined, SheetSize | Length | undefined ]|undefined;
-    _blurStyle: BlurStyle|undefined;
-    _showClose: boolean | Resource|undefined;
-    _preferType: SheetType|undefined;
-    _title: SheetTitleOptions | CustomBuilder|undefined;
-    _shouldDismiss: Callback<SheetDismiss,void>|undefined;
-    _onWillDismiss: Callback<DismissSheetAction,void>|undefined;
-    _onWillSpringBackWhenDismiss: Callback<SpringBackAction,void>|undefined;
-    _enableOutsideInteractive: boolean|undefined;
-    _width: Dimension|undefined;
-    _borderWidth: Dimension | EdgeWidths | LocalizedEdgeWidths|undefined;
-    _borderColor: ResourceColor | EdgeColors | LocalizedEdgeColors|undefined;
-    _borderStyle: BorderStyle | EdgeStyles|undefined;
-    _shadow: ShadowOptions | ShadowStyle|undefined;
-    _onHeightDidChange: Callback<number,void>|undefined;
-    _mode: SheetMode|undefined;
-    _scrollSizeMode: ScrollSizeMode|undefined;
-    _onDetentsDidChange: Callback<number,void>|undefined;
-    _onWidthDidChange: Callback<number,void>|undefined;
-    _onTypeDidChange: Callback<SheetType,void>|undefined;
-    _uiContext: UIContext|undefined;
-    _keyboardAvoidMode: SheetKeyboardAvoidMode|undefined;
-    _enableHoverMode: boolean|undefined;
-    _hoverModeArea: HoverModeAreaType|undefined;
-    _backgroundColor: ResourceColor|undefined;
-    _onAppear: (() => void)|undefined;
-    _onDisappear: (() => void)|undefined;
-    _onWillAppear: (() => void)|undefined;
-    _onWillDisappear: (() => void)|undefined;
-    _offset?: Position;
-
-    constructor(title?: SheetTitleOptions) {
-        this._title = title
-    }
-
-    get title(): SheetTitleOptions | CustomBuilder| undefined {
-        return this._title
-    }
-    set title(arg: SheetTitleOptions | CustomBuilder| undefined) {
-        this._title = arg
-    }
-
-    get onWillDismiss(): Callback<DismissSheetAction, void>| undefined {
-        return this._onWillDismiss
-    }
-    set onWillDismiss(arg: Callback<DismissSheetAction, void>| undefined) {
-        this._onWillDismiss = arg
-    }
-
-    get detents(): [(SheetSize | Length), (SheetSize | Length) | undefined, (SheetSize | Length) | undefined] | undefined {
-        return this._detents
-    }
-    set detents(arg: [(SheetSize | Length), (SheetSize | Length) | undefined, (SheetSize | Length) | undefined] | undefined) {
-        this._detents = arg
-    }
-
-    get height(): SheetSize | Length| undefined {
-        return this._height
-    }
-    set height(arg: SheetSize | Length| undefined) {
-        this._height = arg
-    }
-
-    get dragBar(): boolean| undefined {
-        return this._dragBar
-    }
-    set dragBar(arg: boolean| undefined) {
-        this._dragBar = arg
-    }
-
-    get maskColor(): ResourceColor| undefined {
-        return this._maskColor
-    }
-    set maskColor(arg: ResourceColor| undefined) {
-        this._maskColor = arg
-    }
-
-    get blurStyle(): BlurStyle| undefined {
-        return this._blurStyle
-    }
-    set blurStyle(arg: BlurStyle| undefined) {
-        this._blurStyle = arg
-    }
-
-    get showClose(): boolean | Resource| undefined {
-        return this._showClose
-    }
-    set showClose(arg: boolean | Resource| undefined) {
-        this._showClose = arg
-    }
-
-    get preferType(): SheetType| undefined {
-        return this._preferType
-    }
-    set preferType(arg: SheetType| undefined) {
-        this._preferType = arg
-    }
-
-    get shouldDismiss(): ((sheetDismiss: SheetDismiss) => void) | undefined {
-        return this._shouldDismiss
-    }
-    set shouldDismiss(arg: ((sheetDismiss: SheetDismiss) => void) | undefined) {
-        this._shouldDismiss = arg
-    }
-
-    get onWillSpringBackWhenDismiss(): Callback<SpringBackAction, void>| undefined {
-        return this._onWillSpringBackWhenDismiss
-    }
-    set onWillSpringBackWhenDismiss(arg: Callback<SpringBackAction, void>| undefined) {
-        this._onWillSpringBackWhenDismiss = arg
-    }
-
-    get enableOutsideInteractive(): boolean| undefined {
-        return this._enableOutsideInteractive
-    }
-    set enableOutsideInteractive(arg: boolean| undefined) {
-        this._enableOutsideInteractive = arg
-    }
-
-    get width(): Dimension| undefined {
-        return this._width
-    }
-    set width(arg: Dimension| undefined) {
-        this._width = arg
-    }
-
-    get borderWidth(): Dimension | EdgeWidths | LocalizedEdgeWidths| undefined {
-        return this._borderWidth
-    }
-    set borderWidth(arg: Dimension | EdgeWidths | LocalizedEdgeWidths| undefined) {
-        this._borderWidth = arg
-    }
-
-    get borderColor(): ResourceColor | EdgeColors | LocalizedEdgeColors| undefined {
-        return this._borderColor
-    }
-    set borderColor(arg: ResourceColor | EdgeColors | LocalizedEdgeColors| undefined) {
-        this._borderColor = arg
-    }
-
-    get borderStyle(): BorderStyle | EdgeStyles| undefined {
-        return this._borderStyle
-    }
-    set borderStyle(arg: BorderStyle | EdgeStyles| undefined) {
-        this._borderStyle = arg
-    }
-
-    get shadow(): ShadowOptions | ShadowStyle| undefined {
-        return this._shadow
-    }
-    set shadow(arg: ShadowOptions | ShadowStyle| undefined) {
-        this._shadow = arg
-    }
-
-    get onHeightDidChange(): Callback<number, void>| undefined {
-        return this._onHeightDidChange
-    }
-    set onHeightDidChange(arg: Callback<number, void>| undefined) {
-        this._onHeightDidChange = arg
-    }
-
-    get mode(): SheetMode| undefined {
-        return this._mode
-    }
-    set mode(arg: SheetMode| undefined) {
-        this._mode = arg
-    }
-
-    get scrollSizeMode(): ScrollSizeMode| undefined {
-        return this._scrollSizeMode
-    }
-    set scrollSizeMode(arg: ScrollSizeMode| undefined) {
-        this._scrollSizeMode = arg
-    }
-
-    get onDetentsDidChange(): Callback<number, void>| undefined {
-        return this._onDetentsDidChange
-    }
-    set onDetentsDidChange(arg: Callback<number, void>| undefined) {
-        this._onDetentsDidChange = arg
-    }
-
-    get onWidthDidChange(): Callback<number, void>| undefined {
-        return this._onWidthDidChange
-    }
-    set onWidthDidChange(arg: Callback<number, void>| undefined) {
-        this._onWidthDidChange = arg
-    }
-
-    get onTypeDidChange(): Callback<SheetType, void>| undefined {
-        return this._onTypeDidChange
-    }
-    set onTypeDidChange(arg: Callback<SheetType, void>| undefined) {
-        this._onTypeDidChange = arg
-    }
-
-    get uiContext(): UIContext| undefined {
-        return this._uiContext
-    }
-    set uiContext(arg: UIContext| undefined) {
-        this._uiContext = arg
-    }
-
-    get enableHoverMode(): boolean | undefined {
-        return this._enableHoverMode
-    }
-    set enableHoverMode(arg: boolean | undefined) {
-        this._enableHoverMode = arg
-    }
-
-    get hoverModeArea(): HoverModeAreaType | undefined {
-        return this._hoverModeArea
-    }
-    set hoverModeArea(arg: HoverModeAreaType | undefined) {
-        this._hoverModeArea = arg
-    }
-
-    get backgroundColor(): ResourceColor | undefined {
-        return this._backgroundColor
-    }
-    set backgroundColor(arg: ResourceColor | undefined) {
-        this._backgroundColor = arg
-    }
-
-    get onAppear(): (() => void) | undefined {
-        return this._onAppear
-    }
-    set onAppear(arg: (() => void) | undefined) {
-        this._onAppear = arg
-    }
-
-    get onDisappear(): (() => void) | undefined {
-        return this._onDisappear
-    }
-    set onDisappear(arg: (() => void) | undefined) {
-        this._onDisappear = arg
-    }
-
-    get onWillAppear(): (() => void) | undefined {
-        return this._onWillAppear
-    }
-    set onWillAppear(arg: (() => void) | undefined) {
-        this._onWillAppear = arg
-    }
-
-    get onWillDisappear(): (() => void) | undefined {
-        return this._onWillDisappear
-    }
-    set onWillDisappear(arg: (() => void) | undefined) {
-        this._onWillDisappear = arg
-    }
-
-    get keyboardAvoidMode(): SheetKeyboardAvoidMode | undefined {
-        return this._keyboardAvoidMode
-    }
-    set keyboardAvoidMode(arg: SheetKeyboardAvoidMode | undefined) {
-        this._keyboardAvoidMode = arg
-    }
-
-    get offset(): Position | undefined {
-        return this._offset
-    }
-    set offset(arg: Position | undefined) {
-        this._offset = arg
-    }
-}
 
 class BlurOptionsImpl implements BlurOptions {
     _grayscale: [number, number]
@@ -528,16 +259,6 @@ class BlurOptionsImpl implements BlurOptions {
     set grayscale(arg: [number, number]) {
         this._grayscale = arg
     }
-}
-
-function checkPerf2(count: number) {
-    let peer = ArkButtonPeer.create()
-    let start = Date.now()
-    for (let i = 0; i < count; i++) {
-        peer.backdropBlurAttribute(i, i % 2 == 0 ? undefined : new BlurOptionsImpl([1, 2] as [number, number]))
-    }
-    let passed = Date.now() - start
-    console.log(`backdropBlur: ${Math.round(passed)}ms for ${count} iteration, ${Math.round(passed / count * 1_000_000)}ms per 1M iterations`)
 }
 
 function checkPerf3(count: number) {
@@ -561,12 +282,12 @@ function checkButton() {
     checkResult("height", () => peer.heightAttribute(44),
         "height({.type=1, .value=44, .unit=1, .resource=0})")
     const builder: CustomBuilder = (): void => { }
-    const options: Literal_Alignment_align = { align: Alignment.of(4) }
+    const options: Literal_Alignment_align = { align: 4 as Alignment }
     checkResult("background", () => peer.backgroundAttribute(builder, options),
         "background({.resource={.resourceId=104, .hold=0, .release=0}, .call=0}, {.tag=ARK_TAG_OBJECT, .value={.align={.tag=ARK_TAG_OBJECT, .value=Ark_Alignment(4)}}})")
-    checkResult("type", () => peer.typeAttribute(ButtonType.of(1)), "type(Ark_ButtonType(1))")
+    checkResult("type", () => peer.typeAttribute(ButtonType.Circle), "type(Ark_ButtonType(1))")
     checkResult("labelStyle", () => peer.labelStyleAttribute(new LabelStyleImpl(3)),
-         "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=3}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})")
+        "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=3}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})")
     checkResult("labelStyle2", () => peer.labelStyleAttribute(new LabelStyleImpl()),
         "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_UNDEFINED, .value={}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})")
 }
@@ -584,10 +305,10 @@ function checkCallback() {
 function createDefaultWriteCallback(kind: CallbackKind, callback: object) {
     return (serializer: Serializer) => {
         return serializer.holdAndWriteCallback(callback,
-            nativeModule()._TestGetManagedHolder(),
-            nativeModule()._TestGetManagedReleaser(),
-            nativeModule()._TestGetManagedCaller(kind.value),
-            nativeModule()._TestGetManagedCallerSync(kind.value),
+            TestNativeModule._TestGetManagedHolder(),
+            TestNativeModule._TestGetManagedReleaser(),
+            TestNativeModule._TestGetManagedCaller(kind.valueOf()),
+            TestNativeModule._TestGetManagedCallerSync(kind.valueOf()),
         )
     }
 }
@@ -599,7 +320,7 @@ function enqueueCallback(
     const serializer = Serializer.hold()
     const resourceId = writeCallback(serializer)
     /* imitate libace holding resource */
-    nativeModule()._HoldArkoalaResource(resourceId)
+    ArkUINativeModule._HoldArkoalaResource(resourceId)
     /* libace stored resource somewhere */
     const buffer = new byte[serializer.length()]
     for (let i = 0; i < buffer.length; i++) {
@@ -611,11 +332,11 @@ function enqueueCallback(
     const deserializer = new Deserializer(buffer, buffer.length)
     readAndCallCallback(deserializer)
     /* libace released resource */
-    nativeModule()._ReleaseArkoalaResource(resourceId)
+    ArkUINativeModule._ReleaseArkoalaResource(resourceId)
 }
 
 function checkTwoSidesCallback() {
-    nativeModule()._TestSetArkoalaCallbackCaller()
+    TestNativeModule._TestSetArkoalaCallbackCaller()
 
     let callResult1 = "NOT_CALLED"
     let callResult2 = 0
@@ -650,7 +371,7 @@ function checkTwoSidesCallback() {
 }
 
 function checkTwoSidesCallbackSync() {
-    nativeModule()._TestSetArkoalaCallbackCallerSync()
+    TestNativeModule._TestSetArkoalaCallbackCallerSync()
     wrapSystemCallback(1, (buff:byte[], len:int) => { deserializeAndCallCallback(new Deserializer(buff, len)); return 0 })
 
     let callResult1 = "NOT_CALLED"
@@ -668,7 +389,7 @@ function checkTwoSidesCallbackSync() {
 }
 
 function checkCallbackWithReturn() {
-    nativeModule()._TestSetArkoalaCallbackCallerSync()
+    TestNativeModule._TestSetArkoalaCallbackCallerSync()
     wrapSystemCallback(1, (buff:byte[], len:int) => { deserializeAndCallCallback(new Deserializer(buff, len)); return 0 })
 
     let callResult1 = "NOT_CALLED"
@@ -692,9 +413,9 @@ function checkNativeCallback() {
     const id1 = wrapCallback((args: byte[], length: int): int => {
         return 123456
     })
-    assertEquals("NativeCallback without args", 123456, nativeModule()._TestCallIntNoArgs(id1))
+    assertEquals("NativeCallback without args", 123456, TestNativeModule._TestCallIntNoArgs(id1))
     assertThrows("NativeCallback without args called again", () => { callCallback(id1, [], 0) })
-    assertThrows("NativeCallback without args called again from native", () => { nativeModule()._TestCallIntNoArgs(id1) })
+    assertThrows("NativeCallback without args called again from native", () => { TestNativeModule._TestCallIntNoArgs(id1) })
 
     const id2 = wrapCallback((args: byte[], length: int): int => {
         const buf = new ArrayBuffer(length)
@@ -710,7 +431,7 @@ function checkNativeCallback() {
         return sum
     })
     const arr2: int[] = [100, 200, 300, -1000]
-    assertEquals("NativeCallback Int32Array sum", -400, nativeModule()._TestCallIntIntArraySum(id2, arr2, arr2.length))
+    assertEquals("NativeCallback Int32Array sum", -400, TestNativeModule._TestCallIntIntArraySum(id2, arr2, arr2.length))
 
     const id3 = wrapCallback((args: byte[], length: int): int => {
         const buf = new ArrayBuffer(length)
@@ -728,7 +449,7 @@ function checkNativeCallback() {
         return 0
     })
     const arr3: int[] = [100, 200, 300, -1000]
-    nativeModule()._TestCallVoidIntArrayPrefixSum(id3, arr3, arr3.length)
+    TestNativeModule._TestCallVoidIntArrayPrefixSum(id3, arr3, arr3.length)
     assertEquals("NativeCallback Int32Array PrefixSum [0]", 100, arr3[0])
     assertEquals("NativeCallback Int32Array PrefixSum [1]", 300, arr3[1])
     assertEquals("NativeCallback Int32Array PrefixSum [2]", 600, arr3[2])
@@ -747,7 +468,7 @@ function checkNativeCallback() {
             args[i] = view.getUint8(i) as byte
         }
         if (args32[0] + args32[1] < args32[2]) {
-            return nativeModule()._TestCallIntRecursiveCallback(id3 + 1, args, args.length)
+            return TestNativeModule._TestCallIntRecursiveCallback(id3 + 1, args, args.length)
         }
         return 1
     }, false)
@@ -764,7 +485,7 @@ function checkNativeCallback() {
         for (let i = 0; i < length; i++) {
             args[i] = view.getUint8(i) as byte
         }
-        nativeModule()._TestCallIntRecursiveCallback(id4, args, args.length)
+        TestNativeModule._TestCallIntRecursiveCallback(id4, args, args.length)
         for (let i = 0; i < length; i++) {
             view.setUint8(i, args[i]);
         }
@@ -783,7 +504,7 @@ function checkNativeCallback() {
         }
         return sum
     }, false)
-    nativeModule()._TestCallIntMemory(id5, 1000)
+    TestNativeModule._TestCallIntMemory(id5, 1000)
 }
 
 function checkNodeAPI() {
@@ -812,12 +533,11 @@ function checkNodeAPI() {
         `disposeNode(0x${child2.peer.ptr})`)
     checkResult("BasicNodeAPI dumpTree", () => root.peer.dumpTree(),
         `dumpTreeNode(0x${root.peer.ptr})`)
-    checkResult("BasicNodeAPI measureLayoutAndDraw", () => NativeModule._MeasureLayoutAndDraw(root.peer.ptr),
+    checkResult("BasicNodeAPI measureLayoutAndDraw", () => ArkUINativeModule._MeasureLayoutAndDraw(root.peer.ptr),
         `measureLayoutAndDraw(0x${root.peer.ptr})`)
 }
 
 export function main(): void {
-
     checkCallbackWithReturn()
     checkTwoSidesCallbackSync()
 

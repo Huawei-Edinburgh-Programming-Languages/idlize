@@ -17,12 +17,11 @@ import { program } from "commander"
 import * as fs from "fs"
 import * as path from "path"
 import { fromIDL } from "./from-idl/common"
-import { idlToString } from "./from-idl/DtsPrinter"
+import { idlToDtsString } from "./from-idl/DtsPrinter"
 import { generate } from "./idlize"
 import {
     forEachChild,
     IDLEntry,
-    isClass,
     isEnum,
     isInterface,
     isSyntheticEntry,
@@ -41,7 +40,6 @@ import { PeerLibrary } from "./peer-generation/PeerLibrary"
 import { PeerFile } from "./peer-generation/PeerFile"
 import {
     IDLInteropPredefinesVisitor,
-    IdlPeerGeneratorVisitor,
     IdlPeerProcessor,
     IDLPredefinesVisitor,
 } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
@@ -68,6 +66,7 @@ const options = program
     .option('--output-dir <path>', 'Path to output dir')
     .option('--input-file <name>', 'Name of file to convert, all files in input-dir if none')
     .option('--idl2dts', 'Convert IDL to .d.ts definitions')
+    .option('--idl2peer', 'Convert IDL to peer drafts')
     .option('--dts2skoala', 'Convert DTS to skoala definitions')
     .option('--linter', 'Run linter')
     .option('--linter-suppress-errors <suppress>', 'Error codes to suppress, comma separated, no space')
@@ -295,8 +294,27 @@ if (options.idl2dts) {
         options.outputDir ?? "./generated/dts/",
         ".d.ts",
         options.verbose ?? false,
-        idlToString,
+        idlToDtsString,
     )
+    didJob = true
+}
+
+if (options.idl2peer) {
+    PeerGeneratorConfig.needInterfaces = options.needInterfaces
+    const generatedPeersDir = options.outputDir ?? "./out/peers/generated"
+    const lang = Language.fromString(options.language ?? "ts")
+    const idlLibrary = new PeerLibrary(lang)
+
+    scanNotPredefinedDirectory(options.inputDir).forEach(
+        (file: PeerFile) => idlLibrary.files.push(file)
+    )
+
+    PrimitiveType.Prefix = "OH_"
+    const peerProcessor = new IdlPeerProcessor(idlLibrary)
+    peerProcessor.process()
+
+    generateTarget(idlLibrary, generatedPeersDir, lang)
+
     didJob = true
 }
 
@@ -305,22 +323,10 @@ if (options.dts2peer) {
     const generatedPeersDir = options.outputDir ?? "./out/ts-peers/generated"
     const lang = Language.fromString(options.language ?? "ts")
 
-    function scanPredefinedDirectory(dir: string, ...subdirs: string[]): PeerFile[] {
-        dir = path.join(dir, ...subdirs)
-        return fs.readdirSync(dir)
-            .filter(it => it.endsWith(".idl"))
-            .map(it => {
-                const idlFile = path.resolve(path.join(dir, it))
-                const content = fs.readFileSync(path.resolve(path.join(dir, it))).toString()
-                const nodes = webidl2.parse(content).filter(it => !!it.type).map(it => toIDLNode(idlFile, it))
-                return new PeerFile(idlFile, nodes, new Set(), true)
-            })
-    }
-
     const PREDEFINED_PATH = path.join(__dirname, "..", "predefined")
 
     options.docs = "all"
-    const idlLibrary = new PeerLibrary(lang, toSet(options.generateInterface))
+    const idlLibrary = new PeerLibrary(lang)
     // collect predefined files
     scanPredefinedDirectory(PREDEFINED_PATH, "sys").forEach(file => {
         new IDLInteropPredefinesVisitor({
@@ -359,7 +365,6 @@ if (options.dts2peer) {
                 entries = entries.filter(newEntry =>
                     !idlLibrary.files.find(peerFile => peerFile.entries.find(entry => {
                         if (([newEntry, entry].every(isInterface)
-                            || [newEntry, entry].every(isClass)
                             || [newEntry, entry].every(isEnum)
                             || [newEntry, entry].every(isSyntheticEntry))) {
                             if (newEntry.name === entry.name) {
@@ -371,9 +376,8 @@ if (options.dts2peer) {
                 )
                 entries.forEach(it => {
                     transformMethodsAsync2ReturnPromise(it)
-                    correctOverloadedProperties(it, idlLibrary)
                 })
-                const file = new PeerFile(sourceFile.fileName, entries, idlLibrary.componentsToGenerate)
+                const file = new PeerFile(sourceFile.fileName, entries)
                 idlLibrary.files.push(file)
             },
             onEnd(outDir) {
@@ -382,58 +386,11 @@ if (options.dts2peer) {
                     // TODO find better place for setup?
                     PrimitiveType.Prefix = "OH_"
                 }
-                // Visit IDL peer files
-                idlLibrary.files.forEach(file => {
-                    const visitor = new IdlPeerGeneratorVisitor({
-                        sourceFile: file.originalFilename,
-                        peerLibrary: idlLibrary,
-                        peerFile: file,
-                    })
-                    visitor.visitWholeFile()
-                })
                 fillSyntheticDeclarations(idlLibrary)
                 const peerProcessor = new IdlPeerProcessor(idlLibrary)
                 peerProcessor.process()
-                idlLibrary.analyze()
 
-                if (options.generatorTarget == "arkoala" ||
-                    options.generatorTarget == "all") {
-                    generateArkoalaFromIdl({
-                        outDir: outDir,
-                        arkoalaDestination: options.arkoalaDestination,
-                        nativeBridgeFile: options.nativeBridgePath,
-                        apiVersion: apiVersion,
-                        verbose: options.verbose ?? false,
-                        onlyIntegrated: options.onlyIntegrated ?? false,
-                        dumpSerialized: options.dumpSerialized ?? false,
-                        callLog: options.callLog ?? false,
-                        lang: lang
-                    }, idlLibrary)
-                }
-                if (options.generatorTarget == "libace" ||
-                    options.generatorTarget == "all") {
-                    generateLibaceFromIdl({
-                        outDir: outDir,
-                        libaceDestination: options.libaceDestination,
-                        apiVersion: apiVersion,
-                        commentedCode: options.commentedCode,
-                    }, idlLibrary)
-                }
-                if (options.generatorTarget == "tracker") {
-                    generateTracker(outDir, idlLibrary, options.trackerStatus, options.verbose)
-                }
-                if (options.generatorTarget == "ohos") {
-                    generateOhos(outDir, idlLibrary)
-                }
-
-                if (options.plugin) {
-                    loadPlugin(options.plugin)
-                        .then(plugin => plugin.process({outDir: outDir}, idlLibrary))
-                        .then(result => {
-                            console.log(`Plugin ${options.plugin} process returned ${result}`)
-                        })
-                        .catch(error => console.error(`Plugin ${options.plugin} not found: ${error}`))
-                }
+                generateTarget(idlLibrary, outDir, lang)
             }
         }
     )
@@ -444,25 +401,62 @@ if (!didJob) {
     program.help()
 }
 
-function correctOverloadedProperties(entry: IDLEntry, idlLibrary: PeerLibrary) {
-    if (idlLibrary.language !== Language.ARKTS) {
-        return;
+function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language) {
+    if (options.generatorTarget == "arkoala" || options.generatorTarget == "all") {
+        generateArkoalaFromIdl({
+            outDir: outDir,
+            arkoalaDestination: options.arkoalaDestination,
+            nativeBridgeFile: options.nativeBridgePath,
+            apiVersion: apiVersion,
+            verbose: options.verbose ?? false,
+            onlyIntegrated: options.onlyIntegrated ?? false,
+            dumpSerialized: options.dumpSerialized ?? false,
+            callLog: options.callLog ?? false,
+            lang: lang
+        }, idlLibrary)
     }
-    if (!isInterface(entry) && !isClass(entry)) {
-        return;
+    if (options.generatorTarget == "libace" ||
+        options.generatorTarget == "all") {
+        generateLibaceFromIdl({
+            outDir: outDir,
+            libaceDestination: options.libaceDestination,
+            apiVersion: apiVersion,
+            commentedCode: options.commentedCode,
+        }, idlLibrary)
     }
-    if (entry.inheritance.length !== 1) {
-        return;
+    if (options.generatorTarget == "tracker") {
+        generateTracker(outDir, idlLibrary, options.trackerStatus, options.verbose)
     }
-    const firstParent = idlLibrary.toDeclaration(entry.inheritance[0])
-    if (!isInterface(firstParent) && !isClass(firstParent)) {
-        return;
+    if (options.generatorTarget == "ohos") {
+        generateOhos(outDir, idlLibrary)
     }
-    entry.properties.forEach(prop => {
-        const overloadedProp =
-            firstParent.properties.find(it => it.name === prop.name)
-        if (overloadedProp !== undefined) {
-            prop.type = overloadedProp.type
-        }
-    })
+    if (options.plugin) {
+        loadPlugin(options.plugin)
+            .then(plugin => plugin.process({outDir: outDir}, idlLibrary))
+            .then(result => {
+                console.log(`Plugin ${options.plugin} process returned ${result}`)
+            })
+            .catch(error => console.error(`Plugin ${options.plugin} not found: ${error}`))
+    }
+
+}
+
+function scanNotPredefinedDirectory(dir: string, ...subdirs: string[]): PeerFile[] {
+    return scanDirectory(false, dir, ...subdirs)
+}
+
+function scanPredefinedDirectory(dir: string, ...subdirs: string[]): PeerFile[] {
+    return scanDirectory(true, dir, ...subdirs)
+}
+
+function scanDirectory(isPredefined: boolean, dir: string, ...subdirs: string[]): PeerFile[] {
+    dir = path.join(dir, ...subdirs)
+    return fs.readdirSync(dir)
+        .filter(it => it.endsWith(".idl"))
+        .map(it => {
+            const idlFile = path.resolve(path.join(dir, it))
+            const content = fs.readFileSync(path.resolve(path.join(dir, it))).toString()
+            const nodes = webidl2.parse(content).filter(it => !!it.type).map(it => toIDLNode(idlFile, it))
+            return new PeerFile(idlFile, nodes, isPredefined)
+        })
 }

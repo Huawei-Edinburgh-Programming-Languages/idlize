@@ -13,25 +13,13 @@
  * limitations under the License.
  */
 
-package org.koalaui.arkoala;
-
-public class NativeModule {
-  static {
-    Runtime.getRuntime().loadLibrary("NativeBridgeJni");
-  }
-
-  static int callCallbackFromNative(int id, byte[] args, int length) {
-    throw new Error("implement callCallbackFromNative()");
-  }
-
-%GENERATED_METHODS%
-
-// interop
-%GENERATED_PREDEFINED_Interop%
-// loader
-%GENERATED_PREDEFINED_Loader%
-// node
-%GENERATED_PREDEFINED_Node%
-// test
-%GENERATED_PREDEFINED_Test%
-}
+export interface PageTransitionExitInterface {}
+export interface CommonTransition {}
+export interface NavigationAttribute {}
+export interface SubscribaleAbstract {}
+export interface ISinglePropertyChangeSubscriber {}
+export interface IPropertySubscriber {}
+export interface AbstractProperty {}
+export interface CustomComponent {}
+export interface AttributeModifier<T> {}
+export interface PageTransitionEnterInterface {}

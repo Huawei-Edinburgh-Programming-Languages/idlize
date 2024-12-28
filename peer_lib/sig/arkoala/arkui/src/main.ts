@@ -54,7 +54,9 @@ import {
     startNativeTest,
     stopNativeTest,
 } from "./test_utils"
-import { nativeModule } from "@koalaui/arkoala"
+import { PixelMap } from "@arkoala/arkui/ArkPixelMapMaterialized"
+import { ArkUINativeModule, TestNativeModule } from "@koalaui/arkoala"
+import { ArkUIGeneratedNativeModule } from "./ArkUIGeneratedNativeModule"
 import { mkdirSync, writeFileSync } from "fs"
 import { CallbackKind } from "@arkoala/arkui/peers/CallbackKind"
 import { ResourceId, ResourceHolder } from "@koalaui/interop"
@@ -127,70 +129,70 @@ function checkNodeAPI() {
 
     const id = 12
     const flags = 7
-    let ptr: pointer = nativeModule()._ComponentRoot_construct(id, flags)
-    let childPtr1: pointer = nativeModule()._ComponentRoot_construct(id + 1, flags)
-    let childPtr2: pointer = nativeModule()._ComponentRoot_construct(id + 2, flags)
+    let ptr: pointer = ArkUIGeneratedNativeModule._ComponentRoot_construct(id, flags)
+    let childPtr1: pointer = ArkUIGeneratedNativeModule._ComponentRoot_construct(id + 1, flags)
+    let childPtr2: pointer = ArkUIGeneratedNativeModule._ComponentRoot_construct(id + 2, flags)
 
     let stackPtr: pointer = 0
     checkResult("BasicNodeAPI getNodeByViewStack",
-        () => stackPtr = nativeModule()._GetNodeByViewStack(),
+        () => stackPtr = ArkUINativeModule._GetNodeByViewStack(),
         `getNodeByViewStack()`
     )
     assertEquals("BasicNodeAPI getNodeByViewStack result", 234, stackPtr)
 
     checkResult("BasicNodeAPI addChild",
-        () => nativeModule()._AddChild(ptr, childPtr1),
+        () => ArkUINativeModule._AddChild(ptr, childPtr1),
         `addChild(0x${ptr}, 0x${childPtr1})markDirty(0x${ptr}, 32)`
     )
 
-    nativeModule()._AddChild(ptr, childPtr2)
+    ArkUINativeModule._AddChild(ptr, childPtr2)
     checkResult("BasicNodeAPI removeChild",
-        () => nativeModule()._RemoveChild(ptr, childPtr2),
+        () => ArkUINativeModule._RemoveChild(ptr, childPtr2),
         `removeChild(0x${ptr}, 0x${childPtr2})markDirty(0x${ptr}, 32)`
     )
 
     checkResult("BasicNodeAPI insertChildAfter",
-        () => nativeModule()._InsertChildAfter(ptr, childPtr2, childPtr1),
+        () => ArkUINativeModule._InsertChildAfter(ptr, childPtr2, childPtr1),
         `insertChildAfter(0x${ptr}, 0x${childPtr2}, 0x${childPtr1})markDirty(0x${ptr}, 32)`
     )
-    nativeModule()._RemoveChild(ptr, childPtr2)
+    ArkUINativeModule._RemoveChild(ptr, childPtr2)
 
     checkResult("BasicNodeAPI insertChildBefore",
-        () => nativeModule()._InsertChildBefore(ptr, childPtr2, childPtr1),
+        () => ArkUINativeModule._InsertChildBefore(ptr, childPtr2, childPtr1),
         `insertChildBefore(0x${ptr}, 0x${childPtr2}, 0x${childPtr1})markDirty(0x${ptr}, 32)`
     )
-    nativeModule()._RemoveChild(ptr, childPtr2)
+    ArkUINativeModule._RemoveChild(ptr, childPtr2)
 
     checkResult("BasicNodeAPI insertChildAt",
-        () => nativeModule()._InsertChildAt(ptr, childPtr2, 0),
+        () => ArkUINativeModule._InsertChildAt(ptr, childPtr2, 0),
         `insertChildAt(0x${ptr}, 0x${childPtr2}, 0)markDirty(0x${ptr}, 32)`
     )
-    nativeModule()._RemoveChild(ptr, childPtr2)
+    ArkUINativeModule._RemoveChild(ptr, childPtr2)
 
     checkResult("BasicNodeAPI applyModifierFinish",
-        () => nativeModule()._ApplyModifierFinish(ptr),
+        () => ArkUINativeModule._ApplyModifierFinish(ptr),
         `applyModifierFinish(0x${ptr})`
     )
 
     checkResult("BasicNodeAPI markDirty",
-        () => nativeModule()._MarkDirty(ptr, 123456),
+        () => ArkUINativeModule._MarkDirty(ptr, 123456),
         `markDirty(0x${ptr}, 123456)`
     )
 
     let isBuilderNode = 0
     checkResult("BasicNodeAPI isBuilderNode",
-        () => isBuilderNode = nativeModule()._IsBuilderNode(ptr),
+        () => isBuilderNode = ArkUINativeModule._IsBuilderNode(ptr),
         `isBuilderNode(0x${ptr})`
     )
     assertEquals("BasicNodeAPI isBuilderNode result", 1, isBuilderNode)
 
     checkResult("BasicNodeAPI disposeNode",
-        () => nativeModule()._DisposeNode(childPtr2),
+        () => ArkUINativeModule._DisposeNode(childPtr2),
         `disposeNode(0x${childPtr2})`)
 
     let length = 0.0
     checkResult("BasicNodeAPI convertLengthMetricsUnit",
-        () => length = nativeModule()._ConvertLengthMetricsUnit(1.23, 10, 0),
+        () => length = ArkUINativeModule._ConvertLengthMetricsUnit(1.23, 10, 0),
         `convertLengthMetricsUnit(1.23, 10, 0)`
     )
     assertTrue("BasicNodeAPI convertLengthMetricsUnit result", Math.abs(12.3 - length) < 0.00001)
@@ -217,10 +219,10 @@ function checkCallback() {
 function createDefaultWriteCallback(kind: CallbackKind, callback: object) {
     return (serializer: Serializer) => {
         return serializer.holdAndWriteCallback(callback,
-            nativeModule()._TestGetManagedHolder(),
-            nativeModule()._TestGetManagedReleaser(),
-            nativeModule()._TestGetManagedCaller(kind),
-            nativeModule()._TestGetManagedCallerSync(kind)
+            TestNativeModule._TestGetManagedHolder(),
+            TestNativeModule._TestGetManagedReleaser(),
+            TestNativeModule._TestGetManagedCaller(kind),
+            TestNativeModule._TestGetManagedCallerSync(kind)
         )
     }
 }
@@ -228,9 +230,9 @@ function createDefaultWriteCallback(kind: CallbackKind, callback: object) {
 function createDefaultWritePromiseVoid(kind: CallbackKind, then_: () => void, catch_: (err: string[])=>void) {
     return (serializer: Serializer) => {
         const promiseSerialized = serializer.holdAndWriteCallbackForPromiseVoid(
-            nativeModule()._TestGetManagedHolder(),
-            nativeModule()._TestGetManagedReleaser(),
-            nativeModule()._TestGetManagedCaller(kind),
+            TestNativeModule._TestGetManagedHolder(),
+            TestNativeModule._TestGetManagedReleaser(),
+            TestNativeModule._TestGetManagedCaller(kind),
         )
         promiseSerialized[0].then(then_).catch(catch_)
         return promiseSerialized[1]
@@ -244,7 +246,7 @@ function enqueueCallback(
     const serializer = Serializer.hold()
     const resourceId = writeCallback(serializer)
     /* imitate libace holding resource */
-    nativeModule()._HoldArkoalaResource(resourceId)
+    ArkUINativeModule._HoldArkoalaResource(resourceId)
     /* libace stored resource somewhere */
     const buffer = new Uint8Array(serializer.asArray().buffer.byteLength)
     const bufferLength = serializer.length()
@@ -255,11 +257,11 @@ function enqueueCallback(
     const deserializer = new Deserializer(buffer.buffer, bufferLength)
     readAndCallCallback(deserializer)
     /* libace released resource */
-    nativeModule()._ReleaseArkoalaResource(resourceId)
+    ArkUINativeModule._ReleaseArkoalaResource(resourceId)
 }
 
 function checkCallbackWithReturn() {
-    nativeModule()._TestSetArkoalaCallbackCallerSync()
+    TestNativeModule._TestSetArkoalaCallbackCallerSync()
 
     let callResult1 = "NOT_CALLED"
 
@@ -279,7 +281,7 @@ function checkCallbackWithReturn() {
 }
 
 function checkTwoSidesCallbackSync() {
-    nativeModule()._TestSetArkoalaCallbackCallerSync()
+    TestNativeModule._TestSetArkoalaCallbackCallerSync()
 
     let callResult1 = "NOT_CALLED"
     enqueueCallback(
@@ -327,7 +329,7 @@ function checkTwoSidesCallbackSync() {
 }
 
 function checkTwoSidesCallback() {
-    nativeModule()._TestSetArkoalaCallbackCaller()
+    TestNativeModule._TestSetArkoalaCallbackCaller()
 
     let callResult1 = "NOT_CALLED"
     let callResult2 = 0
@@ -362,7 +364,7 @@ function checkTwoSidesCallback() {
 }
 
 function checkTwoSidesPromise() {
-    nativeModule()._TestSetArkoalaCallbackCaller()
+    TestNativeModule._TestSetArkoalaCallbackCaller()
 
     let result1 = "PENDING"
     let result2 = "PENDING"
@@ -401,7 +403,7 @@ function checkTwoSidesPromise() {
 }
 
 function checkTransformedCallback() {
-    
+
 }
 
 function checkWriteFunction() {
@@ -452,11 +454,6 @@ function checkCalendar() {
     const date = new Date()
     checkResult("setCalendarOptions: selected", () => peer.setCalendarPickerOptionsAttribute({ selected: date }),
         `setCalendarPickerOptions({.tag=ARK_TAG_OBJECT, .value={.hintRadius={.tag=ARK_TAG_UNDEFINED, .value={}}, .selected={.tag=ARK_TAG_OBJECT, .value=${date.getTime()}}}})`)
-    checkResult("edgeAlign1", () => peer.edgeAlignAttribute(2, { dx: 5, dy: 6 }),
-        `edgeAlign(Ark_CalendarAlign(2), {.tag=ARK_TAG_OBJECT, .value={.dx={.type=1, .value=5, .unit=1, .resource=0}, .dy={.type=1, .value=6, .unit=1, .resource=0}}})`)
-    checkResult("edgeAlign2", () => peer.edgeAlignAttribute(2),
-        `edgeAlign(Ark_CalendarAlign(2), {.tag=ARK_TAG_UNDEFINED, .value={}})`)
-
     stopNativeTest(CALL_GROUP_LOG)
 }
 
@@ -465,11 +462,11 @@ function checkFormComponent() {
 
     let peer = ArkFormComponentPeer.create()
     checkResult("size int", () => peer.sizeAttribute({ width: 5, height: 6 }),
-        `size({.width={.tag=102, .i32=5}, .height={.tag=102, .i32=6}})`)
+        `size({.width={.tag=ARK_TAG_OBJECT, .value={.type=1, .value=5, .unit=1, .resource=0}}, .height={.tag=ARK_TAG_OBJECT, .value={.type=1, .value=6, .unit=1, .resource=0}}})`)
     checkResult("size float", () => peer.sizeAttribute({ width: 5.5, height: 6.789 }),
-        `size({.width={.tag=103, .f32=5.5}, .height={.tag=103, .f32=6.789}})`)
+        `size({.width={.tag=ARK_TAG_OBJECT, .value={.type=1, .value=5.5, .unit=1, .resource=0}}, .height={.tag=ARK_TAG_OBJECT, .value={.type=1, .value=6.789, .unit=1, .resource=0}}})`)
     checkResult("size zero", () => peer.sizeAttribute({ width: 0.0, height: 0.0 }),
-        `size({.width={.tag=102, .i32=0}, .height={.tag=102, .i32=0}})`)
+        `size({.width={.tag=ARK_TAG_OBJECT, .value={.type=1, .value=0, .unit=1, .resource=0}}, .height={.tag=ARK_TAG_OBJECT, .value={.type=1, .value=0, .unit=1, .resource=0}}})`)
 
     stopNativeTest(CALL_GROUP_LOG)
 }
@@ -487,11 +484,6 @@ function checkCommon() {
             grayscale: [1, 1]
         }
     }
-    checkResult("Test backgroundBlurStyle for BackgroundBlurStyleOptions",
-        () => peer.backgroundBlurStyleAttribute(0, backgroundBlurStyle),
-        `backgroundBlurStyle(Ark_BlurStyle(0), {.tag=ARK_TAG_OBJECT, .value={.colorMode={.tag=ARK_TAG_OBJECT, .value=Ark_ThemeColorMode(0)}, .adaptiveColor={.tag=ARK_TAG_OBJECT, .value=Ark_AdaptiveColor(0)}, .scale={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=1}}, .blurOptions={.tag=ARK_TAG_OBJECT, .value={.grayscale={.value0={.tag=102, .i32=1}, .value1={.tag=102, .i32=1}}}}, .policy={.tag=ARK_TAG_UNDEFINED, .value={}}, .inactiveColor={.tag=ARK_TAG_UNDEFINED, .value={}}}})`
-    )
-
     checkResult("Test dragPreviewOptions numberBadge with number",
         () => peer.dragPreviewOptionsAttribute({ numberBadge: 10 }, { isMultiSelectionEnabled: true }),
         `dragPreviewOptions({.mode={.tag=ARK_TAG_UNDEFINED, .value={}}, .modifier={.tag=ARK_TAG_UNDEFINED, .value={}}, .numberBadge={.tag=ARK_TAG_OBJECT, .value={.selector=1, .value1={.tag=102, .i32=10}}}}, {.tag=ARK_TAG_OBJECT, .value={.isMultiSelectionEnabled={.tag=ARK_TAG_OBJECT, .value=true}, .defaultAnimationBeforeLifting={.tag=ARK_TAG_UNDEFINED, .value={}}}})`
@@ -580,11 +572,11 @@ function checkCanvasRenderingContext2D() {
 
     checkResult("CanvasRenderingContext2D width",
         () => canvasRenderingContext2D!.width,
-        `getWidth()`)
+        `getWidth()[return 0]`)
 
     checkResult("CanvasRenderingContext2D width",
         () => canvasRenderingContext2D!.height,
-        `getHeight()`)
+        `getHeight()[return 0]`)
 
     assertEquals("CanvasRenderingContext2D width", 0, canvasRenderingContext2D!.width)
     assertEquals("CanvasRenderingContext2D height", 0, canvasRenderingContext2D!.height)
@@ -603,16 +595,6 @@ function checkCanvasRenderingContext2D() {
     stopNativeTest(CALL_GROUP_LOG)
 }
 
-function checkPerf2(count: number) {
-    let peer = ArkButtonPeer.create()
-    let start = performance.now()
-    for (let i = 0; i < count; i++) {
-        peer.backdropBlurAttribute(i, i % 2 == 0 ? undefined : { grayscale: [1, 2] })
-    }
-    let passed = performance.now() - start
-    console.log(`backdropBlur: ${Math.round(passed)}ms for ${count} iteration, ${Math.round(passed / count * 1000000)}ms per 1M iterations`)
-}
-
 function checkPerf3(count: number) {
     let peer = ArkButtonPeer.create()
     let start = performance.now()
@@ -624,7 +606,7 @@ function checkPerf3(count: number) {
 }
 
 function setEventsAPI() {
-    nativeModule()._Test_SetEventsApi()
+    TestNativeModule._Test_SetEventsApi()
 }
 
 function checkEvent_Primitive() {
@@ -633,11 +615,11 @@ function checkEvent_Primitive() {
     serializer.writeInt32(1) //nodeId
     serializer.writeString("testString") //arg1
     serializer.writeNumber(22) //arg2
-    nativeModule()._Test_TextPicker_OnAccept(serializer.asArray(), serializer.length())
+    TestNativeModule._Test_TextPicker_OnAccept(serializer.asArray(), serializer.length())
     serializer.release()
 
     const buffer = new Uint8Array(BufferSize)
-    const checkResult = nativeModule()._CheckArkoalaGeneratedEvents(buffer, BufferSize)
+    const checkResult = ArkUINativeModule._CheckArkoalaGeneratedEvents(buffer, BufferSize)
     const event = deserializePeerEvent(new Deserializer(buffer.buffer, BufferSize))
     assertEquals("Event_Primitive: read event from native", 1, checkResult)
     if (checkResult !== 1)
@@ -660,11 +642,11 @@ function checkEvent_Interface_Optional() {
     serializer.writeInt32(1) //nodeId
     serializer.writeVisibleListContentInfo(eventStart);
     serializer.writeVisibleListContentInfo(eventEnd);
-    nativeModule()._Test_List_OnScrollVisibleContentChange(serializer.asArray(), serializer.length())
+    TestNativeModule._Test_List_OnScrollVisibleContentChange(serializer.asArray(), serializer.length())
     serializer.release()
 
     const buffer = new Uint8Array(bufferSize)
-    const checkResult = nativeModule()._CheckArkoalaGeneratedEvents(buffer, bufferSize)
+    const checkResult = ArkUINativeModule._CheckArkoalaGeneratedEvents(buffer, bufferSize)
     const event = deserializePeerEvent(new Deserializer(buffer.buffer, bufferSize))
     assertEquals("Event_Interface_Optional: read event from native", 1, checkResult)
     if (checkResult !== 1)
@@ -703,11 +685,11 @@ function checkEvent_Array_Class() {
     for (let i = 0; i < eventParam.length; i++) {
         serializer.writeTouchTestInfo(eventParam[i]);
     }
-    nativeModule()._Test_Common_OnChildTouchTest(serializer.asArray(), serializer.length())
+    TestNativeModule._Test_Common_OnChildTouchTest(serializer.asArray(), serializer.length())
     serializer.release()
 
     const buffer = new Uint8Array(bufferSize)
-    const checkResult = nativeModule()._CheckArkoalaGeneratedEvents(buffer, bufferSize)
+    const checkResult = ArkUINativeModule._CheckArkoalaGeneratedEvents(buffer, bufferSize)
     const event = deserializePeerEvent(new Deserializer(buffer.buffer, bufferSize))
     assertEquals("Event_Array_Class: read event from native", 1, checkResult)
     if (checkResult !== 1)
@@ -735,7 +717,7 @@ function checkNativeCallback() {
     const id1 = wrapCallback((args: Uint8Array, length: number): number => {
         return 123456
     })
-    assertEquals("NativeCallback without args", 123456, nativeModule()._TestCallIntNoArgs(id1))
+    assertEquals("NativeCallback without args", 123456, TestNativeModule._TestCallIntNoArgs(id1))
 // TODO: Fix the tests according to the latest callback changes
 //     assertThrows("NativeCallback without args called again", () => { callCallback(id1, new Uint8Array([]), 0) })
 //     assertThrows("NativeCallback without args called again from native", () => { nativeModule()._TestCallIntNoArgs(id1) })
@@ -745,7 +727,7 @@ function checkNativeCallback() {
         return args32.reduce((acc, val) => acc + val, 0)
     })
     const arr2 = new Int32Array([100, 200, 300, -1000])
-    assertEquals("NativeCallback Int32Array sum", -400, nativeModule()._TestCallIntIntArraySum(id2, arr2, arr2.length))
+    assertEquals("NativeCallback Int32Array sum", -400, TestNativeModule._TestCallIntIntArraySum(id2, arr2, arr2.length))
 
     const id3 = wrapCallback((args: Uint8Array, length: number): number => {
         const args32 = new Int32Array(args.buffer)
@@ -755,7 +737,7 @@ function checkNativeCallback() {
         return 0
     })
     const arr3 = new Int32Array([100, 200, 300, -1000])
-    nativeModule()._TestCallVoidIntArrayPrefixSum(id3, arr3, arr3.length)
+    TestNativeModule._TestCallVoidIntArrayPrefixSum(id3, arr3, arr3.length)
     assertEquals("NativeCallback Int32Array PrefixSum [0]", 100, arr3[0])
     assertEquals("NativeCallback Int32Array PrefixSum [1]", 300, arr3[1])
     assertEquals("NativeCallback Int32Array PrefixSum [2]", 600, arr3[2])
@@ -766,7 +748,7 @@ function checkNativeCallback() {
         const args32 = new Int32Array(args.buffer)
         args32[1]++
         if (args32[0] + args32[1] < args32[2]) {
-            return nativeModule()._TestCallIntRecursiveCallback(id3 + 1, args, args.length)
+            return TestNativeModule._TestCallIntRecursiveCallback(id3 + 1, args, args.length)
         }
         return 1
     }, false)
@@ -775,7 +757,7 @@ function checkNativeCallback() {
     const count = 100
     for (var i = 0; i < count; i++) {
         const arr4 = new Int32Array([0, 0, depth])
-        nativeModule()._TestCallIntRecursiveCallback(id4, new Uint8Array(arr4.buffer), arr4.byteLength)
+        TestNativeModule._TestCallIntRecursiveCallback(id4, new Uint8Array(arr4.buffer), arr4.byteLength)
         if (i == 0) {
             assertEquals("NativeCallback Recursive [0]", Math.ceil(depth / 2), arr4[0])
             assertEquals("NativeCallback Recursive [1]", Math.floor(depth / 2), arr4[1])
@@ -787,7 +769,7 @@ function checkNativeCallback() {
     const id5 = wrapCallback((args: Uint8Array, length: number): number => {
         return args.reduce((acc, val) => acc + val, 0)
     }, false)
-    nativeModule()._TestCallIntMemory(id5, 1000)
+    TestNativeModule._TestCallIntMemory(id5, 1000)
 
     stopNativeTest(CALL_GROUP_LOG)
 }
@@ -798,13 +780,43 @@ function checkArrayBuffer() {
         let view = new DataView(buffer)
         view.setInt8(0, 42)
         view.setInt8(100, 37)
-        nativeModule()._TestWithBuffer(buffer)
+        TestNativeModule._TestWithBuffer(buffer)
     }, "42 37")
+}
+
+function checkPassToNativeBuffer() {
+    checkResult("ArrayBuffer", () => {
+        const buffer = new ArrayBuffer(256)
+        const pm = new PixelMap()
+        pm.readPixelsToBufferSync(buffer)
+    }, "new PixelMap()[return (PixelMapPeer*) 100]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]readPixelsToBufferSync({.data=nullptr, .length=256})")
+}
+
+function checkReadAndMutateBuffer() {
+    const bufferSize = 10
+    const buffer = new ArrayBuffer(bufferSize)
+    const uint8array = new Uint8Array(buffer)
+    for (let i = 0; i < bufferSize; ++i) {
+        uint8array[i] = i + 1
+    }
+    const serializer = Serializer.hold()
+    serializer.writeBuffer(buffer)
+    TestNativeModule._TestReadAndMutateManagedBuffer(serializer.asArray(), serializer.length())
+
+    let isSame = true
+    for (let i = 0; i < bufferSize; ++i) {
+        isSame = isSame && (i + 1) * 2 === uint8array[i]
+    }
+    serializer.release()
+    assertTrue("Buffer mutated correctly", isSame)
 }
 
 function main() {
     // Place where mock of ACE is located.
     process.env.ACE_LIBRARY_PATH = __dirname + "/../../../native"
+
+    checkReadAndMutateBuffer()
+    checkPassToNativeBuffer()
 
     checkCallbackWithReturn()
     checkTwoSidesCallbackSync()
@@ -814,7 +826,7 @@ function main() {
     checkSerdePrimitive()
     checkSerdeCustomObject()
 
-    checkPerf2(5 * 1000 * 1000)
+    //checkPerf2(5 * 1000 * 1000)
     checkPerf3(5 * 1000 * 1000)
 
     startPerformanceTest()

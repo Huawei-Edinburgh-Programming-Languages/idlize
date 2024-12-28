@@ -14,7 +14,8 @@
  */
 import { float32, int32, int64 } from "@koalaui/common"
 import { pointer, wrapCallback, ResourceId, ResourceHolder, KPointer } from "@koalaui/interop"
-import { nativeModule } from "@koalaui/arkoala"
+import { InteropNativeModule } from "@koalaui/interop"
+import { ArkUINativeModule } from "@koalaui/arkoala"
 
 // imports required interfaces (now generation is disabled)
 // import { Resource } from "@arkoala/arkui"
@@ -63,12 +64,16 @@ export function runtimeType(value: any): int32 {
     throw new Error(`bug: ${value} is ${type}`)
 }
 
-export function isResource(value: Object): value is Resource {
-    return value.hasOwnProperty("bundleName") && value.hasOwnProperty("moduleName")
+export function isResource(value: unknown): value is Resource {
+    return value !== undefined 
+        && typeof value === 'object' 
+        && value !== null 
+        && value.hasOwnProperty("bundleName") 
+        && value.hasOwnProperty("moduleName")
 }
 
 // Poor man's instanceof, fails on subclasses
-export function isInstanceOf(className: string, value: Object | undefined): boolean {
+export function isInstanceOf(className: string, value: object | undefined): boolean {
     return value?.constructor.name === className
 }
 
@@ -188,7 +193,7 @@ export class SerializerBase {
     }
     private releaseResources() {
         for (const resourceId of this.heldResources)
-            nativeModule()._ReleaseArkoalaResource(resourceId)
+            ArkUINativeModule._ReleaseArkoalaResource(resourceId)
         // todo think about effective array clearing/pushing
         this.heldResources = []
     }
@@ -257,12 +262,19 @@ export class SerializerBase {
     writeString(value: string) {
         this.checkCapacity(4 + value.length * 4) // length, data
         let encodedLength =
-            nativeModule()._ManagedStringWrite(value, new Uint8Array(this.view.buffer, 0), this.position + 4)
+            InteropNativeModule._ManagedStringWrite(value, new Uint8Array(this.view.buffer, 0), this.position + 4)
         this.view.setInt32(this.position, encodedLength, true)
         this.position += encodedLength + 4
     }
     writeBuffer(buffer: ArrayBuffer) {
-        this.writePointer(64)
+        const resourceId = ResourceHolder.instance().registerAndHold(buffer)
+        this.writeCallbackResource({
+            resourceId, 
+            hold: 0,
+            release: 0
+        })
+        const ptr = InteropNativeModule._GetNativeBufferPointer(buffer)
+        this.writePointer(ptr)
         this.writeInt64(buffer.byteLength)
     }
 }

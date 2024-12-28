@@ -14,7 +14,7 @@
  */
 import { float32, float64, int8, int32, int64, int32BitsFromFloat } from "@koalaui/common"
 import { pointer, KUint8ArrayPtr, KBuffer, ResourceId, ResourceHolder } from "@koalaui/interop"
-import { %NATIVE_MODULE_ACCESSOR% as NativeModule } from "%NATIVE_MODULE_PATH%"
+import { ArkUINativeModule } from "%NATIVE_MODULE_PATH%"
 
 /**
  * Value representing possible JS runtime object type.
@@ -81,6 +81,28 @@ export interface CallbackResource {
     hold: pointer
     release: pointer
 }
+
+
+export class NativeBuffer {
+    public data:pointer = 0
+    public length: int64 = 0
+    public resourceId: int32 = 0
+    public hold:pointer = 0
+    public release: pointer = 0
+
+    constructor(data:pointer, length: int64, resourceId: int32, hold:pointer, release: pointer) {
+        this.data = data
+        this.length = length
+        this.resourceId = resourceId
+        this.hold = hold
+        this.release = release
+    }
+
+    static wrap(data:pointer, length: int64, resourceId: int32, hold:pointer, release: pointer): NativeBuffer {
+        return new NativeBuffer(data, length, resourceId, hold, release)
+    }
+}
+
 
 /* Serialization extension point */
 export abstract class CustomSerializer {
@@ -165,7 +187,7 @@ export class SerializerBase {
     }
     private releaseResources() {
         for (const resourceId of this.heldResources)
-            NativeModule._ReleaseArkoalaResource(resourceId)
+            ArkUINativeModule._ReleaseArkoalaResource(resourceId)
         // todo think about effective array clearing/pushing
         this.heldResources = new Array<ResourceId>()
     }
@@ -267,9 +289,14 @@ export class SerializerBase {
         // this.setInt32(this.position, encodedLength)
         // this.position += encodedLength + 4
     }
-    //TODO: Needs to be implemented
-    writeBuffer(value: ArrayBuffer) {
-        this.writePointer(42)
-        this.writeInt64(value.byteLength as int64)
+    
+    writeBuffer(value: NativeBuffer) {
+        this.writeCallbackResource({
+            resourceId: value.resourceId,
+            hold: value.hold,
+            release: value.release
+        })
+        this.writePointer(value.data)
+        this.writeInt64(value.length as int64)
     }
 }

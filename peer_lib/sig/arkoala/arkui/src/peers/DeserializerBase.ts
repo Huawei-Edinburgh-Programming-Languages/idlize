@@ -12,9 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { CustomTextDecoder, float32, int32, int64 } from "@koalaui/common"
-import { pointer } from "@koalaui/interop"
+import { CustomTextDecoder, float32, int32, int64, finalizerRegister } from "@koalaui/common"
 import { Tags, CallbackResource } from "./SerializerBase";
+import { NativeThunkImpl } from "../Finalizable"
+import { ResourceHolder, pointer, InteropNativeModule } from "@koalaui/interop"
 
 export class DeserializerBase {
     private position = 0
@@ -187,9 +188,11 @@ export class DeserializerBase {
         return suffix
     }
     readBuffer(): ArrayBuffer {
-        this.readPointer()
+        const resource = this.readCallbackResource()
+        const data = this.readPointer()
         const length = this.readInt64()
-        return new ArrayBuffer(Number(length))
+
+        return InteropNativeModule._MaterializeBuffer(data, length, resource.resourceId, resource.hold, resource.release)
     }
 }
 

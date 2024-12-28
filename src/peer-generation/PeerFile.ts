@@ -16,27 +16,30 @@
 import * as idl from "../idl"
 import { PeerClass } from "./PeerClass"
 import { ImportFeature } from './ImportsCollector'
+import { LibraryFileInterface } from "../LibraryInterface"
 
-export class PeerFile {
+export class PeerFile implements LibraryFileInterface {
     readonly peers: Map<string, PeerClass> = new Map()
     constructor(
         public readonly originalFilename: string,
         public readonly entries: idl.IDLEntry[],
-        private readonly componentsToGenerate: Set<string>,
         public readonly isPredefined: boolean = false
     ) {}
 
 
     public packageName(): string {
         let packageTag = this.entries.find(it => idl.isPackage(it)) as idl.IDLPackage
-        if (packageTag) return packageTag.name
-        return ""
+        if (packageTag === undefined) {
+            return ""
+        }
+        if (packageTag.name.startsWith('"') && packageTag.name.endsWith('"')) {
+            return packageTag.name.slice(1, packageTag.name.length - 1)
+        }
+        return packageTag.name
     }
 
     get peersToGenerate(): PeerClass[] {
         const peers = Array.from(this.peers.values())
-        if (!this.componentsToGenerate.size)
-            return peers
-        return peers.filter(it => this.componentsToGenerate.has(it.componentName))
+        return peers
     }
 }

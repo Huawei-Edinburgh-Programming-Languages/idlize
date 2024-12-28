@@ -9,8 +9,10 @@ import { renameClassToBuilderClass, renameClassToMaterialized, renameDtsToInterf
 import { createDependenciesCollector } from "./idl/IdlDependenciesCollector"
 import { getInternalClassName } from "./Materialized"
 import { maybeTransformManagedCallback } from "./ArgConvertors"
+import { isComponentDeclaration } from "./ComponentsCollector"
 
 export const SyntheticModule = "./SyntheticDeclarations"
+export const HandwrittenModule = "../handwritten"
 
 export function convertDeclToFeature(library: PeerLibrary, node: idl.IDLNode): ImportFeature {
     const featureNameConvertor = createFeatureNameConvertor(library.language)
@@ -22,12 +24,14 @@ export function convertDeclToFeature(library: PeerLibrary, node: idl.IDLNode): I
     }
     if (!idl.isEntry(node))
         throw new Error("Expected to have an entry")
+    if (idl.isHandwritten(node))
+        return { feature: node.name, module: HandwrittenModule }
     if (idl.isSyntheticEntry(node))
         return { feature: node.name, module: SyntheticModule }
 
     const originalBasename = path.basename(node.fileName!)
     let fileName = renameDtsToInterfaces(originalBasename, library.language)
-    if ((idl.isInterface(node) || idl.isClass(node)) && !library.isComponentDeclaration(node)) {
+    if (idl.isInterface(node) && !isComponentDeclaration(library, node)) {
         if (isBuilderClass(node)) {
             fileName = renameClassToBuilderClass(node.name, library.language)
         } else if (isMaterialized(node)) {
@@ -56,7 +60,7 @@ export function collectDeclItself(
         const feature = convertDeclToFeature(library, node)
         emitter.addFeature(feature.feature, feature.module)
         if (options?.includeMaterializedInternals) {
-            if ((idl.isInterface(node) || idl.isClass(node)) && isMaterialized(node) && !isBuilderClass(node)) {
+            if (idl.isInterface(node) && isMaterialized(node) && !isBuilderClass(node)) {
                 emitter.addFeature(getInternalClassName(node.name), feature.module)
             }
         }

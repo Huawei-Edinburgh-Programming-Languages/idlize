@@ -15,7 +15,7 @@
 
 import * as fs from 'fs'
 import * as path from 'path'
-import { createConstructor, createContainerType, createOptionalType, createReferenceType, createTypeParameterReference, forceAsNamedNode, getExtAttribute, hasExtAttribute, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLInterface, IDLMethod, IDLParameter, IDLPointerType, IDLStringType, IDLType, IDLU8Type, IDLUint8ArrayType, IDLVoidType, isCallback, isClass, isConstructor, isContainerType, isEnum, isInterface, isMethod, isReferenceType, isType, isUnionType } from '../idl'
+import { createConstructor, createContainerType, createOptionalType, createReferenceType, createTypeParameterReference, DebugUtils, forceAsNamedNode, getExtAttribute, hasExtAttribute, IDLBufferType, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLI64Type, IDLInterface, IDLInterfaceSubkind, IDLMethod, IDLParameter, IDLPointerType, IDLStringType, IDLType, IDLU8Type, IDLUint8ArrayType, IDLVoidType, isCallback, isConstructor, isContainerType, isEnum, isInterface, isMethod, isNamedNode, isReferenceType, isType, isUnionType } from '../idl'
 import { IndentedPrinter } from "../IndentedPrinter"
 import { Language } from '../Language'
 import { capitalize, getOrPut } from '../util'
@@ -31,6 +31,7 @@ import { printCallbacksKinds, printManagedCaller } from './printers/CallbacksPri
 import { writeDeserializer, writeSerializer } from './printers/SerializerPrinter'
 import { CppSourceFile } from './printers/SourceFile'
 import { StructPrinter } from './printers/StructPrinter'
+import { NativeModuleType } from './NativeModuleType'
 
 class NameType {
     constructor(public name: string, public type: string) {}
@@ -51,6 +52,7 @@ class OHOSVisitor {
     peerWriter: LanguageWriter
     nativeWriter: LanguageWriter
     nativeFunctionsWriter: LanguageWriter
+    arkUIFunctionsWriter: LanguageWriter
 
     libraryName: string = ""
 
@@ -65,11 +67,13 @@ class OHOSVisitor {
             throw new Error("No files in library")
 
         this.libraryName = this.library.files.filter(f => !f.isPredefined)[0].packageName().toUpperCase()
+
         this.library.name = this.libraryName
 
         this.peerWriter = createLanguageWriter(library.language, library)
         this.nativeWriter = createLanguageWriter(library.language, library)
         this.nativeFunctionsWriter = createLanguageWriter(library.language, library)
+        this.arkUIFunctionsWriter = createLanguageWriter(library.language, library)
 
         const fileNamePrefix = this.libraryName.toLowerCase()
         this.implementationStubsFile = new CppSourceFile(`${fileNamePrefix}Impl_template${Language.CPP.extension}`, library)
@@ -79,10 +83,6 @@ class OHOSVisitor {
     private static knownBasicTypes = new Set(['ArrayBuffer', 'DataView'])
 
     mapType(type: IDLType | IDLEnum): string {
-        if (isType(type)) {
-            this.library.requestType(type, true)
-        }
-
         const typeName = isEnum(type)
             ? type.name
             : isContainerType(type) || isUnionType(type)
@@ -256,26 +256,6 @@ class OHOSVisitor {
         return capitalize(clazz.name)
     }
 
-    private requestType(type: IDLType | IDLEnum) {
-        this.library.requestType(type, true)
-    }
-
-    private requestTypes(entry: IDLEntry) {
-        if (isClass(entry)) {
-            entry.constructors.forEach(it => this.requestTypes(it))
-            entry.methods.forEach(it => this.requestTypes(it))
-            entry.properties.forEach(it => this.requestType(it.type))
-        } else if (isConstructor(entry)) {
-            entry.parameters.forEach(it => this.requestType(it.type!))
-        } else if (isMethod(entry) || isCallback(entry)) {
-            entry.parameters.forEach(it => this.requestType(it.type!))
-            this.requestType(entry.returnType)
-        } else if (isEnum(entry)) {
-            entry.elements.forEach(it => this.requestType(it.type))
-        }
-        entry.scope?.forEach(it => this.requestTypes(it))
-    }
-
     private printManaged() {
         this.printNative()
         this.printPeer()
@@ -283,6 +263,7 @@ class OHOSVisitor {
 
     private printNative() {
         const className = `${this.libraryName}NativeModule`
+        NativeModuleType.Generated.name = className
         this.callbacks.forEach(callback => {
             if (this.library.language === Language.TS) {
                 const params = callback.parameters.map(it => `${it.name}:${this.nativeWriter.getNodeName(it.type!)}`).join(', ')
@@ -301,11 +282,14 @@ class OHOSVisitor {
             })
         })
         printCallbacksKinds(this.library, this.nativeWriter)
+
         this.nativeFunctionsWriter.printer.pushIndent(this.nativeWriter.indentDepth() + 1)
         ;((writer: LanguageWriter) => {
             this.interfaces.forEach(it => {
                 // TODO TBD do we need to provide declaration for "fake" constructor for interfaces?
                 const ctors = it.constructors.map(it => ({ parameters: it.parameters, returnType: it.returnType }))
+                if (ctors.length === 0)
+                    ctors.push({parameters: [], returnType: undefined})
                 ctors.forEach(ctor => {
                     const signature = makePeerCallSignature(this.library, ctor.parameters, IDLPointerType)
                     writer.writeNativeMethodDeclaration(`_${it.name}_ctor`, signature)
@@ -319,38 +303,10 @@ class OHOSVisitor {
                     writer.writeNativeMethodDeclaration(`_${it.name}_${method.name}`, signature)  // TODO temporarily removed _${this.libraryName} prefix
                 })
             })
-            writer.writeNativeMethodDeclaration("_InvokeFinalizer",
-                NamedMethodSignature.make(IDLVoidType, [
-                    { name: "ptr", type: IDLPointerType },
-                    { name: "finalizer", type: IDLPointerType },
-                ])
-            )
-            writer.writeNativeMethodDeclaration("_CallCallback",
-                NamedMethodSignature.make(IDLVoidType, [
-                    { name: "callbackKind", type: IDLI32Type },
-                    { name: "args", type: IDLUint8ArrayType },
-                    { name: "argsSize", type: IDLI32Type },
-                ])
-            )
-            writer.writeNativeMethodDeclaration("_CallCallbackSync",
-                NamedMethodSignature.make(IDLVoidType, [
-                    { name: "callbackKind", type: IDLI32Type },
-                    { name: "args", type: IDLUint8ArrayType },
-                    { name: "argsSize", type: IDLI32Type },
-                ])
-            )
-            writer.writeNativeMethodDeclaration("_CallCallbackResourceHolder",
-                NamedMethodSignature.make(IDLVoidType, [
-                    { name: "holder", type: IDLPointerType },
-                    { name: "resourceId", type: IDLI32Type },
-                ])
-            )
-            writer.writeNativeMethodDeclaration("_CallCallbackResourceReleaser",
-                NamedMethodSignature.make(IDLVoidType, [
-                    { name: "releaser", type: IDLPointerType },
-                    { name: "resourceId", type: IDLI32Type },
-                ])
-            )
+        })(this.nativeFunctionsWriter)
+
+        this.arkUIFunctionsWriter.printer.pushIndent(this.nativeWriter.indentDepth() + 1)
+        ;((writer: LanguageWriter) => {
             writer.writeNativeMethodDeclaration("_CheckArkoalaCallbackEvent",
                 NamedMethodSignature.make(IDLI32Type, [
                     { name: "buffer", type: IDLUint8ArrayType },
@@ -374,27 +330,43 @@ class OHOSVisitor {
                     { name: "length", type: IDLI32Type },
                 ])
             )
-        })(this.nativeFunctionsWriter)
+            if (writer.language === Language.TS) {
+                writer.writeNativeMethodDeclaration("_MaterializeBuffer",
+                    NamedMethodSignature.make(IDLBufferType, [
+                        { name: "data", type: IDLPointerType },
+                        { name: "length", type: IDLI32Type },
+                        { name: "resourceId", type: IDLI32Type },
+                        { name: "holdPtr", type: IDLPointerType },
+                        { name: "releasePtr", type: IDLPointerType },
+                    ])
+                )
+            }
+            if (writer.language === Language.ARKTS) {
+                writer.writeNativeMethodDeclaration("_ManagedStringWrite", 
+                    NamedMethodSignature.make(IDLI32Type, [
+                        { name: "str", type: IDLStringType },
+                        { name: "arr", type: IDLUint8ArrayType },
+                        { name: "len", type: IDLI32Type },
+                    ])
+                )
+            }
+        })(this.arkUIFunctionsWriter)
     }
 
     private printPeer() {
         const nativeModuleVar = `${this.libraryName}NativeModule`
-        const nativeModuleGetter = `get${nativeModuleVar}`
         if (this.library.language === Language.TS) {
             this.peerWriter.print('import {')
             this.peerWriter.pushIndent()
             this.peerWriter.print(`${nativeModuleVar},`)
-            this.peerWriter.print(`${nativeModuleGetter},`)
             this.peerWriter.popIndent()
             this.peerWriter.print(`} from './${this.libraryName.toLocaleLowerCase()}Native'`)
-            this.peerWriter.nativeModuleAccessor = nativeModuleGetter
         } else if (this.library.language === Language.ARKTS) {
             this.peerWriter.print('import {')
             this.peerWriter.pushIndent()
             this.peerWriter.print(`${nativeModuleVar},`)
             this.peerWriter.popIndent()
             this.peerWriter.print(`} from './${this.libraryName.toLocaleLowerCase()}Native'`)
-            this.peerWriter.nativeModuleAccessor = nativeModuleVar
         }
         this.data.forEach(data => {
             this.peerWriter.writeInterface(data.name, writer => {
@@ -424,6 +396,9 @@ class OHOSVisitor {
                 // TODO Make peer private again
                 writer.writeFieldDeclaration('peer', createReferenceType("Finalizable"), [/* FieldModifier.PRIVATE */], false, peerInitExpr)
                 const ctors = int.constructors.map(it => ({ parameters: it.parameters, returnType: it.returnType }))
+                if (ctors.length === 0)
+                    // create empty constructor anyway
+                    ctors.push({parameters: [], returnType: undefined})
                 ctors.forEach(ctor => {
                     const signature = writer.makeNamedSignature(ctor.returnType ?? IDLVoidType, ctor.parameters)
                     // TODO remove duplicated code from writePeerMethod (PeersPrinter.ts)
@@ -462,7 +437,7 @@ class OHOSVisitor {
                         })
                         
                         const createPeerExpression = writer.makeNewObject("Finalizable", [
-                            writer.makeNativeCall(`_${int.name}_ctor`, params),
+                            writer.makeNativeCall(NativeModuleType.Generated, `_${int.name}_ctor`, params),
                             writer.makeString(`${int.name}.getFinalizer()`)
                         ])
                         writer.writeStatement(
@@ -487,6 +462,7 @@ class OHOSVisitor {
                 const getFinalizerSig = new MethodSignature(IDLPointerType, [])
                 writer.writeMethodImplementation(new Method("getFinalizer", getFinalizerSig, [MethodModifier.STATIC]), writer => {
                     const callExpression = writer.makeNativeCall(
+                        NativeModuleType.Generated,
                         `_${int.name}_getFinalizer`, // TODO temporarily removed _${this.libraryName} prefix
                         []
                     );
@@ -553,6 +529,7 @@ class OHOSVisitor {
                             }
                         })
                         const callExpression = writer.makeNativeCall(
+                            NativeModuleType.Generated,
                             `_${int.name}_${method.name}`, // TODO temporarily removed _${this.libraryName} prefix
                             params
                         )
@@ -608,6 +585,7 @@ class OHOSVisitor {
 
         this.cppWriter.writeLines(
             readLangTemplate('api_impl_prologue.cc', Language.CPP)
+                .replaceAll("%INTEROP_MODULE_NAME%", `${this.libraryName.toUpperCase()}NativeModule`)
                 .replaceAll("%API_HEADER_PATH%", `${this.libraryName.toLowerCase()}.h`)
                 .replaceAll("%CALLBACK_KINDS%", callbackKindsPrinter.getOutput().join("\n"))
                 .replaceAll("%LIBRARY_NAME%", this.libraryName.toUpperCase())
@@ -650,8 +628,7 @@ class OHOSVisitor {
         this.library.files.forEach(file => {
             if (file.isPredefined) return
             file.entries.forEach(entry => {
-                this.requestTypes(entry)
-                if (isInterface(entry) || isClass(entry)) {
+                if (isInterface(entry)) {
                     if (isMaterialized(entry)) {
                         this.interfaces.push(entry)
                     } else {
@@ -687,8 +664,6 @@ class OHOSVisitor {
 
         this.interfaces = interfaces
 
-        this.library.analyze()
-
         this.printManaged()
         this.printC()
 
@@ -696,7 +671,7 @@ class OHOSVisitor {
         const ext = this.library.language.extension
 
         const managedCodeModuleInfo = {
-            name: `get${this.libraryName}NativeModule`,
+            name: `${this.libraryName}NativeModule`,
             path: `./${fileNamePrefix}Native`,
             serializerPath: `./${fileNamePrefix}Serializer`,
             finalizablePath: `./${fileNamePrefix}Finalizable`,
@@ -711,7 +686,9 @@ class OHOSVisitor {
             .replaceAll('%NATIVE_MODULE_NAME%', this.libraryName)
             .replaceAll('%NATIVE_MODULE_CONTENT%', this.nativeWriter.getOutput().join('\n'))
             .replaceAll('%NATIVE_FUNCTIONS%', this.nativeFunctionsWriter.getOutput().join('\n'))
-        fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Native${ext}`), nativeModuleText, 'utf-8')
+            .replaceAll('%ARKUI_FUNCTIONS%', this.arkUIFunctionsWriter.getOutput().join('\n'))
+            .replaceAll('%OUTPUT_FILE%', managedCodeModuleInfo.path.replace('./', ''))
+        fs.writeFileSync(path.join(managedOutDir, `${managedCodeModuleInfo.path}${ext}`), nativeModuleText, 'utf-8')
 
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Finalizable${ext}`),
             readLangTemplate(`OHOSFinalizable_template${ext}`, this.library.language)
