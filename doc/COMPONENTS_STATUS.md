@@ -1666,9 +1666,9 @@
 |`removeOwningPropertyById`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
 |*ContextMenu*| *Class* | Tuzhilkin Ivan | blocked IDL | |
 |`close`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB84T |
-|*CustomDialogController*| *Class* | Erokhin Ilya | in progress | CustomBuilder https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|`open`| Function | Erokhin Ilya | in progress | https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|`close`| Function | Erokhin Ilya | in progress | https://gitee.com/openharmony/interface_sdk-js/issues/IB07SJ & https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|*CustomDialogController*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IBECPG |
+|`open`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IBECPG |
+|`close`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IBECPG |
 |*DatePickerDialog*| *Class* | Ekaterina Stepanova | testskipped | |
 |`show`| Function | Ekaterina Stepanova | testskipped | |
 |*PanGestureOptions*| *Class* | Politov Mikhail | blocked | |
