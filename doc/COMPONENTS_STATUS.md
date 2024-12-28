@@ -1543,7 +1543,7 @@
 |`restore`| Function  | Vadim Voronov | done | |
 |`save`| Function  | Vadim Voronov | done | |
 |`fillText`| Function  | Vadim Voronov | done | |
-|`measureText`| Function  | Vadim Voronov | devdone | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`measureText`| Function  | Vadim Voronov | devdone | testskipped, https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`strokeText`| Function  | Vadim Voronov | done | |
 |`getTransform`| Function  | Vadim Voronov | devdone | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`resetTransform`| Function  | Vadim Voronov | done | |
@@ -1552,7 +1552,7 @@
 |`setTransform`| Function  | Vadim Voronov | done | |
 |`transform`| Function  | Vadim Voronov | done | |
 |`translate`| Function  | Vadim Voronov | done | |
-|`setPixelMap`| Function  | Vadim Voronov | devdone | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
+|`setPixelMap`| Function  | Vadim Voronov | devdone | testskipped, https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`transferFromImageBitmap`| Function  | Vadim Voronov | done | |
 |`saveLayer`| Function  | Vadim Voronov | done | |
 |`restoreLayer`| Function  | Vadim Voronov | done | |
