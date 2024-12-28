@@ -608,7 +608,7 @@
 |`menuItemGroupDivider`|Function|Morozov Sergey| done |https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`subMenuExpandingMode`|Function|Morozov Sergey| done |  |
 |*MenuItem*| *Component* |Morozov Sergey|blocked|  |
-|`setMenuItemOptions`| Function |Kovalev Sergey| in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`setMenuItemOptions`| Function |Kovalev Sergey| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD |
 |`selected`| Function |Morozov Sergey|done|  |
 |`selectIcon`| Function |Morozov Sergey|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`onChange`| Function |Morozov Sergey|done|  |
