@@ -128,14 +128,14 @@ export class OverloadsPrinter {
     printGroupedComponentOverloads(peer: PeerClassBase, peerMethods: (PeerMethod)[]) {
         const orderedMethods = Array.from(peerMethods)
             .sort((a, b) => b.argConvertors.length - a.argConvertors.length)
-            // Methods with a large number of runtime types should have low priority(place below)
+            // Methods with a large number of runtime types should have low priority(place below) and we go from specific to general
             .sort((a, b) => {
                 const cardinalityA = a.argConvertors
                     .reduce((acc, it) => it.runtimeTypes.length + acc, 0)
                 const cardinalityB = b.argConvertors
                     .reduce((acc, it) => it.runtimeTypes.length + acc, 0)
                 return cardinalityA - cardinalityB
-        })
+            })
         const collapsedMethod = collapseSameNamedMethods(orderedMethods.map(it => it.method))
         if (this.isComponent) {
             this.printer.print(`/** @memo */`)
@@ -190,16 +190,8 @@ export class OverloadsPrinter {
 
     private printPeerCallAndReturn(peer: PeerClassBase, collapsedMethod: Method, peerMethod: PeerMethod) {
         const argsNames = peerMethod.argConvertors.map((conv, index) => {
-            let argName = collapsedMethod.signature.argName(index)
-            if (collapsedMethod.signature.args.length != peerMethod.method.signature.args.length) {
-                const peerMethodSign = peerMethod.method.signature as NamedMethodSignature
-                const collapsedMethodSign = collapsedMethod.signature as NamedMethodSignature
-                if (peerMethodSign.argsNames.find(argName =>
-                    collapsedMethodSign.argsNames.find(it => it === argName)) !== undefined) {
-                    argName = peerMethodSign.argName(index)
-                }
-            }
-            const castedArgName = `${argName}_casted`
+            const argName = collapsedMethod.signature.argName(index)
+            const castedArgName = `${(peerMethod.method.signature as NamedMethodSignature).argsNames[index]}_casted`
             const castedType = peerMethod.method.signature.args[index]
             this.printer.print(`const ${castedArgName} = ${argName} as (${this.printer.getNodeName(castedType)})`)
             return castedArgName
