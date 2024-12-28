@@ -223,7 +223,7 @@
 |`alignRules`| Function | Dmitry A Smirnov| done | |
 |`aspectRatio`| Function | Roman Sedaikin | done | |
 |`clickEffect`| Function | Lobah Mikhail | done | |
-|`onDragStart`| Function | Skroba Gleb | in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IARLIB, https://gitee.com/openharmony/arkui_ace_engine/issues/IAHA4D |
+|`onDragStart`| Function | Skroba Gleb | blocked IDL | PixelMap https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR, https://gitee.com/openharmony/arkui_ace_engine/issues/IAHA4D |
 |`onDragEnter`| Function | Lobah Mikhail | done | |
 |`onDragMove`| Function | Lobah Mikhail | done | |
 |`onDragLeave`| Function | Lobah Mikhail| done | |
