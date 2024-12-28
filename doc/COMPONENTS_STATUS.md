@@ -293,8 +293,8 @@
 |`bindPopup`| Function | Erokhin Ilya | testskipped | |
 |`bindMenu`| Function | Erokhin Ilya | blocked IDL | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG  |
 |`bindContextMenu`| Function | Erokhin Ilya | blocked IDL | Ark_ContextMenuAnimationOptions https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
-|`bindContentCover`| Function | Erokhin Ilya | testskipped | CustomBuilder |
-|`bindSheet`| Function | Erokhin Ilya | in progress | CustomBuilder |
+|`bindContentCover`| Function | Erokhin Ilya | testskipped | |
+|`bindSheet`| Function | Erokhin Ilya | testskipped | |
 |`onVisibleAreaChange`| Function | Erokhin Ilya | done | |
 |`keyboardShortcut`| Function | Erokhin Ilya | testskipped | |
 |*CommonShapeMethod*|*Component*|Skroba Gleb| blocked AceEngine |  |
