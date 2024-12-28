@@ -1098,7 +1098,7 @@
 |`bindSelectionMenu`| Function | Lobah Mikhail | testskipped | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*TextArea*|*Component*|Tuzhilkin Ivan|blocked IDL|  |
 |`setTextAreaOptions`|Function|Tuzhilkin Ivan|testskipped|  |
-|`placeholderColor`|Function|Tuzhilkin Ivan|testskipped|  |
+|`placeholderColor`|Function|Tuzhilkin Ivan|done|  |
 |`placeholderFont`|Function|Tuzhilkin Ivan|testskipped|  |
 |`enterKeyType`|Function|Tuzhilkin Ivan|done|  |
 |`textAlign`|Function|Tuzhilkin Ivan|done|  |
