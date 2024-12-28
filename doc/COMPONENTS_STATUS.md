@@ -95,7 +95,7 @@
 |`onReady`| Function |Vadim Voronov | done |  |
 |`enableAnalyzer`| Function |Vadim Voronov | done |  |
 |*Checkbox*| *Component* | Andrey Khudenkikh | blocked |  |
-|`setCheckboxOptions`| Function | Samarin Sergey | in progress | CustomBuilder  |
+|`setCheckboxOptions`| Function | Samarin Sergey | testskipped | CustomBuilder  |
 |`select`| Function | Andrey Khudenkikh | done |  |
 |`selectedColor`| Function | Andrey Khudenkikh | done |  |
 |`shape`| Function | Andrey Khudenkikh | done |  |
@@ -571,7 +571,7 @@
 |`editable`|Function|Morozov Sergey|done|  |
 |`selectable`|Function|Morozov Sergey|done|  |
 |`selected`|Function|Morozov Sergey|done|  |
-|`swipeAction`|Function|Kovalev Sergey| in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`swipeAction`|Function|Samarin Sergey| in progress | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`onSelect`|Function|Morozov Sergey|done|  |
 |*ListItemGroup*|*Component*|Morozov Sergey|blocked|  |
 |`setListItemGroupOptions`|Function|Dmitry A Smirnov | testskipped | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
@@ -1467,6 +1467,9 @@
 |*UnifiedData*| *Class* | Tuzhilkin Ivan | blocked IDL | |
 |`hasType`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY , https://gitee.com/nikolay-igotti/idlize/issues/IBDHH7 |
 |`getTypes`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY , https://gitee.com/nikolay-igotti/idlize/issues/IBDHH7 |
+|*LazyForEachOps*| *Class* | | | |
+|`NeedMoreElements`| Function | | | |
+|`OnRangeUpdate`| Function | | | |
 |*DrawingCanvas*| *Class* | Dudkin Sergey | blocked IDL | |
 |`drawRect`| Function | Dudkin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDOCY |
 |*FrameNode*| *Class* | Tuzhilkin Ivan | testskipped| |
@@ -1629,12 +1632,6 @@
 |`updateProgress`| Function | Maksimov Nikita | done | |
 |`updateColor`| Function | Maksimov Nikita | done | |
 |`enableBreathingAnimation`| Function | Maksimov Nikita | done | |
-|*AttributeModifier*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
-|`applyNormalAttribute`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
-|`applyPressedAttribute`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
-|`applyFocusedAttribute`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
-|`applyDisabledAttribute`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
-|`applySelectedAttribute`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |*View*| *Class* | Skroba Gleb | blocked IDL | |
 |`create`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*TextContentControllerBase*| *Class* | Morozov Sergey | blocked IDL | |
@@ -1650,20 +1647,6 @@
 |`setChildDefaultSize`| Function | Morozov Sergey| done | |
 |*GestureModifier*| *Class* | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`applyGesture`| Function | Tuzhilkin Ivan | blocked IDL |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG|
-|*AbstractProperty*| *Class* | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
-|`get`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
-|`set`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
-|`info`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
-|*IPropertySubscriber*| *Class* | Tuzhilkin Ivan | blocked IDL | |
-|`id`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
-|`aboutToBeDeleted`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
-|*ISinglePropertyChangeSubscriber*| *Class* | Tuzhilkin Ivan | blocked IDL | |
-|`hasChanged`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
-|*SubscribaleAbstract*| *Class* | Tuzhilkin Ivan | blocked IDL | |
-|`notifyPropertyHasChanged`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
-|`addOwningProperty`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS|
-|`removeOwningProperty`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
-|`removeOwningPropertyById`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB7NS |
 |*ContextMenu*| *Class* | Tuzhilkin Ivan | blocked IDL | |
 |`close`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB84T |
 |*CustomDialogController*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IBECPG |
