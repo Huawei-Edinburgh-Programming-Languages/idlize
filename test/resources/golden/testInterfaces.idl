@@ -1,0 +1,8 @@
+interface Serializer {};
+interface Deserializer {};
+interface CallbackBuffer {};
+interface CallbackResourceHolder {};
+interface Tag {};
+interface GENERATED_ArkUIEventsAPI {};
+interface CallbackKind {};
+interface KVMContext {};

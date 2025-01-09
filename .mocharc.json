@@ -1,0 +1,8 @@
+{
+    "ui": "tdd",
+    "timeout": "10s",
+    "spec": "./test/**/*.test.ts",
+    "extension": ["ts"],
+    "require": ["./external/incremental/test-utils/scripts/register"]
+
+}
