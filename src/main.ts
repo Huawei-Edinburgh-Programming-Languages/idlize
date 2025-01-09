@@ -22,7 +22,9 @@ import {
     IDLEntry,
     isEnum,
     isInterface,
+    isMethod,
     isSyntheticEntry,
+    printMethod,
     toIDLString,
     transformMethodsAsync2ReturnPromise
 } from "@idlize/core/idl"
@@ -51,6 +53,7 @@ import { generateIdlSkoala } from "./skoala-generation/SkoalaGeneration"
 import { IdlWrapperProcessor } from "./skoala-generation/idl/idlSkoalaLibrary"
 import { fillSyntheticDeclarations } from "./peer-generation/idl/SyntheticDeclarationsFiller"
 import { LibarktsGenerator } from "./libarkts-generation/LibarktsGenerator"
+import { Es2PandaTransformer } from "./Es2PandaTransformer"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -301,6 +304,17 @@ if (options.idl2peer) {
     const idlLibrary = new PeerLibrary(language)
     idlLibrary.files.push(...scanNotPredefinedDirectory(options.inputDir))
     new IdlPeerProcessor(idlLibrary).process()
+    idlLibrary.files.forEach(
+        file => console.log(toIDLString(file.entries, {}))
+    )
+
+    Es2PandaTransformer.transform(idlLibrary)
+
+    console.log("\n\n\n=======================\n\n\n")
+
+    idlLibrary.files.forEach(
+        file => console.log(toIDLString(file.entries, {}))
+    )
 
     generateTarget(idlLibrary, outDir, language)
 
