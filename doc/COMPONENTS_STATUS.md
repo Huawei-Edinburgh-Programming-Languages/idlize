@@ -374,8 +374,8 @@
 |*Ellipse*| *Component* | Ekaterina Stepanova | done | |
 |`setEllipseOptions`| Function | Ekaterina Stepanova | done | |
 |*EmbeddedComponent*| *Component* | Ekaterina Stepanova | blocked IDL | |
-|`setEmbeddedComponentOptions`| Function | Ekaterina Stepanova | testskipped | |
-|`onTerminated`| Function | Ekaterina Stepanova | testskipped | |
+|`setEmbeddedComponentOptions`| Function | Ekaterina Stepanova | testskipped | UT in progress, Skroba Gleb |
+|`onTerminated`| Function | Ekaterina Stepanova | testskipped | UT in progress, Skroba Gleb |
 |`onError`| Function | Ekaterina Stepanova | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*Flex*| *Component* | Kovalev Sergey | done |  |
 |`setFlexOptions`| Function | Kovalev Sergey | done |  |
@@ -1496,14 +1496,14 @@
 |`emitClickEvent`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 |
 |`emitTextInputEvent`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 |
 |*ActionSheet*| *Class* | Ekaterina Stepanova | testskipped | |
-|`show`| Function | Ekaterina Stepanova | testskipped | |
+|`show`| Function | Ekaterina Stepanova | testskipped | UT in progress, Skroba Gleb |
 |*AlertDialog*| *Class* | Ekaterina Stepanova | testskipped | |
-|`show`| Function | Ekaterina Stepanova | testskipped | |
+|`show`| Function | Ekaterina Stepanova | testskipped | UT in progress, Skroba Gleb |
 |*CalendarController*| *Class* |Maksimov Nikita | done |  |
 |`backToToday`| Function |Maksimov Nikita | done |  |
 |`goTo`| Function |Maksimov Nikita | done |  |
 |*CalendarPickerDialog*| *Class* | Ekaterina Stepanova | testskipped | |
-|`show`| Function | Ekaterina Stepanova | testskipped | |
+|`show`| Function | Ekaterina Stepanova | testskipped | UT in progress, Skroba Gleb |
 |*CanvasGradient*| *Class* | Vadim Voronov | done | |
 |`addColorStop`| Function | Vadim Voronov | done | |
 |*CanvasPath*| *Class* | Kovalev Sergey |done |  |
@@ -1653,7 +1653,7 @@
 |`open`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IBECPG |
 |`close`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IBECPG |
 |*DatePickerDialog*| *Class* | Ekaterina Stepanova | testskipped | |
-|`show`| Function | Ekaterina Stepanova | testskipped | |
+|`show`| Function | Ekaterina Stepanova | testskipped | UT in progress, Skroba Gleb |
 |*PanGestureOptions*| *Class* | Politov Mikhail | blocked | |
 |`setDirection`| Function | Politov Mikhail | done | |
 |`setDistance`| Function | Politov Mikhail | done | |
