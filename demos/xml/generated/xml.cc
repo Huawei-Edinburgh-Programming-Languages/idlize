@@ -797,7 +797,7 @@ void callManagedCallback_EventType_ParseInfo_Boolean(OH_Int32 resourceId, OH_xml
     Serializer argsSerializer = Serializer(__buffer.buffer, &(__buffer.resourceHolder));
     argsSerializer.writeInt32(Kind_Callback_EventType_ParseInfo_Boolean);
     argsSerializer.writeInt32(resourceId);
-    argsSerializer.writeInt32(eventType);
+    argsSerializer.writeInt32(static_cast<OH_xml_EventType>(eventType));
     argsSerializer.writeParseInfo(value);
     argsSerializer.writeCallbackResource(continuation.resource);
     argsSerializer.writePointer(reinterpret_cast<OH_NativePointer>(continuation.call));
@@ -810,7 +810,7 @@ void callManagedCallback_EventType_ParseInfo_BooleanSync(OH_VMContext vmContext,
     Serializer argsSerializer = Serializer(__buffer, nullptr);
     argsSerializer.writeInt32(Kind_Callback_EventType_ParseInfo_Boolean);
     argsSerializer.writeInt32(resourceId);
-    argsSerializer.writeInt32(eventType);
+    argsSerializer.writeInt32(static_cast<OH_xml_EventType>(eventType));
     argsSerializer.writeParseInfo(value);
     argsSerializer.writeCallbackResource(continuation.resource);
     argsSerializer.writePointer(reinterpret_cast<OH_NativePointer>(continuation.call));
@@ -863,6 +863,8 @@ OH_NativePointer getManagedCallbackCallerSync(CallbackKind kind)
     }
     return nullptr;
 }
+#define KOALA_INTEROP_MODULE ArkUINativeModule
+
 enum CallbackEventKind {
     Event_CallCallback = 0,
     Event_HoldManagedResource = 1,

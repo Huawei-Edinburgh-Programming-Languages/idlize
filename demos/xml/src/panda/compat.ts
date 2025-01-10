@@ -2,7 +2,7 @@ import { checkArkoalaCallbacks } from "../../generated/arkts/CallbacksChecker";
 import { xml_EventType } from "../../generated/arkts/xml";
 import { NativeBuffer } from "../../generated/arkts/SerializerBase"
 import { DeserializerBase } from "../../generated/arkts/DeserializerBase"
-import { XMLNativeModule } from "../../generated/arkts/xmlNative"
+import { ArkUINativeModule } from "../../generated/arkts/xmlNative"
 import { int32 } from "@koalaui/common"
 import { InteropNativeModule } from "@koalaui/interop";
 
@@ -16,7 +16,7 @@ export function pullEvents() {
 
 function makeBuffer(len: int32, init:byte[]): OHBuffer {
     const data = new byte[64];
-    XMLNativeModule._AllocateNativeBuffer(len, data, init);
+    ArkUINativeModule._AllocateNativeBuffer(len, data, init);
     const des = new DeserializerBase(data, 64);
     return des.readBuffer()
 }
