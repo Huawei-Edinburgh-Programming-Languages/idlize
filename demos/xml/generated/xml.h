@@ -187,7 +187,7 @@ typedef InteropBuffer OH_Buffer;
 typedef InteropLength OH_Length;
 
 typedef enum OH_APIKind {
-    OH_XML_API_KIND = 1
+    OH_XML_API_KIND = 100
 } OH_APIKind;
 
 typedef struct Callback_EventType_ParseInfo_Boolean Callback_EventType_ParseInfo_Boolean;
