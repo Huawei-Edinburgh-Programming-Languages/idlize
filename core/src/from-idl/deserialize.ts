@@ -25,7 +25,7 @@ import {
 import { toString } from "./toString"
 import * as idl from "../idl"
 import { isDefined, stringOrNone, warn } from "../util"
-import { generateSyntheticUnionName } from "../IDLVisitor"
+import { generateSyntheticUnionName } from "../peer-generation/idl/common"
 
 const syntheticTypes = new Map<string, idl.IDLEntry>()
 

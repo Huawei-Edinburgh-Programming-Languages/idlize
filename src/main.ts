@@ -16,7 +16,7 @@
 import { program } from "commander"
 import * as fs from "fs"
 import * as path from "path"
-import { fromIDL } from "./from-idl/common"
+import { fromIDL } from "@azanat/idlize-core/from-idl/common"
 import { idlToDtsString } from "./from-idl/DtsPrinter"
 import { generate } from "./idlize"
 import {

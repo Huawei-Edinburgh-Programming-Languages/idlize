@@ -16,7 +16,6 @@
 import * as idl from "../../idl";
 import { LibraryInterface } from "../../LibraryInterface";
 import { maybeTransformManagedCallback } from "../ArgConvertors";
-import { PeerLibrary } from "../PeerLibrary";
 import { collectProperties } from "../printers/StructPrinter";
 import { flattenUnionType } from "../unions";
 import { DependenciesCollector } from "./IdlDependenciesCollector";
