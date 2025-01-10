@@ -571,7 +571,7 @@
 |`editable`|Function|Morozov Sergey|done|  |
 |`selectable`|Function|Morozov Sergey|done|  |
 |`selected`|Function|Morozov Sergey|done|  |
-|`swipeAction`|Function|Samarin Sergey| testskipped | |
+|`swipeAction`|Function|Samarin Sergey| testskipped | UT in progress Morozov Sergey |
 |`onSelect`|Function|Morozov Sergey|done|  |
 |*ListItemGroup*|*Component*|Morozov Sergey|blocked|  |
 |`setListItemGroupOptions`|Function|Dmitry A Smirnov | testskipped | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
