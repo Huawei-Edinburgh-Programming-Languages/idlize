@@ -16,7 +16,7 @@
 import { program } from "commander"
 import * as fs from "fs"
 import * as path from "path"
-import { fromIDL } from "./from-idl/common"
+import { generateFromIDL } from "./from-idl/common"
 import { idlToDtsString } from "./from-idl/DtsPrinter"
 import { generate } from "./idlize"
 import {
@@ -288,7 +288,7 @@ if (options.dts2test) {
 }
 
 if (options.idl2dts) {
-    fromIDL(
+    generateFromIDL(
         options.inputDir,
         options.inputFile,
         options.outputDir ?? "./generated/dts/",

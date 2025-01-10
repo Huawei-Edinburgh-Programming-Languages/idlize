@@ -18,7 +18,7 @@ import * as fs from "fs"
 import * as path from "path"
 import { GenerateOptions, GenericVisitor } from "./options"
 
-function readdir(dir: string): string[] {
+export function readdir(dir: string): string[] {
     return fs.readdirSync(dir)
         .map(elem => path.join(dir, elem))
 }
@@ -30,6 +30,7 @@ export function generate<T>(
     visitorFactory: (sourceFile: ts.SourceFile, typeChecker: ts.TypeChecker) => GenericVisitor<T>,
     options: GenerateOptions<T>
 ): void {
+    inputDirs = inputDirs.map(it => path.resolve(it))
     let input = inputFile ? [
         path.join(inputDirs[0], inputFile)
     ] : inputDirs.flatMap(it => readdir(path.resolve(it)))
@@ -44,23 +45,16 @@ export function generate<T>(
     const typeChecker = program.getTypeChecker()
     options.onBegin?.(outputDir, typeChecker)
 
-    // Visit every sourceFile in the program
-    let cared = inputDirs.map(it => path.resolve(it))
-    for (const sourceFile of program.getSourceFiles()) {
-        if (!cared.some(it => path.resolve(sourceFile.fileName).indexOf(it) >= 0)) {
-            // console.log("Ignore ", path.resolve(sourceFile.fileName) , "wrt", inputDirs)
-            continue
-        }
-        if (inputFile && path.basename(sourceFile.fileName) != inputFile) {
-            continue
-        }
+    const sourceFiles = program.getSourceFiles()
+        .filter(sourceFile => inputFile && path.basename(sourceFile.fileName) == inputFile)
+        .filter(sourceFile => inputDirs.some(dir => path.resolve(sourceFile.fileName).indexOf(dir) >= 0))
 
+    sourceFiles.forEach(sourceFile => {
         // Walk the tree to search for classes
         const visitor = visitorFactory(sourceFile, typeChecker)
         const output = visitor.visitWholeFile()
-
         options.onSingleFile?.(output, outputDir, sourceFile)
-    }
+    })
 
     options.onEnd?.(outputDir)
 

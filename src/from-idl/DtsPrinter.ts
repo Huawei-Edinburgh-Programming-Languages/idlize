@@ -399,15 +399,19 @@ export class CustomPrintVisitor {
     }
 }
 
-export function idlToDtsString(name: string, content: string): string {
-    let printer = new CustomPrintVisitor(resolveSyntheticType, Language.TS)
-    webidl2.parse(content)
+export function idlToDtsString(fileName: string, content: string): string {
+    const entries = webidl2.parse(content)
         .filter(it => !!it.type)
-        .map(it => toIDLNode(name, it))
-        .forEach(it => {
-            transformMethodsAsync2ReturnPromise(it)
-            printer.visit(it)
-        })
+        .map(it => toIDLNode(fileName, it))
+    return toDtsString(entries)
+}
+
+export function toDtsString(entries: IDLEntry[]): string {
+    let printer = new CustomPrintVisitor(resolveSyntheticType, Language.TS)
+    entries.forEach(it => {
+        transformMethodsAsync2ReturnPromise(it)
+        printer.visit(it)
+    })
     return printer.output.join("\n")
 }
 

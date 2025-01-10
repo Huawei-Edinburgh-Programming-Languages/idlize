@@ -20,20 +20,29 @@ import * as webidl2 from "webidl2"
 import { toIDLNode } from "./deserialize";
 import { zip } from "../util";
 
-function getFilesRecursive(dirPath: string, arrayOfFiles: string[] = []) {
+export function getFilesRecursive(dirPath: string, ext?: string, arrayOfFiles: string[] = []): string[] {
     let files = fs.readdirSync(dirPath)
     arrayOfFiles = arrayOfFiles || []
-    files.forEach((file: string) => {
-        if (fs.statSync(dirPath + "/" + file).isDirectory()) {
-            arrayOfFiles = getFilesRecursive(dirPath + "/" + file, arrayOfFiles)
-        } else {
-            arrayOfFiles.push(path.join(dirPath, file))
-        }
-    })
+    files
+        .filter((fileName: string) => ext ? fileName.endsWith(ext) : true)
+        .forEach((file: string) => {
+            if (fs.statSync(dirPath + "/" + file).isDirectory()) {
+                arrayOfFiles = getFilesRecursive(dirPath + "/" + file, ext, arrayOfFiles)
+            } else {
+                arrayOfFiles.push(path.join(dirPath, file))
+            }
+        })
     return arrayOfFiles
 }
 
-export function fromIDL(
+export function transformFromIDL(
+    files: string[],
+    transform: (name: string, content: string) => string
+): string[] {
+    return files.map((file: string) => transform(file, fs.readFileSync(file).toString()))
+}
+
+export function generateFromIDL(
     inputDir: string,
     inputFile: string | undefined,
     outputDir: string,
@@ -44,11 +53,9 @@ export function fromIDL(
     inputDir = path.resolve(inputDir)
     const files: string[] = inputFile
         ? [path.join(inputDir, inputFile)]
-        : getFilesRecursive(inputDir)
+        : getFilesRecursive(inputDir, ".idl")
 
-    const results: string[] =
-        files
-            .map((file: string) => transform(file, fs.readFileSync(file).toString()))
+    const results = transformFromIDL(files, transform)
 
     zip(files, results)
         .forEach(([fileName, output]: [string, string]) => {
@@ -70,7 +77,7 @@ export function fromIDL(
 export function scanIDL(
     inputDir: string,
     inputFile: string | undefined,
-): IDLEntry[][] {
+): Map<string, IDLEntry[]> {
     inputDir = path.resolve(inputDir)
     const files: string[] =
         inputFile
@@ -78,12 +85,13 @@ export function scanIDL(
             : fs.readdirSync(inputDir)
                 .map((elem: string) => path.join(inputDir, elem))
 
-    return files
-        .map((file: string) => {
-            let content = fs.readFileSync(file).toString()
-            let parsed = webidl2.parse(content)
-            return parsed.filter(it => !!it.type).map(it => toIDLNode(file, it))
-        })
+    const result = new Map<string, IDLEntry[]>()
+    files.forEach((file: string) => {
+        let content = fs.readFileSync(file).toString()
+        let parsed = webidl2.parse(content)
+        result.set(file, parsed.filter(it => !!it.type).map(it => toIDLNode(file, it)))
+    })
+    return result
 }
 
 export const licence =

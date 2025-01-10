@@ -21,6 +21,7 @@ import {
     isDefined, isNodePublic, isPrivate, isProtected, isReadonly, isStatic, isAsync,
     nameEnumValues, nameOrNull, identString, getNameWithoutQualifiersLeft, stringOrNone, warn,
     snakeCaseToCamelCase,
+    defaultCompilerOptions,
 } from "./util"
 import { GenericVisitor } from "./options"
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig"
@@ -30,6 +31,48 @@ import { IDLKeywords } from "./languageSpecificKeywords"
 import { isCommonMethodOrSubclass } from "./peer-generation/inheritance"
 import { ReferenceResolver } from "./peer-generation/ReferenceResolver"
 import { IDLVisitorConfig } from "./IDLVisitorConfig"
+import { readdir } from "./idlize"
+
+function transformFromDts(
+    sourceFiles: ts.SourceFile[],
+    typeChecker: ts.TypeChecker,
+    transform: (sourceFile: ts.SourceFile, typeChecker: ts.TypeChecker) => string // dtsToIDLString
+): string[] {
+    return sourceFiles.map(file => transform(file, typeChecker))
+}
+
+function generateFromDts(
+    inputDirs: string[],
+    inputFile: string | undefined,
+    compilerOptions: ts.CompilerOptions,
+    transform: (sourceFile: ts.SourceFile, typeChecker: ts.TypeChecker) => string // dtsToIDLString
+) {
+    inputDirs = inputDirs.map(it => path.resolve(it))
+    let input = inputFile ? [
+        path.join(inputDirs[0], inputFile)
+    ] : inputDirs.flatMap(it => readdir(path.resolve(it)))
+    // Build a program using the set of root file names in fileNames
+    let program = ts.createProgram(
+        input.concat([path.join(__dirname, "../stdlib.d.ts")]
+    ), compilerOptions)
+
+    // Get the checker, we will use it to find more about classes
+    const typeChecker = program.getTypeChecker()
+    const sourceFiles = program.getSourceFiles()
+        .filter(sourceFile => inputFile && path.basename(sourceFile.fileName) == inputFile)
+        .filter(sourceFile => inputDirs.some(dir => path.resolve(sourceFile.fileName).indexOf(dir) >= 0))
+    
+    const result = new Map<string, idl.IDLEntry[]>()
+    
+    sourceFiles.forEach(it => {
+        transform(it, typeChecker)
+    })
+}
+
+function dtsToIDLString(fileVisitor: IDLVisitor): string {
+    const output = fileVisitor.visitWholeFile()
+    return idl.toIDLString(output, {})
+}
 
 function escapeIdl(name: string): string {
     if (IDLKeywords.has(name))
