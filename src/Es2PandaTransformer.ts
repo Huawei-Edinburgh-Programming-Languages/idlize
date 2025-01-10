@@ -145,7 +145,6 @@ function processType(type: IDLType): IDLType {
         }
         if (type.extendedAttributes?.find(it => it.name == "constant")) {
             type.extendedAttributes = type.extendedAttributes?.filter(it => it.name != "constant")
-            type.name = `${type.name}Const`
 
             return processType(type)
         }
