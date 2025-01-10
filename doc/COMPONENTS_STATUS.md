@@ -654,14 +654,14 @@
 |*Panel*| *Component* | Pavelyev Ivan| done | deprecated  |
 |`setPanelOptions`| Function | Pavelyev Ivan| done |  |
 |`mode`| Function |Pavelyev Ivan| done |  |
-|`type`| Function | Pavelyev Ivan | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IAY6MM |
+|`type`| Function | Pavelyev Ivan | deprecated | https://gitee.com/openharmony/arkui_ace_engine/issues/IAY6MM |
 |`dragBar`| Function |Pavelyev Ivan| done |  |
-|`customHeight`| Function |Pavelyev Ivan| testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ1EF |
+|`customHeight`| Function |Pavelyev Ivan| deprecated | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ1EF |
 |`fullHeight`| Function |Pavelyev Ivan| done |  |
 |`halfHeight`| Function |Pavelyev Ivan| done |  |
 |`miniHeight`| Function | Pavelyev Ivan| done |  |
 |`show`| Function |Pavelyev Ivan| done |  |
-|`backgroundMask`| Function |Pavelyev Ivan| testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IAXD0B |
+|`backgroundMask`| Function |Pavelyev Ivan| deprecated | https://gitee.com/openharmony/arkui_ace_engine/issues/IAXD0B |
 |`showCloseIcon`| Function |Pavelyev Ivan| done |  |
 |`onChange`| Function |Pavelyev Ivan| done |  |
 |`onHeightChange`| Function |Pavelyev Ivan| done |  |
