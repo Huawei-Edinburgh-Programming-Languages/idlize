@@ -14,13 +14,13 @@
  */
 package idlize
 
-public type pointer = Int64
+public type pointer = UInt64
 
 public interface MaterializedBase {
     func getPeer(): Finalizable
 }
 
-public class Wrapper {
+public open class Wrapper {
     var ptr: pointer
     init (ptr: pointer) {
         this.ptr = ptr
@@ -30,7 +30,7 @@ public class Wrapper {
     }
 }
 
-public abstract class FinalizableBase {
+public abstract class FinalizableBase <: Wrapper {
     var finalizer: pointer
     var cleaner: ?NativeThunk = Option.None
     var managed: Bool
@@ -77,14 +77,14 @@ public abstract class NativeThunk <: Thunk {
         this.obj = 0
     }
 
-    abstract func destroyNative(ptr: pointer, finalizer: pointer): Unit
+    public func destroyNative(ptr: pointer, finalizer: pointer): Unit
 }
 
 public class NativeThunkImpl <: NativeThunk {
     init (ptr: pointer, finalizer: pointer, name: ?String) {
         super(ptr, finalizer, name)
     }
-    func destroyNative(ptr: pointer, finalizer: pointer): Unit {
+    public func destroyNative(ptr: pointer, finalizer: pointer): Unit {
         NativeModule._InvokeFinalizer(ptr, finalizer)
     }
 }
