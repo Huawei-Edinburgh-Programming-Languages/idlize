@@ -1097,9 +1097,9 @@
 |`selection`| Function |Samarin Sergey | testskipped |  |
 |`bindSelectionMenu`| Function | Lobah Mikhail | testskipped | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*TextArea*|*Component*|Tuzhilkin Ivan|blocked IDL|  |
-|`setTextAreaOptions`|Function|Tuzhilkin Ivan|testskipped|  |
+|`setTextAreaOptions`|Function|Tuzhilkin Ivan|testskipped| UT in progress Tuzhilkin Ivan |
 |`placeholderColor`|Function|Tuzhilkin Ivan|done|  |
-|`placeholderFont`|Function|Tuzhilkin Ivan|testskipped|  |
+|`placeholderFont`|Function|Tuzhilkin Ivan|testskipped| UT in progress Tuzhilkin Ivan |
 |`enterKeyType`|Function|Tuzhilkin Ivan|done|  |
 |`textAlign`|Function|Tuzhilkin Ivan|done|  |
 |`caretColor`|Function|Tuzhilkin Ivan|done|  |
@@ -1108,7 +1108,7 @@
 |`fontStyle`|Function|Tuzhilkin Ivan|done|  |
 |`fontWeight`|Function|Tuzhilkin Ivan|done|  |
 |`fontFamily`|Function|Tuzhilkin Ivan|done|  |
-|`textOverflow`|Function|Tuzhilkin Ivan|testskipped| https://gitee.com/openharmony/arkui_ace_engine/issues/IB57XU |
+|`textOverflow`|Function|Tuzhilkin Ivan|testskipped| https://gitee.com/openharmony/arkui_ace_engine/issues/IB57XU , Issue is still exist . Fix is incorect |
 |`textIndent`|Function|Tuzhilkin Ivan|done|  |
 |`caretStyle`|Function|Tuzhilkin Ivan|done|  |
 |`selectedBackgroundColor`|Function|Tuzhilkin Ivan|done|  |
@@ -1135,7 +1135,7 @@
 |`decoration`|Function|Tuzhilkin Ivan|done|  |
 |`letterSpacing`|Function|Tuzhilkin Ivan|done|  |
 |`lineSpacing`|Function|Tuzhilkin Ivan|done| |
-|`lineHeight`|Function|Tuzhilkin Ivan|testskipped|  |
+|`lineHeight`|Function|Tuzhilkin Ivan|testskipped| UT in progress Tuzhilkin Ivan |
 |`type`|Function|Tuzhilkin Ivan|done|  |
 |`enableAutoFill`|Function|Tuzhilkin Ivan|done|  |
 |`contentType`|Function|Tuzhilkin Ivan|done|  |
