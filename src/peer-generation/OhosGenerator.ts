@@ -709,17 +709,7 @@ class OHOSVisitor {
         fs.writeFileSync(path.join(outDir, this.implementationStubsFile.name),
             this.implementationStubsFile.printToString()
         )
-        /*
-        fs.writeFileSync(path.join(outDir, `SerializerBase.h`),
-            readLangTemplate(`ohos_SerializerBase.h`, Language.CPP)
-                .replaceAll("%NATIVE_API_HEADER_PATH%", `${fileNamePrefix}.h`)
-        )
-        fs.writeFileSync(path.join(outDir, `DeserializerBase.h`),
-            readLangTemplate(`ohos_DeserializerBase.h`, Language.CPP)
-                .replaceAll("%NATIVE_API_HEADER_PATH%", `${fileNamePrefix}.h`)
-        )
-        */
-
+        
         const serializerText = makeSerializerForOhos(this.library, managedCodeModuleInfo, fileNamePrefix).printToString()
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}${ext}`), peerText, 'utf-8')
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Serializer${ext}`), serializerText, 'utf-8')
