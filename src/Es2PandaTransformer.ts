@@ -19,14 +19,46 @@ export class Es2PandaTransformer {
                 entry => forEachChild(entry, node => {
                     if (isMethod(node)) {
                         if (node.name.startsWith("Create")) {
-                            es2pandaFile.entries.push(
-                                lookupInterface(node.name.substring("Create".length))
-                            )
+                            lookupInterface(node.name.substring("Create".length))
                         }
                     }
                 })
             )
         )
+
+        classes = new Map(
+            Array.from(classes)
+                .sort((a:any, b:any) =>
+                    a[0].localeCompare(b[0])
+                )
+        )
+
+        idlLibrary.files.forEach(
+            file => file.entries.forEach(entry => {
+                forEachChild(entry, node => {
+                    if (isMethod(node)) {
+                        const clazzName = isConstructor(node.name)
+                        if (clazzName) {
+                            lookupInterface(clazzName).constructors.push(
+                                createConstructor(
+                                    node.parameters,
+                                    undefined
+                                )
+                            )
+                        }
+                        const clazzName2 = className(node.name)
+                        if (clazzName2) {
+                            node.name = methodName(clazzName2, node.name)!
+                            lookupInterface(clazzName2).methods.push(
+                                node
+                            )
+                        }
+                    }
+                })
+            })
+        )
+
+        es2pandaFile.entries.push(...Array.from(classes.values()).flat())
 
         idlLibrary.files.forEach(
             file => file.entries.forEach(
@@ -60,32 +92,19 @@ export class Es2PandaTransformer {
         idlLibrary.files.forEach(
             file => file.entries.forEach(entry => {
                 forEachChild(entry, node => {
-                    if (isMethod(node)) {
-
-                        const clazzName = isConstructor(node.name)
-                        if (clazzName) {
-                            lookupInterface(clazzName).constructors.push(
-                                createConstructor(
-                                    node.parameters,
-                                    undefined
-                                )
-                            )
-                        }
-                        const clazzName2 = className(node.name)
-                        if (clazzName2) {
-                            node.name = methodName(clazzName2, node.name)!
-                            lookupInterface(clazzName2).methods.push(
-                                node
-                            )
-                        }
-                    }
                     if (isReferenceType(node) && node.name.startsWith("es2panda_")) {
                         node.name = node.name.substring("es2panda_".length)
                     }
                 })
             })
         )
-        console.log("}")
+
+        // Drop the original interface
+        es2pandaFile.entries.shift()
+
+        idlLibrary.files.forEach(
+            file => console.log(toIDLString(file.entries, {}))
+        )
     }
 }
 
@@ -131,7 +150,9 @@ function lookupInterface(name: string): IDLInterface {
 function processType(type: IDLType): IDLType {
     if (isReferenceType(type)) {
         if (type.extendedAttributes?.find(it => it.name == "ptr_1")) {
-            if (!type.name.startsWith("es2panda_")) {
+            if (type.name == "char") {
+                type.name = "String"
+            } else if (!type.name.startsWith("es2panda_")) {
                 type.name = `${type.name}Ptr`
             }
             type.extendedAttributes = type.extendedAttributes?.filter(it => it.name != "ptr_1")
@@ -145,7 +166,7 @@ function processType(type: IDLType): IDLType {
         }
         if (type.extendedAttributes?.find(it => it.name == "constant")) {
             type.extendedAttributes = type.extendedAttributes?.filter(it => it.name != "constant")
-            type.name = `${type.name}Const`
+            //type.name = `${type.name}Const`
 
             return processType(type)
         }

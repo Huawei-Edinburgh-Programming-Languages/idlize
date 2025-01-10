@@ -304,17 +304,10 @@ if (options.idl2peer) {
     const idlLibrary = new PeerLibrary(language)
     idlLibrary.files.push(...scanNotPredefinedDirectory(options.inputDir))
     new IdlPeerProcessor(idlLibrary).process()
-    idlLibrary.files.forEach(
-        file => console.log(toIDLString(file.entries, {}))
-    )
 
-    Es2PandaTransformer.transform(idlLibrary)
-
-    console.log("\n\n\n=======================\n\n\n")
-
-    idlLibrary.files.forEach(
-        file => console.log(toIDLString(file.entries, {}))
-    )
+    if (options.generatorTarget == "libarkts") {
+        Es2PandaTransformer.transform(idlLibrary)
+    }
 
     generateTarget(idlLibrary, outDir, language)
 
