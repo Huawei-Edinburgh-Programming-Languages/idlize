@@ -585,8 +585,8 @@
 |*LocationButton*| *Component* |Samarin Sergey| done |  |
 |`setLocationButtonOptions`| Function |Samarin Sergey| done |  |
 |`onClick`| Function |Samarin Sergey| done |  |
-|*Marquee*| *Component* | Andrey Khudenkikh| testskipped |  |
-|`setMarqueeOptions`| Function | Andrey Khudenkikh| testskipped |  |
+|*Marquee*| *Component* | Andrey Khudenkikh| done |  |
+|`setMarqueeOptions`| Function | Andrey Khudenkikh| done |  |
 |`fontColor`| Function |Andrey Khudenkikh | done |  |
 |`fontSize`| Function |Andrey Khudenkikh | done |  |
 |`allowScale`| Function |Andrey Khudenkikh | done |  |
