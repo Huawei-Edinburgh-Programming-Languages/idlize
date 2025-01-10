@@ -1,3 +1,6 @@
+#undef KOALA_INTEROP_MODULE
+#define KOALA_INTEROP_MODULE %INTEROP_MODULE_NAME%
+
 enum CallbackEventKind {
     Event_CallCallback = 0,
     Event_HoldManagedResource = 1,
@@ -128,17 +131,3 @@ void holdBuffer(int resourceId) {
         ++record.count;
     }
 }
-
-void impl_AllocateNativeBuffer(KInt len, KByte* ret, KByte* init) {
-    void* mem;
-    int resourceId = allocate_buffer(len, &mem);
-    memcpy((KByte*)mem, init, len);
-    SerializerBase ser { ret };
-    ser.writeInt32(resourceId);
-    ser.writePointer((void*)&holdBuffer);
-    ser.writePointer((void*)&releaseBuffer);
-    ser.writePointer(mem);
-    ser.writeInt64(len);
-
-}
-KOALA_INTEROP_V3(AllocateNativeBuffer, KInt, KByte*, KByte*);

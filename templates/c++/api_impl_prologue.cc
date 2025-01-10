@@ -39,3 +39,21 @@ void holdManagedCallbackResource(OH_Int32 resourceId);
 void releaseManagedCallbackResource(OH_Int32 resourceId);
 
 void deserializeAndCallCallback(KInt kind, KByte* args, KInt argsSize);
+
+void holdBuffer(int resourceId);
+void releaseBuffer(int resourceId);
+int allocate_buffer(int len, void** mem);
+
+void impl_AllocateNativeBuffer(KInt len, KByte* ret, KByte* init) {
+    void* mem;
+    int resourceId = allocate_buffer(len, &mem);
+    memcpy((KByte*)mem, init, len);
+    SerializerBase ser { ret };
+    ser.writeInt32(resourceId);
+    ser.writePointer((void*)&holdBuffer);
+    ser.writePointer((void*)&releaseBuffer);
+    ser.writePointer(mem);
+    ser.writeInt64(len);
+
+}
+KOALA_INTEROP_V3(AllocateNativeBuffer, KInt, KByte*, KByte*);

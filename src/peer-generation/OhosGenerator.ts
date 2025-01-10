@@ -618,6 +618,7 @@ class OHOSVisitor {
         )
         this.cppWriter.writeLines(
             readLangTemplate('api_impl_epilogue.cc', Language.CPP)
+                .replaceAll("%INTEROP_MODULE_NAME%", `ArkUINativeModule`)
                 .replaceAll("%LIBRARY_NAME%", this.libraryName.toUpperCase())
         )
     }
