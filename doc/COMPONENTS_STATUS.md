@@ -71,18 +71,18 @@
 |`contentModifier`| Function |Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`labelStyle`| Function |Evstigneev Roman | done |  |
 |*Calendar*| *Component* | Maksimov Nikita | done |  |
-|`setCalendarOptions`| Function | Maksimov Nikita | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
-|`showLunar`| Function | Maksimov Nikita | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
-|`showHoliday`| Function | Maksimov Nikita | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
+|`setCalendarOptions`| Function | Maksimov Nikita Kovalev Sergey | in progress |  |
+|`showLunar`| Function | Maksimov Nikita Kovalev Sergey | in progress |  |
+|`showHoliday`| Function | Maksimov Nikita Kovalev Sergey | in progress |  |
 |`needSlide`| Function | Maksimov Nikita | done |  |
-|`startOfWeek`| Function | Maksimov Nikita | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
-|`offDays`| Function | Maksimov Nikita | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
-|`direction`| Function | Maksimov Nikita | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1N99 |
-|`currentDayStyle`| Function | Maksimov Nikita | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
-|`nonCurrentDayStyle`| Function | Maksimov Nikita | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
-|`todayStyle`| Function | Maksimov Nikita | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
-|`weekStyle`| Function | Maksimov Nikita | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
-|`workStateStyle`| Function | Maksimov Nikita | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3TMG |
+|`startOfWeek`| Function | Maksimov Nikita Kovalev Sergey | in progress |  |
+|`offDays`| Function | Maksimov Nikita Kovalev Sergey | in progress |  |
+|`direction`| Function | Maksimov Nikita Kovalev Sergey | in progress |  |
+|`currentDayStyle`| Function | Maksimov Nikita Kovalev Sergey | in progress |  |
+|`nonCurrentDayStyle`| Function | Maksimov Nikita Kovalev Sergey | in progress |  |
+|`todayStyle`| Function | Maksimov Nikita Kovalev Sergey | in progress |  |
+|`weekStyle`| Function | Maksimov Nikita Kovalev Sergey | in progress |  |
+|`workStateStyle`| Function | Maksimov Nikita Kovalev Sergey | in progress |  |
 |`onSelectChange`| Function | Maksimov Nikita | done | |
 |`onRequestData`| Function | Maksimov Nikita | done | |
 |*CalendarPicker*| *Component* |Politov Mikhail | done |  |
