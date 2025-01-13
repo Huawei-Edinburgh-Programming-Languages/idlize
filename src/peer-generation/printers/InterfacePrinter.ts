@@ -48,7 +48,7 @@ import { Language } from '../../Language'
 import { ETSLanguageWriter } from '../LanguageWriters/writers/ETSLanguageWriter'
 import { collectProperties } from './StructPrinter'
 import { CustomPrintVisitor } from "../../from-idl/DtsPrinter"
-import { escapeKeyword, IDLEntry, IDLType } from "../../idl";
+import { escapeKeyword, IDLEntry, IDLNamedNode, IDLType } from "../../idl";
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig'
 import { isBuilderClass, isMaterialized, isPredefined } from '../idl/IdlPeerGeneratorVisitor'
 import { DependenciesCollector } from '../idl/IdlDependenciesCollector'
@@ -520,12 +520,12 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
         this.writer.print('export ' + result)
     }
 
-    private printIfNotSeen<T extends IDLEntry>(
+    private printIfNotSeen<T extends IDLNamedNode>(
         type: T,
         print: (_: T) => stringOrNone[],
         seenNames: Set<string>
     ): stringOrNone[] | undefined {
-        if (type?.name !== undefined && !seenNames.has(type.name)) {
+        if (!seenNames.has(type.name)) {
             seenNames.add(type.name)
             return print(type)
         }
