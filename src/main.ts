@@ -306,7 +306,7 @@ if (options.idl2peer) {
     new IdlPeerProcessor(idlLibrary).process()
 
     if (options.generatorTarget == "libarkts") {
-        Es2PandaTransformer.transform(idlLibrary)
+        (new Es2PandaTransformer(idlLibrary)).transform()
     }
 
     generateTarget(idlLibrary, outDir, language)
