@@ -128,8 +128,11 @@ export class PeerLibrary implements LibraryInterface {
         }
 
         const candidates = entries.filter(it => type.name === it.name)
-        if (candidates.length === 1)
+        console.error(`resolveTypeReference candidates`, candidates)
+        if (candidates.length === 1) {
+            console.error(`RETURN`)
             return candidates[0]
+        }
         const maybePredefined = candidates.find(isPredefined)
         if (maybePredefined)
             return maybePredefined

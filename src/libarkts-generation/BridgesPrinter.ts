@@ -21,18 +21,22 @@ import {
     IDLInterface,
     IDLParameter,
     IDLType,
-    isInterface, isReferenceType,
+    isInterface,
+    isContainerType,
+    isEnum,
+    isPrimitiveType,
+    isReferenceType,
 } from "@idlize/core/idl"
 import { NativeTypeConvertor } from "./NativeTypeConvertor"
 import { convertType } from "../peer-generation/LanguageWriters/nameConvertor"
 
-export class LibPrinter {
+export class BridgesPrinter {
     constructor(
         private library: PeerLibrary
     ) { }
 
     private printer = new IndentedPrinter()
-    private convertor = new NativeTypeConvertor()
+    private convertor = new NativeTypeConvertor(this.library)
     private static implPrefix = `impl_`
     private static constructorPrefix = `Create`
     private static typePrefix = `es2panda_`
@@ -47,27 +51,26 @@ export class LibPrinter {
     private visit(node: IDLEntry): void {
         console.log(node.name)
         if (isInterface(node)) return this.visitInterface(node)
+        if (isEnum(node)) return this.visitEnum(node)
+
+        throwException(`Unexpected top-level node: ${IDLKind[node.kind]}`)
     }
 
     private visitInterface(node: IDLInterface): void {
         node.constructors.forEach(it =>
             this.printConstructor(this.constructorFunction(node.name), it)
         )
+        node.methods.forEach(it =>
+            this.printMethod(node.name, it)
+        )
+    }
+
+    private visitEnum(node: IDLEnum): void {
+        // do nothing
     }
 
     private printConstructor(constructorName: string, node: IDLConstructor): void {
-        this.printer.print(`KNativePointer ${this.implFunction(constructorName)}(`)
-        this.printer.withIndent(() =>
-            this.printParameters(node.parameters)
-        )
-        this.printer.print(`) {`)
-        this.printer.withIndent(() =>
-            this.printBody(constructorName, node.parameters)
-        )
-        this.printer.print(`}`)
-
-        this.printInteropMacro(constructorName, node.parameters)
-        this.printer.print(``)
+        this.printFunction(constructorName, node.parameters)
     }
 
     private printParameters(parameters: IDLParameter[]): void {
@@ -92,27 +95,68 @@ export class LibPrinter {
                 const comma = index !== array.length - 1
                     ? `,`
                     : ``
-                if (it.type === undefined) throwException(`Parameter type is undefined`)
-                const maybeCasted = isReferenceType(it.type)
-                    ? `reinterpret_cast<${LibPrinter.typePrefix}${it.type.name}*>(${it.name})`
-                    : it.name
-                this.printer.print(`${maybeCasted}${comma}`)
+                this.printer.print(`${this.casted(it)}${comma}`)
             })
         )
         this.printer.print(`)`)
     }
 
     private constructorFunction(astNodeName: string): string {
-        return `${LibPrinter.constructorPrefix}${astNodeName}`
+        return `${BridgesPrinter.constructorPrefix}${astNodeName}`
     }
 
     private implFunction(name: string): string {
-        return `${LibPrinter.implPrefix}${name}`
+        return `${BridgesPrinter.implPrefix}${name}`
     }
 
-    private mapType(node: IDLType | undefined): string {
-        if (node === undefined) throwException(`Parameter type is undefined`)
+    private casted(node: IDLParameter): string {
+        if (isPrimitiveType(node.type)) return node.name
+        if (isReferenceType(node.type) || isContainerType(node.type)) {
+            const castTo = this.castTo(node.type)
+            return castTo === undefined
+                ? node.name
+                : `reinterpret_cast<${castTo}>(${node.name})`
+        }
+        throw new Error(`Unsupported type "${node.type}"`)
+    }
 
+    private castTo(node: IDLReferenceType | IDLContainerType): string | undefined {
+        if (isPrimitiveType(node)) return undefined
+        if (isReferenceType(node)) return `${BridgesPrinter.typePrefix}${node.name}*`
+        if (idl.isContainerType(node)) {
+            if (idl.IDLContainerUtils.isSequence(node)) {
+                if (!isReferenceType(node.elementType[0])) throwException(`Sequence of non-reference type`)
+                return `${BridgesPrinter.typePrefix}${node.elementType[0].name}**`
+            }
+        }
+
+        throwException(`Unexpected type`)
+    }
+
+    private mapType(node: IDLType): string {
         return convertType(this.convertor, node)
+    }
+
+    private printMethod(astNodeName: string, node: IDLMethod): void {
+        this.printFunction(`${astNodeName}${node.name}`, node.parameters, node.returnType)
+    }
+
+    private printFunction(name: string, parameters: IDLParameter[], returnType?: IDLType): void {
+        const translatedReturnType = returnType === undefined
+            ? `KNativePointer`
+            : this.mapType(returnType)
+
+        this.printer.print(`${translatedReturnType} ${this.implFunction(name)}(`)
+        this.printer.withIndent(() =>
+            this.printParameters(parameters)
+        )
+        this.printer.print(`) {`)
+        this.printer.withIndent(() =>
+            this.printBody(name, parameters)
+        )
+        this.printer.print(`}`)
+
+        this.printInteropMacro(name, parameters)
+        this.printer.print(``)
     }
 }

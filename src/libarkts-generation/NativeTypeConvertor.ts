@@ -15,33 +15,42 @@
 
 import { TypeConvertor } from "../peer-generation/LanguageWriters/nameConvertor"
 import * as idl from "@idlize/core/idl"
-import { throwException } from "@idlize/core"
+import { throwException } from "../util"
 
 export class NativeTypeConvertor implements TypeConvertor<string> {
-    convertOptional(type: idl.IDLOptionalType): string {
-        throw new Error("Method not implemented.");
+    constructor(private library: PeerLibrary) {}
+
+    convertOptional(type: IDLOptionalType): string {
+        throw new Error("Method not implemented.")
     }
-    convertUnion(type: idl.IDLUnionType): string {
-        throw new Error("Method not implemented.");
+    convertUnion(type: IDLUnionType): string {
+        throw new Error("Method not implemented.")
     }
-    convertContainer(type: idl.IDLContainerType): string {
+    convertContainer(type: IDLContainerType): string {
+        if (idl.IDLContainerUtils.isSequence(type)) return `KNativePointerArray`
+        throwException(`Unexpected container`)
+    }
+    convertImport(type: IDLReferenceType, importClause: string): string {
+        throw new Error("Method not implemented.")
+    }
+    convertTypeReference(type: IDLReferenceType): string {
+        const declaration = this.library.resolveTypeReference(type)
+        if (declaration !== undefined) console.warn(`WARNING: type reference with no declaration: ${type.name}`)
+        if (declaration !== undefined && idl.isEnum(declaration)) {
+            return `KInt`
+        }
         return `KNativePointer`
     }
-    convertImport(type: idl.IDLReferenceType, importClause: string): string {
-        throw new Error("Method not implemented.");
+    convertTypeParameter(type: IDLTypeParameterType): string {
+        throw new Error("Method not implemented.")
     }
-    convertTypeReference(type: idl.IDLReferenceType): string {
-        return `KNativePointer`
-    }
-    convertTypeParameter(type: idl.IDLTypeParameterType): string {
-        throw new Error("Method not implemented.");
-    }
-    convertPrimitiveType(type: idl.IDLPrimitiveType): string {
+    convertPrimitiveType(type: IDLPrimitiveType): string {
         switch (type) {
             case idl.IDLI32Type: return `KInt`
             case idl.IDLBooleanType: return `KBoolean`
             case idl.IDLStringType: return `KStringPtr&`
+            case idl.IDLVoidType: return `KNativePointer`
         }
-        throwException(`Unsupported primitive type: ${type}`)
+        throwException(`Unsupported primitive type: ${JSON.stringify(type)}`)
     }
 }
