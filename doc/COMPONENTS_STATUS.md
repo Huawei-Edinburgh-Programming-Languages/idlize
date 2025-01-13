@@ -792,8 +792,8 @@
 |`setScrollOptions`| Function | Berezin Kirill | done |  |
 |`scrollable`| Function | Berezin Kirill | done |  |
 |`onScroll`| Function | Berezin Kirill | done |  |
-|`onWillScroll`| Function | Berezin Kirill |blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onDidScroll`| Function | Berezin Kirill | in progress |  |
+|`onWillScroll`| Function | Berezin Kirill |in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onDidScroll`| Function | Berezin Kirill | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBEDRL  |
 |`onScrollEdge`| Function | Berezin Kirill | done |  |
 |`onScrollStart`| Function | Berezin Kirill | done |  |
 |`onScrollEnd`| Function | Berezin Kirill | done |  |
