@@ -21,7 +21,8 @@ import {
     asString, capitalize, getComment, getDeclarationsByNode, getExportedDeclarationNameByDecl, identName,
     isDefined, isNodePublic, isPrivate, isProtected, isReadonly, isStatic, isAsync,
     nameEnumValues, nameOrNull, identString, getNameWithoutQualifiersLeft, stringOrNone, warn,
-    snakeCaseToCamelCase, IDLKeywords, GenericVisitor
+    snakeCaseToCamelCase, IDLKeywords, GenericVisitor,
+    generateSyntheticUnionName
 } from "@azanat/idlize-core"
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig"
 import { generateSyntheticIdlNodeName, typeOrUnion } from "./peer-generation/idl/common"

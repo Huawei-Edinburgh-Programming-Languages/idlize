@@ -1,3 +1,5 @@
+import { fromIDL } from "./from-idl/common"
+
 /*
  * Copyright (c) 2024 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +20,8 @@ export * from "./Language"
 export * from "./languageSpecificKeywords"
 export * from "./options"
 export * from "./util"
+export * from "./IndentedPrinter"
 
 export * from "./peer-generation/idl/common"
+export { fromIDL }  from "./from-idl/common"
 

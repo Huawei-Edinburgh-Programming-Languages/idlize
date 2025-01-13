@@ -16,9 +16,5 @@
         "rootDirs": ["src"],
         "module": "CommonJS",
     },
-    "include": ["src/**/*"],
-    "paths": {
-        "@azanat/idlize-core": ["./core/src"],
-        "@azanat/idlize-core/*": ["./core/src/*"],
-    }
+    "include": ["src/**/*"]
 }
