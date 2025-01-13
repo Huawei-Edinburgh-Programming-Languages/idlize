@@ -1555,7 +1555,7 @@
 |`setTransform`| Function  | Vadim Voronov | done | |
 |`transform`| Function  | Vadim Voronov | done | |
 |`translate`| Function  | Vadim Voronov | done | |
-|`setPixelMap`| Function  | Vadim Voronov | testskipped | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
+|`setPixelMap`| Function  | Vadim Voronov | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`transferFromImageBitmap`| Function  | Vadim Voronov | done | |
 |`saveLayer`| Function  | Vadim Voronov | done | |
 |`restoreLayer`| Function  | Vadim Voronov | done | |
