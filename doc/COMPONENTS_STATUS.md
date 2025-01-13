@@ -526,8 +526,8 @@
 |`alt`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |*Line*|*Component*|Dudkin Sergey| blocked |  |
 |`setLineOptions`|Function|Dudkin Sergey| done |  |
-|`startPoint`|Function|Dudkin Sergey|blocked AceEngine | https://gitee.com/openharmony/interface_sdk-js/issues/IAXCBA |
-|`endPoint`|Function|Dudkin Sergey|blocked AceEngine | https://gitee.com/openharmony/interface_sdk-js/issues/IAXCBA |
+|`startPoint`|Function|Dudkin Sergey|blocked AceEngine | https://gitee.com/openharmony/interface_sdk-js/issues/IAXCBA + |
+|`endPoint`|Function|Dudkin Sergey|blocked AceEngine | https://gitee.com/openharmony/interface_sdk-js/issues/IAXCBA + |
 |*List*|*Component*|Morozov Sergey| blocked|  |
 |`setListOptions`|Function|Morozov Sergey| done |  |
 |`alignListItem`|Function|Morozov Sergey|done|  |
@@ -724,7 +724,7 @@
 |`setRectOptions`|Function|Dudkin Sergey| done |  |
 |`radiusWidth`|Function|Dudkin Sergey| done |  |
 |`radiusHeight`|Function|Dudkin Sergey| done |  |
-|`radius`|Function|Dudkin Sergey| blocked AceEngine|https://gitee.com/openharmony/interface_sdk-js/issues/IAXA7J|
+|`radius`|Function|Dudkin Sergey| blocked done|   |
 |*Refresh*| *Component* |Politov Mikhail | blocked |  |
 |`setRefreshOptions`| Function | Samarin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD ; offset, friction - deprecated |
 |`onStateChange`| Function |Politov Mikhail | done |  |
@@ -757,7 +757,7 @@
 |`onEditingChange`| Function | Dudkin Sergey| done|  |
 |`enterKeyType`| Function | Dudkin Sergey| done|  |
 |`onSubmit`| Function | Dudkin Sergey| done|  |
-|`onWillChange`| Function | Dudkin Sergey| blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4G70 |
+|`onWillChange`| Function | Dudkin Sergey| blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4G70 + |
 |`onDidChange`| Function | Dudkin Sergey| done|  |
 |`onCut`| Function | Dudkin Sergey| done| |
 |`onCopy`| Function | Dudkin Sergey| done | |
@@ -902,12 +902,12 @@
 |`divider` | Function | Samarin Sergey | done |  |
 |`menuAlign` | Function | Samarin Sergey | done |  |
 |*Shape*|*Component*|Dudkin Sergey| done |  |
-|`setShapeOptions`|Function|Dudkin Sergey| blocked AceEngine| https://gitee.com/openharmony/interface_sdk-js/issues/IAX8ZZ |
+|`setShapeOptions`|Function|Dudkin Sergey| blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IBDOCY + |
 |`viewPort`|Function|Dudkin Sergey| done |  |
 |`stroke`|Function|Dudkin Sergey| done |  |
 |`fill`|Function|Dudkin Sergey| done |  |
 |`strokeDashOffset`|Function|Dudkin Sergey| done |  |
-|`strokeDashArray`|Function|Dudkin Sergey| blocked AceEngine| https://gitee.com/openharmony/interface_sdk-js/issues/IAX8ZZ |
+|`strokeDashArray`|Function|Dudkin Sergey| blocked AceEngine| https://gitee.com/openharmony/interface_sdk-js/issues/IAX8ZZ +|
 |`strokeLineCap`|Function|Dudkin Sergey| done |  |
 |`strokeLineJoin`|Function|Dudkin Sergey| done |  |
 |`strokeMiterLimit`|Function|Dudkin Sergey| done |  |
@@ -915,7 +915,7 @@
 |`fillOpacity`|Function|Dudkin Sergey| done |  |
 |`strokeWidth`|Function|Dudkin Sergey| done |  |
 |`antiAlias`|Function|Dudkin Sergey| done |  |
-|`mesh`|Function|Dudkin Sergey| blocked AceEngine| https://gitee.com/openharmony/interface_sdk-js/issues/IAX8ZZ |
+|`mesh`|Function|Dudkin Sergey| blocked AceEngine| https://gitee.com/openharmony/interface_sdk-js/issues/IAX8ZZ + |
 |*Slider*| *Component* |Morozov Sergey |blocked|  |
 |`setSliderOptions`| Function |Morozov Sergey |done |  |
 |`blockColor`| Function |Morozov Sergey |done |  |
@@ -1412,8 +1412,8 @@
 |`registerNativeEmbedRule`| Function | Erokhin Ilya | done | |
 |`bindSelectionMenu`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*WindowScene*| *Component* | Dudkin Sergey | testskipped | |
-|`setWindowSceneOptions`| Function | Dudkin Sergey | testskipped | |
-|`attractionEffect`| Function | Dudkin Sergey  | testskipped | |
+|`setWindowSceneOptions`| Function | Dudkin Sergey | testskipped | UT in progress Dudkin Sergey |
+|`attractionEffect`| Function | Dudkin Sergey  | testskipped | UT in progress Dudkin Sergey |
 |*XComponent*| *Component* | Tuzhilkin Ivan | blocked IDL | |
 |`setXComponentOptions`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`onLoad`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB7RSS |
@@ -1472,7 +1472,7 @@
 |`NeedMoreElements`| Function | | | |
 |`OnRangeUpdate`| Function | | | |
 |*DrawingCanvas*| *Class* | Dudkin Sergey | blocked IDL | |
-|`drawRect`| Function | Dudkin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDOCY |
+|`drawRect`| Function | Dudkin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDOCY + |
 |*FrameNode*| *Class* | Tuzhilkin Ivan | testskipped| |
 |`isModifiable`| Function | Tuzhilkin Ivan | testskipped | |
 |`appendChild`| Function | Tuzhilkin Ivan | testskipped | |
@@ -1609,8 +1609,8 @@
 |`offOnDetach`| Function | Vadim Voronov, Evstigneev Roman | testskipped |  |
 |`getHeight`| Function |Vadim Voronov| done | |
 |`getWidth`| Function |Vadim Voronov| done | |
-|*DrawingRenderingContext*| *Class* | Dudkin Sergey | blocked IDL| |
-|`invalidate`| Function | Dudkin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC6PG |
+|*DrawingRenderingContext*| *Class* | Dudkin Sergey | done| |
+|`invalidate`| Function | Dudkin Sergey | done | |
 |*ICurve*| *Class* | Erokhin Ilya | blocked | |
 |`interpolate`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*DrawModifier*| *Class* | Erokhin Ilya | blocked | |
@@ -1830,31 +1830,31 @@
 |`getCaretOffset`| Function|Dudkin Sergey| done | |
 |`setCaretOffset`| Function|Dudkin Sergey| done | |
 |`closeSelectionMenu`| Function|Dudkin Sergey| done| |
-|`getTypingStyle`| Function|Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IBAXVH |
+|`getTypingStyle`| Function|Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IBAXVH + |
 |`setTypingStyle`| Function|Dudkin Sergey| done| |
 |`setSelection`| Function|Dudkin Sergey| done| |
 |`isEditing`| Function|Dudkin Sergey| done| |
 |`stopEditing`| Function|Dudkin Sergey| done| |
 |`getLayoutManager`| Function|Dudkin Sergey| done | |
-|`getPreviewText`| Function|Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IBAXVH |
+|`getPreviewText`| Function|Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IBAXVH + |
 |*RichEditorController*| *Class* |Dudkin Sergey| blocked|  |
 |`addTextSpan`| Function |Dudkin Sergey| done|  |
-|`addImageSpan`| Function |Dudkin Sergey| blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
+|`addImageSpan`| Function |Dudkin Sergey| | |
 |`addBuilderSpan`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`addSymbolSpan`| Function | Dudkin Sergey| done|  |
 |`updateSpanStyle`| Function | Dudkin Sergey| done|  |
 |`updateParagraphStyle`| Function | Dudkin Sergey| done|  |
 |`deleteSpans`| Function |Dudkin Sergey| done|  |
 |`getSpans`| Function |Dudkin Sergey| done|  |
-|`getParagraphs`| Function |Dudkin Sergey| blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB1LVZ |
+|`getParagraphs`| Function |Dudkin Sergey| blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB1LVZ + |
 |`getSelection`| Function |Dudkin Sergey| done|  |
 |`fromStyledString`| Function | Dudkin Sergey| done|  |
 |`toStyledString`| Function | Dudkin Sergey| done|  |
 |*RichEditorStyledStringController*| *Class* |Dudkin Sergey| blocked IDL| |
 |`setStyledString`| Function |Dudkin Sergey| done| |
 |`getStyledString`| Function | Maksimov Nikita | testskipped | UT in progress Maksimov Nikita |
-|`getSelection`| Function |Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`onContentChanged`| Function | Dudkin Sergey| blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB944G |
+|`getSelection`| Function |Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
+|`onContentChanged`| Function | Dudkin Sergey| blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB944G + |
 |*Scroller*| *Class* | Erokhin Ilya | blocked |  |
 |`scrollTo`| Function | Erokhin Ilya | done |  |
 |`scrollEdge`| Function | Erokhin Ilya | done |  |
