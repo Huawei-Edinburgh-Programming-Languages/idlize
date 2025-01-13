@@ -1,0 +1,17 @@
+interface Fropple {
+    attribute String str;
+    attribute number num;
+};
+
+interface Bopple {
+    attribute boolean lies;
+};
+
+interface Nopple {
+};
+
+interface Topple {
+};
+
+typedef (Fropple or Bopple) U;
+typedef (Nopple or Topple) E;
