@@ -520,14 +520,14 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
         this.writer.print('export ' + result)
     }
 
-    private IDLTypedEntryPrinter<T extends IDLEntry>(
+    private printIfNotSeen<T extends IDLEntry>(
         type: T,
-        printer: (_: T) => stringOrNone[],
+        print: (_: T) => stringOrNone[],
         seenNames: Set<string>
     ): stringOrNone[] | undefined {
-        if (type?.name != undefined && !seenNames.has(type.name)) {
-            seenNames.add(type.name!)
-            return printer(type)
+        if (type?.name !== undefined && !seenNames.has(type.name)) {
+            seenNames.add(type.name)
+            return print(type)
         }
         return undefined
     }
@@ -547,13 +547,13 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
         const seenFields = new Set<string>()
         return ([`interface ${this.printInterfaceName(idlInterface)} {`] as stringOrNone[])
             .concat(idlInterface.constants
-                .map(it => this.IDLTypedEntryPrinter(it, it => this.printConstant(it), seenFields)).flat())
+                .map(it => this.printIfNotSeen(it, it => this.printConstant(it), seenFields)).flat())
             .concat(idlInterface.properties
-                .map(it => this.IDLTypedEntryPrinter(it, it => this.printProperty(it, isMaterialized(idlInterface)), seenFields) ).flat())
+                .map(it => this.printIfNotSeen(it, it => this.printProperty(it, isMaterialized(idlInterface)), seenFields) ).flat())
             .concat(idlInterface.methods
-                .map(it => this.IDLTypedEntryPrinter(it, it => this.printMethod(it), seenFields) ).flat())
+                .map(it => this.printIfNotSeen(it, it => this.printMethod(it), seenFields) ).flat())
             .concat(idlInterface.callables
-                .map(it => this.IDLTypedEntryPrinter(it, it => this.printFunction(it), seenFields) ).flat())
+                .map(it => this.printIfNotSeen(it, it => this.printFunction(it), seenFields) ).flat())
             .concat(["}"])
     }
 
@@ -684,7 +684,7 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
         const seenFields = new Set<string>()
         return ([`type ${this.printInterfaceName(tuple)} = [`] as stringOrNone[])
             .concat(tuple.properties
-                .map((it, propIndex) => this.IDLTypedEntryPrinter(it, it => {
+                .map((it, propIndex) => this.printIfNotSeen(it, it => {
                     //TODO: use ETSConvertor.processTupleType
                     let types: IDLType[] = []
                     if (it.isOptional) {
