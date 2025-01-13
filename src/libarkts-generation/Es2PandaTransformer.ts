@@ -1,4 +1,4 @@
-import { isMethod, IDLInterface, IDLInterfaceSubkind, IDLKind, IDLParameter, IDLType, createConstructor, createContainerType, createInterface, forEachChild, isConstructor, isContainerType, isInterface, isReferenceType, toIDLString } from "../idl"
+import { isMethod, IDLInterface, IDLInterfaceSubkind, IDLKind, IDLParameter, IDLType, createConstructor, createContainerType, createInterface, forEachChild, isConstructor, isContainerType, isInterface, isReferenceType, toIDLString } from "@idlize/core/idl"
 import { PeerFile } from "../peer-generation/PeerFile"
 import { PeerLibrary } from "../peer-generation/PeerLibrary"
 
@@ -111,7 +111,7 @@ export class Es2PandaTransformer {
                             if (it.type) it.type = processType(it.type)
                         })
                         node.parameters = node.parameters
-                            .map((it, index) => killLen(node.parameters, index))
+                            .map((it, index) => killUnneededParameters(node.parameters, index))
                             .filter(it => it != undefined) as IDLParameter[]
                     }
                 })
@@ -139,16 +139,18 @@ export class Es2PandaTransformer {
         this.dropEs2pandaPrefix()
 
         this.idlLibrary.files.forEach(
-            file => console.log(toIDLString(file.entries, {}))
+            file => console.log(toIDLString(file.entries, {allowUnknownKinds: true}))
         )
     }
 }
 
-function killLen(parameters: IDLParameter[], index: number): IDLParameter|undefined {
+function killUnneededParameters(parameters: IDLParameter[], index: number): IDLParameter|undefined {
     const parameter = parameters[index]
     // This function return sequence.
     // This is its length.
     if (parameter.name == "returnTypeLen") return undefined
+
+    if (parameter.name == "context" && index == 0) return undefined
 
     if (index > 0 && parameter.name.endsWith("Len")) {
         const previous = parameters[index-1]
