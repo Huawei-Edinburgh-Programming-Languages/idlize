@@ -320,7 +320,7 @@
 |`friction`| Function | Samarin Sergey | done |  |
 |`onScroll`| Function | Samarin Sergey | deprecated |  |
 |`onWillScroll`| Function | Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onDidScroll`| Function | Samarin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB6U0 |
+|`onDidScroll`| Function | Samarin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB6U0 + |
 |`onReachStart`| Function | Samarin Sergey | testskipped | UT in progress Samarin Sergey |
 |`onReachEnd`| Function | Samarin Sergey | testskipped | UT in progress Samarin Sergey |
 |`onScrollStart`| Function | Samarin Sergey | testskipped | UT in progress Samarin Sergey |
@@ -581,7 +581,7 @@
 |`setLoadingProgressOptions`|Function| Samarin Sergey | done |  |
 |`color`|Function| Samarin Sergey | done |  |
 |`enableLoading`|Function| Samarin Sergey | done |  |
-|`contentModifier`|Function| Samarin Sergey|blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
+|`contentModifier`|Function| Samarin Sergey|blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG + |
 |*LocationButton*| *Component* |Samarin Sergey| done |  |
 |`setLocationButtonOptions`| Function |Samarin Sergey| done |  |
 |`onClick`| Function |Samarin Sergey| done |  |
@@ -726,7 +726,7 @@
 |`radiusHeight`|Function|Dudkin Sergey| done |  |
 |`radius`|Function|Dudkin Sergey| blocked done|   |
 |*Refresh*| *Component* |Politov Mikhail | blocked |  |
-|`setRefreshOptions`| Function | Samarin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD ; offset, friction - deprecated |
+|`setRefreshOptions`| Function | Samarin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD ; offset, friction - deprecated + |
 |`onStateChange`| Function |Politov Mikhail | done |  |
 |`onRefreshing`| Function |Politov Mikhail | done |  |
 |`refreshOffset`| Function |Politov Mikhail | done |  |
@@ -879,7 +879,7 @@
 |`size`| Function |Samarin Sergey| done |  |
 |`constraintSize`| Function |Samarin Sergey| done |  |
 |*Select*| *Component* | Samarin Sergey | blocked |  |
-|`setSelectOptions` | Function | Samarin Sergey | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
+|`setSelectOptions` | Function | Samarin Sergey | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD + |
 |`selected` | Function | Samarin Sergey | done |  |
 |`value` | Function | Samarin Sergey | done |  |
 |`font` | Function | Samarin Sergey | done |  |
@@ -898,7 +898,7 @@
 |`menuBackgroundColor` | Function | Samarin Sergey | done |  |
 |`menuBackgroundBlurStyle` | Function | Samarin Sergey | done |  |
 |`controlSize` | Function | Samarin Sergey | done |  |
-|`menuItemContentModifier` | Function | Samarin Sergey | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
+|`menuItemContentModifier` | Function | Samarin Sergey | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG + |
 |`divider` | Function | Samarin Sergey | done |  |
 |`menuAlign` | Function | Samarin Sergey | done |  |
 |*Shape*|*Component*|Dudkin Sergey| done |  |
