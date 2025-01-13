@@ -330,7 +330,7 @@
 |`edgeEffect`| Function | Samarin Sergey | done | |
 |`fadingEdge`| Function | Samarin Sergey | done | |
 |*Component3D*| *Component* |Kovalev Sergey | blocked | |
-|`setComponent3DOptions`| Function |Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD |
+|`setComponent3DOptions`| Function |Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD + |
 |`environment`| Function |Kovalev Sergey | done |  |
 |`shader`| Function |Kovalev Sergey | done |  |
 |`shaderImageTexture`| Function |Kovalev Sergey | done |  |
@@ -608,7 +608,7 @@
 |`menuItemGroupDivider`|Function|Morozov Sergey| done |https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`subMenuExpandingMode`|Function|Morozov Sergey| done |  |
 |*MenuItem*| *Component* |Morozov Sergey|blocked|  |
-|`setMenuItemOptions`| Function |Kovalev Sergey| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD |
+|`setMenuItemOptions`| Function |Kovalev Sergey| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD + |
 |`selected`| Function |Morozov Sergey|done|  |
 |`selectIcon`| Function |Morozov Sergey|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`onChange`| Function |Morozov Sergey|done|  |
@@ -1665,8 +1665,8 @@
 |*EventTargetInfo*| *Class* | Maksimov Nikita | testskipped | |
 |`getId`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*GestureRecognizer*| *Class* | Kovalev Sergey | in progress | |
-|`getTag`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
-|`getType`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getTag`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR + |
+|`getType`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
 |`isBuiltIn`| Function | Kovalev Sergey | done | |
 |`setEnabled`| Function | Kovalev Sergey | done | |
 |`isEnabled`| Function | Kovalev Sergey | done | |
@@ -2009,11 +2009,11 @@
 |`onSurfaceDestroyed`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV |
 |`startImageAnalyzer`| Function | Tuzhilkin Ivan | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IB3J8N , https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`stopImageAnalyzer`| Function | Tuzhilkin Ivan | testskipped | |
-|*WaterFlowSections*| *Class* | Kovalev Sergey | in progress |one converter is not fully implemented |
+|*WaterFlowSections*| *Class* | Kovalev Sergey | in progress | |
 |`splice`| Function | Kovalev Sergey | done | |
 |`push`| Function | Kovalev Sergey | done | |
 |`update`| Function | Kovalev Sergey | done | |
-|`values`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`values`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
 |`length`| Function | Kovalev Sergey | done | |
 |*UIExtensionProxy*| *Class* | Tuzhilkin Ivan | blocked IDL | |
 |`send`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBCGB5 , https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF |
