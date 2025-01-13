@@ -165,10 +165,10 @@
 |`outlineRadius`| Function | Skroba Gleb | done | |
 |`foregroundColor`| Function | Roman Sedaikin | done | |
 |`onClick`| Function | Roman Sedaikin | done | |
-|`onHover`| Function | Erokhin Ilya | testskipped | |
-|`onAccessibilityHover`| Function | Erokhin Ilya | testskipped | |
+|`onHover`| Function | Andrey Khudenkikh | in progress | |
+|`onAccessibilityHover`| Function | Andrey Khudenkikh | in progress | |
 |`hoverEffect`| Function | Roman Sedaikin | done | |
-|`onMouse`| Function | Erokhin Ilya | testskipped | |
+|`onMouse`| Function | Andrey Khudenkikh | in progress | |
 |`onTouch`| Function | Roman Sedaikin | done | |
 |`onKeyEvent`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`onKeyPreIme`| Function | Erokhin Ilya | testskipped | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX & https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
@@ -203,8 +203,8 @@
 |`transform`| Function | Lobah Mikhail | done | |
 |`onAppear`| Function | Roman Sedaikin | done | |
 |`onDisAppear`| Function | Roman Sedaikin | done | |
-|`onAttach`| Function | Erokhin Ilya | testskipped | |
-|`onDetach`| Function | Erokhin Ilya | testskipped | |
+|`onAttach`| Function | Andrey Khudenkikh | in progress | |
+|`onDetach`| Function | Andrey Khudenkikh | in progress | |
 |`onAreaChange`| Function | Roman Sedaikin | done | |
 |`visibility`| Function | Roman Sedaikin | done | |
 |`flexGrow`| Function | Dmitry A Smirnov| done | |
@@ -267,7 +267,7 @@
 |`onGestureRecognizerJudgeBegin`| Function | Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`shouldBuiltInRecognizerParallelWith`| Function | Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`monopolizeEvents`| Function | Erokhin Ilya | testskipped | |
-|`onTouchIntercept`| Function | Erokhin Ilya | testskipped | |
+|`onTouchIntercept`| Function | Andrey Khudenkikh | in progress | |
 |`onSizeChange`| Function | Dmitry A Smirnov|testskipped | |
 |`customProperty`| Function | Dmitry A Smirnov|blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
 |`expandSafeArea`| Function | Dmitry A Smirnov|testskipped | |
