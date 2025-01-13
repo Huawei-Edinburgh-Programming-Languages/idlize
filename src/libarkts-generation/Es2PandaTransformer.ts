@@ -1,7 +1,6 @@
-import { IDLContainerType, IDLInterface, IDLInterfaceSubkind, IDLKind, IDLParameter, IDLReferenceType, IDLType, createConstructor, createContainerType, createInterface, forEachChild, isConstructor, isContainerType, isInterface, isModuleType, isParameter, isReferenceType, isType, toIDLString } from "./idl"
-import { isMethod, printMethod } from "./idl"
-import { PeerFile } from "./peer-generation/PeerFile"
-import { PeerLibrary } from "./peer-generation/PeerLibrary"
+import { isMethod, IDLInterface, IDLInterfaceSubkind, IDLKind, IDLParameter, IDLType, createConstructor, createContainerType, createInterface, forEachChild, isConstructor, isContainerType, isInterface, isReferenceType, toIDLString } from "../idl"
+import { PeerFile } from "../peer-generation/PeerFile"
+import { PeerLibrary } from "../peer-generation/PeerLibrary"
 
 
 // TODO: unfortunately we don't have IDL transformers yet.
@@ -111,11 +110,9 @@ export class Es2PandaTransformer {
                         node.parameters.forEach(it => {
                             if (it.type) it.type = processType(it.type)
                         })
-                        console.log(node.parameters.length)
                         node.parameters = node.parameters
                             .map((it, index) => killLen(node.parameters, index))
                             .filter(it => it != undefined) as IDLParameter[]
-                        console.log(node.parameters.length)
                     }
                 })
             )
@@ -149,16 +146,13 @@ export class Es2PandaTransformer {
 
 function killLen(parameters: IDLParameter[], index: number): IDLParameter|undefined {
     const parameter = parameters[index]
-    console.log("PARAMETER: ", parameter.name)
     // This function return sequence.
     // This is its length.
-    if (parameter.name == "returnTypeLen") console.log("RETURN UNDEFINED")
     if (parameter.name == "returnTypeLen") return undefined
 
     if (index > 0 && parameter.name.endsWith("Len")) {
         const previous = parameters[index-1]
         if (previous.type && isContainerType(previous.type) && previous.type.containerKind == 'sequence') {
-            console.log("RETURN UNDEFINED")
             return undefined
         }
     }

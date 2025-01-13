@@ -51,7 +51,7 @@ import { generateIdlSkoala } from "./skoala-generation/SkoalaGeneration"
 import { IdlWrapperProcessor } from "./skoala-generation/idl/idlSkoalaLibrary"
 import { fillSyntheticDeclarations } from "./peer-generation/idl/SyntheticDeclarationsFiller"
 import { LibarktsGenerator } from "./libarkts-generation/LibarktsGenerator"
-import { Es2PandaTransformer } from "./Es2PandaTransformer"
+import { Es2PandaTransformer } from "./libarkts-generation/Es2PandaTransformer"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
