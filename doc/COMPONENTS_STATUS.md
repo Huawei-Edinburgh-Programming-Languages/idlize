@@ -71,18 +71,18 @@
 |`contentModifier`| Function |Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`labelStyle`| Function |Evstigneev Roman | done |  |
 |*Calendar*| *Component* | Maksimov Nikita | done |  |
-|`setCalendarOptions`| Function | Maksimov Nikita Kovalev Sergey | in progress |  |
-|`showLunar`| Function | Maksimov Nikita Kovalev Sergey | in progress |  |
-|`showHoliday`| Function | Maksimov Nikita Kovalev Sergey | in progress |  |
+|`setCalendarOptions`| Function | Maksimov Nikita | testskipped | UT in progress Kovalev Sergey |
+|`showLunar`| Function | Maksimov Nikita | testskipped | UT in progress Kovalev Sergey |
+|`showHoliday`| Function | Maksimov Nikita | testskipped | UT in progress Kovalev Sergey |
 |`needSlide`| Function | Maksimov Nikita | done |  |
-|`startOfWeek`| Function | Maksimov Nikita Kovalev Sergey | in progress |  |
-|`offDays`| Function | Maksimov Nikita Kovalev Sergey | in progress |  |
-|`direction`| Function | Maksimov Nikita Kovalev Sergey | in progress |  |
-|`currentDayStyle`| Function | Maksimov Nikita Kovalev Sergey | in progress |  |
-|`nonCurrentDayStyle`| Function | Maksimov Nikita Kovalev Sergey | in progress |  |
-|`todayStyle`| Function | Maksimov Nikita Kovalev Sergey | in progress |  |
-|`weekStyle`| Function | Maksimov Nikita Kovalev Sergey | in progress |  |
-|`workStateStyle`| Function | Maksimov Nikita Kovalev Sergey | in progress |  |
+|`startOfWeek`| Function | Maksimov Nikita | testskipped | UT in progress Kovalev Sergey |
+|`offDays`| Function | Maksimov Nikita | testskipped | UT in progress Kovalev Sergey |
+|`direction`| Function | Maksimov Nikita | testskipped | UT in progress Kovalev Sergey |
+|`currentDayStyle`| Function | Maksimov Nikita | testskipped | UT in progress Kovalev Sergey |
+|`nonCurrentDayStyle`| Function | Maksimov Nikita | testskipped | UT in progress Kovalev Sergey |
+|`todayStyle`| Function | Maksimov Nikita | testskipped | UT in progress Kovalev Sergey |
+|`weekStyle`| Function | Maksimov Nikita | testskipped | UT in progress Kovalev Sergey |
+|`workStateStyle`| Function | Maksimov Nikita | testskipped | UT in progress Kovalev Sergey |
 |`onSelectChange`| Function | Maksimov Nikita | done | |
 |`onRequestData`| Function | Maksimov Nikita | done | |
 |*CalendarPicker*| *Component* |Politov Mikhail | done |  |
