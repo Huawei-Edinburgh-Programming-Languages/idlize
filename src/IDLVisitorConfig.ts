@@ -1,6 +1,6 @@
-import * as idl from '@azanat/idlize-core/idl'
+import * as idl from '@idlize/core/idl'
 import * as ts from "typescript"
-import { identName } from '@azanat/idlize-core'
+import { identName } from '@idlize/core'
 
 export class IDLVisitorConfig {
     private constructor() {}

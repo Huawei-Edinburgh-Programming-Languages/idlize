@@ -16,14 +16,14 @@ import * as ts from "typescript"
 import * as path from "path"
 import { parse } from "comment-parser"
 import { OptionValues } from "commander"
-import * as idl from "@azanat/idlize-core/idl"
+import * as idl from "@idlize/core/idl"
 import {
     asString, capitalize, getComment, getDeclarationsByNode, getExportedDeclarationNameByDecl, identName,
     isDefined, isNodePublic, isPrivate, isProtected, isReadonly, isStatic, isAsync,
     nameEnumValues, nameOrNull, identString, getNameWithoutQualifiersLeft, stringOrNone, warn,
     snakeCaseToCamelCase, IDLKeywords, GenericVisitor,
     generateSyntheticUnionName
-} from "@azanat/idlize-core"
+} from "@idlize/core"
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig"
 import { generateSyntheticIdlNodeName, typeOrUnion } from "./peer-generation/idl/common"
 import { isCommonMethodOrSubclass } from "./peer-generation/inheritance"

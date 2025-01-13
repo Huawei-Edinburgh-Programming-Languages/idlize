@@ -1,5 +1,5 @@
 {
-    "name": "@azanat/idlize-core",
+    "name": "@idlize/core",
     "description": "",
     "version": "1.0.0-devel",
     "types": "build/lib/src/index.d.ts",

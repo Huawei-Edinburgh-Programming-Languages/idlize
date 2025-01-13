@@ -1,5 +1,5 @@
-import * as idl from "@azanat/idlize-core/idl"
-import { Language } from "@azanat/idlize-core"
+import * as idl from "@idlize/core/idl"
+import { Language } from "@idlize/core"
 import { ArgConvertor } from "./peer-generation/ArgConvertors"
 import { ReferenceResolver } from "./peer-generation/ReferenceResolver"
 

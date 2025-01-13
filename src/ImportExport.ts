@@ -14,7 +14,7 @@
  */
 
 import * as ts from 'typescript'
-import { arrayAt, getDeclarationsByNode } from '@azanat/idlize-core'
+import { arrayAt, getDeclarationsByNode } from '@idlize/core'
 
 export class ImportExport {
     constructor(

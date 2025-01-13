@@ -16,9 +16,8 @@
 import { program } from "commander"
 import * as fs from "fs"
 import * as path from "path"
-import { fromIDL } from "@azanat/idlize-core"
+import { fromIDL, generate,  defaultCompilerOptions, toSet } from "@idlize/core"
 import { idlToDtsString } from "./from-idl/DtsPrinter"
-import { generate } from "./idlize"
 import {
     forEachChild,
     IDLEntry,
@@ -27,7 +26,7 @@ import {
     isSyntheticEntry,
     toIDLString,
     transformMethodsAsync2ReturnPromise
-} from "./idl"
+} from "@idlize/core/idl"
 import { LinterVisitor, toLinterString } from "./linter"
 import { LinterMessage } from "./LinterMessage"
 import { IDLVisitor } from "./IDLVisitor"

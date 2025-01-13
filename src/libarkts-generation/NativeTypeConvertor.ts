@@ -14,8 +14,8 @@
  */
 
 import { TypeConvertor } from "../peer-generation/LanguageWriters/nameConvertor"
-import * as idl from "@azanat/idlize-core/idl"
-import { throwException } from "@azanat/idlize-core"
+import * as idl from "@idlize/core/idl"
+import { throwException } from "@idlize/core"
 
 export class NativeTypeConvertor implements TypeConvertor<string> {
     convertOptional(type: idl.IDLOptionalType): string {

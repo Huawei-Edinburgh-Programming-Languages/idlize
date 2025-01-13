@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { IndentedPrinter, throwException } from "@azanat/idlize-core"
+import { IndentedPrinter, throwException } from "@idlize/core"
 import { PeerLibrary } from "../peer-generation/PeerLibrary"
 import {
     IDLConstructor,
@@ -22,7 +22,7 @@ import {
     IDLParameter,
     IDLType,
     isInterface, isReferenceType,
-} from "@azanat/idlize-core/idl"
+} from "@idlize/core/idl"
 import { NativeTypeConvertor } from "./NativeTypeConvertor"
 import { convertType } from "../peer-generation/LanguageWriters/nameConvertor"
 
