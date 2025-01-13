@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { IDLType } from "../../idl";
+import { IDLType } from '@idlize/core/idl'
 import { LanguageWriter } from "../LanguageWriters";
 
 export interface ImportTable {

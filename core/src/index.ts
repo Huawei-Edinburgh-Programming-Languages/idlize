@@ -24,4 +24,6 @@ export * from "./IndentedPrinter"
 
 export * from "./peer-generation/idl/common"
 export { fromIDL }  from "./from-idl/common"
+export { idlToDtsString, CustomPrintVisitor }  from "./from-idl/DtsPrinter"
+export { toIDL, addSyntheticType, resolveSyntheticType } from "./from-idl/deserialize"
 

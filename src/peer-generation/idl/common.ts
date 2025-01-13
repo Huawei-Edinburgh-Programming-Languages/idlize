@@ -13,9 +13,8 @@
  * limitations under the License.
  */
 
-import * as idl from "../../idl"
-import { Language } from "../../Language"
-import { capitalize } from "../../util"
+import * as idl from "@idlize/core/idl"
+import { Language, capitalize } from "@idlize/core"
 
 export function isImport(decl: idl.IDLNode): boolean {
     return idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.Import)
