@@ -1468,6 +1468,7 @@
 |`hasType`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY , https://gitee.com/nikolay-igotti/idlize/issues/IBDHH7 |
 |`getTypes`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY , https://gitee.com/nikolay-igotti/idlize/issues/IBDHH7 |
 |*LazyForEachOps*| *Class* | | | |
+|`NeedMoreElements`| Function |  |  |
 |`NeedMoreElements`| Function | | | |
 |`OnRangeUpdate`| Function | | | |
 |*DrawingCanvas*| *Class* | Dudkin Sergey | blocked IDL | |
@@ -1626,8 +1627,78 @@
 |`asymmetric`| Function | Andrey Khudenkikh | done | |
 |`animation`| Function | Andrey Khudenkikh | blocked IDL | |
 |`combine`| Function | Andrey Khudenkikh | blocked IDL | |
+|*BaseEvent*| *Class* | | | |
+|`getModifierKeyState`| Function | | | |
+|`setTarget`| Function | | | |
+|`getTimestamp`| Function | | | |
+|`setTimestamp`| Function | | | |
+|`getSource`| Function | | | |
+|`setSource`| Function | | | |
+|`getAxisHorizontal`| Function | | | |
+|`setAxisHorizontal`| Function | | | |
+|`getAxisVertical`| Function | | | |
+|`setAxisVertical`| Function | | | |
+|`getPressure`| Function | | | |
+|`setPressure`| Function | | | |
+|`getTiltX`| Function | | | |
+|`setTiltX`| Function | | | |
+|`getTiltY`| Function | | | |
+|`setTiltY`| Function | | | |
+|`getSourceTool`| Function | | | |
+|`setSourceTool`| Function | | | |
+|`getDeviceId`| Function | | | |
+|`setDeviceId`| Function | | | |
+|*TouchEvent*| *Class* | | | |
+|`getHistoricalPoints`| Function | | | |
+|`getType`| Function | | | |
+|`setType`| Function | | | |
+|`setTouches`| Function | | | |
+|`setChangedTouches`| Function | | | |
+|`setStopPropagation`| Function | | | |
+|`setPreventDefault`| Function | | | |
 |*PixelMapMock*| *Class* | Maksimov Nikita | done | |
 |`release`| Function | Maksimov Nikita | done | |
+|*DragEvent*| *Class* | | | |
+|`getDisplayX`| Function | | | |
+|`getDisplayY`| Function | | | |
+|`getWindowX`| Function | | | |
+|`getWindowY`| Function | | | |
+|`getX`| Function | | | |
+|`getY`| Function | | | |
+|`setData`| Function | | | |
+|`getData`| Function | | | |
+|`getSummary`| Function | | | |
+|`setResult`| Function | | | |
+|`getResult`| Function | | | |
+|`getPreviewRect`| Function | | | |
+|`getVelocityX`| Function | | | |
+|`getVelocityY`| Function | | | |
+|`getVelocity`| Function | | | |
+|`getModifierKeyState`| Function | | | |
+|`getDragBehavior`| Function | | | |
+|`setDragBehavior`| Function | | | |
+|`getUseCustomDropAnimation`| Function | | | |
+|`setUseCustomDropAnimation`| Function | | | |
+|*KeyEvent*| *Class* | | | |
+|`getModifierKeyState`| Function | | | |
+|`getType`| Function | | | |
+|`setType`| Function | | | |
+|`getKeyCode`| Function | | | |
+|`setKeyCode`| Function | | | |
+|`getKeyText`| Function | | | |
+|`setKeyText`| Function | | | |
+|`getKeySource`| Function | | | |
+|`setKeySource`| Function | | | |
+|`getDeviceId`| Function | | | |
+|`setDeviceId`| Function | | | |
+|`getMetaKey`| Function | | | |
+|`setMetaKey`| Function | | | |
+|`getTimestamp`| Function | | | |
+|`setTimestamp`| Function | | | |
+|`setStopPropagation`| Function | | | |
+|`setIntentionCode`| Function | | | |
+|`getUnicode`| Function | | | |
+|`setUnicode`| Function | | | |
 |*ProgressMask*| *Class* | Maksimov Nikita | done | |
 |`updateProgress`| Function | Maksimov Nikita | done | |
 |`updateColor`| Function | Maksimov Nikita | done | |
@@ -1645,6 +1716,18 @@
 |`update`| Function | Morozov Sergey | done |  |
 |`getChildDefaultSize`| Function | Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4QKQ |
 |`setChildDefaultSize`| Function | Morozov Sergey| done | |
+|*UICommonEvent*| *Class* | | | |
+|`setOnClick`| Function | | | |
+|`setOnTouch`| Function | | | |
+|`setOnAppear`| Function | | | |
+|`setOnDisappear`| Function | | | |
+|`setOnKeyEvent`| Function | | | |
+|`setOnFocus`| Function | | | |
+|`setOnBlur`| Function | | | |
+|`setOnHover`| Function | | | |
+|`setOnMouse`| Function | | | |
+|`setOnSizeChange`| Function | | | |
+|`setOnVisibleAreaApproximateChange`| Function | | | |
 |*GestureModifier*| *Class* | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`applyGesture`| Function | Tuzhilkin Ivan | blocked IDL |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG|
 |*ContextMenu*| *Class* | Tuzhilkin Ivan | blocked IDL | |
@@ -1852,6 +1935,10 @@
 |*EditMenuOptions*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onCreateMenu`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N, https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onMenuItemClick`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N, https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|*SubmitEvent*| *Class* | | | |
+|`keepEditableState`| Function | | | |
+|`getText`| Function | | | |
+|`setText`| Function | | | |
 |*TextInputController*| *Class* | Spirin Andrey | done |  |
 |`caretPosition`| Function | Spirin Andrey | done |  |
 |`setTextSelection`| Function | Spirin Andrey | done |  |
