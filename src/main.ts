@@ -22,9 +22,7 @@ import {
     IDLEntry,
     isEnum,
     isInterface,
-    isMethod,
     isSyntheticEntry,
-    printMethod,
     toIDLString,
     transformMethodsAsync2ReturnPromise
 } from "@idlize/core/idl"
