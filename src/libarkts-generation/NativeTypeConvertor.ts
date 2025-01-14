@@ -34,30 +34,38 @@ import {
 export class NativeTypeConvertor implements TypeConvertor<string> {
     constructor(private library: PeerLibrary) {}
 
+    private usagesWithoutDeclaration = new Set<string>()
+
     convertOptional(type: IDLOptionalType): string {
         throw new Error("Method not implemented.")
     }
+
     convertUnion(type: IDLUnionType): string {
         throw new Error("Method not implemented.")
     }
+
     convertContainer(type: IDLContainerType): string {
         if (IDLContainerUtils.isSequence(type)) return `KNativePointerArray`
         throwException(`Unexpected container`)
     }
+
     convertImport(type: IDLReferenceType, importClause: string): string {
         throw new Error("Method not implemented.")
     }
+
     convertTypeReference(type: IDLReferenceType): string {
         const declaration = this.library.resolveTypeReference(type)
-        if (declaration === undefined) console.warn(`Warning: type reference with no declaration: ${type.name}`)
+        if (declaration === undefined) this.complain(type.name)
         if (declaration !== undefined && isEnum(declaration)) {
             return `KInt`
         }
         return `KNativePointer`
     }
+
     convertTypeParameter(type: IDLTypeParameterType): string {
         throw new Error("Method not implemented.")
     }
+
     convertPrimitiveType(type: IDLPrimitiveType): string {
         switch (type) {
             case IDLI32Type: return `KInt`
@@ -66,5 +74,11 @@ export class NativeTypeConvertor implements TypeConvertor<string> {
             case IDLVoidType: return `KNativePointer`
         }
         throwException(`Unsupported primitive type: ${JSON.stringify(type)}`)
+    }
+
+    private complain(name: string): void {
+        if (this.usagesWithoutDeclaration.has(name)) return
+        this.usagesWithoutDeclaration.add(name)
+        console.warn(`Warning: type reference with no declaration: ${name}`)
     }
 }
