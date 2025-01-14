@@ -95,7 +95,7 @@
 |`onReady`| Function |Vadim Voronov | done |  |
 |`enableAnalyzer`| Function |Vadim Voronov | done |  |
 |*Checkbox*| *Component* | Andrey Khudenkikh | blocked |  |
-|`setCheckboxOptions`| Function | Samarin Sergey | testskipped | CustomBuilder  |
+|`setCheckboxOptions`| Function | Samarin Sergey | testskipped | UT in progress Samarin Sergey |
 |`select`| Function | Andrey Khudenkikh | done |  |
 |`selectedColor`| Function | Andrey Khudenkikh | done |  |
 |`shape`| Function | Andrey Khudenkikh | done |  |
