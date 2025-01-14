@@ -1,17 +1,35 @@
-interface Fropple {
-    attribute String str;
-    attribute number num;
+dictionary Parity {
+    number EVEN = 0;
+    number ODD = 1;
 };
 
-interface Bopple {
-    attribute boolean lies;
+interface PriceTag {
+    attribute number price;
+    attribute String currency;
 };
 
-interface Nopple {
+[Entity=Literal]
+interface MeasurementLiteral {
+    attribute number value;
+    attribute String unit;
 };
 
-interface Topple {
+[Entity=Class]
+interface MeasurementClass {
+    attribute number value;
+    attribute String unit;
 };
 
-typedef (Fropple or Bopple) U;
-typedef (Nopple or Topple) E;
+interface Boolean {
+    attribute boolean value;
+};
+
+
+// Test cases. The test tries to discriminate each property's type
+interface TestCases {
+    attribute (Length or number or Parity) testLengthNumberEnum;
+    attribute (sequence<number> or ArrayBuffer) testArrayBuffer;
+    attribute (PriceTag or MeasurementLiteral) testInterfaceLiteral;
+    attribute (PriceTag or MeasurementClass) testInterfaceClass;
+    attribute (Boolean or boolean) testInterfacePrimitive;
+};

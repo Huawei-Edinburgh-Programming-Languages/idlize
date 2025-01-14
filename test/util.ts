@@ -17,8 +17,7 @@ export class IDLTest {
         this.peerLibrary.files.push(new PeerFile(file, entries))
     }
 
-    lookup(name: string): IDLEntry {
-        return this.peerLibrary.resolveTypeReference(createReferenceType(name))!
+    lookup<T extends IDLEntry>(name: string): T {
+        return this.peerLibrary.resolveTypeReference(createReferenceType(name)) as T
     }
 }
-///add README
