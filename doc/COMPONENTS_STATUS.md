@@ -724,7 +724,7 @@
 |`setRectOptions`|Function|Dudkin Sergey| done |  |
 |`radiusWidth`|Function|Dudkin Sergey| done |  |
 |`radiusHeight`|Function|Dudkin Sergey| done |  |
-|`radius`|Function|Dudkin Sergey| blocked done|   |
+|`radius`|Function|Dudkin Sergey| done|   |
 |*Refresh*| *Component* |Politov Mikhail | blocked |  |
 |`setRefreshOptions`| Function | Samarin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD ; offset, friction - deprecated + |
 |`onStateChange`| Function |Politov Mikhail | done |  |
