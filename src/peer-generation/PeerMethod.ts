@@ -14,10 +14,10 @@
  */
 
 import { capitalize, IDLType, isDefined } from '@idlize/core'
-import { ArgConvertor } from "./ArgConvertors"
+import { ArgConvertor } from "@idlize/core"
 import { Method, MethodModifier } from "./LanguageWriters"
 import { PrimitiveType } from "./ArkPrimitiveType"
-import { mangleMethodName } from "./LanguageWriters/LanguageWriter"
+import { mangleMethodName } from "@idlize/core"
 import { IdlNameConvertor } from "@idlize/core"
 export class PeerMethod {
     private overloadIndex?: number

@@ -19,12 +19,14 @@ import * as idl from '@idlize/core/idl'
 
 import { createConstructor, createContainerType, createOptionalType, createReferenceType, createTypeParameterReference, createParameter, forceAsNamedNode, hasExtAttribute, IDLBufferType, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLI64Type, IDLInterface, IDLInterfaceSubkind, IDLMethod, IDLParameter, IDLPointerType, IDLStringType, IDLType, IDLU8Type, IDLUint8ArrayType, IDLVoidType, isCallback, isConstructor, isContainerType, isEnum, isInterface, isReferenceType, isUnionType } from '@idlize/core/idl'
 import { IndentedPrinter, Language, capitalize, qualifiedName } from '@idlize/core'
-import { ArgConvertor, generateCallbackAPIArguments } from './ArgConvertors'
+import { ArgConvertor } from '@idlize/core'
+import { generateCallbackAPIArguments } from './ArgConvertors'
 import { createOutArgConvertor } from './PromiseConvertors'
 import { PrimitiveType } from './ArkPrimitiveType'
 import { makeDeserializeAndCall, makeSerializerForOhos, readLangTemplate } from './FileGenerators'
 import { isMaterialized } from './idl/IdlPeerGeneratorVisitor'
-import { CppLanguageWriter, createLanguageWriter, ExpressionStatement, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature } from './LanguageWriters'
+import { CppLanguageWriter, createLanguageWriter, ExpressionStatement, LanguageExpression, Method, MethodModifier, MethodSignature, NamedMethodSignature } from './LanguageWriters'
+import { LanguageWriter } from '@idlize/core'
 import { PeerLibrary } from './PeerLibrary'
 import { printBridgeCcForOHOS } from './printers/BridgeCcPrinter'
 import { printCallbacksKinds, printManagedCaller } from './printers/CallbacksPrinter'
@@ -556,7 +558,7 @@ class OHOSVisitor {
 
                 materializedMethods.forEach(method => {
                     writePeerMethod(
-                        writer, 
+                        writer,
                         method.getPrivateMethod(),
                         true,
                         { language: this.library.language, imports: undefined, synthesizedTypes: undefined  },
@@ -750,7 +752,7 @@ class OHOSVisitor {
         fs.writeFileSync(path.join(outDir, this.implementationStubsFile.name),
             this.implementationStubsFile.printToString()
         )
-        
+
         const serializerText = makeSerializerForOhos(this.library, managedCodeModuleInfo, fileNamePrefix).printToString()
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}${ext}`), peerText, 'utf-8')
         fs.writeFileSync(path.join(managedOutDir, `${fileNamePrefix}Serializer${ext}`), serializerText, 'utf-8')

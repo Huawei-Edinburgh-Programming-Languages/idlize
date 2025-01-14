@@ -20,9 +20,11 @@ import { isMaterialized, isPredefined } from './idl/IdlPeerGeneratorVisitor';
 import { PeerFile } from "./PeerFile";
 import { AggregateConvertor, ArrayConvertor, BufferConvertor, CallbackConvertor, ClassConvertor, DateConvertor, EnumConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, MapConvertor, MaterializedClassConvertor, NumericConvertor, OptionConvertor,  PointerConvertor,  StringConvertor, TupleConvertor, TypeAliasConvertor, UnionConvertor } from './ArgConvertors';
 import { IndentedPrinter, Language, warn, isImportAttr, isStringEnum } from '@idlize/core'
-import { createTypeNameConvertor, LanguageWriter } from './LanguageWriters';
+import { createTypeNameConvertor } from './LanguageWriters';
+import { LanguageWriter } from '@idlize/core';
 import { StructPrinter } from './printers/StructPrinter';
-import { ArgConvertor, BooleanConvertor, CustomTypeConvertor, LengthConvertor, NumberConvertor, UndefinedConvertor, VoidConvertor } from './ArgConvertors';
+import { BooleanConvertor, CustomTypeConvertor, LengthConvertor, NumberConvertor, UndefinedConvertor, VoidConvertor } from './ArgConvertors';
+import { ArgConvertor } from '@idlize/core';
 import { generateSyntheticFunctionName } from '../IDLVisitor';
 import { IdlNameConvertor } from '@idlize/core';
 import { LibraryInterface } from '../LibraryInterface';

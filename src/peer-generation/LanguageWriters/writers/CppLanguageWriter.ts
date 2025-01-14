@@ -15,7 +15,7 @@
 
 import { createReferenceType, forceAsNamedNode, IDLContainerType, IDLEnum, IDLNode, IDLType, IDLUint8ArrayType, IDLVoidType } from '@idlize/core'
 import { IndentedPrinter, cppKeywords, Language, throwException } from '@idlize/core'
-import { ArgConvertor, BaseArgConvertor, EnumConvertor, RuntimeType } from "../../ArgConvertors"
+import { ArgConvertor, BaseArgConvertor, RuntimeType } from "@idlize/core"
 import { PrimitiveType } from "../../ArkPrimitiveType"
 import {
     AssignStatement,
@@ -34,7 +34,7 @@ import {
     NamedMethodSignature,
     ObjectArgs,
     StringExpression
-} from "../LanguageWriter"
+} from "@idlize/core"
 import {
     CDefinedExpression,
     CLikeExpressionStatement,
@@ -42,9 +42,11 @@ import {
     CLikeLoopStatement,
     CLikeReturnStatement
 } from "./CLikeLanguageWriter"
-import { ReferenceResolver } from "../../ReferenceResolver"
+import { ReferenceResolver } from "@idlize/core"
 import { IdlNameConvertor } from "@idlize/core"
 import { CppIDLNodeToStringConvertor } from "../convertors/CppConvertors"
+import * as idl from '@idlize/core/idl'
+import { EnumConvertor } from "../../ArgConvertors";
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //

@@ -24,24 +24,28 @@ import {
     MethodSignature,
     NamedMethodSignature,
     ObjectArgs
-} from "../LanguageWriter"
+} from "@idlize/core"
 import { TSCastExpression, TSLanguageWriter } from "./TsLanguageWriter"
 import { getExtAttribute, IDLEnum, IDLI32Type, IDLThisType, IDLType, IDLVoidType } from '@idlize/core/idl'
 import {
     AggregateConvertor,
-    ArgConvertor,
     ArrayConvertor,
-    BaseArgConvertor,
     CustomTypeConvertor,
     EnumConvertor,
     InterfaceConvertor,
     MaterializedClassConvertor,
     OptionConvertor,
-    RuntimeType,
     UnionConvertor
 } from "../../ArgConvertors"
+
+import {
+    ArgConvertor,
+    BaseArgConvertor,
+    RuntimeType,
+} from "@idlize/core"
+
 import { Language } from  '@idlize/core'
-import { ReferenceResolver } from "../../ReferenceResolver"
+import { ReferenceResolver } from "@idlize/core"
 import { EtsIDLNodeToStringConvertor } from "../convertors/ETSConvertors"
 import {makeEnumTypeCheckerCall} from "../../printers/TypeCheckPrinter"
 import * as idl from '@idlize/core/idl'
@@ -300,7 +304,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         // the '==' operator must be used when one of the operands is a reference
         return super.makeNaryOp('==', args)
     }
-    makeDiscriminatorConvertor(convertor: EnumConvertor, value: string, index: number): LanguageExpression { //
+    override makeDiscriminatorConvertor(convertor: EnumConvertor, value: string, index: number): LanguageExpression { //
         return this.instanceOf(convertor, value);
         // Or this ????????
         // return this.discriminatorFromExpressions(value, RuntimeType.OBJECT, [

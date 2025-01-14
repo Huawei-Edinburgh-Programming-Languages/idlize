@@ -28,7 +28,7 @@ import {
     MethodSignature,
     NamedMethodSignature,
     ObjectArgs,
-} from "../LanguageWriter"
+} from "@idlize/core"
 import {
     CLikeExpressionStatement,
     CLikeLanguageWriter,
@@ -36,10 +36,11 @@ import {
     CLikeReturnStatement
 } from "./CLikeLanguageWriter"
 import * as idl from '@idlize/core/idl'
-import { ArgConvertor, BaseArgConvertor, EnumConvertor, RuntimeType } from "../../ArgConvertors"
-import { ReferenceResolver } from "../../ReferenceResolver"
+import { ArgConvertor, BaseArgConvertor, RuntimeType } from "@idlize/core"
+import { ReferenceResolver } from "@idlize/core"
 import { IdlNameConvertor } from "@idlize/core"
 import { JavaIDLNodeToStringConvertor } from "../convertors/JavaConvertors"
+import { EnumConvertor } from "../../ArgConvertors";
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //

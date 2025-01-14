@@ -19,7 +19,7 @@ import { maybeTransformManagedCallback } from '../../ArgConvertors'
 import { PrimitiveType } from '../../ArkPrimitiveType'
 import { PeerGeneratorConfig } from '../../PeerGeneratorConfig'
 import { PeerMethod } from '../../PeerMethod'
-import { ReferenceResolver } from '../../ReferenceResolver'
+import { ReferenceResolver } from "@idlize/core"
 import { convertNode, convertType, IdlNameConvertor, NodeConvertor, TypeConvertor } from '@idlize/core'
 
 export interface ConvertResult {

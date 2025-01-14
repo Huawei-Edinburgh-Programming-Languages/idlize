@@ -1369,3 +1369,8 @@ export function isHandwritten(decl: IDLEntry): boolean {
 export function isStringEnum(decl: IDLEnum): boolean {
     return decl.elements.some(e => e.type === IDLStringType)
 }
+
+export interface ReferenceResolver {
+    resolveTypeReference(type: IDLReferenceType, entries?: IDLEntry[]): IDLEntry | undefined
+    toDeclaration(type: IDLNode): IDLNode
+}

@@ -4,11 +4,11 @@ import {
     createLanguageWriter,
     generateTypeCheckerName,
     LanguageExpression,
-    LanguageWriter,
     Method,
     MethodModifier,
     NamedMethodSignature
 } from "../LanguageWriters";
+import { LanguageWriter } from "@idlize/core"
 import { PeerLibrary } from "../PeerLibrary";
 import { createDeclarationNameConvertor } from "../idl/IdlNameConvertor";
 import { Language } from "@idlize/core"

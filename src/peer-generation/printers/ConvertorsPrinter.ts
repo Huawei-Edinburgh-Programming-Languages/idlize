@@ -15,7 +15,7 @@
 
 import { PrimitiveType } from "../ArkPrimitiveType"
 import { PeerLibrary } from "../PeerLibrary";
-import { LanguageWriter } from "../LanguageWriters";
+import { LanguageWriter } from "@idlize/core";
 import { DeclarationTargets } from "../DeclarationTargetCollector";
 
 export const SELECTOR_ID_PREFIX = "SELECTOR_ID_"

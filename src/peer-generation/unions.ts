@@ -16,9 +16,9 @@
 import { convertType, TypeConvertor } from "@idlize/core";
 import { IDLContainerType, IDLCustomObjectType, IDLOptionalType, IDLPrimitiveType, IDLReferenceType, IDLType, IDLTypeParameterType, IDLUndefinedType, IDLUnionType, isType, isUnionType } from '@idlize/core/idl'
 import { typeOrUnion } from "@idlize/core"
-import { ReferenceResolver } from "./ReferenceResolver";
-import { ArgConvertor, RuntimeType } from "./ArgConvertors";
-import { LanguageExpression, LanguageWriter } from "./LanguageWriters";
+import { ReferenceResolver } from "@idlize/core"
+import { ArgConvertor, RuntimeType } from "@idlize/core";
+import { LanguageExpression, LanguageWriter } from "@idlize/core";
 import { LibraryInterface } from "../LibraryInterface";
 
 export class UnionFlattener implements TypeConvertor<IDLType[]> {

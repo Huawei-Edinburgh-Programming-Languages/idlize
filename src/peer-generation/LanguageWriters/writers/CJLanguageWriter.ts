@@ -16,9 +16,9 @@
 import * as idl from  '@idlize/core/idl'
 import { IDLNumberType, IDLType } from '@idlize/core/idl'
 import { IndentedPrinter, Language, CJKeywords, isDefined } from  '@idlize/core'
-import { ArgConvertor, BaseArgConvertor, RuntimeType } from "../../ArgConvertors"
+import { ArgConvertor, BaseArgConvertor, RuntimeType } from "@idlize/core"
 import { EnumConvertor } from "../../ArgConvertors"
-import { ReferenceResolver } from "../../ReferenceResolver"
+import { ReferenceResolver } from "@idlize/core"
 import {
     AssignStatement,
     ExpressionStatement,
@@ -35,7 +35,7 @@ import {
     ObjectArgs,
     ReturnStatement,
     StringExpression
-} from "../LanguageWriter"
+} from "@idlize/core"
 import { IdlNameConvertor } from "@idlize/core"
 import { CJIDLTypeToForeignStringConvertor, CJIDLNodeToStringConvertor } from "../convertors/CJConvertors"
 

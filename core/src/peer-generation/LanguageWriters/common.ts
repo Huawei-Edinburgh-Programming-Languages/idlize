@@ -13,11 +13,23 @@
  * limitations under the License.
  */
 
-import { IDLType } from '@idlize/core/idl'
-import { LanguageWriter } from "@idlize/core";
+export enum RuntimeType {
+    UNEXPECTED = -1,
+    NUMBER = 1,
+    STRING = 2,
+    OBJECT = 3,
+    BOOLEAN = 4,
+    UNDEFINED = 5,
+    BIGINT = 6,
+    FUNCTION = 7,
+    SYMBOL = 8,
+    MATERIALIZED = 9,
+}
 
-export interface ImportTable {
-    getImportsForTypes(types: IDLType[]): string[]
-    setImportsForType(type: IDLType, imports: string[]): void
-    printImportsForTypes(types: IDLType[], printer: LanguageWriter): void
+export class NativeModuleType {
+    protected constructor(public name: string) {}
+    static Interop = new NativeModuleType("InteropNativeModule")
+    static ArkUI = new NativeModuleType("ArkUINativeModule")
+    static Generated = new NativeModuleType("ArkUIGeneratedNativeModule")
+    static Test = new NativeModuleType("TestNativeModule")
 }

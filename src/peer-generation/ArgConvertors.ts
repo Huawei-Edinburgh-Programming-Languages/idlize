@@ -15,100 +15,15 @@
 
 import * as idl from "@idlize/core/idl"
 import { Language, hashCodeFromString, warn } from "@idlize/core"
+import { RuntimeType, ArgConvertor, BaseArgConvertor, ExpressionAssigner } from "@idlize/core"
 import { LibraryInterface } from "../LibraryInterface"
 import { PrimitiveType } from "./ArkPrimitiveType"
-import { BlockStatement, BranchStatement, createTypeNameConvertor, generateTypeCheckerName, LanguageExpression, LanguageStatement, LanguageWriter, StringExpression } from "./LanguageWriters"
+import { BlockStatement, BranchStatement, LanguageExpression, LanguageStatement, LanguageWriter, StringExpression } from "@idlize/core"
 import { CppIDLNodeToStringConvertor } from "./LanguageWriters/convertors/CppConvertors"
 import { IDLNodeToStringConvertor } from "./LanguageWriters/convertors/InteropConvertor"
 import { createEmptyReferenceResolver } from "@idlize/core"
 import { UnionRuntimeTypeChecker } from "./unions"
-
-export enum RuntimeType {
-    UNEXPECTED = -1,
-    NUMBER = 1,
-    STRING = 2,
-    OBJECT = 3,
-    BOOLEAN = 4,
-    UNDEFINED = 5,
-    BIGINT = 6,
-    FUNCTION = 7,
-    SYMBOL = 8,
-    MATERIALIZED = 9,
-}
-
-export type ExpressionAssigneer = (expression: LanguageExpression) => LanguageStatement
-
-export interface ArgConvertor { // todo:
-    param: string
-    idlType: idl.IDLType
-    isScoped: boolean
-    useArray: boolean
-    runtimeTypes: RuntimeType[]
-    isOut?: true
-    scopeStart?(param: string, language: Language): string
-    scopeEnd?(param: string, language: Language): string
-    convertorArg(param: string, writer: LanguageWriter): string
-    convertorSerialize(param: string, value: string, writer: LanguageWriter): void
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement
-    interopType(): idl.IDLType
-    nativeType(): idl.IDLType
-    targetType(writer: LanguageWriter): string
-    isPointerType(): boolean
-    unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression|undefined
-    getMembers(): string[]
-    getObjectAccessor(languge: Language, value: string, args?: Record<string, string>, writer?: LanguageWriter): string
-}
-
-export abstract class BaseArgConvertor implements ArgConvertor {
-    constructor(
-        public idlType: idl.IDLType,
-        public runtimeTypes: RuntimeType[],
-        public isScoped: boolean,
-        public useArray: boolean,
-        public param: string
-    ) { }
-
-    nativeType(): idl.IDLType {
-        throw new Error("Define")
-    }
-    isPointerType(): boolean {
-        throw new Error("Define")
-    }
-    interopType(): idl.IDLType {
-        throw new Error("Define")
-    }
-    targetType(writer: LanguageWriter): string {
-        return writer.getNodeName(this.idlType)
-    }
-    scopeStart?(param: string, language: Language): string
-    scopeEnd?(param: string, language: Language): string
-    abstract convertorArg(param: string, writer: LanguageWriter): string
-    abstract convertorSerialize(param: string, value: string, writer: LanguageWriter): void
-    abstract convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement
-    unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression|undefined {
-        return undefined
-    }
-    getMembers(): string[] { return [] }
-    getObjectAccessor(language: Language, value: string, args?: Record<string, string>, writer?: LanguageWriter): string {
-        if (writer) return writer.getObjectAccessor(this, value, args)
-        return this.useArray && args?.index ? `${value}[${args.index}]` : value
-    }
-    protected discriminatorFromFields<T>(value: string,
-                                         writer: LanguageWriter,
-                                         uniqueFields: T[] | undefined,
-                                         nameAccessor: (field: T) => string,
-                                         optionalAccessor: (field: T) => boolean,
-                                         duplicates: Set<string>){
-        if (!uniqueFields || uniqueFields.length === 0) return undefined
-        const firstNonOptional = uniqueFields.find(it => !optionalAccessor(it))
-        return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT, [
-            writer.makeDiscriminatorFromFields(this,
-                value,
-                firstNonOptional ? [nameAccessor(firstNonOptional)] : uniqueFields.map(it => nameAccessor(it)),
-                duplicates)
-        ])
-    }
-}
+import { createTypeNameConvertor, generateTypeCheckerName } from "./LanguageWriters";
 
 export class ProxyConvertor extends BaseArgConvertor {
     constructor(public convertor: ArgConvertor, suggestedName?: string) {
@@ -117,7 +32,7 @@ export class ProxyConvertor extends BaseArgConvertor {
     convertorArg(param: string, writer: LanguageWriter): string {
         return this.convertor.convertorArg(param, writer)
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         return this.convertor.convertorDeserialize(bufferName, deserializerName, assigneer, writer)
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
@@ -150,7 +65,7 @@ export class BooleanConvertor extends BaseArgConvertor {
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         printer.writeMethodCall(`${param}Serializer`, "writeBoolean", [value])
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         return assigneer(writer.makeString(`${deserializerName}.readBoolean()`))
     }
     nativeType(): idl.IDLType {
@@ -172,7 +87,7 @@ export class UndefinedConvertor extends BaseArgConvertor {
         return writer.makeUndefined().asString()
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {}
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         return assigneer(writer.makeUndefined())
     }
     nativeType(): idl.IDLType {
@@ -190,7 +105,7 @@ export class VoidConvertor extends UndefinedConvertor {
     convertorArg(param: string, writer: LanguageWriter): string {
         return writer.makeVoid().asString()
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         return assigneer(writer.makeVoid())
     }
     nativeType(): idl.IDLType {
@@ -219,7 +134,7 @@ export class LengthConvertor extends BaseArgConvertor {
             )
         )
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const readExpr = writer.makeString(`${deserializerName}.readLength()`)
         if (writer.language === Language.CPP)
             return assigneer(readExpr)
@@ -264,7 +179,7 @@ export class CustomTypeConvertor extends BaseArgConvertor {
             [`"${this.customTypeName}"`, printer.makeCastCustomObject(value, this.isGenericType).asString()]
         )
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const type = writer.language === Language.CPP
             ? this.nativeType()
             : this.idlType
@@ -297,7 +212,7 @@ export class NumberConvertor extends BaseArgConvertor {
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         printer.writeMethodCall(`${param}Serializer`, "writeNumber", [value])
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         return assigneer(writer.makeCast(
             writer.makeString(`${deserializerName}.readNumber()`),
             this.idlType, { optional: false })
@@ -327,7 +242,7 @@ export class NumericConvertor extends BaseArgConvertor {
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         printer.writeMethodCall(`${param}Serializer`, `write${this.interopNameConvertor.convert(this.idlType)}`, [value])
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         return assigneer(
             writer.makeString(`${deserializerName}.read${this.interopNameConvertor.convert(this.idlType)}()`)
         )
@@ -354,7 +269,7 @@ export class PointerConvertor extends BaseArgConvertor {
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         printer.writeMethodCall(`${param}Serializer`, `writePointer`, [value])
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         return assigneer(
             writer.makeString(`${deserializerName}.readPointer()`)
         )
@@ -380,7 +295,7 @@ export class BufferConvertor extends BaseArgConvertor {
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         printer.writeMethodCall(`${param}Serializer`, "writeBuffer", [value])
     }
-    convertorDeserialize(_: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(_: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         return assigneer(writer.makeCast(
             writer.makeString(`${deserializerName}.readBuffer()`),
             this.idlType, { optional: false })
@@ -411,7 +326,7 @@ export class StringConvertor extends BaseArgConvertor {
     convertorSerialize(param: string, value: string, writer: LanguageWriter): void {
         writer.writeMethodCall(`${param}Serializer`, `writeString`, [value])
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         return assigneer(writer.makeCast(
             writer.makeString(`${deserializerName}.readString()`),
             this.idlType, { optional: false }
@@ -457,7 +372,7 @@ export class EnumConvertor extends BaseArgConvertor { //
                 : writer.makeEnumCast(value, false, this)
         writer.writeMethodCall(`${param}Serializer`, "writeInt32", [value])
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const readExpr = writer.makeMethodCall(`${deserializerName}`, "readInt32", [])
         const enumExpr = this.isStringEnum
             ? writer.enumFromOrdinal(readExpr, idl.createReferenceType(this.enumEntry.name))
@@ -528,7 +443,7 @@ export class UnionConvertor extends BaseArgConvertor { //
         })
         this.unionChecker.reportConflicts(this.library.getCurrentContext() ?? "<unknown context>")
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const statements: LanguageStatement[] = []
         let selectorBuffer = `${bufferName}_selector`
         const maybeOptionalUnion = writer.language === Language.CPP || writer.language == Language.CJ
@@ -594,7 +509,7 @@ export class ImportTypeConvertor extends BaseArgConvertor { //
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         printer.writeMethodCall(`${param}Serializer`, "writeCustomObject", [`"${this.importedName}"`, value])
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         return assigneer(writer.makeString(`${deserializerName}.readCustomObject("${this.importedName}")`))
     }
     nativeType(): idl.IDLType {
@@ -648,7 +563,7 @@ export class OptionConvertor extends BaseArgConvertor { //
     convertorCArg(param: string): string {
         throw new Error("Must never be used")
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const runtimeBufferName = `${bufferName}_runtimeType`
         const statements: LanguageStatement[] = []
         statements.push(writer.makeAssign(runtimeBufferName, undefined,
@@ -715,7 +630,7 @@ export class AggregateConvertor extends BaseArgConvertor { //
             it.convertorSerialize(param, `${value}_${memberName}`, printer)
         })
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const statements: LanguageStatement[] = []
         if (writer.language === Language.CPP) {
             statements.push(writer.makeAssign(bufferName, this.idlType, undefined, true, false))
@@ -793,7 +708,7 @@ export class InterfaceConvertor extends BaseArgConvertor { //
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         printer.writeMethodCall(`${param}Serializer`, `write${this.library.getInteropName(this.idlType)}`, [value])
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         return assigneer(writer.makeMethodCall(`${deserializerName}`, `read${this.library.getInteropName(this.idlType)}`, []))
     }
     nativeType(): idl.IDLType {
@@ -856,7 +771,7 @@ export class FunctionConvertor extends BaseArgConvertor { //
     convertorSerialize(param: string, value: string, writer: LanguageWriter): void {
         writer.writeMethodCall(`${param}Serializer`, "writeFunction", [value])
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         return assigneer(writer.makeCast(
             writer.makeString(`${deserializerName}.readFunction()`),
             this.type, { optional: true }
@@ -906,7 +821,7 @@ export class CallbackConvertor extends BaseArgConvertor {
             value = `CallbackTransformer.transformFrom${this.library.getInteropName(this.decl)}(${value})`
         writer.writeMethodCall(`${param}Serializer`, `holdAndWriteCallback`, [`${value}`])
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter, useSyncVersion: boolean = false): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter, useSyncVersion: boolean = false): LanguageStatement {
         if (writer.language == Language.CPP) {
             const callerInvocation = writer.makeString(`getManagedCallbackCaller(${generateCallbackKindAccess(this.transformedDecl, writer.language)})`)
             const callerSyncInvocation = writer.makeString(`getManagedCallbackCallerSync(${generateCallbackKindAccess(this.transformedDecl, writer.language)})`)
@@ -1004,7 +919,7 @@ export class ArrayConvertor extends BaseArgConvertor { //
         printer.popIndent()
         printer.print(`}`)
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const lengthBuffer = `${bufferName}_length`
         const counterBuffer = `${bufferName}_i`
         const statements: LanguageStatement[] = []
@@ -1067,7 +982,7 @@ export class MapConvertor extends BaseArgConvertor { //
             this.valueConvertor.convertorSerialize(param, `${value}_value`, printer)
         }))
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const mapTypeName = writer.getNodeName(this.idlType)
         const keyType = this.keyType
         const valueType = this.valueType
@@ -1135,7 +1050,7 @@ export class DateConvertor extends BaseArgConvertor { //
             ])
         }
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const deserializeTime = writer.makeMethodCall(`${deserializerName}`, "readInt64", [])
         if (writer.language === Language.CPP) {
             return assigneer(deserializeTime)
@@ -1167,7 +1082,7 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
                     printer.makeString(value)
                 ])))
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const readStatement = writer.makeCast(
             writer.makeMethodCall(`${deserializerName}`, `read${this.declaration.name}`, []),
             idl.createReferenceType(this.declaration.name)

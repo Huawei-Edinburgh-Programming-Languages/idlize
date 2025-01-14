@@ -17,19 +17,20 @@ import * as idl from '@idlize/core/idl'
 import {
     ExpressionStatement,
     LanguageExpression,
-    LanguageWriter,
     Method,
     MethodModifier,
     NamedMethodSignature,
     StringExpression
 } from "../LanguageWriters";
+import { LanguageWriter } from "@idlize/core"
 import { PeerClassBase } from "../PeerClass";
 import { isDefined, Language, throwException, typeOrUnion } from '@idlize/core'
 import { callbackIdByInfo, canProcessCallback, convertIdlToCallback } from "./EventsPrinter";
 import { PeerMethod } from "../PeerMethod";
 import { PeerLibrary } from "../PeerLibrary";
-import { ArgConvertor, UndefinedConvertor } from '../ArgConvertors';
-import { ReferenceResolver } from "../ReferenceResolver";
+import { UndefinedConvertor } from '../ArgConvertors';
+import { ArgConvertor } from "@idlize/core"
+import { ReferenceResolver } from "@idlize/core"
 import { UnionRuntimeTypeChecker } from "../unions";
 import { zipMany } from '../../utils';
 

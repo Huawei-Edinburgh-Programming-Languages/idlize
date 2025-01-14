@@ -16,7 +16,8 @@ import * as fs from "fs"
 import * as path from "path"
 import { IndentedPrinter, camelCaseToUpperSnakeCase, Language } from "@idlize/core"
 import { PrimitiveType } from "./ArkPrimitiveType"
-import { CppLanguageWriter, createLanguageWriter, LanguageWriter, Method, MethodSignature, NamedMethodSignature, PrinterLike, TSLanguageWriter } from "./LanguageWriters"
+import { CppLanguageWriter, createLanguageWriter, Method, MethodSignature, NamedMethodSignature, PrinterLike } from "./LanguageWriters"
+import { LanguageWriter } from "@idlize/core";
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
 import { writeDeserializer, writeDeserializerFile, writeSerializer, writeSerializerFile } from "./printers/SerializerPrinter"
 import { SELECTOR_ID_PREFIX, writeConvertors } from "./printers/ConvertorsPrinter"
@@ -31,6 +32,8 @@ import { getReferenceResolver } from "./ReferenceResolver"
 import { MethodArgPrintHint } from "./LanguageWriters/LanguageWriter"
 import { SourceFile, TsSourceFile, CJSourceFile } from "./printers/SourceFile"
 import { NativeModuleType } from "./NativeModuleType"
+
+import { ReferenceResolver } from "@idlize/core";
 
 export const warning = "WARNING! THIS FILE IS AUTO-GENERATED, DO NOT MAKE CHANGES, THEY WILL BE LOST ON NEXT GENERATION!"
 

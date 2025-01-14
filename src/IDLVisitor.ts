@@ -25,7 +25,7 @@ import {
     generateSyntheticUnionName, generateSyntheticIdlNodeName, typeOrUnion, isCommonMethodOrSubclass
 } from "@idlize/core"
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig"
-import { ReferenceResolver } from "./peer-generation/ReferenceResolver"
+import { ReferenceResolver } from "@idlize/core"
 import { IDLVisitorConfig } from "./IDLVisitorConfig"
 
 function escapeIdl(name: string): string {

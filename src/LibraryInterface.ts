@@ -1,7 +1,7 @@
 import * as idl from "@idlize/core/idl"
 import { Language } from "@idlize/core"
-import { ArgConvertor } from "./peer-generation/ArgConvertors"
-import { ReferenceResolver } from "./peer-generation/ReferenceResolver"
+import { ArgConvertor } from "@idlize/core"
+import { ReferenceResolver } from "@idlize/core"
 
 export interface LibraryFileInterface {
     get entries(): idl.IDLEntry[]

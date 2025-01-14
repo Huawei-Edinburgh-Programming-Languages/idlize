@@ -22,13 +22,13 @@ import {
     ExpressionStatement,
     LanguageExpression,
     LanguageStatement,
-    LanguageWriter,
     Method,
     MethodModifier,
     MethodSignature,
     NamedMethodSignature,
     createLanguageWriter
 } from "../LanguageWriters";
+import { LanguageWriter } from "@idlize/core"
 import { getInternalClassName, MaterializedMethod } from "../Materialized";
 import { tsCopyrightAndWarning } from "../FileGenerators";
 import { ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from "./lang/Java";

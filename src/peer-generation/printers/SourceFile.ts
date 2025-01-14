@@ -16,11 +16,11 @@
 import { Language } from "@idlize/core"
 import { cStyleCopyright, makeIncludeGuardDefine } from "../FileGenerators"
 import { ImportsCollector } from "../ImportsCollector"
-import { CppLanguageWriter, createLanguageWriter, LanguageWriter, TSLanguageWriter } from "../LanguageWriters"
+import { CppLanguageWriter, createLanguageWriter, TSLanguageWriter } from "../LanguageWriters"
+import { LanguageWriter } from "@idlize/core"
 import { CJLanguageWriter } from "../LanguageWriters/writers/CJLanguageWriter"
 import { ETSLanguageWriter } from "../LanguageWriters/writers/ETSLanguageWriter"
-import { ReferenceResolver } from "../ReferenceResolver"
-
+import { ReferenceResolver } from "@idlize/core"
 
 export abstract class SourceFile {
     public readonly content: LanguageWriter

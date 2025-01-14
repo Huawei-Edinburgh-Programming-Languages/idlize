@@ -13,7 +13,8 @@
  * limitations under the License.
  */
 
-import { createLanguageWriter, LanguageWriter, Method, NamedMethodSignature } from "../../peer-generation/LanguageWriters"
+import { LanguageWriter, Method, NamedMethodSignature } from "@idlize/core"
+import { createLanguageWriter } from "../../peer-generation/LanguageWriters"
 import { Language } from "@idlize/core"
 import * as idl from '@idlize/core/idl'
 import { IdlSkoalaLibrary } from "../idl/idlSkoalaLibrary"

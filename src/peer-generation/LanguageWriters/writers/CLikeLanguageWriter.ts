@@ -16,8 +16,8 @@
 import { IDLType } from '@idlize/core/idl'
 import { IndentedPrinter, Language } from "@idlize/core"
 import { PrimitiveType } from "../../ArkPrimitiveType"
-import { ReferenceResolver } from "../../ReferenceResolver"
-import { ExpressionStatement, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodArgPrintHint, MethodModifier, MethodSignature, ReturnStatement } from "../LanguageWriter"
+import { ReferenceResolver } from "@idlize/core"
+import { ExpressionStatement, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodArgPrintHint, MethodModifier, MethodSignature, ReturnStatement } from "@idlize/core"
 
 ////////////////////////////////////////////////////////////////
 //                         STATEMENTS                         //

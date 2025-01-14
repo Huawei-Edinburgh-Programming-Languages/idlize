@@ -20,12 +20,12 @@ import {
     createLanguageWriter,
     createTypeNameConvertor,
     FieldModifier,
-    LanguageWriter,
     Method,
     MethodModifier,
     MethodSignature,
     NamedMethodSignature,
 } from '../LanguageWriters'
+import { LanguageWriter } from "@idlize/core"
 import {
     indentedBy,
     isDefined,

@@ -28,7 +28,8 @@ import {
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { createDestroyPeerMethod, MaterializedClass, MaterializedMethod } from "../Materialized";
 import { groupBy, Language } from '@idlize/core'
-import { CppLanguageWriter, createLanguageWriter, createTypeNameConvertor, LanguageStatement, LanguageWriter, printMethodDeclaration } from "../LanguageWriters";
+import { CppLanguageWriter, createLanguageWriter, createTypeNameConvertor, LanguageStatement, printMethodDeclaration } from "../LanguageWriters";
+import { LanguageWriter } from "@idlize/core"
 import { LibaceInstall } from "../../Install";
 import { IDLAnyType, IDLBooleanType, IDLFunctionType, IDLPointerType, IDLStringType, IDLThisType, IDLType, isOptionalType, isReferenceType } from '@idlize/core/idl'
 import { createConstructPeerMethod, PeerClass } from "../PeerClass";

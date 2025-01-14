@@ -14,7 +14,7 @@
  */
 
 import { createReferenceType, IDLVoidType } from "@idlize/core/idl"
-import { FieldModifier, LanguageExpression, LanguageWriter, Method, MethodSignature, NamedMethodSignature } from "../../peer-generation/LanguageWriters"
+import { FieldModifier, LanguageExpression, LanguageWriter, Method, MethodSignature, NamedMethodSignature } from "@idlize/core"
 import { NativeModuleType } from "../../peer-generation/NativeModuleType"
 import { capitalize, removeExt } from "@idlize/core"
 import { WrapperClass, WrapperField, WrapperMethod } from "../WrapperClass"

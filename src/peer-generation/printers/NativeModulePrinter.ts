@@ -13,7 +13,8 @@
  * limitations under the License.
  */
 import { maybeReadLangTemplate, readLangTemplate } from "../FileGenerators";
-import { FunctionCallExpression, LanguageWriter, Method, MethodModifier, NamedMethodSignature, StringExpression, createInteropArgConvertor, createLanguageWriter } from "../LanguageWriters";
+import { FunctionCallExpression, Method, MethodModifier, NamedMethodSignature, StringExpression, createInteropArgConvertor, createLanguageWriter } from "../LanguageWriters";
+import { LanguageWriter } from "@idlize/core"
 import { createConstructPeerMethod } from "../PeerClass";
 import { PeerClass } from "../PeerClass";
 import { PeerLibrary } from "../PeerLibrary";

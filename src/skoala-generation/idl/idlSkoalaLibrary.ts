@@ -21,8 +21,9 @@ import { capitalize, isDefined, throwException, Language, CustomPrintVisitor, ad
 import { PrimitiveType } from "../../peer-generation/ArkPrimitiveType";
 import { WrapperClass, WrapperField, WrapperMethod } from "../WrapperClass";
 import { Skoala } from "../utils";
-import { Field, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, NamedMethodSignature } from "../../peer-generation/LanguageWriters";
-import { ArgConvertor, BaseArgConvertor, BooleanConvertor, ClassConvertor, CustomTypeConvertor, EnumConvertor, ExpressionAssigneer, InterfaceConvertor, NumberConvertor, RuntimeType, StringConvertor, TypeAliasConvertor, UndefinedConvertor, UnionConvertor } from "../../peer-generation/ArgConvertors";
+import { Field, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, NamedMethodSignature } from "@idlize/core";
+import { BooleanConvertor, ClassConvertor, CustomTypeConvertor, EnumConvertor, InterfaceConvertor, NumberConvertor, StringConvertor, TypeAliasConvertor, UndefinedConvertor, UnionConvertor } from "../../peer-generation/ArgConvertors";
+import { ArgConvertor, BaseArgConvertor, ExpressionAssigner, RuntimeType } from "@idlize/core";
 import { convertDeclaration, convertType, DeclarationConvertor, IdlNameConvertor, TypeConvertor } from "@idlize/core";
 import { LibraryFileInterface, LibraryInterface } from "../../LibraryInterface";
 import { generateSyntheticFunctionName } from "../../IDLVisitor";
@@ -259,7 +260,7 @@ export class IdlWrapperClassConvertor extends BaseArgConvertor {
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         printer.writeMethodCall(`${param}Serializer`, "writeWrapper", [value])
     }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigneer, writer: LanguageWriter): LanguageStatement {
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const prefix = writer.language === Language.CPP ? PrimitiveType.Prefix : ""
         const readStatement = writer.makeCast(
             writer.makeMethodCall(`${deserializerName}`, `readWrapper`, []),

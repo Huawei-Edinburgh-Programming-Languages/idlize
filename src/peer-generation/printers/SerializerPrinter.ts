@@ -16,7 +16,8 @@
 import * as idl from '@idlize/core/idl'
 import { Language, throwException } from '@idlize/core'
 import { PrimitiveType } from "../ArkPrimitiveType"
-import { ExpressionStatement, LanguageStatement, LanguageWriter, Method, MethodSignature, NamedMethodSignature } from "../LanguageWriters"
+import { ExpressionStatement, LanguageStatement, Method, MethodSignature, NamedMethodSignature } from "../LanguageWriters"
+import { LanguageWriter } from "@idlize/core"
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig'
 import { ImportsCollector } from '../ImportsCollector'
 import { PeerLibrary } from '../PeerLibrary'
@@ -27,7 +28,7 @@ import {
     isMaterialized,
 } from '../idl/IdlPeerGeneratorVisitor'
 import { collectProperties } from '../printers/StructPrinter'
-import { FieldModifier, MethodModifier, ProxyStatement } from '../LanguageWriters/LanguageWriter'
+import { FieldModifier, MethodModifier, ProxyStatement } from '@idlize/core'
 import { createDeclarationNameConvertor } from '../idl/IdlNameConvertor'
 import { IDLEntry } from "@idlize/core/idl"
 import { convertDeclaration } from '@idlize/core'

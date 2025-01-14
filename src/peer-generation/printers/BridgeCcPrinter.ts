@@ -14,10 +14,11 @@
  */
 
 import { capitalize, dropSuffix, isDefined, Language } from '@idlize/core'
-import { ArgConvertor } from "../ArgConvertors";
+import { ArgConvertor } from "@idlize/core";
 import { PrimitiveType } from "../ArkPrimitiveType"
 import { bridgeCcCustomDeclaration, bridgeCcGeneratedDeclaration } from "../FileGenerators";
-import { createInteropArgConvertor, createLanguageWriter, createTypeNameConvertor, ExpressionStatement, LanguageWriter } from "../LanguageWriters";
+import { createLanguageWriter, createTypeNameConvertor, ExpressionStatement } from "../LanguageWriters";
+import { LanguageWriter } from "@idlize/core"
 import { PeerLibrary } from "../PeerLibrary";
 import { PeerMethod } from "../PeerMethod";
 import { forceAsNamedNode, IDLBooleanType, IDLNumberType, IDLVoidType } from '@idlize/core/idl'

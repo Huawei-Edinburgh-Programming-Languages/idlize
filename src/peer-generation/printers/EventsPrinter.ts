@@ -21,22 +21,23 @@ import {
     CppLanguageWriter,
     ExpressionStatement,
     FieldModifier,
-    LanguageWriter,
     printMethodDeclaration,
     StringExpression,
     TSLanguageWriter
 } from "../LanguageWriters"
+import { LanguageWriter } from "@idlize/core"
 import { PeerClassBase } from "../PeerClass"
 import { makeCEventsArkoalaImpl, makeCEventsLibaceImpl } from "../FileGenerators"
 import { generateEventReceiverName } from "./HeaderPrinter"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig"
 import { PeerMethod } from "../PeerMethod"
 import { PeerLibrary } from "../PeerLibrary"
-import { ArgConvertor } from "../ArgConvertors"
+import { ArgConvertor } from "@idlize/core"
 import { PeerClass } from "../PeerClass"
 import { collapseIdlPeerMethods, groupOverloads } from "./OverloadsPrinter"
 import { ImportsCollector } from "../ImportsCollector";
-import { getReferenceResolver, ReferenceResolver } from "../ReferenceResolver"
+import { getReferenceResolver } from "../ReferenceResolver"
+import { ReferenceResolver } from "@idlize/core"
 import { ETSLanguageWriter } from "../LanguageWriters/writers/ETSLanguageWriter";
 import { collectDeclItself, collectDeclDependencies } from "../ImportsCollectorUtils"
 

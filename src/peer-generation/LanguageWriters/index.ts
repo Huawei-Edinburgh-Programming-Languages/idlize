@@ -14,13 +14,13 @@
  */
 
 import { IndentedPrinter, Language } from "@idlize/core"
-import { LanguageWriter } from "./LanguageWriter";
+import { LanguageWriter } from "@idlize/core";
 import { TSLanguageWriter } from "./writers/TsLanguageWriter";
 import { ETSLanguageWriter } from "./writers/ETSLanguageWriter";
 import { JavaLanguageWriter } from "./writers/JavaLanguageWriter";
 import { CppLanguageWriter } from "./writers/CppLanguageWriter";
 import { CJLanguageWriter } from "./writers/CJLanguageWriter";
-import { ReferenceResolver } from "../ReferenceResolver";
+import { ReferenceResolver } from "@idlize/core";
 
 import { CJIDLNodeToStringConvertor, CJInteropArgConvertor } from "./convertors/CJConvertors";
 import { TsIDLNodeToStringConverter } from "./convertors/TSConvertors";
@@ -47,11 +47,10 @@ export {
     LanguageExpression,
     FunctionCallExpression,
     LanguageStatement,
-    LanguageWriter,
     StringExpression,
     PrinterLike,
     printMethodDeclaration
-} from './LanguageWriter'
+} from '@idlize/core'
 export { CppLanguageWriter, TSLanguageWriter }
 
 export function createLanguageWriter(language: Language, resolver:ReferenceResolver): LanguageWriter {

@@ -32,13 +32,14 @@ import {
     ObjectArgs,
     ReturnStatement,
     StringExpression
-} from "../LanguageWriter"
+} from "@idlize/core"
 import * as idl from '@idlize/core/idl'
 import * as ts from 'typescript'
-import { ArgConvertor, EnumConvertor, RuntimeType } from "../../ArgConvertors"
-import { ReferenceResolver } from "../../ReferenceResolver"
+import { ArgConvertor, RuntimeType } from "@idlize/core"
+import { ReferenceResolver } from "@idlize/core"
 import { IdlNameConvertor } from "@idlize/core"
 import { TsIDLNodeToStringConverter } from "../convertors/TSConvertors"
+import { EnumConvertor } from "../../ArgConvertors";
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
