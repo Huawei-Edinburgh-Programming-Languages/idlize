@@ -38,6 +38,14 @@ declare interface BlurOptions {
 
 declare class AttributeModifier<T> {}
 
+declare interface BlurStyleOptions {
+    colorMode?: ThemeColorMode;
+    adaptiveColor?: AdaptiveColor;
+    scale?: number;
+    blurOptions?: BlurOptions;
+}
+
+
 declare interface BackgroundBlurStyleOptions extends BlurStyleOptions {
     policy?: BlurStyleActivePolicy;
     inactiveColor?: ResourceColor;
