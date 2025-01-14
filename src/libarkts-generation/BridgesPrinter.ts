@@ -13,7 +13,16 @@
  * limitations under the License.
  */
 
-import { IndentedPrinter, throwException } from "@idlize/core"
+import {
+    IDLContainerType,
+    IDLContainerUtils,
+    IDLEnum,
+    IDLKind,
+    IDLMethod,
+    IDLReferenceType,
+    IndentedPrinter,
+    throwException
+} from "@idlize/core"
 import { PeerLibrary } from "../peer-generation/PeerLibrary"
 import {
     IDLConstructor,
@@ -80,9 +89,10 @@ export class BridgesPrinter {
         })
     }
 
-    private printInteropMacro(constructorName: string, parameters: IDLParameter[]): void {
+    private printInteropMacro(constructorName: string, returnType: string, parameters: IDLParameter[]): void {
         const types = [
             this.constructorFunction(constructorName),
+            returnType,
             ...parameters.map(it => this.mapType(it.type))
         ].join(`, `)
         this.printer.print(`KOALA_INTEROP_${parameters.length}(${types})`)
@@ -123,8 +133,8 @@ export class BridgesPrinter {
     private castTo(node: IDLReferenceType | IDLContainerType): string | undefined {
         if (isPrimitiveType(node)) return undefined
         if (isReferenceType(node)) return `${BridgesPrinter.typePrefix}${node.name}*`
-        if (idl.isContainerType(node)) {
-            if (idl.IDLContainerUtils.isSequence(node)) {
+        if (isContainerType(node)) {
+            if (IDLContainerUtils.isSequence(node)) {
                 if (!isReferenceType(node.elementType[0])) throwException(`Sequence of non-reference type`)
                 return `${BridgesPrinter.typePrefix}${node.elementType[0].name}**`
             }
@@ -156,7 +166,7 @@ export class BridgesPrinter {
         )
         this.printer.print(`}`)
 
-        this.printInteropMacro(name, parameters)
+        this.printInteropMacro(name, translatedReturnType, parameters)
         this.printer.print(``)
     }
 }

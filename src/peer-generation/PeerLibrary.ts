@@ -30,7 +30,7 @@ import { IDLNodeToStringConvertor } from './LanguageWriters/convertors/InteropCo
 
 export class PeerLibrary implements LibraryInterface {
     private _syntheticEntries: idl.IDLEntry[] = []
-    /** @deprecated PeerLibrary should contains only SDK entries */
+    /** @deprecated PeerLibrary should contain only SDK entries */
     public get syntheticEntries(): idl.IDLEntry[] {
         return this._syntheticEntries!
     }
@@ -128,11 +128,8 @@ export class PeerLibrary implements LibraryInterface {
         }
 
         const candidates = entries.filter(it => type.name === it.name)
-        console.error(`resolveTypeReference candidates`, candidates)
-        if (candidates.length === 1) {
-            console.error(`RETURN`)
+        if (candidates.length === 1)
             return candidates[0]
-        }
         const maybePredefined = candidates.find(isPredefined)
         if (maybePredefined)
             return maybePredefined
