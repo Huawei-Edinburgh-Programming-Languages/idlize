@@ -16,7 +16,7 @@
 import { program } from "commander"
 import * as fs from "fs"
 import * as path from "path"
-import { fromIDL, toIDL, generate, defaultCompilerOptions, idlToDtsString, Language, findVersion } from "@idlize/core"
+import { fromIDL, toIDL, generate, defaultCompilerOptions, idlToDtsString, Language, findVersion, GeneratorConfiguration, setDefaultConfig } from "@idlize/core"
 import {
     forEachChild,
     IDLEntry,
@@ -98,6 +98,21 @@ if (process.env.npm_package_version) {
 }
 
 let didJob = false
+
+class DefaultConfig implements GeneratorConfiguration {
+    param<T>(name: string): T {
+        throw new Error(`${name} is unknown`)
+    }
+    paramArray<T>(name: string): T[] {
+        switch (name) {
+            case 'rootComponents': return PeerGeneratorConfig.rootComponents as T[]
+            case 'standaloneComponents': return PeerGeneratorConfig.standaloneComponents as T[]
+        }
+        throw new Error(`array ${name} is unknown`)
+    }
+}
+
+setDefaultConfig(new DefaultConfig())
 
 if (options.dts2idl) {
     generate(

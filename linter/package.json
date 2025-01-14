@@ -30,6 +30,6 @@
   },
   "scripts": {
     "compile": "rollup -c",
-    "run": "npm run compile && node . --input-dir ../interface_sdk-js/api/@internal/component/ets/,../interface_sdk-js/api/global --output-dir out/linter --linter-whitelist ./whitelist.json || true"
+    "run": "npm run compile && node . --input-dir ../interface_sdk-js/api/@internal/component/ets/,../interface_sdk-js/api/global --output-dir out/linter --whitelist ./whitelist.json || true"
   }
 }
