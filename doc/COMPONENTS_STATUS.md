@@ -720,7 +720,7 @@
 |`starStyle`| Function | Lobah Mikhail| done | |
 |`onChange`| Function | Lobah Mikhail| done |  |
 |`contentModifier`| Function | Lobah Mikhail| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
-|*Rect*|*Component*|Dudkin Sergey| blocked |  |
+|*Rect*|*Component*|Dudkin Sergey| done |  |
 |`setRectOptions`|Function|Dudkin Sergey| done |  |
 |`radiusWidth`|Function|Dudkin Sergey| done |  |
 |`radiusHeight`|Function|Dudkin Sergey| done |  |
