@@ -486,7 +486,7 @@ export function makeAPI(
         .replaceAll(`%CPP_PREFIX%`, PeerGeneratorConfig.cppPrefix)
         .replaceAll(`%INTEROP_TYPES_HEADER`, 
             fs.readFileSync(
-                path.resolve(__dirname, '..', 'external', 'interop', 'src', 'cpp', 'interop-types.h'),
+                path.resolve(__dirname, '..', 'node_modules', '@koalaui', 'interop', 'src', 'cpp', 'interop-types.h'),
                 'utf-8'
             )
         )
