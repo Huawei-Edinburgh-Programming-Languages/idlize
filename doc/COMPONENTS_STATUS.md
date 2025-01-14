@@ -321,10 +321,10 @@
 |`onScroll`| Function | Samarin Sergey | deprecated |  |
 |`onWillScroll`| Function | Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onDidScroll`| Function | Samarin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB6U0 + |
-|`onReachStart`| Function | Samarin Sergey | testskipped | UT in progress Samarin Sergey |
-|`onReachEnd`| Function | Samarin Sergey | testskipped | UT in progress Samarin Sergey |
-|`onScrollStart`| Function | Samarin Sergey | testskipped | UT in progress Samarin Sergey |
-|`onScrollStop`| Function | Samarin Sergey | testskipped | UT in progress Samarin Sergey |
+|`onReachStart`| Function | Samarin Sergey | done | |
+|`onReachEnd`| Function | Samarin Sergey | done | |
+|`onScrollStart`| Function | Samarin Sergey | done | |
+|`onScrollStop`| Function | Samarin Sergey | done | |
 |`flingSpeedLimit`| Function | Samarin Sergey | done |  |
 |`clipContent`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBBLGP (+) |
 |`edgeEffect`| Function | Samarin Sergey | done | |
@@ -1086,7 +1086,7 @@
 |`selectedBackgroundColor`| Function |Samarin Sergey | done | |
 |`ellipsisMode`| Function |Samarin Sergey | done |  |
 |`enableDataDetector`| Function | Kirill Kirichenko | done |  |
-|`dataDetectorConfig`| Function | Samarin Sergey | testskipped | UT in progress Samarin Sergey |
+|`dataDetectorConfig`| Function | Samarin Sergey | done | |
 |`onTextSelectionChange`| Function | Kirill Kirichenko | done |  |
 |`fontFeature`| Function |Samarin Sergey | done |  |
 |`privacySensitive`| Function |Samarin Sergey | done |  |
