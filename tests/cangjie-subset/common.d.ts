@@ -82,7 +82,7 @@ declare class CommonMethod<T> {
 
     restoreId(value: number): T;
 
-    padding(value: Padding | Dimension): T;
+    padding(value: Padding): T;
 
     bindSheet(isShow: boolean, /* builder: CustomBuilder, */ options?: SheetOptions): T;
 
@@ -297,8 +297,8 @@ declare interface SheetOptions extends BindOptions {
     //~onWillDismiss?: Callback<DismissSheetAction>;
     //~onWillSpringBackWhenDismiss?: Callback<SpringBackAction>;
     enableOutsideInteractive?: boolean;
-    width?: Dimension;
-    borderWidth?: Dimension/*~ | EdgeWidths | LocalizedEdgeWidths*/;
+    // width?: Dimension;
+    // borderWidth?: Dimension/*~ | EdgeWidths | LocalizedEdgeWidths*/;
     // borderColor?: ResourceColor/*~ | EdgeColors */| LocalizedEdgeColors;
     borderStyle?: BorderStyle/*~ | EdgeStyles*/;
     // shadow?: ShadowOptions | ShadowStyle;
