@@ -1120,7 +1120,7 @@
 |`onCopy`|Function|Tuzhilkin Ivan|done|  |
 |`onCut`|Function|Tuzhilkin Ivan|done|  |
 |`onPaste`|Function|Tuzhilkin Ivan| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAOKSL |
-|`copyOption`|Function|Tuzhilkin Ivan|done|  |
+|`copyOption`|Function|Tuzhilkin Ivan| testskipped | UT in progress Tuzhilkin Ivan |
 |`enableKeyboardOnFocus`|Function|Tuzhilkin Ivan|done|  |
 |`maxLength`|Function|Tuzhilkin Ivan|done|  |
 |`style`|Function|Tuzhilkin Ivan|done|  |
@@ -1146,8 +1146,8 @@
 |`onDidDelete`|Function|Tuzhilkin Ivan|done |  |
 |`editMenuOptions`|Function| Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`enablePreviewText`|Function|Tuzhilkin Ivan|done|  |
-|`enableHapticFeedback`|Function|Tuzhilkin Ivan|done|  |
-|`inputFilter`|Function|Tuzhilkin Ivan|done|  |
+|`enableHapticFeedback`|Function|Tuzhilkin Ivan|done| UT in progress Tuzhilkin Ivan |
+|`inputFilter`|Function|Tuzhilkin Ivan| testskipped | UT in progress Tuzhilkin Ivan |
 |`showCounter`|Function|Tuzhilkin Ivan|done| https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
 |`customKeyboard`|Function| Erokhin Ilya | testskipped | Custom Builder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*TextClock*| *Component* |Pavelyev Ivan|in progress|  |
@@ -1170,7 +1170,7 @@
 |`placeholderColor`| Function | Spirin Andrey | done |  |
 |`textOverflow`| Function | Spirin Andrey | blocked AceEngine|https://gitee.com/openharmony/arkui_ace_engine/issues/IB57XU|
 |`textIndent`| Function | Spirin Andrey | done |  |
-|`placeholderFont`| Function | Spirin Andrey | testskipped |  |
+|`placeholderFont`| Function | Spirin Andrey | testskipped | UT in progress Tuzhilkin Ivan |
 |`enterKeyType`| Function | Spirin Andrey | done |  |
 |`caretColor`| Function | Spirin Andrey | done |  |
 |`onEditChanged`| Function | Spirin Andrey | testskipped |  |
