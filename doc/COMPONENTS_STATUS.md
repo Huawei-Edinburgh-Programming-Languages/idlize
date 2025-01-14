@@ -179,7 +179,7 @@
 |`defaultFocus`| Function | Dmitry A Smirnov| done | |
 |`groupDefaultFocus`| Function | Dmitry A Smirnov| done | |
 |`focusOnTouch`| Function | Dmitry A Smirnov| done | |
-|`focusBox`| Function | Dmitry A Smirnov| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
+|`focusBox`| Function | Dmitry A Smirnov| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX +|
 |`animation`| Function | Erokhin Ilya | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAXHJP|
 |`transition`| Function | Dmitry A Smirnov| testskipped | |
 |`motionBlur`| Function | Dmitry A Smirnov| testskipped | |
@@ -239,9 +239,9 @@
 |`motionPath`| Function | Lobah Mikhail | done | |
 |`shadow`| Function | Roman Sedaikin | done | |
 |`clip`| Function | Skroba Gleb |  blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
-|`clipShape`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
+|`clipShape`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH +|
 |`mask`| Function | Maksimov Nikita | done | |
-|`maskShape`| Function | Dmitry A Smirnov| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
+|`maskShape`| Function | Dmitry A Smirnov| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX +|
 |`key`| Function | Lobah Mikhail | done | |
 |`id`| Function | Erokhin Ilya | done |  |
 |`geometryTransition`| Function | Lobah Mikhail | done| |
@@ -269,7 +269,7 @@
 |`monopolizeEvents`| Function | Erokhin Ilya | testskipped | |
 |`onTouchIntercept`| Function | Andrey Khudenkikh | testskipped | UT in progress Andrey Khudenkikh |
 |`onSizeChange`| Function | Dmitry A Smirnov|testskipped | |
-|`customProperty`| Function | Dmitry A Smirnov|blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX|
+|`customProperty`| Function | Dmitry A Smirnov|blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX + need clrify bridge implementation|
 |`expandSafeArea`| Function | Dmitry A Smirnov|testskipped | |
 |`background`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`backgroundImage`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
@@ -1423,7 +1423,7 @@
 |*SideBarContainer*| *Component* |Dmitry A Smirnov|blocked|  |
 |`setSideBarContainerOptions`| Function |Dmitry A Smirnov|done|  |
 |`showSideBar`| Function |Dmitry A Smirnov|done|  |
-|`controlButton`| Function |Dmitry A Smirnov| blocked IDL | 1.parse PixelMap from CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR 2. default values https://gitee.com/openharmony/arkui_ace_engine/issues/IAW40V |
+|`controlButton`| Function |Dmitry A Smirnov| blocked IDL | 1.parse PixelMap from CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR 2. default values https://gitee.com/openharmony/arkui_ace_engine/issues/IAW40V +|
 |`showControlButton`| Function |Dmitry A Smirnov|done|  |
 |`onChange`| Function |Dmitry A Smirnov|done|  |
 |`sideBarWidth`| Function |Dmitry A Smirnov|done|  |
@@ -1493,9 +1493,9 @@
 |`setIsEditable`| Function | Andrey Khudenkikh | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
 |`getIsStrideAlignment`| Function | Andrey Khudenkikh | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
 |`setIsStrideAlignment`| Function | Andrey Khudenkikh | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
-|*EventEmulator*| *Class* | Dmitry A Smirnov | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 |
-|`emitClickEvent`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 |
-|`emitTextInputEvent`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 |
+|*EventEmulator*| *Class* | Dmitry A Smirnov | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 +|
+|`emitClickEvent`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 +|
+|`emitTextInputEvent`| Function | Dmitry A Smirnov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 +|
 |*ActionSheet*| *Class* | Ekaterina Stepanova | blocked IDL | |
 |`show`| Function | Ekaterina Stepanova | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBHHWA |
 |*AlertDialog*| *Class* | Ekaterina Stepanova | blocked IDL | |
