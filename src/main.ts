@@ -16,7 +16,7 @@
 import { program } from "commander"
 import * as fs from "fs"
 import * as path from "path"
-import { fromIDL, toIDL, generate, defaultCompilerOptions, idlToDtsString, Language } from "@idlize/core"
+import { fromIDL, toIDL, generate, defaultCompilerOptions, idlToDtsString, Language, findVersion } from "@idlize/core"
 import {
     forEachChild,
     IDLEntry,
@@ -26,8 +26,6 @@ import {
     toIDLString,
     transformMethodsAsync2ReturnPromise
 } from "@idlize/core/idl"
-import { LinterVisitor, toLinterString } from "./linter"
-import { LinterMessage } from "./LinterMessage"
 import { IDLVisitor } from "./IDLVisitor"
 import { TestGeneratorVisitor } from "./TestGeneratorVisitor"
 import { initRNG } from "./rand_utils"
@@ -63,9 +61,6 @@ const options = program
     .option('--idl2dts', 'Convert IDL to .d.ts definitions')
     .option('--idl2peer', 'Convert IDL to peer drafts')
     .option('--dts2skoala', 'Convert DTS to skoala definitions')
-    .option('--linter', 'Run linter')
-    .option('--linter-suppress-errors <suppress>', 'Error codes to suppress, comma separated, no space')
-    .option('--linter-whitelist <whitelist.json>', 'Whitelist for linter')
     .option('--verbose', 'Verbose processing')
     .option('--verify-idl', 'Verify produced IDL')
     .option('--common-to-attributes', 'Transform common attributes as IDL attributes')
@@ -97,16 +92,6 @@ const options = program
 
 let apiVersion = options.apiVersion ?? 9999
 
-function findVersion() {
-    if (process.env.npm_package_version) return process.env.npm_package_version
-    let packageJson = path.join(__dirname, '..', 'package.json')
-    try {
-        let json = fs.readFileSync(packageJson).toString()
-        return json ? JSON.parse(json).version : undefined
-    } catch (e) {
-        return undefined
-    }
-}
 
 if (process.env.npm_package_version) {
     console.log(`IDLize version ${findVersion()}`)
@@ -195,32 +180,6 @@ if (options.dts2skoala) {
                 }
 
                 console.log("All files processed.")
-            }
-        }
-    )
-    didJob = true
-}
-
-if (options.linter) {
-    const allEntries = new Array<LinterMessage[]>()
-    generate(
-        options.inputDir.split(','),
-        options.inputFile,
-        options.outputDir,
-        (sourceFile, typeChecker) => new LinterVisitor(sourceFile, typeChecker),
-        {
-            compilerOptions: defaultCompilerOptions,
-            onSingleFile: (entries: LinterMessage[]) => allEntries.push(entries),
-            onBegin: () => { },
-            onEnd: (outputDir) => {
-                const outFile = options.outputDir ? path.join(outputDir, "linter.txt") : undefined
-                const histogramFile = options.outputDir ? path.join(outputDir, "histogram.txt") : undefined
-                let [generated, exitCode, histogram] = toLinterString(allEntries, options.linterSuppressErrors, options.linterWhitelist)
-                console.log(histogram)
-                if (!outFile || options.verbose) console.log(generated)
-                if (outFile) fs.writeFileSync(outFile, generated)
-                if (histogramFile) fs.writeFileSync(histogramFile, histogram)
-                process.exit(exitCode)
             }
         }
     )
