@@ -25,8 +25,8 @@ const options = program
     .option('--input-dir <path>', 'Path to input dir(s), comma separated')
     .option('--output-dir <path>', 'Path to output dir')
     .option('--input-file <name>', 'Name of file to convert, all files in input-dir if none')
-    .option('--linter-suppress-errors <suppress>', 'Error codes to suppress, comma separated, no space')
-    .option('--linter-whitelist <whitelist.json>', 'Whitelist for linter')
+    .option('--suppress-errors <suppress>', 'Error codes to suppress, comma separated, no space')
+    .option('--whitelist <whitelist.json>', 'Whitelist for linter')
     .parse()
     .opts()
 
@@ -80,7 +80,7 @@ function main() {
             onEnd: (outputDir) => {
                 const outFile = options.outputDir ? path.join(outputDir, "linter.txt") : undefined
                 const histogramFile = options.outputDir ? path.join(outputDir, "histogram.txt") : undefined
-                let [generated, exitCode, histogram] = toLinterString(allEntries, options.linterSuppressErrors, options.linterWhitelist)
+                let [generated, exitCode, histogram] = toLinterString(allEntries, options.suppressErrors, options.whitelist)
                 console.log(histogram)
                 if (!outFile || options.verbose) console.log(generated)
                 if (outFile) fs.writeFileSync(outFile, generated)
