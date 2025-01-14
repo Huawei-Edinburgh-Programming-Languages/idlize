@@ -16,7 +16,7 @@
 import { program } from "commander"
 import * as fs from "fs"
 import * as path from "path"
-import { fromIDL, toIDL, generate, defaultCompilerOptions, idlToDtsString, Language, findVersion, GeneratorConfiguration, setDefaultConfig } from "@idlize/core"
+import { fromIDL, toIDL, generate, defaultCompilerOptions, idlToDtsString, Language, findVersion, GeneratorConfiguration, setDefaultConfiguration } from "@idlize/core"
 import {
     forEachChild,
     IDLEntry,
@@ -112,7 +112,7 @@ class DefaultConfig implements GeneratorConfiguration {
     }
 }
 
-setDefaultConfig(new DefaultConfig())
+setDefaultConfiguration(new DefaultConfig())
 
 if (options.dts2idl) {
     generate(

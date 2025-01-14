@@ -28,10 +28,10 @@ class EmptyGeneratorConfiguration implements GeneratorConfiguration {
 
 let currentConfig: GeneratorConfiguration = new EmptyGeneratorConfiguration()
 
-export function setDefaultConfig(config: GeneratorConfiguration): void {
+export function setDefaultConfiguration(config: GeneratorConfiguration): void {
     currentConfig = config
 }
 
-export function generatorConfig(): GeneratorConfiguration {
+export function generatorConfiguration(): GeneratorConfiguration {
     return currentConfig
 }
