@@ -162,6 +162,7 @@ build idlize-core:
     - cd $CI_PROJECT_DIR/core
   script:
     - npm run compile
+  needs: []
   artifacts:
     expire_in: 2 days
     paths:
@@ -177,6 +178,8 @@ build idlize-linter:
     - cd $CI_PROJECT_DIR/linter
   script:
     - npm run compile
+  needs:
+    - build idlize-core
   artifacts:
     expire_in: 2 days
     paths:
