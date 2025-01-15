@@ -805,6 +805,6 @@ function makePeerCallSignature(library: PeerLibrary, parameters: IDLParameter[],
 
 function suggestLibraryName(library: PeerLibrary) {
     let libraryName = library.files.filter(f => !f.isPredefined)[0].packageName()
-    libraryName = libraryName.replaceAll("@ohos", "ohos").replaceAll(".", "_").toUpperCase()
+    libraryName = libraryName.replaceAll("@", "").replaceAll(".", "_").toUpperCase()
     return libraryName
 }
