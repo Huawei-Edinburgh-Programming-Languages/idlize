@@ -418,7 +418,7 @@ export function printPeerFinalizer(peerClassBase: PeerClassBase, writer: Languag
 }
 
 export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isIDL: boolean, printerContext: PrinterContext, dumpSerialized: boolean,
-    methodPostfix: string, ptr: string, returnType: IDLType = IDLVoidType, generics?: string[]
+    methodPostfix: string, ptr: string | null, returnType: IDLType = IDLVoidType, mode: 'function' | 'method' = 'method'
 ) {
     const signature = method.method.signature as NamedMethodSignature
     let peerMethod = new Method(
@@ -426,7 +426,12 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
         new NamedMethodSignature(returnType, signature.args, signature.argsNames),
         method.method.modifiers, method.method.generics
     )
-    printer.writeMethodImplementation(peerMethod, (writer) => {
+
+    const write: (m:Method, f:(w:LanguageWriter) => void) => void = mode === 'method'
+        ? (m, f) => printer.writeMethodImplementation(m, f)
+        : (m, f) => printer.writeFunctionImplementation(m.name, m.signature, f)
+    
+    write(peerMethod, (writer) => {
         let scopes = method.argAndOutConvertors.filter(it => it.isScoped)
         scopes.forEach(it => {
             writer.pushIndent()
@@ -460,7 +465,7 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
             })
         }
         let params: LanguageExpression[] = []
-        if (method.hasReceiver()) {
+        if (method.hasReceiver() && ptr !== null) {
             params.push(writer.makeString(ptr))
         }
         let serializerPushed = false

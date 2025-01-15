@@ -165,8 +165,13 @@ export function getInternalClassName(name: string): string {
     return `${name}Internal`
 }
 
+export function getMaterializedFileName(name:string): string {
+     const pascalCase = name.split('_').map(x => capitalize(x)).join('')
+    return `Ark${pascalCase}Materialized`
+}
+
 export function collectMaterializedImports(imports: ImportsCollector, library: PeerLibrary) {
     for (const materialized of library.materializedClasses.values()) {
-        imports.addFeature(getInternalClassName(materialized.className), `./Ark${materialized.className}Materialized`)
+        imports.addFeature(getInternalClassName(materialized.className), `./${getMaterializedFileName(materialized.className)}`)
     }
 }
