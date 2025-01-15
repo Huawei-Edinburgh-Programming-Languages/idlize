@@ -3,7 +3,7 @@ import { PeerLibrary } from "../peer-generation/PeerLibrary"
 import { BridgesPrinter } from "./BridgesPrinter"
 import { forceWriteFile } from "@idlize/core"
 import { NativeModulePrinter } from "./NativeModulePrinter"
-
+import * as fs from "fs"
 
 export class LibarktsConfig {
     static implPrefix = `impl_`
@@ -24,6 +24,11 @@ export class LibarktsConfig {
         return `${LibarktsConfig.nativeModulePrefix}${name}`
     }
 }
+
+export function readTemplate(name: string): string {
+    return fs.readFileSync(path.join(__dirname, `./${name}`), 'utf8')
+}
+
 export class LibarktsGenerator {
     constructor(
         private outDir: string,
@@ -42,7 +47,11 @@ export class LibarktsGenerator {
         )
         forceWriteFile(
             path.join(this.outDir, this.nativeModuleFile),
-            this.nativeModulePrinter.print()
+            readTemplate("Es2PandaNativeModule.ts")
+                .replaceAll(
+                    "%GENERATED_PART%",
+                    this.nativeModulePrinter.print()
+                )
         )
     }
 }
