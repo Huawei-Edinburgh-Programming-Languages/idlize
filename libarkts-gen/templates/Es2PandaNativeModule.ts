@@ -14,7 +14,7 @@
  */
 
 import {
-    KNativePointer as KPtr,
+    KNativePointer,
     KInt,
     KBoolean,
     KNativePointer,
@@ -23,7 +23,7 @@ import {
 } from "@koalaui/interop"
 
 // TODO: this type should be in interop
-export type KPtrArray = BigUint64Array
+export type KNativePointerArray = BigUint64Array
 
 %GENERATED_PART%
 

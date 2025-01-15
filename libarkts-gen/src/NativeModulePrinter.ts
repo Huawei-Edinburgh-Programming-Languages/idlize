@@ -20,7 +20,6 @@ import {
     Language,
     throwException
 } from "@idlize/core"
-import { PeerLibrary } from "../peer-generation/PeerLibrary"
 import {
     IDLEntry,
     IDLInterface,
@@ -30,32 +29,43 @@ import {
     IDLPointerType,
     IDLI32Type,
 } from "@idlize/core/idl"
-import { MethodSignature, createLanguageWriter } from "../peer-generation/LanguageWriters"
-import { createEmptyReferenceResolver } from "../peer-generation/ReferenceResolver"
+// TODO: need language writers extracted to @idl/core :-()
+// import { MethodSignature, createLanguageWriter } from "../../src/peer-generation/LanguageWriters"
 import { LibarktsConfig } from "./LibarktsGenerator"
+import { IDLParameter, IndentedPrinter } from "@idlize/core"
+import { convertType } from "@idlize/core"
+import { NativeTypeConvertor } from "./NativeTypeConvertor"
+import { IDLFile } from "./Es2PandaTransformer"
 
 
 export class NativeModulePrinter {
     constructor(
-        private library: PeerLibrary
+        private idl: IDLFile
     ) { }
 
-    private writer = createLanguageWriter(Language.TS, createEmptyReferenceResolver())
+    // private writer = createLanguageWriter(Language.TS, createEmptyReferenceResolver())
+    private printer = new IndentedPrinter()
+    private convertor = new NativeTypeConvertor(this.idl.entries)
 
     print(): string {
-        this.writer.writeInterface(
-            LibarktsConfig.nativeModuleName,
-            _ => {
-                this.printInterfaceContents()
-            }
-        )
-        return this.writer.printer.getOutput().join('\n')
+        // this.writer.writeInterface(
+        //     LibarktsConfig.nativeModuleName,
+        //     _ => {
+        //         this.printInterfaceContents()
+        //     }
+        // )
+        // return this.writer.printer.getOutput().join('\n')
+
+        this.printer.print(`export interface ${LibarktsConfig.nativeModuleName} {`)
+        this.printer.withIndent(() => {
+            this.idl.entries.forEach(it => this.visit(it))
+        })
+        this.printer.print(`}`)
+        return this.printer.getOutput().join('\n')
     }
 
     printInterfaceContents() {
-        this.library.files
-            .flatMap(it => it.entries)
-            .forEach(it => this.visit(it))
+        this.idl.entries.forEach(it => this.visit(it))
     }
 
     private visit(node: IDLEntry): void {
@@ -77,7 +87,14 @@ export class NativeModulePrinter {
     }
 
     private convertReturnType(type: IDLType): IDLType {
-        return IDLPointerType
+        // if (IDLContainerUtils.isSequence(type))
+        //     return IDLPointerType
+        // else
+        return type
+    }
+
+    private mapType(node: IDLType): string {
+        return convertType(this.convertor, node)
     }
 
     private printMethod(iface: IDLInterface, method: IDLMethod): void {
@@ -90,16 +107,29 @@ export class NativeModulePrinter {
             parameterTypes.push(IDLI32Type)
         }
 
-        const adjustedSignature = new MethodSignature(
-            this.convertReturnType(method.returnType),
-            parameterTypes,
-            [],
-            undefined
-        )
+        // const adjustedSignature = new MethodSignature(
+        //     this.convertReturnType(method.returnType),
+        //     parameterTypes,
+        //     [],
+        //     undefined
+        // )
 
-        this.writer.writeMethodDeclaration(
-            LibarktsConfig.nativeModuleFunction(LibarktsConfig.methodFunction(iface.name, method.name)),
-            adjustedSignature
-        )
+        // this.writer.writeMethodDeclaration(
+        //     LibarktsConfig.nativeModuleFunction(LibarktsConfig.methodFunction(iface.name, method.name)),
+        //     adjustedSignature
+        // )
+
+        this.printer.print(this.printFunction(iface.name, method.name, parameterTypes, method.returnType))
+    }
+
+    printFunction(ifaceName: string, methodName: string, parameterTypes: IDLType[], returnType: IDLType) {
+        const name = LibarktsConfig.nativeModuleFunction(LibarktsConfig.methodFunction(ifaceName, methodName))
+        const parameters = parameterTypes.map((it, index) => this.printParameter(it, index)).join(", ")
+        const retType = this.mapType(returnType)
+        return `${name}(${parameters}): ${retType}`
+    }
+
+    printParameter(parameter: IDLType, index: number): string {
+        return `arg${index}: ${this.mapType(parameter)}`
     }
 }

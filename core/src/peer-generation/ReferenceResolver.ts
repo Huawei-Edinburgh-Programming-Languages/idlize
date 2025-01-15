@@ -13,8 +13,7 @@
  * limitations under the License.
  */
 
-import * as idl from '@idlize/core/idl'
-import { PeerLibrary } from "./PeerLibrary";
+import * as idl from '../idl'
 
 export interface ReferenceResolver {
     resolveTypeReference(type: idl.IDLReferenceType, entries?: idl.IDLEntry[]): idl.IDLEntry | undefined
@@ -30,10 +29,6 @@ export function createEmptyReferenceResolver(): ReferenceResolver {
             return type
         }
     }
-}
-
-export function getReferenceResolver(library: PeerLibrary): ReferenceResolver {
-    return library
 }
 
 /** Please do not store any global instances */
