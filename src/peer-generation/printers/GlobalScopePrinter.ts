@@ -96,6 +96,11 @@ class GlobalScopePrinter {
 }
 
 export function printGlobal(peerLibrary: PeerLibrary): Map<TargetFile, string> {
+
+    if (peerLibrary.globalScopeInterfaces.flatMap(x => x.methods).length === 0) {
+        return new Map([])
+    }
+
     const content = GlobalScopePrinter
         .create(peerLibrary)
         .visit()
