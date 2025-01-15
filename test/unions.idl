@@ -25,7 +25,7 @@ interface Boolean {
 };
 
 
-// Test cases. The test tries to discriminate each property's type
+// Test cases. We should be able to discriminate each property's type
 interface TestCases {
     attribute (Length or number or Parity) testLengthNumberEnum;
     attribute (sequence<number> or ArrayBuffer) testArrayBuffer;
