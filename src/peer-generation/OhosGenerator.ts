@@ -406,7 +406,6 @@ class OHOSVisitor {
                     let scopes = argConvertors.filter(it => it.isScoped)
                     scopes.forEach(it => {
                         writer.pushIndent()
-                        writer.print(it.scopeStart?.(it.param, writer.language))
                     })
 
                     let serializerPushed = false
@@ -449,7 +448,6 @@ class OHOSVisitor {
                                 writer.makeMethodCall('thisSerializer', 'release', [])))
                             scopes.reverse().forEach(it => {
                                 writer.popIndent()
-                                writer.print(it.scopeEnd!(it.param, writer.language))
                             })
                         }
                     })
@@ -500,7 +498,6 @@ class OHOSVisitor {
                         let scopes = adjustedSignature.convertors.filter(it => it.isScoped)
                         scopes.forEach(it => {
                             writer.pushIndent()
-                            writer.print(it.scopeStart?.(it.param, writer.language))
                         })
                         let serializerCreated = false
                         adjustedSignature.convertors.forEach((it) => {
@@ -543,7 +540,6 @@ class OHOSVisitor {
                                 writer.makeMethodCall('thisSerializer', 'release', [])))
                             scopes.reverse().forEach(it => {
                                 writer.popIndent()
-                                writer.print(it.scopeEnd!(it.param, writer.language))
                             })
                         }
                         if (adjustedSignature.returnType !== IDLVoidType) {
