@@ -143,7 +143,7 @@ build idlize:
     - !reference [.setup, script]
     - cd $CI_PROJECT_DIR
   script:
-    - npm run compile && npm run webidl2
+    - npm run compile
   artifacts:
     expire_in: 2 days
     paths:
