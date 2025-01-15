@@ -23,8 +23,8 @@ import { IndentedPrinter, Language, warn, isImportAttr, isStringEnum } from '@id
 import { createTypeNameConvertor } from './LanguageWriters';
 import { LanguageWriter } from '@idlize/core';
 import { StructPrinter } from './printers/StructPrinter';
-import { BooleanConvertor, CustomTypeConvertor, LengthConvertor, NumberConvertor, UndefinedConvertor, VoidConvertor } from './ArgConvertors';
-import { ArgConvertor } from '@idlize/core';
+import { CustomTypeConvertor, LengthConvertor, NumberConvertor } from './ArgConvertors';
+import { ArgConvertor, BooleanConvertor, UndefinedConvertor, VoidConvertor } from '@idlize/core';
 import { generateSyntheticFunctionName } from '../IDLVisitor';
 import { IdlNameConvertor } from '@idlize/core';
 import { LibraryInterface } from '../LibraryInterface';

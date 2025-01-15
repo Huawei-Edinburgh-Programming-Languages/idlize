@@ -17,8 +17,6 @@ import * as idl from  '@idlize/core/idl'
 import { IDLNumberType, IDLType } from '@idlize/core/idl'
 import { IndentedPrinter, Language, CJKeywords, isDefined } from  '@idlize/core'
 import { ArgConvertor, BaseArgConvertor, RuntimeType } from "@idlize/core"
-import { EnumConvertor } from "../../ArgConvertors"
-import { ReferenceResolver } from "@idlize/core"
 import {
     AssignStatement,
     ExpressionStatement,
@@ -47,7 +45,7 @@ class CJLambdaExpression extends LambdaExpression {
     constructor(
         protected writer: LanguageWriter,
         signature: MethodSignature,
-        resolver: ReferenceResolver,
+        resolver: idl.ReferenceResolver,
         body?: LanguageStatement[]) {
         super(writer, signature, resolver, body)
     }
@@ -274,12 +272,12 @@ class CJArrayResizeStatement implements LanguageStatement {
 export class CJLanguageWriter extends LanguageWriter {
     protected typeConvertor: IdlNameConvertor
     protected typeForeignConvertor: IdlNameConvertor
-    constructor(printer: IndentedPrinter, resolver:ReferenceResolver, language: Language = Language.CJ) {
+    constructor(printer: IndentedPrinter, resolver: idl.ReferenceResolver, language: Language = Language.CJ) {
         super(printer, resolver, language)
         this.typeConvertor = new CJIDLNodeToStringConvertor(this.resolver)
         this.typeForeignConvertor = new CJIDLTypeToForeignStringConvertor(this.resolver)
     }
-    fork(options?: { resolver?: ReferenceResolver }): LanguageWriter {
+    fork(options?: { resolver?: idl.ReferenceResolver }): LanguageWriter {
         return new CJLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver)
     }
     getNodeName(type: idl.IDLNode): string {
@@ -418,7 +416,7 @@ export class CJLanguageWriter extends LanguageWriter {
         let signture = `${signature.args.map((it, index) => `${this.escapeKeyword(signature.argName(index))}: ${this.typeForeignConvertor.convert(it)}`).join(", ")}`
         this.print(`func ${name}(${signture}): ${this.typeForeignConvertor.convert(signature.returnType)}`)
     }
-    override makeEnumCast(enumName: string, _unsafe: boolean, _convertor: EnumConvertor | undefined): string {
+    override makeEnumCast(enumName: string, _unsafe: boolean, _convertor: ArgConvertor | undefined): string {
         return `${enumName}.value`
     }
     makeAssign(variableName: string, type: IDLType | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {

@@ -28,8 +28,7 @@ import { isDefined, Language, throwException, typeOrUnion } from '@idlize/core'
 import { callbackIdByInfo, canProcessCallback, convertIdlToCallback } from "./EventsPrinter";
 import { PeerMethod } from "../PeerMethod";
 import { PeerLibrary } from "../PeerLibrary";
-import { UndefinedConvertor } from '../ArgConvertors';
-import { ArgConvertor } from "@idlize/core"
+import { ArgConvertor, UndefinedConvertor } from "@idlize/core"
 import { ReferenceResolver } from "@idlize/core"
 import { UnionRuntimeTypeChecker } from "../unions";
 import { zipMany } from '../../utils';

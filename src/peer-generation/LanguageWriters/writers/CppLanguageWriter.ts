@@ -41,11 +41,10 @@ import {
     CLikeLanguageWriter,
     CLikeLoopStatement,
     CLikeReturnStatement
-} from "./CLikeLanguageWriter"
+} from "@idlize/core"
 import { ReferenceResolver } from "@idlize/core"
 import { IdlNameConvertor } from "@idlize/core"
 import { CppIDLNodeToStringConvertor } from "../convertors/CppConvertors"
-import * as idl from '@idlize/core/idl'
 import { EnumConvertor } from "../../ArgConvertors";
 
 ////////////////////////////////////////////////////////////////

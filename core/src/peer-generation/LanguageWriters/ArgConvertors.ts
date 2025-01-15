@@ -89,3 +89,61 @@ export abstract class BaseArgConvertor implements ArgConvertor {
         ])
     }
 }
+
+export class BooleanConvertor extends BaseArgConvertor {
+    constructor(param: string) {
+        super(idl.IDLBooleanType, [RuntimeType.BOOLEAN], false, false, param)
+    }
+    convertorArg(param: string, writer: LanguageWriter): string {
+        return writer.castToBoolean(param)
+    }
+    convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
+        printer.writeMethodCall(`${param}Serializer`, "writeBoolean", [value])
+    }
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
+        return assigneer(writer.makeString(`${deserializerName}.readBoolean()`))
+    }
+    nativeType(): idl.IDLType {
+        return idl.IDLBooleanType
+    }
+    interopType(): idl.IDLType {
+        return idl.IDLBooleanType
+    }
+    isPointerType(): boolean {
+        return false
+    }
+}
+
+export class UndefinedConvertor extends BaseArgConvertor {
+    constructor(param: string) {
+        super(idl.IDLUndefinedType, [RuntimeType.UNDEFINED], false, false, param)
+    }
+    convertorArg(param: string, writer: LanguageWriter): string {
+        return writer.makeUndefined().asString()
+    }
+    convertorSerialize(param: string, value: string, printer: LanguageWriter): void {}
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
+        return assigneer(writer.makeUndefined())
+    }
+    nativeType(): idl.IDLType {
+        return idl.IDLUndefinedType
+    }
+    interopType(): idl.IDLType {
+        return idl.IDLUndefinedType
+    }
+    isPointerType(): boolean {
+        return false
+    }
+}
+
+export class VoidConvertor extends UndefinedConvertor {
+    convertorArg(param: string, writer: LanguageWriter): string {
+        return writer.makeVoid().asString()
+    }
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
+        return assigneer(writer.makeVoid())
+    }
+    nativeType(): idl.IDLType {
+        return idl.IDLVoidType
+    }
+}

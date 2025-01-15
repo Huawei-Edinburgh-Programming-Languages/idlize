@@ -34,7 +34,7 @@ import {
     CLikeLanguageWriter,
     CLikeLoopStatement,
     CLikeReturnStatement
-} from "./CLikeLanguageWriter"
+} from "@idlize/core"
 import * as idl from '@idlize/core/idl'
 import { ArgConvertor, BaseArgConvertor, RuntimeType } from "@idlize/core"
 import { ReferenceResolver } from "@idlize/core"

@@ -14,6 +14,8 @@
  */
 
 // import { TypeConvertor } from "../../src/peer-generation/LanguageWriters/nameConvertor"
+import { TypeConvertor } from "@idlize/core"
+import { PeerLibrary } from "../peer-generation/PeerLibrary"
 import {
     IDLBooleanType,
     IDLContainerType,
