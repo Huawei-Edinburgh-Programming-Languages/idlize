@@ -1146,7 +1146,7 @@
 |`onDidDelete`|Function|Tuzhilkin Ivan|done |  |
 |`editMenuOptions`|Function| Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`enablePreviewText`|Function|Tuzhilkin Ivan|done|  |
-|`enableHapticFeedback`|Function|Tuzhilkin Ivan|done| UT in progress Tuzhilkin Ivan |
+|`enableHapticFeedback`|Function|Tuzhilkin Ivan|done| |
 |`inputFilter`|Function|Tuzhilkin Ivan| testskipped | UT in progress Tuzhilkin Ivan |
 |`showCounter`|Function|Tuzhilkin Ivan|done| https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
 |`customKeyboard`|Function| Erokhin Ilya | testskipped | Custom Builder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
