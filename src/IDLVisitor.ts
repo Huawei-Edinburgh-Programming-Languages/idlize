@@ -318,7 +318,6 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
                 this.output.push(typedef)
         } else if (ts.isFunctionDeclaration(node)) {
             const method = this.serializeMethod(node, undefined, true)
-            method.isStatic = true
             this.globalFunctions.push(method)
         } else if (ts.isVariableStatement(node)) {
             this.globalConstants.push(...this.serializeConstants(node)) // TODO: Initializers are not allowed in ambient contexts (d.ts).
@@ -1345,7 +1344,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             escapedMethodName,
             methodParameters.map(it => this.serializeParameter(it, nameSuggestion)),
             returnType, {
-            isStatic: isStatic(method.modifiers),
+            isStatic: isGlobal || isStatic(method.modifiers),
             isOptional: !!method.questionToken,
             isAsync: isAsync(method.modifiers),
         }, {
