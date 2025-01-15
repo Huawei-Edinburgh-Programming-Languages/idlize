@@ -222,6 +222,7 @@ export function generateArkoalaFromIdl(config: {
             integrated: true,
             message: "producing [idl]"
         })
+        globalScopeFiles.push(outGlobalFile)
     }
     const builderClasses = printBuilderClasses(peerLibrary, context, config.dumpSerialized)
     for (const [targetFile, builderClass] of builderClasses) {
@@ -390,7 +391,7 @@ export function generateArkoalaFromIdl(config: {
         )
         writeFile(
             arkoala.arktsLib(new TargetFile('index')),
-            makeArkuiModule(arkuiComponentsFiles),
+            makeArkuiModule(arkuiComponentsFiles.concat(globalScopeFiles)),
             {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true

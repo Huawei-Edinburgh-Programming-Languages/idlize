@@ -64,7 +64,15 @@ export class MaterializedMethod extends PeerMethod {
     override get dummyReturnValue(): string | undefined {
         if (this.method.name === "ctor") return `(${this.originalParentName}Peer*) 100`
         if (this.method.name === "getFinalizer") return `fnPtr<KNativePointer>(dummyClassFinalizer)`
-        if (this.method.modifiers?.includes(MethodModifier.STATIC)) return `(void*) 300`
+        if (this.method.modifiers?.includes(MethodModifier.STATIC)) {
+            if (this.method.signature.returnType === idl.IDLNumberType) {
+                return '100'
+            }
+            if (this.method.signature.returnType === idl.IDLBooleanType) {
+                return '0'
+            }
+            return `(void*) 300`
+        }
         return undefined;
     }
 
@@ -140,6 +148,10 @@ export class MaterializedClass implements PeerClassBase {
 
     generatedName(isCallSignature: boolean): string{
         return this.className
+    }
+
+    isGlobalScope() {
+        return idl.hasExtAttribute(this.decl, idl.IDLExtendedAttributes.GlobalScope)
     }
 }
 
