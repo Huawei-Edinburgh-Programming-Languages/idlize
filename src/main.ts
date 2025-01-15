@@ -40,7 +40,7 @@ import { generateOhos } from "./peer-generation/OhosGenerator"
 import { generateArkoalaFromIdl, generateLibaceFromIdl } from "./peer-generation/arkoala"
 import { loadPlugin } from "./peer-generation/plugin-api"
 import { SkoalaDeserializerPrinter } from "./peer-generation/printers/SkoalaDeserializerPrinter"
-import { PrimitiveType } from "./peer-generation/ArkPrimitiveType"
+import { ArkPrimitiveType } from "./peer-generation/ArkPrimitiveType"
 
 import { IdlSkoalaLibrary, IldSkoalaFile } from "./skoala-generation/idl/idlSkoalaLibrary"
 import { generateIdlSkoala } from "./skoala-generation/SkoalaGeneration"
@@ -146,7 +146,7 @@ if (options.dts2idl) {
 }
 
 if (options.dts2skoala) {
-    PrimitiveType.Prefix = ""
+    ArkPrimitiveType.Prefix = ""
 
     const outputDir: string = options.outputDir ?? "./out/skoala"
 
@@ -346,7 +346,7 @@ if (options.dts2peer) {
                 if (options.generatorTarget == "ohos") {
                     // This setup code placed here because wrong prefix may be cached during library creation
                     // TODO find better place for setup?
-                    PrimitiveType.Prefix = "OH_"
+                    ArkPrimitiveType.Prefix = "OH_"
                 }
                 fillSyntheticDeclarations(idlLibrary)
                 const peerProcessor = new IdlPeerProcessor(idlLibrary)

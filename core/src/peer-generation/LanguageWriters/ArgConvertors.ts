@@ -17,6 +17,7 @@ import * as idl from "../../idl";
 import { Language } from "../../Language";
 import { LanguageExpression, LanguageStatement, LanguageWriter, ExpressionAssigner } from "./LanguageWriter";
 import { RuntimeType } from "./common";
+import { PrimitiveType } from "../PrimitiveType";
 
 export interface ArgConvertor {
     param: string
@@ -145,5 +146,44 @@ export class VoidConvertor extends UndefinedConvertor {
     }
     nativeType(): idl.IDLType {
         return idl.IDLVoidType
+    }
+}
+
+export class StringConvertor extends BaseArgConvertor {
+    private literalValue?: string
+    constructor(param: string, private primitiveType: PrimitiveType) {
+        super(idl.IDLStringType, [RuntimeType.STRING], false, false, param)
+    }
+    convertorArg(param: string, writer: LanguageWriter): string {
+        return writer.language == Language.CPP ? `(const ${this.primitiveType.getText()}*)&${param}` : param
+    }
+    convertorSerialize(param: string, value: string, writer: LanguageWriter): void {
+        writer.writeMethodCall(`${param}Serializer`, `writeString`, [value])
+    }
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
+        return assigneer(writer.makeCast(
+            writer.makeString(`${deserializerName}.readString()`),
+            this.idlType, { optional: false }
+        ))
+    }
+    nativeType(): idl.IDLType {
+        return idl.IDLStringType
+    }
+    interopType(): idl.IDLType {
+        return idl.IDLStringType
+    }
+    isPointerType(): boolean {
+        return true
+    }
+    override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
+        return this.literalValue
+            ? writer.makeString(`${value} === "${this.literalValue}"`)
+            : undefined
+    }
+    targetType(writer: LanguageWriter): string {
+        if (this.literalValue) {
+            return writer.getNodeName(idl.IDLStringType)
+        }
+        return super.targetType(writer);
     }
 }

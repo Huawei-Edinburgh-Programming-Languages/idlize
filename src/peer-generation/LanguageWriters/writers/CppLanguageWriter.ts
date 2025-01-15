@@ -16,7 +16,7 @@
 import { createReferenceType, forceAsNamedNode, IDLContainerType, IDLEnum, IDLNode, IDLType, IDLUint8ArrayType, IDLVoidType } from '@idlize/core'
 import { IndentedPrinter, cppKeywords, Language, throwException } from '@idlize/core'
 import { ArgConvertor, BaseArgConvertor, RuntimeType } from "@idlize/core"
-import { PrimitiveType } from "../../ArkPrimitiveType"
+import { ArkPrimitiveType } from "../../ArkPrimitiveType"
 import {
     AssignStatement,
     BlockStatement,
@@ -55,7 +55,7 @@ export class CppCastExpression implements LanguageExpression {
     constructor(public convertor:IdlNameConvertor, public value: LanguageExpression, public type: IDLType, private options?:MakeCastOptions) {}
     asString(): string {
         if (forceAsNamedNode(this.type).name === "Tag") {
-            return `${this.value.asString()} == ${PrimitiveType.UndefinedRuntime} ? ${PrimitiveType.UndefinedTag} : ${PrimitiveType.ObjectTag}`
+            return `${this.value.asString()} == ${ArkPrimitiveType.UndefinedRuntime} ? ${ArkPrimitiveType.UndefinedTag} : ${ArkPrimitiveType.ObjectTag}`
         }
         let resultName = ''
         if (this.options?.overrideTypeName) {
@@ -246,7 +246,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
 
 
     override makeTag(tag: string): string {
-        return PrimitiveType.Prefix.toLocaleUpperCase() + "TAG_" + tag
+        return ArkPrimitiveType.Prefix.toLocaleUpperCase() + "TAG_" + tag
     }
     override makeRef(type: IDLType | string, options?:MakeRefOptions): IDLType {
         if (typeof type === 'string') {
@@ -336,10 +336,10 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         return value
     }
     makeUndefined(): LanguageExpression {
-        return this.makeString(`${PrimitiveType.Undefined.getText()}()`)
+        return this.makeString(`${ArkPrimitiveType.Undefined.getText()}()`)
     }
     makeVoid(): LanguageExpression {
-        return this.makeString(`${PrimitiveType.Void.getText()}()`)
+        return this.makeString(`${ArkPrimitiveType.Void.getText()}()`)
     }
     makeRuntimeType(rt: RuntimeType): LanguageExpression {
         return this.makeString(`INTEROP_RUNTIME_${RuntimeType[rt]}`)

@@ -16,7 +16,7 @@
 import * as idl from "@idlize/core/idl"
 import { IndentedPrinter, Language, camelCaseToUpperSnakeCase, isImportAttr, isStringEnum } from "@idlize/core"
 import { RuntimeType } from "@idlize/core"
-import { PrimitiveType } from "../ArkPrimitiveType"
+import { ArkPrimitiveType } from "../ArkPrimitiveType"
 import { createLanguageWriter, LanguageExpression, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters"
 import { LanguageWriter } from "@idlize/core"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig"
@@ -112,7 +112,7 @@ export class StructPrinter {
                 forwardDeclarations.print(`typedef struct ${nameAssigned} ${nameAssigned};`)
                 this.printStructsCHead(nameAssigned, target, concreteDeclarations)
                 if (idl.isUnionType(target)) {
-                    concreteDeclarations.print(`${PrimitiveType.Prefix}Int32 selector;`)
+                    concreteDeclarations.print(`${ArkPrimitiveType.Prefix}Int32 selector;`)
                     concreteDeclarations.print("union {")
                     concreteDeclarations.pushIndent()
                     target.types.forEach((it, index) =>
@@ -134,20 +134,20 @@ export class StructPrinter {
                         fieldNames = ["array"]
                     }
                     if (idl.IDLContainerUtils.isRecord(target)) {
-                        concreteDeclarations.print(`${PrimitiveType.Int32.getText()} size;`)
+                        concreteDeclarations.print(`${ArkPrimitiveType.Int32.getText()} size;`)
                             fieldNames = ["keys", "values"]
                     }
                     target.elementType.forEach((it, index) => {
                         concreteDeclarations.print(`${structs.getNodeName(it)}* ${fieldNames[index]};`)
                     })
                     if (idl.IDLContainerUtils.isSequence(target)) {
-                        concreteDeclarations.print(`${PrimitiveType.Int32.getText()} length;`)
+                        concreteDeclarations.print(`${ArkPrimitiveType.Int32.getText()} length;`)
                     }
                 } else if (idl.isCallback(target)) {
-                    concreteDeclarations.print(`${PrimitiveType.Prefix}CallbackResource resource;`)
+                    concreteDeclarations.print(`${ArkPrimitiveType.Prefix}CallbackResource resource;`)
                     const args = generateCallbackAPIArguments(this.library, target)
                     concreteDeclarations.print(`void (*call)(${args.join(', ')});`)
-                    const syncArgs = [`${PrimitiveType.Prefix}VMContext context`].concat(args)
+                    const syncArgs = [`${ArkPrimitiveType.Prefix}VMContext context`].concat(args)
                     concreteDeclarations.print(`void (*callSync)(${syncArgs.join(', ')});`)
                 }
                 this.printStructsCTail(nameAssigned, concreteDeclarations)
@@ -155,7 +155,7 @@ export class StructPrinter {
                 this.generateWriteToString(nameAssigned, target, writeToString, isPointer)
                 this.printOptionalIfNeeded(forwardDeclarations, concreteDeclarations, writeToString, target, seenNames)
             } else if (isAccessor) {
-                forwardDeclarations.print(`typedef ${PrimitiveType.Materialized.getText()} ${nameAssigned};`)
+                forwardDeclarations.print(`typedef ${ArkPrimitiveType.Materialized.getText()} ${nameAssigned};`)
                 this.printOptionalIfNeeded(forwardDeclarations, concreteDeclarations, writeToString, target, seenNames)
             } else {
                 if (!noBasicDecl && !idl.isPrimitiveType(target))
@@ -169,7 +169,7 @@ export class StructPrinter {
         structs.concat(concreteDeclarations)
         // TODO: hack, remove me!
         if (this.library.name == "") { // TODO we probably don't need this typedef for any library except Ark
-            typedefs.print(`typedef ${PrimitiveType.OptionalPrefix}Length ${PrimitiveType.OptionalPrefix}Dimension;`)
+            typedefs.print(`typedef ${ArkPrimitiveType.OptionalPrefix}Length ${ArkPrimitiveType.OptionalPrefix}Dimension;`)
         }
     }
 
@@ -185,20 +185,20 @@ export class StructPrinter {
         const nameAssigned = concreteDeclarations.getNodeName(target)
         const nameOptional = idl.isType(target)
             ? concreteDeclarations.getNodeName(idl.createOptionalType(target))
-            : PrimitiveType.OptionalPrefix + cleanPrefix(concreteDeclarations.getNodeName(target as idl.IDLEntry), PrimitiveType.Prefix)
-        
+            : ArkPrimitiveType.OptionalPrefix + cleanPrefix(concreteDeclarations.getNodeName(target as idl.IDLEntry), ArkPrimitiveType.Prefix)
+
         if (forceOptianal) {
             if (seenNames.has(nameOptional)) {
                 return
             }
         }
-        
+
         seenNames.add(nameOptional)
 
         if (nameAssigned !== "Optional" && nameAssigned !== "RelativeIndexable") {
             forwardDeclarations?.print(`typedef struct ${nameOptional} ${nameOptional};`)
             this.printStructsCHead(nameOptional, target, concreteDeclarations)
-            concreteDeclarations.print(`${PrimitiveType.Tag.getText()} tag;`)
+            concreteDeclarations.print(`${ArkPrimitiveType.Tag.getText()} tag;`)
             concreteDeclarations.print(`${nameAssigned} value;`)
             this.printStructsCTail(nameOptional, concreteDeclarations)
             this.writeOptional(nameOptional, writeToString, isPointer)
@@ -293,15 +293,15 @@ export class StructPrinter {
         printer.print(`inline void WriteToString(std::string* result, const ${nameOptional}* value) {`)
         printer.pushIndent()
         printer.print(`result->append("{.tag=");`)
-        printer.print(`result->append(tagNameExact((${PrimitiveType.Tag.getText()})(value->tag)));`)
+        printer.print(`result->append(tagNameExact((${ArkPrimitiveType.Tag.getText()})(value->tag)));`)
         printer.print(`result->append(", .value=");`)
-        printer.print(`if (value->tag != ${PrimitiveType.UndefinedTag}) {`)
+        printer.print(`if (value->tag != ${ArkPrimitiveType.UndefinedTag}) {`)
         printer.pushIndent()
         printer.print(`WriteToString(result, ${isPointer ? "&" : ""}value->value);`)
         printer.popIndent()
         printer.print(`} else {`)
         printer.pushIndent()
-        printer.print(`${PrimitiveType.Undefined.getText()} undefined = { 0 };`)
+        printer.print(`${ArkPrimitiveType.Undefined.getText()} undefined = { 0 };`)
         printer.print(`WriteToString(result, undefined);`)
         printer.popIndent()
         printer.print(`}`)
@@ -387,7 +387,7 @@ inline void WriteToString(std::string* result, const ${name}* value) {
             printer.print(`inline void WriteToString(std::string* result, const ${name} value) {`)
             printer.pushIndent()
             printer.print(`result->append("${name}(");`)
-            printer.print(`WriteToString(result, (${PrimitiveType.Int32.getText()}) value);`)
+            printer.print(`WriteToString(result, (${ArkPrimitiveType.Int32.getText()}) value);`)
             printer.print(`result->append(")");`)
             printer.popIndent()
             printer.print(`}`)
@@ -445,7 +445,7 @@ inline void WriteToString(std::string* result, const ${name}* value) {
                         const isPointerField = this.isPointerDeclaration(this.library.toDeclaration(field.type), field.isOptional)
                         printer.print(`WriteToString(result, ${isPointerField ? "&" : ""}value${access}${field.name});`)
                         if (index == 0) {
-                            printer.print(`if (value${access}${field.name} != ${PrimitiveType.UndefinedTag}) {`)
+                            printer.print(`if (value${access}${field.name} != ${ArkPrimitiveType.UndefinedTag}) {`)
                             printer.pushIndent()
                         }
                     })

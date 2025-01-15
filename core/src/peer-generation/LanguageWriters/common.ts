@@ -27,9 +27,7 @@ export enum RuntimeType {
 }
 
 export class NativeModuleType {
-    protected constructor(public name: string) {}
-    static Interop = new NativeModuleType("InteropNativeModule")
-    static ArkUI = new NativeModuleType("ArkUINativeModule")
-    static Generated = new NativeModuleType("ArkUIGeneratedNativeModule")
-    static Test = new NativeModuleType("TestNativeModule")
+    constructor(public name: string) {
+
+    }
 }

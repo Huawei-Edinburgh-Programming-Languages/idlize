@@ -15,7 +15,7 @@
 import * as fs from "fs"
 import * as path from "path"
 import { IndentedPrinter, camelCaseToUpperSnakeCase, Language } from "@idlize/core"
-import { PrimitiveType } from "./ArkPrimitiveType"
+import { ArkPrimitiveType } from "./ArkPrimitiveType"
 import { CppLanguageWriter, createLanguageWriter, Method, MethodSignature, NamedMethodSignature, PrinterLike } from "./LanguageWriters"
 import { LanguageWriter } from "@idlize/core";
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
@@ -31,7 +31,7 @@ import { createEmptyReferenceResolver, ReferenceResolver } from "@idlize/core"
 import { getReferenceResolver } from "./ReferenceResolver"
 import { MethodArgPrintHint } from "./LanguageWriters/LanguageWriter"
 import { SourceFile, TsSourceFile, CJSourceFile } from "./printers/SourceFile"
-import { NativeModuleType } from "./NativeModuleType"
+import { NativeModule } from "./NativeModule"
 
 import { ReferenceResolver } from "@idlize/core";
 
@@ -393,7 +393,7 @@ import { int32 } from "@koalaui/common"
 import { unsafeCast } from "../shared/generated-utils"
 import { CallbackKind } from "./CallbackKind"
 import { Serializer } from "./Serializer"
-import { KPointer, ${NativeModuleType.Interop.name} } from "@koalaui/interop"
+import { KPointer, ${NativeModule.Interop.name} } from "@koalaui/interop"
 
 ${deserializer.getOutput().join("\n")}
 
@@ -410,7 +410,7 @@ export function makeArkTSDeserializer(library: PeerLibrary): string {
     imports.addFeature("DeserializerBase", "./DeserializerBase")
     imports.addFeatures(["int32", "int64"], "@koalaui/common")
     imports.addFeature("Serializer", "./Serializer")
-    imports.addFeatures([NativeModuleType.Generated.name], "#components")
+    imports.addFeatures([NativeModule.Generated.name], "#components")
     imports.addFeatures(["CallbackKind"], "CallbackKind")
     imports.addFeatures(['KPointer'], '@koalaui/interop')
     imports.print(printer, '')
@@ -440,7 +440,7 @@ ${accessors.join("\n")}
 } ${PeerGeneratorConfig.cppPrefix}ArkUIAccessors;
 
 typedef struct ${PeerGeneratorConfig.cppPrefix}ArkUIGraphicsAPI {
-    ${PrimitiveType.Int32.getText()} version;
+    ${ArkPrimitiveType.Int32.getText()} version;
 } ${PeerGeneratorConfig.cppPrefix}ArkUIGraphicsAPI;
 
 typedef struct ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI {

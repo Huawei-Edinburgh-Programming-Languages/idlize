@@ -13,27 +13,20 @@
  * limitations under the License.
  */
 
-export class PrimitiveType {
-    constructor(protected name: string, public isPointer = false) { }
-    static get UndefinedTag() { return "INTEROP_TAG_UNDEFINED" }
-    static get UndefinedRuntime() { return "INTEROP_RUNTIME_UNDEFINED" }
-    static get ObjectTag() { return "INTEROP_TAG_OBJECT" }
+export abstract class PrimitiveType {
+    static get UndefinedTag() {
+        return "INTEROP_TAG_UNDEFINED"
+    }
 
-    static String = new PrimitiveType(`String`, true)
-    static Number = new PrimitiveType(`Number`, true)
-    static Int32 = new PrimitiveType(`Int32`)
-    static Int64 = new PrimitiveType(`Int64`)
-    static Date = new PrimitiveType(`Date`) 
-    static RuntimeType = new PrimitiveType(`RuntimeType`)
-    static Boolean = new PrimitiveType(`Boolean`)
-    static Function = new PrimitiveType(`Function`, false)
-    static Undefined = new PrimitiveType(`Undefined`)
-    static Void = new PrimitiveType(`Void`)
-    static NativePointer = new PrimitiveType(`NativePointer`)
+    static get UndefinedRuntime() {
+        return "INTEROP_RUNTIME_UNDEFINED"
+    }
 
-    static Tag = new PrimitiveType(`Tag`)
-    static Materialized = new PrimitiveType(`Materialized`, true)
-    static ObjectHandle = new PrimitiveType(`ObjectHandle`)
-    static Length = new PrimitiveType(`Length`, true)
-    static CustomObject = new PrimitiveType(`CustomObject`, true)
+    static get ObjectTag() {
+        return "INTEROP_TAG_OBJECT"
+    }
+
+    abstract getText(): string
+
+    toString(): string { return this.getText() }
 }

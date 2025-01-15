@@ -15,7 +15,7 @@
 
 import * as idl from '@idlize/core/idl'
 import { Language, throwException } from '@idlize/core'
-import { PrimitiveType } from "../ArkPrimitiveType"
+import { ArkPrimitiveType } from "../ArkPrimitiveType"
 import { ExpressionStatement, LanguageStatement, Method, MethodSignature, NamedMethodSignature } from "../LanguageWriters"
 import { LanguageWriter } from "@idlize/core"
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig'
@@ -39,7 +39,7 @@ import { collectUniqueCallbacks } from './CallbacksPrinter'
 import { collectDeclItself, collectDeclDependencies, convertDeclToFeature } from '../ImportsCollectorUtils'
 import { collectDeclarationTargets } from '../DeclarationTargetCollector'
 import { flattenUnionType } from '../unions'
-import { NativeModuleType } from '../NativeModuleType'
+import { NativeModule } from '../NativeModule'
 
 type SerializableTarget = idl.IDLInterface | idl.IDLCallback
 
@@ -174,7 +174,7 @@ class IdlSerializerPrinter {
         const superName = `${className}Base`
         let ctorSignature = this.writer.makeSerializerConstructorSignature()
         if (prefix == "" && this.writer.language === Language.CPP)
-            prefix = PrimitiveType.Prefix + this.library.libraryPrefix
+            prefix = ArkPrimitiveType.Prefix + this.library.libraryPrefix
         const serializerDeclarations = getSerializerDeclarations(this.library,
             createSerializerDependencyFilter(this.writer.language))
         printSerializerImports(this.library, this.destFile, declarationPath)
@@ -468,12 +468,12 @@ class IdlDeserializerPrinter {
                 new ExpressionStatement(
                     writer.makeTernary(
                         writer.makeString('isSync'),
-                        writer.makeNativeCall(NativeModuleType.Interop, `_CallCallbackSync`, [
+                        writer.makeNativeCall(NativeModule.Interop, `_CallCallbackSync`, [
                             writer.makeString(generateCallbackKindValue(target).toString()),
                             writer.makeString(`${argsSerializer}Serializer.asArray()`),
                             writer.makeString(`${argsSerializer}Serializer.length()`),
                         ]),
-                        writer.makeNativeCall(NativeModuleType.Interop, `_CallCallback`, [
+                        writer.makeNativeCall(NativeModule.Interop, `_CallCallback`, [
                             writer.makeString(generateCallbackKindValue(target).toString()),
                             writer.makeString(`${argsSerializer}Serializer.asArray()`),
                             writer.makeString(`${argsSerializer}Serializer.length()`),
@@ -515,7 +515,7 @@ class IdlDeserializerPrinter {
         let ctorSignature: NamedMethodSignature | undefined = undefined
         if (this.writer.language == Language.CPP) {
             ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [idl.IDLUint8ArrayType, idl.IDLI32Type], ["data", "length"])
-            prefix = prefix === "" ? PrimitiveType.Prefix : prefix
+            prefix = prefix === "" ? ArkPrimitiveType.Prefix : prefix
         } else if (this.writer.language === Language.ARKTS) {
             ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [idl.createContainerType("sequence", [idl.IDLU8Type]), idl.IDLI32Type], ["data", "length"])
         }

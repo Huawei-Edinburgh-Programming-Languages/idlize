@@ -14,7 +14,7 @@
  */
 
 import { IndentedPrinter } from '@idlize/core'
-import { PrimitiveType } from "../ArkPrimitiveType"
+import { ArkPrimitiveType } from "../ArkPrimitiveType"
 import {
     accessorStructList,
     appendModifiersCommonPrologue,
@@ -143,7 +143,7 @@ export class ModifierVisitor {
         const apiParameters = method.generateAPIParameters(
             createTypeNameConvertor(Language.CPP, getReferenceResolver(this.library))
         )
-        if (apiParameters.at(0)?.includes(PrimitiveType.NativePointer.getText())) {
+        if (apiParameters.at(0)?.includes(ArkPrimitiveType.NativePointer.getText())) {
             this.real.print(`auto frameNode = reinterpret_cast<FrameNode *>(node);`)
             this.real.print(`CHECK_NULL_VOID(frameNode);`)
             if (method.argAndOutConvertors.length === 1

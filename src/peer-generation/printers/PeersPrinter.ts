@@ -47,7 +47,7 @@ import { createOptionalType, createReferenceType, forceAsNamedNode, IDLI32Type, 
 import { getReferenceResolver } from "../ReferenceResolver";
 import { collectDeclDependencies } from "../ImportsCollectorUtils";
 import { findComponentByType } from "../ComponentsCollector";
-import { NativeModuleType } from "../NativeModuleType";
+import { NativeModule } from "../NativeModule";
 
 export function componentToPeerClass(component: string) {
     return `Ark${component}Peer`
@@ -182,7 +182,7 @@ class PeerFileVisitor {
             const _peerPtr = '_peerPtr'
             writer.writeStatement(
                 writer.makeAssign(_peerPtr, undefined, writer.makeNativeCall(
-                    NativeModuleType.Generated,
+                    NativeModule.Generated,
                     `_${peer.componentName}_${createConstructPeerMethod(peer).overloadedName}`,
                     [writer.makeString(peerId), writer.makeString(signature.argName(1))]
                 ), true)
@@ -259,11 +259,11 @@ class PeerFileVisitor {
         switch (lang) {
             case Language.TS: {
                 return [...defaultPeerImports,
-                    `import { ${NativeModuleType.Generated.name} } from "../${NativeModuleType.Generated.name}"`,]
+                    `import { ${NativeModule.Generated.name} } from "../${NativeModule.Generated.name}"`,]
             }
             case Language.ARKTS: {
                 return [...defaultPeerImports,
-                    `import { ${NativeModuleType.Generated.name} } from "#components"`,]
+                    `import { ${NativeModule.Generated.name} } from "#components"`,]
             }
             default: {
                 return []
@@ -413,7 +413,7 @@ export function printPeerFinalizer(peerClassBase: PeerClassBase, writer: Languag
     writer.writeMethodImplementation(finalizer, writer => {
         writer.writeStatement(
             writer.makeReturn(
-                writer.makeNativeCall(NativeModuleType.Generated, `_${className}_getFinalizer`, [])))
+                writer.makeNativeCall(NativeModule.Generated, `_${className}_getFinalizer`, [])))
     })
 }
 
@@ -476,7 +476,7 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
             }
         })
         let call = writer.makeNativeCall(
-            NativeModuleType.Generated,
+            NativeModule.Generated,
             `_${method.originalParentName}_${method.overloadedName}`,
             params)
 

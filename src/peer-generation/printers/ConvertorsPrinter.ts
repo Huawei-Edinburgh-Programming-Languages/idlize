@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { PrimitiveType } from "../ArkPrimitiveType"
+import { ArkPrimitiveType } from "../ArkPrimitiveType"
 import { PeerLibrary } from "../PeerLibrary";
 import { LanguageWriter } from "@idlize/core";
 import { DeclarationTargets } from "../DeclarationTargetCollector";
@@ -73,7 +73,7 @@ class ConvertorsPrinter {
         this.writer.print("template<typename T> \\")
         this.writer.print("void AssignOptionalTo(std::optional<T>& dst, const name& src) { \\")
         this.writer.pushIndent()
-        this.writer.print(`if (src.tag != ${PrimitiveType.UndefinedTag}) { \\`)
+        this.writer.print(`if (src.tag != ${ArkPrimitiveType.UndefinedTag}) { \\`)
         this.writer.pushIndent()
         this.writer.print("AssignUnionTo(dst, src.value); \\")
         this.writer.popIndent()
@@ -83,7 +83,7 @@ class ConvertorsPrinter {
         this.writer.print("template<typename T> \\")
         this.writer.print("void WithOptional(const name& src, T call) { \\")
         this.writer.pushIndent()
-        this.writer.print(`if (src.tag != ${PrimitiveType.UndefinedTag}) { \\`)
+        this.writer.print(`if (src.tag != ${ArkPrimitiveType.UndefinedTag}) { \\`)
         this.writer.pushIndent()
         this.writer.print("call(src.value); \\")
         this.writer.popIndent()

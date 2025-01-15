@@ -18,7 +18,8 @@ import { BuilderClass } from './BuilderClass';
 import { MaterializedClass } from "./Materialized";
 import { isMaterialized, isPredefined } from './idl/IdlPeerGeneratorVisitor';
 import { PeerFile } from "./PeerFile";
-import { AggregateConvertor, ArrayConvertor, BufferConvertor, CallbackConvertor, ClassConvertor, DateConvertor, EnumConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, MapConvertor, MaterializedClassConvertor, NumericConvertor, OptionConvertor,  PointerConvertor,  StringConvertor, TupleConvertor, TypeAliasConvertor, UnionConvertor } from './ArgConvertors';
+import { AggregateConvertor, ArrayConvertor, BufferConvertor, CallbackConvertor, ClassConvertor, DateConvertor, EnumConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, MapConvertor, MaterializedClassConvertor, NumericConvertor, OptionConvertor,  PointerConvertor, TupleConvertor, TypeAliasConvertor, UnionConvertor } from './ArgConvertors';
+import { StringConvertor } from "@idlize/core"
 import { IndentedPrinter, Language, warn, isImportAttr, isStringEnum } from '@idlize/core'
 import { createTypeNameConvertor } from './LanguageWriters';
 import { LanguageWriter } from '@idlize/core';
@@ -29,6 +30,7 @@ import { generateSyntheticFunctionName } from '../IDLVisitor';
 import { IdlNameConvertor } from '@idlize/core';
 import { LibraryInterface } from '../LibraryInterface';
 import { IDLNodeToStringConvertor } from './LanguageWriters/convertors/InteropConvertor';
+import { ArkPrimitiveType } from "./ArkPrimitiveType";
 
 export class PeerLibrary implements LibraryInterface {
     private _syntheticEntries: idl.IDLEntry[] = []
@@ -168,8 +170,8 @@ export class PeerLibrary implements LibraryInterface {
 
                 case idl.IDLBufferType: return new BufferConvertor(param)
                 case idl.IDLBooleanType: return new BooleanConvertor(param)
-                case idl.IDLStringType: return new StringConvertor(param)
-                case idl.IDLNumberType: return new NumberConvertor(param)
+                case idl.IDLStringType: return new StringConvertor(param, ArkPrimitiveType.String)
+                case idl.IDLNumberType: return new NumberConvertor(param, ArkPrimitiveType.Number)
                 case idl.IDLUndefinedType: return new UndefinedConvertor(param)
                 case idl.IDLVoidType: return new VoidConvertor(param)
                 case idl.IDLUnknownType:

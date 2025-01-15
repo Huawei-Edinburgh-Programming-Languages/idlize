@@ -18,11 +18,12 @@ import { posix as path } from "path"
 import { DeclarationNameConvertor } from "../../peer-generation/idl/IdlNameConvertor"
 import { ImportsCollector } from "../../peer-generation/ImportsCollector";
 import { capitalize, isDefined, throwException, Language, CustomPrintVisitor, addSyntheticType, resolveSyntheticType, isImport, isStringEnum } from '@idlize/core'
-import { PrimitiveType } from "../../peer-generation/ArkPrimitiveType";
+import { ArkPrimitiveType } from "../../peer-generation/ArkPrimitiveType";
 import { WrapperClass, WrapperField, WrapperMethod } from "../WrapperClass";
 import { Skoala } from "../utils";
 import { Field, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, NamedMethodSignature } from "@idlize/core";
-import { ClassConvertor, CustomTypeConvertor, EnumConvertor, InterfaceConvertor, NumberConvertor, StringConvertor, TypeAliasConvertor, UnionConvertor } from "../../peer-generation/ArgConvertors";
+import { ClassConvertor, CustomTypeConvertor, EnumConvertor, InterfaceConvertor, NumberConvertor, TypeAliasConvertor, UnionConvertor } from "../../peer-generation/ArgConvertors";
+import { StringConvertor } from "@idlize/core";
 import { ArgConvertor, BooleanConvertor, BaseArgConvertor, ExpressionAssigner, RuntimeType, UndefinedConvertor } from "@idlize/core";
 import { convertDeclaration, convertType, DeclarationConvertor, IdlNameConvertor, TypeConvertor } from "@idlize/core";
 import { LibraryFileInterface, LibraryInterface } from "../../LibraryInterface";
@@ -142,9 +143,9 @@ export class IdlSkoalaLibrary implements LibraryInterface {
             switch (type) {
                 case idl.IDLAnyType: return new CustomTypeConvertor(param, "Any")
                 case idl.IDLBooleanType: return new BooleanConvertor(param)
-                case idl.IDLStringType: return new StringConvertor(param)
+                case idl.IDLStringType: return new StringConvertor(param, ArkPrimitiveType.String)
                 case idl.IDLBigintType:
-                case idl.IDLNumberType: return new NumberConvertor(param)
+                case idl.IDLNumberType: return new NumberConvertor(param, ArkPrimitiveType.Number)
                 case idl.IDLUndefinedType:
                 case idl.IDLVoidType: return new UndefinedConvertor(param)
                 default: throw new Error(`Unconverted ${type}`)
@@ -261,7 +262,7 @@ export class IdlWrapperClassConvertor extends BaseArgConvertor {
         printer.writeMethodCall(`${param}Serializer`, "writeWrapper", [value])
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
-        const prefix = writer.language === Language.CPP ? PrimitiveType.Prefix : ""
+        const prefix = writer.language === Language.CPP ? ArkPrimitiveType.Prefix : ""
         const readStatement = writer.makeCast(
             writer.makeMethodCall(`${deserializerName}`, `readWrapper`, []),
             idl.createReferenceType(`${prefix}${this.type.name}`)
@@ -568,8 +569,8 @@ export class IdlWrapperProcessor {
 function mapCInteropRetType(type: idl.IDLType): string {
     if (idl.isPrimitiveType(type)) {
         switch (type) {
-            case idl.IDLBooleanType: return PrimitiveType.Boolean.getText()
-            case idl.IDLNumberType: return PrimitiveType.Int32.getText()
+            case idl.IDLBooleanType: return ArkPrimitiveType.Boolean.getText()
+            case idl.IDLNumberType: return ArkPrimitiveType.Int32.getText()
             case idl.IDLStringType:
             case idl.IDLAnyType:
                 /* HACK, fix */
@@ -581,20 +582,20 @@ function mapCInteropRetType(type: idl.IDLType): string {
         }
     }
     if (idl.isReferenceType(type)) {
-        return PrimitiveType.NativePointer.getText()
+        return ArkPrimitiveType.NativePointer.getText()
     }
     if (idl.isTypeParameterType(type))
         /* ANOTHER HACK, fix */
         return "void"
     if (idl.isUnionType(type))
-        return PrimitiveType.NativePointer.getText()
+        return ArkPrimitiveType.NativePointer.getText()
     if (idl.isContainerType(type)) {
         if (idl.IDLContainerUtils.isSequence(type)) {
             /* HACK, fix */
             // return array by some way
             return "void"
         } else
-            return PrimitiveType.NativePointer.getText()
+            return ArkPrimitiveType.NativePointer.getText()
     }
     throw new Error(`mapCInteropType failed for ${idl.IDLKind[type.kind]}`)
 }

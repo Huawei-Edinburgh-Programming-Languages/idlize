@@ -28,6 +28,7 @@ export * from "./peer-generation/LanguageWriters/ArgConvertors"
 export * from "./peer-generation/LanguageWriters/common"
 export * from "./peer-generation/LanguageWriters/nameConvertor"
 export * from "./peer-generation/LanguageWriters/writers/CLikeLanguageWriter"
+export * from "./peer-generation/PrimitiveType"
 
 export * from "./peer-generation/LanguageWriters"
 export * from "./peer-generation/ReferenceResolver"
