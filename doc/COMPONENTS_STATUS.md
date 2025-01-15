@@ -390,7 +390,7 @@
 |`enableAnimation`| Function | Politov Mikhail | done |  |
 |`autoHalfFold`| Function | Politov Mikhail | done |  |
 |*FormComponent*| *Component* | Vadim Voronov | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
-|`setFormComponentOptions`| Function | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
+|`setFormComponentOptions`| Function | Vadim Voronov | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
 |`size`| Function | Vadim Voronov | blocked AceEngine | implemented with tests, https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
 |`moduleName`| Function | Vadim Voronov | done | |
 |`dimension`| Function | Vadim Voronov | done | |
@@ -1528,8 +1528,8 @@
 |*CanvasRenderer*| *Class*  | Vadim Voronov | in progress | |
 |`drawImage`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA |
 |`beginPath`| Function  | Vadim Voronov | done | |
-|`clip`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
-|`fill`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
+|`clip`| Function  | Vadim Voronov | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
+|`fill`| Function  | Vadim Voronov | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
 |`stroke`| Function  | Vadim Voronov | done | |
 |`createLinearGradient`| Function  | Vadim Voronov | done | |
 |`createPattern`| Function  | Vadim Voronov | done | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
@@ -1556,7 +1556,7 @@
 |`setTransform`| Function  | Vadim Voronov | done | |
 |`transform`| Function  | Vadim Voronov | done | |
 |`translate`| Function  | Vadim Voronov | done | |
-|`setPixelMap`| Function  | Vadim Voronov | testskipped | UT in progress https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
+|`setPixelMap`| Function  | Vadim Voronov | done | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`transferFromImageBitmap`| Function  | Vadim Voronov | done | |
 |`saveLayer`| Function  | Vadim Voronov | done | |
 |`restoreLayer`| Function  | Vadim Voronov | done | |
