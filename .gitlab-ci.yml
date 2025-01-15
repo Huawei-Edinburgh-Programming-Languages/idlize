@@ -133,7 +133,7 @@ build arkoala-ts:
 #      paths:
 #          - arkoala.har
 
-/* Build targets */
+# Build targets
 build idlize:
   stage: build
   tags:
@@ -182,7 +182,7 @@ build idlize-linter:
     paths:
       - linter/build
 
-/* Pack targets */
+# Pack targets
 pack idlize:
   extends:
     - .npm-pack
@@ -190,7 +190,7 @@ pack idlize:
     PACKAGE_DIR: .
   needs:
     - build idlize
-    
+
 pack idlize-core:
   extends:
     - .npm-pack
@@ -208,7 +208,7 @@ pack idlize-linter:
     - build idlize-linter
 
 
-/* Publish targets */
+# Publish targets
 publish idlize:
   extends: 
     - .npm-publish
