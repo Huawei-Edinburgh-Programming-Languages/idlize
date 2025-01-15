@@ -1627,27 +1627,27 @@
 |`asymmetric`| Function | Andrey Khudenkikh | done | |
 |`animation`| Function | Andrey Khudenkikh | blocked IDL | |
 |`combine`| Function | Andrey Khudenkikh | blocked IDL | |
-|*BaseEvent*| *Class* | | | |
-|`getModifierKeyState`| Function | | | |
-|`setTarget`| Function | | | |
-|`getTimestamp`| Function | | | |
-|`setTimestamp`| Function | | | |
-|`getSource`| Function | | | |
-|`setSource`| Function | | | |
-|`getAxisHorizontal`| Function | | | |
-|`setAxisHorizontal`| Function | | | |
-|`getAxisVertical`| Function | | | |
-|`setAxisVertical`| Function | | | |
-|`getPressure`| Function | | | |
-|`setPressure`| Function | | | |
-|`getTiltX`| Function | | | |
-|`setTiltX`| Function | | | |
-|`getTiltY`| Function | | | |
-|`setTiltY`| Function | | | |
-|`getSourceTool`| Function | | | |
-|`setSourceTool`| Function | | | |
-|`getDeviceId`| Function | | | |
-|`setDeviceId`| Function | | | |
+|*BaseEvent*| *Class* | Politov Mikhail | | |
+|`getModifierKeyState`| Function | Politov Mikhail | | |
+|`setTarget`| Function | Politov Mikhail | | |
+|`getTimestamp`| Function | Politov Mikhail | | |
+|`setTimestamp`| Function | Politov Mikhail | | |
+|`getSource`| Function | Politov Mikhail | | |
+|`setSource`| Function | Politov Mikhail | | |
+|`getAxisHorizontal`| Function | Politov Mikhail | | |
+|`setAxisHorizontal`| Function | Politov Mikhail | | |
+|`getAxisVertical`| Function | Politov Mikhail | | |
+|`setAxisVertical`| Function | Politov Mikhail | | |
+|`getPressure`| Function | Politov Mikhail | | |
+|`setPressure`| Function | Politov Mikhail | | |
+|`getTiltX`| Function | Politov Mikhail | | |
+|`setTiltX`| Function | Politov Mikhail | | |
+|`getTiltY`| Function | Politov Mikhail | | |
+|`setTiltY`| Function | Politov Mikhail | | |
+|`getSourceTool`| Function | Politov Mikhail | | |
+|`setSourceTool`| Function | Politov Mikhail | | |
+|`getDeviceId`| Function | Politov Mikhail | | |
+|`setDeviceId`| Function | Politov Mikhail | | |
 |*TouchEvent*| *Class* | | | |
 |`getHistoricalPoints`| Function | | | |
 |`getType`| Function | | | |
