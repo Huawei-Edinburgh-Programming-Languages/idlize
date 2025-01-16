@@ -14,7 +14,7 @@
  */
 
 import * as idl from '@idlize/core/idl'
-import { LibraryInterface } from "../LibraryInterface"
+import { LibraryInterface } from "@idlize/core"
 import { CallbackConvertor } from "./ArgConvertors"
 import { ArgConvertor, BaseArgConvertor, RuntimeType, ExpressionAssigner } from "@idlize/core"
 import { LanguageStatement, LanguageWriter } from "@idlize/core"

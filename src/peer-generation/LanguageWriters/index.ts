@@ -16,7 +16,7 @@
 import { IndentedPrinter, Language } from "@idlize/core"
 import { LanguageWriter } from "@idlize/core";
 import { TSLanguageWriter } from "@idlize/core";
-import { ETSLanguageWriter } from "./writers/ETSLanguageWriter";
+import { ETSLanguageWriter } from "@idlize/core";
 import { JavaLanguageWriter } from "@idlize/core";
 import { CppLanguageWriter } from "@idlize/core";
 import { CJLanguageWriter } from "@idlize/core";
@@ -38,7 +38,7 @@ import { ArkPrimitiveTypes } from "../ArkPrimitiveType";
 //////////////////////////////////////////////////////////////////
 // REEXPORTS
 
-export { generateTypeCheckerName, makeArrayTypeCheckCall } from './writers/ETSLanguageWriter'
+export { generateTypeCheckerName, makeArrayTypeCheckCall } from '@idlize/core'
 export {
     Field,
     FieldModifier,

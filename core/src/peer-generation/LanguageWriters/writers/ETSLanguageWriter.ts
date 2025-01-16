@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { IndentedPrinter } from '@idlize/core'
+import { IndentedPrinter } from "../../../IndentedPrinter"
 import {
     LambdaExpression,
     LanguageExpression,
@@ -24,10 +24,13 @@ import {
     MethodSignature,
     NamedMethodSignature,
     ObjectArgs
-} from "@idlize/core"
-import { TSCastExpression, TSLanguageWriter } from "@idlize/core"
-import { getExtAttribute, IDLEnum, IDLI32Type, IDLThisType, IDLType, IDLVoidType } from '@idlize/core/idl'
+} from "../LanguageWriter"
+import { TSCastExpression, TSLanguageWriter } from "./TsLanguageWriter"
+import { getExtAttribute, IDLEnum, IDLI32Type, IDLThisType, IDLType, IDLVoidType } from '../../../idl'
 import {
+    ArgConvertor,
+    EnumConvertor,
+    BaseArgConvertor,
     AggregateConvertor,
     ArrayConvertor,
     CustomTypeConvertor,
@@ -35,22 +38,12 @@ import {
     MaterializedClassConvertor,
     OptionConvertor,
     UnionConvertor
-} from "../../ArgConvertors"
-
-import {
-    ArgConvertor,
-    EnumConvertor,
-    BaseArgConvertor,
-    RuntimeType,
-} from "@idlize/core"
-
-import { Language } from  '@idlize/core'
-import { ReferenceResolver } from "@idlize/core"
-import {makeEnumTypeCheckerCall} from "../../printers/TypeCheckPrinter"
-import * as idl from '@idlize/core/idl'
-import { convertDeclaration, IdlNameConvertor } from "@idlize/core"
-import { createDeclarationNameConvertor } from "../../idl/IdlNameConvertor"
-import { CppIDLNodeToStringConvertor } from "../convertors/CppConvertors"
+} from "../ArgConvertors"
+import * as idl from '../../../idl'
+import { convertDeclaration, IdlNameConvertor } from "../nameConvertor"
+import { createDeclarationNameConvertor } from "../../idl/IdlNameConvertor";
+import { Language } from "../../../Language";
+import { RuntimeType } from "../common";
 
 ////////////////////////////////////////////////////////////////
 //                         STATEMENTS                         //
@@ -129,7 +122,7 @@ export class ETSLambdaExpression extends LambdaExpression {
         writer: LanguageWriter,
         private convertor: IdlNameConvertor,
         signature: MethodSignature,
-        resolver: ReferenceResolver,
+        resolver: idl.ReferenceResolver,
         body?: LanguageStatement[]) {
         super(writer, signature, resolver, body)
     }
@@ -180,10 +173,10 @@ export function makeArrayTypeCheckCall(
 ////////////////////////////////////////////////////////////////
 
 export class ETSLanguageWriter extends TSLanguageWriter {
-    constructor(printer: IndentedPrinter, resolver:ReferenceResolver, typeConvertor: IdlNameConvertor) {
+    constructor(printer: IndentedPrinter, resolver:idl.ReferenceResolver, typeConvertor: IdlNameConvertor) {
         super(printer, resolver, typeConvertor, Language.ARKTS)
     }
-    fork(options?: { resolver?: ReferenceResolver }): LanguageWriter {
+    fork(options?: { resolver?: idl.ReferenceResolver }): LanguageWriter {
         return new ETSLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver, this.typeConvertor)
     }
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
@@ -335,9 +328,10 @@ export class ETSLanguageWriter extends TSLanguageWriter {
                 convertor.members.map(it => it[0]), duplicateMembers!, this)
         }
         if (convertor instanceof ArrayConvertor) {
-            const cppConvertor = new CppIDLNodeToStringConvertor(this.resolver)
-            return makeArrayTypeCheckCall(value,
-                cppConvertor.convert(convertor.idlType), this)
+            //TODO: why CppIDLNodeToStringConvertor ?
+            // const cppConvertor = new CppIDLNodeToStringConvertor(this.resolver)
+            // return makeArrayTypeCheckCall(value,
+            //     cppConvertor.convert(convertor.idlType), this)
         }
         if (convertor instanceof EnumConvertor) {
             return makeEnumTypeCheckerCall(value, this.getNodeName(convertor.idlType), this)
@@ -380,4 +374,12 @@ export function makeInterfaceTypeCheckerCall(
             return writer.makeString(duplicates.has(it) ? "true" : "false")
         })
     ])
+}
+
+export function makeEnumTypeCheckerCall(valueAccessor: string, enumName: string, writer: LanguageWriter): LanguageExpression {
+    return writer.makeMethodCall(
+        "TypeChecker",
+        generateTypeCheckerName(enumName),
+        [writer.makeString(valueAccessor)]
+    )
 }

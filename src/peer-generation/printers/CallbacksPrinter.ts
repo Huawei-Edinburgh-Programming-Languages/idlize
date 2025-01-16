@@ -25,7 +25,7 @@ import { PrintHint } from "@idlize/core";
 import { CppSourceFile, SourceFile, TsSourceFile } from "./SourceFile";
 import { ArkPrimitiveType } from "../ArkPrimitiveType";
 import { collectDeclItself, collectDeclDependencies } from "../ImportsCollectorUtils";
-import { LibraryInterface } from "../../LibraryInterface";
+import { LibraryInterface } from "@idlize/core";
 
 function collectEntryCallbacks(library: LibraryInterface, entry: idl.IDLEntry): idl.IDLCallback[] {
     let res: idl.IDLCallback[] = []

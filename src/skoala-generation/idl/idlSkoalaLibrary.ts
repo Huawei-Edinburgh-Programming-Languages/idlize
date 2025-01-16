@@ -18,7 +18,7 @@ import { posix as path } from "path"
 import { DeclarationNameConvertor } from "../../peer-generation/idl/IdlNameConvertor"
 import { ImportsCollector } from "../../peer-generation/ImportsCollector";
 import { capitalize, isDefined, throwException, Language, CustomPrintVisitor, addSyntheticType, resolveSyntheticType, isImport, isStringEnum } from '@idlize/core'
-import { ArkPrimitiveType, ArkPrimitiveTypes } from "../../peer-generation/ArkPrimitiveType";
+import { ArkPrimitiveType } from "../../peer-generation/ArkPrimitiveType";
 import { WrapperClass, WrapperField, WrapperMethod } from "../WrapperClass";
 import { Skoala } from "../utils";
 import { Field, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, NamedMethodSignature, NumberConvertor } from "@idlize/core";
@@ -26,7 +26,7 @@ import { ClassConvertor, CustomTypeConvertor, InterfaceConvertor, TypeAliasConve
 import { StringConvertor } from "@idlize/core";
 import { ArgConvertor, BooleanConvertor, BaseArgConvertor, EnumConvertor, ExpressionAssigner, RuntimeType, UndefinedConvertor } from "@idlize/core";
 import { convertDeclaration, convertType, DeclarationConvertor, IdlNameConvertor, TypeConvertor } from "@idlize/core";
-import { LibraryFileInterface, LibraryInterface } from "../../LibraryInterface";
+import { LibraryFileInterface, LibraryInterface } from "@idlize/core";
 import { generateSyntheticFunctionName } from "../../IDLVisitor";
 import { IDLNodeToStringConvertor } from "../../peer-generation/LanguageWriters/convertors/InteropConvertor";
 import { DependenciesCollector } from "../../peer-generation/idl/IdlDependenciesCollector";

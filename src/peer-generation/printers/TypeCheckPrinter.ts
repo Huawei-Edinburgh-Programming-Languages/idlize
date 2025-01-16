@@ -10,7 +10,7 @@ import {
 } from "../LanguageWriters";
 import { LanguageWriter } from "@idlize/core"
 import { PeerLibrary } from "../PeerLibrary";
-import { createDeclarationNameConvertor } from "../idl/IdlNameConvertor";
+import { createDeclarationNameConvertor } from "@idlize/core";
 import { Language } from "@idlize/core"
 import { getExtAttribute, IDLBooleanType, isReferenceType } from "@idlize/core/idl"
 import { getReferenceResolver } from '../ReferenceResolver';
@@ -32,14 +32,6 @@ const builtInInterfaceTypes = new Map<string,
 
 export function importTypeChecker(library: PeerLibrary, imports: ImportsCollector): void {
     imports.addFeature("TypeChecker", "#components")
-}
-
-export function makeEnumTypeCheckerCall(valueAccessor: string, enumName: string, writer: LanguageWriter): LanguageExpression {
-    return writer.makeMethodCall(
-        "TypeChecker",
-        generateTypeCheckerName(enumName),
-        [writer.makeString(valueAccessor)]
-    )
 }
 
 class FieldRecord {

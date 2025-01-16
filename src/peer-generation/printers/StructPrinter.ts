@@ -24,9 +24,9 @@ import { generateCallbackAPIArguments } from "../ArgConvertors"
 import { isBuilderClass, isMaterialized } from "../idl/IdlPeerGeneratorVisitor"
 import { cleanPrefix, PeerLibrary } from "../PeerLibrary"
 import { PrintHint } from "@idlize/core"
-import { LibraryInterface } from "../../LibraryInterface"
+import { LibraryInterface } from "@idlize/core"
 import { collectDeclarationTargets } from "../DeclarationTargetCollector"
-import { flattenUnionType } from "../unions"
+import { flattenUnionType } from "@idlize/core"
 
 export class StructPrinter {
     constructor(private library: PeerLibrary) {}

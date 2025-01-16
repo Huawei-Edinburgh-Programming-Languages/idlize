@@ -1,14 +1,13 @@
-import * as idl from "@idlize/core/idl"
-import { Language } from "@idlize/core"
-import { ArgConvertor } from "@idlize/core"
-import { ReferenceResolver } from "@idlize/core"
+import * as idl from "./idl"
+import { Language } from "./Language";
+import { ArgConvertor } from "./peer-generation/LanguageWriters/ArgConvertors";
 
 export interface LibraryFileInterface {
     get entries(): idl.IDLEntry[]
 }
 
 // todo: TypeProcessor? LibraryBase?
-export interface LibraryInterface extends ReferenceResolver {
+export interface LibraryInterface extends idl.ReferenceResolver {
     language: Language
     get files(): LibraryFileInterface[]
     typeConvertor(param: string, type: idl.IDLType, isOptionalParam?: boolean): ArgConvertor

@@ -29,7 +29,7 @@ import {
 } from '../idl/IdlPeerGeneratorVisitor'
 import { collectProperties } from '../printers/StructPrinter'
 import { FieldModifier, MethodModifier, ProxyStatement } from '@idlize/core'
-import { createDeclarationNameConvertor } from '../idl/IdlNameConvertor'
+import { createDeclarationNameConvertor } from '@idlize/core'
 import { IDLEntry } from "@idlize/core/idl"
 import { convertDeclaration } from '@idlize/core'
 import { collectMaterializedImports, getInternalClassName } from '../Materialized'
@@ -38,7 +38,7 @@ import { ArkTSSourceFile, SourceFile, TsSourceFile } from './SourceFile'
 import { collectUniqueCallbacks } from './CallbacksPrinter'
 import { collectDeclItself, collectDeclDependencies, convertDeclToFeature } from '../ImportsCollectorUtils'
 import { collectDeclarationTargets } from '../DeclarationTargetCollector'
-import { flattenUnionType } from '../unions'
+import { flattenUnionType } from '@idlize/core'
 import { NativeModule } from '../NativeModule'
 
 type SerializableTarget = idl.IDLInterface | idl.IDLCallback

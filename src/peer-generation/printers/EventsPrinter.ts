@@ -38,7 +38,7 @@ import { collapseIdlPeerMethods, groupOverloads } from "./OverloadsPrinter"
 import { ImportsCollector } from "../ImportsCollector";
 import { getReferenceResolver } from "../ReferenceResolver"
 import { ReferenceResolver } from "@idlize/core"
-import { ETSLanguageWriter } from "../LanguageWriters/writers/ETSLanguageWriter";
+import { ETSLanguageWriter } from "@idlize/core";
 import { collectDeclItself, collectDeclDependencies } from "../ImportsCollectorUtils"
 import { CppIDLNodeToStringConvertor } from "../LanguageWriters/convertors/CppConvertors";
 import { ArkPrimitiveTypes } from "../ArkPrimitiveType";

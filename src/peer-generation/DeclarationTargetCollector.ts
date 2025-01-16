@@ -1,6 +1,6 @@
 import * as idl from "@idlize/core/idl"
 import { Language } from "@idlize/core"
-import { LibraryInterface } from "../LibraryInterface";
+import { LibraryInterface } from "@idlize/core";
 import { ArkPrimitiveType } from "./ArkPrimitiveType";
 import { isComponentDeclaration } from "./ComponentsCollector";
 import { DependencySorter } from "./idl/DependencySorter";

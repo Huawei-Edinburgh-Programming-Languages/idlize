@@ -19,7 +19,7 @@ import { ImportsCollector } from "../ImportsCollector"
 import { CppLanguageWriter, createLanguageWriter } from "../LanguageWriters"
 import { LanguageWriter } from "@idlize/core"
 import { CJLanguageWriter } from "@idlize/core"
-import { ETSLanguageWriter } from "../LanguageWriters/writers/ETSLanguageWriter"
+import { ETSLanguageWriter } from "@idlize/core"
 import { TSLanguageWriter } from "@idlize/core"
 import { ReferenceResolver } from "@idlize/core"
 

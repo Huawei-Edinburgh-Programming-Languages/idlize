@@ -45,7 +45,7 @@ import { convertDeclaration, DeclarationConvertor } from "@idlize/core";
 import { ARK_CUSTOM_OBJECT, ARK_OBJECTBASE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH, INT_VALUE_GETTER } from './lang/Java'
 import { printJavaImports } from './lang/JavaPrinters'
 import { collectJavaImports } from './lang/JavaIdlUtils'
-import { ETSLanguageWriter } from '../LanguageWriters/writers/ETSLanguageWriter'
+import { ETSLanguageWriter } from '@idlize/core'
 import { collectProperties } from './StructPrinter'
 import { escapeKeyword, IDLType } from '@idlize/core/idl'
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig'
