@@ -15,9 +15,16 @@
 
 import * as idl from "../../idl";
 import { Language } from "../../Language";
-import { LanguageExpression, LanguageStatement, LanguageWriter, ExpressionAssigner, PrintHint } from "./LanguageWriter";
+import {
+    LanguageExpression,
+    LanguageStatement,
+    LanguageWriter,
+    ExpressionAssigner,
+    PrintHint,
+    BlockStatement,
+    BranchStatement
+} from "./LanguageWriter";
 import { RuntimeType } from "./common";
-import { PrimitiveType } from "../PrimitiveType";
 import { generateTypeCheckerName } from "./writers/ETSLanguageWriter";
 import { LibraryInterface } from "../../LibraryInterface";
 import { warn } from "../../util";
