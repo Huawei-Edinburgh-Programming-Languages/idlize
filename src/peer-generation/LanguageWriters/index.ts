@@ -15,7 +15,7 @@
 
 import { IndentedPrinter, Language } from "@idlize/core"
 import { LanguageWriter } from "@idlize/core";
-import { TSLanguageWriter } from "./writers/TsLanguageWriter";
+import { TSLanguageWriter } from "@idlize/core";
 import { ETSLanguageWriter } from "./writers/ETSLanguageWriter";
 import { JavaLanguageWriter } from "@idlize/core";
 import { CppLanguageWriter } from "@idlize/core";
@@ -60,8 +60,10 @@ export { CppLanguageWriter, TSLanguageWriter }
 
 export function createLanguageWriter(language: Language, resolver:ReferenceResolver): LanguageWriter {
     switch (language) {
-        case Language.TS: return new TSLanguageWriter(new IndentedPrinter(), resolver, Language.TS)
-        case Language.ARKTS: return new ETSLanguageWriter(new IndentedPrinter(), resolver)
+        case Language.TS: return new TSLanguageWriter(new IndentedPrinter(), resolver,
+            new TsIDLNodeToStringConverter(resolver))
+        case Language.ARKTS: return new ETSLanguageWriter(new IndentedPrinter(), resolver,
+            new EtsIDLNodeToStringConvertor(resolver))
         case Language.JAVA: return new JavaLanguageWriter(new IndentedPrinter(), resolver,
             new JavaIDLNodeToStringConvertor(resolver))
         case Language.CPP: return new CppLanguageWriter(new IndentedPrinter(), resolver,

@@ -255,61 +255,6 @@ export class BufferConvertor extends BaseArgConvertor {
     }
 }
 
-export class EnumConvertor extends BaseArgConvertor { //
-    constructor(param: string,
-                public enumEntry: idl.IDLEnum,
-                public readonly isStringEnum: boolean) {
-        super(idl.createReferenceType(enumEntry.name),
-            [isStringEnum ? RuntimeType.STRING : RuntimeType.NUMBER],
-            false, false, param)
-    }
-    convertorArg(param: string, writer: LanguageWriter): string {
-        return writer.makeEnumCast(param, false, this)
-    }
-    convertorSerialize(param: string, value: string, writer: LanguageWriter): void {
-        value =
-            this.isStringEnum
-                ? writer.ordinalFromEnum(writer.makeString(value), idl.createReferenceType(this.enumEntry.name)).asString()
-                : writer.makeEnumCast(value, false, this)
-        writer.writeMethodCall(`${param}Serializer`, "writeInt32", [value])
-    }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
-        const readExpr = writer.makeMethodCall(`${deserializerName}`, "readInt32", [])
-        const enumExpr = this.isStringEnum
-            ? writer.enumFromOrdinal(readExpr, idl.createReferenceType(this.enumEntry.name))
-            : writer.makeCast(readExpr, idl.createReferenceType(this.enumEntry.name))
-        return assigneer(enumExpr)
-    }
-    nativeType(): idl.IDLType {
-        return idl.createReferenceType(this.enumEntry.name)
-    }
-    interopType(): idl.IDLType {
-        return idl.IDLI32Type
-    }
-    isPointerType(): boolean {
-        return false
-    }
-    targetType(writer: LanguageWriter): string {
-        return writer.getNodeName(this.idlType) // this.enumTypeName(writer.language)
-    }
-    override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        return writer.makeDiscriminatorConvertor(this, value, index)
-    }
-    extremumOfOrdinals(): {low: number, high: number} {
-        let low: number = 0
-        let high: number = 0
-        this.enumEntry.elements.forEach((member, index) => {
-            let value = index
-            if ((typeof member.initializer === 'number') && !this.isStringEnum) {
-                value = member.initializer
-            }
-            if (low > value) low = value
-            if (high < value) high = value
-        })
-        return {low, high}
-    }
-}
-
 export class UnionConvertor extends BaseArgConvertor { //
     private memberConvertors: ArgConvertor[]
     private unionChecker: UnionRuntimeTypeChecker

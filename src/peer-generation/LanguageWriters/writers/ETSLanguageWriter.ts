@@ -25,13 +25,12 @@ import {
     NamedMethodSignature,
     ObjectArgs
 } from "@idlize/core"
-import { TSCastExpression, TSLanguageWriter } from "./TsLanguageWriter"
+import { TSCastExpression, TSLanguageWriter } from "@idlize/core"
 import { getExtAttribute, IDLEnum, IDLI32Type, IDLThisType, IDLType, IDLVoidType } from '@idlize/core/idl'
 import {
     AggregateConvertor,
     ArrayConvertor,
     CustomTypeConvertor,
-    EnumConvertor,
     InterfaceConvertor,
     MaterializedClassConvertor,
     OptionConvertor,
@@ -40,13 +39,13 @@ import {
 
 import {
     ArgConvertor,
+    EnumConvertor,
     BaseArgConvertor,
     RuntimeType,
 } from "@idlize/core"
 
 import { Language } from  '@idlize/core'
 import { ReferenceResolver } from "@idlize/core"
-import { EtsIDLNodeToStringConvertor } from "../convertors/ETSConvertors"
 import {makeEnumTypeCheckerCall} from "../../printers/TypeCheckPrinter"
 import * as idl from '@idlize/core/idl'
 import { convertDeclaration, IdlNameConvertor } from "@idlize/core"
@@ -181,12 +180,11 @@ export function makeArrayTypeCheckCall(
 ////////////////////////////////////////////////////////////////
 
 export class ETSLanguageWriter extends TSLanguageWriter {
-    constructor(printer: IndentedPrinter, resolver:ReferenceResolver) {
-        super(printer, resolver, Language.ARKTS)
-        this.typeConvertor = new EtsIDLNodeToStringConvertor(this.resolver)
+    constructor(printer: IndentedPrinter, resolver:ReferenceResolver, typeConvertor: IdlNameConvertor) {
+        super(printer, resolver, typeConvertor, Language.ARKTS)
     }
     fork(options?: { resolver?: ReferenceResolver }): LanguageWriter {
-        return new ETSLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver)
+        return new ETSLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver, this.typeConvertor)
     }
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
         if (signature.returnType === IDLThisType) {

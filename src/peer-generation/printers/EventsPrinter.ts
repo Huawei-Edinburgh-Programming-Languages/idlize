@@ -42,6 +42,7 @@ import { ETSLanguageWriter } from "../LanguageWriters/writers/ETSLanguageWriter"
 import { collectDeclItself, collectDeclDependencies } from "../ImportsCollectorUtils"
 import { CppIDLNodeToStringConvertor } from "../LanguageWriters/convertors/CppConvertors";
 import { ArkPrimitiveTypes } from "../ArkPrimitiveType";
+import { TsIDLNodeToStringConverter } from "../LanguageWriters/convertors/TSConvertors";
 
 export const PeerEventsProperties = "PeerEventsProperties"
 export const PeerEventKind = "PeerEventKind"
@@ -313,7 +314,9 @@ class IdlCEventsVisitor extends CEventsVisitorBase {
 }
 
 abstract class TSEventsVisitorBase {
-    readonly printer: LanguageWriter = new TSLanguageWriter(new IndentedPrinter(), getReferenceResolver(this.library))
+    readonly printer: LanguageWriter = new TSLanguageWriter(new IndentedPrinter(),
+        getReferenceResolver(this.library),
+        new TsIDLNodeToStringConverter(getReferenceResolver(this.library)))
 
     constructor(
         protected readonly library: PeerLibrary,
@@ -533,7 +536,9 @@ class IdlTSEventsVisitor extends TSEventsVisitorBase {
 }
 
 class IdlArkTSEventVisitor extends IdlTSEventsVisitor {
-    readonly printer: LanguageWriter = new ETSLanguageWriter(new IndentedPrinter(), getReferenceResolver(this.library))
+    readonly printer: LanguageWriter = new ETSLanguageWriter(new IndentedPrinter(),
+        getReferenceResolver(this.library),
+        new TsIDLNodeToStringConverter(getReferenceResolver(this.library)))
 
     protected printParseFunction(infos: IdlCallbackInfo[]) {
         // Disable event functions printing until deserializer is ready

@@ -18,14 +18,14 @@ import { BuilderClass } from './BuilderClass';
 import { MaterializedClass } from "./Materialized";
 import { isMaterialized, isPredefined } from './idl/IdlPeerGeneratorVisitor';
 import { PeerFile } from "./PeerFile";
-import { AggregateConvertor, ArrayConvertor, BufferConvertor, CallbackConvertor, ClassConvertor, DateConvertor, EnumConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, MapConvertor, MaterializedClassConvertor, NumericConvertor, OptionConvertor,  PointerConvertor, TupleConvertor, TypeAliasConvertor, UnionConvertor } from './ArgConvertors';
+import { AggregateConvertor, ArrayConvertor, BufferConvertor, CallbackConvertor, ClassConvertor, DateConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, MapConvertor, MaterializedClassConvertor, NumericConvertor, OptionConvertor,  PointerConvertor, TupleConvertor, TypeAliasConvertor, UnionConvertor } from './ArgConvertors';
 import { StringConvertor } from "@idlize/core"
 import { IndentedPrinter, Language, warn, isImportAttr, isStringEnum } from '@idlize/core'
 import { createTypeNameConvertor } from './LanguageWriters';
 import { LanguageWriter } from '@idlize/core';
 import { StructPrinter } from './printers/StructPrinter';
 import { CustomTypeConvertor, LengthConvertor, NumberConvertor } from './ArgConvertors';
-import { ArgConvertor, BooleanConvertor, UndefinedConvertor, VoidConvertor } from '@idlize/core';
+import { ArgConvertor, BooleanConvertor, EnumConvertor, UndefinedConvertor, VoidConvertor } from '@idlize/core';
 import { generateSyntheticFunctionName } from '../IDLVisitor';
 import { IdlNameConvertor } from '@idlize/core';
 import { LibraryInterface } from '../LibraryInterface';

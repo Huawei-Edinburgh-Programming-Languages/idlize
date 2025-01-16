@@ -13,8 +13,9 @@
  * limitations under the License.
  */
 
-import { IndentedPrinter, Language, isStringEnum  } from '@idlize/core'
-import { TSTypeNodeNameConvertor } from "../../TypeNodeNameConvertor"
+import { isStringEnum  } from '../../../idl'
+import { Language } from '../../../Language'
+import { IndentedPrinter } from "../../../IndentedPrinter";
 import {
     AssignStatement,
     CheckOptionalStatement,
@@ -32,14 +33,12 @@ import {
     ObjectArgs,
     ReturnStatement,
     StringExpression
-} from "@idlize/core"
-import * as idl from '@idlize/core/idl'
-import * as ts from 'typescript'
-import { ArgConvertor, RuntimeType } from "@idlize/core"
-import { ReferenceResolver } from "@idlize/core"
-import { IdlNameConvertor } from "@idlize/core"
-import { TsIDLNodeToStringConverter } from "../convertors/TSConvertors"
-import { EnumConvertor } from "../../ArgConvertors";
+} from "../LanguageWriter"
+import * as idl from '../../../idl'
+import { ArgConvertor } from "../ArgConvertors"
+import { IdlNameConvertor } from "../nameConvertor"
+import { EnumConvertor } from "../ArgConvertors";
+import { RuntimeType } from "../common";
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -50,7 +49,7 @@ export class TSLambdaExpression extends LambdaExpression {
         writer: LanguageWriter,
         private convertor: IdlNameConvertor,
         signature: MethodSignature,
-        resolver: ReferenceResolver,
+        resolver: idl.ReferenceResolver,
         body?: LanguageStatement[]) {
         super(writer, signature, resolver, body)
     }
@@ -129,49 +128,6 @@ export class TsTupleAllocStatement implements LanguageStatement {
     }
 }
 
-export class TsObjectAssignStatement implements LanguageStatement {
-    constructor(private object: string, private type: idl.IDLType | undefined, private isDeclare: boolean) {}
-    write(writer: LanguageWriter): void {
-        writer.writeStatement(writer.makeAssign(this.object,
-            this.type,
-            writer.makeString(`{}`),
-            this.isDeclare,
-            false))
-    }
-}
-
-///////////////////////////////////////////////////////////////
-//                            UTILS                          //
-///////////////////////////////////////////////////////////////
-
-class TsObjectDeclareNodeNameConvertor extends TSTypeNodeNameConvertor {
-    private useOptionalTypes = true
-
-    override convertTuple(node: ts.TupleTypeNode): string {
-        this.useOptionalTypes = false
-        const name = super.convertTuple(node)
-        this.useOptionalTypes = true
-        return name
-    }
-    override convertOptional(node: ts.OptionalTypeNode): string {
-        let name = super.convertOptional(node)
-        if (!this.useOptionalTypes) {
-            name = name.replace("?", "")
-        }
-        return name
-    }
-    override convertImport(_node: ts.ImportTypeNode): string {
-        //TODO: to preventing an error IMPORT_* types were  not found
-        return "object"
-    }
-    override convert(node: ts.Node | undefined): string {
-        if (node) {
-            return super.convert(node)
-        }
-        return "undefined"
-    }
-}
-
 ////////////////////////////////////////////////////////////////
 //                           WRITER                           //
 ////////////////////////////////////////////////////////////////
@@ -179,9 +135,12 @@ class TsObjectDeclareNodeNameConvertor extends TSTypeNodeNameConvertor {
 export class TSLanguageWriter extends LanguageWriter {
     protected typeConvertor: IdlNameConvertor
 
-    constructor(printer: IndentedPrinter, resolver: ReferenceResolver, language: Language = Language.TS) {
+    constructor(printer: IndentedPrinter,
+                resolver: idl.ReferenceResolver,
+                typeConvertor: IdlNameConvertor,
+                language: Language = Language.TS) {
         super(printer, resolver, language)
-        this.typeConvertor = new TsIDLNodeToStringConverter(this.resolver)
+        this.typeConvertor = typeConvertor
     }
 
     maybeSemicolon() { return "" }
@@ -191,8 +150,8 @@ export class TSLanguageWriter extends LanguageWriter {
         if (ident) this.pushIndent()
     }
 
-    fork(options?: { resolver?: ReferenceResolver }): LanguageWriter {
-        return new TSLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver, this.language)
+    fork(options?: { resolver?: idl.ReferenceResolver }): LanguageWriter {
+        return new TSLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver, this.typeConvertor, this.language)
     }
 
     getNodeName(type: idl.IDLNode): string {

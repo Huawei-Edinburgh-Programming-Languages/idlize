@@ -55,6 +55,7 @@ import { createInterfaceDeclName } from '../TypeNodeNameConvertor'
 import { collectDeclDependencies, convertDeclToFeature } from '../ImportsCollectorUtils'
 import { maybeTransformManagedCallback } from '../ArgConvertors'
 import { isComponentDeclaration } from '../ComponentsCollector'
+import { EtsIDLNodeToStringConvertor } from "../LanguageWriters/convertors/ETSConvertors";
 
 interface InterfacesVisitor {
     getInterfaces(): Map<TargetFile, LanguageWriter>
@@ -484,7 +485,9 @@ class JavaInterfacesVisitor extends DefaultInterfacesVisitor {
 }
 
 export class ArkTSDeclConvertor extends TSDeclConvertor {
-    private typeNameConvertor = new ETSLanguageWriter(new IndentedPrinter(), this.peerLibrary)
+    private typeNameConvertor = new ETSLanguageWriter(new IndentedPrinter(),
+        this.peerLibrary,
+        new EtsIDLNodeToStringConvertor(this.peerLibrary))
     private seenInterfaceNames = new Set<string>()
 
     convertTypedef(node: idl.IDLTypedef) {
