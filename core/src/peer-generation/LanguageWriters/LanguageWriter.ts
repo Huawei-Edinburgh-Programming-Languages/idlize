@@ -357,18 +357,18 @@ export class Method {
     ) {}
 }
 
-export class MethodArgPrintHint {
+export class PrintHint {
     private constructor(
         public hint: string
     ) {}
 
-    static AsPointer = new MethodArgPrintHint('AsPointer')
-    static AsConstPointer = new MethodArgPrintHint('AsConstPointer')
-    static AsValue = new MethodArgPrintHint('AsValue')
-    static AsConstReference = new MethodArgPrintHint('AsConstReference')
+    static AsPointer = new PrintHint('AsPointer')
+    static AsConstPointer = new PrintHint('AsConstPointer')
+    static AsValue = new PrintHint('AsValue')
+    static AsConstReference = new PrintHint('AsConstReference')
 }
 
-type MethodArgPrintHintOrNone = MethodArgPrintHint | undefined
+type MethodArgPrintHintOrNone = PrintHint | undefined
 
 export class MethodSignature {
     constructor(
@@ -384,10 +384,10 @@ export class MethodSignature {
     argDefault(index: number): string|undefined {
         return this.defaults?.[index]
     }
-    retHint(): MethodArgPrintHint | undefined {
+    retHint(): PrintHint | undefined {
         return this.printHints?.[0]
     }
-    argHint(index: number): MethodArgPrintHint | undefined {
+    argHint(index: number): PrintHint | undefined {
         return this.printHints?.[index + 1]
     }
 
@@ -512,10 +512,7 @@ export abstract class LanguageWriter {
         this.writeStatement(new ExpressionStatement(smth))
     }
 
-    makeRef(type: idl.IDLType | string, _options?:MakeRefOptions): idl.IDLType {
-        if (typeof type === 'string') {
-            return idl.createReferenceType(type)
-        }
+    makeRef(type: idl.IDLType, _options?: MakeRefOptions): idl.IDLType {
         return type
     }
     makeThis(): LanguageExpression {
@@ -668,8 +665,14 @@ export abstract class LanguageWriter {
     mapMethodModifier(modifier: MethodModifier): string {
         return `${MethodModifier[modifier].toLowerCase()}`
     }
+    /**
+     * TODO: replace me with {@link makeUnsafeCast_}
+     */
     makeUnsafeCast(convertor: ArgConvertor, param: string): string {
         return `unsafeCast<int32>(${param})`
+    }
+    makeUnsafeCast_(value: LanguageExpression, type: idl.IDLType, typeOptions?: PrintHint) {
+        return `(${value.asString()} as ${this.getNodeName(type)})`
     }
     runtimeType(param: ArgConvertor, valueType: string, value: string) {
         this.writeStatement(this.makeAssign(valueType, idl.IDLI32Type,

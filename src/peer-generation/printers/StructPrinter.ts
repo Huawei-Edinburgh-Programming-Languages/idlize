@@ -23,7 +23,7 @@ import { PeerGeneratorConfig } from "../PeerGeneratorConfig"
 import { generateCallbackAPIArguments } from "../ArgConvertors"
 import { isBuilderClass, isMaterialized } from "../idl/IdlPeerGeneratorVisitor"
 import { cleanPrefix, PeerLibrary } from "../PeerLibrary"
-import { MethodArgPrintHint } from "@idlize/core"
+import { PrintHint } from "@idlize/core"
 import { LibraryInterface } from "../../LibraryInterface"
 import { collectDeclarationTargets } from "../DeclarationTargetCollector"
 import { flattenUnionType } from "../unions"
@@ -218,7 +218,7 @@ export class StructPrinter {
             writer.print("template <>")
             writer.writeMethodImplementation(
                 new Method("runtimeType",
-                    new NamedMethodSignature(resultType, [idl.maybeOptional(targetType, isOptional)], ["value"], undefined, [undefined, MethodArgPrintHint.AsConstReference]),
+                    new NamedMethodSignature(resultType, [idl.maybeOptional(targetType, isOptional)], ["value"], undefined, [undefined, PrintHint.AsConstReference]),
                     [MethodModifier.INLINE]),
                 op)
         }

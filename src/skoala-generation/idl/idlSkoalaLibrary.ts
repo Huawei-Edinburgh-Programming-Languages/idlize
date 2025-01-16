@@ -21,8 +21,8 @@ import { capitalize, isDefined, throwException, Language, CustomPrintVisitor, ad
 import { ArkPrimitiveType, ArkPrimitiveTypes } from "../../peer-generation/ArkPrimitiveType";
 import { WrapperClass, WrapperField, WrapperMethod } from "../WrapperClass";
 import { Skoala } from "../utils";
-import { Field, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, NamedMethodSignature } from "@idlize/core";
-import { ClassConvertor, CustomTypeConvertor, InterfaceConvertor, NumberConvertor, TypeAliasConvertor, UnionConvertor } from "../../peer-generation/ArgConvertors";
+import { Field, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, NamedMethodSignature, NumberConvertor } from "@idlize/core";
+import { ClassConvertor, CustomTypeConvertor, InterfaceConvertor, TypeAliasConvertor, UnionConvertor } from "../../peer-generation/ArgConvertors";
 import { StringConvertor } from "@idlize/core";
 import { ArgConvertor, BooleanConvertor, BaseArgConvertor, EnumConvertor, ExpressionAssigner, RuntimeType, UndefinedConvertor } from "@idlize/core";
 import { convertDeclaration, convertType, DeclarationConvertor, IdlNameConvertor, TypeConvertor } from "@idlize/core";
@@ -143,9 +143,9 @@ export class IdlSkoalaLibrary implements LibraryInterface {
             switch (type) {
                 case idl.IDLAnyType: return new CustomTypeConvertor(param, "Any")
                 case idl.IDLBooleanType: return new BooleanConvertor(param)
-                case idl.IDLStringType: return new StringConvertor(param, ArkPrimitiveType.Instance.String)
+                case idl.IDLStringType: return new StringConvertor(param)
                 case idl.IDLBigintType:
-                case idl.IDLNumberType: return new NumberConvertor(param, ArkPrimitiveType.Instance.Number)
+                case idl.IDLNumberType: return new NumberConvertor(param)
                 case idl.IDLUndefinedType:
                 case idl.IDLVoidType: return new UndefinedConvertor(param)
                 default: throw new Error(`Unconverted ${type}`)

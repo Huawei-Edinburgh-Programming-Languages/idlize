@@ -14,7 +14,7 @@
  */
 
 import * as idl from "@idlize/core/idl"
-import { Language, hashCodeFromString, warn } from "@idlize/core"
+import { Language, PrintHint, hashCodeFromString, warn } from "@idlize/core"
 import { RuntimeType, ArgConvertor, BaseArgConvertor, ExpressionAssigner, UndefinedConvertor } from "@idlize/core"
 import { LibraryInterface } from "../LibraryInterface"
 import { ArkPrimitiveType } from "./ArkPrimitiveType"
@@ -135,35 +135,6 @@ export class CustomTypeConvertor extends BaseArgConvertor {
     }
     interopType(): idl.IDLType {
         throw new Error("Must never be used")
-    }
-    isPointerType(): boolean {
-        return true
-    }
-}
-
-export class NumberConvertor extends BaseArgConvertor {
-    constructor(param: string, private primitiveType: ArkPrimitiveType) {
-        // TODO: as we pass tagged values - request serialization to array for now.
-        // Optimize me later!
-        super(idl.IDLNumberType, [RuntimeType.NUMBER], false, false, param)
-    }
-    convertorArg(param: string, writer: LanguageWriter): string {
-        return writer.language == Language.CPP ?  `(const ${this.primitiveType.getText()}*)&${param}` : param
-    }
-    convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
-        printer.writeMethodCall(`${param}Serializer`, "writeNumber", [value])
-    }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
-        return assigneer(writer.makeCast(
-            writer.makeString(`${deserializerName}.readNumber()`),
-            this.idlType, { optional: false })
-        )
-    }
-    nativeType(): idl.IDLType {
-        return idl.IDLNumberType
-    }
-    interopType(): idl.IDLType {
-        return idl.IDLNumberType
     }
     isPointerType(): boolean {
         return true

@@ -23,7 +23,7 @@ import {
     LanguageStatement,
     LanguageWriter,
     Method,
-    MethodArgPrintHint,
+    PrintHint,
     MethodModifier,
     MethodSignature,
     ReturnStatement
@@ -121,10 +121,10 @@ export abstract class CLikeLanguageWriter extends LanguageWriter {
         prefix = prefix ? prefix + " " : ""
         this.print(`${prefix}${this.stringifyMethodReturnType(signature.returnType, signature.retHint())} ${name}(${signature.args.map((it, index) => `${this.stringifyMethodArgType(it, signature.argHint(index))} ${signature.argName(index)}`).join(", ")})${postfix ?? ""}`)
     }
-    protected stringifyMethodReturnType(type: idl.IDLType, _?:MethodArgPrintHint): string {
+    protected stringifyMethodReturnType(type: idl.IDLType, _?:PrintHint): string {
         return this.getNodeName(type)
     }
-    protected stringifyMethodArgType(type: idl.IDLType, _?:MethodArgPrintHint): string {
+    protected stringifyMethodArgType(type: idl.IDLType, _?:PrintHint): string {
         return this.getNodeName(type)
     }
 }

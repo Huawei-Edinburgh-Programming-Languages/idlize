@@ -29,7 +29,7 @@ import { printCallbacksKinds, printCallbacksKindsImports, printDeserializeAndCal
 import * as idl from "@idlize/core/idl"
 import { createEmptyReferenceResolver, ReferenceResolver } from "@idlize/core"
 import { getReferenceResolver } from "./ReferenceResolver"
-import { MethodArgPrintHint } from "./LanguageWriters/LanguageWriter"
+import { PrintHint } from "./LanguageWriters/LanguageWriter"
 import { SourceFile, TsSourceFile, CJSourceFile } from "./printers/SourceFile"
 import { NativeModule } from "./NativeModule"
 
@@ -608,7 +608,7 @@ export function makeCEventsArkoalaImpl(resolver: ReferenceResolver, implData: La
     writer.concat(implData)
     writer.writeMethodImplementation(new Method(
         `GetArkUiEventsAPI`,
-        new MethodSignature(idl.createReferenceType(`${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI`), [], undefined, [MethodArgPrintHint.AsConstPointer]),
+        new MethodSignature(idl.createReferenceType(`${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI`), [], undefined, [PrintHint.AsConstPointer]),
     ), (writer) => {
         writer.print(`static const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI eventsImpl = {`)
         writer.pushIndent()
@@ -637,14 +637,14 @@ export function makeCEventsLibaceImpl(implData: PrinterLike, receiversList: Prin
         new NamedMethodSignature(idl.IDLVoidType, [
             idl.createReferenceType(`${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI`)],
             [`api`], undefined,
-            [undefined, MethodArgPrintHint.AsConstPointer]),
+            [undefined, PrintHint.AsConstPointer]),
     ), (writer) => {
         writer.writeStatement(writer.makeAssign(`g_OverriddenEventsImpl`, undefined, writer.makeString(`api`), false))
     })
 
     writer.writeMethodImplementation(new Method(
         `${PeerGeneratorConfig.cppPrefix}GetArkUiEventsAPI`,
-        new MethodSignature(idl.createReferenceType(`${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI`), [], undefined, [MethodArgPrintHint.AsConstPointer]),
+        new MethodSignature(idl.createReferenceType(`${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI`), [], undefined, [PrintHint.AsConstPointer]),
     ), (writer) => {
         writer.print(`static const ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI eventsImpl = {`)
         writer.pushIndent()

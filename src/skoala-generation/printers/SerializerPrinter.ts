@@ -43,7 +43,7 @@ class IdlSerializerPrinter {
                 const properties = collectProperties(target, this.library)
                 if (properties.length > 0) {
                     writer.writeStatement(
-                        writer.makeAssign("valueSerializer", writer.makeRef("Serializer"), writer.makeThis(), true, false))
+                        writer.makeAssign("valueSerializer", writer.makeRef(idl.createReferenceType("Serializer")), writer.makeThis(), true, false))
                 }
                 properties.forEach(it => {
                     let field = `value_${it.name}`

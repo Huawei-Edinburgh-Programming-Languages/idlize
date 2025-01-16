@@ -38,7 +38,7 @@ import {
     MakeCastOptions,
     MakeRefOptions,
     Method,
-    MethodArgPrintHint,
+    PrintHint,
     MethodModifier,
     MethodSignature,
     NamedMethodSignature,
@@ -258,10 +258,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         this.print(`#include <${path}>`)
     }
 
-    override makeRef(type: IDLType | string, options?:MakeRefOptions): IDLType {
-        if (typeof type === 'string') {
-            return createReferenceType(`${type}&`)
-        }
+    override makeRef(type: IDLType, options?:MakeRefOptions): IDLType {
         return createReferenceType(`${this.stringifyTypeWithReceiver(type, options?.receiver)}&`)
     }
     override makeThis(): LanguageExpression {
@@ -390,6 +387,23 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     makeUnsafeCast(convertor: ArgConvertor, param: string): string {
         return param
     }
+    makeUnsafeCast_(value: LanguageExpression, type: IDLType, typeOptions?: PrintHint): string {
+        let typeName = this.getNodeName(type)
+        switch (typeOptions) {
+            case PrintHint.AsPointer:
+                typeName = `${typeName}*`
+                break
+            case PrintHint.AsConstPointer:
+                typeName = `const ${typeName}*`
+                break;
+            case PrintHint.AsConstReference:
+                typeName = `const ${typeName}&`
+                break
+            default:
+                break;
+        }
+        return `(${typeName}) (${value.asString()})`
+    }
     override makeEnumCast(value: string, _unsafe: boolean, convertor: ArgConvertor | undefined): string {
         if (convertor !== undefined) {
             return `static_cast<${this.typeConvertor.convert(convertor.nativeType())}>(${value})`
@@ -412,35 +426,35 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
 
         return typeName
     }
-    override stringifyMethodReturnType(type:IDLType, hint?: MethodArgPrintHint): string {
+    override stringifyMethodReturnType(type:IDLType, hint?: PrintHint): string {
         const name = this.getNodeName(type)
         let postfix = ''
-        if (hint === MethodArgPrintHint.AsPointer || hint === MethodArgPrintHint.AsConstPointer) {
+        if (hint === PrintHint.AsPointer || hint === PrintHint.AsConstPointer) {
             postfix = '*'
         }
         let constModifier = ''
-        if (hint === MethodArgPrintHint.AsConstPointer) {
+        if (hint === PrintHint.AsConstPointer) {
             constModifier = 'const '
         }
         return `${constModifier}${name}${postfix}`
     }
-    override stringifyMethodArgType(type:IDLType, hint?: MethodArgPrintHint): string {
+    override stringifyMethodArgType(type:IDLType, hint?: PrintHint): string {
         // we should decide pass by value or by reference here
         const name = this.getNodeName(type)
         let constModifier = ''
         let postfix = ''
         switch (hint) {
             case undefined:
-            case MethodArgPrintHint.AsValue:
+            case PrintHint.AsValue:
                 break;
-            case MethodArgPrintHint.AsPointer:
+            case PrintHint.AsPointer:
                 postfix = '*'
                 break;
-            case MethodArgPrintHint.AsConstPointer:
+            case PrintHint.AsConstPointer:
                 constModifier = 'const ';
                 postfix = '*'
                 break;
-            case MethodArgPrintHint.AsConstReference:
+            case PrintHint.AsConstReference:
                 constModifier = 'const '
                 postfix = '&'
                 break;
@@ -464,7 +478,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
             ],
             ["data", "resourceHolder"],
             [undefined, `nullptr`],
-            [undefined, undefined, MethodArgPrintHint.AsPointer]
+            [undefined, undefined, PrintHint.AsPointer]
         )
     }
     override makeLengthSerializer(serializer: string, value: string): LanguageStatement | undefined {

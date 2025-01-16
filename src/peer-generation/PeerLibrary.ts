@@ -20,11 +20,11 @@ import { isMaterialized, isPredefined } from './idl/IdlPeerGeneratorVisitor';
 import { PeerFile } from "./PeerFile";
 import { AggregateConvertor, ArrayConvertor, BufferConvertor, CallbackConvertor, ClassConvertor, DateConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, MapConvertor, MaterializedClassConvertor, NumericConvertor, OptionConvertor,  PointerConvertor, TupleConvertor, TypeAliasConvertor, UnionConvertor } from './ArgConvertors';
 import { StringConvertor } from "@idlize/core"
-import { IndentedPrinter, Language, warn, isImportAttr, isStringEnum } from '@idlize/core'
+import { IndentedPrinter, Language, warn, isImportAttr, isStringEnum, NumberConvertor } from '@idlize/core'
 import { createTypeNameConvertor } from './LanguageWriters';
 import { LanguageWriter } from '@idlize/core';
 import { StructPrinter } from './printers/StructPrinter';
-import { CustomTypeConvertor, LengthConvertor, NumberConvertor } from './ArgConvertors';
+import { CustomTypeConvertor, LengthConvertor } from './ArgConvertors';
 import { ArgConvertor, BooleanConvertor, EnumConvertor, UndefinedConvertor, VoidConvertor } from '@idlize/core';
 import { generateSyntheticFunctionName } from '../IDLVisitor';
 import { IdlNameConvertor } from '@idlize/core';
@@ -170,8 +170,8 @@ export class PeerLibrary implements LibraryInterface {
 
                 case idl.IDLBufferType: return new BufferConvertor(param)
                 case idl.IDLBooleanType: return new BooleanConvertor(param)
-                case idl.IDLStringType: return new StringConvertor(param, ArkPrimitiveType.Instance.String)
-                case idl.IDLNumberType: return new NumberConvertor(param, ArkPrimitiveType.Instance.Number)
+                case idl.IDLStringType: return new StringConvertor(param)
+                case idl.IDLNumberType: return new NumberConvertor(param)
                 case idl.IDLUndefinedType: return new UndefinedConvertor(param)
                 case idl.IDLVoidType: return new VoidConvertor(param)
                 case idl.IDLUnknownType:

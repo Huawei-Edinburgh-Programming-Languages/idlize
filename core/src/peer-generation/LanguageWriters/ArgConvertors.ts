@@ -15,7 +15,7 @@
 
 import * as idl from "../../idl";
 import { Language } from "../../Language";
-import { LanguageExpression, LanguageStatement, LanguageWriter, ExpressionAssigner } from "./LanguageWriter";
+import { LanguageExpression, LanguageStatement, LanguageWriter, ExpressionAssigner, PrintHint } from "./LanguageWriter";
 import { RuntimeType } from "./common";
 import { PrimitiveType } from "../PrimitiveType";
 
@@ -26,8 +26,6 @@ export interface ArgConvertor {
     useArray: boolean
     runtimeTypes: RuntimeType[]
     isOut?: true
-    scopeStart?(param: string, language: Language): string
-    scopeEnd?(param: string, language: Language): string
     convertorArg(param: string, writer: LanguageWriter): string
     convertorSerialize(param: string, value: string, writer: LanguageWriter): void
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement
@@ -61,8 +59,6 @@ export abstract class BaseArgConvertor implements ArgConvertor {
     targetType(writer: LanguageWriter): string {
         return writer.getNodeName(this.idlType)
     }
-    scopeStart?(param: string, language: Language): string
-    scopeEnd?(param: string, language: Language): string
     abstract convertorArg(param: string, writer: LanguageWriter): string
     abstract convertorSerialize(param: string, value: string, writer: LanguageWriter): void
     abstract convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement
@@ -151,11 +147,13 @@ export class VoidConvertor extends UndefinedConvertor {
 
 export class StringConvertor extends BaseArgConvertor {
     private literalValue?: string
-    constructor(param: string, private primitiveType: PrimitiveType) {
+    constructor(param: string) {
         super(idl.IDLStringType, [RuntimeType.STRING], false, false, param)
     }
     convertorArg(param: string, writer: LanguageWriter): string {
-        return writer.language == Language.CPP ? `(const ${this.primitiveType.getText()}*)&${param}` : param
+        return writer.language == Language.CPP
+            ? writer.makeUnsafeCast_(writer.makeString(`&${param}`), this.idlType, PrintHint.AsConstPointer)
+            : param
     }
     convertorSerialize(param: string, value: string, writer: LanguageWriter): void {
         writer.writeMethodCall(`${param}Serializer`, `writeString`, [value])
@@ -240,5 +238,36 @@ export class EnumConvertor extends BaseArgConvertor { //
             if (high < value) high = value
         })
         return {low, high}
+    }
+}
+
+export class NumberConvertor extends BaseArgConvertor {
+    constructor(param: string) {
+        // TODO: as we pass tagged values - request serialization to array for now.
+        // Optimize me later!
+        super(idl.IDLNumberType, [RuntimeType.NUMBER], false, false, param)
+    }
+    convertorArg(param: string, writer: LanguageWriter): string {
+        return writer.language == Language.CPP
+            ? writer.makeUnsafeCast_(writer.makeString(`&${param}`), this.idlType, PrintHint.AsConstPointer)
+            : param
+    }
+    convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
+        printer.writeMethodCall(`${param}Serializer`, "writeNumber", [value])
+    }
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
+        return assigneer(writer.makeCast(
+            writer.makeString(`${deserializerName}.readNumber()`),
+            this.idlType, { optional: false })
+        )
+    }
+    nativeType(): idl.IDLType {
+        return idl.IDLNumberType
+    }
+    interopType(): idl.IDLType {
+        return idl.IDLNumberType
+    }
+    isPointerType(): boolean {
+        return true
     }
 }

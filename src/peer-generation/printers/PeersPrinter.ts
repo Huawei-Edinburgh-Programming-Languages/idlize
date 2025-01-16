@@ -430,7 +430,6 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
         let scopes = method.argAndOutConvertors.filter(it => it.isScoped)
         scopes.forEach(it => {
             writer.pushIndent()
-            writer.print(it.scopeStart?.(it.param, printer.language))
         })
         let serializerCreated = false
         let returnValueFilledThroughOutArg = false
@@ -490,7 +489,6 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
                 writer.makeMethodCall('thisSerializer', 'release', [])))
         scopes.reverse().forEach(it => {
             writer.popIndent()
-            writer.print(it.scopeEnd!(it.param, writer.language))
         })
         // TODO: refactor
         if (returnType != IDLVoidType) {

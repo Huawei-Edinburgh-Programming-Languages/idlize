@@ -21,7 +21,7 @@ import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { ImportsCollector } from "../ImportsCollector";
 import { Language } from  '@idlize/core'
 import { CallbackConvertor, CallbackKind, generateCallbackAPIArguments, generateCallbackKindAccess, generateCallbackKindName, generateCallbackKindValue, maybeTransformManagedCallback } from "../ArgConvertors";
-import { MethodArgPrintHint } from "@idlize/core";
+import { PrintHint } from "@idlize/core";
 import { CppSourceFile, SourceFile, TsSourceFile } from "./SourceFile";
 import { ArkPrimitiveType } from "../ArkPrimitiveType";
 import { collectDeclItself, collectDeclDependencies } from "../ImportsCollectorUtils";
@@ -472,7 +472,7 @@ class ManagedCallCallbackVisitor {
             [idl.createReferenceType(`CallbackKind`)],
             [`kind`],
             undefined,
-            [undefined, MethodArgPrintHint.AsValue]
+            [undefined, PrintHint.AsValue]
         )
         this.writer.writeFunctionImplementation(`getManagedCallbackCaller`, signature, writer => {
             writer.print(`switch (kind) {`)
