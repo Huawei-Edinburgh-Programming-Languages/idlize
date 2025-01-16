@@ -270,7 +270,7 @@
 |`onTouchIntercept`| Function | Andrey Khudenkikh | testskipped | UT in progress Andrey Khudenkikh |
 |`onSizeChange`| Function | Dmitry A Smirnov|testskipped | |
 |`customProperty`| Function | Dmitry A Smirnov|blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX + need clrify bridge implementation|
-|`expandSafeArea`| Function | Dmitry A Smirnov|testskipped | |
+|`expandSafeArea`| Function | Dmitry A Smirnov|testskipped |default value https://gitee.com/openharmony/arkui_ace_engine/issues/IBICVG?from=project-issue |
 |`background`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`backgroundImage`| Function | Erokhin Ilya | in progress | PixelMap on https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`backgroundBlurStyle`| Function | Skroba Gleb | done |  |
