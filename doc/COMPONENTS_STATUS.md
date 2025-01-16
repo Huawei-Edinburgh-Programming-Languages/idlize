@@ -519,7 +519,7 @@
 |*ImageSpan*| *Component* | Politov Mikhail | blocked |  |
 |`setImageSpanOptions`| Function | Politov Mikhail | in progress | PixelMap on https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`verticalAlign`| Function | Politov Mikhail | done |  |
-|`colorFilter`| Function | Politov Mikhail | in progress | PixelMap on https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
+|`colorFilter`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0Y72 | |
 |`objectFit`| Function | Politov Mikhail | done |  |
 |`onComplete`| Function | Politov Mikhail | done |  |
 |`onError`| Function | Politov Mikhail | done |  |
