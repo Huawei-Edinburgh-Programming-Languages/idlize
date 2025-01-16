@@ -24,7 +24,7 @@ export default {
     input: "./src/main.ts",
     output: {
         file: "./lib/index.js",
-        format: "commonjs",
+        format: "esnext",
         sourcemap: ENABLE_SOURCE_MAPS,
         sourcemapPathTransform: (relativeSourcePath, sourcemapPath) => {
             // For some reason Rollup adds extra ../ to relativeSourcePath, remove it

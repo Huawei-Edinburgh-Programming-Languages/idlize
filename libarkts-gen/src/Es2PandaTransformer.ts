@@ -173,7 +173,6 @@ function className(classes: Map<string, IDLInterface>, name: string): string|und
 }
 
 function methodName(clazzName: string, name: string): string|undefined {
-    console.log("XXX", clazzName, name)
     return name.substring(clazzName.length)
 }
 

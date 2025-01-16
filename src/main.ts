@@ -46,6 +46,8 @@ import { IdlSkoalaLibrary, IldSkoalaFile } from "./skoala-generation/idl/idlSkoa
 import { generateIdlSkoala } from "./skoala-generation/SkoalaGeneration"
 import { IdlWrapperProcessor } from "./skoala-generation/idl/idlSkoalaLibrary"
 import { fillSyntheticDeclarations } from "./peer-generation/idl/SyntheticDeclarationsFiller"
+import { PeerLibrary } from "./peer-generation/PeerLibrary"
+import { PeerFile } from "./peer-generation/PeerFile"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
