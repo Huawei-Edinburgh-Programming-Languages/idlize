@@ -1,4 +1,4 @@
-idlize sanity:
+libarkts-gen idl:
   stage: test
   tags:
     - idlize-ci
