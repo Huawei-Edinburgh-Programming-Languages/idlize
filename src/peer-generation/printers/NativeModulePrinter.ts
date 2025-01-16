@@ -25,7 +25,7 @@ import { InteropArgConvertor } from "../LanguageWriters/convertors/InteropConver
 import { NativeModule } from "../NativeModule";
 import { NativeModuleType } from "@idlize/core"
 import { ArkTSSourceFile, SourceFile, TsSourceFile } from "./SourceFile";
-import { CJLanguageWriter } from "../LanguageWriters/writers/CJLanguageWriter";
+import { CJLanguageWriter } from "@idlize/core";
 
 class NativeModulePrinterBase {
     readonly nativeModule: LanguageWriter = createLanguageWriter(this.language, this.library)

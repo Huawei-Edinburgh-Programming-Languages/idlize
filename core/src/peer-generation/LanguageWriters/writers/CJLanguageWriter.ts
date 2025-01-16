@@ -13,10 +13,11 @@
  * limitations under the License.
  */
 
-import * as idl from  '@idlize/core/idl'
-import { IDLNumberType, IDLType } from '@idlize/core/idl'
-import { IndentedPrinter, Language, CJKeywords, isDefined } from  '@idlize/core'
-import { ArgConvertor, BaseArgConvertor, RuntimeType } from "@idlize/core"
+import * as idl from "../../../idl"
+import { IndentedPrinter } from "../../../IndentedPrinter";
+import { CJKeywords } from "../../../languageSpecificKeywords";
+import { ArgConvertor, BaseArgConvertor } from "../ArgConvertors"
+import { RuntimeType } from "../common"
 import {
     AssignStatement,
     ExpressionStatement,
@@ -33,9 +34,10 @@ import {
     ObjectArgs,
     ReturnStatement,
     StringExpression
-} from "@idlize/core"
-import { IdlNameConvertor } from "@idlize/core"
-import { CJIDLTypeToForeignStringConvertor, CJIDLNodeToStringConvertor } from "../convertors/CJConvertors"
+} from "../LanguageWriter"
+import { IdlNameConvertor } from "../nameConvertor"
+import { Language } from "../../../Language";
+import { isDefined } from "../../../util";
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -117,7 +119,7 @@ export class CJNewObjectExpression implements LanguageExpression {
 
 export class CJAssignStatement extends AssignStatement {
     constructor(public variableName: string,
-        public type: IDLType | undefined,
+        public type: idl.IDLType | undefined,
         public expression: LanguageExpression,
         public isDeclared: boolean = true,
         public isConst: boolean = true) {
@@ -272,13 +274,17 @@ class CJArrayResizeStatement implements LanguageStatement {
 export class CJLanguageWriter extends LanguageWriter {
     protected typeConvertor: IdlNameConvertor
     protected typeForeignConvertor: IdlNameConvertor
-    constructor(printer: IndentedPrinter, resolver: idl.ReferenceResolver, language: Language = Language.CJ) {
+    constructor(printer: IndentedPrinter,
+                resolver: idl.ReferenceResolver,
+                typeConvertor: IdlNameConvertor,
+                typeForeignConvertor: IdlNameConvertor,
+                language: Language = Language.CJ) {
         super(printer, resolver, language)
-        this.typeConvertor = new CJIDLNodeToStringConvertor(this.resolver)
-        this.typeForeignConvertor = new CJIDLTypeToForeignStringConvertor(this.resolver)
+        this.typeConvertor = typeConvertor
+        this.typeForeignConvertor = typeForeignConvertor
     }
     fork(options?: { resolver?: idl.ReferenceResolver }): LanguageWriter {
-        return new CJLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver)
+        return new CJLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver, this.typeConvertor, this.typeForeignConvertor)
     }
     getNodeName(type: idl.IDLNode): string {
         return this.typeConvertor.convert(type)
@@ -342,7 +348,7 @@ export class CJLanguageWriter extends LanguageWriter {
             super.writeMethodCall(receiver, method, params, nullable)
         }
     }
-    writeFieldDeclaration(name: string, type: IDLType, modifiers: FieldModifier[]|undefined, optional: boolean, initExpr?: LanguageExpression): void {
+    writeFieldDeclaration(name: string, type: idl.IDLType, modifiers: FieldModifier[]|undefined, optional: boolean, initExpr?: LanguageExpression): void {
         const init = initExpr != undefined ? ` = ${initExpr.asString()}` : ``
         name = this.escapeKeyword(name)
         let prefix = this.makeFieldModifiersList(modifiers)
@@ -419,7 +425,7 @@ export class CJLanguageWriter extends LanguageWriter {
     override makeEnumCast(enumName: string, _unsafe: boolean, _convertor: ArgConvertor | undefined): string {
         return `${enumName}.value`
     }
-    makeAssign(variableName: string, type: IDLType | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
+    makeAssign(variableName: string, type: idl.IDLType | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
         return new CJAssignStatement(variableName, type, expr, isDeclared, isConst)
     }
     makeClassInit(type: idl.IDLType, paramenters: LanguageExpression[]): LanguageExpression {
@@ -482,7 +488,7 @@ export class CJLanguageWriter extends LanguageWriter {
     writePrintLog(message: string): void {
         this.print(`println("${message}")`)
     }
-    makeCast(value: LanguageExpression, type: IDLType, options?:MakeCastOptions): LanguageExpression {
+    makeCast(value: LanguageExpression, type: idl.IDLType, options?:MakeCastOptions): LanguageExpression {
         return new CJCastExpression(value, this.getNodeName(type), options?.unsafe ?? false)
     }
     getObjectAccessor(convertor: BaseArgConvertor, value: string, args?: ObjectArgs): string {
@@ -510,11 +516,11 @@ export class CJLanguageWriter extends LanguageWriter {
     makeNull(value?: string): LanguageExpression {
         return new StringExpression(`None<${value}>`)
     }
-    getTagType(): IDLType {
+    getTagType(): idl.IDLType {
         return idl.createReferenceType("Tags")
     }
-    getRuntimeType(): IDLType {
-        return IDLNumberType
+    getRuntimeType(): idl.IDLType {
+        return idl.IDLNumberType
     }
     makeTupleAssign(receiver: string, fields: string[]): LanguageStatement {
         return this.makeAssign(receiver, undefined,

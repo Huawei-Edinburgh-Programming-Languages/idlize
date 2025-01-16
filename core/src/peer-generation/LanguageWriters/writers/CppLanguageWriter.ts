@@ -392,7 +392,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     }
     override makeEnumCast(value: string, _unsafe: boolean, convertor: ArgConvertor | undefined): string {
         if (convertor !== undefined) {
-            return `static_cast<${this.typeConvertor.convert(convertor.idlType)}>(${value})`
+            return `static_cast<${this.typeConvertor.convert(convertor.nativeType())}>(${value})`
         }
         throwException("Need pass EnumConvertor")
     }
