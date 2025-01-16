@@ -22,11 +22,11 @@
   tags:
   - idlize-ci
   - koala-ci
-  # rules:
-  # - if: $CI_PIPELINE_SOURCE == "schedule"
-  #   when: never
-  # - if: $CI_COMMIT_BRANCH == "master"
-  #   when: on_success
+  rules:
+  - if: $CI_PIPELINE_SOURCE == "schedule"
+    when: never
+  - if: $CI_COMMIT_BRANCH == "master"
+    when: on_success
   before_script:
     - !reference [.setup, script]
     - cd $PACKAGE_DIR
