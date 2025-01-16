@@ -565,15 +565,15 @@
 |`onScrollFrameBegin`|Function| Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`lanes`|Function|Morozov Sergey|done|  |
 |`edgeEffect`|Function|Morozov Sergey|done|  |
-|*ListItem*|*Component*|Morozov Sergey|blocked IDL|  |
+|*ListItem*|*Component*|Morozov Sergey|done|  |
 |`setListItemOptions`|Function|Morozov Sergey| done | deprecated for SetListItemOptions1Impl |
 |`sticky`|Function|Morozov Sergey|done|  |
 |`editable`|Function|Morozov Sergey|done|  |
 |`selectable`|Function|Morozov Sergey|done|  |
 |`selected`|Function|Morozov Sergey|done|  |
-|`swipeAction`|Function|Samarin Sergey| testskipped | UT in progress Morozov Sergey |
+|`swipeAction`|Function|Samarin Sergey| done |  |
 |`onSelect`|Function|Morozov Sergey|done|  |
-|*ListItemGroup*|*Component*|Morozov Sergey|blocked|  |
+|*ListItemGroup*|*Component*|Morozov Sergey|done|  |
 |`setListItemGroupOptions`|Function|Dmitry A Smirnov | done | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`divider`|Function|Morozov Sergey|done|  |
 |`childrenMainSize`|Function|Morozov Sergey|done|  |
@@ -616,7 +616,7 @@
 |`contentFontColor`| Function |Morozov Sergey|done|  |
 |`labelFont`| Function |Morozov Sergey|done|  |
 |`labelFontColor`| Function |Morozov Sergey|done|  |
-|*MenuItemGroup*| *Component* |Morozov Sergey |blocked |  |
+|*MenuItemGroup*| *Component* |Morozov Sergey |done |  |
 |`setMenuItemGroupOptions`| Function | Dmitry A Smirnov | done | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*NavDestination*| *Component* |Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`setNavDestinationOptions`| Function |Kovalev Sergey | done | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
