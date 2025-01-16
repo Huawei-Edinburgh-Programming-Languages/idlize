@@ -40,6 +40,8 @@ import { getReferenceResolver } from "../ReferenceResolver"
 import { ReferenceResolver } from "@idlize/core"
 import { ETSLanguageWriter } from "../LanguageWriters/writers/ETSLanguageWriter";
 import { collectDeclItself, collectDeclDependencies } from "../ImportsCollectorUtils"
+import { CppIDLNodeToStringConvertor } from "../LanguageWriters/convertors/CppConvertors";
+import { ArkPrimitiveTypes } from "../ArkPrimitiveType";
 
 export const PeerEventsProperties = "PeerEventsProperties"
 export const PeerEventKind = "PeerEventKind"
@@ -200,8 +202,8 @@ export function collapseIdlEventsOverloads(library: PeerLibrary, peer: PeerClass
 }
 
 abstract class CEventsVisitorBase {
-    readonly impl: CppLanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library)
-    readonly receiversList: LanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library)
+    readonly impl: CppLanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppIDLNodeToStringConvertor(this.library), new ArkPrimitiveTypes())
+    readonly receiversList: LanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppIDLNodeToStringConvertor(this.library), new ArkPrimitiveTypes())
 
     constructor(
         protected readonly library: PeerLibrary,

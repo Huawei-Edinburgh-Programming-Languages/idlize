@@ -22,7 +22,7 @@ import { IndentedPrinter, Language, capitalize, qualifiedName } from '@idlize/co
 import { ArgConvertor } from '@idlize/core'
 import { generateCallbackAPIArguments } from './ArgConvertors'
 import { createOutArgConvertor } from './PromiseConvertors'
-import { ArkPrimitiveType } from './ArkPrimitiveType'
+import { ArkPrimitiveType, ArkPrimitiveTypes } from './ArkPrimitiveType'
 import { makeDeserializeAndCall, makeSerializerForOhos, readLangTemplate } from './FileGenerators'
 import { isMaterialized } from './idl/IdlPeerGeneratorVisitor'
 import { CppLanguageWriter, createLanguageWriter, ExpressionStatement, LanguageExpression, Method, MethodModifier, MethodSignature, NamedMethodSignature } from './LanguageWriters'
@@ -38,6 +38,7 @@ import { collapseSameMethodsIDL, groupOverloads, groupOverloadsIDL, OverloadsPri
 import { MaterializedClass, MaterializedMethod } from './Materialized'
 import { PeerMethod } from './PeerMethod'
 import { writePeerMethod } from './printers/PeersPrinter'
+import { CppIDLNodeToStringConvertor } from "./LanguageWriters/convertors/CppConvertors";
 
 class NameType {
     constructor(public name: string, public type: string) {}
@@ -52,8 +53,8 @@ interface SignatureDescriptor {
 class OHOSVisitor {
     implementationStubsFile: CppSourceFile
 
-    hWriter = new CppLanguageWriter(new IndentedPrinter(), this.library)
-    cppWriter = new CppLanguageWriter(new IndentedPrinter(), this.library)
+    hWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppIDLNodeToStringConvertor(this.library), new ArkPrimitiveTypes())
+    cppWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppIDLNodeToStringConvertor(this.library), new ArkPrimitiveTypes())
 
     peerWriter: LanguageWriter
     nativeWriter: LanguageWriter
@@ -646,7 +647,7 @@ class OHOSVisitor {
         writeSerializer(this.library, this.cppWriter, prefix)
         writeDeserializer(this.library, this.cppWriter, prefix)
 
-        let writer = new CppLanguageWriter(new IndentedPrinter(), this.library)
+        let writer = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppIDLNodeToStringConvertor(this.library), new ArkPrimitiveTypes())
         this.writeModifiers(writer)
         this.writeImpls()
         this.cppWriter.concat(writer)
@@ -814,7 +815,7 @@ function generateArgConvertor(library: PeerLibrary, param: IDLParameter): ArgCon
 
 // TODO drop this method
 function generateCParameters(method: IDLMethod | IDLConstructor, argConvertors: ArgConvertor[], writer: LanguageWriter): string {
-    let args = isConstructor(method) ? [] : [`${ArkPrimitiveType.NativePointer} thisPtr`]
+    let args = isConstructor(method) ? [] : [`${ArkPrimitiveType.Instance.NativePointer} thisPtr`]
     for (let i = 0; i < argConvertors.length; ++i) {
         const typeName = writer.getNodeName(argConvertors[i].nativeType())
         const argName = writer.escapeKeyword(argConvertors[i].param)

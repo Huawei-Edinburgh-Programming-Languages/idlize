@@ -62,7 +62,7 @@ export class LengthConvertor extends BaseArgConvertor {
     }
     convertorArg(param: string, writer: LanguageWriter): string {
         switch (writer.language) {
-            case Language.CPP: return `(const ${ArkPrimitiveType.Length.getText()}*)&${param}`
+            case Language.CPP: return `(const ${ArkPrimitiveType.Instance.Length.getText()}*)&${param}`
             case Language.JAVA: return `${param}.value`
             case Language.CJ: return `${param}.value`
             default: return param
@@ -1047,7 +1047,7 @@ export function generateCallbackKindValue(callback: idl.IDLCallback): number {
 
 export function generateCallbackAPIArguments(library: LibraryInterface, callback: idl.IDLCallback): string[] {
     const nameConvertor = createTypeNameConvertor(Language.CPP, library)
-    const args: string[] = [`const ${ArkPrimitiveType.Int32.getText()} resourceId`]
+    const args: string[] = [`const ${ArkPrimitiveType.Instance.Int32.getText()} resourceId`]
     args.push(...callback.parameters.map(it => {
         const target = library.toDeclaration(it.type!)
         const type = library.typeConvertor(it.name, it.type!, it.isOptional)

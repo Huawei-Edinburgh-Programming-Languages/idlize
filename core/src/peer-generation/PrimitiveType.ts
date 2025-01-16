@@ -14,19 +14,39 @@
  */
 
 export abstract class PrimitiveType {
-    static get UndefinedTag() {
-        return "INTEROP_TAG_UNDEFINED"
-    }
-
-    static get UndefinedRuntime() {
-        return "INTEROP_RUNTIME_UNDEFINED"
-    }
-
-    static get ObjectTag() {
-        return "INTEROP_TAG_OBJECT"
+    constructor(protected name: string, protected isPointer: boolean = false) {
     }
 
     abstract getText(): string
 
     toString(): string { return this.getText() }
+}
+
+
+export abstract class PrimitiveTypes {
+    public static get UndefinedTag() {
+        return "INTEROP_TAG_UNDEFINED"
+    }
+
+    public static get UndefinedRuntime() {
+        return "INTEROP_RUNTIME_UNDEFINED"
+    }
+
+    public static get ObjectTag() {
+        return "INTEROP_TAG_OBJECT"
+    }
+
+    abstract String: PrimitiveType
+    abstract Number: PrimitiveType
+    abstract Int32: PrimitiveType
+    abstract Int64: PrimitiveType
+    abstract Date: PrimitiveType
+    abstract RuntimeType: PrimitiveType
+    abstract Boolean: PrimitiveType
+    abstract Function: PrimitiveType
+    abstract Undefined: PrimitiveType
+    abstract Void: PrimitiveType
+    abstract NativePointer: PrimitiveType
+    abstract Tag: PrimitiveType
+    abstract CustomObject: PrimitiveType
 }

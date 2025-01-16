@@ -13,36 +13,35 @@
  * limitations under the License.
  */
 
-import { PrimitiveType } from "@idlize/core"
+import { PrimitiveType, PrimitiveTypes } from "@idlize/core"
+
+export class ArkPrimitiveTypes extends PrimitiveTypes {
+    readonly String: PrimitiveType = new ArkPrimitiveType(`String`, true)
+    readonly Number = new ArkPrimitiveType(`Number`, true)
+    readonly Int32 = new ArkPrimitiveType(`Int32`)
+    readonly Int64 = new ArkPrimitiveType(`Int64`)
+    readonly Date = new ArkPrimitiveType(`Date`)
+    readonly RuntimeType = new ArkPrimitiveType(`RuntimeType`)
+    readonly Boolean = new ArkPrimitiveType(`Boolean`)
+    readonly Function = new ArkPrimitiveType(`Function`, false)
+    readonly Undefined = new ArkPrimitiveType(`Undefined`)
+    readonly Void = new ArkPrimitiveType(`Void`)
+    readonly NativePointer = new ArkPrimitiveType(`NativePointer`)
+    readonly Tag = new ArkPrimitiveType(`Tag`)
+    readonly Materialized = new ArkPrimitiveType(`Materialized`, true)
+    readonly ObjectHandle = new ArkPrimitiveType(`ObjectHandle`)
+    readonly Length = new ArkPrimitiveType(`Length`, true)
+    readonly CustomObject = new ArkPrimitiveType(`CustomObject`, true)
+}
 
 export class ArkPrimitiveType extends PrimitiveType {
     static Prefix = "Ark_"
     static LibraryPrefix = ""
     static OptionalPrefix = "Opt_"
 
-    constructor(protected name: string, public isPointer = false) {
-        super()
-    }
-
     getText(): string {
         return ArkPrimitiveType.Prefix + this.name
     }
 
-    static String = new ArkPrimitiveType(`String`, true)
-    static Number = new ArkPrimitiveType(`Number`, true)
-    static Int32 = new ArkPrimitiveType(`Int32`)
-    static Int64 = new ArkPrimitiveType(`Int64`)
-    static Date = new ArkPrimitiveType(`Date`)
-    static RuntimeType = new ArkPrimitiveType(`RuntimeType`)
-    static Boolean = new ArkPrimitiveType(`Boolean`)
-    static Function = new ArkPrimitiveType(`Function`, false)
-    static Undefined = new ArkPrimitiveType(`Undefined`)
-    static Void = new ArkPrimitiveType(`Void`)
-    static NativePointer = new ArkPrimitiveType(`NativePointer`)
-
-    static Tag = new ArkPrimitiveType(`Tag`)
-    static Materialized = new ArkPrimitiveType(`Materialized`, true)
-    static ObjectHandle = new ArkPrimitiveType(`ObjectHandle`)
-    static Length = new ArkPrimitiveType(`Length`, true)
-    static CustomObject = new ArkPrimitiveType(`CustomObject`, true)
+    static readonly Instance = new ArkPrimitiveTypes()
 }

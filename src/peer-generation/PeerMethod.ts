@@ -87,7 +87,7 @@ export class PeerMethod {
         if (!this.hasReceiver()) return undefined
         return {
             argName: "node",
-            argType: ArkPrimitiveType.NativePointer.getText()
+            argType: ArkPrimitiveType.Instance.NativePointer.getText()
         }
     }
 

@@ -170,8 +170,8 @@ export class PeerLibrary implements LibraryInterface {
 
                 case idl.IDLBufferType: return new BufferConvertor(param)
                 case idl.IDLBooleanType: return new BooleanConvertor(param)
-                case idl.IDLStringType: return new StringConvertor(param, ArkPrimitiveType.String)
-                case idl.IDLNumberType: return new NumberConvertor(param, ArkPrimitiveType.Number)
+                case idl.IDLStringType: return new StringConvertor(param, ArkPrimitiveType.Instance.String)
+                case idl.IDLNumberType: return new NumberConvertor(param, ArkPrimitiveType.Instance.Number)
                 case idl.IDLUndefinedType: return new UndefinedConvertor(param)
                 case idl.IDLVoidType: return new VoidConvertor(param)
                 case idl.IDLUnknownType:

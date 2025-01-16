@@ -511,9 +511,7 @@ export abstract class LanguageWriter {
     writeExpressionStatement(smth: LanguageExpression) {
         this.writeStatement(new ExpressionStatement(smth))
     }
-    makeTag(tag: string): string {
-        return "Tag." + tag
-    }
+
     makeRef(type: idl.IDLType | string, _options?:MakeRefOptions): idl.IDLType {
         if (typeof type === 'string') {
             return idl.createReferenceType(type)

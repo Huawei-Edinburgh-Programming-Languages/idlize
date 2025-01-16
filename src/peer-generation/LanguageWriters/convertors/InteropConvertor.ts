@@ -16,7 +16,7 @@
 import * as idl from '@idlize/core/idl'
 import { capitalize } from '@idlize/core'
 import { maybeTransformManagedCallback } from '../../ArgConvertors'
-import { ArkPrimitiveType } from '../../ArkPrimitiveType'
+import { ArkPrimitiveType, ArkPrimitiveTypes } from '../../ArkPrimitiveType'
 import { PeerGeneratorConfig } from '../../PeerGeneratorConfig'
 import { PeerMethod } from '../../PeerMethod'
 import { ReferenceResolver } from "@idlize/core"
@@ -165,8 +165,8 @@ export class InteropConverter implements NodeConvertor<ConvertResult> {
         switch (type.name) {
             // maybe we should remove them
             case "Resource": return "Resource"
-            case "Callback": return ArkPrimitiveType.Function.getText()
-            default: return ArkPrimitiveType.CustomObject.getText()
+            case "Callback": return ArkPrimitiveType.Instance.Function.getText()
+            default: return ArkPrimitiveType.Instance.CustomObject.getText()
         }
     }
 
@@ -212,7 +212,7 @@ export class InteropReturnTypeConvertor implements TypeConvertor<string> {
             // TODO return array by some way
             return "void"
         } else
-            return ArkPrimitiveType.NativePointer.getText()
+            return ArkPrimitiveType.Instance.NativePointer.getText()
     }
     convertImport(type: idl.IDLReferenceType, importClause: string): string {
         throw new Error(`Cannot pass import type ${type.name} through interop`)
@@ -233,8 +233,8 @@ export class InteropReturnTypeConvertor implements TypeConvertor<string> {
             case idl.IDLF16Type:
             case idl.IDLF32Type:
             case idl.IDLF64Type:
-            case idl.IDLNumberType: return ArkPrimitiveType.Int32.getText()
-            case idl.IDLBooleanType: return ArkPrimitiveType.Boolean.getText()
+            case idl.IDLNumberType: return ArkPrimitiveType.Instance.Int32.getText()
+            case idl.IDLBooleanType: return ArkPrimitiveType.Instance.Boolean.getText()
             case idl.IDLAnyType:
             case idl.IDLBufferType:
             case idl.IDLStringType:
@@ -242,7 +242,7 @@ export class InteropReturnTypeConvertor implements TypeConvertor<string> {
             case idl.IDLUndefinedType:
             case idl.IDLUnknownType:
             case idl.IDLVoidType: return idl.IDLVoidType.name
-            case idl.IDLPointerType: return ArkPrimitiveType.NativePointer.getText()
+            case idl.IDLPointerType: return ArkPrimitiveType.Instance.NativePointer.getText()
         }
         throw new Error(`Cannot pass primitive type ${type.name} through interop`)
     }
@@ -252,10 +252,10 @@ export class InteropReturnTypeConvertor implements TypeConvertor<string> {
     convertTypeReference(type: idl.IDLReferenceType): string {
         if (type.name.endsWith("Attribute"))
             return idl.IDLVoidType.name
-        return ArkPrimitiveType.NativePointer.getText()
+        return ArkPrimitiveType.Instance.NativePointer.getText()
     }
     convertUnion(type: idl.IDLUnionType): string {
-        return ArkPrimitiveType.NativePointer.getText()
+        return ArkPrimitiveType.Instance.NativePointer.getText()
     }
 }
 
@@ -284,7 +284,7 @@ export class InteropArgConvertor implements TypeConvertor<string> {
             case idl.IDLLengthType: return 'Length'
             case idl.IDLDate: return 'KLong'
             case idl.IDLUndefinedType:
-            case idl.IDLVoidType: return ArkPrimitiveType.NativePointer.getText()
+            case idl.IDLVoidType: return ArkPrimitiveType.Instance.NativePointer.getText()
             case idl.IDLPointerType: return "KPointer"//PrimitiveType.NativePointer.getText()
         }
         throw new Error(`Cannot pass primitive type ${type.name} through interop`)

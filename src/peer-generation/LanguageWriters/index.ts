@@ -18,7 +18,7 @@ import { LanguageWriter } from "@idlize/core";
 import { TSLanguageWriter } from "./writers/TsLanguageWriter";
 import { ETSLanguageWriter } from "./writers/ETSLanguageWriter";
 import { JavaLanguageWriter } from "./writers/JavaLanguageWriter";
-import { CppLanguageWriter } from "./writers/CppLanguageWriter";
+import { CppLanguageWriter } from "@idlize/core";
 import { CJLanguageWriter } from "./writers/CJLanguageWriter";
 import { ReferenceResolver } from "@idlize/core";
 
@@ -29,6 +29,7 @@ import { EtsIDLNodeToStringConvertor } from "./convertors/ETSConvertors";
 import { CppIDLNodeToStringConvertor, CppInteropArgConvertor } from "./convertors/CppConvertors";
 import { IdlNameConvertor } from "@idlize/core";
 import { InteropArgConvertor } from "./convertors/InteropConvertor";
+import { ArkPrimitiveTypes } from "../ArkPrimitiveType";
 
 //////////////////////////////////////////////////////////////////
 // REEXPORTS
@@ -58,7 +59,7 @@ export function createLanguageWriter(language: Language, resolver:ReferenceResol
         case Language.TS: return new TSLanguageWriter(new IndentedPrinter(), resolver, Language.TS)
         case Language.ARKTS: return new ETSLanguageWriter(new IndentedPrinter(), resolver)
         case Language.JAVA: return new JavaLanguageWriter(new IndentedPrinter(), resolver)
-        case Language.CPP: return new CppLanguageWriter(new IndentedPrinter(), resolver)
+        case Language.CPP: return new CppLanguageWriter(new IndentedPrinter(), resolver, new CppIDLNodeToStringConvertor(resolver), new ArkPrimitiveTypes())
         case Language.CJ: return new CJLanguageWriter(new IndentedPrinter(), resolver)
         default: throw new Error(`Language ${language.toString()} is not supported`)
     }

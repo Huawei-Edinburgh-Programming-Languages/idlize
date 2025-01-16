@@ -15,9 +15,9 @@
 import * as fs from "fs"
 import * as path from "path"
 import { IndentedPrinter, camelCaseToUpperSnakeCase, Language } from "@idlize/core"
-import { ArkPrimitiveType } from "./ArkPrimitiveType"
-import { CppLanguageWriter, createLanguageWriter, Method, MethodSignature, NamedMethodSignature, PrinterLike } from "./LanguageWriters"
-import { LanguageWriter } from "@idlize/core";
+import { ArkPrimitiveType, ArkPrimitiveTypes } from "./ArkPrimitiveType"
+import { createLanguageWriter, Method, MethodSignature, NamedMethodSignature, PrinterLike } from "./LanguageWriters"
+import { CppLanguageWriter, LanguageWriter } from "@idlize/core";
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
 import { writeDeserializer, writeDeserializerFile, writeSerializer, writeSerializerFile } from "./printers/SerializerPrinter"
 import { SELECTOR_ID_PREFIX, writeConvertors } from "./printers/ConvertorsPrinter"
@@ -34,6 +34,7 @@ import { SourceFile, TsSourceFile, CJSourceFile } from "./printers/SourceFile"
 import { NativeModule } from "./NativeModule"
 
 import { ReferenceResolver } from "@idlize/core";
+import { CppIDLNodeToStringConvertor } from "./LanguageWriters/convertors/CppConvertors";
 
 export const warning = "WARNING! THIS FILE IS AUTO-GENERATED, DO NOT MAKE CHANGES, THEY WILL BE LOST ON NEXT GENERATION!"
 
@@ -327,7 +328,8 @@ export function makeTypeChecker(library: PeerLibrary): { arkts: string, ts: stri
 }
 
 export function makeConverterHeader(path: string, namespace: string, library: PeerLibrary): LanguageWriter {
-    const converter = new CppLanguageWriter(new IndentedPrinter(), library)
+    const converter = new CppLanguageWriter(new IndentedPrinter(), library,
+        new CppIDLNodeToStringConvertor(library), new ArkPrimitiveTypes())
     converter.writeLines(cStyleCopyright)
     converter.writeLines(`/*
  * ${warning}
@@ -440,7 +442,7 @@ ${accessors.join("\n")}
 } ${PeerGeneratorConfig.cppPrefix}ArkUIAccessors;
 
 typedef struct ${PeerGeneratorConfig.cppPrefix}ArkUIGraphicsAPI {
-    ${ArkPrimitiveType.Int32.getText()} version;
+    ${ArkPrimitiveType.Instance.Int32.getText()} version;
 } ${PeerGeneratorConfig.cppPrefix}ArkUIGraphicsAPI;
 
 typedef struct ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI {
@@ -595,7 +597,7 @@ export function makeDeserializeAndCall(library: PeerLibrary, language: Language,
 }
 
 export function makeCEventsArkoalaImpl(resolver: ReferenceResolver, implData: LanguageWriter, receiversList: LanguageWriter): string {
-    const writer = new CppLanguageWriter(new IndentedPrinter(), resolver)
+    const writer = new CppLanguageWriter(new IndentedPrinter(), resolver, new CppIDLNodeToStringConvertor(resolver), new ArkPrimitiveTypes())
     writer.print(cStyleCopyright)
     writer.writeInclude("arkoala_api_generated.h")
     writer.writeInclude("events.h")
@@ -620,7 +622,7 @@ export function makeCEventsArkoalaImpl(resolver: ReferenceResolver, implData: La
 }
 
 export function makeCEventsLibaceImpl(implData: PrinterLike, receiversList: PrinterLike, namespace: string, resolver: ReferenceResolver): string {
-    const writer = new CppLanguageWriter(new IndentedPrinter(), resolver)
+    const writer = new CppLanguageWriter(new IndentedPrinter(), resolver, new CppIDLNodeToStringConvertor(resolver), new ArkPrimitiveTypes())
     writer.writeLines(cStyleCopyright)
     writer.print("")
     writer.writeInclude(`arkoala_api_generated.h`)

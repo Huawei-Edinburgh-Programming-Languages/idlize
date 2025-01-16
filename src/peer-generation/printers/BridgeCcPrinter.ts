@@ -141,7 +141,7 @@ class BridgeCcVisitor {
 
         this.generatedApi.print(`_logData.append("  ${api}->${modifier}->${this.getPeerMethodName(method)}(");`)
         if (method.hasReceiver()) {
-            this.generatedApi.print(`_logData.append("(${ArkPrimitiveType.NativePointer})");`)
+            this.generatedApi.print(`_logData.append("(${ArkPrimitiveType.Instance.NativePointer})");`)
             this.generatedApi.print(`_logData.append("peer" + std::to_string((uintptr_t)thisPtr));`);
             if (method.argAndOutConvertors.length > 0)
                 this.generatedApi.print(`_logData.append(", ");`)
@@ -182,7 +182,7 @@ class BridgeCcVisitor {
 
     private generateCParameters(method: PeerMethod): [string, string][] {
         const maybeReceiver: [string, string][] = method.hasReceiver()
-            ? [[ArkPrimitiveType.NativePointer.getText(), "thisPtr"]] : []
+            ? [[ArkPrimitiveType.Instance.NativePointer.getText(), "thisPtr"]] : []
         let ptrCreated = false;
         method.argAndOutConvertors.forEach(it => {
             if (it.useArray) {
@@ -315,7 +315,7 @@ class OhosBridgeCcVisitor extends BridgeCcVisitor {
             const modifier = this.generateApiCall(method, modifierName)
             const peerMethod = this.getPeerMethodName(method)
             const apiCall = this.getApiCall(method)
-            const call = `return (${ArkPrimitiveType.NativePointer}) ${apiCall}->${modifier}->${peerMethod};`
+            const call = `return (${ArkPrimitiveType.Instance.NativePointer}) ${apiCall}->${modifier}->${peerMethod};`
             this.generatedApi.print(call)
         } else {
             super.printAPICall(method, modifierName)

@@ -478,7 +478,7 @@ class ManagedCallCallbackVisitor {
             writer.print(`switch (kind) {`)
             writer.pushIndent()
             for (const callback of callbacks) {
-                writer.print(`case ${generateCallbackKindName(callback)}: return reinterpret_cast<${ArkPrimitiveType.NativePointer}>(callManaged${callback.name});`)
+                writer.print(`case ${generateCallbackKindName(callback)}: return reinterpret_cast<${ArkPrimitiveType.Instance.NativePointer}>(callManaged${callback.name});`)
             }
             writer.popIndent()
             writer.print(`}`)
@@ -488,7 +488,7 @@ class ManagedCallCallbackVisitor {
             writer.print(`switch (kind) {`)
             writer.pushIndent()
             for (const callback of callbacks) {
-                writer.print(`case ${generateCallbackKindName(callback)}: return reinterpret_cast<${ArkPrimitiveType.NativePointer}>(callManaged${callback.name}Sync);`)
+                writer.print(`case ${generateCallbackKindName(callback)}: return reinterpret_cast<${ArkPrimitiveType.Instance.NativePointer}>(callManaged${callback.name}Sync);`)
             }
             writer.popIndent()
             writer.print(`}`)

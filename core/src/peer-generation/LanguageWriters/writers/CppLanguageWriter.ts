@@ -13,10 +13,20 @@
  * limitations under the License.
  */
 
-import { createReferenceType, forceAsNamedNode, IDLContainerType, IDLEnum, IDLNode, IDLType, IDLUint8ArrayType, IDLVoidType } from '@idlize/core'
-import { IndentedPrinter, cppKeywords, Language, throwException } from '@idlize/core'
-import { ArgConvertor, BaseArgConvertor, RuntimeType } from "@idlize/core"
-import { ArkPrimitiveType } from "../../ArkPrimitiveType"
+import {
+    createReferenceType,
+    forceAsNamedNode,
+    IDLContainerType,
+    IDLEnum,
+    IDLNode,
+    IDLType,
+    IDLUint8ArrayType,
+    IDLVoidType,
+    ReferenceResolver
+} from '../../../idl'
+import { Language } from '../../../Language'
+import { ArgConvertor, BaseArgConvertor } from "../ArgConvertors"
+import { PrimitiveTypes } from "../../PrimitiveType"
 import {
     AssignStatement,
     BlockStatement,
@@ -34,18 +44,19 @@ import {
     NamedMethodSignature,
     ObjectArgs,
     StringExpression
-} from "@idlize/core"
+} from "../LanguageWriter"
 import {
     CDefinedExpression,
     CLikeExpressionStatement,
     CLikeLanguageWriter,
     CLikeLoopStatement,
     CLikeReturnStatement
-} from "@idlize/core"
-import { ReferenceResolver } from "@idlize/core"
-import { IdlNameConvertor } from "@idlize/core"
-import { CppIDLNodeToStringConvertor } from "../convertors/CppConvertors"
-import { EnumConvertor } from "../../ArgConvertors";
+} from "./CLikeLanguageWriter"
+import { IdlNameConvertor } from "../nameConvertor"
+import { RuntimeType } from "../common"
+import { IndentedPrinter } from "../../../IndentedPrinter";
+import { throwException } from "../../../util";
+import { cppKeywords } from "../../../languageSpecificKeywords";
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -55,7 +66,7 @@ export class CppCastExpression implements LanguageExpression {
     constructor(public convertor:IdlNameConvertor, public value: LanguageExpression, public type: IDLType, private options?:MakeCastOptions) {}
     asString(): string {
         if (forceAsNamedNode(this.type).name === "Tag") {
-            return `${this.value.asString()} == ${ArkPrimitiveType.UndefinedRuntime} ? ${ArkPrimitiveType.UndefinedTag} : ${ArkPrimitiveType.ObjectTag}`
+            return `${this.value.asString()} == ${PrimitiveTypes.UndefinedRuntime} ? ${PrimitiveTypes.UndefinedTag} : ${PrimitiveTypes.ObjectTag}`
         }
         let resultName = ''
         if (this.options?.overrideTypeName) {
@@ -159,15 +170,19 @@ class CPPThrowErrorStatement implements LanguageStatement {
 
 export class CppLanguageWriter extends CLikeLanguageWriter {
     protected typeConvertor: IdlNameConvertor
-    constructor(printer: IndentedPrinter, resolver:ReferenceResolver) {
+
+    constructor(printer: IndentedPrinter,
+                resolver:ReferenceResolver,
+                typeConvertor: IdlNameConvertor,
+                private primitivesTypes: PrimitiveTypes) {
         super(printer, resolver, Language.CPP)
-        this.typeConvertor = new CppIDLNodeToStringConvertor(this.resolver)
+        this.typeConvertor = typeConvertor
     }
     getNodeName(type: IDLNode): string {
         return this.typeConvertor.convert(type)
     }
     fork(options?: { resolver?: ReferenceResolver }): LanguageWriter {
-        return new CppLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver)
+        return new CppLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver, this.typeConvertor, this.primitivesTypes)
     }
     writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string, interfaces?: string[]): void {
         const superClasses = (superClass ? [superClass] : []).concat(interfaces ?? [])
@@ -243,11 +258,6 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         this.print(`#include <${path}>`)
     }
 
-
-
-    override makeTag(tag: string): string {
-        return ArkPrimitiveType.Prefix.toLocaleUpperCase() + "TAG_" + tag
-    }
     override makeRef(type: IDLType | string, options?:MakeRefOptions): IDLType {
         if (typeof type === 'string') {
             return createReferenceType(`${type}&`)
@@ -336,10 +346,10 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         return value
     }
     makeUndefined(): LanguageExpression {
-        return this.makeString(`${ArkPrimitiveType.Undefined.getText()}()`)
+        return this.makeString(`${this.primitivesTypes.Undefined.getText()}()`)
     }
     makeVoid(): LanguageExpression {
-        return this.makeString(`${ArkPrimitiveType.Void.getText()}()`)
+        return this.makeString(`${this.primitivesTypes.Void.getText()}()`)
     }
     makeRuntimeType(rt: RuntimeType): LanguageExpression {
         return this.makeString(`INTEROP_RUNTIME_${RuntimeType[rt]}`)
@@ -380,11 +390,15 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     makeUnsafeCast(convertor: ArgConvertor, param: string): string {
         return param
     }
-    override makeEnumCast(value: string, _unsafe: boolean, convertor: EnumConvertor | undefined): string {
-        if (convertor === undefined) {
-            throwException("Need pass EnumConvertor")
-        }
-        return `static_cast<${this.typeConvertor.convert(convertor.enumEntry)}>(${value})`
+    override makeEnumCast(value: string, _unsafe: boolean, convertor: ArgConvertor | undefined): string {
+        //TODO: needs to be reworked
+        // if (convertor === undefined) {
+        //     throwException("Need pass EnumConvertor")
+        // }
+        // if (convertor instanceof EnumConvertor) {
+        //     return `static_cast<${this.typeConvertor.convert(convertor.enumEntry)}>(${value})`
+        // }
+        return ""
     }
     override escapeKeyword(name: string): string {
         return cppKeywords.has(name) ? name + "_" : name
