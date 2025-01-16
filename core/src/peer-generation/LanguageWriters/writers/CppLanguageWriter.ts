@@ -391,14 +391,10 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         return param
     }
     override makeEnumCast(value: string, _unsafe: boolean, convertor: ArgConvertor | undefined): string {
-        //TODO: needs to be reworked
-        // if (convertor === undefined) {
-        //     throwException("Need pass EnumConvertor")
-        // }
-        // if (convertor instanceof EnumConvertor) {
-        //     return `static_cast<${this.typeConvertor.convert(convertor.enumEntry)}>(${value})`
-        // }
-        return ""
+        if (convertor !== undefined) {
+            return `static_cast<${this.typeConvertor.convert(convertor.idlType)}>(${value})`
+        }
+        throwException("Need pass EnumConvertor")
     }
     override escapeKeyword(name: string): string {
         return cppKeywords.has(name) ? name + "_" : name
