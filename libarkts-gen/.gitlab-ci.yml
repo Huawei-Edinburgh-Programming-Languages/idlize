@@ -7,5 +7,5 @@ libarkts-gen idl:
     - !reference [.setup, script]
   script:
     - npm run subset --prefix libarkts-gen
-    - npm run full -- prefix libarkts-gen
+    - npm run full --prefix libarkts-gen
 
