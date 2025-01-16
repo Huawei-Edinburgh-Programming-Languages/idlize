@@ -16,7 +16,7 @@
 import {
     IDLContainerUtils,
     IDLKind,
-    IDLMethod,
+    IDLMethod, isTypedef,
     throwException
 } from "@idlize/core"
 import {
@@ -72,14 +72,15 @@ export class NativeModulePrinter {
         console.log(node.name)
         if (isInterface(node)) return this.visitInterface(node)
         if (isEnum(node)) return
+        if (isTypedef(node)) return
 
         throwException(`Unexpected top-level node: ${IDLKind[node.kind]}`)
     }
 
     private visitInterface(node: IDLInterface): void {
-        node.methods.forEach(it =>
-            this.printMethod(node, it)
-        )
+        node.methods
+            .filter(it => !this.config.paramArray(`handwrittenMethods`).includes(it.name))
+            .forEach(it => this.printMethod(node, it))
     }
 
     private convertType(type: IDLType): IDLType[] {
@@ -124,7 +125,9 @@ export class NativeModulePrinter {
 
     printFunction(ifaceName: string, methodName: string, parameterTypes: IDLType[], returnType: IDLType) {
         const name = this.config.nativeModuleFunction(this.config.methodFunction(ifaceName, methodName))
-        const parameters = parameterTypes.map((it, index) => this.printParameter(it, index)).join(", ")
+        const parameters = parameterTypes
+            .map((it, index) => this.printParameter(it, index))
+            .join(", ")
         const retType = this.mapType(returnType)
         return `${name}(${parameters}): ${retType}`
     }

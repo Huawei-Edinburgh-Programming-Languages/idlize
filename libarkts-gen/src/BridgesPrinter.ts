@@ -54,7 +54,6 @@ export class BridgesPrinter {
     }
 
     private visit(node: IDLEntry): void {
-        console.log(node.name)
         if (isInterface(node)) return this.visitInterface(node)
         if (isEnum(node)) return
         if (isTypedef(node)) return
@@ -64,7 +63,7 @@ export class BridgesPrinter {
 
     private visitInterface(node: IDLInterface): void {
         node.methods
-            .filter(it => !this.config.paramArray(`handwrittenMethods`).includes(it))
+            .filter(it => !this.config.paramArray(`handwrittenMethods`).includes(it.name))
             .forEach(it => this.printMethod(node.name, it))
     }
 

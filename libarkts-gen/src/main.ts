@@ -29,16 +29,14 @@ const options = program
     .parse()
     .opts()
 
-function generateTarget(idl: IDLFile, outDir: string, language: Language) {
+function generateTarget(idl: IDLFile, outDir: string, language: Language): void {
     if (options.libarktsTransform) {
         new Es2PandaTransformer(idl).transform()
     }
     new LibarktsGenerator(outDir, idl).print()
 }
 
-
-function main() {
-
+function main(): void {
     const outDir = options.outputDir ?? "./out"
     const language = Language.fromString(options.language ?? "ts")
     const idlFile = options.inputFile ?? "./tests/subset.idl"
