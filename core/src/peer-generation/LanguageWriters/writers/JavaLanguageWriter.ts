@@ -13,7 +13,8 @@
  * limitations under the License.
  */
 
-import { IndentedPrinter, Language } from '@idlize/core'
+import { Language } from '../../../Language'
+import { IndentedPrinter } from "../../../IndentedPrinter";
 import {
     AssignStatement,
     CheckOptionalStatement,
@@ -28,19 +29,17 @@ import {
     MethodSignature,
     NamedMethodSignature,
     ObjectArgs,
-} from "@idlize/core"
+} from "../LanguageWriter"
 import {
     CLikeExpressionStatement,
     CLikeLanguageWriter,
     CLikeLoopStatement,
     CLikeReturnStatement
-} from "@idlize/core"
-import * as idl from '@idlize/core/idl'
-import { ArgConvertor, BaseArgConvertor, RuntimeType } from "@idlize/core"
-import { ReferenceResolver } from "@idlize/core"
-import { IdlNameConvertor } from "@idlize/core"
-import { JavaIDLNodeToStringConvertor } from "../convertors/JavaConvertors"
-import { EnumConvertor } from "../../ArgConvertors";
+} from "./CLikeLanguageWriter"
+import * as idl from '../../../idl'
+import { ArgConvertor, BaseArgConvertor } from "../ArgConvertors"
+import { IdlNameConvertor } from "../nameConvertor"
+import { RuntimeType } from "../common";
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -50,7 +49,7 @@ class JavaLambdaExpression extends LambdaExpression {
     constructor(
         writer: LanguageWriter,
         signature: MethodSignature,
-        resolver: ReferenceResolver,
+        resolver: idl.ReferenceResolver,
         body?: LanguageStatement[]) {
         super(writer, signature, resolver, body)
     }
@@ -119,17 +118,19 @@ class JavaMapForEachStatement implements LanguageStatement {
 
 export class JavaLanguageWriter extends CLikeLanguageWriter {
     protected typeConvertor: IdlNameConvertor
-    constructor(printer: IndentedPrinter, resolver:ReferenceResolver) {
+    constructor(printer: IndentedPrinter,
+                resolver: idl.ReferenceResolver,
+                typeConvertor: IdlNameConvertor) {
         super(printer, resolver, Language.JAVA)
-        this.typeConvertor = new JavaIDLNodeToStringConvertor(this.resolver)
+        this.typeConvertor = typeConvertor
     }
 
     getNodeName(type: idl.IDLNode): string {
         return this.typeConvertor.convert(type)
     }
 
-    fork(options?: { resolver?: ReferenceResolver }): LanguageWriter {
-        return new JavaLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver)
+    fork(options?: { resolver?: idl.ReferenceResolver }): LanguageWriter {
+        return new JavaLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver, this.typeConvertor)
     }
 
     writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string, interfaces?: string[], generics?: string[]): void {
@@ -290,7 +291,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         this.writeStatement(this.makeAssign(valueType, undefined,
             this.makeRuntimeTypeGetterCall(value), false))
     }
-    override makeEnumCast(enumName: string, _unsafe: boolean, _convertor: EnumConvertor | undefined): string {
+    override makeEnumCast(enumName: string, _unsafe: boolean, _convertor: ArgConvertor | undefined): string {
         return `${enumName}.getIntValue()`
     }
     override castToBoolean(value: string): string { return `${value} ? 1 : 0` }

@@ -30,6 +30,7 @@ export * from "./peer-generation/LanguageWriters/nameConvertor"
 export * from "./peer-generation/LanguageWriters/writers/CJLanguageWriter"
 export * from "./peer-generation/LanguageWriters/writers/CLikeLanguageWriter"
 export * from "./peer-generation/LanguageWriters/writers/CppLanguageWriter"
+export * from "./peer-generation/LanguageWriters/writers/JavaLanguageWriter"
 export * from "./peer-generation/PrimitiveType"
 
 export * from "./peer-generation/LanguageWriters"
