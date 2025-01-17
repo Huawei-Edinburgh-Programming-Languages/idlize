@@ -2120,17 +2120,17 @@
 |`unmarshalling`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
 |`getLength`| Function | Pavelyev Ivan | done | |
 |*MutableStyledString*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBBYJE + |
-|`replaceString`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
-|`insertString`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
-|`removeString`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
-|`replaceStyle`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
-|`setStyle`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
-|`removeStyle`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
-|`removeStyles`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
-|`clearStyles`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
-|`replaceStyledString`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
-|`insertStyledString`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
-|`appendStyledString`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
+|`replaceString`| Function | Maksimov Nikita | done | |
+|`insertString`| Function | Maksimov Nikita | done | |
+|`removeString`| Function | Maksimov Nikita | done | |
+|`replaceStyle`| Function | Maksimov Nikita | done | |
+|`setStyle`| Function | Maksimov Nikita | done | |
+|`removeStyle`| Function | Maksimov Nikita | done | |
+|`removeStyles`| Function | Maksimov Nikita | done | |
+|`clearStyles`| Function | Maksimov Nikita | done | |
+|`replaceStyledString`| Function | Maksimov Nikita | done | |
+|`insertStyledString`| Function | Maksimov Nikita | done | |
+|`appendStyledString`| Function | Maksimov Nikita | done | |
 |*CustomSpan*| *Class* | Politov Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onMeasure`| Function | Politov Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onDraw`| Function | Politov Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
