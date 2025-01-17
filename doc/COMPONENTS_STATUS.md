@@ -95,7 +95,7 @@
 |`onReady`| Function |Vadim Voronov | done |  |
 |`enableAnalyzer`| Function |Vadim Voronov | done |  |
 |*Checkbox*| *Component* | Andrey Khudenkikh | blocked |  |
-|`setCheckboxOptions`| Function | Samarin Sergey | testskipped | UT in progress Samarin Sergey |
+|`setCheckboxOptions`| Function | Samarin Sergey | done | |
 |`select`| Function | Andrey Khudenkikh | done |  |
 |`selectedColor`| Function | Andrey Khudenkikh | done |  |
 |`shape`| Function | Andrey Khudenkikh | done |  |
@@ -1094,7 +1094,7 @@
 |`editMenuOptions`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`halfLeading`| Function |Samarin Sergey | done |  |
 |`enableHapticFeedback`| Function |Samarin Sergey | done |  |
-|`selection`| Function |Samarin Sergey | testskipped | UT in progress Samarin Sergey |
+|`selection`| Function |Samarin Sergey | done | |
 |`bindSelectionMenu`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*TextArea*|*Component*|Tuzhilkin Ivan|blocked IDL|  |
 |`setTextAreaOptions`|Function|Tuzhilkin Ivan|done| |
@@ -1902,8 +1902,8 @@
 |`setTo`| Function | Dudkin Sergey | done | |
 |*TextController*| *Class* | Samarin Sergey | in progress | |
 |`closeSelectionMenu`| Function | Samarin Sergey | done | |
-|`setStyledString`| Function | Samarin Sergey | testskipped | |
-|`getLayoutManager`| Function | Samarin Sergey | testskipped | |
+|`setStyledString`| Function | Samarin Sergey | testskipped | UT in progress Samarin Sergey |
+|`getLayoutManager`| Function | Samarin Sergey | testskipped | UT in progress Samarin Sergey |
 |*TextAreaController*| *Class* | Tuzhilkin Ivan | done |  |
 |`caretPosition`| Function | Tuzhilkin Ivan | done |  |
 |`setTextSelection`| Function | Tuzhilkin Ivan | done |  |
