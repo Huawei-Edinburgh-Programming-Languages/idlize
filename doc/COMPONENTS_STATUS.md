@@ -1839,7 +1839,7 @@
 |`getPreviewText`| Function|Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IBAXVH + |
 |*RichEditorController*| *Class* |Dudkin Sergey| blocked|  |
 |`addTextSpan`| Function |Dudkin Sergey| done|  |
-|`addImageSpan`| Function |Dudkin Sergey| | |
+|`addImageSpan`| Function |Dudkin Sergey|in progress |PixelMap on https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`addBuilderSpan`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`addSymbolSpan`| Function | Dudkin Sergey| done|  |
 |`updateSpanStyle`| Function | Dudkin Sergey| done|  |
