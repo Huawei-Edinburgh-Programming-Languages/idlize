@@ -50,7 +50,7 @@ export interface ArgConvertor {
 }
 
 export abstract class BaseArgConvertor implements ArgConvertor {
-    constructor(
+    protected constructor(
         public idlType: idl.IDLType,
         public runtimeTypes: RuntimeType[],
         public isScoped: boolean,
@@ -197,12 +197,10 @@ export class StringConvertor extends BaseArgConvertor {
     }
 }
 
-export class EnumConvertor extends BaseArgConvertor { //
-    constructor(param: string,
-                public enumEntry: idl.IDLEnum,
-                public readonly isStringEnum: boolean) {
+export class EnumConvertor extends BaseArgConvertor {
+    constructor(param: string, public enumEntry: idl.IDLEnum) {
         super(idl.createReferenceType(enumEntry.name),
-            [isStringEnum ? RuntimeType.STRING : RuntimeType.NUMBER],
+            [idl.isStringEnum(enumEntry) ? RuntimeType.STRING : RuntimeType.NUMBER],
             false, false, param)
     }
     convertorArg(param: string, writer: LanguageWriter): string {
@@ -210,14 +208,14 @@ export class EnumConvertor extends BaseArgConvertor { //
     }
     convertorSerialize(param: string, value: string, writer: LanguageWriter): void {
         value =
-            this.isStringEnum
+            idl.isStringEnum(this.enumEntry)
                 ? writer.ordinalFromEnum(writer.makeString(value), idl.createReferenceType(this.enumEntry.name)).asString()
                 : writer.makeEnumCast(value, false, this)
         writer.writeMethodCall(`${param}Serializer`, "writeInt32", [value])
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const readExpr = writer.makeMethodCall(`${deserializerName}`, "readInt32", [])
-        const enumExpr = this.isStringEnum
+        const enumExpr = idl.isStringEnum(this.enumEntry)
             ? writer.enumFromOrdinal(readExpr, idl.createReferenceType(this.enumEntry.name))
             : writer.makeCast(readExpr, idl.createReferenceType(this.enumEntry.name))
         return assigneer(enumExpr)
@@ -236,19 +234,6 @@ export class EnumConvertor extends BaseArgConvertor { //
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
         return writer.makeDiscriminatorConvertor(this, value, index)
-    }
-    extremumOfOrdinals(): {low: number, high: number} {
-        let low: number = 0
-        let high: number = 0
-        this.enumEntry.elements.forEach((member, index) => {
-            let value = index
-            if ((typeof member.initializer === 'number') && !this.isStringEnum) {
-                value = member.initializer
-            }
-            if (low > value) low = value
-            if (high < value) high = value
-        })
-        return {low, high}
     }
 }
 
@@ -526,7 +511,7 @@ export class CustomTypeConvertor extends BaseArgConvertor {
 }
 
 export class OptionConvertor extends BaseArgConvertor { //
-    private typeConvertor: ArgConvertor
+    private readonly typeConvertor: ArgConvertor
     // TODO: be smarter here, and for smth like Length|undefined or number|undefined pass without serializer.
     constructor(private library: LibraryInterface, param: string, public type: idl.IDLType) {
         let conv = library.typeConvertor(param, type)
@@ -595,7 +580,7 @@ export class OptionConvertor extends BaseArgConvertor { //
 }
 
 export class UnionConvertor extends BaseArgConvertor { //
-    private memberConvertors: ArgConvertor[]
+    private readonly memberConvertors: ArgConvertor[]
     private unionChecker: UnionRuntimeTypeChecker
 
     constructor(private library: LibraryInterface, param: string, private type: idl.IDLUnionType) {

@@ -44,6 +44,7 @@ import { convertDeclaration, IdlNameConvertor } from "../nameConvertor"
 import { createDeclarationNameConvertor } from "../../idl/IdlNameConvertor";
 import { Language } from "../../../Language";
 import { RuntimeType } from "../common";
+import { throwException } from "../../../util";
 
 ////////////////////////////////////////////////////////////////
 //                         STATEMENTS                         //
@@ -204,8 +205,9 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         return [MethodModifier.PUBLIC, MethodModifier.PRIVATE, MethodModifier.NATIVE, MethodModifier.STATIC]
     }
     makeUnsafeCast(convertor: ArgConvertor, param: string): string {
-        if ((convertor instanceof EnumConvertor) && !param.endsWith(".value")) {
-            return `(${param} as ${this.typeConvertor.convert(convertor.enumEntry)}).${convertor.isStringEnum ? 'ordinal' : 'value'}`
+        if (idl.isEnum(convertor.idlType) && !param.endsWith(".value")) {
+            const isStringEnum = idl.isStringEnum(convertor.idlType)
+            return `(${param} as ${this.typeConvertor.convert(convertor.idlType)}).${isStringEnum ? 'ordinal' : 'value'}`
         }
         return super.makeUnsafeCast(convertor, param)
     }
@@ -256,9 +258,24 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     writeProperty(propName: string, propType: IDLType) {
         throw new Error("writeProperty for ArkTS is not implemented yet.")
     }
-    override makeEnumCast(value: string, _unsafe: boolean, convertor: EnumConvertor | undefined): string {
-        return this.makeCast(this.makeString(`${value}${convertor?.isStringEnum ? "" : ".valueOf()"}`),
-            IDLI32Type).asString()
+    override makeEnumCast(value: string, _unsafe: boolean, convertor: ArgConvertor | undefined): string {
+        if (convertor === undefined) {
+            throwException(`The makeEnumCast function required ArgConvertor`)
+        }
+
+        // FIXME: resolveTypeReference does not find 'GestureControl_GestureType'
+        // const decl = this.resolver.resolveTypeReference(
+        //     idl.createReferenceType(this.getNodeName(convertor.nativeType()))
+        // )
+        // if (decl === undefined || !idl.isEnum(decl)) {
+        //     throwException(`The type reference ${decl?.name} must be Enum`)
+        // }
+
+        if (convertor instanceof EnumConvertor) {
+            return this.makeCast(this.makeString(`${value}${idl.isStringEnum(convertor.enumEntry) ? "" : ".valueOf()"}`),
+                IDLI32Type).asString()
+        }
+        throwException("The converter argument must be of type EnumConvertor")
     }
     makeUnionVariantCondition(convertor: ArgConvertor, valueName: string, valueType: string, type: string,
                               convertorIndex: number,

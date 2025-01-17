@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { isStringEnum  } from '../../../idl'
+import * as idl from '../../../idl'
 import { Language } from '../../../Language'
 import { IndentedPrinter } from "../../../IndentedPrinter";
 import {
@@ -34,11 +34,10 @@ import {
     ReturnStatement,
     StringExpression
 } from "../LanguageWriter"
-import * as idl from '../../../idl'
 import { ArgConvertor } from "../ArgConvertors"
 import { IdlNameConvertor } from "../nameConvertor"
-import { EnumConvertor } from "../ArgConvertors";
 import { RuntimeType } from "../common";
+import { throwException } from "../../../util";
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -357,12 +356,12 @@ export class TSLanguageWriter extends LanguageWriter {
     ordinalFromEnum(value: LanguageExpression, enumEntry: idl.IDLType): LanguageExpression {
         const enumName = idl.forceAsNamedNode(enumEntry).name
         const decl = idl.isReferenceType(enumEntry) ? this.resolver.resolveTypeReference(enumEntry) : undefined
-        if (decl && idl.isEnum(decl) && isStringEnum(decl)) {
+        if (decl && idl.isEnum(decl) && idl.isStringEnum(decl)) {
             return this.makeString(`Object.values(${enumName}).indexOf(${value.asString()})`)
         }
         return value
     }
-    override makeEnumCast(enumName: string, unsafe: boolean, convertor: EnumConvertor): string {
+    override makeEnumCast(enumName: string, unsafe: boolean, convertor: ArgConvertor): string {
         if (unsafe) {
             return this.makeUnsafeCast(convertor, enumName)
         }
@@ -377,17 +376,23 @@ export class TSLanguageWriter extends LanguageWriter {
         return TSKeywords.has(keyword) ? keyword + "_" : keyword
     }
 
-    makeDiscriminatorConvertor(convertor: EnumConvertor, value: string, index: number): LanguageExpression | undefined {
-        const ordinal = convertor.isStringEnum
+    makeDiscriminatorConvertor(convertor: ArgConvertor, value: string, index: number): LanguageExpression | undefined {
+        const decl = this.resolver.resolveTypeReference(
+            idl.createReferenceType(this.getNodeName(convertor.nativeType()))
+        )
+        if (decl === undefined || !idl.isEnum(decl)) {
+            throwException(`The type reference ${decl?.name} must be Enum`)
+        }
+        const ordinal = idl.isStringEnum(decl)
             ? this.ordinalFromEnum(
                 this.makeCast(this.makeString(this.getObjectAccessor(convertor, value)), convertor.idlType),
-                idl.createReferenceType(convertor.enumEntry.name)
+                idl.createReferenceType(this.getNodeName(convertor.nativeType()))
             )
             : this.makeUnionVariantCast(this.getObjectAccessor(convertor, value), this.getNodeName(idl.IDLI32Type), convertor, index)
-        const {low, high} = convertor.extremumOfOrdinals()
+        const {low, high} = idl.extremumOfOrdinals(decl)
         return this.discriminatorFromExpressions(value, convertor.runtimeTypes[0], [
-            this.makeNaryOp(">=", [ordinal, this.makeString(low!.toString())]),
-            this.makeNaryOp("<=",  [ordinal, this.makeString(high!.toString())])
+            this.makeNaryOp(">=", [ordinal, this.makeString(low.toString())]),
+            this.makeNaryOp("<=",  [ordinal, this.makeString(high.toString())])
         ])
     }
 }

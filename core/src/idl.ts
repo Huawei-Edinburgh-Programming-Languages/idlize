@@ -1370,6 +1370,20 @@ export function isStringEnum(decl: IDLEnum): boolean {
     return decl.elements.some(e => e.type === IDLStringType)
 }
 
+export function extremumOfOrdinals(enumEntry: IDLEnum): {low: number, high: number} {
+    let low: number = 0
+    let high: number = 0
+    enumEntry.elements.forEach((member, index) => {
+        let value = index
+        if ((typeof member.initializer === 'number') && !isStringEnum(enumEntry)) {
+            value = member.initializer
+        }
+        if (low > value) low = value
+        if (high < value) high = value
+    })
+    return {low, high}
+}
+
 export interface ReferenceResolver {
     resolveTypeReference(type: IDLReferenceType, entries?: IDLEntry[]): IDLEntry | undefined
     toDeclaration(type: IDLNode): IDLNode
