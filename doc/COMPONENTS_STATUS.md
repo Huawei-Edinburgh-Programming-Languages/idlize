@@ -1894,7 +1894,7 @@
 |`preloadItems`| Function | Skroba Gleb | done | |
 |`setTabBarTranslate`| Function | Skroba Gleb | done | |
 |`setTabBarOpacity`| Function | Skroba Gleb | done | |
-|*TabContentTransitionProxy*| *Class* | Dudkin Sergey | | |
+|*TabContentTransitionProxy*| *Class* | Dudkin Sergey | done | |
 |`finishTransition`| Function | Dudkin Sergey | done | |
 |`getFrom`| Function | Dudkin Sergey | done | |
 |`setFrom`| Function | Dudkin Sergey | done | |
