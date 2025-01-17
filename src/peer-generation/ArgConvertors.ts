@@ -1153,9 +1153,9 @@ export class DateConvertor extends BaseArgConvertor { //
     }
 }
 
-export class MaterializedClassConvertor extends BaseArgConvertor { ///rm name param?
-    constructor(private library: LibraryInterface, name: string, param: string, public declaration: idl.IDLInterface) {
-        super(idl.createReferenceType(name), [RuntimeType.OBJECT], false, true, param)
+export class MaterializedClassConvertor extends BaseArgConvertor {
+    constructor(param: string, public declaration: idl.IDLInterface) {
+        super(idl.createReferenceType(declaration.name), [RuntimeType.OBJECT], false, true, param)
     }
     convertorArg(param: string, writer: LanguageWriter): string {
         throw new Error("Must never be used")
