@@ -1754,7 +1754,7 @@
 |`setEnabled`| Function | Kovalev Sergey | done | |
 |`isEnabled`| Function | Kovalev Sergey | done | |
 |`getState`| Function | Kovalev Sergey | done | |
-|`getEventTargetInfo`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
+|`getEventTargetInfo`| Function | Maksimov Nikita | testskipped | UT in progress Maksimov Nikita |
 |`isValid`| Function | Kovalev Sergey | done | |
 |*PanRecognizer*| *Class* | Politov Mikhail | done | |
 |`getPanGestureOptions`| Function | Politov Mikhail | done | |
@@ -1852,7 +1852,7 @@
 |`toStyledString`| Function | Dudkin Sergey| done|  |
 |*RichEditorStyledStringController*| *Class* |Dudkin Sergey| blocked IDL| |
 |`setStyledString`| Function |Dudkin Sergey| done| |
-|`getStyledString`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
+|`getStyledString`| Function | Maksimov Nikita | done | |
 |`getSelection`| Function |Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
 |`onContentChanged`| Function | Dudkin Sergey| blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB944G + |
 |*Scroller*| *Class* | Erokhin Ilya | blocked |  |
