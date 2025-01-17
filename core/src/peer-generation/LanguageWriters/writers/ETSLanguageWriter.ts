@@ -173,11 +173,14 @@ export function makeArrayTypeCheckCall(
 ////////////////////////////////////////////////////////////////
 
 export class ETSLanguageWriter extends TSLanguageWriter {
-    constructor(printer: IndentedPrinter, resolver:idl.ReferenceResolver, typeConvertor: IdlNameConvertor) {
+    constructor(printer: IndentedPrinter,
+                resolver: idl.ReferenceResolver,
+                typeConvertor: IdlNameConvertor,
+                private arrayConvertor: IdlNameConvertor) {
         super(printer, resolver, typeConvertor, Language.ARKTS)
     }
     fork(options?: { resolver?: idl.ReferenceResolver }): LanguageWriter {
-        return new ETSLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver, this.typeConvertor)
+        return new ETSLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver, this.typeConvertor, this.arrayConvertor)
     }
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
         if (signature.returnType === IDLThisType) {
@@ -328,10 +331,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
                 convertor.members.map(it => it[0]), duplicateMembers!, this)
         }
         if (convertor instanceof ArrayConvertor) {
-            //TODO: why CppIDLNodeToStringConvertor ?
-            // const cppConvertor = new CppIDLNodeToStringConvertor(this.resolver)
-            // return makeArrayTypeCheckCall(value,
-            //     cppConvertor.convert(convertor.idlType), this)
+            return makeArrayTypeCheckCall(value, this.arrayConvertor.convert(convertor.idlType), this)
         }
         if (convertor instanceof EnumConvertor) {
             return makeEnumTypeCheckerCall(value, this.getNodeName(convertor.idlType), this)

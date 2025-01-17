@@ -19,6 +19,7 @@ import { IndentedPrinter, Language, isImportAttr } from '@idlize/core'
 import {
     BlockStatement,
     CppLanguageWriter,
+    createLanguageWriter,
     ExpressionStatement,
     FieldModifier,
     printMethodDeclaration,
@@ -38,7 +39,6 @@ import { collapseIdlPeerMethods, groupOverloads } from "./OverloadsPrinter"
 import { ImportsCollector } from "../ImportsCollector";
 import { getReferenceResolver } from "../ReferenceResolver"
 import { ReferenceResolver } from "@idlize/core"
-import { ETSLanguageWriter } from "@idlize/core";
 import { collectDeclItself, collectDeclDependencies } from "../ImportsCollectorUtils"
 import { CppIDLNodeToStringConvertor } from "../LanguageWriters/convertors/CppConvertors";
 import { ArkPrimitiveTypes } from "../ArkPrimitiveType";
@@ -536,9 +536,7 @@ class IdlTSEventsVisitor extends TSEventsVisitorBase {
 }
 
 class IdlArkTSEventVisitor extends IdlTSEventsVisitor {
-    readonly printer: LanguageWriter = new ETSLanguageWriter(new IndentedPrinter(),
-        getReferenceResolver(this.library),
-        new TsIDLNodeToStringConverter(getReferenceResolver(this.library)))
+    readonly printer: LanguageWriter = createLanguageWriter(Language.ARKTS, this.library)
 
     protected printParseFunction(infos: IdlCallbackInfo[]) {
         // Disable event functions printing until deserializer is ready

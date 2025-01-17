@@ -45,7 +45,6 @@ import { convertDeclaration, DeclarationConvertor } from "@idlize/core";
 import { ARK_CUSTOM_OBJECT, ARK_OBJECTBASE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH, INT_VALUE_GETTER } from './lang/Java'
 import { printJavaImports } from './lang/JavaPrinters'
 import { collectJavaImports } from './lang/JavaIdlUtils'
-import { ETSLanguageWriter } from '@idlize/core'
 import { collectProperties } from './StructPrinter'
 import { escapeKeyword, IDLType } from '@idlize/core/idl'
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig'
@@ -55,7 +54,6 @@ import { createInterfaceDeclName } from '../TypeNodeNameConvertor'
 import { collectDeclDependencies, convertDeclToFeature } from '../ImportsCollectorUtils'
 import { maybeTransformManagedCallback } from '../ArgConvertors'
 import { isComponentDeclaration } from '../ComponentsCollector'
-import { EtsIDLNodeToStringConvertor } from "../LanguageWriters/convertors/ETSConvertors";
 
 interface InterfacesVisitor {
     getInterfaces(): Map<TargetFile, LanguageWriter>
@@ -485,9 +483,7 @@ class JavaInterfacesVisitor extends DefaultInterfacesVisitor {
 }
 
 export class ArkTSDeclConvertor extends TSDeclConvertor {
-    private typeNameConvertor = new ETSLanguageWriter(new IndentedPrinter(),
-        this.peerLibrary,
-        new EtsIDLNodeToStringConvertor(this.peerLibrary))
+    private typeNameConvertor = createLanguageWriter(Language.ARKTS, this.peerLibrary)
     private seenInterfaceNames = new Set<string>()
 
     convertTypedef(node: idl.IDLTypedef) {

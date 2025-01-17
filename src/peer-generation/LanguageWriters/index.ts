@@ -63,7 +63,7 @@ export function createLanguageWriter(language: Language, resolver:ReferenceResol
         case Language.TS: return new TSLanguageWriter(new IndentedPrinter(), resolver,
             new TsIDLNodeToStringConverter(resolver))
         case Language.ARKTS: return new ETSLanguageWriter(new IndentedPrinter(), resolver,
-            new EtsIDLNodeToStringConvertor(resolver))
+            new EtsIDLNodeToStringConvertor(resolver), new CppIDLNodeToStringConvertor(resolver))
         case Language.JAVA: return new JavaLanguageWriter(new IndentedPrinter(), resolver,
             new JavaIDLNodeToStringConvertor(resolver))
         case Language.CPP: return new CppLanguageWriter(new IndentedPrinter(), resolver,
