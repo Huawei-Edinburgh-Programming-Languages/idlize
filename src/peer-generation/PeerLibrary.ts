@@ -176,7 +176,7 @@ export class PeerLibrary implements LibraryInterface {
             }
         }
         if (idl.isReferenceType(type)) {
-            if (type == idl.IDLObjectType)
+            if (type == idl.IDLObjectType)///mv to customConv?
                 return new CustomTypeConvertor(param, "Object")
             if (type.name === 'Date') {
                 return new DateConvertor(param)
