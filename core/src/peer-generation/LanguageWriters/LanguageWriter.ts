@@ -21,6 +21,7 @@ import { stringOrNone } from "../../util";
 import * as fs from "fs"
 import { NativeModuleType, RuntimeType } from "./common"
 import { ArgConvertor } from "./ArgConvertors";
+import { ReferenceResolver } from "../ReferenceResolver";
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -291,7 +292,7 @@ export abstract class LambdaExpression implements LanguageExpression {
     constructor(
         private originalWriter: LanguageWriter,
         protected signature: MethodSignature,
-        protected resolver: idl.ReferenceResolver,
+        protected resolver: ReferenceResolver,
         private body?: LanguageStatement[]) { }
 
     protected abstract get statementHasSemicolon(): boolean
@@ -431,7 +432,7 @@ export interface PrinterLike {
 export abstract class LanguageWriter {
     constructor(
         public printer: IndentedPrinter,
-        protected resolver: idl.ReferenceResolver,
+        protected resolver: ReferenceResolver,
         public language: Language,
     ) {}
 
@@ -481,7 +482,7 @@ export abstract class LanguageWriter {
     abstract ordinalFromEnum(value: LanguageExpression, enumReference: idl.IDLType): LanguageExpression
     abstract makeEnumCast(enumName: string, unsafe: boolean, convertor: ArgConvertor | undefined): string
     abstract getNodeName(type: idl.IDLNode): string
-    abstract fork(options?: { resolver?: idl.ReferenceResolver }): LanguageWriter
+    abstract fork(options?: { resolver?: ReferenceResolver }): LanguageWriter
 
     concat(other: PrinterLike): this {
         other.getOutput().forEach(it => this.print(it))

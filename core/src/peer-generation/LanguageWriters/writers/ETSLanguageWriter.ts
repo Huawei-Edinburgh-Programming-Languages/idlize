@@ -45,6 +45,7 @@ import { createDeclarationNameConvertor } from "../../idl/IdlNameConvertor";
 import { Language } from "../../../Language";
 import { RuntimeType } from "../common";
 import { throwException } from "../../../util";
+import { ReferenceResolver } from "../../ReferenceResolver";
 
 ////////////////////////////////////////////////////////////////
 //                         STATEMENTS                         //
@@ -123,7 +124,7 @@ export class ETSLambdaExpression extends LambdaExpression {
         writer: LanguageWriter,
         private convertor: IdlNameConvertor,
         signature: MethodSignature,
-        resolver: idl.ReferenceResolver,
+        resolver: ReferenceResolver,
         body?: LanguageStatement[]) {
         super(writer, signature, resolver, body)
     }
@@ -175,12 +176,12 @@ export function makeArrayTypeCheckCall(
 
 export class ETSLanguageWriter extends TSLanguageWriter {
     constructor(printer: IndentedPrinter,
-                resolver: idl.ReferenceResolver,
+                resolver: ReferenceResolver,
                 typeConvertor: IdlNameConvertor,
                 private arrayConvertor: IdlNameConvertor) {
         super(printer, resolver, typeConvertor, Language.ARKTS)
     }
-    fork(options?: { resolver?: idl.ReferenceResolver }): LanguageWriter {
+    fork(options?: { resolver?: ReferenceResolver }): LanguageWriter {
         return new ETSLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver, this.typeConvertor, this.arrayConvertor)
     }
     writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {

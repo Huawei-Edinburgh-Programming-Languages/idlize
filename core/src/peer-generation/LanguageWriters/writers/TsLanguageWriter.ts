@@ -38,6 +38,7 @@ import { ArgConvertor } from "../ArgConvertors"
 import { IdlNameConvertor } from "../nameConvertor"
 import { RuntimeType } from "../common";
 import { throwException } from "../../../util";
+import { ReferenceResolver } from "../../ReferenceResolver";
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -48,7 +49,7 @@ export class TSLambdaExpression extends LambdaExpression {
         writer: LanguageWriter,
         private convertor: IdlNameConvertor,
         signature: MethodSignature,
-        resolver: idl.ReferenceResolver,
+        resolver: ReferenceResolver,
         body?: LanguageStatement[]) {
         super(writer, signature, resolver, body)
     }
@@ -135,7 +136,7 @@ export class TSLanguageWriter extends LanguageWriter {
     protected typeConvertor: IdlNameConvertor
 
     constructor(printer: IndentedPrinter,
-                resolver: idl.ReferenceResolver,
+                resolver: ReferenceResolver,
                 typeConvertor: IdlNameConvertor,
                 language: Language = Language.TS) {
         super(printer, resolver, language)
@@ -149,7 +150,7 @@ export class TSLanguageWriter extends LanguageWriter {
         if (ident) this.pushIndent()
     }
 
-    fork(options?: { resolver?: idl.ReferenceResolver }): LanguageWriter {
+    fork(options?: { resolver?: ReferenceResolver }): LanguageWriter {
         return new TSLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver, this.typeConvertor, this.language)
     }
 

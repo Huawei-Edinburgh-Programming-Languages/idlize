@@ -40,6 +40,7 @@ import * as idl from '../../../idl'
 import { ArgConvertor, BaseArgConvertor } from "../ArgConvertors"
 import { IdlNameConvertor } from "../nameConvertor"
 import { RuntimeType } from "../common";
+import { ReferenceResolver } from "../../ReferenceResolver";
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -49,7 +50,7 @@ class JavaLambdaExpression extends LambdaExpression {
     constructor(
         writer: LanguageWriter,
         signature: MethodSignature,
-        resolver: idl.ReferenceResolver,
+        resolver: ReferenceResolver,
         body?: LanguageStatement[]) {
         super(writer, signature, resolver, body)
     }
@@ -119,7 +120,7 @@ class JavaMapForEachStatement implements LanguageStatement {
 export class JavaLanguageWriter extends CLikeLanguageWriter {
     protected typeConvertor: IdlNameConvertor
     constructor(printer: IndentedPrinter,
-                resolver: idl.ReferenceResolver,
+                resolver: ReferenceResolver,
                 typeConvertor: IdlNameConvertor) {
         super(printer, resolver, Language.JAVA)
         this.typeConvertor = typeConvertor
@@ -129,7 +130,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         return this.typeConvertor.convert(type)
     }
 
-    fork(options?: { resolver?: idl.ReferenceResolver }): LanguageWriter {
+    fork(options?: { resolver?: ReferenceResolver }): LanguageWriter {
         return new JavaLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver, this.typeConvertor)
     }
 

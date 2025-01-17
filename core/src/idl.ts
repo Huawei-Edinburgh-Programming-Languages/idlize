@@ -1383,8 +1383,3 @@ export function extremumOfOrdinals(enumEntry: IDLEnum): {low: number, high: numb
     })
     return {low, high}
 }
-
-export interface ReferenceResolver {
-    resolveTypeReference(type: IDLReferenceType, entries?: IDLEntry[]): IDLEntry | undefined
-    toDeclaration(type: IDLNode): IDLNode
-}

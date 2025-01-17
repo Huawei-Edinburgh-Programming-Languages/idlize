@@ -22,7 +22,7 @@ import { createReferenceType, IDLType, IDLVoidType } from '@idlize/core/idl'
 import { PeerMethod } from "./PeerMethod";
 import { PeerClassBase } from "./PeerClass";
 import { PeerLibrary } from "./PeerLibrary"
-import { copyMethod } from './LanguageWriters/LanguageWriter'
+import { copyMethod } from '@idlize/core'
 
 export class MaterializedField {
     constructor(

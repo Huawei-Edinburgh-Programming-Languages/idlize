@@ -13,10 +13,20 @@
  * limitations under the License.
  */
 
-import * as idl from '@idlize/core/idl'
 import { ReferenceResolver } from '@idlize/core'
 import { PeerLibrary } from "./PeerLibrary";
 export { ReferenceResolver }
+
+export function createEmptyReferenceResolver(): ReferenceResolver {
+    return {
+        resolveTypeReference() {
+            return undefined
+        },
+        toDeclaration(type) {
+            return type
+        }
+    }
+}
 
 export function getReferenceResolver(library: PeerLibrary): ReferenceResolver {
     return library

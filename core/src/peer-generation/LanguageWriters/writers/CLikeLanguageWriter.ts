@@ -28,6 +28,7 @@ import {
     MethodSignature,
     ReturnStatement
 } from "../LanguageWriter"
+import { ReferenceResolver } from "../../ReferenceResolver";
 
 ////////////////////////////////////////////////////////////////
 //                         STATEMENTS                         //
@@ -82,7 +83,7 @@ class CLikeThrowErrorStatement implements LanguageStatement {
 ////////////////////////////////////////////////////////////////
 
 export abstract class CLikeLanguageWriter extends LanguageWriter {
-    protected constructor(printer: IndentedPrinter, resolver: idl.ReferenceResolver, language: Language) {
+    protected constructor(printer: IndentedPrinter, resolver: ReferenceResolver, language: Language) {
         super(printer, resolver, language)
     }
     writeFunctionDeclaration(name: string, signature: MethodSignature): void {

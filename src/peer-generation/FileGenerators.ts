@@ -29,11 +29,9 @@ import { printCallbacksKinds, printCallbacksKindsImports, printDeserializeAndCal
 import * as idl from "@idlize/core/idl"
 import { createEmptyReferenceResolver, ReferenceResolver } from "@idlize/core"
 import { getReferenceResolver } from "./ReferenceResolver"
-import { PrintHint } from "./LanguageWriters/LanguageWriter"
+import { PrintHint } from "@idlize/core"
 import { SourceFile, TsSourceFile, CJSourceFile } from "./printers/SourceFile"
 import { NativeModule } from "./NativeModule"
-
-import { ReferenceResolver } from "@idlize/core";
 import { CppIDLNodeToStringConvertor } from "./LanguageWriters/convertors/CppConvertors";
 
 export const warning = "WARNING! THIS FILE IS AUTO-GENERATED, DO NOT MAKE CHANGES, THEY WILL BE LOST ON NEXT GENERATION!"

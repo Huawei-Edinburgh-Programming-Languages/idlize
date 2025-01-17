@@ -21,8 +21,7 @@ import {
     IDLNode,
     IDLType,
     IDLUint8ArrayType,
-    IDLVoidType,
-    ReferenceResolver
+    IDLVoidType
 } from '../../../idl'
 import { Language } from '../../../Language'
 import { ArgConvertor, BaseArgConvertor } from "../ArgConvertors"
@@ -57,6 +56,7 @@ import { RuntimeType } from "../common"
 import { IndentedPrinter } from "../../../IndentedPrinter";
 import { throwException } from "../../../util";
 import { cppKeywords } from "../../../languageSpecificKeywords";
+import { ReferenceResolver } from "../../ReferenceResolver";
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //

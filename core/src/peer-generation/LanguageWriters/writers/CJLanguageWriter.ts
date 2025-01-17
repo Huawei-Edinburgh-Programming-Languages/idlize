@@ -38,6 +38,7 @@ import {
 import { IdlNameConvertor } from "../nameConvertor"
 import { Language } from "../../../Language";
 import { isDefined } from "../../../util";
+import { ReferenceResolver } from "../../ReferenceResolver";
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -47,7 +48,7 @@ class CJLambdaExpression extends LambdaExpression {
     constructor(
         protected writer: LanguageWriter,
         signature: MethodSignature,
-        resolver: idl.ReferenceResolver,
+        resolver: ReferenceResolver,
         body?: LanguageStatement[]) {
         super(writer, signature, resolver, body)
     }
@@ -275,7 +276,7 @@ export class CJLanguageWriter extends LanguageWriter {
     protected typeConvertor: IdlNameConvertor
     protected typeForeignConvertor: IdlNameConvertor
     constructor(printer: IndentedPrinter,
-                resolver: idl.ReferenceResolver,
+                resolver: ReferenceResolver,
                 typeConvertor: IdlNameConvertor,
                 typeForeignConvertor: IdlNameConvertor,
                 language: Language = Language.CJ) {
@@ -283,7 +284,7 @@ export class CJLanguageWriter extends LanguageWriter {
         this.typeConvertor = typeConvertor
         this.typeForeignConvertor = typeForeignConvertor
     }
-    fork(options?: { resolver?: idl.ReferenceResolver }): LanguageWriter {
+    fork(options?: { resolver?: ReferenceResolver }): LanguageWriter {
         return new CJLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver, this.typeConvertor, this.typeForeignConvertor)
     }
     getNodeName(type: idl.IDLNode): string {
