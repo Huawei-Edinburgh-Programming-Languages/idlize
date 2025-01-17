@@ -748,7 +748,7 @@
 |`aboutToDelete`| Function | Dudkin Sergey| done|  |
 |`onDeleteComplete`| Function | Dudkin Sergey| done|  |
 |`copyOptions`| Function | Dudkin Sergey| done|  |
-|`onPaste`| Function | Dudkin Sergey| done|  |
+|`onPaste`| Function | Dudkin Sergey| in progress |  |
 |`enableDataDetector`| Function | Dudkin Sergey| done|  |
 |`enablePreviewText`| Function | Dudkin Sergey| done|  |
 |`dataDetectorConfig`| Function | Dudkin Sergey| done|  |
@@ -816,7 +816,7 @@
 |`setSearchOptions`|Function| Evstigneev Roman | done | https://gitee.com/openharmony/arkui_ace_engine/issues/IAXCOP |
 |`fontColor`|Function| Evstigneev Roman | done |  |
 |`searchIcon`|Function| Evstigneev Roman |blocked AceEngine| https://gitee.com/openharmony/arkui_ace_engine/issues/IAWF91, https://gitee.com/nikolay-igotti/idlize/issues/IAYXQ8 (+)|
-|`cancelButton`|Function| Evstigneev Roman | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
+|`cancelButton`|Function| Evstigneev Roman | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB |
 |`textIndent`|Function| Evstigneev Roman | done |  |
 |`onEditChange`|Function| Evstigneev Roman |done|  |
 |`selectedBackgroundColor`|Function| Evstigneev Roman | done |  |
