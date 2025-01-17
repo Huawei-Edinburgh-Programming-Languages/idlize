@@ -21,6 +21,7 @@ import {
     IDLReferenceType,
     IndentedPrinter,
     isTypedef,
+    isVoidType,
     throwException
 } from "@idlize/core"
 import {
@@ -62,7 +63,7 @@ export class BridgesPrinter {
     }
 
     private visitInterface(node: IDLInterface): void {
-        if (!this.config.shouldEmit(node.name)) return
+        if (!this.config.shouldEmitInterface(node.name)) return
         node.methods
             .filter(it => !this.config.paramArray(`handwrittenMethods`).includes(it.name))
             .forEach(it => this.printMethod(node.name, it))
@@ -75,13 +76,23 @@ export class BridgesPrinter {
         })
     }
 
-    private printInteropMacro(constructorName: string, returnType: string, parameters: IDLParameter[]): void {
-        const types = [
+    private printInteropMacro(constructorName: string, returnType: IDLType, parameters: IDLParameter[]): void {
+        if (isVoidType(returnType)) return this.printVoidInteropMacro(constructorName, parameters)
+
+        const args = [
             constructorName,
-            returnType,
+            this.mapType(returnType),
             ...parameters.map(it => this.mapType(it.type))
         ].join(`, `)
-        this.printer.print(`KOALA_INTEROP_${parameters.length}(${types})`)
+        this.printer.print(`${this.config.interopMacroPrefix(false)}${parameters.length}(${args})`)
+    }
+
+    private printVoidInteropMacro(constructorName: string, parameters: IDLParameter[]): void {
+        const args = [
+            constructorName,
+            ...parameters.map(it => this.mapType(it.type))
+        ]
+        this.printer.print(`${this.config.interopMacroPrefix(true)}${parameters.length}(${args})`)
     }
 
     private printBody(constructorName: string, parameters: IDLParameter[]): void {
@@ -94,7 +105,7 @@ export class BridgesPrinter {
                 this.printer.print(`${this.casted(it)}${comma}`)
             })
         )
-        this.printer.print(`)`)
+        this.printer.print(`);`)
     }
 
     private casted(node: IDLParameter): string {
@@ -110,7 +121,11 @@ export class BridgesPrinter {
 
     private castTo(node: IDLReferenceType | IDLContainerType): string | undefined {
         if (isPrimitiveType(node)) return undefined
-        if (isReferenceType(node)) return `${this.config.typePrefix}${node.name}*`
+        if (isReferenceType(node)) {
+            /* Temporary workaround until .idl is fixed */
+            if (node.name === `es2panda_Context`) return `${node.name}*`
+            return `${this.config.typePrefix}${node.name}*`
+        }
         if (isContainerType(node)) {
             if (IDLContainerUtils.isSequence(node)) {
                 const typeParam = node.elementType[0]
@@ -133,13 +148,12 @@ export class BridgesPrinter {
     }
 
     private printMethod(astNodeName: string, node: IDLMethod): void {
+        if (!this.config.shouldEmitMethod(node.name)) return
         this.printFunction(`${this.config.methodFunction(astNodeName, node.name)}`, node.parameters, node.returnType)
     }
 
     private printFunction(name: string, parameters: IDLParameter[], returnType: IDLType): void {
-        const translatedReturnType = this.mapType(returnType)
-
-        this.printer.print(`${translatedReturnType} ${this.config.implFunction(name)}(`)
+        this.printer.print(`${this.mapType(returnType)} ${this.config.implFunction(name)}(`)
         this.printer.withIndent(() =>
             this.printParameters(parameters)
         )
@@ -149,7 +163,7 @@ export class BridgesPrinter {
         )
         this.printer.print(`}`)
 
-        this.printInteropMacro(name, translatedReturnType, parameters)
+        this.printInteropMacro(name, returnType, parameters)
         this.printer.print(``)
     }
 }

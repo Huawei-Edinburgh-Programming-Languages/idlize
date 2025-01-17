@@ -53,7 +53,7 @@ export class NativeTypeConvertor /*implements TypeConvertor<string>*/ {
     }
 
     convertContainer(type: IDLContainerType): string {
-        if (IDLContainerUtils.isSequence(type)) return `KNativePointerArray`
+        if (IDLContainerUtils.isSequence(type)) return `KNativePointer`
         throwException(`Unexpected container`)
     }
 

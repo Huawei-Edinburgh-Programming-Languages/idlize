@@ -25,18 +25,22 @@ export class LibarktsGenerator {
     constructor(
         private outDir: string,
         private idl: IDLFile,
-        private config = new Config()
+        private config: Config,
     ) {}
 
-    private libPrinter = new BridgesPrinter(this.idl, this.config)
-    private libFile = 'libarkts/native/src/generated/bridges.cc'
+    private bridgesPrinter = new BridgesPrinter(this.idl, this.config)
+    private bridgesFile = 'libarkts/native/src/generated/bridges.cc'
     private nativeModulePrinter = new NativeModulePrinter(this.idl, this.config)
     private nativeModuleFile = 'libarkts/src/Es2pandaNativeModule.ts'
 
     print(): void {
         forceWriteFile(
-            path.join(this.outDir, this.libFile),
-            this.libPrinter.print()
+            path.join(this.outDir, this.bridgesFile),
+            this.readTemplate("bridges.cc")
+                .replaceAll(
+                    "%GENERATED_PART%",
+                    this.bridgesPrinter.print()
+                )
         )
         forceWriteFile(
             path.join(this.outDir, this.nativeModuleFile),
