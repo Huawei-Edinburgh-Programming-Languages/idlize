@@ -1742,10 +1742,10 @@
 |`setDistance`| Function | Politov Mikhail | done | |
 |`setFingers`| Function | Politov Mikhail | done | |
 |`getDirection`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|*ScrollableTargetInfo*| *Class* | Maksimov Nikita | testskipped | |
-|`isBegin`| Function | Maksimov Nikita | testskipped | |
-|`isEnd`| Function | Maksimov Nikita | testskipped | |
-|*EventTargetInfo*| *Class* | Maksimov Nikita | testskipped | |
+|*ScrollableTargetInfo*| *Class* | Maksimov Nikita | testskipped | UT in progress Maksimov Nikita |
+|`isBegin`| Function | Maksimov Nikita | testskipped | UT in progress Maksimov Nikita |
+|`isEnd`| Function | Maksimov Nikita | testskipped | UT in progress Maksimov Nikita |
+|*EventTargetInfo*| *Class* | Maksimov Nikita | testskipped | UT in progress Maksimov Nikita |
 |`getId`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
 |*GestureRecognizer*| *Class* | Kovalev Sergey | in progress | |
 |`getTag`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR + |
@@ -1754,7 +1754,7 @@
 |`setEnabled`| Function | Kovalev Sergey | done | |
 |`isEnabled`| Function | Kovalev Sergey | done | |
 |`getState`| Function | Kovalev Sergey | done | |
-|`getEventTargetInfo`| Function | Maksimov Nikita | testskipped | |
+|`getEventTargetInfo`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
 |`isValid`| Function | Kovalev Sergey | done | |
 |*PanRecognizer*| *Class* | Politov Mikhail | done | |
 |`getPanGestureOptions`| Function | Politov Mikhail | done | |
@@ -1852,7 +1852,7 @@
 |`toStyledString`| Function | Dudkin Sergey| done|  |
 |*RichEditorStyledStringController*| *Class* |Dudkin Sergey| blocked IDL| |
 |`setStyledString`| Function |Dudkin Sergey| done| |
-|`getStyledString`| Function | Maksimov Nikita | devdone | |
+|`getStyledString`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
 |`getSelection`| Function |Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
 |`onContentChanged`| Function | Dudkin Sergey| blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB944G + |
 |*Scroller*| *Class* | Erokhin Ilya | blocked |  |
@@ -2120,17 +2120,17 @@
 |`unmarshalling`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
 |`getLength`| Function | Pavelyev Ivan | done | |
 |*MutableStyledString*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBBYJE + |
-|`replaceString`| Function | Maksimov Nikita | devdone | |
-|`insertString`| Function | Maksimov Nikita | devdone | |
-|`removeString`| Function | Maksimov Nikita | devdone | |
-|`replaceStyle`| Function | Maksimov Nikita | devdone | |
-|`setStyle`| Function | Maksimov Nikita | devdone | |
-|`removeStyle`| Function | Maksimov Nikita | devdone | |
-|`removeStyles`| Function | Maksimov Nikita | devdone | |
-|`clearStyles`| Function | Maksimov Nikita | devdone | |
-|`replaceStyledString`| Function | Maksimov Nikita | devdone | |
-|`insertStyledString`| Function | Maksimov Nikita | devdone | |
-|`appendStyledString`| Function | Maksimov Nikita | devdone | |
+|`replaceString`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
+|`insertString`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
+|`removeString`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
+|`replaceStyle`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
+|`setStyle`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
+|`removeStyle`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
+|`removeStyles`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
+|`clearStyles`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
+|`replaceStyledString`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
+|`insertStyledString`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
+|`appendStyledString`| Function | Maksimov Nikita | testskipped | UT devdone Maksimov Nikita |
 |*CustomSpan*| *Class* | Politov Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onMeasure`| Function | Politov Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onDraw`| Function | Politov Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
