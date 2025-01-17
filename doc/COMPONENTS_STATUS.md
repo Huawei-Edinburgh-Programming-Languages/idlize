@@ -1097,9 +1097,9 @@
 |`selection`| Function |Samarin Sergey | testskipped | UT in progress Samarin Sergey |
 |`bindSelectionMenu`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*TextArea*|*Component*|Tuzhilkin Ivan|blocked IDL|  |
-|`setTextAreaOptions`|Function|Tuzhilkin Ivan|testskipped| UT in progress Tuzhilkin Ivan |
-|`placeholderColor`|Function|Tuzhilkin Ivan|done|  |
-|`placeholderFont`|Function|Tuzhilkin Ivan|testskipped| UT in progress Tuzhilkin Ivan |
+|`setTextAreaOptions`|Function|Tuzhilkin Ivan|done| |
+|`placeholderColor`|Function|Tuzhilkin Ivan| done | |
+|`placeholderFont`|Function|Tuzhilkin Ivan| done| |
 |`enterKeyType`|Function|Tuzhilkin Ivan|done|  |
 |`textAlign`|Function|Tuzhilkin Ivan|done|  |
 |`caretColor`|Function|Tuzhilkin Ivan|done|  |
@@ -1111,10 +1111,10 @@
 |`textOverflow`|Function|Tuzhilkin Ivan|testskipped| https://gitee.com/openharmony/arkui_ace_engine/issues/IB57XU + , Issue is still exist . Fix is incorect |
 |`textIndent`|Function|Tuzhilkin Ivan|done|  |
 |`caretStyle`|Function|Tuzhilkin Ivan|done|  |
-|`selectedBackgroundColor`|Function|Tuzhilkin Ivan|done|  |
+|`selectedBackgroundColor`|Function|Tuzhilkin Ivan|done| |
 |`onSubmit`|Function|Tuzhilkin Ivan|done|  |
 |`onChange`|Function|Tuzhilkin Ivan|done|  |
-|`onTextSelectionChange`|Function|Tuzhilkin Ivan|done|  |
+|`onTextSelectionChange`|Function|Tuzhilkin Ivan|done| |
 |`onContentScroll`|Function|Tuzhilkin Ivan|done|  |
 |`onEditChange`|Function|Tuzhilkin Ivan|done|  |
 |`onCopy`|Function|Tuzhilkin Ivan|done|  |
@@ -1135,7 +1135,7 @@
 |`decoration`|Function|Tuzhilkin Ivan|done|  |
 |`letterSpacing`|Function|Tuzhilkin Ivan|done|  |
 |`lineSpacing`|Function|Tuzhilkin Ivan|done| |
-|`lineHeight`|Function|Tuzhilkin Ivan|testskipped| UT in progress Tuzhilkin Ivan |
+|`lineHeight`|Function|Tuzhilkin Ivan| done | |
 |`type`|Function|Tuzhilkin Ivan|done|  |
 |`enableAutoFill`|Function|Tuzhilkin Ivan|done|  |
 |`contentType`|Function|Tuzhilkin Ivan|done|  |
@@ -1170,7 +1170,7 @@
 |`placeholderColor`| Function | Spirin Andrey | done |  |
 |`textOverflow`| Function | Spirin Andrey | blocked AceEngine|https://gitee.com/openharmony/arkui_ace_engine/issues/IB57XU|
 |`textIndent`| Function | Spirin Andrey | done |  |
-|`placeholderFont`| Function | Spirin Andrey | testskipped | UT in progress Tuzhilkin Ivan |
+|`placeholderFont`| Function | Spirin Andrey | done | |
 |`enterKeyType`| Function | Spirin Andrey | done |  |
 |`caretColor`| Function | Spirin Andrey | done |  |
 |`onEditChanged`| Function | Spirin Andrey | testskipped |  |
