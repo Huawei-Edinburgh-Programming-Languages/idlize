@@ -14,7 +14,7 @@
  */
 
 import * as idl from "../../idl"
-import { DeclarationConvertor } from "../LanguageWriters/nameConvertor";
+import { DeclarationConvertor } from "../../LanguageWriters/nameConvertor";
 import { Language } from "../../Language";
 
 export class DeclarationNameConvertor implements DeclarationConvertor<string> {

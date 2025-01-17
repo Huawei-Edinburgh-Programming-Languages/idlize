@@ -22,10 +22,10 @@ import {
     IDLType,
     IDLUint8ArrayType,
     IDLVoidType
-} from '../../../idl'
-import { Language } from '../../../Language'
+} from '../../idl'
+import { Language } from '../../Language'
 import { ArgConvertor, BaseArgConvertor } from "../ArgConvertors"
-import { PrimitiveTypeList } from "../../PrimitiveType"
+import { PrimitiveTypeList } from "../../peer-generation/PrimitiveType"
 import {
     AssignStatement,
     BlockStatement,
@@ -53,10 +53,10 @@ import {
 } from "./CLikeLanguageWriter"
 import { IdlNameConvertor } from "../nameConvertor"
 import { RuntimeType } from "../common"
-import { IndentedPrinter } from "../../../IndentedPrinter";
-import { throwException } from "../../../util";
-import { cppKeywords } from "../../../languageSpecificKeywords";
-import { ReferenceResolver } from "../../ReferenceResolver";
+import { IndentedPrinter } from "../../IndentedPrinter";
+import { throwException } from "../../util";
+import { cppKeywords } from "../../languageSpecificKeywords";
+import { ReferenceResolver } from "../../peer-generation/ReferenceResolver";
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //

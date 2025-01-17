@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { IndentedPrinter } from "../../../IndentedPrinter"
+import { IndentedPrinter } from "../../IndentedPrinter"
 import {
     LambdaExpression,
     LanguageExpression,
@@ -26,7 +26,7 @@ import {
     ObjectArgs
 } from "../LanguageWriter"
 import { TSCastExpression, TSLanguageWriter } from "./TsLanguageWriter"
-import { getExtAttribute, IDLEnum, IDLI32Type, IDLThisType, IDLType, IDLVoidType } from '../../../idl'
+import { getExtAttribute, IDLEnum, IDLI32Type, IDLThisType, IDLType, IDLVoidType } from '../../idl'
 import {
     ArgConvertor,
     AggregateConvertor,
@@ -37,13 +37,13 @@ import {
     OptionConvertor,
     UnionConvertor
 } from "../ArgConvertors"
-import * as idl from '../../../idl'
+import * as idl from '../../idl'
 import { convertDeclaration, IdlNameConvertor } from "../nameConvertor"
-import { createDeclarationNameConvertor } from "../../idl/IdlNameConvertor";
-import { Language } from "../../../Language";
+import { createDeclarationNameConvertor } from "../../peer-generation/idl/IdlNameConvertor";
+import { Language } from "../../Language";
 import { RuntimeType } from "../common";
-import { throwException } from "../../../util";
-import { ReferenceResolver } from "../../ReferenceResolver";
+import { throwException } from "../../util";
+import { ReferenceResolver } from "../../peer-generation/ReferenceResolver";
 
 ////////////////////////////////////////////////////////////////
 //                         STATEMENTS                         //

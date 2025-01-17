@@ -13,15 +13,15 @@
  * limitations under the License.
  */
 
-import { Language } from "../../Language"
-import { IndentedPrinter } from "../../IndentedPrinter"
+import { Language } from "../Language"
+import { IndentedPrinter } from "../IndentedPrinter"
 
-import * as idl from "../../idl"
-import { stringOrNone } from "../../util";
+import * as idl from "../idl"
+import { stringOrNone } from "../util";
 import * as fs from "fs"
 import { NativeModuleType, RuntimeType } from "./common"
 import { ArgConvertor } from "./ArgConvertors";
-import { ReferenceResolver } from "../ReferenceResolver";
+import { ReferenceResolver } from "../peer-generation/ReferenceResolver";
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //

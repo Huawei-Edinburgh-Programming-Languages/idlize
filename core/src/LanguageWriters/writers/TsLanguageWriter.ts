@@ -13,9 +13,9 @@
  * limitations under the License.
  */
 
-import * as idl from '../../../idl'
-import { Language } from '../../../Language'
-import { IndentedPrinter } from "../../../IndentedPrinter";
+import * as idl from '../../idl'
+import { Language } from '../../Language'
+import { IndentedPrinter } from "../../IndentedPrinter";
 import {
     AssignStatement,
     CheckOptionalStatement,
@@ -37,8 +37,8 @@ import {
 import { ArgConvertor } from "../ArgConvertors"
 import { IdlNameConvertor } from "../nameConvertor"
 import { RuntimeType } from "../common";
-import { throwException } from "../../../util";
-import { ReferenceResolver } from "../../ReferenceResolver";
+import { throwException } from "../../util";
+import { ReferenceResolver } from "../../peer-generation/ReferenceResolver";
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //

@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import * as idl from "../../idl";
-import { Language } from "../../Language";
+import * as idl from "../idl";
+import { Language } from "../Language";
 import {
     LanguageExpression,
     LanguageStatement,
@@ -26,9 +26,9 @@ import {
 } from "./LanguageWriter";
 import { RuntimeType } from "./common";
 import { generateTypeCheckerName } from "./writers/ETSLanguageWriter";
-import { LibraryInterface } from "../../LibraryInterface";
-import { warn } from "../../util";
-import { UnionRuntimeTypeChecker } from "../unions";
+import { LibraryInterface } from "../LibraryInterface";
+import { warn } from "../util";
+import { UnionRuntimeTypeChecker } from "../peer-generation/unions";
 
 export interface ArgConvertor {
     param: string

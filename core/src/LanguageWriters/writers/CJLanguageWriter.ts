@@ -13,9 +13,9 @@
  * limitations under the License.
  */
 
-import * as idl from "../../../idl"
-import { IndentedPrinter } from "../../../IndentedPrinter";
-import { CJKeywords } from "../../../languageSpecificKeywords";
+import * as idl from "../../idl"
+import { IndentedPrinter } from "../../IndentedPrinter";
+import { CJKeywords } from "../../languageSpecificKeywords";
 import { ArgConvertor, BaseArgConvertor } from "../ArgConvertors"
 import { RuntimeType } from "../common"
 import {
@@ -36,9 +36,9 @@ import {
     StringExpression
 } from "../LanguageWriter"
 import { IdlNameConvertor } from "../nameConvertor"
-import { Language } from "../../../Language";
-import { isDefined } from "../../../util";
-import { ReferenceResolver } from "../../ReferenceResolver";
+import { Language } from "../../Language";
+import { isDefined } from "../../util";
+import { ReferenceResolver } from "../../peer-generation/ReferenceResolver";
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //

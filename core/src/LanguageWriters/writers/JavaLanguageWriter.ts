@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import { Language } from '../../../Language'
-import { IndentedPrinter } from "../../../IndentedPrinter";
+import { Language } from '../../Language'
+import { IndentedPrinter } from "../../IndentedPrinter";
 import {
     AssignStatement,
     CheckOptionalStatement,
@@ -36,11 +36,11 @@ import {
     CLikeLoopStatement,
     CLikeReturnStatement
 } from "./CLikeLanguageWriter"
-import * as idl from '../../../idl'
+import * as idl from '../../idl'
 import { ArgConvertor, BaseArgConvertor } from "../ArgConvertors"
 import { IdlNameConvertor } from "../nameConvertor"
 import { RuntimeType } from "../common";
-import { ReferenceResolver } from "../../ReferenceResolver";
+import { ReferenceResolver } from "../../peer-generation/ReferenceResolver";
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //

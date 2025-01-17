@@ -1,6 +1,6 @@
 import * as idl from "./idl"
 import { Language } from "./Language";
-import { ArgConvertor } from "./peer-generation/LanguageWriters/ArgConvertors";
+import { ArgConvertor } from "./LanguageWriters/ArgConvertors";
 import { ReferenceResolver } from "./peer-generation/ReferenceResolver";
 
 export interface LibraryFileInterface {
