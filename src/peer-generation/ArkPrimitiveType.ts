@@ -13,15 +13,11 @@
  * limitations under the License.
  */
 
-import { PrimitiveType, PrimitiveTypes } from "@idlize/core"
+import { PrimitiveType, PrimitiveTypeList } from "@idlize/core"
 
-export class ArkPrimitiveTypes extends PrimitiveTypes {
-    readonly String: PrimitiveType = new ArkPrimitiveType(`String`, true)
-    readonly Number = new ArkPrimitiveType(`Number`, true)
+export class ArkPrimitiveTypeList extends PrimitiveTypeList {
     readonly Int32 = new ArkPrimitiveType(`Int32`)
     readonly Int64 = new ArkPrimitiveType(`Int64`)
-    readonly Date = new ArkPrimitiveType(`Date`)
-    readonly RuntimeType = new ArkPrimitiveType(`RuntimeType`)
     readonly Boolean = new ArkPrimitiveType(`Boolean`)
     readonly Function = new ArkPrimitiveType(`Function`, false)
     readonly Undefined = new ArkPrimitiveType(`Undefined`)
@@ -29,7 +25,6 @@ export class ArkPrimitiveTypes extends PrimitiveTypes {
     readonly NativePointer = new ArkPrimitiveType(`NativePointer`)
     readonly Tag = new ArkPrimitiveType(`Tag`)
     readonly Materialized = new ArkPrimitiveType(`Materialized`, true)
-    readonly ObjectHandle = new ArkPrimitiveType(`ObjectHandle`)
     readonly Length = new ArkPrimitiveType(`Length`, true)
     readonly CustomObject = new ArkPrimitiveType(`CustomObject`, true)
 }
@@ -42,6 +37,6 @@ export class ArkPrimitiveType extends PrimitiveType {
     getText(): string {
         return ArkPrimitiveType.Prefix + this.name
     }
-
-    static readonly Instance = new ArkPrimitiveTypes()
 }
+
+export const ArkPrimitiveTypesInstance = new ArkPrimitiveTypeList()

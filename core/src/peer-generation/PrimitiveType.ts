@@ -13,17 +13,21 @@
  * limitations under the License.
  */
 
-export abstract class PrimitiveType {
-    constructor(protected name: string, protected isPointer: boolean = false) {
+export class PrimitiveType {
+    constructor(protected name: string,
+                protected isPointer: boolean = false) {
     }
 
-    abstract getText(): string
+    getText(): string {
+        return this.name
+    }
 
-    toString(): string { return this.getText() }
+    toString(): string {
+        return this.getText()
+    }
 }
 
-
-export abstract class PrimitiveTypes {
+export abstract class PrimitiveTypeList {
     public static get UndefinedTag() {
         return "INTEROP_TAG_UNDEFINED"
     }
@@ -36,17 +40,6 @@ export abstract class PrimitiveTypes {
         return "INTEROP_TAG_OBJECT"
     }
 
-    abstract String: PrimitiveType
-    abstract Number: PrimitiveType
-    abstract Int32: PrimitiveType
-    abstract Int64: PrimitiveType
-    abstract Date: PrimitiveType
-    abstract RuntimeType: PrimitiveType
-    abstract Boolean: PrimitiveType
-    abstract Function: PrimitiveType
     abstract Undefined: PrimitiveType
     abstract Void: PrimitiveType
-    abstract NativePointer: PrimitiveType
-    abstract Tag: PrimitiveType
-    abstract CustomObject: PrimitiveType
 }

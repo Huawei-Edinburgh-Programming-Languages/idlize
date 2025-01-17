@@ -41,7 +41,7 @@ import { getReferenceResolver } from "../ReferenceResolver"
 import { ReferenceResolver } from "@idlize/core"
 import { collectDeclItself, collectDeclDependencies } from "../ImportsCollectorUtils"
 import { CppIDLNodeToStringConvertor } from "../LanguageWriters/convertors/CppConvertors";
-import { ArkPrimitiveTypes } from "../ArkPrimitiveType";
+import { ArkPrimitiveTypesInstance } from "../ArkPrimitiveType";
 import { TsIDLNodeToStringConverter } from "../LanguageWriters/convertors/TSConvertors";
 
 export const PeerEventsProperties = "PeerEventsProperties"
@@ -203,8 +203,8 @@ export function collapseIdlEventsOverloads(library: PeerLibrary, peer: PeerClass
 }
 
 abstract class CEventsVisitorBase {
-    readonly impl: CppLanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppIDLNodeToStringConvertor(this.library), new ArkPrimitiveTypes())
-    readonly receiversList: LanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppIDLNodeToStringConvertor(this.library), new ArkPrimitiveTypes())
+    readonly impl: CppLanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppIDLNodeToStringConvertor(this.library), ArkPrimitiveTypesInstance)
+    readonly receiversList: LanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppIDLNodeToStringConvertor(this.library), ArkPrimitiveTypesInstance)
 
     constructor(
         protected readonly library: PeerLibrary,

@@ -17,8 +17,8 @@ import * as idl from "@idlize/core/idl"
 import { Language, PrintHint, hashCodeFromString, warn } from "@idlize/core"
 import { RuntimeType, AggregateConvertor, ArgConvertor, BaseArgConvertor, ExpressionAssigner } from "@idlize/core"
 import { LibraryInterface } from "@idlize/core"
-import { ArkPrimitiveType } from "./ArkPrimitiveType"
-import { BlockStatement, BranchStatement, LanguageExpression, LanguageStatement, LanguageWriter, StringExpression } from "@idlize/core"
+import { ArkPrimitiveType, ArkPrimitiveTypesInstance } from "./ArkPrimitiveType"
+import { BlockStatement, LanguageExpression, LanguageStatement, LanguageWriter, StringExpression } from "@idlize/core"
 import { IDLNodeToStringConvertor } from "./LanguageWriters/convertors/InteropConvertor"
 import { createEmptyReferenceResolver } from "@idlize/core"
 import { createTypeNameConvertor } from "./LanguageWriters";
@@ -62,7 +62,7 @@ export class LengthConvertor extends BaseArgConvertor {
     }
     convertorArg(param: string, writer: LanguageWriter): string {
         switch (writer.language) {
-            case Language.CPP: return `(const ${ArkPrimitiveType.Instance.Length.getText()}*)&${param}`
+            case Language.CPP: return `(const ${ArkPrimitiveTypesInstance.Length.getText()}*)&${param}`
             case Language.JAVA: return `${param}.value`
             case Language.CJ: return `${param}.value`
             default: return param
@@ -546,7 +546,7 @@ export function generateCallbackKindValue(callback: idl.IDLCallback): number {
 
 export function generateCallbackAPIArguments(library: LibraryInterface, callback: idl.IDLCallback): string[] {
     const nameConvertor = createTypeNameConvertor(Language.CPP, library)
-    const args: string[] = [`const ${ArkPrimitiveType.Instance.Int32.getText()} resourceId`]
+    const args: string[] = [`const ${ArkPrimitiveTypesInstance.Int32.getText()} resourceId`]
     args.push(...callback.parameters.map(it => {
         const target = library.toDeclaration(it.type!)
         const type = library.typeConvertor(it.name, it.type!, it.isOptional)

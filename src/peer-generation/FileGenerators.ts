@@ -15,7 +15,7 @@
 import * as fs from "fs"
 import * as path from "path"
 import { IndentedPrinter, camelCaseToUpperSnakeCase, Language } from "@idlize/core"
-import { ArkPrimitiveType, ArkPrimitiveTypes } from "./ArkPrimitiveType"
+import { ArkPrimitiveTypeList, ArkPrimitiveTypesInstance } from "./ArkPrimitiveType"
 import { createLanguageWriter, Method, MethodSignature, NamedMethodSignature, PrinterLike } from "./LanguageWriters"
 import { CppLanguageWriter, LanguageWriter } from "@idlize/core";
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
@@ -327,7 +327,7 @@ export function makeTypeChecker(library: PeerLibrary): { arkts: string, ts: stri
 
 export function makeConverterHeader(path: string, namespace: string, library: PeerLibrary): LanguageWriter {
     const converter = new CppLanguageWriter(new IndentedPrinter(), library,
-        new CppIDLNodeToStringConvertor(library), new ArkPrimitiveTypes())
+        new CppIDLNodeToStringConvertor(library), ArkPrimitiveTypesInstance)
     converter.writeLines(cStyleCopyright)
     converter.writeLines(`/*
  * ${warning}
@@ -440,7 +440,7 @@ ${accessors.join("\n")}
 } ${PeerGeneratorConfig.cppPrefix}ArkUIAccessors;
 
 typedef struct ${PeerGeneratorConfig.cppPrefix}ArkUIGraphicsAPI {
-    ${ArkPrimitiveType.Instance.Int32.getText()} version;
+    ${ArkPrimitiveTypesInstance.Int32.getText()} version;
 } ${PeerGeneratorConfig.cppPrefix}ArkUIGraphicsAPI;
 
 typedef struct ${PeerGeneratorConfig.cppPrefix}ArkUIEventsAPI {
@@ -595,7 +595,7 @@ export function makeDeserializeAndCall(library: PeerLibrary, language: Language,
 }
 
 export function makeCEventsArkoalaImpl(resolver: ReferenceResolver, implData: LanguageWriter, receiversList: LanguageWriter): string {
-    const writer = new CppLanguageWriter(new IndentedPrinter(), resolver, new CppIDLNodeToStringConvertor(resolver), new ArkPrimitiveTypes())
+    const writer = new CppLanguageWriter(new IndentedPrinter(), resolver, new CppIDLNodeToStringConvertor(resolver), ArkPrimitiveTypesInstance)
     writer.print(cStyleCopyright)
     writer.writeInclude("arkoala_api_generated.h")
     writer.writeInclude("events.h")
@@ -620,7 +620,7 @@ export function makeCEventsArkoalaImpl(resolver: ReferenceResolver, implData: La
 }
 
 export function makeCEventsLibaceImpl(implData: PrinterLike, receiversList: PrinterLike, namespace: string, resolver: ReferenceResolver): string {
-    const writer = new CppLanguageWriter(new IndentedPrinter(), resolver, new CppIDLNodeToStringConvertor(resolver), new ArkPrimitiveTypes())
+    const writer = new CppLanguageWriter(new IndentedPrinter(), resolver, new CppIDLNodeToStringConvertor(resolver), ArkPrimitiveTypesInstance)
     writer.writeLines(cStyleCopyright)
     writer.print("")
     writer.writeInclude(`arkoala_api_generated.h`)

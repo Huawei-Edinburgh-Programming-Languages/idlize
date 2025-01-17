@@ -25,7 +25,7 @@ import { getReferenceResolver } from "../ReferenceResolver";
 import { createDestroyPeerMethod } from "../Materialized";
 import { InteropReturnTypeConvertor } from "../LanguageWriters/convertors/InteropConvertor";
 import { CppIDLNodeToStringConvertor } from "../LanguageWriters/convertors/CppConvertors";
-import { ArkPrimitiveTypes } from "../ArkPrimitiveType";
+import { ArkPrimitiveTypesInstance } from "../ArkPrimitiveType";
 
 export function generateEventReceiverName(componentName: string) {
     return `${PeerGeneratorConfig.cppPrefix}ArkUI${componentName}EventsReceiver`
@@ -163,7 +163,7 @@ export function printUserConverter(headerPath: string, namespace: string, apiVer
     const visitor = new HeaderVisitor(peerLibrary, apiHeader, modifierList, accessorList, eventsList, nodeTypesList)
     visitor.printApiAndDeserializer()
 
-    const structs = new CppLanguageWriter(new IndentedPrinter(), getReferenceResolver(peerLibrary), new CppIDLNodeToStringConvertor(peerLibrary), new ArkPrimitiveTypes())
+    const structs = new CppLanguageWriter(new IndentedPrinter(), getReferenceResolver(peerLibrary), new CppIDLNodeToStringConvertor(peerLibrary), ArkPrimitiveTypesInstance)
     const typedefs = new IndentedPrinter()
 
     const converterHeader = makeConverterHeader(headerPath, namespace, peerLibrary).getOutput().join("\n")
@@ -182,7 +182,7 @@ export function printSerializers(apiVersion: number, peerLibrary: PeerLibrary): 
     const visitor = new HeaderVisitor(peerLibrary, apiHeader, modifierList, accessorList, eventsList, nodeTypesList)
     visitor.printApiAndDeserializer()
 
-    const structs = new CppLanguageWriter(new IndentedPrinter(), getReferenceResolver(peerLibrary), new CppIDLNodeToStringConvertor(peerLibrary), new ArkPrimitiveTypes())
+    const structs = new CppLanguageWriter(new IndentedPrinter(), getReferenceResolver(peerLibrary), new CppIDLNodeToStringConvertor(peerLibrary), ArkPrimitiveTypesInstance)
     const typedefs = new IndentedPrinter()
 
     const serializers = makeCSerializers(peerLibrary, structs, typedefs)

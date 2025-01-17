@@ -16,7 +16,7 @@
 import { capitalize, IDLType, isDefined } from '@idlize/core'
 import { ArgConvertor } from "@idlize/core"
 import { Method, MethodModifier } from "./LanguageWriters"
-import { ArkPrimitiveType } from "./ArkPrimitiveType"
+import { ArkPrimitiveTypesInstance } from "./ArkPrimitiveType"
 import { mangleMethodName } from "@idlize/core"
 import { IdlNameConvertor } from "@idlize/core"
 export class PeerMethod {
@@ -87,7 +87,7 @@ export class PeerMethod {
         if (!this.hasReceiver()) return undefined
         return {
             argName: "node",
-            argType: ArkPrimitiveType.Instance.NativePointer.getText()
+            argType: ArkPrimitiveTypesInstance.NativePointer.getText()
         }
     }
 

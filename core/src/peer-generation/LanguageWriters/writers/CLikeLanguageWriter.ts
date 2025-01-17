@@ -15,7 +15,7 @@
 
 import { Language } from "../../../Language"
 import { IndentedPrinter } from "../../../IndentedPrinter"
-import { PrimitiveTypes } from "../../PrimitiveType"
+import { PrimitiveTypeList } from "../../PrimitiveType"
 import * as idl from "../../../idl"
 import {
     ExpressionStatement,
@@ -44,7 +44,7 @@ export class CLikeReturnStatement extends ReturnStatement {
 export class CDefinedExpression implements LanguageExpression {
     constructor(private value: string) { }
     asString(): string {
-        return `${this.value} != ${PrimitiveTypes.UndefinedTag}`
+        return `${this.value} != ${PrimitiveTypeList.UndefinedTag}`
     }
 }
 

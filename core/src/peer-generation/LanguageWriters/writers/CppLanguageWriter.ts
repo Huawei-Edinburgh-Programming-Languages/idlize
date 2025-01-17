@@ -25,7 +25,7 @@ import {
 } from '../../../idl'
 import { Language } from '../../../Language'
 import { ArgConvertor, BaseArgConvertor } from "../ArgConvertors"
-import { PrimitiveTypes } from "../../PrimitiveType"
+import { PrimitiveTypeList } from "../../PrimitiveType"
 import {
     AssignStatement,
     BlockStatement,
@@ -66,7 +66,7 @@ export class CppCastExpression implements LanguageExpression {
     constructor(public convertor:IdlNameConvertor, public value: LanguageExpression, public type: IDLType, private options?:MakeCastOptions) {}
     asString(): string {
         if (forceAsNamedNode(this.type).name === "Tag") {
-            return `${this.value.asString()} == ${PrimitiveTypes.UndefinedRuntime} ? ${PrimitiveTypes.UndefinedTag} : ${PrimitiveTypes.ObjectTag}`
+            return `${this.value.asString()} == ${PrimitiveTypeList.UndefinedRuntime} ? ${PrimitiveTypeList.UndefinedTag} : ${PrimitiveTypeList.ObjectTag}`
         }
         let resultName = ''
         if (this.options?.overrideTypeName) {
@@ -174,7 +174,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     constructor(printer: IndentedPrinter,
                 resolver:ReferenceResolver,
                 typeConvertor: IdlNameConvertor,
-                private primitivesTypes: PrimitiveTypes) {
+                private primitivesTypes: PrimitiveTypeList) {
         super(printer, resolver, Language.CPP)
         this.typeConvertor = typeConvertor
     }

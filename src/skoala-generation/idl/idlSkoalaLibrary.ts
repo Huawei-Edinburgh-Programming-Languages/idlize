@@ -18,7 +18,7 @@ import { posix as path } from "path"
 import { DeclarationNameConvertor } from "../../peer-generation/idl/IdlNameConvertor"
 import { ImportsCollector } from "../../peer-generation/ImportsCollector";
 import { capitalize, isDefined, throwException, Language, CustomPrintVisitor, addSyntheticType, resolveSyntheticType, isImport, isStringEnum, CustomTypeConvertor } from '@idlize/core'
-import { ArkPrimitiveType } from "../../peer-generation/ArkPrimitiveType";
+import { ArkPrimitiveType, ArkPrimitiveTypesInstance } from "../../peer-generation/ArkPrimitiveType";
 import { WrapperClass, WrapperField, WrapperMethod } from "../WrapperClass";
 import { Skoala } from "../utils";
 import { Field, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, NamedMethodSignature, NumberConvertor } from "@idlize/core";
@@ -569,8 +569,8 @@ export class IdlWrapperProcessor {
 function mapCInteropRetType(type: idl.IDLType): string {
     if (idl.isPrimitiveType(type)) {
         switch (type) {
-            case idl.IDLBooleanType: return ArkPrimitiveType.Instance.Boolean.getText()
-            case idl.IDLNumberType: return ArkPrimitiveType.Instance.Int32.getText()
+            case idl.IDLBooleanType: return ArkPrimitiveTypesInstance.Boolean.getText()
+            case idl.IDLNumberType: return ArkPrimitiveTypesInstance.Int32.getText()
             case idl.IDLStringType:
             case idl.IDLAnyType:
                 /* HACK, fix */
@@ -582,20 +582,20 @@ function mapCInteropRetType(type: idl.IDLType): string {
         }
     }
     if (idl.isReferenceType(type)) {
-        return ArkPrimitiveType.Instance.NativePointer.getText()
+        return ArkPrimitiveTypesInstance.NativePointer.getText()
     }
     if (idl.isTypeParameterType(type))
         /* ANOTHER HACK, fix */
         return "void"
     if (idl.isUnionType(type))
-        return ArkPrimitiveType.Instance.NativePointer.getText()
+        return ArkPrimitiveTypesInstance.NativePointer.getText()
     if (idl.isContainerType(type)) {
         if (idl.IDLContainerUtils.isSequence(type)) {
             /* HACK, fix */
             // return array by some way
             return "void"
         } else
-            return ArkPrimitiveType.Instance.NativePointer.getText()
+            return ArkPrimitiveTypesInstance.NativePointer.getText()
     }
     throw new Error(`mapCInteropType failed for ${idl.IDLKind[type.kind]}`)
 }
