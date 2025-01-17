@@ -29,8 +29,6 @@ import { TSCastExpression, TSLanguageWriter } from "./TsLanguageWriter"
 import { getExtAttribute, IDLEnum, IDLI32Type, IDLThisType, IDLType, IDLVoidType } from '../../../idl'
 import {
     ArgConvertor,
-    EnumConvertor,
-    BaseArgConvertor,
     AggregateConvertor,
     ArrayConvertor,
     CustomTypeConvertor,
@@ -238,7 +236,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         return this.makeString(`${value} instanceof ${convertor.targetType(this)}`)
     }
     makeValueFromOption(value: string, destinationConvertor: ArgConvertor): LanguageExpression {
-        if (destinationConvertor instanceof EnumConvertor) {
+        if (idl.isEnum(this.resolver.toDeclaration(destinationConvertor.nativeType()))) {
             return this.makeCast(this.makeString(value), destinationConvertor.idlType)
         }
         return super.makeValueFromOption(value, destinationConvertor)
@@ -261,13 +259,11 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     }
     override makeEnumCast(value: string, _unsafe: boolean, convertor: ArgConvertor | undefined): string {
         if (convertor === undefined) {
-            throwException(`The makeEnumCast function required ArgConvertor`)
+            throwException(`The makeEnumCast function required EnumConvertor`)
         }
-        const decl = this.resolver.resolveTypeReference(
-            idl.createReferenceType(this.getNodeName(convertor.nativeType()))
-        )
-        if (decl === undefined || !idl.isEnum(decl)) {
-            throwException(`The type reference ${decl?.name} must be Enum`)
+        const decl = this.resolver.toDeclaration(convertor.nativeType())
+        if (!idl.isEnum(decl)) {
+            throwException(`Declaration type must be Enum`)
         }
         return this.makeCast(this.makeString(`${value}${idl.isStringEnum(decl) ? "" : ".valueOf()"}`),
             IDLI32Type).asString()
@@ -275,7 +271,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     makeUnionVariantCondition(convertor: ArgConvertor, valueName: string, valueType: string, type: string,
                               convertorIndex: number,
                               runtimeTypeIndex: number): LanguageExpression {
-        if (convertor instanceof EnumConvertor) {
+        if (idl.isEnum(this.resolver.toDeclaration(convertor.nativeType()))) {
             return this.instanceOf(convertor, valueName)
         }
         // TODO: in ArkTS SerializerBase.runtimeType returns RuntimeType.OBJECT for enum type and not RuntimeType.NUMBER as in TS
@@ -310,7 +306,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         // the '==' operator must be used when one of the operands is a reference
         return super.makeNaryOp('==', args)
     }
-    override makeDiscriminatorConvertor(convertor: EnumConvertor, value: string, index: number): LanguageExpression { //
+    override makeDiscriminatorConvertor(convertor: ArgConvertor, value: string, index: number): LanguageExpression { //
         return this.instanceOf(convertor, value);
         // Or this ????????
         // return this.discriminatorFromExpressions(value, RuntimeType.OBJECT, [
@@ -322,7 +318,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     }
     override castToBoolean(value: string): string { return `${value} ? 1 : 0` }
 
-    override instanceOf(convertor: BaseArgConvertor, value: string, duplicateMembers?: Set<string>): LanguageExpression {
+    override instanceOf(convertor: ArgConvertor, value: string, duplicateMembers?: Set<string>): LanguageExpression {
         if (convertor instanceof CustomTypeConvertor) {
             return makeInterfaceTypeCheckerCall(value,
                 this.getNodeName(convertor.idlType),
@@ -345,7 +341,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         if (convertor instanceof ArrayConvertor) {
             return makeArrayTypeCheckCall(value, this.arrayConvertor.convert(convertor.idlType), this)
         }
-        if (convertor instanceof EnumConvertor) {
+        if (idl.isEnum(this.resolver.toDeclaration(convertor.nativeType()))) {
             return makeEnumTypeCheckerCall(value, this.getNodeName(convertor.idlType), this)
         }
         return super.instanceOf(convertor, value, duplicateMembers)
