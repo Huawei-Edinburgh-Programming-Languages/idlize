@@ -34,7 +34,9 @@ import {
     IDLUnionType,
     IDLVoidType,
     isEnum,
-    throwException
+    throwException,
+    IDLF64Type,
+    IDLF32Type
 } from "@idlize/core"
 
 export class NativeTypeConvertor /*implements TypeConvertor<string>*/ {
@@ -80,6 +82,8 @@ export class NativeTypeConvertor /*implements TypeConvertor<string>*/ {
             case IDLU32Type: return `KUInt`
             case IDLI64Type: return `KLong`
             case IDLU64Type: return `KULong`
+            case IDLF32Type: return `KFloat`
+            case IDLF64Type: return `KDouble`
             case IDLBooleanType: return `KBoolean`
             case IDLStringType: return `KStringPtr&`
             case IDLVoidType: return `KNativePointer`

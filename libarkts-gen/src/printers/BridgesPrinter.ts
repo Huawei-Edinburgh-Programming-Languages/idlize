@@ -34,10 +34,10 @@ import {
     isPrimitiveType,
     isReferenceType,
 } from "@idlize/core/idl"
-import { NativeTypeConvertor } from "./NativeTypeConvertor"
+import { NativeTypeConvertor } from "../NativeTypeConvertor"
 import { convertType } from "@idlize/core"
-import { IDLFile } from "./Es2PandaTransformer"
-import { Config } from "./Config"
+import { IDLFile } from "../Es2PandaTransformer"
+import { Config } from "../Config"
 
 export class BridgesPrinter {
     constructor(
@@ -54,7 +54,6 @@ export class BridgesPrinter {
     }
 
     private visit(node: IDLEntry): void {
-        console.log(node.name)
         if (isInterface(node)) return this.visitInterface(node)
         if (isEnum(node)) return
         if (isTypedef(node)) return
@@ -106,7 +105,7 @@ export class BridgesPrinter {
                 ? node.name
                 : `reinterpret_cast<${castTo}>(${node.name})`
         }
-        throw new Error(`Unsupported type "${node.type}"`)
+        throw new Error(`Unsupported type: ${node.type}`)
     }
 
     private castTo(node: IDLReferenceType | IDLContainerType): string | undefined {
@@ -137,10 +136,8 @@ export class BridgesPrinter {
         this.printFunction(`${this.config.methodFunction(astNodeName, node.name)}`, node.parameters, node.returnType)
     }
 
-    private printFunction(name: string, parameters: IDLParameter[], returnType?: IDLType): void {
-        const translatedReturnType = returnType === undefined
-            ? `KNativePointer`
-            : this.mapType(returnType)
+    private printFunction(name: string, parameters: IDLParameter[], returnType: IDLType): void {
+        const translatedReturnType = this.mapType(returnType)
 
         this.printer.print(`${translatedReturnType} ${this.config.implFunction(name)}(`)
         this.printer.withIndent(() =>

@@ -16,8 +16,8 @@
 import * as path from "node:path"
 import * as fs from "node:fs"
 import { forceWriteFile } from "@idlize/core"
-import { BridgesPrinter } from "./BridgesPrinter"
-import { NativeModulePrinter } from "./NativeModulePrinter"
+import { BridgesPrinter } from "./printers/BridgesPrinter"
+import { NativeModulePrinter } from "./printers/NativeModulePrinter"
 import { IDLFile } from "./Es2PandaTransformer"
 import { Config } from "./Config"
 
@@ -29,9 +29,9 @@ export class LibarktsGenerator {
     ) {}
 
     private libPrinter = new BridgesPrinter(this.idl, this.config)
-    private libFile = 'native/src/bridges.cc'
+    private libFile = 'libarkts/native/src/generated/bridges.cc'
     private nativeModulePrinter = new NativeModulePrinter(this.idl, this.config)
-    private nativeModuleFile = 'native/src/ts/LibarktsNativeModule.ts'
+    private nativeModuleFile = 'libarkts/src/Es2pandaNativeModule.ts'
 
     print(): void {
         forceWriteFile(

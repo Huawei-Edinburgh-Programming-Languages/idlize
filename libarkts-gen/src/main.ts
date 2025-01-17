@@ -29,6 +29,7 @@ const options: {
     .option('--input-file <path>', 'Path to file to generate from')
     .option('--libarkts-transform', 'Invokes Es2PandaTransformer on input .idl')
     .option('--generate-for <string>', 'Ignore all other nodes, comma separated, no space')
+    .option('--update-external', 'Integrate generated files to external')
     .parse()
     .opts()
 
