@@ -1894,12 +1894,12 @@
 |`preloadItems`| Function | Skroba Gleb | done | |
 |`setTabBarTranslate`| Function | Skroba Gleb | done | |
 |`setTabBarOpacity`| Function | Skroba Gleb | done | |
-|*TabContentTransitionProxy*| *Class* | Dudkin Sergey | UT in progress Dudkin Sergey | |
-|`finishTransition`| Function | Dudkin Sergey | testskipped | UT in progress Dudkin Sergey |
-|`getFrom`| Function | Dudkin Sergey | testskipped | UT in progress Dudkin Sergey |
-|`setFrom`| Function | Dudkin Sergey | testskipped | UT in progress Dudkin Sergey |
-|`getTo`| Function | Dudkin Sergey | testskipped | UT in progress Dudkin Sergey |
-|`setTo`| Function | Dudkin Sergey | testskipped | UT in progress Dudkin Sergey |
+|*TabContentTransitionProxy*| *Class* | Dudkin Sergey | | |
+|`finishTransition`| Function | Dudkin Sergey | done | |
+|`getFrom`| Function | Dudkin Sergey | done | |
+|`setFrom`| Function | Dudkin Sergey | done | |
+|`getTo`| Function | Dudkin Sergey | done | |
+|`setTo`| Function | Dudkin Sergey | done | |
 |*TextController*| *Class* | Samarin Sergey | in progress | |
 |`closeSelectionMenu`| Function | Samarin Sergey | done | |
 |`setStyledString`| Function | Samarin Sergey | testskipped | |
