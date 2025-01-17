@@ -1,5 +1,5 @@
 import * as idl from "@idlize/core/idl"
-import { Language } from "@idlize/core"
+import { generatorConfiguration, Language } from "@idlize/core"
 import { LibraryInterface } from "@idlize/core";
 import { ArkPrimitiveType } from "./ArkPrimitiveType";
 import { isComponentDeclaration } from "./ComponentsCollector";
@@ -98,7 +98,7 @@ export namespace DeclarationTargets {
             .filter(it => it !== idl.IDLVoidType)
             .map(it => idl.isType(it)
                 ? nativeNameConvertorInstance.convert(idl.createOptionalType(it))
-                : ArkPrimitiveType.OptionalPrefix + cleanPrefix(nativeNameConvertorInstance.convert(it), ArkPrimitiveType.Prefix)
+                : generatorConfiguration().param("OptionalPrefix") + cleanPrefix(nativeNameConvertorInstance.convert(it), generatorConfiguration().param("TypePrefix"))
             )
         return new Set(data)
     }

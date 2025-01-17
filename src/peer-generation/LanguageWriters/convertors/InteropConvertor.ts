@@ -14,7 +14,7 @@
  */
 
 import * as idl from '@idlize/core/idl'
-import { capitalize } from '@idlize/core'
+import { capitalize, generatorConfiguration } from '@idlize/core'
 import { maybeTransformManagedCallback } from '../../ArgConvertors'
 import { ArkPrimitiveType, ArkPrimitiveTypesInstance } from '../../ArkPrimitiveType'
 import { PeerGeneratorConfig } from '../../PeerGeneratorConfig'
@@ -67,7 +67,7 @@ export class InteropConverter implements NodeConvertor<ConvertResult> {
         return this.make(node.name)
     }
     convertCallback(node: idl.IDLCallback): ConvertResult {
-        return this.make(ArkPrimitiveType.LibraryPrefix + node.name, true)
+        return this.make(generatorConfiguration().param("LibraryPrefix") + node.name, true)
     }
     // convertImport
     //

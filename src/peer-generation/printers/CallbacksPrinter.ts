@@ -16,7 +16,7 @@
 import * as idl from '@idlize/core/idl'
 import { PeerLibrary } from "../PeerLibrary";
 import { CppLanguageWriter, NamedMethodSignature } from "../LanguageWriters";
-import { LanguageWriter } from "@idlize/core"
+import { generatorConfiguration, LanguageWriter } from "@idlize/core"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { ImportsCollector } from "../ImportsCollector";
 import { Language } from  '@idlize/core'
@@ -265,7 +265,7 @@ class DeserializeCallbacksVisitor {
                 const callReadExpr = writer.makeCast(
                     writer.makeMethodCall(`thisDeserializer`, `readPointer`, []),
                     idl.IDLUndefinedType,
-                    { unsafe: true, overrideTypeName: `void(*)(${[`${ArkPrimitiveType.Prefix}VMContext vmContext`].concat(generateCallbackAPIArguments(this.library, callback)).join(", ")})` }
+                    { unsafe: true, overrideTypeName: `void(*)(${[`${generatorConfiguration().param("TypePrefix")}VMContext vmContext`].concat(generateCallbackAPIArguments(this.library, callback)).join(", ")})` }
                 )
                 writer.writeStatement(writer.makeStatement(writer.makeMethodCall(`thisDeserializer`, `readPointer`, [])))
                 writer.writeStatement(writer.makeAssign(callName, undefined, callReadExpr, true))

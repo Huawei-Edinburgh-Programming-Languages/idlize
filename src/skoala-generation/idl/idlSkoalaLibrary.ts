@@ -17,7 +17,18 @@ import * as idl from '@idlize/core/idl'
 import { posix as path } from "path"
 import { DeclarationNameConvertor } from "../../peer-generation/idl/IdlNameConvertor"
 import { ImportsCollector } from "../../peer-generation/ImportsCollector";
-import { capitalize, isDefined, throwException, Language, CustomPrintVisitor, addSyntheticType, resolveSyntheticType, isImport, isStringEnum, CustomTypeConvertor } from '@idlize/core'
+import {
+    capitalize,
+    isDefined,
+    throwException,
+    Language,
+    CustomPrintVisitor,
+    addSyntheticType,
+    resolveSyntheticType,
+    isImport,
+    CustomTypeConvertor,
+    generatorConfiguration
+} from '@idlize/core'
 import { ArkPrimitiveType, ArkPrimitiveTypesInstance } from "../../peer-generation/ArkPrimitiveType";
 import { WrapperClass, WrapperField, WrapperMethod } from "../WrapperClass";
 import { Skoala } from "../utils";
@@ -262,7 +273,7 @@ export class IdlWrapperClassConvertor extends BaseArgConvertor {
         printer.writeMethodCall(`${param}Serializer`, "writeWrapper", [value])
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
-        const prefix = writer.language === Language.CPP ? ArkPrimitiveType.Prefix : ""
+        const prefix = writer.language === Language.CPP ? generatorConfiguration().param("TypePrefix") : ""
         const readStatement = writer.makeCast(
             writer.makeMethodCall(`${deserializerName}`, `readWrapper`, []),
             idl.createReferenceType(`${prefix}${this.type.name}`)

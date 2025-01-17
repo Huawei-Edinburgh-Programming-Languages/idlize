@@ -15,7 +15,7 @@
 
 import * as idl from '@idlize/core/idl'
 import { ArkPrimitiveType, ArkPrimitiveTypesInstance } from '../../ArkPrimitiveType'
-import { IdlNameConvertor } from "@idlize/core"
+import { generatorConfiguration, IdlNameConvertor } from "@idlize/core"
 import { ConvertResult, InteropArgConvertor, InteropConverter } from './InteropConvertor'
 
 export class CppIDLNodeToStringConvertor extends InteropConverter implements IdlNameConvertor {
@@ -26,7 +26,7 @@ export class CppIDLNodeToStringConvertor extends InteropConverter implements Idl
         if (result.noPrefix) {
             return result.text
         }
-        return `${ArkPrimitiveType.Prefix}${result.text}`
+        return `${generatorConfiguration().param("TypePrefix")}${result.text}`
     }
 
     convert(node: idl.IDLNode): string {

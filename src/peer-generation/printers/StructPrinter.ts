@@ -14,7 +14,14 @@
  */
 
 import * as idl from "@idlize/core/idl"
-import { IndentedPrinter, Language, camelCaseToUpperSnakeCase, isImportAttr, isStringEnum } from "@idlize/core"
+import {
+    IndentedPrinter,
+    Language,
+    camelCaseToUpperSnakeCase,
+    isImportAttr,
+    isStringEnum,
+    generatorConfiguration
+} from "@idlize/core"
 import { RuntimeType } from "@idlize/core"
 import { ArkPrimitiveType, ArkPrimitiveTypeList, ArkPrimitiveTypesInstance } from "../ArkPrimitiveType"
 import { createLanguageWriter, LanguageExpression, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters"
@@ -112,7 +119,7 @@ export class StructPrinter {
                 forwardDeclarations.print(`typedef struct ${nameAssigned} ${nameAssigned};`)
                 this.printStructsCHead(nameAssigned, target, concreteDeclarations)
                 if (idl.isUnionType(target)) {
-                    concreteDeclarations.print(`${ArkPrimitiveType.Prefix}Int32 selector;`)
+                    concreteDeclarations.print(`${generatorConfiguration().param("TypePrefix")}Int32 selector;`)
                     concreteDeclarations.print("union {")
                     concreteDeclarations.pushIndent()
                     target.types.forEach((it, index) =>
@@ -144,10 +151,10 @@ export class StructPrinter {
                         concreteDeclarations.print(`${ArkPrimitiveTypesInstance.Int32.getText()} length;`)
                     }
                 } else if (idl.isCallback(target)) {
-                    concreteDeclarations.print(`${ArkPrimitiveType.Prefix}CallbackResource resource;`)
+                    concreteDeclarations.print(`${generatorConfiguration().param("TypePrefix")}CallbackResource resource;`)
                     const args = generateCallbackAPIArguments(this.library, target)
                     concreteDeclarations.print(`void (*call)(${args.join(', ')});`)
-                    const syncArgs = [`${ArkPrimitiveType.Prefix}VMContext context`].concat(args)
+                    const syncArgs = [`${generatorConfiguration().param("TypePrefix")}VMContext context`].concat(args)
                     concreteDeclarations.print(`void (*callSync)(${syncArgs.join(', ')});`)
                 }
                 this.printStructsCTail(nameAssigned, concreteDeclarations)
@@ -169,7 +176,7 @@ export class StructPrinter {
         structs.concat(concreteDeclarations)
         // TODO: hack, remove me!
         if (this.library.name == "") { // TODO we probably don't need this typedef for any library except Ark
-            typedefs.print(`typedef ${ArkPrimitiveType.OptionalPrefix}Length ${ArkPrimitiveType.OptionalPrefix}Dimension;`)
+            typedefs.print(`typedef ${generatorConfiguration().param("OptionalPrefix")}Length ${generatorConfiguration().param("OptionalPrefix")}Dimension;`)
         }
     }
 
@@ -185,7 +192,7 @@ export class StructPrinter {
         const nameAssigned = concreteDeclarations.getNodeName(target)
         const nameOptional = idl.isType(target)
             ? concreteDeclarations.getNodeName(idl.createOptionalType(target))
-            : ArkPrimitiveType.OptionalPrefix + cleanPrefix(concreteDeclarations.getNodeName(target as idl.IDLEntry), ArkPrimitiveType.Prefix)
+            : generatorConfiguration().param("OptionalPrefix") + cleanPrefix(concreteDeclarations.getNodeName(target as idl.IDLEntry), generatorConfiguration().param("TypePrefix"))
 
         if (forceOptianal) {
             if (seenNames.has(nameOptional)) {

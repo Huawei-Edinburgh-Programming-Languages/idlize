@@ -18,7 +18,7 @@ import * as path from 'path'
 import * as idl from '@idlize/core/idl'
 
 import { createConstructor, createContainerType, createOptionalType, createReferenceType, createTypeParameterReference, createParameter, forceAsNamedNode, hasExtAttribute, IDLBufferType, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLI64Type, IDLInterface, IDLInterfaceSubkind, IDLMethod, IDLParameter, IDLPointerType, IDLStringType, IDLType, IDLU8Type, IDLUint8ArrayType, IDLVoidType, isCallback, isConstructor, isContainerType, isEnum, isInterface, isReferenceType, isUnionType } from '@idlize/core/idl'
-import { IndentedPrinter, Language, capitalize, qualifiedName } from '@idlize/core'
+import { IndentedPrinter, Language, capitalize, qualifiedName, generatorConfiguration } from '@idlize/core'
 import { ArgConvertor } from '@idlize/core'
 import { generateCallbackAPIArguments } from './ArgConvertors'
 import { createOutArgConvertor } from './PromiseConvertors'
@@ -97,10 +97,10 @@ class OHOSVisitor {
                     ? `Opt_${this.mapType(type.type)}`
                     : idl.forceAsNamedNode(type).name
         if (OHOSVisitor.knownBasicTypes.has(typeName))
-            return `${ArkPrimitiveType.Prefix}${typeName}`
+            return `${generatorConfiguration().param("TypePrefix")}${typeName}`
 
         if (isReferenceType(type) || isEnum(type)) {
-            return `${ArkPrimitiveType.Prefix}${this.libraryName}_${qualifiedName(type, Language.CPP)}`
+            return `${generatorConfiguration().param("TypePrefix")}${this.libraryName}_${qualifiedName(type, Language.CPP)}`
         }
         return this.hWriter.getNodeName(type)
     }
@@ -112,12 +112,12 @@ class OHOSVisitor {
 
     private writeCallback(callback: IDLCallback) {
         // TODO commonize with StructPrinter.ts
-        const callbackTypeName = `${ArkPrimitiveType.Prefix}${this.libraryName}_${callback.name}`;
+        const callbackTypeName = `${generatorConfiguration().param("TypePrefix")}${this.libraryName}_${callback.name}`;
         const args = generateCallbackAPIArguments(this.library, callback)
         let _ = this.hWriter
         _.print(`typedef struct ${callbackTypeName} {`)
         _.pushIndent()
-        _.print(`${ArkPrimitiveType.Prefix}CallbackResource resource;`)
+        _.print(`${generatorConfiguration().param("TypePrefix")}CallbackResource resource;`)
         _.print(`void (*call)(${args.join(', ')});`)
         _.popIndent()
         _.print(`} ${callbackTypeName};`)
@@ -199,12 +199,12 @@ class OHOSVisitor {
 
     private modifierName(clazz: IDLInterface): string {
         if (hasExtAttribute(clazz, IDLExtendedAttributes.GlobalScope)) {
-            return `${ArkPrimitiveType.Prefix}${this.libraryName}_Modifier`
+            return `${generatorConfiguration().param("TypePrefix")}${this.libraryName}_Modifier`
         }
-        return `${ArkPrimitiveType.Prefix}${this.libraryName}_${clazz.name}Modifier`
+        return `${generatorConfiguration().param("TypePrefix")}${this.libraryName}_${clazz.name}Modifier`
     }
     private handleType(name: string): string {
-        return `${ArkPrimitiveType.Prefix}${this.libraryName}_${name}Handle`
+        return `${generatorConfiguration().param("TypePrefix")}${this.libraryName}_${name}Handle`
     }
 
     private writeImpls() {
@@ -233,9 +233,9 @@ class OHOSVisitor {
         // Create API.
         let api = this.libraryName
         let _c = writer
-        _c.print(`const ${ArkPrimitiveType.Prefix}${api}_API* Get${api}APIImpl(int version) {`)
+        _c.print(`const ${generatorConfiguration().param("TypePrefix")}${api}_API* Get${api}APIImpl(int version) {`)
         _c.pushIndent()
-        _c.print(`const static ${ArkPrimitiveType.Prefix}${api}_API api = {`)
+        _c.print(`const static ${generatorConfiguration().param("TypePrefix")}${api}_API api = {`)
         _c.pushIndent()
         _c.print(`1, // version`)
         this.interfaces.forEach(it => {
@@ -247,11 +247,11 @@ class OHOSVisitor {
         _c.print(`return &api;`)
         _c.popIndent()
         _c.print(`}`)
-        let name = `${ArkPrimitiveType.Prefix}${api}_API`
+        let name = `${generatorConfiguration().param("TypePrefix")}${api}_API`
         let _h = this.hWriter
         _h.print(`typedef struct ${name} {`)
         _h.pushIndent()
-        _h.print(`${ArkPrimitiveType.Prefix}Int32 version;`)
+        _h.print(`${generatorConfiguration().param("TypePrefix")}Int32 version;`)
         this.interfaces.forEach(it => {
             _h.print(`const ${this.modifierName(it)}* (*${this.apiName(it)})();`)
         })
@@ -641,7 +641,7 @@ class OHOSVisitor {
         let toStringsPrinter = createLanguageWriter(Language.CPP, this.library)
         new StructPrinter(this.library).generateStructs(this.hWriter, this.hWriter.printer, toStringsPrinter)
         this.cppWriter.concat(toStringsPrinter)
-        const prefix = ArkPrimitiveType.Prefix + this.library.libraryPrefix
+        const prefix = generatorConfiguration().param("TypePrefix") + this.library.libraryPrefix
         writeSerializer(this.library, this.cppWriter, prefix)
         writeDeserializer(this.library, this.cppWriter, prefix)
 

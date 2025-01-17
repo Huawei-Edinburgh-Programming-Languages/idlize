@@ -14,7 +14,7 @@
  */
 
 import * as idl from '@idlize/core/idl'
-import { Language, throwException } from '@idlize/core'
+import { generatorConfiguration, Language, throwException } from '@idlize/core'
 import { ArkPrimitiveType } from "../ArkPrimitiveType"
 import { ExpressionStatement, LanguageStatement, Method, MethodSignature, NamedMethodSignature } from "../LanguageWriters"
 import { LanguageWriter } from "@idlize/core"
@@ -174,7 +174,7 @@ class IdlSerializerPrinter {
         const superName = `${className}Base`
         let ctorSignature = this.writer.makeSerializerConstructorSignature()
         if (prefix == "" && this.writer.language === Language.CPP)
-            prefix = ArkPrimitiveType.Prefix + this.library.libraryPrefix
+            prefix = generatorConfiguration().param("TypePrefix") + this.library.libraryPrefix
         const serializerDeclarations = getSerializerDeclarations(this.library,
             createSerializerDependencyFilter(this.writer.language))
         printSerializerImports(this.library, this.destFile, declarationPath)
@@ -515,7 +515,7 @@ class IdlDeserializerPrinter {
         let ctorSignature: NamedMethodSignature | undefined = undefined
         if (this.writer.language == Language.CPP) {
             ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [idl.IDLUint8ArrayType, idl.IDLI32Type], ["data", "length"])
-            prefix = prefix === "" ? ArkPrimitiveType.Prefix : prefix
+            prefix = prefix === "" ? generatorConfiguration().param("TypePrefix") : prefix
         } else if (this.writer.language === Language.ARKTS) {
             ctorSignature = new NamedMethodSignature(idl.IDLVoidType, [idl.createContainerType("sequence", [idl.IDLU8Type]), idl.IDLI32Type], ["data", "length"])
         }

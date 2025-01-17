@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { PrimitiveType, PrimitiveTypeList } from "@idlize/core"
+import { generatorConfiguration, PrimitiveType, PrimitiveTypeList } from "@idlize/core"
 
 export class ArkPrimitiveTypeList extends PrimitiveTypeList {
     readonly Int32 = new ArkPrimitiveType(`Int32`)
@@ -30,12 +30,8 @@ export class ArkPrimitiveTypeList extends PrimitiveTypeList {
 }
 
 export class ArkPrimitiveType extends PrimitiveType {
-    static Prefix = "Ark_"
-    static LibraryPrefix = ""
-    static OptionalPrefix = "Opt_"
-
     getText(): string {
-        return ArkPrimitiveType.Prefix + this.name
+        return generatorConfiguration().param("TypePrefix") + this.name
     }
 }
 
