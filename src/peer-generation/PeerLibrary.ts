@@ -133,6 +133,18 @@ export class PeerLibrary implements LibraryInterface {
                 it.name === typeName && idl.getExtAttribute(it, idl.IDLExtendedAttributes.Namespace) === qualifier)
         }
 
+        // TODO: Workaround for namespace support in ArkTS. Remove after fixing namespaces
+        const firstUnderscore = qualifiedName.lastIndexOf("_")
+        if (firstUnderscore >= 0 && this.language === Language.ARKTS) {
+            const namespace = qualifiedName.slice(0, firstUnderscore)
+            const typeName = qualifiedName.slice(firstUnderscore + 1)
+            const entry = entries.find(it =>
+                it.name === typeName && idl.getExtAttribute(it, idl.IDLExtendedAttributes.Namespace) === namespace)
+            if (entry !== undefined) {
+                return entry
+            }
+        }
+
         const candidates = entries.filter(it => type.name === it.name)
         if (candidates.length === 1)
             return candidates[0]

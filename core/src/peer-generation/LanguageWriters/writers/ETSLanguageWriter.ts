@@ -263,20 +263,14 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         if (convertor === undefined) {
             throwException(`The makeEnumCast function required ArgConvertor`)
         }
-
-        // FIXME: resolveTypeReference does not find 'GestureControl_GestureType'
-        // const decl = this.resolver.resolveTypeReference(
-        //     idl.createReferenceType(this.getNodeName(convertor.nativeType()))
-        // )
-        // if (decl === undefined || !idl.isEnum(decl)) {
-        //     throwException(`The type reference ${decl?.name} must be Enum`)
-        // }
-
-        if (convertor instanceof EnumConvertor) {
-            return this.makeCast(this.makeString(`${value}${idl.isStringEnum(convertor.enumEntry) ? "" : ".valueOf()"}`),
-                IDLI32Type).asString()
+        const decl = this.resolver.resolveTypeReference(
+            idl.createReferenceType(this.getNodeName(convertor.nativeType()))
+        )
+        if (decl === undefined || !idl.isEnum(decl)) {
+            throwException(`The type reference ${decl?.name} must be Enum`)
         }
-        throwException("The converter argument must be of type EnumConvertor")
+        return this.makeCast(this.makeString(`${value}${idl.isStringEnum(decl) ? "" : ".valueOf()"}`),
+            IDLI32Type).asString()
     }
     makeUnionVariantCondition(convertor: ArgConvertor, valueName: string, valueType: string, type: string,
                               convertorIndex: number,
