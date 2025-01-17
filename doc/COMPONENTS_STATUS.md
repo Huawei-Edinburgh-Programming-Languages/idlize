@@ -203,8 +203,8 @@
 |`transform`| Function | Lobah Mikhail | done | |
 |`onAppear`| Function | Roman Sedaikin | done | |
 |`onDisAppear`| Function | Roman Sedaikin | done | |
-|`onAttach`| Function | Andrey Khudenkikh | testskipped | UT in progress Andrey Khudenkikh |
-|`onDetach`| Function | Andrey Khudenkikh | testskipped | UT in progress Andrey Khudenkikh |
+|`onAttach`| Function | Andrey Khudenkikh | done | |
+|`onDetach`| Function | Andrey Khudenkikh | done | |
 |`onAreaChange`| Function | Roman Sedaikin | done | |
 |`visibility`| Function | Roman Sedaikin | done | |
 |`flexGrow`| Function | Dmitry A Smirnov| done | |
@@ -267,7 +267,7 @@
 |`onGestureRecognizerJudgeBegin`| Function | Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`shouldBuiltInRecognizerParallelWith`| Function | Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`monopolizeEvents`| Function | Erokhin Ilya | testskipped | UT in progress Vadim Voronov |
-|`onTouchIntercept`| Function | Andrey Khudenkikh | testskipped | UT in progress Andrey Khudenkikh |
+|`onTouchIntercept`| Function | Andrey Khudenkikh | done | |
 |`onSizeChange`| Function | Dmitry A Smirnov|testskipped | |
 |`customProperty`| Function | Dmitry A Smirnov|blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX + need clrify bridge implementation|
 |`expandSafeArea`| Function | Dmitry A Smirnov|testskipped |default value https://gitee.com/openharmony/arkui_ace_engine/issues/IBICVG?from=project-issue |
