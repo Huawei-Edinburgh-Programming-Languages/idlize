@@ -816,7 +816,7 @@
 |`setSearchOptions`|Function| Evstigneev Roman | done | https://gitee.com/openharmony/arkui_ace_engine/issues/IAXCOP |
 |`fontColor`|Function| Evstigneev Roman | done |  |
 |`searchIcon`|Function| Evstigneev Roman |blocked AceEngine| https://gitee.com/openharmony/arkui_ace_engine/issues/IAWF91, https://gitee.com/nikolay-igotti/idlize/issues/IAYXQ8 (+)|
-|`cancelButton`|Function| Evstigneev Roman | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB |
+|`cancelButton`|Function| Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB |
 |`textIndent`|Function| Evstigneev Roman | done |  |
 |`onEditChange`|Function| Evstigneev Roman |done|  |
 |`selectedBackgroundColor`|Function| Evstigneev Roman | done |  |
