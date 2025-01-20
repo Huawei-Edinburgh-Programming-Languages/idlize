@@ -38,6 +38,23 @@ declare interface BlurOptions {
 
 declare class AttributeModifier<T> {}
 
+declare interface BlurStyleOptions {
+    colorMode?: ThemeColorMode;
+    adaptiveColor?: AdaptiveColor;
+    scale?: number;
+    blurOptions?: BlurOptions;
+}
+
+declare enum ThemeColorMode {
+    SYSTEM = 0,
+    LIGHT = 1,
+    DARK = 2
+}
+
+declare enum AdaptiveColor {
+    DEFAULT = 0,
+}
+
 declare interface BackgroundBlurStyleOptions extends BlurStyleOptions {
     policy?: BlurStyleActivePolicy;
     inactiveColor?: ResourceColor;
@@ -82,7 +99,7 @@ declare class CommonMethod<T> {
 
     restoreId(value: number): T;
 
-    padding(value: Padding | Dimension): T;
+    padding(value: Padding): T;
 
     bindSheet(isShow: boolean, /* builder: CustomBuilder, */ options?: SheetOptions): T;
 
@@ -297,8 +314,8 @@ declare interface SheetOptions extends BindOptions {
     //~onWillDismiss?: Callback<DismissSheetAction>;
     //~onWillSpringBackWhenDismiss?: Callback<SpringBackAction>;
     enableOutsideInteractive?: boolean;
-    width?: Dimension;
-    borderWidth?: Dimension/*~ | EdgeWidths | LocalizedEdgeWidths*/;
+    // width?: Dimension;
+    // borderWidth?: Dimension/*~ | EdgeWidths | LocalizedEdgeWidths*/;
     // borderColor?: ResourceColor/*~ | EdgeColors */| LocalizedEdgeColors;
     borderStyle?: BorderStyle/*~ | EdgeStyles*/;
     // shadow?: ShadowOptions | ShadowStyle;

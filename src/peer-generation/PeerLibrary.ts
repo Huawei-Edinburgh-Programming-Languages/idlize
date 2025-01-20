@@ -13,31 +13,24 @@
  * limitations under the License.
  */
 
-import * as idl from '../idl'
+import * as idl from '@idlize/core/idl'
 import { BuilderClass } from './BuilderClass';
 import { MaterializedClass } from "./Materialized";
 import { isMaterialized, isPredefined } from './idl/IdlPeerGeneratorVisitor';
 import { PeerFile } from "./PeerFile";
 import { AggregateConvertor, ArrayConvertor, BufferConvertor, CallbackConvertor, ClassConvertor, DateConvertor, EnumConvertor, FunctionConvertor, ImportTypeConvertor, InterfaceConvertor, MapConvertor, MaterializedClassConvertor, NumericConvertor, OptionConvertor,  PointerConvertor,  StringConvertor, TupleConvertor, TypeAliasConvertor, UnionConvertor } from './ArgConvertors';
-import { PrimitiveType } from "./ArkPrimitiveType"
-import { DependencySorter } from './idl/DependencySorter';
-import { IndentedPrinter } from '../IndentedPrinter';
+import { IndentedPrinter, Language, warn, isImportAttr, isStringEnum } from '@idlize/core'
 import { createTypeNameConvertor, LanguageWriter } from './LanguageWriters';
-import { isImport, isStringEnum, typeOrUnion } from './idl/common';
 import { StructPrinter } from './printers/StructPrinter';
 import { ArgConvertor, BooleanConvertor, CustomTypeConvertor, LengthConvertor, NumberConvertor, UndefinedConvertor, VoidConvertor } from './ArgConvertors';
-import { Language } from '../Language';
 import { generateSyntheticFunctionName } from '../IDLVisitor';
-import { collectUniqueCallbacks } from './printers/CallbacksPrinter';
-import { convertType, IdlNameConvertor } from './LanguageWriters/nameConvertor';
+import { IdlNameConvertor } from '@idlize/core';
 import { LibraryInterface } from '../LibraryInterface';
 import { IDLNodeToStringConvertor } from './LanguageWriters/convertors/InteropConvertor';
-import { UnionFlattener } from './unions';
-import { warn } from '../util';
 
 export class PeerLibrary implements LibraryInterface {
     private _syntheticEntries: idl.IDLEntry[] = []
-    /** @deprecated PeerLibrary should contains only SDK entries */
+    /** @deprecated PeerLibrary should contain only SDK entries */
     public get syntheticEntries(): idl.IDLEntry[] {
         return this._syntheticEntries!
     }
@@ -56,6 +49,8 @@ export class PeerLibrary implements LibraryInterface {
     }
 
     public readonly predefinedDeclarations: idl.IDLInterface[] = []
+
+    public readonly globalScopeInterfaces: idl.IDLInterface[] = []
 
     constructor(
         public language: Language,
@@ -128,7 +123,7 @@ export class PeerLibrary implements LibraryInterface {
             // This is a namespace or enum member. Try enum first
             const parent = entries.find(it => it.name === qualifier)
             if (parent && idl.isEnum(parent))
-                return parent.elements.find(it => it.name === type.name)
+                return parent.elements.find(it => it.name === typeName)
             // Else try namespaces
             return entries.find(it =>
                 it.name === typeName && idl.getExtAttribute(it, idl.IDLExtendedAttributes.Namespace) === qualifier)
@@ -181,15 +176,8 @@ export class PeerLibrary implements LibraryInterface {
             }
         }
         if (idl.isReferenceType(type)) {
-            if (type == idl.IDLObjectType)
-                return new CustomTypeConvertor(param, "Object")
-            if (type.name === 'Date') {
-                return new DateConvertor(param)
-            }
-            if (isImport(type))
+            if (isImportAttr(type))
                 return new ImportTypeConvertor(param, this.targetNameConvertorInstance.convert(type))
-        }
-        if (idl.isReferenceType(type)) {
             const decl = this.resolveTypeReference(type)
             return this.declarationConvertor(param, type, decl)
         }
@@ -217,7 +205,7 @@ export class PeerLibrary implements LibraryInterface {
             return new CustomTypeConvertor(param, this.targetNameConvertorInstance.convert(type), false, this.targetNameConvertorInstance.convert(type)) // assume some predefined type
 
         const declarationName = declaration.name!
-        if (isImport(declaration)) {
+        if (isImportAttr(declaration)) {
             return new ImportTypeConvertor(param, this.targetNameConvertorInstance.convert(type))
         }
         if (idl.isEnum(declaration)) {
@@ -233,8 +221,8 @@ export class PeerLibrary implements LibraryInterface {
             return new TypeAliasConvertor(this, param, declaration)
         }
         if (idl.isInterface(declaration)) {
-            if (isMaterialized(declaration)) {
-                return new MaterializedClassConvertor(this, declarationName, param, declaration)
+            if (isMaterialized(declaration, this)) {
+                return new MaterializedClassConvertor(param, declaration)
             }
             switch (declaration.subkind) {
                 case idl.IDLInterfaceSubkind.Interface:
@@ -252,6 +240,7 @@ export class PeerLibrary implements LibraryInterface {
 
     private customConvertor(param: string, typeName: string, type: idl.IDLReferenceType): ArgConvertor | undefined {
         switch (typeName) {
+            case `Object`: return new CustomTypeConvertor(param, "Object")
             case `Dimension`:
             case `Length`:
                 return new LengthConvertor(typeName, param, this.language)
@@ -288,7 +277,7 @@ export class PeerLibrary implements LibraryInterface {
             case "object":
             case "Object": return ArkCustomObject
         }
-        if (isImport(type)) {
+        if (isImportAttr(type)) {
             return ArkCustomObject
         }
         if (idl.isReferenceType(type)) {

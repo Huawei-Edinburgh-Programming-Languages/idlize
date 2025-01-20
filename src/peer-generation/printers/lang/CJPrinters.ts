@@ -13,19 +13,17 @@
  * limitations under the License.
  */
 
-import { IDLI32Type, IDLType, IDLVoidType } from "../../../idl"
+import * as idl from "@idlize/core/idl"
+import { MethodSignature, FieldModifier } from "../../LanguageWriters"
 import { PeerLibrary } from "../../PeerLibrary"
-import { ImportFeature } from "../../ImportsCollector"
 import {
     createLanguageWriter,
-    FieldModifier,
     LanguageWriter,
-    MethodSignature,
 } from "../../LanguageWriters"
 import { getReferenceResolver } from "../../ReferenceResolver"
 import { writeDeserializer, writeSerializer } from "../SerializerPrinter"
 import { TargetFile } from "../TargetFile"
-import { ARK_OBJECTBASE, ARK_UI_NODE_TYPE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from "./Cangjie"
+import { ARK_UI_NODE_TYPE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from "./Cangjie"
 import { IdlSyntheticTypeBase } from "./CommonUtils"
 
 export function makeCJSerializer(library: PeerLibrary): { targetFile: TargetFile, writer: LanguageWriter } {
@@ -53,29 +51,6 @@ export function makeCJNodeTypes(library: PeerLibrary): { targetFile: TargetFile,
     return { targetFile: new TargetFile(ARK_UI_NODE_TYPE, ARKOALA_PACKAGE_PATH), writer: writer }
 }
 
-// export class CJTuple extends IdlSyntheticTypeBase {
-//     constructor(source: Object | undefined, readonly name: string, public readonly members: IDLType[], public readonly imports: ImportFeature[]) {
-//         super(source)
-//     }
-
-//     print(writer: LanguageWriter): void {
-//         const memberNames: string[] = this.members.map((_, index) => `value${index}`)
-//         writer.writeClass(this.name, () => {
-//             for (let i = 0; i < memberNames.length; i++) {
-//                 writer.writeFieldDeclaration(memberNames[i], this.members[i], [FieldModifier.PUBLIC], false)
-//             }
-
-//             const signature = new MethodSignature(IDLVoidType, this.members)
-//             writer.writeConstructorImplementation(this.name, signature, () => {
-//                 for (let i = 0; i < memberNames.length; i++) {
-//                     writer.writeStatement(
-//                         writer.makeAssign(memberNames[i], this.members[i], writer.makeString(signature.argName(i)), false)
-//                     )
-//                 }
-//             })
-//         }, ARK_OBJECTBASE)
-//     }
-// }
 
 export class CJEnum extends IdlSyntheticTypeBase {
     public readonly isStringEnum: boolean
@@ -109,15 +84,23 @@ export class CJEnum extends IdlSyntheticTypeBase {
     }
 
     print(writer: LanguageWriter): void {
-        writer.writeEnum(this.name, this.members, () => {
-            writer.writeProperty("ordinal", IDLI32Type, false, () => {
-                writer.print("match (this) {")
-                writer.pushIndent()
-                for (const member of this.members) {
-                    writer.print(`case ${member.name} => ${member.numberId}`)
-                }
-                writer.popIndent()
-                writer.print("}")
+        writer.writeClass(this.name, () => {
+            const enumType = idl.createReferenceType(this.name)
+            this.members.forEach(it => {
+                writer.writeFieldDeclaration(it.name, enumType, [FieldModifier.PUBLIC, FieldModifier.STATIC, FieldModifier.FINAL], false,
+                    writer.makeString(`${this.name}(${it.numberId})`)
+                )
+            })
+
+            const value = 'value'
+            const intType = idl.IDLI32Type
+            writer.writeFieldDeclaration(value, intType, [FieldModifier.PUBLIC, FieldModifier.FINAL], false)
+
+            const signature = new MethodSignature(idl.IDLVoidType, [intType])
+            writer.writeConstructorImplementation(this.name, signature, () => {
+                writer.writeStatement(
+                    writer.makeAssign(value, undefined, writer.makeString(signature.argName(0)), false)
+                )
             })
         })
     }

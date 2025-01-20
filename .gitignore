@@ -2,13 +2,13 @@
 /.rollup.cache/
 /.vscode/
 /build/
+/core/build/
 /generated/
 /out/
 /.packages/
 /idl/
 /interface_sdk-js/
 /lib/
-/linter/
 /node_modules/
 /panda/node_modules/
 /sdk/
@@ -22,3 +22,6 @@
 /native/*.dll
 /native/*.lib
 NativeBridge.node
+/libarkts-gen/.rollup.cache/
+/libarkts-gen/lib/
+/libarkts-gen/out/

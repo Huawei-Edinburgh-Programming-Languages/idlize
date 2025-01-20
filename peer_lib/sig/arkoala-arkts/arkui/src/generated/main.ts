@@ -282,14 +282,14 @@ function checkButton() {
     checkResult("height", () => peer.heightAttribute(44),
         "height({.type=1, .value=44, .unit=1, .resource=0})")
     const builder: CustomBuilder = (): void => { }
-    const options: Literal_Alignment_align = { align: 4 as Alignment }
+    const options: Literal_Alignment_align = { align: Alignment.Center }
     checkResult("background", () => peer.backgroundAttribute(builder, options),
-        "background({.resource={.resourceId=104, .hold=0, .release=0}, .call=0}, {.tag=ARK_TAG_OBJECT, .value={.align={.tag=ARK_TAG_OBJECT, .value=Ark_Alignment(4)}}})")
+        "background({.resource={.resourceId=104, .hold=0, .release=0}, .call=0}, {.tag=INTEROP_TAG_OBJECT, .value={.align={.tag=INTEROP_TAG_OBJECT, .value=Ark_Alignment(4)}}})")
     checkResult("type", () => peer.typeAttribute(ButtonType.Circle), "type(Ark_ButtonType(1))")
     checkResult("labelStyle", () => peer.labelStyleAttribute(new LabelStyleImpl(3)),
-        "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_OBJECT, .value={.tag=102, .i32=3}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})")
+        "labelStyle({.overflow={.tag=INTEROP_TAG_UNDEFINED, .value={}}, .maxLines={.tag=INTEROP_TAG_OBJECT, .value={.tag=102, .i32=3}}, .minFontSize={.tag=INTEROP_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=INTEROP_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=INTEROP_TAG_UNDEFINED, .value={}}, .font={.tag=INTEROP_TAG_UNDEFINED, .value={}}})")
     checkResult("labelStyle2", () => peer.labelStyleAttribute(new LabelStyleImpl()),
-        "labelStyle({.overflow={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxLines={.tag=ARK_TAG_UNDEFINED, .value={}}, .minFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=ARK_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=ARK_TAG_UNDEFINED, .value={}}, .font={.tag=ARK_TAG_UNDEFINED, .value={}}})")
+        "labelStyle({.overflow={.tag=INTEROP_TAG_UNDEFINED, .value={}}, .maxLines={.tag=INTEROP_TAG_UNDEFINED, .value={}}, .minFontSize={.tag=INTEROP_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=INTEROP_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=INTEROP_TAG_UNDEFINED, .value={}}, .font={.tag=INTEROP_TAG_UNDEFINED, .value={}}})")
 }
 
 function checkCallback() {
@@ -517,17 +517,17 @@ function checkNodeAPI() {
     const child4 = ArkButtonPeer.create()
     const child5 = ArkButtonPeer.create()
 
-    checkResult("BasicNodeAPI addChild", () => root.peer.addChild(child1.peer),
+    checkResult("BasicNodeAPI addChild", () => root.peer.addChild(child1.peer.ptr),
         `addChild(0x${root.peer.ptr}, 0x${child1.peer.ptr})markDirty(0x${root.peer.ptr}, 32)`)
-    checkResult("BasicNodeAPI insertChildAfter", () => root.peer.insertChildAfter(child4.peer, child1.peer),
+    checkResult("BasicNodeAPI insertChildAfter", () => root.peer.insertChildAfter(child4.peer.ptr, child1.peer.ptr),
         `insertChildAfter(0x${root.peer.ptr}, 0x${child4.peer.ptr}, 0x${child1.peer.ptr})markDirty(0x${root.peer.ptr}, 32)`)
-    checkResult("BasicNodeAPI insertChildBefore", () => root.peer.insertChildBefore(child3.peer, child4.peer),
+    checkResult("BasicNodeAPI insertChildBefore", () => root.peer.insertChildBefore(child3.peer.ptr, child4.peer.ptr),
         `insertChildBefore(0x${root.peer.ptr}, 0x${child3.peer.ptr}, 0x${child4.peer.ptr})markDirty(0x${root.peer.ptr}, 32)`)
-    checkResult("BasicNodeAPI insertChildAt", () => root.peer.insertChildAt(child2.peer, 1),
+    checkResult("BasicNodeAPI insertChildAt", () => root.peer.insertChildAt(child2.peer.ptr, 1),
         `insertChildAt(0x${root.peer.ptr}, 0x${child2.peer.ptr}, 1)markDirty(0x${root.peer.ptr}, 32)`)
-    checkResult("BasicNodeAPI insertChildAfter (empty tree case)", () => child4.peer.insertChildAfter(child5.peer, undefined),
+    checkResult("BasicNodeAPI insertChildAfter (empty tree case)", () => child4.peer.insertChildAfter(child5.peer.ptr, 0),
         `insertChildAfter(0x${child4.peer.ptr}, 0x${child5.peer.ptr}, 0x0)markDirty(0x${child4.peer.ptr}, 32)`)
-    checkResult("BasicNodeAPI removeChild", () => root.peer.removeChild(child2.peer),
+    checkResult("BasicNodeAPI removeChild", () => root.peer.removeChild(child2.peer.ptr),
         `removeChild(0x${root.peer.ptr}, 0x${child2.peer.ptr})markDirty(0x${root.peer.ptr}, 32)`)
     checkResult("BasicNodeAPI dispose", () => child2.peer.dispose(),
         `disposeNode(0x${child2.peer.ptr})`)

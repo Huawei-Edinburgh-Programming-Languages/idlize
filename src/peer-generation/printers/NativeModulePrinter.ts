@@ -14,12 +14,12 @@
  */
 import { maybeReadLangTemplate, readLangTemplate } from "../FileGenerators";
 import { FunctionCallExpression, LanguageWriter, Method, MethodModifier, NamedMethodSignature, StringExpression, createInteropArgConvertor, createLanguageWriter } from "../LanguageWriters";
-import { createConstructPeerMethod, PeerClassBase } from "../PeerClass";
+import { createConstructPeerMethod } from "../PeerClass";
 import { PeerClass } from "../PeerClass";
 import { PeerLibrary } from "../PeerLibrary";
 import { PeerMethod } from "../PeerMethod";
-import { Language } from "../../Language";
-import * as idl from '../../idl'
+import { Language } from  '@idlize/core'
+import * as idl from  '@idlize/core/idl'
 import { InteropArgConvertor } from "../LanguageWriters/convertors/InteropConvertor";
 import { NativeModuleType } from "../NativeModuleType";
 import { ArkTSSourceFile, SourceFile, TsSourceFile } from "./SourceFile";
@@ -40,12 +40,7 @@ class NativeModulePrinterBase {
 
 class NativeModulePredefinedVisitor extends NativeModulePrinterBase {
     private static readonly excludes = new Map<Language, Set<string>>([
-        [Language.CJ, new Set([
-            "StringData",
-            "CheckArkoalaCallbackEvent",
-            "MaterializeBuffer",
-            "GetNativeBufferPointer",
-        ])],
+        [Language.CJ, new Set(["MaterializeBuffer", "GetNativeBufferPointer"])],
         [Language.JAVA, new Set(["MaterializeBuffer", "GetNativeBufferPointer"])],
         [Language.CPP, new Set(["MaterializeBuffer", "GetNativeBufferPointer"])],
         [Language.TS, new Set()],
@@ -171,8 +166,8 @@ class TSNativeModuleArkUIGeneratedVisitor extends NativeModuleArkUIGeneratedVisi
 }
 
 const cjArrayLikeTypes = new Set([
-    'Uint8Array', 'KUint8ArrayPtr', 'KInt32ArrayPtr', 'KFloat32ArrayPtr', 'ArrayBuffer'])
-const cjAtringLikeTypes = new Set(['String', 'KString', 'KStringPtr', 'string'])
+    'Uint8Array', 'KUint8ArrayPtr', 'KInt32ArrayPtr', 'KFloat32ArrayPtr', 'ArrayBuffer', 'ArrayList<UInt8>'])
+const cjStringLikeTypes = new Set(['String', 'KString', 'KStringPtr', 'string'])
 function writeCJNativeModuleMethod(method: Method, nativeModule: LanguageWriter, nativeFunctions: LanguageWriter) {
     method = new Method(method.name, method.signature, [MethodModifier.PUBLIC, MethodModifier.STATIC])
     const signature = method.signature as NamedMethodSignature
@@ -181,12 +176,13 @@ function writeCJNativeModuleMethod(method: Method, nativeModule: LanguageWriter,
         let functionCallArgs: Array<string> = []
         printer.print('unsafe {')
         printer.pushIndent()
-        for(let param of signature.args) {
-            let ordinal = signature.args.indexOf(param)
-            if (idl.isContainerType(param) || cjArrayLikeTypes.has(idl.forceAsNamedNode(param).name)) {
+        for(let paramName of signature.argsNames) {
+            let ordinal = signature.argsNames.indexOf(paramName)
+            let param = signature.args[ordinal]
+            if (idl.isContainerType(param) || cjArrayLikeTypes.has(nativeModule.getNodeName(param))) {
                 functionCallArgs.push(`handle_${ordinal}.pointer`)
                 printer.print(`let handle_${ordinal} = acquireArrayRawData(${signature.argsNames[ordinal]}.toArray())`)
-            } else if (cjAtringLikeTypes.has(idl.forceAsNamedNode(param).name)) {
+            } else if (cjStringLikeTypes.has(nativeModule.getNodeName(param))) {
                 printer.print(`let ${signature.argsNames[ordinal]} =  LibC.mallocCString(${signature.argsNames[ordinal]})`)
                 functionCallArgs.push(signature.argsNames[ordinal])
             } else {
@@ -210,15 +206,15 @@ function writeCJNativeModuleMethod(method: Method, nativeModule: LanguageWriter,
         }
         for(let param of signature.args) {
             let ordinal = signature.args.indexOf(param)
-            if (idl.isContainerType(param) || cjArrayLikeTypes.has(idl.forceAsNamedNode(param).name)) {
+            if (idl.isContainerType(param) || cjArrayLikeTypes.has(nativeModule.getNodeName(param))) {
                 printer.print(`releaseArrayRawData(handle_${ordinal})`)
-            } else if (cjAtringLikeTypes.has(idl.forceAsNamedNode(param).name)) {
+            } else if (cjStringLikeTypes.has(nativeModule.getNodeName(param))) {
                 printer.print(`LibC.free(${signature.argsNames[ordinal]})`)
             }
         }
 
         if (shouldReturn) {
-            printer.writeStatement(printer.makeReturn(printer.makeString(resultVarName)))
+            printer.writeStatement(printer.makeReturn(printer.makeString(resultVarName.concat(signature.returnType == idl.IDLStringType ? ".toString()" : ""))))
         }
         printer.popIndent()
         printer.print('}')

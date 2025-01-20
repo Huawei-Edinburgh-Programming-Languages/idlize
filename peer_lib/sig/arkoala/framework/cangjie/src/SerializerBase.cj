@@ -105,7 +105,7 @@ public open class SerializerBase {
         var current = SerializerBase.customSerializers
         // TODO
         println("Unsupported custom serialization for ${kind}, write undefined")
-        this.writeInt8(Tag.UNDEFINED.ordinal)
+        this.writeInt8(Tag.UNDEFINED.value)
     }
     private var heldResources: ArrayList<ResourceId> = ArrayList<ResourceId>()
     func holdAndWriteCallback(callback: Any): ResourceId {
@@ -148,7 +148,7 @@ public open class SerializerBase {
             if(value == Float32(Int32(value))) {
                 this.writeNumber(Int32(value))
             } else {
-                this.setBytes(this.position, Tag.FLOAT32.ordinal)
+                this.setBytes(this.position, Tag.FLOAT32.value)
                 this.setBytes(this.position, value)
             }
         }
@@ -162,7 +162,7 @@ public open class SerializerBase {
             if(value == Float64(Int32(value))) {
                 this.writeNumber(Int32(value))
             } else {
-                this.setBytes(this.position, Tag.FLOAT32.ordinal)
+                this.setBytes(this.position, Tag.FLOAT32.value)
                 this.setBytes(this.position, Float32(value))
             }
         }
@@ -173,7 +173,7 @@ public open class SerializerBase {
     }
     func writeNumber(value: ?Int32): Unit {
         if (let Some(value) <- value) {
-            this.setBytes(this.position, Tag.INT32.ordinal)
+            this.setBytes(this.position, Tag.INT32.value)
             this.setBytes(this.position, value)
             }
         else {
@@ -183,7 +183,7 @@ public open class SerializerBase {
     }
     func writeNumber(value: ?Int64): Unit {
         if (let Some(value) <- value) {
-            this.setBytes(this.position, Tag.INT32.ordinal)
+            this.setBytes(this.position, Tag.INT32.value)
             this.setBytes(this.position, Int32(value))
         }
         else {
@@ -206,7 +206,7 @@ public open class SerializerBase {
     func writeFloat32(value: Float32): Unit {
         this.setBytes(this.position, value)
     }
-    func writePointer(ptr: Int64): Unit {
+    func writePointer(ptr: UInt64): Unit {
         this.setBytes(this.position, ptr)
     }
     func writeBoolean(value: ?Bool): Unit {

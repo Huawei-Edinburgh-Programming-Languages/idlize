@@ -13,16 +13,12 @@
  * limitations under the License.
  */
 
-import * as idl from "../../idl"
-import { IDLType } from "../../idl"
-import { IndentedPrinter } from "../../IndentedPrinter"
-import { Language } from "../../Language"
-import { camelCaseToUpperSnakeCase } from "../../util"
+import * as idl from "@idlize/core/idl"
+import { IndentedPrinter, Language, camelCaseToUpperSnakeCase, isImportAttr, isStringEnum } from "@idlize/core"
 import { RuntimeType } from "../ArgConvertors"
 import { PrimitiveType } from "../ArkPrimitiveType"
-import { createLanguageWriter, createTypeNameConvertor, LanguageExpression, LanguageWriter, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters"
+import { createLanguageWriter, LanguageExpression, LanguageWriter, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig"
-import { isImport, isStringEnum } from "../idl/common"
 import { generateCallbackAPIArguments } from "../ArgConvertors"
 import { isBuilderClass, isMaterialized } from "../idl/IdlPeerGeneratorVisitor"
 import { cleanPrefix, PeerLibrary } from "../PeerLibrary"
@@ -90,9 +86,12 @@ export class StructPrinter {
             }
             seenNames.add(nameAssigned)
             let isPointer = this.isPointerDeclaration(target)
-            let isAccessor = idl.isInterface(target) && isMaterialized(target)
+            let isAccessor = idl.isInterface(target) && isMaterialized(target, this.library)
             let noBasicDecl = isAccessor || noDeclaration.includes(nameAssigned)
-            if (idl.isEnum(target) || idl.isEnumMember(target)) {
+            if (idl.isOptionalType(target)) {
+                forwardDeclarations.print(`typedef struct ${nameAssigned} ${nameAssigned};`)
+                this.printOptionalIfNeeded(forwardDeclarations, enumsDeclarations, writeToString, target.type, seenNames, true)
+            } else if (idl.isEnum(target) || idl.isEnumMember(target)) {
                 const enumTarget = idl.isEnumMember(target) ? target.parent : target
                 const stringEnum = isStringEnum(enumTarget)
                 enumsDeclarations.print(`typedef enum ${nameAssigned} {`)
@@ -174,21 +173,27 @@ export class StructPrinter {
     }
 
     private printOptionalIfNeeded(
-        forwardDeclarations: LanguageWriter | undefined, 
-        concreteDeclarations: LanguageWriter, 
-        writeToString: LanguageWriter, 
-        target: idl.IDLNode, 
+        forwardDeclarations: LanguageWriter | undefined,
+        concreteDeclarations: LanguageWriter,
+        writeToString: LanguageWriter,
+        target: idl.IDLNode,
         seenNames: Set<String>,
+        forceOptianal: boolean = false
     ) {
         const isPointer = this.isPointerDeclaration(target)
         const nameAssigned = concreteDeclarations.getNodeName(target)
         const nameOptional = idl.isType(target)
             ? concreteDeclarations.getNodeName(idl.createOptionalType(target))
             : PrimitiveType.OptionalPrefix + cleanPrefix(concreteDeclarations.getNodeName(target as idl.IDLEntry), PrimitiveType.Prefix)
-        if (seenNames.has(nameOptional)) {
-            return
+        
+        if (forceOptianal) {
+            if (seenNames.has(nameOptional)) {
+                return
+            }
         }
+        
         seenNames.add(nameOptional)
+
         if (nameAssigned !== "Optional" && nameAssigned !== "RelativeIndexable") {
             forwardDeclarations?.print(`typedef struct ${nameOptional} ${nameOptional};`)
             this.printStructsCHead(nameOptional, target, concreteDeclarations)
@@ -203,7 +208,7 @@ export class StructPrinter {
     private prologueDefinedRuntimeTypes = [
         idl.IDLDate.name,
     ]
-    private writeRuntimeType(target: idl.IDLNode, targetType: IDLType, isOptional: boolean, writer: LanguageWriter) {
+    private writeRuntimeType(target: idl.IDLNode, targetType: idl.IDLType, isOptional: boolean, writer: LanguageWriter) {
         if (idl.isNamedNode(target) && this.prologueDefinedRuntimeTypes.includes(target.name) && !isOptional)
             return
         const resultType = idl.createReferenceType("RuntimeType")
@@ -219,7 +224,7 @@ export class StructPrinter {
     }
 
     private writeRuntimeTypeOp(
-        target: idl.IDLNode, targetType: IDLType, resultType: IDLType, isOptional: boolean, writer: LanguageWriter
+        target: idl.IDLNode, targetType: idl.IDLType, resultType: idl.IDLType, isOptional: boolean, writer: LanguageWriter
     ) : ((writer: LanguageWriter) => void) | undefined
     {
         let result: LanguageExpression
@@ -228,7 +233,7 @@ export class StructPrinter {
                 writer.makeRuntimeType(RuntimeType.OBJECT), writer.makeRuntimeType(RuntimeType.UNDEFINED))
         } else if (idl.isEnum(target)) {
             result = writer.makeRuntimeType(RuntimeType.NUMBER)
-        } else if (idl.isInterface(target) && isMaterialized(target)) {
+        } else if (idl.isInterface(target) && isMaterialized(target, this.library)) {
             return undefined
         } else if (idl.isUnionType(target)) {
             return writer => {
@@ -467,7 +472,7 @@ inline void WriteToString(std::string* result, const ${name}* value) {
         if (idl.isNamedNode(target) && PeerGeneratorConfig.ignoreSerialization.includes(target.name)) return true
         if (idl.isPrimitiveType(target)) return true
         if (idl.isEnum(target)) return true
-        if (isImport(target)) return true
+        if (isImportAttr(target)) return true
         return false
     }
 }

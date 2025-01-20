@@ -13,20 +13,21 @@
  * limitations under the License.
  */
 
-import * as idl from "../../idl"
+import * as idl from '@idlize/core/idl'
 import {
     getExtAttribute,
     IDLExtendedAttributes,
     IDLType,
     maybeOptional
-} from "../../idl"
+} from '@idlize/core/idl'
 import {
     capitalize,
     isDefined,
-    serializerBaseMethods,
     warn,
-} from "../../util"
-import { GenericVisitor } from "../../options"
+    GenericVisitor,
+    Language,
+    isRoot
+} from '@idlize/core'
 import { ArgConvertor } from "../ArgConvertors"
 import { createOutArgConvertor } from "../PromiseConvertors"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
@@ -37,14 +38,11 @@ import { PeerLibrary } from "../PeerLibrary"
 import { getInternalClassName, MaterializedClass, MaterializedField, MaterializedMethod } from "../Materialized"
 import { Field, FieldModifier, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters";
 import { BuilderClass, initCustomBuilderClasses, isCustomBuilderClass } from "../BuilderClass";
-import { isRoot } from "../inheritance";
 import { ImportFeature } from "../ImportsCollector";
-import { DeclarationNameConvertor } from "./IdlNameConvertor";
-import { PrimitiveType } from "../ArkPrimitiveType"
 import { collapseIdlEventsOverloads } from "../printers/EventsPrinter"
-import { Language } from "../../Language"
 import { convertDeclToFeature } from "../ImportsCollectorUtils"
 import { collectComponents, findComponentByType, IdlComponentDeclaration, isComponentDeclaration } from "../ComponentsCollector"
+import { ReferenceResolver } from '../ReferenceResolver'
 
 /**
  * Theory of operations.
@@ -363,13 +361,13 @@ export class IdlPeerProcessor {
         return new Method(methodName, signature, modifiers/*, generics*/)
     }
 
-    private processMaterialized(decl: idl.IDLInterface) {
+    private processMaterialized(decl: idl.IDLInterface, isGlobalScope = false) {
         const name = decl.name
         if (this.library.materializedClasses.has(name)) {
             return
         }
 
-        const isDeclInterface = idl.isInterfaceSubkind(decl)
+        const isDeclInterface = idl.isInterfaceSubkind(decl) && !isGlobalScope
         const implemenationParentName = isDeclInterface ? getInternalClassName(name) : name
 
         const constructor = decl.subkind === idl.IDLInterfaceSubkind.Class ? decl.constructors[0] : undefined
@@ -452,9 +450,12 @@ export class IdlPeerProcessor {
         )
     }
 
+    private processGlobal(decl: idl.IDLInterface) {
+        this.processMaterialized(decl, true)
+    }
+
     private ignoreDeclaration(decl: idl.IDLEntry, language: Language): boolean {
-        return idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.GlobalScope) ||
-            idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.TSType) ||
+        return idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.TSType) ||
             idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.CPPType) ||
             PeerGeneratorConfig.ignoreEntry(decl.name!, language)
     }
@@ -468,12 +469,18 @@ export class IdlPeerProcessor {
         for (const dep of allDeclarations) {
             if (PeerGeneratorConfig.ignoreEntry(dep.name, this.library.language) || this.ignoreDeclaration(dep, this.library.language) || idl.isHandwritten(dep))
                 continue
+            if (idl.isInterface(dep) && idl.hasExtAttribute(dep, idl.IDLExtendedAttributes.GlobalScope)) {
+                this.library.globalScopeInterfaces.push(dep)
+            }
             const isPeerDecl = idl.isInterface(dep) && isComponentDeclaration(this.library, dep)
             if (!isPeerDecl && idl.isInterface(dep) && [idl.IDLInterfaceSubkind.Class, idl.IDLInterfaceSubkind.Interface].includes(dep.subkind)) {
-                if (isBuilderClass(dep)) {
+                if (isGlobalScope(dep)) {
+                    this.processGlobal(dep)
+                    continue
+                } else if (isBuilderClass(dep)) {
                     this.processBuilder(dep)
                     continue
-                } else if (isMaterialized(dep)) {
+                } else if (isMaterialized(dep, this.library)) {
                     this.processMaterialized(dep)
                     continue
                 }
@@ -503,6 +510,10 @@ export function createDependencyFilter(library: PeerLibrary): DependencyFilter {
     }
     // TODO: support other languages
     return new EmptyDependencyFilter()
+}
+
+export function isGlobalScope(declaration: idl.IDLEntry): boolean {
+    return idl.isInterface(declaration) && idl.hasExtAttribute(declaration, idl.IDLExtendedAttributes.GlobalScope)
 }
 
 export function isBuilderClass(declaration: idl.IDLInterface): boolean {/// stolen from BUilderClass
@@ -575,9 +586,9 @@ function generateSignature(
     )
 }
 
-export function isMaterialized(declaration: idl.IDLInterface): boolean {
+export function isMaterialized(declaration: idl.IDLInterface, resolver: ReferenceResolver): boolean {
     if (PeerGeneratorConfig.isMaterializedIgnored(declaration.name) || idl.isHandwritten(declaration))
-        return false;
+        return false
     if (isBuilderClass(declaration))
         return false
     if (declaration.subkind === idl.IDLInterfaceSubkind.AnonymousInterface ||
@@ -588,12 +599,18 @@ export function isMaterialized(declaration: idl.IDLInterface): boolean {
 
     // A materialized class is a class or an interface with methods
     // excluding components and related classes
-    return declaration.methods.length > 0
-}
+    if (declaration.methods.length > 0) return true
 
-export function checkTSDeclarationMaterialized(decl: idl.IDLNode): boolean {
-    return (idl.isInterface(decl))
-            && isMaterialized(decl)
+    // Or a class or an interface derived from materialized class
+    if (idl.hasSuperType(declaration)) {
+        const superType = resolver.resolveTypeReference(idl.getSuperType(declaration)!)
+        if (!superType || !idl.isInterface(superType)) {
+            console.log(`Unable to resolve ${idl.getSuperType(declaration)!.name} type, consider ${declaration.name} to be not materialized`)
+            return false
+        }
+        return isMaterialized(superType, resolver)
+    }
+    return false
 }
 
 export function convertTypeToFeature(library: PeerLibrary, type: IDLType): ImportFeature | undefined {

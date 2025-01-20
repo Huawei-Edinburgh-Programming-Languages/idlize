@@ -13,15 +13,16 @@
  * limitations under the License.
  */
 
-import * as idl from "../idl"
+import * as idl from '@idlize/core/idl'
 import { ArgConvertor } from "./ArgConvertors"
 import { Field, Method, MethodModifier, NamedMethodSignature } from "./LanguageWriters"
-import { capitalize } from "../util"
-import { ImportFeature, ImportsCollector } from "./ImportsCollector"
-import { createReferenceType, IDLType, IDLVoidType } from "../idl"
+import { capitalize } from '@idlize/core'
+import { ImportsCollector } from "./ImportsCollector"
+import { createReferenceType, IDLType, IDLVoidType } from '@idlize/core/idl'
 import { PeerMethod } from "./PeerMethod";
 import { PeerClassBase } from "./PeerClass";
 import { PeerLibrary } from "./PeerLibrary"
+import { copyMethod } from './LanguageWriters/LanguageWriter'
 
 export class MaterializedField {
     constructor(
@@ -64,7 +65,15 @@ export class MaterializedMethod extends PeerMethod {
     override get dummyReturnValue(): string | undefined {
         if (this.method.name === "ctor") return `(${this.originalParentName}Peer*) 100`
         if (this.method.name === "getFinalizer") return `fnPtr<KNativePointer>(dummyClassFinalizer)`
-        if (this.method.modifiers?.includes(MethodModifier.STATIC)) return `(void*) 300`
+        if (this.method.modifiers?.includes(MethodModifier.STATIC)) {
+            if (this.method.signature.returnType === idl.IDLNumberType) {
+                return '100'
+            }
+            if (this.method.signature.returnType === idl.IDLBooleanType) {
+                return '0'
+            }
+            return `(void*) 300`
+        }
         return undefined;
     }
 
@@ -94,6 +103,20 @@ export class MaterializedMethod extends PeerMethod {
 
     tsReturnType(): IDLType | undefined {
         return this.method.signature.returnType
+    }
+
+    getPrivateMethod() {
+        let privateMethod: MaterializedMethod = this
+        if (!privateMethod.method.modifiers?.includes(MethodModifier.PRIVATE)) {
+            privateMethod = copyMaterializedMethod(this, {
+                method: copyMethod(this.method, {
+                    modifiers: (this.method.modifiers ?? [])
+                        .filter(it => it !== MethodModifier.PUBLIC)
+                        .concat([MethodModifier.PRIVATE])
+                })
+            })
+        }
+        return privateMethod
     }
 }
 
@@ -141,6 +164,10 @@ export class MaterializedClass implements PeerClassBase {
     generatedName(isCallSignature: boolean): string{
         return this.className
     }
+
+    isGlobalScope() {
+        return idl.hasExtAttribute(this.decl, idl.IDLExtendedAttributes.GlobalScope)
+    }
 }
 
 export function createDestroyPeerMethod(clazz: MaterializedClass): MaterializedMethod {
@@ -165,8 +192,13 @@ export function getInternalClassName(name: string): string {
     return `${name}Internal`
 }
 
+export function getMaterializedFileName(name:string): string {
+     const pascalCase = name.split('_').map(x => capitalize(x)).join('')
+    return `Ark${pascalCase}Materialized`
+}
+
 export function collectMaterializedImports(imports: ImportsCollector, library: PeerLibrary) {
     for (const materialized of library.materializedClasses.values()) {
-        imports.addFeature(getInternalClassName(materialized.className), `./Ark${materialized.className}Materialized`)
+        imports.addFeature(getInternalClassName(materialized.className), `./${getMaterializedFileName(materialized.className)}`)
     }
 }

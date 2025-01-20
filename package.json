@@ -10,18 +10,19 @@
     "whitelist.json",
     "peer_lib/**/*",
     "templates/**/*",
-    "webidl2.js/dist/**/*",
-    "webidl2.js/package.json",
     "predefined/**/*"
   ],
   "workspaces": [
-    "webidl2.js",
-    "demos/*"
+    "core/webidl2.js",
+    "demos/*",
+    "core",
+    "linter"
   ],
   "license": "Apache-2.0",
   "keywords": [],
   "dependencies": {
-    "@rollup/plugin-commonjs": "^26.0.1",
+    "@idlize/core": "1.4.1+devel",
+    "@koalaui/interop": "next",
     "@types/node": "^18.0.0",
     "@types/webidl2": "file:webidl2.js/types",
     "commander": "^10.0.0",
@@ -30,11 +31,11 @@
     "minimist": "^1.2.8",
     "node-addon-api": "^8.0.0",
     "node-api-headers": "^1.1.0",
-    "typescript": "^4.9.5",
-    "webidl2": "file:webidl2.js"
+    "typescript": "^4.9.5"
   },
   "devDependencies": {
     "@koalaui/fast-arktsc": "next",
+    "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-replace": "^5.0.7",
     "@rollup/plugin-terser": "^0.4.4",
@@ -48,22 +49,25 @@
     "eslint": "^8.13.0",
     "eslint-plugin-unused-imports": "^2.0.0",
     "mocha": "^9.2.2",
+    "tsx": "^4.19.2",
     "rollup": "^4.24.4",
     "source-map-support": "^0.5.21"
   },
   "scripts": {
+    "switch:develop": "node tools/devenv.mjs on",
+    "switch:release": "node tools/devenv.mjs off",
     "download:sdk": "node ./download-sdk.mjs",
     "upload": "npm run compile && npm run webidl2 && node tools/publish.mjs --tag next",
     "release": "npm run compile && npm run webidl2 && node tools/release.mjs",
     "webidl2": "cd ./webidl2.js && npm i && npm run build",
     "setup-out": "node tools/setup/setup.mjs",
-    "compile": "npm run download:sdk && rollup -c",
+    "compile": "npm run download:sdk && npm run compile -C core && rollup -c",
     "clean": "rimraf build dist lib generated native/build* native/lib* native/cross* native/NativeBridge* native/ace* out",
     "run": "npm run compile && node . --dts2idl --input-dir ./interface_sdk-js/api/@internal/component/ets/,./interface_sdk-js/api/global --input-file common.d.ts --verify-idl --common-to-attributes --docs=opt",
     "run:all": "npm run compile && node . --dts2peer --input-dir ./interface_sdk-js/api/@internal/component/ets/,./interface_sdk-js/api/arkui,./interface_sdk-js/api/global --verify-idl --common-to-attributes --docs=opt",
     "run:xml": "npm run compile && node . --generator-target ohos --dts2peer --input-dir ./interface_sdk-js/api --input-file @ohos.xml.d.ts --output-dir ./out/xml --verify-idl --common-to-attributes --docs=none",
     "run:xml:arkts": "npm run compile && node . --generator-target ohos --dts2peer --input-dir ./interface_sdk-js/api --input-file @ohos.xml.d.ts --output-dir ./out/xml --verify-idl --common-to-attributes --docs=none --language=arkts",
-    "libarkts": "npm run compile && node . --generator-target libarkts --idl2peer --input-dir ./tests/libarkts --output-dir ./out/libarkts/ --verify-idl --language ts",
+    "run:xml:cj": "npm run compile && node . --generator-target ohos --dts2peer --input-dir ./interface_sdk-js/api --input-file @ohos.xml.d.ts --output-dir ./out/xml --verify-idl --common-to-attributes --docs=none --language=cangjie",
     "run2dts": "npm run compile && node . --idl2dts --input-dir ./idl",
     "dts2skoala": "npm run compile && node . --dts2skoala --input-dir ./tests/mini_skoala/build/ ",
     "idl2peer:target": "node --stack_trace_limit=200 . --api-version 99 --dts2peer --input-dir ./interface_sdk-js/api/@internal/component/ets/,./interface_sdk-js/api/global --output-dir ./out/ts-peers/generated",
@@ -73,8 +77,8 @@
     "tracker": "npm run compile && node . --dts2peer --input-dir ./interface_sdk-js/api/@internal/component/ets/,./interface_sdk-js/api/global --output-dir ./doc --generator-target tracker --tracker-status ./doc/COMPONENTS_STATUS.md",
     "dts2peer:all": "npm run compile && npm run dts2peer:libace && npm run dts2peer:arkoala",
     "dts2peer": "npm run compile && node . --api-version 99 --dts2peer --input-dir ./interface_sdk-js/api/@internal/component/ets/,./interface_sdk-js/api/global --output-dir ./out/ts-peers/generated --need-interfaces",
-    "lint": "npm run compile && node . --linter --input-dir ./interface_sdk-js/api/@internal/component/ets/,./interface_sdk-js/api/global --input-file common.d.ts --output-dir linter --linter-whitelist whitelist.json",
-    "lint:all": "npm run compile && node . --linter --input-dir ./interface_sdk-js/api/@internal/component/ets/,./interface_sdk-js/api/global --output-dir out/linter --linter-whitelist whitelist.json",
+    "lint": "npm run -C linter compile && node ./linter --input-dir ./interface_sdk-js/api/@internal/component/ets/,./interface_sdk-js/api/global --input-file common.d.ts --output-dir linter --whitelist linter/whitelist.json",
+    "lint:all": "npm run -C linter compile && node ./linter --input-dir ./interface_sdk-js/api/@internal/component/ets/,./interface_sdk-js/api/global --output-dir out/linter --whitelist ./linter/whitelist.json",
     "lint:test": "rimraf out/linter && npm run lint:all ; cat out/linter/histogram.txt",
     "check:peers": "npm run setup-out -- --out out/ts-peers  --template ts_peers && npm run idl2peer:compile",
     "check:subset": "npm run setup-out -- --out out/ts-subset --template ts_subset && npm run make:ts:subset && cp -r tests/subset out/ts-subset/generated/tests && cd out/ts-subset && tsc -p .",
@@ -161,6 +165,9 @@
     "check:index-full:ts": "tsc --target esnext --lib esnext --types chai --noEmit out/ts-peers/generated/sig/arkoala/arkui-types/index-full.d.ts",
     "check:index-full:subset:ts": "tsc --target esnext --lib esnext --types chai --noEmit out/ts-subset/generated/sig/arkoala/arkui-types/index-full.d.ts",
     "check:index-full:arkts": "tsc --target esnext --lib esnext --types chai --noEmit out/arkts-peers/generated/sig/arkoala-arkts/arkui/types/index-full.d.ts",
-    "check:index-full:arkts:subset": "tsc --target esnext --lib esnext --types chai --noEmit out/arkts-subset/generated/sig/arkoala-arkts/arkui/types/index-full.d.ts"
+    "check:index-full:arkts:subset": "tsc --target esnext --lib esnext --types chai --noEmit out/arkts-subset/generated/sig/arkoala-arkts/arkui/types/index-full.d.ts",
+    "test:core": "mocha core/test",
+    "test:root": "mocha test",
+    "test": "npm run test:core && npm run test:root"
   }
 }

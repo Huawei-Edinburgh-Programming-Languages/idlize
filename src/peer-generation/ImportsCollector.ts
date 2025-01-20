@@ -14,9 +14,8 @@
  */
 
 import { posix as path } from "path"
-import { getOrPut, renameDtsToPeer } from "../util";
+import { getOrPut, renameDtsToPeer, Language } from "@idlize/core"
 import { LanguageWriter } from "./LanguageWriters";
-import { Language } from '../Language';
 
 export class ImportsCollector {
     private readonly moduleToFeatures: Map<string, Set<string>> = new Map()
@@ -83,6 +82,6 @@ export class ImportsCollector {
 export type ImportFeature = { feature: string, module: string }
 
 export function convertPeerFilenameToModule(filename: string) {
-    const basename = renameDtsToPeer(path.basename(filename), Language.TS, false)
+    const basename = renameDtsToPeer(path.basename(filename.replaceAll('\\', '/')), Language.TS, false)
     return `./peers/${basename}`
 }

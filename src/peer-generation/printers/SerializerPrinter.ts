@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import * as idl from '../../idl'
-import { Language } from "../../Language"
+import * as idl from '@idlize/core/idl'
+import { Language, throwException } from '@idlize/core'
 import { PrimitiveType } from "../ArkPrimitiveType"
 import { ExpressionStatement, LanguageStatement, LanguageWriter, Method, MethodSignature, NamedMethodSignature } from "../LanguageWriters"
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig'
@@ -27,11 +27,10 @@ import {
     isMaterialized,
 } from '../idl/IdlPeerGeneratorVisitor'
 import { collectProperties } from '../printers/StructPrinter'
-import { FieldModifier, MethodModifier, ProxyStatement, TernaryExpression } from '../LanguageWriters/LanguageWriter'
+import { FieldModifier, MethodModifier, ProxyStatement } from '../LanguageWriters/LanguageWriter'
 import { createDeclarationNameConvertor } from '../idl/IdlNameConvertor'
-import { throwException } from "../../util"
-import { IDLEntry } from "../../idl"
-import { convertDeclaration } from '../LanguageWriters/nameConvertor'
+import { IDLEntry } from "@idlize/core/idl"
+import { convertDeclaration } from '@idlize/core'
 import { collectMaterializedImports, getInternalClassName } from '../Materialized'
 import { generateCallbackKindValue, maybeTransformManagedCallback } from '../ArgConvertors'
 import { ArkTSSourceFile, SourceFile, TsSourceFile } from './SourceFile'
@@ -60,7 +59,7 @@ class IdlSerializerPrinter {
             new Method(`write${methodName}`,
                 new NamedMethodSignature(idl.IDLVoidType, [idl.createReferenceType(target.name)], ["value"])),
             writer => {
-                if (isMaterialized(target)) {
+                if (isMaterialized(target, this.library)) {
                     this.generateMaterializedBodySerializer(target, writer)
                 } else {
                     this.generateInterfaceBodySerializer(target, writer)
@@ -183,7 +182,7 @@ class IdlSerializerPrinter {
             this.writer.print("import java.util.function.Supplier;")
         }
         this.writer.writeClass(className, writer => {
-            if (writer.language == Language.JAVA)
+            if (writer.language == Language.JAVA || writer.language == Language.CJ)
                 writer.writeFieldDeclaration('nullptr', idl.IDLPointerType, [FieldModifier.STATIC, FieldModifier.PRIVATE], false, writer.makeString('0'))
 
 
@@ -231,8 +230,6 @@ class IdlSerializerPrinter {
                     writer.writeStatement(writer.makeAssign("pool", poolType, writer.makeUnwrapOptional(
                         writer.makeString("Serializer.pool")), true, true))
                     writer.writeStatement(writer.makeCondition(
-                            writer.language == Language.CJ ?
-                            writer.makeString(`refEq(this, pool[Int64(Serializer.poolTop)])`) :
                             writer.makeEquals([
                                 writer.makeThis(),
                                 writer.makeArrayAccess("pool", "Serializer.poolTop")
@@ -279,7 +276,7 @@ class IdlDeserializerPrinter {
         const methodName = this.library.getInteropName(target)
         const type = idl.createReferenceType(target.name)
         this.writer.writeMethodImplementation(new Method(`read${methodName}`, new NamedMethodSignature(type, [], [])), writer => {
-            if (isMaterialized(target)) {
+            if (isMaterialized(target, this.library)) {
                 this.generateMaterializedBodyDeserializer(target)
             } else if (isBuilderClass(target)) {
                 this.generateBuilderClassDeserializer(target, type)
@@ -650,7 +647,7 @@ export function printSerializerImports(library: PeerLibrary, destFile: SourceFil
                 module: `./${declarationPath}` // TODO resolve
             })
             // Add <class>Internal support class for materialized classes with no constructor
-            if (idl.isInterface(node) && isMaterialized(node) && node.constructors.length === 0) {
+            if (idl.isInterface(node) && isMaterialized(node, library) && node.constructors.length === 0) {
                 features.push({
                     feature: getInternalClassName(convertDeclaration(nameCovertor, node)), // TODO check/refactor name generation
                     module: `./${declarationPath}` // TODO resolve

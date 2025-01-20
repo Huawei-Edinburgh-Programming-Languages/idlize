@@ -13,14 +13,13 @@
  * limitations under the License.
  */
 
-import { IndentedPrinter } from "../../IndentedPrinter";
+import { IndentedPrinter, Language } from "@idlize/core"
 import { LanguageWriter } from "./LanguageWriter";
 import { TSLanguageWriter } from "./writers/TsLanguageWriter";
 import { ETSLanguageWriter } from "./writers/ETSLanguageWriter";
 import { JavaLanguageWriter } from "./writers/JavaLanguageWriter";
 import { CppLanguageWriter } from "./writers/CppLanguageWriter";
 import { CJLanguageWriter } from "./writers/CJLanguageWriter";
-import { Language } from "../../Language";
 import { ReferenceResolver } from "../ReferenceResolver";
 
 import { CJIDLNodeToStringConvertor, CJInteropArgConvertor } from "./convertors/CJConvertors";
@@ -28,7 +27,7 @@ import { TsIDLNodeToStringConverter } from "./convertors/TSConvertors";
 import { JavaIDLNodeToStringConvertor, JavaInteropArgConvertor } from "./convertors/JavaConvertors";
 import { EtsIDLNodeToStringConvertor } from "./convertors/ETSConvertors";
 import { CppIDLNodeToStringConvertor, CppInteropArgConvertor } from "./convertors/CppConvertors";
-import { IdlNameConvertor } from "./nameConvertor";
+import { IdlNameConvertor } from "@idlize/core";
 import { InteropArgConvertor } from "./convertors/InteropConvertor";
 
 //////////////////////////////////////////////////////////////////
@@ -42,10 +41,10 @@ export {
     MethodModifier,
     MethodSignature,
     ExpressionStatement,
-    NamedMethodSignature, 
-    BlockStatement, 
-    BranchStatement, 
-    LanguageExpression, 
+    NamedMethodSignature,
+    BlockStatement,
+    BranchStatement,
+    LanguageExpression,
     FunctionCallExpression,
     LanguageStatement,
     LanguageWriter,
@@ -93,7 +92,7 @@ export function createTypeNameConvertor(language: Language , library: ReferenceR
         return new EtsIDLNodeToStringConvertor(library)
     if (language === Language.CJ)
         return new CJIDLNodeToStringConvertor(library)
-    if (language === Language.CPP) 
+    if (language === Language.CPP)
         return new CppIDLNodeToStringConvertor(library)
     throw new Error(`Convertor from IDL to ${language} not implemented`)
 }

@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import * as idl from '../../idl'
+import * as idl from '@idlize/core/idl'
 import * as path from 'path'
 import { PeerLibrary } from "../PeerLibrary"
 import {
@@ -32,23 +32,22 @@ import {
     removeExt,
     renameDtsToInterfaces,
     stringOrNone,
-    throwException
-} from '../../util'
+    throwException,
+    IndentedPrinter,
+    Language,
+    CustomPrintVisitor
+} from '@idlize/core'
 import { ImportFeature, ImportsCollector } from '../ImportsCollector'
 import { PeerFile } from '../PeerFile'
-import { IndentedPrinter } from "../../IndentedPrinter"
-import { TargetFile } from '../printers/TargetFile'
-import { PrinterContext } from '../printers/PrinterContext'
-import { convertDeclaration, DeclarationConvertor } from "../LanguageWriters/nameConvertor";
-import { tsCopyrightAndWarning } from '../FileGenerators'
-import { ARK_CUSTOM_OBJECT, ARK_OBJECTBASE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH, INT_VALUE_GETTER } from '../printers/lang/Java'
-import { printJavaImports } from '../printers/lang/JavaPrinters'
-import { collectJavaImports } from '../printers/lang/JavaIdlUtils'
-import { Language } from '../../Language'
+import { TargetFile } from './TargetFile'
+import { PrinterContext } from './PrinterContext'
+import { convertDeclaration, DeclarationConvertor } from "@idlize/core";
+import { ARK_CUSTOM_OBJECT, ARK_OBJECTBASE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH, INT_VALUE_GETTER } from './lang/Java'
+import { printJavaImports } from './lang/JavaPrinters'
+import { collectJavaImports } from './lang/JavaIdlUtils'
 import { ETSLanguageWriter } from '../LanguageWriters/writers/ETSLanguageWriter'
 import { collectProperties } from './StructPrinter'
-import { CustomPrintVisitor } from "../../from-idl/DtsPrinter"
-import { escapeKeyword, IDLType } from "../../idl";
+import { escapeKeyword, IDLType } from '@idlize/core/idl'
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig'
 import { isBuilderClass, isMaterialized, isPredefined } from '../idl/IdlPeerGeneratorVisitor'
 import { DependenciesCollector } from '../idl/IdlDependenciesCollector'
@@ -475,7 +474,7 @@ class JavaInterfacesVisitor extends DefaultInterfacesVisitor {
                     continue
                 if (idl.isInterface(entry) && (
                     isBuilderClass(entry) ||
-                    isMaterialized(entry)))
+                    isMaterialized(entry, this.peerLibrary)))
                     continue
                 convertDeclaration(declarationConverter, entry)
             }
@@ -520,13 +519,16 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
         this.writer.print('export ' + result)
     }
 
-    private iDLTypedEntryPrinter<T extends idl.IDLTypedEntry>(type: T,
-                                                              printer: (_: T) => stringOrNone[],
-                                                              seenNames: Set<string>) {
-        if (type?.name != undefined && !seenNames.has(type.name)) {
-            seenNames.add(type.name!)
-            return printer(type)
+    private printIfNotSeen<T extends idl.IDLNamedNode>(
+        type: T,
+        print: (_: T) => stringOrNone[],
+        seenNames: Set<string>
+    ): stringOrNone[] | undefined {
+        if (!seenNames.has(type.name)) {
+            seenNames.add(type.name)
+            return print(type)
         }
+        return undefined
     }
 
     private printInterface(idlInterface: idl.IDLInterface): stringOrNone[] {
@@ -544,13 +546,13 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
         const seenFields = new Set<string>()
         return ([`interface ${this.printInterfaceName(idlInterface)} {`] as stringOrNone[])
             .concat(idlInterface.constants
-                .map(it => this.iDLTypedEntryPrinter(it, it => this.printConstant(it), seenFields)).flat())
+                .map(it => this.printIfNotSeen(it, it => this.printConstant(it), seenFields)).flat())
             .concat(idlInterface.properties
-                .map(it => this.iDLTypedEntryPrinter(it, it => this.printProperty(it, isMaterialized(idlInterface)), seenFields) ).flat())
+                .map(it => this.printIfNotSeen(it, it => this.printProperty(it, isMaterialized(idlInterface, this.peerLibrary)), seenFields) ).flat())
             .concat(idlInterface.methods
-                .map(it => this.iDLTypedEntryPrinter(it, it => this.printMethod(it), seenFields) ).flat())
+                .map(it => this.printIfNotSeen(it, it => this.printMethod(it), seenFields) ).flat())
             .concat(idlInterface.callables
-                .map(it => this.iDLTypedEntryPrinter(it, it => this.printFunction(it), seenFields) ).flat())
+                .map(it => this.printIfNotSeen(it, it => this.printFunction(it), seenFields) ).flat())
             .concat(["}"])
     }
 
@@ -681,7 +683,7 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
         const seenFields = new Set<string>()
         return ([`type ${this.printInterfaceName(tuple)} = [`] as stringOrNone[])
             .concat(tuple.properties
-                .map((it, propIndex) => this.iDLTypedEntryPrinter(it, it => {
+                .map((it, propIndex) => this.printIfNotSeen(it, it => {
                     //TODO: use ETSConvertor.processTupleType
                     let types: IDLType[] = []
                     if (it.isOptional) {
@@ -750,7 +752,7 @@ class ArkTSSyntheticGenerator extends DependenciesCollector {
                 this.onSyntheticDeclaration(continuation)
             }
         })
-        if (isMaterialized(decl) && !isBuilderClass(decl)) {
+        if (isMaterialized(decl, this.library) && !isBuilderClass(decl)) {
             this.onSyntheticDeclaration(idl.createInterface(
                 createInterfaceDeclName(decl.name),
                 idl.IDLInterfaceSubkind.Interface,
@@ -825,7 +827,7 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
                     PeerGeneratorConfig.ignoreEntry(entry.name, this.peerLibrary.language))
                     continue
                 syntheticGenerator.convert(entry)
-                if (idl.isInterface(entry) && (isMaterialized(entry) || isBuilderClass(entry)))
+                if (idl.isInterface(entry) && (isMaterialized(entry, this.peerLibrary) || isBuilderClass(entry)))
                     continue
                 registerEntry(entry)
             }
@@ -875,12 +877,13 @@ class CJInterfacesVisitor extends DefaultInterfacesVisitor {
                 if (idl.isModuleType(entry) ||
                     idl.isPackage(entry) ||
                     idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.GlobalScope) ||
+                    idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.TSType) ||
                     isPredefined(entry))
                     continue
                 if (PeerGeneratorConfig.ignoreEntry(entry.name, this.peerLibrary.language))
                     continue
                 syntheticGenerator.convert(entry)
-                if (idl.isInterface(entry) && (isMaterialized(entry) || isBuilderClass(entry)))
+                if (idl.isInterface(entry) && (isMaterialized(entry, this.peerLibrary) || isBuilderClass(entry)))
                     continue
                 onEntry(entry)
             }
@@ -1096,14 +1099,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
                     writer.makeAssign(value, undefined, writer.makeString(signature.argName(0)), false)
                 )
             })
-
-            const getIntValue = new Method('getIntValue', new MethodSignature(intType, []), [MethodModifier.PUBLIC])
-            writer.writeMethodImplementation(getIntValue, () => {
-                writer.writeStatement(
-                    writer.makeReturn(writer.makeString(value))
-                )
-            })
-        }, ARK_OBJECTBASE, [INT_VALUE_GETTER])
+        }, ARK_OBJECTBASE)
 
         return new CJDeclaration(alias, writer)
     }

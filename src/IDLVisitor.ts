@@ -14,20 +14,17 @@
  */
 import * as ts from "typescript"
 import * as path from "path"
-import { parse } from 'comment-parser'
-import * as idl from "./idl"
+import { parse } from "comment-parser"
+import { OptionValues } from "commander"
+import * as idl from "@idlize/core/idl"
 import {
     asString, capitalize, getComment, getDeclarationsByNode, getExportedDeclarationNameByDecl, identName,
     isDefined, isNodePublic, isPrivate, isProtected, isReadonly, isStatic, isAsync,
     nameEnumValues, nameOrNull, identString, getNameWithoutQualifiersLeft, stringOrNone, warn,
-    snakeCaseToCamelCase,
-} from "./util"
-import { GenericVisitor } from "./options"
+    snakeCaseToCamelCase, IDLKeywords, GenericVisitor,
+    generateSyntheticUnionName, generateSyntheticIdlNodeName, typeOrUnion, isCommonMethodOrSubclass
+} from "@idlize/core"
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig"
-import { OptionValues } from "commander"
-import { generateSyntheticIdlNodeName, typeOrUnion } from "./peer-generation/idl/common"
-import { IDLKeywords } from "./languageSpecificKeywords"
-import { isCommonMethodOrSubclass } from "./peer-generation/inheritance"
 import { ReferenceResolver } from "./peer-generation/ReferenceResolver"
 import { IDLVisitorConfig } from "./IDLVisitorConfig"
 
@@ -74,10 +71,6 @@ export function generateSyntheticFunctionName(parameters: idl.IDLParameter[], re
     let prefix = isAsync ? "AsyncCallback" : "Callback"
     const names = parameters.map(it => `${generateSyntheticIdlNodeName(it.type!)}`).concat(generateSyntheticIdlNodeName(returnType))
     return `${prefix}_${names.join("_").replaceAll(".", "_")}`
-}
-
-export function generateSyntheticUnionName(types: idl.IDLType[]) {
-    return `Union_${types.map(it => generateSyntheticIdlNodeName(it)).join("_")}`
 }
 
 function mangleConflictingName(name: string, sourceFile: ts.SourceFile | undefined): string {
@@ -324,7 +317,8 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             if (typedef)
                 this.output.push(typedef)
         } else if (ts.isFunctionDeclaration(node)) {
-            this.globalFunctions.push(this.serializeMethod(node, undefined, true))
+            const method = this.serializeMethod(node, undefined, true)
+            this.globalFunctions.push(method)
         } else if (ts.isVariableStatement(node)) {
             this.globalConstants.push(...this.serializeConstants(node)) // TODO: Initializers are not allowed in ambient contexts (d.ts).
         } else if (ts.isImportDeclaration(node)) {
@@ -1137,7 +1131,8 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         this.computeDeprecatedExtendAttributes(property, extendedAttributes)
         if (ts.isMethodDeclaration(property) || ts.isMethodSignature(property)) {
             if (!this.isCommonMethodUsedAsProperty(property)) throw new Error("Wrong")
-            let type = IDLVisitorConfig.customSerializePropertyType(property, escapedName)
+            let [type, syntheticEntry] = IDLVisitorConfig.checkParameterTypeReplacement(property.parameters[0])
+            if (syntheticEntry) this.addSyntheticType(syntheticEntry)
             if (!isDefined(type)) {
                 type = this.serializeType(property.parameters[0].type, nameSuggestion?.extend(nameOrNull(property.parameters[0].name)!))
             }
@@ -1155,14 +1150,10 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         }
 
         if (ts.isPropertyDeclaration(property) || ts.isPropertySignature(property)) {
-            let type = this.serializeType(property.type, nameSuggestion)
-            if (escapedName == "params" && this.maybeClassName(property.parent) == "Resource" &&
-                idl.isContainerType(type) && type.elementType[0] == idl.IDLAnyType) {
-                // Ugly hack: Resource.params is any[] in the SDK, but it should be string[].
-                // TODO: remove, once SDK is fixed.
-                warn(`applying Resource.params workaround, type was ${generateSyntheticIdlNodeName(type)}`)
-                type = idl.createContainerType('sequence', [idl.IDLStringType])
-            }
+            let [type, syntheticEntry] = IDLVisitorConfig.checkPropertyTypeReplacement(property)
+            if (syntheticEntry) this.addSyntheticType(syntheticEntry)
+            if (!isDefined(type)) type = this.serializeType(property.type, nameSuggestion)
+
             return idl.createProperty(
                 escapedName,
                 type,
@@ -1174,13 +1165,6 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             })
         }
         throw new Error("Unknown")
-    }
-
-    private maybeClassName(node: ts.Node|ts.ClassLikeDeclaration): string | undefined {
-        if (ts.isInterfaceDeclaration(node) || ts.isClassDeclaration(node))
-            return identName(node.name)
-        else
-            return undefined
     }
 
     serializeTupleProperty(property: ts.NamedTupleMember | ts.TypeNode, index: number, isReadonly: boolean = false): idl.IDLProperty {
@@ -1230,9 +1214,13 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         }
         const parameterName = nameOrNull(parameter.name)!
         nameSuggestion = nameSuggestion?.extend(parameterName)
+        let [type, syntheticEntry] = IDLVisitorConfig.checkParameterTypeReplacement(parameter)
+        if (syntheticEntry) {
+            this.addSyntheticType(syntheticEntry)
+        }
         return idl.createParameter(
             escapeIdl(parameterName),
-            this.serializeType(parameter.type, nameSuggestion),
+            type ?? this.serializeType(parameter.type, nameSuggestion),
             !!parameter.questionToken,
             !!parameter.dotDotDotToken,
         )
@@ -1350,7 +1338,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             escapedMethodName,
             methodParameters.map(it => this.serializeParameter(it, nameSuggestion)),
             returnType, {
-            isStatic: isStatic(method.modifiers),
+            isStatic: isGlobal || isStatic(method.modifiers),
             isOptional: !!method.questionToken,
             isAsync: isAsync(method.modifiers),
         }, {

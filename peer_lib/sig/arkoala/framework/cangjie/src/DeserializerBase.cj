@@ -38,14 +38,6 @@ public open class DeserializerBase {
         this.length = length
     }
 
-    // static func get<T>(
-    //     factory: (args: ArrayList<UInt8>, length: Int32) -> T,
-    //               args: ArrayList<UInt8>, length: Int32): T where T <: DeserializerBase {
-
-    //     // TBD: Use cache
-    //     return factory(args, length)
-    // }
-
     func asArray(position: Int64, length: Int64): ArrayList<UInt8> {
         return ArrayList<UInt8>()
     }
@@ -66,57 +58,43 @@ public open class DeserializerBase {
 
     func readInt8(): Int8 {
         this.checkCapacity(1)
-        let buffer: Array<Byte> = [this.buffer[this.position]]
+        let res = Int8.readLittleEndian(this.buffer[this.position..this.position+1])
         this.position += 1
-        let res = Int8.readLittleEndian(buffer)
         return res
     }
 
     func readInt32(): Int32 {
         this.checkCapacity(4)
-        let buffer: Array<Byte> = [this.buffer[this.position], this.buffer[this.position+1], this.buffer[this.position+2], this.buffer[this.position+3]]
+        let res = Int32.readLittleEndian(this.buffer[this.position..this.position+4])
         this.position += 4
-        let res = Int32.readLittleEndian(buffer)
         return res
     }
 
     func readInt64(): Int64 {
         this.checkCapacity(8)
-        let buffer: Array<Byte> = [this.buffer[this.position], this.buffer[this.position+1], this.buffer[this.position+2], this.buffer[this.position+3],
-                                 this.buffer[this.position+4], this.buffer[this.position+5], this.buffer[this.position+6], this.buffer[this.position+7]]
+        let res = Int64.readLittleEndian(this.buffer[this.position..this.position+8])
         this.position += 8
-        let res = Int64.readLittleEndian(buffer)
         return res
     }
 
     func readPointer(): KPointer {
         this.checkCapacity(8)
-        let buffer: Array<Byte> = [this.buffer[this.position], this.buffer[this.position+1], this.buffer[this.position+2], this.buffer[this.position+3],
-                                 this.buffer[this.position+4], this.buffer[this.position+5], this.buffer[this.position+6], this.buffer[this.position+7]]
-        let res = Int64.readLittleEndian(buffer)
+        let res = UInt64.readLittleEndian(this.buffer[this.position..this.position+8])
         this.position += 8
         return res
     }
 
     func readFloat32(): Float32 {
         this.checkCapacity(4)
-        let buffer: Array<Byte> = [this.buffer[this.position], this.buffer[this.position+1], this.buffer[this.position+2], this.buffer[this.position+3]]
+        let res = Float32.readLittleEndian(this.buffer[this.position..this.position+4])
         this.position += 4
-        let res = Float32.readLittleEndian(buffer)
         return res
     }
 
     func readBoolean(): Bool {
-        let buffer: Array<Byte> = [this.buffer[this.position]]
+        let res = Bool.readLittleEndian(this.buffer[this.position..this.position+1])
         this.position += 1
-        let res = Bool.readLittleEndian(buffer)
         return res
-    }
-
-    func readFunction(): Int32 {
-        // TODO: not exactly correct.
-        let id = this.readInt32()
-        return id
     }
 
     // readMaterialized(): object {
@@ -135,15 +113,14 @@ public open class DeserializerBase {
 
     func readNumber(): Float64 {
         let tag = this.readInt8()
-        match (tag) {
-            case 101 =>
-                throw Exception("Read number can't return undefined.")
-            case 102 =>
-                return Float64(this.readInt32())
-            case 103 =>
-                return Float64(this.readFloat32())
-            case _ =>
-                throw Exception("Unknown number tag: ${tag}")
+        if (tag == Tag.UNDEFINED.value) {
+            throw Exception("Read number can't return undefined.")
+        } else if (tag == Tag.INT32.value) {
+            return Float64(this.readInt32())
+        } else if (tag == Tag.FLOAT32.value) {
+            return Float64(this.readFloat32())
+        } else {
+            throw Exception("Unknown number tag: ${tag}")
         }
     }
 

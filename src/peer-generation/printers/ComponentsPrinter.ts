@@ -13,11 +13,10 @@
  * limitations under the License.
  */
 
-import * as idl from "../../idl"
+import * as idl from '@idlize/core/idl'
 import * as path from "path"
-import { removeExt, renameDtsToComponent } from "../../util";
+import { removeExt, renameDtsToComponent, Language, isCommonMethod } from '@idlize/core'
 import { convertPeerFilenameToModule, ImportsCollector } from "../ImportsCollector";
-import { isCommonMethod } from "../inheritance";
 import { componentToPeerClass } from "./PeersPrinter";
 import { collapseSameNamedMethods, groupOverloads, OverloadsPrinter } from "./OverloadsPrinter";
 import {
@@ -38,9 +37,9 @@ import { PeerFile } from "../PeerFile";
 import { PeerClass } from "../PeerClass";
 import { collectJavaImports } from "./lang/JavaIdlUtils";
 import { printJavaImports } from "./lang/JavaPrinters";
-import { Language } from "../../Language";
-import { createReferenceType, IDLVoidType, isOptionalType } from "../../idl";
-import { createEmptyReferenceResolver, getReferenceResolver } from "../ReferenceResolver";
+import { createReferenceType, IDLVoidType, isOptionalType } from '@idlize/core'
+import { createEmptyReferenceResolver } from "@idlize/core";
+import { getReferenceResolver } from "../ReferenceResolver";
 import { convertIdlToCallback } from "./EventsPrinter";
 import { collectDeclDependencies } from "../ImportsCollectorUtils";
 import { collectComponents, findComponentByType } from "../ComponentsCollector";

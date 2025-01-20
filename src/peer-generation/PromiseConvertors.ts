@@ -13,26 +13,24 @@
  * limitations under the License.
  */
 
-import * as idl from "../idl"
+import * as idl from '@idlize/core/idl'
 import { LibraryInterface } from "../LibraryInterface"
 import { ArgConvertor, BaseArgConvertor, CallbackConvertor, RuntimeType, ExpressionAssigneer } from "./ArgConvertors"
 import { LanguageStatement, LanguageWriter } from "./LanguageWriters"
-import { Language } from "../Language"
+import { Language } from '@idlize/core'
 
 class PromiseOutArgConvertor extends BaseArgConvertor {
     callbackConvertor: CallbackConvertor
     callback: idl.IDLCallback
-    callbackReference: idl.IDLReferenceType
     isOut: true = true
     constructor(
         private readonly library: LibraryInterface,
         param: string,
         readonly promise: idl.IDLContainerType)
     {
-        super(promise, [RuntimeType.FUNCTION], false, true, param)
+        super(library.createContinuationCallbackReference(promise), [RuntimeType.FUNCTION], false, true, param)
 
-        this.callbackReference = library.createContinuationCallbackReference(promise)
-        const callbackEntry = library.resolveTypeReference(this.callbackReference)
+        const callbackEntry = library.resolveTypeReference(this.idlType as idl.IDLReferenceType)
         if (!callbackEntry)
             throw new Error("Internal error: no callback for Promise resolved")
         this.callback = callbackEntry as idl.IDLCallback
@@ -57,7 +55,7 @@ class PromiseOutArgConvertor extends BaseArgConvertor {
         return this.callbackConvertor.convertorDeserialize(bufferName, deserializerName, assigneer, writer)
     }
     nativeType(): idl.IDLType {
-        return this.callbackReference
+        return this.idlType
     }
     isPointerType(): boolean {
         return true

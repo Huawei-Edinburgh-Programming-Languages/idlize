@@ -13,14 +13,14 @@
  * limitations under the License.
  */
 
-import * as idl from '../../../idl'
-import { capitalize } from '../../../util'
+import * as idl from '@idlize/core/idl'
+import { capitalize } from '@idlize/core'
 import { maybeTransformManagedCallback } from '../../ArgConvertors'
 import { PrimitiveType } from '../../ArkPrimitiveType'
 import { PeerGeneratorConfig } from '../../PeerGeneratorConfig'
 import { PeerMethod } from '../../PeerMethod'
 import { ReferenceResolver } from '../../ReferenceResolver'
-import { convertNode, convertType, IdlNameConvertor, NodeConvertor, TypeConvertor } from '../nameConvertor'
+import { convertNode, convertType, IdlNameConvertor, NodeConvertor, TypeConvertor } from '@idlize/core'
 
 export interface ConvertResult {
     text: string,

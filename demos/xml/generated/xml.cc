@@ -39,22 +39,64 @@ void enqueueArkoalaCallback(const CallbackBuffer* event);
 
 OH_NativePointer getManagedCallbackCaller(CallbackKind kind);
 OH_NativePointer getManagedCallbackCallerSync(CallbackKind kind);
-void holdManagedCallbackResource(OH_Int32 resourceId);
-void releaseManagedCallbackResource(OH_Int32 resourceId);
 
-void deserializeAndCallCallback(KInt kind, KByte* args, KInt argsSize);
+struct Counter {
+    int count;
+    void* data;
+};
 
+static int bufferResourceId = 0;
+static std::unordered_map<int, Counter> refCounterMap;
+
+int allocate_buffer(int len, void** mem) {
+    char* data = new char[len];
+    (*mem) = data;
+    int id = ++bufferResourceId;
+    refCounterMap[id] = Counter { 1, (void*)data };
+    return id;
+}
+
+void releaseBuffer(int resourceId) {
+    if (refCounterMap.find(resourceId) != refCounterMap.end()) {
+        Counter& record = refCounterMap[resourceId];
+        --record.count;
+        if (record.count <= 0) {
+            delete[] (char*)record.data;
+        }
+    }
+}
+
+void holdBuffer(int resourceId) {
+    if (refCounterMap.find(resourceId) != refCounterMap.end()) {
+        Counter& record = refCounterMap[resourceId];
+        ++record.count;
+    }
+}
+
+void impl_AllocateNativeBuffer(KInt len, KByte* ret, KByte* init) {
+    void* mem;
+    int resourceId = allocate_buffer(len, &mem);
+    memcpy((KByte*)mem, init, len);
+    SerializerBase ser { ret };
+    ser.writeInt32(resourceId);
+    ser.writePointer((void*)&holdBuffer);
+    ser.writePointer((void*)&releaseBuffer);
+    ser.writePointer(mem);
+    ser.writeInt64(len);
+
+}
+KOALA_INTEROP_V3(AllocateNativeBuffer, KInt, KByte*, KByte*);
 template <>
 inline OH_RuntimeType runtimeType(const OH_Int32& value)
 {
-    return OH_RUNTIME_OBJECT;
+    return INTEROP_RUNTIME_OBJECT;
 }
 template <>
 inline void WriteToString(std::string* result, const Opt_Int32* value) {
     result->append("{.tag=");
     result->append(tagNameExact((OH_Tag)(value->tag)));
     result->append(", .value=");
-    if (value->tag != OH_TAG_UNDEFINED) {
+    if (value->tag != INTEROP_TAG_UNDEFINED) {
         WriteToString(result, value->value);
     } else {
         OH_Undefined undefined = { 0 };
@@ -65,12 +107,12 @@ inline void WriteToString(std::string* result, const Opt_Int32* value) {
 template <>
 inline OH_RuntimeType runtimeType(const Opt_Int32& value)
 {
-    return (value.tag != OH_TAG_UNDEFINED) ? (OH_RUNTIME_OBJECT) : (OH_RUNTIME_UNDEFINED);
+    return (value.tag != INTEROP_TAG_UNDEFINED) ? (INTEROP_RUNTIME_OBJECT) : (INTEROP_RUNTIME_UNDEFINED);
 }
 template <>
 inline OH_RuntimeType runtimeType(const Callback_EventType_ParseInfo_Boolean& value)
 {
-    return OH_RUNTIME_OBJECT;
+    return INTEROP_RUNTIME_OBJECT;
 }
 template <>
 inline void WriteToString(std::string* result, const Callback_EventType_ParseInfo_Boolean* value) {
@@ -85,7 +127,7 @@ inline void WriteToString(std::string* result, const Opt_Callback_EventType_Pars
     result->append("{.tag=");
     result->append(tagNameExact((OH_Tag)(value->tag)));
     result->append(", .value=");
-    if (value->tag != OH_TAG_UNDEFINED) {
+    if (value->tag != INTEROP_TAG_UNDEFINED) {
         WriteToString(result, &value->value);
     } else {
         OH_Undefined undefined = { 0 };
@@ -96,12 +138,12 @@ inline void WriteToString(std::string* result, const Opt_Callback_EventType_Pars
 template <>
 inline OH_RuntimeType runtimeType(const Opt_Callback_EventType_ParseInfo_Boolean& value)
 {
-    return (value.tag != OH_TAG_UNDEFINED) ? (OH_RUNTIME_OBJECT) : (OH_RUNTIME_UNDEFINED);
+    return (value.tag != INTEROP_TAG_UNDEFINED) ? (INTEROP_RUNTIME_OBJECT) : (INTEROP_RUNTIME_UNDEFINED);
 }
 template <>
 inline OH_RuntimeType runtimeType(const Callback_String_String_Boolean& value)
 {
-    return OH_RUNTIME_OBJECT;
+    return INTEROP_RUNTIME_OBJECT;
 }
 template <>
 inline void WriteToString(std::string* result, const Callback_String_String_Boolean* value) {
@@ -116,7 +158,7 @@ inline void WriteToString(std::string* result, const Opt_Callback_String_String_
     result->append("{.tag=");
     result->append(tagNameExact((OH_Tag)(value->tag)));
     result->append(", .value=");
-    if (value->tag != OH_TAG_UNDEFINED) {
+    if (value->tag != INTEROP_TAG_UNDEFINED) {
         WriteToString(result, &value->value);
     } else {
         OH_Undefined undefined = { 0 };
@@ -127,19 +169,19 @@ inline void WriteToString(std::string* result, const Opt_Callback_String_String_
 template <>
 inline OH_RuntimeType runtimeType(const Opt_Callback_String_String_Boolean& value)
 {
-    return (value.tag != OH_TAG_UNDEFINED) ? (OH_RUNTIME_OBJECT) : (OH_RUNTIME_UNDEFINED);
+    return (value.tag != INTEROP_TAG_UNDEFINED) ? (INTEROP_RUNTIME_OBJECT) : (INTEROP_RUNTIME_UNDEFINED);
 }
 template <>
 inline OH_RuntimeType runtimeType(const OH_Boolean& value)
 {
-    return OH_RUNTIME_BOOLEAN;
+    return INTEROP_RUNTIME_BOOLEAN;
 }
 template <>
 inline void WriteToString(std::string* result, const Opt_Boolean* value) {
     result->append("{.tag=");
     result->append(tagNameExact((OH_Tag)(value->tag)));
     result->append(", .value=");
-    if (value->tag != OH_TAG_UNDEFINED) {
+    if (value->tag != INTEROP_TAG_UNDEFINED) {
         WriteToString(result, value->value);
     } else {
         OH_Undefined undefined = { 0 };
@@ -150,12 +192,12 @@ inline void WriteToString(std::string* result, const Opt_Boolean* value) {
 template <>
 inline OH_RuntimeType runtimeType(const Opt_Boolean& value)
 {
-    return (value.tag != OH_TAG_UNDEFINED) ? (OH_RUNTIME_OBJECT) : (OH_RUNTIME_UNDEFINED);
+    return (value.tag != INTEROP_TAG_UNDEFINED) ? (INTEROP_RUNTIME_OBJECT) : (INTEROP_RUNTIME_UNDEFINED);
 }
 template <>
 inline OH_RuntimeType runtimeType(const OH_ParseOptions& value)
 {
-    return OH_RUNTIME_OBJECT;
+    return INTEROP_RUNTIME_OBJECT;
 }
 template <>
 inline void WriteToString(std::string* result, const OH_ParseOptions* value) {
@@ -186,7 +228,7 @@ inline void WriteToString(std::string* result, const Opt_ParseOptions* value) {
     result->append("{.tag=");
     result->append(tagNameExact((OH_Tag)(value->tag)));
     result->append(", .value=");
-    if (value->tag != OH_TAG_UNDEFINED) {
+    if (value->tag != INTEROP_TAG_UNDEFINED) {
         WriteToString(result, &value->value);
     } else {
         OH_Undefined undefined = { 0 };
@@ -197,12 +239,12 @@ inline void WriteToString(std::string* result, const Opt_ParseOptions* value) {
 template <>
 inline OH_RuntimeType runtimeType(const Opt_ParseOptions& value)
 {
-    return (value.tag != OH_TAG_UNDEFINED) ? (OH_RUNTIME_OBJECT) : (OH_RUNTIME_UNDEFINED);
+    return (value.tag != INTEROP_TAG_UNDEFINED) ? (INTEROP_RUNTIME_OBJECT) : (INTEROP_RUNTIME_UNDEFINED);
 }
 template <>
 inline OH_RuntimeType runtimeType(const Callback_Boolean_Void& value)
 {
-    return OH_RUNTIME_OBJECT;
+    return INTEROP_RUNTIME_OBJECT;
 }
 template <>
 inline void WriteToString(std::string* result, const Callback_Boolean_Void* value) {
@@ -217,7 +259,7 @@ inline void WriteToString(std::string* result, const Opt_Callback_Boolean_Void* 
     result->append("{.tag=");
     result->append(tagNameExact((OH_Tag)(value->tag)));
     result->append(", .value=");
-    if (value->tag != OH_TAG_UNDEFINED) {
+    if (value->tag != INTEROP_TAG_UNDEFINED) {
         WriteToString(result, &value->value);
     } else {
         OH_Undefined undefined = { 0 };
@@ -228,14 +270,14 @@ inline void WriteToString(std::string* result, const Opt_Callback_Boolean_Void* 
 template <>
 inline OH_RuntimeType runtimeType(const Opt_Callback_Boolean_Void& value)
 {
-    return (value.tag != OH_TAG_UNDEFINED) ? (OH_RUNTIME_OBJECT) : (OH_RUNTIME_UNDEFINED);
+    return (value.tag != INTEROP_TAG_UNDEFINED) ? (INTEROP_RUNTIME_OBJECT) : (INTEROP_RUNTIME_UNDEFINED);
 }
 template <>
 inline void WriteToString(std::string* result, const Opt_ParseInfo* value) {
     result->append("{.tag=");
     result->append(tagNameExact((OH_Tag)(value->tag)));
     result->append(", .value=");
-    if (value->tag != OH_TAG_UNDEFINED) {
+    if (value->tag != INTEROP_TAG_UNDEFINED) {
         WriteToString(result, &value->value);
     } else {
         OH_Undefined undefined = { 0 };
@@ -246,12 +288,12 @@ inline void WriteToString(std::string* result, const Opt_ParseInfo* value) {
 template <>
 inline OH_RuntimeType runtimeType(const Opt_ParseInfo& value)
 {
-    return (value.tag != OH_TAG_UNDEFINED) ? (OH_RUNTIME_OBJECT) : (OH_RUNTIME_UNDEFINED);
+    return (value.tag != INTEROP_TAG_UNDEFINED) ? (INTEROP_RUNTIME_OBJECT) : (INTEROP_RUNTIME_UNDEFINED);
 }
 template <>
 inline OH_RuntimeType runtimeType(const OH_xml_EventType& value)
 {
-    return OH_RUNTIME_NUMBER;
+    return INTEROP_RUNTIME_NUMBER;
 }
 template <>
 inline void WriteToString(std::string* result, const OH_xml_EventType value) {
@@ -264,7 +306,7 @@ inline void WriteToString(std::string* result, const Opt_xml_EventType* value) {
     result->append("{.tag=");
     result->append(tagNameExact((OH_Tag)(value->tag)));
     result->append(", .value=");
-    if (value->tag != OH_TAG_UNDEFINED) {
+    if (value->tag != INTEROP_TAG_UNDEFINED) {
         WriteToString(result, value->value);
     } else {
         OH_Undefined undefined = { 0 };
@@ -275,19 +317,19 @@ inline void WriteToString(std::string* result, const Opt_xml_EventType* value) {
 template <>
 inline OH_RuntimeType runtimeType(const Opt_xml_EventType& value)
 {
-    return (value.tag != OH_TAG_UNDEFINED) ? (OH_RUNTIME_OBJECT) : (OH_RUNTIME_UNDEFINED);
+    return (value.tag != INTEROP_TAG_UNDEFINED) ? (INTEROP_RUNTIME_OBJECT) : (INTEROP_RUNTIME_UNDEFINED);
 }
 template <>
 inline OH_RuntimeType runtimeType(const OH_Buffer& value)
 {
-    return OH_RUNTIME_OBJECT;
+    return INTEROP_RUNTIME_OBJECT;
 }
 template <>
 inline void WriteToString(std::string* result, const Opt_Buffer* value) {
     result->append("{.tag=");
     result->append(tagNameExact((OH_Tag)(value->tag)));
     result->append(", .value=");
-    if (value->tag != OH_TAG_UNDEFINED) {
+    if (value->tag != INTEROP_TAG_UNDEFINED) {
         WriteToString(result, value->value);
     } else {
         OH_Undefined undefined = { 0 };
@@ -298,19 +340,19 @@ inline void WriteToString(std::string* result, const Opt_Buffer* value) {
 template <>
 inline OH_RuntimeType runtimeType(const Opt_Buffer& value)
 {
-    return (value.tag != OH_TAG_UNDEFINED) ? (OH_RUNTIME_OBJECT) : (OH_RUNTIME_UNDEFINED);
+    return (value.tag != INTEROP_TAG_UNDEFINED) ? (INTEROP_RUNTIME_OBJECT) : (INTEROP_RUNTIME_UNDEFINED);
 }
 template <>
 inline OH_RuntimeType runtimeType(const OH_String& value)
 {
-    return OH_RUNTIME_STRING;
+    return INTEROP_RUNTIME_STRING;
 }
 template <>
 inline void WriteToString(std::string* result, const Opt_String* value) {
     result->append("{.tag=");
     result->append(tagNameExact((OH_Tag)(value->tag)));
     result->append(", .value=");
-    if (value->tag != OH_TAG_UNDEFINED) {
+    if (value->tag != INTEROP_TAG_UNDEFINED) {
         WriteToString(result, &value->value);
     } else {
         OH_Undefined undefined = { 0 };
@@ -321,7 +363,7 @@ inline void WriteToString(std::string* result, const Opt_String* value) {
 template <>
 inline OH_RuntimeType runtimeType(const Opt_String& value)
 {
-    return (value.tag != OH_TAG_UNDEFINED) ? (OH_RUNTIME_OBJECT) : (OH_RUNTIME_UNDEFINED);
+    return (value.tag != INTEROP_TAG_UNDEFINED) ? (INTEROP_RUNTIME_OBJECT) : (INTEROP_RUNTIME_UNDEFINED);
 }
 class Serializer : public SerializerBase {
     public:
@@ -331,46 +373,46 @@ class Serializer : public SerializerBase {
     {
         Serializer& valueSerializer = *this;
         const auto value_supportDoctype = value.supportDoctype;
-        OH_Int32 value_supportDoctype_type = OH_RUNTIME_UNDEFINED;
+        OH_Int32 value_supportDoctype_type = INTEROP_RUNTIME_UNDEFINED;
         value_supportDoctype_type = runtimeType(value_supportDoctype);
         valueSerializer.writeInt8(value_supportDoctype_type);
-        if ((OH_RUNTIME_UNDEFINED) != (value_supportDoctype_type)) {
+        if ((INTEROP_RUNTIME_UNDEFINED) != (value_supportDoctype_type)) {
             const auto value_supportDoctype_value = value_supportDoctype.value;
             valueSerializer.writeBoolean(value_supportDoctype_value);
         }
         const auto value_ignoreNameSpace = value.ignoreNameSpace;
-        OH_Int32 value_ignoreNameSpace_type = OH_RUNTIME_UNDEFINED;
+        OH_Int32 value_ignoreNameSpace_type = INTEROP_RUNTIME_UNDEFINED;
         value_ignoreNameSpace_type = runtimeType(value_ignoreNameSpace);
         valueSerializer.writeInt8(value_ignoreNameSpace_type);
-        if ((OH_RUNTIME_UNDEFINED) != (value_ignoreNameSpace_type)) {
+        if ((INTEROP_RUNTIME_UNDEFINED) != (value_ignoreNameSpace_type)) {
             const auto value_ignoreNameSpace_value = value_ignoreNameSpace.value;
             valueSerializer.writeBoolean(value_ignoreNameSpace_value);
         }
         const auto value_tagValueCallbackFunction = value.tagValueCallbackFunction;
-        OH_Int32 value_tagValueCallbackFunction_type = OH_RUNTIME_UNDEFINED;
+        OH_Int32 value_tagValueCallbackFunction_type = INTEROP_RUNTIME_UNDEFINED;
         value_tagValueCallbackFunction_type = runtimeType(value_tagValueCallbackFunction);
         valueSerializer.writeInt8(value_tagValueCallbackFunction_type);
-        if ((OH_RUNTIME_UNDEFINED) != (value_tagValueCallbackFunction_type)) {
+        if ((INTEROP_RUNTIME_UNDEFINED) != (value_tagValueCallbackFunction_type)) {
             const auto value_tagValueCallbackFunction_value = value_tagValueCallbackFunction.value;
             valueSerializer.writeCallbackResource(value_tagValueCallbackFunction_value.resource);
             valueSerializer.writePointer(reinterpret_cast<OH_NativePointer>(value_tagValueCallbackFunction_value.call));
             valueSerializer.writePointer(reinterpret_cast<OH_NativePointer>(value_tagValueCallbackFunction_value.callSync));
         }
         const auto value_attributeValueCallbackFunction = value.attributeValueCallbackFunction;
-        OH_Int32 value_attributeValueCallbackFunction_type = OH_RUNTIME_UNDEFINED;
+        OH_Int32 value_attributeValueCallbackFunction_type = INTEROP_RUNTIME_UNDEFINED;
         value_attributeValueCallbackFunction_type = runtimeType(value_attributeValueCallbackFunction);
         valueSerializer.writeInt8(value_attributeValueCallbackFunction_type);
-        if ((OH_RUNTIME_UNDEFINED) != (value_attributeValueCallbackFunction_type)) {
+        if ((INTEROP_RUNTIME_UNDEFINED) != (value_attributeValueCallbackFunction_type)) {
             const auto value_attributeValueCallbackFunction_value = value_attributeValueCallbackFunction.value;
             valueSerializer.writeCallbackResource(value_attributeValueCallbackFunction_value.resource);
             valueSerializer.writePointer(reinterpret_cast<OH_NativePointer>(value_attributeValueCallbackFunction_value.call));
             valueSerializer.writePointer(reinterpret_cast<OH_NativePointer>(value_attributeValueCallbackFunction_value.callSync));
         }
         const auto value_tokenValueCallbackFunction = value.tokenValueCallbackFunction;
-        OH_Int32 value_tokenValueCallbackFunction_type = OH_RUNTIME_UNDEFINED;
+        OH_Int32 value_tokenValueCallbackFunction_type = INTEROP_RUNTIME_UNDEFINED;
         value_tokenValueCallbackFunction_type = runtimeType(value_tokenValueCallbackFunction);
         valueSerializer.writeInt8(value_tokenValueCallbackFunction_type);
-        if ((OH_RUNTIME_UNDEFINED) != (value_tokenValueCallbackFunction_type)) {
+        if ((INTEROP_RUNTIME_UNDEFINED) != (value_tokenValueCallbackFunction_type)) {
             const auto value_tokenValueCallbackFunction_value = value_tokenValueCallbackFunction.value;
             valueSerializer.writeCallbackResource(value_tokenValueCallbackFunction_value.resource);
             valueSerializer.writePointer(reinterpret_cast<OH_NativePointer>(value_tokenValueCallbackFunction_value.call));
@@ -394,40 +436,40 @@ class Deserializer : public DeserializerBase {
         Deserializer& valueDeserializer = *this;
         const auto supportDoctype_buf_runtimeType = static_cast<OH_RuntimeType>(valueDeserializer.readInt8());
         Opt_Boolean supportDoctype_buf = {};
-        supportDoctype_buf.tag = supportDoctype_buf_runtimeType == OH_RUNTIME_UNDEFINED ? OH_TAG_UNDEFINED : OH_TAG_OBJECT;
-        if ((OH_RUNTIME_UNDEFINED) != (supportDoctype_buf_runtimeType))
+        supportDoctype_buf.tag = supportDoctype_buf_runtimeType == INTEROP_RUNTIME_UNDEFINED ? INTEROP_TAG_UNDEFINED : INTEROP_TAG_OBJECT;
+        if ((INTEROP_RUNTIME_UNDEFINED) != (supportDoctype_buf_runtimeType))
         {
             supportDoctype_buf.value = valueDeserializer.readBoolean();
         }
         value.supportDoctype = supportDoctype_buf;
         const auto ignoreNameSpace_buf_runtimeType = static_cast<OH_RuntimeType>(valueDeserializer.readInt8());
         Opt_Boolean ignoreNameSpace_buf = {};
-        ignoreNameSpace_buf.tag = ignoreNameSpace_buf_runtimeType == OH_RUNTIME_UNDEFINED ? OH_TAG_UNDEFINED : OH_TAG_OBJECT;
-        if ((OH_RUNTIME_UNDEFINED) != (ignoreNameSpace_buf_runtimeType))
+        ignoreNameSpace_buf.tag = ignoreNameSpace_buf_runtimeType == INTEROP_RUNTIME_UNDEFINED ? INTEROP_TAG_UNDEFINED : INTEROP_TAG_OBJECT;
+        if ((INTEROP_RUNTIME_UNDEFINED) != (ignoreNameSpace_buf_runtimeType))
         {
             ignoreNameSpace_buf.value = valueDeserializer.readBoolean();
         }
         value.ignoreNameSpace = ignoreNameSpace_buf;
         const auto tagValueCallbackFunction_buf_runtimeType = static_cast<OH_RuntimeType>(valueDeserializer.readInt8());
         Opt_Callback_String_String_Boolean tagValueCallbackFunction_buf = {};
-        tagValueCallbackFunction_buf.tag = tagValueCallbackFunction_buf_runtimeType == OH_RUNTIME_UNDEFINED ? OH_TAG_UNDEFINED : OH_TAG_OBJECT;
-        if ((OH_RUNTIME_UNDEFINED) != (tagValueCallbackFunction_buf_runtimeType))
+        tagValueCallbackFunction_buf.tag = tagValueCallbackFunction_buf_runtimeType == INTEROP_RUNTIME_UNDEFINED ? INTEROP_TAG_UNDEFINED : INTEROP_TAG_OBJECT;
+        if ((INTEROP_RUNTIME_UNDEFINED) != (tagValueCallbackFunction_buf_runtimeType))
         {
             tagValueCallbackFunction_buf.value = {valueDeserializer.readCallbackResource(), reinterpret_cast<void(*)(const OH_Int32 resourceId, const OH_String name, const OH_String value, const Callback_Boolean_Void continuation)>(valueDeserializer.readPointerOrDefault(reinterpret_cast<OH_NativePointer>(getManagedCallbackCaller(Kind_Callback_String_String_Boolean)))), reinterpret_cast<void(*)(OH_VMContext vmContext, const OH_Int32 resourceId, const OH_String name, const OH_String value, const Callback_Boolean_Void continuation)>(valueDeserializer.readPointerOrDefault(reinterpret_cast<OH_NativePointer>(getManagedCallbackCallerSync(Kind_Callback_String_String_Boolean))))};
         }
         value.tagValueCallbackFunction = tagValueCallbackFunction_buf;
         const auto attributeValueCallbackFunction_buf_runtimeType = static_cast<OH_RuntimeType>(valueDeserializer.readInt8());
         Opt_Callback_String_String_Boolean attributeValueCallbackFunction_buf = {};
-        attributeValueCallbackFunction_buf.tag = attributeValueCallbackFunction_buf_runtimeType == OH_RUNTIME_UNDEFINED ? OH_TAG_UNDEFINED : OH_TAG_OBJECT;
-        if ((OH_RUNTIME_UNDEFINED) != (attributeValueCallbackFunction_buf_runtimeType))
+        attributeValueCallbackFunction_buf.tag = attributeValueCallbackFunction_buf_runtimeType == INTEROP_RUNTIME_UNDEFINED ? INTEROP_TAG_UNDEFINED : INTEROP_TAG_OBJECT;
+        if ((INTEROP_RUNTIME_UNDEFINED) != (attributeValueCallbackFunction_buf_runtimeType))
         {
             attributeValueCallbackFunction_buf.value = {valueDeserializer.readCallbackResource(), reinterpret_cast<void(*)(const OH_Int32 resourceId, const OH_String name, const OH_String value, const Callback_Boolean_Void continuation)>(valueDeserializer.readPointerOrDefault(reinterpret_cast<OH_NativePointer>(getManagedCallbackCaller(Kind_Callback_String_String_Boolean)))), reinterpret_cast<void(*)(OH_VMContext vmContext, const OH_Int32 resourceId, const OH_String name, const OH_String value, const Callback_Boolean_Void continuation)>(valueDeserializer.readPointerOrDefault(reinterpret_cast<OH_NativePointer>(getManagedCallbackCallerSync(Kind_Callback_String_String_Boolean))))};
         }
         value.attributeValueCallbackFunction = attributeValueCallbackFunction_buf;
         const auto tokenValueCallbackFunction_buf_runtimeType = static_cast<OH_RuntimeType>(valueDeserializer.readInt8());
         Opt_Callback_EventType_ParseInfo_Boolean tokenValueCallbackFunction_buf = {};
-        tokenValueCallbackFunction_buf.tag = tokenValueCallbackFunction_buf_runtimeType == OH_RUNTIME_UNDEFINED ? OH_TAG_UNDEFINED : OH_TAG_OBJECT;
-        if ((OH_RUNTIME_UNDEFINED) != (tokenValueCallbackFunction_buf_runtimeType))
+        tokenValueCallbackFunction_buf.tag = tokenValueCallbackFunction_buf_runtimeType == INTEROP_RUNTIME_UNDEFINED ? INTEROP_TAG_UNDEFINED : INTEROP_TAG_OBJECT;
+        if ((INTEROP_RUNTIME_UNDEFINED) != (tokenValueCallbackFunction_buf_runtimeType))
         {
             tokenValueCallbackFunction_buf.value = {valueDeserializer.readCallbackResource(), reinterpret_cast<void(*)(const OH_Int32 resourceId, OH_xml_EventType eventType, const OH_ParseInfo value, const Callback_Boolean_Void continuation)>(valueDeserializer.readPointerOrDefault(reinterpret_cast<OH_NativePointer>(getManagedCallbackCaller(Kind_Callback_EventType_ParseInfo_Boolean)))), reinterpret_cast<void(*)(OH_VMContext vmContext, const OH_Int32 resourceId, OH_xml_EventType eventType, const OH_ParseInfo value, const Callback_Boolean_Void continuation)>(valueDeserializer.readPointerOrDefault(reinterpret_cast<OH_NativePointer>(getManagedCallbackCallerSync(Kind_Callback_EventType_ParseInfo_Boolean))))};
         }
@@ -530,8 +572,8 @@ OH_NativePointer impl_XmlSerializer_ctor(uint8_t* thisArray, int32_t thisLength)
         OH_Buffer buffer_value = static_cast<OH_Buffer>(thisDeserializer.readBuffer());;
         const auto encoding_value_buf_runtimeType = static_cast<OH_RuntimeType>(thisDeserializer.readInt8());
         Opt_String encoding_value_buf = {};
-        encoding_value_buf.tag = encoding_value_buf_runtimeType == OH_RUNTIME_UNDEFINED ? OH_TAG_UNDEFINED : OH_TAG_OBJECT;
-        if ((OH_RUNTIME_UNDEFINED) != (encoding_value_buf_runtimeType))
+        encoding_value_buf.tag = encoding_value_buf_runtimeType == INTEROP_RUNTIME_UNDEFINED ? INTEROP_TAG_UNDEFINED : INTEROP_TAG_OBJECT;
+        if ((INTEROP_RUNTIME_UNDEFINED) != (encoding_value_buf_runtimeType))
         {
             encoding_value_buf.value = static_cast<OH_String>(thisDeserializer.readString());
         }
@@ -660,8 +702,8 @@ OH_NativePointer impl_XmlPullParser_ctor(uint8_t* thisArray, int32_t thisLength)
         OH_Buffer buffer_value = static_cast<OH_Buffer>(thisDeserializer.readBuffer());;
         const auto encoding_value_buf_runtimeType = static_cast<OH_RuntimeType>(thisDeserializer.readInt8());
         Opt_String encoding_value_buf = {};
-        encoding_value_buf.tag = encoding_value_buf_runtimeType == OH_RUNTIME_UNDEFINED ? OH_TAG_UNDEFINED : OH_TAG_OBJECT;
-        if ((OH_RUNTIME_UNDEFINED) != (encoding_value_buf_runtimeType))
+        encoding_value_buf.tag = encoding_value_buf_runtimeType == INTEROP_RUNTIME_UNDEFINED ? INTEROP_TAG_UNDEFINED : INTEROP_TAG_OBJECT;
+        if ((INTEROP_RUNTIME_UNDEFINED) != (encoding_value_buf_runtimeType))
         {
             encoding_value_buf.value = static_cast<OH_String>(thisDeserializer.readString());
         }
@@ -797,7 +839,7 @@ void callManagedCallback_EventType_ParseInfo_Boolean(OH_Int32 resourceId, OH_xml
     Serializer argsSerializer = Serializer(__buffer.buffer, &(__buffer.resourceHolder));
     argsSerializer.writeInt32(Kind_Callback_EventType_ParseInfo_Boolean);
     argsSerializer.writeInt32(resourceId);
-    argsSerializer.writeInt32(eventType);
+    argsSerializer.writeInt32(static_cast<OH_xml_EventType>(eventType));
     argsSerializer.writeParseInfo(value);
     argsSerializer.writeCallbackResource(continuation.resource);
     argsSerializer.writePointer(reinterpret_cast<OH_NativePointer>(continuation.call));
@@ -810,7 +852,7 @@ void callManagedCallback_EventType_ParseInfo_BooleanSync(OH_VMContext vmContext,
     Serializer argsSerializer = Serializer(__buffer, nullptr);
     argsSerializer.writeInt32(Kind_Callback_EventType_ParseInfo_Boolean);
     argsSerializer.writeInt32(resourceId);
-    argsSerializer.writeInt32(eventType);
+    argsSerializer.writeInt32(static_cast<OH_xml_EventType>(eventType));
     argsSerializer.writeParseInfo(value);
     argsSerializer.writeCallbackResource(continuation.resource);
     argsSerializer.writePointer(reinterpret_cast<OH_NativePointer>(continuation.call));
@@ -863,6 +905,30 @@ OH_NativePointer getManagedCallbackCallerSync(CallbackKind kind)
     }
     return nullptr;
 }
+const OH_AnyAPI* impls[16] = { 0 };
+
+
+const OH_AnyAPI* GetAnyAPIImpl(int kind, int version) {
+    switch (kind) {
+        case OH_XML_API_KIND:
+            return reinterpret_cast<const OH_AnyAPI*>(GetXMLAPIImpl(version));
+        default:
+            return nullptr;
+    }
+}
+
+extern "C" const OH_AnyAPI* GetAnyAPI(int kind, int version) {
+    if (kind < 0 || kind > 15) return nullptr;
+    if (!impls[kind]) {
+        impls[kind] = GetAnyAPIImpl(kind, version);
+    }
+    return impls[kind];
+}
+
+// ArkUINativeModule::Callbacks
+
+#undef KOALA_INTEROP_MODULE
+#define KOALA_INTEROP_MODULE ArkUINativeModule
 enum CallbackEventKind {
     Event_CallCallback = 0,
     Event_HoldManagedResource = 1,
@@ -898,10 +964,10 @@ KInt impl_CheckArkoalaCallbackEvent(KByte* result, KInt size) {
     const CallbackEventKind frontEventKind = callbackEventsQueue.front();
     Serializer serializer(result);
     serializer.writeInt32(frontEventKind);
-    switch (frontEventKind) 
+    switch (frontEventKind)
     {
         case Event_CallCallback:
-            serializer.append(callbackCallSubqueue.front().buffer, sizeof(CallbackBuffer::buffer));
+            memcpy(result + serializer.length(), callbackCallSubqueue.front().buffer, sizeof(CallbackBuffer::buffer));
             break;
         case Event_HoldManagedResource:
         case Event_ReleaseManagedResource:
@@ -939,71 +1005,3 @@ void releaseManagedCallbackResource(OH_Int32 resourceId) {
     callbackEventsQueue.push_back(Event_ReleaseManagedResource);
     callbackResourceSubqueue.push_back(resourceId);
 }
-
-
-const OH_AnyAPI* impls[16] = { 0 };
-
-
-const OH_AnyAPI* GetAnyAPIImpl(int kind, int version) {
-    switch (kind) {
-        case OH_XML_API_KIND:
-            return reinterpret_cast<const OH_AnyAPI*>(GetXMLAPIImpl(version));
-        default:
-            return nullptr;
-    }
-}
-
-extern "C" const OH_AnyAPI* GetAnyAPI(int kind, int version) {
-    if (kind < 0 || kind > 15) return nullptr;
-    if (!impls[kind]) {
-        impls[kind] = GetAnyAPIImpl(kind, version);
-    }
-    return impls[kind];
-}
-
-struct Counter {
-    int count;
-    void* data;
-};
-
-static int bufferResourceId = 0;
-static std::unordered_map<int, Counter> refCounterMap;
-
-int allocate_buffer(int len, void** mem) {
-    char* data = new char[len];
-    (*mem) = data;
-    int id = ++bufferResourceId;
-    refCounterMap[id] = Counter { 1, (void*)data };
-    return id;
-}
-
-void releaseBuffer(int resourceId) {
-    if (refCounterMap.find(resourceId) != refCounterMap.end()) {
-        Counter& record = refCounterMap[resourceId];
-        --record.count;
-        if (record.count <= 0) {
-            delete[] (char*)record.data;
-        }
-    }
-}
-
-void holdBuffer(int resourceId) {
-    if (refCounterMap.find(resourceId) != refCounterMap.end()) {
-        Counter& record = refCounterMap[resourceId];
-        ++record.count;
-    }
-}
-
-void impl_AllocateNativeBuffer(KInt len, KByte* ret, KByte* init) {
-    void* mem;
-    int resourceId = allocate_buffer(len, &mem);
-    memcpy((KByte*)mem, init, len);
-    SerializerBase ser { ret };
-    ser.writeInt32(resourceId);
-    ser.writePointer((void*)&holdBuffer);
-    ser.writePointer((void*)&releaseBuffer);
-    ser.writePointer(mem);
-    ser.writeInt64(len);
-
-}
-KOALA_INTEROP_V3(AllocateNativeBuffer, KInt, KByte*, KByte*);

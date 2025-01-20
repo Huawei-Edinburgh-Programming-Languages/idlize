@@ -13,8 +13,7 @@
  * limitations under the License.
  */
 
-import { IndentedPrinter } from "../../../IndentedPrinter"
-import { Language } from "../../../Language"
+import { IndentedPrinter, Language, isStringEnum  } from '@idlize/core'
 import { TSTypeNodeNameConvertor } from "../../TypeNodeNameConvertor"
 import {
     AssignStatement,
@@ -30,18 +29,16 @@ import {
     Method,
     MethodModifier,
     MethodSignature,
-    NamedMethodSignature,
     ObjectArgs,
     ReturnStatement,
     StringExpression
 } from "../LanguageWriter"
-import * as idl from '../../../idl'
+import * as idl from '@idlize/core/idl'
 import * as ts from 'typescript'
 import { ArgConvertor, EnumConvertor, RuntimeType } from "../../ArgConvertors"
 import { ReferenceResolver } from "../../ReferenceResolver"
-import { convertType, IdlNameConvertor, TypeConvertor } from "../nameConvertor"
+import { IdlNameConvertor } from "@idlize/core"
 import { TsIDLNodeToStringConverter } from "../convertors/TSConvertors"
-import { isStringEnum } from "../../idl/common"
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -230,7 +227,7 @@ export class TSLanguageWriter extends LanguageWriter {
         this.printer.print('}')
     }
     private generateFunctionDeclaration(name: string, signature: MethodSignature): string {
-        const args = signature.args.map((it, index) => `${signature.argName(index)}: ${this.getNodeName(it)}`)
+        const args = signature.args.map((it, index) => `${signature.argName(index)}${idl.isOptionalType(it) ? '?' : ''}: ${this.getNodeName(it)}`)
         return `export function ${name}(${args.join(", ")})`
     }
     writeEnum(name: string, members: { name: string, alias?: string | undefined, stringId: string | undefined, numberId: number }[]): void {
@@ -418,6 +415,20 @@ export class TSLanguageWriter extends LanguageWriter {
 
     override escapeKeyword(keyword: string): string {
         return TSKeywords.has(keyword) ? keyword + "_" : keyword
+    }
+
+    makeDiscriminatorConvertor(convertor: EnumConvertor, value: string, index: number): LanguageExpression | undefined {
+        const ordinal = convertor.isStringEnum
+            ? this.ordinalFromEnum(
+                this.makeCast(this.makeString(this.getObjectAccessor(convertor, value)), convertor.idlType),
+                idl.createReferenceType(convertor.enumEntry.name)
+            )
+            : this.makeUnionVariantCast(this.getObjectAccessor(convertor, value), this.getNodeName(idl.IDLI32Type), convertor, index)
+        const {low, high} = convertor.extremumOfOrdinals()
+        return this.discriminatorFromExpressions(value, convertor.runtimeTypes[0], [
+            this.makeNaryOp(">=", [ordinal, this.makeString(low!.toString())]),
+            this.makeNaryOp("<=",  [ordinal, this.makeString(high!.toString())])
+        ])
     }
 }
 

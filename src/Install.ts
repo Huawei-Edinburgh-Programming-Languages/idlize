@@ -15,7 +15,7 @@
 
 import * as fs from 'fs'
 import * as path from 'path'
-import { Language } from './Language'
+import { Language } from '@idlize/core'
 import { TargetFile } from './peer-generation/printers/TargetFile'
 
 class Install {
@@ -70,6 +70,9 @@ export class ArkoalaInstall extends Install {
         return path.join(this.langDir(), targetFile.path ?? "", targetFile.name)
     }
     builderClass(targetFile: TargetFile): string {
+        return path.join(this.langDir(), targetFile.path ?? "", targetFile.name)
+    }
+    globalFile(targetFile: TargetFile): string {
         return path.join(this.langDir(), targetFile.path ?? "", targetFile.name)
     }
     materialized(targetFile: TargetFile): string {

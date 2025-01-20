@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { IndentedPrinter } from "../../IndentedPrinter";
+import { IndentedPrinter } from '@idlize/core'
 import { PrimitiveType } from "../ArkPrimitiveType"
 import {
     accessorStructList,
@@ -27,14 +27,14 @@ import {
 } from "../FileGenerators";
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { createDestroyPeerMethod, MaterializedClass, MaterializedMethod } from "../Materialized";
-import { groupBy } from "../../util";
+import { groupBy, Language } from '@idlize/core'
 import { CppLanguageWriter, createLanguageWriter, createTypeNameConvertor, LanguageStatement, LanguageWriter, printMethodDeclaration } from "../LanguageWriters";
 import { LibaceInstall } from "../../Install";
-import { IDLAnyType, IDLBooleanType, IDLFunctionType, IDLPointerType, IDLStringType, IDLThisType, IDLType, isNamedNode, isOptionalType, isReferenceType } from "../../idl";
+import { IDLAnyType, IDLBooleanType, IDLFunctionType, IDLPointerType, IDLStringType, IDLThisType, IDLType, isOptionalType, isReferenceType } from '@idlize/core/idl'
 import { createConstructPeerMethod, PeerClass } from "../PeerClass";
 import { PeerMethod } from "../PeerMethod";
-import { Language } from "../../Language";
-import { createEmptyReferenceResolver, getReferenceResolver } from "../ReferenceResolver";
+import { createEmptyReferenceResolver } from "@idlize/core";
+import { getReferenceResolver } from "../ReferenceResolver";
 import { PeerLibrary } from "../PeerLibrary";
 import { InteropReturnTypeConvertor } from "../LanguageWriters/convertors/InteropConvertor";
 
@@ -303,7 +303,7 @@ class AccessorVisitor extends ModifierVisitor {
         this.printMaterializedClassProlog(clazz)
         // Materialized class methods share the same namespace
         // so take the first one.
-        const namespaceName = clazz.methods[0].implNamespaceName
+        const namespaceName = clazz.ctor.implNamespaceName
         this.pushNamespace(namespaceName, false)
         const mDestroyPeer = createDestroyPeerMethod(clazz);
         [mDestroyPeer, clazz.ctor, clazz.finalizer].concat(clazz.methods).forEach(method => {

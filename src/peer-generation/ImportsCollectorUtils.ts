@@ -1,11 +1,11 @@
-import * as idl from "../idl"
+import * as idl from "@idlize/core/idl"
 import * as path from "path"
 import { createFeatureNameConvertor } from "./idl/IdlNameConvertor"
 import { isBuilderClass, isMaterialized, isPredefined } from "./idl/IdlPeerGeneratorVisitor"
 import { ImportFeature, ImportsCollector } from "./ImportsCollector"
-import { convertDeclaration } from "./LanguageWriters/nameConvertor"
+import { convertDeclaration } from "@idlize/core"
 import { PeerLibrary } from "./PeerLibrary"
-import { renameClassToBuilderClass, renameClassToMaterialized, renameDtsToInterfaces } from "../util"
+import { renameClassToBuilderClass, renameClassToMaterialized, renameDtsToInterfaces } from "@idlize/core"
 import { createDependenciesCollector } from "./idl/IdlDependenciesCollector"
 import { getInternalClassName } from "./Materialized"
 import { maybeTransformManagedCallback } from "./ArgConvertors"
@@ -34,7 +34,7 @@ export function convertDeclToFeature(library: PeerLibrary, node: idl.IDLNode): I
     if (idl.isInterface(node) && !isComponentDeclaration(library, node)) {
         if (isBuilderClass(node)) {
             fileName = renameClassToBuilderClass(node.name, library.language)
-        } else if (isMaterialized(node)) {
+        } else if (isMaterialized(node, library)) {
             fileName = renameClassToMaterialized(node.name, library.language)
         }
     }
@@ -60,7 +60,7 @@ export function collectDeclItself(
         const feature = convertDeclToFeature(library, node)
         emitter.addFeature(feature.feature, feature.module)
         if (options?.includeMaterializedInternals) {
-            if (idl.isInterface(node) && isMaterialized(node) && !isBuilderClass(node)) {
+            if (idl.isInterface(node) && isMaterialized(node, library) && !isBuilderClass(node)) {
                 emitter.addFeature(getInternalClassName(node.name), feature.module)
             }
         }

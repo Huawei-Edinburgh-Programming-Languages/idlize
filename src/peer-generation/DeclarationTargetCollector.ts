@@ -1,12 +1,12 @@
-import * as idl from "../idl"
-import { Language } from "../Language";
+import * as idl from "@idlize/core/idl"
+import { Language } from "@idlize/core"
 import { LibraryInterface } from "../LibraryInterface";
 import { PrimitiveType } from "./ArkPrimitiveType";
 import { isComponentDeclaration } from "./ComponentsCollector";
 import { DependencySorter } from "./idl/DependencySorter";
 import { isMaterialized } from "./idl/IdlPeerGeneratorVisitor";
 import { createTypeNameConvertor } from "./LanguageWriters";
-import { IdlNameConvertor } from "./LanguageWriters/nameConvertor";
+import { IdlNameConvertor } from "@idlize/core";
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
 import { cleanPrefix } from "./PeerLibrary";
 import { collectUniqueCallbacks } from "./printers/CallbacksPrinter";
@@ -29,7 +29,7 @@ export function collectDeclarationTargets(library: LibraryInterface): idl.IDLNod
                 continue
             if (idl.isInterface(entry)) {
                 if (isComponentDeclaration(library, entry) ||
-                    isMaterialized(entry)) {
+                    isMaterialized(entry, library)) {
                     for (const property of entry.properties) {
                         if (PeerGeneratorConfig.ignorePeerMethod.includes(property.name))
                             continue
@@ -50,6 +50,9 @@ export function collectDeclarationTargets(library: LibraryInterface): idl.IDLNod
                             orderer.addDep(library.toDeclaration(parameter.type!))
                     }
                 }
+            }
+            else if (idl.isEnum(entry)) {
+                orderer.addDep(library.toDeclaration(entry))
             }
         }
     }
