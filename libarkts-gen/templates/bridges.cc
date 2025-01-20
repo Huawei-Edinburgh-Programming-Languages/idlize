@@ -15,4 +15,6 @@
 
 #include <common.h>
 
+std::size_t ignoreReturnSequenceLen;
+
 %GENERATED_PART%

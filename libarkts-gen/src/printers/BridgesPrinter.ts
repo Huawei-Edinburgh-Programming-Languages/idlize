@@ -100,17 +100,26 @@ export class BridgesPrinter {
         this.printer.print(`${this.config.interopMacroPrefix(true)}${parameters.length}(${args})`)
     }
 
-    private printBody(constructorName: string, parameters: IDLParameter[]): void {
+    private printBody(constructorName: string, returnType: IDLType, parameters: IDLParameter[]): void {
         this.printer.print(`return GetImpl()->${constructorName}(`)
-        this.printer.withIndent(() =>
+        this.printer.withIndent(() => {
+            const isSequence = IDLContainerUtils.isSequence(returnType)
             parameters.forEach((it, index, array) => {
-                const comma = index !== array.length - 1
+                const comma = this.shouldPrintComma(index, array, isSequence)
                     ? `,`
                     : ``
                 this.printer.print(`${this.casted(it)}${comma}`)
             })
-        )
+            if (isSequence) {
+                this.printer.print(`&ignoreReturnSequenceLen`)
+            }
+        })
         this.printer.print(`);`)
+    }
+
+    private shouldPrintComma<T>(index: number, parameters: T[], extraParameter: boolean): boolean {
+        if (extraParameter) return true
+        return index !== parameters.length - 1;
     }
 
     private casted(node: IDLParameter): string {
@@ -170,7 +179,7 @@ export class BridgesPrinter {
         )
         this.printer.print(`) {`)
         this.printer.withIndent(() =>
-            this.printBody(name, parameters)
+            this.printBody(name, returnType, parameters)
         )
         this.printer.print(`}`)
 
@@ -180,10 +189,25 @@ export class BridgesPrinter {
 
     private transform(node: IDLMethod, parent: IDLInterface): IDLMethod {
         node = this.withInsertedReceiver(node, parent)
-        const isSequenceReturnType = IDLContainerUtils.isSequence(node.returnType)
-        const returnType = isSequenceReturnType
-            ? IDLPointerType
-            : node.returnType
+        node = this.withSplitSequenceParameter(node)
+        return node
+    }
+
+    private withInsertedReceiver(node: IDLMethod, parent: IDLInterface): IDLMethod {
+        const copy = createMethod(
+            node.name,
+            node.parameters,
+            node.returnType
+        )
+        copy.parameters.splice(
+            1,
+            0,
+            createParameter(`receiver`, createReferenceType(parent.name))
+        )
+        return copy
+    }
+
+    private withSplitSequenceParameter(node: IDLMethod): IDLMethod {
         const parameters = node.parameters
             .flatMap(it =>
                 IDLContainerUtils.isSequence(it)
@@ -199,25 +223,10 @@ export class BridgesPrinter {
                     ]
                     : it
             )
-            .concat(isSequenceReturnType ? [createParameter(`returnTypeLength`, IDLU32Type)] : [])
         return createMethod(
             node.name,
             parameters,
-            returnType
-        )
-    }
-
-    private withInsertedReceiver(node: IDLMethod, parent: IDLInterface): IDLMethod {
-        const copy = createMethod(
-            node.name,
-            node.parameters,
             node.returnType
         )
-        copy.parameters.splice(
-            1,
-            0,
-            createParameter(`receiver`, createReferenceType(parent.name))
-        )
-        return copy
     }
 }
