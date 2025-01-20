@@ -25,12 +25,14 @@ const options: {
     transform?: boolean,
     interfaces?: string
     methods?: string
+    files?: string
 } = program
     .option('--output-dir <path>', 'Path to output dir')
     .option('--input-file <path>', 'Path to file to generate from')
     .option('--transform', 'Invokes Es2PandaTransformer on input .idl')
     .option('--interfaces <string>', 'Ignore all other nodes, comma separated, no space')
     .option('--methods <string>', 'Ignore all other nodes, comma separated, no space')
+    .option('--files <string>', 'Types of files to be emitted [bridges|bindings|enums], comma separated, no space')
     .parse()
     .opts()
 
@@ -49,6 +51,7 @@ function main() {
             options.interfaces?.split(`,`),
             options.methods?.split(`,`),
         ),
+        options.files?.split(`,`)
     ).print()
 }
 

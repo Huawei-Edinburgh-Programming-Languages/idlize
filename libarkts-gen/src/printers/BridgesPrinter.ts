@@ -14,11 +14,16 @@
  */
 
 import {
+    createMethod,
+    createParameter,
+    createReferenceType,
     IDLContainerType,
     IDLContainerUtils,
     IDLKind,
     IDLMethod,
+    IDLPointerType,
     IDLReferenceType,
+    IDLU32Type,
     IndentedPrinter,
     isTypedef,
     isVoidType,
@@ -66,7 +71,7 @@ export class BridgesPrinter {
         if (!this.config.shouldEmitInterface(node.name)) return
         node.methods
             .filter(it => !this.config.paramArray(`handwrittenMethods`).includes(it.name))
-            .forEach(it => this.printMethod(node.name, it))
+            .forEach(it => this.printMethod(it, node))
     }
 
     private printParameters(parameters: IDLParameter[]): void {
@@ -147,9 +152,15 @@ export class BridgesPrinter {
         return convertType(this.convertor, node)
     }
 
-    private printMethod(astNodeName: string, node: IDLMethod): void {
+    private printMethod(node: IDLMethod, parent: IDLInterface): void {
         if (!this.config.shouldEmitMethod(node.name)) return
-        this.printFunction(`${this.config.methodFunction(astNodeName, node.name)}`, node.parameters, node.returnType)
+
+        node = this.transform(node, parent)
+        this.printFunction(
+            `${this.config.methodFunction(parent.name, node.name)}`,
+            node.parameters,
+            node.returnType
+        )
     }
 
     private printFunction(name: string, parameters: IDLParameter[], returnType: IDLType): void {
@@ -165,5 +176,48 @@ export class BridgesPrinter {
 
         this.printInteropMacro(name, returnType, parameters)
         this.printer.print(``)
+    }
+
+    private transform(node: IDLMethod, parent: IDLInterface): IDLMethod {
+        node = this.withInsertedReceiver(node, parent)
+        const isSequenceReturnType = IDLContainerUtils.isSequence(node.returnType)
+        const returnType = isSequenceReturnType
+            ? IDLPointerType
+            : node.returnType
+        const parameters = node.parameters
+            .flatMap(it =>
+                IDLContainerUtils.isSequence(it)
+                    ? [
+                        createParameter(
+                            `${it.name}ArrayPointer`,
+                            IDLPointerType
+                        ),
+                        createParameter(
+                            `${it.name}ArrayLength`,
+                            IDLU32Type
+                        )
+                    ]
+                    : it
+            )
+            .concat(isSequenceReturnType ? [createParameter(`returnTypeLength`, IDLU32Type)] : [])
+        return createMethod(
+            node.name,
+            parameters,
+            returnType
+        )
+    }
+
+    private withInsertedReceiver(node: IDLMethod, parent: IDLInterface): IDLMethod {
+        const copy = createMethod(
+            node.name,
+            node.parameters,
+            node.returnType
+        )
+        copy.parameters.splice(
+            1,
+            0,
+            createParameter(`receiver`, createReferenceType(parent.name))
+        )
+        return copy
     }
 }
