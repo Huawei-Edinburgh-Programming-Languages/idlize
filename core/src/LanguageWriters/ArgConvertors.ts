@@ -364,7 +364,7 @@ export class AggregateConvertor extends BaseArgConvertor { //
     }
 }
 
-export class InterfaceConvertor extends BaseArgConvertor { //
+export class InterfaceConvertorCore extends BaseArgConvertor {
     constructor(private library: LibraryInterface, name: string /* change to IDLReferenceType */, param: string, public declaration: idl.IDLInterface) {
         super(idl.createReferenceType(name), [RuntimeType.OBJECT], false, true, param)
     }
@@ -391,21 +391,6 @@ export class InterfaceConvertor extends BaseArgConvertor { //
         return this.declaration?.properties.map(it => it.name) ?? []
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        // First, tricky special cases
-        if (this.declaration.name.endsWith("GestureInterface")) {
-            const gestureType = this.declaration.name.slice(0, -"GestureInterface".length)
-            const castExpr = writer.makeCast(writer.makeString(value), idl.createReferenceType("GestureComponent<Object>"), { unsafe: true })
-            return writer.makeNaryOp("===", [
-                writer.makeString(`${castExpr.asString()}.type`),
-                writer.makeString(`GestureName.${gestureType}`)])
-        }
-        if (this.declaration.name === "CancelButtonSymbolOptions") {
-            if (writer.language === Language.ARKTS)
-                //TODO: Need to check this in TypeChecker
-                return this.discriminatorFromFields(value, writer, this.declaration.properties, it => it.name, it => it.isOptional, duplicates)
-            else return writer.makeHasOwnProperty(value,
-                "CancelButtonSymbolOptions", "icon", "SymbolGlyphModifier")
-        }
         // Try to figure out interface by examining field sets
         const uniqueFields = this.declaration?.properties.filter(it => !duplicates.has(it.name))
         return this.discriminatorFromFields(value, writer, uniqueFields, it => it.name, it => it.isOptional, duplicates)

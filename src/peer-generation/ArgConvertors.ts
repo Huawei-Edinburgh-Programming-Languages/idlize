@@ -22,7 +22,30 @@ import { BlockStatement, LanguageExpression, LanguageStatement, LanguageWriter, 
 import { IDLNodeToStringConvertor } from "./LanguageWriters/convertors/InteropConvertor"
 import { createEmptyReferenceResolver } from "@idlize/core"
 import { createTypeNameConvertor } from "./LanguageWriters";
-import { InterfaceConvertor } from "@idlize/core";
+import { InterfaceConvertorCore } from "@idlize/core";
+
+export class InterfaceConvertor extends InterfaceConvertorCore {
+    override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
+        // First, tricky special cases
+        if (this.declaration.name.endsWith("GestureInterface")) {
+            const gestureType = this.declaration.name.slice(0, -"GestureInterface".length)
+            const castExpr = writer.makeCast(writer.makeString(value), idl.createReferenceType("GestureComponent<Object>"), { unsafe: true })
+            return writer.makeNaryOp("===", [
+                writer.makeString(`${castExpr.asString()}.type`),
+                writer.makeString(`GestureName.${gestureType}`)])
+        }
+        if (this.declaration.name === "CancelButtonSymbolOptions") {
+            if (writer.language === Language.ARKTS) {
+                //TODO: Need to check this in TypeChecker
+                return this.discriminatorFromFields(value, writer, this.declaration.properties, it => it.name, it => it.isOptional, duplicates)
+            } else {
+                return writer.makeHasOwnProperty(value,
+                    "CancelButtonSymbolOptions", "icon", "SymbolGlyphModifier")
+            }
+        }
+        return super.unionDiscriminator(value, index, writer, duplicates)
+    }
+}
 
 export class ProxyConvertor extends BaseArgConvertor {
     constructor(public convertor: ArgConvertor, suggestedName?: string) {

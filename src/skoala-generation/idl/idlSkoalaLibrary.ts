@@ -33,8 +33,8 @@ import { ArkPrimitiveType, ArkPrimitiveTypesInstance } from "../../peer-generati
 import { WrapperClass, WrapperField, WrapperMethod } from "../WrapperClass";
 import { Skoala } from "../utils";
 import { Field, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, NamedMethodSignature, NumberConvertor } from "@idlize/core";
-import { ClassConvertor, TypeAliasConvertor } from "../../peer-generation/ArgConvertors";
-import { StringConvertor, InterfaceConvertor, UnionConvertor } from "@idlize/core";
+import { ClassConvertor, TypeAliasConvertor, InterfaceConvertor } from "../../peer-generation/ArgConvertors";
+import { StringConvertor, UnionConvertor } from "@idlize/core";
 import { ArgConvertor, BooleanConvertor, BaseArgConvertor, EnumConvertor, ExpressionAssigner, RuntimeType, UndefinedConvertor } from "@idlize/core";
 import { convertDeclaration, convertType, DeclarationConvertor, IdlNameConvertor, TypeConvertor } from "@idlize/core";
 import { LibraryFileInterface, LibraryInterface } from "@idlize/core";
