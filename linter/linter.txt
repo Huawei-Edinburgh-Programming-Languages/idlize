@@ -1,0 +1,98 @@
+common.d.ts:1298:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function getContext(component?: Object): Context;
+common.d.ts:1344:23 - [IMPORT_TYPE] Import type: import('../api/application/Context').default
+common.d.ts:1379:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function postCardAction(component: Object, action: Object): void;
+common.d.ts:1789:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function $r(value: string, ...params: any[]): Resource;
+common.d.ts:1789:46 - [ANY_KEYWORD] Keyword "any" is disallowed: any[]
+common.d.ts:1829:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function $rawfile(value: string): Resource;
+common.d.ts:3222:9 - [TYPE_LITERAL] Type literal
+common.d.ts:3251:10 - [TYPE_LITERAL] Type literal
+common.d.ts:3280:11 - [TYPE_LITERAL] Type literal
+common.d.ts:3309:8 - [TYPE_LITERAL] Type literal
+common.d.ts:3336:11 - [TYPE_LITERAL] Type literal
+common.d.ts:3365:11 - [TYPE_LITERAL] Type literal
+common.d.ts:4055:33 - [TYPE_LITERAL] Type literal
+common.d.ts:4063:14 - [TYPE_LITERAL] Type literal
+common.d.ts:4460:20 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: Type
+common.d.ts:4460:34 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: Effect
+common.d.ts:5024:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function animateTo(value: AnimateParam, event: () => void): void;
+common.d.ts:5036:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function animateToImmediately(value: AnimateParam, event: () => void): void;
+common.d.ts:5076:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function vp2px(value: number): number;
+common.d.ts:5116:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function px2vp(value: number): number;
+common.d.ts:5156:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function fp2px(value: number): number;
+common.d.ts:5196:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function px2fp(value: number): number;
+common.d.ts:5236:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function lpx2px(value: number): number;
+common.d.ts:5276:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function px2lpx(value: number): number;
+common.d.ts:5297:0 - [NAMESPACE] Namespace detected: focusControl
+common.d.ts:5343:28 - [IMPORT_TYPE] Import type: import('../api/@ohos.multimodalInput.pointer').default.PointerStyle
+common.d.ts:5360:0 - [NAMESPACE] Namespace detected: cursorControl
+common.d.ts:6451:13 - [TUPLE_TYPE] Tuple type: [number, number]
+common.d.ts:9314:24 - [IMPORT_TYPE] Import type: import('../api/@ohos.multimedia.image').default.PixelMap
+common.d.ts:9398:27 - [IMPORT_TYPE] Import type: import('../api/@ohos.data.unifiedDataChannel').default.UnifiedData
+common.d.ts:9415:23 - [IMPORT_TYPE] Import type: import('../api/@ohos.data.unifiedDataChannel').default.Summary
+common.d.ts:9432:31 - [IMPORT_TYPE] Import type: import('../api/@ohos.data.uniformTypeDescriptor').default.UniformDataType
+common.d.ts:10600:29 - [IMPORT_TYPE] Import type: import('../api/@ohos.multimodalInput.intentionCode').IntentionCode
+common.d.ts:11516:12 - [TUPLE_TYPE] Tuple type: [(SheetSize | Length), (SheetSize | Length)?, (SheetSize | Length)?]
+common.d.ts:11911:11 - [ANY_KEYWORD] Keyword "any" is disallowed: normal?: any;
+common.d.ts:11947:12 - [ANY_KEYWORD] Keyword "any" is disallowed: pressed?: any;
+common.d.ts:11983:13 - [ANY_KEYWORD] Keyword "any" is disallowed: disabled?: any;
+common.d.ts:12019:12 - [ANY_KEYWORD] Keyword "any" is disallowed: focused?: any;
+common.d.ts:12055:12 - [ANY_KEYWORD] Keyword "any" is disallowed: clicked?: any;
+common.d.ts:12329:18 - [TYPE_LITERAL] Type literal
+common.d.ts:12407:20 - [TYPE_LITERAL] Type literal
+common.d.ts:12579:19 - [TYPE_LITERAL] Type literal
+common.d.ts:13171:19 - [TYPE_LITERAL] Type literal
+common.d.ts:13491:33 - [TUPLE_TYPE] Tuple type: [from: T, to: T]
+common.d.ts:14970:29 - [IMPORT_TYPE] Import type: import('../api/arkui/ImageModifier').ImageModifier
+common.d.ts:14981:35 - [IMPORT_TYPE] Import type: import('../api/arkui/SymbolGlyphModifier').SymbolGlyphModifier
+common.d.ts:15171:27 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.shape').CircleShape
+common.d.ts:15183:28 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.shape').EllipseShape
+common.d.ts:15195:25 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.shape').PathShape
+common.d.ts:15207:25 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.shape').RectShape
+common.d.ts:15602:26 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback for member CommonMethod.onChildTouchTest has non void return type: (value: Array) => TouchResult
+common.d.ts:15792:47 - [TYPE_LITERAL] Type literal
+common.d.ts:16805:21 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<KeyEvent, boolean> has non void return type
+common.d.ts:18824:21 - [TYPE_LITERAL] Type literal
+common.d.ts:18825:18 - [TYPE_LITERAL] Type literal
+common.d.ts:18826:18 - [TYPE_LITERAL] Type literal
+common.d.ts:18827:18 - [TYPE_LITERAL] Type literal
+common.d.ts:18828:18 - [TYPE_LITERAL] Type literal
+common.d.ts:18980:21 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback for member CommonMethod.onDragStart has non void return type: (event: DragEvent, extraParams: string) => UnionType
+common.d.ts:19356:24 - [TYPE_LITERAL] Type literal
+common.d.ts:19447:23 - [TYPE_LITERAL] Type literal
+common.d.ts:19448:12 - [TUPLE_TYPE] Tuple type: [Length, Length]
+common.d.ts:19525:24 - [TYPE_LITERAL] Type literal
+common.d.ts:19526:12 - [TUPLE_TYPE] Tuple type: [Length, Length]
+common.d.ts:20666:32 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback for member CommonMethod.onGestureJudgeBegin has non void return type: (gestureInfo: GestureInfo, event: BaseGestureEvent) => GestureJudgeResult
+common.d.ts:20737:29 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<TouchEvent, HitTestMode> has non void return type
+common.d.ts:15251:0 - [METHOD_OVERLOADING] Method overloaded: onClick
+common.d.ts:15251:0 - [METHOD_OVERLOADING] Method overloaded: focusScopeId
+common.d.ts:15251:0 - [METHOD_OVERLOADING] Method overloaded: transition
+common.d.ts:15251:0 - [METHOD_OVERLOADING] Method overloaded: useEffect
+common.d.ts:15251:0 - [METHOD_OVERLOADING] Method overloaded: alignRules
+common.d.ts:15251:0 - [METHOD_OVERLOADING] Method overloaded: clip
+common.d.ts:15251:0 - [METHOD_OVERLOADING] Method overloaded: mask
+common.d.ts:15251:0 - [METHOD_OVERLOADING] Method overloaded: geometryTransition
+common.d.ts:15251:0 - [METHOD_OVERLOADING] Method overloaded: bindMenu
+common.d.ts:15251:0 - [METHOD_OVERLOADING] Method overloaded: bindContextMenu
+common.d.ts:15251:0 - [METHOD_OVERLOADING] Method overloaded: bindContentCover
+common.d.ts:15251:0 - [METHOD_OVERLOADING] Method overloaded: accessibilityGroup
+common.d.ts:15251:0 - [METHOD_OVERLOADING] Method overloaded: accessibilityText
+common.d.ts:15251:0 - [METHOD_OVERLOADING] Method overloaded: accessibilityDescription
+common.d.ts:15251:0 - [METHOD_OVERLOADING] Method overloaded: onGestureRecognizerJudgeBegin
+common.d.ts:21140:28 - [TUPLE_TYPE] Tuple type: [ number, number ]
+common.d.ts:22424:34 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.observer').default.NavDestinationInfo
+common.d.ts:22435:30 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.observer').default.NavigationInfo
+common.d.ts:22446:30 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.observer').default.RouterPageInfo
+common.d.ts:22464:25 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.UIContext').UIContext
+common.d.ts:22475:27 - [IMPORT_TYPE] Import type: import('../api/arkui/Graphics').DrawContext
+common.d.ts:22486:28 - [IMPORT_TYPE] Import type: import('../api/@ohos.graphics.uiEffect').default.VisualEffect
+common.d.ts:22498:22 - [IMPORT_TYPE] Import type: import('../api/@ohos.graphics.uiEffect').default.Filter
+common.d.ts:22509:23 - [IMPORT_TYPE] Import type: import('../api/@ohos.graphics.uiEffect').default.Blender
+common.d.ts:22520:44 - [IMPORT_TYPE] Import type: import('../api/arkui/ComponentContent').ComponentContent<T>
+common.d.ts:22531:21 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.theme').Theme
+common.d.ts:22697:24 - [TYPE_LITERAL] Type literal
+common.d.ts:22697:26 - [INDEX_SIGNATURE] Index signature type: { [key: string]: unknown }
+common.d.ts:23084:22 - [ANY_KEYWORD] Keyword "any" is disallowed: create(value: any): any;
+common.d.ts:23084:16 - [ANY_KEYWORD] Keyword "any" is disallowed: value: any
+common.d.ts:23678:44 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+common.d.ts:23957:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function wrapBuilder<Args extends Object[]>(builder: (...args: Args) => void): WrappedBuilder<Args>;

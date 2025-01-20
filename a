@@ -1,0 +1,27 @@
+diff --git a/templates/dummy_impl_prologue.cc b/templates/dummy_impl_prologue.cc
+index 13899cfd..ff94f7a0 100644
+--- a/templates/dummy_impl_prologue.cc
++++ b/templates/dummy_impl_prologue.cc
+@@ -789,6 +789,22 @@ void SetChildTotalCount(Ark_NodeHandle node, Ark_Int32 totalCount) {}
+ void ShowCrash(Ark_CharPtr message) {}
+ }
+ 
++Callback_RangeUpdate updaterValue = {};
++void OnRangeUpdate(Ark_NativePointer node,
++                   const Callback_RangeUpdate* updater) {
++    auto* node = AsNode(nodePtr);
++    updater->resource.hold(updater->resource.resourceId);
++    updaterValue = *updater;
++    updaterValue.call(updaterValue.resource.resourceId, 2, node->children()->size() > 1 ? (*node->children())[1] : nullptr);
++
++}
++
++Ark_NativePointer NeedMoreElements(Ark_NativePointer node,
++                                       Ark_NativePointer mark,
++                                       Ark_Int32 direction) {
++    return AsNode(node)->needMoreElements(mark, direction);
++}
++
+ namespace GeneratedEvents {
+     const %CPP_PREFIX%ArkUIEventsAPI* g_OverriddenEventsImpl = nullptr;
+     const %CPP_PREFIX%ArkUIEventsAPI* %CPP_PREFIX%GetArkUiEventsAPI() { return g_OverriddenEventsImpl; }
