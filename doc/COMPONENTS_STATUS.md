@@ -71,13 +71,13 @@
 |`contentModifier`| Function |Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG (+) |
 |`labelStyle`| Function |Evstigneev Roman | done |  |
 |*Calendar*| *Component* | Maksimov Nikita | done |  |
-|`setCalendarOptions`| Function | Maksimov Nikita | done | UT in progress Kovalev Sergey |
-|`showLunar`| Function | Maksimov Nikita | done | UT in progress Kovalev Sergey |
-|`showHoliday`| Function | Maksimov Nikita | done | UT in progress Kovalev Sergey |
+|`setCalendarOptions`| Function | Maksimov Nikita | done |  |
+|`showLunar`| Function | Maksimov Nikita | done |  |
+|`showHoliday`| Function | Maksimov Nikita | done |  |
 |`needSlide`| Function | Maksimov Nikita | done |  |
-|`startOfWeek`| Function | Maksimov Nikita | done | UT in progress Kovalev Sergey |
-|`offDays`| Function | Maksimov Nikita | done | UT in progress Kovalev Sergey |
-|`direction`| Function | Maksimov Nikita | done | UT in progress Kovalev Sergey |
+|`startOfWeek`| Function | Maksimov Nikita | done |  |
+|`offDays`| Function | Maksimov Nikita | done |  |
+|`direction`| Function | Maksimov Nikita | done |  |
 |`currentDayStyle`| Function | Maksimov Nikita | testskipped | UT in progress Kovalev Sergey |
 |`nonCurrentDayStyle`| Function | Maksimov Nikita | testskipped | UT in progress Kovalev Sergey |
 |`todayStyle`| Function | Maksimov Nikita | testskipped | UT in progress Kovalev Sergey |
