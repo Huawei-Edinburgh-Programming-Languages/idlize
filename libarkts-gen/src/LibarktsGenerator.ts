@@ -59,7 +59,7 @@ export class LibarktsGenerator {
 
     private printFile(filePrinter: FilePrinter): void {
         if (filePrinter.enabled) {
-            console.log(`emit for ${filePrinter.path}`)
+            console.log(`emit to ${filePrinter.path}`)
             forceWriteFile(
                 path.join(this.outDir, filePrinter.path),
                 this.readTemplate(filePrinter.template)
