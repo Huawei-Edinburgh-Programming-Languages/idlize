@@ -18,10 +18,10 @@ import { cStyleCopyright, makeIncludeGuardDefine } from "../FileGenerators"
 import { ImportsCollector } from "../ImportsCollector"
 import { CppLanguageWriter, createLanguageWriter } from "../LanguageWriters"
 import { LanguageWriter } from "@idlize/core"
-import { CJLanguageWriter } from "@idlize/core"
 import { ETSLanguageWriter } from "@idlize/core"
 import { TSLanguageWriter } from "@idlize/core"
 import { ReferenceResolver } from "@idlize/core"
+import { CJLanguageWriter } from "../LanguageWriters/ArkLanguageWriters"
 
 export abstract class SourceFile {
     public readonly content: LanguageWriter

@@ -272,7 +272,7 @@ class CJArrayResizeStatement implements LanguageStatement {
 //                           WRITER                           //
 ////////////////////////////////////////////////////////////////
 
-export class CJLanguageWriter extends LanguageWriter {
+export class CJLanguageWriterCore extends LanguageWriter {
     protected typeConvertor: IdlNameConvertor
     protected typeForeignConvertor: IdlNameConvertor
     constructor(printer: IndentedPrinter,
@@ -285,7 +285,7 @@ export class CJLanguageWriter extends LanguageWriter {
         this.typeForeignConvertor = typeForeignConvertor
     }
     fork(options?: { resolver?: ReferenceResolver }): LanguageWriter {
-        return new CJLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver, this.typeConvertor, this.typeForeignConvertor)
+        return new CJLanguageWriterCore(new IndentedPrinter(), options?.resolver ?? this.resolver, this.typeConvertor, this.typeForeignConvertor)
     }
     getNodeName(type: idl.IDLNode): string {
         return this.typeConvertor.convert(type)
@@ -402,7 +402,7 @@ export class CJLanguageWriter extends LanguageWriter {
         this.popIndent()
         this.printer.print(`}`)
     }
-    writeCJForeign(op: (writer: CJLanguageWriter) => void) {
+    writeCJForeign(op: (writer: CJLanguageWriterCore) => void) {
         this.print(`foreign {`)
         this.pushIndent()
         op(this)

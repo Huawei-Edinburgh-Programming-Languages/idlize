@@ -17,10 +17,11 @@ import { IndentedPrinter, Language } from "@idlize/core"
 import { LanguageWriter } from "@idlize/core";
 import { TSLanguageWriter } from "@idlize/core";
 import { ETSLanguageWriter } from "@idlize/core";
-import { JavaLanguageWriter } from "@idlize/core";
 import { CppLanguageWriter } from "@idlize/core";
-import { CJLanguageWriter } from "@idlize/core";
 import { ReferenceResolver } from "@idlize/core";
+
+import { CJLanguageWriter } from "./ArkLanguageWriters";
+import { JavaLanguageWriter } from "./ArkLanguageWriters";
 
 import {
     CJIDLNodeToStringConvertor,

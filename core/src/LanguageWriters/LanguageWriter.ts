@@ -677,7 +677,7 @@ export abstract class LanguageWriter {
     }
     runtimeType(param: ArgConvertor, valueType: string, value: string) {
         this.writeStatement(this.makeAssign(valueType, idl.IDLI32Type,
-            this.makeFunctionCall("runtimeType", [this.makeString(value)]), false))
+            this.makeRuntimeTypeGetterCall(value), false))
     }
     makeDiscriminatorFromFields(convertor: {targetType: (writer: LanguageWriter) => string}, value: string, accessors: string[], duplicates: Set<string>): LanguageExpression {
         return this.makeString(`(${this.makeNaryOp("||",

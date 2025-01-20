@@ -117,7 +117,7 @@ class JavaMapForEachStatement implements LanguageStatement {
 //                           WRITER                           //
 ////////////////////////////////////////////////////////////////
 
-export class JavaLanguageWriter extends CLikeLanguageWriter {
+export class JavaLanguageWriterCore extends CLikeLanguageWriter {
     protected typeConvertor: IdlNameConvertor
     constructor(printer: IndentedPrinter,
                 resolver: ReferenceResolver,
@@ -131,7 +131,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     }
 
     fork(options?: { resolver?: ReferenceResolver }): LanguageWriter {
-        return new JavaLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver, this.typeConvertor)
+        return new JavaLanguageWriterCore(new IndentedPrinter(), options?.resolver ?? this.resolver, this.typeConvertor)
     }
 
     writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string, interfaces?: string[], generics?: string[]): void {
