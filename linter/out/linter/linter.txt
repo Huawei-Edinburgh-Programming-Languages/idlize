@@ -1,0 +1,430 @@
+ability_component.d.ts:44:10 - [TYPE_LITERAL] Type literal
+ability_component.d.ts:44:18 - [IMPORT_TYPE] Import type: import('../api/@ohos.app.ability.Want').default
+action_sheet.d.ts:852:0 - [STATIC_METHODS_WITHOUT_CONSTRUCTOR] Class ActionSheet with static methods [show] but without a constructor
+alert_dialog.d.ts:1112:0 - [DUPLICATE_INTERFACE] Duplicate interface DismissDialogAction: /home/huawei/src/idlize/interface_sdk-js/api/@internal/component/ets/alert_dialog.d.ts and /home/huawei/src/idlize/interface_sdk-js/api/@internal/component/ets/action_sheet.d.ts
+alert_dialog.d.ts:1313:0 - [STATIC_METHODS_WITHOUT_CONSTRUCTOR] Class AlertDialog with static methods [show] but without a constructor
+animator.d.ts:28:0 - [INCORRECT_DATA_CLASS] Data class SpringProp declared wrong way: use class/interface with fields
+animator.d.ts:49:0 - [INCORRECT_DATA_CLASS] Data class SpringMotion declared wrong way: use class/interface with fields
+animator.d.ts:71:0 - [INCORRECT_DATA_CLASS] Data class FrictionMotion declared wrong way: use class/interface with fields
+animator.d.ts:92:0 - [INCORRECT_DATA_CLASS] Data class ScrollMotion declared wrong way: use class/interface with fields
+button.d.ts:372:2 - [ENUM_WITH_INIT] Enum ControlSize.SMALL with non-int initializer: 'small'
+button.d.ts:391:2 - [ENUM_WITH_INIT] Enum ControlSize.NORMAL with non-int initializer: 'normal'
+calendar.d.ts:1538:14 - [TYPE_LITERAL] Type literal
+calendar.d.ts:1578:10 - [TYPE_LITERAL] Type literal
+calendar.d.ts:1579:10 - [TYPE_LITERAL] Type literal
+calendar_picker.d.ts:539:0 - [STATIC_METHODS_WITHOUT_CONSTRUCTOR] Class CalendarPickerDialog with static methods [show] but without a constructor
+canvas.d.ts:30:29 - [IMPORT_TYPE] Import type: import('../api/@ohos.graphics.drawing').default.Canvas
+canvas.d.ts:433:25 - [IMPORT_TYPE] Import type: import('../api/arkui/FrameNode').FrameNode
+canvas.d.ts:2398:0 - [METHOD_OVERLOADING] Method overloaded: drawImage
+canvas.d.ts:2398:0 - [METHOD_OVERLOADING] Method overloaded: drawImage
+canvas.d.ts:2398:0 - [METHOD_OVERLOADING] Method overloaded: clip
+canvas.d.ts:2398:0 - [METHOD_OVERLOADING] Method overloaded: fill
+canvas.d.ts:2398:0 - [METHOD_OVERLOADING] Method overloaded: stroke
+canvas.d.ts:2398:0 - [METHOD_OVERLOADING] Method overloaded: createImageData
+canvas.d.ts:2398:0 - [METHOD_OVERLOADING] Method overloaded: putImageData
+canvas.d.ts:2398:0 - [METHOD_OVERLOADING] Method overloaded: setTransform
+canvas.d.ts:5319:37 - [ANY_KEYWORD] Keyword "any" is disallowed: quality?: any
+canvas.d.ts:5189:0 - [METHOD_OVERLOADING] Method overloaded: on
+canvas.d.ts:5189:0 - [METHOD_OVERLOADING] Method overloaded: off
+canvas.d.ts:5537:37 - [ANY_KEYWORD] Keyword "any" is disallowed: quality?: any
+common.d.ts:1298:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function getContext(component?: Object): Context;
+common.d.ts:1344:23 - [IMPORT_TYPE] Import type: import('../api/application/Context').default
+common.d.ts:1379:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function postCardAction(component: Object, action: Object): void;
+common.d.ts:1789:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function $r(value: string, ...params: any[]): Resource;
+common.d.ts:1789:46 - [ANY_KEYWORD] Keyword "any" is disallowed: any[]
+common.d.ts:1829:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function $rawfile(value: string): Resource;
+common.d.ts:3222:9 - [TYPE_LITERAL] Type literal
+common.d.ts:3251:10 - [TYPE_LITERAL] Type literal
+common.d.ts:3280:11 - [TYPE_LITERAL] Type literal
+common.d.ts:3309:8 - [TYPE_LITERAL] Type literal
+common.d.ts:3336:11 - [TYPE_LITERAL] Type literal
+common.d.ts:3365:11 - [TYPE_LITERAL] Type literal
+common.d.ts:4055:33 - [TYPE_LITERAL] Type literal
+common.d.ts:4063:14 - [TYPE_LITERAL] Type literal
+common.d.ts:4460:20 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: Type
+common.d.ts:4460:34 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: Effect
+common.d.ts:5024:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function animateTo(value: AnimateParam, event: () => void): void;
+common.d.ts:5036:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function animateToImmediately(value: AnimateParam, event: () => void): void;
+common.d.ts:5076:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function vp2px(value: number): number;
+common.d.ts:5116:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function px2vp(value: number): number;
+common.d.ts:5156:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function fp2px(value: number): number;
+common.d.ts:5196:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function px2fp(value: number): number;
+common.d.ts:5236:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function lpx2px(value: number): number;
+common.d.ts:5276:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function px2lpx(value: number): number;
+common.d.ts:5297:0 - [NAMESPACE] Namespace detected: focusControl
+common.d.ts:5343:28 - [IMPORT_TYPE] Import type: import('../api/@ohos.multimodalInput.pointer').default.PointerStyle
+common.d.ts:5360:0 - [NAMESPACE] Namespace detected: cursorControl
+common.d.ts:6451:13 - [TUPLE_TYPE] Tuple type: [number, number]
+common.d.ts:9314:24 - [IMPORT_TYPE] Import type: import('../api/@ohos.multimedia.image').default.PixelMap
+common.d.ts:9398:27 - [IMPORT_TYPE] Import type: import('../api/@ohos.data.unifiedDataChannel').default.UnifiedData
+common.d.ts:9415:23 - [IMPORT_TYPE] Import type: import('../api/@ohos.data.unifiedDataChannel').default.Summary
+common.d.ts:9432:31 - [IMPORT_TYPE] Import type: import('../api/@ohos.data.uniformTypeDescriptor').default.UniformDataType
+common.d.ts:10600:29 - [IMPORT_TYPE] Import type: import('../api/@ohos.multimodalInput.intentionCode').IntentionCode
+common.d.ts:11551:12 - [TUPLE_TYPE] Tuple type: [(SheetSize | Length), (SheetSize | Length)?, (SheetSize | Length)?]
+common.d.ts:11946:11 - [ANY_KEYWORD] Keyword "any" is disallowed: normal?: any;
+common.d.ts:11982:12 - [ANY_KEYWORD] Keyword "any" is disallowed: pressed?: any;
+common.d.ts:12018:13 - [ANY_KEYWORD] Keyword "any" is disallowed: disabled?: any;
+common.d.ts:12054:12 - [ANY_KEYWORD] Keyword "any" is disallowed: focused?: any;
+common.d.ts:12090:12 - [ANY_KEYWORD] Keyword "any" is disallowed: clicked?: any;
+common.d.ts:12364:18 - [TYPE_LITERAL] Type literal
+common.d.ts:12442:20 - [TYPE_LITERAL] Type literal
+common.d.ts:12614:19 - [TYPE_LITERAL] Type literal
+common.d.ts:13206:19 - [TYPE_LITERAL] Type literal
+common.d.ts:13526:33 - [TUPLE_TYPE] Tuple type: [from: T, to: T]
+common.d.ts:15005:29 - [IMPORT_TYPE] Import type: import('../api/arkui/ImageModifier').ImageModifier
+common.d.ts:15016:35 - [IMPORT_TYPE] Import type: import('../api/arkui/SymbolGlyphModifier').SymbolGlyphModifier
+common.d.ts:15206:27 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.shape').CircleShape
+common.d.ts:15218:28 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.shape').EllipseShape
+common.d.ts:15230:25 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.shape').PathShape
+common.d.ts:15242:25 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.shape').RectShape
+common.d.ts:15637:26 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback for member CommonMethod.onChildTouchTest has non void return type: (value: Array) => TouchResult
+common.d.ts:15827:47 - [TYPE_LITERAL] Type literal
+common.d.ts:16840:21 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<KeyEvent, boolean> has non void return type
+common.d.ts:18870:21 - [TYPE_LITERAL] Type literal
+common.d.ts:18871:18 - [TYPE_LITERAL] Type literal
+common.d.ts:18872:18 - [TYPE_LITERAL] Type literal
+common.d.ts:18873:18 - [TYPE_LITERAL] Type literal
+common.d.ts:18874:18 - [TYPE_LITERAL] Type literal
+common.d.ts:19026:21 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback for member CommonMethod.onDragStart has non void return type: (event: DragEvent, extraParams: string) => UnionType
+common.d.ts:19402:24 - [TYPE_LITERAL] Type literal
+common.d.ts:19493:23 - [TYPE_LITERAL] Type literal
+common.d.ts:19494:12 - [TUPLE_TYPE] Tuple type: [Length, Length]
+common.d.ts:19571:24 - [TYPE_LITERAL] Type literal
+common.d.ts:19572:12 - [TUPLE_TYPE] Tuple type: [Length, Length]
+common.d.ts:19755:24 - [USE_COMPONENT_AS_PARAM] Component CircleAttribute used as parameter
+common.d.ts:19755:42 - [USE_COMPONENT_AS_PARAM] Component EllipseAttribute used as parameter
+common.d.ts:19755:61 - [USE_COMPONENT_AS_PARAM] Component PathAttribute used as parameter
+common.d.ts:19755:77 - [USE_COMPONENT_AS_PARAM] Component RectAttribute used as parameter
+common.d.ts:19822:14 - [USE_COMPONENT_AS_PARAM] Component CircleAttribute used as parameter
+common.d.ts:19822:32 - [USE_COMPONENT_AS_PARAM] Component EllipseAttribute used as parameter
+common.d.ts:19822:51 - [USE_COMPONENT_AS_PARAM] Component PathAttribute used as parameter
+common.d.ts:19822:67 - [USE_COMPONENT_AS_PARAM] Component RectAttribute used as parameter
+common.d.ts:20676:32 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback for member CommonMethod.onGestureJudgeBegin has non void return type: (gestureInfo: GestureInfo, event: BaseGestureEvent) => GestureJudgeResult
+common.d.ts:20747:29 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<TouchEvent, HitTestMode> has non void return type
+common.d.ts:15286:0 - [METHOD_OVERLOADING] Method overloaded: onClick
+common.d.ts:15286:0 - [METHOD_OVERLOADING] Method overloaded: focusScopeId
+common.d.ts:15286:0 - [METHOD_OVERLOADING] Method overloaded: transition
+common.d.ts:15286:0 - [METHOD_OVERLOADING] Method overloaded: useEffect
+common.d.ts:15286:0 - [METHOD_OVERLOADING] Method overloaded: alignRules
+common.d.ts:15286:0 - [METHOD_OVERLOADING] Method overloaded: clip
+common.d.ts:15286:0 - [METHOD_OVERLOADING] Method overloaded: mask
+common.d.ts:15286:0 - [METHOD_OVERLOADING] Method overloaded: geometryTransition
+common.d.ts:15286:0 - [METHOD_OVERLOADING] Method overloaded: bindMenu
+common.d.ts:15286:0 - [METHOD_OVERLOADING] Method overloaded: bindContextMenu
+common.d.ts:15286:0 - [METHOD_OVERLOADING] Method overloaded: bindContentCover
+common.d.ts:15286:0 - [METHOD_OVERLOADING] Method overloaded: accessibilityGroup
+common.d.ts:15286:0 - [METHOD_OVERLOADING] Method overloaded: accessibilityText
+common.d.ts:15286:0 - [METHOD_OVERLOADING] Method overloaded: accessibilityDescription
+common.d.ts:15286:0 - [METHOD_OVERLOADING] Method overloaded: onGestureRecognizerJudgeBegin
+common.d.ts:21150:28 - [TUPLE_TYPE] Tuple type: [ number, number ]
+common.d.ts:22434:34 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.observer').default.NavDestinationInfo
+common.d.ts:22445:30 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.observer').default.NavigationInfo
+common.d.ts:22456:30 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.observer').default.RouterPageInfo
+common.d.ts:22474:25 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.UIContext').UIContext
+common.d.ts:22485:27 - [IMPORT_TYPE] Import type: import('../api/arkui/Graphics').DrawContext
+common.d.ts:22496:28 - [IMPORT_TYPE] Import type: import('../api/@ohos.graphics.uiEffect').default.VisualEffect
+common.d.ts:22508:22 - [IMPORT_TYPE] Import type: import('../api/@ohos.graphics.uiEffect').default.Filter
+common.d.ts:22519:23 - [IMPORT_TYPE] Import type: import('../api/@ohos.graphics.uiEffect').default.Blender
+common.d.ts:22530:44 - [IMPORT_TYPE] Import type: import('../api/arkui/ComponentContent').ComponentContent<T>
+common.d.ts:22541:21 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.theme').Theme
+common.d.ts:22707:24 - [TYPE_LITERAL] Type literal
+common.d.ts:22707:26 - [INDEX_SIGNATURE] Index signature type: { [key: string]: unknown }
+common.d.ts:23094:22 - [ANY_KEYWORD] Keyword "any" is disallowed: create(value: any): any;
+common.d.ts:23094:16 - [ANY_KEYWORD] Keyword "any" is disallowed: value: any
+common.d.ts:23688:44 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+common.d.ts:23967:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function wrapBuilder<Args extends Object[]>(builder: (...args: Args) => void): WrappedBuilder<Args>;
+common_ts_ets_api.d.ts:86:33 - [ANY_KEYWORD] Keyword "any" is disallowed: static Link(propName: string): any;
+common_ts_ets_api.d.ts:179:33 - [ANY_KEYWORD] Keyword "any" is disallowed: static Prop(propName: string): any;
+common_ts_ets_api.d.ts:45:0 - [STATIC_METHODS_WITHOUT_CONSTRUCTOR] Class AppStorage with static methods [ref, setAndRef, Link, link, SetAndLink, setAndLink, Prop, prop, SetAndProp, setAndProp, Has, has, Get, get, Set, set, SetOrCreate, setOrCreate, Delete, delete, Keys, keys, staticClear, Clear, clear, IsMutable, Size, size] but without a constructor
+common_ts_ets_api.d.ts:792:2 - [PRIVATE_VISIBILITY] Private visibility is useless: private id_;
+common_ts_ets_api.d.ts:802:2 - [PRIVATE_VISIBILITY] Private visibility is useless: private info_?;
+common_ts_ets_api.d.ts:896:18 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+common_ts_ets_api.d.ts:947:25 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+common_ts_ets_api.d.ts:991:39 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+common_ts_ets_api.d.ts:1075:0 - [MULTIPLE_INHERITANCE] Multiple inheritance for class SyncedPropertyTwoWay
+common_ts_ets_api.d.ts:1087:2 - [PRIVATE_VISIBILITY] Private visibility is useless: private source_;
+common_ts_ets_api.d.ts:1119:23 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+common_ts_ets_api.d.ts:1129:9 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+common_ts_ets_api.d.ts:1139:16 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+common_ts_ets_api.d.ts:1075:0 - [INTERFACE_METHOD_TYPE_INCONSISTENT_WITH_PARENT] SyncedPropertyTwoWay - aboutToBeDeleted
+common_ts_ets_api.d.ts:1151:0 - [MULTIPLE_INHERITANCE] Multiple inheritance for class SyncedPropertyOneWay
+common_ts_ets_api.d.ts:1163:2 - [PRIVATE_VISIBILITY] Private visibility is useless: private wrappedValue_;
+common_ts_ets_api.d.ts:1173:2 - [PRIVATE_VISIBILITY] Private visibility is useless: private source_;
+common_ts_ets_api.d.ts:1205:23 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+common_ts_ets_api.d.ts:1215:9 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+common_ts_ets_api.d.ts:1225:16 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+common_ts_ets_api.d.ts:1151:0 - [INTERFACE_METHOD_TYPE_INCONSISTENT_WITH_PARENT] SyncedPropertyOneWay - aboutToBeDeleted
+common_ts_ets_api.d.ts:1265:2 - [PRIVATE_VISIBILITY] Private visibility is useless: private owningProperties_: Set<number>;
+common_ts_ets_api.d.ts:1285:65 - [ANY_KEYWORD] Keyword "any" is disallowed: newValue: any
+common_ts_ets_api.d.ts:1458:11 - [TYPE_LITERAL] Type literal
+common_ts_ets_api.d.ts:1460:20 - [ANY_KEYWORD] Keyword "any" is disallowed: defaultValue: any;
+common_ts_ets_api.d.ts:1683:16 - [TYPE_LITERAL] Type literal
+common_ts_ets_api.d.ts:1685:20 - [ANY_KEYWORD] Keyword "any" is disallowed: defaultValue: any;
+component3d.d.ts:29:21 - [IMPORT_TYPE] Import type: import('../api/@ohos.graphics.scene').Scene
+content_slot.d.ts:30:23 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.node').Content
+content_slot.d.ts:40:0 - [INCORRECT_DATA_CLASS] Data class ContentSlotAttribute declared wrong way: use class/interface with fields
+content_slot.d.ts:40:0 - [EMPTY_DECLARATION] Empty class or interface declaration ContentSlotAttribute
+context_menu.d.ts:42:0 - [STATIC_METHODS_WITHOUT_CONSTRUCTOR] Class ContextMenu with static methods [close] but without a constructor
+custom_dialog_controller.d.ts:70:11 - [ANY_KEYWORD] Keyword "any" is disallowed: builder: any;
+custom_dialog_controller.d.ts:516:0 - [DUPLICATE_INTERFACE] Duplicate interface DismissDialogAction: /home/huawei/src/idlize/interface_sdk-js/api/@internal/component/ets/custom_dialog_controller.d.ts and /home/huawei/src/idlize/interface_sdk-js/api/@internal/component/ets/alert_dialog.d.ts
+data_panel.d.ts:186:0 - [DUPLICATE_INTERFACE] Duplicate interface LinearGradient: /home/huawei/src/idlize/interface_sdk-js/api/@internal/component/ets/data_panel.d.ts and /home/huawei/src/idlize/interface_sdk-js/api/@internal/component/ets/common.d.ts
+data_panel.d.ts:186:0 - [INCORRECT_DATA_CLASS] Data class LinearGradient declared wrong way: use class/interface with fields
+date_picker.d.ts:1050:0 - [STATIC_METHODS_WITHOUT_CONSTRUCTOR] Class DatePickerDialog with static methods [show] but without a constructor
+embedded_component.d.ts:44:12 - [IMPORT_TYPE] Import type: import('../api/@ohos.app.ability.Want').default
+embedded_component.d.ts:76:10 - [IMPORT_TYPE] Import type: import('../api/@ohos.app.ability.Want').default
+embedded_component.d.ts:97:25 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').Callback<TerminationInfo>
+embedded_component.d.ts:108:20 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').ErrorCallback
+enums.d.ts:527:2 - [ENUM_WITH_INIT] Enum ColoringStrategy.INVERT with non-int initializer: 'invert'
+enums.d.ts:544:2 - [ENUM_WITH_INIT] Enum ColoringStrategy.AVERAGE with non-int initializer: 'average'
+enums.d.ts:561:2 - [ENUM_WITH_INIT] Enum ColoringStrategy.PRIMARY with non-int initializer: 'primary'
+enums.d.ts:7534:2 - [ENUM_WITH_INIT] Enum ArrowPointPosition.START with non-int initializer: 'Start'
+enums.d.ts:7551:2 - [ENUM_WITH_INIT] Enum ArrowPointPosition.CENTER with non-int initializer: 'Center'
+enums.d.ts:7568:2 - [ENUM_WITH_INIT] Enum ArrowPointPosition.END with non-int initializer: 'End'
+enums.d.ts:9388:2 - [ENUM_WITH_INIT] Enum OptionWidthMode.FIT_CONTENT with non-int initializer: 'fit_content'
+enums.d.ts:9405:2 - [ENUM_WITH_INIT] Enum OptionWidthMode.FIT_TRIGGER with non-int initializer: 'fit_trigger'
+folder_stack.d.ts:29:32 - [IMPORT_TYPE] Import type: import('../api/@ohos.window').default.WindowStatusType
+form_component.d.ts:257:9 - [IMPORT_TYPE] Import type: import('../api/@ohos.app.ability.Want').default
+form_component.d.ts:383:14 - [TYPE_LITERAL] Type literal
+gesture.d.ts:586:0 - [NAMESPACE] Namespace detected: GestureControl
+gesture.d.ts:797:8 - [TYPE_ELEMENT_TYPE] Type element types unsupported, use type "GestureControl" itself: GestureControl.GestureType
+gesture.d.ts:2037:11 - [TYPE_LITERAL] Type literal
+gesture.d.ts:2173:22 - [TYPE_LITERAL] Type literal
+gesture.d.ts:2320:11 - [TYPE_LITERAL] Type literal
+gesture.d.ts:2494:11 - [TYPE_LITERAL] Type literal
+gesture.d.ts:2581:11 - [TYPE_LITERAL] Type literal
+gesture.d.ts:2755:11 - [TYPE_LITERAL] Type literal
+gesture.d.ts:3142:20 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+gesture.d.ts:3154:42 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+gesture.d.ts:3955:13 - [TYPE_ELEMENT_TYPE] Type element types unsupported, use type "GestureControl" itself: GestureControl.GestureType
+grid.d.ts:56:15 - [TUPLE_TYPE] Tuple type: [number, number]
+grid.d.ts:98:30 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback for member GridLayoutOptions.onGetIrregularSizeByIndex has non void return type: (index: number) => TupleType
+grid.d.ts:119:21 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback for member GridLayoutOptions.onGetRectByIndex has non void return type: (index: number) => TupleType
+grid.d.ts:638:27 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback for member GridAttribute.onScrollBarUpdate has non void return type: (index: number, offset: number) => ComputedBarAttribute
+grid.d.ts:948:25 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback for member GridAttribute.onItemDragStart has non void return type: (event: ItemDragInfo, itemIndex: number) => UnionType
+grid.d.ts:1299:28 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback for member GridAttribute.onScrollFrameBegin has non void return type: (offset: number, state: ScrollState) => TypeLiteral
+grid.d.ts:411:0 - [METHOD_OVERLOADING] Method overloaded: cachedCount
+image.d.ts:35:34 - [IMPORT_TYPE] Import type: import ('../api/@ohos.arkui.drawableDescriptor').DrawableDescriptor
+image.d.ts:46:34 - [IMPORT_TYPE] Import type: import('../api/@ohos.graphics.drawing').default.ColorFilter
+image.d.ts:56:34 - [IMPORT_TYPE] Import type: import('../api/@ohos.multimedia.image').default.ResolutionQuality
+image.d.ts:67:31 - [IMPORT_TYPE] Import type: import('../api/@ohos.graphics.drawing').default.Lattice
+lazy_for_each.d.ts:39:2 - [ENUM_WITH_INIT] Enum DataOperationType.ADD with non-int initializer: 'add'
+lazy_for_each.d.ts:49:2 - [ENUM_WITH_INIT] Enum DataOperationType.DELETE with non-int initializer: 'delete'
+lazy_for_each.d.ts:59:2 - [ENUM_WITH_INIT] Enum DataOperationType.EXCHANGE with non-int initializer: 'exchange'
+lazy_for_each.d.ts:69:2 - [ENUM_WITH_INIT] Enum DataOperationType.MOVE with non-int initializer: 'move'
+lazy_for_each.d.ts:79:2 - [ENUM_WITH_INIT] Enum DataOperationType.CHANGE with non-int initializer: 'change'
+lazy_for_each.d.ts:89:2 - [ENUM_WITH_INIT] Enum DataOperationType.RELOAD with non-int initializer: 'reload'
+lazy_for_each.d.ts:111:8 - [TYPE_ELEMENT_TYPE] Type element types unsupported, use type "DataOperationType" itself: DataOperationType.ADD
+lazy_for_each.d.ts:168:8 - [TYPE_ELEMENT_TYPE] Type element types unsupported, use type "DataOperationType" itself: DataOperationType.DELETE
+lazy_for_each.d.ts:214:8 - [TYPE_ELEMENT_TYPE] Type element types unsupported, use type "DataOperationType" itself: DataOperationType.CHANGE
+lazy_for_each.d.ts:354:8 - [TYPE_ELEMENT_TYPE] Type element types unsupported, use type "DataOperationType" itself: DataOperationType.MOVE
+lazy_for_each.d.ts:398:8 - [TYPE_ELEMENT_TYPE] Type element types unsupported, use type "DataOperationType" itself: DataOperationType.EXCHANGE
+lazy_for_each.d.ts:442:8 - [TYPE_ELEMENT_TYPE] Type element types unsupported, use type "DataOperationType" itself: DataOperationType.RELOAD
+lazy_for_each.d.ts:747:26 - [ANY_KEYWORD] Keyword "any" is disallowed: getData(index: number): any;
+list.d.ts:2051:22 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback for member ListAttribute.onItemDelete has non void return type: (index: number) => boolean
+list.d.ts:2080:20 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback for member ListAttribute.onItemMove has non void return type: (from: number, to: number) => boolean
+list.d.ts:2112:25 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback for member ListAttribute.onItemDragStart has non void return type: (event: ItemDragInfo, itemIndex: number) => UnionType
+list.d.ts:2263:28 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback for member ListAttribute.onScrollFrameBegin has non void return type: (offset: number, state: ScrollState) => TypeLiteral
+list.d.ts:1223:0 - [METHOD_OVERLOADING] Method overloaded: cachedCount
+matrix2d.d.ts:51:0 - [METHOD_OVERLOADING] Method overloaded: rotate
+nav_destination.d.ts:661:26 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback for member NavDestinationAttribute.onBackPressed has non void return type: () => boolean
+nav_destination.d.ts:754:20 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').Callback<NavDestinationContext>
+nav_destination.d.ts:505:0 - [METHOD_OVERLOADING] Method overloaded: hideTitleBar
+navigation.d.ts:29:30 - [IMPORT_TYPE] Import type: import('../api/@ohos.window').default.SystemBarStyle
+navigation.d.ts:720:52 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').Callback<PopInfo>
+navigation.d.ts:777:10 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').Callback<PopInfo>
+navigation.d.ts:1044:53 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').Callback<PopInfo>
+navigation.d.ts:1124:60 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').Callback<PopInfo>
+navigation.d.ts:892:0 - [METHOD_OVERLOADING] Method overloaded: pushPath
+navigation.d.ts:892:0 - [METHOD_OVERLOADING] Method overloaded: pushDestination
+navigation.d.ts:892:0 - [METHOD_OVERLOADING] Method overloaded: pushPathByName
+navigation.d.ts:892:0 - [METHOD_OVERLOADING] Method overloaded: pushDestinationByName
+navigation.d.ts:892:0 - [METHOD_OVERLOADING] Method overloaded: replacePath
+navigation.d.ts:892:0 - [METHOD_OVERLOADING] Method overloaded: pop
+navigation.d.ts:892:0 - [METHOD_OVERLOADING] Method overloaded: popToName
+navigation.d.ts:892:0 - [METHOD_OVERLOADING] Method overloaded: popToIndex
+navigation.d.ts:2299:26 - [TUPLE_TYPE] Tuple type: [Dimension, Dimension]
+navigation.d.ts:2787:39 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback for member NavigationAttribute.customNavContentTransition has non void return type: (from: NavContentInfo, to: NavContentInfo, operation: NavigationOperation) => UnionType
+navigation.d.ts:2221:0 - [METHOD_OVERLOADING] Method overloaded: hideTitleBar
+navigation.d.ts:2221:0 - [METHOD_OVERLOADING] Method overloaded: hideToolBar
+navigator.d.ts:174:11 - [TYPE_LITERAL] Type literal
+node_container.d.ts:58:15 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.node').NodeController
+panel.d.ts:278:2 - [ENUM_WITH_INIT] Enum PanelHeight.WRAP_CONTENT with non-int initializer: 'wrapContent'
+particle.d.ts:30:37 - [TUPLE_TYPE] Tuple type: [T1, T2]
+particle.d.ts:442:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ParticleType.POINT]
+particle.d.ts:459:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ParticleType.IMAGE]
+particle.d.ts:559:10 - [INDEXED_ACCESS_TYPE] Indexed access type: ParticleConfigs[PARTICLE]
+particle.d.ts:791:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ParticleUpdater.NONE]
+particle.d.ts:816:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ParticleUpdater.RANDOM]
+particle.d.ts:833:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ParticleUpdater.CURVE]
+particle.d.ts:878:10 - [INDEXED_ACCESS_TYPE] Indexed access type: ParticlePropertyUpdaterConfigs<TYPE>[UPDATER]
+particle.d.ts:1002:10 - [INDEXED_ACCESS_TYPE] Indexed access type: ParticleColorPropertyUpdaterConfigs[UPDATER]
+particle.d.ts:1108:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ParticleUpdater.NONE]
+particle.d.ts:1133:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ParticleUpdater.RANDOM]
+particle.d.ts:1152:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ParticleUpdater.CURVE]
+particle.d.ts:1479:2 - [ENUM_WITH_INIT] Enum ParticleType.POINT with non-int initializer: 'point'
+particle.d.ts:1494:2 - [ENUM_WITH_INIT] Enum ParticleType.IMAGE with non-int initializer: 'image'
+particle.d.ts:1526:2 - [ENUM_WITH_INIT] Enum ParticleEmitterShape.RECTANGLE with non-int initializer: 'rectangle'
+particle.d.ts:1541:2 - [ENUM_WITH_INIT] Enum ParticleEmitterShape.CIRCLE with non-int initializer: 'circle'
+particle.d.ts:1556:2 - [ENUM_WITH_INIT] Enum ParticleEmitterShape.ELLIPSE with non-int initializer: 'ellipse'
+particle.d.ts:1619:2 - [ENUM_WITH_INIT] Enum ParticleUpdater.NONE with non-int initializer: 'none'
+particle.d.ts:1634:2 - [ENUM_WITH_INIT] Enum ParticleUpdater.RANDOM with non-int initializer: 'random'
+particle.d.ts:1649:2 - [ENUM_WITH_INIT] Enum ParticleUpdater.CURVE with non-int initializer: 'curve'
+particle.d.ts:1661:24 - [IMPORT_TYPE] Import type: import('../api/arkui/Graphics').SizeT<T>
+particle.d.ts:1672:28 - [IMPORT_TYPE] Import type: import('../api/arkui/Graphics').PositionT<T>
+pattern_lock.d.ts:595:25 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').Callback<number>
+plugin_component.d.ts:66:2 - [CPP_KEYWORDS] Use C/C++ keyword as the field name: template
+plugin_component.d.ts:75:8 - [ANY_KEYWORD] Keyword "any" is disallowed: data: any;
+progress.d.ts:759:0 - [MULTIPLE_INHERITANCE] Multiple inheritance for interface RingStyleOptions
+progress.d.ts:833:0 - [MULTIPLE_INHERITANCE] Multiple inheritance for interface LinearStyleOptions
+progress.d.ts:890:0 - [MULTIPLE_INHERITANCE] Multiple inheritance for interface CapsuleStyleOptions
+progress.d.ts:1228:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ProgressType.Linear]
+progress.d.ts:1244:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ProgressType.Ring]
+progress.d.ts:1260:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ProgressType.Eclipse]
+progress.d.ts:1276:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ProgressType.ScaleRing]
+progress.d.ts:1292:2 - [COMPUTED_PROPERTY_NAME] Computed property name [ProgressType.Capsule]
+relative_container.d.ts:367:0 - [METHOD_OVERLOADING] Method overloaded: barrier
+repeat.d.ts:159:20 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback for member RepeatAttribute.key has non void return type: (item: T, index: number) => string
+rich_editor.d.ts:268:13 - [TUPLE_TYPE] Tuple type: [number, number]
+rich_editor.d.ts:518:8 - [TUPLE_TYPE] Tuple type: [Dimension, Dimension]
+rich_editor.d.ts:793:9 - [TUPLE_TYPE] Tuple type: [Dimension, Dimension]
+rich_editor.d.ts:1203:9 - [TUPLE_TYPE] Tuple type: [number, number]
+rich_editor.d.ts:1407:16 - [TUPLE_TYPE] Tuple type: [number, number]
+rich_editor.d.ts:1503:8 - [TUPLE_TYPE] Tuple type: [number, number]
+rich_editor.d.ts:1658:16 - [TUPLE_TYPE] Tuple type: [number, number]
+rich_editor.d.ts:2394:13 - [TUPLE_TYPE] Tuple type: [number, number]
+rich_editor.d.ts:3216:0 - [MULTIPLE_INHERITANCE] Multiple inheritance for class RichEditorStyledStringController
+rich_editor.d.ts:3378:28 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<RichEditorInsertValue, boolean> has non void return type
+rich_editor.d.ts:3450:26 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<RichEditorDeleteValue, boolean> has non void return type
+rich_editor.d.ts:3720:25 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<RichEditorChangeValue, boolean> has non void return type
+root_scene.d.ts:29:0 - [EMPTY_DECLARATION] Empty class or interface declaration RootSceneSession
+scroll.d.ts:542:20 - [TYPE_LITERAL] Type literal
+scroll.d.ts:388:0 - [METHOD_OVERLOADING] Method overloaded: scrollPage
+scroll.d.ts:1059:0 - [INTERFACE_METHOD_TYPE_INCONSISTENT_WITH_PARENT] ScrollAttribute - onDidScroll
+search.d.ts:1516:25 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<InsertValue, boolean> has non void return type
+search.d.ts:1540:25 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<DeleteValue, boolean> has non void return type
+search.d.ts:701:0 - [METHOD_OVERLOADING] Method overloaded: onSubmit
+state_management.d.ts:169:24 - [ANY_KEYWORD] Keyword "any" is disallowed: val: any
+stepper.d.ts:73:11 - [TYPE_LITERAL] Type literal
+swiper.d.ts:212:23 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+swiper.d.ts:235:22 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+swiper.d.ts:258:24 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+swiper.d.ts:281:25 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+swiper.d.ts:295:31 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+swiper.d.ts:309:29 - [UNSUPPORTED_TYPE_PARAMETER] Unsupported type parameter: T
+swiper.d.ts:190:0 - [STATIC_METHODS_WITHOUT_CONSTRUCTOR] Class Indicator with static methods [dot, digit] but without a constructor
+symbolglyph.d.ts:320:0 - [INCORRECT_DATA_CLASS] Data class SymbolEffect declared wrong way: use class/interface with fields
+symbolglyph.d.ts:320:0 - [EMPTY_DECLARATION] Empty class or interface declaration SymbolEffect
+symbolglyph.d.ts:596:0 - [METHOD_OVERLOADING] Method overloaded: symbolEffect
+tabs.d.ts:1097:17 - [TYPE_ELEMENT_TYPE] Type element types unsupported, use type "BarMode" itself: BarMode.Fixed
+tabs.d.ts:1120:17 - [TYPE_ELEMENT_TYPE] Type element types unsupported, use type "BarMode" itself: BarMode.Scrollable
+tabs.d.ts:990:0 - [METHOD_OVERLOADING] Method overloaded: barMode
+tabs.d.ts:990:0 - [METHOD_OVERLOADING] Method overloaded: barMode
+tabs.d.ts:990:0 - [METHOD_OVERLOADING] Method overloaded: barBackgroundBlurStyle
+tab_content.d.ts:164:0 - [DUPLICATE_INTERFACE] Duplicate interface IndicatorStyle: /home/huawei/src/idlize/interface_sdk-js/api/@internal/component/ets/tab_content.d.ts and /home/huawei/src/idlize/interface_sdk-js/api/@internal/component/ets/swiper.d.ts
+tab_content.d.ts:324:0 - [DUPLICATE_INTERFACE] Duplicate interface LabelStyle: /home/huawei/src/idlize/interface_sdk-js/api/@internal/component/ets/tab_content.d.ts and /home/huawei/src/idlize/interface_sdk-js/api/@internal/component/ets/button.d.ts
+tab_content.d.ts:611:0 - [METHOD_OVERLOADING] Method overloaded: of
+tab_content.d.ts:611:0 - [METHOD_OVERLOADING] Method overloaded: padding
+tab_content.d.ts:1145:0 - [METHOD_OVERLOADING] Method overloaded: tabBar
+text.d.ts:172:0 - [METHOD_OVERLOADING] Method overloaded: font
+text.d.ts:172:0 - [METHOD_OVERLOADING] Method overloaded: fontWeight
+text_area.d.ts:1415:25 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<InsertValue, boolean> has non void return type
+text_area.d.ts:1439:25 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<DeleteValue, boolean> has non void return type
+text_area.d.ts:447:0 - [METHOD_OVERLOADING] Method overloaded: onSubmit
+text_common.d.ts:734:24 - [IMPORT_TYPE] Import type: import('../api/@ohos.graphics.text').default.Affinity
+text_common.d.ts:745:27 - [IMPORT_TYPE] Import type: import('../api/@ohos.graphics.text').default.LineMetrics
+text_common.d.ts:756:30 - [IMPORT_TYPE] Import type: import('../api/@ohos.graphics.text').default.RectWidthStyle
+text_common.d.ts:767:31 - [IMPORT_TYPE] Import type: import('../api/@ohos.graphics.text').default.RectHeightStyle
+text_common.d.ts:778:23 - [IMPORT_TYPE] Import type: import('../api/@ohos.graphics.text').default.TextBox
+text_common.d.ts:845:0 - [STATIC_METHODS_WITHOUT_CONSTRUCTOR] Class TextMenuItemId with static methods [of] but without a constructor
+text_input.d.ts:2545:25 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<InsertValue, boolean> has non void return type
+text_input.d.ts:2569:25 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<DeleteValue, boolean> has non void return type
+text_input.d.ts:1181:0 - [METHOD_OVERLOADING] Method overloaded: cancelButton
+text_picker.d.ts:1135:0 - [STATIC_METHODS_WITHOUT_CONSTRUCTOR] Class TextPickerDialog with static methods [show] but without a constructor
+time_picker.d.ts:293:31 - [IMPORT_TYPE] Import type: import('../api/@ohos.intl').default.DateTimeOptions
+time_picker.d.ts:906:0 - [STATIC_METHODS_WITHOUT_CONSTRUCTOR] Class TimePickerDialog with static methods [show] but without a constructor
+with_theme.d.ts:31:27 - [IMPORT_TYPE] Import type: import('../api/@ohos.arkui.theme').CustomTheme
+with_theme.d.ts:87:0 - [INCORRECT_DATA_CLASS] Data class WithThemeAttribute declared wrong way: use class/interface with fields
+with_theme.d.ts:87:0 - [EMPTY_DECLARATION] Empty class or interface declaration WithThemeAttribute
+units.d.ts:57:24 - [IMPORT_TYPE] Import type: import('../api/global/resource').Resource
+units.d.ts:110:18 - [TEMPLATE_LITERAL] Template literal: `${number}px`
+units.d.ts:127:18 - [TEMPLATE_LITERAL] Template literal: `${number}vp`
+units.d.ts:144:18 - [TEMPLATE_LITERAL] Template literal: `${number}fp`
+units.d.ts:161:19 - [TEMPLATE_LITERAL] Template literal: `${number}lpx`
+units.d.ts:178:26 - [TEMPLATE_LITERAL] Template literal: `${number}%`
+units.d.ts:195:22 - [TEMPLATE_LITERAL] Template literal: `${number}deg`
+units.d.ts:281:23 - [TYPE_LITERAL] Type literal
+units.d.ts:569:26 - [TYPE_LITERAL] Type literal
+units.d.ts:765:33 - [TYPE_LITERAL] Type literal
+units.d.ts:878:30 - [TYPE_LITERAL] Type literal
+units.d.ts:1075:31 - [TYPE_LITERAL] Type literal
+units.d.ts:1188:26 - [TYPE_LITERAL] Type literal
+units.d.ts:1405:26 - [TYPE_LITERAL] Type literal
+units.d.ts:1542:33 - [TYPE_LITERAL] Type literal
+units.d.ts:1652:22 - [TYPE_LITERAL] Type literal
+units.d.ts:1769:31 - [TYPE_LITERAL] Type literal
+units.d.ts:1850:33 - [IMPORT_TYPE] Import type: import('../api/arkui/Graphics').LengthMetricsUnit
+units.d.ts:1861:29 - [IMPORT_TYPE] Import type: import('../api/arkui/Graphics').LengthMetrics
+units.d.ts:1872:28 - [IMPORT_TYPE] Import type: import('../api/arkui/Graphics').ColorMetrics
+units.d.ts:3242:0 - [INCORRECT_DATA_CLASS] Data class ColorFilter declared wrong way: use class/interface with fields
+video.d.ts:537:0 - [METHOD_OVERLOADING] Method overloaded: setCurrentTime
+web.d.ts:43:33 - [IMPORT_TYPE] Import type: import('../api/@ohos.web.webview').default.WebviewController
+web.d.ts:1851:0 - [METHOD_OVERLOADING] Method overloaded: confirm
+web.d.ts:1964:2 - [ENUM_WITH_INIT] Enum ProtectedResourceType.MidiSysex with non-int initializer: 'TYPE_MIDI_SYSEX'
+web.d.ts:1980:2 - [ENUM_WITH_INIT] Enum ProtectedResourceType.VIDEO_CAPTURE with non-int initializer: 'TYPE_VIDEO_CAPTURE'
+web.d.ts:1996:2 - [ENUM_WITH_INIT] Enum ProtectedResourceType.AUDIO_CAPTURE with non-int initializer: 'TYPE_AUDIO_CAPTURE'
+web.d.ts:2005:2 - [ENUM_WITH_INIT] Enum ProtectedResourceType.SENSOR with non-int initializer: 'TYPE_SENSOR'
+web.d.ts:2603:2 - [ENUM_WITH_INIT] Enum ContextMenuEditStateFlags.CAN_CUT with non-int initializer: 1 << 0
+web.d.ts:2618:2 - [ENUM_WITH_INIT] Enum ContextMenuEditStateFlags.CAN_COPY with non-int initializer: 1 << 1
+web.d.ts:2633:2 - [ENUM_WITH_INIT] Enum ContextMenuEditStateFlags.CAN_PASTE with non-int initializer: 1 << 2
+web.d.ts:2648:2 - [ENUM_WITH_INIT] Enum ContextMenuEditStateFlags.CAN_SELECT_ALL with non-int initializer: 1 << 3
+web.d.ts:4043:0 - [METHOD_OVERLOADING] Method overloaded: setGestureEventResult
+web.d.ts:4142:25 - [TYPE_LITERAL] Type literal
+web.d.ts:4153:20 - [TYPE_LITERAL] Type literal
+web.d.ts:4164:19 - [TYPE_LITERAL] Type literal
+web.d.ts:4195:35 - [TYPE_LITERAL] Type literal
+web.d.ts:7086:20 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<OnAlertEvent, boolean> has non void return type
+web.d.ts:7114:27 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<OnBeforeUnloadEvent, boolean> has non void return type
+web.d.ts:7144:22 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<OnConfirmEvent, boolean> has non void return type
+web.d.ts:7174:21 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<OnPromptEvent, boolean> has non void return type
+web.d.ts:7204:22 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<OnConsoleEvent, boolean> has non void return type
+web.d.ts:7343:31 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback for member WebAttribute.onUrlLoadIntercept has non void return type: (event: TypeLiteral) => boolean
+web.d.ts:7413:31 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<OnShowFileSelectorEvent, boolean> has non void return type
+web.d.ts:7425:27 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback for member WebAttribute.onRenderExited has non void return type: (event: TypeLiteral) => boolean
+web.d.ts:7572:30 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<OnHttpAuthRequestEvent, boolean> has non void return type
+web.d.ts:7600:31 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<OnInterceptRequestEvent, WebResourceResponse> has non void return type
+web.d.ts:7689:30 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<OnContextMenuShowEvent, boolean> has non void return type
+web.d.ts:7937:32 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback for member WebAttribute.onInterceptKeyEvent has non void return type: (event: KeyEvent) => boolean
+web.d.ts:8486:28 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback<OnLoadInterceptEvent, boolean> has non void return type
+web.d.ts:6367:0 - [METHOD_OVERLOADING] Method overloaded: onRenderExited
+xcomponent.d.ts:167:34 - [TYPE_LITERAL] Type literal
+xcomponent.d.ts:333:10 - [TYPE_LITERAL] Type literal
+xcomponent.d.ts:353:10 - [TYPE_LITERAL] Type literal
+sidebar.d.ts:520:0 - [DUPLICATE_INTERFACE] Duplicate interface DividerStyle: /home/huawei/src/idlize/interface_sdk-js/api/@internal/component/ets/sidebar.d.ts and /home/huawei/src/idlize/interface_sdk-js/api/@internal/component/ets/tabs.d.ts
+sidebar.d.ts:624:0 - [METHOD_OVERLOADING] Method overloaded: sideBarWidth
+sidebar.d.ts:624:0 - [METHOD_OVERLOADING] Method overloaded: minSideBarWidth
+sidebar.d.ts:624:0 - [METHOD_OVERLOADING] Method overloaded: maxSideBarWidth
+water_flow.d.ts:747:28 - [CALLBACK_WITH_NON_VOID_RETURN_TYPE] Callback for member WaterFlowAttribute.onScrollFrameBegin has non void return type: (offset: number, state: ScrollState) => TypeLiteral
+water_flow.d.ts:406:0 - [METHOD_OVERLOADING] Method overloaded: cachedCount
+ui_extension_component.d.ts:113:0 - [DUPLICATE_INTERFACE] Duplicate interface TerminationInfo: /home/huawei/src/idlize/interface_sdk-js/api/@internal/component/ets/ui_extension_component.d.ts and /home/huawei/src/idlize/interface_sdk-js/api/@internal/component/ets/embedded_component.d.ts
+ui_extension_component.d.ts:132:10 - [IMPORT_TYPE] Import type: import('../api/@ohos.app.ability.Want').default
+ui_extension_component.d.ts:143:31 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').Callback<Record<string, Object>>
+ui_extension_component.d.ts:155:0 - [METHOD_OVERLOADING] Method overloaded: on
+ui_extension_component.d.ts:155:0 - [METHOD_OVERLOADING] Method overloaded: off
+ui_extension_component.d.ts:311:10 - [IMPORT_TYPE] Import type: import('../api/@ohos.app.ability.Want').default
+ui_extension_component.d.ts:335:14 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').Callback<UIExtensionProxy>
+ui_extension_component.d.ts:366:14 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').Callback<{
+      code: number;
+      want?: import('../api/@ohos.app.ability.Want').default;
+    }>
+ui_extension_component.d.ts:384:14 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').Callback<number>
+ui_extension_component.d.ts:396:14 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').ErrorCallback
+isolated_component.d.ts:29:32 - [IMPORT_TYPE] Import type: import('../api/@ohos.worker').default.RestrictedWorker
+isolated_component.d.ts:39:29 - [IMPORT_TYPE] Import type: import('../api/@ohos.base').ErrorCallback
+isolated_component.d.ts:49:20 - [IMPORT_TYPE] Import type: import('../api/@ohos.app.ability.Want').default
+styled_string.d.ts:288:0 - [DUPLICATE_INTERFACE] Duplicate interface TextStyle: /home/huawei/src/idlize/interface_sdk-js/api/@internal/component/ets/styled_string.d.ts and /home/huawei/src/idlize/interface_sdk-js/api/@internal/component/ets/alert_dialog.d.ts
+styled_string.d.ts:677:0 - [INCORRECT_DATA_CLASS] Data class GestureStyle declared wrong way: use class/interface with fields
+inspector.d.ts:31:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function getInspectorNodes(): object;
+inspector.d.ts:44:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function getInspectorNodeById(id: number): object;
+inspector.d.ts:55:0 - [NAMESPACE] Namespace detected: Profiler
+inspector.d.ts:87:0 - [TOP_LEVEL_FUNCTIONS] Top level function: declare function setAppBgColor(value: string): void;
+resource.d.ts:108:11 - [ANY_KEYWORD] Keyword "any" is disallowed: any[]

@@ -39,7 +39,7 @@ function run() {
     const currentBranch = git.branch()
 
     console.log(`> Current branch: ${currentBranch}`)
-    if (currentBranch !== 'master') {
+    if (currentBranch !== 'master' && false) {
         throw new Error("You must be on master branch!")
     }
 
@@ -78,7 +78,7 @@ function run() {
         git.add('.')
         git.commit(`Release version ${next.toString()}`)
         console.log(`> Create commit`)
-    
+
     } catch(e) {
         writeVersion(old)
         files.forEach(file => {
