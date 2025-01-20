@@ -831,7 +831,7 @@
 |`onContentScroll`|Function| Evstigneev Roman |done|  |
 |`onCopy`|Function| Evstigneev Roman |done|  |
 |`onCut`|Function| Evstigneev Roman |done|  |
-|`onPaste`|Function| Evstigneev Roman | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAOKSL |
+|`onPaste`|Function| Evstigneev Roman | done | https://gitee.com/nikolay-igotti/idlize/issues/IAOKSL |
 |`copyOption`|Function| Evstigneev Roman | done | https://gitee.com/openharmony/arkui_ace_engine/issues/IAVPM2 |
 |`maxLength`|Function| Evstigneev Roman |done|  |
 |`textAlign`|Function| Evstigneev Roman |done|  |
@@ -1603,10 +1603,10 @@
 |`toDataURL`| Function |Vadim Voronov| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`startImageAnalyzer`| Function |Vadim Voronov| done | |
 |`stopImageAnalyzer`| Function | Vadim Voronov| done | |
-|`onOnAttach`| Function | Vadim Voronov, Evstigneev Roman | testskipped | UT in progress Evstigneev Roman |
-|`offOnAttach`| Function | Vadim Voronov, Evstigneev Roman | testskipped | UT in progress Evstigneev Roman |
-|`onOnDetach`| Function | Vadim Voronov, Evstigneev Roman | testskipped | UT in progress Evstigneev Roman |
-|`offOnDetach`| Function | Vadim Voronov, Evstigneev Roman | testskipped | UT in progress Evstigneev Roman |
+|`onOnAttach`| Function | Vadim Voronov, Evstigneev Roman | done | UT in progress Evstigneev Roman |
+|`offOnAttach`| Function | Vadim Voronov, Evstigneev Roman | done | UT in progress Evstigneev Roman |
+|`onOnDetach`| Function | Vadim Voronov, Evstigneev Roman | done | UT in progress Evstigneev Roman |
+|`offOnDetach`| Function | Vadim Voronov, Evstigneev Roman | done | UT in progress Evstigneev Roman |
 |`getHeight`| Function |Vadim Voronov| done | |
 |`getWidth`| Function |Vadim Voronov| done | |
 |*DrawingRenderingContext*| *Class* | Dudkin Sergey | done| |
