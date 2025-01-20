@@ -1555,18 +1555,18 @@
 |*DrawingCanvas*| *Class* | Dudkin Sergey | blocked IDL | |
 |`drawRect`| Function | Dudkin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDOCY + |
 |*FrameNode*| *Class* | Tuzhilkin Ivan | testskipped| |
-|`isModifiable`| Function | Tuzhilkin Ivan | testskipped | |
-|`appendChild`| Function | Tuzhilkin Ivan | testskipped | |
-|`insertChildAfter`| Function | Tuzhilkin Ivan | testskipped | |
-|`removeChild`| Function | Tuzhilkin Ivan | testskipped | |
-|`clearChildren`| Function | Tuzhilkin Ivan | testskipped | |
-|`getChild`| Function | Tuzhilkin Ivan | testskipped | |
-|`getFirstChild`| Function | Tuzhilkin Ivan | testskipped | |
-|`getNextSibling`| Function | Tuzhilkin Ivan | testskipped | |
-|`getPreviousSibling`| Function | Tuzhilkin Ivan | testskipped | |
-|`getParent`| Function | Tuzhilkin Ivan | testskipped | |
-|`getChildrenCount`| Function | Tuzhilkin Ivan | testskipped | |
-|`dispose`| Function | Tuzhilkin Ivan | testskipped | |
+|`isModifiable`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
+|`appendChild`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
+|`insertChildAfter`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
+|`removeChild`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
+|`clearChildren`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
+|`getChild`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
+|`getFirstChild`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
+|`getNextSibling`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
+|`getPreviousSibling`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
+|`getParent`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
+|`getChildrenCount`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
+|`dispose`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
 |*PixelMap*| *Class* | Andrey Khudenkikh | blocked  | |
 |`readPixelsToBufferSync`| Function | Andrey Khudenkikh | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
 |`writeBufferToPixels`| Function | Andrey Khudenkikh | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
