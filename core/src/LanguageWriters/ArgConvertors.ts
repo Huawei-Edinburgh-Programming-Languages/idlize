@@ -25,7 +25,6 @@ import {
     BranchStatement
 } from "./LanguageWriter";
 import { RuntimeType } from "./common";
-import { generateTypeCheckerName } from "./writers/ETSLanguageWriter";
 import { LibraryInterface } from "../LibraryInterface";
 import { warn } from "../util";
 import { UnionRuntimeTypeChecker } from "../peer-generation/unions";

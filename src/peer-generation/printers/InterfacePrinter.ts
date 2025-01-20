@@ -46,7 +46,7 @@ import { ARK_CUSTOM_OBJECT, ARK_OBJECTBASE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PAT
 import { printJavaImports } from './lang/JavaPrinters'
 import { collectJavaImports } from './lang/JavaIdlUtils'
 import { collectProperties } from './StructPrinter'
-import { escapeKeyword, IDLType } from '@idlize/core/idl'
+import { escapeIDLKeyword, IDLType } from '@idlize/core/idl'
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig'
 import { isBuilderClass, isMaterialized, isPredefined } from '../idl/IdlPeerGeneratorVisitor'
 import { DependenciesCollector } from '../idl/IdlDependenciesCollector'
@@ -644,7 +644,7 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
         isOptional: boolean = false): string {
         const type = idl.type ? this.convertType(idl.type) : ""
         const optional = isOptional ? "optional " : ""
-        return `${escapeKeyword(idl.name!)}${optional ? "?" : ""}: ${type}`
+        return `${escapeIDLKeyword(idl.name!)}${optional ? "?" : ""}: ${type}`
     }
 
     private printTypeParameters(typeParameters: string[] | undefined): string {

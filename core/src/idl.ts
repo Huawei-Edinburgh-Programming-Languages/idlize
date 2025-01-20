@@ -16,6 +16,7 @@
 import * as webidl2 from "webidl2"
 import { indentedBy, isDefined, stringOrNone } from "./util";
 import { generateSyntheticIdlNodeName } from "./peer-generation/idl/common";
+import { IDLKeywords } from "./languageSpecificKeywords";
 
 export enum IDLKind {
     Interface,
@@ -855,9 +856,7 @@ export function createConstant(name: string, type: IDLType, value: string, nodeI
     }
 }
 
-const IDLKeywords = new Set<string>(["attribute", "callback", "object", "toString"])
-
-export function escapeKeyword(name: string): string {
+export function escapeIDLKeyword(name: string): string {
     return name + (IDLKeywords.has(name) ? "_" : "")
 }
 
@@ -919,7 +918,7 @@ export function nameWithType(
     const type = printType(idl.type)
     const variadic = isVariadic ? "..." : ""
     const optional = isOptional ? "optional " : ""
-    return `${optional}${type}${variadic} ${escapeKeyword(idl.name!)}`
+    return `${optional}${type}${variadic} ${escapeIDLKeyword(idl.name!)}`
 }
 
 export function printConstant(idl: IDLConstant): stringOrNone[] {

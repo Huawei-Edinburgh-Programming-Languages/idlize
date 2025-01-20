@@ -39,6 +39,7 @@ import { IdlNameConvertor } from "../nameConvertor"
 import { RuntimeType } from "../common";
 import { throwException } from "../../util";
 import { ReferenceResolver } from "../../peer-generation/ReferenceResolver";
+import { TSKeywords } from '../../languageSpecificKeywords';
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -397,7 +398,3 @@ export class TSLanguageWriter extends LanguageWriter {
         ])
     }
 }
-
-const TSKeywords = new Set([
-    "namespace"
-])
