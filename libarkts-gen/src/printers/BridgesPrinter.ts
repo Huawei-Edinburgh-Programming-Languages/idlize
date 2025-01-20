@@ -144,12 +144,13 @@ export class BridgesPrinter {
             if (IDLContainerUtils.isSequence(node)) {
                 const typeParam = node.elementType[0]
                 if (isContainerType(typeParam)) {
-                    console.warn(`Warning: doing nothing for sequence<sequence<T>>`)
+                    console.warn(`Warning: doing nothing for sequence<container>`)
                     return undefined
                 }
-                if (!isReferenceType(typeParam)) throwException(
-                    `Sequence of non-reference type: ${JSON.stringify(typeParam)}`
-                )
+                if (!isReferenceType(typeParam)) {
+                    console.warn(`Warning: doing nothing for sequence<${JSON.stringify(typeParam)}>`)
+                    return undefined
+                }
                 return `${this.config.typePrefix}${typeParam.name}**`
             }
         }
