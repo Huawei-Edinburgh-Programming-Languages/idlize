@@ -1,4 +1,0 @@
-package "org.openharmony.idlize.predefined";
-
-interface Object {};
-interface Date {};
