@@ -1119,8 +1119,8 @@
 |`onEditChange`|Function|Tuzhilkin Ivan|done|  |
 |`onCopy`|Function|Tuzhilkin Ivan|done|  |
 |`onCut`|Function|Tuzhilkin Ivan|done|  |
-|`onPaste`|Function|Tuzhilkin Ivan| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAOKSL |
-|`copyOption`|Function|Tuzhilkin Ivan| testskipped | UT in progress Tuzhilkin Ivan |
+|`onPaste`|Function|Tuzhilkin Ivan| done | |
+|`copyOption`|Function|Tuzhilkin Ivan| done | https://gitee.com/openharmony/arkui_ace_engine/issues/IBI2SU, after fix this issue need disable manual UT and enable generated UT |
 |`enableKeyboardOnFocus`|Function|Tuzhilkin Ivan|done|  |
 |`maxLength`|Function|Tuzhilkin Ivan|done|  |
 |`style`|Function|Tuzhilkin Ivan|done|  |
@@ -1147,7 +1147,7 @@
 |`editMenuOptions`|Function| Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`enablePreviewText`|Function|Tuzhilkin Ivan|done|  |
 |`enableHapticFeedback`|Function|Tuzhilkin Ivan|done| |
-|`inputFilter`|Function|Tuzhilkin Ivan| testskipped | UT in progress Tuzhilkin Ivan |
+|`inputFilter`|Function|Tuzhilkin Ivan| done | |
 |`showCounter`|Function|Tuzhilkin Ivan|done| https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
 |`customKeyboard`|Function| Erokhin Ilya | testskipped | Custom Builder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*TextClock*| *Component* |Pavelyev Ivan|in progress|  |
