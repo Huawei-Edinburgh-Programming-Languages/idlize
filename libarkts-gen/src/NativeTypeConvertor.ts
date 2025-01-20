@@ -96,5 +96,6 @@ export class NativeTypeConvertor /*implements TypeConvertor<string>*/ {
         if (this.incorrectDeclarations.has(name)) return undefined
         this.incorrectDeclarations.add(name)
         console.warn(`Expected reference type "${name}" to have exactly one declaration, got: ${declarations.length}`)
+        return undefined
     }
 }
