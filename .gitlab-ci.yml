@@ -221,9 +221,25 @@ publish idlize:
   dependencies:
     - build idlize
 
+publish idlize (release):
+  extends:
+    - .npm-publish-release
+  variables:
+    PACKAGE_DIR: .
+  dependencies:
+    - build idlize
+
 publish idlize-core:
   extends: 
     - .npm-publish
+  variables:
+    PACKAGE_DIR: core
+  dependencies:
+    - build idlize-core
+
+publish idlize-core (release):
+  extends:
+    - .npm-publish-release
   variables:
     PACKAGE_DIR: core
   dependencies:
@@ -237,6 +253,13 @@ publish idlize-linter:
   dependencies:
     - build idlize-linter
 
+publish idlize-linter (release):
+  extends:
+    - .npm-publish-release
+  variables:
+    PACKAGE_DIR: linter
+  dependencies:
+    - build idlize-linter
 
 check index-full:
     stage: test

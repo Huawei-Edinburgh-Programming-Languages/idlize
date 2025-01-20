@@ -1,0 +1,8 @@
+# Setup rules to trigger job on master only when VERSION file was changed, 
+# or triggered manually
+.on-release:
+  # rules:
+  #   - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  #     when: on_success
+  #     changes:
+  #       - VERSION

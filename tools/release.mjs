@@ -15,7 +15,7 @@
 
 import fs from "fs"
 import path from "path"
-import { Version, Git, writeToPackageJson, IDLIZE_HOME, publishToOpenlab } from "./utils.mjs"
+import { Version, Git, writeToPackageJson, IDLIZE_HOME } from "./utils.mjs"
 
 const CURRENT_VERSION = readVersion()
 const git = new Git
@@ -49,7 +49,6 @@ function run() {
     if (git.checkBranch(newBranch)) git.deleteBranch(newBranch)
 
     try {
-        publishToOpenlab("next")
 
         writeToPackageJson("version", `${next.toString()}+devel`)
         writeToPackageJson("description", "")

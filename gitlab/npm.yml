@@ -39,3 +39,22 @@
     expire_in: 1 day
     paths:
       - .packages/*.tgz
+
+# Publish latest commit from master as NPM packages with version `VERSION` and tag `latest`
+# if VERSION file was changed, or task triggered manually
+.npm-publish-release:
+    extends:
+      - .npm-publish
+      - .on-release
+    script:
+        - find . -name '*.js' -or -name '*.d.ts' -or -name '*.mjs' -or -name '*.cjs' | grep -v ./ohos-sdk | xargs sed -i "/\/\/# sourceMappingURL=/d"
+        - find . -name '*.js' -or -name '*.mjs' -or -name '*.cjs' | grep -v ./ohos-sdk | xargs -I '{}' npx esbuild {} --target=esnext --minify --outfile={} --allow-overwrite
+        - suffix=`cat $CI_PROJECT_DIR/VERSION | sed -e 's/\([^-]*\)\(.*\)$/\2/'`
+        - sed -i "s/+devel/$suffix/" package.json
+        - mkdir -p $CI_PROJECT_DIR/.release-packages
+        - PACK_NAME=`npm pack --no-workspaces --pack-destination $CI_PROJECT_DIR/.release-packages | grep -o -E '[^ ]+\.tgz$'`
+        - npm publish --no-workspaces $CI_PROJECT_DIR/.release-packages/$PACK_NAME
+    artifacts:
+        expire_in: 1 day
+        paths:
+            - .release-packages/*.tgz
