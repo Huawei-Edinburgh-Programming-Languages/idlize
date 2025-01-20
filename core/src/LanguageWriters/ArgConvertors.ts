@@ -25,7 +25,7 @@ import {
     BranchStatement
 } from "./LanguageWriter";
 import { RuntimeType } from "./common";
-import { LibraryInterface } from "../LibraryInterface";
+import { LibraryInterface, UNDEFINED_CONTEXT } from "../LibraryInterface";
 import { warn } from "../util";
 import { UnionRuntimeTypeChecker } from "../peer-generation/unions";
 
@@ -185,7 +185,7 @@ export class StringConvertor extends BaseArgConvertor {
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
         return this.literalValue
-            ? writer.makeString(`${value} === "${this.literalValue}"`)
+            ? writer.makeEquals([writer.makeString(value), writer.makeString(this.literalValue)])
             : undefined
     }
     targetType(writer: LanguageWriter): string {
@@ -595,7 +595,7 @@ export class UnionConvertor extends BaseArgConvertor { //
             printer.popIndent()
             printer.print(`}`)
         })
-        this.unionChecker.reportConflicts(this.library.getCurrentContext() ?? "<unknown context>")
+        this.unionChecker.reportConflicts(this.library.getCurrentContext() ?? UNDEFINED_CONTEXT)
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const statements: LanguageStatement[] = []

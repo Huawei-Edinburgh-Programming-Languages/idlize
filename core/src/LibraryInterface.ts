@@ -21,3 +21,5 @@ export interface LibraryInterface extends ReferenceResolver {
      */
     libraryPrefix: string
 }
+
+export const UNDEFINED_CONTEXT = "<unknown context>"
