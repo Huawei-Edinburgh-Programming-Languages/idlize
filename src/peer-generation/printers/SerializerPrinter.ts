@@ -14,7 +14,7 @@
  */
 
 import * as idl from '@idlize/core/idl'
-import { generatorConfiguration, Language, throwException } from '@idlize/core'
+import { generatorConfiguration, Language, RuntimeType, throwException } from '@idlize/core'
 import { ArkPrimitiveType } from "../ArkPrimitiveType"
 import { ExpressionStatement, LanguageStatement, Method, MethodSignature, NamedMethodSignature } from "../LanguageWriters"
 import { LanguageWriter } from "@idlize/core"
@@ -43,12 +43,88 @@ import { NativeModule } from '../NativeModule'
 
 type SerializableTarget = idl.IDLInterface | idl.IDLCallback
 
+class LengthSerializerPrinter {
+    constructor(
+        private readonly library: PeerLibrary,
+        private readonly writer: LanguageWriter,
+    ) {}
+
+    generateLengthSerializer() {
+        // generate Length serializer only if there is such a type
+        if (!collectDeclarationTargets(this.library).some(it => it === idl.IDLLengthType)) return
+
+        const methodName = idl.IDLLengthType.name
+        const value = "value"
+
+        const serializerBody = this.makeLengthSerializer("this", value, this.writer)
+        if (!serializerBody) return
+
+        this.library.setCurrentContext(`write${methodName}()`)
+        this.writer.writeMethodImplementation(
+            new Method(`write${methodName}`,
+                new NamedMethodSignature(idl.IDLVoidType, [idl.IDLLengthType], [value])),
+            writer => writer.writeStatement(serializerBody))
+        this.library.setCurrentContext(undefined)
+    }
+
+    private makeLengthSerializer(serializer: string, value: string, writer: LanguageWriter): LanguageStatement | undefined {
+        switch (writer.language) {
+            case Language.CPP:
+                return undefined
+            case Language.TS:
+            case Language.ARKTS: {
+                const valueType = "valueType"
+                return writer.makeBlock([
+                    writer.makeAssign(valueType, undefined, writer.makeFunctionCall("runtimeType", [writer.makeString(value)]), true),
+                    writer.makeStatement(writer.makeMethodCall(serializer, "writeInt8", [writer.makeString(valueType)])),
+
+                    writer.makeMultiBranchCondition([
+                        {
+                            expr: writer.makeRuntimeTypeCondition(valueType, true, RuntimeType.NUMBER),
+                            stmt: writer.makeStatement(
+                                writer.makeMethodCall(serializer, "writeFloat32", [writer.makeString(`${value} as float32`)])
+                            )
+                        },
+                        {
+                            expr: writer.makeRuntimeTypeCondition(valueType, true, RuntimeType.STRING),
+                            stmt: writer.makeStatement(
+                                writer.makeMethodCall(serializer, "writeString", [writer.makeString(`${value} as string`)])
+                            )
+                        },
+                        {
+                            expr: writer.makeRuntimeTypeCondition(valueType, true, RuntimeType.OBJECT),
+                            stmt: writer.makeStatement(
+                                writer.makeMethodCall(serializer, "writeInt32", [writer.makeString(`(${value} as Resource).id as int32`)])
+                            )
+                        },
+                    ]),
+                ], false)
+            }
+            case Language.JAVA:
+                return writer.makeBlock([
+                    writer.makeStatement(writer.makeMethodCall(serializer, "writeInt8", [writer.makeRuntimeType(RuntimeType.STRING)])),
+                    writer.makeStatement(writer.makeMethodCall(serializer, "writeString", [writer.makeString(`${value}.value`)]))
+                ], false)
+            case Language.CJ:
+                return writer.makeBlock([
+                    writer.makeStatement(writer.makeMethodCall(serializer, "writeInt8", [writer.makeRuntimeType(RuntimeType.STRING)])),
+                    writer.makeStatement(writer.makeMethodCall(serializer, "writeString", [writer.makeString(`${value}.getValue1()`)]))
+                ], false)
+            default:
+                break;
+        }
+    }
+}
+
 class IdlSerializerPrinter {
     constructor(
         private readonly library: PeerLibrary,
         private readonly destFile: SourceFile,
-    ) {}
-
+    ) {
+        this.lengthSerializerPrinter = new LengthSerializerPrinter(library, destFile.content)
+    }
+    
+    private lengthSerializerPrinter: LengthSerializerPrinter
     private get writer(): LanguageWriter {
         return this.destFile.content
     }
@@ -152,21 +228,7 @@ class IdlSerializerPrinter {
     }
 
     private generateLengthSerializer() {
-        // generate Length serializer only if there is such a type
-        if (!collectDeclarationTargets(this.library).some(it => it === idl.IDLLengthType)) return
-
-        const methodName = idl.IDLLengthType.name
-        const value = "value"
-
-        const serializerBody = this.writer.makeLengthSerializer("this", value)
-        if (!serializerBody) return
-
-        this.library.setCurrentContext(`write${methodName}()`)
-        this.writer.writeMethodImplementation(
-            new Method(`write${methodName}`,
-                new NamedMethodSignature(idl.IDLVoidType, [idl.IDLLengthType], [value])),
-            writer => writer.writeStatement(serializerBody))
-        this.library.setCurrentContext(undefined)
+        this.lengthSerializerPrinter.generateLengthSerializer()
     }
 
     print(prefix: string, declarationPath?: string) {
