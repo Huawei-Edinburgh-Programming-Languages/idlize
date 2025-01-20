@@ -18,9 +18,10 @@ import { BuilderClass } from './BuilderClass';
 import { MaterializedClass } from "./Materialized";
 import { isMaterialized, isPredefined } from './idl/IdlPeerGeneratorVisitor';
 import { PeerFile } from "./PeerFile";
-import { BufferConvertor, CallbackConvertor, ClassConvertor, DateConvertor, ImportTypeConvertor, MapConvertor, MaterializedClassConvertor, NumericConvertor,  PointerConvertor, TupleConvertor, TypeAliasConvertor } from './ArgConvertors';
+import { BufferConvertor, CallbackConvertor, ClassConvertor, DateConvertor, ImportTypeConvertor, MapConvertor, NumericConvertor,  PointerConvertor, TupleConvertor, TypeAliasConvertor } from './ArgConvertors';
 import { AggregateConvertor, StringConvertor, ArrayConvertor, FunctionConvertor, InterfaceConvertor, OptionConvertor, CustomTypeConvertor, UnionConvertor } from "@idlize/core"
-import { IndentedPrinter, Language, warn, isImportAttr, isStringEnum, NumberConvertor } from '@idlize/core'
+import { MaterializedClassConvertor } from '@idlize/core'
+import { IndentedPrinter, Language, warn, isImportAttr, NumberConvertor } from '@idlize/core'
 import { createTypeNameConvertor } from './LanguageWriters';
 import { LanguageWriter } from '@idlize/core';
 import { StructPrinter } from './printers/StructPrinter';
@@ -30,7 +31,6 @@ import { generateSyntheticFunctionName } from '../IDLVisitor';
 import { IdlNameConvertor } from '@idlize/core';
 import { LibraryInterface } from '@idlize/core';
 import { IDLNodeToStringConvertor } from './LanguageWriters/convertors/InteropConvertor';
-import { ArkPrimitiveType } from "./ArkPrimitiveType";
 
 export class PeerLibrary implements LibraryInterface {
     private _syntheticEntries: idl.IDLEntry[] = []

@@ -365,7 +365,7 @@ const builtInInterfaceTypes = new Map<string,
     ],
 )
 
-export function makeInterfaceTypeCheckerCall(
+function makeInterfaceTypeCheckerCall(
     valueAccessor: string,
     interfaceName: string,
     allFields: string[],

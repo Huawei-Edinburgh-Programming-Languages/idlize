@@ -468,50 +468,6 @@ export class DateConvertor extends BaseArgConvertor { //
     }
 }
 
-export class MaterializedClassConvertor extends BaseArgConvertor {
-    constructor(param: string, public declaration: idl.IDLInterface) {
-        super(idl.createReferenceType(declaration.name), [RuntimeType.OBJECT], false, true, param)
-    }
-    convertorArg(param: string, writer: LanguageWriter): string {
-        throw new Error("Must never be used")
-    }
-    convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
-        printer.writeStatement(
-            printer.makeStatement(
-                printer.makeMethodCall(`${param}Serializer`, `write${this.declaration.name}`, [
-                    printer.makeString(value)
-                ])))
-    }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
-        const readStatement = writer.makeCast(
-            writer.makeMethodCall(`${deserializerName}`, `read${this.declaration.name}`, []),
-            idl.createReferenceType(this.declaration.name)
-        )
-        return assigneer(readStatement)
-    }
-    nativeType(): idl.IDLType {
-        return idl.createReferenceType(this.declaration.name)
-    }
-    interopType(): idl.IDLType {
-        throw new Error("Must never be used")
-    }
-    isPointerType(): boolean {
-        return true
-    }
-    override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        if (idl.isInterface(this.declaration)) {
-            if (this.declaration.subkind === idl.IDLInterfaceSubkind.Class) {
-                return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT,
-                    [writer.instanceOf(this, value, duplicates)])
-            }
-            if (this.declaration.subkind === idl.IDLInterfaceSubkind.Interface) {
-                const uniqueFields = this.declaration.properties.filter(it => !duplicates.has(it.name))
-                return this.discriminatorFromFields(value, writer, uniqueFields, it => it.name, it => it.isOptional, duplicates)
-            }
-        }
-    }
-}
-
 export class TypeAliasConvertor extends ProxyConvertor { //
     constructor(library: LibraryInterface, param: string, typedef: idl.IDLTypedef) {///, private typeArguments?: ts.NodeArray<ts.TypeNode>) {
         super(library.typeConvertor(param, typedef.type), typedef.name)

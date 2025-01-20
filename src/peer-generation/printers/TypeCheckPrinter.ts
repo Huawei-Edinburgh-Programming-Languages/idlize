@@ -20,16 +20,6 @@ import { collectDeclItself, collectDeclDependencies } from '../ImportsCollectorU
 import { DependenciesCollector } from '../idl/IdlDependenciesCollector';
 import { isPredefined } from '../idl/IdlPeerGeneratorVisitor';
 
-const builtInInterfaceTypes = new Map<string,
-    (writer: LanguageWriter, value: string) => LanguageExpression>([
-        ["Object",
-            (writer: LanguageWriter, value: string) => writer.makeCallIsObject(value)],
-        ["ArrayBuffer",
-            (writer: LanguageWriter, value: string) => writer.makeCallIsArrayBuffer(value)],
-        ["Resource",
-            (writer: LanguageWriter, value: string) => writer.makeCallIsResource(value)],
-    ])
-
 export function importTypeChecker(library: PeerLibrary, imports: ImportsCollector): void {
     imports.addFeature("TypeChecker", "#components")
 }
