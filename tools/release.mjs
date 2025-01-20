@@ -88,7 +88,7 @@ function run() {
         throw new Error("Failed to publish idlize package")
     }
 
-    console.log(`> Link: https://nexus.bz-openlab.ru:10443/repository/koala-npm/%40idlize/arkgen/-/idlize-${next.toString()}.tgz`)
+    console.log(`> Link: https://nexus.bz-openlab.ru:10443/repository/koala-npm/%40idlize/arkgen/-/arkgen-${next.toString()}.tgz`)
     console.log("$ git push")
 
 }
