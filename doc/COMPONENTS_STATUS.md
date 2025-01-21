@@ -1227,8 +1227,8 @@
 |`placeholderFont`| Function | Spirin Andrey | done | |
 |`enterKeyType`| Function | Spirin Andrey | done |  |
 |`caretColor`| Function | Spirin Andrey | done |  |
-|`onEditChanged`| Function | Spirin Andrey | testskipped |  |
-|`onEditChange`| Function | Spirin Andrey | testskipped |  |
+|`onEditChanged`| Function | Spirin Andrey | testskipped | UT in progress Kovalev Sergey |
+|`onEditChange`| Function | Spirin Andrey | testskipped | UT in progress Kovalev Sergey |
 |`onSubmit`| Function | Spirin Andrey | done |  |
 |`onChange`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail  |
 |`onTextSelectionChange`| Function | Spirin Andrey | testskipped |  |
