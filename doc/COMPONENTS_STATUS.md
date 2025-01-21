@@ -1474,7 +1474,7 @@
 |`enableSmoothDragResize`| Function | Erokhin Ilya | done | |
 |`onRenderProcessNotResponding`| Function | Erokhin Ilya | done | |
 |`onRenderProcessResponding`| Function | Erokhin Ilya | done | |
-|`selectionMenuOptions`| Function | Erokhin Ilya | testskipped | |
+|`selectionMenuOptions`| Function | Erokhin Ilya | testskipped | UT in progress Maksimov Nikita |
 |`onViewportFitChanged`| Function | Erokhin Ilya | done | |
 |`onInterceptKeyboardAttach`| Function | Maksimov Nikita | done | |
 |`onAdsBlocked`| Function | Erokhin Ilya | done | |
@@ -1699,7 +1699,7 @@
 |`drawBehind`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
 |`drawContent`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
 |`drawFront`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
-|`invalidate`| Function | Erokhin Ilya | testskipped | |
+|`invalidate`| Function | Erokhin Ilya | testskipped | UT in progress Maksimov Nikita |
 |*TransitionEffect*| *Class* | Andrey Khudenkikh | blocked IDL | |
 |`translate`| Function | Andrey Khudenkikh | done | |
 |`rotate`| Function | Andrey Khudenkikh | done | |
@@ -2087,7 +2087,7 @@
 |`fling`| Function | Erokhin Ilya | done |  |
 |`scrollPage`| Function | Erokhin Ilya | done |  |
 |`currentOffset`| Function | Erokhin Ilya | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0|
-|`scrollToIndex`| Function | Erokhin Ilya | testskipped | |
+|`scrollToIndex`| Function | Erokhin Ilya | testskipped | UT in progress Maksimov Nikita |
 |`scrollBy`| Function | Erokhin Ilya | done |  |
 |`isAtEnd`| Function | Erokhin Ilya | done |  |
 |`getItemRect`| Function | Erokhin Ilya | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0|
