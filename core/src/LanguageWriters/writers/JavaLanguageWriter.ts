@@ -117,6 +117,8 @@ class JavaMapForEachStatement implements LanguageStatement {
 //                           WRITER                           //
 ////////////////////////////////////////////////////////////////
 
+// hello
+
 export class JavaLanguageWriter extends CLikeLanguageWriter {
     protected typeConvertor: IdlNameConvertor
     constructor(printer: IndentedPrinter,
