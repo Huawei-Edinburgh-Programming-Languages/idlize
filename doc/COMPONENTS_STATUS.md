@@ -167,10 +167,10 @@
 |`outlineRadius`| Function | Skroba Gleb | done | |
 |`foregroundColor`| Function | Roman Sedaikin | done | |
 |`onClick`| Function | Roman Sedaikin | done | |
-|`onHover`| Function | Andrey Khudenkikh | testskipped | UT in progress Andrey Khudenkikh |
-|`onAccessibilityHover`| Function | Andrey Khudenkikh | testskipped | UT in progress Andrey Khudenkikh |
+|`onHover`| Function | Andrey Khudenkikh | done | |
+|`onAccessibilityHover`| Function | Andrey Khudenkikh | done | |
 |`hoverEffect`| Function | Roman Sedaikin | done | |
-|`onMouse`| Function | Andrey Khudenkikh | testskipped | UT in progress Andrey Khudenkikh |
+|`onMouse`| Function | Andrey Khudenkikh | done | |
 |`onTouch`| Function | Roman Sedaikin | done | |
 |`onKeyEvent`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`onDigitalCrown`| Function | | | |
