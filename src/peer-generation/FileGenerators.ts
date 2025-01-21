@@ -570,7 +570,7 @@ export function makeMaterializedPrologue(lang: Language): string {
     return `
 ${prologue}
 
-${importTsInteropTypes}
+${lang == Language.TS || lang == Language.ARKTS ? importTsInteropTypes : ''}
 
 `
 }

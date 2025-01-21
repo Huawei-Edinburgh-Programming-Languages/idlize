@@ -189,7 +189,7 @@ export class IfStatement implements LanguageStatement {
         }
     }
 
-    writeBody(writer: LanguageWriter, body:LanguageStatement, op: () => void) {
+    writeBody(writer: LanguageWriter, body: LanguageStatement, op: () => void) {
         if (!(body instanceof BlockStatement)) {
             writer.pushIndent()
         }
@@ -340,6 +340,12 @@ export enum MethodModifier {
     PROTECTED
 }
 
+export enum ClassModifier {
+    PUBLIC,
+    PRIVATE,
+    PROTECTED
+}
+
 export class Field {
     constructor(
         public name: string,
@@ -441,7 +447,7 @@ export abstract class LanguageWriter {
 
     maybeSemicolon() { return ";" }
 
-    abstract writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string, interfaces?: string[], generics?: string[], isDeclared?: boolean): void
+    abstract writeClass(name: string, op: (writer: LanguageWriter) => void, superClass?: string, interfaces?: string[], generics?: string[], isDeclared?: boolean, isExport?: boolean): void
     abstract writeEnum(name: string, members: { name: string, alias?: string, stringId: string | undefined, numberId: number }[], op?: (writer: LanguageWriter) => void): void
     abstract writeInterface(name: string, op: (writer: LanguageWriter) => void, superInterfaces?: string[], isDeclared?: boolean): void
     abstract writeFieldDeclaration(name: string, type: idl.IDLType, modifiers: FieldModifier[]|undefined, optional: boolean, initExpr?: LanguageExpression): void
