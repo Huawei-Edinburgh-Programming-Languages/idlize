@@ -504,6 +504,12 @@ export class CJLanguageWriter extends LanguageWriter {
     makeCast(value: LanguageExpression, type: idl.IDLType, options?:MakeCastOptions): LanguageExpression {
         return new CJCastExpression(value, this.getNodeName(type), options?.unsafe ?? false)
     }
+    typeInstanceOf(type: idl.IDLEntry, value: string, members?: string[]): LanguageExpression {
+        if (idl.isInterface(type)) {
+            return this.makeString(`${value} is ${this.getNodeName(type)}`)
+        }
+        throw new Error(`typeInstanceOf fails: not class or interface: ${this.getNodeName(type)}`)
+    }
     getObjectAccessor(convertor: BaseArgConvertor, value: string, args?: ObjectArgs): string {
         return `${value}`
     }

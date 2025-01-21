@@ -315,6 +315,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
                 undefined,
                 undefined,
                 undefined,
+                undefined,
                 false
             )
         } else {
