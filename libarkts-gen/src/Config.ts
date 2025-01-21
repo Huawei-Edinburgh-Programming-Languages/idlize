@@ -18,7 +18,8 @@ import { GeneratorConfiguration, throwException } from "@idlize/core"
 export class Config implements GeneratorConfiguration {
     constructor(
         private interfacesGenerateFor?: string[],
-        private methodsGenerateFor?: string[]
+        private methodsGenerateFor?: string[],
+        private enumsGenerateFor?: string[]
     ) {}
 
     private implPrefix = `impl_`
@@ -59,6 +60,10 @@ export class Config implements GeneratorConfiguration {
 
     nativeModuleFunction(name: string): string {
         return `${this.nativeModulePrefix}${name}`
+    }
+
+    shouldEmitEnums(name: string): boolean {
+        return this.enumsGenerateFor?.includes(name) ?? true
     }
 
     shouldEmitInterface(name: string): boolean {

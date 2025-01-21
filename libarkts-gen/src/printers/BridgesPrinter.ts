@@ -34,6 +34,8 @@ import {
     IDLInterface,
     IDLParameter,
     IDLType,
+    IDLEnum,
+    IDLEnumMember,
     isInterface,
     isContainerType,
     isEnum,
@@ -61,7 +63,7 @@ export class BridgesPrinter {
 
     private visit(node: IDLEntry): void {
         if (isInterface(node)) return this.visitInterface(node)
-        if (isEnum(node)) return
+        if (isEnum(node)) return this.visitEnum(node)
         if (isTypedef(node)) return
 
         throwException(`Unexpected top-level node: ${IDLKind[node.kind]}`)
@@ -72,6 +74,11 @@ export class BridgesPrinter {
         node.methods
             .filter(it => !this.config.paramArray(`handwrittenMethods`).includes(it.name))
             .forEach(it => this.printMethod(it, node))
+    }
+
+    private visitEnum(node: IDLEnum): void {
+        if (!this.config.shouldEmitEnums(node.name)) return
+        this.printEnum(node.name, node.elements)
     }
 
     private printParameters(parameters: IDLParameter[]): void {
@@ -160,6 +167,24 @@ export class BridgesPrinter {
 
     private mapType(node: IDLType): string {
         return convertType(this.convertor, node)
+    }
+
+    private printEnumMember(member: IDLEnumMember): void {
+        if (member.type.kind !== IDLKind.PrimitiveType) {
+            throw new Error(`Unexpected kind of enum member type: ${member.type.kind}`)
+        }
+        this.printer.print(`${member.name} = ${member.initializer},`)
+    }
+
+    private printEnum(name: string, elements: IDLEnumMember[]): void {
+        this.printer.print(`enum ${name} {`)
+        this.printer.withIndent(() =>
+            elements.forEach(
+                it => this.printEnumMember(it)
+            )
+        )
+        this.printer.print(`}`)
+        this.printer.print(``)
     }
 
     private printMethod(node: IDLMethod, parent: IDLInterface): void {
