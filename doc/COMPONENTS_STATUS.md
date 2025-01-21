@@ -1218,7 +1218,7 @@
 |`contentModifier`| Function |Pavelyev Ivan|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG + |
 |`dateTimeOptions`| Function |Pavelyev Ivan|blocked IDL| Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX + |
 |*TextInput*| *Component* | Spirin Andrey | in progress |  |
-|`setTextInputOptions`| Function | Spirin Andrey | testskipped |  |
+|`setTextInputOptions`| Function | Spirin Andrey | testskipped | UT in progress Samarin Sergey |
 |`type`| Function | Spirin Andrey | done |  |
 |`contentType`| Function | Spirin Andrey | done |  |
 |`placeholderColor`| Function | Spirin Andrey | done |  |
@@ -1268,11 +1268,11 @@
 |`maxFontScale`| Function | | | |
 |`heightAdaptivePolicy`| Function | Spirin Andrey | done |  |
 |`enableAutoFill`| Function | Spirin Andrey | done |  |
-|`decoration`| Function | Spirin Andrey | testskipped  |  |
-|`letterSpacing`| Function | Spirin Andrey | testskipped  |  |
-|`lineHeight`| Function | Spirin Andrey | testskipped  |  |
+|`decoration`| Function | Spirin Andrey | testskipped  | UT in progress Samarin Sergey |
+|`letterSpacing`| Function | Spirin Andrey | testskipped  | UT in progress Samarin Sergey |
+|`lineHeight`| Function | Spirin Andrey | testskipped  | UT in progress Samarin Sergey |
 |`passwordRules`| Function | Spirin Andrey | done |  |
-|`fontFeature`| Function | Spirin Andrey | testskipped  |  |
+|`fontFeature`| Function | Spirin Andrey | testskipped  | UT in progress Samarin Sergey |
 |`showPassword`| Function | Spirin Andrey | done |  |
 |`onSecurityStateChange`| Function | Spirin Andrey | testskipped | UT in progress Kovalev Sergey |
 |`onWillInsert`| Function | Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
@@ -2129,8 +2129,8 @@
 |`setTo`| Function | Dudkin Sergey | done | |
 |*TextController*| *Class* | Samarin Sergey | in progress | |
 |`closeSelectionMenu`| Function | Samarin Sergey | done | |
-|`setStyledString`| Function | Samarin Sergey | testskipped | UT in progress Samarin Sergey |
-|`getLayoutManager`| Function | Samarin Sergey | testskipped | UT in progress Samarin Sergey |
+|`setStyledString`| Function | Samarin Sergey | done | |
+|`getLayoutManager`| Function | Samarin Sergey | done | |
 |*TextAreaController*| *Class* | Tuzhilkin Ivan | done |  |
 |`caretPosition`| Function | Tuzhilkin Ivan | done |  |
 |`setTextSelection`| Function | Tuzhilkin Ivan | done |  |
