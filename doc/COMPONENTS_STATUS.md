@@ -80,11 +80,11 @@
 |`startOfWeek`| Function | Maksimov Nikita | done |  |
 |`offDays`| Function | Maksimov Nikita | done |  |
 |`direction`| Function | Maksimov Nikita | done |  |
-|`currentDayStyle`| Function | Maksimov Nikita | testskipped | UT in progress Kovalev Sergey |
-|`nonCurrentDayStyle`| Function | Maksimov Nikita | testskipped | UT in progress Kovalev Sergey |
-|`todayStyle`| Function | Maksimov Nikita | testskipped | UT in progress Kovalev Sergey |
-|`weekStyle`| Function | Maksimov Nikita | testskipped | UT in progress Kovalev Sergey |
-|`workStateStyle`| Function | Maksimov Nikita | testskipped | UT in progress Kovalev Sergey |
+|`currentDayStyle`| Function | Maksimov Nikita | done |  |
+|`nonCurrentDayStyle`| Function | Maksimov Nikita | done |  |
+|`todayStyle`| Function | Maksimov Nikita | done |  |
+|`weekStyle`| Function | Maksimov Nikita | done |  |
+|`workStateStyle`| Function | Maksimov Nikita | done |  |
 |`onSelectChange`| Function | Maksimov Nikita | done | |
 |`onRequestData`| Function | Maksimov Nikita | done | |
 |*CalendarPicker*| *Component* |Politov Mikhail | done |  |
