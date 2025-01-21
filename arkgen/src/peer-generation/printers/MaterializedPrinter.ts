@@ -25,7 +25,7 @@ import {
     MethodSignature,
     NamedMethodSignature
 } from "../LanguageWriters";
-import { LanguageWriter } from "@idlize/core"
+import { LanguageWriter, RuntimeType } from "@idlize/core"
 import { copyMaterializedMethod, getInternalClassName, MaterializedClass, MaterializedField, MaterializedMethod } from "../Materialized"
 import { makeMaterializedPrologue, tsCopyrightAndWarning } from "../FileGenerators";
 import { groupOverloads, OverloadsPrinter } from "./OverloadsPrinter";
@@ -47,7 +47,6 @@ import { getReferenceResolver } from "../ReferenceResolver";
 import { collectDeclItself, collectDeclDependencies, SyntheticModule } from "../ImportsCollectorUtils";
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { isMaterialized } from "../idl/IdlPeerGeneratorVisitor";
-import { RuntimeType } from '../ArgConvertors';
 
 interface MaterializedFileVisitor {
     visit(): void
