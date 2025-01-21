@@ -36,8 +36,9 @@ pg java:run:
     - koala-ci
   before_script:
     - !reference [.setup, script]
+    - cd $CI_PROJECT_DIR/arkgen
   script:
-    - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-arm64 npm run -C arkgen run:java
+    - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-arm64 npm run run:java
 
 run arkts subset:
   stage: test
@@ -46,9 +47,10 @@ run arkts subset:
     - koala-ci
   before_script:
     - !reference [.setup, script]
+    - cd $CI_PROJECT_DIR/arkgen
     - PANDA_SDK_VERSION=1.5.0-dev.12828 npm run panda:sdk:install
   script:
-    - npm run -C arkgen run:panda:subset
+    - npm run run:panda:subset
 
 compile arkts peers:
   stage: test
@@ -58,9 +60,10 @@ compile arkts peers:
     - koala-ci
   before_script:
     - !reference [.setup, script]
+    - cd $CI_PROJECT_DIR/arkgen
     - PANDA_SDK_VERSION=1.5.0-dev.12828 npm run panda:sdk:install
   script:
-    - npm run -C arkgen make:compile:arkts:peers
+    - npm run make:compile:arkts:peers
 
 arkts subset tsc:
    allow_failure: true
@@ -70,8 +73,9 @@ arkts subset tsc:
      - koala-ci
    before_script:
      - !reference [.setup, script]
+     - cd $CI_PROJECT_DIR/arkgen
    script:
-     - npm run -C arkgen check:arkts:subset:tsc
+     - npm run check:arkts:subset:tsc
 
 arkts subset sig integration:
   allow_failure: true
@@ -81,9 +85,10 @@ arkts subset sig integration:
     - koala-ci
   before_script:
     - !reference [.setup, script]
-    - PANDA_SDK_VERSION=1.5.0-dev.12828 npm run -C arkgen panda:sdk:install
+    - cd $CI_PROJECT_DIR/arkgen
+    - PANDA_SDK_VERSION=1.5.0-dev.12828 npm run panda:sdk:install
   script:
-    - npm run -C arkgen sig:arkts:subset:all
+    - npm run sig:arkts:subset:all
 
 build arkoala-ts:
   allow_failure: true
@@ -93,8 +98,9 @@ build arkoala-ts:
     - koala-ci
   before_script:
     - !reference [.setup, script]
+    - cd $CI_PROJECT_DIR/arkgen
   script:
-    - KOALA_BZ=1 OPENLAB_USERNAME=koala-ci OPENLAB_PASSWORD=w1llUgu3ss npm run -C arkgen arkoala:ts
+    - KOALA_BZ=1 OPENLAB_USERNAME=koala-ci OPENLAB_PASSWORD=w1llUgu3ss npm run arkoala:ts
 
 #build arkoala-ts-native-arm64:
 #  stage: test
@@ -245,8 +251,8 @@ check index-full:
       - koala-ci
     before_script:
       - !reference [.setup, script]
+      - cd $CI_PROJECT_DIR/arkgen
     script:
-        - cd $CI_PROJECT_DIR/arkgen
         - npm run check:peers
         - npm run check:index-full:ts
         - npm run make:ts:subset
