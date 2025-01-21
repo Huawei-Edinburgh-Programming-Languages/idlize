@@ -1231,8 +1231,8 @@
 |`onEditChange`| Function | Spirin Andrey | testskipped | UT in progress Kovalev Sergey |
 |`onSubmit`| Function | Spirin Andrey | done |  |
 |`onChange`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail  |
-|`onTextSelectionChange`| Function | Spirin Andrey | testskipped |  |
-|`onContentScroll`| Function | Spirin Andrey | testskipped |  |
+|`onTextSelectionChange`| Function | Spirin Andrey | UT in progress Kovalev Sergey |  |
+|`onContentScroll`| Function | Spirin Andrey | UT in progress Kovalev Sergey |  |
 |`maxLength`| Function | Spirin Andrey | done |  |
 |`fontColor`| Function | Spirin Andrey | done |  |
 |`fontSize`| Function | Spirin Andrey | done |  |
