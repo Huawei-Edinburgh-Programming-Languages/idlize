@@ -27,7 +27,7 @@ idlize sanity:
   before_script:
     - !reference [.setup, script]
   script:
-    - npm run sanity -C ..
+    - npm run sanity
 
 pg java:run:
   stage: test
@@ -37,7 +37,7 @@ pg java:run:
   before_script:
     - !reference [.setup, script]
   script:
-    - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-arm64 npm run run:java
+    - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-arm64 npm run -C arkgen run:java
 
 run arkts subset:
   stage: test
@@ -48,7 +48,7 @@ run arkts subset:
     - !reference [.setup, script]
     - PANDA_SDK_VERSION=1.5.0-dev.12828 npm run panda:sdk:install
   script:
-    - npm run run:panda:subset
+    - npm run -C arkgen run:panda:subset
 
 compile arkts peers:
   stage: test
@@ -60,7 +60,7 @@ compile arkts peers:
     - !reference [.setup, script]
     - PANDA_SDK_VERSION=1.5.0-dev.12828 npm run panda:sdk:install
   script:
-    - npm run make:compile:arkts:peers
+    - npm run -C arkgen make:compile:arkts:peers
 
 arkts subset tsc:
    allow_failure: true
@@ -71,7 +71,7 @@ arkts subset tsc:
    before_script:
      - !reference [.setup, script]
    script:
-     - npm run check:arkts:subset:tsc
+     - npm run -C arkgen check:arkts:subset:tsc
 
 arkts subset sig integration:
   allow_failure: true
@@ -81,9 +81,9 @@ arkts subset sig integration:
     - koala-ci
   before_script:
     - !reference [.setup, script]
-    - PANDA_SDK_VERSION=1.5.0-dev.12828 npm run panda:sdk:install
+    - PANDA_SDK_VERSION=1.5.0-dev.12828 npm run -C arkgen panda:sdk:install
   script:
-    - npm run sig:arkts:subset:all
+    - npm run -C arkgen sig:arkts:subset:all
 
 build arkoala-ts:
   allow_failure: true
@@ -94,7 +94,7 @@ build arkoala-ts:
   before_script:
     - !reference [.setup, script]
   script:
-    - KOALA_BZ=1 OPENLAB_USERNAME=koala-ci OPENLAB_PASSWORD=w1llUgu3ss npm run arkoala:ts
+    - KOALA_BZ=1 OPENLAB_USERNAME=koala-ci OPENLAB_PASSWORD=w1llUgu3ss npm run -C arkgen arkoala:ts
 
 #build arkoala-ts-native-arm64:
 #  stage: test
@@ -142,15 +142,15 @@ build idlize:
   - koala-ci
   before_script:
     - !reference [.setup, script]
-    - cd $CI_PROJECT_DIR
+    - cd $CI_PROJECT_DIR/arkgen
   script:
     - npm run compile
   artifacts:
     expire_in: 2 days
     paths:
-      - build
-      - lib
-      - out
+      - arkgen/build
+      - arkgen/lib
+      - arkgen/out
 
 
 build idlize-core:
@@ -246,7 +246,7 @@ check index-full:
     before_script:
       - !reference [.setup, script]
     script:
-        - cd $CI_PROJECT_DIR
+        - cd $CI_PROJECT_DIR/arkgen
         - npm run check:peers
         - npm run check:index-full:ts
         - npm run make:ts:subset
@@ -263,6 +263,7 @@ check generated XML demo:
       - koala-ci
     before_script:
       - !reference [.setup, script]
+      - cd $CI_PROJECT_DIR/arkgen
       - PANDA_SDK_VERSION=1.5.0-dev.12828 npm run panda:sdk:install
       - chmod +x external/incremental/tools/panda/arkts/ark{,tsc,link,disasm}
       - npm run compile --prefix external/interop
