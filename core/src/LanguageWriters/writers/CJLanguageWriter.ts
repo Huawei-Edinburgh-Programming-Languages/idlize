@@ -588,12 +588,6 @@ export class CJLanguageWriter extends LanguageWriter {
     override castToBoolean(value: string): string {
         return `if (${value}) { Int32(1) } else { Int32(0) }`
     }
-    override makeLengthSerializer(serializer: string, value: string): LanguageStatement | undefined {
-        return this.makeBlock([
-            this.makeStatement(this.makeMethodCall(serializer, "writeInt8", [this.makeRuntimeType(RuntimeType.STRING)])),
-            this.makeStatement(this.makeMethodCall(serializer, "writeString", [this.makeString(`${value}.getValue1()`)]))
-        ], false)
-    }
     override makeLengthDeserializer(deserializer: string): LanguageStatement | undefined {
         const valueType = "valueType"
 

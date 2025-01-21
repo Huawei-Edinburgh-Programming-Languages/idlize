@@ -61,11 +61,7 @@ export class LengthConvertor extends BaseArgConvertor {
         }
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
-        printer.writeStatement(
-            printer.makeStatement(
-                printer.makeMethodCall(`${param}Serializer`, 'writeLength', [printer.makeString(value)])
-            )
-        )
+        printer.writeMethodCall(`${param}Serializer`, 'writeLength', [value])
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const readExpr = writer.makeString(`${deserializerName}.readLength()`)
