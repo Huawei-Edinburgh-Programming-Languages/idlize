@@ -1459,14 +1459,14 @@
 |`onSafeBrowsingCheckResult`| Function | Erokhin Ilya | done | |
 |`onNavigationEntryCommitted`| Function | Erokhin Ilya | done | |
 |`onIntelligentTrackingPreventionResult`| Function | Erokhin Ilya | done | |
-|`javaScriptOnDocumentStart`| Function | Erokhin Ilya | testskipped | |
-|`javaScriptOnDocumentEnd`| Function | Erokhin Ilya | testskipped | |
+|`javaScriptOnDocumentStart`| Function | Erokhin Ilya | testskipped | UT in progress Andrey Khudenkikh |
+|`javaScriptOnDocumentEnd`| Function | Erokhin Ilya | testskipped | UT in progress Andrey Khudenkikh |
 |`layoutMode`| Function | Erokhin Ilya | done | |
 |`nestedScroll`| Function | Erokhin Ilya | testskipped | |
 |`enableNativeEmbedMode`| Function | Erokhin Ilya | done | |
-|`onNativeEmbedLifecycleChange`| Function | Erokhin Ilya | testskipped | |
+|`onNativeEmbedLifecycleChange`| Function | Erokhin Ilya | testskipped | UT in progress Andrey Khudenkikh |
 |`onNativeEmbedVisibilityChange`| Function | Erokhin Ilya | done | |
-|`onNativeEmbedGestureEvent`| Function | Erokhin Ilya | testskipped | |
+|`onNativeEmbedGestureEvent`| Function | Erokhin Ilya | testskipped | UT in progress Andrey Khudenkikh |
 |`copyOptions`| Function | Erokhin Ilya | done | |
 |`onOverrideUrlLoading`| Function | Maksimov Nikita | done | |
 |`textAutosizing`| Function | Erokhin Ilya | done | |
