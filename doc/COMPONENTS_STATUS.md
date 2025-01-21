@@ -1274,7 +1274,7 @@
 |`passwordRules`| Function | Spirin Andrey | done |  |
 |`fontFeature`| Function | Spirin Andrey | testskipped  |  |
 |`showPassword`| Function | Spirin Andrey | done |  |
-|`onSecurityStateChange`| Function | Spirin Andrey | testskipped |  |
+|`onSecurityStateChange`| Function | Spirin Andrey | testskipped | UT in progress Kovalev Sergey |
 |`onWillInsert`| Function | Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onDidInsert`| Function | Spirin Andrey | testskipped |  |
 |`onWillDelete`| Function | Skroba Gleb | done |  https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
