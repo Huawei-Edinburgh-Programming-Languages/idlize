@@ -1,22 +1,26 @@
 /.idea/
-/.rollup.cache/
+/arkgen/.rollup.cache/
 /.vscode/
 /build/
 /core/build/
 /generated/
-/out/
+/out
+/arkgen/out/
 /.packages/
 /idl/
 /interface_sdk-js/
-/lib/
+arkgen/lib/
 /node_modules/
 /panda/node_modules/
 /sdk/
+/arkgen/sdk/
 
 /package-lock.json
 /.npmrc
 
+/arkgen/native/NativeBridgeNapi.node
 /native/NativeBridgeNapi.node
+/arkgen/native/*.so
 /native/*.so
 /native/*.dylib
 /native/*.dll
