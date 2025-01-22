@@ -58,6 +58,7 @@ import { IdlWrapperProcessor } from "./skoala-generation/idl/idlSkoalaLibrary"
 import { fillSyntheticDeclarations } from "./peer-generation/idl/SyntheticDeclarationsFiller"
 import { PeerLibrary } from "./peer-generation/PeerLibrary"
 import { PeerFile } from "./peer-generation/PeerFile"
+import { IDLConverterFactory } from "./NodeToIDLConverter";
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -356,7 +357,8 @@ if (options.dts2peer) {
         options.inputDir.split(','),
         options.inputFile,
         generatedPeersDir,
-        (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, options, idlLibrary),
+        (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, options,
+            idlLibrary, new IDLConverterFactory(lang)),
         {
             compilerOptions: defaultCompilerOptions,
             onSingleFile(entries: IDLEntry[], outputDir, sourceFile) {
