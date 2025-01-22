@@ -7,9 +7,9 @@ import { execSync } from "child_process"
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 export const IDLIZE_HOME = path.join(__dirname, "..")
-export const IDLIZE_ARKGEN = path.join(__dirname, "../arkgen")
-export const IDLIZE_CORE = path.join(__dirname, "../core")
-export const IDLIZE_LINTER = path.join(__dirname, "../linter")
+export const IDLIZE_ARKGEN = path.join(IDLIZE_HOME, "arkgen")
+export const IDLIZE_CORE = path.join(IDLIZE_HOME, "core")
+export const IDLIZE_LINTER = path.join(IDLIZE_HOME, "linter")
 
 export class Package {
     constructor(path) {
@@ -23,9 +23,9 @@ export class Package {
 }
 
 export const packages = [
-    new Package(path.join(__dirname, "../arkgen")), 
-    new Package(path.join(__dirname, "../core")), 
-    new Package(path.join(__dirname, "../linter"))
+    new Package(path.join(IDLIZE_HOME, "arkgen")),
+    new Package(path.join(IDLIZE_HOME, "core")),
+    new Package(path.join(IDLIZE_HOME, "linter"))
 ]
 
 export class Version {
@@ -95,9 +95,10 @@ export class Git {
 
 }
 
-export function writeToPackageJson(filePath, key, value) {
+export function writeToPackageJson(filePath, key, value, updater) {
     const json = JSON.parse(fs.readFileSync(filePath, "utf-8"))
     json[key] = value
+    if (updater) updater(json)
     fs.writeFileSync(filePath, JSON.stringify(json, null, 2), "utf-8")
 
 }
