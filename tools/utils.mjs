@@ -1,12 +1,11 @@
 import fs from "fs"
-import chalk from "chalk"
 import path from "path"
 import { fileURLToPath } from 'url'
 import { execSync } from "child_process"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-export const IDLIZE_HOME = path.join(__dirname, "..")
+export const IDLIZE_HOME = path.resolve(path.join(__dirname, ".."))
 export const IDLIZE_ARKGEN = path.join(IDLIZE_HOME, "arkgen")
 export const IDLIZE_CORE = path.join(IDLIZE_HOME, "core")
 export const IDLIZE_LINTER = path.join(IDLIZE_HOME, "linter")
