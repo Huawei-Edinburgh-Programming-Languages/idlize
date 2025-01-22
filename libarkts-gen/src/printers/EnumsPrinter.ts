@@ -14,33 +14,23 @@
  */
 
 import {
-    IDLContainerUtils,
     IDLKind,
-    IDLMethod,
     throwException,
     createEmptyReferenceResolver,
-    Language,
     TSLanguageWriter,
 } from "@idlize/core"
 import {
     IDLEntry,
-    IDLInterface,
     IDLType,
     isInterface,
     isEnum,
-    IDLPointerType,
-    IDLI32Type,
     isTypedef,
     IDLEnum,
     IDLEnumMember,
     isPrimitiveType,
 } from "@idlize/core/idl"
-// TODO: need language writers extracted to @idl/core :-()
-// import { MethodSignature, createLanguageWriter } from "../../src/peer-generation/LanguageWriters"
 import { Config } from "../Config"
 import { IndentedPrinter } from "@idlize/core"
-import { convertType } from "@idlize/core"
-import { NativeTypeConvertor } from "../NativeTypeConvertor"
 import { IDLFile } from "../Es2PandaTransformer"
 
 export class EnumsPrinter {
@@ -52,10 +42,8 @@ export class EnumsPrinter {
     private writer = new TSLanguageWriter(
         new IndentedPrinter(),
         createEmptyReferenceResolver(),
-        { convert : (node: IDLType) => this.mapType(node) },
+        { convert : (node: IDLType) => { throw new Error(`There is no type conversions in enums`) } },
     )
-    private convertor = new NativeTypeConvertor(this.idl.entries)
-
     print(): string {
         this.idl.entries.forEach(it => this.visit(it))
         return this.writer.getOutput().join('\n')
@@ -97,9 +85,5 @@ export class EnumsPrinter {
                 }
             )
         )
-    }
-
-    private mapType(node: IDLType): string {
-        return convertType(this.convertor, node)
     }
 }
