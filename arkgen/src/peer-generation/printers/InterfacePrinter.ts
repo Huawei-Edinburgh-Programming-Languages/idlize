@@ -683,24 +683,8 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
         return ([`type ${this.printInterfaceName(tuple)} = [`] as stringOrNone[])
             .concat(tuple.properties
                 .map((it, propIndex) => this.printIfNotSeen(it, it => {
-                    //TODO: use ETSConvertor.processTupleType
-                    let types: IDLType[] = []
-                    if (it.isOptional) {
-                        if (idl.isUnionType(it.type)) {
-                            types = it.type.types
-                        } else if (idl.isPrimitiveType(it.type)) {
-                            types = [it.type]
-                        } else {
-                            throwException(`Unprocessed type: ${idl.forceAsNamedNode(it.type)}`)
-                        }
-                    }
-                    let property = idl.createProperty("",
-                        it.isOptional ? idl.createUnionType([...types, idl.IDLUndefinedType]) : it.type,
-                        it.isReadonly,
-                        it.isStatic,
-                        false)
                     const maybeComma = propIndex < tuple.properties.length - 1 ? ',' : ''
-                    return [indentedBy(`${this.printPropNameWithType(property)}${maybeComma}`, 1)]
+                    return [indentedBy(`${this.printPropNameWithType(it)}${maybeComma}`, 1)]
                 }, seenFields) ).flat())
             .concat(["]"])
     }
