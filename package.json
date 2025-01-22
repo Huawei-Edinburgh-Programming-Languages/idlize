@@ -14,6 +14,6 @@
   "keywords": [],
   "scripts": {
     "release": "npm run -C arkgen release",
-    "sanity": "npm run -C arkgen check:subset:run && npm run -C arkgen check:peers:run && npm run -C arkgen run:all && npm run -C linter run && npm run -C arkgen make:arkts"
+    "sanity": "npm run -C arkgen sanity && npm run -C linter run"
   }
 }
