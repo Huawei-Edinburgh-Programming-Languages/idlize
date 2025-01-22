@@ -15,7 +15,7 @@
 
 import fs from "fs"
 import path from "path"
-import { Version, Git, writeToPackageJson, IDLIZE_ARKGEN, IDLIZE_CORE, IDLIZE_LINTER, publishToOpenlab, replaceInJson } from "./utils.mjs"
+import { Version, Git, writeToPackageJson, IDLIZE_HOME, IDLIZE_CORE, IDLIZE_LINTER, publishToOpenlab, replaceInJson, packages, Package } from "./utils.mjs"
 
 const files = [
     path.join(IDLIZE_ARKGEN, "package.json"),
@@ -58,15 +58,8 @@ function run() {
     if (git.checkBranch(newBranch)) git.deleteBranch(newBranch)
 
     try {
-        console.log("Publish idlize")
-        publishToOpenlab("next")
-        process.chdir("./core")
-        console.log("Publish idlize-core")
-        publishToOpenlab("next")
-        process.chdir("../linter")
-        console.log("Publish idlize-linter")
-        publishToOpenlab("next")
-        process.chdir("..")
+
+        packages.forEach(module => module.publish())
 
         files.forEach(file => {
             replaceInJson(file, new RegExp(`${next.toString()}`, 'g'), `${next.toString()}+devel`)
