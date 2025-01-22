@@ -8,6 +8,7 @@
 /arkgen/out/
 /.packages/
 /idl/
+/arkgen/interface_sdk-js/
 /interface_sdk-js/
 arkgen/lib/
 /node_modules/
