@@ -1,5 +1,4 @@
 /.idea/
-/arkgen/.rollup.cache/
 /.vscode/
 /build/
 /core/build/
@@ -8,20 +7,15 @@
 /arkgen/out/
 /.packages/
 /idl/
-/arkgen/interface_sdk-js/
 /interface_sdk-js/
-arkgen/lib/
 /node_modules/
 /panda/node_modules/
 /sdk/
-/arkgen/sdk/
 
 /package-lock.json
 /.npmrc
 
-/arkgen/native/NativeBridgeNapi.node
 /native/NativeBridgeNapi.node
-/arkgen/native/*.so
 /native/*.so
 /native/*.dylib
 /native/*.dll
