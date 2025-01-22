@@ -1967,19 +1967,19 @@
 |`setDistance`| Function | Politov Mikhail | done | |
 |`setFingers`| Function | Politov Mikhail | done | |
 |`getDirection`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|*ScrollableTargetInfo*| *Class* | Maksimov Nikita | testskipped | UT in progress Maksimov Nikita |
-|`isBegin`| Function | Maksimov Nikita | testskipped | UT in progress Maksimov Nikita |
-|`isEnd`| Function | Maksimov Nikita | testskipped | UT in progress Maksimov Nikita |
-|*EventTargetInfo*| *Class* | Maksimov Nikita | testskipped | UT in progress Maksimov Nikita |
+|*ScrollableTargetInfo*| *Class* | Maksimov Nikita | done | |
+|`isBegin`| Function | Maksimov Nikita | done | |
+|`isEnd`| Function | Maksimov Nikita | done | |
+|*EventTargetInfo*| *Class* | Maksimov Nikita | blocked IDL | |
 |`getId`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
-|*GestureRecognizer*| *Class* | Kovalev Sergey | in progress | |
+|*GestureRecognizer*| *Class* | Kovalev Sergey | blocked IDL | |
 |`getTag`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR + |
 |`getType`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
 |`isBuiltIn`| Function | Kovalev Sergey | done | |
 |`setEnabled`| Function | Kovalev Sergey | done | |
 |`isEnabled`| Function | Kovalev Sergey | done | |
 |`getState`| Function | Kovalev Sergey | done | |
-|`getEventTargetInfo`| Function | Maksimov Nikita | testskipped | UT in progress Maksimov Nikita |
+|`getEventTargetInfo`| Function | Maksimov Nikita | done | |
 |`isValid`| Function | Kovalev Sergey | done | |
 |*PanRecognizer*| *Class* | Politov Mikhail | done | |
 |`getPanGestureOptions`| Function | Politov Mikhail | done | |
