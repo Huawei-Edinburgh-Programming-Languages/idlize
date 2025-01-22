@@ -66,6 +66,7 @@ import { NativeModule } from "./NativeModule"
 import { printArkUIGeneratedNativeModule, printArkUILibrariesLoader, printCJArkUIGeneratedNativeFunctions, printCJPredefinedNativeFunctions, printPredefinedNativeModule, printTSArkUIGeneratedEmptyNativeModule, printTSPredefinedEmptyNativeModule } from "./printers/NativeModulePrinter"
 import { makeGetFunctionRuntimeType } from "./printers/lang/CJIdlUtils"
 import { printGlobal } from "./printers/GlobalScopePrinter"
+import { writeFile, writeIntegratedFile } from "./common"
 
 export function generateLibaceFromIdl(config: {
     libaceDestination: string|undefined,
@@ -105,31 +106,6 @@ export function generateLibaceFromIdl(config: {
     }
 
     copyToLibace(path.join(__dirname, '..', 'peer_lib'), libace)
-}
-
-function writeFile(filename: string, content: string | LanguageWriter, config: { // TODO make content a string or a writer only
-        onlyIntegrated: boolean,
-        integrated?: boolean,
-        message?: string
-    }): boolean {
-    if (config.integrated || !config.onlyIntegrated) {
-        if (config.message)
-            console.log(config.message, filename)
-        fs.mkdirSync(path.dirname(filename), { recursive: true })
-        if (typeof content !== "string") {
-            content = content.getOutput().join("\n")
-        }
-        fs.writeFileSync(filename, content)
-        return true
-    }
-    return false
-}
-
-function writeIntegratedFile(filename: string, content: string | LanguageWriter) {
-    writeFile(filename, content, {
-        onlyIntegrated: false,
-        integrated: true
-    })
 }
 
 function copyArkoalaFiles(config: {
@@ -176,6 +152,8 @@ export function generateArkoalaFromIdl(config: {
         new ArkoalaInstall(config.outDir, config.lang, true)
     arkoala.createDirs([ARKOALA_PACKAGE_PATH, INTEROP_PACKAGE_PATH].map(dir => path.join(arkoala.javaDir, dir)))
     arkoala.createDirs(['', ''].map(dir => path.join(arkoala.cjDir, dir)))
+
+    peerLibrary.name = 'arkoala'
 
     const context = {
         language: config.lang,
@@ -318,7 +296,7 @@ export function generateArkoalaFromIdl(config: {
             }
         )
         writeFile(arkoala.peer(new TargetFile('Serializer')),
-            makeTSSerializer(peerLibrary),
+            makeTSSerializer(peerLibrary).getOutput().join('\n'),
             {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true,
@@ -339,7 +317,7 @@ export function generateArkoalaFromIdl(config: {
                 integrated: true
             }
         )
-        writeFile(arkoala.peer(new TargetFile('CallbackDeserializeCall')), makeDeserializeAndCall(peerLibrary, Language.TS, "./peers/CallbackDeserializeCall.ts").printToString(),
+        writeFile(arkoala.peer(new TargetFile('CallbackDeserializeCall')), makeDeserializeAndCall('arkoala', peerLibrary, Language.TS, "./peers/CallbackDeserializeCall.ts").printToString(),
             {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true
@@ -381,7 +359,7 @@ export function generateArkoalaFromIdl(config: {
             }
         )
         writeFile(arkoala.peer(new TargetFile('Serializer')),
-            makeTSSerializer(peerLibrary),
+            makeTSSerializer(peerLibrary).getOutput().join('\n'),
             {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true,
@@ -403,7 +381,7 @@ export function generateArkoalaFromIdl(config: {
                 integrated: true
             }
         )
-        writeFile(arkoala.peer(new TargetFile('CallbackDeserializeCall')), makeDeserializeAndCall(peerLibrary, Language.ARKTS, "./peers/CallbackDeserializeCall.ts").printToString(),
+        writeFile(arkoala.peer(new TargetFile('CallbackDeserializeCall')), makeDeserializeAndCall('arkoala', peerLibrary, Language.ARKTS, "./peers/CallbackDeserializeCall.ts").printToString(),
             {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true
@@ -487,7 +465,7 @@ export function generateArkoalaFromIdl(config: {
             }
         )
         writeFile(arkoala.peer(new TargetFile('CallbackDeserializeCall', '')),
-            makeDeserializeAndCall(peerLibrary, Language.CJ, "./CallbackDeserializeCall.cj").printToString(),
+            makeDeserializeAndCall('arkoala', peerLibrary, Language.CJ, "./CallbackDeserializeCall.cj").printToString(),
             {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true
@@ -561,12 +539,12 @@ export function generateArkoalaFromIdl(config: {
             onlyIntegrated: config.onlyIntegrated,
             integrated: true
         })
-    writeFile(arkoala.native(new TargetFile('callback_deserialize_call.cc')), makeDeserializeAndCall(peerLibrary, Language.CPP, 'callback_deserialize_call.cc').printToString(),
+    writeFile(arkoala.native(new TargetFile('callback_deserialize_call.cc')), makeDeserializeAndCall('arkoala', peerLibrary, Language.CPP, 'callback_deserialize_call.cc').printToString(),
         {
             onlyIntegrated: config.onlyIntegrated,
             integrated: true
         })
-    writeFile(arkoala.native(new TargetFile('callback_managed_caller.cc')), printManagedCaller(peerLibrary).printToString(),
+    writeFile(arkoala.native(new TargetFile('callback_managed_caller.cc')), printManagedCaller('arkoala', peerLibrary).printToString(),
         {
             onlyIntegrated: config.onlyIntegrated,
             integrated: true

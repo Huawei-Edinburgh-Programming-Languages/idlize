@@ -38,6 +38,7 @@ import { MaterializedClass, MaterializedMethod } from './Materialized'
 import { PeerMethod } from './PeerMethod'
 import { writePeerMethod } from './printers/PeersPrinter'
 import { PeerGeneratorConfig } from './PeerGeneratorConfig'
+import { TargetFile } from './printers/TargetFile'
 
 class NameType {
     constructor(public name: string, public type: string) {}
@@ -669,7 +670,7 @@ class OHOSVisitor {
         })
     }
 
-    private printC() {
+    printC() {
         let callbackKindsPrinter = createLanguageWriter(Language.CPP, this.library);
         printCallbacksKinds(this.library, callbackKindsPrinter)
 
@@ -702,8 +703,8 @@ class OHOSVisitor {
         this.writeImpls()
         this.cppWriter.concat(writer)
         this.cppWriter.concat(printBridgeCcForOHOS(this.library).generated)
-        this.cppWriter.concat(makeDeserializeAndCall(this.library, Language.CPP, 'serializer.cc').content)
-        this.cppWriter.concat(printManagedCaller(this.library).content)
+        this.cppWriter.concat(makeDeserializeAndCall('ohos', this.library, Language.CPP, 'serializer.cc').content)
+        this.cppWriter.concat(printManagedCaller('', this.library).content)
 
         this.hWriter.writeLines(
             readLangTemplate('ohos_api_epilogue.h', Language.CPP)
@@ -872,6 +873,16 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, defaultId
     visitor.execute(rootPath, generatedSubDir, managedOutDir)
 }
 
+export function generateNativeOhos(peerLibrary: PeerLibrary): Map<TargetFile, string> {
+    const libraryName = suggestLibraryName(peerLibrary)
+    const visitor = new OHOSVisitor(peerLibrary, libraryName)
+    visitor.printC()
+    return new Map([
+        [new TargetFile(`${peerLibrary.name}.h`), visitor.hWriter.getOutput().join('\n')],
+        [new TargetFile(`${peerLibrary.name}.cc`), visitor.cppWriter.getOutput().join('\n')],
+    ])
+}
+
 
 type AdjustedSignature = {
     convertors: ArgConvertor[]
@@ -932,7 +943,7 @@ function makePeerCallSignature(library: PeerLibrary, parameters: IDLParameter[],
     return NamedMethodSignature.make(adjustedSignature.returnType, args)
 }
 
-function suggestLibraryName(library: PeerLibrary) {
+export function suggestLibraryName(library: PeerLibrary) {
     let libraryName = library.files.filter(f => !f.isPredefined)[0].packageName()
     libraryName = libraryName.replaceAll("@", "").replaceAll(".", "_").toUpperCase()
     return libraryName

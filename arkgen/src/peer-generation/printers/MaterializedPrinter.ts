@@ -46,6 +46,7 @@ import { getReferenceResolver } from "../ReferenceResolver";
 import { collectDeclItself, collectDeclDependencies, SyntheticModule } from "../ImportsCollectorUtils";
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { isMaterialized } from "../idl/IdlPeerGeneratorVisitor";
+import { NativeModule } from '../NativeModule';
 
 interface MaterializedFileVisitor {
     visit(): void
@@ -366,6 +367,17 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
         const imports = new ImportsCollector()
         this.collectImports(imports)
         const currentModule = removeExt(renameClassToMaterialized(this.clazz.className, this.library.language))
+        if (this.library.name === 'arkoala') {
+            imports.addFeatures(['CallbackTransformer'], './peers/CallbackTransformer')
+            if (this.library.language === Language.TS) {
+                imports.addFeatures(['ArkUIGeneratedNativeModule'], './ArkUIGeneratedNativeModule')
+            }
+            if (this.library.language === Language.ARKTS) {
+                imports.addFeatures(['ArkUIGeneratedNativeModule'], '#components')
+            }
+        } else {
+            imports.addFeatures([NativeModule.Generated.name], `./${NativeModule.Generated.name}`)
+        }
         imports.print(this.printer, currentModule)
     }
 
