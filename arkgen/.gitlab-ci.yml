@@ -196,8 +196,6 @@ build idlize-linter:
 pack idlize-arkgen:
   extends:
     - .npm-pack
-  before_script:
-    - cd $CI_PROJECT_DIR/arkgen
   variables:
     PACKAGE_DIR: arkgen
   needs:
