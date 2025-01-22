@@ -193,9 +193,11 @@ build idlize-linter:
       - linter/build
 
 # Pack targets
-pack idlize:
+pack idlize-arkgen:
   extends:
     - .npm-pack
+  before_script:
+    - cd $CI_PROJECT_DIR/arkgen
   variables:
     PACKAGE_DIR: .
   needs:
@@ -219,11 +221,11 @@ pack idlize-linter:
 
 
 # Publish targets
-publish idlize:
+publish idlize-arkgen:
   extends:
     - .npm-publish
   variables:
-    PACKAGE_DIR: .
+    PACKAGE_DIR: arkgen
   dependencies:
     - build idlize-arkgen
 
