@@ -48,7 +48,7 @@ run arkts subset:
   before_script:
     - !reference [.setup, script]
     - cd $CI_PROJECT_DIR/arkgen
-    - PANDA_SDK_VERSION=1.5.0-dev.12828 npm run panda:sdk:install
+    - PANDA_SDK_VERSION=next npm run panda:sdk:install
   script:
     - npm run run:panda:subset
 
@@ -61,7 +61,7 @@ compile arkts peers:
   before_script:
     - !reference [.setup, script]
     - cd $CI_PROJECT_DIR/arkgen
-    - PANDA_SDK_VERSION=1.5.0-dev.12828 npm run panda:sdk:install
+    - PANDA_SDK_VERSION=next npm run panda:sdk:install
   script:
     - npm run make:compile:arkts:peers
 
@@ -86,7 +86,7 @@ arkts subset sig integration:
   before_script:
     - !reference [.setup, script]
     - cd $CI_PROJECT_DIR/arkgen
-    - PANDA_SDK_VERSION=1.5.0-dev.12828 npm run panda:sdk:install
+    - PANDA_SDK_VERSION=next npm run panda:sdk:install
   script:
     - npm run sig:arkts:subset:all
 
@@ -141,7 +141,7 @@ build arkoala-ts:
 #          - arkoala.har
 
 # Build targets
-build idlize:
+build idlize-arkgen:
   stage: build
   tags:
   - idlize-ci
@@ -193,13 +193,15 @@ build idlize-linter:
       - linter/build
 
 # Pack targets
-pack idlize:
+pack idlize-arkgen:
   extends:
     - .npm-pack
+  before_script:
+    - cd $CI_PROJECT_DIR/arkgen
   variables:
     PACKAGE_DIR: .
   needs:
-    - build idlize
+    - build idlize-arkgen
 
 pack idlize-core:
   extends:
@@ -219,13 +221,13 @@ pack idlize-linter:
 
 
 # Publish targets
-publish idlize:
+publish idlize-arkgen:
   extends:
     - .npm-publish
   variables:
-    PACKAGE_DIR: .
+    PACKAGE_DIR: arkgen
   dependencies:
-    - build idlize
+    - build idlize-arkgen
 
 publish idlize-core:
   extends:
@@ -270,14 +272,14 @@ check generated XML demo:
     before_script:
       - !reference [.setup, script]
       - cd $CI_PROJECT_DIR/arkgen
-      - PANDA_SDK_VERSION=1.5.0-dev.12828 npm run panda:sdk:install
-      - chmod +x external/incremental/tools/panda/arkts/ark{,tsc,link,disasm}
-      - npm run compile --prefix external/interop
-      - npm run compile --prefix external/incremental/common
-      - npm run compile --prefix external/incremental/compat
-      - npm run compile --prefix external/incremental/runtime
-      - npm run build:interop:inc --prefix external/interop
-      - npm run build:incremental:inc --prefix external/incremental/runtime
+      - PANDA_SDK_VERSION=next npm run panda:sdk:install
+      - chmod +x ../external/incremental/tools/panda/arkts/ark{,tsc,link,disasm}
+      - npm run compile --prefix ../external/interop
+      - npm run compile --prefix ../external/incremental/common
+      - npm run compile --prefix ../external/incremental/compat
+      - npm run compile --prefix ../external/incremental/runtime
+      - npm run build:interop:inc --prefix ../external/interop
+      - npm run build:incremental:inc --prefix ../external/incremental/runtime
     script:
       - npm run run:xml
       - npm run run:xml:arkts
