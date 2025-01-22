@@ -11,9 +11,6 @@
   ],
   "license": "Apache-2.0",
   "keywords": [],
-  "workspaces": [
-    "../core"
-  ],
   "dependencies": {
     "@idlize/core": "2.0.0+devel",
     "@types/node": "^18.0.0",

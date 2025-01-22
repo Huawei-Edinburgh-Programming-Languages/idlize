@@ -16,7 +16,8 @@
     "core/webidl2.js",
     "demos/*",
     "core",
-    "linter"
+    "linter",
+    "libarkts-gen"
   ],
   "license": "Apache-2.0",
   "keywords": [],

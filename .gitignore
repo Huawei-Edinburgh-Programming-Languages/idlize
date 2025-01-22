@@ -27,4 +27,3 @@ NativeBridge.node
 /libarkts-gen/out/
 *.rej
 *.orig
-/libarkts-gen/node_modules/
