@@ -1239,8 +1239,8 @@
 |`fontStyle`| Function | Spirin Andrey | done |  |
 |`fontWeight`| Function | Spirin Andrey | done |  |
 |`fontFamily`| Function | Spirin Andrey | done |  |
-|`onCopy`| Function | Spirin Andrey | testskipped |  |
-|`onCut`| Function | Spirin Andrey | testskipped|  |
+|`onCopy`| Function | Spirin Andrey | testskipped | UT in progress Kovalev Sergey |
+|`onCut`| Function | Spirin Andrey | testskipped| UT in progress Kovalev Sergey |
 |`onPaste`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail |
 |`copyOption`| Function | Spirin Andrey | done |  |
 |`showPasswordIcon`| Function | Spirin Andrey | done |  |
@@ -1257,7 +1257,7 @@
 |`underlineColor`| Function | Spirin Andrey | done |  |
 |`selectionMenuHidden`| Function | Spirin Andrey | done |  |
 |`barState`| Function | Spirin Andrey | done |  |
-|`maxLines`| Function | Spirin Andrey | testskipped  |  |
+|`maxLines`| Function | Spirin Andrey | testskipped  | UT in progress Kovalev Sergey |
 |`wordBreak`| Function | Spirin Andrey | done |  |
 |`lineBreakStrategy`| Function | Spirin Andrey | done |  |
 |`cancelButton`| Function | Spirin Andrey, Andrey Khudenkikh | done |  |
