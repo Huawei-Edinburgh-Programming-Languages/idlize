@@ -84,7 +84,7 @@ export class StructPrinter {
             }
             const targetType  = idl.isType(target) ? target : idl.createReferenceType(idl.forceAsNamedNode(target).name)
             let nameAssigned = structs.getNodeName(target)
-            if (nameAssigned === 'Tag')
+            if (nameAssigned === 'Tag') //
                 continue
             if (!nameAssigned) {
                 throw new Error(`No assigned name for an ${idl.IDLKind[target.kind!]}`)
