@@ -3,7 +3,7 @@
 ## Description
 
 This folder contains collection of tools for analyzing and transformation of
-.d.ts files, with aim of exposing ArkUI interfaces to more languages and runtimes.
+.d.ts and idl files, with aim of exposing native interfaces to managed languages and runtimes.
 
 ## Tools available
 
