@@ -11,6 +11,23 @@ export const IDLIZE_ARKGEN = path.join(__dirname, "../arkgen")
 export const IDLIZE_CORE = path.join(__dirname, "../core")
 export const IDLIZE_LINTER = path.join(__dirname, "../linter")
 
+export class Package {
+    constructor(path) {
+        this.path = path
+    }
+
+    publish() {
+        process.chdir(this.path)
+        publishToOpenlab("next")
+    }
+}
+
+export const packages = [
+    new Package(path.join(__dirname, "../arkgen")), 
+    new Package(path.join(__dirname, "../core")), 
+    new Package(path.join(__dirname, "../linter"))
+]
+
 export class Version {
     constructor(version) {
         let [major, minor, patch] = version.split(/\./).map(x => +x);
