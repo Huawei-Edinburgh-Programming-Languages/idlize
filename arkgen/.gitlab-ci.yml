@@ -199,7 +199,7 @@ pack idlize:
   variables:
     PACKAGE_DIR: .
   needs:
-    - build idlize
+    - build idlize-arkgen
 
 pack idlize-core:
   extends:
@@ -225,7 +225,7 @@ publish idlize:
   variables:
     PACKAGE_DIR: .
   dependencies:
-    - build idlize
+    - build idlize-arkgen
 
 publish idlize-core:
   extends:
