@@ -1,4 +1,7 @@
 package "org.openharmony.idlize.predefined";
+
+callback Callback_String_Void = void (String str);
+
 [Entity=Class]
 interface NavExtender {
   static void setUpdateStackCallback(NavPathStack peer, Callback_String_Void callback);

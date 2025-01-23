@@ -480,6 +480,7 @@ export class CustomTypeConvertor extends BaseArgConvertor {
     }
     /** todo: check */
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
+        console.log(this.customTypeName, this.customTypeName, this.customTypeName)
         printer.writeMethodCall(
             `${param}Serializer`,
             `writeCustomObject`,
