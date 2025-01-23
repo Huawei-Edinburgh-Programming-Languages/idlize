@@ -11,13 +11,6 @@ public open class CallbackKind {
 }
 
 public class XMLNativeModule {
-    static {
-        loadLibrary("XML_NativeBridgeArk")
-        XMLNativeModule.init()
-    }
-
-    static func native init(): Unit {}
-
     static func callCallbackFromNative(id: KInt, args: KPointer, length: KInt): KInt {
         // TODO implement callCallbackFromNative
         return 0

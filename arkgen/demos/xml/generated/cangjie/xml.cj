@@ -1,6 +1,6 @@
 package idlize
 
-public interface ParseOptions {
+public abstract class ParseOptions {
     var supportDoctype: Bool
     var ignoreNameSpace: Bool
     var tagValueCallbackFunction: ((name: String, value: String) -> Bool)

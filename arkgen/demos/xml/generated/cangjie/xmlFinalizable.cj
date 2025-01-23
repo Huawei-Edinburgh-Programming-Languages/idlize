@@ -19,11 +19,9 @@ public abstract class MaterializedBase {
     func getPeer(): Finalizable
 }
 
-export class Finalizable {
+public class Finalizable {
     public var ptr: pointer
     public var finalizerPtr: pointer
-
-    public static func Empty: Finalizable = Finalizable(0, 0)
 
     init (ptr: pointer, finalizerPtr: pointer) {
         this.ptr = ptr
