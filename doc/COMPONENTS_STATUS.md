@@ -1257,7 +1257,7 @@
 |`underlineColor`| Function | Spirin Andrey | done |  |
 |`selectionMenuHidden`| Function | Spirin Andrey | done |  |
 |`barState`| Function | Spirin Andrey | done |  |
-|`maxLines`| Function | Spirin Andrey | testskipped  | UT in progress Kovalev Sergey |
+|`maxLines`| Function | Spirin Andrey | testskipped  |  |
 |`wordBreak`| Function | Spirin Andrey | done |  |
 |`lineBreakStrategy`| Function | Spirin Andrey | done |  |
 |`cancelButton`| Function | Spirin Andrey, Andrey Khudenkikh | done |  |
@@ -1276,9 +1276,9 @@
 |`showPassword`| Function | Spirin Andrey | done |  |
 |`onSecurityStateChange`| Function | Spirin Andrey | testskipped | UT in progress Kovalev Sergey |
 |`onWillInsert`| Function | Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onDidInsert`| Function | Spirin Andrey | testskipped |  |
+|`onDidInsert`| Function | Spirin Andrey | testskipped | UT in progress Kovalev Sergey |
 |`onWillDelete`| Function | Skroba Gleb | done |  https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
-|`onDidDelete`| Function | Spirin Andrey | testskipped |  |
+|`onDidDelete`| Function | Spirin Andrey | testskipped | UT in progress Kovalev Sergey |
 |`editMenuOptions`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`enablePreviewText`| Function | Spirin Andrey | done |  |
 |`enableHapticFeedback`| Function | Spirin Andrey | done |  |
