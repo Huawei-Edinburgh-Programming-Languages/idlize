@@ -38,7 +38,7 @@ import {
     ARKOALA_PACKAGE,
     ARKOALA_PACKAGE_PATH
 } from "./lang/Java";
-import { createInterfaceDeclName } from "../TypeNodeNameConvertor";
+import { createInterfaceDeclName } from '../../utils';
 import { PeerLibrary } from "../PeerLibrary";
 import { printJavaImports } from "./lang/JavaPrinters";
 import { copyMethod } from "@idlize/core";
