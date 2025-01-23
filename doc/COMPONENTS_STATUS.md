@@ -1267,7 +1267,7 @@
 |`halfLeading`| Function | | | |
 |`ellipsisMode`| Function | | | |
 |`stopBackPress`| Function | | | |
-|`inputFilter`| Function | Spirin Andrey | testskipped  |  |
+|`inputFilter`| Function | Spirin Andrey | testskipped  | UT in progress Kovalev Sergey |
 |`customKeyboard`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`showCounter`| Function | Spirin Andrey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
 |*TextPicker*| *Component* |Ekaterina Stepanova |in progress |  |
