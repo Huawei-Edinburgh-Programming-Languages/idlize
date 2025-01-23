@@ -394,8 +394,8 @@
 |*Flex*| *Component* | Kovalev Sergey | done |  |
 |`setFlexOptions`| Function | Kovalev Sergey | done |  |
 |`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1N86 (+) and https://gitee.com/openharmony/arkui_ace_engine/issues/IB1N6E, test in progress, Evstigneev Roman |
-|*FlowItem*| *Component* | Evstigneev Roman | testskipped | test in progress Evstigneev Roman |
-|`setFlowItemOptions`| Function | Evstigneev Roman | testskipped | test in progress Evstigneev Roman |
+|*FlowItem*| *Component* | Evstigneev Roman | done | test in progress Evstigneev Roman |
+|`setFlowItemOptions`| Function | Evstigneev Roman | done | test in progress Evstigneev Roman |
 |*FolderStack*| *Component* | Politov Mikhail | done |  |
 |`setFolderStackOptions`| Function | Politov Mikhail | done |  |
 |`alignContent`| Function | Politov Mikhail | done |  |
