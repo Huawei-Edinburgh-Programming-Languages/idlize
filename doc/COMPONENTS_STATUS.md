@@ -2284,7 +2284,7 @@
 |`onSurfaceCreated`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV + |
 |`onSurfaceChanged`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV + |
 |`onSurfaceDestroyed`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV + |
-|`startImageAnalyzer`| Function | Tuzhilkin Ivan | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IB3J8N , https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 +|
+|`startImageAnalyzer`| Function | Tuzhilkin Ivan | in progress |https://gitee.com/nikolay-igotti/idlize/issues/IB3J8N , https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 +|
 |`stopImageAnalyzer`| Function | Tuzhilkin Ivan | testskipped | |
 |*WaterFlowSections*| *Class* | Kovalev Sergey | in progress | |
 |`splice`| Function | Kovalev Sergey | done | |
