@@ -707,7 +707,9 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
         const maybeMemo = this.isMemo(node) ? `\n/** @memo */\n` : ``
         const paramsType = this.printParameters(parameters)
         const retType = this.convertType(returnType !== undefined ? returnType : idl.IDLVoidType)
-        return `type ${node.name}${this.printTypeParameters(node.typeParameters)} = ${maybeMemo}(${paramsType}) => ${retType};`
+        const namePrefix = node.namespace != undefined ? `${node.namespace.name}_` : ``
+        // TODO: The name prefix is used instead of printing namespace, nesting Callback type into namespaces causes es2panda to crash
+        return `type ${namePrefix}${node.name}${this.printTypeParameters(node.typeParameters)} = ${maybeMemo}(${paramsType}) => ${retType};`
     }
 
     private isCallback(node: idl.IDLInterface) {
