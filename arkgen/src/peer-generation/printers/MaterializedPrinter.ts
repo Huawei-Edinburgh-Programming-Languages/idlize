@@ -109,7 +109,10 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
         if (clazz.isInterface) {
             interfaces.push(`${this.namespacePrefix}${this.clazz.className}`)
             // const chunks = idl.getNamespacesPathFor(clazz.decl).map(it => it.name).join('.')
-            // interfaces.push(chunks + '.' + clazz.decl.name)
+            // const name = chunks === ''
+            //     ? clazz.decl.name
+            //     : chunks + '.' + clazz.decl.name
+            // interfaces.push(name)
         }
 
         // TODO: workarond for ContentModifier<T> which returns WrappedBuilder<[T]>
