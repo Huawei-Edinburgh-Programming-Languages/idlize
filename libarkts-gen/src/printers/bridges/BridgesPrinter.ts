@@ -66,7 +66,7 @@ export class BridgesPrinter extends InteropPrinter {
         const macro = BridgesConstructions.interopMacro(isVoid, node.parameters.length)
         this.writer.writeExpressionStatement(
             this.writer.makeFunctionCall(
-                this.constructions.interopMacro(isVoid, node.parameters.length),
+                BridgesConstructions.interopMacro(isVoid, node.parameters.length),
                 [node.name]
                     .concat(isVoid ? [] : this.mapType(isString(node.returnType) ? IDLPointerType : node.returnType))
                     .concat(node.parameters.map(it => this.mapType(it.type)))
@@ -153,7 +153,7 @@ export class BridgesPrinter extends InteropPrinter {
         }
         writer.writeStatement(
             writer.makeAssign(
-                BridgesConstructions.resultName,
+                BridgesConstructions.result,
                 undefined,
                 writer.makeFunctionCall(
                     BridgesConstructions.callMethod(node.name),
@@ -161,31 +161,31 @@ export class BridgesPrinter extends InteropPrinter {
                         .map(it => ({
                             asString: () => BridgesConstructions.castedParameter(it.name),
                         }))
-                        .concat(IDLContainerUtils.isSequence(node.returnType) ? writer.makeString(BridgesConstructions.sequenceLengthPass) : [])
+                        .concat(
+                            IDLContainerUtils.isSequence(node.returnType)
+                                ? writer.makeString(BridgesConstructions.sequenceLengthPass)
+                                : []
+                        )
                 )
             )
         )
-        const getReturn = (node: IDLMethod): string => {
-            if (IDLContainerUtils.isSequence(node.returnType)) {
-                return this.constructions.sequenceConstructor(
-                    this.constructions.resultName,
-                    this.constructions.sequenceLengthUsage
-                )
-            }
-            if (isString(node.returnType)) {
-                return this.constructions.stringConstructor(
-                    this.constructions.resultName
-                )
-            }
-            return this.constructions.resultName
-        }
         writer.writeStatement(
             writer.makeReturn(
                 writer.makeString(
-                    getReturn(node)
+                    this.wrapResultInConstructor(node.returnType)
                 )
             )
         )
+    }
+
+    private wrapResultInConstructor(returnType: IDLType): string {
+        if (IDLContainerUtils.isSequence(returnType)) return BridgesConstructions.sequenceConstructor(
+            BridgesConstructions.result,
+            BridgesConstructions.sequenceLengthUsage
+        )
+        if (isString(returnType)) return BridgesConstructions.stringConstructor(BridgesConstructions.result)
+
+        return BridgesConstructions.result
     }
 
     override getOutput(): string[] {

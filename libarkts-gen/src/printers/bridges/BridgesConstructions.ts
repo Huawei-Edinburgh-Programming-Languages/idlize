@@ -42,7 +42,7 @@ export class BridgesConstructions {
         return `length`
     }
 
-    static get resultName(): string {
+    static get result(): string {
         return `result`
     }
 
