@@ -103,13 +103,19 @@ export class CustomPrintVisitor {
 
     currentInterface?: IDLInterface
 
+    private isStdLibType(node: IDLEntry): boolean {
+        return hasExtAttribute(node, IDLExtendedAttributes.TSType) && this.language === Language.TS
+            || hasExtAttribute(node, IDLExtendedAttributes.ARKTSType) && this.language === Language.ARKTS
+    }
+
     visit(node: IDLEntry, wrapNamespaces: boolean = false) {
         const namespacesPath = wrapNamespaces ? getNamespacesPathFor(node) : []
         for(const namespace of namespacesPath) {
             this.print(`${namespace.namespace ? "" : "declare "}namespace ${namespace.name} {`);
             this.pushIndent();
         }
-        if (hasExtAttribute(node, IDLExtendedAttributes.TSType) && this.language == Language.TS) return
+        if (this.isStdLibType(node)) 
+            return
         if (isInterface(node)) {
             this.printInterface(node)
         } else if (isMethod(node) || isConstructor(node) || isCallable(node)) {

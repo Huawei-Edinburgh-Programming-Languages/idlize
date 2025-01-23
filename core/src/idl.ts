@@ -56,6 +56,7 @@ export enum IDLEntity {
 
 export enum IDLExtendedAttributes {
     Accessor = "Accessor",
+    ARKTSType = "ARKTSType",
     Async = "Async",
     CallSignature = "CallSignature",
     CJType = "CJType",
