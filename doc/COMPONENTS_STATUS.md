@@ -1139,7 +1139,7 @@
 |`fontStyle`|Function|Tuzhilkin Ivan|done|  |
 |`fontWeight`|Function|Tuzhilkin Ivan|done|  |
 |`fontFamily`|Function|Tuzhilkin Ivan|done|  |
-|`textOverflow`|Function|Tuzhilkin Ivan|testskipped| https://gitee.com/openharmony/arkui_ace_engine/issues/IB57XU + , Issue is still exist . Fix is incorect |
+|`textOverflow`|Function|Tuzhilkin Ivan|done| https://gitee.com/openharmony/arkui_ace_engine/issues/IB57XU |
 |`textIndent`|Function|Tuzhilkin Ivan|done|  |
 |`caretStyle`|Function|Tuzhilkin Ivan|done|  |
 |`selectedBackgroundColor`|Function|Tuzhilkin Ivan|done| |
@@ -1530,19 +1530,19 @@
 |`Prepare`| Function | | | |
 |*DrawingCanvas*| *Class* | Dudkin Sergey | blocked IDL | |
 |`drawRect`| Function | Dudkin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDOCY + |
-|*FrameNode*| *Class* | Tuzhilkin Ivan | testskipped| |
-|`isModifiable`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
-|`appendChild`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
-|`insertChildAfter`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
-|`removeChild`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
-|`clearChildren`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
-|`getChild`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
-|`getFirstChild`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
-|`getNextSibling`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
-|`getPreviousSibling`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
-|`getParent`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
-|`getChildrenCount`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
-|`dispose`| Function | Tuzhilkin Ivan | testskipped | UT in progress Tuzhilkin Ivan |
+|*FrameNode*| *Class* | Tuzhilkin Ivan | done| |
+|`isModifiable`| Function | Tuzhilkin Ivan | done | |
+|`appendChild`| Function | Tuzhilkin Ivan | done | |
+|`insertChildAfter`| Function | Tuzhilkin Ivan | done | |
+|`removeChild`| Function | Tuzhilkin Ivan | done | |
+|`clearChildren`| Function | Tuzhilkin Ivan | done | |
+|`getChild`| Function | Tuzhilkin Ivan | done | |
+|`getFirstChild`| Function | Tuzhilkin Ivan | done | |
+|`getNextSibling`| Function | Tuzhilkin Ivan | done | |
+|`getPreviousSibling`| Function | Tuzhilkin Ivan | done | |
+|`getParent`| Function | Tuzhilkin Ivan | done | |
+|`getChildrenCount`| Function | Tuzhilkin Ivan | done | |
+|`dispose`| Function | Tuzhilkin Ivan | done | |
 |*PixelMap*| *Class* | Andrey Khudenkikh | blocked  | |
 |`readPixelsToBufferSync`| Function | Andrey Khudenkikh | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
 |`writeBufferToPixels`| Function | Andrey Khudenkikh | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
