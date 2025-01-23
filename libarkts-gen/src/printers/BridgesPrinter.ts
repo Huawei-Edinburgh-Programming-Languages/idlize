@@ -46,10 +46,6 @@ function isString(node: IDLType): node is IDLPrimitiveType {
     return isPrimitiveType(node) && node.name === "String"
 }
 
-function isSequence(node: IDLType): boolean {
-    return IDLContainerUtils.isSequence(node)
-}
-
 export class BridgesPrinter {
     constructor(
         private idl: IDLFile,
@@ -230,7 +226,7 @@ export class BridgesPrinter {
                     )
                 )
             ))
-        if (isSequence(node.returnType)) {
+        if (IDLContainerUtils.isSequence(node.returnType)) {
             writer.writeExpressionStatement(
                 writer.makeString(this.constructions.sequenceLengthDeclaration)
             )
@@ -245,12 +241,12 @@ export class BridgesPrinter {
                         .map(it => ({
                             asString: () => this.constructions.castedParameterName(it.name),
                         }))
-                        .concat(isSequence(node.returnType) ? writer.makeString(this.constructions.sequenceLengthPass) : [])
+                        .concat(IDLContainerUtils.isSequence(node.returnType) ? writer.makeString(this.constructions.sequenceLengthPass) : [])
                 )
             )
         )
         const getReturn = (node: IDLMethod): string => {
-            if (isSequence(node.returnType)) {
+            if (IDLContainerUtils.isSequence(node.returnType)) {
                 return this.constructions.sequenceConstructor(
                     this.constructions.resultName,
                     this.constructions.sequenceLengthUsage
