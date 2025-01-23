@@ -533,13 +533,13 @@
 |`onCancel`| Function | Pavelyev Ivan | done | |
 |`onFinish`| Function | Pavelyev Ivan | done | |
 |*ImageSpan*| *Component* | Politov Mikhail | blocked |  |
-|`setImageSpanOptions`| Function | Politov Mikhail | in progress | PixelMap on https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
+|`setImageSpanOptions`| Function | Politov Mikhail | done | |
 |`verticalAlign`| Function | Politov Mikhail | done |  |
 |`colorFilter`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0Y72 | |
 |`objectFit`| Function | Politov Mikhail | done |  |
 |`onComplete`| Function | Politov Mikhail | done |  |
 |`onError`| Function | Politov Mikhail | done |  |
-|`alt`| Function | Politov Mikhail | in progress | PixelMap on https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
+|`alt`| Function | Politov Mikhail | done | |
 |*Line*|*Component*|Dudkin Sergey| blocked |  |
 |`setLineOptions`|Function|Dudkin Sergey| done |  |
 |`startPoint`|Function|Dudkin Sergey|blocked AceEngine | https://gitee.com/openharmony/interface_sdk-js/issues/IAXCBA + |
