@@ -18,7 +18,8 @@ interface DoubleAnimationParam {
 
 [Entity=Class]
 interface AnimationExtender {
-  static void setClipRect(pointer peer, number left, number top, number right, number bottom);
+  static void SetClipRect(pointer peer, number left, number top, number right, number bottom);
   static void OpenImplicitAnimation(pointer peer, AnimateParam param);
+  static void CloseImplicitAnimation(pointer node);
   static void StartDoubleAnimation(pointer peer, DoubleAnimationParam param);
 };
