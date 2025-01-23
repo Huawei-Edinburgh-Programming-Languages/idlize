@@ -36,10 +36,7 @@ import { collectDeclarationTargets } from "../DeclarationTargetCollector"
 import { flattenUnionType, generateCallbackAPIArguments } from "@idlizer/core"
 
 export class StructPrinter {
-    private targetType: string
-    constructor(private library: PeerLibrary) {
-        this.targetType = generatorConfiguration().param<string>('TargetType')
-    }
+    constructor(private library: PeerLibrary) {}
 
     private isPointerDeclaration(target: idl.IDLNode, isOptional: boolean = false): boolean {
         if (isOptional) return true
@@ -180,10 +177,8 @@ export class StructPrinter {
         structs.concat(enumsDeclarations)
         structs.concat(concreteDeclarations)
         // TODO: hack, remove me!
-        if (this.targetType === 'Ark') {
-            if (this.library.name == "") { // TODO we probably don't need this typedef for any library except Ark
-                typedefs.print(`typedef ${generatorConfiguration().param("OptionalPrefix")}Length ${generatorConfiguration().param("OptionalPrefix")}Dimension;`)
-            }
+        if (["arkoala", "libace"].includes(this.library.name)) { // TODO we probably don't need this typedef for any library except Ark
+            typedefs.print(`typedef ${generatorConfiguration().param("OptionalPrefix")}Length ${generatorConfiguration().param("OptionalPrefix")}Dimension;`)
         }
     }
 

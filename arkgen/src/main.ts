@@ -117,7 +117,6 @@ class DefaultConfig implements GeneratorConfiguration {
         TypePrefix: "Ark_",
         LibraryPrefix: "",
         OptionalPrefix: "Opt_",
-        TargetType: "Ark",
     }
 
     param<T>(name: string): T {
@@ -145,7 +144,6 @@ class ArkoalaConfiguration extends DefaultConfig {
 
 class SkoalaConfiguration extends DefaultConfig {
     protected params: Record<string, any> = {
-        TargetType: "SKoala",
         TypePrefix: "",
         LibraryPrefix: "",
         OptionalPrefix: "Opt_"
@@ -156,7 +154,6 @@ class SkoalaConfiguration extends DefaultConfig {
 // from the library name
 class OhosConfiguration extends DefaultConfig {
     protected params: Record<string, any> = {
-        TargetType: "OHOS",
         TypePrefix: "OH_",
         LibraryPrefix: "",
         OptionalPrefix: "Opt_"

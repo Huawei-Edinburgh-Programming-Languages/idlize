@@ -74,6 +74,7 @@ export function generateLibaceFromIdl(config: {
     commentedCode: boolean,
     outDir: string
 }, peerLibrary: PeerLibrary) {
+    peerLibrary.name = 'libace'
     const libace = config.libaceDestination ?
         new LibaceInstall(config.libaceDestination, false) :
         new LibaceInstall(config.outDir, true)
