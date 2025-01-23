@@ -626,9 +626,6 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
     private printPropNameWithType(prop: idl.IDLProperty): string {
         const isOptional = prop.isOptional
         const type = this.convertType(prop.type)
-        if (prop.name === "") {
-            return `${type}${isOptional ? "?" : ""}`
-        }
         return `${prop.name}${isOptional ? "?" : ""}: ${type}`
     }
 
@@ -679,13 +676,13 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
     }
 
     private printTuple(tuple: idl.IDLInterface) {
-        const seenFields = new Set<string>()
         return ([`type ${this.printInterfaceName(tuple)} = [`] as stringOrNone[])
             .concat(tuple.properties
-                .map((it, propIndex) => this.printIfNotSeen(it, it => {
+                .map((it, propIndex) => {
                     const maybeComma = propIndex < tuple.properties.length - 1 ? ',' : ''
-                    return [indentedBy(`${this.printPropNameWithType(it)}${maybeComma}`, 1)]
-                }, seenFields) ).flat())
+                    // TODO: Omit name, ArkTS does not support named tuple elements
+                    return [indentedBy(`${this.convertType(it.type)}${maybeComma}`, 1)]
+                }).flat())
             .concat(["]"])
     }
 }

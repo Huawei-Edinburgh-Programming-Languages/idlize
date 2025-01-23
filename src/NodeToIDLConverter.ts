@@ -1042,9 +1042,6 @@ export class NodeToIDLConverter {
         const properties = node.elements.map((it, index) => this.serializeTupleProperty(it, index, withOperator))
         const syntheticName = `Tuple_${properties.map(it => generateSyntheticIdlNodeName(it.type)).join("_")}`
         const selectedName = selectName(nameSuggestion, syntheticName)
-        if (selectedName.includes("SheetOptions")) {
-            console.log("")
-        }
         return idl.createInterface(
             selectedName,
             idl.IDLInterfaceSubkind.Tuple,
@@ -1221,7 +1218,7 @@ function tagPostfix(tag: string, tagEnumValue?: string) {
 }
 
 export class IDLConverterFactory implements NodeToIDLConverterFactory {
-    constructor(private language: Language) {
+    constructor(private readonly language: Language) {
     }
 
     create(sourceFile: ts.SourceFile,
@@ -1246,14 +1243,14 @@ class ArkTsIDLConvertor extends NodeToIDLConverter {
     }
 
     protected serializeTupleProperty(property: ts.NamedTupleMember | ts.TypeNode, index: number, isReadonly: boolean = false): idl.IDLProperty {
-        // TODO: ArkTS does not support named tuple elements
         // TODO: ArkTS does not support optional elements in tuples because it needs to convert Type? -> Type | undefined
-        const isOptional = ts.isOptionalTypeNode(property)
         return idl.createProperty(
             `value${index}`,
-            isOptional ? idl.createUnionType([this.serializeType(property.type), IDLUndefinedType]) : this.serializeType(property),
+            ts.isOptionalTypeNode(property)
+                ? idl.createUnionType([this.serializeType(property.type), IDLUndefinedType])
+                : this.serializeType(property),
             isReadonly,
             false,
-            false,)
+            false)
     }
 }
