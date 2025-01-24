@@ -59,19 +59,24 @@ export class BridgesPrinter extends InteropPrinter {
     )
 
     private printInteropMacro(node: IDLMethod): void {
-        const isVoid = isVoidType(node.returnType)
+        const params = [
+            node.name,
+            this.mapType(isString(node.returnType) ? IDLPointerType : node.returnType),
+            ...node.parameters.map(it => this.mapType(it.type))
+        ]
         this.writer.writeExpressionStatement(
             this.writer.makeFunctionCall(
-                BridgesConstructions.interopMacro(isVoid, node.parameters.length),
-                [node.name]
-                    .concat(isVoid ? [] : this.mapType(isString(node.returnType) ? IDLPointerType : node.returnType))
-                    .concat(node.parameters.map(it => this.mapType(it.type)))
-                    .map(it => this.writer.makeString(it))
+                BridgesConstructions.interopMacro(isVoidType(node.returnType), node.parameters.length),
+                (isVoidType(node.returnType) ? params.splice(1, 1) : params).map(it => this.writer.makeString(it))
             )
         )
     }
 
     private cast(node: IDLParameter): string {
+        // TODO: check if type is enum by some set of enums in context
+        if (isReferenceType(node.type) && node.type.name.startsWith(`Es2panda`)) {
+            return BridgesConstructions.primitiveTypeCast(node.type.name) // TODO: check
+        }
         if (isPrimitiveType(node.type)) {
             return BridgesConstructions.primitiveTypeCast(this.mapType(node.type)) // TODO: check
         }

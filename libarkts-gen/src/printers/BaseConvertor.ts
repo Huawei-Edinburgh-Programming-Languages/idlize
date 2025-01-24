@@ -51,16 +51,16 @@ export abstract class BaseConvertor implements TypeConvertor<string> {
         throw new Error("Method not implemented.")
     }
 
-    protected findRealDeclaration(name: string): IDLEntry | undefined {
-        const declarations = this.idl.filter(it => name === it.name)
-        if (declarations.length === 1) {
-            return declarations[0]
-        }
-        if (this.incorrectDeclarations.has(name)) {
-            return undefined
-        }
-        this.incorrectDeclarations.add(name)
-        console.warn(`Expected reference type "${name}" to have exactly one declaration, got: ${declarations.length}`)
-        return undefined
-    }
+    // protected findRealDeclaration(name: string): IDLEntry | undefined {
+    //     const declarations = this.idl.filter(it => name === it.name)
+    //     if (declarations.length === 1) {
+    //         return declarations[0]
+    //     }
+    //     if (this.incorrectDeclarations.has(name)) {
+    //         return undefined
+    //     }
+    //     this.incorrectDeclarations.add(name)
+    //     console.warn(`Expected reference type "${name}" to have exactly one declaration, got: ${declarations.length}`)
+    //     return undefined
+    // }
 }

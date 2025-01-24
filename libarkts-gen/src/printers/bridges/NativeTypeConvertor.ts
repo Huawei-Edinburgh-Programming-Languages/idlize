@@ -49,11 +49,10 @@ export class NativeTypeConvertor extends BaseConvertor {
     }
 
     override convertTypeReference(type: IDLReferenceType): string {
-        const declaration = this.findRealDeclaration(type.name)
-        if (declaration !== undefined && isEnum(declaration)) {
-            return `KInt`
-        }
-
+        // const declaration = this.findRealDeclaration(type.name)
+        // if (declaration !== undefined && isEnum(declaration)) {
+        //     return `KInt`
+        // }
         return `KNativePointer`
     }
 

@@ -49,7 +49,7 @@ export class FileEmitter {
 
     private nativeModulePrinter = new FilePrinter(
         (idl: IDLFile) => new NativeModulePrinter(idl, this.config).print(),
-        `libarkts/src/generated/Es2pandaNativeModule.ts`,
+        `libarkts/src/Es2pandaNativeModule.ts`,
         `Es2pandaNativeModule.ts`,
         this.config.shouldEmitFile(`nativeModule`),
     )

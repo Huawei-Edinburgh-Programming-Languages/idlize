@@ -48,10 +48,14 @@ export class ManagedTypeConvertor extends BaseConvertor {
     }
 
     override convertTypeReference(type: IDLReferenceType): string {
-        const declaration = this.findRealDeclaration(type.name)
-        if (declaration !== undefined && isEnum(declaration)) {
+        // TODO: check if type is enum by some set of enums in context
+        if (type.name.startsWith(`Es2panda`)) {
             return `KInt`
         }
+        // const declaration = this.findRealDeclaration(type.name)
+        // if (declaration !== undefined && isEnum(declaration)) {
+        //     return `KInt`
+        // }
 
         return `KNativePointer`
     }
