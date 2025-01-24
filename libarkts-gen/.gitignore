@@ -1,0 +1,4 @@
+/.rollup.cache/
+/lib/
+/out/
+/package-lock.json/
