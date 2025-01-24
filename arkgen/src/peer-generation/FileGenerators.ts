@@ -261,7 +261,6 @@ export function makeTSSerializer(library: PeerLibrary): LanguageWriter {
         imports.addFeature('KPointer', '@koalaui/interop')
     }
     if (printer.language == Language.ARKTS) {
-        imports.addFeatures(["unsafeCast"], "../shared/generated-utils")
         imports.addFeatures(["MaterializedBase"], "../MaterializedBase")
         imports.addFeatures(['nullptr', 'KPointer'], '@koalaui/interop')
         imports.addFeatures(["int64"], "@koalaui/common")
