@@ -2090,7 +2090,7 @@
 |`setFrom`| Function | Dudkin Sergey | done | |
 |`getTo`| Function | Dudkin Sergey | done | |
 |`setTo`| Function | Dudkin Sergey | done | |
-|*TextController*| *Class* | Samarin Sergey | in progress | |
+|*TextController*| *Class* | Samarin Sergey | done | |
 |`closeSelectionMenu`| Function | Samarin Sergey | done | |
 |`setStyledString`| Function | Samarin Sergey | done | |
 |`getLayoutManager`| Function | Samarin Sergey | done | |
