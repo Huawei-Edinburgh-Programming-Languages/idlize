@@ -24,18 +24,14 @@ import {
     IDLI32Type,
     IDLI64Type,
     IDLI8Type,
-    IDLOptionalType,
     IDLPointerType,
     IDLPrimitiveType,
     IDLReferenceType,
     IDLStringType,
-    IDLTypeParameterType,
     IDLU32Type,
-    IDLUnionType,
     IDLVoidType,
     isEnum,
-    throwException,
-    TypeConvertor
+    throwException
 } from "@idlize/core"
 import { BaseConvertor } from "../BaseConvertor"
 
@@ -44,12 +40,14 @@ export class ManagedTypeConvertor extends BaseConvertor {
         super(idl)
     }
 
-    convertContainer(type: IDLContainerType): string {
-        if (IDLContainerUtils.isSequence(type)) return `KNativePointer`
+    override convertContainer(type: IDLContainerType): string {
+        if (IDLContainerUtils.isSequence(type)) {
+            return `KNativePointerArray`
+        }
         throwException(`Unexpected container`)
     }
 
-    convertTypeReference(type: IDLReferenceType): string {
+    override convertTypeReference(type: IDLReferenceType): string {
         const declaration = this.findRealDeclaration(type.name)
         if (declaration !== undefined && isEnum(declaration)) {
             return `KInt`
@@ -58,7 +56,7 @@ export class ManagedTypeConvertor extends BaseConvertor {
         return `KNativePointer`
     }
 
-    convertPrimitiveType(type: IDLPrimitiveType): string {
+    override convertPrimitiveType(type: IDLPrimitiveType): string {
         switch (type) {
             case IDLI8Type: return `KBoolean`
             case IDLI16Type: return `KInt`

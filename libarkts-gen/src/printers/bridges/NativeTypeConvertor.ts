@@ -15,6 +15,7 @@
 
 import {
     IDLBooleanType,
+    IDLContainerType,
     IDLEntry,
     IDLF32Type,
     IDLF64Type,
@@ -33,13 +34,21 @@ import {
     throwException
 } from "@idlize/core"
 import { BaseConvertor } from "../BaseConvertor"
+import { isSequence } from "../../idl-utils"
 
 export class NativeTypeConvertor extends BaseConvertor {
     constructor(idl: IDLEntry[]) {
         super(idl)
     }
 
-    convertTypeReference(type: IDLReferenceType): string {
+    override convertContainer(type: IDLContainerType): string {
+        if (isSequence(type)) {
+            return `KNativePointerArray`
+        }
+        throwException(`Unexpected container`)
+    }
+
+    override convertTypeReference(type: IDLReferenceType): string {
         const declaration = this.findRealDeclaration(type.name)
         if (declaration !== undefined && isEnum(declaration)) {
             return `KInt`
@@ -48,7 +57,7 @@ export class NativeTypeConvertor extends BaseConvertor {
         return `KNativePointer`
     }
 
-    convertPrimitiveType(type: IDLPrimitiveType): string {
+    override convertPrimitiveType(type: IDLPrimitiveType): string {
         switch (type) {
             case IDLI8Type: return `KBoolean`
             case IDLI16Type: return `KShort`

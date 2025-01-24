@@ -23,12 +23,13 @@ import {
     isTypedef,
     throwException
 } from "@idlize/core"
-import { createInterface, IDLEntry, IDLInterface, isEnum, isInterface, } from "@idlize/core/idl"
+import { IDLEntry, IDLInterface, isEnum, isInterface, } from "@idlize/core/idl"
 import { Config } from "../Config"
 import { InteropConstructions } from "../printers/InteropConstructions"
 import { IDLFile } from "../IdlFile"
+import { withUpdatedMethods } from "../idl-utils"
 
-export class Transformer {
+export class MainTransformer {
     constructor(
         private config: Config
     ) {}
@@ -190,18 +191,4 @@ export class Transformer {
             node.entries.map(it => this.transformEntry(it))
         )
     }
-}
-
-function withUpdatedMethods(node: IDLInterface, methods: IDLMethod[]): IDLInterface {
-    return createInterface(
-        node.name,
-        node.subkind,
-        node.inheritance,
-        node.constructors,
-        node.constants,
-        node.properties,
-        methods,
-        node.callables,
-        node.typeParameters
-    )
 }

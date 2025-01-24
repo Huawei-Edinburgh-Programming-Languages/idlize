@@ -14,33 +14,29 @@
  */
 
 import {
-    createInterface,
+    createMethod,
+    createParameter,
+    createReferenceType,
     IDLContainerUtils,
-    IDLInterface,
+    IDLKind,
     IDLMethod,
-    IDLPrimitiveType,
-    IDLType,
-    isPrimitiveType
+    isTypedef,
+    throwException
 } from "@idlize/core"
+import { createInterface, IDLEntry, IDLInterface, isEnum, isInterface, } from "@idlize/core/idl"
+import { Config } from "../Config"
+import { InteropConstructions } from "../printers/InteropConstructions"
+import { IDLFile } from "../IdlFile"
 
-export function isString(node: IDLType): node is IDLPrimitiveType {
-    return isPrimitiveType(node) && node.name === "String"
-}
+export class TemporaryTransformer {
+    constructor(
+        private config: Config
+    ) {}
 
-export function isSequence(node: IDLType): boolean {
-    return IDLContainerUtils.isSequence(node)
-}
-
-export function withUpdatedMethods(node: IDLInterface, methods: IDLMethod[]): IDLInterface {
-    return createInterface(
-        node.name,
-        node.subkind,
-        node.inheritance,
-        node.constructors,
-        node.constants,
-        node.properties,
-        methods,
-        node.callables,
-        node.typeParameters
-    )
+    transform(file: IDLFile): IDLFile {
+        if (!this.config.shouldFixInput()) {
+            return file
+        }
+        return file
+    }
 }

@@ -29,6 +29,12 @@ export abstract class BaseConvertor implements TypeConvertor<string> {
 
     private incorrectDeclarations = new Set<string>()
 
+    abstract convertTypeReference(type: IDLReferenceType): string
+
+    abstract convertPrimitiveType(type: IDLPrimitiveType): string
+
+    abstract convertContainer(type: IDLContainerType): string
+
     convertOptional(type: IDLOptionalType): string {
         throw new Error("Method not implemented.")
     }
@@ -37,21 +43,13 @@ export abstract class BaseConvertor implements TypeConvertor<string> {
         throw new Error("Method not implemented.")
     }
 
-    convertContainer(type: IDLContainerType): string {
-        throw new Error("Method not implemented.")
-    }
-
     convertImport(type: IDLReferenceType, importClause: string): string {
         throw new Error("Method not implemented.")
     }
 
-    abstract convertTypeReference(type: IDLReferenceType): string
-
     convertTypeParameter(type: IDLTypeParameterType): string {
         throw new Error("Method not implemented.")
     }
-
-    abstract convertPrimitiveType(type: IDLPrimitiveType): string
 
     protected findRealDeclaration(name: string): IDLEntry | undefined {
         const declarations = this.idl.filter(it => name === it.name)
