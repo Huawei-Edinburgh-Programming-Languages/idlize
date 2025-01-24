@@ -10,7 +10,7 @@ export enum CallbackKind {
 export class XMLNativeModule {
     static {
         loadLibrary("XML_NativeBridgeArk")
-        XMLNativeModule.init(["xmlNative/XMLNativeModule", "xmlNative/ArkUINativeModule"])
+        XMLNativeModule.init(["@koalaui/interop/generated/arkts/xmlNative/XMLNativeModule", "@koalaui/interop/generated/arkts/xmlNative/ArkUINativeModule"])
     }
 
     static native init(modules: string[]): void
