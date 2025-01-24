@@ -17,6 +17,7 @@ import * as path from 'path'
 import * as fs from "fs"
 import * as ts from "typescript"
 import { Language } from './Language'
+import { generatorConfiguration } from './config'
 
 export interface NameWithType {
     name?: ts.DeclarationName
@@ -479,7 +480,7 @@ export function camelCaseToUpperSnakeCase(input: string) {
 }
 
 export function renameDtsToPeer(fileName: string, language: Language, withFileExtension: boolean = true) {
-    const renamed = "Ark"
+    const renamed = `${generatorConfiguration().param("FilePrefix")}`
         .concat(snakeCaseToCamelCase(fileName))
         .replace(".d.ts", "")
         .replace(".idl", "")
@@ -491,7 +492,7 @@ export function renameDtsToPeer(fileName: string, language: Language, withFileEx
 }
 
 export function renameDtsToComponent(fileName: string, language: Language, withFileExtension: boolean = true) {
-    const renamed = "Ark"
+    const renamed = `${generatorConfiguration().param("FilePrefix")}`
         .concat(snakeCaseToCamelCase(fileName))
         .replace(".d.ts", "")
         .replace(".idl", "")
@@ -503,7 +504,7 @@ export function renameDtsToComponent(fileName: string, language: Language, withF
 }
 
 export function renameDtsToInterfaces(fileName: string, language: Language, withFileExtension: boolean = true) {
-    const renamed = "Ark"
+    const renamed = `${generatorConfiguration().param("FilePrefix")}`
         .concat(snakeCaseToCamelCase(fileName), "Interfaces")
         .replace(".d.ts", "")
         .replace(".idl", "")
@@ -515,7 +516,7 @@ export function renameDtsToInterfaces(fileName: string, language: Language, with
 }
 
 export function renameClassToBuilderClass(className: string, language: Language, withFileExtension: boolean = true) {
-    const renamed = "Ark"
+    const renamed = `${generatorConfiguration().param("FilePrefix")}`
         .concat(snakeCaseToCamelCase(className))
         .concat("Builder")
 
@@ -528,7 +529,7 @@ export function renameClassToBuilderClass(className: string, language: Language,
 export function renameClassToMaterialized(className: string, language: Language, withFileExtension: boolean = true) {
 
     const name = className.endsWith("Internal") ? className.substring(0, className.length - "Internal".length) : className
-    const renamed = "Ark"
+    const renamed = `${generatorConfiguration().param("FilePrefix")}`
         .concat(snakeCaseToCamelCase(name))
         .concat("Materialized")
 

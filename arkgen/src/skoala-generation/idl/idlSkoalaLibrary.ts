@@ -87,7 +87,7 @@ export class IdlSkoalaLibrary implements LibraryInterface {
     }
 
     getCurrentContext(): string | undefined {
-        return ""
+        return undefined
     }
 
     isComponentDeclaration(iface: idl.IDLInterface): boolean {

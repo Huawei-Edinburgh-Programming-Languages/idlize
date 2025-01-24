@@ -526,6 +526,7 @@ export class CJLanguageWriter extends LanguageWriter {
         return this.makeString(`RuntimeType.${RuntimeType[rt]}.ordinal`)
     }
     makeRuntimeTypeGetterCall(value: string): LanguageExpression {
+        // todo: refactor after Ark_Object::getRuntimeType() moved to interop module (renamed Interop_Object::getRuntimeType() ?)
         let methodCall = this.makeMethodCall("Ark_Object", "getRuntimeType", [this.makeString(value)])
         return this.makeString(methodCall.asString() + '.ordinal')
     }
@@ -587,28 +588,5 @@ export class CJLanguageWriter extends LanguageWriter {
     }
     override castToBoolean(value: string): string {
         return `if (${value}) { Int32(1) } else { Int32(0) }`
-    }
-    override makeLengthDeserializer(deserializer: string): LanguageStatement | undefined {
-        const valueType = "valueType"
-
-        return this.makeBlock([
-            this.makeAssign(valueType, undefined, this.makeMethodCall(deserializer, "readInt8", []), true),
-
-            this.makeMultiBranchCondition(
-                [{
-                    expr: this.makeRuntimeTypeCondition(valueType, true, RuntimeType.NUMBER, ''),
-                    stmt: this.makeReturn(this.makeString(`Ark_Length(${deserializer}.readFloat32())`))
-                },
-                {
-                    expr: this.makeRuntimeTypeCondition(valueType, true, RuntimeType.STRING, ''),
-                    stmt: this.makeReturn(this.makeString(`Ark_Length(${deserializer}.readString())`))
-                },
-                {
-                    expr: this.makeRuntimeTypeCondition(valueType, true, RuntimeType.OBJECT, ''),
-                    stmt: this.makeReturn(this.makeString(`Ark_Length(Resource(${deserializer}.readString(), "", 0.0, Option.None, Option.None))`))
-                }],
-                this.makeReturn(this.makeUndefined())
-            ),
-        ], false)
     }
 }

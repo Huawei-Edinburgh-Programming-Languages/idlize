@@ -114,6 +114,7 @@ class DefaultConfig implements GeneratorConfiguration {
     protected params: Record<string, any> = {
         TypePrefix: "Ark_",
         LibraryPrefix: "",
+        FilePrefix: "Ark",
         OptionalPrefix: "Opt_"
     }
 
@@ -137,6 +138,7 @@ class SkoalaConfiguration extends DefaultConfig {
     protected params: Record<string, any> = {
         TypePrefix: "",
         LibraryPrefix: "",
+        FilePrefix: "Ark",
         OptionalPrefix: "Opt_"
     }
 }
@@ -147,6 +149,7 @@ class OhosConfiguration extends DefaultConfig {
     protected params: Record<string, any> = {
         TypePrefix: "OH_",
         LibraryPrefix: "",
+        FilePrefix: "Ark",
         OptionalPrefix: "Opt_"
     }
 }

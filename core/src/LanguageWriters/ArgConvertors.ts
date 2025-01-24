@@ -27,7 +27,7 @@ import {
 } from "./LanguageWriter";
 import { RuntimeType } from "./common";
 import { generatorTypePrefix } from "../config"
-import { LibraryInterface } from "../LibraryInterface";
+import { LibraryInterface, UNDEFINED_CONTEXT } from "../LibraryInterface";
 import { hashCodeFromString, warn } from "../util";
 import { UnionRuntimeTypeChecker } from "../peer-generation/unions";
 import { InteropNameConvertor } from "./InteropConvertor";
@@ -191,7 +191,7 @@ export class StringConvertor extends BaseArgConvertor {
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
         return this.literalValue
-            ? writer.makeString(`${value} === "${this.literalValue}"`)
+            ? writer.makeEquals([writer.makeString(value), writer.makeString(this.literalValue)])
             : undefined
     }
     targetType(writer: LanguageWriter): string {
@@ -885,7 +885,7 @@ export class UnionConvertor extends BaseArgConvertor { //
             printer.popIndent()
             printer.print(`}`)
         })
-        this.unionChecker.reportConflicts(this.library.getCurrentContext() ?? "<unknown context>")
+        this.unionChecker.reportConflicts(this.library.getCurrentContext() ?? UNDEFINED_CONTEXT)
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const statements: LanguageStatement[] = []
@@ -936,12 +936,14 @@ export class UnionConvertor extends BaseArgConvertor { //
     }
 }
 
-export class FunctionConvertor extends BaseArgConvertor { //
+// Todo: remove completely FunctionConvertor, use CustomTypeConvertor instead ??
+export class FunctionConvertor extends BaseArgConvertor {
     constructor(private library: LibraryInterface, param: string, protected type: idl.IDLReferenceType) {
         // TODO: pass functions as integers to native side.
         super(idl.IDLFunctionType, [RuntimeType.FUNCTION], false, false, param)
     }
     convertorArg(param: string, writer: LanguageWriter): string {
+        // todo: rename makeArkFunctionFromId => makeInteropFunctionFromId ?
         return writer.language == Language.CPP ? `makeArkFunctionFromId(${param})` : `registerCallback(${param})`
     }
     convertorSerialize(param: string, value: string, writer: LanguageWriter): void {

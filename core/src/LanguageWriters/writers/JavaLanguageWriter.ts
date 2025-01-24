@@ -248,6 +248,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         return this.makeString(`RuntimeType.${RuntimeType[rt]}`)
     }
     makeRuntimeTypeGetterCall(value: string): LanguageExpression {
+        // todo: refactor after Ark_Object::getRuntimeType() moved to interop module (renamed Interop_Object::getRuntimeType() ?)
         return this.makeMethodCall("Ark_Object", "getRuntimeType", [this.makeString(value)])
     }
     makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement {
@@ -297,7 +298,4 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         return `${enumName}.getIntValue()`
     }
     override castToBoolean(value: string): string { return value }
-    override makeSerializerConstructorSignature(): NamedMethodSignature | undefined {
-        return new NamedMethodSignature(idl.IDLVoidType, [], [])
-    }
 }

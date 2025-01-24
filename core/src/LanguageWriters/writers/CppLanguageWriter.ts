@@ -494,7 +494,4 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
             [undefined, undefined, undefined, PrintHint.AsPointer]
         )
     }
-    override makeLengthDeserializer(deserializer: string): LanguageStatement | undefined {
-        return  undefined
-    }
 }

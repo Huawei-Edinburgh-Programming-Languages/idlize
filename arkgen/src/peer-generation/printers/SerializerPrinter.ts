@@ -65,6 +65,23 @@ class LengthSerializerPrinter {
         this.library.setCurrentContext(undefined)
     }
 
+    generateLengthDeserializer() {
+        // generate Length deserializer only if there is such a type
+        if (!collectDeclarationTargets(this.library).some(it => it === idl.IDLLengthType)) return
+
+        const deserializerBody = this.makeLengthDeserializer("this", this.writer)
+        if (!deserializerBody) return
+
+        const methodName = idl.IDLLengthType.name
+
+        this.library.setCurrentContext(`read${methodName}()`)
+        this.writer.writeMethodImplementation(
+            new Method(`read${methodName}`,
+                new NamedMethodSignature(idl.createOptionalType(idl.IDLLengthType))),
+            writer => writer.writeStatement(deserializerBody))
+        this.library.setCurrentContext(undefined)
+    }
+
     private makeLengthSerializer(serializer: string, value: string, writer: LanguageWriter): LanguageStatement | undefined {
         switch (writer.language) {
             case Language.CPP:
@@ -108,6 +125,63 @@ class LengthSerializerPrinter {
                     writer.makeStatement(writer.makeMethodCall(serializer, "writeInt8", [writer.makeRuntimeType(RuntimeType.STRING)])),
                     writer.makeStatement(writer.makeMethodCall(serializer, "writeString", [writer.makeString(`${value}.getValue1()`)]))
                 ], false)
+            default:
+                break;
+        }
+    }
+
+    private makeLengthDeserializer(deserializer: string, writer: LanguageWriter): LanguageStatement | undefined {
+        switch (writer.language) {
+            case Language.CPP:
+                return undefined
+            case Language.JAVA:
+            case Language.TS:
+            case Language.ARKTS: {
+                const valueType = "valueType"
+                return writer.makeBlock([
+                    writer.makeAssign(valueType, undefined, writer.makeMethodCall(deserializer, "readInt8", []), true),
+                    writer.makeMultiBranchCondition(
+                        [{
+                            expr: writer.makeRuntimeTypeCondition(valueType, true, RuntimeType.NUMBER),
+                            stmt: writer.makeReturn(writer.makeString(`${deserializer}.readFloat32() as number`))
+                        },
+                        {
+                            expr: writer.makeRuntimeTypeCondition(valueType, true, RuntimeType.STRING),
+                            stmt: writer.makeReturn(writer.makeMethodCall(deserializer, "readString", []))
+                        },
+                        {
+                            expr: writer.makeRuntimeTypeCondition(valueType, true, RuntimeType.OBJECT),
+                            stmt: writer.makeReturn(writer.makeString(`({id: ${deserializer}.readInt32(), bundleName: "", moduleName: ""}) as Resource`))
+                        }],
+                        writer.makeReturn(writer.makeUndefined())
+                    ),
+                ], false)
+            }
+
+            case Language.CJ: {
+                const valueType = "valueType"
+
+                return writer.makeBlock([
+                    writer.makeAssign(valueType, undefined, writer.makeMethodCall(deserializer, "readInt8", []), true),
+
+                    writer.makeMultiBranchCondition(
+                        [{
+                            expr: writer.makeRuntimeTypeCondition(valueType, true, RuntimeType.NUMBER, ''),
+                            stmt: writer.makeReturn(writer.makeString(`Ark_Length(${deserializer}.readFloat32())`))
+                        },
+                        {
+                            expr: writer.makeRuntimeTypeCondition(valueType, true, RuntimeType.STRING, ''),
+                            stmt: writer.makeReturn(writer.makeString(`Ark_Length(${deserializer}.readString())`))
+                        },
+                        {
+                            expr: writer.makeRuntimeTypeCondition(valueType, true, RuntimeType.OBJECT, ''),
+                            stmt: writer.makeReturn(writer.makeString(`Ark_Length(Resource(${deserializer}.readString(), "", 0.0, Option.None, Option.None))`))
+                        }],
+                        writer.makeReturn(writer.makeUndefined())
+                    ),
+                ], false)
+            }
+
             default:
                 break;
         }
@@ -333,8 +407,11 @@ class DeserializerPrinter {
     constructor(
         private readonly library: PeerLibrary,
         private readonly destFile: SourceFile,
-    ) {}
-
+    ) {
+        this.lengthSerializerPrinter = new LengthSerializerPrinter(library, destFile.content)
+    }
+    
+    private lengthSerializerPrinter: LengthSerializerPrinter
     private get writer(): LanguageWriter {
         return this.destFile.content
     }
@@ -539,21 +616,7 @@ class DeserializerPrinter {
     }
 
     private generateLengthDeserializer() {
-        // generate Length deserializer only if there is such a type
-        if (!collectDeclarationTargets(this.library).some(it => it === idl.IDLLengthType)) return
-
-        const deserializerBody = this.writer.makeLengthDeserializer("this")
-        if (!deserializerBody) return
-
-        const methodName = idl.IDLLengthType.name
-        const value = "value"
-
-        this.library.setCurrentContext(`read${methodName}()`)
-        this.writer.writeMethodImplementation(
-            new Method(`read${methodName}`,
-                new NamedMethodSignature(idl.createOptionalType(idl.IDLLengthType))),
-            writer => writer.writeStatement(deserializerBody))
-        this.library.setCurrentContext(undefined)
+        this.lengthSerializerPrinter.generateLengthDeserializer()
     }
 
     print(prefix: string, declarationPath?: string) {
