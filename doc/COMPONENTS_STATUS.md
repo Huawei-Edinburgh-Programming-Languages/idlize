@@ -1443,9 +1443,9 @@
 |`layoutMode`| Function | Erokhin Ilya | done | |
 |`nestedScroll`| Function | Erokhin Ilya | testskipped | |
 |`enableNativeEmbedMode`| Function | Erokhin Ilya | done | |
-|`onNativeEmbedLifecycleChange`| Function | Erokhin Ilya | testskipped | UT in progress Andrey Khudenkikh |
+|`onNativeEmbedLifecycleChange`| Function | Erokhin Ilya, Andrey Khudenkikh | done | |
 |`onNativeEmbedVisibilityChange`| Function | Erokhin Ilya | done | |
-|`onNativeEmbedGestureEvent`| Function | Erokhin Ilya | in progress | UT in progress Andrey Khudenkikh EVENT |
+|`onNativeEmbedGestureEvent`| Function | Erokhin Ilya, Andrey Khudenkikh | done | |
 |`copyOptions`| Function | Erokhin Ilya | done | |
 |`onOverrideUrlLoading`| Function | Maksimov Nikita | done | |
 |`textAutosizing`| Function | Erokhin Ilya | done | |
