@@ -1200,7 +1200,7 @@
 |`contentModifier`| Function |Pavelyev Ivan|blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG + |
 |`dateTimeOptions`| Function |Pavelyev Ivan|blocked IDL| Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX + |
 |*TextInput*| *Component* | Spirin Andrey | in progress |  |
-|`setTextInputOptions`| Function | Spirin Andrey | testskipped | UT in progress Samarin Sergey |
+|`setTextInputOptions`| Function | Spirin Andrey | done | |
 |`type`| Function | Spirin Andrey | done |  |
 |`contentType`| Function | Spirin Andrey | done |  |
 |`placeholderColor`| Function | Spirin Andrey | done |  |
@@ -1250,11 +1250,11 @@
 |`maxFontScale`| Function | | | |
 |`heightAdaptivePolicy`| Function | Spirin Andrey | done |  |
 |`enableAutoFill`| Function | Spirin Andrey | done |  |
-|`decoration`| Function | Spirin Andrey | testskipped  | UT in progress Samarin Sergey |
-|`letterSpacing`| Function | Spirin Andrey | testskipped  | UT in progress Samarin Sergey |
-|`lineHeight`| Function | Spirin Andrey | testskipped  | UT in progress Samarin Sergey |
+|`decoration`| Function | Spirin Andrey | done | |
+|`letterSpacing`| Function | Spirin Andrey | done | |
+|`lineHeight`| Function | Spirin Andrey | done | |
 |`passwordRules`| Function | Spirin Andrey | done |  |
-|`fontFeature`| Function | Spirin Andrey | testskipped  | UT in progress Samarin Sergey |
+|`fontFeature`| Function | Spirin Andrey | done | |
 |`showPassword`| Function | Spirin Andrey | done |  |
 |`onSecurityStateChange`| Function | Spirin Andrey | testskipped | UT in progress Kovalev Sergey |
 |`onWillInsert`| Function | Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
