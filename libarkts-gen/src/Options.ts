@@ -40,14 +40,17 @@ export class Options {
         this.interfaces = [
             ...Object.entries(interfaces).map(([name, methods]: [any, any]) => {
                 if (Interface.isWhole(methods)) {
-                    return new Ignored(name)
+                    return this.generateByDefault
+                        ? new Ignored(name)
+                        : new Full(name)
                 }
-                return new Partial(name, new Map(
-                    (Object.values(methods) as string[])
-                        .map((name: string) =>
-                            [name, !this.generateByDefault]
-                        )
-                ))
+                return new Partial(
+                    name,
+                    new Map(
+                        Object.values(methods)
+                            .map((name: any) => [name, !this.generateByDefault])
+                    )
+                )
             })
         ]
     }
@@ -81,7 +84,7 @@ export class Options {
 }
 
 abstract class Interface {
-    protected constructor(
+    constructor(
         public name: string
     ) {}
 
@@ -90,25 +93,16 @@ abstract class Interface {
     }
 }
 
-class Ignored extends Interface {
-    constructor(name: string) {
-        super(name)
-    }
-}
+class Ignored extends Interface {}
+
+class Full extends Interface {}
 
 class Partial extends Interface {
     constructor(
-        name: string,
-        public methods: Map<string, boolean>
+        public name: string,
+        public methods: Map<string, boolean>,
     ) {
         super(name)
     }
 }
 
-class Full extends Interface {
-    constructor(
-        name: string,
-    ) {
-        super(name)
-    }
-}
