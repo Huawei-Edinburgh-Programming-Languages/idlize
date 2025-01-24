@@ -94,8 +94,12 @@ export class NativeTypeConvertor implements TypeConvertor<string> {
     }
 
     private findRealDeclaration(name: string, declarations: IDLEntry[]): IDLEntry | undefined {
-        if (declarations.length === 1) return declarations[0]
-        if (this.incorrectDeclarations.has(name)) return undefined
+        if (declarations.length === 1) {
+            return declarations[0]
+        }
+        if (this.incorrectDeclarations.has(name)) {
+            return undefined
+        }
         this.incorrectDeclarations.add(name)
         console.warn(`Expected reference type "${name}" to have exactly one declaration, got: ${declarations.length}`)
         return undefined

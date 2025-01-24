@@ -40,9 +40,15 @@ export class Transformer {
     }
 
     private transformEntry(node: IDLEntry): IDLEntry {
-        if (isInterface(node)) return this.transformInterface(node)
-        if (isEnum(node)) return node
-        if (isTypedef(node)) return node
+        if (isInterface(node)) {
+            return this.transformInterface(node)
+        }
+        if (isEnum(node)) {
+            return node
+        }
+        if (isTypedef(node)) {
+            return node
+        }
 
         throwException(`Unexpected top-level node: ${IDLKind[node.kind]}`)
     }
@@ -126,7 +132,9 @@ export class Transformer {
 
     private withKeywordsReplaced(node: IDLMethod): IDLMethod {
         const rename = (name: string) => {
-            if (InteropConstructions.keywords.includes(name)) return `_${name}`
+            if (InteropConstructions.keywords.includes(name)) {
+                return `_${name}`
+            }
             return name
         }
         return createMethod(
