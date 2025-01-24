@@ -8,7 +8,7 @@
 /.packages/
 /idl/
 /interface_sdk-js/
-/node_modules/
+node_modules
 /panda/node_modules/
 /sdk/
 
