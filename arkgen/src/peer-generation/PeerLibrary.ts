@@ -18,8 +18,10 @@ import { BuilderClass } from './BuilderClass';
 import { MaterializedClass } from "./Materialized";
 import { isMaterialized, isPredefined } from './idl/IdlPeerGeneratorVisitor';
 import { PeerFile } from "./PeerFile";
-import { BufferConvertor, CallbackConvertor, DateConvertor, ImportTypeConvertor, ArkoalaInterfaceConvertor, MapConvertor, NumericConvertor,  PointerConvertor, TupleConvertor, TypeAliasConvertor } from './ArgConvertors';
-import { AggregateConvertor, StringConvertor, ClassConvertor, ArrayConvertor, FunctionConvertor, OptionConvertor, CustomTypeConvertor, UnionConvertor } from "@idlize/core"
+import { CallbackConvertor, ImportTypeConvertor, ArkoalaInterfaceConvertor, NumericConvertor } from './ArgConvertors';
+import { BufferConvertor, DateConvertor, MapConvertor, PointerConvertor, TupleConvertor, TypeAliasConvertor,
+         AggregateConvertor, StringConvertor, ClassConvertor, ArrayConvertor, FunctionConvertor, OptionConvertor,
+         CustomTypeConvertor, UnionConvertor } from "@idlize/core"
 import { MaterializedClassConvertor } from '@idlize/core'
 import { IndentedPrinter, Language, warn, isImportAttr, NumberConvertor } from '@idlize/core'
 import { createTypeNameConvertor } from './LanguageWriters';
