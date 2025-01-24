@@ -709,6 +709,7 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
         const retType = this.convertType(returnType !== undefined ? returnType : idl.IDLVoidType)
         const namePrefix = node.namespace != undefined ? `${node.namespace.name}_` : ``
         // TODO: The name prefix is used instead of printing namespace, nesting Callback type into namespaces causes es2panda to crash
+        // https://rnd-gitlab-msc.huawei.com/rus-os-team/virtual-machines-and-tools/panda/-/issues/22177
         return `type ${namePrefix}${node.name}${this.printTypeParameters(node.typeParameters)} = ${maybeMemo}(${paramsType}) => ${retType};`
     }
 
