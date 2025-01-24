@@ -16,14 +16,15 @@
 import * as idl from '@idlize/core/idl'
 import { PeerLibrary } from "../PeerLibrary";
 import { CppLanguageWriter, NamedMethodSignature } from "../LanguageWriters";
-import { generatorConfiguration, generatorTypePrefix, LanguageWriter } from "@idlize/core"
+import { generatorTypePrefix, LanguageWriter } from "@idlize/core"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { ImportsCollector } from "../ImportsCollector";
 import { Language } from  '@idlize/core'
-import { CallbackConvertor, CallbackKind, generateCallbackAPIArguments, generateCallbackKindAccess, generateCallbackKindName, generateCallbackKindValue } from "../ArgConvertors";
+import { CallbackConvertor } from "../ArgConvertors";
+import { CallbackKind, generateCallbackAPIArguments, generateCallbackKindAccess, generateCallbackKindName, generateCallbackKindValue } from "@idlize/core";
 import { PrintHint } from "@idlize/core";
 import { CppSourceFile, SourceFile, TsSourceFile } from "./SourceFile";
-import { ArkPrimitiveType, ArkPrimitiveTypesInstance } from "../ArkPrimitiveType";
+import { ArkPrimitiveTypesInstance } from "../ArkPrimitiveType";
 import { collectDeclItself, collectDeclDependencies } from "../ImportsCollectorUtils";
 import { LibraryInterface } from "@idlize/core";
 import { maybeTransformManagedCallback } from "@idlize/core"

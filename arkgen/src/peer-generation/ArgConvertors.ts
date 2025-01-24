@@ -14,13 +14,12 @@
  */
 
 import * as idl from "@idlize/core/idl"
-import { Language, hashCodeFromString, warn, generatorTypePrefix } from "@idlize/core"
+import { Language, generatorTypePrefix, generateCallbackKindAccess, generateCallbackAPIArguments } from "@idlize/core"
 import { RuntimeType, BaseArgConvertor, ExpressionAssigner } from "@idlize/core"
 import { LibraryInterface } from "@idlize/core"
 import { ArkPrimitiveTypesInstance } from "./ArkPrimitiveType"
 import { LanguageExpression, LanguageStatement, LanguageWriter, StringExpression } from "@idlize/core"
-import { maybeTransformManagedCallback, warnCustomObject } from "@idlize/core"
-import { createTypeNameConvertor } from "./LanguageWriters";
+import { maybeTransformManagedCallback } from "@idlize/core"
 import { InterfaceConvertor, ImportTypeConvertor } from "@idlize/core";
 
 export class ArkoalaInterfaceConvertor extends InterfaceConvertor {
@@ -193,38 +192,3 @@ export class CallbackConvertor extends BaseArgConvertor {
 ////////////////////////////////////////////////////////////////////////////////
 // UTILS
 
-
-export const CallbackKind = "CallbackKind"
-
-export function generateCallbackKindName(callback: idl.IDLCallback) {
-    return `Kind_${callback.name}`
-}
-
-export function generateCallbackKindAccess(callback: idl.IDLCallback, language: Language) {
-    const name = generateCallbackKindName(callback)
-    if (language == Language.CPP)
-        return name
-    return `${CallbackKind}.${name}`
-}
-
-export function generateCallbackKindValue(callback: idl.IDLCallback): number {
-    const name = generateCallbackKindName(callback)
-    return hashCodeFromString(name)
-}
-
-export function generateCallbackAPIArguments(library: LibraryInterface, callback: idl.IDLCallback): string[] {
-    const nameConvertor = createTypeNameConvertor(Language.CPP, library)
-    const args: string[] = [`const ${ArkPrimitiveTypesInstance.Int32.getText()} resourceId`]
-    args.push(...callback.parameters.map(it => {
-        const target = library.toDeclaration(it.type!)
-        const type = library.typeConvertor(it.name, it.type!, it.isOptional)
-        const constPrefix = !idl.isEnum(target) ? "const " : ""
-        return `${constPrefix}${nameConvertor.convert(type.nativeType())} ${type.param}`
-    }))
-    if (!idl.isVoidType(callback.returnType)) {
-        const type = library.typeConvertor(`continuation`,
-            library.createContinuationCallbackReference(callback.returnType)!, false)
-        args.push(`const ${nameConvertor.convert(type.nativeType())} ${type.param}`)
-    }
-    return args
-}

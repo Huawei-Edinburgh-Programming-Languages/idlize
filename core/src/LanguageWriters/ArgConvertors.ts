@@ -26,10 +26,12 @@ import {
 } from "./LanguageWriter";
 import { RuntimeType } from "./common";
 import { LibraryInterface } from "../LibraryInterface";
-import { warn } from "../util";
+import { hashCodeFromString, warn } from "../util";
 import { UnionRuntimeTypeChecker } from "../peer-generation/unions";
 import { InteropNameConvertor } from "./InteropConvertor";
 import { createEmptyReferenceResolver } from "../peer-generation/ReferenceResolver";
+import { CppInteropConvertor } from "./convertors/CppConvertors";
+import { PrimitiveTypesInstance } from "../peer-generation/PrimitiveType";
 
 export interface ArgConvertor {
     param: string
@@ -1036,11 +1038,46 @@ export class ImportTypeConvertor extends BaseArgConvertor {
 // UTILS
 
 const customObjects = new Set<string>()
-export function warnCustomObject(type: string, msg?: string) {
+function warnCustomObject(type: string, msg?: string) {
     if (!customObjects.has(type)) {
         warn(`Use CustomObject for ${msg ? `${msg} ` : ``}type ${type}`)
         customObjects.add(type)
     }
+}
+
+export const CallbackKind = "CallbackKind"
+
+export function generateCallbackKindName(callback: idl.IDLCallback) {
+    return `Kind_${callback.name}`
+}
+
+export function generateCallbackKindAccess(callback: idl.IDLCallback, language: Language) {
+    const name = generateCallbackKindName(callback)
+    if (language == Language.CPP)
+        return name
+    return `${CallbackKind}.${name}`
+}
+
+export function generateCallbackKindValue(callback: idl.IDLCallback): number {
+    const name = generateCallbackKindName(callback)
+    return hashCodeFromString(name)
+}
+
+export function generateCallbackAPIArguments(library: LibraryInterface, callback: idl.IDLCallback): string[] {
+    const nameConvertor = new CppInteropConvertor(library)
+    const args: string[] = [`const ${PrimitiveTypesInstance.Int32.getText()} resourceId`]
+    args.push(...callback.parameters.map(it => {
+        const target = library.toDeclaration(it.type!)
+        const type = library.typeConvertor(it.name, it.type!, it.isOptional)
+        const constPrefix = !idl.isEnum(target) ? "const " : ""
+        return `${constPrefix}${nameConvertor.convert(type.nativeType())} ${type.param}`
+    }))
+    if (!idl.isVoidType(callback.returnType)) {
+        const type = library.typeConvertor(`continuation`,
+            library.createContinuationCallbackReference(callback.returnType)!, false)
+        args.push(`const ${nameConvertor.convert(type.nativeType())} ${type.param}`)
+    }
+    return args
 }
 
 export function maybeTransformManagedCallback(callback: idl.IDLCallback): idl.IDLCallback | undefined {
