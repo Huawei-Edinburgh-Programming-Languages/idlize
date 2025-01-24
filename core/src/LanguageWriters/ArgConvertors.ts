@@ -28,6 +28,8 @@ import { RuntimeType } from "./common";
 import { LibraryInterface } from "../LibraryInterface";
 import { warn } from "../util";
 import { UnionRuntimeTypeChecker } from "../peer-generation/unions";
+import { InteropNameConvertor } from "./InteropConvertor";
+import { createEmptyReferenceResolver } from "../peer-generation/ReferenceResolver";
 
 export interface ArgConvertor {
     param: string
@@ -264,6 +266,34 @@ export class NumberConvertor extends BaseArgConvertor {
     }
     isPointerType(): boolean {
         return true
+    }
+}
+
+export class NumericConvertor extends BaseArgConvertor {
+    private readonly interopNameConvertor = new InteropNameConvertor(createEmptyReferenceResolver())
+    constructor(param: string, type: idl.IDLPrimitiveType) {
+        // check numericPrimitiveTypes.include(type)
+        super(type, [RuntimeType.NUMBER], false, false, param)
+    }
+    convertorArg(param: string, writer: LanguageWriter): string {
+        return param
+    }
+    convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
+        printer.writeMethodCall(`${param}Serializer`, `write${this.interopNameConvertor.convert(this.idlType)}`, [value])
+    }
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
+        return assigneer(
+            writer.makeString(`${deserializerName}.read${this.interopNameConvertor.convert(this.idlType)}()`)
+        )
+    }
+    nativeType(): idl.IDLType {
+        return this.idlType
+    }
+    interopType(): idl.IDLType {
+        return this.idlType
+    }
+    isPointerType(): boolean {
+        return false
     }
 }
 
@@ -978,9 +1008,20 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
 // UTILS
 
 const customObjects = new Set<string>()
-function warnCustomObject(type: string, msg?: string) {
+export function warnCustomObject(type: string, msg?: string) {
     if (!customObjects.has(type)) {
         warn(`Use CustomObject for ${msg ? `${msg} ` : ``}type ${type}`)
         customObjects.add(type)
     }
+}
+
+export function maybeTransformManagedCallback(callback: idl.IDLCallback): idl.IDLCallback | undefined {
+    if (callback.name === "CustomBuilder")
+        return idl.createCallback(
+            "CustomNodeBuilder",
+            [idl.createParameter("parentNode", idl.IDLPointerType)],
+            idl.IDLPointerType,
+            { extendedAttributes: [{name: idl.IDLExtendedAttributes.Synthetic}] }
+        )
+    return undefined
 }

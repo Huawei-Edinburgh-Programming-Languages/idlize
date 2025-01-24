@@ -18,12 +18,12 @@ import { BuilderClass } from './BuilderClass';
 import { MaterializedClass } from "./Materialized";
 import { isMaterialized, isPredefined } from './idl/IdlPeerGeneratorVisitor';
 import { PeerFile } from "./PeerFile";
-import { CallbackConvertor, ImportTypeConvertor, ArkoalaInterfaceConvertor, NumericConvertor } from './ArgConvertors';
+import { CallbackConvertor, ImportTypeConvertor, ArkoalaInterfaceConvertor } from './ArgConvertors';
 import { BufferConvertor, DateConvertor, MapConvertor, PointerConvertor, TupleConvertor, TypeAliasConvertor,
          AggregateConvertor, StringConvertor, ClassConvertor, ArrayConvertor, FunctionConvertor, OptionConvertor,
-         CustomTypeConvertor, UnionConvertor } from "@idlize/core"
-import { MaterializedClassConvertor } from '@idlize/core'
-import { IndentedPrinter, Language, warn, isImportAttr, NumberConvertor } from '@idlize/core'
+         NumberConvertor, NumericConvertor, CustomTypeConvertor, UnionConvertor, MaterializedClassConvertor
+        } from '@idlize/core'
+import { IndentedPrinter, Language, warn, isImportAttr, InteropNameConvertor } from '@idlize/core'
 import { createTypeNameConvertor } from './LanguageWriters';
 import { LanguageWriter } from '@idlize/core';
 import { StructPrinter } from './printers/StructPrinter';
@@ -32,7 +32,6 @@ import { ArgConvertor, BooleanConvertor, EnumConvertor, UndefinedConvertor, Void
 import { generateSyntheticFunctionName } from '../IDLVisitor';
 import { IdlNameConvertor } from '@idlize/core';
 import { LibraryInterface } from '@idlize/core';
-import { IDLNodeToStringConvertor } from './LanguageWriters/convertors/InteropConvertor';
 
 export class PeerLibrary implements LibraryInterface {
     private _syntheticEntries: idl.IDLEntry[] = []
@@ -67,7 +66,7 @@ export class PeerLibrary implements LibraryInterface {
     readonly customComponentMethods: string[] = []
 
     private readonly targetNameConvertorInstance: IdlNameConvertor = createTypeNameConvertor(this.language, this)
-    private readonly interopNameConvertorInstance: IdlNameConvertor = new IDLNodeToStringConvertor(this)
+    private readonly interopNameConvertorInstance: IdlNameConvertor = new InteropNameConvertor(this)
 
     get libraryPrefix(): string {
         return this.name ? this.name + "_" : ""

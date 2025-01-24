@@ -14,13 +14,12 @@
  */
 
 import * as idl from "@idlize/core/idl"
-import { Language, hashCodeFromString, warn, generatorConfiguration, generatorTypePrefix } from "@idlize/core"
-import { RuntimeType, AggregateConvertor, ArgConvertor, BaseArgConvertor, ExpressionAssigner } from "@idlize/core"
+import { Language, hashCodeFromString, warn, generatorTypePrefix } from "@idlize/core"
+import { RuntimeType, BaseArgConvertor, ExpressionAssigner } from "@idlize/core"
 import { LibraryInterface } from "@idlize/core"
 import { ArkPrimitiveTypesInstance } from "./ArkPrimitiveType"
-import { BlockStatement, LanguageExpression, LanguageStatement, LanguageWriter, StringExpression } from "@idlize/core"
-import { IDLNodeToStringConvertor } from "./LanguageWriters/convertors/InteropConvertor"
-import { createEmptyReferenceResolver } from "@idlize/core"
+import { LanguageExpression, LanguageStatement, LanguageWriter, StringExpression } from "@idlize/core"
+import { maybeTransformManagedCallback, warnCustomObject } from "@idlize/core"
 import { createTypeNameConvertor } from "./LanguageWriters";
 import { InterfaceConvertor } from "@idlize/core";
 
@@ -94,34 +93,6 @@ export class LengthConvertor extends BaseArgConvertor {
                 writer.makeNaryOp("==", [writer.makeRuntimeType(RuntimeType.OBJECT), writer.makeString(`${value}_type`)]),
                 writer.makeCallIsResource(value)
             ])])
-    }
-}
-
-export class NumericConvertor extends BaseArgConvertor {
-    private readonly interopNameConvertor = new IDLNodeToStringConvertor(createEmptyReferenceResolver())
-    constructor(param: string, type: idl.IDLPrimitiveType) {
-        // check numericPrimitiveTypes.include(type)
-        super(type, [RuntimeType.NUMBER], false, false, param)
-    }
-    convertorArg(param: string, writer: LanguageWriter): string {
-        return param
-    }
-    convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
-        printer.writeMethodCall(`${param}Serializer`, `write${this.interopNameConvertor.convert(this.idlType)}`, [value])
-    }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
-        return assigneer(
-            writer.makeString(`${deserializerName}.read${this.interopNameConvertor.convert(this.idlType)}()`)
-        )
-    }
-    nativeType(): idl.IDLType {
-        return this.idlType
-    }
-    interopType(): idl.IDLType {
-        return this.idlType
-    }
-    isPointerType(): boolean {
-        return false
     }
 }
 
@@ -279,27 +250,4 @@ export function generateCallbackAPIArguments(library: LibraryInterface, callback
         args.push(`const ${nameConvertor.convert(type.nativeType())} ${type.param}`)
     }
     return args
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-// UTILS
-
-const customObjects = new Set<string>()
-function warnCustomObject(type: string, msg?: string) {
-    if (!customObjects.has(type)) {
-        warn(`Use CustomObject for ${msg ? `${msg} ` : ``}type ${type}`)
-        customObjects.add(type)
-    }
-}
-
-export function maybeTransformManagedCallback(callback: idl.IDLCallback): idl.IDLCallback | undefined {
-    if (callback.name === "CustomBuilder")
-        return idl.createCallback(
-            "CustomNodeBuilder",
-            [idl.createParameter("parentNode", idl.IDLPointerType)],
-            idl.IDLPointerType,
-            { extendedAttributes: [{name: idl.IDLExtendedAttributes.Synthetic}] }
-        )
-    return undefined
 }
