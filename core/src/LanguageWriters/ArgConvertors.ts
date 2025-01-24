@@ -22,9 +22,11 @@ import {
     ExpressionAssigner,
     PrintHint,
     BlockStatement,
-    BranchStatement
+    BranchStatement,
+    StringExpression
 } from "./LanguageWriter";
 import { RuntimeType } from "./common";
+import { generatorTypePrefix } from "../config"
 import { LibraryInterface } from "../LibraryInterface";
 import { hashCodeFromString, warn } from "../util";
 import { UnionRuntimeTypeChecker } from "../peer-generation/unions";
@@ -1028,6 +1030,78 @@ export class ImportTypeConvertor extends BaseArgConvertor {
     }
     interopType(): idl.IDLType {
         throw new Error("Must never be used")
+    }
+    isPointerType(): boolean {
+        return true
+    }
+}
+
+export class CallbackConvertor extends BaseArgConvertor {
+    constructor(
+        private readonly library: LibraryInterface,
+        param: string,
+        private readonly decl: idl.IDLCallback,
+    ) {
+        super(idl.createReferenceType(decl.name, undefined, decl), [RuntimeType.FUNCTION], false, true, param)
+    }
+
+    private get isTransformed(): boolean {
+        return this.decl !== this.transformedDecl
+    }
+
+    private get transformedDecl(): idl.IDLCallback {
+        return maybeTransformManagedCallback(this.decl) ?? this.decl
+    }
+
+    convertorArg(param: string, writer: LanguageWriter): string {
+        throw new Error("Must never be used")
+    }
+    convertorSerialize(param: string, value: string, writer: LanguageWriter): void {
+        if (writer.language == Language.CPP) {
+            writer.writeMethodCall(`${param}Serializer`, "writeCallbackResource", [`${value}.resource`])
+            writer.writeMethodCall(`${param}Serializer`, "writePointer", [writer.makeCast(
+                new StringExpression(`${value}.call`), idl.IDLPointerType, { unsafe: true }).asString()])
+            writer.writeMethodCall(`${param}Serializer`, "writePointer", [writer.makeCast(
+                new StringExpression(`${value}.callSync`), idl.IDLPointerType, { unsafe: true }).asString()])
+            return
+        }
+        if (this.isTransformed)
+            value = `CallbackTransformer.transformFrom${this.library.getInteropName(this.decl)}(${value})`
+        writer.writeMethodCall(`${param}Serializer`, `holdAndWriteCallback`, [`${value}`])
+    }
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter, useSyncVersion: boolean = false): LanguageStatement {
+        if (writer.language == Language.CPP) {
+            const callerInvocation = writer.makeString(`getManagedCallbackCaller(${generateCallbackKindAccess(this.transformedDecl, writer.language)})`)
+            const callerSyncInvocation = writer.makeString(`getManagedCallbackCallerSync(${generateCallbackKindAccess(this.transformedDecl, writer.language)})`)
+            const resourceReadExpr = writer.makeMethodCall(`${deserializerName}`, `readCallbackResource`, [])
+            const callReadExpr = writer.makeCast(
+                writer.makeMethodCall(`${deserializerName}`, `readPointerOrDefault`,
+                    [writer.makeCast(callerInvocation, idl.IDLPointerType, { unsafe: true })]),
+                    idl.IDLUndefinedType /* not used */,
+                    {
+                        unsafe: true,
+                        overrideTypeName: `void(*)(${generateCallbackAPIArguments(this.library, this.transformedDecl).join(", ")})`
+                    }
+            )
+            const callSyncReadExpr = writer.makeCast(
+                writer.makeMethodCall(`${deserializerName}`, `readPointerOrDefault`,
+                    [writer.makeCast(callerSyncInvocation, idl.IDLPointerType, { unsafe: true })]),
+                    idl.IDLUndefinedType /* not used */,
+                    {
+                        unsafe: true,
+                        overrideTypeName: `void(*)(${[`${generatorTypePrefix()}VMContext vmContext`].concat(generateCallbackAPIArguments(this.library, this.transformedDecl)).join(", ")})`
+                    }
+            )
+            return assigneer(writer.makeString(`{${resourceReadExpr.asString()}, ${callReadExpr.asString()}, ${callSyncReadExpr.asString()}}`))
+        }
+        let result = writer.makeString(
+            `${deserializerName}.read${this.library.getInteropName(this.transformedDecl)}(${useSyncVersion ? 'true' : ''})`)
+        if (this.isTransformed)
+            result = writer.makeMethodCall(`CallbackTransformer`, `transformTo${this.library.getInteropName(this.decl)}`, [result])
+        return assigneer(result)
+    }
+    nativeType(): idl.IDLType {
+        return idl.createReferenceType(this.transformedDecl.name, undefined, this.decl)
     }
     isPointerType(): boolean {
         return true
