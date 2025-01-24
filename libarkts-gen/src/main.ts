@@ -21,19 +21,15 @@ import { IDLFile } from "./IdlFile"
 import { Options } from "./Options"
 
 const cliOptions: {
-    outputDir?: string,
     inputFile?: string,
+    outputDir?: string,
     transform?: boolean,
-    interfaces?: string
-    methods?: string
     files?: string
     optionsFile?: string
 } = program
-    .option('--output-dir <path>', 'Path to output dir')
     .option('--input-file <path>', 'Path to file to generate from')
+    .option('--output-dir <path>', 'Path to output dir')
     .option('--transform', 'Applies some temporary fixes on input .idl')
-    .option('--interfaces <string>', 'Ignore all other nodes, comma separated, no space')
-    .option('--methods <string>', 'Ignore all other nodes, comma separated, no space')
     .option('--files <string>', 'Types of files to be emitted [bridges|bindings|enums], comma separated, no space')
     .option('--options-file <path>', 'Path to file which determines what to generate')
     .parse()
@@ -42,17 +38,13 @@ const cliOptions: {
 function main() {
     const outDir = cliOptions.outputDir ?? `./out`
     const idlFile = cliOptions.inputFile ?? `./input/full.idl`
-    const interfaces = cliOptions.interfaces?.split(`,`)
-    const methods = cliOptions.methods?.split(`,`)
     const files = cliOptions.files?.split(`,`)
     const shouldFixInput = cliOptions.transform ?? false
 
     const config = new Config(
-        shouldFixInput,
         new Options(cliOptions.optionsFile),
-        interfaces,
-        methods,
-        files,
+        shouldFixInput,
+        files
     )
 
     new FileEmitter(

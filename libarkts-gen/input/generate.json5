@@ -1,10 +1,4 @@
 {
-    "generateByDefault": false,
-    "ignore": {
-        "interfaces": {
-            "es2panda_Impl": ["*"]
-        }
-    },
     "generate": {
         "interfaces": {
             "FunctionSignature": [

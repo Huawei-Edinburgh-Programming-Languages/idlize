@@ -26,37 +26,26 @@ export class Options {
         }
 
         const json = JSON5.parse(fs.readFileSync(filePath).toString())
-        const generateByDefault = json.generateByDefault ?? throwException(
-            `missing options section generateByDefault`
-        )
-        const ignore = json.ignore.interfaces ?? throwException(
-            `missing options section ignore or ignore.interfaces`
-        )
-        const generate = json.generate.interfaces ?? throwException(
-            `missing options section generate or generate.interfaces`
+        if (json?.ignore !== undefined) {
+            this.generateByDefault = true
+        } else if (json?.generate !== undefined) {
+            this.generateByDefault = false
+        } else {
+            throwException(`missing options.json section generate or ignore`)
+        }
+        const interfaces = json.ignore?.interfaces ?? json.generate?.interfaces ?? throwException(
+            `missing options.json section generate.interfaces or ignore.interfaces`
         )
 
-        this.generateByDefault = generateByDefault
         this.interfaces = [
-            ...Object.entries(ignore).map(([name, methods]: [any, any]) => {
+            ...Object.entries(interfaces).map(([name, methods]: [any, any]) => {
                 if (Interface.isWhole(methods)) {
                     return new Ignored(name)
                 }
                 return new Partial(name, new Map(
                     (Object.values(methods) as string[])
                         .map((name: string) =>
-                            [name, false]
-                        )
-                ))
-            }),
-            ...Object.entries(generate).map(([name, methods]: [any, any]) => {
-                if (Interface.isWhole(methods)) {
-                    return new Full(name)
-                }
-                return new Partial(name, new Map(
-                    (Object.values(methods) as string[])
-                        .map((name: string) =>
-                            [name, true]
+                            [name, !this.generateByDefault]
                         )
                 ))
             })

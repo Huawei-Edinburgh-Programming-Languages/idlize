@@ -18,25 +18,10 @@ import { Options } from "./Options"
 
 export class Config {
     constructor(
-        private fixInput: boolean,
         private options: Options,
-        private enumsGenerateFor?: string[],
-        private interfaces?: string[],
-        private methods?: string[],
+        private fixInput: boolean,
         private files?: string[]
     ) {}
-
-    private handwrittenEnums = new Set<string>([])
-
-    private handwrittenMethods = new Set([
-        `CreateConfig`, // sequence<String>
-        `ProgramExternalSources`, // sequence<sequence>
-        `ExternalSourcePrograms`, // sequence<sequence>
-        `ProtectionFlagConst`, // u8
-        `TypeIdConst`, // u64
-    ])
-
-    private handwrittenInterfaces = new Set<string>([])
 
     get sequencePointerType(): IDLPrimitiveType {
         return IDLPointerType
