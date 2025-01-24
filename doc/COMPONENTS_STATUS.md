@@ -1528,8 +1528,8 @@
 |`OnRangeUpdate`| Function | | | |
 |`SetCurrentIndex`| Function | | | |
 |`Prepare`| Function | | | |
-|*DrawingCanvas*| *Class* | Dudkin Sergey | blocked IDL | |
-|`drawRect`| Function | Dudkin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDOCY + |
+|*DrawingCanvas*| *Class* | Dudkin Sergey | done | |
+|`drawRect`| Function | Dudkin Sergey | done | |
 |*FrameNode*| *Class* | Tuzhilkin Ivan | done| |
 |`isModifiable`| Function | Tuzhilkin Ivan | done | |
 |`appendChild`| Function | Tuzhilkin Ivan | done | |
