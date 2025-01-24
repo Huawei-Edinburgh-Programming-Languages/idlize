@@ -1004,6 +1004,34 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
     }
 }
 
+export class ImportTypeConvertor extends BaseArgConvertor {
+    protected importedName: string
+    constructor(param: string, importedName: string) {
+        super(idl.IDLObjectType, [RuntimeType.OBJECT], false, true, param)
+        this.importedName = importedName
+        warnCustomObject(importedName, `imported`)
+    }
+    convertorArg(param: string, writer: LanguageWriter): string {
+        throw new Error("Must never be used")
+    }
+    convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
+        printer.writeMethodCall(`${param}Serializer`, "writeCustomObject", [`"${this.importedName}"`, value])
+    }
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
+        return assigneer(writer.makeString(`${deserializerName}.readCustomObject("${this.importedName}")`))
+    }
+    nativeType(): idl.IDLType {
+        // treat ImportType as CustomObject
+        return idl.IDLCustomObjectType
+    }
+    interopType(): idl.IDLType {
+        throw new Error("Must never be used")
+    }
+    isPointerType(): boolean {
+        return true
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // UTILS
 

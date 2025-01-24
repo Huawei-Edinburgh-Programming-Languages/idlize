@@ -21,7 +21,7 @@ import { ArkPrimitiveTypesInstance } from "./ArkPrimitiveType"
 import { LanguageExpression, LanguageStatement, LanguageWriter, StringExpression } from "@idlize/core"
 import { maybeTransformManagedCallback, warnCustomObject } from "@idlize/core"
 import { createTypeNameConvertor } from "./LanguageWriters";
-import { InterfaceConvertor } from "@idlize/core";
+import { InterfaceConvertor, ImportTypeConvertor } from "@idlize/core";
 
 export class ArkoalaInterfaceConvertor extends InterfaceConvertor {
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
@@ -96,7 +96,7 @@ export class LengthConvertor extends BaseArgConvertor {
     }
 }
 
-export class ImportTypeConvertor extends BaseArgConvertor { //
+export class ArkoalaImportTypeConvertor extends ImportTypeConvertor {
     private static knownTypes: Map<string, string[]> = new Map([
         ["CircleShape", ["isInstanceOf", "\"CircleShape\""]],
         ["EllipseShape", ["isInstanceOf", "\"EllipseShape\""]],
@@ -106,34 +106,11 @@ export class ImportTypeConvertor extends BaseArgConvertor { //
         ["DrawableDescriptor", ["isInstanceOf", "\"DrawableDescriptor\""]],
         ["SymbolGlyphModifier", ["isInstanceOf", "\"SymbolGlyphModifier\""]],
         ["Scene", ["isInstanceOf", "\"Scene\""]]])
-    private importedName: string
     constructor(param: string, importedName: string) {
-        super(idl.IDLObjectType, [RuntimeType.OBJECT], false, true, param)
-        this.importedName = importedName
-        warnCustomObject(importedName, `imported`)
-    }
-    convertorArg(param: string, writer: LanguageWriter): string {
-        throw new Error("Must never be used")
-    }
-    convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
-        printer.writeMethodCall(`${param}Serializer`, "writeCustomObject", [`"${this.importedName}"`, value])
-    }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
-        return assigneer(writer.makeString(`${deserializerName}.readCustomObject("${this.importedName}")`))
-    }
-    nativeType(): idl.IDLType {
-        // return this.importedName
-        // treat ImportType as CustomObject
-        return idl.IDLCustomObjectType
-    }
-    interopType(): idl.IDLType {
-        throw new Error("Must never be used")
-    }
-    isPointerType(): boolean {
-        return true
+        super(param, importedName)
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        const handler = ImportTypeConvertor.knownTypes.get(this.importedName)
+        const handler = ArkoalaImportTypeConvertor.knownTypes.get(this.importedName)
         return handler
             ? writer.discriminatorFromExpressions(value, RuntimeType.OBJECT,
                 [writer.makeString(`${handler[0]}(${handler.slice(1).concat(value).join(", ")})`)])

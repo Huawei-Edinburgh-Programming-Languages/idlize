@@ -16,9 +16,9 @@
 import * as idl from '@idlize/core/idl'
 import { BuilderClass } from './BuilderClass';
 import { MaterializedClass } from "./Materialized";
-import { isMaterialized, isPredefined } from './idl/IdlPeerGeneratorVisitor';
+import { isMaterialized } from './idl/IdlPeerGeneratorVisitor';
 import { PeerFile } from "./PeerFile";
-import { CallbackConvertor, ImportTypeConvertor, ArkoalaInterfaceConvertor } from './ArgConvertors';
+import { CallbackConvertor, ArkoalaImportTypeConvertor, ArkoalaInterfaceConvertor } from './ArgConvertors';
 import { BufferConvertor, DateConvertor, MapConvertor, PointerConvertor, TupleConvertor, TypeAliasConvertor,
          AggregateConvertor, StringConvertor, ClassConvertor, ArrayConvertor, FunctionConvertor, OptionConvertor,
          NumberConvertor, NumericConvertor, CustomTypeConvertor, UnionConvertor, MaterializedClassConvertor
@@ -220,7 +220,7 @@ export class PeerLibrary implements LibraryInterface {
         }
         if (idl.isReferenceType(type)) {
             if (isImportAttr(type))
-                return new ImportTypeConvertor(param, this.targetNameConvertorInstance.convert(type))
+                return new ArkoalaImportTypeConvertor(param, this.targetNameConvertorInstance.convert(type))
             const decl = this.resolveTypeReference(type)
             return this.declarationConvertor(param, type, decl)
         }
@@ -249,7 +249,7 @@ export class PeerLibrary implements LibraryInterface {
 
         const declarationName = declaration.name!
         if (isImportAttr(declaration)) {
-            return new ImportTypeConvertor(param, this.targetNameConvertorInstance.convert(type))
+            return new ArkoalaImportTypeConvertor(param, this.targetNameConvertorInstance.convert(type))
         }
         if (idl.isEnum(declaration)) {
             return new EnumConvertor(param, declaration)
