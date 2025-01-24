@@ -1,6 +1,3 @@
-declare const LOAD_NATIVE: string
-registerLoadedLibrary(LOAD_NATIVE)
-
 class NativeString extends NativeStringBase {
     constructor(ptr: KPointer) {
         super(ptr)
