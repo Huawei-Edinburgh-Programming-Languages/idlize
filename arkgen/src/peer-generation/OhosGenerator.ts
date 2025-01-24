@@ -469,7 +469,6 @@ class OHOSVisitor {
                 const fields = this.getPropertiesFromInterfaces(int).concat(int.properties.concat())
                 fields.forEach(f => {
                     const typeName = idl.isNamedNode(f.type) ? f.type.name : "UnknownType"
-                    console.log(`  field: ${f.name}, type: ${typeName}`)
                     // TBD: use deserializer to get complex type from native
                     writer.writeMethodImplementation(new Method(`get${capitalize(f.name)}`,
                         new MethodSignature(f.type, [])), writer => {
