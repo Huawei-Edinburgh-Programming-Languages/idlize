@@ -82,7 +82,7 @@ export class BridgesPrinter extends InteropPrinter {
             }
             return BridgesConstructions.referenceTypeCast(castTo)
         }
-        throw new Error(`Unsupported type: ${node.type}`)
+        throwException(`Unsupported type: ${node.type}`)
     }
 
     private castTo(node: IDLReferenceType | IDLContainerType): string | undefined {

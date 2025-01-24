@@ -37,18 +37,11 @@ import {
     throwException,
     TypeConvertor
 } from "@idlize/core"
+import { BaseConvertor } from "../BaseConvertor"
 
-export class ManagedTypeConvertor implements TypeConvertor<string> {
-    constructor(private idl: IDLEntry[]) {}
-
-    private incorrectDeclarations = new Set<string>()
-
-    convertOptional(type: IDLOptionalType): string {
-        throw new Error("Method not implemented.")
-    }
-
-    convertUnion(type: IDLUnionType): string {
-        throw new Error("Method not implemented.")
+export class ManagedTypeConvertor extends BaseConvertor {
+    constructor(idl: IDLEntry[]) {
+        super(idl)
     }
 
     convertContainer(type: IDLContainerType): string {
@@ -56,20 +49,13 @@ export class ManagedTypeConvertor implements TypeConvertor<string> {
         throwException(`Unexpected container`)
     }
 
-    convertImport(type: IDLReferenceType, importClause: string): string {
-        throw new Error("Method not implemented.")
-    }
-
     convertTypeReference(type: IDLReferenceType): string {
-        const declarations = this.idl.filter(it => type.name === it.name)
-        const real = this.findRealDeclaration(type.name, declarations)
-        if (real !== undefined && isEnum(real)) return `KInt`
+        const declaration = this.findRealDeclaration(type.name)
+        if (declaration !== undefined && isEnum(declaration)) {
+            return `KInt`
+        }
 
         return `KNativePointer`
-    }
-
-    convertTypeParameter(type: IDLTypeParameterType): string {
-        throw new Error("Method not implemented.")
     }
 
     convertPrimitiveType(type: IDLPrimitiveType): string {
@@ -87,13 +73,5 @@ export class ManagedTypeConvertor implements TypeConvertor<string> {
             case IDLPointerType: return `KNativePointer`
         }
         throwException(`Unsupported primitive type: ${JSON.stringify(type)}`)
-    }
-
-    private findRealDeclaration(name: string, declarations: IDLEntry[]): IDLEntry | undefined {
-        if (declarations.length === 1) return declarations[0]
-        if (this.incorrectDeclarations.has(name)) return undefined
-        this.incorrectDeclarations.add(name)
-        console.warn(`Expected reference type "${name}" to have exactly one declaration, got: ${declarations.length}`)
-        return undefined
     }
 }
