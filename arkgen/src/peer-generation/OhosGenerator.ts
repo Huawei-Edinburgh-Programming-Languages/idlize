@@ -321,15 +321,6 @@ class OHOSVisitor {
                     writer.writeNativeMethodDeclaration(`_${it.name}_ctor`, signature)
                 })
 
-                this.getPropertiesFromInterfaces(it).concat(it.properties).forEach(f => {
-                    const nativeType = idl.isPrimitiveType(f.type) ? f.type : IDLPointerType
-                    const getterSig = makePeerCallSignature(this.library, [], nativeType)
-                    const cName = capitalize(f.name)
-                    writer.writeNativeMethodDeclaration(`_${it.name}_get${cName}`, getterSig)
-                    const param = idl.createParameter(f.name, nativeType)
-                    const setterSig = makePeerCallSignature(this.library, [param], idl.IDLVoidType)
-                    writer.writeNativeMethodDeclaration(`_${it.name}_set${cName}`, setterSig)
-                })
                 const getFinalizerSig = makePeerCallSignature(this.library, [], IDLPointerType)
                 writer.writeNativeMethodDeclaration(`_${it.name}_getFinalizer`, getFinalizerSig)
 
@@ -341,15 +332,7 @@ class OHOSVisitor {
                     writer.writeNativeMethodDeclaration(name, signature)  // TODO temporarily removed _${this.libraryName} prefix
                 })
 
-                const superType = idl.getSuperType(it)
-                const propertiesFromInterface: idl.IDLProperty[] = []
-                if (superType) {
-                    const resolvedType = this.library.resolveTypeReference(superType) as (idl.IDLInterface | undefined)
-                    if (!resolvedType || !isMaterialized(resolvedType, this.library)) {
-                        propertiesFromInterface.push(...getUniquePropertiesFromSuperTypes(it, this.library))
-                    }
-                }
-                it.properties.concat(propertiesFromInterface).forEach(property => {
+                this.getPropertiesFromInterfaces(it).concat(it.properties).forEach(property => {
                     const getterSignature = makePeerCallSignature(this.library, [], property.type, "self")
                     const getterName = `_${it.name}_get${capitalize(property.name)}`
                     writer.writeNativeMethodDeclaration(getterName, getterSignature)
@@ -466,6 +449,7 @@ class OHOSVisitor {
                 }
                 // TODO Make peer private again
                 writer.writeFieldDeclaration('peer', createReferenceType("Finalizable"), [/* FieldModifier.PRIVATE */], false, peerInitExpr)
+                const peerPtr = "this.peer!.ptr"
                 const fields = this.getPropertiesFromInterfaces(int).concat(int.properties.concat())
                 fields.forEach(f => {
                     const typeName = idl.isNamedNode(f.type) ? f.type.name : "UnknownType"
@@ -474,14 +458,14 @@ class OHOSVisitor {
                         new MethodSignature(f.type, [])), writer => {
                             writer.writeStatement(
                                 writer.makeReturn(
-                                    writer.makeNativeCall(NativeModule.Generated, `_${int.name}_get${capitalize(f.name)}`, [])
+                                    writer.makeNativeCall(NativeModule.Generated, `_${int.name}_get${capitalize(f.name)}`, [writer.makeString(peerPtr)])
                                 ))
                         });
                     writer.writeMethodImplementation(new Method(`set${capitalize(f.name)}`,
                         new NamedMethodSignature(idl.IDLVoidType, [f.type], [f.name])), writer => {
                             writer.writeExpressionStatement(
                                 writer.makeNativeCall(NativeModule.Generated, `_${int.name}_set${capitalize(f.name)}`,
-                                    [writer.makeString(f.name)])
+                                    [writer.makeString(peerPtr), writer.makeString(f.name)])
                             )
                         });
 
