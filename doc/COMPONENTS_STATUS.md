@@ -385,8 +385,8 @@
 |*Ellipse*| *Component* | Ekaterina Stepanova | done | |
 |`setEllipseOptions`| Function | Ekaterina Stepanova | done | |
 |*EmbeddedComponent*| *Component* | Ekaterina Stepanova | blocked IDL | |
-|`setEmbeddedComponentOptions`| Function | Ekaterina Stepanova | testskipped | |
-|`onTerminated`| Function | Ekaterina Stepanova | testskipped | |
+|`setEmbeddedComponentOptions`| Function | Ekaterina Stepanova | testskipped | UT in progress Samarin Sergey |
+|`onTerminated`| Function | Ekaterina Stepanova | testskipped | UT in progress Samarin Sergey |
 |`onError`| Function | Ekaterina Stepanova | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*Flex*| *Component* | Kovalev Sergey | done |  |
 |`setFlexOptions`| Function | Kovalev Sergey | done |  |
