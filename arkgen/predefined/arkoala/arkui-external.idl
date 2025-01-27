@@ -148,3 +148,7 @@ interface LengthMetrics {
    */
   attribute number value;
 };
+
+interface ESObject {
+  attribute string _stub;
+};

@@ -851,6 +851,8 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
                 moduleToEntries.set(module, [])
             if (moduleToEntries.get(module)!.some(it => idl.isEqualByQualifedName(it, entry)))
                 return
+            if (entry.name==="Callback_String_Void")
+                console.log("AAA")
             moduleToEntries.get(module)!.push(entry)
         }
         const syntheticGenerator = new ArkTSSyntheticGenerator(this.peerLibrary, (entry) => {
