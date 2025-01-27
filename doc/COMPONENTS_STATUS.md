@@ -804,8 +804,8 @@
 |*SaveButton*| *Component* | Samarin Sergey| done |  |
 |`setSaveButtonOptions`| Function | Samarin Sergey| done |  |
 |`onClick`| Function | Samarin Sergey| in progress | EVENT |
-|*Screen*| *Component* | Spirin Andrey | testskipped | |
-|`setScreenOptions`| Function | Spirin Andrey | testskipped | |
+|*Screen*| *Component* | Dudkin Sergey | testskipped | |
+|`setScreenOptions`| Function | Dudkin Sergey | testskipped | |
 |*Scroll*| *Component* | Berezin Kirill | in progress |  |
 |`setScrollOptions`| Function | Berezin Kirill | done |  |
 |`scrollable`| Function | Berezin Kirill | done |  |
