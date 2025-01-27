@@ -13,5 +13,4 @@
  * limitations under the License.
  */
 
-export { FinalizableBase } from "@koalaui/interop"
-export { Finalizable, NativeThunkImpl } from "@koalaui/arkoala"
+export { Finalizable } from "@koalaui/interop"
