@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 import * as ts from "typescript"
-import { generatorConfiguration } from "./config"
+import { generatorConfigurationSafe } from "./config"
 import { asString, heritageDeclarations, identName } from "./util"
 
 export enum InheritanceRole {
@@ -39,8 +39,8 @@ export function isCommonMethodOrSubclass(typeChecker: ts.TypeChecker, decl: ts.C
 }
 
 export function determineInheritanceRole(name: string): InheritanceRole {
-    if (generatorConfiguration().paramArray<string>("rootComponents").includes(name)) return InheritanceRole.Root
-    if (generatorConfiguration().paramArray<string>("standaloneComponents").includes(name)) return InheritanceRole.Standalone
+    if (generatorConfigurationSafe().param("rootComponents").asArray().includes(name)) return InheritanceRole.Root
+    if (generatorConfigurationSafe().param("standaloneComponents").asArray().includes(name)) return InheritanceRole.Standalone
     return InheritanceRole.Heir
 }
 

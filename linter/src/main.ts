@@ -19,7 +19,7 @@ import * as ts from "typescript"
 
 import { LinterVisitor, toLinterString } from "./linter"
 import { LinterMessage } from "./LinterMessage"
-import { findVersion, generate, GeneratorConfiguration, setDefaultConfiguration } from "@idlize/core"
+import { ConfigurationValueHolder, findVersion, generate, GeneratorConfiguration, setDefaultConfiguration } from "@idlize/core"
 
 const options = program
     .option('--input-dir <path>', 'Path to input dir(s), comma separated')
@@ -38,12 +38,11 @@ const defaultCompilerOptions: ts.CompilerOptions = {
 }
 
 class LinterConfig implements GeneratorConfiguration {
-    param<T>(name: string): T {
-        throw new Error(`${name} is unknown`)
-    }
-    paramArray<T>(name: string): T[] {
-        switch (name) {
-            case 'rootComponents': return [
+
+    private params = new Map<string, string[]>([
+        [
+            'rootComponents',
+            [
                 "Root",
                 "ComponentRoot",
                 "CommonMethod",
@@ -51,15 +50,30 @@ class LinterConfig implements GeneratorConfiguration {
                 "CommonTransition",
                 "CalendarAttribute",
                 "ContainerSpanAttribute",
-            ] as T[]
-            case 'standaloneComponents': return [
+            ]
+        ],
+        [
+            'standaloneComponents',
+            [
                 "TextPickerDialog",
                 "TimePickerDialog",
                 "AlertDialog",
-                "CanvasPattern"
-            ] as T[]
+                "CanvasPattern",
+            ]
+        ]
+    ])
+
+    param<T>(name: string): T {
+        throw new Error(`${name} is unknown`)
+    }
+    paramArray<T>(name: string): T[] {
+        if (this.params.has(name)) {
+            return this.params.get(name) as T[]
         }
         throw new Error(`array ${name} is unknown`)
+    }
+    configSafe(): ConfigurationValueHolder {
+        return new ConfigurationValueHolder(this.params)
     }
 }
 

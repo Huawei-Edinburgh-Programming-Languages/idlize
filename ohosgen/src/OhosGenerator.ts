@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import { GeneratorConfiguration, setDefaultConfiguration, toIDLFile, IDLFile, lib, IDLLibrary, QueryType } from '@idlize/core'
+import { GeneratorConfiguration, setDefaultConfiguration, toIDLFile, IDLFile, lib, IDLLibrary, QueryType, ConfigurationValueHolder } from '@idlize/core'
 
 class OHOSVisitor {
 
@@ -51,5 +51,8 @@ class OhosConfiguration implements GeneratorConfiguration {
     }
     paramArray<T>(name: string): T[] {
         throw new Error(`array ${name} is unknown`)
+    }
+    configSafe(): ConfigurationValueHolder {
+        return new ConfigurationValueHolder(this.params)
     }
 }

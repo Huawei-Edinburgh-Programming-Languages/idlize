@@ -27,7 +27,8 @@ import {
     GeneratorConfiguration,
     setDefaultConfiguration,
     initRNG,
-    PrimitiveType
+    PrimitiveType,
+    ConfigurationValueHolder
 } from "@idlize/core"
 import {
     forEachChild,
@@ -130,6 +131,9 @@ class DefaultConfig implements GeneratorConfiguration {
             case 'knownParameterized': return PeerGeneratorConfig.knownParametrized as T[]
         }
         throw new Error(`array ${name} is unknown`)
+    }
+    configSafe(): ConfigurationValueHolder {
+        return new ConfigurationValueHolder(this.params)
     }
 }
 

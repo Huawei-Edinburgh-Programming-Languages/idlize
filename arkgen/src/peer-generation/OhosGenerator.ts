@@ -18,7 +18,7 @@ import * as path from 'path'
 import * as idl from '@idlize/core/idl'
 
 import { createConstructor, createContainerType, createOptionalType, createReferenceType, createTypeParameterReference, createParameter, forceAsNamedNode, hasExtAttribute, IDLBufferType, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLI64Type, IDLInterface, IDLInterfaceSubkind, IDLMethod, IDLParameter, IDLPointerType, IDLStringType, IDLType, IDLU8Type, IDLUint8ArrayType, IDLVoidType, isCallback, isConstructor, isContainerType, isEnum, isInterface, isReferenceType, isUnionType } from '@idlize/core/idl'
-import { IndentedPrinter, Language, capitalize, qualifiedName, generatorConfiguration, GeneratorConfiguration, setDefaultConfiguration, generatorTypePrefix } from '@idlize/core'
+import { IndentedPrinter, Language, capitalize, qualifiedName, generatorConfiguration, GeneratorConfiguration, setDefaultConfiguration, generatorTypePrefix, ConfigurationValueHolder } from '@idlize/core'
 import { ArgConvertor, generateCallbackAPIArguments } from '@idlize/core'
 import { createOutArgConvertor } from './PromiseConvertors'
 import { ArkPrimitiveTypesInstance } from './ArkPrimitiveType'
@@ -966,5 +966,8 @@ export class OhosConfiguration implements GeneratorConfiguration {
             case 'knownParameterized': return PeerGeneratorConfig.knownParametrized as T[]
         }
         throw new Error(`array ${name} is unknown`)
+    }
+    configSafe(): ConfigurationValueHolder {
+        return new ConfigurationValueHolder(this.params)
     }
 }
