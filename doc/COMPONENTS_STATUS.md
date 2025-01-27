@@ -1660,7 +1660,7 @@
 |`getTextBaseline`| Function  | Vadim Voronov | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO & https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 & https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
 |`setTextBaseline`| Function  | Vadim Voronov | done | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
 |*CanvasRenderingContext2D*| *Class* | Vadim Voronov, Evstigneev Roman | in progress|  |
-|`toDataURL`| Function |Vadim Voronov| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`toDataURL`| Function |Vadim Voronov| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`startImageAnalyzer`| Function |Vadim Voronov| done | |
 |`stopImageAnalyzer`| Function | Vadim Voronov| done | |
 |`onOnAttach`| Function | Vadim Voronov, Evstigneev Roman | done | UT in progress Evstigneev Roman |
