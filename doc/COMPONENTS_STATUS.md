@@ -1118,8 +1118,8 @@
 |`dataDetectorConfig`| Function | Samarin Sergey | done | |
 |`onTextSelectionChange`| Function | Kirill Kirichenko | done |  |
 |`fontFeature`| Function |Samarin Sergey | done |  |
-|`marqueeOptions`| Function | | | |
-|`onMarqueeStateChange`| Function | | | |
+|`marqueeOptions`| Function | Samarin Sergey | | |
+|`onMarqueeStateChange`| Function | Samarin Sergey | | |
 |`privacySensitive`| Function |Samarin Sergey | done |  |
 |`textSelectable`| Function |Samarin Sergey | done |  |
 |`editMenuOptions`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
