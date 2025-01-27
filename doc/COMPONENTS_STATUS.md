@@ -365,15 +365,15 @@
 |`strokeWidth`| Function | Morozov Sergey |done |  |
 |`trackShadow`| Function |Morozov Sergey |blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAW4DU|
 |`contentModifier`| Function | Morozov Sergey |blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
-|*DatePicker*| *Component* | Vadim Voronov | done |  |
+|*DatePicker*| *Component* | Vadim Voronov | in progress |  |
 |`setDatePickerOptions`| Function | Vadim Voronov| done | |
-|`lunar`| Function |Vadim Voronov | done |  |
-|`disappearTextStyle`| Function | Vadim Voronov| done |  |
-|`textStyle`| Function |Vadim Voronov | done |  |
-|`selectedTextStyle`| Function |Vadim Voronov | done |  |
+|`lunar`| Function |Vadim Voronov | in progress |  |
+|`disappearTextStyle`| Function | Vadim Voronov| in progress |  |
+|`textStyle`| Function |Vadim Voronov | in progress |  |
+|`selectedTextStyle`| Function |Vadim Voronov | in progress |  |
 |`onChange`| Function | Vadim Voronov| done |  |
-|`onDateChange`| Function |Vadim Voronov | done | |
-|`digitalCrownSensitivity`| Function | | | |
+|`onDateChange`| Function |Vadim Voronov | in progress | |
+|`digitalCrownSensitivity`| Function | Vadim Voronov | in progress | |
 |*Divider*| *Component* | Tuzhilkin Ivan | done |  |
 |`setDividerOptions`| Function | Tuzhilkin Ivan| done |  |
 |`vertical`| Function | Tuzhilkin Ivan | done |  |
