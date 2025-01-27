@@ -1,0 +1,12 @@
+[dependencies]
+[package]
+  cjc-version = "0.53.12"
+  compile-option = ""
+  description = "config file for cj build"
+  link-option = ""
+  name = "citest"
+  output-type = "executable"
+  src-dir = "."
+  target-dir = "./build"
+  version = "1.0.0"
+  package-configuration = {}

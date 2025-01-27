@@ -40,6 +40,18 @@ pg java:run:
   script:
     - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-arm64 npm run run:java
 
+pg run:cj:
+  stage: test
+  tags:
+    - idlize-ci
+    - koala-ci
+  before_script:
+    - !reference [.setup, script]
+    - cd $CI_PROJECT_DIR/arkgen
+  script:
+    - cd cj_ci_test
+    - cjpm run
+
 run arkts subset:
   stage: test
   tags:
