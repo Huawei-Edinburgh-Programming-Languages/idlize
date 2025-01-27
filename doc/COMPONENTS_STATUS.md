@@ -187,8 +187,8 @@
 |`focusOnTouch`| Function | Dmitry A Smirnov| done | |
 |`focusBox`| Function | Dmitry A Smirnov| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX +|
 |`animation`| Function | Erokhin Ilya | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAXHJP|
-|`transition`| Function | Dmitry A Smirnov| testskipped | |
-|`motionBlur`| Function | Dmitry A Smirnov| testskipped | |
+|`transition`| Function | Dmitry A Smirnov| testskipped |transition(Ark_TransitionOptions) - deprecated, modifier is ready, UT in progress,Dmitry A Smirnov|
+|`motionBlur`| Function | Dmitry A Smirnov| done | |
 |`brightness`| Function | Lobah Mikhail | done |  |
 |`contrast`| Function | Lobah Mikhail | done | |
 |`grayscale`| Function | Lobah Mikhail | done | |
@@ -205,7 +205,7 @@
 |`scale`| Function | Erokhin Ilya | done |  |
 |`gridSpan`| Function | Lobah Mikhail | done | |
 |`gridOffset`| Function | Lobah Mikhail | done | |
-|`rotate`| Function | Dmitry A Smirnov| testskipped | |
+|`rotate`| Function | Dmitry A Smirnov| testskipped | UT in progress,Dmitry A Smirnov|
 |`transform`| Function | Lobah Mikhail | done | |
 |`onAppear`| Function | Roman Sedaikin | done | |
 |`onDisAppear`| Function | Roman Sedaikin | done | |
@@ -225,7 +225,7 @@
 |`markAnchor`| Function | Dmitry A Smirnov| done | |
 |`offset`| Function | Skroba Gleb | done | |
 |`enabled`| Function | Roman Sedaikin | done | |
-|`useSizeType`| Function | Dmitry A Smirnov| testskipped | deprecated|
+|`useSizeType`| Function | Dmitry A Smirnov| testskipped | deprecated, modifier is ready|
 |`alignRules`| Function | Dmitry A Smirnov| done | |
 |`aspectRatio`| Function | Roman Sedaikin | done | |
 |`clickEffect`| Function | Lobah Mikhail | done | |
