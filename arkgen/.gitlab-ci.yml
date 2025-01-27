@@ -48,6 +48,7 @@ pg run:cj:
   before_script:
     - !reference [.setup, script]
     - cd $CI_PROJECT_DIR/arkgen
+    - source .bash_profile
   script:
     - cd cj_ci_test
     - cjpm run
