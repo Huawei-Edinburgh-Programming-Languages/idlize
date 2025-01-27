@@ -1678,15 +1678,15 @@
 |`drawContent`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
 |`drawFront`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
 |`invalidate`| Function | Erokhin Ilya | done | |
-|*TransitionEffect*| *Class* | Andrey Khudenkikh | blocked IDL | |
+|*TransitionEffect*| *Class* | Andrey Khudenkikh | in progress | |
 |`translate`| Function | Andrey Khudenkikh | done | |
 |`rotate`| Function | Andrey Khudenkikh | done | |
 |`scale`| Function | Andrey Khudenkikh | done | |
 |`opacity`| Function | Andrey Khudenkikh | done | |
 |`move`| Function | Andrey Khudenkikh | done | |
 |`asymmetric`| Function | Andrey Khudenkikh | done | |
-|`animation`| Function | Andrey Khudenkikh | blocked IDL | |
-|`combine`| Function | Andrey Khudenkikh | blocked IDL | |
+|`animation`| Function | Andrey Khudenkikh | in progress | |
+|`combine`| Function | Andrey Khudenkikh | in progress | |
 |*BaseEvent*| *Class* | Politov Mikhail | | |
 |`getModifierKeyState`| Function | Politov Mikhail | | |
 |`setTarget`| Function | Politov Mikhail | | |
