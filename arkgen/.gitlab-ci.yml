@@ -51,7 +51,8 @@ pg run:cj:
     - cd $CI_PROJECT_DIR/arkgen
   script:
     - cd cj_ci_test
-    - cjpm run
+    - echo $CANGJIE_HOME
+    - cjc -v
 
 run arkts subset:
   stage: test
