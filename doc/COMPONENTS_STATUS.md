@@ -1891,22 +1891,22 @@
 |`setOnVisibleAreaApproximateChange`| Function | | | |
 |*GestureModifier*| *Class* | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`applyGesture`| Function | Tuzhilkin Ivan | blocked IDL |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG +|
-|*GlobalScope_common*| *Class* | | | |
-|`getContext`| Function | | | |
-|`postCardAction`| Function | | | |
-|`dollar_r`| Function | | | |
-|`dollar_rawfile`| Function | | | |
-|`animateTo`| Function | | | |
-|`animateToImmediately`| Function | | | |
-|`vp2px`| Function | | | |
-|`px2vp`| Function | | | |
-|`fp2px`| Function | | | |
-|`px2fp`| Function | | | |
-|`lpx2px`| Function | | | |
-|`px2lpx`| Function | | | |
-|`requestFocus`| Function | | | |
-|`setCursor`| Function | | | |
-|`restoreDefault`| Function | | | |
+|*GlobalScope_common*| *Class* | Erokhin Ilya | in progress | |
+|`getContext`| Function | Erokhin Ilya | in progress | |
+|`postCardAction`| Function | Erokhin Ilya | in progress | |
+|`dollar_r`| Function | Erokhin Ilya | in progress | |
+|`dollar_rawfile`| Function | Erokhin Ilya | in progress | |
+|`animateTo`| Function | Erokhin Ilya | in progress | |
+|`animateToImmediately`| Function | Erokhin Ilya | in progress | |
+|`vp2px`| Function | Erokhin Ilya | in progress | |
+|`px2vp`| Function | Erokhin Ilya | in progress | |
+|`fp2px`| Function | Erokhin Ilya | in progress | |
+|`px2fp`| Function | Erokhin Ilya | in progress | |
+|`lpx2px`| Function | Erokhin Ilya | in progress | |
+|`px2lpx`| Function | Erokhin Ilya | in progress | |
+|`requestFocus`| Function | Erokhin Ilya | in progress | |
+|`setCursor`| Function | Erokhin Ilya | in progress | |
+|`restoreDefault`| Function | Erokhin Ilya | in progress | |
 |*ContextMenu*| *Class* | Tuzhilkin Ivan | blocked IDL | |
 |`close`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB84T +|
 |*CustomDialogController*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IBECPG & https://gitee.com/nikolay-igotti/idlize/issues/IBGU8S + |
