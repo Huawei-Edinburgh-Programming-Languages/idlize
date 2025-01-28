@@ -14,7 +14,7 @@
  */
 
 import * as idl from '@idlize/core/idl'
-import { generatorConfiguration, Language, throwException } from '@idlize/core'
+import { generatorConfiguration, Language, lib, throwException } from '@idlize/core'
 import { ExpressionStatement, LanguageStatement, Method, MethodSignature, NamedMethodSignature } from "../LanguageWriters"
 import { LanguageWriter } from "@idlize/core"
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig'
@@ -580,7 +580,11 @@ export function printSerializerImports(library: PeerLibrary, destFile: SourceFil
             for (let builder of library.builderClasses.keys()) {
                 collector.addFeature(builder, `Ark${builder}Builder`)
             }
-            collector.addFeature(`Finalizable`, `Finalizable`)
+            if (library.language === Language.TS) {
+                collector.addFeature('Finalizable', '@koalaui/interop')
+            } else {
+                collector.addFeature(`Finalizable`, `Finalizable`)
+            }
             collector.addFeature("CallbackTransformer", "./peers/CallbackTransformer")
             collectMaterializedImports(collector, library)
         } else {
