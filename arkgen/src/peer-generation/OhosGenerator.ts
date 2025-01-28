@@ -411,8 +411,7 @@ class OHOSVisitor {
                     if (method.isStatic) {
                         return
                     }
-                    const adjustedSignature = adjustSignature(this.library, method.parameters, method.returnType)
-                    const signature = writer.makeNamedSignature(adjustedSignature.returnType, adjustedSignature.parameters)
+                    const signature = writer.makeNamedSignature(method.returnType, method.parameters)
                     writer.writeMethodDeclaration(method.name, signature)
                 })
             }, superTypes.length > 0 ? superTypes : undefined)
@@ -564,7 +563,8 @@ class OHOSVisitor {
                             it.parameters.map(p => ({ name: writer.escapeKeyword(p.name), type: p.type }))
                         ),
                         it.isStatic ? [MethodModifier.STATIC] : []
-                                    )
+                    ),
+                    createOutArgConvertor(this.library, it.returnType, it.parameters.map(p => p.name))
                 ))
 
                 PeerMethod.markAndGroupOverloads(materializedMethods)
