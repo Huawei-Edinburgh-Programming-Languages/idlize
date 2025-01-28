@@ -187,7 +187,7 @@
 |`focusOnTouch`| Function | Dmitry A Smirnov| done | |
 |`focusBox`| Function | Dmitry A Smirnov| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX +|
 |`animation`| Function | Erokhin Ilya | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAXHJP|
-|`transition`| Function | Dmitry A Smirnov| testskipped |transition(Ark_TransitionOptions) - deprecated, modifier is ready, UT in progress,Dmitry A Smirnov|
+|`transition`| Function | Dmitry A Smirnov| done |transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
 |`motionBlur`| Function | Dmitry A Smirnov| done | |
 |`brightness`| Function | Lobah Mikhail | done |  |
 |`contrast`| Function | Lobah Mikhail | done | |
