@@ -21,5 +21,3 @@ providePlatformDefinedData({
     nativeStringArrayDecoder(): ArrayDecoder<NativeStringBase> { throw new Error("Not implemented") },
     callbackRegistry(): CallbackRegistry | undefined { return undefined }
 })
-
-InteropNativeModule._SetCallbackDispatcher(callCallback)

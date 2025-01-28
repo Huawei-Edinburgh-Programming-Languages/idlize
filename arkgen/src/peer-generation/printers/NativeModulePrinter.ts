@@ -14,7 +14,7 @@
  */
 import { maybeReadLangTemplate, readLangTemplate } from "../FileGenerators";
 import { FunctionCallExpression, Method, MethodModifier, NamedMethodSignature, StringExpression, createInteropArgConvertor, createLanguageWriter } from "../LanguageWriters";
-import { LanguageWriter } from "@idlizer/core"
+import { BlockStatement, ExpressionStatement, IfStatement, LanguageWriter, MethodSignature, NaryOpExpression } from "@idlize/core"
 import { createConstructPeerMethod } from "../PeerClass";
 import { PeerClass } from "../PeerClass";
 import { PeerLibrary } from "../PeerLibrary";
@@ -306,12 +306,32 @@ function printNativeModuleRegistration(language: Language, module: NativeModuleT
         case Language.TS:
             const tsFile = file as TsSourceFile
             tsFile.imports.addFeatures(['loadNativeModuleLibrary'], '@koalaui/interop')
-            tsFile.content.print(`loadNativeModuleLibrary("${module.name}", ${module.name})`)
+            tsFile.content.print("private static _isLoaded: boolean = false")
+            tsFile.content.writeMethodImplementation(new Method(
+                "_LoadOnce",
+                new MethodSignature(idl.IDLBooleanType, []),
+                [MethodModifier.PRIVATE, MethodModifier.STATIC]
+            ), writer => {
+                writer.writeStatement(new IfStatement(
+                    new NaryOpExpression("==", [writer.makeString("this._isLoaded"), writer.makeString("false")]),
+                    new BlockStatement([
+                        writer.makeAssign("this._isLoaded", undefined, writer.makeString("true"), false),
+                        new ExpressionStatement(writer.makeFunctionCall(
+                            `loadNativeModuleLibrary`,
+                            [writer.makeString(`"${module.name}"`), writer.makeString(module.name)],
+                        )),
+                        writer.makeReturn(writer.makeString("true"))
+                    ]), undefined, undefined, undefined
+                ))
+                writer.writeStatement(writer.makeReturn(writer.makeString("false")))
+            })
             break
         case Language.ARKTS:
             const arktsFile = file as ArkTSSourceFile
             arktsFile.imports.addFeatures(['loadNativeModuleLibrary'], '@koalaui/interop')
-            arktsFile.content.print(`loadNativeModuleLibrary("${module.name}")`)
+            arktsFile.content.writeStaticBlock(writer => {
+                writer.print(`loadNativeModuleLibrary("${module.name}")`)
+            })
             break
     }
 }
@@ -341,9 +361,7 @@ export function printPredefinedNativeModule(library: PeerLibrary, module: Native
     const file = SourceFile.make(`${module.name}${language.extension}`, language, library)
     collectNativeModuleImports(module, file)
     file.content.writeClass(module.name, writer => {
-        writer.writeStaticBlock(writer => {
-            printNativeModuleRegistration(language, module, file)
-        })
+        printNativeModuleRegistration(language, module, file)
         writer.concat(visitor.nativeModule)
         const maybeTemplate = maybeReadLangTemplate(`${module.name}_functions`, language)
         if (maybeTemplate)
@@ -387,9 +405,7 @@ export function printArkUIGeneratedNativeModule(library: PeerLibrary, module: Na
     const file = SourceFile.make("", library.language, library)
     collectNativeModuleImports(module, file)
     file.content.writeClass(module.name, writer => {
-        writer.writeStaticBlock(writer => {
-            printNativeModuleRegistration(library.language, module, file)
-        })
+        printNativeModuleRegistration(library.language, module, file)
         writer.concat(visitor.nativeModule)
     })
     return file

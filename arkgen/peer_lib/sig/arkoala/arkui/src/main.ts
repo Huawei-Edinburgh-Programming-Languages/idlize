@@ -12,8 +12,7 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-import "./mapModules"
-import { pointer, nullptr, wrapCallback, callCallback, InteropNativeModule } from "@koalaui/interop"
+import { pointer, nullptr, wrapCallback, callCallback, InteropNativeModule, registerNativeModuleLibraryName, loadInteropNativeModule } from "@koalaui/interop"
 import { Serializer } from "@arkoala/arkui/peers/Serializer"
 import { Deserializer } from "@arkoala/arkui/peers/Deserializer"
 import { MaterializedBase } from "@arkoala/arkui/MaterializedBase"
@@ -810,9 +809,19 @@ function checkReadAndMutateBuffer() {
     assertTrue("Buffer mutated correctly", isSame)
 }
 
-function main() {
+function prepareTSNativeModules() {
     // Place where mock of ACE is located.
     process.env.ACE_LIBRARY_PATH = __dirname + "/../../../native"
+    registerNativeModuleLibraryName("InteropNativeModule", "./native/NativeBridgeNapi")
+    registerNativeModuleLibraryName("TestNativeModule", "./native/NativeBridgeNapi")
+    registerNativeModuleLibraryName("ArkUINativeModule", "./native/NativeBridgeNapi")
+    registerNativeModuleLibraryName("ArkUIGeneratedNativeModule", "./native/NativeBridgeNapi")
+    loadInteropNativeModule()
+    InteropNativeModule._SetCallbackDispatcher(callCallback)
+}
+
+function main() {
+    prepareTSNativeModules()
 
     checkReadAndMutateBuffer()
     checkPassToNativeBuffer()
