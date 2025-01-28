@@ -388,8 +388,8 @@
 |*Ellipse*| *Component* | Ekaterina Stepanova | done | |
 |`setEllipseOptions`| Function | Ekaterina Stepanova | done | |
 |*EmbeddedComponent*| *Component* | Ekaterina Stepanova | blocked IDL | |
-|`setEmbeddedComponentOptions`| Function | Ekaterina Stepanova | blocked | |
-|`onTerminated`| Function | Ekaterina Stepanova | blocked | |
+|`setEmbeddedComponentOptions`| Function | Ekaterina Stepanova | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`onTerminated`| Function | Ekaterina Stepanova | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`onError`| Function | Ekaterina Stepanova | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*Flex*| *Component* | Kovalev Sergey | done |  |
 |`setFlexOptions`| Function | Kovalev Sergey | done |  |
