@@ -64,7 +64,14 @@ export class BridgesPrinter extends InteropPrinter {
             this.writer.makeFunctionCall(
                 BridgesConstructions.interopMacro(isVoid, node.parameters.length),
                 [node.name]
-                    .concat(isVoid ? [] : this.mapType(isString(node.returnType) ? IDLPointerType : node.returnType))
+                    .concat(isVoid
+                        ? []
+                        : this.mapType(
+                            isString(node.returnType)
+                                ? IDLPointerType
+                                : node.returnType
+                        )
+                    )
                     .concat(node.parameters.map(it => this.mapType(it.type)))
                     .map(it => this.writer.makeString(it))
             )
@@ -94,6 +101,10 @@ export class BridgesPrinter extends InteropPrinter {
             if (node.name === `es2panda_Context`) return `${node.name}*`
             if (node.name === `es2panda_AstNode`) return `${node.name}*`
             if (node.name === `es2panda_Impl`) return `${node.name}*`
+
+            if (this.convertor.isHeir(node, `AstNode`)) {
+                return `${BridgesConstructions.referenceType(`AstNode`)}*`
+            }
 
             return `${BridgesConstructions.referenceType(node.name)}*`
         }

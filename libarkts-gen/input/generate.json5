@@ -1,10 +1,32 @@
 {
     "generate": {
         "interfaces": {
-            "FunctionSignature": [
-                "ParamsConst"
-            ],
-            "Identifier": ["*"]
+            "MemberExpression": [
+                "Object",
+                "Property",
+                "KindConst",
+                "Create", // Declaration of Es2pandaMemberExpressionKind expected to be interface
+            ]
+//            "Identifier": [
+//                "Name",
+//            ],
+//            "FunctionSignature": [
+//                "ParamsConst",
+//            ],
+//            "BlockStatement": [
+//                "Statements",
+//                "SetStatements",
+//            ],
+//            "ClassDefinition": [
+//                "Body",
+//            ],
+//            "ClassElement": [
+//                "Key",
+//                "Value",
+//            ],
+//            "CallExpression": [
+//                "Arguments",
+//            ],
         }
     }
 }
