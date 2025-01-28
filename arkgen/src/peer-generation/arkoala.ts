@@ -33,8 +33,8 @@ import {
     makeDeserializeAndCall,
     readLangTemplate,
 } from "./FileGenerators"
-import { makeCJDeserializer, makeCJNodeTypes, makeCJSerializer } from "./printers/lang/CJPrinters"
-import { makeJavaArkComponents, makeJavaNodeTypes, makeJavaSerializer } from "./printers/lang/JavaPrinters"
+import { makeCJDeserializer, makeCJSerializer } from "./printers/lang/CJPrinters"
+import { makeJavaArkComponents, makeJavaSerializer } from "./printers/lang/JavaPrinters"
 import {
     printRealAndDummyAccessors,
     printRealAndDummyModifiers,
@@ -45,7 +45,6 @@ import { printComponents } from "./printers/ComponentsPrinter"
 import { printPeers } from "./printers/PeersPrinter"
 import { printMaterialized } from "./printers/MaterializedPrinter"
 import { printSerializers, printUserConverter } from "./printers/HeaderPrinter"
-import { printNodeTypes } from "./printers/NodeTypesPrinter"
 import { printEvents, printEventsCArkoalaImpl, printEventsCLibaceImpl } from "./printers/EventsPrinter"
 import { printGniSources } from "./printers/GniPrinter"
 import { printMesonBuild } from "./printers/MesonPrinter"
@@ -308,14 +307,6 @@ export function generateArkoalaFromIdl(config: {
         //     }
         // )
         writeFile(
-            arkoala.peer(new TargetFile('ArkUINodeType')),
-            printNodeTypes(peerLibrary),
-            {
-                onlyIntegrated: config.onlyIntegrated,
-                integrated: true
-            }
-        )
-        writeFile(
             arkoala.tsLib(new TargetFile('index')),
             makeArkuiModule(arkuiComponentsFiles.concat(globalScopeFiles)),
             {
@@ -376,14 +367,6 @@ export function generateArkoalaFromIdl(config: {
         writeIntegratedFile(
             arkoala.arktsLib(new TargetFile(NativeModule.Generated.name, 'arkts')),
             printArkUIGeneratedNativeModule(peerLibrary, NativeModule.Generated).printToString()
-        )
-        writeFile(
-            arkoala.peer(new TargetFile('ArkUINodeType')),
-            printNodeTypes(peerLibrary),
-            {
-                onlyIntegrated: config.onlyIntegrated,
-                integrated: true
-            }
         )
         writeFile(
             arkoala.arktsLib(new TargetFile('index')),
@@ -465,9 +448,6 @@ export function generateArkoalaFromIdl(config: {
             printArkUIGeneratedNativeModule(peerLibrary, NativeModule.Generated).printToString()
         )
 
-        const nodeTypes = makeJavaNodeTypes(peerLibrary)
-        nodeTypes.writer.printTo(arkoala.javaLib(nodeTypes.targetFile))
-
         const arkComponents = makeJavaArkComponents(peerLibrary, context)
         arkComponents.writer.printTo(arkoala.javaLib(arkComponents.targetFile))
 
@@ -476,7 +456,7 @@ export function generateArkoalaFromIdl(config: {
     }
 
     if (peerLibrary.language == Language.CJ) {
-        writeIntegratedFile( 
+        writeIntegratedFile(
             arkoala.cjLib(new TargetFile(NativeModule.ArkUI.name)),
             printCJPredefinedNativeFunctions(peerLibrary, NativeModule.ArkUI).printToString().concat(
                 printPredefinedNativeModule(peerLibrary, NativeModule.ArkUI).content.getOutput().join('\n')
@@ -500,7 +480,7 @@ export function generateArkoalaFromIdl(config: {
                 printPredefinedNativeModule(peerLibrary, NativeModule.Interop).content.getOutput().join('\n')
             )
         )
-        writeIntegratedFile( 
+        writeIntegratedFile(
             arkoala.cjLib(new TargetFile('Ark_Object')), makeGetFunctionRuntimeType(peerLibrary)
         )
         writeFile(arkoala.peer(new TargetFile('CallbackKind', '')),
@@ -517,9 +497,6 @@ export function generateArkoalaFromIdl(config: {
                 integrated: true
             }
         )
-        const nodeTypes = makeCJNodeTypes(peerLibrary)
-        nodeTypes.writer.printTo(arkoala.cjLib(nodeTypes.targetFile))
-
         // const arkComponents = makeJavaArkComponents(peerLibrary, context)
         // arkComponents.writer.printTo(arkoala.javaLib(arkComponents.targetFile))
 
