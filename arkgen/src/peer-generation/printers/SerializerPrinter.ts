@@ -580,11 +580,7 @@ export function printSerializerImports(library: PeerLibrary, destFile: SourceFil
             for (let builder of library.builderClasses.keys()) {
                 collector.addFeature(builder, `Ark${builder}Builder`)
             }
-            if (library.language === Language.TS) {
-                collector.addFeature('Finalizable', '@koalaui/interop')
-            } else {
-                collector.addFeature(`Finalizable`, `Finalizable`)
-            }
+            collector.addFeature('Finalizable', '@koalaui/interop')
             collector.addFeature("CallbackTransformer", "./peers/CallbackTransformer")
             collectMaterializedImports(collector, library)
         } else {

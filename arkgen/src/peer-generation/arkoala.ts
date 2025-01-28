@@ -143,7 +143,6 @@ function copyArkoalaFiles(config: {
         'sig/arkoala/framework/native/src/generated/arkoala-macros.h',
         'sig/arkoala/arkui/src/peers/CallbackTransformer.ts',
         'sig/arkoala-arkts/arkui/src/generated/use_properties.ts',
-        'sig/arkoala-arkts/arkui/src/generated/Finalizable.ts',
         'sig/arkoala-arkts/arkui/src/generated/CallbackRegistry.ts',
         'sig/arkoala-arkts/arkui/src/generated/ComponentBase.ts',
         'sig/arkoala-arkts/arkui/src/generated/MaterializedBase.ts',
