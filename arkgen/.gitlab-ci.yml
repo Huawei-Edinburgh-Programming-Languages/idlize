@@ -47,10 +47,10 @@ pg run:cj:
     - koala-ci
   before_script:
     - !reference [.setup, script]
-    - source .bashrc
+    - source ~/.bashrc
     - cd $CI_PROJECT_DIR/arkgen
   script:
-    - env
+    - ls
     - cjc -v
 
 run arkts subset:
