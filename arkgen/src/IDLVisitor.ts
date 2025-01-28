@@ -22,7 +22,8 @@ import {
     isDefined, isNodePublic, isPrivate, isProtected, isReadonly, isStatic, isAsync,
     nameEnumValues, nameOrNull, identString, getNameWithoutQualifiersLeft, stringOrNone, warn,
     snakeCaseToCamelCase, escapeIDLKeyword, GenericVisitor,
-    generateSyntheticUnionName, generateSyntheticIdlNodeName, typeOrUnion, isCommonMethodOrSubclass
+    generateSyntheticUnionName, generateSyntheticIdlNodeName, typeOrUnion, isCommonMethodOrSubclass,
+    generatorConfiguration
 } from "@idlizer/core"
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig"
 import { ReferenceResolver } from "@idlizer/core"
@@ -538,14 +539,18 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         const nameSuggestion = NameSuggestion.make(getExportedDeclarationNameByDecl(node) ?? "UNDEFINED")
         const childNameSuggestion = nameSuggestion.prependType()
         this.context.enter(nameSuggestion.name)
+        const props = this.pickProperties(node.members, childNameSuggestion)
+            .concat(this.pickAccessors(node.members, childNameSuggestion))
+        const methods = this.pickMethods(node.members, childNameSuggestion)
+            .concat(this.pickPropertyBindings(nameSuggestion.name, props))
         return idl.createInterface(
             mangleConflictingName(nameSuggestion.name, node.getSourceFile()),
             idl.IDLInterfaceSubkind.Class,
             inheritance,
             node.members.filter(ts.isConstructorDeclaration).map(it => this.serializeConstructor(it as ts.ConstructorDeclaration, childNameSuggestion)),
             [],
-            this.pickProperties(node.members, childNameSuggestion).concat(this.pickAccessors(node.members, childNameSuggestion)),
-            this.pickMethods(node.members, childNameSuggestion),
+            props,
+            methods,
             [],
             this.collectTypeParameters(node.typeParameters), {
             extendedAttributes: this.computeComponentExtendedAttributes(node),
@@ -580,6 +585,25 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         return mergeSetGetProperties(properties)
     }
 
+    /**
+     * Generates synthetic methods to support $$ (two way sync) properties.
+     * List of such properties is taken from the GeneratorConfiguration.boundProperties parameter
+     */
+    pickPropertyBindings(className: string, props: idl.IDLProperty[]): idl.IDLMethod[] {
+        const boundPropsConfig: Array<[string, string[]]> = generatorConfiguration().paramArray("boundProperties")
+        return boundPropsConfig
+            .find(it => it[0] === className)
+            ?.map(propName => {
+                const prop = props.find(it => it.name === propName)
+                if (!prop)
+                    throw new Error(`No such property ${className}.${propName}, check 'boundProperties' param in the generator configuration`)
+                return idl.createMethod(
+                    `__onChangeEvent_${propName}`,
+                    [idl.createParameter("value", prop.type)],
+                    idl.IDLVoidType
+                )})
+            ?? []
+    }
     fakeOverrides(node: ts.InterfaceDeclaration): ts.TypeElement[] {
         return node.heritageClauses
             ?.flatMap(it => this.baseDeclarations(it))

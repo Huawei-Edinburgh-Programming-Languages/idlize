@@ -128,8 +128,9 @@ class DefaultConfig implements GeneratorConfiguration {
             case 'rootComponents': return PeerGeneratorConfig.rootComponents as T[]
             case 'standaloneComponents': return PeerGeneratorConfig.standaloneComponents as T[]
             case 'knownParameterized': return PeerGeneratorConfig.knownParametrized as T[]
+            case 'boundProperties': return PeerGeneratorConfig.boundProperties as T[]
         }
-        throw new Error(`array ${name} is unknown`)
+        throw new Error(`array ${name} is unknown`)///refac into ArkoalaConfiguration
     }
 }
 
