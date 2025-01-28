@@ -174,12 +174,13 @@ arkts_sources = [
 ]
 
 cj_include_dirs = [
-    external_interop_dir/ 'cangjie'
+    external_interop_dir / 'cangjie',
+    external_interop_dir / '../../../incremental-cj' 
 ]
 cj_sources = [
     external_interop_dir / 'cangjie/convertors-cj.cc',
     external_interop_dir / 'cangjie/convertors-cj.h',
-    external_interop_dir / 'cangjie/CallsiteKey.c'
+    external_interop_dir / '../../../incremental-cj/runtime/src/core/CallsiteKey.c' 
 ]
 
 if is_jni
