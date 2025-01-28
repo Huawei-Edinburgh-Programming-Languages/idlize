@@ -47,11 +47,13 @@ pg run:cj:
     - koala-ci
   before_script:
     - !reference [.setup, script]
-    - source ~/.bashrc
     - cd $CI_PROJECT_DIR/arkgen
   script:
-    - cd cj_ci_test
+    - source ~/.bashrc
     - echo $CANGJIE_HOME
+    - CANGJIE_HOME=lol
+    - echo CANGJIE_HOME
+    - cd cj_ci_test
     - cjc -v
 
 run arkts subset:
