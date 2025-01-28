@@ -84,6 +84,9 @@ export class MainTransformer {
     }
 
     private withInsertedReceiver(node: IDLMethod, parent: IDLInterface): IDLMethod {
+        if (MainTransformer.isCreate(node)) {
+            return node
+        }
         const copy = createMethod(
             node.name,
             [...node.parameters],
@@ -124,6 +127,14 @@ export class MainTransformer {
     }
 
     private withQualifiedName(node: IDLMethod, parent: IDLInterface): IDLMethod {
+        if (MainTransformer.isCreate(node) || MainTransformer.isUpdate(node)) {
+            return createMethod(
+                `${InteropConstructions.method(node.name, parent.name)}`,
+                node.parameters,
+                node.returnType
+            )
+        }
+
         return createMethod(
             `${InteropConstructions.method(parent.name, node.name)}`,
             node.parameters,
@@ -190,5 +201,13 @@ export class MainTransformer {
         return new IDLFile(
             node.entries.map(it => this.transformEntry(it))
         )
+    }
+
+    private static isCreate(node: IDLMethod): boolean {
+        return node.name === `Create`
+    }
+
+    private static isUpdate(node: IDLMethod): boolean {
+        return node.name === `Update`
     }
 }

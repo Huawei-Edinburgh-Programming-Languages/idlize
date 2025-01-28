@@ -27,7 +27,7 @@ export class BridgesConstructions {
     }
 
     static referenceType(name: string): string {
-        return `es2panda_${name}`
+        return `es2panda_${name}*`
     }
 
     static get sequenceLengthDeclaration(): string {

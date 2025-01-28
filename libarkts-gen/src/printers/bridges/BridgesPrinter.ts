@@ -80,9 +80,20 @@ export class BridgesPrinter extends InteropPrinter {
 
     private cast(node: IDLParameter): string {
         if (isPrimitiveType(node.type)) {
-            return BridgesConstructions.primitiveTypeCast(this.mapType(node.type)) // TODO: check
+            return BridgesConstructions.primitiveTypeCast(this.mapType(node.type))
         }
-        if (isReferenceType(node.type) || isContainerType(node.type)) {
+        if (isReferenceType(node.type)) {
+            const castTo = this.castTo(node.type)
+            if (castTo === undefined) {
+                return ``
+            }
+            if (this.convertor.isEnumReference(node.type)) {
+                return BridgesConstructions.primitiveTypeCast(castTo)
+            }
+            return BridgesConstructions.referenceTypeCast(castTo)
+        }
+        if (isContainerType(node.type)) {
+            // TODO
             const castTo = this.castTo(node.type)
             if (castTo === undefined) {
                 return ``
@@ -103,10 +114,13 @@ export class BridgesPrinter extends InteropPrinter {
             if (node.name === `es2panda_Impl`) return `${node.name}*`
 
             if (this.convertor.isHeir(node, `AstNode`)) {
-                return `${BridgesConstructions.referenceType(`AstNode`)}*`
+                return BridgesConstructions.referenceType(`AstNode`)
+            }
+            if (this.convertor.isEnumReference(node)) {
+                return node.name
             }
 
-            return `${BridgesConstructions.referenceType(node.name)}*`
+            return BridgesConstructions.referenceType(node.name)
         }
         if (isContainerType(node)) {
             if (isSequence(node)) {
@@ -119,7 +133,7 @@ export class BridgesPrinter extends InteropPrinter {
                     console.warn(`Warning: doing nothing for sequence<${JSON.stringify(typeParam)}>`)
                     return undefined
                 }
-                return `${BridgesConstructions.referenceType(typeParam.name)}**`
+                return BridgesConstructions.referenceType(typeParam.name)
             }
         }
 
