@@ -49,7 +49,7 @@ import {
     IdlPeerProcessor,
     IDLPredefinesVisitor,
 } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
-import { generateOhosOld } from "./peer-generation/OhosGenerator"
+import { generateOhos as generateOhosOld } from "./peer-generation/OhosGenerator"
 import { generateArkoalaFromIdl, generateLibaceFromIdl } from "./peer-generation/arkoala"
 import { loadPlugin } from "./peer-generation/plugin-api"
 import { SkoalaDeserializerPrinter } from "./peer-generation/printers/SkoalaDeserializerPrinter"

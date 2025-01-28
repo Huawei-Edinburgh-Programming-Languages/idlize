@@ -717,15 +717,7 @@ class OHOSVisitor {
         )
     }
 
-    execute(rootProject: string, outDir: string, managedOutDir: string) {
-
-        const params: Record<string, any> = {
-            TypePrefix: "OH_",
-            LibraryPrefix: `${this.libraryName}_`,
-            OptionalPrefix: "Opt_"
-        }
-        setDefaultConfiguration(new OhosConfiguration(params))
-
+    prepare() {
         this.library.files.forEach(file => {
             if (file.isPredefined) return
             idl.linearizeNamespaceMembers(file.entries).forEach(entry => {
@@ -764,6 +756,18 @@ class OHOSVisitor {
         })
 
         this.interfaces = interfaces
+    }
+
+    execute(rootProject: string, outDir: string, managedOutDir: string) {
+
+        const params: Record<string, any> = {
+            TypePrefix: "OH_",
+            LibraryPrefix: `${this.libraryName}_`,
+            OptionalPrefix: "Opt_"
+        }
+        setDefaultConfiguration(new OhosConfiguration(params))
+
+        this.prepare()
 
         this.printManaged()
         this.printC()
@@ -876,10 +880,11 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, defaultId
 export function generateNativeOhos(peerLibrary: PeerLibrary): Map<TargetFile, string> {
     const libraryName = suggestLibraryName(peerLibrary)
     const visitor = new OHOSVisitor(peerLibrary, libraryName)
+    visitor.prepare()
     visitor.printC()
     return new Map([
-        [new TargetFile(`${peerLibrary.name}.h`), visitor.hWriter.getOutput().join('\n')],
-        [new TargetFile(`${peerLibrary.name}.cc`), visitor.cppWriter.getOutput().join('\n')],
+        [new TargetFile(`${peerLibrary.name.toLowerCase()}.h`), visitor.hWriter.getOutput().join('\n')],
+        [new TargetFile(`${peerLibrary.name.toLowerCase()}.cc`), visitor.cppWriter.getOutput().join('\n')],
     ])
 }
 

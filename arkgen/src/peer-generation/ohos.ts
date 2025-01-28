@@ -21,7 +21,7 @@ import { PeerLibrary } from "./PeerLibrary";
 import { printMaterialized } from "./printers/MaterializedPrinter";
 import { printGlobal } from "./printers/GlobalScopePrinter";
 import { printDeclarations } from "./printers/DeclarationPrinter";
-import { IndentedPrinter, Language, NativeModuleType } from "@idlize/core";
+import { IndentedPrinter, Language, NativeModuleType, setDefaultConfiguration } from "@idlize/core";
 import { dummyImplementations, libraryCcDeclaration, makeArkTSDeserializer, makeCallbacksKinds, makeDeserializeAndCall, makeOhosModule, makeTSDeserializer, makeTSSerializer, readLangTemplate, tsCopyrightAndWarning } from "./FileGenerators";
 import { printArkUIGeneratedNativeModule, printArkUILibrariesLoader, printPredefinedNativeModule } from './printers/NativeModulePrinter';
 import { NativeModule } from './NativeModule';
@@ -31,7 +31,7 @@ import { printBridgeCcCustom, printBridgeCcGenerated } from './printers/BridgeCc
 import { printSerializers, printSerializersOhos } from './printers/HeaderPrinter';
 import { printRealAndDummyAccessors, printRealAndDummyModifiers } from './printers/ModifierPrinter';
 import { printManagedCaller } from './printers/CallbacksPrinter';
-import { generateNativeOhos, suggestLibraryName } from './OhosGenerator';
+import { generateNativeOhos, OhosConfiguration, suggestLibraryName } from './OhosGenerator';
 
 interface GenerateOhosConfig {
     dumpSerialized: boolean
@@ -40,7 +40,15 @@ interface GenerateOhosConfig {
 
 export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config?: GenerateOhosConfig) {
 
+
     peerLibrary.name = suggestLibraryName(peerLibrary).toLowerCase()
+
+    const params: Record<string, any> = {
+        TypePrefix: "OH_",
+        LibraryPrefix: `${peerLibrary.name.toUpperCase()}_`,
+        OptionalPrefix: "Opt_"
+    }
+    setDefaultConfiguration(new OhosConfiguration(params))
 
     const ohos = new OhosInstall(outDir, peerLibrary.language)
 
@@ -169,20 +177,8 @@ const PEER_LIB_CONFIG = new Map<Language, [string, string][]>()
 
 PEER_LIB_CONFIG.set(Language.TS, [
     [
-        path.join('sig', 'arkoala', 'arkui', 'src', 'peers', 'SerializerBase.ts'),
-        path.join('peers', 'SerializerBase.ts')
-    ],
-    [
-        path.join('sig', 'arkoala', 'arkui', 'src', 'peers', 'DeserializerBase.ts'),
-        path.join('peers', 'DeserializerBase.ts')
-    ],
-    [
         path.join('sig', 'arkoala', 'arkui', 'src', 'MaterializedBase.ts'),
         'MaterializedBase.ts'
-    ],
-    [
-        path.join('sig', 'arkoala', 'arkui', 'src', 'Finalizable.ts'),
-        'Finalizable.ts'
     ],
     [
         path.join('sig', 'arkoala', 'arkui', 'src', 'shared', 'generated-utils.ts'),

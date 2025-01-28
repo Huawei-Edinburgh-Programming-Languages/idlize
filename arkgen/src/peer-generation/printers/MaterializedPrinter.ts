@@ -14,7 +14,7 @@
  */
 
 import * as idl from '@idlizer/core/idl'
-import { capitalize, removeExt, renameClassToMaterialized, stringOrNone, Language, generifiedTypeName } from '@idlizer/core'
+import { capitalize, removeExt, renameClassToMaterialized, stringOrNone, Language, generifiedTypeName, IndentedPrinter } from '@idlizer/core'
 import { printPeerFinalizer, writePeerMethod } from "./PeersPrinter"
 import {
     createLanguageWriter,
@@ -57,11 +57,12 @@ interface MaterializedFileVisitor {
 const FinalizableType = idl.maybeOptional(createReferenceType("Finalizable"), true)
 
 abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
-    protected readonly printer: LanguageWriter = createLanguageWriter(this.printerContext.language, getReferenceResolver(this.library))
     protected readonly internalPrinter: LanguageWriter = createLanguageWriter(this.printerContext.language, getReferenceResolver(this.library))
     protected overloadsPrinter = new OverloadsPrinter(getReferenceResolver(this.library), this.printer, this.library.language, false)
 
     constructor(
+        protected readonly collector:ImportsCollector,
+        protected readonly printer: LanguageWriter,
         protected readonly library: PeerLibrary,
         protected readonly printerContext: PrinterContext,
         protected readonly clazz: MaterializedClass,
@@ -85,8 +86,6 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
 
     protected printMaterializedClass(clazz: MaterializedClass) {
         const printer = this.printer
-
-        printer.print(makeMaterializedPrologue(this.printerContext.language))
 
         this.printImports()
 
@@ -369,21 +368,20 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
     }
 
     override printImports() {
-        const imports = new ImportsCollector()
-        this.collectImports(imports)
-        const currentModule = removeExt(renameClassToMaterialized(this.clazz.className, this.library.language))
+        this.collectImports(this.collector)
+        // const currentModule = removeExt(renameClassToMaterialized(this.clazz.className, this.library.language))
         if (this.library.name === 'arkoala') {
-            imports.addFeatures(['CallbackTransformer'], './peers/CallbackTransformer')
+            this.collector.addFeatures(['CallbackTransformer'], './peers/CallbackTransformer')
             if (this.library.language === Language.TS) {
-                imports.addFeatures(['ArkUIGeneratedNativeModule'], './ArkUIGeneratedNativeModule')
+                this.collector.addFeatures(['ArkUIGeneratedNativeModule'], './ArkUIGeneratedNativeModule')
             }
             if (this.library.language === Language.ARKTS) {
-                imports.addFeatures(['ArkUIGeneratedNativeModule'], '#components')
+                this.collector.addFeatures(['ArkUIGeneratedNativeModule'], '#components')
             }
         } else {
-            imports.addFeatures([NativeModule.Generated.name], `./${NativeModule.Generated.name}`)
+            this.collector.addFeatures([NativeModule.Generated.name], `./${NativeModule.Generated.name}`)
         }
-        imports.print(this.printer, currentModule)
+        // this.collector.print(this.printer, currentModule)
     }
 
     override get namespacePrefix(): string {
@@ -485,28 +483,55 @@ class MaterializedVisitor {
 
     printMaterialized(): void {
         console.log(`Materialized classes: ${this.library.materializedClasses.size}`)
-        for (const clazz of this.library.materializedToGenerate) {
-            let visitor: MaterializedFileVisitor
-            if (Language.TS == this.printerContext.language) {
-                visitor = new TSMaterializedFileVisitor(
-                    this.library, this.printerContext, clazz, this.dumpSerialized)
-            } else if (Language.ARKTS == this.printerContext.language) {
-                visitor = new ArkTSMaterializedFileVisitor(
-                    this.library, this.printerContext, clazz, this.dumpSerialized)
-            } else if (this.printerContext.language == Language.JAVA) {
-                visitor = new JavaMaterializedFileVisitor(
-                    this.library, this.printerContext, clazz, this.dumpSerialized)
-            } else if (this.printerContext.language == Language.CJ) {
-                visitor = new CJMaterializedFileVisitor(
-                    this.library, this.printerContext, clazz, this.dumpSerialized)
-            } else {
-                throw new Error(`Unsupported language ${this.printerContext.language} in MaterializedPrinter.ts`)
-            }
+        const prologue = makeMaterializedPrologue(this.printerContext.language)
+        const buckets = groupByNamespace(this.library.materializedToGenerate)
+        for (const [name, bucket] of buckets) {
+            const collector = new ImportsCollector()
+            const printer = createLanguageWriter(this.printerContext.language, getReferenceResolver(this.library))
+            printer.print(prologue)
+            printer.pushNamespace(name)
+            for (const clazz of bucket) {
+                let visitor: MaterializedFileVisitor
+                if (Language.TS == this.printerContext.language) {
+                    visitor = new TSMaterializedFileVisitor(
+                        collector, printer, this.library, this.printerContext, clazz, this.dumpSerialized)
+                } else if (Language.ARKTS == this.printerContext.language) {
+                    visitor = new ArkTSMaterializedFileVisitor(
+                        collector, printer, this.library, this.printerContext, clazz, this.dumpSerialized)
+                } else if (this.printerContext.language == Language.JAVA) {
+                    visitor = new JavaMaterializedFileVisitor(
+                        collector, printer, this.library, this.printerContext, clazz, this.dumpSerialized)
+                } else if (this.printerContext.language == Language.CJ) {
+                    visitor = new CJMaterializedFileVisitor(
+                        collector, printer, this.library, this.printerContext, clazz, this.dumpSerialized)
+                } else {
+                    throw new Error(`Unsupported language ${this.printerContext.language} in MaterializedPrinter.ts`)
+                }
 
-            visitor.visit()
-            this.materialized.set(visitor.getTargetFile(), visitor.getOutput())
+                visitor.visit()
+            }
+            printer.popNamespace()
+
+            const currentModule = name + this.library.language.extension
+            this.materialized.set(
+                new TargetFile(currentModule),
+                collector.printToLines(currentModule)
+                    .concat(printer.getOutput())
+            )
         }
     }
+}
+
+function groupByNamespace(classes: MaterializedClass[]): Map<string, MaterializedClass[]> {
+    const buckets = new Map<string, MaterializedClass[]>()
+    for (const clazz of classes) {
+        const ns = idl.getNamespacesPathFor(clazz.decl).map(it => it.name).join('.')
+        if (!buckets.has(ns)) {
+            buckets.set(ns, [])
+        }
+        buckets.get(ns)?.push(clazz)
+    }
+    return buckets
 }
 
 export function printMaterialized(peerLibrary: PeerLibrary, printerContext: PrinterContext, dumpSerialized: boolean): Map<TargetFile, string> {
