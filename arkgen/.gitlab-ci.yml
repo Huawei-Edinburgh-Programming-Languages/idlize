@@ -52,7 +52,7 @@ pg run:cj:
     - source ~/.bashrc
     - echo $CANGJIE_HOME
     - CANGJIE_HOME=lol
-    - echo CANGJIE_HOME
+    - echo $CANGJIE_HOME
     - cd cj_ci_test
     - cjc -v
 
