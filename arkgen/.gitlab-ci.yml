@@ -49,7 +49,7 @@ pg run:cj:
     - !reference [.setup, script]
     - cd $CI_PROJECT_DIR/arkgen
   script:
-    - source ~/.bashrc
+    - source .bashrc
     - env
 
 run arkts subset:
