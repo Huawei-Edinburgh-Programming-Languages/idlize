@@ -101,7 +101,7 @@ public open class SerializerBase {
             this.buffer = resizedBuffer
         }
     }
-    func writeCustomObject(kind: String, value: Object): Unit {
+    func writeCustomObject(kind: String, value: Any): Unit {
         var current = SerializerBase.customSerializers
         // TODO
         println("Unsupported custom serialization for ${kind}, write undefined")
