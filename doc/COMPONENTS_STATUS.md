@@ -448,7 +448,7 @@
 |`cellLength`|Function| Erokhin Ilya | done |  |
 |`layoutDirection`|Function| Erokhin Ilya | done |  |
 |`supportAnimation`|Function| Erokhin Ilya | done |  |
-|`onItemDragStart`|Function| Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAGL8 |
+|`onItemDragStart`|Function| Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IBAGL8 |
 |`onItemDragEnter`|Function| Erokhin Ilya | done |  |
 |`onItemDragMove`|Function| Erokhin Ilya | done |  |
 |`onItemDragLeave`|Function| Erokhin Ilya | done |  |
@@ -573,7 +573,7 @@
 |`onScrollStop`|Function|Morozov Sergey|done|  |
 |`onItemDelete`|Function| Skroba Gleb | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IBGUML |
 |`onItemMove`|Function| Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onItemDragStart`|Function| Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAGL8 |
+|`onItemDragStart`|Function| Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IBAGL8 |
 |`onItemDragEnter`|Function|Morozov Sergey|done|  |
 |`onItemDragMove`|Function|Morozov Sergey|done|  |
 |`onItemDragLeave`|Function|Morozov Sergey|done|  |
