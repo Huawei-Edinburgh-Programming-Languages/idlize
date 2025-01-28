@@ -1200,7 +1200,7 @@
 |`halfLeading`| Function | Kovalev Sergey | in progress | |
 |`ellipsisMode`| Function | Kovalev Sergey | in progress | |
 |`stopBackPress`| Function | Kovalev Sergey | in progress | |
-|`onWillChange`| Function | Kovalev Sergey | in progress | |
+|`onWillChange`| Function | | | |
 |`inputFilter`|Function|Tuzhilkin Ivan| done | |
 |`showCounter`|Function|Tuzhilkin Ivan|done| https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
 |`customKeyboard`|Function| Erokhin Ilya | testskipped | UT in progress Vadim Voronov Custom Builder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
@@ -1285,7 +1285,7 @@
 |`halfLeading`| Function | Kovalev Sergey | in progress | |
 |`ellipsisMode`| Function |  Kovalev Sergey| in progress | |
 |`stopBackPress`| Function | Kovalev Sergey | in progress | |
-|`onWillChange`| Function | Kovalev Sergey | in progress | |
+|`onWillChange`| Function | | | |
 |`inputFilter`| Function | Spirin Andrey | testskipped  | UT сKovalev Sergey |
 |`customKeyboard`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`showCounter`| Function | Spirin Andrey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
