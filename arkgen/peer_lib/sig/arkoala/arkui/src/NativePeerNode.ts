@@ -1,7 +1,6 @@
 import { int32 } from "@koalaui/common"
 import { pointer, Finalizable } from "@koalaui/interop"
 import { PeerNode } from "./PeerNode"
-import { ArkUINodeType } from "./peers/ArkUINodeType"
 import { ArkUINativeModule } from "@koalaui/arkoala";
 
 export class NativePeerNode extends Finalizable {
