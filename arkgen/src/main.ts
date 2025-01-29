@@ -426,6 +426,14 @@ function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language)
             commentedCode: options.commentedCode,
         }, idlLibrary)
     }
+    if (options.generatorTarget == "common") {
+        generateLibaceFromIdl({
+            outDir: outDir,
+            libaceDestination: options.libaceDestination,
+            apiVersion: apiVersion,
+            commentedCode: options.commentedCode,
+        }, idlLibrary)
+    }
     if (options.generatorTarget == "tracker") {
         generateTracker(outDir, idlLibrary, options.trackerStatus, options.verbose)
     }
