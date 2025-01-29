@@ -25,18 +25,51 @@ function readdir(dir: string): string[] {
 
 export function generate<T>(
     inputDirs: string[],
-    inputFile: string | undefined,
+    inputFiles: string[],
     outputDir: string,
     visitorFactory: (sourceFile: ts.SourceFile, typeChecker: ts.TypeChecker) => GenericVisitor<T>,
     options: GenerateOptions<T>
 ): void {
-    let input = inputFile ? [
-        path.join(inputDirs[0], inputFile)
-    ] : inputDirs.flatMap(it => readdir(path.resolve(it)))
-    // Build a program using the set of root file names in fileNames
+    if (inputDirs.length === 0 && inputFiles.length === 0) {
+        console.error("Error: No input specified (no directories and no files).")
+        process.exit(1)
+    }
+
+    const resolvedInputDirs = inputDirs.map(dir => path.resolve(dir))
+
+    let input: string[] = []
+
+    if (resolvedInputDirs.length > 0) {
+        resolvedInputDirs.forEach(dir => {
+            if (fs.existsSync(dir) && fs.statSync(dir).isDirectory()) {
+                console.log(`Processing all .d.ts from directory: ${dir}`)
+                const files = readdir(dir).filter(file => file.endsWith(".d.ts"))
+                input = input.concat(files)
+            } else {
+                console.warn(`Warning: Directory does not exist or is not a directory: ${dir}`)
+            }
+        })
+    }
+
+    if (inputFiles.length > 0) {
+        inputFiles.forEach(file => {
+            const fullPath = path.resolve(file)
+            if (fs.existsSync(fullPath)) {
+                console.log(`Including input file: ${fullPath}`)
+                input.push(fullPath)
+            } else {
+                console.warn(`Warning: Input file does not exist: ${fullPath}`)
+            }
+        })
+    }
+
+    input = Array.from(new Set(input.map(p => path.resolve(p))))
+
     let program = ts.createProgram(
         input.concat([path.join(__dirname, "../stdlib.d.ts")]
     ), options.compilerOptions)
+
+    program.getSourceFiles().forEach(f => console.log(f.fileName))
 
     // Get the checker, we will use it to find more about classes
     if (outputDir && !fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true })
@@ -44,14 +77,14 @@ export function generate<T>(
     const typeChecker = program.getTypeChecker()
     options.onBegin?.(outputDir, typeChecker)
 
-    // Visit every sourceFile in the program
-    let cared = inputDirs.map(it => path.resolve(it))
     for (const sourceFile of program.getSourceFiles()) {
-        if (!cared.some(it => path.resolve(sourceFile.fileName).indexOf(it) >= 0)) {
-            // console.log("Ignore ", path.resolve(sourceFile.fileName) , "wrt", inputDirs)
-            continue
-        }
-        if (inputFile && path.basename(sourceFile.fileName) != inputFile) {
+        const resolvedSourceFile = path.resolve(sourceFile.fileName)
+        
+        const isInDir = resolvedInputDirs.some(dir => resolvedSourceFile.startsWith(dir))
+        const isExplicitFile = input.some(f => path.resolve(f) === resolvedSourceFile)
+
+        if (!isInDir && !isExplicitFile) {
+            console.log(`Skipping file: ${resolvedSourceFile}`)
             continue
         }
 
@@ -63,6 +96,4 @@ export function generate<T>(
     }
 
     options.onEnd?.(outputDir)
-
-    return
 }
