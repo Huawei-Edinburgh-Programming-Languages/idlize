@@ -391,7 +391,7 @@ export function makeTSDeserializer(library: PeerLibrary): string {
 import { runtimeType, Tags, RuntimeType, SerializerBase, DeserializerBase, CallbackResource } from "@koalaui/interop"
 import { KPointer, ${NativeModule.Interop.name} } from "@koalaui/interop"
 import { MaterializedBase } from "./../MaterializedBase"
-import { int32 } from "@koalaui/common"
+import { int32, float32 } from "@koalaui/common"
 import { unsafeCast } from "../shared/generated-utils"
 import { CallbackKind } from "./CallbackKind"
 import { Serializer } from "./Serializer"
