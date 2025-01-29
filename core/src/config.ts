@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import * as fs from "fs"
 export interface GeneratorConfiguration {
     param<T>(name: string): T
     paramArray<T>(name: string): T[]
@@ -40,3 +42,35 @@ export function generatorTypePrefix() {
     const conf = generatorConfiguration()
     return `${conf.param("TypePrefix")}${conf.param("LibraryPrefix")}`
 }
+
+class FileGeneratorConfiguration implements GeneratorConfiguration {
+    constructor(private json: any) {}
+    param<T>(name: string): T {
+        return this.json[name] as T
+    }
+    paramArray<T>(name: string): T[] {
+        return this.json[name] as T[]
+    }
+}
+
+export function loadConfiguration(path: string): GeneratorConfiguration {
+    return new FileGeneratorConfiguration(JSON.parse(fs.readFileSync(path, 'utf-8')))
+}
+
+export class PeerGeneratorConfigImpl implements GeneratorConfiguration {
+    constructor(private file: GeneratorConfiguration) {
+    }
+    param<T>(name: string): T {
+        return this.file.param(name)
+    }
+    paramArray<T>(name: string): T[] {
+        return this.file.paramArray(name)
+    }
+    handwrittenMethods(): string[] {
+        return this.file.paramArray<string>("handwritten")
+    }
+}
+
+const PeerGeneratorConfig = new PeerGeneratorConfigImpl(loadConfiguration(options.configFile))
+
+PeerGeneratorConfig.handwrittenMethods().includes("")
