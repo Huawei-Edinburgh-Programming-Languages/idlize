@@ -29,7 +29,7 @@ public open class DateCustomSerializer <: CustomSerializer {
     }
 }
 
-public open class Ark_CustomObject <: Ark_ObjectBase {
+public open class Ark_CustomObject {
     init() {
         SerializerBase.registerCustomSerializer(DateCustomSerializer())     
     }

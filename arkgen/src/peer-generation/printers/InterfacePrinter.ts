@@ -1069,7 +1069,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
                     }
                 )
             }
-        }, ARK_OBJECTBASE)
+        })
 
         return new CJDeclaration(alias, writer)
     }
@@ -1093,7 +1093,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
                     )
                 }
             })
-        }, ARK_OBJECTBASE)
+        })
 
         return new CJDeclaration(alias, writer)
     }
@@ -1147,7 +1147,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
                     writer.makeAssign(value, undefined, writer.makeString(signature.argName(0)), false)
                 )
             })
-        }, ARK_OBJECTBASE)
+        })
 
         return new CJDeclaration(alias, writer)
     }
@@ -1198,7 +1198,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
                             writer.print(`this.${i.name}_container = ${i.name}`)
                         }
                     })
-        }, superName ?? ARK_OBJECTBASE)
+        }, superName)
 
         return new CJDeclaration(alias, writer)
     }
