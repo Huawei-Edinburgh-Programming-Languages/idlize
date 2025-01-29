@@ -229,7 +229,7 @@
 |`alignRules`| Function | Dmitry A Smirnov| done | |
 |`aspectRatio`| Function | Roman Sedaikin | done | |
 |`clickEffect`| Function | Lobah Mikhail | done | |
-|`onDragStart`| Function | Skroba Gleb | in progress | PixelMap on https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR, https://gitee.com/openharmony/arkui_ace_engine/issues/IAHA4D EVENT |
+|`onDragStart`| Function | Skroba Gleb | in progress | It needs DragEventAccessor implemented to complete Unit tests, but it is empty C-API now. |
 |`onDragEnter`| Function | Lobah Mikhail | in progress | EVENT |
 |`onDragMove`| Function | Lobah Mikhail | in progress | EVENT |
 |`onDragLeave`| Function | Lobah Mikhail| in progress | EVENT |
@@ -284,7 +284,7 @@
 |`customProperty`| Function | Dmitry A Smirnov|blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX + need clrify bridge implementation|
 |`expandSafeArea`| Function | Dmitry A Smirnov| done |default value https://gitee.com/openharmony/arkui_ace_engine/issues/IBICVG?from=project-issue |
 |`background`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|`backgroundImage`| Function | Erokhin Ilya | in progress | PixelMap on https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
+|`backgroundImage`| Function | Erokhin Ilya | done | |
 |`backgroundBlurStyle`| Function | Skroba Gleb | done |  |
 |`foregroundBlurStyle`| Function | Roman Sedaikin | done | |
 |`focusScopeId`| Function | Dmitry A Smirnov| done | |
