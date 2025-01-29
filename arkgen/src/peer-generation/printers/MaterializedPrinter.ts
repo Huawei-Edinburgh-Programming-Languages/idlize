@@ -511,17 +511,18 @@ class MaterializedVisitor {
             printer.pushNamespace(name)
         }
         for (const clazz of bucket) {
+            console.error( 'HERE:',  clazz.className, name)
             this.printContent(clazz, collector, printer)
         }
         if (isNamespace) {
             printer.popNamespace()
         }
 
-        const fileName = isNamespace ? name : renameClassToMaterialized(name, this.library.language, false)
-        const currentModule = fileName + this.library.language.extension
+        const currentModule = name
+        const fileName = currentModule + this.library.language.extension
         this.materialized.set(
-            new TargetFile(currentModule),
-            collector.printToLines(fileName)
+            new TargetFile(fileName),
+            collector.printToLines(currentModule)
                 .concat(printer.getOutput())
         )
     }
@@ -530,9 +531,15 @@ class MaterializedVisitor {
         console.log(`Materialized classes: ${this.library.materializedClasses.size}`)
         const buckets = groupByNamespace(this.library.materializedToGenerate)
         for (const [name, bucket] of buckets) {
-            if (name === '') {
+            if (name === '' || this.library.language === Language.JAVA) {
                 for (const clazz of bucket) {
-                    this.printFile([clazz], clazz.className, false)
+                    this.printFile(
+                        [clazz],
+                        this.library.language === Language.JAVA
+                            ? clazz.getImplementationName()
+                            : renameClassToMaterialized(clazz.className, this.library.language),
+                        false
+                    )
                 }
             } else {
                 this.printFile(bucket, name, true)
