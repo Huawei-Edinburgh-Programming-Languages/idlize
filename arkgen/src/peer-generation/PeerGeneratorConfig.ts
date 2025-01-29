@@ -206,7 +206,7 @@ export class PeerGeneratorConfig {
         ["BindContentCover", ["isShow"]],
         ["Refresh", ["refreshing"]],
         ["GridItem", ["selected"]],
-        ["ListItem", ["select"]],
+        ["ListItem", ["selected"]],
     ]
 
     public static ignoredCallbacks = new Set<string>([

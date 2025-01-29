@@ -539,10 +539,11 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         const nameSuggestion = NameSuggestion.make(getExportedDeclarationNameByDecl(node) ?? "UNDEFINED")
         const childNameSuggestion = nameSuggestion.prependType()
         this.context.enter(nameSuggestion.name)
+        const fileName = node.getSourceFile().fileName
         const props = this.pickProperties(node.members, childNameSuggestion)
             .concat(this.pickAccessors(node.members, childNameSuggestion))
         const methods = this.pickMethods(node.members, childNameSuggestion)
-            .concat(this.pickPropertyBindings(nameSuggestion.name, props))
+            .concat(this.pickPropertyBindings(nameSuggestion.name, props, fileName))
         return idl.createInterface(
             mangleConflictingName(nameSuggestion.name, node.getSourceFile()),
             idl.IDLInterfaceSubkind.Class,
@@ -555,7 +556,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             this.collectTypeParameters(node.typeParameters), {
             extendedAttributes: this.computeComponentExtendedAttributes(node),
             documentation: getDocumentation(this.sourceFile, node, this.options.docs),
-            fileName: node.getSourceFile().fileName,
+            fileName,
         })
     }
 
@@ -589,20 +590,35 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
      * Generates synthetic methods to support $$ (two way sync) properties.
      * List of such properties is taken from the GeneratorConfiguration.boundProperties parameter
      */
-    pickPropertyBindings(className: string, props: idl.IDLProperty[]): idl.IDLMethod[] {
+    pickPropertyBindings(className: string, props: idl.IDLProperty[], fileName: string): idl.IDLMethod[] {
+        const componentName = PeerGeneratorConfig.mapComponentName(className)
         const boundPropsConfig: Array<[string, string[]]> = generatorConfiguration().paramArray("boundProperties")
-        return boundPropsConfig
-            .find(it => it[0] === className)
-            ?.map(propName => {
-                const prop = props.find(it => it.name === propName)
-                if (!prop)
-                    throw new Error(`No such property ${className}.${propName}, check 'boundProperties' param in the generator configuration`)
+        const boundProps = boundPropsConfig.find(it => it[0] === componentName)
+        return !boundProps ? []
+            : boundProps[1].map(propName => {
+                let propType = props.find(it => it.name === propName)?.type
+                if (!propType) {
+                    // Property not found in `Component`, look in `ComponentOptions`
+                    const options = this.output.find(it => it.name === componentName + "Options")
+                    if (options && idl.isInterface(options))
+                        propType = options.properties.find(it => it.name === propName)?.type
+                }
+                if (!propType) {
+                    // Give up search, and let the type be `number`
+                    propType = idl.IDLNumberType
+                }
+                const callbackParams = [idl.createParameter(propName, propType)]
+                const callbackName = generateSyntheticFunctionName(callbackParams, idl.IDLVoidType)
+                this.addSyntheticType(
+                    idl.createCallback(
+                        callbackName, callbackParams, idl.IDLVoidType, {
+                        extendedAttributes: [{name: idl.IDLExtendedAttributes.Synthetic}],
+                        fileName}))
                 return idl.createMethod(
                     `__onChangeEvent_${propName}`,
-                    [idl.createParameter("value", prop.type)],
+                    [idl.createParameter("callback", idl.createReferenceType(callbackName))],
                     idl.IDLVoidType
                 )})
-            ?? []
     }
     fakeOverrides(node: ts.InterfaceDeclaration): ts.TypeElement[] {
         return node.heritageClauses
