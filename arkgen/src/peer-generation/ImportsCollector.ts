@@ -27,10 +27,8 @@ export class ImportsCollector {
     addFeature(feature: ImportFeature): void
     addFeature(feature: string, module: string): void
     addFeature(feature: string | ImportFeature, module?: string) {
-        if (typeof feature != "string") {
+        if (typeof feature != "string")
             return this.addFeature(feature.feature, feature.module)
-        }
-        if (feature.startsWith("[object")) throw new Error(feature)
         module = path.normalize(module!)
         // Checking for name collisions between modules
         // TODO: needs to be done more effectively
