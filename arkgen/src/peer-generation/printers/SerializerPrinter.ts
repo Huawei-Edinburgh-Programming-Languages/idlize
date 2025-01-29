@@ -594,6 +594,7 @@ export function printSerializerImports(library: PeerLibrary, destFile: SourceFil
     } else if (destFile.language === Language.ARKTS) {
         const collector = (destFile as ArkTSSourceFile).imports
         if (!declarationPath) {
+            collector.addFeature("float32", "@koalaui/common")
             collector.addFeature("TypeChecker", "#components")
             collector.addFeatures(["KUint8ArrayPtr", "NativeBuffer", "InteropNativeModule"], "@koalaui/interop")
             collector.addFeature("CallbackTransformer", "./peers/CallbackTransformer")
