@@ -69,6 +69,7 @@ const options = program
     .option('--input-dir <path>', 'Path to input dir(s), comma separated')
     .option('--output-dir <path>', 'Path to output dir')
     .option('--input-file <name>', 'Name of file to convert, all files in input-dir if none')
+    .option('--input-files <files...>', 'Comma-separated list of specific files to process')
     .option('--idl2dts', 'Convert IDL to .d.ts definitions')
     .option('--idl2peer', 'Convert IDL to peer drafts')
     .option('--dts2skoala', 'Convert DTS to skoala definitions')
@@ -327,6 +328,38 @@ if (options.dts2peer) {
 
     const PREDEFINED_PATH = path.join(__dirname, "..", "predefined")
 
+    if (options.inputFiles && typeof options.inputFiles === 'string') {
+        options.inputFiles = options.inputFiles.split(',')
+            .map(file => file.trim())
+            .filter(Boolean)
+    }
+
+    if (options.inputDir && typeof options.inputDir === 'string') {
+        options.inputDir = options.inputDir.split(',')
+            .map(dir => dir.trim())
+            .filter(Boolean)
+    }
+
+    const inputDirs: string[] = options.inputDir || []
+    inputDirs.forEach(dir => {
+        if (!fs.existsSync(dir)) {
+            console.error(`Input directory does not exist: ${dir}`)
+            process.exit(1)
+        } else {
+            console.log(`Input directory exists: ${dir}`)
+        }
+    })
+
+    const inputFiles: string[] = options.inputFiles || []
+    inputFiles.forEach(file => {
+        if (!fs.existsSync(file)) {
+            console.error(`Input file does not exist: ${file}`)
+            process.exit(1)
+        } else {
+            console.log(`Input file exists: ${file}`)
+        }
+    })
+
     options.docs = "all"
     const idlLibrary = new PeerLibrary(lang)
     // collect predefined files
@@ -337,6 +370,7 @@ if (options.dts2peer) {
             peerFile: file,
         }).visitWholeFile()
     })
+
     scanPredefinedDirectory(PREDEFINED_PATH, "src").forEach(file => {
         new IDLPredefinesVisitor({
             sourceFile: file.originalFilename,
@@ -344,6 +378,7 @@ if (options.dts2peer) {
             peerFile: file,
         }).visitWholeFile()
     })
+
     if (["arkoala", "libace", "all", "tracker"].includes(options.generatorTarget)) {
         scanPredefinedDirectory(PREDEFINED_PATH, "arkoala").forEach(file => {
             new IDLPredefinesVisitor({
@@ -354,33 +389,37 @@ if (options.dts2peer) {
         })
     }
 
-    // First convert DTS to IDL
     generate(
-        options.inputDir.split(','),
-        options.inputFile,
+        inputDirs,
+        inputFiles,
         generatedPeersDir,
         (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, options, idlLibrary),
         {
             compilerOptions: defaultCompilerOptions,
             onSingleFile(entries: IDLEntry[], outputDir, sourceFile) {
-                // Search for duplicate declarations
                 entries = entries.filter(newEntry =>
-                    !idlLibrary.files.find(peerFile => linearizeNamespaceMembers(peerFile.entries).find(entry => {
+                    !idlLibrary.files.find(peerFile => peerFile.entries.find(entry => {
                         if (([newEntry, entry].every(isInterface)
                             || [newEntry, entry].every(isEnum)
                             || [newEntry, entry].every(isSyntheticEntry))) {
                             if (newEntry.name === entry.name) {
-                                console.warn(`WARNING: Skip entry:'${newEntry.name}'(${sourceFile.fileName}) already exists in ${peerFile.originalFilename}`)
                                 return true
                             }
                         }
+                        return false
                     }))
                 )
                 entries.forEach(it => {
                     transformMethodsAsync2ReturnPromise(it)
                 })
-                const file = new PeerFile(sourceFile.fileName, entries)
-                idlLibrary.files.push(file)
+
+                const baseFileName = path.relative(
+                    path.resolve(inputDirs[0] || ''),
+                    path.resolve(sourceFile.fileName)
+                )
+                const peerFile = new PeerFile(baseFileName, entries)
+
+                idlLibrary.files.push(peerFile)
             },
             onEnd(outDir) {
                 if (options.generatorTarget == "ohos") {
@@ -402,6 +441,8 @@ if (options.dts2peer) {
 if (!didJob) {
     program.help()
 }
+
+
 
 function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language) {
     if (options.generatorTarget == "arkoala" || options.generatorTarget == "all") {
@@ -430,7 +471,7 @@ function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language)
         generateTracker(outDir, idlLibrary, options.trackerStatus, options.verbose)
     }
     if (options.generatorTarget == "ohos") {
-        generateOhos(outDir, idlLibrary, options.defaultIdlPackage as string)
+        generateOhos(outDir, idlLibrary)
     }
     if (options.plugin) {
         loadPlugin(options.plugin)
@@ -461,3 +502,4 @@ function scanDirectory(isPredefined: boolean, dir: string, ...subdirs: string[])
             return new PeerFile(idlFile, nodes, isPredefined)
         })
 }
+
