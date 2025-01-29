@@ -1490,8 +1490,8 @@
 |`registerNativeEmbedRule`| Function | Erokhin Ilya | done | |
 |`bindSelectionMenu`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*WindowScene*| *Component* | Dudkin Sergey | testskipped | |
-|`setWindowSceneOptions`| Function | Dudkin Sergey | testskipped | UT in progress Dudkin Sergey |
-|`attractionEffect`| Function | Dudkin Sergey  | testskipped | UT in progress Dudkin Sergey |
+|`setWindowSceneOptions`| Function | Dudkin Sergey | done | |
+|`attractionEffect`| Function | Dudkin Sergey  | done |  |
 |*XComponent*| *Component* | Tuzhilkin Ivan | blocked IDL | |
 |`setXComponentOptions`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+)|
 |`onLoad`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB7RSS (+) |
