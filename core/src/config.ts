@@ -12,6 +12,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import * as fs from "fs"
+import * as path from "path"
+import { isDefined } from "./util"
+
+
 export interface GeneratorConfiguration {
     param<T>(name: string): T
     paramArray<T>(name: string): T[]
@@ -39,4 +45,24 @@ export function generatorConfiguration(): GeneratorConfiguration {
 export function generatorTypePrefix() {
     const conf = generatorConfiguration()
     return `${conf.param("TypePrefix")}${conf.param("LibraryPrefix")}`
+}
+
+export class FileGeneratorConfiguration implements GeneratorConfiguration {
+    protected json: Record<string, any> = {}
+    constructor(filePath?: string) {
+        if (!isDefined(filePath) || !filePath.length) return 
+        
+        const data = fs.readFileSync(path.resolve(filePath)).toString()
+        const json = JSON.parse(data)
+        if (!isDefined(json)) {
+            throw new Error(`Could not parse json config file ${filePath}`)
+        }
+        this.json = json
+    }
+    param<T>(name: string): T {
+        return this.json[name] as T
+    }
+    paramArray<T>(name: string): T[] {
+        return this.json[name] as T[]
+    }
 }

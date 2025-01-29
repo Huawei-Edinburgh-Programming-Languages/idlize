@@ -13,7 +13,46 @@
  * limitations under the License.
  */
 
-import { Language } from '@idlizer/core'
+import { 
+    Language, 
+    isDefined, 
+    FileGeneratorConfiguration
+} from '@idlizer/core'
+
+export class PeerGeneratorConfigImpl extends FileGeneratorConfiguration {
+    private noDummyComponents: Map<string, string[]> = new Map()
+    constructor(filePath: string) {
+        super(filePath)
+
+        const ignoreDummy = this.json.generators?.dummy?.ignoreMethods
+        if (ignoreDummy) {
+            this.noDummyComponents = new Map<string, string[]>(Object.entries(ignoreDummy))
+        }
+    }
+
+    noDummyGeneration(component: string, method = "") {
+        const ignoreMethods = this.noDummyComponents.get(component)
+        if (!isDefined(ignoreMethods)) return false
+        if (this.isWhole(ignoreMethods)) return true
+        if (ignoreMethods.includes(method)) return true
+
+        return false
+    }
+
+    private isWhole(methods: string[]): boolean {
+        return methods.includes("*")
+    }
+}
+
+export let PeerGeneratorConfigCore = new PeerGeneratorConfigImpl("")
+
+export function loadConfiguration(configurationFile: string): PeerGeneratorConfigImpl {
+    return new PeerGeneratorConfigImpl(configurationFile)
+}
+
+export function setFileGeneratorConfiguration(config: FileGeneratorConfiguration) {
+    PeerGeneratorConfigCore = config as PeerGeneratorConfigImpl
+}
 
 export class PeerGeneratorConfig {
     public static commonMethod = ["CommonMethod"]
