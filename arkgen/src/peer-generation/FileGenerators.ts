@@ -280,7 +280,7 @@ export function makeSerializerForOhos(library: PeerLibrary, nativeModule: { name
         writeSerializerFile(library, destFile, "", declarationPath)
         writeDeserializerFile(library, destFile, "", declarationPath)
         // destFile.imports.clear() // TODO fix dependencies
-        destFile.imports.addFeatures(["int32"], "@koalaui/common")
+        destFile.imports.addFeatures(["int32", "float32"], "@koalaui/common")
         destFile.imports.addFeatures(["KPointer", "KInt", "KStringPtr", "KUint8ArrayPtr", "nullptr",
             "InteropNativeModule", "SerializerBase", "RuntimeType", "runtimeType", "CallbackResource",
             "DeserializerBase", "wrapSystemCallback"
@@ -408,7 +408,7 @@ export function makeArkTSDeserializer(library: PeerLibrary): string {
 
     const imports = new ImportsCollector()
     imports.addFeatures(["KPointer", "runtimeType", "RuntimeType", "CallbackResource", "DeserializerBase"], "@koalaui/interop")
-    imports.addFeatures(["int32", "int64"], "@koalaui/common")
+    imports.addFeatures(["int32", "float32", "int64"], "@koalaui/common")
     imports.addFeature("Serializer", "./Serializer")
     imports.addFeatures([NativeModule.Generated.name], "#components")
     imports.addFeatures(["CallbackKind"], "CallbackKind")
