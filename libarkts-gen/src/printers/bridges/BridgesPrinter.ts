@@ -82,7 +82,7 @@ export class BridgesPrinter extends InteropPrinter {
         if (isPrimitiveType(node.type)) {
             return BridgesConstructions.primitiveTypeCast(this.mapType(node.type))
         }
-        if (this.convertor.isEnumReference(node.type)) {
+        if (this.convertor.typechecker.isEnumReference(node.type)) {
             return BridgesConstructions.enumCast(node.type.name)
         }
         if (isReferenceType(node.type)) {
@@ -100,7 +100,7 @@ export class BridgesPrinter extends InteropPrinter {
         if (node.name === `es2panda_AstNode`) return `${node.name}*`
         if (node.name === `es2panda_Impl`) return `${node.name}*`
 
-        if (this.convertor.isHeir(node, Config.astNodeCommonAncestor)) {
+        if (this.convertor.typechecker.isHeir(node.name, Config.astNodeCommonAncestor)) {
             return BridgesConstructions.referenceType(Config.astNodeCommonAncestor)
         }
         return BridgesConstructions.referenceType(node.name)
