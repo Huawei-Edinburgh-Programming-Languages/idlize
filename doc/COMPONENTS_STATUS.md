@@ -1894,19 +1894,19 @@
 |*GlobalScope_common*| *Class* | Erokhin Ilya | in progress | |
 |`getContext`| Function | Erokhin Ilya | in progress | |
 |`postCardAction`| Function | Erokhin Ilya | in progress | |
-|`dollar_r`| Function | Erokhin Ilya | in progress | |
-|`dollar_rawfile`| Function | Erokhin Ilya | in progress | |
+|`dollar_r`| Function | Erokhin Ilya | blocked IDL | NEED TO BE REMOVED https://gitee.com/nikolay-igotti/idlize/issues/IBJVPN |
+|`dollar_rawfile`| Function | Erokhin Ilya | blocked IDL | NEED TO BE REMOVED https://gitee.com/nikolay-igotti/idlize/issues/IBJVPN |
 |`animateTo`| Function | Erokhin Ilya | in progress | |
 |`animateToImmediately`| Function | Erokhin Ilya | in progress | |
-|`vp2px`| Function | Erokhin Ilya | in progress | |
-|`px2vp`| Function | Erokhin Ilya | in progress | |
-|`fp2px`| Function | Erokhin Ilya | in progress | |
-|`px2fp`| Function | Erokhin Ilya | in progress | |
-|`lpx2px`| Function | Erokhin Ilya | in progress | |
-|`px2lpx`| Function | Erokhin Ilya | in progress | |
-|`requestFocus`| Function | Erokhin Ilya | in progress | |
-|`setCursor`| Function | Erokhin Ilya | in progress | |
-|`restoreDefault`| Function | Erokhin Ilya | in progress | |
+|`vp2px`| Function | Erokhin Ilya | devdone | |
+|`px2vp`| Function | Erokhin Ilya | devdone | |
+|`fp2px`| Function | Erokhin Ilya | devdone | |
+|`px2fp`| Function | Erokhin Ilya | devdone | |
+|`lpx2px`| Function | Erokhin Ilya | devdone | |
+|`px2lpx`| Function | Erokhin Ilya | devdone | |
+|`requestFocus`| Function | Erokhin Ilya | devdone | |
+|`setCursor`| Function | Erokhin Ilya | devdone | |
+|`restoreDefault`| Function | Erokhin Ilya | devdone | |
 |*ContextMenu*| *Class* | Tuzhilkin Ivan | blocked IDL | |
 |`close`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB84T +|
 |*CustomDialogController*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IBECPG & https://gitee.com/nikolay-igotti/idlize/issues/IBGU8S + |
