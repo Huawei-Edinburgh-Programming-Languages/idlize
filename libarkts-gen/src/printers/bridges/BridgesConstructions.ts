@@ -62,6 +62,10 @@ export class BridgesConstructions {
         return `static_cast<${type}>`
     }
 
+    static enumCast(type: string): string {
+        return `static_cast<${type}>`
+    }
+
     static callMethod(name: string): string {
         return `GetImpl()->${name}`
     }

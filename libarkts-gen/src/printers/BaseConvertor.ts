@@ -19,9 +19,12 @@ import {
     IDLOptionalType,
     IDLPrimitiveType,
     IDLReferenceType,
+    IDLType,
     IDLTypeParameterType,
-    IDLUnionType, isEnum,
+    IDLUnionType,
+    isEnum,
     isInterface,
+    isReferenceType,
     TypeConvertor
 } from "@idlize/core"
 
@@ -77,7 +80,10 @@ export abstract class BaseConvertor implements TypeConvertor<string> {
         return this.isHeir(parent, ancestor)
     }
 
-    isEnumReference(type: IDLReferenceType): boolean {
+    isEnumReference(type: IDLType): type is IDLReferenceType {
+        if (!isReferenceType(type)) {
+            return false
+        }
         const declaration = this.findRealDeclaration(type.name)
         return declaration !== undefined && isEnum(declaration)
     }

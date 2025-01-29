@@ -5,7 +5,8 @@
                 "Object",
                 "Property",
                 "KindConst",
-                "Create", // Declaration of Es2pandaMemberExpressionKind expected to be interface
+                "Create",
+                "Update",
             ]
 //            "Identifier": [
 //                "Name",

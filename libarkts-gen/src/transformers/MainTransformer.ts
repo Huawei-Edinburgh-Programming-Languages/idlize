@@ -84,7 +84,7 @@ export class MainTransformer {
     }
 
     private withInsertedReceiver(node: IDLMethod, parent: IDLInterface): IDLMethod {
-        if (MainTransformer.isCreate(node)) {
+        if (MainTransformer.isCreateOrUpdate(node)) {
             return node
         }
         const copy = createMethod(
@@ -110,11 +110,11 @@ export class MainTransformer {
                     ? [
                         createParameter(
                             InteropConstructions.sequenceParameterPointer(it.name),
-                            this.config.sequencePointerType
+                            Config.sequencePointerType
                         ),
                         createParameter(
                             InteropConstructions.sequenceParameterLength(it.name),
-                            this.config.sequenceLengthType
+                            Config.sequenceLengthType
                         )
                     ]
                     : it
@@ -127,7 +127,7 @@ export class MainTransformer {
     }
 
     private withQualifiedName(node: IDLMethod, parent: IDLInterface): IDLMethod {
-        if (MainTransformer.isCreate(node) || MainTransformer.isUpdate(node)) {
+        if (MainTransformer.isCreateOrUpdate(node)) {
             return createMethod(
                 `${InteropConstructions.method(node.name, parent.name)}`,
                 node.parameters,
@@ -203,11 +203,7 @@ export class MainTransformer {
         )
     }
 
-    private static isCreate(node: IDLMethod): boolean {
-        return node.name === `Create`
-    }
-
-    private static isUpdate(node: IDLMethod): boolean {
-        return node.name === `Update`
+    private static isCreateOrUpdate(node: IDLMethod): boolean {
+        return node.name === Config.createMethod || node.name === Config.updateMethod
     }
 }

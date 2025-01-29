@@ -82,62 +82,37 @@ export class BridgesPrinter extends InteropPrinter {
         if (isPrimitiveType(node.type)) {
             return BridgesConstructions.primitiveTypeCast(this.mapType(node.type))
         }
+        if (this.convertor.isEnumReference(node.type)) {
+            return BridgesConstructions.enumCast(node.type.name)
+        }
         if (isReferenceType(node.type)) {
-            const castTo = this.castTo(node.type)
-            if (castTo === undefined) {
-                return ``
-            }
-            if (this.convertor.isEnumReference(node.type)) {
-                return BridgesConstructions.primitiveTypeCast(castTo)
-            }
-            return BridgesConstructions.referenceTypeCast(castTo)
+            return BridgesConstructions.referenceTypeCast(this.castToReference(node.type))
         }
         if (isContainerType(node.type)) {
-            // TODO
-            const castTo = this.castTo(node.type)
-            if (castTo === undefined) {
-                return ``
-            }
-            return BridgesConstructions.referenceTypeCast(castTo)
+            return BridgesConstructions.referenceTypeCast(this.castToContainer(node.type))
         }
         throwException(`Unsupported type: ${node.type}`)
     }
 
-    private castTo(node: IDLReferenceType | IDLContainerType): string | undefined {
-        if (isPrimitiveType(node)) {
-            return undefined
-        }
-        if (isReferenceType(node)) {
-            /* Temporary workaround until .idl is fixed */
-            if (node.name === `es2panda_Context`) return `${node.name}*`
-            if (node.name === `es2panda_AstNode`) return `${node.name}*`
-            if (node.name === `es2panda_Impl`) return `${node.name}*`
+    private castToReference(node: IDLReferenceType): string {
+        /* Temporary workaround until .idl is fixed */
+        if (node.name === `es2panda_Context`) return `${node.name}*`
+        if (node.name === `es2panda_AstNode`) return `${node.name}*`
+        if (node.name === `es2panda_Impl`) return `${node.name}*`
 
-            if (this.convertor.isHeir(node, `AstNode`)) {
-                return BridgesConstructions.referenceType(`AstNode`)
-            }
-            if (this.convertor.isEnumReference(node)) {
-                return node.name
-            }
-
-            return BridgesConstructions.referenceType(node.name)
+        if (this.convertor.isHeir(node, Config.astNodeCommonAncestor)) {
+            return BridgesConstructions.referenceType(Config.astNodeCommonAncestor)
         }
-        if (isContainerType(node)) {
-            if (isSequence(node)) {
-                const typeParam = node.elementType[0]
-                if (isContainerType(typeParam)) {
-                    console.warn(`Warning: doing nothing for sequence<container>`)
-                    return undefined
-                }
-                if (!isReferenceType(typeParam)) {
-                    console.warn(`Warning: doing nothing for sequence<${JSON.stringify(typeParam)}>`)
-                    return undefined
-                }
-                return BridgesConstructions.referenceType(typeParam.name)
-            }
-        }
+        return BridgesConstructions.referenceType(node.name)
+    }
 
-        throwException(`Unexpected type: ${IDLKind[node.kind]}`)
+    private castToContainer(node: IDLContainerType): string {
+        if (!isSequence(node)) {
+            throwException(`Unexpected container type: ${IDLKind[node.kind]}`)
+        }
+        const typeParam = node.elementType[0]
+        console.warn(`Warning: doing nothing for sequence<T>`)
+        return ``
     }
 
     private mapType(node: IDLType): string {
