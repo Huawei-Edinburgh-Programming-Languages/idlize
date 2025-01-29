@@ -14,7 +14,7 @@
  */
 import { maybeReadLangTemplate, readLangTemplate } from "../FileGenerators";
 import { FunctionCallExpression, Method, MethodModifier, NamedMethodSignature, StringExpression, createInteropArgConvertor, createLanguageWriter } from "../LanguageWriters";
-import { BlockStatement, ExpressionStatement, IfStatement, LanguageWriter, MethodSignature, NaryOpExpression } from "@idlize/core"
+import { BlockStatement, ExpressionStatement, IfStatement, LanguageWriter, MethodSignature, NaryOpExpression } from "@idlizer/core"
 import { createConstructPeerMethod } from "../PeerClass";
 import { PeerClass } from "../PeerClass";
 import { PeerLibrary } from "../PeerLibrary";

@@ -809,13 +809,14 @@ function checkReadAndMutateBuffer() {
     assertTrue("Buffer mutated correctly", isSame)
 }
 
+declare const NATIVE_LIBRARY_NAME: string
 function prepareTSNativeModules() {
     // Place where mock of ACE is located.
     process.env.ACE_LIBRARY_PATH = __dirname + "/../../../native"
-    registerNativeModuleLibraryName("InteropNativeModule", "./native/NativeBridgeNapi")
-    registerNativeModuleLibraryName("TestNativeModule", "./native/NativeBridgeNapi")
-    registerNativeModuleLibraryName("ArkUINativeModule", "./native/NativeBridgeNapi")
-    registerNativeModuleLibraryName("ArkUIGeneratedNativeModule", "./native/NativeBridgeNapi")
+    registerNativeModuleLibraryName("InteropNativeModule", NATIVE_LIBRARY_NAME)
+    registerNativeModuleLibraryName("TestNativeModule", NATIVE_LIBRARY_NAME)
+    registerNativeModuleLibraryName("ArkUINativeModule", NATIVE_LIBRARY_NAME)
+    registerNativeModuleLibraryName("ArkUIGeneratedNativeModule", NATIVE_LIBRARY_NAME)
     loadInteropNativeModule()
     InteropNativeModule._SetCallbackDispatcher(callCallback)
 }
