@@ -402,13 +402,6 @@ export function generateArkoalaFromIdl(config: {
                 integrated: true
             }
         )
-        writeFile(arkoala.peer(new TargetFile('CallbackKind')),
-            makeCallbacksKinds(peerLibrary, peerLibrary.language),
-            {
-                onlyIntegrated: config.onlyIntegrated,
-                integrated: true
-            }
-        )
     } else if (peerLibrary.language == Language.JAVA) {
         writeIntegratedFile(
             arkoala.javaLib(new TargetFile(NativeModule.ArkUI.name, ARKOALA_PACKAGE_PATH)),

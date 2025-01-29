@@ -420,6 +420,14 @@ export function createDeserializer(args: Uint8Array, length: int32): Deserialize
 `
 }
 
+export function makeDeserializer(library: PeerLibrary): string {
+    switch (library.language) {
+        case Language.ARKTS: return makeArkTSDeserializer(library)
+        case Language.TS: return makeTSDeserializer(library)
+    }
+    throw new Error(`Unsupported language "${library.language}"`)
+}
+
 export function makeArkTSDeserializer(library: PeerLibrary): string {
     const printer = createLanguageWriter(Language.ARKTS, library)
     printer.writeLines(cStyleCopyright)

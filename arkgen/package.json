@@ -57,7 +57,7 @@
     "clean": "rimraf build dist lib generated native/build* native/lib* native/cross* native/NativeBridge* native/ace* out",
     "run": "npm run compile && node . --dts2idl --input-dir ./interface_sdk-js/api/@internal/component/ets/,./interface_sdk-js/api/global --input-file common.d.ts --verify-idl --common-to-attributes --docs=opt",
     "run:all": "npm run compile && node . --dts2peer --input-dir ./interface_sdk-js/api/@internal/component/ets/,./interface_sdk-js/api/arkui,./interface_sdk-js/api/global --verify-idl --common-to-attributes --docs=opt",
-    "run:xml": "npm run compile && node . --generator-target ohos --dts2peer --input-dir ./interface_sdk-js/api --input-file @ohos.xml.d.ts --output-dir ./out/xml --verify-idl --common-to-attributes --docs=none",
+    "run:xml": "npm run compile && node . --use-new-ohos --generator-target ohos --dts2peer --input-dir ./interface_sdk-js/api --input-file @ohos.xml.d.ts --output-dir ./out/xml --verify-idl --common-to-attributes --docs=none",
     "run:xml:arkts": "npm run compile && node . --generator-target ohos --dts2peer --input-dir ./interface_sdk-js/api --input-file @ohos.xml.d.ts --output-dir ./out/xml --verify-idl --common-to-attributes --docs=none --language=arkts",
     "run:xml:cj": "npm run compile && node . --generator-target ohos --dts2peer --input-dir ./interface_sdk-js/api --input-file @ohos.xml.d.ts --output-dir ./out/xml --verify-idl --common-to-attributes --docs=none --language=cangjie",
     "run2dts": "npm run compile && node . --idl2dts --input-dir ./idl",

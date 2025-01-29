@@ -21,16 +21,12 @@ import { PeerLibrary } from "./PeerLibrary";
 import { printMaterialized } from "./printers/MaterializedPrinter";
 import { printGlobal } from "./printers/GlobalScopePrinter";
 import { printDeclarations } from "./printers/DeclarationPrinter";
-import { IndentedPrinter, Language, NativeModuleType, setDefaultConfiguration } from "@idlize/core";
-import { dummyImplementations, libraryCcDeclaration, makeArkTSDeserializer, makeCallbacksKinds, makeDeserializeAndCall, makeOhosModule, makeTSDeserializer, makeTSSerializer, readLangTemplate, tsCopyrightAndWarning } from "./FileGenerators";
-import { printArkUIGeneratedNativeModule, printArkUILibrariesLoader, printPredefinedNativeModule } from './printers/NativeModulePrinter';
+import { IndentedPrinter, Language, NativeModuleType, setDefaultConfiguration } from "@idlizer/core";
+import { makeCallbacksKinds, makeDeserializeAndCall, makeDeserializer, makeOhosModule, makeTSDeserializer, makeTSSerializer, makeTypeChecker, tsCopyrightAndWarning } from "./FileGenerators";
+import { printArkUIGeneratedNativeModule } from './printers/NativeModulePrinter';
 import { NativeModule } from './NativeModule';
 import { TargetFile } from './printers/TargetFile';
 import { copyFileSync, existsSync, mkdirSync } from 'node:fs';
-import { printBridgeCcCustom, printBridgeCcGenerated } from './printers/BridgeCcPrinter';
-import { printSerializers, printSerializersOhos } from './printers/HeaderPrinter';
-import { printRealAndDummyAccessors, printRealAndDummyModifiers } from './printers/ModifierPrinter';
-import { printManagedCaller } from './printers/CallbacksPrinter';
 import { generateNativeOhos, OhosConfiguration, suggestLibraryName } from './OhosGenerator';
 
 interface GenerateOhosConfig {
@@ -52,7 +48,7 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config?: 
 
     const ohos = new OhosInstall(outDir, peerLibrary.language)
 
-    NativeModule.Generated = new NativeModuleType(peerLibrary.name + 'Native')
+    NativeModule.Generated = new NativeModuleType(peerLibrary.name.toUpperCase() + 'NativeModule')
 
     const context = {
         language: peerLibrary.language,
@@ -87,7 +83,7 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config?: 
         makeTSSerializer(peerLibrary).getOutput().join('\n')
     )
     writeIntegratedFile(ohos.peer(new TargetFile('Deserializer')),
-        makeTSDeserializer(peerLibrary)
+        makeDeserializer(peerLibrary)
     )
 
     // managed-callbacks
@@ -134,6 +130,14 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config?: 
     }
     index.printTo(path.join(ohos.managedDir(), "index.d.ts"))
 
+    // managed-utils
+
+    if (peerLibrary.language === Language.ARKTS) {
+        writeIntegratedFile(ohos.peer(new TargetFile('type_check')),
+            makeTypeChecker(peerLibrary, Language.ARKTS)
+        )
+    }
+
     // NATIVE
     /////////////////////////////////////////
 
@@ -153,16 +157,16 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config?: 
     )
 
     writeIntegratedFile(ohos.native(new TargetFile('Serializers.h')), serializers)
-    
+
     // native-callbacks
 
     writeIntegratedFile(ohos.native(new TargetFile('callback_kind.h')), makeCallbacksKinds(peerLibrary, Language.CPP))
     writeIntegratedFile(
-        ohos.native(new TargetFile('callback_deserialize_call.cc')), 
+        ohos.native(new TargetFile('callback_deserialize_call.cc')),
         makeDeserializeAndCall('ohos', peerLibrary, Language.CPP, 'callback_deserialize_call.cc').printToString()
     )
     writeIntegratedFile(
-        ohos.native(new TargetFile('callback_managed_caller.cc')), 
+        ohos.native(new TargetFile('callback_managed_caller.cc')),
         printManagedCaller('ohos', peerLibrary).printToString()
     )
     */
@@ -184,6 +188,16 @@ PEER_LIB_CONFIG.set(Language.TS, [
         path.join('sig', 'arkoala', 'arkui', 'src', 'shared', 'generated-utils.ts'),
         path.join('shared', 'generated-utils.ts')
     ],
+])
+PEER_LIB_CONFIG.set(Language.ARKTS, [
+    [
+        path.join('sig', 'arkoala-arkts', 'arkui', 'src', 'generated', 'MaterializedBase.ts'),
+        'MaterializedBase.ts'
+    ],
+    [
+        path.join('sig', 'arkoala-arkts', 'arkui', 'src', 'generated', 'shared', 'generated-utils.ts'),
+        path.join('shared', 'generated-utils.ts')
+    ]
 ])
 
 function copyPeerLib(lang: Language, rootDir: string) {
