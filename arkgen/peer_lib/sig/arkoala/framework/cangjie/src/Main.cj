@@ -151,7 +151,7 @@ func enqueueCallback(
 ): Unit {
     let serializer = Serializer.hold()
     let resourceId = writeCallback(serializer)
-    InteropNativeModule._HoldCallbackResource(resourceId)
+    ArkUINativeModule._HoldCallbackResource(resourceId)
     let buffer = Array<UInt8>(Int64(serializer.length()), repeat: 0)
     for (i in 0..buffer.size) {
         buffer[i] = serializer.asArray()[i]
@@ -162,7 +162,7 @@ func enqueueCallback(
     let deserializer = Deserializer(buffer, buffer.size)
     readAndCallCallback(deserializer)
     /* libace released resource */
-    InteropNativeModule._ReleaseCallbackResource(resourceId)
+    ArkUINativeModule._ReleaseCallbackResource(resourceId)
 }
 
 class callResult {

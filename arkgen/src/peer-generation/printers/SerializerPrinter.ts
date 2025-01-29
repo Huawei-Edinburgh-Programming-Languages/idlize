@@ -383,6 +383,11 @@ class DeserializerPrinter {
         target = maybeTransformManagedCallback(target) ?? target
         const methodName = this.library.getInteropName(target)
         const type = idl.createReferenceType(target.name, undefined, target)
+        if (this.writer.language == Language.CJ) {
+            this.writer.writeMethodImplementation(new Method(`read${methodName}`, new NamedMethodSignature(type, [], [])), writer => {
+                this.writer.writeMethodCall('this', `read${methodName}`, ['false'])
+            })
+        }
         this.writer.writeMethodImplementation(new Method(`read${methodName}`, new NamedMethodSignature(type, [idl.IDLBooleanType], ['isSync'], ['false'])), writer => {
             const resourceName = "_resource"
             const callName = "_call"

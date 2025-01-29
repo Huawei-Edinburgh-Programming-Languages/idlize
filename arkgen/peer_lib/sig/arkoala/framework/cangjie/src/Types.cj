@@ -24,5 +24,5 @@ type ArrayBuffer = ArrayList<UInt8>
 type Callback_RangeUpdate = (index: Int32, mark: pointer, end: Int32) -> Unit
 type Callback_String_Void = (str: String) -> Unit
 type Callback_Extender_OnProgress = (value: Float32) -> Unit
-type Callback_Extender_OnFinish = () -> pointer
-type Callback_Extender_OnAnimation = () -> UInt8
+type Callback_Extender_OnFinish = () -> Unit
+type NavExtender_OnUpdateStack = (value: String) -> Unit
