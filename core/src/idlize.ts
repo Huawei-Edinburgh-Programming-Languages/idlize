@@ -62,9 +62,7 @@ export function generate<T>(
         options.onSingleFile?.(output, outputDir, sourceFile)
     }
 
-    setImmediate(() => {
-        options.onEnd?.(outputDir)
-    })
+    options.onEnd?.(outputDir)
 
     return
 }

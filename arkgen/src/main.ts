@@ -60,412 +60,427 @@ import { IdlWrapperProcessor } from "./skoala-generation/idl/idlSkoalaLibrary"
 import { fillSyntheticDeclarations } from "./peer-generation/idl/SyntheticDeclarationsFiller"
 import { PeerLibrary } from "./peer-generation/PeerLibrary"
 import { PeerFile } from "./peer-generation/PeerFile"
+import { isMainThread, Worker, workerData } from "node:worker_threads"
 import { cli } from "./logger/logger"
 
-cli.animation.begin()
+if (isMainThread) {
+    const handle = cli.runner.begin()
+    const options = program
+        .option('--dts2idl', 'Convert .d.ts to IDL definitions')
+        .option('--dts2test', 'Generate tests from .d.ts to .h')
+        .option('--dts2peer', 'Convert .d.ts to peer drafts')
+        .option('--ets2ts', 'Convert .ets to .ts')
+        .option('--input-dir <path>', 'Path to input dir(s), comma separated')
+        .option('--output-dir <path>', 'Path to output dir')
+        .option('--input-file <name>', 'Name of file to convert, all files in input-dir if none')
+        .option('--idl2dts', 'Convert IDL to .d.ts definitions')
+        .option('--idl2peer', 'Convert IDL to peer drafts')
+        .option('--dts2skoala', 'Convert DTS to skoala definitions')
+        .option('--verbose', 'Verbose processing')
+        .option('--verify-idl', 'Verify produced IDL')
+        .option('--common-to-attributes', 'Transform common attributes as IDL attributes')
+        .option('--test-interface <name>', 'Interfaces to test (comma separated)')
+        .option('--test-method <name>', 'Methods to test (comma separated)')
+        .option('--test-property <name>', 'Properties to test (comma separated)')
+        .option('--generate-interface <name>', 'Interfaces to generate (comma separated)')
+        .option('--disable-enum-initializers', "Don't include enum member initializers in the interface")
+        .option('--native-bridge-path <name>', "Path to native bridge")
+        .option('--api-version <version>', "API version for generated peers")
+        .option('--dump-serialized', "Dump serialized data")
+        .option('--call-log', "Call log")
+        .option('--docs [all|opt|none]', 'How to handle documentation: include, optimize, or skip')
+        .option('--language [ts|ts|java|cangjie]', 'Output language')
+        .option('--api-prefix <string>', 'Cpp prefix to be compatible with manual arkoala implementation')
+        .option('--need-interfaces', 'Generate interfaces to resolve all .d.ts dependencies', false)
+        .option('--only-integrated', 'Generate only thoose files that can be integrated to target', false)
+        .option('--version')
+        .option('--generator-target <all|arkoala|libace|none>', 'Copy peers to arkoala or libace (use with --dts2peer)', "all")
+        .option('--arkoala-destination <path>', 'Location of arkoala repository')
+        .option('--libace-destination <path>', 'Location of libace repository')
+        .option('--copy-peers-components <name...>', 'List of components to copy (omit to copy all)')
+        .option('--tracker-status <file>', 'Tracker status file)')
+        .option('--plugin <file>', 'File with generator\'s plugin')
+        .option('--default-idl-package <name>', 'Name of the default package for generated IDL')
+        .option('--no-commented-code', 'Do not generate commented code in modifiers')
+        .parse()
+        .opts()
 
-const options = program
-    .option('--dts2idl', 'Convert .d.ts to IDL definitions')
-    .option('--dts2test', 'Generate tests from .d.ts to .h')
-    .option('--dts2peer', 'Convert .d.ts to peer drafts')
-    .option('--ets2ts', 'Convert .ets to .ts')
-    .option('--input-dir <path>', 'Path to input dir(s), comma separated')
-    .option('--output-dir <path>', 'Path to output dir')
-    .option('--input-file <name>', 'Name of file to convert, all files in input-dir if none')
-    .option('--idl2dts', 'Convert IDL to .d.ts definitions')
-    .option('--idl2peer', 'Convert IDL to peer drafts')
-    .option('--dts2skoala', 'Convert DTS to skoala definitions')
-    .option('--verbose', 'Verbose processing')
-    .option('--verify-idl', 'Verify produced IDL')
-    .option('--common-to-attributes', 'Transform common attributes as IDL attributes')
-    .option('--test-interface <name>', 'Interfaces to test (comma separated)')
-    .option('--test-method <name>', 'Methods to test (comma separated)')
-    .option('--test-property <name>', 'Properties to test (comma separated)')
-    .option('--generate-interface <name>', 'Interfaces to generate (comma separated)')
-    .option('--disable-enum-initializers', "Don't include enum member initializers in the interface")
-    .option('--native-bridge-path <name>', "Path to native bridge")
-    .option('--api-version <version>', "API version for generated peers")
-    .option('--dump-serialized', "Dump serialized data")
-    .option('--call-log', "Call log")
-    .option('--docs [all|opt|none]', 'How to handle documentation: include, optimize, or skip')
-    .option('--language [ts|ts|java|cangjie]', 'Output language')
-    .option('--api-prefix <string>', 'Cpp prefix to be compatible with manual arkoala implementation')
-    .option('--need-interfaces', 'Generate interfaces to resolve all .d.ts dependencies', false)
-    .option('--only-integrated', 'Generate only thoose files that can be integrated to target', false)
-    .option('--version')
-    .option('--generator-target <all|arkoala|libace|none>', 'Copy peers to arkoala or libace (use with --dts2peer)', "all")
-    .option('--arkoala-destination <path>', 'Location of arkoala repository')
-    .option('--libace-destination <path>', 'Location of libace repository')
-    .option('--copy-peers-components <name...>', 'List of components to copy (omit to copy all)')
-    .option('--tracker-status <file>', 'Tracker status file)')
-    .option('--plugin <file>', 'File with generator\'s plugin')
-    .option('--default-idl-package <name>', 'Name of the default package for generated IDL')
-    .option('--no-commented-code', 'Do not generate commented code in modifiers')
-    .parse()
-    .opts()
-
-let apiVersion = options.apiVersion ?? 9999
-
-
-if (process.env.npm_package_version) {
-    console.log(`IDLize version ${findVersion()}`)
+    const worker = new Worker(__filename, {
+        workerData: { options, handle },
+        transferList: [handle]
+    })
+    worker.on('exit', () => {
+        cli.runner.end()
+    })
+} else {
+    main()
 }
 
-let didJob = false
+function main() {
+    const { options } = workerData
+    let apiVersion = options.apiVersion ?? 9999
 
-class DefaultConfig implements GeneratorConfiguration {
-    protected params: Record<string, any> = {
-        TypePrefix: "Ark_",
-        LibraryPrefix: "",
-        OptionalPrefix: "Opt_"
+
+    if (process.env.npm_package_version) {
+        console.log(`IDLize version ${findVersion()}`)
     }
 
-    param<T>(name: string): T {
-        if (name in this.params) {
-            return this.params[name] as T;
+    let didJob = false
+
+    class DefaultConfig implements GeneratorConfiguration {
+        protected params: Record<string, any> = {
+            TypePrefix: "Ark_",
+            LibraryPrefix: "",
+            OptionalPrefix: "Opt_"
         }
-        throw new Error(`${name} is unknown`)
-    }
-    paramArray<T>(name: string): T[] {
-        return []
-    }
-}
 
-class ArkoalaConfiguration extends DefaultConfig {
-    override paramArray<T>(name: string): T[] {
-        switch (name) {
-            case 'rootComponents': return PeerGeneratorConfig.rootComponents as T[]
-            case 'standaloneComponents': return PeerGeneratorConfig.standaloneComponents as T[]
-            case 'knownParameterized': return PeerGeneratorConfig.knownParametrized as T[]
-            case 'boundProperties': return PeerGeneratorConfig.boundProperties as T[]
-        }
-        return super.paramArray(name)
-    }
-}
-
-class SkoalaConfiguration extends DefaultConfig {
-    protected params: Record<string, any> = {
-        TypePrefix: "",
-        LibraryPrefix: "",
-        OptionalPrefix: "Opt_"
-    }
-}
-
-// TBD: OhosConfiguration needs to include LibraryPrefix
-// from the library name
-class OhosConfiguration extends DefaultConfig {
-    protected params: Record<string, any> = {
-        TypePrefix: "OH_",
-        LibraryPrefix: "",
-        OptionalPrefix: "Opt_"
-    }
-}
-
-setDefaultConfiguration(new ArkoalaConfiguration())
-
-if (options.dts2idl) {
-    generate(
-        options.inputDir.split(','),
-        options.inputFile,
-        options.outputDir ?? "./idl",
-        (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, options),
-        {
-            compilerOptions: defaultCompilerOptions,
-            onSingleFile: (entries: IDLEntry[], outputDir, sourceFile) => {
-                console.log('producing', path.basename(sourceFile.fileName))
-                const outFile = path.join(outputDir,
-                    path.basename(sourceFile.fileName).replace(".d.ts", ".idl"))
-                console.log("saved", outFile)
-                if (options.skipDocs) {
-                    entries.forEach(it => forEachChild(
-                        it, (it) => it.documentation = undefined))
-                }
-                let generated = toIDLString(entries, {
-                    disableEnumInitializers: options.disableEnumInitializers ?? false
-                })
-                if (options.verbose) console.log(generated)
-                if (!fs.existsSync(path.dirname(outFile))){
-                    fs.mkdirSync(path.dirname(outFile), { recursive: true });
-                }
-                fs.writeFileSync(outFile, generated)
-                if (options.verifyIdl)
-                    verifyIDLString(generated)
+        param<T>(name: string): T {
+            if (name in this.params) {
+                return this.params[name] as T;
             }
+            throw new Error(`${name} is unknown`)
         }
-    )
-    didJob = true
-}
-
-if (options.dts2skoala) {
-    setDefaultConfiguration(new SkoalaConfiguration())
-
-    const outputDir: string = options.outputDir ?? "./out/skoala"
-
-    if (!fs.existsSync(outputDir)) {
-        fs.mkdirSync(outputDir, { recursive: true })
+        paramArray<T>(name: string): T[] {
+            return []
+        }
     }
 
-    const generatedIDLMap = new Map<string, IDLEntry[]>()
-    const skoalaLibrary = new IdlSkoalaLibrary()
+    class ArkoalaConfiguration extends DefaultConfig {
+        override paramArray<T>(name: string): T[] {
+            switch (name) {
+                case 'rootComponents': return PeerGeneratorConfig.rootComponents as T[]
+                case 'standaloneComponents': return PeerGeneratorConfig.standaloneComponents as T[]
+                case 'knownParameterized': return PeerGeneratorConfig.knownParametrized as T[]
+                case 'boundProperties': return PeerGeneratorConfig.boundProperties as T[]
+            }
+            return super.paramArray(name)
+        }
+    }
 
-    generate(
-        options.inputDir.split(','),
-        options.inputFile,
-        outputDir,
-        (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, options, skoalaLibrary),
-        {
-            compilerOptions: {
-                ...defaultCompilerOptions,
-                paths: {
-                    "@koalaui/common": ["../external/incremental/common/src"],
-                    "@koalaui/compat": ["../external/incremental/compat/src/typescript"],
-                    "@koalaui/interop": ["../external/interop/src/interop"],
-                    "@koalaui/arkoala": ["../external/arkoala/framework/src"],
+    class SkoalaConfiguration extends DefaultConfig {
+        protected params: Record<string, any> = {
+            TypePrefix: "",
+            LibraryPrefix: "",
+            OptionalPrefix: "Opt_"
+        }
+    }
+
+    // TBD: OhosConfiguration needs to include LibraryPrefix
+    // from the library name
+    class OhosConfiguration extends DefaultConfig {
+        protected params: Record<string, any> = {
+            TypePrefix: "OH_",
+            LibraryPrefix: "",
+            OptionalPrefix: "Opt_"
+        }
+    }
+
+    setDefaultConfiguration(new ArkoalaConfiguration())
+
+    if (options.dts2idl) {
+        generate(
+            options.inputDir.split(','),
+            options.inputFile,
+            options.outputDir ?? "./idl",
+            (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, options),
+            {
+                compilerOptions: defaultCompilerOptions,
+                onSingleFile: (entries: IDLEntry[], outputDir, sourceFile) => {
+                    console.log('producing', path.basename(sourceFile.fileName))
+                    const outFile = path.join(outputDir,
+                        path.basename(sourceFile.fileName).replace(".d.ts", ".idl"))
+                    console.log("saved", outFile)
+                    if (options.skipDocs) {
+                        entries.forEach(it => forEachChild(
+                            it, (it) => it.documentation = undefined))
+                    }
+                    let generated = toIDLString(entries, {
+                        disableEnumInitializers: options.disableEnumInitializers ?? false
+                    })
+                    if (options.verbose) console.log(generated)
+                    if (!fs.existsSync(path.dirname(outFile))) {
+                        fs.mkdirSync(path.dirname(outFile), { recursive: true });
+                    }
+                    fs.writeFileSync(outFile, generated)
+                    if (options.verifyIdl)
+                        verifyIDLString(generated)
+                }
+            }
+        )
+        didJob = true
+    }
+
+    if (options.dts2skoala) {
+        setDefaultConfiguration(new SkoalaConfiguration())
+
+        const outputDir: string = options.outputDir ?? "./out/skoala"
+
+        if (!fs.existsSync(outputDir)) {
+            fs.mkdirSync(outputDir, { recursive: true })
+        }
+
+        const generatedIDLMap = new Map<string, IDLEntry[]>()
+        const skoalaLibrary = new IdlSkoalaLibrary()
+
+        generate(
+            options.inputDir.split(','),
+            options.inputFile,
+            outputDir,
+            (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, options, skoalaLibrary),
+            {
+                compilerOptions: {
+                    ...defaultCompilerOptions,
+                    paths: {
+                        "@koalaui/common": ["../external/incremental/common/src"],
+                        "@koalaui/compat": ["../external/incremental/compat/src/typescript"],
+                        "@koalaui/interop": ["../external/interop/src/interop"],
+                        "@koalaui/arkoala": ["../external/arkoala/framework/src"],
+                    },
                 },
-            },
-            onSingleFile: (entries: IDLEntry[], outputDirectory, sourceFile) => {
-                const fileName = path.basename(sourceFile.fileName, ".d.ts")
+                onSingleFile: (entries: IDLEntry[], outputDirectory, sourceFile) => {
+                    const fileName = path.basename(sourceFile.fileName, ".d.ts")
 
-                if (!generatedIDLMap.has(fileName)) {
-                    generatedIDLMap.set(fileName, [])
+                    if (!generatedIDLMap.has(fileName)) {
+                        generatedIDLMap.set(fileName, [])
+                    }
+
+                    generatedIDLMap.get(fileName)?.push(...entries)
+                    skoalaLibrary.files.push(new IldSkoalaFile(sourceFile.fileName, entries))
+                },
+                onEnd: (outDir) => {
+                    const wrapperProcessor = new IdlWrapperProcessor(skoalaLibrary)
+                    wrapperProcessor.process()
+                    generateIdlSkoala(outDir, skoalaLibrary, options)
+
+                    try {
+                        SkoalaDeserializerPrinter.generateDeserializer(outputDir, generatedIDLMap)
+                    } catch (error) {
+                        console.error("Error during deserializer generation:", error)
+                    }
+
+                    console.log("All files processed.")
                 }
-
-                generatedIDLMap.get(fileName)?.push(...entries)
-                skoalaLibrary.files.push(new IldSkoalaFile(sourceFile.fileName, entries))
-            },
-            onEnd: (outDir) => {
-                const wrapperProcessor = new IdlWrapperProcessor(skoalaLibrary)
-                wrapperProcessor.process()
-                generateIdlSkoala(outDir, skoalaLibrary, options)
-
-                try {
-                    SkoalaDeserializerPrinter.generateDeserializer(outputDir, generatedIDLMap)
-                } catch (error) {
-                    console.error("Error during deserializer generation:", error)
-                }
-
-                console.log("All files processed.")
             }
-        }
-    )
-    didJob = true
-}
-
-if (options.dts2test) {
-    initRNG()
-    let testInterfaces = options.testInterface
-    if (testInterfaces === undefined) {
-        function fileNameToClass(name: string): string {
-            return name
-                .split('_')
-                .map(s => s.charAt(0).toUpperCase() + s.slice(1))
-                .join(``)
-        }
-
-        (options.inputDir as string).split(",").forEach(inputDir => {
-            let inDir = path.resolve(inputDir)
-            testInterfaces = testInterfaces.concat(
-                fs.readdirSync(inDir)
-                .filter(file => file.endsWith("d.ts"))
-                .map(file => file.substring(0, file.length - 5))
-                .map(fileNameToClass)
-                .join(','))
-            })
+        )
+        didJob = true
     }
 
-    let lines: string[] = []
-    generate(
-        options.inputDir.split(','),
-        options.inputFile,
-        options.outputDir ?? "./generated/tests",
-        (sourceFile, typeChecker) => new TestGeneratorVisitor(sourceFile, typeChecker, testInterfaces, options.testMethod, options.testProperties),
-        {
-            compilerOptions: defaultCompilerOptions,
-            onBegin: (outDir: string) => {
-                lines.push(`import {checkResult, checkTestFailures} from "@arkoala/arkui/test_utils"`)
-                lines.push(``)
-            },
-            onSingleFile: (entries: string[], outputDir, sourceFile) => {
-                lines = lines.concat(entries)
-            },
-            onEnd: (outDir: string) => {
-                lines.push(``)
-                lines.push(`checkTestFailures()`)
-
-                let generated = lines.join("\n")
-                const outFile = path.join(outDir, "index.ts")
-                if (options.verbose) {
-                    console.log(generated)
-                }
-                console.log(`Write fuzzing peers to file ${outFile}`)
-                fs.writeFileSync(outFile, lines.join("\n"))
+    if (options.dts2test) {
+        initRNG()
+        let testInterfaces = options.testInterface
+        if (testInterfaces === undefined) {
+            function fileNameToClass(name: string): string {
+                return name
+                    .split('_')
+                    .map(s => s.charAt(0).toUpperCase() + s.slice(1))
+                    .join(``)
             }
+
+            (options.inputDir as string).split(",").forEach(inputDir => {
+                let inDir = path.resolve(inputDir)
+                testInterfaces = testInterfaces.concat(
+                    fs.readdirSync(inDir)
+                        .filter(file => file.endsWith("d.ts"))
+                        .map(file => file.substring(0, file.length - 5))
+                        .map(fileNameToClass)
+                        .join(','))
+            })
         }
-    )
-    didJob = true
-}
 
-if (options.idl2dts) {
-    fromIDL(
-        options.inputDir,
-        options.inputFile,
-        options.outputDir ?? "./generated/dts/",
-        ".d.ts",
-        options.verbose ?? false,
-        idlToDtsString,
-    )
-    didJob = true
-}
+        let lines: string[] = []
+        generate(
+            options.inputDir.split(','),
+            options.inputFile,
+            options.outputDir ?? "./generated/tests",
+            (sourceFile, typeChecker) => new TestGeneratorVisitor(sourceFile, typeChecker, testInterfaces, options.testMethod, options.testProperties),
+            {
+                compilerOptions: defaultCompilerOptions,
+                onBegin: (outDir: string) => {
+                    lines.push(`import {checkResult, checkTestFailures} from "@arkoala/arkui/test_utils"`)
+                    lines.push(``)
+                },
+                onSingleFile: (entries: string[], outputDir, sourceFile) => {
+                    lines = lines.concat(entries)
+                },
+                onEnd: (outDir: string) => {
+                    lines.push(``)
+                    lines.push(`checkTestFailures()`)
 
-if (options.idl2peer) {
-    const outDir = options.outputDir ?? "./out"
-    const language = Language.fromString(options.language ?? "ts")
+                    let generated = lines.join("\n")
+                    const outFile = path.join(outDir, "index.ts")
+                    if (options.verbose) {
+                        console.log(generated)
+                    }
+                    console.log(`Write fuzzing peers to file ${outFile}`)
+                    fs.writeFileSync(outFile, lines.join("\n"))
+                }
+            }
+        )
+        didJob = true
+    }
 
-    const idlLibrary = new PeerLibrary(language)
-    idlLibrary.files.push(...scanNotPredefinedDirectory(options.inputDir))
-    new IdlPeerProcessor(idlLibrary).process()
+    if (options.idl2dts) {
+        fromIDL(
+            options.inputDir,
+            options.inputFile,
+            options.outputDir ?? "./generated/dts/",
+            ".d.ts",
+            options.verbose ?? false,
+            idlToDtsString,
+        )
+        didJob = true
+    }
 
-    generateTarget(idlLibrary, outDir, language)
+    if (options.idl2peer) {
+        const outDir = options.outputDir ?? "./out"
+        const language = Language.fromString(options.language ?? "ts")
 
-    didJob = true
-}
+        const idlLibrary = new PeerLibrary(language)
+        idlLibrary.files.push(...scanNotPredefinedDirectory(options.inputDir))
+        new IdlPeerProcessor(idlLibrary).process()
 
-if (options.dts2peer) {
-    PeerGeneratorConfig.needInterfaces = options.needInterfaces
-    const generatedPeersDir = options.outputDir ?? "./out/ts-peers/generated"
-    const lang = Language.fromString(options.language ?? "ts")
+        generateTarget(idlLibrary, outDir, language)
 
-    const PREDEFINED_PATH = path.join(__dirname, "..", "predefined")
+        didJob = true
+    }
 
-    options.docs = "all"
-    const idlLibrary = new PeerLibrary(lang)
-    // collect predefined files
-    scanPredefinedDirectory(PREDEFINED_PATH, "sys").forEach(file => {
-        new IDLInteropPredefinesVisitor({
-            sourceFile: file.originalFilename,
-            peerLibrary: idlLibrary,
-            peerFile: file,
-        }).visitWholeFile()
-    })
-    scanPredefinedDirectory(PREDEFINED_PATH, "src").forEach(file => {
-        new IDLPredefinesVisitor({
-            sourceFile: file.originalFilename,
-            peerLibrary: idlLibrary,
-            peerFile: file,
-        }).visitWholeFile()
-    })
-    if (["arkoala", "libace", "all", "tracker"].includes(options.generatorTarget)) {
-        scanPredefinedDirectory(PREDEFINED_PATH, "arkoala").forEach(file => {
+    if (options.dts2peer) {
+        PeerGeneratorConfig.needInterfaces = options.needInterfaces
+        const generatedPeersDir = options.outputDir ?? "./out/ts-peers/generated"
+        const lang = Language.fromString(options.language ?? "ts")
+
+        const PREDEFINED_PATH = path.join(__dirname, "..", "predefined")
+
+        options.docs = "all"
+        const idlLibrary = new PeerLibrary(lang)
+        // collect predefined files
+        scanPredefinedDirectory(PREDEFINED_PATH, "sys").forEach(file => {
+            new IDLInteropPredefinesVisitor({
+                sourceFile: file.originalFilename,
+                peerLibrary: idlLibrary,
+                peerFile: file,
+            }).visitWholeFile()
+        })
+        scanPredefinedDirectory(PREDEFINED_PATH, "src").forEach(file => {
             new IDLPredefinesVisitor({
                 sourceFile: file.originalFilename,
                 peerLibrary: idlLibrary,
                 peerFile: file,
             }).visitWholeFile()
         })
-    }
-
-    // First convert DTS to IDL
-    generate(
-        options.inputDir.split(','),
-        options.inputFile,
-        generatedPeersDir,
-        (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, options, idlLibrary),
-        {
-            compilerOptions: defaultCompilerOptions,
-            onSingleFile(entries: IDLEntry[], outputDir, sourceFile) {
-                // Search for duplicate declarations
-                entries = entries.filter(newEntry =>
-                    !idlLibrary.files.find(peerFile => linearizeNamespaceMembers(peerFile.entries).find(entry => {
-                        if (([newEntry, entry].every(isInterface)
-                            || [newEntry, entry].every(isEnum)
-                            || [newEntry, entry].every(isSyntheticEntry))) {
-                            if (newEntry.name === entry.name) {
-                                console.warn(`WARNING: Skip entry:'${newEntry.name}'(${sourceFile.fileName}) already exists in ${peerFile.originalFilename}`)
-                                return true
-                            }
-                        }
-                    }))
-                )
-                entries.forEach(it => {
-                    transformMethodsAsync2ReturnPromise(it)
-                })
-                const file = new PeerFile(sourceFile.fileName, entries)
-                idlLibrary.files.push(file)
-            },
-            onEnd(outDir) {
-                if (options.generatorTarget == "ohos") {
-                    // This setup code placed here because wrong prefix may be cached during library creation
-                    // TODO find better place for setup?
-                    setDefaultConfiguration(new OhosConfiguration())
-                }
-                fillSyntheticDeclarations(idlLibrary)
-                const peerProcessor = new IdlPeerProcessor(idlLibrary)
-                peerProcessor.process()
-
-                generateTarget(idlLibrary, outDir, lang)
-            }
-        }
-    )
-    didJob = true
-}
-
-
-
-function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language) {
-    if (options.generatorTarget == "arkoala" || options.generatorTarget == "all") {
-        generateArkoalaFromIdl({
-            outDir: outDir,
-            arkoalaDestination: options.arkoalaDestination,
-            nativeBridgeFile: options.nativeBridgePath,
-            apiVersion: apiVersion,
-            verbose: options.verbose ?? false,
-            onlyIntegrated: options.onlyIntegrated ?? false,
-            dumpSerialized: options.dumpSerialized ?? false,
-            callLog: options.callLog ?? false,
-            lang: lang
-        }, idlLibrary)
-    }
-    if (options.generatorTarget == "libace" ||
-        options.generatorTarget == "all") {
-        generateLibaceFromIdl({
-            outDir: outDir,
-            libaceDestination: options.libaceDestination,
-            apiVersion: apiVersion,
-            commentedCode: options.commentedCode,
-        }, idlLibrary)
-    }
-    if (options.generatorTarget == "tracker") {
-        generateTracker(outDir, idlLibrary, options.trackerStatus, options.verbose)
-    }
-    if (options.generatorTarget == "ohos") {
-        generateOhos(outDir, idlLibrary, options.defaultIdlPackage as string)
-    }
-    if (options.plugin) {
-        loadPlugin(options.plugin)
-            .then(plugin => plugin.process({outDir: outDir}, idlLibrary))
-            .then(result => {
-                console.log(`Plugin ${options.plugin} process returned ${result}`)
+        if (["arkoala", "libace", "all", "tracker"].includes(options.generatorTarget)) {
+            scanPredefinedDirectory(PREDEFINED_PATH, "arkoala").forEach(file => {
+                new IDLPredefinesVisitor({
+                    sourceFile: file.originalFilename,
+                    peerLibrary: idlLibrary,
+                    peerFile: file,
+                }).visitWholeFile()
             })
-            .catch(error => console.error(`Plugin ${options.plugin} not found: ${error}`))
+        }
+
+        // First convert DTS to IDL
+        generate(
+            options.inputDir.split(','),
+            options.inputFile,
+            generatedPeersDir,
+            (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, options, idlLibrary),
+            {
+                compilerOptions: defaultCompilerOptions,
+                onSingleFile(entries: IDLEntry[], outputDir, sourceFile) {
+                    // Search for duplicate declarations
+                    entries = entries.filter(newEntry =>
+                        !idlLibrary.files.find(peerFile => linearizeNamespaceMembers(peerFile.entries).find(entry => {
+                            if (([newEntry, entry].every(isInterface)
+                                || [newEntry, entry].every(isEnum)
+                                || [newEntry, entry].every(isSyntheticEntry))) {
+                                if (newEntry.name === entry.name) {
+                                    cli.logger.warn(`WARNING: Skip entry:'${newEntry.name}'(${sourceFile.fileName}) already exists in ${peerFile.originalFilename}`)
+                                    return true
+                                }
+                            }
+                        }))
+                    )
+                    entries.forEach(it => {
+                        transformMethodsAsync2ReturnPromise(it)
+                    })
+                    const file = new PeerFile(sourceFile.fileName, entries)
+                    idlLibrary.files.push(file)
+                },
+                onEnd(outDir) {
+                    if (options.generatorTarget == "ohos") {
+                        // This setup code placed here because wrong prefix may be cached during library creation
+                        // TODO find better place for setup?
+                        setDefaultConfiguration(new OhosConfiguration())
+                    }
+                    fillSyntheticDeclarations(idlLibrary)
+                    const peerProcessor = new IdlPeerProcessor(idlLibrary)
+                    peerProcessor.process()
+
+                    cli.logger.print('Prepare library...')
+                    generateTarget(idlLibrary, outDir, lang)
+                }
+            }
+        )
+        didJob = true
     }
 
-}
+    function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language) {
+        if (options.generatorTarget == "arkoala" || options.generatorTarget == "all") {
+            generateArkoalaFromIdl({
+                outDir: outDir,
+                arkoalaDestination: options.arkoalaDestination,
+                nativeBridgeFile: options.nativeBridgePath,
+                apiVersion: apiVersion,
+                verbose: options.verbose ?? false,
+                onlyIntegrated: options.onlyIntegrated ?? false,
+                dumpSerialized: options.dumpSerialized ?? false,
+                callLog: options.callLog ?? false,
+                lang: lang
+            }, idlLibrary)
+        }
+        if (options.generatorTarget == "libace" ||
+            options.generatorTarget == "all") {
+            generateLibaceFromIdl({
+                outDir: outDir,
+                libaceDestination: options.libaceDestination,
+                apiVersion: apiVersion,
+                commentedCode: options.commentedCode,
+            }, idlLibrary)
+        }
+        if (options.generatorTarget == "tracker") {
+            generateTracker(outDir, idlLibrary, options.trackerStatus, options.verbose)
+        }
+        if (options.generatorTarget == "ohos") {
+            generateOhos(outDir, idlLibrary, options.defaultIdlPackage as string)
+        }
+        if (options.plugin) {
+            loadPlugin(options.plugin)
+                .then(plugin => plugin.process({ outDir: outDir }, idlLibrary))
+                .then(result => {
+                    console.log(`Plugin ${options.plugin} process returned ${result}`)
+                })
+                .catch(error => console.error(`Plugin ${options.plugin} not found: ${error}`))
+        }
 
-function scanNotPredefinedDirectory(dir: string, ...subdirs: string[]): PeerFile[] {
-    return scanDirectory(false, dir, ...subdirs)
-}
+    }
 
-function scanPredefinedDirectory(dir: string, ...subdirs: string[]): PeerFile[] {
-    return scanDirectory(true, dir, ...subdirs)
-}
+    function scanNotPredefinedDirectory(dir: string, ...subdirs: string[]): PeerFile[] {
+        return scanDirectory(false, dir, ...subdirs)
+    }
 
-function scanDirectory(isPredefined: boolean, dir: string, ...subdirs: string[]): PeerFile[] {
-    dir = path.join(dir, ...subdirs)
-    return fs.readdirSync(dir)
-        .filter(it => it.endsWith(".idl"))
-        .map(it => {
-            const idlFile = path.resolve(path.join(dir, it))
-            const nodes = toIDL(idlFile)
-            return new PeerFile(idlFile, nodes, isPredefined)
-        })
+    function scanPredefinedDirectory(dir: string, ...subdirs: string[]): PeerFile[] {
+        return scanDirectory(true, dir, ...subdirs)
+    }
+
+    function scanDirectory(isPredefined: boolean, dir: string, ...subdirs: string[]): PeerFile[] {
+        dir = path.join(dir, ...subdirs)
+        return fs.readdirSync(dir)
+            .filter(it => it.endsWith(".idl"))
+            .map(it => {
+                const idlFile = path.resolve(path.join(dir, it))
+                const nodes = toIDL(idlFile)
+                return new PeerFile(idlFile, nodes, isPredefined)
+            })
+    }
+
 }

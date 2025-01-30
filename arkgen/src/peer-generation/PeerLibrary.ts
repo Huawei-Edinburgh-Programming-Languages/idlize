@@ -32,6 +32,7 @@ import { ArgConvertor, BooleanConvertor, EnumConvertor, UndefinedConvertor, Void
 import { generateSyntheticFunctionName } from '../IDLVisitor';
 import { IdlNameConvertor } from '@idlizer/core';
 import { LibraryInterface } from '@idlizer/core';
+import { cli } from '../logger/logger';
 
 export class PeerLibrary implements LibraryInterface {
     private _syntheticEntries: idl.IDLEntry[] = []
@@ -179,7 +180,7 @@ export class PeerLibrary implements LibraryInterface {
             this.files.forEach(file => file.entries.forEach(traverseNamespaces))
 
             if (resolveds.length)
-                console.log(`WARNING: Type reference '${type.name}' is not resolved without own namespace/pointOfView but resolved within some other namespace: '${idl.getNamespacesPathFor(resolveds[0]).map(obj => obj.name).join(".")}'`)
+                cli.logger.warn(`WARNING: Type reference '${type.name}' is not resolved without own namespace/pointOfView but resolved within some other namespace: '${idl.getNamespacesPathFor(resolveds[0]).map(obj => obj.name).join(".")}'`)
         }// end of block to remove
 
         return undefined // empty result

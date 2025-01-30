@@ -1,32 +1,33 @@
 import { isMainThread, workerData, MessagePort } from "node:worker_threads"
+import { S } from "./style"
+import { SECRET_END_PHRASE } from "./shared"
 
 const SPINNER = [
-    "[    ]",
-    "[=   ]",
-    "[==  ]",
-    "[=== ]",
-    "[====]",
-    "[ ===]",
-    "[  ==]",
-    "[   =]",
-    "[    ]",
-    "[   =]",
-    "[  ==]",
-    "[ ===]",
-    "[====]",
-    "[=== ]",
-    "[==  ]",
-    "[=   ]"
+    "[ ]",
+    "[o]",
+    "[O]",
+    "[^]",
+    "[O]",
+    "[o]",
+    "[_]",
 ]
 let spinnerIdx = 0
 let interval: ReturnType<typeof setInterval> | null = null
 
+function colorStatus(kind:string) {
+    switch (kind) {
+        case 'warn': return S.text.yellow
+        case 'error': return S.text.red
+    }
+    return S.text.green
+}
+
 let message = ''
 function makeLine() {
-    return '\x1b[2K\r' + SPINNER[spinnerIdx] + ' ' + message
+    return '\x1b[2K\r' + S.text.blue(SPINNER[spinnerIdx]) + ' ' + S.text.bold(message)
 }
-function frozeLine() {
-    return '\x1b[2K\r' + '       ' + message + '\n'
+function frozeLine(kind:string) {
+    return '\x1b[2K\r' + colorStatus(kind)('... ') + S.text.gray(message) + '\n'
 }
 
 function printLine() {
@@ -43,11 +44,25 @@ if (!isMainThread) {
         clearInterval(interval)
         interval = null
     }
-    interval = setInterval(runAnimation, 1000)
+    interval = setInterval(runAnimation, 120)
     const port = workerData as MessagePort
-    port.on('message', (msg) => {
-        process.stdout.write(frozeLine())
+    port.on('message', ({ msg, kind }) => {
+        if (msg === SECRET_END_PHRASE && kind === 'system') {
+            process.stdout.write(frozeLine(kind))
+            if (interval) {
+                clearInterval(interval)
+                interval = null
+            }
+            return
+        }
+        if (message !== '') {
+            process.stdout.write(frozeLine('log'))
+        }
         message = msg
+        if (kind !== 'log') {
+            process.stdout.write(frozeLine(kind))
+            message = ''
+        }
         printLine()
     })
 }

@@ -16,6 +16,7 @@
 import { posix as path } from "path"
 import { getOrPut, renameDtsToPeer, Language } from "@idlizer/core"
 import { LanguageWriter } from "@idlizer/core";
+import { cli } from "../logger/logger";
 
 export class ImportsCollector {
     private readonly moduleToFeatures: Map<string, Set<string>> = new Map()
@@ -35,7 +36,7 @@ export class ImportsCollector {
         const featureInAnotherModule = [...this.moduleToFeatures.entries()]
             .find(it => it[0] !== module && it[1].has(feature))
         if (featureInAnotherModule) {
-            console.warn(`WARNING: Skip feature:'${feature}' is already imported into '${featureInAnotherModule[0]}'`)
+            cli.logger.warn(`WARNING: Skip feature:'${feature}' is already imported into '${featureInAnotherModule[0]}'`)
         } else {
             const dependencies = getOrPut(this.moduleToFeatures, module, () => new Set())
             dependencies.add(feature)

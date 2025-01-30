@@ -66,6 +66,7 @@ import { NativeModule } from "./NativeModule"
 import { printArkUIGeneratedNativeModule, printArkUILibrariesLoader, printCJArkUIGeneratedNativeFunctions, printCJPredefinedNativeFunctions, printPredefinedNativeModule, printTSArkUIGeneratedEmptyNativeModule, printTSPredefinedEmptyNativeModule } from "./printers/NativeModulePrinter"
 import { makeGetFunctionRuntimeType } from "./printers/lang/CJIdlUtils"
 import { printGlobal } from "./printers/GlobalScopePrinter"
+import { cli } from "../logger/logger"
 
 export function generateLibaceFromIdl(config: {
     libaceDestination: string|undefined,
@@ -114,7 +115,7 @@ function writeFile(filename: string, content: string | LanguageWriter, config: {
     }): boolean {
     if (config.integrated || !config.onlyIntegrated) {
         if (config.message)
-            console.log(config.message, filename)
+            cli.logger.print(config.message + ' ' + filename)
         fs.mkdirSync(path.dirname(filename), { recursive: true })
         if (typeof content !== "string") {
             content = content.getOutput().join("\n")
