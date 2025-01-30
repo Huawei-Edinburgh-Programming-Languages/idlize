@@ -126,7 +126,6 @@
 |`resizeable`| Function | Dmitry A Smirnov| done|  |
 |`divider`| Function | Dmitry A Smirnov| done|  |
 |*CommonMethod*|*Component*|Skroba Gleb,Erokhin Ilya | in progress |  |
-|`animateTo`| Function | Erokhin Ilya | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAUUE7|
 |`width`| Function | Roman Sedaikin | done | |
 |`height`| Function | Roman Sedaikin | done | |
 |`drawModifier`| Function | Erokhin Ilya | done | |
