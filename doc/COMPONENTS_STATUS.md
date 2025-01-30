@@ -205,7 +205,7 @@
 |`scale`| Function | Erokhin Ilya | done |  |
 |`gridSpan`| Function | Lobah Mikhail | done | |
 |`gridOffset`| Function | Lobah Mikhail | done | |
-|`rotate`| Function | Dmitry A Smirnov| testskipped | UT in progress,Dmitry A Smirnov|
+|`rotate`| Function | Dmitry A Smirnov| done | Dmitry A Smirnov|
 |`transform`| Function | Lobah Mikhail | done | |
 |`onAppear`| Function | Roman Sedaikin | done | |
 |`onDisAppear`| Function | Roman Sedaikin | done | |
