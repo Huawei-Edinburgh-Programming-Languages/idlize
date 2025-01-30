@@ -14,19 +14,12 @@
  */
 
 import * as idl from '@idlizer/core/idl'
-import { ArgConvertor, IdlNameConvertor, isImportAttr, Language } from "@idlizer/core";
+import { ArgConvertor, CustomTypeConvertor, isImportAttr } from "@idlizer/core";
 import { PeerLibrary } from "../peer-generation/PeerLibrary";
-import { ArkoalaTSTypeNameConvertor } from "./TSConvertors";
 import { ArkoalaImportTypeConvertor, ArkoalaInterfaceConvertor, LengthConvertor } from '../peer-generation/ArgConvertors';
 import { isMaterialized } from '../peer-generation/idl/IdlPeerGeneratorVisitor';
 
 export class ArkPeerLibrary extends PeerLibrary {
-    createTypeNameConvertor(language: Language): IdlNameConvertor {
-        if (language === Language.TS)
-            return new ArkoalaTSTypeNameConvertor(this)
-        return super.createTypeNameConvertor(language)
-    }
-
     typeConvertor(param: string, type: idl.IDLType, isOptionalParam = false): ArgConvertor {
         if (idl.isReferenceType(type)) {
             if (isImportAttr(type))
@@ -35,8 +28,15 @@ export class ArkPeerLibrary extends PeerLibrary {
         return super.typeConvertor(param, type, isOptionalParam)
     }
     declarationConvertor(param: string, type: idl.IDLReferenceType, declaration: idl.IDLEntry | undefined): ArgConvertor {
-        if (type.name === "Length")
-            return new LengthConvertor(type.name, param, this.language)
+        switch (type.name) {
+            case `Dimension`:
+            case `Length`:
+                return new LengthConvertor(type.name, param, this.language)
+            case `AnimationRange`:
+                return new CustomTypeConvertor(param, "AnimationRange", false, "AnimationRange<number>")
+            case `ContentModifier`:
+                return new CustomTypeConvertor(param, "ContentModifier", false, "ContentModifier<any>")
+        }
         if (declaration) {
             if (isImportAttr(declaration))
                 return new ArkoalaImportTypeConvertor(param, this.targetNameConvertorInstance.convert(type))

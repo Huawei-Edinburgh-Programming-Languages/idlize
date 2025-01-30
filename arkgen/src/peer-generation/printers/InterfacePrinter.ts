@@ -18,6 +18,7 @@ import * as path from 'path'
 import { PeerLibrary } from "../PeerLibrary"
 import {
     createLanguageWriter,
+    createTypeNameConvertor,
     FieldModifier,
     Method,
     MethodModifier,
@@ -227,7 +228,7 @@ class JavaSyntheticGenerator extends DependenciesCollector {
 }
 
 class JavaDeclarationConvertor implements DeclarationConvertor<void> {
-    private readonly nameConvertor = this.peerLibrary.createTypeNameConvertor(Language.JAVA)
+    private readonly nameConvertor = createTypeNameConvertor(Language.JAVA, this.peerLibrary)
     constructor(private readonly peerLibrary: PeerLibrary, private readonly onNewDeclaration: (declaration: JavaDeclaration) => void) {}
     convertCallback(node: idl.IDLCallback): void {
     }
@@ -928,7 +929,7 @@ class CJInterfacesVisitor extends DefaultInterfacesVisitor {
 }
 
 class CJSyntheticGenerator extends DependenciesCollector {
-    private readonly nameConvertor = this.library.createTypeNameConvertor(Language.CJ)
+    private readonly nameConvertor = createTypeNameConvertor(Language.CJ, this.library)
 
     constructor(
         library: PeerLibrary,

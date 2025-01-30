@@ -38,7 +38,7 @@ import { ImportsCollector } from "../ImportsCollector";
 import { ReferenceResolver, CppInteropConvertor } from "@idlizer/core"
 import { collectDeclItself, collectDeclDependencies } from "../ImportsCollectorUtils"
 import { ArkPrimitiveTypesInstance } from "../ArkPrimitiveType";
-import { TSTypeNameConvertor } from "../LanguageWriters/convertors/TSConvertors";
+import { TsIDLNodeToStringConverter } from "../LanguageWriters/convertors/TSConvertors";
 
 export const PeerEventsProperties = "PeerEventsProperties"
 export const PeerEventKind = "PeerEventKind"
@@ -290,7 +290,7 @@ class CEventsVisitor {
 class TSEventsVisitor {
     readonly printer: LanguageWriter = new TSLanguageWriter(new IndentedPrinter(),
         this.library,
-        new TSTypeNameConvertor(this.library))
+        new TsIDLNodeToStringConverter(this.library))
 
     constructor(protected readonly library: PeerLibrary) {}
 

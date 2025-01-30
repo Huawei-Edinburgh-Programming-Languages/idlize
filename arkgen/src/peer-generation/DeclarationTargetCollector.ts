@@ -4,6 +4,7 @@ import { LibraryInterface, PrimitiveType } from "@idlizer/core";
 import { isComponentDeclaration } from "./ComponentsCollector";
 import { DependencySorter } from "./idl/DependencySorter";
 import { isMaterialized, isPredefined } from "./idl/IdlPeerGeneratorVisitor";
+import { createTypeNameConvertor } from "./LanguageWriters";
 import { IdlNameConvertor } from "@idlizer/core";
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
 import { cleanPrefix } from "./PeerLibrary";
@@ -81,7 +82,7 @@ export namespace DeclarationTargets {
     }
 
     export function allUnionTypes(library: LibraryInterface): Map<string, {id: number, name: string}[]> {
-        const nativeNameConvertorInstance: IdlNameConvertor = library.createTypeNameConvertor(Language.CPP)
+        const nativeNameConvertorInstance: IdlNameConvertor = createTypeNameConvertor(Language.CPP, library)
         const data: Array<[string, {id: number, name: string}[]]> =
             allTypes(library, idl.isUnionType)
                 .map(it => [
@@ -91,7 +92,7 @@ export namespace DeclarationTargets {
     }
 
     export function allLiteralTypes(library: LibraryInterface): Map<string, string[]> {
-        const nativeNameConvertorInstance: IdlNameConvertor = library.createTypeNameConvertor(Language.CPP)
+        const nativeNameConvertorInstance: IdlNameConvertor = createTypeNameConvertor(Language.CPP, library)
         const data: Array<[string, string[]]> =
             allEntries(library, (it): it is idl.IDLInterface => idl.isInterface(it) && it.subkind === idl.IDLInterfaceSubkind.AnonymousInterface)
                 .map(it => [
@@ -101,7 +102,7 @@ export namespace DeclarationTargets {
     }
 
     export function allOptionalTypes(library: LibraryInterface): Set<string> {
-        const nativeNameConvertorInstance: IdlNameConvertor = library.createTypeNameConvertor(Language.CPP)
+        const nativeNameConvertorInstance: IdlNameConvertor = createTypeNameConvertor(Language.CPP, library)
         const data = collectDeclarationTargets(library)
             .filter(it => it !== idl.IDLVoidType)
             .map(it => idl.isType(it)

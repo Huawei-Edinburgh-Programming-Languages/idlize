@@ -17,7 +17,7 @@ import { capitalize, dropSuffix, isDefined, Language } from '@idlizer/core'
 import { ArgConvertor } from "@idlizer/core";
 import { ArkPrimitiveTypesInstance } from "../ArkPrimitiveType"
 import { bridgeCcCustomDeclaration, bridgeCcGeneratedDeclaration } from "../FileGenerators";
-import { createLanguageWriter, ExpressionStatement } from "../LanguageWriters";
+import { createLanguageWriter, createTypeNameConvertor, ExpressionStatement } from "../LanguageWriters";
 import { LanguageWriter } from "@idlizer/core"
 import { PeerLibrary } from "../PeerLibrary";
 import { PeerMethod } from "../PeerMethod";
@@ -50,7 +50,7 @@ class BridgeCcVisitor {
 
     // TODO: may be this is another method of ArgConvertor?
     private generateApiArgument(argConvertor: ArgConvertor): string {
-        const nameConverter = this.library.createTypeNameConvertor(Language.CPP)
+        const nameConverter = createTypeNameConvertor(Language.CPP, this.library)
         const prefix = argConvertor.isPointerType() ? `(const ${nameConverter.convert(argConvertor.nativeType())}*)&`: "    "
         if (argConvertor.useArray)
             return `${prefix}${this.escapeKeyword(argConvertor.param)}_value`

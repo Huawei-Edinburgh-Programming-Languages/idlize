@@ -86,10 +86,6 @@ export class IdlSkoalaLibrary implements LibraryInterface {
         return this.name
     }
 
-    createTypeNameConvertor(language: Language) {
-        return this.nameConvertorInstance
-    }
-
     getCurrentContext(): string | undefined {
         return ""
     }

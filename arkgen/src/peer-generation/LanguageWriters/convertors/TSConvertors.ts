@@ -13,12 +13,16 @@
  * limitations under the License.
  */
 
+import { convertNode, IdlNameConvertor, NodeConvertor } from '@idlizer/core'
 import * as idl from '@idlizer/core/idl'
-import { convertNode, IdlNameConvertor, NodeConvertor, ReferenceResolver } from '@idlizer/core'
+import { ReferenceResolver } from "@idlizer/core"
+import { stringOrNone } from '@idlizer/core'
 
-export class TSTypeNameConvertor implements NodeConvertor<string>, IdlNameConvertor {
+export class TsIDLNodeToStringConverter implements NodeConvertor<string>, IdlNameConvertor {
 
-    constructor(protected resolver: ReferenceResolver) { }
+    constructor(
+        protected resolver: ReferenceResolver
+    ) { }
 
     convert(node: idl.IDLNode): string {
         return convertNode(this, node)
@@ -106,6 +110,10 @@ export class TSTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
 
         let typeSpec = type.name
         let typeArgs = type.typeArguments?.map(it => idl.printType(it)) ?? []
+        if (typeSpec === `AttributeModifier`)
+            typeArgs = [`object`]
+        if (typeSpec === `ContentModifier` || typeSpec === `WrappedBuilder`)
+            typeArgs = [this.convert(idl.IDLAnyType)]
         if (typeSpec === `Optional`)
             return `${typeArgs} | undefined`
         if (typeSpec === `Function`)
@@ -158,6 +166,9 @@ export class TSTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
 
             case idl.IDLBufferType:
                 return `ArrayBuffer`
+
+            case idl.IDLLengthType:
+                return 'Length'
         }
         throw new Error(`Unmapped primitive type ${idl.DebugUtils.debugPrintType(type)}`)
     }
