@@ -1553,11 +1553,11 @@
 |*UnifiedData*| *Class* | Tuzhilkin Ivan | blocked IDL | |
 |`hasType`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY , https://gitee.com/nikolay-igotti/idlize/issues/IBDHH7 (+)|
 |`getTypes`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY , https://gitee.com/nikolay-igotti/idlize/issues/IBDHH7 (+)|
-|*LazyForEachOps*| *Class* | | | |
-|`NeedMoreElements`| Function |  |  |
-|`OnRangeUpdate`| Function | | | |
-|`SetCurrentIndex`| Function | | | |
-|`Prepare`| Function | | | |
+|*LazyForEachOps*| *Class* | managed side | | |
+|`NeedMoreElements`| Function | managed side |  |
+|`OnRangeUpdate`| Function | managed side | | |
+|`SetCurrentIndex`| Function | managed side | | |
+|`Prepare`| Function | managed side | | |
 |*DrawingCanvas*| *Class* | Dudkin Sergey | done | |
 |`drawRect`| Function | Dudkin Sergey | done | |
 |*FrameNode*| *Class* | Tuzhilkin Ivan | done| |
