@@ -1,5 +1,5 @@
 import * as path from "node:path"
-import { Worker } from "node:worker_threads"
+import { MessagePort, Worker } from "node:worker_threads"
 
 const ESCAPE_SEQUENCE = '\x1b'
 
@@ -87,17 +87,32 @@ export const S = {
 //////////////////////////////////////
 
 const RUNNER = path.join(__dirname, 'runner.js')
-let worker: Worker | null = null
+let runner: {
+    worker: Worker
+    port: MessagePort
+ } | null = null
 
 const animation = {
     begin: () => {
-        worker = new Worker(RUNNER)
+        const { port1, port2 } = new MessageChannel()
+        const worker = new Worker(RUNNER, {
+            workerData: port2,
+            transferList: [port2]
+        })
         worker.on('exit', () => {
             console.error("EXITED")
         })
+        runner = {
+            worker,
+            port: port1
+        }
+
     },
     end: () => {
-        worker?.terminate()
+        runner?.worker.terminate()
+    },
+    send: (msg:string) => {
+        runner?.worker.postMessage(msg)
     },
 }
 
@@ -105,21 +120,21 @@ const animation = {
 
 const logger = {
 
-    debug: () => {
-
+    debug: (msg:string) => {
+        animation.send(msg)
     },
-    info: () => {
-
+    info: (msg:string) => {
+        animation.send(msg)
     },
-    warn: () => {
-
+    warn: (msg:string) => {
+        animation.send(msg)
     },
-    error: () => {
-
+    error: (msg:string) => {
+        animation.send(msg)
     },
 
-    print: () => {
-
+    print: (msg:string) => {
+        animation.send(msg)
     }
 }
 

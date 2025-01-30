@@ -409,11 +409,7 @@ if (options.dts2peer) {
     didJob = true
 }
 
-if (!didJob) {
-    program.help()
-}
 
-// cli.animation.end()
 
 function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language) {
     if (options.generatorTarget == "arkoala" || options.generatorTarget == "all") {
