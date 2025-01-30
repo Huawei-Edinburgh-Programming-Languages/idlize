@@ -61,7 +61,7 @@ import { fillSyntheticDeclarations } from "./peer-generation/idl/SyntheticDeclar
 import { PeerLibrary } from "./peer-generation/PeerLibrary"
 import { PeerFile } from "./peer-generation/PeerFile"
 import { generateOhos } from "./peer-generation/ohos"
-import { ArkPeerLibrary } from "./arkoala/ArkPeerLibrary"
+import { ArkoalaPeerLibrary } from "./arkoala/ArkoalaPeerLibrary"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -479,6 +479,6 @@ function scanDirectory(isPredefined: boolean, dir: string, ...subdirs: string[])
 
 function createPeerLibrary(lang: Language) {
     if (["arkoala", "libace", "all"].includes(options.generatorTarget))
-        return new ArkPeerLibrary(lang)
+        return new ArkoalaPeerLibrary(lang)
     return new PeerLibrary(lang)
 }

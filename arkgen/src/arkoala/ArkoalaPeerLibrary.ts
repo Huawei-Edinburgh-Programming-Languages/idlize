@@ -16,10 +16,10 @@
 import * as idl from '@idlizer/core/idl'
 import { ArgConvertor, CustomTypeConvertor, isImportAttr } from "@idlizer/core";
 import { PeerLibrary } from "../peer-generation/PeerLibrary";
-import { ArkoalaImportTypeConvertor, ArkoalaInterfaceConvertor, LengthConvertor } from '../peer-generation/ArgConvertors';
+import { ArkoalaImportTypeConvertor, ArkoalaInterfaceConvertor, LengthConvertor } from './ArkoalaArgConvertors';
 import { isMaterialized } from '../peer-generation/idl/IdlPeerGeneratorVisitor';
 
-export class ArkPeerLibrary extends PeerLibrary {
+export class ArkoalaPeerLibrary extends PeerLibrary {
     typeConvertor(param: string, type: idl.IDLType, isOptionalParam = false): ArgConvertor {
         if (idl.isReferenceType(type)) {
             if (isImportAttr(type))
