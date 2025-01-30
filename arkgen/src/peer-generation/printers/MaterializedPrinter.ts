@@ -47,10 +47,10 @@ import { collectDeclItself, collectDeclDependencies, SyntheticModule } from "../
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { isMaterialized } from "../idl/IdlPeerGeneratorVisitor";
 import { NativeModule } from '../NativeModule';
+import * as path from 'node:path';
 
 interface MaterializedFileVisitor {
     visit(): void
-    getTargetFile(): TargetFile
     getOutput(): string[]
 }
 
@@ -70,7 +70,6 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
     ) { }
 
     abstract visit(): void
-    abstract getTargetFile(): TargetFile
     abstract printImports(): void
 
     convertToPropertyType(field: MaterializedField): IDLType {
@@ -391,10 +390,6 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
     visit(): void {
         this.printMaterializedClass(this.clazz)
     }
-
-    getTargetFile(): TargetFile {
-        return new TargetFile(renameClassToMaterialized(this.clazz.className, this.printerContext.language))
-    }
 }
 
 function writeFromPtrMethod(clazz: MaterializedClass, writer: LanguageWriter, classTypeParameters?: string[]) {
@@ -432,10 +427,6 @@ class JavaMaterializedFileVisitor extends MaterializedFileVisitorBase {
     visit(): void {
         this.printMaterializedClass(this.clazz)
     }
-
-    getTargetFile(): TargetFile {
-        return new TargetFile(this.clazz.getImplementationName() + this.printerContext.language.extension, ARKOALA_PACKAGE_PATH)
-    }
 }
 
 class ArkTSMaterializedFileVisitor extends TSMaterializedFileVisitor {
@@ -464,10 +455,6 @@ class CJMaterializedFileVisitor extends MaterializedFileVisitorBase {
 
     visit(): void {
         this.printMaterializedClass(this.clazz)
-    }
-
-    getTargetFile(): TargetFile {
-        return new TargetFile(this.clazz.className + this.printerContext.language.extension, '')
     }
 }
 
@@ -502,47 +489,54 @@ class MaterializedVisitor {
         visitor.visit()
     }
 
-    private printFile(bucket: MaterializedClass[], name: string, isNamespace:boolean) {
+    private printFile(bucket: MaterializedClass[], file:TargetFile, nameSpace?:string) {
         const prologue = makeMaterializedPrologue(this.printerContext.language)
         const collector = new ImportsCollector()
         const printer = createLanguageWriter(this.printerContext.language, getReferenceResolver(this.library))
         printer.print(prologue)
-        if (isNamespace) {
-            printer.pushNamespace(name)
+        if (nameSpace) {
+            printer.pushNamespace(nameSpace)
         }
         for (const clazz of bucket) {
-            console.error( 'HERE:',  clazz.className, name)
             this.printContent(clazz, collector, printer)
         }
-        if (isNamespace) {
+        if (nameSpace) {
             printer.popNamespace()
         }
 
-        const currentModule = name
-        const fileName = currentModule + this.library.language.extension
         this.materialized.set(
-            new TargetFile(fileName),
-            collector.printToLines(currentModule)
+            file,
+            collector.printToLines(path.basename(file.name, path.extname(file.name)))
                 .concat(printer.getOutput())
         )
+    }
+
+    private selectTargetFile(clazz:MaterializedClass) {
+        switch (this.library.language) {
+            case Language.JAVA: {
+                return new TargetFile(clazz.getImplementationName() + this.library.language.extension, ARKOALA_PACKAGE_PATH)
+            }
+            case Language.TS:
+            case Language.ARKTS: {
+                return new TargetFile(renameClassToMaterialized(clazz.className, this.library.language))
+            }
+            case Language.CJ: {
+                return new TargetFile(clazz.className + this.printerContext.language.extension, '')
+            }
+        }
+        throw new Error(`Unsupported language "${this.library.language}"`)
     }
 
     printMaterialized(): void {
         console.log(`Materialized classes: ${this.library.materializedClasses.size}`)
         const buckets = groupByNamespace(this.library.materializedToGenerate)
-        for (const [name, bucket] of buckets) {
-            if (name === '' || this.library.language === Language.JAVA) {
+        for (const [ns, bucket] of buckets) {
+            if (ns === '' || this.library.language === Language.JAVA) {
                 for (const clazz of bucket) {
-                    this.printFile(
-                        [clazz],
-                        this.library.language === Language.JAVA
-                            ? clazz.getImplementationName()
-                            : renameClassToMaterialized(clazz.className, this.library.language),
-                        false
-                    )
+                    this.printFile([clazz], this.selectTargetFile(clazz))
                 }
             } else {
-                this.printFile(bucket, name, true)
+                this.printFile(bucket, new TargetFile(ns + this.library.language.extension), ns)
             }
         }
     }
