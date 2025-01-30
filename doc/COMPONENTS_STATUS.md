@@ -138,7 +138,7 @@
 |`hitTestBehavior`| Function | Roman Sedaikin | done | |
 |`onChildTouchTest`| Function | Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`layoutWeight`| Function | Roman Sedaikin | done | |
-|`chainWeight`| Function | Politov Mikhail | testskipped | |
+|`chainWeight`| Function | Politov Mikhail | testskipped | https://gitee.com/openharmony/arkui_ace_engine/issues/IBJW6H |
 |`padding`| Function | Skroba Gleb | done | |
 |`safeAreaPadding`| Function |Dmitry A Smirnov | done | |
 |`margin`| Function | Skroba Gleb | done | |
@@ -1717,27 +1717,27 @@
 |`asymmetric`| Function | Andrey Khudenkikh | done | |
 |`animation`| Function | Andrey Khudenkikh | in progress | |
 |`combine`| Function | Andrey Khudenkikh | in progress | |
-|*BaseEvent*| *Class* | Politov Mikhail | | |
-|`getModifierKeyState`| Function | Politov Mikhail | | |
-|`setTarget`| Function | Politov Mikhail | | |
-|`getTimestamp`| Function | Politov Mikhail | | |
-|`setTimestamp`| Function | Politov Mikhail | | |
-|`getSource`| Function | Politov Mikhail | | |
-|`setSource`| Function | Politov Mikhail | | |
-|`getAxisHorizontal`| Function | Politov Mikhail | | |
-|`setAxisHorizontal`| Function | Politov Mikhail | | |
-|`getAxisVertical`| Function | Politov Mikhail | | |
-|`setAxisVertical`| Function | Politov Mikhail | | |
-|`getPressure`| Function | Politov Mikhail | | |
-|`setPressure`| Function | Politov Mikhail | | |
-|`getTiltX`| Function | Politov Mikhail | | |
-|`setTiltX`| Function | Politov Mikhail | | |
-|`getTiltY`| Function | Politov Mikhail | | |
-|`setTiltY`| Function | Politov Mikhail | | |
-|`getSourceTool`| Function | Politov Mikhail | | |
-|`setSourceTool`| Function | Politov Mikhail | | |
-|`getDeviceId`| Function | Politov Mikhail | | |
-|`setDeviceId`| Function | Politov Mikhail | | |
+|*BaseEvent*| *Class* | Politov Mikhail | in progress | |
+|`getModifierKeyState`| Function | Politov Mikhail | devdone | |
+|`setTarget`| Function | Politov Mikhail | devdone | |
+|`getTimestamp`| Function | Politov Mikhail | devdone | |
+|`setTimestamp`| Function | Politov Mikhail | devdone | |
+|`getSource`| Function | Politov Mikhail | blocked IDL | |
+|`setSource`| Function | Politov Mikhail | devdone | |
+|`getAxisHorizontal`| Function | Politov Mikhail | devdone | |
+|`setAxisHorizontal`| Function | Politov Mikhail | devdone | |
+|`getAxisVertical`| Function | Politov Mikhail | devdone | |
+|`setAxisVertical`| Function | Politov Mikhail | devdone | |
+|`getPressure`| Function | Politov Mikhail | devdone | |
+|`setPressure`| Function | Politov Mikhail | devdone | |
+|`getTiltX`| Function | Politov Mikhail | devdone | |
+|`setTiltX`| Function | Politov Mikhail | devdone | |
+|`getTiltY`| Function | Politov Mikhail | devdone | |
+|`setTiltY`| Function | Politov Mikhail | devdone | |
+|`getSourceTool`| Function | Politov Mikhail | blocked IDL | |
+|`setSourceTool`| Function | Politov Mikhail | devdone | |
+|`getDeviceId`| Function | Politov Mikhail | devdone | |
+|`setDeviceId`| Function | Politov Mikhail | devdone | |
 |`getTargetDisplayId`| Function | | | |
 |`setTargetDisplayId`| Function | | | |
 |*ClickEvent*| *Class* | | | |
