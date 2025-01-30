@@ -906,11 +906,11 @@
 |`height`| Function |Samarin Sergey| done |  |
 |`size`| Function |Samarin Sergey| done |  |
 |`constraintSize`| Function |Samarin Sergey| done |  |
-|`align`| Function | | | |
-|`alignRules`| Function | | | |
-|`id`| Function | | | |
-|`minFontScale`| Function | | | |
-|`maxFontScale`| Function | | | |
+|`align`| Function | Samarin Sergey | in progress | |
+|`alignRules`| Function | Samarin Sergey | in progress | |
+|`id`| Function | Samarin Sergey | in progress | |
+|`minFontScale`| Function | Samarin Sergey | in progress | |
+|`maxFontScale`| Function | Samarin Sergey | in progress | |
 |`maxLines`| Function | | | |
 |`minFontSize`| Function | | | |
 |`maxFontSize`| Function | | | |
