@@ -14,13 +14,13 @@
  */
 
 import * as idl from "@idlizer/core/idl"
-import { TsIDLNodeToStringConverter } from "./TSConvertors"
+import { TSTypeNameConvertor } from "./TSConvertors"
 import { createReferenceType, IDLEntry, IDLReferenceType } from "@idlizer/core/idl"
 import { createDeclarationNameConvertor } from "@idlizer/core"
 import { convertDeclaration } from "@idlizer/core"
 import { Language, stringOrNone } from "@idlizer/core"
 
-export class EtsIDLNodeToStringConvertor extends TsIDLNodeToStringConverter {
+export class EtsIDLNodeToStringConvertor extends TSTypeNameConvertor {
     convertTypeReference(type: IDLReferenceType): string {
         // Only to deal with namespaces. TODO: remove later
         const decl = this.resolver.resolveTypeReference(type)

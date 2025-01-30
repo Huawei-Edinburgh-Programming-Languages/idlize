@@ -28,7 +28,7 @@ import {
     CJIDLTypeToForeignStringConvertor,
     CJInteropArgConvertor
 } from "./convertors/CJConvertors";
-import { TsIDLNodeToStringConverter } from "./convertors/TSConvertors";
+import { TSTypeNameConvertor } from "./convertors/TSConvertors";
 import { JavaIDLNodeToStringConvertor, JavaInteropArgConvertor } from "./convertors/JavaConvertors";
 import { EtsIDLNodeToStringConvertor } from "./convertors/ETSConvertors";
 import { CppInteropArgConvertor } from "./convertors/CppConvertors";
@@ -61,7 +61,7 @@ export { CppLanguageWriter, TSLanguageWriter }
 export function createLanguageWriter(language: Language, resolver:ReferenceResolver): LanguageWriter {
     switch (language) {
         case Language.TS: return new TSLanguageWriter(new IndentedPrinter(), resolver,
-            new TsIDLNodeToStringConverter(resolver))
+            new TSTypeNameConvertor(resolver))
         case Language.ARKTS: return new ETSLanguageWriter(new IndentedPrinter(), resolver,
             new EtsIDLNodeToStringConvertor(resolver), new CppInteropConvertor(resolver))
         case Language.JAVA: return new JavaLanguageWriter(new IndentedPrinter(), resolver,

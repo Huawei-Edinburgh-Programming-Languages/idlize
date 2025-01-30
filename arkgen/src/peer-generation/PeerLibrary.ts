@@ -32,7 +32,7 @@ import { ArgConvertor, BooleanConvertor, EnumConvertor, UndefinedConvertor, Void
 import { generateSyntheticFunctionName } from '../IDLVisitor';
 import { IdlNameConvertor } from '@idlizer/core';
 import { LibraryInterface } from '@idlizer/core';
-import { TsIDLNodeToStringConverter } from './LanguageWriters/convertors/TSConvertors';
+import { TSTypeNameConvertor } from './LanguageWriters/convertors/TSConvertors';
 import { JavaIDLNodeToStringConvertor } from './LanguageWriters/convertors/JavaConvertors';
 import { EtsIDLNodeToStringConvertor } from './LanguageWriters/convertors/ETSConvertors';
 import { CJIDLNodeToStringConvertor } from './LanguageWriters/convertors/CJConvertors';
@@ -69,7 +69,7 @@ export class PeerLibrary implements LibraryInterface {
 
     readonly customComponentMethods: string[] = []
 
-    private readonly targetNameConvertorInstance: IdlNameConvertor = this.createTypeNameConvertor(this.language)
+    protected readonly targetNameConvertorInstance: IdlNameConvertor = this.createTypeNameConvertor(this.language)
     private readonly interopNameConvertorInstance: IdlNameConvertor = new InteropNameConvertor(this)
 
     get libraryPrefix(): string {
@@ -78,7 +78,7 @@ export class PeerLibrary implements LibraryInterface {
 
     createTypeNameConvertor(language: Language): IdlNameConvertor {
         if (language === Language.TS)
-            return new TsIDLNodeToStringConverter(this)
+            return new TSTypeNameConvertor(this)
         if (language === Language.JAVA)
             return new JavaIDLNodeToStringConvertor(this)
         if (language === Language.ARKTS)

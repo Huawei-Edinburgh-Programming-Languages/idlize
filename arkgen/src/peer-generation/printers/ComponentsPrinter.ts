@@ -58,7 +58,7 @@ interface ComponentFileVisitor {
 
 class TSComponentFileVisitor implements ComponentFileVisitor {
     private readonly language = this.library.language
-    private readonly printer = createLanguageWriter(this.language, this.library instanceof PeerLibrary ? this.library : createEmptyReferenceResolver())
+    private readonly printer = createLanguageWriter(this.language, this.library)
     private readonly overloadsPrinter = new OverloadsPrinter(this.library, this.printer, this.library.language)
 
     constructor(
