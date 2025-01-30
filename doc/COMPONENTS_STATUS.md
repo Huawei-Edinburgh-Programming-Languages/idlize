@@ -1740,24 +1740,24 @@
 |`setDeviceId`| Function | Politov Mikhail | devdone | |
 |`getTargetDisplayId`| Function | | | |
 |`setTargetDisplayId`| Function | | | |
-|*ClickEvent*| *Class* | | | |
-|`getDisplayX`| Function | | | |
-|`setDisplayX`| Function | | | |
-|`getDisplayY`| Function | | | |
-|`setDisplayY`| Function | | | |
-|`getWindowX`| Function | | | |
-|`setWindowX`| Function | | | |
-|`getWindowY`| Function | | | |
-|`setWindowY`| Function | | | |
-|`getScreenX`| Function | | | |
-|`setScreenX`| Function | | | |
-|`getScreenY`| Function | | | |
-|`setScreenY`| Function | | | |
-|`getX`| Function | | | |
-|`setX`| Function | | | |
-|`getY`| Function | | | |
-|`setY`| Function | | | |
-|`setPreventDefault`| Function | | |  |
+|*ClickEvent*| *Class* | Maksimov Nikita | in progress | |
+|`getDisplayX`| Function | Maksimov Nikita | in progress | |
+|`setDisplayX`| Function | Maksimov Nikita | in progress | |
+|`getDisplayY`| Function | Maksimov Nikita | in progress | |
+|`setDisplayY`| Function | Maksimov Nikita | in progress | |
+|`getWindowX`| Function | Maksimov Nikita | in progress | |
+|`setWindowX`| Function | Maksimov Nikita | in progress | |
+|`getWindowY`| Function | Maksimov Nikita | in progress | |
+|`setWindowY`| Function | Maksimov Nikita | in progress | |
+|`getScreenX`| Function | Maksimov Nikita | in progress | |
+|`setScreenX`| Function | Maksimov Nikita | in progress | |
+|`getScreenY`| Function | Maksimov Nikita | in progress | |
+|`setScreenY`| Function | Maksimov Nikita | in progress | |
+|`getX`| Function | Maksimov Nikita | in progress | |
+|`setX`| Function | Maksimov Nikita | in progress | |
+|`getY`| Function | Maksimov Nikita | in progress | |
+|`setY`| Function | Maksimov Nikita | in progress | |
+|`setPreventDefault`| Function | Maksimov Nikita | in progress | |
 |*HoverEvent*| *Class* | | | |
 |`setStopPropagation`| Function | | | |
 |*MouseEvent*| *Class* | | | |
@@ -1834,26 +1834,26 @@
 |`setDragBehavior`| Function | Evstigneev Roman | in progress | |
 |`getUseCustomDropAnimation`| Function | Evstigneev Roman | in progress | |
 |`setUseCustomDropAnimation`| Function | Evstigneev Roman | in progress | |
-|*KeyEvent*| *Class* | | | |
-|`getModifierKeyState`| Function | | | |
-|`getType`| Function | | | |
-|`setType`| Function | | | |
-|`getKeyCode`| Function | | | |
-|`setKeyCode`| Function | | | |
-|`getKeyText`| Function | | | |
-|`setKeyText`| Function | | | |
-|`getKeySource`| Function | | | |
-|`setKeySource`| Function | | | |
-|`getDeviceId`| Function | | | |
-|`setDeviceId`| Function | | | |
-|`getMetaKey`| Function | | | |
-|`setMetaKey`| Function | | | |
-|`getTimestamp`| Function | | | |
-|`setTimestamp`| Function | | | |
-|`setStopPropagation`| Function | | | |
-|`setIntentionCode`| Function | | | |
-|`getUnicode`| Function | | | |
-|`setUnicode`| Function | | | | |
+|*KeyEvent*| *Class* | Maksimov Nikita | in progress | |
+|`getModifierKeyState`| Function | Maksimov Nikita | in progress | |
+|`getType`| Function | Maksimov Nikita | in progress | |
+|`setType`| Function | Maksimov Nikita | in progress | |
+|`getKeyCode`| Function | Maksimov Nikita | in progress | |
+|`setKeyCode`| Function | Maksimov Nikita | in progress | |
+|`getKeyText`| Function | Maksimov Nikita | in progress | |
+|`setKeyText`| Function | Maksimov Nikita | in progress | |
+|`getKeySource`| Function | Maksimov Nikita | in progress | |
+|`setKeySource`| Function | Maksimov Nikita | in progress | |
+|`getDeviceId`| Function | Maksimov Nikita | in progress | |
+|`setDeviceId`| Function | Maksimov Nikita | in progress | |
+|`getMetaKey`| Function | Maksimov Nikita | in progress | |
+|`setMetaKey`| Function | Maksimov Nikita | in progress | |
+|`getTimestamp`| Function | Maksimov Nikita | in progress | |
+|`setTimestamp`| Function | Maksimov Nikita | in progress | |
+|`setStopPropagation`| Function | Maksimov Nikita | in progress | |
+|`setIntentionCode`| Function | Maksimov Nikita | in progress | |
+|`getUnicode`| Function | Maksimov Nikita | in progress | |
+|`setUnicode`| Function | Maksimov Nikita | in progress | |
 |*FocusAxisEvent*| *Class* | | | |
 |`setAxisMap`| Function | | | |
 |`setStopPropagation`| Function | | | |
@@ -1914,8 +1914,8 @@
 |`close`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IBECPG + |
 |*DatePickerDialog*| *Class* | Ekaterina Stepanova | blocked IDL | |
 |`show`| Function | Ekaterina Stepanova | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBHHWA |
-|*BaseGestureEvent*| *Class* | | | |
-|`setFingerList`| Function | | | |
+|*BaseGestureEvent*| *Class* | Maksimov Nikita | in progress | |
+|`setFingerList`| Function | Maksimov Nikita | in progress | |
 |*TapGestureEvent*| *Class* | | | |
 |*LongPressGestureEvent*| *Class* | | | |
 |`getRepeat`| Function | | | |
@@ -1946,30 +1946,30 @@
 |`setAngle`| Function | | | |
 |`getSpeed`| Function | | | |
 |`setSpeed`| Function | | | |
-|*GestureEvent*| *Class* | | | |
-|`getRepeat`| Function | | | |
-|`setRepeat`| Function | | | |
-|`setFingerList`| Function | | | |
-|`getOffsetX`| Function | | | |
-|`setOffsetX`| Function | | | |
-|`getOffsetY`| Function | | | |
-|`setOffsetY`| Function | | | |
-|`getAngle`| Function | | | |
-|`setAngle`| Function | | | |
-|`getSpeed`| Function | | | |
-|`setSpeed`| Function | | | |
-|`getScale`| Function | | | |
-|`setScale`| Function | | | |
-|`getPinchCenterX`| Function | | | |
-|`setPinchCenterX`| Function | | | |
-|`getPinchCenterY`| Function | | | |
-|`setPinchCenterY`| Function | | | |
-|`getVelocityX`| Function | | | |
-|`setVelocityX`| Function | | | |
-|`getVelocityY`| Function | | | |
-|`setVelocityY`| Function | | | |
-|`getVelocity`| Function | | | |
-|`setVelocity`| Function | | | |
+|*GestureEvent*| *Class* | Maksimov Nikita | in progress | |
+|`getRepeat`| Function | Maksimov Nikita | in progress | |
+|`setRepeat`| Function | Maksimov Nikita | in progress | |
+|`setFingerList`| Function | Maksimov Nikita | in progress | |
+|`getOffsetX`| Function | Maksimov Nikita | in progress | |
+|`setOffsetX`| Function | Maksimov Nikita | in progress | |
+|`getOffsetY`| Function | Maksimov Nikita | in progress | |
+|`setOffsetY`| Function | Maksimov Nikita | in progress | |
+|`getAngle`| Function | Maksimov Nikita | in progress | |
+|`setAngle`| Function | Maksimov Nikita | in progress | |
+|`getSpeed`| Function | Maksimov Nikita | in progress | |
+|`setSpeed`| Function | Maksimov Nikita | in progress | |
+|`getScale`| Function | Maksimov Nikita | in progress | |
+|`setScale`| Function | Maksimov Nikita | in progress | |
+|`getPinchCenterX`| Function | Maksimov Nikita | in progress | |
+|`setPinchCenterX`| Function | Maksimov Nikita | in progress | |
+|`getPinchCenterY`| Function | Maksimov Nikita | in progress | |
+|`setPinchCenterY`| Function | Maksimov Nikita | in progress | |
+|`getVelocityX`| Function | Maksimov Nikita | in progress | |
+|`setVelocityX`| Function | Maksimov Nikita | in progress | |
+|`getVelocityY`| Function | Maksimov Nikita | in progress | |
+|`setVelocityY`| Function | Maksimov Nikita | in progress | |
+|`getVelocity`| Function | Maksimov Nikita | in progress | |
+|`setVelocity`| Function | Maksimov Nikita | in progress | |
 |*PanGestureOptions*| *Class* | Politov Mikhail | blocked | |
 |`setDirection`| Function | Politov Mikhail | done | |
 |`setDistance`| Function | Politov Mikhail | done | |
