@@ -60,6 +60,9 @@ import { IdlWrapperProcessor } from "./skoala-generation/idl/idlSkoalaLibrary"
 import { fillSyntheticDeclarations } from "./peer-generation/idl/SyntheticDeclarationsFiller"
 import { PeerLibrary } from "./peer-generation/PeerLibrary"
 import { PeerFile } from "./peer-generation/PeerFile"
+import { cli } from "./logger/logger"
+
+cli.animation.begin()
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -409,6 +412,8 @@ if (options.dts2peer) {
 if (!didJob) {
     program.help()
 }
+
+// cli.animation.end()
 
 function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language) {
     if (options.generatorTarget == "arkoala" || options.generatorTarget == "all") {

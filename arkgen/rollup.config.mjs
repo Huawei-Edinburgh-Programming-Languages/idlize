@@ -21,24 +21,13 @@ import * as fs from "fs"
 const ENABLE_SOURCE_MAPS = true;  // Enable for debugging
 
 /** @type {import("rollup").RollupOptions} */
-export default {
+export default [{
     input: "./src/main.ts",
     output: {
         file: "./lib/index.js",
         format: "commonjs",
         sourcemap: ENABLE_SOURCE_MAPS,
-        sourcemapPathTransform: (relativeSourcePath, sourcemapPath) => {
-            const sourcemapDir = path.dirname(sourcemapPath)
-            let absolute = path.join(sourcemapDir, relativeSourcePath);
-            if(fs.existsSync(absolute))
-                return path.relative(sourcemapDir, absolute)
-            // For some reason Rollup adds extra ../ to relativeSourcePath, compensate it
-            absolute = path.join(sourcemapDir, "extra", relativeSourcePath);
-            if(fs.existsSync(absolute))
-                return path.relative(sourcemapDir, absolute)
-            console.warn("unable to map source path:", relativeSourcePath, " -> ", sourcemapPath);
-            return relativeSourcePath
-        },
+        sourcemapPathTransform,
         plugins: [
             // terser()
         ],
@@ -49,9 +38,9 @@ export default {
     },
     onwarn: (message) => {
         if (message.code === 'CIRCULAR_DEPENDENCY') {
-          console.error(message)
-          // TODO: stop build on circular dependencies.
-          // process.exit(-1);
+            console.error(message)
+            // TODO: stop build on circular dependencies.
+            // process.exit(-1);
         }
     },
     external: ["commander", "typescript"],
@@ -68,6 +57,41 @@ export default {
             extensions: [".js", ".mjs", ".cjs", ".ts", ".cts", ".mts"]
         })
     ],
+}, {
+    input: "./src/logger/runner.ts",
+    output: {
+        file: "./lib/runner.js",
+        format: "commonjs",
+        sourcemap: ENABLE_SOURCE_MAPS,
+        sourcemapPathTransform,
+        banner: APACHE_LICENSE_HEADER(),
+    },
+    plugins: [
+        typescript({
+            outputToFilesystem: false,
+            module: "esnext",
+            sourceMap: ENABLE_SOURCE_MAPS,
+            declarationMap: false,
+            declaration: false,
+            composite: false,
+        }),
+        nodeResolve({
+            extensions: [".js", ".mjs", ".cjs", ".ts", ".cts", ".mts"]
+        })
+    ],
+}]
+
+function sourcemapPathTransform(relativeSourcePath, sourcemapPath) {
+    const sourcemapDir = path.dirname(sourcemapPath)
+    let absolute = path.join(sourcemapDir, relativeSourcePath);
+    if (fs.existsSync(absolute))
+        return path.relative(sourcemapDir, absolute)
+    // For some reason Rollup adds extra ../ to relativeSourcePath, compensate it
+    absolute = path.join(sourcemapDir, "extra", relativeSourcePath);
+    if (fs.existsSync(absolute))
+        return path.relative(sourcemapDir, absolute)
+    console.warn("unable to map source path:", relativeSourcePath, " -> ", sourcemapPath);
+    return relativeSourcePath
 }
 
 function APACHE_LICENSE_HEADER() {
