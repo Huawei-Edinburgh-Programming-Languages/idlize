@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { Callback } from './@ohos.base';
+// import { Callback } from './@ohos.base';
 
 declare namespace mediaquery {
 
@@ -22,19 +22,19 @@ declare namespace mediaquery {
 
     readonly matches: boolean;
 
-    readonly media: string;
+    // readonly media: string;
   }
 
 
-  interface MediaQueryListener extends MediaQueryResult {
+  // interface MediaQueryListener extends MediaQueryResult {
 
-    on(type: 'change', callback: Callback<MediaQueryResult>): void;
+  //   on(type: 'change', callback: Callback<MediaQueryResult>): void;
 
-    off(type: 'change', callback?: Callback<MediaQueryResult>): void;
-  }
+  //   off(type: 'change', callback?: Callback<MediaQueryResult>): void;
+  // }
 
 
-  function matchMediaSync(condition: string): MediaQueryListener;
+  // function matchMediaSync(condition: string): MediaQueryListener;
 }
 
 export default mediaquery;
