@@ -21,10 +21,10 @@ import { PeerFile } from "./PeerFile";
 import { ArkoalaImportTypeConvertor, ArkoalaInterfaceConvertor } from './ArgConvertors';
 import { BufferConvertor, CallbackConvertor, DateConvertor, MapConvertor, PointerConvertor, TupleConvertor, TypeAliasConvertor,
          AggregateConvertor, StringConvertor, ClassConvertor, ArrayConvertor, FunctionConvertor, OptionConvertor,
-         NumberConvertor, NumericConvertor, CustomTypeConvertor, UnionConvertor, MaterializedClassConvertor
+         NumberConvertor, NumericConvertor, CustomTypeConvertor, UnionConvertor, MaterializedClassConvertor,
+         CppInteropConvertor
         } from '@idlizer/core'
 import { IndentedPrinter, Language, warn, isImportAttr, InteropNameConvertor } from '@idlizer/core'
-import { createTypeNameConvertor } from './LanguageWriters';
 import { LanguageWriter } from '@idlizer/core';
 import { StructPrinter } from './printers/StructPrinter';
 import { LengthConvertor } from './ArgConvertors';
@@ -32,6 +32,10 @@ import { ArgConvertor, BooleanConvertor, EnumConvertor, UndefinedConvertor, Void
 import { generateSyntheticFunctionName } from '../IDLVisitor';
 import { IdlNameConvertor } from '@idlizer/core';
 import { LibraryInterface } from '@idlizer/core';
+import { TsIDLNodeToStringConverter } from './LanguageWriters/convertors/TSConvertors';
+import { JavaIDLNodeToStringConvertor } from './LanguageWriters/convertors/JavaConvertors';
+import { EtsIDLNodeToStringConvertor } from './LanguageWriters/convertors/ETSConvertors';
+import { CJIDLNodeToStringConvertor } from './LanguageWriters/convertors/CJConvertors';
 
 export class PeerLibrary implements LibraryInterface {
     private _syntheticEntries: idl.IDLEntry[] = []
@@ -65,13 +69,27 @@ export class PeerLibrary implements LibraryInterface {
 
     readonly customComponentMethods: string[] = []
 
-    private readonly targetNameConvertorInstance: IdlNameConvertor = createTypeNameConvertor(this.language, this)
+    private readonly targetNameConvertorInstance: IdlNameConvertor = this.createTypeNameConvertor(this.language)
     private readonly interopNameConvertorInstance: IdlNameConvertor = new InteropNameConvertor(this)
 
     get libraryPrefix(): string {
         return this.name ? this.name + "_" : ""
     }
 
+    createTypeNameConvertor(language: Language): IdlNameConvertor {
+        if (language === Language.TS)
+            return new TsIDLNodeToStringConverter(this)
+        if (language === Language.JAVA)
+            return new JavaIDLNodeToStringConvertor(this)
+        if (language === Language.ARKTS)
+            return new EtsIDLNodeToStringConvertor(this)
+        if (language === Language.CJ)
+            return new CJIDLNodeToStringConvertor(this)
+        if (language === Language.CPP)
+            return new CppInteropConvertor(this)
+        throw new Error(`Convertor from IDL to ${language} not implemented`)
+    }
+    
     createContinuationParameters(continuationType: idl.IDLType): idl.IDLParameter[] {
         const continuationParameters: idl.IDLParameter[] = []
         if (idl.isContainerType(continuationType) && idl.IDLContainerUtils.isPromise(continuationType)) {

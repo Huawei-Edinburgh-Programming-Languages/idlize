@@ -28,7 +28,7 @@ import {
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { createDestroyPeerMethod, MaterializedClass, MaterializedMethod } from "../Materialized";
 import { groupBy, Language } from '@idlizer/core'
-import { CppLanguageWriter, createLanguageWriter, createTypeNameConvertor, LanguageStatement, printMethodDeclaration } from "../LanguageWriters";
+import { CppLanguageWriter, createLanguageWriter, LanguageStatement, printMethodDeclaration } from "../LanguageWriters";
 import { LanguageWriter, CppInteropConvertor } from "@idlizer/core"
 import { LibaceInstall } from "../../Install";
 import { IDLAnyType, IDLBooleanType, IDLFunctionType, IDLPointerType, IDLStringType, IDLThisType, IDLType, isOptionalType, isReferenceType } from '@idlizer/core/idl'
@@ -141,7 +141,7 @@ export class ModifierVisitor {
     private printBodyImplementation(printer: LanguageWriter, method: PeerMethod,
         clazz: PeerClass | undefined = undefined) {
         const apiParameters = method.generateAPIParameters(
-            createTypeNameConvertor(Language.CPP, getReferenceResolver(this.library))
+            this.library.createTypeNameConvertor(Language.CPP)
         )
         if (apiParameters.at(0)?.includes(ArkPrimitiveTypesInstance.NativePointer.getText())) {
             this.real.print(`auto frameNode = reinterpret_cast<FrameNode *>(node);`)
@@ -197,7 +197,7 @@ export class ModifierVisitor {
 
     printMethodProlog(printer: LanguageWriter, method: PeerMethod) {
         const apiParameters = method.generateAPIParameters(
-            createTypeNameConvertor(Language.CPP, getReferenceResolver(this.library))
+            this.library.createTypeNameConvertor(Language.CPP)
         )
         printMethodDeclaration(printer.printer, this.returnTypeConvertor.convert(method.returnType), method.implName, apiParameters)
         printer.print("{")

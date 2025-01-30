@@ -27,6 +27,6 @@ export function createEmptyReferenceResolver(): ReferenceResolver {
     }
 }
 
-export function getReferenceResolver(library: PeerLibrary): ReferenceResolver {
+export function getReferenceResolver(library: PeerLibrary): ReferenceResolver {///rm
     return library
 }
