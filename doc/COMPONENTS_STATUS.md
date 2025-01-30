@@ -571,7 +571,7 @@
 |`onReachEnd`|Function|Morozov Sergey|done|  |
 |`onScrollStart`|Function|Morozov Sergey|done|  |
 |`onScrollStop`|Function|Morozov Sergey|done|  |
-|`onItemDelete`|Function| Skroba Gleb | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IBGUML |
+|`onItemDelete`|Function| Skroba Gleb | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IBGUML , deprecated|
 |`onItemMove`|Function| Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onItemDragStart`|Function| Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IBAGL8 |
 |`onItemDragEnter`|Function|Morozov Sergey|done|  |
