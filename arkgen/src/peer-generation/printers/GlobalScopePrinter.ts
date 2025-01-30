@@ -64,15 +64,10 @@ class GlobalScopePrinter {
                 const signature = NamedMethodSignature.make(method.returnType, method.parameters.map(it => ({ name: it.name, type: it.type })))
                 this.writer.writeFunctionImplementation(method.name, signature, w => {
                     const call = w.makeMethodCall(entry.name, method.name, method.parameters.map(it => w.makeString(it.name)))
-                    let statement: LanguageStatement
-                    if (method.returnType !== idl.IDLVoidType) {
-                        statement = w.makeReturn(call)
-                    } else {
-                        statement = w.makeStatement(call)
-                    }
-                    w.writeStatement(
-                        statement
-                    )
+                    const statement = method.returnType !== idl.IDLVoidType
+                        ? w.makeReturn(call)
+                        : w.makeStatement(call)
+                    w.writeStatement(statement)
                 })
             })
         })

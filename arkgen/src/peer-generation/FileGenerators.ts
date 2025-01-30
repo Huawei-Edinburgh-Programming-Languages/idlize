@@ -613,9 +613,9 @@ ${content}
 `
 }
 
-export function makeDeserializeAndCall(libraryName:string, library: PeerLibrary, language: Language, fileName: string): SourceFile {
+export function makeDeserializeAndCall(library: PeerLibrary, language: Language, fileName: string): SourceFile {
     const writer = SourceFile.make(fileName, language, library)
-    printDeserializeAndCall(libraryName, library, writer)
+    printDeserializeAndCall(library.name, library, writer)
     return writer
 }
 

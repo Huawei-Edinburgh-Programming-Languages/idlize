@@ -146,7 +146,7 @@ export function printCallbacksKinds(library: PeerLibrary, writer: LanguageWriter
 class DeserializeCallbacksVisitor {
     constructor(
         private readonly libraryName: string,
-        private readonly library: PeerLibrary, 
+        private readonly library: PeerLibrary,
         private readonly destFile: SourceFile
     ) {}
 
@@ -408,8 +408,8 @@ class DeserializeCallbacksVisitor {
 
 class ManagedCallCallbackVisitor {
     constructor(
-        private readonly libraryName:string, 
-        private readonly library: PeerLibrary, 
+        private readonly libraryName:string,
+        private readonly library: PeerLibrary,
         private readonly dest: CppSourceFile
     ) {}
 

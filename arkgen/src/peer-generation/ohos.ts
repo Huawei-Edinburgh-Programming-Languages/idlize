@@ -35,8 +35,6 @@ interface GenerateOhosConfig {
 }
 
 export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config?: GenerateOhosConfig) {
-
-
     peerLibrary.name = suggestLibraryName(peerLibrary).toLowerCase()
 
     const params: Record<string, any> = {
@@ -66,14 +64,14 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config?: 
     const materialized = printMaterialized(peerLibrary, context, config?.dumpSerialized ?? false)
     for (const [targetFile, materializedClass] of materialized) {
         const outMaterializedFile = ohos.materialized(targetFile)
-        writeIntegratedFile(outMaterializedFile, materializedClass, "producing [idl]")
+        writeIntegratedFile(outMaterializedFile, materializedClass, "producing")
         ohosManagedFiles.push(outMaterializedFile)
     }
 
     const globals = printGlobal(peerLibrary)
     for (const [targetFile, content] of globals) {
         const outGlobalFile = ohos.globalFile(targetFile)
-        writeIntegratedFile(outGlobalFile, content, "producing [idl]")
+        writeIntegratedFile(outGlobalFile, content, "producing")
         ohosManagedFiles.push(outGlobalFile)
     }
 
@@ -92,7 +90,7 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config?: 
         makeCallbacksKinds(peerLibrary, peerLibrary.language)
     )
     writeIntegratedFile(ohos.peer(new TargetFile('CallbackDeserializeCall')),
-        makeDeserializeAndCall('ohos', peerLibrary, Language.TS, "./peers/CallbackDeserializeCall.ts").printToString()
+        makeDeserializeAndCall(peerLibrary, Language.TS, "./peers/CallbackDeserializeCall.ts").printToString()
     )
 
     // managed-index

@@ -703,7 +703,7 @@ class OHOSVisitor {
         this.writeImpls()
         this.cppWriter.concat(writer)
         this.cppWriter.concat(printBridgeCcForOHOS(this.library).generated)
-        this.cppWriter.concat(makeDeserializeAndCall('ohos', this.library, Language.CPP, 'serializer.cc').content)
+        this.cppWriter.concat(makeDeserializeAndCall(this.library, Language.CPP, 'serializer.cc').content)
         this.cppWriter.concat(printManagedCaller('', this.library).content)
 
         this.hWriter.writeLines(
@@ -759,7 +759,6 @@ class OHOSVisitor {
     }
 
     execute(rootProject: string, outDir: string, managedOutDir: string) {
-
         const params: Record<string, any> = {
             TypePrefix: "OH_",
             LibraryPrefix: `${this.libraryName}_`,

@@ -318,7 +318,7 @@ export function generateArkoalaFromIdl(config: {
                 integrated: true
             }
         )
-        writeFile(arkoala.peer(new TargetFile('CallbackDeserializeCall')), makeDeserializeAndCall('arkoala', peerLibrary, Language.TS, "./peers/CallbackDeserializeCall.ts").printToString(),
+        writeFile(arkoala.peer(new TargetFile('CallbackDeserializeCall')), makeDeserializeAndCall(peerLibrary, Language.TS, "./peers/CallbackDeserializeCall.ts").printToString(),
             {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true
@@ -382,7 +382,7 @@ export function generateArkoalaFromIdl(config: {
                 integrated: true
             }
         )
-        writeFile(arkoala.peer(new TargetFile('CallbackDeserializeCall')), makeDeserializeAndCall('arkoala', peerLibrary, Language.ARKTS, "./peers/CallbackDeserializeCall.ts").printToString(),
+        writeFile(arkoala.peer(new TargetFile('CallbackDeserializeCall')), makeDeserializeAndCall(peerLibrary, Language.ARKTS, "./peers/CallbackDeserializeCall.ts").printToString(),
             {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true
@@ -459,7 +459,7 @@ export function generateArkoalaFromIdl(config: {
             }
         )
         writeFile(arkoala.peer(new TargetFile('CallbackDeserializeCall', '')),
-            makeDeserializeAndCall('arkoala', peerLibrary, Language.CJ, "./CallbackDeserializeCall.cj").printToString(),
+            makeDeserializeAndCall(peerLibrary, Language.CJ, "./CallbackDeserializeCall.cj").printToString(),
             {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true
@@ -533,7 +533,7 @@ export function generateArkoalaFromIdl(config: {
             onlyIntegrated: config.onlyIntegrated,
             integrated: true
         })
-    writeFile(arkoala.native(new TargetFile('callback_deserialize_call.cc')), makeDeserializeAndCall('arkoala', peerLibrary, Language.CPP, 'callback_deserialize_call.cc').printToString(),
+    writeFile(arkoala.native(new TargetFile('callback_deserialize_call.cc')), makeDeserializeAndCall(peerLibrary, Language.CPP, 'callback_deserialize_call.cc').printToString(),
         {
             onlyIntegrated: config.onlyIntegrated,
             integrated: true
