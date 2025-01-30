@@ -89,21 +89,18 @@ class OHOSVisitor {
     private static knownBasicTypes = new Set(['ArrayBuffer', 'DataView'])
 
     mapType(type: IDLType | IDLEnum): string {
-        const libName = this.libraryName
         const typeName = isEnum(type)
             ? type.name
             : isContainerType(type) || isUnionType(type)
                 ? ''
                 : idl.isOptionalType(type)
-                    ? `Opt_${libName}_${this.mapType(type.type)}`
+                    ? `Opt_${this.libraryName}_${this.mapType(type.type)}`
                     : idl.forceAsNamedNode(type).name
         if (OHOSVisitor.knownBasicTypes.has(typeName))
             return `${generatorConfiguration().param("TypePrefix")}${typeName}`
 
         if (isReferenceType(type) || isEnum(type)) {
-            let name = `${generatorConfiguration().param("TypePrefix")}${this.libraryName}_${qualifiedName(type, Language.CPP)}`
-            name = name.replaceAll(".","_")
-            return name
+            return `${generatorTypePrefix()}${qualifiedName(type, Language.CPP)}`.replaceAll(".", "_")
         }
         return this.hWriter.getNodeName(type)
     }
@@ -114,7 +111,7 @@ class OHOSVisitor {
 
     private writeCallback(callback: IDLCallback) {
         // TODO commonize with StructPrinter.ts
-        const callbackTypeName = `${generatorConfiguration().param("TypePrefix")}${this.libraryName}_${callback.name}`;
+        const callbackTypeName = `${generatorTypePrefix()}_${callback.name}`;
         const args = generateCallbackAPIArguments(this.library, callback)
         let _ = this.hWriter
         _.print(`typedef struct ${callbackTypeName} {`)
@@ -215,12 +212,12 @@ class OHOSVisitor {
 
     private modifierName(clazz: IDLInterface): string {
         if (hasExtAttribute(clazz, IDLExtendedAttributes.GlobalScope)) {
-            return `${generatorConfiguration().param("TypePrefix")}${this.libraryName}_Modifier`
+            return `${generatorTypePrefix()}Modifier`
         }
-        return `${generatorConfiguration().param("TypePrefix")}${this.libraryName}_${clazz.name}Modifier`
+        return `${generatorTypePrefix()}${clazz.name}Modifier`
     }
     private handleType(name: string): string {
-        return `${generatorConfiguration().param("TypePrefix")}${this.libraryName}_${name}Handle`
+        return `${generatorTypePrefix()}${name}Handle`
     }
 
     private writeImpls() {
