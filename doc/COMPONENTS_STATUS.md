@@ -1812,28 +1812,28 @@
 |`setPreventDefault`| Function | | | |
 |*PixelMapMock*| *Class* | Maksimov Nikita | done | |
 |`release`| Function | Maksimov Nikita | done | |
-|*DragEvent*| *Class* | | | |
-|`getDisplayX`| Function | | | |
-|`getDisplayY`| Function | | | |
-|`getWindowX`| Function | | | |
-|`getWindowY`| Function | | | |
-|`getX`| Function | | | |
-|`getY`| Function | | | |
-|`setData`| Function | | | |
-|`getData`| Function | | | |
-|`getSummary`| Function | | | |
-|`setResult`| Function | | | |
-|`getResult`| Function | | | |
-|`getPreviewRect`| Function | | | |
-|`getVelocityX`| Function | | | |
-|`getVelocityY`| Function | | | |
-|`getVelocity`| Function | | | |
-|`getModifierKeyState`| Function | | | |
-|`executeDropAnimation`| Function | | | |
-|`getDragBehavior`| Function | | | |
-|`setDragBehavior`| Function | | | |
-|`getUseCustomDropAnimation`| Function | | | |
-|`setUseCustomDropAnimation`| Function | | | |
+|*DragEvent*| *Class* | Evstigneev Roman | in progress | |
+|`getDisplayX`| Function | Evstigneev Roman | in progress | |
+|`getDisplayY`| Function | Evstigneev Roman | in progress | |
+|`getWindowX`| Function | Evstigneev Roman | in progress | |
+|`getWindowY`| Function | Evstigneev Roman | in progress | |
+|`getX`| Function | Evstigneev Roman | in progress | |
+|`getY`| Function | Evstigneev Roman | in progress | |
+|`setData`| Function | Evstigneev Roman | in progress | |
+|`getData`| Function | Evstigneev Roman | in progress | |
+|`getSummary`| Function | Evstigneev Roman | in progress | |
+|`setResult`| Function | Evstigneev Roman | in progress | |
+|`getResult`| Function | Evstigneev Roman | in progress | |
+|`getPreviewRect`| Function | Evstigneev Roman | in progress | |
+|`getVelocityX`| Function | Evstigneev Roman | in progress | |
+|`getVelocityY`| Function | Evstigneev Roman | in progress | |
+|`getVelocity`| Function | Evstigneev Roman | in progress | |
+|`getModifierKeyState`| Function | Evstigneev Roman | in progress | |
+|`executeDropAnimation`| Function | Evstigneev Roman | in progress | |
+|`getDragBehavior`| Function | Evstigneev Roman | in progress | |
+|`setDragBehavior`| Function | Evstigneev Roman | in progress | |
+|`getUseCustomDropAnimation`| Function | Evstigneev Roman | in progress | |
+|`setUseCustomDropAnimation`| Function | Evstigneev Roman | in progress | |
 |*KeyEvent*| *Class* | | | |
 |`getModifierKeyState`| Function | | | |
 |`getType`| Function | | | |
