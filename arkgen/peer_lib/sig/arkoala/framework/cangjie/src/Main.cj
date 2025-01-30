@@ -19,6 +19,7 @@ import std.time.DateTime
 import std.math.round
 import std.collection.*
 
+import Interop.*
 import KoalaRuntime.*
 
 public func assertEquals(name: String, expected: String, actual: String): Unit {

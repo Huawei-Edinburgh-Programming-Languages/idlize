@@ -186,6 +186,9 @@ class SerializerPrinter {
         if (this.writer.language == Language.JAVA) {
             this.writer.print("import java.util.function.Supplier;")
         }
+        if (this.writer.language == Language.CJ) {
+            this.writer.print("import Interop.*")
+        }
         this.writer.writeClass(className, writer => {
             if (writer.language == Language.JAVA || writer.language == Language.CJ)
                 writer.writeFieldDeclaration('nullptr', idl.IDLPointerType, [FieldModifier.STATIC, FieldModifier.PRIVATE], false, writer.makeString('0'))
@@ -515,6 +518,9 @@ class DeserializerPrinter {
         const serializerDeclarations = getSerializerDeclarations(this.library,
             createSerializerDependencyFilter(this.writer.language))
         printSerializerImports(this.library, this.destFile, declarationPath)
+        if (this.writer.language == Language.CJ) {
+            this.writer.print("import Interop.*")
+        }
         this.writer.print("")
         this.writer.writeClass(className, writer => {
             if (ctorSignature && this.writer.language != Language.CJ) {

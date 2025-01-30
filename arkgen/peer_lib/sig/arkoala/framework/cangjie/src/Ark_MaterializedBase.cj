@@ -16,6 +16,8 @@
 
 package idlize
 
+import Interop.Finalizable
+
 public abstract class MaterializedBase {
     var peer: Option<Finalizable> = Option.None
 
