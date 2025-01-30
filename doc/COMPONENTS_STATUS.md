@@ -1895,8 +1895,8 @@
 |`postCardAction`| Function | Erokhin Ilya | in progress | |
 |`dollar_r`| Function | Erokhin Ilya | blocked IDL | NEED TO BE REMOVED https://gitee.com/nikolay-igotti/idlize/issues/IBJVPN |
 |`dollar_rawfile`| Function | Erokhin Ilya | blocked IDL | NEED TO BE REMOVED https://gitee.com/nikolay-igotti/idlize/issues/IBJVPN |
-|`animateTo`| Function | Erokhin Ilya | in progress | |
-|`animateToImmediately`| Function | Erokhin Ilya | in progress | |
+|`animateTo`| Function | Erokhin Ilya | devdone | |
+|`animateToImmediately`| Function | Erokhin Ilya | devdone | |
 |`vp2px`| Function | Erokhin Ilya | devdone | |
 |`px2vp`| Function | Erokhin Ilya | devdone | |
 |`fp2px`| Function | Erokhin Ilya | devdone | |
