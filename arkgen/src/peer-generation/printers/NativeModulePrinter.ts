@@ -281,7 +281,6 @@ function collectNativeModuleImports(module: NativeModuleType, file: SourceFile) 
         const tsFile = file as TsSourceFile
         tsFile.imports.addFeatures([
             "KInt",
-            "KLong",
             "KBoolean",
             "KFloat",
             "KUInt",
