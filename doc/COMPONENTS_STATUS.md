@@ -184,7 +184,7 @@
 |`defaultFocus`| Function | Dmitry A Smirnov| done | |
 |`groupDefaultFocus`| Function | Dmitry A Smirnov| done | |
 |`focusOnTouch`| Function | Dmitry A Smirnov| done | |
-|`focusBox`| Function | Dudkin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX +|
+|`focusBox`| Function | Dudkin Sergey | devdone | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX +|
 |`animation`| Function | managed side | |https://gitee.com/nikolay-igotti/idlize/issues/IAXHJP|
 |`transition`| Function | Dmitry A Smirnov| done |transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
 |`motionBlur`| Function | Dmitry A Smirnov| done | |
