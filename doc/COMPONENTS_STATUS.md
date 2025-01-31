@@ -171,11 +171,7 @@
 |`hoverEffect`| Function | Roman Sedaikin | done | |
 |`onMouse`| Function | Andrey Khudenkikh | in progress | EVENT |
 |`onTouch`| Function | Roman Sedaikin | in progress | EVENT |
-<<<<<<< HEAD
-|`onKeyEvent`| Function | Erokhin Ilya | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX EVENT |
-=======
-|`onKeyEvent`| Function | Erokhin Ilya, Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX EVENT |
->>>>>>> dfb18435 (COMPONENTS_STATUS.md EVENT)
+|`onKeyEvent`| Function | Erokhin Ilya, Maksimov Nikita | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX EVENT |
 |`onDigitalCrown`| Function | | | |
 |`onKeyPreIme`| Function | Erokhin Ilya, Maksimov Nikita | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX & https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ EVENT |
 |`onKeyEventDispatch`| Function | | | |
