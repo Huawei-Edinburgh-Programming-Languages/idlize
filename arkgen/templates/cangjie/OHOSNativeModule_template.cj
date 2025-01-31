@@ -1,5 +1,7 @@
 package idlize
 
+import Interop.*
+
 %NATIVE_MODULE_CONTENT%
 
 public class %NATIVE_MODULE_NAME%NativeModule {
@@ -10,14 +12,3 @@ public class %NATIVE_MODULE_NAME%NativeModule {
 
 %NATIVE_FUNCTIONS%
 }
-
-let theModule: %NATIVE_MODULE_NAME%NativeModule
-
-func function get%NATIVE_MODULE_NAME%NativeModule(): %NATIVE_MODULE_NAME%NativeModule {
-    if (theModule) {
-        return theModule
-    }
-    theModule = new %NATIVE_MODULE_NAME%NativeModule()
-    return theModule
-}
-

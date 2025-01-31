@@ -1,5 +1,7 @@
 package idlize
 
+import Interop.*
+
 public open class CallbackKind {
     public static var Kind_Callback_Boolean_Void: CallbackKind = CallbackKind(313269291)
     public static var Kind_Callback_EventType_ParseInfo_Boolean: CallbackKind = CallbackKind(240036623)
@@ -45,14 +47,3 @@ public class XMLNativeModule {
     func _XmlPullParser_parse(self: UInt64, thisArray: CPointer<UInt8>, thisLength: Int32): Unit
     func _XmlPullParser_parseXml(self: UInt64, thisArray: CPointer<UInt8>, thisLength: Int32): Unit
 }
-
-let theModule: XMLNativeModule
-
-func function getXMLNativeModule(): XMLNativeModule {
-    if (theModule) {
-        return theModule
-    }
-    theModule = new XMLNativeModule()
-    return theModule
-}
-

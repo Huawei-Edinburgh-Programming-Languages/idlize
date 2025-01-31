@@ -677,7 +677,7 @@ abstract class OHOSVisitor {
                 }
                 // TODO Make peer private again
                 writer.writeFieldDeclaration('peer', createReferenceType("Finalizable"), [/* FieldModifier.PRIVATE */], false, peerInitExpr)
-                const peerPtr = "this.peer!.ptr"
+                const peerPtr = writer.language == Language.CJ ? "this.peer.ptr" : "this.peer!.ptr"
                 const fields = this.getPropertiesFromInterfaces(int).concat(int.properties.concat())
                 fields.forEach(f => {
                     const typeName = idl.isNamedNode(f.type) ? f.type.name : "UnknownType"
@@ -847,7 +847,7 @@ abstract class OHOSVisitor {
                         { language: this.library.language, imports: undefined, synthesizedTypes: undefined  },
                         false,
                         '_serialize',
-                        'this.peer!.ptr',
+                        writer.language == Language.CJ ? "this.peer.ptr" : "this.peer!.ptr",
                         method.returnType
                     )
                     })
@@ -872,7 +872,7 @@ abstract class OHOSVisitor {
                             )
                             writer.writeStatement(
                                 writer.makeAssign(`${objVar}.peer`, createReferenceType("Finalizable"),
-                                    writer.makeString(`new Finalizable(ptr, ${int.name}.getFinalizer())`), false),
+                                    writer.makeNewObject('Finalizable', [writer.makeString('ptr'), writer.makeString(`${int.name}.getFinalizer()`)]), false),
                             )
                             writer.writeStatement(writer.makeReturn(writer.makeString(objVar)))
                         })

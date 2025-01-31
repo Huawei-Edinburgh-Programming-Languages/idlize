@@ -15,6 +15,7 @@
 
 package idlize
 
+import Interop.*
 import std.collection.*
 
 public open class Serializer <: SerializerBase {
