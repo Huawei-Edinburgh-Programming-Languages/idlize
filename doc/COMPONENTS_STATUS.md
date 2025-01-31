@@ -166,7 +166,7 @@
 |`outlineRadius`| Function | Skroba Gleb | done | |
 |`foregroundColor`| Function | Roman Sedaikin | done | |
 |`onClick`| Function | Roman Sedaikin, Maksimov Nikita | in progress | EVENT |
-|`onHover`| Function | Andrey Khudenkikh | in progress | EVENT |
+|`onHover`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | in progress | EVENT |
 |`onAccessibilityHover`| Function | Andrey Khudenkikh | in progress | EVENT |
 |`hoverEffect`| Function | Roman Sedaikin | done | |
 |`onMouse`| Function | Andrey Khudenkikh | in progress | EVENT |
@@ -278,7 +278,7 @@
 |`onGestureRecognizerJudgeBegin`| Function | Skroba Gleb, Maksimov Nikita | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ EVENT |
 |`shouldBuiltInRecognizerParallelWith`| Function | Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`monopolizeEvents`| Function | Erokhin Ilya | done | UT by Vadim Voronov |
-|`onTouchIntercept`| Function | Andrey Khudenkikh | in progress | EVENT |
+|`onTouchIntercept`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | in progress | EVENT |
 |`onSizeChange`| Function | Dmitry A Smirnov| done | |
 |`customProperty`| Function | Dmitry A Smirnov|blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX + need clrify bridge implementation|
 |`expandSafeArea`| Function | Dmitry A Smirnov| done |default value https://gitee.com/openharmony/arkui_ace_engine/issues/IBICVG?from=project-issue |
@@ -1159,7 +1159,7 @@
 |`textIndent`|Function|Tuzhilkin Ivan|done|  |
 |`caretStyle`|Function|Tuzhilkin Ivan|done|  |
 |`selectedBackgroundColor`|Function|Tuzhilkin Ivan|done| |
-|`onSubmit`|Function|Tuzhilkin Ivan| in progress | EVENT |
+|`onSubmit`|Function|Tuzhilkin Ivan, Spirin Andrey| in progress | EVENT |
 |`onChange`|Function|Tuzhilkin Ivan|done|  |
 |`onTextSelectionChange`|Function|Tuzhilkin Ivan|done| |
 |`onContentScroll`|Function|Tuzhilkin Ivan|done|  |
@@ -1690,7 +1690,7 @@
 |`setTextBaseline`| Function  | Vadim Voronov | done | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
 |*CanvasRenderingContext2D*| *Class* | Vadim Voronov, Evstigneev Roman | in progress|  |
 |`toDataURL`| Function |Vadim Voronov| done | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`startImageAnalyzer`| Function |Vadim Voronov| done | |
+|`startImageAnalyzer`| Function | Vadim Voronov, Tuzhilkin Ivan | in progress | |
 |`stopImageAnalyzer`| Function | Vadim Voronov| done | |
 |`onOnAttach`| Function | Vadim Voronov, Evstigneev Roman | done | UT in progress Evstigneev Roman |
 |`offOnAttach`| Function | Vadim Voronov, Evstigneev Roman | done | UT in progress Evstigneev Roman |
@@ -2072,7 +2072,7 @@
 |`getCaretRect`| Function | | | |
 |*RichEditorController*| *Class* |Dudkin Sergey| blocked|  |
 |`addTextSpan`| Function |Dudkin Sergey, Maksimov Nikita| in progress | EVENT |
-|`addImageSpan`| Function |Dudkin Sergey, Maksimov Nikita| done | EVENT |
+|`addImageSpan`| Function |Dudkin Sergey, Maksimov Nikita, Tuzhilkin Ivan| in progress | EVENT |
 |`addBuilderSpan`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`addSymbolSpan`| Function | Dudkin Sergey| done|  |
 |`updateSpanStyle`| Function | Dudkin Sergey| done|  |
@@ -2329,7 +2329,7 @@
 |`onSurfaceCreated`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV + |
 |`onSurfaceChanged`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV + |
 |`onSurfaceDestroyed`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV + |
-|`startImageAnalyzer`| Function | Tuzhilkin Ivan | in progress |https://gitee.com/nikolay-igotti/idlize/issues/IB3J8N , https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 +|
+|`startImageAnalyzer`| Function | Tuzhilkin Ivan | in progress | |
 |`stopImageAnalyzer`| Function | Tuzhilkin Ivan | testskipped | |
 |*WaterFlowSections*| *Class* | Kovalev Sergey | in progress | |
 |`splice`| Function | Kovalev Sergey | done | |
