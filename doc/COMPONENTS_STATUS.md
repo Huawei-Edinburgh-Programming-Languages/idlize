@@ -1890,22 +1890,22 @@
 |`setOnVisibleAreaApproximateChange`| Function | | | |
 |*GestureModifier*| *Class* | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`applyGesture`| Function | Tuzhilkin Ivan | blocked IDL |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG +|
-|*GlobalScope_common*| *Class* | Erokhin Ilya | in progress | |
-|`getContext`| Function | Erokhin Ilya | in progress | |
-|`postCardAction`| Function | Erokhin Ilya | in progress | |
+|*GlobalScope_common*| *Class* | Erokhin Ilya | blocked IDL | |
+|`getContext`| Function | Erokhin Ilya | blocked IDL | TBD |
+|`postCardAction`| Function | Erokhin Ilya | blocked IDL | TBD |
 |`dollar_r`| Function | Erokhin Ilya | blocked IDL | NEED TO BE REMOVED https://gitee.com/nikolay-igotti/idlize/issues/IBJVPN |
 |`dollar_rawfile`| Function | Erokhin Ilya | blocked IDL | NEED TO BE REMOVED https://gitee.com/nikolay-igotti/idlize/issues/IBJVPN |
 |`animateTo`| Function | Erokhin Ilya | devdone | |
 |`animateToImmediately`| Function | Erokhin Ilya | devdone | |
-|`vp2px`| Function | Erokhin Ilya | devdone | |
-|`px2vp`| Function | Erokhin Ilya | devdone | |
-|`fp2px`| Function | Erokhin Ilya | devdone | |
-|`px2fp`| Function | Erokhin Ilya | devdone | |
-|`lpx2px`| Function | Erokhin Ilya | devdone | |
-|`px2lpx`| Function | Erokhin Ilya | devdone | |
-|`requestFocus`| Function | Erokhin Ilya | devdone | |
-|`setCursor`| Function | Erokhin Ilya | devdone | |
-|`restoreDefault`| Function | Erokhin Ilya | devdone | |
+|`vp2px`| Function | Erokhin Ilya | done | |
+|`px2vp`| Function | Erokhin Ilya | done | |
+|`fp2px`| Function | Erokhin Ilya | done | |
+|`px2fp`| Function | Erokhin Ilya | done | |
+|`lpx2px`| Function | Erokhin Ilya | done | |
+|`px2lpx`| Function | Erokhin Ilya | done | |
+|`requestFocus`| Function | Erokhin Ilya | done | |
+|`setCursor`| Function | Erokhin Ilya | done | |
+|`restoreDefault`| Function | Erokhin Ilya | done | |
 |*ContextMenu*| *Class* | Tuzhilkin Ivan | blocked IDL | |
 |`close`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBB84T +|
 |*CustomDialogController*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IBECPG & https://gitee.com/nikolay-igotti/idlize/issues/IBGU8S + |
