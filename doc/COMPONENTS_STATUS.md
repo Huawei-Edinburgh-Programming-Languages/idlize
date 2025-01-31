@@ -1775,7 +1775,7 @@
 |`getScreenX`| Function | Spirin Andrey | in progress | |
 |`setScreenX`| Function | Spirin Andrey | in progress | |
 |`getScreenY`| Function | Spirin Andrey | in progress | |
-|`setScreenY`| Function | Spirin Andrey | | |
+|`setScreenY`| Function | Spirin Andrey | in progress | |
 |`getX`| Function | Spirin Andrey | in progress | |
 |`setX`| Function | Spirin Andrey | in progress | |
 |`getY`| Function | Spirin Andrey | in progress | |
