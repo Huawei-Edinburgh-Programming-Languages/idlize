@@ -1819,11 +1819,11 @@
 |`getX`| Function | Evstigneev Roman | in progress | |
 |`getY`| Function | Evstigneev Roman | in progress | |
 |`setData`| Function | Evstigneev Roman | in progress | |
-|`getData`| Function | Evstigneev Roman | in progress | |
+|`getData`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getSummary`| Function | Evstigneev Roman | in progress | |
 |`setResult`| Function | Evstigneev Roman | in progress | |
-|`getResult`| Function | Evstigneev Roman | in progress | |
-|`getPreviewRect`| Function | Evstigneev Roman | in progress | |
+|`getResult`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getPreviewRect`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getVelocityX`| Function | Evstigneev Roman | in progress | |
 |`getVelocityY`| Function | Evstigneev Roman | in progress | |
 |`getVelocity`| Function | Evstigneev Roman | in progress | |
