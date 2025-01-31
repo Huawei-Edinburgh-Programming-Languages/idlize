@@ -47,22 +47,3 @@ export function generatorTypePrefix() {
     return `${conf.param("TypePrefix")}${conf.param("LibraryPrefix")}`
 }
 
-export class FileGeneratorConfiguration implements GeneratorConfiguration {
-    protected json: Record<string, any> = {}
-    constructor(filePath?: string) {
-        if (!isDefined(filePath) || !filePath.length) return 
-        
-        const data = fs.readFileSync(path.resolve(filePath)).toString()
-        const json = JSON.parse(data)
-        if (!isDefined(json)) {
-            throw new Error(`Could not parse json config file ${filePath}`)
-        }
-        this.json = json
-    }
-    param<T>(name: string): T {
-        return this.json[name] as T
-    }
-    paramArray<T>(name: string): T[] {
-        return this.json[name] as T[]
-    }
-}

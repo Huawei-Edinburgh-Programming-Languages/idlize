@@ -16,19 +16,54 @@
 import { 
     Language, 
     isDefined, 
-    FileGeneratorConfiguration
+    warn
 } from '@idlizer/core'
 
-export class PeerGeneratorConfigImpl extends FileGeneratorConfiguration {
-    private noDummyComponents: Map<string, string[]> = new Map()
-    constructor(filePath: string) {
-        super(filePath)
+import * as fs from "fs"
+import * as path from "path"
 
-        const ignoreDummy = this.json.generators?.dummy?.ignoreMethods
+export interface CoreGeneratorConfiguration {
+    get dummy(): { 
+        [key: string]: { }
+    }
+}
+
+export const defaultCoreGeneratorConfiguration: CoreGeneratorConfiguration = {
+    "dummy": {
+        "ignoreMethods": {
+            "LazyForEachOps": ["*"],
+            "CommonMethod": [
+                "onClick"
+            ]
+        }
+    }
+}
+
+export function loadConfiguration(configurationFile?: string): CoreGeneratorConfiguration {
+    if (!isDefined(configurationFile)) return defaultCoreGeneratorConfiguration
+
+    const data = fs.readFileSync(path.resolve(configurationFile)).toString()
+    const userConfiguration = JSON.parse(data)
+    if (!isDefined(userConfiguration)) {
+        warn(`Could not parse json config file ${configurationFile}`)
+        return defaultCoreGeneratorConfiguration
+    }
+    const mergedConfig = deepMergeConfig(defaultCoreGeneratorConfiguration, userConfiguration)
+    return mergedConfig
+}
+
+export class PeerGeneratorConfigImpl implements CoreGeneratorConfiguration {
+    constructor(private data: CoreGeneratorConfiguration) {
+
+        this.dummy = this.data.dummy
+
+        const ignoreDummy = this.dummy?.ignoreMethods
         if (ignoreDummy) {
             this.noDummyComponents = new Map<string, string[]>(Object.entries(ignoreDummy))
         }
     }
+
+    readonly dummy: Record<string, any> 
 
     noDummyGeneration(component: string, method = "") {
         const ignoreMethods = this.noDummyComponents.get(component)
@@ -42,16 +77,14 @@ export class PeerGeneratorConfigImpl extends FileGeneratorConfiguration {
     private isWhole(methods: string[]): boolean {
         return methods.includes("*")
     }
+
+    private noDummyComponents: Map<string, string[]> = new Map()
 }
 
-export let PeerGeneratorConfigCore = new PeerGeneratorConfigImpl("")
+export let PeerGeneratorConfigCore = new PeerGeneratorConfigImpl(defaultCoreGeneratorConfiguration)
 
-export function loadConfiguration(configurationFile: string): PeerGeneratorConfigImpl {
-    return new PeerGeneratorConfigImpl(configurationFile)
-}
-
-export function setFileGeneratorConfiguration(config: FileGeneratorConfiguration) {
-    PeerGeneratorConfigCore = config as PeerGeneratorConfigImpl
+export function setFileGeneratorConfiguration(config: CoreGeneratorConfiguration) {
+    PeerGeneratorConfigCore = new PeerGeneratorConfigImpl(config)
 }
 
 export class PeerGeneratorConfig {
@@ -283,4 +316,33 @@ export class PeerGeneratorConfig {
 
     static cppPrefix = "GENERATED_"
     static needInterfaces = true
+}
+
+
+function isObject(i: any): i is object {
+    if (typeof i !== 'object')
+        return false
+    if (Array.isArray(i))
+        return false
+    return true
+}
+
+export function deepMergeConfig<T extends object>(defaults: T, custom: Partial<T>): T {
+    if (custom === undefined)
+        return defaults
+    const result = Object.assign({}, defaults)
+    for (const key in custom) {
+        if (Object.prototype.hasOwnProperty.call(custom, key)) {
+            const defaultValue = result[key]
+            const customValue = custom[key]
+            if (isObject(defaultValue) && isObject(customValue)) {
+                Object.assign(result, { [key]: deepMergeConfig(defaultValue, customValue) })
+            } else {
+                if (isObject(defaultValue))
+                    throw new Error("Replacing default object value with custom non-object")
+                Object.assign(result, { [key]: customValue })
+            }
+        }
+    }
+    return result
 }
