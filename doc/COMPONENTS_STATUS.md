@@ -70,8 +70,8 @@
 |`fontFamily`| Function |Evstigneev Roman | done |  |
 |`contentModifier`| Function |Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG (+) |
 |`labelStyle`| Function |Evstigneev Roman | done |  |
-|`minFontScale`| Function | | | |
-|`maxFontScale`| Function | | | |
+|`minFontScale`| Function | Kovalev Sergey | in progress | |
+|`maxFontScale`| Function | Kovalev Sergey | in progress | |
 |*Calendar*| *Component* | Maksimov Nikita | done |  |
 |`setCalendarOptions`| Function | Maksimov Nikita | done |  |
 |`showLunar`| Function | Maksimov Nikita | done |  |
@@ -861,8 +861,8 @@
 |`selectionMenuHidden`|Function| Evstigneev Roman |done|  |
 |`minFontSize`|Function| Evstigneev Roman |done|  |
 |`maxFontSize`|Function| Evstigneev Roman |done|  |
-|`minFontScale`| Function | | | |
-|`maxFontScale`| Function | | | |
+|`minFontScale`| Function | Kovalev Sergey | in progress | |
+|`maxFontScale`| Function | Kovalev Sergey | in progress | |
 |`decoration`|Function| Evstigneev Roman |done|  |
 |`letterSpacing`|Function| Evstigneev Roman | done |  |
 |`lineHeight`|Function| Evstigneev Roman | done |  |
@@ -875,8 +875,8 @@
 |`editMenuOptions`|Function| Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`enablePreviewText`|Function| Evstigneev Roman |done|  |
 |`enableHapticFeedback`|Function|Evstigneev Roman| done |  |
-|`halfLeading`| Function | | | |
-|`stopBackPress`| Function | | | |
+|`halfLeading`| Function | Kovalev Sergey | in progress | |
+|`stopBackPress`| Function | Kovalev Sergey | in progress | |
 |`onWillChange`| Function | | | |
 |`searchButton`|Function| Evstigneev Roman | done |  |
 |`inputFilter`|Function| Evstigneev Roman | done |  |
@@ -1056,8 +1056,8 @@
 |`fontWeight`| Function |Andrey Khudenkikh | done |  |
 |`effectStrategy`| Function |Andrey Khudenkikh | done |  |
 |`renderingStrategy`| Function |Andrey Khudenkikh | done |  |
-|`minFontScale`| Function | | | |
-|`maxFontScale`| Function | | | |
+|`minFontScale`| Function | Kovalev Sergey | in progress  | |
+|`maxFontScale`| Function | Kovalev Sergey | in progress  | |
 |`symbolEffect`| Function | Andrey Khudenkikh | blocked AceEngine| https://gitee.com/openharmony/arkui_ace_engine/issues/IB3KMB |
 |*SymbolSpan*| *Component* |Dmitry A Smirnov| done|  |
 |`setSymbolSpanOptions`| Function |Dmitry A Smirnov| done| https://gitee.com/openharmony/arkui_ace_engine/issues/IB3IX8 |
