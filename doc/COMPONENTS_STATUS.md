@@ -1763,7 +1763,7 @@
 |`getDeviceId`| Function | Politov Mikhail | testskipped | |
 |`setDeviceId`| Function | Politov Mikhail | testskipped | |
 |`getTargetDisplayId`| Function | Politov Mikhail | in progress | |
-|`setTargetDisplayId`| Function | | Politov Mikhail in progress | |
+|`setTargetDisplayId`| Function | | Politov Mikhail | in progress | |
 |*ClickEvent*| *Class* | Maksimov Nikita | in progress | |
 |`getDisplayX`| Function | Maksimov Nikita | in progress | |
 |`setDisplayX`| Function | Maksimov Nikita | in progress | |
