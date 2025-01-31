@@ -833,19 +833,12 @@ class OHOSVisitor {
             materializedBasePath: "./xmlFinalizable"
         }
 
-        let nativeModuleName = managedCodeModuleInfo.path.replace('./', '')
-
-        if (this.library.language === Language.ARKTS) {
-            nativeModuleName = path.join(`@${this.libraryName.toLowerCase()}/${managedOutDir}`, nativeModuleName)
-        }
-
         const nativeModuleTemplate = readLangTemplate(`OHOSNativeModule_template${ext}`, this.library.language)
         const nativeModuleText = nativeModuleTemplate
             .replaceAll('%NATIVE_MODULE_NAME%', this.libraryName)
             .replaceAll('%NATIVE_MODULE_CONTENT%', this.nativeWriter.getOutput().join('\n'))
             .replaceAll('%NATIVE_FUNCTIONS%', this.nativeFunctionsWriter.getOutput().join('\n'))
             .replaceAll('%ARKUI_FUNCTIONS%', this.arkUIFunctionsWriter.getOutput().join('\n'))
-            .replaceAll('%OUTPUT_FILE%', nativeModuleName)
         fs.writeFileSync(path.join(rootPath, managedOutDir, `${managedCodeModuleInfo.path}${ext}`), nativeModuleText, 'utf-8')
 
         fs.writeFileSync(path.join(rootPath, managedOutDir, `${fileNamePrefix}Finalizable${ext}`),
