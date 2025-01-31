@@ -910,12 +910,12 @@
 |`id`| Function | Samarin Sergey | in progress | |
 |`minFontScale`| Function | Samarin Sergey | in progress | |
 |`maxFontScale`| Function | Samarin Sergey | in progress | |
-|`maxLines`| Function | | | |
-|`minFontSize`| Function | | | |
-|`maxFontSize`| Function | | | |
-|`heightAdaptivePolicy`| Function | | | |
-|`enabled`| Function | | | |
-|`chainMode`| Function | | | |
+|`maxLines`| Function | Samarin Sergey | in progress | |
+|`minFontSize`| Function | Samarin Sergey | in progress | |
+|`maxFontSize`| Function | Samarin Sergey | in progress | |
+|`heightAdaptivePolicy`| Function | Samarin Sergey | in progress | |
+|`enabled`| Function | Samarin Sergey | in progress | |
+|`chainMode`| Function | Samarin Sergey | in progress | |
 |*Select*| *Component* | Samarin Sergey | blocked |  |
 |`setSelectOptions` | Function | Samarin Sergey | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD + |
 |`selected` | Function | Samarin Sergey | done |  |
