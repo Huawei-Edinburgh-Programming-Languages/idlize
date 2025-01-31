@@ -277,7 +277,7 @@
 |`onGestureJudgeBegin`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ EVENT |
 |`onGestureRecognizerJudgeBegin`| Function | Skroba Gleb | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ EVENT |
 |`shouldBuiltInRecognizerParallelWith`| Function | Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`monopolizeEvents`| Function | Erokhin Ilya | devdone | UT in progress Vadim Voronov |
+|`monopolizeEvents`| Function | Erokhin Ilya | done | UT by Vadim Voronov |
 |`onTouchIntercept`| Function | Andrey Khudenkikh | in progress | EVENT |
 |`onSizeChange`| Function | Dmitry A Smirnov| done | |
 |`customProperty`| Function | Dmitry A Smirnov|blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX + need clrify bridge implementation|
@@ -304,10 +304,10 @@
 |`bindPopup`| Function | Erokhin Ilya | testskipped | UT in progress Morozov Sergey |
 |`bindMenu`| Function | Erokhin Ilya | blocked IDL | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG  |
 |`bindContextMenu`| Function | Erokhin Ilya | blocked IDL | Ark_ContextMenuAnimationOptions https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
-|`bindContentCover`| Function | Erokhin Ilya | devdone | UT in progress Vadim Voronov |
+|`bindContentCover`| Function | Erokhin Ilya | done | UT by Vadim Voronov |
 |`bindSheet`| Function | Erokhin Ilya | testskipped | UT in progress Vadim Voronov |
 |`onVisibleAreaChange`| Function | Erokhin Ilya | done | |
-|`keyboardShortcut`| Function | Erokhin Ilya | devdone | UT in progress Vadim Voronov |
+|`keyboardShortcut`| Function | Erokhin Ilya | done | UT by Vadim Voronov |
 |*CommonShapeMethod*|*Component*|Skroba Gleb| blocked AceEngine |  |
 |`stroke`|Function| Skroba Gleb | done |  |
 |`fill`|Function| Skroba Gleb | done |  |
