@@ -43,6 +43,7 @@ export * from "./peer-generation/PrimitiveType"
 export * from "./peer-generation/PeerFile"
 export * from "./peer-generation/PeerClass"
 export * from "./peer-generation/PeerMethod"
+export * from "./peer-generation/BuilderClass"
 export * from "./peer-generation/unions"
 
 export * from "./LanguageWriters"
