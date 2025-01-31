@@ -1226,20 +1226,20 @@
 |`placeholderFont`| Function | Spirin Andrey | done | |
 |`enterKeyType`| Function | Spirin Andrey | done |  |
 |`caretColor`| Function | Spirin Andrey | done |  |
-|`onEditChanged`| Function | Spirin Andrey | testskipped | UT in progress Kovalev Sergey |
-|`onEditChange`| Function | Spirin Andrey | testskipped | UT in progress Kovalev Sergey |
+|`onEditChanged`| Function | Spirin Andrey | done | UT Kovalev Sergey |
+|`onEditChange`| Function | Spirin Andrey | done | UT Kovalev Sergey |
 |`onSubmit`| Function | Spirin Andrey | in progress | EVENT |
 |`onChange`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail  |
-|`onTextSelectionChange`| Function | Spirin Andrey | testskipped| UT in progress Kovalev Sergey |
-|`onContentScroll`| Function | Spirin Andrey |testskipped | UT in progress Kovalev Sergey |
+|`onTextSelectionChange`| Function | Spirin Andrey | done| UT Kovalev Sergey |
+|`onContentScroll`| Function | Spirin Andrey | done | UT Kovalev Sergey |
 |`maxLength`| Function | Spirin Andrey | done |  |
 |`fontColor`| Function | Spirin Andrey | done |  |
 |`fontSize`| Function | Spirin Andrey | done |  |
 |`fontStyle`| Function | Spirin Andrey | done |  |
 |`fontWeight`| Function | Spirin Andrey | done |  |
 |`fontFamily`| Function | Spirin Andrey | done |  |
-|`onCopy`| Function | Spirin Andrey | testskipped | UT in progress Kovalev Sergey |
-|`onCut`| Function | Spirin Andrey | testskipped| UT in progress Kovalev Sergey |
+|`onCopy`| Function | Spirin Andrey | done | UT Kovalev Sergey |
+|`onCut`| Function | Spirin Andrey | done | UT Kovalev Sergey |
 |`onPaste`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail |
 |`copyOption`| Function | Spirin Andrey | done |  |
 |`showPasswordIcon`| Function | Spirin Andrey | done |  |
@@ -1273,11 +1273,11 @@
 |`passwordRules`| Function | Spirin Andrey | done |  |
 |`fontFeature`| Function | Spirin Andrey | done | |
 |`showPassword`| Function | Spirin Andrey | done |  |
-|`onSecurityStateChange`| Function | Spirin Andrey | testskipped | UT in progress Kovalev Sergey |
+|`onSecurityStateChange`| Function | Spirin Andrey | done | UT Kovalev Sergey |
 |`onWillInsert`| Function | Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|`onDidInsert`| Function | Spirin Andrey | testskipped | UT in progress Kovalev Sergey |
+|`onDidInsert`| Function | Spirin Andrey | done | UT Kovalev Sergey |
 |`onWillDelete`| Function | Skroba Gleb | done |  https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ|
-|`onDidDelete`| Function | Spirin Andrey | testskipped | UT in progress Kovalev Sergey |
+|`onDidDelete`| Function | Spirin Andrey | done | UT Kovalev Sergey |
 |`editMenuOptions`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`enablePreviewText`| Function | Spirin Andrey | done |  |
 |`enableHapticFeedback`| Function | Spirin Andrey | done |  |
@@ -1285,7 +1285,7 @@
 |`ellipsisMode`| Function |  Kovalev Sergey| in progress | |
 |`stopBackPress`| Function | Kovalev Sergey | in progress | |
 |`onWillChange`| Function | | | |
-|`inputFilter`| Function | Spirin Andrey | testskipped  | UT сKovalev Sergey |
+|`inputFilter`| Function | Spirin Andrey | done | UT Kovalev Sergey |
 |`customKeyboard`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`showCounter`| Function | Spirin Andrey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
 |*TextPicker*| *Component* |Ekaterina Stepanova |in progress |  |
