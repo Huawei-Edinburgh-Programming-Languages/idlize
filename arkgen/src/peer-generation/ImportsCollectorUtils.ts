@@ -1,7 +1,7 @@
 import * as idl from "@idlizer/core/idl"
 import * as path from "path"
 import { capitalize, createFeatureNameConvertor, Language } from "@idlizer/core"
-import { isBuilderClass, isMaterialized, isPredefined } from "./idl/IdlPeerGeneratorVisitor"
+import { isMaterialized } from "./idl/IdlPeerGeneratorVisitor"
 import { ImportFeature, ImportsCollector } from "./ImportsCollector"
 import { convertDeclaration } from "@idlizer/core"
 import { PeerLibrary } from "./PeerLibrary"
@@ -39,8 +39,10 @@ export function convertDeclToFeature(library: PeerLibrary, node: idl.IDLNode): I
     }
     let feature = convertDeclaration(featureNameConvertor, node)
     const featureNs = idl.getNamespaceName(node)
-    if (library.language === Language.TS && featureNs !== '') {
-        feature = featureNs.split('.')[0]
+    if ((library.language === Language.TS || library.language === Language.ARKTS) && featureNs !== '') {
+        if (library.language !== Language.ARKTS || !idl.isEnum(node)) {
+            feature = featureNs.split('.')[0]
+        }
         fileName = 'Ark' + featureNs.split('.').map(it => capitalize(it)).join('') + 'Namespace'
     }
 
@@ -61,15 +63,22 @@ export function collectDeclItself(
     },
 ) {
     if (emitter instanceof ImportsCollector) {
-        // ts synthetic entries not printed
-        if (idl.isSyntheticEntry(node) && library.language === Language.TS) {
+        if (
+            idl.isSyntheticEntry(node) && library.language === Language.TS // ts synthetic entries not printed
+            || idl.isSyntheticEntry(node) && library.language === Language.ARKTS && library.name !== 'arkoala' // or if target is not arkoala
+            ) {
             return
         }
         const feature = convertDeclToFeature(library, node)
         emitter.addFeature(feature.feature, feature.module)
         if (options?.includeMaterializedInternals) {
             if (idl.isInterface(node) && isMaterialized(node, library) && !isBuilderClass(node)) {
-                emitter.addFeature(getInternalClassName(node.name), feature.module)
+                const ns = idl.getNamespaceName(node)
+                if (ns !== '') {
+                    emitter.addFeature(ns.split('.')[0], feature.module)
+                } else {
+                    emitter.addFeature(getInternalClassName(node.name), feature.module)
+                }
             }
         }
         if (options?.includeTransformedCallbacks) {

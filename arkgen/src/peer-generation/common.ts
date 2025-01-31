@@ -4,7 +4,7 @@ import { LayoutManagerStrategy, LayoutNodeRole } from './LayoutManager'
 import { PeerLibrary } from './PeerLibrary'
 import * as idl from '@idlizer/core'
 import { isComponentDeclaration } from './ComponentsCollector'
-import { isBuilderClass, isMaterialized } from './idl/IdlPeerGeneratorVisitor'
+import { isMaterialized } from './idl/IdlPeerGeneratorVisitor'
 
 export function writeFile(filename: string, content: string, config: { // TODO make content a string or a writer only
         onlyIntegrated: boolean,
@@ -57,7 +57,7 @@ class TsLayout extends CommonLayoutBase {
                     if (isComponentDeclaration(this.library, node)) {
                         return `Ark${toFileName(node.name)}`
                     }
-                    if (isBuilderClass(node)) {
+                    if (idl.isBuilderClass(node)) {
                         return `Ark${toFileName(node.name)}Builder`
                     }
                     if (isMaterialized(node, this.library)) {
@@ -93,7 +93,7 @@ class ArkTsLayout extends CommonLayoutBase {
                     if (isComponentDeclaration(this.library, node)) {
                         return `Ark${toFileName(node.name)}`
                     }
-                    if (isBuilderClass(node)) {
+                    if (idl.isBuilderClass(node)) {
                         return `Ark${toFileName(node.name)}Builder`
                     }
                     if (isMaterialized(node, this.library)) {

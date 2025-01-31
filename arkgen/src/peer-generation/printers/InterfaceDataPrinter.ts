@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { isBuilderClass, isMaterialized } from "../idl/IdlPeerGeneratorVisitor";
+import { isMaterialized } from "../idl/IdlPeerGeneratorVisitor";
 import { collectDeclDependencies } from "../ImportsCollectorUtils";
 import { LayoutNodeRole } from "../LayoutManager";
 import { PeerLibrary } from "../PeerLibrary";
@@ -32,7 +32,7 @@ export function printInterfaceData(library: PeerLibrary) {
                 if (isMaterialized(entry, library) && idl.isClassSubkind(entry)) {
                     return
                 }
-                if (isBuilderClass(entry)) {
+                if (idl.isBuilderClass(entry)) {
                     return
                 }
                 printInterface(library, entry)
@@ -77,17 +77,30 @@ function printEnum(library: PeerLibrary, entry: idl.IDLEnum) {
     const { printer, collector } = library.layout.allocate(entry, LayoutNodeRole.INTERFACE)
     collectDeclDependencies(library, entry, collector)
 
-    const ns = idl.getNamespaceName(entry)
-    if (ns !== '') {
-        printer.pushNamespace(ns)
+    if (library.language === idl.Language.TS) {
+        const ns = idl.getNamespaceName(entry)
+        if (ns !== '') {
+            printer.pushNamespace(ns)
+        }
+        printer.writeEnum(entry.name, entry.elements.map((it, idx) => ({
+            name: it.name,
+            numberId: typeof it.initializer === 'number' ? it.initializer : idx,
+            stringId: typeof it.initializer === 'string' ? it.initializer : undefined
+        })))
+        if (ns !== '') {
+            printer.popNamespace()
+        }
     }
-    printer.writeEnum(entry.name, entry.elements.map((it, idx) => ({
-        name: it.name,
-        numberId: typeof it.initializer === 'number' ? it.initializer : idx,
-        stringId: typeof it.initializer === 'string' ? it.initializer : undefined
-    })))
-    if (ns !== '') {
-        printer.popNamespace()
+    if (library.language === idl.Language.ARKTS) {
+        let ns = idl.getNamespaceName(entry).split('.').join('_')
+        if (ns !== '') {
+            ns += '_'
+        }
+        printer.writeEnum(`${ns}${entry.name}`, entry.elements.map((it, idx) => ({
+            name: it.name,
+            numberId: typeof it.initializer === 'number' ? it.initializer : idx,
+            stringId: typeof it.initializer === 'string' ? it.initializer : undefined
+        })))
     }
 }
 

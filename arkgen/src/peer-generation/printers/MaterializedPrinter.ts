@@ -85,13 +85,6 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
 
         this.printImports()
 
-        if (clazz.isInterface) {
-            // generate interface declarations for ArkTS only
-            if (Language.ARKTS == this.printerContext.language) {
-                writeInterface(clazz.decl, printer);
-            }
-        }
-
         const emptyParameterType = createReferenceType(ARK_MATERIALIZEDBASE_EMPTY_PARAMETER)
         const finalizableType = FinalizableType
         const superClassName = generifiedTypeName(clazz.superClass, getSuperName(clazz)) ?? (new Set([Language.JAVA]).has(printer.language) ? ARK_MATERIALIZEDBASE : undefined)
@@ -124,6 +117,13 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
         const ns = idl.getNamespaceName(clazz.decl)
         if (ns !== '') {
             printer.pushNamespace(ns)
+        }
+
+        if (clazz.isInterface && this.library.name === 'arkoala') {
+            // generate interface declarations for ArkTS only
+            if (Language.ARKTS == this.printerContext.language) {
+                writeInterface(clazz.decl, printer);
+            }
         }
 
         const implementationClassName = clazz.getImplementationName()
