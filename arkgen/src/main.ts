@@ -61,6 +61,7 @@ import { fillSyntheticDeclarations } from "./peer-generation/idl/SyntheticDeclar
 import { PeerLibrary } from "./peer-generation/PeerLibrary"
 import { PeerFile } from "./peer-generation/PeerFile"
 import { generateOhos } from "./peer-generation/ohos"
+import { ArkoalaPeerLibrary } from "./arkoala/ArkoalaPeerLibrary"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -339,7 +340,7 @@ if (options.idl2peer) {
     const outDir = options.outputDir ?? "./out"
     const language = Language.fromString(options.language ?? "ts")
 
-    const idlLibrary = new PeerLibrary(language)
+    const idlLibrary = createPeerLibrary(language)
     idlLibrary.files.push(...scanNotPredefinedDirectory(options.inputDir))
     new IdlPeerProcessor(idlLibrary).process()
 
@@ -429,7 +430,7 @@ if (options.dts2peer) {
     })
 
     options.docs = "all"
-    const idlLibrary = new PeerLibrary(lang)
+    const idlLibrary = createPeerLibrary(lang)
     // collect predefined files
     scanPredefinedDirectory(PREDEFINED_PATH, "sys").forEach(file => {
         new IDLInteropPredefinesVisitor({
@@ -606,4 +607,9 @@ function validatePaths(paths: string[], type: 'file' | 'dir'): void {
             console.log(`Input ${type} exists: ${pathItem}`)
         }
     })
+}
+function createPeerLibrary(lang: Language) {
+    if (["arkoala", "libace", "all"].includes(options.generatorTarget))
+        return new ArkoalaPeerLibrary(lang)
+    return new PeerLibrary(lang)
 }
