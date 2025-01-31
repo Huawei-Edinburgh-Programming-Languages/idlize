@@ -27,13 +27,11 @@ import {
 } from "../FileGenerators";
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { createDestroyPeerMethod, MaterializedClass, MaterializedMethod } from "../Materialized";
-import { groupBy, Language } from '@idlizer/core'
+import { groupBy, Language, createConstructPeerMethod, PeerClass, PeerMethod } from '@idlizer/core'
 import { CppLanguageWriter, createLanguageWriter, createTypeNameConvertor, LanguageStatement, printMethodDeclaration } from "../LanguageWriters";
 import { LanguageWriter, CppInteropConvertor } from "@idlizer/core"
 import { LibaceInstall } from "../../Install";
 import { IDLAnyType, IDLBooleanType, IDLFunctionType, IDLPointerType, IDLStringType, IDLThisType, IDLType, isOptionalType, isReferenceType } from '@idlizer/core/idl'
-import { createConstructPeerMethod, PeerClass } from "../PeerClass";
-import { PeerMethod } from "../PeerMethod";
 import { createEmptyReferenceResolver } from "@idlizer/core";
 import { PeerLibrary } from "../PeerLibrary";
 import { InteropReturnTypeConvertor } from "../LanguageWriters/convertors/InteropConvertor";

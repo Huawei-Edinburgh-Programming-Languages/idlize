@@ -25,7 +25,7 @@ import {
     MethodSignature,
     NamedMethodSignature,
 } from '../LanguageWriters'
-import { LanguageWriter } from "@idlizer/core"
+import { LanguageWriter, PeerFile } from "@idlizer/core"
 import {
     indentedBy,
     isDefined,
@@ -38,7 +38,6 @@ import {
     CustomPrintVisitor
 } from '@idlizer/core'
 import { ImportFeature, ImportsCollector } from '../ImportsCollector'
-import { PeerFile } from '../PeerFile'
 import { TargetFile } from './TargetFile'
 import { PrinterContext } from './PrinterContext'
 import { convertDeclaration, DeclarationConvertor } from "@idlizer/core";

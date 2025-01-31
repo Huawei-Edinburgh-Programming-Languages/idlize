@@ -58,6 +58,7 @@ import {
     Language,
     LanguageStatement,
     LanguageWriter,
+    PeerMethod,
     qualifiedName,
     setDefaultConfiguration
 } from '@idlizer/core'
@@ -89,7 +90,6 @@ import {
     OverloadsPrinter
 } from './printers/OverloadsPrinter'
 import { MaterializedClass, MaterializedMethod } from './Materialized'
-import { PeerMethod } from './PeerMethod'
 import { writePeerMethod } from './printers/PeersPrinter'
 import { PeerGeneratorConfig } from './PeerGeneratorConfig'
 import { TargetFile } from './printers/TargetFile'

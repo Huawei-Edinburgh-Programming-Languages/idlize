@@ -13,9 +13,8 @@
  * limitations under the License.
  */
 
-import { IndentedPrinter } from '@idlizer/core'
+import { IndentedPrinter, PeerClass } from '@idlizer/core'
 import { makeFileNameFromClassName } from "../FileGenerators"
-import { PeerClass } from "../PeerClass"
 import { PeerLibrary } from "../PeerLibrary"
 import { MaterializedClass } from "../Materialized"
 

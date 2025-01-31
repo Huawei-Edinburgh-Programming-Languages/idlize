@@ -17,7 +17,6 @@ import * as idl from '@idlizer/core/idl'
 import { BuilderClass } from './BuilderClass';
 import { MaterializedClass } from "./Materialized";
 import { isMaterialized } from './idl/IdlPeerGeneratorVisitor';
-import { PeerFile } from "./PeerFile";
 import { ArkoalaImportTypeConvertor, ArkoalaInterfaceConvertor } from '../arkoala/ArkoalaArgConvertors';
 import { BufferConvertor, CallbackConvertor, DateConvertor, MapConvertor, PointerConvertor, TupleConvertor, TypeAliasConvertor,
          AggregateConvertor, StringConvertor, ClassConvertor, ArrayConvertor, FunctionConvertor, OptionConvertor,
@@ -25,7 +24,7 @@ import { BufferConvertor, CallbackConvertor, DateConvertor, MapConvertor, Pointe
         } from '@idlizer/core'
 import { IndentedPrinter, Language, warn, isImportAttr, InteropNameConvertor } from '@idlizer/core'
 import { createTypeNameConvertor } from './LanguageWriters';
-import { LanguageWriter } from '@idlizer/core';
+import { LanguageWriter, PeerFile } from '@idlizer/core';
 import { StructPrinter } from './printers/StructPrinter';
 import { LengthConvertor } from '../arkoala/ArkoalaArgConvertors';
 import { ArgConvertor, BooleanConvertor, EnumConvertor, UndefinedConvertor, VoidConvertor } from '@idlizer/core';

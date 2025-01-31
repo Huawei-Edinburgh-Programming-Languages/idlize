@@ -14,15 +14,11 @@
  */
 
 import * as idl from '@idlizer/core/idl'
-import { ArgConvertor, qualifiedName } from "@idlizer/core"
+import { ArgConvertor, PeerClassBase, PeerMethod,
+    capitalize, copyMethod, qualifiedName } from "@idlizer/core"
 import { Field, Method, MethodModifier, NamedMethodSignature } from "./LanguageWriters"
-import { capitalize } from '@idlizer/core'
 import { ImportsCollector } from "./ImportsCollector"
-import { createReferenceType, IDLType, IDLVoidType } from '@idlizer/core/idl'
-import { PeerMethod } from "./PeerMethod";
-import { PeerClassBase } from "./PeerClass";
 import { PeerLibrary } from "./PeerLibrary"
-import { copyMethod } from '@idlizer/core'
 
 export class MaterializedField {
     constructor(
@@ -38,7 +34,7 @@ export class MaterializedMethod extends PeerMethod {
         originalParentName: string,
         public implementationParentName: string,
         argConvertors: ArgConvertor[],
-        returnType: IDLType,
+        returnType: idl.IDLType,
         isCallSignature: boolean,
         method: Method,
         public outArgConvertor?: ArgConvertor,
@@ -101,7 +97,7 @@ export class MaterializedMethod extends PeerMethod {
         return this.implementationParentName
     }
 
-    tsReturnType(): IDLType | undefined {
+    tsReturnType(): idl.IDLType | undefined {
         return this.method.signature.returnType
     }
 
@@ -176,13 +172,13 @@ export function createDestroyPeerMethod(clazz: MaterializedClass): MaterializedM
             clazz.className,
             clazz.getImplementationName(),
             [],
-            IDLVoidType,
+            idl.IDLVoidType,
             false,
             new Method(
                 'destroyPeer',
                 new NamedMethodSignature(
-                    IDLVoidType,
-                    [createReferenceType(clazz.className)],
+                    idl.IDLVoidType,
+                    [idl.createReferenceType(clazz.className)],
                     ['peer']
                 )
             )

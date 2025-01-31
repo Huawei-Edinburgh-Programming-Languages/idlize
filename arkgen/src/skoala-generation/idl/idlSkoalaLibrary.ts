@@ -27,7 +27,9 @@ import {
     resolveSyntheticType,
     isImport,
     CustomTypeConvertor,
-    generatorConfiguration
+    generatorConfiguration,
+    LibraryInterface,
+    LibraryFileInterface
 } from '@idlizer/core'
 import { ArkPrimitiveTypesInstance } from "../../peer-generation/ArkPrimitiveType";
 import { WrapperClass, WrapperField, WrapperMethod } from "../WrapperClass";
@@ -37,7 +39,6 @@ import { ArkoalaInterfaceConvertor } from "../../arkoala/ArkoalaArgConvertors";
 import { ClassConvertor, StringConvertor, TypeAliasConvertor, UnionConvertor, InteropNameConvertor } from "@idlizer/core";
 import { ArgConvertor, BooleanConvertor, BaseArgConvertor, EnumConvertor, ExpressionAssigner, RuntimeType, UndefinedConvertor } from "@idlizer/core";
 import { convertDeclaration, convertType, DeclarationConvertor, IdlNameConvertor, TypeConvertor } from "@idlizer/core";
-import { LibraryFileInterface, LibraryInterface } from "@idlizer/core";
 import { generateSyntheticFunctionName } from "../../IDLVisitor";
 import { DependenciesCollector } from "../../peer-generation/idl/IdlDependenciesCollector";
 import { createOutArgConvertor } from "../../peer-generation/PromiseConvertors";

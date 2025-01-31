@@ -28,12 +28,9 @@ import {
     Language,
     isRoot
 } from '@idlizer/core'
-import { ArgConvertor } from "@idlizer/core"
+import { ArgConvertor, PeerFile, PeerClass, PeerMethod } from "@idlizer/core"
 import { createOutArgConvertor } from "../PromiseConvertors"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
-import { PeerClass } from "../PeerClass"
-import { PeerMethod } from "../PeerMethod"
-import { PeerFile } from "../PeerFile"
 import { PeerLibrary } from "../PeerLibrary"
 import { getInternalClassName, MaterializedClass, MaterializedField, MaterializedMethod } from "../Materialized"
 import { Field, FieldModifier, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters";
