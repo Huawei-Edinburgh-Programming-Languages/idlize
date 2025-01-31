@@ -228,12 +228,12 @@
 |`alignRules`| Function | Dmitry A Smirnov| done | |
 |`aspectRatio`| Function | Roman Sedaikin | done | |
 |`clickEffect`| Function | Lobah Mikhail | done | |
-|`onDragStart`| Function | Skroba Gleb | in progress | It needs DragEventAccessor implemented to complete Unit tests, but it is empty C-API now. |
-|`onDragEnter`| Function | Lobah Mikhail | in progress | EVENT |
-|`onDragMove`| Function | Lobah Mikhail | in progress | EVENT |
-|`onDragLeave`| Function | Lobah Mikhail| in progress | EVENT |
-|`onDrop`| Function | Lobah Mikhail | in progress | EVENT |
-|`onDragEnd`| Function | Lobah Mikhail | in progress | EVENT |
+|`onDragStart`| Function | Skroba Gleb, Evstigneev Roman | in progress | It needs DragEventAccessor implemented to complete Unit tests, but it is empty C-API now. |
+|`onDragEnter`| Function | Lobah Mikhail, Evstigneev Roman | in progress | EVENT |
+|`onDragMove`| Function | Lobah Mikhail, Evstigneev Roman | in progress | EVENT |
+|`onDragLeave`| Function | Lobah Mikhail, Evstigneev Roman | in progress | EVENT |
+|`onDrop`| Function | Lobah Mikhail, Evstigneev Roman | in progress | EVENT |
+|`onDragEnd`| Function | Lobah Mikhail, Evstigneev Roman | in progress | EVENT |
 |`allowDrop`| Function | Lobah Mikhail | done | |
 |`draggable`| Function | Lobah Mikhail | done | |
 |`dragPreview`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder |
