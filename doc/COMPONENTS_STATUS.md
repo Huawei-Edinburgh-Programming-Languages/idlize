@@ -170,7 +170,7 @@
 |`onAccessibilityHover`| Function | Andrey Khudenkikh | in progress | EVENT |
 |`hoverEffect`| Function | Roman Sedaikin | done | |
 |`onMouse`| Function | Andrey Khudenkikh | in progress | EVENT |
-|`onTouch`| Function | Roman Sedaikin | in progress | EVENT |
+|`onTouch`| Function | Roman Sedaikin, Tuzhilkin Ivan | testskipped | EVENT |
 |`onKeyEvent`| Function | Erokhin Ilya, Maksimov Nikita | testskipped | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX EVENT |
 |`onDigitalCrown`| Function | | | |
 |`onKeyPreIme`| Function | Erokhin Ilya, Maksimov Nikita | testskipped | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX & https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ EVENT |
@@ -278,7 +278,7 @@
 |`onGestureRecognizerJudgeBegin`| Function | Skroba Gleb, Maksimov Nikita | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ EVENT |
 |`shouldBuiltInRecognizerParallelWith`| Function | Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`monopolizeEvents`| Function | Erokhin Ilya | done | UT by Vadim Voronov |
-|`onTouchIntercept`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | in progress | EVENT |
+|`onTouchIntercept`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | testskipped | EVENT |
 |`onSizeChange`| Function | Dmitry A Smirnov| done | |
 |`customProperty`| Function | Dmitry A Smirnov|blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX + need clrify bridge implementation|
 |`expandSafeArea`| Function | Dmitry A Smirnov| done |default value https://gitee.com/openharmony/arkui_ace_engine/issues/IBICVG?from=project-issue |
@@ -1690,7 +1690,7 @@
 |`setTextBaseline`| Function  | Vadim Voronov | done | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
 |*CanvasRenderingContext2D*| *Class* | Vadim Voronov, Evstigneev Roman | in progress|  |
 |`toDataURL`| Function |Vadim Voronov| done | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`startImageAnalyzer`| Function | Vadim Voronov, Tuzhilkin Ivan | in progress | |
+|`startImageAnalyzer`| Function | Vadim Voronov, Tuzhilkin Ivan | done | |
 |`stopImageAnalyzer`| Function | Vadim Voronov| done | |
 |`onOnAttach`| Function | Vadim Voronov, Evstigneev Roman | done | UT in progress Evstigneev Roman |
 |`offOnAttach`| Function | Vadim Voronov, Evstigneev Roman | done | UT in progress Evstigneev Roman |
@@ -2329,7 +2329,7 @@
 |`onSurfaceCreated`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV + |
 |`onSurfaceChanged`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV + |
 |`onSurfaceDestroyed`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV + |
-|`startImageAnalyzer`| Function | Tuzhilkin Ivan | in progress | |
+|`startImageAnalyzer`| Function | Tuzhilkin Ivan | testskipped | |
 |`stopImageAnalyzer`| Function | Tuzhilkin Ivan | testskipped | |
 |*WaterFlowSections*| *Class* | Kovalev Sergey | in progress | |
 |`splice`| Function | Kovalev Sergey | done | |
