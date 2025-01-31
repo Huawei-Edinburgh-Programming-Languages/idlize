@@ -16,16 +16,65 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import * as idl from '@idlizer/core/idl'
-
-import { createConstructor, createContainerType, createOptionalType, createReferenceType, createTypeParameterReference, createParameter, forceAsNamedNode, hasExtAttribute, IDLBufferType, IDLCallback, IDLConstructor, IDLEntry, IDLEnum, IDLExtendedAttributes, IDLI32Type, IDLI64Type, IDLInterface, IDLInterfaceSubkind, IDLMethod, IDLParameter, IDLPointerType, IDLStringType, IDLType, IDLU8Type, IDLUint8ArrayType, IDLVoidType, isCallback, isConstructor, isContainerType, isEnum, isInterface, isReferenceType, isUnionType } from '@idlizer/core/idl'
-import { IndentedPrinter, Language, capitalize, qualifiedName, generatorConfiguration, GeneratorConfiguration, setDefaultConfiguration, generatorTypePrefix } from '@idlizer/core'
-import { ArgConvertor, generateCallbackAPIArguments } from '@idlizer/core'
+import {
+    createConstructor,
+    createContainerType,
+    createOptionalType,
+    createParameter,
+    createReferenceType,
+    createTypeParameterReference,
+    forceAsNamedNode,
+    hasExtAttribute,
+    IDLBufferType,
+    IDLCallback,
+    IDLConstructor,
+    IDLEnum,
+    IDLExtendedAttributes,
+    IDLI32Type,
+    IDLInterface,
+    IDLMethod,
+    IDLParameter,
+    IDLPointerType,
+    IDLType,
+    IDLU8Type,
+    IDLVoidType,
+    isCallback,
+    isConstructor,
+    isContainerType,
+    isEnum,
+    isInterface,
+    isReferenceType,
+    isUnionType
+} from '@idlizer/core/idl'
+import {
+    ArgConvertor,
+    capitalize,
+    CppInteropConvertor,
+    generateCallbackAPIArguments,
+    generatorConfiguration,
+    GeneratorConfiguration,
+    generatorTypePrefix,
+    IndentedPrinter,
+    Language,
+    LanguageStatement,
+    LanguageWriter,
+    qualifiedName,
+    setDefaultConfiguration
+} from '@idlizer/core'
 import { createOutArgConvertor } from './PromiseConvertors'
 import { ArkPrimitiveTypesInstance } from './ArkPrimitiveType'
 import { getInteropRootPath, makeDeserializeAndCall, makeSerializerForOhos, readLangTemplate } from './FileGenerators'
 import { getUniquePropertiesFromSuperTypes, isMaterialized } from './idl/IdlPeerGeneratorVisitor'
-import { CppLanguageWriter, createLanguageWriter, ExpressionStatement, LanguageExpression, Method, MethodModifier, MethodSignature, NamedMethodSignature } from './LanguageWriters'
-import { LanguageWriter, LanguageStatement, CppInteropConvertor } from '@idlizer/core'
+import {
+    CppLanguageWriter,
+    createLanguageWriter,
+    ExpressionStatement,
+    LanguageExpression,
+    Method,
+    MethodModifier,
+    MethodSignature,
+    NamedMethodSignature
+} from './LanguageWriters'
 import { PeerLibrary } from './PeerLibrary'
 import { printBridgeCcForOHOS } from './printers/BridgeCcPrinter'
 import { printCallbacksKinds, printManagedCaller } from './printers/CallbacksPrinter'
@@ -33,7 +82,12 @@ import { writeDeserializer, writeSerializer } from './printers/SerializerPrinter
 import { CppSourceFile } from './printers/SourceFile'
 import { StructPrinter } from './printers/StructPrinter'
 import { NativeModule } from './NativeModule'
-import { collapseSameMethodsIDL, groupOverloads, groupOverloadsIDL, OverloadsPrinter } from './printers/OverloadsPrinter'
+import {
+    collapseSameMethodsIDL,
+    groupOverloads,
+    groupOverloadsIDL,
+    OverloadsPrinter
+} from './printers/OverloadsPrinter'
 import { MaterializedClass, MaterializedMethod } from './Materialized'
 import { PeerMethod } from './PeerMethod'
 import { writePeerMethod } from './printers/PeersPrinter'
@@ -754,12 +808,13 @@ class OHOSVisitor {
         this.interfaces = interfaces
     }
 
-    execute(rootProject: string, outDir: string, managedOutDir: string) {
+    execute(rootPath: string, outDir: string, managedOutDir: string) {
         const params: Record<string, any> = {
             TypePrefix: "OH_",
             LibraryPrefix: `${this.libraryName}_`,
             OptionalPrefix: "Opt_"
         }
+        const origGenConfig = generatorConfiguration()
         setDefaultConfiguration(new OhosConfiguration(params))
 
         this.prepare()
@@ -791,9 +846,9 @@ class OHOSVisitor {
             .replaceAll('%NATIVE_FUNCTIONS%', this.nativeFunctionsWriter.getOutput().join('\n'))
             .replaceAll('%ARKUI_FUNCTIONS%', this.arkUIFunctionsWriter.getOutput().join('\n'))
             .replaceAll('%OUTPUT_FILE%', nativeModuleName)
-        fs.writeFileSync(path.join(rootProject, managedOutDir, `${managedCodeModuleInfo.path}${ext}`), nativeModuleText, 'utf-8')
+        fs.writeFileSync(path.join(rootPath, managedOutDir, `${managedCodeModuleInfo.path}${ext}`), nativeModuleText, 'utf-8')
 
-        fs.writeFileSync(path.join(rootProject, managedOutDir, `${fileNamePrefix}Finalizable${ext}`),
+        fs.writeFileSync(path.join(rootPath, managedOutDir, `${fileNamePrefix}Finalizable${ext}`),
             readLangTemplate(`OHOSFinalizable_template${ext}`, this.library.language)
                 .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
                 .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
@@ -804,26 +859,28 @@ class OHOSVisitor {
             .replaceAll('%PEER_CONTENT%', this.peerWriter.getOutput().join('\n'))
             .replaceAll('%SERIALIZER_PATH%', managedCodeModuleInfo.serializerPath)
             .replaceAll('%FINALIZABLE_PATH%', managedCodeModuleInfo.finalizablePath)
-        fs.writeFileSync(path.join(rootProject, managedOutDir, `${fileNamePrefix}${ext}`), peerText, 'utf-8')
+        fs.writeFileSync(path.join(rootPath, managedOutDir, `${fileNamePrefix}${ext}`), peerText, 'utf-8')
 
-        this.hWriter.printTo(path.join(rootProject, outDir, `${fileNamePrefix}.h`))
-        this.cppWriter.printTo(path.join(rootProject, outDir, `${fileNamePrefix}.cc`))
+        this.hWriter.printTo(path.join(rootPath, outDir, `${fileNamePrefix}.h`))
+        this.cppWriter.printTo(path.join(rootPath, outDir, `${fileNamePrefix}.cc`))
 
-        fs.writeFileSync(path.join(rootProject, outDir, this.implementationStubsFile.name),
+        fs.writeFileSync(path.join(rootPath, outDir, this.implementationStubsFile.name),
             this.implementationStubsFile.printToString()
         )
 
         const serializerText = makeSerializerForOhos(this.library, managedCodeModuleInfo, fileNamePrefix).printToString()
-        fs.writeFileSync(path.join(rootProject, managedOutDir, `${fileNamePrefix}${ext}`), peerText, 'utf-8')
-        fs.writeFileSync(path.join(rootProject, managedOutDir, `${fileNamePrefix}Serializer${ext}`), serializerText, 'utf-8')
-        fs.writeFileSync(path.join(rootProject, managedOutDir, `CallbacksChecker${ext}`),
+        fs.writeFileSync(path.join(rootPath, managedOutDir, `${fileNamePrefix}${ext}`), peerText, 'utf-8')
+        fs.writeFileSync(path.join(rootPath, managedOutDir, `${fileNamePrefix}Serializer${ext}`), serializerText, 'utf-8')
+        fs.writeFileSync(path.join(rootPath, managedOutDir, `CallbacksChecker${ext}`),
             readLangTemplate(`CallbacksChecker${ext}`, this.library.language)
                 .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
                 .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
                 .replaceAll("%SERIALIZER_PATH%", managedCodeModuleInfo.serializerPath)
         )
 
-        generateTypeCheckFile(path.join(rootProject, managedOutDir), this.library.language)
+        generateTypeCheckFile(path.join(rootPath, managedOutDir), this.library.language)
+        // Restore initial config
+        setDefaultConfiguration(origGenConfig)
     }
 
     private mangleTypeName(typeName: string): string {
