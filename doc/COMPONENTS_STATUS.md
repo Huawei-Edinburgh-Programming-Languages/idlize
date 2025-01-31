@@ -1098,7 +1098,7 @@
 |`tabBar`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IB74L4 & https://gitee.com/nikolay-igotti/idlize/issues/IB764R|
 |`onWillShow`| Function |Evstigneev Roman | done |  |
 |`onWillHide`| Function |Evstigneev Roman | done |  |
-|*Text*| *Component* | Samarin Sergey | in progress | |
+|*Text*| *Component* | Samarin Sergey | blocked | |
 |`setTextOptions`| Function | Kirill Kirichenko | done |  |
 |`font`| Function |Samarin Sergey | done |  |
 |`fontColor`| Function |Samarin Sergey | done |  |
@@ -1134,8 +1134,8 @@
 |`dataDetectorConfig`| Function | Samarin Sergey | done | |
 |`onTextSelectionChange`| Function | Kirill Kirichenko | done |  |
 |`fontFeature`| Function |Samarin Sergey | done |  |
-|`marqueeOptions`| Function | Samarin Sergey | in progress | |
-|`onMarqueeStateChange`| Function | Samarin Sergey | in progress | |
+|`marqueeOptions`| Function | Samarin Sergey | done | |
+|`onMarqueeStateChange`| Function | Samarin Sergey | done | |
 |`privacySensitive`| Function |Samarin Sergey | done |  |
 |`textSelectable`| Function |Samarin Sergey | done |  |
 |`editMenuOptions`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
