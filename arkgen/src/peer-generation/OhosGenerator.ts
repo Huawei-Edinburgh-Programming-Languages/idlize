@@ -96,11 +96,11 @@ class OHOSVisitor {
                 : idl.isOptionalType(type)
                     ? `Opt_${this.libraryName}_${this.mapType(type.type)}`
                     : idl.forceAsNamedNode(type).name
-        if (OHOSVisitor.knownBasicTypes.has(typeName))
-            return `${generatorConfiguration().param("TypePrefix")}${typeName}`
-
+        if (OHOSVisitor.knownBasicTypes.has(typeName)) {
+            return this.mangleTypeName(typeName)
+        }
         if (isReferenceType(type) || isEnum(type)) {
-            return `${generatorTypePrefix()}${qualifiedName(type, Language.CPP)}`.replaceAll(".", "_")
+            return this.mangleTypeName(qualifiedName(type, Language.CPP)).replaceAll(".", "_")
         }
         return this.hWriter.getNodeName(type)
     }
@@ -111,12 +111,12 @@ class OHOSVisitor {
 
     private writeCallback(callback: IDLCallback) {
         // TODO commonize with StructPrinter.ts
-        const callbackTypeName = `${generatorTypePrefix()}_${callback.name}`;
+        const callbackTypeName = this.mangleTypeName(callback.name);
         const args = generateCallbackAPIArguments(this.library, callback)
         let _ = this.hWriter
         _.print(`typedef struct ${callbackTypeName} {`)
         _.pushIndent()
-        _.print(`${generatorTypePrefix()}CallbackResource resource;`)
+        _.print(`${this.mangleTypeName("CallbackResource")} resource;`)
         _.print(`void (*call)(${args.join(', ')});`)
         _.popIndent()
         _.print(`} ${callbackTypeName};`)
@@ -212,12 +212,12 @@ class OHOSVisitor {
 
     private modifierName(clazz: IDLInterface): string {
         if (hasExtAttribute(clazz, IDLExtendedAttributes.GlobalScope)) {
-            return `${generatorTypePrefix()}Modifier`
+            return this.mangleTypeName("Modifier")
         }
-        return `${generatorTypePrefix()}${clazz.name}Modifier`
+        return this.mangleTypeName(`${clazz.name}Modifier`)
     }
     private handleType(name: string): string {
-        return `${generatorTypePrefix()}${name}Handle`
+        return this.mangleTypeName(`${name}Handle`)
     }
 
     private writeImpls() {
@@ -283,8 +283,7 @@ class OHOSVisitor {
     }
 
     private printNative() {
-        const className = `${this.libraryName}NativeModule`
-        NativeModule.Generated.name = className
+        NativeModule.Generated.name = `${this.libraryName}NativeModule`
         this.callbacks.forEach(callback => {
             if (this.library.language === Language.TS) {
                 const params = callback.parameters.map(it => `${it.name}:${this.nativeWriter.getNodeName(it.type!)}`).join(', ')
@@ -825,6 +824,10 @@ class OHOSVisitor {
         )
 
         generateTypeCheckFile(path.join(rootProject, managedOutDir), this.library.language)
+    }
+
+    private mangleTypeName(typeName: string): string {
+        return `${generatorTypePrefix()}${typeName}`
     }
 }
 
