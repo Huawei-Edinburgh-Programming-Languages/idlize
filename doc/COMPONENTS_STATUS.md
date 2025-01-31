@@ -184,7 +184,7 @@
 |`defaultFocus`| Function | Dmitry A Smirnov| done | |
 |`groupDefaultFocus`| Function | Dmitry A Smirnov| done | |
 |`focusOnTouch`| Function | Dmitry A Smirnov| done | |
-|`focusBox`| Function | Dudkin Sergey | devdone | |
+|`focusBox`| Function | Dudkin Sergey | done | |
 |`animation`| Function | managed side | |https://gitee.com/nikolay-igotti/idlize/issues/IAXHJP|
 |`transition`| Function | Dmitry A Smirnov| done |transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
 |`motionBlur`| Function | Dmitry A Smirnov| done | |
@@ -1488,7 +1488,7 @@
 |`runJavaScriptOnHeadEnd`| Function | | | |
 |`registerNativeEmbedRule`| Function | Erokhin Ilya | done | |
 |`bindSelectionMenu`| Function | Lobah Mikhail | done | UT done Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|*WindowScene*| *Component* | Dudkin Sergey | testskipped | |
+|*WindowScene*| *Component* | Dudkin Sergey | done | |
 |`setWindowSceneOptions`| Function | Dudkin Sergey | done | |
 |`attractionEffect`| Function | Dudkin Sergey  | done |  |
 |*XComponent*| *Component* | Tuzhilkin Ivan | blocked IDL | |
