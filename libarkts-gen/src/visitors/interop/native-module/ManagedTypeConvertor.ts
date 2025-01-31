@@ -36,10 +36,6 @@ import {
 import { BaseConvertor } from "../BaseConvertor"
 
 export class ManagedTypeConvertor extends BaseConvertor {
-    constructor(idl: IDLEntry[]) {
-        super(idl)
-    }
-
     override convertContainer(type: IDLContainerType): string {
         if (IDLContainerUtils.isSequence(type)) {
             return `KNativePointer`
@@ -48,11 +44,9 @@ export class ManagedTypeConvertor extends BaseConvertor {
     }
 
     override convertTypeReference(type: IDLReferenceType): string {
-        const declaration = this.findRealDeclaration(type.name)
-        if (declaration !== undefined && isEnum(declaration)) {
+        if (this.typechecker.isReferenceTo(type, isEnum)) {
             return `KInt`
         }
-
         return `KNativePointer`
     }
 

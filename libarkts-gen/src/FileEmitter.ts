@@ -16,13 +16,14 @@
 import * as path from "node:path"
 import * as fs from "node:fs"
 import { forceWriteFile } from "@idlizer/core"
-import { BridgesPrinter } from "./printers/bridges/BridgesPrinter"
-import { NativeModulePrinter } from "./printers/native-module/NativeModulePrinter"
-import { EnumsPrinter } from "./printers/EnumsPrinter"
+import { BridgesPrinter } from "./visitors/interop/bridges/BridgesPrinter"
+import { NativeModulePrinter } from "./visitors/interop/native-module/NativeModulePrinter"
+import { EnumsPrinter } from "./visitors/EnumsPrinter"
 import { IDLFile } from "./IdlFile"
 import { Config } from "./Config"
-import { TemporaryTransformer } from "./transformers/TemporaryTransformer"
-import { MainTransformer } from "./transformers/MainTransformer"
+import { InteropTransformer } from "./transformers/InteropTransformer"
+import { AstNodeFilterTransformer } from "./transformers/AstNodeFilterTransformer"
+import { OptionsFilterTransformer } from "./transformers/OptionsFilterTransformer"
 
 class FilePrinter {
     constructor(
@@ -62,10 +63,11 @@ export class FileEmitter {
     )
 
     print(): void {
-        const fixed = new TemporaryTransformer(this.config).transform(this.idl)
-        this.printFile(this.enumsPrinter, fixed)
+        const ignored = new OptionsFilterTransformer(this.config, this.idl).transformed()
+        const astNodes = new AstNodeFilterTransformer(ignored).transformed()
+        this.printFile(this.enumsPrinter, astNodes)
 
-        const transformedForInterop = new MainTransformer(this.config).transform(this.idl)
+        const transformedForInterop = new InteropTransformer(this.config).transform(astNodes)
         this.printFile(this.bridgesPrinter, transformedForInterop)
         this.printFile(this.nativeModulePrinter, transformedForInterop)
     }

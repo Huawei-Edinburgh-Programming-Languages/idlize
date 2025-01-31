@@ -169,7 +169,7 @@ export class StringConvertor extends BaseArgConvertor {
     convertorArg(param: string, writer: LanguageWriter): string {
         return writer.language == Language.CPP
             ? writer.makeUnsafeCast_(writer.makeString(`&${param}`), this.idlType, PrintHint.AsConstPointer)
-            : param
+            : writer.escapeKeyword(param)
     }
     convertorSerialize(param: string, value: string, writer: LanguageWriter): void {
         writer.writeMethodCall(`${param}Serializer`, `writeString`, [value])
@@ -209,7 +209,7 @@ export class EnumConvertor extends BaseArgConvertor {
             false, false, param)
     }
     convertorArg(param: string, writer: LanguageWriter): string {
-        return writer.makeEnumCast(param, false, this)
+        return writer.makeEnumCast(writer.escapeKeyword(param), false, this)
     }
     convertorSerialize(param: string, value: string, writer: LanguageWriter): void {
         value =
@@ -251,7 +251,7 @@ export class NumberConvertor extends BaseArgConvertor {
     convertorArg(param: string, writer: LanguageWriter): string {
         return writer.language == Language.CPP
             ? writer.makeUnsafeCast_(writer.makeString(`&${param}`), this.idlType, PrintHint.AsConstPointer)
-            : param
+            : writer.escapeKeyword(param)
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         printer.writeMethodCall(`${param}Serializer`, "writeNumber", [value])
@@ -803,14 +803,26 @@ export class OptionConvertor extends BaseArgConvertor { //
         const valueType = `${value}_type`
         const serializedType = (printer.language == Language.JAVA ? undefined : idl.IDLI32Type)
         printer.writeStatement(printer.makeAssign(valueType, serializedType, printer.makeRuntimeType(RuntimeType.UNDEFINED), true, false))
-        printer.runtimeType(this, valueType, value)
-        printer.writeMethodCall(`${param}Serializer`, "writeInt8", [printer.castToInt(valueType, 8)])
+        if (printer.language != Language.CJ) {
+            printer.runtimeType(this, valueType, value)
+            printer.writeMethodCall(`${param}Serializer`, "writeInt8", [printer.castToInt(valueType, 8)])
+        }
         printer.print(`if (${printer.makeRuntimeTypeCondition(valueType, false, RuntimeType.UNDEFINED, value).asString()}) {`)
         printer.pushIndent()
+        if (printer.language == Language.CJ) {
+            printer.writeMethodCall(`${param}Serializer`, "writeInt8", ["RuntimeType.OBJECT.ordinal"]) // everything is object, except None<T>
+        }
         printer.writeStatement(printer.makeAssign(`${value}_value`, undefined, printer.makeValueFromOption(value, this.typeConvertor), true))
         this.typeConvertor.convertorSerialize(param, this.typeConvertor.getObjectAccessor(printer.language, `${value}_value`), printer)
         printer.popIndent()
         printer.print(`}`)
+        if (printer.language == Language.CJ) {
+            printer.print('else {')
+            printer.pushIndent()
+            printer.writeMethodCall(`${param}Serializer`, "writeInt8", ["RuntimeType.UNDEFINED.ordinal"]) // undefined
+            printer.popIndent()
+            printer.print('}')
+        }
     }
     convertorCArg(param: string): string {
         throw new Error("Must never be used")

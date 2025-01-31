@@ -16,11 +16,17 @@
 import {
     createInterface,
     IDLContainerUtils,
+    IDLEntry,
     IDLInterface,
     IDLMethod,
+    IDLNode,
     IDLPrimitiveType,
+    IDLReferenceType,
     IDLType,
-    isPrimitiveType
+    isEnum,
+    isInterface,
+    isPrimitiveType,
+    isReferenceType
 } from "@idlizer/core"
 
 export function isString(node: IDLType): node is IDLPrimitiveType {
@@ -31,7 +37,7 @@ export function isSequence(node: IDLType): boolean {
     return IDLContainerUtils.isSequence(node)
 }
 
-export function withUpdatedMethods(node: IDLInterface, methods: IDLMethod[]): IDLInterface {
+export function createInterfaceWithUpdatedMethods(node: IDLInterface, methods: IDLMethod[]): IDLInterface {
     return createInterface(
         node.name,
         node.subkind,
@@ -43,4 +49,47 @@ export function withUpdatedMethods(node: IDLInterface, methods: IDLMethod[]): ID
         node.callables,
         node.typeParameters
     )
+}
+
+export class Typechecker {
+    constructor(private idl: IDLEntry[]) {}
+
+    findRealDeclaration(name: string): IDLEntry | undefined {
+        const declarations = this.idl.filter(it => name === it.name)
+        if (declarations.length === 1) {
+            return declarations[0]
+        }
+        return undefined
+    }
+
+    isHeir(name: string, ancestor: string): boolean {
+        if (name === ancestor) {
+            return true
+        }
+        const declaration = this.findRealDeclaration(name)
+        if (declaration === undefined || !isInterface(declaration)) {
+            return false
+        }
+        const parent = declaration.inheritance[0]
+        if (parent === undefined) {
+            return declaration.name === ancestor
+        }
+        return this.isHeir(parent.name, ancestor)
+    }
+
+    isEnumReference(type: IDLType): type is IDLReferenceType {
+        if (!isReferenceType(type)) {
+            return false
+        }
+        const declaration = this.findRealDeclaration(type.name)
+        return declaration !== undefined && isEnum(declaration)
+    }
+
+    isReferenceTo(type: IDLType, isTarget: (type: IDLNode) => boolean): boolean  {
+        if (!isReferenceType(type)) {
+            return false
+        }
+        const declaration = this.findRealDeclaration(type.name)
+        return declaration !== undefined && isTarget(declaration)
+    }
 }

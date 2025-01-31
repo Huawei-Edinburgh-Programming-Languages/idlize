@@ -12,10 +12,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package idlize
 
-public abstract class Ark_ObjectBase <: Ark_Object {
-    public open func runtimeType(): RuntimeType {
-        return RuntimeType.OBJECT
+export class CachedLogger {
+    private static logs = new Set<string>()
+
+    static warn(message: string): void {
+        if (CachedLogger.logs.has(message)) {
+            return
+        }
+        CachedLogger.logs.add(message)
+        console.warn(`Warning: ${message}`)
     }
 }

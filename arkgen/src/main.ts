@@ -49,7 +49,7 @@ import {
     IdlPeerProcessor,
     IDLPredefinesVisitor,
 } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
-import { generateOhos } from "./peer-generation/OhosGenerator"
+import { generateOhos as generateOhosOld } from "./peer-generation/OhosGenerator"
 import { generateArkoalaFromIdl, generateLibaceFromIdl } from "./peer-generation/arkoala"
 import { loadPlugin } from "./peer-generation/plugin-api"
 import { SkoalaDeserializerPrinter } from "./peer-generation/printers/SkoalaDeserializerPrinter"
@@ -60,6 +60,7 @@ import { IdlWrapperProcessor } from "./skoala-generation/idl/idlSkoalaLibrary"
 import { fillSyntheticDeclarations } from "./peer-generation/idl/SyntheticDeclarationsFiller"
 import { PeerLibrary } from "./peer-generation/PeerLibrary"
 import { PeerFile } from "./peer-generation/PeerFile"
+import { generateOhos } from "./peer-generation/ohos"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -98,6 +99,7 @@ const options = program
     .option('--plugin <file>', 'File with generator\'s plugin')
     .option('--default-idl-package <name>', 'Name of the default package for generated IDL')
     .option('--no-commented-code', 'Do not generate commented code in modifiers')
+    .option('--use-new-ohos', 'Use new ohos generator')
     .parse()
     .opts()
 
@@ -114,7 +116,8 @@ class DefaultConfig implements GeneratorConfiguration {
     protected params: Record<string, any> = {
         TypePrefix: "Ark_",
         LibraryPrefix: "",
-        OptionalPrefix: "Opt_"
+        OptionalPrefix: "Opt_",
+        GenerateUnused: false,
     }
 
     param<T>(name: string): T {
@@ -124,12 +127,19 @@ class DefaultConfig implements GeneratorConfiguration {
         throw new Error(`${name} is unknown`)
     }
     paramArray<T>(name: string): T[] {
+        return []
+    }
+}
+
+class ArkoalaConfiguration extends DefaultConfig {
+    override paramArray<T>(name: string): T[] {
         switch (name) {
             case 'rootComponents': return PeerGeneratorConfig.rootComponents as T[]
             case 'standaloneComponents': return PeerGeneratorConfig.standaloneComponents as T[]
             case 'knownParameterized': return PeerGeneratorConfig.knownParametrized as T[]
+            case 'boundProperties': return PeerGeneratorConfig.boundProperties as T[]
         }
-        throw new Error(`array ${name} is unknown`)
+        return super.paramArray(name)
     }
 }
 
@@ -151,7 +161,7 @@ class OhosConfiguration extends DefaultConfig {
     }
 }
 
-setDefaultConfiguration(new DefaultConfig())
+setDefaultConfiguration(new ArkoalaConfiguration())
 
 
 if (options.dts2idl) {
@@ -527,7 +537,11 @@ function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language)
         generateTracker(outDir, idlLibrary, options.trackerStatus, options.verbose)
     }
     if (options.generatorTarget == "ohos") {
-        generateOhos(outDir, idlLibrary)
+        if (options.useNewOhos) {
+            generateOhos(outDir, idlLibrary)
+        } else {
+            generateOhosOld(outDir, idlLibrary, options.defaultIdlPackage as string)
+        }
     }
     if (options.plugin) {
         loadPlugin(options.plugin)

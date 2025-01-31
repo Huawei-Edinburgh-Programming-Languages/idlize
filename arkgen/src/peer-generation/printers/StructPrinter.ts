@@ -71,14 +71,14 @@ export class StructPrinter {
         structs.print(`} ${name};`)
     }
 
-    generateStructs(structs: LanguageWriter, typedefs: IndentedPrinter, writeToString: LanguageWriter, generateUnused = false) {
+    generateStructs(structs: LanguageWriter, typedefs: IndentedPrinter, writeToString: LanguageWriter) {
         const enumsDeclarations = createLanguageWriter(Language.CPP, this.library)
         const forwardDeclarations = createLanguageWriter(Language.CPP, this.library)
         const concreteDeclarations = createLanguageWriter(Language.CPP, this.library)
         const seenNames = new Set<string>()
         seenNames.clear()
         const noDeclaration = ["Int32", "Tag", idl.IDLNumberType.name, idl.IDLBooleanType.name, idl.IDLStringType.name, idl.IDLVoidType.name]
-        const declTargets = collectDeclarationTargets(this.library, generateUnused)
+        const declTargets = collectDeclarationTargets(this.library)
         for (const target of declTargets) {
             if (target === idl.IDLVoidType) {
                 continue
@@ -177,7 +177,7 @@ export class StructPrinter {
         structs.concat(enumsDeclarations)
         structs.concat(concreteDeclarations)
         // TODO: hack, remove me!
-        if (this.library.name == "") { // TODO we probably don't need this typedef for any library except Ark
+        if (["arkoala", "libace"].includes(this.library.name)) { // TODO we probably don't need this typedef for any library except Ark
             typedefs.print(`typedef ${generatorConfiguration().param("OptionalPrefix")}Length ${generatorConfiguration().param("OptionalPrefix")}Dimension;`)
         }
     }

@@ -186,6 +186,9 @@ class SerializerPrinter {
         if (this.writer.language == Language.JAVA) {
             this.writer.print("import java.util.function.Supplier;")
         }
+        if (this.writer.language == Language.CJ) {
+            this.writer.print("import Interop.*")
+        }
         this.writer.writeClass(className, writer => {
             if (writer.language == Language.JAVA || writer.language == Language.CJ)
                 writer.writeFieldDeclaration('nullptr', idl.IDLPointerType, [FieldModifier.STATIC, FieldModifier.PRIVATE], false, writer.makeString('0'))
@@ -383,6 +386,11 @@ class DeserializerPrinter {
         target = maybeTransformManagedCallback(target) ?? target
         const methodName = this.library.getInteropName(target)
         const type = idl.createReferenceType(target.name, undefined, target)
+        if (this.writer.language == Language.CJ) {
+            this.writer.writeMethodImplementation(new Method(`read${methodName}`, new NamedMethodSignature(type, [], [])), writer => {
+                this.writer.writeMethodCall('this', `read${methodName}`, ['false'])
+            })
+        }
         this.writer.writeMethodImplementation(new Method(`read${methodName}`, new NamedMethodSignature(type, [idl.IDLBooleanType], ['isSync'], ['false'])), writer => {
             const resourceName = "_resource"
             const callName = "_call"
@@ -510,6 +518,9 @@ class DeserializerPrinter {
         const serializerDeclarations = getSerializerDeclarations(this.library,
             createSerializerDependencyFilter(this.writer.language))
         printSerializerImports(this.library, this.destFile, declarationPath)
+        if (this.writer.language == Language.CJ) {
+            this.writer.print("import Interop.*")
+        }
         this.writer.print("")
         this.writer.writeClass(className, writer => {
             if (ctorSignature && this.writer.language != Language.CJ) {
@@ -581,7 +592,9 @@ export function printSerializerImports(library: PeerLibrary, destFile: SourceFil
                 collector.addFeature(builder, `Ark${builder}Builder`)
             }
             collector.addFeature('Finalizable', '@koalaui/interop')
-            collector.addFeature("CallbackTransformer", "./peers/CallbackTransformer")
+            if (library.name === 'arkoala') {
+                collector.addFeature("CallbackTransformer", "./peers/CallbackTransformer")
+            }
             collectMaterializedImports(collector, library)
         } else {
             // Add TypeChecker import for OhosGenerator
@@ -596,7 +609,9 @@ export function printSerializerImports(library: PeerLibrary, destFile: SourceFil
         if (!declarationPath) {
             collector.addFeature("TypeChecker", "#components")
             collector.addFeatures(["KUint8ArrayPtr", "NativeBuffer", "InteropNativeModule"], "@koalaui/interop")
-            collector.addFeature("CallbackTransformer", "./peers/CallbackTransformer")
+            if (library.name === 'arkoala') {
+                collector.addFeature("CallbackTransformer", "./peers/CallbackTransformer")
+            }
             for (const callback of collectUniqueCallbacks(library)) {
                 if (idl.isSyntheticEntry(callback))
                     continue

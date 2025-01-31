@@ -30,11 +30,11 @@ import {
     IDLU32Type,
     IDLU64Type,
     IDLVoidType,
-    isEnum,
+    isReferenceType,
     throwException
 } from "@idlizer/core"
 import { BaseConvertor } from "../BaseConvertor"
-import { isSequence } from "../../idl-utils"
+import { isSequence } from "../../../idl-utils"
 
 export class NativeTypeConvertor extends BaseConvertor {
     constructor(idl: IDLEntry[]) {
@@ -49,11 +49,9 @@ export class NativeTypeConvertor extends BaseConvertor {
     }
 
     override convertTypeReference(type: IDLReferenceType): string {
-        const declaration = this.findRealDeclaration(type.name)
-        if (declaration !== undefined && isEnum(declaration)) {
+        if (this.typechecker.isReferenceTo(type, isReferenceType)) {
             return `KInt`
         }
-
         return `KNativePointer`
     }
 

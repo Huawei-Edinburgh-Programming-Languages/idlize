@@ -12,14 +12,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package idlize
 
-public open class Finalizable {
-    public var ptr: KPointer
-    public var finalizer: KPointer
+import { Config } from "../Config"
+import { IDLFile } from "../IdlFile"
+import { Typechecker } from "../idl-utils"
+import { isInterface } from "@idlizer/core"
 
-    public Finalizable(ptr: KPointer, finalizer: KPointer) {
-        this.ptr = ptr
-        this.finalizer = finalizer
+export class AstNodeFilterTransformer {
+    constructor(
+        private file: IDLFile
+    ) {}
+
+    private typechecker = new Typechecker(this.file.entries)
+
+    transformed(): IDLFile {
+        return new IDLFile(
+            this.file.entries
+                .filter(it => !isInterface(it) || this.typechecker.isHeir(
+                    it.name,
+                    Config.astNodeCommonAncestor
+                ))
+        )
     }
 }

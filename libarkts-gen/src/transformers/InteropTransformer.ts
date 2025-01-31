@@ -25,11 +25,11 @@ import {
 } from "@idlizer/core"
 import { IDLEntry, IDLInterface, isEnum, isInterface, } from "@idlizer/core/idl"
 import { Config } from "../Config"
-import { InteropConstructions } from "../printers/InteropConstructions"
+import { InteropConstructions } from "../visitors/interop/InteropConstructions"
 import { IDLFile } from "../IdlFile"
-import { withUpdatedMethods } from "../idl-utils"
+import { createInterfaceWithUpdatedMethods } from "../idl-utils"
 
-export class MainTransformer {
+export class InteropTransformer {
     constructor(
         private config: Config
     ) {}
@@ -56,20 +56,12 @@ export class MainTransformer {
 
     private transformInterface(node: IDLInterface): IDLInterface {
         node = this.withOverloadsRenamed(node)
-        node = this.withFilteredOutMethods(node)
         node = this.withTransformedMethods(node)
         return node
     }
 
-    private withFilteredOutMethods(node: IDLInterface): IDLInterface {
-        return withUpdatedMethods(
-            node,
-            node.methods.filter(it => this.config.shouldEmitMethod(node.name, it.name))
-        )
-    }
-
     private withTransformedMethods(node: IDLInterface): IDLInterface {
-        return withUpdatedMethods(
+        return createInterfaceWithUpdatedMethods(
             node,
             node.methods.map(it => this.transformMethod(it, node))
         )
@@ -84,7 +76,7 @@ export class MainTransformer {
     }
 
     private withInsertedReceiver(node: IDLMethod, parent: IDLInterface): IDLMethod {
-        if (MainTransformer.isCreateOrUpdate(node)) {
+        if (InteropTransformer.isCreateOrUpdate(node)) {
             return node
         }
         const copy = createMethod(
@@ -127,7 +119,7 @@ export class MainTransformer {
     }
 
     private withQualifiedName(node: IDLMethod, parent: IDLInterface): IDLMethod {
-        if (MainTransformer.isCreateOrUpdate(node)) {
+        if (InteropTransformer.isCreateOrUpdate(node)) {
             return createMethod(
                 `${InteropConstructions.method(node.name, parent.name)}`,
                 node.parameters,
@@ -173,7 +165,7 @@ export class MainTransformer {
         }
         const overloaded = findOverloaded()
 
-        return withUpdatedMethods(
+        return createInterfaceWithUpdatedMethods(
             node, node.methods.map(it => {
                 if (overloaded.has(it.name)) {
                     return createMethod(
@@ -191,8 +183,7 @@ export class MainTransformer {
     private withFilteredOutInterfaces(node: IDLFile): IDLFile {
         return new IDLFile(
             node.entries.filter(it => {
-                if (!isInterface(it)) return true
-                return this.config.shouldEmitInterface(it.name)
+                return !isInterface(it) || this.config.shouldEmitInterface(it.name)
             })
         )
     }

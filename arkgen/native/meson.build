@@ -31,6 +31,7 @@ endif
 arkoala_dir = gen_dir + '/sig/arkoala/framework/native/src/generated'
 external_framework_dir = '../../external/arkoala/framework/native/src'
 external_interop_dir = '../../external/interop/src/cpp'
+external_incremental_cj_dir = '../../external/incremental-cj'
 libace_dir = gen_dir / 'libace'
 
 cxx = meson.get_compiler('cpp')
@@ -131,13 +132,11 @@ if is_msvc
 cflags += ['/Gy-']
 endif
 
-node_addon_api = run_command('node', '-p', 'require.resolve("node-addon-api/package.json").slice(0, -12)', check: true).stdout().strip()
 node_api_headers = run_command('node', '-p', 'require.resolve("node-api-headers/package.json").slice(0, -12)', check: true).stdout().strip()
 
 node_cflags = ['-DKOALA_USE_NODE_VM', '-DKOALA_NAPI', '-DINTEROP_LIBRARY_NAME=' + node_library_name ]
 node_include_dirs = [
     node_api_headers / 'include',
-    node_addon_api,
     external_interop_dir / 'napi'
 ]
 node_sources = [
@@ -174,12 +173,13 @@ arkts_sources = [
 ]
 
 cj_include_dirs = [
-    external_interop_dir/ 'cangjie'
+    external_interop_dir / 'cangjie',
+    external_incremental_cj_dir / 'runtime/src/' 
 ]
 cj_sources = [
     external_interop_dir / 'cangjie/convertors-cj.cc',
     external_interop_dir / 'cangjie/convertors-cj.h',
-    external_interop_dir / 'cangjie/CallsiteKey.c'
+    external_incremental_cj_dir / 'runtime/src/core/CallsiteKey.c' 
 ]
 
 if is_jni
@@ -303,7 +303,6 @@ ohos_ldflags = [
 ]
 
 ohos_include_dirs = [
-    node_addon_api,
     external_interop_dir / 'node',
     external_interop_dir / 'arkts'
 ]
