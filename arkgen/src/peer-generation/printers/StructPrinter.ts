@@ -23,6 +23,7 @@ import {
     isStringEnum,
     generatorConfiguration,
     generatorTypePrefix,
+    lib,
 } from "@idlizer/core"
 import { RuntimeType } from "@idlizer/core"
 import { ArkPrimitiveTypeList, ArkPrimitiveTypesInstance } from "../ArkPrimitiveType"
@@ -505,6 +506,10 @@ export function collectFunctions(decl: idl.IDLInterface, library: LibraryInterfa
         ...decl.methods,
         ...decl.callables,
     ]
+}
+
+export function generateStructs(library: PeerLibrary, structs: LanguageWriter, typedefs: IndentedPrinter, writeToString: LanguageWriter) {
+    new StructPrinter(library).generateStructs(structs, typedefs, writeToString)
 }
 
 class NameWithType {
