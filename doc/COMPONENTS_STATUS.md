@@ -625,7 +625,7 @@
 |*MenuItem*| *Component* |Morozov Sergey|blocked|  |
 |`setMenuItemOptions`| Function |Kovalev Sergey| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD + |
 |`selected`| Function |Morozov Sergey|done|  |
-|`selectIcon`| Function |Morozov Sergey|in progress| PixelMap on https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
+|`selectIcon`| Function |Morozov Sergey| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB, PixelMap on https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`onChange`| Function |Morozov Sergey|done|  |
 |`contentFont`| Function |Morozov Sergey|done|  |
 |`contentFontColor`| Function |Morozov Sergey|done|  |
