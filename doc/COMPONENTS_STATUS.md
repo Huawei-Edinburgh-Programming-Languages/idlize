@@ -1826,14 +1826,14 @@
 |`setWindowX`| Function | | | |
 |`getWindowY`| Function | | | |
 |`setWindowY`| Function | | | |
-|*TouchEvent*| *Class* | | | |
-|`getHistoricalPoints`| Function | | | |
-|`getType`| Function | | | |
-|`setType`| Function | | | |
-|`setTouches`| Function | | | |
-|`setChangedTouches`| Function | | | |
-|`setStopPropagation`| Function | | | |
-|`setPreventDefault`| Function | | | |
+|*TouchEvent*| *Class* | Tuzhilkin Ivan | in progress | |
+|`getHistoricalPoints`| Function | Tuzhilkin Ivan | in progress | |
+|`getType`| Function | Tuzhilkin Ivan | in progress | |
+|`setType`| Function | Tuzhilkin Ivan | in progress | |
+|`setTouches`| Function | Tuzhilkin Ivan | in progress | |
+|`setChangedTouches`| Function | Tuzhilkin Ivan | in progress | |
+|`setStopPropagation`| Function | Tuzhilkin Ivan | in progress | |
+|`setPreventDefault`| Function | Tuzhilkin Ivan | in progress | |
 |*PixelMapMock*| *Class* | Maksimov Nikita | done | |
 |`release`| Function | Maksimov Nikita | done | |
 |*DragEvent*| *Class* | Evstigneev Roman | in progress | |
