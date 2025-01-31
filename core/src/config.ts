@@ -17,6 +17,25 @@ export interface GeneratorConfiguration {
     paramArray<T>(name: string): T[]
 }
 
+export type CoreNativeModule = "Interop" | "Generated"
+
+export interface CoreGeneratorConfiguration {
+    get TypePrefix(): string
+    get LibraryPrefix(): string
+    get OptionalPrefix(): string
+    get NativeModule(): Record<CoreNativeModule, string>
+}
+
+export const defaultCoreGeneratorConfiguration: CoreGeneratorConfiguration = {
+    TypePrefix: "Ark_",
+    LibraryPrefix: "",
+    OptionalPrefix: "Opt_",
+    NativeModule: {
+        "Interop": "InteropNativeModule",
+        "Generated": "__GeneratedNotSpecifiedNativeModule__",
+    },
+}
+
 class EmptyGeneratorConfiguration implements GeneratorConfiguration {
     param<T>(name: string): T {
         throw new Error(`${name} is unknown`)

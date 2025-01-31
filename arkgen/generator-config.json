@@ -1,0 +1,7 @@
+{
+    "NativeModule": {
+        "Generated": "MyGeneratedOverride",
+        "ArkUI": "MyArkUIConfiguration"
+    },
+    "MyNotExistingField": "No exception thrown"
+}

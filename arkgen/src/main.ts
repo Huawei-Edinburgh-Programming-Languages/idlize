@@ -27,7 +27,10 @@ import {
     GeneratorConfiguration,
     setDefaultConfiguration,
     initRNG,
-    PrimitiveType
+    defaultCoreGeneratorConfiguration,
+    deepMergeConfig,
+    CoreGeneratorConfiguration,
+    CoreNativeModule
 } from "@idlizer/core"
 import {
     forEachChild,
@@ -61,6 +64,7 @@ import { fillSyntheticDeclarations } from "./peer-generation/idl/SyntheticDeclar
 import { PeerLibrary } from "./peer-generation/PeerLibrary"
 import { PeerFile } from "./peer-generation/PeerFile"
 import { generateOhos } from "./peer-generation/ohos"
+import { NativeModule } from "./peer-generation/NativeModule"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -141,6 +145,36 @@ class ArkoalaConfiguration extends DefaultConfig {
         }
         return super.paramArray(name)
     }
+}
+
+export type ArkgenNativeModule = CoreNativeModule | "ArkUI" | "Test"
+
+export interface ArkgenConfiguration extends CoreGeneratorConfiguration {
+    get NativeModule(): Record<ArkgenNativeModule, string>
+    get rootComponents(): string[]
+    get standaloneComponents(): string[]
+    get knownParameterized(): string[]
+    get boundProperties(): string[]
+}
+
+export const defaultArkgenConfiguration: ArkgenConfiguration = {
+    ...defaultCoreGeneratorConfiguration,
+    NativeModule: {
+        ...defaultCoreGeneratorConfiguration.NativeModule,
+        "ArkUI": "ArkUINativeModule",
+        "Test": "TestNativeModule",
+    },
+    rootComponents: [],
+    standaloneComponents: [],
+    knownParameterized: [],
+    boundProperties: []
+}
+
+export function loadArkgenConfig() {
+    const userConfigRaw = fs.readFileSync(path.resolve("./generator-config.json"), { encoding: "utf8" })
+    const userConfig = JSON.parse(userConfigRaw)
+    const mergedConfig = deepMergeConfig(defaultCoreGeneratorConfiguration, userConfig)
+    return mergedConfig
 }
 
 class SkoalaConfiguration extends DefaultConfig {
