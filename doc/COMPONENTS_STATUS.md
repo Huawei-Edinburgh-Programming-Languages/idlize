@@ -821,7 +821,7 @@
 |`onClick`| Function | Samarin Sergey, Maksimov Nikita | testskipped | EVENT |
 |*Screen*| *Component* | Dudkin Sergey | done | |
 |`setScreenOptions`| Function | Dudkin Sergey | done | |
-|*Scroll*| *Component* | Berezin Kirill | in progress |  |
+|*Scroll*| *Component* | Berezin Kirill | done |  |
 |`setScrollOptions`| Function | Berezin Kirill | done |  |
 |`scrollable`| Function | Berezin Kirill | done |  |
 |`onScroll`| Function | Berezin Kirill | done |  |
