@@ -1891,12 +1891,12 @@
 |*GestureModifier*| *Class* | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`applyGesture`| Function | Tuzhilkin Ivan | blocked IDL |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG +|
 |*GlobalScope_common*| *Class* | Erokhin Ilya | blocked IDL | |
-|`getContext`| Function | Erokhin Ilya | blocked IDL | TBD |
-|`postCardAction`| Function | Erokhin Ilya | blocked IDL | TBD |
+|`getContext`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBJXAR |
+|`postCardAction`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
 |`dollar_r`| Function | Erokhin Ilya | blocked IDL | NEED TO BE REMOVED https://gitee.com/nikolay-igotti/idlize/issues/IBJVPN |
 |`dollar_rawfile`| Function | Erokhin Ilya | blocked IDL | NEED TO BE REMOVED https://gitee.com/nikolay-igotti/idlize/issues/IBJVPN |
-|`animateTo`| Function | Erokhin Ilya | devdone | |
-|`animateToImmediately`| Function | Erokhin Ilya | devdone | |
+|`animateTo`| Function | Erokhin Ilya | testskipped | |
+|`animateToImmediately`| Function | Erokhin Ilya | testskipped | |
 |`vp2px`| Function | Erokhin Ilya | done | |
 |`px2vp`| Function | Erokhin Ilya | done | |
 |`fp2px`| Function | Erokhin Ilya | done | |
