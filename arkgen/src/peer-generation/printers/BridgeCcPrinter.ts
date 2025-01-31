@@ -14,7 +14,7 @@
  */
 
 import { capitalize, dropSuffix, isDefined, Language, PeerMethod, createConstructPeerMethod } from '@idlizer/core'
-import { ArgConvertor } from "@idlizer/core";
+import { ArgConvertor, MaterializedClass } from "@idlizer/core";
 import { ArkPrimitiveTypesInstance } from "../ArkPrimitiveType"
 import { bridgeCcCustomDeclaration, bridgeCcGeneratedDeclaration } from "../FileGenerators";
 import { createLanguageWriter, createTypeNameConvertor, ExpressionStatement } from "../LanguageWriters";
@@ -24,7 +24,6 @@ import { forceAsNamedNode, IDLBooleanType, IDLNumberType, IDLVoidType } from '@i
 import { InteropReturnTypeConvertor } from "../LanguageWriters/convertors/InteropConvertor";
 import { CppInteropArgConvertor } from "../LanguageWriters/convertors/CppConvertors";
 import { isGlobalScope } from '../idl/IdlPeerGeneratorVisitor';
-import { MaterializedClass } from '../Materialized';
 
 class BridgeCcVisitor {
     readonly generatedApi = createLanguageWriter(Language.CPP, this.library)

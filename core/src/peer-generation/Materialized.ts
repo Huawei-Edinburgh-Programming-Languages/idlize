@@ -13,12 +13,13 @@
  * limitations under the License.
  */
 
-import * as idl from '@idlizer/core/idl'
-import { ArgConvertor, PeerClassBase, PeerMethod,
-    capitalize, copyMethod, qualifiedName } from "@idlizer/core"
-import { Field, Method, MethodModifier, NamedMethodSignature } from "./LanguageWriters"
-import { ImportsCollector } from "./ImportsCollector"
-import { PeerLibrary } from "./PeerLibrary"
+import * as idl from '../idl'
+import { ArgConvertor } from '../LanguageWriters/ArgConvertors'
+import { copyMethod, Field, Method, MethodModifier, NamedMethodSignature } from '../LanguageWriters/LanguageWriter'
+import { capitalize } from '../util'
+import { qualifiedName } from './idl/common'
+import { PeerClassBase } from './PeerClass'
+import { PeerMethod } from './PeerMethod'
 
 export class MaterializedField {
     constructor(
@@ -194,12 +195,6 @@ export function getInternalClassQualifiedName(target: idl.IDLEntry): string {
 }
 
 export function getMaterializedFileName(name:string): string {
-     const pascalCase = name.split('_').map(x => capitalize(x)).join('')
+    const pascalCase = name.split('_').map(x => capitalize(x)).join('')
     return `Ark${pascalCase}Materialized`
-}
-
-export function collectMaterializedImports(imports: ImportsCollector, library: PeerLibrary) {
-    for (const materialized of library.materializedClasses.values()) {
-        imports.addFeature(getInternalClassName(materialized.className), `./${getMaterializedFileName(materialized.className)}`)
-    }
 }

@@ -26,8 +26,9 @@ import {
     warning
 } from "../FileGenerators";
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
-import { createDestroyPeerMethod, MaterializedClass, MaterializedMethod } from "../Materialized";
-import { groupBy, Language, createConstructPeerMethod, PeerClass, PeerMethod } from '@idlizer/core'
+import { createDestroyPeerMethod, MaterializedClass, MaterializedMethod,
+    groupBy, Language, createConstructPeerMethod, PeerClass, PeerMethod
+} from '@idlizer/core'
 import { CppLanguageWriter, createLanguageWriter, createTypeNameConvertor, LanguageStatement, printMethodDeclaration } from "../LanguageWriters";
 import { LanguageWriter, CppInteropConvertor } from "@idlizer/core"
 import { LibaceInstall } from "../../Install";

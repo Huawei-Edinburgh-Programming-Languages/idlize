@@ -89,7 +89,7 @@ import {
     groupOverloadsIDL,
     OverloadsPrinter
 } from './printers/OverloadsPrinter'
-import { MaterializedClass, MaterializedMethod } from './Materialized'
+import { MaterializedClass, MaterializedMethod } from '@idlizer/core'
 import { writePeerMethod } from './printers/PeersPrinter'
 import { PeerGeneratorConfig } from './PeerGeneratorConfig'
 import { TargetFile } from './printers/TargetFile'

@@ -27,7 +27,7 @@ import { ArgConvertor, PeerFile, PeerClass, PeerMethod } from "@idlizer/core"
 import { createOutArgConvertor } from "../PromiseConvertors"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { PeerLibrary } from "../PeerLibrary"
-import { getInternalClassName, MaterializedClass, MaterializedField, MaterializedMethod } from "../Materialized"
+import { getInternalClassName, MaterializedClass, MaterializedField, MaterializedMethod } from "@idlizer/core"
 import { Field, FieldModifier, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters";
 import { BuilderClass, CUSTOM_BUILDER_CLASSES, isCustomBuilderClass } from "@idlizer/core";
 import { ImportFeature } from "../ImportsCollector";
