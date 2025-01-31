@@ -21,7 +21,13 @@ import { PeerLibrary } from "./PeerLibrary";
 import { printMaterialized } from "./printers/MaterializedPrinter";
 import { printGlobal } from "./printers/GlobalScopePrinter";
 import { printDeclarations } from "./printers/DeclarationPrinter";
-import { IndentedPrinter, Language, NativeModuleType, setDefaultConfiguration } from "@idlizer/core";
+import {
+    generatorConfiguration,
+    IndentedPrinter,
+    Language,
+    NativeModuleType,
+    setDefaultConfiguration
+} from "@idlizer/core";
 import {
     dummyImplementations,
     makeCallbacksKinds,
@@ -48,18 +54,12 @@ interface GenerateOhosConfig {
 
 export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: GenerateOhosConfig) {
     peerLibrary.name = suggestLibraryName(peerLibrary).toLowerCase()
-
-    const params: Record<string, any> = {
-        TypePrefix: "OH_",
-        LibraryPrefix: `${peerLibrary.name.toUpperCase()}_`,
-        OptionalPrefix: "Opt_",
-        GenerateUnused: true
-    }
-    setDefaultConfiguration(new OhosConfiguration(params))
+    const origGenConfig = generatorConfiguration()
+    setDefaultConfiguration(new OhosConfiguration(suggestLibraryName(peerLibrary)))
 
     const ohos = new OhosInstall(outDir, peerLibrary.language)
 
-    NativeModule.Generated = new NativeModuleType(peerLibrary.name.toUpperCase() + 'NativeModule')
+    NativeModule.Generated = new NativeModuleType(suggestLibraryName(peerLibrary) + 'NativeModule')
 
     const context = {
         language: peerLibrary.language,
@@ -199,6 +199,8 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: G
     const modifiersReal = dummyImplementations(modifiers.real, accessors.real, 1, config.apiVersion, 6, apiGenFile).getOutput().join('\n')
     writeIntegratedFile(ohos.native(new TargetFile(`dummy_impl.cc`)), modifiersDummy)
     writeIntegratedFile(ohos.native(new TargetFile(`real_impl.cc`)), modifiersReal)
+
+    setDefaultConfiguration(origGenConfig)
 }
 
 const PEER_LIB_CONFIG = new Map<Language, [string, string][]>()

@@ -822,14 +822,8 @@ class OHOSVisitor {
     }
 
     execute(rootPath: string, outDir: string, managedOutDir: string) {
-        const params: Record<string, any> = {
-            TypePrefix: "OH_",
-            LibraryPrefix: `${this.libraryName}_`,
-            OptionalPrefix: "Opt_",
-            GenerateUnused: true
-        }
         const origGenConfig = generatorConfiguration()
-        setDefaultConfiguration(new OhosConfiguration(params))
+        setDefaultConfiguration(new OhosConfiguration(this.libraryName))
 
         this.prepare()
 
@@ -1049,8 +1043,15 @@ function generatePostfixForOverloads(methods:IDLMethod[]): MethodWithPostfix[]  
 }
 
 export class OhosConfiguration implements GeneratorConfiguration {
+    readonly params: Record<string, any>
 
-    constructor(private params: Record<string, any>) {
+    constructor(libraryName: string) {
+        this.params = {
+            TypePrefix: "OH_",
+            LibraryPrefix: `${libraryName}_`,
+            OptionalPrefix: "Opt_",
+            GenerateUnused: true
+        }
     }
 
     param<T>(name: string): T {
