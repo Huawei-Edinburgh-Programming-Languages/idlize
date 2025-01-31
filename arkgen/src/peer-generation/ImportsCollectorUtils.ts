@@ -1,7 +1,7 @@
 import * as idl from "@idlizer/core/idl"
 import * as path from "path"
-import { createFeatureNameConvertor } from "@idlizer/core"
-import { isMaterialized } from "./idl/IdlPeerGeneratorVisitor"
+import { capitalize, createFeatureNameConvertor, Language } from "@idlizer/core"
+import { isBuilderClass, isMaterialized, isPredefined } from "./idl/IdlPeerGeneratorVisitor"
 import { ImportFeature, ImportsCollector } from "./ImportsCollector"
 import { convertDeclaration } from "@idlizer/core"
 import { PeerLibrary } from "./PeerLibrary"
@@ -34,19 +34,19 @@ export function convertDeclToFeature(library: PeerLibrary, node: idl.IDLNode): I
         if (isBuilderClass(node)) {
             fileName = renameClassToBuilderClass(node.name, library.language)
         } else if (isMaterialized(node, library)) {
-            const ns = idl.getNamespacesPathFor(node).map(it => it.name).join('_')
-            if (ns !== '') {
-                fileName = ns
-            } else {
-                fileName = renameClassToMaterialized(node.name, library.language)
-            }
+            fileName = renameClassToMaterialized(node.name, library.language)
         }
     }
+    let feature = convertDeclaration(featureNameConvertor, node)
+    const featureNs = idl.getNamespaceName(node)
+    if (library.language === Language.TS && featureNs !== '') {
+        feature = featureNs.split('.')[0]
+        fileName = 'Ark' + featureNs.split('.').map(it => capitalize(it)).join('') + 'Namespace'
+    }
 
-    const basename = path.basename(fileName)
-    const basenameNoExt = basename.replaceAll(path.extname(basename), '')
+    const basenameNoExt = path.basename(fileName, path.extname(fileName))
     return {
-        feature: convertDeclaration(featureNameConvertor, node),
+        feature,
         module: `./${basenameNoExt}`,
     }
 }
@@ -61,6 +61,10 @@ export function collectDeclItself(
     },
 ) {
     if (emitter instanceof ImportsCollector) {
+        // ts synthetic entries not printed
+        if (idl.isSyntheticEntry(node) && library.language === Language.TS) {
+            return
+        }
         const feature = convertDeclToFeature(library, node)
         emitter.addFeature(feature.feature, feature.module)
         if (options?.includeMaterializedInternals) {

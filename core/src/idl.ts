@@ -584,6 +584,10 @@ export function isEqualByQualifedName(a?: IDLEntry, b?: IDLEntry): boolean {
     return isEqualByQualifedName(a.namespace, b.namespace)
 }
 
+export function getNamespaceName(a:IDLEntry): string {
+    return getNamespacesPathFor(a).map(it => it.name).join('.')
+}
+
 export function createVersion(value: string[], extendedAttributes?: IDLExtendedAttribute[], fileName?:string): IDLVersion {
     return {
         kind: IDLKind.Version,
