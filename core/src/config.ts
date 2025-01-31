@@ -36,6 +36,11 @@ export const defaultCoreGeneratorConfiguration: CoreGeneratorConfiguration = {
     },
 }
 
+let configuration = defaultCoreGeneratorConfiguration
+export function exampleGeneratorConfig<T extends CoreGeneratorConfiguration>(): T {
+    return configuration as T
+}
+
 class EmptyGeneratorConfiguration implements GeneratorConfiguration {
     param<T>(name: string): T {
         throw new Error(`${name} is unknown`)
