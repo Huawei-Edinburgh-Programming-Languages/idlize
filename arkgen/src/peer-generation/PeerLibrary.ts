@@ -26,9 +26,7 @@ import { LanguageWriter, PeerFile, BuilderClass, MaterializedClass } from '@idli
 import { StructPrinter } from './printers/StructPrinter';
 import { LengthConvertor } from '../arkoala/ArkoalaArgConvertors';
 import { ArgConvertor, BooleanConvertor, EnumConvertor, UndefinedConvertor, VoidConvertor } from '@idlizer/core';
-import { generateSyntheticFunctionName } from '../IDLVisitor';
-import { IdlNameConvertor } from '@idlizer/core';
-import { LibraryInterface } from '@idlizer/core';
+import { generateSyntheticFunctionName, IdlNameConvertor, LibraryInterface } from '@idlizer/core';
 
 export class PeerLibrary implements LibraryInterface {
     private _syntheticEntries: idl.IDLEntry[] = []

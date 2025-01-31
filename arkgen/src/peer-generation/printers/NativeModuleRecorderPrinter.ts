@@ -24,8 +24,7 @@ import {
 } from "@idlizer/core/idl"
 import { makeInteropSignature } from "./NativeModulePrinter";
 import { InteropArgConvertor } from "../LanguageWriters/convertors/InteropConvertor";
-import { generateSyntheticFunctionName } from "../../IDLVisitor";
-import { createAlternativeReferenceResolver } from "@idlizer/core";
+import { generateSyntheticFunctionName, createAlternativeReferenceResolver } from "@idlizer/core";
 
 class NativeModuleRecorderVisitor {
     readonly nativeModuleRecorder: LanguageWriter
