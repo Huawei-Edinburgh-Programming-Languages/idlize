@@ -1759,28 +1759,28 @@
 |`setPreventDefault`| Function | Maksimov Nikita | in progress | |
 |*HoverEvent*| *Class* | | | |
 |`setStopPropagation`| Function | | | |
-|*MouseEvent*| *Class* | | | |
-|`getButton`| Function | | | |
-|`setButton`| Function | | | |
-|`getAction`| Function | | | |
-|`setAction`| Function | | | |
-|`getDisplayX`| Function | | | |
-|`setDisplayX`| Function | | | |
-|`getDisplayY`| Function | | | |
-|`setDisplayY`| Function | | | |
-|`getWindowX`| Function | | | |
-|`setWindowX`| Function | | | |
-|`getWindowY`| Function | | | |
-|`setWindowY`| Function | | | |
-|`getScreenX`| Function | | | |
-|`setScreenX`| Function | | | |
-|`getScreenY`| Function | | | |
-|`setScreenY`| Function | | | |
-|`getX`| Function | | | |
-|`setX`| Function | | | |
-|`getY`| Function | | | |
-|`setY`| Function | | | |
-|`setStopPropagation`| Function | | | |
+|*MouseEvent*| *Class* | Spirin Andrey | in progress | |
+|`getButton`| Function | Spirin Andrey | in progress | |
+|`setButton`| Function | Spirin Andrey | in progress | |
+|`getAction`| Function | Spirin Andrey | in progress | |
+|`setAction`| Function | Spirin Andrey | in progress | |
+|`getDisplayX`| Function | Spirin Andrey | in progress | |
+|`setDisplayX`| Function | Spirin Andrey | in progress | |
+|`getDisplayY`| Function | Spirin Andrey | in progress | |
+|`setDisplayY`| Function | Spirin Andrey | in progress | |
+|`getWindowX`| Function | Spirin Andrey | in progress | |
+|`setWindowX`| Function | Spirin Andrey | in progress | |
+|`getWindowY`| Function | Spirin Andrey | in progress | |
+|`setWindowY`| Function | Spirin Andrey | in progress | |
+|`getScreenX`| Function | Spirin Andrey | in progress | |
+|`setScreenX`| Function | Spirin Andrey | in progress | |
+|`getScreenY`| Function | Spirin Andrey | in progress | |
+|`setScreenY`| Function | Spirin Andrey | | |
+|`getX`| Function | Spirin Andrey | in progress | |
+|`setX`| Function | Spirin Andrey | in progress | |
+|`getY`| Function | Spirin Andrey | in progress | |
+|`setY`| Function | Spirin Andrey | in progress | |
+|`setStopPropagation`| Function | Spirin Andrey | in progress | |
 |`getRawDeltaX`| Function | | | |
 |`setRawDeltaX`| Function | | | |
 |`getRawDeltaY`| Function | | | |
