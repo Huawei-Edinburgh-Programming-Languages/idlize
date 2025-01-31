@@ -138,6 +138,7 @@ class ArkoalaConfiguration extends DefaultConfig {
             case 'standaloneComponents': return PeerGeneratorConfig.standaloneComponents as T[]
             case 'knownParameterized': return PeerGeneratorConfig.knownParametrized as T[]
             case 'boundProperties': return PeerGeneratorConfig.boundProperties as T[]
+            case 'builderClasses': return PeerGeneratorConfig.builderClasses as T[]
         }
         return super.paramArray(name)
     }

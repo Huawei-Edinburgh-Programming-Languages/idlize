@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import { generatorConfiguration } from "../config"
 import { IDLInterface, IDLReferenceType } from "../idl"
 import { Field, Method } from "../LanguageWriters/LanguageWriter"
 import { isDefined } from "../util"
@@ -29,6 +30,41 @@ export class BuilderClass {
         public readonly methods: Method[],
         public readonly needBeGenerated: boolean = true,
     ) { }
+}
+
+/**
+ * Builder classes are classes with methods which have only one parameter and return only itself
+ */
+export function isBuilderClass(declaration: IDLInterface): boolean {
+    const className = declaration.name!
+    if (generatorConfiguration().paramArray("builderClasses").includes(className)) {
+        return true
+    }
+    if (isCustomBuilderClass(className)) {
+        return true
+    }
+
+    // TBD: update builder class check condition.
+    // Only SubTabBarStyle, BottomTabBarStyle, DotIndicator, and DigitIndicator classes
+    // are used for now.
+
+    return false
+
+    /*
+    if (PeerGeneratorConfig.isStandardNameIgnored(className)) {
+        return false
+    }
+
+    const methods: (ts.MethodSignature | ts.MethodDeclaration)[] = [
+        ...ts.isClassDeclaration(declaration) ? declaration.members.filter(ts.isMethodDeclaration) : [],
+    ]
+
+    if (methods.length === 0) {
+        return false
+    }
+
+    return methods.every(it => it.type && className == it.type.getText() && it.parameters.length === 1)
+    */
 }
 
 export const CUSTOM_BUILDER_CLASSES: BuilderClass[] = []

@@ -29,6 +29,7 @@ import { LanguageWriter, PeerFile } from "@idlizer/core"
 import {
     indentedBy,
     isDefined,
+    isBuilderClass,
     removeExt,
     renameDtsToInterfaces,
     stringOrNone,
@@ -47,7 +48,7 @@ import { collectJavaImports } from './lang/JavaIdlUtils'
 import { collectProperties } from './StructPrinter'
 import { escapeIDLKeyword, IDLType } from '@idlizer/core/idl'
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig'
-import { isBuilderClass, isMaterialized, isPredefined } from '../idl/IdlPeerGeneratorVisitor'
+import { isMaterialized, isPredefined } from '../idl/IdlPeerGeneratorVisitor'
 import { DependenciesCollector } from '../idl/IdlDependenciesCollector'
 import { createInterfaceDeclName } from './lang/CommonUtils'
 import { collectDeclDependencies, convertDeclToFeature } from '../ImportsCollectorUtils'

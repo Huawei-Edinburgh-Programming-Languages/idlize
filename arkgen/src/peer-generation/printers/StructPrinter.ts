@@ -18,6 +18,7 @@ import {
     IndentedPrinter,
     Language,
     camelCaseToUpperSnakeCase,
+    isBuilderClass,
     isImportAttr,
     isStringEnum,
     generatorConfiguration,
@@ -28,7 +29,7 @@ import { ArkPrimitiveTypeList, ArkPrimitiveTypesInstance } from "../ArkPrimitive
 import { createLanguageWriter, LanguageExpression, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters"
 import { LanguageWriter } from "@idlizer/core"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig"
-import { isBuilderClass, isMaterialized } from "../idl/IdlPeerGeneratorVisitor"
+import { isMaterialized } from "../idl/IdlPeerGeneratorVisitor"
 import { cleanPrefix, PeerLibrary } from "../PeerLibrary"
 import { PrintHint } from "@idlizer/core"
 import { LibraryInterface } from "@idlizer/core"

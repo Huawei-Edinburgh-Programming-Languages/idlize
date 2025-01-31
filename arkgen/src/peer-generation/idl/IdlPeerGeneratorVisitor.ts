@@ -27,7 +27,7 @@ import { ArgConvertor, PeerFile, PeerClass, PeerMethod } from "@idlizer/core"
 import { createOutArgConvertor } from "../PromiseConvertors"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { PeerLibrary } from "../PeerLibrary"
-import { getInternalClassName, MaterializedClass, MaterializedField, MaterializedMethod } from "@idlizer/core"
+import { getInternalClassName, isBuilderClass, MaterializedClass, MaterializedField, MaterializedMethod } from "@idlizer/core"
 import { Field, FieldModifier, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters";
 import { BuilderClass, CUSTOM_BUILDER_CLASSES, isCustomBuilderClass } from "@idlizer/core";
 import { ImportFeature } from "../ImportsCollector";
@@ -513,43 +513,6 @@ export function createDependencyFilter(library: PeerLibrary): DependencyFilter {
 
 export function isGlobalScope(declaration: idl.IDLEntry): boolean {
     return idl.isInterface(declaration) && idl.hasExtAttribute(declaration, idl.IDLExtendedAttributes.GlobalScope)
-}
-
-export function isBuilderClass(declaration: idl.IDLInterface): boolean {/// stolen from BUilderClass
-
-    // Builder classes are classes with methods which have only one parameter and return only itself
-
-    const className = declaration.name!
-
-    if (PeerGeneratorConfig.builderClasses.includes(className)) {
-        return true
-    }
-
-    if (isCustomBuilderClass(className)) {
-        return true
-    }
-
-    // TBD: update builder class check condition.
-    // Only SubTabBarStyle, BottomTabBarStyle, DotIndicator, and DigitIndicator classes
-    // are used for now.
-
-    return false
-
-    /*
-    if (PeerGeneratorConfig.isStandardNameIgnored(className)) {
-        return false
-    }
-
-    const methods: (ts.MethodSignature | ts.MethodDeclaration)[] = [
-        ...ts.isClassDeclaration(declaration) ? declaration.members.filter(ts.isMethodDeclaration) : [],
-    ]
-
-    if (methods.length === 0) {
-        return false
-    }
-
-    return methods.every(it => it.type && className == it.type.getText() && it.parameters.length === 1)
-    */
 }
 
 export function isCommonMethodOrSubclass(library: PeerLibrary, decl?: idl.IDLEntry): boolean {
