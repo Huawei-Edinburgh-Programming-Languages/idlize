@@ -13,48 +13,56 @@
  * limitations under the License.
  */
 
-import { GeneratorConfiguration, throwException } from "@idlize/core"
+import { IDLPointerType, IDLPrimitiveType, IDLU32Type } from "@idlizer/core"
+import { Options } from "./Options"
 
-export class Config implements GeneratorConfiguration {
-    constructor(private generateFor?: string[]) {}
+export class Config {
+    constructor(
+        private options: Options,
+        private fixInput: boolean,
+        private files?: string[]
+    ) {}
 
-    private implPrefix = `impl_`
-    private nativeModulePrefix = `_`
-
-    param<T>(name: string): T {
-        throw new Error("Method not implemented.")
-    }
-    paramArray<T>(name: string): T[] {
-        if (name === `handwrittenMethods`) return [
-            `CreateConfig`, // sequence<String>
-            `ProgramExternalSources`, // sequence<sequence>
-            `ExternalSourcePrograms`, // sequence<sequence>
-            `ProtectionFlagConst` // u8
-        ] as T[]
-        throwException(`Unexpected name: ${name}`)
+    static get sequencePointerType(): IDLPrimitiveType {
+        return IDLPointerType
     }
 
-    get typePrefix() {
-        return `es2panda_`
+    static get sequenceLengthType(): IDLPrimitiveType {
+        return IDLU32Type
     }
 
-    get nativeModuleName() {
-        return `Es2pandaNativeModule`
+    static get createMethod(): string {
+        return `Create`
     }
 
-    methodFunction(interfaceName: string, methodName: string): string {
-        return `${interfaceName}${methodName}`
+    static get updateMethod(): string {
+        return `Update`
     }
 
-    implFunction(name: string): string {
-        return `${this.implPrefix}${name}`
+    static get astNodeCommonAncestor(): string {
+        return `AstNode`
     }
 
-    nativeModuleFunction(name: string): string {
-        return `${this.nativeModulePrefix}${name}`
+    shouldEmitEnum(name: string): boolean {
+        return true
     }
 
-    shouldEmit(nodeName: string): boolean {
-        return this.generateFor?.includes(nodeName) ?? true
+    shouldEmitInterface(name: string): boolean {
+        return this.options.shouldEmitInterface(name)
+    }
+
+    shouldEmitMethod(iface: string, method: string): boolean {
+        return this.options.shouldEmitMethod(iface, method)
+    }
+
+    shouldEmitFile(name: string): boolean {
+        if (this.files !== undefined) {
+            return this.files.includes(name)
+        }
+        return true
+    }
+
+    shouldFixInput(): boolean {
+        return this.fixInput
     }
 }

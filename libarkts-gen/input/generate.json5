@@ -1,0 +1,33 @@
+{
+    "generate": {
+        "interfaces": {
+            "MemberExpression": [
+                "Object",
+                "Property",
+                "KindConst",
+                "Create",
+                "Update",
+            ]
+//            "Identifier": [
+//                "Name",
+//            ],
+//            "FunctionSignature": [
+//                "ParamsConst",
+//            ],
+//            "BlockStatement": [
+//                "Statements",
+//                "SetStatements",
+//            ],
+//            "ClassDefinition": [
+//                "Body",
+//            ],
+//            "ClassElement": [
+//                "Key",
+//                "Value",
+//            ],
+//            "CallExpression": [
+//                "Arguments",
+//            ],
+        }
+    }
+}

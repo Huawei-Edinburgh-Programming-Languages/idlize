@@ -1,27 +1,19 @@
 /.idea/
-/.rollup.cache/
 /.vscode/
 /build/
+/lib/
 /core/build/
 /generated/
-/out/
 /.packages/
 /idl/
-/interface_sdk-js/
-/lib/
-/node_modules/
-/panda/node_modules/
-/sdk/
+node_modules
+/.rollup.cache/
 
 /package-lock.json
 /.npmrc
 
-/native/NativeBridgeNapi.node
-/native/*.so
-/native/*.dylib
-/native/*.dll
-/native/*.lib
-NativeBridge.node
 /libarkts-gen/.rollup.cache/
 /libarkts-gen/lib/
 /libarkts-gen/out/
+*.rej
+*.orig

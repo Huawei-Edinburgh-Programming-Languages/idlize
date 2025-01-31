@@ -25,6 +25,7 @@ import {
 } from "./webidl2-utils"
 import { toString } from "./toString"
 import * as idl from "../idl"
+import * as lib from "../library"
 import { isDefined, stringOrNone, warn } from "../util"
 import { generateSyntheticUnionName } from "../peer-generation/idl/common"
 
@@ -41,6 +42,12 @@ export function resolveSyntheticType(type: idl.IDLReferenceType): idl.IDLEntry |
 }
 
 export function toIDLNode(file: string, node: webidl2.IDLRootType): idl.IDLEntry {
+    const result = toIDLNodeForward(file, node)
+    idl.linkNamespacesBack(result)
+    return result
+}
+
+function toIDLNodeForward(file: string, node: webidl2.IDLRootType): idl.IDLEntry {
     if (isEnum(node)) {
         return toIDLEnum(file, node)
     }
@@ -71,9 +78,14 @@ export function toIDLNode(file: string, node: webidl2.IDLRootType): idl.IDLEntry
     if (isVersion(node)) {
         return toIDLVersion(file, node)
     }
+    if (isAttribute(node as webidl2.IDLNamespaceMemberType)) {
+        return toIDLProperty(file, node as webidl2.AttributeMemberType)
+    }
+    if (isOperation(node as webidl2.IDLNamespaceMemberType)) {
+        return toIDLMethod(file, node as webidl2.OperationMemberType)
+    }
     throw new Error(`unexpected node type: ${toString(node)}`)
 }
-
 
 function isNamespace(node: webidl2.IDLRootType): node is webidl2.NamespaceType {
     return node.type === 'namespace'
@@ -267,6 +279,7 @@ function toIDLMethod(file: string, node: webidl2.OperationMemberType): idl.IDLMe
             isStatic: node.special === "static",
             isAsync: node.async,
             isOptional: isOptional(node),
+            isFree: false, // TODO: namespace-related-to-rework
         }, {
             documentation: makeDocs(node),
             extendedAttributes: toExtendedAttributes(node.extAttrs),
@@ -329,12 +342,14 @@ function toIDLDictionary(file: string, node: webidl2.DictionaryType): idl.IDLEnu
     return result
 }
 
-function toIDLNamespace(file: string, node: webidl2.NamespaceType): idl.IDLModule {
-    return idl.createModuleType(
+function toIDLNamespace(file: string, node: webidl2.NamespaceType): idl.IDLNamespace {
+    const namespace = idl.createNamespace(
         node.name,
         toExtendedAttributes(node.extAttrs),
         file
     )
+    namespace.members = node.members.map(it => toIDLNodeForward(file, it))
+    return namespace
 }
 
 function toIDLVersion(file: string, node: webidl2.VersionType): idl.IDLVersion {
@@ -455,4 +470,15 @@ function findExtendedAttribute(extAttrs: webidl2.ExtendedAttribute[], name: idl.
 export function toIDL(file: string): idl.IDLEntry[] {
     const content = fs.readFileSync(file).toString()
     return webidl2.parse(content).map(it => toIDLNode(file, it))
+}
+
+export function toIDLFile(fileName: string): lib.IDLFile {
+    const content = fs.readFileSync(fileName).toString()
+    const entities = webidl2.parse(content).map(it => toIDLNode(fileName, it))
+    const pack = entities.find(idl.isPackage)
+    return {
+        fileName,
+        entities,
+        package: pack,
+    }
 }

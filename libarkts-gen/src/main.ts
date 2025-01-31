@@ -14,43 +14,48 @@
  */
 
 import { program } from "commander"
-import { Language, toIDL } from "@idlize/core"
-import { LibarktsGenerator } from "./LibarktsGenerator"
-import { IDLFile, Es2PandaTransformer } from "./Es2PandaTransformer"
+import { toIDL } from "@idlizer/core"
+import { FileEmitter } from "./FileEmitter"
 import { Config } from "./Config"
+import { IDLFile } from "./IdlFile"
+import { Options } from "./Options"
+import { VerifyVisitor } from "./visitors/VerifyVisitor"
 
-const options: {
-    outputDir?: string,
+const cliOptions: {
     inputFile?: string,
-    libarktsTransform?: boolean,
-    generateFor?: string
+    outputDir?: string,
+    transform?: boolean,
+    files?: string
+    optionsFile?: string
 } = program
-    .option('--output-dir <path>', 'Path to output dir')
     .option('--input-file <path>', 'Path to file to generate from')
-    .option('--libarkts-transform', 'Invokes Es2PandaTransformer on input .idl')
-    .option('--generate-for <string>', 'Ignore all other nodes, comma separated, no space')
+    .option('--output-dir <path>', 'Path to output dir')
+    .option('--transform', 'Applies some temporary fixes on input .idl')
+    .option('--files <string>', 'Types of files to be emitted [bridges|bindings|enums], comma separated, no space')
+    .option('--options-file <path>', 'Path to file which determines what to generate')
     .parse()
     .opts()
 
-function generateTarget(idl: IDLFile, outDir: string, language: Language) {
-    if (options.libarktsTransform) {
-        new Es2PandaTransformer(idl).transform()
-    }
-    new LibarktsGenerator(
+function main() {
+    const outDir = cliOptions.outputDir ?? `./out`
+    const idlFile = cliOptions.inputFile ?? `./input/full.idl`
+    const files = cliOptions.files?.split(`,`)
+    const shouldFixInput = cliOptions.transform ?? false
+
+    const idl = new IDLFile(toIDL(idlFile))
+    new VerifyVisitor(idl).complain()
+
+    const config = new Config(
+        new Options(cliOptions.optionsFile),
+        shouldFixInput,
+        files
+    )
+
+    new FileEmitter(
         outDir,
         idl,
-        new Config(options.generateFor?.split(`,`))
+        config,
     ).print()
-}
-
-function main() {
-
-    const outDir = options.outputDir ?? `./out`
-    const language = Language.fromString(`ts`)
-    const idlFile = options.inputFile ?? `./tests/subset.idl`
-    const idl = new IDLFile(toIDL(idlFile))
-
-    generateTarget(idl, outDir, language)
 }
 
 main()

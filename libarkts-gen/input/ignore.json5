@@ -1,0 +1,29 @@
+{
+    "ignore": {
+        "interfaces": {
+            "es2panda_Impl": [
+                "CreateConfig", // sequence<String>
+                "ProgramExternalSources", // sequence<sequence>
+                "ExternalSourcePrograms", // sequence<sequence>
+            ],
+            "Signature": [
+                "ProtectionFlagConst", // u8
+            ],
+            "Type": [
+                "IdConst", // u64
+            ],
+            "FunctionSignature": [ // not AstNode
+                "*"
+            ],
+            "es2panda_FunctionSignature": [ // not AstNode
+                "*"
+            ],
+            "es2panda_Signature": [ // not AstNode
+                "*"
+            ],
+            "LocalScope": [ // bugged
+                "*"
+            ],
+        }
+    }
+}

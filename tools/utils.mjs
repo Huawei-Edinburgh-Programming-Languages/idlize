@@ -1,12 +1,48 @@
 import fs from "fs"
-import chalk from "chalk"
 import path from "path"
 import { fileURLToPath } from 'url'
 import { execSync } from "child_process"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-export const IDLIZE_HOME = path.join(__dirname, "..")
+export const IDLIZE_HOME = path.resolve(path.join(__dirname, ".."))
+
+export class Package {
+    constructor(path) {
+        this.path = path
+    }
+
+    package() {
+        return path.join(this.path, "package.json")
+    }
+
+    write(key, value, updater) {
+        const json = JSON.parse(fs.readFileSync(this.package(), "utf-8"))
+        json[key] = value
+        if (updater) updater(json)
+        fs.writeFileSync(this.package(), JSON.stringify(json, null, 2), "utf-8")
+    }
+
+    read(key) {
+        const json = JSON.parse(fs.readFileSync(this.package(), "utf-8"))
+        return json[key]
+    }
+
+    publish() {
+        process.chdir(this.path)
+        publishToOpenlab("latest")
+    }
+
+    externalDependencies = ["@idlizer/core", "@koalaui/interop"]
+}
+
+export const all_packages = [
+    new Package(path.join(IDLIZE_HOME, "arkgen")),
+    new Package(path.join(IDLIZE_HOME, "core")),
+    new Package(path.join(IDLIZE_HOME, "linter")),
+    new Package(path.join(IDLIZE_HOME, "libarkts-gen")),
+    new Package(path.join(IDLIZE_HOME, "ohosgen"))
+]
 
 export class Version {
     constructor(version) {
@@ -68,22 +104,29 @@ export class Git {
     restore(files) {
         execSync(`git restore ${files}`)
     }
-    
+
     clean() {
         execSync("git clean -fd")
     }
 
 }
 
-export function writeToPackageJson(key, value) {
-    const json = JSON.parse(fs.readFileSync(path.join(IDLIZE_HOME, "package.json"), "utf-8"))
+export function writeToPackageJson(filePath, key, value, updater) {
+    const json = JSON.parse(fs.readFileSync(filePath, "utf-8"))
     json[key] = value
-    fs.writeFileSync(path.join(IDLIZE_HOME, "package.json"), JSON.stringify(json, null, 2), "utf-8")
+    if (updater) updater(json)
+    fs.writeFileSync(filePath, JSON.stringify(json, null, 2), "utf-8")
+
+}
+
+export function replaceInJson(filePath, regexp, value) {
+    const json = JSON.parse(fs.readFileSync(filePath, "utf-8"))
+    fs.writeFileSync(filePath, JSON.stringify(json, null, 2).replace(regexp, value), "utf-8")
 
 }
 
 
-const keyIdlizeRegistry = "@azanat:registry"
+const keyIdlizeRegistry = "@idlizer:registry"
 const keyKoalaRegistry = "@koalaui:registry"
 const koalaRegistry = "https://rnd-gitlab-msc.huawei.com/api/v4/projects/3921/packages/npm/"
 const idlizeRegistry = "https://nexus.bz-openlab.ru:10443/repository/koala-npm/"
@@ -97,8 +140,6 @@ function getRegistry(key) {
 }
 
 export function publishToOpenlab(tag, dryRun = false) {
-    setRegistry(keyIdlizeRegistry, idlizeRegistry)
-    setRegistry("strict-ssl", false)
 
     if (dryRun) {
         execSync(`npm publish --dry-run --tag ${tag}`)

@@ -1,9 +1,9 @@
-# IDLizer
+# <p> <img align="bottom" src="artwork/logo.svg" alt="logo" width="100"/> IDLize <p/>
 
 ## Description
 
 This folder contains collection of tools for analyzing and transformation of
-.d.ts files, with aim of exposing ArkUI interfaces to more languages and runtimes.
+.d.ts and idl files, with aim of exposing native interfaces to managed languages and runtimes.
 
 ## Tools available
 
@@ -17,14 +17,14 @@ registry=https://repo.huaweicloud.com/repository/npm/
 @ohos:registry=https://repo.harmonyos.com/npm/
 strict-ssl=false
 lockfile=false
-@azanat:registry=https://nexus.bz-openlab.ru:10443/repository/koala-npm/
+@idlizer:registry=https://nexus.bz-openlab.ru:10443/repository/koala-npm/
 @koalaui:registry=https://nexus.bz-openlab.ru:10443/repository/koala-npm/
 @panda:registry=https://nexus.bz-openlab.ru:10443/repository/koala-npm/
 //nexus.bz-openlab.ru:10443/repository/koala-npm/:_auth=a29hbGEtcHViOnkzdCFuMHRoZXJQ
 ```
 Using:
 ```
-npx @azanat/idlize@next --dts2peer --input-dir <dir> --arkoala-destination <arkoala-path> --generate-interface <components> --generator-target arkoala --only-integrated
+npx @idlizer/arkgen@next --dts2peer --input-dir <dir> --arkoala-destination <arkoala-path> --generate-interface <components> --generator-target arkoala --only-integrated
 ```
 
 Run:
@@ -33,6 +33,7 @@ cd idlize
 git submodule update --init
 git submodule update --remote
 npm i
+cd arkgen
 npm run compile
 ```
 
@@ -40,7 +41,7 @@ npm run compile
 
 Given interface definitions it will produce for libace
   * For libace interface
-    * arkoala_api.h header
+    * arkoala_api_generated.h header
     * api discovery code
     * component modifiers
     * etc
@@ -108,7 +109,7 @@ Linter support whitelist files in JSON:
     }
 }
 ```
-can be passed with `--linter-whitelist whitelist.json`.
+can be passed with `--whitelist whitelist.json`.
 
 ### IDL generator
 
@@ -118,21 +119,9 @@ can be passed with `--linter-whitelist whitelist.json`.
 ```bash
 cd idlize
 npm i
+cd arkgen
 npm run compile
 node . --dts2idl --input-dir ../arkui-common/ohos-sdk-ets/openharmony/10/ets/component --output-dir ./idl
 ```
 
 Results are in `./idl/` folder.
-
-### Typescript declaration files generator
-
-Tool producing set of typescript declaration files from .idl interface definitions.
-
-```bash
-cd idlize
-npm i
-npm run compile
-node . --idl2dts --input-dir ./test/from-idl/idl --output-dir ./dts
-```
-
-Results are in `./dts` folder.

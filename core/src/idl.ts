@@ -16,6 +16,7 @@
 import * as webidl2 from "webidl2"
 import { indentedBy, isDefined, stringOrNone } from "./util";
 import { generateSyntheticIdlNodeName } from "./peer-generation/idl/common";
+import { IDLKeywords } from "./languageSpecificKeywords";
 
 export enum IDLKind {
     Interface,
@@ -35,12 +36,11 @@ export enum IDLKind {
     ContainerType,
     UnspecifiedGenericType,
     ReferenceType,
-    EnumType,
     UnionType,
     TypeParameterType,
-    ModuleType,
     OptionalType,
     Version,
+    Namespace,
 }
 
 export enum IDLEntity {
@@ -68,11 +68,10 @@ export enum IDLExtendedAttributes {
     DtsName = "DtsName",
     DtsTag = "DtsTag",
     Entity = "Entity",
-    GlobalScope = "GlobalScope",
+    GlobalScope = "GlobalScope", // TODO: namespace-related-to-rework
     Import = "Import",
     IndexSignature = "IndexSignature",
     Interfaces = "Interfaces",
-    Namespace = "Namespace",
     NativeModule = "NativeModule",
     Optional = "Optional",
     OriginalEnumMemberName = "OriginalEnumMemberName",
@@ -83,6 +82,7 @@ export enum IDLExtendedAttributes {
     TypeParameters = "TypeParameters",
     VerbatimDts = "VerbatimDts",
     HandWrittenImplementation = "HandWrittenImplementation",
+    Predefined = "Predefined",
 }
 
 export enum IDLAccessorAttribute {
@@ -113,7 +113,8 @@ export interface IDLNamedNode extends IDLNode {
 export interface IDLEntry extends IDLNode, IDLNamedNode {
     _idlEntryBrand: any
     comment?: string
-    scope?: IDLEntry[]
+    scope?: IDLEntry[] // TODO: cascade remove as useless
+    namespace?: IDLNamespace
 }
 
 export interface IDLType extends IDLNode {
@@ -149,6 +150,7 @@ export interface IDLContainerType extends IDLType {
 export interface IDLReferenceType extends IDLType, IDLNamedNode {
     kind: IDLKind.ReferenceType
     typeArguments?: IDLType[]
+    namespace?: IDLNamespace
 }
 
 export interface IDLUnspecifiedGenericType extends IDLType, IDLNamedNode {
@@ -163,10 +165,6 @@ export interface IDLUnionType extends IDLType, IDLNamedNode {
 
 export interface IDLTypeParameterType extends IDLType, IDLNamedNode {
     kind: IDLKind.TypeParameterType
-}
-
-export interface IDLModule extends IDLEntry {
-    kind: IDLKind.ModuleType
 }
 
 export interface IDLVersion extends IDLEntry {
@@ -231,6 +229,7 @@ export interface IDLMethod extends IDLFunction, IDLNamedNode {
     returnType: IDLType
     isStatic: boolean
     isOptional: boolean
+    isFree: boolean
 }
 
 export interface IDLCallable extends IDLFunction {
@@ -270,66 +269,96 @@ export interface IDLImport extends IDLEntry {
     importClause?: string[]
 }
 
+export interface IDLNamespace extends IDLEntry {
+    kind: IDLKind.Namespace
+    members: IDLEntry[]
+}
+
 export interface IDLCallback extends IDLEntry, IDLSignature {
     kind: IDLKind.Callback
     returnType: IDLType
 }
 
-export function forEachChild(node: IDLNode, cb: (entry: IDLNode) => void): void {
-    cb(node)
+export function forEachChild(node: IDLNode, cbEnter: (entry: IDLNode) => void, cbLeave?: (entry: IDLNode) => void): void {
+    cbEnter(node)
     switch (node.kind) {
+        case IDLKind.Namespace:
+            (node as IDLNamespace).members.forEach((value) => forEachChild(value, cbEnter, cbLeave))
+            break
+
         case IDLKind.Interface: {
-            let iface = node as IDLInterface
-            iface.inheritance.forEach((value) => forEachChild(value, cb))
-            iface.constructors.forEach((value) => forEachChild(value, cb))
-            iface.properties.forEach((value) => forEachChild(value, cb))
-            iface.methods.forEach((value) => forEachChild(value, cb))
-            iface.callables.forEach((value) => forEachChild(value, cb))
-            iface.scope?.forEach((value) => forEachChild(value, cb))
+            let concrete = node as IDLInterface
+            concrete.inheritance.forEach((value) => forEachChild(value, cbEnter, cbLeave))
+            concrete.constructors.forEach((value) => forEachChild(value, cbEnter, cbLeave))
+            concrete.properties.forEach((value) => forEachChild(value, cbEnter, cbLeave))
+            concrete.methods.forEach((value) => forEachChild(value, cbEnter, cbLeave))
+            concrete.callables.forEach((value) => forEachChild(value, cbEnter, cbLeave))
+            concrete.scope?.forEach((value) => forEachChild(value, cbEnter, cbLeave))
             break
         }
         case IDLKind.Method:
         case IDLKind.Callable:
         case IDLKind.Callback:
         case IDLKind.Constructor: {
-            let param = node as IDLSignature
-            param.parameters?.forEach((value) => forEachChild(value, cb))
-            if (param.returnType) forEachChild(param.returnType, cb)
+            let concrete = node as IDLSignature
+            concrete.parameters?.forEach((value) => forEachChild(value, cbEnter, cbLeave))
+            if (concrete.returnType) forEachChild(concrete.returnType, cbEnter, cbLeave)
             break
         }
         case IDLKind.UnionType: {
-            let param = node as IDLUnionType
-            param.types?.forEach((value) => forEachChild(value, cb))
+            let concrete = node as IDLUnionType
+            concrete.types?.forEach((value) => forEachChild(value, cbEnter, cbLeave))
+            break
+        }
+        case IDLKind.OptionalType: {
+            let concrete = node as IDLOptionalType
+            forEachChild(concrete.type, cbEnter, cbLeave)
+            break
+        }
+        case IDLKind.Const: {
+            forEachChild((node as IDLConstant).type, cbEnter, cbLeave)
             break
         }
         case IDLKind.Enum: {
+            (node as IDLEnum).elements.forEach((value) => forEachChild(value, cbEnter, cbLeave))
             break
         }
-        case IDLKind.Parameter:
-            let parameter = node as IDLParameter
-            if (parameter.type) forEachChild(parameter.type, cb)
+        case IDLKind.Property: {
+            forEachChild((node as IDLProperty).type, cbEnter, cbLeave)
             break
-        case IDLKind.ContainerType:
-            let container = node as IDLContainerType
-            if (container.elementType) container.elementType.forEach((value) => forEachChild(value, cb))
+        }
+        case IDLKind.Parameter: {
+            const concrete = node as IDLParameter
+            if (concrete.type)
+                forEachChild(concrete.type, cbEnter, cbLeave)
             break
-        case IDLKind.Property:
-        case IDLKind.Typedef:
-        case IDLKind.EnumType:
-        case IDLKind.PrimitiveType:
-        case IDLKind.TypeParameterType:
-        case IDLKind.ReferenceType:
-        case IDLKind.Version:
+        }
+        case IDLKind.Typedef: {
+            forEachChild((node as IDLTypedef).type, cbEnter, cbLeave)
+            break
+        }
+        case IDLKind.ContainerType: {
+            (node as IDLContainerType).elementType.forEach((value) => forEachChild(value, cbEnter, cbLeave))
+            break
+        }
         case IDLKind.UnspecifiedGenericType: {
+            (node as IDLUnspecifiedGenericType).typeArguments.forEach((value) => forEachChild(value, cbEnter, cbLeave))
             break
         }
-        case IDLKind.ModuleType: {
+        case IDLKind.ReferenceType:
+        case IDLKind.TypeParameterType:
+        case IDLKind.EnumMember:
+        case IDLKind.Package:
+        case IDLKind.Import:
+        case IDLKind.PrimitiveType:
+        case IDLKind.Version:
             break
-        }
         default: {
             throw new Error(`Unhandled ${node.kind}`)
         }
     }
+    if (cbLeave)
+        cbLeave(node)
 }
 
 export function isNamedNode(type: IDLNode): type is IDLNamedNode {
@@ -420,9 +449,10 @@ export function isEntry(node: IDLNode): node is IDLEntry {
     return "_idlEntryBrand" in node
 }
 
-export function isModuleType(node: IDLNode): node is IDLModule {
-    return node.kind === IDLKind.ModuleType
+export function isNamespace(node: IDLNode): node is IDLNamespace {
+    return node.kind === IDLKind.Namespace
 }
+
 export function isSyntheticEntry(node: IDLNode): boolean {
     return isDefined(node.extendedAttributes?.find(it => it.name === IDLExtendedAttributes.Synthetic))
 }
@@ -506,9 +536,10 @@ export type IDLNodeInitializer = {
     documentation?: string
 }
 
-export function createModuleType(name:string, extendedAttributes?: IDLExtendedAttribute[], fileName?:string): IDLModule {
+export function createNamespace(name:string, extendedAttributes?: IDLExtendedAttribute[], fileName?:string): IDLNamespace {
     return {
-        kind: IDLKind.ModuleType,
+        kind: IDLKind.Namespace,
+        members: [],
         name: name,
         extendedAttributes,
         fileName,
@@ -516,6 +547,41 @@ export function createModuleType(name:string, extendedAttributes?: IDLExtendedAt
         _idlEntryBrand: innerIdlSymbol,
         _idlNamedNodeBrand: innerIdlSymbol,
     }
+}
+
+export function linkNamespacesBack(node: IDLNode): void {
+    let namespacePath: IDLNamespace[] = []
+    forEachChild(node, child => {
+        if (isEntry(child) || isReferenceType(child)) {
+            if (!child.namespace)
+                child.namespace = namespacePath.length ? namespacePath[namespacePath.length-1] : undefined
+        }
+        if (isNamespace(child))
+            namespacePath.push(child)
+    }, child => {
+        if (isNamespace(child))
+            namespacePath.pop()
+    })
+}
+
+export function getNamespacesPathFor(entry: IDLEntry): IDLNamespace[] {
+    let iterator: IDLNamespace | undefined = entry.namespace
+    const result: IDLNamespace[] = []
+    while (iterator) {
+        result.unshift(iterator);
+        iterator = iterator.namespace
+    }
+    return result
+}
+
+export function isEqualByQualifedName(a?: IDLEntry, b?: IDLEntry): boolean {
+    if (a === b)
+        return true
+    if (!a || !b)
+        return false
+    if (a.kind !== b.kind || a.name !== b.name)
+        return false
+    return isEqualByQualifedName(a.namespace, b.namespace)
 }
 
 export function createVersion(value: string[], extendedAttributes?: IDLExtendedAttribute[], fileName?:string): IDLVersion {
@@ -531,11 +597,22 @@ export function createVersion(value: string[], extendedAttributes?: IDLExtendedA
     }
 }
 
-export function createReferenceType(name: string, typeArguments?: IDLType[]): IDLReferenceType {
+export function fetchNamespaceFrom(pointOfView?: IDLNode): IDLNamespace|undefined {
+    if (pointOfView) {
+        if (isNamespace(pointOfView))
+            return pointOfView
+        if (isEntry(pointOfView) || isReferenceType(pointOfView))
+            return pointOfView.namespace
+    }
+    return undefined
+}
+
+export function createReferenceType(name: string, typeArguments?: IDLType[], pointOfView?: IDLNode): IDLReferenceType {
     return {
         kind: IDLKind.ReferenceType,
         name,
         typeArguments,
+        namespace: fetchNamespaceFrom(pointOfView),
         _idlNodeBrand: innerIdlSymbol,
         _idlTypeBrand: innerIdlSymbol,
         _idlNamedNodeBrand: innerIdlSymbol,
@@ -558,18 +635,10 @@ export function entityToType(entity:IDLNode): IDLType {
         return entity
     }
 
-    return createReferenceType(forceAsNamedNode(entity).name)
+    return createReferenceType(forceAsNamedNode(entity).name, undefined, entity)
 }
 
 export function createContainerType(container: IDLContainerKind, element: IDLType[]): IDLContainerType {
-    if (container == "Promise") {
-        // A bit ugly, but we cannot do that.
-        element.forEach(it => { it.extendedAttributes = []})
-    }
-    // TODO not used?
-    // if (element[0][idlTypeName] == "PropertyKey") {
-    //     element[0] = { ...element[0], [idlTypeName]: IDLStringType[idlTypeName] }
-    // }
     return {
         kind: IDLKind.ContainerType,
         containerKind: container,
@@ -725,6 +794,7 @@ export type IDLMethodInitializer = {
     isAsync: boolean
     isStatic: boolean
     isOptional: boolean
+    isFree: boolean // not a member of interface/class
 }
 export function createMethod(
     name: string,
@@ -734,6 +804,7 @@ export function createMethod(
         isAsync: false,
         isStatic: false,
         isOptional: false,
+        isFree: false,
     },
     nodeInitializer: IDLNodeInitializer = {},
     typeParameters: string[] = []
@@ -798,7 +869,7 @@ export function createConstructor(
 export function createCallback(name: string, parameters: IDLParameter[], returnType: IDLType,
         nodeInitializer: IDLNodeInitializer = {}, typeParameters: string[] = []): IDLCallback
 {
-    if (isNamedNode(returnType) && returnType.name === "this")
+    if (returnType === IDLThisType || isReferenceType(returnType) && returnType.name === "this")
         returnType = IDLAnyType
     parameters = parameters.map(it => {
         if (it.type && isNamedNode(it.type) && (it.type.name === "T" || it.type.name === "this"))
@@ -855,9 +926,7 @@ export function createConstant(name: string, type: IDLType, value: string, nodeI
     }
 }
 
-const IDLKeywords = new Set<string>(["attribute", "callback", "object", "toString"])
-
-export function escapeKeyword(name: string): string {
+export function escapeIDLKeyword(name: string): string {
     return name + (IDLKeywords.has(name) ? "_" : "")
 }
 
@@ -868,6 +937,13 @@ export function unescapeKeyword(name: string): string {
     }
     return name
 }
+
+type PrintedIndentInc = "[[indent-inc]]"
+type PrintedIndentDec = "[[indent-dec]]"
+type PrintedLine = undefined | string | PrintedIndentInc | PrintedIndentDec
+
+const printedIndentInc: PrintedIndentInc = "[[indent-inc]]"
+const printedIndentDec: PrintedIndentDec = "[[indent-dec]]"
 
 type PrintTypeOptions = {
     [key: string]: any
@@ -907,8 +983,8 @@ export function printParameters(parameters: IDLParameter[] | undefined): string 
         ?.join(", ") ?? ""
 }
 
-export function printConstructor(idl: IDLConstructor): stringOrNone[] {
-    return [indentedBy(`constructor(${printParameters(idl.parameters)});`, 1)]
+export function printConstructor(idl: IDLConstructor): PrintedLine[] {
+    return [`constructor(${printParameters(idl.parameters)});`]
 }
 
 export function nameWithType(
@@ -919,27 +995,27 @@ export function nameWithType(
     const type = printType(idl.type)
     const variadic = isVariadic ? "..." : ""
     const optional = isOptional ? "optional " : ""
-    return `${optional}${type}${variadic} ${escapeKeyword(idl.name!)}`
+    return `${optional}${type}${variadic} ${escapeIDLKeyword(idl.name!)}`
 }
 
-export function printConstant(idl: IDLConstant): stringOrNone[] {
+export function printConstant(idl: IDLConstant): PrintedLine[] {
     return [
         ...printExtendedAttributes(idl, 1),
-        indentedBy(`const ${nameWithType(idl)} = ${idl.value};`, 1)
+        `const ${nameWithType(idl)} = ${idl.value};`
     ]
 }
 
-export function printProperty(idl: IDLProperty): stringOrNone[] {
+export function printProperty(idl: IDLProperty): PrintedLine[] {
     const staticMod = idl.isStatic ? "static " : ""
     const readonlyMod = idl.isReadonly ? "readonly " : ""
 
     return [
         ...printExtendedAttributes(idl, 1),
-        indentedBy(`${staticMod}${readonlyMod}attribute ${nameWithType(idl)};`, 1)
+        `${staticMod}${readonlyMod}attribute ${nameWithType(idl)};`
     ]
 }
 
-function printExtendedAttributes(idl: IDLNode, indentLevel: number): stringOrNone[] {
+export function printExtendedAttributes(idl: IDLNode, indentLevel: number): PrintedLine[] {
     let typeParameters: string[]|undefined
     let typeArguments: IDLType[]|undefined
     switch(idl.kind) {
@@ -976,7 +1052,7 @@ function printExtendedAttributes(idl: IDLNode, indentLevel: number): stringOrNon
         attributes.push(docs)
     }
     const attrSpec = quoteAttributeValues(attributes)
-    return attrSpec ? [indentedBy(`[${attrSpec}]`, indentLevel)] : []
+    return attrSpec ? [`[${attrSpec}]`] : []
 }
 
 export const attributesToQuote = new Set([
@@ -1004,62 +1080,65 @@ function quoteAttributeValues(attributes?: IDLExtendedAttribute[]): stringOrNone
         .join(", ")
 }
 
-export function printFunction(idl: IDLFunction): stringOrNone[] {
+export function printFunction(idl: IDLFunction): PrintedLine[] {
     if (idl.name?.startsWith("__")) {
         console.log(`Ignore ${idl.name}`)
         return []
     }
     return [
         ...printExtendedAttributes(idl, 1),
-        indentedBy(`${idl.isAsync ? "async " : ""}${printReturnType(idl.returnType)} ${idl.name}(${printParameters(idl.parameters)});`, 1)
+        `${idl.isAsync ? "async " : ""}${printReturnType(idl.returnType)} ${idl.name}(${printParameters(idl.parameters)});`
     ]
 }
 
-export function printMethod(idl: IDLMethod): stringOrNone[] {
+export function printMethod(idl: IDLMethod): PrintedLine[] {
     if (idl.name?.startsWith("__")) {
         console.log(`Ignore ${idl.name}`)
         return []
     }
     return [
         ...printExtendedAttributes(idl, 1),
-        indentedBy(`${idl.isStatic ? "static " : ""}${idl.isAsync ? "async " : ""}${printReturnType(idl.returnType)} ${idl.name}(${printParameters(idl.parameters)});`, 1)
+        `${idl.isStatic ? "static " : ""}${idl.isAsync ? "async " : ""}${printReturnType(idl.returnType)} ${idl.name}(${printParameters(idl.parameters)});`
     ]
 }
 
-export function printModule(idl: IDLModule): stringOrNone[] {
-    // May changes later to deal with namespace. currently just VerbatimDts
-    return [
-        ...printExtendedAttributes(idl,0),
-        `namespace ${idl.name} {};`
-    ]
-}
-
-export function printPackage(idl: IDLPackage): stringOrNone[] {
+export function printPackage(idl: IDLPackage): PrintedLine[] {
     return [
         `package "${idl.name}";`
     ]
 }
 
-export function printImport(idl: IDLImport): stringOrNone[] {
+export function printImport(idl: IDLImport): PrintedLine[] {
     return [
         `import "${idl.name}";`
     ]
 }
 
-export function printCallback(idl: IDLCallback): stringOrNone[] {
+export function printNamespace(idl: IDLNamespace): PrintedLine[] {
+    return [
+        ...printExtendedAttributes(idl,0),
+        `namespace ${idl.name} {`,
+        printedIndentInc,
+        ...idl.members.map(member => printIDL(member)).flat(),
+        printedIndentDec,
+        "};"
+    ]
+}
+
+export function printCallback(idl: IDLCallback): PrintedLine[] {
     return [
         ...printExtendedAttributes(idl, 0),
         `callback ${idl.name} = ${printReturnType(idl.returnType)} (${printParameters(idl.parameters)});`
     ]
 }
 
-export function printScoped(idl: IDLEntry): stringOrNone[] {
+export function printScoped(idl: IDLEntry): PrintedLine[] {
     if (idl.kind == IDLKind.Callback) return printCallback(idl as IDLCallback)
     if (idl.kind === IDLKind.Interface) return printInterface(idl as IDLInterface)
     throw new Error(`Unexpected scoped: ${idl.kind} ${idl.name}`)
 }
 
-export function printInterface(idl: IDLInterface): stringOrNone[] {
+export function printInterface(idl: IDLInterface): PrintedLine[] {
     idl.methods
         .map(it => {
             let result = it.scope
@@ -1073,15 +1152,18 @@ export function printInterface(idl: IDLInterface): stringOrNone[] {
         `interface ${idl.name}${hasSuperType(idl) ? ": " + printType(idl.inheritance[0]) : ""} {`,
         // TODO: type system hack!
     ]
+        .concat(printedIndentInc)
         .concat(idl.constructors.map(printConstructor).flat())
         .concat(idl.constants.map(printConstant).flat())
         .concat(idl.properties.map(printProperty).flat())
         .concat(idl.methods.map(printMethod).flat())
         .concat(idl.callables.map(printFunction).flat())
+        .concat(printedIndentDec)
         .concat(["};"])
 }
 
 export function getSuperType(idl: IDLInterface): IDLReferenceType | undefined {
+    if (!idl.inheritance) return undefined
     const parent = idl.inheritance[0]
     return parent && parent !== IDLTopType ? parent : undefined
 }
@@ -1090,7 +1172,7 @@ export function hasSuperType(idl: IDLInterface) {
     return isDefined(getSuperType(idl))
 }
 
-export function printEnumMember(idl: IDLEnumMember): stringOrNone[] {
+export function printEnumMember(idl: IDLEnumMember): PrintedLine[] {
     const type = printType(idl.type)
     const initializer = idl.initializer === undefined
         ? ''
@@ -1101,16 +1183,18 @@ export function printEnumMember(idl: IDLEnumMember): stringOrNone[] {
         idl.documentation,
         ...printExtendedAttributes(idl, 0),
         `${type} ${idl.name}${initializer};`
-    ].map(it => it ? indentedBy(it, 1) : undefined)
+    ]
 }
 
-export function printEnum(idl: IDLEnum, skipInitializers: boolean): stringOrNone[] {
+export function printEnum(idl: IDLEnum, skipInitializers: boolean): PrintedLine[] {
     if (skipInitializers) {
         return [
             idl.documentation,
             ...printExtendedAttributes(idl, 0),
             `enum ${idl.name!} {`,
-            ...idl.elements.map(it => indentedBy(`${it.name} ${(it.initializer !== undefined ? " /* " + it.initializer + " */" : "")}`, 1)),
+            printedIndentInc,
+            ...idl.elements.map(it => `${it.name} ${(it.initializer !== undefined ? " /* " + it.initializer + " */" : "")}`),
+            printedIndentDec,
             "};"
         ]
     } else {
@@ -1118,13 +1202,15 @@ export function printEnum(idl: IDLEnum, skipInitializers: boolean): stringOrNone
             idl.documentation,
             ...printExtendedAttributes(idl, 0),
             `dictionary ${idl.name!} {`,
+            printedIndentInc,
             ...idl.elements.map(printEnumMember) as any,
+            printedIndentDec,
             "};"
         ].flat()
     }
 }
 
-export function printTypedef(idl: IDLTypedef): stringOrNone[] {
+export function printTypedef(idl: IDLTypedef): PrintedLine[] {
     return [
         idl.documentation,
         ...printExtendedAttributes(idl, 0),
@@ -1132,14 +1218,16 @@ export function printTypedef(idl: IDLTypedef): stringOrNone[] {
     ]
 }
 
-export function printIDL(idl: IDLNode, options?: Partial<IDLPrintOptions>): stringOrNone[] {
+export function printIDL(idl: IDLNode, options?: Partial<IDLPrintOptions>): PrintedLine[] {
     if (idl.kind == IDLKind.Interface) return printInterface(idl as IDLInterface)
     if (idl.kind == IDLKind.Enum) return printEnum(idl as IDLEnum, options?.disableEnumInitializers ?? false)
     if (idl.kind == IDLKind.Typedef) return printTypedef(idl as IDLTypedef)
     if (idl.kind == IDLKind.Callback) return printCallback(idl as IDLCallback)
-    if (idl.kind == IDLKind.ModuleType) return printModule(idl as IDLModule)
     if (idl.kind == IDLKind.Package) return printPackage(idl as IDLPackage)
     if (idl.kind == IDLKind.Import) return printImport(idl as IDLImport)
+    if (idl.kind == IDLKind.Namespace) return printNamespace(idl as IDLNamespace)
+    if (idl.kind == IDLKind.Method) return printMethod(idl as IDLMethod)
+    if (idl.kind == IDLKind.Const) return printConstant(idl as IDLConstant)
 
     if (options?.allowUnknownKinds) {
         return [`${IDLKind[idl.kind]} ${"name" in idl ? idl.name : ""}`]
@@ -1155,16 +1243,31 @@ export interface IDLPrintOptions {
 }
 
 export function toIDLString(entries: IDLEntry[], options: Partial<IDLPrintOptions>): string {
+    let indent = 0
     const generatedIdl = entries
         .map(it => printIDL(it, options))
         .concat(printScopes(entries))
         .flat()
         .filter(isDefined)
         .filter(it => it.length > 0)
+        .map(it => {
+            if (it === printedIndentInc)
+                ++indent
+            else if (it === printedIndentDec)
+                --indent
+            else
+                return indentedBy(it as string, indent)
+        })
         .join("\n")
-    if (options.verifyIdl) webidl2.validate(webidl2.parse(generatedIdl))
     return generatedIdl
 }
+
+// throws validation error
+export function verifyIDLString(source: string): true {
+    webidl2.validate(webidl2.parse(source))
+    return true
+}
+
 
 function printScopes(entries: IDLEntry[]) {
     return entries
@@ -1230,72 +1333,10 @@ export const DebugUtils = {
 }
 
 export function forEachFunction(node: IDLNode, cb: (node: IDLFunction) => void): void {
-    switch (node.kind) {
-        case IDLKind.Interface: {
-            const concrete = node as IDLInterface
-            concrete.inheritance.forEach((value) => forEachFunction(value, cb))
-            concrete.constructors.forEach((value) => forEachFunction(value, cb))
-            concrete.properties.forEach((value) => forEachFunction(value, cb))
-            concrete.methods.forEach((value) => forEachFunction(value, cb))
-            concrete.callables.forEach((value) => forEachFunction(value, cb))
-            break
-        }
-        case IDLKind.Method:
-        case IDLKind.Callable: {
-            const concrete = node as IDLFunction
-            cb(concrete)
-            concrete.parameters.forEach((value) => forEachFunction(value, cb))
-            if (concrete.returnType) forEachFunction(concrete.returnType, cb)
-            break
-        }
-        case IDLKind.Callback:
-        case IDLKind.Constructor: {
-            const concrete = node as IDLSignature
-            concrete.parameters.forEach((value) => forEachFunction(value, cb))
-            if (concrete.returnType) forEachFunction(concrete.returnType, cb)
-            break
-        }
-        case IDLKind.Parameter: {
-            const concrete = node as IDLParameter
-            if (concrete.type) forEachFunction(concrete.type, cb)
-            break
-        }
-        case IDLKind.Property: {
-            const concrete = node as IDLProperty
-            if (concrete.type) forEachFunction(concrete.type, cb)
-            break
-        }
-        case IDLKind.UnionType: {
-            const concrete = node as IDLUnionType
-            concrete.types.forEach((value) => forEachFunction(value, cb))
-            break
-        }
-        case IDLKind.ContainerType: {
-            const concrete = node as IDLContainerType
-            concrete.elementType.forEach((value) => forEachFunction(value, cb))
-            break
-        }
-        case IDLKind.OptionalType: {
-            const concrete = node as IDLOptionalType
-            forEachFunction(concrete.type, cb)
-            break
-        }
-        case IDLKind.TypeParameterType:
-        case IDLKind.Enum:
-        case IDLKind.Typedef:
-        case IDLKind.EnumType:
-        case IDLKind.PrimitiveType:
-        case IDLKind.ReferenceType:
-        case IDLKind.UnspecifiedGenericType:
-        case IDLKind.ModuleType:
-        case IDLKind.Package:
-        case IDLKind.Import:
-        case IDLKind.Version:
-            break
-        default: {
-            throw new Error(`Unhandled ${node.kind}`)
-        }
-    }
+    forEachChild(node, child => {
+        if (child.kind === IDLKind.Method || child.kind === IDLKind.Callable)
+            cb(child as IDLFunction)
+    })
 }
 
 export function asPromise(type?: IDLType): IDLContainerType | undefined {
@@ -1368,4 +1409,29 @@ export function isHandwritten(decl: IDLEntry): boolean {
 
 export function isStringEnum(decl: IDLEnum): boolean {
     return decl.elements.some(e => e.type === IDLStringType)
+}
+
+export function linearizeNamespaceMembers(entries: IDLEntry[]) {
+    const linearized: IDLEntry[] = []
+    for (const entry of entries) {
+        if (isNamespace(entry))
+            linearized.push(...linearizeNamespaceMembers(entry.members))
+        else
+            linearized.push(entry)
+    }
+    return linearized
+}
+
+export function extremumOfOrdinals(enumEntry: IDLEnum): {low: number, high: number} {
+    let low: number = 0
+    let high: number = 0
+    enumEntry.elements.forEach((member, index) => {
+        let value = index
+        if ((typeof member.initializer === 'number') && !isStringEnum(enumEntry)) {
+            value = member.initializer
+        }
+        if (low > value) low = value
+        if (high < value) high = value
+    })
+    return {low, high}
 }

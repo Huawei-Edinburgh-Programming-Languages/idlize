@@ -36,12 +36,18 @@ export const CJKeywords = new Set([
     'break', 'is', 'as', 'in', 'match',
     'from', 'where', 'extend', 'spawn',
     'synchronized', 'macro', 'quote', 'true',
-    'false', 'static', 'public', 'private',
+    /*'false', */'static', 'public', 'private',
     'protected', 'override', 'redef', 'abstract',
     'open', 'operator', 'foreign', 'inout',
     'prop', 'mut', 'unsafe', 'get', 'set'
 ])
 
-export const IDLKeywords = new Set([
-    'sequence', 'record', 'or', 'toString', 'Int8Array', 'interface', 'number', 'undefined'
+export const IDLKeywords = new Set<string>([
+    "attribute", "callback", "object", "toString",
+    'sequence', 'record', 'or', 'Int8Array', 
+    'interface', 'number', 'undefined'
+])
+
+export const TSKeywords = new Set([
+    "namespace"
 ])

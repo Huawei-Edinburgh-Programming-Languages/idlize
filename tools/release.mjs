@@ -15,7 +15,9 @@
 
 import fs from "fs"
 import path from "path"
-import { Version, Git, writeToPackageJson, IDLIZE_HOME, publishToOpenlab } from "./utils.mjs"
+import { Version, Git, writeToPackageJson, IDLIZE_HOME, all_packages } from "./utils.mjs"
+
+//const files = all_packages.map(it => path.join(it.path, "package.json"))
 
 const CURRENT_VERSION = readVersion()
 const git = new Git
@@ -29,45 +31,74 @@ function readVersion() {
     return new Version(version)
 }
 
+const autoPromote = false
+
 function run() {
     const currentBranch = git.branch()
 
     console.log(`> Current branch: ${currentBranch}`)
-    if (currentBranch !== 'master') {
+    if (currentBranch !== 'master' && false) {
         throw new Error("You must be on master branch!")
     }
 
     const old = CURRENT_VERSION
-    const next = new Version(old.toString()).up()
+    const next = autoPromote ? new Version(old.toString()).up() : old
     const newBranch = `release-${next.toString()}`
+    const oldString = old.toString()
+    const nextString = next.toString()
 
-    console.log(`> Updating idlize version from ${old.toString()} to ${next.toString()}`)
-    writeVersion(next)
-    writeToPackageJson("version", next.toString())
-    writeToPackageJson("description", `idlize hash of head: ${git.hash()}`)
+    if (autoPromote) {
+        console.log(`> Updating idlize version from ${old.toString()} to ${next.toString()}`)
+        writeVersion(next)
+    }
+
+    all_packages.forEach(module => {
+        module.write(`version`, `${nextString}`, (json) => {
+            module.externalDependencies.forEach(dep => {
+                if (json.dependencies && json.dependencies[dep]) {
+                    json.dependencies[dep] = nextString
+                }
+            })
+        })
+    })
 
     if (git.checkBranch(newBranch)) git.deleteBranch(newBranch)
 
     try {
-        publishToOpenlab("next")
 
-        writeToPackageJson("version", `${next.toString()}+devel`)
-        writeToPackageJson("description", "")
+        all_packages.forEach(module => {
+            module.publish()
+            module.write(`version`, `${nextString}+devel`, (json) => {
+                module.externalDependencies.forEach(dep => {
+                    if (json.dependencies && json.dependencies[dep]) {
+                        json.dependencies[dep] = `${nextString}+devel`
+                    }
+                })
+            })
+        })
 
         console.log(`> Checkout to ${newBranch}`)
         git.checkout(`release-${next.toString()}`)
         git.add('.')
         git.commit(`Release version ${next.toString()}`)
         console.log(`> Create commit`)
-    
+
     } catch(e) {
         writeVersion(old)
-        writeToPackageJson("version", `${old.toString()}+devel`)
-        writeToPackageJson("description", "")
-        throw new Error("Failed to publish idlize package")
+
+        all_packages.forEach(module => {
+            module.write(`version`, `${oldString}+devel`, (json) => {
+                module.externalDependencies.forEach(dep => {
+                    if (json.dependencies && json.dependencies[dep]) {
+                        json.dependencies[dep] = `${oldString}+devel`
+                    }
+                })
+            })
+        })
+        throw new Error(`Failed to publish idlize package. Error: ${e}`)
     }
 
-    console.log(`> Link: https://nexus.bz-openlab.ru:10443/repository/koala-npm/%40azanat/idlize/-/idlize-${next.toString()}.tgz`)
+    console.log(`> Link: https://nexus.bz-openlab.ru:10443/repository/koala-npm/%40idlize/arkgen/-/arkgen-${next.toString()}.tgz`)
     console.log("$ git push")
 
 }
