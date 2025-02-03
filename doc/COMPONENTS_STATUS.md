@@ -170,7 +170,7 @@
 |`foregroundColor`| Function | Roman Sedaikin | done | |
 |`onClick`| Function | Roman Sedaikin, Maksimov Nikita | testskipped | EVENT |
 |`onHover`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | in progress | EVENT |
-|`onAccessibilityHover`| Function | Andrey Khudenkikh | in progress | EVENT |
+|`onAccessibilityHover`| Function | Andrey Khudenkikh, Pavelyev Ivan | in progress | EVENT |
 |`hoverEffect`| Function | Roman Sedaikin | done | |
 |`onMouse`| Function | Andrey Khudenkikh | in progress | EVENT |
 |`onTouch`| Function | Roman Sedaikin, Tuzhilkin Ivan | testskipped | EVENT |
@@ -1811,21 +1811,21 @@
 |`getRawDeltaY`| Function | | | |
 |`setRawDeltaY`| Function | | | |
 |`setPressedButtons`| Function | | | |
-|*AccessibilityHoverEvent*| *Class* | | | |
-|`getType`| Function | | | |
-|`setType`| Function | | | |
-|`getX`| Function | | | |
-|`setX`| Function | | | |
-|`getY`| Function | | | |
-|`setY`| Function | | | |
-|`getDisplayX`| Function | | | |
-|`setDisplayX`| Function | | | |
-|`getDisplayY`| Function | | | |
-|`setDisplayY`| Function | | | |
-|`getWindowX`| Function | | | |
-|`setWindowX`| Function | | | |
-|`getWindowY`| Function | | | |
-|`setWindowY`| Function | | | |
+|*AccessibilityHoverEvent*| *Class* | Pavelyev Ivan | in progress | |
+|`getType`| Function | Pavelyev Ivan | in progress | |
+|`setType`| Function | Pavelyev Ivan | in progress | |
+|`getX`| Function | Pavelyev Ivan | in progress | |
+|`setX`| Function | Pavelyev Ivan | in progress | |
+|`getY`| Function | Pavelyev Ivan | in progress | |
+|`setY`| Function | Pavelyev Ivan | in progress | |
+|`getDisplayX`| Function | Pavelyev Ivan | in progress | |
+|`setDisplayX`| Function | Pavelyev Ivan | in progress | |
+|`getDisplayY`| Function | Pavelyev Ivan | in progress | |
+|`setDisplayY`| Function | Pavelyev Ivan | in progress | |
+|`getWindowX`| Function | Pavelyev Ivan | in progress | |
+|`setWindowX`| Function | Pavelyev Ivan | in progress | |
+|`getWindowY`| Function | Pavelyev Ivan | in progress | |
+|`setWindowY`| Function | Pavelyev Ivan | in progress | |
 |*TouchEvent*| *Class* | Tuzhilkin Ivan | in progress | |
 |`getHistoricalPoints`| Function | Tuzhilkin Ivan | in progress | |
 |`getType`| Function | Tuzhilkin Ivan | in progress | |
