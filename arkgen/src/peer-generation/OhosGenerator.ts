@@ -153,15 +153,17 @@ class DependecyCollector {
     }
 
     parseImport(imp: idl.IDLImport) {
+        if (!imp.importClause) {
+            return
+        }
         const fileName = getFileNameFromDeclaration(imp)
+        // console.log(`File name: "${fileName}", import: ${imp.name}, clause: ${imp.importClause}`)
         let imports = this.fileToImpors.get(fileName)
         if (!imports) {
             imports = new Set()
         }
         imports.add(imp)
         this.fileToImpors.set(fileName, imports)
-        // console.log(`Parse file: ${fileName}, import: ${imp.name}`)
-        // console.log(``)
     }
 
     getImportLines(fileName: string): string[] {
