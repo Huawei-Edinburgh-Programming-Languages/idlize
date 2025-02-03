@@ -451,6 +451,7 @@ class JavaMaterializedFileVisitor extends MaterializedFileVisitorBase {
     }
 
     override printImports(): void {
+        this.printPackage()
         const imports = [{ feature: 'org.koalaui.interop.Finalizable', module: '' }]
         printJavaImports(this.printer, imports)
     }
