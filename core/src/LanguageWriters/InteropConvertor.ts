@@ -16,7 +16,7 @@
 import * as idl from '../idl'
 import { convertNode, IdlNameConvertor, NodeConvertor } from "./nameConvertor"
 import { ReferenceResolver } from "../peer-generation/ReferenceResolver"
-import { generatorConfiguration } from '../config'
+import { generatorConfiguration, generatorTypePrefix } from '../config'
 import { capitalize } from '../util'
 import { qualifiedName } from '../peer-generation/idl/common'
 import { maybeTransformManagedCallback } from './ArgConvertors'
@@ -67,7 +67,7 @@ export class InteropConvertor implements NodeConvertor<ConvertResult> {
         return this.make(node.name)
     }
     convertCallback(node: idl.IDLCallback): ConvertResult {
-        return this.make(generatorConfiguration().param("LibraryPrefix") + node.name, true)
+        return this.make(generatorTypePrefix() + node.name, true)
     }
     convertMethod(node: idl.IDLMethod): ConvertResult {
         return this.make(node.name)
