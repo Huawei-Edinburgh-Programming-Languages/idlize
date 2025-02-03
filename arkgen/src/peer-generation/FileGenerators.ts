@@ -31,6 +31,7 @@ import { createEmptyReferenceResolver, ReferenceResolver } from "@idlizer/core"
 import { PrintHint } from "@idlizer/core"
 import { SourceFile, TsSourceFile, CJSourceFile } from "./printers/SourceFile"
 import { NativeModule } from "./NativeModule"
+import { generateStructs } from "./printers/StructPrinter"
 
 export const warning = "WARNING! THIS FILE IS AUTO-GENERATED, DO NOT MAKE CHANGES, THEY WILL BE LOST ON NEXT GENERATION!"
 
@@ -184,12 +185,13 @@ ${lines}
 `
 }
 
-export function dummyImplementations(modifiers: LanguageWriter, accessors: LanguageWriter, basicVersion: number, fullVersion: number, extendedVersion: number): LanguageWriter {
+export function dummyImplementations(modifiers: LanguageWriter, accessors: LanguageWriter, basicVersion: number, fullVersion: number, extendedVersion: number, apiGeneratedFile: string): LanguageWriter {
     let prologue = readTemplate('dummy_impl_prologue.cc')
     let epilogue = readTemplate('dummy_impl_epilogue.cc')
 
     prologue = prologue
         .replaceAll(`%CPP_PREFIX%`, PeerGeneratorConfig.cppPrefix)
+        .replaceAll(`%API_GENERATED%`, apiGeneratedFile)
     epilogue = epilogue
         .replaceAll("%CPP_PREFIX%", PeerGeneratorConfig.cppPrefix)
         .replaceAll(`%ARKUI_BASIC_NODE_API_VERSION_VALUE%`, basicVersion.toString())
@@ -392,7 +394,7 @@ function makeCSerializers(library: PeerLibrary, structs: LanguageWriter, typedef
     writeSerializer(library, serializers, "")
     serializers.print("\n// Deserializers\n")
     writeDeserializer(library, serializers, "")
-    library.generateStructs(structs, typedefs, writeToString)
+    generateStructs(library, structs, typedefs, writeToString)
 
     return `
 ${writeToString.getOutput().join("\n")}

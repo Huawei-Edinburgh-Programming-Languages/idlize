@@ -27,7 +27,7 @@ import {
     GeneratorConfiguration,
     setDefaultConfiguration,
     initRNG,
-    PrimitiveType
+    PeerFile
 } from "@idlizer/core"
 import {
     forEachChild,
@@ -60,7 +60,7 @@ import { IdlWrapperProcessor } from "./skoala-generation/idl/idlSkoalaLibrary"
 import { fillSyntheticDeclarations } from "./peer-generation/idl/SyntheticDeclarationsFiller"
 import { PeerLibrary } from "./peer-generation/PeerLibrary"
 import { PeerFile } from "./peer-generation/PeerFile"
-// import { generateOhos } from "./peer-generation/ohos"
+import { generateOhos } from "./peer-generation/ohos"
 import { ArkoalaPeerLibrary } from "./arkoala/ArkoalaPeerLibrary"
 
 const options = program
@@ -142,6 +142,7 @@ class ArkoalaConfiguration extends DefaultConfig {
             case 'standaloneComponents': return PeerGeneratorConfig.standaloneComponents as T[]
             case 'knownParameterized': return PeerGeneratorConfig.knownParametrized as T[]
             case 'boundProperties': return PeerGeneratorConfig.boundProperties as T[]
+            case 'builderClasses': return PeerGeneratorConfig.builderClasses as T[]
         }
         return super.paramArray(name)
     }
@@ -487,7 +488,9 @@ function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language)
     }
     if (options.generatorTarget == "ohos") {
         if (options.useNewOhos) {
-            generateOhos(outDir, idlLibrary)
+            generateOhos(outDir, idlLibrary, {
+                apiVersion: apiVersion
+            })
         } else {
             generateOhosOld(outDir, idlLibrary, options.defaultIdlPackage as string)
         }
