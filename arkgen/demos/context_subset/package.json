@@ -8,7 +8,7 @@
         "rollup": "^4.24.4"
     },
     "scripts": {
-        "run:xml:context": "rm -rf ./generated && cd ../.. && npm run compile && node . --generator-target ohos --dts2peer --input-dir ./tests/context_subset/ --output-dir ./demos/context_subset/ --verify-idl --common-to-attributes --docs=none --language=ts --default-idl-package CONTEXT && cd ./demos/context_subset",
+        "run:xml:context": "rm -rf ./generated && cd ../.. && npm run compile && node . --generator-target ohos --use-new-ohos --dts2peer --input-dir ./tests/context_subset/ --output-dir ./demos/context_subset/ --verify-idl --common-to-attributes --docs=none --language=ts --default-idl-package CONTEXT && cd ./demos/context_subset",
         "compile:ts:node": "rollup -c",
         "compile:arkts:panda": "bash scripts/build-panda.sh",
         "compile:native:node": "meson setup build/native/node -Dtarget_vm=node && meson install -C build/native/node",

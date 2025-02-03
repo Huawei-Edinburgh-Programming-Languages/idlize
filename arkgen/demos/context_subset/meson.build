@@ -19,8 +19,9 @@ include_dirs = [
 ]
 
 sources = [
-    'generated/context.cc',
-    'generated/contextImpl_template.cc',
+    'generated/native/context.cc',
+    'generated/native/dummy_impl.cc',
+    'generated/native/real_impl.cc',
     external_interop_dir / 'common-interop.cc',
     external_interop_dir / 'callback-resource.cc',
     external_interop_dir / 'interop-logging.cc',
