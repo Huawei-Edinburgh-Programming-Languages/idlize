@@ -1812,7 +1812,7 @@
 |`setRawDeltaY`| Function | | | |
 |`setPressedButtons`| Function | | | |
 |*AccessibilityHoverEvent*| *Class* | Pavelyev Ivan | in progress | |
-|`getType`| Function | Pavelyev Ivan | in progress | |
+|`getType`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setType`| Function | Pavelyev Ivan | in progress | |
 |`getX`| Function | Pavelyev Ivan | in progress | |
 |`setX`| Function | Pavelyev Ivan | in progress | |
