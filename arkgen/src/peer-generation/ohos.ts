@@ -103,7 +103,7 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: G
         makeCallbacksKinds(peerLibrary, peerLibrary.language)
     )
     writeIntegratedFile(ohos.peer(new TargetFile('CallbackDeserializeCall')),
-        makeDeserializeAndCall(peerLibrary, Language.TS, "./peers/CallbackDeserializeCall.ts").printToString()
+        makeDeserializeAndCall(peerLibrary, peerLibrary.language, "./peers/CallbackDeserializeCall.ts").printToString()
     )
 
     // managed-index
@@ -143,11 +143,9 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: G
 
     // managed-utils
 
-    if (peerLibrary.language === Language.ARKTS) {
-        writeIntegratedFile(ohos.peer(new TargetFile('type_check')),
-            makeTypeChecker(peerLibrary, Language.ARKTS)
-        )
-    }
+    writeIntegratedFile(ohos.peer(new TargetFile('type_check')),
+        makeTypeChecker(peerLibrary, peerLibrary.language)
+    )
 
     // NATIVE
     /////////////////////////////////////////
