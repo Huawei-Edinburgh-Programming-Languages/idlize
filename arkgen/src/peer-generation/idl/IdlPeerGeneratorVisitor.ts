@@ -35,6 +35,7 @@ import { collapseIdlEventsOverloads } from "../printers/EventsPrinter"
 import { convertDeclToFeature } from "../ImportsCollectorUtils"
 import { collectComponents, findComponentByType, IdlComponentDeclaration, isComponentDeclaration } from "../ComponentsCollector"
 import { ReferenceResolver } from "@idlizer/core"
+import * as path from "path"
 
 /**
  * Theory of operations.
@@ -274,19 +275,29 @@ class PeersGenerator {
     }
 
     public generatePeer(component: IdlComponentDeclaration): void {
-        const sourceFile = component.attributeDeclaration.fileName
-        if (!sourceFile)
-            throw new Error("Expected parent of attributes to be a SourceFile")
-        const file = this.library.findFileByOriginalFilename(sourceFile)
-        if (!file)
+        if (!component.attributeDeclaration.fileName) {
+            throw new Error("Expected parent of attributes to be a SourceFile, but fileName is undefined")
+        }
+    
+        const sourceFile = path.basename(component.attributeDeclaration.fileName)
+    
+        const file = this.library.findFileByOriginalFilename(sourceFile) || 
+                    this.library.findFileByOriginalFilename(path.resolve(component.attributeDeclaration.fileName))
+    
+        if (!file) {
             throw new Error("Not found a file corresponding to attributes class")
+        }
+    
         const peer = new PeerClass(file, component.name, sourceFile)
+    
         if (component.interfaceDeclaration)
             this.fillInterface(peer, component.interfaceDeclaration)
+    
         this.fillClass(peer, component.attributeDeclaration)
         collapseIdlEventsOverloads(this.library, peer)
         file.peers.set(component.name, peer)
     }
+    
 }
 
 export class IdlPeerProcessor {
