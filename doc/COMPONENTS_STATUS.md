@@ -1066,7 +1066,7 @@
 |`loop`| Function |  Andrey Khudenkikh | done |  |
 |`vertical`| Function | Andrey Khudenkikh | done |  |
 |`onChange`| Function | Andrey Khudenkikh | done |  |
-|*SymbolGlyph*| *Component* |Andrey Khudenkikh | blocked |  |
+|*SymbolGlyph*| *Component* |Andrey Khudenkikh | in progress |  |
 |`setSymbolGlyphOptions`| Function |Andrey Khudenkikh | done |  |
 |`fontSize`| Function |Andrey Khudenkikh | done |  |
 |`fontColor`| Function |Andrey Khudenkikh | done |  |
@@ -1075,7 +1075,7 @@
 |`renderingStrategy`| Function |Andrey Khudenkikh | done |  |
 |`minFontScale`| Function | Kovalev Sergey | in progress  | |
 |`maxFontScale`| Function | Kovalev Sergey | in progress  | |
-|`symbolEffect`| Function | Andrey Khudenkikh | blocked AceEngine| https://gitee.com/openharmony/arkui_ace_engine/issues/IB3KMB |
+|`symbolEffect`| Function | | in progress | |
 |*SymbolSpan*| *Component* |Dmitry A Smirnov| done|  |
 |`setSymbolSpanOptions`| Function |Dmitry A Smirnov| done| https://gitee.com/openharmony/arkui_ace_engine/issues/IB3IX8 |
 |`fontSize`| Function |Dmitry A Smirnov| done|  |
