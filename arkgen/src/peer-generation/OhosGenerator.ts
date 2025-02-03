@@ -205,8 +205,14 @@ class DependecyCollector {
     private collectInterface(decl: idl.IDLInterface): string[] {
         return [
             ...decl.properties
-                .map(it => this.collectType(it.type))
-                .filter(it => it != this.NONE_TYPE)
+                .map(prop => this.collectType(prop.type))
+                .filter(it => it != this.NONE_TYPE),
+            ...decl.methods
+                .flatMap(meth => [
+                    this.collectType(meth.returnType),
+                    ...meth.parameters.map(param => this.collectType(param.type)),
+                ])
+                .filter(it => it != this.NONE_TYPE),
         ]
     }
 
