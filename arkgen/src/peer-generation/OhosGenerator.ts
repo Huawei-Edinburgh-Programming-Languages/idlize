@@ -117,16 +117,32 @@ class DependecyCollector {
     // declaration -> dependencies
     dependencies: Map<string, Set<string>> = new Map()
 
-    constructor() {
+    constructor(private library: PeerLibrary) {
     }
 
-    collect(fileName: string, decl: idl.IDLNode) {
+    collect(decl: idl.IDLNode, fileName?: string, traverse: boolean = true) {
+        if (!fileName) {
+            fileName = getFileNameFromDeclaration(decl)
+        }
         let declName: string | undefined = undefined
         if (idl.isInterface(decl)) {
             declName = decl.name
-            this.dependencies.set(declName, new Set(this.collectInterface(decl)))
+            if (traverse) {
+                this.dependencies.set(declName, new Set(this.collectInterface(decl)))
+            }
+        } else if (idl.isReferenceType(decl)) {
+            declName = decl.name
         }
         if (declName) {
+            // IDLNode file name is unknown
+            if (fileName == "unknown") {
+                // try to reuse the existed one
+                fileName = this.declToFile.get(declName)
+                if (!fileName) {
+                    console.log(`Unable find the file for the declaration: ${declName}`)
+                    fileName = "unknown"
+                }
+            }
             this.seen.add(declName)
             this.declToFile.set(declName, fileName)
             if (!this.fileToDeclSet.has(fileName)) {
@@ -190,6 +206,9 @@ class DependecyCollector {
                 }
             }
             for (const [f, imports] of importsMap) {
+                if (f == fileName) {
+                    continue
+                }
                 importLines.push(this.getImportLine(`./${f}`, imports))
             }
         }
@@ -200,10 +219,21 @@ class DependecyCollector {
         return `import { ${imports?.join(", ")} } from "${path}"`
     }
 
-    NONE_TYPE: string = "NONE_TYPE"
+    collectTypeReference(type?: idl.IDLReferenceType): string {
+        if (!type) {
+            return this.NONE_TYPE
+        }
+        const resolvedType = this.library.resolveTypeReference(type)
+        if (!resolvedType) return this.NONE_TYPE
+        this.collect(resolvedType, undefined, false)
+        return idl.isNamedNode(resolvedType) ? type.name : this.NONE_TYPE
+    }
 
+    NONE_TYPE: string = "NONE_TYPE"
     private collectInterface(decl: idl.IDLInterface): string[] {
+        const superType = idl.getSuperType(decl)
         return [
+            this.collectTypeReference(superType),
             ...decl.properties
                 .map(prop => this.collectType(prop.type))
                 .filter(it => it != this.NONE_TYPE),
@@ -217,6 +247,14 @@ class DependecyCollector {
     }
 
     private collectType(type: idl.IDLType): string {
+        if (idl.isNamedNode(type)) {
+            if (type.name == "ApplicationContext") {
+                console.log(`Type: ApplicationContext`)
+            }
+        }
+        if (idl.isReferenceType(type)) {
+            return this.collectTypeReference(type)
+        }
         return idl.isNamedNode(type) ? type.name : this.NONE_TYPE
     }
 
@@ -245,7 +283,7 @@ class OHOSVisitor {
     hWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), ArkPrimitiveTypesInstance)
     cppWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), ArkPrimitiveTypesInstance)
 
-    dependecyCollector = new DependecyCollector()
+    dependecyCollector: DependecyCollector
     peerWriters: Map<string, LanguageWriter> = new Map<string, LanguageWriter>()
 
     nativeWriter: LanguageWriter
@@ -266,6 +304,7 @@ class OHOSVisitor {
 
         this.libraryName = libraryName
         this.library.name = libraryName
+        this.dependecyCollector = new DependecyCollector(library)
 
         this.nativeWriter = createLanguageWriter(library.language, library)
         this.nativeFunctionsWriter = createLanguageWriter(library.language, library)
@@ -1049,7 +1088,7 @@ class OHOSVisitor {
 
     getPeerWriter(decl: idl.IDLNode): LanguageWriter {
         const fileName = getFileNameFromDeclaration(decl)
-        this.dependecyCollector.collect(fileName, decl)
+        this.dependecyCollector.collect(decl, fileName)
         let writer = this.peerWriters.get(fileName)
         if (!writer) {
             writer = createLanguageWriter(this.library.language, this.library)
