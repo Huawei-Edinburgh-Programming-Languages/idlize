@@ -49,7 +49,7 @@ import {
     IdlPeerProcessor,
     IDLPredefinesVisitor,
 } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
-import { generateOhos, generateOhos as generateOhosOld } from "./peer-generation/OhosGenerator"
+import { generateOhos as generateOhosOld } from "./peer-generation/OhosGenerator"
 import { generateArkoalaFromIdl, generateLibaceFromIdl } from "./peer-generation/arkoala"
 import { loadPlugin } from "./peer-generation/plugin-api"
 import { SkoalaDeserializerPrinter } from "./peer-generation/printers/SkoalaDeserializerPrinter"
@@ -59,6 +59,7 @@ import { generateIdlSkoala } from "./skoala-generation/SkoalaGeneration"
 import { IdlWrapperProcessor } from "./skoala-generation/idl/idlSkoalaLibrary"
 import { fillSyntheticDeclarations } from "./peer-generation/idl/SyntheticDeclarationsFiller"
 import { PeerLibrary } from "./peer-generation/PeerLibrary"
+import { generateOhos } from "./peer-generation/ohos"
 import { ArkoalaPeerLibrary } from "./arkoala/ArkoalaPeerLibrary"
 
 const options = program
