@@ -104,13 +104,118 @@ interface SignatureDescriptor {
     paramsCString?: string
 }
 
+class DependecyCollector {
+
+    seen: Set<string> = new Set()
+    // declaration -> name
+    declToFile: Map<string, string> = new Map()
+    // file -> declarations
+    fileToDeclSet: Map<string, Set<string>> = new Map()
+    // declaration -> dependencies
+    dependencies: Map<string, Set<string>> = new Map()
+
+    constructor() {
+    }
+
+    collect(fileName: string, decl: idl.IDLNode) {
+        let declName: string | undefined = undefined
+        if (idl.isInterface(decl)) {
+            declName = decl.name
+            this.dependencies.set(declName, new Set(this.collectInterface(decl)))
+        }
+        if (declName) {
+            this.seen.add(declName)
+            this.declToFile.set(declName, fileName)
+            if (!this.fileToDeclSet.has(fileName)) {
+                this.fileToDeclSet.set(fileName, new Set())
+            }
+            this.fileToDeclSet.get(fileName)?.add(declName)
+        }
+    }
+
+    getImportLines(fileName: string): string[] {
+        const importLines: string[] = []
+        const declarations = this.fileToDeclSet.get(fileName)
+        if (!declarations) {
+            return importLines
+        }
+
+        for (const decl of declarations) {
+            //  file to decl
+            const importsMap = new Map<string, string[]>()
+            const deps = this.dependencies.get(decl)
+            if (!deps) {
+                continue
+            }
+            for (const d of deps) {
+                // Add only collected declarations
+                if (this.seen.has(d)) {
+                    const f = this.declToFile.get(d)
+                    if (!f) {
+                        continue
+                    }
+                    let imports = importsMap.get(f)
+                    if (!imports) {
+                        imports = []
+                    }
+                    if (!imports.includes(d)) {
+                        imports.push(d)
+                        importsMap.set(f, imports)
+                    }
+                }
+            }
+            for (const [f, imports] of importsMap) {
+                importLines.push(this.getImportLine(f, imports))
+            }
+        }
+        return importLines
+    }
+
+    private getImportLine(fileName: string, imports: string[]) : string {
+        return `import { ${imports.join(", ")} } from "${fileName}"`
+    }
+
+    NONE_TYPE: string = "NONE_TYPE"
+
+    private collectInterface(decl: idl.IDLInterface): string[] {
+        return [
+            ...decl.properties
+                .map(it => this.collectType(it.type))
+                .filter(it => it != this.NONE_TYPE)
+        ]
+    }
+
+    private collectType(type: idl.IDLType): string {
+        return idl.isNamedNode(type) ? type.name : this.NONE_TYPE
+    }
+
+    dump() {
+        console.log(`Dump dependency collector`)
+        console.log(`Seen:`)
+        console.log(`  ${Array.from(this.seen)}`)
+        console.log(`Decl to files`)
+        for (const [decl, file] of this.declToFile) {
+            console.log(`  decl: ${decl} -> file: ${file}`)
+        }
+        console.log(`File to decls`)
+        for (const [file, declSet] of this.fileToDeclSet) {
+            console.log(`  file: ${file} -> decl: ${Array.from(declSet)}`)
+        }
+        console.log(`Decl to imports`)
+        for (const [decl, imports] of this.dependencies) {
+            console.log(`  decl: ${decl} -> imports: ${Array.from(imports)}`)
+        }
+    }
+}
+
 class OHOSVisitor {
     implementationStubsFile: CppSourceFile
 
     hWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), ArkPrimitiveTypesInstance)
     cppWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), ArkPrimitiveTypesInstance)
 
-    filePeerWriters: Map<string, LanguageWriter> = new Map<string, LanguageWriter>()
+    dependecyCollector = new DependecyCollector()
+    peerWriters: Map<string, LanguageWriter> = new Map<string, LanguageWriter>()
 
     nativeWriter: LanguageWriter
     nativeFunctionsWriter: LanguageWriter
@@ -690,7 +795,7 @@ class OHOSVisitor {
 
     private printPeers() {
         const nativeModuleVar = `${this.libraryName}NativeModule`
-        for (const [fileName, peerWriter] of this.filePeerWriters) {
+        for (const [fileName, peerWriter] of this.peerWriters) {
             if (this.library.language != Language.CJ) peerWriter.print('import { TypeChecker } from "./type_check"')
             if (this.library.language === Language.TS) {
                 peerWriter.print('import {')
@@ -867,13 +972,20 @@ class OHOSVisitor {
                 .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
         )
 
-        for (const [f, peerWriter] of this.filePeerWriters) {
+        // this.dependecyCollector.dump()
+
+        for (const [file, peerWriter] of this.peerWriters) {
             const peerTemplate = readLangTemplate(`OHOSPeer_template${ext}`, this.library.language)
+
+            const imports = this.dependecyCollector.getImportLines(file)
+            // console.log(`File: ${file}, imports: ${imports}`)
+
             const peerText = peerTemplate
+                .replaceAll('%PEER_IMPORTS%', imports.join('\n'))
                 .replaceAll('%PEER_CONTENT%', peerWriter.getOutput().join('\n'))
                 .replaceAll('%SERIALIZER_PATH%', managedCodeModuleInfo.serializerPath)
                 .replaceAll('%FINALIZABLE_PATH%', managedCodeModuleInfo.finalizablePath)
-            fs.writeFileSync(path.join(rootPath, managedOutDir, `${f}${ext}`), peerText, 'utf-8')
+            fs.writeFileSync(path.join(rootPath, managedOutDir, `${file}${ext}`), peerText, 'utf-8')
         }
 
         this.hWriter.printTo(path.join(rootPath, outDir, `${fileNamePrefix}.h`))
@@ -904,10 +1016,11 @@ class OHOSVisitor {
 
     getPeerWriter(decl: idl.IDLNode): LanguageWriter {
         const fileName = getFileNameFromDeclaration(decl)
-        let writer = this.filePeerWriters.get(fileName)
+        this.dependecyCollector.collect(fileName, decl)
+        let writer = this.peerWriters.get(fileName)
         if (!writer) {
             writer = createLanguageWriter(this.library.language, this.library)
-            this.filePeerWriters.set(fileName, writer)
+            this.peerWriters.set(fileName, writer)
         }
         return writer
     }
