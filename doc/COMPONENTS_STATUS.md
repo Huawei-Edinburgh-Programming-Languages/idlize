@@ -1075,7 +1075,7 @@
 |`renderingStrategy`| Function |Andrey Khudenkikh | done |  |
 |`minFontScale`| Function | Kovalev Sergey | in progress  | |
 |`maxFontScale`| Function | Kovalev Sergey | in progress  | |
-|`symbolEffect`| Function | | in progress | |
+|`symbolEffect`| Function | Andrey Khudenkikh | in progress | |
 |*SymbolSpan*| *Component* |Dmitry A Smirnov| done|  |
 |`setSymbolSpanOptions`| Function |Dmitry A Smirnov| done| https://gitee.com/openharmony/arkui_ace_engine/issues/IB3IX8 |
 |`fontSize`| Function |Dmitry A Smirnov| done|  |
