@@ -1282,8 +1282,8 @@
 |`selectAll`| Function | Spirin Andrey | done |  |
 |`minFontSize`| Function | Spirin Andrey | done  |  |
 |`maxFontSize`| Function | Spirin Andrey | done  |  |
-|`minFontScale`| Function | Kovalev Sergey | in progress | |
-|`maxFontScale`| Function | Kovalev Sergey | in progress | |
+|`minFontScale`| Function | Kovalev Sergey | done | |
+|`maxFontScale`| Function | Kovalev Sergey | done | |
 |`heightAdaptivePolicy`| Function | Spirin Andrey | done |  |
 |`enableAutoFill`| Function | Spirin Andrey | done |  |
 |`decoration`| Function | Spirin Andrey | done | |
@@ -1300,9 +1300,9 @@
 |`editMenuOptions`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`enablePreviewText`| Function | Spirin Andrey | done |  |
 |`enableHapticFeedback`| Function | Spirin Andrey | done |  |
-|`halfLeading`| Function | Kovalev Sergey | in progress | |
-|`ellipsisMode`| Function |  Kovalev Sergey| in progress | |
-|`stopBackPress`| Function | Kovalev Sergey | in progress | |
+|`halfLeading`| Function | Kovalev Sergey | done | |
+|`ellipsisMode`| Function |  Kovalev Sergey| done | |
+|`stopBackPress`| Function | Kovalev Sergey | done | |
 |`onWillChange`| Function | | | |
 |`inputFilter`| Function | Spirin Andrey | done | UT Kovalev Sergey |
 |`customKeyboard`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
