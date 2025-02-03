@@ -117,7 +117,9 @@ if (options.optionsFile) {
 }
 
 if (process.env.npm_package_version) {
-    console.log(`IDLize version ${findVersion()}`)
+    if (options.enableLog) {
+        console.log(`IDLize version ${findVersion()}`)
+    }
 }
 
 let didJob = false
@@ -280,61 +282,6 @@ if (options.dts2skoala) {
     )
     didJob = true
 }
-
-// if (options.dts2test) {
-//     initRNG()
-//     let testInterfaces = options.testInterface
-//     if (testInterfaces === undefined) {
-//         function fileNameToClass(name: string): string {
-//             return name
-//                 .split('_')
-//                 .map(s => s.charAt(0).toUpperCase() + s.slice(1))
-//                 .join(``)
-//         }
-
-//         (options.inputDir as string).split(",").forEach(inputDir => {
-//             let inDir = path.resolve(inputDir)
-//             testInterfaces = testInterfaces.concat(
-//                 fs.readdirSync(inDir)
-//                 .filter(file => file.endsWith("d.ts"))
-//                 .map(file => file.substring(0, file.length - 5))
-//                 .map(fileNameToClass)
-//                 .join(','))
-//             })
-//     }
-
-//     let lines: string[] = []
-//     generate(
-//         options.inputDir.split(','),
-//         options.inputFile,
-//         options.outputDir ?? "./generated/tests",
-//         (sourceFile, typeChecker) => new TestGeneratorVisitor(sourceFile, typeChecker, testInterfaces, options.testMethod, options.testProperties),
-//         {
-//             compilerOptions: defaultCompilerOptions,
-//             onBegin: (outDir: string) => {
-//                 lines.push(`import {checkResult, checkTestFailures} from "@arkoala/arkui/test_utils"`)
-//                 lines.push(``)
-//             },
-//             onSingleFile: (entries: string[], outputDir, sourceFile) => {
-//                 lines = lines.concat(entries)
-//             },
-//             onEnd: (outDir: string) => {
-//                 lines.push(``)
-//                 lines.push(`checkTestFailures()`)
-
-//                 let generated = lines.join("\n")
-//                 const outFile = path.join(outDir, "index.ts")
-//                 if (options.verbose) {
-//                     console.log(generated)
-//                 }
-//                 console.log(`Write fuzzing peers to file ${outFile}`)
-//                 fs.writeFileSync(outFile, lines.join("\n"))
-//             }
-//         }
-//     )
-//     didJob = true
-// }
-
 
 if (options.idl2peer) {
     const outDir = options.outputDir ?? "./out"
