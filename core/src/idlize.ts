@@ -30,19 +30,24 @@ export function generate<T>(
     visitorFactory: (sourceFile: ts.SourceFile, typeChecker: ts.TypeChecker) => GenericVisitor<T>,
     options: GenerateOptions<T>
 ): void {
+    if (options.enableLog) {
+        console.log("Logging is enabled")
+    }
+
     if (inputDirs.length === 0 && inputFiles.length === 0) {
         console.error("Error: No input specified (no directories and no files).")
         process.exit(1)
     }
 
     const resolvedInputDirs = inputDirs.map(dir => path.resolve(dir))
-
     let input: string[] = []
 
     if (resolvedInputDirs.length > 0) {
         resolvedInputDirs.forEach(dir => {
             if (fs.existsSync(dir) && fs.statSync(dir).isDirectory()) {
-                console.log(`Processing all .d.ts from directory: ${dir}`)
+                if (options.enableLog) {
+                    console.log(`Processing all .d.ts from directory: ${dir}`)
+                }
                 const files = readdir(dir).filter(file => file.endsWith(".d.ts"))
                 input = input.concat(files)
             } else {
@@ -55,7 +60,9 @@ export function generate<T>(
         inputFiles.forEach(file => {
             const fullPath = path.resolve(file)
             if (fs.existsSync(fullPath)) {
-                console.log(`Including input file: ${fullPath}`)
+                if (options.enableLog) {
+                    console.log(`Including input file: ${fullPath}`)
+                }
                 input.push(fullPath)
             } else {
                 console.warn(`Warning: Input file does not exist: ${fullPath}`)
@@ -63,32 +70,31 @@ export function generate<T>(
         })
     }
 
-    input = Array.from(new Set(input.map(p => path.resolve(p))))
-
     let program = ts.createProgram(
-        input.concat([path.join(__dirname, "../stdlib.d.ts")]
-    ), options.compilerOptions)
+        input.concat([path.join(__dirname, "../stdlib.d.ts")]),
+        options.compilerOptions
+    )
 
-    program.getSourceFiles().forEach(f => console.log(f.fileName))
-
-    // Get the checker, we will use it to find more about classes
-    if (outputDir && !fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true })
+    if (options.enableLog) {
+        program.getSourceFiles().forEach(f => console.log(f.fileName))
+    }
 
     const typeChecker = program.getTypeChecker()
     options.onBegin?.(outputDir, typeChecker)
 
     for (const sourceFile of program.getSourceFiles()) {
         const resolvedSourceFile = path.resolve(sourceFile.fileName)
-        
+
         const isInDir = resolvedInputDirs.some(dir => resolvedSourceFile.startsWith(dir))
         const isExplicitFile = input.some(f => path.resolve(f) === resolvedSourceFile)
 
         if (!isInDir && !isExplicitFile) {
-            console.log(`Skipping file: ${resolvedSourceFile}`)
+            if (options.enableLog) {
+                console.log(`Skipping file: ${resolvedSourceFile}`)
+            }
             continue
         }
 
-        // Walk the tree to search for classes
         const visitor = visitorFactory(sourceFile, typeChecker)
         const output = visitor.visitWholeFile()
 
