@@ -63,7 +63,6 @@ import { generateIdlSkoala } from "./skoala-generation/SkoalaGeneration"
 import { IdlWrapperProcessor } from "./skoala-generation/idl/idlSkoalaLibrary"
 import { fillSyntheticDeclarations } from "./peer-generation/idl/SyntheticDeclarationsFiller"
 import { PeerLibrary } from "./peer-generation/PeerLibrary"
-import { generateOhos } from "./peer-generation/ohos"
 import { ArkoalaPeerLibrary } from "./arkoala/ArkoalaPeerLibrary"
 
 const options = program
