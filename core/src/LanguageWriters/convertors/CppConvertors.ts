@@ -22,7 +22,7 @@ export class CppInteropConvertor extends InteropConvertor implements IdlNameConv
     private unwrap(type: idl.IDLNode, result: ConvertResult): string {
         const conf = generatorConfiguration()
         if (idl.isType(type) && idl.isOptionalType(type)) {
-            return conf.param("OptionalPrefix") + result.text.replace(generatorTypePrefix(), "")
+            return `${conf.param("OptionalPrefix")}${result.text}`
         }
         if (result.noPrefix) {
             return result.text
