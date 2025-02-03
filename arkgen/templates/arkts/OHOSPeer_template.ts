@@ -3,4 +3,7 @@ import { KPointer, KInt, KStringPtr, pointer, nullptr, RuntimeType, runtimeType,
 import { Serializer } from "%SERIALIZER_PATH%"
 import { Finalizable } from "%FINALIZABLE_PATH%"
 
+// Dependency imports
+%PEER_IMPORTS%
+
 %PEER_CONTENT%

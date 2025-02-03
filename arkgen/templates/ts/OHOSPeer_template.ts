@@ -3,4 +3,7 @@ import { KPointer, pointer, RuntimeType, runtimeType, unsafeCast } from "@koalau
 import { Serializer } from "%SERIALIZER_PATH%"
 import { Finalizable } from "%FINALIZABLE_PATH%"
 
+// Dependency imports
+%PEER_IMPORTS%
+
 %PEER_CONTENT%
