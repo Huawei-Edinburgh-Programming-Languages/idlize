@@ -22,6 +22,10 @@ import { printMaterialized } from "./printers/MaterializedPrinter";
 import { printGlobal } from "./printers/GlobalScopePrinter";
 import { printDeclarations } from "./printers/DeclarationPrinter";
 import {
+    IDLBufferType,
+    IDLI32Type,
+    IDLUint8ArrayType,
+    NamedMethodSignature,
     GeneratorConfiguration,
     generatorConfiguration,
     IndentedPrinter,
@@ -104,40 +108,31 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: G
         makeDeserializeAndCall(peerLibrary, peerLibrary.language, "./peers/CallbackDeserializeCall.ts").printToString()
     )
 
-    // managed-index
-
-    writeIntegratedFile(path.join(ohos.managedDir(), 'index.ts'),
-        makeOhosModule(ohosManagedFiles.map(f => {
-            const rel = path.relative(ohos.managedDir(), f)
-            if (!rel.startsWith('.')) {
-                return `./${rel}`
-            }
-            return rel
-        }))
-    )
-
     // managed-native-module
 
+    const nativeModuleFileName = NativeModule.Generated.name + peerLibrary.language.extension
     writeIntegratedFile(
-        ohos.materialized(new TargetFile(NativeModule.Generated.name + peerLibrary.language.extension)),
-        printArkUIGeneratedNativeModule(peerLibrary, NativeModule.Generated).printToString()
+        ohos.materialized(new TargetFile(nativeModuleFileName)),
+        printArkUIGeneratedNativeModule(peerLibrary, NativeModule.Generated, w => {
+            // add method for arkts buffer stubs
+            if (peerLibrary.language === Language.ARKTS) {
+                w.writeNativeMethodDeclaration('_AllocateNativeBuffer',
+                    NamedMethodSignature.make(
+                        IDLBufferType,
+                        [
+                            { name: 'len', type: IDLI32Type },
+                            { name: 'data', type: IDLUint8ArrayType },
+                            { name: 'init', type: IDLUint8ArrayType },
+                        ]
+                    )
+                )
+            }
+        }).printToString()
     )
 
     // managed-copies
 
     copyPeerLib(peerLibrary.language, ohos.managedDir())
-
-    // managed-types
-
-    const declarations = printDeclarations(peerLibrary)
-    const index = new IndentedPrinter()
-
-    index.print(tsCopyrightAndWarning(''))
-    // index.print(readLangTemplate("platform.d.ts", peerLibrary.language))
-    for (const data of declarations) {
-        index.print(data)
-    }
-    index.printTo(path.join(ohos.managedDir(), "index.d.ts"))
 
     // managed-utils
 
@@ -161,6 +156,27 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: G
                 './' + path.relative(path.dirname(callbackCheckerFilePath), callbackAndCallFilePath)
                     .replaceAll(peerLibrary.language.extension, '')
             )
+    )
+
+    // managed-index
+
+    if ([Language.TS, Language.ARKTS].includes(peerLibrary.language)) {
+        const generatedFiles = peerLibrary.layout.entries().map(([file, ]) => file)
+        if (peerLibrary.language === Language.ARKTS) {
+            generatedFiles.push('./peers/type_check.ts')
+            generatedFiles.push('./' + path.basename(nativeModuleFileName, path.extname(nativeModuleFileName)))
+        }
+        writeIntegratedFile(path.join(ohos.managedDir(), 'index.ts'),
+            makeOhosModule(generatedFiles)
+        )
+    }
+
+    // install managed part
+
+    install(
+        ohos.managedDir(),
+        peerLibrary.layout,
+        peerLibrary.language.extension
     )
 
     // NATIVE
@@ -215,11 +231,6 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: G
     writeIntegratedFile(ohos.native(new TargetFile(`real_impl.cc`)), modifiersReal)
 
     setDefaultConfiguration(origGenConfig)
-    install(
-        ohos.managedDir(),
-        peerLibrary.layout,
-        peerLibrary.language.extension
-    )
 }
 
 const PEER_LIB_CONFIG = new Map<Language, [string, string][]>()
