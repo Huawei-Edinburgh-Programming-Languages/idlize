@@ -494,7 +494,7 @@
 |`color`| Function | Morozov Sergey | done | |
 |*Image*| *Component* | Evstigneev Roman | in progress |  |
 |`setImageOptions`| Function | Berezin Kirill | in progress | |
-|`alt`| Function | Evstigneev Roman | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
+|`alt`| Function | Evstigneev Roman | done | UT done Lobah Mikhail https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |`matchTextDirection`| Function | Evstigneev Roman | done | |
 |`fitOriginalSize`| Function | Evstigneev Roman | done | |
 |`fillColor`| Function | Evstigneev Roman | done | |
