@@ -106,6 +106,9 @@ interface SignatureDescriptor {
 
 class DependecyCollector {
 
+    // file -> imports
+    fileToImpors: Map<string, Set<idl.IDLImport>> = new Map()
+    // already seen declarations
     seen: Set<string> = new Set()
     // declaration -> name
     declToFile: Map<string, string> = new Map()
@@ -133,8 +136,30 @@ class DependecyCollector {
         }
     }
 
+    parseImport(imp: idl.IDLImport) {
+        const fileName = getFileNameFromDeclaration(imp)
+        let imports = this.fileToImpors.get(fileName)
+        if (!imports) {
+            imports = new Set()
+        }
+        imports.add(imp)
+        this.fileToImpors.set(fileName, imports)
+        // console.log(`Parse file: ${fileName}, import: ${imp.name}`)
+        // console.log(``)
+    }
+
     getImportLines(fileName: string): string[] {
         const importLines: string[] = []
+
+        // imports from IDLImport
+        const imps = this.fileToImpors.get(fileName)
+        if (imps) {
+            for (const imp of imps) {
+                importLines.push(this.getImportLine(imp.name, imp.importClause))
+            }
+        }
+
+        // import from dependencies
         const declarations = this.fileToDeclSet.get(fileName)
         if (!declarations) {
             return importLines
@@ -165,14 +190,14 @@ class DependecyCollector {
                 }
             }
             for (const [f, imports] of importsMap) {
-                importLines.push(this.getImportLine(f, imports))
+                importLines.push(this.getImportLine(`./${f}`, imports))
             }
         }
         return importLines
     }
 
-    private getImportLine(fileName: string, imports: string[]) : string {
-        return `import { ${imports.join(", ")} } from "${fileName}"`
+    private getImportLine(path: string, imports?: string[]) : string {
+        return `import { ${imports?.join(", ")} } from "${path}"`
     }
 
     NONE_TYPE: string = "NONE_TYPE"
@@ -903,6 +928,8 @@ class OHOSVisitor {
                     }
                 } else if (isEnum(entry)) {
                     this.enums.push(entry)
+                } else if(idl.isImport(entry)) {
+                    this.dependecyCollector.parseImport(entry)
                 }
                 entry.scope?.forEach(it => {
                     if (isCallback(it))
@@ -966,7 +993,7 @@ class OHOSVisitor {
                 .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
         )
 
-        // this.dependecyCollector.dump()
+        this.dependecyCollector.dump()
 
         for (const [file, peerWriter] of this.peerWriters) {
             const peerTemplate = readLangTemplate(`OHOSPeer_template${ext}`, this.library.language)
