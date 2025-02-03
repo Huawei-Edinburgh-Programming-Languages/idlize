@@ -28,6 +28,9 @@ export function printInterfaceData(library: PeerLibrary) {
             return
         }
         file.entries.flatMap(it => idl.isNamespace(it) ? it.members : [it]).forEach(entry => {
+            if (idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.GlobalScope)) {
+                return
+            }
             if (idl.isInterface(entry)) {
                 if (isMaterialized(entry, library) && idl.isClassSubkind(entry)) {
                     return
