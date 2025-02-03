@@ -31,7 +31,7 @@ export function generate<T>(
     options: GenerateOptions<T>
 ): void {
     if (options.enableLog) {
-        console.log("Logging is enabled")
+        console.log("Starting generation process...")
     }
 
     if (inputDirs.length === 0 && inputFiles.length === 0) {
@@ -40,6 +40,11 @@ export function generate<T>(
     }
 
     const resolvedInputDirs = inputDirs.map(dir => path.resolve(dir))
+
+    if (options.enableLog) {
+        console.log("Resolved input directories:", resolvedInputDirs)
+    }
+
     let input: string[] = []
 
     if (resolvedInputDirs.length > 0) {
@@ -70,21 +75,25 @@ export function generate<T>(
         })
     }
 
+    input = Array.from(new Set(input.map(p => path.resolve(p)))).sort()
+
     let program = ts.createProgram(
         input.concat([path.join(__dirname, "../stdlib.d.ts")]),
         options.compilerOptions
     )
 
     if (options.enableLog) {
-        program.getSourceFiles().forEach(f => console.log(f.fileName))
+        console.log("Initialized TypeScript program with input files:", input)
     }
+
+    if (outputDir && !fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true })
 
     const typeChecker = program.getTypeChecker()
     options.onBegin?.(outputDir, typeChecker)
 
     for (const sourceFile of program.getSourceFiles()) {
         const resolvedSourceFile = path.resolve(sourceFile.fileName)
-
+        
         const isInDir = resolvedInputDirs.some(dir => resolvedSourceFile.startsWith(dir))
         const isExplicitFile = input.some(f => path.resolve(f) === resolvedSourceFile)
 
@@ -95,6 +104,11 @@ export function generate<T>(
             continue
         }
 
+        if (options.enableLog) {
+            console.log(`Processing file: ${resolvedSourceFile}`)
+        }
+
+        // Walk the tree to search for classes
         const visitor = visitorFactory(sourceFile, typeChecker)
         const output = visitor.visitWholeFile()
 
@@ -102,4 +116,8 @@ export function generate<T>(
     }
 
     options.onEnd?.(outputDir)
+
+    if (options.enableLog) {
+        console.log("Generation completed.")
+    }
 }
