@@ -22,6 +22,7 @@ import { printMaterialized } from "./printers/MaterializedPrinter";
 import { printGlobal } from "./printers/GlobalScopePrinter";
 import { printDeclarations } from "./printers/DeclarationPrinter";
 import {
+    GeneratorConfiguration,
     generatorConfiguration,
     IndentedPrinter,
     Language,
@@ -46,16 +47,10 @@ import { generateNativeOhos, OhosConfiguration, suggestLibraryName } from './Oho
 import { printRealAndDummyAccessors, printRealAndDummyModifiers } from './printers/ModifierPrinter';
 import { printSerializersOhos } from './printers/HeaderPrinter';
 
-interface GenerateOhosConfig {
-    apiVersion: number
-    dumpSerialized?: boolean
-    callLog?: boolean
-}
-
-export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: GenerateOhosConfig) {
+export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: GeneratorConfiguration) {
     peerLibrary.name = suggestLibraryName(peerLibrary).toLowerCase()
     const origGenConfig = generatorConfiguration()
-    setDefaultConfiguration(new OhosConfiguration(suggestLibraryName(peerLibrary)))
+    setDefaultConfiguration(config)
 
     const ohos = new OhosInstall(outDir, peerLibrary.language)
 
@@ -74,7 +69,7 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: G
 
     // manged-classes
 
-    const materialized = printMaterialized(peerLibrary, context, config.dumpSerialized ?? false)
+    const materialized = printMaterialized(peerLibrary, context, config.param("DumpSerialized"))
     for (const [targetFile, materializedClass] of materialized) {
         const outMaterializedFile = ohos.materialized(targetFile)
         writeIntegratedFile(outMaterializedFile, materializedClass, "producing")
@@ -185,7 +180,7 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: G
         writeIntegratedFile(ohos.native(file), content)
     }
 
-    const { api, serializers } = printSerializersOhos(config.apiVersion, peerLibrary)
+    const { api, serializers } = printSerializersOhos(config.param("ApiVersion"), peerLibrary)
     writeIntegratedFile(ohos.native(new TargetFile(`Serializers.h`)), serializers)
 
     // writeIntegratedFile(ohos.native(new TargetFile(`all_events.cc`)), printEventsCArkoalaImpl(peerLibrary))
@@ -193,8 +188,8 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: G
     const modifiers = printRealAndDummyModifiers(peerLibrary, true)
     const accessors = printRealAndDummyAccessors(peerLibrary)
     const apiGenFile = peerLibrary.name.toLowerCase()
-    const modifiersDummy = dummyImplementations(modifiers.dummy, accessors.dummy, 1, config.apiVersion , 6, apiGenFile).getOutput().join('\n')
-    const modifiersReal = dummyImplementations(modifiers.real, accessors.real, 1, config.apiVersion, 6, apiGenFile).getOutput().join('\n')
+    const modifiersDummy = dummyImplementations(modifiers.dummy, accessors.dummy, 1, config.param("ApiVersion") , 6, apiGenFile).getOutput().join('\n')
+    const modifiersReal = dummyImplementations(modifiers.real, accessors.real, 1, config.param("ApiVersion"), 6, apiGenFile).getOutput().join('\n')
     writeIntegratedFile(ohos.native(new TargetFile(`dummy_impl.cc`)), modifiersDummy)
     writeIntegratedFile(ohos.native(new TargetFile(`real_impl.cc`)), modifiersReal)
 

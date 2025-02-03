@@ -643,7 +643,7 @@ class OHOSVisitor {
 
                 materializedMethods.forEach(method => {
                     writePeerMethod(
-                        writer, 
+                        writer,
                         method.getPrivateMethod(),
                         true,
                         { language: this.library.language, imports: undefined, synthesizedTypes: undefined  },
@@ -1045,12 +1045,15 @@ function generatePostfixForOverloads(methods:IDLMethod[]): MethodWithPostfix[]  
 export class OhosConfiguration implements GeneratorConfiguration {
     readonly params: Record<string, any>
 
-    constructor(libraryName: string) {
+    constructor(libraryName?: string, params?: Record<string, any>) {
         this.params = {
             TypePrefix: "OH_",
-            LibraryPrefix: `${libraryName}_`,
+            LibraryPrefix: libraryName !== undefined ? `${libraryName}_` : "",
             OptionalPrefix: "Opt_",
-            GenerateUnused: true
+            GenerateUnused: true,
+            DumpSerialized: false,
+            ApiVersion: 0,
+            ...params
         }
     }
 
