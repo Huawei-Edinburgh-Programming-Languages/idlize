@@ -161,7 +161,6 @@ interface WebviewController {
   void loadUrl((String or Resource) url, optional sequence<WebHeader> headers);
 };
 
-
 /**
  * The componentSnapshot API declaration , part for M2 app
  */
@@ -178,4 +177,30 @@ callback AsyncCallback_image_PixelMap_Void = void (PixelMap result);
 [GlobalScope]
 interface GlobalScope_ohos_arkui_componentSnapshot {
     static void get(String id, AsyncCallback_image_PixelMap_Void callback, optional SnapshotOptions options);
+};
+
+/**
+ * The performanceMonitor API declaration, part for M2 app
+ */
+dictionary PerfMonitorActionType {
+
+    number LAST_DOWN = 0;
+    number LAST_UP = 1;
+    number FIRST_MOVE = 2;
+
+};
+dictionary PerfMonitorSourceType {
+
+    number PERF_TOUCH_EVENT = 0;
+    number PERF_MOUSE_EVENT = 1;
+    number PERF_TOUCHPAD_EVENT = 2;
+    number PERF_JOYSTICK_EVENT = 3;
+    number PERF_KEY_EVENT = 4;
+
+};
+[GlobalScope]
+interface GlobalScope_ohos_arkui_performanceMonitor {
+    static void begin(String scene, PerfMonitorActionType startInputType, optional String note);
+    static void end(String scene);
+    static void recordInputEventTime(PerfMonitorActionType type, PerfMonitorSourceType sourceType, number time);
 };
