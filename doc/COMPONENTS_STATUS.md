@@ -370,7 +370,7 @@
 |`strokeWidth`| Function | Morozov Sergey |done |  |
 |`trackShadow`| Function |Morozov Sergey |blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAW4DU|
 |`contentModifier`| Function | Morozov Sergey |blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
-|*DatePicker*| *Component* | Vadim Voronov | in progress |  |
+|*DatePicker*| *Component* | Vadim Voronov | done |  |
 |`setDatePickerOptions`| Function | Vadim Voronov| done | |
 |`lunar`| Function |Vadim Voronov | done |  |
 |`disappearTextStyle`| Function | Vadim Voronov| done |  |
