@@ -115,9 +115,7 @@ if (options.optionsFile) {
 }
 
 if (process.env.npm_package_version) {
-    if (options.enableLog) {
-        console.log(`IDLize version ${findVersion()}`)
-    }
+    console.log(`IDLize version ${findVersion()}`)
 }
 
 let didJob = false
