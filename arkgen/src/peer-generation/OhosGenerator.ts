@@ -104,7 +104,15 @@ interface SignatureDescriptor {
     paramsCString?: string
 }
 
-class DependecyCollector {
+interface DependecyCollector {
+
+    parseImport(imp: idl.IDLImport): void
+    collect(decl: idl.IDLNode, fileName?: string, traverse?: boolean): void
+    getImportLines(fileName: string): string[]
+    dump(): void
+}
+
+class ManyFilesDependecyCollector implements DependecyCollector{
 
     // file -> imports
     fileToImpors: Map<string, Set<idl.IDLImport>> = new Map()
@@ -221,7 +229,7 @@ class DependecyCollector {
         return `import { ${imports?.join(", ")} } from "${path}"`
     }
 
-    collectTypeReference(type?: idl.IDLReferenceType): string {
+    private collectTypeReference(type?: idl.IDLReferenceType): string {
         if (!type) {
             return this.NONE_TYPE
         }
@@ -306,7 +314,7 @@ class OHOSVisitor {
 
         this.libraryName = libraryName
         this.library.name = libraryName
-        this.dependecyCollector = new DependecyCollector(library)
+        this.dependecyCollector = new ManyFilesDependecyCollector(library)
 
         this.nativeWriter = createLanguageWriter(library.language, library)
         this.nativeFunctionsWriter = createLanguageWriter(library.language, library)
