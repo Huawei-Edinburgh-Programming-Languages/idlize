@@ -118,31 +118,35 @@ if (process.env.npm_package_version) {
 
 let didJob = false
 
-class ArkoalaConfiguration extends BaseGeneratorConfiguration {
-    protected params: Record<string, any> = {
-        TypePrefix: "Ark_",
-        LibraryPrefix: "",
-        OptionalPrefix: "Opt_",
-        GenerateUnused: false,
-        DumpSerialized: false,
-        ApiVersion: 9999,
-        rootComponents: PeerGeneratorConfig.rootComponents,
-        standaloneComponents: PeerGeneratorConfig.standaloneComponents,
-        knownParameterized: PeerGeneratorConfig.knownParameterized,
-        boundProperties: Array.from(PeerGeneratorConfig.boundProperties),
-        builderClasses: PeerGeneratorConfig.builderClasses,
-        ignoreMaterialized: PeerGeneratorConfig.ignoreMaterialized
-    }
-    override paramArray<T>(name: string): T[] {
-        return super.paramArray(name)
+class DefaultConfig extends BaseGeneratorConfiguration {
+    constructor(params: Record<string, any> = {}) {
+        super({
+            TypePrefix: "",
+            LibraryPrefix: "",
+            OptionalPrefix: "Opt_",
+            GenerateUnused: false,
+            DumpSerialized: false,
+            ApiVersion: apiVersion,
+            builderClasses: [],
+            knownParameterized: [],
+            ...params
+        })
     }
 }
 
-class SkoalaConfiguration extends BaseGeneratorConfiguration {
-    protected params: Record<string, any> = {
-        TypePrefix: "",
-        LibraryPrefix: "",
-        OptionalPrefix: "Opt_"
+class ArkoalaConfiguration extends DefaultConfig {
+    constructor() {
+        super({
+            TypePrefix: "Ark_",
+            rootComponents: PeerGeneratorConfig.rootComponents,
+            standaloneComponents: PeerGeneratorConfig.standaloneComponents,
+            knownParameterized: PeerGeneratorConfig.knownParameterized,
+            boundProperties: Array.from(PeerGeneratorConfig.boundProperties.entries()),
+            builderClasses: PeerGeneratorConfig.builderClasses
+        });
+    }
+    override paramArray<T>(name: string): T[] {
+        return super.paramArray(name)
     }
 }
 
@@ -201,7 +205,7 @@ if (options.dts2idl) {
 }
 
 if (options.dts2skoala) {
-    setDefaultConfiguration(new SkoalaConfiguration())
+    setDefaultConfiguration(new DefaultConfig())
 
     console.log(`Processing all .d.ts from directory: ${options.inputDir ?? "undefined"}`)
 
@@ -420,7 +424,7 @@ if (options.dts2peer) {
                 if (options.generatorTarget == "ohos") {
                     // This setup code placed here because wrong prefix may be cached during library creation
                     // TODO find better place for setup?
-                    setDefaultConfiguration(new BaseGeneratorConfiguration({builderClasses: []}))
+                    setDefaultConfiguration(new DefaultConfig())
                 }
                 fillSyntheticDeclarations(idlLibrary)
                 const peerProcessor = new IdlPeerProcessor(idlLibrary)
@@ -465,15 +469,11 @@ function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language)
     }
     if (options.generatorTarget == "ohos") {
         if (options.useNewOhos) {
-            generateOhos(outDir, idlLibrary, new BaseGeneratorConfiguration({
+            generateOhos(outDir, idlLibrary, new DefaultConfig({
                 TypePrefix: "OH_",
                 LibraryPrefix: `${suggestLibraryName(idlLibrary)}_`,
                 OptionalPrefix: "Opt_",
-                GenerateUnused: true,
-                DumpSerialized: false,
-                ApiVersion: apiVersion,
-                builderClasses: [],
-                knownParameterized: []
+                GenerateUnused: true
             }))
         } else {
             generateOhosOld(outDir, idlLibrary, options.defaultIdlPackage as string, options.splitFiles)
