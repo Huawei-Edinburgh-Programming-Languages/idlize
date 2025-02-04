@@ -25,10 +25,10 @@ import {
     idlToDtsString,
     Language,
     findVersion,
-    GeneratorConfiguration,
     setDefaultConfiguration,
     PeerFile,
-    PeerLibrary
+    PeerLibrary,
+    BaseGeneratorConfiguration
 } from "@idlizer/core"
 import {
     forEachChild,
@@ -118,7 +118,7 @@ if (process.env.npm_package_version) {
 
 let didJob = false
 
-export class DefaultConfig implements GeneratorConfiguration {
+class ArkoalaConfiguration extends BaseGeneratorConfiguration {
     protected params: Record<string, any> = {
         TypePrefix: "Ark_",
         LibraryPrefix: "",
@@ -126,46 +126,19 @@ export class DefaultConfig implements GeneratorConfiguration {
         GenerateUnused: false,
         DumpSerialized: false,
         ApiVersion: 9999,
-        rootComponents:  [],
-        standaloneComponents: [],
-        knownParameterized: [],
-        boundProperties: [],
-        builderClasses: []
+        rootComponents: PeerGeneratorConfig.rootComponents,
+        standaloneComponents: PeerGeneratorConfig.standaloneComponents,
+        knownParameterized: PeerGeneratorConfig.knownParameterized,
+        boundProperties: Array.from(PeerGeneratorConfig.boundProperties),
+        builderClasses: PeerGeneratorConfig.builderClasses,
+        ignoreMaterialized: PeerGeneratorConfig.ignoreMaterialized
     }
-
-    constructor(params: Record<string, any> = {}) {
-        Object.assign(this.params, params);
-    }
-
-    param<T>(name: string): T {
-        if (name in this.params) {
-            return this.params[name] as T
-        }
-        throw new Error(`${name} is unknown`)
-    }
-    paramArray<T>(name: string): T[] {
-        if (name in this.params) {
-            return this.params[name] as T[]
-        }
-        throw new Error(`${name} is unknown`)
-    }
-}
-
-class ArkoalaConfiguration extends DefaultConfig {
     override paramArray<T>(name: string): T[] {
-        switch (name) {
-            case 'rootComponents': return PeerGeneratorConfig.rootComponents as T[]
-            case 'standaloneComponents': return PeerGeneratorConfig.standaloneComponents as T[]
-            case 'knownParameterized': return PeerGeneratorConfig.knownParameterized as T[]
-            case 'boundProperties': return Array.from(PeerGeneratorConfig.boundProperties) as T[]
-            case 'builderClasses': return PeerGeneratorConfig.builderClasses as T[]
-            case 'ignoreMaterialized': return PeerGeneratorConfig.ignoreMaterialized as T[]
-        }
         return super.paramArray(name)
     }
 }
 
-class SkoalaConfiguration extends DefaultConfig {
+class SkoalaConfiguration extends BaseGeneratorConfiguration {
     protected params: Record<string, any> = {
         TypePrefix: "",
         LibraryPrefix: "",
@@ -447,7 +420,7 @@ if (options.dts2peer) {
                 if (options.generatorTarget == "ohos") {
                     // This setup code placed here because wrong prefix may be cached during library creation
                     // TODO find better place for setup?
-                    setDefaultConfiguration(new DefaultConfig())
+                    setDefaultConfiguration(new BaseGeneratorConfiguration({builderClasses: []}))
                 }
                 fillSyntheticDeclarations(idlLibrary)
                 const peerProcessor = new IdlPeerProcessor(idlLibrary)
@@ -492,13 +465,15 @@ function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language)
     }
     if (options.generatorTarget == "ohos") {
         if (options.useNewOhos) {
-            generateOhos(outDir, idlLibrary, new DefaultConfig({
+            generateOhos(outDir, idlLibrary, new BaseGeneratorConfiguration({
                 TypePrefix: "OH_",
                 LibraryPrefix: `${suggestLibraryName(idlLibrary)}_`,
                 OptionalPrefix: "Opt_",
                 GenerateUnused: true,
                 DumpSerialized: false,
-                ApiVersion: apiVersion
+                ApiVersion: apiVersion,
+                builderClasses: [],
+                knownParameterized: []
             }))
         } else {
             generateOhosOld(outDir, idlLibrary, options.defaultIdlPackage as string, options.splitFiles)
