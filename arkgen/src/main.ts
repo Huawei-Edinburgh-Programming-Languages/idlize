@@ -50,7 +50,6 @@ import {
 } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
 import {
     generateOhos as generateOhosOld,
-    OhosConfiguration,
     suggestLibraryName
 } from "./peer-generation/OhosGenerator"
 import { generateArkoalaFromIdl, generateLibaceFromIdl } from "./peer-generation/arkoala"
@@ -119,12 +118,23 @@ if (process.env.npm_package_version) {
 
 let didJob = false
 
-class DefaultConfig implements GeneratorConfiguration {
+export class DefaultConfig implements GeneratorConfiguration {
     protected params: Record<string, any> = {
         TypePrefix: "Ark_",
         LibraryPrefix: "",
         OptionalPrefix: "Opt_",
         GenerateUnused: false,
+        DumpSerialized: false,
+        ApiVersion: 9999,
+        rootComponents:  [],
+        standaloneComponents: [],
+        knownParameterized: [],
+        boundProperties: [],
+        builderClasses: []
+    }
+
+    constructor(params: Record<string, any> = {}) {
+        Object.assign(this.params, params);
     }
 
     param<T>(name: string): T {
@@ -134,7 +144,10 @@ class DefaultConfig implements GeneratorConfiguration {
         throw new Error(`${name} is unknown`)
     }
     paramArray<T>(name: string): T[] {
-        return []
+        if (name in this.params) {
+            return this.params[name] as T[]
+        }
+        throw new Error(`${name} is unknown`)
     }
 }
 
@@ -434,7 +447,7 @@ if (options.dts2peer) {
                 if (options.generatorTarget == "ohos") {
                     // This setup code placed here because wrong prefix may be cached during library creation
                     // TODO find better place for setup?
-                    setDefaultConfiguration(new OhosConfiguration())
+                    setDefaultConfiguration(new DefaultConfig())
                 }
                 fillSyntheticDeclarations(idlLibrary)
                 const peerProcessor = new IdlPeerProcessor(idlLibrary)
@@ -479,11 +492,14 @@ function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language)
     }
     if (options.generatorTarget == "ohos") {
         if (options.useNewOhos) {
-            generateOhos(outDir, idlLibrary, new OhosConfiguration(suggestLibraryName(idlLibrary),
-                {
-                    ApiVersion: apiVersion
-                }
-            ))
+            generateOhos(outDir, idlLibrary, new DefaultConfig({
+                TypePrefix: "OH_",
+                LibraryPrefix: `${suggestLibraryName(idlLibrary)}_`,
+                OptionalPrefix: "Opt_",
+                GenerateUnused: true,
+                DumpSerialized: false,
+                ApiVersion: apiVersion
+            }))
         } else {
             generateOhosOld(outDir, idlLibrary, options.defaultIdlPackage as string, options.splitFiles)
         }
