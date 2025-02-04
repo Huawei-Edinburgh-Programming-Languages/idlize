@@ -137,6 +137,7 @@ dictionary LengthUnit {
 /**
  * Defines the Length Metrics.
  */
+[Entity=Class]
 interface LengthMetrics {
   /**
    * The unit of the LengthMetrics. The default value is LengthUnit::VP.
@@ -180,7 +181,7 @@ interface SnapshotOptions {
 [Async, Synthetic]
 callback AsyncCallback_image_PixelMap_Void = void (PixelMap result);
 
-[GlobalScope]
+[Entity=Class]
 interface GlobalScope_ohos_arkui_componentSnapshot {
     static void get(String id, AsyncCallback_image_PixelMap_Void callback, optional SnapshotOptions options);
 };
@@ -204,7 +205,7 @@ dictionary PerfMonitorSourceType {
     number PERF_KEY_EVENT = 4;
 
 };
-[GlobalScope]
+[Entity=Class]
 interface GlobalScope_ohos_arkui_performanceMonitor {
     static void begin(String scene, PerfMonitorActionType startInputType, optional String note);
     static void end(String scene);
