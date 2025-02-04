@@ -27,7 +27,6 @@ import {
     findVersion,
     GeneratorConfiguration,
     setDefaultConfiguration,
-    initRNG,
     PeerFile
 } from "@idlizer/core"
 import {
@@ -38,11 +37,9 @@ import {
     isSyntheticEntry,
     toIDLString,
     transformMethodsAsync2ReturnPromise,
-    verifyIDLString,
-    linearizeNamespaceMembers
+    verifyIDLString
 } from "@idlizer/core/idl"
 import { IDLVisitor } from "./IDLVisitor"
-import { TestGeneratorVisitor } from "./TestGeneratorVisitor"
 import { loadConfiguration, PeerGeneratorConfig, setFileGeneratorConfiguration } from "./peer-generation/PeerGeneratorConfig"
 import { generateTracker } from "./peer-generation/Tracker"
 import {
