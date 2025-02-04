@@ -1193,8 +1193,8 @@
 |`selectionMenuHidden`|Function|Tuzhilkin Ivan|done|  |
 |`minFontSize`|Function|Tuzhilkin Ivan|done|  |
 |`maxFontSize`|Function|Tuzhilkin Ivan|done|  |
-|`minFontScale`| Function | Kovalev Sergey | in progress | |
-|`maxFontScale`| Function | Kovalev Sergey | in progress | |
+|`minFontScale`| Function | Kovalev Sergey | done | |
+|`maxFontScale`| Function | Kovalev Sergey | done | |
 |`heightAdaptivePolicy`|Function|Tuzhilkin Ivan|done|  |
 |`maxLines`|Function|Tuzhilkin Ivan|done|  |
 |`wordBreak`|Function|Tuzhilkin Ivan|done|  |
@@ -1214,9 +1214,9 @@
 |`editMenuOptions`|Function| Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`enablePreviewText`|Function|Tuzhilkin Ivan|done|  |
 |`enableHapticFeedback`|Function|Tuzhilkin Ivan|done| |
-|`halfLeading`| Function | Kovalev Sergey | in progress | |
-|`ellipsisMode`| Function | Kovalev Sergey | in progress | |
-|`stopBackPress`| Function | Kovalev Sergey | in progress | |
+|`halfLeading`| Function | Kovalev Sergey | done | |
+|`ellipsisMode`| Function | Kovalev Sergey | done | |
+|`stopBackPress`| Function | Kovalev Sergey | done | |
 |`onWillChange`| Function | | | |
 |`inputFilter`|Function|Tuzhilkin Ivan| done | |
 |`showCounter`|Function|Tuzhilkin Ivan|done| https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
