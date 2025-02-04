@@ -112,6 +112,18 @@ interface DependecyCollector {
     dump(): void
 }
 
+class OneFileDependecyCollector implements DependecyCollector {
+
+    parseImport(imp: idl.IDLImport): void {
+    }
+    collect(decl: idl.IDLNode, fileName?: string, traverse?: boolean): void {
+    }
+    getImportLines(fileName: string): string[] {
+        return []
+    }
+    dump(): void {
+    }
+}
 class ManyFilesDependecyCollector implements DependecyCollector{
 
     // file -> imports
@@ -287,14 +299,13 @@ class ManyFilesDependecyCollector implements DependecyCollector{
     }
 }
 
-class OHOSVisitor {
+abstract class OHOSVisitor {
     implementationStubsFile: CppSourceFile
 
     hWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), ArkPrimitiveTypesInstance)
     cppWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), ArkPrimitiveTypesInstance)
 
     dependecyCollector: DependecyCollector
-    peerWriters: Map<string, LanguageWriter> = new Map<string, LanguageWriter>()
 
     nativeWriter: LanguageWriter
     nativeFunctionsWriter: LanguageWriter
@@ -308,13 +319,13 @@ class OHOSVisitor {
     callbacks = new Array<IDLCallback>()
     callbackInterfaces = new Array<IDLInterface>()
 
-    constructor(protected library: PeerLibrary, libraryName: string) {
+    constructor(protected library: PeerLibrary, libraryName: string, dependencyCollector: DependecyCollector) {
         if (this.library.files.length == 0)
             throw new Error("No files in library")
 
         this.libraryName = libraryName
         this.library.name = libraryName
-        this.dependecyCollector = new ManyFilesDependecyCollector(library)
+        this.dependecyCollector = dependencyCollector
 
         this.nativeWriter = createLanguageWriter(library.language, library)
         this.nativeFunctionsWriter = createLanguageWriter(library.language, library)
@@ -875,7 +886,7 @@ class OHOSVisitor {
 
     private printPeers() {
         const nativeModuleVar = `${this.libraryName}NativeModule`
-        for (const [fileName, peerWriter] of this.peerWriters) {
+        for (const [fileName, peerWriter] of this.getPeerWriters()) {
             if (this.library.language != Language.CJ) peerWriter.print('import { TypeChecker } from "./type_check"')
             if (this.library.language === Language.TS) {
                 peerWriter.print('import {')
@@ -1050,7 +1061,7 @@ class OHOSVisitor {
 
         this.dependecyCollector.dump()
 
-        for (const [file, peerWriter] of this.peerWriters) {
+        for (const [file, peerWriter] of this.getPeerWriters()) {
             const peerTemplate = readLangTemplate(`OHOSPeer_template${ext}`, this.library.language)
 
             const imports = this.dependecyCollector.getImportLines(file)
@@ -1091,6 +1102,39 @@ class OHOSVisitor {
         return `${generatorTypePrefix()}${typeName}`
     }
 
+    abstract getPeerWriter(decl: idl.IDLNode): LanguageWriter
+    abstract getPeerWriters(): Map<string, LanguageWriter>
+}
+
+class OneFileOHOSVisitor extends OHOSVisitor {
+
+    peerWriter: LanguageWriter
+    peerWriters: Map<string, LanguageWriter> = new Map()
+    constructor(protected library: PeerLibrary, libraryName: string) {
+        super(library, libraryName, new OneFileDependecyCollector())
+        console.log(`Use OneFileOHOSVisitor`)
+        this.peerWriter = createLanguageWriter(library.language, library)
+        this.peerWriters.set(this.libraryName.toLowerCase(), this.peerWriter)
+    }
+
+    getPeerWriter(decl: idl.IDLNode): LanguageWriter {
+        return this.peerWriter
+    }
+
+    getPeerWriters(): Map<string, LanguageWriter> {
+        return this.peerWriters
+    }
+}
+
+class ManyFilesOHOSVisitor extends OHOSVisitor {
+
+    peerWriters: Map<string, LanguageWriter> = new Map<string, LanguageWriter>()
+
+    constructor(protected library: PeerLibrary, libraryName: string) {
+        super(library, libraryName, new ManyFilesDependecyCollector(library))
+        console.log(`Use ManyFilesOHOSVisitor`)
+    }
+
     getPeerWriter(decl: idl.IDLNode): LanguageWriter {
         const fileName = getFileNameFromDeclaration(decl)
         this.dependecyCollector.collect(decl, fileName)
@@ -1100,6 +1144,10 @@ class OHOSVisitor {
             this.peerWriters.set(fileName, writer)
         }
         return writer
+    }
+
+    getPeerWriters(): Map<string, LanguageWriter> {
+        return this.peerWriters
     }
 }
 
@@ -1132,7 +1180,12 @@ function generateTypeCheckFile(dir: string, lang: Language): void {
     fs.writeFileSync(path.join(dir, `type_check.ts`), code)
 }
 
-export function generateOhos(outDir: string, peerLibrary: PeerLibrary, defaultIdlPackage?: string): void {
+function getOhosGenerator(peerLibrary: PeerLibrary, libraryName: string, splitFiles?: boolean) {
+    console.log(`Use split file option: ${splitFiles}`)
+    return splitFiles ? new ManyFilesOHOSVisitor(peerLibrary, libraryName) : new OneFileOHOSVisitor(peerLibrary, libraryName)
+}
+
+export function generateOhos(outDir: string, peerLibrary: PeerLibrary, defaultIdlPackage?: string, splitFiles?: boolean): void {
     const rootPath = outDir
     const generatedSubDir = 'generated'
     const managedOutDir = path.join(generatedSubDir, peerLibrary.language.name.toLocaleLowerCase())
@@ -1144,13 +1197,13 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, defaultId
         fs.mkdirSync(manageOutPath, { recursive: true })
     }
     const libraryName = defaultIdlPackage ?? suggestLibraryName(peerLibrary)
-    const visitor = new OHOSVisitor(peerLibrary, libraryName)
+    const visitor = getOhosGenerator(peerLibrary, libraryName, splitFiles)
     visitor.execute(rootPath, generatedSubDir, managedOutDir)
 }
 
 export function generateNativeOhos(peerLibrary: PeerLibrary): Map<TargetFile, string> {
     const libraryName = suggestLibraryName(peerLibrary)
-    const visitor = new OHOSVisitor(peerLibrary, libraryName)
+    const visitor = new ManyFilesOHOSVisitor(peerLibrary, libraryName)
     visitor.prepare()
     visitor.printC()
     return new Map([
