@@ -106,6 +106,7 @@ class TSDependenciesCollector extends DependenciesCollector {
         if (idl.isInterfaceSubkind(decl) && isMaterialized(decl, this.library)) {
             const name = getInternalClassName(decl.name)
             return super.convertTypeReference(idl.createReferenceType(name))
+                .concat(super.convertInterface(decl))
         }
         if (idl.isClassSubkind(decl) && isMaterialized(decl, this.library)) {
             return []
