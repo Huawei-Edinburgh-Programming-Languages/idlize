@@ -90,10 +90,9 @@ export function loadConfiguration(configurationFiles?: string): CoreGeneratorCon
 
     let configuration = defaultCoreGeneratorConfiguration
     files.forEach(file => {
-        console.log(`checking ${file}`)
         const nextConfiguration = loadConfigurationFromFile(file)
         if (nextConfiguration) {
-            console.log(`adding from ${file}`)
+            console.log(`Using options from ${file}`)
             configuration = deepMergeConfig(configuration, nextConfiguration)
         }
     })
