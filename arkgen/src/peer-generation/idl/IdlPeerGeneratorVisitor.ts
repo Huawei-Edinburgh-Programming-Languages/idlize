@@ -269,29 +269,33 @@ class PeersGenerator {
     }
 
     public generatePeer(component: IdlComponentDeclaration): void {
+
         if (!component.attributeDeclaration.fileName) {
             throw new Error("Expected parent of attributes to be a SourceFile, but fileName is undefined")
         }
     
-        const sourceFile = path.basename(component.attributeDeclaration.fileName)
+        const originalFileName = component.attributeDeclaration.fileName
+        const baseName = path.basename(originalFileName)
+        const resolvedPath = path.resolve(originalFileName)
     
-        const file = this.library.findFileByOriginalFilename(sourceFile) || 
-                    this.library.findFileByOriginalFilename(path.resolve(component.attributeDeclaration.fileName))
+        const file = this.library.findFileByOriginalFilename(baseName) ||
+                     this.library.findFileByOriginalFilename(resolvedPath)
     
         if (!file) {
-            throw new Error("Not found a file corresponding to attributes class")
+            console.error("Available files in library:", this.library.files.map(f => f.originalFilename))
+            throw new Error(`Not found a file corresponding to attributes class: ${baseName} (${resolvedPath})`)
         }
     
-        const peer = new PeerClass(file, component.name, sourceFile)
+        const peer = new PeerClass(file, component.name, baseName)
     
-        if (component.interfaceDeclaration)
+        if (component.interfaceDeclaration) {
             this.fillInterface(peer, component.interfaceDeclaration)
-    
+        }
+
         this.fillClass(peer, component.attributeDeclaration)
         collapseIdlEventsOverloads(this.library, peer)
         file.peers.set(component.name, peer)
     }
-    
 }
 
 export class IdlPeerProcessor {
