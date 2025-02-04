@@ -1939,7 +1939,7 @@
 |*DatePickerDialog*| *Class* | Ekaterina Stepanova | blocked IDL | |
 |`show`| Function | Ekaterina Stepanova | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBHHWA |
 |*BaseGestureEvent*| *Class* | Maksimov Nikita | in progress | |
-|`setFingerList`| Function | Maksimov Nikita | in progress | implementation and UT in progress Vadim Voronov |
+|`setFingerList`| Function | Maksimov Nikita | devdone | implementation and UT in progress Vadim Voronov |
 |*TapGestureEvent*| *Class* | | | |
 |*LongPressGestureEvent*| *Class* | | | |
 |`getRepeat`| Function | | | |
