@@ -43,14 +43,18 @@ import {
 } from "@idlizer/core/idl"
 import { IDLVisitor } from "./IDLVisitor"
 import { TestGeneratorVisitor } from "./TestGeneratorVisitor"
-import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig"
+import { loadConfiguration, PeerGeneratorConfig, setFileGeneratorConfiguration } from "./peer-generation/PeerGeneratorConfig"
 import { generateTracker } from "./peer-generation/Tracker"
 import {
     IDLInteropPredefinesVisitor,
     IdlPeerProcessor,
     IDLPredefinesVisitor,
 } from "./peer-generation/idl/IdlPeerGeneratorVisitor"
-import { generateOhos as generateOhosOld } from "./peer-generation/OhosGenerator"
+import {
+    generateOhos as generateOhosOld,
+    OhosConfiguration,
+    suggestLibraryName
+} from "./peer-generation/OhosGenerator"
 import { generateArkoalaFromIdl, generateLibaceFromIdl } from "./peer-generation/arkoala"
 import { loadPlugin } from "./peer-generation/plugin-api"
 import { SkoalaDeserializerPrinter } from "./peer-generation/printers/SkoalaDeserializerPrinter"
@@ -100,13 +104,18 @@ const options = program
     .option('--plugin <file>', 'File with generator\'s plugin')
     .option('--default-idl-package <name>', 'Name of the default package for generated IDL')
     .option('--no-commented-code', 'Do not generate commented code in modifiers')
+    .option('--options-file <path>', 'Path to file which determines what to generate')
     .option('--use-new-ohos', 'Use new ohos generator')
     .option('--enable-log', 'Enable logging')
+    .option('--options-file <path>', 'Path to file which determines what to generate')
     .parse()
     .opts()
 
 let apiVersion = options.apiVersion ?? 9999
 
+if (options.optionsFile) {
+    setFileGeneratorConfiguration(loadConfiguration(options.optionsFile as string))
+}
 
 if (process.env.npm_package_version) {
     if (options.enableLog) {
@@ -140,8 +149,8 @@ class ArkoalaConfiguration extends DefaultConfig {
         switch (name) {
             case 'rootComponents': return PeerGeneratorConfig.rootComponents as T[]
             case 'standaloneComponents': return PeerGeneratorConfig.standaloneComponents as T[]
-            case 'knownParameterized': return PeerGeneratorConfig.knownParametrized as T[]
-            case 'boundProperties': return PeerGeneratorConfig.boundProperties as T[]
+            case 'knownParameterized': return PeerGeneratorConfig.knownParameterized as T[]
+            case 'boundProperties': return Array.from(PeerGeneratorConfig.boundProperties) as T[]
             case 'builderClasses': return PeerGeneratorConfig.builderClasses as T[]
         }
         return super.paramArray(name)
@@ -151,16 +160,6 @@ class ArkoalaConfiguration extends DefaultConfig {
 class SkoalaConfiguration extends DefaultConfig {
     protected params: Record<string, any> = {
         TypePrefix: "",
-        LibraryPrefix: "",
-        OptionalPrefix: "Opt_"
-    }
-}
-
-// TBD: OhosConfiguration needs to include LibraryPrefix
-// from the library name
-class OhosConfiguration extends DefaultConfig {
-    protected params: Record<string, any> = {
-        TypePrefix: "OH_",
         LibraryPrefix: "",
         OptionalPrefix: "Opt_"
     }
@@ -488,9 +487,11 @@ function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language)
     }
     if (options.generatorTarget == "ohos") {
         if (options.useNewOhos) {
-            generateOhos(outDir, idlLibrary, {
-                apiVersion: apiVersion
-            })
+            generateOhos(outDir, idlLibrary, new OhosConfiguration(suggestLibraryName(idlLibrary),
+                {
+                    ApiVersion: apiVersion
+                }
+            ))
         } else {
             generateOhosOld(outDir, idlLibrary, options.defaultIdlPackage as string)
         }

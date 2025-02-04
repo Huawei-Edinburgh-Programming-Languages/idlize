@@ -643,7 +643,7 @@ class OHOSVisitor {
 
                 materializedMethods.forEach(method => {
                     writePeerMethod(
-                        writer, 
+                        writer,
                         method.getPrivateMethod(),
                         true,
                         { language: this.library.language, imports: undefined, synthesizedTypes: undefined  },
@@ -822,14 +822,8 @@ class OHOSVisitor {
     }
 
     execute(rootPath: string, outDir: string, managedOutDir: string) {
-        const params: Record<string, any> = {
-            TypePrefix: "OH_",
-            LibraryPrefix: `${this.libraryName}_`,
-            OptionalPrefix: "Opt_",
-            GenerateUnused: true
-        }
         const origGenConfig = generatorConfiguration()
-        setDefaultConfiguration(new OhosConfiguration(params))
+        setDefaultConfiguration(new OhosConfiguration(this.libraryName))
 
         this.prepare()
 
@@ -882,7 +876,8 @@ class OHOSVisitor {
             readLangTemplate(`CallbacksChecker${ext}`, this.library.language)
                 .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
                 .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
-                .replaceAll("%SERIALIZER_PATH%", managedCodeModuleInfo.serializerPath)
+                .replaceAll("%DESERIALIZER_PATH%", managedCodeModuleInfo.serializerPath)
+                .replaceAll("%CALLBACKS_PATH%", managedCodeModuleInfo.serializerPath)
         )
 
         generateTypeCheckFile(path.join(rootPath, managedOutDir), this.library.language)
@@ -1049,8 +1044,18 @@ function generatePostfixForOverloads(methods:IDLMethod[]): MethodWithPostfix[]  
 }
 
 export class OhosConfiguration implements GeneratorConfiguration {
+    readonly params: Record<string, any>
 
-    constructor(private params: Record<string, any>) {
+    constructor(libraryName?: string, params?: Record<string, any>) {
+        this.params = {
+            TypePrefix: "OH_",
+            LibraryPrefix: libraryName !== undefined ? `${libraryName}_` : "",
+            OptionalPrefix: "Opt_",
+            GenerateUnused: true,
+            DumpSerialized: false,
+            ApiVersion: 0,
+            ...params
+        }
     }
 
     param<T>(name: string): T {

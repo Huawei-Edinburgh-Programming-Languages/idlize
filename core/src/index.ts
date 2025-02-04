@@ -15,6 +15,7 @@ import { fromIDL } from "./from-idl/common"
  * limitations under the License.
  */
 export * from "./config"
+export * from "./configMerge"
 export * from "./idl"
 export * from "./library"
 export * from "./idlize"
@@ -53,4 +54,3 @@ export * from "./peer-generation/idl/common"
 export { fromIDL }  from "./from-idl/common"
 export { idlToDtsString, CustomPrintVisitor }  from "./from-idl/DtsPrinter"
 export { toIDL, toIDLFile, addSyntheticType, resolveSyntheticType } from "./from-idl/deserialize"
-
