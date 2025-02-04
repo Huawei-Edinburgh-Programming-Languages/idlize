@@ -160,3 +160,22 @@ interface WebviewController {
   static void initializeWebEngine();
   void loadUrl((String or Resource) url, optional sequence<WebHeader> headers);
 };
+
+
+/**
+ * The componentSnapshot API declaration , part for M2 app
+ */
+[Entity=Interface]
+interface SnapshotOptions {
+    [Optional]
+    attribute number scale;
+    [Optional]
+    attribute boolean waitUntilRenderFinished;
+};
+[Async, Synthetic]
+callback AsyncCallback_image_PixelMap_Void = void (PixelMap result);
+
+[GlobalScope]
+interface GlobalScope_ohos_arkui_componentSnapshot {
+    static void get(String id, AsyncCallback_image_PixelMap_Void callback, optional SnapshotOptions options);
+};
