@@ -147,6 +147,12 @@ interface LengthMetrics {
    * The value of the LengthMetrics.
    */
   attribute number value;
+
+  /**
+   * expand for M2 app
+   */
+  static LengthMetrics px(number value);
+  static LengthMetrics resource(Resource value);
 };
 
 [Entity=Interface]
