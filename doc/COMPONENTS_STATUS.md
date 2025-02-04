@@ -291,9 +291,9 @@
 |`foregroundBlurStyle`| Function | Roman Sedaikin | done | |
 |`focusScopeId`| Function | Dmitry A Smirnov| done | |
 |`focusScopePriority`| Function | Dmitry A Smirnov| done | |
-|`gesture`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARW2A |
-|`priorityGesture`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARW2A |
-|`parallelGesture`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IARW2A |
+|`gesture`| Function | Dudkin Sergey | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IARW2A |
+|`priorityGesture`| Function | Dudkin Sergey | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IARW2A |
+|`parallelGesture`| Function | Dudkin Sergey | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IARW2A |
 |`blur`| Function | Roman Sedaikin | done | |
 |`linearGradientBlur`| Function | Lobah Mikhail | done | |
 |`systemBarEffect`| Function | Lobah Mikhail | done | |
