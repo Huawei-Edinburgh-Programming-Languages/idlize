@@ -136,6 +136,14 @@ declare function LazyForEach<T>(
     keyGenerator?: (item: T, index: number) => string,
 ): LazyForEachAttribute // extends LazyForEachInterface<T> {}
 
+declare function setTimeout(handler: Function | string, delay?: number, ...arguments: any[]): number;
+
+declare function setInterval(handler: Function | string, delay: number, ...arguments: any[]): number;
+
+declare function clearInterval(intervalID?: number): void;
+
+declare function clearTimeout(timeoutID?: number): void;
+
 // Until we have full sdk
 declare interface LayoutChild {}
 declare interface ContentModifier<T>{}

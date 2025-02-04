@@ -150,6 +150,8 @@ declare function setInterval(handler: Function | string, delay: number, ...argum
 
 declare function clearInterval(intervalID?: number): void;
 
+declare function clearTimeout(timeoutID?: number): void;
+
 declare class TextEncoder {
     encode(input?: string): Uint8Array;
     encodeInto(input?: string): Uint8Array;
