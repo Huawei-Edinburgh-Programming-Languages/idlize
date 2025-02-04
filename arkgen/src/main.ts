@@ -430,10 +430,7 @@ if (options.dts2peer) {
                     transformMethodsAsync2ReturnPromise(it)
                 })
 
-                const baseFileName = path.relative(
-                    path.resolve(inputDirs[0] || ''),
-                    path.resolve(sourceFile.fileName)
-                )
+                const baseFileName = path.resolve(sourceFile.fileName)
                 const peerFile = new PeerFile(baseFileName, entries)
 
                 idlLibrary.files.push(peerFile)
