@@ -72,6 +72,8 @@ class TsLayout extends CommonLayoutBase {
         if (idl.isSyntheticEntry(node)) {
             return SyntheticModule
         }
+        if (!this.library.hasInLibrary(node))
+            return "@EXTERNAL_SMTH"
         if (idl.isHandwritten(node)) {
             return HandwrittenModule(this.library.language)
         }
