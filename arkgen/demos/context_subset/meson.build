@@ -9,11 +9,11 @@ is_cj = get_option('target_vm') == 'cangjie'
 
 external_interop_dir = '../../../external/interop/src/cpp'
 
-cflags = ['-DKOALA_INTEROP_MODULE=NativeModule']
+cflags = ['-DKOALA_INTEROP_MODULE=NativeModule', '-DETS_MODULE_CLASSPATH_PREFIX=@xml/generated/arkts/xmlNative/']
 ldflags = []
 
 include_dirs = [
-   'generated',
+   'generated/native',
    external_interop_dir,
    external_interop_dir / 'types',
 ]
@@ -68,13 +68,11 @@ if is_node
     library_name = 'Xml_NativeBridgeNapi'
     platform_build_dir = 'build/node'
 
-    node_addon_api = run_command('node', '-p', 'require.resolve("node-addon-api/package.json").slice(0, -12)', check: true).stdout().strip()
     node_api_headers = run_command('node', '-p', 'require.resolve("node-api-headers/package.json").slice(0, -12)', check: true).stdout().strip()
 
     cflags += ['-DKOALA_USE_NODE_VM', '-DKOALA_NAPI', '-DINTEROP_LIBRARY_NAME=' + library_name ]
     include_dirs += [
         node_api_headers / 'include',
-        node_addon_api,
         external_interop_dir / 'napi'
     ]
     sources += [

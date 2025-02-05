@@ -8,7 +8,10 @@
         "rollup": "^4.24.4"
     },
     "scripts": {
-        "run:xml:context": "rm -rf ./generated && cd ../.. && npm run compile && node . --generator-target ohos --use-new-ohos --dts2peer --input-dir ./tests/context_subset/ --output-dir ./demos/context_subset/ --verify-idl --common-to-attributes --docs=none --language=ts --default-idl-package CONTEXT && cd ./demos/context_subset",
+        "run:xml:ts": "cd ../.. && npm run compile && node . --generator-target ohos --use-new-ohos --dts2peer --input-dir ./tests/context_subset/ --output-dir ./out/context_subset/ --verify-idl --common-to-attributes --docs=none --language=ts --default-idl-package CONTEXT && cd ./demos/context_subset",
+        "run:xml:arkts": "cd ../.. && npm run compile && node . --generator-target ohos --use-new-ohos --dts2peer --input-dir ./tests/context_subset/ --output-dir ./out/context_subset/ --verify-idl --common-to-attributes --docs=none --language=arkts --default-idl-package CONTEXT && cd ./demos/context_subset",
+        "cp:generated": "rm -rf ./generated && cp -r ../../out/context_subset/generated generated",
+        "run:xml": "npm run run:xml:ts && npm run run:xml:arkts && npm run cp:generated",
         "compile:ts:node": "rollup -c",
         "compile:arkts:panda": "bash scripts/build-panda.sh",
         "compile:native:node": "meson setup build/native/node -Dtarget_vm=node && meson install -C build/native/node",
