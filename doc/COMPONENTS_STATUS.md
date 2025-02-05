@@ -669,7 +669,7 @@
 |`setNavRouterOptions`| Function |Evstigneev Roman| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y, https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF (+) |
 |`onStateChange`| Function |Evstigneev Roman | done| https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y (+) |
 |`mode`| Function |Evstigneev Roman | done | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y (+) |
-|*Navigator*| *Component* | Skroba Gleb| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
+|*Navigator*| *Component* | Skroba Gleb| managed side | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`setNavigatorOptions`| Function | Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`active`| Function | Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`type`| Function | Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
