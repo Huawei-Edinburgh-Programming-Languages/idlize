@@ -581,7 +581,8 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
 
         //TODO: CommonMethod has a method onClick and a property onClick
         const seenFields = new Set<string>()
-        return ([`interface ${this.printInterfaceName(idlInterface)} {`] as stringOrNone[])
+        const interfaceOrClass = idl.isClassSubkind(idlInterface) ? "class" : "interface"
+        return ([`${interfaceOrClass} ${this.printInterfaceName(idlInterface)} {`] as stringOrNone[])
             .concat(idlInterface.constants
                 .map(it => this.printIfNotSeen(it, it => this.printConstant(it), seenFields)).flat())
             .concat(idlInterface.properties
