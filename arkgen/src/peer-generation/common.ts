@@ -136,9 +136,9 @@ class JavaLayout extends CommonLayoutBase {
                     }
                     if (isMaterialized(node, this.library)) {
                         if (idl.isInterfaceSubkind(node)) {
-                            return this.getPath(toFileName(node.name) + 'Internal')
+                            return this.getPath(node.name + 'Internal')
                         }
-                        return this.getPath(toFileName(node.name))
+                        return this.getPath(node.name)
                     }
                     return this.getPath(`Ark${toFileName(node.name)}Interfaces`)
                 }
