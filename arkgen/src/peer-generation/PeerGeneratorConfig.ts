@@ -251,7 +251,6 @@ export class PeerGeneratorConfigImpl implements CoreGeneratorConfiguration {
     readonly cppPrefix: string = "GENERATED_"
     readonly typePrefix: string = ""
     readonly optionalTypePrefix: string = ""
-    public needInterfaces: boolean = true
     private ignoredEntriesCommon: string[] = []
     private ignoredEntriesJava: string[] = []
     readonly ignoreComponents: string[] = []

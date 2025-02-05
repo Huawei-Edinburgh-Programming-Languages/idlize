@@ -109,10 +109,18 @@ class TSDependenciesCollector extends DependenciesCollector {
                 .concat(decl.methods.flatMap(it => this.convert(it)))
                 .concat(decl.properties.flatMap(it => this.convert(it.type)))
         }
-        if (idl.isClassSubkind(decl) && isMaterialized(decl, this.library)) {
-            return []
+        return super.convertInterface(decl);
+    }
+    protected override convertSupertype(type: idl.IDLType | idl.IDLInterface): idl.IDLNode[] {
+        if (idl.isReferenceType(type)) {
+            const resolved = this.library.resolveTypeReference(type)
+            if (resolved)
+                return [
+                    resolved,
+                    ...this.convert(resolved),
+                ]
         }
-        return super.convertInterface(decl)
+        return this.convert(type)
     }
 }
 

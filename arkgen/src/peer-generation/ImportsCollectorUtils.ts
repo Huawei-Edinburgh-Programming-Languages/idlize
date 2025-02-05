@@ -41,6 +41,8 @@ export function collectDeclItself(
         includeTransformedCallbacks?: boolean,
     },
 ) {
+    if (idl.isSyntheticEntry(node) && Language.TS === library.language)
+        return
     if (emitter instanceof ImportsCollector) {
         if (
             idl.isSyntheticEntry(node) && library.language === Language.TS // ts synthetic entries not printed
