@@ -1327,8 +1327,8 @@
 |`gradientHeight`| Function | Ekaterina Stepanova| done |  |
 |`enableHapticFeedback`| Function | | | |
 |`digitalCrownSensitivity`| Function | | | |
-|`__onChangeEvent_selected`| Function | Erokhin Ilya | in progress | |
-|`__onChangeEvent_value`| Function | Erokhin Ilya | in progress | |
+|`__onChangeEvent_selected`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_value`| Function | Erokhin Ilya | devdone | |
 |*TextTimer*| *Component* |Ekaterina Stepanova| blocked |  |
 |`setTextTimerOptions`| Function |Ekaterina Stepanova| done |  |
 |`format`| Function |Ekaterina Stepanova| done |  |
@@ -1353,7 +1353,7 @@
 |`enableHapticFeedback`| Function |Ekaterina Stepanova| done |  |
 |`digitalCrownSensitivity`| Function | | | |
 |`enableCascade`| Function | | | |
-|`__onChangeEvent_selected`| Function | Erokhin Ilya | in progress | |
+|`__onChangeEvent_selected`| Function | Erokhin Ilya | devdone | |
 |*Toggle*| *Component* |Morozov Sergey |blocked |  |
 |`setToggleOptions`| Function |Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB2SVB |
 |`onChange`| Function | Morozov Sergey|done |  |
@@ -1361,7 +1361,7 @@
 |`selectedColor`| Function | Morozov Sergey|done |  |
 |`switchPointColor`| Function | Morozov Sergey|done |  |
 |`switchStyle`| Function | Morozov Sergey|done |  |
-|`__onChangeEvent_isOn`| Function | Erokhin Ilya | in progress | |
+|`__onChangeEvent_isOn`| Function | Erokhin Ilya | devdone | |
 |*Video*| *Component* | Erokhin Ilya | blocked |  |
 |`setVideoOptions`| Function | Erokhin Ilya | blocked AceEngine| https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`muted`| Function | Erokhin Ilya | done |  |
@@ -1536,7 +1536,7 @@
 |`sideBarPosition`| Function |Dmitry A Smirnov|done|  |
 |`divider`| Function |Dmitry A Smirnov|done|  |
 |`minContentWidth`| Function |Dmitry A Smirnov|done|  |
-|`__onChangeEvent_showSideBar`| Function | Erokhin Ilya | in progress | |
+|`__onChangeEvent_showSideBar`| Function | Erokhin Ilya | devdone | |
 |*RemoteWindow*| *Component* | Spirin Andrey, Evstigneev Roman | in progress | |
 |`setRemoteWindowOptions`| Function | Spirin Andrey, Evstigneev Roman | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+) |
 |*WaterFlow*| *Component* | Kovalev Sergey | in progress |  |
