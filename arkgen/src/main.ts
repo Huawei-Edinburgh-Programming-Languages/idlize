@@ -120,9 +120,9 @@ let didJob = false
 class DefaultConfig extends BaseGeneratorConfiguration {
     constructor(params: Record<string, any> = {}) {
         super({
-            TypePrefix: "",
+            TypePrefix: PeerGeneratorConfig.typePrefix,
             LibraryPrefix: "",
-            OptionalPrefix: "Opt_",
+            OptionalPrefix: PeerGeneratorConfig.optionalTypePrefix,
             GenerateUnused: false,
             DumpSerialized: false,
             ApiVersion: apiVersion,
@@ -136,7 +136,6 @@ class DefaultConfig extends BaseGeneratorConfiguration {
 class ArkoalaConfiguration extends DefaultConfig {
     constructor() {
         super({
-            TypePrefix: "Ark_",
             rootComponents: PeerGeneratorConfig.rootComponents,
             standaloneComponents: PeerGeneratorConfig.standaloneComponents,
             knownParameterized: PeerGeneratorConfig.knownParameterized,
@@ -469,9 +468,7 @@ function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language)
     if (options.generatorTarget == "ohos") {
         if (options.useNewOhos) {
             generateOhos(outDir, idlLibrary, new DefaultConfig({
-                TypePrefix: "OH_",
                 LibraryPrefix: `${suggestLibraryName(idlLibrary)}_`,
-                OptionalPrefix: "Opt_",
                 GenerateUnused: true
             }))
         } else {
