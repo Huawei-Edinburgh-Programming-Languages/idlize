@@ -126,8 +126,9 @@ class DefaultConfig extends BaseGeneratorConfiguration {
             GenerateUnused: false,
             DumpSerialized: false,
             ApiVersion: apiVersion,
-            builderClasses: [],
+            builderClasses: [], // TODO: builderClasses, knownParameterized, ignoreMaterialized should be taken from PeerGeneratorConfig
             knownParameterized: [],
+            ignoreMaterialized: [],
             ...params
         })
     }
@@ -140,7 +141,8 @@ class ArkoalaConfiguration extends DefaultConfig {
             standaloneComponents: PeerGeneratorConfig.standaloneComponents,
             knownParameterized: PeerGeneratorConfig.knownParameterized,
             boundProperties: Array.from(PeerGeneratorConfig.boundProperties.entries()),
-            builderClasses: PeerGeneratorConfig.builderClasses
+            builderClasses: PeerGeneratorConfig.builderClasses,
+            ignoreMaterialized: PeerGeneratorConfig.ignoreMaterialized,
         });
     }
     override paramArray<T>(name: string): T[] {
