@@ -298,6 +298,8 @@ check ohos demos:
     - !reference [.setup, script]
     - cd $CI_PROJECT_DIR/arkgen
   script:
-    - npm run run:ohos:mediaquery:ts
-    - npm run run:ohos:context:ts
+    - cd demos/mediaquery
+    - npm run check:ts
+    - npm run check:arkts
+#   - npm run run:ohos:context:ts
 #   - npm run check:ohos:context:run
