@@ -57,7 +57,7 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: G
     setDefaultConfiguration(config)
     peerLibrary.setFileLayout(layout(peerLibrary))
 
-    peerLibrary.setFileLayout(layout(peerLibrary))
+    peerLibrary.setFileLayout(layout(peerLibrary, "OH"))
 
     const ohos = new OhosInstall(outDir, peerLibrary.language)
 
