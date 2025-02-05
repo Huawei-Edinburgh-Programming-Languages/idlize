@@ -21,7 +21,6 @@ import { LanguageWriter, NamedMethodSignature, getMaterializedFileName, PeerLibr
 import { TargetFile } from "./TargetFile"
 import * as idl from '@idlizer/core'
 import { collapseSameMethodsIDL, groupOverloadsIDL } from "./OverloadsPrinter"
-import { isMaterialized } from "../idl/IdlPeerGeneratorVisitor"
 
 const MODULE_NAME = 'GlobalScope'
 class GlobalScopePrinter {
@@ -46,7 +45,7 @@ class GlobalScopePrinter {
                 if (it.isStatic) {
                     collectDeclDependencies(this.library, it, decl => {
                         if (this.library.language !== idl.Language.TS
-                         || idl.isInterface(decl) && isMaterialized(decl, this.library)
+                         || idl.isInterface(decl) && idl.isMaterialized(decl, this.library)
                         ) {
                             collectDeclItself(this.library, decl, imports)
                         }
