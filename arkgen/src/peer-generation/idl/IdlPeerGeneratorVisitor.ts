@@ -384,8 +384,10 @@ export class IdlPeerProcessor {
             const resolvedType = this.library.resolveTypeReference(superType) as (idl.IDLInterface | undefined)
             if (!resolvedType || !isMaterialized(resolvedType, this.library)) {
                 propertiesFromInterface.push(...getUniquePropertiesFromSuperTypes(decl, this.library))
-                interfaces.push(superType)
-                superType = undefined
+                if (!resolvedType || idl.isInterfaceSubkind(resolvedType)) {
+                    interfaces.push(superType)
+                    superType = undefined
+                }
             }
         }
 
