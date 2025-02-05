@@ -1783,7 +1783,7 @@
 |`setY`| Function | Maksimov Nikita | in progress | |
 |`setPreventDefault`| Function | Maksimov Nikita | in progress | |
 |*HoverEvent*| *Class* | | | |
-|`setStopPropagation`| Function | | | |
+|`setStopPropagation`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |*MouseEvent*| *Class* | Spirin Andrey | in progress | |
 |`getButton`| Function | Spirin Andrey | in progress | |
 |`setButton`| Function | Spirin Andrey | in progress | |
@@ -1805,7 +1805,7 @@
 |`setX`| Function | Spirin Andrey | in progress | |
 |`getY`| Function | Spirin Andrey | in progress | |
 |`setY`| Function | Spirin Andrey | in progress | |
-|`setStopPropagation`| Function | Spirin Andrey | in progress | |
+|`setStopPropagation`| Function | Spirin Andrey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |`getRawDeltaX`| Function | | | |
 |`setRawDeltaX`| Function | | | |
 |`getRawDeltaY`| Function | | | |
@@ -1826,14 +1826,14 @@
 |`setWindowX`| Function | Pavelyev Ivan | in progress | |
 |`getWindowY`| Function | Pavelyev Ivan | in progress | |
 |`setWindowY`| Function | Pavelyev Ivan | in progress | |
-|*TouchEvent*| *Class* | Tuzhilkin Ivan | in progress | |
-|`getHistoricalPoints`| Function | Tuzhilkin Ivan | in progress | |
-|`getType`| Function | Tuzhilkin Ivan | in progress | |
-|`setType`| Function | Tuzhilkin Ivan | in progress | |
-|`setTouches`| Function | Tuzhilkin Ivan | in progress | |
-|`setChangedTouches`| Function | Tuzhilkin Ivan | in progress | |
-|`setStopPropagation`| Function | Tuzhilkin Ivan | in progress | |
-|`setPreventDefault`| Function | Tuzhilkin Ivan | in progress | |
+|*TouchEvent*| *Class* | Tuzhilkin Ivan | blocked IDL | |
+|`getHistoricalPoints`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getType`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`setType`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
+|`setTouches`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
+|`setChangedTouches`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
+|`setStopPropagation`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
+|`setPreventDefault`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |*PixelMapMock*| *Class* | Maksimov Nikita | done | |
 |`release`| Function | Maksimov Nikita | done | |
 |*DragEvent*| *Class* | Evstigneev Roman | in progress | |
@@ -1874,13 +1874,13 @@
 |`setMetaKey`| Function | Maksimov Nikita | in progress | |
 |`getTimestamp`| Function | Maksimov Nikita | in progress | |
 |`setTimestamp`| Function | Maksimov Nikita | in progress | |
-|`setStopPropagation`| Function | Maksimov Nikita | in progress | |
+|`setStopPropagation`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL|
 |`setIntentionCode`| Function | Maksimov Nikita | in progress | |
 |`getUnicode`| Function | Maksimov Nikita | in progress | |
 |`setUnicode`| Function | Maksimov Nikita | in progress | |
 |*FocusAxisEvent*| *Class* | | | |
 |`setAxisMap`| Function | | | |
-|`setStopPropagation`| Function | | | |
+|`setStopPropagation`| Function | | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |*ProgressMask*| *Class* | Maksimov Nikita | done | |
 |`updateProgress`| Function | Maksimov Nikita | done | |
 |`updateColor`| Function | Maksimov Nikita | done | |
