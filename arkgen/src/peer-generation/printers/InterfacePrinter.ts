@@ -49,7 +49,6 @@ import { escapeIDLKeyword, IDLType } from '@idlizer/core/idl'
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig'
 import { isPredefined } from '../idl/IdlPeerGeneratorVisitor'
 import { DependenciesCollector } from '../idl/IdlDependenciesCollector'
-import { createInterfaceDeclName } from './lang/CommonUtils'
 import { collectDeclDependencies, convertDeclToFeature } from '../ImportsCollectorUtils'
 import { maybeTransformManagedCallback } from '@idlizer/core'
 import { isComponentDeclaration } from '../ComponentsCollector'
@@ -791,24 +790,6 @@ class ArkTSSyntheticGenerator extends DependenciesCollector {
                 this.onSyntheticDeclaration(continuation)
             }
         })
-        if (isMaterialized(decl, this.library) && !isBuilderClass(decl)) {
-            this.onSyntheticDeclaration(idl.createInterface(
-                createInterfaceDeclName(decl.name),
-                idl.IDLInterfaceSubkind.Interface,
-                [], // todo decl.inheritance
-                decl.constructors,
-                decl.constants,
-                decl.properties.filter(it => !it.isStatic),
-                decl.methods,
-                decl.callables,
-                decl.typeParameters,
-                {
-                    documentation: decl.documentation,
-                    fileName: decl.fileName,
-                    extendedAttributes: [{ name: idl.IDLExtendedAttributes.Synthetic }],
-                }
-            ))
-        }
         return super.convertInterface(decl)
     }
 }

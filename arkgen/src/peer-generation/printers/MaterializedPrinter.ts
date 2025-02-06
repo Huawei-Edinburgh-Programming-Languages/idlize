@@ -35,7 +35,6 @@ import {
     ARK_MATERIALIZEDBASE_EMPTY_PARAMETER,
     ARKOALA_PACKAGE,
 } from "./lang/Java";
-import { createInterfaceDeclName } from './lang/CommonUtils';
 import { printJavaImports } from "./lang/JavaPrinters";
 import { createReferenceType, forceAsNamedNode, IDLPointerType, IDLType, IDLVoidType, isOptionalType, maybeOptional } from '@idlizer/core/idl'
 import { collectDeclItself, collectDeclDependencies } from "../ImportsCollectorUtils";
@@ -350,12 +349,6 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
             includeTransformedCallbacks: true,
             includeMaterializedInternals: true,
         })
-        if (this.library.language === Language.ARKTS && !this.clazz.isGlobalScope()) {
-            imports.addFeature(
-                createInterfaceDeclName(this.clazz.className),
-                SyntheticModule,
-            )
-        }
     }
 
     override printImports() {
