@@ -771,7 +771,7 @@
 |*RichEditor*| *Component* | Dudkin Sergey| in progress|  |
 |`setRichEditorOptions`| Function | Dudkin Sergey| done|  |
 |`onReady`| Function | Dudkin Sergey| done|  |
-|`onSelect`| Function | Dudkin Sergey| done|  |
+|`onSelect`| Function | Dudkin Sergey| in progress | reopened beacuse Ark_RichEditorSelection changed after generations |
 |`onSelectionChange`| Function | Dudkin Sergey| done|  |
 |`aboutToIMEInput`| Function | Dudkin Sergey| done|  |
 |`onIMEInputComplete`| Function | Dudkin Sergey| done| |
