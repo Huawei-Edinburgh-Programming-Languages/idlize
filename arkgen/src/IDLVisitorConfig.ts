@@ -48,11 +48,11 @@ const parameterTypeReplacements: ((clazz: string, method: string, parameter: str
     },
     (clazz, method, parameter) => {
         if (clazz === "ScrollableCommonMethod" && method === "onDidScroll" && parameter === "handler")
-            return [idl.createOptionalType(idl.createReferenceType("ScrollOnScrollCallback"))]
+            return [idl.createOptionalType(idl.createReferenceType("OnScrollCallback"))]
     },
     (clazz, method, parameter) => {
         if (clazz === "ScrollableCommonMethod" && method === "onScroll" && parameter === "event")
-            return [idl.createReferenceType("Callback_Number_Number_Void")]
+            return [idl.createReferenceType("Callback_Number_ScrollState_Void")]
     },
 
     (clazz, method, parameter) => {
@@ -62,6 +62,10 @@ const parameterTypeReplacements: ((clazz: string, method: string, parameter: str
     (clazz, method, parameter) => {
         if (clazz === "ScrollAttribute" && method === "onDidScroll" && parameter === "handler")
             return [idl.createOptionalType(idl.createReferenceType("ScrollOnScrollCallback"))]
+    },
+    (clazz, method, parameter) => {
+        if (clazz === "ScrollAttribute" && method === "onScroll" && parameter === "event")
+            return [idl.createReferenceType("Callback_Number_Number_Void")]
     },
 
     (clazz, method, parameter) => {
