@@ -71,6 +71,11 @@ class BridgeCcVisitor {
         const call = `${isVoid ? "" : "return "}${apiCall}->${modifier}->${peerMethod}(${args})${field};`
         if (this.callLog) this.printCallLog(method, apiCall, modifier)
         this.generatedApi.print(call)
+        if (true /* shouldReturnByInteropBuffer */) {
+            this.generatedApi.print("Serializer _serializer = new Serializer();");
+            this.generatedApi.print(`_serializer.write${method.returnType}(tmp);`); // todo argConvertor
+            this.generatedApi.print("return _serializer.toReturnBuffer()");
+        }
     }
 
     protected getApiCallResultField(method: PeerMethod): string {

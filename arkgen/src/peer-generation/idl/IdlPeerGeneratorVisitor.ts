@@ -409,14 +409,14 @@ export class IdlPeerProcessor {
             const idlType = field.type
             // TBD: use deserializer to get complex type from native
             const isSimpleType = !f.argConvertor.useArray // type needs to be deserialized from the native
-            if (isSimpleType) {
+            // if (isSimpleType) {
                 const getSignature = new NamedMethodSignature(idlType, [], [])
                 const getAccessor = new MaterializedMethod(
                     name, implemenationParentName, [], field.type, false,
                     new Method(`get${capitalize(field.name)}`, getSignature, [MethodModifier.PRIVATE]),
                     f.outArgConvertor)
                 mMethods.push(getAccessor)
-            }
+            // }
             const isReadOnly = field.modifiers.includes(FieldModifier.READONLY)
             if (!isReadOnly) {
                 const setSignature = new NamedMethodSignature(idl.IDLVoidType, [idlType], [field.name])
