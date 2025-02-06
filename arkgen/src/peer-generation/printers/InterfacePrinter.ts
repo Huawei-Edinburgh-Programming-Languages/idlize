@@ -392,6 +392,7 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
         for (const file of this.peerLibrary.files) {
             for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
                 if (idl.isPackage(entry) ||
+                    idl.isImport(entry) ||
                     isPredefined(entry) ||
                     idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.GlobalScope) ||
                     idl.isHandwritten(entry) ||
