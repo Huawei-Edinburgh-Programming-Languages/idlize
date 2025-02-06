@@ -16,7 +16,6 @@
 import * as idl from '@idlizer/core/idl'
 import * as path from 'path'
 import {
-    createLanguageWriter,
     FieldModifier,
     Method,
     MethodModifier,
@@ -169,7 +168,7 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
 
     printInterfaces() {
         for (const file of this.peerLibrary.files.values()) {
-            const writer = createLanguageWriter(this.peerLibrary.language, this.peerLibrary)
+            const writer = this.peerLibrary.createLanguageWriter()
             this.printImports(writer, file)
             const typeConvertor = new TSDeclConvertor(writer, this.peerLibrary)
             for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
@@ -297,7 +296,7 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
     }
 
     private makeUnion(alias: string, type: idl.IDLUnionType): JavaDeclaration {
-        const writer = createLanguageWriter(Language.JAVA, this.peerLibrary)
+        const writer = this.peerLibrary.createLanguageWriter(Language.JAVA)
         this.printPackage(writer)
 
         const imports = collectJavaImports(type.types)
@@ -349,7 +348,7 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
     }
 
     private makeTuple(alias: string, type: idl.IDLInterface): JavaDeclaration {
-        const writer = createLanguageWriter(Language.JAVA, this.peerLibrary)
+        const writer = this.peerLibrary.createLanguageWriter(Language.JAVA)
         this.printPackage(writer)
 
         const imports = collectJavaImports(type.properties.map(it => it.type))
@@ -376,7 +375,7 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
     }
 
     private makeEnum(alias: string, enumDecl: idl.IDLEnum): JavaDeclaration {
-        const writer = createLanguageWriter(Language.JAVA, this.peerLibrary)
+        const writer = this.peerLibrary.createLanguageWriter(Language.JAVA)
         this.printPackage(writer)
 
         const initializers = enumDecl.elements.map(it => {
@@ -440,7 +439,7 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
     }
 
     private makeInterface(alias: string, type: idl.IDLInterface): JavaDeclaration {
-        const writer = createLanguageWriter(Language.JAVA, this.peerLibrary)
+        const writer = this.peerLibrary.createLanguageWriter(Language.JAVA)
         this.printPackage(writer)
 
         const imports = collectJavaImports(type.properties.map(it => it.type))
@@ -506,7 +505,7 @@ class JavaInterfacesVisitor extends DefaultInterfacesVisitor {
 }
 
 export class ArkTSDeclConvertor extends TSDeclConvertor {
-    private typeNameConvertor = createLanguageWriter(Language.ARKTS, this.peerLibrary)
+    private typeNameConvertor = this.peerLibrary.createLanguageWriter(Language.ARKTS)
     private seenInterfaceNames = new Set<string>()
 
     private wrapWithNamespaces(node: idl.IDLEntry, cb: () => void) {
@@ -872,7 +871,7 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
         }
 
         for (const [module, entries] of moduleToEntries) {
-            const writer = createLanguageWriter(this.peerLibrary.language, this.peerLibrary)
+            const writer = this.peerLibrary.createLanguageWriter()
             const imports = new ImportsCollector()
             for (const entry of entries) {
                 collectDeclDependencies(this.peerLibrary, entry, imports)
@@ -1018,7 +1017,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
     }
 
     private makeUnion(alias: string, type: idl.IDLUnionType): CJDeclaration {
-        const writer = createLanguageWriter(Language.CJ, this.peerLibrary)
+        const writer = this.peerLibrary.createLanguageWriter(Language.CJ)
         this.printPackage(writer)
 
         writer.print('import std.collection.*\n')
@@ -1076,7 +1075,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
     }
 
     private makeTuple(alias: string, type: idl.IDLInterface): CJDeclaration {
-        const writer = createLanguageWriter(Language.CJ, this.peerLibrary)
+        const writer = this.peerLibrary.createLanguageWriter(Language.CJ)
         this.printPackage(writer)
 
         writer.print('import Interop.*\n')
@@ -1102,7 +1101,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
     }
 
     private makeEnum(alias: string, enumDecl: idl.IDLEnum): CJDeclaration {
-      const writer = createLanguageWriter(Language.CJ, this.peerLibrary)
+      const writer = this.peerLibrary.createLanguageWriter(Language.CJ)
         this.printPackage(writer)
 
         writer.print('import Interop.*\n')
@@ -1157,7 +1156,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
     }
 
     private makeInterface(alias: string, type: idl.IDLInterface): CJDeclaration {
-        const writer = createLanguageWriter(Language.CJ, this.peerLibrary)
+        const writer = this.peerLibrary.createLanguageWriter(Language.CJ)
         this.printPackage(writer)
 
         writer.print('import Interop.*\n')
