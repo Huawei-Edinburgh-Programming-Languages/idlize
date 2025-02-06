@@ -623,7 +623,7 @@ abstract class OHOSVisitor {
 
     private printInterfaces() {
         this.cjInterfaces = printInterfaces(this.library, {
-            language: this.peerWriter.language,
+            language: this.library.language,
             synthesizedTypes: undefined,
             imports: undefined
         })

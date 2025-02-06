@@ -17,6 +17,7 @@ package idlize
 
 import std.collection.*
 import Interop.*
+
 public open class Serializer <: SerializerBase {
     static private var nullptr: UInt64 = 0
     private static var pool: Option<ArrayList<Serializer>> = None<ArrayList<Serializer>>
@@ -115,9 +116,9 @@ case _ => throw Exception("Unmatched pattern Serializer.pool")
             let base: MaterializedBase = match (value as MaterializedBase) { case Some(x) => x; case None => throw Exception("Cast is not succeeded")}
             let peer = base.getPeer()
             var ptr: UInt64 = nullptr
-            if (let Some(peer) <- peer) {
+            //if (let Some(peer) <- peer) {
                 ptr = peer.ptr
-            }
+            // }
             valueSerializer.writePointer(ptr);
             return
         }
@@ -145,12 +146,12 @@ _argsSerializer.writePointer(_call);
 _argsSerializer.writePointer(_callSync);
 _argsSerializer.writeInt32(eventType.value);
 _argsSerializer.writeParseInfo(value);
-var _continuationValue: Option<Bool> ;
-let _continuationCallback: ((value: Bool) -> Unit) = {value: Bool => _continuationValue = value; };
+let _continuationValue = BoolHolder(None<Bool>);
+let _continuationCallback: ((value: Bool) -> Unit) = {value: Bool => _continuationValue.value = value; }
 _argsSerializer.holdAndWriteCallback(_continuationCallback);
 if (isSync) { InteropNativeModule._CallCallbackSync(240036623, _argsSerializer.asArray(), _argsSerializer.length()) } else { InteropNativeModule._CallCallback(240036623, _argsSerializer.asArray(), _argsSerializer.length()) };
 _argsSerializer.release();
-return match (_continuationValue as Bool) { case Some(x) => x; case None => throw Exception("Cast is not succeeded")}; }
+return match (_continuationValue.value as Bool) { case Some(x) => x; case None => throw Exception("Cast is not succeeded")} }
     }
     func readXML_Callback_String_String_Boolean(): ((name: String, value: String) -> Bool) {
         this.readXML_Callback_String_String_Boolean(false)
@@ -165,12 +166,12 @@ _argsSerializer.writePointer(_call);
 _argsSerializer.writePointer(_callSync);
 _argsSerializer.writeString(name);
 _argsSerializer.writeString(value);
-var _continuationValue: Option<Bool> ;
-let _continuationCallback: ((value: Bool) -> Unit) = {value: Bool => _continuationValue = value; };
+let _continuationValue = BoolHolder(None<Bool>);
+let _continuationCallback: ((value: Bool) -> Unit) = {value: Bool => _continuationValue.value = value; }
 _argsSerializer.holdAndWriteCallback(_continuationCallback);
 if (isSync) { InteropNativeModule._CallCallbackSync(923368928, _argsSerializer.asArray(), _argsSerializer.length()) } else { InteropNativeModule._CallCallback(923368928, _argsSerializer.asArray(), _argsSerializer.length()) };
 _argsSerializer.release();
-return match (_continuationValue as Bool) { case Some(x) => x; case None => throw Exception("Cast is not succeeded")}; }
+return match (_continuationValue.value as Bool) { case Some(x) => x; case None => throw Exception("Cast is not succeeded")} }
     }
     func readParseOptions(): ParseOptions {
         var valueDeserializer: Deserializer = this
@@ -232,6 +233,18 @@ return; }
         var valueDeserializer: Deserializer = this
         var ptr: UInt64 = valueDeserializer.readPointer()
         return ParseInfoInternal.fromPtr(ptr)
+    }
+}
+public open class BoolHolder {
+    var value: Option<Bool> 
+    BoolHolder(arg0: Option<Bool>) {
+        this.value = arg0
+    }
+}
+public open class UnitHolder {
+    var value: Option<Unit> 
+    UnitHolder(arg0: Option<Unit>) {
+        this.value = arg0
     }
 }
 public func deserializeAndCallCallback_Boolean_Void(thisDeserializer: Deserializer): Unit {

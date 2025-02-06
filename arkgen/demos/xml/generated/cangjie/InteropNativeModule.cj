@@ -19,6 +19,8 @@ import std.collection.*
 import Interop.*
 
 foreign {
+        func CheckCallbackEvent(buffer: CPointer<UInt8>, bufferLength: Int32): Int32
+
         func GetGroupedLog(index: Int32): UInt64
         func StartGroupedLog(index: Int32): Unit
         func StopGroupedLog(index: Int32): Unit
@@ -46,6 +48,14 @@ foreign {
 }
 
 public open class InteropNativeModule {
+    public static func _CheckCallbackEvent(buffer: Array<UInt8>, bufferLength: Int32): Int32 {
+        unsafe {
+            let handle_0 = acquireArrayRawData(buffer)
+            let result = CheckCallbackEvent(handle_0.pointer, bufferLength)
+            releaseArrayRawData(handle_0);
+            return result
+        }
+    }
     public static func _GetGroupedLog(index: Int32): UInt64 {
         unsafe {
             let result = GetGroupedLog(index)

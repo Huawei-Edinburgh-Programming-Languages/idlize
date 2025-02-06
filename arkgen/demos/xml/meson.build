@@ -13,14 +13,14 @@ cflags = ['-DKOALA_INTEROP_MODULE=NativeModule', '-DETS_MODULE_CLASSPATH_PREFIX=
 ldflags = []
 
 include_dirs = [
-   'generated/native',
+   'generated',
    'src/cpp',
    external_interop_dir,
    external_interop_dir / 'types',
 ]
 
 sources = [
-    'generated/native/xml.cc',
+    'generated/xml.cc',
     'src/cpp/xmlImpl.cc',
     external_interop_dir / 'common-interop.cc',
     external_interop_dir / 'callback-resource.cc',

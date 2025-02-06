@@ -38,13 +38,13 @@ public interface XmlPullParserInterface {
     func parse(option: ParseOptions): Unit
     func parseXml(option: ParseOptions): Unit
 }
-public abstract class ParseOptionsInterface {
-    var supportDoctype: Bool
-    var ignoreNameSpace: Bool
-    var tagValueCallbackFunction: ((name: String, value: String) -> Bool)
-    var attributeValueCallbackFunction: ((name: String, value: String) -> Bool)
-    var tokenValueCallbackFunction: ((eventType: EventType, value: ParseInfo) -> Bool)
-}
+// public abstract class ParseOptionsInterface {
+//     var supportDoctype: Bool
+//     var ignoreNameSpace: Bool
+//     var tagValueCallbackFunction: ((name: String, value: String) -> Bool)
+//     var attributeValueCallbackFunction: ((name: String, value: String) -> Bool)
+//     var tokenValueCallbackFunction: ((eventType: EventType, value: ParseInfo) -> Bool)
+// }
 public open class EventType {
     public static var START_DOCUMENT: EventType = EventType(0)
     public static var END_DOCUMENT: EventType = EventType(1)
@@ -64,7 +64,7 @@ public open class EventType {
 }
 public open class XmlSerializer <: XmlSerializerInterface {
     var peer: Finalizable
-    XmlSerializer(buffer: ArrayList<UInt8>, encoding: Option<String>) {
+    XmlSerializer(buffer: Array<UInt8>, encoding: Option<String>) {
         let thisSerializer: Serializer = Serializer.hold()
         thisSerializer.writeBuffer(buffer)
         var encoding_type: Int32 = RuntimeType.UNDEFINED.ordinal
@@ -267,7 +267,7 @@ public open class ParseInfoInternal {
 }
 public open class XmlPullParser <: XmlPullParserInterface {
     var peer: Finalizable
-    XmlPullParser(buffer: ArrayList<UInt8>, encoding: Option<String>) {
+    XmlPullParser(buffer: Array<UInt8>, encoding: Option<String>) {
         let thisSerializer: Serializer = Serializer.hold()
         thisSerializer.writeBuffer(buffer)
         var encoding_type: Int32 = RuntimeType.UNDEFINED.ordinal
@@ -303,7 +303,7 @@ public open class XmlPullParser <: XmlPullParserInterface {
     private func parse_serialize(option: ParseOptions): Unit {
         let thisSerializer: Serializer = Serializer.hold()
         thisSerializer.writeParseOptions(option)
-        XMLNativeModule._XmlPullParser_parse(this.peer.ptr, thisSerializer.asArray(), thisSerializer.length());
+        XMLNativeModule._XmlPullParser_parse(this.peer.ptr, thisSerializer.asArray().toArray(), thisSerializer.length());
         thisSerializer.release();
     }
     private func parseXml_serialize(option: ParseOptions): Unit {
