@@ -292,14 +292,3 @@ export class InteropArgConvertor implements TypeConvertor<string> {
         throw new Error("Cannot pass union types through interop")
     }
 }
-
-export function createInteropArgConvertor(language: Language): InteropArgConvertor {
-    switch (language) {
-        case Language.TS:
-        case Language.ARKTS: return new InteropArgConvertor()
-        case Language.CPP: return CppInteropArgConvertor.INSTANCE
-        case Language.JAVA: return new JavaInteropArgConvertor()
-        case Language.CJ: return new CJInteropArgConvertor()
-    }
-    throw new Error(`InteropArgConvertor for language ${language} not implemented`)
-}
