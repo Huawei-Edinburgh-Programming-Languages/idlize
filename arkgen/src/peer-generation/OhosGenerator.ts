@@ -94,6 +94,7 @@ import { MaterializedClass, MaterializedMethod } from '@idlizer/core'
 import { writePeerMethod } from './printers/PeersPrinter'
 import { TargetFile } from "@idlizer/libohos"
 import { printInterfaces } from './printers/InterfacePrinter'
+import { DefaultConfig } from '../main'
 
 class NameType {
     constructor(public name: string, public type: string) {}
@@ -1148,7 +1149,7 @@ abstract class OHOSVisitor {
 
     execute(rootPath: string, outDir: string, managedOutDir: string) {
         const origGenConfig = generatorConfiguration()
-        setDefaultConfiguration(new BaseGeneratorConfiguration({
+        setDefaultConfiguration(new DefaultConfig({
             TypePrefix: "OH_",
             LibraryPrefix: `${this.libraryName}_`,
             OptionalPrefix: "Opt_",

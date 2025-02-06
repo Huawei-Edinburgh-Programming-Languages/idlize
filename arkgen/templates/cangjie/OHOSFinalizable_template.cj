@@ -18,5 +18,5 @@ package idlize
 import Interop.*
 
 public abstract class MaterializedBase {
-    public func getPeer(): Finalizable
+    public func getPeer(): ?Finalizable
 }
