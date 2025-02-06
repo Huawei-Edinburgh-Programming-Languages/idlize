@@ -14,34 +14,34 @@ public open class CallbackKind {
 }
 
 foreign {
-    func _XmlSerializer_ctor(thisArray: CPointer<UInt8>, thisLength: Int32): UInt64
-    func _XmlSerializer_getFinalizer(): UInt64
-    func _XmlSerializer_setAttributes(self: UInt64, name: CString, value: CString): Unit
-    func _XmlSerializer_addEmptyElement(self: UInt64, name: CString): Unit
-    func _XmlSerializer_setDeclaration(self: UInt64): Unit
-    func _XmlSerializer_startElement(self: UInt64, name: CString): Unit
-    func _XmlSerializer_endElement(self: UInt64): Unit
-    func _XmlSerializer_setNamespace(self: UInt64, prefix: CString, namespace: CString): Unit
-    func _XmlSerializer_setComment(self: UInt64, text: CString): Unit
-    func _XmlSerializer_setCDATA(self: UInt64, text: CString): Unit
-    func _XmlSerializer_setText(self: UInt64, text: CString): Unit
-    func _XmlSerializer_setDocType(self: UInt64, text: CString): Unit
-    func _ParseInfo_ctor(): UInt64
-    func _ParseInfo_getFinalizer(): UInt64
-    func _ParseInfo_getColumnNumber(self: UInt64): Float64
-    func _ParseInfo_getDepth(self: UInt64): Float64
-    func _ParseInfo_getLineNumber(self: UInt64): Float64
-    func _ParseInfo_getName(self: UInt64): CString
-    func _ParseInfo_getNamespace(self: UInt64): CString
-    func _ParseInfo_getPrefix(self: UInt64): CString
-    func _ParseInfo_getText(self: UInt64): CString
-    func _ParseInfo_isEmptyElementTag(self: UInt64): Bool
-    func _ParseInfo_isWhitespace(self: UInt64): Bool
-    func _ParseInfo_getAttributeCount(self: UInt64): Float64
-    func _XmlPullParser_ctor(thisArray: CPointer<UInt8>, thisLength: Int32): UInt64
-    func _XmlPullParser_getFinalizer(): UInt64
-    func _XmlPullParser_parse(self: UInt64, thisArray: CPointer<UInt8>, thisLength: Int32): Unit
-    func _XmlPullParser_parseXml(self: UInt64, thisArray: CPointer<UInt8>, thisLength: Int32): Unit
+    func XmlSerializer_ctor(thisArray: CPointer<UInt8>, thisLength: Int32): UInt64
+    func XmlSerializer_getFinalizer(): UInt64
+    func XmlSerializer_setAttributes(self: UInt64, name: CString, value: CString): Unit
+    func XmlSerializer_addEmptyElement(self: UInt64, name: CString): Unit
+    func XmlSerializer_setDeclaration(self: UInt64): Unit
+    func XmlSerializer_startElement(self: UInt64, name: CString): Unit
+    func XmlSerializer_endElement(self: UInt64): Unit
+    func XmlSerializer_setNamespace(self: UInt64, prefix: CString, namespace: CString): Unit
+    func XmlSerializer_setComment(self: UInt64, text: CString): Unit
+    func XmlSerializer_setCDATA(self: UInt64, text: CString): Unit
+    func XmlSerializer_setText(self: UInt64, text: CString): Unit
+    func XmlSerializer_setDocType(self: UInt64, text: CString): Unit
+    func ParseInfo_ctor(): UInt64
+    func ParseInfo_getFinalizer(): UInt64
+    func ParseInfo_getColumnNumber(self: UInt64): Float64
+    func ParseInfo_getDepth(self: UInt64): Float64
+    func ParseInfo_getLineNumber(self: UInt64): Float64
+    func ParseInfo_getName(self: UInt64): CString
+    func ParseInfo_getNamespace(self: UInt64): CString
+    func ParseInfo_getPrefix(self: UInt64): CString
+    func ParseInfo_getText(self: UInt64): CString
+    func ParseInfo_isEmptyElementTag(self: UInt64): Bool
+    func ParseInfo_isWhitespace(self: UInt64): Bool
+    func ParseInfo_getAttributeCount(self: UInt64): Float64
+    func XmlPullParser_ctor(thisArray: CPointer<UInt8>, thisLength: Int32): UInt64
+    func XmlPullParser_getFinalizer(): UInt64
+    func XmlPullParser_parse(self: UInt64, thisArray: CPointer<UInt8>, thisLength: Int32): Unit
+    func XmlPullParser_parseXml(self: UInt64, thisArray: CPointer<UInt8>, thisLength: Int32): Unit
 }
 
 public class XMLNativeModule {
@@ -132,6 +132,12 @@ public class XMLNativeModule {
             let text =  LibC.mallocCString(text)
             XmlSerializer_setDocType(self, text)
             LibC.free(text)
+        }
+    }
+    static func _ParseInfo_ctor(): UInt64 {
+        unsafe {
+            let result = ParseInfo_ctor()
+            return result
         }
     }
     static func _ParseInfo_getFinalizer(): UInt64 {

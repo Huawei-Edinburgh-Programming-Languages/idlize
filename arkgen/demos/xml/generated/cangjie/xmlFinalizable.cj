@@ -20,19 +20,3 @@ import Interop.*
 public abstract class MaterializedBase {
     public func getPeer(): Finalizable
 }
-
-public class Finalizable {
-    public var ptr: pointer
-    public var finalizerPtr: pointer
-
-    init (ptr: pointer, finalizerPtr: pointer) {
-        this.ptr = ptr
-        this.finalizerPtr = finalizerPtr
-    }
-
-    func release(): pointer {
-        let result = this.ptr
-        this.ptr = nullptr
-        return result
-    }
-}

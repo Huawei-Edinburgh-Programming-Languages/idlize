@@ -370,6 +370,8 @@ class DeserializerPrinter {
             this.writer.writeStatement(
                 this.writer.makeReturn(
                     this.writer.makeMethodCall(
+                        this.writer.language == Language.CJ ?
+                        getInternalClassName(this.writer.getNodeName(target)) :
                         getInternalClassQualifiedName(target), "fromPtr", [this.writer.makeString(`ptr`)])))
     }
 

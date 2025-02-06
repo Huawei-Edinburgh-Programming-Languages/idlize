@@ -93,6 +93,7 @@ import {
 import { MaterializedClass, MaterializedMethod } from '@idlizer/core'
 import { writePeerMethod } from './printers/PeersPrinter'
 import { TargetFile } from "@idlizer/libohos"
+import { printInterfaces } from './printers/InterfacePrinter'
 
 class NameType {
     constructor(public name: string, public type: string) {}
@@ -387,6 +388,7 @@ abstract class OHOSVisitor {
     enums = new Array<IDLEnum>()
     callbacks = new Array<IDLCallback>()
     callbackInterfaces = new Array<IDLInterface>()
+    cjInterfaces = new Map<TargetFile, string>()
 
     constructor(protected library: PeerLibrary, libraryName: string, dependencyCollector: DependecyCollector) {
         if (this.library.files.length == 0)
@@ -615,8 +617,16 @@ abstract class OHOSVisitor {
         this.printPeers()
         if (this.library.language == Language.CJ) {
             this.printCJNative()
-            // this.printInterfaces()
+            this.printInterfaces()
         }
+    }
+
+    private printInterfaces() {
+        this.cjInterfaces = printInterfaces(this.library, {
+            language: this.peerWriter.language,
+            synthesizedTypes: undefined,
+            imports: undefined
+        })
     }
 
     private printNative() {
@@ -698,35 +708,34 @@ abstract class OHOSVisitor {
             this.interfaces.forEach(it => {
                 // TODO TBD do we need to provide declaration for "fake" constructor for interfaces?
                 const ctors = it.constructors.map(it => ({ parameters: it.parameters, returnType: it.returnType }))
+                if (ctors.length === 0)
+                    ctors.push({parameters: [], returnType: undefined})
                 ctors.forEach(ctor => {
                     const signature = makePeerCallSignature(this.library, ctor.parameters, IDLPointerType)
-                    if (this.library.language != Language.CJ) {
-                        // writer.writeNativeMethodDeclaration(`_${it.name}_ctor`, signature)
-                    } else {
-                        writeCJMethod(writer, { name:`${it.name}_ctor`, method: signature })
-                    }
+                    writeCJMethod(writer, { name:`${it.name}_ctor`, method: signature })
                 })
 
                 const getFinalizerSig = makePeerCallSignature(this.library, [], IDLPointerType)
+                writeCJMethod(writer, { name: `${it.name}_getFinalizer`, method: getFinalizerSig })
 
-                if (this.library.language == Language.CJ) {
-                    writeCJMethod(writer, { name: `${it.name}_getFinalizer`, method: getFinalizerSig })
-                } else {
-                    writer.writeNativeMethodDeclaration(`${it.name}_getFinalizer`, getFinalizerSig)
-                }
+                const methodsWithPostfix = generatePostfixForOverloads(it.methods)
 
-                it.methods.forEach(method => {
-                    const signature = makePeerCallSignature(this.library, method.parameters, method.returnType, "self")
-                    if (this.library.language == Language.CJ) {
-                        writeCJMethod(writer, { name: `${it.name}_${method.name}`, method: signature })
-                    } else {
-                        writer.writeNativeMethodDeclaration(`${it.name}_${method.name}`, signature)  // TODO temporarily removed _${this.libraryName} prefix
-                    }
+                methodsWithPostfix.forEach(({ method, overloadPostfix }) => {
+                    const signature = makePeerCallSignature(this.library, method.parameters, method.returnType, method.isStatic ? undefined : "self")
+                    const name = `_${it.name}_${method.name}${overloadPostfix}`
+                    writeCJMethod(writer, { name: name, method: signature})  // TODO temporarily removed _${this.libraryName} prefix
+                })
+
+                this.getPropertiesFromInterfaces(it).concat(it.properties).forEach(property => {
+                    const getterSignature = makePeerCallSignature(this.library, [], property.type, "self")
+                    const getterName = `_${it.name}_get${capitalize(property.name)}`
+                    writeCJMethod(writer, { name: getterName, method: getterSignature})
+
+                    const setterSignature = makePeerCallSignature(this.library, [idl.createParameter("value", property.type)], idl.IDLVoidType, "self")
+                    const setterName = `_${it.name}_set${capitalize(property.name)}`
+                    writeCJMethod(writer, { name: setterName, method: setterSignature})
                 })
             })
-            // for (let method of BaseNativeMethods) {
-            //     writeCJMethod(writer, method)
-            // }
         })(this.nativeFunctionsWriterCJ)
     }
 
@@ -904,7 +913,7 @@ abstract class OHOSVisitor {
                         writer.writeStatement(writer.makeAssign(objVar, clazzRefType, writer.makeNewObject(int.name), true))
                         writer.writeStatement(
                             writer.makeAssign(`${objVar}.peer`, createReferenceType("Finalizable"),
-                                writer.makeString(`new Finalizable(ptr, ${int.name}.getFinalizer())`), false),
+                                writer.makeNewObject('Finalizable', [writer.makeString(`${int.name}.getFinalizer()`)]), false)
                         )
                         writer.writeStatement(writer.makeReturn(writer.makeString(objVar)))
                     })
@@ -1190,6 +1199,9 @@ abstract class OHOSVisitor {
                 .replaceAll('%SERIALIZER_PATH%', managedCodeModuleInfo.serializerPath)
                 .replaceAll('%FINALIZABLE_PATH%', managedCodeModuleInfo.finalizablePath)
             fs.writeFileSync(path.join(rootPath, managedOutDir, `${file}${ext}`), peerText, 'utf-8')
+        }
+        for (const [file, data] of this.cjInterfaces) {
+            fs.writeFileSync(path.join(rootPath, managedOutDir, file.name), data, 'utf-8')
         }
 
         this.hWriter.printTo(path.join(rootPath, outDir, `${fileNamePrefix}.h`))

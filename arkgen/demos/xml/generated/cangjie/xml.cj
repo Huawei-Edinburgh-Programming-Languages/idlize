@@ -3,13 +3,13 @@ package idlize
 import Interop.*
 import std.collection.*
 
-public abstract class ParseOptions {
-    var supportDoctype: Bool
-    var ignoreNameSpace: Bool
-    var tagValueCallbackFunction: ((name: String, value: String) -> Bool)
-    var attributeValueCallbackFunction: ((name: String, value: String) -> Bool)
-    var tokenValueCallbackFunction: ((eventType: EventType, value: ParseInfo) -> Bool)
-}
+// public interface ParseOptions {
+//     var supportDoctype: Option<Bool>
+//     var ignoreNameSpace: Option<Bool>
+//     var tagValueCallbackFunction: Option<((name: String, value: String) -> Bool)>
+//     var attributeValueCallbackFunction: Option<((name: String, value: String) -> Bool)>
+//     var tokenValueCallbackFunction: Option<((eventType: EventType, value: ParseInfo) -> Bool)>
+// }
 public interface XmlSerializerInterface {
     func setAttributes(name: String, value: String): Unit
     func addEmptyElement(name: String): Unit
@@ -85,61 +85,61 @@ public open class XmlSerializer <: XmlSerializerInterface {
     func getPeer(): Option<Finalizable> {
         return this.peer
     }
-    func setAttributes(name: String, value: String): Unit {
+    public func setAttributes(name: String, value: String): Unit {
         let name_casted: String = name
         let value_casted: String = value
         let thisObj = this
         thisObj.setAttributes_serialize(name_casted, value_casted)
         return
     }
-    func addEmptyElement(name: String): Unit {
+    public func addEmptyElement(name: String): Unit {
         let name_casted: String = name
         let thisObj = this
         thisObj.addEmptyElement_serialize(name_casted)
         return
     }
-    func setDeclaration(): Unit {
+    public func setDeclaration(): Unit {
         let thisObj = this
         thisObj.setDeclaration_serialize()
         return
     }
-    func startElement(name: String): Unit {
+    public func startElement(name: String): Unit {
         let name_casted: String = name
         let thisObj = this
         thisObj.startElement_serialize(name_casted)
         return
     }
-    func endElement(): Unit {
+    public func endElement(): Unit {
         let thisObj = this
         thisObj.endElement_serialize()
         return
     }
-    func setNamespace(prefix: String, namespace: String): Unit {
+    public func setNamespace(prefix: String, namespace: String): Unit {
         let prefix_casted: String = prefix
         let namespace_casted: String = namespace
         let thisObj = this
         thisObj.setNamespace_serialize(prefix_casted, namespace_casted)
         return
     }
-    func setComment(text: String): Unit {
+    public func setComment(text: String): Unit {
         let text_casted: String = text
         let thisObj = this
         thisObj.setComment_serialize(text_casted)
         return
     }
-    func setCDATA(text: String): Unit {
+    public func setCDATA(text: String): Unit {
         let text_casted: String = text
         let thisObj = this
         thisObj.setCDATA_serialize(text_casted)
         return
     }
-    func setText(text: String): Unit {
+    public func setText(text: String): Unit {
         let text_casted: String = text
         let thisObj = this
         thisObj.setText_serialize(text_casted)
         return
     }
-    func setDocType(text: String): Unit {
+    public func setDocType(text: String): Unit {
         let text_casted: String = text
         let thisObj = this
         thisObj.setDocType_serialize(text_casted)
@@ -187,34 +187,34 @@ public open class ParseInfo <: ParseInfoInterface {
     func getPeer(): Option<Finalizable> {
         return this.peer
     }
-    func getColumnNumber(): Float64 {
+    public func getColumnNumber(): Float64 {
         return this.getColumnNumber_serialize()
     }
-    func getDepth(): Float64 {
+    public func getDepth(): Float64 {
         return this.getDepth_serialize()
     }
-    func getLineNumber(): Float64 {
+    public func getLineNumber(): Float64 {
         return this.getLineNumber_serialize()
     }
-    func getName(): String {
+    public func getName(): String {
         return this.getName_serialize()
     }
-    func getNamespace(): String {
+    public func getNamespace(): String {
         return this.getNamespace_serialize()
     }
-    func getPrefix(): String {
+    public func getPrefix(): String {
         return this.getPrefix_serialize()
     }
-    func getText(): String {
+    public func getText(): String {
         return this.getText_serialize()
     }
-    func isEmptyElementTag(): Bool {
+    public func isEmptyElementTag(): Bool {
         return this.isEmptyElementTag_serialize()
     }
-    func isWhitespace(): Bool {
+    public func isWhitespace(): Bool {
         return this.isWhitespace_serialize()
     }
-    func getAttributeCount(): Float64 {
+    public func getAttributeCount(): Float64 {
         return this.getAttributeCount_serialize()
     }
     private func getColumnNumber_serialize(): Float64 {
@@ -288,13 +288,13 @@ public open class XmlPullParser <: XmlPullParserInterface {
     func getPeer(): Option<Finalizable> {
         return this.peer
     }
-    func parse(option: ParseOptions): Unit {
+    public func parse(option: ParseOptions): Unit {
         let option_casted: ParseOptions = option
         let thisObj = this
         thisObj.parse_serialize(option_casted)
         return
     }
-    func parseXml(option: ParseOptions): Unit {
+    public func parseXml(option: ParseOptions): Unit {
         let option_casted: ParseOptions = option
         let thisObj = this
         thisObj.parseXml_serialize(option_casted)
