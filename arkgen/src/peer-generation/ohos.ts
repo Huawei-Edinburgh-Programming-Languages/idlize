@@ -129,9 +129,11 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: G
 
     // managed-utils
 
-    writeIntegratedFile(ohos.peer(new TargetFile('type_check')),
-        makeTypeChecker(peerLibrary, peerLibrary.language)
-    )
+    if (peerLibrary.language === Language.ARKTS) {
+        writeIntegratedFile(ohos.peer(new TargetFile('type_check')),
+            makeTypeChecker(peerLibrary, peerLibrary.language)
+        )
+    }
 
     // managed-stubs
 
