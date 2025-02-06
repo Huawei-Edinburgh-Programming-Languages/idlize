@@ -1732,15 +1732,15 @@
 |`drawContent`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
 |`drawFront`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
 |`invalidate`| Function | Erokhin Ilya | done | |
-|*TransitionEffect*| *Class* | Andrey Khudenkikh | in progress | |
+|*TransitionEffect*| *Class* | Andrey Khudenkikh | done | |
 |`translate`| Function | Andrey Khudenkikh | done | |
 |`rotate`| Function | Andrey Khudenkikh | done | |
 |`scale`| Function | Andrey Khudenkikh | done | |
 |`opacity`| Function | Andrey Khudenkikh | done | |
 |`move`| Function | Andrey Khudenkikh | done | |
 |`asymmetric`| Function | Andrey Khudenkikh | done | |
-|`animation`| Function | Andrey Khudenkikh | in progress | |
-|`combine`| Function | Andrey Khudenkikh | in progress | |
+|`animation`| Function | Andrey Khudenkikh | done | |
+|`combine`| Function | Andrey Khudenkikh | done | |
 |*BaseEvent*| *Class* | Politov Mikhail | in progress | |
 |`getModifierKeyState`| Function | Politov Mikhail | testskipped | |
 |`setTarget`| Function | Politov Mikhail | testskipped | |
