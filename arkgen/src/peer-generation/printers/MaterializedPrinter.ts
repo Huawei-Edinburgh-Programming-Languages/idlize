@@ -117,9 +117,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
 
         if (clazz.isInterface && this.library.name === 'arkoala') {
             // generate interface declarations for ArkTS only
-            if (Language.ARKTS == this.printerContext.language) {
-                writeInterface(clazz.decl, printer);
-            }
+            writeInterface(clazz.decl, printer);
         }
 
         const implementationClassName = clazz.getImplementationName()
