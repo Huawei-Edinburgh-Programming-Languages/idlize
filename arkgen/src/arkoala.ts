@@ -479,7 +479,7 @@ export function generateArkoalaFromIdl(config: {
             integrated: true,
         }
     )
-    writeFile(arkoala.native(new TargetFile('all_events.cc'),), printEventsCArkoalaImpl(peerLibrary),
+    writeFile(arkoala.native(new TargetFile('all_events.cc')), printEventsCArkoalaImpl(peerLibrary),
         {
             onlyIntegrated: config.onlyIntegrated,
             integrated: true,

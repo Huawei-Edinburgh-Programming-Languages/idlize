@@ -39,6 +39,9 @@ export function collectDeclarationTargets(library: LibraryInterface): idl.IDLNod
                             continue
                         for (const parameter of method.parameters)
                             orderer.addDep(parameter.type!)
+                        if (method.returnType)
+                            if (!idl.IDLContainerUtils.isPromise(method.returnType))
+                                orderer.addDep(method.returnType!)
                     }
                     for (const constructor of entry.constructors) {
                         for (const parameter of constructor.parameters)
@@ -47,6 +50,8 @@ export function collectDeclarationTargets(library: LibraryInterface): idl.IDLNod
                     for (const callable of entry.callables) {
                         for (const parameter of callable.parameters)
                             orderer.addDep(library.toDeclaration(parameter.type!))
+                        if (callable.returnType)
+                            orderer.addDep(callable.returnType!)
                     }
                 } else if (generateUnused && !isPredefined(entry)) {
                     orderer.addDep(library.toDeclaration(entry))

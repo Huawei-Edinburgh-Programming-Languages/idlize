@@ -74,7 +74,12 @@ export class CppCastExpression implements LanguageExpression {
             resultName = this.options.overrideTypeName
         } else {
             const pureName = this.mapTypeWithReceiver(this.type, this.options?.receiver)
-            const qualifiedName = this.options?.toRef ? `${pureName}&` : pureName
+            let qualifiedName = pureName
+            if (this.options?.toRef) {
+                qualifiedName += "&"
+            } else if (this.options?.toPtr) {
+                qualifiedName += "*"
+            }
             resultName = qualifiedName
         }
         return this.options?.unsafe
@@ -116,7 +121,12 @@ export class CppAssignStatement extends AssignStatement {
      write(writer: CppLanguageWriter): void{
         if (this.isDeclared) {
             const typeName = this.type ? writer.stringifyTypeWithReceiver(this.type, this.options?.receiver) : "auto"
-            const typeSpec = this.options?.assignRef ? `${typeName}&` : typeName
+            let typeSpec = typeName
+            if (this.options?.assignRef) {
+                typeSpec += "&"
+            } else if (this.options?.assignPtr) {
+                typeSpec += "*"
+            }
             const initValue = this.expression ? this.expression.asString() : "{}"
             const constSpec = this.isConst ? "const " : ""
             writer.print(`${constSpec}${typeSpec} ${this.variableName} = ${initValue};`)

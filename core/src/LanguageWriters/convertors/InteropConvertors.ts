@@ -22,6 +22,8 @@ import { ReferenceResolver } from '../../peer-generation/ReferenceResolver'
 import { capitalize } from '../../util'
 import { maybeTransformManagedCallback } from '../ArgConvertors'
 import { convertNode, convertType, IdlNameConvertor, NodeConvertor, TypeConvertor } from '../nameConvertor'
+import {PeerLibrary} from "../../peer-generation/PeerLibrary";
+import {isMaterialized} from "../../peer-generation/Materialized";
 
 export interface ConvertResult {
     text: string,
@@ -252,6 +254,31 @@ export class InteropReturnTypeConvertor implements TypeConvertor<string> {
     }
     convertUnion(type: idl.IDLUnionType): string {
         return PrimitiveTypesInstance.NativePointer.getText()
+    }
+}
+
+export class CppInteropReturnTypeConvertor extends InteropReturnTypeConvertor {
+    constructor(protected library: PeerLibrary | undefined) {
+        super()
+    }
+    convertTypeReference(type: idl.IDLReferenceType): string {
+        if (!this.library || (type.name.toLowerCase() == 'object' || type.name.toLowerCase() == 'required')) {
+            return super.convertTypeReference(type)
+        }
+
+        let res = this.library.resolveTypeReference(type)
+
+        if (!res) {
+            return super.convertTypeReference(type)
+        }
+
+        if (idl.isInterface(res)) {
+            if (isMaterialized(res, this.library)) {
+                return `${type.name}Peer*`
+            }
+        }
+
+        return super.convertTypeReference(type)
     }
 }
 

@@ -34,6 +34,7 @@ import { InteropNameConvertor } from "./convertors/InteropConvertors";
 import { createEmptyReferenceResolver } from "../peer-generation/ReferenceResolver";
 import { CppInteropConvertor } from "./convertors/CppConvertors";
 import { PrimitiveTypesInstance } from "../peer-generation/PrimitiveType";
+import { isMaterializedNode } from "../peer-generation/Materialized"
 
 export interface ArgConvertor {
     param: string
@@ -551,10 +552,11 @@ export class ArrayConvertor extends BaseArgConvertor { //
         printer.writeMethodCall(`${param}Serializer`, "writeInt32", [printer.castToInt(valueLength, 32)])
         printer.writeStatement(printer.makeLoop(loopCounter, valueLength))
         printer.pushIndent()
+        const isMaterializedElementType = isMaterializedNode(this.elementType, this.library)
         printer.writeStatement(
             printer.makeAssign(`${value}_element`,
                 this.elementType,
-                printer.makeArrayAccess(value, loopCounter), true))
+                printer.makeArrayAccess(value, loopCounter), true, !isMaterializedElementType, {assignPtr: isMaterializedElementType}))
         this.elementConvertor.convertorSerialize(param, this.elementConvertor.getObjectAccessor(printer.language, `${value}_element`), printer)
         printer.popIndent()
         printer.print(`}`)
@@ -993,7 +995,8 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const readStatement = writer.makeCast(
             writer.makeMethodCall(`${deserializerName}`, `read${this.declaration.name}`, []),
-            idl.createReferenceType(this.declaration.name, undefined, this.declaration)
+            idl.createReferenceType(this.declaration.name, undefined, this.declaration),
+            {toPtr: true}
         )
         return assigneer(readStatement)
     }
@@ -1155,8 +1158,9 @@ export function generateCallbackAPIArguments(library: LibraryInterface, callback
     args.push(...callback.parameters.map(it => {
         const target = library.toDeclaration(it.type!)
         const type = library.typeConvertor(it.name, it.type!, it.isOptional)
-        const constPrefix = !idl.isEnum(target) ? "const " : ""
-        return `${constPrefix}${nameConvertor.convert(type.nativeType())} ${type.param}`
+        const isMaterializedParameter = isMaterializedNode(type.nativeType(), library)
+        const constPrefix = idl.isEnum(target) || isMaterializedParameter ? "" : "const "
+        return `${constPrefix}${nameConvertor.convert(type.nativeType())}${isMaterializedParameter ? "*" : "" } ${type.param}`
     }))
     if (!idl.isVoidType(callback.returnType)) {
         const type = library.typeConvertor(`continuation`,

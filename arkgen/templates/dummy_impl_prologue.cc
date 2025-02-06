@@ -698,7 +698,7 @@ Ark_Float32 ConvertLengthMetricsUnit(Ark_Float32 value, Ark_Int32 originUnit, Ar
     return result;
 }
 
-void EmitOnClick(Ark_NativePointer node, Ark_ClickEvent event) {
+void EmitOnClick(Ark_NativePointer node, ClickEventPeer* event) {
     auto frameNode = AsNode(node);
     frameNode->callClickEvent(event);
 }
@@ -840,7 +840,7 @@ namespace OHOS::Ace::NG::GeneratedModifier {
         out.append(") \n");
         appendGroupedLog(1, out);
     }
-    Ark_NativePointer CtorImpl()
+    LazyForEachOpsPeer* CtorImpl()
     {
         if (!needGroupedLog(1))
             return (LazyForEachOpsPeer*) 100;

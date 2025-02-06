@@ -450,6 +450,8 @@ export class IdlPeerProcessor {
             methodName = method.name
             returnType = method.returnType
             outArgConvertor = createOutArgConvertor(this.library, method.returnType, method.parameters.map(it => it.name))
+        } else {
+            returnType = idl.createReferenceType(decl.name)
         }
         if (method === undefined) {
             // interface or class without constructors

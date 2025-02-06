@@ -27,6 +27,7 @@ import { collectFunctions, collectProperties } from '../printers/StructPrinter'
 import { FieldModifier, MethodModifier, ProxyStatement } from '@idlizer/core'
 import { createDeclarationNameConvertor } from '@idlizer/core'
 import { IDLEntry } from "@idlizer/core/idl"
+import { PrintHint } from '@idlizer/core'
 import { convertDeclaration, generateCallbackKindValue } from '@idlizer/core'
 import { getInternalClassName, getInternalClassQualifiedName, LayoutNodeRole } from '@idlizer/core'
 import { ArkTSSourceFile, SourceFile, TsSourceFile } from './SourceFile'
@@ -51,16 +52,22 @@ class SerializerPrinter {
     private generateInterfaceSerializer(target: idl.IDLInterface, prefix: string = "") {
         const methodName = this.library.getInteropName(target)
         this.library.setCurrentContext(`write${methodName}()`)
-        this.writer.writeMethodImplementation(
-            new Method(`write${methodName}`,
-                new NamedMethodSignature(idl.IDLVoidType, [idl.createReferenceType(target.name, undefined, target)], ["value"])),
-            writer => {
-                if (isMaterialized(target, this.library)) {
-                    this.generateMaterializedBodySerializer(target, writer)
-                } else {
-                    this.generateInterfaceBodySerializer(target, writer)
-                }
-            })
+        if (isMaterialized(target, this.library)) {
+            const signature = new NamedMethodSignature(
+                idl.IDLVoidType,
+                [idl.createReferenceType(target.name, undefined, target)],
+                ["value"],
+                undefined,
+                [undefined, PrintHint.AsPointer]
+            )
+            const method = new Method(`write${methodName}`, signature)
+            this.writer.writeMethodImplementation(method, writer => { this.generateMaterializedBodySerializer(target, writer) } )
+        } else {
+            this.writer.writeMethodImplementation(
+                new Method(`write${methodName}`, new NamedMethodSignature(idl.IDLVoidType, [idl.createReferenceType(target.name)], ["value"])),
+                writer => { this.generateInterfaceBodySerializer(target, writer) }
+            )
+        }
         this.library.setCurrentContext(undefined)
     }
 
@@ -97,7 +104,7 @@ class SerializerPrinter {
         this.declareSerializer(writer)
         if (writer.language === Language.CPP) {
             writer.writeExpressionStatement(
-                writer.makeMethodCall(`valueSerializer`, `writePointer`, [writer.makeString(`value.ptr`)]))
+                writer.makeMethodCall(`valueSerializer`, `writePointer`, [writer.makeString(`value`)]))
             return
         }
         const baseType = idl.createReferenceType("MaterializedBase")
@@ -279,15 +286,19 @@ class DeserializerPrinter {
     private generateInterfaceDeserializer(target: idl.IDLInterface, prefix: string = "") {
         const methodName = this.library.getInteropName(target)
         const type = idl.createReferenceType(target.name, undefined, target)
-        this.writer.writeMethodImplementation(new Method(`read${methodName}`, new NamedMethodSignature(type, [], [])), writer => {
-            if (isMaterialized(target, this.library)) {
+        if (isMaterialized(target, this.library)) {
+            this.writer.writeMethodImplementation(new Method(`read${methodName}`, new NamedMethodSignature(type, [], [], undefined, [PrintHint.AsPointer])), writer => {
                 this.generateMaterializedBodyDeserializer(target)
-            } else if (isBuilderClass(target)) {
+            })
+        } else if (isBuilderClass(target)) {
+            this.writer.writeMethodImplementation(new Method(`read${methodName}`, new NamedMethodSignature(type)), writer => {
                 this.generateBuilderClassDeserializer(target, type)
-            } else {
+            })
+        } else {
+            this.writer.writeMethodImplementation(new Method(`read${methodName}`, new NamedMethodSignature(type)), writer => {
                 this.generateInterfaceBodyDeserializer(target, type)
-            }
-        })
+            })
+        }
     }
 
     private declareDeserializer() {
@@ -318,15 +329,17 @@ class DeserializerPrinter {
             if (properties.length > 0) {
                 this.declareDeserializer()
             }
-            properties.forEach(it => {
+            for (let i = 0; i < properties.length; ++i) {
+                let it = properties[i]
                 const type = flattenUnionType(this.library, it.type)
                 let typeConvertor = this.library.typeConvertor(`value`, type, it.isOptional)
-                this.writer.writeStatement(typeConvertor.convertorDeserialize(`${it.name}_buf`, `valueDeserializer`, (expr) => {
+                let result = typeConvertor.convertorDeserialize(`${it.name}_buf`, `valueDeserializer`, (expr) => {
                     if (this.writer.language === Language.CPP)
                         return this.writer.makeAssign(`value.${this.writer.escapeKeyword(it.name)}`, undefined, expr, false)
                     return this.writer.makeAssign(`${it.name}_result`, idl.maybeOptional(it.type, it.isOptional), expr, true, true)
-                }, this.writer))
-            })
+                }, this.writer)
+                this.writer.writeStatement(result)
+            }
             if (this.writer.language !== Language.CPP) {
                 const propsAssignees = properties.map(it => {
                     return `${it.name}: ${it.name}_result`
@@ -364,7 +377,7 @@ class DeserializerPrinter {
                 this.writer.makeMethodCall(`valueDeserializer`, `readPointer`, []), true, false))
         if (this.writer.language === Language.CPP)
             this.writer.writeStatement(
-                this.writer.makeReturn(this.writer.makeString(`{ ptr }`)))
+                this.writer.makeReturn(this.writer.makeString(`(${target.name}Peer*)(ptr)`)))
         else
             this.writer.writeStatement(
                 this.writer.makeReturn(

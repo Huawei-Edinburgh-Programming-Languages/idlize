@@ -19,6 +19,8 @@ import { IdlNameConvertor } from "../nameConvertor"
 import { ConvertResult, InteropConvertor } from './InteropConvertors'
 import { PrimitiveTypesInstance } from '../../peer-generation/PrimitiveType'
 import { InteropArgConvertor } from './InteropConvertors'
+import { IDLReferenceType } from "../../idl";
+import { isMaterializedNode, isOptionalTypeNode } from "../../peer-generation/Materialized";
 
 export class CppInteropConvertor extends InteropConvertor implements IdlNameConvertor {
     private unwrap(type: idl.IDLNode, result: ConvertResult): string {
@@ -38,6 +40,25 @@ export class CppInteropConvertor extends InteropConvertor implements IdlNameConv
 
     convert(node: idl.IDLNode): string {
         return this.unwrap(node, this.convertNode(node))
+    }
+
+    convertInterface(node: idl.IDLInterface): ConvertResult {
+        if (node.subkind in [idl.IDLInterfaceSubkind.Class, idl.IDLInterfaceSubkind.Interface]) {
+            if (isMaterializedNode(node, this.resolver)) {
+                return {text: node.name, noPrefix: true}
+            }
+        }
+        return super.convertInterface(node)
+    }
+
+    convertTypeReference(type: IDLReferenceType): ConvertResult {
+        if (isMaterializedNode(type, this.resolver) && !isOptionalTypeNode(type, this.resolver)) {
+            let res = type.name
+            if (res.startsWith("Ark_"))
+                res = res.slice(4)
+            return {text: `${res}Peer`, noPrefix: true}
+        }
+        return super.convertTypeReference(type);
     }
 }
 

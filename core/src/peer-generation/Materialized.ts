@@ -23,6 +23,29 @@ import { qualifiedName } from './idl/common'
 import { PeerClassBase } from './PeerClass'
 import { PeerMethod } from './PeerMethod'
 import { ReferenceResolver } from './ReferenceResolver'
+import {isInterface} from "../idl";
+
+export function isMaterializedNode(declaration: idl.IDLNode, resolver: ReferenceResolver): boolean {
+    let res
+    if (idl.isReferenceType(declaration)) {
+        res = resolver.resolveTypeReference(declaration)
+    } else {
+        res = declaration
+    }
+
+    return res ? res && isInterface(res) && isMaterialized(res, resolver) : false
+}
+
+export function isOptionalTypeNode(declaration: idl.IDLNode, resolver: ReferenceResolver): boolean {
+    let res
+    if (idl.isReferenceType(declaration)) {
+        res = resolver.resolveTypeReference(declaration)
+    } else {
+        res = declaration
+    }
+
+    return res ? idl.isOptionalType(res) : false
+}
 
 export function isMaterialized(declaration: idl.IDLInterface, resolver: ReferenceResolver): boolean {
     if (idl.isHandwritten(declaration) ||
@@ -100,7 +123,7 @@ export class MaterializedMethod extends PeerMethod {
             if (this.method.signature.returnType === idl.IDLBooleanType) {
                 return '0'
             }
-            return `(void*) 300`
+            return `(${this.originalParentName}Peer*) 300`
         }
         if (idl.isReferenceType(this.method.signature.returnType)) {
             return "{}"

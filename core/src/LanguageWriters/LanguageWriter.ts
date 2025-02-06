@@ -884,6 +884,7 @@ export type MakeCastOptions = {
     optional?: boolean
     receiver?: string
     toRef?: boolean
+    toPtr?: boolean
     overrideTypeName?: string
 }
 
@@ -894,6 +895,7 @@ export type MakeRefOptions = {
 export type MakeAssignOptions = {
     receiver?: string,
     assignRef?: boolean
+    assignPtr?: boolean
     overrideTypeName?: string
 }
 

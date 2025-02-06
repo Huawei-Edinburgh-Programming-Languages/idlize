@@ -31,13 +31,14 @@ import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { collectCallbacks, groupCallbacks, CallbackInfo } from "./EventsPrinter";
 import { CppLanguageWriter, printMethodDeclaration } from "../LanguageWriters";
 import { ArkPrimitiveTypesInstance } from "../ArkPrimitiveType";
+import { isMaterializedNode, CppInteropReturnTypeConvertor } from '@idlizer/core'
 
 export function generateEventReceiverName(componentName: string) {
     return `${PeerGeneratorConfig.cppPrefix}ArkUI${componentName}EventsReceiver`
 }
 
 class HeaderVisitor {
-    private readonly returnTypeConvertor = new InteropReturnTypeConvertor(this.library)
+    private readonly returnTypeConvertor = new CppInteropReturnTypeConvertor(this.library)
     constructor(
         private library: PeerLibrary,
         private api: IndentedPrinter,
@@ -79,12 +80,22 @@ class HeaderVisitor {
         this.accessorsList.popIndent()
     }
 
-    private printAccessor(name: string) {
+    public printPeerTypedef(name: string, alias: string | undefined = undefined) {
         const clazz = this.library.materializedClasses.get(name)
         if (clazz) {
             let peerName = `${name}Peer`
+            if (alias) {
+                this.api.print(`typedef ${peerName} ${alias};`)
+            } else {
+                this.api.print(`typedef struct ${peerName} ${peerName};`)
+            }
+        }
+    }
+
+    private printAccessor(name: string) {
+        const clazz = this.library.materializedClasses.get(name)
+        if (clazz) {
             let accessorName = `${PeerGeneratorConfig.cppPrefix}ArkUI${name}Accessor`
-            this.api.print(`typedef struct ${peerName} ${peerName};`)
             this.api.print(`typedef struct ${accessorName} {`)
             this.api.pushIndent()
             const mDestroyPeer = createDestroyPeerMethod(clazz)
@@ -107,9 +118,17 @@ class HeaderVisitor {
         const nameConvertor = this.library.createTypeNameConvertor(Language.CPP)
 
         for (const callback of callbacks) {
-            const args = ["Ark_Int32 nodeId",
-                ...callback.args.map(it =>
-                    `const ${nameConvertor.convert(maybeOptional(library.typeConvertor(it.name, it.type, it.nullable).nativeType(), it.nullable))} ${it.name}`)]
+            const args = [
+                "Ark_Int32 nodeId",
+                ...callback.args.map(it => {
+                    const nodeType = maybeOptional(this.library.typeConvertor(it.name, it.type, it.nullable).nativeType(), it.nullable)
+                    if (isMaterializedNode(nodeType, this.library)) {
+                        return `${nameConvertor.convert(nodeType)}* ${it.name}`
+                    } else {
+                        return `const ${nameConvertor.convert(nodeType)} ${it.name}`
+                    }
+                })
+            ]
             printMethodDeclaration(this.api, "void", `(*${callback.methodName})`, args, `;`)
         }
         this.api.popIndent()
@@ -140,6 +159,9 @@ class HeaderVisitor {
 
     // TODO: have a proper Peer module visitor
     printApiAndDeserializer() {
+        this.library.materializedClasses.forEach(c => {
+            this.printPeerTypedef(c.className)  // печатаем здесь
+        })
         this.library.files.forEach(file => {
             file.peers.forEach(clazz => {
                 this.printClassProlog(clazz)

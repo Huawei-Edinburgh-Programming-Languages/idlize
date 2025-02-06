@@ -30,6 +30,7 @@ import {
 } from "@idlizer/core";
 import * as idl from "@idlizer/core";
 import { ArkPrimitiveTypesInstance } from "../ArkPrimitiveType"
+import { isMaterializedNode } from "@idlizer/core";
 import { bridgeCcCustomDeclaration, bridgeCcGeneratedDeclaration } from "../FileGenerators";
 import { ExpressionStatement } from "../LanguageWriters";
 import { forceAsNamedNode, IDLBooleanType, IDLNumberType, IDLVoidType } from '@idlizer/core/idl'
@@ -129,9 +130,9 @@ class BridgeCcVisitor {
                 }
                 let result = `${it.param}_value`
                 this.generatedApi.writeStatement(it.convertorDeserialize(`${result}_buf`, `thisDeserializer`, (expr) => {
-                    return new ExpressionStatement(this.generatedApi.makeString(
-                        `${this.generatedApi.getNodeName(it.nativeType())} ${result} = ${expr.asString()};`
-                    ))
+                    const isMaterializedType = isMaterializedNode(it.nativeType(), this.library)
+                    const expressionString = `${this.generatedApi.getNodeName(it.nativeType())}${isMaterializedType ? "*" : ""} ${result} = ${expr.asString()};`
+                    return new ExpressionStatement(this.generatedApi.makeString(expressionString))
                 }, this.generatedApi))
             }
         })

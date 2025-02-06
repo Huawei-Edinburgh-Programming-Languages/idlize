@@ -28,6 +28,7 @@ import {
     PeerLibrary,
 } from "@idlizer/core"
 import { RuntimeType } from "@idlizer/core"
+import { isMaterializedNode, isReferenceType } from "@idlizer/core"
 import { ArkPrimitiveTypeList, ArkPrimitiveTypesInstance } from "../ArkPrimitiveType"
 import { LanguageExpression, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters"
 import { LanguageWriter } from "@idlizer/core"
@@ -76,6 +77,7 @@ export class StructPrinter {
     generateStructs(structs: LanguageWriter, typedefs: IndentedPrinter, writeToString: LanguageWriter) {
         const enumsDeclarations = this.library.createLanguageWriter(Language.CPP)
         const forwardDeclarations = this.library.createLanguageWriter(Language.CPP)
+        const forwardDeclarationsSet: Set<string> = new Set()
         const concreteDeclarations = this.library.createLanguageWriter(Language.CPP)
         const seenNames = new Set<string>()
         seenNames.clear()
@@ -101,7 +103,7 @@ export class StructPrinter {
             let noBasicDecl = isAccessor || noDeclaration.includes(nameAssigned)
             if (idl.isOptionalType(target)) {
                 forwardDeclarations.print(`typedef struct ${nameAssigned} ${nameAssigned};`)
-                this.printOptionalIfNeeded(forwardDeclarations, enumsDeclarations, writeToString, target.type, seenNames, true)
+                this.printOptionalIfNeeded(forwardDeclarations, forwardDeclarationsSet, enumsDeclarations, writeToString, target.type, seenNames, true)
             } else if (idl.isEnum(target) || idl.isEnumMember(target)) {
                 const enumTarget = idl.isEnumMember(target) ? target.parent : target
                 const stringEnum = isStringEnum(enumTarget)
@@ -117,7 +119,7 @@ export class StructPrinter {
                 enumsDeclarations.print(`} ${nameAssigned};`)
                 this.writeRuntimeType(target, targetType, false, writeToString)
                 this.generateWriteToString(nameAssigned, target, writeToString, isPointer)
-                this.printOptionalIfNeeded(undefined, enumsDeclarations, writeToString, target, seenNames)
+                this.printOptionalIfNeeded(forwardDeclarations, forwardDeclarationsSet, enumsDeclarations, writeToString, target, seenNames, true)
             } else if (!noBasicDecl && !this.ignoreTarget(target)) {
                 forwardDeclarations.print(`typedef struct ${nameAssigned} ${nameAssigned};`)
                 this.printStructsCHead(nameAssigned, target, concreteDeclarations)
@@ -125,8 +127,14 @@ export class StructPrinter {
                     concreteDeclarations.print(`${generatorConfiguration().param("TypePrefix")}Int32 selector;`)
                     concreteDeclarations.print("union {")
                     concreteDeclarations.pushIndent()
-                    target.types.forEach((it, index) =>
-                        concreteDeclarations.print(`${structs.getNodeName(it)} value${index};`))
+                    target.types.forEach((it, index) => {
+                        let name = structs.getNodeName(it)
+                        if (this.addPointerIfMaterialized(it)) {
+                            this.printForwardDeclarationIfUnseen(name, forwardDeclarationsSet, forwardDeclarations)
+                            name += "*"
+                        }
+                        concreteDeclarations.print(`${name} value${index};`)
+                    })
                     concreteDeclarations.popIndent()
                     concreteDeclarations.print("};")
                 } else if (idl.isInterface(target)) {
@@ -136,7 +144,12 @@ export class StructPrinter {
                     }
                     properties.forEach(it => {
                         const type = flattenUnionType(this.library, it.type)
-                        concreteDeclarations.print(`${structs.getNodeName(idl.maybeOptional(type, it.isOptional))} ${concreteDeclarations.escapeKeyword(it.name)};`)
+                        let name = structs.getNodeName(idl.maybeOptional(type, it.isOptional))
+                        if (this.addPointerIfMaterialized(type) && !it.isOptional) {
+                            this.printForwardDeclarationIfUnseen(name, forwardDeclarationsSet, forwardDeclarations)
+                            name += "*"
+                        }
+                        concreteDeclarations.print(`${name} ${concreteDeclarations.escapeKeyword(it.name)};`)
                     })
                 } else if (idl.isContainerType(target)) {
                     let fieldNames: string[] = []
@@ -148,12 +161,22 @@ export class StructPrinter {
                             fieldNames = ["keys", "values"]
                     }
                     target.elementType.forEach((it, index) => {
-                        concreteDeclarations.print(`${structs.getNodeName(it)}* ${fieldNames[index]};`)
+                        if (this.addPointerIfMaterialized(it)) {
+                            concreteDeclarations.print(`${structs.getNodeName(it)}** ${fieldNames[index]};`)
+                        } else {
+                            concreteDeclarations.print(`${structs.getNodeName(it)}* ${fieldNames[index]};`)
+                        }
                     })
                     if (idl.IDLContainerUtils.isSequence(target)) {
                         concreteDeclarations.print(`${ArkPrimitiveTypesInstance.Int32.getText()} length;`)
                     }
                 } else if (idl.isCallback(target)) {
+                    target.parameters.forEach(p => {
+                        if (isReferenceType(p.type) && this.addPointerIfMaterialized(p.type)) {
+                            let name = p.type.name + "Peer"
+                            this.printForwardDeclarationIfUnseen(name, forwardDeclarationsSet, forwardDeclarations)
+                        }
+                    })
                     concreteDeclarations.print(`${generatorTypePrefix()}CallbackResource resource;`)
                     const args = generateCallbackAPIArguments(this.library, target)
                     concreteDeclarations.print(`void (*call)(${args.join(', ')});`)
@@ -163,15 +186,15 @@ export class StructPrinter {
                 this.printStructsCTail(nameAssigned, concreteDeclarations)
                 this.writeRuntimeType(target, targetType, idl.isOptionalType(target), writeToString)
                 this.generateWriteToString(nameAssigned, target, writeToString, isPointer)
-                this.printOptionalIfNeeded(forwardDeclarations, concreteDeclarations, writeToString, target, seenNames)
+                this.printOptionalIfNeeded(forwardDeclarations, forwardDeclarationsSet, concreteDeclarations, writeToString, target, seenNames, true)
             } else if (isAccessor) {
                 forwardDeclarations.print(`typedef ${ArkPrimitiveTypesInstance.Materialized.getText()} ${nameAssigned};`)
-                this.printOptionalIfNeeded(forwardDeclarations, concreteDeclarations, writeToString, target, seenNames)
+                this.printOptionalIfNeeded(forwardDeclarations, forwardDeclarationsSet, concreteDeclarations, writeToString, target, seenNames, true)
             } else {
                 if (!noBasicDecl && !idl.isPrimitiveType(target))
                     this.generateWriteToString(nameAssigned, target, writeToString, isPointer)
                 this.writeRuntimeType(target, targetType, idl.isOptionalType(target), writeToString)
-                this.printOptionalIfNeeded(undefined, concreteDeclarations, writeToString, target, seenNames)
+                this.printOptionalIfNeeded(forwardDeclarations, forwardDeclarationsSet, concreteDeclarations, writeToString, target, seenNames, true)
             }
         }
         structs.concat(forwardDeclarations)
@@ -183,8 +206,20 @@ export class StructPrinter {
         }
     }
 
+    private addPointerIfMaterialized(type: idl.IDLNode): boolean {
+        return isMaterializedNode(type, this.library)
+    }
+
+    private printForwardDeclarationIfUnseen(name: string, forwardDeclarationsSet: Set<string> | undefined, forwardDeclarations: LanguageWriter | undefined) {
+        if (!forwardDeclarationsSet?.has(name)) {
+            forwardDeclarationsSet?.add(name)
+            forwardDeclarations?.print(`typedef struct ${name} ${name};`)
+        }
+    }
+
     private printOptionalIfNeeded(
         forwardDeclarations: LanguageWriter | undefined,
+        forwardDeclarationsSet: Set<string>,
         concreteDeclarations: LanguageWriter,
         writeToString: LanguageWriter,
         target: idl.IDLNode,
@@ -192,7 +227,7 @@ export class StructPrinter {
         forceOptional: boolean = false
     ) {
         const isPointer = this.isPointerDeclaration(target)
-        const nameAssigned = concreteDeclarations.getNodeName(target)
+        let nameAssigned = concreteDeclarations.getNodeName(target)
         const nameOptional = idl.isType(target)
             ? concreteDeclarations.getNodeName(idl.createOptionalType(target))
             : generatorConfiguration().param("OptionalPrefix") + cleanPrefix(concreteDeclarations.getNodeName(target as idl.IDLEntry), generatorTypePrefix())
@@ -208,9 +243,16 @@ export class StructPrinter {
             forwardDeclarations?.print(`typedef struct ${nameOptional} ${nameOptional};`)
             this.printStructsCHead(nameOptional, target, concreteDeclarations)
             concreteDeclarations.print(`${ArkPrimitiveTypesInstance.Tag.getText()} tag;`)
+            let isValueMaterialized = false
+            if (this.addPointerIfMaterialized(target)) {
+                let name = `${nameAssigned}Peer`
+                this.printForwardDeclarationIfUnseen(name, forwardDeclarationsSet, forwardDeclarations)
+                nameAssigned += "Peer*"
+                isValueMaterialized = true
+            }
             concreteDeclarations.print(`${nameAssigned} value;`)
             this.printStructsCTail(nameOptional, concreteDeclarations)
-            this.writeOptional(nameOptional, writeToString, isPointer)
+            this.writeOptional(nameOptional, writeToString, isPointer, isValueMaterialized)
             this.writeRuntimeType(target, idl.isType(target) ? target : idl.createReferenceType(idl.forceAsNamedNode(target).name, undefined, target), true, writeToString)
         }
     }
@@ -250,7 +292,11 @@ export class StructPrinter {
                 writer.print("switch (value.selector) {")
                 writer.pushIndent()
                 for (let i = 0; i < target.types.length; i++) {
-                    writer.print(`case ${i}: return runtimeType(value.value${i});`)
+                    if (isMaterializedNode(target.types[i], this.library)) {
+                        writer.print(`case ${i}: return INTEROP_RUNTIME_OBJECT;`)
+                    } else {
+                        writer.print(`case ${i}: return runtimeType(value.value${i});`)
+                    }
                 }
                 writer.print(`default: throw "Bad selector in ${writer.getNodeName(targetType)}: " + std::to_string(value.selector);`)
                 writer.popIndent()
@@ -297,7 +343,7 @@ export class StructPrinter {
         return writer => writer.writeStatement(writer.makeReturn(result))
     }
 
-    writeOptional(nameOptional: string, printer: LanguageWriter, isPointer: boolean) {
+    writeOptional(nameOptional: string, printer: LanguageWriter, isPointer: boolean, isValueMaterialized = false) {
         printer.print(`template <>`)
         printer.print(`inline void WriteToString(std::string* result, const ${nameOptional}* value) {`)
         printer.pushIndent()
@@ -306,7 +352,11 @@ export class StructPrinter {
         printer.print(`result->append(", .value=");`)
         printer.print(`if (value->tag != ${ArkPrimitiveTypeList.UndefinedTag}) {`)
         printer.pushIndent()
-        printer.print(`WriteToString(result, ${isPointer ? "&" : ""}value->value);`)
+        if (isValueMaterialized) {
+            printer.print(`WriteToString(result, (Ark_NativePointer)(${isPointer ? "&" : ""}value->value));`)
+        } else {
+            printer.print(`WriteToString(result, ${isPointer ? "&" : ""}value->value);`)
+        }
         printer.popIndent()
         printer.print(`} else {`)
         printer.pushIndent()
@@ -323,12 +373,13 @@ export class StructPrinter {
         let convertor = this.library.typeConvertor("param", target.elementType[0])
         let isPointerField = convertor.isPointerType()
         let elementNativeType = printer.getNodeName(convertor.nativeType())
-        let constCast = isPointerField ? `(const ${elementNativeType}*)` : ``
+        let isMaterializedElement = isMaterializedNode(convertor.nativeType(), this.library)
+        let constCast = isMaterializedElement ? `(Ark_NativePointer)` : isPointerField ? `(const ${elementNativeType}*)` : ``
 
         printer.print(
 `
 template <>
-inline void WriteToString(std::string* result, const ${elementNativeType}${isPointerField ? "*" : ""} value);
+inline void WriteToString(std::string* result, const ${elementNativeType}${isPointerField && !isMaterializedElement ? "*" : ""} value);
 
 inline void WriteToString(std::string* result, const ${name}* value) {
     int32_t count = value->length;
@@ -428,7 +479,11 @@ inline void WriteToString(std::string* result, const ${name}* value) {
                     printer.print(`if (value${access}selector == ${index}) {`)
                     printer.pushIndent()
                     printer.print(`result->append(".value${index}=");`);
-                    printer.print(`WriteToString(result, ${isPointerField ? "&" : ""}value${access}value${index});`)
+                    if (isMaterializedNode(type, this.library)) {
+                        printer.print(`WriteToString(result, (Ark_NativePointer)(${isPointerField ? "&" : ""}value${access}value${index}));`)
+                    } else {
+                        printer.print(`WriteToString(result, ${isPointerField ? "&" : ""}value${access}value${index});`)
+                    }
                     printer.popIndent()
                     printer.print(`}`)
                 })
@@ -469,7 +524,11 @@ inline void WriteToString(std::string* result, const ${name}* value) {
                         if (index > 0) printer.print(`result->append(", ");`)
                         printer.print(`result->append(".${field.name}=");`)
                         let isPointerField = this.isPointerDeclaration(this.library.toDeclaration(field.type), field.isOptional)
-                        printer.print(`WriteToString(result, ${isPointerField ? "&" : ""}value${access}${printer.escapeKeyword(field.name)});`)
+                        if (isMaterializedNode(field.type, this.library)) {
+                            printer.print(`WriteToString(result, (Ark_NativePointer)(${isPointerField ? "&" : ""}value${access}${printer.escapeKeyword(field.name)}));`)
+                        } else {
+                            printer.print(`WriteToString(result, ${isPointerField ? "&" : ""}value${access}${printer.escapeKeyword(field.name)});`)
+                        }
                     })
                 printer.print(`result->append("}");`)
             }

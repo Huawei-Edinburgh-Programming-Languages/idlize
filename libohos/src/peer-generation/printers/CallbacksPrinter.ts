@@ -15,7 +15,7 @@
 
 import * as idl from '@idlizer/core/idl'
 import { CppLanguageWriter, NamedMethodSignature } from "../LanguageWriters";
-import { generatorTypePrefix, LanguageWriter, PeerLibrary } from "@idlizer/core"
+import { generatorTypePrefix, LanguageWriter, PeerLibrary, isMaterializedNode } from "@idlizer/core"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { ImportsCollector } from "../ImportsCollector"
 import { Language, LibraryInterface, CallbackConvertor, maybeTransformManagedCallback } from  '@idlizer/core'
@@ -228,7 +228,7 @@ class DeserializeCallbacksVisitor {
                 const convertor = this.library.typeConvertor(param.name, param.type!, param.isOptional)
                 writer.writeStatement(convertor.convertorDeserialize(`${param.name}_buf`, `thisDeserializer`, (expr) => {
                     const maybeOptionalType = idl.maybeOptional(param.type!, param.isOptional)
-                    return writer.makeAssign(param.name, maybeOptionalType, expr, true, false)
+                    return writer.makeAssign(param.name, maybeOptionalType, expr, true, false, {assignPtr: isMaterializedNode(maybeOptionalType, this.library)})
                 }, writer))
                 argsNames.push(param.name)
             }
@@ -283,7 +283,7 @@ class DeserializeCallbacksVisitor {
                     const convertor = this.library.typeConvertor(param.name, param.type!, param.isOptional)
                     writer.writeStatement(convertor.convertorDeserialize(`${param.name}_buf`, `thisDeserializer`, (expr) => {
                         const maybeOptionalType = idl.maybeOptional(param.type!, param.isOptional)
-                        return writer.makeAssign(param.name, maybeOptionalType, expr, true, false)
+                        return writer.makeAssign(param.name, maybeOptionalType, expr, true, false, {assignPtr: isMaterializedNode(maybeOptionalType, this.library)})
                     }, writer))
                     argsNames.push(param.name)
                 }
@@ -443,10 +443,10 @@ class ManagedCallCallbackVisitor {
             args.push(this.library.createContinuationCallbackReference(callback.returnType))
             argsNames.push(`continuation`)
         }
-        const signature = new NamedMethodSignature(idl.IDLVoidType,
-            [idl.IDLI32Type, ...args],
-            ["resourceId", ...argsNames],
-        )
+        const signatureArgs = [idl.IDLI32Type, ...args]
+        const printHints = signatureArgs.map(arg => {return isMaterializedNode(arg, this.library) ? PrintHint.AsPointer : undefined})
+        const signature = new NamedMethodSignature(idl.IDLVoidType, signatureArgs, ["resourceId", ...argsNames], undefined, [undefined, ...printHints])
+
         this.writer.writeFunctionImplementation(`callManaged${callback.name}`, signature, writer => {
             writer.writeStatement(writer.makeAssign(`__buffer`, idl.createReferenceType(`CallbackBuffer`),
                 writer.makeString(`{{}, {}}`), true, false))
@@ -472,10 +472,10 @@ class ManagedCallCallbackVisitor {
             args.push(this.library.createContinuationCallbackReference(callback.returnType))
             argsNames.push(`continuation`)
         }
-        const signature = new NamedMethodSignature(idl.IDLVoidType,
-            [idl.createReferenceType('VMContext'), idl.IDLI32Type, ...args],
-            ["vmContext", "resourceId", ...argsNames],
-        )
+        const signatureArgs = [idl.createReferenceType('VMContext'), idl.IDLI32Type, ...args]
+        const printHints = signatureArgs.map(arg => {return isMaterializedNode(arg, this.library) ? PrintHint.AsPointer : undefined})
+        const signature = new NamedMethodSignature(idl.IDLVoidType, signatureArgs, ["vmContext", "resourceId", ...argsNames], undefined, [undefined, ...printHints])
+
         this.writer.writeFunctionImplementation(`callManaged${callback.name}Sync`, signature, writer => {
             writer.print('uint8_t __buffer[60 * 4];')
             writer.writeStatement(writer.makeAssign(`argsSerializer`, idl.createReferenceType(`Serializer`),

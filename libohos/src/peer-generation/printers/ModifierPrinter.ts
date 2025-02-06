@@ -42,6 +42,7 @@ import {
     createEmptyReferenceResolver,
     CppInteropConvertor
 } from '@idlizer/core'
+import { isMaterializedNode, CppInteropReturnTypeConvertor } from '@idlizer/core'
 import { CppLanguageWriter, LanguageStatement, printMethodDeclaration } from "../LanguageWriters";
 import { LibaceInstall } from "../../Install";
 import { IDLAnyType, IDLBooleanType, IDLFunctionType, IDLPointerType, IDLStringType, IDLThisType, IDLType, isOptionalType, isReferenceType } from '@idlizer/core/idl'
@@ -52,7 +53,7 @@ export class ModifierVisitor {
     modifiers = this.library.createLanguageWriter(Language.CPP)
     getterDeclarations = this.library.createLanguageWriter(Language.CPP)
     modifierList = this.library.createLanguageWriter(Language.CPP)
-    private readonly returnTypeConvertor = new InteropReturnTypeConvertor(this.library)
+    private readonly returnTypeConvertor = new CppInteropReturnTypeConvertor(this.library)
     commentedCode = true
 
     constructor(
@@ -76,7 +77,8 @@ export class ModifierVisitor {
         _.print(`string out("${method.toStringName}(");`)
         method.argAndOutConvertors.forEach((argConvertor, index) => {
             if (index > 0) this.dummy.print(`out.append(", ");`)
-            _.print(`WriteToString(&out, ${argConvertor.param});`)
+            const isMaterialized = isMaterializedNode(argConvertor.nativeType(), this.library)
+            _.print(`WriteToString(&out, ${isMaterialized ? "(Ark_NativePointer)" : ""}${argConvertor.param});`)
         })
         _.print(`out.append(") \\n");`)
         if (retVal !== undefined) {

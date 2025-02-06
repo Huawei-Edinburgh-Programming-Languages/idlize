@@ -25,6 +25,7 @@ import {
     TSLanguageWriter
 } from "../LanguageWriters"
 import { LanguageWriter } from "@idlizer/core"
+import { isMaterializedNode } from "@idlizer/core";
 import { makeCEventsArkoalaImpl, makeCEventsLibaceImpl } from "../FileGenerators"
 import { generateEventReceiverName } from "./HeaderPrinter"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig"
@@ -261,9 +262,17 @@ class CEventsVisitor {
     }
 
     protected printEventMethodDeclaration(event: CallbackInfo) {
-        const args = ["Ark_Int32 nodeId",
-            ...event.args.map(it =>
-                `const ${this.impl.getNodeName(idl.maybeOptional(this.library.typeConvertor(it.name, it.type, it.nullable).nativeType(), it.nullable))} ${it.name}`)]
+        const args = [
+            "Ark_Int32 nodeId",
+            ...event.args.map(it => {
+                const nodeType = idl.maybeOptional(this.library.typeConvertor(it.name, it.type, it.nullable).nativeType(), it.nullable)
+                if (isMaterializedNode(nodeType, this.library)) {
+                    return `${this.impl.getNodeName(nodeType)}* ${it.name}`
+                } else {
+                    return `const ${this.impl.getNodeName(nodeType)} ${it.name}`
+                }
+            })
+        ]
         printMethodDeclaration(this.impl.printer, "void", `${event.methodName}Impl`, args)
     }
 
