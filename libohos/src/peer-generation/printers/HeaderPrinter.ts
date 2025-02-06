@@ -83,7 +83,7 @@ class HeaderVisitor {
     public printPeerTypedef(name: string, alias: string | undefined = undefined) {
         const clazz = this.library.materializedClasses.get(name)
         if (clazz) {
-            let peerName = `${name}Peer`
+            let peerName = name.endsWith("Peer") ? name : `${name}Peer`
             if (alias) {
                 this.api.print(`typedef ${peerName} ${alias};`)
             } else {

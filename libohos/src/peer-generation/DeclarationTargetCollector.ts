@@ -39,8 +39,8 @@ export function collectDeclarationTargets(library: LibraryInterface): idl.IDLNod
                             continue
                         for (const parameter of method.parameters)
                             orderer.addDep(parameter.type!)
-                        if (method.returnType)
-                            if (!idl.IDLContainerUtils.isPromise(method.returnType))
+                        // TODO: can`t deserialize generic interfaces i.e. "Measurable"
+                        if (method.returnType && !idl.IDLContainerUtils.isPromise(method.returnType) && entry.name != "Measurable")
                                 orderer.addDep(method.returnType!)
                     }
                     for (const constructor of entry.constructors) {
