@@ -175,7 +175,7 @@ public class Main {
             );
         TestUtils.checkResult("[Materialized] of",
             () -> { ClassWithConstructorAndAllOptionalParamsDTS.of(null, "test"); },
-            "of({.tag=INTEROP_TAG_UNDEFINED, .value={}}, {.tag=INTEROP_TAG_OBJECT, .value={.chars=\"test\", .length=4}})[return (void*) 300]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]"
+            "of({.tag=INTEROP_TAG_UNDEFINED, .value={}}, {.tag=INTEROP_TAG_OBJECT, .value={.chars=\"test\", .length=4}})[return (ClassWithConstructorAndAllOptionalParamsDTSPeer*) 300]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]"
             );
         var classCtor = new ClassWithConstructorAndAllOptionalParamsDTS(new Opt_Number(10), null);
         var classOf = ClassWithConstructorAndAllOptionalParamsDTS.of(null, "test");

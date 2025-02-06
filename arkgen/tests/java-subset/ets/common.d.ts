@@ -23,21 +23,55 @@ declare type AnimationRange<T> = [from: T, to: T];
 
 declare interface Callback<T> {}
 
-declare interface BaseEvent {}
-
 declare interface AnimateParam {
     duration?: number;
 }
 
+declare interface Area {
+    width: Length;
+    height: Length;
+    position: Position;
+    globalPosition: Position;
+}
+
+declare interface EventTarget {
+    area: Area;
+}
+
+declare enum SourceType {
+    UNKNOWN = 0,
+    Unknown = 0,
+    MOUSE = 1,
+    Mouse = 1,
+    TOUCH_SCREEN = 2,
+    TouchScreen = 2,
+}
+
+declare interface BaseEvent {
+    target: EventTarget;
+    timestamp: number;
+    source: SourceType;
+    axisHorizontal?: number;
+    axisVertical?: number;
+    pressure: number;
+    tiltX: number;
+    tiltY: number;
+    sourceTool: SourceTool;
+    getModifierKeyState?(keys: Array<string>): boolean;
+    deviceId?: number;
+    targetDisplayId?: number;
+}
+
 declare interface ClickEvent extends BaseEvent {
-
-    x: number;
-
-    y: number;
-
     displayX: number;
-
     displayY: number;
+    windowX: number;
+    windowY: number;
+    screenX: number;
+    screenY: number;
+    x: number;
+    y: number;
+    preventDefault: () => void;
 }
 
 declare interface CommonConfiguration<T> {
