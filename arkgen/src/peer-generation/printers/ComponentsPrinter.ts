@@ -16,7 +16,7 @@
 import * as idl from '@idlizer/core/idl'
 import * as path from "path"
 import { removeExt, renameDtsToComponent, Language, isCommonMethod } from '@idlizer/core'
-import { convertPeerFilenameToModule, ImportsCollector } from "../ImportsCollector";
+import { convertPeerFilenameToModule, ImportsCollector } from "@idlizer/libohos"
 import { componentToPeerClass } from "./PeersPrinter";
 import { collapseSameNamedMethods, groupOverloads, OverloadsPrinter } from "./OverloadsPrinter";
 import {

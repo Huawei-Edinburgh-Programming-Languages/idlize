@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { IDLNode } from "../idl";
+import { IDLNode } from "../idl"
 
 export enum LayoutNodeRole {
     PEER,

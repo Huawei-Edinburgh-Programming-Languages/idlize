@@ -28,7 +28,7 @@ import {
 import { LanguageWriter, RuntimeType, getInternalClassName,
     MaterializedClass, MaterializedField, isMaterialized, PeerLibrary, LayoutNodeRole } from "@idlizer/core"
 import { groupOverloads, OverloadsPrinter } from "./OverloadsPrinter";
-import { ImportsCollector } from "../ImportsCollector";
+import { ImportsCollector } from "@idlizer/libohos"
 import { PrinterContext } from "./PrinterContext";
 import { TargetFile } from "@idlizer/libohos"
 import {

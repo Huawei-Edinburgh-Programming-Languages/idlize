@@ -14,7 +14,7 @@
  */
 
 import { createReferenceType, IDLI32Type, IDLType, IDLVoidType } from "@idlizer/core/idl"
-import { ImportFeature } from "../../ImportsCollector"
+import { ImportFeature } from "@idlizer/libohos"
 import { LanguageWriter, NamedMethodSignature, Method, MethodModifier, MethodSignature,
     FieldModifier, PeerMethod, PeerLibrary
 } from "@idlizer/core"

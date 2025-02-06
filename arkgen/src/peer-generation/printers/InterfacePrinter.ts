@@ -38,7 +38,7 @@ import {
     CustomPrintVisitor,
     PeerLibrary
 } from '@idlizer/core'
-import { ImportFeature, ImportsCollector } from '../ImportsCollector'
+import { ImportFeature, ImportsCollector } from "@idlizer/libohos"
 import { TargetFile } from "@idlizer/libohos"
 import { PrinterContext } from './PrinterContext'
 import { convertDeclaration, DeclarationConvertor } from "@idlizer/core";

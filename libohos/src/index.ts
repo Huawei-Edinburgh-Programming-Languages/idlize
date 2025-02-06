@@ -14,4 +14,6 @@
  */
 
 export * from "./Install"
+export * from "./peer-generation/Tracker"
+export * from "./peer-generation/ImportsCollector"
 export * from "./peer-generation/printers/TargetFile"

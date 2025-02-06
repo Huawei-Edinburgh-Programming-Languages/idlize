@@ -16,7 +16,7 @@
 import * as idl from '@idlizer/core/idl'
 import * as path from "path"
 import { renameDtsToPeer, throwException, Language, InheritanceRole, determineParentRole, isHeir, isRoot } from '@idlizer/core'
-import { convertPeerFilenameToModule, ImportsCollector } from "../ImportsCollector";
+import { convertPeerFilenameToModule, ImportsCollector } from "@idlizer/libohos"
 import {
     ExpressionStatement,
     LanguageExpression,
