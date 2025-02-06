@@ -35,7 +35,7 @@
 |`popupTitleBackground`| Function |Ekaterina Stepanova| done |  |
 |`enableHapticFeedback`| Function |Ekaterina Stepanova| done |  |
 |`alignStyle`| Function |Ekaterina Stepanova| done |  |
-|`__onChangeEvent_selected`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_selected`| Function | Erokhin Ilya | done | |
 |*Animator*| *Component* | Skroba Gleb | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
 |`setAnimatorOptions`| Function | Skroba Gleb | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
 |`state`| Function | Skroba Gleb | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
@@ -106,7 +106,7 @@
 |`mark`| Function | Andrey Khudenkikh | done |  |
 |`onChange`| Function | Andrey Khudenkikh | done |  |
 |`contentModifier`| Function | Andrey Khudenkikh | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
-|`__onChangeEvent_select`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_select`| Function | Erokhin Ilya | done | |
 |*CheckboxGroup*| *Component* | Dudkin Sergey| done |  |
 |`setCheckboxGroupOptions`| Function | Dudkin Sergey| done |  |
 |`selectAll`| Function | Dudkin Sergey | done |  |
@@ -115,7 +115,7 @@
 |`mark`| Function | Dudkin Sergey | done |  |
 |`onChange`| Function | Dudkin Sergey | done |  |
 |`checkboxShape`| Function | Dudkin Sergey | done |  |
-|`__onChangeEvent_selectAll`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_selectAll`| Function | Erokhin Ilya | done | |
 |*Circle*|*Component*| Erokhin Ilya | done |  |
 |`setCircleOptions`|Function| Erokhin Ilya | done |  |
 |*Column*| *Component* | Politov Mikhail | done |  |
@@ -246,7 +246,7 @@
 |`radialGradient`| Function | Erokhin Ilya | done |  |
 |`motionPath`| Function | Lobah Mikhail | done | |
 |`shadow`| Function | Roman Sedaikin | done | |
-|`clip`| Function | Dudkin Sergey | deprecated | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
+|`clip`| Function | Dudkin Sergey | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH deprecated partially |
 |`clipShape`| Function | Dudkin Sergey | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH +|
 |`mask`| Function | Maksimov Nikita | done |deprecated |
 |`maskShape`| Function | Dmitry A Smirnov| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX +|
@@ -379,7 +379,7 @@
 |`onChange`| Function | Vadim Voronov| done |deprecated?  |
 |`onDateChange`| Function |Vadim Voronov | done | |
 |`digitalCrownSensitivity`| Function | Vadim Voronov | done | |
-|`__onChangeEvent_selected`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_selected`| Function | Erokhin Ilya | done | |
 |*Divider*| *Component* | Tuzhilkin Ivan | done |  |
 |`setDividerOptions`| Function | Tuzhilkin Ivan| done |  |
 |`vertical`| Function | Tuzhilkin Ivan | done |  |
@@ -477,7 +477,7 @@
 |`selectable`|Function| Erokhin Ilya | done |  |
 |`selected`|Function| Erokhin Ilya | done |  |
 |`onSelect`|Function| Erokhin Ilya | done |  |
-|`__onChangeEvent_selected`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_selected`| Function | Erokhin Ilya | done | |
 |*GridCol*| *Component* | Lobah Mikhail| done|  |
 |`setGridColOptions`| Function |Lobah Mikhail| done|  |
 |`span`| Function |Lobah Mikhail| done |  |
@@ -593,7 +593,7 @@
 |`selected`|Function|Morozov Sergey|done|  |
 |`swipeAction`|Function|Samarin Sergey| done |  |
 |`onSelect`|Function|Morozov Sergey|done|  |
-|`__onChangeEvent_selected`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_selected`| Function | Erokhin Ilya | done | |
 |*ListItemGroup*|*Component*|Morozov Sergey|done|  |
 |`setListItemGroupOptions`|Function|Dmitry A Smirnov | done | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`divider`|Function|Morozov Sergey|done|  |
@@ -637,7 +637,7 @@
 |`contentFontColor`| Function |Morozov Sergey|done|  |
 |`labelFont`| Function |Morozov Sergey|done|  |
 |`labelFontColor`| Function |Morozov Sergey|done|  |
-|`__onChangeEvent_selected`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_selected`| Function | Erokhin Ilya | done | |
 |*MenuItemGroup*| *Component* |Morozov Sergey |done |  |
 |`setMenuItemGroupOptions`| Function | Dmitry A Smirnov | done | CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |*NavDestination*| *Component* |Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
@@ -691,7 +691,7 @@
 |`showCloseIcon`| Function |Pavelyev Ivan| done |  |
 |`onChange`| Function |Pavelyev Ivan| done |  |
 |`onHeightChange`| Function |Pavelyev Ivan| done |  |
-|`__onChangeEvent_mode`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_mode`| Function | Erokhin Ilya | done | |
 |*PasteButton*| *Component* | Samarin Sergey| done |  |
 |`setPasteButtonOptions`| Function | Samarin Sergey| done |  |
 |`onClick`| Function | Samarin Sergey, Maksimov Nikita | testskipped | EVENT |
@@ -724,10 +724,10 @@
 |`setPolylineOptions`| Function | Politov Mikhail | done |  |
 |`points`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBAGL8 |
 |*Progress*| *Component* | Erokhin Ilya | blocked | |
-|`setProgressOptions`| Function | Erokhin Ilya | done | |
+|`setProgressOptions`| Function | Erokhin Ilya | done | deprecated for `style` property |
 |`value`| Function | Erokhin Ilya | done | |
 |`color`| Function | Erokhin Ilya | done | |
-|`style`| Function | Erokhin Ilya | testskipped |deprecated? UT in progress Vadim Voronov linearStyle.strokeRadius need to be tested https://gitee.com/nikolay-igotti/idlize/issues/IB4G8D |
+|`style`| Function | Erokhin Ilya | testskipped | UT in progress Vadim Voronov linearStyle.strokeRadius need to be tested https://gitee.com/nikolay-igotti/idlize/issues/IB4G8D |
 |`privacySensitive`| Function | Erokhin Ilya | done | |
 |`contentModifier`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |*QRCode*| *Component* | Evstigneev Roman |in progress|  |
@@ -741,7 +741,7 @@
 |`onChange`| Function | Evstigneev Roman | done |  |
 |`radioStyle`| Function | Evstigneev Roman | done |  |
 |`contentModifier`| Function | Evstigneev Roman |blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG (+) |
-|`__onChangeEvent_checked`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_checked`| Function | Erokhin Ilya | done | |
 |*Rating*| *Component* | Lobah Mikhail| done |  |
 |`setRatingOptions`| Function | Lobah Mikhail| done | |
 |`stars`| Function | Lobah Mikhail| done | |
@@ -749,7 +749,7 @@
 |`starStyle`| Function | Lobah Mikhail| done | |
 |`onChange`| Function | Lobah Mikhail| done |  |
 |`contentModifier`| Function | Lobah Mikhail| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
-|`__onChangeEvent_rating`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_rating`| Function | Erokhin Ilya | done | |
 |*Rect*|*Component*|Dudkin Sergey| done |  |
 |`setRectOptions`|Function|Dudkin Sergey| done |  |
 |`radiusWidth`|Function|Dudkin Sergey| done |  |
@@ -763,7 +763,7 @@
 |`pullToRefresh`| Function |Politov Mikhail | done |  |
 |`onOffsetChange`| Function |Politov Mikhail | done | |
 |`pullDownRatio`| Function |Politov Mikhail | done |  |
-|`__onChangeEvent_refreshing`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_refreshing`| Function | Erokhin Ilya | done | |
 |*RelativeContainer*| *Component* | Dmitry A Smirnov | done |  |
 |`setRelativeContainerOptions`| Function | Dmitry A Smirnov | done |  |
 |`guideLine`| Function | Dmitry A Smirnov | done |  |
@@ -892,7 +892,7 @@
 |`searchButton`|Function| Evstigneev Roman | done |  |
 |`inputFilter`|Function| Evstigneev Roman | in progress |  |
 |`customKeyboard`|Function| Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|`__onChangeEvent_value`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_value`| Function | Erokhin Ilya | done | |
 |*SecurityComponentMethod*| *Component* | Samarin Sergey|in progress |  |
 |`iconSize`| Function |Samarin Sergey| done |  |
 |`layoutDirection`| Function |Samarin Sergey|done |  |
@@ -953,8 +953,8 @@
 |`textModifier`| Function | Samarin Sergey | in progress | |
 |`arrowModifier`| Function | Samarin Sergey | in progress | |
 |`menuAlign` | Function | Samarin Sergey | done |  |
-|`__onChangeEvent_selected`| Function | Erokhin Ilya | devdone | |
-|`__onChangeEvent_value`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_selected`| Function | Erokhin Ilya | done | |
+|`__onChangeEvent_value`| Function | Erokhin Ilya | done | |
 |*Shape*|*Component*|Dudkin Sergey| done |  |
 |`setShapeOptions`|Function|Dudkin Sergey| blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IBDOCY + |
 |`viewPort`|Function|Dudkin Sergey| done |  |
@@ -994,7 +994,7 @@
 |`slideRange`| Function | Morozov Sergey |done |  |
 |`digitalCrownSensitivity`| Function | | | |
 |`showTips`| Function |Morozov Sergey |done |  |
-|`__onChangeEvent_value`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_value`| Function | Erokhin Ilya | done | |
 |*BaseSpan*| *Component* |Politov Mikhail | done |  |
 |`textBackgroundStyle`| Function | Politov Mikhail | done |  |
 |`baselineOffset`| Function | Politov Mikhail | done |  |
@@ -1022,7 +1022,7 @@
 |`onChange`| Function | Morozov Sergey | done |  |
 |`onNext`| Function | Morozov Sergey | done |  |
 |`onPrevious`| Function | Morozov Sergey | done |  |
-|`__onChangeEvent_index`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_index`| Function | Erokhin Ilya | done | |
 |*StepperItem*| *Component* | Morozov Sergey | done | |
 |`setStepperItemOptions`| Function | Morozov Sergey | done | |
 |`prevLabel`| Function | Morozov Sergey | done | |
@@ -1057,7 +1057,7 @@
 |`displayCount`| Function |Skroba Gleb | done |  |
 |`prevMargin`| Function | Skroba Gleb| done |  |
 |`nextMargin`| Function | Skroba Gleb | done |  |
-|`__onChangeEvent_index`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_index`| Function | Erokhin Ilya | done | |
 |*IndicatorComponent*| *Component* | Andrey Khudenkikh | done |  |
 |`setIndicatorComponentOptions`| Function | Andrey Khudenkikh | done |  |
 |`initialIndex`| Function | Andrey Khudenkikh | done |  |
@@ -1110,7 +1110,7 @@
 |`pageFlipMode`| Function | | | |
 |`onContentWillChange`| Function | Dudkin Sergey | done | |
 |`barModeScrollable`| Function | Tuzhilkin Ivan | done | |
-|`__onChangeEvent_index`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_index`| Function | Erokhin Ilya | done | |
 |*TabContent*| *Component* | Evstigneev Roman |in progress |  |
 |`setTabContentOptions`| Function | Evstigneev Roman | done |  |
 |`tabBar`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IB74L4 & https://gitee.com/nikolay-igotti/idlize/issues/IB764R|
@@ -1221,7 +1221,7 @@
 |`inputFilter`|Function|Tuzhilkin Ivan| done | |
 |`showCounter`|Function|Tuzhilkin Ivan|done| https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
 |`customKeyboard`|Function| Erokhin Ilya | testskipped | UT in progress Vadim Voronov Custom Builder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
-|`__onChangeEvent_text`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_text`| Function | Erokhin Ilya | done | |
 |*TextClock*| *Component* |Pavelyev Ivan|in progress|  |
 |`setTextClockOptions`| Function |Pavelyev Ivan|done|  |
 |`format`| Function |Pavelyev Ivan|done|  |
@@ -1307,7 +1307,7 @@
 |`inputFilter`| Function | Spirin Andrey | done | UT Kovalev Sergey |
 |`customKeyboard`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`showCounter`| Function | Spirin Andrey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
-|`__onChangeEvent_text`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_text`| Function | Erokhin Ilya | done | |
 |*TextPicker*| *Component* |Ekaterina Stepanova |in progress |  |
 |`setTextPickerOptions`| Function | Tuzhilkin Ivan| done | https://gitee.com/openharmony/arkui_ace_engine/issues/IB2GJB |
 |`defaultPickerItemHeight`| Function |Ekaterina Stepanova | done |  |
@@ -1327,8 +1327,8 @@
 |`gradientHeight`| Function | Ekaterina Stepanova| done |  |
 |`enableHapticFeedback`| Function | | | |
 |`digitalCrownSensitivity`| Function | | | |
-|`__onChangeEvent_selected`| Function | Erokhin Ilya | devdone | |
-|`__onChangeEvent_value`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_selected`| Function | Erokhin Ilya | done | |
+|`__onChangeEvent_value`| Function | Erokhin Ilya | done | |
 |*TextTimer*| *Component* |Ekaterina Stepanova| blocked |  |
 |`setTextTimerOptions`| Function |Ekaterina Stepanova| done |  |
 |`format`| Function |Ekaterina Stepanova| done |  |
@@ -1353,7 +1353,7 @@
 |`enableHapticFeedback`| Function |Ekaterina Stepanova| done |  |
 |`digitalCrownSensitivity`| Function | | | |
 |`enableCascade`| Function | | | |
-|`__onChangeEvent_selected`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_selected`| Function | Erokhin Ilya | done | |
 |*Toggle*| *Component* |Morozov Sergey |blocked |  |
 |`setToggleOptions`| Function |Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB2SVB |
 |`onChange`| Function | Morozov Sergey|done |  |
@@ -1361,7 +1361,7 @@
 |`selectedColor`| Function | Morozov Sergey|done |  |
 |`switchPointColor`| Function | Morozov Sergey|done |  |
 |`switchStyle`| Function | Morozov Sergey|done |  |
-|`__onChangeEvent_isOn`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_isOn`| Function | Erokhin Ilya | done | |
 |*Video*| *Component* | Erokhin Ilya | blocked |  |
 |`setVideoOptions`| Function | Erokhin Ilya | blocked AceEngine| https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`muted`| Function | Erokhin Ilya | done |  |
@@ -1536,7 +1536,7 @@
 |`sideBarPosition`| Function |Dmitry A Smirnov|done|  |
 |`divider`| Function |Dmitry A Smirnov|done|  |
 |`minContentWidth`| Function |Dmitry A Smirnov|done|  |
-|`__onChangeEvent_showSideBar`| Function | Erokhin Ilya | devdone | |
+|`__onChangeEvent_showSideBar`| Function | Erokhin Ilya | done | |
 |*RemoteWindow*| *Component* | Spirin Andrey, Evstigneev Roman | in progress | |
 |`setRemoteWindowOptions`| Function | Spirin Andrey, Evstigneev Roman | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+) |
 |*WaterFlow*| *Component* | Kovalev Sergey | in progress |  |
