@@ -13,8 +13,12 @@
  * limitations under the License.
  */
 
-import { TargetFile } from "@idlizer/libohos"
+import * as fs from 'fs'
 
-export interface SynthesizedTypesRegistry {
-    getDefinitions(): Map<TargetFile, string>
+export class Install {
+    mkdir(path: string): string {
+        fs.mkdirSync(path, { recursive: true })
+        return path
+    }
 }
+

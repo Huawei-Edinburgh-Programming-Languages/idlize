@@ -32,7 +32,7 @@ import { LanguageWriter, createConstructPeerMethod, PeerClassBase, PeerClass, Pe
 } from "@idlizer/core";
 import { tsCopyrightAndWarning } from "../FileGenerators";
 import { ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from "./lang/Java";
-import { TargetFile } from "./TargetFile";
+import { TargetFile } from "@idlizer/libohos"
 import { PrinterContext } from "./PrinterContext";
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { collectJavaImports } from "./lang/JavaIdlUtils";

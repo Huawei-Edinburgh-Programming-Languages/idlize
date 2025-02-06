@@ -19,7 +19,7 @@ import { LanguageWriter, PeerLibrary,
     BuilderClass, methodsGroupOverloads, CUSTOM_BUILDER_CLASSES
 } from "@idlizer/core";
 import { collapseSameNamedMethods } from "./OverloadsPrinter";
-import { TargetFile } from "./TargetFile";
+import { TargetFile } from "@idlizer/libohos"
 import { PrinterContext } from "./PrinterContext";
 import { ImportsCollector } from "../ImportsCollector";
 import { ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from "./lang/Java";

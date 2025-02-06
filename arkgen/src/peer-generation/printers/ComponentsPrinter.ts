@@ -29,7 +29,7 @@ import {
 import { LanguageWriter, PeerFile, PeerClass, PeerLibrary } from "@idlizer/core"
 import { tsCopyrightAndWarning } from "../FileGenerators";
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
-import { TargetFile } from "./TargetFile";
+import { TargetFile } from "@idlizer/libohos"
 import { PrinterContext } from "./PrinterContext";
 import { ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH, COMPONENT_BASE } from "./lang/Java";
 import { collectJavaImports } from "./lang/JavaIdlUtils";
