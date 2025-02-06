@@ -16,7 +16,7 @@
 import * as idl from './idl'
 import { ReferenceResolver } from './peer-generation/ReferenceResolver'
 
-export interface IDLVisitor<T> {
+export interface IDLConverter<T> {
     visitOptional(type: idl.IDLOptionalType): T
     visitUnion(type: idl.IDLUnionType): T
     visitContainer(type: idl.IDLContainerType): T
@@ -34,7 +34,7 @@ export interface IDLVisitor<T> {
     visitConstant(node: idl.IDLConstant): T
 }
 
-export function walkIDL<T>(convertor: IDLVisitor<T>, node: idl.IDLNode): T {
+export function walkIDL<T>(convertor: IDLConverter<T>, node: idl.IDLNode): T {
     if (idl.isNamespace(node)) return convertor.visitNamespace(node)
     if (idl.isInterface(node))
         return convertor.visitInterface(node)
@@ -61,7 +61,7 @@ export function walkIDL<T>(convertor: IDLVisitor<T>, node: idl.IDLNode): T {
 
 ////////////////////////////////////////////////////////////////////////////
 
-export class IDLDependencyCollector implements IDLVisitor<idl.IDLNode[]> {
+export class IDLDependencyCollector implements IDLConverter<idl.IDLNode[]> {
     constructor(
         private readonly resolver: ReferenceResolver
     ) {}
