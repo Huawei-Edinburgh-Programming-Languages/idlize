@@ -80,15 +80,11 @@ class HeaderVisitor {
         this.accessorsList.popIndent()
     }
 
-    public printPeerTypedef(name: string, alias: string | undefined = undefined) {
+    public printPeerTypedef(name: string) {
         const clazz = this.library.materializedClasses.get(name)
         if (clazz) {
             let peerName = name.endsWith("Peer") ? name : `${name}Peer`
-            if (alias) {
-                this.api.print(`typedef ${peerName} ${alias};`)
-            } else {
-                this.api.print(`typedef struct ${peerName} ${peerName};`)
-            }
+            this.api.print(`typedef struct ${peerName} ${peerName};`)
         }
     }
 
