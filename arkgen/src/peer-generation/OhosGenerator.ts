@@ -93,6 +93,7 @@ import {
 import { MaterializedClass, MaterializedMethod } from '@idlizer/core'
 import { writePeerMethod } from './printers/PeersPrinter'
 import { TargetFile } from "@idlizer/libohos"
+import { PeerGeneratorConfig } from './PeerGeneratorConfig'
 
 class NameType {
     constructor(public name: string, public type: string) {}
@@ -841,11 +842,19 @@ abstract class OHOSVisitor {
                 }
 
                 materializedMethods.forEach(method => {
+                    let handwrittenImpl = PeerGeneratorConfig.getHandwrittenMethod("Common", method.implName)
+                    if (handwrittenImpl) {
+                        let privateMethod = method.getPrivateMethod().method
+                        if (privateMethod.signature.returnType == IDLVoidType) {
+                            writer.writeExpressionStatement(writer.makeFunctionCall(handwrittenImpl, privateMethod.signature.argNames!.map(it => writer.makeString(it))))
+                        } else {
+                            writer.writeStatement(writer.makeReturn(writer.makeFunctionCall(handwrittenImpl, privateMethod.signature.argNames!.map(it => writer.makeString(it)))))
+                        }
+                        return
+                    }
                     writePeerMethod(
                         writer,
                         method.getPrivateMethod(),
-                        true,
-                        { language: this.library.language, imports: undefined, synthesizedTypes: undefined  },
                         false,
                         '_serialize',
                         'this.peer!.ptr',

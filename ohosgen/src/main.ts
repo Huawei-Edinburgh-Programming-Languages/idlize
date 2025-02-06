@@ -21,6 +21,8 @@ const options = program
     .option('--input-files <path>', 'Path to file(s) to generate from')
     .option('--idl2bridges', 'Convert IDL files to bridges')
     .option('--default-idl-package <name>', 'Name of the default package for generated IDL')
+    .option('--options-file <path>', 'Path to generator configuration options file (appends to defaults)')
+    .option('--override-options-file <path>', 'Path to generator configuration options file (replaces defaults)')
     .parse()
     .opts()
 

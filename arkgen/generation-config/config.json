@@ -73,8 +73,8 @@
             "attributeModifier"
         ],
         "ignoreMethodArkts": [
-            "testTupleNumberStringEnum", 
-            "testTupleOptional", 
+            "testTupleNumberStringEnum",
+            "testTupleOptional",
             "testTupleUnion"
         ],
         "invalidAttributes": [
@@ -239,6 +239,11 @@
             "CommonMethod": [
                 "onClick"
             ]
+        }
+    },
+    "handwrittenMethods": {
+        "CommonMethod": {
+            "clip": "HandwrittenCommonMethod.clip"
         }
     }
 }

@@ -198,7 +198,7 @@ class PeerFileVisitor {
 
     protected printPeerMethod(method: PeerMethod, printer: LanguageWriter) {
         this.library.setCurrentContext(`${method.originalParentName}.${method.overloadedName}`)
-        writePeerMethod(printer, method, true, this.printerContext, this.dumpSerialized, "Attribute", "this.peer.ptr")
+        writePeerMethod(printer, method, this.dumpSerialized, "Attribute", "this.peer.ptr")
         this.library.setCurrentContext(undefined)
     }
 
@@ -413,7 +413,7 @@ export function printPeerFinalizer(peerClassBase: PeerClassBase, writer: Languag
     })
 }
 
-export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isIDL: boolean, printerContext: PrinterContext, dumpSerialized: boolean,
+export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, dumpSerialized: boolean,
     methodPostfix: string, ptr: string, returnType: IDLType = IDLVoidType, generics?: string[]
 ) {
     const signature = method.method.signature as NamedMethodSignature
@@ -447,7 +447,6 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
         })
         // Enable to see serialized data.
         if (dumpSerialized) {
-            let arrayNum = 0
             method.argAndOutConvertors.forEach((it, index) => {
                 if (it.useArray) {
                     writer.writePrintLog(`"${it.param}:", thisSerializer.asArray(), thisSerializer.length())`)

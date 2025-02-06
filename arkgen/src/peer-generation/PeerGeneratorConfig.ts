@@ -42,6 +42,11 @@ export interface CoreGeneratorConfiguration {
     get dummy(): {
         [key: string]: {}
     }
+    get handwrittenMethods(): {
+        [key: string]: {
+            [key: string]: string
+        }
+    }
 }
 
 export const defaultCoreGeneratorConfiguration: CoreGeneratorConfiguration = {
@@ -73,6 +78,8 @@ export const defaultCoreGeneratorConfiguration: CoreGeneratorConfiguration = {
             "LazyForEachOps": ["*"],
             "CommonMethod": ["onClick"]
         }
+    },
+    handwrittenMethods: {
     }
 }
 
@@ -222,6 +229,14 @@ export class PeerGeneratorConfigImpl implements CoreGeneratorConfiguration {
 
     isHandWritten(component: string) {
         return this.handWritten.concat(this.customComponents).includes(component)
+    }
+
+    get handwrittenMethods(): { [key: string]: { [key: string]: string } } {
+        throw new Error("Wrong method")
+    }
+
+    getHandwrittenMethod(clazz: string, method: string): string | undefined {
+        return this.data.handwrittenMethods?.[clazz]?.[method]
     }
 
     isKnownParametrized(name: string | undefined): boolean {
