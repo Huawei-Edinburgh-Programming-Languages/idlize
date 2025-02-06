@@ -585,9 +585,15 @@ export function getUniquePropertiesFromSuperTypes(declaration: idl.IDLInterface,
     forEachSuperType(declaration, resolver, (superInterface) => {
         const props = superInterface.properties
         if (props) {
+            const isClass = idl.isClassSubkind(declaration)
             props.forEach((property) => {
                 if (seenProperties.has(property.name)) return
-                result.push(property)
+                let p = property
+                // optional is forced as a workaround for non initialized super class properties (see PR 1465)
+                if (isClass && !property.isOptional) {
+                    p = idl.createProperty(p.name, p.type, p.isReadonly, p.isStatic, true)
+                }
+                result.push(p)
                 seenProperties.add(property.name)
 
             })

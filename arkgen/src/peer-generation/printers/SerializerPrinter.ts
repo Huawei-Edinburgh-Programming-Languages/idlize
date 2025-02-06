@@ -85,7 +85,10 @@ class SerializerPrinter {
         properties.forEach(it => {
             let field = `value_${it.name}`
             const type = flattenUnionType(this.library, it.type)
-            let typeConvertor = this.library.typeConvertor(`value`, type, it.isOptional)
+            // optional is forced as a workaround for non initialized class properties in ArkTS (see PR 1465)
+            const forceOptional = writer.language === Language.ARKTS && idl.isClassSubkind(target)
+            writer.print(`// serialize ${target.name}, is class: ${idl.isClassSubkind(target)}, property: ${it.name}, optional: ${it.isOptional}, force optional: ${forceOptional}`)
+            let typeConvertor = this.library.typeConvertor(`value`, type, it.isOptional || forceOptional)
 
             let memberAccess = writer.makeString(`value.${writer.escapeKeyword(it.name)}`)
             writer.writeStatement(writer.makeAssign(field, undefined, memberAccess, true))

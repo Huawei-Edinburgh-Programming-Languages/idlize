@@ -586,9 +586,9 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
             .concat(idlInterface.constants
                 .map(it => this.printIfNotSeen(it, it => this.printConstant(it), seenFields)).flat())
             .concat(idlInterface.properties
-                // TODO ArkTS does not support static fields in interfaces
                 .filter(it => !it.isStatic)
-                .map(it => this.printIfNotSeen(it, it => this.printProperty(it, isMaterialized(idlInterface, this.peerLibrary)), seenFields) ).flat())
+                // optional is forced as a workaround for non initialized class properties in ArkTS (see PR 1465)
+                .map(it => this.printIfNotSeen(it, it => this.printProperty(it, isMaterialized(idlInterface, this.peerLibrary), idl.isClassSubkind(idlInterface)), seenFields) ).flat())
             .concat(idlInterface.methods
                 .map(it => this.printIfNotSeen(it, it => this.printMethod(it), seenFields) ).flat())
             .concat(idlInterface.callables
@@ -629,13 +629,14 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
         ]
     }
 
-    private printProperty(prop: idl.IDLProperty, allowReadonly: boolean): stringOrNone[] {
+    // optional is forced as a workaround for non initialized class properties in ArkTS (see PR 1465)
+    private printProperty(prop: idl.IDLProperty, allowReadonly: boolean, forceOptional: boolean = false): stringOrNone[] {
         const staticMod = prop.isStatic ? "static " : ""
         // TODO stub until issue 20764 is fixed
         const readonlyMod = prop.isReadonly && allowReadonly ? "readonly " : ""
         return [
             ...this.printExtendedAttributes(prop),
-            indentedBy(`${staticMod}${readonlyMod}${this.printPropNameWithType(prop)};`, 1)
+            indentedBy(`${staticMod}${readonlyMod}${this.printPropNameWithType(prop, forceOptional)};`, 1)
         ]
     }
 
@@ -664,8 +665,10 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
         return []
     }
 
-    private printPropNameWithType(prop: idl.IDLProperty): string {
-        const isOptional = prop.isOptional
+    // forceOptional property is used as a workaround for non initialized classs properties
+    private printPropNameWithType(prop: idl.IDLProperty, forceOptional: boolean = false): string {
+        // const forceOptionalType = forceOptional && (idl.isReferenceType(prop.type) || !idl.isPrimitiveType(prop.type))
+        const isOptional = prop.isOptional || (forceOptional)
         const type = this.convertType(prop.type)
         if (prop.name === "") {
             return `${type}${isOptional ? "?" : ""}`
