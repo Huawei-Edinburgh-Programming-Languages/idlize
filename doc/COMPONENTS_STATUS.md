@@ -169,7 +169,7 @@
 |`outlineRadius`| Function | Skroba Gleb | done | |
 |`foregroundColor`| Function | Roman Sedaikin | done | |
 |`onClick`| Function | Roman Sedaikin, Maksimov Nikita | testskipped | EVENT |
-|`onHover`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | in progress | EVENT |
+|`onHover`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | done | EVENT |
 |`onAccessibilityHover`| Function | Andrey Khudenkikh, Pavelyev Ivan | in progress | EVENT |
 |`hoverEffect`| Function | Roman Sedaikin | done | |
 |`onMouse`| Function | Andrey Khudenkikh | in progress | EVENT |
@@ -281,7 +281,7 @@
 |`onGestureRecognizerJudgeBegin`| Function | Skroba Gleb, Maksimov Nikita | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ EVENT |
 |`shouldBuiltInRecognizerParallelWith`| Function | Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`monopolizeEvents`| Function | Erokhin Ilya | done | UT by Vadim Voronov |
-|`onTouchIntercept`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | testskipped | EVENT |
+|`onTouchIntercept`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | done | EVENT |
 |`onSizeChange`| Function | Dmitry A Smirnov| done | |
 |`customProperty`| Function | Dmitry A Smirnov|blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX + need clrify bridge implementation|
 |`expandSafeArea`| Function | Dmitry A Smirnov| done |default value https://gitee.com/openharmony/arkui_ace_engine/issues/IBICVG?from=project-issue |
@@ -2097,7 +2097,7 @@
 |`getCaretRect`| Function | | | |
 |*RichEditorController*| *Class* |Dudkin Sergey| blocked|  |
 |`addTextSpan`| Function |Dudkin Sergey, Maksimov Nikita | in progress | EVENT |
-|`addImageSpan`| Function |Dudkin Sergey, Maksimov Nikita, Tuzhilkin Ivan| in progress | EVENT |
+|`addImageSpan`| Function |Dudkin Sergey, Maksimov Nikita, Tuzhilkin Ivan| done | EVENT |
 |`addBuilderSpan`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`addSymbolSpan`| Function | Dudkin Sergey| done|  |
 |`updateSpanStyle`| Function | Dudkin Sergey| done|  |
@@ -2194,10 +2194,10 @@
 |*EditMenuOptions*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`onCreateMenu`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N, https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onMenuItemClick`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N, https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|*SubmitEvent*| *Class* | | | |
-|`keepEditableState`| Function | | | |
-|`getText`| Function | | | |
-|`setText`| Function | | | |
+|*SubmitEvent*| *Class* | Tuzhilkin Ivan | in progress | |
+|`keepEditableState`| Function | Tuzhilkin Ivan | in progress | |
+|`getText`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`setText`| Function | Tuzhilkin Ivan | in progress | |
 |*TextInputController*| *Class* | Spirin Andrey | done |  |
 |`caretPosition`| Function | Spirin Andrey | done |  |
 |`setTextSelection`| Function | Spirin Andrey | done |  |
