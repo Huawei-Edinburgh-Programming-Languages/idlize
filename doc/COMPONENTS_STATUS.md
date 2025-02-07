@@ -788,11 +788,11 @@
 |`onEditingChange`| Function | Dudkin Sergey| done|  |
 |`enterKeyType`| Function | Dudkin Sergey| done|  |
 |`onSubmit`| Function | Dudkin Sergey| in progress | EVENT |
-|`onWillChange`| Function | Dudkin Sergey| blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IB4G70 + |
+|`onWillChange`| Function | Dudkin Sergey| in progress | https://gitee.com/nikolay-igotti/idlize/issues/IB4G70, reopened beacuse Ark_RichEditorChangeValue changed after generations |
 |`onDidChange`| Function | Dudkin Sergey| done|  |
 |`onCut`| Function | Dudkin Sergey| done| |
 |`onCopy`| Function | Dudkin Sergey| done | |
-|`editMenuOptions`| Function | Maksimov Nikita | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N, reopened beacuse Ark_RichEditorChangeValue changed after generations |
+|`editMenuOptions`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`enableKeyboardOnFocus`| Function | Dudkin Sergey| done|  |
 |`enableHapticFeedback`| Function | Dudkin Sergey| done|  |
 |`barState`| Function | Dudkin Sergey| done|  |
