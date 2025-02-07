@@ -1744,8 +1744,8 @@
 |*BaseEvent*| *Class* | Politov Mikhail | in progress | |
 |`getModifierKeyState`| Function | Politov Mikhail | done | |
 |`setTarget`| Function | Politov Mikhail | done | |
-|`getTimestamp`| Function | Politov Mikhail | blocked IDL | |
-|`setTimestamp`| Function | Politov Mikhail | blocked IDL | |
+|`getTimestamp`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
+|`setTimestamp`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
 |`getSource`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setSource`| Function | Politov Mikhail | done | |
 |`getAxisHorizontal`| Function | Politov Mikhail | done | |
