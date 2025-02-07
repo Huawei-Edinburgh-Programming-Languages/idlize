@@ -3,48 +3,6 @@ package idlize
 import Interop.*
 import std.collection.*
 
-// public interface ParseOptions {
-//     var supportDoctype: Option<Bool>
-//     var ignoreNameSpace: Option<Bool>
-//     var tagValueCallbackFunction: Option<((name: String, value: String) -> Bool)>
-//     var attributeValueCallbackFunction: Option<((name: String, value: String) -> Bool)>
-//     var tokenValueCallbackFunction: Option<((eventType: EventType, value: ParseInfo) -> Bool)>
-// }
-public interface XmlSerializerInterface {
-    func setAttributes(name: String, value: String): Unit
-    func addEmptyElement(name: String): Unit
-    func setDeclaration(): Unit
-    func startElement(name: String): Unit
-    func endElement(): Unit
-    func setNamespace(prefix: String, namespace: String): Unit
-    func setComment(text: String): Unit
-    func setCDATA(text: String): Unit
-    func setText(text: String): Unit
-    func setDocType(text: String): Unit
-}
-public interface ParseInfoInterface {
-    func getColumnNumber(): Float64
-    func getDepth(): Float64
-    func getLineNumber(): Float64
-    func getName(): String
-    func getNamespace(): String
-    func getPrefix(): String
-    func getText(): String
-    func isEmptyElementTag(): Bool
-    func isWhitespace(): Bool
-    func getAttributeCount(): Float64
-}
-public interface XmlPullParserInterface {
-    func parse(option: ParseOptions): Unit
-    func parseXml(option: ParseOptions): Unit
-}
-// public abstract class ParseOptionsInterface {
-//     var supportDoctype: Bool
-//     var ignoreNameSpace: Bool
-//     var tagValueCallbackFunction: ((name: String, value: String) -> Bool)
-//     var attributeValueCallbackFunction: ((name: String, value: String) -> Bool)
-//     var tokenValueCallbackFunction: ((eventType: EventType, value: ParseInfo) -> Bool)
-// }
 public open class EventType {
     public static var START_DOCUMENT: EventType = EventType(0)
     public static var END_DOCUMENT: EventType = EventType(1)
@@ -62,7 +20,7 @@ public open class EventType {
         value = arg0
     }
 }
-public open class XmlSerializer <: XmlSerializerInterface {
+public open class XmlSerializer {
     var peer: Finalizable
     XmlSerializer(buffer: Array<UInt8>, encoding: Option<String>) {
         let thisSerializer: Serializer = Serializer.hold()
@@ -176,7 +134,7 @@ public open class XmlSerializer <: XmlSerializerInterface {
         XMLNativeModule._XmlSerializer_setDocType(this.peer.ptr, text);
     }
 }
-public open class ParseInfo <: ParseInfoInterface {
+public open class ParseInfo {
     var peer: Finalizable
     ParseInfo() {
         this.peer = Finalizable(XMLNativeModule._ParseInfo_ctor(), ParseInfo.getFinalizer())
@@ -265,7 +223,7 @@ public open class ParseInfoInternal {
         return obj
     }
 }
-public open class XmlPullParser <: XmlPullParserInterface {
+public open class XmlPullParser {
     var peer: Finalizable
     XmlPullParser(buffer: Array<UInt8>, encoding: Option<String>) {
         let thisSerializer: Serializer = Serializer.hold()
@@ -303,7 +261,7 @@ public open class XmlPullParser <: XmlPullParserInterface {
     private func parse_serialize(option: ParseOptions): Unit {
         let thisSerializer: Serializer = Serializer.hold()
         thisSerializer.writeParseOptions(option)
-        XMLNativeModule._XmlPullParser_parse(this.peer.ptr, thisSerializer.asArray().toArray(), thisSerializer.length());
+        XMLNativeModule._XmlPullParser_parse(this.peer.ptr, thisSerializer.asArray(), thisSerializer.length());
         thisSerializer.release();
     }
     private func parseXml_serialize(option: ParseOptions): Unit {

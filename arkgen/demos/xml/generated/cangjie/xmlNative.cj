@@ -220,9 +220,9 @@ public class XMLNativeModule {
             return result
         }
     }
-    static func _XmlPullParser_parse(self: UInt64, thisArray: Array<UInt8>, thisLength: Int32): Unit {
+    static func _XmlPullParser_parse(self: UInt64, thisArray: ArrayList<UInt8>, thisLength: Int32): Unit {
         unsafe {
-            let handle_1 = acquireArrayRawData(thisArray)
+            let handle_1 = acquireArrayRawData(thisArray.toArray())
             XmlPullParser_parse(self, handle_1.pointer, thisLength)
             releaseArrayRawData(handle_1)
         }

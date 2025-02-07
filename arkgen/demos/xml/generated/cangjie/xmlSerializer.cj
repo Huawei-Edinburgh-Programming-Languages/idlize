@@ -116,9 +116,9 @@ case _ => throw Exception("Unmatched pattern Serializer.pool")
             let base: MaterializedBase = match (value as MaterializedBase) { case Some(x) => x; case None => throw Exception("Cast is not succeeded")}
             let peer = base.getPeer()
             var ptr: UInt64 = nullptr
-            //if (let Some(peer) <- peer) {
+            if (let Some(peer) <- peer) {
                 ptr = peer.ptr
-            // }
+            }
             valueSerializer.writePointer(ptr);
             return
         }

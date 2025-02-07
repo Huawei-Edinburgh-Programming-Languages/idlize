@@ -975,7 +975,7 @@ abstract class OHOSVisitor {
                     )
                     })
 
-            }, superType?.name, isGlobalScope ? undefined : [`${int.name}Interface`])
+            }, superType?.name, isGlobalScope ? this.library.language != Language.CJ ? [`${int.name}Interface`] : undefined : undefined)
 
             // TODO Migrate to MaterializedPrinter
             if (int.constructors.length === 0) {
@@ -1025,8 +1025,10 @@ abstract class OHOSVisitor {
             }
         }
 
-        this.printStructsDeclarations(this.data)
-        this.printInterfacesDeclarations([...this.interfaces, ...this.data])
+        if (this.library.language != Language.CJ) {
+            this.printStructsDeclarations(this.data)
+            this.printInterfacesDeclarations([...this.interfaces, ...this.data])
+        }
 
         this.enums.forEach(e => {
             const writer = this.getPeerWriter(e)
