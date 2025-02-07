@@ -427,7 +427,7 @@
 |`endAngle`| Function | Maksimov Nikita | done | |
 |`colors`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4DU + |
 |`strokeWidth`| Function | Maksimov Nikita | done | |
-|`description`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`description`| Function | Lobah Mikhail | done | UT done Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`trackShadow`| Function | Maksimov Nikita | done |  |
 |`indicator`| Function | Maksimov Nikita | done |  |
 |`privacySensitive`| Function | Maksimov Nikita | done ||
@@ -891,7 +891,7 @@
 |`onWillChange`| Function | | | |
 |`searchButton`|Function| Evstigneev Roman | done |  |
 |`inputFilter`|Function| Evstigneev Roman | in progress |  |
-|`customKeyboard`|Function| Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`customKeyboard`|Function| Lobah Mikhail | done | UT done Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`__onChangeEvent_value`| Function | Erokhin Ilya | done | |
 |*SecurityComponentMethod*| *Component* | Samarin Sergey|in progress |  |
 |`iconSize`| Function |Samarin Sergey| done |  |
@@ -1113,7 +1113,7 @@
 |`__onChangeEvent_index`| Function | Erokhin Ilya | done | |
 |*TabContent*| *Component* | Evstigneev Roman |in progress |  |
 |`setTabContentOptions`| Function | Evstigneev Roman | done |  |
-|`tabBar`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IB74L4 & https://gitee.com/nikolay-igotti/idlize/issues/IB764R|
+|`tabBar`| Function | Lobah Mikhail | done | UT done Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IB74L4 & https://gitee.com/nikolay-igotti/idlize/issues/IB764R|
 |`onWillShow`| Function |Evstigneev Roman | done |  |
 |`onWillHide`| Function |Evstigneev Roman | done |  |
 |*Text*| *Component* | Samarin Sergey | blocked | |
@@ -1248,7 +1248,7 @@
 |`onEditChanged`| Function | Spirin Andrey | done |deprecated UT Kovalev Sergey |
 |`onEditChange`| Function | Spirin Andrey | done | UT Kovalev Sergey |
 |`onSubmit`| Function | Spirin Andrey | in progress | EVENT |
-|`onChange`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail  |
+|`onChange`| Function | Lobah Mikhail | done | UT done Lobah Mikhail  |
 |`onTextSelectionChange`| Function | Spirin Andrey | done| UT Kovalev Sergey |
 |`onContentScroll`| Function | Spirin Andrey | done | UT Kovalev Sergey |
 |`maxLength`| Function | Spirin Andrey | done |  |
@@ -1259,7 +1259,7 @@
 |`fontFamily`| Function | Spirin Andrey | done |  |
 |`onCopy`| Function | Spirin Andrey | done | UT Kovalev Sergey |
 |`onCut`| Function | Spirin Andrey | done | UT Kovalev Sergey |
-|`onPaste`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail |
+|`onPaste`| Function | Lobah Mikhail | done | UT done Lobah Mikhail |
 |`copyOption`| Function | Spirin Andrey | done |  |
 |`showPasswordIcon`| Function | Spirin Andrey | done |  |
 |`textAlign`| Function | Spirin Andrey | done |  |
@@ -1305,7 +1305,7 @@
 |`stopBackPress`| Function | Kovalev Sergey | done | |
 |`onWillChange`| Function | | | |
 |`inputFilter`| Function | Spirin Andrey | done | UT Kovalev Sergey |
-|`customKeyboard`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`customKeyboard`| Function | Lobah Mikhail | done | UT done Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`showCounter`| Function | Spirin Andrey | blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
 |`__onChangeEvent_text`| Function | Erokhin Ilya | done | |
 |*TextPicker*| *Component* |Ekaterina Stepanova |in progress |  |
@@ -2098,7 +2098,7 @@
 |*RichEditorController*| *Class* |Dudkin Sergey| blocked|  |
 |`addTextSpan`| Function |Dudkin Sergey, Samarin Sergey | in progress | EVENT |
 |`addImageSpan`| Function |Dudkin Sergey, Maksimov Nikita, Tuzhilkin Ivan| done | EVENT |
-|`addBuilderSpan`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`addBuilderSpan`| Function | Lobah Mikhail | devdone | UT devdone Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`addSymbolSpan`| Function | Dudkin Sergey| done|  |
 |`updateSpanStyle`| Function | Dudkin Sergey| done|  |
 |`updateParagraphStyle`| Function | Dudkin Sergey| done|  |
