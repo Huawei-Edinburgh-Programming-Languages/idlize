@@ -1813,19 +1813,19 @@
 |`setPressedButtons`| Function | | | |
 |*AccessibilityHoverEvent*| *Class* | Pavelyev Ivan | in progress | |
 |`getType`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setType`| Function | Pavelyev Ivan | in progress | |
-|`getX`| Function | Pavelyev Ivan | in progress | |
-|`setX`| Function | Pavelyev Ivan | in progress | |
-|`getY`| Function | Pavelyev Ivan | in progress | |
-|`setY`| Function | Pavelyev Ivan | in progress | |
-|`getDisplayX`| Function | Pavelyev Ivan | in progress | |
-|`setDisplayX`| Function | Pavelyev Ivan | in progress | |
-|`getDisplayY`| Function | Pavelyev Ivan | in progress | |
-|`setDisplayY`| Function | Pavelyev Ivan | in progress | |
-|`getWindowX`| Function | Pavelyev Ivan | in progress | |
-|`setWindowX`| Function | Pavelyev Ivan | in progress | |
-|`getWindowY`| Function | Pavelyev Ivan | in progress | |
-|`setWindowY`| Function | Pavelyev Ivan | in progress | |
+|`setType`| Function | Pavelyev Ivan | devdone | |
+|`getX`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
+|`setX`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
+|`getY`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
+|`setY`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
+|`getDisplayX`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
+|`setDisplayX`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
+|`getDisplayY`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
+|`setDisplayY`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
+|`getWindowX`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
+|`setWindowX`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
+|`getWindowY`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
+|`setWindowY`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
 |*TouchEvent*| *Class* | Tuzhilkin Ivan | blocked IDL | |
 |`getHistoricalPoints`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getType`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
@@ -1939,7 +1939,7 @@
 |*DatePickerDialog*| *Class* | Ekaterina Stepanova | blocked IDL | |
 |`show`| Function | Ekaterina Stepanova | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBHHWA |
 |*BaseGestureEvent*| *Class* | Maksimov Nikita | in progress | |
-|`setFingerList`| Function | Maksimov Nikita | devdone | implementation and UT in progress Vadim Voronov |
+|`setFingerList`| Function | Maksimov Nikita | done | implementation and UT Vadim Voronov |
 |*TapGestureEvent*| *Class* | | | |
 |*LongPressGestureEvent*| *Class* | | | |
 |`getRepeat`| Function | | | |
