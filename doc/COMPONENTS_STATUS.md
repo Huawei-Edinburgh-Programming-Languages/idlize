@@ -2096,7 +2096,7 @@
 |`getPreviewText`| Function|Dudkin Sergey| blocked IDL|https://gitee.com/nikolay-igotti/idlize/issues/IBAXVH + |
 |`getCaretRect`| Function | | | |
 |*RichEditorController*| *Class* |Dudkin Sergey| blocked|  |
-|`addTextSpan`| Function |Dudkin Sergey, Maksimov Nikita | in progress | EVENT |
+|`addTextSpan`| Function |Dudkin Sergey, Samarin Sergey | in progress | EVENT |
 |`addImageSpan`| Function |Dudkin Sergey, Maksimov Nikita, Tuzhilkin Ivan| done | EVENT |
 |`addBuilderSpan`| Function | Lobah Mikhail | testskipped | UT in progress Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`addSymbolSpan`| Function | Dudkin Sergey| done|  |
