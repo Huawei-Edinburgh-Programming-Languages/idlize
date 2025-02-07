@@ -59,10 +59,7 @@ class TsLayout extends CommonLayoutBase {
         if (ns !== '') {
             return `${this.prefix}${ns.split('.').map(it => idl.capitalize(it)).join('')}Namespace`
         }
-        if (idl.isInterface(node)) {
-            if (isComponentDeclaration(this.library, node)) {
-                return `${this.prefix}${toFileName(node.name)}`
-            }
+        if (idl.isInterface(node) && !isComponentDeclaration(this.library, node)) {
             if (idl.isBuilderClass(node)) {
                 return `${this.prefix}${toFileName(node.name)}Builder`
             }
