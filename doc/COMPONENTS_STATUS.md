@@ -792,7 +792,7 @@
 |`onDidChange`| Function | Dudkin Sergey| done|  |
 |`onCut`| Function | Dudkin Sergey| done| |
 |`onCopy`| Function | Dudkin Sergey| done | |
-|`editMenuOptions`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
+|`editMenuOptions`| Function | Maksimov Nikita | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N, reopened beacuse Ark_RichEditorChangeValue changed after generations |
 |`enableKeyboardOnFocus`| Function | Dudkin Sergey| done|  |
 |`enableHapticFeedback`| Function | Dudkin Sergey| done|  |
 |`barState`| Function | Dudkin Sergey| done|  |
