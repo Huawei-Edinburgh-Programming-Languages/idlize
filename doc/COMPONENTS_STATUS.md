@@ -2194,10 +2194,10 @@
 |*EditMenuOptions*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`onCreateMenu`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N, https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`onMenuItemClick`| Function | Skroba Gleb | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N, https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
-|*SubmitEvent*| *Class* | Tuzhilkin Ivan | in progress | |
-|`keepEditableState`| Function | Tuzhilkin Ivan | in progress | |
+|*SubmitEvent*| *Class* | Tuzhilkin Ivan | blocked IDL | |
+|`keepEditableState`| Function | Tuzhilkin Ivan | done | |
 |`getText`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setText`| Function | Tuzhilkin Ivan | in progress | |
+|`setText`| Function | Tuzhilkin Ivan | done | |
 |*TextInputController*| *Class* | Spirin Andrey | done |  |
 |`caretPosition`| Function | Spirin Andrey | done |  |
 |`setTextSelection`| Function | Spirin Andrey | done |  |
