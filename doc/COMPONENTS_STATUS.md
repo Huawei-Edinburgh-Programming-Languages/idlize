@@ -1831,19 +1831,19 @@
 |`setPressedButtons`| Function | | | |
 |*AccessibilityHoverEvent*| *Class* | Pavelyev Ivan | blocked IDL | |
 |`getType`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setType`| Function | Pavelyev Ivan | devdone | |
-|`getX`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
-|`setX`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
-|`getY`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
-|`setY`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
-|`getDisplayX`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
-|`setDisplayX`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
-|`getDisplayY`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
-|`setDisplayY`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
-|`getWindowX`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
-|`setWindowX`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
-|`getWindowY`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
-|`setWindowY`| Function | Pavelyev Ivan | devdone | UT in progress Vadim Voronov |
+|`setType`| Function | Pavelyev Ivan | done | |
+|`getX`| Function | Pavelyev Ivan | done | UT in progress Vadim Voronov |
+|`setX`| Function | Pavelyev Ivan | done | UT in progress Vadim Voronov |
+|`getY`| Function | Pavelyev Ivan | done | UT in progress Vadim Voronov |
+|`setY`| Function | Pavelyev Ivan | done | UT in progress Vadim Voronov |
+|`getDisplayX`| Function | Pavelyev Ivan | done | UT in progress Vadim Voronov |
+|`setDisplayX`| Function | Pavelyev Ivan | done | UT in progress Vadim Voronov |
+|`getDisplayY`| Function | Pavelyev Ivan | done | UT in progress Vadim Voronov |
+|`setDisplayY`| Function | Pavelyev Ivan | done | UT in progress Vadim Voronov |
+|`getWindowX`| Function | Pavelyev Ivan | done | UT in progress Vadim Voronov |
+|`setWindowX`| Function | Pavelyev Ivan | done | UT in progress Vadim Voronov |
+|`getWindowY`| Function | Pavelyev Ivan | done | UT in progress Vadim Voronov |
+|`setWindowY`| Function | Pavelyev Ivan | done | UT in progress Vadim Voronov |
 |*TouchEvent*| *Class* | Tuzhilkin Ivan | blocked IDL | |
 |`getHistoricalPoints`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getType`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
