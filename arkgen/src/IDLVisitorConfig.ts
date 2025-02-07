@@ -44,15 +44,15 @@ const propertyTypeReplacements: ((clazz: string, property: string) => [idl.IDLTy
 const parameterTypeReplacements: ((clazz: string, method: string, parameter: string) => [idl.IDLType, idl.IDLEntry?] | undefined )[] = [
     (clazz, method, parameter) => {
         if (clazz === "ScrollableCommonMethod" && method === "onWillScroll" && parameter === "handler")
-            return [idl.createOptionalType(idl.createReferenceType("OnWillScrollCallback"))]
+            return [idl.createOptionalType(idl.createReferenceType("ScrollOnWillScrollCallback"))]
     },
     (clazz, method, parameter) => {
         if (clazz === "ScrollableCommonMethod" && method === "onDidScroll" && parameter === "handler")
-            return [idl.createReferenceType("OnScrollCallback")]
+            return [idl.createReferenceType("ScrollOnScrollCallback")]
     },
     (clazz, method, parameter) => {
         if (clazz === "ScrollableCommonMethod" && method === "onScroll" && parameter === "event")
-            return [idl.createReferenceType("Callback_Number_ScrollState_Void")]
+            return [idl.createReferenceType("Callback_Number_Number_Void")]
     },
 
     (clazz, method, parameter) => {
