@@ -1742,26 +1742,26 @@
 |`animation`| Function | Andrey Khudenkikh | done | |
 |`combine`| Function | Andrey Khudenkikh | done | |
 |*BaseEvent*| *Class* | Politov Mikhail | in progress | |
-|`getModifierKeyState`| Function | Politov Mikhail | testskipped | |
-|`setTarget`| Function | Politov Mikhail | testskipped | |
-|`getTimestamp`| Function | Politov Mikhail | in progress | |
-|`setTimestamp`| Function | Politov Mikhail | in progress | |
+|`getModifierKeyState`| Function | Politov Mikhail | done | |
+|`setTarget`| Function | Politov Mikhail | done | |
+|`getTimestamp`| Function | Politov Mikhail | blocked IDL | |
+|`setTimestamp`| Function | Politov Mikhail | blocked IDL | |
 |`getSource`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setSource`| Function | Politov Mikhail | testskipped | |
-|`getAxisHorizontal`| Function | Politov Mikhail | testskipped | |
-|`setAxisHorizontal`| Function | Politov Mikhail | testskipped | |
-|`getAxisVertical`| Function | Politov Mikhail | testskipped | |
-|`setAxisVertical`| Function | Politov Mikhail | testskipped | |
-|`getPressure`| Function | Politov Mikhail | testskipped | |
-|`setPressure`| Function | Politov Mikhail | testskipped | |
-|`getTiltX`| Function | Politov Mikhail | testskipped | |
-|`setTiltX`| Function | Politov Mikhail | testskipped | |
-|`getTiltY`| Function | Politov Mikhail | testskipped | |
-|`setTiltY`| Function | Politov Mikhail | testskipped | |
+|`setSource`| Function | Politov Mikhail | done | |
+|`getAxisHorizontal`| Function | Politov Mikhail | done | |
+|`setAxisHorizontal`| Function | Politov Mikhail | done | |
+|`getAxisVertical`| Function | Politov Mikhail | done | |
+|`setAxisVertical`| Function | Politov Mikhail | done | |
+|`getPressure`| Function | Politov Mikhail | done | |
+|`setPressure`| Function | Politov Mikhail | done | |
+|`getTiltX`| Function | Politov Mikhail | done | |
+|`setTiltX`| Function | Politov Mikhail | done | |
+|`getTiltY`| Function | Politov Mikhail | done | |
+|`setTiltY`| Function | Politov Mikhail | done | |
 |`getSourceTool`| Function | Politov Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setSourceTool`| Function | Politov Mikhail | testskipped | |
-|`getDeviceId`| Function | Politov Mikhail | testskipped | |
-|`setDeviceId`| Function | Politov Mikhail | testskipped | |
+|`setSourceTool`| Function | Politov Mikhail | done | |
+|`getDeviceId`| Function | Politov Mikhail | done | |
+|`setDeviceId`| Function | Politov Mikhail | done | |
 |`getTargetDisplayId`| Function | Politov Mikhail | in progress | |
 |`setTargetDisplayId`| Function | Politov Mikhail | in progress | |
 |*ClickEvent*| *Class* | Maksimov Nikita | in progress | |
