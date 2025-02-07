@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { IndentedPrinter } from '@idlizer/core'
+import { PeerGeneratorConfig } from '../PeerGeneratorConfig'
 import { ArkPrimitiveTypesInstance } from "../ArkPrimitiveType"
 import {
     accessorStructList,
@@ -25,26 +25,20 @@ import {
     modifierStructList,
     warning
 } from "../FileGenerators";
-import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
-import { createDestroyPeerMethod, MaterializedClass, MaterializedMethod } from "../Materialized";
-import { groupBy, Language } from '@idlizer/core'
-import { CppLanguageWriter, createLanguageWriter, createTypeNameConvertor, LanguageStatement, printMethodDeclaration } from "../LanguageWriters";
-import { LanguageWriter, CppInteropConvertor } from "@idlizer/core"
+import { createDestroyPeerMethod, MaterializedClass, MaterializedMethod, IndentedPrinter,
+    groupBy, Language, createConstructPeerMethod, PeerClass, PeerMethod, PeerLibrary, InteropReturnTypeConvertor,
+    createLanguageWriter, createEmptyReferenceResolver, LanguageWriter, CppInteropConvertor
+} from '@idlizer/core'
+import { CppLanguageWriter, LanguageStatement, printMethodDeclaration } from "../LanguageWriters";
 import { LibaceInstall } from "../../Install";
 import { IDLAnyType, IDLBooleanType, IDLFunctionType, IDLPointerType, IDLStringType, IDLThisType, IDLType, isOptionalType, isReferenceType } from '@idlizer/core/idl'
-import { createConstructPeerMethod, PeerClass } from "../PeerClass";
-import { PeerMethod } from "../PeerMethod";
-import { createEmptyReferenceResolver } from "@idlizer/core";
-import { getReferenceResolver } from "../ReferenceResolver";
-import { PeerLibrary } from "../PeerLibrary";
-import { InteropReturnTypeConvertor } from "../LanguageWriters/convertors/InteropConvertor";
 
 export class ModifierVisitor {
-    dummy = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
-    real = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
-    modifiers = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
-    getterDeclarations = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
-    modifierList = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
+    dummy = this.library.createLanguageWriter(Language.CPP)
+    real = this.library.createLanguageWriter(Language.CPP)
+    modifiers = this.library.createLanguageWriter(Language.CPP)
+    getterDeclarations = this.library.createLanguageWriter(Language.CPP)
+    modifierList = this.library.createLanguageWriter(Language.CPP)
     private readonly returnTypeConvertor = new InteropReturnTypeConvertor()
     commentedCode = true
 
@@ -141,7 +135,7 @@ export class ModifierVisitor {
     private printBodyImplementation(printer: LanguageWriter, method: PeerMethod,
         clazz: PeerClass | undefined = undefined) {
         const apiParameters = method.generateAPIParameters(
-            createTypeNameConvertor(Language.CPP, getReferenceResolver(this.library))
+            this.library.createTypeNameConvertor(Language.CPP)
         )
         if (apiParameters.at(0)?.includes(ArkPrimitiveTypesInstance.NativePointer.getText())) {
             this.real.print(`auto frameNode = reinterpret_cast<FrameNode *>(node);`)
@@ -197,7 +191,7 @@ export class ModifierVisitor {
 
     printMethodProlog(printer: LanguageWriter, method: PeerMethod) {
         const apiParameters = method.generateAPIParameters(
-            createTypeNameConvertor(Language.CPP, getReferenceResolver(this.library))
+            this.library.createTypeNameConvertor(Language.CPP)
         )
         printMethodDeclaration(printer.printer, this.returnTypeConvertor.convert(method.returnType), method.implName, apiParameters)
         printer.print("{")
@@ -210,14 +204,16 @@ export class ModifierVisitor {
     }
 
     printRealAndDummyModifier(method: PeerMethod, clazz: PeerClass) {
+        this.modifiers.print(`${method.implNamespaceName}::${method.implName},`)
+        if (PeerGeneratorConfig.noDummyGeneration(clazz.getComponentName(), method.toStringName)) {
+            return
+        }
         this.printMethodProlog(this.dummy, method)
         this.printMethodProlog(this.real, method)
         this.printDummyImplFunctionBody(method)
         this.printModifierImplFunctionBody(method, clazz)
         this.printMethodEpilog(this.dummy)
         this.printMethodEpilog(this.real)
-
-        this.modifiers.print(`${method.implNamespaceName}::${method.implName},`)
     }
 
     printClassProlog(clazz: PeerClass) {
@@ -272,7 +268,9 @@ export class ModifierVisitor {
         Array.from(namespaces.keys()).forEach (namespaceName => {
             this.pushNamespace(namespaceName, false)
             namespaces.get(namespaceName)?.forEach(
-                method => this.printRealAndDummyModifier(method, clazz)
+                method => {
+                    this.printRealAndDummyModifier(method, clazz)
+                }
             )
             this.popNamespace(namespaceName, false)
         })
@@ -288,8 +286,8 @@ export class ModifierVisitor {
 }
 
 class AccessorVisitor extends ModifierVisitor {
-    accessors = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
-    accessorList = createLanguageWriter(Language.CPP, getReferenceResolver(this.library))
+    accessors = this.library.createLanguageWriter(Language.CPP)
+    accessorList = this.library.createLanguageWriter(Language.CPP)
 
     constructor(library: PeerLibrary) {
         super(library)
@@ -301,16 +299,19 @@ class AccessorVisitor extends ModifierVisitor {
     }
 
     printRealAndDummyAccessor(clazz: MaterializedClass) {
-        this.printMaterializedClassProlog(clazz)
+        this.printMaterializedClassProlog(clazz) 
         // Materialized class methods share the same namespace
         // so take the first one.
         const namespaceName = clazz.ctor.implNamespaceName
         this.pushNamespace(namespaceName, false)
         const mDestroyPeer = createDestroyPeerMethod(clazz);
         [mDestroyPeer, clazz.ctor, clazz.finalizer].concat(clazz.methods).forEach(method => {
+            this.accessors.print(`${method.implNamespaceName}::${method.implName},`)
+            if (PeerGeneratorConfig.noDummyGeneration(clazz.getComponentName(), method.toStringName)) {
+                return
+            }
             this.printMaterializedMethod(this.dummy, method, m => this.printDummyImplFunctionBody(m))
             this.printMaterializedMethod(this.real, method, m => this.printModifierImplFunctionBody(m))
-            this.accessors.print(`${method.implNamespaceName}::${method.implName},`)
         })
         this.popNamespace(namespaceName, false)
         this.printMaterializedClassEpilog(clazz)
@@ -356,13 +357,13 @@ class AccessorVisitor extends ModifierVisitor {
 }
 
 class MultiFileModifiersVisitorState {
-    dummy = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
-    real = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
-    accessorList = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
-    accessors = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
-    modifierList = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
-    modifiers = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
-    getterDeclarations = createLanguageWriter(Language.CPP, createEmptyReferenceResolver())
+    dummy = createLanguageWriter(Language.CPP)
+    real = createLanguageWriter(Language.CPP)
+    accessorList = createLanguageWriter(Language.CPP)
+    accessors = createLanguageWriter(Language.CPP)
+    modifierList = createLanguageWriter(Language.CPP)
+    modifiers = createLanguageWriter(Language.CPP)
+    getterDeclarations = createLanguageWriter(Language.CPP)
     hasModifiers = false
     hasAccessors = false
 }
@@ -412,9 +413,9 @@ class MultiFileModifiersVisitor extends AccessorVisitor {
     }
 
     emitRealSync(library: PeerLibrary, libace: LibaceInstall, options: ModifierFileOptions): void {
-        const modifierList = createLanguageWriter(Language.CPP, getReferenceResolver(library))
-        const accessorList = createLanguageWriter(Language.CPP, getReferenceResolver(library))
-        const getterDeclarations = createLanguageWriter(Language.CPP, getReferenceResolver(library))
+        const modifierList = library.createLanguageWriter(Language.CPP)
+        const accessorList = library.createLanguageWriter(Language.CPP)
+        const getterDeclarations = library.createLanguageWriter(Language.CPP)
 
         for (const [slug, state] of this.stateByFile) {
             if (state.hasModifiers)
@@ -541,7 +542,7 @@ function printModifiersCommonImplFile(filePath: string, content: LanguageWriter,
 }
 
 function printApiImplFile(library: PeerLibrary, filePath: string, options: ModifierFileOptions) {
-    const writer = new CppLanguageWriter(new IndentedPrinter(), getReferenceResolver(library), new CppInteropConvertor(library), ArkPrimitiveTypesInstance)
+    const writer = new CppLanguageWriter(new IndentedPrinter(), library, new CppInteropConvertor(library), ArkPrimitiveTypesInstance)
     writer.writeLines(cStyleCopyright)
     writer.writeMultilineCommentBlock(warning)
     writer.print("")

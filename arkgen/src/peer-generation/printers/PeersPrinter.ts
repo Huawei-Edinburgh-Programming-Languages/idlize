@@ -16,8 +16,7 @@
 import * as idl from '@idlizer/core/idl'
 import * as path from "path"
 import { renameDtsToPeer, throwException, Language, InheritanceRole, determineParentRole, isHeir, isRoot } from '@idlizer/core'
-import { convertPeerFilenameToModule, ImportsCollector } from "../ImportsCollector";
-import { createConstructPeerMethod, PeerClassBase } from "../PeerClass";
+import { convertPeerFilenameToModule, ImportsCollector } from "@idlizer/libohos"
 import {
     ExpressionStatement,
     LanguageExpression,
@@ -26,25 +25,20 @@ import {
     MethodModifier,
     MethodSignature,
     NamedMethodSignature,
-    createLanguageWriter
 } from "../LanguageWriters";
-import { LanguageWriter } from "@idlizer/core"
-import { getInternalClassName, MaterializedMethod } from "../Materialized";
+import { LanguageWriter, createConstructPeerMethod, PeerClassBase, PeerClass, PeerFile, PeerMethod,
+    getInternalClassName, MaterializedMethod, PeerLibrary
+} from "@idlizer/core";
 import { tsCopyrightAndWarning } from "../FileGenerators";
 import { ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from "./lang/Java";
-import { TargetFile } from "./TargetFile";
+import { TargetFile } from "@idlizer/libohos"
 import { PrinterContext } from "./PrinterContext";
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
-import { PeerLibrary } from "../PeerLibrary";
-import { PeerFile } from "../PeerFile";
-import { PeerClass } from "../PeerClass";
-import { PeerMethod } from "../PeerMethod";
 import { collectJavaImports } from "./lang/JavaIdlUtils";
 import { printJavaImports } from "./lang/JavaPrinters";
 import { createOptionalType, createReferenceType, forceAsNamedNode, IDLI32Type, IDLPointerType, IDLStringType, IDLThisType, IDLType,
         IDLVoidType, isNamedNode, isPrimitiveType
 } from '@idlizer/core'
-import { getReferenceResolver } from "../ReferenceResolver";
 import { collectDeclDependencies } from "../ImportsCollectorUtils";
 import { findComponentByType } from "../ComponentsCollector";
 import { NativeModule } from "../NativeModule";
@@ -236,7 +230,7 @@ class PeerFileVisitor {
     }
 
     printFile(): void {
-        const printer = createLanguageWriter(this.library.language, getReferenceResolver(this.library))
+        const printer = this.library.createLanguageWriter()
         const targetBasename = renameDtsToPeer(path.basename(this.file.originalFilename), this.library.language, false)
         this.printers.set(new TargetFile(targetBasename), printer)
 
@@ -306,7 +300,7 @@ class JavaPeerFileVisitor extends PeerFileVisitor {
 
     printFile(): void {
         this.file.peers.forEach(peer => {
-            let printer = createLanguageWriter(this.library.language, getReferenceResolver(this.library))
+            let printer = this.library.createLanguageWriter()
             const peerName = componentToPeerClass(peer.componentName)
             this.printers.set(new TargetFile(peerName, ARKOALA_PACKAGE_PATH), printer)
 
@@ -350,7 +344,7 @@ class CJPeerFileVisitor extends PeerFileVisitor {
     }
 
     printFile(): void {
-        const printer = createLanguageWriter(this.library.language, getReferenceResolver(this.library))
+        const printer = this.library.createLanguageWriter()
         const targetBasename = renameDtsToPeer(path.basename(this.file.originalFilename), this.library.language, false)
         this.printers.set(new TargetFile(targetBasename), printer)
 

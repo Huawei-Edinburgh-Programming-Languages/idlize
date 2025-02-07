@@ -15,34 +15,26 @@
 
 import * as idl from '@idlizer/core/idl'
 import {
-    getExtAttribute,
-    IDLExtendedAttributes,
-    IDLType,
-    maybeOptional
-} from '@idlizer/core/idl'
-import {
     capitalize,
     isDefined,
     warn,
     GenericVisitor,
     Language,
-    isRoot
+    isRoot,
+    MethodSignature
 } from '@idlizer/core'
-import { ArgConvertor } from "@idlizer/core"
+import { ArgConvertor, PeerLibrary, PeerFile, PeerClass, PeerMethod } from "@idlizer/core"
 import { createOutArgConvertor } from "../PromiseConvertors"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
-import { PeerClass } from "../PeerClass"
-import { PeerMethod } from "../PeerMethod"
-import { PeerFile } from "../PeerFile"
-import { PeerLibrary } from "../PeerLibrary"
-import { getInternalClassName, MaterializedClass, MaterializedField, MaterializedMethod } from "../Materialized"
+import { getInternalClassName, isBuilderClass, MaterializedClass, MaterializedField, MaterializedMethod } from "@idlizer/core"
 import { Field, FieldModifier, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters";
-import { BuilderClass, initCustomBuilderClasses, isCustomBuilderClass } from "../BuilderClass";
-import { ImportFeature } from "../ImportsCollector";
+import { BuilderClass, CUSTOM_BUILDER_CLASSES, isCustomBuilderClass, isMaterialized } from "@idlizer/core";
+import { ImportFeature } from "@idlizer/libohos"
 import { collapseIdlEventsOverloads } from "../printers/EventsPrinter"
 import { convertDeclToFeature } from "../ImportsCollectorUtils"
 import { collectComponents, findComponentByType, IdlComponentDeclaration, isComponentDeclaration } from "../ComponentsCollector"
 import { ReferenceResolver } from "@idlizer/core"
+import * as path from "path"
 
 /**
  * Theory of operations.
@@ -127,6 +119,12 @@ export function isPredefined(entry: idl.IDLEntry) {
     return idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.Predefined)
 }
 
+export function isSystemEntry(entry: idl.IDLEntry) {
+    return idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.CPPType)
+        || idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.TSType)
+        || idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.ArkTSType)
+}
+
 function generateArgConvertor(library: PeerLibrary, param: idl.IDLParameter): ArgConvertor {
     if (!param.type) throw new Error("Type is needed")
     return library.typeConvertor(param.name, param.type, param.isOptional)
@@ -194,7 +192,7 @@ class PeersGenerator {
             return
         const originalParentName = parentName ?? peer.originalClassName!
         const argConvertor = this.library.typeConvertor("value", prop.type, prop.isOptional)
-        const signature = new NamedMethodSignature(idl.IDLThisType, [maybeOptional(prop.type, prop.isOptional)], ["value"])
+        const signature = new NamedMethodSignature(idl.IDLThisType, [idl.maybeOptional(prop.type, prop.isOptional)], ["value"])
         return new PeerMethod(
             originalParentName,
             [argConvertor],
@@ -276,15 +274,29 @@ class PeersGenerator {
     }
 
     public generatePeer(component: IdlComponentDeclaration): void {
-        const sourceFile = component.attributeDeclaration.fileName
-        if (!sourceFile)
-            throw new Error("Expected parent of attributes to be a SourceFile")
-        const file = this.library.findFileByOriginalFilename(sourceFile)
-        if (!file)
-            throw new Error("Not found a file corresponding to attributes class")
-        const peer = new PeerClass(file, component.name, sourceFile)
-        if (component.interfaceDeclaration)
+
+        if (!component.attributeDeclaration.fileName) {
+            throw new Error("Expected parent of attributes to be a SourceFile, but fileName is undefined")
+        }
+
+        const originalFileName = component.attributeDeclaration.fileName
+        const baseName = path.basename(originalFileName)
+        const resolvedPath = path.resolve(originalFileName)
+
+        const file = this.library.findFileByOriginalFilename(baseName) ||
+                     this.library.findFileByOriginalFilename(resolvedPath)
+
+        if (!file) {
+            console.error("Available files in library:", this.library.files.map(f => f.originalFilename))
+            throw new Error(`Not found a file corresponding to attributes class: ${baseName} (${resolvedPath})`)
+        }
+
+        const peer = new PeerClass(file, component.name, baseName)
+
+        if (component.interfaceDeclaration) {
             this.fillInterface(peer, component.interfaceDeclaration)
+        }
+
         this.fillClass(peer, component.attributeDeclaration)
         collapseIdlEventsOverloads(this.library, peer)
         file.peers.set(component.name, peer)
@@ -350,7 +362,7 @@ export class IdlPeerProcessor {
         // const generics = method.typeParameters?.map(it => it.getText())
         const signature = new NamedMethodSignature(
             isStatic ? method.returnType! : idl.IDLThisType,
-            method.parameters.map(it => maybeOptional(it.type!, it.isOptional)),
+            method.parameters.map(it => idl.maybeOptional(it.type!, it.isOptional)),
             method.parameters.map(it => it.name)
         )
         const modifiers = idl.isConstructor(method) || method.isStatic ? [MethodModifier.STATIC] : []
@@ -388,9 +400,9 @@ export class IdlPeerProcessor {
         const mMethods = decl.methods
             // TODO: Properly handle methods with return Promise<T> type
             .map(method => this.makeMaterializedMethod(decl, method, implemenationParentName))
-            .filter(it => !idl.isNamedNode(it.method.signature.returnType) || !PeerGeneratorConfig.ignoreReturnTypes.has(it.method.signature.returnType.name))
+            .filter(it => !idl.isNamedNode(it.method.signature.returnType) || !PeerGeneratorConfig.ignoreReturnTypes.includes(it.method.signature.returnType.name))
 
-        const taggedMethods = decl.methods.filter(m => m.extendedAttributes?.find(it => it.name === IDLExtendedAttributes.DtsTag))
+        const taggedMethods = decl.methods.filter(m => m.extendedAttributes?.find(it => it.name === idl.IDLExtendedAttributes.DtsTag))
 
         mFields.forEach(f => {
             const field = f.field
@@ -431,7 +443,7 @@ export class IdlPeerProcessor {
 
     private makeMaterializedMethod(decl: idl.IDLInterface, method: idl.IDLConstructor | idl.IDLMethod | undefined, implemenationParentName: string) {
         let methodName = "ctor"
-        let returnType: IDLType = idl.IDLPointerType
+        let returnType: idl.IDLType = idl.IDLPointerType
         let outArgConvertor = undefined
         if (method && !idl.isConstructor(method)) {
             methodName = method.name
@@ -444,7 +456,7 @@ export class IdlPeerProcessor {
             return new MaterializedMethod(decl.name, implemenationParentName, [], returnType, false, ctor, outArgConvertor)
         }
 
-        const methodTypeParams = getExtAttribute(method, IDLExtendedAttributes.TypeParameters)
+        const methodTypeParams = idl.getExtAttribute(method, idl.IDLExtendedAttributes.TypeParameters)
         const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param))
         const signature = generateSignature(method)
         const modifiers = idl.isConstructor(method) || method.isStatic ? [MethodModifier.STATIC] : []
@@ -468,7 +480,7 @@ export class IdlPeerProcessor {
     }
 
     process(): void {
-        initCustomBuilderClasses(this.library)
+        initCustomBuilderClasses()
         const peerGenerator = new PeersGenerator(this.library)
         for (const component of collectComponents(this.library))
             peerGenerator.generatePeer(component)
@@ -523,43 +535,6 @@ export function isGlobalScope(declaration: idl.IDLEntry): boolean {
     return idl.isInterface(declaration) && idl.hasExtAttribute(declaration, idl.IDLExtendedAttributes.GlobalScope)
 }
 
-export function isBuilderClass(declaration: idl.IDLInterface): boolean {/// stolen from BUilderClass
-
-    // Builder classes are classes with methods which have only one parameter and return only itself
-
-    const className = declaration.name!
-
-    if (PeerGeneratorConfig.builderClasses.includes(className)) {
-        return true
-    }
-
-    if (isCustomBuilderClass(className)) {
-        return true
-    }
-
-    // TBD: update builder class check condition.
-    // Only SubTabBarStyle, BottomTabBarStyle, DotIndicator, and DigitIndicator classes
-    // are used for now.
-
-    return false
-
-    /*
-    if (PeerGeneratorConfig.isStandardNameIgnored(className)) {
-        return false
-    }
-
-    const methods: (ts.MethodSignature | ts.MethodDeclaration)[] = [
-        ...ts.isClassDeclaration(declaration) ? declaration.members.filter(ts.isMethodDeclaration) : [],
-    ]
-
-    if (methods.length === 0) {
-        return false
-    }
-
-    return methods.every(it => it.type && className == it.type.getText() && it.parameters.length === 1)
-    */
-}
-
 export function isCommonMethodOrSubclass(library: PeerLibrary, decl?: idl.IDLEntry): boolean {
     if (!decl || !idl.isInterface(decl))
         return false
@@ -588,36 +563,9 @@ function generateSignature(
 ): NamedMethodSignature {
     return new NamedMethodSignature(
         returnType ?? method.returnType!,
-        method.parameters.map(it => maybeOptional(it.type!, it.isOptional)),
+        method.parameters.map(it => idl.maybeOptional(it.type!, it.isOptional)),
         method.parameters.map(it => it.name)
     )
-}
-
-export function isMaterialized(declaration: idl.IDLInterface, resolver: ReferenceResolver): boolean {
-    if (PeerGeneratorConfig.isMaterializedIgnored(declaration.name) || idl.isHandwritten(declaration))
-        return false
-    if (isBuilderClass(declaration))
-        return false
-    if (declaration.subkind === idl.IDLInterfaceSubkind.AnonymousInterface ||
-        declaration.subkind === idl.IDLInterfaceSubkind.Tuple)
-        return false
-
-    // TODO: parse Builder classes separatly
-
-    // A materialized class is a class or an interface with methods
-    // excluding components and related classes
-    if (declaration.methods.length > 0) return true
-
-    // Or a class or an interface derived from materialized class
-    if (idl.hasSuperType(declaration)) {
-        const superType = resolver.resolveTypeReference(idl.getSuperType(declaration)!)
-        if (!superType || !idl.isInterface(superType)) {
-            console.log(`Unable to resolve ${idl.getSuperType(declaration)!.name} type, consider ${declaration.name} to be not materialized`)
-            return false
-        }
-        return isMaterialized(superType, resolver)
-    }
-    return false
 }
 
 export function forEachSuperType(declaration: idl.IDLInterface, resolver: ReferenceResolver, callback: (superType: idl.IDLInterface) => void) {
@@ -646,7 +594,7 @@ export function getUniquePropertiesFromSuperTypes(declaration: idl.IDLInterface,
     return result
 }
 
-export function convertTypeToFeature(library: PeerLibrary, type: IDLType): ImportFeature | undefined {
+export function convertTypeToFeature(library: PeerLibrary, type: idl.IDLType): ImportFeature | undefined {
     const typeReference = idl.isReferenceType(type)
         ? library.resolveTypeReference(type)
         : undefined
@@ -654,4 +602,42 @@ export function convertTypeToFeature(library: PeerLibrary, type: IDLType): Impor
         return convertDeclToFeature(library, typeReference)
     }
     return undefined
+}
+
+function initCustomBuilderClasses() {
+    function builderMethod(name: string, type: idl.IDLType): Method {
+        return new Method(name, new NamedMethodSignature(idl.IDLThisType, [type], ["value"]))
+    }
+    const decl = idl.createInterface(
+        "Indicator",
+        idl.IDLInterfaceSubkind.Class,
+        [],
+        [idl.createConstructor([], undefined)],
+        undefined,
+        undefined,
+        [
+            ...["left", "top", "right", "bottom"].map(it => idl.createMethod(it,
+                [idl.createParameter("value", idl.createReferenceType("Length"))],
+                idl.IDLThisType,
+            )),
+            ...["start", "end"].map(it => idl.createMethod(it,
+                [idl.createParameter(`value`, idl.createReferenceType("LengthMetrics"))],
+                idl.IDLThisType,
+            )),
+            idl.createMethod(`dot`, [], idl.createReferenceType(`DotIndicator`)),
+            idl.createMethod(`digit`, [], idl.createReferenceType(`DigitIndicator`)),
+        ]
+    )
+    CUSTOM_BUILDER_CLASSES.push(
+        new BuilderClass(decl, "Indicator", ["T"], false, undefined,
+            [], // fields
+            [new Method("constructor", new MethodSignature(idl.IDLVoidType, []))],
+            [
+                ...["left", "top", "right", "bottom"].map(it => builderMethod(it, idl.createReferenceType("Length"))),
+                ...["start", "end"].map(it => builderMethod(it, idl.createReferenceType("LengthMetrics"))),
+                new Method("dot", new MethodSignature(idl.createReferenceType("DotIndicator"), []), [MethodModifier.STATIC]),
+                new Method("digit", new MethodSignature(idl.createReferenceType("DigitIndicator"), []), [MethodModifier.STATIC]),
+            ]
+        )
+    )
 }

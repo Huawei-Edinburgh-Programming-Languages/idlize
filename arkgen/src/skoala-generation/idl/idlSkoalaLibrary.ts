@@ -15,30 +15,31 @@
 
 import * as idl from '@idlizer/core/idl'
 import { posix as path } from "path"
-import { DeclarationNameConvertor } from "../../peer-generation/idl/IdlNameConvertor"
-import { ImportsCollector } from "../../peer-generation/ImportsCollector";
+import { ImportsCollector } from '@idlizer/libohos'
 import {
     capitalize,
     isDefined,
     throwException,
     Language,
     CustomPrintVisitor,
+    DeclarationNameConvertor,
     addSyntheticType,
     resolveSyntheticType,
     isImport,
     CustomTypeConvertor,
-    generatorConfiguration
+    generatorConfiguration,
+    LibraryInterface,
+    LibraryFileInterface
 } from '@idlizer/core'
 import { ArkPrimitiveTypesInstance } from "../../peer-generation/ArkPrimitiveType";
 import { WrapperClass, WrapperField, WrapperMethod } from "../WrapperClass";
 import { Skoala } from "../utils";
 import { Field, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, NamedMethodSignature, NumberConvertor } from "@idlizer/core";
-import { ArkoalaInterfaceConvertor } from "../../peer-generation/ArgConvertors";
-import { ClassConvertor, StringConvertor, TypeAliasConvertor, UnionConvertor, InteropNameConvertor } from "@idlizer/core";
-import { ArgConvertor, BooleanConvertor, BaseArgConvertor, EnumConvertor, ExpressionAssigner, RuntimeType, UndefinedConvertor } from "@idlizer/core";
-import { convertDeclaration, convertType, DeclarationConvertor, IdlNameConvertor, TypeConvertor } from "@idlizer/core";
-import { LibraryFileInterface, LibraryInterface } from "@idlizer/core";
-import { generateSyntheticFunctionName } from "../../IDLVisitor";
+import { ArkoalaInterfaceConvertor } from "../../arkoala/ArkoalaArgConvertors";
+import { ClassConvertor, StringConvertor, TypeAliasConvertor, UnionConvertor, InteropNameConvertor,
+    ArgConvertor, BooleanConvertor, BaseArgConvertor, EnumConvertor, ExpressionAssigner, RuntimeType, UndefinedConvertor,
+    convertDeclaration, convertType, DeclarationConvertor, IdlNameConvertor, TypeConvertor, generateSyntheticFunctionName
+} from "@idlizer/core"
 import { DependenciesCollector } from "../../peer-generation/idl/IdlDependenciesCollector";
 import { createOutArgConvertor } from "../../peer-generation/PromiseConvertors";
 
@@ -226,7 +227,7 @@ export class IdlSkoalaLibrary implements LibraryInterface {
         // // let wrapperClassEntries: idl.IDLEntry[] = this.files.map(it => it.wrapperClasses.get(type.name)?.[1] as idl.IDLEntry).filter(it => !!it)
         // let wrapperClassEntries = this.files.flatMap(f => f.wrapperClasses.get(type.name)?.[1]).filter(isDefined)
         // entries ??= [...this.files.flatMap(it => [...it.declarations]), ...wrapperClassEntries]
-                
+
         // const [qualifier, typeName] = idl.decomposeQualifiedName(type)
         // if (qualifier) {
         //     // This is a namespace or enum member. Try enum first
@@ -254,6 +255,10 @@ export class IdlSkoalaLibrary implements LibraryInterface {
             idl.IDLVoidType,
         )
         return idl.createReferenceType(syntheticName)
+    }
+
+    createTypeNameConvertor(language: Language): IdlNameConvertor {
+        return this.nameConvertorInstance
     }
 }
 

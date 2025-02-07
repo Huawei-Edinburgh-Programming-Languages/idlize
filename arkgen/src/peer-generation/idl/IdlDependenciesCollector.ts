@@ -15,11 +15,8 @@
 
 import * as idl from '@idlizer/core/idl'
 import { NodeConvertor, convertNode, convertType } from "@idlizer/core"
-import { LibraryInterface } from '@idlizer/core'
-import { PeerLibrary } from '../PeerLibrary'
-import { Language } from '@idlizer/core'
-import { isMaterialized } from './IdlPeerGeneratorVisitor'
-import { getInternalClassName } from '../Materialized'
+import { LibraryInterface, PeerLibrary } from '@idlizer/core'
+import { Language, getInternalClassName, isMaterialized } from '@idlizer/core'
 
 export class DependenciesCollector implements NodeConvertor<idl.IDLNode[]> {
     constructor(protected readonly library: LibraryInterface) {}
@@ -109,6 +106,8 @@ class TSDependenciesCollector extends DependenciesCollector {
         if (idl.isInterfaceSubkind(decl) && isMaterialized(decl, this.library)) {
             const name = getInternalClassName(decl.name)
             return super.convertTypeReference(idl.createReferenceType(name))
+                .concat(decl.methods.flatMap(it => this.convert(it)))
+                .concat(decl.properties.flatMap(it => this.convert(it.type)))
         }
         if (idl.isClassSubkind(decl) && isMaterialized(decl, this.library)) {
             return []

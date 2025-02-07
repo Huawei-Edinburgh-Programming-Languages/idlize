@@ -13,22 +13,17 @@
  * limitations under the License.
  */
 import { maybeReadLangTemplate, readLangTemplate } from "../FileGenerators";
-import { FunctionCallExpression, Method, MethodModifier, NamedMethodSignature, StringExpression, createInteropArgConvertor, createLanguageWriter } from "../LanguageWriters";
-import { BlockStatement, ExpressionStatement, IfStatement, LanguageWriter, MethodSignature, NaryOpExpression } from "@idlizer/core"
-import { createConstructPeerMethod } from "../PeerClass";
-import { PeerClass } from "../PeerClass";
-import { PeerLibrary } from "../PeerLibrary";
-import { PeerMethod } from "../PeerMethod";
-import { Language } from  '@idlizer/core'
+import { FunctionCallExpression, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters";
+import { BlockStatement, ExpressionStatement, IfStatement, LanguageWriter, MethodSignature, NaryOpExpression,
+    createConstructPeerMethod, PeerClass, PeerMethod, PeerLibrary, Language, InteropArgConvertor,
+    createInteropArgConvertor, NativeModuleType, CJLanguageWriter,
+} from "@idlizer/core"
 import * as idl from  '@idlizer/core/idl'
-import { InteropArgConvertor } from "../LanguageWriters/convertors/InteropConvertor";
 import { NativeModule } from "../NativeModule";
-import { NativeModuleType } from "@idlizer/core"
 import { ArkTSSourceFile, SourceFile, TsSourceFile } from "./SourceFile";
-import { CJLanguageWriter } from "@idlizer/core";
 
 class NativeModulePrinterBase {
-    readonly nativeModule: LanguageWriter = createLanguageWriter(this.language, this.library)
+    readonly nativeModule: LanguageWriter = this.library.createLanguageWriter(this.language)
 
     constructor(
         protected readonly library: PeerLibrary,
@@ -150,7 +145,7 @@ function writeNativeModuleEmptyImplementation(method: Method, writer: LanguageWr
 }
 
 class TSNativeModulePredefinedVisitor extends NativeModulePredefinedVisitor {
-    readonly nativeModuleEmpty: LanguageWriter = createLanguageWriter(this.language, this.library)
+    readonly nativeModuleEmpty: LanguageWriter = this.library.createLanguageWriter(this.language)
 
     protected printMethod(method: Method): void {
         super.printMethod(method)
@@ -159,7 +154,7 @@ class TSNativeModulePredefinedVisitor extends NativeModulePredefinedVisitor {
 }
 
 class TSNativeModuleArkUIGeneratedVisitor extends NativeModuleArkUIGeneratedVisitor {
-    readonly nativeModuleEmpty: LanguageWriter = createLanguageWriter(Language.TS, this.library)
+    readonly nativeModuleEmpty: LanguageWriter = this.library.createLanguageWriter(Language.TS)
 
     protected printMethod(method: Method): void {
         super.printMethod(method)
@@ -233,7 +228,7 @@ function writeCJNativeModuleMethod(method: Method, nativeModule: LanguageWriter,
 }
 
 class CJNativeModulePredefinedVisitor extends NativeModulePredefinedVisitor {
-    readonly nativeFunctions = createLanguageWriter(Language.CJ, this.library)
+    readonly nativeFunctions = this.library.createLanguageWriter(Language.CJ)
 
     protected printMethod(method: Method): void {
         writeCJNativeModuleMethod(method, this.nativeModule, this.nativeFunctions)
@@ -241,7 +236,7 @@ class CJNativeModulePredefinedVisitor extends NativeModulePredefinedVisitor {
 }
 
 class CJNativeModuleArkUIGeneratedVisitor extends NativeModuleArkUIGeneratedVisitor {
-    readonly nativeFunctions = createLanguageWriter(Language.CJ, this.library)
+    readonly nativeFunctions = this.library.createLanguageWriter(Language.CJ)
 
     protected printMethod(method: Method): void {
         writeCJNativeModuleMethod(method, this.nativeModule, this.nativeFunctions)
@@ -386,7 +381,7 @@ export function printCJPredefinedNativeFunctions(library: PeerLibrary, module: N
     const entries = collectPredefinedNativeModuleEntries(library, module)
     const visitor = new CJNativeModulePredefinedVisitor(library, library.language, entries)
     visitor.visit()
-    const writer = createLanguageWriter(Language.CJ, library) as CJLanguageWriter
+    const writer = library.createLanguageWriter(Language.CJ) as CJLanguageWriter
     writer.writeCJForeign(writer => {
         writer.concat(visitor.nativeFunctions)
         const maybeTemplate = maybeReadLangTemplate(`${module.name}_nativeFunctions`, Language.CJ)
@@ -399,13 +394,14 @@ export function printCJPredefinedNativeFunctions(library: PeerLibrary, module: N
     return file
 }
 
-export function printArkUIGeneratedNativeModule(library: PeerLibrary, module: NativeModuleType): SourceFile {
+export function printArkUIGeneratedNativeModule(library: PeerLibrary, module: NativeModuleType, more?:(w:LanguageWriter) => void): SourceFile {
     const visitor = createArkUIGeneratedNativeModuleVisitor(library, library.language)
     visitor.visit()
     const file = SourceFile.make("", library.language, library)
     collectNativeModuleImports(module, file, library)
     file.content.writeClass(module.name, writer => {
         printNativeModuleRegistration(library.language, module, file)
+        more?.(writer)
         writer.concat(visitor.nativeModule)
     })
     return file
@@ -425,7 +421,7 @@ export function printTSArkUIGeneratedEmptyNativeModule(library: PeerLibrary, mod
 export function printCJArkUIGeneratedNativeFunctions(library: PeerLibrary, module: NativeModuleType): SourceFile {
     const visitor = new CJNativeModuleArkUIGeneratedVisitor(library, library.language)
     visitor.visit()
-    const writer = createLanguageWriter(Language.CJ, library) as CJLanguageWriter
+    const writer = library.createLanguageWriter(Language.CJ) as CJLanguageWriter
     writer.writeCJForeign(writer => {
         writer.concat(visitor.nativeFunctions)
     })

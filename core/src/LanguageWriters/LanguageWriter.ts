@@ -305,7 +305,7 @@ export abstract class LambdaExpression implements LanguageExpression {
 
         return writer.getOutput()
             .filter(line => line !== "")
-            .map(line => line === "{" || line === "}" || line.endsWith(';') ? line : `${line};`)
+            .map(line => line.endsWith('{') || line.endsWith('}') || line.endsWith(';') ? line : `${line};`)
             .join("\n")
     }
 }
@@ -523,6 +523,9 @@ export abstract class LanguageWriter {
     }
     writeExpressionStatement(smth: LanguageExpression) {
         this.writeStatement(new ExpressionStatement(smth))
+    }
+    writeExpressionStatements(statements: LanguageExpression[]): void {
+        statements.forEach(it => this.writeExpressionStatement(it))
     }
     writeStaticBlock(op: (writer: this) => void) {
         this.print("static {")

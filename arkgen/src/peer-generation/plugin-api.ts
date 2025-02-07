@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { PeerLibrary } from "./PeerLibrary";
+import { PeerLibrary } from "@idlizer/core";
 
 export interface PluginHost {
     log(message: string): void

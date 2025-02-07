@@ -22,8 +22,8 @@ import {
     isDefined, isNodePublic, isPrivate, isProtected, isReadonly, isStatic, isAsync,
     nameEnumValues, nameOrNull, identString, getNameWithoutQualifiersLeft, stringOrNone, warn,
     snakeCaseToCamelCase, escapeIDLKeyword, GenericVisitor,
-    generateSyntheticUnionName, generateSyntheticIdlNodeName, typeOrUnion, isCommonMethodOrSubclass,
-    generatorConfiguration
+    generateSyntheticUnionName, generateSyntheticIdlNodeName, generateSyntheticFunctionName,
+    typeOrUnion, isCommonMethodOrSubclass, generatorConfiguration
 } from "@idlizer/core"
 import { PeerGeneratorConfig } from "./peer-generation/PeerGeneratorConfig"
 import { ReferenceResolver } from "@idlizer/core"
@@ -59,12 +59,6 @@ export function selectName(nameSuggestion: NameSuggestion | undefined, synthetic
     if (nameSuggestion?.name && syntheticName.length >= MaxSyntheticTypeLength)
         return nameSuggestion.name
     return syntheticName
-}
-
-export function generateSyntheticFunctionName(parameters: idl.IDLParameter[], returnType: idl.IDLType, isAsync: boolean = false): string {
-    let prefix = isAsync ? "AsyncCallback" : "Callback"
-    const names = parameters.map(it => `${generateSyntheticIdlNodeName(it.type!)}`).concat(generateSyntheticIdlNodeName(returnType))
-    return `${prefix}_${names.join("_").replaceAll(".", "_")}`
 }
 
 function mangleConflictingName(name: string, sourceFile: ts.SourceFile | undefined): string {
@@ -364,7 +358,17 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         if (node.importClause?.namedBindings && ts.isNamedImports(node.importClause.namedBindings)) {
             importClause = node.importClause.namedBindings.elements.map(it => it.getText())
         }
-        const result = idl.createImport(name, importClause)
+        const extendedAttributes:idl.IDLExtendedAttribute[] = []
+        this.computeDeprecatedExtendAttributes(node, extendedAttributes)
+        this.computeExportAttribute(node, extendedAttributes)
+        const result = idl.createImport(
+            name,
+            importClause,
+            {
+                fileName: node.getSourceFile().fileName,
+                extendedAttributes: extendedAttributes,
+                documentation: getDocumentation(this.sourceFile, node, this.options.docs),
+            })
         return result
     }
 
@@ -476,7 +480,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
     computeComponentExtendedAttributes(node: ts.ClassDeclaration | ts.InterfaceDeclaration): idl.IDLExtendedAttribute[] | undefined {
         let result: idl.IDLExtendedAttribute[] = this.computeExtendedAttributes(node)
         let name = identName(node.name)
-        if (name && PeerGeneratorConfig.handWritten.includes(PeerGeneratorConfig.mapComponentName(name))) {
+        if (name && PeerGeneratorConfig.isHandWritten(PeerGeneratorConfig.mapComponentName(name))) {
             result.push({ name: idl.IDLExtendedAttributes.HandWrittenImplementation })
         }
         if (name && ts.isClassDeclaration(node) && isCommonMethodOrSubclass(this.typeChecker, node)) {

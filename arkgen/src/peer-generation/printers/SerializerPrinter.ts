@@ -14,24 +14,21 @@
  */
 
 import * as idl from '@idlizer/core/idl'
-import { generatorConfiguration, Language, lib, throwException } from '@idlizer/core'
+import { generatorConfiguration, Language, isMaterialized, isBuilderClass, throwException } from '@idlizer/core'
 import { ExpressionStatement, LanguageStatement, Method, MethodSignature, NamedMethodSignature } from "../LanguageWriters"
-import { LanguageWriter } from "@idlizer/core"
+import { LanguageWriter, PeerLibrary } from "@idlizer/core"
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig'
-import { ImportsCollector } from '../ImportsCollector'
-import { PeerLibrary } from '../PeerLibrary'
+import { ImportsCollector } from "@idlizer/libohos"
 import {
     ArkTSBuiltTypesDependencyFilter,
     DependencyFilter,
-    isBuilderClass,
-    isMaterialized,
 } from '../idl/IdlPeerGeneratorVisitor'
 import { collectFunctions, collectProperties } from '../printers/StructPrinter'
 import { FieldModifier, MethodModifier, ProxyStatement } from '@idlizer/core'
 import { createDeclarationNameConvertor } from '@idlizer/core'
 import { IDLEntry } from "@idlizer/core/idl"
 import { convertDeclaration, generateCallbackKindValue } from '@idlizer/core'
-import { collectMaterializedImports, getInternalClassName, getInternalClassQualifiedName } from '../Materialized'
+import { getInternalClassName, getInternalClassQualifiedName, LayoutNodeRole } from '@idlizer/core'
 import { ArkTSSourceFile, SourceFile, TsSourceFile } from './SourceFile'
 import { collectUniqueCallbacks } from './CallbacksPrinter'
 import { collectDeclItself, collectDeclDependencies, convertDeclToFeature } from '../ImportsCollectorUtils'
@@ -381,8 +378,6 @@ class DeserializerPrinter {
             // callbacks in native are just CallbackResource while in managed we need to convert them to
             // target language callable
             return
-        if (PeerGeneratorConfig.ignoredCallbacks.has(target.name))
-            return
         target = maybeTransformManagedCallback(target) ?? target
         const methodName = this.library.getInteropName(target)
         const type = idl.createReferenceType(target.name, undefined, target)
@@ -632,6 +627,16 @@ export function printSerializerImports(library: PeerLibrary, destFile: SourceFil
         } else { // This is used for OHOS library generation only
             collectOhosImports(collector, true)
             collector.addFeature("TypeChecker", "./type_check")
+        }
+    }
+
+    function collectMaterializedImports(imports: ImportsCollector, library: PeerLibrary) {
+        for (const materialized of library.materializedClasses.values()) {
+            if (materialized.isGlobalScope()) continue
+            const file = library.layout.resolve(materialized.decl, LayoutNodeRole.INTERFACE)
+            const ns = idl.getNamespaceName(materialized.decl)
+            const name = ns === '' ? getInternalClassName(materialized.className) : ns.split('.')[0]
+            imports.addFeature(name, `./${file}`)
         }
     }
 

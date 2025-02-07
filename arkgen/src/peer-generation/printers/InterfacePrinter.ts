@@ -15,31 +15,30 @@
 
 import * as idl from '@idlizer/core/idl'
 import * as path from 'path'
-import { PeerLibrary } from "../PeerLibrary"
 import {
-    createLanguageWriter,
-    createTypeNameConvertor,
     FieldModifier,
     Method,
     MethodModifier,
     MethodSignature,
     NamedMethodSignature,
 } from '../LanguageWriters'
-import { LanguageWriter } from "@idlizer/core"
+import { LanguageWriter, PeerFile } from "@idlizer/core"
 import {
     indentedBy,
     isDefined,
+    isBuilderClass,
+    isMaterialized,
     removeExt,
     renameDtsToInterfaces,
     stringOrNone,
     throwException,
     IndentedPrinter,
     Language,
-    CustomPrintVisitor
+    CustomPrintVisitor,
+    PeerLibrary
 } from '@idlizer/core'
-import { ImportFeature, ImportsCollector } from '../ImportsCollector'
-import { PeerFile } from '../PeerFile'
-import { TargetFile } from './TargetFile'
+import { ImportFeature, ImportsCollector } from "@idlizer/libohos"
+import { TargetFile } from "@idlizer/libohos"
 import { PrinterContext } from './PrinterContext'
 import { convertDeclaration, DeclarationConvertor } from "@idlizer/core";
 import { ARK_CUSTOM_OBJECT, ARK_OBJECTBASE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH, INT_VALUE_GETTER } from './lang/Java'
@@ -48,12 +47,13 @@ import { collectJavaImports } from './lang/JavaIdlUtils'
 import { collectProperties } from './StructPrinter'
 import { escapeIDLKeyword, IDLType } from '@idlizer/core/idl'
 import { PeerGeneratorConfig } from '../PeerGeneratorConfig'
-import { isBuilderClass, isMaterialized, isPredefined } from '../idl/IdlPeerGeneratorVisitor'
+import { isPredefined } from '../idl/IdlPeerGeneratorVisitor'
 import { DependenciesCollector } from '../idl/IdlDependenciesCollector'
 import { createInterfaceDeclName } from './lang/CommonUtils'
 import { collectDeclDependencies, convertDeclToFeature } from '../ImportsCollectorUtils'
 import { maybeTransformManagedCallback } from '@idlizer/core'
 import { isComponentDeclaration } from '../ComponentsCollector'
+import { tsCopyrightAndWarning } from '../FileGenerators'
 
 interface InterfacesVisitor {
     getInterfaces(): Map<TargetFile, LanguageWriter>
@@ -169,7 +169,7 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
 
     printInterfaces() {
         for (const file of this.peerLibrary.files.values()) {
-            const writer = createLanguageWriter(this.peerLibrary.language, this.peerLibrary)
+            const writer = this.peerLibrary.createLanguageWriter()
             this.printImports(writer, file)
             const typeConvertor = new TSDeclConvertor(writer, this.peerLibrary)
             for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
@@ -194,7 +194,7 @@ class JavaDeclaration {
 }
 
 class JavaSyntheticGenerator extends DependenciesCollector {
-    private readonly nameConvertor = createLanguageWriter(Language.JAVA, this.library)
+    private readonly nameConvertor = this.library.createTypeNameConvertor(Language.JAVA)
 
     constructor(
         library: PeerLibrary,
@@ -204,13 +204,13 @@ class JavaSyntheticGenerator extends DependenciesCollector {
     }
 
     convertUnion(type: idl.IDLUnionType): idl.IDLNode[] {
-        const typeName = this.nameConvertor.getNodeName(type)
+        const typeName = this.nameConvertor.convert(type)
         this.onSyntheticDeclaration(idl.createTypedef(typeName, type))
         return super.convertUnion(type)
     }
 
     convertImport(type: idl.IDLReferenceType, importClause: string): idl.IDLNode[] {
-        const generatedName = this.nameConvertor.getNodeName(type)
+        const generatedName = this.nameConvertor.convert(type)
         const clazz = idl.createInterface(
             generatedName,
             idl.IDLInterfaceSubkind.Interface,
@@ -228,7 +228,7 @@ class JavaSyntheticGenerator extends DependenciesCollector {
 }
 
 class JavaDeclarationConvertor implements DeclarationConvertor<void> {
-    private readonly nameConvertor = createTypeNameConvertor(Language.JAVA, this.peerLibrary)
+    private readonly nameConvertor = this.peerLibrary.createTypeNameConvertor(Language.JAVA)
     constructor(private readonly peerLibrary: PeerLibrary, private readonly onNewDeclaration: (declaration: JavaDeclaration) => void) {}
     convertCallback(node: idl.IDLCallback): void {
     }
@@ -297,7 +297,7 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
     }
 
     private makeUnion(alias: string, type: idl.IDLUnionType): JavaDeclaration {
-        const writer = createLanguageWriter(Language.JAVA, this.peerLibrary)
+        const writer = this.peerLibrary.createLanguageWriter(Language.JAVA)
         this.printPackage(writer)
 
         const imports = collectJavaImports(type.types)
@@ -349,7 +349,7 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
     }
 
     private makeTuple(alias: string, type: idl.IDLInterface): JavaDeclaration {
-        const writer = createLanguageWriter(Language.JAVA, this.peerLibrary)
+        const writer = this.peerLibrary.createLanguageWriter(Language.JAVA)
         this.printPackage(writer)
 
         const imports = collectJavaImports(type.properties.map(it => it.type))
@@ -376,7 +376,7 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
     }
 
     private makeEnum(alias: string, enumDecl: idl.IDLEnum): JavaDeclaration {
-        const writer = createLanguageWriter(Language.JAVA, this.peerLibrary)
+        const writer = this.peerLibrary.createLanguageWriter(Language.JAVA)
         this.printPackage(writer)
 
         const initializers = enumDecl.elements.map(it => {
@@ -440,7 +440,7 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
     }
 
     private makeInterface(alias: string, type: idl.IDLInterface): JavaDeclaration {
-        const writer = createLanguageWriter(Language.JAVA, this.peerLibrary)
+        const writer = this.peerLibrary.createLanguageWriter(Language.JAVA)
         this.printPackage(writer)
 
         const imports = collectJavaImports(type.properties.map(it => it.type))
@@ -506,7 +506,7 @@ class JavaInterfacesVisitor extends DefaultInterfacesVisitor {
 }
 
 export class ArkTSDeclConvertor extends TSDeclConvertor {
-    private typeNameConvertor = createLanguageWriter(Language.ARKTS, this.peerLibrary)
+    private typeNameConvertor = this.peerLibrary.createLanguageWriter(Language.ARKTS)
     private seenInterfaceNames = new Set<string>()
 
     private wrapWithNamespaces(node: idl.IDLEntry, cb: () => void) {
@@ -872,7 +872,7 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
         }
 
         for (const [module, entries] of moduleToEntries) {
-            const writer = createLanguageWriter(this.peerLibrary.language, this.peerLibrary)
+            const writer = this.peerLibrary.createLanguageWriter()
             const imports = new ImportsCollector()
             for (const entry of entries) {
                 collectDeclDependencies(this.peerLibrary, entry, imports)
@@ -929,7 +929,7 @@ class CJInterfacesVisitor extends DefaultInterfacesVisitor {
 }
 
 class CJSyntheticGenerator extends DependenciesCollector {
-    private readonly nameConvertor = createTypeNameConvertor(Language.CJ, this.library)
+    private readonly nameConvertor = this.library.createTypeNameConvertor(Language.CJ)
 
     constructor(
         library: PeerLibrary,
@@ -1018,7 +1018,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
     }
 
     private makeUnion(alias: string, type: idl.IDLUnionType): CJDeclaration {
-        const writer = createLanguageWriter(Language.CJ, this.peerLibrary)
+        const writer = this.peerLibrary.createLanguageWriter(Language.CJ)
         this.printPackage(writer)
 
         writer.print('import std.collection.*\n')
@@ -1076,7 +1076,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
     }
 
     private makeTuple(alias: string, type: idl.IDLInterface): CJDeclaration {
-        const writer = createLanguageWriter(Language.CJ, this.peerLibrary)
+        const writer = this.peerLibrary.createLanguageWriter(Language.CJ)
         this.printPackage(writer)
 
         writer.print('import Interop.*\n')
@@ -1102,7 +1102,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
     }
 
     private makeEnum(alias: string, enumDecl: idl.IDLEnum): CJDeclaration {
-      const writer = createLanguageWriter(Language.CJ, this.peerLibrary)
+      const writer = this.peerLibrary.createLanguageWriter(Language.CJ)
         this.printPackage(writer)
 
         writer.print('import Interop.*\n')
@@ -1157,7 +1157,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
     }
 
     private makeInterface(alias: string, type: idl.IDLInterface): CJDeclaration {
-        const writer = createLanguageWriter(Language.CJ, this.peerLibrary)
+        const writer = this.peerLibrary.createLanguageWriter(Language.CJ)
         this.printPackage(writer)
 
         writer.print('import Interop.*\n')
@@ -1236,7 +1236,7 @@ export function printInterfaces(peerLibrary: PeerLibrary, context: PrinterContex
     const result = new Map<TargetFile, string>()
     for (const [key, writer] of visitor.getInterfaces()) {
         if (writer.getOutput().length === 0) continue
-        result.set(key, writer.getOutput().join('\n'))
+        result.set(key, tsCopyrightAndWarning(writer.getOutput().join('\n')))
     }
     return result
 }

@@ -14,13 +14,10 @@
  */
 
 import { tsCopyrightAndWarning } from "../FileGenerators"
-import { ImportsCollector } from "../ImportsCollector"
-import { collectDeclDependencies } from "../ImportsCollectorUtils"
-import { createLanguageWriter } from "../LanguageWriters"
-import { LanguageStatement, LanguageWriter, Method, NamedMethodSignature } from "@idlizer/core"
-import { getMaterializedFileName } from "../Materialized"
-import { PeerLibrary } from "../PeerLibrary"
-import { TargetFile } from "./TargetFile"
+import { ImportsCollector } from "@idlizer/libohos"
+import { collectDeclDependencies, collectDeclItself } from "../ImportsCollectorUtils"
+import { LanguageWriter, NamedMethodSignature, getMaterializedFileName, PeerLibrary } from "@idlizer/core"
+import { TargetFile } from "@idlizer/libohos"
 import * as idl from '@idlizer/core'
 import { collapseSameMethodsIDL, groupOverloadsIDL } from "./OverloadsPrinter"
 
@@ -31,7 +28,7 @@ class GlobalScopePrinter {
     constructor(
         private library: PeerLibrary
     ) {
-        this.writer = createLanguageWriter(library.language, this.library)
+        this.writer = library.createLanguageWriter()
     }
 
     static create(library: PeerLibrary) {
@@ -42,7 +39,18 @@ class GlobalScopePrinter {
 
     private collectImports(entries:idl.IDLInterface[], imports:ImportsCollector) {
         entries.forEach(entry => {
-            collectDeclDependencies(this.library, entry, imports)
+            collectDeclItself(this.library, entry, imports)
+            entry.methods.forEach(it => {
+                if (it.isStatic) {
+                    collectDeclDependencies(this.library, it, decl => {
+                        if (this.library.language !== idl.Language.TS
+                         || idl.isInterface(decl) && idl.isMaterialized(decl, this.library)
+                        ) {
+                            collectDeclItself(this.library, decl, imports)
+                        }
+                    })
+                }
+            })
         })
     }
 

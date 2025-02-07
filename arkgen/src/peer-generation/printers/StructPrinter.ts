@@ -18,18 +18,20 @@ import {
     IndentedPrinter,
     Language,
     camelCaseToUpperSnakeCase,
+    isMaterialized,
+    isBuilderClass,
     isImportAttr,
     isStringEnum,
     generatorConfiguration,
     generatorTypePrefix,
+    cleanPrefix,
+    PeerLibrary,
 } from "@idlizer/core"
 import { RuntimeType } from "@idlizer/core"
 import { ArkPrimitiveTypeList, ArkPrimitiveTypesInstance } from "../ArkPrimitiveType"
-import { createLanguageWriter, LanguageExpression, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters"
+import { LanguageExpression, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters"
 import { LanguageWriter } from "@idlizer/core"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig"
-import { isBuilderClass, isMaterialized } from "../idl/IdlPeerGeneratorVisitor"
-import { cleanPrefix, PeerLibrary } from "../PeerLibrary"
 import { PrintHint } from "@idlizer/core"
 import { LibraryInterface } from "@idlizer/core"
 import { collectDeclarationTargets } from "../DeclarationTargetCollector"
@@ -72,9 +74,9 @@ export class StructPrinter {
     }
 
     generateStructs(structs: LanguageWriter, typedefs: IndentedPrinter, writeToString: LanguageWriter) {
-        const enumsDeclarations = createLanguageWriter(Language.CPP, this.library)
-        const forwardDeclarations = createLanguageWriter(Language.CPP, this.library)
-        const concreteDeclarations = createLanguageWriter(Language.CPP, this.library)
+        const enumsDeclarations = this.library.createLanguageWriter(Language.CPP)
+        const forwardDeclarations = this.library.createLanguageWriter(Language.CPP)
+        const concreteDeclarations = this.library.createLanguageWriter(Language.CPP)
         const seenNames = new Set<string>()
         seenNames.clear()
         const noDeclaration = ["Int32", "Tag", idl.IDLNumberType.name, idl.IDLBooleanType.name, idl.IDLStringType.name, idl.IDLVoidType.name]
@@ -155,7 +157,6 @@ export class StructPrinter {
                     concreteDeclarations.print(`${generatorTypePrefix()}CallbackResource resource;`)
                     const args = generateCallbackAPIArguments(this.library, target)
                     concreteDeclarations.print(`void (*call)(${args.join(', ')});`)
-                    const typePrefix = `${generatorConfiguration().param("TypePrefix")}${generatorConfiguration().param("LibraryPrefix")}`
                     const syncArgs = [`${generatorTypePrefix()}VMContext context`].concat(args)
                     concreteDeclarations.print(`void (*callSync)(${syncArgs.join(', ')});`)
                 }
@@ -504,6 +505,10 @@ export function collectFunctions(decl: idl.IDLInterface, library: LibraryInterfa
         ...decl.methods,
         ...decl.callables,
     ]
+}
+
+export function generateStructs(library: PeerLibrary, structs: LanguageWriter, typedefs: IndentedPrinter, writeToString: LanguageWriter) {
+    new StructPrinter(library).generateStructs(structs, typedefs, writeToString)
 }
 
 class NameWithType {

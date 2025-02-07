@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { TargetFile } from './TargetFile'
+import { TargetFile } from "@idlizer/libohos"
 
 export interface SynthesizedTypesRegistry {
     getDefinitions(): Map<TargetFile, string>

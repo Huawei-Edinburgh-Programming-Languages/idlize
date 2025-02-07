@@ -6,6 +6,7 @@ import { execSync } from "child_process"
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 export const IDLIZE_HOME = path.resolve(path.join(__dirname, ".."))
+export const EXTERNAL_HOME = path.resolve(path.join(__dirname, "../external"))
 
 export class Package {
     constructor(path) {
@@ -33,14 +34,14 @@ export class Package {
         publishToOpenlab("latest")
     }
 
-    externalDependencies = ["@idlizer/core", "@koalaui/interop"]
+    externalDependencies = ["@idlizer/core", "@idlizer/libohos", "@koalaui/interop"]
 }
 
 export const all_packages = [
     new Package(path.join(IDLIZE_HOME, "arkgen")),
     new Package(path.join(IDLIZE_HOME, "core")),
+    new Package(path.join(IDLIZE_HOME, "libohos")),
     new Package(path.join(IDLIZE_HOME, "linter")),
-    new Package(path.join(IDLIZE_HOME, "libarkts-gen")),
     new Package(path.join(IDLIZE_HOME, "ohosgen"))
 ]
 

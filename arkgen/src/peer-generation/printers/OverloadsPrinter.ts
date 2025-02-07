@@ -22,12 +22,9 @@ import {
     NamedMethodSignature,
     StringExpression
 } from "../LanguageWriters";
-import { LanguageWriter } from "@idlizer/core"
-import { PeerClassBase } from "../PeerClass";
+import { LanguageWriter, PeerClassBase, PeerMethod, PeerLibrary } from "@idlizer/core"
 import { isDefined, Language, throwException, typeOrUnion } from '@idlizer/core'
-import { callbackIdByInfo, canProcessCallback, convertIdlToCallback } from "./EventsPrinter";
-import { PeerMethod } from "../PeerMethod";
-import { PeerLibrary } from "../PeerLibrary";
+import { callbackIdByInfo, convertIdlToCallback } from "./EventsPrinter";
 import { ArgConvertor, UndefinedConvertor } from "@idlizer/core"
 import { ReferenceResolver, UnionRuntimeTypeChecker, zipMany } from "@idlizer/core";
 
@@ -269,7 +266,7 @@ export class OverloadsPrinter {
             peerMethod.method.signature.args.forEach((target, index) => {
                 if (this.isComponent) { // TBD: Check for materialized classes
                     const callback = convertIdlToCallback(this.resolver, peer, peerMethod, target)
-                    if (!callback || !canProcessCallback(callback))
+                    if (!callback)
                         return
                     const argName = argsNames[index]
                     this.printer.writeStatement(new ExpressionStatement(this.printer.makeFunctionCall(`UseEventsProperties`,[

@@ -14,15 +14,15 @@
  */
 
 import { removeExt, renameClassToBuilderClass, Language, generifiedTypeName } from '@idlizer/core'
-import { MethodModifier, Method, createLanguageWriter, Field, NamedMethodSignature } from "../LanguageWriters";
-import { LanguageWriter } from "@idlizer/core"
-import { BuilderClass, methodsGroupOverloads, CUSTOM_BUILDER_CLASSES } from "../BuilderClass";
+import { MethodModifier, Method, Field, NamedMethodSignature } from "../LanguageWriters";
+import { LanguageWriter, PeerLibrary,
+    BuilderClass, methodsGroupOverloads, CUSTOM_BUILDER_CLASSES
+} from "@idlizer/core";
 import { collapseSameNamedMethods } from "./OverloadsPrinter";
-import { TargetFile } from "./TargetFile";
+import { TargetFile } from "@idlizer/libohos"
 import { PrinterContext } from "./PrinterContext";
-import { ImportsCollector } from "../ImportsCollector";
+import { ImportsCollector } from "@idlizer/libohos"
 import { ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from "./lang/Java";
-import { PeerLibrary } from "../PeerLibrary";
 import { createOptionalType, createReferenceType, forceAsNamedNode, IDLTopType, IDLType, IDLVoidType, isOptionalType } from '@idlizer/core/idl'
 import { collectDeclDependencies } from "../ImportsCollectorUtils";
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
@@ -35,7 +35,7 @@ interface BuilderClassFileVisitor {
 
 class TSBuilderClassFileVisitor implements BuilderClassFileVisitor {
 
-    private readonly printer: LanguageWriter = createLanguageWriter(this.language, this.peerLibrary)
+    private readonly printer: LanguageWriter = this.peerLibrary.createLanguageWriter(this.language)
 
     constructor(
         private readonly language: Language,
@@ -127,7 +127,7 @@ class TSBuilderClassFileVisitor implements BuilderClassFileVisitor {
 
 class JavaBuilderClassFileVisitor implements BuilderClassFileVisitor {
 
-    private readonly printer: LanguageWriter = createLanguageWriter(this.printerContext.language, this.library)
+    private readonly printer: LanguageWriter = this.library.createLanguageWriter(this.printerContext.language)
 
     constructor(
         private readonly library: PeerLibrary,

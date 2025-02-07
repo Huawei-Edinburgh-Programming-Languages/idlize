@@ -1,24 +1,19 @@
 import * as idl from "@idlizer/core/idl"
-import { ImportFeature, ImportsCollector } from "../ImportsCollector";
+import { ImportFeature, ImportsCollector } from  "@idlizer/libohos"
 import {
-    createLanguageWriter,
     generateTypeCheckerName,
-    LanguageExpression,
     Method,
     MethodModifier,
     NamedMethodSignature
 } from "../LanguageWriters";
-import { LanguageWriter } from "@idlizer/core"
-import { PeerLibrary } from "../PeerLibrary";
-import { createDeclarationNameConvertor } from "@idlizer/core";
+import { LanguageWriter, PeerLibrary, createDeclarationNameConvertor } from "@idlizer/core"
 import { Language } from "@idlizer/core"
 import { getExtAttribute, IDLBooleanType, isReferenceType } from "@idlizer/core/idl"
-import { getReferenceResolver } from '../ReferenceResolver';
 import { convertDeclaration } from '@idlizer/core';
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
 import { collectDeclItself, collectDeclDependencies } from '../ImportsCollectorUtils';
 import { DependenciesCollector } from '../idl/IdlDependenciesCollector';
-import { isPredefined } from '../idl/IdlPeerGeneratorVisitor';
+import { isPredefined, isSystemEntry } from '../idl/IdlPeerGeneratorVisitor';
 
 export function importTypeChecker(library: PeerLibrary, imports: ImportsCollector): void {
     imports.addFeature("TypeChecker", "#components")
@@ -104,9 +99,11 @@ function collectTypeCheckDeclarations(library: PeerLibrary): (idl.IDLInterface |
     })
     for (const file of library.files) {
         for (const decl of idl.linearizeNamespaceMembers(file.entries)) {
-            if (idl.isPackage(decl) ||
+            if (idl.isPackage(decl) || idl.isImport(decl) ||
                 idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.GlobalScope) ||
-                isPredefined(decl))
+                isPredefined(decl) ||
+                isSystemEntry(decl)
+            )
                 continue
             if (PeerGeneratorConfig.ignoreEntry(decl.name, library.language))
                 continue
@@ -191,7 +188,7 @@ class ARKTSTypeCheckerPrinter extends TypeCheckerPrinter {
     constructor(
         library: PeerLibrary
     ) {
-        super(library, createLanguageWriter(Language.ARKTS, getReferenceResolver(library)))
+        super(library, library.createLanguageWriter(Language.ARKTS))
     }
 
     private writeInstanceofChecker(typeName: string,
@@ -265,7 +262,7 @@ class TSTypeCheckerPrinter extends TypeCheckerPrinter {
     constructor(
         library: PeerLibrary
     ) {
-        super(library, createLanguageWriter(Language.TS, getReferenceResolver(library)))
+        super(library, library.createLanguageWriter(Language.TS))
     }
 
     protected writeTypeInstanceOf(): void {

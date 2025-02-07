@@ -13,13 +13,11 @@
  * limitations under the License.
  */
 
-import * as ts from "typescript"
 import * as idl from '@idlizer/core/idl'
-import { IndentedPrinter, Language, isImportAttr } from '@idlizer/core'
+import { IndentedPrinter, Language, isImportAttr, PeerClassBase, PeerClass, PeerMethod, PeerLibrary } from '@idlizer/core'
 import {
     BlockStatement,
     CppLanguageWriter,
-    createLanguageWriter,
     ExpressionStatement,
     FieldModifier,
     printMethodDeclaration,
@@ -27,21 +25,15 @@ import {
     TSLanguageWriter
 } from "../LanguageWriters"
 import { LanguageWriter } from "@idlizer/core"
-import { PeerClassBase } from "../PeerClass"
 import { makeCEventsArkoalaImpl, makeCEventsLibaceImpl } from "../FileGenerators"
 import { generateEventReceiverName } from "./HeaderPrinter"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig"
-import { PeerMethod } from "../PeerMethod"
-import { PeerLibrary } from "../PeerLibrary"
-import { ArgConvertor } from "@idlizer/core"
-import { PeerClass } from "../PeerClass"
 import { collapseIdlPeerMethods, groupOverloads } from "./OverloadsPrinter"
-import { ImportsCollector } from "../ImportsCollector";
-import { getReferenceResolver } from "../ReferenceResolver"
+import { ImportsCollector } from "@idlizer/libohos"
 import { ReferenceResolver, CppInteropConvertor } from "@idlizer/core"
 import { collectDeclItself, collectDeclDependencies } from "../ImportsCollectorUtils"
 import { ArkPrimitiveTypesInstance } from "../ArkPrimitiveType";
-import { TsIDLNodeToStringConverter } from "../LanguageWriters/convertors/TSConvertors";
+import { ArkoalaTSTypeNameConvertor } from '../../arkoala/ArkoalaTypeNameConvertors'
 
 export const PeerEventsProperties = "PeerEventsProperties"
 export const PeerEventKind = "PeerEventKind"
@@ -72,8 +64,8 @@ export function collectCallbacks(library: PeerLibrary): CallbackInfo[] {
             for (const method of peer.methods) {
                 let callbackFound = false
                 for (const target of method.method.signature.args) {
-                    const info = convertIdlToCallback(getReferenceResolver(library), peer, method, target)
-                    if (info && canProcessCallback(info)) {
+                    const info = convertIdlToCallback(library, peer, method, target)
+                    if (info) {
                         if (callbackFound)
                             throw new Error("Only one callback per method is acceptable")
                         callbackFound = true
@@ -84,12 +76,6 @@ export function collectCallbacks(library: PeerLibrary): CallbackInfo[] {
         }
     }
     return callbacks
-}
-
-export function canProcessCallback(callback: CallbackInfo): boolean {
-    if (PeerGeneratorConfig.invalidEvents.includes(callback.methodName))
-        return false
-    return true
 }
 
 export function convertIdlToCallback(resolver: ReferenceResolver, peer: PeerClassBase, method: PeerMethod, argType: idl.IDLType): CallbackInfo | undefined {
@@ -292,8 +278,8 @@ class CEventsVisitor {
 
 class TSEventsVisitor {
     readonly printer: LanguageWriter = new TSLanguageWriter(new IndentedPrinter(),
-        getReferenceResolver(this.library),
-        new TsIDLNodeToStringConverter(getReferenceResolver(this.library)))
+        this.library,
+        new ArkoalaTSTypeNameConvertor(this.library))
 
     constructor(protected readonly library: PeerLibrary) {}
 
@@ -484,7 +470,7 @@ interface PeerEvent {
 }
 
 class ArkTSEventVisitor extends TSEventsVisitor {
-    readonly printer: LanguageWriter = createLanguageWriter(Language.ARKTS, this.library)
+    readonly printer: LanguageWriter = this.library.createLanguageWriter(Language.ARKTS)
 
     protected printParseFunction(infos: CallbackInfo[]) {
         // Disable event functions printing until deserializer is ready
@@ -516,7 +502,7 @@ export function printEventsCArkoalaImpl(library: PeerLibrary): string {
     const visitor = new CEventsVisitor(library, false)
     visitor.print()
     return makeCEventsArkoalaImpl(
-        getReferenceResolver(library),
+        library,
         visitor.impl,
         visitor.receiversList,
     )
@@ -529,6 +515,6 @@ export function printEventsCLibaceImpl(library: PeerLibrary, options: { namespac
         visitor.impl,
         visitor.receiversList,
         options.namespace,
-        getReferenceResolver(library)
+        library
     )
 }

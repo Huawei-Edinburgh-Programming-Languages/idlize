@@ -13,25 +13,18 @@
  * limitations under the License.
  */
 
-import { capitalize, dropSuffix, isDefined, Language } from '@idlizer/core'
-import { ArgConvertor } from "@idlizer/core";
+import { capitalize, dropSuffix, isDefined, Language, PeerMethod, createConstructPeerMethod,
+    ArgConvertor, MaterializedClass, PeerLibrary, LanguageWriter, InteropReturnTypeConvertor, CppInteropArgConvertor,
+} from "@idlizer/core";
 import { ArkPrimitiveTypesInstance } from "../ArkPrimitiveType"
 import { bridgeCcCustomDeclaration, bridgeCcGeneratedDeclaration } from "../FileGenerators";
-import { createLanguageWriter, createTypeNameConvertor, ExpressionStatement } from "../LanguageWriters";
-import { LanguageWriter } from "@idlizer/core"
-import { PeerLibrary } from "../PeerLibrary";
-import { PeerMethod } from "../PeerMethod";
+import { ExpressionStatement } from "../LanguageWriters";
 import { forceAsNamedNode, IDLBooleanType, IDLNumberType, IDLVoidType } from '@idlizer/core/idl'
-import { getReferenceResolver } from "../ReferenceResolver";
-import { createConstructPeerMethod } from "../PeerClass";
-import { InteropReturnTypeConvertor } from "../LanguageWriters/convertors/InteropConvertor";
-import { CppInteropArgConvertor } from "../LanguageWriters/convertors/CppConvertors";
 import { isGlobalScope } from '../idl/IdlPeerGeneratorVisitor';
-import { MaterializedClass } from '../Materialized';
 
 class BridgeCcVisitor {
-    readonly generatedApi = createLanguageWriter(Language.CPP, this.library)
-    readonly customApi = createLanguageWriter(Language.CPP, this.library)
+    readonly generatedApi = this.library.createLanguageWriter(Language.CPP)
+    readonly customApi = this.library.createLanguageWriter(Language.CPP)
     private readonly returnTypeConvertor = new InteropReturnTypeConvertor()
 
     constructor(
@@ -51,7 +44,7 @@ class BridgeCcVisitor {
 
     // TODO: may be this is another method of ArgConvertor?
     private generateApiArgument(argConvertor: ArgConvertor): string {
-        const nameConverter = createTypeNameConvertor(Language.CPP, getReferenceResolver(this.library))
+        const nameConverter = this.library.createTypeNameConvertor(Language.CPP)
         const prefix = argConvertor.isPointerType() ? `(const ${nameConverter.convert(argConvertor.nativeType())}*)&`: "    "
         if (argConvertor.useArray)
             return `${prefix}${this.escapeKeyword(argConvertor.param)}_value`

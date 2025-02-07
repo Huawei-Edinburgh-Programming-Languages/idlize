@@ -13,30 +13,29 @@
  * limitations under the License.
  */
 
-import { IDLPointerType, IDLPrimitiveType, IDLU32Type } from "@idlizer/core"
 import { Options } from "./Options"
 
 export class Config {
     constructor(
-        private options: Options,
+        public options: Options,
         private fixInput: boolean,
         private files?: string[]
     ) {}
 
-    static get sequencePointerType(): IDLPrimitiveType {
-        return IDLPointerType
-    }
-
-    static get sequenceLengthType(): IDLPrimitiveType {
-        return IDLU32Type
-    }
-
-    static get createMethod(): string {
+    static get createPrefix(): string {
         return `Create`
     }
 
-    static get updateMethod(): string {
+    static get updatePrefix(): string {
         return `Update`
+    }
+
+    static get constPostfix(): string {
+        return `Const`
+    }
+
+    static get nodeTypeAttribute(): string {
+        return `Es2pandaAstNodeType`
     }
 
     static get astNodeCommonAncestor(): string {
@@ -45,14 +44,6 @@ export class Config {
 
     shouldEmitEnum(name: string): boolean {
         return true
-    }
-
-    shouldEmitInterface(name: string): boolean {
-        return this.options.shouldEmitInterface(name)
-    }
-
-    shouldEmitMethod(iface: string, method: string): boolean {
-        return this.options.shouldEmitMethod(iface, method)
     }
 
     shouldEmitFile(name: string): boolean {

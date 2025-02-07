@@ -17,13 +17,16 @@ import * as path from "node:path"
 import * as fs from "node:fs"
 import { forceWriteFile } from "@idlizer/core"
 import { BridgesPrinter } from "./visitors/interop/bridges/BridgesPrinter"
-import { NativeModulePrinter } from "./visitors/interop/native-module/NativeModulePrinter"
+import { BindingsPrinter } from "./visitors/interop/bindings/BindingsPrinter"
 import { EnumsPrinter } from "./visitors/EnumsPrinter"
-import { IDLFile } from "./IdlFile"
+import { IDLFile } from "./idl-utils"
 import { Config } from "./Config"
 import { InteropTransformer } from "./transformers/InteropTransformer"
-import { AstNodeFilterTransformer } from "./transformers/AstNodeFilterTransformer"
-import { OptionsFilterTransformer } from "./transformers/OptionsFilterTransformer"
+import { AstNodeFilterTransformer } from "./transformers/filter/AstNodeFilterTransformer"
+import { OptionsFilterTransformer } from "./transformers/filter/OptionsFilterTransformer"
+import { MultipleDeclarationFilterTransformer } from "./transformers/filter/MultipleDeclarationFilterTransformer"
+import { Result } from "./visitors/MultiFilePrinter"
+import { AllPeersPrinter } from "./visitors/peers/AllPeersPrinter"
 
 class FilePrinter {
     constructor(
@@ -34,56 +37,97 @@ class FilePrinter {
     ) {}
 }
 
+class MultiFilePrinter {
+    constructor(
+        public print: (idl: IDLFile) => Result[],
+        public dir: string,
+        public template: string,
+        public enabled: boolean
+    ) {}
+}
+
 export class FileEmitter {
     constructor(
         private outDir: string,
-        private idl: IDLFile,
+        private file: IDLFile,
         private config: Config,
     ) {}
 
     private bridgesPrinter = new FilePrinter(
-        (idl: IDLFile) => new BridgesPrinter(idl, this.config).print(),
+        (idl: IDLFile) => new BridgesPrinter(idl).print(),
         `libarkts/native/src/generated/bridges.cc`,
         `bridges.cc`,
         this.config.shouldEmitFile(`bridges`),
     )
 
-    private nativeModulePrinter = new FilePrinter(
-        (idl: IDLFile) => new NativeModulePrinter(idl, this.config).print(),
+    private bindingsPrinter = new FilePrinter(
+        (idl: IDLFile) => new BindingsPrinter(idl).print(),
         `libarkts/src/generated/Es2pandaNativeModule.ts`,
         `Es2pandaNativeModule.ts`,
         this.config.shouldEmitFile(`nativeModule`),
     )
 
     private enumsPrinter = new FilePrinter(
-        (idl: IDLFile) => new EnumsPrinter(idl, this.config).print(),
+        (idl: IDLFile) => new EnumsPrinter(idl).print(),
         `libarkts/src/Es2pandaEnums.ts`,
         `Es2pandaEnums.ts`,
         this.config?.shouldEmitFile(`enums`),
     )
 
-    print(): void {
-        const ignored = new OptionsFilterTransformer(this.config, this.idl).transformed()
-        const astNodes = new AstNodeFilterTransformer(ignored).transformed()
-        this.printFile(this.enumsPrinter, astNodes)
+    private peersPrinter = new MultiFilePrinter(
+        (idl: IDLFile) => new AllPeersPrinter(idl).print(),
+        `libarkts/src/generated/peers`,
+        `peer.ts`,
+        true
+    )
 
-        const transformedForInterop = new InteropTransformer(this.config).transform(astNodes)
-        this.printFile(this.bridgesPrinter, transformedForInterop)
-        this.printFile(this.nativeModulePrinter, transformedForInterop)
+    print(): void {
+        let idl = this.file
+
+        idl = new OptionsFilterTransformer(this.config, idl).transformed()
+        idl = new MultipleDeclarationFilterTransformer(idl).transformed()
+        this.printFile(this.enumsPrinter, idl)
+
+        idl = new AstNodeFilterTransformer(idl).transformed()
+        this.printMultiFile(this.peersPrinter, idl)
+
+        idl = new InteropTransformer(idl).transformed()
+        this.printFile(this.bindingsPrinter, idl)
+        this.printFile(this.bridgesPrinter, idl)
     }
 
     private printFile(filePrinter: FilePrinter, idl: IDLFile): void {
-        if (filePrinter.enabled) {
-            console.log(`emit to ${filePrinter.path}`)
-            forceWriteFile(
-                path.join(this.outDir, filePrinter.path),
-                this.readTemplate(filePrinter.template)
-                    .replaceAll(
-                        `%GENERATED_PART%`,
-                        filePrinter.print(idl)
-                    )
-            )
+        if (!filePrinter.enabled) {
+            return
         }
+        console.log(`emit to ${filePrinter.path}`)
+        forceWriteFile(
+            path.join(this.outDir, filePrinter.path),
+            this.readTemplate(filePrinter.template)
+                .replaceAll(
+                    `%GENERATED_PART%`,
+                    filePrinter.print(idl)
+                )
+        )
+    }
+
+    private printMultiFile(multiFilePrinter: MultiFilePrinter, idl: IDLFile): void {
+        if (!multiFilePrinter.enabled) {
+            return
+        }
+        console.log(`emit to ${multiFilePrinter.dir}`)
+        multiFilePrinter
+            .print(idl)
+            .forEach(({fileName, output}) => {
+                forceWriteFile(
+                    path.join(this.outDir, multiFilePrinter.dir, fileName),
+                    this.readTemplate(multiFilePrinter.template)
+                        .replaceAll(
+                            `%GENERATED_PART%`,
+                            output
+                        )
+                )
+            })
     }
 
     private readTemplate(name: string): string {

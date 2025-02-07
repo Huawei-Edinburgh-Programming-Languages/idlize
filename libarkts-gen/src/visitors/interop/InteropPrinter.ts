@@ -15,13 +15,11 @@
 
 import { IDLKind, IDLMethod, isTypedef, LanguageWriter, throwException } from "@idlizer/core"
 import { IDLEntry, IDLEnum, IDLInterface, isEnum, isInterface, } from "@idlizer/core/idl"
-import { Config } from "../../Config"
-import { IDLFile } from "../../IdlFile"
+import { IDLFile } from "../../idl-utils"
 
 export abstract class InteropPrinter {
-    protected constructor(
+    constructor(
         protected idl: IDLFile,
-        protected config: Config
     ) { }
 
     protected abstract writer: LanguageWriter
@@ -36,7 +34,7 @@ export abstract class InteropPrinter {
             return this.visitInterface(node)
         }
         if (isEnum(node)) {
-            return this.visitEnum(node)
+            return
         }
         if (isTypedef(node)) {
             return
@@ -49,16 +47,9 @@ export abstract class InteropPrinter {
         node.methods.forEach(it => this.visitMethod(it))
     }
 
-    private visitEnum(node: IDLEnum): void {
-        if (!this.config.shouldEmitEnum(node.name)) return
-        this.printEnum(node)
-    }
-
     private visitMethod(node: IDLMethod): void {
         this.printMethod(node)
     }
 
     protected printMethod(node: IDLMethod): void {}
-
-    protected printEnum(node: IDLEnum): void {}
 }
