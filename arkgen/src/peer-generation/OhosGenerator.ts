@@ -51,6 +51,7 @@ import {
     BaseGeneratorConfiguration,
     capitalize,
     CppInteropConvertor,
+    FunctionCallExpression,
     generateCallbackAPIArguments,
     generatorConfiguration,
     generatorTypePrefix,
@@ -298,6 +299,74 @@ class ManyFilesDependecyCollector implements DependecyCollector{
     }
 }
 
+function writeCJMethod(writer: LanguageWriter, method: {name: string, method: NamedMethodSignature}) {
+    let arrayLikeTypes = new Set(['Uint8Array', 'KUint8ArrayPtr', 'KInt32ArrayPtr', 'KFloat32ArrayPtr', 'ArrayBuffer'])
+    let stringLikeTypes = new Set(['String', 'KString', 'KStringPtr', 'string'])
+
+    writer.writeMethodImplementation(new Method((method.name.startsWith('_') ? '' : '_').concat(method.name), method.method, [MethodModifier.STATIC]), () => {
+        let parameters = method.method
+        let functionCallArgs: Array<string> = []
+        writer.print('unsafe {')
+        writer.pushIndent()
+        let ordinal = 0
+        for(let param of parameters.args) {
+            if (idl.isContainerType(param) || arrayLikeTypes.has(idl.forceAsNamedNode(param).name)) {
+                functionCallArgs.push(`handle_${ordinal}.pointer`)
+                writer.print(`let handle_${ordinal} = acquireArrayRawData(${parameters.argsNames[ordinal]}.toArray())`)
+            } else if (stringLikeTypes.has(idl.forceAsNamedNode(param).name)) {
+                writer.print(`let ${parameters.argsNames[ordinal]} =  LibC.mallocCString(${parameters.argsNames[ordinal]})`)
+                functionCallArgs.push(parameters.argsNames[ordinal])
+            } else {
+                functionCallArgs.push(parameters.argsNames[ordinal])
+            }
+            ordinal += 1
+        }
+        const resultVarName = 'result'
+        let shouldReturn = false
+        let returnType = method.method.returnType 
+        let nativeName = method.name 
+        if (returnType === idl.IDLVoidType) {
+            writer.print(`${new FunctionCallExpression(nativeName.startsWith('_') ? nativeName.substring(1) : nativeName, functionCallArgs.map(it => writer.makeString(it))).asString()}`)
+        } else if (returnType === idl.IDLStringType) {
+            let expr = new FunctionCallExpression(nativeName.startsWith('_') ? nativeName.substring(1) : nativeName, functionCallArgs.map(it => writer.makeString(it)))
+            let final_expr = writer.makeMethodCall(expr.asString(), 'toString', [])
+            writer.writeStatement(
+                writer.makeAssign(
+                    resultVarName,
+                    undefined,
+                    final_expr,
+                    true
+                )
+            )
+            shouldReturn = true
+        } else {
+            writer.writeStatement(
+                writer.makeAssign(
+                    resultVarName,
+                    undefined,
+                    new FunctionCallExpression(nativeName.startsWith('_') ? nativeName.substring(1) : nativeName, functionCallArgs.map(it => writer.makeString(it))),
+                    true
+                )
+            )
+            shouldReturn = true
+        }
+        for(let param of parameters.args) {
+            let ordinal = parameters.args.indexOf(param)
+            if (idl.isContainerType(param) || arrayLikeTypes.has(idl.forceAsNamedNode(param).name)) {
+                writer.print(`releaseArrayRawData(handle_${ordinal})`)
+            } else if (stringLikeTypes.has(idl.forceAsNamedNode(param).name)) {
+                writer.print(`LibC.free(${parameters.argsNames[ordinal]})`)
+            }
+        }
+
+        if (shouldReturn) {
+            writer.writeStatement(writer.makeReturn(writer.makeString(resultVarName)))
+        }
+        writer.popIndent()
+        writer.print('}')
+    })    
+}
+
 abstract class OHOSVisitor {
     implementationStubsFile: CppSourceFile
 
@@ -309,6 +378,7 @@ abstract class OHOSVisitor {
     nativeWriter: LanguageWriter
     nativeFunctionsWriter: LanguageWriter
     arkUIFunctionsWriter: LanguageWriter
+    nativeFunctionsWriterCJ: LanguageWriter
 
     libraryName: string = ""
 
@@ -329,6 +399,7 @@ abstract class OHOSVisitor {
         this.nativeWriter = library.createLanguageWriter()
         this.nativeFunctionsWriter = library.createLanguageWriter()
         this.arkUIFunctionsWriter = library.createLanguageWriter()
+        this.nativeFunctionsWriterCJ = library.createLanguageWriter()
 
         const fileNamePrefix = this.libraryName.toLowerCase()
         this.implementationStubsFile = new CppSourceFile(`${fileNamePrefix}Impl_template${Language.CPP.extension}`, library)
@@ -542,6 +613,10 @@ abstract class OHOSVisitor {
     private printManaged() {
         this.printNative()
         this.printPeers()
+        if (this.library.language == Language.CJ) {
+            this.printCJNative()
+            // this.printInterfaces()
+        }
     }
 
     private printNative() {
@@ -615,6 +690,44 @@ abstract class OHOSVisitor {
                 )
             }
         })(this.arkUIFunctionsWriter)
+    }
+
+    private printCJNative() {
+        this.nativeFunctionsWriterCJ.printer.pushIndent(this.nativeWriter.indentDepth() + 1)
+        ;((writer: LanguageWriter) => {
+            this.interfaces.forEach(it => {
+                // TODO TBD do we need to provide declaration for "fake" constructor for interfaces?
+                const ctors = it.constructors.map(it => ({ parameters: it.parameters, returnType: it.returnType }))
+                ctors.forEach(ctor => {
+                    const signature = makePeerCallSignature(this.library, ctor.parameters, IDLPointerType)
+                    if (this.library.language != Language.CJ) {
+                        // writer.writeNativeMethodDeclaration(`_${it.name}_ctor`, signature)
+                    } else {
+                        writeCJMethod(writer, { name:`${it.name}_ctor`, method: signature })
+                    }
+                })
+
+                const getFinalizerSig = makePeerCallSignature(this.library, [], IDLPointerType)
+
+                if (this.library.language == Language.CJ) {
+                    writeCJMethod(writer, { name: `${it.name}_getFinalizer`, method: getFinalizerSig })
+                } else {
+                    writer.writeNativeMethodDeclaration(`${it.name}_getFinalizer`, getFinalizerSig)
+                }
+
+                it.methods.forEach(method => {
+                    const signature = makePeerCallSignature(this.library, method.parameters, method.returnType, "self")
+                    if (this.library.language == Language.CJ) {
+                        writeCJMethod(writer, { name: `${it.name}_${method.name}`, method: signature })
+                    } else {
+                        writer.writeNativeMethodDeclaration(`${it.name}_${method.name}`, signature)  // TODO temporarily removed _${this.libraryName} prefix
+                    }
+                })
+            })
+            // for (let method of BaseNativeMethods) {
+            //     writeCJMethod(writer, method)
+            // }
+        })(this.nativeFunctionsWriterCJ)
     }
 
     private printStructsDeclarations(data: idl.IDLInterface[]) {
@@ -1053,6 +1166,7 @@ abstract class OHOSVisitor {
             .replaceAll('%NATIVE_MODULE_NAME%', this.libraryName)
             .replaceAll('%NATIVE_MODULE_CONTENT%', this.nativeWriter.getOutput().join('\n'))
             .replaceAll('%NATIVE_FUNCTIONS%', this.nativeFunctionsWriter.getOutput().join('\n'))
+            .replaceAll('%CJ_NATIVE_FUNCTIONS%', this.nativeFunctionsWriterCJ ? this.nativeFunctionsWriterCJ.getOutput().join('\n') : "")
             .replaceAll('%ARKUI_FUNCTIONS%', this.arkUIFunctionsWriter.getOutput().join('\n'))
         fs.writeFileSync(path.join(rootPath, managedOutDir, `${managedCodeModuleInfo.path}${ext}`), nativeModuleText, 'utf-8')
 
