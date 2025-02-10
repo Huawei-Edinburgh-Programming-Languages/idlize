@@ -231,12 +231,12 @@
 |`alignRules`| Function | Dmitry A Smirnov| done | |
 |`aspectRatio`| Function | Roman Sedaikin | done | |
 |`clickEffect`| Function | Lobah Mikhail | done | |
-|`onDragStart`| Function | Skroba Gleb, Evstigneev Roman | in progress | It needs DragEventAccessor implemented to complete Unit tests, but it is empty C-API now. |
-|`onDragEnter`| Function | Lobah Mikhail, Evstigneev Roman | in progress | EVENT |
-|`onDragMove`| Function | Lobah Mikhail, Evstigneev Roman | in progress | EVENT |
-|`onDragLeave`| Function | Lobah Mikhail, Evstigneev Roman | in progress | EVENT |
-|`onDrop`| Function | Lobah Mikhail, Evstigneev Roman | in progress | EVENT |
-|`onDragEnd`| Function | Lobah Mikhail, Evstigneev Roman | in progress | EVENT |
+|`onDragStart`| Function | Skroba Gleb, Evstigneev Roman | done | It needs DragEventAccessor implemented to complete Unit tests, but it is empty C-API now. |
+|`onDragEnter`| Function | Lobah Mikhail, Evstigneev Roman | done | EVENT |
+|`onDragMove`| Function | Lobah Mikhail, Evstigneev Roman | done | EVENT |
+|`onDragLeave`| Function | Lobah Mikhail, Evstigneev Roman | done | EVENT |
+|`onDrop`| Function | Lobah Mikhail, Evstigneev Roman | done | EVENT |
+|`onDragEnd`| Function | Lobah Mikhail, Evstigneev Roman | done | EVENT |
 |`allowDrop`| Function | Lobah Mikhail | done | |
 |`draggable`| Function | Lobah Mikhail | done | |
 |`dragPreview`| Function | Lobah Mikhail | done | UT done Lobah Mikhail CustomBuilder |
@@ -1857,14 +1857,14 @@
 |*DragEvent*| *Class* | Evstigneev Roman | in progress | |
 |`getDisplayX`| Function | Tuzhilkin Ivan | in progress | |
 |`getDisplayY`| Function | Tuzhilkin Ivan | in progress | |
-|`getWindowX`| Function | Evstigneev Roman | in progress | |
-|`getWindowY`| Function | Evstigneev Roman | in progress | |
-|`getX`| Function | Evstigneev Roman | in progress |deprecated? |
-|`getY`| Function | Evstigneev Roman | in progress |deprecated? |
-|`setData`| Function | Evstigneev Roman | in progress | |
+|`getWindowX`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBLA1J |
+|`getWindowY`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBLA1J |
+|`getX`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBLA1J, deprecated? |
+|`getY`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBLA1J, deprecated? |
+|`setData`| Function | Evstigneev Roman | done | |
 |`getData`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getSummary`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setResult`| Function | Evstigneev Roman | in progress | |
+|`setResult`| Function | Evstigneev Roman | done | |
 |`getResult`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getPreviewRect`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getVelocityX`| Function | Tuzhilkin Ivan | in progress | |
