@@ -1800,7 +1800,7 @@
 |`getY`| Function | Maksimov Nikita | in progress | |
 |`setY`| Function | Maksimov Nikita | in progress | |
 |`setPreventDefault`| Function | Maksimov Nikita | in progress | |
-|*HoverEvent*| *Class* | | | |
+|*HoverEvent*| *Class* | Tuzhilkin Ivan |blocked IDL | |
 |`setStopPropagation`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |*MouseEvent*| *Class* | Spirin Andrey | in progress | |
 |`getButton`| Function | Spirin Andrey | in progress | |
