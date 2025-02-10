@@ -172,7 +172,7 @@
 |`onHover`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | done | EVENT |
 |`onAccessibilityHover`| Function | Andrey Khudenkikh, Pavelyev Ivan | in progress | EVENT |
 |`hoverEffect`| Function | Roman Sedaikin | done | |
-|`onMouse`| Function | Andrey Khudenkikh | in progress | EVENT |
+|`onMouse`| Function | Kovalev Sergey | testskipped | EVENT |
 |`onTouch`| Function | Roman Sedaikin, Tuzhilkin Ivan | testskipped | EVENT |
 |`onKeyEvent`| Function | Erokhin Ilya, Maksimov Nikita | testskipped | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX EVENT |
 |`onDigitalCrown`| Function | | | |
