@@ -69,6 +69,9 @@ export class CppReturnTypeConvertor implements TypeConvertor<string> {
     constructor(resolver: ReferenceResolver) {
         this.convertor = new CppConvertor(resolver)
     }
+    isVoid(returnType: idl.IDLType): boolean {
+        return this.convert(returnType) == 'void'
+    }
     convert(type: idl.IDLType): string {
         if (idl.isContainerType(type))
             return this.convertContainer(type)

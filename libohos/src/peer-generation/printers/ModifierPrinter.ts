@@ -50,7 +50,7 @@ export class ModifierVisitor {
 
     printDummyImplFunctionBody(method: PeerMethod) {
         let _ = this.dummy
-        const isVoid = method.returnType == IDLVoidType
+        const isVoid = this.returnTypeConvertor.isVoid(method.returnType)
         let retVal = isVoid ? undefined : (method.dummyReturnValue ?? "0")
 
         _.writeStatement(
@@ -90,7 +90,7 @@ export class ModifierVisitor {
     }
 
     private printReturnStatement(printer: LanguageWriter, method: PeerMethod, isDummy?: boolean, returnValue: string | undefined = undefined) {
-        const isVoid = method.returnType == IDLVoidType
+        const isVoid = this.returnTypeConvertor.isVoid(method.returnType)
         if (isDummy) {
             if (returnValue) {
                 printer.print(`return ${returnValue};`)
