@@ -37,7 +37,7 @@ import {
 } from "../LanguageWriter"
 import { IdlNameConvertor } from "../nameConvertor"
 import { Language } from "../../Language";
-import { isDefined } from "../../util";
+import { indentedBy, isDefined } from "../../util";
 import { ReferenceResolver } from "../../peer-generation/ReferenceResolver";
 
 ////////////////////////////////////////////////////////////////
@@ -83,15 +83,15 @@ export class CJUnionCastExpression implements LanguageExpression {
 }
 
 export class CJMatchExpression implements LanguageExpression {
-    constructor(public matchValue: LanguageExpression, public matchCases: LanguageExpression[], public caseBlocks: LanguageExpression[]) {}
+    constructor(public matchValue: LanguageExpression, public matchCases: LanguageExpression[], public caseBlocks: LanguageExpression[], public indentDepth?: number) {}
     asString(): string {
         let output: string[] = []
         output.push(`match (${this.matchValue.asString()}) {`)
         for (let index in this.matchCases) {
-            output.push(`case ${this.matchCases[index].asString()} => ${this.caseBlocks[index].asString()} `)
+            output.push(indentedBy(`case ${this.matchCases[index].asString()} => ${this.caseBlocks[index].asString()}`, (this.indentDepth ?? 0) + 1))
         }
-        output.push(`case _ => throw Exception(\"Unmatched pattern ${this.matchValue.asString()}\")`)
-        output.push(`}`)
+        output.push(indentedBy(`case _ => throw Exception(\"Unmatched pattern ${this.matchValue.asString()}\")`, (this.indentDepth ?? 1) + 1))
+        output.push(indentedBy(`}`, (this.indentDepth ?? 1)))
         return output.join('\n')
     }
 }
@@ -518,7 +518,7 @@ export class CJLanguageWriter extends LanguageWriter {
         return this.makeString("Option.None")
     }
     override makeUnwrapOptional(expression: LambdaExpression): LanguageExpression {
-        return new CJMatchExpression(expression, [this.makeString('Some(serializer)')], [this.makeString('serializer')])
+        return new CJMatchExpression(expression, [this.makeString('Some(serializer)')], [this.makeString('serializer')], this.indentDepth())
     }
     makeValueFromOption(value: string, destinationConvertor: ArgConvertor): LanguageExpression {
         return this.makeString(`${value}`)
