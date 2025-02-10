@@ -17,13 +17,13 @@ import { IndentedPrinter, camelCaseToUpperSnakeCase, maybeOptional, Language, Cp
     createConstructPeerMethod, createDestroyPeerMethod, PeerClass, PeerMethod, PeerLibrary, InteropReturnTypeConvertor
 } from '@idlizer/core'
 import { getNodeTypes, makeAPI, makeApiOhos, makeConverterHeader, makeCSerializersArk, makeCSerializersOhos, readInteropTypesHeader, readLangTemplate, readTemplate } from "../FileGenerators";
-import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
+import { peerGeneratorConfiguration} from "../PeerGeneratorConfig";
 import { collectCallbacks, groupCallbacks, CallbackInfo } from "./EventsPrinter";
 import { CppLanguageWriter, printMethodDeclaration } from "../LanguageWriters";
 import { ArkPrimitiveTypesInstance } from "../ArkPrimitiveType";
 
 export function generateEventReceiverName(componentName: string) {
-    return `${PeerGeneratorConfig.cppPrefix}ArkUI${componentName}EventsReceiver`
+    return `${peerGeneratorConfiguration().cppPrefix}ArkUI${componentName}EventsReceiver`
 }
 
 class HeaderVisitor {
@@ -38,14 +38,14 @@ class HeaderVisitor {
     ) {}
 
     private apiModifierHeader(clazz: PeerClass) {
-        return `typedef struct ${PeerGeneratorConfig.cppPrefix}ArkUI${clazz.componentName}Modifier {`
+        return `typedef struct ${peerGeneratorConfiguration().cppPrefix}ArkUI${clazz.componentName}Modifier {`
     }
 
     private printClassProlog(clazz: PeerClass) {
         this.api.print(this.apiModifierHeader(clazz))
         this.api.pushIndent()
         this.modifiersList.pushIndent()
-        this.modifiersList.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUI${clazz.componentName}Modifier* (*get${clazz.componentName}Modifier)();`)
+        this.modifiersList.print(`const ${peerGeneratorConfiguration().cppPrefix}ArkUI${clazz.componentName}Modifier* (*get${clazz.componentName}Modifier)();`)
     }
 
     private printMethod(method: PeerMethod) {
@@ -55,7 +55,7 @@ class HeaderVisitor {
 
     private printClassEpilog(clazz: PeerClass) {
         this.api.popIndent()
-        this.api.print(`} ${PeerGeneratorConfig.cppPrefix}ArkUI${clazz.componentName}Modifier;\n`)
+        this.api.print(`} ${peerGeneratorConfiguration().cppPrefix}ArkUI${clazz.componentName}Modifier;\n`)
         this.modifiersList.popIndent()
     }
 
@@ -64,7 +64,7 @@ class HeaderVisitor {
         this.accessorsList.pushIndent()
         this.library.materializedClasses.forEach(c => {
             this.printAccessor(c.className)
-            this.accessorsList.print(`const ${PeerGeneratorConfig.cppPrefix}ArkUI${c.className}Accessor* (*get${c.className}Accessor)();`)
+            this.accessorsList.print(`const ${peerGeneratorConfiguration().cppPrefix}ArkUI${c.className}Accessor* (*get${c.className}Accessor)();`)
         })
         this.accessorsList.popIndent()
     }
@@ -73,7 +73,7 @@ class HeaderVisitor {
         const clazz = this.library.materializedClasses.get(name)
         if (clazz) {
             let peerName = `${name}Peer`
-            let accessorName = `${PeerGeneratorConfig.cppPrefix}ArkUI${name}Accessor`
+            let accessorName = `${peerGeneratorConfiguration().cppPrefix}ArkUI${name}Accessor`
             this.api.print(`typedef struct ${peerName} ${peerName};`)
             this.api.print(`typedef struct ${accessorName} {`)
             this.api.pushIndent()
@@ -122,7 +122,7 @@ class HeaderVisitor {
     private printNodeTypes() {
         this.nodeTypesList.pushIndent()
         for (const nodeType of getNodeTypes(this.library)) {
-            const name = `${PeerGeneratorConfig.cppPrefix}ARKUI_${camelCaseToUpperSnakeCase(nodeType)}`
+            const name = `${peerGeneratorConfiguration().cppPrefix}ARKUI_${camelCaseToUpperSnakeCase(nodeType)}`
             this.nodeTypesList.print(name)
         }
         this.nodeTypesList.popIndent()
@@ -152,12 +152,12 @@ function decorateApiArk(apiVersion:string, text:string) {
 
     prologue = prologue
         .replaceAll(`%ARKUI_FULL_API_VERSION_VALUE%`, apiVersion)
-        .replaceAll(`%CPP_PREFIX%`, PeerGeneratorConfig.cppPrefix)
+        .replaceAll(`%CPP_PREFIX%`, peerGeneratorConfiguration().cppPrefix)
         .replaceAll(`%INTEROP_TYPES_HEADER`,
            readInteropTypesHeader()
         )
     epilogue = epilogue
-        .replaceAll("%CPP_PREFIX%", PeerGeneratorConfig.cppPrefix)
+        .replaceAll("%CPP_PREFIX%", peerGeneratorConfiguration().cppPrefix)
 
     return `
 ${prologue}
@@ -177,7 +177,7 @@ function decorateApiOhos(text:string) {
         .replaceAll(`%LIBRARY_NAME%`, 'LIBNAME')
         .replaceAll(`%INTEROP_TYPES_HEADER`, readInteropTypesHeader())
     epilogue = epilogue
-        .replaceAll("%CPP_PREFIX%", PeerGeneratorConfig.cppPrefix)
+        .replaceAll("%CPP_PREFIX%", peerGeneratorConfiguration().cppPrefix)
 
     return `
 ${prologue}
