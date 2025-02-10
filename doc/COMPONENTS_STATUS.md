@@ -253,7 +253,7 @@
 |`key`| Function | Lobah Mikhail | done | |
 |`id`| Function | Erokhin Ilya | done |  |
 |`geometryTransition`| Function | Lobah Mikhail | done| |
-|`stateStyles`| Function | Lobah Mikhail | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`stateStyles`| Function | Dudkin Sergey | blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`restoreId`| Function | Lobah Mikhail | done | |
 |`sphericalEffect`| Function | Lobah Mikhail | done | |
 |`lightUpEffect`| Function | Lobah Mikhail | done | |
