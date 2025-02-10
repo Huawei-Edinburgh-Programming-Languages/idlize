@@ -20,7 +20,7 @@ import { writeDeserializer, writeSerializer } from "../SerializerPrinter"
 import { TargetFile } from "../TargetFile"
 import { IdlSyntheticTypeBase } from "./CommonUtils"
 
-const ARKOALA_PACKAGE_PATH = 'idlize'
+const ARKOALA_PACKAGE_PATH = '.'
 
 export function makeCJSerializer(library: PeerLibrary): { targetFile: TargetFile, writer: LanguageWriter } {
     let writer = library.createLanguageWriter()
