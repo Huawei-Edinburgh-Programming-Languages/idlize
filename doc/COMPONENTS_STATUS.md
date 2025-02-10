@@ -1855,8 +1855,8 @@
 |*PixelMapMock*| *Class* | Maksimov Nikita | done | |
 |`release`| Function | Maksimov Nikita | done | |
 |*DragEvent*| *Class* | Evstigneev Roman | in progress | |
-|`getDisplayX`| Function | Tuzhilkin Ivan | in progress | |
-|`getDisplayY`| Function | Tuzhilkin Ivan | in progress | |
+|`getDisplayX`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getDisplayY`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getWindowX`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBLA1J |
 |`getWindowY`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBLA1J |
 |`getX`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBLA1J, deprecated? |
@@ -1867,11 +1867,11 @@
 |`setResult`| Function | Evstigneev Roman | done | |
 |`getResult`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getPreviewRect`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getVelocityX`| Function | Tuzhilkin Ivan | in progress | |
-|`getVelocityY`| Function | Tuzhilkin Ivan | in progress | |
-|`getVelocity`| Function | Tuzhilkin Ivan | in progress | |
+|`getVelocityX`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getVelocityY`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getVelocity`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getModifierKeyState`| Function | Tuzhilkin Ivan | in progress | |
-|`executeDropAnimation`| Function | Tuzhilkin Ivan | blocked IDL | interface is not exist |
+|`executeDropAnimation`| Function | Tuzhilkin Ivan | in progress | wait MASTER upmerge |
 |`getDragBehavior`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setDragBehavior`| Function | Tuzhilkin Ivan | in progress | |
 |`getUseCustomDropAnimation`| Function | Evstigneev Roman | in progress | |
