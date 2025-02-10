@@ -15,12 +15,12 @@
 
 import * as idl from '../../idl'
 import { generatorConfiguration } from "../../config"
-import { convertType, IdlNameConvertor, TypeConvertor } from "../nameConvertor"
+import { IdlNameConvertor, TypeConvertor } from "../nameConvertor"
 import { ConvertResult, GenericCppConvertor } from './InteropConvertors'
 import { PrimitiveTypesInstance } from '../../peer-generation/PrimitiveType'
 import { InteropArgConvertor } from './InteropConvertors'
-import { PeerMethod } from '../../peer-generation/PeerMethod'
 import { ReferenceResolver } from '../../peer-generation/ReferenceResolver'
+import { IDLContainerUtils } from '../../idl'
 
 export class CppConvertor extends GenericCppConvertor implements IdlNameConvertor {
     private unwrap(type: idl.IDLNode, result: ConvertResult): string {
@@ -70,10 +70,15 @@ export class CppReturnTypeConvertor implements TypeConvertor<string> {
         this.convertor = new CppConvertor(resolver)
     }
     convert(type: idl.IDLType): string {
+        if (idl.isContainerType(type))
+            return this.convertContainer(type)
         return this.convertor.convert(type)
     }
     convertContainer(type: idl.IDLContainerType): string {
-        return this.convertor.convert(type)
+        // Promise return is done as CPS callback, thus return type is void.
+        if (IDLContainerUtils.isPromise(type)) return 'void'
+        // TODO: FIX ME!
+        return PrimitiveTypesInstance.NativePointer.getText()
     }
     convertImport(type: idl.IDLReferenceType, importClause: string): string {
         return this.convertor.convert(type)

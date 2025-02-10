@@ -27,11 +27,12 @@ import {
 } from "../FileGenerators";
 import { createDestroyPeerMethod, MaterializedClass, MaterializedMethod, IndentedPrinter,
     groupBy, Language, createConstructPeerMethod, PeerClass, PeerMethod, PeerLibrary, InteropReturnTypeConvertor,
-    createLanguageWriter, createEmptyReferenceResolver, LanguageWriter, CppConvertor
+    createLanguageWriter, createEmptyReferenceResolver, LanguageWriter, CppConvertor,
+    CppReturnTypeConvertor
 } from '@idlizer/core'
 import { CppLanguageWriter, LanguageStatement, printMethodDeclaration } from "../LanguageWriters";
 import { LibaceInstall } from "../../Install";
-import { IDLAnyType, IDLBooleanType, IDLFunctionType, IDLPointerType, IDLStringType, IDLThisType, IDLType, isOptionalType, isReferenceType } from '@idlizer/core/idl'
+import { IDLAnyType, IDLBooleanType, IDLFunctionType, IDLPointerType, IDLStringType, IDLThisType, IDLType, IDLVoidType, isOptionalType, isReferenceType } from '@idlizer/core/idl'
 
 export class ModifierVisitor {
     dummy = this.library.createLanguageWriter(Language.CPP)
@@ -39,7 +40,7 @@ export class ModifierVisitor {
     modifiers = this.library.createLanguageWriter(Language.CPP)
     getterDeclarations = this.library.createLanguageWriter(Language.CPP)
     modifierList = this.library.createLanguageWriter(Language.CPP)
-    private readonly returnTypeConvertor = new InteropReturnTypeConvertor()
+    private readonly returnTypeConvertor = new CppReturnTypeConvertor(this.library)
     commentedCode = true
 
     constructor(
@@ -49,7 +50,7 @@ export class ModifierVisitor {
 
     printDummyImplFunctionBody(method: PeerMethod) {
         let _ = this.dummy
-        const isVoid = this.returnTypeConvertor.isVoid(method)
+        const isVoid = method.returnType == IDLVoidType
         let retVal = isVoid ? undefined : (method.dummyReturnValue ?? "0")
 
         _.writeStatement(
@@ -89,7 +90,7 @@ export class ModifierVisitor {
     }
 
     private printReturnStatement(printer: LanguageWriter, method: PeerMethod, isDummy?: boolean, returnValue: string | undefined = undefined) {
-        const isVoid = this.returnTypeConvertor.isVoid(method)
+        const isVoid = method.returnType == IDLVoidType
         if (isDummy) {
             if (returnValue) {
                 printer.print(`return ${returnValue};`)
