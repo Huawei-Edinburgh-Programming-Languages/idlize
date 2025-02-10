@@ -52,22 +52,18 @@ class SerializerPrinter {
     private generateInterfaceSerializer(target: idl.IDLInterface, prefix: string = "") {
         const methodName = this.library.getInteropName(target)
         this.library.setCurrentContext(`write${methodName}()`)
-        if (isMaterialized(target, this.library)) {
-            const signature = new NamedMethodSignature(
-                idl.IDLVoidType,
-                [idl.createReferenceType(target.name, undefined, target)],
-                ["value"],
-                undefined,
-                [undefined, PrintHint.AsPointer]
-            )
-            const method = new Method(`write${methodName}`, signature)
-            this.writer.writeMethodImplementation(method, writer => { this.generateMaterializedBodySerializer(target, writer) } )
-        } else {
-            this.writer.writeMethodImplementation(
-                new Method(`write${methodName}`, new NamedMethodSignature(idl.IDLVoidType, [idl.createReferenceType(target.name)], ["value"])),
-                writer => { this.generateInterfaceBodySerializer(target, writer) }
-            )
-        }
+        this.writer.writeMethodImplementation(
+            new Method(`write${methodName}`,
+                isMaterialized(target, this.library)
+                    ? new NamedMethodSignature(idl.IDLVoidType, [idl.createReferenceType(target.name, undefined, target)], ["value"], undefined, [undefined, PrintHint.AsPointer])
+                    : new NamedMethodSignature(idl.IDLVoidType, [idl.createReferenceType(target.name, undefined, target)], ["value"])),
+            writer => {
+                if (isMaterialized(target, this.library)) {
+                    this.generateMaterializedBodySerializer(target, writer)
+                } else {
+                    this.generateInterfaceBodySerializer(target, writer)
+                }
+        })
         this.library.setCurrentContext(undefined)
     }
 
