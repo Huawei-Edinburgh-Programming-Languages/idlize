@@ -1,4 +1,4 @@
-import { PeerEventsProperties } from "./peer_events"
+import { PeerEventsProperties } from "./generated/peer_events"
 
 export function UseEventsProperties(properties: PeerEventsProperties) {
 

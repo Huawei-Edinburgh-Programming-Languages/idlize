@@ -16,6 +16,7 @@
   "keywords": [],
   "dependencies": {
     "@koalaui/interop": "1.5.3",
+    "@koalaui/common": "1.4.7",
     "@idlizer/core": "2.0.28+devel",
     "@idlizer/libohos": "2.0.28+devel",
     "@types/node": "^18.0.0",

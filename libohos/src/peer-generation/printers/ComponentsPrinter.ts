@@ -81,7 +81,7 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
             imports.addFeatures(['int32', 'float32'], '@koalaui/common')
             imports.addFeatures(["KStringPtr", "KBoolean", "RuntimeType", "runtimeType", "isResource", "isInstanceOf"], "@koalaui/interop")
             imports.addFeatures(["NodeAttach", "remember"], "@koalaui/runtime")
-            imports.addFeature('ComponentBase', './ComponentBase')
+            imports.addFeature('ComponentBase', '../ComponentBase')
             this.populateImports(imports)
 
             if (peer.originalParentFilename) {
@@ -97,7 +97,7 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
             for (const method of peer.methods) {
                 for (const argType of method.method.signature.args)
                     if (convertIdlToCallback(this.library, peer, method, argType))
-                        imports.addFeature("UseEventsProperties", './use_properties')
+                        imports.addFeature("UseEventsProperties", '../use_properties')
             }
 
             const component = findComponentByType(this.library, idl.createReferenceType(peer.originalClassName!))!
