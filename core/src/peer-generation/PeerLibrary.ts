@@ -36,6 +36,7 @@ import { MaterializedClass } from './Materialized'
 import { PeerFile } from './PeerFile'
 import { LayoutManager, LayoutManagerStrategy } from './LayoutManager'
 import { isMaterialized } from './isMaterialized'
+import { IDLLibrary } from '../library'
 
 export class PeerLibrary implements LibraryInterface {
 
@@ -392,6 +393,21 @@ export class PeerLibrary implements LibraryInterface {
     }
     setFileLayout(strategy: LayoutManagerStrategy) {
         this.layout = new LayoutManager(strategy)
+    }
+
+    _cachedIdlLibrary?: IDLLibrary
+    asIDLLibrary(): IDLLibrary {
+        if (this._cachedIdlLibrary) {
+            return this._cachedIdlLibrary
+        }
+        this._cachedIdlLibrary = {
+            files: this.files.map(file => ({
+                fileName: file.originalFilename,
+                entities: file.entries,
+                package: file.package()
+            }))
+        }
+        return this._cachedIdlLibrary
     }
 }
 
