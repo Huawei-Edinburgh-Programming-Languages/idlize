@@ -15,14 +15,15 @@
 
 import * as idl from '../../idl'
 import { generatorConfiguration } from "../../config"
-import { IdlNameConvertor } from "../nameConvertor"
-import { ConvertResult, InteropConvertor, InteropReturnTypeConvertor } from './InteropConvertors'
+import { convertType, IdlNameConvertor, TypeConvertor } from "../nameConvertor"
+import { ConvertResult, GenericCppConvertor } from './InteropConvertors'
 import { PrimitiveTypesInstance } from '../../peer-generation/PrimitiveType'
 import { InteropArgConvertor } from './InteropConvertors'
 import { ReferenceResolver } from '../../peer-generation/ReferenceResolver'
 import { isMaterialized } from '../../peer-generation/Materialized'
+import { IDLContainerUtils } from '../../idl'
 
-export class CppInteropConvertor extends InteropConvertor implements IdlNameConvertor {
+export class CppConvertor extends GenericCppConvertor implements IdlNameConvertor {
     private unwrap(type: idl.IDLNode, result: ConvertResult): string {
         const conf = generatorConfiguration()
         if (idl.isType(type) && idl.isOptionalType(type)) {
@@ -64,13 +65,47 @@ export class CppInteropArgConvertor extends InteropArgConvertor {
     }
 }
 
-export class CppReturnTypeConvertor extends InteropReturnTypeConvertor {
-    constructor(protected resolver: ReferenceResolver) { super() }
-
+export class CppReturnTypeConvertor implements TypeConvertor<string> {
+    private convertor: CppConvertor
+    constructor(
+        private resolver: ReferenceResolver
+    ) {
+        this.convertor = new CppConvertor(resolver)
+    }
+    isVoid(returnType: idl.IDLType): boolean {
+        return this.convert(returnType) == 'void'
+    }
+    convert(type: idl.IDLType): string {
+        return convertType(this, type)
+    }
+    convertContainer(type: idl.IDLContainerType): string {
+        // Promise return is done as CPS callback, thus return type is void.
+        if (idl.IDLContainerUtils.isPromise(type)) return 'void'
+        // TODO: FIX ME!
+        return PrimitiveTypesInstance.NativePointer.getText()
+    }
+    convertImport(type: idl.IDLReferenceType, importClause: string): string {
+        return this.convertor.convert(type)
+    }
+    convertOptional(type: idl.IDLOptionalType): string {
+        return this.convertor.convert(type)
+    }
+    convertPrimitiveType(type: idl.IDLPrimitiveType): string {
+        if (type == idl.IDLUndefinedType) return 'void'
+        if (type == idl.IDLNumberType) return 'Ark_Int32' // :(
+        return this.convertor.convert(type)
+    }
+    convertTypeParameter(type: idl.IDLTypeParameterType): string {
+        return this.convertor.convert(type)
+    }
     convertTypeReference(type: idl.IDLReferenceType): string {
-        const resolved = this.resolver.resolveTypeReference(type)
-        if (resolved && idl.isInterface(resolved) && isMaterialized(resolved, this.resolver))
+        const decl = this.resolver.resolveTypeReference(type)
+        if (decl && idl.isInterface(decl) && isMaterialized(decl, this.resolver)) {
             return generatorConfiguration().param("TypePrefix") + type.name
-        return super.convertTypeReference(type)
+        }
+        return this.convertor.convert(type)
+    }
+    convertUnion(type: idl.IDLUnionType): string {
+        return this.convertor.convert(type)
     }
 }

@@ -16,6 +16,7 @@
 import { generatorConfiguration } from '../../config'
 import * as idl from '../../idl'
 import { qualifiedName } from '../../peer-generation/idl/common'
+import { isMaterialized } from '../../peer-generation/Materialized'
 import { PeerMethod } from '../../peer-generation/PeerMethod'
 import { PrimitiveTypesInstance } from '../../peer-generation/PrimitiveType'
 import { ReferenceResolver } from '../../peer-generation/ReferenceResolver'
@@ -28,7 +29,7 @@ export interface ConvertResult {
     noPrefix: boolean
 }
 
-export class InteropConvertor implements NodeConvertor<ConvertResult> {
+export class GenericCppConvertor implements NodeConvertor<ConvertResult> {
 
     constructor(protected resolver: ReferenceResolver) {}
 
@@ -180,19 +181,20 @@ export class InteropConvertor implements NodeConvertor<ConvertResult> {
     }
 }
 
-export class InteropNameConvertor implements IdlNameConvertor {
-    private readonly interopConvertor: InteropConvertor
+export class CppNameConvertor implements IdlNameConvertor {
+    private readonly cppConvertor: GenericCppConvertor
     constructor(protected resolver: ReferenceResolver) {
-        this.interopConvertor = new InteropConvertor(resolver)
+        this.cppConvertor = new GenericCppConvertor(resolver)
     }
     convert(node: idl.IDLNode): string {
-        return this.interopConvertor.convertNode(node).text
+        return this.cppConvertor.convertNode(node).text
     }
 }
 
 export class InteropReturnTypeConvertor implements TypeConvertor<string> {
-    constructor(protected readonly resolver?: ReferenceResolver) {
-    }
+    constructor(
+        protected readonly resolver: ReferenceResolver
+    ) {}
 
     isVoid(method: PeerMethod): boolean {
         return this.convert(method.returnType) === idl.IDLVoidType.name
@@ -225,8 +227,8 @@ export class InteropReturnTypeConvertor implements TypeConvertor<string> {
             case idl.IDLU64Type:
             case idl.IDLF16Type:
             case idl.IDLF32Type:
-            case idl.IDLF64Type:
-            case idl.IDLNumberType: return PrimitiveTypesInstance.Int32.getText()
+            case idl.IDLF64Type: return PrimitiveTypesInstance.Int32.getText()
+            case idl.IDLNumberType: return `Ark_Number`
             case idl.IDLBooleanType: return PrimitiveTypesInstance.Boolean.getText()
             case idl.IDLBigintType: return PrimitiveTypesInstance.Int64.getText()
             case idl.IDLAnyType:
@@ -244,16 +246,25 @@ export class InteropReturnTypeConvertor implements TypeConvertor<string> {
         return idl.IDLVoidType.name
     }
     convertTypeReference(type: idl.IDLReferenceType): string {
-        if (type.name.endsWith("Attribute"))
+       if (type.name.endsWith("Attribute"))
             return idl.IDLVoidType.name
-        // Callbacks and array types return by value
-        if (this.resolver && idl.isCallback(this.resolver.toDeclaration(type))) {
-            return type.name
+        const decl = this.resolver.resolveTypeReference(type)
+        if (decl) {
+            // Callbacks and array types return by value
+            if (idl.isCallback(this.resolver.toDeclaration(type))) {
+                return type.name
+            }
+            if (idl.isInterface(decl)) {
+                if (isMaterialized(decl, this.resolver)) {
+                    return PrimitiveTypesInstance.NativePointer.getText()
+                }
+                return 'KInteropReturnBuffer'
+            }
         }
         return PrimitiveTypesInstance.NativePointer.getText()
     }
     convertUnion(type: idl.IDLUnionType): string {
-        return PrimitiveTypesInstance.NativePointer.getText()
+        return 'KInteropReturnBuffer'
     }
 }
 
