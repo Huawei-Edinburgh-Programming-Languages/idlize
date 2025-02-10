@@ -10,7 +10,9 @@
   },
   "files": [
     "build/lib/**/*.js",
-    "build/lib/**/*.d.ts"
+    "build/lib/**/*.d.ts",
+    "peer_lib/**/*",
+    "templates/**/*"
   ],
   "type": "module",
   "engines": {
