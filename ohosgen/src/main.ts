@@ -41,8 +41,10 @@ import {
 } from "@idlizer/core/idl"
 import { IDLVisitor, loadConfiguration, setFileGeneratorConfiguration,
     IDLInteropPredefinesVisitor, IdlPeerProcessor, IDLPredefinesVisitor,
-    generateOhos, generateOhosOld, suggestLibraryName, loadPlugin, fillSyntheticDeclarations, DefaultConfig,
+    loadPlugin, fillSyntheticDeclarations, DefaultConfig,
 } from "@idlizer/libohos"
+import { generateOhos } from "./ohos"
+import { generateOhos as generateOhosOld, suggestLibraryName } from "./OhosGenerator"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')

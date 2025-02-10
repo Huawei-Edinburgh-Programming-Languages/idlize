@@ -21,12 +21,11 @@ import { CppLanguageWriter, CppInteropConvertor, LanguageWriter } from "@idlizer
 import { PeerGeneratorConfig } from "./PeerGeneratorConfig";
 import { writeDeserializer, writeDeserializerFile, writeSerializer, writeSerializerFile } from "./printers/SerializerPrinter"
 import { SELECTOR_ID_PREFIX, writeConvertors } from "./printers/ConvertorsPrinter"
-import { ArkoalaInstall, LibaceInstall } from "../Install"
 import { ImportsCollector } from "./ImportsCollector"
 import { writeARKTSTypeCheckers, writeTSTypeCheckers } from "./printers/TypeCheckPrinter"
 import { printCallbacksKinds, printCallbacksKindsImports, printDeserializeAndCall } from "./printers/CallbacksPrinter"
 import * as idl from "@idlizer/core/idl"
-import { createEmptyReferenceResolver, ReferenceResolver } from "@idlizer/core"
+import { ReferenceResolver } from "@idlizer/core"
 import { PrintHint } from "@idlizer/core"
 import { SourceFile, TsSourceFile, CJSourceFile } from "./printers/SourceFile"
 import { NativeModule } from "./NativeModule"
@@ -547,17 +546,7 @@ ${headers.join("\n")}
 `
 }
 
-export function copyToArkoala(from: string, arkoala: ArkoalaInstall, filters?: string[]) {
-    filters = filters?.map(it => path.join(from, it))
-    copyDir(path.join(from, 'sig'), arkoala.sig, true, filters)
-}
-
-export function copyToLibace(from: string, libace: LibaceInstall) {
-    const macros = path.join(from, 'shared', 'arkoala-macros.h')
-    fs.copyFileSync(macros, libace.arkoalaMacros)
-}
-
-function copyDir(from: string, to: string, recursive: boolean, filters?: string[]) {
+export function copyDir(from: string, to: string, recursive: boolean, filters?: string[]) {
     fs.readdirSync(from).forEach(it => {
         const sourcePath = path.join(from, it)
         const targetPath = path.join(to, it)

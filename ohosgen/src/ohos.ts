@@ -14,11 +14,7 @@
  */
 
 import * as path from 'node:path'
-
-import { layout, writeIntegratedFile } from "./common";
-import { OhosInstall } from "../Install"
-import { createMaterializedPrinter } from "./printers/MaterializedPrinter";
-import { printGlobal } from "./printers/GlobalScopePrinter";
+import { copyFileSync, existsSync, mkdirSync } from 'node:fs';
 import {
     IDLBufferType,
     IDLI32Type,
@@ -32,6 +28,10 @@ import {
     PeerLibrary,
 } from "@idlizer/core";
 import {
+    layout,
+    writeIntegratedFile,
+    createMaterializedPrinter,
+    printGlobal,
     dummyImplementations,
     makeCallbacksKinds,
     makeDeserializeAndCall,
@@ -40,16 +40,17 @@ import {
     makeTSSerializer,
     makeTypeChecker,
     readLangTemplate,
-} from "./FileGenerators";
-import { printArkUIGeneratedNativeModule } from './printers/NativeModulePrinter';
-import { NativeModule } from './NativeModule';
-import { TargetFile } from "./printers/TargetFile"
-import { copyFileSync, existsSync, mkdirSync } from 'node:fs';
+    printArkUIGeneratedNativeModule,
+    NativeModule,
+    TargetFile,
+    printRealAndDummyAccessors,
+    printRealAndDummyModifiers,
+    printSerializersOhos,
+    install,
+    printInterfaceData,
+} from '@idlizer/libohos';
+import { OhosInstall } from "./OhosInstall"
 import { generateNativeOhos, suggestLibraryName } from './OhosGenerator';
-import { printRealAndDummyAccessors, printRealAndDummyModifiers } from './printers/ModifierPrinter';
-import { printSerializersOhos } from './printers/HeaderPrinter';
-import { install } from './LayoutManager';
-import { printInterfaceData } from './printers/InterfaceDataPrinter';
 
 export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: GeneratorConfiguration) {
     peerLibrary.name = suggestLibraryName(peerLibrary).toLowerCase()

@@ -40,8 +40,7 @@ import {
     verifyIDLString
 } from "@idlizer/core/idl"
 import { IDLVisitor, loadConfiguration, PeerGeneratorConfig, setFileGeneratorConfiguration,
-    generateTracker, IDLInteropPredefinesVisitor, IdlPeerProcessor, IDLPredefinesVisitor,
-    generateOhos, generateOhosOld, suggestLibraryName, loadPlugin,
+    generateTracker, IDLInteropPredefinesVisitor, IdlPeerProcessor, IDLPredefinesVisitor, loadPlugin,
     SkoalaDeserializerPrinter, IdlSkoalaLibrary, IldSkoalaFile, generateIdlSkoala,
     IdlWrapperProcessor, fillSyntheticDeclarations, DefaultConfig,
 } from "@idlizer/libohos"
@@ -84,9 +83,7 @@ const options = program
     .option('--plugin <file>', 'File with generator\'s plugin')
     .option('--default-idl-package <name>', 'Name of the default package for generated IDL')
     .option('--no-commented-code', 'Do not generate commented code in modifiers')
-    .option('--use-new-ohos', 'Use new ohos generator')
     .option('--enable-log', 'Enable logging')
-    .option('--split-files', 'Experemental feature to store declarations to different files for ohos generator')
     .option('--options-file <path>', 'Path to generator configuration options file (appends to defaults)')
     .option('--override-options-file <path>', 'Path to generator configuration options file (replaces defaults)')
 
@@ -394,11 +391,6 @@ if (options.dts2peer) {
                 idlLibrary.files.push(peerFile)
             },
             onEnd(outDir) {
-                if (options.generatorTarget == "ohos") {
-                    // This setup code placed here because wrong prefix may be cached during library creation
-                    // TODO find better place for setup?
-                    setDefaultConfiguration(new DefaultConfig(apiVersion))
-                }
                 fillSyntheticDeclarations(idlLibrary)
                 const peerProcessor = new IdlPeerProcessor(idlLibrary)
                 peerProcessor.process()
@@ -439,17 +431,6 @@ function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language)
     }
     if (options.generatorTarget == "tracker") {
         generateTracker(outDir, idlLibrary, options.trackerStatus, options.verbose)
-    }
-    if (options.generatorTarget == "ohos") {
-        if (options.useNewOhos) {
-            generateOhos(outDir, idlLibrary, new DefaultConfig(
-                apiVersion, {
-                LibraryPrefix: `${suggestLibraryName(idlLibrary)}_`,
-                GenerateUnused: true
-            }))
-        } else {
-            generateOhosOld(outDir, idlLibrary, apiVersion, options.defaultIdlPackage as string, options.splitFiles)
-        }
     }
     if (options.plugin) {
         loadPlugin(options.plugin)

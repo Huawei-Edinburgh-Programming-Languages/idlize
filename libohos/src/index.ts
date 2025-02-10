@@ -13,12 +13,12 @@
  * limitations under the License.
  */
 
+import * as fs from 'fs'
 import { BaseGeneratorConfiguration } from '@idlizer/core'
 import { PeerGeneratorConfig } from './peer-generation/PeerGeneratorConfig'
 
 export * from './IDLVisitor'
 export * from './IDLVisitorConfig'
-export * from "./Install"
 export * from "./peer-generation/Tracker"
 export * from "./peer-generation/ImportsCollector"
 export * from './peer-generation/PeerGeneratorConfig'
@@ -57,7 +57,6 @@ export * from './peer-generation/printers/InterfacePrinter'
 export * from './peer-generation/printers/lang/Java'
 export * from './peer-generation/printers/lang/CJPrinters'
 export * from './peer-generation/printers/lang/JavaPrinters'
-export * from './peer-generation/ohos'
 export * from './peer-generation/PromiseConvertors'
 export * from './peer-generation/idl/IdlDependenciesCollector'
 export * from './peer-generation/idl/IdlPeerGeneratorVisitor'
@@ -67,7 +66,6 @@ export * from './peer-generation/LayoutManager'
 export * from './peer-generation/DeclarationTargetCollector'
 export * from './peer-generation/plugin-api'
 export * from './peer-generation/ImportsCollectorUtils'
-export { generateOhos as generateOhosOld, suggestLibraryName } from './peer-generation/OhosGenerator'
 export * from './peer-generation/NativeModule'
 export * from './peer-generation/FileGenerators'
 export * from './TestGeneratorVisitor'
@@ -99,5 +97,12 @@ export class DefaultConfig extends BaseGeneratorConfiguration {
             return this.params[name] as T[]
         }
         return []
+    }
+}
+
+export class Install {
+    mkdir(path: string): string {
+        fs.mkdirSync(path, { recursive: true })
+        return path
     }
 }
