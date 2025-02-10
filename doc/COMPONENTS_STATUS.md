@@ -1961,7 +1961,7 @@
 |`close`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IBECPG + |
 |*DatePickerDialog*| *Class* | Ekaterina Stepanova | blocked IDL | |
 |`show`| Function | Ekaterina Stepanova | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBHHWA |
-|*BaseGestureEvent*| *Class* | Maksimov Nikita | in progress | |
+|*BaseGestureEvent*| *Class* | Maksimov Nikita | done | |
 |`setFingerList`| Function | Maksimov Nikita | done | implementation and UT Vadim Voronov |
 |*TapGestureEvent*| *Class* | | | |
 |*LongPressGestureEvent*| *Class* | | | |
