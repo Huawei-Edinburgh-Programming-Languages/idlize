@@ -311,6 +311,8 @@ ${serializers.getOutput().join("\n")}
 export function makeTSDeserializer(library: PeerLibrary): string {
     const deserializer = library.createLanguageWriter(Language.TS)
     writeDeserializer(library, deserializer, "")
+    const importMaterializedBase = library.name == "arkoala" ? "./../../MaterializedBase" : "./../MaterializedBase"
+    const importGeneratedUtils = library.name == "arkoala" ? "../../shared/generated-utils" : "../shared/generated-utils"
     return `${cStyleCopyright}
 import { runtimeType, Tags, RuntimeType, SerializerBase, DeserializerBase, CallbackResource } from "@koalaui/interop"
 import { KPointer, ${NativeModule.Interop.name} } from "@koalaui/interop"

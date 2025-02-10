@@ -95,8 +95,8 @@ class PeerFileVisitor {
                 collectDeclDependencies(this.library, component.interfaceDeclaration, imports, { expandTypedefs: true })
         })
         if (this.library.language === Language.TS) {
-            imports.addFeature('GestureName', './shared/generated-utils')
-            imports.addFeature('GestureComponent', './shared/generated-utils')
+            imports.addFeature('GestureName', '../shared/generated-utils')
+            imports.addFeature('GestureComponent', '../shared/generated-utils')
         }
 
         if (this.library.language === Language.TS || this.library.language === Language.ARKTS) {
@@ -243,8 +243,8 @@ class PeerFileVisitor {
             `import { nullptr, KPointer, KInt, KBoolean, KStringPtr } from "@koalaui/interop"`,
             `import { isResource, isInstanceOf, runtimeType, RuntimeType } from "@koalaui/interop"`,
             `import { Serializer } from "./Serializer"`,
-            `import { ComponentBase } from "../ComponentBase"`,
-            `import { PeerNode } from "../PeerNode"`
+            `import { ComponentBase } from "../../ComponentBase"`,
+            `import { PeerNode } from "../../PeerNode"`
         ]
         switch (lang) {
             case Language.TS: {
