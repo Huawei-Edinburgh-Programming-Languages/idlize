@@ -27,7 +27,7 @@ export class PeerFile implements LibraryFileInterface {
     ) {}
 
     public packageName(): string {
-        const packageTag = this.package
+        const packageTag = this.package()
         if (packageTag === undefined) {
             return ""
         }
