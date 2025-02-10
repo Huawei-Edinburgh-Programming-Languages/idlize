@@ -64,7 +64,7 @@ export class ModifierVisitor {
     printDummyImplFunctionBody(method: PeerMethod) {
         let _ = this.dummy
         const isVoid = this.returnTypeConvertor.isVoid(method)
-        let retVal = isVoid ? undefined : (method.dummyReturnValue ?? "0")
+        let retVal = isVoid ? undefined : (method.dummyReturnValue(this.library) ?? "0")
 
         _.writeStatement(
             _.makeCondition(

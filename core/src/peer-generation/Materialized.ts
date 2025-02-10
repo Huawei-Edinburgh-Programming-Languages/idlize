@@ -23,7 +23,9 @@ import { qualifiedName } from './idl/common'
 import { PeerClassBase } from './PeerClass'
 import { PeerMethod } from './PeerMethod'
 import { ReferenceResolver } from './ReferenceResolver'
-import {isInterface} from "../idl";
+import {isInterface, isNamedNode} from "../idl";
+import {PeerLibrary} from "./PeerLibrary";
+import assert from 'node:assert'
 
 export function isMaterializedNode(declaration: idl.IDLNode, resolver: ReferenceResolver): boolean {
     let res
@@ -113,7 +115,7 @@ export class MaterializedMethod extends PeerMethod {
         }
     }
 
-    override get dummyReturnValue(): string | undefined {
+    override dummyReturnValue(resolver: PeerLibrary): string | undefined {
         if (this.method.name === "ctor") return `(${this.originalParentName}Peer*) 100`
         if (this.method.name === "getFinalizer") return `fnPtr<KNativePointer>(dummyClassFinalizer)`
         if (this.method.modifiers?.includes(MethodModifier.STATIC)) {
@@ -123,7 +125,12 @@ export class MaterializedMethod extends PeerMethod {
             if (this.method.signature.returnType === idl.IDLBooleanType) {
                 return '0'
             }
-            return `(${this.originalParentName}Peer*) 300`
+            if (isMaterializedNode(this.method.signature.returnType, resolver)) {
+                assert(isNamedNode(this.method.signature.returnType))
+                return `(${this.method.signature.returnType.name}Peer*) 300`
+            } else {
+                return `(${this.originalParentName}Peer*) 300`
+            }
         }
         if (idl.isReferenceType(this.method.signature.returnType)) {
             return "{}"
