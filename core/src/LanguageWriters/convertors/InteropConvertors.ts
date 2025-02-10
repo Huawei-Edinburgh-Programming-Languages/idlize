@@ -15,7 +15,6 @@
 
 import { generatorConfiguration } from '../../config'
 import * as idl from '../../idl'
-import { Language } from '../../Language'
 import { qualifiedName } from '../../peer-generation/idl/common'
 import { PeerMethod } from '../../peer-generation/PeerMethod'
 import { PrimitiveTypesInstance } from '../../peer-generation/PrimitiveType'
@@ -23,16 +22,13 @@ import { ReferenceResolver } from '../../peer-generation/ReferenceResolver'
 import { capitalize } from '../../util'
 import { maybeTransformManagedCallback } from '../ArgConvertors'
 import { convertNode, convertType, IdlNameConvertor, NodeConvertor, TypeConvertor } from '../nameConvertor'
-import { CJInteropArgConvertor } from './CJConvertors'
-import { CppInteropArgConvertor } from './CppConvertors'
-import { JavaInteropArgConvertor } from './JavaConvertors'
 
 export interface ConvertResult {
     text: string,
     noPrefix: boolean
 }
 
-export class InteropConvertor implements NodeConvertor<ConvertResult> {
+export class GenericCppConvertor implements NodeConvertor<ConvertResult> {
 
     constructor(protected resolver: ReferenceResolver) {}
 
@@ -183,13 +179,13 @@ export class InteropConvertor implements NodeConvertor<ConvertResult> {
     }
 }
 
-export class InteropNameConvertor implements IdlNameConvertor {
-    private readonly interopConvertor: InteropConvertor
+export class CppNameConvertor implements IdlNameConvertor {
+    private readonly cppConvertor: GenericCppConvertor
     constructor(protected resolver: ReferenceResolver) {
-        this.interopConvertor = new InteropConvertor(resolver)
+        this.cppConvertor = new GenericCppConvertor(resolver)
     }
     convert(node: idl.IDLNode): string {
-        return this.interopConvertor.convertNode(node).text
+        return this.cppConvertor.convertNode(node).text
     }
 }
 
@@ -243,7 +239,7 @@ export class InteropReturnTypeConvertor implements TypeConvertor<string> {
         return idl.IDLVoidType.name
     }
     convertTypeReference(type: idl.IDLReferenceType): string {
-        if (type.name.endsWith("Attribute"))
+       if (type.name.endsWith("Attribute"))
             return idl.IDLVoidType.name
         return PrimitiveTypesInstance.NativePointer.getText()
     }

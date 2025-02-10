@@ -36,7 +36,7 @@ import { ArkPrimitiveTypesInstance } from "../../peer-generation/ArkPrimitiveTyp
 import { WrapperClass, WrapperField, WrapperMethod } from "../WrapperClass";
 import { Skoala } from "../utils";
 import { Field, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, NamedMethodSignature, NumberConvertor } from "@idlizer/core";
-import { ClassConvertor, StringConvertor, TypeAliasConvertor, UnionConvertor, InteropNameConvertor,
+import { ClassConvertor, StringConvertor, TypeAliasConvertor, UnionConvertor, CppNameConvertor,
     ArgConvertor, BooleanConvertor, BaseArgConvertor, EnumConvertor, ExpressionAssigner, RuntimeType, UndefinedConvertor,
     convertDeclaration, convertType, DeclarationConvertor, IdlNameConvertor, TypeConvertor, generateSyntheticFunctionName
 } from "@idlizer/core"
@@ -72,7 +72,7 @@ export class IldSkoalaFile implements LibraryFileInterface {
 export class IdlSkoalaLibrary implements LibraryInterface {
     public readonly serializerDeclarations: Set<idl.IDLInterface> = new Set()
     readonly nameConvertorInstance: IdlNameConvertor = new TSSkoalaTypeNameConvertor(this)
-    readonly interopNameConvertorInstance: IdlNameConvertor = new InteropNameConvertor(this)
+    readonly interopNameConvertorInstance: IdlNameConvertor = new CppNameConvertor(this)
     readonly typeMap = new Map<idl.IDLType, [idl.IDLNode, boolean]>()
     public name: string = ""
 

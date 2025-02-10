@@ -49,7 +49,7 @@ import {
 import {
     ArgConvertor,
     capitalize,
-    CppInteropConvertor,
+    CppConvertor,
     FunctionCallExpression,
     generateCallbackAPIArguments,
     generatorConfiguration,
@@ -324,8 +324,8 @@ function writeCJMethod(writer: LanguageWriter, method: {name: string, method: Na
         }
         const resultVarName = 'result'
         let shouldReturn = false
-        let returnType = method.method.returnType 
-        let nativeName = method.name 
+        let returnType = method.method.returnType
+        let nativeName = method.name
         if (returnType === idl.IDLVoidType) {
             writer.print(`${new FunctionCallExpression(nativeName.startsWith('_') ? nativeName.substring(1) : nativeName, functionCallArgs.map(it => writer.makeString(it))).asString()}`)
         } else if (returnType === idl.IDLStringType) {
@@ -365,14 +365,14 @@ function writeCJMethod(writer: LanguageWriter, method: {name: string, method: Na
         }
         writer.popIndent()
         writer.print('}')
-    })    
+    })
 }
 
 abstract class OHOSVisitor {
     implementationStubsFile: CppSourceFile
 
-    hWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), ArkPrimitiveTypesInstance)
-    cppWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), ArkPrimitiveTypesInstance)
+    hWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppConvertor(this.library), ArkPrimitiveTypesInstance)
+    cppWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppConvertor(this.library), ArkPrimitiveTypesInstance)
 
     dependecyCollector: DependecyCollector
 
@@ -1088,7 +1088,7 @@ abstract class OHOSVisitor {
         writeSerializer(this.library, this.cppWriter, prefix)
         writeDeserializer(this.library, this.cppWriter, prefix)
 
-        let writer = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), ArkPrimitiveTypesInstance)
+        let writer = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppConvertor(this.library), ArkPrimitiveTypesInstance)
         this.writeModifiers(writer)
         this.writeImpls()
         this.cppWriter.concat(writer)

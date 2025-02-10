@@ -15,12 +15,14 @@
 
 import * as idl from '../../idl'
 import { generatorConfiguration } from "../../config"
-import { IdlNameConvertor } from "../nameConvertor"
-import { ConvertResult, InteropConvertor } from './InteropConvertors'
+import { convertType, IdlNameConvertor, TypeConvertor } from "../nameConvertor"
+import { ConvertResult, GenericCppConvertor } from './InteropConvertors'
 import { PrimitiveTypesInstance } from '../../peer-generation/PrimitiveType'
 import { InteropArgConvertor } from './InteropConvertors'
+import { PeerMethod } from '../../peer-generation/PeerMethod'
+import { ReferenceResolver } from '../../peer-generation/ReferenceResolver'
 
-export class CppInteropConvertor extends InteropConvertor implements IdlNameConvertor {
+export class CppConvertor extends GenericCppConvertor implements IdlNameConvertor {
     private unwrap(type: idl.IDLNode, result: ConvertResult): string {
         const conf = generatorConfiguration()
         if (idl.isType(type) && idl.isOptionalType(type)) {
@@ -59,5 +61,36 @@ export class CppInteropArgConvertor extends InteropArgConvertor {
             case idl.IDLPointerType: return PrimitiveTypesInstance.NativePointer.getText()
         }
         return super.convertPrimitiveType(type)
+    }
+}
+
+export class CppReturnTypeConvertor implements TypeConvertor<string> {
+    private convertor: CppConvertor
+    constructor(resolver: ReferenceResolver) {
+        this.convertor = new CppConvertor(resolver)
+    }
+    convert(type: idl.IDLType): string {
+        return this.convertor.convert(type)
+    }
+    convertContainer(type: idl.IDLContainerType): string {
+        return this.convertor.convert(type)
+    }
+    convertImport(type: idl.IDLReferenceType, importClause: string): string {
+        return this.convertor.convert(type)
+    }
+    convertOptional(type: idl.IDLOptionalType): string {
+        return this.convertor.convert(type)
+    }
+    convertPrimitiveType(type: idl.IDLPrimitiveType): string {
+        return this.convertor.convert(type)
+    }
+    convertTypeParameter(type: idl.IDLTypeParameterType): string {
+        return this.convertor.convert(type)
+    }
+    convertTypeReference(type: idl.IDLReferenceType): string {
+        return this.convertor.convert(type)
+    }
+    convertUnion(type: idl.IDLUnionType): string {
+        return this.convertor.convert(type)
     }
 }

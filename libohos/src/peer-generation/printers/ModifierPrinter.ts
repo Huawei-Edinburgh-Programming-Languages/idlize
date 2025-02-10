@@ -27,7 +27,7 @@ import {
 } from "../FileGenerators";
 import { createDestroyPeerMethod, MaterializedClass, MaterializedMethod, IndentedPrinter,
     groupBy, Language, createConstructPeerMethod, PeerClass, PeerMethod, PeerLibrary, InteropReturnTypeConvertor,
-    createLanguageWriter, createEmptyReferenceResolver, LanguageWriter, CppInteropConvertor
+    createLanguageWriter, createEmptyReferenceResolver, LanguageWriter, CppConvertor
 } from '@idlizer/core'
 import { CppLanguageWriter, LanguageStatement, printMethodDeclaration } from "../LanguageWriters";
 import { LibaceInstall } from "../../Install";
@@ -299,7 +299,7 @@ class AccessorVisitor extends ModifierVisitor {
     }
 
     printRealAndDummyAccessor(clazz: MaterializedClass) {
-        this.printMaterializedClassProlog(clazz) 
+        this.printMaterializedClassProlog(clazz)
         // Materialized class methods share the same namespace
         // so take the first one.
         const mDestroyPeer = createDestroyPeerMethod(clazz)
@@ -481,7 +481,7 @@ export function printRealModifiersAsMultipleFiles(library: PeerLibrary, libace: 
 }
 
 function printModifiersImplFile(filePath: string, state: MultiFileModifiersVisitorState, options: ModifierFileOptions) {
-    const writer = new CppLanguageWriter(new IndentedPrinter(), createEmptyReferenceResolver(), new CppInteropConvertor(createEmptyReferenceResolver()), ArkPrimitiveTypesInstance)
+    const writer = new CppLanguageWriter(new IndentedPrinter(), createEmptyReferenceResolver(), new CppConvertor(createEmptyReferenceResolver()), ArkPrimitiveTypesInstance)
     writer.writeLines(cStyleCopyright)
 
     writer.writeInclude(`core/components_ng/base/frame_node.h`)
@@ -506,7 +506,7 @@ function printModifiersImplFile(filePath: string, state: MultiFileModifiersVisit
 }
 
 function printModifiersCommonImplFile(filePath: string, content: LanguageWriter, options: ModifierFileOptions) {
-    const writer = new CppLanguageWriter(new IndentedPrinter(), createEmptyReferenceResolver(), new CppInteropConvertor(createEmptyReferenceResolver()), ArkPrimitiveTypesInstance)
+    const writer = new CppLanguageWriter(new IndentedPrinter(), createEmptyReferenceResolver(), new CppConvertor(createEmptyReferenceResolver()), ArkPrimitiveTypesInstance)
     writer.writeLines(cStyleCopyright)
     writer.writeMultilineCommentBlock(warning)
     writer.print("")
@@ -542,7 +542,7 @@ function printModifiersCommonImplFile(filePath: string, content: LanguageWriter,
 }
 
 function printApiImplFile(library: PeerLibrary, filePath: string, options: ModifierFileOptions) {
-    const writer = new CppLanguageWriter(new IndentedPrinter(), library, new CppInteropConvertor(library), ArkPrimitiveTypesInstance)
+    const writer = new CppLanguageWriter(new IndentedPrinter(), library, new CppConvertor(library), ArkPrimitiveTypesInstance)
     writer.writeLines(cStyleCopyright)
     writer.writeMultilineCommentBlock(warning)
     writer.print("")

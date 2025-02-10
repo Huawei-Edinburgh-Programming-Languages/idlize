@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import { IndentedPrinter, camelCaseToUpperSnakeCase, maybeOptional, Language, CppInteropConvertor,
-    createConstructPeerMethod, createDestroyPeerMethod, PeerClass, PeerMethod, PeerLibrary, InteropReturnTypeConvertor
+import { IndentedPrinter, camelCaseToUpperSnakeCase, maybeOptional, Language, CppConvertor,
+    createConstructPeerMethod, createDestroyPeerMethod, PeerClass, PeerMethod, PeerLibrary, CppReturnTypeConvertor,
 } from '@idlizer/core'
 import { getNodeTypes, makeAPI, makeApiOhos, makeConverterHeader, makeCSerializersArk, makeCSerializersOhos, readInteropTypesHeader, readLangTemplate, readTemplate } from "../FileGenerators";
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig";
@@ -27,7 +27,6 @@ export function generateEventReceiverName(componentName: string) {
 }
 
 class HeaderVisitor {
-    private readonly returnTypeConvertor = new InteropReturnTypeConvertor()
     constructor(
         private library: PeerLibrary,
         private api: IndentedPrinter,
@@ -36,6 +35,7 @@ class HeaderVisitor {
         private eventsList: IndentedPrinter,
         private nodeTypesList: IndentedPrinter,
     ) {}
+    private readonly returnTypeConvertor = new CppReturnTypeConvertor(this.library)
 
     private apiModifierHeader(clazz: PeerClass) {
         return `typedef struct ${PeerGeneratorConfig.cppPrefix}ArkUI${clazz.componentName}Modifier {`
@@ -200,7 +200,7 @@ export function printUserConverter(headerPath: string, namespace: string, apiVer
     const visitor = new HeaderVisitor(peerLibrary, apiHeader, modifierList, accessorList, eventsList, nodeTypesList)
     visitor.printApiAndDeserializer()
 
-    const structs = new CppLanguageWriter(new IndentedPrinter(), peerLibrary, new CppInteropConvertor(peerLibrary), ArkPrimitiveTypesInstance)
+    const structs = new CppLanguageWriter(new IndentedPrinter(), peerLibrary, new CppConvertor(peerLibrary), ArkPrimitiveTypesInstance)
     const typedefs = new IndentedPrinter()
 
     const converterHeader = makeConverterHeader(headerPath, namespace, peerLibrary).getOutput().join("\n")
@@ -220,7 +220,7 @@ export function printSerializers(apiVersion: number, peerLibrary: PeerLibrary): 
     const visitor = new HeaderVisitor(peerLibrary, apiHeader, modifierList, accessorList, eventsList, nodeTypesList)
     visitor.printApiAndDeserializer()
 
-    const structs = new CppLanguageWriter(new IndentedPrinter(), peerLibrary, new CppInteropConvertor(peerLibrary), ArkPrimitiveTypesInstance)
+    const structs = new CppLanguageWriter(new IndentedPrinter(), peerLibrary, new CppConvertor(peerLibrary), ArkPrimitiveTypesInstance)
     const typedefs = new IndentedPrinter()
 
     const serializers = makeCSerializersArk(peerLibrary, structs, typedefs)
@@ -239,7 +239,7 @@ export function printSerializersOhos(apiVersion: number, peerLibrary: PeerLibrar
     const visitor = new HeaderVisitor(peerLibrary, apiHeader, modifierList, accessorList, eventsList, nodeTypesList)
     visitor.printApiAndDeserializer()
 
-    const structs = new CppLanguageWriter(new IndentedPrinter(), peerLibrary, new CppInteropConvertor(peerLibrary), ArkPrimitiveTypesInstance)
+    const structs = new CppLanguageWriter(new IndentedPrinter(), peerLibrary, new CppConvertor(peerLibrary), ArkPrimitiveTypesInstance)
     const typedefs = new IndentedPrinter()
 
     const serializers = makeCSerializersOhos('ohos', peerLibrary, structs, typedefs)

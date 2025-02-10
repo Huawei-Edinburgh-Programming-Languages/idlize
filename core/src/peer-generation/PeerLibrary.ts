@@ -23,9 +23,9 @@ import { BufferConvertor, CallbackConvertor, DateConvertor, MapConvertor, Pointe
          NumberConvertor, NumericConvertor, CustomTypeConvertor, UnionConvertor, MaterializedClassConvertor,
          ArgConvertor, BooleanConvertor, EnumConvertor, UndefinedConvertor, VoidConvertor, ImportTypeConvertor, InterfaceConvertor,
 } from "../LanguageWriters/ArgConvertors"
-import { InteropNameConvertor } from '../LanguageWriters/convertors/InteropConvertors'
+import { CppNameConvertor } from '../LanguageWriters/convertors/InteropConvertors'
 import { CJTypeNameConvertor } from '../LanguageWriters/convertors/CJConvertors'
-import { CppInteropConvertor } from '../LanguageWriters/convertors/CppConvertors'
+import { CppConvertor } from '../LanguageWriters/convertors/CppConvertors'
 import { ETSTypeNameConvertor } from '../LanguageWriters/convertors/ETSConvertors'
 import { JavaTypeNameConvertor } from '../LanguageWriters/convertors/JavaConvertors'
 import { TSTypeNameConvertor } from '../LanguageWriters/convertors/TSConvertors'
@@ -74,20 +74,20 @@ export class PeerLibrary implements LibraryInterface {
     createLanguageWriter(language?: Language): LanguageWriter {
         return createLanguageWriter(language ?? this.language, this)
     }
-    
+
     createTypeNameConvertor(language: Language): IdlNameConvertor {
         switch (language) {
             case Language.TS: return new TSTypeNameConvertor(this)
             case Language.ARKTS: return new ETSTypeNameConvertor(this)
             case Language.JAVA: return new JavaTypeNameConvertor(this)
             case Language.CJ: return new CJTypeNameConvertor(this)
-            case Language.CPP: return new CppInteropConvertor(this)
+            case Language.CPP: return new CppConvertor(this)
         }
         throw new Error(`IdlNameConvertor for ${language} is not implemented`)
     }
 
     protected readonly targetNameConvertorInstance: IdlNameConvertor = this.createTypeNameConvertor(this.language)
-    private readonly interopNameConvertorInstance: IdlNameConvertor = new InteropNameConvertor(this)
+    private readonly interopNameConvertorInstance: IdlNameConvertor = new CppNameConvertor(this)
 
     get libraryPrefix(): string {
         return this.name ? this.name + "_" : ""

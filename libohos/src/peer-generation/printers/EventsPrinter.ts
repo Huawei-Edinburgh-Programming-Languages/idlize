@@ -30,7 +30,7 @@ import { generateEventReceiverName } from "./HeaderPrinter"
 import { PeerGeneratorConfig } from "../PeerGeneratorConfig"
 import { collapseIdlPeerMethods, groupOverloads } from "./OverloadsPrinter"
 import { ImportsCollector } from "../ImportsCollector"
-import { ReferenceResolver, CppInteropConvertor } from "@idlizer/core"
+import { ReferenceResolver, CppConvertor } from "@idlizer/core"
 import { collectDeclItself, collectDeclDependencies } from "../ImportsCollectorUtils"
 import { ArkPrimitiveTypesInstance } from "../ArkPrimitiveType";
 
@@ -178,8 +178,8 @@ export function collapseIdlEventsOverloads(library: PeerLibrary, peer: PeerClass
 }
 
 class CEventsVisitor {
-    readonly impl: CppLanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), ArkPrimitiveTypesInstance)
-    readonly receiversList: LanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), ArkPrimitiveTypesInstance)
+    readonly impl: CppLanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppConvertor(this.library), ArkPrimitiveTypesInstance)
+    readonly receiversList: LanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppConvertor(this.library), ArkPrimitiveTypesInstance)
 
     constructor(
         protected readonly library: PeerLibrary,
