@@ -72,13 +72,13 @@ export function generateLibaceFromIdl(config: {
         fs.writeFileSync(libace.mesonBuild, mesonBuildFile(mesonBuild))
     }
 
-    copyToLibace(path.join(__dirname, '..', 'peer_lib'), libace)
+    copyToLibace(path.join(__dirname, '../..', 'libohos', 'peer_lib'), libace)
 }
 
 function copyArkoalaFiles(config: {
         onlyIntegrated: boolean| undefined
     }, arkoala: ArkoalaInstall) {
-    copyToArkoala(path.join(__dirname, '..', 'peer_lib'), arkoala, !config.onlyIntegrated ? undefined : [
+    copyToArkoala(path.join(__dirname, '../..', 'libohos', 'peer_lib'), arkoala, !config.onlyIntegrated ? undefined : [
         'sig/arkoala/framework/native/src/generated/arkoala-macros.h',
         'sig/arkoala/arkui/src/peers/CallbackTransformer.ts',
         'sig/arkoala-arkts/arkui/src/generated/use_properties.ts',

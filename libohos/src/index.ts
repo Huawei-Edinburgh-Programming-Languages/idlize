@@ -94,4 +94,10 @@ export class DefaultConfig extends BaseGeneratorConfiguration {
             ...params
         })
     }
+    override paramArray<T>(name: string): T[] {
+        if (name in this.params) {
+            return this.params[name] as T[]
+        }
+        return []
+    }
 }

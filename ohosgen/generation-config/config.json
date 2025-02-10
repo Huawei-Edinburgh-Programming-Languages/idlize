@@ -1,0 +1,6 @@
+{
+    "native": {
+        "typePrefix": "OH_",
+        "optionalTypePrefix": "Opt_"
+    }
+}

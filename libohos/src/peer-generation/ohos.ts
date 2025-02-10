@@ -259,7 +259,7 @@ PEER_LIB_CONFIG.set(Language.ARKTS, [
 
 function copyPeerLib(lang: Language, rootDir: string) {
     const list = PEER_LIB_CONFIG.get(lang)
-    const peerLibDir = path.resolve(__dirname, '..', 'peer_lib')
+    const peerLibDir = path.resolve(__dirname, '../..', 'libohos', 'peer_lib')
     if (list) {
         for (const [src, dst] of list) {
             const resolvedSrc = path.join(peerLibDir, src)

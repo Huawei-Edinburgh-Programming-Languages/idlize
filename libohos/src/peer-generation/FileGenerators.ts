@@ -485,7 +485,7 @@ const TEMPLATES_CACHE = new Map<string, string>()
 export function readTemplate(name: string): string {
     let template = TEMPLATES_CACHE.get(name);
     if (template == undefined) {
-        template = fs.readFileSync(path.join(__dirname, `../templates/${name}`), 'utf8')
+        template = fs.readFileSync(path.join(__dirname, `../../libohos/templates/${name}`), 'utf8')
         TEMPLATES_CACHE.set(name, template)
     }
     return template
@@ -507,12 +507,12 @@ function useLangExtIfNeeded(file: string, lang: Language): string {
 
 export function readLangTemplate(name: string, lang: Language): string {
     name = useLangExtIfNeeded(name, lang)
-    return fs.readFileSync(path.join(__dirname, `../templates/${lang.directory}/${name}`), 'utf8')
+    return fs.readFileSync(path.join(__dirname, `../../libohos/templates/${lang.directory}/${name}`), 'utf8')
 }
 
 export function maybeReadLangTemplate(name: string, lang: Language): string | undefined {
     name = useLangExtIfNeeded(name, lang)
-    const file = path.join(__dirname, `../templates/${lang.directory}/${name}`)
+    const file = path.join(__dirname, `../../libohos/templates/${lang.directory}/${name}`)
     if (!fs.existsSync(file))
         return undefined
     return fs.readFileSync(file, 'utf8')

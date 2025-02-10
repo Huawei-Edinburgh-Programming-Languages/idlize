@@ -304,8 +304,6 @@ if (options.dts2peer) {
     const generatedPeersDir = options.outputDir ?? "./out/ts-peers/generated"
     const lang = Language.fromString(options.language ?? "ts")
 
-    const PREDEFINED_PATH = path.join(__dirname, "..", "predefined")
-
     if (options.inputFiles && typeof options.inputFiles === 'string') {
         options.inputFiles = options.inputFiles
             .split(',')
@@ -342,7 +340,7 @@ if (options.dts2peer) {
     options.docs = "all"
     const idlLibrary = createPeerLibrary(lang)
     // collect predefined files
-    scanPredefinedDirectory(PREDEFINED_PATH, "sys").forEach(file => {
+    scanPredefinedDirectory(__dirname, "../../predefined/interop").forEach(file => {
         new IDLInteropPredefinesVisitor({
             sourceFile: file.originalFilename,
             peerLibrary: idlLibrary,
@@ -350,7 +348,7 @@ if (options.dts2peer) {
         }).visitWholeFile()
     })
 
-    scanPredefinedDirectory(PREDEFINED_PATH, "src").forEach(file => {
+    scanPredefinedDirectory(__dirname, "../../predefined").forEach(file => {
         new IDLPredefinesVisitor({
             sourceFile: file.originalFilename,
             peerLibrary: idlLibrary,
@@ -358,15 +356,13 @@ if (options.dts2peer) {
         }).visitWholeFile()
     })
 
-    if (["arkoala", "libace", "all", "tracker"].includes(options.generatorTarget)) {
-        scanPredefinedDirectory(PREDEFINED_PATH, "arkoala").forEach(file => {
-            new IDLPredefinesVisitor({
-                sourceFile: file.originalFilename,
-                peerLibrary: idlLibrary,
-                peerFile: file,
-            }).visitWholeFile()
-        })
-    }
+    scanPredefinedDirectory(__dirname, "../predefined").forEach(file => {
+        new IDLPredefinesVisitor({
+            sourceFile: file.originalFilename,
+            peerLibrary: idlLibrary,
+            peerFile: file,
+        }).visitWholeFile()
+    })
 
     generate(
         inputDirs,
