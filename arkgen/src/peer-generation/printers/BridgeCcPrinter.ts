@@ -14,7 +14,7 @@
  */
 
 import { capitalize, dropSuffix, isDefined, Language, PeerMethod, createConstructPeerMethod,
-    ArgConvertor, MaterializedClass, PeerLibrary, LanguageWriter, InteropReturnTypeConvertor, CppInteropArgConvertor,
+    ArgConvertor, MaterializedClass, PeerLibrary, LanguageWriter, InteropReturnTypeConvertor, CppInteropArgConvertor, createInteropArgConvertor,
 } from "@idlizer/core";
 import { ArkPrimitiveTypesInstance } from "../ArkPrimitiveType"
 import { bridgeCcCustomDeclaration, bridgeCcGeneratedDeclaration } from "../FileGenerators";
@@ -208,6 +208,11 @@ class BridgeCcVisitor {
         this.printNativeBody(method, modifierName)
         this.generatedApi.popIndent()
         this.generatedApi.print(`}`)
+        const retArgConvert = this.library.typeConvertor("__result", method.returnType, false)
+        if (retArgConvert.useArray) {
+            this.generatedApi.print("// USEARRAU")
+            // retArgConvert.convertorSerialize()
+        }
         let macroArgs = [cName, retType === IDLVoidType.name ? undefined : retType]
             .concat(argTypesAndNames.map(([type, _]) => type))
             .filter(isDefined)
