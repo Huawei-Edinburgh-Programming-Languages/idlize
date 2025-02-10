@@ -67,13 +67,6 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: O
     // MANAGED
     /////////////////////////////////////////
 
-    const globals = printGlobal(peerLibrary)
-    for (const [targetFile, content] of globals) {
-        const outGlobalFile = ohos.globalFile(targetFile)
-        writeIntegratedFile(outGlobalFile, content, "producing")
-        ohosManagedFiles.push(outGlobalFile)
-    }
-
     // managed-interop-serializers
 
     writeIntegratedFile(ohos.peer(new TargetFile('Serializer')),
@@ -153,7 +146,8 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: O
         peerLibrary,
         [
             createMaterializedPrinter(context, false),
-            printInterfaceData
+            printInterfaceData,
+            printGlobal,
         ]
     )
 
