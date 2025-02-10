@@ -246,8 +246,8 @@
 |`radialGradient`| Function | Erokhin Ilya | done |  |
 |`motionPath`| Function | Lobah Mikhail | done | |
 |`shadow`| Function | Roman Sedaikin | done | |
-|`clip`| Function | Dudkin Sergey | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH deprecated partially |
-|`clipShape`| Function | Dudkin Sergey | in progress | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH +|
+|`clip`| Function | Dudkin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH deprecated partially |
+|`clipShape`| Function | Dudkin Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH +|
 |`mask`| Function | Maksimov Nikita | done |deprecated |
 |`maskShape`| Function | Dmitry A Smirnov| blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX +|
 |`key`| Function | Lobah Mikhail | done | |
