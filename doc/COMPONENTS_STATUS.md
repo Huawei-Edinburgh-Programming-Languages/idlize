@@ -872,8 +872,8 @@
 |`selectionMenuHidden`|Function| Evstigneev Roman |done|  |
 |`minFontSize`|Function| Evstigneev Roman |done|  |
 |`maxFontSize`|Function| Evstigneev Roman |done|  |
-|`minFontScale`| Function | Kovalev Sergey | in progress | |
-|`maxFontScale`| Function | Kovalev Sergey | in progress | |
+|`minFontScale`| Function | Kovalev Sergey | done | |
+|`maxFontScale`| Function | Kovalev Sergey | done | |
 |`decoration`|Function| Evstigneev Roman |done|  |
 |`letterSpacing`|Function| Evstigneev Roman | done |  |
 |`lineHeight`|Function| Evstigneev Roman | done |  |
@@ -886,8 +886,8 @@
 |`editMenuOptions`|Function| Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`enablePreviewText`|Function| Evstigneev Roman |done|  |
 |`enableHapticFeedback`|Function|Evstigneev Roman| done |  |
-|`halfLeading`| Function | Kovalev Sergey | in progress | |
-|`stopBackPress`| Function | Kovalev Sergey | in progress | |
+|`halfLeading`| Function | Kovalev Sergey | done | |
+|`stopBackPress`| Function | Kovalev Sergey | done | |
 |`onWillChange`| Function | | | |
 |`searchButton`|Function| Evstigneev Roman | done |  |
 |`inputFilter`|Function| Evstigneev Roman | in progress |  |
