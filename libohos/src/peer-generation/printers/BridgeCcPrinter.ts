@@ -14,7 +14,7 @@
  */
 
 import { capitalize, dropSuffix, isDefined, Language, PeerMethod, createConstructPeerMethod,
-    ArgConvertor, MaterializedClass, PeerLibrary, LanguageWriter, InteropReturnTypeConvertor, CppInteropArgConvertor,
+    ArgConvertor, MaterializedClass, PeerLibrary, LanguageWriter, CppReturnTypeConvertor, CppInteropArgConvertor,
 } from "@idlizer/core";
 import { ArkPrimitiveTypesInstance } from "../ArkPrimitiveType"
 import { bridgeCcCustomDeclaration, bridgeCcGeneratedDeclaration } from "../FileGenerators";
@@ -25,7 +25,7 @@ import { isGlobalScope } from '../idl/IdlPeerGeneratorVisitor';
 class BridgeCcVisitor {
     readonly generatedApi = this.library.createLanguageWriter(Language.CPP)
     readonly customApi = this.library.createLanguageWriter(Language.CPP)
-    private readonly returnTypeConvertor = new InteropReturnTypeConvertor()
+    private readonly returnTypeConvertor = new CppReturnTypeConvertor(this.library)
 
     constructor(
         protected readonly library: PeerLibrary,
@@ -59,7 +59,7 @@ class BridgeCcVisitor {
     protected printAPICall(method: PeerMethod, modifierName?: string) {
         const hasReceiver = method.hasReceiver()
         const argAndOutConvertors = method.argAndOutConvertors
-        const isVoid = this.returnTypeConvertor.isVoid(method)
+        const isVoid = this.returnTypeConvertor.isVoid(method.returnType)
         const modifier = this.generateApiCall(method, modifierName)
         const peerMethod = this.getPeerMethodName(method)
         const receiver = hasReceiver ? [this.getReceiverArgName()] : []
@@ -159,19 +159,20 @@ class BridgeCcVisitor {
     }
 
     private generateCMacroSuffix(method: PeerMethod): string {
-        let counter = method.hasReceiver() ? 1 : 0
+        let argumentsCount = method.hasReceiver() ? 1 : 0
         let arrayAdded = false
         method.argAndOutConvertors.forEach(it => {
             if (it.useArray) {
                 if (!arrayAdded) {
-                    counter += 2
+                    argumentsCount += 2
                     arrayAdded = true
                 }
             } else {
-                counter += 1
+                argumentsCount += 1
             }
         })
-        return `${this.returnTypeConvertor.isVoid(method) ? 'V' : ''}${counter}`
+        const returnsVoid = this.returnTypeConvertor.isVoid(method.returnType);
+        return `${returnsVoid ? 'V' : ''}${argumentsCount}`
     }
 
     private generateCParameters(method: PeerMethod): [string, string][] {
