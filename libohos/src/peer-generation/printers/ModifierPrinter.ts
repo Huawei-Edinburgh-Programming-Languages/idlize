@@ -32,7 +32,7 @@ import { createDestroyPeerMethod, MaterializedClass, MaterializedMethod, Indente
 } from '@idlizer/core'
 import { CppLanguageWriter, LanguageStatement, printMethodDeclaration } from "../LanguageWriters";
 import { LibaceInstall } from "../../Install";
-import { IDLAnyType, IDLBooleanType, IDLFunctionType, IDLNumberType, IDLPointerType, IDLPrimitiveType, IDLStringType, IDLThisType, IDLType, isOptionalType, isReferenceType } from '@idlizer/core/idl'
+import { IDLAnyType, IDLBooleanType, IDLBufferType, IDLFunctionType, IDLNumberType, IDLPointerType, IDLPrimitiveType, IDLStringType, IDLThisType, IDLType, IDLUndefinedType, isOptionalType, isReferenceType, isUnionType } from '@idlizer/core/idl'
 
 export class ModifierVisitor {
     dummy = this.library.createLanguageWriter(Language.CPP)
@@ -53,15 +53,20 @@ export class ModifierVisitor {
         const returnType = method.returnType
         const isVoid = this.returnTypeConvertor.isVoid(returnType)
         let returnValue: string| undefined = undefined
-        if (isVoid) {
+        if (isVoid || returnType == IDLUndefinedType) {
             returnValue = undefined
-        } else if (isReferenceType(returnType)) {
-            returnValue = `${this.returnTypeConvertor.convertTypeReference(returnType)}()`
+        } else if (isReferenceType(returnType) || isUnionType(returnType) || returnType == IDLBufferType) {
+            returnValue = `${this.returnTypeConvertor.convert(returnType)}()`
         } else if (returnType == IDLStringType || returnType == IDLNumberType) {
             returnValue = `${this.returnTypeConvertor.convertPrimitiveType(returnType as IDLPrimitiveType)}()`
         } else if (method.dummyReturnValue != undefined) {
             returnValue = method.dummyReturnValue
+        } else if (returnType == IDLPointerType) {
+            returnValue = "nullptr"
+        } else if (returnType == IDLBooleanType) {
+            returnValue = "false"
         } else {
+            throw new Error(`Ignored ${JSON.stringify(returnType)}`)
             returnValue = "0"
         }
         _.writeStatement(

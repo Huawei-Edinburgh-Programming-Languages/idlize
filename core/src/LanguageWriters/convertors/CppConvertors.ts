@@ -75,6 +75,8 @@ export class CppReturnTypeConvertor implements TypeConvertor<string> {
     convert(type: idl.IDLType): string {
         if (idl.isContainerType(type))
             return this.convertContainer(type)
+        if (idl.isPrimitiveType(type))
+            return this.convertPrimitiveType(type)
         return this.convertor.convert(type)
     }
     convertContainer(type: idl.IDLContainerType): string {
@@ -90,6 +92,7 @@ export class CppReturnTypeConvertor implements TypeConvertor<string> {
         return this.convertor.convert(type)
     }
     convertPrimitiveType(type: idl.IDLPrimitiveType): string {
+        if (type == idl.IDLUndefinedType) return 'void'
         return this.convertor.convert(type)
     }
     convertTypeParameter(type: idl.IDLTypeParameterType): string {
