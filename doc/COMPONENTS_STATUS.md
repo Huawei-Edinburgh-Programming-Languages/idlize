@@ -170,7 +170,7 @@
 |`foregroundColor`| Function | Roman Sedaikin | done | |
 |`onClick`| Function | Roman Sedaikin, Maksimov Nikita | testskipped | EVENT |
 |`onHover`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | done | EVENT |
-|`onAccessibilityHover`| Function | Andrey Khudenkikh, Pavelyev Ivan | in progress | EVENT |
+|`onAccessibilityHover`| Function | Andrey Khudenkikh, Pavelyev Ivan | in progress | UT in prugress Vadim Voronov EVENT |
 |`hoverEffect`| Function | Roman Sedaikin | done | |
 |`onMouse`| Function | Kovalev Sergey | testskipped | EVENT |
 |`onTouch`| Function | Roman Sedaikin, Tuzhilkin Ivan | testskipped | EVENT |
@@ -277,8 +277,8 @@
 |`renderFit`| Function | Dmitry A Smirnov|done | |
 |`gestureModifier`| Function | Erokhin Ilya | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`backgroundBrightness`| Function | Skroba Gleb | done | |
-|`onGestureJudgeBegin`| Function | Skroba Gleb, Maksimov Nikita | testskipped | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ EVENT |
-|`onGestureRecognizerJudgeBegin`| Function | Skroba Gleb, Maksimov Nikita | testskipped | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ EVENT |
+|`onGestureJudgeBegin`| Function | Skroba Gleb, Maksimov Nikita | testskipped | UT in prugress Vadim Voronov https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ EVENT |
+|`onGestureRecognizerJudgeBegin`| Function | Skroba Gleb, Maksimov Nikita | testskipped | UT in prugress Vadim Voronov https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ EVENT |
 |`shouldBuiltInRecognizerParallelWith`| Function | Skroba Gleb | done | https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
 |`monopolizeEvents`| Function | Erokhin Ilya | done | UT by Vadim Voronov |
 |`onTouchIntercept`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | done | EVENT |
