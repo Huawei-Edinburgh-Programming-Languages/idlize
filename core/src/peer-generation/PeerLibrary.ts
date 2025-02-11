@@ -74,7 +74,7 @@ export class PeerLibrary implements LibraryInterface {
     createLanguageWriter(language?: Language): LanguageWriter {
         return createLanguageWriter(language ?? this.language, this)
     }
-
+    
     createTypeNameConvertor(language: Language): IdlNameConvertor {
         switch (language) {
             case Language.TS: return new TSTypeNameConvertor(this)
@@ -350,7 +350,7 @@ export class PeerLibrary implements LibraryInterface {
             if (type.name === 'Date') {
                 return ArkDate
             }
-            if (type.name === 'ContentModifier') {
+            if (type.name === 'AnimationRange' || type.name === 'ContentModifier') {
                 return ArkCustomObject
             }
             if (type.name === 'Function') {
