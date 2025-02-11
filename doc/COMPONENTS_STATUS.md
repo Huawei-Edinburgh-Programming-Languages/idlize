@@ -1355,7 +1355,7 @@
 |`enableCascade`| Function | | | |
 |`__onChangeEvent_selected`| Function | Erokhin Ilya | done | |
 |*Toggle*| *Component* |Morozov Sergey |blocked |  |
-|`setToggleOptions`| Function |Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB2SVB |
+|`setToggleOptions`| Function |Morozov Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB2SVB , https://gitee.com/openharmony/arkui_ace_engine/issues/IB5V55|
 |`onChange`| Function | Morozov Sergey|done |  |
 |`contentModifier`| Function |Morozov Sergey |blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`selectedColor`| Function | Morozov Sergey|done |  |
