@@ -85,6 +85,9 @@ const TypeParameterMap: Map<string, Map<string, idl.IDLType>> = new Map([
             idl.createReferenceType("CapsuleStyleOptions"),
             idl.createReferenceType("ProgressStyleOptions")],
             "Union_LinearStyleOptions_RingStyleOptions_CapsuleStyleOptions_ProgressStyleOptions")]])],
+    ["AnimationRange", new Map([
+        ["T", idl.IDLNumberType]])],
+
 ])
 
 class Context {

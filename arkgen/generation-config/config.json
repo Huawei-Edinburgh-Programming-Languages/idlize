@@ -110,7 +110,6 @@
     "parameterized": [
         "Indicator",
         "AttributeModifier",
-        "AnimationRange",
         "ContentModifier",
         "SizeT",
         "PositionT",
@@ -175,7 +174,6 @@
             "IMonitorValue"
         ],
         "ignoreEntryJava": [
-            "AnimationRange",
             "EventTargetInfo",
             "GestureRecognizer",
             "GestureRecognizerJudgeBeginCallback",

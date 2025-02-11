@@ -71,8 +71,6 @@ export class ArkoalaPeerLibrary extends PeerLibrary {
             case `Dimension`:
             case `Length`:
                 return new LengthConvertor(type.name, param, this.language)
-            case `AnimationRange`:
-                return new CustomTypeConvertor(param, "AnimationRange", false, "AnimationRange<number>")
             case `ContentModifier`:
                 return new CustomTypeConvertor(param, "ContentModifier", false, "ContentModifier<any>")
         }
