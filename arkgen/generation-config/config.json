@@ -90,8 +90,7 @@
             "ContentModifier",
             "SizeT",
             "PositionT",
-            "Record",
-            "DirectionalEdgesT"
+            "Record"
         ],
         "builderClasses": [
             "SubTabBarStyle",

@@ -32,7 +32,7 @@ import { createDestroyPeerMethod, MaterializedClass, MaterializedMethod, Indente
 } from '@idlizer/core'
 import { CppLanguageWriter, LanguageStatement, printMethodDeclaration } from "../LanguageWriters";
 import { LibaceInstall } from "../../Install";
-import { IDLAnyType, IDLBooleanType, IDLFunctionType, IDLPointerType, IDLStringType, IDLThisType, IDLType, IDLVoidType, isOptionalType, isReferenceType } from '@idlizer/core/idl'
+import { IDLAnyType, IDLBooleanType, IDLFunctionType, IDLNumberType, IDLPointerType, IDLPrimitiveType, IDLStringType, IDLThisType, IDLType, isOptionalType, isReferenceType } from '@idlizer/core/idl'
 
 export class ModifierVisitor {
     dummy = this.library.createLanguageWriter(Language.CPP)
@@ -50,15 +50,26 @@ export class ModifierVisitor {
 
     printDummyImplFunctionBody(method: PeerMethod) {
         let _ = this.dummy
-        const isVoid = this.returnTypeConvertor.isVoid(method.returnType)
-        let retVal = isVoid ? undefined : (method.dummyReturnValue ?? "0")
-
+        const returnType = method.returnType
+        const isVoid = this.returnTypeConvertor.isVoid(returnType)
+        let returnValue: string| undefined = undefined
+        if (isVoid) {
+            returnValue = undefined
+        } else if (isReferenceType(returnType)) {
+            returnValue = `${this.returnTypeConvertor.convertTypeReference(returnType)}()`
+        } else if (returnType == IDLStringType || returnType == IDLNumberType) {
+            returnValue = `${this.returnTypeConvertor.convertPrimitiveType(returnType as IDLPrimitiveType)}()`
+        } else if (method.dummyReturnValue != undefined) {
+            returnValue = method.dummyReturnValue
+        } else {
+            returnValue = "0"
+        }
         _.writeStatement(
             _.makeCondition(
                 _.makeString("!needGroupedLog(1)"),
                 method.toStringName == "construct"
                     ? this.makeConstructReturnStatement(_, method)
-                    : _.makeReturn(retVal ? _.makeString(retVal) : undefined)
+                    : _.makeReturn(returnValue ? _.makeString(returnValue) : undefined)
             )
         )
         _.print(`string out("${method.toStringName}(");`)
@@ -67,14 +78,14 @@ export class ModifierVisitor {
             _.print(`WriteToString(&out, ${argConvertor.param});`)
         })
         _.print(`out.append(") \\n");`)
-        if (retVal !== undefined) {
-            _.print(`out.append("[return ${retVal}] \\n");`)
+        if (returnValue !== undefined) {
+            _.print(`out.append("[return ${returnValue}] \\n");`)
         }
         _.print(`appendGroupedLog(1, out);`)
         if (method.toStringName == "construct") {
             _.writeStatement(this.makeConstructReturnStatement(_, method))
         } else {
-            this.printReturnStatement(this.dummy, method, true, retVal)
+            this.printReturnStatement(this.dummy, method, true, returnValue)
         }
     }
 

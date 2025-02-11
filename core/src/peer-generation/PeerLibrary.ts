@@ -232,7 +232,7 @@ export class PeerLibrary implements LibraryInterface {
                 case idl.IDLUndefinedType: return new UndefinedConvertor(param)
                 case idl.IDLVoidType: return new VoidConvertor(param)
                 case idl.IDLUnknownType:
-                case idl.IDLAnyType: return new CustomTypeConvertor(param, "Any")
+                case idl.IDLAnyType: return new CustomTypeConvertor(param, "Any", false, "Object")
                 default: throw new Error(`Unconverted primitive ${idl.DebugUtils.debugPrintType(type)}`)
             }
         }
@@ -253,7 +253,7 @@ export class PeerLibrary implements LibraryInterface {
         }
         if (idl.isTypeParameterType(type)) {
             // TODO: unlikely correct.
-            return new CustomTypeConvertor(param, this.targetNameConvertorInstance.convert(type), true)
+            return new CustomTypeConvertor(param, this.targetNameConvertorInstance.convert(type), true, `<${type.name}>`)
         }
         throw new Error(`Cannot convert: ${type.kind}`)
     }
@@ -308,7 +308,7 @@ export class PeerLibrary implements LibraryInterface {
     private customConvertor(param: string, typeName: string, type: idl.IDLReferenceType): ArgConvertor | undefined {
         switch (typeName) {
             case `Object`:
-                return new CustomTypeConvertor(param, "Object")
+                return new CustomTypeConvertor(param, "Object", false, "Object")
             case `Date`:
                 return new DateConvertor(param)
             case `Function`:

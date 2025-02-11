@@ -747,10 +747,10 @@ export class TypeAliasConvertor extends ProxyConvertor {
 export class CustomTypeConvertor extends BaseArgConvertor {
     constructor(param: string,
                 public readonly customTypeName: string,
-                private readonly isGenericType: boolean = false,
-                tsType?: string) {
+                private readonly isGenericType: boolean,
+                tsType: string) {
         super(idl.createReferenceType(tsType ?? "Object"), [RuntimeType.OBJECT], false, true, param)
-        warnCustomObject(`${tsType}`)
+        warnCustomObject(`${customTypeName}: ${tsType}`)
     }
     convertorArg(param: string, writer: LanguageWriter): string {
         throw new Error("Must never be used")
