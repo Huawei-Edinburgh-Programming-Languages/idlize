@@ -1390,8 +1390,13 @@ function adjustSignature(library: PeerLibrary, parameters: IDLParameter[], retur
     return {
         convertors,
         parameters,
-        returnType: isPrimitiveType(returnType) ? returnType : IDLPointerType,
+        returnType: isPrimitiveType(returnType) || isStructureType(returnType, library) ? returnType : IDLPointerType,
     }
+}
+
+function isStructureType(type: IDLType, library: PeerLibrary): boolean {
+    const resolved = isReferenceType(type) && library.resolveTypeReference(type)
+    return !!resolved && !isMaterialized(resolved as IDLInterface, library)
 }
 
 function generateArgConvertor(library: PeerLibrary, param: IDLParameter): ArgConvertor {

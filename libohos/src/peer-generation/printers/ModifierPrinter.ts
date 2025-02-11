@@ -19,7 +19,7 @@ import {
     modifierStructList,
 } from "../FileGenerators";
 import { createDestroyPeerMethod, MaterializedClass, MaterializedMethod, IndentedPrinter,
-    groupBy, Language, createConstructPeerMethod, PeerClass, PeerMethod, PeerLibrary, InteropReturnTypeConvertor,
+    groupBy, Language, createConstructPeerMethod, PeerClass, PeerMethod, PeerLibrary,
     createLanguageWriter, createEmptyReferenceResolver, LanguageWriter, CppConvertor,
     CppReturnTypeConvertor,
     TypeConvertor,
