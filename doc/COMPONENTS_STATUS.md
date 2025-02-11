@@ -1993,30 +1993,30 @@
 |`setAngle`| Function | | | |
 |`getSpeed`| Function | | | |
 |`setSpeed`| Function | | | |
-|*GestureEvent*| *Class* | Maksimov Nikita | in progress | |
-|`getRepeat`| Function | Maksimov Nikita | in progress | |
-|`setRepeat`| Function | Maksimov Nikita | in progress | |
-|`setFingerList`| Function | Maksimov Nikita | in progress | |
-|`getOffsetX`| Function | Maksimov Nikita | in progress | |
-|`setOffsetX`| Function | Maksimov Nikita | in progress | |
-|`getOffsetY`| Function | Maksimov Nikita | in progress | |
-|`setOffsetY`| Function | Maksimov Nikita | in progress | |
-|`getAngle`| Function | Maksimov Nikita | in progress | |
-|`setAngle`| Function | Maksimov Nikita | in progress | |
-|`getSpeed`| Function | Maksimov Nikita | in progress | |
-|`setSpeed`| Function | Maksimov Nikita | in progress | |
-|`getScale`| Function | Maksimov Nikita | in progress | |
-|`setScale`| Function | Maksimov Nikita | in progress | |
-|`getPinchCenterX`| Function | Maksimov Nikita | in progress | |
-|`setPinchCenterX`| Function | Maksimov Nikita | in progress | |
-|`getPinchCenterY`| Function | Maksimov Nikita | in progress | |
-|`setPinchCenterY`| Function | Maksimov Nikita | in progress | |
-|`getVelocityX`| Function | Maksimov Nikita | in progress | |
-|`setVelocityX`| Function | Maksimov Nikita | in progress | |
-|`getVelocityY`| Function | Maksimov Nikita | in progress | |
-|`setVelocityY`| Function | Maksimov Nikita | in progress | |
-|`getVelocity`| Function | Maksimov Nikita | in progress | |
-|`setVelocity`| Function | Maksimov Nikita | in progress | |
+|*GestureEvent*| *Class* | Samarin Sergey | blocked | |
+|`getRepeat`| Function | Samarin Sergey | done | |
+|`setRepeat`| Function | Samarin Sergey | done | |
+|`setFingerList`| Function | Samarin Sergey | done | |
+|`getOffsetX`| Function | Samarin Sergey | blocked IDL | |
+|`setOffsetX`| Function | Samarin Sergey | done | |
+|`getOffsetY`| Function | Samarin Sergey | blocked IDL | |
+|`setOffsetY`| Function | Samarin Sergey | done | |
+|`getAngle`| Function | Samarin Sergey | blocked IDL | |
+|`setAngle`| Function | Samarin Sergey | done | |
+|`getSpeed`| Function | Samarin Sergey | blocked IDL | |
+|`setSpeed`| Function | Samarin Sergey | done | |
+|`getScale`| Function | Samarin Sergey | blocked IDL | |
+|`setScale`| Function | Samarin Sergey | done | |
+|`getPinchCenterX`| Function | Samarin Sergey | blocked IDL | |
+|`setPinchCenterX`| Function | Samarin Sergey | done | |
+|`getPinchCenterY`| Function | Samarin Sergey | blocked IDL | |
+|`setPinchCenterY`| Function | Samarin Sergey | done | |
+|`getVelocityX`| Function | Samarin Sergey | blocked IDL | |
+|`setVelocityX`| Function | Samarin Sergey | done | |
+|`getVelocityY`| Function | Samarin Sergey | blocked IDL | |
+|`setVelocityY`| Function | Samarin Sergey | done | |
+|`getVelocity`| Function | Samarin Sergey | blocked IDL | |
+|`setVelocity`| Function | Samarin Sergey | blocked | not applicable |
 |*PanGestureOptions*| *Class* | Politov Mikhail | blocked | |
 |`setDirection`| Function | Politov Mikhail | done | |
 |`setDistance`| Function | Politov Mikhail | done | |
