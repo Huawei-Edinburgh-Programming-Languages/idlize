@@ -433,7 +433,7 @@
 |`privacySensitive`| Function | Maksimov Nikita | done ||
 |`contentModifier`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG + |
 |*Grid*|*Component*| Erokhin Ilya | blocked |  |
-|`setGridOptions`|Function| Erokhin Ilya | blocked IDL |https://gitee.com/nikolay-igotti/idlize/issues/IAQIXM|
+|`setGridOptions`|Function| Erokhin Ilya | in progress |https://gitee.com/nikolay-igotti/idlize/issues/IAQIXM|
 |`columnsTemplate`|Function| Erokhin Ilya | done |  |
 |`rowsTemplate`|Function| Erokhin Ilya | done |  |
 |`columnsGap`|Function| Erokhin Ilya | done |  |
