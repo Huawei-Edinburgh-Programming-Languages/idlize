@@ -956,7 +956,7 @@
 |`__onChangeEvent_selected`| Function | Erokhin Ilya | done | |
 |`__onChangeEvent_value`| Function | Erokhin Ilya | done | |
 |*Shape*|*Component*|Dudkin Sergey| done |  |
-|`setShapeOptions`|Function|Dudkin Sergey| blocked IDL| https://gitee.com/nikolay-igotti/idlize/issues/IBDOCY + |
+|`setShapeOptions`|Function|Dudkin Sergey| in progress | |
 |`viewPort`|Function|Dudkin Sergey| done |  |
 |`stroke`|Function|Dudkin Sergey| done |  |
 |`fill`|Function|Dudkin Sergey| done |  |
