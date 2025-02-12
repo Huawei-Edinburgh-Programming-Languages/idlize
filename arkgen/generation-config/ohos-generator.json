@@ -1,3 +1,6 @@
 {
-    "TypePrefix": "OH_"
+    "TypePrefix": "OH_",
+    "forceMaterialized": [
+        "BaseContext"
+    ]
 }

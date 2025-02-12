@@ -33,6 +33,12 @@ export function isMaterialized(declaration: idl.IDLInterface, resolver: Referenc
     {
         return false
     }
+
+    for (const forceMaterialized of generatorConfiguration().param<string[]>("forceMaterialized")) {
+        console.log(`Force materialized: ${forceMaterialized}`)
+        if (declaration.name == forceMaterialized) return true
+    }
+
     for (const ignore of generatorConfiguration().param<string[]>("ignoreMaterialized")) {
         if (declaration.name.endsWith(ignore)) return false
     }
