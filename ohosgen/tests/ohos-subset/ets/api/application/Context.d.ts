@@ -48,8 +48,8 @@ export default class Context extends BaseContext {
   createModuleContext(bundleName: string, moduleName: string): Context;
   // createSystemHspModuleResourceManager(bundleName: string, moduleName: string): resmgr.ResourceManager;
   getApplicationContext(): ApplicationContext;
-  // getGroupDir(dataGroupID: string, callback: AsyncCallback<string>): void;
-  getGroupDir(dataGroupID: string): Promise<string>;
+  getGroupDir(dataGroupID: string, callback: AsyncCallback<string>): void;
+  //getGroupDir(dataGroupID: string): Promise<string>;
   // createModuleResourceManager(bundleName: string, moduleName: string): resmgr.ResourceManager;
   // createAreaModeContext(areaMode: contextConstant.AreaMode): Context;
   createDisplayContext(displayId: number): Context;

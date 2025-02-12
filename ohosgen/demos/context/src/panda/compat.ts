@@ -2,6 +2,7 @@ import { int32 } from "@koalaui/common"
 import { InteropNativeModule, NativeBuffer, DeserializerBase, registerNativeModuleLibraryName } from "@koalaui/interop";
 import { checkArkoalaCallbacks } from "../../generated/arkts/peers/CallbacksChecker";
 import { CONTEXTNativeModule } from "../../generated/arkts"
+export { Context } from "../../generated/arkts"
 
 export type OHBuffer = NativeBuffer
 
