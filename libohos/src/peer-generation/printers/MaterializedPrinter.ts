@@ -466,15 +466,7 @@ class ArkTSMaterializedFileVisitor extends TSMaterializedFileVisitor {
 }
 
 class CJMaterializedFileVisitor extends MaterializedFileVisitorBase {
-    private printPackage(): void {
-        this.printer.print(`package idlize\n`)
-    }
-
-    override printImports(): void {
-        this.printPackage()
-        this.printer.print("import std.collection.*")
-        this.printer.print("import Interop.*\n")
-    }
+    override printImports(): void {}
 
     visit(): PrinterResult {
         this.printMaterializedClass(this.clazz)
@@ -520,12 +512,12 @@ class MaterializedVisitor implements PrinterClass {
         return visitor.visit()
     }
 
-    printMaterialized(): void {
-        console.log(`Materialized classes: ${this.library.materializedClasses.size}`)
-        for (const clazz of this.library.materializedToGenerate) {
-            this.printContent(clazz)
-        }
-    }
+    // printMaterialized(): void {
+    //     console.log(`Materialized classes: ${this.library.materializedClasses.size}`)
+    //     for (const clazz of this.library.materializedToGenerate) {
+    //         this.printContent(clazz)
+    //     }
+    // }
 
     print(): PrinterResult[] {
         console.log(`Materialized classes: ${this.library.materializedClasses.size}`)

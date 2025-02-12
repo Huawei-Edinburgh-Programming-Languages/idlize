@@ -534,7 +534,7 @@ export class CJLanguageWriter extends LanguageWriter {
         return this.makeStatement(this.makeMethodCall(keyAccessor, "set", [this.makeString(key), this.makeString(value)]))
     }
     makeNull(value?: string): LanguageExpression {
-        return new StringExpression(`None<${value}>`)
+        return new StringExpression(`Option.None`)
     }
     getTagType(): idl.IDLType {
         return idl.createReferenceType("Tags")
