@@ -94,7 +94,6 @@ import { MaterializedClass, MaterializedMethod } from '@idlizer/core'
 import { writePeerMethod } from './printers/PeersPrinter'
 import { TargetFile } from "./printers/TargetFile"
 import { printInterfaces } from './printers/InterfacePrinter'
-// import { DefaultConfig } from '../'
 
 class NameType {
     constructor(public name: string, public type: string) {}
