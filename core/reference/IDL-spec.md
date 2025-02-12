@@ -60,20 +60,20 @@ Primitive types and the most common generic containers are available in their li
 ## primitives
 **Composition of primitives:**  
   
- 1. `void`  
- 2. `boolean`  
- 3. **Integers:**  
-   1. `i8` / `u8`  
-   2. `i16` / `u16`  
-   3. `i32` / `u32`  
-   4. `i64` / `u64`  
- 4. **Real numbers:**  
-   1. `f16`  
-   2. `f32`  
-   3. `f64`  
- 5. `number` / `bigint`  
- 6. `String`  
- 7. `buffer`  
+1. void  
+2. boolean  
+3. **Integers:**  
+    1. i8 / u8  
+    2. i16 / u16  
+    3. i32 / u32  
+    4. i64 / u64  
+4. **Real numbers:**  
+    1. f16  
+    2. f32  
+    3. f64  
+5. number / bigint  
+6. String  
+7. buffer   
 
 ## containers
 
@@ -215,19 +215,19 @@ Unlike functions and methods, a callback signature cannot be marked with the asy
 
 ## interface
 
- **Declares a contract in an object-oriented style, which consists of:  ** 
+ **Declares a contract in an object-oriented style, which consists of:** 
   
- 1. Optionally, a base interface for inheritance.  
- 2. Attributes, which can be marked as *optional* or *static*:  
+ 1.  Optionally, a base interface for inheritance.   
+ 2.   **Attributes, which can be marked as *optional* or *static*:**    
      1. Type  
      2. Name  
- 3. Methods, which can be marked as *static*:  
+ 3.   **Methods, which can be marked as *static*:**    
      1. Return type  
      2. Name  
      3. Set of typed/named parameters  
- 4. Constructors:  
+ 4.   **Constructors:**    
      1. Set of typed/named parameters  
- 5. Constants:  
+ 5.   **Constants:**    
      1. Type  
      2. Name  
      3. Value  
