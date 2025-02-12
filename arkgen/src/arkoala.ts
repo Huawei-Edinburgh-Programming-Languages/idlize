@@ -154,7 +154,7 @@ export function generateArkoalaFromIdl(config: {
     arkoala.createDirs(['', ''].map(dir => path.join(arkoala.cjDir, dir)))
 
     peerLibrary.name = 'arkoala'
-    peerLibrary.setFileLayout(layout(peerLibrary, 'Ark'))
+    peerLibrary.setFileLayout(layout(peerLibrary, 'Ark', ARKOALA_PACKAGE_PATH))
 
     const context = {
         language: config.lang,

@@ -60,9 +60,7 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: O
     peerLibrary.name = suggestLibraryName(peerLibrary).toLowerCase()
     const origGenConfig = generatorConfiguration()
     setDefaultConfiguration(config)
-    peerLibrary.setFileLayout(layout(peerLibrary))
-
-    peerLibrary.setFileLayout(layout(peerLibrary, "OH"))
+    peerLibrary.setFileLayout(layout(peerLibrary, "OH", `org/openharmony/${config.LibraryPrefix}`))
 
     const ohos = new OhosInstall(outDir, peerLibrary.language)
 
