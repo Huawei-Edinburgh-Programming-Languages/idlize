@@ -14,16 +14,15 @@
  */
 import * as fs from "fs"
 import * as path from "path"
-import { Language, IndentedPrinter, PeerLibrary, CppLanguageWriter, createEmptyReferenceResolver, CppInteropConvertor, LanguageWriter } from '@idlizer/core'
+import * as idl from "@idlizer/core/idl"
+import { Language, IndentedPrinter, PeerLibrary, CppLanguageWriter, createEmptyReferenceResolver, CppInteropConvertor, LanguageWriter, ReferenceResolver, Method, MethodSignature, PrintHint, PrinterLike, NamedMethodSignature } from '@idlizer/core'
 import {
     dummyImplementations, gniFile, libraryCcDeclaration,
     makeArkuiModule, makeCallbacksKinds, makeTSDeserializer, makeArkTSDeserializer,
     makeTSSerializer, makeTypeChecker, mesonBuildFile, tsCopyrightAndWarning,
     makeDeserializeAndCall, readLangTemplate, makeCJDeserializer, makeCJSerializer,
     makeJavaArkComponents, makeJavaSerializer, printRealAndDummyAccessors,
-    printRealAndDummyModifiers, printComponents, printPeers,
-    createMaterializedPrinter, printSerializers, printUserConverter,
-    printEvents, printEventsCArkoalaImpl, printEventsCLibaceImpl,
+    printRealAndDummyModifiers, printComponents, printPeers, createMaterializedPrinter, printEvents,
     printGniSources, printMesonBuild, printInterfaces as printIdlInterfaces,
     printBuilderClasses, ARKOALA_PACKAGE_PATH, INTEROP_PACKAGE_PATH,
     TargetFile, printBridgeCcCustom, printBridgeCcGenerated,
@@ -43,7 +42,17 @@ import {
     warning,
     appendModifiersCommonPrologue,
     completeModifiersContent,
-    appendViewModelBridge
+    appendViewModelBridge,
+    HeaderVisitor,
+    makeAPI,
+    makeIncludeGuardDefine,
+    SELECTOR_ID_PREFIX,
+    writeConvertors,
+    makeCSerializers,
+    readTemplate,
+    peerGeneratorConfiguration,
+    readInteropTypesHeader,
+    CEventsVisitor,
 } from "@idlizer/libohos"
 import { ArkoalaInstall, LibaceInstall } from "./ArkoalaInstall"
 
@@ -680,4 +689,185 @@ function printRealModifiersAsMultipleFiles(library: PeerLibrary, libace: LibaceI
     visitor.commentedCode = options.commentedCode
     visitor.printRealAndDummyModifiers()
     visitor.emitRealSync(library, libace, options)
+}
+
+function printUserConverter(headerPath: string, namespace: string, apiVersion: number, peerLibrary: PeerLibrary) :
+        {api: string, converterHeader: string}
+{
+    const apiHeader = new IndentedPrinter()
+    const modifierList = new IndentedPrinter()
+    const accessorList = new IndentedPrinter()
+    const eventsList = new IndentedPrinter()
+    const nodeTypesList = new IndentedPrinter()
+
+    const visitor = new HeaderVisitor(peerLibrary, apiHeader, modifierList, accessorList, eventsList, nodeTypesList)
+    visitor.printApiAndDeserializer()
+
+    const structs = new CppLanguageWriter(new IndentedPrinter(), peerLibrary, new CppInteropConvertor(peerLibrary), ArkPrimitiveTypesInstance)
+    const typedefs = new IndentedPrinter()
+
+    const converterHeader = makeConverterHeader(headerPath, namespace, peerLibrary).getOutput().join("\n")
+    makeCSerializer(peerLibrary, structs, typedefs)
+    const apiText = makeAPI(apiHeader.getOutput(), modifierList.getOutput(), accessorList.getOutput(), eventsList.getOutput(), nodeTypesList.getOutput(), structs, typedefs)
+    const api = makeApi(apiVersion.toString(), apiText)
+    return {api, converterHeader}
+}
+
+function printSerializers(apiVersion: number, peerLibrary: PeerLibrary): {api: string, serializers: string} {
+    const apiHeader = new IndentedPrinter()
+    const modifierList = new IndentedPrinter()
+    const accessorList = new IndentedPrinter()
+    const eventsList = new IndentedPrinter()
+    const nodeTypesList = new IndentedPrinter()
+
+    const visitor = new HeaderVisitor(peerLibrary, apiHeader, modifierList, accessorList, eventsList, nodeTypesList)
+    visitor.printApiAndDeserializer()
+
+    const structs = new CppLanguageWriter(new IndentedPrinter(), peerLibrary, new CppInteropConvertor(peerLibrary), ArkPrimitiveTypesInstance)
+    const typedefs = new IndentedPrinter()
+
+    const serializers = makeCSerializer(peerLibrary, structs, typedefs)
+    const apiText = makeAPI(apiHeader.getOutput(), modifierList.getOutput(), accessorList.getOutput(), eventsList.getOutput(), nodeTypesList.getOutput(), structs, typedefs)
+    const api = makeApi(apiVersion.toString(), apiText)
+    return {api, serializers}
+}
+
+function makeConverterHeader(path: string, namespace: string, library: PeerLibrary): LanguageWriter {
+    const converter = new CppLanguageWriter(new IndentedPrinter(), library,
+        new CppInteropConvertor(library), ArkPrimitiveTypesInstance)
+    converter.writeLines(cStyleCopyright)
+    converter.writeLines(`/*
+ * ${warning}
+ */
+`)
+    const includeGuardDefine = makeIncludeGuardDefine(path)
+    converter.print(`#ifndef ${includeGuardDefine}`)
+    converter.print(`#define ${includeGuardDefine}`)
+    converter.print("")
+
+    converter.writeGlobalInclude('optional')
+    converter.writeGlobalInclude('cstdlib')
+    converter.writeInclude('arkoala_api_generated.h')
+    converter.writeInclude('base/log/log_wrapper.h')
+    converter.print("")
+
+    const MAX_SELECTORS_IDS = 16
+    for(let i = 0; i < MAX_SELECTORS_IDS; i++) {
+        converter.print(`#define ${SELECTOR_ID_PREFIX}${i} ${i}`)
+    }
+    converter.print("")
+
+    converter.pushNamespace(namespace, false)
+    converter.print("")
+    writeConvertors(library, converter)
+    converter.popNamespace(false)
+    converter.print(`\n#endif // ${includeGuardDefine}`)
+    converter.print("")
+    return converter
+}
+
+function makeCSerializer(library: PeerLibrary, structs: LanguageWriter, typedefs: IndentedPrinter): string {
+    return `
+#include "SerializerBase.h"
+#include "DeserializerBase.h"
+#include "callbacks.h"
+#include "arkoala_api_generated.h"
+#include <string>
+
+${makeCSerializers(library, structs, typedefs)}
+`
+}
+
+function makeApi(apiVersion: string, text: string) {
+    let prologue = readTemplate('arkoala_api_prologue.h')
+    let epilogue = readTemplate('arkoala_api_epilogue.h')
+
+    prologue = prologue
+        .replaceAll(`%ARKUI_FULL_API_VERSION_VALUE%`, apiVersion)
+        .replaceAll(`%CPP_PREFIX%`, peerGeneratorConfiguration().cppPrefix)
+        .replaceAll(`%INTEROP_TYPES_HEADER`,
+           readInteropTypesHeader()
+        )
+    epilogue = epilogue
+        .replaceAll("%CPP_PREFIX%", peerGeneratorConfiguration().cppPrefix)
+
+    return `
+${prologue}
+
+${text}
+
+${epilogue}
+`
+}
+
+function printEventsCArkoalaImpl(library: PeerLibrary): string {
+    const visitor = new CEventsVisitor(library, false)
+    visitor.print()
+
+    const writer = new CppLanguageWriter(new IndentedPrinter(), library, new CppInteropConvertor(library), ArkPrimitiveTypesInstance)
+    writer.print(cStyleCopyright)
+    writer.writeInclude("arkoala_api_generated.h")
+    writer.writeInclude("events.h")
+    writer.writeInclude("Serializers.h")
+    writer.print("")
+
+    writer.pushNamespace("Generated")
+    writer.concat(visitor.impl)
+    writer.writeMethodImplementation(new Method(
+        `GetArkUiEventsAPI`,
+        new MethodSignature(idl.createReferenceType(`${peerGeneratorConfiguration().cppPrefix}ArkUIEventsAPI`), [], undefined, [PrintHint.AsConstPointer]),
+    ), (writer) => {
+        writer.print(`static const ${peerGeneratorConfiguration().cppPrefix}ArkUIEventsAPI eventsImpl = {`)
+        writer.pushIndent()
+        writer.concat(visitor.receiversList)
+        writer.popIndent()
+        writer.print(`};`)
+        writer.writeStatement(writer.makeReturn(writer.makeString(`&eventsImpl`)))
+    })
+    writer.popNamespace()
+    return writer.getOutput().join('\n')
+}
+
+function printEventsCLibaceImpl(library: PeerLibrary, options: { namespace: string }): string {
+    const visitor = new CEventsVisitor(library, true)
+    visitor.print()
+
+    const writer = new CppLanguageWriter(new IndentedPrinter(), library, new CppInteropConvertor(library), ArkPrimitiveTypesInstance)
+    writer.writeLines(cStyleCopyright)
+    writer.print("")
+    writer.writeInclude(`arkoala_api_generated.h`)
+    writer.print("")
+    writer.pushNamespace(options.namespace, false)
+
+    writer.concat(visitor.impl)
+
+    writer.print(`const ${peerGeneratorConfiguration().cppPrefix}ArkUIEventsAPI* g_OverriddenEventsImpl = nullptr;`)
+    writer.writeMethodImplementation(new Method(
+        `${peerGeneratorConfiguration().cppPrefix}SetArkUiEventsAPI`,
+        new NamedMethodSignature(idl.IDLVoidType, [
+            idl.createReferenceType(`${peerGeneratorConfiguration().cppPrefix}ArkUIEventsAPI`)],
+            [`api`], undefined,
+            [undefined, PrintHint.AsConstPointer]),
+    ), (writer) => {
+        writer.writeStatement(writer.makeAssign(`g_OverriddenEventsImpl`, undefined, writer.makeString(`api`), false))
+    })
+
+    writer.writeMethodImplementation(new Method(
+        `${peerGeneratorConfiguration().cppPrefix}GetArkUiEventsAPI`,
+        new MethodSignature(idl.createReferenceType(`${peerGeneratorConfiguration().cppPrefix}ArkUIEventsAPI`), [], undefined, [PrintHint.AsConstPointer]),
+    ), (writer) => {
+        writer.print(`static const ${peerGeneratorConfiguration().cppPrefix}ArkUIEventsAPI eventsImpl = {`)
+        writer.pushIndent()
+        writer.concat(visitor.receiversList)
+        writer.popIndent()
+        writer.print(`};`)
+        writer.writeStatement(writer.makeCondition(
+            writer.makeNaryOp("!=", [writer.makeString(`g_OverriddenEventsImpl`), writer.makeString(`nullptr`)]),
+            writer.makeReturn(writer.makeString(`g_OverriddenEventsImpl`)),
+        ))
+        writer.writeStatement(writer.makeReturn(writer.makeString(`&eventsImpl`)))
+    })
+
+    writer.popNamespace(false)
+    return writer.getOutput().join('\n')
 }

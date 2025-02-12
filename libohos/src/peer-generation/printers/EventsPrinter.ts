@@ -25,9 +25,7 @@ import {
     TSLanguageWriter
 } from "../LanguageWriters"
 import { LanguageWriter } from "@idlizer/core"
-import { makeCEventsArkoalaImpl, makeCEventsLibaceImpl } from "../FileGenerators"
 import { generateEventReceiverName } from "./HeaderPrinter"
-import { peerGeneratorConfiguration} from "../PeerGeneratorConfig"
 import { collapseIdlPeerMethods, groupOverloads } from "./OverloadsPrinter"
 import { ImportsCollector } from "../ImportsCollector"
 import { ReferenceResolver, CppInteropConvertor } from "@idlizer/core"
@@ -177,7 +175,7 @@ export function collapseIdlEventsOverloads(library: PeerLibrary, peer: PeerClass
     }
 }
 
-class CEventsVisitor {
+export class CEventsVisitor {
     readonly impl: CppLanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), ArkPrimitiveTypesInstance)
     readonly receiversList: LanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), ArkPrimitiveTypesInstance)
 
@@ -493,25 +491,4 @@ export function printEvents(library: PeerLibrary): string {
     }
     visitor.print()
     return visitor.printer.getOutput().join("\n")
-}
-
-export function printEventsCArkoalaImpl(library: PeerLibrary): string {
-    const visitor = new CEventsVisitor(library, false)
-    visitor.print()
-    return makeCEventsArkoalaImpl(
-        library,
-        visitor.impl,
-        visitor.receiversList,
-    )
-}
-
-export function printEventsCLibaceImpl(library: PeerLibrary, options: { namespace: string }): string {
-    const visitor = new CEventsVisitor(library, true)
-    visitor.print()
-    return makeCEventsLibaceImpl(
-        visitor.impl,
-        visitor.receiversList,
-        options.namespace,
-        library
-    )
 }
