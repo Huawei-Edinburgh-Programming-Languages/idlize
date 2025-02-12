@@ -1,10 +1,10 @@
-| Component | Function | Owner | Status (done=merged **with** UT, devdone=implemented and pushed, testskipped=merged **without** UT, blocked=blocked by IDL)|issue/comment|
-| --------- | -------- | ----- | ------ |------|
+| Component | Function | Owner | Status (done=merged **with** UT, devdone=implemented and pushed, testskipped=merged **without** UT, blocked=blocked by IDL)|  |issue/comment|
+| --------- | -------- | ----- | ------ |------|------|
 |*Root*| *Component* | | | | |
 |*ComponentRoot*| *Component* | | | | |
-|*AbilityComponent*| *Component* | Tuzhilkin Ivan | deprecated | deprecated |
-|`setAbilityComponentOptions`| Function | Tuzhilkin Ivan | deprecated  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`onConnect`| Function | Tuzhilkin Ivan | deprecated | deprecated |
+|*AbilityComponent*| *Component* | Tuzhilkin Ivan | deprecated |  | deprecated |
+|`setAbilityComponentOptions`| Function | Tuzhilkin Ivan | deprecated  |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`onConnect`| Function | Tuzhilkin Ivan | deprecated |  | deprecated |
 |`onDisconnect`| Function | Tuzhilkin Ivan | deprecated | deprecated |
 |*AlphabetIndexer*| *Component* |Ekaterina Stepanova| done |  |  |
 |`setAlphabetIndexerOptions`| Function |Ekaterina Stepanova| done |  | deprecated |
