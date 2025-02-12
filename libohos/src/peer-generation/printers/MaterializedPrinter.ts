@@ -114,11 +114,24 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
             printer.pushNamespace(ns)
         }
 
-        if (clazz.isInterface && this.library.name === 'arkoala') {
-            // generate interface declarations for ArkTS only
-            if (this.library.language !== Language.JAVA) {
-                writeInterface(clazz.decl, printer);
+        if (clazz.isInterface) {
+            if (printer.language == Language.CJ || printer.language == Language.JAVA) {
+                printer.writeInterface(clazz.className, writer => {})
+            } else {
+                writeInterface(clazz.decl, printer)
             }
+        }
+        else {
+            // Write internal Materialized class with fromPtr(ptr) method
+            printer.writeClass(
+                getInternalClassName(clazz.className),
+                writer => writeFromPtrMethod(clazz, writer, classTypeParameters),
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+                false
+            )
         }
 
         const implementationClassName = clazz.getImplementationName()
@@ -315,26 +328,6 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
             }
 
         }, superClassName, interfaces.length === 0 ? undefined : interfaces, classTypeParameters)
-
-        if (needPrintInterals) {
-            if (!clazz.isInterface) {
-                // Write internal Materialized class with fromPtr(ptr) method
-                printer.writeClass(
-                    getInternalClassName(clazz.className),
-                    writer => writeFromPtrMethod(clazz, writer, classTypeParameters),
-                    undefined,
-                    undefined,
-                    undefined,
-                    undefined,
-                    false
-                )
-            } else {
-                if (printer.language == Language.CJ || printer.language == Language.JAVA) {
-                    // TODO: fill interface fields
-                    printer.writeInterface(clazz.className, writer => { }, undefined, undefined)
-                }
-            }
-        }
 
         if (ns !== '') {
             printer.popNamespace()
