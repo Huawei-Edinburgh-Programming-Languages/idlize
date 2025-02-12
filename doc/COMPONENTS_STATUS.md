@@ -1874,8 +1874,8 @@
 |`executeDropAnimation`| Function | Tuzhilkin Ivan | in progress |  | wait MASTER upmerge |
 |`getDragBehavior`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setDragBehavior`| Function | Tuzhilkin Ivan | done |  | |
-|`getUseCustomDropAnimation`| Function | Evstigneev Roman | in progress |  | |
-|`setUseCustomDropAnimation`| Function | Evstigneev Roman | in progress |  | |
+|`getUseCustomDropAnimation`| Function | Evstigneev Roman | done |  | |
+|`setUseCustomDropAnimation`| Function | Evstigneev Roman | done |  | |
 |*KeyEvent*| *Class* | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |`getModifierKeyState`| Function | Maksimov Nikita | done | | |
 |`getType`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
