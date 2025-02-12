@@ -1559,8 +1559,8 @@
 |`setUIExtensionComponentOptions`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBCGB5 ,  https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF (+)|
 |`onRemoteReady`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`onReceive`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX (+) - still blocked, but ticket can be incorect after new generation|
-|`onResult`| Function | Tuzhilkin Ivan | deprecated | testskipped |  |
-|`onRelease`| Function | Tuzhilkin Ivan | deprecated | testskipped |  |
+|`onResult`| Function | Tuzhilkin Ivan | deprecated | testskipped |  | |
+|`onRelease`| Function | Tuzhilkin Ivan | deprecated | testskipped |  | |
 |`onError`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX (+) - still blocked, but ticket can be incorect after new generation|
 |`onTerminated`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`onDrawReady`| Function | | | | |
@@ -1669,8 +1669,8 @@
 |`createImageData`| Function  | Vadim Voronov | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA & https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getImageData`| Function  | Vadim Voronov | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getPixelMap`| Function  | Vadim Voronov | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
-|`putImageData`| Function  | Vadim Voronov | done  | https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA |
-|`getLineDash`| Function  | Vadim Voronov |  blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
+|`putImageData`| Function  | Vadim Voronov | done  |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA |
+|`getLineDash`| Function  | Vadim Voronov |  blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB0DGR |
 |`setLineDash`| Function  | Vadim Voronov | done |  | |
 |`clearRect`| Function  | Vadim Voronov | done |  | |
 |`fillRect`| Function  | Vadim Voronov | done |  | |
@@ -1876,26 +1876,26 @@
 |`setDragBehavior`| Function | Tuzhilkin Ivan | done |  | |
 |`getUseCustomDropAnimation`| Function | Evstigneev Roman | in progress |  | |
 |`setUseCustomDropAnimation`| Function | Evstigneev Roman | in progress |  | |
-|*KeyEvent*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
-|`getModifierKeyState`| Function | Maksimov Nikita | done | |
+|*KeyEvent*| *Class* | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
+|`getModifierKeyState`| Function | Maksimov Nikita | done | | |
 |`getType`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setType`| Function | Maksimov Nikita | done | |
-|`getKeyCode`| Function | Maksimov Nikita | done | |
-|`setKeyCode`| Function | Maksimov Nikita | done | |
-|`getKeyText`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setKeyText`| Function | Maksimov Nikita | done | |
-|`getKeySource`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setKeySource`| Function | Maksimov Nikita | done | |
-|`getDeviceId`| Function | Maksimov Nikita | done | |
-|`setDeviceId`| Function | Maksimov Nikita | done | |
-|`getMetaKey`| Function | Maksimov Nikita | done | |
-|`setMetaKey`| Function | Maksimov Nikita | done | |
-|`getTimestamp`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
-|`setTimestamp`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
-|`setStopPropagation`| Function | Maksimov Nikita | done | |
-|`setIntentionCode`| Function | Maksimov Nikita | done | |
-|`getUnicode`| Function | Maksimov Nikita | done | |
-|`setUnicode`| Function | Maksimov Nikita | done | |
+|`setType`| Function | Maksimov Nikita | done | | |
+|`getKeyCode`| Function | Maksimov Nikita | done | | |
+|`setKeyCode`| Function | Maksimov Nikita | done | | |
+|`getKeyText`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`setKeyText`| Function | Maksimov Nikita | done | | |
+|`getKeySource`| Function | Maksimov Nikita | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`setKeySource`| Function | Maksimov Nikita | done | | |
+|`getDeviceId`| Function | Maksimov Nikita | done | | |
+|`setDeviceId`| Function | Maksimov Nikita | done | | |
+|`getMetaKey`| Function | Maksimov Nikita | done | | |
+|`setMetaKey`| Function | Maksimov Nikita | done | | |
+|`getTimestamp`| Function | Maksimov Nikita | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
+|`setTimestamp`| Function | Maksimov Nikita | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
+|`setStopPropagation`| Function | Maksimov Nikita | done | | |
+|`setIntentionCode`| Function | Maksimov Nikita | done | | |
+|`getUnicode`| Function | Maksimov Nikita | done | | |
+|`setUnicode`| Function | Maksimov Nikita | done | | |
 |*FocusAxisEvent*| *Class* | | | | |
 |`setAxisMap`| Function | | | | |
 |`setStopPropagation`| Function | | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
