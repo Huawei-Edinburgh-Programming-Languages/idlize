@@ -247,9 +247,9 @@
 |`motionPath`| Function | Lobah Mikhail | done |  | |
 |`shadow`| Function | Roman Sedaikin | done |  | |
 |`clip`| Function | Dudkin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH deprecated partially |
-|`clipShape`| Function | Dudkin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH +|
+|`clipShape`| Function | Dudkin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
 |`mask`| Function | Maksimov Nikita | done |  |deprecated |
-|`maskShape`| Function | Dmitry A Smirnov| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX +|
+|`maskShape`| Function | Dmitry A Smirnov| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`key`| Function | Lobah Mikhail | done |  | |
 |`id`| Function | Erokhin Ilya | done |  |  |
 |`geometryTransition`| Function | Lobah Mikhail | done |  | |
@@ -961,7 +961,7 @@
 |`stroke`|Function|Dudkin Sergey| done |  |  |
 |`fill`|Function|Dudkin Sergey| done |  |  |
 |`strokeDashOffset`|Function|Dudkin Sergey| done |  |  |
-|`strokeDashArray`|Function|Dudkin Sergey| blocked AceEngine| https://gitee.com/openharmony/interface_sdk-js/issues/IAX8ZZ +|
+|`strokeDashArray`|Function|Dudkin Sergey| blocked AceEngine| https://gitee.com/openharmony/interface_sdk-js/issues/IAX8ZZ |
 |`strokeLineCap`|Function|Dudkin Sergey| done |  |  |
 |`strokeLineJoin`|Function|Dudkin Sergey| done |  |  |
 |`strokeMiterLimit`|Function|Dudkin Sergey| done |  |  |
@@ -1526,7 +1526,7 @@
 |*SideBarContainer*| *Component* |Dmitry A Smirnov|in progress|  |
 |`setSideBarContainerOptions`| Function |Dmitry A Smirnov| done |  |  |
 |`showSideBar`| Function |Dmitry A Smirnov| done |  |  |
-|`controlButton`| Function |Dmitry A Smirnov| in progress |  | 1.parse PixelMap on from CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR 2. default values https://gitee.com/openharmony/arkui_ace_engine/issues/IAW40V +|
+|`controlButton`| Function |Dmitry A Smirnov| in progress |  | 1.parse PixelMap on from CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR 2. default values https://gitee.com/openharmony/arkui_ace_engine/issues/IAW40V |
 |`showControlButton`| Function |Dmitry A Smirnov| done |  |  |
 |`onChange`| Function |Dmitry A Smirnov| done |  |  |
 |`sideBarWidth`| Function |Dmitry A Smirnov| done |  |  |
@@ -1624,9 +1624,9 @@
 |`setIsStrideAlignment`| Function | Andrey Khudenkikh | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
 |*NavExtender*| *Class* | | | | |
 |`setUpdateStackCallback`| Function | | | | |
-|*EventEmulator*| *Class* | Dmitry A Smirnov | blocked IDL |  |https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 +|
+|*EventEmulator*| *Class* | Dmitry A Smirnov | blocked IDL |  |https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 |
 |`emitClickEvent`| Function | Dmitry A Smirnov, Maksimov Nikita | testskipped |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 + EVENT |
-|`emitTextInputEvent`| Function | Dmitry A Smirnov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 +|
+|`emitTextInputEvent`| Function | Dmitry A Smirnov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 |
 |*ActionSheet*| *Class* | Ekaterina Stepanova | blocked IDL |  | |
 |`show`| Function | Ekaterina Stepanova | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBHHWA |
 |*AlertDialog*| *Class* | Ekaterina Stepanova | blocked IDL |  | |
@@ -1802,33 +1802,33 @@
 |`setPreventDefault`| Function | Maksimov Nikita | in progress |  | |
 |*HoverEvent*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
 |`setStopPropagation`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
-|*MouseEvent*| *Class* | Spirin Andrey | in progress |  | |
-|`getButton`| Function | Spirin Andrey | in progress |  | |
-|`setButton`| Function | Spirin Andrey | in progress |  | |
-|`getAction`| Function | Spirin Andrey | in progress |  | |
-|`setAction`| Function | Spirin Andrey | in progress |  | |
-|`getDisplayX`| Function | Spirin Andrey | in progress |  | |
-|`setDisplayX`| Function | Spirin Andrey | in progress |  | |
-|`getDisplayY`| Function | Spirin Andrey | in progress |  | |
-|`setDisplayY`| Function | Spirin Andrey | in progress |  | |
-|`getWindowX`| Function | Spirin Andrey | in progress |  | |
-|`setWindowX`| Function | Spirin Andrey | in progress |  | |
-|`getWindowY`| Function | Spirin Andrey | in progress |  | |
-|`setWindowY`| Function | Spirin Andrey | in progress |  | |
-|`getScreenX`| Function | Spirin Andrey | in progress |  |deprecated? |
-|`setScreenX`| Function | Spirin Andrey | in progress |  |deprecated? |
-|`getScreenY`| Function | Spirin Andrey | in progress |  |deprecated? |
-|`setScreenY`| Function | Spirin Andrey | in progress |  |deprecated? |
-|`getX`| Function | Spirin Andrey | in progress |  | |
-|`setX`| Function | Spirin Andrey | in progress |  | |
-|`getY`| Function | Spirin Andrey | in progress |  | |
-|`setY`| Function | Spirin Andrey | in progress |  | |
-|`setStopPropagation`| Function | Spirin Andrey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
-|`getRawDeltaX`| Function | | | | |
-|`setRawDeltaX`| Function | | | | |
-|`getRawDeltaY`| Function | | | | |
-|`setRawDeltaY`| Function | | | | |
-|`setPressedButtons`| Function | | | | |
+|*MouseEvent*| *Class* | Kovalev Sergey | testskipped |  | |
+|`getButton`| Function | Kovalev Sergey | testskipped |  | |
+|`setButton`| Function | Kovalev Sergey | testskipped |  | |
+|`getAction`| Function | Kovalev Sergey | testskipped |  | |
+|`setAction`| Function | Kovalev Sergey | testskipped |  | |
+|`getDisplayX`| Function | Kovalev Sergey | testskipped |  | |
+|`setDisplayX`| Function | Kovalev Sergey | testskipped |  | |
+|`getDisplayY`| Function | Kovalev Sergey | testskipped |  | |
+|`setDisplayY`| Function | Kovalev Sergey | testskipped |  | |
+|`getWindowX`| Function | Kovalev Sergey | testskipped |  | |
+|`setWindowX`| Function | Kovalev Sergey | testskipped |  | |
+|`getWindowY`| Function | Kovalev Sergey | testskipped |  | |
+|`setWindowY`| Function | Kovalev Sergey | testskipped |  | |
+|`getScreenX`| Function | Kovalev Sergey | testskipped |  |deprecated? |
+|`setScreenX`| Function | Kovalev Sergey | testskipped |  |deprecated? |
+|`getScreenY`| Function | Kovalev Sergey | testskipped |  |deprecated? |
+|`setScreenY`| Function | Kovalev Sergey | testskipped |  |deprecated? |
+|`getX`| Function | Kovalev Sergey | testskipped |  | |
+|`setX`| Function | Kovalev Sergey | testskipped |  | |
+|`getY`| Function | Kovalev Sergey | testskipped |  | |
+|`setY`| Function | Kovalev Sergey | testskipped |  | |
+|`setStopPropagation`| Function | Kovalev Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
+|`getRawDeltaX`| Function | | blocked | noFB | doesn't present in Upstream and FB |
+|`setRawDeltaX`| Function | | blocked | noFB | doesn't present in Upstream and FB |
+|`getRawDeltaY`| Function | | blocked | noFB | doesn't present in Upstream and FB |
+|`setRawDeltaY`| Function | | blocked | noFB | doesn't present in Upstream and FB |
+|`setPressedButtons`| Function | | blocked | noFB | doesn't present in Upstream and FB |
 |*AccessibilityHoverEvent*| *Class* | Pavelyev Ivan | blocked IDL |  | |
 |`getType`| Function | Pavelyev Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setType`| Function | Pavelyev Ivan | done |  | |
@@ -1937,7 +1937,7 @@
 |`setOnSizeChange`| Function | | | | |
 |`setOnVisibleAreaApproximateChange`| Function | | | | |
 |*GestureModifier*| *Class* | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
-|`applyGesture`| Function | Tuzhilkin Ivan | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG +|
+|`applyGesture`| Function | Tuzhilkin Ivan | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |*GlobalScope_common*| *Class* | Erokhin Ilya | blocked IDL |  | |
 |`getContext`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBJXAR |
 |`postCardAction`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
@@ -1955,7 +1955,7 @@
 |`setCursor`| Function | Erokhin Ilya | done |  | |
 |`restoreDefault`| Function | Erokhin Ilya | done |  | |
 |*ContextMenu*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
-|`close`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBB84T +|
+|`close`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBB84T |
 |*CustomDialogController*| *Class* | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IBECPG & https://gitee.com/nikolay-igotti/idlize/issues/IBGU8S + |
 |`open`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IBECPG + |
 |`close`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IBECPG + |
