@@ -62,7 +62,8 @@ import {
     qualifiedName,
     setDefaultConfiguration,
     isMaterialized,
-    PeerLibrary
+    PeerLibrary,
+    BaseGeneratorConfiguration
 } from '@idlizer/core'
 import { createOutArgConvertor } from './PromiseConvertors'
 import { ArkPrimitiveTypesInstance } from './ArkPrimitiveType'
@@ -93,7 +94,7 @@ import { MaterializedClass, MaterializedMethod } from '@idlizer/core'
 import { writePeerMethod } from './printers/PeersPrinter'
 import { TargetFile } from "./printers/TargetFile"
 import { printInterfaces } from './printers/InterfacePrinter'
-import { DefaultConfig } from '../'
+// import { DefaultConfig } from '../'
 
 class NameType {
     constructor(public name: string, public type: string) {}
@@ -1150,9 +1151,10 @@ abstract class OHOSVisitor {
     }
 
     execute(rootPath: string, apiVersion: number, outDir: string, managedOutDir: string) {
-        const origGenConfig = generatorConfiguration()
-        setDefaultConfiguration(new DefaultConfig(
-            apiVersion, {
+        const origGenConfig = generatorConfiguration() 
+        setDefaultConfiguration(new BaseGeneratorConfiguration(
+        {
+            ApiVersion: apiVersion,
             TypePrefix: "OH_",
             LibraryPrefix: `${this.libraryName}_`,
             OptionalPrefix: "Opt_",

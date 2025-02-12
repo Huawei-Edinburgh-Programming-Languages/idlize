@@ -94,7 +94,43 @@ public open class Serializer <: SerializerBase {
             valueSerializer.writeInt8(RuntimeType.UNDEFINED.ordinal)
         }
     }
+    func writeXmlPullParser(value: XmlPullParser): Unit {
+        var valueSerializer: Serializer = this
+        if (value is MaterializedBase)
+        {
+            let base: MaterializedBase = match (value as MaterializedBase) { case Some(x) => x; case None => throw Exception("Cast is not succeeded")}
+            let peer = base.getPeer()
+            var ptr: UInt64 = nullptr
+            if (let Some(peer) <- peer) {
+                ptr = peer.ptr
+            }
+            valueSerializer.writePointer(ptr);
+            return
+        }
+        else
+        {
+            throw Exception("Value is not a MaterializedBase instance!")
+        }
+    }
     func writeParseInfo(value: ParseInfo): Unit {
+        var valueSerializer: Serializer = this
+        if (value is MaterializedBase)
+        {
+            let base: MaterializedBase = match (value as MaterializedBase) { case Some(x) => x; case None => throw Exception("Cast is not succeeded")}
+            let peer = base.getPeer()
+            var ptr: UInt64 = nullptr
+            if (let Some(peer) <- peer) {
+                ptr = peer.ptr
+            }
+            valueSerializer.writePointer(ptr);
+            return
+        }
+        else
+        {
+            throw Exception("Value is not a MaterializedBase instance!")
+        }
+    }
+    func writeXmlSerializer(value: XmlSerializer): Unit {
         var valueSerializer: Serializer = this
         if (value is MaterializedBase)
         {

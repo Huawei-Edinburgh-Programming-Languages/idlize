@@ -47,6 +47,7 @@ import {
     printSerializersOhos,
     install,
     printInterfaceData,
+    printCJArkUIGeneratedNativeFunctions,
 } from '@idlizer/libohos';
 import { OhosInstall } from "./OhosInstall"
 import { generateNativeOhos, OhosConfiguration, suggestLibraryName } from './OhosGenerator';
@@ -243,10 +244,8 @@ const PEER_LIB_CONFIG = new Map<Language, string[]>([
     [Language.ARKTS, ['MaterializedBase.ts', 'shared/generated-utils.ts']]
 ])
 PEER_LIB_CONFIG.set(Language.ARKTS, [
-    [
         path.join('sig', 'arkoala-arkts', 'arkui', 'src', 'generated', 'MaterializedBase.ts'),
         'MaterializedBase.cj'
-    ]
 ])
 
 function copyPeerLib(lang: Language, rootDir: string) {

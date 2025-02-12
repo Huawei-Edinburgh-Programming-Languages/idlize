@@ -107,10 +107,20 @@ public open class Deserializer <: DeserializerBase {
     _argsSerializer.release();
     return; }
     }
+    func readXmlPullParser(): XmlPullParser {
+        var valueDeserializer: Deserializer = this
+        var ptr: UInt64 = valueDeserializer.readPointer()
+        return XmlPullParserInternal.fromPtr(ptr)
+    }
     func readParseInfo(): ParseInfo {
         var valueDeserializer: Deserializer = this
         var ptr: UInt64 = valueDeserializer.readPointer()
         return ParseInfoInternal.fromPtr(ptr)
+    }
+    func readXmlSerializer(): XmlSerializer {
+        var valueDeserializer: Deserializer = this
+        var ptr: UInt64 = valueDeserializer.readPointer()
+        return XmlSerializerInternal.fromPtr(ptr)
     }
 }
 public open class BoolHolder {
