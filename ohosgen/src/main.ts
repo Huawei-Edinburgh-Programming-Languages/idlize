@@ -194,7 +194,7 @@ if (!didJob) {
 
 function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language) {
     if (options.useNewOhos) {
-        generateOhos(outDir, idlLibrary, new OhosConfiguration({///rm?
+        generateOhos(outDir, idlLibrary, new OhosConfiguration({
             ...peerGeneratorConfiguration().params,
             LibraryPrefix: `${suggestLibraryName(idlLibrary)}_`, 
             GenerateUnused: true,

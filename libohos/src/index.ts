@@ -14,8 +14,6 @@
  */
 
 import * as fs from 'fs'
-import { BaseGeneratorConfiguration } from '@idlizer/core'
-import { peerGeneratorConfiguration } from './peer-generation/PeerGeneratorConfig'
 
 export * from './launch'
 export * from './IDLVisitor'
@@ -78,23 +76,6 @@ export * from './skoala-generation/printers/InterfacePrinter'
 export { IdlSkoalaLibrary, IldSkoalaFile, IdlWrapperProcessor } from './skoala-generation/idl/idlSkoalaLibrary'
 export * from './skoala-generation/SkoalaInstall'
 export * from './skoala-generation/SkoalaGeneration'
-
-export class DefaultConfig extends BaseGeneratorConfiguration {///rm?
-    constructor(apiVersion: number, params: Record<string, any> = {}) {
-        super({
-            TypePrefix: peerGeneratorConfiguration().TypePrefix,
-            LibraryPrefix: "",
-            OptionalPrefix: peerGeneratorConfiguration().OptionalPrefix,
-            GenerateUnused: false,
-            DumpSerialized: false,
-            ApiVersion: apiVersion,
-            builderClasses: [], // TODO: builderClasses, knownParameterized, ignoreMaterialized should be taken from PeerGeneratorConfig
-            knownParameterized: [],
-            ignoreMaterialized: [],
-            ...params
-        })
-    }
-}
 
 export class Install {
     mkdir(path: string): string {
