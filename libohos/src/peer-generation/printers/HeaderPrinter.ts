@@ -25,7 +25,7 @@ export function generateEventReceiverName(componentName: string) {
     return `${peerGeneratorConfiguration().cppPrefix}ArkUI${componentName}EventsReceiver`
 }
 
-class HeaderVisitor {
+export class HeaderVisitor {
     constructor(
         private library: PeerLibrary,
         private api: IndentedPrinter,
