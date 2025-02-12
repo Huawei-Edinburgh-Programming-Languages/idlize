@@ -605,7 +605,7 @@
 |`contentModifier`|Function| Samarin Sergey| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG + |
 |*LocationButton*| *Component* |Samarin Sergey| done |  |  |
 |`setLocationButtonOptions`| Function |Samarin Sergey| done |  |deprecated: icon, text, buttonType  |
-|`onClick`| Function | Samarin Sergey, Maksimov Nikita | testskipped |  | EVENT |
+|`onClick`| Function | Samarin Sergey, Maksimov Nikita, Pavelyev Ivan | testskipped |  | EVENT |
 |*Marquee*| *Component* | Andrey Khudenkikh| done |  |  |
 |`setMarqueeOptions`| Function | Andrey Khudenkikh| done |  |  |
 |`fontColor`| Function |Andrey Khudenkikh | done |  |  |
@@ -694,7 +694,7 @@
 |`__onChangeEvent_mode`| Function | Erokhin Ilya | done |  | |
 |*PasteButton*| *Component* | Samarin Sergey| done |  |  |
 |`setPasteButtonOptions`| Function | Samarin Sergey| done |  |  |
-|`onClick`| Function | Samarin Sergey, Maksimov Nikita | testskipped |  | EVENT |
+|`onClick`| Function | Samarin Sergey, Maksimov Nikita, Pavelyev Ivan | testskipped |  | EVENT |
 |*Path*| *Component* | Skroba Gleb | done |  |  |
 |`setPathOptions`| Function | Skroba Gleb | done |  |  |
 |`commands`| Function | Skroba Gleb | done |  |  |
@@ -818,7 +818,7 @@
 |`resizeable`| Function | Dmitry A Smirnov| done |  |  |
 |*SaveButton*| *Component* | Samarin Sergey| done |  |  |
 |`setSaveButtonOptions`| Function | Samarin Sergey| done |  |  |
-|`onClick`| Function | Samarin Sergey, Maksimov Nikita | testskipped |  | EVENT |
+|`onClick`| Function | Samarin Sergey, Maksimov Nikita, Pavelyev Ivan | testskipped |  | EVENT |
 |*Screen*| *Component* | Dudkin Sergey | done |  | |
 |`setScreenOptions`| Function | Dudkin Sergey | done |  | |
 |*Scroll*| *Component* | Berezin Kirill | done |  |  |
@@ -2120,7 +2120,7 @@
 |`getCaretRect`| Function | | | | |
 |*RichEditorController*| *Class* |Dudkin Sergey| blocked |  |  |
 |`addTextSpan`| Function |Dudkin Sergey, Samarin Sergey | in progress |  | EVENT |
-|`addImageSpan`| Function |Dudkin Sergey, Maksimov Nikita, Tuzhilkin Ivan, Pavelyev Ivan| testkipped |  | EVENT |
+|`addImageSpan`| Function |Dudkin Sergey, Maksimov Nikita, Tuzhilkin Ivan, Samarin Sergey| in progress |  | EVENT |
 |`addBuilderSpan`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`addSymbolSpan`| Function | Dudkin Sergey| done |  |  |
 |`updateSpanStyle`| Function | Dudkin Sergey| done |  |  |
