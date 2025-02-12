@@ -15,7 +15,7 @@
 import * as fs from "fs"
 import * as path from "path"
 import * as idl from "@idlizer/core/idl"
-import { Language, IndentedPrinter, PeerLibrary, CppLanguageWriter, createEmptyReferenceResolver, CppInteropConvertor, LanguageWriter, ReferenceResolver, Method, MethodSignature, PrintHint, PrinterLike, NamedMethodSignature } from '@idlizer/core'
+import { Language, IndentedPrinter, PeerLibrary, CppLanguageWriter, createEmptyReferenceResolver, CppInteropConvertor, LanguageWriter, ReferenceResolver, Method, MethodSignature, PrintHint, PrinterLike, NamedMethodSignature, printMethodDeclaration } from '@idlizer/core'
 import {
     dummyImplementations, gniFile, libraryCcDeclaration,
     makeArkuiModule, makeCallbacksKinds, makeTSDeserializer, makeArkTSDeserializer,
@@ -37,7 +37,6 @@ import {
     MultiFileModifiersVisitorState,
     modifierStructList,
     accessorStructList,
-    ArkPrimitiveTypesInstance,
     cStyleCopyright,
     warning,
     appendModifiersCommonPrologue,
@@ -52,9 +51,15 @@ import {
     readTemplate,
     peerGeneratorConfiguration,
     readInteropTypesHeader,
-    CEventsVisitor,
+    CallbackInfo,
+    PeerEventKind,
+    callbackIdByInfo,
+    generateEventReceiverName,
+    collectCallbacks,
+    groupCallbacks,
 } from "@idlizer/libohos"
 import { ArkoalaInstall, LibaceInstall } from "./ArkoalaInstall"
+import { ArkPrimitiveTypesInstance } from "./ArkPrimitiveType"
 
 export function generateLibaceFromIdl(config: {
     libaceDestination: string|undefined,
@@ -870,4 +875,102 @@ function printEventsCLibaceImpl(library: PeerLibrary, options: { namespace: stri
 
     writer.popNamespace(false)
     return writer.getOutput().join('\n')
+}
+
+export class CEventsVisitor {
+    readonly impl: CppLanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), ArkPrimitiveTypesInstance)
+    readonly receiversList: LanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), ArkPrimitiveTypesInstance)
+
+    constructor(
+        protected readonly library: PeerLibrary,
+        protected readonly isEmptyImplementation: boolean,
+    ) {
+    }
+
+    private printEventsKinds(callbacks: CallbackInfo[]) {
+        if (this.isEmptyImplementation)
+            return
+        this.impl.print(`enum ${PeerEventKind} {`)
+        this.impl.pushIndent()
+        callbacks.forEach((callback, index) => {
+            this.impl.print(`Kind${callbackIdByInfo(callback)} = ${index},`)
+        })
+        this.impl.popIndent()
+        this.impl.print('};\n')
+    }
+
+    private printEventImpl(namespace: string, event: CallbackInfo) {
+        this.library.setCurrentContext(`${namespace}.${event.methodName}Impl`)
+        this.printEventMethodDeclaration(event)
+        this.impl.print("{")
+        this.impl.pushIndent()
+        if (this.isEmptyImplementation) {
+            this.impl.print("// GENERATED EMPTY IMPLEMENTATION")
+        } else {
+            this.impl.print(`EventBuffer _eventBuffer;`)
+            this.impl.print(`Serializer _eventBufferSerializer(_eventBuffer.buffer, sizeof(_eventBuffer.buffer));`)
+            this.impl.print(`_eventBufferSerializer.writeInt32(Kind${callbackIdByInfo(event)});`)
+            this.impl.print(`_eventBufferSerializer.writeInt32(nodeId);`)
+            this.printSerializers(event)
+            this.impl.print(`sendEvent(&_eventBuffer);`)
+        }
+        this.impl.popIndent()
+        this.impl.print('}')
+        this.library.setCurrentContext(undefined)
+    }
+
+    private printReceiver(componentName: string, callbacks: CallbackInfo[]) {
+        const receiver = generateEventReceiverName(componentName)
+        this.impl.print(`const ${receiver}* Get${componentName}EventsReceiver()`)
+        this.impl.print("{")
+        this.impl.pushIndent()
+        this.impl.print(`static const ${receiver} ${receiver}Impl {`)
+        this.impl.pushIndent()
+        for (const callback of callbacks) {
+            this.impl.print(`${callback.componentName}::${callback.methodName}Impl,`)
+        }
+        this.impl.popIndent()
+        this.impl.print(`};\n`)
+
+        this.impl.print(`return &${receiver}Impl;`)
+        this.impl.popIndent()
+        this.impl.print(`}`)
+    }
+
+    private printReceiversList(callbacks: Map<string, CallbackInfo[]>) {
+        for (const componentName of callbacks.keys()) {
+            this.receiversList.print(`Get${componentName}EventsReceiver,`)
+        }
+    }
+
+    print() {
+        const listedCallbacks = collectCallbacks(this.library)
+        const groupedCallbacks = groupCallbacks(listedCallbacks)
+        this.printEventsKinds(listedCallbacks)
+        for (const [name, callbacks] of groupedCallbacks) {
+            this.impl.pushNamespace(name, false)
+            for (const callback of callbacks) {
+                this.printEventImpl(name, callback)
+            }
+            this.impl.popNamespace(false)
+        }
+        for (const [name, callbacks] of groupedCallbacks) {
+            this.printReceiver(name, callbacks)
+        }
+        this.printReceiversList(groupedCallbacks)
+    }
+
+    protected printEventMethodDeclaration(event: CallbackInfo) {
+        const args = ["Ark_Int32 nodeId",
+            ...event.args.map(it =>
+                `const ${this.impl.getNodeName(idl.maybeOptional(this.library.typeConvertor(it.name, it.type, it.nullable).nativeType(), it.nullable))} ${it.name}`)]
+        printMethodDeclaration(this.impl.printer, "void", `${event.methodName}Impl`, args)
+    }
+
+    protected printSerializers(event: CallbackInfo): void {
+        for (const arg of event.args) {
+            const convertor = this.library.typeConvertor(arg.name, arg.type, arg.nullable)
+            convertor.convertorSerialize(`_eventBuffer`, arg.name, this.impl)
+        }
+    }
 }

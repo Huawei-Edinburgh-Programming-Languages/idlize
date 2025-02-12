@@ -87,10 +87,10 @@ import {
     MethodModifier,
     MethodSignature,
     NamedMethodSignature,
+    PrimitiveTypesInstance,
 } from '@idlizer/core'
 import {
     createOutArgConvertor,
-    ArkPrimitiveTypesInstance,
     getInteropRootPath,
     makeDeserializeAndCall,
     readLangTemplate,
@@ -395,8 +395,8 @@ function writeCJMethod(writer: LanguageWriter, method: {name: string, method: Na
 abstract class OHOSVisitor {
     implementationStubsFile: CppSourceFile
 
-    hWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), ArkPrimitiveTypesInstance)
-    cppWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), ArkPrimitiveTypesInstance)
+    hWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), PrimitiveTypesInstance)
+    cppWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), PrimitiveTypesInstance)
 
     dependecyCollector: DependecyCollector
 
@@ -1112,7 +1112,7 @@ abstract class OHOSVisitor {
         writeSerializer(this.library, this.cppWriter, prefix)
         writeDeserializer(this.library, this.cppWriter, prefix)
 
-        let writer = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), ArkPrimitiveTypesInstance)
+        let writer = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), PrimitiveTypesInstance)
         this.writeModifiers(writer)
         this.writeImpls()
         this.cppWriter.concat(writer)
@@ -1401,7 +1401,7 @@ function generateArgConvertor(library: PeerLibrary, param: IDLParameter): ArgCon
 
 // TODO drop this method
 function generateCParameters(method: IDLMethod | IDLConstructor, argConvertors: ArgConvertor[], writer: LanguageWriter): string {
-    let args = isConstructor(method) || method.isStatic ? [] : [`${ArkPrimitiveTypesInstance.NativePointer} thisPtr`]
+    let args = isConstructor(method) || method.isStatic ? [] : [`${PrimitiveTypesInstance.NativePointer} thisPtr`]
     for (let i = 0; i < argConvertors.length; ++i) {
         const typeName = writer.getNodeName(argConvertors[i].nativeType())
         const argName = writer.escapeKeyword(argConvertors[i].param)

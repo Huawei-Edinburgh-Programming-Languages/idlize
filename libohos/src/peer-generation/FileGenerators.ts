@@ -14,8 +14,7 @@
  */
 import * as fs from "fs"
 import * as path from "path"
-import { IndentedPrinter, camelCaseToUpperSnakeCase, Language, PeerLibrary, createLanguageWriter } from "@idlizer/core"
-import { ArkPrimitiveTypesInstance } from "./ArkPrimitiveType"
+import { IndentedPrinter, camelCaseToUpperSnakeCase, Language, PeerLibrary, createLanguageWriter, PrimitiveTypesInstance } from "@idlizer/core"
 import { PrinterLike } from "./LanguageWriters"
 import { LanguageWriter } from "@idlizer/core";
 import { peerGeneratorConfiguration } from "./PeerGeneratorConfig";
@@ -373,7 +372,7 @@ ${accessors.join("\n")}
 } ${peerGeneratorConfiguration().cppPrefix}ArkUIAccessors;
 
 typedef struct ${peerGeneratorConfiguration().cppPrefix}ArkUIGraphicsAPI {
-    ${ArkPrimitiveTypesInstance.Int32.getText()} version;
+    ${PrimitiveTypesInstance.Int32.getText()} version;
 } ${peerGeneratorConfiguration().cppPrefix}ArkUIGraphicsAPI;
 
 typedef struct ${peerGeneratorConfiguration().cppPrefix}ArkUIEventsAPI {
