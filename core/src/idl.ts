@@ -620,19 +620,21 @@ export function fetchNamespaceFrom(pointOfView?: IDLNode): IDLNamespace|undefine
     return undefined
 }
 
+export function createReferenceType(name: string, typeArguments?: IDLType[], pointOfView?: IDLNode): IDLReferenceType
+export function createReferenceType(source: IDLEntry, typeArguments?: IDLType[]): IDLReferenceType
 export function createReferenceType(
-    ref: string | IDLNamedNode /*named node seems incorrect, but does not have better replacement for now*/,
+    nameOrSource: string | IDLEntry,
     typeArguments?: IDLType[],
     pointOfView?: IDLNode,
 ): IDLReferenceType {
     let name: string
     let namespace: IDLNamespace | undefined
-    if (typeof ref === 'string') {
-        name = ref
+    if (typeof nameOrSource === 'string') {
+        name = nameOrSource
         namespace = fetchNamespaceFrom(pointOfView)
     } else {
-        name = ref.name
-        namespace = fetchNamespaceFrom(pointOfView ?? ref)
+        name = nameOrSource.name
+        namespace = fetchNamespaceFrom(nameOrSource)
     }
     return {
         kind: IDLKind.ReferenceType,
