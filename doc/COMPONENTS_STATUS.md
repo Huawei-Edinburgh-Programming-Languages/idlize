@@ -1802,33 +1802,33 @@
 |`setPreventDefault`| Function | Maksimov Nikita | in progress | |
 |*HoverEvent*| *Class* | Tuzhilkin Ivan |blocked IDL | |
 |`setStopPropagation`| Function | Tuzhilkin Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
-|*MouseEvent*| *Class* | Spirin Andrey | in progress | |
-|`getButton`| Function | Spirin Andrey | in progress | |
-|`setButton`| Function | Spirin Andrey | in progress | |
-|`getAction`| Function | Spirin Andrey | in progress | |
-|`setAction`| Function | Spirin Andrey | in progress | |
-|`getDisplayX`| Function | Spirin Andrey | in progress | |
-|`setDisplayX`| Function | Spirin Andrey | in progress | |
-|`getDisplayY`| Function | Spirin Andrey | in progress | |
-|`setDisplayY`| Function | Spirin Andrey | in progress | |
-|`getWindowX`| Function | Spirin Andrey | in progress | |
-|`setWindowX`| Function | Spirin Andrey | in progress | |
-|`getWindowY`| Function | Spirin Andrey | in progress | |
-|`setWindowY`| Function | Spirin Andrey | in progress | |
-|`getScreenX`| Function | Spirin Andrey | in progress |deprecated? |
-|`setScreenX`| Function | Spirin Andrey | in progress |deprecated? |
-|`getScreenY`| Function | Spirin Andrey | in progress |deprecated? |
-|`setScreenY`| Function | Spirin Andrey | in progress |deprecated? |
-|`getX`| Function | Spirin Andrey | in progress | |
-|`setX`| Function | Spirin Andrey | in progress | |
-|`getY`| Function | Spirin Andrey | in progress | |
-|`setY`| Function | Spirin Andrey | in progress | |
-|`setStopPropagation`| Function | Spirin Andrey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
-|`getRawDeltaX`| Function | | | |
-|`setRawDeltaX`| Function | | | |
-|`getRawDeltaY`| Function | | | |
-|`setRawDeltaY`| Function | | | |
-|`setPressedButtons`| Function | | | |
+|*MouseEvent*| *Class* | Kovalev Sergey | testskipped | |
+|`getButton`| Function | Kovalev Sergey | testskipped | |
+|`setButton`| Function | Kovalev Sergey | testskipped | |
+|`getAction`| Function | Kovalev Sergey | testskipped | |
+|`setAction`| Function | Kovalev Sergey | testskipped | |
+|`getDisplayX`| Function | Kovalev Sergey | testskipped | |
+|`setDisplayX`| Function | Kovalev Sergey | testskipped | |
+|`getDisplayY`| Function | Kovalev Sergey | testskipped | |
+|`setDisplayY`| Function | Kovalev Sergey | testskipped | |
+|`getWindowX`| Function | Kovalev Sergey | testskipped | |
+|`setWindowX`| Function | Kovalev Sergey | testskipped | |
+|`getWindowY`| Function | Kovalev Sergey | testskipped | |
+|`setWindowY`| Function | Kovalev Sergey | testskipped | |
+|`getScreenX`| Function | Kovalev Sergey | testskipped |deprecated? |
+|`setScreenX`| Function | Kovalev Sergey | testskipped |deprecated? |
+|`getScreenY`| Function | Kovalev Sergey | testskipped |deprecated? |
+|`setScreenY`| Function | Kovalev Sergey | testskipped |deprecated? |
+|`getX`| Function | Kovalev Sergey | testskipped | |
+|`setX`| Function | Kovalev Sergey | testskipped | |
+|`getY`| Function | Kovalev Sergey | testskipped | |
+|`setY`| Function | Kovalev Sergey | testskipped | |
+|`setStopPropagation`| Function | Kovalev Sergey | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
+|`getRawDeltaX`| Function | | blocked | doesn't present in Upstream and FB |
+|`setRawDeltaX`| Function | | blocked | doesn't present in Upstream and FB |
+|`getRawDeltaY`| Function | | blocked | doesn't present in Upstream and FB |
+|`setRawDeltaY`| Function | | blocked | doesn't present in Upstream and FB |
+|`setPressedButtons`| Function | | blocked | doesn't present in Upstream and FB |
 |*AccessibilityHoverEvent*| *Class* | Pavelyev Ivan | blocked IDL | |
 |`getType`| Function | Pavelyev Ivan | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setType`| Function | Pavelyev Ivan | done | |
