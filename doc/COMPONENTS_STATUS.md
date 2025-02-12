@@ -503,7 +503,7 @@
 |`objectRepeat`| Function | Evstigneev Roman | done |  | |
 |`autoResize`| Function | Evstigneev Roman | done |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAW529, test in progress Evstgneev Roman |
 |`renderMode`| Function | Evstigneev Roman | done |  | |
-|`dynamicRangeMode`| Function | Evstigneev Roman | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1IEY, test in progress Evstgneev Roman |
+|`dynamicRangeMode`| Function | Evstigneev Roman | testskipped |  | test blocked by aceEngine https://gitee.com/openharmony/arkui_ace_engine/issues/IB1IEY, test in progress Evstgneev Roman |
 |`interpolation`| Function | Evstigneev Roman | done |  | |
 |`sourceSize`| Function | Evstigneev Roman | done |  | |
 |`syncLoad`| Function | Evstigneev Roman | done |  | |
