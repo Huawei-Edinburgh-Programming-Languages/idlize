@@ -17,13 +17,11 @@
 // WARNING! THIS FILE IS AUTO-GENERATED, DO NOT MAKE CHANGES, THEY WILL BE LOST ON NEXT GENERATION!
 
 package idlize
-
 import std.collection.*
 import Interop.*
-
 public open class XmlSerializerInternal {
     public static func fromPtr(ptr: UInt64): XmlSerializer {
-        let obj: XmlSerializer = XmlSerializer(None<Array<UInt8>>, None<String>)
+        let obj: XmlSerializer = XmlSerializer(Option.None, Option.None)
         obj.peer = Finalizable(ptr, XmlSerializer.getFinalizer())
         return obj
     }
@@ -238,7 +236,7 @@ public open class ParseInfoInternal <: MaterializedBase & ParseInfo {
 }
 public open class XmlPullParserInternal {
     public static func fromPtr(ptr: UInt64): XmlPullParser {
-        let obj: XmlPullParser = XmlPullParser(None<Array<UInt8>>, None<String>)
+        let obj: XmlPullParser = XmlPullParser(Option.None, Option.None)
         obj.peer = Finalizable(ptr, XmlPullParser.getFinalizer())
         return obj
     }
@@ -310,6 +308,11 @@ public open class EventType {
     public var value: Int32
     EventType(arg0: Int32) {
         value = arg0
+    }
+}
+public open class ParseInfo {
+    ParseInfo() {
+        super()
     }
 }
 public open class ParseOptions {
