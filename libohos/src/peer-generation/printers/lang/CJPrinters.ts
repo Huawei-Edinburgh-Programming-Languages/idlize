@@ -22,14 +22,14 @@ import { IdlSyntheticTypeBase } from "./CommonUtils"
 
 const ARKOALA_PACKAGE_PATH = '.'
 
-export function makeCJSerializer(library: PeerLibrary): { targetFile: TargetFile, writer: LanguageWriter } {
+export function makeCJSerializer(library: PeerLibrary): LanguageWriter {
     let writer = library.createLanguageWriter()
     writeSerializer(library, writer, "")
-    return { targetFile: new TargetFile('Serializer', ARKOALA_PACKAGE_PATH), writer: writer }
+    return writer
 }
 
-export function makeCJDeserializer(library: PeerLibrary): { targetFile: TargetFile, writer: LanguageWriter } {
+export function makeCJDeserializer(library: PeerLibrary): string {
     let writer = library.createLanguageWriter()
     writeDeserializer(library, writer, "")
-    return { targetFile: new TargetFile('Deserializer', ARKOALA_PACKAGE_PATH), writer: writer }
+    return writer.getOutput().join("\n")
 }

@@ -250,7 +250,7 @@ export function makeSerializer(library: PeerLibrary): string {
     switch (library.language) {
         case Language.ARKTS: return makeTSSerializer(library).getOutput().join("\n")
         case Language.TS: return makeTSSerializer(library).getOutput().join("\n")
-        case Language.CJ: return makeCJSerializer(library).writer.getOutput().join("\n")
+        case Language.CJ: return makeCJSerializer(library).getOutput().join("\n")
     }
     throw new Error(`Unsupported language "${library.language}"`)
 }
@@ -433,7 +433,7 @@ export function makeDeserializer(library: PeerLibrary): string {
     switch (library.language) {
         case Language.ARKTS: return makeArkTSDeserializer(library)
         case Language.TS: return makeTSDeserializer(library)
-        case Language.CJ: return makeCJDeserializer(library).writer.getOutput().join("\n")
+        case Language.CJ: return makeCJDeserializer(library)
     }
     throw new Error(`Unsupported language "${library.language}"`)
 }
