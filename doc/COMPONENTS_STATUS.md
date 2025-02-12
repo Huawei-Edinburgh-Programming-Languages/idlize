@@ -617,8 +617,8 @@
 |`onStart`| Function | Andrey Khudenkikh| done |  |  |
 |`onBounce`| Function |Andrey Khudenkikh | done |  |  |
 |`onFinish`| Function |Andrey Khudenkikh | done |  |  |
-|*MediaCachedImage*| *Component* | Skroba Gleb | in progress |  | |
-|`setMediaCachedImageOptions`| Function | Skroba Gleb | in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX, PixelMap on https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
+|*MediaCachedImage*| *Component* | Skroba Gleb, Evstgneev Roman | in progress |  | |
+|`setMediaCachedImageOptions`| Function | Skroba Gleb, Evstgneev Roman | in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX, PixelMap on https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
 |*Menu*|*Component*|Morozov Sergey| done |  |  |
 |`setMenuOptions`| Function |Morozov Sergey| done |  |  |
 |`fontSize`|Function|Morozov Sergey| done |  |deprecated  |
