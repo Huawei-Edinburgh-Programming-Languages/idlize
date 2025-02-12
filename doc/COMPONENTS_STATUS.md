@@ -986,7 +986,7 @@
 |`trackBorderRadius`| Function |Morozov Sergey | done |  |  |
 |`selectedBorderRadius`| Function |Morozov Sergey | done |  |  |
 |`blockSize`| Function |Morozov Sergey | done |  |  |
-|`blockStyle`| Function |Morozov Sergey | in progress |  | PixelMap on https://gitee.com/nikolay-igotti/idlize/issues/IAU9UR |
+|`blockStyle`| Function |Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBLDH2 |
 |`stepSize`| Function |Morozov Sergey | done |  |  |
 |`sliderInteractionMode`| Function |Morozov Sergey | done |  |  |
 |`minResponsiveDistance`| Function |Morozov Sergey | done |  |  |
@@ -1613,8 +1613,8 @@
 |`getParent`| Function | Tuzhilkin Ivan | done |  | |
 |`getChildrenCount`| Function | Tuzhilkin Ivan | done |  | |
 |`dispose`| Function | Tuzhilkin Ivan | done |  | |
-|`getOpacity`| Function | | | | |
-|`getPositionToWindowWithTransform`| Function | | | | |
+|`getOpacity`| Function | Morozov Sergey | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getPositionToWindowWithTransform`| Function | Morozov Sergey | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 https://gitee.com/nikolay-igotti/idlize/issues/IBLA1J|
 |*PixelMap*| *Class* | Andrey Khudenkikh | blocked  | |
 |`readPixelsToBufferSync`| Function | Andrey Khudenkikh | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
 |`writeBufferToPixels`| Function | Andrey Khudenkikh | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
