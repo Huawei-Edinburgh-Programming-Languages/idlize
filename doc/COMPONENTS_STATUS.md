@@ -1559,8 +1559,8 @@
 |`setUIExtensionComponentOptions`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBCGB5 ,  https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF (+)|
 |`onRemoteReady`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`onReceive`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX (+) - still blocked, but ticket can be incorect after new generation|
-|`onResult`| Function | Tuzhilkin Ivan | deprecated | testskipped |  | |
-|`onRelease`| Function | Tuzhilkin Ivan | deprecated | testskipped |  | |
+|`onResult`| Function | Tuzhilkin Ivan | deprecated |  | testskipped | |
+|`onRelease`| Function | Tuzhilkin Ivan | deprecated |  | testskipped | |
 |`onError`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX (+) - still blocked, but ticket can be incorect after new generation|
 |`onTerminated`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`onDrawReady`| Function | | | | |
@@ -1878,7 +1878,7 @@
 |`setUseCustomDropAnimation`| Function | Evstigneev Roman | in progress |  | |
 |*KeyEvent*| *Class* | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |`getModifierKeyState`| Function | Maksimov Nikita | done | | |
-|`getType`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getType`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setType`| Function | Maksimov Nikita | done | | |
 |`getKeyCode`| Function | Maksimov Nikita | done | | |
 |`setKeyCode`| Function | Maksimov Nikita | done | | |
@@ -1917,7 +1917,7 @@
 |`addText`| Function | | | | |
 |`deleteText`| Function | | | | |
 |`getSelection`| Function | | | | |
-|*DynamicNode*| *Class* | Skroba Gleb | blocked ID | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
+|*DynamicNode*| *Class* | Skroba Gleb | blocked ID |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`onMove`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |*ChildrenMainSize*| *Class* | Morozov Sergey | blocked IDL |  |
 |`splice`| Function | Morozov Sergey | done |  |  |
@@ -2353,7 +2353,7 @@
 |`clearHistory`| Function | Erokhin Ilya | done |  |deprecated |
 |`runJavaScript`| Function | Erokhin Ilya | deprecated |  | testkipped |
 |`loadData`| Function | Erokhin Ilya | done |  |deprecated |
-|`loadUrl`| Function | Erokhin Ilya | deprecated | testskipped |  |
+|`loadUrl`| Function | Erokhin Ilya | deprecated |  | testskipped |  |
 |`refresh`| Function | Erokhin Ilya | done |  |deprecated |
 |`stop`| Function | Erokhin Ilya | done |  |deprecated |
 |`registerJavaScriptProxy`| Function | Erokhin Ilya | deprecated |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV |
