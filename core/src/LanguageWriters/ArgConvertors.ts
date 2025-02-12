@@ -30,7 +30,7 @@ import { generatorTypePrefix } from "../config"
 import { LibraryInterface } from "../LibraryInterface";
 import { hashCodeFromString, warn } from "../util";
 import { UnionRuntimeTypeChecker } from "../peer-generation/unions";
-import { CppNameConvertor } from "./convertors/InteropConvertors";
+import { CppNameConvertor } from "./convertors/CppConvertors";
 import { createEmptyReferenceResolver } from "../peer-generation/ReferenceResolver";
 import { CppConvertor } from "./convertors/CppConvertors";
 import { PrimitiveTypesInstance } from "../peer-generation/PrimitiveType";

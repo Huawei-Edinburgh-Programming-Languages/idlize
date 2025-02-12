@@ -37,21 +37,20 @@ class ReturnValueConvertor implements TypeConvertor<string | undefined> {
         private retTypeConverter: CppReturnTypeConvertor,
         private resolver: ReferenceResolver
     ) {}
-    private mkObject(type:IDLType): string {
-        return this.retTypeConverter.convert(type) + '()'
+    private mkObject(): string {
+        return '{}'
     }
-    convertOptional(type: IDLOptionalType): string | undefined {
-        return this.mkObject(type)
+    convertOptional(_: IDLOptionalType): string | undefined {
+        return this.mkObject()
     }
-    convertUnion(type: IDLUnionType): string | undefined {
-        return this.mkObject(type)
+    convertUnion(_: IDLUnionType): string | undefined {
+        return this.mkObject()
     }
     convertContainer(type: IDLContainerType): string | undefined {
-        if (IDLContainerUtils.isSequence(type) || IDLContainerUtils.isPromise(type)) {
+        if (IDLContainerUtils.isPromise(type)) {
             return undefined
-        } else {
-            return "nullptr"
         }
+        return "{}"
     }
     convertImport(type: IDLReferenceType, importClause: string): string | undefined {
         throw new Error('Can not return import');
@@ -59,21 +58,22 @@ class ReturnValueConvertor implements TypeConvertor<string | undefined> {
     convertTypeReference(type: IDLReferenceType): string | undefined {
         const decl = this.resolver.resolveTypeReference(type)
         if (decl && isInterface(decl) && isMaterialized(decl, this.resolver)) {
-            return 'nullptr'
+            return `(${this.retTypeConverter.convert(type)}) 300`
         }
-        return this.mkObject(type)
+        return this.mkObject()
     }
-    convertTypeParameter(type: IDLTypeParameterType): string | undefined {
+    convertTypeParameter(_: IDLTypeParameterType): string | undefined {
         // TODO: type parameter here?
-        return 'nullptr'
+        return '{}'
     }
     convertPrimitiveType(type: IDLPrimitiveType): string | undefined {
         switch (type) {
             case IDLUndefinedType: return undefined
-            case IDLBufferType: return this.mkObject(type)
-            case IDLStringType: return this.mkObject(type)
+            case IDLBufferType: return this.mkObject()
+            case IDLStringType: return this.mkObject()
             case IDLPointerType: return 'nullptr'
-            case IDLBooleanType: return 'false'
+            case IDLBooleanType: return '0'
+            case IDLAnyType: return "{}"
         }
         return '0'
     }

@@ -90,7 +90,12 @@ class BridgeCcVisitor {
                 `return {};`
             ]
         } else {
-            statements = [isVoid ? `${peerMethodCall};` : `return ${peerMethodCall};`]
+            if (this.returnTypeConvertor.isReturnInteropBuffer(method.returnType)) {
+                // TODO: real serialization here
+                statements = [`${peerMethodCall};`, "return {};"]
+            } else {
+                statements = [isVoid ? `${peerMethodCall};` : `return ${peerMethodCall};`]
+            }
         }
         if (this.callLog) this.printCallLog(method, apiCall, modifier)
         statements.forEach(it => this.generatedApi.print(it))

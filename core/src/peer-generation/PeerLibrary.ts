@@ -23,7 +23,7 @@ import { BufferConvertor, CallbackConvertor, DateConvertor, MapConvertor, Pointe
          NumberConvertor, NumericConvertor, CustomTypeConvertor, UnionConvertor, MaterializedClassConvertor,
          ArgConvertor, BooleanConvertor, EnumConvertor, UndefinedConvertor, VoidConvertor, ImportTypeConvertor, InterfaceConvertor, BigIntToU64Convertor,
 } from "../LanguageWriters/ArgConvertors"
-import { CppNameConvertor } from '../LanguageWriters/convertors/InteropConvertors'
+import { CppNameConvertor } from '../LanguageWriters/convertors/CppConvertors'
 import { CJTypeNameConvertor } from '../LanguageWriters/convertors/CJConvertors'
 import { CppConvertor } from '../LanguageWriters/convertors/CppConvertors'
 import { ETSTypeNameConvertor } from '../LanguageWriters/convertors/ETSConvertors'
@@ -32,9 +32,10 @@ import { TSTypeNameConvertor } from '../LanguageWriters/convertors/TSConvertors'
 import { LibraryInterface } from '../LibraryInterface'
 import { BuilderClass, isBuilderClass } from './BuilderClass'
 import { generateSyntheticFunctionName, isImportAttr } from './idl/common'
-import { isMaterialized, MaterializedClass } from './Materialized'
+import { MaterializedClass } from './Materialized'
 import { PeerFile } from './PeerFile'
 import { LayoutManager, LayoutManagerStrategy } from './LayoutManager'
+import { isMaterialized } from './isMaterialized'
 
 export class PeerLibrary implements LibraryInterface {
 
