@@ -126,7 +126,7 @@ export class MaterializedMethod extends PeerMethod {
         if (!this.hasReceiver()) return undefined
         return {
             argName: 'peer',
-            argType: `${this.originalParentName}Peer*`
+            argType: `Ark_${this.originalParentName}`
         }
     }
 
