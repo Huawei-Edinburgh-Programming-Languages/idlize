@@ -1870,10 +1870,10 @@
 |`getVelocityX`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getVelocityY`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getVelocity`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getModifierKeyState`| Function | Tuzhilkin Ivan | in progress |  | |
+|`getModifierKeyState`| Function | Tuzhilkin Ivan | done |  | |
 |`executeDropAnimation`| Function | Tuzhilkin Ivan | in progress |  | wait MASTER upmerge |
 |`getDragBehavior`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setDragBehavior`| Function | Tuzhilkin Ivan | in progress |  | |
+|`setDragBehavior`| Function | Tuzhilkin Ivan | done |  | |
 |`getUseCustomDropAnimation`| Function | Evstigneev Roman | in progress |  | |
 |`setUseCustomDropAnimation`| Function | Evstigneev Roman | in progress |  | |
 |*KeyEvent*| *Class* | Maksimov Nikita | in progress |  | |
