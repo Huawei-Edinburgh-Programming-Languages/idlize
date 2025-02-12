@@ -30,7 +30,6 @@ export function isMaterialized(declaration: idl.IDLInterface, resolver: Referenc
     if (idl.isHandwritten(declaration) || isBuilderClass(declaration)) return false
 
     for (const forceMaterialized of generatorConfiguration().param<string[]>("forceMaterialized")) {
-        console.log(`Force materialized: ${forceMaterialized}`)
         if (declaration.name == forceMaterialized) return true
     }
 
