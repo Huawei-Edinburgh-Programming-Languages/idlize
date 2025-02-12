@@ -92,7 +92,7 @@ export class MaterializedMethod extends PeerMethod {
     }
 
     override dummyReturnValue(resolver: ReferenceResolver): string | undefined {
-        if (this.method.name === "ctor") return `(${this.originalParentName}Peer*) 100`
+        if (this.method.name === "ctor") return `(Ark_${this.originalParentName}) 100`
         if (this.method.name === "getFinalizer") return `fnPtr<KNativePointer>(dummyClassFinalizer)`
         if (this.method.modifiers?.includes(MethodModifier.STATIC)) {
             if (this.method.signature.returnType === idl.IDLNumberType) {
@@ -111,7 +111,7 @@ export class MaterializedMethod extends PeerMethod {
     }
 
     override get receiverType(): string {
-        return `${this.originalParentName}Peer*`
+        return `Ark_${this.originalParentName}`
     }
 
     override get apiCall(): string {
