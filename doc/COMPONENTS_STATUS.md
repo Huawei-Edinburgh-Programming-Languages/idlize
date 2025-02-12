@@ -168,7 +168,7 @@
 |`outlineColor`| Function | Skroba Gleb | done |  | |
 |`outlineRadius`| Function | Skroba Gleb | done |  | |
 |`foregroundColor`| Function | Roman Sedaikin | done |  | |
-|`onClick`| Function | Roman Sedaikin, Maksimov Nikita | testskipped |  | EVENT |
+|`onClick`| Function | Roman Sedaikin, Maksimov Nikita, Pavelyev Ivan | testskipped |  | EVENT |
 |`onHover`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | done |  | EVENT |
 |`onAccessibilityHover`| Function | Andrey Khudenkikh, Pavelyev Ivan | in progress |  | UT by Vadim Voronov EVENT |
 |`hoverEffect`| Function | Roman Sedaikin | done |  | |
@@ -1783,23 +1783,23 @@
 |`getTargetDisplayId`| Function | Politov Mikhail | in progress |  | |
 |`setTargetDisplayId`| Function | Politov Mikhail | in progress |  | |
 |*ClickEvent*| *Class* | Maksimov Nikita | in progress |  | |
-|`getDisplayX`| Function | Maksimov Nikita | in progress |  | |
-|`setDisplayX`| Function | Maksimov Nikita | in progress |  | |
-|`getDisplayY`| Function | Maksimov Nikita | in progress |  | |
-|`setDisplayY`| Function | Maksimov Nikita | in progress |  | |
-|`getWindowX`| Function | Maksimov Nikita | in progress |  | |
-|`setWindowX`| Function | Maksimov Nikita | in progress |  | |
-|`getWindowY`| Function | Maksimov Nikita | in progress |  | |
-|`setWindowY`| Function | Maksimov Nikita | in progress |  | |
-|`getScreenX`| Function | Maksimov Nikita | in progress |  |deprecated? |
-|`setScreenX`| Function | Maksimov Nikita | in progress |  |deprecated? |
-|`getScreenY`| Function | Maksimov Nikita | in progress |  |deprecated? |
-|`setScreenY`| Function | Maksimov Nikita | in progress |  |deprecated? |
-|`getX`| Function | Maksimov Nikita | in progress |  | |
-|`setX`| Function | Maksimov Nikita | in progress |  | |
-|`getY`| Function | Maksimov Nikita | in progress |  | |
-|`setY`| Function | Maksimov Nikita | in progress |  | |
-|`setPreventDefault`| Function | Maksimov Nikita | in progress |  | |
+|`getDisplayX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`setDisplayX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`getDisplayY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`setDisplayY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`getWindowX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`setWindowX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`getWindowY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`setWindowY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`getScreenX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  |deprecated? |
+|`setScreenX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  |deprecated? |
+|`getScreenY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  |deprecated? |
+|`setScreenY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  |deprecated? |
+|`getX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`setX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`getY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`setY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`setPreventDefault`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
 |*HoverEvent*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
 |`setStopPropagation`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |*MouseEvent*| *Class* | Kovalev Sergey | testskipped |  | |
