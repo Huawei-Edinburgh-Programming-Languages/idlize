@@ -426,11 +426,6 @@ function adjustSignature(library: PeerLibrary, parameters: IDLParameter[], retur
     }
 }
 
-function isStructureType(type: IDLType, library: PeerLibrary): boolean {
-    const resolved = isReferenceType(type) && library.resolveTypeReference(type)
-    return !!resolved && !isMaterialized(resolved as IDLInterface, library)
-}
-
 function generateArgConvertor(library: PeerLibrary, param: IDLParameter): ArgConvertor {
     if (!param.type) throw new Error("Type is needed")
     return library.typeConvertor(param.name, param.type, param.isOptional)
@@ -488,3 +483,7 @@ export function suggestLibraryName(library: PeerLibrary) {
     libraryName = libraryName.replaceAll("@", "").replaceAll(".", "_").toUpperCase()
     return libraryName
 }
+function isStructureType(returnType: IDLType, library: PeerLibrary): any {
+    throw new Error('Function not implemented.')
+}
+
