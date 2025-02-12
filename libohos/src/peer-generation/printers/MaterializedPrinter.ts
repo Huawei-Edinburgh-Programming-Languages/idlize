@@ -122,16 +122,18 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
             }
         }
         else {
-            // Write internal Materialized class with fromPtr(ptr) method
-            printer.writeClass(
-                getInternalClassName(clazz.className),
-                writer => writeFromPtrMethod(clazz, writer, classTypeParameters),
-                undefined,
-                undefined,
-                undefined,
-                undefined,
-                false
-            )
+            if (needPrintInterals) {
+                // Write internal Materialized class with fromPtr(ptr) method
+                printer.writeClass(
+                    getInternalClassName(clazz.className),
+                    writer => writeFromPtrMethod(clazz, writer, classTypeParameters),
+                    undefined,
+                    undefined,
+                    undefined,
+                    undefined,
+                    false
+                )
+            }
         }
 
         const implementationClassName = clazz.getImplementationName()
@@ -511,13 +513,6 @@ class MaterializedVisitor implements PrinterClass {
 
         return visitor.visit()
     }
-
-    // printMaterialized(): void {
-    //     console.log(`Materialized classes: ${this.library.materializedClasses.size}`)
-    //     for (const clazz of this.library.materializedToGenerate) {
-    //         this.printContent(clazz)
-    //     }
-    // }
 
     print(): PrinterResult[] {
         console.log(`Materialized classes: ${this.library.materializedClasses.size}`)
