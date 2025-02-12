@@ -1876,26 +1876,26 @@
 |`setDragBehavior`| Function | Tuzhilkin Ivan | done |  | |
 |`getUseCustomDropAnimation`| Function | Evstigneev Roman | in progress |  | |
 |`setUseCustomDropAnimation`| Function | Evstigneev Roman | in progress |  | |
-|*KeyEvent*| *Class* | Maksimov Nikita | in progress |  | |
-|`getModifierKeyState`| Function | Maksimov Nikita | in progress |  | |
-|`getType`| Function | Maksimov Nikita | in progress |  | |
-|`setType`| Function | Maksimov Nikita | in progress |  | |
-|`getKeyCode`| Function | Maksimov Nikita | in progress |  | |
-|`setKeyCode`| Function | Maksimov Nikita | in progress |  | |
-|`getKeyText`| Function | Maksimov Nikita | in progress |  | |
-|`setKeyText`| Function | Maksimov Nikita | in progress |  | |
-|`getKeySource`| Function | Maksimov Nikita | in progress |  | |
-|`setKeySource`| Function | Maksimov Nikita | in progress |  | |
-|`getDeviceId`| Function | Maksimov Nikita | in progress |  | |
-|`setDeviceId`| Function | Maksimov Nikita | in progress |  | |
-|`getMetaKey`| Function | Maksimov Nikita | in progress |  | |
-|`setMetaKey`| Function | Maksimov Nikita | in progress |  | |
-|`getTimestamp`| Function | Maksimov Nikita | in progress |  | |
-|`setTimestamp`| Function | Maksimov Nikita | in progress |  | |
-|`setStopPropagation`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL|
-|`setIntentionCode`| Function | Maksimov Nikita | in progress |  | |
-|`getUnicode`| Function | Maksimov Nikita | in progress |  | |
-|`setUnicode`| Function | Maksimov Nikita | in progress |  | |
+|*KeyEvent*| *Class* | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
+|`getModifierKeyState`| Function | Maksimov Nikita | done | |
+|`getType`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`setType`| Function | Maksimov Nikita | done | |
+|`getKeyCode`| Function | Maksimov Nikita | done | |
+|`setKeyCode`| Function | Maksimov Nikita | done | |
+|`getKeyText`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`setKeyText`| Function | Maksimov Nikita | done | |
+|`getKeySource`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`setKeySource`| Function | Maksimov Nikita | done | |
+|`getDeviceId`| Function | Maksimov Nikita | done | |
+|`setDeviceId`| Function | Maksimov Nikita | done | |
+|`getMetaKey`| Function | Maksimov Nikita | done | |
+|`setMetaKey`| Function | Maksimov Nikita | done | |
+|`getTimestamp`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
+|`setTimestamp`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
+|`setStopPropagation`| Function | Maksimov Nikita | done | |
+|`setIntentionCode`| Function | Maksimov Nikita | done | |
+|`getUnicode`| Function | Maksimov Nikita | done | |
+|`setUnicode`| Function | Maksimov Nikita | done | |
 |*FocusAxisEvent*| *Class* | | | | |
 |`setAxisMap`| Function | | | | |
 |`setStopPropagation`| Function | | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
