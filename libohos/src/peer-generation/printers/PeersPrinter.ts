@@ -15,7 +15,7 @@
 
 import * as idl from '@idlizer/core/idl'
 import * as path from "path"
-import { renameDtsToPeer, throwException, Language, InheritanceRole, determineParentRole, isHeir, isRoot } from '@idlizer/core'
+import { renameDtsToPeer, throwException, Language, InheritanceRole, determineParentRole, isHeir, isRoot, MaterializedClassConvertor } from '@idlizer/core'
 import { convertPeerFilenameToModule, ImportsCollector } from "../ImportsCollector"
 import {
     ExpressionStatement,
@@ -516,12 +516,16 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
                             writer.print(`console.log("Object deserialization is not implemented for type: ${contType}, return default value.")`)
                         }
                     }
-                    result = [
-                        ret
-                            ? writer.makeReturn(ret)
-                            : writer.makeThrowError("Object deserialization is not implemented.")
-                    ]
-
+                    if (ret) {
+                        result = [writer.makeReturn(ret)]
+                    } else {
+                        const deserializerMethod = `read${writer.getNodeName(returnType).split(/\./).slice(-1)[0]}` // TODO Remove this hacky name conversion
+                        result = [
+                            writer.makeStatement(writer.makeString(
+                                `return new Deserializer(${returnValName}, ${returnValName}.byteLength).${deserializerMethod}()`
+                            ))
+                        ]
+                    }
                 }
             }
             for (const stmt of result) {
