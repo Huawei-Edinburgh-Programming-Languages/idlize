@@ -67,6 +67,15 @@ export class PeersConstructions {
         }`
     }
 
+    static callCreateOrUpdate(iface: string, method: string, namespace: string): string {
+        return `global.generatedEs2panda.${
+            BindingsConstructions.method(
+                InteropConstructions.createOrUpdate(iface, method, namespace)
+            )
+        }`
+    }
+
+
     static get warn(): string {
         return `console.warn`
     }

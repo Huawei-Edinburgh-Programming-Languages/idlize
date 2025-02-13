@@ -363,7 +363,7 @@ export class PeerPrinter {
                             this.node.name,
                             [
                                 this.writer.makeFunctionCall(
-                                    this.writer.makeString(PeersConstructions.callBinding(create.name, this.node.name)),
+                                    this.writer.makeString(PeersConstructions.callCreateOrUpdate(this.node.name, create.name, nodeNamespace(this.node) ?? "")),
                                     create.parameters
                                         .map(it => {
                                             if (InteropConstructions.keywords.includes(it.name)) {
