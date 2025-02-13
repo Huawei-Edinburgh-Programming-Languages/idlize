@@ -59,10 +59,10 @@ export class PeersConstructions {
         return `this.peer`
     }
 
-    static callBinding(iface: string, method: string): string {
+    static callBinding(iface: string, method: string, namespace: string): string {
         return `global.generatedEs2panda.${
             BindingsConstructions.method(
-                InteropConstructions.method(iface, method)
+                InteropConstructions.method(iface, method, namespace)
             )
         }`
     }

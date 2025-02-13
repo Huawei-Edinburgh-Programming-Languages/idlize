@@ -28,7 +28,7 @@ export class MultipleDeclarationFilterTransformer {
             seen.set(it.name, oldValue+1)
         })
         return new IDLFile(
-            this.file.entries.map(it => {
+            this.file.entries.filter(it => {
                 if (!isInterface(it)) {
                     return it
                 }
@@ -36,6 +36,9 @@ export class MultipleDeclarationFilterTransformer {
                 if (occurence < 2) {
                     dropNamespace(it)
                 }
+                console.log("ZZZ", occurence, it.name, nodeNamespace(it))
+                if (occurence > 1 && nodeNamespace(it) != "ir") return undefined
+
                 return it
             })
         )

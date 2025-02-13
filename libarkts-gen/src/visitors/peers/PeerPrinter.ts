@@ -41,6 +41,7 @@ import {
     isAbstract,
     isGetter,
     isSequence,
+    nodeNamespace,
     nodeType,
     parent,
     signatureTypes,
@@ -228,7 +229,7 @@ export class PeerPrinter {
 
     private makeReturnExpression(node: IDLMethod): LanguageExpression {
         const nativeCall = this.writer.makeFunctionCall(
-            PeersConstructions.callBinding(this.node.name, node.name),
+            PeersConstructions.callBinding(this.node.name, node.name, nodeNamespace(this.node) ?? ""),
             [
                 this.writer.makeString(PeersConstructions.context),
                 this.writer.makeString(PeersConstructions.pointerUsage)

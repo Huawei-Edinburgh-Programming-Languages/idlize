@@ -139,7 +139,7 @@ export function nodeNamespace(node: IDLInterface): string | undefined {
 export function dropNamespace(node: IDLInterface) {
     const index = node.extendedAttributes
         ?.findIndex(it => it.name === Config.nodeNamespaceAttribute)
-    if (index == undefined) return
+    if (index == undefined || index == -1) return
 
     node.extendedAttributes?.splice(index, 1)
 }
