@@ -36,7 +36,6 @@ export class MultipleDeclarationFilterTransformer {
                 if (occurence < 2) {
                     dropNamespace(it)
                 }
-                console.log("ZZZ", occurence, it.name, nodeNamespace(it))
                 if (occurence > 1 && nodeNamespace(it) != "ir") return undefined
 
                 return it

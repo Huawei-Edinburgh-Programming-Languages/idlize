@@ -297,7 +297,6 @@ export class PeerPrinter {
                 .filter(it => !it.name.startsWith(`es2panda_AstNode`))
                 .some(it => this.typechecker.isHollow(it.name))
         ) {
-            console.error(`filtered out 1: ${this.node.name}`)
             return
         }
 
