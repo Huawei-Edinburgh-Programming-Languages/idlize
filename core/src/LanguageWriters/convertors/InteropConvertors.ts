@@ -15,7 +15,6 @@
 
 import { generatorConfiguration } from '../../config'
 import * as idl from '../../idl'
-import { Language } from '../../Language'
 import { qualifiedName } from '../../peer-generation/idl/common'
 import { PeerMethod } from '../../peer-generation/PeerMethod'
 import { PrimitiveTypesInstance } from '../../peer-generation/PrimitiveType'
@@ -23,9 +22,6 @@ import { ReferenceResolver } from '../../peer-generation/ReferenceResolver'
 import { capitalize } from '../../util'
 import { maybeTransformManagedCallback } from '../ArgConvertors'
 import { convertNode, convertType, IdlNameConvertor, NodeConvertor, TypeConvertor } from '../nameConvertor'
-import { CJInteropArgConvertor } from './CJConvertors'
-import { CppInteropArgConvertor } from './CppConvertors'
-import { JavaInteropArgConvertor } from './JavaConvertors'
 
 export interface ConvertResult {
     text: string,
@@ -73,7 +69,7 @@ export class InteropConvertor implements NodeConvertor<ConvertResult> {
         return this.make(node.name)
     }
     convertCallback(node: idl.IDLCallback): ConvertResult {
-        return this.make(generatorConfiguration().param("LibraryPrefix") + node.name, true)
+        return this.make(generatorConfiguration().LibraryPrefix + node.name, true)
     }
     convertMethod(node: idl.IDLMethod): ConvertResult {
         return this.make(node.name)
@@ -115,7 +111,7 @@ export class InteropConvertor implements NodeConvertor<ConvertResult> {
             case "Object":
                 return this.make('CustomObject')
         }
-        if (generatorConfiguration().paramArray("knownParameterized").includes(refName)) {
+        if (generatorConfiguration().param<string[]>("parameterized").includes(refName)) {
             return this.make('CustomObject')
         }
         let decl = this.resolver.toDeclaration(type)
@@ -152,6 +148,7 @@ export class InteropConvertor implements NodeConvertor<ConvertResult> {
             case idl.IDLNumberType: return this.make(`Number`)
             case idl.IDLStringType: return this.make(`String`)
             case idl.IDLBooleanType: return this.make(`Boolean`)
+            case idl.IDLBigintType: return this.make(`UInt64`) // TODO add arbitrary precision numeric type
             case idl.IDLPointerType: return this.make('NativePointer')
             case idl.IDLUnknownType:
             case idl.IDLCustomObjectType:
@@ -194,6 +191,9 @@ export class InteropNameConvertor implements IdlNameConvertor {
 }
 
 export class InteropReturnTypeConvertor implements TypeConvertor<string> {
+    constructor(protected readonly resolver?: ReferenceResolver) {
+    }
+
     isVoid(method: PeerMethod): boolean {
         return this.convert(method.returnType) === idl.IDLVoidType.name
     }
@@ -228,6 +228,7 @@ export class InteropReturnTypeConvertor implements TypeConvertor<string> {
             case idl.IDLF64Type:
             case idl.IDLNumberType: return PrimitiveTypesInstance.Int32.getText()
             case idl.IDLBooleanType: return PrimitiveTypesInstance.Boolean.getText()
+            case idl.IDLBigintType: return PrimitiveTypesInstance.Int64.getText()
             case idl.IDLAnyType:
             case idl.IDLBufferType:
             case idl.IDLStringType:
@@ -245,6 +246,10 @@ export class InteropReturnTypeConvertor implements TypeConvertor<string> {
     convertTypeReference(type: idl.IDLReferenceType): string {
         if (type.name.endsWith("Attribute"))
             return idl.IDLVoidType.name
+        // Callbacks and array types return by value
+        if (this.resolver && idl.isCallback(this.resolver.toDeclaration(type))) {
+            return type.name
+        }
         return PrimitiveTypesInstance.NativePointer.getText()
     }
     convertUnion(type: idl.IDLUnionType): string {
@@ -268,6 +273,7 @@ export class InteropArgConvertor implements TypeConvertor<string> {
     convertPrimitiveType(type: idl.IDLPrimitiveType): string {
         switch (type) {
             case idl.IDLI32Type: return "KInt"
+            case idl.IDLF32Type: return "KFloat"
             case idl.IDLNumberType: return 'number'
             case idl.IDLBigintType: return 'bigint'
             case idl.IDLBooleanType:

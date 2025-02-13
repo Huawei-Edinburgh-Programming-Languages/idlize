@@ -21,7 +21,7 @@ import { createLanguageWriter, IdlNameConvertor } from '../LanguageWriters'
 import { BufferConvertor, CallbackConvertor, DateConvertor, MapConvertor, PointerConvertor, TupleConvertor, TypeAliasConvertor,
          AggregateConvertor, StringConvertor, ClassConvertor, ArrayConvertor, FunctionConvertor, OptionConvertor,
          NumberConvertor, NumericConvertor, CustomTypeConvertor, UnionConvertor, MaterializedClassConvertor,
-         ArgConvertor, BooleanConvertor, EnumConvertor, UndefinedConvertor, VoidConvertor, ImportTypeConvertor, InterfaceConvertor,
+         ArgConvertor, BooleanConvertor, EnumConvertor, UndefinedConvertor, VoidConvertor, ImportTypeConvertor, InterfaceConvertor, BigIntToU64Convertor,
 } from "../LanguageWriters/ArgConvertors"
 import { InteropNameConvertor } from '../LanguageWriters/convertors/InteropConvertors'
 import { CJTypeNameConvertor } from '../LanguageWriters/convertors/CJConvertors'
@@ -30,7 +30,7 @@ import { ETSTypeNameConvertor } from '../LanguageWriters/convertors/ETSConvertor
 import { JavaTypeNameConvertor } from '../LanguageWriters/convertors/JavaConvertors'
 import { TSTypeNameConvertor } from '../LanguageWriters/convertors/TSConvertors'
 import { LibraryInterface } from '../LibraryInterface'
-import { BuilderClass } from './BuilderClass'
+import { BuilderClass, isBuilderClass } from './BuilderClass'
 import { generateSyntheticFunctionName, isImportAttr } from './idl/common'
 import { isMaterialized, MaterializedClass } from './Materialized'
 import { PeerFile } from './PeerFile'
@@ -223,6 +223,7 @@ export class PeerLibrary implements LibraryInterface {
                 case idl.IDLF16Type: return new NumericConvertor(param, type)
                 case idl.IDLF32Type: return new NumericConvertor(param, type)
                 case idl.IDLF64Type: return new NumericConvertor(param, type)
+                case idl.IDLBigintType: return new BigIntToU64Convertor(param)
                 case idl.IDLPointerType: return new PointerConvertor(param)
 
                 case idl.IDLBufferType: return new BufferConvertor(param)
@@ -289,11 +290,13 @@ export class PeerLibrary implements LibraryInterface {
             if (isMaterialized(declaration, this)) {
                 return new MaterializedClassConvertor(param, declaration)
             }
+            if (isBuilderClass(declaration)) {
+                return new ClassConvertor(this, declarationName, param, declaration)
+            }
             switch (declaration.subkind) {
                 case idl.IDLInterfaceSubkind.Interface:
-                    return new InterfaceConvertor(this, declarationName, param, declaration)
                 case idl.IDLInterfaceSubkind.Class:
-                    return new ClassConvertor(this, declarationName, param, declaration)
+                        return new InterfaceConvertor(this, declarationName, param, declaration)
                 case idl.IDLInterfaceSubkind.AnonymousInterface:
                     return new AggregateConvertor(this, param, type, declaration as idl.IDLInterface)
                 case idl.IDLInterfaceSubkind.Tuple:

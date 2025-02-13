@@ -301,6 +301,33 @@ export class NumericConvertor extends BaseArgConvertor {
     }
 }
 
+export class BigIntToU64Convertor extends BaseArgConvertor {
+    constructor(param: string) {
+        super(idl.IDLBigintType, [RuntimeType.BIGINT], false, false, param)
+    }
+    convertorArg(param: string, writer: LanguageWriter): string {
+        return writer.escapeKeyword(param)
+    }
+    convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
+        printer.writeMethodCall(`${param}Serializer`, "writeUInt64", [value])
+    }
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
+        return assigneer(writer.makeCast(
+            writer.makeString(`${deserializerName}.readUInt64()`),
+            this.idlType, { optional: false })
+        )
+    }
+    nativeType(): idl.IDLType {
+        return idl.IDLU64Type
+    }
+    interopType(): idl.IDLType {
+        return idl.IDLU64Type
+    }
+    isPointerType(): boolean {
+        return false
+    }
+}
+
 export class PointerConvertor extends BaseArgConvertor {
     constructor(param: string) {
         // check numericPrimitiveTypes.include(type)
@@ -897,7 +924,7 @@ export class UnionConvertor extends BaseArgConvertor { //
             printer.popIndent()
             printer.print(`}`)
         })
-        this.unionChecker.reportConflicts(this.library.getCurrentContext() ?? "<unknown context>")
+        this.unionChecker.reportConflicts(this.library.getCurrentContext() ?? "<unknown context>", printer)
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const statements: LanguageStatement[] = []
@@ -1004,7 +1031,7 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
         throw new Error("Must never be used")
     }
     isPointerType(): boolean {
-        return true
+        return false
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
         if (idl.isInterface(this.declaration)) {

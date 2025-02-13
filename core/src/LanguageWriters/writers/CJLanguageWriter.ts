@@ -37,7 +37,7 @@ import {
 } from "../LanguageWriter"
 import { IdlNameConvertor } from "../nameConvertor"
 import { Language } from "../../Language";
-import { isDefined } from "../../util";
+import { indentedBy, isDefined } from "../../util";
 import { ReferenceResolver } from "../../peer-generation/ReferenceResolver";
 
 ////////////////////////////////////////////////////////////////
@@ -83,15 +83,15 @@ export class CJUnionCastExpression implements LanguageExpression {
 }
 
 export class CJMatchExpression implements LanguageExpression {
-    constructor(public matchValue: LanguageExpression, public matchCases: LanguageExpression[], public caseBlocks: LanguageExpression[]) {}
+    constructor(public matchValue: LanguageExpression, public matchCases: LanguageExpression[], public caseBlocks: LanguageExpression[], public indentDepth?: number) {}
     asString(): string {
         let output: string[] = []
         output.push(`match (${this.matchValue.asString()}) {`)
         for (let index in this.matchCases) {
-            output.push(`case ${this.matchCases[index].asString()} => ${this.caseBlocks[index].asString()} `)
+            output.push(indentedBy(`case ${this.matchCases[index].asString()} => ${this.caseBlocks[index].asString()}`, (this.indentDepth ?? 0) + 1))
         }
-        output.push(`case _ => throw Exception(\"Unmatched pattern ${this.matchValue.asString()}\")`)
-        output.push(`}`)
+        output.push(indentedBy(`case _ => throw Exception(\"Unmatched pattern ${this.matchValue.asString()}\")`, (this.indentDepth ?? 1) + 1))
+        output.push(indentedBy(`}`, (this.indentDepth ?? 1)))
         return output.join('\n')
     }
 }
@@ -359,7 +359,7 @@ export class CJLanguageWriter extends LanguageWriter {
         const init = initExpr != undefined ? ` = ${initExpr.asString()}` : ``
         name = this.escapeKeyword(name)
         let prefix = this.makeFieldModifiersList(modifiers)
-        this.printer.print(`${prefix ? prefix.concat(" ") : ""}var ${name}: ${this.getNodeName(type)}${init}`)
+        this.printer.print(`${prefix ? prefix.concat(" ") : ""}var ${name}: ${this.getNodeName(idl.maybeOptional(type, optional))}${init}`)
     }
     writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void {
         this.writeDeclaration(name, signature, modifiers)
@@ -433,6 +433,7 @@ export class CJLanguageWriter extends LanguageWriter {
     }
     writeNativeMethodDeclaration(name: string, signature: NamedMethodSignature): void {
         let signture = `${signature.args.map((it, index) => `${this.escapeKeyword(signature.argName(index))}: ${this.typeForeignConvertor.convert(it)}`).join(", ")}`
+        name = name.startsWith('_') ? name.slice(1) : name
         this.print(`func ${name}(${signture}): ${this.typeForeignConvertor.convert(signature.returnType)}`)
     }
     override makeEnumCast(enumName: string, _unsafe: boolean, _convertor: ArgConvertor | undefined): string {
@@ -517,7 +518,7 @@ export class CJLanguageWriter extends LanguageWriter {
         return this.makeString("Option.None")
     }
     override makeUnwrapOptional(expression: LambdaExpression): LanguageExpression {
-        return new CJMatchExpression(expression, [this.makeString('Some(serializer)')], [this.makeString('serializer')])
+        return new CJMatchExpression(expression, [this.makeString('Some(serializer)')], [this.makeString('serializer')], this.indentDepth())
     }
     makeValueFromOption(value: string, destinationConvertor: ArgConvertor): LanguageExpression {
         return this.makeString(`${value}`)
@@ -533,7 +534,7 @@ export class CJLanguageWriter extends LanguageWriter {
         return this.makeStatement(this.makeMethodCall(keyAccessor, "set", [this.makeString(key), this.makeString(value)]))
     }
     makeNull(value?: string): LanguageExpression {
-        return new StringExpression(`None<${value}>`)
+        return new StringExpression(`Option.None`)
     }
     getTagType(): idl.IDLType {
         return idl.createReferenceType("Tags")
@@ -582,6 +583,8 @@ export class CJLanguageWriter extends LanguageWriter {
     escapeKeyword(word: string): string {
         return CJKeywords.has(word) ? word + "_" : word
     }
+    pushNamespace(namespace: string, ident: boolean = true) {}
+    popNamespace(ident: boolean = true) {}
     override castToInt(value: string, bitness: 8|32): string {
         return `Int${bitness}(${value})`
     }

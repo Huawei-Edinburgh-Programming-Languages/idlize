@@ -1,6 +1,6 @@
 {
   "name": "@idlizer/libohos",
-  "version": "2.0.20+devel",
+  "version": "2.0.25+devel",
   "description": "",
   "types": "build/lib/src/index.d.ts",
   "exports": {
@@ -10,7 +10,10 @@
   },
   "files": [
     "build/lib/**/*.js",
-    "build/lib/**/*.d.ts"
+    "build/lib/**/*.d.ts",
+    "peer_lib/**/*",
+    "predefined/**/*",
+    "templates/**/*"
   ],
   "type": "module",
   "engines": {
@@ -19,11 +22,13 @@
   },
   "keywords": [],
   "dependencies": {
-    "@idlizer/core": "2.0.20+devel",
+    "@idlizer/core": "2.0.25+devel",
     "@types/node": "^18.0.0"
   },
   "scripts": {
     "clean": "rimraf -g build",
-    "compile": "npm run -C ../core compile && tsc -b ."
+    "compile": "npm run -C ../core compile && tsc -b .",
+    "common:idl": "npm run compile && node . --dts2idl --output-dir ./out/idl --input-dir  ./interface_sdk-js/api/@internal/component/ets/,./interface_sdk-js/api/arkui,./interface_sdk-js/api/global --verify-idl --docs=none",
+    "common:dts": "npm run compile && node . --idl2dts --output-dir ./out/dts --input-dir ./out/idl"
   }
 }

@@ -16,6 +16,7 @@
 import { generatorConfiguration } from '../config'
 import * as idl from '../idl'
 import { ArgConvertor } from '../LanguageWriters/ArgConvertors'
+import { CppReturnTypeConvertor } from '../LanguageWriters/convertors/CppConvertors'
 import { copyMethod, Field, Method, MethodModifier, NamedMethodSignature } from '../LanguageWriters/LanguageWriter'
 import { capitalize } from '../util'
 import { isBuilderClass } from './BuilderClass'
@@ -25,20 +26,20 @@ import { PeerMethod } from './PeerMethod'
 import { ReferenceResolver } from './ReferenceResolver'
 
 export function isMaterialized(declaration: idl.IDLInterface, resolver: ReferenceResolver): boolean {
-    if (idl.isHandwritten(declaration) ||
-        isBuilderClass(declaration) ||
-        declaration.subkind === idl.IDLInterfaceSubkind.AnonymousInterface ||
-        declaration.subkind === idl.IDLInterfaceSubkind.Tuple)
-    {
-        return false
+    if (!idl.isInterfaceSubkind(declaration) && !idl.isClassSubkind(declaration)) return false
+    if (idl.isHandwritten(declaration) || isBuilderClass(declaration)) return false
+
+    for (const forceMaterialized of generatorConfiguration().param<string[]>("forceMaterialized")) {
+        if (declaration.name == forceMaterialized) return true
     }
-    for (const ignore of generatorConfiguration().paramArray<string>("ignoreMaterialized")) {
-        if (declaration.name.endsWith(ignore)) return false
+
+    for (const ignore of generatorConfiguration().param<string[]>("ignoreMaterialized")) {
+            if (declaration.name.endsWith(ignore)) return false
     }
 
     // A materialized class is a class or an interface with methods
     // excluding components and related classes
-    if (declaration.methods.length > 0) return true
+    if (declaration.methods.length > 0 || declaration.constructors.length > 0) return true
 
     // Or a class or an interface derived from materialized class
     if (idl.hasSuperType(declaration)) {
@@ -90,7 +91,7 @@ export class MaterializedMethod extends PeerMethod {
         }
     }
 
-    override get dummyReturnValue(): string | undefined {
+    override dummyReturnValue(resolver: ReferenceResolver): string | undefined {
         if (this.method.name === "ctor") return `(${this.originalParentName}Peer*) 100`
         if (this.method.name === "getFinalizer") return `fnPtr<KNativePointer>(dummyClassFinalizer)`
         if (this.method.modifiers?.includes(MethodModifier.STATIC)) {
@@ -100,7 +101,11 @@ export class MaterializedMethod extends PeerMethod {
             if (this.method.signature.returnType === idl.IDLBooleanType) {
                 return '0'
             }
-            return `(void*) 300`
+            const convertor = new CppReturnTypeConvertor(resolver)
+            return `(${convertor.convert(this.returnType)}) 300`
+        }
+        if (idl.isReferenceType(this.method.signature.returnType)) {
+            return "{}"
         }
         return undefined;
     }
@@ -173,8 +178,8 @@ export class MaterializedClass implements PeerClassBase {
         public readonly interfaces: idl.IDLReferenceType[] | undefined,
         public readonly generics: string[] | undefined,
         public readonly fields: MaterializedField[],
-        public readonly ctor: MaterializedMethod,
-        public readonly finalizer: MaterializedMethod,
+        public readonly ctor: MaterializedMethod | undefined, // undefined when used for global functions
+        public readonly finalizer: MaterializedMethod | undefined, // undefined when used for global functions
         public readonly methods: MaterializedMethod[],
         public readonly needBeGenerated: boolean = true,
         public readonly taggedMethods: idl.IDLMethod[] = [],

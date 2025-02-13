@@ -133,8 +133,7 @@ declare class CommonMethod<T> {
     // onGestureRecognizerJudgeBegin(callback: GestureRecognizerJudgeBeginCallback): T;
 
     onClick(event: (event: ClickEvent) => void): T;
-
-    // onClick(event: Callback<ClickEvent>, distanceThreshold: number): T;
+    onClick(event: Callback<ClickEvent>, distanceThreshold: number): T;
 }
 
 declare interface Rectangle {
@@ -333,4 +332,10 @@ declare interface SheetOptions extends BindOptions {
     //~onWidthDidChange?: Callback<number>;
     //~onTypeDidChange?: Callback<SheetType>;
     uiContext?: UIContext;
+}
+
+declare interface TranslateOptions {
+    x?: number | string;
+    y?: number | string;
+    z?: number | string;
 }
