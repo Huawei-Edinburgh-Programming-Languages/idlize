@@ -1592,9 +1592,9 @@
 |`setUnit`| Function | | | | |
 |`getValue`| Function | | | | |
 |`setValue`| Function | | | | |
-|*WebviewController*| *Class* | | | | |
-|`initializeWebEngine`| Function | | | | |
-|`loadUrl`| Function | | | | |
+|*WebviewController*| *Class* | Politov Mikhail | in progress | | |
+|`initializeWebEngine`| Function | Politov Mikhail | in progress | | |
+|`loadUrl`| Function | Politov Mikhail | in progress | | |
 |*GlobalScope_ohos_arkui_componentSnapshot*| *Class* | | | | |
 |`get`| Function | | | | |
 |*GlobalScope_ohos_arkui_performanceMonitor*| *Class* | | | | |
