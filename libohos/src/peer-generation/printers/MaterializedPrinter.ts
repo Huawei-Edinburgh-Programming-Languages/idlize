@@ -42,6 +42,7 @@ import { peerGeneratorConfiguration} from "../PeerGeneratorConfig";
 import { NativeModule } from '../NativeModule';
 import { PrinterClass, PrinterResult } from '../LayoutManager';
 import { SyntheticModule } from '../common';
+import { createInterfaceName } from "./InterfaceDataPrinter";
 
 interface MaterializedFileVisitor {
     visit(): PrinterResult
@@ -537,7 +538,7 @@ function getSuperName(clazz: MaterializedClass): string | undefined {
 }
 
 function writeInterface(decl: idl.IDLInterface, writer: LanguageWriter) {
-    writer.writeInterface(decl.name, writer => {
+    writer.writeInterface(`${createInterfaceName(decl)}`, writer => {
         for (const p of decl.properties) {
             const modifiers: FieldModifier[] = []
             if (p.isReadonly) modifiers.push(FieldModifier.READONLY)

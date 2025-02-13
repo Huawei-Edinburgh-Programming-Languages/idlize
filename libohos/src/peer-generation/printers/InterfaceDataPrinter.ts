@@ -175,7 +175,7 @@ function printInterface(library: PeerLibrary, entry: idl.IDLInterface): PrinterR
         CJDeclConvertor.makeInterface(library, entry, printer)
     } else {
         if (idl.isInterfaceSubkind(entry)) {
-            printer.writeInterface(entry.name, w => {
+            printer.writeInterface(`${createInterfaceName(entry)}`, w => {
                 printInterfaceBody(library, entry, w)
             })
         } else if (idl.isClassSubkind(entry)) {
@@ -262,4 +262,9 @@ function toMethodModifiers(method: idl.IDLMethod) {
         modifiers.push(idl.MethodModifier.STATIC)
     }
     return modifiers
+}
+
+export function createInterfaceName(decl: idl.IDLInterface): string {
+    const typeParams = decl.typeParameters?.length ? `<${decl.typeParameters.join(",")}>` : ``;
+    return `${decl.name}${typeParams}`
 }
