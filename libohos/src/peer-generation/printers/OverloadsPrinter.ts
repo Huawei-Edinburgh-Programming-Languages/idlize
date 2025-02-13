@@ -28,7 +28,7 @@ import { callbackIdByInfo, convertIdlToCallback } from "./EventsPrinter";
 import { ArgConvertor, UndefinedConvertor } from "@idlizer/core"
 import { ReferenceResolver, UnionRuntimeTypeChecker, zipMany } from "@idlizer/core";
 
-export function collapseSameNamedMethods(methods: Method[], selectMaxMethodArgs?: number[]): Method {
+export function collapseSameNamedMethods(methods: Method[], selectMaxMethodArgs?: number[], language?: Language): Method {
     if (methods.some(it => it.signature.defaults?.length))
         throw new Error("Can not process defaults in collapsed method")
     const maxArgLength = Math.max(...methods.map(it => it.signature.args.length))
@@ -47,7 +47,11 @@ export function collapseSameNamedMethods(methods: Method[], selectMaxMethodArgs?
         return idl.maybeOptional(typeOrUnion(types, "%PROXY_BEFORE_PEER%"), optional)
     })
 
-    const returnType = typeOrUnion(methods.map(it => it.signature.returnType))
+    let returnType = typeOrUnion(methods.map(it => it.signature.returnType))
+    if (language && language == Language.ARKTS && idl.isUnionType(returnType)) {
+        let newTypes = returnType.types.map(it => idl.isVoidType(it) ? idl.IDLUndefinedType : it)
+        returnType = idl.createUnionType(newTypes)
+    }
     return new Method(
         methods[0].name,
         new NamedMethodSignature(
@@ -189,7 +193,7 @@ export class OverloadsPrinter {
                     .reduce((acc, it) => it.runtimeTypes.length + acc, 0)
                 return cardinalityA - cardinalityB
             })
-        const collapsedMethod = collapseSameNamedMethods(orderedMethods.map(it => it.method))
+        const collapsedMethod = collapseSameNamedMethods(orderedMethods.map(it => it.method), undefined, this.language)
         if (this.isComponent) {
             this.printer.print(`/** @memo */`)
         }

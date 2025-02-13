@@ -414,6 +414,14 @@ abstract class OHOSVisitor {
     callbackInterfaces = new Array<IDLInterface>()
     cjInterfaces = new Map<TargetFile, string>()
 
+    managedCodeModuleInfo: {
+        name: string,
+        path: string,
+        serializerPath: string,
+        finalizablePath:string,
+        materializedBasePath: string
+    }
+
     constructor(protected library: PeerLibrary, libraryName: string, dependencyCollector: DependecyCollector) {
         if (this.library.files.length == 0)
             throw new Error("No files in library")
@@ -430,6 +438,14 @@ abstract class OHOSVisitor {
         const fileNamePrefix = this.libraryName.toLowerCase()
         this.implementationStubsFile = new CppSourceFile(`${fileNamePrefix}Impl_template${Language.CPP.extension}`, library)
         this.implementationStubsFile.addInclude(`${fileNamePrefix}.h`)
+
+        this.managedCodeModuleInfo = {
+            name: `${this.libraryName}NativeModule`,
+            path: `./${fileNamePrefix}Native`,
+            serializerPath: `./${fileNamePrefix}Serializer`,
+            finalizablePath: `@koalaui/interop`,
+            materializedBasePath: `./${fileNamePrefix}Finalizable`
+        }
     }
 
     private static knownBasicTypes = new Set(['ArrayBuffer', 'DataView'])
@@ -818,6 +834,7 @@ abstract class OHOSVisitor {
 
             const superType = getSuperType(int)
 
+            peerWriter.print(`import { ${this.managedCodeModuleInfo.name} } from '${this.managedCodeModuleInfo.path}'`) // todo: remove !!!!!
             peerWriter.writeClass(`${int.name}`, writer => {
                 let peerInitExpr: LanguageExpression | undefined = undefined
                 if (this.library.language === Language.ARKTS && int.constructors.length === 0) {
@@ -1090,10 +1107,10 @@ abstract class OHOSVisitor {
 
         this.cppWriter.writeLines(
             readLangTemplate('api_impl_prologue.cc', Language.CPP)
-                .replaceAll("%INTEROP_MODULE_NAME%", `${this.libraryName.toUpperCase()}NativeModule`)
+                .replaceAll("%INTEROP_MODULE_NAME%", `${this.libraryName}NativeModule`)
                 .replaceAll("%API_HEADER_PATH%", `${this.libraryName.toLowerCase()}.h`)
                 .replaceAll("%CALLBACK_KINDS%", callbackKindsPrinter.getOutput().join("\n"))
-                .replaceAll("%LIBRARY_NAME%", this.libraryName.toUpperCase())
+                .replaceAll("%LIBRARY_NAME%", this.libraryName)
         )
         const interopRootPath = getInteropRootPath()
         const interopTypesPath = path.resolve(interopRootPath, 'src', 'cpp', 'interop-types.h')
@@ -1101,8 +1118,8 @@ abstract class OHOSVisitor {
         this.hWriter.writeLines(
             readLangTemplate('ohos_api_prologue.h', Language.CPP)
                 .replaceAll("%INTEROP_TYPES_HEADER", interopTypesContent)
-                .replaceAll("%INCLUDE_GUARD_DEFINE%", `OH_${this.libraryName.toUpperCase()}_H`)
-                .replaceAll("%LIBRARY_NAME%", this.libraryName.toUpperCase())
+                .replaceAll("%INCLUDE_GUARD_DEFINE%", `OH_${this.libraryName}_H`)
+                .replaceAll("%LIBRARY_NAME%", this.libraryName)
         )
 
         let toStringsPrinter = this.library.createLanguageWriter(Language.CPP)
@@ -1122,12 +1139,12 @@ abstract class OHOSVisitor {
 
         this.hWriter.writeLines(
             readLangTemplate('ohos_api_epilogue.h', Language.CPP)
-                .replaceAll("%INCLUDE_GUARD_DEFINE%", `OH_${this.libraryName.toUpperCase()}_H`)
-                .replaceAll("%LIBRARY_NAME%", this.libraryName.toUpperCase())
+                .replaceAll("%INCLUDE_GUARD_DEFINE%", `OH_${this.libraryName}_H`)
+                .replaceAll("%LIBRARY_NAME%", this.libraryName)
         )
         this.cppWriter.writeLines(
             readLangTemplate('api_impl_epilogue.cc', Language.CPP)
-                .replaceAll("%LIBRARY_NAME%", this.libraryName.toUpperCase())
+                .replaceAll("%LIBRARY_NAME%", this.libraryName)
         )
     }
 
@@ -1184,21 +1201,21 @@ abstract class OHOSVisitor {
             ApiVersion: apiVersion
         }))
 
+        const fileNamePrefix = this.libraryName.toLowerCase()
+        // this.managedCodeModuleInfo = {
+        //     name: `${this.libraryName}NativeModule`,
+        //     path: `./${fileNamePrefix}Native`,
+        //     serializerPath: `./${fileNamePrefix}Serializer`,
+        //     finalizablePath: `@koalaui/interop`,
+        //     materializedBasePath: `./${fileNamePrefix}Finalizable`
+        // }
+
         this.prepare()
 
         this.printManaged()
         this.printC()
 
-        const fileNamePrefix = this.libraryName.toLowerCase()
         const ext = this.library.language.extension
-
-        const managedCodeModuleInfo = {
-            name: `${this.libraryName}NativeModule`,
-            path: `./${fileNamePrefix}Native`,
-            serializerPath: `./${fileNamePrefix}Serializer`,
-            finalizablePath: `@koalaui/interop`,
-            materializedBasePath: "./xmlFinalizable"
-        }
 
         const nativeModuleTemplate = readLangTemplate(`OHOSNativeModule_template${ext}`, this.library.language)
         const nativeModuleText = nativeModuleTemplate
@@ -1207,12 +1224,12 @@ abstract class OHOSVisitor {
             .replaceAll('%NATIVE_FUNCTIONS%', this.nativeFunctionsWriter.getOutput().join('\n'))
             .replaceAll('%CJ_NATIVE_FUNCTIONS%', this.nativeFunctionsWriterCJ ? this.nativeFunctionsWriterCJ.getOutput().join('\n') : "")
             .replaceAll('%ARKUI_FUNCTIONS%', this.arkUIFunctionsWriter.getOutput().join('\n'))
-        fs.writeFileSync(path.join(rootPath, managedOutDir, `${managedCodeModuleInfo.path}${ext}`), nativeModuleText, 'utf-8')
+        fs.writeFileSync(path.join(rootPath, managedOutDir, `${this.managedCodeModuleInfo.path}${ext}`), nativeModuleText, 'utf-8')
 
-        fs.writeFileSync(path.join(rootPath, managedOutDir, `${fileNamePrefix}Finalizable${ext}`),
+        fs.writeFileSync(path.join(rootPath, managedOutDir, `${this.managedCodeModuleInfo.materializedBasePath}${ext}`),
             readLangTemplate(`OHOSFinalizable_template${ext}`, this.library.language)
-                .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
-                .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
+                .replaceAll("%NATIVE_MODULE_ACCESSOR%", this.managedCodeModuleInfo.name)
+                .replaceAll("%NATIVE_MODULE_PATH%", this.managedCodeModuleInfo.path)
         )
 
         this.dependecyCollector.dump()
@@ -1221,13 +1238,19 @@ abstract class OHOSVisitor {
             const peerTemplate = readLangTemplate(`OHOSPeer_template${ext}`, this.library.language)
 
             const imports = this.dependecyCollector.getImportLines(file)
-            // console.log(`File: ${file}, imports: ${imports}`)
+            console.log(`File: ${file}, imports: ${imports}`)
+            /**
+             * imports for UIAbilityContext.ts
+             * import { AsyncCallback } from "./@ohos.base"
+             * import { Want } from "./@ohos.app.ability.Want"
+             * import { UIAbilityContextNativeModule } from "./uiabilitycontextNative" // where?????
+             */
 
             const peerText = peerTemplate
                 .replaceAll('%PEER_IMPORTS%', imports.join('\n'))
                 .replaceAll('%PEER_CONTENT%', peerWriter.getOutput().join('\n'))
-                .replaceAll('%SERIALIZER_PATH%', managedCodeModuleInfo.serializerPath)
-                .replaceAll('%FINALIZABLE_PATH%', managedCodeModuleInfo.finalizablePath)
+                .replaceAll('%SERIALIZER_PATH%', this.managedCodeModuleInfo.serializerPath)
+                .replaceAll('%FINALIZABLE_PATH%', this.managedCodeModuleInfo.finalizablePath)
             fs.writeFileSync(path.join(rootPath, managedOutDir, `${file}${ext}`), peerText, 'utf-8')
         }
         for (const [file, data] of this.cjInterfaces) {
@@ -1241,15 +1264,15 @@ abstract class OHOSVisitor {
             this.implementationStubsFile.printToString()
         )
 
-        const serializerText = makeSerializer(this.library, managedCodeModuleInfo, fileNamePrefix).printToString()
+        const serializerText = makeSerializer(this.library, this.managedCodeModuleInfo, fileNamePrefix).printToString()
         // fs.writeFileSync(path.join(rootPath, managedOutDir, `${fileNamePrefix}${ext}`), peerText, 'utf-8')
-        fs.writeFileSync(path.join(rootPath, managedOutDir, `${fileNamePrefix}Serializer${ext}`), serializerText, 'utf-8')
+        fs.writeFileSync(path.join(rootPath, managedOutDir, `${this.managedCodeModuleInfo.serializerPath}${ext}`), serializerText, 'utf-8')
         fs.writeFileSync(path.join(rootPath, managedOutDir, `CallbacksChecker${ext}`),
             readLangTemplate(`CallbacksChecker${ext}`, this.library.language)
-                .replaceAll("%NATIVE_MODULE_ACCESSOR%", managedCodeModuleInfo.name)
-                .replaceAll("%NATIVE_MODULE_PATH%", managedCodeModuleInfo.path)
-                .replaceAll("%DESERIALIZER_PATH%", managedCodeModuleInfo.serializerPath)
-                .replaceAll("%CALLBACKS_PATH%", managedCodeModuleInfo.serializerPath)
+                .replaceAll("%NATIVE_MODULE_ACCESSOR%", this.managedCodeModuleInfo.name)
+                .replaceAll("%NATIVE_MODULE_PATH%", this.managedCodeModuleInfo.path)
+                .replaceAll("%DESERIALIZER_PATH%", this.managedCodeModuleInfo.serializerPath)
+                .replaceAll("%CALLBACKS_PATH%", this.managedCodeModuleInfo.serializerPath)
         )
 
         generateTypeCheckFile(path.join(rootPath, managedOutDir), this.library.language)
@@ -1507,7 +1530,13 @@ function makeSerializer(library: PeerLibrary, nativeModule: { name: string, path
     // TODO Complete refactoring to SourceFiles
     if (lang === Language.TS || lang === Language.ARKTS) {
         const destFile = SourceFile.make("Serializer" + lang.extension, lang, library) as TsSourceFile
-        writeSerializerFile(library, destFile, "", declarationPath)
+        writeSerializerFile(library, destFile, "", declarationPath) // calm down
+        /**
+         * imports for uiabilitycontextSerializer.ts
+         * import { Want } from "./@ohos.app.ability.Want"
+         * import { UIAbilityContext, UIAbilityContextInternal } from "./UIAbilityContext"
+         * import { MaterializedBase } from "./uiabilitycontextFinalizable"
+         */
         writeDeserializerFile(library, destFile, "", declarationPath)
         // destFile.imports.clear() // TODO fix dependencies
         destFile.imports.addFeatures(["int32", "float32"], "@koalaui/common")
