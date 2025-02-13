@@ -1595,8 +1595,8 @@
 |*WebviewController*| *Class* | Politov Mikhail | in progress | | |
 |`initializeWebEngine`| Function | Politov Mikhail | in progress | | |
 |`loadUrl`| Function | Politov Mikhail | in progress | | |
-|*GlobalScope_ohos_arkui_componentSnapshot*| *Class* | | | | |
-|`get`| Function | | | | |
+|*GlobalScope_ohos_arkui_componentSnapshot*| *Class* | Dudkin Sergey| in progress| | |
+|`get`| Function | Dudkin Sergey | in progress | | |
 |*GlobalScope_ohos_arkui_performanceMonitor*| *Class* | Vadim Voronov | blocked IDL | | |
 |`begin`| Function | Vadim Voronov | devdone | | |
 |`end`| Function | Vadim Voronov | devdone | | |
