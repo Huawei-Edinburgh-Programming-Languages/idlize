@@ -48,7 +48,7 @@ export class PeersConstructions {
     }
 
     static get arrayOfPointersToArrayOfPeers(): string {
-        return `unpackNonNullableNode`
+        return `unpackNodeArray`
     }
 
     static get context(): string {

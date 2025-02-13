@@ -98,7 +98,7 @@ export class PeerPrinter {
     private printBody(): void {
         this.printConstructor()
         this.printCreate()
-        // this.printMethods()
+        this.printMethods()
     }
 
     private printConstructor(): void {
