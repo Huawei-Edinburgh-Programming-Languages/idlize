@@ -1597,10 +1597,10 @@
 |`loadUrl`| Function | Politov Mikhail | in progress | | |
 |*GlobalScope_ohos_arkui_componentSnapshot*| *Class* | | | | |
 |`get`| Function | | | | |
-|*GlobalScope_ohos_arkui_performanceMonitor*| *Class* | | | | |
-|`begin`| Function | | | | |
-|`end`| Function | | | | |
-|`recordInputEventTime`| Function | | | | |
+|*GlobalScope_ohos_arkui_performanceMonitor*| *Class* | Vadim Voronov | blocked IDL | | |
+|`begin`| Function | Vadim Voronov | devdone | | |
+|`end`| Function | Vadim Voronov | devdone | | |
+|`recordInputEventTime`| Function | Vadim Voronov | blocked IDL | | implemented with UT https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
 |*FrameNode*| *Class* | Tuzhilkin Ivan | done |  | |
 |`isModifiable`| Function | Tuzhilkin Ivan | done |  | |
 |`appendChild`| Function | Tuzhilkin Ivan | done |  | |
