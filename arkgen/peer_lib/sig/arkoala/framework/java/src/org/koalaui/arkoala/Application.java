@@ -70,7 +70,6 @@ public class Application {
         return new Application(view);
     }
 
-    static long foreignVMContext;
     public boolean enter(int arg0, int arg1, long vmContext) {
         ForeignFunctions.enter(vmContext);
         boolean rv = loopIteration(arg0, arg1);
