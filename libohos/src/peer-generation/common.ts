@@ -66,6 +66,11 @@ abstract class CommonLayoutBase implements LayoutManagerStrategy {
 
 }
 
+function suggestTSPackageName(library: PeerLibrary, node: idl.IDLEntry): string {
+    const packageName = library.resolvePackageName(node)
+    return `@${packageName.split(".").join("/")}`
+}
+
 class TsLayout extends CommonLayoutBase {
 
     private selectInterface(node: idl.IDLEntry): string {
@@ -73,7 +78,7 @@ class TsLayout extends CommonLayoutBase {
             return SyntheticModule
         }
         if (!this.library.hasInLibrary(node))
-            return "@EXTERNAL_SMTH"
+            return suggestTSPackageName(this.library, node)
         if (idl.isHandwritten(node)) {
             return HandwrittenModule(this.library.language)
         }
