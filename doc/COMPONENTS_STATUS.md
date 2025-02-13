@@ -1817,25 +1817,25 @@
 |`setStopPropagation`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |*MouseEvent*| *Class* | Kovalev Sergey | testskipped |  | |
 |`getButton`| Function | Kovalev Sergey | testskipped |  | |
-|`setButton`| Function | Kovalev Sergey | testskipped |  | |
+|`setButton`| Function | Kovalev Sergey | done |  | |
 |`getAction`| Function | Kovalev Sergey | testskipped |  | |
-|`setAction`| Function | Kovalev Sergey | testskipped |  | |
-|`getDisplayX`| Function | Kovalev Sergey | testskipped |  | |
-|`setDisplayX`| Function | Kovalev Sergey | testskipped |  | |
-|`getDisplayY`| Function | Kovalev Sergey | testskipped |  | |
-|`setDisplayY`| Function | Kovalev Sergey | testskipped |  | |
-|`getWindowX`| Function | Kovalev Sergey | testskipped |  | |
-|`setWindowX`| Function | Kovalev Sergey | testskipped |  | |
-|`getWindowY`| Function | Kovalev Sergey | testskipped |  | |
-|`setWindowY`| Function | Kovalev Sergey | testskipped |  | |
-|`getScreenX`| Function | Kovalev Sergey | testskipped |  |deprecated? |
-|`setScreenX`| Function | Kovalev Sergey | testskipped |  |deprecated? |
-|`getScreenY`| Function | Kovalev Sergey | testskipped |  |deprecated? |
-|`setScreenY`| Function | Kovalev Sergey | testskipped |  |deprecated? |
-|`getX`| Function | Kovalev Sergey | testskipped |  | |
-|`setX`| Function | Kovalev Sergey | testskipped |  | |
-|`getY`| Function | Kovalev Sergey | testskipped |  | |
-|`setY`| Function | Kovalev Sergey | testskipped |  | |
+|`setAction`| Function | Kovalev Sergey | done |  | |
+|`getDisplayX`| Function | Kovalev Sergey | done |  | |
+|`setDisplayX`| Function | Kovalev Sergey | done |  | |
+|`getDisplayY`| Function | Kovalev Sergey | done |  | |
+|`setDisplayY`| Function | Kovalev Sergey | done |  | |
+|`getWindowX`| Function | Kovalev Sergey | done |  | |
+|`setWindowX`| Function | Kovalev Sergey | done |  | |
+|`getWindowY`| Function | Kovalev Sergey | done |  | |
+|`setWindowY`| Function | Kovalev Sergey | done |  | |
+|`getScreenX`| Function | Kovalev Sergey | done |  |deprecated? |
+|`setScreenX`| Function | Kovalev Sergey | done |  |deprecated? |
+|`getScreenY`| Function | Kovalev Sergey | done |  |deprecated? |
+|`setScreenY`| Function | Kovalev Sergey | done |  |deprecated? |
+|`getX`| Function | Kovalev Sergey | done |  | |
+|`setX`| Function | Kovalev Sergey | done |  | |
+|`getY`| Function | Kovalev Sergey | done |  | |
+|`setY`| Function | Kovalev Sergey | done |  | |
 |`getStopPropagation`| Function | | | | |
 |`setStopPropagation`| Function | Kovalev Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |`getRawDeltaX`| Function | | blocked | noFB | doesn't present in Upstream and FB |
