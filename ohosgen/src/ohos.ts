@@ -245,10 +245,6 @@ const PEER_LIB_CONFIG = new Map<Language, string[]>([
     [Language.TS, ['MaterializedBase.ts', 'shared/generated-utils.ts']],
     [Language.ARKTS, ['MaterializedBase.ts', 'shared/generated-utils.ts']]
 ])
-PEER_LIB_CONFIG.set(Language.ARKTS, [
-        path.join('sig', 'arkoala-arkts', 'arkui', 'src', 'generated', 'MaterializedBase.ts'),
-        'MaterializedBase.cj'
-])
 
 function copyPeerLib(lang: Language, rootDir: string) {
     const list = PEER_LIB_CONFIG.get(lang)
