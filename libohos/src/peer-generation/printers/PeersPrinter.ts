@@ -15,7 +15,7 @@
 
 import * as idl from '@idlizer/core/idl'
 import * as path from "path"
-import { renameDtsToPeer, throwException, Language, InheritanceRole, determineParentRole, isHeir, isRoot, MaterializedClassConvertor } from '@idlizer/core'
+import { renameDtsToPeer, throwException, Language, InheritanceRole, determineParentRole, isHeir, isRoot, MaterializedClassConvertor, isStructureType } from '@idlizer/core'
 import { convertPeerFilenameToModule, ImportsCollector } from "../ImportsCollector"
 import {
     ExpressionStatement,
@@ -518,13 +518,15 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
                     }
                     if (ret) {
                         result = [writer.makeReturn(ret)]
-                    } else {
+                    } else if (isStructureType(returnType, writer.resolver)) {
                         const deserializerMethod = `read${writer.getNodeName(returnType).split(/\./).slice(-1)[0]}` // TODO Remove this hacky name conversion
                         result = [
                             writer.makeStatement(writer.makeString(
                                 `return new Deserializer(${returnValName}, ${returnValName}.byteLength).${deserializerMethod}()`
                             ))
                         ]
+                    } else {
+                        result = [writer.makeThrowError("Object deserialization is not implemented.")]
                     }
                 }
             }

@@ -437,7 +437,7 @@ export interface PrinterLike {
 export abstract class LanguageWriter {
     constructor(
         public printer: IndentedPrinter,
-        protected resolver: ReferenceResolver,
+        public resolver: ReferenceResolver, // TODO make protected again
         public language: Language,
     ) {}
 
