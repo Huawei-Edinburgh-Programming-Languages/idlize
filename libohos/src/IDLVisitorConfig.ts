@@ -274,7 +274,6 @@ export class IDLVisitorConfig {
         "LocalizedPadding",
         "ColumnOptionsV2",
         "RowOptionsV2",
-        "StyledStringValue",
     )
 
     static readonly ReplacedDeclarations = new Map<string, idl.IDLEntry>([
