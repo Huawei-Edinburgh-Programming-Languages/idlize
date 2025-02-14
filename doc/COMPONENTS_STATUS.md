@@ -727,7 +727,7 @@
 |`setProgressOptions`| Function | Erokhin Ilya | done |  | deprecated for `style` property |
 |`value`| Function | Erokhin Ilya | done |  | |
 |`color`| Function | Erokhin Ilya | done |  | |
-|`style`| Function | Erokhin Ilya | devdone |  | UT in progress Vadim Voronov linearStyle.strokeRadius need to be tested https://gitee.com/nikolay-igotti/idlize/issues/IB4G8D |
+|`style`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov linearStyle.strokeRadius need to be tested https://gitee.com/nikolay-igotti/idlize/issues/IB4G8D |
 |`privacySensitive`| Function | Erokhin Ilya | done |  | |
 |`contentModifier`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |*QRCode*| *Component* | Evstigneev Roman | done |  |  |
@@ -1220,7 +1220,7 @@
 |`onWillChange`| Function | | | | |
 |`inputFilter`|Function|Tuzhilkin Ivan| done |  | |
 |`showCounter`|Function|Tuzhilkin Ivan| done |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
-|`customKeyboard`|Function| Erokhin Ilya | devdone |  | UT in progress Vadim Voronov Custom Builder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
+|`customKeyboard`|Function| Erokhin Ilya | done |  | UT by Vadim Voronov Custom Builder https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q |
 |`_onChangeEvent_text`| Function | Erokhin Ilya | done |  | |
 |*TextClock*| *Component* |Pavelyev Ivan| blocked IDL |  |  |
 |`setTextClockOptions`| Function |Pavelyev Ivan| done |  |  |
@@ -1461,7 +1461,7 @@
 |`defaultFontSize`| Function | Erokhin Ilya | done |  | |
 |`minFontSize`| Function | Erokhin Ilya | done |  | |
 |`minLogicalFontSize`| Function | Erokhin Ilya | done |  | |
-|`defaultTextEncodingFormat`| Function | Erokhin Ilya | devdone |  | UT in progress Vadim Voronov |
+|`defaultTextEncodingFormat`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
 |`forceDisplayScrollBar`| Function | Erokhin Ilya | done |  | |
 |`blockNetwork`| Function | Erokhin Ilya | done |  | |
 |`horizontalScrollBarAccess`| Function | Erokhin Ilya | done |  | |
@@ -1598,8 +1598,8 @@
 |*GlobalScope_ohos_arkui_componentSnapshot*| *Class* | Dudkin Sergey| in progress| | |
 |`get`| Function | Dudkin Sergey | in progress | | |
 |*GlobalScope_ohos_arkui_performanceMonitor*| *Class* | Vadim Voronov | blocked IDL | | |
-|`begin`| Function | Vadim Voronov | devdone | | |
-|`end`| Function | Vadim Voronov | devdone | | |
+|`begin`| Function | Vadim Voronov | done | | |
+|`end`| Function | Vadim Voronov | done | | |
 |`recordInputEventTime`| Function | Vadim Voronov | blocked IDL | | implemented with UT https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
 |*FrameNode*| *Class* | Tuzhilkin Ivan | done |  | |
 |`isModifiable`| Function | Tuzhilkin Ivan | done |  | |
@@ -2349,8 +2349,8 @@
 |`getInputFieldType`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`isEditable`| Function | Erokhin Ilya | done |  |  |
 |`getEditStateFlags`| Function | Erokhin Ilya | done |  |  |
-|`getPreviewWidth`| Function | Erokhin Ilya | devdone |  | UT in progress Vadim Voronov |
-|`getPreviewHeight`| Function | Erokhin Ilya | devdone |  | UT in progress Vadim Voronov |
+|`getPreviewWidth`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
+|`getPreviewHeight`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
 |*WebContextMenuResult*| *Class* | Erokhin Ilya | done |  |  |
 |`closeContextMenu`| Function | Erokhin Ilya | done |  |  |
 |`copyImage`| Function | Erokhin Ilya | done |  |  |
@@ -2378,7 +2378,7 @@
 |`getReasonMessage`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getResponseHeader`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getResponseCode`| Function | Erokhin Ilya | done |  |  |
-|`setResponseData`| Function | Erokhin Ilya | devdone |  | UT in progress Vadim Voronov |
+|`setResponseData`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
 |`setResponseEncoding`| Function | Erokhin Ilya | done |  |  |
 |`setResponseMimeType`| Function | Erokhin Ilya | done |  |  |
 |`setReasonMessage`| Function | Erokhin Ilya | done |  |  |
