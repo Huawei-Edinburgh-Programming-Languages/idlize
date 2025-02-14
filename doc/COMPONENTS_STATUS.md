@@ -1794,21 +1794,21 @@
 |`getTargetDisplayId`| Function | Politov Mikhail | in progress |  | |
 |`setTargetDisplayId`| Function | Politov Mikhail | in progress |  | |
 |*ClickEvent*| *Class* | Maksimov Nikita | in progress |  | |
-|`getDisplayX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`getDisplayX`| Function | Maksimov Nikita, Pavelyev Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setDisplayX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
-|`getDisplayY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`getDisplayY`| Function | Maksimov Nikita, Pavelyev Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setDisplayY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
-|`getWindowX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`getWindowX`| Function | Maksimov Nikita, Pavelyev Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setWindowX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
-|`getWindowY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`getWindowY`| Function | Maksimov Nikita, Pavelyev Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setWindowY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
 |`getScreenX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  |deprecated? |
 |`setScreenX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  |deprecated? |
 |`getScreenY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  |deprecated? |
 |`setScreenY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  |deprecated? |
-|`getX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`getX`| Function | Maksimov Nikita, Pavelyev Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
-|`getY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`getY`| Function | Maksimov Nikita, Pavelyev Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
 |`getPreventDefault`| Function | | | | |
 |`setPreventDefault`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
