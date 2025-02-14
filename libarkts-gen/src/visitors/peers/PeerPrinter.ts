@@ -221,11 +221,11 @@ export class PeerPrinter {
     }
 
     private modifiers(node: IDLMethod): MethodModifier[] {
-        if (node.parameters.length === 1) {
-            return [MethodModifier.GETTER]
-        }
         if (node.name.startsWith(Config.createPrefix)) {
             return [MethodModifier.STATIC]
+        }
+        if (node.parameters.length === 1) {
+            return [MethodModifier.GETTER]
         }
         return []
     }
