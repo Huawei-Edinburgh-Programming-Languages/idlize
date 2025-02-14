@@ -2007,11 +2007,11 @@
 |*RotationGestureEvent*| *Class* | | | | |
 |`getAngle`| Function | | | | |
 |`setAngle`| Function | | | | |
-|*SwipeGestureEvent*| *Class* | | | | |
-|`getAngle`| Function | | | | |
-|`setAngle`| Function | | | | |
-|`getSpeed`| Function | | | | |
-|`setSpeed`| Function | | | | |
+|*SwipeGestureEvent*| *Class* | Evstigneev Roman | in progress | | |
+|`getAngle`| Function | Evstigneev Roman | in progress | | |
+|`setAngle`| Function | Evstigneev Roman | in progress | | |
+|`getSpeed`| Function | Evstigneev Roman | in progress | | |
+|`setSpeed`| Function | Evstigneev Roman | in progress | | |
 |*GestureEvent*| *Class* | Samarin Sergey | blocked |  | |
 |`getRepeat`| Function | Samarin Sergey | done |  | |
 |`setRepeat`| Function | Samarin Sergey | done |  | |
