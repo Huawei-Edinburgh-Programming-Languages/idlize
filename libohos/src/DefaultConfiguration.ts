@@ -21,6 +21,7 @@ export class DefaultConfiguration extends BaseGeneratorConfiguration {
             ignoreMaterialized: [],
             boundProperties: new Map(),
             builderClasses: [],
+            interfaceMethodToCallback: [],
             ...data
         })
     }

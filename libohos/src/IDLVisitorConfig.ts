@@ -2,6 +2,7 @@ import * as idl from '@idlizer/core/idl'
 import * as ts from "typescript"
 import * as path from "path"
 import { identName } from '@idlizer/core'
+import { peerGeneratorConfiguration } from "./peer-generation/PeerGeneratorConfig";
 
 // convenience shorthands for IDL creation
 namespace $ {
@@ -340,5 +341,23 @@ export class IDLVisitorConfig {
             }
         }
         return name
+    }
+
+    static filterInterfaceMethods(name: string, elements: ts.TypeElement[]): ReadonlyArray<ts.TypeElement | ts.ClassElement> {
+        if (peerGeneratorConfiguration()
+            .interfaceMethodToCallback
+            .includes(name)) {
+            return elements.filter(it => !ts.isMethodSignature(it))
+        }
+        return elements
+    }
+
+    static filterInterfaceTypeParams(name: string, params: string[] | undefined): string[] | undefined {
+        if (peerGeneratorConfiguration()
+            .interfaceMethodToCallback
+            .includes(name)) {
+            return [];
+        }
+        return params
     }
 }

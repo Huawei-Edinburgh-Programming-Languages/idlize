@@ -31,6 +31,7 @@ export interface PeerGeneratorConfiguration extends DefaultConfiguration {
     customNodeTypes: string[]
     ignoreSerialization: string[]
     ignoreReturnTypes: string[]
+    interfaceMethodToCallback: string[]
 
     mapComponentName(originalName: string): string 
     ignoreEntry(name: string, language: Language): boolean
@@ -54,6 +55,7 @@ export class PeerGeneratorConfigurationImpl extends DefaultConfiguration impleme
     get customNodeTypes(): string[] { return this.paramByKeys<string[]>("components", "customTypes") }
     get ignoreSerialization(): string[] { return this.paramByKeys<string[]>("serializer", "ignore") }
     get ignoreReturnTypes(): string[] { return this.paramByKeys<string[]>("materialized", "ignoredReturnTypes") }
+    get interfaceMethodToCallback(): string[] { return this.param<string[]>("interfaceMethodToCallback") }
 
     private paramByKeys<T>(...keys: string[]): T {
         let result = this.params
