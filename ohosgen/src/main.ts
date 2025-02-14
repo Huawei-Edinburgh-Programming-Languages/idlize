@@ -23,6 +23,11 @@ import {
     Language,
     findVersion,
     setDefaultConfiguration,
+    forEachChild,
+    toIDLString,
+    fromIDL,
+    idlToDtsString,
+    verifyIDLString,
     PeerFile,
     PeerLibrary,
 } from "@idlizer/core"
@@ -46,6 +51,8 @@ import { generateOhos as generateOhosOld, OhosConfiguration, suggestLibraryName 
 
 const options = program
     .option('--dts2peer', 'Convert .d.ts to peer drafts')
+    .option('--dts2idl', 'Convert .d.ts to IDL definitions')
+    .option('--idl2dts', 'Convert IDL to .d.ts definitions')
     .option('--input-dir <path>', 'Path to input dir(s), comma separated')
     .option('--output-dir <path>', 'Path to output dir')
     .option('--input-files <files...>', 'Comma-separated list of specific files to process')
@@ -79,6 +86,93 @@ setDefaultConfiguration(loadPeerConfiguration(options.optionsFile, options.overr
 
 if (process.env.npm_package_version) {
     console.log(`IDLize version ${findVersion()}`)
+}
+
+if (options.dts2idl) {
+    const { inputDirs, inputFiles } = formatInputPaths(options)
+    validatePaths(inputDirs, 'dir')
+    validatePaths(inputFiles, 'file')
+    generate(
+        inputDirs,
+        inputFiles,
+        options.outputDir ?? "./idl",
+        (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, options),
+        {
+            compilerOptions: defaultCompilerOptions,
+            onSingleFile: (entries: IDLEntry[], outputDir, sourceFile) => {
+                console.log('producing', path.basename(sourceFile.fileName))
+                const outFile = path.join(
+                    outputDir,
+                    path.basename(sourceFile.fileName).replace(".d.ts", ".idl")
+                )
+
+                console.log("saved", outFile)
+
+                if (options.skipDocs) {
+                    entries.forEach(entry =>
+                        forEachChild(entry, it => (it.documentation = undefined))
+                    )
+                }
+
+                const generated = toIDLString(entries, {
+                    disableEnumInitializers: options.disableEnumInitializers ?? false
+                })
+
+                if (options.verbose) {
+                    console.log(generated)
+                }
+
+                if (!fs.existsSync(path.dirname(outFile))) {
+                    fs.mkdirSync(path.dirname(outFile), { recursive: true })
+                }
+                fs.writeFileSync(outFile, generated)
+
+                if (options.verifyIdl) {
+                    verifyIDLString(generated)
+                }
+            }
+        }
+    )
+    didJob = true
+}
+
+if (options.idl2dts) {
+    const generatedDtsDir = options.outputDir ?? "./generated/dts/"
+
+    if (options.inputFiles && typeof options.inputFiles === 'string') {
+        options.inputFiles = options.inputFiles
+            .split(',')
+            .map(file => file.trim())
+            .filter(Boolean)
+    }
+
+    const inputDirs = options.inputDir
+
+    if (typeof options.inputDir === 'string') {
+        options.inputDir = options.inputDir.split(',')
+            .map(dir => dir.trim())
+            .filter(Boolean)
+    }
+
+    const inputFiles: string[] = options.inputFiles || []
+    inputFiles.forEach(file => {
+        if (!fs.existsSync(file)) {
+            console.error(`Input file does not exist: ${file}`)
+            process.exit(1)
+        } else {
+            console.log(`Input file exists: ${file}`)
+        }
+    })
+
+    fromIDL(
+        inputDirs,
+        inputFiles,
+        generatedDtsDir,
+        ".d.ts",
+        options.verbose ?? false,
+        idlToDtsString
+    )
+    didJob = true
 }
 
 if (options.idl2peer) {
