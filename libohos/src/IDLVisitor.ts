@@ -579,9 +579,31 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             .map(it => this.serializeConstructor(it as ts.ConstructSignatureDeclaration, nameSuggestion))
     }
     pickProperties(members: ReadonlyArray<ts.TypeElement | ts.ClassElement>, nameSuggestion: NameSuggestion): idl.IDLProperty[] {
-        const properties = members
+        let properties = members
             .filter(it => (ts.isPropertySignature(it) || ts.isPropertyDeclaration(it) || this.isCommonMethodUsedAsProperty(it)) && !isPrivate(it.modifiers))
             .map(it => this.serializeProperty(it, nameSuggestion))
+        if (generatorConfiguration()
+            .param<string[]>("interfaceMethodToCallback")
+            .includes(nameSuggestion.name.replace("Type_", ""))) {
+            properties.push(
+                ...members
+                    .filter(ts.isMethodSignature)
+                    .map(it => {
+                        const idlMethod = this.serializeMethod(it, nameSuggestion)
+                        this.addSyntheticType(
+                            idl.createCallback(
+                                idlMethod.name,
+                                idlMethod.parameters,
+                                idlMethod.returnType,
+                                {
+                                    extendedAttributes: [{name: idl.IDLExtendedAttributes.Synthetic}]
+                                },
+                                idlMethod.typeParameters))
+                        return idl.createProperty(
+                            idlMethod.name,
+                            idl.createReferenceType(idlMethod.name))
+                    }))
+        }
         return mergeSetGetProperties(properties)
     }
     pickMethods(members: ReadonlyArray<ts.TypeElement | ts.ClassElement>, nameSuggestion: NameSuggestion): idl.IDLMethod[] {
@@ -668,11 +690,18 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
 
     // TODO: class and interface look identical, but their elements' types are different
     serializeInterface(node: ts.InterfaceDeclaration): idl.IDLInterface {
-        const allMembers = node.members.filter(it => it.name && ts.isIdentifier(it.name))
+        let allMembers = node.members.filter(it => it.name && ts.isIdentifier(it.name))
         const inheritance = this.serializeInheritance(node.heritageClauses)
         const nameSuggestion = NameSuggestion.make(getExportedDeclarationNameByDecl(node) ?? "UNDEFINED")
         const childNameSuggestion = nameSuggestion.prependType()
         this.context.enter(nameSuggestion.name)
+        let methods = allMembers
+        let typeParams = this.collectTypeParameters(node.typeParameters)
+        if (generatorConfiguration().param<string[]>("interfaceMethodToCallback")
+            .includes(nameSuggestion.name)) {
+            methods = allMembers.filter(it => !ts.isMethodSignature(it))
+            typeParams = []
+        }
         return idl.createInterface(
             IDLVisitorConfig.checkNameReplacement(nameSuggestion.name, node.getSourceFile()),
             idl.IDLInterfaceSubkind.Interface,
@@ -680,12 +709,13 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             this.pickConstructors(node.members, childNameSuggestion),
             [],
             this.pickProperties(allMembers, childNameSuggestion),
-            this.pickMethods(allMembers, childNameSuggestion),
+            this.pickMethods(methods, childNameSuggestion),
             this.pickCallables(node.members, childNameSuggestion),
-            this.collectTypeParameters(node.typeParameters), {
-            fileName: node.getSourceFile().fileName,
-            extendedAttributes: this.computeComponentExtendedAttributes(node),
-            documentation: getDocumentation(this.sourceFile, node, this.options.docs)
+            typeParams,
+            {
+                fileName: node.getSourceFile().fileName,
+                extendedAttributes: this.computeComponentExtendedAttributes(node),
+                documentation: getDocumentation(this.sourceFile, node, this.options.docs)
             })
     }
 
@@ -814,7 +844,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         const syntheticName = generateSyntheticFunctionName(parameters, returnType)
         const selectedName = selectName(nameSuggestion, syntheticName)
         const typeParameters = signature.typeParameters ??
-            (ts.isTypeAliasDeclaration(signature.parent) ? signature.parent.typeParameters : undefined)
+            (signature.parent != undefined && ts.isTypeAliasDeclaration(signature.parent) ? signature.parent.typeParameters : undefined)
         return idl.createCallback(
             selectedName,
             parameters,
@@ -1193,7 +1223,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         let extendedAttributes: idl.IDLExtendedAttribute[] = this.computeClassMemberExtendedAttributes(property, propName, escapedName)
         this.computeDeprecatedExtendAttributes(property, extendedAttributes)
         if (ts.isMethodDeclaration(property) || ts.isMethodSignature(property)) {
-            if (!this.isCommonMethodUsedAsProperty(property)) throw new Error("Wrong")
+            // if (!this.isCommonMethodUsedAsProperty(property)) throw new Error("Wrong")
             let [type, syntheticEntry] = IDLVisitorConfig.checkParameterTypeReplacement(property.parameters[0])
             if (syntheticEntry) this.addSyntheticType(syntheticEntry)
             if (!isDefined(type)) {

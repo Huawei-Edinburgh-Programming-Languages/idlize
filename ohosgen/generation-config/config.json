@@ -4,7 +4,14 @@
     "OptionalPrefix": "Opt_",
     "GenerateUnused": false,
     "dumpSerialized": false,
-    "ignoreMaterialized": [],
+    "ignoreMaterialized": [
+        "MediaAssetDataHandler",
+        "QuickImageDataHandler"
+    ],
+    "interfaceMethodToCallback": [
+        "MediaAssetDataHandler",
+        "QuickImageDataHandler"
+    ],
     "forceMaterialized": [
         "BaseContext"
     ],
