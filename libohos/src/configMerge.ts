@@ -24,7 +24,7 @@ export function deepMergeConfig<T extends object>(defaults: T, custom: Partial<T
             const keys = parentKeys?.concat(key) ?? [key]
             if (Array.isArray(defaultValue)) {
                 if (!Array.isArray(customValue))
-                    throw new Error(`Merge ${keys.join("")}. Expected Array, actual ${customValue}`)
+                    throw new Error(`Merge ${keys.join(".")}. Expected Array, actual ${customValue}`)
                 Object.assign(result, { [key]: customValue })
             } else if (defaultValue instanceof Map) {
                 if (typeof customValue === 'object') {
@@ -32,7 +32,7 @@ export function deepMergeConfig<T extends object>(defaults: T, custom: Partial<T
                 } else if (customValue instanceof Map) {
                     Object.assign(result, { [key]: customValue })
                 } else {
-                    throw new Error(`Merge ${keys.join("")}. Expected Map or Object, actual ${customValue}`)
+                    throw new Error(`Merge ${keys.join(".")}. Expected Map or Object, actual ${customValue}`)
                 }
             } else if (typeof defaultValue === 'string') {
                 if (typeof customValue === 'string') {
@@ -40,30 +40,30 @@ export function deepMergeConfig<T extends object>(defaults: T, custom: Partial<T
                 } else if (typeof customValue === 'number') {
                     Object.assign(result, { [key]: customValue.toString() })
                 } else {
-                    throw new Error(`Merge ${keys.join("")}. Expected string, actual ${customValue}`)
+                    throw new Error(`Merge ${keys.join(".")}. Expected string, actual ${customValue}`)
                 }
             } else if (typeof defaultValue === 'number') {
                 if (typeof customValue === 'number') {
                     Object.assign(result, { [key]: customValue })
                 } else {
-                    throw new Error(`Merge ${keys.join("")}. Expected number, actual ${customValue}`)
+                    throw new Error(`Merge ${keys.join(".")}. Expected number, actual ${customValue}`)
                 }
             } else if (typeof defaultValue === 'object') {
                 if (typeof customValue === 'object') {
-                    Object.assign(result, { [key]: deepMergeConfig(defaultValue as object, customValue as object, ) })
+                    Object.assign(result, { [key]: deepMergeConfig(defaultValue as object, customValue as object, keys) })
                 } else {
-                    throw new Error(`Merge ${keys.join("")}. Expected Object, actual ${customValue}`)
+                    throw new Error(`Merge ${keys.join(".")}. Expected Object, actual ${customValue}`)
                 }
             } else if (typeof defaultValue === 'boolean') {
                 if (typeof customValue === 'boolean') {
                     Object.assign(result, { [key]: customValue })
                 } else {
-                    throw new Error(`Merge ${keys.join("")}. Expected Boolean, actual ${customValue}`)
+                    throw new Error(`Merge ${keys.join(".")}. Expected Boolean, actual ${customValue}`)
                 }
             } else {
                 if (typeof defaultValue === 'undefined')
-                    throw new Error(`Merge ${keys.join("")}. Key is not found in template`)
-                throw new Error(`Merge ${keys.join("")}. Unknown default value type, can not merge`)
+                    throw new Error(`Merge ${keys.join(".")}. Key is not found in template`)
+                throw new Error(`Merge ${keys.join(".")}. Unknown default value type, can not merge`)
             }
         }
     }
