@@ -1585,9 +1585,9 @@
 |`Prepare`| Function | managed side |  | | |
 |*DrawingCanvas*| *Class* | Dudkin Sergey | done |  | |
 |`drawRect`| Function | Dudkin Sergey | done |  | |
-|*LengthMetrics*| *Class* | | | | |
-|`px`| Function | | | | |
-|`resource`| Function | | | | |
+|*LengthMetrics*| *Class* | Evstigneev Roman | in progress | | |
+|`px`| Function | Evstigneev Roman | in progress | | done for feature branch |
+|`resource`| Function | Evstigneev Roman | in progress | | done for feature branch |
 |`getUnit`| Function | | | | |
 |`setUnit`| Function | | | | |
 |`getValue`| Function | | | | |
