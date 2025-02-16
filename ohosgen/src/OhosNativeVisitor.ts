@@ -61,6 +61,7 @@ import {
     NamedMethodSignature,
     PrimitiveTypesInstance,
     CppConvertor,
+    isStructureType,
 } from '@idlizer/core'
 import {
     createOutArgConvertor,
@@ -483,7 +484,3 @@ export function suggestLibraryName(library: PeerLibrary) {
     libraryName = libraryName.replaceAll("@", "").replaceAll(".", "_").toUpperCase()
     return libraryName
 }
-function isStructureType(returnType: IDLType, library: PeerLibrary): any {
-    throw new Error('Function not implemented.')
-}
-
