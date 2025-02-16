@@ -16,6 +16,7 @@
 import {
     convertType,
     createEmptyReferenceResolver,
+    createOptionalType,
     createParameter,
     createReferenceType,
     IDLInterface,
@@ -178,6 +179,10 @@ export class PeerPrinter {
         )
     }
 
+    private isReferenceToAst(type: IDLType): boolean {
+        return isReferenceType(type) && this.typechecker.isHeir(type.name, Config.astNodeCommonAncestor)
+    }
+
     private printMethods(): void {
         this.node.methods
             .filter(isGetter)
@@ -197,7 +202,9 @@ export class PeerPrinter {
                     new Method(
                         pascalToCamel(it.name),
                         new MethodSignature(
-                            it.returnType,
+                            this.isReferenceToAst(it.returnType) ?
+                                createOptionalType(it.returnType) :
+                                it.returnType,
                             it.parameters
                                 .slice(1)
                                 .map(it => it.type),
