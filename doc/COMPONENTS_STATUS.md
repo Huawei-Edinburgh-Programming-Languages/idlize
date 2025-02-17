@@ -694,7 +694,7 @@
 |`_onChangeEvent_mode`| Function | Erokhin Ilya | done |  | |
 |*PasteButton*| *Component* | Samarin Sergey| done |  |  |
 |`setPasteButtonOptions`| Function | Samarin Sergey| done |  |  |
-|`onClick`| Function | Samarin Sergey, Maksimov Nikita, Pavelyev Ivan | testskipped |  | EVENT |
+|`onClick`| Function | Samarin Sergey, Maksimov Nikita, Pavelyev Ivan, Evstgneev Roman | testskipped |  | EVENT, reopened after refactoring methods |
 |*Path*| *Component* | Skroba Gleb | done |  |  |
 |`setPathOptions`| Function | Skroba Gleb | done |  |  |
 |`commands`| Function | Skroba Gleb | done |  |  |
@@ -774,7 +774,7 @@
 |`onSelect`| Function | Dudkin Sergey| in progress |  | reopened because Ark_RichEditorSelection changed after generations |
 |`onSelectionChange`| Function | Dudkin Sergey| done |  |  |
 |`aboutToIMEInput`| Function | Dudkin Sergey| done |  |  |
-|`onIMEInputComplete`| Function | Dudkin Sergey| done |  | |
+|`onIMEInputComplete`| Function | Dudkin Sergey, Evstigneev Roman | testskipped |  | reopened after refactoring methods |
 |`onDidIMEInput`| Function | Dudkin Sergey| done |  |  |
 |`aboutToDelete`| Function | Dudkin Sergey| done |  |  |
 |`onDeleteComplete`| Function | Dudkin Sergey| done |  |  |
@@ -787,11 +787,11 @@
 |`selectedBackgroundColor`| Function | Dudkin Sergey| done |  |  |
 |`onEditingChange`| Function | Dudkin Sergey| done |  |  |
 |`enterKeyType`| Function | Dudkin Sergey| done |  |  |
-|`onSubmit`| Function | Dudkin Sergey| in progress |  | EVENT |
-|`onWillChange`| Function | Dudkin Sergey| in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4G70, reopened beacuse Ark_RichEditorChangeValue changed after generations |
+|`onSubmit`| Function | Dudkin Sergey, Evstigneev Roman | testskipped |  | EVENT, reopened after refactoring methods |
+|`onWillChange`| Function | Dudkin Sergey| testskipped |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4G70, reopened beacuse Ark_RichEditorChangeValue changed after generations |
 |`onDidChange`| Function | Dudkin Sergey| done |  |  |
-|`onCut`| Function | Dudkin Sergey| done |  | |
-|`onCopy`| Function | Dudkin Sergey| done |  | |
+|`onCut`| Function | Dudkin Sergey, Evstigneev Roman | testskipped |  | reopened after refactoring methods |
+|`onCopy`| Function | Dudkin Sergey, Evstigneev Roman | testskipped |  | reopened after refactoring methods |
 |`editMenuOptions`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`enableKeyboardOnFocus`| Function | Dudkin Sergey| done |  |  |
 |`enableHapticFeedback`| Function | Dudkin Sergey| done |  |  |
