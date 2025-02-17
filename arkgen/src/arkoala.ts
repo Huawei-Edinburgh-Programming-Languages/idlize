@@ -107,26 +107,17 @@ function copyArkoalaFiles(config: {
     }, arkoala: ArkoalaInstall) {
     copyToArkoala(path.join(__dirname, '..', 'peer_lib'), arkoala, !config.onlyIntegrated ? undefined : [
         'sig/arkoala/framework/native/src/generated/arkoala-macros.h',
-        'sig/arkoala/arkui/src/peers/CallbackTransformer.ts',
-        'sig/arkoala/arkui/src/shared/generated-utils.ts',
-        'sig/arkoala-arkts/arkui/src/generated/use_properties.ts',
+        'sig/arkoala/arkui/src/generated/peers/CallbackTransformer.ts',
         'sig/arkoala-arkts/arkui/src/generated/CallbackRegistry.ts',
-        'sig/arkoala-arkts/arkui/src/generated/ComponentBase.ts',
-        'sig/arkoala-arkts/arkui/src/MaterializedBase.ts',
-        'sig/arkoala-arkts/arkui/src/PeerNode.ts',
-        'sig/arkoala-arkts/arkui/src/NativePeerNode.ts',
         'sig/arkoala-arkts/arkui/src/generated/Events.ts',
-        'sig/arkoala-arkts/arkui/src/arkts/index.ts',
-        'sig/arkoala-arkts/arkui/src/ts/index.ts',
-        'sig/arkoala-arkts/arkui/src/ts/arkts-stdlib.ts',
-        'sig/arkoala-arkts/arkui/src/ts/ArkUINativeModule.ts',
-        'sig/arkoala-arkts/arkui/src/ts/ArkUIGeneratedNativeModule.ts',
-        'sig/arkoala-arkts/arkui/src/ts/TestNativeModule.ts',
+        'sig/arkoala-arkts/arkui/src/generated/arkts/index.ts',
+        'sig/arkoala-arkts/arkui/src/generated/ts/index.ts',
+        'sig/arkoala-arkts/arkui/src/generated/ts/arkts-stdlib.ts',
+        'sig/arkoala-arkts/arkui/src/generated/ts/ArkUINativeModule.ts',
+        'sig/arkoala-arkts/arkui/src/generated/ts/ArkUIGeneratedNativeModule.ts',
+        'sig/arkoala-arkts/arkui/src/generated/ts/TestNativeModule.ts',
         'sig/arkoala-arkts/arkui/src/generated/peers/CallbacksChecker.ts',
         'sig/arkoala-arkts/arkui/src/generated/peers/CallbackTransformer.ts',
-        'sig/arkoala-arkts/arkui/src/shared/ArkResource.ts',
-        'sig/arkoala-arkts/arkui/src/shared/dts-exports.ts',
-        'sig/arkoala-arkts/arkui/src/shared/generated-utils.ts',
     ])
 }
 
