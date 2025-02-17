@@ -487,7 +487,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         const fromBufferCtor =  new NamedMethodSignature(IDLVoidType, [
                 IDLUint8ArrayType,
                 IDLU32Type,
-                createReferenceType("CallbackResourceHolder" /* ast */)
+                createReferenceType("CallbackResourceHolder")
             ],
             ["data", "dataLength", "resourceHolder"],
             [undefined, `0`, `nullptr`],
@@ -495,7 +495,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
         )
 
         const ownedDataCtor = new NamedMethodSignature(IDLVoidType, [
-                createReferenceType("CallbackResourceHolder" /* ast */)
+                createReferenceType("CallbackResourceHolder")
             ],
             ["resourceHolder"],
             [`nullptr`],
