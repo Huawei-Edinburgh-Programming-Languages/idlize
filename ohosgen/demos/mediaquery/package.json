@@ -44,6 +44,6 @@
     },
     "dependencies": {
         "@koalaui/interop": "1.5.3",
-        "@koalaui/runtime": "1.5.3"
+        "@koalaui/common": "1.5.3"
     }
 }
