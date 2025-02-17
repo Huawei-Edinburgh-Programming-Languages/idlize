@@ -27,8 +27,12 @@ export class InteropTransformer {
     transformed(): IDLFile {
         return new IDLFile(
             this.file.entries
-                .filter(isInterface)
-                .map(it => this.transformInterface(it))
+                .map(it => {
+                    if (isInterface(it)) {
+                        return this.transformInterface(it)
+                    }
+                    return it
+                })
         )
     }
 
