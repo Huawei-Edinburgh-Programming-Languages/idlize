@@ -1986,17 +1986,17 @@
 |*LongPressGestureEvent*| *Class* | | | | |
 |`getRepeat`| Function | | | | |
 |`setRepeat`| Function | | | | |
-|*PanGestureEvent*| *Class* | | | | |
-|`getOffsetX`| Function | | | | |
-|`setOffsetX`| Function | | | | |
-|`getOffsetY`| Function | | | | |
-|`setOffsetY`| Function | | | | |
-|`getVelocityX`| Function | | | | |
-|`setVelocityX`| Function | | | | |
-|`getVelocityY`| Function | | | | |
-|`setVelocityY`| Function | | | | |
-|`getVelocity`| Function | | | | |
-|`setVelocity`| Function | | | | |
+|*PanGestureEvent*| *Class* | Morozov Sergey | blocked IDL | | |
+|`getOffsetX`| Function | Morozov Sergey | devdone | | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`setOffsetX`| Function | Morozov Sergey | devdone | | |
+|`getOffsetY`| Function | Morozov Sergey | devdone | | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`setOffsetY`| Function | Morozov Sergey | devdone | | |
+|`getVelocityX`| Function | Morozov Sergey | devdone | | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`setVelocityX`| Function | Morozov Sergey | devdone | | |
+|`getVelocityY`| Function | Morozov Sergey | devdone | | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`setVelocityY`| Function | Morozov Sergey | devdone | | |
+|`getVelocity`| Function | Morozov Sergey | devdone | | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`setVelocity`| Function | Morozov Sergey | devdone | | |
 |*PinchGestureEvent*| *Class* | | | | |
 |`getScale`| Function | | | | |
 |`setScale`| Function | | | | |
