@@ -98,7 +98,7 @@ export class PeerPrinter {
 
     private printBody(): void {
         this.printConstructor()
-        this.printCreate()
+        this.printCreates()
         this.printMethods()
     }
 
@@ -275,16 +275,13 @@ export class PeerPrinter {
         throwException(`couldn't emit return expression while generating peer: ${this.node.name}.${node.name}`)
     }
 
-    private printCreate(): void {
-        const create = this.node.methods.find(it => it.name.startsWith(Config.createPrefix))
-        if (create === undefined) {
-            return
-        }
+    private printCreates(): void {
         if (isAbstract(this.node)) {
             return
         }
-        if (
-            create.parameters
+        this.node.methods
+            .filter(it => Config.isCreateOrUpdate(it.name))
+            .filter(create => !create.parameters
                 .map(it => it.type)
                 .concat(create.returnType)
                 .map(it => {
@@ -299,10 +296,11 @@ export class PeerPrinter {
                 .filter(it => !it.name.startsWith(`es2panda_Context`))
                 .filter(it => !it.name.startsWith(`es2panda_AstNode`))
                 .some(it => this.typechecker.isHollow(it.name))
-        ) {
-            return
-        }
+            )
+            .forEach(it => this.printCreate(it))
+    }
 
+    private printCreate(create: IDLMethod): void {
         create.parameters
             .map(it => {
                 if (isContainerType(it.type)) {
@@ -331,7 +329,10 @@ export class PeerPrinter {
 
         this.writer.writeMethodImplementation(
             new Method(
-                `create${this.node.name}`,
+                PeersConstructions.createOrUpdate(
+                    pascalToCamel(create.name),
+                    this.node.name
+                ),
                 new MethodSignature(
                     create.returnType,
                     create.parameters

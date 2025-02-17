@@ -70,11 +70,10 @@ export class PeersConstructions {
     static callCreateOrUpdate(iface: string, method: string, namespace: string): string {
         return `global.generatedEs2panda.${
             BindingsConstructions.method(
-                InteropConstructions.createOrUpdate(iface, method, namespace)
+                InteropConstructions.method(iface, method, namespace)
             )
         }`
     }
-
 
     static get warn(): string {
         return `console.warn`
@@ -90,5 +89,9 @@ export class PeersConstructions {
 
     static importEnum(what: string): string {
         return PeersConstructions.import(what, `../Es2pandaEnums`)
+    }
+
+    static createOrUpdate(iface: string, method: string): string {
+        return `${method}${iface}`
     }
 }
