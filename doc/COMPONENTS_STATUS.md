@@ -1795,23 +1795,23 @@
 |`setTargetDisplayId`| Function | Politov Mikhail | in progress |  | |
 |*ClickEvent*| *Class* | Maksimov Nikita | in progress |  | |
 |`getDisplayX`| Function | Maksimov Nikita, Pavelyev Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setDisplayX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`setDisplayX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |`getDisplayY`| Function | Maksimov Nikita, Pavelyev Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setDisplayY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`setDisplayY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |`getWindowX`| Function | Maksimov Nikita, Pavelyev Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setWindowX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`setWindowX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |`getWindowY`| Function | Maksimov Nikita, Pavelyev Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setWindowY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`setWindowY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |`getScreenX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  |deprecated? |
-|`setScreenX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  |deprecated? |
+|`setScreenX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  |deprecated? |
 |`getScreenY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  |deprecated? |
-|`setScreenY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  |deprecated? |
+|`setScreenY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  |deprecated? |
 |`getX`| Function | Maksimov Nikita, Pavelyev Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`setX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |`getY`| Function | Maksimov Nikita, Pavelyev Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`setY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |`getPreventDefault`| Function | | | | |
-|`setPreventDefault`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
+|`setPreventDefault`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |*HoverEvent*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
 |`getStopPropagation`| Function | | | | |
 |`setStopPropagation`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
