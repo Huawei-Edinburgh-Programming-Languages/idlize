@@ -1997,13 +1997,13 @@
 |`setVelocityY`| Function | Morozov Sergey | devdone | | |
 |`getVelocity`| Function | Morozov Sergey | devdone | | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setVelocity`| Function | Morozov Sergey | devdone | | |
-|*PinchGestureEvent*| *Class* | | | | |
-|`getScale`| Function | | | | |
-|`setScale`| Function | | | | |
-|`getPinchCenterX`| Function | | | | |
-|`setPinchCenterX`| Function | | | | |
-|`getPinchCenterY`| Function | | | | |
-|`setPinchCenterY`| Function | | | | |
+|*PinchGestureEvent*| *Class* | Vadim Voronov | in progress | | |
+|`getScale`| Function | Vadim Voronov | devdone | | |
+|`setScale`| Function | Vadim Voronov | devdone | | |
+|`getPinchCenterX`| Function | Vadim Voronov | devdone | | |
+|`setPinchCenterX`| Function | Vadim Voronov | devdone | | |
+|`getPinchCenterY`| Function | Vadim Voronov | devdone | | |
+|`setPinchCenterY`| Function | Vadim Voronov | devdone | | |
 |*RotationGestureEvent*| *Class* | | | | |
 |`getAngle`| Function | | | | |
 |`setAngle`| Function | | | | |
