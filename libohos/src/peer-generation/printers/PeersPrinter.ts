@@ -520,9 +520,10 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
                         result = [writer.makeReturn(ret)]
                     } else if (isStructureType(returnType, writer.resolver)) {
                         const deserializerMethod = `read${writer.getNodeName(returnType).split(/\./).slice(-1)[0]}` // TODO Remove this hacky name conversion
+                        const instance = makeDeserializerInstance(returnValName, writer.language)
                         result = [
                             writer.makeStatement(writer.makeString(
-                                `return new Deserializer(${returnValName}, ${returnValName}.byteLength).${deserializerMethod}()`
+                                `return ${instance}.${deserializerMethod}()`
                             ))
                         ]
                     } else {
@@ -535,6 +536,18 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
             }
         }
     })
+}
+
+function makeDeserializerInstance(returnValName: string, language: Language) {
+    if (language === Language.TS) {
+        return `new Deserializer(${returnValName}, ${returnValName}.byteLength)`
+    } else if (language === Language.ARKTS) {
+        return `new Deserializer(${returnValName}, ${returnValName}.length)`
+    } else if (language === Language.JAVA) {
+        return `new Deserializer(${returnValName}, ${returnValName}.length)`
+    } else {
+        throw "not implemented"
+    } 
 }
 
 function returnsThis(method: PeerMethod, returnType: IDLType) {
