@@ -330,8 +330,8 @@ export class PeerPrinter {
         this.writer.writeMethodImplementation(
             new Method(
                 PeersConstructions.createOrUpdate(
-                    pascalToCamel(create.name),
-                    this.node.name
+                    this.node.name,
+                    create.name
                 ),
                 new MethodSignature(
                     create.returnType,

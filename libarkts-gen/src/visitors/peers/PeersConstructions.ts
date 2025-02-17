@@ -15,6 +15,7 @@
 
 import { BindingsConstructions } from "../interop/bindings/BindingsConstructions"
 import { InteropConstructions } from "../interop/InteropConstructions"
+import { pascalToCamel } from "../../utils/common"
 
 export class PeersConstructions {
     static fileName(node: string): string {
@@ -92,6 +93,6 @@ export class PeersConstructions {
     }
 
     static createOrUpdate(iface: string, method: string): string {
-        return `${method}${iface}`
+        return pascalToCamel(`${method}${iface}`)
     }
 }
