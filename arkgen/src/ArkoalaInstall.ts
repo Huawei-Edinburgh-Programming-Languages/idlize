@@ -47,7 +47,7 @@ export class ArkoalaInstall extends Install {
     tsDir = this.mkdir(path.join(this.sig, "arkoala/arkui/src/"))
     tsTypesDir = this.mkdir(path.join(this.sig, `arkoala/arkui-types/`))
     arktsDir = this.mkdir(path.join(this.sig, "arkoala-arkts/arkui/src/generated/"))
-    stsDir = this.mkdir(path.join(this.sig, "arkoala-arkts/arkui/src/sts/generated/"))
+    facadeDir = this.mkdir(path.join(this.sig, "arkoala-arkts/arkui/src/generated/facade"))
     arktsTypesDir = this.mkdir(path.join(this.sig, `arkoala-arkts/arkui/types/`))
 
     frameworkDir = this.mkdir(path.join(this.sig, "arkoala/framework"))
@@ -76,6 +76,9 @@ export class ArkoalaInstall extends Install {
     }
     langLib(targetFile: TargetFile) {
         return path.join(this.langDir(), targetFile.path ?? "", targetFile.name + this.lang.extension)
+    }
+    facade(targetFile: TargetFile): string {
+        return path.join(this.facadeDir, targetFile.path ?? "", targetFile.name)
     }
     tsLib(targetFile: TargetFile) {
         return path.join(this.tsDir, targetFile.path ?? "", targetFile.name + this.lang.extension)

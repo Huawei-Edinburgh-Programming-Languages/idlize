@@ -191,6 +191,47 @@ export function ${componentFunctionName}(
     })
 }`)
     }
+
+    protected printComponentFacade(
+        componentName: string, // Button
+        instanceName: string, // Button
+        mappedCallableParams: string, // ButtonOptions
+        peerComponentName: string) {
+        if (!collectComponents(this.library).find(it => it.name === peerComponentName)?.interfaceDeclaration)
+            return
+
+        const parentName = "CommonMethod"
+
+        this.printer.print(`
+import { BuilderLambda, ${parentName} } from "../arkui"
+
+export class ${componentName} extends ${parentName} {
+    @BuilderLambda("instantiateImpl")
+    static $_instantiate(
+        factory: () => ${componentName},
+        ${mappedCallableParams},
+        content?: () => void
+    ): Button {
+        //throw new Error("This method should only be called through a @BuilderLambda redirect")
+        console.log("${componentName}")
+        return factory()
+    }
+
+    static instantiateImpl(
+        style: (instance: ${instanceName}) => ${instanceName},
+        factory: () => ${componentName},
+        ${mappedCallableParams},
+        content?: () => void
+    ): void {
+        console.log("${componentName}()")
+        const instance = factory()
+        style(instance)
+        content()
+    }
+}
+`)
+    }
+
 }
 
 class ArkTsComponentFileVisitor extends TSComponentFileVisitor {
