@@ -1873,10 +1873,10 @@
 |*DragEvent*| *Class* | Evstigneev Roman | in progress |  | |
 |`getDisplayX`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getDisplayY`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getWindowX`| Function | Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBLA1J |
-|`getWindowY`| Function | Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBLA1J |
-|`getX`| Function | Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBLA1J, deprecated? |
-|`getY`| Function | Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBLA1J, deprecated? |
+|`getWindowX`| Function | Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getWindowY`| Function | Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getX`| Function | Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0, deprecated? |
+|`getY`| Function | Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0, deprecated? |
 |`setData`| Function | Evstigneev Roman | done |  | |
 |`getData`| Function | Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getSummary`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
