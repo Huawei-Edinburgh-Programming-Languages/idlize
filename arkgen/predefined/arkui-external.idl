@@ -407,3 +407,36 @@ dictionary UniformDataType {
     String CAD = "general.cad";
     String OCTET_STREAM = "general.octet-stream";
 };
+
+/**
+ * The SymbolEffect,ReplaceSymbolEffect,ScaleSymbolEffect API declaration, part for M2 app
+ */
+dictionary EffectDirection {
+    number DOWN = 0;
+    number UP = 1;
+};
+
+dictionary EffectScope {
+    number LAYER = 0;
+    number WHOLE = 1;
+};
+
+[Entity=Class]
+interface SymbolEffect {
+};
+
+[Entity=Class]
+interface ScaleSymbolEffect: SymbolEffect {
+    constructor(optional EffectScope scope, optional EffectDirection direction);
+    [Optional]
+    attribute EffectScope scope;
+    [Optional]
+    attribute EffectDirection direction;
+};
+
+[Entity=Class]
+interface ReplaceSymbolEffect: SymbolEffect {
+    constructor(optional EffectScope scope);
+    [Optional]
+    attribute EffectScope scope;
+};
