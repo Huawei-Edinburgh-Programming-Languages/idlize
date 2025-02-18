@@ -2168,11 +2168,11 @@
 |`scrollEdge`| Function | Erokhin Ilya | done |  |  |
 |`fling`| Function | Erokhin Ilya | done |  |  |
 |`scrollPage`| Function | Erokhin Ilya | done |  |  |
-|`currentOffset`| Function | Erokhin Ilya | blocked IDL |  |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0|
+|`currentOffset`| Function | Erokhin Ilya | in progress |  |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0|
 |`scrollToIndex`| Function | Erokhin Ilya | done |  | |
 |`scrollBy`| Function | Erokhin Ilya | done |  |  |
 |`isAtEnd`| Function | Erokhin Ilya | done |  |  |
-|`getItemRect`| Function | Erokhin Ilya | blocked IDL |  |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0|
+|`getItemRect`| Function | Erokhin Ilya | in progress |  |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0|
 |`getItemIndex`| Function | Erokhin Ilya | done |  |  |
 |*SearchController*| *Class* |Evstigneev Roman | done |  |  |
 |`caretPosition`| Function |Evstigneev Roman | done |  |  |
