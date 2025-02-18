@@ -1,7 +1,7 @@
 import { int32 } from "@koalaui/common"
 import { InteropNativeModule, NativeBuffer, DeserializerBase, registerNativeModuleLibraryName } from "@koalaui/interop";
 import { checkArkoalaCallbacks } from "../../generated/arkts/peers/CallbacksChecker";
-import { CONTEXTNativeModule } from "../../generated/arkts"
+import { CONTEXTNativeModule } from "../../generated/arkts/context"
 
 export { BaseContext, Context, ApplicationContext } from "../../generated/arkts"
 

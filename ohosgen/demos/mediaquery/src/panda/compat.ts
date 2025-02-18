@@ -1,8 +1,8 @@
 import { int32 } from "@koalaui/common"
 import { InteropNativeModule, NativeBuffer, DeserializerBase, registerNativeModuleLibraryName } from "@koalaui/interop";
 import { checkArkoalaCallbacks } from "../../generated/arkts/peers/CallbacksChecker";
-import { MEDIAQUERYNativeModule } from "../../generated/arkts";
-export { mediaquery } from "../../generated/arkts"
+import { MEDIAQUERYNativeModule } from "../../generated/arkts/mediaquery";
+export { mediaquery } from "../../generated/arkts/mediaquery"
 
 export type OHBuffer = NativeBuffer
 
