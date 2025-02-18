@@ -215,6 +215,10 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         this.output.splice(0, 0, ...header)
     }
 
+    private getGlobalScopeName(nsName:string): string {
+        return `GlobalScope${nsName}${path.basename(this.sourceFile.fileName).replace(".d.ts", "").replaceAll("@", "").replaceAll(".", "_")}`
+    }
+
     collectGlobalScope() {
 
         const groups = new Map<idl.IDLNamespace, [idl.IDLConstant[], idl.IDLMethod[]]>()
@@ -247,7 +251,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
             if (constants.length || methods.length) {
                 const nsName = ns ? '_' + idl.getFQName(ns) + '_' : ''
                 const int = idl.createInterface(
-                    `GlobalScope${nsName}${path.basename(this.sourceFile.fileName).replace(".d.ts", "").replaceAll("@", "").replaceAll(".", "_")}`,
+                    this.getGlobalScopeName(nsName),
                     idl.IDLInterfaceSubkind.Interface,
                     [],
                     [],
