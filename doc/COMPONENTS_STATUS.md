@@ -787,7 +787,7 @@
 |`selectedBackgroundColor`| Function | Dudkin Sergey| done |  |  |
 |`onEditingChange`| Function | Dudkin Sergey| done |  |  |
 |`enterKeyType`| Function | Dudkin Sergey| done |  |  |
-|`onSubmit`| Function | Dudkin Sergey, Evstigneev Roman | testskipped |  | EVENT, reopened after refactoring methods |
+|`onSubmit`| Function | Dudkin Sergey, Evstigneev Roman | done |  | EVENT, reopened after refactoring methods |
 |`onWillChange`| Function | Dudkin Sergey| testskipped |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4G70, reopened beacuse Ark_RichEditorChangeValue changed after generations |
 |`onDidChange`| Function | Dudkin Sergey| done |  |  |
 |`onCut`| Function | Dudkin Sergey, Evstigneev Roman | testskipped |  | reopened after refactoring methods |
@@ -858,7 +858,7 @@
 |`placeholderFont`|Function| Evstigneev Roman | done |  |  |
 |`textFont`|Function| Evstigneev Roman | done |  |  |
 |`enterKeyType`|Function| Evstigneev Roman | done |  |  |
-|`onSubmit`|Function| Evstigneev Roman | in progress |  | EVENT |
+|`onSubmit`|Function| Evstigneev Roman | done |  | EVENT |
 |`onChange`|Function| Evstigneev Roman | done |  |  |
 |`onTextSelectionChange`|Function| Evstigneev Roman | done |  |  |
 |`onContentScroll`|Function| Evstigneev Roman | done |  |  |
@@ -1177,7 +1177,7 @@
 |`textIndent`|Function|Tuzhilkin Ivan| done |  |  |
 |`caretStyle`|Function|Tuzhilkin Ivan| done |  |  |
 |`selectedBackgroundColor`|Function|Tuzhilkin Ivan| done |  | |
-|`onSubmit`|Function|Tuzhilkin Ivan, Spirin Andrey| in progress |  | EVENT |
+|`onSubmit`|Function|Tuzhilkin Ivan, Spirin Andrey| done |  | EVENT |
 |`onChange`|Function|Tuzhilkin Ivan| done |  |  |
 |`onTextSelectionChange`|Function|Tuzhilkin Ivan| done |  | |
 |`onContentScroll`|Function|Tuzhilkin Ivan| done |  |  |
@@ -1247,7 +1247,7 @@
 |`caretColor`| Function | Spirin Andrey | done |  |  |
 |`onEditChanged`| Function | Spirin Andrey | done |  |deprecated UT Kovalev Sergey |
 |`onEditChange`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
-|`onSubmit`| Function | Spirin Andrey | in progress |  | EVENT |
+|`onSubmit`| Function | Spirin Andrey | done |  | EVENT |
 |`onChange`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail  |
 |`onTextSelectionChange`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
 |`onContentScroll`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
