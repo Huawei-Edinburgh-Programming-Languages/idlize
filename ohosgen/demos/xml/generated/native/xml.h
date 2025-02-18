@@ -21,7 +21,7 @@
 
 #include <stdint.h>
 
-#define INTEROP_FATAL(msg, ...) fprintf(stderr, msg "\n", ##__VA_ARGS__); abort();
+#define INTEROP_FATAL(msg, ...) do { fprintf(stderr, msg "\n", ##__VA_ARGS__); abort(); } while (0)
 
 typedef enum InteropTag
 {
@@ -53,6 +53,7 @@ typedef double InteropFloat64;
 typedef int32_t InteropInt32;
 typedef unsigned int InteropUInt32; // TODO: update unsigned int
 typedef int64_t InteropInt64;
+typedef uint64_t InteropUInt64;
 typedef int8_t InteropInt8;
 typedef uint8_t InteropUInt8;
 typedef int64_t InteropDate;
@@ -165,6 +166,7 @@ typedef InteropFloat64 OH_Float64;
 typedef InteropInt32 OH_Int32;
 typedef InteropUInt32 OH_UInt32;
 typedef InteropInt64 OH_Int64;
+typedef InteropUInt64 OH_UInt64;
 typedef InteropInt8 OH_Int8;
 typedef InteropBoolean OH_Boolean;
 typedef InteropCharPtr OH_CharPtr;
@@ -197,8 +199,15 @@ typedef struct OH_XML_ParseOptions OH_XML_ParseOptions;
 typedef struct Opt_ParseOptions Opt_ParseOptions;
 typedef struct XML_Callback_Boolean_Void XML_Callback_Boolean_Void;
 typedef struct Opt_XML_Callback_Boolean_Void Opt_XML_Callback_Boolean_Void;
-typedef OH_Materialized OH_XML_ParseInfo;
+typedef struct XML_XmlPullParserPeer XML_XmlPullParserPeer;
+typedef struct XML_XmlPullParserPeer* OH_XML_XmlPullParser;
+typedef struct Opt_XmlPullParser Opt_XmlPullParser;
+typedef struct XML_ParseInfoPeer XML_ParseInfoPeer;
+typedef struct XML_ParseInfoPeer* OH_XML_ParseInfo;
 typedef struct Opt_ParseInfo Opt_ParseInfo;
+typedef struct XML_XmlSerializerPeer XML_XmlSerializerPeer;
+typedef struct XML_XmlSerializerPeer* OH_XML_XmlSerializer;
+typedef struct Opt_XmlSerializer Opt_XmlSerializer;
 typedef enum OH_XML_xml_EventType {
     OH_XML_XML_EVENT_TYPE_START_DOCUMENT = 0,
     OH_XML_XML_EVENT_TYPE_END_DOCUMENT = 1,
@@ -262,6 +271,14 @@ typedef struct Opt_XML_Callback_Boolean_Void {
     OH_Tag tag;
     XML_Callback_Boolean_Void value;
 } Opt_XML_Callback_Boolean_Void;
+typedef struct Opt_XmlPullParser {
+    OH_Tag tag;
+    OH_XML_XmlPullParser value;
+} Opt_XmlPullParser;
+typedef struct Opt_Number {
+    OH_Tag tag;
+    OH_Number value;
+} Opt_Number;
 typedef struct Opt_ParseInfo {
     OH_Tag tag;
     OH_XML_ParseInfo value;
@@ -274,6 +291,10 @@ typedef struct Opt_String {
     OH_Tag tag;
     OH_String value;
 } Opt_String;
+typedef struct Opt_XmlSerializer {
+    OH_Tag tag;
+    OH_XML_XmlSerializer value;
+} Opt_XmlSerializer;
 struct OH_XML_XmlSerializerHandleOpaque;
 typedef struct OH_XML_XmlSerializerHandleOpaque* OH_XML_XmlSerializerHandle;
 typedef struct OH_XML_XmlSerializerModifier {

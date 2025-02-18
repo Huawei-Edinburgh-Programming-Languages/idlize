@@ -2,9 +2,9 @@ import { checkArkoalaCallbacks } from "../../generated/arkts/peers/CallbacksChec
 import { XMLNativeModule } from "../../generated/arkts/XMLNativeModule"
 import { int32 } from "@koalaui/common"
 import { InteropNativeModule, NativeBuffer, DeserializerBase, registerNativeModuleLibraryName } from "@koalaui/interop";
-import { xml } from "../../generated/arkts"
+import { xml } from "../../generated/arkts/xml"
 
-export { xml } from "../../generated/arkts"
+export { xml } from "../../generated/arkts/xml"
 export type EventType = xml.EventType
 export type OHBuffer = NativeBuffer
 

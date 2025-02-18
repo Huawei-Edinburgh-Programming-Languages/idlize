@@ -156,7 +156,7 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: P
             generatedFiles.push('./peers/type_check.ts')
             generatedFiles.push('./' + path.basename(nativeModuleFileName, path.extname(nativeModuleFileName)))
         }
-        writeIntegratedFile(path.join(ohos.managedDir(), 'index.ts'),
+        writeIntegratedFile(path.join(ohos.managedDir(), peerLibrary.name.toLowerCase() + '.ts'),
             makeOhosModule(generatedFiles)
         )
     }

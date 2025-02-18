@@ -1,11 +1,20 @@
-import { int32 } from "@koalaui/common"
-import { pointer, KPointer, loadNativeModuleLibrary } from "@koalaui/interop"
+/*
+ * Copyright (c) 2024-2025 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-export enum CallbackKind {
-    Kind_Callback_Boolean_Void = 313269291,
-    Kind_Callback_EventType_ParseInfo_Boolean = 240036623,
-    Kind_Callback_String_String_Boolean = 923368928,
-}
+import { KInt, KBoolean, KFloat, KUInt, KStringPtr, KPointer, KNativePointer, KInt32ArrayPtr, KUint8ArrayPtr, KFloat32ArrayPtr, pointer, KInteropReturnBuffer, loadNativeModuleLibrary } from "@koalaui/interop"
+import { int32, float32 } from "@koalaui/common"
 
 export class XMLNativeModule {
     private static _isLoaded: boolean = false
@@ -32,73 +41,73 @@ export class XMLNativeModule {
         }
         throw new Error("Not implemented")
     }
-    static _XmlSerializer_setAttributes(self: KPointer, name: string, value: string): void {
+    static _XmlSerializer_setAttributes(ptr: KPointer, name: KStringPtr, value: KStringPtr): void {
         if ((this._LoadOnce()) == (true))
         {
-            return this._XmlSerializer_setAttributes(self, name, value)
+            return this._XmlSerializer_setAttributes(ptr, name, value)
         }
         throw new Error("Not implemented")
     }
-    static _XmlSerializer_addEmptyElement(self: KPointer, name: string): void {
+    static _XmlSerializer_addEmptyElement(ptr: KPointer, name: KStringPtr): void {
         if ((this._LoadOnce()) == (true))
         {
-            return this._XmlSerializer_addEmptyElement(self, name)
+            return this._XmlSerializer_addEmptyElement(ptr, name)
         }
         throw new Error("Not implemented")
     }
-    static _XmlSerializer_setDeclaration(self: KPointer): void {
+    static _XmlSerializer_setDeclaration(ptr: KPointer): void {
         if ((this._LoadOnce()) == (true))
         {
-            return this._XmlSerializer_setDeclaration(self)
+            return this._XmlSerializer_setDeclaration(ptr)
         }
         throw new Error("Not implemented")
     }
-    static _XmlSerializer_startElement(self: KPointer, name: string): void {
+    static _XmlSerializer_startElement(ptr: KPointer, name: KStringPtr): void {
         if ((this._LoadOnce()) == (true))
         {
-            return this._XmlSerializer_startElement(self, name)
+            return this._XmlSerializer_startElement(ptr, name)
         }
         throw new Error("Not implemented")
     }
-    static _XmlSerializer_endElement(self: KPointer): void {
+    static _XmlSerializer_endElement(ptr: KPointer): void {
         if ((this._LoadOnce()) == (true))
         {
-            return this._XmlSerializer_endElement(self)
+            return this._XmlSerializer_endElement(ptr)
         }
         throw new Error("Not implemented")
     }
-    static _XmlSerializer_setNamespace(self: KPointer, prefix: string, namespace_: string): void {
+    static _XmlSerializer_setNamespace(ptr: KPointer, prefix: KStringPtr, namespace_: KStringPtr): void {
         if ((this._LoadOnce()) == (true))
         {
-            return this._XmlSerializer_setNamespace(self, prefix, namespace_)
+            return this._XmlSerializer_setNamespace(ptr, prefix, namespace_)
         }
         throw new Error("Not implemented")
     }
-    static _XmlSerializer_setComment(self: KPointer, text: string): void {
+    static _XmlSerializer_setComment(ptr: KPointer, text: KStringPtr): void {
         if ((this._LoadOnce()) == (true))
         {
-            return this._XmlSerializer_setComment(self, text)
+            return this._XmlSerializer_setComment(ptr, text)
         }
         throw new Error("Not implemented")
     }
-    static _XmlSerializer_setCDATA(self: KPointer, text: string): void {
+    static _XmlSerializer_setCDATA(ptr: KPointer, text: KStringPtr): void {
         if ((this._LoadOnce()) == (true))
         {
-            return this._XmlSerializer_setCDATA(self, text)
+            return this._XmlSerializer_setCDATA(ptr, text)
         }
         throw new Error("Not implemented")
     }
-    static _XmlSerializer_setText(self: KPointer, text: string): void {
+    static _XmlSerializer_setText(ptr: KPointer, text: KStringPtr): void {
         if ((this._LoadOnce()) == (true))
         {
-            return this._XmlSerializer_setText(self, text)
+            return this._XmlSerializer_setText(ptr, text)
         }
         throw new Error("Not implemented")
     }
-    static _XmlSerializer_setDocType(self: KPointer, text: string): void {
+    static _XmlSerializer_setDocType(ptr: KPointer, text: KStringPtr): void {
         if ((this._LoadOnce()) == (true))
         {
-            return this._XmlSerializer_setDocType(self, text)
+            return this._XmlSerializer_setDocType(ptr, text)
         }
         throw new Error("Not implemented")
     }
@@ -116,73 +125,73 @@ export class XMLNativeModule {
         }
         throw new Error("Not implemented")
     }
-    static _ParseInfo_getColumnNumber(self: KPointer): number {
+    static _ParseInfo_getColumnNumber(ptr: KPointer): number {
         if ((this._LoadOnce()) == (true))
         {
-            return this._ParseInfo_getColumnNumber(self)
+            return this._ParseInfo_getColumnNumber(ptr)
         }
         throw new Error("Not implemented")
     }
-    static _ParseInfo_getDepth(self: KPointer): number {
+    static _ParseInfo_getDepth(ptr: KPointer): number {
         if ((this._LoadOnce()) == (true))
         {
-            return this._ParseInfo_getDepth(self)
+            return this._ParseInfo_getDepth(ptr)
         }
         throw new Error("Not implemented")
     }
-    static _ParseInfo_getLineNumber(self: KPointer): number {
+    static _ParseInfo_getLineNumber(ptr: KPointer): number {
         if ((this._LoadOnce()) == (true))
         {
-            return this._ParseInfo_getLineNumber(self)
+            return this._ParseInfo_getLineNumber(ptr)
         }
         throw new Error("Not implemented")
     }
-    static _ParseInfo_getName(self: KPointer): string {
+    static _ParseInfo_getName(ptr: KPointer): string {
         if ((this._LoadOnce()) == (true))
         {
-            return this._ParseInfo_getName(self)
+            return this._ParseInfo_getName(ptr)
         }
         throw new Error("Not implemented")
     }
-    static _ParseInfo_getNamespace(self: KPointer): string {
+    static _ParseInfo_getNamespace(ptr: KPointer): string {
         if ((this._LoadOnce()) == (true))
         {
-            return this._ParseInfo_getNamespace(self)
+            return this._ParseInfo_getNamespace(ptr)
         }
         throw new Error("Not implemented")
     }
-    static _ParseInfo_getPrefix(self: KPointer): string {
+    static _ParseInfo_getPrefix(ptr: KPointer): string {
         if ((this._LoadOnce()) == (true))
         {
-            return this._ParseInfo_getPrefix(self)
+            return this._ParseInfo_getPrefix(ptr)
         }
         throw new Error("Not implemented")
     }
-    static _ParseInfo_getText(self: KPointer): string {
+    static _ParseInfo_getText(ptr: KPointer): string {
         if ((this._LoadOnce()) == (true))
         {
-            return this._ParseInfo_getText(self)
+            return this._ParseInfo_getText(ptr)
         }
         throw new Error("Not implemented")
     }
-    static _ParseInfo_isEmptyElementTag(self: KPointer): boolean {
+    static _ParseInfo_isEmptyElementTag(ptr: KPointer): boolean {
         if ((this._LoadOnce()) == (true))
         {
-            return this._ParseInfo_isEmptyElementTag(self)
+            return this._ParseInfo_isEmptyElementTag(ptr)
         }
         throw new Error("Not implemented")
     }
-    static _ParseInfo_isWhitespace(self: KPointer): boolean {
+    static _ParseInfo_isWhitespace(ptr: KPointer): boolean {
         if ((this._LoadOnce()) == (true))
         {
-            return this._ParseInfo_isWhitespace(self)
+            return this._ParseInfo_isWhitespace(ptr)
         }
         throw new Error("Not implemented")
     }
-    static _ParseInfo_getAttributeCount(self: KPointer): number {
+    static _ParseInfo_getAttributeCount(ptr: KPointer): number {
         if ((this._LoadOnce()) == (true))
         {
-            return this._ParseInfo_getAttributeCount(self)
+            return this._ParseInfo_getAttributeCount(ptr)
         }
         throw new Error("Not implemented")
     }
@@ -200,25 +209,17 @@ export class XMLNativeModule {
         }
         throw new Error("Not implemented")
     }
-    static _XmlPullParser_parse(self: KPointer, thisArray: Uint8Array, thisLength: int32): void {
+    static _XmlPullParser_parse(ptr: KPointer, thisArray: Uint8Array, thisLength: int32): void {
         if ((this._LoadOnce()) == (true))
         {
-            return this._XmlPullParser_parse(self, thisArray, thisLength)
+            return this._XmlPullParser_parse(ptr, thisArray, thisLength)
         }
         throw new Error("Not implemented")
     }
-    static _XmlPullParser_parseXml(self: KPointer, thisArray: Uint8Array, thisLength: int32): void {
+    static _XmlPullParser_parseXml(ptr: KPointer, thisArray: Uint8Array, thisLength: int32): void {
         if ((this._LoadOnce()) == (true))
         {
-            return this._XmlPullParser_parseXml(self, thisArray, thisLength)
-        }
-        throw new Error("Not implemented")
-    }
-
-    static _MaterializeBuffer(data: KPointer, length: int32, resourceId: int32, holdPtr: KPointer, releasePtr: KPointer): ArrayBuffer {
-        if ((this._LoadOnce()) == (true))
-        {
-            return this._MaterializeBuffer(data, length, resourceId, holdPtr, releasePtr)
+            return this._XmlPullParser_parseXml(ptr, thisArray, thisLength)
         }
         throw new Error("Not implemented")
     }

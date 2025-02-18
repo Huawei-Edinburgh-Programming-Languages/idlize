@@ -1,5 +1,6 @@
 import { InteropNativeModule, ResourceHolder } from "@koalaui/interop"
-import { Deserializer, deserializeAndCallCallback } from "./xmlSerializer"
+import { Deserializer } from "./Deserializer"
+import { deserializeAndCallCallback } from "./CallbackDeserializeCall"
 
 enum CallbackEventKind {
     Event_CallCallback = 0,

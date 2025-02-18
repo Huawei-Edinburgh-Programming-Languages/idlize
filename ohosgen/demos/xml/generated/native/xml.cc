@@ -270,12 +270,71 @@ inline OH_XML_RuntimeType runtimeType(const Opt_XML_Callback_Boolean_Void& value
     return (value.tag != INTEROP_TAG_UNDEFINED) ? (INTEROP_RUNTIME_OBJECT) : (INTEROP_RUNTIME_UNDEFINED);
 }
 template <>
-inline void WriteToString(std::string* result, const Opt_ParseInfo* value) {
+inline OH_XML_RuntimeType runtimeType(const OH_XML_XmlPullParser& value)
+{
+    return INTEROP_RUNTIME_OBJECT;
+}
+template <>
+inline void WriteToString(std::string* result, const OH_XML_XmlPullParser value) {
+    WriteToString(result, static_cast<InteropNativePointer>(value));
+}
+template <>
+inline void WriteToString(std::string* result, const Opt_XmlPullParser* value) {
+    result->append("{.tag=");
+    result->append(tagNameExact((OH_Tag)(value->tag)));
+    result->append(", .value=");
+    if (value->tag != INTEROP_TAG_UNDEFINED) {
+        WriteToString(result, value->value);
+    } else {
+        OH_Undefined undefined = { 0 };
+        WriteToString(result, undefined);
+    }
+    result->append("}");
+}
+template <>
+inline OH_XML_RuntimeType runtimeType(const Opt_XmlPullParser& value)
+{
+    return (value.tag != INTEROP_TAG_UNDEFINED) ? (INTEROP_RUNTIME_OBJECT) : (INTEROP_RUNTIME_UNDEFINED);
+}
+template <>
+inline OH_XML_RuntimeType runtimeType(const OH_Number& value)
+{
+    return INTEROP_RUNTIME_NUMBER;
+}
+template <>
+inline void WriteToString(std::string* result, const Opt_Number* value) {
     result->append("{.tag=");
     result->append(tagNameExact((OH_Tag)(value->tag)));
     result->append(", .value=");
     if (value->tag != INTEROP_TAG_UNDEFINED) {
         WriteToString(result, &value->value);
+    } else {
+        OH_Undefined undefined = { 0 };
+        WriteToString(result, undefined);
+    }
+    result->append("}");
+}
+template <>
+inline OH_XML_RuntimeType runtimeType(const Opt_Number& value)
+{
+    return (value.tag != INTEROP_TAG_UNDEFINED) ? (INTEROP_RUNTIME_OBJECT) : (INTEROP_RUNTIME_UNDEFINED);
+}
+template <>
+inline OH_XML_RuntimeType runtimeType(const OH_XML_ParseInfo& value)
+{
+    return INTEROP_RUNTIME_OBJECT;
+}
+template <>
+inline void WriteToString(std::string* result, const OH_XML_ParseInfo value) {
+    WriteToString(result, static_cast<InteropNativePointer>(value));
+}
+template <>
+inline void WriteToString(std::string* result, const Opt_ParseInfo* value) {
+    result->append("{.tag=");
+    result->append(tagNameExact((OH_Tag)(value->tag)));
+    result->append(", .value=");
+    if (value->tag != INTEROP_TAG_UNDEFINED) {
+        WriteToString(result, value->value);
     } else {
         OH_Undefined undefined = { 0 };
         WriteToString(result, undefined);
@@ -362,7 +421,37 @@ inline OH_XML_RuntimeType runtimeType(const Opt_String& value)
 {
     return (value.tag != INTEROP_TAG_UNDEFINED) ? (INTEROP_RUNTIME_OBJECT) : (INTEROP_RUNTIME_UNDEFINED);
 }
+template <>
+inline OH_XML_RuntimeType runtimeType(const OH_XML_XmlSerializer& value)
+{
+    return INTEROP_RUNTIME_OBJECT;
+}
+template <>
+inline void WriteToString(std::string* result, const OH_XML_XmlSerializer value) {
+    WriteToString(result, static_cast<InteropNativePointer>(value));
+}
+template <>
+inline void WriteToString(std::string* result, const Opt_XmlSerializer* value) {
+    result->append("{.tag=");
+    result->append(tagNameExact((OH_Tag)(value->tag)));
+    result->append(", .value=");
+    if (value->tag != INTEROP_TAG_UNDEFINED) {
+        WriteToString(result, value->value);
+    } else {
+        OH_Undefined undefined = { 0 };
+        WriteToString(result, undefined);
+    }
+    result->append("}");
+}
+template <>
+inline OH_XML_RuntimeType runtimeType(const Opt_XmlSerializer& value)
+{
+    return (value.tag != INTEROP_TAG_UNDEFINED) ? (INTEROP_RUNTIME_OBJECT) : (INTEROP_RUNTIME_UNDEFINED);
+}
 class Serializer : public SerializerBase {
+    public:
+    Serializer(CallbackResourceHolder* resourceHolder = nullptr) : SerializerBase(resourceHolder) {
+    }
     public:
     Serializer(uint8_t* data, OH_UInt32 dataLength = 0, CallbackResourceHolder* resourceHolder = nullptr) : SerializerBase(data, dataLength, resourceHolder) {
     }
@@ -416,10 +505,20 @@ class Serializer : public SerializerBase {
             valueSerializer.writePointer(reinterpret_cast<OH_NativePointer>(value_tokenValueCallbackFunction_value.callSync));
         }
     }
+    void writeXmlPullParser(OH_XML_XmlPullParser value)
+    {
+        Serializer& valueSerializer = *this;
+        valueSerializer.writePointer(value);
+    }
     void writeParseInfo(OH_XML_ParseInfo value)
     {
         Serializer& valueSerializer = *this;
-        valueSerializer.writePointer(value.ptr);
+        valueSerializer.writePointer(value);
+    }
+    void writeXmlSerializer(OH_XML_XmlSerializer value)
+    {
+        Serializer& valueSerializer = *this;
+        valueSerializer.writePointer(value);
     }
 };
 
@@ -473,11 +572,23 @@ class Deserializer : public DeserializerBase {
         value.tokenValueCallbackFunction = tokenValueCallbackFunction_buf;
         return value;
     }
+    OH_XML_XmlPullParser readXmlPullParser()
+    {
+        Deserializer& valueDeserializer = *this;
+        OH_NativePointer ptr = valueDeserializer.readPointer();
+        return static_cast<OH_XML_XmlPullParser>(ptr);
+    }
     OH_XML_ParseInfo readParseInfo()
     {
         Deserializer& valueDeserializer = *this;
         OH_NativePointer ptr = valueDeserializer.readPointer();
-        return { ptr };
+        return static_cast<OH_XML_ParseInfo>(ptr);
+    }
+    OH_XML_XmlSerializer readXmlSerializer()
+    {
+        Deserializer& valueDeserializer = *this;
+        OH_NativePointer ptr = valueDeserializer.readPointer();
+        return static_cast<OH_XML_XmlSerializer>(ptr);
     }
 };
 OH_XML_XmlSerializerHandle XmlSerializer_constructImpl(const OH_Buffer* buffer, const Opt_String* encoding);
@@ -782,30 +893,30 @@ void deserializeAndCallCallbackSync(OH_XML_VMContext vmContext, OH_Int32 kind, u
 }
 void callManagedCallback_Boolean_Void(OH_Int32 resourceId, OH_Boolean value)
 {
-    CallbackBuffer __buffer = {{}, {}};
-    const OH_XML_CallbackResource __callbackResource = {resourceId, holdManagedCallbackResource, releaseManagedCallbackResource};
-    __buffer.resourceHolder.holdCallbackResource(&__callbackResource);
-    Serializer argsSerializer = Serializer(__buffer.buffer, sizeof(__buffer.buffer), &(__buffer.resourceHolder));
+    CallbackBuffer _buffer = {{}, {}};
+    const OH_XML_CallbackResource _callbackResource = {resourceId, holdManagedCallbackResource, releaseManagedCallbackResource};
+    _buffer.resourceHolder.holdCallbackResource(&_callbackResource);
+    Serializer argsSerializer = Serializer(_buffer.buffer, sizeof(_buffer.buffer), &(_buffer.resourceHolder));
     argsSerializer.writeInt32(Kind_Callback_Boolean_Void);
     argsSerializer.writeInt32(resourceId);
     argsSerializer.writeBoolean(value);
-    enqueueCallback(&__buffer);
+    enqueueCallback(&_buffer);
 }
 void callManagedCallback_Boolean_VoidSync(OH_XML_VMContext vmContext, OH_Int32 resourceId, OH_Boolean value)
 {
-    uint8_t __buffer[60 * 4];
-    Serializer argsSerializer = Serializer(__buffer, sizeof(__buffer), nullptr);
+    uint8_t _buffer[60 * 4];
+    Serializer argsSerializer = Serializer(_buffer, sizeof(_buffer), nullptr);
     argsSerializer.writeInt32(Kind_Callback_Boolean_Void);
     argsSerializer.writeInt32(resourceId);
     argsSerializer.writeBoolean(value);
-    KOALA_INTEROP_CALL_VOID(vmContext, 1, sizeof(__buffer), __buffer);
+    KOALA_INTEROP_CALL_VOID(vmContext, 1, sizeof(_buffer), _buffer);
 }
 void callManagedCallback_EventType_ParseInfo_Boolean(OH_Int32 resourceId, OH_XML_xml_EventType eventType, OH_XML_ParseInfo value, XML_Callback_Boolean_Void continuation)
 {
-    CallbackBuffer __buffer = {{}, {}};
-    const OH_XML_CallbackResource __callbackResource = {resourceId, holdManagedCallbackResource, releaseManagedCallbackResource};
-    __buffer.resourceHolder.holdCallbackResource(&__callbackResource);
-    Serializer argsSerializer = Serializer(__buffer.buffer, sizeof(__buffer.buffer), &(__buffer.resourceHolder));
+    CallbackBuffer _buffer = {{}, {}};
+    const OH_XML_CallbackResource _callbackResource = {resourceId, holdManagedCallbackResource, releaseManagedCallbackResource};
+    _buffer.resourceHolder.holdCallbackResource(&_callbackResource);
+    Serializer argsSerializer = Serializer(_buffer.buffer, sizeof(_buffer.buffer), &(_buffer.resourceHolder));
     argsSerializer.writeInt32(Kind_Callback_EventType_ParseInfo_Boolean);
     argsSerializer.writeInt32(resourceId);
     argsSerializer.writeInt32(static_cast<OH_XML_xml_EventType>(eventType));
@@ -813,12 +924,12 @@ void callManagedCallback_EventType_ParseInfo_Boolean(OH_Int32 resourceId, OH_XML
     argsSerializer.writeCallbackResource(continuation.resource);
     argsSerializer.writePointer(reinterpret_cast<OH_NativePointer>(continuation.call));
     argsSerializer.writePointer(reinterpret_cast<OH_NativePointer>(continuation.callSync));
-    enqueueCallback(&__buffer);
+    enqueueCallback(&_buffer);
 }
 void callManagedCallback_EventType_ParseInfo_BooleanSync(OH_XML_VMContext vmContext, OH_Int32 resourceId, OH_XML_xml_EventType eventType, OH_XML_ParseInfo value, XML_Callback_Boolean_Void continuation)
 {
-    uint8_t __buffer[60 * 4];
-    Serializer argsSerializer = Serializer(__buffer, sizeof(__buffer), nullptr);
+    uint8_t _buffer[60 * 4];
+    Serializer argsSerializer = Serializer(_buffer, sizeof(_buffer), nullptr);
     argsSerializer.writeInt32(Kind_Callback_EventType_ParseInfo_Boolean);
     argsSerializer.writeInt32(resourceId);
     argsSerializer.writeInt32(static_cast<OH_XML_xml_EventType>(eventType));
@@ -826,14 +937,14 @@ void callManagedCallback_EventType_ParseInfo_BooleanSync(OH_XML_VMContext vmCont
     argsSerializer.writeCallbackResource(continuation.resource);
     argsSerializer.writePointer(reinterpret_cast<OH_NativePointer>(continuation.call));
     argsSerializer.writePointer(reinterpret_cast<OH_NativePointer>(continuation.callSync));
-    KOALA_INTEROP_CALL_VOID(vmContext, 1, sizeof(__buffer), __buffer);
+    KOALA_INTEROP_CALL_VOID(vmContext, 1, sizeof(_buffer), _buffer);
 }
 void callManagedCallback_String_String_Boolean(OH_Int32 resourceId, OH_String name, OH_String value, XML_Callback_Boolean_Void continuation)
 {
-    CallbackBuffer __buffer = {{}, {}};
-    const OH_XML_CallbackResource __callbackResource = {resourceId, holdManagedCallbackResource, releaseManagedCallbackResource};
-    __buffer.resourceHolder.holdCallbackResource(&__callbackResource);
-    Serializer argsSerializer = Serializer(__buffer.buffer, sizeof(__buffer.buffer), &(__buffer.resourceHolder));
+    CallbackBuffer _buffer = {{}, {}};
+    const OH_XML_CallbackResource _callbackResource = {resourceId, holdManagedCallbackResource, releaseManagedCallbackResource};
+    _buffer.resourceHolder.holdCallbackResource(&_callbackResource);
+    Serializer argsSerializer = Serializer(_buffer.buffer, sizeof(_buffer.buffer), &(_buffer.resourceHolder));
     argsSerializer.writeInt32(Kind_Callback_String_String_Boolean);
     argsSerializer.writeInt32(resourceId);
     argsSerializer.writeString(name);
@@ -841,12 +952,12 @@ void callManagedCallback_String_String_Boolean(OH_Int32 resourceId, OH_String na
     argsSerializer.writeCallbackResource(continuation.resource);
     argsSerializer.writePointer(reinterpret_cast<OH_NativePointer>(continuation.call));
     argsSerializer.writePointer(reinterpret_cast<OH_NativePointer>(continuation.callSync));
-    enqueueCallback(&__buffer);
+    enqueueCallback(&_buffer);
 }
 void callManagedCallback_String_String_BooleanSync(OH_XML_VMContext vmContext, OH_Int32 resourceId, OH_String name, OH_String value, XML_Callback_Boolean_Void continuation)
 {
-    uint8_t __buffer[60 * 4];
-    Serializer argsSerializer = Serializer(__buffer, sizeof(__buffer), nullptr);
+    uint8_t _buffer[60 * 4];
+    Serializer argsSerializer = Serializer(_buffer, sizeof(_buffer), nullptr);
     argsSerializer.writeInt32(Kind_Callback_String_String_Boolean);
     argsSerializer.writeInt32(resourceId);
     argsSerializer.writeString(name);
@@ -854,7 +965,7 @@ void callManagedCallback_String_String_BooleanSync(OH_XML_VMContext vmContext, O
     argsSerializer.writeCallbackResource(continuation.resource);
     argsSerializer.writePointer(reinterpret_cast<OH_NativePointer>(continuation.call));
     argsSerializer.writePointer(reinterpret_cast<OH_NativePointer>(continuation.callSync));
-    KOALA_INTEROP_CALL_VOID(vmContext, 1, sizeof(__buffer), __buffer);
+    KOALA_INTEROP_CALL_VOID(vmContext, 1, sizeof(_buffer), _buffer);
 }
 OH_NativePointer getManagedCallbackCaller(CallbackKind kind)
 {
