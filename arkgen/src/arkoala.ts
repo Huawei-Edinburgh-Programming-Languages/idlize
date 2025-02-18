@@ -30,7 +30,7 @@ import {
     NativeModule, printArkUIGeneratedNativeModule, printArkUILibrariesLoader,
     printCJArkUIGeneratedNativeFunctions, printCJPredefinedNativeFunctions,
     printPredefinedNativeModule, printTSArkUIGeneratedEmptyNativeModule,
-    printTSPredefinedEmptyNativeModule, printGlobal, layout, writeFile, writeIntegratedFile, install,
+    printTSPredefinedEmptyNativeModule, printGlobal, writeFile, writeIntegratedFile, install,
     copyDir,
     ModifierFileOptions,
     MultiFileModifiersVisitor,
@@ -57,6 +57,7 @@ import {
     generateEventReceiverName,
     collectCallbacks,
     groupCallbacks,
+    layout,
 } from "@idlizer/libohos"
 import { ArkoalaInstall, LibaceInstall } from "./ArkoalaInstall"
 import { ArkPrimitiveTypesInstance } from "./ArkPrimitiveType"

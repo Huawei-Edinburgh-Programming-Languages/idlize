@@ -26,7 +26,6 @@ import {
     PeerLibrary,
 } from "@idlizer/core";
 import {
-    layout,
     writeIntegratedFile,
     createMaterializedPrinter,
     printGlobal,
@@ -46,11 +45,18 @@ import {
 } from '@idlizer/libohos';
 import { OhosInstall } from "./OhosInstall"
 import { generateNativeOhos, suggestLibraryName } from './OhosNativeVisitor';
+import { layout, LayoutMode } from './layout';
 
 export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: PeerGeneratorConfiguration) {
     const origGenConfig = generatorConfiguration()
     setDefaultConfiguration(config)
-    peerLibrary.setFileLayout(layout(peerLibrary, "OH", `org/openharmony/${config.LibraryPrefix}`))
+    peerLibrary.setFileLayout(layout(
+        peerLibrary,
+        "OH",
+        `org/openharmony/${config.LibraryPrefix}`,
+        opts?.alternativeLayout ? LayoutMode.ARKTS12 : LayoutMode.NORMAL,
+        peerLibrary.name
+    ))
 
     const ohos = new OhosInstall(outDir, peerLibrary.language)
 
@@ -147,7 +153,7 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: P
 
     // managed-index
 
-    if ([Language.TS, Language.ARKTS].includes(peerLibrary.language)) {
+    if ([Language.TS, Language.ARKTS].includes(peerLibrary.language) && !opts?.noIndex) {
         const generatedFiles = [...installed]
         ohosManagedFiles.forEach(it => {
             generatedFiles.push('./' + path.relative(ohos.managedDir(), it))

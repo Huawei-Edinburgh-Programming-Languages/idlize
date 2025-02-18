@@ -15,7 +15,7 @@
 
 import * as fs from 'node:fs'
 import * as path from 'node:path'
-import { isMaterialized, Language, LayoutManagerStrategy, LayoutNodeRole, PeerLibrary } from '@idlizer/core'
+import { Language, LayoutManagerStrategy, LayoutNodeRole, PeerLibrary } from '@idlizer/core'
 import * as idl from '@idlizer/core'
 import { isComponentDeclaration } from './ComponentsCollector'
 
@@ -53,11 +53,11 @@ export function HandwrittenModule(language: Language) {
     }
 }
 
-function toFileName(name:string) {
+export function toFileName(name:string) {
     return name.split(/[_-]/gi).map(it => idl.capitalize(it)).join('')
 }
 
-abstract class CommonLayoutBase implements LayoutManagerStrategy {
+export abstract class CommonLayoutBase implements LayoutManagerStrategy {
     constructor(
         protected library: PeerLibrary,
         protected prefix: string = "",
@@ -66,7 +66,7 @@ abstract class CommonLayoutBase implements LayoutManagerStrategy {
 
 }
 
-function suggestTSPackageName(library: PeerLibrary, node: idl.IDLEntry): string {
+export function suggestTSPackageName(library: PeerLibrary, node: idl.IDLEntry): string {
     const packageName = idl.getPackageName(node)
     return `@${packageName.split(".").join("/")}`
 }
@@ -90,7 +90,7 @@ class TsLayout extends CommonLayoutBase {
             if (idl.isBuilderClass(node)) {
                 return `${this.prefix}${toFileName(node.name)}Builder`
             }
-            if (isMaterialized(node, this.library)) {
+            if (idl.isMaterialized(node, this.library)) {
                 const name = node.name.endsWith('Internal') ? node.name.substring(0, node.name.length - 8) : node.name
                 return `${this.prefix}${toFileName(name)}Materialized`
             }
@@ -124,11 +124,11 @@ class TsLayout extends CommonLayoutBase {
 
     /////
 
-    resolve(node: idl.IDLEntry, role: LayoutNodeRole): string {
+    resolve(node: idl.IDLEntry, role: idl.LayoutNodeRole): string {
         switch (role) {
-            case LayoutNodeRole.INTERFACE: return this.selectInterface(node)
-            case LayoutNodeRole.PEER: return this.selectPeer(node)
-            case LayoutNodeRole.GLOBAL: return this.selectGlobal(node)
+            case idl.LayoutNodeRole.INTERFACE: return this.selectInterface(node)
+            case idl.LayoutNodeRole.PEER: return this.selectPeer(node)
+            case idl.LayoutNodeRole.GLOBAL: return this.selectGlobal(node)
         }
     }
 }
@@ -136,15 +136,15 @@ class TsLayout extends CommonLayoutBase {
 class ArkTsLayout extends TsLayout { }
 
 class JavaLayout extends CommonLayoutBase {
-    constructor(library: PeerLibrary, prefix: string, private packagePath: string) {
+    constructor(library: idl.PeerLibrary, prefix: string, private packagePath: string) {
         super(library, prefix)
     }
     private getPath(file:string):string {
         return path.join(this.packagePath, file)
     }
-    resolve(node: idl.IDLNode, role: LayoutNodeRole): string {
+    resolve(node: idl.IDLNode, role: idl.LayoutNodeRole): string {
         switch (role) {
-            case LayoutNodeRole.INTERFACE: {
+            case idl.LayoutNodeRole.INTERFACE: {
                 if (idl.isEntry(node)) {
                     const ns = idl.getNamespaceName(node)
                     if (ns !== '') {
@@ -158,7 +158,7 @@ class JavaLayout extends CommonLayoutBase {
                     if (idl.isBuilderClass(node)) {
                         return this.getPath(`${this.prefix}${toFileName(node.name)}Builder`)
                     }
-                    if (isMaterialized(node, this.library)) {
+                    if (idl.isMaterialized(node, this.library)) {
                         if (idl.isInterfaceSubkind(node)) {
                             return this.getPath(node.name + 'Internal')
                         }
@@ -168,7 +168,7 @@ class JavaLayout extends CommonLayoutBase {
                 }
                 return this.getPath(`Common`)
             }
-            case LayoutNodeRole.PEER: {
+            case idl.LayoutNodeRole.PEER: {
                 if (idl.isInterface(node)) {
                     if (isComponentDeclaration(this.library, node)) {
                         return this.getPath(`peers/${this.prefix}${toFileName(node.name)}Peer`)
@@ -176,7 +176,7 @@ class JavaLayout extends CommonLayoutBase {
                 }
                 return this.getPath(`CommonPeer`)
             }
-            case LayoutNodeRole.GLOBAL: {
+            case idl.LayoutNodeRole.GLOBAL: {
                 return 'GlobalScope'
             }
         }
@@ -187,9 +187,9 @@ class CJLayout extends CommonLayoutBase {
     private getPath(file:string):string {
         return path.join('.', file)
     }
-    resolve(node: idl.IDLNode, role: LayoutNodeRole): string {
+    resolve(node: idl.IDLNode, role: idl.LayoutNodeRole): string {
         switch (role) {
-            case LayoutNodeRole.INTERFACE: {
+            case idl.LayoutNodeRole.INTERFACE: {
                 if (idl.isEntry(node)) {
                     const ns = idl.getNamespaceName(node)
                     if (ns !== '') {
@@ -203,7 +203,7 @@ class CJLayout extends CommonLayoutBase {
                     if (idl.isBuilderClass(node)) {
                         return this.getPath(`${this.prefix}${toFileName(node.name)}Builder`)
                     }
-                    if (isMaterialized(node, this.library)) {
+                    if (idl.isMaterialized(node, this.library)) {
                         if (idl.isInterfaceSubkind(node)) {
                             return this.getPath(toFileName(node.name) + 'Internal')
                         }
@@ -213,7 +213,7 @@ class CJLayout extends CommonLayoutBase {
                 }
                 return this.getPath(`Common`)
             }
-            case LayoutNodeRole.PEER: {
+            case idl.LayoutNodeRole.PEER: {
                 if (idl.isInterface(node)) {
                     if (isComponentDeclaration(this.library, node)) {
                         return this.getPath(`peers/${this.prefix}${toFileName(node.name)}Peer`)
@@ -221,7 +221,7 @@ class CJLayout extends CommonLayoutBase {
                 }
                 return this.getPath(`CommonPeer`)
             }
-            case LayoutNodeRole.GLOBAL: {
+            case idl.LayoutNodeRole.GLOBAL: {
                 return 'GlobalScope'
             }
         }
@@ -230,7 +230,7 @@ class CJLayout extends CommonLayoutBase {
 
 ////////////////////////////////////////////////////////
 
-export function layout(library: PeerLibrary, prefix: string = '', packagePath: string = ''): LayoutManagerStrategy {
+export function layout(library: idl.PeerLibrary, prefix: string = '', packagePath: string = ''): idl.LayoutManagerStrategy {
     switch(library.language) {
         case idl.Language.TS: return new TsLayout(library, prefix)
         case idl.Language.ARKTS: return new ArkTsLayout(library, prefix)

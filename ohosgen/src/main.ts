@@ -73,6 +73,8 @@ const options = program
     .option('--options-file <path>', 'Path to generator configuration options file (appends to defaults)')
     .option('--override-options-file <path>', 'Path to generator configuration options file (replaces defaults)')
     .option('--arkts-extension <string> [.ts|.ets]', "Generated ArkTS language files extension.", ".ts")
+    .option('--arkts12-layout', 'Enable special layout for ArkTs1.2 Runtime')
+    .option('--no-index-file', 'Do not generate index file')
     .parse()
     .opts()
 
@@ -99,7 +101,7 @@ if (options.idl2peer) {
     idlLibrary.files.push(...scanNotPredefinedDirectory(inputDirs[0]))
     new IdlPeerProcessor(idlLibrary).process()
 
-    generateTarget(idlLibrary, outDir, language)
+    generateTarget(idlLibrary, outDir)
 
     didJob = true
 }
@@ -171,7 +173,7 @@ if (options.dts2peer) {
                 const peerProcessor = new IdlPeerProcessor(idlLibrary)
                 peerProcessor.process()
 
-                generateTarget(idlLibrary, outDir, lang)
+                generateTarget(idlLibrary, outDir)
             }
         }
     )
@@ -184,7 +186,7 @@ if (!didJob) {
 
 function processInputFiles(files: string[] | string | undefined): string[] {
     if (!files) return []
-    
+
     const processPath = (path: string) => {
         const trimmedPath = path.trim()
         if (!fs.existsSync(trimmedPath)) {
@@ -198,11 +200,11 @@ function processInputFiles(files: string[] | string | undefined): string[] {
         const filesList = files[0].split(',').map(f => f.trim()).filter(Boolean)
         return filesList.filter(processPath)
     }
-    
+
     if (Array.isArray(files)) {
         return files.map(f => f.trim()).filter(Boolean).filter(processPath)
     }
-    
+
     const filesList = files.split(',').map(f => f.trim()).filter(Boolean)
     return filesList.filter(processPath)
 }
@@ -220,6 +222,9 @@ function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language)
         LibraryPrefix: `${idlLibrary.name.toUpperCase()}_`,
         GenerateUnused: true,
         ApiVersion: apiVersion,
+    }, {
+        alternativeLayout: !!options.arkts12Layout,
+        noIndex: !options.indexFile
     })
 
     if (options.plugin) {
