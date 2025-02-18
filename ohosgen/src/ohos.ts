@@ -24,6 +24,7 @@ import {
     NativeModuleType,
     setDefaultConfiguration,
     PeerLibrary,
+    when,
 } from "@idlizer/core";
 import {
     writeIntegratedFile,
@@ -148,7 +149,17 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: P
             createMaterializedPrinter(false),
             printInterfaceData,
             printGlobal,
-        ]
+        ],
+        {
+            overridePath: new Map([
+                ['#component', './ets']
+            ]),
+            purgeImports: peerLibrary.language === Language.CJ,
+            appendHeader: when(
+                peerLibrary.language === Language.CJ,
+                () => ['package idlize', 'import std.collection.*', 'import Interop.*']
+            )
+        }
     )
 
     // managed-index

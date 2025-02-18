@@ -15,7 +15,7 @@
 import * as fs from "fs"
 import * as path from "path"
 import * as idl from "@idlizer/core/idl"
-import { Language, IndentedPrinter, PeerLibrary, CppLanguageWriter, createEmptyReferenceResolver, LanguageWriter, ReferenceResolver, Method, MethodSignature, PrintHint, PrinterLike, NamedMethodSignature, printMethodDeclaration, CppConvertor } from '@idlizer/core'
+import { Language, IndentedPrinter, PeerLibrary, CppLanguageWriter, createEmptyReferenceResolver, LanguageWriter, ReferenceResolver, Method, MethodSignature, PrintHint, PrinterLike, NamedMethodSignature, printMethodDeclaration, CppConvertor, when } from '@idlizer/core'
 import {
     dummyImplementations, gniFile, libraryCcDeclaration,
     makeArkuiModule, makeCallbacksKinds, makeTSDeserializer, makeArkTSDeserializer,
@@ -200,7 +200,14 @@ export function generateArkoalaFromIdl(config: {
         [
             createMaterializedPrinter(config.dumpSerialized),
             printGlobal
-        ]
+        ],
+        {
+            purgeImports: peerLibrary.language === Language.CJ,
+            appendHeader: when(
+                peerLibrary.language === Language.CJ,
+                () => ['package idlize', 'import std.collection.*', 'import Interop.*']
+            )
+        }
     )
 
     if (peerLibrary.language == Language.TS || peerLibrary.language == Language.ARKTS) {

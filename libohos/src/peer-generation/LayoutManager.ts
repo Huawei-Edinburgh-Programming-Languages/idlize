@@ -37,12 +37,17 @@ export interface PrinterFunction {
 }
 export type Printer = PrinterClass | PrinterFunction
 
-export function install(outDir:string, library:PeerLibrary, printers:Printer[]): string[] {
+interface InstallOptions {
+    overridePath?: Map<string, string>
+    purgeImports?: boolean
+    appendHeader?: (file:string) => string[]
+}
+export function install(outDir:string, library:PeerLibrary, printers:Printer[], options?: InstallOptions): string[] {
     const storage = new Map<string, PrinterResult[]>()
 
     // groupBy
     printers.flatMap(it => typeof it === 'function' ? it(library) : it.print(library)).forEach(it => {
-        const filePath = library.layout.resolve(it.over.node, it.over.role)
+        const filePath = library.layout.resolveFile(it.over.node, it.over.role)
         if (!storage.has(filePath)) {
             storage.set(filePath, [])
         }
@@ -51,7 +56,10 @@ export function install(outDir:string, library:PeerLibrary, printers:Printer[]):
 
     // print
     Array.from(storage.entries()).forEach(([filePath, results]) => {
-        const installPath = join(outDir, filePath) + library.language.extension
+        let installPath = join(outDir, filePath) + library.language.extension
+        if (options?.overridePath && options.overridePath.has(installPath)) {
+            installPath = options.overridePath.get(installPath)!
+        }
         results.sort((a, b) => (a.weight ?? 0) - (b.weight ?? 0))
 
         const imports = new ImportsCollector()
@@ -61,9 +69,12 @@ export function install(outDir:string, library:PeerLibrary, printers:Printer[]):
             imports.merge(record.collector)
             content = content.concat(record.content.getOutput())
         }
-        if (library.language === Language.CJ) {
+        if (options?.purgeImports) {
             imports.clear()
-            content = ['package idlize', 'import std.collection.*', 'import Interop.*'].concat(content)
+        }
+
+        if (options?.appendHeader) {
+            content = options.appendHeader(installPath).concat(content)
         }
 
         const text = tsCopyrightAndWarning(

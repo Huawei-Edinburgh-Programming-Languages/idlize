@@ -62,7 +62,7 @@ export abstract class CommonLayoutBase implements LayoutManagerStrategy {
         protected library: PeerLibrary,
         protected prefix: string = "",
     ) {}
-    abstract resolve(node: idl.IDLEntry, role: LayoutNodeRole): string
+    abstract resolve(node: idl.IDLEntry, role: LayoutNodeRole): string | [string, string]
 
 }
 
@@ -124,7 +124,7 @@ class TsLayout extends CommonLayoutBase {
 
     /////
 
-    resolve(node: idl.IDLEntry, role: idl.LayoutNodeRole): string {
+    resolve(node: idl.IDLEntry, role: idl.LayoutNodeRole): string | [string, string] {
         switch (role) {
             case idl.LayoutNodeRole.INTERFACE: return this.selectInterface(node)
             case idl.LayoutNodeRole.PEER: return this.selectPeer(node)

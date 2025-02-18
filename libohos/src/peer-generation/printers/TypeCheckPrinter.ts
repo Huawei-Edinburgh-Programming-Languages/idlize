@@ -15,10 +15,6 @@ import { collectDeclItself, collectDeclDependencies } from '../ImportsCollectorU
 import { DependenciesCollector } from '../idl/IdlDependenciesCollector';
 import { isPredefined, isSystemEntry } from '../idl/IdlPeerGeneratorVisitor';
 
-export function importTypeChecker(library: PeerLibrary, imports: ImportsCollector): void {
-    imports.addFeature("TypeChecker", "#components")
-}
-
 class FieldRecord {
     constructor(public type: idl.IDLType, public name: string, public optional: boolean = false) { }
 }

@@ -22,7 +22,7 @@ export enum LayoutNodeRole {
 }
 
 export interface LayoutManagerStrategy {
-    resolve(node:IDLEntry, role:LayoutNodeRole): string
+    resolve(node:IDLEntry, role:LayoutNodeRole): string | [importPath:string, filePath:string]
 }
 
 export class LayoutManager {
@@ -31,8 +31,25 @@ export class LayoutManager {
     ) { }
 
     resolve(node:IDLEntry, role:LayoutNodeRole): string {
-        return this.strategy.resolve(node, role)
+        return this.resolveImport(node, role)
     }
+
+    resolveFile(node:IDLEntry, role:LayoutNodeRole): string {
+        const result = this.strategy.resolve(node, role)
+        if (Array.isArray(result)) {
+            return result[1]
+        }
+        return result
+    }
+
+    resolveImport(node:IDLEntry, role:LayoutNodeRole): string {
+        const result = this.strategy.resolve(node, role)
+        if (Array.isArray(result)) {
+            return result[0]
+        }
+        return result
+    }
+
     ////////////////////////////////////////////////////////////////////
 
     static Empty(): LayoutManager {

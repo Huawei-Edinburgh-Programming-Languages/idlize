@@ -674,3 +674,7 @@ export function lazy<T>(factory: () => T): Lazy<T> {
 export function isInNamespace(node: idl.IDLEntry): boolean {
     return idl.getNamespacesPathFor(node).length > 0
 }
+
+export function when<T>(cond:boolean, x:T): T | undefined {
+    return cond ? x : undefined
+}
