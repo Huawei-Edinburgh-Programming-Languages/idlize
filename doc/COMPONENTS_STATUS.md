@@ -1489,7 +1489,7 @@
 |`enableNativeEmbedMode`| Function | Erokhin Ilya | done |  | |
 |`onNativeEmbedLifecycleChange`| Function | Erokhin Ilya, Andrey Khudenkikh | done |  | |
 |`onNativeEmbedVisibilityChange`| Function | Erokhin Ilya | done |  | |
-|`onNativeEmbedGestureEvent`| Function | Erokhin Ilya, Andrey Khudenkikh | done |  | |
+|`onNativeEmbedGestureEvent`| Function | Erokhin Ilya, Andrey Khudenkikh, Tuzhilkin Ivan | testkipped |  | Optional EventResult part is not covered in UT |
 |`copyOptions`| Function | Erokhin Ilya | done |  | |
 |`onOverrideUrlLoading`| Function | Erokhin Ilya, Maksimov Nikita | done |  | |
 |`textAutosizing`| Function | Erokhin Ilya | done |  | |
