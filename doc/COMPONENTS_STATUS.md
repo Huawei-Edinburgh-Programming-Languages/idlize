@@ -1810,10 +1810,10 @@
 |`setX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |`getY`| Function | Maksimov Nikita, Pavelyev Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
-|`getPreventDefault`| Function | | in progress | | |
+|`getPreventDefault`| Function | Samarin Sergey | in progress | | |
 |`setPreventDefault`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |*HoverEvent*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
-|`getStopPropagation`| Function | | in progress | | |
+|`getStopPropagation`| Function | Samarin Sergey | in progress | | |
 |`setStopPropagation`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |*MouseEvent*| *Class* | Kovalev Sergey | testskipped |  | |
 |`getButton`| Function | Kovalev Sergey | testskipped |  | |
@@ -1836,7 +1836,7 @@
 |`setX`| Function | Kovalev Sergey | done |  | |
 |`getY`| Function | Kovalev Sergey | done |  | |
 |`setY`| Function | Kovalev Sergey | done |  | |
-|`getStopPropagation`| Function | | in progress | | |
+|`getStopPropagation`| Function | Samarin Sergey | in progress | | |
 |`setStopPropagation`| Function | Kovalev Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |`getRawDeltaX`| Function | | blocked | noFB | doesn't present in Upstream and FB |
 |`setRawDeltaX`| Function | | blocked | noFB | doesn't present in Upstream and FB |
@@ -1908,14 +1908,14 @@
 |`setMetaKey`| Function | Maksimov Nikita | done | | |
 |`getTimestamp`| Function | Maksimov Nikita | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
 |`setTimestamp`| Function | Maksimov Nikita | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
-|`getStopPropagation`| Function | | in progress | | |
+|`getStopPropagation`| Function | Samarin Sergey | in progress | | |
 |`setStopPropagation`| Function | Maksimov Nikita | done | | |
 |`setIntentionCode`| Function | Maksimov Nikita | done | | |
 |`getUnicode`| Function | Maksimov Nikita | done | | |
 |`setUnicode`| Function | Maksimov Nikita | done | | |
 |*FocusAxisEvent*| *Class* | | | | |
 |`setAxisMap`| Function | | | | |
-|`getStopPropagation`| Function | | in progress | | |
+|`getStopPropagation`| Function | Samarin Sergey | in progress | | |
 |`setStopPropagation`| Function | | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |*ProgressMask*| *Class* | Maksimov Nikita | done |  | |
 |`updateProgress`| Function | Maksimov Nikita | done |  | |
