@@ -171,6 +171,16 @@ export function generateArkoalaFromIdl(config: {
         })
         arkuiComponentsFiles.push(outComponentFile)
     }
+    const facades = printFacades(peerLibrary)
+    for (const [targetFile, component] of components) {
+        const outFacadeFile = arkoala.facade(targetFile)
+        if (config.verbose) console.log(component)
+        writeFile(outFacadeFile, component,{
+            onlyIntegrated: config.onlyIntegrated,
+            integrated: true,
+            message: "producing [idl]"
+        })
+    }
     const builderClasses = printBuilderClasses(peerLibrary, config.dumpSerialized)
     for (const [targetFile, builderClass] of builderClasses) {
         const outBuilderFile = arkoala.builderClass(targetFile)

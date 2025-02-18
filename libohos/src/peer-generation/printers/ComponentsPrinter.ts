@@ -258,6 +258,25 @@ class ArkTsComponentFileVisitor extends TSComponentFileVisitor {
     }
 }
 
+class ArkTsFacadeFileVisitor {
+    private readonly results: ComponentPrintResult[] = []
+
+    constructor(
+        private readonly library: PeerLibrary,
+        private readonly file: PeerFile,
+    ) { }
+    visit(): void {
+        this.file.peersToGenerate.forEach(peer => this.printComponent(peer))
+    }
+
+    getResults(): ComponentPrintResult[] {
+        return this.results
+    }
+
+    private printComponent(peer: PeerClass) {
+    }
+}
+
 class JavaComponentFileVisitor implements ComponentFileVisitor {
     private readonly results: ComponentPrintResult[] = []
 
@@ -343,6 +362,21 @@ class ComponentsVisitor {
             visitor.getResults().forEach(it => this.components.set(it.targetFile, it.writer))
         }
     }
+    printFacades(): void {
+        if (this.language != Language.ARKTS) return
+
+        for (const file of this.peerLibrary.files.values()) {
+            if (!file.peersToGenerate.length)
+                continue
+            let visitor: ComponentFileVisitor
+            if (this.language == Language.ARKTS) {
+                visitor = new ArkTsFacadeFileVisitor(this.peerLibrary, file)
+            }
+
+            visitor.visit()
+            visitor.getResults().forEach(it => this.components.set(it.targetFile, it.writer))
+        }
+    }
 }
 
 export function printComponents(peerLibrary: PeerLibrary): Map<TargetFile, string> {
@@ -352,6 +386,22 @@ export function printComponents(peerLibrary: PeerLibrary): Map<TargetFile, strin
 
     const visitor = new ComponentsVisitor(peerLibrary)
     visitor.printComponents()
+    const result = new Map<TargetFile, string>()
+    for (const [key, writer] of visitor.components) {
+        if (writer.getOutput().length === 0) continue
+        const text = tsCopyrightAndWarning(writer.getOutput().join('\n'))
+        result.set(key, text)
+    }
+    return result
+}
+
+export function printFacades(peerLibrary: PeerLibrary): Map<TargetFile, string> {
+    // TODO: support other output languages
+    if (![Language.TS, Language.ARKTS, Language.JAVA].includes(peerLibrary.language))
+        return new Map()
+
+    const visitor = new ComponentsVisitor(peerLibrary)
+    visitor.printFacades()
     const result = new Map<TargetFile, string>()
     for (const [key, writer] of visitor.components) {
         if (writer.getOutput().length === 0) continue
