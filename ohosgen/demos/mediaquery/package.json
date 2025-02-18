@@ -43,7 +43,7 @@
         "check:cj": "TARGET=cj npm run check"
     },
     "dependencies": {
-        "@koalaui/interop": "1.5.3",
-        "@koalaui/common": "1.5.3"
+        "@koalaui/interop": "next",
+        "@koalaui/common": "next"
     }
 }
