@@ -956,7 +956,7 @@
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
 |`_onChangeEvent_value`| Function | Erokhin Ilya | done |  | |
 |*Shape*|*Component*|Dudkin Sergey| done |  |  |
-|`setShapeOptions`|Function|Dudkin Sergey| in progress |  | |
+|`setShapeOptions`|Function|Samarin Sergey| in progress |  | |
 |`viewPort`|Function|Dudkin Sergey| done |  |  |
 |`stroke`|Function|Dudkin Sergey| done |  |  |
 |`fill`|Function|Dudkin Sergey| done |  |  |
@@ -1864,9 +1864,9 @@
 |`setType`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |`setTouches`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |`setChangedTouches`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
-|`getStopPropagation`| Function | | in progress | | |
+|`getStopPropagation`| Function | Samarin Sergey | in progress | | |
 |`setStopPropagation`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
-|`getPreventDefault`| Function | | in progress | | |
+|`getPreventDefault`| Function | Samarin Sergey | in progress | | |
 |`setPreventDefault`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |*PixelMapMock*| *Class* | Maksimov Nikita | done |  | |
 |`release`| Function | Maksimov Nikita | done |  | |
