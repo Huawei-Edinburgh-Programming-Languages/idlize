@@ -56,7 +56,7 @@ export class TopLevelTypeConvertor extends BaseConvertor {
 
     override convertOptional(type: IDLOptionalType): string {
         if (!isReferenceType(type.type)) throwException(`Unexpected optional: ${JSON.stringify(type)}`)
-        return `${type.type.name}|undefined`
+        return `${type.type.name} | undefined`
     }
 
     override convertPrimitiveType(type: IDLPrimitiveType): string {

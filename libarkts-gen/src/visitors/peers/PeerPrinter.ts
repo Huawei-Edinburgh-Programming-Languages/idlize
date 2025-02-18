@@ -183,6 +183,13 @@ export class PeerPrinter {
         return isReferenceType(type) && this.typechecker.isHeir(type.name, Config.astNodeCommonAncestor)
     }
 
+    private optionalIfAst(type: IDLType): IDLType {
+        if (this.isReferenceToAst(type)) {
+            return createOptionalType(type)
+        }
+        return type
+    }
+
     private printMethods(): void {
         this.node.methods
             .filter(isGetter)
@@ -202,12 +209,10 @@ export class PeerPrinter {
                     new Method(
                         pascalToCamel(it.name),
                         new MethodSignature(
-                            this.isReferenceToAst(it.returnType) ?
-                                createOptionalType(it.returnType) :
-                                it.returnType,
+                            this.optionalIfAst(it.returnType),
                             it.parameters
                                 .slice(1)
-                                .map(it => it.type),
+                                .map(it => this.optionalIfAst(it.type)),
                             undefined,
                             undefined,
                             it.parameters
@@ -331,7 +336,7 @@ export class PeerPrinter {
                     create.name
                 ),
                 new MethodSignature(
-                    create.returnType,
+                    this.optionalIfAst(create.returnType),
                     create.parameters
                         .slice(1)
                         .map(it => it.type)
@@ -342,7 +347,8 @@ export class PeerPrinter {
                                 )
                             }
                             return it
-                        }),
+                        })
+                        .map(it => this.optionalIfAst(it)),
                     undefined,
                     undefined,
                     create.parameters
