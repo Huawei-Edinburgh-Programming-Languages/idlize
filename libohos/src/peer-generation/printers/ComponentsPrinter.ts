@@ -97,7 +97,7 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
             for (const method of peer.methods) {
                 for (const argType of method.method.signature.args)
                     if (convertIdlToCallback(this.library, peer, method, argType))
-                        imports.addFeature("UseEventsProperties", '../use_properties')
+                        imports.addFeature("UseEventsProperties", './use_properties')
             }
 
             const component = findComponentByType(this.library, idl.createReferenceType(peer.originalClassName!))!

@@ -4,7 +4,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,18 +13,18 @@
  * limitations under the License.
  */
 
-export interface Thunk {
-    clean(): void
-}
+import { PeerNode } from './PeerNode'
+import { ArkUINativeModule } from "#components"
 
-const registry = new FinalizationRegistry<Thunk>(
-    (thunk: Thunk) => { thunk.clean() }
-);
-
-export function finalizerRegister(target: object, thunk: Thunk) {
-    registry.register(target, thunk)
-}
-
-export function finalizerUnregister(target: object) {
-    registry.unregister(target)
+export class ComponentBase {
+    protected peer?: PeerNode
+    setPeer(peer: PeerNode) {
+        this.peer = peer
+    }
+    protected checkPriority(name: string): boolean {
+        return true
+    }
+    public applyAttributesFinish(): void {
+        ArkUINativeModule._ApplyModifierFinish(this.peer!.peer.ptr)
+    }
 }

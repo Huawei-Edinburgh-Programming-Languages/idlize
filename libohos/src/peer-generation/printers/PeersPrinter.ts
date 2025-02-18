@@ -95,8 +95,8 @@ class PeerFileVisitor {
                 collectDeclDependencies(this.library, component.interfaceDeclaration, imports, { expandTypedefs: true })
         })
         if (this.library.language === Language.TS) {
-            imports.addFeature('GestureName', '../shared/generated-utils')
-            imports.addFeature('GestureComponent', '../shared/generated-utils')
+            imports.addFeature('GestureName', './shared/generated-utils')
+            imports.addFeature('GestureComponent', './shared/generated-utils')
         }
 
         if (this.library.language === Language.TS || this.library.language === Language.ARKTS) {
