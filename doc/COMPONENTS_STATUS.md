@@ -1793,7 +1793,7 @@
 |`setDeviceId`| Function | Politov Mikhail | done |  | |
 |`getTargetDisplayId`| Function | Politov Mikhail | in progress |  | |
 |`setTargetDisplayId`| Function | Politov Mikhail | in progress |  | |
-|*ClickEvent*| *Class* | Maksimov Nikita | in progress |  | |
+|*ClickEvent*| *Class* | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
 |`getDisplayX`| Function | Maksimov Nikita, Pavelyev Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setDisplayX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |`getDisplayY`| Function | Maksimov Nikita, Pavelyev Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
@@ -1802,9 +1802,9 @@
 |`setWindowX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |`getWindowY`| Function | Maksimov Nikita, Pavelyev Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setWindowY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
-|`getScreenX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  |deprecated? |
+|`getScreenX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  |deprecated? |
 |`setScreenX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  |deprecated? |
-|`getScreenY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  |deprecated? |
+|`getScreenY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  |deprecated? |
 |`setScreenY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  |deprecated? |
 |`getX`| Function | Maksimov Nikita, Pavelyev Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
