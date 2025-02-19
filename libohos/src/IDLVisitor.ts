@@ -245,6 +245,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLFile> {
             })
         }
         this.output = filter(this.output, undefined)
+        this.output.forEach(it => idl.linkParentBack(it))
 
         const globals = (Array.from(groups.entries()) as [idl.IDLNamespace | undefined, [idl.IDLConstant[], idl.IDLMethod[]]][])
             .concat([[undefined, topLevel]])
@@ -264,7 +265,6 @@ export class IDLVisitor implements GenericVisitor<idl.IDLFile> {
                         extendedAttributes: [ { name: idl.IDLExtendedAttributes.GlobalScope } ],
                         fileName: this.sourceFile.fileName
                     })
-                int.namespace = ns
                 if (ns) {
                     ns.members.push(int)
                 } else {

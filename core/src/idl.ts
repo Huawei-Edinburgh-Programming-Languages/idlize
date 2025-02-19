@@ -624,7 +624,7 @@ export function getNamespaceName(a: IDLEntry): string {
 }
 
 export function getFQName(a: IDLEntry): string {
-    let packageName = getPackageName(a)
+    // let packageName = getPackageName(a)
     let namespaceName = getNamespaceName(a)
     let result = a.name
     if (namespaceName) result = `${namespaceName}.${result}`
