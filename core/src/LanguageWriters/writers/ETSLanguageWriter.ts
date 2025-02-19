@@ -78,7 +78,8 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
     constructor(private readonly enumEntity: IDLEnum, private readonly isExport: boolean) {}
 
     write(writer: LanguageWriter) {
-        const enumName = convertDeclaration(createDeclarationNameConvertor(Language.ARKTS), this.enumEntity)
+        let enumName = convertDeclaration(createDeclarationNameConvertor(Language.ARKTS), this.enumEntity)
+        enumName = enumName.split('.').at(-1)!
         const members
             = this.enumEntity.elements
             .flatMap((member, index) => {
