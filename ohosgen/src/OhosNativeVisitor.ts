@@ -303,7 +303,7 @@ class OHOSNativeVisitor {
         // Create API.
         let api = this.libraryName
         let _c = writer
-        _c.print(`const ${generatorConfiguration().TypePrefix}${api}_API* Get${api}APIImpl(int version) {`)
+        _c.print(`const ${generatorConfiguration().TypePrefix}${api}_API* Get${api.toUpperCase()}APIImpl(int version) {`)
         _c.pushIndent()
         _c.print(`const static ${generatorConfiguration().TypePrefix}${api}_API api = {`)
         _c.pushIndent()
@@ -418,7 +418,7 @@ class OhosBridgeCcVisitor extends BridgeCcVisitor {
 
     protected getApiCall(method: PeerMethod): string {
         const libName = this.library.name;
-        return `Get${libName}APIImpl(${libName}_API_VERSION)`
+        return `Get${libName.toUpperCase()}APIImpl(${libName.toUpperCase()}_API_VERSION)`
     }
 
 
@@ -471,8 +471,7 @@ export function printBridgeCc(peerLibrary: PeerLibrary): BridgeCcApi {
 }
 
 export function generateNativeOhos(peerLibrary: PeerLibrary): Map<TargetFile, string> {
-    const libraryName = suggestLibraryName(peerLibrary)
-    const visitor = new OHOSNativeVisitor(peerLibrary, libraryName)
+    const visitor = new OHOSNativeVisitor(peerLibrary, peerLibrary.name)
     visitor.prepare()
     visitor.printC()
     return new Map([

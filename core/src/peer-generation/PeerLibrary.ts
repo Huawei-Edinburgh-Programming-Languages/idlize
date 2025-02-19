@@ -183,7 +183,8 @@ export class PeerLibrary implements LibraryInterface {
                 if (qualifiedNamePart === qualifiedName.length - 1) {
                     const target = candidates.length == 1
                         ? candidates[0]
-                        : candidates.find(it => !idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Import)) // probably the wrong logic here
+                        : candidates.filter(it => !idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Import)) // probably the wrong logic here
+                        .find(it => !idl.isPackage(it))
                     if (target && idl.isImport(target))// Temporary disable Import declarations
                         return undefined
                     return target

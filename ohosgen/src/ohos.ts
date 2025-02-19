@@ -56,8 +56,6 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: P
 
     NativeModule.Generated = new NativeModuleType(peerLibrary.name + 'NativeModule')
 
-    const ohosManagedFiles: string[] = []
-
     // MANAGED
     /////////////////////////////////////////
 
@@ -149,15 +147,12 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: P
 
     if ([Language.TS, Language.ARKTS].includes(peerLibrary.language)) {
         const generatedFiles = [...installed]
-        ohosManagedFiles.forEach(it => {
-            generatedFiles.push('./' + path.relative(ohos.managedDir(), it))
-        })
         if (peerLibrary.language === Language.ARKTS) {
             generatedFiles.push('./peers/type_check.ts')
             generatedFiles.push('./' + path.basename(nativeModuleFileName, path.extname(nativeModuleFileName)))
         }
         writeIntegratedFile(path.join(ohos.managedDir(), 'index.ts'),
-            makeOhosModule(generatedFiles)
+            makeOhosModule(generatedFiles, [Language.TS.extension, Language.ARKTS.extension])
         )
     }
 
@@ -172,9 +167,14 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: P
     setDefaultConfiguration(origGenConfig)
 }
 
-function makeOhosModule(componentsFiles: string[]): string {
+function makeOhosModule(componentsFiles: string[], fileExtensions?: string[]): string {
     return componentsFiles.map(file => {
-        const fileNameNoExt = file.replaceAll(path.extname(file), "")
-        return `export * from "./${fileNameNoExt}"`
+        let modulePath = file
+        if (fileExtensions) {
+            fileExtensions.forEach(ext => modulePath = modulePath.replaceAll(ext, ""))
+        } else {
+            modulePath = modulePath.replaceAll(path.extname(modulePath), "")
+        }
+        return `export * from "./${modulePath}"`
     }).join("\n")
 }

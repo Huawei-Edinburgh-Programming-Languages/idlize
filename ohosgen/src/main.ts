@@ -185,7 +185,7 @@ function processInputFiles(files: string[] | string | undefined): string[] {
 }
 
 function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language) {
-    idlLibrary.name = options.defaultIdlPackage?.toUpperCase() ?? ""
+    idlLibrary.name = options.defaultIdlPackage ?? "" // toUpperCase??
     if (!idlLibrary.name.length) {
         idlLibrary.name = suggestLibraryName(idlLibrary)
     }
