@@ -58,6 +58,7 @@ import {
     collectCallbacks,
     groupCallbacks,
     layout,
+    Printer,
 } from "@idlizer/libohos"
 import { ArkoalaInstall, LibaceInstall } from "./ArkoalaInstall"
 import { ArkPrimitiveTypesInstance } from "./ArkPrimitiveType"
@@ -194,13 +195,22 @@ export function generateArkoalaFromIdl(config: {
         arkuiComponentsFiles.push(outComponentFile)
     }
 
+    const producers: Printer[] = [
+        createMaterializedPrinter(config.dumpSerialized),
+        printGlobal,
+    ]
+
+    if (peerLibrary.language === Language.ARKTS) {
+        producers.push(
+            makeTypeChecker(Language.TS),
+            makeTypeChecker(Language.ARKTS),
+        )
+    }
+
     const installedFiles = install(
         selectOutDir(arkoala, peerLibrary.language),
         peerLibrary,
-        [
-            createMaterializedPrinter(config.dumpSerialized),
-            printGlobal
-        ],
+        producers,
         {
             purgeImports: peerLibrary.language === Language.CJ,
             appendHeader: when(
@@ -367,20 +377,6 @@ export function generateArkoalaFromIdl(config: {
             }
         )
         writeFile(arkoala.peer(new TargetFile('CallbackDeserializeCall')), makeDeserializeAndCall(peerLibrary, Language.ARKTS, "./peers/CallbackDeserializeCall.ts").printToString(),
-            {
-                onlyIntegrated: config.onlyIntegrated,
-                integrated: true
-            }
-        )
-        writeFile(arkoala.arktsLib(new TargetFile('type_check', 'arkts')),
-            makeTypeChecker(peerLibrary, Language.ARKTS),
-            {
-                onlyIntegrated: config.onlyIntegrated,
-                integrated: true
-            }
-        )
-        writeFile(arkoala.arktsLib(new TargetFile('type_check', 'ts')),
-            makeTypeChecker(peerLibrary, Language.TS),
             {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true

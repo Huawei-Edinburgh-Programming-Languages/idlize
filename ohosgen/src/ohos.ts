@@ -43,6 +43,7 @@ import {
     printInterfaceData,
     printCJArkUIGeneratedNativeFunctions,
     PeerGeneratorConfiguration,
+    Printer,
 } from '@idlizer/libohos';
 import { OhosInstall } from "./OhosInstall"
 import { generateNativeOhos, suggestLibraryName } from './OhosNativeVisitor';
@@ -62,8 +63,6 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: P
     const ohos = new OhosInstall(outDir, peerLibrary.language)
 
     NativeModule.Generated = new NativeModuleType(peerLibrary.name + 'NativeModule')
-
-    const ohosManagedFiles: string[] = []
 
     // MANAGED
     /////////////////////////////////////////
@@ -114,14 +113,6 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: P
         }).printToString()
     )
 
-    // managed-utils
-
-    if (peerLibrary.language === Language.ARKTS) {
-        writeIntegratedFile(ohos.peer(new TargetFile('type_check')),
-            makeTypeChecker(peerLibrary, peerLibrary.language)
-        )
-    }
-
     // managed-stubs
 
     const callbackCheckerFilePath = ohos.peer(new TargetFile('CallbacksChecker'))
@@ -142,18 +133,21 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: P
 
     // install managed part
 
+    const producers: Printer[] = [
+        createMaterializedPrinter(false),
+        printInterfaceData,
+        printGlobal,
+    ]
+
+    if ([Language.ARKTS].includes(peerLibrary.language)) {
+        producers.push(makeTypeChecker(peerLibrary.language),)
+    }
+
     const installed = install(
         ohos.managedDir(),
         peerLibrary,
-        [
-            createMaterializedPrinter(false),
-            printInterfaceData,
-            printGlobal,
-        ],
+        producers,
         {
-            overridePath: new Map([
-                ['#component', './ets']
-            ]),
             purgeImports: peerLibrary.language === Language.CJ,
             appendHeader: when(
                 peerLibrary.language === Language.CJ,
@@ -165,16 +159,8 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: P
     // managed-index
 
     if ([Language.TS, Language.ARKTS].includes(peerLibrary.language) && !opts?.noIndex) {
-        const generatedFiles = [...installed]
-        ohosManagedFiles.forEach(it => {
-            generatedFiles.push('./' + path.relative(ohos.managedDir(), it))
-        })
-        if (peerLibrary.language === Language.ARKTS) {
-            generatedFiles.push('./peers/type_check.ts')
-            generatedFiles.push('./' + path.basename(nativeModuleFileName, path.extname(nativeModuleFileName)))
-        }
         writeIntegratedFile(path.join(ohos.managedDir(), 'index.ts'),
-            makeOhosModule(generatedFiles)
+            makeOhosModule(installed)
         )
     }
 

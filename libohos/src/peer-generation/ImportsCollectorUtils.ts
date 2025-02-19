@@ -19,7 +19,7 @@ import { ImportFeature, ImportsCollector } from "./ImportsCollector"
 import { createDependenciesCollector } from "./idl/IdlDependenciesCollector"
 import { getInternalClassName, isBuilderClass, isMaterialized, PeerLibrary, maybeTransformManagedCallback } from "@idlizer/core"
 
-export function convertDeclToFeature(library: PeerLibrary, node: idl.IDLEntry | idl.IDLReferenceType): ImportFeature {
+export function convertDeclToFeature(library: PeerLibrary, node: idl.IDLEntry | idl.IDLReferenceType, role?:LayoutNodeRole): ImportFeature {
     const featureNameConvertor = createFeatureNameConvertor(library.language)
     if (idl.isReferenceType(node)) {
         const decl = library.resolveTypeReference(node)
@@ -37,7 +37,7 @@ export function convertDeclToFeature(library: PeerLibrary, node: idl.IDLEntry | 
         }
     }
 
-    const moduleName = library.layout.resolve(node, LayoutNodeRole.INTERFACE)
+    const moduleName = library.layout.resolve(node, role ?? LayoutNodeRole.INTERFACE)
     return {
         feature,
         module: `./${moduleName}`,
@@ -51,16 +51,17 @@ export function collectDeclItself(
     options?: {
         includeMaterializedInternals?: boolean,
         includeTransformedCallbacks?: boolean,
+        role?: LayoutNodeRole
     },
 ) {
     if (idl.isSyntheticEntry(node) && Language.TS === library.language)
         return
     if (emitter instanceof ImportsCollector) {
-        if (idl.isSyntheticEntry(node) && library.language === Language.ARKTS && library.name !== 'arkoala' // or if target is not arkoala
+        if (idl.isSyntheticEntry(node) && library.language === Language.ARKTS && library.name !== 'arkoala'
             ) {
             return
         }
-        const feature = convertDeclToFeature(library, node)
+        const feature = convertDeclToFeature(library, node, options?.role)
         emitter.addFeature(feature.feature, feature.module)
         if (options?.includeMaterializedInternals) {
             if (idl.isInterface(node) && isMaterialized(node, library) && !isBuilderClass(node)) {

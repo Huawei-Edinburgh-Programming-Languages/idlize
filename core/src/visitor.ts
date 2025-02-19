@@ -61,6 +61,81 @@ export function walkIDL<T>(convertor: IDLConverter<T>, node: idl.IDLNode): T {
 
 ////////////////////////////////////////////////////////////////////////////
 
+export abstract class IDLDefaultConverter<T> implements IDLConverter<T[]> {
+
+    constructor(
+        private resolver?: ReferenceResolver
+    ) {}
+
+    visitOptional(type: idl.IDLOptionalType): T[] {
+        return this.walk(type.type)
+    }
+    visitUnion(type: idl.IDLUnionType): T[] {
+        return type.types.flatMap(it => this.walk(it))
+    }
+    visitContainer(type: idl.IDLContainerType): T[] {
+        return type.elementType.flatMap(it => this.walk(it))
+    }
+    visitImport(type: idl.IDLReferenceType, importClause: string): T[] {
+        return []
+    }
+    visitTypeReference(type: idl.IDLReferenceType): T[] {
+        if (!this.resolver) {
+            return []
+        }
+        const decl = this.resolver.resolveTypeReference(type)
+        if (!decl) {
+            return []
+        }
+        return this.walk(decl)
+    }
+    visitTypeParameter(type: idl.IDLTypeParameterType): T[] {
+        return []
+    }
+    visitPrimitiveType(type: idl.IDLPrimitiveType): T[] {
+        return []
+    }
+    visitNamespace(node: idl.IDLNamespace): T[] {
+        return node.members.flatMap(it => this.walk(it))
+    }
+    visitInterface(node: idl.IDLInterface): T[] {
+        return node.inheritance.flatMap(it => this.walk(it))
+            .concat(node.methods.flatMap(it => this.walk(it)))
+            .concat(node.constructors.flatMap(it => this.walk(it)))
+            .concat(node.callables.flatMap(it => this.walk(it)))
+            .concat(node.properties.flatMap(it => this.walk(it)))
+            .concat(node.constants.flatMap(it => this.walk(it)))
+    }
+    visitEnum(node: idl.IDLEnum): T[] {
+        return []
+    }
+    visitTypedef(node: idl.IDLTypedef): T[] {
+        return this.walk(node.type)
+    }
+    visitCallback(node: idl.IDLCallback): T[] {
+        return node.parameters.flatMap(it => this.walk(it.type))
+            .concat(this.walk(node.returnType))
+    }
+    visitMethod(node: idl.IDLMethod): T[] {
+        return node.parameters.flatMap(it => this.walk(it.type))
+            .concat(this.walk(node.returnType))
+    }
+    visitProperty(node: idl.IDLProperty): T[] {
+        return this.walk(node.type)
+    }
+    visitConstant(node: idl.IDLConstant): T[] {
+        return this.walk(node.type)
+    }
+
+    walk(node?: idl.IDLNode): T[] {
+        if (node === undefined)
+            return []
+        return walkIDL(this, node)
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////
+
 export class IDLDependencyCollector implements IDLConverter<idl.IDLNode[]> {
     constructor(
         private readonly resolver: ReferenceResolver

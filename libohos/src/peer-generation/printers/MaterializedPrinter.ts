@@ -385,7 +385,11 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                 this.collector.addFeatures(['ArkUIGeneratedNativeModule'], '#components')
             }
         } else {
-            this.collector.addFeatures([NativeModule.Generated.name], `./${NativeModule.Generated.name}`)
+            if (this.library.language === Language.ARKTS) {
+                this.collector.addFeatures([NativeModule.Generated.name], '#components')
+            } else {
+                this.collector.addFeatures([NativeModule.Generated.name], `./${NativeModule.Generated.name}`)
+            }
         }
     }
 

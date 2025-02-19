@@ -6,7 +6,7 @@ import {
     MethodModifier,
     NamedMethodSignature
 } from "../LanguageWriters";
-import { LanguageWriter, PeerLibrary, createDeclarationNameConvertor } from "@idlizer/core"
+import { LanguageWriter, LayoutNodeRole, PeerLibrary, createDeclarationNameConvertor } from "@idlizer/core"
 import { Language } from "@idlizer/core"
 import { getExtAttribute, IDLBooleanType, isReferenceType } from "@idlizer/core/idl"
 import { convertDeclaration } from '@idlizer/core';
@@ -14,6 +14,8 @@ import { peerGeneratorConfiguration} from "../PeerGeneratorConfig";
 import { collectDeclItself, collectDeclDependencies } from '../ImportsCollectorUtils';
 import { DependenciesCollector } from '../idl/IdlDependenciesCollector';
 import { isPredefined, isSystemEntry } from '../idl/IdlPeerGeneratorVisitor';
+import { PrinterResult } from "../LayoutManager";
+import { system } from "../system";
 
 class FieldRecord {
     constructor(public type: idl.IDLType, public name: string, public optional: boolean = false) { }
@@ -116,27 +118,27 @@ function collectTypeCheckDeclarations(library: PeerLibrary): (idl.IDLInterface |
 }
 
 abstract class TypeCheckerPrinter {
+    protected readonly imports = new ImportsCollector()
     constructor(
+        protected readonly language: Language,
         protected readonly library: PeerLibrary,
         public readonly writer: LanguageWriter,
     ) {}
 
     protected writeImports(features: ImportFeature[]): void {
-        const imports = new ImportsCollector()
-        imports.addFeature('KBoolean', '@koalaui/interop')
-        imports.addFeature('KStringPtr', '@koalaui/interop')
-        imports.addFeature('NativeBuffer', '@koalaui/interop')
-        imports.addFeature('MaterializedBase', '@koalaui/interop')
+        this.imports.addFeature('KBoolean', '@koalaui/interop')
+        this.imports.addFeature('KStringPtr', '@koalaui/interop')
+        this.imports.addFeature('NativeBuffer', '@koalaui/interop')
+        this.imports.addFeature('MaterializedBase', '@koalaui/interop')
         for (const feature of features) {
-            imports.addFeature(feature.feature, feature.module)
+            this.imports.addFeature(feature.feature, feature.module)
         }
         for (const dep of collectTypeCheckDeclarations(this.library)) {
             if (idl.isContainerType(dep))
                 continue
-            collectDeclItself(this.library, dep, imports)
-            collectDeclDependencies(this.library, dep, imports)
+            collectDeclItself(this.library, dep, this.imports)
+            collectDeclDependencies(this.library, dep, this.imports)
         }
-        imports.print(this.writer, 'arkts/type_check')
     }
 
     protected abstract writeTypeInstanceOf(): void
@@ -145,7 +147,7 @@ abstract class TypeCheckerPrinter {
     protected abstract writeInterfaceChecker(name: string, descriptor: StructDescriptor, type?: idl.IDLType): void
     protected abstract writeArrayChecker(typeName: string, type: idl.IDLContainerType): void
 
-    print() {
+    print(): PrinterResult {
         const importFeatures: ImportFeature[] = []
         const declNameConvertor = createDeclarationNameConvertor(this.library.language)
         const interfaces: { name: string, type?: idl.IDLType, descriptor: StructDescriptor }[] = []
@@ -177,14 +179,23 @@ abstract class TypeCheckerPrinter {
                 this.writeArrayChecker(name, array)
             }
         })
+
+        return {
+            collector: this.imports,
+            content: this.writer,
+            over: {
+                node: this.language === Language.TS ? system.typeCheckerTS : system.typeCheckerARKTS,
+                role: LayoutNodeRole.INTERFACE
+            }
+        }
     }
 }
 
 class ARKTSTypeCheckerPrinter extends TypeCheckerPrinter {
     constructor(
-        library: PeerLibrary
+        library: PeerLibrary,
     ) {
-        super(library, library.createLanguageWriter(Language.ARKTS))
+        super(Language.ARKTS, library, library.createLanguageWriter(Language.ARKTS))
     }
 
     private writeInstanceofChecker(typeName: string,
@@ -256,9 +267,9 @@ class ARKTSTypeCheckerPrinter extends TypeCheckerPrinter {
 
 class TSTypeCheckerPrinter extends TypeCheckerPrinter {
     constructor(
-        library: PeerLibrary
+        library: PeerLibrary,
     ) {
-        super(library, library.createLanguageWriter(Language.TS))
+        super(Language.TS, library, library.createLanguageWriter(Language.TS))
     }
 
     protected writeTypeInstanceOf(): void {
@@ -357,14 +368,10 @@ class TSTypeCheckerPrinter extends TypeCheckerPrinter {
     }
 }
 
-export function writeARKTSTypeCheckers(library: PeerLibrary, printer: LanguageWriter) {
-    const checker = new ARKTSTypeCheckerPrinter(library)
-    checker.print()
-    printer.concat(checker.writer)
+export function writeARKTSTypeCheckers(library: PeerLibrary) {
+    return new ARKTSTypeCheckerPrinter(library).print()
 }
 
-export function writeTSTypeCheckers(library: PeerLibrary, printer: LanguageWriter) {
-    const checker = new TSTypeCheckerPrinter(library)
-    checker.print()
-    printer.concat(checker.writer)
+export function writeTSTypeCheckers(library: PeerLibrary) {
+    return new TSTypeCheckerPrinter(library).print()
 }

@@ -26,6 +26,7 @@ import { SourceFile } from "./printers/SourceFile"
 import { NativeModule } from "./NativeModule"
 import { generateStructs } from "./printers/StructPrinter"
 import { makeCJDeserializer, makeCJSerializer } from "./printers/lang/CJPrinters"
+import { Printer, PrinterResult } from "./LayoutManager";
 
 export const warning = "WARNING! THIS FILE IS AUTO-GENERATED, DO NOT MAKE CHANGES, THEY WILL BE LOST ON NEXT GENERATION!"
 
@@ -36,7 +37,7 @@ function dateChunk(): string {
 }
 
 export const cStyleCopyright =
-`/*
+    `/*
  * Copyright (c) ${dateChunk()} Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +54,7 @@ export const cStyleCopyright =
 `
 
 export const sharpCopyright =
-`# Copyright (c) ${dateChunk()} Huawei Device Co., Ltd.
+    `# Copyright (c) ${dateChunk()} Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -275,20 +276,14 @@ export function makeTSSerializer(library: PeerLibrary): LanguageWriter {
     return printer
 }
 
-export function makeTypeChecker(library: PeerLibrary, language: Language): string {
-    if (language === Language.ARKTS) {
-    let arktsPrinter = createLanguageWriter(Language.ARKTS)
-    writeARKTSTypeCheckers(library, arktsPrinter)
-        return arktsPrinter.getOutput().join("\n")
+export function makeTypeChecker(language: Language): Printer  {
+    return (library:PeerLibrary): PrinterResult[] => {
+        switch (language) {
+            case Language.ARKTS: return [writeARKTSTypeCheckers(library)]
+            case Language.TS: return [writeTSTypeCheckers(library)]
+        }
+        throw new Error("Only TS/ARKTS are allowed here")
     }
-
-    if (language === Language.TS) {
-    let tsPrinter = createLanguageWriter(Language.TS)
-    writeTSTypeCheckers(library, tsPrinter)
-        return tsPrinter.getOutput().join("\n")
-    }
-
-    throw new Error("Only TS/ARKTS are allowed here")
 }
 
 export function makeCSerializers(library: PeerLibrary, structs: LanguageWriter, typedefs: IndentedPrinter): string {
@@ -529,7 +524,7 @@ ${enumContent}
 }
 
 export function gniFile(gniSources: string): string {
-return `${sharpCopyright}
+    return `${sharpCopyright}
 
 # ${warning}
 
@@ -538,7 +533,7 @@ ${gniSources}
 }
 
 export function mesonBuildFile(content: string): string {
-return `${sharpCopyright}
+    return `${sharpCopyright}
 
 # ${warning}
 

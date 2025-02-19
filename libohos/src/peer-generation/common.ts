@@ -18,6 +18,7 @@ import * as path from 'node:path'
 import { Language, LayoutManagerStrategy, LayoutNodeRole, PeerLibrary } from '@idlizer/core'
 import * as idl from '@idlizer/core'
 import { isComponentDeclaration } from './ComponentsCollector'
+import { system } from './system'
 
 export function writeFile(filename: string, content: string, config: { // TODO make content a string or a writer only
         onlyIntegrated: boolean,
@@ -73,7 +74,7 @@ export function suggestTSPackageName(library: PeerLibrary, node: idl.IDLEntry): 
 
 class TsLayout extends CommonLayoutBase {
 
-    private selectInterface(node: idl.IDLEntry): string {
+    protected selectInterface(node: idl.IDLEntry): string | [string, string] {
         if (!this.library.hasInLibrary(node))
             return suggestTSPackageName(this.library, node)
         if (idl.isHandwritten(node)) {
@@ -105,7 +106,7 @@ class TsLayout extends CommonLayoutBase {
         return `${this.prefix}${toFileName(entryName)}Interfaces`
     }
 
-    private selectPeer(node:idl.IDLEntry): string {
+    protected selectPeer(node:idl.IDLEntry): string {
         if (idl.isInterface(node)) {
             if (isComponentDeclaration(this.library, node)) {
                 return `peers/${this.prefix}${toFileName(node.name)}Peer`
@@ -114,7 +115,7 @@ class TsLayout extends CommonLayoutBase {
         return `CommonPeer`
     }
 
-    private selectGlobal(node:idl.IDLEntry): string {
+    protected selectGlobal(node:idl.IDLEntry): string {
         const ns = idl.getNamespaceName(node)
         if (ns !== '') {
             return `${this.prefix}${ns.split('.').map(it => idl.capitalize(it)).join('')}Namespace`
@@ -133,7 +134,15 @@ class TsLayout extends CommonLayoutBase {
     }
 }
 
-class ArkTsLayout extends TsLayout { }
+class ArkTsLayout extends TsLayout {
+    protected selectInterface(node: idl.IDLEntry): string | [string, string] {
+        switch (node) {
+            case system.typeCheckerARKTS: return ['#components', 'arkts/type_check']
+            case system.typeCheckerTS: return ['#components', 'ts/type_check']
+        }
+        return super.selectInterface(node)
+    }
+}
 
 class JavaLayout extends CommonLayoutBase {
     constructor(library: idl.PeerLibrary, prefix: string, private packagePath: string) {
