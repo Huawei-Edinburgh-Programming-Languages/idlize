@@ -118,7 +118,7 @@ function mergeSetGetProperties(properties: idl.IDLProperty[]): idl.IDLProperty[]
     }, new Array<idl.IDLProperty>)
 }
 
-export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
+export class IDLVisitor implements GenericVisitor<idl.IDLFile> {
     private output: idl.IDLEntry[] = []
     private seenNames = new Set<string>()
     private context = new Context()
@@ -140,15 +140,16 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         this.defaultPackage = suggestedPackage ?? options.defaultIdlPackage as string ?? "arkui"
     }
 
-    visitWholeFile(): idl.IDLEntry[] {
+    visitWholeFile(): idl.IDLFile {
         ts.forEachChild(this.sourceFile, (node) => this.visit(node))
         this.addMeta()
 
-        this.output.forEach(idl.linkNamespacesBack)
+        // this.output.forEach(idl.linkNamespacesBack)
         this.output.forEach(idl.transformMethodsReturnPromise2Async)
-
         this.collectGlobalScope()
-        return this.output
+        const file = idl.createFile(this.output, this.sourceFile.fileName)
+        idl.linkParentBack(file)
+        return file
     }
 
     private makeContainerType(kind: idl.IDLContainerKind, type: ts.TypeReferenceNode, nameSuggestion?: NameSuggestion): idl.IDLContainerType {
