@@ -72,7 +72,7 @@ export function suggestTSPackageName(library: PeerLibrary, node: idl.IDLEntry): 
     return `@${packageName.split(".").join("/")}`
 }
 
-class TsLayout extends CommonLayoutBase {
+export class TsLayout extends CommonLayoutBase {
 
     protected selectInterface(node: idl.IDLEntry): string | [string, string] {
         if (!this.library.hasInLibrary(node))
@@ -134,7 +134,7 @@ class TsLayout extends CommonLayoutBase {
     }
 }
 
-class ArkTsLayout extends TsLayout {
+export class ArkTsLayout extends TsLayout {
     protected selectInterface(node: idl.IDLEntry): string | [string, string] {
         switch (node) {
             case system.typeCheckerARKTS: return ['#components', 'arkts/type_check']
@@ -144,7 +144,7 @@ class ArkTsLayout extends TsLayout {
     }
 }
 
-class JavaLayout extends CommonLayoutBase {
+export class JavaLayout extends CommonLayoutBase {
     constructor(library: idl.PeerLibrary, prefix: string, private packagePath: string) {
         super(library, prefix)
     }
@@ -192,7 +192,7 @@ class JavaLayout extends CommonLayoutBase {
     }
 }
 
-class CJLayout extends CommonLayoutBase {
+export class CJLayout extends CommonLayoutBase {
     private getPath(file:string):string {
         return path.join('.', file)
     }

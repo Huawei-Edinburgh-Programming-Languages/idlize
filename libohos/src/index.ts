@@ -74,6 +74,7 @@ export * from './skoala-generation/printers/InterfacePrinter'
 export { IdlSkoalaLibrary, IldSkoalaFile, IdlWrapperProcessor } from './skoala-generation/idl/idlSkoalaLibrary'
 export * from './skoala-generation/SkoalaInstall'
 export * from './skoala-generation/SkoalaGeneration'
+export * from './peer-generation/system'
 
 export class Install {
     mkdir(path: string): string {
