@@ -28,10 +28,10 @@ import {
     IDLExtendedAttributes,
     IDLInterface,
     IDLMethod,
+    IDLNumberType,
     IDLParameter,
     IDLPrimitiveType,
     IDLProperty,
-    IDLStringType,
     IDLType,
     IDLVoidType,
     isConstructor,
@@ -388,8 +388,8 @@ class OHOSNativeVisitor {
 
 class ReturnTypeConvertor extends CppReturnTypeConvertor {
     override convertPrimitiveType(type: IDLPrimitiveType): string {
-        if (type === IDLStringType)
-            return `${generatorConfiguration().TypePrefix}String`
+        if (type === IDLNumberType)
+            return `${generatorConfiguration().TypePrefix}Number`
         return super.convertPrimitiveType(type)
     }
 }
