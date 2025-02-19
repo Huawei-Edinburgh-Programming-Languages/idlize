@@ -49,7 +49,12 @@ import { OhosInstall } from "./OhosInstall"
 import { generateNativeOhos, suggestLibraryName } from './OhosNativeVisitor';
 import { layout, LayoutMode } from './layout';
 
-export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: PeerGeneratorConfiguration) {
+interface OhosOptions {
+    alternativeLayout?: boolean
+    noIndex?: boolean
+}
+
+export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: PeerGeneratorConfiguration, opts?:OhosOptions) {
     const origGenConfig = generatorConfiguration()
     setDefaultConfiguration(config)
     peerLibrary.setFileLayout(layout(

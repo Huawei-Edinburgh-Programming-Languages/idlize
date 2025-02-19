@@ -137,12 +137,7 @@ if (options.dts2peer) {
         inputDirs,
         inputFiles,
         generatedPeersDir,
-        (sourceFile, typeChecker) => {
-            const visitor = new IDLVisitor(sourceFile, typeChecker, options, idlLibrary)
-            return {
-                visitWholeFile: () => visitor.visitWholeFile(),
-            }
-        },
+        (sourceFile, program, compilerHost) => new IDLVisitor(sourceFile, program, compilerHost, options, idlLibrary),
         {
             compilerOptions: defaultCompilerOptions,
             onSingleFile(file, outputDir, sourceFile) {
@@ -209,7 +204,7 @@ function processInputFiles(files: string[] | string | undefined): string[] {
     return filesList.filter(processPath)
 }
 
-function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language) {
+function generateTarget(idlLibrary: PeerLibrary, outDir: string) {
     idlLibrary.name = options.defaultIdlPackage?.toUpperCase() ?? ""
     if (!idlLibrary.name.length) {
         idlLibrary.name = suggestLibraryName(idlLibrary)
