@@ -34,7 +34,7 @@ import {
     isSyntheticEntry,
     linkParentBack,
     transformMethodsAsync2ReturnPromise,
-} from "@idlizer/core/idl";
+} from "@idlizer/core/idl"
 import { IDLVisitor, loadPeerConfiguration,
     IDLInteropPredefinesVisitor, IdlPeerProcessor, IDLPredefinesVisitor,
     loadPlugin, fillSyntheticDeclarations, peerGeneratorConfiguration,
@@ -150,33 +150,32 @@ if (options.dts2peer) {
                             || [newEntry, entry].every(isEnum)
                             || [newEntry, entry].every(isSyntheticEntry))) {
                             if (newEntry.name === entry.name) {
-                                return true;
+                                return true
                             }
                         }
-                        return false;
+                        return false
                     }))
-                );
-
+                )
                 file.entries.forEach(it => {
-                    transformMethodsAsync2ReturnPromise(it);
-                });
+                    transformMethodsAsync2ReturnPromise(it)
+                })
 
-                linkParentBack(file);
+                linkParentBack(file)
 
-                const peerFile = new PeerFile(file);
+                const peerFile = new PeerFile(file)
 
-                idlLibrary.files.push(peerFile);
+                idlLibrary.files.push(peerFile)
             },
             onEnd(outDir: string) {
-                fillSyntheticDeclarations(idlLibrary);
-                const peerProcessor = new IdlPeerProcessor(idlLibrary);
-                peerProcessor.process();
+                fillSyntheticDeclarations(idlLibrary)
+                const peerProcessor = new IdlPeerProcessor(idlLibrary)
+                peerProcessor.process()
 
-                generateTarget(idlLibrary, outDir, lang);
+                generateTarget(idlLibrary, outDir, lang)
             }
         }
-    );
-    didJob = true;
+    )
+    didJob = true
 }
 
 if (!didJob) {
@@ -184,20 +183,20 @@ if (!didJob) {
 }
 
 function processInputFiles(files: string[] | string | undefined): string[] {
-    if (!files) return [];
+    if (!files) return []
     
     const processPath = (path: string) => {
-        const trimmedPath = path.trim();
+        const trimmedPath = path.trim()
         if (!fs.existsSync(trimmedPath)) {
             console.error(`Input file does not exist: ${trimmedPath}`)
-            return false;
+            return false
         }
-        return true;
-    };
+        return true
+    }
 
     if (Array.isArray(files) && files.length === 1 && files[0].includes(',')) {
         const filesList = files[0].split(',').map(f => f.trim()).filter(Boolean)
-        return filesList.filter(processPath);
+        return filesList.filter(processPath)
     }
     
     if (Array.isArray(files)) {
@@ -205,7 +204,7 @@ function processInputFiles(files: string[] | string | undefined): string[] {
     }
     
     const filesList = files.split(',').map(f => f.trim()).filter(Boolean)
-    return filesList.filter(processPath);
+    return filesList.filter(processPath)
 }
 
 function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language) {
