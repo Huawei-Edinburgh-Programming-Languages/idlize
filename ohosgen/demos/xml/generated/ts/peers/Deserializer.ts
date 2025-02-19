@@ -60,6 +60,13 @@ export class Deserializer extends DeserializerBase {
     _argsSerializer.release();
     return (_continuationValue as boolean); }
     }
+    readPoint(): xml.Point {
+        let valueDeserializer: Deserializer = this
+        const x_result: number = (valueDeserializer.readNumber() as number)
+        const y_result: number = (valueDeserializer.readNumber() as number)
+        let value: xml.Point = ({x: x_result,y: y_result} as xml.Point)
+        return value
+    }
     readParseOptions(): xml.ParseOptions {
         let valueDeserializer: Deserializer = this
         const supportDoctype_buf_runtimeType = (valueDeserializer.readInt8() as int32)
@@ -99,6 +106,37 @@ export class Deserializer extends DeserializerBase {
         const tokenValueCallbackFunction_result: ((eventType: xml.EventType, value: xml.ParseInfo) => boolean) | undefined|undefined = tokenValueCallbackFunction_buf
         let value: xml.ParseOptions = ({supportDoctype: supportDoctype_result,ignoreNameSpace: ignoreNameSpace_result,tagValueCallbackFunction: tagValueCallbackFunction_result,attributeValueCallbackFunction: attributeValueCallbackFunction_result,tokenValueCallbackFunction: tokenValueCallbackFunction_result} as xml.ParseOptions)
         return value
+    }
+    readXML_Callback_Opt_Number_Opt_Array_String_Void(isSync: boolean = false): ((value?: number | undefined, error?: Array<string> | undefined) => void) {
+        const _resource: CallbackResource = this.readCallbackResource()
+        const _call: KPointer = this.readPointer()
+        const _callSync: KPointer = this.readPointer()
+        return (value?: number | undefined, error?: Array<string> | undefined): void => { 
+    const _argsSerializer: Serializer = Serializer.hold();
+    _argsSerializer.writeInt32(_resource.resourceId);
+    _argsSerializer.writePointer(_call);
+    _argsSerializer.writePointer(_callSync);
+    let value_type: int32 = RuntimeType.UNDEFINED;
+    value_type = runtimeType(value);
+    _argsSerializer.writeInt8(value_type);
+    if ((RuntimeType.UNDEFINED) != (value_type)) {
+        const value_value = value!;
+        _argsSerializer.writeNumber(value_value);
+    }
+    let error_type: int32 = RuntimeType.UNDEFINED;
+    error_type = runtimeType(error);
+    _argsSerializer.writeInt8(error_type);
+    if ((RuntimeType.UNDEFINED) != (error_type)) {
+        const error_value = error!;
+        _argsSerializer.writeInt32(error_value.length);
+        for (let i = 0; i < error_value.length; i++) {
+            const error_value_element: string = error_value[i];
+            _argsSerializer.writeString(error_value_element);
+        }
+    }
+    (isSync) ? (InteropNativeModule._CallCallbackSync(1738660608, _argsSerializer.asArray(), _argsSerializer.length())) : (InteropNativeModule._CallCallback(1738660608, _argsSerializer.asArray(), _argsSerializer.length()));
+    _argsSerializer.release();
+    return; }
     }
     readXML_Callback_Boolean_Void(isSync: boolean = false): ((value: boolean) => void) {
         const _resource: CallbackResource = this.readCallbackResource()

@@ -195,10 +195,19 @@ typedef struct XML_Callback_EventType_ParseInfo_Boolean XML_Callback_EventType_P
 typedef struct Opt_XML_Callback_EventType_ParseInfo_Boolean Opt_XML_Callback_EventType_ParseInfo_Boolean;
 typedef struct XML_Callback_String_String_Boolean XML_Callback_String_String_Boolean;
 typedef struct Opt_XML_Callback_String_String_Boolean Opt_XML_Callback_String_String_Boolean;
+typedef struct OH_XML_Point OH_XML_Point;
+typedef struct Opt_Point Opt_Point;
 typedef struct OH_XML_ParseOptions OH_XML_ParseOptions;
 typedef struct Opt_ParseOptions Opt_ParseOptions;
+typedef struct Array_String Array_String;
+typedef struct Opt_Array_String Opt_Array_String;
+typedef struct XML_Callback_Opt_Number_Opt_Array_String_Void XML_Callback_Opt_Number_Opt_Array_String_Void;
+typedef struct Opt_XML_Callback_Opt_Number_Opt_Array_String_Void Opt_XML_Callback_Opt_Number_Opt_Array_String_Void;
 typedef struct XML_Callback_Boolean_Void XML_Callback_Boolean_Void;
 typedef struct Opt_XML_Callback_Boolean_Void Opt_XML_Callback_Boolean_Void;
+typedef struct XML_GlobalScope_xml_xmlpromisesPeer XML_GlobalScope_xml_xmlpromisesPeer;
+typedef struct XML_GlobalScope_xml_xmlpromisesPeer* OH_XML_GlobalScope_xml_xmlpromises;
+typedef struct Opt_GlobalScope_xml_xmlpromises Opt_GlobalScope_xml_xmlpromises;
 typedef struct XML_XmlPullParserPeer XML_XmlPullParserPeer;
 typedef struct XML_XmlPullParserPeer* OH_XML_XmlPullParser;
 typedef struct Opt_XmlPullParser Opt_XmlPullParser;
@@ -229,6 +238,10 @@ typedef struct Opt_Int32 {
     OH_Tag tag;
     OH_Int32 value;
 } Opt_Int32;
+typedef struct Opt_Number {
+    OH_Tag tag;
+    OH_Number value;
+} Opt_Number;
 typedef struct XML_Callback_EventType_ParseInfo_Boolean {
     OH_XML_CallbackResource resource;
     void (*call)(const OH_Int32 resourceId, OH_XML_xml_EventType eventType, const OH_XML_ParseInfo value, const XML_Callback_Boolean_Void continuation);
@@ -251,6 +264,14 @@ typedef struct Opt_Boolean {
     OH_Tag tag;
     OH_Boolean value;
 } Opt_Boolean;
+typedef struct OH_XML_Point {
+    OH_Number x;
+    OH_Number y;
+} OH_XML_Point;
+typedef struct Opt_Point {
+    OH_Tag tag;
+    OH_XML_Point value;
+} Opt_Point;
 typedef struct OH_XML_ParseOptions {
     Opt_Boolean supportDoctype;
     Opt_Boolean ignoreNameSpace;
@@ -262,6 +283,23 @@ typedef struct Opt_ParseOptions {
     OH_Tag tag;
     OH_XML_ParseOptions value;
 } Opt_ParseOptions;
+typedef struct Array_String {
+    OH_String* array;
+    OH_Int32 length;
+} Array_String;
+typedef struct Opt_Array_String {
+    OH_Tag tag;
+    Array_String value;
+} Opt_Array_String;
+typedef struct XML_Callback_Opt_Number_Opt_Array_String_Void {
+    OH_XML_CallbackResource resource;
+    void (*call)(const OH_Int32 resourceId, const Opt_Number value, const Opt_Array_String error);
+    void (*callSync)(OH_XML_VMContext context, const OH_Int32 resourceId, const Opt_Number value, const Opt_Array_String error);
+} XML_Callback_Opt_Number_Opt_Array_String_Void;
+typedef struct Opt_XML_Callback_Opt_Number_Opt_Array_String_Void {
+    OH_Tag tag;
+    XML_Callback_Opt_Number_Opt_Array_String_Void value;
+} Opt_XML_Callback_Opt_Number_Opt_Array_String_Void;
 typedef struct XML_Callback_Boolean_Void {
     OH_XML_CallbackResource resource;
     void (*call)(const OH_Int32 resourceId, const OH_Boolean value);
@@ -271,14 +309,14 @@ typedef struct Opt_XML_Callback_Boolean_Void {
     OH_Tag tag;
     XML_Callback_Boolean_Void value;
 } Opt_XML_Callback_Boolean_Void;
+typedef struct Opt_GlobalScope_xml_xmlpromises {
+    OH_Tag tag;
+    OH_XML_GlobalScope_xml_xmlpromises value;
+} Opt_GlobalScope_xml_xmlpromises;
 typedef struct Opt_XmlPullParser {
     OH_Tag tag;
     OH_XML_XmlPullParser value;
 } Opt_XmlPullParser;
-typedef struct Opt_Number {
-    OH_Tag tag;
-    OH_Number value;
-} Opt_Number;
 typedef struct Opt_ParseInfo {
     OH_Tag tag;
     OH_XML_ParseInfo value;
@@ -335,11 +373,18 @@ typedef struct OH_XML_XmlPullParserModifier {
     void (*parse)(OH_NativePointer thisPtr, const OH_XML_ParseOptions* option);
     void (*parseXml)(OH_NativePointer thisPtr, const OH_XML_ParseOptions* option);
 } OH_XML_XmlPullParserModifier;
+struct OH_XML_GlobalScope_xml_xmlpromisesHandleOpaque;
+typedef struct OH_XML_GlobalScope_xml_xmlpromisesHandleOpaque* OH_XML_GlobalScope_xml_xmlpromisesHandle;
+typedef struct OH_XML_Modifier {
+    void (*returnPromise)(const XML_Callback_Opt_Number_Opt_Array_String_Void* outputArgumentForReturningPromise);
+    OH_XML_Point (*getPoint)();
+} OH_XML_Modifier;
 typedef struct OH_XML_API {
     OH_Int32 version;
     const OH_XML_XmlSerializerModifier* (*XmlSerializer)();
     const OH_XML_ParseInfoModifier* (*ParseInfo)();
     const OH_XML_XmlPullParserModifier* (*XmlPullParser)();
+    const OH_XML_Modifier* (*XML)();
 } OH_XML_API;
 
 #ifdef __cplusplus

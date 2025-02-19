@@ -223,4 +223,18 @@ export class XMLNativeModule {
         }
         throw new Error("Not implemented")
     }
+    static _GlobalScope_xml_xmlpromises_returnPromise(thisArray: Uint8Array, thisLength: int32): KPointer {
+        if ((this._LoadOnce()) == (true))
+        {
+            return this._GlobalScope_xml_xmlpromises_returnPromise(thisArray, thisLength)
+        }
+        throw new Error("Not implemented")
+    }
+    static _GlobalScope_xml_xmlpromises_getPoint(): KInteropReturnBuffer {
+        if ((this._LoadOnce()) == (true))
+        {
+            return this._GlobalScope_xml_xmlpromises_getPoint()
+        }
+        throw new Error("Not implemented")
+    }
 }

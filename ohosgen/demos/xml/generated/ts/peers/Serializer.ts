@@ -56,6 +56,13 @@ export class Serializer extends SerializerBase {
      constructor() {
         super()
     }
+    writePoint(value: xml.Point): void {
+        let valueSerializer: Serializer = this
+        const value_x = value.x
+        valueSerializer.writeNumber(value_x)
+        const value_y = value.y
+        valueSerializer.writeNumber(value_y)
+    }
     writeParseOptions(value: xml.ParseOptions): void {
         let valueSerializer: Serializer = this
         const value_supportDoctype = value.supportDoctype

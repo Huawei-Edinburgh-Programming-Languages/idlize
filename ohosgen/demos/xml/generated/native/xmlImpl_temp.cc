@@ -85,3 +85,8 @@ void XmlPullParser_parseImpl(OH_NativePointer thisPtr, const OH_XML_ParseOptions
 }
 void XmlPullParser_parseXmlImpl(OH_NativePointer thisPtr, const OH_XML_ParseOptions* option) {
 }
+void GlobalScope_xml_xmlpromises_returnPromiseImpl(const XML_Callback_Opt_Number_Opt_Array_String_Void* outputArgumentForReturningPromise) {
+}
+OH_XML_Point GlobalScope_xml_xmlpromises_getPointImpl() {
+    return {};
+}

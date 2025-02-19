@@ -34,6 +34,30 @@ export function deserializeAndCallCallback_EventType_ParseInfo_Boolean(thisDeser
     const _callResult  = _call(eventType, value)
     _continuation(_callResult)
 }
+export function deserializeAndCallCallback_Opt_Number_Opt_Array_String_Void(thisDeserializer: Deserializer): void {
+    const _resourceId : int32 = thisDeserializer.readInt32()
+    const _call  = (ResourceHolder.instance().get(_resourceId) as ((value?: number | undefined,error?: Array<string> | undefined) => void))
+    const value_buf_runtimeType  = (thisDeserializer.readInt8() as int32)
+    let value_buf : number | undefined
+    if ((RuntimeType.UNDEFINED) != (value_buf_runtimeType))
+    {
+        value_buf = (thisDeserializer.readNumber() as number)
+    }
+    let value : number | undefined = value_buf
+    const error_buf_runtimeType  = (thisDeserializer.readInt8() as int32)
+    let error_buf : Array<string> | undefined
+    if ((RuntimeType.UNDEFINED) != (error_buf_runtimeType))
+    {
+        const error_buf__length : int32 = thisDeserializer.readInt32()
+        let error_buf_ : Array<string> = new Array<string>()
+        for (let error_buf__i = 0; error_buf__i < error_buf__length; error_buf__i++) {
+            error_buf_[error_buf__i] = (thisDeserializer.readString() as string)
+        }
+        error_buf = error_buf_
+    }
+    let error : Array<string> | undefined = error_buf
+    _call(value, error)
+}
 export function deserializeAndCallCallback_String_String_Boolean(thisDeserializer: Deserializer): void {
     const _resourceId : int32 = thisDeserializer.readInt32()
     const _call  = (ResourceHolder.instance().get(_resourceId) as ((name: string,value: string) => boolean))
@@ -48,6 +72,7 @@ export function deserializeAndCallCallback(thisDeserializer: Deserializer): void
     switch (kind) {
         case 313269291/*CallbackKind.Kind_Callback_Boolean_Void*/: return deserializeAndCallCallback_Boolean_Void(thisDeserializer);
         case 240036623/*CallbackKind.Kind_Callback_EventType_ParseInfo_Boolean*/: return deserializeAndCallCallback_EventType_ParseInfo_Boolean(thisDeserializer);
+        case 1738660608/*CallbackKind.Kind_Callback_Opt_Number_Opt_Array_String_Void*/: return deserializeAndCallCallback_Opt_Number_Opt_Array_String_Void(thisDeserializer);
         case 923368928/*CallbackKind.Kind_Callback_String_String_Boolean*/: return deserializeAndCallCallback_String_String_Boolean(thisDeserializer);
     }
     console.log("Unknown callback kind")

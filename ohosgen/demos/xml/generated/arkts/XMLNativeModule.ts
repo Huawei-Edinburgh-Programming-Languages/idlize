@@ -49,4 +49,6 @@ export class XMLNativeModule {
     native static _XmlPullParser_getFinalizer(): KPointer 
     native static _XmlPullParser_parse(ptr: KPointer, thisArray: KUint8ArrayPtr, thisLength: int32): void 
     native static _XmlPullParser_parseXml(ptr: KPointer, thisArray: KUint8ArrayPtr, thisLength: int32): void 
+    native static _GlobalScope_xml_xmlpromises_returnPromise(thisArray: KUint8ArrayPtr, thisLength: int32): KPointer 
+    native static _GlobalScope_xml_xmlpromises_getPoint(): KInteropReturnBuffer 
 }

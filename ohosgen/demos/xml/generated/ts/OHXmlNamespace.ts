@@ -297,6 +297,27 @@ export namespace xml {
     }
 }
 export namespace xml {
+    export class GlobalScope_xml_xmlpromises {
+        public static returnPromise(): Promise<number> {
+            return GlobalScope_xml_xmlpromises.returnPromise_serialize()
+        }
+        public static getPoint(): xml.Point {
+            return GlobalScope_xml_xmlpromises.getPoint_serialize()
+        }
+        private static returnPromise_serialize(): Promise<number> {
+            const thisSerializer: Serializer = Serializer.hold()
+            const retval = thisSerializer.holdAndWriteCallbackForPromise<number>()[0]
+            XMLNativeModule._GlobalScope_xml_xmlpromises_returnPromise(thisSerializer.asArray(), thisSerializer.length())
+            thisSerializer.release()
+            return retval
+        }
+        private static getPoint_serialize(): xml.Point {
+            const retval = XMLNativeModule._GlobalScope_xml_xmlpromises_getPoint()
+            return new Deserializer(retval.buffer, retval.byteLength).readPoint()
+        }
+    }
+}
+export namespace xml {
     export enum EventType {
         START_DOCUMENT = 0,
         END_DOCUMENT = 1,
@@ -332,5 +353,19 @@ export namespace xml {
         tagValueCallbackFunction?: ((name: string, value: string) => boolean)
         attributeValueCallbackFunction?: ((name: string, value: string) => boolean)
         tokenValueCallbackFunction?: ((eventType: xml.EventType, value: xml.ParseInfo) => boolean)
+    }
+}
+export namespace xml {
+    export interface Point {
+        x: number
+        y: number
+    }
+}
+export namespace xml {
+    export function returnPromise(): Promise<number> {
+        return GlobalScope_xml_xmlpromises.returnPromise()
+    }
+    export function getPoint(): xml.Point {
+        return GlobalScope_xml_xmlpromises.getPoint()
     }
 }
