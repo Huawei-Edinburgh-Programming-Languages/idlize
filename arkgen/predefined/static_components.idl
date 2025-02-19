@@ -2,4 +2,4 @@
 interface Root {};
 
 [Component="ComponentRoot"]
-interface ComponentRoot {};
+interface ComponentRoot : CommonMethod {};
