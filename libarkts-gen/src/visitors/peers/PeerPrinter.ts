@@ -337,7 +337,7 @@ export class PeerPrinter {
                     create.name
                 ),
                 new MethodSignature(
-                    this.optionalIfAst(create.returnType),
+                    create.returnType,
                     create.parameters
                         .slice(1)
                         .map(it => it.type)
