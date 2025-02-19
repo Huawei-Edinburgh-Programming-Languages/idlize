@@ -178,7 +178,7 @@ if (!didJob) {
 
 function processInputFiles(files: string[] | string | undefined): string[] {
     if (!files) return []
-    
+
     const processPath = (path: string) => {
         const trimmedPath = path.trim()
         if (!fs.existsSync(trimmedPath)) {
@@ -192,11 +192,11 @@ function processInputFiles(files: string[] | string | undefined): string[] {
         const filesList = files[0].split(',').map(f => f.trim()).filter(Boolean)
         return filesList.filter(processPath)
     }
-    
+
     if (Array.isArray(files)) {
         return files.map(f => f.trim()).filter(Boolean).filter(processPath)
     }
-    
+
     const filesList = files.split(',').map(f => f.trim()).filter(Boolean)
     return filesList.filter(processPath)
 }

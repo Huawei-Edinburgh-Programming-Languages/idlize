@@ -114,7 +114,11 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
                 }
                 return res
             })
+
+        const nss = idl.getNamespacesPathFor(this.enumEntity)
+        nss.forEach(it => writer.pushNamespace(it.name))
         writer.writeEnum(enumName, members)
+        nss.forEach(() => writer.popNamespace())
     }
 }
 

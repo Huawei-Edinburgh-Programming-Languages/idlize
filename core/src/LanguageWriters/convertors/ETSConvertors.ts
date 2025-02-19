@@ -43,10 +43,6 @@ export class ETSTypeNameConvertor extends TSTypeNameConvertor {
         }
         return typeName
     }
-    override convertEnum(node: idl.IDLEnum): string {
-        return idl.getFQName(node)
-    }
-
     override convertContainer(type: idl.IDLContainerType): string {
         if (idl.IDLContainerUtils.isSequence(type)) {
             switch (type.elementType[0]) {
