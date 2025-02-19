@@ -107,7 +107,7 @@ export class CustomPrintVisitor {
         const namespacesPath = wrapNamespaces ? getNamespacesPathFor(node) : []
         for(const namespace of namespacesPath) {
             const isTopmost = namespacesPath[0] === namespace
-            this.print(`${isTopmost ? "" : "declare "}namespace ${namespace.name} {`);
+            this.print(`${!isTopmost ? "" : "declare "}namespace ${namespace.name} {`);
             this.pushIndent();
         }
         if (hasExtAttribute(node, IDLExtendedAttributes.TSType) && this.language == Language.TS) return
