@@ -23,7 +23,8 @@ import {
     nameEnumValues, nameOrNull, identString, getNameWithoutQualifiersLeft, stringOrNone, warn,
     snakeCaseToCamelCase, escapeIDLKeyword, GenericVisitor,
     generateSyntheticUnionName, generateSyntheticIdlNodeName, generateSyntheticFunctionName,
-    typeOrUnion, isCommonMethodOrSubclass, generatorConfiguration
+    typeOrUnion, isCommonMethodOrSubclass, generatorConfiguration,
+    getOrPut
 } from "@idlizer/core"
 import { ReferenceResolver } from "@idlizer/core"
 import { IDLVisitorConfig } from "./IDLVisitorConfig"
@@ -77,6 +78,9 @@ const TypeParameterMap: Map<string, Map<string, idl.IDLType>> = new Map([
             idl.createReferenceType("CapsuleStyleOptions"),
             idl.createReferenceType("ProgressStyleOptions")],
             "Union_LinearStyleOptions_RingStyleOptions_CapsuleStyleOptions_ProgressStyleOptions")]])],
+    ["DirectionalEdgesT", new Map([
+        ["T", idl.IDLNumberType]])],
+
 ])
 
 class Context {
@@ -102,8 +106,9 @@ function mergeSetGetProperties(properties: idl.IDLProperty[]): idl.IDLProperty[]
                 member.isStatic,
                 member.isOptional,
                 {
-                    ...member,
                     extendedAttributes: member.extendedAttributes?.filter(it => it.name != idl.IDLExtendedAttributes.Accessor),
+                    fileName: member.fileName,
+                    documentation: member.documentation,
                 }
             )
         } else {
@@ -128,7 +133,11 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         private options: OptionValues,
         private predefinedTypeResolver?: ReferenceResolver,
     ) {
-        this.defaultPackage = options.defaultIdlPackage as string ?? "arkui"
+        const sourceFilePath = path.resolve(sourceFile.fileName)
+        const suggestedPackage = (options.fileToPackage as string[] | undefined)
+            ?.map(it => it.split(":"))
+            ?.find(it => path.resolve(it[0]) === sourceFilePath)?.[1]
+        this.defaultPackage = suggestedPackage ?? options.defaultIdlPackage as string ?? "arkui"
     }
 
     visitWholeFile(): idl.IDLEntry[] {
@@ -207,38 +216,56 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         this.output.splice(0, 0, ...header)
     }
 
+    private getGlobalScopeName(nsName:string): string {
+        return `GlobalScope${nsName}${path.basename(this.sourceFile.fileName).replace(".d.ts", "").replaceAll("@", "").replaceAll(".", "_")}`
+    }
+
     collectGlobalScope() {
-        const collectedConstants: idl.IDLConstant[] = []
-        const collectedMethods: idl.IDLMethod[] = []
-        function filter(entries: idl.IDLEntry[]) {
+
+        const groups = new Map<idl.IDLNamespace, [idl.IDLConstant[], idl.IDLMethod[]]>()
+        const topLevel: [idl.IDLConstant[], idl.IDLMethod[]] = [[], []]
+
+        function filter(entries: idl.IDLEntry[], ns:idl.IDLNamespace | undefined) {
             return entries.filter(entry => {
+                const bucket = ns === undefined
+                    ? topLevel
+                    : getOrPut(groups, ns, () => [[], []] as [idl.IDLConstant[], idl.IDLMethod[]])
+
                 if (idl.isConstant(entry)) {
-                    collectedConstants.push(entry)
+                    bucket[0].push(entry)
                     return false;
                 } else if (idl.isMethod(entry)) {
-                    collectedMethods.push(entry)
+                    bucket[1].push(entry)
                     return false;
                 } else if (idl.isNamespace(entry)) {
-                    entry.members = filter(entry.members)
+                    entry.members = filter(entry.members, entry)
                 }
                 return true;
             })
         }
-        this.output = filter(this.output)
+        this.output = filter(this.output, undefined)
 
-        if (collectedConstants.length > 0 || collectedMethods.length > 0) {
-            this.output.push(idl.createInterface(
-                `GlobalScope_${path.basename(this.sourceFile.fileName).replace(".d.ts", "").replaceAll("@", "").replaceAll(".", "_")}`,
-                idl.IDLInterfaceSubkind.Interface,
-                [],
-                [],
-                collectedConstants,
-                [],
-                collectedMethods,
-                [], [], {
-                    extendedAttributes: [ { name: idl.IDLExtendedAttributes.GlobalScope } ],
-                    fileName: this.sourceFile.fileName
-                }))
+        const globals = (Array.from(groups.entries()) as [idl.IDLNamespace | undefined, [idl.IDLConstant[], idl.IDLMethod[]]][])
+            .concat([[undefined, topLevel]])
+
+        for (const [ns, [constants, methods]] of globals) {
+            if (constants.length || methods.length) {
+                const nsName = ns ? '_' + idl.getFQName(ns) + '_' : ''
+                const int = idl.createInterface(
+                    this.getGlobalScopeName(nsName),
+                    idl.IDLInterfaceSubkind.Interface,
+                    [],
+                    [],
+                    constants,
+                    [],
+                    methods,
+                    [], [], {
+                        extendedAttributes: [ { name: idl.IDLExtendedAttributes.GlobalScope } ],
+                        fileName: this.sourceFile.fileName
+                    })
+                int.namespace = ns
+                this.output.push(int)
+            }
         }
     }
 
@@ -298,11 +325,11 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
         }
         if (ts.isClassDeclaration(node)) {
             const entry = this.serializeClass(node)
-            if (!peerGeneratorConfiguration().ignoreComponents.includes(idl.getExtAttribute(entry, idl.IDLExtendedAttributes.Component) ?? ""))
+            if (!peerGeneratorConfiguration().components.ignoreComponents.includes(idl.getExtAttribute(entry, idl.IDLExtendedAttributes.Component) ?? ""))
                 this.output.push(entry)
         } else if (ts.isInterfaceDeclaration(node)) {
             const entry = this.serializeInterface(node)
-            if (!peerGeneratorConfiguration().ignoreComponents.includes(idl.getExtAttribute(entry, idl.IDLExtendedAttributes.Component) ?? ""))
+            if (!peerGeneratorConfiguration().components.ignoreComponents.includes(idl.getExtAttribute(entry, idl.IDLExtendedAttributes.Component) ?? ""))
                 this.output.push(entry)
         } else if (ts.isModuleDeclaration(node)) {
             if (this.isKnownAmbientModuleDeclaration(node)) {
@@ -603,7 +630,7 @@ export class IDLVisitor implements GenericVisitor<idl.IDLEntry[]> {
      */
     pickPropertyBindings(className: string, props: idl.IDLProperty[], fileName: string): idl.IDLMethod[] {
         const componentName = peerGeneratorConfiguration().mapComponentName(className)
-        const boundProps = peerGeneratorConfiguration().boundProperties[componentName]
+        const boundProps = peerGeneratorConfiguration().boundProperties.get(componentName)
         return !boundProps ? []
             : boundProps.map(propName => {
                 let propType = props.find(it => it.name === propName)?.type

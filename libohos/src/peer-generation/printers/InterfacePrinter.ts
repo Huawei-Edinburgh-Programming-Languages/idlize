@@ -39,7 +39,6 @@ import {
 } from '@idlizer/core'
 import { ImportFeature, ImportsCollector } from "../ImportsCollector"
 import { TargetFile } from "./TargetFile"
-import { PrinterContext } from './PrinterContext'
 import { convertDeclaration, DeclarationConvertor } from "@idlizer/core";
 import { ARK_CUSTOM_OBJECT, ARK_OBJECTBASE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH, INT_VALUE_GETTER } from './lang/Java'
 import { printJavaImports } from './lang/JavaPrinters'
@@ -134,16 +133,6 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
     }
 
     private printInterface(idlInterface: idl.IDLInterface): stringOrNone[] {
-        idlInterface.methods.map((it: idl.IDLMethod) => {
-            let result = it.scope
-            it.scope = undefined
-            return result
-        })
-            .filter(isDefined)
-            .map(scope => {
-                idlInterface.scope ? idlInterface.scope.push(...scope) : idlInterface.scope = scope
-            })
-
         //TODO: CommonMethod has a method onClick and a property onClick
         const seenFields = new Set<string>()
         return ([`interface ${this.printInterfaceName(idlInterface)} {`] as stringOrNone[])
@@ -398,7 +387,7 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
                     peerGeneratorConfiguration().ignoreEntry(entry.name, this.peerLibrary.language))
                     continue
                 syntheticGenerator.convert(entry)
-                if (idl.isInterface(entry) && (isMaterialized(entry, this.peerLibrary) || isBuilderClass(entry)))
+                if (idl.isInterface(entry) && (isMaterialized(entry, this.peerLibrary) && entry.subkind == idl.IDLInterfaceSubkind.Class || isBuilderClass(entry)))
                     continue
                 registerEntry(entry)
             }
@@ -838,6 +827,8 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
             registerEntry(entry)
         })
         for (const file of this.peerLibrary.files) {
+            if (this.peerLibrary?.libraryPackages?.length && !this.peerLibrary.libraryPackages.includes(file.packageName()))
+                continue
             for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
                 if (idl.isPackage(entry) ||
                     isPredefined(entry) ||
@@ -1191,24 +1182,24 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
 }
 
 
-function getVisitor(peerLibrary: PeerLibrary, context: PrinterContext): InterfacesVisitor | undefined {
-    if (context.language == Language.TS) {
+function getVisitor(peerLibrary: PeerLibrary): InterfacesVisitor | undefined {
+    if (peerLibrary.language == Language.TS) {
         return new TSInterfacesVisitor(peerLibrary)
     }
-    if (context.language == Language.JAVA) {
+    if (peerLibrary.language == Language.JAVA) {
         return new JavaInterfacesVisitor(peerLibrary)
     }
-    if (context.language == Language.ARKTS) {
+    if (peerLibrary.language == Language.ARKTS) {
         return new ArkTSInterfacesVisitor(peerLibrary)
     }
-    if (context.language == Language.CJ) {
+    if (peerLibrary.language == Language.CJ) {
         return new CJInterfacesVisitor(peerLibrary)
     }
-    throwException(`Need to implement InterfacesVisitor for ${context.language} language`)
+    throwException(`Need to implement InterfacesVisitor for ${peerLibrary.language} language`)
 }
 
-export function printInterfaces(peerLibrary: PeerLibrary, context: PrinterContext): Map<TargetFile, string> {
-    const visitor = getVisitor(peerLibrary, context)
+export function printInterfaces(peerLibrary: PeerLibrary): Map<TargetFile, string> {
+    const visitor = getVisitor(peerLibrary)
     if (!visitor) {
         return new Map()
     }

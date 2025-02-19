@@ -171,11 +171,11 @@ public class Main {
         // materialized classes
         TestUtils.checkResult("[Materialized] ctor",
             () -> { new ClassWithConstructorAndAllOptionalParamsDTS(new Opt_Number(10), null); },
-            "new ClassWithConstructorAndAllOptionalParamsDTS({.tag=INTEROP_TAG_OBJECT, .value={.tag=102, .i32=10}}, {.tag=INTEROP_TAG_UNDEFINED, .value={}})[return (ClassWithConstructorAndAllOptionalParamsDTSPeer*) 100]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]"
+            "new ClassWithConstructorAndAllOptionalParamsDTS({.tag=INTEROP_TAG_OBJECT, .value={.tag=102, .i32=10}}, {.tag=INTEROP_TAG_UNDEFINED, .value={}})[return (Ark_ClassWithConstructorAndAllOptionalParamsDTS) 100]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]"
             );
         TestUtils.checkResult("[Materialized] of",
             () -> { ClassWithConstructorAndAllOptionalParamsDTS.of(null, "test"); },
-            "of({.tag=INTEROP_TAG_UNDEFINED, .value={}}, {.tag=INTEROP_TAG_OBJECT, .value={.chars=\"test\", .length=4}})[return (void*) 300]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]"
+            "of({.tag=INTEROP_TAG_UNDEFINED, .value={}}, {.tag=INTEROP_TAG_OBJECT, .value={.chars=\"test\", .length=4}})[return (Ark_ClassWithConstructorAndAllOptionalParamsDTS) 300]getFinalizer()[return fnPtr<KNativePointer>(dummyClassFinalizer)]"
             );
         var classCtor = new ClassWithConstructorAndAllOptionalParamsDTS(new Opt_Number(10), null);
         var classOf = ClassWithConstructorAndAllOptionalParamsDTS.of(null, "test");
@@ -184,10 +184,10 @@ public class Main {
             "method({.tag=INTEROP_TAG_OBJECT, .value=false}, {.tag=INTEROP_TAG_UNDEFINED, .value={}})");
         TestUtils.checkResult("[Materialized] TestPeer.testClassWithConstructorAndAllOptionalParams(ctor)",
             () -> { peer.testClassWithConstructorAndAllOptionalParamsAttribute(classCtor); },
-            "testClassWithConstructorAndAllOptionalParams(\"Materialized 0x64\")");
+            "testClassWithConstructorAndAllOptionalParams(0x100)");
         TestUtils.checkResult("[Materialized] TestPeer.testClassWithConstructorAndAllOptionalParams(of)",
             () -> { peer.testClassWithConstructorAndAllOptionalParamsAttribute(classOf); },
-            "testClassWithConstructorAndAllOptionalParams(\"Materialized 0x12c\")");
+            "testClassWithConstructorAndAllOptionalParams(0x300)");
 
         var startDate = new Date();
         var endDate = new Date();

@@ -27,6 +27,7 @@ import {
     InteropReturnTypeConvertor,
     CppInteropArgConvertor,
     PrimitiveTypesInstance,
+    CppNameConvertor,
 } from "@idlizer/core";
 import * as idl from "@idlizer/core";
 import { bridgeCcCustomDeclaration, bridgeCcGeneratedDeclaration } from "../FileGenerators";
@@ -38,6 +39,7 @@ class BridgeCcVisitor {
     readonly generatedApi = this.library.createLanguageWriter(Language.CPP)
     readonly customApi = this.library.createLanguageWriter(Language.CPP)
     private readonly returnTypeConvertor = new BridgeReturnTypeConvertor(this.library)
+    private readonly interopNameConvertor = new CppNameConvertor(this.library)
 
     constructor(
         protected readonly library: PeerLibrary,
@@ -83,14 +85,25 @@ class BridgeCcVisitor {
         let statements: string[];
         // TODO: It is necessary to implement value passing to vm
         const peerMethodCall = `${apiCall}->${modifier}->${peerMethod}(${args})${field}`
-        if (idl.isCallback(this.library.toDeclaration(method.returnType))) {
+        if (idl.isCallback(this.library.toDeclaration(method.returnType))
+            || idl.IDLContainerUtils.isSequence(method.returnType)) {
             statements = [
                 `[[maybe_unused]] const auto &value = ${peerMethodCall};`,
                 `// TODO: Value serialization needs to be implemented`,
                 `return {};`
             ]
         } else {
-            statements = [isVoid ? `${peerMethodCall};` : `return ${peerMethodCall};`]
+            if (this.returnTypeConvertor.isReturnInteropBuffer(method.returnType)) {
+                // TODO: real serialization here
+                const serilializerMethodName = "write" + this.interopNameConvertor.convert(method.returnType)
+                statements = [
+                    `Serializer _retSerializer {};`,
+                    `_retSerializer.${serilializerMethodName}(${peerMethodCall});`,
+                    `return _retSerializer.toReturnBuffer();`,
+                ]
+            } else {
+                statements = [isVoid ? `${peerMethodCall};` : `return ${peerMethodCall};`]
+            }
         }
         if (this.callLog) this.printCallLog(method, apiCall, modifier)
         statements.forEach(it => this.generatedApi.print(it))
@@ -182,19 +195,20 @@ class BridgeCcVisitor {
     }
 
     private generateCMacroSuffix(method: PeerMethod): string {
-        let counter = method.hasReceiver() ? 1 : 0
+        let argumentsCount = method.hasReceiver() ? 1 : 0
         let arrayAdded = false
         method.argAndOutConvertors.forEach(it => {
             if (it.useArray) {
                 if (!arrayAdded) {
-                    counter += 2
+                    argumentsCount += 2
                     arrayAdded = true
                 }
             } else {
-                counter += 1
+                argumentsCount += 1
             }
         })
-        return `${this.returnTypeConvertor.isVoid(method) ? 'V' : ''}${counter}`
+        const returnsVoid = this.returnTypeConvertor.isVoid(method);
+        return `${returnsVoid ? 'V' : ''}${argumentsCount}`
     }
 
     private generateCParameters(method: PeerMethod): [string, string][] {
@@ -400,5 +414,13 @@ class BridgeReturnTypeConvertor extends InteropReturnTypeConvertor {
             return PrimitiveTypesInstance.NativePointer.getText()
         }
         return super.convertTypeReference(type)
+    }
+
+    convertContainer(type: idl.IDLContainerType): string {
+        const retType = super.convertContainer(type)
+        if (idl.IDLContainerUtils.isSequence(type)) {
+            return PrimitiveTypesInstance.NativePointer.getText()
+        }
+        return retType
     }
 }

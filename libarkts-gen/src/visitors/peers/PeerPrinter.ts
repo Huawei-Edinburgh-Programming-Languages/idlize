@@ -16,20 +16,43 @@
 import {
     convertType,
     createEmptyReferenceResolver,
+    createOptionalType,
+    createParameter,
     createReferenceType,
     IDLInterface,
+    IDLMethod,
     IDLPointerType,
     IDLType,
     IDLVoidType,
     IndentedPrinter,
+    isContainerType,
+    isEnum,
+    isPrimitiveType,
+    isReferenceType,
+    LanguageExpression,
+    Method,
+    MethodModifier,
     MethodSignature,
     throwException,
     TSLanguageWriter
 } from "@idlizer/core"
 import { Config } from "../../Config"
-import { IDLFile, isAbstract, nodeType, parent } from "../../idl-utils"
+import {
+    IDLFile,
+    isAbstract,
+    isGetter,
+    isSequence,
+    nodeNamespace,
+    nodeType,
+    parent,
+    signatureTypes,
+    Typechecker
+} from "../../utils/idl"
 import { PeersConstructions } from "./PeersConstructions"
 import { TopLevelTypeConvertor } from "./TopLevelTypeConvertor"
+import { pascalToCamel } from "../../utils/common"
+import { PeerImporter } from "./PeerImporter"
+import { InteropConstructions } from "../interop/InteropConstructions"
 
 export class PeerPrinter {
     constructor(
@@ -39,21 +62,25 @@ export class PeerPrinter {
 
     private convertor = new TopLevelTypeConvertor(this.idl.entries)
 
+    private typechecker = new Typechecker(this.idl.entries)
+
     private writer = new TSLanguageWriter(
         new IndentedPrinter(),
         createEmptyReferenceResolver(),
         { convert: (node: IDLType) => convertType(this.convertor, node) }
     )
 
+    private importer = new PeerImporter(this.node.name)
+
     print(): string {
-        this.write()
-        return this.writer.getOutput().join(`\n`)
+        this.visit()
+        return [
+            ...this.importer.getOutput(),
+            ...this.writer.getOutput()
+        ].join(`\n`)
     }
 
-    private write(): void {
-        if (parent(this.node) === undefined) {
-            return
-        }
+    private visit(): void {
         this.printPeer()
         this.printTypeGuard()
     }
@@ -62,7 +89,7 @@ export class PeerPrinter {
         this.writer.writeClass(
             this.node.name,
             () => this.printBody(),
-            Config.astNodeCommonAncestor,
+            this.importer.withPeerImport(parent(this.node) ?? throwException(`Peer without parent`)),
             undefined,
             undefined,
             undefined,
@@ -72,6 +99,8 @@ export class PeerPrinter {
 
     private printBody(): void {
         this.printConstructor()
+        this.printCreates()
+        this.printMethods()
     }
 
     private printConstructor(): void {
@@ -85,7 +114,7 @@ export class PeerPrinter {
                 undefined,
                 undefined,
                 [
-                    PeersConstructions.peer
+                    PeersConstructions.pointerParameter
                 ]
             ),
             () => this.printConstructorBody()
@@ -98,26 +127,26 @@ export class PeerPrinter {
                 this.writer.makeFunctionCall(
                     PeersConstructions.validatePeer,
                     [
-                        this.writer.makeString(PeersConstructions.peer),
+                        this.writer.makeString(PeersConstructions.pointerParameter),
                         this.writer.makeString(nodeType(this.node) ?? throwException(`somehow abstract node`))
                     ]
                 )
             )
         }
-        this.writer.writeExpressionStatements([
+        this.writer.writeExpressionStatements(
             this.writer.makeFunctionCall(
                 PeersConstructions.super,
                 [
-                    this.writer.makeString(PeersConstructions.peer)
+                    this.writer.makeString(PeersConstructions.pointerParameter)
                 ]
             ),
             this.writer.makeFunctionCall(
-                `console.warn`,
+                PeersConstructions.warn,
                 [
-                    this.writer.makeString(`"Warning: stub node ${this.node.name}"`)
+                    this.writer.makeString(PeersConstructions.stubNodeMessage(this.node.name))
                 ]
             )
-        ])
+        )
     }
 
     private printTypeGuard(): void {
@@ -143,6 +172,251 @@ export class PeerPrinter {
                     this.writer.makeReturn(
                         this.writer.makeString(
                             PeersConstructions.typeGuard.body(this.node.name)
+                        )
+                    )
+                )
+            }
+        )
+    }
+
+    private isReferenceToAst(type: IDLType): boolean {
+        return isReferenceType(type) && this.typechecker.isHeir(type.name, Config.astNodeCommonAncestor)
+    }
+
+    private optionalIfAst(type: IDLType): IDLType {
+        if (this.isReferenceToAst(type)) {
+            return createOptionalType(type)
+        }
+        return type
+    }
+
+    private printMethods(): void {
+        this.node.methods
+            .filter(isGetter)
+            .forEach(it => {
+                signatureTypes(it)
+                    .map(_it => {
+                        if (isContainerType(_it)) {
+                            return _it.elementType[0]
+                        }
+                        return _it
+                    })
+                    .filter(isReferenceType)
+                    .filter(_it => this.typechecker.isPeer(_it.name))
+                    .forEach(_it => this.importer.withPeerImport(_it.name))
+
+                this.writer.writeMethodImplementation(
+                    new Method(
+                        pascalToCamel(it.name),
+                        new MethodSignature(
+                            this.optionalIfAst(it.returnType),
+                            it.parameters
+                                .slice(1)
+                                .map(it => this.optionalIfAst(it.type)),
+                            undefined,
+                            undefined,
+                            it.parameters
+                                .slice(1)
+                                .map(it => it.name)
+                        ),
+                        [MethodModifier.GETTER]
+                    ),
+                    () => {
+                        this.writer.writeStatement(
+                            this.writer.makeReturn(
+                                this.makeReturnExpression(it)
+                            )
+                        )
+                    }
+                )
+            })
+    }
+
+    private makeReturnExpression(node: IDLMethod): LanguageExpression {
+        const nativeCall = this.writer.makeFunctionCall(
+            PeersConstructions.callBinding(this.node.name, node.name, nodeNamespace(this.node) ?? ""),
+            [
+                this.writer.makeString(PeersConstructions.context),
+                this.writer.makeString(PeersConstructions.pointerUsage)
+            ]
+                .concat(
+                    node.parameters
+                        .slice(1)
+                        .map(it => {
+                            if (isReferenceType(it.type) && this.typechecker.isPeer(it.type.name)) {
+                                return this.writer.makeFunctionCall(
+                                    `passNode`,
+                                    [this.writer.makeString(it.name)]
+                                )
+                            }
+                            return this.writer.makeString(it.name)
+                        })
+                )
+        )
+        if (isPrimitiveType(node.returnType)) {
+            return nativeCall
+        }
+
+        if (isReferenceType(node.returnType)) {
+            if (this.typechecker.isReferenceTo(node.returnType, isEnum)) {
+                this.importer.withEnumImport(node.returnType.name)
+                return nativeCall
+            }
+
+            return this.writer.makeFunctionCall(
+                PeersConstructions.pointerToPeer,
+                [nativeCall]
+            )
+        }
+        if (isSequence(node.returnType)) {
+            return this.writer.makeFunctionCall(
+                PeersConstructions.arrayOfPointersToArrayOfPeers,
+                [nativeCall]
+            )
+        }
+        throwException(`couldn't emit return expression while generating peer: ${this.node.name}.${node.name}`)
+    }
+
+    private printCreates(): void {
+        if (isAbstract(this.node)) {
+            return
+        }
+        this.node.methods
+            .filter(it => Config.isCreateOrUpdate(it.name))
+            .filter(create => !create.parameters
+                .map(it => it.type)
+                .concat(create.returnType)
+                .map(it => {
+                    if (isContainerType(it)) {
+                        if (isSequence(it)) {
+                            return it.elementType[0]
+                        }
+                    }
+                    return it
+                })
+                .filter(isReferenceType)
+                .filter(it => !it.name.startsWith(`es2panda_Context`))
+                .filter(it => !it.name.startsWith(`es2panda_AstNode`))
+                .some(it => this.typechecker.isHollow(it.name))
+            )
+            .forEach(it => this.printCreateOrUpdates(it))
+    }
+
+    private printCreateOrUpdates(create: IDLMethod): void {
+        create.parameters
+            .map(it => {
+                if (isContainerType(it.type)) {
+                    if (isSequence(it.type)) {
+                        return it.type.elementType[0]
+                    }
+                }
+                return it.type
+            })
+            .forEach(it => {
+                if (isReferenceType(it)) {
+                    if (this.typechecker.isHeir(it.name, Config.astNodeCommonAncestor)) {
+                        this.importer.withPeerImport(it.name)
+                    }
+                    if (this.typechecker.isReferenceTo(it, isEnum)) {
+                        this.importer.withEnumImport(it.name)
+                    }
+                    if (it.name === `es2panda_Context`) {
+                        return
+                    }
+                    if (it.name.startsWith(`es2panda_`)) {
+                        this.importer.withPeerImport(it.name.slice(`es2panda_`.length))
+                    }
+                }
+            })
+
+        this.writer.writeMethodImplementation(
+            new Method(
+                PeersConstructions.createOrUpdate(
+                    this.node.name,
+                    create.name
+                ),
+                new MethodSignature(
+                    this.optionalIfAst(create.returnType),
+                    create.parameters
+                        .slice(1)
+                        .map(it => it.type)
+                        .map(it => {
+                            if (isReferenceType(it) && it.name === `es2panda_AstNode`) {
+                                return createReferenceType(
+                                    `AstNode`
+                                )
+                            }
+                            return it
+                        })
+                        .map(it => this.optionalIfAst(it)),
+                    undefined,
+                    undefined,
+                    create.parameters
+                        .slice(1)
+                        .map(it => it.name)
+                        .map(it => {
+                            if (InteropConstructions.keywords.includes(it)) {
+                                return `_${it}`
+                            }
+                            return it
+                        })
+                ),
+                [MethodModifier.STATIC]
+            ),
+            () => {
+                this.writer.writeStatement(
+                    this.writer.makeReturn(
+                        this.writer.makeNewObject(
+                            this.node.name,
+                            [
+                                this.writer.makeFunctionCall(
+                                    this.writer.makeString(
+                                        PeersConstructions.callCreateOrUpdate(
+                                            this.node.name,
+                                            create.name,
+                                            nodeNamespace(this.node) ?? ""
+                                        )
+                                    ),
+                                    create.parameters
+                                        .map(it => {
+                                            if (InteropConstructions.keywords.includes(it.name)) {
+                                                return createParameter(
+                                                    `_${it.name}`,
+                                                    it.type
+                                                )
+                                            }
+                                            return it
+                                        })
+                                        .map(it => {
+                                            if (it.name === `context`) {
+                                                return `global.${it.name}`
+                                            }
+                                            if (it.name === `es2panda_AstNode`) {
+                                                return `AstNode`
+                                            }
+                                            if (this.typechecker.isHollow(it.name)) {
+                                                return it.name.slice(`es2panda_`.length);
+                                            }
+                                            if (isReferenceType(it.type)) {
+                                                if (this.typechecker.isReferenceTo(it.type, isEnum)) {
+                                                    return it.name
+                                                }
+                                                return `passNode(${it.name})`
+                                            }
+                                            if (isContainerType(it.type)) {
+                                                if (isSequence(it.type)) {
+                                                    const inner = it.type.elementType[0]
+                                                    if (isReferenceType(inner) && this.typechecker.isHollow(inner.name)) {
+                                                        return it.name.slice(`es2panda_`.length);
+                                                    }
+                                                    return `passNodeArray(${it.name})`
+                                                }
+                                            }
+                                            return it.name
+                                        })
+                                        .map(it => this.writer.makeString(it))
+                                )
+                            ]
                         )
                     )
                 )

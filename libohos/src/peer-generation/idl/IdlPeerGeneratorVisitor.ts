@@ -189,7 +189,7 @@ class PeersGenerator {
     ) {}
 
     private processProperty(prop: idl.IDLProperty, peer: PeerClass, parentName?: string): PeerMethod | undefined {
-        if (peerGeneratorConfiguration().ignorePeerMethod.includes(prop.name))
+        if (peerGeneratorConfiguration().components.ignorePeerMethod.includes(prop.name))
             return
         const originalParentName = parentName ?? peer.originalClassName!
         const argConvertor = this.library.typeConvertor("value", prop.type, prop.isOptional)
@@ -203,7 +203,7 @@ class PeersGenerator {
     }
 
     private processMethodOrCallable(method: idl.IDLMethod | idl.IDLCallable, peer: PeerClass, parentName?: string): PeerMethod | undefined {
-        if (peerGeneratorConfiguration().ignorePeerMethod.includes(method.name!))
+        if (peerGeneratorConfiguration().components.ignorePeerMethod.includes(method.name!))
             return
         // Some method have other parents as part of their names
         // Such as the ones coming from the friend interfaces
@@ -225,7 +225,7 @@ class PeersGenerator {
     }
 
     private createComponentAttributesDeclaration(clazz: idl.IDLInterface, peer: PeerClass) {
-        if (peerGeneratorConfiguration().invalidAttributes.includes(peer.componentName)) {
+        if (peerGeneratorConfiguration().components.invalidAttributes.includes(peer.componentName)) {
             return
         }
         const seenAttributes = new Set<string>()
@@ -371,6 +371,9 @@ export class IdlPeerProcessor {
     }
 
     private processMaterialized(decl: idl.IDLInterface, isGlobalScope = false) {
+        if (!this.library.hasInLibrary(decl)) {
+            return
+        }
         const name = decl.name
         if (this.library.materializedClasses.has(name)) {
             return
@@ -401,7 +404,7 @@ export class IdlPeerProcessor {
         const mMethods = decl.methods
             // TODO: Properly handle methods with return Promise<T> type
             .map(method => this.makeMaterializedMethod(decl, method, implemenationParentName))
-            .filter(it => !idl.isNamedNode(it.method.signature.returnType) || !peerGeneratorConfiguration().ignoreReturnTypes.includes(it.method.signature.returnType.name))
+            .filter(it => !idl.isNamedNode(it.method.signature.returnType) || !peerGeneratorConfiguration().materialized.ignoreReturnTypes.includes(it.method.signature.returnType.name))
 
         const taggedMethods = decl.methods.filter(m => m.extendedAttributes?.find(it => it.name === idl.IDLExtendedAttributes.DtsTag))
 
@@ -411,7 +414,8 @@ export class IdlPeerProcessor {
             // TBD: use deserializer to get complex type from native
             const isSimpleType = !f.argConvertor.useArray // type needs to be deserialized from the native
             const isCallback = idl.isCallback(this.library.toDeclaration(f.argConvertor.idlType))
-            if (isSimpleType || isCallback) {
+            const isContainer = idl.IDLContainerUtils.isSequence(this.library.toDeclaration(f.argConvertor.idlType))
+            if (isSimpleType || isCallback || isContainer) {
                 const getSignature = new NamedMethodSignature(idlType, [], [])
                 const getAccessor = new MaterializedMethod(
                     name, implemenationParentName, [], field.type, false,
@@ -445,7 +449,7 @@ export class IdlPeerProcessor {
 
     private makeMaterializedMethod(decl: idl.IDLInterface, method: idl.IDLConstructor | idl.IDLMethod | undefined, implemenationParentName: string) {
         let methodName = "ctor"
-        let returnType: idl.IDLType = idl.createReferenceType(decl.name)
+        let returnType: idl.IDLType = idl.createReferenceType(decl)
         let outArgConvertor = undefined
         if (method && !idl.isConstructor(method)) {
             methodName = method.name
@@ -494,9 +498,6 @@ export class IdlPeerProcessor {
         for (const dep of allDeclarations) {
             if (peerGeneratorConfiguration().ignoreEntry(dep.name, this.library.language) || this.ignoreDeclaration(dep, this.library.language) || idl.isHandwritten(dep))
                 continue
-            if (idl.isInterface(dep) && idl.hasExtAttribute(dep, idl.IDLExtendedAttributes.GlobalScope)) {
-                this.library.globalScopeInterfaces.push(dep)
-            }
             const isPeerDecl = idl.isInterface(dep) && isComponentDeclaration(this.library, dep)
             if (!isPeerDecl && idl.isInterface(dep) && [idl.IDLInterfaceSubkind.Class, idl.IDLInterfaceSubkind.Interface].includes(dep.subkind)) {
                 if (isGlobalScope(dep)) {

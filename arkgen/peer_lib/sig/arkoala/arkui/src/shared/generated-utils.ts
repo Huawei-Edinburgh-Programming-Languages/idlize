@@ -13,12 +13,20 @@
  * limitations under the License.
  */
 
-import { Language } from '@idlizer/core'
-import { ImportTable } from './ImportTable'
-import { SynthesizedTypesRegistry } from './SynthesizedTypesRegistry'
+export { unsafeCast } from "@koalaui/interop"
 
-export interface PrinterContext {
-    get language(): Language
-    get synthesizedTypes(): SynthesizedTypesRegistry | undefined
-    get imports(): ImportTable | undefined
+export enum GestureName {
+    Tap,
+    LongPress,
+    Pan,
+    Pinch,
+    Swipe,
+    Rotation,
+    Group
+}
+
+export class GestureComponent<T> {
+    public type?: GestureName
+    public value?: T
+    public hasEvent?: Int32Array
 }

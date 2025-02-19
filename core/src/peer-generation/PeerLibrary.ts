@@ -23,20 +23,45 @@ import { BufferConvertor, CallbackConvertor, DateConvertor, MapConvertor, Pointe
          NumberConvertor, NumericConvertor, CustomTypeConvertor, UnionConvertor, MaterializedClassConvertor,
          ArgConvertor, BooleanConvertor, EnumConvertor, UndefinedConvertor, VoidConvertor, ImportTypeConvertor, InterfaceConvertor, BigIntToU64Convertor,
 } from "../LanguageWriters/ArgConvertors"
-import { InteropNameConvertor } from '../LanguageWriters/convertors/InteropConvertors'
+import { CppNameConvertor } from '../LanguageWriters/convertors/CppConvertors'
 import { CJTypeNameConvertor } from '../LanguageWriters/convertors/CJConvertors'
-import { CppInteropConvertor } from '../LanguageWriters/convertors/CppConvertors'
+import { CppConvertor } from '../LanguageWriters/convertors/CppConvertors'
 import { ETSTypeNameConvertor } from '../LanguageWriters/convertors/ETSConvertors'
 import { JavaTypeNameConvertor } from '../LanguageWriters/convertors/JavaConvertors'
 import { TSTypeNameConvertor } from '../LanguageWriters/convertors/TSConvertors'
 import { LibraryInterface } from '../LibraryInterface'
 import { BuilderClass, isBuilderClass } from './BuilderClass'
 import { generateSyntheticFunctionName, isImportAttr } from './idl/common'
-import { isMaterialized, MaterializedClass } from './Materialized'
+import { MaterializedClass } from './Materialized'
 import { PeerFile } from './PeerFile'
 import { LayoutManager, LayoutManagerStrategy } from './LayoutManager'
+import { IDLLibrary, lib, query } from '../library'
+import { isMaterialized } from './isMaterialized'
+
+export const lenses = {
+    globals: lib.lens(lib.select.files())
+        .pipe(lib.select.nodes({ expandNamespaces: true }))
+        .pipe(lib.select.interfaces())
+        .pipe(lib.select.hasExt(idl.IDLExtendedAttributes.GlobalScope))
+}
 
 export class PeerLibrary implements LibraryInterface {
+    private _cachedIdlLibrary?: IDLLibrary
+    asIDLLibrary(): IDLLibrary {
+        if (this._cachedIdlLibrary) {
+            return this._cachedIdlLibrary
+        }
+        this._cachedIdlLibrary = {
+            files: this.files.map(file => ({
+                fileName: file.originalFilename,
+                entities: file.entries,
+                package: file.package()
+            }))
+        }
+        return this._cachedIdlLibrary
+    }
+
+    public get globalScopeInterfaces() { return query(this.asIDLLibrary(), lenses.globals) }
 
     public layout: LayoutManager = LayoutManager.Empty()
 
@@ -61,10 +86,9 @@ export class PeerLibrary implements LibraryInterface {
 
     public readonly predefinedDeclarations: idl.IDLInterface[] = []
 
-    public readonly globalScopeInterfaces: idl.IDLInterface[] = []
-
     constructor(
         public language: Language,
+        public libraryPackages: string[] | undefined,
     ) {}
 
     public name: string = ""
@@ -74,20 +98,20 @@ export class PeerLibrary implements LibraryInterface {
     createLanguageWriter(language?: Language): LanguageWriter {
         return createLanguageWriter(language ?? this.language, this)
     }
-    
+
     createTypeNameConvertor(language: Language): IdlNameConvertor {
         switch (language) {
             case Language.TS: return new TSTypeNameConvertor(this)
             case Language.ARKTS: return new ETSTypeNameConvertor(this)
             case Language.JAVA: return new JavaTypeNameConvertor(this)
             case Language.CJ: return new CJTypeNameConvertor(this)
-            case Language.CPP: return new CppInteropConvertor(this)
+            case Language.CPP: return new CppConvertor(this)
         }
         throw new Error(`IdlNameConvertor for ${language} is not implemented`)
     }
 
     protected readonly targetNameConvertorInstance: IdlNameConvertor = this.createTypeNameConvertor(this.language)
-    private readonly interopNameConvertorInstance: IdlNameConvertor = new InteropNameConvertor(this)
+    private readonly interopNameConvertorInstance: IdlNameConvertor = new CppNameConvertor(this)
 
     get libraryPrefix(): string {
         return this.name ? this.name + "_" : ""
@@ -159,17 +183,17 @@ export class PeerLibrary implements LibraryInterface {
             let entries = pointOfViewNamespace
                 ? [...pointOfViewNamespace.members]
                 : [...rootEntries]
-            for(let qualifiedNamePart = 0; qualifiedNamePart < qualifiedName.length; ++qualifiedNamePart) {
+            for (let qualifiedNamePart = 0; qualifiedNamePart < qualifiedName.length; ++qualifiedNamePart) {
                 const candidates = entries.filter(it => it.name === qualifiedName[qualifiedNamePart])
                 if (!candidates.length)
                     break
-                if (qualifiedNamePart === qualifiedName.length-1) {
+                if (qualifiedNamePart === qualifiedName.length - 1) {
                     return candidates.length == 1
                         ? candidates[0]
                         : candidates.find(it => !idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Import)) // probably the wrong logic here
                 }
                 entries = []
-                for(const candidate of candidates) {
+                for (const candidate of candidates) {
                     if (idl.isNamespace(candidate))
                         entries.push(...candidate.members)
                     else if (idl.isEnum(candidate))
@@ -202,6 +226,21 @@ export class PeerLibrary implements LibraryInterface {
 
         return undefined // empty result
     }
+    resolvePackageName(entry: idl.IDLEntry): string {
+        if (this._syntheticEntries.includes(entry))
+            return this.libraryPackages?.length ? this.libraryPackages[0] : this.files[0].packageName()
+        while (entry.namespace) {
+            entry = entry.namespace
+        }
+        for (const file of this.files) {
+            if (file.entries.includes(entry))
+                return file.packageName()
+        }
+        throw new Error(`Package name for entry ${entry.name} was not found`)
+    }
+    hasInLibrary(entry: idl.IDLEntry): boolean {
+        return !this.libraryPackages?.length || this.libraryPackages?.includes(this.resolvePackageName(entry))
+    }
 
     typeConvertor(param: string, type: idl.IDLType, isOptionalParam = false): ArgConvertor {
         if (isOptionalParam) {
@@ -233,7 +272,7 @@ export class PeerLibrary implements LibraryInterface {
                 case idl.IDLUndefinedType: return new UndefinedConvertor(param)
                 case idl.IDLVoidType: return new VoidConvertor(param)
                 case idl.IDLUnknownType:
-                case idl.IDLAnyType: return new CustomTypeConvertor(param, "Any")
+                case idl.IDLAnyType: return new CustomTypeConvertor(param, "Any", false, "Object")
                 default: throw new Error(`Unconverted primitive ${idl.DebugUtils.debugPrintType(type)}`)
             }
         }
@@ -254,7 +293,7 @@ export class PeerLibrary implements LibraryInterface {
         }
         if (idl.isTypeParameterType(type)) {
             // TODO: unlikely correct.
-            return new CustomTypeConvertor(param, this.targetNameConvertorInstance.convert(type), true)
+            return new CustomTypeConvertor(param, this.targetNameConvertorInstance.convert(type), true, `<${type.name}>`)
         }
         throw new Error(`Cannot convert: ${type.kind}`)
     }
@@ -296,7 +335,7 @@ export class PeerLibrary implements LibraryInterface {
             switch (declaration.subkind) {
                 case idl.IDLInterfaceSubkind.Interface:
                 case idl.IDLInterfaceSubkind.Class:
-                        return new InterfaceConvertor(this, declarationName, param, declaration)
+                    return new InterfaceConvertor(this, declarationName, param, declaration)
                 case idl.IDLInterfaceSubkind.AnonymousInterface:
                     return new AggregateConvertor(this, param, type, declaration as idl.IDLInterface)
                 case idl.IDLInterfaceSubkind.Tuple:
@@ -309,7 +348,7 @@ export class PeerLibrary implements LibraryInterface {
     private customConvertor(param: string, typeName: string, type: idl.IDLReferenceType): ArgConvertor | undefined {
         switch (typeName) {
             case `Object`:
-                return new CustomTypeConvertor(param, "Object")
+                return new CustomTypeConvertor(param, "Object", false, "Object")
             case `Date`:
                 return new DateConvertor(param)
             case `Function`:
@@ -369,7 +408,7 @@ export class PeerLibrary implements LibraryInterface {
             }
             return !decl ? ArkCustomObject  // assume some builtin type
                 : idl.isTypedef(decl) ? this.toDeclaration(decl.type)
-                : decl
+                    : decl
         }
         return type
     }

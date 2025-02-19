@@ -13,7 +13,9 @@
  * limitations under the License.
  */
 
-import { IDLPointerType, IDLPrimitiveType, IDLU32Type } from "@idlizer/core"
+import { IDLPointerType, IDLPrimitiveType, IDLU32Type, capitalize } from "@idlizer/core"
+import { Config } from "../../Config"
+import { splitCreateOrUpdate } from "../../utils/common"
 
 export class InteropConstructions {
     static get receiver(): string {
@@ -36,8 +38,12 @@ export class InteropConstructions {
         return `${parameter}SequenceLength`
     }
 
-    static method(interfaceName: string, methodName: string): string {
-        return `${interfaceName}${methodName}`
+    static method(interfaceName: string, methodName: string, namespaceName: string = ""): string {
+        if (Config.isCreateOrUpdate(methodName)) {
+            const { createOrUpdate, rest } = splitCreateOrUpdate(methodName)
+            return `${createOrUpdate}${interfaceName}${capitalize(namespaceName)}${rest}`
+        }
+        return `${interfaceName}${capitalize(namespaceName)}${methodName}`
     }
 
     static get keywords(): string[] {

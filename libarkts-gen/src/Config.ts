@@ -14,6 +14,7 @@
  */
 
 import { Options } from "./Options"
+import { splitCreateOrUpdate } from "./utils/common"
 
 export class Config {
     constructor(
@@ -38,6 +39,14 @@ export class Config {
         return `Es2pandaAstNodeType`
     }
 
+    static get nodeNamespaceAttribute(): string {
+        return `cpp_namespace`
+    }
+
+    static get getterAttribute(): string {
+        return `get`
+    }
+
     static get astNodeCommonAncestor(): string {
         return `AstNode`
     }
@@ -55,5 +64,16 @@ export class Config {
 
     shouldFixInput(): boolean {
         return this.fixInput
+    }
+
+    static isCreateOrUpdate(sourceMethodName: string): boolean {
+        if (!sourceMethodName.startsWith(Config.createPrefix) && !sourceMethodName.startsWith(Config.updatePrefix)) {
+            return false
+        }
+        const { rest } = splitCreateOrUpdate(sourceMethodName)
+        if (rest.length > 1) {
+            return false
+        }
+        return true
     }
 }

@@ -15,7 +15,7 @@
 import * as fs from "fs"
 import * as path from "path"
 import * as idl from "@idlizer/core/idl"
-import { Language, IndentedPrinter, PeerLibrary, CppLanguageWriter, createEmptyReferenceResolver, CppInteropConvertor, LanguageWriter, ReferenceResolver, Method, MethodSignature, PrintHint, PrinterLike, NamedMethodSignature, printMethodDeclaration } from '@idlizer/core'
+import { Language, IndentedPrinter, PeerLibrary, CppLanguageWriter, createEmptyReferenceResolver, LanguageWriter, ReferenceResolver, Method, MethodSignature, PrintHint, PrinterLike, NamedMethodSignature, printMethodDeclaration, CppConvertor } from '@idlizer/core'
 import {
     dummyImplementations, gniFile, libraryCcDeclaration,
     makeArkuiModule, makeCallbacksKinds, makeTSDeserializer, makeArkTSDeserializer,
@@ -42,11 +42,11 @@ import {
     appendModifiersCommonPrologue,
     completeModifiersContent,
     appendViewModelBridge,
-    HeaderVisitor,
     makeAPI,
     makeIncludeGuardDefine,
     SELECTOR_ID_PREFIX,
     writeConvertors,
+    HeaderVisitor,
     makeCSerializers,
     readTemplate,
     peerGeneratorConfiguration,
@@ -108,6 +108,7 @@ function copyArkoalaFiles(config: {
     copyToArkoala(path.join(__dirname, '..', 'peer_lib'), arkoala, !config.onlyIntegrated ? undefined : [
         'sig/arkoala/framework/native/src/generated/arkoala-macros.h',
         'sig/arkoala/arkui/src/peers/CallbackTransformer.ts',
+        'sig/arkoala/arkui/src/shared/generated-utils.ts',
         'sig/arkoala-arkts/arkui/src/generated/use_properties.ts',
         'sig/arkoala-arkts/arkui/src/generated/CallbackRegistry.ts',
         'sig/arkoala-arkts/arkui/src/generated/ComponentBase.ts',
@@ -125,19 +126,6 @@ function copyArkoalaFiles(config: {
         'sig/arkoala-arkts/arkui/src/generated/shared/ArkResource.ts',
         'sig/arkoala-arkts/arkui/src/generated/shared/dts-exports.ts',
     ])
-    const templates = path.join(__dirname, '../../libohos/templates')
-    fs.copyFileSync(
-        path.join(templates, 'ts/MaterializedBase.ts'),
-        path.join(arkoala.sig, 'arkoala/arkui/src/MaterializedBase.ts'))
-    fs.copyFileSync(
-        path.join(templates, 'ts/shared/generated-utils.ts'),
-        path.join(arkoala.sig, 'arkoala/arkui/src/shared/generated-utils.ts'))
-    fs.copyFileSync(
-        path.join(templates, 'arkts/MaterializedBase.ts'),
-        path.join(arkoala.sig, 'arkoala-arkts/arkui/src/generated/MaterializedBase.ts'))
-    fs.copyFileSync(
-        path.join(templates, 'arkts/shared/generated-utils.ts'),
-        path.join(arkoala.sig, 'arkoala-arkts/arkui/src/generated/shared/generated-utils.ts'))
 }
 
 export function generateArkoalaFromIdl(config: {
@@ -161,15 +149,9 @@ export function generateArkoalaFromIdl(config: {
     peerLibrary.name = 'arkoala'
     peerLibrary.setFileLayout(layout(peerLibrary, 'Ark', ARKOALA_PACKAGE_PATH))
 
-    const context = {
-        language: config.lang,
-        synthesizedTypes: undefined,
-        imports: undefined
-    }
     const arkuiComponentsFiles: string[] = []
-    const globalScopeFiles: string[] = []
 
-    const peers = printPeers(peerLibrary, context, config.dumpSerialized ?? false)
+    const peers = printPeers(peerLibrary, config.dumpSerialized ?? false)
     for (const [targetFile, peer] of peers) {
         const outPeerFile = arkoala.peer(targetFile)
         writeFile(outPeerFile, peer, {
@@ -178,7 +160,7 @@ export function generateArkoalaFromIdl(config: {
             message: "producing [idl]"
         })
     }
-    const components = printComponents(peerLibrary, context)
+    const components = printComponents(peerLibrary)
     for (const [targetFile, component] of components) {
         const outComponentFile = arkoala.component(targetFile)
         if (config.verbose) console.log(component)
@@ -189,17 +171,7 @@ export function generateArkoalaFromIdl(config: {
         })
         arkuiComponentsFiles.push(outComponentFile)
     }
-    const globals = printGlobal(peerLibrary)
-    for (const [targetFile, content] of globals) {
-        const outGlobalFile = arkoala.globalFile(targetFile)
-        writeFile(outGlobalFile, content, {
-            onlyIntegrated: config.onlyIntegrated,
-            integrated: true,
-            message: "producing [idl]"
-        })
-        globalScopeFiles.push(outGlobalFile)
-    }
-    const builderClasses = printBuilderClasses(peerLibrary, context, config.dumpSerialized)
+    const builderClasses = printBuilderClasses(peerLibrary, config.dumpSerialized)
     for (const [targetFile, builderClass] of builderClasses) {
         const outBuilderFile = arkoala.builderClass(targetFile)
         writeFile(outBuilderFile, builderClass, {
@@ -209,7 +181,7 @@ export function generateArkoalaFromIdl(config: {
         })
     }
 
-    const interfaces = printIdlInterfaces(peerLibrary, context)
+    const interfaces = printIdlInterfaces(peerLibrary)
     for (const [targetFile, data] of interfaces) {
         const outComponentFile = arkoala.interface(targetFile)
         writeFile(outComponentFile, data, {
@@ -224,7 +196,8 @@ export function generateArkoalaFromIdl(config: {
         selectOutDir(arkoala, peerLibrary.language),
         peerLibrary,
         [
-            createMaterializedPrinter(context, config.dumpSerialized)
+            createMaterializedPrinter(config.dumpSerialized),
+            printGlobal
         ]
     )
 
@@ -285,7 +258,7 @@ export function generateArkoalaFromIdl(config: {
         // )
         writeFile(
             arkoala.tsLib(new TargetFile('index')),
-            makeArkuiModule(arkuiComponentsFiles.concat(installedFiles).concat(globalScopeFiles)),
+            makeArkuiModule(arkuiComponentsFiles.concat(installedFiles)),
             {
                 onlyIntegrated: config.onlyIntegrated
             }
@@ -347,7 +320,7 @@ export function generateArkoalaFromIdl(config: {
         )
         writeFile(
             arkoala.arktsLib(new TargetFile('index')),
-            makeArkuiModule(arkuiComponentsFiles.concat(installedFiles).concat(globalScopeFiles)),
+            makeArkuiModule(arkuiComponentsFiles.concat(installedFiles)),
             {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true
@@ -418,7 +391,7 @@ export function generateArkoalaFromIdl(config: {
             printArkUIGeneratedNativeModule(peerLibrary, NativeModule.Generated).printToString()
         )
 
-        const arkComponents = makeJavaArkComponents(peerLibrary, context)
+        const arkComponents = makeJavaArkComponents(peerLibrary)
         arkComponents.writer.printTo(arkoala.javaLib(arkComponents.targetFile))
 
         const serializer = makeJavaSerializer(peerLibrary)
@@ -606,7 +579,7 @@ class ArkoalaMultiFileModifiersVisitor extends MultiFileModifiersVisitor {
 }
 
 function printModifiersImplFile(filePath: string, state: MultiFileModifiersVisitorState, options: ModifierFileOptions) {
-    const writer = new CppLanguageWriter(new IndentedPrinter(), createEmptyReferenceResolver(), new CppInteropConvertor(createEmptyReferenceResolver()), ArkPrimitiveTypesInstance)
+    const writer = new CppLanguageWriter(new IndentedPrinter(), createEmptyReferenceResolver(), new CppConvertor(createEmptyReferenceResolver()), ArkPrimitiveTypesInstance)
     writer.writeLines(cStyleCopyright)
 
     writer.writeInclude(`core/components_ng/base/frame_node.h`)
@@ -631,7 +604,7 @@ function printModifiersImplFile(filePath: string, state: MultiFileModifiersVisit
 }
 
 function printModifiersCommonImplFile(filePath: string, content: LanguageWriter, options: ModifierFileOptions) {
-    const writer = new CppLanguageWriter(new IndentedPrinter(), createEmptyReferenceResolver(), new CppInteropConvertor(createEmptyReferenceResolver()), ArkPrimitiveTypesInstance)
+    const writer = new CppLanguageWriter(new IndentedPrinter(), createEmptyReferenceResolver(), new CppConvertor(createEmptyReferenceResolver()), ArkPrimitiveTypesInstance)
     writer.writeLines(cStyleCopyright)
     writer.writeMultilineCommentBlock(warning)
     writer.print("")
@@ -667,7 +640,7 @@ function printModifiersCommonImplFile(filePath: string, content: LanguageWriter,
 }
 
 function printApiImplFile(library: PeerLibrary, filePath: string, options: ModifierFileOptions) {
-    const writer = new CppLanguageWriter(new IndentedPrinter(), library, new CppInteropConvertor(library), ArkPrimitiveTypesInstance)
+    const writer = new CppLanguageWriter(new IndentedPrinter(), library, new CppConvertor(library), ArkPrimitiveTypesInstance)
     writer.writeLines(cStyleCopyright)
     writer.writeMultilineCommentBlock(warning)
     writer.print("")
@@ -708,7 +681,7 @@ function printUserConverter(headerPath: string, namespace: string, apiVersion: n
     const visitor = new HeaderVisitor(peerLibrary, apiHeader, modifierList, accessorList, eventsList, nodeTypesList)
     visitor.printApiAndDeserializer()
 
-    const structs = new CppLanguageWriter(new IndentedPrinter(), peerLibrary, new CppInteropConvertor(peerLibrary), ArkPrimitiveTypesInstance)
+    const structs = new CppLanguageWriter(new IndentedPrinter(), peerLibrary, new CppConvertor(peerLibrary), ArkPrimitiveTypesInstance)
     const typedefs = new IndentedPrinter()
 
     const converterHeader = makeConverterHeader(headerPath, namespace, peerLibrary).getOutput().join("\n")
@@ -728,7 +701,7 @@ function printSerializers(apiVersion: number, peerLibrary: PeerLibrary): {api: s
     const visitor = new HeaderVisitor(peerLibrary, apiHeader, modifierList, accessorList, eventsList, nodeTypesList)
     visitor.printApiAndDeserializer()
 
-    const structs = new CppLanguageWriter(new IndentedPrinter(), peerLibrary, new CppInteropConvertor(peerLibrary), ArkPrimitiveTypesInstance)
+    const structs = new CppLanguageWriter(new IndentedPrinter(), peerLibrary, new CppConvertor(peerLibrary), ArkPrimitiveTypesInstance)
     const typedefs = new IndentedPrinter()
 
     const serializers = makeCSerializer(peerLibrary, structs, typedefs)
@@ -739,7 +712,7 @@ function printSerializers(apiVersion: number, peerLibrary: PeerLibrary): {api: s
 
 function makeConverterHeader(path: string, namespace: string, library: PeerLibrary): LanguageWriter {
     const converter = new CppLanguageWriter(new IndentedPrinter(), library,
-        new CppInteropConvertor(library), ArkPrimitiveTypesInstance)
+        new CppConvertor(library), ArkPrimitiveTypesInstance)
     converter.writeLines(cStyleCopyright)
     converter.writeLines(`/*
  * ${warning}
@@ -809,7 +782,7 @@ function printEventsCArkoalaImpl(library: PeerLibrary): string {
     const visitor = new CEventsVisitor(library, false)
     visitor.print()
 
-    const writer = new CppLanguageWriter(new IndentedPrinter(), library, new CppInteropConvertor(library), ArkPrimitiveTypesInstance)
+    const writer = new CppLanguageWriter(new IndentedPrinter(), library, new CppConvertor(library), ArkPrimitiveTypesInstance)
     writer.print(cStyleCopyright)
     writer.writeInclude("arkoala_api_generated.h")
     writer.writeInclude("events.h")
@@ -837,7 +810,7 @@ function printEventsCLibaceImpl(library: PeerLibrary, options: { namespace: stri
     const visitor = new CEventsVisitor(library, true)
     visitor.print()
 
-    const writer = new CppLanguageWriter(new IndentedPrinter(), library, new CppInteropConvertor(library), ArkPrimitiveTypesInstance)
+    const writer = new CppLanguageWriter(new IndentedPrinter(), library, new CppConvertor(library), ArkPrimitiveTypesInstance)
     writer.writeLines(cStyleCopyright)
     writer.print("")
     writer.writeInclude(`arkoala_api_generated.h`)
@@ -878,8 +851,8 @@ function printEventsCLibaceImpl(library: PeerLibrary, options: { namespace: stri
 }
 
 export class CEventsVisitor {
-    readonly impl: CppLanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), ArkPrimitiveTypesInstance)
-    readonly receiversList: LanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppInteropConvertor(this.library), ArkPrimitiveTypesInstance)
+    readonly impl: CppLanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppConvertor(this.library), ArkPrimitiveTypesInstance)
+    readonly receiversList: LanguageWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppConvertor(this.library), ArkPrimitiveTypesInstance)
 
     constructor(
         protected readonly library: PeerLibrary,

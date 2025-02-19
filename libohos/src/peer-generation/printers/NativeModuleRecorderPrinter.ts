@@ -16,7 +16,8 @@
 import { Method, NamedMethodSignature } from "../LanguageWriters";
 import { LanguageWriter, createConstructPeerMethod, PeerClassBase, PeerClass, PeerMethod, PeerLibrary,
     InteropArgConvertor, createInteropArgConvertor, generateSyntheticFunctionName, createAlternativeReferenceResolver,
-    Language
+    Language,
+    InteropReturnTypeConvertor
 } from '@idlizer/core'
 import { ImportsCollector } from "../ImportsCollector"
 import {
@@ -28,18 +29,20 @@ import { makeInteropSignature } from "./NativeModulePrinter";
 class NativeModuleRecorderVisitor {
     readonly nativeModuleRecorder: LanguageWriter
     private readonly interopConvertor: InteropArgConvertor
+    private readonly interopRetConvertor: InteropReturnTypeConvertor
 
     constructor(
         protected readonly library: PeerLibrary,
     ) {
         this.nativeModuleRecorder = library.createLanguageWriter()
         this.interopConvertor = createInteropArgConvertor(library.language)
+        this.interopRetConvertor = new InteropReturnTypeConvertor(this.library)
     }
 
     private printImports() {
         const imports = new ImportsCollector()
         imports.addFeature("Deserializer", "./peers/Deserializer")
-        imports.addFeature("unsafeCast", "./shared/generated-utils")
+        imports.addFeature("unsafeCast", "@koalaui/common")
         imports.addFeatures(["int32", "float32", "asFloat64", "CustomTextEncoder"], "@koalaui/common")
         imports.addFeatures(["encodeToData", "KFloat", "KFloat32ArrayPtr", "KInt", "KInt32ArrayPtr", "KPointer",
             "KStringPtr", "KUint8ArrayPtr", "nullptr", "pointer", "KBoolean", "RuntimeType"], "@koalaui/interop")
@@ -74,7 +77,7 @@ class NativeModuleRecorderVisitor {
     private printPeerMethod(clazz: PeerClassBase, method: PeerMethod, nativeModuleRecorder: LanguageWriter, returnType?: IDLType) {
         const component = clazz.generatedName(method.isCallSignature)
         const interfaceName = clazz.getComponentName()
-        const parameters = makeInteropSignature(method, returnType, this.interopConvertor)
+        const parameters = makeInteropSignature(method, returnType, this.interopConvertor, this.interopRetConvertor)
         let name = `_${component}_${method.overloadedName}`
 
         nativeModuleRecorder.writeMethodImplementation(new Method(name, parameters), (printer) => {

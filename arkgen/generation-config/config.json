@@ -131,7 +131,7 @@
             "CustomComponent",
             "CustomComponentV2"
         ],
-        "customTypes": [
+        "customNodeTypes": [
             "CustomNode"
         ],
         "handWritten": [
@@ -166,8 +166,6 @@
             "IDataSource",
             "LazyForEachInterface",
             "LocalStorage",
-            "OffscreenCanvas",
-            "OffscreenCanvasRenderingContext2D",
             "PersistentStorage",
             "PositionT",
             "SizeT",
@@ -211,13 +209,11 @@
         ]
     },
     "materialized": {
-        "ignoredReturnTypes": [
+        "ignoreReturnTypes": [
             "Promise"
         ]
     },
-    "native": {
-        "cppPrefix": "GENERATED_"
-    },
+    "cppPrefix": "GENERATED_",
     "serializer": {
         "ignore": [
             "Array",

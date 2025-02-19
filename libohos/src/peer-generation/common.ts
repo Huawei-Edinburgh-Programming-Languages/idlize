@@ -66,18 +66,25 @@ abstract class CommonLayoutBase implements LayoutManagerStrategy {
 
 }
 
+function suggestTSPackageName(library: PeerLibrary, node: idl.IDLEntry): string {
+    const packageName = library.resolvePackageName(node)
+    return `@${packageName.split(".").join("/")}`
+}
+
 class TsLayout extends CommonLayoutBase {
 
     private selectInterface(node: idl.IDLEntry): string {
-        if (idl.isSyntheticEntry(node)) {
-            return SyntheticModule
-        }
+        if (!this.library.hasInLibrary(node))
+            return suggestTSPackageName(this.library, node)
         if (idl.isHandwritten(node)) {
             return HandwrittenModule(this.library.language)
         }
         const ns = idl.getNamespaceName(node)
         if (ns !== '') {
             return `${this.prefix}${ns.split('.').map(it => idl.capitalize(it)).join('')}Namespace`
+        }
+        if (idl.isSyntheticEntry(node)) {
+            return SyntheticModule
         }
         if (idl.isInterface(node) && !isComponentDeclaration(this.library, node)) {
             if (idl.isBuilderClass(node)) {
@@ -107,12 +114,21 @@ class TsLayout extends CommonLayoutBase {
         return `CommonPeer`
     }
 
+    private selectGlobal(node:idl.IDLEntry): string {
+        const ns = idl.getNamespaceName(node)
+        if (ns !== '') {
+            return `${this.prefix}${ns.split('.').map(it => idl.capitalize(it)).join('')}Namespace`
+        }
+        return `GlobalScope`
+    }
+
     /////
 
     resolve(node: idl.IDLEntry, role: LayoutNodeRole): string {
         switch (role) {
             case LayoutNodeRole.INTERFACE: return this.selectInterface(node)
             case LayoutNodeRole.PEER: return this.selectPeer(node)
+            case LayoutNodeRole.GLOBAL: return this.selectGlobal(node)
         }
     }
 }
@@ -160,6 +176,9 @@ class JavaLayout extends CommonLayoutBase {
                 }
                 return this.getPath(`CommonPeer`)
             }
+            case LayoutNodeRole.GLOBAL: {
+                return 'GlobalScope'
+            }
         }
     }
 }
@@ -201,6 +220,9 @@ class CJLayout extends CommonLayoutBase {
                     }
                 }
                 return this.getPath(`CommonPeer`)
+            }
+            case LayoutNodeRole.GLOBAL: {
+                return 'GlobalScope'
             }
         }
     }

@@ -31,7 +31,7 @@ import {
     throwException,
     TSLanguageWriter
 } from "@idlizer/core"
-import { Config } from "./Config"
+import { Config } from "../Config"
 
 export function isString(node: IDLType): node is IDLPrimitiveType {
     return isPrimitiveType(node) && node.name === "String"
@@ -93,8 +93,8 @@ export class Typechecker {
     }
 
 
-    isPeer(node: IDLInterface): boolean {
-        return this.isHeir(node.name, Config.astNodeCommonAncestor) && node.name !== Config.astNodeCommonAncestor
+    isPeer(node: string): boolean {
+        return this.isHeir(node, Config.astNodeCommonAncestor) && node !== Config.astNodeCommonAncestor
     }
 
     isHollow(name: string): boolean {
@@ -130,6 +130,20 @@ export function nodeType(node: IDLInterface): string | undefined {
         ?.value
 }
 
+export function nodeNamespace(node: IDLInterface): string | undefined {
+    return node.extendedAttributes
+        ?.find(it => it.name === Config.nodeNamespaceAttribute)
+        ?.value
+}
+
+export function dropNamespace(node: IDLInterface) {
+    const index = node.extendedAttributes
+        ?.findIndex(it => it.name === Config.nodeNamespaceAttribute)
+    if (index == undefined || index == -1) return
+
+    node.extendedAttributes?.splice(index, 1)
+}
+
 export function parent(node: IDLInterface): string | undefined {
     return node.inheritance[0]?.name
 }
@@ -138,10 +152,25 @@ export function isAbstract(node: IDLInterface): boolean {
     return nodeType(node) === undefined
 }
 
+export function isGetter(node: IDLMethod): boolean {
+    if (node.parameters.length !== 1) {
+        return false
+    }
+    return node.extendedAttributes
+        ?.some(it => it.name === Config.getterAttribute)
+        ?? false
+}
+
 export function createDefaultTypescriptWriter() {
     return new TSLanguageWriter(
         new IndentedPrinter(),
         createEmptyReferenceResolver(),
         { convert: (node: IDLType) => throwException(`Unexpected type conversion`) }
     )
+}
+
+export function signatureTypes(node: IDLMethod): IDLType[] {
+    return node.parameters
+        .map(it => it.type)
+        .concat(node.returnType)
 }

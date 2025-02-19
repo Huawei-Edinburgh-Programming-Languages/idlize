@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { IDLFile, Typechecker } from "../idl-utils"
+import { IDLFile, Typechecker } from "../utils/idl"
 import { LanguageWriter } from "@idlizer/core"
 
 export abstract class SingleFilePrinter {

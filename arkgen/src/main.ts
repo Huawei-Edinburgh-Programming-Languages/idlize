@@ -36,9 +36,13 @@ import {
 import { IDLVisitor, loadPeerConfiguration,
     generateTracker, IDLInteropPredefinesVisitor, IdlPeerProcessor, IDLPredefinesVisitor, loadPlugin,
     SkoalaDeserializerPrinter, IdlSkoalaLibrary, IldSkoalaFile, generateIdlSkoala,
-    IdlWrapperProcessor, fillSyntheticDeclarations, DefaultConfiguration,
+    IdlWrapperProcessor, fillSyntheticDeclarations,
     scanPredefinedDirectory, scanNotPredefinedDirectory,
     scanCommonPredefined,
+    formatInputPaths,
+    validatePaths,
+    PeerGeneratorConfiguration,
+    defaultPeerGeneratorConfiguration,
 } from "@idlizer/libohos"
 import { generateArkoalaFromIdl, generateLibaceFromIdl } from "./arkoala"
 import { ArkoalaPeerLibrary } from "./ArkoalaPeerLibrary"
@@ -50,6 +54,8 @@ const options = program
     .option('--input-dir <path>', 'Path to input dir(s), comma separated')
     .option('--output-dir <path>', 'Path to output dir')
     .option('--input-files <files...>', 'Comma-separated list of specific files to process')
+    .option('--file-to-package <fileToPackage>', 'Comma-separated list of pairs, what package name should be used for file in format <fileName:packageName>')
+    .option('--library-packages <packages>', 'Comma separated list of packages included into library')
     .option('--idl2peer', 'Convert IDL to peer drafts')
     .option('--dts2skoala', 'Convert DTS to skoala definitions')
     .option('--verbose', 'Verbose processing')
@@ -80,11 +86,13 @@ const options = program
     .option('--enable-log', 'Enable logging')
     .option('--options-file <path>', 'Path to generator configuration options file (appends to defaults)')
     .option('--override-options-file <path>', 'Path to generator configuration options file (replaces defaults)')
+    .option('--arkts-extension <string> [.ts|.ets]', "Generated ArkTS language files extension.", ".ts")
 
     .parse()
     .opts()
 
 let apiVersion = options.apiVersion ?? 9999
+Language.ARKTS.extension = options.arktsExtension as string
 
 setDefaultConfiguration(loadPeerConfiguration(options.optionsFile, options.overrideOptionsFile))
 
@@ -95,7 +103,13 @@ if (process.env.npm_package_version) {
 let didJob = false
 
 if (options.dts2skoala) {
-    setDefaultConfiguration(new DefaultConfiguration({ ApiVersion: apiVersion, TypePrefix: "", LibraryPrefix: "", OptionalPrefix: "Opt_" }))
+    setDefaultConfiguration<PeerGeneratorConfiguration>({
+        ...defaultPeerGeneratorConfiguration,
+        ApiVersion: apiVersion,
+        TypePrefix: "",
+        LibraryPrefix: "",
+        OptionalPrefix: "Opt_",
+    })
 
     console.log(`Processing all .d.ts from directory: ${options.inputDir ?? "undefined"}`)
 
@@ -163,7 +177,7 @@ if (options.idl2peer) {
     const outDir = options.outputDir ?? "./out"
     const language = Language.fromString(options.language ?? "ts")
 
-    const idlLibrary = new ArkoalaPeerLibrary(language)
+    const idlLibrary = new ArkoalaPeerLibrary(language, options.libraryPackages)
     idlLibrary.files.push(...scanNotPredefinedDirectory(options.inputDir))
     const { interop, root } = scanCommonPredefined()
     interop.forEach(file => {
@@ -192,41 +206,13 @@ if (options.dts2peer) {
     const generatedPeersDir = options.outputDir ?? "./out/ts-peers/generated"
     const lang = Language.fromString(options.language ?? "ts")
 
-    if (options.inputFiles && typeof options.inputFiles === 'string') {
-        options.inputFiles = options.inputFiles
-            .split(',')
-            .map(file => file.trim())
-            .filter(Boolean)
-    }
-
-    if (options.inputDir && typeof options.inputDir === 'string') {
-        options.inputDir = options.inputDir.split(',')
-            .map(dir => dir.trim())
-            .filter(Boolean)
-    }
-
-    const inputDirs: string[] = options.inputDir || []
-    inputDirs.forEach(dir => {
-        if (!fs.existsSync(dir)) {
-            console.error(`Input directory does not exist: ${dir}`)
-            process.exit(1)
-        } else {
-            console.log(`Input directory exists: ${dir}`)
-        }
-    })
-
-    const inputFiles: string[] = options.inputFiles || []
-    inputFiles.forEach(file => {
-        if (!fs.existsSync(file)) {
-            console.error(`Input file does not exist: ${file}`)
-            process.exit(1)
-        } else {
-            console.log(`Input file exists: ${file}`)
-        }
-    })
+    const PREDEFINED_PATH = path.join(__dirname, "..", "predefined")
+    const { inputFiles, inputDirs } = formatInputPaths(options)
+    validatePaths(inputDirs, "dir")
+    validatePaths(inputFiles, "file")
 
     options.docs = "all"
-    const idlLibrary = new ArkoalaPeerLibrary(lang)
+    const idlLibrary = new ArkoalaPeerLibrary(lang, options.libraryPackages)
     // collect predefined files
     const { interop, root } = scanCommonPredefined()
     interop.forEach(file => {

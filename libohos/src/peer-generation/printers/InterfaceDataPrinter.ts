@@ -28,6 +28,8 @@ export function printInterfaceData(library: PeerLibrary): PrinterResult[] {
         if (file.isPredefined) {
             return []
         }
+        if (library?.libraryPackages?.length && !library.libraryPackages.includes(file.packageName()))
+            return []
         return file.entries
             .flatMap(it => idl.isNamespace(it) ? it.members : [it])
             .flatMap(entry => {
@@ -172,7 +174,9 @@ function printInterface(library: PeerLibrary, entry: idl.IDLInterface): PrinterR
         printer.pushNamespace(ns)
     }
     if (library.language == idl.Language.CJ) {
-        CJDeclConvertor.makeInterface(library, entry, printer)
+        if (!idl.isMaterialized(entry, library)) {
+            CJDeclConvertor.makeInterface(library, entry, printer)
+        }
     } else {
         if (idl.isInterfaceSubkind(entry)) {
             printer.writeInterface(entry.name, w => {

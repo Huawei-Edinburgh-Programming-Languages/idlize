@@ -1,5 +1,5 @@
 import * as idl from "@idlizer/core/idl"
-import { generatorConfiguration, Language, LibraryInterface, isMaterialized, cleanPrefix } from "@idlizer/core";
+import { generatorConfiguration, Language, LibraryInterface, isMaterialized, cleanPrefix, PeerFile } from "@idlizer/core";
 import { isComponentDeclaration } from "./ComponentsCollector";
 import { DependencySorter } from "./idl/DependencySorter";
 import { isPredefined } from "./idl/IdlPeerGeneratorVisitor";
@@ -19,6 +19,8 @@ export function collectDeclarationTargets(library: LibraryInterface): idl.IDLNod
 
     let orderer = new DependencySorter(library)
     for (const file of library.files) {
+        if (library.libraryPackages?.length && !library.libraryPackages.includes((file as PeerFile).packageName()))
+            continue
         for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
             if (peerGeneratorConfiguration().ignoreEntry(entry.name, library.language) ||
                 idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.TSType) ||
@@ -32,15 +34,16 @@ export function collectDeclarationTargets(library: LibraryInterface): idl.IDLNod
                     if (isMaterialized(entry, library))
                         orderer.addDep(entry)
                     for (const property of entry.properties) {
-                        if (peerGeneratorConfiguration().ignorePeerMethod.includes(property.name))
+                        if (peerGeneratorConfiguration().components.ignorePeerMethod.includes(property.name))
                             continue
                         orderer.addDep(library.toDeclaration(property.type))
                     }
                     for (const method of entry.methods) {
-                        if (peerGeneratorConfiguration().ignorePeerMethod.includes(method.name))
+                        if (peerGeneratorConfiguration().components.ignorePeerMethod.includes(method.name))
                             continue
                         for (const parameter of method.parameters)
                             orderer.addDep(parameter.type!)
+                        orderer.addDep(method.returnType)
                     }
                     for (const constructor of entry.constructors) {
                         for (const parameter of constructor.parameters)
@@ -53,7 +56,7 @@ export function collectDeclarationTargets(library: LibraryInterface): idl.IDLNod
                 } else if (generateUnused && !isPredefined(entry)) {
                     orderer.addDep(library.toDeclaration(entry))
                     for (const property of entry.properties) {
-                        if (peerGeneratorConfiguration().ignorePeerMethod.includes(property.name))
+                        if (peerGeneratorConfiguration().components.ignorePeerMethod.includes(property.name))
                             continue
                         orderer.addDep(library.toDeclaration(property.type))
                     }

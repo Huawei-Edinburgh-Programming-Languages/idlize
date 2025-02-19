@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Copyright (c) 2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,9 +13,13 @@
  * limitations under the License.
  */
 
-import { Finalizable } from "@koalaui/interop"
+import { IDLType, isReferenceType, isInterface } from "../idl"
+import { isMaterialized } from "./isMaterialized"
+import { ReferenceResolver } from "./ReferenceResolver"
 
-export interface MaterializedBase {
-    getPeer(): Finalizable | undefined
+export function isStructureType(type: IDLType, library: ReferenceResolver): boolean {
+    if (!isReferenceType(type)) return false
+    const resolved = library.resolveTypeReference(type)
+    if (!resolved || !isInterface(resolved)) return false
+    return !isMaterialized(resolved, library)
 }
-

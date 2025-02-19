@@ -43,6 +43,7 @@ export class TernaryExpression implements LanguageExpression {
 export class NaryOpExpression implements LanguageExpression {
     constructor(public op: string, public args: LanguageExpression[]) { }
     asString(): string {
+        if (this.args.length === 1) return this.args[0].asString()
         return `${this.args.map(arg => `(${arg.asString()})`).join(` ${this.op} `)}`
     }
 }
@@ -436,7 +437,7 @@ export interface PrinterLike {
 export abstract class LanguageWriter {
     constructor(
         public printer: IndentedPrinter,
-        protected resolver: ReferenceResolver,
+        public resolver: ReferenceResolver, // TODO make protected again
         public language: Language,
     ) {}
 
@@ -681,7 +682,7 @@ export abstract class LanguageWriter {
     makeNativeMethodNamedSignature(returnType: idl.IDLType, parameters: idl.IDLParameter[]): NamedMethodSignature {
         return this.makeNamedSignature(returnType, parameters)
     }
-    makeSerializerConstructorSignature(): NamedMethodSignature | undefined {
+    makeSerializerConstructorSignatures(): NamedMethodSignature[] | undefined {
         return undefined
     }
     mapFieldModifier(modifier: FieldModifier): string {

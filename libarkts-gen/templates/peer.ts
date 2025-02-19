@@ -16,8 +16,10 @@
 import {
     global,
     passNode,
+    passNodeArray,
     unpackNonNullableNode,
-    Es2pandaMemberExpressionKind,
+    unpackNode,
+    unpackNodeArray,
     assertValidPeer,
     AstNode,
     Es2pandaAstNodeType,
