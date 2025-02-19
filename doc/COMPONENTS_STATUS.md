@@ -956,7 +956,7 @@
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
 |`_onChangeEvent_value`| Function | Erokhin Ilya | done |  | |
 |*Shape*|*Component*|Dudkin Sergey| done |  |  |
-|`setShapeOptions`|Function|Samarin Sergey| in progress |  | |
+|`setShapeOptions`|Function|Samarin Sergey| testskipped |  | |
 |`viewPort`|Function|Dudkin Sergey| done |  |  |
 |`stroke`|Function|Dudkin Sergey| done |  |  |
 |`fill`|Function|Dudkin Sergey| done |  |  |
@@ -1820,10 +1820,10 @@
 |`setX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |`getY`| Function | Maksimov Nikita, Pavelyev Ivan | blocked IDL |  |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
-|`getPreventDefault`| Function | Samarin Sergey | in progress | | |
+|`getPreventDefault`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`setPreventDefault`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |*HoverEvent*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
-|`getStopPropagation`| Function | Samarin Sergey | in progress | | |
+|`getStopPropagation`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`setStopPropagation`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |*MouseEvent*| *Class* | Kovalev Sergey | testskipped |  | |
 |`getButton`| Function | Kovalev Sergey | testskipped |  | |
@@ -1846,7 +1846,7 @@
 |`setX`| Function | Kovalev Sergey | done |  | |
 |`getY`| Function | Kovalev Sergey | done |  | |
 |`setY`| Function | Kovalev Sergey | done |  | |
-|`getStopPropagation`| Function | Samarin Sergey | in progress | | |
+|`getStopPropagation`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`setStopPropagation`| Function | Kovalev Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |`getRawDeltaX`| Function | | blocked | noFB | doesn't present in Upstream and FB |
 |`setRawDeltaX`| Function | | blocked | noFB | doesn't present in Upstream and FB |
@@ -1874,9 +1874,9 @@
 |`setType`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |`setTouches`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |`setChangedTouches`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
-|`getStopPropagation`| Function | Samarin Sergey | in progress | | |
+|`getStopPropagation`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`setStopPropagation`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
-|`getPreventDefault`| Function | Samarin Sergey | in progress | | |
+|`getPreventDefault`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`setPreventDefault`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |*PixelMapMock*| *Class* | Maksimov Nikita | done |  | |
 |`release`| Function | Maksimov Nikita | done |  | |
@@ -1918,14 +1918,14 @@
 |`setMetaKey`| Function | Maksimov Nikita | done | | |
 |`getTimestamp`| Function | Maksimov Nikita | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
 |`setTimestamp`| Function | Maksimov Nikita | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
-|`getStopPropagation`| Function | Samarin Sergey | in progress | | |
+|`getStopPropagation`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`setStopPropagation`| Function | Maksimov Nikita | done | | |
 |`setIntentionCode`| Function | Maksimov Nikita | done | | |
 |`getUnicode`| Function | Maksimov Nikita | done | | |
 |`setUnicode`| Function | Maksimov Nikita | done | | |
 |*FocusAxisEvent*| *Class* | | | | |
 |`setAxisMap`| Function | | | | |
-|`getStopPropagation`| Function | Samarin Sergey | in progress | | |
+|`getStopPropagation`| Function | Samarin Sergey | blocked IDL | | feature: API not present, upstream: https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |`setStopPropagation`| Function | | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |*ProgressMask*| *Class* | Maksimov Nikita | done |  | |
 |`updateProgress`| Function | Maksimov Nikita | done |  | |
