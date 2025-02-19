@@ -90,9 +90,11 @@ interface SignatureDescriptor {
 class OHOSNativeVisitor {
     implementationStubsFile: CppSourceFile
 
-    hWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppConvertor(this.library), PrimitiveTypesInstance)
-    cppWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppConvertor(this.library), PrimitiveTypesInstance)
-    returnTypeConvertor = new ReturnTypeConvertor(this.library)
+    private readonly argTypeConvertor = new CppConvertor(this.library)
+    private readonly returnTypeConvertor = new ReturnTypeConvertor(this.library)
+
+    hWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, this.argTypeConvertor, PrimitiveTypesInstance)
+    cppWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, this.argTypeConvertor, PrimitiveTypesInstance)
     libraryName: string = ""
 
     interfaces = new Array<IDLInterface>()
@@ -117,20 +119,6 @@ class OHOSNativeVisitor {
     private apiName(clazz: IDLInterface): string {
         if (hasExtAttribute(clazz, IDLExtendedAttributes.GlobalScope)) return capitalize(this.libraryName)
         return capitalize(clazz.name)
-    }
-
-    private static knownBasicTypes = new Set(['ArrayBuffer', 'DataView'])
-
-    mapType(type: IDLType): string {
-        const typeName = isContainerType(type) || isUnionType(type)
-            ? ''
-            : isOptionalType(type)
-                ? `Opt_${this.libraryName}_${this.mapType(type.type)}`
-                : forceAsNamedNode(type).name
-        if (OHOSNativeVisitor.knownBasicTypes.has(typeName)) {
-            return this.mangleTypeName(typeName)
-        }
-        return this.hWriter.getNodeName(type)
     }
 
     makeSignature(returnType: IDLType, parameters: IDLParameter[]): MethodSignature {
@@ -185,7 +173,8 @@ class OHOSNativeVisitor {
             }
             ctors.forEach((ctor, index) => {
                 let name = `construct${(index > 0) ? index.toString() : ""}`
-                let params = ctor.parameters.map(it => new NameType(_h.escapeKeyword(it.name), this.mapType(it.type!)))
+                let params = ctor.parameters.map(it =>
+                    new NameType(_h.escapeKeyword(it.name), this.argTypeConvertor.convert(it.type!)))
                 let argConvertors = ctor.parameters.map(param => generateArgConvertor(this.library, param))
                 let cppArgs = generateCParameters(ctor, argConvertors, _h)
                 _h.print(`${handleType} (*${name})(${cppArgs});`) // TODO check
@@ -207,7 +196,8 @@ class OHOSNativeVisitor {
             if (!method.isStatic && !isGlobalScope) {
                 params.push(new NameType("thiz", handleType))
             }
-            params = params.concat(adjustedSignature.parameters.map(it => new NameType(_h.escapeKeyword(it.name), this.mapType(it.type!))))
+            params = params.concat(adjustedSignature.parameters.map(it =>
+                new NameType(_h.escapeKeyword(it.name), this.argTypeConvertor.convert(it.type!))))
             let returnType = this.returnTypeConvertor.convert(adjustedSignature.returnType)
             const args = generateCParameters(method, adjustedSignature.convertors, _h)
             _h.print(`${returnType} (*${method.name}${overloadPostfix})(${args});`)
@@ -234,7 +224,8 @@ class OHOSNativeVisitor {
                 if (!isGlobalScope) {
                     params.push(new NameType("thiz", handleType))
                 }
-                params = params.concat(adjustedSignature.parameters.map(it => new NameType(_h.escapeKeyword(it.name), this.mapType(it.type!))))
+                params = params.concat(adjustedSignature.parameters.map(it =>
+                    new NameType(_h.escapeKeyword(it.name), this.argTypeConvertor.convert(it.type!))))
                 let returnType = this.returnTypeConvertor.convert(adjustedSignature.returnType)
                 const args = generateCParameters(method, adjustedSignature.convertors, _h)
                 _h.print(`${returnType} (*${method.name})(${args});`)
@@ -343,7 +334,7 @@ class OHOSNativeVisitor {
         writeSerializer(this.library, this.cppWriter, prefix)
         writeDeserializer(this.library, this.cppWriter, prefix)
 
-        let writer = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppConvertor(this.library), PrimitiveTypesInstance)
+        let writer = new CppLanguageWriter(new IndentedPrinter(), this.library, this.argTypeConvertor, PrimitiveTypesInstance)
         this.writeModifiers(writer)
         this.writeImpls()
         this.cppWriter.concat(writer)
