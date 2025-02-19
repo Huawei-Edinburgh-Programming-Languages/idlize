@@ -362,7 +362,7 @@
 |`onDec`| Function | Erokhin Ilya | done |  |  |
 |`enableDec`| Function | Erokhin Ilya | done |  |  |
 |`enableInc`| Function | Erokhin Ilya | done |  |  |
-|*DataPanel*| *Component* | Morozov Sergey | blocked |  |  |
+|*DataPanel*| *Component* | Morozov Sergey | blocked IDL |  |  |
 |`setDataPanelOptions`| Function | Morozov Sergey | done |  |  |
 |`closeEffect`| Function | Morozov Sergey | done |  |  |
 |`valueColors`| Function |Morozov Sergey | blocked IDL |  |https://gitee.com/nikolay-igotti/idlize/issues/IAW4DU|
@@ -536,7 +536,7 @@
 |`onRepeat`| Function | Pavelyev Ivan | done |  | |
 |`onCancel`| Function | Pavelyev Ivan | done |  | |
 |`onFinish`| Function | Pavelyev Ivan | done |  | |
-|*ImageSpan*| *Component* | Politov Mikhail | blocked |  |  |
+|*ImageSpan*| *Component* | Politov Mikhail | blocked IDL |  |  |
 |`setImageSpanOptions`| Function | Politov Mikhail | done |  | |
 |`verticalAlign`| Function | Politov Mikhail | done |  |  |
 |`colorFilter`| Function | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB0Y72 | |
@@ -544,7 +544,7 @@
 |`onComplete`| Function | Politov Mikhail | done |  |  |
 |`onError`| Function | Politov Mikhail | done |  |  |
 |`alt`| Function | Politov Mikhail | done |  | |
-|*Line*|*Component*|Dudkin Sergey| blocked |  |  |
+|*Line*|*Component*|Dudkin Sergey| blocked AceEngine|  |  |
 |`setLineOptions`|Function|Dudkin Sergey| done |  |  |
 |`startPoint`|Function|Dudkin Sergey| blocked AceEngine |  | https://gitee.com/openharmony/interface_sdk-js/issues/IAXCBA + |
 |`endPoint`|Function|Dudkin Sergey| blocked AceEngine |  | https://gitee.com/openharmony/interface_sdk-js/issues/IAXCBA + |
@@ -1354,7 +1354,7 @@
 |`digitalCrownSensitivity`| Function | | | | |
 |`enableCascade`| Function | | | | |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
-|*Toggle*| *Component* |Morozov Sergey |blocked |  |
+|*Toggle*| *Component* |Morozov Sergey |blocked IDL |  |
 |`setToggleOptions`| Function |Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2SVB , https://gitee.com/openharmony/arkui_ace_engine/issues/IB5V55|
 |`onChange`| Function | Morozov Sergey| done |  |  |
 |`contentModifier`| Function |Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
@@ -1362,7 +1362,7 @@
 |`switchPointColor`| Function | Morozov Sergey| done |  |  |
 |`switchStyle`| Function | Morozov Sergey| done |  |  |
 |`_onChangeEvent_isOn`| Function | Erokhin Ilya | done |  | |
-|*Video*| *Component* | Erokhin Ilya | blocked |  |  |
+|*Video*| *Component* | Erokhin Ilya | blocked AceEngine|  |  |
 |`setVideoOptions`| Function | Erokhin Ilya | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`muted`| Function | Erokhin Ilya | done |  |  |
 |`autoPlay`| Function | Erokhin Ilya | done |  |  |
@@ -1752,6 +1752,16 @@
 |`offOnDetach`| Function | Vadim Voronov, Evstigneev Roman | done |  |  |
 |`getHeight`| Function |Vadim Voronov| done |  | |
 |`getWidth`| Function |Vadim Voronov| done |  | |
+|*OffscreenCanvasRenderingContext2D*| *Class* | | | | |
+|`toDataURL`| Function | | | | |
+|`transferToImageBitmap`| Function | | | | |
+|*OffscreenCanvas*| *Class* | | | | |
+|`transferToImageBitmap`| Function | | | | |
+|`getContext2d`| Function | | | | |
+|`getHeight`| Function | | | | |
+|`setHeight`| Function | | | | |
+|`getWidth`| Function | | | | |
+|`setWidth`| Function | | | | |
 |*DrawingRenderingContext*| *Class* | Dudkin Sergey | done |  | |
 |`invalidate`| Function | Dudkin Sergey | done |  | |
 |*ICurve*| *Class* | Erokhin Ilya | blocked |  | |
