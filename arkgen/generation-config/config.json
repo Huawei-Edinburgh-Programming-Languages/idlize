@@ -185,7 +185,9 @@
             "SheetDismiss",
             "SubTabBarStyle",
             "TextPickerDialog",
-            "Dimension"
+            "Dimension",
+            "ScaleSymbolEffect",
+            "ReplaceSymbolEffect"
         ],
         "ignoreComponents": [
             "Particle",
