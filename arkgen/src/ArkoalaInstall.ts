@@ -104,12 +104,14 @@ export class LibaceInstall extends Install {
     generatedUtility = this.mkdir(path.join(this.libace, "utility", "generated"))
     userConverterHeader = path.join(this.generatedUtility, "converter_generated.h")
     mesonBuild = path.join(this.libace, "meson.build")
+    unittestDir = path.join(this.libace, "unittest", "capi", "modifiers", "generated")
 
     arkoalaMacros = this.interface("arkoala-macros.h")
     generatedArkoalaApi = this.interface("arkoala_api_generated.h")
     gniComponents = this.interface("node_interface.gni")
     viewModelBridge = this.implementation("view_model_bridge.cpp")
     allModifiers = this.implementation("all_modifiers.cpp")
+    unitTestGni = this.unittest("modifiers.gni")
 
     interface(name: string) {
         return path.join(this.generatedInterface, name)
@@ -131,5 +133,12 @@ export class LibaceInstall extends Install {
     }
     delegateCpp(component: string) {
         return this.implementation(`${component}_delegate.cpp`)
+    }
+    unittest(name: string) {
+        this.mkdir(this.unittestDir)
+        return path.join(this.unittestDir, name)
+    }
+    modifierUnittest(component: string, index?: number) {
+        return this.unittest(`${component}_modifier_test${index ? `_${index}` : ''}.${index == 0 ? 'h' : 'cpp'}`)
     }
 }

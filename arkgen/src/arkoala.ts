@@ -56,6 +56,19 @@ import { printInterfaces } from "./printers/InterfacePrinter"
 import { printComponents } from "./printers/ComponentsPrinter"
 import { makeJavaArkComponents } from "./printers/JavaPrinter"
 import { printStsComponents, printStsComponentsDeclarations } from "./printers/StsComponentsPrinter"
+import { printUnitTestsAsMultipleFiles } from "./ut/UnittestPrinter"
+
+export function generateLibaceUnitTests(config: {
+    libaceDestination: string | undefined,
+    outDir: string,
+    aceTypes?: string,
+}, peerLibrary: PeerLibrary) {
+    const libace = config.libaceDestination ?
+        new LibaceInstall(config.libaceDestination, false) :
+        new LibaceInstall(config.outDir, true)
+
+    printUnitTestsAsMultipleFiles(peerLibrary, libace, config.aceTypes)
+}
 
 export function generateLibaceFromIdl(config: {
     libaceDestination: string|undefined,
