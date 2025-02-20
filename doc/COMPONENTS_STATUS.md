@@ -1992,7 +1992,7 @@
 |`show`| Function | Ekaterina Stepanova | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBHHWA |
 |*BaseGestureEvent*| *Class* | Maksimov Nikita | done |  | |
 |`setFingerList`| Function | Maksimov Nikita | done |  | implementation and UT Vadim Voronov |
-|*TapGestureEvent*| *Class* | | | | |
+|*TapGestureEvent*| *Class* | Samarin Sergey | done | | nothing to do |
 |*LongPressGestureEvent*| *Class* | | | | |
 |`getRepeat`| Function | | | | |
 |`setRepeat`| Function | | | | |
