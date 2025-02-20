@@ -1576,10 +1576,8 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         }) // check
     }
 
-    // TODO here we only handle initialized constants. Do we care for uninitialized const declarations?
     serializeConstants(stmt: ts.VariableStatement): idl.IDLConstant[] {
         return stmt.declarationList.declarations
-            .filter(decl => decl.initializer) // todo: handle uninitialized declarations (d.ts).
             .map(decl => {
                 const name = nameOrNull(decl.name)!
                 let [type, value] = this.guessTypeAndValue(decl)
@@ -1591,7 +1589,13 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
     }
 
     private guessTypeAndValue(declaration: ts.VariableDeclaration):  [idl.IDLType, string] {
-        if (declaration.type) return [this.serializeType(declaration.type), declaration.initializer!.getText()]
+        if (declaration.type && declaration.initializer) return [this.serializeType(declaration.type), declaration.initializer.getText()]
+        if (declaration.type) {
+            const value = peerGeneratorConfiguration().constants.get(declaration.name.getText())
+            if (value) {
+                return [this.serializeType(declaration.type), value]
+            }
+        }
         if (declaration.initializer) {
             let value = declaration.initializer.getText()
             if (value.startsWith('"') || value.startsWith("'")) {

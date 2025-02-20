@@ -39,11 +39,12 @@ export function printGlobal(library: PeerLibrary): PrinterResult[] {
 
         // write
         const writer = library.createLanguageWriter()
-        const ns = idl.getNamespaceName(entry)
         const groupedMethods = groupOverloadsIDL(entry.methods)
-        if (ns !== '') {
-            writer.pushNamespace(ns)
-        }
+        const nsPath = idl.getNamespacesPathFor(entry)
+        nsPath.forEach(it => writer.pushNamespace(it.name))
+        entry.constants.forEach(it => {
+            writer.writeConstant(it.name, it.type, it.value)
+        })
         groupedMethods.forEach(methods => {
             const method = collapseSameMethodsIDL(methods)
             const signature = NamedMethodSignature.make(method.returnType, method.parameters.map(it => ({ name: it.name, type: it.type })))
@@ -55,9 +56,7 @@ export function printGlobal(library: PeerLibrary): PrinterResult[] {
                 w.writeStatement(statement)
             })
         })
-        if (ns !== '') {
-            writer.popNamespace()
-        }
+        nsPath.forEach(() => writer.popNamespace())
 
         return {
             collector: imports,

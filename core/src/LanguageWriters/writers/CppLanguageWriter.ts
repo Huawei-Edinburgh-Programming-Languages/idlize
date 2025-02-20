@@ -242,6 +242,9 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     writeProperty(propName: string, propType: IDLType, mutable: boolean = true) {
         throw new Error("writeProperty for c++ is not implemented yet.")
     }
+    writeConstant(constName: string, constType: IDLType, constVal?: string): void {
+        this.print(`${this.getNodeName(constType)} ${constName}${constVal ? ' = ' + constVal : ''};`)
+    }
 
     /**
      * Writes multiline comments decorated with stars
