@@ -174,9 +174,9 @@
 |`hoverEffect`| Function | Roman Sedaikin | done |  | |
 |`onMouse`| Function | Kovalev Sergey | testskipped |  | EVENT |
 |`onTouch`| Function | Roman Sedaikin, Tuzhilkin Ivan | testskipped |  | EVENT |
-|`onKeyEvent`| Function | Erokhin Ilya, Maksimov Nikita | testskipped |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX EVENT |
+|`onKeyEvent`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX EVENT |
 |`onDigitalCrown`| Function | | | | |
-|`onKeyPreIme`| Function | Erokhin Ilya, Maksimov Nikita | testskipped |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX & https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ EVENT |
+|`onKeyPreIme`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | testskipped |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX & https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ EVENT |
 |`onKeyEventDispatch`| Function | | | | |
 |`onFocusAxisEvent`| Function | | | | |
 |`focusable`| Function | Roman Sedaikin | done |  | |
@@ -1450,7 +1450,7 @@
 |`onWindowNew`| Function | Erokhin Ilya | done |  | |
 |`onWindowExit`| Function | Erokhin Ilya | done |  | |
 |`multiWindowAccess`| Function | Erokhin Ilya | done |  | |
-|`onInterceptKeyEvent`| Function | Erokhin Ilya, Maksimov Nikita | testskipped |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX + EVENT |
+|`onInterceptKeyEvent`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX + EVENT |
 |`webStandardFont`| Function | Erokhin Ilya | done |  | |
 |`webSerifFont`| Function | Erokhin Ilya | done |  | |
 |`webSansSerifFont`| Function | Erokhin Ilya | done |  | |
