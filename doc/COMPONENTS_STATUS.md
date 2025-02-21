@@ -1754,7 +1754,7 @@
 |`getWidth`| Function |Vadim Voronov| done |  | |
 |*OffscreenCanvasRenderingContext2D*| *Class* | Vadim Voronov | blocked | | |
 |`toDataURL`| Function | Vadim Voronov | blocked IDL | | Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`transferToImageBitmap`| Function | Vadim Voronov | blocked Ace_Engine | | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
+|`transferToImageBitmap`| Function | Vadim Voronov | blocked Ace Engine | | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
 |*OffscreenCanvas*| *Class* | | | | |
 |`transferToImageBitmap`| Function | | | | |
 |`getContext2d`| Function | | | | |
