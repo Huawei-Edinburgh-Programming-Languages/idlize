@@ -1953,17 +1953,17 @@
 |`getChildDefaultSize`| Function | Morozov Sergey | blocked IDL |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IB4QKQ |
 |`setChildDefaultSize`| Function | Morozov Sergey| done |  | |
 |*UICommonEvent*| *Class* | Andrey Khudenkikh | in progress | | |
-|`setOnClick`| Function | Andrey Khudenkikh | devdone | | |
-|`setOnTouch`| Function | Andrey Khudenkikh | devdone | | |
-|`setOnAppear`| Function | Andrey Khudenkikh | devdone | | |
-|`setOnDisappear`| Function | Andrey Khudenkikh | devdone | | |
+|`setOnClick`| Function | Andrey Khudenkikh | testskipped | | |
+|`setOnTouch`| Function | Andrey Khudenkikh | testskipped | | |
+|`setOnAppear`| Function | Andrey Khudenkikh | testskipped | | |
+|`setOnDisappear`| Function | Andrey Khudenkikh | testskipped | | |
 |`setOnKeyEvent`| Function | Andrey Khudenkikh | in progress | | |
-|`setOnFocus`| Function | Andrey Khudenkikh | devdone | | |
-|`setOnBlur`| Function | Andrey Khudenkikh | devdone | | |
-|`setOnHover`| Function | Andrey Khudenkikh | devdone | | |
-|`setOnMouse`| Function |  Andrey Khudenkikh| devdone | | |
+|`setOnFocus`| Function | Andrey Khudenkikh | testskipped | | |
+|`setOnBlur`| Function | Andrey Khudenkikh | testskipped | | |
+|`setOnHover`| Function | Andrey Khudenkikh | testskipped | | |
+|`setOnMouse`| Function |  Andrey Khudenkikh| testskipped | | |
 |`setOnSizeChange`| Function | Andrey Khudenkikh | in progress | | |
-|`setOnVisibleAreaApproximateChange`| Function | Andrey Khudenkikh | devdone | | |
+|`setOnVisibleAreaApproximateChange`| Function | Andrey Khudenkikh | testskipped | | |
 |*GestureModifier*| *Class* | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`applyGesture`| Function | Tuzhilkin Ivan | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |*GlobalScope_common*| *Class* | Erokhin Ilya | blocked IDL |  | |
