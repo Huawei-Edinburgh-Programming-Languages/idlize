@@ -284,52 +284,46 @@ export class PeerPrinter {
         }
         this.node.methods
             .filter(it => Config.isCreateOrUpdate(it.name))
-            .filter(create => !create.parameters
-                .map(it => it.type)
-                .concat(create.returnType)
-                .map(it => {
-                    if (isContainerType(it)) {
-                        if (isSequence(it)) {
-                            return it.elementType[0]
+            // .filter(create => !create.parameters
+            //     .map(it => it.type)
+            //     .concat(create.returnType)
+            //     .map(it => {
+            //         if (isContainerType(it)) {
+            //             if (isSequence(it)) {
+            //                 return it.elementType[0]
+            //             }
+            //         }
+            //         return it
+            //     })
+            //     .filter(isReferenceType)
+            //     .filter(it => !it.name.startsWith(`es2panda_Context`))
+            //     .filter(it => !it.name.startsWith(`es2panda_AstNode`))
+            //     .some(it => this.typechecker.isHollow(it.name))
+            // )
+            .forEach(it => {
+                signatureTypes(it)
+                    .map(_it => {
+                        if (isContainerType(_it)) {
+                            return _it.elementType[0]
                         }
-                    }
-                    return it
-                })
-                .filter(isReferenceType)
-                .filter(it => !it.name.startsWith(`es2panda_Context`))
-                .filter(it => !it.name.startsWith(`es2panda_AstNode`))
-                .some(it => this.typechecker.isHollow(it.name))
-            )
-            .forEach(it => this.printCreateOrUpdates(it))
+                        return _it
+                    })
+                    .forEach(it => {
+                        if (isReferenceType(it)) {
+                            if (this.typechecker.isPeer(it.name)) {
+                                this.importer.withPeerImport(it.name)
+                            }
+                            if (this.typechecker.isReferenceTo(it, isEnum)) {
+                                this.importer.withEnumImport(it.name)
+                            }
+                        }
+
+                    })
+                this.printCreateOrUpdates(it)
+            })
     }
 
     private printCreateOrUpdates(create: IDLMethod): void {
-        create.parameters
-            .map(it => {
-                if (isContainerType(it.type)) {
-                    if (isSequence(it.type)) {
-                        return it.type.elementType[0]
-                    }
-                }
-                return it.type
-            })
-            .forEach(it => {
-                if (isReferenceType(it)) {
-                    if (this.typechecker.isHeir(it.name, Config.astNodeCommonAncestor)) {
-                        this.importer.withPeerImport(it.name)
-                    }
-                    if (this.typechecker.isReferenceTo(it, isEnum)) {
-                        this.importer.withEnumImport(it.name)
-                    }
-                    if (it.name === `es2panda_Context`) {
-                        return
-                    }
-                    if (it.name.startsWith(`es2panda_`)) {
-                        this.importer.withPeerImport(it.name.slice(`es2panda_`.length))
-                    }
-                }
-            })
-
         this.writer.writeMethodImplementation(
             new Method(
                 PeersConstructions.createOrUpdate(
@@ -395,9 +389,9 @@ export class PeerPrinter {
                                             if (it.name === `es2panda_AstNode`) {
                                                 return `AstNode`
                                             }
-                                            if (this.typechecker.isHollow(it.name)) {
-                                                return it.name.slice(`es2panda_`.length);
-                                            }
+                                            // if (this.typechecker.isHollow(it.name)) {
+                                            //     return it.name.slice(`es2panda_`.length);
+                                            // }
                                             if (isReferenceType(it.type)) {
                                                 if (this.typechecker.isReferenceTo(it.type, isEnum)) {
                                                     return it.name
@@ -407,13 +401,13 @@ export class PeerPrinter {
                                             if (isContainerType(it.type)) {
                                                 if (isSequence(it.type)) {
                                                     const inner = it.type.elementType[0]
-                                                    if (isReferenceType(inner) && this.typechecker.isHollow(inner.name)) {
-                                                        return it.name.slice(`es2panda_`.length);
-                                                    }
+
                                                     return `passNodeArray(${it.name})`
                                                 }
                                             }
-                                            return it.name
+                                            if (isPrimitiveType(it.type)) return it.name
+                                            throw (it)
+                                            // return it.name
                                         })
                                         .map(it => this.writer.makeString(it))
                                 )

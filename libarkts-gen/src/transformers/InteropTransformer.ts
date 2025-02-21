@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-import { createMethod, createParameter, createReferenceType, IDLMethod } from "@idlizer/core"
+import { createParameter, createReferenceType, IDLMethod } from "@idlizer/core"
 import { IDLInterface, isInterface, } from "@idlizer/core/idl"
 import { InteropConstructions } from "../visitors/interop/InteropConstructions"
-import { createUpdatedInterface, IDLFile, nodeNamespace } from "../utils/idl"
+import { createUpdatedInterface, createUpdatedMethod, IDLFile, nodeNamespace } from "../utils/idl"
 import { Config } from "../Config"
 
 export class InteropTransformer {
@@ -60,7 +60,8 @@ export class InteropTransformer {
         if (Config.isCreateOrUpdate(node.name)) {
             return node
         }
-        const copy = createMethod(
+        const copy = createUpdatedMethod(
+            node,
             node.name,
             [...node.parameters],
             node.returnType
@@ -77,7 +78,8 @@ export class InteropTransformer {
     }
 
     private withQualifiedName(node: IDLMethod, parent: IDLInterface): IDLMethod {
-        return createMethod(
+        return createUpdatedMethod(
+            node,
             `${InteropConstructions.method(parent.name, node.name, nodeNamespace(parent))}`,
             node.parameters,
             node.returnType
@@ -91,7 +93,8 @@ export class InteropTransformer {
             }
             return name
         }
-        return createMethod(
+        return createUpdatedMethod(
+            node,
             rename(node.name),
             node.parameters.map(it => createParameter(
                 rename(it.name),

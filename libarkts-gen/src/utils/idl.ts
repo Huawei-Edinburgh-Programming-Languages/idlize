@@ -15,13 +15,13 @@
 
 import {
     createEmptyReferenceResolver,
-    createInterface,
+    createInterface, createMethod,
     IDLContainerUtils,
-    IDLEntry,
+    IDLEntry, IDLExtendedAttribute,
     IDLInterface,
     IDLMethod,
-    IDLNode,
-    IDLPrimitiveType,
+    IDLNode, IDLParameter,
+    IDLPrimitiveType, IDLReferenceType,
     IDLType,
     IndentedPrinter,
     isEnum,
@@ -47,11 +47,17 @@ export class IDLFile {
     ) {}
 }
 
-export function createUpdatedInterface(node: IDLInterface, methods?: IDLMethod[], name?: string): IDLInterface {
+export function createUpdatedInterface(
+    node: IDLInterface,
+    methods?: IDLMethod[],
+    name?: string,
+    inheritance?: IDLReferenceType[],
+    extendedAttributes?: IDLExtendedAttribute[]
+): IDLInterface {
     return createInterface(
         name ?? node.name,
         node.subkind,
-        node.inheritance,
+        inheritance ?? node.inheritance,
         node.constructors,
         node.constants,
         node.properties,
@@ -59,10 +65,36 @@ export function createUpdatedInterface(node: IDLInterface, methods?: IDLMethod[]
         node.callables,
         node.typeParameters,
         {
-            extendedAttributes: node.extendedAttributes,
+            extendedAttributes: extendedAttributes ?? node.extendedAttributes,
             fileName: node.fileName,
             documentation: node.documentation
         }
+    )
+}
+
+export function createUpdatedMethod(
+    node: IDLMethod,
+    name?: string,
+    parameters?: IDLParameter[],
+    returnType?: IDLType,
+    extendedAttributes?: IDLExtendedAttribute[]
+): IDLMethod {
+    return createMethod(
+        name ?? node.name,
+        parameters ?? node.parameters,
+        returnType ?? node.returnType,
+        {
+            isAsync: node.isAsync,
+            isFree: node.isFree,
+            isStatic: node.isStatic,
+            isOptional: node.isOptional,
+        },
+        {
+            extendedAttributes: extendedAttributes ?? node.extendedAttributes,
+            fileName: node.fileName,
+            documentation: node.documentation,
+        },
+        node.typeParameters
     )
 }
 

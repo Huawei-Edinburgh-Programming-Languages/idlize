@@ -61,12 +61,7 @@ export class NativeTypeMapper {
         }
         const inner = node.elementType[0]
         if (isReferenceType(inner)) {
-            if (this.typechecker.isHeir(inner.name, Config.astNodeCommonAncestor)) {
-                return BridgesConstructions.arrayOf(BridgesConstructions.astNode)
-            }
-            if (this.typechecker.isHollow(inner.name)) {
-                return BridgesConstructions.arrayOf(BridgesConstructions.pointer(inner.name))
-            }
+            return `${this.castToReference(inner)}*`
         }
 
         CachedLogger.warn(`doing nothing for sequence of: ${IDLKind[inner.kind]}`)
@@ -77,8 +72,8 @@ export class NativeTypeMapper {
         if (this.convertor.typechecker.isHeir(node.name, Config.astNodeCommonAncestor)) {
             return BridgesConstructions.referenceType(Config.astNodeCommonAncestor)
         }
-        if (this.typechecker.isHollow(node.name)) {
-            return BridgesConstructions.pointer(node.name)
+        if (node.extendedAttributes?.some(it => it.name === `hadPrefix`)) {
+            return BridgesConstructions.pointer(`es2panda_${node.name}`)
         }
         return BridgesConstructions.referenceType(node.name)
     }

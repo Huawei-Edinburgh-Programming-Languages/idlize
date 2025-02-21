@@ -15,7 +15,7 @@
 
 import * as path from "node:path"
 import * as fs from "node:fs"
-import { forceWriteFile, printIDL } from "@idlizer/core"
+import { forceWriteFile, printIDL, toIDLString } from "@idlizer/core"
 import { BridgesPrinter } from "./visitors/interop/bridges/BridgesPrinter"
 import { BindingsPrinter } from "./visitors/interop/bindings/BindingsPrinter"
 import { EnumsPrinter } from "./visitors/enums/EnumsPrinter"
@@ -29,6 +29,7 @@ import { Result } from "./visitors/MultiFilePrinter"
 import { AllPeersPrinter } from "./visitors/peers/AllPeersPrinter"
 import { NodeMapPrinter } from "./visitors/peers/NodeMapPrinter"
 import { IndexPrinter } from "./visitors/peers/IndexPrinter"
+import { PrefixTransformer } from "./transformers/PrefixTransformer"
 
 class SingleFileEmitter {
     constructor(
@@ -54,6 +55,9 @@ export class FileEmitter {
         private file: IDLFile,
         private config: Config,
     ) {}
+
+    private logDir = `./out/log-idl`
+    private logCount = 0
 
     private bridgesPrinter = new SingleFileEmitter(
         (idl: IDLFile) => new BridgesPrinter(idl).print(),
@@ -98,19 +102,42 @@ export class FileEmitter {
     )
 
     print(): void {
-        let idl = this.file
+        let idl = this.withLog(
+            this.file,
+            `none`
+        )
 
-        idl = new OptionsFilterTransformer(this.config, idl).transformed()
-        idl = new MultipleDeclarationFilterTransformer(idl).transformed()
-        console.log(idl.entries.forEach(it => printIDL(it)))
+        idl = this.withLog(
+            new PrefixTransformer(idl).transformed(),
+            `prefix`
+        )
+
+        idl = this.withLog(
+            new OptionsFilterTransformer(this.config, idl).transformed(),
+            `options`
+        )
+
+        idl = this.withLog(
+            new MultipleDeclarationFilterTransformer(idl).transformed(),
+            `multi-decl`
+        )
+
         this.printFile(this.enumsPrinter, idl)
 
-        idl = new AstNodeFilterTransformer(idl).transformed()
+        idl = this.withLog(
+            new AstNodeFilterTransformer(idl).transformed(),
+            `ast-node`
+        )
+
         this.printFiles(this.peersPrinter, idl)
         this.printFile(this.nodeMapPrinter, idl)
         this.printFile(this.indexPrinter, idl)
 
-        idl = new InteropTransformer(idl).transformed()
+        idl = this.withLog(
+            new InteropTransformer(idl).transformed(),
+            `interop`
+        )
+
         this.printFile(this.bindingsPrinter, idl)
         this.printFile(this.bridgesPrinter, idl)
     }
@@ -151,5 +178,14 @@ export class FileEmitter {
 
     private readTemplate(name: string): string {
         return fs.readFileSync(path.join(__dirname, `./../templates/${name}`), 'utf8')
+    }
+
+    private withLog(idl: IDLFile, name: string): IDLFile {
+        forceWriteFile(
+            path.join(this.logDir, `${this.logCount}-after-${name}.idl`),
+            toIDLString(idl.entries, {})
+        )
+        this.logCount += 1
+        return idl
     }
 }

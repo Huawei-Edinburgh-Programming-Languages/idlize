@@ -9,13 +9,6 @@
             "Signature": [
                 "ProtectionFlagConst", // u8
             ],
-            "es2panda_Signature": [ // data class
-                "*"
-            ],
-            "Type": [
-                "IdConst", // u64
-                "*"
-            ],
             "LocalScope": [ // missing inheritance
                 "*"
             ],
