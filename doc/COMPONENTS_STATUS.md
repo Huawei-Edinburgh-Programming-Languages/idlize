@@ -1489,7 +1489,7 @@
 |`enableNativeEmbedMode`| Function | Erokhin Ilya | done |  | |
 |`onNativeEmbedLifecycleChange`| Function | Erokhin Ilya, Andrey Khudenkikh | done |  | |
 |`onNativeEmbedVisibilityChange`| Function | Erokhin Ilya | done |  | |
-|`onNativeEmbedGestureEvent`| Function | Erokhin Ilya, Andrey Khudenkikh, Tuzhilkin Ivan | testkipped |  | Optional EventResult part is not covered in UT |
+|`onNativeEmbedGestureEvent`| Function | Erokhin Ilya, Andrey Khudenkikh, Tuzhilkin Ivan | testskipped |  | Optional EventResult part is not covered in UT |
 |`copyOptions`| Function | Erokhin Ilya | done |  | |
 |`onOverrideUrlLoading`| Function | Erokhin Ilya, Maksimov Nikita | done |  | |
 |`textAutosizing`| Function | Erokhin Ilya | done |  | |
@@ -2411,7 +2411,7 @@
 |`onActive`| Function | Erokhin Ilya | done |  |deprecated |
 |`zoom`| Function | Erokhin Ilya | done |  |deprecated |
 |`clearHistory`| Function | Erokhin Ilya | done |  |deprecated |
-|`runJavaScript`| Function | Erokhin Ilya | deprecated |  | testkipped |
+|`runJavaScript`| Function | Erokhin Ilya | deprecated |  | testskipped |
 |`loadData`| Function | Erokhin Ilya | done |  |deprecated |
 |`loadUrl`| Function | Erokhin Ilya | deprecated |  | testskipped |  |
 |`refresh`| Function | Erokhin Ilya | done |  |deprecated |
@@ -2425,7 +2425,7 @@
 |`accessStep`| Function | Erokhin Ilya | done |  | deprecated |
 |`backward`| Function | Erokhin Ilya | done |  | deprecated |
 |`forward`| Function | Erokhin Ilya | done |  | deprecated |
-|`getCookieManager`| Function | Erokhin Ilya | deprecated |  | testkipped |
+|`getCookieManager`| Function | Erokhin Ilya | deprecated |  | testskipped |
 |*XComponentController*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
 |`getXComponentSurfaceId`| Function | Tuzhilkin Ivan | blocked IDL |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
 |`getXComponentContext`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF + |
