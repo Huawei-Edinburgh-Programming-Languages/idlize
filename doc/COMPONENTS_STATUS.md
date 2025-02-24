@@ -2457,10 +2457,10 @@
 |`getStyles`| Function | Pavelyev Ivan | blocked IDL |  |RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
 |`equals`| Function | Pavelyev Ivan | done |  | |
 |`subStyledString`| Function | Pavelyev Ivan | done |  | |
-|`fromHtml`| Function | Pavelyev Ivan | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
+|`fromHtml`| Function | Pavelyev Ivan | done |  | |
 |`toHtml`| Function | Pavelyev Ivan | blocked IDL |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
 |`marshalling`| Function | Pavelyev Ivan | blocked IDL |  |RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
-|`unmarshalling`| Function | Pavelyev Ivan | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
+|`unmarshalling`| Function | Pavelyev Ivan | done |  | |
 |`getLength`| Function | Pavelyev Ivan | done |  | |
 |*TextStyle_styled_string*| *Class* | | |  | |
 |`getFontFamily`| Function | | |  | |
